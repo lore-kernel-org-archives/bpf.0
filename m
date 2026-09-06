@@ -1,35 +1,53 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out-2z4y-a139.jellyfish.systems (out-2z4y-a139.jellyfish.systems [198.54.127.139])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 108E71DDC38;
-	Sun,  6 Sep 2026 14:31:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76BD033F589
+	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 14:39:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788705082; cv=none; b=JZ8aFdH+qafgVbhqGzCjP0Vq9N6i3ywt+c0c8/tzgaPIOYFUBDTruCrkIJ0+mqkDRNRrMEAnOt+u8GjG3kM9WBQc0NdYdkviDRMMhiLt49Ry+MmZx2ldJg+ioMX8NQ6F4whYdl4b5ELnEeWVrFwzqlAEkvlJ6VTgVSe2rgrmCNk=
+	t=1788705595; cv=none; b=DS6CIvhNWBZKFlrr+yRAhbR5MlyYHTijwwC2o3GPXsIkqPHpz0gT1z6xq3eU+6hDgTAr6izSA1/SKf/AjE3N9XZrHKbgUa/1OZt9pmeKB4NIvfbA6mkuSlPm0HU6QSHvwHcwI/YRXcJ0447ck1tC5iWbyDgp2zVhNieeQGUSxr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788705082; c=relaxed/simple;
-	bh=BzWbu2+U/DEd/hSFzWAF6Vzz6t06QyVp25PH6QIXFWA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=ouB579YW77HyX/po+PtiFoLZGME6RnR2+Ppbjq7sok4dckfGWVRCmhPqp1F4m7mBDdsxlEp7eFGuD0isY17xXyhpvX+VHz5GjiaqIUy7e3Xb2Y1BGsAJ8uqer8+Irl3qGULKZMU3zaaJQcYrJiBMmnd32CZ0SHG7SdZiI6pKACc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CqYhMKZK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788705595; c=relaxed/simple;
+	bh=HjX43IXUVj0c1iU7YYoc2MlHHzj53Q0lGrYgc3kbfwM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jtJI/uDZqmA5IyFqsYlwQWhLbmqFt4DdvNk3b3n8JbjPhfIyzzT0mKq5j+otPOUP4nDcDf6chhp6691ShKjht1+daoQRbfEwhRZngTfvpw3AlM6V2TMl5KsgPkVwecCPCGMBhMX19oFmbdjwS1ZdCLV5x+LR9ViEIwpU6EW0a54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=NJQ6bb1n; arc=none smtp.client-ip=198.54.127.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CqYhMKZK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CF641F00A3A;
-	Sun,  6 Sep 2026 14:31:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788705080;
-	bh=phI0pFUU/TbdwawklPiQe1XCuRfE6yBbtcnr3EzdFHg=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=CqYhMKZKeD4ZYmsZULDapZBRn+eDyRt0PWZBhFrOvp9gaa3qIqGUYw3KcpIdNUaF/
-	 NjaQWiVtizwgr7tmUdWWoj4N3SDS943FA2Z+Drp8Yw9PL42lTR+0l/vcF4ZLUmxmfT
-	 niSTUPzbVDz3c+PF0Y0vFUqwZN3mz8/8VTsT4mOjStirxmRgvxF0x43lAFWNHRTtSG
-	 ZlyLq9bBTvVNEKQ6yRiYpnODvYLu/ckXUANx7cTH2qgF1Uft5kPzEvNgfDRyq3a/EM
-	 yLDB1+fch5xmC4RfYgf5qYgHxBCCuXAJ//nIuvK13Xtuy0Ym5LYaRF7yGAaSz6wdn8
-	 PD6G/p+Exyn6g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93A9E39253F7;
-	Sun,  6 Sep 2026 14:30:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="NJQ6bb1n"
+Received: from fedora (unknown [69.5.53.41])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdCX13skmz2x9X;
+	Sun, 06 Sep 2026 14:39:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1788705573;
+	bh=6ySDbc6oyC0qahabQIu62xCvVoIVq3NcjYGnbezvhBY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=NJQ6bb1nnQLbupaenLLkab6hsY7dJKt2xSHDBjcC/tLtqADesOKMiMz6gXXhI87yB
+	 DH//mdmjX9HDRQyDzIaZ+vvhl59VYC5V+6R0SAONXZoueIBCvbTTJwEwSzgAiFBAXh
+	 V1fmgRM1iXYV+vDeIqXNnQlHSZLQJNLckuEJmoF5y39Lh1XtlyS+BCdZAwqQRnLsuk
+	 91BYYyPJdEq1owE2LuA6rKN/bBZerOGWm0fSizE/nbY30RGzjaGiZT7kkYkBDeUs8t
+	 9lWvnyWYCm0kxHv0mY+/ZfsJs/8eBZm+q3NKTiTNrWXYwoXTHvFiHijz05udLuIwb9
+	 yeBU+LODqV95A==
+From: Tianyi Chen <hi@tychen.cc>
+To: andrii@kernel.org,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Tianyi Chen <hi@tychen.cc>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Brian Vazquez <brianvv@google.com>
+Subject: [PATCH bpf] selftests/bpf: Check returned keys in map batch validators
+Date: Sun,  6 Sep 2026 22:39:18 +0800
+Message-ID: <20260906143918.848536-1-hi@tychen.cc>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,49 +55,76 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v5 0/3] Add bpf stack arguments support for RV64
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178870502013.1578634.1317677297595952017.git-patchwork-notify@kernel.org>
-Date: Sun, 06 Sep 2026 14:30:20 +0000
-References: <20260905085857.14143-1-pulehui@huaweicloud.com>
-In-Reply-To: <20260905085857.14143-1-pulehui@huaweicloud.com>
-To: Pu Lehui <pulehui@huaweicloud.com>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, jiangfeng@kylinos.cn, bjorn@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, puranjay@kernel.org, pjw@kernel.org,
- palmer@dabbelt.com, alex@ghiti.fr, pulehui@huawei.com
+X-Envelope-From: hi@tychen.cc
 
-Hello:
+The hash and array batch validators mark visited entries by output
+position, making the subsequent completeness checks always succeed.
+Duplicate keys with matching values can therefore hide missing entries.
 
-This series was applied to bpf/bpf-next.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+Check that returned keys fall within the populated range and index
+the visited array by key. This detects missing entries while preserving
+unordered results and existing per-CPU value validation.
 
-On Sat,  5 Sep 2026 08:58:54 +0000 you wrote:
-> Implement bpf_jit_supports_stack_args() on RV64 JIT to allow bpf
-> subprogs and kfuncs to pass and receive more than 5 arguments.
-> 
-> Tested on riscv64 QEMU with LLVM main [1]; BPF-to-BPF and kfunc
-> selftests pass.
-> 
-> [1] https://github.com/llvm/llvm-project/pull/189060
-> 
-> [...]
+Controlled inputs confirm that the old validators accept duplicates
+and out-of-range keys with matching values, while the updated checks
+reject them. Ordered, reversed and shuffled valid keys still pass,
+and scalar and per-CPU value corruption is still rejected. The full
+test_maps suite passes with no skips on the matching kernel.
 
-Here is the summary with links:
-  - [bpf-next,v5,1/3] riscv, bpf: Remap BPF_REG_0 and RV_REG_TCC
-    https://git.kernel.org/bpf/bpf-next/c/f80a09c486e7
-  - [bpf-next,v5,2/3] riscv, bpf: Add BPF stack arguments support for RV64 JIT
-    https://git.kernel.org/bpf/bpf-next/c/ba754185f902
-  - [bpf-next,v5,3/3] selftests/bpf: Enable stack argument tests for RV64
-    https://git.kernel.org/bpf/bpf-next/c/7687f1cbbaf8
+Fixes: 30ff3c59137d ("selftests/bpf: Add batch ops testing for htab and htab_percpu map")
+Fixes: f0fac2cec286 ("selftests/bpf: Add batch ops testing to array bpf map")
+Assisted-by: LLM
+Signed-off-by: Tianyi Chen <hi@tychen.cc>
+---
+ tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c | 5 ++++-
+ tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c  | 4 +++-
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c b/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
+index b595556315b..76d3800a82a 100644
+--- a/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
++++ b/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
+@@ -45,6 +45,9 @@ static void map_batch_verify(int *visited, __u32 max_entries, int *keys,
+ 
+ 	memset(visited, 0, max_entries * sizeof(*visited));
+ 	for (i = 0; i < max_entries; i++) {
++		CHECK(keys[i] < 0 || keys[i] >= max_entries, "key checking",
++		      "error: i %d key %d out of range\n", i, keys[i]);
++
+ 		if (is_pcpu) {
+ 			cpu_offset = i * nr_cpus;
+ 			for (j = 0; j < nr_cpus; j++) {
+@@ -59,7 +62,7 @@ static void map_batch_verify(int *visited, __u32 max_entries, int *keys,
+ 			      "error: i %d key %d value %lld\n", i, keys[i],
+ 			      values[i]);
+ 		}
+-		visited[i] = 1;
++		visited[keys[i]] = 1;
+ 	}
+ 	for (i = 0; i < max_entries; i++) {
+ 		CHECK(visited[i] != 1, "visited checking",
+diff --git a/tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c b/tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c
+index 5da493b94ae..430949f9691 100644
+--- a/tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c
++++ b/tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c
+@@ -50,6 +50,8 @@ static void map_batch_verify(int *visited, __u32 max_entries,
+ 
+ 	memset(visited, 0, max_entries * sizeof(*visited));
+ 	for (i = 0; i < max_entries; i++) {
++		CHECK(keys[i] < 1 || keys[i] > max_entries, "key checking",
++		      "error: i %d key %d out of range\n", i, keys[i]);
+ 
+ 		if (is_pcpu) {
+ 			for (j = 0; j < bpf_num_possible_cpus(); j++) {
+@@ -65,7 +67,7 @@ static void map_batch_verify(int *visited, __u32 max_entries,
+ 			      ((int *)values)[i]);
+ 		}
+ 
+-		visited[i] = 1;
++		visited[keys[i] - 1] = 1;
+ 
+ 	}
+ 	for (i = 0; i < max_entries; i++) {
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.55.0
 
