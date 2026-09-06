@@ -1,102 +1,102 @@
-Received: from out-zbxj-a65.jellyfish.systems (out-zbxj-a65.jellyfish.systems [198.54.127.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A8919CC0F
-	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 14:45:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928DB3537FD
+	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 14:45:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788705923; cv=none; b=FBULLp/ol0fi55urPRA7jV5o7D5bAIRdstDrm6CmSsLaK7p3FPS14eav/1ahAh7MSSjIj3FaksEpAffaWp9/6WMzDa+nAuTZSWaSeMlokir8C50WkaIlsR1dYq3yRHdXSP1iaRnvISBArUlQUTMjBXuXRkHTnGGri8F5HxgfqP8=
+	t=1788705925; cv=none; b=Jodn+398HXLqJXc8nxav2kTKQvPUL2RFtchpYLKpXxhgWh2F+1X2dMaLA75n2N/qVcG88J7ImhgOKW8s1KYbwmnEh0CqibZ6//e1PKJiaSMJu/42pNc5doKqv7OrrEK7gVcunOIlwqWF6Fob6BZfZMAqWxCLfjhN0fkmMpOwY0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788705923; c=relaxed/simple;
-	bh=ID6pU/SCipMAoR6bnnWttfaKW8Cz/CkOPUWe7BjzTR4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QXz9TeZTHNHhRQPu4pg1Vb7iasI9ly7BCo6Zx57DyHVbSpKSq3zRo9WEjJ5ZohhaxAYqJCShjzGtOavU9YENJPJNWJXZiCmxkyjae+J5sosxVouZYVmRZuUcbjExpNhU+NgWOHJWDaUfGqjldmdnbS0+mdh6++Uyy1Q6UjT1uOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=FzFwf7sF; arc=none smtp.client-ip=198.54.127.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
+	s=arc-20240116; t=1788705925; c=relaxed/simple;
+	bh=gX8qcYzH+3XhWbd/iKY5bqceID7XqnypHmSBLAE4UYA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=bKH7A9w8MN06fRdexgj/hxMIqutKvT8wmy7Wm9/qcAUidLPAZqxV1Iy+2gFc+xS3hCcdFCApUB77neRk+bXIc0xr39HzrW/5yQbq+e2IVZzX/KCjmNNbAXVFVrGRHxcxVlLerQ62tqb3ecIu1RpYE65bxW/r0kz7G++xCYY3Nik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lglGDFL4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="FzFwf7sF"
-Received: from fedora (unknown [69.5.53.41])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdCXK0lK1z8sWg;
-	Sun, 06 Sep 2026 14:39:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1788705589;
-	bh=18NIljhIBXGMPhC2bNVsXV9nKFTRbDl30rj7K0iSWS0=;
-	h=From:To:Cc:Subject:Date:From;
-	b=FzFwf7sF/gdufKxLTVuVYA5VCNtjND9bRMGjbLU+PzU68TRqq01DngEM99zlTwaIk
-	 ClGGwvSkSBehiYeHQdTKqAtZhbrktcXGgUnt+p6qH22xbx/wXEQUItwmrApwj0H/cC
-	 2MqWg2Ic+K9RfD1DeDkJkHH+cEF62TCZsUWX0gS8MMp1Iju+yyZnn/NPAdwuBSe+a/
-	 v0IDKnvjZp/HZwLDH1Ar9V9M7ZTDeFjCjkBnWgTxJHNPmPNxEm7PAY3LoYIQWsv9PX
-	 /T1fLYT5cFFn0HrdFC7cDTF6MNtSIwa8DM8mV0KyCnrszEtRFdQbHENwf/GpfLsBop
-	 /qu1v0905WQog==
-From: Tianyi Chen <hi@tychen.cc>
-To: andrii@kernel.org,
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: Tianyi Chen <hi@tychen.cc>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	David Vernet <void@manifault.com>
-Subject: [PATCH bpf] selftests/bpf: Exercise double release in cpumask failure test
-Date: Sun,  6 Sep 2026 22:39:34 +0800
-Message-ID: <20260906143934.848632-1-hi@tychen.cc>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lglGDFL4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DCE91F00A3A;
+	Sun,  6 Sep 2026 14:45:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788705924;
+	bh=ZX1sjvb7r2y88z7WeHc4uPq/CAyy4fwQqmExKxT/vtg=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=lglGDFL4jAKfL0MBHA3sstto+3kxt78+QRYHmXfWF1MnxzYmkumqHf5hX1h0mUAyi
+	 H7R/yJiiQk9qSdgbUw0fHqbCOomhXV3a21ITVErtRF+D1YvsvtN9r8n8KotucCpUhN
+	 45tIRY2XLkAJO9CjqHVxFF1jk0rga6D15I9jwbLX4qIn92dhlpy6lnEP0+rg/T8pWo
+	 PtbxY9Mv1aQ1KwcxeIPjaB1Y/qb4+j+f17BgYRlkmlGAGQjTwuOsiETtmYRWahQewS
+	 wzeUnxqTtRos1GxSYcxePHhSc+x4J+Iyrsk6VOaa3PuhTqzDSGS08pUId6RW75Xzah
+	 1E7yuiKJP6+mw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf] selftests/bpf: Check returned keys in map batch
+ validators
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tianyi Chen" <hi@tychen.cc>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260906143918.848536-1-hi@tychen.cc>
+References: <20260906143918.848536-1-hi@tychen.cc>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 06 Sep 2026 14:45:23 +0000
+Message-Id: <20260906144524.0DCE91F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Envelope-From: hi@tychen.cc
 
-create_cpumask() can return NULL, but test_alloc_double_release does
-not check its result before releasing it. The expected NULL-pointer
-diagnostic allows the test to pass when the first release is rejected,
-without checking the second release at all. Removing the second call
-still produces the same expected rejection.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] The patch introduces new usages of the deprecated CHECK() macro ins=
+tead of the modern ASSERT_*() macros, violating BPF subsystem selftest guid=
+elines.
+--
 
-Return when creation fails and expect the release-ownership diagnostic.
-This makes the verifier accept the first release and reject the second
-use of the invalidated reference.
+commit a52968798d334a652d5c678ee6009b5d4bc96738
+Author: Tianyi Chen <hi@tychen.cc>
 
-Verified that the guarded single-release control is accepted and the
-guarded double-release program is rejected at its second release. All
-36 cpumask subtests pass on the matching kernel.
+selftests/bpf: Check returned keys in map batch validators
 
-Fixes: 7b6abcfa15cd ("selftests/bpf: Add selftest suite for cpumask kfuncs")
-Assisted-by: LLM
-Signed-off-by: Tianyi Chen <hi@tychen.cc>
----
- tools/testing/selftests/bpf/progs/cpumask_failure.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+This commit updates map batch validators for hash and array maps by
+indexing the visited array by key and verifying that returned keys fall
+within the valid range. This prevents duplicate keys with matching values
+from hiding missing entries.
 
-diff --git a/tools/testing/selftests/bpf/progs/cpumask_failure.c b/tools/testing/selftests/bpf/progs/cpumask_failure.c
-index 4628feb53d8..e98493bd575 100644
---- a/tools/testing/selftests/bpf/progs/cpumask_failure.c
-+++ b/tools/testing/selftests/bpf/progs/cpumask_failure.c
-@@ -45,12 +45,14 @@ int BPF_PROG(test_alloc_no_release, struct task_struct *task, u64 clone_flags)
- }
- 
- SEC("tp_btf/task_newtask")
--__failure __msg("NULL pointer passed to trusted R1")
-+__failure __msg("release kfunc bpf_cpumask_release expects referenced PTR_TO_BTF_ID passed to R1")
- int BPF_PROG(test_alloc_double_release, struct task_struct *task, u64 clone_flags)
- {
- 	struct bpf_cpumask *cpumask;
- 
- 	cpumask = create_cpumask();
-+	if (!cpumask)
-+		return 0;
- 
- 	/* cpumask is released twice. */
- 	bpf_cpumask_release(cpumask);
--- 
-2.55.0
+> diff --git a/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c =
+b/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
+> index b595556315bc3..76d3800a82af9 100644
+> --- a/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
+> +++ b/tools/testing/selftests/bpf/map_tests/array_map_batch_ops.c
+> @@ -45,6 +45,9 @@ static void map_batch_verify(int *visited, __u32 max_en=
+tries, int *keys,
+> =20
+>  	memset(visited, 0, max_entries * sizeof(*visited));
+>  	for (i =3D 0; i < max_entries; i++) {
+> +		CHECK(keys[i] < 0 || keys[i] >=3D max_entries, "key checking",
+> +		      "error: i %d key %d out of range\n", i, keys[i]);
+> +
 
+[Severity: Low]
+Could this use the modern ASSERT_*() macros instead of the deprecated
+CHECK() macro?
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c b=
+/tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c
+> index 5da493b94ae25..430949f9691d7 100644
+> --- a/tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c
+> +++ b/tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c
+> @@ -50,6 +50,8 @@ static void map_batch_verify(int *visited, __u32 max_en=
+tries,
+> =20
+>  	memset(visited, 0, max_entries * sizeof(*visited));
+>  	for (i =3D 0; i < max_entries; i++) {
+> +		CHECK(keys[i] < 1 || keys[i] > max_entries, "key checking",
+> +		      "error: i %d key %d out of range\n", i, keys[i]);
+
+[Severity: Low]
+Could this also use the modern ASSERT_*() macros rather than CHECK()?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260906143918.8485=
+36-1-hi@tychen.cc?part=3D1
