@@ -1,528 +1,98 @@
-Received: from out-zbxj-a76.jellyfish.systems (out-zbxj-a76.jellyfish.systems [198.54.127.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127D73AAF4D
-	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 17:13:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3CA32EEE89
+	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 17:16:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788714841; cv=none; b=NeLJwEm0dxncpRwkgbQ5s4eb+E5klO57AFLCMoiGbo42wdAfKys85lXCdcPjIPbJlWCGRfnxcwRR+IP0X/TD3O4YHH2jjUflKysImiI8PZrTlgw0qesGTIuR7BQiqFHw5Mwxfc3RsK9ZhF63UyYCBZnuhbJoMNUMvyKcvCxrvCE=
+	t=1788714983; cv=none; b=SQlsWyq3QNhGEeaMYWZswn7uo/ikPx+ELw3HitsQ7F9u1YjMR6402cHTgEMT+vD5YJHnERSctDXgikGRFeerGtBMPASfKpSrv+ueaFo7SkxuSiwme8OwXtveWuszT9BW3T36sUVRn7KaHp0HmIB1npDOOO9c/tvyvEoKr1Rm/qw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788714841; c=relaxed/simple;
-	bh=Xvw1+VHZ09mD1fLpUZHFGVtJ66gzAkZUw+EA9SImGBw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GAiCfGMCko3dbeuphF96XQ6icAG1Pdn3KcLD2P9palku0HLEB5w/VjCUquXC71ERCf1H6fmVClpoGS+p5RiY6wHKJK1n/LX8IB7JLGbxQq5AK7pjxRA7MHsC1pWO4zUe+AcwkA6g+fSwK3dC2hl3Dclva41PZfDSXwSb6DtiBLY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=Tk61iM2a; arc=none smtp.client-ip=198.54.127.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
+	s=arc-20240116; t=1788714983; c=relaxed/simple;
+	bh=peuPn2SA9N1BvQ8WRZ+dMHLe7SnKfA84699y5c7UiWU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=c1jwY3V3/xBaCuSTq3fMqb3TuEbjqvjQUBi6ZYS08hchPyrLVfkR6T+Afm2qx25UPAzEtKEzv4S24UDrCNtCOY/MkYRbzOixb6vaYraf35BJMaaTRT/td453yPCrM+rybmMC0i5IW7Ft5Iad1J6daLakvK39CoZyQqUBsQ35vfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TozDMxjl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="Tk61iM2a"
-Received: from fedora (unknown [69.5.53.41])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdGqb0G3yz8sWR;
-	Sun, 06 Sep 2026 17:08:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1788714498;
-	bh=/MdlgTeuE3uztSOZKTAUbSHOQgduElJ/go9RNr7SVsE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Tk61iM2aCu5amOyazVZX/26QVpqd16oURGeHlxMXuCJMrRBjyPlF9Dw3OlreewhpS
-	 gElqrA/0q7Jc9NxM9oopiMdwmDJD5ItZ17YBmidVAnaFPeUhQ3W0CiK9Z2P43/nHpU
-	 vMsechOmm3RCUmX71s5xzlrywWy8qtV3gSJpsbXX6bBCNMiBFMCI4j+9jPWK0ATJgR
-	 gIJX5hdtE5bzmdoBmbRZKed7tzKH5iMNlNVdWDMRb0wKD/wLm/qJSRUoyFvCHa2+UM
-	 jAOndy9DGSJDGyu+YpcxVJu7Ap8qzEVw20PzlkdSROIs8piGouF85ZYulMi5k7BbjO
-	 rc0BwmHwdubTQ==
-From: Tianyi Chen <hi@tychen.cc>
-To: bpf@vger.kernel.org
-Cc: Tianyi Chen <hi@tychen.cc>,
-	Quentin Monnet <qmo@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Cover bpftool ring buffer event_pipe
-Date: Mon,  7 Sep 2026 01:07:47 +0800
-Message-ID: <20260906170747.1212378-3-hi@tychen.cc>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260906170747.1212378-1-hi@tychen.cc>
-References: <20260906170747.1212378-1-hi@tychen.cc>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TozDMxjl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F901F00A3A;
+	Sun,  6 Sep 2026 17:16:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788714981;
+	bh=a6V21nBKp7BB+cjiV2t4n3hOTa1t6iv63/b+PUK1GPU=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=TozDMxjl8CgeH8jsiq49G7Rp7gC9uWvOgIVoBbN/baIFSEO0oxgmZRzLPin3k62cN
+	 dNvLsrVHUMoV6vO7kL2p+3A+yKzFAsSaXHjZ2OwFqv+mVWVO/v7gapm9eq5XLd0JdJ
+	 7HhHanRa8fylfpvQK1Z7H8f3q69aKqyUAKa9qYu30899NucUbsI01HBYxMo+mMb0B9
+	 E6ixSM5uFx7ZMXKx7tOpzwDrAySGjiSULPHebAnkBo3zoRl3OKpXaWv3rRDb6g1jXR
+	 BE53ce2TbGBA9dpf93qfP7+zEuB96JK4WOBM7/XeRD4ZD3CIkc6Rddcof4fJGf8j96
+	 W8QhYjdclDr0A==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Check bpftool batch map
+ dump contents
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tianyi Chen" <hi@tychen.cc>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260906170819.1212661-3-hi@tychen.cc>
+References: <20260906170819.1212661-1-hi@tychen.cc>
+ <20260906170819.1212661-3-hi@tychen.cc>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 06 Sep 2026 17:16:20 +0000
+Message-Id: <20260906171621.48F901F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Envelope-From: hi@tychen.cc
 
-Produce known ring buffer records and check complete plain, JSON and
-pretty JSON output. Exercise ID and pinned map selection, SIGINT and
-SIGTERM shutdown, empty streams and invalid map types or selectors.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Multi-line comment does not follow the required BPF subsystem style.
+--
 
-Also produce a perf event sample and check its existing header and raw
-payload output. Use a payload whose size plus the raw sample length
-field is aligned to eight bytes so the expected bytes exclude implicit
-perf padding.
+commit c56ab936d02afbcb53a4b6f2e304647318354a05
+Author: Tianyi Chen <hi@tychen.cc>
 
-Assisted-by: Codex:GPT-6
-Signed-off-by: Tianyi Chen <hi@tychen.cc>
----
- .../bpf/prog_tests/bpftool_ringbuf.c          | 381 ++++++++++++++++++
- .../selftests/bpf/progs/bpftool_ringbuf.c     |  47 +++
- 2 files changed, 428 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpftool_ringbuf.c
+selftests/bpf: Check bpftool batch map dump contents
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c b/tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
-new file mode 100644
-index 00000000000..2099bf10209
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
-@@ -0,0 +1,381 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <ctype.h>
-+#include <fcntl.h>
-+#include <poll.h>
-+#include <signal.h>
-+#include <sys/mman.h>
-+#include <sys/wait.h>
-+#include <test_progs.h>
-+#include "bpftool_ringbuf.skel.h"
-+
-+#define WAIT_STEPS 500
-+#define WAIT_US 10000
-+
-+struct consumer {
-+	pid_t pid;
-+	int fd;
-+};
-+
-+static const char *bpftool_path(void)
-+{
-+	const char *path = getenv("BPFTOOL");
-+
-+	if (path)
-+		return access(path, X_OK) ? NULL : path;
-+	if (!access("./tools/sbin/bpftool", X_OK))
-+		return "./tools/sbin/bpftool";
-+	if (!access("../tools/sbin/bpftool", X_OK))
-+		return "../tools/sbin/bpftool";
-+	return NULL;
-+}
-+
-+static void consumer_cleanup(struct consumer *child)
-+{
-+	if (child->pid > 0) {
-+		kill(child->pid, SIGKILL);
-+		while (waitpid(child->pid, NULL, 0) < 0 && errno == EINTR)
-+			;
-+		child->pid = -1;
-+	}
-+	if (child->fd >= 0) {
-+		close(child->fd);
-+		child->fd = -1;
-+	}
-+}
-+
-+static bool consumer_start(struct consumer *child, int map_fd, bool json,
-+			   const char *option, bool pair, bool capture_errors)
-+{
-+	struct bpf_map_info info = {};
-+	__u32 len = sizeof(info);
-+	const char *path = bpftool_path();
-+	char *argv[12], id[16];
-+	int out[2], ready[2], n = 0, err, err_fd;
-+	struct pollfd pfd;
-+
-+	if (!ASSERT_OK_PTR(path, "bpftool path (set BPFTOOL to override)") ||
-+	    !ASSERT_OK(bpf_map_get_info_by_fd(map_fd, &info, &len), "map info"))
-+		return false;
-+	snprintf(id, sizeof(id), "%u", info.id);
-+	argv[n++] = (char *)path;
-+	if (json)
-+		argv[n++] = "-j";
-+	argv[n++] = "map";
-+	argv[n++] = "event_pipe";
-+	argv[n++] = "id";
-+	argv[n++] = id;
-+	if (option) {
-+		argv[n++] = (char *)option;
-+		argv[n++] = "0";
-+		if (pair) {
-+			argv[n++] = "index";
-+			argv[n++] = "0";
-+		}
-+	}
-+	argv[n] = NULL;
-+	if (!ASSERT_OK(pipe2(out, O_CLOEXEC), "output pipe"))
-+		return false;
-+	if (!ASSERT_OK(pipe2(ready, O_CLOEXEC), "exec pipe")) {
-+		close(out[0]);
-+		close(out[1]);
-+		return false;
-+	}
-+	child->pid = fork();
-+	if (!child->pid) {
-+		close(out[0]);
-+		close(ready[0]);
-+		err_fd = capture_errors ? out[1] : open("/dev/null", O_WRONLY);
-+		if (dup2(out[1], STDOUT_FILENO) < 0 ||
-+		    dup2(err_fd, STDERR_FILENO) < 0)
-+			goto exec_fail;
-+		if (!capture_errors)
-+			close(err_fd);
-+		close(out[1]);
-+		execv(path, argv);
-+exec_fail:
-+		err = errno;
-+		write(ready[1], &err, sizeof(err));
-+		_exit(127);
-+	}
-+	close(out[1]);
-+	close(ready[1]);
-+	child->fd = out[0];
-+	pfd = (struct pollfd) { .fd = ready[0], .events = POLLIN };
-+	/* EOF on the close-on-exec pipe distinguishes exec from inherited handlers. */
-+	err = child->pid > 0 ? poll(&pfd, 1, WAIT_STEPS * WAIT_US / 1000) : -1;
-+	if (!ASSERT_GT(child->pid, 0, "fork") ||
-+	    !ASSERT_GT(err, 0, "exec timeout") ||
-+	    !ASSERT_EQ(read(ready[0], &err, sizeof(err)), 0, "exec")) {
-+		close(ready[0]);
-+		consumer_cleanup(child);
-+		return false;
-+	}
-+	close(ready[0]);
-+	return true;
-+}
-+
-+static bool consumer_finish(struct consumer *child, int signo, bool success,
-+			    char *output, size_t size)
-+{
-+	int status = 0, i;
-+	pid_t ret = 0;
-+	ssize_t n;
-+	size_t used = 0;
-+
-+	if (!ASSERT_OK(fcntl(child->fd, F_SETFL, O_NONBLOCK), "nonblocking output"))
-+		return false;
-+	if (signo && !ASSERT_OK(kill(child->pid, signo), "signal consumer"))
-+		return false;
-+	for (i = 0; i < WAIT_STEPS; i++) {
-+		while (used < size - 1 &&
-+		       (n = read(child->fd, output + used, size - 1 - used)) > 0)
-+			used += n;
-+		ret = waitpid(child->pid, &status, WNOHANG);
-+		if (ret == child->pid)
-+			break;
-+		if (ret < 0 && errno != EINTR)
-+			break;
-+		usleep(WAIT_US);
-+	}
-+	if (!ASSERT_EQ(ret, child->pid, "bounded consumer exit"))
-+		return false;
-+	child->pid = -1;
-+	while (used < size - 1 && (n = read(child->fd, output + used, size - 1 - used)) > 0)
-+		used += n;
-+	output[used] = '\0';
-+	return ASSERT_TRUE(WIFEXITED(status), "normal exit") &&
-+	       ASSERT_EQ(WEXITSTATUS(status) == 0, success, "exit status");
-+}
-+
-+static bool consumer_ready(struct consumer *child)
-+{
-+	unsigned long long caught;
-+	char path[64], line[256];
-+	int i;
-+	FILE *f;
-+
-+	snprintf(path, sizeof(path), "/proc/%d/status", child->pid);
-+	for (i = 0; i < WAIT_STEPS; i++) {
-+		f = fopen(path, "r");
-+		if (!f)
-+			break;
-+		while (fgets(line, sizeof(line), f)) {
-+			if (sscanf(line, "SigCgt: %llx", &caught) == 1 &&
-+			    (caught & (1ULL << (SIGINT - 1))) &&
-+			    (caught & (1ULL << (SIGTERM - 1)))) {
-+				fclose(f);
-+				return true;
-+			}
-+		}
-+		fclose(f);
-+		usleep(WAIT_US);
-+	}
-+	return ASSERT_TRUE(false, "consumer signal handlers ready");
-+}
-+
-+static bool emit_record(struct bpftool_ringbuf *skel, int record)
-+{
-+	char packet[64] = {};
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, opts,
-+		    .data_in = packet,
-+		    .data_size_in = sizeof(packet),
-+	);
-+
-+	skel->bss->record = record;
-+	return ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.produce),
-+					      &opts), "produce record") &&
-+	       ASSERT_OK(skel->bss->output_err, "ringbuf output");
-+}
-+
-+static bool consumed(unsigned long *position, unsigned long expected)
-+{
-+	int i;
-+
-+	for (i = 0; i < WAIT_STEPS; i++) {
-+		if (__atomic_load_n(position, __ATOMIC_ACQUIRE) == expected)
-+			return true;
-+		usleep(WAIT_US);
-+	}
-+	return ASSERT_EQ(*position, expected, "consumer position");
-+}
-+
-+static void check_json(char *output, const char *expected)
-+{
-+	char *src = output, *dst = output;
-+	bool quoted = false, escaped = false;
-+
-+	/* Ignore formatting whitespace while checking the entire JSON document. */
-+	while (*src) {
-+		if (quoted || !isspace((unsigned char)*src))
-+			*dst++ = *src;
-+		if (!escaped && *src == '"')
-+			quoted = !quoted;
-+		escaped = !escaped && quoted && *src == '\\';
-+		src++;
-+	}
-+	*dst = '\0';
-+	ASSERT_STREQ(output, expected, "JSON records");
-+}
-+
-+static void test_consumer(bool json, bool idle, int signo)
-+{
-+	struct consumer child = { .pid = -1, .fd = -1 };
-+	struct bpftool_ringbuf *skel;
-+	unsigned long *position = MAP_FAILED;
-+	int page_size = getpagesize(), fd;
-+	char output[4096];
-+	struct pollfd pfd;
-+
-+	skel = bpftool_ringbuf__open();
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		return;
-+	bpf_map__set_max_entries(skel->maps.ringbuf, page_size);
-+	if (!ASSERT_OK(bpftool_ringbuf__load(skel), "load"))
-+		goto out;
-+	fd = bpf_map__fd(skel->maps.ringbuf);
-+	position = mmap(NULL, page_size, PROT_READ, MAP_SHARED, fd, 0);
-+	if (!ASSERT_NEQ(position, MAP_FAILED, "consumer mmap"))
-+		goto out;
-+	if (!idle && (!emit_record(skel, 0) || !emit_record(skel, 1)))
-+		goto out;
-+	if (!consumer_start(&child, fd, json, NULL, false, false) ||
-+	    !consumer_ready(&child))
-+		goto out;
-+	if (!idle) {
-+		/* Both prefilled records occupy 16 bytes including their headers. */
-+		if (!consumed(position, 32))
-+			goto out;
-+		pfd = (struct pollfd) { .fd = child.fd, .events = POLLIN };
-+		if (!ASSERT_GT(poll(&pfd, 1, WAIT_STEPS * WAIT_US / 1000), 0,
-+			       "records flushed before exit") ||
-+		    !ASSERT_TRUE(pfd.revents & POLLIN, "record output readable") ||
-+		    !emit_record(skel, 2) || !consumed(position, 64))
-+			goto out;
-+	}
-+	if (!consumer_finish(&child, signo, true, output, sizeof(output)))
-+		goto out;
-+	if (json)
-+		check_json(output, idle ? "[]" :
-+			   "[{\"size\":2,\"data\":[0,255]},"
-+			   "{\"size\":5,\"data\":[1,2,3,4,5]},"
-+			   "{\"size\":17,\"data\":[16,17,18,19,20,21,22,23,"
-+			   "24,25,26,27,28,29,30,31,32]}]");
-+	else
-+		ASSERT_STREQ(output, idle ? "" :
-+			     "== size: 2 =====\n00 ff\n"
-+			     "== size: 5 =====\n01 02 03 04 05\n"
-+			     "== size: 17 =====\n10 11 12 13 14 15 16 17  "
-+			     "18 19 1a 1b 1c 1d 1e 1f\n20\n", "plain records");
-+out:
-+	consumer_cleanup(&child);
-+	if (position != MAP_FAILED)
-+		munmap(position, page_size);
-+	bpftool_ringbuf__destroy(skel);
-+}
-+
-+static void test_perf_consumer(void)
-+{
-+	struct consumer child = { .pid = -1, .fd = -1 };
-+	unsigned long long seconds, nanoseconds;
-+	struct bpftool_ringbuf *skel;
-+	char output[16384], expected[16384];
-+	int nr_cpus, cpu, index, offset = 0, i, used = 0, fields;
-+	struct pollfd pfd;
-+
-+	nr_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(nr_cpus, 0, "possible cpus"))
-+		return;
-+	skel = bpftool_ringbuf__open();
-+	if (!ASSERT_OK_PTR(skel, "open"))
-+		return;
-+	bpf_map__set_max_entries(skel->maps.ringbuf, getpagesize());
-+	bpf_map__set_max_entries(skel->maps.perfbuf, nr_cpus);
-+	if (!ASSERT_OK(bpftool_ringbuf__load(skel), "load") ||
-+	    !consumer_start(&child, bpf_map__fd(skel->maps.perfbuf), false,
-+			    NULL, false, false) || !consumer_ready(&child) ||
-+	    !emit_record(skel, 3))
-+		goto out;
-+	/* One large record flushes the existing buffered perf output callback. */
-+	pfd = (struct pollfd) { .fd = child.fd, .events = POLLIN };
-+	if (!ASSERT_GT(poll(&pfd, 1, WAIT_STEPS * WAIT_US / 1000), 0,
-+		       "perf record output") ||
-+	    !ASSERT_TRUE(pfd.revents & POLLIN, "perf output readable") ||
-+	    !consumer_finish(&child, SIGINT, true, output, sizeof(output)))
-+		goto out;
-+	fields = sscanf(output, "== @%llu.%llu CPU: %d index: %d =====\n%n",
-+			&seconds, &nanoseconds, &cpu, &index, &offset);
-+	if (!ASSERT_EQ(fields, 4, "perf header") ||
-+	    !ASSERT_GT(offset, 0, "perf payload offset"))
-+		goto out;
-+	ASSERT_GT(seconds * 1000000000ULL + nanoseconds, 0, "perf timestamp");
-+	ASSERT_LT(nanoseconds, 1000000000ULL, "perf timestamp nanoseconds");
-+	ASSERT_GE(cpu, 0, "perf cpu");
-+	ASSERT_LT(cpu, nr_cpus, "perf cpu range");
-+	ASSERT_EQ(index, cpu, "perf index");
-+	for (i = 0; i < sizeof(skel->rodata->perf_payload); i++) {
-+		const char *separator = !i ? "" : !(i % 16) ? "\n" :
-+					!(i % 8) ? "  " : " ";
-+
-+		used += snprintf(expected + used, sizeof(expected) - used,
-+				 "%s%02x", separator, i == 1 ? 0xff : 0);
-+	}
-+	snprintf(expected + used, sizeof(expected) - used, "\n");
-+	ASSERT_STREQ(output + offset, expected, "perf payload");
-+out:
-+	consumer_cleanup(&child);
-+	bpftool_ringbuf__destroy(skel);
-+}
-+
-+static void test_reject(enum bpf_map_type type, const char *option, bool pair, bool json)
-+{
-+	struct consumer child = { .pid = -1, .fd = -1 };
-+	bool ring = type == BPF_MAP_TYPE_RINGBUF || type == BPF_MAP_TYPE_USER_RINGBUF;
-+	const char *expected = option ?
-+		"{\"error\":\"ring buffer maps do not support cpu or index arguments\"}" :
-+		"{\"error\":\"map is not a perf event array or ring buffer\"}";
-+	char output[4096];
-+	int fd;
-+
-+	fd = bpf_map_create(type, NULL, ring ? 0 : 4, ring ? 0 : 4,
-+			    ring ? getpagesize() : 1, NULL);
-+	if (!ASSERT_GE(fd, 0, "create map"))
-+		return;
-+	if (consumer_start(&child, fd, json, option, pair, true) &&
-+	    consumer_finish(&child, 0, false, output, sizeof(output))) {
-+		if (json)
-+			check_json(output, expected);
-+		else
-+			ASSERT_GT(strlen(output), 0, "error diagnostic");
-+	}
-+	consumer_cleanup(&child);
-+	close(fd);
-+}
-+
-+void test_bpftool_ringbuf(void)
-+{
-+	if (test__start_subtest("perf_event_array"))
-+		test_perf_consumer();
-+	if (test__start_subtest("plain"))
-+		test_consumer(false, false, SIGINT);
-+	if (test__start_subtest("json"))
-+		test_consumer(true, false, SIGTERM);
-+	if (test__start_subtest("idle_sigint"))
-+		test_consumer(false, true, SIGINT);
-+	if (test__start_subtest("idle_sigterm_json"))
-+		test_consumer(true, true, SIGTERM);
-+	if (test__start_subtest("reject_array"))
-+		test_reject(BPF_MAP_TYPE_ARRAY, NULL, false, false);
-+	if (test__start_subtest("reject_user_ringbuf"))
-+		test_reject(BPF_MAP_TYPE_USER_RINGBUF, NULL, false, false);
-+	if (test__start_subtest("reject_cpu"))
-+		test_reject(BPF_MAP_TYPE_RINGBUF, "cpu", false, false);
-+	if (test__start_subtest("reject_index"))
-+		test_reject(BPF_MAP_TYPE_RINGBUF, "index", false, false);
-+	if (test__start_subtest("reject_cpu_index"))
-+		test_reject(BPF_MAP_TYPE_RINGBUF, "cpu", true, false);
-+	if (test__start_subtest("reject_user_ringbuf_json"))
-+		test_reject(BPF_MAP_TYPE_USER_RINGBUF, NULL, false, true);
-+	if (test__start_subtest("reject_cpu_index_json"))
-+		test_reject(BPF_MAP_TYPE_RINGBUF, "cpu", true, true);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/bpftool_ringbuf.c b/tools/testing/selftests/bpf/progs/bpftool_ringbuf.c
-new file mode 100644
-index 00000000000..bbbc93c30a8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpftool_ringbuf.c
-@@ -0,0 +1,47 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RINGBUF);
-+} ringbuf SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+	__uint(max_entries, 1);
-+} perfbuf SEC(".maps");
-+
-+/*
-+ * Include the u32 raw size in perf's 8-byte alignment to avoid padding.
-+ * Keep plain output large enough to flush stdio before the consumer exits.
-+ */
-+const unsigned char perf_payload[4092] = { 0x00, 0xff };
-+
-+int record;
-+int output_err;
-+
-+SEC("socket")
-+int produce(struct __sk_buff *skb)
-+{
-+	unsigned char first[] = { 0x00, 0xff };
-+	unsigned char second[] = { 1, 2, 3, 4, 5 };
-+	unsigned char third[] = {
-+		0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
-+		0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20,
-+	};
-+
-+	if (record == 0)
-+		output_err = bpf_ringbuf_output(&ringbuf, first, sizeof(first), 0);
-+	else if (record == 1)
-+		output_err = bpf_ringbuf_output(&ringbuf, second, sizeof(second), 0);
-+	else if (record == 2)
-+		output_err = bpf_ringbuf_output(&ringbuf, third, sizeof(third), 0);
-+	else
-+		output_err = bpf_perf_event_output(skb, &perfbuf, BPF_F_CURRENT_CPU,
-+						   (void *)perf_payload, sizeof(perf_payload));
-+	return 0;
-+}
-+
-+char LICENSE[] SEC("license") = "GPL";
--- 
-2.55.0
+This commit adds selftests to exercise bpftool hash map dumps using batches.
+It compares the unordered key/value results against expected inputs in plai=
+n,
+JSON, and pretty JSON formats.
 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c b=
+/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
+> new file mode 100644
+> index 0000000000000..139d13a49dcef
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_batch.c
+
+[ ... ]
+
+> +static void check_dump(const struct dump_case *test, __u32 id, bool json=
+, bool pretty)
+> +{
+
+[ ... ]
+
+> +	err =3D get_bpftool_command_output(command, output, OUTPUT_SIZE);
+> +	if (!ASSERT_OK(err, "map_dump"))
+> +		goto out;
+> +	/* Ignore presentation whitespace, but compare complete records and all
+> +	 * punctuation. Expected contents come only from the input data, never
+> +	 * from another map walk or bpftool invocation.
+> +	 */
+
+[Severity: Low]
+Could we update this multi-line comment in check_dump() to follow the
+preferred BPF subsystem style where the opening /* is placed on its own lin=
+e?
+
+> +	for (src =3D output, dst =3D output; *src; src++)
+> +		if (!isspace((unsigned char)*src))
+> +			*dst++ =3D *src;
+> +	*dst =3D '\0';
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260906170819.1212=
+661-1-hi@tychen.cc?part=3D2
