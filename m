@@ -1,89 +1,245 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D5C23B8BBB
-	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 22:34:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC6F45038
+	for <bpf@vger.kernel.org>; Sun,  6 Sep 2026 22:43:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788734054; cv=none; b=HDJHEflk/fw+9Z9FPDWF6pzV+ulTi4csz99e3+yKmgtXHRxXAfKknqh+HutO6qxEnf5CrdouMzg90NFpmGK3cw9odL2QHyOdM3Q7V23oPBqlEYTGm+L0ZC//YSvmC2JUSIYdXuTiREV7LGYE7sgyXDBaPOSAZTxeQ/i1OsQMEN8=
+	t=1788734585; cv=none; b=PzSc/Oi9wUutMvsRwdVTbe/6L2IWrUHvUTAmUk/JcBbSmNQCqzb1Av0vXz3exODGDVjUt5MR60qhPUXVXt9G38De5zJ+ECltkK436jC53Os6SPMQr4+l56t94N5Y0rNldE/QoMBi6mWF/q4jG9NVyADY2dHqqDQLgdESDtz/xTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788734054; c=relaxed/simple;
-	bh=okvJ6MUhnWI+E7FimIXZxzgRJVCReJSPDgX+XaGLlzc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=GIzanu9ylQrsHXloTwkmS9YcuNs7d2dmgNK22cmvDXi+77MxHuWzhrFB3nhAUhNj1ebU6zpYOzm9HebAQRQKGFlwYbP1v4Jd3gxJbVSO9xy6dwtwLAZ5mJ8vLMuerZ/1sFeTba8XWZmHW+QkVgxdoLdSZn7nJY6vG5/uFz3rzec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mqfKEdp+; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788734585; c=relaxed/simple;
+	bh=SPCoPNti9QVQUdX5Pz5VRkSaHJM2AbcuQqFX6Q0JXJA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fAngiHJHpWQIRZ7S9qdHfZWtVlVSZTqxT/opX7+FDVcM48eV2SD9AagZO8ck5TGQixvjiKsq4+z0jH31Ywgk5e2u0lIGWn/wUij1e3bY7SWRQLwZqYU1k738+kbzhNT3i8RBTpBPe8gVSnMbNVh5FVcv/chAVUux1AOlzwzjC30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=VG9mwxYD; arc=none smtp.client-ip=178.21.23.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mqfKEdp+"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-49b0eab380eso25695495e9.0
-        for <bpf@vger.kernel.org>; Sun, 06 Sep 2026 15:34:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788734051; x=1789338851; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=okvJ6MUhnWI+E7FimIXZxzgRJVCReJSPDgX+XaGLlzc=;
-        b=mqfKEdp+nW+9PSuCpA7jvxUSRg42G9LcDOFu5y0PFb7AX4EChtT1R8WJG27sJJzNrn
-         Wn4TCPERjxBpXS/LonVV3dwC2HpRY+qwkGOZacfX9qOTa+3X99lQ+sYzhtvsElx54KPH
-         Y3YzjLgFh7yRR5YFxFS6tDbCpJ6Njaw7O2Af1P14NFIYZiuymzhU2HKgrIbZXcQyhOAv
-         ibccAt0Xw4C4AaaFulo9y4srYevs/qQZLJE9Soa7BnB1YhpwdzMmGfa0TwadxhUiaRus
-         G2Twp2mdcVB5Stm7/eI/zZkrSUXfIK9gt+AQIsQxhnBNTBwEqHSed1d60ws1v6WqGWYU
-         QsHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788734051; x=1789338851;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=okvJ6MUhnWI+E7FimIXZxzgRJVCReJSPDgX+XaGLlzc=;
-        b=aWsi5Bq0jJVdPGIgw81nTa/O57SfWURo8RTaJtwa10IqsD2MjJ00pIPCQ1G4hCNoaU
-         KQq/qgJZ3LfhgPr4CKdTOsP7KI1FYzvyrlrBaRxL7wt2h642wJ+LqvxJHT2480OCDBOj
-         nai6833S0WQnI2sfc1RdNwtvH1r2GL93/3hXLQpFl6ZpAET1mT95BhjRPal4K1PQnroe
-         6Hj7EBWfi1HMQI1bTxZ+tDTAML6ZE40rsVrf2yx3rGhmucMz67yboTfUjoijxKh3m0Is
-         a9SMDoTMupX6FsnxJgzJkMxjPqfjzGVE/8wYjm2nfdlDeqq1Tcji7CXJZPga55fpMT6I
-         7tVQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwaCHJm9MCJGWw/fgRda4y0eqlpdeDSECPDV5ezD1XbnEbuXMZKhoKNUylrPFnQFyrDn+c=@vger.kernel.org
-X-Gm-Message-State: AFuF++lRS7hL3ejAa+ncoM0TAVLfsf2VCFaWgjgMpJ36l5ZoPImFhNrl
-	XNuuqA4VE+RTgzgcojuPiFG8XZVV/i8EOuK1sVTfL9zwOr47PnRSxgrWc54pTP1Y
-X-Gm-Gg: AYBFou0/UHFGPzE5KXWV/iZLIwcxklu6K6F0U+rM6z7lyyQL1d0oU1cYXUnoi7A3T1p
-	HatCbwPX19CMtiRXC1VcDhkGRUn9g3Gv93OFq940K5nCidH2BKsMNAWBjwandDaEF3qxuvYZutv
-	NGwrY7bKTpBcBcnYAO5aOnv5OCe410JtP865xGLdRqbSjp/BmpR9+DrdTivd0UKuzzj4kiMOJsP
-	JS3evLWcp3oas1Giwaz0zscgaNGRqS3sd3o+Z9RtPd1PqPBhTffm0dInmZQOYN6ahTRen3SkYac
-	IK4npzli4Q7VQmLfzwNt0A6uOTWEk98qT0r+OUryndy1jYTXwDp50xGL5Adn1EFv1faaULmrO0Y
-	bhYREQ+16kqgU06xnrCV8XyYogzqD05L48jtys2Dx0uJz0jrSPPvDAi39/E+rCjQ5rsEC3eZ79j
-	VPOHtZ1U3hwTb3Ce/3xY9+zDWLr4F5kqKNIo0PvtfIUOG6iJ2vKjWjQ9k1RczTScXapJr0K9r1r
-	Y1GVHXL9wdW1iFPK5/c2Oytq+VNowAlTCLVr1HdrSV05OTeg9yETcOSg3u0uBemrB1zlfLPKREh
-	jxiaueX6Z+BOom4yMh7ZgaNQfFM3Fxe3fq5/838Xij6H4AN4YiJGFc3IDlk6lNoH3e4=
-X-Received: by 2002:a05:600c:5397:b0:49c:e37e:4389 with SMTP id 5b1f17b1804b1-49cf82cba17mr169598915e9.4.1788734051512;
-        Sun, 06 Sep 2026 15:34:11 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-2a02-3100-9d84-5101-9c80-d25b-14b6-410c.310.pool.telefonica.de. [2a02:3100:9d84:5101:9c80:d25b:14b6:410c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cf7740d44sm587151185e9.15.2026.09.06.15.34.10
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 06 Sep 2026 15:34:11 -0700 (PDT)
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>,
-	bpf@vger.kernel.org,
-	Randy Dunlap <rdunlap@infradead.org>
-Subject: Re: [PATCH bpf-next] bpf, docs: Fix the struct bpf_cpumask name in kfuncs.rst
-Date: Mon,  7 Sep 2026 00:34:06 +0200
-Message-Id: <20260906223406.3528-1-kmehltretter@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20260905095527.42261-1-kmehltretter@gmail.com>
-References: 
+	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="VG9mwxYD"
+Received: from mail01.layka.lan (localhost [127.0.0.1])
+	by disroot.org (Postfix) with ESMTP id 0A8CF80D6E;
+	Mon, 07 Sep 2026 00:42:54 +0200 (CEST)
+X-Virus-Scanned: SPAM Filter at disroot.org
+Received: from layka.disroot.org ([127.0.0.1])
+ by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
+ id 3Vflt9aJgoOw; Mon,  7 Sep 2026 00:42:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
+	t=1788734573; bh=SPCoPNti9QVQUdX5Pz5VRkSaHJM2AbcuQqFX6Q0JXJA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=VG9mwxYD5nhqb/Qgny2tDlDcVkLXETBBXO1RWKQOF05OPfJ9x0RlXbhISkwB1JBao
+	 qyaZX2Yj8NbwekNZlH3hA+CrETUuiG8cEEjFZx6QzqussvjaPOGQm+RkQuDVBwlFti
+	 nd6BHz26Fbw2QDlbteFEoAfGeQ5WCPkSzsPSH0zwHK6LT7pVA5s7lvJgwebeDmz9zE
+	 mp9iCXCyjsEHnS3dP96w8hn+aW5RKgDl7OFNc9hLt1yV+hhh7yFpwV44a3578FnSan
+	 DRvLFuGf8f24gcGZ2bOZm++z+tSAW0mCxGRRhAzvvWtO/ocXsgnqMgKppR9e/zLcK6
+	 5H+ba9lC7gD8g==
+Message-ID: <5574f80b-104c-48d7-8d1e-74b1cc720a41@disroot.org>
+Date: Sun, 6 Sep 2026 23:42:46 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] bpf: Fix u32 overflow issue in map batch operations
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, Brian Vazquez <brianvv@google.com>
+References: <20260902204439.287888-1-maghasi@disroot.org>
+ <20260903082734.623904-1-maghasi@disroot.org>
+ <CAADnVQLX5bjLTPm8Ch0wNuojHrKw6R5iJDBRsMJwrWMSupVwew@mail.gmail.com>
+Content-Language: en-US
+From: Masoud Aghasi <maghasi@disroot.org>
+In-Reply-To: <CAADnVQLX5bjLTPm8Ch0wNuojHrKw6R5iJDBRsMJwrWMSupVwew@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Superseded by the combined v2 with the btf_var patch:
+On 04/09/2026 05:45, Alexei Starovoitov wrote:
+> On Thu, Sep 3, 2026 at 1:28 AM Masoud Aghasi <maghasi@disroot.org> wrote:
+>>
+>> Several map batch operation implementations such as
+>> generic_map_lookup_batch() use calculations in the form of
+>> "values + cp * map->value_size" to compute the desired userspace memory
+>> address for reading or writing. This can overflow the u32 type
+>> (the result of "cp * map->value_size") when the map size exceeds 4GB.
+>>
+>> generic_map_lookup_batch() may corrupt values for some keys in
+>> userspace memory, and in some cases it mismatches values for some keys
+>> while still reporting success.
+> 
+> without selftest I have to assume that this is AI hallucination.
+> 
+> pw-bot: cr
 
-https://lore.kernel.org/r/20260906222656.3459-1-kmehltretter@gmail.com/
+I post the selftest here to make it easier to reproduce the bug
+and also not having issues with the CI. I also added the output that
+I received locally, which shows tests fail for map sizes bigger
+than 4GB. I hope it helps, please let me know if you need any
+more clarifications.
 
-Thanks,
-Karl
+```c
+// SPDX-License-Identifier: GPL-2.0
+
+#include <test_progs.h>
+#include <stdlib.h>
+#include <errno.h>
+#include <unistd.h>
+
+#include <bpf/bpf.h>
+#include <bpf/libbpf.h>
+
+#define TEST_BATCH_LOOKUP 1
+#define TEST_BATCH_UPDATE 2
+
+static void validate_batch_lookup(const int map_fd, const __u32 max_entries,
+				  void *keys, void *values)
+{
+	int err;
+	__u32 out_batch, count;
+
+	/* Do batch lookup on the map and validate the result */
+	count = max_entries;
+	err = bpf_map_lookup_batch(map_fd, NULL, &out_batch, keys, values,
+				   &count, NULL);
+	if (!ASSERT_EQ(err, 0, "map_lookup_batch"))
+		return;
+
+	if (!ASSERT_EQ(count, max_entries, "map_lookup_batch_count"))
+		return;
+
+	if (!ASSERT_EQ(*(__u64 *)values, 0llu, "map_lookup_batch_value"))
+		return;
+}
+
+static void validate_batch_update(const int map_fd, const __u32 max_entries,
+				  const __u32 value_size, void *keys,
+				  void *values)
+{
+	int err;
+	__u32 count, key;
+
+	/* Do batch update on the map */
+	count = max_entries;
+	err = bpf_map_update_batch(map_fd, keys, values, &count, NULL);
+	if (!ASSERT_EQ(err, 0, "map_update_batch"))
+		return;
+
+	if (!ASSERT_EQ(count, max_entries, "map_update_batch_count"))
+		return;
+
+	/* Validate the last value */
+	key = max_entries - 1;
+	err = bpf_map_lookup_elem(map_fd, &key, values);
+	if (!ASSERT_EQ(err, 0, "map_update_batch_lookup"))
+		return;
+
+	if (!ASSERT_EQ(*(__u64 *)values, key, "map_update_batch_value"))
+		return;
+}
+
+static void test_array_batch_overflow(const __u32 max_entries,
+				      const __u32 value_size, int test_type)
+{
+	int map_fd, err;
+	void *keys, *values;
+	__u32 i;
+	const __u32 key_size = sizeof(int);
+
+	keys = calloc(max_entries, key_size);
+	if (!keys) {
+		test__skip();
+		return;
+	}
+
+	values = calloc(max_entries, value_size);
+	if (!values) {
+		free(keys);
+		test__skip();
+		return;
+	}
+
+	map_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "array_map", key_size,
+				value_size, max_entries, NULL);
+	if (map_fd < 0) {
+		if (errno == ENOMEM)
+			test__skip();
+		else
+			ASSERT_GE(map_fd, 0, "map_create");
+
+		free(keys);
+		free(values);
+		return;
+	}
+
+	/* Update all elements with unique values */
+	for (i = 0; i < max_entries; i++) {
+		*(__u32 *)(keys + (__u64)i * key_size) = i;
+		*(__u64 *)(values + (__u64)i * value_size) = (__u64)i;
+		err = bpf_map_update_elem(map_fd, &i,
+					  values + (__u64)i * value_size, 0);
+		if (err) {
+			ASSERT_EQ(err, 0, "map_update_elem");
+			goto cleanup;
+		}
+	}
+
+	if (test_type == TEST_BATCH_LOOKUP)
+		validate_batch_lookup(map_fd, max_entries, keys, values);
+	else if (test_type == TEST_BATCH_UPDATE)
+		validate_batch_update(map_fd, max_entries, value_size, keys,
+				      values);
+
+cleanup:
+	free(keys);
+	free(values);
+	close(map_fd);
+}
+
+void test_map_batch_overflow(void)
+{
+	if (test__start_subtest("array_lookup"))
+		test_array_batch_overflow(17, 1024U, TEST_BATCH_LOOKUP);
+	if (test__start_subtest("array_lookup_4gb_plus"))
+		test_array_batch_overflow(17, 0x10000000U, TEST_BATCH_LOOKUP);
+	if (test__start_subtest("array_update"))
+		test_array_batch_overflow(17, 1024U, TEST_BATCH_UPDATE);
+	if (test__start_subtest("array_update_4gb_plus"))
+		test_array_batch_overflow(17, 0x10000000U, TEST_BATCH_UPDATE);
+}
+
+```
+
+The output of "sudo ./test_progs -t map_batch_overflow":
+#212/1   map_batch_overflow/array_lookup:OK
+validate_batch_lookup:PASS:map_lookup_batch 0 nsec
+validate_batch_lookup:PASS:map_lookup_batch_count 0 nsec
+validate_batch_lookup:FAIL:map_lookup_batch_value unexpected map_lookup_batch_value: actual 16 != expected 0
+#212/2   map_batch_overflow/array_lookup_4gb_plus:FAIL
+#212/3   map_batch_overflow/array_update:OK
+validate_batch_update:PASS:map_update_batch 0 nsec
+validate_batch_update:PASS:map_update_batch_count 0 nsec
+validate_batch_update:PASS:map_update_batch_lookup 0 nsec
+validate_batch_update:FAIL:map_update_batch_value unexpected map_update_batch_value: actual 0 != expected 16
+#212/4   map_batch_overflow/array_update_4gb_plus:FAIL
+#212     map_batch_overflow:FAIL
+
+All error logs:
+validate_batch_lookup:PASS:map_lookup_batch 0 nsec
+validate_batch_lookup:PASS:map_lookup_batch_count 0 nsec
+validate_batch_lookup:FAIL:map_lookup_batch_value unexpected map_lookup_batch_value: actual 16 != expected 0
+#212/2   map_batch_overflow/array_lookup_4gb_plus:FAIL
+validate_batch_update:PASS:map_update_batch 0 nsec
+validate_batch_update:PASS:map_update_batch_count 0 nsec
+validate_batch_update:PASS:map_update_batch_lookup 0 nsec
+validate_batch_update:FAIL:map_update_batch_value unexpected map_update_batch_value: actual 0 != expected 16
+#212/4   map_batch_overflow/array_update_4gb_plus:FAIL
+#212     map_batch_overflow:FAIL
+Summary: 0/2 PASSED, 0 SKIPPED, 1 FAILED
+
