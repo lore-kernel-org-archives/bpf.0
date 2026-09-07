@@ -1,248 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA682367295
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 19:44:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F173F6615
+	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 19:51:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788810286; cv=none; b=elYHhjtiSrEV0e7XTEvRdoA2be/An+dADjGJyTBGf43eYdW1bEQpX+uJt2ezJbKB+e65EqY6QxrRmZ6GTTzL8ee8OIVlql691jLFSktnzoHQWELMtAl6mhacPaGs0UyY5doPeim7VaN3ojYw/UHaSviRHro9Q0BNeAj9jq5nfI4=
+	t=1788810683; cv=none; b=fWq0v9Th0MyPQ1gTKJRwuPudlAhU10FsRdmTnhTOEwJoTGH/gZWS6o8fhN+o6e6cxX7gOzWZpe+9SWfon1Bhww3PTFsrBx6KiPXGY/xfDXdQTnSwXZ/uc4dPikcSMMpE9/kS9lfg0IjQbwVKjY/BQqA4gLOqsAb02SQ4/jV0tYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788810286; c=relaxed/simple;
-	bh=heVSWZ6ofcmkguErxTUn5xFI+sn3FWQ6oAgyxDPFOIk=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=XlGBVf2CqmMFCiVP0MC7SRporrdLKY9BiIoEkyAUHUm+nbK/OG2p+BGVZm1zcF8/DhfN2PsYnwmQ5zFAppNoRg9Wu/mOfw8r4zs3ocSzaNFukyD8f1DNfMYUOnqY4OSYoA9nl1TvixmHe/H1Y6dhvQNVfQLZ7RrL2U8dYgwUkls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AS1YHE/W; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788810683; c=relaxed/simple;
+	bh=IkAOD52TRvuG1O/4Ub8aY84lrUQIIUmjTPiuK5b15TI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=dSfTGtqJ+8ohpMWehklSsZaxmOZmlQ3wQx7BdjO2u1zjKp0eizWE3jTDRwyLOXIn+5xtp8DYavrsX1ZjY7PtiVg4iEeOP+2rufnBtW2cec5QKO218rLqNjsCOIHJH5n8hOJGC18ebEdSWWEQ4yHineeymydUuzprbyjVin5enE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jbQeY95m; arc=none smtp.client-ip=209.85.210.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AS1YHE/W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37BBA1F00A3A;
-	Mon,  7 Sep 2026 19:44:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788810284;
-	bh=mCmR72e2nOVpqrAnxqoWJB/dmw9MTO20IiKdwmYu4LY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=AS1YHE/Wx3j0mPNoZj9QToAE4SHxjEChfcR0SjTfXl2qgvGcVn5pqZZzjmyy2zEUC
-	 KTCQ2jIFTNubPJkbYz+B6apKrAa7UqEZFDTDeefNLEKZ6pSD9jqXpl93DPsWNVmJBa
-	 uvjPGey9ZWCkHTFdN/awChdv19Pc5xmCQFzE8NIfb8yaSV708U8zjbIvpBVCcJSi6K
-	 2OvLIjONS+1EeBxMGtmmAEglAMrYf7960kt8Tx4uP5Mo+ECrLueDeCB/nxj1UHGTfU
-	 flb/nFpqOAFU3Y748o86PPsNQy2Tvlm4ndpYAX221/eGlS/AvzTDt1VZhFaS97ub8u
-	 hdi7dWtu70XGg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf] bpf: refresh seg6local SRH pointer after skb pull
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Weiming Shi" <bestswngs@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260907192129.557377-2-bestswngs@gmail.com>
-References: <20260907192129.557377-2-bestswngs@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 07 Sep 2026 19:44:43 +0000
-Message-Id: <20260907194444.37BBA1F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jbQeY95m"
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7f57db8b5a4so2964932a34.2
+        for <bpf@vger.kernel.org>; Mon, 07 Sep 2026 12:51:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788810680; x=1789415480; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Hn4kdaO+bjAGm4qgxej2R9Cm/StZH9qbIx/OM9SBJK8=;
+        b=jbQeY95mtf3RtbrXtsGx7EktJnR1jAUMnYtKt2PxDIELJT422DNJbXnE72PeajsMih
+         fu1pCZA4Jv/lc2r+rnpUUOSNGi6Uwj4mdahXADV3O2dE5gQsotSNPCf83KP0khLc9kWi
+         IRK98MYPZ7fKMGlGxCt12N+KEVDr52LbwA+7eqQGMf5wFVRFzxA2DS2cqmmWa6oYmQvr
+         uE0pmCxqjrjdC+U7wMEN1SOO/nE+CbwMvpcZmPC1T2LREjFY+8dykGgblGwpNws+rqIf
+         FSpkQZ63j727cT1ZwXi9yo2+99sVIUzDpzKJ/XSxQvsLAfWdCcjONPQARVWoPrwjxNZo
+         oCHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788810680; x=1789415480;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Hn4kdaO+bjAGm4qgxej2R9Cm/StZH9qbIx/OM9SBJK8=;
+        b=P2GrQDn3thoxT5XggPHPyLLox5PtndIYXLD/sUh4c7HIw+HBT8VMXFTOTEHRf9C7pK
+         Drcvxraw+IwzrG1Mq12+R8y5hWxrd0lMWfax9uSklfCp3iUMeKrSJzFfL61bljiQe+2C
+         08hsRpSJ8R7R1q/Yvgbsd5Vprmsq1LAhPtNLC9k9l0bqJYCwE2aXBkt0TvmR0NinAjdo
+         ihTr9eZkw4jmoXmurhOONSonSPKS/dD+K9Kb/aCvhVs8EaZUWDfYv19ABIe6x5I9puCT
+         xb53i3nGeBYi0h6m2V1rCDRDzqxaRNiFgnvxseUCxPEFIpS8ZacvjHFBzw2asL7cec6W
+         biZg==
+X-Forwarded-Encrypted: i=1; AKwUvByl9Br+WXQPTgZ5JFnz0ZJIlFYMmb91AaZHL8fbpa+XKO0ITMdwbgX3ylwaJy1LPTraYNI=@vger.kernel.org
+X-Gm-Message-State: AFuF++kUXmKyvOYf3U6N8SwslusWQyaC0PXyHgQGdgQpkVLRwrM3AYe5
+	Myi1Id0Qc5/XuWWgpgGdlR/nUA8lJf5D+3mLRPCCAlTn4ABZFrwV6v6Q
+X-Gm-Gg: AYBFou23MH9gpNI+LSig0gYrgJBn8WrzqkDejGRljNieotCVpOZCe9sgcJO5c9+mpoj
+	vEZV2ms5Yh7nDHavOtHGNvGB72Dje8lplHa9E5U+njJF8go1ObTtfgjTjLBiZEmcVqcRDb3jxE4
+	DqE0nXBN0zkWlKx+4Z+1jynT/zkymZDOIRNHLV3u38pNZstWTjHpodt7v7q6Q0cr0nWMv9Gcrft
+	zQqnpOpydfY8dGXJ0UeZhQstX3j336sJMyQ7Tk5ObHhpd+lW4hBiYjXep+zphwFiCrP0jUy3WiF
+	u1cJXzXv7ytXk1+4t3txtDPsWlHRHEgza0w8CDjnbH/WW4+g/uWdWFua33OFURUa3IdXdl/WJ2f
+	RUbzV9fs6WFhBiuTZ1+otTayE1FcCaaiKHI+aegUTzO29WjfNnjMayWfz2ipscTFDJ2AQiGTND6
+	lo5nGxO09FDnUNyxKDDZoXfMUDoIl+aXXjByzsHm1UmF5EBUuzoCGNoyq3AM4DTiTyyh+czRBO/
+	4GHJqQLp7iaPc2reCF40/KXnyWHQO1JnScSj0qldWI3pQqhnUkoqCw=
+X-Received: by 2002:a05:6830:a8b:b0:7f6:96ad:36a8 with SMTP id 46e09a7af769-7fa1e2c7ea0mr15894586a34.8.1788810679996;
+        Mon, 07 Sep 2026 12:51:19 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:54::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f9f7aef680sm12847166a34.26.2026.09.07.12.51.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 07 Sep 2026 12:51:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 07 Sep 2026 12:51:18 -0700
+Message-Id: <DL9CGP0NFZ37.25Y31VZH6PKPQ@gmail.com>
+Cc: <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
+ <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
+ <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
+ <jolsa@kernel.org>, <tangyazhou518@outlook.com>,
+ <shenghaoyuan0928@163.com>, <ziye@zju.edu.cn>
+Subject: Re: [RFC PATCH bpf-next 1/6] bpf: Add UHMUL and SHMUL instructions
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Yazhou Tang" <tangyazhou@zju.edu.cn>, <bpf@vger.kernel.org>,
+ <ast@kernel.org>, <eddyz87@gmail.com>
+X-Mailer: aerc
+References: <20260902070534.2141812-1-tangyazhou@zju.edu.cn>
+ <20260902070534.2141812-2-tangyazhou@zju.edu.cn>
+In-Reply-To: <20260902070534.2141812-2-tangyazhou@zju.edu.cn>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+On Wed Sep 2, 2026 at 12:05 AM PDT, Yazhou Tang wrote:
+> From: Tianci Cao <ziye@zju.edu.cn>
+>
+> Define UHMUL and SHMUL as BPF_ALU64 BPF_MUL variants selected by insn->of=
+f.
+> UHMUL returns the high 64 bits of an unsigned 64-by-64-bit product, while
+> SHMUL returns the high 64 bits of a signed product. Keep off =3D=3D 0 as =
+the
+> existing low-half multiplication, and assign off =3D=3D 1 and off =3D=3D =
+2 to
+> UHMUL and SHMUL, respectively.
+>
+> These operations are inspired by the UHMUL and SHMUL instructions
+> introduced as part of the PQR instruction class in Solana sBPF[1].
+>
+> The encoding and immediate semantics differ from current sBPF.
+>
+> 1. Solana sBPF assigns these operations dedicated opcodes in the BPF_PQR
+>    class, whereas this implementation selects them through the offset
+>    field of BPF_MUL.
+>
+> 2. Solana sBPF initially sign-extended the immediate operand of UHMUL,
+>    but later changed unsigned PQR immediates, including UHMUL, to be
+>    zero-extended[2].
 
-Pre-existing issues:
-- [Critical] The fix for the dangling SRH pointer is conditionally compiled=
- under `CONFIG_IPV6_SEG6_BPF`, leaving the use-after-free vulnerability unp=
-atched when IPv6 is compiled as a module (`CONFIG_IPV6=3Dm`).
-- [Critical] Early error returns in `bpf_lwt_seg6_store_bytes`, `bpf_lwt_se=
-g6_adjust_srh`, and `bpf_lwt_seg6_action` leave `srh_state->srh` dangling i=
-f the SKB head was reallocated before the failure, causing the exact same u=
-se-after-free that the patch attempts to fix for `bpf_skb_pull_data`.
-- [High] `bpf_lwt_seg6_store_bytes`, `bpf_lwt_seg6_adjust_srh`, and `bpf_up=
-date_srh_state` use `ipv6_find_hdr` without `IP6_FH_F_SKIP_RH`, correctly i=
-dentifying the wrong routing header if multiple are present.
---
+Why did you switch to zero-extend ?
+Sounds odd to do zero extend just for these ops.
 
-commit 681db76be957fb9fd9b5dfbb7a3c0b06da4f90b7
-Author: Weiming Shi <bestswngs@gmail.com>
+Overall the patch set look pretty good.
+Please drop RFC and respin.
 
-bpf: refresh seg6local SRH pointer after skb pull
-
-An LWT_SEG6LOCAL program can invalidate its cached SRH with
-bpf_lwt_seg6_adjust_srh() and then call bpf_skb_pull_data(). The latter
-may reallocate skb->head, leaving the per-CPU SRH pointer dangling.
-Post-program SRH validation then writes through that pointer.
-
-Closes: https://lore.kernel.org/all/GCy0KRM2IcQGoJQTjJEU9D0maBxXzEDHuQpq@bu=
-gs.sh/
-
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 61940e7535523..e61f9e9226b10 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -7162,6 +7162,32 @@ static const struct bpf_func_proto bpf_lwt_seg6_ad=
-just_srh_proto =3D {
->  	.arg2_type	=3D ARG_ANYTHING,
->  	.arg3_type	=3D ARG_ANYTHING,
->  };
-
-[Severity: High]
-This isn't a bug introduced by this patch, but bpf_lwt_seg6_store_bytes(),
-bpf_lwt_seg6_adjust_srh(), and bpf_update_srh_state() use ipv6_find_hdr()
-without IP6_FH_F_SKIP_RH, which can correctly identify the wrong routing
-header if multiple are present.
-
-If a remote packet arrives with an exhausted Routing Header (e.g., Type 0)
-followed by an active SRH, seg6_get_srh() initially correctly skips the
-exhausted header using IP6_FH_F_SKIP_RH.
-
-However, when the BPF program calls bpf_lwt_seg6_store_bytes() or
-bpf_lwt_seg6_adjust_srh(), they recalculate the pointer using
-ipv6_find_hdr() without IP6_FH_F_SKIP_RH, which stops at the exhausted
-first header:
-
-net/core/filter.c:bpf_lwt_seg6_store_bytes() {
-    ...
-    if (ipv6_find_hdr(skb, &srhoff, IPPROTO_ROUTING, NULL, NULL) < 0)
-        return -EINVAL;
-    ...
-}
-
-This reassigns srh_state->srh to the wrong header. Later,
-seg6_bpf_has_valid_srh() overwrites the hdrlen of the exhausted header and
-validates against it, which can cause packet corruption and SRH validation
-bypass.
-
-Should we update these functions to use IP6_FH_F_SKIP_RH when finding the
-routing header to ensure we match the correct active SRH?
-
-> +
-> +BPF_CALL_2(bpf_lwt_seg6_pull_data, struct sk_buff *, skb, u32, len)
-> +{
-> +	struct seg6_bpf_srh_state *srh_state =3D
-> +		this_cpu_ptr(&seg6_bpf_srh_states);
-> +	unsigned int srhoff;
-> +	int ret;
-> +
-> +	lockdep_assert_held(&srh_state->bh_lock);
-> +	if (!srh_state->srh)
-> +		return ____bpf_skb_pull_data(skb, len);
-> +
-> +	srhoff =3D (unsigned char *)srh_state->srh - skb->data;
-> +	ret =3D ____bpf_skb_pull_data(skb, len);
-> +	srh_state->srh =3D (struct ipv6_sr_hdr *)(skb->data + srhoff);
-> +
-> +	return ret;
-> +}
-
-[Severity: Critical]
-This is a pre-existing issue, but I noticed early error returns in
-bpf_lwt_seg6_store_bytes(), bpf_lwt_seg6_adjust_srh(), and
-bpf_lwt_seg6_action() leave srh_state->srh dangling if the SKB head was
-reallocated before the failure, causing the exact same use-after-free
-regression that this patch attempts to fix for bpf_skb_pull_data().
-
-For example, in bpf_lwt_seg6_store_bytes():
-
-net/core/filter.c:bpf_lwt_seg6_store_bytes() {
-    ...
-    if (unlikely(bpf_try_make_writable(skb, offset + len)))
-        return -EFAULT;
-    ...
-}
-
-If bpf_try_make_writable() successfully reallocates skb->head and frees the
-old head, but then fails in a subsequent step such as an skb_clone()
-fragment failure, it returns an error code immediately.
-
-Because the early error paths do not update srh_state->srh, it remains
-pointing to the freed old head. When the BPF program finishes,
-seg6_bpf_has_valid_srh() accesses this freed memory.
-
-A similar situation occurs in bpf_lwt_seg6_adjust_srh():
-
-net/core/filter.c:bpf_lwt_seg6_adjust_srh() {
-    ...
-    if (ipv6_find_hdr(skb, &srhoff, IPPROTO_ROUTING, NULL, NULL) < 0)
-        return -EINVAL;
-    ...
-}
-
-If the earlier skb_cow_head() successfully freed the old head, and then this
-IPv6 header search fails, it returns early and leaves the SRH pointer dangl=
-ing.
-
-Also in bpf_lwt_seg6_action():
-
-net/core/filter.c:bpf_lwt_seg6_action() {
-    ...
-    if (!pskb_pull(skb, hdroff))
-        return -EBADMSG;
-    ...
-}
-
-If pskb_pull() reallocates the head and fails, bpf_update_srh_state(skb) is
-never called, leaving the SRH pointer dangling.
-
-Should we also ensure the SRH pointer is updated on early error returns in
-these functions, similarly to how it is handled for bpf_skb_pull_data() her=
-e?
-
-> +
-> +static const struct bpf_func_proto bpf_lwt_seg6_pull_data_proto =3D {
-> +	.func		=3D bpf_lwt_seg6_pull_data,
-> +	.gpl_only	=3D false,
-> +	.ret_type	=3D RET_INTEGER,
-> +	.arg1_type	=3D ARG_PTR_TO_CTX,
-> +	.arg2_type	=3D ARG_ANYTHING,
-> +};
->  #endif /* CONFIG_IPV6_SEG6_BPF */
-
-[ ... ]
-
-> @@ -9052,6 +9078,8 @@ lwt_seg6local_func_proto(enum bpf_func_id func_id, =
-const struct bpf_prog *prog)
->  		return &bpf_lwt_seg6_action_proto;
->  	case BPF_FUNC_lwt_seg6_adjust_srh:
->  		return &bpf_lwt_seg6_adjust_srh_proto;
-> +	case BPF_FUNC_skb_pull_data:
-> +		return &bpf_lwt_seg6_pull_data_proto;
->  #endif
->  	default:
->  		return lwt_out_func_proto(func_id, prog);
-
-[Severity: Critical]
-This is a pre-existing issue, but I noticed the fix for the dangling SRH
-pointer is conditionally compiled under CONFIG_IPV6_SEG6_BPF, leaving the
-use-after-free regression unpatched when IPv6 is compiled as a module
-(CONFIG_IPV6=3Dm).
-
-When IPv6 is built as a module, CONFIG_IPV6_SEG6_BPF evaluates to 'n'.
-BPF programs can still be attached via parse_nla_bpf() which unconditionally
-supports BPF_PROG_TYPE_LWT_SEG6LOCAL. The verifier defaults
-BPF_FUNC_skb_pull_data to the standard bpf_skb_pull_data_proto wrapper
-instead of this newly introduced safe wrapper because of this fallback:
-
-net/core/filter.c:lwt_seg6local_func_proto() {
-    ...
-#if IS_ENABLED(CONFIG_IPV6_SEG6_BPF)
-    ...
-#endif
-    default:
-        return lwt_out_func_proto(func_id, prog);
-}
-
-This standard wrapper can reallocate the SKB head without updating the
-per-CPU srh_state->srh pointer. When the BPF program finishes,
-input_action_end_bpf() in net/ipv6/seg6_local.c reads the dangling
-pointer regardless of CONFIG_IPV6_SEG6_BPF:
-
-net/ipv6/seg6_local.c:input_action_end_bpf() {
-    ...
-    if (srh_state->srh && !seg6_bpf_has_valid_srh(skb))
-        goto drop;
-    ...
-}
-
-Can we make sure the safe wrapper is also used when IPv6 is compiled as a
-module to avoid this regression?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260907192129.5573=
-77-2-bestswngs@gmail.com?part=3D1
