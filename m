@@ -1,61 +1,63 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE40371D01
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 04:51:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E176371D01
+	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 04:51:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788756708; cv=none; b=Ue6r4MHTerOM1DADTw281dGMu5roa2T1g8xGdui/BHQC83yyFuCVw5K0//qp3zJlDtWgkvk07e12C9wBp/gYy4E1MW2Uv3jUfv5Ug3m3Y2aULkfH/ToW3pxkNQZFJXZbsJe32IzzYkBUoLUl2NVie1awhXn6vpfOuu2FDEwHew8=
+	t=1788756717; cv=none; b=bu/DAL6J9d1acuXO2uQcd87wEUYBG+aR2CiUZTi/vfqxAoHh7XMyzaEnZ9aWmdKz1J/bcpg9sYnzfWXWCG87ycSB1TxTIL/cbVC8kUkwL7IKdnMpp7XDYGx0CMZ0lFGl6rCLzyf6mtBmJKi3OFg2Gc3BFJfoe9juwDl4CewJu04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788756708; c=relaxed/simple;
-	bh=GYLGPTz7B4DR+c4lAIA8hn1QEzqtbEK6fanc+u3joVg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=niVBLRPkYkDRWmxRxDyDlUvR7cAh5/D9CB2OFKjld7gZa+3UBXHoew6dMPdocbBftirxni+Q/TtPVsasWLILP4guk2auxvCQd5NgmfcxBvNGhykdvi2GyPzH4VbBZnw/H/jW3CBaKWMtJL245CD9WAGckvBCX1nThJny8Aks9xU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fnRN3Zzx; arc=none smtp.client-ip=209.85.215.169
+	s=arc-20240116; t=1788756717; c=relaxed/simple;
+	bh=WGtOQOgtI5Fvi9gfpYR69VsJM+hCLeDnatkdn+Q2LKg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Lv1aQ7kWHrzKChSVT3e0YccwxAJVUTG4FuHcPW5G8A1YiGSQP49Ip/LqJQH7kXShqelCmrrUA30vvqaUnTdRs55BCMkHBp654hWoeU2TV4udQ+qgVk/XcK555BjM9Qn5C1QcP+2YXAnbkuYurupJ76KV074a56ReZwstPBLk2y0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nv4oxIpJ; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fnRN3Zzx"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cc1c8d4a959so1992347a12.3
-        for <bpf@vger.kernel.org>; Sun, 06 Sep 2026 21:51:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nv4oxIpJ"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-853e2610bb4so2713150b3a.0
+        for <bpf@vger.kernel.org>; Sun, 06 Sep 2026 21:51:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788756706; x=1789361506; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=dSkZ75+revt0e4KyfnrpcrTujkH4yPeuqSBvDGGLspk=;
-        b=fnRN3Zzx+m/zlZ8cev3X69P2unCU/hKmk9KjTIB3yjMi8U152ulGdkf7hT/RomEYNI
-         XuYqllVVPpP67DyqhwAO5tpBTEatOmP/7k5ybHQErlPeSHslie07gjN+XwRst7xjKrtt
-         8YFQNXz4EqT0gN7d289pFJ0/TyownBzAv1nJKSsshKAVbPUSed1KJsb/dgFRzqDaSPPL
-         OSWkArHfoZK/XeqQnBvR4j8olsKFu9t528W0R/d0+ahTHcfwTqkNVWjamdJ7cMmkLpVz
-         q9R4iQ5uYJoAyPcXs58eKuia1X4/81NoH1Kg9HTUOXRa7j21BfB6Phi9wJ1dfFatS0Kp
-         N2FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788756706; x=1789361506;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1788756714; x=1789361514; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=dSkZ75+revt0e4KyfnrpcrTujkH4yPeuqSBvDGGLspk=;
-        b=FRPbKhvBRe2ulBQznAnWuY+V8RWxKAEYP8Ej+GiRVuqYtCgNPtoDGzwwltn8jHeEeh
-         pr6WTZbVbSgd74j8w44qx6qT99PAm2kNWY1eTmgpRVmVxXsp3JwNdia/hW4TosgruYwY
-         y5SkTHw3c+lN7Rk1026KSnD4kkbzOmPCGsRrnGEp7wPJzKZZNr6l8sBoUFigT7Nb3aZU
-         iHmsxXCfePCg6znmU0fr3DKWmXrTEy0hLi2lsmCemb5MYtBQBqyvrH1aeO4PphEv213c
-         dW+M+n2TLiUoGJwCnuTX60h+2L6/liigcOj3Pr2nU3ZxAMwHiye8svjhSnj8YwGqcDpq
-         27CA==
-X-Gm-Message-State: AFuF++kBS5eX6Bpn6ZFlSpx8YfkFJW6rE+yBXCEmYiLK235rljHxXEdY
-	PfngjW/788zKaLUoUGkyCVxz7fCv+SbaAeJ0VWTSuyaMDIIxL8O4H7fU
-X-Gm-Gg: AYBFou0/DGHXE5bD9Ak6v9dpPJivC6sQOPIuoTmDmYgKQ7GVDRLqatbqLQtKOHEe5qA
-	O3S6XGSkfJs5cnjL6RvpT4eQscBQVjwBxhTNMMYWnyHnfFbjFerxgjmE3QDTUG0GZysZ+2KpoxE
-	DwTCTicSBB7m5yQKKmJnX2xMNgcgeoObryOznmwnG0c9+9vmIRt16Gi4OIcJCpunnVXzRMJfLXs
-	PJdvlU7ujqB3END1neNQOj9N7hZJdwIDrL/17IvUMTOyMLZ1rrBIcQ2GvwcPB+JB8z965nNJMEA
-	S849b/Qp0NtS+8cWGAWjARIZDVdOsWij0ApEChX1Y2oxicLfFyaVXZ1Am5O1E8EqbW3+tIJwSBx
-	Z3ZaGHJQIAB/hCciTqoASwoZHs7XeYmnLPqcsUjAZ9WCcGCsZ8ddTKh7pA6N6yTwaXePxgXAEpm
-	CbOXBDbnJS+PZxHlSkNwHxBJX0vAzH+9BaP3Eymj4cENucNhz22Q1yz0bUNaKn3UH2wqfqbb/d9
-	r/LEZgRk5YV1g==
-X-Received: by 2002:a17:90b:1643:b0:380:21b7:e727 with SMTP id 98e67ed59e1d1-39b26272f04mr30192034a91.14.1788756706071;
-        Sun, 06 Sep 2026 21:51:46 -0700 (PDT)
+        bh=6ZDdWvx8nd79EclYwIbserkqXBmdMeyV10TLzPxe1TU=;
+        b=Nv4oxIpJPqU7YNEbfXW/xZzG+x3fDC9m/DF2QQuMVAEgxpLVHSDc48xc+kBPWgcDti
+         F/T93U9NdBsOJsGBU3gpco28cLyeGbxd4kLT5KwV4c98jO3ijn0ISJeOJbw0ogQ0PxLp
+         dLfOHJ1YF6vacdUlePjdlDpoRhy7vOnd/VgeiEA9W44gVQ+BbU1fIfshow7Tv16bwNHc
+         tnvnsBCIhHaYrlyoGFvJYMUP591ZrF65wSLggcOrWF3flt30+ytafy8q3YCTBwDo2SBI
+         uX8+S7FZ1SUSaW9hi+QZs0DiDBMGHJH15wjSy+VhAXlNiEkaX7Xwgf27uDZypajVmKgt
+         XBJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788756714; x=1789361514;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=6ZDdWvx8nd79EclYwIbserkqXBmdMeyV10TLzPxe1TU=;
+        b=DqQGEf7jyYIPNET6VhoWrmay6hbMkHwwvAReWcCofdXFKPuENHTQoV3hUCSbDxUGgG
+         fK4ZdUrpbs9rFy335QNVW+zh2cF13kA3V4FNc+KUX+Q36HVv94PPfMWpoUjapKLb/2F0
+         ByGKmwxfWu0o+mTkNpf5IJUzwSs4Y5wJdMff24ibxhLaBe4qzde71B1Ezvm6Uxy8cuEV
+         cHTcw4EfdOEY9sf4w5CXX82QsjeYfckdhLCb4MZl7WnKn5/Ft4AG5fZT4cbdYxBfaZyE
+         sIyQRW8CboQeufoWbBSzTE+jesCGr4LM9fyuCFnwcQr9LM4wsdJ6yoOuo/SfRBJYUBR1
+         Mx9w==
+X-Gm-Message-State: AFuF++lhxmQ992nMRbRDv0kavX7RM9gYxVtsmmHSAQj07X02dRSBgQ6X
+	Ow+DBIPsg2DB7sySsNdz5LFB+v/ce85OJBxh0PUqQq1wYrenF6/HZhf8
+X-Gm-Gg: AYBFou1uY+eiGN+SAvCfjCiLLdevp1WCQfUhR5YDlBhBJX5+pr+gogp5Z1ZzjoWKPLH
+	VHG0cCkC76vsAQnRyO4ndZ23YWS90FH8Dl//cfS6PInl7fLJWxOWPpysSH7EF5g2SsVJOinY1Er
+	K9hw+DbpSWeYaLE7IlxP3bnVW8MrTL+j7IkpFXXQyflR9ayT3uMFfaLH8fatCtsPUkO+RHX7jfz
+	wGLejdb+hZM7a63+hIz1sRLZSB9MBXkVBlOHv1Zk0Ka8WU4t20jH8/Mpd7XzakfuKpjwxlt2zme
+	bj9yJC5ygxVaNTeIy+JumTykSFnQU1kEK+CZOa8UyVG/pVLdg3RcZTeK5Fph2jGHKHgWRSISGNo
+	6H3PhCGznnMZHE1uKfIMmaoWsvIbMZT/nGat9MKUtN1PbyyxSaz2ZU2WzeiBu/Vm5jMnIe6RWdE
+	lfug3Knz1AKHTxd+/M2G6MkOD6sBSFu0g+6HP/nPLKG0pZzOtRiJvgYEl0o46sYb2QhKMb3nluO
+	orhNQjrkDTEQg==
+X-Received: by 2002:a05:6a21:e082:b0:3d3:aed2:6f21 with SMTP id adf61e73a8af0-3da2160e09fmr24886058637.21.1788756714529;
+        Sun, 06 Sep 2026 21:51:54 -0700 (PDT)
 Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14324410092sm21979675c88.14.2026.09.06.21.51.37
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14324410092sm21979675c88.14.2026.09.06.21.51.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Sep 2026 21:51:45 -0700 (PDT)
+        Sun, 06 Sep 2026 21:51:54 -0700 (PDT)
 From: Hemanth Selam <hemanth.selam@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -86,10 +88,12 @@ Cc: bpf@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org,
 	linux-kselftest@vger.kernel.org,
 	sparclinux@vger.kernel.org
-Subject: [PATCH v2 0/7] bpf: fix typos and repeated words in comments
-Date: Mon,  7 Sep 2026 10:21:28 +0530
-Message-ID: <20260907045135.13317-1-hemanth.selam@gmail.com>
+Subject: [PATCH v2 1/7] ARM: net: fix typo "arithmatic" in comment
+Date: Mon,  7 Sep 2026 10:21:29 +0530
+Message-ID: <20260907045135.13317-2-hemanth.selam@gmail.com>
 X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20260907045135.13317-1-hemanth.selam@gmail.com>
+References: <20260907045135.13317-1-hemanth.selam@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -98,28 +102,26 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is v2 of the spelling fixes for this tree.
+Correct "arithmatic" to "Arithmetic", reported by scripts/checkpatch.pl
+using the misspelling list in scripts/spelling.txt.  Only touches comments,
+no code changes.
 
-Changes since v1:
-Subject prefixes corrected: 'selftests: bpf:' becomes 'selftests/bpf:'
-and the tools/lib patch becomes 'libbpf:', as the CI bot suggested.
+Assisted-by: Cursor:claude-opus-5
+Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
+---
+ arch/arm/net/bpf_jit_32.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Only comments change; no code is touched.
-
- arch/arm/net/bpf_jit_32.c                                    | 2 +-
- arch/powerpc/net/bpf_jit_comp32.c                            | 2 +-
- arch/powerpc/net/bpf_jit_comp64.c                            | 4 ++--
- arch/sparc/net/bpf_jit_asm_32.S                              | 2 +-
- include/linux/filter.h                                       | 4 ++--
- kernel/bpf/reuseport_array.c                                 | 2 +-
- kernel/bpf/stream.c                                          | 2 +-
- tools/lib/bpf/btf.c                                          | 4 ++--
- tools/lib/bpf/usdt.c                                         | 2 +-
- tools/testing/selftests/bpf/libarena/src/asan.bpf.c          | 2 +-
- tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c       | 2 +-
- tools/testing/selftests/bpf/prog_tests/task_local_data.h     | 2 +-
- tools/testing/selftests/bpf/progs/freplace_unreliable_prog.c | 2 +-
- tools/testing/selftests/bpf/progs/iters.c                    | 2 +-
- tools/testing/selftests/bpf/progs/verifier_var_off.c         | 2 +-
- 15 files changed, 18 insertions(+), 18 deletions(-)
-
+diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
+index 9ede81afbc50..b1c21c014c9c 100644
+--- a/arch/arm/net/bpf_jit_32.c
++++ b/arch/arm/net/bpf_jit_32.c
+@@ -1346,7 +1346,7 @@ static inline void emit_ldsx_r(const s8 dst[], const s8 src,
+ 	arm_bpf_put_reg64(dst, rd, ctx);
+ }
+ 
+-/* Arithmatic Operation */
++/* Arithmetic Operation */
+ static inline void emit_ar_r(const u8 rd, const u8 rt, const u8 rm,
+ 			     const u8 rn, struct jit_ctx *ctx, u8 op,
+ 			     bool is_jmp64) {
