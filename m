@@ -1,175 +1,177 @@
-Received: from out-93wp-a21.jellyfish.systems (out-93wp-a21.jellyfish.systems [104.207.68.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E3253E1CFB
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 02:15:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.207.68.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF2993E1693;
+	Mon,  7 Sep 2026 02:20:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788747343; cv=none; b=qB2o4Bnbd7dY8HZ/rcym3RAOuOigxA0+ygglFGD0Ft60iUEB62OJfTp4W5sohvfKediILhxDPFiPbLhd/ACFXoJ8XyaXLCObe498FAIpBmFYc3Ioggo5r6eplLPiB0O6+uiuo7cRQ7f+nZL5KjYv2XXwqPg2ks6ccweHkG1O7+o=
+	t=1788747657; cv=none; b=p7heLycVNZTUX62ofrphjADCZjWB2fWaHvgRRjU4sjbdUUHRcYU1psqBy2YMHcZntPK4tv9/OUoDwekSRzsuwtb7lME9J82d5Jbsi8Fvogd4D1JTCeaYkhDBNqBER6IOtUmvAyJpsb+EgpSmq/dXC4VtNJJXJdQNQNK4kB1qUM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788747343; c=relaxed/simple;
-	bh=V24EdTx0Jc3b4YquY5iKBvYsiJvrFgyxPWaiu4uUAN8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UDMGS3AQBHRy8IUEHR+3rgctDszQE6EVqnURJ4mk+OjNA0M2krwGyY/akz1fNza+8I7z8ZYx02GkjkXAPZahBvv9qRUDtmfBXIyo1XY5DxSsu5XkuV8nINZ1xMMd3y7pARM4ZD1jX29men41/il+xX8IibHP9I8gTf97VLGTwls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=mmhjXOtN; arc=none smtp.client-ip=104.207.68.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
+	s=arc-20240116; t=1788747657; c=relaxed/simple;
+	bh=xEPJY0Xy2R6hVl9OJ+pvt8jh1tU/gwGch8H96sNsGX0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=hubp6NfXtVfaQ/mfas837Nysv2I2EzKp4HPnyj9EN+mEry7gwNp9hn5PImLWduhK7uth7Db7owDLVQyzUHmaPaGgIu+ezxOv1tXUQByesojJRTUqJOW139pbgA818or1rDBmynsGBtSdojwdFLIku/h7XtwYKZaQI8uMiTnxHF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bfSivRSt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="mmhjXOtN"
-Received: from 192.168.5.3 (unknown [69.5.53.41])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdVyz1wxGz2x9N;
-	Mon, 07 Sep 2026 02:15:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1788747325;
-	bh=xM7csDhXm8uOsmjo6YRZ+NmRhstWabkie9x2z0r7Ab8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mmhjXOtN4XHHUa90nvjvKUifxB21fnuCA3vtB+y8r2zftVzCkI1eAIMgSCnmcxzKn
-	 IUcyisgnfekr0TU4aNOgnnRy1ShzVvqHYKlnQJvpc+RDztuvXntlOMWfDe2lmVHYdS
-	 HN0D8TMsqHaRFDBhM+Vl3DeTh6SCUyop4ORVTkIiIaRWE4PCslRDX8JW9+uHJk8GYB
-	 Lt9D8yzcTzodV06qFnyscAHR+w8Kg1ChyubAVP3vibnnlLIOKJTGrenRXK2UidTswW
-	 E8vKIS0WnLsHzhoqhDo0KDYPXJ0+YWAlxbMemVcqcOqJk3fPp2Bw01aDsoti8/IQ5S
-	 QUMiCPXOrqlzw==
-From: Tianyi Chen <hi@tychen.cc>
-To: bpf@vger.kernel.org
-Cc: qmo@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	hi@tychen.cc
-Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Cover symbolic bpftool map creation flags
-Date: Mon,  7 Sep 2026 10:15:16 +0800
-Message-ID: <178874713816.1519295.11686841174785622807.flags-v3-2@tychen.cc>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <178874713816.1519295.5079603775338308680.flags-v3-0@tychen.cc>
-References: <178874362959.1415955.5742268739057412911.flags-v2-0@tychen.cc> <178874713816.1519295.5079603775338308680.flags-v3-0@tychen.cc>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bfSivRSt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C92781F00A3A;
+	Mon,  7 Sep 2026 02:20:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788747655;
+	bh=t365erqQSDoE5ipiV8It4X0KNt1LMeimohJDD30xFy8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=bfSivRSt7jNxuS/Db3JUBS6IfS1sPubQoUloUuj7hI9Nw2awRtwo20pI3tjn+5EQs
+	 dPo43cs0brAsXX2lGfINWM9AGqe+Lc9O4Juxs/dc4bdLx2dllBXS8Pw6/LZfOTSeMO
+	 kxP1+8mU8NlrloMUwxxB6fwnYq1ru/o2+voJ6cumYmKEpWa3/juhH4tCF3jgxQx+45
+	 GoUl9dgelbYa6n2wmUVyJ6skixOxcPYxoGiLy18JNTQ6SLUD15SaHl33+nigb3Utqd
+	 PTuIQE/jLKVgkj0p3P3GSzaPHEFVLIo2NtPfiJ0C5AUj81T4KLQ3OzIpbUiXfjvT3K
+	 Jl0KKe3qAR+WQ==
+Content-Type: multipart/mixed; boundary="===============3433593942401381302=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Envelope-From: hi@tychen.cc
+Message-Id: <7a2ed42e006620d35c7112f2828f37e97b13f77e71d242c121c2641e88ffa3d8@mail.kernel.org>
+In-Reply-To: <178874362960.1415955.4802953891665661440.ringbuf-v2-1@tychen.cc>
+References: <178874362960.1415955.4802953891665661440.ringbuf-v2-1@tychen.cc>
+Subject: Re: [PATCH bpf-next v2 1/2] bpftool: Read ring buffer maps with event_pipe
+From: bot+bpf-ci@kernel.org
+To: hi@tychen.cc,bpf@vger.kernel.org
+Cc: hi@tychen.cc,qmo@kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon,  7 Sep 2026 02:20:54 +0000 (UTC)
 
-Check numeric and symbolic map creation flags, including combined and
-repeated names, against map information read independently with libbpf.
-Exercise malformed names and lists, update-only flags, empty input and
-numeric range errors. Verify rejected input leaves no pinned map.
+--===============3433593942401381302==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Assisted-by: Codex:GPT-6
-Signed-off-by: Tianyi Chen <hi@tychen.cc>
+> Allow map event_pipe to consume BPF_MAP_TYPE_RINGBUF maps using
+> libbpf's ring buffer manager. Print each record's size and raw bytes
+> in plain or JSON output, and flush output as records arrive.
+>
+> Reject CPU and index selectors for ring buffers and retain the existing
+> perf event array path. Keep signal handlers limited to setting a stop
+> flag, reset that flag for each command, and print the stopping message
+> on stderr from the main path. Close the JSON array on poll errors and
+> preserve output errors returned by the ring buffer callback.
+
+This isn't a bug, but could the changelog lead with why this is needed
+(ring buffers are now the common output channel but event_pipe has no way
+to read them) and keep only the parts of the mechanism that are not
+obvious from the diff, such as the -EINTR return from the callback? The
+second and third paragraphs walk through what individual hunks do rather
+than explaining the rationale. A reader can learn what each hunk does but
+not why the feature is wanted; the motivation is only reachable through
+the Link: tag.
+
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+> index 5daf3de5c744..c44e6f797e57 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+
+[ ... ]
+
+> @@ -134,6 +135,18 @@ bpftool map event_pipe *MAP* [cpu *N* index *M*]
+>      existing ring.  Any other application will stop receiving events if it
+>      installed its rings earlier.
+>
+> +    For a ring buffer map, consume records submitted by BPF programs, including
+> +    records already queued before the command starts. **cpu** and **index**
+> +    are not supported. Each record is printed as raw bytes, including embedded
+> +    zero bytes. Plain output reports the record size followed by hexadecimal
+> +    bytes; JSON output contains **size** and **data** fields, with **data** an
+> +    array of byte values. Ring buffer records have no implicit CPU or timestamp.
+> +
+> +    Ring buffers support a single consumer. This command advances the shared
+> +    consumer position and must not run alongside another consumer of the same
+> +    map; it does not provide a passive view of events. **BPF_MAP_TYPE_USER_RINGBUF**
+> +    maps are not supported.
+
+This isn't a bug, but would it read more tightly to state the
+consumer-position effect once, e.g. "Consuming a ring buffer advances its
+shared consumer position, so this command must not run alongside another
+consumer of the same map", and to say "printed in full, including embedded
+zero bytes" rather than "raw bytes" just before describing the hex output?
+The single-consumer point is made four times in three sentences: "support
+a single consumer", "advances the shared consumer position", "must not run
+alongside another consumer of the same map", and "it does not provide a
+passive view of events". The paragraph above has a similar redundancy in
+the other direction: "Each record is printed as raw bytes, including
+embedded zero bytes" is immediately followed by "Plain output reports the
+record size followed by hexadecimal bytes", so "raw bytes" reads as a
+contradiction of the hex encoding described one sentence later.
+
+> diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
+> index 75cbcb512eba..1750b488c9e3 100644
+> --- a/tools/bpf/bpftool/bash-completion/bpftool
+> +++ b/tools/bpf/bpftool/bash-completion/bpftool
+> @@ -878,11 +878,11 @@ _bpftool()
+>                              return 0
+>                              ;;
+>                          id)
+> -                            _bpftool_get_map_ids_for_type perf_event_array
+> +                            _bpftool_get_map_ids_for_type '"type": "\(perf_event_array\|ringbuf\)"'
+>                              return 0
+>                              ;;
+>                          name)
+> -                            _bpftool_get_map_names_for_type perf_event_array
+> +                            _bpftool_get_map_names_for_type '"type": "\(perf_event_array\|ringbuf\)"'
+>                              return 0
+>                              ;;
+>                          cpu)
+
+This isn't a bug, but the other _for_type callers here pass a bare map
+type (e.g. stack / queue on two lines). Would anchoring the "type": "$type"
+match inside _bpftool_get_map_ids_for_type()/_bpftool_get_map_names_for_type()
+and then calling them twice read more consistently than passing a grep
+expression from the call site? The two new call sites pass a raw grep BRE
+to helpers that every other caller in this file feeds a bare map type
+name, and the call site now encodes the helper's internal implementation
+detail (that it greps the pretty-printed JSON for a "type": "..." line).
+The file's existing idiom for a two-type selection is two consecutive
+calls (lines 682-683 and 700-701).
+
+> diff --git a/tools/bpf/bpftool/map_perf_ring.c b/tools/bpf/bpftool/map_perf_ring.c
+> index bcb767e2d673..7d555331f443 100644
+> --- a/tools/bpf/bpftool/map_perf_ring.c
+> +++ b/tools/bpf/bpftool/map_perf_ring.c
+> @@ -27,7 +27,7 @@
+>
+>  #define MMAP_PAGE_CNT	16
+>
+> -static volatile bool stop;
+> +static volatile sig_atomic_t stop;
+>
+>  struct perf_event_sample {
+>  	struct perf_event_header header;
+> @@ -44,7 +44,6 @@ struct perf_event_lost {
+>
+>  static void int_exit(int signo)
+>  {
+> -	fprintf(stderr, "Stopping...\n");
+>  	stop = true;
+>  }
+
+Would it be worth splitting the signal-handler hardening (volatile bool ->
+volatile sig_atomic_t, and moving the "Stopping..." print out of int_exit())
+into a small preparatory patch? It looks like a standalone async-signal-safety
+fix for the existing perf-event-array path, and separating it would make both
+halves easier to review and backport. Two of the changes in this hunk are
+async-signal-safety fixes to pre-existing code rather than part of the new
+ring buffer support: widening stop from volatile bool to volatile sig_atomic_t,
+and dropping the fprintf call out of the handler (fprintf is not
+async-signal-safe). Both stand on their own and apply equally to the existing
+perf-event-array path, whereas the rest of the patch (the stop = false reset,
+the -EINTR return from the ring buffer callback, the jsonw_end_array() on the
+error path) is genuinely needed for ring buffers.
+
+[ ... ]
+
 ---
- .../bpf/prog_tests/bpftool_map_flags.c        | 100 ++++++++++++++++++
- 1 file changed, 100 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c
-new file mode 100644
-index 00000000000..d617b43273a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c
-@@ -0,0 +1,100 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <errno.h>
-+#include <unistd.h>
-+#include <bpf/bpf.h>
-+#include <bpftool_helpers.h>
-+#include <test_progs.h>
-+
-+static const struct map_flags_test {
-+	const char *name;
-+	const char *flags;
-+	__u32 expected_flags;
-+	const char *error;
-+} tests[] = {
-+	{ "zero", "0", 0 },
-+	{ "decimal", "129", BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
-+	{ "hexadecimal", "0x81", BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
-+	{ "octal", "0201", BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
-+	{ "positive_sign", "+1", BPF_F_NO_PREALLOC },
-+	{ "single_name", "BPF_F_NO_PREALLOC", BPF_F_NO_PREALLOC },
-+	{ "combined_names", "BPF_F_NO_PREALLOC,BPF_F_RDONLY_PROG",
-+	  BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
-+	{ "repeated_name", "BPF_F_NO_PREALLOC,BPF_F_NO_PREALLOC", BPF_F_NO_PREALLOC },
-+	{ "unknown_name", "BPF_F_NOT_A_MAP_FLAG", 0, "can't parse" },
-+	{ "other_command_flag", "BPF_F_PATH_FD", 0, "can't parse" },
-+	{ "update_flag", "BPF_F_LOCK", 0, "can't parse" },
-+	{ "abbreviated_name", "BPF_F_NO_PRE", 0, "can't parse" },
-+	{ "lowercase_name", "bpf_f_no_prealloc", 0, "can't parse" },
-+	{ "empty", "", 0, "can't parse" },
-+	{ "whitespace", " ", 0, "can't parse" },
-+	{ "empty_list", ",", 0, "can't parse" },
-+	{ "leading_comma", ",BPF_F_NO_PREALLOC", 0, "can't parse" },
-+	{ "trailing_comma", "BPF_F_NO_PREALLOC,", 0, "can't parse" },
-+	{ "empty_element", "BPF_F_NO_PREALLOC,,BPF_F_RDONLY_PROG", 0, "can't parse" },
-+	{ "number_then_name", "1,BPF_F_RDONLY_PROG", 0, "can't parse" },
-+	{ "name_then_number", "BPF_F_NO_PREALLOC,128", 0, "can't parse" },
-+	{ "numeric_list", "1,128", 0, "can't parse" },
-+	{ "whitespace_in_list", "BPF_F_NO_PREALLOC, BPF_F_RDONLY_PROG", 0, "can't parse" },
-+	{ "overflow_u32", "4294967296", 0, "can't parse" },
-+	{ "overflow_hex", "0x100000000", 0, "can't parse" },
-+	{ "overflow_u64", "18446744073709551616", 0, "can't parse" },
-+	{ "negative", "-1", 0, "can't parse" },
-+	/* Numeric bits unknown to bpftool must still reach the kernel. */
-+	{ "all_bits", "0xffffffff", 0, "map create failed" },
-+	/* The kernel validates combinations of known map creation flags. */
-+	{ "invalid_combination", "BPF_F_RDONLY,BPF_F_WRONLY", 0, "map create failed" },
-+};
-+
-+static void test_map_flags(const struct map_flags_test *test, const char *path)
-+{
-+	char cmd[MAX_BPFTOOL_CMD_LEN], output[1024] = {};
-+	struct bpf_map_info info = {};
-+	__u32 info_len = sizeof(info);
-+	int fd, err;
-+
-+	/* Let the flags parser handle negative numbers instead of getopt(). */
-+	err = snprintf(cmd, sizeof(cmd),
-+		       "-- map create %s type hash key 4 value 4 entries 1 name flags_test flags '%s' 2>&1",
-+		       path, test->flags);
-+	if (!ASSERT_GT(err, 0, "format_command") ||
-+	    !ASSERT_LT(err, sizeof(cmd), "command_length"))
-+		return;
-+
-+	err = get_bpftool_command_output(cmd, output, sizeof(output));
-+	if (test->error) {
-+		ASSERT_NEQ(err, 0, "reject_flags");
-+		ASSERT_HAS_SUBSTR(output, test->error, "error_message");
-+		err = access(path, F_OK);
-+		ASSERT_EQ(err, -1, "no_pin");
-+		ASSERT_EQ(errno, ENOENT, "pin_absent");
-+		goto cleanup;
-+	}
-+	if (!ASSERT_OK(err, "create_map"))
-+		goto cleanup;
-+
-+	fd = bpf_obj_get(path);
-+	if (!ASSERT_OK_FD(fd, "open_map"))
-+		goto cleanup;
-+	if (ASSERT_OK(bpf_map_get_info_by_fd(fd, &info, &info_len), "map_info"))
-+		ASSERT_EQ(info.map_flags, test->expected_flags, "map_flags");
-+	close(fd);
-+cleanup:
-+	unlink(path);
-+}
-+
-+void test_bpftool_map_flags(void)
-+{
-+	char dir[] = "/sys/fs/bpf/bpftool_flags_XXXXXX";
-+	char path[sizeof(dir) + sizeof("/map")];
-+	int i;
-+
-+	if (!ASSERT_OK_PTR(mkdtemp(dir), "create_pin_dir"))
-+		return;
-+	snprintf(path, sizeof(path), "%s/map", dir);
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		if (test__start_subtest(tests[i].name))
-+			test_map_flags(&tests[i], path);
-+	}
-+	ASSERT_OK(rmdir(dir), "remove_pin_dir");
-+}
--- 
-2.55.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34074185878
+--===============3433593942401381302==--
