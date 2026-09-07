@@ -1,137 +1,185 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from bg-bec.cloudflare-smtp.org (bg-bec.cloudflare-smtp.org [104.30.16.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3A3251D53C
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 17:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CD6521222
+	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 18:13:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.30.16.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788801259; cv=none; b=p2tmGa/Lfa6+R2OV7SIsS6FajPKerATD50GMbLDy1DbJGx/i8bGxKzPLZdUSkG05rAlQ7aNeRVbN8ZDLTux580SdRXec16vDStvF7elkVE01IAhOAFxQy13bkRePD+bOa5pJU0zjMVTzIitGM9r7mV4TlAQB0+m1zrqxXw5GxgE=
+	t=1788804808; cv=none; b=XXtL/X/8USDfzsTdaAd6mvyGx7wdE1mDwDhqEX++klI8jkPI96twb8jXGRfYwGN4Tx7yiED3M+af7tzm0Mlf1Gvz01z2N/EZyALD6umfspHicBHSREWQ4+0P3vsAvdbw8kyJJoPgo8UP9J1tO8ZM3oH+r7TU5PW+OaGM1kxWFJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788801259; c=relaxed/simple;
-	bh=/C6diKm3AvCNrAtgLNV4FW1ctWv1KG1asdrs+zzomUY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=XJOsdZXY9HCPHxov3+CUBF422ZqEM0v5dZcezMGpgySZOMMGf/GslgxnJtP0IsyyJA8t3zc130Z4S0ZKD7aF50Ih6++FoXzCfWinjg6nUCHQPTPu/dliLssqjl4UR0JKaBWrVvPcNkFFxk0MApREosSolXLiwM+KDyZ/rcOpMt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D16Ezudz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788804808; c=relaxed/simple;
+	bh=qCWRk6NNvF6vDMpmZHo9Ueq40DPrOWuJ7dexK/0j/yo=;
+	h=From:Message-ID:Date:Subject:To:Cc:MIME-Version:Content-Type; b=e60LkRIdp9SAg6k60XiSb26FA3EQqBz70LGe0+Xh7Mxf2D+Uvc5BHqflTaexJ98aBfm111tVT5IZPlm+M5nmaFmhKkumc9EXI6/gbMZowVXLwcLtOMMNu5UGKjdwttO3nCTL9Ix8cbAVQMBKn8iceAIx+W2kjoQOIRCFk2NdEGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bugs.sh; spf=pass smtp.mailfrom=cf-bounce.bugs.sh; dkim=pass (2048-bit key) header.d=cloudflare-smtp.org header.i=@cloudflare-smtp.org header.b=f6Ksgo7m; dkim=pass (2048-bit key) header.d=bugs.sh header.i=@bugs.sh header.b=YsadLwD+; arc=none smtp.client-ip=104.30.16.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bugs.sh
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cf-bounce.bugs.sh
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D16Ezudz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 559201F00A3A;
-	Mon,  7 Sep 2026 17:14:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788801257;
-	bh=YPNFv5NiwNqKetL1kLced8l9fgD3o0o3Qc/Za6UY1lQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=D16Ezudz+HfiBrC2JB0xCwN3SBUhi46mE+/A+v+Q0oD0GNpCj9iLjsW+PiIKHIyE2
-	 y8YNB1Ua3VAMvbOfd2kVkKCUZNMA4hppQHThBkdRQQDJ7UmIisIhKQIqmFbC1lsXhK
-	 Xiy+56NoIU7peL8Pg/2zsUA+OnfSk7oa2mbqtnP8kbOlBNgZP6KRh3p4LL4Q+/uUQi
-	 KaZ4Om8CzhqOyZNF4UDOzzEADJwrNRG0YPqjlHMAv0ikyuSClvD55QWKj075wjSXWw
-	 ZlPr9VDsPfUmItmSJBMg18ZXTk+k42qggzQMXpNuNBxx8tvdWhYMs0JbymmZt3BEGc
-	 eaWgMLazVC8Hg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 6.12.y] tcp: clear sock_ops cb flags before
- force-closing a child socket
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?TWlndWVsIEdhenF1ZXogKFNjaG5laWRlciBFbGVjdHJpYyk=?= <miguel.gazquez@bootlin.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260907-cve-2026-74268-v1-1-cacea38d7fb3@bootlin.com>
-References: <20260907-cve-2026-74268-v1-1-cacea38d7fb3@bootlin.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 07 Sep 2026 17:14:16 +0000
-Message-Id: <20260907171417.559201F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=cloudflare-smtp.org header.i=@cloudflare-smtp.org header.b="f6Ksgo7m";
+	dkim=pass (2048-bit key) header.d=bugs.sh header.i=@bugs.sh header.b="YsadLwD+"
+DKIM-Signature: v=1; a=rsa-sha256; s=cf2024-1; d=cloudflare-smtp.org; c=relaxed/relaxed;
+	h=Cc:To:Subject:Date:From:Feedback-ID:from:reply-to:resent-date
+	:resent-from:resent-to:resent-cc:in-reply-to:references:list-id:list-help
+	:list-unsubscribe:list-unsubscribe-post:list-subscribe:list-post
+	:list-owner:list-archive; t=1788804806; x=1789409606; bh=Y1k9M3m0T020G6VgZc
+	BGnYVq9doEsBQQyGYyOLclWTY=; b=f6Ksgo7m4NZWhYkfYAcyzgA9SG/kf1jyzO+Smfvknbgx+
+	MgNI/9yuLc0W0f/9EJdg2Y49rC9UspwNPCqiKgHTFJmZIiTKaElzqPT7IRvBKmmnC4oP7FSXK44
+	WLbdZLnbHeE9p6iyEHLOAM166LeBQJcz036qmZ8IsFNVFx0NlavjYFTfh+N+m7qwyPsdoEBep3Z
+	e3LMi77fjLOGDe1MAJFFiwmvlCP52H0BAaiiTUyY+e+sujHm1eq9LBh/CvkbEuOwI70zuwvGr41
+	LfrWuV1T1lOTXWKVYPiHs90fKKbC44Jd8z895zJFoqt/k6O4djQtigq23Bov2nqfND8wzOGg==;
+DKIM-Signature: v=1; a=rsa-sha256; s=cf-bounce; d=bugs.sh; c=relaxed/relaxed;
+	h=Cc:To:Subject:Date:From:Feedback-ID:from:reply-to:resent-date
+	:resent-from:resent-to:resent-cc:in-reply-to:references:list-id:list-help
+	:list-unsubscribe:list-unsubscribe-post:list-subscribe:list-post
+	:list-owner:list-archive; t=1788804806; x=1789409606; bh=Y1k9M3m0T020G6VgZc
+	BGnYVq9doEsBQQyGYyOLclWTY=; b=YsadLwD+XQnAoBlyCeOaln67O68DZ7i+Q36Huv1ocE6eK
+	fVRzN2bkZAkUVINapUXwW1enDVsB5NH3ZMPqryikwRtLZ21XsMks8CFuecneq/QeAJI8a4uQTn1
+	TBZQs+qirfywaVCXBz/5M4/ky8Yld9+acr0kD62E3QVe8as+03QIvT6P+4CLr8Dted4a6/OyFsk
+	YIT78I+v3sRNWpNSeO1UHl892B9IoV4q73HlAL7jMom8MH6ZxuLlBSUgsQOazD0tWnLO1wT7KZQ
+	8aexsXX2+v3w7zeqWvYtaJWp6ymqOOKRx0IdNlrHcyeTqnVb1ZR6oM43OP3SouiMtSpFaLKQ==;
+Feedback-ID: bugs.sh:5:6:Cloudflare
+From: co <co+adfca3e91be95776@bugs.sh>
+Message-ID: <GCy0KRM2IcQGoJQTjJEU9D0maBxXzEDHuQpq@bugs.sh>
+Date: Mon, 07 Sep 2026 18:13:15 +0000
+Subject: [BUG] net/ipv6: use-after-free in seg6_bpf_has_valid_srh()
+To: "David S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song
+ Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
+ Olsa" <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>, "Stanislav
+ Fomichev" <sdf@fomichev.me>, "Simon Horman" <horms@kernel.org>, "David
+ Lebrun" <dlebrun@google.com>, "Mathieu Xhonneux" <m.xhonneux@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, co <co+adfca3e91be95776@bugs.sh>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] Calling tcp_clear_sock_ops_cb_flags() unconditionally on non-T=
-CP sockets (like DCCP) causes an out-of-bounds write due to an invalid stru=
-ct tcp_sock cast.
---
+We found a bug reachable in:
 
-commit a1e4666cc30271c086f6d9e64c6ebfaddd6750ca
-Author: Sechang Lim <rhkrqnwk98@gmail.com>
+    path    net/ipv6
+    crash   use-after-free in seg6_bpf_has_valid_srh()
+    commit  2f1baf1fc892 ("Merge tag 'trace-v7.2-rc7' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/trace/linux-trace")
 
-tcp: clear sock_ops cb flags before force-closing a child socket
+Config, environment, the sanitizer report and a C reproducer follow.
 
-A child socket inherits the listener's bpf_sock_ops_cb_flags via
-sk_clone_lock(). If its setup fails in tcp_v4_syn_recv_sock() /
-tcp_v6_syn_recv_sock(), the child is freed through put_and_exit, where
-inet_csk_prepare_forced_close() drops the socket lock and tcp_done() runs
-without it.
+=3D=3D Notes =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+    If you patch the bug based on our artifacts, a tag would be
+    appreciated:
 
-Link: https://patch.msgid.link/20260611092923.1895982-1-rhkrqnwk98@gmail.com
+Reported-by: co+adfca3e91be95776@bugs.sh
 
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> index 1cc25e0b3bdea..c472c1cdd3b83 100644
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-[ ... ]
-> @@ -2702,6 +2702,11 @@ static inline int tcp_call_bpf_3arg(struct sock *s=
-k, int op, u32 arg1, u32 arg2,
->  	return tcp_call_bpf(sk, op, 3, args);
->  }
-> =20
-> +static inline void tcp_clear_sock_ops_cb_flags(struct sock *sk)
-> +{
-> +	tcp_sk(sk)->bpf_sock_ops_cb_flags =3D 0;
+    Everything in this mail is validated by the reproducer below.
 
-[Severity: Critical]
-Does this code perform an unsafe cast and memory write for non-TCP sockets?
+    We also hold an LLM-generated root-cause analysis and a candidate
+    patch. The patch passes an A/B test: the same reproducer panics the
+    unpatched kernel and runs clean on the patched one. Neither has had
+    human review, so both still require validation before you send or
+    apply them. Available on:
 
-This accesses an offset that exceeds the bounds of a dccp_sock when
-invoked on DCCP sockets, which writes outside the slab allocation for the
-socket structure.
+        patch.diff  https://bugs.sh/b/adfca3e91be95776/patch.diff
+        report.md   https://bugs.sh/b/adfca3e91be95776/report.md
 
-> +}
-> +
-[ ... ]
-> diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_s=
-ock.c
-> index 91dcdb7567ace..e0bd8e76fa781 100644
-> --- a/net/ipv4/inet_connection_sock.c
-> +++ b/net/ipv4/inet_connection_sock.c
-[ ... ]
-> @@ -1315,6 +1315,14 @@ void inet_csk_destroy_sock(struct sock *sk)
->  }
->  EXPORT_SYMBOL(inet_csk_destroy_sock);
-> =20
-> +void inet_csk_prepare_for_destroy_sock(struct sock *sk)
-> +{
-> +	/* The below has to be done to allow calling inet_csk_destroy_sock */
-> +	tcp_clear_sock_ops_cb_flags(sk);
+    This is an open science project. The code and the full set of PoCs
+    are not public at this moment, as we intend to disclose our findings
+    in an ethical way.
 
-[Severity: Critical]
-Can calling this unconditionally on non-TCP sockets cause memory regression=
-s?
+    Happy to test patches. Complaints and suggestions about our work
+    are welcome at:
 
-This generic connection socket destruction path in
-inet_csk_prepare_for_destroy_sock() blindly invokes a TCP-specific helper,
-passing it sockets (like DCCP) that are incompatible with the TCP socket
-structure.
+        cedalion@bugs.sh
 
-This can be triggered by a remote, unauthenticated attacker sending a
-malicious or unroutable DCCP connection request to a listening DCCP port.
+=3D=3D Environment =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+    Reproduced on  2f1baf1fc892 ("Merge tag 'trace-v7.2-rc7' of git://git.k=
+ernel.org/pub/scm/linux/kernel/git/trace/linux-trace")
+    VM setup       https://bugs.sh/b/adfca3e91be95776/run.sh
+    config         https://bugs.sh/b/adfca3e91be95776/config.gz
+    poc            https://bugs.sh/b/adfca3e91be95776/repro.c
 
-The regression is triggered on the failure path of DCCP connection setup,
-for example when routing fails:
+=3D=3D Sanitizer Report =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+BUG: KASAN: slab-use-after-free in seg6_bpf_has_valid_srh (net/ipv6/seg6_lo=
+cal.c:1411)
+Write of size 1 at addr ffff88803012c6b1 by task exploit/5008
+CPU: 0 UID: 0 PID: 5008 Comm: exploit Not tainted 7.2.0-07242-g7cbfb180945c=
+ #65 PREEMPT(full)
+Call Trace:
+<IRQ>
+dump_stack_lvl (lib/dump_stack.c:94 lib/dump_stack.c:120)
+print_report (mm/kasan/report.c:378 mm/kasan/report.c:482)
+kasan_report (mm/kasan/report.c:595)
+seg6_bpf_has_valid_srh (net/ipv6/seg6_local.c:1411)
+input_action_end_bpf (net/ipv6/seg6_local.c:1463 (discriminator 1))
+seg6_local_input_core (net/ipv6/seg6_local.c:1628)
+seg6_local_input (net/ipv6/seg6_local.c:1650 (discriminator 1))
+lwtunnel_input (net/core/lwtunnel.c:465)
+ipv6_rcv (./include/net/dst.h:480 (discriminator 7) net/ipv6/ip6_input.c:11=
+9 (discriminator 7) ./include/linux/netfilter.h:325 (discriminator 7) ./inc=
+lude/linux/netfilter.h:319 (discriminator 7) net/ipv6/ip6_input.c:351 (disc=
+riminator 7))
+__netif_receive_skb_one_core (net/core/dev.c:6264 (discriminator 1))
+__netif_receive_skb (net/core/dev.c:6377)
+process_backlog (net/core/dev.c:6728)
+__napi_poll.constprop.0 (net/core/dev.c:7787)
+net_rx_action (net/core/dev.c:7850 net/core/dev.c:8007)
+handle_softirqs (kernel/softirq.c:645)
+do_softirq (kernel/softirq.c:546 (discriminator 20) kernel/softirq.c:533 (d=
+iscriminator 20))
+</IRQ>
+__local_bh_enable_ip (kernel/softirq.c:473)
+__dev_queue_xmit (./include/linux/bottom_half.h:33 (discriminator 1) ./incl=
+ude/linux/rcupdate.h:914 (discriminator 1) net/core/dev.c:4961 (discriminat=
+or 1))
+packet_xmit (./include/linux/netdevice.h:3461 net/packet/af_packet.c:277)
+packet_sendmsg (net/packet/af_packet.c:3110 net/packet/af_packet.c:3142)
+__sys_sendto (net/socket.c:800 (discriminator 1) net/socket.c:815 (discrimi=
+nator 1) net/socket.c:2281 (discriminator 1))
+__x64_sys_sendto (net/socket.c:2288 net/socket.c:2284 net/socket.c:2284)
+do_syscall_64 (arch/x86/entry/syscall_64.c:61 arch/x86/entry/syscall_64.c:8=
+4)
+entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121)
+Allocated by task 5008:
+Freed by task 5008:
+The buggy address belongs to the object at ffff88803012c680
+which belongs to the cache skbuff_small_head of size 704
+The buggy address is located 49 bytes inside of
+freed 704-byte region [ffff88803012c680, ffff88803012c940)
+The buggy address belongs to the physical page:
+page_owner tracks the page as allocated
+page last allocated via order 2, migratetype Unmovable, gfp_mask 0xd20c0(__=
+GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pi=
+d 1, tgid 1 (swapper/0), ts 23240374303, free_ts 0
+page_owner free stack trace missing
+Memory state around the buggy address:
+ffff88803012c580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
 
-net/dccp/ipv4.c:dccp_v4_request_recv_sock()
-   ...
-   put_and_exit:
-        ...
-        inet_csk_prepare_forced_close(newsk);
-            inet_csk_prepare_for_destroy_sock(newsk);
-                tcp_clear_sock_ops_cb_flags(newsk); /* out-of-bounds write =
-*/
 
-> +	sock_set_flag(sk, SOCK_DEAD);
-> +	this_cpu_inc(*sk->sk_prot->orphan_count);
-> +}
-> +
+---
+The report format is based on syzbot bug report.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260907-cve-2026-7=
-4268-v1-1-cacea38d7fb3@bootlin.com?part=3D1
+This report is generated by a bot. It may contain errors.
+See https://github.com/n132/cedalion for more information.
+
+For any issue with this report, reach out to cedalion@bugs.sh
+
+If the report is already addressed, let us know by replying with:
+#co fix: <commit hash>
+
+If the report is a duplicate of another one, reply with:
+#co dup: <lore link>
+
+If you want to undo deduplication, reply with:
+#co undup
+
+
