@@ -1,112 +1,149 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59694BAA15;
-	Mon,  7 Sep 2026 12:42:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D3F92D949F;
+	Mon,  7 Sep 2026 12:52:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788784927; cv=none; b=tsGh+zjWCPx+FQjxCKGwvgReysIcfUVAqLAtfAzhxPeoq+auJzQB63eq0H4ypxeiQrOBqVCPA2qJIeZ061Ni2y6mD0/fNgHne+nBuqhfq65lLZYXunH9czf5k2VDxwtzRsXo3rsIR5L4AZLiFBn3et7wk7WtpD9r+AF/tqGnSaU=
+	t=1788785540; cv=none; b=QIDDU43x7HX3n5tGuMdiBDUL80Ak9lvDKLf7bfB2N6isvoWr/5or+XcNl2HSKAF93y7nMewxsDcY/Fbqb5ioAs+a/95aUYeBpv0uMSSLMrvoSi0FqOx2Z99vam/uqkmJWRdTzGWniqH1cC4z0HEunAqzlM84ADuqfGD9przWlTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788784927; c=relaxed/simple;
-	bh=m4VD+kZQ3UTdknOoWEEhUFYlOYY9U+SOYKhCEnqeun0=;
+	s=arc-20240116; t=1788785540; c=relaxed/simple;
+	bh=MZhF9bnZvbOFE7bsrMQoFB6pM4cvaxyJ/W22+E0UBAk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QyRmr0TfXDe2zE2xcEvotgF79+glZ5Gby2g5zAZGnYGDq6XbE2E2QTcqqHPORfy/OUPfrSqib6VEibmPncKpzd7Boj8y/MmVxOFC26O5Dy+zAXxM2x8CaqYcoUTMnoVgORIQBq9HhZwH200cAp9c4BPjOLx5J0tQrhqYukrLROg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=SUuhM0LX; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="SUuhM0LX"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=KLhtHvb1s/9tH7HpqReOcJSjDSF0xJJWIHODkvRmQSs=; b=SUuhM0LXxdDaTZV5y2KFco13v7
-	GcGpqg1dyoLAJOOAkbISZyUK/xQVbEpAHR8TCCqilfA5kYKvZI6fT0JDPuWuXGafDjZByyewaa0g8
-	ha8Mr9qQpeAaRj5+gqVG+3xSSSSGGaqcTf3ZQP2+4l/xC1Be8FXc7j3YuEaRiW239P41jkG05TIQJ
-	zoQqlmm9YHo1ld2WDO2JZCnmFyHJu7phE6VL7rqv+W6ExW5PxBktN6K7xnedptf8w5zNASseNF2BE
-	T5masTDLmoQ3SiVFjH/l9o66/IGpfJRfW1MGHnTweQWVwvF21nNIZlHJUBf//oge+WFANcwy0/RQE
-	pFwCT9aw==;
-Received: from sslproxy08.your-server.de ([78.47.166.52])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1x3Yfg-00042g-0F;
-	Mon, 07 Sep 2026 14:42:00 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1x3Yff-000Iux-2n;
-	Mon, 07 Sep 2026 14:41:59 +0200
-Message-ID: <e78da738-2788-45b1-b76f-5fc82794ee4e@iogearbox.net>
-Date: Mon, 7 Sep 2026 14:41:59 +0200
+	 In-Reply-To:Content-Type; b=c2ooyyRxOyXL5ueQlb7U3otJ2h+8mESqM9oX7mtjGuWCs6hze2xzYVB4OP+AuwKUeRGzCHplvDmCUjhouBPercrt4euXtHF2QjIsD0fz7XJT9q60olIiR+aX3/pS6pLHi7nTEU1HETizbFbtU9chSsSqN8fFwcVffhdt9dRdM7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hdmfx1hxjzKHLtb;
+	Mon,  7 Sep 2026 20:32:25 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 6A37D4058C;
+	Mon,  7 Sep 2026 20:33:25 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgCXCbcTr55qPXJXBA--.48482S2;
+	Mon, 07 Sep 2026 20:33:25 +0800 (CST)
+Message-ID: <8116d851-b52f-4b17-9ff5-45a0c5d45e07@huaweicloud.com>
+Date: Mon, 7 Sep 2026 20:33:23 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH bpf 1/2] bpf: Fix bpf_skb_change_tail wrt csum partial
- skbs
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260907121025.1923656-1-daniel@iogearbox.net>
- <20260907122414.95F7F1F00ACF@smtp.kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: cover the exception callback
+ using its own BPF stack
 Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260907122414.95F7F1F00ACF@smtp.kernel.org>
+To: Donggeun Yoo <donggeunyoo.kernel@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Mark Rutland <mark.rutland@arm.com>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Puranjay Mohan <puranjay@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>,
+ Will Deacon <will@kernel.org>, Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260907054235.473103-1-donggeunyoo.kernel@gmail.com>
+ <20260907054235.473103-3-donggeunyoo.kernel@gmail.com>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <20260907054235.473103-3-donggeunyoo.kernel@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28116/Mon Sep  7 08:24:32 2026)
+X-CM-TRANSID:_Ch0CgCXCbcTr55qPXJXBA--.48482S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxur4xXw47uFW8uw1xAFWfGrg_yoW5Ar4fpF
+	yqvF9xKF95JFnFva47Jw40ga1rWrs7XF48CrWkXr1YvF1xtrn7WF1xKFZ8tw45CrWSyrn5
+	Za1Yvr93Kw45C3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-On 9/7/26 2:24 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+On 9/7/2026 1:42 PM, Donggeun Yoo wrote:
+> The existing exception tests do not reach a callback that materializes
+> BPF_REG_FP into a register. They either throw from the main program,
+> where BPF_REG_FP already holds the value the callback needs, or use a
+> callback whose only stack accesses are frame pointer relative, which the
+> arm64 JIT rewrites to be stack pointer relative.
 > 
-> Pre-existing issues:
-> - [High] The checksum field space check in `bpf_skb_trim_rcsum()` assumes a 2-byte checksum (`sizeof(__sum16)`), but SCTP checksum offloads (`skb->csum_not_inet == 1`) require a 4-byte CRC32c. This allows BPF programs to trim SCTP packets such that only the first 2 bytes of the checksum field remain. The hardware will then attempt to process a 4-byte checksum, causing an out-of-bounds access.
-yeap, unrelated, and I'm not sure anyone has used it in combo with sctp
+> Add a test that throws from a subprogram using its own BPF stack, with a
+> callback that hands the address of a local variable to
+> bpf_probe_read_kernel(). The helper and the callback have to name the
+> same slot for the value read back to be the one the helper stored.
+> 
+> Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+> ---
+>   .../selftests/bpf/prog_tests/exceptions.c     |  1 +
+>   .../testing/selftests/bpf/progs/exceptions.c  | 29 +++++++++++++++++++
+>   2 files changed, 30 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> index 3588d6f97fd4..639866ce09a9 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
+> @@ -55,6 +55,7 @@ static void test_exceptions_success(void)
+>   	RUN_SUCCESS(exception_ext, 0);
+>   	RUN_SUCCESS(exception_ext_mod_cb_runtime, 35);
+>   	RUN_SUCCESS(exception_throw_subprog, 1);
+> +	RUN_SUCCESS(exception_throw_subprog_stack_cb, 0x1234);
+>   	RUN_SUCCESS(exception_assert_nz_gfunc, 1);
+>   	RUN_SUCCESS(exception_assert_zero_gfunc, 1);
+>   	RUN_SUCCESS(exception_assert_neg_gfunc, 1);
+> diff --git a/tools/testing/selftests/bpf/progs/exceptions.c b/tools/testing/selftests/bpf/progs/exceptions.c
+> index c8d716fbd419..2b01b45cef06 100644
+> --- a/tools/testing/selftests/bpf/progs/exceptions.c
+> +++ b/tools/testing/selftests/bpf/progs/exceptions.c
+> @@ -212,6 +212,35 @@ int exception_throw_subprog(struct __sk_buff *ctx)
+>   	return 0;
+>   }
+>   
+> +u64 exception_cb_stack_src = 0x1234;
+> +
+> +/* The address handed to the helper has to be this callback's own stack
+> + * slot, not one from a frame that is already gone.
+> + */
+> +__noinline int exception_cb_stack(u64 cookie)
+> +{
+> +	volatile u64 val = 0xdead;
+> +
+> +	bpf_probe_read_kernel((void *)&val, sizeof(val), &exception_cb_stack_src);
+> +	return val;
+> +}
+> +
+> +/* Throws from a subprogram that has a stack of its own. */
+> +__noinline static int throwing_subprog_stack(struct __sk_buff *ctx)
+> +{
+> +	volatile u64 pad[4] = {};
+> +
+> +	bpf_throw(pad[0]);
+> +	return 0;
+> +}
+> +
+> +SEC("tc")
+> +__exception_cb(exception_cb_stack)
+> +int exception_throw_subprog_stack_cb(struct __sk_buff *ctx)
+> +{
+> +	return throwing_subprog_stack(ctx);
+> +}
+> +
+>   __noinline int assert_nz_gfunc(u64 c)
+>   {
+>   	volatile u64 cookie = c;
+
+
+Acked-by: Xu Kuohai <xukuohai@huawei.com>
+
