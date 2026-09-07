@@ -1,148 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D13038AC68
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 05:51:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4BE39184F
+	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 06:49:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788760311; cv=none; b=d20QsF4lOASfDozTHJ7w4LEbH9uTGMDBkPMXdteBjIPrAxbOnjBP3OKXRK+pH2+2d9YRN0zMkzBZ3pdauJ4g0SASx4k2C5sjwZTQLhHkNljtTvmMJrAT+xqVQNI4D5yX+WzUYZWxF8bcsgkUwXdnhJA9S2lydgM3TQOLWqxqnMw=
+	t=1788763793; cv=none; b=NVxyF1p2A3NXPJSQe2pKGH1cD+2ZZbqb83TyV9ucskFKTVnwF3U645r+iEtQh+JfD8bIdP0CgB7rr49D+QfElzJWoQ/nXrcn4uZuK+x0Nl5g2SPH0/rSRIl60BdnXTpDUVmqx2hd4gdg69gl/uJbMaxzyFdlGh0ZZJoQKh5pisw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788760311; c=relaxed/simple;
-	bh=/UjtUFP8xz45spIpTntDBlzlAlsYmyu4uffrg7MI31M=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=cRQj1TGycjZYLOnoWIsRXbNh+CkEktGgrXORVx49pHQhfhu6v3lWOOQ1ewNOubG/1cF0ufLtZAtGn3ZyJ+85bE93wq/t+8vnK6i/ELsbMWT0U5LRU/G6WLPOQbeew0NXwbJS9Aty0IFrbmLXR7qljFohu2p7AYA1GFcG6yVYom4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GdqrFfDh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788763793; c=relaxed/simple;
+	bh=2766B3eMmFd/OaLBWXRn8QBlE+XKdud9wFfOhEigG4w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=td0NM5i5gB1QwXuNdBqykdCp0srVBr867JwmM4vZ1KOUA8YaVHuAB0G6fDq2NVOdtyvwXZvSevKa8YgrrO7lTENmyBu+5FmHs5VfPb5cxE/uK0zD0Q0hV5kd++1EwrMcyH4yCBk+1rFpDvxV56JVlIcil8qbYkFv4VcKChsPpwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Va9REisD; arc=none smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GdqrFfDh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8FC71F00A3A;
-	Mon,  7 Sep 2026 05:51:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788760310;
-	bh=ZvYkqFYjZJpqyH0rr2QUkuivQ4HrQbfIzQ0K3Q4wy6c=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=GdqrFfDhXD9str7bO3vxS4A5ZGjW2lOzyMP1pxNJElT/A1XvSVnx3jpoeQWeAMFvZ
-	 GiJp83vhsBFvfXn9nTAeGRg3LIUle6q86ObSNPzKyc3bFhIRGrw0U1X/GUfpiXpAf2
-	 oliNfzuwdUbTFPTCYvlRrv9XYK/DJzQrpYuPEt6TIlbg7WZW0RmYCRAMF3jzqpZ8lK
-	 U9zGkIKgE8HdQRBq9aqTo7px+kqK56B2BHbBFixscVFBgj10AZ9doHCk7RuYq6qzGj
-	 HOw47k2hH8TgHepT5AvBNS2S2ksMMXPLBrA+UBK6RvZeJgvqjx0E7OqslBRWSZrIs+
-	 qZnzWavyV58rw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v7 2/2] selftests/bpf: add tests for selective
- module BTF loading
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Fuyu Zhao" <zhaofuyu@vivo.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260907053847.1115-3-zhaofuyu@vivo.com>
-References: <20260907053847.1115-1-zhaofuyu@vivo.com>
- <20260907053847.1115-3-zhaofuyu@vivo.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 07 Sep 2026 05:51:49 +0000
-Message-Id: <20260907055149.C8FC71F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Va9REisD"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cc1cbb64a1fso3081393a12.1
+        for <bpf@vger.kernel.org>; Sun, 06 Sep 2026 23:49:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788763791; x=1789368591; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=NbyN7tVnWnxYp0pp4uHeU72ENpo3XFInJUk6Uv6k4kM=;
+        b=Va9REisDIHkLARUvuc4c58/+a0xnLZZlUmKfjNnOVeUdYOYmUVIL8Nndnn0yvtP1wP
+         ONFjIEBuDhP4IepPC32HlRlh0oI0I4jhTvO/f+QA9UMk2UVQF4lLfLlU33ukS04RCdlO
+         0aNFXa2UV0gXdG9wQ8RU+VUncPM+61MLGgjzSTyrjnvrVwv0ext6F2PqsxSEc82uNJA4
+         mkwNA5aK/Qn+/dzOL0O03I88mnBAa2iLTp19/ZOuq7VhUZIL3IkPhNMjElC+pG0uGDa9
+         FEX9QA18Qb5NrDDK3d15F0DGgF0vw94JIdLqYj4M+qYV9wQo7x0HP4NlT9Tg+mw9DbxM
+         nvng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788763791; x=1789368591;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=NbyN7tVnWnxYp0pp4uHeU72ENpo3XFInJUk6Uv6k4kM=;
+        b=PFOHfHnvOZm0ME8FNyfassNoIxMeCGKM94dhjvO/QoPus+H4xLDeV9qmGB4wZcQI6J
+         9PCw5KB+JeSFtCuq1IiGGSm0/RHSr1d2sYVeJCiv3wv3v5jyTTt0MrVNDanL5xtWayGN
+         //xJTAEqE+4w8OTPa+qxu03eJUFMeAGEQQ4JXwUF8+iMhCTCnGU5MREnOrYIHewK/iQ5
+         70PdIiL1Kyi9eoHdupgAeBGb8Bu0gnjuqDIEuAdkN5JOS2LCywz6Ry5xBoTKYubiXbfa
+         JcQxT7AJkMZESPZZ4Ght3FqYz5b6qJBLQM+5XIMf9pqjAPAghVTgL+S5fbLGkqRQDSq7
+         JCiQ==
+X-Forwarded-Encrypted: i=1; AKwUvByaiWW+shDBoV58rZY89cL7MY8MhMdyWkGzpcyTa7ZyANvN0aTkYJ+4t8QMfD+xSzyVVlo=@vger.kernel.org
+X-Gm-Message-State: AFuF++mtLsco3FDTAuAVaZi9YYvgc7bzYCGuOGCp+uNVmetvJfIHVDn3
+	N188LzCdaOxtpmbNwCxmBRiGrdxfln93x4FnUpeB2GpO9hQofVJOi4mC
+X-Gm-Gg: AYBFou1vtj7EoNgIo2U5h6qmQpz56ikSDlIdfvVhOXc2WEZZCav447XgRafzkEcVLl3
+	LONVrkHGxPF4HDpeL0rWbEBmPOtrhtii2ytRHYcPX9Wwb3l2AWmFhx6mEXPChGLFLsUYOWD4/w/
+	HgjCXFoIEnEQ3yXN5uP4SF6i1Ym6TUf+P1f2S+WQfYhPKnOsIDcBr4JMQw8cfGvYp0WOiE5IDmI
+	l/zPIDRiEh98Ot6vd8LXFUAGerhxwUgUCW6haqIQO7/GTJA0WO3UFNn7Bp+8sBph8WLOVVJngzP
+	9+UsFXk53V246aJ+Ea0F3vPZ4TrZ7dGyU5YprmHIBbSgTf6yK+Y4sk3Jd+w2gqukT3cUAvGd4S+
+	BE2d7Wre2nCawn5w9gP0gON2HjA9girkz+eUlPIbJISISN+MH8R5Dwfo8whJV7m5q7Km8N1Ah5Z
+	jEXK1JXH8NPnysA0UPCrBdkGJ4g0MKamOU+HjPX2rAAGNul1syEH8kR5smFRCEXt4W4YxaqFCCs
+	Hg1jzDCsjqM9g==
+X-Received: by 2002:a05:6a21:6110:b0:3d1:3c2:85b6 with SMTP id adf61e73a8af0-3da39b43743mr33286987637.5.1788763790919;
+        Sun, 06 Sep 2026 23:49:50 -0700 (PDT)
+Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-338778fb926sm465210eec.31.2026.09.06.23.49.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Sep 2026 23:49:50 -0700 (PDT)
+From: Hemanth Selam <hemanth.selam@gmail.com>
+To: Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>
+Cc: sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH 0/2] sched: fix typos and repeated words in comments
+Date: Mon,  7 Sep 2026 12:19:41 +0530
+Message-ID: <20260907064943.25304-1-hemanth.selam@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+This corrects 2 misspellings and repeated words in comments.  Each is a
+separate patch so that any one of them can be dropped without touching
+the rest.
 
-New issues:
-- [Medium] Flaky Test / errno Clobbering
+Nothing outside comments changes.  Every touched C file was checked by
+dropping its comments, replacing each string literal with a placeholder
+and collapsing whitespace; what remained was identical before and after,
+so the compiled code cannot differ.
 
-Pre-existing issues:
-- [High] NULL Pointer Dereference in bpf_object__close() on allocation fail=
-ure
---
+The mistakes were found with scripts/checkpatch.pl against the list in
+scripts/spelling.txt.  The scanning, the edits and the changelogs were
+produced with Cursor running the claude-opus-5 model, from a request to
+find and fix spelling mistakes across the tree, and every correction was
+then re-checked by the comparison described above.  Words that name an
+identifier were left alone deliberately, even when they read as typos,
+because correcting the prose would make the comment disagree with the
+code it describes.
 
-commit b3d2f975120fb1ef7382fad8983c653ebd2ae39c
-Author: Fuyu Zhao <zhaofuyu@vivo.com>
+Tested by building x86_64 defconfig at v7.3-rc1-269-gbc35965f6940, which
+is clean.  Nothing else was built, so any patch touching code that
+x86_64 defconfig does not compile has been read but not compiled.
 
-selftests/bpf: add tests for selective module BTF loading
+Hemanth Selam (2):
+  sched: fix typo "upto" in comments
+  tools/sched_ext: fix repeated word 'be' in comment
 
-This commit adds selftests for selective kernel module BTF loading using
-bpf_object_open_opts. It verifies that valid allowlists succeed, module BTFs
-not listed are skipped, and invalid inputs are rejected.
+ kernel/sched/ext/ext.c                   | 4 ++--
+ tools/sched_ext/include/scx/common.bpf.h | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_module_allowlist.=
-c b/tools/testing/selftests/bpf/prog_tests/btf_module_allowlist.c
-> new file mode 100644
-> index 0000000000000..fb1b9ffb6c7aa
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_module_allowlist.c
+-- 
+2.48.1
 
-[ ... ]
-
-> +static void test_invalid_input(const char **list, int count,
-> +			       const char *test_name)
-> +{
-> +	struct btf_module_allowlist *skel;
-> +	char assert_name[64];
-> +	LIBBPF_OPTS(bpf_object_open_opts, opts,
-> +		.btf_module_allowlist =3D list,
-> +		.btf_module_allowlist_cnt =3D count,
-> +	);
-> +
-> +	snprintf(assert_name, sizeof(assert_name), "%s: open_opts", test_name);
-> +	skel =3D btf_module_allowlist__open_opts(&opts);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does passing a negative count
-or encountering an allocation failure here lead to a crash inside libbpf?
-
-When btf_module_allowlist__open_opts() calls into bpf_object_open(), if the
-count is huge (e.g., from passing -1 in the negative_count subtest) or call=
-oc()
-fails with ENOMEM, the array remains NULL:
-
-tools/lib/bpf/libbpf.c:bpf_object_open() {
-    ...
-        obj->btf_module_allowlist =3D calloc(obj->btf_module_allowlist_cnt,
-                                           sizeof(*obj->btf_module_allowlis=
-t));
-        if (!obj->btf_module_allowlist) {
-            err =3D -ENOMEM;
-            goto out; /* out calls bpf_object__close(obj) */
-        }
-    ...
-}
-
-Then bpf_object__close() iterates over the unallocated array:
-
-tools/lib/bpf/libbpf.c:bpf_object__close() {
-    ...
-    for (j =3D 0; j < obj->btf_module_allowlist_cnt; j++)
-        zfree(&obj->btf_module_allowlist[j]);
-    ...
-}
-
-Since obj->btf_module_allowlist is NULL but obj->btf_module_allowlist_cnt is
-greater than 0 (or -1 cast to a large unsigned type), won't this blindly ac=
-cess
-memory and crash?
-
-> +	if (!ASSERT_NULL(skel, assert_name)) {
-> +		btf_module_allowlist__destroy(skel);
-> +		return;
-> +	}
-> +	snprintf(assert_name, sizeof(assert_name), "%s: open_opts err", test_na=
-me);
-> +	ASSERT_EQ(errno, EINVAL, assert_name);
-
-[Severity: Medium]
-Can this cause test flakiness?
-
-According to POSIX, standard library functions like snprintf() can clobber
-errno even on success.
-
-Since snprintf() is called right before ASSERT_EQ(errno, EINVAL, assert_nam=
-e),
-is it possible that errno gets modified here and causes the assertion to
-fail?
-
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260907053847.1115=
--1-zhaofuyu@vivo.com?part=3D2
