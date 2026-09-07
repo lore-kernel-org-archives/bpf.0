@@ -1,191 +1,132 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D708835B14E
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 17:02:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44825513542
+	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 17:05:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788800565; cv=none; b=dRa9FgFw3xOL5P3W2mDjsxMaYoVMTRlIaQvK3IhK+LPN5t7uxj2ee7RGtTFBX+T96xShjhPVkutMvwhqlz9A8ZVCdphhYMy0w1BHmgGmEBiC7plmtAYbGzbs8PkUFNXRRcbTZuta6EoRmUM0MQOI2L+3mNIMUhPu9TCptKFLb0s=
+	t=1788800753; cv=none; b=tLPKmIVU65Lo6xwydhTPcPH5Ka7sNOzgdsgtOd4JkNR32cbk9uBqjiWxiDtnONCPM8yPNbT5Z/Xy831C+rkPlscuVWxtdpq8psqyuwabAA87hVsQdIhod9ROsxw/x94eC6ojSVbVdJWMiAgozB8ybaTa2O3RsOpHMIiuIUcZI2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788800565; c=relaxed/simple;
-	bh=X/s1XNaINmiUqzvzDx/P4+fqGZPIdSlPLAWBJ/UyuMw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=upTOiEOHU4CKydHxHnUGq4thrDzp8T2oR4liqO0H+DpYr5r1hXeSyLFQzXQNs4H3n4kx/CxnXX0DEUupBucAvLmlORACAK3TmBelWdYzJK5lZNLRDcXTXybalE4X82XUws8E9ybXapZn/nrTO4Ft6+LfPuCTSec8LKPPqbUjjyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=KN1T63TQ; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1788800753; c=relaxed/simple;
+	bh=kry/VOnp8gGARe/TVRNABFMapq00adZ+CMOlxgjK1+k=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Cb1uoCLM/lsg/wisO8UkkZSUf8Y79YDJxiaxYx3SHlVHc+8QnQ2sTBZofbQ4VAhwt1abar3NxdnnOAoZMPzc9CcL/ZDZ8niXxBCAwCL+lyhY5e2GqHD1WM8XLqKMQBsleWcCeRncujQTBKbG5QuHndw2fnTXGopZ8KSAmUlE8U4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WFi4zxzQ; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KN1T63TQ"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 4B6AA4E41571;
-	Mon,  7 Sep 2026 17:02:40 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 1059C60383;
-	Mon,  7 Sep 2026 17:02:40 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5B3DD11C7A34F;
-	Mon,  7 Sep 2026 19:02:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1788800559; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=TPBFaRQq2cT8jbiEmrzWCCDROYRAcXs2NN30XcIR25k=;
-	b=KN1T63TQ3ZnSJ4mevdIUUZ4InvDmcu++2eCJ4+otbuUH2Ets5xoyZ+9kJhZ5a8xGv5PcGA
-	ie0THgIg+PNDIiIFC+MWtWqHxEP93hEmg2z8WhWwgULEKaFLJdWJIkFYJBQ1q71OslYolt
-	XGfIfhY/rdkh5o6hEnU1+xlwZxlhJlUkl8LVBRjdbDHL/SuqsUAHGrOwGMfdI/EhnBsvn3
-	v0t5llm2Ijc4tC+YO0AjP70IQTvhfrtGuLltTx7jduCMZVSo5aQ9KLjy6tAp/lpOCmPati
-	PrIMAjv9Mc1LXFZdQqfQ9dNuPReepM0H1TfedlhHr/Mo3q3+TZv613FsNO0SrQ==
-From: "Miguel Gazquez (Schneider Electric)" <miguel.gazquez@bootlin.com>
-Date: Mon, 07 Sep 2026 19:02:30 +0200
-Subject: [PATCH 6.12.y] tcp: clear sock_ops cb flags before force-closing a
- child socket
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WFi4zxzQ"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-48444ec4fe2so2302653f8f.0
+        for <bpf@vger.kernel.org>; Mon, 07 Sep 2026 10:05:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788800750; x=1789405550; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=pg361us6OadAIFXLa1WJ6PQ/ub48H2GT5TA/zN1TKOs=;
+        b=WFi4zxzQ+kCkKHuWHZ1WTUfgw/N/9L4fqVbnDyp3yGNksFaXitMuFVYZ6MdWrl/JX7
+         mR7rkGQ2BGq54SZADfb3fdpRUltc++D35WYxpSQnykGgUUBsUg1+rZdwimRJMeZ13Rbm
+         K/b8ow60Pfh0Of9h8Y2ud6kwGqR8woCS+K5+DyKHUQ9Vt3OZkNTAFjJoTQyEF2URzD27
+         ibAgikpJBFe8vKNwY9jLrNOyv5alQxtWo5mJj6JPHgbAxHZU3lZs+L6x4mQlGdP70lU9
+         4Krmvqp3pfvAykSGWxHTMiPkJYo0rGR2Q6lzvuPcvcfuZR7GTawjljNejEzSMcdDpGSm
+         Qqkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788800750; x=1789405550;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=pg361us6OadAIFXLa1WJ6PQ/ub48H2GT5TA/zN1TKOs=;
+        b=Een1OC9jtENgNOFDDvDmnhuOmsNaSLjqeiCooSf3qAq/xPDofi0wv647Um0/DnTsZL
+         gmhb4uVAknmS4r8C2T1lSW4xj8uudbho9QQv1bHMwl5Q5POzNw5EX/anMMWlhvZh8ODV
+         WyMy8NGrgu2c63q/2fnHv0Id8ZE2mFoOxWHtkfsqi6O1XdfNG5DEJ4Rsf5vIKv4y0coP
+         FOIgVQJv+kZzgLdJ1mKKLqv0nVptXh9LUXKmyRfhwGNsdCZLUxFp0yHPE7I1UQGwox4q
+         BETU8bkjK876H4Qn0ADZlt9bj+hZsPnTNRb5c2NTZJsN4QAzIvApFjErRptgAVy4tUWb
+         cd8w==
+X-Gm-Message-State: AFuF++kEyzrZVxcFTZEOeGX6zu2vPcaY3+Sr9LAkSvbxYgOoO4nOYqjG
+	sb7VSCXfrAdQeKufosBjDNfTTGNddyR6HE1wJJW60xcV/e7OqTgfAv5Dj+vfTFlE
+X-Gm-Gg: AYBFou0YzTAWi4JjQ0V2kzGR97FaOwZ9buyxtKXbF67UUSkQP+FRkivnaXyCbu/WQJW
+	egBNTYtJ3c8zz/jiwHTFeDZOnLRyjonAuHFJem8432fhmojiDdEYBZ9V+7AW3WeAjeriJj0nbmI
+	DrHBJJfudlD+4v3PWi+08i1TEEg9a000OvslfqdKg0vTawPBkpQAMQ/Y/gzGiUyv5sNBsnyzKf8
+	v7iGMzOqYKxC0hQLnQ8biyQsi2MVONkb2UMChm/vvKqfb158eoVagPBXj62dDfs3JKcMdba6QUK
+	fiBckUqaqt6Cr0cKhdKdqUwvbxUrtiYdQXmOvYQReNrNhr4Mz0hC07wy/yy8Kn55FMn0PQ+5Ksc
+	YT9LCSlu9+rSQyNMpEHOUU75sh9Fjn6i25VRvRl5yDMDcr4kN0cPF7hA0QzBKReCldU6b990yb1
+	lPZKJ+kLcxqJUC/OpQPwXs6HMxFkQ25MNGLkSlkHsTUWsO28RGxUGr8n354cuglpX4pKHCMH66l
+	woHBgig9aljcrkc6/b6T3oWr1Gs6Bz3AQ==
+X-Received: by 2002:a05:6000:26d3:b0:484:3310:710d with SMTP id ffacd0b85a97d-48587291448mr42015337f8f.25.1788800750208;
+        Mon, 07 Sep 2026 10:05:50 -0700 (PDT)
+Received: from mtardy-friendly-lvh-runner.europe-west1-c.c.cilium-dev.internal ([2600:1900:4010:1a8::])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-485885be01bsm29195446f8f.31.2026.09.07.10.05.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Sep 2026 10:05:49 -0700 (PDT)
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	Mahe Tardy <mahe.tardy@gmail.com>
+Subject: [PATCH bpf-next v2] libbpf: fix log level propagation for light skeleton loaders
+Date: Mon,  7 Sep 2026 17:05:36 +0000
+Message-Id: <20260907170536.9996-1-mahe.tardy@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260907-cve-2026-74268-v1-1-cacea38d7fb3@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQ7CMBBD0atUXjNVEiCBXgWxgMHAsCgogQpU9
- e6ksHyW/EcUZmNB14zIHKzYva/wiwZ6PfQXip2qEVyIbuuS6ECZIWkV4kY8U/Jr1SWVqKdH5tn
- ev+AOsfWh/WD/38vreKM+5xqm6QtZUEhfegAAAA==
-X-Change-ID: 20260907-cve-2026-74268-1e7715cc3ece
-To: stable@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- David Ahern <dsahern@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Lawrence Brakmo <brakmo@fb.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- Sechang Lim <rhkrqnwk98@gmail.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, 
- Kuniyuki Iwashima <kuniyu@google.com>, Sasha Levin <sashal@kernel.org>, 
- "Miguel Gazquez (Schneider Electric)" <miguel.gazquez@bootlin.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788800553; l=4566;
- i=miguel.gazquez@bootlin.com; s=20250708; h=from:subject:message-id;
- bh=eQtDX2FDK17S6DsoeWyEMqBzN907bygcNtweixVS7tM=;
- b=3rkpEAzzhblkFI6ongGK7I6+IHHAbACofPIdRX27pJXf5AMvX04hoEk7+5iin0lSw7SWL1+Aw
- tx/1VEXb78tDMiLQTFvpy9mE8M15LURzfTA6MsyxqYPpnmFTgQfO3U2
-X-Developer-Key: i=miguel.gazquez@bootlin.com; a=ed25519;
- pk=k/2KI9jkmayaF0ghZ8QYUH9Wm/kFHDhl8QoZ0RHbr4w=
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
 
-From: Sechang Lim <rhkrqnwk98@gmail.com>
+bpftool's -d option is documented to enable bpf_trace_printk() messages
+from the generated syscall loader when used with -L as specified in
+commit d510296d331a ("bpftool: Use syscall/loader program in "prog load"
+and "gen skeleton" command.")
 
-[ Upstream commit 990348e5bb457697c2f1f7f7b65154a3334d9d2b ]
+However commit b59e4ce8bcaa ("bpftool: Switch bpf_object__load_xattr()
+to bpf_object__load()") changed bpftool to use bpf_object__load() which
+call the internal bpf_object_load with extra_log_level to 0 instead of
+bpf_object__load_xattr with the user request log_level.
 
-A child socket inherits the listener's bpf_sock_ops_cb_flags via
-sk_clone_lock(). If its setup fails in tcp_v4_syn_recv_sock() /
-tcp_v6_syn_recv_sock(), the child is freed through put_and_exit, where
-inet_csk_prepare_forced_close() drops the socket lock and tcp_done() runs
-without it.
+All the plumbing was still there to generate the bpf_trace_printk()
+instructions from the generator but was now unreachable because
+bpf_gen__init() was called with extra_log_level to 0, leaving
+gen->log_level at 0.
 
-If BPF_SOCK_OPS_STATE_CB_FLAG was inherited, tcp_done() -> tcp_set_state()
-calls tcp_call_bpf(), which expects the lock and trips sock_owned_by_me():
+This uses the obj->log_level field introduced in commit e0e3ea888c69
+("libbpf: Allow passing user log setting through bpf_object_open_opts")
+set from reading verifier_logs in do_skeleton(). This preserves both
+object-level and explicit load-time logging settings.
 
-  WARNING: include/net/sock.h:1799 at tcp_set_state+0x433/0x550
-  RIP: 0010:tcp_set_state+0x433/0x550 include/net/sock.h:1799
-  Call Trace:
-   <IRQ>
-   tcp_done+0xba/0x250 net/ipv4/tcp.c:5095
-   tcp_v4_syn_recv_sock+0x850/0xa50 net/ipv4/tcp_ipv4.c:1787
-   tcp_check_req+0xf30/0x1360 net/ipv4/tcp_minisocks.c:926
-   tcp_v4_rcv+0x1047/0x1b50 net/ipv4/tcp_ipv4.c:2164
-   </IRQ>
-
-The child is freed before it is ever established, so it should run no
-sock_ops callback. Clear its cb flags in inet_csk_prepare_for_destroy_sock(),
-the common point for the IPv4, IPv6 and chtls forced-close paths and for the
-MPTCP ->syn_recv_sock() failure path (dispose_child), which reaches tcp_done()
-on a child that was never established too.
-
-Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Fixes: d44874910a26 ("bpf: Add BPF_SOCK_OPS_STATE_CB")
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://patch.msgid.link/20260611092923.1895982-1-rhkrqnwk98@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
-[ Moved inet_csk_prepare_for_destroy_sock() to inet_connection_sock.c due to header dependency ]
-Signed-off-by: Miguel Gazquez (Schneider Electric) <miguel.gazquez@bootlin.com>
+Fixes: b59e4ce8bcaa ("bpftool: Switch bpf_object__load_xattr() to bpf_object__load()")
+Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+Signed-off-by: Mahe Tardy <mahe.tardy@gmail.com>
 ---
- include/net/inet_connection_sock.h | 8 +-------
- include/net/tcp.h                  | 9 +++++++++
- net/ipv4/inet_connection_sock.c    | 8 ++++++++
- 3 files changed, 18 insertions(+), 7 deletions(-)
+This v2 is just a rebase on bpf-next as there was a conflict after the
+bpf tree was synched. Daniel suggested to push this to bpf-next as the
+libbpf GH repo syncs only from there and added his ack.
 
-diff --git a/include/net/inet_connection_sock.h b/include/net/inet_connection_sock.h
-index bcc138ff087b..534f4fafad42 100644
---- a/include/net/inet_connection_sock.h
-+++ b/include/net/inet_connection_sock.h
-@@ -296,14 +296,8 @@ reqsk_timeout(struct request_sock *req, unsigned long max_timeout)
- 	return (unsigned long)min_t(u64, timeout, max_timeout);
- }
- 
--static inline void inet_csk_prepare_for_destroy_sock(struct sock *sk)
--{
--	/* The below has to be done to allow calling inet_csk_destroy_sock */
--	sock_set_flag(sk, SOCK_DEAD);
--	this_cpu_inc(*sk->sk_prot->orphan_count);
--}
--
- void inet_csk_destroy_sock(struct sock *sk);
-+void inet_csk_prepare_for_destroy_sock(struct sock *sk);
- void inet_csk_prepare_forced_close(struct sock *sk);
- 
- /*
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 1cc25e0b3bde..c472c1cdd3b8 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -2702,6 +2702,11 @@ static inline int tcp_call_bpf_3arg(struct sock *sk, int op, u32 arg1, u32 arg2,
- 	return tcp_call_bpf(sk, op, 3, args);
- }
- 
-+static inline void tcp_clear_sock_ops_cb_flags(struct sock *sk)
-+{
-+	tcp_sk(sk)->bpf_sock_ops_cb_flags = 0;
-+}
-+
- #else
- static inline int tcp_call_bpf(struct sock *sk, int op, u32 nargs, u32 *args)
- {
-@@ -2719,6 +2724,10 @@ static inline int tcp_call_bpf_3arg(struct sock *sk, int op, u32 arg1, u32 arg2,
- 	return -EPERM;
- }
- 
-+static inline void tcp_clear_sock_ops_cb_flags(struct sock *sk)
-+{
-+}
-+
- #endif
- 
- static inline u32 tcp_timeout_init(struct sock *sk)
-diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
-index 91dcdb7567ac..e0bd8e76fa78 100644
---- a/net/ipv4/inet_connection_sock.c
-+++ b/net/ipv4/inet_connection_sock.c
-@@ -1315,6 +1315,14 @@ void inet_csk_destroy_sock(struct sock *sk)
- }
- EXPORT_SYMBOL(inet_csk_destroy_sock);
- 
-+void inet_csk_prepare_for_destroy_sock(struct sock *sk)
-+{
-+	/* The below has to be done to allow calling inet_csk_destroy_sock */
-+	tcp_clear_sock_ops_cb_flags(sk);
-+	sock_set_flag(sk, SOCK_DEAD);
-+	this_cpu_inc(*sk->sk_prot->orphan_count);
-+}
-+
- /* This function allows to force a closure of a socket after the call to
-  * tcp/dccp_create_openreq_child().
-  */
+ tools/lib/bpf/libbpf.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
----
-base-commit: 064531c7e30cd67b79c0c694ac97f00c7796f4d6
-change-id: 20260907-cve-2026-74268-1e7715cc3ece
-
-Best regards,
---  
-Miguel Gazquez (Schneider Electric) <miguel.gazquez@bootlin.com>
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index c036e8a91ed8..395c4dcb54de 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9144,7 +9144,8 @@ static int bpf_object_load(struct bpf_object *obj, int extra_log_level, const ch
+ 	 * permit cross-endian creation of "light skeleton".
+ 	 */
+ 	if (obj->gen_loader) {
+-		bpf_gen__init(obj->gen_loader, extra_log_level, obj->nr_programs, obj->nr_maps);
++		bpf_gen__init(obj->gen_loader, obj->log_level | extra_log_level,
++			      obj->nr_programs, obj->nr_maps);
+ 	} else if (!is_native_endianness(obj)) {
+ 		pr_warn("object '%s': loading non-native endianness is unsupported\n", obj->name);
+ 		return libbpf_err(-LIBBPF_ERRNO__ENDIAN);
+--
+2.34.1
 
