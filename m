@@ -1,63 +1,63 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA6A3783C6
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 04:52:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93E637C109
+	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 04:52:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788756750; cv=none; b=ETs9ujjQ8q228JElMZM3QX+iHwPIqhD78pi1XP6JzG/w3Ror5TD2cM9b4bb1L2MhgdqI07ts7WZKnfbeMdmB0vIX0rF2iW1jR5SPOHiE+VPYfNGn4aJ95a2zNbsoiS4kgZ8KOPAFqlpbO2xNYfFcyzQuUT1CJa6ynxNjJGGsehk=
+	t=1788756759; cv=none; b=b3dlC/vINwD6cYbw3Dk7sH6Yuf2hamiLK0V3KkIzXiarPMzhlFmDkN7g8D0XjM3m/jrYyVKPNsiepYHCeCr5s1EnMeredc95dYs/HnGDMFOOoRAmVUbuG3A3HfI7tffrsRS1y/mMnfL3LDoQ5EscqHxLcFdkbgFm0J1Vl8puPX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788756750; c=relaxed/simple;
-	bh=geshVPPC/sFWfefds6yEfFfn1FmETpgHyUfVVTDRiS8=;
+	s=arc-20240116; t=1788756759; c=relaxed/simple;
+	bh=gzMW80CjGFwMFzpHisixnilwRNm+5xQBt6SorGvCuho=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ItpfnSfD29/Sm33sobCAzFdQvfys+plOBeDihFasiTE5elr9FRSknFXJrw1YLJzTSvQYfUuCrvn1EZzhwNksq0wdz78PRmI8mILQiHH1szNW55SQeQKhvke8VcXC3A5HMT8hDuepLtnWLpXtoxztt5WsRWQnwwXSAjiZwitopF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hEAg3ruC; arc=none smtp.client-ip=209.85.214.181
+	 MIME-Version; b=PrkTOQASUVwCUv3CXdDMDICjRJhhazRvZc7zEIuD8KS/qj+QJ34TVBsrWhBbmCsor4OxSnpBaLTlLuug8MXIOiyrTosS9AnwYAP2vNPvvROOXpoOVafEp8sDckv/It9cWD2Gs0MGvUAqrl+lkT0Sj3EcD7pLVJcCMbjN5cVkx3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sdST4BeZ; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hEAg3ruC"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2d5cad1a6baso26386825ad.3
-        for <bpf@vger.kernel.org>; Sun, 06 Sep 2026 21:52:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sdST4BeZ"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-85377c8bc96so2804097b3a.3
+        for <bpf@vger.kernel.org>; Sun, 06 Sep 2026 21:52:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788756748; x=1789361548; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788756757; x=1789361557; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=vm/cehq7ZbHazeTz6lyclFSjgW2pMvi5dQ4X+rlCVtE=;
-        b=hEAg3ruCGRjHQz3RedAr8ltMRKlsmVWFpIrWxjUSEYxeFhJdrexG6OWbCLTDqZ6U/f
-         zGK+FPF4SZ3xYNq3/QLWE5c5L0679jR+XjMmvLyLY/7VilSV1cXdLYehA2KgvBHEh5Pv
-         cqpPzdJCMGKGusu03OrBLv5cBaXbNJWbtDB4sP/6OcrkcJrTJFmAECZCuTo3iiNJymu5
-         aqrPo5JwNQpDpz+O/QUbY/8sILccE3zJhkSYLH8nBDg5d5CmauexfL9Iqdf46hcGi+C/
-         fj1jWUb9kcSdlAbpGA/tmxcSj7BcPq0Zd5Ok3YjbaBgzw0/J7sCjfWEaTodnhuxQ5rQt
-         S1+A==
+        bh=Fv/8WAsrrZD9Z6WoNFeiwDVhsb+FhzzkoAYrTP/tCf8=;
+        b=sdST4BeZFCtcWiOr6aBdIvksM3gW6Ne/O5+asnsg+4QyJC8CHyWu4KMB4hHdlWhRQj
+         EiZ05wDWBCibNWFR9Qk2l4e6l/Se9fILCGCzuQbRN/nasMWpajXBgErE2iyuKbN9eKoo
+         Zt/4//V0haMkAh5B0laGV32l/8StRIWp5bJjcUhLm26UYHKfrsUMWq445A2U7l1qxA3m
+         HxNagJ+qOh8pYjYz9KmjwcfYGO2CdC3Gi8LCGiHgKfrsW584ZBoOW5fIWTUrR/UF5W1C
+         NGKfwIuOYo+6j4aw5pP8xxdTYYB5S2BZuV6pc+XHBEX3GHyfQqXpiIYcNr7NNY3DJ1/Z
+         8obw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788756749; x=1789361549;
+        d=1e100.net; s=20251104; t=1788756757; x=1789361557;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vm/cehq7ZbHazeTz6lyclFSjgW2pMvi5dQ4X+rlCVtE=;
-        b=TF3jLh2YD57BFQfakHrImW8w6EP+D4J4t1ECBGIp6umqN0095lcOyag/1mefKYMoQI
-         Ms6AbqbyjD/3Atgi1k3lYknin7h68kK+/H2YkZA0mKa2noZb02vDFe8f8lEz0RmlLhZ/
-         YDR37XHSHQhId8C2rCEd+i5aTI7WwnEZ5OOUlMlobhvK3NKrxPiCDbrtDAP1e1rB1kd1
-         URSdyzOiSvMRfgFETjQAf5ySxjDF6KahU6HGv/yAL8lhluaHt0fUUlWsI5dzFIu3PlsY
-         QZvIwa1LWDFcaPD8LwAvncp4K/2eMjLkjBd/YG2upX/HUKZlLzm/BDdpoK4XrII3k/X/
-         /p6g==
-X-Gm-Message-State: AFuF++l3p88Um/huQZhPn+bRx5a3xomy7kp7H6T9qHgnBPXX6GarCowT
-	C2PwV0gWMHl+5bSqbeTKOZcum4bM8YK394LbM8ij7SBL7z4bJEAHlRf4
-X-Gm-Gg: AYBFou0FklYzGj9SqMO2RD07ZsSMEmibIn/tUFbgcwKBl53PDqeA5bozEoTQpgWpiiu
-	WR5+6V3FYNrv/NYVNy0mYgBLjaHQz86KdqWJD31OOhLtNvugdZj/n4uzbQXzJEzGdh7sPJTJvUi
-	ZLg+dOvUug9I7faIilAteWf26znf/26X99egL+wkQZEPdkNni8dYK19cgYXPhkFUIp4Duhvb3BS
-	p6Wmj95f/GEAxP6ahBVFvd/br4VcEVG7DyC4L6skCVXS99jfEYfLlDgodKyG2jFanOxYRfuoyZd
-	c83iCa4YkQHeRRQIQCnaBYFo/cVn5cy6vMiRzt2IaWRMXSYu4iBl94Fo4tOUGLKpwRD5VY0Ywkz
-	qy1DSA1h6BAiQqaC7loxymQXSBJMrz1PDd9a1XcHpFjFOv2+W63bpDgzxQ24NlKZqhsIkoHeuar
-	1BWkluDIibwktY6hPy4uGHCMNBpPDlDA9MOgxKnUrWSh4rj3oQfnSVhUH0uDa6ESKDAfMCKNIup
-	hcJ0xIl0+Dorw==
-X-Received: by 2002:a17:90b:4c4e:b0:399:1b64:e0d7 with SMTP id 98e67ed59e1d1-39b262aaf32mr32153720a91.19.1788756748582;
-        Sun, 06 Sep 2026 21:52:28 -0700 (PDT)
+        bh=Fv/8WAsrrZD9Z6WoNFeiwDVhsb+FhzzkoAYrTP/tCf8=;
+        b=BhSoLqQK94s/DddDgRoIQXb1FbvY2UeNNJhMs/6yNznrwbG5foEDzyCcR5SFmGWHEe
+         AuIrWvkBokd4iU6W2PN1M1tTRS1+RdR0orf+rfQkPQiRd39Q0QTrIXvEtquQrFX7wlpj
+         bMXgj5pNfuY03Jbj1EEd2w9F0/zOZjCnm7PLBOEpwKi44kiZpIFRV/xrXru9hg24Ea/l
+         /57E2MD4SkyaJqxtB05zuItIWNQFP35NuukxynGSWJQYFp5T505dNcyNTBL9QS30UULj
+         bH2Q83BK4fP2+UYgwaYQVuVSfhZzGhKfWfvmYvgvskL98z8YvnpXHzgTHzUSvBiAxifk
+         iaCQ==
+X-Gm-Message-State: AFuF++lTy3sivdsFWgJrzw8nciYJ3aTbZBaepf7TGrU6/0n97FIZLbx3
+	f44PpZANDwDP0+5irIXo6Pb3dDdTy0nKJyBPc1UmT6Ni3AQD1KJaC5RU
+X-Gm-Gg: AYBFou24bHkGfPxx0wmWhR4OWdD/DmwoFnEbMKettAPx6Acxh36sMhNWsbMP6E8MIoU
+	vhEgHJ/q988eCJTbhLXBiAnh2v+x2pIrWuvNDKVrh0CUBUvunaVO66UCxX6io0UgVeFhMsTPi2H
+	o8QIvhR2FzXlykLZkEHCRCqkS+XcKka9lBDyxa68+RKEfrqwEzn1v63apQZcwQrgi1sYRQnOGaT
+	R7bU8aPpd9hopEMTPGJ/unFK3f7VD+Mx2hDiOT+ZUPR7pr17rL6hMXIEnkHzn52Lge8i+He03HA
+	Lkbz/oaD7Agtjlej/111RvVPsyrwjzxosKQPaatVY69h9lMT81Kf0kkYTxj2ZfGD9bS3sWmwhSD
+	9Pw075DsI0bdwOYOdywKCzD5QTvHRcdxtU0ByfYdeS6lks5w9PyPEkX5goTsFUAp1nKrMVstKfU
+	0JKxHLfN/z2N38SxRkZlzeOiNmwv8IqQks4dzi2LOq/WXwW/DlzwQrl1BF022WI86ewa3X0nl6V
+	5ZS8Ursg4EgPQ==
+X-Received: by 2002:a05:6a20:72a6:b0:3d1:e510:905f with SMTP id adf61e73a8af0-3da39b3a6b3mr28486268637.1.1788756757103;
+        Sun, 06 Sep 2026 21:52:37 -0700 (PDT)
 Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14324410092sm21979675c88.14.2026.09.06.21.52.20
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14324410092sm21979675c88.14.2026.09.06.21.52.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Sep 2026 21:52:28 -0700 (PDT)
+        Sun, 06 Sep 2026 21:52:36 -0700 (PDT)
 From: Hemanth Selam <hemanth.selam@gmail.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -88,9 +88,9 @@ Cc: bpf@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org,
 	linux-kselftest@vger.kernel.org,
 	sparclinux@vger.kernel.org
-Subject: [PATCH v2 5/7] sparc: net: fix typo "evalute" in comment
-Date: Mon,  7 Sep 2026 10:21:33 +0530
-Message-ID: <20260907045135.13317-6-hemanth.selam@gmail.com>
+Subject: [PATCH v2 6/7] libbpf: Fix typos in comments
+Date: Mon,  7 Sep 2026 10:21:34 +0530
+Message-ID: <20260907045135.13317-7-hemanth.selam@gmail.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20260907045135.13317-1-hemanth.selam@gmail.com>
 References: <20260907045135.13317-1-hemanth.selam@gmail.com>
@@ -102,26 +102,53 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Correct "evalute" to "evaluate", reported by scripts/checkpatch.pl using
-the misspelling list in scripts/spelling.txt.  Only touches comments, no
-code changes.
+Fix typos in comments, reported by scripts/checkpatch.pl using the
+misspelling list in scripts/spelling.txt.  Only touches comments, no code
+changes.
+
+The subject changed since v1, from "tools/lib: fix typos in comments":
+both files are under tools/lib/bpf/, where the prevailing form is
+"libbpf: Fix ...".
 
 Assisted-by: Cursor:claude-opus-5
 Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
 ---
- arch/sparc/net/bpf_jit_asm_32.S | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/lib/bpf/btf.c  | 4 ++--
+ tools/lib/bpf/usdt.c | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/sparc/net/bpf_jit_asm_32.S b/arch/sparc/net/bpf_jit_asm_32.S
-index a2e28e0464a3..81430f065ac9 100644
---- a/arch/sparc/net/bpf_jit_asm_32.S
-+++ b/arch/sparc/net/bpf_jit_asm_32.S
-@@ -195,7 +195,7 @@ bpf_error:
- 	/* Make the JIT program return zero.  The JIT epilogue
- 	 * stores away the original %o7 into r_saved_O7.  The
- 	 * normal leaf function return is to use "retl" which
--	 * would evalute to "jmpl %o7 + 8, %g0" but we want to
-+	 * would evaluate to "jmpl %o7 + 8, %g0" but we want to
- 	 * use the saved value thus the sequence you see here.
- 	 */
- 	jmpl	r_saved_O7 + 8, %g0
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 8417de92d028..c1745bee37c0 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -3843,7 +3843,7 @@ static int btf_dedup_remap_types(struct btf_dedup *d);
+  * types, in general, can form graphs containing cycles, not just DAGs.
+  *
+  * While algorithm does deduplication, it also merges and resolves type
+- * information (unless disabled throught `struct btf_opts`), whenever possible.
++ * information (unless disabled through `struct btf_opts`), whenever possible.
+  * E.g., in the example above with two compilation units having partial type
+  * information for structs `A` and `B`, the output of algorithm will emit
+  * a single copy of each BTF type that describes structs `A`, `B`, and `S`
+@@ -5644,7 +5644,7 @@ static int btf_dedup_resolve_fwds(struct btf_dedup *d)
+  *
+  * After we established for each type its corresponding canonical representative
+  * type, we now can eliminate types that are not canonical and leave only
+- * canonical ones layed out sequentially in memory by copying them over
++ * canonical ones laid out sequentially in memory by copying them over
+  * duplicates. During compaction btf_dedup->hypot_map array is reused to store
+  * a map from original type ID to a new compacted type ID, which will be used
+  * during next phase to "fix up" type IDs, referenced from struct/union and
+diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+index 2e56e3ab5b6c..c0933580930b 100644
+--- a/tools/lib/bpf/usdt.c
++++ b/tools/lib/bpf/usdt.c
+@@ -144,7 +144,7 @@
+  * about. This state has to be maintained per-BPF object and coordinate
+  * between different USDT attachments within the same BPF object.
+  *
+- * Spec ID is the key in spec BPF map, value is the actual USDT spec layed out
++ * Spec ID is the key in spec BPF map, value is the actual USDT spec laid out
+  * as struct usdt_spec. Each invocation of BPF program at runtime needs to
+  * know its associated spec ID. It gets it either through BPF cookie, which
+  * libbpf sets to spec ID during attach time, or, if kernel is too old to
