@@ -1,48 +1,48 @@
-Received: from out-93wp-a21.jellyfish.systems (out-93wp-a21.jellyfish.systems [104.207.68.21])
+Received: from out-zbxj-a90.jellyfish.systems (out-zbxj-a90.jellyfish.systems [198.54.127.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D809274670
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D79B26B742
 	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 01:21:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.207.68.21
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788744083; cv=none; b=axt+4o5Hxw9nceZyNehYKOc4FH1JPjorFJ28kRce0AwGELWXJnN55y6FvcYAFOJcsf7CnVXpyN5RTIiJ/t6OGvVk0u4XUK0eLy+q/EkebV3IdgGhk9F5w/UkPOOYhqRljj5PINKRFZLg6L/n7gHHxw5IgsnBtaCExseWmzrjYek=
+	t=1788744083; cv=none; b=lhhoXruqe9kIJaig4cskPr+tKaQdKyUT2QfUyHMHEpNa5TCLskv4NDscOyFEowtZ/t+nN3R2u1YHvpF8vrdj+jHLhDgO2ICxt4p3++1arLbwA3p8d8zC2YbXkGJI+twQaawhM2SLuvGuwuuAIGtIUx+RCvGFOnQttiZgHDLcY/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1788744083; c=relaxed/simple;
-	bh=DS9iwohj+c+XpqsXPIoaYl5JW0FQadBGMTyGtZVVb/s=;
+	bh=IRE56WVX3dwqVWzGZI4zmf8UloIQ3ZU31Z9VISf2cs8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iF6Oy1Q6oKxUWy5tMMPNoRrLhk8EsFJ+5nIYLMDf4kiDMNJBKILCVCHbYETzmbG7vDI3YI3XqNCtMC4DaYpsGzLoG52h3Xp0AhVpyKH66oYC8cBsoKfJf6n2CKWvGYnuuL/x+huP2QBBKMmxOQFcwCnpCrU3eJHRUWY253c/2QA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=PZ1+dTpX; arc=none smtp.client-ip=104.207.68.21
+	 MIME-Version; b=HWhd+D3rqMkX6uqTR8ca4EtypuBCz6OTJvpsCF87kXZG8UpQ29mEnlDapA55pbvFnU2/TQO0F8wCVS/YYXUnWxCNR06hj5WEfcc9NbLCvDc96d44in4ns3aq9YL4LeQffZp3rbsAtd3AJaPWPTmpu5RZyp3XLGFv2ZDcZz/UUgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=jDGjehnY; arc=none smtp.client-ip=198.54.127.90
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="PZ1+dTpX"
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="jDGjehnY"
 Received: from 192.168.5.3 (unknown [69.5.53.41])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdTmN2BjJz2x9g;
-	Mon, 07 Sep 2026 01:21:07 +0000 (UTC)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdTmD1QwXz8sYS;
+	Mon, 07 Sep 2026 01:20:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1788744071;
-	bh=2UZ6a0ZXQ/tONmzFl9gXaGavlzhwmEH+J/CxZ37mLwQ=;
+	s=spacemail; t=1788744062;
+	bh=XfxKpBvhfXs8G4qxM4Uz03DjYwo8QijjCQSAF1xi5yU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PZ1+dTpXsbVPOi9Nudh0ktXd/xtlF3m/J+QVjI5z7cXZFX/YbsPwr0VlBMW9x15jS
-	 Z+kEnHF5y/U5oU+D00O/CKi2qYU3Z1NZF4MhE4wN5NoC09RetF/ZEBGJP5GBlj2aam
-	 uhm8Xu9FxWuP0ORGVW7fqCTGsfTGBurQtvPJH1/EvYh02+v4Gn5zatSJIqapqFcn8k
-	 5YnGol5tPvVH1rzlrBeMqWLla1AdRUb7ngVoH2zXQCN45JRzyhKhh7vn5zBbkoZVc5
-	 T71qTerf19Nhba4gvZ5OiHatngLJbDirggm0A01mMBFN/Q2Ykwm5S0MTiVtzUMUatA
-	 oq/qc/ZvXoU8A==
+	b=jDGjehnY8Ax05USkNTcVLXzFxrswWWDs7oIWB9dpv5WeW+t2B6EIlD5jOO0o0b9IA
+	 ddQEy7RZZPnTmWvhNAcVIfzfaMpNAL6MFGudm1U1fNR2UGk/0Q2g4XTT89yXGuA4ey
+	 PykJK5z86uDDXLHQ+R0v84qnJWuxbUxHgmraNhDrTo2wKZ5an4lVRZXi2PFuySZ5Od
+	 8O+/aEATbztmjv+bcfJqLBgIabbIR+MCh7MzkM2FTmpJIsr31UW3dJo7TXCKN0bghm
+	 y4ji6Xc/650YBYQWJCuW0dUXV3IyPcdqTqYRD/9IJ9Lk5MbkuIqR1cHABjBpS5UUxS
+	 EGMAcMElUwSaw==
 From: Tianyi Chen <hi@tychen.cc>
 To: bpf@vger.kernel.org
 Cc: Tianyi Chen <hi@tychen.cc>,
 	Quentin Monnet <qmo@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/2] bpftool: Read ring buffer maps with event_pipe
-Date: Mon,  7 Sep 2026 09:21:02 +0800
-Message-ID: <178874362960.1415955.4802953891665661440.ringbuf-v2-1@tychen.cc>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Cover symbolic bpftool map creation flags
+Date: Mon,  7 Sep 2026 09:20:51 +0800
+Message-ID: <178874362959.1415955.8526609394619576332.flags-v2-2@tychen.cc>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <178874362960.1415955.14971768495630842802.ringbuf-v2-0@tychen.cc>
-References: <20260906170747.1212378-1-hi@tychen.cc> <178874362960.1415955.14971768495630842802.ringbuf-v2-0@tychen.cc>
+In-Reply-To: <178874362959.1415955.5742268739057412911.flags-v2-0@tychen.cc>
+References: <20260906170715.1212085-1-hi@tychen.cc> <178874362959.1415955.5742268739057412911.flags-v2-0@tychen.cc>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,234 +52,123 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Envelope-From: hi@tychen.cc
 
-Allow map event_pipe to consume BPF_MAP_TYPE_RINGBUF maps using
-libbpf's ring buffer manager. Print each record's size and raw bytes
-in plain or JSON output, and flush output as records arrive.
-
-Reject CPU and index selectors for ring buffers and retain the existing
-perf event array path. Keep signal handlers limited to setting a stop
-flag, reset that flag for each command, and print the stopping message
-on stderr from the main path. Close the JSON array on poll errors and
-preserve output errors returned by the ring buffer callback.
-
-Document that consuming a ring buffer advances its shared consumer
-position and add ring buffer maps to event_pipe completion.
-
-Link: https://github.com/libbpf/bpftool/issues/54
+Check numeric and symbolic map creation flags, including combined and
+repeated names, against map information read independently with libbpf.
+Exercise malformed names and lists, update-only flags, empty input and
+numeric range errors. Verify rejected input leaves no pinned map.
 
 Assisted-by: Codex:GPT-6
 Signed-off-by: Tianyi Chen <hi@tychen.cc>
 ---
- .../bpf/bpftool/Documentation/bpftool-map.rst | 15 +++-
- tools/bpf/bpftool/bash-completion/bpftool     |  4 +-
- tools/bpf/bpftool/map_perf_ring.c             | 87 ++++++++++++++-----
- 3 files changed, 82 insertions(+), 24 deletions(-)
+ .../bpf/prog_tests/bpftool_map_flags.c        | 99 +++++++++++++++++++
+ 1 file changed, 99 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-index 5daf3de5c74..c44e6f797e5 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-@@ -120,7 +120,8 @@ bpftool map pin     *MAP*  *FILE*
-     character ('.'), which is reserved for future extensions of *bpffs*.
- 
- bpftool map event_pipe *MAP* [cpu *N* index *M*]
--    Read events from a **BPF_MAP_TYPE_PERF_EVENT_ARRAY** map.
-+    Read events from a **BPF_MAP_TYPE_PERF_EVENT_ARRAY** or
-+    **BPF_MAP_TYPE_RINGBUF** map.
- 
-     Install perf rings into a perf event array map and dump output of any
-     **bpf_perf_event_output**\ () call in the kernel. By default read the
-@@ -134,6 +135,18 @@ bpftool map event_pipe *MAP* [cpu *N* index *M*]
-     existing ring.  Any other application will stop receiving events if it
-     installed its rings earlier.
- 
-+    For a ring buffer map, consume records submitted by BPF programs, including
-+    records already queued before the command starts. **cpu** and **index**
-+    are not supported. Each record is printed as raw bytes, including embedded
-+    zero bytes. Plain output reports the record size followed by hexadecimal
-+    bytes; JSON output contains **size** and **data** fields, with **data** an
-+    array of byte values. Ring buffer records have no implicit CPU or timestamp.
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c
+new file mode 100644
+index 00000000000..140401dd254
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c
+@@ -0,0 +1,99 @@
++// SPDX-License-Identifier: GPL-2.0-only
 +
-+    Ring buffers support a single consumer. This command advances the shared
-+    consumer position and must not run alongside another consumer of the same
-+    map; it does not provide a passive view of events. **BPF_MAP_TYPE_USER_RINGBUF**
-+    maps are not supported.
++#include <errno.h>
++#include <unistd.h>
++#include <bpf/bpf.h>
++#include <bpftool_helpers.h>
++#include <test_progs.h>
 +
- bpftool map peek  *MAP*
-     Peek next value in the queue or stack.
- 
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index 75cbcb512eb..1750b488c9e 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -878,11 +878,11 @@ _bpftool()
-                             return 0
-                             ;;
-                         id)
--                            _bpftool_get_map_ids_for_type perf_event_array
-+                            _bpftool_get_map_ids_for_type '"type": "\(perf_event_array\|ringbuf\)"'
-                             return 0
-                             ;;
-                         name)
--                            _bpftool_get_map_names_for_type perf_event_array
-+                            _bpftool_get_map_names_for_type '"type": "\(perf_event_array\|ringbuf\)"'
-                             return 0
-                             ;;
-                         cpu)
-diff --git a/tools/bpf/bpftool/map_perf_ring.c b/tools/bpf/bpftool/map_perf_ring.c
-index bcb767e2d67..7d555331f44 100644
---- a/tools/bpf/bpftool/map_perf_ring.c
-+++ b/tools/bpf/bpftool/map_perf_ring.c
-@@ -27,7 +27,7 @@
- 
- #define MMAP_PAGE_CNT	16
- 
--static volatile bool stop;
-+static volatile sig_atomic_t stop;
- 
- struct perf_event_sample {
- 	struct perf_event_header header;
-@@ -44,7 +44,6 @@ struct perf_event_lost {
- 
- static void int_exit(int signo)
- {
--	fprintf(stderr, "Stopping...\n");
- 	stop = true;
- }
- 
-@@ -107,6 +106,27 @@ print_bpf_output(void *private_data, int cpu, struct perf_event_header *event)
- 	return LIBBPF_PERF_EVENT_CONT;
- }
- 
-+static int print_ringbuf_output(void *ctx, void *data, size_t size)
++static const struct map_flags_test {
++	const char *name;
++	const char *flags;
++	__u32 expected_flags;
++	const char *error;
++} tests[] = {
++	{ "zero", "0", 0 },
++	{ "decimal", "129", BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
++	{ "hexadecimal", "0x81", BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
++	{ "octal", "0201", BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
++	{ "positive_sign", "+1", BPF_F_NO_PREALLOC },
++	{ "single_name", "BPF_F_NO_PREALLOC", BPF_F_NO_PREALLOC },
++	{ "combined_names", "BPF_F_NO_PREALLOC,BPF_F_RDONLY_PROG",
++	  BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
++	{ "repeated_name", "BPF_F_NO_PREALLOC,BPF_F_NO_PREALLOC", BPF_F_NO_PREALLOC },
++	{ "unknown_name", "BPF_F_NOT_A_MAP_FLAG", 0, "can't parse" },
++	{ "other_command_flag", "BPF_F_PATH_FD", 0, "can't parse" },
++	{ "update_flag", "BPF_F_LOCK", 0, "can't parse" },
++	{ "abbreviated_name", "BPF_F_NO_PRE", 0, "can't parse" },
++	{ "lowercase_name", "bpf_f_no_prealloc", 0, "can't parse" },
++	{ "empty", "", 0, "can't parse" },
++	{ "whitespace", " ", 0, "can't parse" },
++	{ "empty_list", ",", 0, "can't parse" },
++	{ "leading_comma", ",BPF_F_NO_PREALLOC", 0, "can't parse" },
++	{ "trailing_comma", "BPF_F_NO_PREALLOC,", 0, "can't parse" },
++	{ "empty_element", "BPF_F_NO_PREALLOC,,BPF_F_RDONLY_PROG", 0, "can't parse" },
++	{ "number_then_name", "1,BPF_F_RDONLY_PROG", 0, "can't parse" },
++	{ "name_then_number", "BPF_F_NO_PREALLOC,128", 0, "can't parse" },
++	{ "numeric_list", "1,128", 0, "can't parse" },
++	{ "whitespace_in_list", "BPF_F_NO_PREALLOC, BPF_F_RDONLY_PROG", 0, "can't parse" },
++	{ "overflow_u32", "4294967296", 0, "can't parse" },
++	{ "overflow_hex", "0x100000000", 0, "can't parse" },
++	{ "overflow_u64", "18446744073709551616", 0, "can't parse" },
++	{ "negative", "-1", 0, "can't parse" },
++	/* Numeric bits unknown to bpftool must still reach the kernel. */
++	{ "all_bits", "0xffffffff", 0, "map create failed" },
++	{ "invalid_combination", "BPF_F_RDONLY,BPF_F_WRONLY", 0, "map create failed" },
++};
++
++static void test_map_flags(const struct map_flags_test *test, const char *path)
 +{
-+	if (json_output) {
-+		jsonw_start_object(json_wtr);
-+		jsonw_uint_field(json_wtr, "size", size);
-+		jsonw_name(json_wtr, "data");
-+		print_data_json(data, size);
-+		jsonw_end_object(json_wtr);
-+	} else {
-+		printf("== size: %zu =====\n", size);
-+		fprint_hex(stdout, data, size, " ");
-+		printf("\n");
++	char cmd[MAX_BPFTOOL_CMD_LEN], output[1024] = {};
++	struct bpf_map_info info = {};
++	__u32 info_len = sizeof(info);
++	int fd, err;
++
++	/* Let the flags parser handle negative numbers instead of getopt(). */
++	err = snprintf(cmd, sizeof(cmd),
++		       "-- map create %s type hash key 4 value 4 entries 1 name flags_test flags '%s' 2>&1",
++		       path, test->flags);
++	if (!ASSERT_GT(err, 0, "format_command") ||
++	    !ASSERT_LT(err, sizeof(cmd), "command_length"))
++		return;
++
++	err = get_bpftool_command_output(cmd, output, sizeof(output));
++	if (test->error) {
++		ASSERT_NEQ(err, 0, "reject_flags");
++		ASSERT_HAS_SUBSTR(output, test->error, "error_message");
++		err = access(path, F_OK);
++		ASSERT_EQ(err, -1, "no_pin");
++		ASSERT_EQ(errno, ENOENT, "pin_absent");
++		goto cleanup;
 +	}
++	if (!ASSERT_OK(err, "create_map"))
++		goto cleanup;
 +
-+	if (fflush(stdout))
-+		return errno ? -errno : -EIO;
-+
-+	/* A producer can keep poll() busy even after a signal arrives. */
-+	return stop ? -EINTR : 0;
++	fd = bpf_obj_get(path);
++	if (!ASSERT_OK_FD(fd, "open_map"))
++		goto cleanup;
++	if (ASSERT_OK(bpf_map_get_info_by_fd(fd, &info, &info_len), "map_info"))
++		ASSERT_EQ(info.map_flags, test->expected_flags, "map_flags");
++	close(fd);
++cleanup:
++	unlink(path);
 +}
 +
- int do_event_pipe(int argc, char **argv)
- {
- 	struct perf_event_attr perf_attr = {
-@@ -123,18 +143,26 @@ int do_event_pipe(int argc, char **argv)
- 		.cpu = -1,
- 		.idx = -1,
- 	};
--	struct perf_buffer *pb;
-+	struct perf_buffer *pb = NULL;
-+	struct ring_buffer *rb = NULL;
- 	__u32 map_info_len;
- 	int err, map_fd;
- 
-+	stop = false;
- 	map_info_len = sizeof(map_info);
- 	map_fd = map_parse_fd_and_info(&argc, &argv, &map_info, &map_info_len,
- 				       0);
- 	if (map_fd < 0)
- 		return -1;
- 
--	if (map_info.type != BPF_MAP_TYPE_PERF_EVENT_ARRAY) {
--		p_err("map is not a perf event array");
-+	if (map_info.type != BPF_MAP_TYPE_PERF_EVENT_ARRAY &&
-+	    map_info.type != BPF_MAP_TYPE_RINGBUF) {
-+		p_err("map is not a perf event array or ring buffer");
-+		goto err_close_map;
-+	}
++void test_bpftool_map_flags(void)
++{
++	char dir[] = "/sys/fs/bpf/bpftool_flags_XXXXXX";
++	char path[sizeof(dir) + sizeof("/map")];
++	int i;
 +
-+	if (map_info.type == BPF_MAP_TYPE_RINGBUF && argc) {
-+		p_err("ring buffer maps do not support cpu or index arguments");
- 		goto err_close_map;
- 	}
- 
-@@ -184,15 +212,24 @@ int do_event_pipe(int argc, char **argv)
- 		ctx.idx = 0;
- 	}
- 
--	opts.cpu_cnt = ctx.all_cpus ? 0 : 1;
--	opts.cpus = &ctx.cpu;
--	opts.map_keys = &ctx.idx;
--	pb = perf_buffer__new_raw(map_fd, MMAP_PAGE_CNT, &perf_attr,
--				  print_bpf_output, &ctx, &opts);
--	if (!pb) {
--		p_err("failed to create perf buffer: %s (%d)",
--		      strerror(errno), errno);
--		goto err_close_map;
-+	if (map_info.type == BPF_MAP_TYPE_RINGBUF) {
-+		rb = ring_buffer__new(map_fd, print_ringbuf_output, NULL, NULL);
-+		if (!rb) {
-+			p_err("failed to create ring buffer: %s (%d)",
-+			      strerror(errno), errno);
-+			goto err_close_map;
-+		}
-+	} else {
-+		opts.cpu_cnt = ctx.all_cpus ? 0 : 1;
-+		opts.cpus = &ctx.cpu;
-+		opts.map_keys = &ctx.idx;
-+		pb = perf_buffer__new_raw(map_fd, MMAP_PAGE_CNT, &perf_attr,
-+					  print_bpf_output, &ctx, &opts);
-+		if (!pb) {
-+			p_err("failed to create perf buffer: %s (%d)",
-+			      strerror(errno), errno);
-+			goto err_close_map;
-+		}
- 	}
- 
- 	signal(SIGINT, int_exit);
-@@ -202,25 +239,33 @@ int do_event_pipe(int argc, char **argv)
- 	if (json_output)
- 		jsonw_start_array(json_wtr);
- 
-+	err = 0;
- 	while (!stop) {
--		err = perf_buffer__poll(pb, 200);
-+		err = rb ? ring_buffer__poll(rb, 200) : perf_buffer__poll(pb, 200);
- 		if (err < 0 && err != -EINTR) {
--			p_err("perf buffer polling failed: %s (%d)",
--			      strerror(errno), errno);
--			goto err_close_pb;
-+			fprintf(stderr, "Error: %s buffer polling failed: %s (%d)\n",
-+				rb ? "ring" : "perf", strerror(-err), -err);
-+			break;
- 		}
-+		err = 0;
- 	}
- 
-+	if (stop)
-+		fprintf(stderr, "Stopping...\n");
- 	if (json_output)
- 		jsonw_end_array(json_wtr);
-+	if (fflush(stdout)) {
-+		fprintf(stderr, "Error: failed to write events: %s\n", strerror(errno));
-+		err = -1;
++	if (!ASSERT_OK_PTR(mkdtemp(dir), "create_pin_dir"))
++		return;
++	snprintf(path, sizeof(path), "%s/map", dir);
++	for (i = 0; i < ARRAY_SIZE(tests); i++) {
++		if (test__start_subtest(tests[i].name))
++			test_map_flags(&tests[i], path);
 +	}
- 
-+	ring_buffer__free(rb);
- 	perf_buffer__free(pb);
-+	/* Both buffer managers borrow map_fd. */
- 	close(map_fd);
- 
--	return 0;
-+	return err < 0 ? -1 : 0;
- 
--err_close_pb:
--	perf_buffer__free(pb);
- err_close_map:
- 	close(map_fd);
- 	return -1;
++	ASSERT_OK(rmdir(dir), "remove_pin_dir");
++}
 -- 
 2.55.0
 
