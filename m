@@ -1,72 +1,109 @@
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-160.mta1.migadu.com [95.215.58.160])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF69246762;
-	Mon,  7 Sep 2026 03:26:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2573C872B
+	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 03:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.160
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788751614; cv=none; b=C/NGf8PGFMwQUlRt4sW+UGQiq4qrmtJtffaHhP8QsYx5sCsW1iQui5C0gmtcZjwJPGW4vy5EdK5VxVGO4C5TyphAoLy8iP4Obr/OsUnvB+9cS/fHi/ljXZc8IOzHsgXHsYC0rcQHywJ57TRogNCnk3bgM8PzcY3MhxoCuIdkAx0=
+	t=1788751917; cv=none; b=YAY5FKZX2L9VYqHxqFvYovN40LyuGfioWi1CBpGEnXSTGxHac2O2BcDRrjZ6nNCPN40XzT/2Pf+j/wy7JmvZC56j+QH8Uo2QWa4pzDT/Z45qhWch5PybiDqWYfYPFiFD/e7R2fT107VnwLB58rLoLVF71z1sU3wwiAIVEHNuans=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788751614; c=relaxed/simple;
-	bh=jlOQ0n2PNhuPIh1KarKCVTN6XuHIkDQKRI5gKjnrtrk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=emSF9s6YNwVjaAhsmJj2BLNKm01UJYvS4AxTfV9oWc8WhJI1fmR8Xx63ANvCpNA2E/p7G26ooW3Rdju0fy7mOjzRXb6PTLnpLxKUqCo6ibpgDdaRwwlyoi9RTSIuB9NrpNw0tqa/pxtYS9h/dmEYGColhVnhHINPM8t4RpXdnMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=eQfA+2WK; arc=none smtp.client-ip=115.124.30.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1788751917; c=relaxed/simple;
+	bh=VMIbqoBiQDeHLrphbYg5Mf+UsKXgH9fka3p1+aplsZE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=K47yKdxTRrTAeYqIyL6x4rga2nqKd47Vczp2CWVHe1+eg/1JylHMCiqD7dmIlemvGiW8rSgEO7Fs5adwvXnxvjMOWWKSB2e43kYnrKq8n2Jnyhk9ER42zJJ2ABgkDBlbzxz1KJzoSAQF23bvunr5F0VrcTOtu3R0BH1OBBsonxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=u6OmzNGU; arc=none smtp.client-ip=95.215.58.160
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="eQfA+2WK"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1788751609; h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-	bh=jlOQ0n2PNhuPIh1KarKCVTN6XuHIkDQKRI5gKjnrtrk=;
-	b=eQfA+2WKnt0jjYvooW61tRh/rXMxO1Gt3DXt3AYSWFLl7uKWgazdQ1Z988owe9r/yhIICNQYnotrxaUDeF5U60mkM4I7Nh52uVhFna4iLkzTdUnRe0F+dIZ5r+0U8KroRe/HShc9GTBWLq9i6yNY/ICyosdsMOAwM6B8kojrsyg=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0XAOUcAG_1788751605;
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XAOUcAG_1788751605 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 07 Sep 2026 11:26:49 +0800
-From: Chen Pei <cp0613@linux.alibaba.com>
-To: Pu Lehui <pulehui@huawei.com>,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	memxor@gmail.com,
-	bjorn@kernel.org,
-	puranjay@kernel.org
-Cc: ihor.solodrai@linux.dev,
-	eddyz87@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	shuah@kernel.org,
-	guoren@kernel.org,
-	bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next] bpf, riscv: Register extable entries at probe insn call sites
-Date: Mon,  7 Sep 2026 11:26:32 +0800
-Message-ID: <20260907023000.16104-1-reply-cp0613@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <7fbae9ac-44e4-4607-8aba-15db9779f80d@huawei.com>
-References: <20260901120013.16104-1-cp0613@linux.alibaba.com> <7fbae9ac-44e4-4607-8aba-15db9779f80d@huawei.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="u6OmzNGU"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=VMIbqoBiQDeHLrphbYg5Mf+UsKXgH9fka3p1+aplsZE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788751912; v=1; x=1789356712;
+ b=u6OmzNGU6htyuZB9kN7btaayVrma/AWzfBItwEpaUeH0V41C7JjCziCsc5jEP8DRP40gFMob
+ zsCf0t0tNlPry5kBEzxBgbXn1sVrSo6Sbk+ycC1m02xzhhSl7BQQZrzbFlOcf5b2ILk6Q6cjvND
+ AwoiubskkSQiExq+8lzrnfak=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id e3763fd486958387;
+	Mon, 07 Sep 2026 03:31:52 +0000
+X-Mizu-Trace-ID: e3763fd486958387
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <13813a74-1f1b-4fb5-a589-6eda1e99bd19@linux.dev>
+Date: Mon, 7 Sep 2026 11:31:46 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Betterbird (macOS/Intel)
+Subject: Re: [PATCH bpf-next v7 0/2] bpf: BPF-driven proactive memcg reclaim
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn
+ <inwardvessel@gmail.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ Barry Song <baohua@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+References: <cover.1788516769.git.zhuhui@kylinos.cn>
+ <DL7CFVDSDV92.1VPGNHDCKVVIV@gmail.com>
+Content-Language: en-US
+From: Hui Zhu <hui.zhu@linux.dev>
+In-Reply-To: <DL7CFVDSDV92.1VPGNHDCKVVIV@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> This patch looks fine, but I still tend not to introduce these changes.
-> I think the function itself should handle its own defensive checks, and
-> we should also avoid "shotgun surgery".
 
-Indeed, you have a point. Thanks for the review.
+> On Fri Sep 4, 2026 at 12:20 PM CEST, Hui Zhu wrote:
+>> From: Hui Zhu <zhuhui@kylinos.cn>
+>>
+>> BPF programs can observe memory pressure on a cgroup (e.g. refault
+>> stats via bpf_mem_cgroup_page_state()), but cannot act on it:
+>> triggering reclaim on a chosen cgroup requires writing to
+>> memory.reclaim, which BPF cannot do. This series adds
+>> bpf_proactive_reclaim(), a sleepable kfunc performing one proactive
+>> reclaim pass on a target memcg, so when and how hard to reclaim is
+>> BPF policy rather than hard-coded thresholds.
+>>
+>> The kfunc is restricted to BPF_PROG_TYPE_SYSCALL so that reclaim
+>> always runs in a clean process context: generic sleepable programs
+>> may execute with filesystem locks held or in NOFS/NOIO contexts,
+>> where the reclaim path could deadlock in filesystem shrinkers. The
+>> bpf_wq and task_work callbacks of a SYSCALL program keep its program
+>> type and run in process context, so reclaim work can still be queued
+>> asynchronously through them, as the selftest does with bpf_wq.
+>>
+>> The use case we are looking at is protecting high-priority workloads:
+>> a BPF program monitors the state of a high-priority cgroup and, when
+>> it degrades (e.g. PSI rises or refaults increase, as in the
+>> selftest), asynchronously reclaims memory from low-priority cgroups
+>> via bpf_wq and bpf_proactive_reclaim(), giving the pressured cgroup
+>> more free pages.
+>>
+>> Another use case: several vendor-maintained kernels carry private
+>> implementations that trigger asynchronous reclaim when a memcg enters
+>> a certain state. These exist for historical and partly psychological
+>> reasons, but the underlying demand is real. We expect BPF-driven
+>> proactive reclaim, combined with the BPF hooks for the memory
+>> controller currently under discussion and development, to serve these
+>> needs in mainline, reducing kernel fragmentation and improving kernel
+>> maintainability.
+>  From BPF perspective this looks ok to me. I saw you dropped the swappiness
+> argument, what happened there? I thought we agreed to just include it in the
+> kfunc now. Did something change?
 
-Best regards,
-Pei
+Nothing changed. I misunderstood the earlier discussion and dropped the
+swappiness argument by mistake. The plan to include it in the kfunc
+still stands, and I will add it back in the next version.
+
+Best,
+Hui
+
