@@ -1,178 +1,165 @@
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 223AC449B12
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 20:02:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE9E521234;
+	Mon,  7 Sep 2026 20:06:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788811330; cv=none; b=t+6sUF7MDrvjVKbrAeBRv1COIMcAckNLbXVT76JbP49aaC6jEA6Du2IM7gGh8YkKw3dHq1DnuDC9jaiQ4rgW3PQV+ctdNqtav0yxKgv25HCptdHh1KVN8V9YkALEhE6kG9/Ywn2Z2edOnS+7yprFyOM2U+BS+tWjUCvtfDwXstE=
+	t=1788811594; cv=none; b=WNRcB2UD4lyAm5e5UqR/ZvisGCVyv4E2Bo0sa74OiTSsV9GkpkvkrENproplqRSjKmbVK5W/HwxEmkS5F0NpnQl28Epwmbp4GU540zBDNUPiejdb9/iTj0mmx0kiBvRQv2wY0p7xqsRDeyAZ0oih9kthwWtOyJKOtZS6J+iFvDw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788811330; c=relaxed/simple;
-	bh=32e5Hq42eMbENhVQyuKVR9aB0aAxBUGCy1TPX6J6la8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=HmGA3AKi17vNdTmtX31fjxGKnq57qQ16uzbxrQcLzJZcPeGNBwZXNMuMIMtoXmFGppi7+JhkjsNNFzyhVAobx6LAyvEWIIpP+Yc6riYj+8XdjqfBlIM0vK9yg/Gw583WDTFhzS59yhmwUPW2dxy8O7a/Qd+R0TU8HUGw3xDGxbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ipkxgOAr; arc=none smtp.client-ip=209.85.160.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788811594; c=relaxed/simple;
+	bh=6z+DKIAYLJkOjTbCElZ17IsPYuMv4G48gys7vG2ZGtY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ieXhQlcmlPo/+sqla4ZeZCjfQS+BcHJ7bUCG05FCSmsWX75zdqoaaRpmdXZxaFBtOl0tCnfig9bks3c7osw3OmYH51UV7piBtZYmSxwnwilrC52TtIdOWWHSwRvBnBxFVTMww34y1t9YcJrjKB1P+GD9ODaSwdMpT69f9xuY6W4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=itj8IO6W; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ipkxgOAr"
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-478c01da5cbso448452fac.3
-        for <bpf@vger.kernel.org>; Mon, 07 Sep 2026 13:02:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788811328; x=1789416128; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=ngem6m2yG08mHgsLH9JWCZ0vrxKdp0QjFmiqcsYBtQw=;
-        b=ipkxgOAr9TbDmqsS8Fc4B6E5afu20lBK6c+fnOnm1l2JUdgsKjLHTY31mA7j6sw3Dc
-         9FhTFwfoZFwtqveB6OaamYtAeXx59vw5PGXezaqfxc+iwDmxP2IEY7mCBl+q/lqP8njf
-         mDV3NbNcA2I3tC01Sq5cLKRmZnbOCdlytBVhf9SrOKRSbqZXxo74hH2pGl7sbeCAuaSS
-         tDpcfbXd3C6xRtq+K6svHQ/9GK5b2qYshJ7e4y+e4Xa4dtz32Qq2GKOvJURMloytJnjc
-         LaNwbf0uCnem/HLWQukQeYzUPF5zcs6l/Zupgu7XWQ88/G9K6Ddiw/Lofs49H4Y0Atx3
-         ksIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788811328; x=1789416128;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ngem6m2yG08mHgsLH9JWCZ0vrxKdp0QjFmiqcsYBtQw=;
-        b=LMDokVMKIAd/LyNqvpOLPfBWeP/YSSFgC6/ylG4ApY5pCnwGVe0EWxvb5HngeIMUcg
-         KiH04GSx+TEcet4/2F0MhGx7QcL+CPpfbUcUu1Nxwv7QZsT7mPLOy7zfK3iTCtpd31dP
-         7L0uXVZ9/uwabc0GM0cp961KFTc+n5MpvSCbA34xIJkID9Qjgy/hf6jfBzQrfYHPflPn
-         XRhglIEXwrsKzPBl6LLmHgdLJXL09ArYa2aMq0AmwhSyX2yMDGylPqpH1+zeBv8KcII5
-         Tzwt5FvywVq9PcDj/6rHzroGSQQLYI7aKVE36ZsxQ7/lyFdGgvBfWZKLYzRWqJk4lngB
-         C5rQ==
-X-Gm-Message-State: AFuF++leQVtKQMtWvo/Ua78CM2RhyYAAu6NSVoS6a149LHUu3JAos6Bt
-	KOBx8MxMNLGWP/1bz+BI+obD4XtBeUeNpPfCIMydxjFvumox1T00TeiY
-X-Gm-Gg: AYBFou1tV6PV2PCFO6In6R8ROM/5qKAhKweUrlRHecarDE6YCaTF+kLxckyOvvnOdXH
-	RV8D3q5CoEfQRsXViSrFc8/m2PquyNrqcV3+1U5EY9xJt+KJn6YSQQPJHZc3Uw5k9vkjV0qjeEA
-	39HxMjyjatGhRCZy6RGVBYA0NfOVTZGsGtFi6ewAOfouwdmqIjUyxgW7/WEb1VAPUN37jB8ZVoQ
-	LDbg9uPI8uyJpjlI/qXRywMnrgjEH2B+bMCbt1Zv4zRV8/K94/y7wzmqUKGmdKYfoZ6r71kzHsJ
-	Eva1j8sTFXwq1nA58Yj2kK4VVDZM3+UMwpjWa99wpTDA1nuGWcMiPoOIH+/8FWPLvubuCicDxi/
-	WGbHN+bTssESldJH3HnAI8Cxk65PdOOqgKLA8fn2rARox9mQAlQTNvuHMJUBkN5MXC8aaXVLNZW
-	zMbfD1o/qXz7zbM/DulS+jg0KTPeTBYNNlWv+0VdAsWyOLBdNe+j9ahl3y6RL19H+Idtkn0qF90
-	DenYC+vH7B5WmTXsyVNnKFd4Nm64pgUYji/2OpbbAqp45+gX5go1FQ=
-X-Received: by 2002:a05:6871:6315:b0:447:4fc:1da1 with SMTP id 586e51a60fabf-475526ec139mr16680060fac.12.1788811327749;
-        Mon, 07 Sep 2026 13:02:07 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:1e::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-476ed51dd64sm7220292fac.18.2026.09.07.13.02.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Sep 2026 13:02:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="itj8IO6W"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E356D1F00A3A;
+	Mon,  7 Sep 2026 20:06:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788811590;
+	bh=8iZFtkM4l1pBZzM0aft9DJRPxcvPbB47sa2kHkN4CLw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=itj8IO6WuGDUlG4fV19yF3V4rKpQ14rYl9UeIVKDmHnSJolv7EFD8UQxFlCdkBVGK
+	 ws9Vqsg1Z5r3sQcqqF/wAeIxdjJpCuEOH8c/snnX01Cix6RsOz8HMTuSuIxyouMrEX
+	 N9Ho7R/MyeVcbXscY7gENbyUtymnAzjTKk4/z1IDjAsYrtk1M77rWloHCt2hqKJLKo
+	 RJGm+RXuXyXLJDPqMwjCCESNFKNgKuiECjrFBmLVzhKAvOx6SXB7UFw/iN06DxwGtd
+	 PXj/TdTFDuHpUbKZBcLTJzspv/NQjcVuLM3gTFfWwF/b6764/khZWF7e+zmsWaTxUO
+	 tAY1Bek0OCNgg==
+Message-ID: <daeab5a8-44b8-4933-80c5-e4145b01a0a1@kernel.org>
+Date: Mon, 7 Sep 2026 22:06:22 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v5 1/7] mm: Add copy_remote_mm_str()
+To: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>, bpf@vger.kernel.org
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, akpm@linux-foundation.org, andrii@kernel.org,
+ ast@kernel.org, brauner@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com,
+ kpsingh@kernel.org, ljs@kernel.org, matt@bobrowski.net, memxor@gmail.com,
+ song@kernel.org, sun.jian.kdev@gmail.com, utilityemal77@gmail.com,
+ viro@zeniv.linux.org.uk
+References: <20260907165220.52431-1-tasos.papagiannnis@gmail.com>
+ <20260907165220.52431-2-tasos.papagiannnis@gmail.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260907165220.52431-2-tasos.papagiannnis@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Date: Mon, 07 Sep 2026 13:02:04 -0700
-Message-Id: <DL9COXZQXX4V.1FN45QO2Q77ZH@gmail.com>
-To: "Weiming Shi" <bestswngs@gmail.com>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "David S . Miller" <davem@davemloft.net>, "Eric
- Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>, "Paolo
- Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>
-Cc: <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <co+adfca3e91be95776@bugs.sh>, "Xiang Mei"
- <xmei5@asu.edu>, <stable@vger.kernel.org>
-Subject: Re: [PATCH bpf] bpf: refresh seg6local SRH pointer after skb pull
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc
-References: <20260907192129.557377-2-bestswngs@gmail.com>
-In-Reply-To: <20260907192129.557377-2-bestswngs@gmail.com>
+Content-Transfer-Encoding: 7bit
 
-On Mon Sep 7, 2026 at 12:21 PM PDT, Weiming Shi wrote:
-> An LWT_SEG6LOCAL program can invalidate its cached SRH with
-> bpf_lwt_seg6_adjust_srh() and then call bpf_skb_pull_data(). The latter
-> may reallocate skb->head, leaving the per-CPU SRH pointer dangling.
-> Post-program SRH validation then writes through that pointer.
->
-> BUG: KASAN: slab-use-after-free in seg6_bpf_has_valid_srh (net/ipv6/seg6_=
-local.c:1411)
-> Write of size 1
->  seg6_bpf_has_valid_srh (net/ipv6/seg6_local.c:1411)
->  input_action_end_bpf (net/ipv6/seg6_local.c:1463)
->  seg6_local_input_core (net/ipv6/seg6_local.c:1630)
->  seg6_local_input (net/ipv6/seg6_local.c:1639)
->  lwtunnel_input (net/core/lwtunnel.c:466)
->  ipv6_rcv (net/ipv6/ip6_input.c:351)
->
-> Give LWT_SEG6LOCAL its own bpf_skb_pull_data() implementation. Save
-> the cached SRH offset before the skb operation and rebuild the pointer
-> from the current skb->data afterwards. Since pulling data can replace
-> storage but does not change packet layout, this preserves the identity
-> of the cached SRH even when multiple Routing Headers are present.
->
-> Refresh the pointer even on error because __pskb_pull_tail() can replace
-> the head before a later step fails. Preserve the pending hdrlen and valid
-> state so SRH validation semantics remain unchanged.
->
-> Fixes: 004d4b274e2a ("ipv6: sr: Add seg6local action End.BPF")
-> Reported-by: co+adfca3e91be95776@bugs.sh
-> Closes: https://lore.kernel.org/all/GCy0KRM2IcQGoJQTjJEU9D0maBxXzEDHuQpq@=
-bugs.sh/
-> Cc: stable@vger.kernel.org
-> Assisted-by: Claude:gpt-5
-> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+On 9/7/26 18:52, Anastasios Papagiannis wrote:
+> copy_remote_vm_str() gets the target address space from a struct
+> task_struct. This does not work for an address space that exists but is
+> not yet associated with a task_struct, such as the mm held by struct
+> linux_binprm during exec.
+> 
+> Add copy_remote_mm_str(), which operates directly on a struct mm_struct.
+> 
+> Use a common internal interface for the MMU and NOMMU implementations
+> and define both public wrappers in mm/util.c. Preserve the existing
+> copy_remote_vm_str() behavior, including handling zero-length requests
+> before acquiring the task's mm.
+> 
+> Signed-off-by: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
 > ---
->  net/core/filter.c | 28 ++++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 61940e7535523..e61f9e9226b10 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -7162,6 +7162,32 @@ static const struct bpf_func_proto bpf_lwt_seg6_ad=
-just_srh_proto =3D {
->  	.arg2_type	=3D ARG_ANYTHING,
->  	.arg3_type	=3D ARG_ANYTHING,
->  };
-> +
-> +BPF_CALL_2(bpf_lwt_seg6_pull_data, struct sk_buff *, skb, u32, len)
-> +{
-> +	struct seg6_bpf_srh_state *srh_state =3D
-> +		this_cpu_ptr(&seg6_bpf_srh_states);
-> +	unsigned int srhoff;
-> +	int ret;
-> +
-> +	lockdep_assert_held(&srh_state->bh_lock);
-> +	if (!srh_state->srh)
-> +		return ____bpf_skb_pull_data(skb, len);
-> +
-> +	srhoff =3D (unsigned char *)srh_state->srh - skb->data;
-> +	ret =3D ____bpf_skb_pull_data(skb, len);
-> +	srh_state->srh =3D (struct ipv6_sr_hdr *)(skb->data + srhoff);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct bpf_func_proto bpf_lwt_seg6_pull_data_proto =3D {
-> +	.func		=3D bpf_lwt_seg6_pull_data,
-> +	.gpl_only	=3D false,
-> +	.ret_type	=3D RET_INTEGER,
-> +	.arg1_type	=3D ARG_PTR_TO_CTX,
-> +	.arg2_type	=3D ARG_ANYTHING,
-> +};
->  #endif /* CONFIG_IPV6_SEG6_BPF */
-> =20
->  #ifdef CONFIG_INET
-> @@ -9052,6 +9078,8 @@ lwt_seg6local_func_proto(enum bpf_func_id func_id, =
-const struct bpf_prog *prog)
->  		return &bpf_lwt_seg6_action_proto;
->  	case BPF_FUNC_lwt_seg6_adjust_srh:
->  		return &bpf_lwt_seg6_adjust_srh_proto;
-> +	case BPF_FUNC_skb_pull_data:
-> +		return &bpf_lwt_seg6_pull_data_proto;
+>  include/linux/mm.h |  2 ++
+>  mm/internal.h      |  5 ++++
+>  mm/memory.c        | 41 ++----------------------------
+>  mm/nommu.c         | 41 ++----------------------------
+>  mm/util.c          | 62 ++++++++++++++++++++++++++++++++++++++++++++++
+>  5 files changed, 73 insertions(+), 78 deletions(-)
 
-Instead of adding new support that no one will use, just disallow this help=
-er from lwt_seg6.
+Almost looks like a cleanup now ;)
 
-pw-bot: cr
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index dd09c438fa23..d5bde1f71a97 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3326,6 +3326,8 @@ extern int access_remote_vm(struct mm_struct *mm, unsigned long addr,
+>  		void *buf, int len, unsigned int gup_flags);
+>  
+>  #ifdef CONFIG_BPF_SYSCALL
+> +extern int copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
+> +			      void *buf, int len, unsigned int gup_flags);
+>  extern int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
+>  			      void *buf, int len, unsigned int gup_flags);
+
+Ah, no new "extern" and best to drop the "extern" from the other involved
+function while at it.
+
+Also, you can just drop the ifdef; the linker will complain either way later.
+
+>  #endif
+> diff --git a/mm/internal.h b/mm/internal.h
+> index 38b1165212c9..8264a346d18a 100644
+> --- a/mm/internal.h
+> +++ b/mm/internal.h
+> @@ -25,6 +25,11 @@
+>  struct folio_batch;
+>  struct hstate;
+>  
+> +#ifdef CONFIG_BPF_SYSCALL
+> +int __copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
+> +			 void *buf, int len, unsigned int gup_flags);
+> +#endif
+> +
+
+Same here, the linker will complain, so no need for the ifdef.
+
+
+
+Apart from that LGTM, thanks!
+
+-- 
+Cheers,
+
+David
