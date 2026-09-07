@@ -1,48 +1,48 @@
 Received: from out-zbxj-a65.jellyfish.systems (out-zbxj-a65.jellyfish.systems [198.54.127.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C150F371D01
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 05:15:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5C40371D01
+	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 05:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788758129; cv=none; b=R3owXzbj19XIa/YNt+KH5PXzp8Ctjw7nWGiLjPB3wAJuyDdgxM7Wam7BHdiEOnLS8oxc45U/U7HQGXdn4JD/5G6Wq4e1UEQQ5It2RaLis17tXOOyD/eHaSHf9Frjq9W3P4lPjEXiMM/N4CnOuTpl9HdMZ1TO14gnIAYpb5pp+is=
+	t=1788758131; cv=none; b=JTzE0znsM9/DsEyBudIoH29UxJ1643uHzyBtDQUJkyQTyfgtQJnA8+EIdA1bFzp5N6sFw+gDP8VhtQEuH+mKqF0w3V7PHIch8bnT1PInneAn5CiM6q+G25ursCyy0vqfBnP/6UR1ayIoAf3f3be4uKEFq0ojtI4LGtf7vTNl2Eo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788758129; c=relaxed/simple;
-	bh=YEB0T5GbUvJrPv8cxSa4tT5wPIvdZxIZu51yaqT6nsU=;
+	s=arc-20240116; t=1788758131; c=relaxed/simple;
+	bh=j6uFuJZKJzAWiejWnQ85APCD4TPpXrmr/0kKPaibQ00=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XDsG1s2pei+kw57vhr5CnzVSsk3kPtwfG2zLAK5ftOcSB/z0BPSkWOyjavpWL28PqT8YFuWxLwJRBw80nuh0mUuRIoEaAlsr1nqnj0WS6VK9cBmMUqp7DytuT7a22VmvvlKh3+/eRbWiCGG9t312dX1D4LcEvvHbGuW5KEZ21NU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=EUFIKw+Q; arc=none smtp.client-ip=198.54.127.65
+	 MIME-Version:Content-Type; b=cF4vkvkm0d8cc6uxQtAXJRCni1lY3MATsxojNuX8EURnb2b6zGv5h1Fiz1omrH7Mqu7L3hazuqdDOdfj01lGhhH9m3yPDFwurrDAh+tfOnq0Uv349CnWsWpx8/n5nsVz71icThrykajYMWpqNGF5w2i+JGzjDtvps4kveiT/rjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=Mg4oi/YY; arc=none smtp.client-ip=198.54.127.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="EUFIKw+Q"
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="Mg4oi/YY"
 Received: from fedora (unknown [23.142.132.69])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdZyQ1lxdz2x9H;
-	Mon, 07 Sep 2026 05:15:10 +0000 (UTC)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdZyd5zzxz2x9F;
+	Mon, 07 Sep 2026 05:15:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1788758111;
-	bh=YEB0T5GbUvJrPv8cxSa4tT5wPIvdZxIZu51yaqT6nsU=;
+	s=spacemail; t=1788758122;
+	bh=j6uFuJZKJzAWiejWnQ85APCD4TPpXrmr/0kKPaibQ00=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EUFIKw+QnUf4wq9kAAuGzfB1D2FX6yMveJ3jcpIPsZlWfbMDKrrfPI3NFvzSRTM4m
-	 iicSjEOuIhqiuzUEYY5tw8AEFsyI7dhiK6j28iuB1ZaDubGQcJX93qxOD14ZbR1dcy
-	 I5hVwpWyqD57DD8DF7+DOZyipsc5XQ7CK0B08WZ4HaSp+Dcmc05FGyxnX47g9U67e7
-	 WrksFzhL/EMpiTrMI7oufmD2Ymn9CWusVTnBQzBv/rOg7svuGgG+7F9qccpHvoYOHx
-	 zxj9fQy4MFm5V3A8J/x4uS2VGX/gG65V2t4ECUIqJ1a4s3TdS/igrTjSBD8nwgy9lj
-	 2cluIndaLP7Og==
+	b=Mg4oi/YYn+UTj3n46M9VgCksFfKMQbitbVl145GxqvT+2YWtIDxwHWawJqQVIBLFK
+	 0Jzxcug2q6VH0+DWJuOhTu0mINg3K/vw2aZ7f8M29sItyD9cupSx2C/1ncENtWPiOI
+	 NXWadxz729on109rxI0/FQw0Q1q6SBnh95I3n5YDGvJf5hAaCk3Wo9kJ8dLSy8DX0d
+	 lqSHkDeSFsUiroa1WZqY/ZIZzl6zy5Hw0fG67547qMoDLNmRmuZPMisWia6R3txfg6
+	 scKwTlfpMv+YwEIgx+l1J1f+lTmhUbI4jhVZSnhzSNDsDZpJsPCK4Le2NYOeNoO+wQ
+	 lm02/vS5L2Bdg==
 From: Tianyi Chen <hi@tychen.cc>
 To: bpf@vger.kernel.org
 Cc: qmo@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	hi@tychen.cc
-Subject: Re: [PATCH bpf-next v2 1/2] bpftool: Read ring buffer maps with event_pipe
-Date: Mon,  7 Sep 2026 13:15:00 +0800
-Message-ID: <178875781913.42294.11132018537579464182.04-ringbuf-review@tychen.cc>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Check bpftool batch map dump contents
+Date: Mon,  7 Sep 2026 13:15:11 +0800
+Message-ID: <178875781913.42294.1366248358606228270.05-batch-test-helper@tychen.cc>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <7a2ed42e006620d35c7112f2828f37e97b13f77e71d242c121c2641e88ffa3d8@mail.kernel.org>
-References: <178874362960.1415955.4802953891665661440.ringbuf-v2-1@tychen.cc> <7a2ed42e006620d35c7112f2828f37e97b13f77e71d242c121c2641e88ffa3d8@mail.kernel.org>
+In-Reply-To: <97cc13b58bb198fedee2dd3d6d68ba5222dac4021162dbdb17ab364b72d60ba8@mail.kernel.org>
+References: <178874362960.1415955.8995787346446727387.batch-v2-2@tychen.cc> <97cc13b58bb198fedee2dd3d6d68ba5222dac4021162dbdb17ab364b72d60ba8@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,36 +53,10 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Envelope-From: hi@tychen.cc
 
-Thanks for the review.
+Thanks. A helper could share the deterministic key/value derivation,
+but these are two short, explicit calculations in a small selftest.
+The one-byte key setup is also visible next to each use, and the test
+already compares the inserted contents with the complete dump output.
 
-I have rewritten the local commit message around the missing capability:
-map event_pipe currently accepts only perf event arrays, leaving no
-built-in way to inspect records produced through the BPF ring buffer
-API. It now explains the callback's -EINTR return as well: a producer
-can keep ring_buffer__poll() busy after a stop signal, so checking only
-the outer loop is insufficient. These message changes are ready for
-the next full revision.
-
-In the manual, "raw bytes" describes the payload without schema/BTF
-decoding; hexadecimal is the stated plain-text representation of those
-bytes. It is not intended to mean binary stdout. Likewise, the shared
-consumer position explains why using this command affects another
-consumer, while the passive-view warning states the user-visible risk.
-The wording could be shorter, but I do not see a semantic contradiction
-and am retaining the explicit consumption warning for now.
-
-For completion, exact matching is intentional: a bare ringbuf pattern
-would also match user_ringbuf, which event_pipe rejects. The current
-expression matches the complete JSON type field and avoids that problem.
-Moving exact matching into both common helpers is a reasonable cleanup,
-but changes all their callers; using two calls also lists the maps twice.
-I am keeping this feature's localized, single-listing change rather than
-expanding it into a shared-helper refactor.
-
-I agree that using sig_atomic_t and removing fprintf() from the handler
-also harden the existing perf path, and could form a preparatory patch.
-The current combined patch keeps the shared handler safe while retaining
-the stopping diagnostic in normal control flow. I am keeping that
-organization for now; I can split it if the maintainer prefers separate
-review/backport handling. There is no remaining unsafe fprintf() in the
-handler in the submitted patch.
+I am leaving this unchanged: extracting the setup would be a readability
+choice, rather than a correction to the test or its coverage.
