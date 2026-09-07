@@ -1,185 +1,290 @@
-Received: from bg-bec.cloudflare-smtp.org (bg-bec.cloudflare-smtp.org [104.30.16.142])
+Received: from mta1.migadu.com (out-152.mta1.migadu.com [95.215.58.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CD6521222
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 18:13:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.30.16.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D819E3E3DAB
+	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 18:51:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788804808; cv=none; b=XXtL/X/8USDfzsTdaAd6mvyGx7wdE1mDwDhqEX++klI8jkPI96twb8jXGRfYwGN4Tx7yiED3M+af7tzm0Mlf1Gvz01z2N/EZyALD6umfspHicBHSREWQ4+0P3vsAvdbw8kyJJoPgo8UP9J1tO8ZM3oH+r7TU5PW+OaGM1kxWFJk=
+	t=1788807081; cv=none; b=b372DzIVCAQVdj3NjKwrlgZRkNaDoPpBXZIalhg8IqDXhMQ8Vl1qWDwiEbkFGJ9DdqLBNh+nmkzfeQS4k/+56fre892FUlheh9PutCPZI0R9PI+ghIoK23oBWxGXEK+FUwQrbvn5Ov0YoSysyKLcyN8jHk1No1IpDxVHXOb175c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788804808; c=relaxed/simple;
-	bh=qCWRk6NNvF6vDMpmZHo9Ueq40DPrOWuJ7dexK/0j/yo=;
-	h=From:Message-ID:Date:Subject:To:Cc:MIME-Version:Content-Type; b=e60LkRIdp9SAg6k60XiSb26FA3EQqBz70LGe0+Xh7Mxf2D+Uvc5BHqflTaexJ98aBfm111tVT5IZPlm+M5nmaFmhKkumc9EXI6/gbMZowVXLwcLtOMMNu5UGKjdwttO3nCTL9Ix8cbAVQMBKn8iceAIx+W2kjoQOIRCFk2NdEGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bugs.sh; spf=pass smtp.mailfrom=cf-bounce.bugs.sh; dkim=pass (2048-bit key) header.d=cloudflare-smtp.org header.i=@cloudflare-smtp.org header.b=f6Ksgo7m; dkim=pass (2048-bit key) header.d=bugs.sh header.i=@bugs.sh header.b=YsadLwD+; arc=none smtp.client-ip=104.30.16.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bugs.sh
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cf-bounce.bugs.sh
+	s=arc-20240116; t=1788807081; c=relaxed/simple;
+	bh=NddO47tYxBI2h7DsCq/hs4VZYoZz/R9enIlpJ3TUNlw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Fd7U39Cv686fZAg/YW3aeORMBzweeWsNhXpnbwy6QCCUmY1myb/Bk05OTmLkBCJ4p4aSwWxHgNquSdEtkpgPyMg28j/hQA5aGe4zwWhbmi3gbvMwCMeQk/WgG9lqqgl+Bb2S89YIL7QE+NqfgAEhHe5umm8r4aKJlZysoV4tKMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EcL5nzSM; arc=none smtp.client-ip=95.215.58.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare-smtp.org header.i=@cloudflare-smtp.org header.b="f6Ksgo7m";
-	dkim=pass (2048-bit key) header.d=bugs.sh header.i=@bugs.sh header.b="YsadLwD+"
-DKIM-Signature: v=1; a=rsa-sha256; s=cf2024-1; d=cloudflare-smtp.org; c=relaxed/relaxed;
-	h=Cc:To:Subject:Date:From:Feedback-ID:from:reply-to:resent-date
-	:resent-from:resent-to:resent-cc:in-reply-to:references:list-id:list-help
-	:list-unsubscribe:list-unsubscribe-post:list-subscribe:list-post
-	:list-owner:list-archive; t=1788804806; x=1789409606; bh=Y1k9M3m0T020G6VgZc
-	BGnYVq9doEsBQQyGYyOLclWTY=; b=f6Ksgo7m4NZWhYkfYAcyzgA9SG/kf1jyzO+Smfvknbgx+
-	MgNI/9yuLc0W0f/9EJdg2Y49rC9UspwNPCqiKgHTFJmZIiTKaElzqPT7IRvBKmmnC4oP7FSXK44
-	WLbdZLnbHeE9p6iyEHLOAM166LeBQJcz036qmZ8IsFNVFx0NlavjYFTfh+N+m7qwyPsdoEBep3Z
-	e3LMi77fjLOGDe1MAJFFiwmvlCP52H0BAaiiTUyY+e+sujHm1eq9LBh/CvkbEuOwI70zuwvGr41
-	LfrWuV1T1lOTXWKVYPiHs90fKKbC44Jd8z895zJFoqt/k6O4djQtigq23Bov2nqfND8wzOGg==;
-DKIM-Signature: v=1; a=rsa-sha256; s=cf-bounce; d=bugs.sh; c=relaxed/relaxed;
-	h=Cc:To:Subject:Date:From:Feedback-ID:from:reply-to:resent-date
-	:resent-from:resent-to:resent-cc:in-reply-to:references:list-id:list-help
-	:list-unsubscribe:list-unsubscribe-post:list-subscribe:list-post
-	:list-owner:list-archive; t=1788804806; x=1789409606; bh=Y1k9M3m0T020G6VgZc
-	BGnYVq9doEsBQQyGYyOLclWTY=; b=YsadLwD+XQnAoBlyCeOaln67O68DZ7i+Q36Huv1ocE6eK
-	fVRzN2bkZAkUVINapUXwW1enDVsB5NH3ZMPqryikwRtLZ21XsMks8CFuecneq/QeAJI8a4uQTn1
-	TBZQs+qirfywaVCXBz/5M4/ky8Yld9+acr0kD62E3QVe8as+03QIvT6P+4CLr8Dted4a6/OyFsk
-	YIT78I+v3sRNWpNSeO1UHl892B9IoV4q73HlAL7jMom8MH6ZxuLlBSUgsQOazD0tWnLO1wT7KZQ
-	8aexsXX2+v3w7zeqWvYtaJWp6ymqOOKRx0IdNlrHcyeTqnVb1ZR6oM43OP3SouiMtSpFaLKQ==;
-Feedback-ID: bugs.sh:5:6:Cloudflare
-From: co <co+adfca3e91be95776@bugs.sh>
-Message-ID: <GCy0KRM2IcQGoJQTjJEU9D0maBxXzEDHuQpq@bugs.sh>
-Date: Mon, 07 Sep 2026 18:13:15 +0000
-Subject: [BUG] net/ipv6: use-after-free in seg6_bpf_has_valid_srh()
-To: "David S. Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song
- Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
- Olsa" <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>, "Stanislav
- Fomichev" <sdf@fomichev.me>, "Simon Horman" <horms@kernel.org>, "David
- Lebrun" <dlebrun@google.com>, "Mathieu Xhonneux" <m.xhonneux@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, co <co+adfca3e91be95776@bugs.sh>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EcL5nzSM"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=NddO47tYxBI2h7DsCq/hs4VZYoZz/R9enIlpJ3TUNlw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788807072; v=1; x=1789411872;
+ b=EcL5nzSMc/vm/90o63vsPdZHGM3U7c9pGvBSvfZmIIpjN9vH34WFfRrRdNfk2xBuYWbQ6Ckr
+ MeV4cOF0JgerKOzZLNevblkr8FTzqlzYmcJ1cbCFhA3P5a037/TPsO5vBCLIsmzoNgzHzwMK6Lp
+ mxU+qbAzF1dt6uO4RS6b8g68=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 0ed654492ec4f958;
+	Mon, 07 Sep 2026 18:51:11 +0000
+X-Mizu-Trace-ID: 0ed654492ec4f958
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <6df0f368-0acb-49b4-8bf6-c82d3d2c79a1@linux.dev>
+Date: Mon, 7 Sep 2026 11:51:06 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v8 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
+To: Hui Zhu <hui.zhu@linux.dev>, Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ Barry Song <baohua@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+References: <cover.1788764121.git.zhuhui@kylinos.cn>
+ <0f1e2b5408aef7baaacf7306dff5f6d4fb91e441.1788764121.git.zhuhui@kylinos.cn>
+Content-Language: en-US
+From: JP Kobryn <jp.kobryn@linux.dev>
+In-Reply-To: <0f1e2b5408aef7baaacf7306dff5f6d4fb91e441.1788764121.git.zhuhui@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-We found a bug reachable in:
+Hi Hui,
 
-    path    net/ipv6
-    crash   use-after-free in seg6_bpf_has_valid_srh()
-    commit  2f1baf1fc892 ("Merge tag 'trace-v7.2-rc7' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/trace/linux-trace")
+On 9/7/26 12:08 AM, Hui Zhu wrote:
+> From: Hui Zhu <zhuhui@kylinos.cn>
+> 
+> Add bpf_proactive_reclaim(), a sleepable kfunc which performs one
+> proactive reclaim pass on a given memory cgroup, similar to a write
+> to memory.reclaim but without retrying until the target is reached.
 
-Config, environment, the sanitizer report and a C reproducer follow.
+The cover letter has the reasons why you're adding this kfunc. It should
+be included before this paragraph.
 
-=3D=3D Notes =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-    If you patch the bug based on our artifacts, a tag would be
-    appreciated:
+> 
+> The kfunc is restricted to BPF_PROG_TYPE_SYSCALL so that reclaim
+> always runs in a clean process context. Generic sleepable programs
+> may execute with filesystem locks held or in NOFS/NOIO contexts,
+> where the reclaim path could deadlock in filesystem shrinkers. A
+> SYSCALL program can still drive reclaim asynchronously through
+> bpf_wq or task_work callbacks, which run in process context and
+> keep the SYSCALL program type, so they can call the kfunc too.
 
-Reported-by: co+adfca3e91be95776@bugs.sh
+I think this paragraph would read better if you inverted the decision
+and rationale. Something like:
 
-    Everything in this mail is validated by the reproducer below.
+"Since some bpf program types may be invoked while holding fs locks,
+limit the kfunc to only syscall progs to avoid..."
 
-    We also hold an LLM-generated root-cause analysis and a candidate
-    patch. The patch passes an A/B test: the same reproducer panics the
-    unpatched kernel and runs clean on the patched one. Neither has had
-    human review, so both still require validation before you send or
-    apply them. Available on:
+> 
+> The reclaim target of a single call is clamped to MEMCG_CHARGE_BATCH.
+> try_to_free_mem_cgroup_pages() takes nr_to_reclaim as a lower bound,
+> so nothing else limits how long one call scans. An unbounded call
+> stalls other work on a shared workqueue, and since lru_lock is held
+> with interrupts disabled the contention delays IPI handling and can
+> cause CSD lock stalls. MEMCG_CHARGE_BATCH is the bound already used
+> by high_work_func(), so each call becomes a bounded unit of work.
 
-        patch.diff  https://bugs.sh/b/adfca3e91be95776/patch.diff
-        report.md   https://bugs.sh/b/adfca3e91be95776/report.md
+It's not strictly speaking a bounded unit of work though. The scan work
+time can vary.
 
-    This is an open science project. The code and the full set of PoCs
-    are not public at this moment, as we intend to disclose our findings
-    in an ethical way.
+The example of interrupt delay I gave on the prior rev is included here,
+unnecessarily increasing the verbosity. I think you can just say that
+you're following the precedent in high_work_func() which uses the same
+cap, but I would still emphasize like I said above that the actual
+scanning work is not bounded.
 
-    Happy to test patches. Complaints and suggestions about our work
-    are welcome at:
+> 
+> Reclaiming more than one batch is left to the BPF program. This is
+> documented in the kfunc rather than enforced: call the kfunc once
+> per bpf_wq callback and requeue the same work item for the next
+> batch instead of looping inside a callback, and give each target
+> memcg its own bpf_wq item. Keeping the policy in BPF lets a program
+> decide when to reclaim and when to stop, e.g. once the target cgroup
+> is dying.
 
-        cedalion@bugs.sh
+You should be explicit on the different calling contexts. This is one
+way to use it, but someone could still invoke it directly in the syscall
+program.
 
-=3D=3D Environment =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-    Reproduced on  2f1baf1fc892 ("Merge tag 'trace-v7.2-rc7' of git://git.k=
-ernel.org/pub/scm/linux/kernel/git/trace/linux-trace")
-    VM setup       https://bugs.sh/b/adfca3e91be95776/run.sh
-    config         https://bugs.sh/b/adfca3e91be95776/config.gz
-    poc            https://bugs.sh/b/adfca3e91be95776/repro.c
+> 
+> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+> ---
+>   mm/bpf_memcontrol.c | 94 ++++++++++++++++++++++++++++++++++++++++++++-
+>   1 file changed, 92 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+> index 716df49d7647..74ccac30c011 100644
+> --- a/mm/bpf_memcontrol.c
+> +++ b/mm/bpf_memcontrol.c
+> @@ -6,8 +6,11 @@
+>    */
+>   
+>   #include <linux/memcontrol.h>
+> +#include <linux/swap.h>
+>   #include <linux/bpf.h>
+>   
+> +#include "internal.h"
+> +
+>   __bpf_kfunc_start_defs();
+>   
+>   /**
+> @@ -159,6 +162,71 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
+>   	mem_cgroup_flush_stats(memcg);
+>   }
+>   
+> +/**
+> + * bpf_proactive_reclaim - proactively reclaim memory from a memory
+> + *                         cgroup
+> + * @memcg: the target memory cgroup to reclaim from
+> + * @size:  the amount of memory to reclaim, in bytes, clamped to
+> + *         MEMCG_CHARGE_BATCH (64 pages)
+> + * @swappiness: the reclaim swappiness, in the range [0, 201] where 201
+> + *         means anon-only reclaim; a negative value means the memcg's
+> + *         own swappiness is used
+> + *
+> + * Trigger one proactive reclaim pass on @memcg, similar to a write to
+> + * memory.reclaim, but without retrying until @size is reached.
+> + *
+> + * @size is clamped so that one call is a bounded unit of work, matching
+> + * the memory.high workqueue fallback in high_work_func(). To reclaim
+> + * more, call this kfunc repeatedly instead of passing a larger @size.
 
-=3D=3D Sanitizer Report =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-BUG: KASAN: slab-use-after-free in seg6_bpf_has_valid_srh (net/ipv6/seg6_lo=
-cal.c:1411)
-Write of size 1 at addr ffff88803012c6b1 by task exploit/5008
-CPU: 0 UID: 0 PID: 5008 Comm: exploit Not tainted 7.2.0-07242-g7cbfb180945c=
- #65 PREEMPT(full)
-Call Trace:
-<IRQ>
-dump_stack_lvl (lib/dump_stack.c:94 lib/dump_stack.c:120)
-print_report (mm/kasan/report.c:378 mm/kasan/report.c:482)
-kasan_report (mm/kasan/report.c:595)
-seg6_bpf_has_valid_srh (net/ipv6/seg6_local.c:1411)
-input_action_end_bpf (net/ipv6/seg6_local.c:1463 (discriminator 1))
-seg6_local_input_core (net/ipv6/seg6_local.c:1628)
-seg6_local_input (net/ipv6/seg6_local.c:1650 (discriminator 1))
-lwtunnel_input (net/core/lwtunnel.c:465)
-ipv6_rcv (./include/net/dst.h:480 (discriminator 7) net/ipv6/ip6_input.c:11=
-9 (discriminator 7) ./include/linux/netfilter.h:325 (discriminator 7) ./inc=
-lude/linux/netfilter.h:319 (discriminator 7) net/ipv6/ip6_input.c:351 (disc=
-riminator 7))
-__netif_receive_skb_one_core (net/core/dev.c:6264 (discriminator 1))
-__netif_receive_skb (net/core/dev.c:6377)
-process_backlog (net/core/dev.c:6728)
-__napi_poll.constprop.0 (net/core/dev.c:7787)
-net_rx_action (net/core/dev.c:7850 net/core/dev.c:8007)
-handle_softirqs (kernel/softirq.c:645)
-do_softirq (kernel/softirq.c:546 (discriminator 20) kernel/softirq.c:533 (d=
-iscriminator 20))
-</IRQ>
-__local_bh_enable_ip (kernel/softirq.c:473)
-__dev_queue_xmit (./include/linux/bottom_half.h:33 (discriminator 1) ./incl=
-ude/linux/rcupdate.h:914 (discriminator 1) net/core/dev.c:4961 (discriminat=
-or 1))
-packet_xmit (./include/linux/netdevice.h:3461 net/packet/af_packet.c:277)
-packet_sendmsg (net/packet/af_packet.c:3110 net/packet/af_packet.c:3142)
-__sys_sendto (net/socket.c:800 (discriminator 1) net/socket.c:815 (discrimi=
-nator 1) net/socket.c:2281 (discriminator 1))
-__x64_sys_sendto (net/socket.c:2288 net/socket.c:2284 net/socket.c:2284)
-do_syscall_64 (arch/x86/entry/syscall_64.c:61 arch/x86/entry/syscall_64.c:8=
-4)
-entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121)
-Allocated by task 5008:
-Freed by task 5008:
-The buggy address belongs to the object at ffff88803012c680
-which belongs to the cache skbuff_small_head of size 704
-The buggy address is located 49 bytes inside of
-freed 704-byte region [ffff88803012c680, ffff88803012c940)
-The buggy address belongs to the physical page:
-page_owner tracks the page as allocated
-page last allocated via order 2, migratetype Unmovable, gfp_mask 0xd20c0(__=
-GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pi=
-d 1, tgid 1 (swapper/0), ts 23240374303, free_ts 0
-page_owner free stack trace missing
-Memory state around the buggy address:
-ffff88803012c580: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+Again I think "bounded unit of work" is too strong here. The reclaim
+target is clamped but the scanning work/time will vary. Lets be explicit
+that we're only capping the reclaim target.
 
+> + *
+> + * This kfunc is restricted to BPF_PROG_TYPE_SYSCALL to ensure it runs
+> + * in a clean process context. The SYSCALL program can schedule the
+> + * actual reclaim work via bpf_wq or timers, which also execute in
+> + * safe process context (workqueue, task_work).
 
----
-The report format is based on syzbot bug report.
+"clean" and "safe" are ambiguous here.
 
-This report is generated by a bot. It may contain errors.
-See https://github.com/n132/cedalion for more information.
+This is another example of mixing calling contexts. You should separate
+them. i.e. can I call this directly in a syscall prog? does it have to
+be async work? Also, as it reads, it makes it sound like calling the
+kfunc is ok in a timer program.
 
-For any issue with this report, reach out to cedalion@bugs.sh
+> + *
+> + * When reclaim is driven from a bpf_wq, call this kfunc once per
+> + * callback and requeue the same work item for the next batch rather
+> + * than looping inside the callback: a long-running callback stalls
+> + * other work on the shared workqueue, and because lru_lock is held with
+> + * interrupts disabled the resulting contention also delays IPI
+> + * handling. Give each target memcg its own bpf_wq item, so that
+> + * reclaiming one memcg neither serializes behind nor piles up on top of
+> + * another. Deciding whether to submit the next batch is up to the BPF
+> + * program, which can stop at any point, e.g. once the target cgroup is
+> + * dying.
 
-If the report is already addressed, let us know by replying with:
-#co fix: <commit hash>
+If this is the intended usage, be more explicit on the recommendation.
+Reduce the verbosity on the interrupt delay here, similar to the advice
+on the changelog.
 
-If the report is a duplicate of another one, reply with:
-#co dup: <lore link>
+> + *
+> + * Must not be called with a filesystem lock held: the reclaim path
+> + * may deadlock on it via filesystem shrinkers.
 
-If you want to undo deduplication, reply with:
-#co undup
+This should move to the syscall-only prog rationale. Otherwise, it reads
+like something for callers to enforce.
 
+> + *
+> + * Return: The amount of memory reclaimed, in bytes, or 0 if @size is
+> + * smaller than a page, or (unsigned long)-1 if @swappiness is out of
+> + * range.
+> + */
+> +__bpf_kfunc unsigned long bpf_proactive_reclaim(struct mem_cgroup *memcg,
+> +						unsigned long size,
+> +						int swappiness)
+> +{
+> +	unsigned long nr_reclaimed;
+> +	unsigned long nr_pages;
+> +
+> +	if (swappiness < -1 || swappiness > SWAPPINESS_ANON_ONLY)
+> +		return (unsigned long)-1;
+> +
+> +	if (size < PAGE_SIZE)
+> +		return 0;
+> +
+> +	nr_pages = min(size / PAGE_SIZE, (unsigned long)MEMCG_CHARGE_BATCH);
+> +
+> +	nr_reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages,
+> +						    GFP_KERNEL,
+> +						    MEMCG_RECLAIM_MAY_SWAP |
+> +						    MEMCG_RECLAIM_PROACTIVE,
+> +						    swappiness < 0 ? NULL :
+> +								     &swappiness);
+> +
+> +	return nr_reclaimed * PAGE_SIZE;
+> +}
+> +
+>   __bpf_kfunc_end_defs();
+>   
+>   BTF_KFUNCS_START(bpf_memcontrol_kfuncs)
+> @@ -171,22 +239,44 @@ BTF_ID_FLAGS(func, bpf_mem_cgroup_memory_events)
+>   BTF_ID_FLAGS(func, bpf_mem_cgroup_usage)
+>   BTF_ID_FLAGS(func, bpf_mem_cgroup_page_state)
+>   BTF_ID_FLAGS(func, bpf_mem_cgroup_flush_stats, KF_SLEEPABLE)
+> -
+>   BTF_KFUNCS_END(bpf_memcontrol_kfuncs)
+>   
+> +/*
+> + * Proactive reclaim needs a clean process context, so it is restricted
+> + * to BPF_PROG_TYPE_SYSCALL. The bpf_wq and task_work callbacks that a
+> + * SYSCALL program schedules run as the same program type, so they can
+> + * still invoke it; generic sleepable programs (e.g. fentry on reclaim
+> + * paths, inode_rmdir) cannot.
+
+This comment feels out of place here and is not buying much at this
+point. You already explained it in the kfunc comments, and the syscall
+only registration further down is explicit enough by now.
+
+> + */
+> +BTF_KFUNCS_START(bpf_memcontrol_reclaim_kfuncs)
+> +BTF_ID_FLAGS(func, bpf_proactive_reclaim, KF_SLEEPABLE)
+> +BTF_KFUNCS_END(bpf_memcontrol_reclaim_kfuncs)
+> +
+>   static const struct btf_kfunc_id_set bpf_memcontrol_kfunc_set = {
+>   	.owner          = THIS_MODULE,
+>   	.set            = &bpf_memcontrol_kfuncs,
+>   };
+>   
+> +static const struct btf_kfunc_id_set bpf_memcontrol_reclaim_kfunc_set = {
+> +	.owner          = THIS_MODULE,
+> +	.set            = &bpf_memcontrol_reclaim_kfuncs,
+> +};
+> +
+>   static int __init bpf_memcontrol_init(void)
+>   {
+>   	int err;
+>   
+>   	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
+>   					&bpf_memcontrol_kfunc_set);
+> -	if (err)
+> +	if (err) {
+>   		pr_warn("error while registering bpf memcontrol kfuncs: %d", err);
+> +		return err;
+> +	}
+> +
+> +	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
+> +					&bpf_memcontrol_reclaim_kfunc_set);
+> +	if (err)
+> +		pr_warn("error registering bpf reclaim kfuncs: %d", err);
+>   
+>   	return err;
+>   }
 
