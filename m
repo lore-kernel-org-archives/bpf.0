@@ -1,143 +1,74 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from out-zbxj-a65.jellyfish.systems (out-zbxj-a65.jellyfish.systems [198.54.127.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A17437D100
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 04:52:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB95533F589
+	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 05:14:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788756767; cv=none; b=kO+lmaHHCx00TTzHbz+ee9r2AAlzw1V+EIc4brg80+H9wwiO1ZtvWinohzAxqW5YlaIHo/dWH3q8rLEeFYwh2pHitqzpeC+f87TXJTq5WU0KtbLmq6x7pAtGp1Dwz+0KavHMq7BXVigfWzfXaX+Avy59Zj/TqzeWqpTkCzaPyGM=
+	t=1788758086; cv=none; b=S6fraNyl/OU8XYkRdabYSRZvOxq6xg0wG2tSGoX5GXVMfcEg6vMQUrt5XaG90l0RuZKLBhr8W7gUIDClorD4wzZL16UQjI6PbPBR7VduQHNkiLc9yMNmbsfFb6J/tBmBeiYvS49BDEkFRtclcwGBk5ZbX1wHpit/dv02eTXWQ1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788756767; c=relaxed/simple;
-	bh=IflaxgY21z66DMaOOZlOWT+BhylVWMmRJyvAy9IC2jA=;
+	s=arc-20240116; t=1788758086; c=relaxed/simple;
+	bh=VIgjKHYjIZWMXIc+aVfcwlKlcjgBtNshGeMavwN4BC4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QSYXMstF0RMGv9N5YPVTrs6SN7QFXU5E2uUIu0D9z/zhenj1sAqaiFEWqGoKrPuMEddCCHFdJdzikGNjh3jsbHHF7/MhoajtCSTuMBLi5hnAi7PRnfEQAiSgWS6I9MAllGbNYla/ljeqzVfllwMEoSEAFhRrqiGII5/2jkJKusk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=abHd90rA; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 MIME-Version:Content-Type; b=dx1KYM7QqvQR1duQ9RcCknxFO/wMZYrh/qkZ59nKsNCVXXydGDZO4rN093sGGLiHzEbmFW44pIwirCw/mL33YDwJXmyFRgI3nSfEMDPstJdM82HQVF/fNh9PGp68bXX67+nXzgKUwXbN8sSnjfQDxBc4UUv922Cu4f0KwMsVCHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=THbq9lSr; arc=none smtp.client-ip=198.54.127.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="abHd90rA"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-398b3d66515so2994231a91.0
-        for <bpf@vger.kernel.org>; Sun, 06 Sep 2026 21:52:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788756766; x=1789361566; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=nKUvGXFfM1WSd/D5lDioUe9VV0OdsRUwt1UqjYJjYJI=;
-        b=abHd90rAF3IlWFVEB7jrLxGffw01oAOFvKp5hc6KNHh4FgBxwdwLXsNDID0lKxi2+E
-         bx1wDeu3DP0raHfsq+yA5Vg8+Ku2oHG2TDcTDk3BddTgR4eD9zgZ5t4R+kaWGQU8wIlk
-         F4bgIc/U1Yb3bhbg3IzXkrLzFWvavX+MrvZewKs6KzV/w+XyDivxwPv1aqxlVk4aI+Cp
-         YzkzXMwcMavR0QsFH50j4xJatGAIVJiijuFtsmbMr0sdB9MtknZ0uwm7onYcu7AqsfQg
-         O/s3bNwYwtP+MmkF++GOcqpafdi5IN17CejEuLGp0GqDyJUDcPJxfz6IQWCFeCnVE3Eq
-         ZXMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788756766; x=1789361566;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=nKUvGXFfM1WSd/D5lDioUe9VV0OdsRUwt1UqjYJjYJI=;
-        b=mBNF6PjAe/+EA1wn9ZSnbuhjjUPLxPxaDz/RP5ewEBvMm5ZMo4rbk6kklpYDYS23OP
-         7CrXbuEC+Yd612KI2oAYqm3ZCadEIw+FH6cQNk7rqbO6agvjSw217fWJ/Gl/XD53mT6l
-         VwRbK0nLjmPIsI4N5a9ieK8vCJt3FJM0DmdMZrVKpERs6SNwDeB73U3sg0CPsrAB8Gt4
-         7umjJwhIocMML4VsK7kY3zwTtT9PJkYE4ksq5nsTu87/03/zIQdz6BDPkY3iOhdPzr8r
-         CSbsn/3tQR0oFakekuzzMyq4AoJt2klKVWH1x5ojri5bOtRZckHdEdUKWrE5sucxdWHg
-         Yc7g==
-X-Gm-Message-State: AFuF++m6GKDa6LeEVoK6xpSO6a/Lb0XNQ5cMYtmrIBT2AbPD2CP7ByEC
-	2jcQJJ3tn6HiFiMRVmZ09WivXmlAXD0XtolQCCiPi4ttnLc+zCmogkUx
-X-Gm-Gg: AYBFou016bnNgApIVHnxezMByAjIHDGN9pc+fdX16XS3GKVZMcIIwQT63Q9Ax/cw0bU
-	5OfNCKl2a/ceDXS8u4p/uYT9rHBZX/TQQocrVl1hPGIyWTU8YJIogJTOkcgmvzgGsWsGs/h7yaP
-	TBxURE/m9niVVjE1FB2T0noaviPBhV0g7KZ/EReq7N9L3ekPFCdR5XcP9R0TUNBdIS1eODfczUI
-	X/cvcNK8Hrm3CDmiYkOwOY+0p1maFBuQVPg5nazN71vY9oRApcE7AdM/FIthJcI+MZ6mYb30f74
-	jAWGgTJSThtjwLLg8/KitFWt/bkeWNvp/MT859WTeA+as+ZCPN/uuL1CEygXvuFoOPtCYe3fAeX
-	8pXPaAF8DOp/lzvj00cAk+oRWPHxE/NSFOc0xw8PMFDmN4o+OopqmNqT+Q+92qEP37+wnIRtxu9
-	uy3ijgWLTVkBLorMMvIU1K8ywUZT1ofCQlh4yFj5r6rzy5104cCFD7Vrf7udh3yYo5du8/+k7gr
-	2yaKrS+ITIshg==
-X-Received: by 2002:a17:90a:1c81:b0:39b:2c00:c3f5 with SMTP id 98e67ed59e1d1-39b2c00ed40mr18971030a91.18.1788756765648;
-        Sun, 06 Sep 2026 21:52:45 -0700 (PDT)
-Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14324410092sm21979675c88.14.2026.09.06.21.52.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Sep 2026 21:52:45 -0700 (PDT)
-From: Hemanth Selam <hemanth.selam@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Russell King <linux@armlinux.org.uk>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Hari Bathini <hbathini@linux.ibm.com>,
-	Christophe Leroy <chleroy@kernel.org>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>
-Cc: bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="THbq9lSr"
+Received: from fedora (unknown [23.142.132.69])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdZxk6nSrz2xBk;
+	Mon, 07 Sep 2026 05:14:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1788758076;
+	bh=h/MQHaS9ne2VaLB2qbTvVez4UnCJMtYEo3zO18uCQ44=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=THbq9lSrWz9VS+fisrWmkVxzqmQPUHTZbSY4WAGdbx2sPcUiAHnvD/KMu7EHCVqOc
+	 DcgKzxXaF6wW+Sak4sumWM0QHzmjH68RRH0B2fKBCcrK+w/WaUtP1g7iOvivmpiZTZ
+	 RDI7FDdcpHhfzk2O+UOtinq/ZjWfZBg7Zpc5fZIndxs40AXjUynHVB7VRE+Ni3dcKR
+	 X80KT7dghwLFsXh+NdChqHmgoP+mZvhBuqTSpkzV/JeIxt9FKWORYbnY/R78/5ZDES
+	 Ds7ZhND5XuBVHqRvV2s/ntqJ7nNuM4nZ1NO2m1P1wOcouy2gTXkgHPJ857ZAobfax6
+	 Than7fvDqRQ6Q==
+From: Tianyi Chen <hi@tychen.cc>
+To: bpf@vger.kernel.org
+Cc: qmo@kernel.org,
 	linux-kselftest@vger.kernel.org,
-	sparclinux@vger.kernel.org
-Subject: [PATCH v2 7/7] selftests/bpf: fix repeated words in comments
-Date: Mon,  7 Sep 2026 10:21:35 +0530
-Message-ID: <20260907045135.13317-8-hemanth.selam@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20260907045135.13317-1-hemanth.selam@gmail.com>
-References: <20260907045135.13317-1-hemanth.selam@gmail.com>
+	hi@tychen.cc
+Subject: Re: [PATCH bpf-next v3 1/2] bpftool: Accept symbolic map creation flags
+Date: Mon,  7 Sep 2026 13:14:24 +0800
+Message-ID: <178875781913.42294.17811476816505465442.01-flags-synopsis@tychen.cc>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <0846fe9c15dc189bd3cd979839ddd7101f79979217dda130d0800b047589f9fe@mail.kernel.org>
+References: <178874713816.1519295.12130500880299787860.flags-v3-1@tychen.cc> <0846fe9c15dc189bd3cd979839ddd7101f79979217dda130d0800b047589f9fe@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Envelope-From: hi@tychen.cc
 
-Drop repeated words in comments, reported by scripts/checkpatch.pl.  Only
-touches comments, no code changes.
+Thanks, agreed: the synopsis should have the same FLAGS production as
+map help. I have added the line below locally and checked the generated
+man page and the bpftool synchronization test.
 
-The subject prefix changed since v1, from "selftests: bpf:" to
-"selftests/bpf:", to match the rest of the history in this directory.
+This is the complete correction; I will fold it into the next full
+revision rather than repost the series just for this documentation line.
 
-Assisted-by: Cursor:claude-opus-5
-Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
----
- tools/testing/selftests/bpf/libarena/src/asan.bpf.c | 2 +-
- tools/testing/selftests/bpf/progs/iters.c           | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/libarena/src/asan.bpf.c b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
-index 5135d5c72a46..158d95c2520b 100644
---- a/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
-+++ b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
-@@ -221,7 +221,7 @@ static __always_inline bool check_asan_args(s8 __arena *addr, size_t size,
- 		goto confirmed_valid;
- 
- 	/*
--	 * Wraparound is possible for values close to the the edge of the
-+	 * Wraparound is possible for values close to the edge of the
- 	 * 4GiB boundary of the arena (last valid address is 1UL << 32 - 1).
- 	 *
- 	 *
-diff --git a/tools/testing/selftests/bpf/progs/iters.c b/tools/testing/selftests/bpf/progs/iters.c
-index 62d7df9e80be..340670e89ba9 100644
---- a/tools/testing/selftests/bpf/progs/iters.c
-+++ b/tools/testing/selftests/bpf/progs/iters.c
-@@ -1511,7 +1511,7 @@ __naked int checkpoint_states_deletion(void)
- 	 * would get equal to one of the explored states and thus loop
- 	 * exploration would be finished (at-least for a specific path).
- 	 * Verifier evicts explored states with high miss to hit ratio
--	 * to to avoid comparing current state with too many explored
-+	 * to avoid comparing current state with too many explored
- 	 * states per instruction.
- 	 * This test is designed to "stress test" eviction policy defined using formula:
- 	 *
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+index 375321d5582..5a5c26f789c 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+@@ -48,6 +48,7 @@ MAP COMMANDS
+ | *DATA* := { [**hex**] *BYTES* }
+ | *PROG* := { **id** *PROG_ID* | **pinned** *FILE* | **tag** *PROG_TAG* | **name** *PROG_NAME* }
+ | *VALUE* := { *DATA* | *MAP* | *PROG* }
++| *FLAGS* := { integer | **BPF_F_NAME[,BPF_F_NAME...]** }
+ | *UPDATE_FLAGS* := { **any** | **exist** | **noexist** }
+ | *TYPE* := { **hash** | **array** | **prog_array** | **perf_event_array** | **percpu_hash**
+ |     | **percpu_array** | **stack_trace** | **cgroup_array** | **lru_hash**
