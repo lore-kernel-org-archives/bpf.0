@@ -1,32 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC7114A8B;
-	Mon,  7 Sep 2026 00:04:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BACAC15E8B;
+	Mon,  7 Sep 2026 00:04:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788739446; cv=none; b=lP99z3WtGmwef7NVGy+jPYJ6n3ZAxG+bkGIXVuCwNSVaAUHC3gS5RdBPKuTwCLPfdEMN7FaSORg8a0UUFhK+nJmUIC7DJcKphRP38wVu6oNvsASlxDXYiGN8eCCqy9J32w+7e9qWM5VNQrD1m96PGuSQyfzvqIPe6MEwjEPmmH8=
+	t=1788739446; cv=none; b=b/o9r8abinlkExWABYtLzoiIqWvuX617tVIYNLzVjVGMR9r8KdS0pz1jdRUExqXqSoHYk2erjhriadCDlPigPU6YjcXauS6026odTi7y4xvJEB68NL6F8HzaPIq9rg2UkUED1oivByj8ELtkWT5Y52pi1XUgtjIKpQvovNCwrU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1788739446; c=relaxed/simple;
-	bh=M7HjaAhMt4jz2uFUbMFIA2zbUpYOJ94VdfJPw0Easgw=;
+	bh=6x43Rbn8+5CZxYE2IpxCBwBEl9sSznn/hzAIiIuY3PY=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nk9qfKPkbpfwFMoaI6ogfCjG8zrqz3SFndS1PnSNFWSfc87JSTdjpkyl8Q0pFv6iRSiyAd0Ey9Nr4ytw7voz90+n7H0NOmzuYMfoGTRz28uC3Tm0s5bySjbXtA4J+8zIe/eyNFGsJvlZPk6TqsQyymIw45OQ5FrG5a5pAd6WbR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PXlgEFPc; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=ZkXmUHafajH0gWavni2vG1vlMmsWTzwTdGjy1H28J3S1JLIBDQAU/kT+8dhfaruMiOU8FrQzBZC/YA6iomAgtdrjTtzPgd16f/RZB5Qrd8/cvn7jABO/NuPJPNScy3tuEaUl6c7MfetOTQa6ptAcxpcoFEs3Gd1M2e7HGghynFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IjDW1qTZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PXlgEFPc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 333B91F00A3D;
-	Mon,  7 Sep 2026 00:03:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IjDW1qTZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03AC21F00A3E;
+	Mon,  7 Sep 2026 00:04:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788739440;
-	bh=rT7AEJfUzOnTf/jz9odfyQKeXNlW5LPhIjwGLBWSA0A=;
+	s=k20260515; t=1788739444;
+	bh=YDdlF+7dXxwUPGzVqGGqD2fkqBfXKvMIltAZTnmqLxg=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=PXlgEFPcIm20uqyqKGAP2AYxrfRpn0kjoPYWNO+h8xJhO2LxXAKOCL8E/+AL0oxMk
-	 QnDUEpnB7lcE6AOHIG7YJ62Gm1ubJ07OjtJxM32mt/wXlHhvsNXjLV+QgSFIRU296M
-	 j1gSvrr/b8jJl+jg00IVYpBtg2GPX2I9VsGQwvfqVzuFHP6A1na54FrSWqXFDKHQxF
-	 tK4mVVjnfFsQJyyxdxrncbtzwp2gYW9lwa831U/MKAZQmcXQV1egWRlWyF0HrzjI7o
-	 rrjoMWIjzeEyAAm3libQSAPGCG9Zxb6GE9gczFUXvjuQQXy2IqUqGRg5CKrDOhVwIF
-	 xfc7T0JHQN0CA==
-Subject: Re: [PATCH net-next v5 06/12] gve: simplify reset logic
+	b=IjDW1qTZcUPpCYJ7EdAoq+TgfDzPJ5mMAH/Rc52fS3SHluQWpWe5P6+QK5cCkU2/t
+	 X37Nj/fFZC17n1PbHnIMdNpGRkoeMKalzBkrjLBB0vfcODxpB6A867eETt3M1rtD8B
+	 FtI70bmC34e8C/gMQr8GLR3o5R4JBPcDaKJeqVYpgm/sX8ZS+JHmNhWkuI3/1xVINX
+	 cCcpsCY8Ht5bf7Np/SeWFOxyb4JiBfDGmgp6sJSE886uHWFvY+TONjJhtIUOo8Jtdk
+	 Pd4u/M9Kymm50io5Exg7LVV7TjeLGyP1FTLURL8Spdv5isihfoqyTQQUl6mB9EyxSz
+	 vzq+P1+bVyVYg==
+Subject: Re: [PATCH net-next v5 09/12] gve: introduce new methods to handle
+ IRQ doorbells
 From: netdev-bot+sashiko@kernel.org
 To: hramamurthy@google.com
 Cc: netdev@vger.kernel.org, joshwash@google.com, andrew+netdev@lunn.ch,
@@ -37,11 +38,11 @@ Cc: netdev@vger.kernel.org, joshwash@google.com, andrew+netdev@lunn.ch,
  jacob.e.keller@intel.com, debarghyak@google.com, kees@kernel.org,
  bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  przemyslaw.kitszel@intel.com
-Date: Mon, 07 Sep 2026 00:03:58 +0000
-Message-ID: <178873943876.219967.7325362894489420354@kernel.org>
-In-Reply-To: <20260903215606.31633-7-hramamurthy@google.com>
-References: <20260903215606.31633-7-hramamurthy@google.com>
-X-sashiko-severity: Low
+Date: Mon, 07 Sep 2026 00:04:02 +0000
+Message-ID: <178873944256.219967.7449126605108572079@kernel.org>
+In-Reply-To: <20260903215606.31633-10-hramamurthy@google.com>
+References: <20260903215606.31633-10-hramamurthy@google.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -51,280 +52,373 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 4 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 (1) · Medium: 0 · Low: 2
+Critical: 0 · High: 0 · Medium: 1 · Low: 3
 
-- [Low] The patch silently fixes a real pre-existing adminq DMA/dma_pool
-  leak without a Fixes: tag and without disclosing it in the commit…
-- [Low] Commit message goal 2 misdescribes the pre-patch defect and
-  overstates the change.
-
-Pre-existing issues:
-- [High] The stats-report DMA buffer can be freed while
-  priv->stats_report_task is queued or running, giving a NULL-pointer…
+- [Medium] The commit message does not describe what the patch actually
+  does.
+- [Low] The patch adds `gve_ntfy_to_msix_idx()` in gve.h — an identity
+  function that ignores its `priv` argument and returns `ntfy_blk_idx`…
+- [Low] The replacement error log in
+  `gve_setup_control_plane_resources()`…
+- [Low] The new kernel-doc for `struct gve_ctrl_ops` (gve.h:837-839)
+  describes the two new callbacks purely in terms of doorbells —…
 
 --
 
-gve: simplify reset logic
+gve: introduce new methods to handle IRQ doorbells
 
-This reworks the gve reset path: recursive resets and resets issued from
-the teardown path are removed, control plane resource allocation is split
-from device setup, and resources shared with the device are only freed
-after gve_adminq_free() has reset the hardware.  Flow rule timeout
-handling moves from the adminq layer into the ethtool add/delete entry
-points.
+This adds request_db_info and release_db_resources callbacks to
+struct gve_ctrl_ops, wires the AdminQ implementations into
+gve_setup_control_plane_resources() and
+gve_teardown_control_plane_resources(), and moves the irq_db_indices DMA
+buffer allocation into new helpers in gve_main.c.
 
-A few questions on the changelog and on the stats report worker below.
+A few questions below about the changelog and some of the hunks.
+
+>     Introduce `request_db_info` and `release_db_resources` to
+>     `struct gve_ctrl_ops`. These encapsulate the configuration of device
+>     resources (counter arrays and IRQ doorbell indices) which vary between
+>     Admin Queue and Mailbox modes. Registration and de-registratino of IRQ
+>     dorrbell indices with the device will be managed by these new methods
+>     instead of occurring directly in notify_block setup/teardown methods.
+>     Similarly, GQ ring counters will be managed in `request_db_info`.
+
+[Severity: Medium]
+Does the changelog match what the diff does?
+
+"Registration and de-registratino of IRQ dorrbell indices with the device
+will be managed by these new methods instead of occurring directly in
+notify_block setup/teardown methods" — registration with the device was
+not in the notify-block methods before this patch. As the diff itself
+shows, gve_setup_control_plane_resources() already called
+gve_adminq_configure_device_resources() and
+gve_teardown_control_plane_resources() already called
+gve_adminq_deconfigure_device_resources(). The new callbacks are invoked
+from those same two functions.
+
+What actually leaves gve_alloc_notify_blocks()/gve_free_notify_blocks()
+is the dma_alloc_coherent()/dma_free_coherent() of priv->irq_db_indices,
+which moves into the new gve_alloc_irq_db_indices()/
+gve_free_irq_db_indices() helpers called from
+gve_alloc_control_plane_resources()/gve_free_control_plane_resources() —
+not into the new ops — plus the per-block
+
+	block->irq_db_index = &priv->irq_db_indices[i].index;
+
+assignment, which moves into gve_adminq_request_db_info().
+
+"Similarly, GQ ring counters will be managed in `request_db_info`" also
+looks stale relative to the code. Per the v3 changelog the counter array
+allocation was moved back into gve_alloc_control_plane_resources(), and
+gve_adminq_request_db_info() only forwards priv->counter_array_bus to the
+device exactly as the removed code did.
+
+Two further changes in the diff are not mentioned at all: the new
+gve_ntfy_to_msix_idx() indirection, and the reordering of the counter
+array and irq db indices allocation and free relative to the notify
+blocks and the stats report. Could the changelog be updated to describe
+these?
+
+Also, "de-registratino" and "dorrbell" are typos.
+
+> diff --git a/drivers/net/ethernet/google/gve/gve.h b/drivers/net/ethernet/google/gve/gve.h
+> index f624a3e385e4c..6c46c842070b7 100644
+> --- a/drivers/net/ethernet/google/gve/gve.h
+> +++ b/drivers/net/ethernet/google/gve/gve.h
+> @@ -834,6 +834,9 @@ struct gve_device_info {
+>   *                  structures stored in @priv to be used during initialization.
+>   * @set_num_ntfy_blks: Sets no. of vectors into @priv to be used during
+>   *                     initialization.
+> + * @request_db_info: Request and store doorbell information into @priv
+> + * @release_db_resources: Release device hold on DMA memory holding doorbell
+> + *			  info (AdminQ only)
 
 [Severity: Low]
-The changelog says:
+Should this kernel-doc also mention the event counter array?
 
-    2) Removing resets during teardown. ... As it stands, if
-       `deconfigure_device_resources` fails, for example, GVE will preempt
-       its reset with another reset without actually invoking a hardware
-       reset, which could actually help with recovery.
+The only implementation does more than doorbells:
+gve_adminq_request_db_info() passes priv->counter_array_bus and
+priv->num_event_counters into gve_adminq_configure_device_resources(),
+and gve_adminq_release_db_resources() calls
+gve_adminq_deconfigure_device_resources(), which revokes the device's
+hold on the counter array as well as the doorbell index array. No other
+hook in struct gve_ctrl_ops covers the counter array, so a future
+Mailbox implementer following this description would not know it has to
+register and revoke priv->counter_array.
 
-Is the "without actually invoking a hardware reset" part accurate?
+The "(AdminQ only)" annotation on release_db_resources also reads as
+optional, but both call sites dereference it unconditionally — the
+release_db_resources: label in gve_setup_control_plane_resources() and
+the call in gve_teardown_control_plane_resources() — so every
+implementation of the table must provide it.
 
-gve_trigger_reset() was just a call to gve_adminq_release(), and that
-function does poke the reset registers and wait for the device:
-
-	iowrite32be(GVE_DRIVER_STATUS_RESET_MASK, &priv->reg_bar0->driver_status);
-	while (!(ioread32be(&priv->reg_bar0->device_status)
-			& GVE_DEVICE_STATUS_DEVICE_IS_RESET)) {
-
-(older revisions zero adminq_pfn and poll it instead).  So a hardware
-reset did happen on that path; what was missing afterwards was the
-adminq/dma_pool teardown, see the next comment.
-
-Also, is "Removing resets during teardown" fully true after this change?
-The new gve_close() still has a reset label calling gve_reset(priv, true)
-when gve_destroy_rings() or gve_unregister_qpls() fails, and both
-gve_shutdown() and gve_suspend() call gve_close(), so queue teardown can
-still perform a full hardware reset plus recovery before the caller tears
-the device down again.  Could the changelog mention that remaining path?
-
-> diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
-> index a62cb7a921d07..901673d2e2648 100644
-> --- a/drivers/net/ethernet/google/gve/gve_adminq.c
-> +++ b/drivers/net/ethernet/google/gve/gve_adminq.c
+>   * @get_ptype_map: Learn packet type map from device and store it in @priv
+>   * @configure_rss: Set up default RSS configuration
+>   * @setup_stats_report: Set up DMA region for stats report (AdminQ only)
 
 [ ... ]
 
-> @@ -394,7 +394,6 @@ void gve_adminq_release(struct gve_priv *priv)
->  	}
->  	gve_clear_device_rings_ok(priv);
->  	gve_clear_device_resources_ok(priv);
-> -	gve_clear_admin_queue_ok(priv);
+> @@ -1164,6 +1169,11 @@ static inline u32 gve_rx_idx_to_ntfy(struct gve_priv *priv, u32 queue_idx)
+>  	return (priv->num_ntfy_blks / 2) + queue_idx;
 >  }
 >  
->  void gve_adminq_free(struct gve_priv *priv)
+> +static inline u32 gve_ntfy_to_msix_idx(struct gve_priv *priv, u32 ntfy_blk_idx)
+> +{
+> +	return ntfy_blk_idx;
+> +}
+> +
 
 [Severity: Low]
-Does this one-line removal fix a pre-existing leak of the adminq buffer
-and its dma_pool?
+What is this helper for in this patch?  It returns its argument unchanged
+and ignores priv, and it is still an identity function at the end of the
+series.  It is also unrelated to the doorbell-info ops the changelog
+describes, so a reader cannot tell what mapping is intended later or
+verify that a future non-identity version will be correct.
 
-Before this patch gve_adminq_release() cleared admin_queue_ok, and
-gve_adminq_free() starts with an early return keyed off that same bit:
+Could it be introduced in the patch that actually needs a non-trivial
+mapping, or at least described in the changelog?
 
-	void gve_adminq_free(struct gve_priv *priv)
-	{
-		if (!gve_get_admin_queue_ok(priv))
-			return;
-		gve_adminq_release(priv);
-		dma_pool_free(priv->adminq_pool, priv->adminq, priv->adminq_bus_addr);
-		dma_pool_destroy(priv->adminq_pool);
-
-so every caller of gve_trigger_reset() skipped the dma_pool_free() and
-dma_pool_destroy() that followed:
-
-gve_reset_and_teardown()
-  gve_trigger_reset()             /* gve_adminq_release(), clears admin_queue_ok */
-  gve_teardown_priv_resources()
-    gve_adminq_free()             /* early return, pool and buffer leaked */
-
-The same happened for the three error branches in
-gve_teardown_device_resources().  Would it make sense to split this into
-its own patch with a Fixes: tag, or at least mention the leak in the
-changelog?  As written the fix is buried in a ~350 line refactor and
-stable tooling has nothing to pick up.
+>  static inline bool gve_is_qpl(struct gve_priv *priv)
+>  {
+>  	return priv->queue_format == GVE_GQI_QPL_FORMAT ||
+> diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
+> index 1176e13fafc0c..b89825a85db82 100644
+> --- a/drivers/net/ethernet/google/gve/gve_adminq.c
+> +++ b/drivers/net/ethernet/google/gve/gve_adminq.c
+> @@ -1718,3 +1718,40 @@ void gve_adminq_unmap_db_bar(struct gve_priv *priv)
+>  
+>  	pci_iounmap(pdev, priv->db_bar2);
+>  }
+> +
+> +int gve_adminq_request_db_info(struct gve_priv *priv)
+> +{
+> +	int err;
+> +	int i;
+> +
+> +	err = gve_adminq_configure_device_resources(priv,
+> +						    priv->counter_array_bus,
+> +						    priv->num_event_counters,
+> +						    priv->irq_db_indices_bus,
+> +						    priv->num_ntfy_blks);
+> +	if (unlikely(err)) {
+> +		dev_err(&priv->pdev->dev,
+> +			"could not setup device_resources: err=%d\n", err);
+> +		return -ENXIO;
+> +	}
+> +
+> +	for (i = 0; i < priv->num_ntfy_blks; i++)
+> +		priv->ntfy_blocks[i].irq_db_index =
+> +			&priv->irq_db_indices[i].index;
+> +	return 0;
+> +}
 
 [ ... ]
 
 > diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-> index 16ce55c6d74f6..acd09e9f416c1 100644
+> index 619ef46a7b30a..a160d36f718b9 100644
 > --- a/drivers/net/ethernet/google/gve/gve_main.c
 > +++ b/drivers/net/ethernet/google/gve/gve_main.c
+> @@ -203,6 +203,30 @@ static void gve_free_counter_array(struct gve_priv *priv)
+>  	priv->counter_array = NULL;
+>  }
+>  
+> +static int gve_alloc_irq_db_indices(struct gve_priv *priv)
+> +{
+> +	priv->irq_db_indices =
+> +		dma_alloc_coherent(&priv->pdev->dev,
+> +				   priv->num_ntfy_blks *
+> +				   sizeof(*priv->irq_db_indices),
+> +				   &priv->irq_db_indices_bus, GFP_KERNEL);
+> +	if (!priv->irq_db_indices)
+> +		return -ENOMEM;
+> +
+> +	return 0;
+> +}
+> +
+> +static void gve_free_irq_db_indices(struct gve_priv *priv)
+> +{
+> +	if (!priv->irq_db_indices)
+> +		return;
+> +
+> +	dma_free_coherent(&priv->pdev->dev, priv->num_ntfy_blks *
+> +			  sizeof(*priv->irq_db_indices),
+> +			  priv->irq_db_indices, priv->irq_db_indices_bus);
+> +	priv->irq_db_indices = NULL;
+> +}
+> +
 
 [ ... ]
 
-> @@ -1451,41 +1494,16 @@ static int gve_open(struct net_device *dev)
->  	return 0;
+> @@ -528,13 +533,14 @@ static void gve_teardown_notify_blocks(struct gve_priv *priv)
+>  
+>  	for (i = 0; i < priv->num_ntfy_blks; i++) {
+>  		struct gve_notify_block *block = &priv->ntfy_blocks[i];
+> +		int msix_idx = gve_ntfy_to_msix_idx(priv, i);
+>  
+>  		if (!block->irq_requested)
+>  			continue;
+>  
+> -		irq_set_affinity_hint(priv->msix_vectors[i].vector,
+> +		irq_set_affinity_hint(priv->msix_vectors[msix_idx].vector,
+>  				      NULL);
+> -		free_irq(priv->msix_vectors[i].vector, block);
+> +		free_irq(priv->msix_vectors[msix_idx].vector, block);
+>  		block->irq = 0;
+>  		block->irq_requested = false;
+>  	}
+> @@ -563,12 +569,11 @@ static int gve_setup_notify_blocks(struct gve_priv *priv)
+>  	}
+>  	priv->mgmt_irq_requested = true;
+>  
+> -	/* Setup the other blocks - the first n-1 vectors */
+>  	node_mask = gve_get_node_mask(priv);
+>  	cur_cpu = cpumask_first(node_mask);
+>  	for (i = 0; i < priv->num_ntfy_blks; i++) {
+>  		struct gve_notify_block *block = &priv->ntfy_blocks[i];
+> -		int msix_idx = i;
+> +		int msix_idx = gve_ntfy_to_msix_idx(priv, i);
+>  
+>  		snprintf(block->name, sizeof(block->name), "gve-ntfy-blk%d@pci:%s",
+>  			 i, pci_name(priv->pdev));
+> @@ -578,14 +583,13 @@ static int gve_setup_notify_blocks(struct gve_priv *priv)
+>  				  IRQF_NO_AUTOEN, block->name, block);
+>  		if (err) {
+>  			dev_err(&priv->pdev->dev,
+> -				"Failed to receive msix vector %d\n", i);
+> +				"Failed to receive msix vector %d\n", msix_idx);
+
+[Severity: Low]
+Is this part of the same intended change?  Two unrelated bits ride along
+in this hunk: the "/* Setup the other blocks - the first n-1 vectors */"
+comment describing the vector layout is dropped, and this error message
+now prints msix_idx rather than the notify block index i, while
+block->name a few lines above is still built from i.  With
+gve_ntfy_to_msix_idx() being an identity function the printed value is
+unchanged today, but the message no longer names the notify block that
+failed.
+
+>  			goto abort;
+>  		}
+>  		block->irq = priv->msix_vectors[msix_idx].vector;
+>  		block->irq_requested = true;
+>  		irq_set_affinity_and_hint(block->irq,
+>  					  cpumask_of(cur_cpu));
+> -		block->irq_db_index = &priv->irq_db_indices[i].index;
+>  
+>  		cur_cpu = cpumask_next(cur_cpu, node_mask);
+>  		/* Wrap once CPUs in the node have been exhausted, or when
+
+[ ... ]
+
+> @@ -611,9 +614,10 @@ static void gve_free_control_plane_resources(struct gve_priv *priv)
+>  	kvfree(priv->ptype_lut_dqo);
+>  	priv->ptype_lut_dqo = NULL;
+>  
+> -	gve_free_stats_report(priv);
+> -	gve_free_notify_blocks(priv);
+> +	gve_free_irq_db_indices(priv);
+>  	gve_free_counter_array(priv);
+> +	gve_free_notify_blocks(priv);
+> +	gve_free_stats_report(priv);
+>  	gve_free_rss_config_cache(priv);
+>  	gve_free_flow_rule_caches(priv);
 >  }
+> @@ -626,15 +630,18 @@ static int gve_alloc_control_plane_resources(struct gve_priv *priv)
+>  	if (err)
+>  		return err;
+>  	err = gve_alloc_rss_config_cache(priv);
+> -	if (err)
+> -		goto abort;
+> -	err = gve_alloc_counter_array(priv);
+>  	if (err)
+>  		goto abort;
+>  	err = gve_alloc_notify_blocks(priv);
+>  	if (err)
+>  		goto abort;
+>  	err = gve_alloc_stats_report(priv);
+> +	if (err)
+> +		goto abort;
+> +	err = gve_alloc_counter_array(priv);
+> +	if (err)
+> +		goto abort;
+> +	err = gve_alloc_irq_db_indices(priv);
+>  	if (err)
+>  		goto abort;
 >  
-> -static int gve_queues_stop(struct gve_priv *priv)
-> +static void gve_queues_stop(struct gve_priv *priv)
->  {
-> -	int err;
-> +	gve_unreg_xdp_info(priv);
-> +	gve_drain_page_cache(priv);
+> @@ -664,15 +671,9 @@ static int gve_setup_control_plane_resources(struct gve_priv *priv)
+>  	const struct gve_ctrl_ops *ops = priv->ctrl_ops;
+>  	int err;
 >  
-> -	netif_carrier_off(priv->dev);
-> -	if (gve_get_device_rings_ok(priv)) {
-> -		gve_turndown(priv);
-> -		gve_drain_page_cache(priv);
-> -		err = gve_destroy_rings(priv);
-> -		if (err)
-> -			goto err;
-> -		err = gve_unregister_qpls(priv);
-> -		if (err)
-> -			goto err;
-> -		gve_clear_device_rings_ok(priv);
-> -	}
->  	timer_delete_sync(&priv->stats_report_timer);
-> -
-> -	gve_unreg_xdp_info(priv);
-> +	cancel_work_sync(&priv->stats_report_task);
+> -	err = gve_adminq_configure_device_resources(priv,
+> -						    priv->counter_array_bus,
+> -						    priv->num_event_counters,
+> -						    priv->irq_db_indices_bus,
+> -						    priv->num_ntfy_blks);
+> -	if (unlikely(err)) {
+> -		dev_err(&priv->pdev->dev,
+> -			"could not setup device_resources: err=%d\n", err);
+> -		err = -ENXIO;
+> +	err = ops->request_db_info(priv);
+> +	if (err) {
+> +		dev_err(&priv->pdev->dev, "Failed to get db info");
 
-[Severity: High]
-This isn't a bug introduced by this patch, since before it nothing
-cancelled stats_report_task at all, but the new cancel_work_sync() only
-runs on the interface-up path.  Should it live in gve_free_stats_report()
-or gve_teardown_device() instead so it covers the down-interface cases?
+[Severity: Low]
+Is the missing '\n' here intentional?  Without it the message stays in
+the printk continuation buffer and the next unrelated kernel message can
+end up spliced onto the same line.
 
-gve_free_stats_report() only synchronizes the timer before freeing the
-coherent buffer:
+The new text also drops the error code that the removed message carried
+("could not setup device_resources: err=%d\n"), and duplicates the log
+that gve_adminq_request_db_info() already emits for the same failure:
 
-	timer_delete_sync(&priv->stats_report_timer);
-	dma_free_coherent(&priv->pdev->dev, priv->stats_report_len,
-			  priv->stats_report, priv->stats_report_bus);
-	priv->stats_report = NULL;
-
-An already queued stats_report_task survives that.  The timer can be
-armed from ethtool with the interface down, there is no netif_running()
-or resource-state check in gve_set_priv_flags():
-
-	if (flags & BIT(0)) {
-		mod_timer(&priv->stats_report_timer,
-			  round_jiffies(jiffies +
-				msecs_to_jiffies(priv->stats_report_timer_period)));
+	if (unlikely(err)) {
+		dev_err(&priv->pdev->dev,
+			"could not setup device_resources: err=%d\n", err);
+		return -ENXIO;
 	}
 
-and gve_stats_report_timer() -> gve_stats_report_schedule() queues
-priv->stats_report_task, whose gve_handle_report_stats() writes into the
-buffer:
+Would dropping this dev_err(), or adding '\n' plus err=%d, be preferable?
 
-	be64_add_cpu(&priv->stats_report->written_count, 1);
-
-Can that write land on a NULL priv->stats_report, or into memory
-dma_free_coherent() has already released?  The paths that skip
-gve_queues_stop() look like:
-
-gve_reset() with was_up == false   /* ethtool --reset all on a down iface */
-  disable_work(&priv->service_task)  /* stats_report_task not disabled */
-  gve_teardown_device()
-    gve_free_control_plane_resources()
-      gve_free_stats_report()
-
-> @@ -2514,30 +2542,7 @@ static int gve_init_priv(struct gve_priv *priv)
->  	return 0;
->  }
->  
-> -static void gve_teardown_priv_resources(struct gve_priv *priv)
-> -{
-> -	gve_teardown_device_resources(priv);
-> -	gve_adminq_free(priv);
-> -	bitmap_free(priv->xsk_pools);
-> -	priv->xsk_pools = NULL;
-> -}
-> -
-> -static void gve_trigger_reset(struct gve_priv *priv)
-> -{
-> -	/* Reset the device by releasing the AQ */
-> -	gve_adminq_release(priv);
-> -}
-> -
-> -static void gve_reset_and_teardown(struct gve_priv *priv, bool was_up)
-> -{
-> -	gve_trigger_reset(priv);
-> -	/* With the reset having already happened, close cannot fail */
-> -	if (was_up)
-> -		gve_close(priv->dev);
-> -	gve_teardown_priv_resources(priv);
-> -}
-> -
-> -static int gve_reset_recovery(struct gve_priv *priv, bool was_up)
-> +static int gve_recover(struct gve_priv *priv, bool setup_queues)
->  {
->  	int err;
->  
-> @@ -2545,62 +2550,66 @@ static int gve_reset_recovery(struct gve_priv *priv, bool was_up)
-
-[ ... ]
-
-> -int gve_reset(struct gve_priv *priv, bool attempt_teardown)
-> +int gve_reset(struct gve_priv *priv, bool skip_queue_setup)
->  {
->  	bool was_up = netif_running(priv->dev);
->  	int err;
->  
-> +	if (gve_get_reset_in_progress(priv))
-> +		return 0;
-> +
->  	dev_info(&priv->pdev->dev, "Performing reset\n");
->  	gve_clear_do_reset(priv);
->  	gve_set_reset_in_progress(priv);
-> -	/* If we aren't attempting to teardown normally, just go turndown and
-> -	 * reset right away.
-> -	 */
-> -	if (!attempt_teardown) {
-> +
-> +	if (was_up) {
->  		gve_turndown(priv);
-> -		gve_reset_and_teardown(priv, was_up);
-> -	} else {
-> -		/* Otherwise attempt to close normally */
-> -		if (was_up) {
-> -			err = gve_close(priv->dev);
-> -			/* If that fails reset as we did above */
-> -			if (err)
-> -				gve_reset_and_teardown(priv, was_up);
-> +		if (gve_get_device_rings_ok(priv)) {
-> +			gve_clear_device_rings_ok(priv);
-> +			gve_destroy_rings(priv);
-> +			gve_unregister_qpls(priv);
->  		}
-> -		/* Clean up any remaining resources */
-> -		gve_teardown_priv_resources(priv);
-> +		gve_queues_stop(priv);
+>  		return err;
 >  	}
 >  
-> -	/* Set it all back up */
-> -	err = gve_reset_recovery(priv, was_up);
-> +	disable_work(&priv->service_task);
-> +	gve_teardown_device(priv);
-> +	gve_queues_mem_remove(priv);
-
-Following the comment above: with was_up == false, gve_queues_stop() is
-not called here, so the new cancel_work_sync(&priv->stats_report_task) is
-skipped while gve_teardown_device() frees the stats report buffer.  Only
-service_task is covered by disable_work() here.
-
-[ ... ]
-
-> @@ -2981,7 +2991,8 @@ static void gve_remove(struct pci_dev *pdev)
->  	void __iomem *reg_bar = priv->reg_bar0;
+> @@ -681,7 +682,7 @@ static int gve_setup_control_plane_resources(struct gve_priv *priv)
+>  		if (err) {
+>  			dev_err(&priv->pdev->dev,
+>  				"Failed to get ptype map: err=%d\n", err);
+> -			goto deconfigure_device;
+> +			goto release_db_resources;
+>  		}
+>  	}
 >  
->  	unregister_netdev(netdev);
-> -	gve_teardown_priv_resources(priv);
-> +	disable_work_sync(&priv->service_task);
-> +	gve_teardown_device(priv);
->  	destroy_workqueue(priv->gve_wq);
-
-Same question for removal of a down interface: stats_report_task is not
-synchronized before gve_teardown_device() frees priv->stats_report.
+> @@ -711,8 +712,8 @@ static int gve_setup_control_plane_resources(struct gve_priv *priv)
+>  
+>  teardown_clock:
+>  	gve_teardown_clock(priv);
+> -deconfigure_device:
+> -	gve_adminq_deconfigure_device_resources(priv);
+> +release_db_resources:
+> +	ops->release_db_resources(priv);
+>  	return err;
+>  }
+>  
+> @@ -745,12 +746,7 @@ static void gve_teardown_control_plane_resources(struct gve_priv *priv)
+>  			dev_err(&priv->pdev->dev,
+>  				"Failed to detach stats report: err=%d\n", err);
+>  		gve_teardown_clock(priv);
+> -
+> -		err = gve_adminq_deconfigure_device_resources(priv);
+> -		if (err)
+> -			dev_err(&priv->pdev->dev,
+> -				"Could not deconfigure device resources: err=%d\n",
+> -				err);
+> +		ops->release_db_resources(priv);
+>  	}
+>  
+>  	gve_clear_device_resources_ok(priv);
 
 [ ... ]
 
