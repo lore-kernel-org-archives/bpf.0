@@ -1,48 +1,48 @@
-Received: from out-zbxj-a65.jellyfish.systems (out-zbxj-a65.jellyfish.systems [198.54.127.65])
+Received: from out-zbxj-a76.jellyfish.systems (out-zbxj-a76.jellyfish.systems [198.54.127.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB95533F589
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 05:14:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FBD1377A93
+	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 05:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788758086; cv=none; b=S6fraNyl/OU8XYkRdabYSRZvOxq6xg0wG2tSGoX5GXVMfcEg6vMQUrt5XaG90l0RuZKLBhr8W7gUIDClorD4wzZL16UQjI6PbPBR7VduQHNkiLc9yMNmbsfFb6J/tBmBeiYvS49BDEkFRtclcwGBk5ZbX1wHpit/dv02eTXWQ1Q=
+	t=1788758093; cv=none; b=XUu45ZQrV4FqxIPGzjQCngV0yvS2MI8obgYYmzXYSFffEiUQFkVIuzH1gdMO46u46s2g0FfQFaTH75GbyhDKy2ZF+fb2cknK9QhLMjnAaeASMz67godPTJz3j3AlhrXhm3t7KPI7kV4jbNivBLfqxPzMgyXc4f1zcEtpb1KVsMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788758086; c=relaxed/simple;
-	bh=VIgjKHYjIZWMXIc+aVfcwlKlcjgBtNshGeMavwN4BC4=;
+	s=arc-20240116; t=1788758093; c=relaxed/simple;
+	bh=omCVoJVAA0RtY4Ob43UzTzQ9Ne9vNj5kvsSNu6Vb5vI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dx1KYM7QqvQR1duQ9RcCknxFO/wMZYrh/qkZ59nKsNCVXXydGDZO4rN093sGGLiHzEbmFW44pIwirCw/mL33YDwJXmyFRgI3nSfEMDPstJdM82HQVF/fNh9PGp68bXX67+nXzgKUwXbN8sSnjfQDxBc4UUv922Cu4f0KwMsVCHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=THbq9lSr; arc=none smtp.client-ip=198.54.127.65
+	 MIME-Version:Content-Type; b=qn3b2gyndXMYzKGLfaM7X8ZZEGPp4KRo08nXTIbmwnU35wO1LT7qS02foG+VcWcSq201sxFKYrm5vUcDHnqw9wYUf7PgQQV0NDQi69gbPi6SyvXXieUiNHtgaLHO3FLcy1VRomW5ECAGC7z9LvlijKx3bNd4t9ttEzJkx7dGIRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=kt56i6oE; arc=none smtp.client-ip=198.54.127.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="THbq9lSr"
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="kt56i6oE"
 Received: from fedora (unknown [23.142.132.69])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdZxk6nSrz2xBk;
-	Mon, 07 Sep 2026 05:14:34 +0000 (UTC)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdZxy5WdFz6tlG;
+	Mon, 07 Sep 2026 05:14:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1788758076;
-	bh=h/MQHaS9ne2VaLB2qbTvVez4UnCJMtYEo3zO18uCQ44=;
+	s=spacemail; t=1788758088;
+	bh=6SAwKz5KVLY3787HEo87FEj/EUCZ12vDs8Aqm7FCTmo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=THbq9lSrWz9VS+fisrWmkVxzqmQPUHTZbSY4WAGdbx2sPcUiAHnvD/KMu7EHCVqOc
-	 DcgKzxXaF6wW+Sak4sumWM0QHzmjH68RRH0B2fKBCcrK+w/WaUtP1g7iOvivmpiZTZ
-	 RDI7FDdcpHhfzk2O+UOtinq/ZjWfZBg7Zpc5fZIndxs40AXjUynHVB7VRE+Ni3dcKR
-	 X80KT7dghwLFsXh+NdChqHmgoP+mZvhBuqTSpkzV/JeIxt9FKWORYbnY/R78/5ZDES
-	 Ds7ZhND5XuBVHqRvV2s/ntqJ7nNuM4nZ1NO2m1P1wOcouy2gTXkgHPJ857ZAobfax6
-	 Than7fvDqRQ6Q==
+	b=kt56i6oEJn9hIS5U9l5joN2KVWIh9EN1iKpnh6Q7cCta5ihYILBgT+1nTYxdNgeWa
+	 r5hmHkfLQdVWnW5kXnVRS1JUiDK3mSq7YlBEb2cpIGwnPoVeTXIJlnNfqrjkAmdfgx
+	 c5GtXAvEb0vQ3kKy3ouDEJ0BFNEgyQux7w+Gfry8dA9ORI1i34dAlFwMCG2LCbomTN
+	 WWOfjKI/5Mq6X/3pHspJwfocmr7cKOoqAPgaHhjjqAJQESPBdov3gDg/GCaa6giKYH
+	 qwkfZ9ER4qqJc6CqUoY/ZhwVETNpMmqHq3QRRvpKEpV4+oXvMCv9aa+mWbJHn+F59c
+	 ibLf2UqFzCTdQ==
 From: Tianyi Chen <hi@tychen.cc>
 To: bpf@vger.kernel.org
 Cc: qmo@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	hi@tychen.cc
-Subject: Re: [PATCH bpf-next v3 1/2] bpftool: Accept symbolic map creation flags
-Date: Mon,  7 Sep 2026 13:14:24 +0800
-Message-ID: <178875781913.42294.17811476816505465442.01-flags-synopsis@tychen.cc>
+Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Cover recursive bpftool map dumps
+Date: Mon,  7 Sep 2026 13:14:36 +0800
+Message-ID: <178875781913.42294.15961579600118750680.02-recursive-helper-comment@tychen.cc>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <0846fe9c15dc189bd3cd979839ddd7101f79979217dda130d0800b047589f9fe@mail.kernel.org>
-References: <178874713816.1519295.12130500880299787860.flags-v3-1@tychen.cc> <0846fe9c15dc189bd3cd979839ddd7101f79979217dda130d0800b047589f9fe@mail.kernel.org>
+In-Reply-To: <c0f83aa30c83e841418eaee2d442a193f73720c3e9288298ed6484e9b0d9c8b8@mail.kernel.org>
+References: <178874362960.1415955.11629203769007485967.recursive-v3-2@tychen.cc> <c0f83aa30c83e841418eaee2d442a193f73720c3e9288298ed6484e9b0d9c8b8@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,22 +53,23 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Envelope-From: hi@tychen.cc
 
-Thanks, agreed: the synopsis should have the same FLAGS production as
-map help. I have added the line below locally and checked the generated
-man page and the bpftool synchronization test.
+Thanks. The helper on the original base did not NUL-terminate captured
+output, but the current bpf-next helper does. The comment should describe
+only why this test strips the newline, which is true for both versions.
 
-This is the complete correction; I will fold it into the next full
-revision rather than repost the series just for this documentation line.
+I have made the following local correction for the next full revision.
+It changes no test behavior.
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-index 375321d5582..5a5c26f789c 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-@@ -48,6 +48,7 @@ MAP COMMANDS
- | *DATA* := { [**hex**] *BYTES* }
- | *PROG* := { **id** *PROG_ID* | **pinned** *FILE* | **tag** *PROG_TAG* | **name** *PROG_NAME* }
- | *VALUE* := { *DATA* | *MAP* | *PROG* }
-+| *FLAGS* := { integer | **BPF_F_NAME[,BPF_F_NAME...]** }
- | *UPDATE_FLAGS* := { **any** | **exist** | **noexist** }
- | *TYPE* := { **hash** | **array** | **prog_array** | **perf_event_array** | **percpu_hash**
- |     | **percpu_array** | **stack_trace** | **cgroup_array** | **lru_hash**
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
+index 9c88743a8f8..db547a68d0a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
+@@ -16,7 +16,7 @@ static bool dump_map(__u32 id, const char *options, char *output)
+ 	if (!ASSERT_OK(get_bpftool_command_output(command, output, OUTPUT_SIZE - 1),
+ 		       "dump_map"))
+ 		return false;
+-	/* The helper doesn't terminate or strip the output. */
++	/* The helper leaves the trailing newline in place. */
+ 	output[strcspn(output, "\n")] = '\0';
+ 	return true;
+ }
