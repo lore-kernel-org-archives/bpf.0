@@ -1,103 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17EE8372058
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 05:47:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788760022; cv=none; b=gAn6eFTkf8xJsR9PH+pw6QXAefRvRNVYGcMb5oBNRMdW3QcB62jDIDrhfFsd/jT5Pe5/MgE/zszfFdCjQqnJ9xq4I/tQCESjcu6jPHA5hnw4a6quDm7fM1IRK/m8+Gix2ZpSckP9Hk3/DuAla3buV1tRPh0GUMqXd6a3alvwIDs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788760022; c=relaxed/simple;
-	bh=mltRRpfbfBR91iaGUJ6P2WJ7YIwsS2ogQdOOkijyb/Y=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=P0RCAsDIfb8/YmfCu30tavl5SRNQV9rBw4OVTdp3KIuWVPWrPKC4TsDIxpu5MMGIX+1XqnwI+lBj2jiSaYKLNl092KNFaCZSIpSiFfR38JNG+StmjGo8gKtgy/J1HI2sk9cMZNNCdQaFnL8RuUYkZj48djwDfooj5ySRxiEnMNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CFUa2WDL; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716E83890EE
+	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 05:47:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.204
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788760025; cv=pass; b=K5vHcGEDQE7cXiTcrNrX6aG4BMvLJXRn1FmT9kNeVD2+7GxxSBm5AnpkeNTUuJOjRAbgF9O79PSnQXBqnRnglV+ZpQfZ8wGHJw7J0uVUomht+9gFPuF7WftblIojO9Ul9wHu4eZ0At3zLxgCxhujgdoDXGrZ7Jsb5nRwXTP2Gdg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788760025; c=relaxed/simple;
+	bh=RUgzcORyckA+8dmosj3W4O7LpXuF1V+EFIaKxpkao/0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LS2crLGOWmMEd6HgyzSlMGqnOr47Y9GOdBnmYYkXQQsbEG+aTBJCWAq91E0Zc4qopUcRksSsGzZ7C5GtNEqrbYRduviQsMi7JOtEdE5Bd8kmYCru0R5f0ThvkeH8LD/BaTyJdhk7qkNPOR6A4yMIDhoWhT23lj65hFoK+rxgdb0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IkamvXQD; arc=pass smtp.client-ip=74.125.230.204
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CFUa2WDL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 738DF1F00A3A;
-	Mon,  7 Sep 2026 05:47:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788760020;
-	bh=DFCNb5x4writyirvTHURZuYZW5eGt3HeQ8CUw7BzCdY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=CFUa2WDLCMmrgjL8LitrHc7O2OmGRvchv/mrVLJM/CuZlgvDVspjuud6QF9wVN/Vb
-	 7CCfxd0cBPiy+AdJ32WJOTvMPpDQFu4GEBaBzwxSzkmFWIQV3bmmkJ4UXaQkZwaPAP
-	 xcQzhWL2aPrjKJNL3eBSagdhDfBMZe8+/ywfegrryhVvA1sRrZOC5/eN7UddQ2ox+E
-	 0yBcKBSc0VtpNwmUdm3jHjUZlIeu+IsabPfsK9zANSG5E8r6eph5NR2BFG1jMXACXV
-	 IFoKod0KGQCWHlvaMb9yHY6/xnmeRKFmlSmalT1ZH0VJLuQ95HYk1iqqn9arEe+Hif
-	 fJY8orHnt24IA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: cover the exception callback
- using its own BPF stack
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Donggeun Yoo" <donggeunyoo.kernel@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260907054235.473103-3-donggeunyoo.kernel@gmail.com>
-References: <20260907054235.473103-1-donggeunyoo.kernel@gmail.com>
- <20260907054235.473103-3-donggeunyoo.kernel@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 07 Sep 2026 05:46:59 +0000
-Message-Id: <20260907054700.738DF1F00A3A@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IkamvXQD"
+Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-53012819c04so209721cf.0
+        for <bpf@vger.kernel.org>; Sun, 06 Sep 2026 22:47:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788760022; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Lw15OYbBPtkey+YR8e1w4Hw8ARxakFlIpmhL3gN+zw4TWiYZYU+iY1nVdqMKTlfozq
+         CZ6VL/pu0BzqfM6hUF6p2ScwRURF1TGK6hfC01hP01deqraV/bND/Tp7zsbftn71kiZw
+         jz8Wc/EmUeTyPHUO5FOf+DxlF+FL+pTWs82praNEwqQL438s5Wj/KHFfDsntYl67nHZJ
+         y7V4eF3+lAqkDpl4coaOFOhRYhznMQ5n4Z+c50GiF26WQVXAGLWYCfYu4o7ScooNSCua
+         cvTNneGp1ws7avyq7EiU70p2vCX2TrRaEPmBUX7ENNu/6imoCr+X3EQB64X6mtnnWRWt
+         DE6w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=RUgzcORyckA+8dmosj3W4O7LpXuF1V+EFIaKxpkao/0=;
+        fh=1ujWX6JIx6aMDd8sW6jWOLJXNZfxfD/fZ+vNdvCZIbI=;
+        b=H0arFeI+hYdXdbqD1mkpQjGlahwNBQMGxaQhJooh8IRlfHk7B7r+Vbef1PfSYEeMsM
+         qowSPFzq0yc3KPQVbcyvvRCUE/HIMSPHht0eTD0EFas4DSAyNkm8Y/8gHtkePMH8UVfE
+         3wGlyVCHSS8Jev/pxVw/DHLKEhQ5DVBENNHixjMJ818O/TZKP9Fmx73URp3DPZg58rt2
+         3ye9rfrlt9XR0xfK6HEmf7wEWm7IBc1iI7YIC+4hJ1tLk6+MHgjhkocucqtHOaf4cAum
+         cXswa1VVtAapJxolq8hEdy99hTj5EyKo1NBwK350QLQ6zpTwcNlQ+pv/Dl3YZfhn2AYp
+         vwKA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1788760022; x=1789364822; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=RUgzcORyckA+8dmosj3W4O7LpXuF1V+EFIaKxpkao/0=;
+        b=IkamvXQDnUCwsOAsZYjD+ZwShl62rlw7OIeABI1Pobtyljv0wOXYmEWk4mh4CLxoUH
+         pr6dTP8SukVGHPvsoCXPmLeCWOHmxwy0Q3qiw5KyiDNeVp/897bI7LifuB3uNxgIcjZJ
+         AQK72jd0PMRWeVPhIDJEQC968/ItcxQK9N4lS4jepeFpY1p3/TkyOGX73X+5+oWKefJg
+         K7owoRSYh9UJ9BUCpRAF2rfXq2a2y/BUIdfoZqdLapfkjc9EsfBKaaz+Q3nl//vLJGI7
+         vxmplUQqGcZO1B1LlkW+RjeT0xnyUAgfklLVfIkxGzpZh9loHKzlGHXKacWbIfilqWvo
+         +nPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788760022; x=1789364822;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=RUgzcORyckA+8dmosj3W4O7LpXuF1V+EFIaKxpkao/0=;
+        b=WKhPS4okRYUTbWkduT40g052nFRRcE3qeSnfn1CnwQ+ZDWYUdZrleI1bzdEyUXnSKA
+         ETsPyDNiUq0YWusiZrlOgQs1fwnvlvtynOBufQMchLfZR3NxGhiPlKPmOMfePOR1MBPC
+         g150y+7RZfV3npLdCEvY9iYtTdhoyEq9vbW43r9ZwGYrF0bhYLv/7NDkRbkhUXxcl2Bw
+         REn9DcHoWq6cIxhCNmynXO+UWdUqLo1q7HsxcYH4C0TfkdUwoxvZRW3827M57BbnMDoc
+         MsCkcA3lPhGqj/WkCJuGM2prB8a9bUhO8YgreMposrm9/PG0+xYd3InIERp8lkSCfX8i
+         RRBw==
+X-Forwarded-Encrypted: i=1; AKwUvBzPwg5u7H4Om0thSmn1WDoz7W7D6anBPpJJNw5YJnllXeda1QCJkFpqJoe+33tGSTYu7lI=@vger.kernel.org
+X-Gm-Message-State: AFuF++nBy6/DuoLL8+Zlm1srgKkeVI9r9cR0HO/7RdW8Tpoy5gIjdXJ6
+	yHq+OchVAM9KkxlhUckQcyicSPP9oPjg/VSAGdl9gxb7JHmjpoqVexThoGNBQ/zOaZss3Ys6dU3
+	jBheXme6Hdom8IVpdhYKx73G9nxhLlGuksCk2YfvA
+X-Gm-Gg: AYBFou3yaYuGAP4KmRwByyKpglo5p9/YjFqHm2vA0WyZNZDfaROHKTEZrobwPGOP1Pl
+	3uXcHytfE8dPbujy3MWojRLdux/r0SI+osUk776/hP2Ej66CKSB5wv2/JJMPBApDwKYodXes8zG
+	nT7dB7p+RNsccexuLegVcSvdeDJsatECCixf4AJjZAfukykUaKDUhEXLNvGLG/evS8Wz2o9KqtE
+	1gPS7psC9l2k/aFcR1VoakR06n5O5fhfQ92VrKqxwoXJN84crBAUkTLIPxp4gHj9KcY/wBTdPqE
+	Ps/z/oWasFqZpE07L/1rQYLFKZkKU0YHn2Gbkb4OXGB7hT5ogK4ChAn8Ugad9hHz0U8L6r8tNH+
+	8N7KIYtf7uxaNxo3G0xb1xd/7mR8=
+X-Received: by 2002:ac8:5a56:0:b0:530:5ed7:50f0 with SMTP id
+ d75a77b69052e-53084da738dmr6405881cf.13.1788760021899; Sun, 06 Sep 2026
+ 22:47:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260904031912.2133476-1-tweek@google.com> <b965bb62-fcc8-4517-9947-24613650f1f5@linux.dev>
+In-Reply-To: <b965bb62-fcc8-4517-9947-24613650f1f5@linux.dev>
+From: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
+Date: Mon, 7 Sep 2026 15:46:43 +1000
+X-Gm-Features: AcwNN1VHWc43-sC_3CoGJGewDfaRQRVxmRUaVlq04jRRQFeRsaJdgNEB0GaZUNE
+Message-ID: <CA+zpnLc-WAqE9rA0PsjvOFe_YCZOdVj9YAzuayGXx0nhpqtw7g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] selftests/bpf: Move verifier failure tests
+ out of test_global_percpu_data
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Sid Nayyar <sidnayyar@google.com>, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] Multi-line comment does not follow the required BPF kernel comment =
-style.
---
+On Fri, Sep 4, 2026 at 4:07=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> wr=
+ote:
+>
+> On 4/9/26 11:19, Thi=C3=A9baud Weksteen wrote:
+> > Commit 4c9241bd731a ("selftests/bpf: Add tests to verify global percpu
+> > data") added test_global_percpu_data.c to LSKELS_EXTRA. Later, in commi=
+t
+> > 1ed2294b31fc ("selftests/bpf: Test verifier log for global percpu data"=
+)
+> > two verifier failure tests were added (verifier_strncmp and
+> > verifier_snprintf), both marked as non-autoload (SEC("?kprobe")).
+> >
+> > When bpftool generates light skeletons, non-autoloaded programs are
+> > skipped during loading, causing the loader program to store subsequent
+> > program FDs into incorrect skeleton struct fields (e.g. dump_percpu_dat=
+a's
+> > FD was stored into verifier_strncmp's descriptor).
+>
+> IIUC, patch 2 will fix the issue totally.
+>
+> Better to add a subtest to verify both the issue and the fix?
 
-commit 6cf0d756f3e18b0c62e71081cda78a62eb981a75
-Author: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+Thanks for the review. That's right, patch 2 will fix the issue:
+bpftool will fail to build any program that is set up that way. That's
+why patch 1 is necessary; otherwise, the existing test would fail.
 
-selftests/bpf: cover the exception callback using its own BPF stack
+Just checking your suggestion: what I can do is add a new test to make
+sure that dump_percpu_data is set up as expected (fd > 0). I can write
+a new test_global_percpu_data_iter_lskel, that is similar to
+test_global_percpu_data_iter, but for lskel?
 
-This commit adds a test to verify that an exception callback can safely
-access its own BPF stack slot. It introduces a subprogram that throws an
-exception and uses a callback that passes a local variable's address to
-bpf_probe_read_kernel().
+I can also write a test to ensure that bpftool fails when light
+skeletons are set up with autoload=3Dfalse?
 
-> diff --git a/tools/testing/selftests/bpf/progs/exceptions.c b/tools/testi=
-ng/selftests/bpf/progs/exceptions.c
-> index c8d716fbd4191..2b01b45cef06a 100644
-> --- a/tools/testing/selftests/bpf/progs/exceptions.c
-> +++ b/tools/testing/selftests/bpf/progs/exceptions.c
-[ ... ]
-> @@ -212,6 +212,35 @@ int exception_throw_subprog(struct __sk_buff *ctx)
->  	return 0;
->  }
-> =20
-> +u64 exception_cb_stack_src =3D 0x1234;
-> +
-> +/* The address handed to the helper has to be this callback's own stack
-> + * slot, not one from a frame that is already gone.
-> + */
-
-[Severity: Low]
-Could we update this comment block in exception_cb_stack() to follow the=20
-preferred BPF multi-line comment style?
-
-The BPF subsystem guidelines require the opening '/*' to be on its own line
-for multi-line comments:
-
-/*
- * The address handed to the helper has to be this callback's own stack
- * slot, not one from a frame that is already gone.
- */
-
-> +__noinline int exception_cb_stack(u64 cookie)
-> +{
-> +	volatile u64 val =3D 0xdead;
-> +
-> +	bpf_probe_read_kernel((void *)&val, sizeof(val), &exception_cb_stack_sr=
-c);
-> +	return val;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260907054235.4731=
-03-1-donggeunyoo.kernel@gmail.com?part=3D2
+Thanks,
