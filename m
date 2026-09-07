@@ -1,298 +1,349 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24C92E7375
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 01:50:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23C232C0261;
+	Mon,  7 Sep 2026 01:54:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788745852; cv=none; b=nD+e3KiZF5ovc2hXQjzDp2Ubt1B1ZppU7L4F8rEqsYnJovHftMCK52kN/z8Qq1fJnalfwPuqXZH46d39RQoC32MR7fpyIsNYgqD/b6DTtBYQXnP6gEKfZkj9VxJKCP590LS6AAo/e4BsVVt5sKxUcmMiCarRTxaMkTeLtxO3AYI=
+	t=1788746063; cv=none; b=OxKzu1D+hiCtOxteT8wp4eDFnBD+ZMpCN4q/qZFa1ReKE5lmHfKkeXAKAcmwhEliV7Gbb3ce07Oyb3+7ZrveCh45VsHDdEoSCkzSQ1q9heKMrS+VZU+289UYS2MyyRLaP5LySJk8cwPM4B8wY33wr5P+kNX3AJlfGzNj2x8Z/vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788745852; c=relaxed/simple;
-	bh=9+4aoPNTqAd8WGCafkd8EILnfgdfYj2vO5R+UZTC56U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=E4gdOG6IYuB6BBeSjQR4XjMSe/lcVe5JO1iH+4cyWt2NMXIazxQzhfC1rHyCuEqVFzEeyagVTmfBJYZQDRamZ2BtT9m5s8g4p4F2/lav8uOYHN1Ce0iqYVz+FhMc5iw1VK2XfiUv/5rgxhR7yxbKVQscBRxXPcP0pC84u+yJ4fY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X/r8bifQ; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X/r8bifQ"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-38dc4553f62so2889603a91.0
-        for <bpf@vger.kernel.org>; Sun, 06 Sep 2026 18:50:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788745850; x=1789350650; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=J+LE5Vy6vaZPNsi+iRTDd/qD0BVGkAM4pa52G4CTr/g=;
-        b=X/r8bifQYrXNi8Dt3gApf1pC3PZG3E9/5l8hpdBU6/IwLQOQMYPM4S4u6jJFHXa/lN
-         rJNJ0do7HUlvCZxMDFUF5ZMl2S28TqZmzo4+zCDr7tquBrEPC8wVUTbe3Nzy4bI9FIPw
-         Za/1tSpVPdrEPj2Shi4v1Fdy7CoLzVAMfpv94fZmwI1n1A9zCzd2E1f9dCcanY7MFMZl
-         G4spvCwtWLO4zgjCIK2f8e57N7pCmKd1ZUjGbdAhJ8d3TRfFXDdP5fBQZndmBbZm4EH9
-         Wq+5L5nMAoGVOo7vPNbRYoKwq2BzhgV+HdsYQZUhATVyobonPinKJ+Tkx+FH8hPk+QIN
-         MO+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788745850; x=1789350650;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=J+LE5Vy6vaZPNsi+iRTDd/qD0BVGkAM4pa52G4CTr/g=;
-        b=GPWOPksfwza0wH0JSXTktSgGRUvFr8z/07nytpDyfThMF8XqD66QMWjbSoUqME6auL
-         GKTaa6Wrzp1IXZxraP65pwQJ5smND0DKPBZxm0MEaUg7buXf16X2cmGze69LtE9w83UE
-         Zh8HEpXP6fdaOPdlDBnFXA2rWM2l7SB1oHXJb9yFBV33Edv5YX6F42vt2NYgueQEXCiA
-         fw2u97cGnGzAI+RGxilpGkbGLUaWp5lN6kJD3qphHVoAWydLFerdipiAIQuxGSuRwmfB
-         YHZRFI3ZoHZ4UGN1SVLEpiF0jxKUJaDmEVxRJ+IgX+y1Rn145OY1cyjCune2kbIo5HYi
-         Ji7A==
-X-Forwarded-Encrypted: i=1; AKwUvBzj+HBgvDkFBvC55IcOUwrW45z3msK6Jl6j2fpxEd+mEes/Gj7AgyUuIIa6Fx54Ka+vbV0=@vger.kernel.org
-X-Gm-Message-State: AFuF++mUJRCXw3eyMhuCwkEyFvdhk9qHGJMG+oMR4pqiO2jg1rDeV3Sn
-	PcWY388fgDS+4SPX/zspdLJ7fkVMqhU+NNcKu/bVYf1dqjCiAAFzeERV
-X-Gm-Gg: AYBFou0kO4Ys/SWgYJc6qS+aviB5oY3JDsywDzeyZ/X7OeUQCRLzztb3paPkj0gcq2s
-	V5jbewn/9BqmX6g/ZCQYKrfZzTFrAYyG0sbs99WV5BdWJv+k3ev2vc7sCm4oAkc6UeZ5sx/bTzp
-	uwQap5aiVav4y5/UVDVJjvNNPa+Dh3yvTdaXGaS6ECkpVfYXwuehel+b0bozvyMJhBxF6mhsczQ
-	zwHUEBtvv8zwopSHiEEeR/Amx9qICVThcAsnXZ80+vSlEotsvFCixm5KrlKKd34y0ogZieEx3aE
-	4fW0VRbGOPZyZvVj4S3VtPlvvxxLVN5q0KdCE6YxCOtzVbQ/kqhK8L7n2fVk1Z+3iwIaNU7/Wdl
-	lCWWJ1AOdNWY5cC0jsQBKygOwLCXw0Q8oJtU255k090W4ukbQOmYxl7qCaXbjbmAhNInOouf6DF
-	xtwEIuBeoG4foJuBACWieU8l/ZjaCrKu6pYF+RL1Or91YU/vxJwflV0f5iDiZLZTlopMQoljwxs
-	yRRlcV05+JfLp5acAs2wWmCNpqD0bcs0a7Db2Ob42p1Lhg6lrp0
-X-Received: by 2002:a17:90a:164f:b0:39b:3510:49e7 with SMTP id 98e67ed59e1d1-39b35105b52mr15190290a91.0.1788745849967;
-        Sun, 06 Sep 2026 18:50:49 -0700 (PDT)
-Received: from secrnd-cstp.tailb7f510.ts.net ([125.131.91.97])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b260cd2aasm17142018a91.3.2026.09.06.18.50.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Sep 2026 18:50:49 -0700 (PDT)
-From: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	bpf@vger.kernel.org
-Cc: Sanghyun Park <sanghyun.park.cnu@gmail.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Pu Lehui <pulehui@huawei.com>,
-	Suchit Karunakaran <suchitkarunakaran@gmail.com>,
-	Xu Kuohai <xukuohai@huawei.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v6 2/2] selftests/bpf: Cover attach type checks in link update
-Date: Mon,  7 Sep 2026 10:50:04 +0900
-Message-ID: <20260907015003.65087-4-sanghyun.park.cnu@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20260907015003.65087-2-sanghyun.park.cnu@gmail.com>
-References: <20260907015003.65087-2-sanghyun.park.cnu@gmail.com>
+	s=arc-20240116; t=1788746063; c=relaxed/simple;
+	bh=jCxj6f4UlPQzTRZ9KgiVMawvjpZ+EV49gFQeh4PdhHg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Acyk5usnWCUU2yfVtNCevtz9OTHNZu8IFWO9Rf5I+T+wdGr0xd1Wg1LFTBb92CteZdiB7OnnLAczxzpeXK90K734c20C0tfG3qE1wQjiaKPJc7LlzQ+v9lp83Sq53VpqqgLenRi8qUF6GO7UmL2o80uFTQFtWEpROpd7VSbvVeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 04e300deaa5f11f19a56ed5b684f684d-20260907
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.19,REQID:a0082915-a3e9-4d8c-8996-9b51c724861d,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:7db8b62,CLOUDID:777c3f2b0f8b365456bf1cf18b81af21,BulkI
+	D:nil,BulkQuantity:0,SF:80|81|82|83|102|136|865|898,TC:nil,Content:0|15|50
+	|99,EDM:-3|-100,IP:nil,URL:97|99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil
+	,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 04e300deaa5f11f19a56ed5b684f684d-20260907
+X-User: jiangfeng@kylinos.cn
+Received: from [10.42.12.56] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <jiangfeng@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
+	with ESMTP id 552934945; Mon, 07 Sep 2026 09:54:10 +0800
+Message-ID: <4a827f8d-f6a1-421c-88af-c4e7530c8426@kylinos.cn>
+Date: Mon, 7 Sep 2026 09:54:07 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 1/2] bpf, riscv: Add BPF stack arguments
+ support for RV64 JIT
+To: Pu Lehui <pulehui@huawei.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Luke Nelson
+ <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>, Paul Walmsley <pjw@kernel.org>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexandre Ghiti <alex@ghiti.fr>, Shuah Khan <shuah@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20260814-bpf-riscv-stack-args-v3-0-2160de56fea3@kylinos.cn>
+ <20260814-bpf-riscv-stack-args-v3-1-2160de56fea3@kylinos.cn>
+ <729d2110-20b2-4e63-af44-99ca8cebdbfd@huawei.com>
+ <1a0c0b5a-fc09-431f-b3a5-56593a6e76be@huawei.com>
+ <482278aa-67e3-41f0-9b12-528efe6e1940@huawei.com>
+Content-Language: en-US
+From: Feng Jiang <jiangfeng@kylinos.cn>
+In-Reply-To: <482278aa-67e3-41f0-9b12-528efe6e1940@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Pin down the two contracts changed by the companion patch. LINK_UPDATE
-validates a replacement program against the link's attach type, while
-CGROUP_SKB capability checks apply at LINK_CREATE and not LINK_UPDATE.
+On 2026/9/5 15:05, Pu Lehui wrote:
+> 
+> On 2026/8/18 11:48, Pu Lehui wrote:
+>>
+>> On 2026/8/17 9:52, Pu Lehui wrote:
+>>> Hi Feng Jiang,
+>>>
+>>> On 2026/8/14 9:29, Feng Jiang wrote:
+>>>> Add bpf_jit_supports_stack_args() for the RV64 JIT so BPF subprograms
+>>>> and kfuncs can receive more than 5 arguments via the stack
+>>>> (BPF_REG_PARAMS / r11).
+>>>>
+>>>> For BPF-to-BPF calls the caller writes outgoing arguments at the
+>>>> bottom of its frame (SP-relative). The callee reads them with
+>>>> FP-relative loads. Its FP is set to the caller SP in the prologue,
+>>>> so the offsets match.
+>>>>
+>>>> The RISC-V ABI puts arguments 6-8 in A5-A7 and arguments 9+ at
+>>>> SP+0. Before each kfunc call, load arguments 6-8 from the outgoing
+>>>> area into A5-A7 and copy any remaining arguments down so argument 9
+>>>> lands at SP+0.
+>>>
+>>> bpf2bpf calls pass extra arguments entirely on the stack, whereas kfuncs pass them via a mix of registers and the stack. This inconsistency not only wastes stack slots in kfunc scenarios but is also error-prone and easy to overlook during maintenance.
+>>>
+>>> To make argument passing more straightforward and consistent, I think we can align it with the standard riscv calling convention: use a0-a7 for the first 8 arguments and pass any remaining arguments on the stack.
+>>>
+>>> To support this, the current bpf-to-rv register mapping needs to be revised:
+>>>
+>>> T0 -> BPF_REG_0 (ftrace use T0 too, but it might not be an issue / needs verification)
+>>> T6 -> TCC
+>>> T7 -> BPF_REG_AX (rarely used, so let's move to t7)
+>>>
+>>> Note that this remapping affects multiple places and requires careful auditing.
+>>
+>> Discussed offline with Feng Jiang; I will take over refactoring this patch and post an updated version once it's ready.
+> 
+> Hi Jiang,
+> 
+> Sorry for the late.
+> 
+> I just send a new series, hope you have time to review and test.
+> 
+> https://lore.kernel.org/bpf/20260905070409.4141522-1-pulehui@huaweicloud.com/
+> 
 
-Cover incompatible UDP4/UDP6 and LSM attach flavors, plus a CGROUP_SKB
-link update after dropping CAP_NET_ADMIN and CAP_SYS_ADMIN.
+Hi Pu Lehui,
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Signed-off-by: Sanghyun Park <sanghyun.park.cnu@gmail.com>
----
-v6:
-  - Remove the unused msg_src_ip6 store from sendmsg6().
-  - Add Reviewed-by tag.
-v5: https://lore.kernel.org/r/20260901014713.3502900-4-sanghyun.park.cnu@gmail.com
-  - Isolate attach and update coverage in separate subtests with their own setup.
-  - Inline the one-use LSM program FD and use a descriptive link FD.
-  - Explain the create-versus-update contracts covered by the tests.
-v4: https://lore.kernel.org/r/20260831023918.1857658-2-sanghyun.park.cnu@gmail.com
----
- .../testing/selftests/bpf/prog_tests/cgroup_link.c | 81 +++++++++++++++++++++-
- .../testing/selftests/bpf/prog_tests/lsm_cgroup.c  | 12 ++++
- tools/testing/selftests/bpf/progs/lsm_cgroup.c     |  6 ++
- .../testing/selftests/bpf/progs/test_cgroup_link.c | 13 +++-
- 4 files changed, 110 insertions(+), 2 deletions(-)
+Apologies for the slow reply! I was away from mail and missed the
+chance to review and test the series in time. Many thanks for your
+detailed review and for taking over the rework.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-index 15093a69510e..3b43c34917cc 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- 
- #include <test_progs.h>
-+#include "cap_helpers.h"
- #include "cgroup_helpers.h"
- #include "testing_helpers.h"
- #include "test_cgroup_link.skel.h"
-@@ -24,7 +25,77 @@ int ping_and_check(int exp_calls, int exp_alt_calls)
- 	return 0;
- }
- 
--void serial_test_cgroup_link(void)
-+static void test_cgroup_link_update(void)
-+{
-+	const __u64 caps = (1ULL << CAP_NET_ADMIN) | (1ULL << CAP_SYS_ADMIN);
-+	struct bpf_link *link = NULL;
-+	__u64 saved_caps = 0;
-+	int cg_fd = -1, err;
-+
-+	skel = test_cgroup_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_load"))
-+		return;
-+
-+	err = setup_cgroup_environment();
-+	if (!ASSERT_OK(err, "cg_init"))
-+		goto cleanup;
-+
-+	cg_fd = create_and_get_cgroup("/cgroup_link_update");
-+	if (!ASSERT_GE(cg_fd, 0, "cg_create"))
-+		goto cleanup;
-+
-+	err = join_cgroup("/cgroup_link_update");
-+	if (!ASSERT_OK(err, "cg_join"))
-+		goto cleanup;
-+
-+	link = bpf_program__attach_cgroup(skel->progs.sendmsg4, cg_fd);
-+	if (!ASSERT_OK_PTR(link, "attach_sendmsg4"))
-+		goto cleanup;
-+
-+	err = bpf_link__update_program(link, skel->progs.sendmsg6);
-+	ASSERT_EQ(err, -EINVAL, "reject_sendmsg6_update");
-+	bpf_link__destroy(link);
-+	link = NULL;
-+
-+	err = cap_disable_effective(caps, &saved_caps);
-+	if (!ASSERT_OK(err, "drop_caps_for_attach"))
-+		goto cleanup;
-+
-+	link = bpf_program__attach_cgroup(skel->progs.egress, cg_fd);
-+	if (!ASSERT_ERR_PTR(link, "attach_without_net_admin"))
-+		goto cleanup;
-+	err = libbpf_get_error(link);
-+	link = NULL;
-+	if (!ASSERT_EQ(err, -EPERM, "attach_err"))
-+		goto cleanup;
-+
-+	err = cap_enable_effective(saved_caps & caps, NULL);
-+	if (!ASSERT_OK(err, "restore_caps_for_attach"))
-+		goto cleanup;
-+
-+	link = bpf_program__attach_cgroup(skel->progs.egress, cg_fd);
-+	if (!ASSERT_OK_PTR(link, "attach_egress"))
-+		goto cleanup;
-+
-+	err = cap_disable_effective(caps, &saved_caps);
-+	if (!ASSERT_OK(err, "drop_caps"))
-+		goto cleanup;
-+
-+	err = bpf_link__update_program(link, skel->progs.egress_alt);
-+	ASSERT_OK(err, "update_without_net_admin");
-+
-+cleanup:
-+	err = cap_enable_effective(saved_caps & caps, NULL);
-+	ASSERT_OK(err, "restore_caps");
-+	bpf_link__destroy(link);
-+	if (cg_fd >= 0)
-+		close(cg_fd);
-+	cleanup_cgroup_environment();
-+	test_cgroup_link__destroy(skel);
-+	skel = NULL;
-+}
-+
-+static void test_cgroup_link_attach(void)
- {
- 	struct {
- 		const char *path;
-@@ -253,3 +324,11 @@ void serial_test_cgroup_link(void)
- 	}
- 	cleanup_cgroup_environment();
- }
-+
-+void serial_test_cgroup_link(void)
-+{
-+	if (test__start_subtest("attach"))
-+		test_cgroup_link_attach();
-+	if (test__start_subtest("update"))
-+		test_cgroup_link_update();
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-index 41e867467f6c..0dd44dbb9c95 100644
---- a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-@@ -74,6 +74,7 @@ static void test_lsm_cgroup_functional(void)
- 	int bind_prog_fd = -1;
- 	int bind_link_fd = -1;
- 	int clone_prog_fd = -1;
-+	int socket_link_fd = -1;
- 	int err, fd, prio;
- 	socklen_t socklen;
- 
-@@ -156,6 +157,17 @@ static void test_lsm_cgroup_functional(void)
- 	ASSERT_EQ(query_prog_cnt(cgroup_fd, "bpf_lsm_socket_bind"), 1, "prog count");
- 	ASSERT_EQ(query_prog_cnt(cgroup_fd, NULL), 4, "total prog count");
- 
-+	socket_link_fd =
-+		bpf_link_create(bpf_program__fd(skel->progs.socket_first),
-+				cgroup_fd, BPF_LSM_CGROUP, NULL);
-+	if (!ASSERT_GE(socket_link_fd, 0, "link create socket_first"))
-+		goto detach_cgroup;
-+	err = bpf_link_update(socket_link_fd,
-+			      bpf_program__fd(skel->progs.socket_create_lsm),
-+			      NULL);
-+	ASSERT_EQ(err, -EINVAL, "reject lsm_mac link update");
-+	close(socket_link_fd);
-+
- 	/* Attach another instance of bind program to another cgroup.
- 	 * This should trigger the reuse of the trampoline shim (two
- 	 * programs attaching to the same btf_id).
-diff --git a/tools/testing/selftests/bpf/progs/lsm_cgroup.c b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
-index 3bfa479104be..30727945cecc 100644
---- a/tools/testing/selftests/bpf/progs/lsm_cgroup.c
-+++ b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
-@@ -213,6 +213,12 @@ int BPF_PROG(socket_first, int family, int type, int protocol, int kern)
- 	return 0;
- }
- 
-+SEC("lsm/socket_create")
-+int BPF_PROG(socket_create_lsm, int family, int type, int protocol, int kern)
-+{
-+	return 0;
-+}
-+
- SEC("lsm_cgroup/socket_create")
- int BPF_PROG(socket_second, int family, int type, int protocol, int kern)
- {
-diff --git a/tools/testing/selftests/bpf/progs/test_cgroup_link.c b/tools/testing/selftests/bpf/progs/test_cgroup_link.c
-index 4faba88e45a5..107429638f54 100644
---- a/tools/testing/selftests/bpf/progs/test_cgroup_link.c
-+++ b/tools/testing/selftests/bpf/progs/test_cgroup_link.c
-@@ -20,5 +20,16 @@ int egress_alt(struct __sk_buff *skb)
- 	return 1;
- }
- 
--char _license[] SEC("license") = "GPL";
-+SEC("cgroup/sendmsg4")
-+int sendmsg4(struct bpf_sock_addr *ctx)
-+{
-+	return 1;
-+}
- 
-+SEC("cgroup/sendmsg6")
-+int sendmsg6(struct bpf_sock_addr *ctx)
-+{
-+	return 1;
-+}
-+
-+char _license[] SEC("license") = "GPL";
+Thanks again for all your help on this series!
+
+>>
+>>>
+>>>>
+>>>> A5 (BPF_REG_0), A6 (TCC) and A7 are safe to clobber here: R0 is not
+>>>> live before a call, TCC is backed up on the stack, and A7 is unused
+>>>> by the JIT.
+>>>
+>>>
+>>>
+>>>>
+>>>> Limit the existing kfunc sign-extension loop to MAX_BPF_FUNC_REG_ARGS
+>>>> iterations; otherwise idx >= 5 resolves to S1-S5 (BPF_R6-FP) and
+>>>> corrupts callee-saved registers.
+>>>>
+>>>> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+>>>> ---
+>>>>   arch/riscv/net/bpf_jit.h        |  1 +
+>>>>   arch/riscv/net/bpf_jit_comp64.c | 79 +++++++++++++++++++++++++++++++++++++++--
+>>>>   arch/riscv/net/bpf_jit_core.c   |  4 +++
+>>>>   3 files changed, 81 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+>>>> index 419b9d795f2a..9eb4e149505d 100644
+>>>> --- a/arch/riscv/net/bpf_jit.h
+>>>> +++ b/arch/riscv/net/bpf_jit.h
+>>>> @@ -82,6 +82,7 @@ struct rv_jit_context {
+>>>>       unsigned long flags;
+>>>>       int stack_size;
+>>>>       int tcc_offset;
+>>>> +    u16 stack_arg_size;
+>>>>       u64 arena_vm_start;
+>>>>       u64 user_vm_start;
+>>>>   };
+>>>> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+>>>> index 6b9972b07c1b..58cb3e5ff6b4 100644
+>>>> --- a/arch/riscv/net/bpf_jit_comp64.c
+>>>> +++ b/arch/riscv/net/bpf_jit_comp64.c
+>>>> @@ -1815,18 +1815,43 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>>>>           if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
+>>>>               const struct btf_func_model *fm;
+>>>> -            int idx;
+>>>> +            int idx, nargs;
+>>>>               fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
+>>>>               if (!fm)
+>>>>                   return -EINVAL;
+>>>> -            for (idx = 0; idx < fm->nr_args; idx++) {
+>>>> +            nargs = min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS);
+>>>> +            for (idx = 0; idx < nargs; idx++) {
+>>>>                   u8 reg = bpf_to_rv_reg(BPF_REG_1 + idx, ctx);
+>>>>                   if (fm->arg_size[idx] == sizeof(int))
+>>>>                       emit_sextw(reg, reg, ctx);
+>>>>               }
+>>>> +
+>>>> +            /* BPF stack args -> RISC-V ABI: args 6-8 in A5-A7, 9+ at SP+0 */
+>>>> +            if (fm->nr_args > MAX_BPF_FUNC_REG_ARGS) {
+>>>> +                int n_stack = fm->nr_args - MAX_BPF_FUNC_REG_ARGS;
+>>>> +                int n_reg = min_t(int, n_stack,
+>>>> +                          RV_MAX_REG_ARGS - MAX_BPF_FUNC_REG_ARGS);
+>>>> +
+>>>> +                for (idx = 0; idx < n_reg; idx++) {
+>>>> +                    int sz = fm->arg_size[MAX_BPF_FUNC_REG_ARGS + idx];
+>>>> +
+>>>> +                    emit_ld(RV_REG_A5 + idx, idx * 8, RV_REG_SP, ctx);
+>>>> +                    if (sz == sizeof(int))
+>>>> +                        emit_sextw(RV_REG_A5 + idx, RV_REG_A5 + idx, ctx);
+>>>> +                }
+>>>> +
+>>>> +                for (idx = n_reg; idx < n_stack; idx++) {
+>>>> +                    int sz = fm->arg_size[MAX_BPF_FUNC_REG_ARGS + idx];
+>>>> +
+>>>> +                    emit_ld(RV_REG_T1, idx * 8, RV_REG_SP, ctx);
+>>>> +                    if (sz == sizeof(int))
+>>>> +                        emit_sextw(RV_REG_T1, RV_REG_T1, ctx);
+>>>> +                    emit_sd(RV_REG_SP, (idx - n_reg) * 8, RV_REG_T1, ctx);
+>>>> +                }
+>>>> +            }
+>>>
+>>> looks a bit complicated, how about the following after redefine regmap:
+>>>
+>>> ```
+>>> for (idx = 0; idx < fm->nr_args; idx++) {
+>>>    if (idx < RV_MAX_REG_ARGS) {
+>>>      u8 reg = RV_REG_A0 + idx;
+>>>
+>>>      sign_extend(reg, reg, xxx)
+>>>    } else {
+>>>      load from stack to T1
+>>>      sign_extend
+>>>      retore from T1 to orig stack slot
+>>>    }
+>>> }
+>>> ```
+>>>
+>>>>           }
+>>>>           /* restore TCC to RV_REG_TCC before bpf2bpf call */
+>>>> @@ -1891,6 +1916,21 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>>>>       case BPF_LDX | BPF_MEM | BPF_H:
+>>>>       case BPF_LDX | BPF_MEM | BPF_W:
+>>>>       case BPF_LDX | BPF_MEM | BPF_DW:
+>>>> +        if (insn->src_reg == BPF_REG_PARAMS) {
+>>>
+>>> pls use is_stack_arg_ldx/st/stx instead.
+>>>
+>>>> +            int idx = off / 8 - 1;
+>>>> +
+>>>> +            if (is_12b_int(idx * 8)) {
+>>>> +                emit_ldx_insn(rd, idx * 8, RV_REG_FP, BPF_SIZE(code), false, ctx);
+>>>> +            } else {
+>>>> +                emit_imm(RV_REG_T1, idx * 8, ctx);
+>>>> +                emit_add(RV_REG_T1, RV_REG_T1, RV_REG_FP, ctx);
+>>>> +                emit_ldx_insn(rd, 0, RV_REG_T1, BPF_SIZE(code), false, ctx);
+>>>> +            }
+>>>> +            if (BPF_SIZE(code) != BPF_DW && insn_is_zext(&insn[1]))
+>>>> +                return 1;
+>>>> +            break;
+>>>
+>>> This piece of code was refactored not long ago. Let's see if we can merge it into the logic below or fold it into emit_ldx—let's give it a try.
+>>>
+>>>> +        }
+>>>> +        fallthrough;
+>>>>       case BPF_LDX | BPF_PROBE_MEM | BPF_B:
+>>>>       case BPF_LDX | BPF_PROBE_MEM | BPF_H:
+>>>>       case BPF_LDX | BPF_PROBE_MEM | BPF_W:
+>>>> @@ -1938,6 +1978,20 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>>>>       case BPF_ST | BPF_MEM | BPF_H:
+>>>>       case BPF_ST | BPF_MEM | BPF_W:
+>>>>       case BPF_ST | BPF_MEM | BPF_DW:
+>>>> +        if (insn->dst_reg == BPF_REG_PARAMS) {
+>>>> +            int idx = -off / 8 - 1;
+>>>> +
+>>>> +            emit_imm(RV_REG_T1, imm, ctx);
+>>>> +            if (is_12b_int(idx * 8)) {
+>>>> +                emit_stx_insn(RV_REG_SP, idx * 8, RV_REG_T1, BPF_SIZE(code), ctx);
+>>>> +            } else {
+>>>> +                emit_imm(RV_REG_T2, idx * 8, ctx);
+>>>> +                emit_add(RV_REG_T2, RV_REG_SP, RV_REG_T2, ctx);
+>>>> +                emit_stx_insn(RV_REG_T2, 0, RV_REG_T1, BPF_SIZE(code), ctx);
+>>>> +            }
+>>>> +            break;
+>>>> +        }
+>>>> +        fallthrough;
+>>>
+>>> ditto
+>>>
+>>>>       /* ST | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = imm */
+>>>>       case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
+>>>>       case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
+>>>> @@ -1960,6 +2014,19 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>>>>       case BPF_STX | BPF_MEM | BPF_H:
+>>>>       case BPF_STX | BPF_MEM | BPF_W:
+>>>>       case BPF_STX | BPF_MEM | BPF_DW:
+>>>> +        if (insn->dst_reg == BPF_REG_PARAMS) {
+>>>> +            int idx = -off / 8 - 1;
+>>>> +
+>>>> +            if (is_12b_int(idx * 8)) {
+>>>> +                emit_stx_insn(RV_REG_SP, idx * 8, rs, BPF_SIZE(code), ctx);
+>>>> +            } else {
+>>>> +                emit_imm(RV_REG_T1, idx * 8, ctx);
+>>>> +                emit_add(RV_REG_T1, RV_REG_SP, RV_REG_T1, ctx);
+>>>> +                emit_stx_insn(RV_REG_T1, 0, rs, BPF_SIZE(code), ctx);
+>>>> +            }
+>>>> +            break;
+>>>> +        }
+>>>> +        fallthrough;
+>>>
+>>> ditto
+>>>
+>>>>       /* STX | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = src */
+>>>>       case BPF_STX | BPF_PROBE_MEM32 | BPF_B:
+>>>>       case BPF_STX | BPF_PROBE_MEM32 | BPF_H:
+>>>> @@ -2036,6 +2103,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+>>>>       stack_adjust = round_up(stack_adjust, STACK_ALIGN);
+>>>>       stack_adjust += bpf_stack_adjust;
+>>>> +    stack_adjust += ctx->stack_arg_size;
+>>>>       store_offset = stack_adjust - 8;
+>>>> @@ -2093,7 +2161,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
+>>>>       emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
+>>>>       if (bpf_stack_adjust)
+>>>> -        emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
+>>>> +        emit_addi(RV_REG_S5, RV_REG_SP, ctx->stack_arg_size + bpf_stack_adjust, ctx);
+>>>>       ctx->stack_size = stack_adjust;
+>>>> @@ -2171,3 +2239,8 @@ bool bpf_jit_supports_timed_may_goto(void)
+>>>>   {
+>>>>       return true;
+>>>>   }
+>>>> +
+>>>> +bool bpf_jit_supports_stack_args(void)
+>>>> +{
+>>>> +    return true;
+>>>> +}
+>>>> diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
+>>>> index cbfcd287ea16..844a0f3e0fa9 100644
+>>>> --- a/arch/riscv/net/bpf_jit_core.c
+>>>> +++ b/arch/riscv/net/bpf_jit_core.c
+>>>> @@ -72,6 +72,10 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+>>>>       ctx->arena_vm_start = bpf_arena_get_kern_vm_start(prog->aux->arena);
+>>>>       ctx->user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
+>>>>       ctx->prog = prog;
+>>>> +
+>>>> +    ctx->stack_arg_size = round_up(bpf_out_stack_arg_cnt(env, prog) *
+>>>> +                       sizeof(u64), STACK_ALIGN);
+>>>
+>>> It's not u64—since every stack slot is aligned to the pointer size (sizeof(long)), I think using 8 is fine.
+>>>
+>>>> +
+>>>>       ctx->offset = kvzalloc_objs(int, prog->len);
+>>>>       if (!ctx->offset)
+>>>>           goto out_offset;
+>>>>
+>>>
+>>> _______________________________________________
+>>> linux-riscv mailing list
+>>> linux-riscv@lists.infradead.org
+>>> http://lists.infradead.org/mailman/listinfo/linux-riscv
+
 -- 
-2.48.1
+With Best Regards,
+Feng Jiang
 
