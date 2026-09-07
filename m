@@ -1,36 +1,33 @@
-Received: from mta1.migadu.com (out-155.mta1.migadu.com [95.215.58.155])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34854C9573
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 15:08:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 099D227057D;
+	Mon,  7 Sep 2026 15:24:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788793723; cv=none; b=Ofl9fePlbgSKynV7NRo7knKpTY20Wq8yBmIaVvotG7tr+ZetsrP6qfKiCsKzokTpqzfiYqjJSxcfiv1WLwNPMsQU2uPnbOkfdd1iZvCxar3Qg+kzsX7Fpu458VrHcVcIcADY6xFzPgBSITtOIhGTtevPbv5j0Yr5siPrEFRn4ic=
+	t=1788794651; cv=none; b=qAb7vzDcrJKHDm9NiKfbHZxMseipEH7rvaP+ItiuCe5hKS+ky3SsVSsAuEAJqx81jlkaOc7j0cdPFoydVqJ0TLN116PosGuWsXmdg3AAXslTjgV1WfLmM4VzKZor0btx7Lk0Rd44sBen4mVWAlTiDfz2otVl52iM3w/YbhIQImU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788793723; c=relaxed/simple;
-	bh=9IaJRo/onH+WZUAxCRicEOSEY53Kz1vfjpyJNhUkVW4=;
+	s=arc-20240116; t=1788794651; c=relaxed/simple;
+	bh=GTuBLuN4JOqWdZd1Mu3f0IP0dpVMTxxsE0i4r7IPbms=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l6URe3PZ+29oanWvnpNiOBvkP5IARODLJUax7lXG68g/KVSGZrHatfSC4wDbjceV9od/YNh4joiYiQ6A0tccXyz6CgesY1VTEeyMbE5FZ7WCngeUNz8rEqePqWkOeecVE83LnhCaLZ5i1KYNG0D/Hr8pZ8S9Uf5lQZzdoADZ+io=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JNwKlzcd; arc=none smtp.client-ip=95.215.58.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=LhrimGEL7yzoEVALjTLrOmJxch03r47sEVlyYB9jIJHZbrm2njx0PRxGzzD5Unsa2c7kk45NfhK/Cz/CeWvFEnmnfOv0UDuET7EzQsm/PEnd5hz8itd0X1whMUPEICUTYwzNygc7CngM2xt+bsl1+toLIfp8P2UsSBF2o9r/1X4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WGLDhRNt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JNwKlzcd"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=9IaJRo/onH+WZUAxCRicEOSEY53Kz1vfjpyJNhUkVW4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788793719; v=1; x=1789398519;
- b=JNwKlzcdbuTin8fwQdweSsro1lrTw4XdeHAToOEAr5drnMDbZucvdgT6gaLwq5zX94qZppbi
- GUP58PSlT7HymSAa4fZociirYirjufE2ako1hTjDd3+l35uGnG+avo3NGtm8UIqceSdT41DpqDQ
- uE5xOhmy0LO7TL72wRe6ozws=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9e0dbadcb7e0ce26;
-	Mon, 07 Sep 2026 15:08:39 +0000
-X-Mizu-Trace-ID: 9e0dbadcb7e0ce26
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <a44630a1-4965-4020-afb9-ba5b1a7848e6@linux.dev>
-Date: Mon, 7 Sep 2026 23:08:30 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WGLDhRNt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C41A51F00A3A;
+	Mon,  7 Sep 2026 15:24:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788794649;
+	bh=XJq6pvnPJHRY0KLfPMgxtLcYaufXaCJJ6tr4Hi7QX3g=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=WGLDhRNt4nRE4aE9ezf3Tni8/D/RqTrv1a6R29B8mOCPBobKtLb9zo5/lK9jOjLby
+	 Mt4b+OTtv8ryjM1qaIQNB89XPtXya1ta6ZulDgDK7CZJop1+wfVILgwIO3MqgD0ub6
+	 woXVtkapsHft7cjq4J3BuccCWv8KHf7zjuA5/xTBYuXfEE+WJOA8yR4/nvlQU3UiEM
+	 192hBNaTqr0SEDWxCJp1XYE5GT46/0RvbwyqZe9w4gnxhfWbzvxx6FliXBykjqnrn7
+	 FdefVRyfxMD1toYikoM7IQ+k7OLpz+ysg4cSsUclLwo4MsyZ1HbMyg2bd31iW24wEz
+	 2kqUMw1lREm2w==
+Message-ID: <4468d220-9d7f-47d0-8e5c-c01070ab2d47@kernel.org>
+Date: Mon, 7 Sep 2026 16:24:05 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,102 +35,68 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v6 1/2] bpf: Validate program attach type during
- link update
-To: bot+bpf-ci@kernel.org, sanghyun.park.cnu@gmail.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, bpf@vger.kernel.org
-Cc: john.fastabend@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, shuah@kernel.org, sdf@fomichev.me,
- pulehui@huawei.com, suchitkarunakaran@gmail.com, xukuohai@huawei.com,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20260907015003.65087-2-sanghyun.park.cnu@gmail.com>
- <514a0c26ff5e0322fe0442d07142cafc7dda338a3ce2c5b7e9437dd994cb0ba1@mail.kernel.org>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <514a0c26ff5e0322fe0442d07142cafc7dda338a3ce2c5b7e9437dd994cb0ba1@mail.kernel.org>
+Subject: Re: [PATCH bpf-next 2/2] bpftool: Reject non-autoload programs for
+ light skeletons
+To: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Leon Hwang <leon.hwang@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Sid Nayyar <sidnayyar@google.com>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260904031912.2133476-1-tweek@google.com>
+ <20260904031912.2133476-2-tweek@google.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20260904031912.2133476-2-tweek@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2026/9/7 10:36, bot+bpf-ci@kernel.org wrote:
->> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
->> index c7bc9ba9b331..b394a37eecb4 100644
->> --- a/kernel/bpf/syscall.c
->> +++ b/kernel/bpf/syscall.c
->> @@ -4481,14 +4481,9 @@ static int bpf_prog_attach_check_attach_type(const struct bpf_prog *prog,
->>  	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
->>  	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
->>  	case BPF_PROG_TYPE_SK_LOOKUP:
->> +	case BPF_PROG_TYPE_LSM:
->>  		return attach_type == prog->expected_attach_type ? 0 : -EINVAL;
+On 04/09/2026 04:19, Thiébaud Weksteen wrote:
+> When generating a light skeleton (bpftool gen skeleton -L), there is no
+> libbpf runtime object or bpf_program__set_autoload() API available to
+> enable/disable the autoloading of programs. If a BPF program in the
+> object has autoload disabled (e.g. via SEC("?...")), bpf_object__load()
+> silently skips loading it. bpftool still generates struct bpf_prog_desc
+> fields and attach functions in the light skeleton header, leaving
+> skel->progs.<name>.prog_fd uninitialized (0).
 > 
-> Does adding BPF_PROG_TYPE_LSM to this arm also relax the check on the
-> BPF_LINK_CREATE path?
+> Explicitly reject non-autoloaded programs when use_loader is true with
+> an error message, preventing the generation of broken light skeleton
+> headers.
 > 
-> Before this patch, BPF_PROG_TYPE_LSM fell into the default arm:
+> Signed-off-by: Thiébaud Weksteen <tweek@google.com>
+> ---
+>  tools/bpf/bpftool/gen.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
 > 
-> 	default:
-> 		ptype = attach_type_to_prog_type(attach_type);
-> 		if (ptype == BPF_PROG_TYPE_UNSPEC || ptype != prog->type)
-> 			return -EINVAL;
-> 		return 0;
-> 
-> Since attach_type_to_prog_type() returns BPF_PROG_TYPE_LSM only for
-> BPF_LSM_MAC and BPF_LSM_CGROUP (kernel/bpf/syscall.c:4457, 4463), an LSM
-> program could only ever be accepted for those two attach types.
-> 
-> The new arm drops that constraint and accepts any attach_type as long as it
-> equals prog->expected_attach_type. The other members of that arm are safe
-> because bpf_prog_load_check_attach() restricts their expected_attach_type
-> to a set that all maps back to the same prog type. BPF_PROG_TYPE_LSM is the
-> one type in that arm with no such restriction: bpf_prog_load_check_attach()
-> (kernel/bpf/syscall.c:2766 onwards) has no LSM case and falls into
-> `default: return 0`, so prog->expected_attach_type is entirely
-> userspace-controlled for LSM programs.
+> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+> index a50540ef6521..1583150241c8 100644
+> --- a/tools/bpf/bpftool/gen.c
+> +++ b/tools/bpf/bpftool/gen.c
+> @@ -1340,6 +1340,12 @@ static int do_skeleton(int argc, char **argv)
+>  	}
+>  	bpf_object__for_each_program(prog, obj) {
+>  		prog_cnt++;
+> +
+> +		if (use_loader && !bpf_program__autoload(prog)) {
+> +			p_err("program '%s' is marked as non-autoload, which is not supported for light skeletons",
+> +			      bpf_program__name(prog));
+> +			return -1;
 
 
-Good catch.
+Sashiko is correct, at this stage of the function, rather than returning
+directly, you'd need to "goto out".
 
-Since there's no expected_attach_type check for lsm prog, a lsm prog can
-have BPF_TRACE_ITER expected_attach_type, and creates a lsm link via
-BPF_LINK_CREATE with this patch. Such lsm prog cannot create a lsm link
-via BPF_LINK_CREATE without this patch.
 
-The new case BPF_PROG_TYPE_LSM in bpf_prog_attach_check_attach_type()
-relaxes the prog->type check when adding expected_attach_type check.
+> +		}
 
-I think we can add expected_attach_type check for lsm prog in
-bpf_prog_load_check_attach(). See below diff. The diff will restrict a
-lsm prog with these two expected_attach_type, BPF_LSM_MAC and
-BPF_LSM_CGROUP.
 
-Thanks,
-Leon
+Thank you. Maybe consider adding a word about autoload/non-autoload in
+"bpftool gen" man page? My concern is that users who are not familiar
+with the notion will struggle to understand the error message.
 
----
-
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 6874ba1424af..4b56e82ff3b9 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2830,6 +2830,16 @@ bpf_prog_load_check_attach(enum bpf_prog_type
-prog_type,
- 		if (expected_attach_type == BPF_NETFILTER)
- 			return 0;
- 		return -EINVAL;
-+	case BPF_PROG_TYPE_LSM:
-+		switch (expected_attach_type) {
-+		case BPF_LSM_MAC:
-+		case BPF_LSM_CGROUP:
-+			return 0;
-+		default:
-+			return -EINVAL;
-+		}
- 	case BPF_PROG_TYPE_SYSCALL:
- 	case BPF_PROG_TYPE_EXT:
- 		if (expected_attach_type)
-
-> [...]
-
+Quentin
