@@ -1,62 +1,64 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4BE39184F
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 06:49:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B4239184F
+	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 06:49:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788763793; cv=none; b=NVxyF1p2A3NXPJSQe2pKGH1cD+2ZZbqb83TyV9ucskFKTVnwF3U645r+iEtQh+JfD8bIdP0CgB7rr49D+QfElzJWoQ/nXrcn4uZuK+x0Nl5g2SPH0/rSRIl60BdnXTpDUVmqx2hd4gdg69gl/uJbMaxzyFdlGh0ZZJoQKh5pisw=
+	t=1788763798; cv=none; b=nsf4lFl5nOPgHILzug0Y/mO/w1eZpn9NJJMU+s5W3QkXg3m1AhHumd4FqNWZkm6hDIJL7xY8LNVpWggM3zxtIvVQFQiu0kDu6BQyr9q+P+caEcQUizQ+NCJMrg4FGGG9It/Mp1FCiAXoQfsulgjDkePboDK5ZZmuRziPASXTjUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788763793; c=relaxed/simple;
-	bh=2766B3eMmFd/OaLBWXRn8QBlE+XKdud9wFfOhEigG4w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=td0NM5i5gB1QwXuNdBqykdCp0srVBr867JwmM4vZ1KOUA8YaVHuAB0G6fDq2NVOdtyvwXZvSevKa8YgrrO7lTENmyBu+5FmHs5VfPb5cxE/uK0zD0Q0hV5kd++1EwrMcyH4yCBk+1rFpDvxV56JVlIcil8qbYkFv4VcKChsPpwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Va9REisD; arc=none smtp.client-ip=209.85.215.178
+	s=arc-20240116; t=1788763798; c=relaxed/simple;
+	bh=wP/VmfgG8uegsHyz+t5uqy0UJrm9m3L+wrFlNnRkDRE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=rtzIf5DnqYoDtDXplWCyHvy0tyT15W0Ed0NJJoOAsl+/rvkZy9zDiubvmxGdkza/hYGj56OMSQtbs9RP22nl9dDKuYKtub9y32UnPIucj83sHGxsYgWRqW2qcMnZ1hNwRmjyrlSINJO95rCMFoy1uCdSj+prsnBGTwaCdIS507o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=am2d/ton; arc=none smtp.client-ip=209.85.216.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Va9REisD"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cc1cbb64a1fso3081393a12.1
-        for <bpf@vger.kernel.org>; Sun, 06 Sep 2026 23:49:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="am2d/ton"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-39b2ad862bdso3421155a91.2
+        for <bpf@vger.kernel.org>; Sun, 06 Sep 2026 23:49:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788763791; x=1789368591; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NbyN7tVnWnxYp0pp4uHeU72ENpo3XFInJUk6Uv6k4kM=;
-        b=Va9REisDIHkLARUvuc4c58/+a0xnLZZlUmKfjNnOVeUdYOYmUVIL8Nndnn0yvtP1wP
-         ONFjIEBuDhP4IepPC32HlRlh0oI0I4jhTvO/f+QA9UMk2UVQF4lLfLlU33ukS04RCdlO
-         0aNFXa2UV0gXdG9wQ8RU+VUncPM+61MLGgjzSTyrjnvrVwv0ext6F2PqsxSEc82uNJA4
-         mkwNA5aK/Qn+/dzOL0O03I88mnBAa2iLTp19/ZOuq7VhUZIL3IkPhNMjElC+pG0uGDa9
-         FEX9QA18Qb5NrDDK3d15F0DGgF0vw94JIdLqYj4M+qYV9wQo7x0HP4NlT9Tg+mw9DbxM
-         nvng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788763791; x=1789368591;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1788763796; x=1789368596; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=NbyN7tVnWnxYp0pp4uHeU72ENpo3XFInJUk6Uv6k4kM=;
-        b=PFOHfHnvOZm0ME8FNyfassNoIxMeCGKM94dhjvO/QoPus+H4xLDeV9qmGB4wZcQI6J
-         9PCw5KB+JeSFtCuq1IiGGSm0/RHSr1d2sYVeJCiv3wv3v5jyTTt0MrVNDanL5xtWayGN
-         //xJTAEqE+4w8OTPa+qxu03eJUFMeAGEQQ4JXwUF8+iMhCTCnGU5MREnOrYIHewK/iQ5
-         70PdIiL1Kyi9eoHdupgAeBGb8Bu0gnjuqDIEuAdkN5JOS2LCywz6Ry5xBoTKYubiXbfa
-         JcQxT7AJkMZESPZZ4Ght3FqYz5b6qJBLQM+5XIMf9pqjAPAghVTgL+S5fbLGkqRQDSq7
-         JCiQ==
-X-Forwarded-Encrypted: i=1; AKwUvByaiWW+shDBoV58rZY89cL7MY8MhMdyWkGzpcyTa7ZyANvN0aTkYJ+4t8QMfD+xSzyVVlo=@vger.kernel.org
-X-Gm-Message-State: AFuF++mtLsco3FDTAuAVaZi9YYvgc7bzYCGuOGCp+uNVmetvJfIHVDn3
-	N188LzCdaOxtpmbNwCxmBRiGrdxfln93x4FnUpeB2GpO9hQofVJOi4mC
-X-Gm-Gg: AYBFou1vtj7EoNgIo2U5h6qmQpz56ikSDlIdfvVhOXc2WEZZCav447XgRafzkEcVLl3
-	LONVrkHGxPF4HDpeL0rWbEBmPOtrhtii2ytRHYcPX9Wwb3l2AWmFhx6mEXPChGLFLsUYOWD4/w/
-	HgjCXFoIEnEQ3yXN5uP4SF6i1Ym6TUf+P1f2S+WQfYhPKnOsIDcBr4JMQw8cfGvYp0WOiE5IDmI
-	l/zPIDRiEh98Ot6vd8LXFUAGerhxwUgUCW6haqIQO7/GTJA0WO3UFNn7Bp+8sBph8WLOVVJngzP
-	9+UsFXk53V246aJ+Ea0F3vPZ4TrZ7dGyU5YprmHIBbSgTf6yK+Y4sk3Jd+w2gqukT3cUAvGd4S+
-	BE2d7Wre2nCawn5w9gP0gON2HjA9girkz+eUlPIbJISISN+MH8R5Dwfo8whJV7m5q7Km8N1Ah5Z
-	jEXK1JXH8NPnysA0UPCrBdkGJ4g0MKamOU+HjPX2rAAGNul1syEH8kR5smFRCEXt4W4YxaqFCCs
-	Hg1jzDCsjqM9g==
-X-Received: by 2002:a05:6a21:6110:b0:3d1:3c2:85b6 with SMTP id adf61e73a8af0-3da39b43743mr33286987637.5.1788763790919;
-        Sun, 06 Sep 2026 23:49:50 -0700 (PDT)
+        bh=JvX58P+MDa4sWTy74Vbi1oLHS8rHG4kgimKkPCwJ7mg=;
+        b=am2d/tonGCziKysd2t/tAOhK6U/C4fYVx8sBLIUNeMarz5jlmLkz1jeqUZKvs3hky8
+         W9+fC2mI39xkWFWevkpaq8kFJDL9138NfdNEC/DhoEl6g9zA4EhPKPX00PV7Ph5bCa4D
+         OtYIX2MRM/R5/wt1NJyqlg0ZswFlFXGKeF5ImxTBRkzrG9kpH9TuucOTRnsAGsI8XkVD
+         xzp1DIo+z5IAYnYwtU4XHrfVWXoIdOY0HLEAHl92zq1WERzMfc9Pqogt5OJYw1o9bH0T
+         ImDVQza6M4mXiqWCXVyza4CGM+ocherHvujaV0+JeSC9H4t0PLfm5pdn5smtxsRhifwV
+         OwHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788763796; x=1789368596;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=JvX58P+MDa4sWTy74Vbi1oLHS8rHG4kgimKkPCwJ7mg=;
+        b=SZRKF0Ag/Eh2vi7RTq5a/MiMJz6E0NVc43AvbXK0qlhhljCyZjfGyWNb977Ruv8oMH
+         4jClX3YRmjNyYE/XUBCztJPrZWux9XvNNtVmjk+OcLR4n+hYrnBO4NptcT4soFHWCmHC
+         a8CwOT66QFWdFxeynhAp7H+l2ZYIrurFA7kN9w0c9OVzPJmbx4LnLPt4vyDUFG8RvKkN
+         WxavB6eZeJy1fN69i5y+KTueTS80ocCjzOswjrl+9p8DBLPWzVhaaeekAnkwevrLPkhz
+         VCXlIDmWbIokbPmjd3PcOI00kkfvCA2V6lcJYWnCRLRFjVV9WdPoJNYIPV5IjGZiMaUw
+         lGIQ==
+X-Forwarded-Encrypted: i=1; AKwUvBykC76I01sZWP+JVRbzrXZR2X6qREy3lgpihsH/XRFFsjkp5QLnWtzksrE3VBB84/DXWdQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++ntIyEQzCfS8uRGsT1SAN/XMeFgsuWxSJOlKKiKDRH4QkfzLluv
+	hawm1WxduLY61MI7XmQ8gKX5X2Vdc2f7Gr0qMKIwqzH1AMTCF8ULk13t
+X-Gm-Gg: AYBFou3lIkJU/KlrQtZu81cs00YvbnMj9SQICBTH+3UCpDGgFwurK/pH8pRtNpHAkOs
+	SoCUf5kIu5z7GVNp78UVezWJygoZsjGTMtW5V9EC/xCJuAahfwsYqeKV5/Z0LtBKYBsk4DANGCf
+	BC0TZB+4S1qLvIbtOaIUIC2fZLdGABmZytN7sX/GGx7mEvXK67JkQMvR+sldz1WSKcRFw0mcxDv
+	x/oQqeoiuGd36ZmzWlEb/n3xS3yuLMLQ1pGICFHrimRm4j7k6KnPVj+xZO+qvnKKzqwVuJaFqtR
+	5HVUnAAwxZ3fRZJcT9f0KaeY/gteMwQywDDK8XM8aT9R3HH1faFHuKrxiLYEtQZFcnwOBLfR6rY
+	Dv7zO+cM7dImUjzWBeCCd1DYaihJ1kc+NDXlrIZ7x1kHfH7MKFdo4aqAYGrjB/Np+Z9a9ULu3lX
+	IpdpHMTIbP33x8XerGWhHQFil0Yk9hGKdTZ0gsG4S8u0RwlK/RBdRa5FpK9klKG4E4SbWlb0RHO
+	+17RAoD2P0w2jVsQ+bK9Roz
+X-Received: by 2002:a17:90a:e7d2:b0:381:1c96:829b with SMTP id 98e67ed59e1d1-39b260d296cmr29785514a91.3.1788763796366;
+        Sun, 06 Sep 2026 23:49:56 -0700 (PDT)
 Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-338778fb926sm465210eec.31.2026.09.06.23.49.45
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-338778fb926sm465210eec.31.2026.09.06.23.49.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Sep 2026 23:49:50 -0700 (PDT)
+        Sun, 06 Sep 2026 23:49:56 -0700 (PDT)
 From: Hemanth Selam <hemanth.selam@gmail.com>
 To: Tejun Heo <tj@kernel.org>,
 	David Vernet <void@manifault.com>,
@@ -75,10 +77,12 @@ To: Tejun Heo <tj@kernel.org>,
 Cc: sched-ext@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH 0/2] sched: fix typos and repeated words in comments
-Date: Mon,  7 Sep 2026 12:19:41 +0530
-Message-ID: <20260907064943.25304-1-hemanth.selam@gmail.com>
+Subject: [PATCH 1/2] sched: fix typo "upto" in comments
+Date: Mon,  7 Sep 2026 12:19:42 +0530
+Message-ID: <20260907064943.25304-2-hemanth.selam@gmail.com>
 X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20260907064943.25304-1-hemanth.selam@gmail.com>
+References: <20260907064943.25304-1-hemanth.selam@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -87,36 +91,38 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This corrects 2 misspellings and repeated words in comments.  Each is a
-separate patch so that any one of them can be dropped without touching
-the rest.
+Correct "upto" to "up to", reported by scripts/checkpatch.pl using the
+misspelling list in scripts/spelling.txt.  Only touches comments, no code
+changes.
 
-Nothing outside comments changes.  Every touched C file was checked by
-dropping its comments, replacing each string literal with a placeholder
-and collapsing whitespace; what remained was identical before and after,
-so the compiled code cannot differ.
+Assisted-by: Cursor:claude-opus-5
+Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
+---
+ kernel/sched/ext/ext.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-The mistakes were found with scripts/checkpatch.pl against the list in
-scripts/spelling.txt.  The scanning, the edits and the changelogs were
-produced with Cursor running the claude-opus-5 model, from a request to
-find and fix spelling mistakes across the tree, and every correction was
-then re-checked by the comparison described above.  Words that name an
-identifier were left alone deliberately, even when they read as typos,
-because correcting the prose would make the comment disagree with the
-code it describes.
-
-Tested by building x86_64 defconfig at v7.3-rc1-269-gbc35965f6940, which
-is clean.  Nothing else was built, so any patch touching code that
-x86_64 defconfig does not compile has been read but not compiled.
-
-Hemanth Selam (2):
-  sched: fix typo "upto" in comments
-  tools/sched_ext: fix repeated word 'be' in comment
-
- kernel/sched/ext/ext.c                   | 4 ++--
- tools/sched_ext/include/scx/common.bpf.h | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
+diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+index 713aa26b2828..721f0b3c5c07 100644
+--- a/kernel/sched/ext/ext.c
++++ b/kernel/sched/ext/ext.c
+@@ -5840,7 +5840,7 @@ static void bypass_lb_node(struct scx_sched *sch, int node)
+ 
+ 	/*
+ 	 * We don't want CPUs to have more than $nr_donor_target tasks and
+-	 * balancing to fill donee CPUs upto $nr_target. Once targets are
++	 * balancing to fill donee CPUs up to $nr_target. Once targets are
+ 	 * calculated, find the donee CPUs.
+ 	 */
+ 	nr_target = DIV_ROUND_UP(nr_tasks, nr_cpus);
+@@ -8816,7 +8816,7 @@ __bpf_kfunc_start_defs();
+  * task is inserted.
+  *
+  * When called from ops.dispatch(), there are no restrictions on @p or @dsq_id
+- * and this function can be called upto ops.dispatch_max_batch times to insert
++ * and this function can be called up to ops.dispatch_max_batch times to insert
+  * multiple tasks. scx_bpf_dispatch_nr_slots() returns the number of the
+  * remaining slots. scx_bpf_dsq_move_to_local() flushes the batch and resets the
+  * counter.
 -- 
 2.48.1
 
