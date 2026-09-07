@@ -1,48 +1,48 @@
-Received: from out-utut-a194.jellyfish.systems (out-utut-a194.jellyfish.systems [198.177.127.194])
+Received: from out-2uec-a100.jellyfish.systems (out-2uec-a100.jellyfish.systems [63.250.43.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F70E284880
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6196A29AB1A
 	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 01:21:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.177.127.194
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.250.43.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788744103; cv=none; b=MiykRQ3YIOFTaL9o9S+O2cg55U4RzofO4/OqK1BDVomToYSrzBNX10A1ZwQxOS0EFhgIss6rUB5pbPb/twn9+OP3/rdezk1c5RwYrKQqhpAuoeitcLIrIz1TwYBtOvpkAbH0aV/T5f45rtK6muB7NiKVXl1VUHQmlQ2rOMlSUQ0=
+	t=1788744103; cv=none; b=anCQ8rB6RCzWJRXcIBaQ+sTSCENYez/SfU8KCFb+I3j9PTc3CtHgatLp9kKzyt0oXCFhAXGZSV7CCoKwJ6z0WGfWIUiJTC8gu+A9WJWSnoQ4H6iEFBe+zqiJBN2EtzObxJXhxeng0tv+F0IZX0KUk69WlowE6qAunaCP6HZYNtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1788744103; c=relaxed/simple;
-	bh=Ihjo7gmvPM55ueU2K1VLQ8mGYR0IcHpLo1q4QFZaUCs=;
+	bh=HWuTbghAz8GbRGirX9uuC+RVBQ6Q6yHZg6WdVpR1+pE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oU94Yvtd6iqqpbZTH9P8IMnoTdVOpNoTEIASSR9RD0/XEa4hZLEgdYPOX1LXilywyos+o8eL4qgyVcpuZ3/eWORbmNV03Kfsh7Qc7suyPQYXJyVcaxOhp8kalSw1sKRgBUaBvngmr0k2nhuEOeze9O3zgD6wMZ5ZijTWJUNh+U0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=F2rwXtkT; arc=none smtp.client-ip=198.177.127.194
+	 MIME-Version; b=pUUv/PbuPYQbz5XW63CTuIz5HXDKlbv9YGD5Cb53H4iRyDtfQSExtuZ1u7bNnj3ZH7/SfqLSzMGJ5dtjvolVfOSXL5sCwe6vLo7fvAmjiveBqDHPwDHRzDtfWBqN50dSd8QOjWJqaxBGe5KtkzUHBPqGfeuBdwbONrnRp8NDQxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=Qip5hffF; arc=none smtp.client-ip=63.250.43.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="F2rwXtkT"
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="Qip5hffF"
 Received: from 192.168.5.3 (unknown [69.5.53.41])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdTmq6TB9z2x9B;
-	Mon, 07 Sep 2026 01:21:31 +0000 (UTC)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hdTmc0lHLz6tll;
+	Mon, 07 Sep 2026 01:21:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1788744094;
-	bh=fjeU/nWyfWC5tUKYTkewveu1Epdg5nG+hywCYb5SS1s=;
+	s=spacemail; t=1788744082;
+	bh=OlhlBfmYJTUK7IFwVGp7RUcLXCteeOCREyWx1bs8Yog=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=F2rwXtkTHMd5JsPopM2FbWXq+/Rv3HmGVtWCPPAFaTEqPy0x/+7Wb6992LguC12Up
-	 lV+cvRvtdhQB1MI6AQ9dZHP7l+FaOPnNUeYSD6sEhU2NO+l7tV1xSIh/dpl0+WOzqh
-	 v7wSNvd+OcPpYtpRBKj7A8cfWGkmZQ6kWXTPSKWqPiu5gw/cGzbKNokZL8wXpHVKIL
-	 iml08G0cQkd7p1YKzymFL7P006Bzln7QPCTdBTG/V4wBJy7DFCMOwFDV0mZ48MYrzY
-	 naZG4kKkCj0VfV+Cn/KbNy6uyX1FECfRQoVlgpG6pNtI5dqoQBbfe2+9sAnoY3MBip
-	 HR0th+HkMKdWg==
+	b=Qip5hffFTMwSfpL4Cii8qJvIn9QzCklYX9SQtIt0NAB/NrNuFKdQ2lTq1UpkxC48o
+	 AZvJTkZYrAYXNZ10ZMBgAhO71PUuJ28c5VI6w3FiWzcIp6LWpg07Ec9lkPIRjKYrxD
+	 K+W1snMwxSTE83jKdGcEqV4wtkzDWyukqD9p8Smqrgi6VmI8nb4nLIRjTeiAIyPpRa
+	 VafhBlQvyqbn46CRwmwOXxTrC3Ab1D64jfIrq7GAS5Z6PAOFHMlE3cqZbKdRcOqsWv
+	 aaN3g0FCpCoI68teaIkC5MU6YO3yDOdZ/WU/2+/wLLMgYMZI/xnLz8Ym5/wp7SaofB
+	 xmvsGxdLYrW3w==
 From: Tianyi Chen <hi@tychen.cc>
 To: bpf@vger.kernel.org
 Cc: Tianyi Chen <hi@tychen.cc>,
 	Quentin Monnet <qmo@kernel.org>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v3 1/2] bpftool: Add recursive map dumping
-Date: Mon,  7 Sep 2026 09:21:26 +0800
-Message-ID: <178874362960.1415955.17339804697296063298.recursive-v3-1@tychen.cc>
+Subject: [PATCH bpf-next v2 1/2] bpftool: Use batch lookups for bounded hash map dumps
+Date: Mon,  7 Sep 2026 09:21:14 +0800
+Message-ID: <178874362960.1415955.206253160275144439.batch-v2-1@tychen.cc>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <178874362960.1415955.7640440818340667463.recursive-v3-0@tychen.cc>
-References: <178870998583.979169.16526173782819097354@tychen.cc> <178874362960.1415955.7640440818340667463.recursive-v3-0@tychen.cc>
+In-Reply-To: <178874362960.1415955.9584865244247659247.batch-v2-0@tychen.cc>
+References: <20260906170819.1212661-1-hi@tychen.cc> <178874362960.1415955.9584865244247659247.batch-v2-0@tychen.cc>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,371 +52,185 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Envelope-From: hi@tychen.cc
 
-Dumping a map-of-maps currently shows inner map IDs without their
-contents. Add -r/--recursive to dump referenced inner maps as well,
-leaving the default output unchanged.
+Use BPF_MAP_LOOKUP_BATCH when dumping hash maps to reduce the number
+of BPF syscalls. Share element formatting with individual lookups to
+preserve plain, JSON and BTF output.
 
-Show the selected maps followed by discovered inner maps, with each
-map's header and entries. JSON uses an array of these map objects.
-Preserve BTF formatting in plain output, including when typed and
-untyped maps are encountered in the same traversal.
+Start with up to 256 entries and grow on ENOSPC without advancing the
+input cursor. Restrict the optimization to maps whose maximum key and
+value storage fits in 4 MiB, so even a worst-case bucket can fit without
+restarting a partially printed dump. Preserve aligned element buffers
+for formatting keys and values with odd sizes.
 
-Keep selected map FDs open and queue distinct inner map IDs. Open,
-dump and close each queued map in turn, requiring only one additional
-map FD regardless of the number of inner maps. Preserve per-entry
-lookup error reporting for maps that do not support element lookups.
+Fall back to individual lookups only if the initial batch operation is
+unsupported. Process the final partial batch on ENOENT, but never use
+count or output buffers after other errors. Report errors after batch
+traversal starts without restarting and duplicating output.
 
-Report failure if an inner map cannot be opened and close any JSON
-containers before returning. Document deferred ID resolution and the
-non-atomic dump behavior, and add option completion.
+Send batch failure diagnostics to stderr so JSON element arrays contain
+only map entries.
 
-Link: https://github.com/libbpf/bpftool/issues/58
+Link: https://github.com/libbpf/bpftool/issues/63
+
 Assisted-by: Codex:GPT-6
 Signed-off-by: Tianyi Chen <hi@tychen.cc>
 ---
- .../bpf/bpftool/Documentation/bpftool-map.rst |  22 ++-
- tools/bpf/bpftool/bash-completion/bpftool     |   2 +-
- tools/bpf/bpftool/main.c                      |   7 +-
- tools/bpf/bpftool/main.h                      |   1 +
- tools/bpf/bpftool/map.c                       | 130 ++++++++++++++++--
- 5 files changed, 151 insertions(+), 11 deletions(-)
+ tools/bpf/bpftool/map.c | 116 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 108 insertions(+), 8 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-index 5daf3de5c74..23faa672685 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-@@ -16,7 +16,8 @@ SYNOPSIS
- 
- **bpftool** [*OPTIONS*] **map** *COMMAND*
- 
--*OPTIONS* := { |COMMON_OPTIONS| | { **-f** | **--bpffs** } | { **-n** | **--nomount** } }
-+*OPTIONS* := { |COMMON_OPTIONS| | { **-f** | **--bpffs** } |
-+{ **-n** | **--nomount** } | { **-r** | **--recursive** } }
- 
- *COMMANDS* :=
- { **show** | **list** | **create** | **dump** | **update** | **lookup** | **getnext** |
-@@ -170,6 +171,25 @@ OPTIONS
-     Do not automatically attempt to mount any virtual file system (such as
-     tracefs or BPF virtual file system) when necessary.
- 
-+-r, --recursive
-+    Also dump the inner maps referenced by **array_of_maps** and **hash_of_maps**
-+    entries when running **map dump**. Each map ID is visited once, even if
-+    several entries refer to it. Selected maps are followed by their inner maps.
-+
-+    Plain output includes a header identifying each map. On success, JSON output
-+    is always an array of map objects, each containing an **id** and an
-+    **elements** array, including when only one map is dumped. Outer map entries
-+    retain their **inner_map_id** field, which identifies the corresponding inner
-+    map object.
-+
-+    Inner map IDs are resolved when the maps are visited. The dump is not an
-+    atomic snapshot: concurrent updates can change map contents or remove a
-+    referenced inner map before it is visited. Failure to open a referenced
-+    inner map stops the dump and returns a nonzero exit status. Output may
-+    contain maps or entries printed before the error.
-+
-+    In JSON mode, the enclosing arrays and objects are closed before returning.
-+
- EXAMPLES
- ========
- **# bpftool map show**
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index 75cbcb512eb..45c336d63be 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -261,7 +261,7 @@ _bpftool()
- 
-     # Deal with options
-     if [[ ${words[cword]} == -* ]]; then
--        local c='--version --json --pretty --bpffs --mapcompat --debug \
-+        local c='--version --json --pretty --recursive --bpffs --mapcompat --debug \
-             --use-loader --base-btf --sign -i -k'
-         COMPREPLY=( $( compgen -W "$c" -- "$cur" ) )
-         return 0
-diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-index c91e1a6e1a1..424af4a496a 100644
---- a/tools/bpf/bpftool/main.c
-+++ b/tools/bpf/bpftool/main.c
-@@ -26,6 +26,7 @@ static int (*last_do_help)(int argc, char **argv);
- json_writer_t *json_wtr;
- bool pretty_output;
- bool json_output;
-+bool recursive_dump;
- bool show_pinned;
- bool block_mount;
- bool verifier_logs;
-@@ -452,6 +453,7 @@ int main(int argc, char **argv)
- 		{ "json",	no_argument,	NULL,	'j' },
- 		{ "help",	no_argument,	NULL,	'h' },
- 		{ "pretty",	no_argument,	NULL,	'p' },
-+		{ "recursive",	no_argument,	NULL,	'r' },
- 		{ "version",	no_argument,	NULL,	'V' },
- 		{ "bpffs",	no_argument,	NULL,	'f' },
- 		{ "mapcompat",	no_argument,	NULL,	'm' },
-@@ -485,7 +487,7 @@ int main(int argc, char **argv)
- 	bin_name = "bpftool";
- 
- 	opterr = 0;
--	while ((opt = getopt_long(argc, argv, "VhpjfLmndSi:k:B:l",
-+	while ((opt = getopt_long(argc, argv, "VhpjrfLmndSi:k:B:l",
- 				  options, NULL)) >= 0) {
- 		switch (opt) {
- 		case 'V':
-@@ -507,6 +509,9 @@ int main(int argc, char **argv)
- 			}
- 			jsonw_pretty(json_wtr, pretty_output);
- 			break;
-+		case 'r':
-+			recursive_dump = true;
-+			break;
- 		case 'f':
- 			show_pinned = true;
- 			break;
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 78b6e0ebb85..76626642e94 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -83,6 +83,7 @@ extern const char *bin_name;
- 
- extern json_writer_t *json_wtr;
- extern bool json_output;
-+extern bool recursive_dump;
- extern bool show_pinned;
- extern bool show_pids;
- extern bool block_mount;
 diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 684a8fb7241..c400b15f16d 100644
+index 684a8fb7241..ea6f1389245 100644
 --- a/tools/bpf/bpftool/map.c
 +++ b/tools/bpf/bpftool/map.c
-@@ -17,6 +17,7 @@
- #include <bpf/bpf.h>
- #include <bpf/btf.h>
- #include <bpf/hashmap.h>
-+#include <bpf/libbpf_internal.h>
- 
- #include "json_writer.h"
- #include "main.h"
-@@ -826,12 +827,44 @@ static void free_map_kv_btf(struct btf *btf)
- 		btf__free(btf);
+@@ -740,15 +740,10 @@ static int do_show(int argc, char **argv)
+ 	return errno == ENOENT ? 0 : -1;
  }
  
-+struct map_dump_ctx {
-+	struct hashmap *seen;
-+	__u32 *pending_ids;
-+	size_t pending_cnt;
-+};
-+
-+static int collect_inner_map(struct map_dump_ctx *ctx, __u32 id)
-+{
-+	__u32 *ids;
-+	int err;
-+
-+	if (hashmap__find(ctx->seen, id, NULL))
-+		return 0;
-+
-+	ids = libbpf_reallocarray(ctx->pending_ids, ctx->pending_cnt + 1,
-+				  sizeof(*ids));
-+	if (!ids) {
-+		p_err("mem alloc failed");
-+		return -1;
-+	}
-+	ctx->pending_ids = ids;
-+
-+	err = hashmap__add(ctx->seen, id, 0);
-+	if (err) {
-+		p_err("failed to record inner map id %u: %s", id, strerror(-err));
-+		return -1;
-+	}
-+	ids[ctx->pending_cnt++] = id;
-+	return 0;
+-static int dump_map_elem(int fd, void *key, void *value,
+-			 struct bpf_map_info *map_info, struct btf *btf,
+-			 json_writer_t *btf_wtr)
++static void print_map_elem(void *key, void *value,
++			   struct bpf_map_info *map_info, struct btf *btf,
++			   json_writer_t *btf_wtr)
+ {
+-	if (bpf_map_lookup_elem(fd, key, value)) {
+-		print_entry_error(map_info, key, errno);
+-		return -1;
+-	}
+-
+ 	if (json_output) {
+ 		print_entry_json(map_info, key, value, btf);
+ 	} else if (btf) {
+@@ -762,10 +757,111 @@ static int dump_map_elem(int fd, void *key, void *value,
+ 	} else {
+ 		print_entry_plain(map_info, key, value);
+ 	}
 +}
 +
- static int
- map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
--	 bool show_header)
-+	 bool show_header, struct map_dump_ctx *ctx)
- {
- 	void *key, *value, *prev_key;
- 	unsigned int num_elems = 0;
-+	json_writer_t *plain_btf_wtr = NULL;
- 	struct btf *btf = NULL;
- 	int err;
- 
-@@ -845,6 +878,17 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
- 
- 	prev_key = NULL;
- 
-+	if (ctx && !wtr && (info->btf_value_type_id ||
-+			    info->btf_vmlinux_value_type_id)) {
-+		plain_btf_wtr = get_btf_writer();
-+		if (plain_btf_wtr) {
-+			if (show_header)
-+				show_map_header_plain(info);
-+			show_header = false;
-+			wtr = plain_btf_wtr;
-+		}
++static int dump_map_elem(int fd, void *key, void *value,
++			 struct bpf_map_info *map_info, struct btf *btf,
++			 json_writer_t *btf_wtr)
++{
++	if (bpf_map_lookup_elem(fd, key, value)) {
++		print_entry_error(map_info, key, errno);
++		return -1;
 +	}
+ 
++	print_map_elem(key, value, map_info, btf, btf_wtr);
+ 	return 0;
+ }
+ 
++#define MAP_DUMP_BATCH_SIZE 256U
++#define MAP_DUMP_BATCH_MAX_BYTES (4 * 1024 * 1024)
 +
- 	if (wtr) {
- 		err = get_map_kv_btf(info, &btf);
- 		if (err) {
-@@ -874,10 +918,20 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
- 		if (err) {
- 			if (errno == ENOENT)
- 				err = 0;
-+			else if (ctx)
-+				p_err("can't get next key for map id %u: %s",
-+				      info->id, strerror(errno));
- 			break;
- 		}
--		if (!dump_map_elem(fd, key, value, info, btf, wtr))
-+		err = dump_map_elem(fd, key, value, info, btf, wtr);
-+		if (!err) {
- 			num_elems++;
-+			if (ctx && map_is_map_of_maps(info->type)) {
-+				err = collect_inner_map(ctx, *(__u32 *)value);
-+				if (err)
-+					break;
-+			}
++/* Return 1 to use individual lookups, but only before batch traversal starts. */
++static int dump_map_batch(int fd, void *key, void *value,
++			  struct bpf_map_info *info, struct btf *btf,
++			  json_writer_t *wtr, unsigned int *num_elems)
++{
++	__u32 capacity, count, batch = 0, next_batch = 0, i;
++	void *keys = NULL, *values = NULL, *buf;
++	bool first = true, can_fallback = true;
++	int err;
++
++	/*
++	 * Hash lookup batches must accommodate a whole bucket. Restrict the
++	 * optimization to maps whose worst-case bucket fits the memory budget,
++	 * so a later ENOSPC never forces a restart after printing some entries.
++	 * Division also bounds the allocation multiplications on 32-bit hosts.
++	 */
++	if (info->type != BPF_MAP_TYPE_HASH || !info->max_entries ||
++	    (__u64)info->key_size + info->value_size >
++	    MAP_DUMP_BATCH_MAX_BYTES / info->max_entries)
++		return 1;
++
++	capacity = min(info->max_entries, MAP_DUMP_BATCH_SIZE);
++resize:
++	buf = realloc(keys, (size_t)capacity * info->key_size);
++	if (!buf) {
++		err = ENOMEM;
++		goto error;
++	}
++	keys = buf;
++	buf = realloc(values, (size_t)capacity * info->value_size);
++	if (!buf) {
++		err = ENOMEM;
++		goto error;
++	}
++	values = buf;
++
++	while (true) {
++		count = capacity;
++		err = bpf_map_lookup_batch(fd, first ? NULL : &batch,
++					   &next_batch, keys, values, &count, NULL);
++		err = err ? errno : 0;
++		/*
++		 * Older kernels reject the command before updating count. Do not
++		 * inspect the buffers on these errors, or fall back after progress.
++		 */
++		if (can_fallback && (err == EINVAL || err == EOPNOTSUPP ||
++				     err == 524 /* ENOTSUPP */)) {
++			err = 1;
++			goto out;
 +		}
++		can_fallback = false;
++		if (err == ENOSPC) {
++			if (capacity == info->max_entries)
++				goto error;
++			capacity += min(capacity, info->max_entries - capacity);
++			/* Preserve the input cursor: the oversized bucket was not read. */
++			goto resize;
++		}
++		/* In particular, EFAULT can leave count and the buffers invalid. */
++		if (err && err != ENOENT)
++			goto error;
++		for (i = 0; i < count; i++) {
++			/*
++			 * Keep the alignment provided by individual lookups, including
++			 * for BTF types whose map key/value size is not aligned.
++			 */
++			memcpy(key, keys + (size_t)i * info->key_size, info->key_size);
++			memcpy(value, values + (size_t)i * info->value_size, info->value_size);
++			print_map_elem(key, value, info, btf, wtr);
++			(*num_elems)++;
++		}
++		if (err == ENOENT) {
++			err = 0;
++			goto out;
++		}
++		first = false;
++		batch = next_batch;
++	}
++error:
++	fprintf(stderr, "Error: can't lookup map batch: %s\n", strerror(err));
++	err = -1;
++out:
++	free(keys);
++	free(values);
++	return err;
++}
++
+ static int maps_have_btf(int *fds, int nb_fds)
+ {
+ 	struct bpf_map_info info = {};
+@@ -869,6 +965,9 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
+ 		p_info("Warning: cannot read values from %s map with value_size != 8",
+ 		       map_type_str);
+ 	}
++	err = dump_map_batch(fd, key, value, info, btf, wtr, &num_elems);
++	if (err != 1)
++		goto end_dump;
+ 	while (true) {
+ 		err = bpf_map_get_next_key(fd, prev_key, key);
+ 		if (err) {
+@@ -881,6 +980,7 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
  		prev_key = key;
  	}
  
-@@ -894,18 +948,25 @@ map_dump(int fd, struct bpf_map_info *info, json_writer_t *wtr,
- 	free(key);
- 	free(value);
- 	free_map_kv_btf(btf);
-+	if (plain_btf_wtr)
-+		jsonw_destroy(&plain_btf_wtr);
- 
- 	return err;
- }
- 
- static int do_dump(int argc, char **argv)
- {
-+	LIBBPF_OPTS(bpf_get_fd_by_id_opts, opts,
-+		    .open_flags = BPF_F_RDONLY,
-+	);
- 	json_writer_t *wtr = NULL, *btf_wtr = NULL;
- 	struct bpf_map_info info = {};
-+	struct map_dump_ctx ctx = {};
- 	int nb_fds, i = 0;
- 	__u32 len = sizeof(info);
- 	int *fds = NULL;
- 	int err = -1;
-+	size_t j;
- 
- 	if (argc != 2)
- 		usage();
-@@ -919,9 +980,34 @@ static int do_dump(int argc, char **argv)
- 	if (nb_fds < 1)
- 		goto exit_free;
- 
-+	if (recursive_dump) {
-+		ctx.seen = hashmap__new(hash_fn_for_key_as_id,
-+					equal_fn_for_key_as_id, NULL);
-+		if (IS_ERR(ctx.seen)) {
-+			ctx.seen = NULL;
-+			p_err("failed to create hashmap for recursive dump");
-+			goto exit_close;
-+		}
-+		/* Record the selected maps before discovering any inner maps. */
-+		for (i = 0; i < nb_fds; i++) {
-+			len = sizeof(info);
-+			if (bpf_map_get_info_by_fd(fds[i], &info, &len)) {
-+				p_err("can't get map info: %s", strerror(errno));
-+				err = -1;
-+				goto exit_close;
-+			}
-+			err = hashmap__add(ctx.seen, info.id, 0);
-+			if (err) {
-+				p_err("failed to record map id %u: %s", info.id,
-+				      strerror(-err));
-+				goto exit_close;
-+			}
-+		}
-+	}
-+
- 	if (json_output) {
- 		wtr = json_wtr;
--	} else {
-+	} else if (!recursive_dump) {
- 		int do_plain_btf;
- 
- 		do_plain_btf = maps_have_btf(fds, nb_fds);
-@@ -936,7 +1022,7 @@ static int do_dump(int argc, char **argv)
- 		}
- 	}
- 
--	if (wtr && nb_fds > 1)
-+	if (wtr && (nb_fds > 1 || recursive_dump))
- 		jsonw_start_array(wtr);	/* root array */
- 	for (i = 0; i < nb_fds; i++) {
- 		if (bpf_map_get_info_by_fd(fds[i], &info, &len)) {
-@@ -944,22 +1030,50 @@ static int do_dump(int argc, char **argv)
- 			err = -1;
- 			break;
- 		}
--		err = map_dump(fds[i], &info, wtr, nb_fds > 1);
-+		err = map_dump(fds[i], &info, wtr, nb_fds > 1 || recursive_dump,
-+			       recursive_dump ? &ctx : NULL);
- 		if (!wtr && i != nb_fds - 1)
- 			printf("\n");
- 
- 		if (err)
- 			break;
--		close(fds[i]);
-+		/* Keep selected maps alive while visiting their inner maps. */
-+		if (!recursive_dump)
-+			close(fds[i]);
-+	}
-+	for (j = 0; !err && j < ctx.pending_cnt; j++) {
-+		int fd;
-+
-+		fd = bpf_map_get_fd_by_id_opts(ctx.pending_ids[j], &opts);
-+		if (fd < 0) {
-+			p_err("can't open inner map id %u: %s",
-+			      ctx.pending_ids[j], strerror(errno));
-+			err = -1;
-+			break;
-+		}
-+		len = sizeof(info);
-+		if (bpf_map_get_info_by_fd(fd, &info, &len)) {
-+			p_err("can't get map info: %s", strerror(errno));
-+			err = -1;
-+		} else {
-+			if (!wtr)
-+				printf("\n");
-+			err = map_dump(fd, &info, wtr, true, &ctx);
-+		}
-+		close(fd);
- 	}
--	if (wtr && nb_fds > 1)
-+	if (wtr && (nb_fds > 1 || recursive_dump))
- 		jsonw_end_array(wtr);	/* root array */
- 
- 	if (btf_wtr)
- 		jsonw_destroy(&btf_wtr);
- exit_close:
-+	if (recursive_dump)
-+		i = 0;
- 	for (; i < nb_fds; i++)
- 		close(fds[i]);
-+	hashmap__free(ctx.seen);
-+	free(ctx.pending_ids);
- exit_free:
- 	free(fds);
- 	free_btf_vmlinux();
-@@ -1484,7 +1598,7 @@ static int do_help(int argc, char **argv)
- 		"                 task_storage | bloom_filter | user_ringbuf | cgrp_storage | arena |\n"
- 		"                 insn_array | rhash }\n"
- 		"       " HELP_SPEC_OPTIONS " |\n"
--		"                    {-f|--bpffs} | {-n|--nomount} }\n"
-+		"                    {-f|--bpffs} | {-n|--nomount} | {-r|--recursive} }\n"
- 		"",
- 		bin_name, argv[-2]);
- 
++end_dump:
+ 	if (wtr) {
+ 		jsonw_end_array(wtr);	/* elements */
+ 		if (show_header)
 -- 
 2.55.0
 
