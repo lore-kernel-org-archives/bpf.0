@@ -1,126 +1,148 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 284E03E5ED7;
-	Mon,  7 Sep 2026 02:21:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B12C561FCE;
+	Mon,  7 Sep 2026 02:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788747701; cv=none; b=ro6XNw+cF2aJE4kbZK15UPBumVqf/oG1HygYcCyDFeQhU/cXl5MXDFDoi0GRB7FfCdI2wIAWPYls2GLZEVBvqGYs24vY85iM3Qf8+hi67LL/Tcw0kIx0fH3w7gjykGRt5O6WllkStjCMzDbLw6dJthiHuFP3u/RsvK3cL7lN9Fc=
+	t=1788748574; cv=none; b=klfxDK7dDxZIlkAl2QdLzhDh2O9rDcXaGImrYjE0faAHSW/mpeI5O6abmY7qUfxkIaYln4ja22kL2dqXV7tazYuFtn+o4IYaHuUvB5lLxXAKTcwSyL18a1SKtvcC0shoMUA/EKuba5si/bXqms4vDvekaq1PyR00bP3W/va4Oxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788747701; c=relaxed/simple;
-	bh=2HblSqRu2XCcvW+rxyc97ECfyo2W24e10jcKZWU/aBI=;
+	s=arc-20240116; t=1788748574; c=relaxed/simple;
+	bh=PKjgGL7wqRSAIYcUtgZTni3j/REQVBk4n4ke07d4vV8=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=hz/2IlmncC78ALuWWkKslzFWg2Co1A3akAT4t69dLC39w0YcRsxYpkDXWAbiK0xKJGgDeK6UiFc+b15roAFWwXGuy6RYqxiLzNB25Gq6Lx0FjMrIRsK0JjCxunAZnVRYzFvBxFqhiO9S6Vp2anActwK6AhBn3PuYHgqpdVOs65A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lJQ0I4JN; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=jDZtFZet/NzoEOYN9G4Xghy9DHtuf8/o4vdaB2dx0nxZgS1ZOQRfLML7WM+ibsAIksdm9laqQqnkCGVuivAO2Zv380f76dYN1X4Ajbl+eEV96jNJb98oznXlBT8YMjq8aAPP5IUTA/uV6d9TeH6C191WDJWRhmq36ZJckkC32js=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F/PB0F6u; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lJQ0I4JN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 857F21F00A3D;
-	Mon,  7 Sep 2026 02:21:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F/PB0F6u"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E42E1F00A3A;
+	Mon,  7 Sep 2026 02:36:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788747700;
-	bh=Dd7ARHz1B7IuWza55XqcSa+1QS6JRqo1HjzEa6Ufeso=;
+	s=k20260515; t=1788748573;
+	bh=bTtpSexXUEzx8fR/jzDmJs1dEgtp2NCHWJDwbujXQII=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=lJQ0I4JNw23T31am1S6/7FWtCm4Gdn7S7dbYLYJdyMD3GO0I6cRLtrq+4Nl8meSju
-	 HPIQeUvaqr63VTsWL45XLOIqXm19DEYCjoKmlmFG/BniBzsJkV01+SkAYaR304EHYc
-	 H8jJgj2gSYHi7VRpWIKKLOjadn2HTd18PjcxYTFl94zUWxBn/bHd/r8P0i4HJtdi7K
-	 vzzcLFMwmFwOH/BXT0Fi/tE+5H8BrrKdDFvnDY6rWw+KBQee+c2K3znSL1JANCKTLV
-	 UGRTw4IwyGZHvqThguLORJcYx6p1Z2eOZUdOku7QTjpcqI3E7T8Wnkq0a8loueuNuC
-	 pXILM+GqM9vHQ==
-Content-Type: multipart/mixed; boundary="===============2543354907178818727=="
+	b=F/PB0F6uom0UGqRVbUvDEwzudZDEdCFLpmrSJ9UmPydFRGlcx2BdesSIvFE7yk1tE
+	 InH6Q/jnWA2tyw4kU7RmWoyVa3hg8V7mTXMe2F9QLzwqbACwN6xe0V6318WGUDvrdx
+	 r/W/U8VcOPe4139iuuQO6ZsElcHbVm8LTat/jj+77Iuq/vGnPBfZk1Ky7HgOjGBEin
+	 TxZc8qf1MAD9ZilFXuCV3GquE4cegvQvHE6jD6bVTzt76uAw1R6Pulw1m1z6jPLfd5
+	 lxfUAHJIoKTcc6YGxABuEqHXa9Hldutc12veaFuU13SCYcQQJyObXFgzoJ080KrdnF
+	 a9a8phjdW2fpQ==
+Content-Type: multipart/mixed; boundary="===============4744973200865761988=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <47ffafd7714d83ed25f2852752660f8e45f6ac45917db93cd33dfe7087870579@mail.kernel.org>
-In-Reply-To: <178874362960.1415955.206253160275144439.batch-v2-1@tychen.cc>
-References: <178874362960.1415955.206253160275144439.batch-v2-1@tychen.cc>
-Subject: Re: [PATCH bpf-next v2 1/2] bpftool: Use batch lookups for bounded hash map dumps
+Message-Id: <514a0c26ff5e0322fe0442d07142cafc7dda338a3ce2c5b7e9437dd994cb0ba1@mail.kernel.org>
+In-Reply-To: <20260907015003.65087-2-sanghyun.park.cnu@gmail.com>
+References: <20260907015003.65087-2-sanghyun.park.cnu@gmail.com>
+Subject: Re: [PATCH bpf-next v6 1/2] bpf: Validate program attach type during link update
 From: bot+bpf-ci@kernel.org
-To: hi@tychen.cc,bpf@vger.kernel.org
-Cc: hi@tychen.cc,qmo@kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon,  7 Sep 2026 02:21:39 +0000 (UTC)
+To: sanghyun.park.cnu@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,bpf@vger.kernel.org
+Cc: sanghyun.park.cnu@gmail.com,leon.hwang@linux.dev,john.fastabend@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,sdf@fomichev.me,pulehui@huawei.com,suchitkarunakaran@gmail.com,xukuohai@huawei.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon,  7 Sep 2026 02:36:12 +0000 (UTC)
 
---===============2543354907178818727==
+--===============4744973200865761988==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpftool: Use batch lookups for bounded hash map dumps
->
-> Use BPF_MAP_LOOKUP_BATCH when dumping hash maps to reduce the number
-> of BPF syscalls. Share element formatting with individual lookups to
-> preserve plain, JSON and BTF output.
->
-> Start with up to 256 entries and grow on ENOSPC without advancing the
-> input cursor. Restrict the optimization to maps whose maximum key and
-> value storage fits in 4 MiB, so even a worst-case bucket can fit without
-> restarting a partially printed dump. Preserve aligned element buffers
-> for formatting keys and values with odd sizes.
->
-> Fall back to individual lookups only if the initial batch operation is
-> unsupported. Process the final partial batch on ENOENT, but never use
-> count or output buffers after other errors. Report errors after batch
-> traversal starts without restarting and duplicating output.
->
-> Send batch failure diagnostics to stderr so JSON element arrays contain
-> only map entries.
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index c7bc9ba9b331..b394a37eecb4 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -4481,14 +4481,9 @@ static int bpf_prog_attach_check_attach_type(const struct bpf_prog *prog,
+>  	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
+>  	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
+>  	case BPF_PROG_TYPE_SK_LOOKUP:
+> +	case BPF_PROG_TYPE_LSM:
+>  		return attach_type == prog->expected_attach_type ? 0 : -EINVAL;
 
-This isn't a bug, but would it help to include performance numbers in the
-commit message? The stated motivation is reducing the number of BPF
-syscalls, but the last three paragraphs describe what each part of
-dump_map_batch() does rather than showing how much the change gains. For
-a patch whose purpose is syscall reduction, showing before and after
-syscall counts or wall time for a representative dump would clarify the
-benefit.
+Does adding BPF_PROG_TYPE_LSM to this arm also relax the check on the
+BPF_LINK_CREATE path?
 
-> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-> index 684a8fb72414..ea6f1389245f 100644
-> --- a/tools/bpf/bpftool/map.c
-> +++ b/tools/bpf/bpftool/map.c
+Before this patch, BPF_PROG_TYPE_LSM fell into the default arm:
+
+	default:
+		ptype = attach_type_to_prog_type(attach_type);
+		if (ptype == BPF_PROG_TYPE_UNSPEC || ptype != prog->type)
+			return -EINVAL;
+		return 0;
+
+Since attach_type_to_prog_type() returns BPF_PROG_TYPE_LSM only for
+BPF_LSM_MAC and BPF_LSM_CGROUP (kernel/bpf/syscall.c:4457, 4463), an LSM
+program could only ever be accepted for those two attach types.
+
+The new arm drops that constraint and accepts any attach_type as long as it
+equals prog->expected_attach_type. The other members of that arm are safe
+because bpf_prog_load_check_attach() restricts their expected_attach_type
+to a set that all maps back to the same prog type. BPF_PROG_TYPE_LSM is the
+one type in that arm with no such restriction: bpf_prog_load_check_attach()
+(kernel/bpf/syscall.c:2766 onwards) has no LSM case and falls into
+`default: return 0`, so prog->expected_attach_type is entirely
+userspace-controlled for LSM programs.
+
+An LSM program can be loaded with expected_attach_type == BPF_TRACE_ITER
+and attach_btf_id pointing at a bpf_iter_* function, because
+check_attach_btf_id() takes the ITER shortcut before the LSM-specific
+validation (kernel/bpf/verifier.c:20810-20819):
+
+	if (prog->expected_attach_type == BPF_TRACE_RAW_TP) {
+		prog->aux->attach_btf_trace = true;
+		return 0;
+	} else if (prog->expected_attach_type == BPF_TRACE_ITER) {
+		return bpf_iter_prog_supported(prog);
+	}
+
+	if (prog->type == BPF_PROG_TYPE_LSM) {
+		ret = bpf_lsm_verify_prog(&env->log, prog);
+
+bpf_check_attach_target()'s `case BPF_TRACE_ITER:` (kernel/bpf/verifier.c:
+20551) and bpf_iter_prog_supported() (kernel/bpf/bpf_iter.c:337) both
+switch on expected_attach_type only and never look at prog->type, so the
+load succeeds and bpf_lsm_verify_prog() never runs.
+
+Post-patch, BPF_LINK_CREATE with attach_type == BPF_TRACE_ITER then
+succeeds for that program. link_create() fetches the prog with plain
+bpf_prog_get() (no type filter, kernel/bpf/syscall.c:5813), so
+bpf_prog_attach_check_perm() is the only prog_type/attach_type gate; it now
+returns 0, and the `case BPF_PROG_TYPE_LSM: case BPF_PROG_TYPE_TRACING:`
+arm dispatches to bpf_iter_link_attach() (kernel/bpf/syscall.c:5847), which
+also performs no prog->type check. The result is a live BPF_LINK_TYPE_ITER
+link holding a BPF_PROG_TYPE_LSM program. Pre-patch this returned -EINVAL.
+
+BPF_PROG_ATTACH is not affected, because bpf_prog_attach() still calls
+bpf_prog_get_type(attr->attach_bpf_fd,
+attach_type_to_prog_type(attr->attach_type)) before the check. BPF_TRACE_ITER
+is also the only newly-permitted attach type that lacks a downstream
+prog->type guard: RAW_TP, FENTRY, FEXIT, FSESSION and MODIFY_RETURN all
+funnel into bpf_tracing_prog_attach(), which rejects
+`prog->expected_attach_type != BPF_LSM_MAC` for LSM programs
+(kernel/bpf/syscall.c:3663), and the *_MULTI types cannot be loaded for
+LSM at all.
+
+Could this be tightened to keep the mapping constraint for LSM?  For
+example, handle BPF_PROG_TYPE_LSM like BPF_PROG_TYPE_CGROUP_SKB does:
+verify attach_type_to_prog_type(attach_type) == prog->type first, then
+compare expected_attach_type.
+
+>  	case BPF_PROG_TYPE_CGROUP_SKB:
+> -		if (!bpf_token_capable(prog->aux->token, CAP_NET_ADMIN))
+> -			/* cg-skb progs can be loaded by unpriv user.
+> -			 * check permissions at attach time.
+> -			 */
+> -			return -EPERM;
+> -
+>  		ptype = attach_type_to_prog_type(attach_type);
+>  		if (prog->type != ptype)
+>  			return -EINVAL;
 
 [ ... ]
-
-> +#define MAP_DUMP_BATCH_SIZE 256U
-> +#define MAP_DUMP_BATCH_MAX_BYTES (4 * 1024 * 1024)
-> +
-> +/* Return 1 to use individual lookups, but only before batch traversal starts. */
-> +static int dump_map_batch(int fd, void *key, void *value,
-> +			  struct bpf_map_info *info, struct btf *btf,
-> +			  json_writer_t *wtr, unsigned int *num_elems)
-> +{
-> +	__u32 capacity, count, batch = 0, next_batch = 0, i;
-> +	void *keys = NULL, *values = NULL, *buf;
-> +	bool first = true, can_fallback = true;
-> +	int err;
-> +
-> +	/*
-> +	 * Hash lookup batches must accommodate a whole bucket. Restrict the
-> +	 * optimization to maps whose worst-case bucket fits the memory budget,
-> +	 * so a later ENOSPC never forces a restart after printing some entries.
-> +	 * Division also bounds the allocation multiplications on 32-bit hosts.
-> +	 */
-> +	if (info->type != BPF_MAP_TYPE_HASH || !info->max_entries ||
-> +	    (__u64)info->key_size + info->value_size >
-> +	    MAP_DUMP_BATCH_MAX_BYTES / info->max_entries)
-> +		return 1;
-
-This isn't a bug, but does the eligibility test have the intended effect
-for large maps? The check disables batching when (key_size + value_size)
-exceeds MAP_DUMP_BATCH_MAX_BYTES / max_entries. For a hash map with 1
-million entries and key_size = value_size = 4, that division yields 4, so
-the test rejects it and forces individual lookups. The batching code
-allocates starting at MAP_DUMP_BATCH_SIZE (256) entries and grows on
-ENOSPC, so the 4 MiB budget could instead cap how far capacity is allowed
-to grow rather than disqualifying the map entirely. That way large hash
-maps would still benefit from batching, and only a genuinely oversized
-bucket would hit the fallback path.
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34074207177
---===============2543354907178818727==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34074783015
+--===============4744973200865761988==--
