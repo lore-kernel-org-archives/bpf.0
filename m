@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 312903C5550
-	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 17:07:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3A3251D53C
+	for <bpf@vger.kernel.org>; Mon,  7 Sep 2026 17:14:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788800847; cv=none; b=fpYpI0yBWhofXmJq4vXE/zu9lotTU/s+iqP25KDqwxu0mjH9GR/ROZi+Gv5CU+U8eugr80mi/xqEE80m56OyTTrL84FaYCUDU75B8l0+H9XcBs1nb1tM3ONgPHUYtp7WdJb3j9zAzAkOD6B91++XgB+CBOdQuDCqJKmF6VQQ6DY=
+	t=1788801259; cv=none; b=p2tmGa/Lfa6+R2OV7SIsS6FajPKerATD50GMbLDy1DbJGx/i8bGxKzPLZdUSkG05rAlQ7aNeRVbN8ZDLTux580SdRXec16vDStvF7elkVE01IAhOAFxQy13bkRePD+bOa5pJU0zjMVTzIitGM9r7mV4TlAQB0+m1zrqxXw5GxgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788800847; c=relaxed/simple;
-	bh=M1ZcqLcx6Ie8YRFRRt7nPNQ714Uw+6JGWjg39ZU+e58=;
+	s=arc-20240116; t=1788801259; c=relaxed/simple;
+	bh=/C6diKm3AvCNrAtgLNV4FW1ctWv1KG1asdrs+zzomUY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=dKWPtRj8iNNmocaybbJChXacmfv8WtvV0LLgVSAMe7ZLRpba4bFOjCIuQ4+lmzizRPrxK8y/or4a08GsE2kgn0tHrDTgeunjhaQf/bUAPLxA7C6rqtsHjU8JoloKv8cHml1DecGZx22t4Bi+5A/X8lzHN3qPdz+MWfDZfeoeHBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ONfW52Y7; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=XJOsdZXY9HCPHxov3+CUBF422ZqEM0v5dZcezMGpgySZOMMGf/GslgxnJtP0IsyyJA8t3zc130Z4S0ZKD7aF50Ih6++FoXzCfWinjg6nUCHQPTPu/dliLssqjl4UR0JKaBWrVvPcNkFFxk0MApREosSolXLiwM+KDyZ/rcOpMt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D16Ezudz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ONfW52Y7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EC261F00A3A;
-	Mon,  7 Sep 2026 17:07:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D16Ezudz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 559201F00A3A;
+	Mon,  7 Sep 2026 17:14:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788800845;
-	bh=glKS5R7KqtZRbfKy6MQPncRKS/E7Dhav47Y0Y12//CA=;
+	s=k20260515; t=1788801257;
+	bh=YPNFv5NiwNqKetL1kLced8l9fgD3o0o3Qc/Za6UY1lQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ONfW52Y7b2wx4hAIXMnAJ8vEIf+K1u/ZI/e91KL8x7OqNLsQTDrjBgG4R4jqUZThq
-	 AdCUdWHE1RnFSbMvqfiz4m3g/Pv/YApFKEuQ37rt8CdXuaqiDEpMD5UU2dTHvfojeO
-	 SXH4tMux9Cj2YCegB0/XjZeFEn8W51BQVDc7c2JGH1fTfRfS2/y4MFJRTBm7ElrDrI
-	 OeI/8AL80nOq06Rssg8QQUAaDB7PAhhN+sYkwTQ6D7NI+5v5mXKq1TviooZo3uepZT
-	 H93252Klm8b7l5S/jYKYnNAucTA50CiKgHriUNxamWsYefGlMeRIUmf02kRwS5d+k4
-	 2fdntBmx8tiXQ==
+	b=D16Ezudz+HfiBrC2JB0xCwN3SBUhi46mE+/A+v+Q0oD0GNpCj9iLjsW+PiIKHIyE2
+	 y8YNB1Ua3VAMvbOfd2kVkKCUZNMA4hppQHThBkdRQQDJ7UmIisIhKQIqmFbC1lsXhK
+	 Xiy+56NoIU7peL8Pg/2zsUA+OnfSk7oa2mbqtnP8kbOlBNgZP6KRh3p4LL4Q+/uUQi
+	 KaZ4Om8CzhqOyZNF4UDOzzEADJwrNRG0YPqjlHMAv0ikyuSClvD55QWKj075wjSXWw
+	 ZlPr9VDsPfUmItmSJBMg18ZXTk+k42qggzQMXpNuNBxx8tvdWhYMs0JbymmZt3BEGc
+	 eaWgMLazVC8Hg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 2/7] exec: Clear bprm->mm before dropping
- its reference
+Subject: Re: [PATCH 6.12.y] tcp: clear sock_ops cb flags before
+ force-closing a child socket
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Anastasios Papagiannis" <tasos.papagiannnis@gmail.com>
+To: =?utf-8?b?TWlndWVsIEdhenF1ZXogKFNjaG5laWRlciBFbGVjdHJpYyk=?= <miguel.gazquez@bootlin.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260907165220.52431-3-tasos.papagiannnis@gmail.com>
-References: <20260907165220.52431-1-tasos.papagiannnis@gmail.com>
- <20260907165220.52431-3-tasos.papagiannnis@gmail.com>
+In-Reply-To: <20260907-cve-2026-74268-v1-1-cacea38d7fb3@bootlin.com>
+References: <20260907-cve-2026-74268-v1-1-cacea38d7fb3@bootlin.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 07 Sep 2026 17:07:25 +0000
-Message-Id: <20260907170725.9EC261F00A3A@smtp.kernel.org>
+Date: Mon, 07 Sep 2026 17:14:16 +0000
+Message-Id: <20260907171417.559201F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,77 +46,92 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-
-Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but the patch addres=
-ses this exact class of BPF Use-After-Free (UAF) vulnerability for `bprm->m=
-m` while missing that `bprm->file` suffers from the same flaw. The BPF veri=
-fier explicitly marks `bprm->file` as a fully trusted pointer via `BTF_TYPE=
-_SAFE_TRUSTED(struct linux_binprm) { struct file *file; };`. In `free_bprm(=
-)`, the file's reference is dropped via `do_close_execat(bprm->file)`, but =
-the pointer is not cleared. Immediately afterward, `bprm_drop_loader(bprm)`=
- is called, which serves as a BPF fentry tracepoint. A BPF program attachin=
-g to this hook will receive a dangling `bprm->file` that the verifier incor=
-rectly considers `PTR_TRUSTED` and completely safe to pass to kfuncs, bypas=
-sing BPF safety guarantees.
+- [Critical] Calling tcp_clear_sock_ops_cb_flags() unconditionally on non-T=
+CP sockets (like DCCP) causes an out-of-bounds write due to an invalid stru=
+ct tcp_sock cast.
 --
 
-commit a611d673e7752074063d4d9476d61d335949964b
-Author: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+commit a1e4666cc30271c086f6d9e64c6ebfaddd6750ca
+Author: Sechang Lim <rhkrqnwk98@gmail.com>
 
-exec: Clear bprm->mm before dropping its reference
+tcp: clear sock_ops cb flags before force-closing a child socket
 
-The patch clears bprm->mm to NULL before dropping its reference via mmput()
-to ensure safe access from BPF kfuncs.
+A child socket inherits the listener's bpf_sock_ops_cb_flags via
+sk_clone_lock(). If its setup fails in tcp_v4_syn_recv_sock() /
+tcp_v6_syn_recv_sock(), the child is freed through put_and_exit, where
+inet_csk_prepare_forced_close() drops the socket lock and tcp_done() runs
+without it.
 
-> diff --git a/fs/exec.c b/fs/exec.c
-> index 745f6eb5279e6..4ddd403fd91c7 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -1456,9 +1456,12 @@ void bprm_drop_loader(struct linux_binprm *bprm)
+Link: https://patch.msgid.link/20260611092923.1895982-1-rhkrqnwk98@gmail.com
+
+> diff --git a/include/net/tcp.h b/include/net/tcp.h
+> index 1cc25e0b3bdea..c472c1cdd3b83 100644
+> --- a/include/net/tcp.h
+> +++ b/include/net/tcp.h
+[ ... ]
+> @@ -2702,6 +2702,11 @@ static inline int tcp_call_bpf_3arg(struct sock *s=
+k, int op, u32 arg1, u32 arg2,
+>  	return tcp_call_bpf(sk, op, 3, args);
+>  }
 > =20
->  static void free_bprm(struct linux_binprm *bprm)
->  {
-> -	if (bprm->mm) {
-> +	struct mm_struct *mm =3D bprm->mm;
+> +static inline void tcp_clear_sock_ops_cb_flags(struct sock *sk)
+> +{
+> +	tcp_sk(sk)->bpf_sock_ops_cb_flags =3D 0;
+
+[Severity: Critical]
+Does this code perform an unsafe cast and memory write for non-TCP sockets?
+
+This accesses an offset that exceeds the bounds of a dccp_sock when
+invoked on DCCP sockets, which writes outside the slab allocation for the
+socket structure.
+
+> +}
 > +
-> +	if (mm) {
->  		acct_arg_size(bprm, 0);
-> -		mmput(bprm->mm);
-> +		bprm->mm =3D NULL;
-> +		mmput(mm);
->  	}
->  	if (bprm->user_ns)
->  		put_user_ns(bprm->user_ns);
+[ ... ]
+> diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_s=
+ock.c
+> index 91dcdb7567ace..e0bd8e76fa781 100644
+> --- a/net/ipv4/inet_connection_sock.c
+> +++ b/net/ipv4/inet_connection_sock.c
+[ ... ]
+> @@ -1315,6 +1315,14 @@ void inet_csk_destroy_sock(struct sock *sk)
+>  }
+>  EXPORT_SYMBOL(inet_csk_destroy_sock);
+> =20
+> +void inet_csk_prepare_for_destroy_sock(struct sock *sk)
+> +{
+> +	/* The below has to be done to allow calling inet_csk_destroy_sock */
+> +	tcp_clear_sock_ops_cb_flags(sk);
 
-[Severity: High]
-This isn't a bug introduced by this patch, but while it addresses a BPF
-Use-After-Free vulnerability for bprm->mm, it appears bprm->file in the same
-function suffers from the same flaw.
+[Severity: Critical]
+Can calling this unconditionally on non-TCP sockets cause memory regression=
+s?
 
-Further down in free_bprm(), the reference to bprm->file is dropped via
-do_close_execat(), but the pointer itself is not cleared:
+This generic connection socket destruction path in
+inet_csk_prepare_for_destroy_sock() blindly invokes a TCP-specific helper,
+passing it sockets (like DCCP) that are incompatible with the TCP socket
+structure.
 
-    do_close_execat(bprm->file);
-    bprm_drop_loader(bprm);
+This can be triggered by a remote, unauthenticated attacker sending a
+malicious or unroutable DCCP connection request to a listening DCCP port.
 
-Immediately afterward, bprm_drop_loader() is called. This acts as a BPF
-fentry attach point where a BPF program can access the dangling bprm->file.
+The regression is triggered on the failure path of DCCP connection setup,
+for example when routing fails:
 
-The BPF verifier explicitly marks bprm->file as a fully trusted pointer via
-BTF_TYPE_SAFE_TRUSTED(struct linux_binprm) { struct file *file; };.
+net/dccp/ipv4.c:dccp_v4_request_recv_sock()
+   ...
+   put_and_exit:
+        ...
+        inet_csk_prepare_forced_close(newsk);
+            inet_csk_prepare_for_destroy_sock(newsk);
+                tcp_clear_sock_ops_cb_flags(newsk); /* out-of-bounds write =
+*/
 
-Because bprm->file is left dangling, a BPF fentry program attached to
-bprm_drop_loader() will receive a pointer to a released file that the verif=
-ier
-incorrectly considers PTR_TRUSTED and safe to pass to kfuncs, bypassing BPF
-safety guarantees.
-
-Should we apply the same pattern here, storing bprm->file in a local variab=
-le,
-setting bprm->file to NULL, and then calling do_close_execat() on the local
-variable to prevent BPF programs from accessing a zero-refcount object?
+> +	sock_set_flag(sk, SOCK_DEAD);
+> +	this_cpu_inc(*sk->sk_prot->orphan_count);
+> +}
+> +
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260907165220.5243=
-1-1-tasos.papagiannnis@gmail.com?part=3D2
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260907-cve-2026-7=
+4268-v1-1-cacea38d7fb3@bootlin.com?part=3D1
