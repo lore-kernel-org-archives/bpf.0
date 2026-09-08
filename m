@@ -1,47 +1,61 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-112.mta1.migadu.com [95.215.58.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 069452E06E6;
-	Tue,  8 Sep 2026 09:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A0C50EBEE
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 09:11:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.112
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788858528; cv=none; b=qbyN2ZikW1uJab0FhT+Nfv6YUYBdobQOxkkUaOPgUUFIdStFraSHktjUzcrAZWun5i9NDCpC4M78KY2BuHWfpT1XPXqfqCEgh43Mk2/d2/kXWAdAPjGATwliQ0xQdHcHqmP2lT579wi15n433o4+6i9KdBwVfpvBO9vkpp9q82w=
+	t=1788858709; cv=none; b=RrE7IDy4VX+8kwrWayUrdDhsD2e0BaAhQmgPAGf9PxvDLMSH1l84MxzXHAWtui4xggva7pMtpr8pWXmNedtuQr3eXAjUVneseiLYjTJ33z9d+/uwLgHZGhY4lRb05Lodte2pBa1h3iSo+Oy3xjTVXsZVRz/LMxHYz2bf918DG/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788858528; c=relaxed/simple;
-	bh=0AKA7sAAY833FNXh8DXKEJIjfLHc6DFUVIEt+bQDIi4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dRPaB/ckV9cltmwa49691e2WDxGbYOLkHnY/VJkeIIZFn49971i/YfY+VAVQqQP/dzgP+Ion5oGWCGDZma0r2xRK1s4j92CsfRG5mxQ9PjhEaCBTD0v7RcZ5u2lDjq6sBgcAxxUrVVRKiyv1HiRXuXt5WN3ZfNmCNb8C7ywxb/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hr5tcHSF; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788858709; c=relaxed/simple;
+	bh=6VmEDsVAvJfO/ndzZMXcVM2LXI2zLrkuWTXR1AO7Mos=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bq5AIRsnHDDsvxMlp/Q+RRVnD3N2W7D674YRMBnjspOYT/iyPFxhzcnwbVP5yMIaoL27sWxuxMJAkSEUerBR6jUVQYVmWMgcrkF4nfE5B4g/RwMDCKLEgsb7RFIEJfDdktj36Vz2qlzI5btvF6t5XQidNcTk49uV2e2qtw20/oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o/OsFgMD; arc=none smtp.client-ip=95.215.58.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hr5tcHSF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B4871F00A3A;
-	Tue,  8 Sep 2026 09:08:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788858526;
-	bh=6N5S6KBO5Uk5jykSQfX8s36EUx9Bv2AGM83B6wzlFHQ=;
-	h=From:To:Cc:Subject:Date;
-	b=Hr5tcHSFsGg23DSdHVZaY07yZz6gBb/Y1HDFWN/yVKJj/I4r2J3UsWfv7rm5rA1Lo
-	 OsOG6Q0XiM+BS9XnbPo45Lq2I3LjlnMsDkC5+OYl23NJnzvo01X2cTQKr9ohKqRxwu
-	 FRkVxiIl+0Ka2wHh2dL3WGhrGQnG8I2g+tU9mS3mCSDaO4dMaGrmETMcTIELXNEtYW
-	 /UcdVbsI8Qtl+Im9MPtaG7XcRdyGmj5dwLJ1u9WH1My63MC4ZY+n6crDfIGP7RuA0/
-	 KArsTQo4Vpwgim+ZgK3kpK4gCjZ3DZfkJx56ATCs+JErDJHMrYJs8fn2wkHljqZdZ9
-	 T1sgEeUQTXadA==
-From: Geliang Tang <geliang@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf v3] bpf, sockmap: Fix self-redirect copied_seq double-counting
-Date: Tue,  8 Sep 2026 17:08:32 +0800
-Message-ID: <1a8e797a1b26e2f695aaac22ac644c2862f63466.1788858299.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o/OsFgMD"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=6VmEDsVAvJfO/ndzZMXcVM2LXI2zLrkuWTXR1AO7Mos=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788858705; v=1; x=1789463505;
+ b=o/OsFgMD/O1bayRQI8oxCjqnwesm8mhG7IbQxPmubhZdQCWn5FytYnHxyBMB1yhB1qL9ZVjJ
+ zrZd2KjKlbYjW51TJlvoFQycyVVkqmIlttgpxOWrp/6FkOWfoPWzv7yaujtlOHeMPo49Tsc1rce
+ L9bXMQWfw1fs5L6ecL3okDYA=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id d929543bb24a8c1b;
+	Tue, 08 Sep 2026 09:11:45 +0000
+X-Mizu-Trace-ID: d929543bb24a8c1b
+X-Migadu-Flow: FLOW_OUT
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Roman Gushchin <roman.gushchin@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Barry Song <baohua@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next v9 0/2] bpf: BPF-driven proactive memcg reclaim
+Date: Tue,  8 Sep 2026 17:11:26 +0800
+Message-ID: <cover.1788857915.git.zhuhui@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,80 +64,109 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-When a BPF stream_verdict program redirects an skb back to the same
-socket (self-redirect with BPF_F_INGRESS), sk_psock_verdict_apply()
-calls tcp_eat_skb() which advances tcp_sk->copied_seq. However, the
-skb is then delivered to the socket's psock ingress queue and later
-read by tcp_bpf_recvmsg_parser(), which also advances copied_seq via
-the copied_from_self accounting path. This double-counting causes
-copied_seq to advance by 2x the actual data length, triggering:
+BPF programs can observe memory pressure on a cgroup (e.g. refault
+stats via bpf_mem_cgroup_page_state()), but cannot act on it:
+triggering reclaim on a chosen cgroup requires writing to
+memory.reclaim, which BPF cannot do. This series adds
+bpf_proactive_reclaim(), a sleepable kfunc performing one proactive
+reclaim pass on a target memcg, so when and how hard to reclaim is
+BPF policy rather than hard-coded thresholds.
 
-  TCP recvmsg seq # bug 2: copied BF2E806, seq BF2E7FD, \
-			   rcvnxt BF2E806, fl 0
-  WARNING: net/ipv4/tcp.c:2745 at tcp_recvmsg_locked+0x72b/0x2640
-  Call Trace:
-   tcp_recvmsg+0x10a/0x500
-   sock_recvmsg+0x168/0x1d0
-   __sys_recvfrom+0x19a/0x2a0
-   __x64_sys_recvfrom+0xe4/0x1f0
-   do_syscall_64+0xf7/0x530
-   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+The kfunc is restricted to BPF_PROG_TYPE_SYSCALL so that reclaim
+always runs in a clean process context: generic sleepable programs
+may execute with filesystem locks held or in NOFS/NOIO contexts,
+where the reclaim path could deadlock in filesystem shrinkers. The
+bpf_wq and task_work callbacks of a SYSCALL program keep its program
+type and run in process context, so reclaim work can still be queued
+asynchronously through them, as the selftest does with bpf_wq.
 
-  cleanup rbuf bug: copied BF2E806 seq BF2E806 rcvnxt BF2E806
-  WARNING: net/ipv4/tcp.c:1609 at tcp_cleanup_rbuf+0xf2/0x1c0
-  Call Trace:
-   tcp_recvmsg_locked+0x8d1/0x2640
-   tcp_recvmsg+0x10a/0x500
-   sock_recvmsg+0x168/0x1d0
-   __sys_recvfrom+0x19a/0x2a0
-   __x64_sys_recvfrom+0xe4/0x1f0
-   do_syscall_64+0xf7/0x530
-   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+The use case we are looking at is protecting high-priority workloads:
+a BPF program monitors the state of a high-priority cgroup and, when
+it degrades (e.g. PSI rises or refaults increase, as in the
+selftest), asynchronously reclaims memory from low-priority cgroups
+via bpf_wq and bpf_proactive_reclaim(), giving the pressured cgroup
+more free pages.
 
-Fix this by converting self-redirect verdict to __SK_PASS at the
-beginning of sk_psock_verdict_apply(). This bypasses the
-__SK_REDIRECT case entirely (which calls sk_psock_eat_skb), letting
-the __SK_PASS path queue the skb to the psock ingress queue. The
-data is then read via tcp_bpf_recvmsg_parser(), which advances
-copied_seq exactly once through copied_from_self. Cross-socket
-redirects continue through __SK_REDIRECT with sk_psock_eat_skb()
-unchanged.
+Another use case: several vendor-maintained kernels carry private
+implementations that trigger asynchronous reclaim when a memcg enters
+a certain state. These exist for historical and partly psychological
+reasons, but the underlying demand is real. We expect BPF-driven
+proactive reclaim, combined with the BPF hooks for the memory
+controller currently under discussion and development, to serve these
+needs in mainline, reducing kernel fragmentation and improving kernel
+maintainability.
 
-Fixes: e5c6de5fa025 ("bpf, sockmap: Incorrectly handling copied_seq")
-Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
-Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
----
+Changelog:
+v9:
+According to the comments of JP, copy the motivation from the cover
+letter to the commit message, restructure the kfunc documentation
+to separate the direct and asynchronous calling contexts, fold the
+fs-lock warning into the SYSCALL-only rationale, soften the "bounded
+unit of work" wording (only the reclaim target is capped), and drop
+the redundant comment above the reclaim kfunc set registration.
+v8:
+According to the comments of Andrew, Kumar and Shakeel, drop the
+bpf_in_reclaim_context() check because the SYSCALL-only restriction
+already rules out reentrancy.
+According to the comments of Kumar, Add the swappiness argument to
+bpf_proactive_reclaim().
+v7:
+According to the comments of JP, clamp the reclaim target of one
+bpf_proactive_reclaim() call to MEMCG_CHARGE_BATCH so each call is
+a bounded unit of work, and document the batching policy in the kfunc.
+selftest: check the target cgroup for dying state before reclaiming
+from it, and add the memcg_async_reclaim_dying test covering target
+removal while reclaim is running.
+v6:
+According to the comments of Kumar and Shakeel, Restrict
+bpf_proactive_reclaim() to BPF_PROG_TYPE_SYSCALL by moving it
+to a dedicated kfunc set registered for that program type only, and
+document the clean-process-context requirement in its kerneldoc.
+v5:
+According to the comments of Andrii, Kumar and Shakeel, remove
+bpf_proactive_reclaim_swappiness.
+v4:
+According to the comments of bot+bpf-ci and sashiko, also check
+current->reclaim_state to close the fentry-on-trace-iter recursion
+window in bpf_in_reclaim_context.
+Return bytes instead of pages ( nr * PAGE_SIZE ) in
+bpf_proactive_reclaim_pages and bpf_proactive_reclaim_swappiness.
+Return (unsigned long)-1 on out-of-range swappiness (was 0).
+Kdoc of both kfuncs: updated Return descriptions; added FS-lock deadlock
+warning to bpf_proactive_reclaim.
+Fix potential child process leak in selftests.
+Use _exit() instead of exit() in forked children in selftests.
+Rename reclaimed_pages to reclaimed_bytes in selftests.
+Fix comments issues in selftests.
 v3:
-- add "bpf" prefix.
-
+According to the comments of bot+bpf-ci, add a shared helper
+bpf_proactive_reclaim_pages() that is called by bpf_proactive_reclaim
+and bpf_proactive_reclaim_swappiness.
+According to the comments of sashiko and bot+bpf-ci, fix the issues of
+selftests.
 v2:
- - fixup the verdict as Jakub and Jiayuan suggested.
- - https://patchwork.kernel.org/project/netdevbpf/patch/1d2370f4c81f10834b8dd77524924575c629a464.1788591198.git.tanggeliang@kylinos.cn/
+According to the comments of Shakeel Butt, replace
+bpf_try_to_free_mem_cgroup_pages() with
+bpf_proactive_reclaim(memcg, size) and
+bpf_proactive_reclaim_swappiness(memcg, size, swappiness).
+According to the comments of Kumar Kartikeya Dwivedi, drop patch 2
+and patch 3.
+Remove bpf_thread_wq code in patch 4.
+According to the comments of sashiko-bot, fix the issues of selftests.
 
-v1:
- - https://patchwork.kernel.org/project/netdevbpf/patch/b840c35fdfdf36e9fddedfa645b12699bc51aa34.1787968065.git.tanggeliang@kylinos.cn/
----
- net/core/skmsg.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Hui Zhu (2):
+  mm/bpf: Add bpf_proactive_reclaim kfunc
+  selftests/bpf: Add memcg async reclaim test
 
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 2521b643fa05..df385a5a961e 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -1000,6 +1000,10 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
- 	int err = 0;
- 	u32 len, off;
- 
-+	if (verdict == __SK_REDIRECT && skb_bpf_ingress(skb) &&
-+	    skb_bpf_redirect_fetch(skb) == psock->sk)
-+		verdict = __SK_PASS;
-+
- 	switch (verdict) {
- 	case __SK_PASS:
- 		err = -EIO;
+ mm/bpf_memcontrol.c                           |  88 ++-
+ .../bpf/prog_tests/memcg_async_reclaim.c      | 686 ++++++++++++++++++
+ .../selftests/bpf/progs/memcg_async_reclaim.c | 259 +++++++
+ 3 files changed, 1032 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_async_reclaim.c
+
 -- 
-2.53.0
+2.43.0
 
