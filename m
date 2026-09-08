@@ -1,183 +1,311 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800CB4FECED
-	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 12:25:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA1C550DB5;
+	Tue,  8 Sep 2026 13:16:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788870330; cv=none; b=Xns3nO+ufz3lIdkeDI5SZmyKXocGV/wFiMgG3c90iyv1XS+A6IrdqX24L38u6gif46TgWKp6yRCHc+VeXj6eSCEdNxNPqYdRKNdukoeEY6fCxe145XxAUM8E/3GjIAnU54m/hiDFsxPWoN55KF40MaezGPUd4yeKzfqIC61EZAE=
+	t=1788873401; cv=none; b=ekwIqPaPwWFROJhIv4HKizjVxJ8+UwWSXlPb0pWP4un5AnGD9Rh43oo7dBDNPoi1bd4nkMKEnMqThjDXmvzJsRmVYmR4XU/FRuc1sKooFohzQr46QFd+Hb9Zl6oIiT2vpquH8PZidtVqXdxhOsWt1XeLCdE1o45nZjMYlfFJmag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788870330; c=relaxed/simple;
-	bh=kUmgtBRRW/6YFkzv9CdMafFAsp9/UnVBqyhb6OSx7bc=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MXgyIWYbIQKQHkM9rTvwQqtqCHzypRIUR6FTVdYNtZgFqv4Bq+DG0EIBrZK3ltRaYelwnLlZpCY7FrUvAIArx2H3yI1K2wZmO94JPwFj4cL6gUIOw0AA+i9z2tY4/GahZ/hV3umuLKCeGXBdrMCb4k0jHX+rm0XOtz9MnGjnBoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KbTUdmj1; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788873401; c=relaxed/simple;
+	bh=rw6q01fV3rH8LWshetnCVReEFs0SL+sAvVq67LFYUaY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mIOBxQYBXxRJp8a8Fe20NGMNUVLvyLb1JNJMBzqHWxqKtpx7+UK0Qb6MOav69Toyj1eLBuTzqdoNGOvaMTydNILMsJUWMVaFOk1R44QvHrVNS2h0ta8ORB/7eYPY4W9/DJyM+UU5dUhKjoreaDrzhO3li2rz1jfMKowyr5q1R2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oqeTVtVP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KbTUdmj1"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-485850cf499so3007424f8f.3
-        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 05:25:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788870327; x=1789475127; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:date
-         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JCVse+ZYy1JDa0fOFXVuj61Y1ueoZZouyA9Vhxgb3eU=;
-        b=KbTUdmj1Zf0HHzRWVPEV+4jQfX2X15GG/3dbLWDqMg5d1R3D00n/7+k2wjHi+3rKks
-         7DJIiB56I1jLIuYtYOJxq7QwmeIrFuwMB7iI73y3HoMrFAHsmQ44Pqjpz+xpFBihZOsK
-         yYxi/odgmFc4MnpBjdKqVDjR4LpP1VJxbOZWVxD4R9yk1dALWhqbnpH8mei2V20cQYJ2
-         /2MVt7hwuMNWPWi7FlzN0MGHfHIy+alPP46eEKvGYHk5DYfxm0/IwC8Rwaah4oYBCtTS
-         jfbB4X+ZBBFi7PIQ3XR0+s4w/01j1VG3FbygInIyIWniaqcdc6NOglQc97V4bAGNV/T/
-         1sLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788870327; x=1789475127;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:date
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=JCVse+ZYy1JDa0fOFXVuj61Y1ueoZZouyA9Vhxgb3eU=;
-        b=E93JvdijgT7m+5NZHelbnaim9rm8j6961EdfHvXOqmqkm4N1mYLfSEalHaUoCAbjHE
-         PAiDSrJv29AqIqBDK9VNWLpVqhA8jONzd+FFUmQy8ehJbjhA9xhkoAoqLhN5pIk9h+Uv
-         uq8yA3aUSf0yl+9aMW6jCuah3l890DFr3bVyDyw6Jppxsk/Q9T19wCvia9HSjK/XgEBj
-         lOV9B7ZeQza2GhMGX/rZ604bNwF6BrGZ3tlPaClVScLc3aoZA3qlGBHhVzdMj6X7xU9k
-         VDygqU34/5kUwLpYmAhLww1CkZ71i7icbN0hnIfrwfjl5zhIyaVl80pXY3tNloJOmtiH
-         F48A==
-X-Forwarded-Encrypted: i=1; AKwUvBwefmCQraAoNzoE7NJ8GyjihPqLWhnkrAFAyJVY37PCUh7Po/2mPeF2EaKp7k03argYeaY=@vger.kernel.org
-X-Gm-Message-State: AFuF++mSTpvMZR9TCJqQKAudZoMTG/y/lRdH5QZyOflvPiboWTRZIVjN
-	BdL3Mf6+Wh8O0c2nEaldE9ougCSUlMxS6n/8e0ekeCwolE2r+OQ/1Pm0
-X-Gm-Gg: AYBFou0PplH67qEDp8y7clkUMLQVpH5EC17kPaPI5OwTVUK6WdDsppLotG33HBT0ZZP
-	RoEu3x8zhwFybKy3wiA3tbXE/IcW3i+tuoPSSG8VDUzXXZAvfZxvVTZNdn/DJ0VrZJe+k7SEb7P
-	FB0ey1Tl06coQLCPpjNfR7rr1kdoOSZN2axz/0qkF59ePOEEoF0N3SDWyHsTFQryo+D/mwXBsrL
-	yVFO8AmjbtV5weH8yxRbKYn34IsZf1GrMfrqaJhQPJ/m3mDQa87ZD+pcO2oyDfoBkxPs8BfX9+w
-	rMB5bM3ofAezhyfQxSbS41JPMqHcWt/Q8jwe7lctNWULrxnOOY6GsRvHTdEqxRlC4xfneO1bnny
-	tfLyckM5vVFBfq+vdrUWxb0FqA6bIPq0vb31v3Uuu9B9lIrfgz2a2WUSM1bWwYIML5qxYEJQpCY
-	bw0RUETclDrFk/y1CoMW+psyzoIAQ4y5i6EBxQYNhcqPBUYkk=
-X-Received: by 2002:a05:6000:26c2:b0:485:9a53:9145 with SMTP id ffacd0b85a97d-4859a539201mr13546430f8f.40.1788870326381;
-        Tue, 08 Sep 2026 05:25:26 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485883c074asm34890455f8f.23.2026.09.08.05.25.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2026 05:25:26 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 8 Sep 2026 14:25:24 +0200
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Mike Rapoport <rppt@kernel.org>
-Subject: Re: [PATCH bpf-next] bpf, x86: Use global buffer for trampoline size
- generation
-Message-ID: <ap_-tAGAqguRdFUn@krava>
-References: <20260907160538.922450-1-jolsa@kernel.org>
- <DL9CKPXX2OFG.2EK0RAZUT2PMV@gmail.com>
- <ap8d2AhD7Ax13rJ8@krava>
- <CAADnVQL-vs02PyTOQE9wYK+S988hG7cUMq+DAiD=X1K5+E=zmw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oqeTVtVP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA0B31F00A3A;
+	Tue,  8 Sep 2026 13:16:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788873399;
+	bh=eGoipUCnVkQSnrYlG4JuuefvC9x1Ssr7yfDjVV3fi44=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=oqeTVtVP8J4gmkOV/vgaJdwrdFmePsueOXneNkP0K3ZCZxNy/XbNk+Mz3u8yPvv8B
+	 rSJcvMVytF2Wex2GWEtxw3Jmo/U6steSK88MCOpPV2qzOXxtFldeoPnZu/oJdcDjjM
+	 mhW11GCOVUtyhlrgmqkMBozE9lYJzkTafjcL7YGglsbBZ90n9rZK1JNJBFwQBLyX3i
+	 laZwDs0zTiur85XZaUXHRw3RmT77Vb9vNnQ7FsJYwfisjB5J6eGu5yI97mQ74KEz+f
+	 9Bj/yI275o/CX6460g5dfvsVUaGHS9oLnUWg3xP8vYkXlOQL1RZnt0vrBDmJZTYTvW
+	 htwTGDeZI9OXQ==
+Date: Tue, 8 Sep 2026 14:16:31 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+Cc: bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, david@kernel.org, akpm@linux-foundation.org, 
+	andrii@kernel.org, ast@kernel.org, brauner@kernel.org, daniel@iogearbox.net, 
+	eddyz87@gmail.com, kpsingh@kernel.org, matt@bobrowski.net, memxor@gmail.com, 
+	song@kernel.org, sun.jian.kdev@gmail.com, utilityemal77@gmail.com, 
+	viro@zeniv.linux.org.uk
+Subject: Re: [PATCH bpf-next v5 1/7] mm: Add copy_remote_mm_str()
+Message-ID: <aqAKY6dtdxN_cUMi@gremlin>
+References: <20260907165220.52431-1-tasos.papagiannnis@gmail.com>
+ <20260907165220.52431-2-tasos.papagiannnis@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQL-vs02PyTOQE9wYK+S988hG7cUMq+DAiD=X1K5+E=zmw@mail.gmail.com>
+In-Reply-To: <20260907165220.52431-2-tasos.papagiannnis@gmail.com>
 
-On Mon, Sep 07, 2026 at 05:13:29PM -0700, Alexei Starovoitov wrote:
-> On Mon, Sep 7, 2026 at 1:26 PM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Mon, Sep 07, 2026 at 12:56:33PM -0700, Alexei Starovoitov wrote:
-> > > On Mon Sep 7, 2026 at 9:05 AM PDT, Jiri Olsa wrote:
-> > > > Currently arch_bpf_trampoline_size allocates and frees a temporary
-> > > > trampoline buffer on every invocation. The buffer is only used as a
-> > > > scratch space while __arch_prepare_bpf_trampoline() calculates the
-> > > > required size, and the generated trampoline is discarded.
-> > > >
-> > > > Allocating a writable scratch page during kernel initialization and
-> > > > reusing it for all size calculations. This improves tracing_multi
-> > > > attachment time.
-> > > >
-> > > > With current code:
-> > > >
-> > > >   # ./test_progs -t tracing_multi_bench_attach -v
-> > > >   ...
-> > > >   serial_test_tracing_multi_bench_attach: found 55227 functions
-> > > >   serial_test_tracing_multi_bench_attach: attached in   1.563s
-> > > >   serial_test_tracing_multi_bench_attach: detached in   0.256s
-> > > >
-> > > > With the fix:
-> > > >
-> > > >   # ./test_progs -t tracing_multi_bench_attach -v
-> > > >   ...
-> > > >   serial_test_tracing_multi_bench_attach: found 55235 functions
-> > > >   serial_test_tracing_multi_bench_attach: attached in   0.798s
-> > > >   serial_test_tracing_multi_bench_attach: detached in   0.258s
-> > > >
-> > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > > ---
-> > > > was "bpf, x86: Add support for jit dry run",
-> > > > - doing this by having single scratch page instead as suggested by Alexei
-> > > >
-> > > >  arch/x86/net/bpf_jit_comp.c | 30 +++++++++++++++---------------
-> > > >  1 file changed, 15 insertions(+), 15 deletions(-)
-> > > >
-> > > > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> > > > index bba351944202..13ef0d53ca29 100644
-> > > > --- a/arch/x86/net/bpf_jit_comp.c
-> > > > +++ b/arch/x86/net/bpf_jit_comp.c
-> > > > @@ -9,6 +9,7 @@
-> > > >  #include <linux/filter.h>
-> > > >  #include <linux/if_vlan.h>
-> > > >  #include <linux/bitfield.h>
-> > > > +#include <linux/init.h>
-> > > >  #include <linux/bpf.h>
-> > > >  #include <linux/bpf_verifier.h>
-> > > >  #include <linux/memory.h>
-> > > > @@ -35,6 +36,15 @@ void __asan_store8(void *p);
-> > > >
-> > > >  static bool all_callee_regs_used[4] = {true, true, true, true};
-> > > >
-> > > > +static void *trampoline_size_image;
-> > > > +
-> > > > +static int __init init_trampoline_size_image(void)
-> > > > +{
-> > > > +   trampoline_size_image = execmem_alloc(EXECMEM_MODULE_DATA, PAGE_SIZE);
-> > >
-> > > I think I asked it earlier... why does it have to be execmem ?
-> > > Can it be normal page?
-> >
-> > ugh sorry I forgot.. the page/image needs to be in execmem range
-> > for emitting call/jmp otherwise the delta won't fit in 4 bytes
-> > and it fails on emit_patch is_simm32 check
-> 
-> ahh. I see. Please mention it in the comment and
-> also use bpf_jit_alloc_exec(PAGE_SIZE).
-> 
-> execmem_alloc(EXECMEM_MODULE_DATA...) was working by accident.
-> The VM ranges could have been different.
+On Mon, Sep 07, 2026 at 07:52:14PM +0300, Anastasios Papagiannis wrote:
+> copy_remote_vm_str() gets the target address space from a struct
+> task_struct. This does not work for an address space that exists but is
+> not yet associated with a task_struct, such as the mm held by struct
+> linux_binprm during exec.
+>
+> Add copy_remote_mm_str(), which operates directly on a struct mm_struct.
+>
+> Use a common internal interface for the MMU and NOMMU implementations
+> and define both public wrappers in mm/util.c. Preserve the existing
+> copy_remote_vm_str() behavior, including handling zero-length requests
+> before acquiring the task's mm.
+>
+> Signed-off-by: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
 
-bpf_jit_alloc_exec returns read only page so I'd use bpf_jit_alloc_exec_rw,
-but it was recently removed in:
+OK actually doing it this way means we don't have to worry about
+__copy_remote_mm_str() at all since we abstract it with
+copy_remote_mm_str().
 
-  c7a2a3618290 x86/bpf: Make arch_bpf_trampoline_size allocate from EXECMEM_MODULE_DATA
+With David's comments addressed LGTM so:
 
-so I ended up with:
+Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-  trampoline_size_image = execmem_alloc_rw(EXECMEM_BPF, PAGE_SIZE);
+> ---
+>  include/linux/mm.h |  2 ++
+>  mm/internal.h      |  5 ++++
+>  mm/memory.c        | 41 ++----------------------------
+>  mm/nommu.c         | 41 ++----------------------------
+>  mm/util.c          | 62 ++++++++++++++++++++++++++++++++++++++++++++++
+>  5 files changed, 73 insertions(+), 78 deletions(-)
+>
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index dd09c438fa23..d5bde1f71a97 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3326,6 +3326,8 @@ extern int access_remote_vm(struct mm_struct *mm, unsigned long addr,
+>  		void *buf, int len, unsigned int gup_flags);
+>
+>  #ifdef CONFIG_BPF_SYSCALL
+> +extern int copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
+> +			      void *buf, int len, unsigned int gup_flags);
+>  extern int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
+>  			      void *buf, int len, unsigned int gup_flags);
+>  #endif
 
-> 
-> > >
-> > > If so then alloc it and free it every time. No need to keep one page in reserve.
-> >
-> > hum, you mean drop the change then?
-> 
-> Since it needs to be execmem preallocating one page for this is fine.
+Same comments as David :>)
 
-ok, great
+> diff --git a/mm/internal.h b/mm/internal.h
+> index 38b1165212c9..8264a346d18a 100644
+> --- a/mm/internal.h
+> +++ b/mm/internal.h
+> @@ -25,6 +25,11 @@
+>  struct folio_batch;
+>  struct hstate;
+>
+> +#ifdef CONFIG_BPF_SYSCALL
+> +int __copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
+> +			 void *buf, int len, unsigned int gup_flags);
+> +#endif
+> +
+>  struct huge_bootmem_page {
+>  	struct list_head list;
+>  	struct hstate *hstate;
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 8b0c2c735d3d..fe2f5e988fb9 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -7331,8 +7331,8 @@ EXPORT_SYMBOL_GPL(access_process_vm);
+>   * Copy a string from another process's address space as given in mm.
+>   * If there is any error return -EFAULT.
+>   */
+> -static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr,
+> -				void *buf, int len, unsigned int gup_flags)
+> +int __copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
+> +			 void *buf, int len, unsigned int gup_flags)
+>  {
+>  	void *old_buf = buf;
+>  	int err = 0;
+> @@ -7407,43 +7407,6 @@ static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr,
+>  		return err;
+>  	return buf - old_buf;
+>  }
+> -
+> -/**
+> - * copy_remote_vm_str - copy a string from another process's address space.
+> - * @tsk:	the task of the target address space
+> - * @addr:	start address to read from
+> - * @buf:	destination buffer
+> - * @len:	number of bytes to copy
+> - * @gup_flags:	flags modifying lookup behaviour
+> - *
+> - * The caller must hold a reference on @mm.
+> - *
+> - * Return: number of bytes copied from @addr (source) to @buf (destination);
+> - * not including the trailing NUL. Always guaranteed to leave NUL-terminated
+> - * buffer. On any error, return -EFAULT.
+> - */
+> -int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
+> -		       void *buf, int len, unsigned int gup_flags)
+> -{
+> -	struct mm_struct *mm;
+> -	int ret;
+> -
+> -	if (unlikely(len == 0))
+> -		return 0;
+> -
+> -	mm = get_task_mm(tsk);
+> -	if (!mm) {
+> -		*(char *)buf = '\0';
+> -		return -EFAULT;
+> -	}
+> -
+> -	ret = __copy_remote_vm_str(mm, addr, buf, len, gup_flags);
+> -
+> -	mmput(mm);
+> -
+> -	return ret;
+> -}
+> -EXPORT_SYMBOL_GPL(copy_remote_vm_str);
+>  #endif /* CONFIG_BPF_SYSCALL */
+>
+>  /*
+> diff --git a/mm/nommu.c b/mm/nommu.c
+> index 498e01ee40b0..98596e60311f 100644
+> --- a/mm/nommu.c
+> +++ b/mm/nommu.c
+> @@ -1746,8 +1746,8 @@ EXPORT_SYMBOL_GPL(access_process_vm);
+>   * Copy a string from another process's address space as given in mm.
+>   * If there is any error return -EFAULT.
+>   */
+> -static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr,
+> -				void *buf, int len)
+> +int __copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
+> +			 void *buf, int len, unsigned int gup_flags)
+>  {
+>  	unsigned long addr_end;
+>  	struct vm_area_struct *vma;
+> @@ -1781,43 +1781,6 @@ static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr,
+>  	mmap_read_unlock(mm);
+>  	return ret;
+>  }
+> -
+> -/**
+> - * copy_remote_vm_str - copy a string from another process's address space.
+> - * @tsk:	the task of the target address space
+> - * @addr:	start address to read from
+> - * @buf:	destination buffer
+> - * @len:	number of bytes to copy
+> - * @gup_flags:	flags modifying lookup behaviour (unused)
+> - *
+> - * The caller must hold a reference on @mm.
+> - *
+> - * Return: number of bytes copied from @addr (source) to @buf (destination);
+> - * not including the trailing NUL. Always guaranteed to leave NUL-terminated
+> - * buffer. On any error, return -EFAULT.
+> - */
+> -int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
+> -		       void *buf, int len, unsigned int gup_flags)
+> -{
+> -	struct mm_struct *mm;
+> -	int ret;
+> -
+> -	if (unlikely(len == 0))
+> -		return 0;
+> -
+> -	mm = get_task_mm(tsk);
+> -	if (!mm) {
+> -		*(char *)buf = '\0';
+> -		return -EFAULT;
+> -	}
+> -
+> -	ret = __copy_remote_vm_str(mm, addr, buf, len);
+> -
+> -	mmput(mm);
+> -
+> -	return ret;
+> -}
+> -EXPORT_SYMBOL_GPL(copy_remote_vm_str);
+>  #endif /* CONFIG_BPF_SYSCALL */
+>
+>  /**
+> diff --git a/mm/util.c b/mm/util.c
+> index bf0513d1d3d0..2eca27b02791 100644
+> --- a/mm/util.c
+> +++ b/mm/util.c
+> @@ -1061,6 +1061,68 @@ int get_cmdline(struct task_struct *task, char *buffer, int buflen)
+>  	return res;
+>  }
+>
+> +#ifdef CONFIG_BPF_SYSCALL
+> +/**
+> + * copy_remote_mm_str - copy a string from a remote address space.
+> + * @mm:         the remote address space
+> + * @addr:       start address to read from
+> + * @buf:        destination buffer
+> + * @len:        number of bytes to copy
+> + * @gup_flags:  flags modifying lookup behaviour
+> + *
+> + * The caller must hold a reference on @mm.
+> + *
+> + * Return: number of bytes copied from @addr (source) to @buf (destination),
+> + * not including the trailing NUL. If @len is zero, return 0 without accessing
+> + * @buf. Otherwise, @buf is always NUL-terminated. On any error, return
+> + * -EFAULT.
+> + */
+> +int copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
+> +		       void *buf, int len, unsigned int gup_flags)
+> +{
+> +	if (unlikely(len == 0))
+> +		return 0;
+> +
+> +	return __copy_remote_mm_str(mm, addr, buf, len, gup_flags);
+> +}
+> +
+> +/**
+> + * copy_remote_vm_str - copy a string from another process's address space.
+> + * @tsk:	the task of the target address space
+> + * @addr:	start address to read from
+> + * @buf:	destination buffer
+> + * @len:	number of bytes to copy
+> + * @gup_flags:	flags modifying lookup behaviour
+> + *
+> + * Return: number of bytes copied from @addr (source) to @buf (destination),
+> + * not including the trailing NUL. If @len is zero, return 0 without accessing
+> + * @buf. Otherwise, @buf is always NUL-terminated. On any error, return
+> + * -EFAULT.
+> + */
+> +int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
+> +		       void *buf, int len, unsigned int gup_flags)
+> +{
+> +	struct mm_struct *mm;
+> +	int ret;
+> +
+> +	if (unlikely(len == 0))
+> +		return 0;
+> +
+> +	mm = get_task_mm(tsk);
+> +	if (!mm) {
+> +		*(char *)buf = '\0';
+> +		return -EFAULT;
+> +	}
+> +
+> +	ret = __copy_remote_mm_str(mm, addr, buf, len, gup_flags);
+> +
+> +	mmput(mm);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(copy_remote_vm_str);
+> +#endif /* CONFIG_BPF_SYSCALL */
+> +
+>  int __weak memcmp_pages(struct page *page1, struct page *page2)
+>  {
+>  	char *addr1, *addr2;
+> --
+> 2.55.0
+>
 
-jirka
+--
+Cheers, Lorenzo
