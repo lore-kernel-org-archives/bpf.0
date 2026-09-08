@@ -1,114 +1,156 @@
-Received: from extorris.mess.org (extorris.mess.org [92.243.27.206])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39CC556E053;
-	Tue,  8 Sep 2026 15:54:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.243.27.206
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788882860; cv=none; b=p9qjoyGTuWcXQw8xVs1XIhsIGKlvXvUzAEJ/wIvy5cHHGihYMPdS1qpeZRmTYqVkFj2lCy0m5iGWjEdCelCvDRHi3pb4WQK4yDZEZYbI+UWTbl6SPNhbi4kUs017Y131TAeP/3OM0N0lx1Zt6iZDsgXOj5GrGGgzSqQKmGMXWH4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788882860; c=relaxed/simple;
-	bh=knl9K8P7DwwSxVkOS5n9sh72AjW62Q/s0/VL+riJqKA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kuQhkUHOOZypR3HS+ED9sgYAg5ZH+aTPFroWIBuBg+1Ke84tep2LZ2olvj8UW++NolEXAGcdu23lsNe/Y2TcNUK9Ti2fjVlN496lrDduz3ZS86Uj1WvcFYogUWDq7t6Xk9ZZETIhyyFU797mc+OZMq/25Poj7wNV6flF8EO9x58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org; spf=pass smtp.mailfrom=mess.org; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=LjDt7h8O; dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b=PopA1IGE; arc=none smtp.client-ip=92.243.27.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=mess.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mess.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F8411AC44D
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 16:00:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788883254; cv=pass; b=Fs5joAd9lYi/zTwcsdR+ppuMHS7t2zCTWEDTl9WjNjyyjYo8Z79x7LxqzFeuhYCk9qEbAE+rsEmdgRkie0vmbkSLHpeb15gds71frDSpCAC6qRIuY0lGQ+HM7n8fGS/l3LeA7Da4+JW8fGAOgdnGOamd7rtwt4sRNSo4/iZeBSI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788883254; c=relaxed/simple;
+	bh=JvpGORMbN0f3B0RLWaA7oEm9RnNQKxZ8y3nKuSFivAQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MVPz5XKJRAeUtTVNOHWduoB7ElQSw8mpoPJP2J5SWmNOtGsoOi0oq8vMHXwxEXaOCYkRznGBeP/r32hl0iEnSgiEoGl+6VfkoN5PkCmr/zZfiJa49CGCpARhi2LyAIrRgivb5kf8KR5DuhbGN8F09g8ioYSLS8olgorXI/+h8og=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=vZOhEZ8+; arc=pass smtp.client-ip=74.125.224.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="LjDt7h8O";
-	dkim=pass (2048-bit key) header.d=mess.org header.i=@mess.org header.b="PopA1IGE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1788882851; bh=knl9K8P7DwwSxVkOS5n9sh72AjW62Q/s0/VL+riJqKA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LjDt7h8OGyy19I+GC25H5T9cRNZOpUwDsYX4fhpHdmb8g6aMf8BpOnCNG8M+U5kN2
-	 /HiV134fka7pW+miZbEx8BMTiciZRm5WK+i6wWBs1LFQIU8y7rtrylTaweikX8OU8j
-	 0+CDTXFcn016QPoWyMYJ8H8HtAxVcnqm7pYsVGYYVpqvSJvWX6QxHqU4bMxWGXIFaB
-	 phDIMhJQkzY8q7w6/u1kwpq79ZXHQP3czFqO+ZDKSJqgUERL/KLiikV5gn+zkzxMO6
-	 blO+n0gKoB14nOX5bVPMfxOMTwAmh51Xai0v/aW+r8A2vl5BCd+gA4CGRFhzWWg23F
-	 R5LcXseHN84Gw==
-Received: by extorris.mess.org (Postfix, from userid 1004)
-	id 4E58141455; Tue, 08 Sep 2026 16:54:11 +0100 (BST)
-X-Spam-Level: 
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
-	t=1788882850; bh=knl9K8P7DwwSxVkOS5n9sh72AjW62Q/s0/VL+riJqKA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PopA1IGE7ZOyjL2einaM6GJcZUSUV//F+X8PSsJbeNMHx6HtIs2ZthfnNlSNCBSlW
-	 us+2f2Legs6GBtd6Co+cQR+HQ4aBGFbHDelhZlmwbb+9jhoS6aVnncOERKWsv8Xp1N
-	 nhmKBhfq++YNcDOfRG/iNEaQrKHTnzc+QprLYvFZivLh6O4LG+fO1y2kz48XrcyJ5H
-	 MOtQzQ3laOtMlvs/MtRSn24PmdcuvUEf68nKyt37YV0VGQn2MwCaq01hI3w+BrsPMf
-	 5zTddp+eAfMnoWsJaXzspbBuHTGTGY901X4fgoPynorDH+k8m2Hqlb+iYqLWS/8/kX
-	 B8+JobpAIf3WQ==
-Received: from maru.home (host86-150-50-53.range86-150.btcentralplus.com [86.150.50.53])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by extorris.mess.org (Postfix) with ESMTPSA id CA1E741450;
-	Tue, 08 Sep 2026 16:54:09 +0100 (BST)
-From: Sean Young <sean@mess.org>
-To: linux-media@vger.kernel.org,
-	Sean Young <sean@mess.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Hans Verkuil <hverkuil+cisco@kernel.org>,
-	Patrice Chotard <patrice.chotard@foss.st.com>
-Cc: Rik van Riel <riel@surriel.com>,
-	stable@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH v4 05/19] media: rc: Fix race between bpf(BPG_PROG_ATTACH) and device unregister
-Date: Tue,  8 Sep 2026 16:51:53 +0100
-Message-ID: <e3a4d95659d373050abe9da495f417e16d7def37.1788882189.git.sean@mess.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <cover.1788882189.git.sean@mess.org>
-References: <cover.1788882189.git.sean@mess.org>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="vZOhEZ8+"
+Received: by mail-yx2-f12.google.com with SMTP id 00721157ae682-85d4e39e3d8so6884857b3.0
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 09:00:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788883251; cv=none;
+        d=google.com; s=arc-20260327;
+        b=B/+qoQWvQZxr+uqXAmil1+MYJ10HV+SHwtMJAyLmA21T6QoAe+fJlA7npnIMgL0KOg
+         h1Ptw+1J60lCZJmj+S3M8WiJrF9GEGIH3wVFQtgB5WEumqJqNaX1aBe0AWbQuXVTkQFN
+         g/Ateze82jNIb6JgAhpyKZCAxBMH3qfz3YbJSPKmGWniPepZc0ptlWTimiRW0pf45yXg
+         hnfTfSojL5LndFccoCyubgvNRDUNYfsF+WTJlR9bvrpJoWnTgr4SI6jeLXD8W9cpRO/W
+         4N3sTs4gV9vCv/qZWIZc6q8XYy9HCFc9KGJ94lmKTFPUF09Ht8Xjj0WnLTUspZNG4CT6
+         tcfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=zLFcLibqgpv9VVaA1mPgIouxF6jt57E+rWme6slCmhY=;
+        fh=oGseWDWQwTMcxS7490Ak5XTvNaq5Lih3BPmWJovRqOE=;
+        b=pfsSzfZFs7dv4hjXwbIxfaHLMhlWNxZDynImy1ZLU62RAfsCy4Zlv+Er9pyIvkTxaZ
+         P/uMZuQH0pZJXxIneft2YeSfZuhiLtnB9SKt1hkQGnZuoOVR1V6CeTZPVgTW6ar7uerr
+         wdnusLTlk4AeLx5KvQQx2CtrKTJA4f2+JwGbDWUisrUGuxsRP62UVbvY27s2k5zP3RCL
+         QJCW1wOO8LquPZ0ACFST9dsVvs35zfqrpVjjkJud1brbt9qlb6IW/cdu9eAjJAwbs3/q
+         IJ9bWVpe58TdLj9enDNTdKaPwSWUToK+HYzi2FxX0D7J54l0E3iViSGe9dmIBiLF+nq9
+         Vt5A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788883251; x=1789488051; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=zLFcLibqgpv9VVaA1mPgIouxF6jt57E+rWme6slCmhY=;
+        b=vZOhEZ8+UPsUYTdkRGYnGllympBUNzxLqElgR3TB2eHBw71vVOrqGJCbXF8YIKEKaZ
+         Si5imTk0K2anAAiVmi6+sxAHX2Hyd0FwBYbw7y0msv6adFxpyq3ifAxFj3082s1A/ojo
+         LJDeFyfk5ojnuQHc7U/PqVB+aDHoJjCvAfjNvtoDfKk8mbm0NpD2CDeAT8e4uO19bzNd
+         KB3w0oGSL/0MjspmXRZEe3S7q/uHJUgZiQtiMo918TWP/BbWzPMTjoR5E6ezXFX38F2e
+         Fi6NAufmdBm4hh+gVvd71hZrXmuSndXYb3s6b0qVC/G8Z7lavhzRf7CdD637qLG9h4Mh
+         mw1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788883251; x=1789488051;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=zLFcLibqgpv9VVaA1mPgIouxF6jt57E+rWme6slCmhY=;
+        b=EUQebhYlU8DmMBl/6zNc4+3aw5vPNZ3+lksJxsqQ0IGqWh/aMPE8Qm0IrShpMzTZZ7
+         QnzWWUwt+IlFXpGudXEzzNjDlxXFTD4x93geeqOLuUiMfm+qS2AFFZYZFavzn8WNhkeE
+         5hN085YEr3eTddkJEYVSX7+5Z8zqkr7crhrYR4HvI4aJxld3CU8BO/vDrQpbQ9uChs2m
+         y/c45k9EL0QZKQMoTKChXWTtGLtHB1DmWAPfCesMbLZznGxx37H4W2JF9Lspfinsm5s6
+         UT2Y9bB08+y7PqpdBJ4YAsbFYFbbO0NKf9psXMw4cHrMxWKDLWqIdxWW76bPaSseDacA
+         O7dw==
+X-Forwarded-Encrypted: i=1; AKwUvBy1qJxu9bfeP6vjju8i9S6a5/yGJSMXTUOSnEbP1oBjfF0bgAAlDpwvdLUmD/TQmzfeVnE=@vger.kernel.org
+X-Gm-Message-State: AFuF++myS/DxBjuoxbhQnDNmEpGTBVRHMzxYTs9KqsH5jI3Xc/MMf7Qz
+	1Rfel0GgGrBm86qqW0lfcbZQp6EgFdDVz8YstEAli3ARVgyDDfSYf0Azeni57xFY3S+NzmNYoPV
+	LpQSU7cIzd3bvFsXhwvExF3iUI5r5gwsDHYbPfTCYpOLJOwdmCkHoMqQ=
+X-Gm-Gg: AYBFou1kz0Vp7v+x8DTBZfgFvgCmSfPsgtlG4YAA3bGDOpT/bKPur8+WiHcDOObUtCE
+	ZMbr3B2fEpt8fh0sd9M6VJVXRk1+03bwSvflrsFGq2opWBAzMDy1Q6JIpO+y6UAKkk1rpaxNliy
+	1mt05xhVZgPHGc7FN056DhxUZfmcrqPyAek/RXwEDBrFGafezO6xeFbIC6TKU64Sj9L1atmvO+C
+	k2eODoCnJbBEab2iYv4eGj2YCXaH/FqVL2FIr4RILlwU4miPzY25PYgJRmJRdwk/j3Zj3LP70ec
+	C0uEqOYLxYCXs+1Og2paoP8vrM7J+HPXZYR8VU2nbobj
+X-Received: by 2002:a05:690c:6610:b0:81e:d001:e0ca with SMTP id
+ 00721157ae682-87c0cb08accmr20725467b3.17.1788883250501; Tue, 08 Sep 2026
+ 09:00:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260902090220.16395-1-liujing@cmss.chinamobile.com> <286de7d2-3750-4a44-a8e8-7054c8cf51d9@linux.dev>
+In-Reply-To: <286de7d2-3750-4a44-a8e8-7054c8cf51d9@linux.dev>
+From: Emil Tsalapatis <emil@etsalapatis.com>
+Date: Tue, 8 Sep 2026 12:00:39 -0400
+X-Gm-Features: AcwNN1XfVvWGsgSwn3ZqzKUvYXDqD4jVjYsyRGGjLTX1m5l-xdM6zw6YWnAE0_o
+Message-ID: <CABFh=a5no3rKs-AzBNyTXUCP_DogzdA00_EMvB0y8ewERS6M+g@mail.gmail.com>
+Subject: Re: [PATCH] bpf: cgroup: fix null-ptr-deref in __cgroup_bpf_attach
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: Liu Jing <liujing@cmss.chinamobile.com>, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, 
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
+	ihor.solodrai@linux.dev, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Mark the device as unregistered before tearing down raw IR/bpf
-state, so that racing bpf(BPF_PROG_{ATTACH,DETACH,QUERY}) calls
-cannot slip in between ir_raw_event_unregister() completing and
-dev->registered being cleared.
++1, this patch implies the error is possible which afaict it isn't.
 
-Fixes: dccc0c3ddf8f ("media: rc: fix race between unregister and urb/irq callbacks")
-Signed-off-by: Sean Young <sean@mess.org>
-Cc: stable@vger.kernel.org
----
- drivers/media/rc/rc-main.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+pw-bot: cr
 
-diff --git a/drivers/media/rc/rc-main.c b/drivers/media/rc/rc-main.c
-index 04204559959f..924b13fff753 100644
---- a/drivers/media/rc/rc-main.c
-+++ b/drivers/media/rc/rc-main.c
-@@ -2050,18 +2050,18 @@ void rc_unregister_device(struct rc_dev *dev)
- 	if (!dev)
- 		return;
- 
-+	mutex_lock(&dev->lock);
-+	dev->registered = false;
-+	if (dev->users && dev->close)
-+		dev->close(dev);
-+	mutex_unlock(&dev->lock);
-+
- 	if (dev->driver_type == RC_DRIVER_IR_RAW)
- 		ir_raw_event_unregister(dev);
- 
- 	timer_delete_sync(&dev->timer_keyup);
- 	timer_delete_sync(&dev->timer_repeat);
- 
--	mutex_lock(&dev->lock);
--	if (dev->users && dev->close)
--		dev->close(dev);
--	dev->registered = false;
--	mutex_unlock(&dev->lock);
--
- 	rc_free_rx_device(dev);
- 
- 	/*
--- 
-2.55.0
-
+On Wed, Sep 2, 2026 at 5:41=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.dev=
+> wrote:
+>
+>
+> on 9/2/26 5:02 PM, Liu Jing wrote:
+> > In __cgroup_bpf_attach(), the expression "prog ? : link->link.prog"
+> > dereferences link before validating that link is non-NULL. If both
+> > prog and link are NULL (a contract violation by the caller), this
+> > causes a null pointer dereference.
+>
+>
+> Both being NULL is unreachable, so the new check is dead code.
+>
+> It's meaningless.
+>
+>
+> >
+> > Add a safe ternary fallback and a NULL check for new_prog before
+> > it is used further.
+> >
+> > Signed-off-by: Liu Jing <liujing@cmss.chinamobile.com>
+> > ---
+> >   kernel/bpf/cgroup.c | 4 +++-
+> >   1 file changed, 3 insertion(+), 1 deletion(-)
+> >
+> > --- a/kernel/bpf/cgroup.c
+> > +++ b/kernel/bpf/cgroup.c
+> > @@ -814,7 +814,7 @@
+> >       struct bpf_cgroup_storage *storage[MAX_BPF_CGROUP_STORAGE_TYPE] =
+=3D {};
+> >       struct bpf_cgroup_storage *new_storage[MAX_BPF_CGROUP_STORAGE_TYP=
+E] =3D {};
+> >       struct bpf_cgroup_storage *old_storage[MAX_BPF_CGROUP_STORAGE_TYP=
+E] =3D {};
+> > -     struct bpf_prog *new_prog =3D prog ? : link->link.prog;
+> > +     struct bpf_prog *new_prog =3D prog ? : (link ? link->link.prog : =
+NULL);
+> >       enum cgroup_bpf_attach_type atype;
+> >       u32 old_flags, old_pl_flags;
+> >       struct bpf_prog_list *pl;
+> > @@ -833,6 +833,8 @@
+> >               return -EINVAL;
+> >       if (!!replace_prog !=3D !!(flags & BPF_F_REPLACE))
+> >               /* replace_prog implies BPF_F_REPLACE, and vice versa */
+> > +             return -EINVAL;
+> > +     if (!new_prog)
+> >               return -EINVAL;
+> >
+> >       atype =3D bpf_cgroup_atype_find(type, new_prog->aux->attach_btf_i=
+d);
+> >
+> > --
+> > 2.43.0
