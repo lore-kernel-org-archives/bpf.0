@@ -1,598 +1,220 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B72A494828;
-	Tue,  8 Sep 2026 08:34:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95EF447A867;
+	Tue,  8 Sep 2026 08:35:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788856463; cv=none; b=QjqRondDXwW2Ksb5PrafFoAqjnqdI9jHwexKylvIqBju2sGPU/L8UHJutgtQODGcOar6IvzMQ5hj35qthQPyweujgCkkjl5rWLkgFPv5V/eI4zJPzrFiqJpmcTYXIga+HqJpHCd0VsoLBAYHjFjx66Tpt2GAlGYQzdEwonVJivQ=
+	t=1788856547; cv=none; b=gE3ejT2opSIOk1XJ64+PxEmk51xjMMGKHaiOKbc5c1ANSiC4KKZMq19ckDzkxanPbbV422cjNQlLk2CZJJS/bcmPW11AHH4+wRfZAqxGUxpIOmjPW44Z/5FjgfeRsxeNMqaojdxqDkMhTbXZ0VvoJiT1JCjPVPlEXJvhyUf2VUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788856463; c=relaxed/simple;
-	bh=Wa2kTZZwN0z/drsZcaEVzxsqDDwPqjBFMMQ3RBDlMCA=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JgCRDWrsthUXgbZdfkhxn/ZoE3S8G2SuwZaJ+JRGkaxja8pCRPlwbHuPBa03csh0m8u8sbBkwpuf0F0kao0FFhTUXslzYHCYT279+7fT+cz/fPDuZA6uvi8n61vSvi0pXunGu/udZNXQZ4CSnAKLBlUP7vHT0nyuwvdSxhKJrog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e+3J/Oun; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788856547; c=relaxed/simple;
+	bh=tUGnQ6aKSBWyts8Xz2amxkWEBAzb/ijgQDfaWdgvmPc=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=o9uBHKiyFyip/ssyx3gevamwwO4Yajb1OAzFiLYjpSeFhyiTnW41tUSpQpjUBfd83dmHBleVatdYWmXpxYz8xeqb2qQ0RbbPHBEbhytsbxDKm0vlhhY6exVptSDsar2KGTip9xxwalHlPmTGuiFb4OvjBG5+wWTs0sL90FuBRk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=RdmTUKr7; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e+3J/Oun"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F9771F00A3F;
-	Tue,  8 Sep 2026 08:34:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788856461;
-	bh=N1wFBKZQAVF3Cdnl7Lvm0lYcAGhDbtfwLxbgeCUDzfY=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=e+3J/Oun433AYwU2cOCK3b47XOKL+UTgJvHwVv9DcwIfD/OL/L0Rm8DGgE5QtFTuP
-	 F8PZlifA66UiEsNsMg3NaERNLth3q04YjinKN3ByMkqJEMmIUtgEjHIl17TVm7fNKv
-	 kZXxivYxfIPeCmkN6ajxYlPVp6aafX8R50WaZwqwsx5ERQOYgDxyfoJdu9lr8zLU3z
-	 b5kNH6kKXQCYmLVpkKoX4cGFhkN4lxJ6cDyyENBUG9oQhTQ27pcWEcNgDudfZ714+z
-	 KkmuDZLHIhTLbbWeksGzq88pnMkdm8XuVUr+jbLCd8IuOLBmrHQl912xGQ6hqAJ8O/
-	 f+7+5eV7PfeGg==
-Subject: Re: [PATCH v12 net-next] octeontx2-pf: add mqprio bandwidth offload
- for NIX TX schedulers
-From: netdev-bot+sashiko@kernel.org
-To: rkannoth@marvell.com
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- andrew+netdev@lunn.ch, ast@kernel.org, daniel@iogearbox.net,
- davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
- john.fastabend@gmail.com, kuba@kernel.org, pabeni@redhat.com, sdf@fomichev.me,
- sgoutham@marvell.com
-Date: Tue, 08 Sep 2026 08:34:19 +0000
-Message-ID: <178885645961.219967.4520397442844422130@kernel.org>
-In-Reply-To: <20260903023324.3078284-1-rkannoth@marvell.com>
-References: <20260903023324.3078284-1-rkannoth@marvell.com>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="RdmTUKr7"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6886VxQt059989;
+	Tue, 8 Sep 2026 08:35:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=R8bURA
+	xOxYBXtW39WB07zwIYo9/CRyZmP50yeNmeuPg=; b=RdmTUKr71t0YIdrLaymnpb
+	sclqdzdEKlAUh+X9Ej6Jh1rBh66GbqKjugfdI0pUHq5ZaitdLLAIbRPcYAJ7Z0pW
+	CXtz9RVtHV64wu3YwobqupzIVjd7MXlc1MKvHBaPu4QR+Ml2ObL0hdoJ/lh6NxsJ
+	lmC/JX4p1tIF29WpIiuCuAd8sNAEP9hHaWHuqkf12sLDMJ/R6H503krg2a9/WPjV
+	8Z++dCrZD6ydC9qorAqOZwg41c8O8up+I1Aqg5CpgQZceDjeKy7YDrz0rEPNZ47S
+	PxUHbt8cTmsUQiQMAYsSZRjVNzzA/kPw1aqY6Vm0JSlziSFtRhBYu7Hwq6b5nXkQ
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ggbhknnn8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 08 Sep 2026 08:35:23 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6888QGFb004841;
+	Tue, 8 Sep 2026 08:35:22 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4gh03yaend-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 08 Sep 2026 08:35:22 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6888ZI4p43581720
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 8 Sep 2026 08:35:18 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 63C3C20043;
+	Tue,  8 Sep 2026 08:35:18 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0188920040;
+	Tue,  8 Sep 2026 08:35:15 +0000 (GMT)
+Received: from [9.123.3.64] (unknown [9.123.3.64])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  8 Sep 2026 08:35:14 +0000 (GMT)
+Message-ID: <f1a0395d-f9ab-4637-8da7-87c91fa9a9aa@linux.ibm.com>
+Date: Tue, 8 Sep 2026 14:05:14 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-
-Thank you for your contribution! Sashiko AI review found 8 potential
-issue(s) to consider:
-
-Critical: 0 · High: 1 · Medium: 5 · Low: 2
-
-- [High] otx2_mqprio_restore_old() is reached from
-  otx2_setup_tc_mqprio()'s `cleanup:` label after…
-- [Medium] The mqprio 'replace' rollback scheme depends on receiving
-  TC_SETUP_ROOT_QDISC/TC_ROOT_GRAFT, but the core suppresses that…
-- [Medium] When an offloaded mqprio is replaced by a qdisc that programs
-  the netdev TC layout itself without offload (e.g. `tc qdisc replace…
-- [Medium] A failed mqprio offload does not merely get rejected:
-  otx2_mqprio_restart_netdev() force-marks the interface down…
-- [Medium] On a failed `tc qdisc replace`, otx2_mqprio_restore_old() re-
-  installs the previous netdev TC layout with…
-- [Medium] If otx2_mqprio_up() fails partway through its per-queue loop
-  (mailbox/AF error on one NIX_AF_MDQX_PIR/CIR write), the MDQ shapers…
-- [Low] otx2_mqprio_restore_old() calls otx2_mqprio_alloc_cache(pfvf,
-  false), whose non-replacing path frees the existing min_rate/max_rate…
-- [Low] The commit message says 'Add a ratelimited AF debug message when
-  validating TX scheduler queue ownership', but the code adds…
-
---
-
-octeontx2-pf: add mqprio bandwidth offload for NIX TX schedulers
-
-This adds TC_SETUP_QDISC_MQPRIO offload for channel-mode mqprio with
-TC_MQPRIO_SHAPER_BW_RATE, programming per-queue MDQ CIR/PIR through the
-NIX TX scheduler mailbox and rebuilding the TX scheduler hierarchy by
-bouncing the netdev through ndo_stop()/ndo_open() on mqprio add, replace
-and delete.
-
-A few questions about the new code below.
-
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c b/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
-> index 153eb57bad06..c9a4326d725d 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/af/rvu_nix.c
-> @@ -331,8 +331,12 @@ static bool is_valid_txschq(struct rvu *rvu, int blkaddr,
->  			return true;
->  	}
->  
-> -	if (map_func != pcifunc)
-> +	if (map_func != pcifunc) {
-> +		dev_err_ratelimited(rvu->dev,
-> +				    "pcifunc %x map pcifunc %x not equal, lvl=%u schq=%u\n",
-> +				    pcifunc, map_func, lvl, schq);
->  		return false;
-> +	}
->  
->  	return true;
->  }
-
-[Severity: Low]
-The commit message says:
-
-  "Add a ratelimited AF debug message when validating TX scheduler queue
-   ownership to aid mqprio hierarchy setup failures."
-
-but the code adds dev_err_ratelimited(), not a debug print.  Should this be
-dev_dbg_ratelimited() instead?
-
-is_valid_txschq() is a plain ownership predicate, and returning false is a
-normal outcome when a VF sends a nix_txschq_config mailbox message naming a
-scheduler queue it does not own.  Is it intended that a guest can make the
-host AF emit error-level output?
-
-Would it also make sense to split this AF logging change out of the NIC
-feature patch?
-
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-> index 175992188c18..a519e0a97a2b 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-> @@ -615,6 +615,142 @@ void otx2_get_mac_from_af(struct net_device *netdev)
-
-[ ... ]
-
-> +int otx2_nix_tm_set_queue_shaper(struct otx2_nic *pfvf,
-> +				 int txq, u64 minrate, u64 maxrate)
-> +{
-> +	struct mbox *mbox = &pfvf->mbox;
-> +	struct nix_txschq_config *req;
-> +	int err, smq, n = 0;
-> +	u64 reg_addr[2];
-> +	u64 reg_val[2];
-> +	u64 rate;
-> +
-> +	if (!maxrate && !minrate) {
-> +		smq = otx2_get_smq_idx(pfvf, txq);
-
-[ ... ]
-
-> +	smq = otx2_get_smq_idx(pfvf, txq);
-
-[ ... ]
-
-> @@ -779,6 +919,9 @@ int otx2_txsch_alloc(struct otx2_nic *pfvf)
->  		req->schq[NIX_TXSCH_LVL_TL4] = chan_cnt;
->  	}
->  
-> +	if (pfvf->mqprio.rate_limit)
-> +		req->schq[NIX_TXSCH_LVL_SMQ] = pfvf->hw.non_qos_queues;
-> +
-
-[Severity: Medium]
-Is there a pre-check that the widened SMQ request can actually be satisfied
-before the working configuration is torn down?
-
-The AF rejects the whole allocation when the shared pool is short:
-
-af/rvu_nix.c:nix_check_txschq_alloc_req() {
-	if (free_cnt < req_schq || req->schq[lvl] > MAX_TXSCHQ_PER_FUNC ||
-	    req->schq_contig[lvl] > MAX_TXSCHQ_PER_FUNC)
-		return NIX_AF_ERR_TLX_ALLOC_FAIL;
-}
-
-free_cnt comes from the pool shared with the other PF/VFs on the NIX block
-(and is capped at 1 when hw->cap.nix_fixed_txschq_mapping is set), so an
-N-SMQ request can fail where the previous single-SMQ open succeeded.
-
-That failure propagates otx2_init_hw_resources() -> otx2_open() ->
-otx2_mqprio_restart_netdev(), which then sets OTX2_FLAG_INTF_DOWN and calls
-netif_close().  So a rejected mqprio offload can leave a previously working
-interface administratively down, needing a manual "ip link set up".
-
-The commit message describes only "bouncing the netdev through ndo_stop()
-and ndo_open()" and "Reject offload unless the interface is running ...";
-should it also state that a failed offload attempt can leave the link down?
-
->  	rc = otx2_sync_mbox_msg(&pfvf->mbox);
->  	if (rc)
->  		return rc;
-> @@ -844,6 +987,7 @@ void otx2_txschq_stop(struct otx2_nic *pfvf)
->  
->  	/* Clear the txschq list */
->  	for (lvl = 0; lvl < NIX_TXSCH_LVL_CNT; lvl++) {
-> +		pfvf->hw.txschq_cnt[lvl] = 0;
->  		for (schq = 0; schq < MAX_TXSCHQ_PER_FUNC; schq++)
->  			pfvf->hw.txschq_list[lvl][schq] = 0;
->  	}
-
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-> index c0e2100de1d9..db77c69a4942 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
-> @@ -2007,6 +2007,12 @@ int otx2_open(struct net_device *netdev)
->  	if (err)
->  		goto err_free_mem;
->  
-> +	err = otx2_mqprio_up(pf);
-> +	if (err)
-> +		netdev_err(pf->netdev,
-> +			   "mqprio: failed to restore shapers during open: %d; continuing without bandwidth limits\n",
-> +			   err);
-> +
-
-[Severity: Medium]
-Is the "continuing without bandwidth limits" message accurate when
-otx2_mqprio_up() fails partway through its loop?
-
-otx2_mqprio_up() issues one otx2_nix_tm_set_queue_shaper() mailbox per txq
-and returns on the first error:
-
-		err = otx2_nix_tm_set_queue_shaper(pfvf, txq, min_rate,
-						   max_rate);
-		if (err) {
-			netdev_err(netdev,
-				   "mqprio: failed to restore shaper for txq %d: %d\n",
-				   txq, err);
-			return err;
-		}
-
-Each earlier iteration already committed NIX_AF_MDQX_PIR/CIR with the enable
-bit set by otx2_get_txschq_rate_regval(), so txq 0..n-1 stay shaped while the
-log says no limits are in effect, and mqprio.rate_limit stays true.
-
-Should this path call otx2_nix_tm_clear_queue_shaper() (or otherwise unwind
-the already written MDQ registers) before continuing?
-
-[ ... ]
-
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> index 039fd47ebf52..4090296edfc5 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> @@ -1600,14 +1609,709 @@ static int otx2_setup_tc_block(struct net_device *netdev,
-
-[ ... ]
-
-> +static int otx2_mqprio_alloc_cache(struct otx2_nic *pfvf, bool replacing)
-> +{
-> +	u16 num_txq = pfvf->hw.non_qos_queues;
-> +
-> +	if (replacing && pfvf->mqprio.min_rate && pfvf->mqprio.max_rate) {
-> +		memset(pfvf->mqprio.min_rate, 0,
-> +		       num_txq * sizeof(*pfvf->mqprio.min_rate));
-> +		memset(pfvf->mqprio.max_rate, 0,
-> +		       num_txq * sizeof(*pfvf->mqprio.max_rate));
-> +		pfvf->mqprio.flags = 0;
-> +		return 0;
-> +	}
-> +
-> +	otx2_mqprio_free_cache(pfvf);
-> +
-> +	pfvf->mqprio.min_rate = devm_kcalloc(pfvf->dev, num_txq,
-> +					     sizeof(*pfvf->mqprio.min_rate),
-> +					     GFP_KERNEL);
-> +	pfvf->mqprio.max_rate = devm_kcalloc(pfvf->dev, num_txq,
-> +					     sizeof(*pfvf->mqprio.max_rate),
-> +					     GFP_KERNEL);
-> +	if (!pfvf->mqprio.min_rate || !pfvf->mqprio.max_rate) {
-> +		otx2_mqprio_free_cache(pfvf);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	return 0;
-> +}
-
-[Severity: Low]
-Can the rollback path lose the rate caches of the still-active offload here?
-
-otx2_mqprio_restore_old() calls otx2_mqprio_alloc_cache(pfvf, false), which
-takes the non-replacing path: otx2_mqprio_free_cache() runs first, and if
-either devm_kcalloc() then fails both pointers are left NULL and -ENOMEM is
-returned.
-
-At that point mqprio.rate_limit is still set, so ethtool -L and XDP stay
-blocked, but a later ndo_open() silently skips restoration because
-otx2_mqprio_up() returns early:
-
-	if (!pfvf->mqprio.min_rate || !pfvf->mqprio.max_rate)
-		return 0;
-
-Since the arrays are already the right size, could the restore path reuse
-them the way the "replacing" branch does, or allocate the new ones before
-releasing the old?
-
-[ ... ]
-
-> +static int otx2_mqprio_restore_old(struct otx2_nic *pfvf)
-> +{
-> +	struct mq_offload_snap *snap = pfvf->old_mq_snap;
-> +	struct net_device *netdev = pfvf->netdev;
-> +	u16 num_txq = pfvf->hw.non_qos_queues;
-> +	int tc, txq, err;
-> +
-> +	if (!snap)
-> +		return 0;
-> +
-> +	err = otx2_mqprio_alloc_cache(pfvf, false);
-> +	if (err)
-> +		return err;
-
-[ ... ]
-
-> +	netdev_set_num_tc(netdev, snap->num_tc);
-> +	for (tc = 0; tc < snap->num_tc; tc++)
-> +		netdev_set_tc_queue(netdev, tc, snap->count[tc],
-> +				    snap->offset[tc]);
-
-[Severity: Medium]
-Does the restored TC layout survive the error return to the qdisc layer?
-
-On a failed replace the driver returns an error from
-ndo_setup_tc(TC_SETUP_QDISC_MQPRIO), so sch_mqprio never records the
-offload:
-
-net/sched/sch_mqprio.c:mqprio_enable_offload() {
-	err = dev->netdev_ops->ndo_setup_tc(dev, TC_SETUP_QDISC_MQPRIO,
-					    &mqprio);
-	if (err)
-		return err;
-
-	priv->hw_offload = mqprio.qopt.hw;
-}
-
-qdisc_create() then calls ops->destroy() for the failed instance, and with
-hw_offload unset:
-
-net/sched/sch_mqprio.c:mqprio_destroy() {
-	if (priv->hw_offload && dev->netdev_ops->ndo_setup_tc)
-		mqprio_disable_offload(sch);
-	else
-		netdev_set_num_tc(dev, 0);
-}
-
-so dev->num_tc goes to 0 right after the driver restored snap->num_tc, while
-mqprio.rate_limit stays true and the old MDQ shapers remain programmed.  Is
-that combination (hardware shaping N classes, dev->num_tc == 0, stale
-tc_to_txq) intended?
-
-> +	if (otx2_mqprio_mdq_allocated(pfvf)) {
-> +		err = otx2_nix_tm_clear_queue_shaper(pfvf);
-> +		if (err)
-> +			return err;
-> +	}
-> +
-> +	/* otx2_mqprio_restart_netdev() clears rate_limit when ndo_open() fails. */
-> +	pfvf->mqprio.rate_limit = true;
-> +
-> +	err = otx2_mqprio_up(pfvf);
-> +	if (err)
-> +		return err;
-
-[Severity: High]
-Should the otx2_mqprio_mdq_allocated() guard cover otx2_mqprio_up() as well?
-
-This function is reached from the cleanup: label of otx2_setup_tc_mqprio()
-after otx2_mqprio_restart_netdev() failed, i.e. after ndo_open() failed and
-otx2_free_hw_resources() -> otx2_txschq_stop() ran.  That path now also
-zeroes the counters this patch added:
-
-	for (lvl = 0; lvl < NIX_TXSCH_LVL_CNT; lvl++) {
-		pfvf->hw.txschq_cnt[lvl] = 0;
-		for (schq = 0; schq < MAX_TXSCHQ_PER_FUNC; schq++)
-			pfvf->hw.txschq_list[lvl][schq] = 0;
-	}
-
-otx2_mqprio_mdq_allocated() correctly returns false there, so the shaper
-clear is skipped, but rate_limit is forced true and otx2_mqprio_up() is
-called anyway.  otx2_mqprio_up() has no netif_running()/MDQ-allocated
-precondition, unlike otx2_mqprio_down():
-
-	if (netif_running(pfvf->netdev) &&
-	    otx2_mqprio_mdq_allocated(pfvf))
-		err = otx2_nix_tm_clear_queue_shaper(pfvf);
-
-For the first txq with a cached non-zero rate this reaches
-otx2_nix_tm_set_queue_shaper() -> otx2_get_smq_idx():
-
-	idx = qidx % pfvf->hw.txschq_cnt[NIX_TXSCH_LVL_SMQ];
-	smq = pfvf->hw.txschq_list[NIX_TXSCH_LVL_SMQ][idx];
-
-Can this divide by zero?  And where the division does not trap, idx becomes
-qidx into the zeroed list, so smq == 0 and the driver writes
-NIX_AF_MDQX_PIR(0)/CIR(0) for a node this PF_FUNC does not own — the exact
-case the new AF dev_err_ratelimited() in is_valid_txschq() reports.
-
-That makes the rollback fail deterministically, leaving rate_limit true,
-cur_mq_snap unfreed and the interface down.  ndo_open() failure is
-reachable: the widened SMQ request can hit NIX_AF_ERR_TLX_ALLOC_FAIL, and
-otx2_open() can also fail in otx2_hw_set_mtu(), otx2_rss_init() or
-request_irq().
-
-> +	otx2_mqprio_snap_free(pfvf, &pfvf->cur_mq_snap);
-> +
-> +	return 0;
-> +}
-
-[ ... ]
-
-> +static void otx2_mqprio_clear_sw(struct otx2_nic *pfvf)
-> +{
-> +	struct net_device *netdev = pfvf->netdev;
-> +
-> +	pfvf->mqprio.rate_limit = false;
-> +	otx2_mqprio_clear_replace_state(pfvf);
-> +	netdev_set_num_tc(netdev, 0);
-> +	otx2_mqprio_free_cache(pfvf);
-> +}
-
-[ ... ]
-
-> +static int otx2_mqprio_restart_netdev(struct net_device *netdev, bool rate_limit)
-> +{
-
-[ ... ]
-
-> +	err = ops->ndo_open(netdev);
-> +	if (err) {
-> +		netdev_err(netdev,
-> +			   "Failed to restart device after mqprio change: %d\n",
-> +			   err);
-> +		/* ndo_open() already freed the TX schedulers on failure while
-> +		 * netif_running() may still be true; drop mqprio software state
-> +		 * only instead of sending shaper clears to freed queues.
-> +		 */
-> +		otx2_mqprio_clear_sw(pfvf);
-> +		/* ndo_open() rolls back on failure; mark the interface down so
-> +		 * netif_close() does not invoke ndo_stop() on freed NAPI/queue
-> +		 * state. Caller holds RTNL; dev_close() would deadlock.
-> +		 */
-> +		pfvf->flags |= OTX2_FLAG_INTF_DOWN;
-> +		/* visible to otx2_stop() on other cpus */
-> +		smp_wmb();
-> +		netif_close(netdev);
-> +	}
-> +
-> +	return err;
-> +}
-
-[ ... ]
-
-> +static int otx2_teardown_tc_mqprio(struct otx2_nic *pfvf,
-> +				   struct tc_mqprio_qopt_offload *mqprio)
-> +{
-> +	struct tc_mqprio_qopt *qopt = &mqprio->qopt;
-> +	bool had_mqprio = pfvf->mqprio.rate_limit;
-> +	struct net_device *netdev = pfvf->netdev;
-> +	bool if_up = netif_running(netdev);
-> +	int err;
-> +
-> +	qopt->hw = 0;
-> +
-> +	/* tc qdisc replace runs setup on the new mqprio before destroying the
-> +	 * old one. replace_setup_done and TC_ROOT_GRAFT distinguish stale
-> +	 * old-instance teardown from graft failure after setup.
-> +	 */
-> +	if (pfvf->mqprio.replace_setup_done && pfvf->cur_mq_snap) {
-> +		err = 0;
-> +		if (pfvf->mqprio.replace_graft_done)
-> +			otx2_mqprio_snap_commit(pfvf);
-> +		else
-> +			err = otx2_mqprio_restore_old(pfvf);
-> +		otx2_mqprio_clear_replace_state(pfvf);
-> +		return err;
-> +	}
-> +
-> +	/* Skip the netdev restart when mqprio offload was not active. */
-> +	if (!had_mqprio)
-> +		return 0;
-> +
-> +	if (if_up) {
-> +		int down_err, err;
-> +
-> +		down_err = otx2_mqprio_down(pfvf);
-> +		err = otx2_mqprio_restart_netdev(netdev, false);
-> +		if (err)
-> +			return err;
-> +		return down_err;
-> +	}
-
-[Severity: Medium]
-What happens when an offloaded mqprio is replaced by a qdisc that is not
-offloaded, for example:
-
-  tc qdisc replace dev eth0 root mqprio num_tc 4 ... hw 0
-
-The new instance programs the netdev TC layout itself in mqprio_init() (with
-qopt->hw == 0 it calls netdev_set_num_tc()/netdev_set_tc_queue() directly),
-and it never reaches otx2_setup_tc_mqprio(), so replace_setup_done stays
-false.
-
-qdisc_graft() installs the new qdisc first and only then destroys the old
-one:
-
-net/sched/sch_api.c:qdisc_graft() {
-		qdisc_offload_graft_root(dev, new, old, extack);
-	...
-			notify_and_destroy(net, skb, n, classid, old, new, extack);
-}
-
-So the old instance's mqprio_destroy() -> mqprio_disable_offload() reaches
-otx2_teardown_tc_mqprio() with replace_setup_done false and had_mqprio true,
-taking the branch above: otx2_mqprio_down() -> otx2_mqprio_clear_sw() runs
-netdev_set_num_tc(netdev, 0), wiping the mapping the new qdisc just
-installed, and otx2_mqprio_restart_netdev(netdev, false) bounces the link.
-
-Does the live software mqprio then keep selecting TX queues correctly with
-dev->num_tc == 0?  Is the unrequested stop/open bounce expected in this
-case?
-
-[ ... ]
-
-> +	err = otx2_mqprio_restart_netdev(pfvf->netdev, true);
-> +	if (err)
-> +		goto cleanup;
-
-[ ... ]
-
-> +cleanup:
-> +	qopt->hw = 0;
-> +	if (replacing) {
-> +		int restore_err = otx2_mqprio_restore_old(pfvf);
-
-[ ... ]
-
-> +static int otx2_setup_tc_root(struct otx2_nic *pfvf,
-> +			      struct tc_root_qopt_offload *root)
-> +{
-> +	switch (root->command) {
-> +	case TC_ROOT_GRAFT:
-> +		if (pfvf->mqprio.replace_setup_done)
-> +			pfvf->mqprio.replace_graft_done = true;
-> +		return 0;
-> +	default:
-> +		return -EOPNOTSUPP;
-> +	}
-> +}
-
-[Severity: Medium]
-Is TC_ROOT_GRAFT guaranteed to be delivered whenever the mqprio setup call
-was?
-
-mqprio_enable_offload() invokes ndo_setup_tc(TC_SETUP_QDISC_MQPRIO)
-unconditionally, but the graft notification is gated on the offload feature
-bit:
-
-net/sched/sch_api.c:qdisc_offload_graft_helper() {
-	if (!tc_can_offload(dev) || !dev->netdev_ops->ndo_setup_tc)
-		return;
-}
-
-With "ethtool -K eth0 hw-tc-offload off" (NETIF_F_HW_TC is in hw_features
-for both PF and VF here), a successful
-
-  tc qdisc replace dev eth0 root mqprio ... hw 1
-
-sets replace_setup_done but never replace_graft_done, so the subsequent
-teardown of the replaced instance takes the rollback branch in
-otx2_teardown_tc_mqprio():
-
-		if (pfvf->mqprio.replace_graft_done)
-			otx2_mqprio_snap_commit(pfvf);
-		else
-			err = otx2_mqprio_restore_old(pfvf);
-
-Does that leave hardware shapers and the netdev TC layout on the previous
-configuration while tc reports the new one?
-
-The commit message states the "successful graft is recorded through
-TC_ROOT_GRAFT" without mentioning the feature-flag dependency; should that
-be noted, or the setup path gated the same way?
-
->  int otx2_setup_tc(struct net_device *netdev, enum tc_setup_type type,
->  		  void *type_data)
->  {
->  	switch (type) {
-> +	case TC_QUERY_CAPS:
-> +		return otx2_setup_tc_query_caps(type_data);
->  	case TC_SETUP_BLOCK:
->  		return otx2_setup_tc_block(netdev, type_data);
->  	case TC_SETUP_QDISC_HTB:
->  		return otx2_setup_tc_htb(netdev, type_data);
-> +	case TC_SETUP_QDISC_MQPRIO:
-> +		return otx2_setup_tc_mqprio(netdev, type_data);
-> +	case TC_SETUP_ROOT_QDISC:
-> +		return otx2_setup_tc_root(netdev_priv(netdev), type_data);
->  	default:
->  		return -EOPNOTSUPP;
->  	}
-
-[ ... ]
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260903023324.3078284-1-rkannoth%40marvell.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v13 4/8] powerpc/bpf: fix alignment of long branch
+ trampoline address
+From: Hari Bathini <hbathini@linux.ibm.com>
+To: bot+bpf-ci@kernel.org, skb99@linux.ibm.com, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc: maddy@linux.ibm.com, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        venkat88@linux.ibm.com, yeswanth@linux.ibm.com, martin.lau@kernel.org,
+        eddyz87@gmail.com, yonghong.song@linux.dev, mason@kernel.org,
+        ihor.solodrai@linux.dev
+References: <0700c866205c8fa2f861e4b8d64fdf7469cba021.1788154635.git.skb99@linux.ibm.com>
+ <71916017b03ad6e22c093094acae6a356a57f8fd0c3afda3833a20a2db10ec77@mail.kernel.org>
+ <f8439dfb-7584-45c4-90fa-5659fa5507e2@linux.ibm.com>
+Content-Language: en-US
+In-Reply-To: <f8439dfb-7584-45c4-90fa-5659fa5507e2@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTA4MDA4OSBTYWx0ZWRfX7RgwKRe0KiIo
+ ibiLK/gpURNPEHDEBuwSYFEyGvb80iMm4KvXpOEbRVPFLZROqjh6jOPW5bLYzK0cpkBTwQ4uUfM
+ dlVU5punrNavA0S70xPJBWrBZwygRX0=
+X-Proofpoint-ORIG-GUID: 5xzRqCDWWilm15zElExfiwfJhukAhYQC
+X-Authority-Analysis: v=2.4 cv=NMDlPU6g c=1 sm=1 tr=0 ts=6a9fc8cb cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=QQXBir-yANtSgwdbjgUA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTA4MDA4OSBTYWx0ZWRfX0f3PTBi14eQa
+ VU3wxCHUNh5706uaT9/wrXZJ1wp7dC8k+WJHteoQ1MGLTbX8fsGe1WqJPFjZHnH+PNIZ2AcG1qZ
+ kibKl8C6iLMNwuhs3M5hIDel0tb0p3qjbaJvLBdp3jEjCRTFbZVD26Lm7NeuLfeT792K9p9fkwE
+ rLbckCRzc2Sgc4T2fdePBx2/DDocRtL74f2mx+vQghLGcXL7oxZeIJeIpPXYx91ZyCytwasqWSP
+ qg7UH5pqSocPOxtrxiC+Y7rkp+GDRAYZJgQQyuZjOaLVCyKeS00DC3IQ+GoqSf4x6cFomwhdjP1
+ +wEnfL0x0NTqrMLlczZtNxkn6mptbSa2bVd7piZl2+9FnQGHdzouL3fSlHhUXIlwa1WZk24H9F4
+ K8z/fLyyYv7tL8n10YRKgjF5eGY8NltB2L0KqJRTscKbGKFL1azfZ6lx/XzBqDYqeJ1GA973N9Y
+ iWsqWJFaIKBIgqPTJ3g==
+X-Proofpoint-GUID: hrqhaITNcNLOgiTF-SKkG_GGyYjWC3dW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-08_01,2026-09-07_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 spamscore=0 lowpriorityscore=0 clxscore=1015 adultscore=0
+ impostorscore=0 bulkscore=0 malwarescore=0 priorityscore=1501 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2609080089
+
+
+
+On 08/09/26 1:53 pm, Hari Bathini wrote:
+> 
+> 
+> On 31/08/26 1:42 pm, bot+bpf-ci@kernel.org wrote:
+>>> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/ 
+>>> bpf_jit_comp.c
+>>> index 11981d2270a9d..8ca36a933c7ae 100644
+>>> --- a/arch/powerpc/net/bpf_jit_comp.c
+>>> +++ b/arch/powerpc/net/bpf_jit_comp.c
+>>
+>> [ ... ]
+>>
+>>> @@ -49,11 +49,35 @@ asm (
+>>>   "    .popsection                ;"
+>>>   );
+>>>
+>>> -void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context 
+>>> *ctx)
+>>> +void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct 
+>>> codegen_context *ctx)
+>>>   {
+>>>       int ool_stub_idx, long_branch_stub_idx;
+>>> +    int ool_stub_sz;
+>>>
+>>>       /*
+>>> +     * Align the mis-aligned dummy_tramp_addr field in the fimage.
+>>> +     * The alignment NOP must appear before OOL stub, to make
+>>> +     * ool_stub_idx & long_branch_stub_idx constant from end.
+>>> +     *
+>>> +     * The fimage can be non 8-byte aligned, so final alignment depends
+>>> +     * on start of fimage and the stub's instruction count offset. The
+>>> +     * OOL stub size is 4 instructions (with 
+>>> CONFIG_PPC_FTRACE_OUT_OF_LINE)
+>>> +     * or 3 instructions (without) before dummy_tramp_addr.
+>>> +     *
+>>> +     * Emit a NOP here if address is not SZL aligned.
+>>> +     *
+>>> +     * In pass=0 when image==NULL, conservatively account for space
+>>> +     * required to accommodate alignment NOP. In case final pass skips
+>>> +     * emitting alignment NOP, the image buffer have 4 spare bytes and
+>>> +     * jited_len signifies correct program size.
+>>> +     */
+>>> +
+>>> +    ool_stub_sz = IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE) ? 16 : 12;
+>>> +    if (!image || !IS_ALIGNED((unsigned long)fimage + ctx->idx*4 + 
+>>> ool_stub_sz, SZL))
+>>> +        EMIT(PPC_RAW_NOP());
+>>
+>> Can the conditional alignment NOP here mask program length convergence?
+>>
+>> The preceding commit (5175364d6174 "powerpc/bpf: fix buffer overflow in
+>> JIT for large BPF programs") added a convergence check:
+>>
+>>      if (pass >= CODEGEN_MIN_PASSES && proglen == prev_proglen)
+>>          break;
+>>
+>> to bpf_int_jit_compile(). But the alignment decision above forces the
+>> stub block to end at a fixed residue mod 8: the field address (fimage +
+>> ctx->idx*4 + ool_stub_sz) is aligned to SZL, and exactly SZL/4 + 7
+>> instructions follow it. So fimage + proglen is congruent to a constant
+>> mod 8 every pass, meaning proglen can only change in multiples of 8.
+>>
+>> When the body shrinks by an odd multiple of 4 bytes between passes, the
+>> NOP can absorb it and keep proglen unchanged. The body can shrink when
+>> an exit goes from out-of-range (emitting a full epilogue) to in-range
+>> (emitting a single branch):
+>>
+>> arch/powerpc/net/bpf_jit_comp.c:bpf_jit_emit_exit_insn() {
+>>      if (exit_addr && is_offset_in_branch_range(...)) {
+>>          PPC_JMP(exit_addr);                    // 1 instruction
+>>      } else {
+>>          ...
+>>          bpf_jit_build_epilogue(image, fimage, ctx);  // N instructions
+>>      }
+>> }
+>>
+>> The shrink is (N-1)*4 bytes. When N-1 is odd, this is 4 mod 8. The NOP
+>> appearance or disappearance compensates, making proglen identical across
+>> passes even though addrs[] shifted.
+>>
+>> Because forward branches use addrs[] from the previous pass (addrs[j]
+>> for target j > current i is computed in the prior pass), those branches
+>> would land (N-1)*4 bytes past the intended target.
+>>
+>> The comment at arch/powerpc/net/bpf_jit.h:132-138 documents that the
+>> PowerPC JIT avoids pass-to-pass size changes by padding the short branch
+>> case with a NOP, specifically to prevent this scenario. Does 
+>> reintroducing
+>> an address-dependent, pass-varying size risk incorrect branches?
+>>
+>> (Note: commit 0cd8bd7da278 later in this series reworks the stub layout
+>> and is described as a layout improvement rather than a fix for this 
+>> commit,
+>> which may provide additional context.)
+>>
+> The review correctly identifies a potential mechanism by which a 4-byte
+> alignment NOP could mask a size change. However, that mechanism only
+> causes a convergence failure if the total code-size reduction between
+> passes is exactly compensated by the NOP (i.e. effectively only 4
+> bytes). In this JIT, changing an exit from the inline epilogue to a
+> branch removes the entire epilogue, so the size reduction is much
+> larger than 4 bytes. The NOP can only compensate for 4 bytes; it
+> cannot hide the remaining reduction. Therefore the proposed
+> convergence failure does not apply to this code.
+With the above said:
+
+Reviewed-by: Hari Bathini <hbathini@linux.ibm.com>
