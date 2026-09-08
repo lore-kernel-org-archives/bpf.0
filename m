@@ -1,160 +1,234 @@
-Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
+Received: from mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A50F430BB8D
-	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 04:58:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.204
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788843492; cv=pass; b=gu5bYqTxETLE5O7qWlwNa618EbisPMyRt7+R8RPdxOzDuFZ3f+hiGjZvHUCqVzu343lB5fGfuWpdeXjAtD7BsZQfi13deVB2LOyNZvM/kQ5HKDV9XUPd3F4TEOjVPv2VtgocRGgoXpSo2u9nI2GucO+0t3bUvBktjI31YeCifHU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788843492; c=relaxed/simple;
-	bh=RgLJezrTBUs5CG3LnOFPDG4AOpylPG1JRVWLEgIQPGU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CisqAiFasKzCzGSgKAKw2zNXL6rgDeXKNnLg6uqKhSNX4ikVUcpqJjqF3WV5agxj0z8QzySv81qmMrg2dBavszJq7aAYCzM0cq72I61dFoazKA/txW4z4Nhix8MFfACNW3yvP9708welox65aKHDJcIPSDXuoJ/+t6SD9vWiHCI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ja7ANi/Q; arc=pass smtp.client-ip=74.125.230.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9911022576E
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 05:02:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788843739; cv=none; b=ZhdBpMMmQ7AlNq9F246EZmHXZYz6TsaGMJHrRqxPHOVrdT+oHfFSiCCGOl3rViaGli7wOcoaSagvrbqfuJwLezuAaSkbidLehpBsvFXr8rZt7wXxMR5+I3NrQ+CmJpOM/vf6ZhzpsQfuhdgNdZ51lh4/mUP+6E9A2o2DIAHRL9w=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788843739; c=relaxed/simple;
+	bh=amY3f6NxaG9gWM3zyX7AOKGmrJ3E2jrn3aUBAXISqtQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mJ9aiWcqC71ejgSD4DqwubEvgPl/YTxIgSCgdK0ijQDo2dXfVwn1/okjEt5BhQvp3U3tPMJ1o0qLJ0/i9tanui9UWexmFJkHFt1PxOrznlMJI4/x83BX5tp9vynIpF6ErZFb32GGCiUb1WTWIU45Btccnu4Z4SWToxdc+IOMIjQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CXGpm8ob; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ja7ANi/Q"
-Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-53012819c04so422121cf.0
-        for <bpf@vger.kernel.org>; Mon, 07 Sep 2026 21:58:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788843488; cv=none;
-        d=google.com; s=arc-20260327;
-        b=QGq9mf7JPfa5sWgj1zK61evFjo6ctJ0Ry/UCzZPqswSyhDg9MV1d5kYnwRHLRkgqyu
-         hCPRt4EdosrG6IHbVJ6X+xBMhwXRajPGjfRIGWaZquz031NfQVnpnqRFS9FwllXJpn4+
-         gj3MIbKtMytVOVSEnVhefdUPqLFEzKxXA8Dks0wbNVxqmSkPlMrkN3CykGAe+dqSPopj
-         s0GJH4smcQ1C7o3LNcirYHOQOhVpc2pE0ECpXZpLt0yfr2SOJqqScT957cNbJjJ0AOBK
-         SkmckHlgpquNq+TjGfuM7p0CYIpdgVpAXxiHr9mTCqgSm7gbSfiaxlkuOR2EHEnK0C9I
-         I1wg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=72ehCLFMyNfTgkqst2/aW85nSHtZnpsBG16QZCxLCCU=;
-        fh=5sohCSigZ9EYRS9gPPqRjv2/ddK+Pp6d5ROSR66umxs=;
-        b=UWW9rQCVMqKLee2k8WReJeQtO1dvaaS4hrOpiYFzmdUp69viwhPsYVq+K3H/cycAV4
-         fU9Q092chLF7jsO9EzfYbNFTtsgXhGapP6Xgu4ycEEYEdsjdnfl+sWd1K1NWudwvwpqo
-         b1IwvZCFBNOTuGbdkLs8C6vgAO4f1qpDDff2QpBqvo1nF17lylzeQmVx62o2VKVWalOk
-         VBn9O7ZGiUVmm482NmpiJfa0qbyoQ6Agim+/VnHLqtl/T94nfBicXRZ55oZLQ0mxvocE
-         5WpBTtXc1lwtTssSKTr2D2vLle3dGd7RxgfwYvnRze/8L94OKVwQgUGddiAt+qnHZm3w
-         3Wvw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788843488; x=1789448288; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=72ehCLFMyNfTgkqst2/aW85nSHtZnpsBG16QZCxLCCU=;
-        b=Ja7ANi/QfO8JQ96r+R+Te0+n1ZblgTrtam3QeDRQoc2mlfZbO2qw12qyvq1k+NhzeA
-         VtZfNwia0lgLaQkMAEmhFYbMwLyZgTuYOA02zenVz9kU6nWbdso93EN3fqzu7qdkiOh8
-         D6Vn/53mMVxM9CKzLq5qgylWFhJTkvbAfi2G6J6q7o6ussrF8lEDwGDdpSTCi0E1QyjK
-         LYr3JxJtllVst9y+QSuRqmfDofJWZjIIXYXJliIPpkZBQ3b6kUw8R1Qg/JVLxh5Rn7MK
-         zq9c1ijWZQxC417heZG/OC4Y+vBP4JGZpAyETOuJcIOAc3QyIPTNPYe/9Oiu+FOgBf6b
-         WTtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788843488; x=1789448288;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=72ehCLFMyNfTgkqst2/aW85nSHtZnpsBG16QZCxLCCU=;
-        b=Rd836AbeovyR0WfUBiziz21JS1HFrsfhO5yWPs2C9vMiBWku2fEjxyBnWRm5IOnkZP
-         2qikEH9Nhvu6jo6Dsh/a9BiyrnjHv1iM2vqAT4T7q9FODjH7AADbjPN0upQ5CNG0qobM
-         KpAwaWZKb99SZoVFyhSbQ6oXQIn/L/HMwKVrRA4x7sNigOtMVT6B+HfdrQXmJLYAvIdz
-         J1dnHzQq2qlKhouvmCe+pFK1w8hxRcDeex1LwyPJEjuzQBQCWQE2/WFYXNk/bF8DOOJA
-         CrFQasefB6Wz62usc4cgWZIZN4u8dEbL01xMu0JatFDdvIlYo1A/dKp4OYtlBiOWD774
-         4rJg==
-X-Forwarded-Encrypted: i=1; AKwUvBwmnz/wpLF1Fnb9+CO2BdaBVwzhMFc7grlNNeyWZ7PPac842+j+T7wIrqpTtEVO97Ryfg8=@vger.kernel.org
-X-Gm-Message-State: AFuF++mfABzDAPSHNtRRUi4DI2HRVxEJ/HLx0r1CrI8PTcB0S2xf7hac
-	9FMVwYgZ+MfjClT2QnwI4zWxH/oxOkspYYxe2qK8LlXlinwIJTy/lml0rJmq1w+1su5iXAmhcEC
-	rRK5CIUHbWA6SE+ZUbz2jlwfS1bnOMGLIdww5WJ3E
-X-Gm-Gg: AYBFou2rqpgiGIvz6MV9L2LvUK5lf6Kf9v5kWymvz7vUGziXx/LxpF8rY/NCjfXxdvv
-	rhqh/A0Czn/PYeN2XoYohVjliOaD5I4jBsnKaapa9lzRdNTEQzkQJsgt0bB000cNV4y6daBKMch
-	VgDeMBm6FKL8LO957V1Dgo96fsrxMk6gn2usZ+kBwaYe+a6co5eV7zh7+FsCnTWTKWSnMYzdNx6
-	lVjAhYanPMtj8KO3cEzTr3lNQt+U5vXhqYO97wfvcweOlhPyjKQK3kqBdnH3N1SFHzbirRtBwqj
-	zG0mTOT7bFAtsIKjFXVM6/1QYDorT6715ms6ajVrKdFZWQbQeG/gBmFJTpIeA7KAYiaS840oXg1
-	8EL53yvkNIkHS+GaK5yhQpuSyAJ6NSE+/6BJLqDM=
-X-Received: by 2002:a05:622a:2b0b:b0:52f:4a75:f840 with SMTP id
- d75a77b69052e-53082b07b6dmr24762111cf.9.1788843488057; Mon, 07 Sep 2026
- 21:58:08 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CXGpm8ob"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=amY3f6NxaG9gWM3zyX7AOKGmrJ3E2jrn3aUBAXISqtQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788843734; v=1; x=1789448534;
+ b=CXGpm8ob6nULyN03iQ0+xkdD8IfD7euC51qKzxt8TmxV9NohgQwtU27sBf4uiZ5XoqAfcAAm
+ OWbyUodjZsgIi2hr7r5P9Pa63z3kAtQlDGBRYnZF5zXbEpZn2PrDDpJ45oM5XJnCFYzL7lN2apl
+ amrfzgcWF8butm1p/ihh+OPc=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 2589e6ed5198f33f;
+	Tue, 08 Sep 2026 05:02:14 +0000
+X-Mizu-Trace-ID: 2589e6ed5198f33f
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <7be30b65-0a22-47b6-8635-e0054c6cba24@linux.dev>
+Date: Mon, 7 Sep 2026 22:02:10 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260904031912.2133476-1-tweek@google.com> <20260904031912.2133476-2-tweek@google.com>
- <4468d220-9d7f-47d0-8e5c-c01070ab2d47@kernel.org>
-In-Reply-To: <4468d220-9d7f-47d0-8e5c-c01070ab2d47@kernel.org>
-From: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
-Date: Tue, 8 Sep 2026 14:57:50 +1000
-X-Gm-Features: AcwNN1Vv3IgsdJ48TcwQ9T2zgBF6SbU0dMzFnoZRARrkmuhvOX0r_mwDFwUWnFQ
-Message-ID: <CA+zpnLdPu+os2SFU1UxR9ha0NqYwO52Hr9ogk2zaEUHLLcv1XQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] bpftool: Reject non-autoload programs for
- light skeletons
-To: Quentin Monnet <qmo@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, Leon Hwang <leon.hwang@linux.dev>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Sid Nayyar <sidnayyar@google.com>, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 07/12] bpf, x86: Place kfunc arguments per the
+ SysV calling convention
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Eduard Zingerman <eddyz87@gmail.com>, Kernel Team <kernel-team@fb.com>
+References: <20260904050957.3976119-1-yonghong.song@linux.dev>
+ <20260904051033.3979978-1-yonghong.song@linux.dev>
+ <DL6XUEHAJN3Z.20UKZKTLHI2XZ@gmail.com>
+ <f034ac4a-2829-4932-b3f8-b13cee4688a6@linux.dev>
+ <CAADnVQ+bKmypdfAPXdk9jDN3QedX9EO9YXHFudLu71AR02Z3CQ@mail.gmail.com>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <CAADnVQ+bKmypdfAPXdk9jDN3QedX9EO9YXHFudLu71AR02Z3CQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 8, 2026 at 1:24=E2=80=AFAM Quentin Monnet <qmo@kernel.org> wrot=
-e:
->
-> On 04/09/2026 04:19, Thi=C3=A9baud Weksteen wrote:
-> > When generating a light skeleton (bpftool gen skeleton -L), there is no
-> > libbpf runtime object or bpf_program__set_autoload() API available to
-> > enable/disable the autoloading of programs. If a BPF program in the
-> > object has autoload disabled (e.g. via SEC("?...")), bpf_object__load()
-> > silently skips loading it. bpftool still generates struct bpf_prog_desc
-> > fields and attach functions in the light skeleton header, leaving
-> > skel->progs.<name>.prog_fd uninitialized (0).
-> >
-> > Explicitly reject non-autoloaded programs when use_loader is true with
-> > an error message, preventing the generation of broken light skeleton
-> > headers.
-> >
-> > Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
-> > ---
-> >  tools/bpf/bpftool/gen.c | 6 ++++++
-> >  1 file changed, 6 insertions(+)
-> >
-> > diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-> > index a50540ef6521..1583150241c8 100644
-> > --- a/tools/bpf/bpftool/gen.c
-> > +++ b/tools/bpf/bpftool/gen.c
-> > @@ -1340,6 +1340,12 @@ static int do_skeleton(int argc, char **argv)
-> >       }
-> >       bpf_object__for_each_program(prog, obj) {
-> >               prog_cnt++;
-> > +
-> > +             if (use_loader && !bpf_program__autoload(prog)) {
-> > +                     p_err("program '%s' is marked as non-autoload, wh=
-ich is not supported for light skeletons",
-> > +                           bpf_program__name(prog));
-> > +                     return -1;
->
->
-> Sashiko is correct, at this stage of the function, rather than returning
-> directly, you'd need to "goto out".
 
-Thanks for the review. I agree, I'm not sure how I missed that one.
 
->
->
-> > +             }
->
->
-> Thank you. Maybe consider adding a word about autoload/non-autoload in
-> "bpftool gen" man page? My concern is that users who are not familiar
-> with the notion will struggle to understand the error message.
+On 9/7/26 9:33 PM, Alexei Starovoitov wrote:
+> On Sun, Sep 6, 2026 at 1:15 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+>>
+>>
+>> On 9/4/26 4:58 PM, Alexei Starovoitov wrote:
+>>> On Thu Sep 3, 2026 at 10:10 PM PDT, Yonghong Song wrote:
+>>>> The JIT hands each eightbyte the BPF calling convention passes an
+>>>> argument in to the argument position of the same number, registers first,
+>>>> so the two conventions agree unless the kernel one places an argument
+>>>> somewhere else. Compute where SysV wants each eightbyte, and move the
+>>>> ones that differ before the call.
+>>>>
+>>>> SysV disagrees over an argument that the registers left cannot hold: it
+>>>> moves the whole of it to the stack and leaves the registers to the
+>>>> arguments that follow, while the BPF convention splits it and keeps
+>>>> filling slots in order. So for
+>>>>
+>>>>     u64 f(u64 a, u64 b, u64 c, u64 d, u64 e, struct pair s);
+>>>>
+>>>> the BPF convention puts s in the last argument register and the first
+>>>> stack slot, while SysV puts it wholly on the stack. Add an argument after
+>>>> s and it takes the register s vacated, which makes the moves a cycle, so
+>>>> one value at a time waits in RAX, dead before a call.
+>>>>
+>>>> The outgoing argument area is sized for both conventions, as SysV can put
+>>>> on the stack an argument the BPF slots kept in a register, and
+>>>> bpf_jit_supports_kfunc_arg_slot() can now answer yes to any placement.
+>>> What is SysV ? This change is about x86-64 ABI.
+>> SysV refers to https://wiki.osdev.org/System_V_ABI#x86-64.
+>>
+>>> How come BPF calling convention diverged from x86-64?
+>> Let me explain the calling convention difference between BPF and x86_64.
+>>
+>> For x86_64,
+>>      rdi, rsi, rdx, rcx, r8, r9, <stack...>
+>> So for
+>>      foo(long a, __int128 b, __int128 c, __int128 d, __int128 e, long f)
+>> the register/stack mapping:
+>>      a:rdi, b:rsi/rdx, c:rcx/r8, d:stack, e:stack, f/r9
+>>
+>> For bpf, the abi is simply sequential, e.g. for the above foo()
+>>      a, b, c, d, e, f // no gap
+>> For bpf, bar(long a, long b, __int128 c, __int128 d, __int128 e, long f, __int128 g)
+>>      a, b, c, d, e, f, g // no gap
+>>
+>> The upstream llvm:
+>>
+>> SDValue BPFTargetLowering::LowerCall(TargetLowering::CallLoweringInfo &CLI,
+>>                                        SmallVectorImpl<SDValue> &InVals) const {
+>> ...
+>>     // Walk arg assignments
+>>     for (size_t i = 0; i < OutVals.size(); ++i) {
+>>       CCValAssign &VA = ArgLocs[i];
+>>       SDValue &Arg = OutVals[i];
+>>
+>>       // Promote the value if needed.
+>>       switch (VA.getLocInfo()) {
+>>       default:
+>>         report_fatal_error("unhandled location info: " + Twine(VA.getLocInfo()));
+>>       case CCValAssign::Full:
+>>         break;
+>>       case CCValAssign::SExt:
+>>         Arg = DAG.getNode(ISD::SIGN_EXTEND, CLI.DL, VA.getLocVT(), Arg);
+>>         break;
+>>       case CCValAssign::ZExt:
+>>         Arg = DAG.getNode(ISD::ZERO_EXTEND, CLI.DL, VA.getLocVT(), Arg);
+>>         break;
+>>       case CCValAssign::AExt:
+>>         Arg = DAG.getNode(ISD::ANY_EXTEND, CLI.DL, VA.getLocVT(), Arg);
+>>         break;
+>>       }
+>>
+>>
+>>       // Push arguments into RegsToPass vector
+>>       if (VA.isRegLoc()) {
+>>         RegsToPass.push_back(std::make_pair(VA.getLocReg(), Arg));
+>>         continue;
+>>       }
+>>
+>>       if (VA.isMemLoc()) {
+>>         int Off = -8 - VA.getLocMemOffset();
+>>         if (Off < INT16_MIN) {
+>>           fail(CLI.DL, DAG, "extra parameter stack depth exceeded limit");
+>>           break;
+>>         }
+>>
+>>         // STORE_STACK_ARG requires i64 operands. With ALU32 mode, the CC
+>>         // promotion may only extend to i32, so extend to i64 if needed.
+>>         if (Arg.getValueType() != MVT::i64)
+>>           Arg = DAG.getNode(ISD::ANY_EXTEND, CLI.DL, MVT::i64, Arg);
+>>
+>>         SDValue OffVal = DAG.getConstant(Off, CLI.DL, MVT::i64);
+>>         Chain = DAG.getNode(BPFISD::STORE_STACK_ARG, CLI.DL, MVT::Other, Chain,
+>>                             OffVal, Arg);
+>>         continue;
+>>       }
+>>
+>>       report_fatal_error("unhandled argument location");
+>>     }
+>>
+>>   From above, for a 16-byte struct e.g. __int128 or struct {long a; long b;};
+>> they can have half in R5 and the other half in Stack. But this is not
+>> allowed for x86_64.
+>>
+>> arm64 has more constraints on top of x86_64. For any 16-byte (or > 8 byte)
+>> argument, the argument must be 16-byte aligned (in registers or in stacks).
+>> For the following example:
+>>     foo(long a, __int128 b, __int128 c, __int128 d, __int128 e, long f, __int128 g)
+>> the registers/stack:
+>>     a: x0, b: x2/x3, c: x4/x5, d: x6/x7
+>>     stack: e (offset 0), f (offset 16), g (offset 32).
+>>
+>>> Maybe we should adjust bpf side instead.
+>> We can keep llvm implementation but we can adjust bpf side in kernel.
+>>
+>> For x86, if we have a reorder of an argument or a hole in the slots, reject.
+>> For arm64, if there is a hole in the slots, reject.
+>>
+>> This will simplify jit a lot.
+> Why cannot we adjust bpf calling convention to match arm64/x86 the best?
+> Since arm64 is stricter, I'd pick that style.
+> There are no kfuncs that use int128 or 16+ byte args,
+> so it's a matter of bpf subprogs calling bpf subprogs.
+> Seems cleaner to adjust what llvm emits instead of forcing all jits to adapt.
 
-Ack. I'll send a new patch to skip over these programs instead, as
-suggested by Leon in the other patch ("selftests/bpf: Move verifier
-failure tests out of test_global_percpu_data"). Thanks.
+The following is what I was suggested:
+
+llvm: no change,
+
+x86_64 jit:
+
++bool bpf_jit_supports_kfunc_arg_slot(u32 slots_used, u32 nslots, u32 align)
++{
++       if (slots_used >= 6)
++               return IS_ALIGNED((slots_used - 6) * sizeof(u64), align);
++
++       return slots_used + nslots <= 6;
++}
+
+arm64 jit:
+
++bool bpf_jit_supports_kfunc_arg_slot(u32 slots_used, u32 nslots, u32 align)
++{
++       if (slots_used >= 8)
++               return IS_ALIGNED((slots_used - 8) * sizeof(u64), align);
++
++       if (!IS_ALIGNED(slots_used * sizeof(u64), align))
++               return false;
++
++       return slots_used + nslots <= 8;
++}
+
+The above x86_64 and arm64 will reject for certain cases as in the above.
+
+The alternative solution is to change llvm's. Let us say we want to have
+arm64 calling convention. We may have
+
+    slot 0: int
+    slot 1: empty
+    slot 2: first64 in int128
+    slot 3: second64 in int128
+    slot 4: int
+    slot 5: empty
+    slot 6: first64 in int128
+    slot 7: second64 int int128
+    slot 8: int
+
+in llvm and it matches to arm64
+but it has some issues in kernel as some slot is empty. (slot 1, slot 5).
+and it needs calling convention change for x86_64.
+
+So in llvm, we should have strict arm64 calling convention without holes.
+That means the above slot 0->8 example will be rejected in llvm.
+Is this what you suggested?
+
