@@ -1,25 +1,25 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.76.78.106])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BAAF46F4AB
-	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 08:31:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.76.78.106
+Received: from zg8tmtyylji0my4xnjeumjiw.icoremail.net (zg8tmtyylji0my4xnjeumjiw.icoremail.net [162.243.161.220])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1234B478859
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 08:32:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.161.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788856276; cv=none; b=HbTXTLLBUpLfDvfVN4yPFJDnJHmTEsPrEi4XEk2bAbx5yLRcJ6Z3UX/7X1Yh1f2t4psGfsEqxezFsSD9AqnqFsjFgMIBspoPgekY6lz5SWVQN64MwfiW0BeUX1jyjs3F/4nPhgejEJBoS0P1ed3nrtO2ie9GevwF248S8F7WzL8=
+	t=1788856377; cv=none; b=uhh5r+1Me1rjpQO98wJnBCgVBE1yFC7MEiaB2zFqqtapV5cyPCTBCtYDKO7H5m6YSJHdWfSlDd2T3prvi+H/7QOquZ2amA4veuAImoszbIllRYs+nk+gYx4syMFuybo5NcqMu/2NbHVNjHxAJE2vHuKPWsJCeWxnlJ2+c7WWj1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788856276; c=relaxed/simple;
-	bh=jUNyzB3J155nkFzmyD5tUdE8Nf6pvJWFemUBgJ221B0=;
+	s=arc-20240116; t=1788856377; c=relaxed/simple;
+	bh=rHm0HvWZiKqD7qErL8YVw7awc9OrPTvWRJaM82ce0ps=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oXBYyzCeMOLr0J8hARHEocZNk/jcPcIzG17DhIhnSF7COuCJoTISzdo/Sv/HsjpIMHP9VMZAdLIZ8Fcg48dgXsAM/I+y0NIv06bZkadO4j2D5962GVSCpRWyySGK1jhQHAhIEoRjIQQDpV23SJU67wW/UbWbG+MxFSLp9ZDOZds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=13.76.78.106
+	 In-Reply-To:Content-Type; b=m3ojYTsuoqEBKlg/TjysFPcOHMBpdvcZAqzgryZoxsKroujpS4/zQWz11rI9SYRh6pr8wIXatKyPws0vtCtNdL8XzjY2ZFT5MIRsr8Em7yUE70YjBwGv+Tqgohdr2Hjh2A08/MUbvDy+fw/dInFTGXXP+wTJQnVPnpGAMY17pYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=162.243.161.220
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
 Received: from zju.edu.cn (unknown [10.162.163.215])
-	by mtasvr (Coremail) with SMTP id _____wD3cDa6x59qnSX+AA--.38094S3;
-	Tue, 08 Sep 2026 16:30:51 +0800 (CST)
+	by mtasvr (Coremail) with SMTP id _____wBXUH8SyJ9q_yb+AA--.24361S3;
+	Tue, 08 Sep 2026 16:32:18 +0800 (CST)
 Received: from [10.162.163.215] (unknown [10.162.163.215])
-	by mail-app3 (Coremail) with SMTP id zS_KCgC3z3G6x59qNXgDBQ--.4722S3;
-	Tue, 08 Sep 2026 16:30:50 +0800 (CST)
-Message-ID: <94eba3a8-6bca-432b-859b-d14e608d34f2@zju.edu.cn>
-Date: Tue, 8 Sep 2026 16:30:50 +0800
+	by mail-app3 (Coremail) with SMTP id zS_KCgAXUXQRyJ9qFHoDBQ--.4125S3;
+	Tue, 08 Sep 2026 16:32:17 +0800 (CST)
+Message-ID: <c466dfd7-0f94-4ff7-bc10-83fa30402708@zju.edu.cn>
+Date: Tue, 8 Sep 2026 16:32:17 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -27,7 +27,8 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH bpf-next 1/6] bpf: Add UHMUL and SHMUL instructions
+Subject: Re: [RFC PATCH bpf-next 3/6] bpf: Reject UHMUL/SHMUL in unsupported
+ JITs
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
  ast@kernel.org, eddyz87@gmail.com
 Cc: daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
@@ -35,74 +36,53 @@ Cc: daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
  kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
  tangyazhou518@outlook.com, shenghaoyuan0928@163.com, ziye@zju.edu.cn
 References: <20260902070534.2141812-1-tangyazhou@zju.edu.cn>
- <20260902070534.2141812-2-tangyazhou@zju.edu.cn>
- <DL9CGP0NFZ37.25Y31VZH6PKPQ@gmail.com>
+ <20260902070534.2141812-4-tangyazhou@zju.edu.cn>
+ <DL9CIMDBZWIQ.2EXQYQI34DDCX@gmail.com>
 Content-Language: en-US
 From: Yazhou Tang <tangyazhou@zju.edu.cn>
-In-Reply-To: <DL9CGP0NFZ37.25Y31VZH6PKPQ@gmail.com>
+In-Reply-To: <DL9CIMDBZWIQ.2EXQYQI34DDCX@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:zS_KCgC3z3G6x59qNXgDBQ--.4722S3
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAgQICmqfE5ommQABsG
-X-CM-DELIVERINFO: =?B?iwXVXAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9AyofRyhA5TOquHFDi8EO5cezsuVsu4/YMhSZ743bxFnXIXkWSRt1f7GNnUm7P0VKYPN
-	KRJA+UVTdUAIbKQK7a3gZQZ7C3b6Dq9XiLoYwH8wEdgaG0QHkmrT3Ugz9Y2bTg==
-X-Coremail-Antispam: 1Uk129KBj93XoW7Kry8Aw15Gry8GryUZryDXFc_yoW8Xw17pF
-	4UKw4UtFZFgryqka4xJ39FgryYyasaka1UGFs5Ww12yF9xtF1FqF4jyw4YqFZxGF4xua42
-	qrWqv34UZw4UuabCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AK
-	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2
-	ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG
-	67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MI
-	IYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E
-	14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJV
-	W8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUo0eH
-	DUUUU
+X-CM-TRANSID:zS_KCgAXUXQRyJ9qFHoDBQ--.4125S3
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAgUICmqfE5onkgAAsM
+X-CM-DELIVERINFO: =?B?stViDAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9P2rgh2U/xFW9zvd3L3RnW5Rf1zHf0b0ozxR25lJ4tbEQN4/ZNYbAV3RmMmuuKY3U7ju
+	5cLDQ+J5XD9VZZf3n7wl+UF/knAL2XtgbKqcPkbBTBVsP+qJGYeN7JWi6Et5lg==
+X-Coremail-Antispam: 1Uk129KBj9xXoW7Xr1kAF1UuF4rGFWrWr1xWFX_yoW3Wrg_tw
+	4YyayIkwnYyF1avF1Yk3WUGr9F9r4DWF1xJF1kWF9rA3sxXry5CrZ5A34xK3yUKrWqkrZ7
+	Wr93ta42yw4Y9osvyTuYvTs0mTUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+	cSsGvfJTRUUUbxAYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20EY4v20x
+	vaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	WxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4
+	xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v2
+	6r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2
+	kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
+	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIx
+	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
+	wI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
+	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWwZcU
+	UUUU=
 
 
 
-On 9/8/26 3:51 AM, Alexei Starovoitov wrote:
+On 9/8/26 3:53 AM, Alexei Starovoitov wrote:
 > On Wed Sep 2, 2026 at 12:05 AM PDT, Yazhou Tang wrote:
->> From: Tianci Cao <ziye@zju.edu.cn>
->>
->> Define UHMUL and SHMUL as BPF_ALU64 BPF_MUL variants selected by insn->off.
->> UHMUL returns the high 64 bits of an unsigned 64-by-64-bit product, while
->> SHMUL returns the high 64 bits of a signed product. Keep off == 0 as the
->> existing low-half multiplication, and assign off == 1 and off == 2 to
->> UHMUL and SHMUL, respectively.
->>
->> These operations are inspired by the UHMUL and SHMUL instructions
->> introduced as part of the PQR instruction class in Solana sBPF[1].
->>
->> The encoding and immediate semantics differ from current sBPF.
->>
->> 1. Solana sBPF assigns these operations dedicated opcodes in the BPF_PQR
->>     class, whereas this implementation selects them through the offset
->>     field of BPF_MUL.
->>
->> 2. Solana sBPF initially sign-extended the immediate operand of UHMUL,
->>     but later changed unsigned PQR immediates, including UHMUL, to be
->>     zero-extended[2].
+>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+>> index 3aa3ea0bc30b..dc60a931c364 100644
+>> --- a/arch/arm64/net/bpf_jit_comp.c
+>> +++ b/arch/arm64/net/bpf_jit_comp.c
+>> @@ -1325,6 +1325,9 @@ static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn
+>>   	int ret;
+>>   	bool sign_extend;
+>>   
+>> +	if (bpf_insn_is_hmul(insn))
+>> +		return -EOPNOTSUPP;
+>> +
 > 
-> Why did you switch to zero-extend ?
-> Sounds odd to do zero extend just for these ops.
-
-Sorry, I wasn't clear. This patch does not zero-extend the UHMUL immediate.
-
-Both UHMUL and SHMUL follow the existing BPF_ALU64 convention and
-sign-extend the 32-bit immediate to 64 bits first. The zero-extension
-I mentioned refers only to current Solana sBPF behavior. I'll clarify
-this in the respin.
-
-> 
-> Overall the patch set look pretty good.
-> Please drop RFC and respin.
-
-Thanks for the review. I'll respin soon.
+> Please add arm64 support in this patch set and may be one more like riscv.
+> Just x86 is not enough to see whether new insns map cleanly on other archs.
+Sounds good. I'll try to add both arm64 and RISC-V support in the respin.
 
