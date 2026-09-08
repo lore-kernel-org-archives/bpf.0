@@ -1,63 +1,63 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2649858E2C0
-	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 16:49:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B7558B6BD
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 16:49:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788886184; cv=none; b=IaPnOJitH4DH7CjaaAVrKyeS1wbq5eFTtePPLn5wEZa3CqI5O+XyonuTA3t2N/3CDX38/QowDh7jJ0yUD2I9ubCuv4XaagJHveh2ZJcDzh+DntV8cVI3E7Zz4s148SvZ/SK67GaYHjkqHnxH+o66FbZD2yIYEZbHbWBBt8qzBjw=
+	t=1788886187; cv=none; b=UtGUtQQgBKUPBbhqC4sPV6rlc4VYs2BrrgamM9ENAb7JeSegzfcAcPOEqqVVcwII3NfxryvoRy4PYAfzGXUZHI1Fs6JDDUHtrO/RN0GRJ01628KzSEiFKfAxDss3dZYbx5gXQMdeBAdwWlodrsFKp36xf5qQYUV3yTmmCaBBNU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788886184; c=relaxed/simple;
-	bh=RsIRhU3fuzQ1FzW3NLw2k4A8bkvzZvAZm5kiGkI7VmY=;
+	s=arc-20240116; t=1788886187; c=relaxed/simple;
+	bh=XxyMRF7fIGTbzRWsCbIPEAOZABbUq1jiCt4sxrunbeA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NJ447fX+r3cteOGuRlezbeNdJSS6zB33IOTDQtYr098onwoJISarFl+UJT0wrPNuAIEG7MjcZE3PJGssDu7qbvTnEMTk3vIqdGjcLjNUp399w6Si5Vl8CVPKFVdyOlkhN82/MwhDBPF1dS5Owl3UDubmrfFjbha3jErdJ/z6UBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EqMwo6Q4; arc=none smtp.client-ip=209.85.214.180
+	 MIME-Version; b=hp91k6e7kOm82Y5iWB1qMK6DzLIH8Z1HEsxV1cEQI7ib0Aa6UTnXzii7TWZlFnay25SgXZkK5yTkrdk4Gs+GRJhheIYW4/9XRbvranPcotMwmLr0cybw4dbTfCdXjI8gZb+WEd2c8tglYp3/1XSmUm49pM1bRN3HHUidunNLWlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=En4N1VLI; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EqMwo6Q4"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2d032846c95so56319255ad.1
-        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 09:49:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="En4N1VLI"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2d9004f39d3so58483395ad.2
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 09:49:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788886182; x=1789490982; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788886185; x=1789490985; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=YbtunuovUXhQ3toZibAc74QEskqK9dBj5W16bCvaNz8=;
-        b=EqMwo6Q48MHpxr7Hip3RmxStWI4TQrnSdj7RQ+9dCXr8WI+VV3qHvxuuqv5saQcYcz
-         WvNPYNiGvBe/JcxJvkulPJGcIgjjp5vgqDvrrzXl2serkM9ihOg40T/2SdtstnwTLNLP
-         AdMvPzVhlT157bngqN+f/LRCIT3+06kNw1yv3kAfoQct5dLTH62JvmuPC+627FaRLUba
-         yuw9BNWBG8tMlZsa31iaqWuOwopJo4Ums9OHXz2VN9NqiZL9FQpiBR5eyGJSnL3oKVdQ
-         ToSYhdBDPdcYME9D1Af/2fYD9otbXGtzQWC8M6eauPRiYrmONh1nJY/dZj8/Os4u49Xk
-         ZoFA==
+        bh=o22DZiWDDwlAzhaD2Y2B352oTp6NegGs0qXVvBJMW04=;
+        b=En4N1VLIN21Ys5ZvxycefGOJeV6JiRA3xhJ6p4btDRh2YU3c/7tSbeI62VIqPPZt++
+         6Ko/mEyzmdnRhWxT4z5xx0zFsKbpMpd9m2TjposH+H40jO0eE5JBG94w7NxVpV2LqF+6
+         BuUXQ1YIsDrpw8qDqTRVzMkG3zVGqYHuZC09YQ9biGrLRGIMmOxVxrb73/IpW7LJePIl
+         S9EVWHkwnisl5d8nZiTrwGhUdCIqi5kLPd2xe21hieCkr2NHwawavlGHzB5GH7CI2Bvy
+         YJskMkeVrgTrDmxhsQeFG/NKl8TA8gMXKu4FMYpJi4rf0k2ykMDPbn9wty+09WEibY9b
+         qlqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788886182; x=1789490982;
+        d=1e100.net; s=20251104; t=1788886185; x=1789490985;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YbtunuovUXhQ3toZibAc74QEskqK9dBj5W16bCvaNz8=;
-        b=A3vFssAVdtliTdK/M1s6ExsJoa7F277xXmx5A3O9TuiiHBtapCWCxxEXtgim6m54Uy
-         8p9Z9qqaeTQPFm6mafPf3J3i5idXETwHmMOwt4oXhJpH20y0K5b3AZLBTBixYeUyH5zz
-         lfEWXgGriZZowX+NvNzEoHPsGYL/MIoxOcJHqwJoKOeBdUT3kxgiNPdJjPwh6pt8jzHg
-         VbDTxzpIzx8/0bK2l0whhIj+0tsftivrd+hNIwbfDj0MDhWlT+jvgb8rndAwHPs6D1eF
-         LzNCwlJVhoXIFvuafTXTybSd9s7so0XVpNTocAz6Qu+/dQIS6cFfw0B0/bEkrumEm2bB
-         SXMg==
-X-Gm-Message-State: AFuF++kOhuxhM6OQ1XML9ba9gMA/HOIy5KT07+ZNY5GUIvo/5//puqcw
-	FwXCSyv5IUj86vHmlfXMCLDovMtQbIi1F5lRRaLu2Sj/QnUwiRhtmXT1U18rToBBycA7Ew==
-X-Gm-Gg: AYBFou10YLm1a9AsYzXw8QVm4fNDEzFEi8tKyKKgdvbnzayALhWq7hTehb25ovYvHHq
-	O5NfhZ34OjP5SKlmCbWMA6VYpolPuh3Sol7GaiiH/8gCd0gFfChLfX2QD+e1ddj4MDb/wNc6SMD
-	bGZ59gUxadQJL6xjAl1NkTs8FJ1XDE2Vr+++/n57MFIwRDGW8I2m8nAMd8srZ2JnqyIia7N6Llo
-	4xV5WvGmCThunXWhJsvLYdav8zd4a4oGryxx1t0o/6sXpxh0+2quo70GxMc+9ZhGyUrzLHD+LG+
-	hrO5fHXd+3PIesRKHY6R+4Y8K/SLqAy5CEOtMxS7oD65r8/vPIrSxFTHvH4sgpMNDG9BUOOtWNc
-	rAb5Vcz/8yQssG1HJMVHjBvrBExHEnMnsib9l4Vncfb1iY24u1TrfYQPJtFR7axCEMtbu17iasQ
-	18mxh3F+6r9dRGCzGidbN6CqFwdyuMd+aQDoK0/bQ6I8318WTED3dCwsVQ4rhG6QZrp7VmZd/Bm
-	gNNC1LfhX6sZOGoF/blBIxmJP8=
-X-Received: by 2002:a17:903:200e:b0:2d9:43f6:59f0 with SMTP id d9443c01a7336-2db1267bc27mr294382775ad.22.1788886181700;
-        Tue, 08 Sep 2026 09:49:41 -0700 (PDT)
+        bh=o22DZiWDDwlAzhaD2Y2B352oTp6NegGs0qXVvBJMW04=;
+        b=qbec7oDe+siT4A5J/Zsfs9d5Db2TMznny9NXgh2w4IQUBSh6zy2bkc7HschMdch0k6
+         4h0RWVlfKBUkwNHGzKAa1rcBPHUGcbeMP+X1g3oWq027nuEJ+mhs1bEZdxl/4kJOUOwb
+         lGEuEEKFry9ZtG/HlxzUrqAotanozizvcy6T9dofcJRbV9ECX9OjHo2Ef+ZDWETQr+54
+         4KnXBBw2nm/ymTjZW4lpAUQYCJiNgMPDrwAVqkIpm3Gb+h8eYNUddelniWhIacEmo5lg
+         jUZnp/XuRghDYfBArKDdUQnpirOsKPHV+Ozqm2lhVNU55+5n0rPMGaqLfeYH44FOOuCs
+         UbFg==
+X-Gm-Message-State: AFuF++ngY5PPagKHobw3iTxCtrZPZEhx1f39ap00c37G9Q1Zx4hxYr1n
+	Gxfdli4Xm24OBGK2wVx4If8Q0CS+7rqFs8PVHshT/wPgNln3+GK9VMLvk7pyORhOu49p2g==
+X-Gm-Gg: AYBFou1GEOy1pfo2dniICc+HY3BJQQks2jbhdpbdcfso3qiqDClIyijacqlaleEnpJW
+	c+xSvsaRCUCEMPUj6Iih8bCC3h+FQbF0Sn20c5hn6hhBs9eV3OELNR034cGWjZiqm31m0gT/bTf
+	Knlfz9aHKR8Sutx5FnTggfWxFIt00W8RKYNms1KBX/cOLqWGWEnuH4fB8UPeLpAuy3PfdWwf/6G
+	bP+U0sGN6nN5Ai3AMScTSMvwDNuKGZT8qx+mu1736HRamxB0HZhWAWA38lhnqBEF1MparbHIGWw
+	nF53yesk9QZj4tbSMNsJ+MJ9Rq44oZOIQk4zDZoY5AZsT5Eqo4tUvpTq+DRbo4KsLmEP9JZFRef
+	O1BWt9fv4WJAtVTyeeYhWq9zcFdKC3H4S17kZoKL+V86MQVMaJHlhuc6gujGzYjOLWZmjvYRL9c
+	P62/hGqhCYdcRLSqjB/DbYKK6r7bTI0VqX70V5tO631L9eTigEdB3qO7n8RI0u80Rf4iR81nD28
+	GBsLXJQ0cEJolxwA7K6SIjY8GU=
+X-Received: by 2002:a17:902:e948:b0:2d9:51b7:c0bc with SMTP id d9443c01a7336-2db125a3452mr498904515ad.12.1788886184549;
+        Tue, 08 Sep 2026 09:49:44 -0700 (PDT)
 Received: from HKG-A3-RJYWAR2VC4M5B7A1.. ([140.245.43.79])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2db146b9691sm61354295ad.0.2026.09.08.09.49.39
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2db146b9691sm61354295ad.0.2026.09.08.09.49.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2026 09:49:41 -0700 (PDT)
+        Tue, 08 Sep 2026 09:49:44 -0700 (PDT)
 From: Mingpei CAO <caomingpei@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Mingpei CAO <caomingpei@gmail.com>,
@@ -65,9 +65,9 @@ Cc: Mingpei CAO <caomingpei@gmail.com>,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	alan.maguire@oracle.com
-Subject: [PATCH bpf v2 1/2] libbpf: Fix array comparison in BTF dedup
-Date: Tue,  8 Sep 2026 16:49:19 +0000
-Message-ID: <20260908164920.108074-2-caomingpei@gmail.com>
+Subject: [PATCH bpf v2 2/2] selftests/bpf: Test array element comparison in BTF dedup
+Date: Tue,  8 Sep 2026 16:49:20 +0000
+Message-ID: <20260908164920.108074-3-caomingpei@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260908164920.108074-1-caomingpei@gmail.com>
 References: <20260908164920.108074-1-caomingpei@gmail.com>
@@ -79,33 +79,158 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-btf_dedup_identical_types() reads both array descriptors from t1,
-skipping comparisons of their referenced types. This can incorrectly
-merge distinct structs and corrupt CO-RE relocation metadata.
+Exercise recursive array comparison with different and identical
+element definitions using the existing BTF dedup tests. Add a separate
+case with the same index type to isolate the element-type comparison.
 
-Read the second descriptor from t2.
+Check that distinct containers remain separate and identical types
+are deduplicated. Both negative cases fail before the fix and pass
+afterwards; the positive case passes both before and after the fix.
 
-Fixes: 62e23f183839 ("libbpf: Improve BTF dedup handling of "identical" BTF types")
-Closes: https://lore.kernel.org/bpf/CABzjXVz3iBuump-pXFkefZ5v+2uu4fG61zqRyWD4xmz3PuBycw@mail.gmail.com/
+Suggested-by: Alan Maguire <alan.maguire@oracle.com>
 Assisted-by: LLM
 Signed-off-by: Mingpei CAO <caomingpei@gmail.com>
 ---
- tools/lib/bpf/btf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/bpf/prog_tests/btf.c | 126 +++++++++++++++++++
+ 1 file changed, 126 insertions(+)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 8417de92d028..41cc3140925f 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -4827,7 +4827,7 @@ static bool btf_dedup_identical_types(struct btf_dedup *d, __u32 id1, __u32 id2,
- 			return false;
- 
- 		a1 = btf_array(t1);
--		a2 = btf_array(t1);
-+		a2 = btf_array(t2);
- 
- 		if (a1->index_type != a2->index_type &&
- 		    !btf_dedup_identical_types(d, a1->index_type, a2->index_type, depth - 1))
+diff --git a/tools/testing/selftests/bpf/prog_tests/btf.c b/tools/testing/selftests/bpf/prog_tests/btf.c
+index 67b9015cbd98..df6ad38d287d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/btf.c
++++ b/tools/testing/selftests/bpf/prog_tests/btf.c
+@@ -7062,6 +7062,132 @@ static struct btf_dedup_test dedup_tests[] = {
+ 		BTF_STR_SEC("\0int\0long int"),
+ 	},
+ },
++{
++	.descr = "dedup: array element comparison",
++	.input = {
++		.raw_types = {
++			/* signed int */
++			BTF_TYPE_INT_ENC(NAME_NTH(1), BTF_INT_SIGNED, 0, 32, 4), /* [1] */
++			/* unsigned int */
++			BTF_TYPE_INT_ENC(NAME_NTH(2), 0, 0, 32, 4),		/* [2] */
++			/* signed int[1] */
++			BTF_TYPE_ARRAY_ENC(1, 1, 1),				/* [3] */
++			/* duplicate signed int[1] */
++			BTF_TYPE_ARRAY_ENC(1, 1, 1),				/* [4] */
++			/* unsigned int[1] */
++			BTF_TYPE_ARRAY_ENC(2, 2, 1),				/* [5] */
++			/* struct s { signed int a[1]; signed int b[1]; } */
++			BTF_STRUCT_ENC(NAME_NTH(3), 2, 8),			/* [6] */
++			BTF_MEMBER_ENC(NAME_NTH(4), 3, 0),
++			BTF_MEMBER_ENC(NAME_NTH(5), 3, 32),
++			/* struct s { signed int a[1]; unsigned int b[1]; } */
++			BTF_STRUCT_ENC(NAME_NTH(3), 2, 8),			/* [7] */
++			BTF_MEMBER_ENC(NAME_NTH(4), 4, 0),
++			BTF_MEMBER_ENC(NAME_NTH(5), 5, 32),
++			BTF_END_RAW,
++		},
++		BTF_STR_SEC("\0int\0unsigned int\0s\0a\0b"),
++	},
++	.expect = {
++		.raw_types = {
++			BTF_TYPE_INT_ENC(NAME_NTH(1), BTF_INT_SIGNED, 0, 32, 4), /* [1] */
++			BTF_TYPE_INT_ENC(NAME_NTH(2), 0, 0, 32, 4),		/* [2] */
++			BTF_TYPE_ARRAY_ENC(1, 1, 1),				/* [3] */
++			BTF_TYPE_ARRAY_ENC(2, 2, 1),				/* [4] */
++			BTF_STRUCT_ENC(NAME_NTH(3), 2, 8),			/* [5] */
++			BTF_MEMBER_ENC(NAME_NTH(4), 3, 0),
++			BTF_MEMBER_ENC(NAME_NTH(5), 3, 32),
++			BTF_STRUCT_ENC(NAME_NTH(3), 2, 8),			/* [6] */
++			BTF_MEMBER_ENC(NAME_NTH(4), 3, 0),
++			BTF_MEMBER_ENC(NAME_NTH(5), 4, 32),
++			BTF_END_RAW,
++		},
++		BTF_STR_SEC("\0int\0unsigned int\0s\0a\0b"),
++	},
++},
++{
++	.descr = "dedup: array element comparison with same index type",
++	.input = {
++		.raw_types = {
++			BTF_TYPE_INT_ENC(NAME_NTH(1), BTF_INT_SIGNED, 0, 32, 4), /* [1] */
++			BTF_TYPE_INT_ENC(NAME_NTH(2), 0, 0, 32, 4),		/* [2] */
++			BTF_TYPE_ARRAY_ENC(1, 1, 1),				/* [3] */
++			BTF_TYPE_ARRAY_ENC(1, 1, 1),				/* [4] */
++			BTF_TYPE_ARRAY_ENC(2, 1, 1),				/* [5] */
++			/* struct s { int a[1]; int b[1]; } */
++			BTF_STRUCT_ENC(NAME_NTH(3), 2, 8),			/* [6] */
++			BTF_MEMBER_ENC(NAME_NTH(4), 3, 0),
++			BTF_MEMBER_ENC(NAME_NTH(5), 3, 32),
++			/* struct s { int a[1]; unsigned int b[1]; } */
++			BTF_STRUCT_ENC(NAME_NTH(3), 2, 8),			/* [7] */
++			BTF_MEMBER_ENC(NAME_NTH(4), 4, 0),
++			BTF_MEMBER_ENC(NAME_NTH(5), 5, 32),
++			BTF_END_RAW,
++		},
++		BTF_STR_SEC("\0int\0unsigned int\0s\0a\0b"),
++	},
++	.expect = {
++		.raw_types = {
++			BTF_TYPE_INT_ENC(NAME_NTH(1), BTF_INT_SIGNED, 0, 32, 4), /* [1] */
++			BTF_TYPE_INT_ENC(NAME_NTH(2), 0, 0, 32, 4),		/* [2] */
++			BTF_TYPE_ARRAY_ENC(1, 1, 1),				/* [3] */
++			BTF_TYPE_ARRAY_ENC(2, 1, 1),				/* [4] */
++			BTF_STRUCT_ENC(NAME_NTH(3), 2, 8),			/* [5] */
++			BTF_MEMBER_ENC(NAME_NTH(4), 3, 0),
++			BTF_MEMBER_ENC(NAME_NTH(5), 3, 32),
++			BTF_STRUCT_ENC(NAME_NTH(3), 2, 8),			/* [6] */
++			BTF_MEMBER_ENC(NAME_NTH(4), 3, 0),
++			BTF_MEMBER_ENC(NAME_NTH(5), 4, 32),
++			BTF_END_RAW,
++		},
++		BTF_STR_SEC("\0int\0unsigned int\0s\0a\0b"),
++	},
++},
++{
++	.descr = "dedup: identical array element comparison",
++	.input = {
++		.raw_types = {
++			/* int */
++			BTF_TYPE_INT_ENC(NAME_NTH(1), BTF_INT_SIGNED, 0, 32, 4), /* [1] */
++			/* struct container { struct elem first[1]; struct elem second[1]; } */
++			BTF_STRUCT_ENC(NAME_NTH(2), 2, 8),			/* [2] */
++			BTF_MEMBER_ENC(NAME_NTH(3), 3, 0),
++			BTF_MEMBER_ENC(NAME_NTH(4), 3, 32),
++			/* struct elem[1] */
++			BTF_TYPE_ARRAY_ENC(4, 1, 1),				/* [3] */
++			/* struct elem { int x; } */
++			BTF_STRUCT_ENC(NAME_NTH(5), 1, 4),			/* [4] */
++			BTF_MEMBER_ENC(NAME_NTH(6), 1, 0),
++			/* duplicate struct container */
++			BTF_STRUCT_ENC(NAME_NTH(2), 2, 8),			/* [5] */
++			BTF_MEMBER_ENC(NAME_NTH(3), 6, 0),
++			BTF_MEMBER_ENC(NAME_NTH(4), 7, 32),
++			/* duplicate struct elem[1] */
++			BTF_TYPE_ARRAY_ENC(8, 1, 1),				/* [6] */
++			BTF_TYPE_ARRAY_ENC(9, 1, 1),				/* [7] */
++			/* duplicate struct elem */
++			BTF_STRUCT_ENC(NAME_NTH(5), 1, 4),			/* [8] */
++			BTF_MEMBER_ENC(NAME_NTH(6), 1, 0),
++			BTF_STRUCT_ENC(NAME_NTH(5), 1, 4),			/* [9] */
++			BTF_MEMBER_ENC(NAME_NTH(6), 1, 0),
++			BTF_END_RAW,
++		},
++		BTF_STR_SEC("\0int\0container\0first\0second\0elem\0x"),
++	},
++	.expect = {
++		.raw_types = {
++			BTF_TYPE_INT_ENC(NAME_NTH(1), BTF_INT_SIGNED, 0, 32, 4), /* [1] */
++			BTF_STRUCT_ENC(NAME_NTH(2), 2, 8),			/* [2] */
++			BTF_MEMBER_ENC(NAME_NTH(3), 3, 0),
++			BTF_MEMBER_ENC(NAME_NTH(4), 3, 32),
++			BTF_TYPE_ARRAY_ENC(4, 1, 1),				/* [3] */
++			BTF_STRUCT_ENC(NAME_NTH(5), 1, 4),			/* [4] */
++			BTF_MEMBER_ENC(NAME_NTH(6), 1, 0),
++			BTF_END_RAW,
++		},
++		BTF_STR_SEC("\0int\0container\0first\0second\0elem\0x"),
++	},
++},
+ {
+ 	.descr = "dedup: struct example #1",
+ 	/*
 -- 
 2.43.0
 
