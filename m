@@ -1,161 +1,332 @@
-Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
+Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08E656B856
-	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 17:29:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.204
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788888551; cv=pass; b=tguRxdJkY7ylWLR1GcrXOZA5WAf1wReZLYHLyaO+vb1dC8ue08TbyIIIvaHkIq4eO2ZPGMvtoZnjvRR0akOHSMwwSMMpeb3BhradlLEbHnbyt3mgmMirjFmDs4+pctAvYBsF9NyXqawEHokS7PB2mlZdA0Qp6EHXthCKby7rJeA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788888551; c=relaxed/simple;
-	bh=TV5fg2vDNwOsjIsuoNOpfutnb5SXppBqOtK/HP2PzCs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JAmWIhnYjcdlh0YZLg8Le7/YJtm3L46L1sDBvy1J3Ws1fGrUOKSJFouyJy/QL6q+8NlIM73UzWzKf3ohN19bgi/X7MpkZMG9acI5l4Sv3iBk+5dwBbBjBmInRuBSt2NhNDxy+/XEjTon5ng8XaW0bnDxyAKuqofC7VMuyEt8oiw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lRITZW0T; arc=pass smtp.client-ip=74.125.230.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A964F0538
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 17:37:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788889050; cv=none; b=DkymG0j2Fxv0ZBsVmxzhQmmKWflmUcBlGZiFXry4tstRz7flgS+lVVRMF3B81FZ8yzofniaDRRU8uHfsFk3sG5+MXTv/fxOAtv3w/VXRSZS5vloU74wHz3XLkpguePIGvmlcHfdyseSBFUIr5NtSFDTwLrzFkcFMSD+h9R34jFw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788889050; c=relaxed/simple;
+	bh=20BKooH4sNQBea+Lfi0HqOLLu9aC0u3JnRN7Y6LiIjU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=owV+JrYAVDvrwEJRGD3n2qOTyN+PkEcbQKTQZd9yqAncZFLsdePBJgUaLR7f3Rc4MkKk5ZXNlu6uTNLzty4iIqcT3zEYxXTVBn3aiaPjPDotlt5t7xvqodMvq2aVGisH1ceZuYjTf6Tq+pnCPcHp43QSRo3O5/Pcp0fMFuJzWkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TRo5uQoE; arc=none smtp.client-ip=74.125.225.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lRITZW0T"
-Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-530411c7ee1so668671cf.0
-        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 10:29:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788888548; cv=none;
-        d=google.com; s=arc-20260327;
-        b=XEuf530xCSh9gN+2VaCNlwR6dVcGoQLj1+GwZ/P1D7KfBfWtsBxb3q7YTVB2hgm7Ng
-         z2wp/tpPmONBFxBOBfCEqaiyNHHI9ZAGzUi/oFE2NGtFay871cBACRa6MTtd5IRA5dsf
-         qDKSN3a6Cw6XqAGMBqLJ1iMU8TmK5xmynRsQFFbHiA76xE5A2laptlUxOjO7XUtlzi4l
-         dnZ8bMToAzoYIxrdOXFa5lq4X7nJuH8JFPXmtPYOw2UI32Z5FP31B4l3FLXlTx9iLlk+
-         wn1jED+xV9SLJ+MHrOYeJes461MZF3fKxrNexb65LHG9MwaV/h7wqq4DeAPMnamaxla7
-         Y+ng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=TV5fg2vDNwOsjIsuoNOpfutnb5SXppBqOtK/HP2PzCs=;
-        fh=wpVNT0C5PMOPG85jWZvXT3s4S30wFCe2VAZ5nRphPH4=;
-        b=YMhelnVzEBDnlV+Ow5MI1QES+pBYOdq0eGBfUfQWtk8QN1js62EIbPpsgFR/WSu25d
-         GJARfo0Dvd7DeHHQDs+K9/7Yju1oeto6o9jvr92Nr+YLYYQDsNPnoHO9N2A603donhUl
-         exbXYmNCj+0HYQEAYL8Mjcc1VIPZH84nG9ksyI9Yi3bCp3JYeAXBgYMa/lkTaqVN6y05
-         Y2v7N9QjE1m4Talf8Y7D/O45EbHdndbylRiod6yTt75lWsTSCrGiY5BC+nt/E+pdfDuD
-         FjxifYxdAuE8qUpL1rI5/Oji618M/8W5/PIHH+ArmAhRiIydHxpZrvCJ/S4sWpYh091U
-         g+jA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TRo5uQoE"
+Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-482f62ccdb1so503204f8f.1
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 10:37:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788888548; x=1789493348; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=TV5fg2vDNwOsjIsuoNOpfutnb5SXppBqOtK/HP2PzCs=;
-        b=lRITZW0Tipp4XNZviNi+dcRudC9YGOtr5Xwhm7xgN0+fsOipsV1hcA0U1YmrFjO9sz
-         82+2SHZolaBR5fQynx4vsME0DuscTxe22sGESKeVXwUqCTsTIaZl7vuy+8EgIISXCzNX
-         7ZgGV7Ppw3O9B8gqszJDl+G76pKsOxx/Wc+dJzeOfnSs40pFboHtOREIwvB8tLNHdL+7
-         rnpHsvGa+Prs//Qzxxh/wvdQx9ej72pNc5JiqOQ0x7PyI8iuzLU7HjGKyephcCYL8Db9
-         duYuoVWXxAl1VfzLvjo+ToewKMl26Z1bTJym98pR4zv7nEgfSfUz13yJw3BoKhsJ8qE/
-         s39w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788888548; x=1789493348;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1788889045; x=1789493845; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=TV5fg2vDNwOsjIsuoNOpfutnb5SXppBqOtK/HP2PzCs=;
-        b=pS+ZY41o4fiLprYktp1v4CV8Ka/1xHI+/FWOSg2I+opkGRtVuNtU6Z6ktukS80zB+e
-         7ahhc8LNCvwg56ny8rzfiDfH9kXQicTT9HX61/DDxBDDmfz144lBa0o354iBzOev82Zw
-         N6YmvIpvWpOD5M70RdicVvSH0OxkUTeI4ZScX+6MPxWeE70W3CWttcbMdG0AYkq3a9dt
-         03ncGm6KKWRKH0T1ofiUINhkZwrXPpU0Te61P41AvUu72wUM99uZBk4hx9zitnsMrZ/k
-         Fi8RgzAozrw0//BM2W42llAJWlDXQig1fWBzapsDuLwfNecVbvIXlYR5eojY8CeFn8HD
-         8Asg==
-X-Forwarded-Encrypted: i=1; AKwUvBwL5Fz6JG5epw0jjMQ+XVfblOo1wIMZwIGMV6NOUtiX++rnvLL5ThHTjIjER1DnbBKlAq0=@vger.kernel.org
-X-Gm-Message-State: AFuF++nhxtXNbme0rnoDosm0ky6JhPQIa/wlqRHm42td/eZJ8qaPeu7y
-	d4hro3E0lBs/SG5xDWO7jUfSmx6LV1Tf8SpoUp4cvqE1I4Jiz5ZlTD9SoHJOoP8LKhmOPw7jYSk
-	dyAKwU9/SM6QBULZGTtxrQVPCuXYbMIlfY4oOsQ5G
-X-Gm-Gg: AYBFou3qtMxn9+zWQ2grAdEhO7DCtkGORI8Suqea0CqAK0BWBuq3cgXZ473+Sl/5fRV
-	R7PvAOYoHHEbObfp1l1wbzMq/67I252SQnra22MSmktExvJ+yx5EN12oNwP2fhIghCr8wDrrPPu
-	U7KI4c+XeNAXqmu/wCSf5jOdrc9901VBpt8nbjSh0DBLIOyUl0Xu1wUdF2c8ydukVFtKv0KQYyh
-	ZJrnXj0ADPKPp5hFCSPYdNyZjNKPGIM496+S+bioGpANqNlSQ2cuy1qdVEdEImumQpdyQfePaHJ
-	B8ipH+RdqKatYjddqw49HR6M5g8VIBfdrVw4sqwTZi5ABE/2u9Lgqay9eNlz/FqwOFzxKmEIgm0
-	=
-X-Received: by 2002:a05:622a:1b17:b0:519:b82d:fe62 with SMTP id
- d75a77b69052e-530a3b7c7e8mr1827921cf.7.1788888547684; Tue, 08 Sep 2026
- 10:29:07 -0700 (PDT)
+        bh=dVPKXie00lKV45A1FT/qWsFJolUDuvV+3HtLDaaSE/Q=;
+        b=TRo5uQoEo+dZ2i/icFyO0tMI2Y799UnsIklY3yMjzdNZzOBx31+PAkHBpH14gaVjFK
+         yHueCKhBvyr8vBVbvX0Rp22ZYLwnVHcc+V7F9fnV0KFLR0hqEVOguZ6w1wbmrkBI2ydE
+         QtA2qNEgIMDOPToPj+SVNqu3wpbdKzmSbcaE0TEbaPtiZmUPrsXArnCPG0j8HKiKe9t+
+         Hqrgsldv9Irz31GTiFCrU/FsREuKC5v3xXmWbWRKBHVgrVdk+SvB9fAUGkGICLVTyB4n
+         xRTTzYmdCL0miwe6gSHoXa5m3JRm6d+9Sh+fpyZSih3u+Sid4WECFJF7YNuktFB47KO3
+         G/LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788889045; x=1789493845;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=dVPKXie00lKV45A1FT/qWsFJolUDuvV+3HtLDaaSE/Q=;
+        b=sYd05RGQCmo3YrWPu3nzX6eee2QT3E56Yfmv4r5yDJnWBpAtNLn/m4nr+D1j5eDYkd
+         y9kbBtXomFGqGQOjF9UpfKE61y/p39qqp/4qLa9Mb/oaiE9oD18UHteeJGrensbkMw8o
+         I2vH4ZnhJxjzXE1Lmvkm9Gk8lChopnAcuPyQtcFTqPs+SeLydsnsVCT2aCstxfbzIJ4s
+         NxZFnto2NDdCpRVVbRW6c6gPJA/NvB5B4kkuHnVuz+a+bWF6JbYXlDSt7BvDLJgWcc05
+         L+52simLsdMLsSahhwxZoG1j1IY3LqnQmqXVF3RN+BoBSX0uOMsDXBwkgSrw9sWG9d+J
+         kqCg==
+X-Forwarded-Encrypted: i=1; AKwUvBwx6wy74kmTXnhOKCgzA4OYMVzgYX8HOJzSKXu/QpDdFnYF80QgrPekRt7gXcUtTxqjPU4=@vger.kernel.org
+X-Gm-Message-State: AFuF++mJT0s0JZ/7qFLh7a1RFlPX0nS8qr+kVeI4bRFDiW5NddypsL3Z
+	tw/Rh3w0y0M/gvggnHKsl4j4TgnwYQoVBW4fVWK9Wgc6cnNsEQ7sM+qC
+X-Gm-Gg: AYBFou0rKdCMAbYf/aGIAjEcolRBfm1f3Qnop16pUQJhZQ5qdBV86eEAIGqsk2uN8e/
+	7cyO8tay3DQZbVf9Z9Zn3LULnkKpQjabxnrtVpzGPClAxJ4y8FzMDQhRgsEhKisbcsaZD0Uj6ex
+	MXAKNJO4/ptolXrGSbySsag3TZfxhi8aRk4XoODkIM+OyitnPbtLPyGaCGhIVaP7mm+iC+348WB
+	Vj9fKg8ajVk6WDa1JI3TftdnSWU0mQGoomfjh5CYXSNf9qVuQuKOyGg9sUWLElSDcHO10c0uZRO
+	ULP2e39mJGWhk7zXPw4K3YI3jTqSCDEGx9g2Asi9kQ12oFAwLTzeyvi2VpG7xzEMdp8X5MbBLXp
+	WZQnOOum1cZikYZPX9XBwK0bcgSMlx1VeQzY7CFUVvEi17WcvwnqmzWlSETEW1DMFZ8CbQwluMU
+	DdNuVcrCNz1lEOzIDuW6t7UlotMH5QxAfHc7fNkuEDOQMtm0QK09nuI3HMPDcJoJNJfRpkjj8Xm
+	Vq/AHln1sBipoBvayUcucnlGzyOMOJbyaCov49DhTMG
+X-Received: by 2002:a05:6000:24c7:b0:484:482d:dce4 with SMTP id ffacd0b85a97d-485a232c8c7mr9789969f8f.0.1788889045218;
+        Tue, 08 Sep 2026 10:37:25 -0700 (PDT)
+Received: from ?IPV6:2a02:8109:a307:d900:d30:32e5:e05c:2aae? ([2a02:8109:a307:d900:d30:32e5:e05c:2aae])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48594172546sm29278996f8f.15.2026.09.08.10.37.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Sep 2026 10:37:24 -0700 (PDT)
+Message-ID: <c0c8d167-80a1-4782-ad98-3cbbbd18e536@gmail.com>
+Date: Tue, 8 Sep 2026 18:37:23 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260906-perf-gtk2-v7-0-1ece839fbca0@gmail.com>
- <CAADnVQLrga+tx0QCUkviGHqbk9Q6a7bmk3oAe51ZrLhQgRaw5Q@mail.gmail.com> <CAEdQ38EMGjp5RbvZn_RStu1=OOS3H+VT8xHFdnEaVC+dof7Thw@mail.gmail.com>
-In-Reply-To: <CAEdQ38EMGjp5RbvZn_RStu1=OOS3H+VT8xHFdnEaVC+dof7Thw@mail.gmail.com>
-From: Ian Rogers <irogers@google.com>
-Date: Tue, 8 Sep 2026 10:28:56 -0700
-X-Gm-Features: AcwNN1U0pzsDB7Ni4zxKoMakrdxYWC_p3L8TNTCtZOf0qYoAAkhxK8NQXfMaReU
-Message-ID: <CAP-5=fWjxnoUxSHwrO3aQ=QPdz2zmjiE1kZZgj4o-eXYCx7Qdg@mail.gmail.com>
-Subject: Re: [PATCH v7 0/3] perf tools: port UI from GTK2 to GTK4
-To: Matt Turner <mattst88@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"linux-perf-use." <linux-perf-users@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 3/3] bpftool: Scale counters and report cycles
+ per run
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
+ andrii@kernel.org, daniel@iogearbox.net, kernel-team@meta.com,
+ eddyz87@gmail.com, memxor@gmail.com, qmo@kernel.org,
+ linux-perf-users@vger.kernel.org, acme@kernel.org, namhyung@kernel.org
+Cc: yatsenko@meta.com, martin.lau@kernel.org, yonghong.song@linux.dev,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20260908-bpftool_cyles_per_run-v3-3-60e86f325c35@meta.com>
+ <cc417e4dba25ded6b33afcdfa4cd4a69de3e9c8ab7ca351c131ae92bc7430d86@mail.kernel.org>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <cc417e4dba25ded6b33afcdfa4cd4a69de3e9c8ab7ca351c131ae92bc7430d86@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Sep 6, 2026 at 2:05=E2=80=AFPM Matt Turner <mattst88@gmail.com> wro=
-te:
->
-> On Sun, Sep 6, 2026 at 4:59=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Sun, Sep 6, 2026 at 1:13=E2=80=AFPM Matt Turner <mattst88@gmail.com>=
- wrote:
-> > >
-> > > GTK2 is long dead upstream and increasingly hard to keep building on
-> > > current distros. This series ports perf's GTK-based report browser to
-> > > GTK4 and fixes it up so it's actually loadable at runtime after the
-> > > port.
-> > >
-> > > Patch 1 does the mechanical port (build system, widget API changes),
-> > > including the leftover-GTK2-call and signal-handling fixes that were =
-a
-> > > separate patch 3 in v4. Patch 2 fixes a runtime issue found after the
-> > > port that prevented the browser from loading. Patch 3 fixes two stack
-> > > buffer overflows in the hierarchy view that predate the port.
-> > >
-> > > Signed-off-by: Matt Turner <mattst88@gmail.com>
-> > > ---
-> > > Changes in v7:
-> >
-> > Matt, please stop the spam.
-> > Wait for humans to reply before respinning.
-> > 7 revisions in one day is way too much.
->
-> My apologies. I figured it would actually save humans time if I went
-> ahead and addressed all the sashiko-generated feedback. Dunno.
->
-> Is there a way to get feedback from sashiko without mailing the public li=
-st?
 
-TL;DR: drop bpf from the to/cc list when sending patches. This work is
-most interesting to linux-perf-users where multiple versions of a
-patch series within a short period of time are common.
 
-I appreciate having the latest patches to review. If Sashiko provides
-feedback, the change goes on my 'to be reviewed later' pile, which
-hinders getting code/fixes landed.
-It is possible to configure Sashiko to 'embargo' its feedback for a
-set number of hours. Networking does this, and it can be frustrating
-when you must wait for a patch to receive review before landing it. It
-also slows down developers.
+On 9/8/26 5:21 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+>> index 8c2f9255b36d..9e126f3823ad 100644
+>> --- a/tools/bpf/bpftool/prog.c
+>> +++ b/tools/bpf/bpftool/prog.c
+> 
+> [ ... ]
+> 
+>> @@ -2182,9 +2199,39 @@ static int profile_parse_metrics(int argc, char **argv)
+>>  	return selected_cnt;
+>>  }
+>>
+>> +/*
+>> + * Filter out CPUs that have any selected metric not scheduled for them. This makes sure all
+>> + * metrics are using the same CPU set, as a result ratio metrics are consistent.
+>> + */
+>> +static void profile_filter_cpus(__u32 num_cpu,
+>> +				struct bpf_perf_event_value vals[MAX_NUM_PROFILE_METRICS][num_cpu],
+>> +				__u64 *counts)
+>> +{
+>> +	__u32 m, cpu, key = 0;
+>> +
+>> +	for (m = 0; m < ARRAY_SIZE(metrics); m++) {
+>> +		if (!metrics[m].selected)
+>> +			continue;
+>> +
+>> +		for (cpu = 0; cpu < num_cpu; cpu++) {
+>> +			/*
+>> +			 * CPU has hits, but this metric never scheduled, set counts[cpu] to 0
+>> +			 * so other metrics ignore this CPU too
+>> +			 */
+>> +			if (counts[cpu] && !vals[key][cpu].running) {
+>> +				p_info("%s not scheduled on CPU %u; excluding %llu runs from all metrics",
+>> +				       metrics[m].name, cpu, counts[cpu]);
+>> +				counts[cpu] = 0;
+>> +			}
+>> +		}
+>> +		key++;
+>> +	}
+>> +}
+> 
+> [ ... ]
+> 
+>> @@ -2194,38 +2241,61 @@ static void profile_read_values(struct profiler_bpf *obj)
+>>  	count_map_fd = bpf_map__fd(obj->maps.counts);
+>>  	if (reading_map_fd < 0 || count_map_fd < 0) {
+>>  		p_err("failed to get fd for map");
+>> -		return;
+>> +		return min(reading_map_fd, count_map_fd);
+>>  	}
+>>
+>>  	err = bpf_map_lookup_elem(count_map_fd, &key, counts);
+>>  	if (err) {
+>>  		p_err("failed to read count_map: %s", strerror(errno));
+>> -		return;
+>> +		return err;
+>> +	}
+>> +
+>> +	for (m = 0; m < ARRAY_SIZE(metrics); m++) {
+>> +		if (!metrics[m].selected)
+>> +			continue;
+>> +
+>> +		err = bpf_map_lookup_elem(reading_map_fd, &key, values[key]);
+>> +		if (err) {
+>> +			p_err("failed to read reading_map: %s", strerror(errno));
+>> +			return err;
+>> +		}
+>> +		key++;
+>>  	}
+>>
+>>  	profile_total_count = 0;
+>>  	for (cpu = 0; cpu < num_cpu; cpu++)
+>>  		profile_total_count += counts[cpu];
+>>
+>> +	profile_filter_cpus(num_cpu, values, counts);
+>> +
+>> +	profile_valid_count = 0;
+>> +	for (cpu = 0; cpu < num_cpu; cpu++)
+>> +		profile_valid_count += counts[cpu];
+>> +
+>> +	key = 0;
+>>  	for (m = 0; m < ARRAY_SIZE(metrics); m++) {
+>> -		struct bpf_perf_event_value values[num_cpu];
+>> +		double scale;
+>>
+>>  		if (!metrics[m].selected)
+>>  			continue;
+>>
+>> -		err = bpf_map_lookup_elem(reading_map_fd, &key, values);
+>> -		if (err) {
+>> -			p_err("failed to read reading_map: %s",
+>> -			      strerror(errno));
+>> -			return;
+>> -		}
+>>  		for (cpu = 0; cpu < num_cpu; cpu++) {
+>> -			metrics[m].val.counter += values[cpu].counter;
+>> -			metrics[m].val.enabled += values[cpu].enabled;
+>> -			metrics[m].val.running += values[cpu].running;
+>> +			/* Skip CPUs with no runs or with an unscheduled metric. */
+>> +			if (!counts[cpu])
+>> +				continue;
+>> +
+>> +			val = &values[key][cpu];
+>> +
+>> +			metrics[m].val.enabled += val->enabled;
+>> +			metrics[m].val.running += val->running;
+>> +			metrics[m].val.counter += val->counter;
+>> +			/* Scale counter values to account for perf event multiplexing. */
+>> +			scale = (double)val->enabled / val->running;
+>> +			metrics[m].scaled_val += val->counter * scale;
+>>  		}
+>>  		key++;
+>>  	}
+>> +	return 0;
+>>  }
+> 
+> Does this correctly handle the case where one metric is never scheduled
+> on any CPU?
+> 
+> The CPU-set filter in profile_filter_cpus() zeroes counts[cpu] for every
+> CPU where any selected metric has running == 0:
 
-Sashiko isn't adopted on all mailing lists, and while it is a widely
-praised, others don't want the email churn. In a year or so, when the
-models are better, I imagine the churn will decrease as:
-1) If AI is used to create the code then it should be better able to
-predict Sashiko-like issues,
-2) Sashiko itself can report all problems, suggest changes, etc.
-rather than its current drip drip of issues.
+This would be an unusual edge case, perf counter normally get 
+scheduled for some fraction of time, even when multiplexed.
 
-Thanks for the contribution!
-Ian
+>     if (counts[cpu] && !vals[key][cpu].running) {
+>         p_info("%s not scheduled on CPU %u; ...");
+>         counts[cpu] = 0;
+>     }
+> 
+> The aggregation loop then skips those CPUs for all metrics:
+> 
+>     for (cpu = 0; cpu < num_cpu; cpu++) {
+>         if (!counts[cpu])
+>             continue;
+>         ...
+>         metrics[m].val.counter += val->counter;
+>         ...
+>         metrics[m].scaled_val += val->counter * scale;
+>     }
+> 
+> If a selected metric is never scheduled on any CPU (the scenario this
+> series targets - commit 44f919dd1fbc describes profiling iTLB misses on
+> a long-running program with a full PMU), then every CPU with counts[cpu]
+> != 0 gets zeroed.
+> 
+> For example, `bpftool prog profile <prog> cycles itlb_misses`:
+> 
+>   * profile_valid_count becomes 0
+>   * cycles' val.counter and scaled_val stay 0 even though the cycles
+>     event was measured correctly on every CPU
+>   * plain output prints "run_cnt 51397" followed by "0 cycles" and
+>     "0 itlb_misses" with no ratio column
+> 
+> Before this patch the same run reported the real cycles count and 0 for
+> itlb_misses, so the healthy metric's data is lost.
+> 
+> In JSON mode there is no diagnostic at all. The p_info() call in
+> profile_filter_cpus() returns immediately when json_output is set, so
+> a consumer sees run_cnt=51397 with value=0, value_scaled=0, enabled=0,
+> running=0, and only run_cnt_valid=0 as a hint.
+> 
+> The commit message scopes the change to ratios ("Use the same CPU set
+> for derived ratios"), and the .rst says "all metric values exclude that
+> CPU so that ratios use a consistent CPU set" but neither documents that
+> a single unscheduled metric collapses the whole report to zeros, and
+> JSON gives no warning.
+> 
+> Would it make sense to exclude only the affected metric, or keep the raw
+> per-metric aggregation intact and restrict only the ratio denominators?
+> 
+>> @@ -2250,24 +2322,34 @@ static void profile_print_readings_json(void)
+>>
+>>  static void profile_print_readings_plain(void)
+>>  {
+>> -	__u32 m;
+>> +	__u32 i;
+>>
+>>  	printf("\n%18llu %-20s\n", profile_total_count, "run_cnt");
+>> -	for (m = 0; m < ARRAY_SIZE(metrics); m++) {
+>> -		struct bpf_perf_event_value *val = &metrics[m].val;
+>> +	for (i = 0; i < ARRAY_SIZE(metrics); i++) {
+>> +		struct profile_metric *m = &metrics[i];
+>> +		struct bpf_perf_event_value *val = &m->val;
+>>  		int r;
+>> +		__u64 ratio;
+>>
+>> -		if (!metrics[m].selected)
+>> +		if (!m->selected)
+>>  			continue;
+>> -		printf("%18llu %-20s", val->counter, metrics[m].name);
+>> +		printf("%18llu %-20s", m->scaled_val, m->name);
+>>
+>> -		r = metrics[m].ratio_metric - 1;
+>> -		if (r >= 0 && metrics[r].selected &&
+>> -		    metrics[r].val.counter > 0) {
+>> +		r = m->ratio_metric;
+>> +		switch (r) {
+>> +		case METRIC_RUN_CNT:
+>> +			ratio = profile_valid_count;
+>> +			break;
+>> +		case METRIC_NONE:
+>> +			ratio = 0;
+>> +			break;
+>> +		default:
+>> +			ratio = metrics[r].scaled_val;
+>> +		}
+>> +		if (ratio) {
+>>  			printf("# %8.2f %-30s",
+>> -			       val->counter * metrics[m].ratio_mul /
+>> -			       metrics[r].val.counter,
+>> -			       metrics[m].ratio_desc);
+>> +			       m->scaled_val * m->ratio_mul / ratio,
+>> +			       m->ratio_desc);
+>>  		} else {
+>>  			printf("%-41s", "");
+>>  		}
+> 
+> Plain output prints profile_total_count as "run_cnt" but the new "cycles
+> per run" column divides by profile_valid_count, and profile_valid_count
+> is never printed in plain mode (it is only exposed as the JSON
+> run_cnt_valid field).
+> 
+> Whenever profile_filter_cpus() excludes at least one CPU the two differ,
+> so the displayed numbers cannot be reconciled. The user sees run_cnt and
+> a scaled cycles value, and "# <x> cycles per run" where
+> x != cycles/run_cnt, with no way to see the denominator that was
+> actually used.
+> 
+> The only signal is the p_info() lines on stderr, which are easy to miss
+> when stdout is redirected and are suppressed entirely under --json.
+> 
+> Would it make sense to print the valid run count in plain mode (as JSON
+> now does) or label the ratio with the CPU set it was computed over?
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34246064212
+
