@@ -1,125 +1,99 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87C2F36F8E9
-	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 06:08:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267FD37A494;
+	Tue,  8 Sep 2026 06:21:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788847719; cv=none; b=QDrEiH9908E6q9flRc8PacB1IxndXgQlUKC2BgSvLhA+AXKzbrq9+0SjQWIdWn6kL4pk52GutXfLS0o9s86+rVNxaevZlj9uGwIPgNU4rIbHUcIFphwpx3XmfWKGeSQWYRUxehZ4SnOZd1t1GCTr+bUV5g4W8Zv/wXlBTNVBQD4=
+	t=1788848519; cv=none; b=AHVkuNFt9p+pax+duKRqXfc7wjEdWBuPw90yR2TgSS9T1FkCD1TZmJjPljbbt4lRCLccAf7LBvZolHzQubomLFmUBP1OCLv1c6llILd7imPPi3okZDOsCO9SuBCnM5DbVx6My8Uy8ulAkodWsRPKxMJGlhLGhHEKM0otTrqkroo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788847719; c=relaxed/simple;
-	bh=uCmsMBCDrsY2CSXZlcugqtfnFjXUOVptSDX6rZ54Kqo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=R9kSxQUeeHkbJkmsM+lQlMYqkN2BWGEijk/IkYJPZ60tNf/CbVUN8CJS/OSxVA6lZWUgFxraFlaEgRm/PjYnH6e7D7kg4COKWclVpnO8/yFaQ2ULuJSP8HFffiwQsbxxe3gw/8e4Gs4UNkGa8Y+S8bY0moc4NgzNncrM/EBXyx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fJPcHTEB; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788848519; c=relaxed/simple;
+	bh=3VycUhpdwHbxfQRDQyilst+mNIkr6plBOkBxjMIVv1s=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qlxy1XKnNGn26zkwZgv44lDN5/xI7wscJXaH9R8P/P1emLxDpNk4Lr8nBjfNRtYwP19gOIkuGbn9LDAGw71zRHzsnjgkIu4uZGDhV99u9cA0HwJsjwbr89EH/E+6cdYP0b+k8goNBv7xcodT/71RL/VKWVkH/5v9ANo6H9NTuRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=LsPUb1n+; arc=none smtp.client-ip=67.231.148.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fJPcHTEB"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-38dfe910e9dso4604122a91.3
-        for <bpf@vger.kernel.org>; Mon, 07 Sep 2026 23:08:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788847718; x=1789452518; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=PazSmK9CIewfru0eTOp5da7ZxmX1DEtx5wd1EeqAqF8=;
-        b=fJPcHTEB8SvlLcT1XcxoLogknt1QB+63j5RrVzAZ21dPjSd45y8DUKsNSbt6qLfrhF
-         HPsOhFLh8rvJ0AtGNTHHkFHTkVorZSh8bWFQtOsxdCc7j8H/GN0juZdheGHZyFiOY675
-         Rxua74SQl6tlldD0syTxw0o0h0wlwl45uyXEha77S2tDsfoWvzFzOsPpk5Xtr9/EBesm
-         OrkaBOo581EbXDEFlJlddsvAINS20ix6z7MctwFNpuXI+bu8jIQ/gsRCeT7I8F4fHo9g
-         El73brS044KPaNQqa2Ayx3Q/3Pcf45nDD+ZbD1hvNms6sZbH5Aykdq52gqVdGXDfw7Up
-         9DBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788847718; x=1789452518;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=PazSmK9CIewfru0eTOp5da7ZxmX1DEtx5wd1EeqAqF8=;
-        b=UgsoVDK9oxTGyj7TgMkuMdkXlGNnBs+m5QboT2WuoQyy8cQ6GhCsukK261PKguB4uF
-         KeuNnZbkW1kFaaIGcAfUYKHoecbwAXh96VDpNzpD1JP3Lv7a9cX79b0bNQwpozyZgfU2
-         EGq3d/aKWTw6ruIeCL9p2XDsNMy4+TrNUjrBM3NNGa709CKUrVbSV3ihDnAGv132SZKT
-         qQMlTxD0oO94t0iRbge/N4HTjF8W1b70xeOwF2cB00BfFVRsl4TbblLkpSazjA6oYXZ1
-         4iehDEVsa6CXsrlZEkj79Qg2gNe6vsWmC6/RRJcvO+G4ecPtUiqbvDibOZo7ST2+cg9y
-         N6/A==
-X-Forwarded-Encrypted: i=1; AKwUvBzGg3PIwGE/9CygChw+uIFFUc/qgMCNIbZGThhQLc9iEm+AKyhwX+8vD+LUgRka8Wv7RlM=@vger.kernel.org
-X-Gm-Message-State: AFuF++nSawOOB20UUV1vpYx2OrQlM1Uzcr8Jt5WTef8/WHf0JOjWVk9W
-	mFBSIu6MkIJd4EuS+wyYT6ImX54y5ZPqPjMUT4as6/4XcD/tgLTGFuaP
-X-Gm-Gg: AYBFou1u9FuKpaqbYFUcP69lUWAXRJFeVDe+yJFnM6XPaVgPrjgQOFmle+g9CTrjhuN
-	M/vrdSYl2gqla6ACrNxi5mViLQZle07W/lFOfAIbv6KyTZUpH+EBdGmhB82yPizE8QENWo2+Cue
-	BgY99BhNWvIFNvVPYvjYUsru2Ecb+mwAhhjbjJqKWnxRMeVm/OAsDmY9NPoQ7ysFZpYUbMIbaVN
-	eH8BGUcjQp1LTXAyUqoZEIULBBY19vcqYSPbeP7nRj6hqkAANzhEVuXmJsKKEAp50F91JvZ3d92
-	4B+HsIQDJSu+ljgA1OcKL9XU8Fl+Rg8/QCTIsketX43VmEzbRfVWDOogt9nSOLCzXbKRfrnI8Tr
-	F2l4vQlPVD+RrR6q9UBwEeHLWtaxj2d72rAgckUZk8+pyQ+1KHCnoLTwiYDyitqmV33BkSnb8nE
-	+IgMTI9eLlvczUzo/z21T9z0VonAhwTCT/ZPWzxqO/6RtEVIR5IcWxai/+v+qJGXuJFq/UcGS5W
-	HEzov9eu5miBQ==
-X-Received: by 2002:a17:90b:39ab:b0:398:9be8:ea68 with SMTP id 98e67ed59e1d1-39b261da75cmr41792101a91.21.1788847717793;
-        Mon, 07 Sep 2026 23:08:37 -0700 (PDT)
-Received: from volcano9f6e-hostos.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14344a86512sm8501320c88.10.2026.09.07.23.08.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Sep 2026 23:08:37 -0700 (PDT)
-From: Hemanth Selam <hemanth.selam@gmail.com>
-To: kernel-ci@meta.com
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v4 0/7] bpf: fix typos and repeated words in comments
-Date: Tue,  8 Sep 2026 11:38:32 +0530
-Message-ID: <20260908060832.32175-1-hemanth.selam@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <01b5453944b3f5259e123e7684a6b6acc60cab31bb258bc7dad31adc5e294984@mail.kernel.org>
-References: <20260908054853.13820-1-hemanth.selam@gmail.com> <01b5453944b3f5259e123e7684a6b6acc60cab31bb258bc7dad31adc5e294984@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="LsPUb1n+"
+Received: from pps.filterd (m0431384.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 687Nqf3w2879773;
+	Mon, 7 Sep 2026 23:21:51 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pfpt0220; bh=3VycUhpdwHbxfQRDQyilst+mN
+	Ikr6plBOkBxjMIVv1s=; b=LsPUb1n+4bBIqGXqSyfPeWlAmGHQjca+PrCOzFHJN
+	v/puX5k8iQ/ltDtF1EPR1rA4F8S30y7hOmg/Vo0P+cq2H2W7q4ku/UXcvKK/3val
+	z1idhX9vmYSreo+WV4o68czbJxTZazLc3kLXNmuT5Rc6hKgZdfdjMHMIJm2EnbQy
+	qsMDdTZ7svlIJUfiwKOPyXSgr3gr/NUgMvx3oPG+skYb1oMcnHKnXcz74Mi6TFpy
+	A++25c5pLN8B03XZpcIFnOLi7KZrssir1hEkmU+b7ANLnkw2Xl5LtHlIgVoCOuUv
+	Y96lkMwzP34ldlmtkJYUccSuUAssQJ/JHksmy2gM5PhUQ==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4gh7b94xua-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 07 Sep 2026 23:21:51 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Mon, 7 Sep 2026 23:21:49 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
+ Transport; Mon, 7 Sep 2026 23:21:49 -0700
+Received: from rkannoth-OptiPlex-7090 (unknown [10.28.36.165])
+	by maili.marvell.com (Postfix) with SMTP id 8CCEF3F7077;
+	Mon,  7 Sep 2026 23:21:48 -0700 (PDT)
+Date: Tue, 8 Sep 2026 11:51:42 +0530
+From: Ratheesh Kannoth <rkannoth@marvell.com>
+To: <sashiko-reviews@lists.linux.dev>
+CC: <bpf@vger.kernel.org>
+Subject: Re: [PATCH v13 net-next] octeontx2-pf: add mqprio bandwidth offload
+ for NIX TX schedulers
+Message-ID: <ap-pdktpQJ8y3LYx@rkannoth-OptiPlex-7090>
+References: <20260904031553.3196916-1-rkannoth@marvell.com>
+ <20260905031641.F3C191F00A3D@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260905031641.F3C191F00A3D@smtp.kernel.org>
+X-Authority-Analysis: v=2.4 cv=J/SaKgnS c=1 sm=1 tr=0 ts=6a9fa97f cx=c_pps
+ a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
+ a=kj9zAlcOel0A:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=l0iWHRpgs5sLHlkKQ1IR:22 a=TtqV-g6YmW1Jfm2GSLaY:22 a=VwQbUJbxAAAA:8
+ a=jB5l-w-mdJaMWxz8i1YA:9 a=CjuIK1q_8ugA:10 a=ZXulRonScM0A:10
+ a=lhd_8Stf4_Oa5sg58ivl:22
+X-Proofpoint-GUID: xgjMiF3j1-hNBJKI02l-IL0MmANao2cu
+X-Proofpoint-ORIG-GUID: xgjMiF3j1-hNBJKI02l-IL0MmANao2cu
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTA4MDA2NyBTYWx0ZWRfX15aOg9I9SZkG
+ cwQNW1Ge3oH10my4dUqXfWTq/It54w/4yiGVkhSMv3dcyEwXL4lyQ8rFCtDZoAd7TM/n96a5Wx+
+ FT9tukqQz19jHDU+tta7eozIUxT7WHUlb/TFNiAixpjMr26ThTwA4rmf05QHpHYyS+K2f1G3oLS
+ aVCN6dWhb3h6UScKwDjLZvQ5IO1eRxJWDttEJS+2jDL+KPkwtEoGfdOR0okGVDiCUdHMmcRS5u4
+ 6mMfuFJYUJn8YMrT4LpfGTDcbkinmN1cQ6M/MWujPCSzHPznh1BnL3kZQDq8+fgKydkwgGaQ2ns
+ prNKT6xuRCPuxuF7E3e9uyv3nvTOGsBw4t/LAndWYMBE7muiToHQxr8OgB9wHUYrZfm7gyjwskQ
+ vXbSdj/ffMa/X8XLA1A2jDR2wQLi0dyr3z5PuLGmzSFw3RXsRJv9CjxFl3WkDNtR2Ox4izUT3xa
+ fWng+tz10YuntUG/C3Q==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTA4MDA2NyBTYWx0ZWRfXzPvlLylI1fyW
+ CFyhOwM60yBPrgA/qCSbW7uvB0oeBtZkZ+BldOgJcMauaNuMqwZOCxhij3RtHqmjQNifRwlJxOJ
+ u66d8GrRGZoG0m+u+4UDoSxi23rU+pc=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-07_07,2026-09-07_01,2025-10-01_01
 
-On Tue, Sep 08, 2026 at 05:53:53AM +0000, bot+bpf-ci@kernel.org wrote:
-> CI has tested the following submission:
-> Status:     CONFLICT
-> Name:       [bpf-next,v4,0/7] bpf: fix typos and repeated words in comments
-> PR:         https://github.com/kernel-patches/bpf/pull/13699
+On 2026-09-05 at 08:46:41, sashiko-bot@kernel.org (sashiko-bot@kernel.org) wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential issue(s) to consider:
 >
-> Please rebase your submission onto the most recent upstream change and resubmit
-> the patch to get it tested again.
+> New issues:
+> - [High] Use-After-Free of transmit queue structure (qset.sq) due to direct ndo_stop() call without disabling TX
+> - [High] Non-atomic read-modify-write of `pfvf->flags` causes a lost update of `OTX2_FLAG_INTF_DOWN`, leading to a double free of queue memory and IRQs.
+>
+> Pre-existing issues:
+> - [High] Hardware QoS queues are not re-allocated after an interface bounce, causing configuration of invalid/unallocated TX schedulers.
+> --
 
-I resent this as v4 rebased onto bpf-next in response to the same report
-on v3, and it came back CONFLICT again, so I would rather ask than keep
-resending the same content.
+Will address in v14
 
-The series applies cleanly here on all three of:
-
-  bpf-next master                          1b7415bf70be
-  kernel-patches/bpf bpf-next_base
-  kernel-patches/bpf bpf-next
-
-with git am and no fuzz, all seven patches.
-
-Looking at the pull requests the bot opened, the base branch does not
-look like the bpf-next one:
-
-  v2  PR 13680  base bpf_base       head series/1159292=>bpf
-  v3  PR 13685  base bpf-net_base   head series/1159712=>bpf-net
-  v4  PR 13699  base bpf-net_base   head series/1160154=>bpf-net
-
-and all three report changed_files: 0, which suggests the series is not
-being applied rather than that it conflicts with something.
-
-The subject is tagged [PATCH bpf-next v4].  The series does touch
-arch/{arm,powerpc,sparc}/net/bpf_jit*, so if the target tree is picked
-up from the paths or from the "net:" in some of the patch subjects, that
-might be what is sending it to the bpf/net branches.
-
-Is there anything I should change on my side?  Happy to retitle the arch
-patches or split them out if that helps the routing.  Otherwise the
-content is unchanged from v3 and I would rather not post a v5 just to
-retrigger CI.
-
-Thanks,
-Hemanth
+pw-bot: changes-requested
