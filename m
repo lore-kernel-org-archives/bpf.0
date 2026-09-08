@@ -1,169 +1,176 @@
-Received: from mta0.migadu.com (out-118.mta0.migadu.com [91.218.175.118])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EACF249F139
-	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 12:22:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.118
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788870139; cv=none; b=uV+lOggdFRNaF3L8FAqrHUiPIRGAbOpwbt8kW4K86lSg2IPJrkZunF6yXCXzmogFnzYVVTKhD9ICyVed3DxOWuhuOV0cBhEozxalvjTDETiY7eUecM4X0z5GTPzJwL0PnJpnrGj2ssrze+Cglyhys+xvwF0DMKTnRwYfi9Nwr+g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788870139; c=relaxed/simple;
-	bh=k/IHifKCS20JBL4khmFjrFg5h30C+16o1SAyAAe7yD8=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=hCmtJrdCLHSBi9SP8FoqBBKrd/sT8lQx/Ye0eqjq2WEiwE/R8L2Hm0PhwPl2Bo6Xx9QKjdOO88XnYqKyj8iF+9mDe0dhVBwA9WRKkRg1/Nw+k9ZqPqUmSGeUJUpnxx0WXYtJYaajqJOeT59MrBFIMaqkxrjjugFEcYJYG9FPHiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hP0neyFS; arc=none smtp.client-ip=91.218.175.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3806949EC7B
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 12:22:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788870178; cv=pass; b=e0vGhDcWZ1TpSxoAzvZDujIo2Wscvk7b7ZnFlKeSeLPxi+TZ2w8Xiuo4XL7V7Pxd3Mc6S6Wq79NIG546K7Jgzs1HmWFov/njclyQKvwl/FKZsBGRo+i1810GaXnzlsT25s9x4iS+iwuDfUKLCF/NUnIWy/9UlTyx5y8laX+Hrcw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788870178; c=relaxed/simple;
+	bh=jNKMxx0MOdU8RjRdPogMBdpEV9wM37Jz7FMCb1o4W3I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sBDoi6lewz0kUq1HoIwnlRR7aLzqxLjOsQhLKQZZow/pmfDAg3U5GgIb5swfw4CWsPxeb9x1PlW2hJkC4a21rtA6fExYz/DXuJqt50typpQgTNYZ1DFA23BQT8+VfFT2JzVePZ9Z/qxfuQGCVdAHRIY2F5mAabxb5HX9sqg5LLg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fLQ+KRLw; arc=pass smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hP0neyFS"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=k/IHifKCS20JBL4khmFjrFg5h30C+16o1SAyAAe7yD8=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788870132; v=1; x=1789474932;
- b=hP0neyFS6PhRYDaYjbwef6m8kg60FR8gWtm174W2znoCF20FPFxYz2l4t15h+H05ZJRIL7Ko
- EcYw0gew4UDwgQWw8EdCe8pPHAIVvs61jiyeNSotyrSqUEt43Zjajmd5wJ0uWoePCKwdCjykKd8
- uM7cKFLM0wzYuHLVpkmmJFZM=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 05ba60e156225361;
-	Tue, 08 Sep 2026 12:22:12 +0000
-X-Mizu-Trace-ID: 05ba60e156225361
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <c6c4fd69-3074-4d6d-804b-cf8ff62359da@linux.dev>
-Date: Tue, 8 Sep 2026 20:22:02 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fLQ+KRLw"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c15e2dab83eso774985966b.1
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 05:22:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788870175; cv=none;
+        d=google.com; s=arc-20260327;
+        b=V0czlzYy4zbD0njBBPXMqB2zDMeQTqeSPcPuNf/MfiNx4nubhSnoS5UqRAGscHU1bZ
+         Yzp2OCUR9QzcRHqqau/85Pmt14Dp+Jxdbz6kyVoitCoBbQe7qkFWJluKdPhCWrhdbyfj
+         PYMhXGwfKKhPX4txqZ5d2avTgW/DX0xeHJwH/HxbepkfPCn96WcN1TFLWyw33XQu+zi8
+         hVDXPOWn9YR08lNjlYfl2pJncoRHP7EpSBprdqH9r44j1Q5Jndpt2u0WYnpTBDr291WL
+         RbCSYYh4iR1BjFTjq+76ImPbbJUH2EXCrIYjlfjLz7EZpHnUie8Dn1/vfQ+E4WHqPlKc
+         7vUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=SOTX3LhGaqV8k/2U8+BV0Xzd4XXbDTqUOYRoKAoVoyM=;
+        fh=kFIDmAGcIldNPHeHwvFM9RhetWJQIgBJh/GzNaiGBSI=;
+        b=NGxFKfq6EjqR+mdcXcJkOW1R0LCeJCtFSc5GmRmiHFUNJudWrxPx0hsOtTGwN5a32N
+         8kNyq+alhHqlrRabcOWpAHopmYbEllkLHk14H2HgVRWBwO1kgOPMtQ10O8E+/hL0B1Hr
+         PFln98PJJWsp49Ou0b1hpiKOCa3R6iOgeZgBhLMF8DK1SDIdjT6IuF9FG6+HxYz8fEj9
+         e+eTtM5f0/N6+59tNfxPIYB80cNkSNpixRRF3PKugDmtm9vtAXIMOuo/OacfOA+8sbpU
+         3G5lOzoE0K5Kws7h7GiVMC39qMqaaq6YkWCVEISMoLArHl8OsbFqwAsBTYBCr+Fgcend
+         vS1Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788870175; x=1789474975; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=SOTX3LhGaqV8k/2U8+BV0Xzd4XXbDTqUOYRoKAoVoyM=;
+        b=fLQ+KRLwzc6dO1YFT+g5rEtaDrT48USwXl+CfWDi3F+KE4IjWK04umd26+zYBA5B6v
+         EJ0/Uma3RrgqILQ9x4ajprs6fu0MD4Kg62G7EsNg2CNOTcZ2EdlPc0lXp90Cjj3BG7KA
+         vjVBKw/4W63a/a6w//vLtmJnQLCUXShNwdDhQ/HSucmkEOb5S0LI/pRq4oNj1OlVKpwB
+         cKEdgtqrSS4034DFvyzOSriioXvTHfBw0FhfEfu35/qCicXtp7dHUo1S5HIXN5mNQtaV
+         eIPCFlrHs5oalxhbYRiPBSaOXSZP9lPgu3Yo5DEv/F2HC3lUqFtnXQqCQoFRMhZy84R6
+         a4+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788870175; x=1789474975;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=SOTX3LhGaqV8k/2U8+BV0Xzd4XXbDTqUOYRoKAoVoyM=;
+        b=dIa4gCnI4ZKTg+VlA86rydqmt4DgOP/aT98coDejh2irCE2Iq7B0rNlNG5hhULrO2k
+         o/++1kGuA3aCt3BQIdq5v7Mx6C7NKVTJAmfetCj8CQfCfnmfVJZbGK55Zb+mipTtoFC7
+         PsRcJlyMMgD9lBWr4ECayG5OSySMEoVKBRLrkfeUUIhXYayrEeY0a8kPeFlMtqnX5ssR
+         /Gx41CbhW0G+svSR/ByQ0gxle8qRtVbeWGgvaR7e89NH0yK3va0JHwnNmW0zm2uYWClV
+         B3XIuHWB0wBGTnDalg8nWa9rEzxm5h64VqY4DkT8MNSnUhzVg8eZm0Y+NfrBhhw3hKV1
+         R7EQ==
+X-Forwarded-Encrypted: i=1; AKwUvBw8FXwL6Hi8TwLuUe5X53DrSpV37PKoBFHIk9z+oFFmfo5uuXf1cE8f90F4CnT38uJfWIs=@vger.kernel.org
+X-Gm-Message-State: AFuF++mJfjSXLTjJ6KwWkLB+WN919VWdNiZYAZT8s0kSuXJ3OcC1LnLD
+	CX16as8W3Wy1fw2lZ2nhuTJhyxsqjF9ZumWYyMXeg5W+CtMv6f5yzOq7xt4Gdo7Lx20CuKaKh3y
+	0eME6zRwCR4EeQGe8EuzwQVKWkQMX7gQ=
+X-Gm-Gg: AYBFou0QfMA54m4Gi0B7Ep7KxTgEi+hcVNxOCSxH4H8pO9jXugU88BQEa0etAiNH8Wg
+	vD60AsEdqYYwV4pVVg9w/1NPqKJb54qJ0Dv+kt89W9F76Jt1krcrPRlVTluPt1MGHmandf1XjLY
+	6Td7ztQsLCtAi+nqwUEthKtwA/zZvEAFmdWKae82mZcdAsGgFw4/hInbeL8BXq4nOntPT5jgb9Y
+	jtA6Gux49n8UYrh7ctSkmd2NWh1zmMrjxrasJ1Z/eAFslUhKChZsFKicmzYBjXKnvEPPWGbO/Ns
+	ru5gpzMphdOKj4hogYqMaksxdekbuQcJoRHI6fJ8PrAGX/2k1Fb8SsRw80W3
+X-Received: by 2002:a17:907:d01:b0:c26:19de:913a with SMTP id
+ a640c23a62f3a-c2619dea224mr932569166b.45.1788870175001; Tue, 08 Sep 2026
+ 05:22:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 2/3] tcp: Skip cond_resched() in
- inet_csk_listen_stop() under BPF context
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: Kuniyuki Iwashima <kuniyu@google.com>, bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- sdf@fomichev.me, martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, ncardwell@google.com,
- shuah@kernel.org, aditi.ghag@isovalent.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20260906074135.185212-3-jiayuan.chen@linux.dev>
- <0aa6425f9e8f32705ae827f6325b29079234c3f3d0c7b2cdefba3e5b50432766@mail.kernel.org>
- <CAAVpQUBztYDHyiCN1fnhdxCPv_5AZ09yCMQfNW96SzZyw0LhHA@mail.gmail.com>
- <a44c1e4d-e9a8-4df3-aa25-20875cd4d30e@linux.dev>
-In-Reply-To: <a44c1e4d-e9a8-4df3-aa25-20875cd4d30e@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20260907134552.1772405-1-puranjay@kernel.org> <20260907134552.1772405-2-puranjay@kernel.org>
+ <20260907140642.B02581F00A3A@smtp.kernel.org> <CANk7y0j33fmyQyTvL37Tx6Ua_bGfT5n_=Smw44u_H7G6rMcr_Q@mail.gmail.com>
+ <CAADnVQLeCzCAF1Ku2Ri=PUfespAKPMEO_qQLJ1XEhAtLERgeBA@mail.gmail.com>
+In-Reply-To: <CAADnVQLeCzCAF1Ku2Ri=PUfespAKPMEO_qQLJ1XEhAtLERgeBA@mail.gmail.com>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Tue, 8 Sep 2026 13:22:40 +0100
+X-Gm-Features: AcwNN1VRXI7Dc37t9BPlMRYUgwE1HIP92RRwvyEJXlseQFtzU6l3-Rs3wMRGzow
+Message-ID: <CANk7y0gizeJe9tx12a+8VzBAAgzAh1G3N+Ru9mJ+4GJwW1CW+w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/4] bpf: Add bpf_call_rcu() kfunc
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: sashiko-reviews@lists.linux.dev, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-On 9/8/26 4:07 PM, Jiayuan Chen wrote:
+On Tue, Sep 8, 2026 at 1:19=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> On 9/8/26 7:34 AM, Kuniyuki Iwashima wrote:
->> On Sun, Sep 6, 2026 at 1:23 AM <bot+bpf-ci@kernel.org> wrote:
->>>> tcp: Skip cond_resched() in inet_csk_listen_stop() under BPF context
->>>>
->>>> bpf_sock_destroy() runs from the tcp iterator, under 
->>>> rcu_read_lock(). If
->>>> the sock is a listener that still has children in its accept queue,
->>>> tcp_abort() ends up in inet_csk_listen_stop() and the cond_resched()
->>>> there trips the debug check:
->>>>
->>>> BUG: sleeping function called from invalid context at 
->>>> net/ipv4/inet_connection_sock.c:1523
->>>> in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 628, name: 
->>>> test_progs
->>>> preempt_count: 0, expected: 0
->>>> RCU nest depth: 1, expected: 0
->>>> locks held by test_progs/628: 3, last CPU#3:
->>>>   #0: ffff8881158cee18 (&p->lock){+.+.}-{4:4}, at: 
->>>> bpf_seq_read+0x56/0x1210
->>>>   #1: ffff8881106bb858 (sk_lock-AF_INET6){+.+.}-{0:0}, at: 
->>>> bpf_iter_tcp_seq_show+0x32b/0x4b0
->>>>   #2: ffffffffb435af20 (rcu_read_lock){....}-{1:3}, at: 
->>>> bpf_iter_run_prog+0x46b/0xde0
->>>> CPU: 3 UID: 0 PID: 628 Comm: test_progs Tainted: G W           
->>>> 7.2.0+ #65 PREEMPT
->>>> Tainted: [W]=WARN
->>>> Call Trace:
->>>>   <TASK>
->>>>   dump_stack_lvl+0xc1/0xf0
->>>>   dump_stack+0x10/0x20
->>>>   __might_resched+0x3d2/0x610
->>>>   inet_csk_listen_stop+0x7b/0xbf0
->>>>   tcp_abort+0x23b/0x3b0
->>>>   bpf_sock_destroy+0xfc/0x140
->>>>   bpf_prog_448133d24601754f_iter_tcp6_server+0x81/0x8a
->>>>   bpf_iter_run_prog+0x538/0xde0
->>>>   bpf_iter_tcp_seq_show+0x26b/0x4b0
->>>>   bpf_seq_read+0x424/0x1210
->>>>   vfs_read+0x197/0xe40
->>>>   ksys_read+0x119/0x240
->>>>   __x64_sys_read+0x72/0xc0
->>>>   x64_sys_call+0x647/0x27e0
->>>>   do_syscall_64+0xe5/0x610
->>>>   entry_SYSCALL_64_after_hwframe+0x76/0x7e
->>>> RIP: 0033:0x7fad39b28aca
->>>> RSP: 002b:00007ffc381c61c0 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
->>>> RAX: ffffffffffffffda RBX: 00007ffc381c6a88 RCX: 00007fad39b28aca
->>>> RDX: 0000000000000032 RSI: 00007ffc381c6250 RDI: 0000000000000014
->>>> RBP: 00007ffc381c61e0 R08: 0000000000000000 R09: 0000000000000000
->>>> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
->>>> R13: 0000000000000000 R14: 000055f077c1bbb0 R15: 00007fad3a0f3000
->>>>   </TASK>
->>>>
->>>> The commit that added the kfunc already guards lock_sock() in 
->>>> tcp_abort()
->>>> and udp_abort() with has_current_bpf_ctx(), but missed the listener 
->>>> path.
->>>> Do the same for the cond_resched(), it can't reschedule there anyway.
->>>>
->>>> Fixes: 4ddbcb886268 ("bpf: Add bpf_sock_destroy kfunc")
->>>> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
->>> Is the justification "it can't reschedule there anyway" accurate?
->>>
->>> With CONFIG_PREEMPT_DYNAMIC=y booted with preempt=none or 
->>> preempt=voluntary,
->>> cond_resched() expands to __cond_resched() which can actually 
->>> reschedule.
->>> The splat in the commit message confirms preempt_count is 0 while 
->>> RCU nest
->>> depth is 1. With preempt_count==0, should_resched(0) can be true and
->>> __cond_resched() will call preempt_schedule_common() for a real 
->>> reschedule.
->>>
->>> Additionally, in configurations with CONFIG_PREEMPT_RCU=n where
->>> rcu_read_lock() is preempt_disable(), __cond_resched() falls through to
->>> rcu_all_qs() which calls rcu_qs() to report a quiescent state from 
->>> inside
->>> an RCU read-side critical section. That's a correctness problem 
->>> beyond just
->>> the debug check.
->>>
->>> So the call can either reschedule (PREEMPT_DYNAMIC none/voluntary) 
->>> or report
->>> a bogus quiescent state (non-preemptible RCU). Could the 
->>> justification be
->>> reworded to explain that the loop runs inside the iterator's RCU 
->>> read-side
->>> critical section and must not reschedule or report a quiescent state 
->>> there?
->>> The code change itself is correct and matches the existing pattern in
->>> tcp_abort() and udp_abort().
->> or maybe simply remove cond_resched(), hoping 7dadeaa6e851 would
->> resolve the scheduling issue.
->>
+> On Mon, Sep 7, 2026 at 7:39=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.c=
+om> wrote:
+> >
+> > On Mon, Sep 7, 2026 at 3:06=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+> > >
+> > > Thank you for your contribution! Sashiko AI review found 1 potential =
+issue(s) to consider:
+> > > - [High] Calling `bpf_call_rcu` from NMI context causes a raw spinloc=
+k deadlock because `call_rcu()` is not NMI-safe.
+> > > --
+> > >
+> > > commit 3385037afe11a72dffbb6db99b4174626596c231
+> > > Author: Puranjay Mohan <puranjay@kernel.org>
+> > >
+> > > bpf: Add bpf_call_rcu() kfunc
+> > >
+> > > This commit adds a new bpf_call_rcu kfunc that allows BPF programs to=
+ defer
+> > > operations using RCU grace periods.
+> > >
+> > > > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> > > > --- a/kernel/bpf/helpers.c
+> > > > +++ b/kernel/bpf/helpers.c
+> > > [ ... ]
+> > > > +__bpf_kfunc int bpf_call_rcu(struct bpf_rcu_head *rh, void *map__c=
+onst_map,
+> > > > +                          bpf_rcu_callback_t callback, struct bpf_=
+prog_aux *aux)
+> > > > +{
+> > > [ ... ]
+> > > > +     rhk->callback_fn =3D (bpf_callback_t)(void *)callback;
+> > > > +     rhk->map =3D map;
+> > > > +     rhk->prog =3D prog;
+> > > > +     call_rcu(&rhk->rcu, bpf_rcu_run_callback);
+> > >
+> > > [Severity: High]
+> > > Does this code risk a raw spinlock deadlock if called from an NMI con=
+text?
+> > >
+> > > Because bpf_call_rcu is exposed to tracing programs, it can be invoke=
+d from
+> > > NMI contexts, such as when a tracing program is attached to a perf ev=
+ent.
+> > > However, call_rcu acquires rcu_node raw spinlocks and is not NMI-safe=
+. If
+> > > the NMI interrupts a path that already holds the same rcu_node lock, =
+the
+> > > system will attempt to re-acquire the lock, resulting in a deadlock.
+> > >
+> > > Should the verifier restrict this kfunc from being called in NMI cont=
+exts,
+> > > similar to how it uses btf_record_has_nmi_unsafe_fields for bpf_obj_d=
+rop?
+> >
+> > This set is supposed to land after the rcu changes that allow call_rcu
+> > to work from NMI have landed. Please see the cover letter for the link
+> > to that patchset.
 >
-> Good suggestion. cond_resched has become old practice under 
-> CONFIG_PREEMPT_LAZY
+> The patch would need to be updated as s/call_rcu/call_rcu_nolock/ ?
+> or more will be required?
+> If the former then we can land it now.
 
+There will be no call_rcu_nolock(), we decided to make the standard
+call_rcu() be safe to be called from anywhere, so no change is
+required to this set. But it needs to land after call_rcu() changes
+land, or maybe rcu and bpf tree can co-ordinate somehow?
 
-After reconsideration, I think it's not a good idea to remove it if we 
-treat it as a fix and the fix will be backported to LTS.
+>
+> Also notice how your LLM doesn't know about your earlier work ;)
+> + rcu_read_lock();
+> + migrate_disable();
+>
+> that should have been ...
 
-Or we just drop both cond_resched and Fixes tag.
-
-
+You mean rcu_read_lock_dont_migrate(); right ? Will change in v2.
