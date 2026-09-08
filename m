@@ -1,103 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-215.mta0.migadu.com [91.218.175.215])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F3FF550DB1
-	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 17:38:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0E54C9001
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 18:01:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.215
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788889139; cv=none; b=rT1AzM0y7GddZLtOwYPbTLtBpP0aW/GwdpN0cASCNWfjjapRSsk7++TRJPJQBV8EVgfvHp7vR+dDza+kargHZ5jJ13EU1fpl+/JZGzo2niqXAxOcWFQNgsgp6TlQGRvGlCIwYP5jX3YgWqe0Yi5fRylw4RX9h7j2CVs9kjRaO2k=
+	t=1788890495; cv=none; b=acOIwmNVCPP7MIBXwBY6G5uGqpJHmMHh4nv4LY+tpD58IJ5LuN1/xJUMfSK4O8OnCJiPrRIw8rPhulzEnnoREj8I4KUZ58njfCoheMKGbv8t590Ooz0hfIVmPIheYByWt8/2odzlrTtD+yC7X3UWCjW4+JFD/1piK7mbDGawLYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788889139; c=relaxed/simple;
-	bh=lMMyumfMwLB/nK2rjqn1siFo+iqE8nueCE65OtEQPsI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=FqImzJp+iIF+1I3YQ0cx1muznstCkduz6OqNZ4847lDhcjJPZzvsrYwl5E20QCpYnNH55rAbXGREGWPqQCFuqUUTL8I+56cnfRQkt+oGxu5x9snJxZ7PwB+RXMTFrvbsN13jarwTTAQcxkY1RezJSYev4HPowHWFUHVP55OBx8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RQfHHyRs; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788890495; c=relaxed/simple;
+	bh=352NuZKJC4ABMe7epkEOWfjaeOUDqtU+5Mor+KAL2J4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=msNQx4JMvjl/chlhzpcWdw4m2YhNw+5IuM8NJ/QxB/D9ryq69AVVHPqprfB1+VPXizWpclhkgWT39biPBr/j8ioS64chPywCJ4wvYDBYNM45H36glR9BWeKD/YSPiTjb76mgJXkKDriDPUKGr0feabDbjFaIdxrLQa8dsvYkjG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=j2705VGR; arc=none smtp.client-ip=91.218.175.215
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RQfHHyRs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE0621F00A3A;
-	Tue,  8 Sep 2026 17:38:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788889138;
-	bh=Q0bvxk5qMt/AyyzxAgh2+9EiBthGeBkvP/wJ8+6af+o=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=RQfHHyRsAA8l9CbH7lQcEXFevuqKR2IGJXx0II3ib2imn77ad6ndtV1HvQ3whnRVb
-	 q61aNao2g6pZZEQ6nFaxVmvqBgvqQ+F7c70SSb44QsnvPHmGXtumWtoQX0uyvPfpW5
-	 JFlZkvjQ55I9dhc2MNw4CaSLeNI47ikWicVxIu1LoqfmXAIVq3VK0RK/zrKgxow36a
-	 EwN8EYfnfwg8cHPAsJnlByELTlCCEwY5m8udLN9T9bmTDQUaAdxz2pv6eZ3Ao0C3HE
-	 K6TNiC8LEdMctVagErcBq+CJxUbgC6++tPfBkfzJjEtZT3TC1gbZEOUSpR7GYH84+7
-	 Z4jUgGo0t3h0Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next] libbpf: defer arena map size check to load
- time
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260908-libbpf_arena_thing-v1-1-0092c0e0d91b@meta.com>
-References: <20260908-libbpf_arena_thing-v1-1-0092c0e0d91b@meta.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 08 Sep 2026 17:38:57 +0000
-Message-Id: <20260908173857.DE0621F00A3A@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="j2705VGR"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=352NuZKJC4ABMe7epkEOWfjaeOUDqtU+5Mor+KAL2J4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788890491; v=1; x=1789495291;
+ b=j2705VGR/DjGY8TOcx5oZ0TDZ+dEyatF/na9tiSK5EsEoscfE3Kwr6HfDngv3GVaxZ3fLVw0
+ uCE+oKPEjWNhfW3pcdsTmQ/537lRijZKCzu/O177PCbYO0WCnB3hXJSPTWtL14jNpKVqcFiTJkI
+ RtP2iYHJoqNVWe9QySRkYg3g=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 780d75177a0e07fd;
+	Tue, 08 Sep 2026 18:01:30 +0000
+X-Mizu-Trace-ID: 780d75177a0e07fd
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <0db57143-430e-4f45-92aa-03b6034b90f0@linux.dev>
+Date: Tue, 8 Sep 2026 11:01:21 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 0/3] bpftool: Improve perf counter reporting
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org,
+ ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ kernel-team@meta.com, eddyz87@gmail.com, memxor@gmail.com, qmo@kernel.org,
+ linux-perf-users@vger.kernel.org, acme@kernel.org, namhyung@kernel.org
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+References: <20260908-bpftool_cyles_per_run-v3-0-60e86f325c35@meta.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260908-bpftool_cyles_per_run-v3-0-60e86f325c35@meta.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On 9/8/26 7:27 AM, Mykyta Yatsenko wrote:
+> Track valid snapshots that have a zero counter value. Scale each per-CPU
+> counter before aggregation. Report cycles per included program run.
+> 
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> ---
+> Changes in v3:
+> - Keep the JSON value field raw. Add value_scaled and run_cnt_valid.
+> - Use the same CPU set for all metrics.
+> - Move snapshot state tracking to a separate patch.
+> - Link to v2: https://patch.msgid.link/20260902-bpftool_cyles_per_run-v2-1-bc5d14ad0ce9@meta.com
+> 
+> Changes in v2:
+> - Scale all counters.
+> - Use an enum for metric indexes.
+> - Link to v1: https://patch.msgid.link/20260827-bpftool_cyles_per_run-v1-1-77d7bfc3c065@meta.com
+> 
+> ---
+> Mykyta Yatsenko (3):
+>       bpftool: Track perf counter snapshot state
+>       perf bpf_counter: Track valid BPF counter snapshots
+>       bpftool: Scale counters and report cycles per run
 
-Pre-existing issues:
-- [High] NULL pointer dereference in init_arena_map_data() when processing =
-a SHT_NOBITS .arena section.
---
+For the series:
 
-commit 839c80f912fa6d6c52eb18408dfd0437488f602b
-Author: Mykyta Yatsenko <yatsenko@meta.com>
+Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-libbpf: defer arena map size check to load time
+> 
+>  tools/bpf/bpftool/Documentation/bpftool-prog.rst |  13 +-
+>  tools/bpf/bpftool/prog.c                         | 159 +++++++++++++++++------
+>  tools/bpf/bpftool/skeleton/profiler.bpf.c        |  25 ++--
+>  tools/perf/util/bpf_skel/bpf_prog_profiler.bpf.c |  26 ++--
+>  4 files changed, 168 insertions(+), 55 deletions(-)
+> ---
+> base-commit: 3fa3128887a4df6057c543aae7c5c7fd2ed41f12
+> change-id: 20260827-bpftool_cyles_per_run-93169fcb30b7
+> 
+> Best regards,
+> --  
+> Mykyta Yatsenko <yatsenko@meta.com>
+> 
 
-init_arena_map_data() used the build-host page size while it opened an
-object. This could reject skeleton generation when the build host and
-target use different page sizes.
-
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index c036e8a91ed88..413b8b305194e 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-
-[ ... ]
-
-> @@ -3107,8 +3095,7 @@ static int bpf_object__init_user_btf_maps(struct bp=
-f_object *obj, bool strict,
->  		obj->arena_map_idx =3D i;
-> =20
->  		if (obj->efile.arena_data) {
-> -			err =3D init_arena_map_data(obj, map, ARENA_SEC, obj->efile.arena_dat=
-a_shndx,
-> -						  obj->efile.arena_data->d_buf,
-> +			err =3D init_arena_map_data(obj, map, obj->efile.arena_data->d_buf,
->  						  obj->efile.arena_data->d_size);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but can we pass a NULL pointer to
-init_arena_map_data() here?
-
-If the ELF section is of type SHT_NOBITS with a non-zero size, elf_getdata()
-can return an Elf_Data structure where d_buf is NULL but d_size is non-zero.
-
-In that case, bpf_object__init_user_btf_maps() passes a NULL data pointer
-to init_arena_map_data(), which then executes:
-
-tools/lib/bpf/libbpf.c:init_arena_map_data() {
-    ...
-	memcpy(obj->arena_data, data, data_sz);
-    ...
-}
-
-leading to a NULL pointer dereference. Could we validate that d_buf is not
-NULL before calling memcpy, or handle SHT_NOBITS sections differently?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260908-libbpf_are=
-na_thing-v1-1-0092c0e0d91b@meta.com?part=3D1
