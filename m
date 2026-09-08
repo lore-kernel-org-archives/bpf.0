@@ -1,133 +1,116 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1574F55C0
-	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 10:12:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D42D4E66A9
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 10:13:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788862371; cv=none; b=D/frqkcqZ/PHCwF2O+IngLg80RY/h9AimKTfbJIoMyXIG+pwE03pfbK9cYRcsYtqkB03oDvWY0RRdFiy9vBjRNq7mcwALACoumGtl14BGYUxmOruJv9athD71IJv4fE1+vRuM5l2Lu9ew7d23tiLFeyrNBsTP1ikugJQqVkp2rQ=
+	t=1788862428; cv=none; b=LAQMmoK1/UyLU2ESTPWqnq5Qh6KmJbrJsqkcrNHZn3v02itcCgi7JYfDQe+7OeRn4AHXBoL/Fp9ZxlMch0X9OFprvxBwLkvN8q9XELTFvniVVbj84m9sQoKZLd0jnS8n9X/EBfv/QTg/REnENc6s3mB8fDwdumxg/ttbsgDyvYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788862371; c=relaxed/simple;
-	bh=L5wrXfBipBywywm0456CWR88hbdBnTem6i9VKKzZbCY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VmRdYqa3zpcqqC8feRBoIgRsRQDCMcYhe9IrxP4Io87Ss+x9OIveMmkJf7rZs1YKIxASIZAtg0AEVkU9IAPOp1u9kOlksMmv8mELgn0swFIvFJEOtUEHTNtd5o2NR0SRLdrltkRhPqZK4fdUUtd0rQmoALaoJjhytfcXaNqr35s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bobrowski.net; spf=pass smtp.mailfrom=bobrowski.net; dkim=pass (2048-bit key) header.d=bobrowski.net header.i=@bobrowski.net header.b=EhoumeQN; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bobrowski.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bobrowski.net
+	s=arc-20240116; t=1788862428; c=relaxed/simple;
+	bh=4Cd5y8hvApr4UN5EZ5j1MvSau8AXeLrPDQXWHfUTLnA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=qgECELQikzCefSCRlEa3Gl1rncjkUBuzqlT+gZz+jHDLF/x8njBsh8+MQoJryDIRi7fr2sQo1QM3/qeonzBbfkaDFc89y8vEfENiFdU5Lg1PXlTRln7VfscjxuODeg5c6t6b2CkIxSbIF4K4VEyflYR6XdwP2yIiCczy1wglo88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F3TriR6m; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bobrowski.net header.i=@bobrowski.net header.b="EhoumeQN"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-381b831d535so7058066a91.0
-        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 03:12:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bobrowski.net; s=google; t=1788862369; x=1789467169; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=GhA9ASZ5myh78peIx89yYob/fVYshdxCIaZiQ5E+/oU=;
-        b=EhoumeQNM9iAJDSMeVJkE/BcO2sTN1IzlmeaIhrZLfQx2NqwD8XNV7PWFjFg44pc3T
-         B33+JzVkfz9R3TuFgydm5ZifYn9Jd17vvVquToxz8YSgDIf+/TlAceanpQnXdBAi80+0
-         V12JvE9RdSgL2e7hRNnMHcPDpMYN/0FwGadynWX/i+WmBhG+7XEMzsgHXlmpK7hVv7lD
-         1etMUlVyR6lAqpHaFEqrwVa7tPQ9nfygN5TwUHKZaKYZQKuoJon+lcKvb5WcZVbfFnks
-         9LWsjmkqN2BtMxhIst8T66CjigLvB1/6pDIKpUzydm061QNwNxvyTekwysIekcWiHgP+
-         1eBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788862369; x=1789467169;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GhA9ASZ5myh78peIx89yYob/fVYshdxCIaZiQ5E+/oU=;
-        b=hgUOJ1UcF2zO6oNrEqoVyzb5YdMJerBwGDRumwAWRdc1NV2pDfeqs7Pq7QTT7sjJ7T
-         lh72PPd4Wnhb//x+JuIihLRC9i1IBLwGw4iZXwWn5ab7zfSzbjtspUAh7PQ0rc6rrZmu
-         VicYcWMwzrCNkOZDgn+LD510b5Qp0SCJKa3EjTNj9emuwXBjbWC+LMflvOOlmPsyTkWo
-         NePj8deI0f6DZz/r85VaIA5FsunUfS13Lm+rcsx1do8oF5WUBR9wHTG+w4MnsoLFEoMq
-         zOegV2FzZJh05oL4FzzmURXYiaX60yrvylTd4GuO0Joa0phipva2vQXMg1emM/nOM+sd
-         J12w==
-X-Gm-Message-State: AFuF++k48H8iO6LDQuGRCIptzPA9tUIJxiB0ykk5Xx5dwG1S7gsgDRdZ
-	MRQQ1V12QhWLPjHlsRv6RCkPZWYoyH2TxudNofMNXQaJ/pcSPVwnBStKw8VsLQqcUFU6
-X-Gm-Gg: AYBFou0Txk9EZD3440Tl/UZlfggkrWpuV2a8YmUf6lWvhIisp4APxvo+fQPzCWKQ5nG
-	APpnxxYPlGJEvks+snBwkk0b03OKtQ0xJj3WK6I+bq54yOfKqFsEJnQnqdmCwRPxGUhaB3KOVNK
-	rtLYflBXxkB3w2S5u64sLoA7jn1qilhvU0PbkeaRkmOXv0MdRhgC5wfplZJ4coENnC/HEirgpzm
-	Hgz6Ks2qT1KGnGQMjXbq2Jh8FN0Q3/LHZx/00H6jrjuDXKdob/SDjJePvsBMAy55X+Y4xlFfRQN
-	ZKzhFX7Z5cx3rABg58Q8OjSHm/u0MuA96XYMp6xTUAlRpCCzyjnUHqauBCv0XKbBGqk9yQzLTsX
-	NuJut1gNS4mZk3ENjkN6IZcYPMAEFSim7rPXHcibVnJFBHgerpAz3Is69N+FXftRYepP8+HAkmj
-	RA+uayij7dZYA1vpC3H4fgYxRpoQw2CFFvoGSbNWevIY4n3XtCQExr5ya0evoF2uO6yRiEebzKT
-	dnH0nhmV7FKS1xVvaj0QEfa7iDuUgArOdEpnIqN
-X-Received: by 2002:a17:90b:1e51:b0:399:ecd:d68d with SMTP id 98e67ed59e1d1-39b26260f7dmr38959127a91.22.1788862368635;
-        Tue, 08 Sep 2026 03:12:48 -0700 (PDT)
-Received: from lima-development (163-53-146-23.ip4.superloop.au. [163.53.146.23])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3339b314cfcsm35093697eec.19.2026.09.08.03.12.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2026 03:12:48 -0700 (PDT)
-Date: Tue, 8 Sep 2026 20:12:33 +1000
-From: Matt Bobrowski <matt@bobrowski.net>
-To: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-Cc: bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, david@kernel.org,
-	akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
-	brauner@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com,
-	kpsingh@kernel.org, ljs@kernel.org, memxor@gmail.com,
-	song@kernel.org, sun.jian.kdev@gmail.com, utilityemal77@gmail.com,
-	viro@zeniv.linux.org.uk
-Subject: Re: [PATCH bpf-next v5 6/7] bpf: Mark linux_binprm->mm as
- trusted-or-null
-Message-ID: <ap_fkWbaG5u7UH7y@lima-development>
-References: <20260907165220.52431-1-tasos.papagiannnis@gmail.com>
- <20260907165220.52431-7-tasos.papagiannnis@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F3TriR6m"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B60E01F00A3A;
+	Tue,  8 Sep 2026 10:13:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788862427;
+	bh=oO9sE7pPSY6TS8LefKRkUCrHBHqdiUWOyu7EptyWRVA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=F3TriR6meG92rKwjNFUp2cEMt3PzddrbSWu1TM5sntpJ5y4jj1OQVOyZeuvEa8Ibx
+	 om5bUqMAJM0MMVi/BtRPnirSRuU39yaRZjAJc+BuP0giHMyARNU4qOGebLRxgfsbsa
+	 w6rraLx6InZaLca6V7eFRQMQbHhB1gFk2CxB6BUjT065Hy7cqtKLM/7f0AtoRom2n0
+	 INwwVFWOs8ur0G3HiuROpVEWBbsPT36JDIrF7FqKcmt3pQ23jPwKy89MZuLXpzE0fV
+	 C3IB2r/eS4Rvrfvq68JaSMiJJgAqzErOSma0L935wK08agBYwc1vEt7lLn5wg+c15m
+	 mY1dlprMFTkig==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH 2/8] blk-iocost: define iocost_model_ops cost model
+ interface
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tao Cui" <cui.tao@linux.dev>
+Cc: hannes@cmpxchg.org, tj@kernel.org, mkoutny@suse.com, bpf@vger.kernel.org
+In-Reply-To: <20260908100143.47598-3-cui.tao@linux.dev>
+References: <20260908100143.47598-1-cui.tao@linux.dev>
+ <20260908100143.47598-3-cui.tao@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 08 Sep 2026 10:13:46 +0000
+Message-Id: <20260908101346.B60E01F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260907165220.52431-7-tasos.papagiannnis@gmail.com>
 
-On Mon, Sep 07, 2026 at 07:52:19PM +0300, Anastasios Papagiannis wrote:
-> Mark linux_binprm->mm as a trusted-or-null nested pointer so BPF programs
-> can pass it to kfuncs after a NULL check.
-> 
-> The field is either NULL or points to a live mm_struct whenever BPF can
-> access a linux_binprm. On successful exec, exec_mmap() installs the new
-> address space before begin_new_exec() clears bprm->mm. The bprm_mm_init()
-> error path clears the field before mmdrop(), and free_bprm() clears it
-> before mmput(), as ensured by an earlier patch in this series.
-> 
-> Signed-off-by: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-> Reviewed-by: Sun Jian <sun.jian.kdev@gmail.com>
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] The `iocost_model_ops` interface uses recycled cgroup IDs (`iocg_i=
+d`) without a lifecycle callback (e.g., `release`), making safe per-cgroup =
+state management impossible.
+- [Low] Incorrect header reference in BPF struct_ops documentation.
+--
 
-Feel free to add RVB tags:
+commit 64a8ffdba67eaf906639412faa34e6125d2960c1
+Author: Tao Cui <cuitao@kylinos.cn>
 
-Reviewed-By: Matt Bobrowski <matt@bobrowski.net>
+blk-iocost: define iocost_model_ops cost model interface
 
-> ---
->  kernel/bpf/verifier.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index b5186e664aea..6799d9e080fc 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -6004,6 +6004,10 @@ BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct dentry) {
->  	struct inode *d_inode;
->  };
->  
-> +BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct linux_binprm) {
-> +	struct mm_struct *mm;
+This commit defines the interface for pluggable cost models via a struct_ops
+with a single calc_cost callback. It passes iocg_id to allow models to keep
+per-cgroup state. The model is called from the IO submission path under RCU.
+
+> diff --git a/include/linux/blk-iocost.h b/include/linux/blk-iocost.h
+> new file mode 100644
+> index 0000000000000..7111b5c03dc36
+> --- /dev/null
+> +++ b/include/linux/blk-iocost.h
+> @@ -0,0 +1,56 @@
+
+[ ... ]
+
+> +struct iocost_model_ops {
+> +	/*
+> +	 * @op:		REQ_OP_* value (uapi blk_opf.h)
+
+[Severity: Low]
+Is this the correct header reference?
+
+The file blk_opf.h does not exist in uapi. Should this point to
+include/linux/blk_types.h instead?
+
+> +	 * @nbytes:	IO size in bytes
+> +	 * @sector:	starting sector
+> +	 * @cursor:	iocg cursor sector, 0 if none (sequentiality hint)
+> +	 * @iocg_id:	css id of the issuing cgroup
+> +	 * @flags:	IOCOST_COST_F_*
+> +	 */
+> +	u64 (*calc_cost)(u64 op, u64 nbytes, u64 sector, u64 cursor,
+> +			 u64 iocg_id, u64 flags);
 > +};
-> +
->  BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct socket) {
->  	struct sock *sk;
->  };
-> @@ -6058,6 +6062,7 @@ static bool type_is_trusted_or_null(struct bpf_verifier_env *env,
->  {
->  	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct socket));
->  	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct dentry));
-> +	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct linux_binprm));
->  	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct vm_area_struct));
->  
->  	return btf_nested_type_is_trusted(&env->log, reg, field_name, btf_id,
-> -- 
-> 2.55.0
-> 
+
+[Severity: High]
+Does this struct_ops interface need a release or offline callback for cgroup
+state cleanup?
+
+When a cgroup is deleted and its CSS ID is recycled, the new cgroup inherits
+the historical IO state of the deleted cgroup if the BPF model tracks it.=20
+There is no reliable way for the BPF program to garbage collect entries,
+which can eventually exhaust map space.
+
+Could unprivileged users with cgroup delegation create and destroy cgroups,
+triggering map exhaustion and causing a denial of service for the cost model
+(which falls back to failure or builtin behavior once max_entries is reache=
+d)?
+
+The commit message notes that the need for a release(iocg_id) callback is
+an open question. Since BPF struct_ops signatures are frozen once merged,=20
+is it safe to omit it from the initial interface? This appears to be
+confirmed in a follow-up patch where map entries have no deletion logic
+and will leak in a production environment.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260908100143.4759=
+8-1-cui.tao@linux.dev?part=3D2
