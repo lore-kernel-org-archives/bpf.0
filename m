@@ -1,133 +1,205 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 354AF43CE56;
-	Tue,  8 Sep 2026 23:48:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D92A524B0B
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 23:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788911307; cv=none; b=mqIg1wgwcTZPlumiPaYnpkNfDuklOvZJVNYqbJspFU/MPkb28ibHv2aT7NEKpkQzoopASUHpM8zLMhAQQXxQlfe29AJjbQloLqqb1D9TaVMRcnt/HLcI5tJ5OU/Mr1nFx8BhD43Ul4k1FVfpcm8mfX8N7S4GUSevqgTNgedQqU4=
+	t=1788911778; cv=none; b=sUiBqWioRAArvjAtsLYYwMeYijJluQ7edtTLy26QS/e7YWohdYVjLMLef8ervN+xNO+OEwXX3udk+ZopPd4krH3xswJEswYIq2bp2Td9XgVZfy3+ApF4tHNMERhckGz2xyEvoLfWB4Y0eDh/HJJrnD5IAAFsUhWEGXnmybO6iVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788911307; c=relaxed/simple;
-	bh=X/wdeUoQL2g3SEPUcRuHWZSH2cwrvyCRMSFtyrgAhjA=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=buVrf+1dQN9l8TrvGqY3Yw856QwC5yIVhiUdjEObYkipNM7AZKNCnATcbRPnycQ15Qq1G91rJHoYvRDLMDjkMw4IpyzicZI2SNhc6xWLmUq5ZnkENPAuJ6fMrYq10A2v6ZVI3/p8+9tcyfcYSTFzAP6UQusR5QKI7eE7EDTsY4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m2S5iUmC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788911778; c=relaxed/simple;
+	bh=5MxxvCdVgC3YLTJh7XEdP1bYFUpjHnVxjCwGvCeCFF0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kmh+E0z0dvljfAoCBFp1wirvhggTDhqW7i+ffYC4DjUGBMzAKh8W4rYmcQvbvD1JPF7oTHAZ8tGNIiKL26FUys+Hn6u5odgBVZP4OcX3x3eHGOzshdZ6u8Xl7DhR7F6aYXb/01ns25/TY239dCf0pNrqzNLruUM/J5dTRmiTWdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JDd3GtzJ; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m2S5iUmC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 052E61F00A3A;
-	Tue,  8 Sep 2026 23:48:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788911305;
-	bh=pBRRw/WQSZq5lErQGcrKbzP/kPv28lIFFHDhWtQ5g3Y=;
-	h=Date:From:Subject:To:Cc:References:In-Reply-To;
-	b=m2S5iUmC9BE4oUJ8V6RXflaXDDOHWZNjHc/QCZtEJYKyWAldsrO8akKbMkbDXtqix
-	 7JKPimdQ/OfI25/9K3qjgXrDYVnWNfRRk2IadNqcG86lvlFiKpfJdoQutbxOD6Kc4d
-	 h1SwwQRATh6UzlJaOWmKQcCG/yZY0lBOBO4ViQ/cpFrkmLIqz9TKykrwluF/th7CR7
-	 +TzV4LbLzAfZQaHjXxLbXswnrsF8EAahUtW4fonLBn8gWLB/+a/iVgcPWkx9zXtKf8
-	 xZsJSY2eRoAXtg7/D6P1Kk4wGEOX/sf7TQrZysJwDfne/GgTrXDTsEnvSEIZPHbWdk
-	 ICQyZligUe60w==
-Message-ID: <f8c3cfba-740c-4a57-ad65-d419fa5b6cf7@kernel.org>
-Date: Wed, 9 Sep 2026 00:48:19 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JDd3GtzJ"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-38ea87caafeso4417266a91.3
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 16:56:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788911775; x=1789516575; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=aeaQ8qHK/MyWCciP9ARnOOzHBOTcOWNQ9SeCb5dOpCc=;
+        b=JDd3GtzJo1ampPo13lGt2FWKwTeupUuyjiznSutxyH1B//grR6To87GBFZt86ZRVd8
+         WEP8ghZO4b1ax/yeiPCToBWaEXWFQMRrqjn5Q7UIC+0EZzZyVY4Ta2ZlaWfGXTnVCx6K
+         ghLPhkg1XMrl/HMWDzNDZKnGVgxYPQxOT5kNS+73HRlitL8TFnaHZAlQHK8pLw0fIH0j
+         UMgvHwaJuzHNDSxdAQSm31oYwsjEJM17EbR+wyzEMxzWSVQn/rOKW36XxNbyR/2TMo06
+         TQJ3spvzMRlYPpdmmlRisluRUz8WXENwNzJYyh84GfQZ47YiHBQZzEqY/FhZzqo3nR4b
+         MpHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788911775; x=1789516575;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=aeaQ8qHK/MyWCciP9ARnOOzHBOTcOWNQ9SeCb5dOpCc=;
+        b=YOH1WUDCoAghghJLIbsO1TNGz5aIcGsUn4lb2JvutYfrHYVSphRzXyaHVxJFRVFDfR
+         KpUUN2TGPhaDU9HLA+Mdfg4lA1jmky+cwnpN8smLpqfALcJh6aJW/bm3/dIA6gdvt+O0
+         gMc9GhwxD1oi+TkCo4l9VtLQnc523yL6lGWaWT6tNyIvGszgiFL9BwFx0W0HssP5pcm/
+         E3K7Z0p2Qu2IsjAOKt94z4/tX2mV/AVcSBCOuEQXrLNv2a4J47L7qEHBQ5+203u8ScxR
+         fE0NLjpNREf9xNBFOz7MDRELX6RBuYIikpglV2TB/MABLatgahLZ/Nit5Nb36n4CLOf9
+         Ohlg==
+X-Forwarded-Encrypted: i=1; AKwUvBxjZzrcDsFQ+ub1RxEpleJkp7T/apkMre0Q4tDCPEYjqWI+2xxYXG1SC6iNsvfImyDIC0A=@vger.kernel.org
+X-Gm-Message-State: AFuF++ncYvrZXhTMoUV4rftQPQ/wa6OkLSq82Gpqn1fzkOwnb5kgTdW4
+	HS87A8Y5QpPI68ZpdMWAfQJsq1wXi4xh8vg8YwjH4VYeMS9CqjKPmCJc
+X-Gm-Gg: AYBFou2mfTvAlqQVW1/KnHqTcKgywdURWd4h+qSj0vX1AabWyE7g8JZ9wF6Gt2dr0ue
+	ApgyqruGCKicbpcssVyTf4FspbEXi8EtIicv2vfwbREo8ec468yVwlxiQfd4PiEkag7YLxAu51C
+	NXm8bdwSEM6IZgbSaztD5PUx32InmpnuKcBmpQAat9aD6UNX4vqBPhoGnUfPcdvLQyflOPpmNi7
+	BPHduzfnjufxB3K1OWYzEWM26mdWsceFs010JQcipHYmcbeonQBcm3N9f/J0yTi8otjva2TDivg
+	74moydaiTIcGg6cIdXoo/l518FfCMc30C2rZBVkZ/z3+aEXa4uQGdh6qWWC9viEjaMZTzdbSTKW
+	9KUZfo9swa/+IRPILkPkCB0/C+FWLSypU8qdHVaSU/3y3Cq7PZYdCcn/akykatz9060j9wuHzxW
+	AdWu+oDtdUe0gLHQL0oPA1FF56iTJtIjMUvInky/ARUns2hxY0aOMwLvE=
+X-Received: by 2002:a17:90b:4cce:b0:38f:240d:b857 with SMTP id 98e67ed59e1d1-39b260dd4e9mr51323684a91.2.1788911775237;
+        Tue, 08 Sep 2026 16:56:15 -0700 (PDT)
+Received: from localhost ([2a03:2880:9ff:73::])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14324410092sm36459946c88.14.2026.09.08.16.56.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2026 16:56:14 -0700 (PDT)
+From: Ziyang Men <ziyang.meme@gmail.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Viktor Malik <vmalik@redhat.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Mykola Lysenko <mykolal@meta.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Ziyang Men <ziyang.meme@gmail.com>,
+	kernel-team@meta.com,
+	linux-kselftest@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-mm@kvack.org,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/4] selftests: add shared Makefile for BPF selftests and new memcg test
+Date: Tue,  8 Sep 2026 16:55:48 -0700
+Message-ID: <20260908235552.2610256-1-ziyang.meme@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Quentin Monnet <qmo@kernel.org>
-Subject: Re: [PATCH bpf-next 1/2] bpftool: Skip non-autoload programs when
- generating light skeletons
-To: bot+bpf-ci@kernel.org, tweek@google.com, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, shuah@kernel.org, kpsingh@kernel.org,
- leon.hwang@linux.dev, emil@etsalapatis.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, ihor.solodrai@linux.dev, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20260908065529.901593-1-tweek@google.com>
- <70e2a2f4354a7eb6208944e1ab2c13dadcb8b78cdbe2888ad4471124b1cc81b7@mail.kernel.org>
-Content-Language: en-GB
-In-Reply-To: <70e2a2f4354a7eb6208944e1ab2c13dadcb8b78cdbe2888ad4471124b1cc81b7@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 08/09/2026 17:01, bot+bpf-ci@kernel.org wrote:
->> diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
->> index d0a36f442db7..1cdecf3e4fa5 100644
->> --- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
->> +++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-> 
-> [ ... ]
-> 
->> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
->> index a50540ef6521..0fcfe20ff515 100644
->> --- a/tools/bpf/bpftool/gen.c
->> +++ b/tools/bpf/bpftool/gen.c
->> @@ -583,6 +583,9 @@ static void codegen_attach_detach(struct bpf_object *obj, const char *obj_name)
->>  	bpf_object__for_each_program(prog, obj) {
->>  		const char *tp_name;
->>
->> +		if (!bpf_program__autoload(prog))
->> +			continue;
->> +
->>  		codegen("\
->>  			\n\
->>  			\n\
-> 
-> [ ... ]
-> 
->> @@ -1339,6 +1348,8 @@ static int do_skeleton(int argc, char **argv)
->>  		map_cnt++;
->>  	}
->>  	bpf_object__for_each_program(prog, obj) {
->> +		if (use_loader && !bpf_program__autoload(prog))
->> +			continue;
->>  		prog_cnt++;
->>  	}
-> 
-> Can the autoload flag change between when this check runs and when
-> codegen_attach_detach() checks it?
-> 
-> Looking at the code flow, do_skeleton() samples bpf_program__autoload() here
-> before calling bpf_object__load(), but codegen_attach_detach() and
-> codegen_destroy() (which also check autoload at gen.c:586, 635, 654, and 686)
-> run inside gen_trace() after bpf_object__load() completes.
-> 
-> In tools/lib/bpf/libbpf.c, bpf_object__load() ->
-> bpf_object_prepare() modifies prog->autoload for struct_ops programs:
-> 
-> 1. bpf_object__init_kern_struct_ops_maps() (libbpf.c:1251, 1290) sets
->    st_ops->progs[i]->autoload = false when the member is missing from kernel
->    BTF or the slot was replaced/NULLed.
-> 
-> 2. bpf_object_adjust_struct_ops_autoload() (libbpf.c:1166) sets
->    prog->autoload = should_load for programs referenced by struct_ops maps,
->    which can flip SEC("?struct_ops/...") programs from false back to true when
->    the referencing map has autocreate set.
-> 
-> For the false->true case (SEC("?struct_ops/foo") with an autocreated map):
-> do_skeleton() omits both the progs and links struct fields, but
-> codegen_attach_detach()/codegen_destroy() then emit attach functions
-> referencing skel->progs.foo.prog_fd and skel->links.foo_fd, which weren't
-> declared.
-> 
-> For the true->false case (plain SEC("struct_ops/foo") whose member is missing
-> from kernel BTF): the fields are emitted but attach/detach/destroy skip the
-> program, and the loader doesn't reserve a prog_fd slot for it, so subsequent
-> program FDs get written into preceding fields.
-> 
-> Would it work to sample autoload once and reuse that decision, or to move the
-> struct field emission after bpf_object__load()?
+This series refactors the BPF-related build machinery that is currently
+duplicated across selftests/{bpf,sched_ext,hid}/. It adds the shared
+tools/testing/selftests/lib.bpf.mk fragment and wires up three consumers,
+simplifying both existing BPF selftests and future additions.
 
-It looks like both Sashiko and the bpf-ci bot raised valid concerns.
-Here, it's probably cleaner to move the struct field emission after
-bpf_object__load()? Seems a bit more involved though, we'd need to move
-these struct field emission to gen_trace() for the use_loader case, or
-move bpf_object__load() out of gen_trace(), not sure which is best. This
-way we'd have the fields printed after bpf_object__load() has updated
-(if necessary) the autoload status for "obj", and
-codegen_attach_detach() would then use the correct fields.
+The series also adds a cgroup memory-controller selftest that complements
+the existing coverage.
 
-Quentin
+Patch 1 adds lib.bpf.mk.
+
+Patch 2 adds selftests/cgroup/test_memcg_stat_cross_cpu, which verifies a
+cgroup flush by comparing values read through BPF memcg kfuncs with the
+corresponding cgroupfs values. The existing bpf/cgroup_iter_memcg test only
+checks whether selected values are non-zero.
+
+Patches 3 and 4 replace the duplicated BPF build machinery in
+selftests/{hid,sched_ext} with lib.bpf.mk.
+
+===
+Changes since v3:
+For shared Makefile:
+- Track in-tree libbpf headers directly so a single make invocation rebuilds
+  BPF objects and skeletons after a header change.
+- Restore the target definitions needed by LoongArch and MIPS cross builds.
+- Validate output directories and skeleton suffixes, and reject dotted or
+  hyphenated source stems before they reach build and cleanup rules.
+- Add stamp tracking for vmlinux.h generation while preserving content-based
+  header updates.
+- Make skeletons and subskeletons explicit outputs, so a missing subskeleton is
+  regenerated and both sets participate in the all target.
+- Namespace private variables, expand the caller-visible contract, track a
+  supplied VMLINUX_H, and remove unnecessary include search paths.
+
+For cgroup selftest:
+- Add CONFIG_BPF_EVENTS and probe every required kfunc plus the sleepable
+  cgroup iterator before running.
+- Bound CPU fanout, cgroup/process count, and total memory use; skip a case
+  when the flush threshold would require more than 256 MiB.
+- Check CPU discovery, polling, iterator creation, and BPF errors, with clearer
+  diagnostics.
+- Compare each BPF statistic against two following memory.stat samples, keeping
+  exact equality on a quiet subtree while tolerating values that move between
+  the two samples.
+
+For hid and sched_ext:
+- Remove unused HID locals instead of suppressing warnings, drop obsolete
+  variables and comments, tighten cleanup, and correct the generated-output
+  description.
+
+===
+Changes since v2:
+For shared Makefile:
+- Use USERCFLAGS and USERLDFLAGS to extend CFLAGS and LDFLAGS.
+- Pass OPT_FLAGS/RELEASE and EXTRA_CFLAGS to the libbpf and bpftool sub-makes.
+- Use one rule per BPF source instead of a global vpath that also affected the
+  caller's normal %.c rules.
+- Take HOSTCC/HOSTLD from lib.mk instead of including Makefile.include, which
+  also rewrote the caller's AR, LD, and CFLAGS.
+- Report a missing vmlinux from the recipe rather than at parse time, so
+  "make clean" still works without BTF.
+
+For cgroup selftest:
+- Create one cgroup tree, perform one flush, then read through BPF and
+  cgroupfs.
+- Use common cgroup helpers such as cg_read_key_long() and values_close().
+- Use cpu_set_t rather than manually allocated CPU lists.
+- Move test_memcontrol.c's anonymous-memory allocator into cgroup_util.
+- Address the remaining review feedback.
+
+===
+Changes since v1:
+- Generalize lib.bpf.mk for source layouts and suffixes, extra headers and
+  flags, skeleton suffixes, subskeletons, and configurable output directories.
+- Add patch 3 (hid) and patch 4 (sched_ext), converting those directories to
+  the shared fragment.
+
+Ziyang Men (4):
+  selftests: add shared lib.bpf.mk to build BPF progs and skeletons
+  selftests/cgroup: add memcg_stat_cross_cpu correctness test for flush
+  selftests/hid: build the BPF program via the shared lib.bpf.mk
+  selftests/sched_ext: build BPF schedulers via the shared lib.bpf.mk
+
+ tools/testing/selftests/cgroup/.gitignore     |   8 +
+ tools/testing/selftests/cgroup/Makefile       |  46 ++
+ tools/testing/selftests/cgroup/config         |   5 +
+ .../selftests/cgroup/lib/cgroup_util.c        |  82 ++
+ .../cgroup/lib/include/cgroup_util.h          |   3 +
+ .../cgroup/memcg_stat_cross_cpu.bpf.c         |  95 +++
+ .../selftests/cgroup/memcg_stat_cross_cpu.h   |  18 +
+ .../cgroup/test_memcg_stat_cross_cpu.c        | 755 ++++++++++++++++++
+ .../selftests/cgroup/test_memcontrol.c        |  29 +-
+ tools/testing/selftests/hid/.gitignore        |   1 +
+ tools/testing/selftests/hid/Makefile          | 179 +----
+ tools/testing/selftests/hid/progs/hid.c       |   7 +-
+ tools/testing/selftests/lib.bpf.mk            | 321 ++++++++
+ tools/testing/selftests/sched_ext/Makefile    | 149 +---
+ 14 files changed, 1382 insertions(+), 316 deletions(-)
+ create mode 100644 tools/testing/selftests/cgroup/memcg_stat_cross_cpu.bpf.c
+ create mode 100644 tools/testing/selftests/cgroup/memcg_stat_cross_cpu.h
+ create mode 100644 tools/testing/selftests/cgroup/test_memcg_stat_cross_cpu.c
+ create mode 100644 tools/testing/selftests/lib.bpf.mk
+
+-- 
+2.53.0-Meta
+
