@@ -1,202 +1,374 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-46.mta1.migadu.com [95.215.58.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E04DF1A6811;
-	Tue,  8 Sep 2026 09:44:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 262F04D2EFE
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 09:48:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788860658; cv=none; b=Usgv/xzlZA0doZMeOwIiOMvWmlPfGOkQYyodRb0BT9+fel1CFX480L9i7BEvkC8J4U/GxkTbQ8n2CmqghzaD0duT7xnBfg89GRFm7gbvDqEPSO5+AM+45Uvz2vvnR146Gc5SM4MTqgmW5YMI3wpdMg0w8VPOwpeYyR7aycMy8IY=
+	t=1788860904; cv=none; b=JfrLnuVnbNugjHBI7vwwmg5FgjIve4NebrlDrb177B63ztiZ2bCITmfpnmc4i0jFgBll5sQtB7UM7yJHMvzde0K4c2SGp8XueSdrNc/0IMwllyWbYOxg5zXLm1FLkJ4vUN757c5lCNsgJoIzpL5Vd9aDcNg8V9AM2PK/vaG+X+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788860658; c=relaxed/simple;
-	bh=tV1/2vbL1jxMtILARx3VLVVgP1XTxok2Hvoa3dXSuDc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=uZsTbCo3oNVpc78q6DlK3DNgmWHQmaaM7qhshn84CKiMc+OD4KVf2nd8uYxXv/UBqaDu/F53EU4SzBuYLDoQvdUC6xtWMkf7NaHcc/tvXFfVF+uDB/jwcFR9D2fEjV3p23XnKexyEPubEff8UHOYqtqwSrD1UdffbrMfQszgYHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Z5LV5O8Z; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1788860904; c=relaxed/simple;
+	bh=/ZYMYmpgg2XO2vAXyids1UUAianNNzROZUceYBbtSIE=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=meVJoWZyiu2rLOUcE2udxqWYaSXZeSA4E1Pp4J95xcEStzy2eRUEAc1SWobX7JooJT2wEH7cH6G8iPVyT9YzMrZ388BRXVTSGJ8WPjlPn03aMt8Vz3tkeGYH+yars2w6YXSZjsUq5t5FDeoBXZ2yyzLtLcv89qCRpSNqCWTN4Ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=i1XKcynH; arc=none smtp.client-ip=95.215.58.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Z5LV5O8Z"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 163AE1A1A48;
-	Tue,  8 Sep 2026 09:44:13 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id D576D603C4;
-	Tue,  8 Sep 2026 09:44:12 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3412911C7AF45;
-	Tue,  8 Sep 2026 11:44:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1788860647; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=4UL0rI1qhKgbhnyOjA0R1BAuU9vhQ7hOWSOXb/t/2aA=;
-	b=Z5LV5O8ZFgRnjS/RpwyUYjtTADG77FnFreY9PgyxcuABpZdY3pbarNlNG4/RqisoO0smmT
-	Q8n/4e+2QUBr8o7fmJwuNz+TAwYO8DGJ2eMYPHZpUPtgMXgjmTJVW9XR5n5eNUZcubrwm9
-	eJ8OHeRnlQqK5s1Q3mtmFuP3OCHLmsiZGTRevK4QW0vJ3dyZDzTBkPfema5Pg1+1cO+/Ga
-	KNUfhKXE2F8wK9nr1z1IESPdxDO2BpaMAA11p6mlJ4ZewfYKGDzJBzUDr17IuuT2rNSTUi
-	gtjYX6IKVNMyGWaMj+FMvuzCkBFWleaUfjRYfPQtuKlEWn60ClbrjUofbJSuWQ==
-From: "Miguel Gazquez (Schneider Electric)" <miguel.gazquez@bootlin.com>
-Date: Tue, 08 Sep 2026 11:43:59 +0200
-Subject: [PATCH 6.12.y v2] tcp: clear sock_ops cb flags before
- force-closing a child socket
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="i1XKcynH"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=/ZYMYmpgg2XO2vAXyids1UUAianNNzROZUceYBbtSIE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788860900; v=1; x=1789465700;
+ b=i1XKcynHmMUe8EgY2eXn36Idv5ukbAVndYr1DqCBO6UgOZLgQ+PBSnMsQz6dWbHtFD1s+oGI
+ eYm+O+hI5qyjekJ7JofO9LS9mOpd95+t1kODWgEakarHd4I0g34d/y8WEDQTaXO0tXg6wpfl86F
+ xPkj0QlZul2XiIcQK9jLdlFE=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 41922c109361a687;
+	Tue, 08 Sep 2026 09:48:10 +0000
+X-Mizu-Trace-ID: 41922c109361a687
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <e0249bc4-c14d-4df3-b798-bc6fb06ae436@linux.dev>
+Date: Tue, 8 Sep 2026 15:18:04 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260908-cve-2026-74268-v2-1-3f81ea487415@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3WNwQ6CMBBEf4Xs2SW0KEVO/ofhAMsia7Q1LTYSw
- r8LePb4JjPzZgjshQNUyQyeowRxdgV9SICGxt4YpVsZdKaL7JwZpMi4AZqjLkpUbIw6EeVMDOv
- o5bmXz354hSJVOp2g/uXh3d6Zxu1taw4SRuen3RzV3v8niQoVUkPc5GVn+ja/tM6ND7EpuSfUy
- 7J8ASngnFvIAAAA
-X-Change-ID: 20260907-cve-2026-74268-1e7715cc3ece
-To: stable@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- David Ahern <dsahern@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Lawrence Brakmo <brakmo@fb.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- Sechang Lim <rhkrqnwk98@gmail.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, 
- Kuniyuki Iwashima <kuniyu@google.com>, Sasha Levin <sashal@kernel.org>, 
- "Miguel Gazquez (Schneider Electric)" <miguel.gazquez@bootlin.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788860641; l=4928;
- i=miguel.gazquez@bootlin.com; s=20250708; h=from:subject:message-id;
- bh=EZy3Ctcpk/9jzcS9g2UJ49fwPzeSX4XCW9l/AbD7+Zo=;
- b=AIeKqALHtIzuSXRgSbu3RxEzHr9F3FRqCV7zQvUYv1rLlpZ+l7LHXy2/MGvezcm7tH4kAiOWE
- UxYEOkmsyXPAGBTqOaJCFqTFzycMYUaMiKV/7XjgG7sFzE+dri7x4RN
-X-Developer-Key: i=miguel.gazquez@bootlin.com; a=ed25519;
- pk=k/2KI9jkmayaF0ghZ8QYUH9Wm/kFHDhl8QoZ0RHbr4w=
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Subject: Re: [RFC bpf-next 3/6] bpf: support low-32 subreg scalar linking for
+ zero-extending movs
+To: Eduard Zingerman <eddyz87@gmail.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260814231945.3884596-1-vineet.gupta@linux.dev>
+ <20260814231945.3884596-4-vineet.gupta@linux.dev>
+ <04238b5fe022a851b8e1fad0af03dd45c15faf7c.camel@gmail.com>
+Content-Language: en-US
+In-Reply-To: <04238b5fe022a851b8e1fad0af03dd45c15faf7c.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-From: Sechang Lim <rhkrqnwk98@gmail.com>
+On 8/19/26 9:09 AM, Eduard Zingerman wrote:
+> On Fri, 2026-08-14 at 16:19 -0700, Vineet Gupta wrote:
+>> Problem
+>> =======
+>> Currently register equality tracking and propagation only works for full
+>> 64-bits (with additional constant offset). It is missing the
+>> relationship: "these two regs share only their low 32-bits".
+>>
+>> An illustrative snippet:
+>>
+>>>   r6 = ...                    /* full 64-bit unknown */
+>>>   w7 = w6                     /* 32-bit zero-extend mov from wide src */
+>>>   if w6 != 0 goto .Lxx        /* branch not taken, src narrowed */
+>>>   if w7 == 0 goto .Lok   <-- missing
+>> It works if the register is narrow to begin with, e.g.
+>>>   r6 = *(u32 *)(...)
+>> Rephrased in verifier speak:
+>>
+>> The linked-scalar equality relation sync_linked_regs() maintains is full
+>> 64-bit only; there is no subregister (low-32) equality link.
+>> A 32-bit mov (w1 = w2) is therefore either promoted to a full-64-bit link
+>> when the source is provably u32, or the link is dropped entirely when the
+>> wider source has unknown high bits. A later narrowing of the source to its
+>> low 32 bits never reaches dst, causing safe programs to be rejected. Note that
+>> the ADD_CONST32 machinery only applies to += const offset, not to equality.
+>>
+>> This was seen with bpf-gcc codegen that tends to reuse "w0 = idx" for
+>> "return 0" on an idx==0 path, for bpf_loop callbacks.
+>>
+>> Solution
+>> ========
+>>   - Introduce a low-32-only link, BPF_FLAG_SUBREG_ZEXT, added to BPF_FLAG_LINK.
+>>   - For a wide-source 32-bit mov, mark dst with BPF_FLAG_SUBREG_ZEXT instead
+>>     of clearing it (when src carries a scalar id).
+>>   - On a later low-32 narrowing sync_linked_regs() re-derives such a register as
+>>     the zero-extension of the base's low 32 bits: it copies the base (keeping its
+>>     precise low-32 tnum) and re-applies zext_32_to_64() -- the same helper the
+>>     32-bit mov used -- which is sound even when the source has unknown high bits.
+>>     This is applied only when neither side carries an ADD_CONST delta (the
+>>     combined subreg+delta case is not modeled).
+>>   - Sites that group a subreg-linked register by its scalar id compare ->id
+>>     directly: no masking is needed, since BPF_FLAG_SUBREG_ZEXT lives in
+>>     ->flags.
+>>
+>> The reconstruction copies the base wholesale, so it must put back the fields
+>> that identify reg rather than known_reg -- ->id and, now, the link flag. This
+>> mirrors what the ADD_CONST arm below already does ("Must preserve off and id,
+>> otherwise another sync_linked_regs() will be incorrect"). Dropping the flag
+>> while keeping the ->id would be worse than losing the link: the register would
+>> claim a full 64-bit equality with a base whose high bits are unknown, and the
+>> next sync driven by it would copy a narrowed low-32 value straight onto the
+>> base's high half.
+>>
+>> The link_flags_match() helper added by the previous patch is widened from
+>> BPF_FLAG_ADD_CONST to BPF_FLAG_LINK, so regs_exact() -- and through it
+>> states_maybe_looping() -- discriminates the new flavour as well. regsafe()
+>> additionally checks it early, before the explore_alu_limits and !precise
+>> short-circuits, which the helper's call site below them does not cover.
+>>
+>> Note: the sync_linked_regs() reconstruction is wrapped in an extra block that
+>> looks redundant here. It is a placeholder for the sign-extension counterpart
+>> patch, which turns it into the else arm of an if/else on the link flavour;
+>> keeping it now avoids re-indenting the whole body there.
+>>
+>> Results
+>> =======
+>> Improves verifier tracking (seen in the next selftest).
+>> selftest runs:
+>>   - clang: no new regressions (-mcpu=v3 and v4)
+>>   - bpf-gcc: no new regressions; the measurable selftest pass improvements
+>>     come with the sign-extension counterpart patch.
+>>
+>> Signed-off-by: Vineet Gupta<vineet.gupta@linux.dev>
+>> ---
+> As a general comment, please make the commit messages and comments
+> less verbose.
 
-[ Upstream commit 990348e5bb457697c2f1f7f7b65154a3334d9d2b ]
+To be honest a lot of this commentary was my own, but yeah I get it.
 
-A child socket inherits the listener's bpf_sock_ops_cb_flags via
-sk_clone_lock(). If its setup fails in tcp_v4_syn_recv_sock() /
-tcp_v6_syn_recv_sock(), the child is freed through put_and_exit, where
-inet_csk_prepare_forced_close() drops the socket lock and tcp_done() runs
-without it.
+>> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+>> index d3105b9a9965..ef71999c4695 100644
+>> --- a/kernel/bpf/states.c
+>> +++ b/kernel/bpf/states.c
+>> @@ -490,6 +490,9 @@ static int clean_verifier_state(struct bpf_verifier_env *env,
+>>    *
+>>    * Only meaningful when rold carries an id: the flags are only ever set
+>>    * together with one, so rold->id == 0 implies none of them is set.
+>> + *
+>> + * BPF_FLAG_LINK covers every flavour, so this widens automatically as new
+>> + * ones are added.
+>>    */
+>>   static bool link_flags_match(const struct bpf_reg_state *rold,
+>>   			     const struct bpf_reg_state *rcur)
+>> @@ -497,7 +500,7 @@ static bool link_flags_match(const struct bpf_reg_state *rold,
+>>   	if (!rold->id)
+>>   		return true;
+>>   
+>> -	return (rold->flags & BPF_FLAG_ADD_CONST) == (rcur->flags & BPF_FLAG_ADD_CONST);
+>> +	return (rold->flags & BPF_FLAG_LINK) == (rcur->flags & BPF_FLAG_LINK);
+>>   }
+>>   
+>>   static bool regs_exact(const struct bpf_reg_state *rold,
+>> @@ -554,6 +557,24 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+>>   
+>>   	switch (base_type(rold->type)) {
+>>   	case SCALAR_VALUE:
+>> +		/*
+>> +		 * A low-32-bit-only link has different sync_linked_regs()
+>> +		 * semantics than a full/ADD_CONST equality. check_scalar_ids()
+>> +		 * only ever sees the plain ->id and never looks at ->flags, so a
+>> +		 * mismatch must be rejected explicitly.
+>> +		 * Check it here, before the explore_alu_limits and !precise
+>> +		 * short-circuits below (neither of which tests it). Note the
+>> +		 * pre-existing BPF_FLAG_ADD_CONST check sits after those
+>> +		 * short-circuits instead. The argument for checking early
+>> +		 * applies to it equally, but moving it makes regsafe() stricter
+>> +		 * on a path that predates this series, which is a pruning change
+>> +		 * that wants measuring on its own; it is deliberately left
+>> +		 * alone here.
+>> +		 */
+>> +		if (rold->id &&
+>> +		    (rold->flags & BPF_FLAG_SUBREG_ZEXT) != (rcur->flags & BPF_FLAG_SUBREG_ZEXT))
+>> +			return false;
+>> +
+> Why is this check here? Isn't it covered by the changes in link_flags_match()?
 
-If BPF_SOCK_OPS_STATE_CB_FLAG was inherited, tcp_done() -> tcp_set_state()
-calls tcp_call_bpf(), which expects the lock and trips sock_owned_by_me():
+Removed.
+FWIW it is added to regs_exact and for the other instance it is part of 
+now open-coded link_flags_match call-site.
 
-  WARNING: include/net/sock.h:1799 at tcp_set_state+0x433/0x550
-  RIP: 0010:tcp_set_state+0x433/0x550 include/net/sock.h:1799
-  Call Trace:
-   <IRQ>
-   tcp_done+0xba/0x250 net/ipv4/tcp.c:5095
-   tcp_v4_syn_recv_sock+0x850/0xa50 net/ipv4/tcp_ipv4.c:1787
-   tcp_check_req+0xf30/0x1360 net/ipv4/tcp_minisocks.c:926
-   tcp_v4_rcv+0x1047/0x1b50 net/ipv4/tcp_ipv4.c:2164
-   </IRQ>
+>> @@ -15076,15 +15076,42 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>>   					if (insn->off == 0) {
+>>   						bool is_src_reg_u32 = get_reg_width(src_reg) <= 32;
+>>   
+>> -						if (is_src_reg_u32)
+>> +						/*
+>> +						 * *dst_reg = *src_reg below copies src's id into dst, a
+>> +						 * full 64-bit equality link. That is only sound when src
+>> +						 * fits in u32: a 32-bit mov zero-extends dst, so for a
+>> +						 * wider src the link would let sync_linked_regs()
+>> +						 * propagate dst's [0, U32_MAX] range back onto src's
+>> +						 * unknown high bits. For a wide src drop the full link
+>> +						 * and form a low-32-only BPF_FLAG_SUBREG_ZEXT link instead, so a
+>> +						 * later narrowing of src's low 32 bits still reaches dst.
+>> +						 *
+>> +						 * wide_subreg_link gates that low-32 link and excludes:
+>> +						 *  - a self-mov (w6 = w6): src == dst, nothing to link;
+>> +						 *    forming one would only mint an id and a spurious
+>> +						 *    self-link (inert in sync_linked_regs()).
+>> +						 *  - an ADD_CONST-linked src (rX = base + K):
+>> +						 *    assign_scalar_id_before_mov() would clear its
+>> +						 *    base+delta link, and a combined subreg+delta link
+>> +						 *    isn't modeled anyway (sync_linked_regs() skips it).
+>> +						 * In both cases src is left untouched and dst is cleared,
+>> +						 * as before this feature.
+>> +						 */
+>> +						bool wide_subreg_link = !is_src_reg_u32 &&
+>> +							src_reg != dst_reg &&
+>> +							!(src_reg->flags & BPF_FLAG_ADD_CONST);
+> Why checking `!(src_reg->flags & BPF_FLAG_ADD_CONST)`?
+> assign_scalar_id_before_mov resets() src_reg->flags and assigns
+> a fresh src_reg->id when `src_reg->flags & BPF_FLAG_ADD_CONST`.
+> The existing code already breaks ADD_CONST32 relationship for src
+> on mov, let's be symmetric here unless there is a good reason not to.
 
-The child is freed before it is ever established, so it should run no
-sock_ops callback. Clear its cb flags in inet_csk_prepare_for_destroy_sock(),
-the common point for the IPv4, IPv6 and chtls forced-close paths and for the
-MPTCP ->syn_recv_sock() failure path (dispose_child), which reaches tcp_done()
-on a child that was never established too.
+And this is what took me a while to unpack and reply.
+I was struggling with the *symmetry* of rule leading to *asymmetry* of 
+the outcomes. So let me jolt it down for posterity but mainly to make 
+sure I'm getting this right.
 
-Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Fixes: d44874910a26 ("bpf: Add BPF_SOCK_OPS_STATE_CB")
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://patch.msgid.link/20260611092923.1895982-1-rhkrqnwk98@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Let's take a simple case with narrow and wide variants (the wide variant 
+is also added the patch for documentation of behavior). It is also 
+annotated with the 3 behaviors: pre-series, RFC and v2 (with your 
+suggestion above)
 
-[ Moved inet_csk_prepare_for_destroy_sock() to inet_connection_sock.c due to header dependency,
-  Added a guard arount the call to tcp_clear_sock_ops_cb_flags to avoid
-  calling it for DDCP sockets.]
+Case A — narrow source
 
-Signed-off-by: Miguel Gazquez (Schneider Electric) <miguel.gazquez@bootlin.com>
----
-Changes in v2:
-- Added guard around the call to tcp_clear_sock_ops_cb_flags to only
-  call it for TCP socket.
-- Link to v1: https://patch.msgid.link/20260907-cve-2026-74268-v1-1-cacea38d7fb3@bootlin.com
----
- include/net/inet_connection_sock.h | 8 +-------
- include/net/tcp.h                  | 9 +++++++++
- net/ipv4/inet_connection_sock.c    | 9 +++++++++
- 3 files changed, 19 insertions(+), 7 deletions(-)
+       w6 = w0;        /* r6 narrow, [0, U32_MAX]                  */
+       r5 = r6;        /* r5, r6 linked, id X                      */
+       w5 += 3;        /* alu32 add -> ADD_CONST_32, delta 3       */
+       w7 = w5;        /* is_src_reg_u32 == true                   */
+               /* pre-series: assign_scalar_id_before_mov() runs ->        */
+               /*             r5 loses id X + delta, gets fresh id Y;      */
+               /*             dst not cleared -> r7 shares id Y (full link)*/
+               /* RFC:        identical (wide_subreg_link needs !u32)      */
+               /* v2:         identical (subreg_link needs !u32)           */
 
-diff --git a/include/net/inet_connection_sock.h b/include/net/inet_connection_sock.h
-index bcc138ff087b..534f4fafad42 100644
---- a/include/net/inet_connection_sock.h
-+++ b/include/net/inet_connection_sock.h
-@@ -296,14 +296,8 @@ reqsk_timeout(struct request_sock *req, unsigned long max_timeout)
- 	return (unsigned long)min_t(u64, timeout, max_timeout);
- }
- 
--static inline void inet_csk_prepare_for_destroy_sock(struct sock *sk)
--{
--	/* The below has to be done to allow calling inet_csk_destroy_sock */
--	sock_set_flag(sk, SOCK_DEAD);
--	this_cpu_inc(*sk->sk_prot->orphan_count);
--}
--
- void inet_csk_destroy_sock(struct sock *sk);
-+void inet_csk_prepare_for_destroy_sock(struct sock *sk);
- void inet_csk_prepare_forced_close(struct sock *sk);
- 
- /*
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 1cc25e0b3bde..c472c1cdd3b8 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -2702,6 +2702,11 @@ static inline int tcp_call_bpf_3arg(struct sock *sk, int op, u32 arg1, u32 arg2,
- 	return tcp_call_bpf(sk, op, 3, args);
- }
- 
-+static inline void tcp_clear_sock_ops_cb_flags(struct sock *sk)
-+{
-+	tcp_sk(sk)->bpf_sock_ops_cb_flags = 0;
-+}
-+
- #else
- static inline int tcp_call_bpf(struct sock *sk, int op, u32 nargs, u32 *args)
- {
-@@ -2719,6 +2724,10 @@ static inline int tcp_call_bpf_3arg(struct sock *sk, int op, u32 arg1, u32 arg2,
- 	return -EPERM;
- }
- 
-+static inline void tcp_clear_sock_ops_cb_flags(struct sock *sk)
-+{
-+}
-+
- #endif
- 
- static inline u32 tcp_timeout_init(struct sock *sk)
-diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
-index 91dcdb7567ac..117a424d1fee 100644
---- a/net/ipv4/inet_connection_sock.c
-+++ b/net/ipv4/inet_connection_sock.c
-@@ -1315,6 +1315,15 @@ void inet_csk_destroy_sock(struct sock *sk)
- }
- EXPORT_SYMBOL(inet_csk_destroy_sock);
- 
-+void inet_csk_prepare_for_destroy_sock(struct sock *sk)
-+{
-+	/* The below has to be done to allow calling inet_csk_destroy_sock */
-+	if (sk->sk_protocol == IPPROTO_TCP)
-+		tcp_clear_sock_ops_cb_flags(sk);
-+	sock_set_flag(sk, SOCK_DEAD);
-+	this_cpu_inc(*sk->sk_prot->orphan_count);
-+}
-+
- /* This function allows to force a closure of a socket after the call to
-  * tcp/dccp_create_openreq_child().
-  */
+Case B — wide source
 
----
-base-commit: 064531c7e30cd67b79c0c694ac97f00c7796f4d6
-change-id: 20260907-cve-2026-74268-1e7715cc3ece
+       r6 = r0;        /* r6 = full 64-bit unknown                 */
+       r5 = r6;        /* r5, r6 linked, id X                      */
+       r5 += 3;        /* alu64 add -> ADD_CONST_64, delta 3       */
+       w7 = w5;        /* is_src_reg_u32 == false                  */
+               /* pre-series: assign not called -> r5 keeps id X + delta 3 */
+               /*             !u32 -> clear_scalar_id(r7): r7 unlinked     */
+               /* RFC:        wide_subreg_link false, because src is       */
+               /*             ADD_CONST -> identical to pre-series         */
+               /* v2:         subreg_link true -> assign runs ->           */
+               /*             r5 loses id X + delta, gets fresh id Y;      */
+               /*             r7 gets id Y + SUBREG_ZEXT                   */
 
-Best regards,
---  
-Miguel Gazquez (Schneider Electric) <miguel.gazquez@bootlin.com>
+
+So the symmetry is to allow ADD_CONST32 to call 
+assign_scalar_id_before_mov () even in the new regime.
+
+This does cause a behavior change for case B: before v2, r5 retained 
+ADD_CONST32, r7 is unlinked; with v2, r5 looses the delta relationship, 
+r7 is linked to r5.
+
+I'm adding this exact test to capture the behavior.
+
+Please shout if anything's asmiss.
+
+> By the way, does assign_scalar_id_before_mov() need to handle
+> BPF_FLAG_SUBREG_ZEXT? It appears that it is fine to share id
+> if `src_reg->flags & BPF_FLAG_SUBREG_ZEXT`,
+
+Yes.
+
+> would be nice to drop a (short) comment there.
+
+This ?
+
+         /*
+          * The verifier is processing rX = rY insn and
+          * rY->id has special linked register already.
+          * Cleared it, since multiple rX += const are not supported.
+          * A ->subreg link can be shared: it describes src's own relationship
+          * to the set, not a delta to unwind.
+          */
+
+
+>> +
+>> +						if (is_src_reg_u32 || wide_subreg_link)
+>>   							assign_scalar_id_before_mov(env, src_reg);
+>>   						*dst_reg = *src_reg;
+>> -						/* Make sure ID is cleared if src_reg is not in u32
+>> -						 * range otherwise dst_reg min/max could be incorrectly
+>> -						 * propagated into src_reg by sync_linked_regs()
+>> -						 */
+>> -						if (!is_src_reg_u32)
+>> -							clear_scalar_id(dst_reg);
+>> +						if (!is_src_reg_u32) {
+>> +							if (wide_subreg_link && src_reg->id) {
+>> +								/* ->id already copied above */
+>> +								dst_reg->flags |= BPF_FLAG_SUBREG_ZEXT;
+>> +							} else {
+>> +								clear_scalar_id(dst_reg);
+>> +							}
+>> +						}
+> Nit: I'd avoid excessive indentation:
+
+OK, fixed
+
+>> @@ -15953,6 +15980,52 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+>>   			continue;
+>>   		if (reg->id != known_reg->id)
+>>   			continue;
+>> +		/*
+>> +		 * A low-32 linked register shares only the base's low 32 bits;
+>> +		 * the flag says how its high bits are derived. For
+>> +		 * BPF_FLAG_SUBREG_ZEXT they are zero (32-bit zero-extending mov).
+>> +		 * Rebuild it from known_reg's low 32 bits accordingly, but only
+>> +		 * when neither side carries an ADD_CONST delta -- with a delta
+>> +		 * the low bits differ from the base by that delta and the combined
+>> +		 * subreg+ADD_CONST reconstruction isn't modeled here, so leave reg
+>> +		 * unchanged (sound, just less precise).
+>> +		 */
+>> +		if (reg->flags & BPF_FLAG_SUBREG_ZEXT) {
+>> +			if (!((reg->flags | known_reg->flags) & BPF_FLAG_ADD_CONST)) {
+>> +				{
+>> +					u32 saved_id = reg->id;
+> Right above this hunk reg->id == known_reg->id relationship is already
+> established, why is saved_id necessary?
+
+Right, not needed.
+
+>> +					u8 saved_subreg = reg->flags & BPF_FLAG_SUBREG_ZEXT;
+>> +
+>> +					/*
+>> +					 * reg = zext32(known_reg): its low 32 bits come from
+>> +					 * the base and its high 32 are zero. Rather than
+>> +					 * rebuild the value by hand, copy the base (keeping
+>> +					 * its precise low-32 tnum) and re-clear the high half
+>> +					 * with the same zext_32_to_64() the 32-bit
+>> +					 * zero-extending mov used -- the zero high half is a
+>> +					 * fallout of it, so no dedicated reconstruction is
+>> +					 * needed.
+>> +					 */
+>> +					*reg = *known_reg;
+>> +					reg->id = saved_id;
+>> +					reg->flags = (reg->flags & ~BPF_FLAG_SUBREG_ZEXT) | saved_subreg;
+> This would look much simpler with bitfields.
+
+Yep.
+
+>> +					zext_32_to_64(reg);
+>> +					reg_bounds_sync(reg);
+>> +				}
+>> +				if (e->is_reg)
+>> +					mark_reg_scratched(env, e->regno);
+>> +				else
+>> +					mark_stack_slot_scratched(env, e->spi);
+>> +			}
+>> +			continue;
+>> +		}
+>> +		/*
+>> +		 * Dest-driven direction (known_reg is subreg-linked, reg is not):
+>> +		 * copying known_reg's low-32-only state into a full register would
+>> +		 * be unsound, so leave reg unchanged.
+>> +		 */
+>> +		if (known_reg->flags & BPF_FLAG_SUBREG_ZEXT)
+>> +			continue;
+>>   		/*
+>>   		 * Skip mixed 32/64-bit links: the delta relationship doesn't
+>>   		 * hold across different ALU widths.
 
