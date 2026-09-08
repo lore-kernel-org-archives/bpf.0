@@ -1,276 +1,273 @@
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E6F54E80C4
-	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 23:20:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 120922E4257
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 23:20:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.140
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788909610; cv=pass; b=hcslrzeD7pLY/2ALAcC1mP/MrhMdMeNY9TOkl8293ebywC2Tp+vY/CoFWMC0rqLJb/zsi293VCIGgsZz2RXtLaIUdueazeCpd0tasCXQAezq49WUyzqBPIWyBQPCh8ZkvhF9WCHRT3forRxENFyHR7jxfyUh77Ng2gcHtWH6ce8=
+	t=1788909622; cv=pass; b=KureE5707dV37eRdCQkJDqQiARcQn07UWV7W94L/ZotnqrBTCv3V4qJsfRANx2Em0aWnYOUhF587Awvjs56prJYXZgwdAu8EReUM25vn2+MFzmMTOH1wsagJXztlDrm6CM6UqGYSBit4bXnbwkI9/fmG3pA4VuqunazJSdWoGE4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788909610; c=relaxed/simple;
-	bh=BwDbGyznSdFukCRXjgObPw7cGoXwjqQHpB0ltFjAKXs=;
+	s=arc-20240116; t=1788909622; c=relaxed/simple;
+	bh=0Nrc3/DTkgBOEhhTRfAXx65ByE3knApEhzU0G4j2nL0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xhp6aEvmhuGLyAmaJFTYA7jil4gxd3Iq/R8b0+GkAC0KY/VlHLCADdD8usjSTSP4wnCgS55E99lnep53wzHPZ5SvHljim3G85YVMyIjBnAxybeikKGRdZWoUf7hg4q5ts/JijEnmM3oihVq+7z6zgEa6Yckm0iJoXBfCpSYWL78=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Gd87nDEK; arc=pass smtp.client-ip=209.85.128.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	 To:Cc:Content-Type; b=O3AkGN3/xVErJ3K2a8+wMSa2zayxbzDtAyvdKB0cKIxXiOhVh12ZH39MAjwiyZ3Qnc/92vhdurSf+5qLiMIYXBTAW04D4eYGWOJ6fs/D88lhuJb2773QES2K0IwhU8qvIdDx1JkjS4Qr+uEDb35cijbVhpR9muNgVbLMUix2omU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bYHtU82K; arc=pass smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Gd87nDEK"
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-867a943b149so83303917b3.1
-        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 16:20:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788909607; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bYHtU82K"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747ee1f9bso4815415ad.3
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 16:20:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788909620; cv=none;
         d=google.com; s=arc-20260327;
-        b=JPN7rNbois+B2NIQR6DeGxvWcyYNHL89sveYB7SblhLpnIvsC9MCgDgj5C5kZqoFxc
-         mm/xXcpzpeZuDqv2nH4fXQPs/meNs6WSefM0NGGS5vsBanMDWI6J71ehTzFSDZ9N2VbD
-         /m0KMU0HF+Fokn7xCxc1iMcFqfx2we1tALw9VBOvwtJIDEL7i4AOcXyFGAB34I0QJQzu
-         +lcBoxr4sr53HKbKjvKc47YJHCr/caFa8afjSmYJGU11Xy5VYxmqIM27ipECEumsbOal
-         KzqWRmmXNsNyVWzLPegovxzkcxEN7zhZ81CIdr/uiV+eHHpxNoEdgZE62mKawdLt6RDA
-         twMQ==
+        b=kQ/J2AI94wwVbeXytw2Bt52q9ctNV7FObZJeioFsgq9JCdfvkCWoPUNJU/TZE8uAiT
+         qrMPt9nM8Y3WwIah/SDQ++6CS+ruthU3km7WF9vZf0lsH3angLytPbsb66kDMbSppUI5
+         3tRDnggCBs6Fk2J55bKcF5NF717g0GrTWsZRJ0ap1ju0NMYr3N3zuy6ASr1/Iuq/TzTR
+         3NwtubAojEEFNbz87h9m0HnCWAt5C/AKCh1fa0o+EpLTcd08Af0JhGGGtncm4EJDwCvj
+         N8d8mJjaNivHVrBRZpgAEV/YOBIp3aLlkD81QBcDylLKkTri8Kw3PT7X5LkTovisAtqj
+         FApw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=26FP9kIUNsB+7HarEjMuFZhQLKe6YlOhbHQM1Yvl7Vo=;
-        fh=JUxPQ9G84apGdqsrDHlxyzhcHqRlwPX1mmt0jfs7mqU=;
-        b=j4fWk6fv5DHbyLypCzM56wm496Su+r1vSSaoFWW8YaDXwOeYLO3J06akgC8b50fnkV
-         vMbVbnGyxiHfZ3MJBhQNOJGm7ihbk2clXJuFk6Rge+xSt4PMjFBLMZYpza23JF1HwBUl
-         ZcRyK0wPyn3/kA+WWvwKKB52AvjMTztPrCBtTAy7pudImgK2tkEGQmGeNQQWSugWLAuP
-         uqTookemWJz6cHAEG7LJnASJIuG7eFCyZBEpx1VnLIWedpMadKyYJdto7L74U8gbnWSu
-         qAfeikPIbDV5Be/Dnv2QU1T80ttRAEnC5xZfrby5rpTCm9KHyQHYTmQdKNcLLGImTCB9
-         be+Q==;
+        bh=UvsqcViZfrOHn4UJwhQEyvVX3zrtGwT7jq8HnfOLPfo=;
+        fh=zec2PoaZqj1ukV8eqXgHC3JJYWl31/+MogOI1SQCJ+A=;
+        b=IGYPKyNp/ReFQiFC0F4iYnkHXKfZdOMsGLmXCaorBPAqbMAty4pxiXbbtWf44id4/J
+         et3uDCqvpMtQrCKOX2au49YgaK0ZTevBwHxsuEKgjbD3ZRmHJFvS8HQGknU9ji1V6Ioi
+         c9a441Gs0oTNRK57sV4HlsLYMTPLeWhesKVlYutREFJFIQ1Oa+f3BLup0rXVx8FCced6
+         bM+JDbC2czITuSwcG9K8NMP0QafRjFNp4ZTuod5ERtGFk9OrYFpjK/pHmkWDbGb9iADc
+         /VTuztCMukUQ1VtwSlryNzrVzQDPtFsUKPZFVZ7NSoYNe7MnXhQtbiFTDfPVl5IUuiZp
+         6a/w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788909607; x=1789514407; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1788909620; x=1789514420; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=26FP9kIUNsB+7HarEjMuFZhQLKe6YlOhbHQM1Yvl7Vo=;
-        b=Gd87nDEKouQTEcntjHj+rbyLzYBFLPHGRt+kodv7wqEayzfAS9Nsn1gLFF2XZbMLYH
-         22trZ/vw9HXCz0ukzi74k1M6rtXLIyYeSXtP64r8JZsm1k9kPQMN+dwC9RBzJ2XXjj4J
-         id9c8NY5+sKQsjlDCMgchFtSZ+7MJcqO5JcXnIklE6lZV9by44JWxUR8YTbBQZpY8D4t
-         ATbTf8SVN8r328Z/yNITQTu1V+NysGUX6J2AyVeIqegduPjtbyCFiE+bkiOpcTsv32j3
-         PBr2cVzeNnqpANJtJEhK+VN9HT8Wv1VNTojWb8/NjcK/yJkAZ6nrnR1POJj0tnshWQJr
-         dnsA==
+        bh=UvsqcViZfrOHn4UJwhQEyvVX3zrtGwT7jq8HnfOLPfo=;
+        b=bYHtU82Kup6GvVqE94hJeoD7zxleVsWNV1c4gd3m1NxB6PLa48qMkqZfDmADtOaYIK
+         UCmGEpjh+NUr7qvVH0+h5PHCMTSObCofz5xc7UVVklO6K1baL0XOsWDF+C+VV4jX4A23
+         xZ9rhvpte9eFiN8VUS24q2eJR1pWPBtcqmN2NFK5ZnOp4ipvlFPTrlM7HUYx9jmkB9+B
+         JR7DXIfwnQjS6QaP06adpS4i545MCgbSE4CE95Ikx/F467OcN+NCzoEgJo7fVMLQrKNg
+         914iXH2ltb7tdCFpcuHKLnDEsd68uS8P5JniRbLYOxOy4Dm+X/ovVXseuRU/cMYfh9GY
+         vU1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788909607; x=1789514407;
+        d=1e100.net; s=20251104; t=1788909620; x=1789514420;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=26FP9kIUNsB+7HarEjMuFZhQLKe6YlOhbHQM1Yvl7Vo=;
-        b=i0ei5Paft5fjhitk6ZoeDvCnUKqok1f0HAe7k6TS/2OglQ74MWEIGtzjY37/Oq8vcT
-         3Kz01vSRYvb7O0KlalDFYzSoEBPMMy1hZMKeNlF02sGEG50TNU2Fpf3T0WpRnpYpx95X
-         UHXo9yLXR5eVRUu2trkROd0/pZ9xcr/TmeV8S58pd0n1TY4u1OxqsZ5QYR7QX3tPdqu2
-         cLj15+DcFd0ybbmtSAOGA/qQDJbDRGqReU68QUx0ipBOb9Pa9JuqgrQ/b4EVLdds5tRS
-         vm1IcdvXToUW2e2cl0dG/xnV4vPIu7W0oIqvO6+v1YX3rP0XF7/rAn44pX3jnCVqR414
-         kslg==
-X-Gm-Message-State: AFuF++kG6mjoaFrOD4x32TK2Jo/3RCQZCgpWi1oWmab+mM7ifj5yu/ZH
-	5JWxjthKnd9eGFFvBsYTfp5YXWDMFxLHZVKEHOPFdz6ZiuNcyoYDnu0kxtWbWn1ZfgshG+DeQiC
-	1G6QnKycOTc0bOD4uxft9dBw8+ctdwfmuCxsH2zMURQ==
-X-Gm-Gg: AYBFou2Ro/Pwo9Rf3KpBepE6w+aH47VNmF/dQGKH+5rHjwruVeYaVjWyEdOhWSgQ7DF
-	ro2HNAae2uA69Z1fDePstuFKewLFqLjdytsPnSeYGyecqgkGbKT7V+s/rYVPG55Lw7zPrlcL1RU
-	iPJHl2Pk60cLQ5XHOtgSkgPW0rzWm5Y6nrNB5U4Ph1x675pu+PFlRVOu7ezyLRNtgxd+X6lxn6K
-	aLzSso3K+yI+WHaecLxj/hVNpxIfTvq0Ph7mfjrYE/mAuNcK426oqTIsn6pqI9q5lzkED6G5r1k
-	yhL+WZ9gzND0rz3ocJ5TYZmbnzart0e6eZ7dDC+30xDT8nlwa41YV8s=
-X-Received: by 2002:a05:690c:388:b0:873:5bd1:98bf with SMTP id
- 00721157ae682-8735bd19fbdmr94689867b3.49.1788909606864; Tue, 08 Sep 2026
- 16:20:06 -0700 (PDT)
+        bh=UvsqcViZfrOHn4UJwhQEyvVX3zrtGwT7jq8HnfOLPfo=;
+        b=bqu1COMTt9qYbHQ7aXRmXHKdec7ODnzR0WD1Br2fG5D3tsrtrbjRdaEj7GXyCtfSLj
+         u8b7rjAHg7IgET8VBwqXSWgZpMGJSee2wPxND/mT/PNxeI7Aa/UZLEJnVqqZYoH9z48X
+         XC8gSWIF2OVoEhDhJfhYUN870+QwIU8Nr3B7zpQIGo9no7paMC3wpej/wZW8IlF26GbV
+         2K6Q9W9ioRzgkIqwSH3gwejhli6O2tRWcqHdSOz+H04Iwq3QF/yVfTQ7Nnz5lrqCE/tZ
+         S9JV2CFAnKcLXlb1Fj7ucXyUzdpH33db861NehWTHsc5qEqqmD4C9irU26DXojBzQRm4
+         ZtFw==
+X-Forwarded-Encrypted: i=1; AKwUvBwZ8mfzLNKnxh3YTKteaMwl5MYPrHREVE3CmKpo44SuiQq4szlGls/Tr+PwftE7Wvyj5kE=@vger.kernel.org
+X-Gm-Message-State: AFuF++nhODmBWbxxtZ7phTEGnNKQ86NGqo0o3pDhj2kMYHR/zJK6qgzR
+	rWHNGQXW7Xacq5V2QGiI1nsijY3MTlQ1MdZYa5edBLYCIrQD3QNk2TN94W8anMelTSgAuETnIBG
+	mZJaSXnyIeQUzYZrLqmTeigdLBVfGGFI=
+X-Gm-Gg: AYBFou2VUZbabTckENRFZX11JjoUCxmPAf6Ay825UyZ3GL5MymwmUNpu7UdItP5vtQR
+	9gazVLTZNQLQcJEgPH6X8lWLQe3vidrIxKBNKJqEo8mri1Pt9d49D+OIY/VS+R6o9e7iofcQeBx
+	buTlcbVmhy/OI6+eRwX3NgZbmPgffKjsro6aziM5rC52VR8q2QIVohkGMHaqeUu2J5fdv1eQMxV
+	Jo45Iu1jVEW7oNPfO/wsdVN7MUhMyUUda1ALYJ7jQbQQCUXg0ts4ueNKG3hYSeou+5uemVMSJUR
+	fwMljyTkV+aHFYmgANZTDqX5JIGTy6VP28bXSxoetX0JXfxi0hxfLGspFvqgE7Xp7zCO33V97lS
+	G1BigkGtierjAJqyPsda44fcgygTXYhDwmmKXVgIS+wgepoPAnOGH
+X-Received: by 2002:a17:90b:5705:b0:398:9be8:ea66 with SMTP id
+ 98e67ed59e1d1-39bac3f1dc2mr3163325a91.19.1788909620153; Tue, 08 Sep 2026
+ 16:20:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260901183151.16648-1-cenzhang@linux.microsoft.com>
-In-Reply-To: <20260901183151.16648-1-cenzhang@linux.microsoft.com>
-From: Emil Tsalapatis <emil@etsalapatis.com>
-Date: Tue, 8 Sep 2026 19:19:56 -0400
-X-Gm-Features: AcwNN1UfREHp2kMvmYLiVPmJrmYLz8bqciXAdv8jBq1uXxNAjBv_hZQTifzbsuw
-Message-ID: <CABFh=a5iLOEJdPhoaWUhLc0eEqAuhnd83_jJr9MVZZG6gSJAEw@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: Fix non-linear SRH access in bpf_update_srh_state()
-To: "Cen Zhang (Microsoft Security FORGE Labs)" <cenzhang@linux.microsoft.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
-	sdf@fomichev.me, martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org, 
-	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, ihor.solodrai@linux.dev, davem@davemloft.net, 
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
-	m.xhonneux@gmail.com, dlebrun@google.com, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, AutonomousCodeSecurity@microsoft.com, 
-	xmei5@asu.edu, tgopinath@linux.microsoft.com, kys@microsoft.com
+References: <20260819124324.43162-1-adi.sharma@zohomail.in>
+ <CAEf4BzZY6uWdobXVyS1WrdtmRw_SLJsodm7d_c+Bhsw=chpJ+A@mail.gmail.com> <a3314523-7ab6-4f1d-b411-be980b964079@linux.dev>
+In-Reply-To: <a3314523-7ab6-4f1d-b411-be980b964079@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 8 Sep 2026 16:20:05 -0700
+X-Gm-Features: AcwNN1XMWu4LAnaBEd40O4avTCpDLvOPiihFxZCe1gtGo1Ibx6Pmoec1cAuFAzM
+Message-ID: <CAEf4BzYMNTgyEBhfuTKb-Ug_THGyVxbBajE4NRQLtaNerFJdOQ@mail.gmail.com>
+Subject: Re: bpf: Is the nmi_uaccess_okay() check needed for bpf_send_signal_task()?
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: Aditya Sharma <adi.sharma@zohomail.in>, bpf@vger.kernel.org, song@kernel.org, 
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, puranjay@kernel.org, 
+	jolsa@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 1, 2026 at 2:32=E2=80=AFPM Cen Zhang (Microsoft Security FORGE
-Labs) <cenzhang@linux.microsoft.com> wrote:
+On Sun, Aug 30, 2026 at 8:40=E2=80=AFPM Yonghong Song <yonghong.song@linux.=
+dev> wrote:
 >
-> bpf_update_srh_state() locates an SRH with ipv6_find_hdr() and caches
-> skb->data + srhoff in the per-CPU SEG6 BPF state. This assumes that the
-> returned offset is within the skb linear head.
 >
-> That assumption is wrong because ipv6_find_hdr() uses skb_header_pointer(=
+>
+> On 8/21/26 11:21 AM, Andrii Nakryiko wrote:
+> > On Wed, Aug 19, 2026 at 5:44=E2=80=AFAM Aditya Sharma <adi.sharma@zohom=
+ail.in> wrote:
+> >> Hi,
+> >>
+> >> I hit this from a bpf_timer callback that signals a userspace task: th=
+e
+> >> signal was not delivered some of the time. It turned out that
+> >> bpf_send_signal_task() was returning -EPERM depending on which task th=
+e
+> >> softirq happened to interrupt, and the source is this check in
+> >> bpf_send_signal_common():
+> >>
+> >> bpf_trace.c:872:        if (unlikely(task->flags & (PF_KTHREAD | PF_EX=
+ITING)))
+> >> bpf_trace.c:873:                return -EPERM;
+> >> bpf_trace.c:874:        if (unlikely(!nmi_uaccess_okay()))
+> >> bpf_trace.c:875:                return -EPERM;
+> >>
+> >> Is the nmi_uaccess_okay() check necessary in the bpf_send_signal_task(=
 )
-> and can locate an SRH in non-linear data. The direct srh->hdrlen read and
-> the cached SRH pointer can therefore access memory outside the linear are=
-a.
+> >> case?
+> >>
+> >> When commit 6280cf7 ("bpf: Implement bpf_send_signal_task() kfunc")
+> >> made the function take a task, the PF_KTHREAD and is_global_init()
+> >> started testing task, while nmi_uaccess_okay() kept testing current.
+> > Yeah, this is weird, at the very least it should be checking it for
+> > the provided task. But I also am not sure why we have to check this...
+> >
+> > Yonghong, do you remember why this was necessary? Can we just drop this=
+?
 >
-> BUG: KASAN: slab-use-after-free in bpf_update_srh_state+0x1bc/0x200
->  net/core/filter.c:7027 bpf_update_srh_state()
->  bpf_lwt_seg6_action()
->  input_action_end_bpf()
->  seg6_local_input()
->  ipv6_rthdr_rcv()
+> I went through the history.
+> In 5.3: we have bpf_send_signal() helper:
 >
-> Fix this by using seg6_get_srh(), which pulls and validates the complete
-> SRH and reloads its pointer afterwards. Pulling can reallocate skb->head,
-> so refresh the BPF data pointers inside bpf_update_srh_state() immediatel=
-y
-> after the call.
+> BPF_CALL_1(bpf_send_signal, u32, sig)
+> {
+>         ...
+>          /* Similar to bpf_probe_write_user, task needs to be
+>           * in a sound condition and kernel memory access be
+>           * permitted in order to send signal to the current
+>           * task.
+>           */
+>          if (unlikely(current->flags & (PF_KTHREAD | PF_EXITING)))
+>                  return -EPERM;
+>          if (unlikely(uaccess_kernel()))
+>                  return -EPERM;
+>          if (unlikely(!nmi_uaccess_okay()))
+>                  return -EPERM;
+>         ...
+> }
 >
-> For End.DT6, make the inner IPv6 base header linear before removing the
-> outer headers. Pulling only the outer headers can leave the inner header =
-in
-> non-linear data, while ipv6_find_hdr() and the nexthop lookup access it
-> directly. Clear the cached SRH pointer and refresh the BPF data pointers =
-if
-> the pull fails.
->
-> End.B6 and End.B6.Encap can modify or reallocate the skb before a later
-> nexthop lookup returns an error. Rebuild the SRH state regardless of the
-> action result instead of assuming that an error leaves the skb unchanged.
->
-> Fixes: 486cdf21583e ("bpf: add End.DT6 action to bpf_lwt_seg6_action help=
-er")
-> Reported-by: Xiang Mei <xmei5@asu.edu>
-> Signed-off-by: Cen Zhang (Microsoft Security FORGE Labs) <cenzhang@linux.=
-microsoft.com>
-> Assisted-by: Copilot:gpt-5.6-sol
+> nmi_uaccess_okay() is needed for *current* task.
 
-This fix has an issue afaict, commenting inline:
+but why did we have that nmi_uaccess_okay() check in the first
+place?... that seems to be something useful for bpf_probe_read_user(),
+but for sending signals, assuming we have CAP_PERFMON/CAP_BPF, we
+should just allow it.
 
 
-> ---
-> Please queue this fix for stable kernels.
 >
-> Testing:
-> - Static checks only: checkpatch.pl, diff --check and patch replay.
-> - No targeted selftest was added. BPF LWT test-run does not support
->   non-linear skbs, and the existing SEG6 netns test does not create a
->   split inner IPv6 header for End.DT6.
+> In 5.6, bpf_send_signal_thread() is added, but still for the same task,
+> so we still have:
 >
->  net/core/filter.c | 30 ++++++++++++++++--------------
->  1 file changed, 16 insertions(+), 14 deletions(-)
+> static int bpf_send_signal_common(u32 sig, enum pid_type type)
+> {
+>         ...
+>          /* Similar to bpf_probe_write_user, task needs to be
+>           * in a sound condition and kernel memory access be
+>           * permitted in order to send signal to the current
+>           * task.
+>           */
+>          if (unlikely(current->flags & (PF_KTHREAD | PF_EXITING)))
+>                  return -EPERM;
+>          if (unlikely(uaccess_kernel()))
+>                  return -EPERM;
+>          if (unlikely(!nmi_uaccess_okay()))
+>                  return -EPERM;
+>         ...
+> }
 >
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 61940e753552..1dd3a685d1b8 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -7018,15 +7018,16 @@ static void bpf_update_srh_state(struct sk_buff *=
-skb)
->  {
->         struct seg6_bpf_srh_state *srh_state =3D
->                 this_cpu_ptr(&seg6_bpf_srh_states);
-> -       int srhoff =3D 0;
-> +       struct ipv6_sr_hdr *srh;
+> In the current master:
 >
-> -       if (ipv6_find_hdr(skb, &srhoff, IPPROTO_ROUTING, NULL, NULL) < 0)=
- {
-> -               srh_state->srh =3D NULL;
-> -       } else {
-> -               srh_state->srh =3D (struct ipv6_sr_hdr *)(skb->data + srh=
-off);
-> -               srh_state->hdrlen =3D srh_state->srh->hdrlen << 3;
-> -               srh_state->valid =3D true;
-> -       }
-> +       srh =3D seg6_get_srh(skb, 0);
-> +       bpf_compute_data_pointers(skb);
-> +       srh_state->srh =3D srh;
-> +       if (!srh)
-> +               return;
-> +
-> +       srh_state->hdrlen =3D srh->hdrlen << 3;
-> +       srh_state->valid =3D true;
->  }
+> __bpf_kfunc int bpf_send_signal_task(struct task_struct *task, int sig, e=
+num pid_type type,
+>                                       u64 value)
+> {
+>          if (type !=3D PIDTYPE_PID && type !=3D PIDTYPE_TGID)
+>                  return -EINVAL;
 >
->  BPF_CALL_4(bpf_lwt_seg6_action, struct sk_buff *, skb,
-> @@ -7059,15 +7060,18 @@ BPF_CALL_4(bpf_lwt_seg6_action, struct sk_buff *,=
- skb,
+>          return bpf_send_signal_common(sig, type, task, value);
+> }
 >
->                 if (ipv6_find_hdr(skb, &hdroff, IPPROTO_IPV6, NULL, NULL)=
- < 0)
->                         return -EBADMSG;
-> -               if (!pskb_pull(skb, hdroff))
-> +               if (!pskb_may_pull(skb, hdroff + sizeof(struct ipv6hdr)))=
- {
-> +                       srh_state->srh =3D NULL;
-> +                       bpf_compute_data_pointers(skb);
->                         return -EBADMSG;
-> +               }
-> +               __skb_pull(skb, hdroff);
+> static int bpf_send_signal_common(u32 sig, enum pid_type type, struct tas=
+k_struct *task, u64 value)
+> {
+>         ...
+>          /* Similar to bpf_probe_write_user, task needs to be
+>           * in a sound condition and kernel memory access be
+>           * permitted in order to send signal to the current
+>           * task.
+>           */
+>          if (unlikely(task->flags & (PF_KTHREAD | PF_EXITING)))
+>                  return -EPERM;
+>          if (unlikely(!nmi_uaccess_okay()))
+>                  return -EPERM;
+>          /* Task should not be pid=3D1 to avoid kernel panic. */
+>          if (unlikely(is_global_init(task)))
+>                  return -EPERM;
+>         ...
+> }
 >
->                 skb_postpull_rcsum(skb, skb_network_header(skb), hdroff);
->                 skb_reset_network_header(skb);
->                 skb_reset_transport_header(skb);
->                 skb->encapsulation =3D 0;
+> We probably cannot remove
+>          if (unlikely(!nmi_uaccess_okay()))
+>                  return -EPERM;
+> unconditionally. The above 'if' statement should be guarded
+> with *current* task if it is different from parameter "task"
+> since nmi_uaccess_okay() is only for the *current* task.
 >
-> -               bpf_compute_data_pointers(skb);
->                 bpf_update_srh_state(skb);
->                 return seg6_lookup_nexthop(skb, NULL, *(int *)param);
->         case SEG6_LOCAL_ACTION_END_B6:
-> @@ -7075,8 +7079,7 @@ BPF_CALL_4(bpf_lwt_seg6_action, struct sk_buff *, s=
-kb,
->                         return -EBADMSG;
->                 err =3D bpf_push_seg6_encap(skb, BPF_LWT_ENCAP_SEG6_INLIN=
-E,
->                                           param, param_len);
-> -               if (!err)
-> -                       bpf_update_srh_state(skb);
-> +               bpf_update_srh_state(skb);
+> >
+> >> As far as I can tell the path here does no user memory access, so
+> >> there is nothing for the check to guard.
+> >>
+> >> Also, it compiles to true outside x86 (include/asm-generic/tlb.h:26),
+> >> so if it were necessary here the kfunc would be broken on every other
+> >> architecture.
+> >>
+> >> Thus, whether a signal can be sent depends on the caller's context,
+> >> rather than the task it is to be sent to. And at the bpf_timer callbac=
+k,
+> >> we never know deterministically whether the signal would go through,
+> >> or it would get rejected here.
+> >>
+> >> A quick reproducibility test by Claude Opus 5 (the issue I was facing
+> >> from the timer callback context was not reproducible deterministically=
+):
+> >>
+> >> SEC("tp_btf/workqueue_execute_start")   /* current is a kworker   */
+> >> SEC("tp_btf/sys_enter")                 /* current is a user task */
+> >>
+> >> static __always_inline int probe(void)
+> >> {
+> >> struct task_struct *t;
+> >> int ret;
+> >>
+> >> t =3D bpf_task_from_pid(target_pid);
+> >> if (!t)
+> >>    return -ESRCH;
+> >> /* sig =3D=3D 0: permission check only, nothing is delivered */
+> >> ret =3D bpf_send_signal_task(t, 0, PIDTYPE_TGID, 0);
+> >> bpf_task_release(t);
+> >> return ret;
+> >> }
+> >>
+> >> On bpf-next commit f79066c7 (selftests/bpf: Add tests for a store
+> >> on a fault prone qdisc pointer), x86_64 under qemu:
+> >>
+> >> bpf_send_signal_task() from kworker context : -1  (-EPERM)
+> >> bpf_send_signal_task() from syscall context :  0
+> >>
+> >> Same result on v6.18.29, x86_64, bare metal.
+> >>
+> >> I may be missing the reason for it to be there as well. If this check
+> >> is intentional, what is it protecting in the _task case?
+> >>
+> >> Thanks,
+> >> Aditya Sharma
 >
-
-Here and for the case below, making the SRH state recomputation
-unconditional  can
-cause logic errors. It's only safe to recompute the state if
-bpf_push_seg6_encap()
-actually adds an SRH up front, then fails, because then the header we
-want is the
-very first one.
-
-If we don't add an SRH before calling seg6_get_srh(), it calls
-ipv6_find_hdr() w/o IP6_FH_F_SKIP_RH and
-end up pointing to the first header it finds even if it is a spent
-SRH. That normally doesn't
-matter because the caller should not continue processing after an
-error, but it is still
-inconsistent.
-
-The easy fix on top of this patch is afaict:
-
-1) Track the old length of the skb before the bpf_push_seg6_encap();
-2) in bpf_lwt_seg6_action:
-
-if (new_len !=3D old_len)
-    bpf_update_srh_state(skb);
-
-instead of unconditional.
-
-wdyt?
-
-pw-bot: cr
-
->                 return err;
->         case SEG6_LOCAL_ACTION_END_B6_ENCAP:
-> @@ -7084,8 +7087,7 @@ BPF_CALL_4(bpf_lwt_seg6_action, struct sk_buff *, s=
-kb,
->                         return -EBADMSG;
->                 err =3D bpf_push_seg6_encap(skb, BPF_LWT_ENCAP_SEG6,
->                                           param, param_len);
-> -               if (!err)
-> -                       bpf_update_srh_state(skb);
-> +               bpf_update_srh_state(skb);
->
->                 return err;
->         default:
->
-> base-commit: 28d75dd3eb60812b3a87cbdf0d52c42f51b28a78
-> --
-> 2.55.0
