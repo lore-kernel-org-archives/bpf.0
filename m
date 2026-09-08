@@ -1,36 +1,36 @@
-Received: from mta1.migadu.com (out-140.mta1.migadu.com [95.215.58.140])
+Received: from mta0.migadu.com (out-91.mta0.migadu.com [91.218.175.91])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD303149DF1
-	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 04:26:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17B7368D4F
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 04:27:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788841609; cv=none; b=dLDxbMfc4MkDFj/kh6YHelPUf5StEDui9fk9OZEMkd8P7RaDOGg4xphO3XPDJ8mj0ISyyXJkVONhQOcYuJe4AXb3+UIk0ZpBK1Ocvpf2BjBUHK2jIpzvjkMXqpYwOa/tcAoCvE0Pvhx0BqcxHWr/lrFOGcY/e0pfD/iPaW8VZuA=
+	t=1788841661; cv=none; b=WGy+BLe78cqKgFmgT5O68aTpFad5YtdhK9GTbIGTekv0s7EZLWt3GNzCIXX0FodB3CUHB41o2QfV5HPweWqypQ+hXwfLZ+fUREsvxINf6vUVtsM97wP/3aNJvmIb76LsGW8X4nYE6b4o6flgoYRfiHoG446MhRwUf4CzWL17oIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788841609; c=relaxed/simple;
-	bh=dqEE4SfDKYgiRz5WSBLE3flWNa2QhcOV6wIFz68Is60=;
+	s=arc-20240116; t=1788841661; c=relaxed/simple;
+	bh=m6V2RF6ABpdBUXt/JwI0k+c2c46Fz5EHr4ua9/GihMY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dZMOP2kvifRGthYntTt/AmDX5iR5V1M4QZdf6U+7haAJ6pVZSfFyrQ08BSb8jOOZvyuluMe4KOdx/I25sJfaJ6JV+ZB4mRNOxwFJFiN0fGVzRHfqaAmcadmdXpCswIY76o15at+14SWhTTd9+y+rEVx1VfR6TccdqqmfFwnsRGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Vu0vKb26; arc=none smtp.client-ip=95.215.58.140
+	 In-Reply-To:Content-Type; b=etHv/gNVjFsP6fxYXtZpf9p4033Yq+s6eq82IEoCsfFCyueHU5FOaG7/ArMdBsSSQWIK/5fJM6cqKxJ9en+E9lVFieh9LUnrRx8DMOXaB/Y44Wb57BYJXSC0TeTnSUS4eULiXrJiVxKFvYKqfbs/m/sGyeLcDPZsBpEB495UeOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qwRGGt42; arc=none smtp.client-ip=91.218.175.91
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Vu0vKb26"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qwRGGt42"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=dqEE4SfDKYgiRz5WSBLE3flWNa2QhcOV6wIFz68Is60=;
+DKIM-Signature: a=rsa-sha256; bh=m6V2RF6ABpdBUXt/JwI0k+c2c46Fz5EHr4ua9/GihMY=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788841605; v=1; x=1789446405;
- b=Vu0vKb26KHsFTT1il85d6LCjvLP4AnYvetB4HE/BGcczD6ObVSZY6BbwnknYbny7M9P+lHx4
- SbaoVtx/YOjIc35K9lRzLOr6soutIEpEB6EGHTW+m5+ZUS/AN90V/2Ao42mxI3MU+oUvQq4QUvU
- uAN2I8VnIGRdAkaTOngIlFFE=
+ t=1788841656; v=1; x=1789446456;
+ b=qwRGGt42YKfY0uRqd5jQUC7BJt5HsownzDvmtNmq+KvPwlIthALtKc872LF+UWYn53HzqiAs
+ FVWo85DMAr+p1dzKYGDaaXDHU2E6EctzyuLpsbLDD57PWalHpw8Drb3zKWXsefoiqn7Of/9c085
+ N6mOTSM6aZu/zSdBUeqjWHjk=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 3f6d3b3f5b0ea20e;
-	Tue, 08 Sep 2026 04:26:45 +0000
-X-Mizu-Trace-ID: 3f6d3b3f5b0ea20e
+Received: by smtp.migadu.com with ESMTPS id e2deb18ee98ccc6d;
+	Tue, 08 Sep 2026 04:27:36 +0000
+X-Mizu-Trace-ID: e2deb18ee98ccc6d
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <2a145c4d-f665-402c-9929-9b2a0fefdad2@linux.dev>
-Date: Mon, 7 Sep 2026 21:26:43 -0700
+Message-ID: <cd3251c3-b2f9-4254-8e33-42b80b4a9f49@linux.dev>
+Date: Mon, 7 Sep 2026 21:27:34 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,111 +38,86 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 06/12] bpf: Add a JIT helper for the outgoing
- stack of kfunc calls
+Subject: Re: [PATCH bpf-next 07/12] bpf, x86: Place kfunc arguments per the
+ SysV calling convention
 Content-Language: en-GB
 To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
 References: <20260904050957.3976119-1-yonghong.song@linux.dev>
- <20260904051028.3979694-1-yonghong.song@linux.dev>
- <20260904052505.DF05D1F00AC4@smtp.kernel.org>
+ <20260904051033.3979978-1-yonghong.song@linux.dev>
+ <20260904053658.335DE1F00A3F@smtp.kernel.org>
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260904052505.DF05D1F00AC4@smtp.kernel.org>
+In-Reply-To: <20260904053658.335DE1F00A3F@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
 
-On 9/3/26 10:25 PM, sashiko-bot@kernel.org wrote:
+On 9/3/26 10:36 PM, sashiko-bot@kernel.org wrote:
 > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [High] An out-of-bounds write occurs in `btf_prepare_func_args` when processing a BPF subprogram with arguments that consume 11 slots followed by a final 16-byte struct argument.
+> - [Medium] emit_kfunc_args() and bpf_jit_kfunc_stack_slots() silently ignore kfunc_arg_layout() errors for kfuncs requiring more than 12 argument eightbytes, leading to miscompiled BPF programs with incorrect argument placements.
 > --
 >
-> commit d1c6556d5925344f81e73a6b534000285b7cee65
+> commit f5201014b232baff8f1ba36c0b74d2c3e1e5ccf9
 > Author: Yonghong Song <yonghong.song@linux.dev>
 >
-> bpf: Support by-value struct arguments up to 16 bytes
+> bpf, x86: Place kfunc arguments per the SysV calling convention
 >
-> This commit adds support for global functions taking a struct or union by
-> value up to 16 bytes. It handles structs passed in consecutive registers
-> or split across registers and the stack, computing the necessary argument
-> slots. The stack argument count is then recomputed based on the slots
-> consumed to ensure proper JIT support checks.
+> This commit updates the BPF JIT on x86 to conform to the SysV calling
+> convention when placing kfunc arguments. It adjusts argument placements
+> before a kfunc call to account for differing rules between BPF and SysV
+> regarding stack and register usage. The outgoing argument area is sized
+> to support both conventions.
 >
->> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
->> index 22828b489b778..dbd64cee1b27a 100644
->> --- a/kernel/bpf/btf.c
->> +++ b/kernel/bpf/btf.c
->> @@ -8103,6 +8103,14 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
->>   	for (i = 0, slots_used = 0; i < nargs; i++) {
->>   		u32 tags = 0;
->>   
->> +		if (slots_used >= MAX_BPF_FUNC_ARGS) {
->> +			if (!is_global)
->> +				return -EINVAL;
->> +			bpf_log(log, "Arguments of %s() need more than %d argument slots\n",
->> +				tname, MAX_BPF_FUNC_ARGS);
->> +			return -EINVAL;
->> +		}
->> +
->>   		err = btf_scan_decl_tags(env, btf, fn_t, i, is_global, &tags);
->>   		if (err)
->>   			return err;
+>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>> --- a/arch/x86/net/bpf_jit_comp.c
+>> +++ b/arch/x86/net/bpf_jit_comp.c
 > [ ... ]
->
->> @@ -8231,6 +8239,31 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
->>   			sub->args[slots_used++].arg_type = ARG_ANYTHING;
->>   			continue;
->>   		}
->> +		if (btf_type_is_struct(t)) {
->> +			u32 nslots;
+>> +static int emit_kfunc_args(const struct btf_func_model *fm, u8 **pprog,
+>> +			   s32 stack_base)
+>> +{
+>> +	u8 *prog = *pprog, *start = prog;
+>> +	bool done[MAX_BPF_FUNC_ARGS] = {};
+>> +	u8 pos[MAX_BPF_FUNC_ARGS];
+>> +	int i, j, n, todo = 0, parked = -1;
 >> +
->> +			if (!t->size || t->size > 2 * BPF_REG_SIZE) {
->> +				if (!is_global)
->> +					return -EINVAL;
->> +				bpf_log(log,
->> +					"Arg#%d type %s in %s() has size %u, only 1 to %d bytes "
->> +					"can be passed by value\n",
->> +					i, btf_type_str(t), tname, t->size, 2 * BPF_REG_SIZE);
->> +				return -EINVAL;
->> +			}
->> +			if (!btf_struct_is_composed_of(env, btf, t, BTF_MEMBER_SCALAR)) {
->> +				if (!is_global)
->> +					return -EINVAL;
->> +				bpf_log(log, "Arg#%d type %s in %s() is not composed of scalars\n",
->> +					i, btf_type_str(t), tname);
->> +				return -EINVAL;
->> +			}
->> +
->> +			nslots = (t->size + BPF_REG_SIZE - 1) / BPF_REG_SIZE;
->> +			while (nslots--)
->> +				sub->args[slots_used++].arg_type = ARG_ANYTHING;
-> [Severity: High]
-> Does this loop write beyond the end of the sub->args[] array?
+>> +	n = kfunc_arg_layout(fm, pos, ARRAY_SIZE(pos));
+>> +	if (n < 0)
+>> +		return 0;
+> [Severity: Medium]
+> Will this silently ignore errors if a kfunc requires more than 12 argument
+> eightbytes?
 >
-> If a non-global BPF subprogram has arguments consuming exactly 11 slots,
-> slots_used >= MAX_BPF_FUNC_ARGS evaluates to false (11 >= 12) at the start
-> of the loop, allowing it to proceed.
+> While the verifier limits the argument count to 12 (MAX_BPF_FUNC_ARGS),
+> arguments can take up to 2 slots, so the total slots could reach 24.
+> If a BPF program calls a registered kfunc that requires more than 12
+> eightbyte slots (such as 7 struct arguments of 16 bytes each),
+> kfunc_arg_layout() will return -EINVAL because max is hardcoded to 12 here.
 >
-> When a final 16-byte struct argument follows, nslots is set to 2. This
-> while loop then writes to sub->args[11] and subsequently out-of-bounds to
-> sub->args[12].
+> Since emit_kfunc_args() returns 0 instead of propagating the error code,
+> could this cause the BPF program to compile successfully but execute with
+> missing argument shuffle instructions? It seems the kfunc might read garbage
+> from the 6th slot onwards, potentially causing panics or data corruption.
 >
-> Could this memory corruption overwrite the adjacent stack_arg_cnt and
-> max_out_stack_arg_cnt fields in struct bpf_subprog_info?
+> This same pattern of silently ignoring layout errors appears in
+> bpf_jit_kfunc_stack_slots():
+>
+> kernel/bpf/core.c:bpf_jit_kfunc_stack_slots() {
+> 	...
+> 		n = layout(fm, pos, ARRAY_SIZE(pos));
+> 		if (n < 0)
+> 			continue;
+> 	...
+> }
+>
+> Does this also leave stack calculations undersized?
+>
+> Though the stack corruption is mathematically averted because BPF's calling
+> convention stack requirements always equal or exceed SysV's (making
+> outgoing_rsp naturally sufficient), the silent argument corruption remains.
+> As there are currently no mainline kfuncs that take more than 12 slots,
+> this appears to be a latent regression.
 
-The same issue similar to "bpf: Support by-value struct arguments up to 16 bytes"
-and "bpf: Support __int128 as a by-value function argument". Will fix.
+This patch will be removed. I will simplify the jit.
 
->
-> On big-endian architectures, this might artificially inflate
-> max_out_stack_arg_cnt to 9 (the value of ARG_ANYTHING), causing the
-> verifier to subsequently reject valid BPF programs in
-> check_outgoing_stack_args(). On little-endian architectures it would
-> silently zero the field.
->
->> +			continue;
->> +		}
->>   		if (!is_global)
->>   			return -EINVAL;
 
