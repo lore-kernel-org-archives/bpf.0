@@ -1,94 +1,93 @@
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C28D393DE9
-	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 18:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0563459E33D
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 18:48:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.173
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788893281; cv=pass; b=GsbDTLGg/OFACSRUblMFETw0siWnqMf9dTTfabhP3MzY7lyGLGt3gbuGx8vxzi6A2HtUyMkGtr0HnOCB86kiWBIO7tO1/rCRFPUpqNl1zPrVVGWwppksqXiQxX+qpgRi+5mnVzj+gXpC0bqulPQ/YrYNMctLmwaUqwsgiyQubhw=
+	t=1788893331; cv=pass; b=kJi2cvjdiMLdXZIaT0JDo/tMAoqM+5k4zBx3dEWNJD9qeqVkfHI3e52FngWrYzZlcjAjzV1qU1a9b3WFmuh3t3M8zUuRwkG6ZJ0EAICu1RYilWyVt8l3uEM4BuVLvaxANgo6LHSltG3cLiVqYV8SHcQdVrLzK3dISi9IksTPEkg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788893281; c=relaxed/simple;
-	bh=KC/MF3mOfz/c6LOZdWzUY/uMGzjmJufJKZrFNJHsoig=;
+	s=arc-20240116; t=1788893331; c=relaxed/simple;
+	bh=xeyGsqtviOZ4IoCR11vbrRZ8b0zYh4NgXM0SsGuBA2c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=plm6tw3APqTDtz5MRXSuSYKFgh5/vS461DSMtgq/flGbUxOgC7WSzixXhH3ebvp45usgy8e58IiQtZ2k0D+ELVbftfSMDLVhzfH2+CUqMJITpelWJ3N/PoSNfLTtsqxCdOrXQsV1etY5snHd989xEW5e7tuLBRIPhK2QTiOis1g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=htIQcPr+; arc=pass smtp.client-ip=209.85.128.181
+	 To:Cc:Content-Type; b=PvqJLiMc3FV5/zH5YYXrSj8CfHS6h06Pfhd+d+5Z+onk1cONWRpitekTi+jsZngvAuvzOX+JQ9lhyZz+ekVU3333fERmfAzcs+/fhmucdfYii3PAqC7dufj1jHLCp2l7Ng+4pStF+/3C5+CgYuh67NFuKJ3XhRwWzdQWu4xqXqM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=sRdfvg2E; arc=pass smtp.client-ip=209.85.128.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="htIQcPr+"
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-867a943b149so78972397b3.1
-        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 11:47:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788893274; cv=none;
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="sRdfvg2E"
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-861feb6d61bso45843657b3.2
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 11:48:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788893325; cv=none;
         d=google.com; s=arc-20260327;
-        b=LfMR2xFLHMe/CPU6JqtZNRgt43C40TPkXX/rqRWKjxSBcbORgij5LWW/5epOJbqG6y
-         CsugoECvNW/XJu+Vby+Go9xnM4nfEWAftJgZ0+5hKYaiAL68E/ruc4AlHdLs5PUTzhIE
-         A+RWGvxlFfHpePZLfcNQKK+ZQ9sgbF5Lo0aX9QwENXX2j49tp3G5Z6+FckDkVc2e8aTI
-         dBAYB1DWj8JnQZKmxmGCTKx5ddg2RS4Vp9EekukARV/NJbisAwj6ZBZgTpiz8lZ47MSl
-         1i1sJWBAqx3eskP6GNpKQYsxCi5QU259aNf1r7Cz8KbJ98WEscE61hB/SyBIydqMpTgg
-         ou0Q==
+        b=ekS1RqxnTCknmC924r2j5FtAzdHyQMBI1C0GHJWFnQ1Wsf9foB+TU2W16GCS562+fi
+         k7tjO9EPOu5eVyq1n0wuxX9nWsWNYzTvMlD2DZsOV3UjxiBePExULpM/ivg5FRmJSxxh
+         pHTu2BjHy7lBiZSIduUBureNQBoFOCcLFmFiXWYfbmkutB4Bep2MPSM5E9o7Doig2xZh
+         dmrCapQoPIKVUT7SOOGQwxlyCviAvu8wvkbtfWjc52WyRRR3NNeB+UaMiMmjooBKe7pp
+         KNZEbsd3oiIQTv/YSM8yPLyTGamfR/OgI13FACePq9N21Y7nkzbsOkasTJEVjEd9570o
+         FJiw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=UhEHmzke+KQ7j1V3S/wUURk+tLbzSlS1aA+NPmeIjqg=;
+        bh=Ark7vZ+YqenlnLaYF736Nj8MmLUQwg4Qt7JLPT3KUXo=;
         fh=5bG9Ph3wKY1cq0b9UgO3oml+l2PwNGRHDr56ATb400I=;
-        b=stziRXJbKkdWfxPmhcbLB4+fkEnd+sZ9q+cLeQBMV2Pv0qiBY3v8DT1gMgCw7RaXcD
-         1ZFBXsMQ52pMVpraKMDNUSZcy8A2nfddqIM6o50yyKG3GNLcX/Kez9PjR76wLvl3lce9
-         h2vQ6nhxAAAEhL3g2NGdmoePXaOIutM6tIjoXVT9OzDSWeDzqTNqKBYg1C01EYvvEEm8
-         wIWrWPOgOfIwpbXKeagI3kcz3/kcfr2FHM94F6CcOxdrD3qF0D4C2LfxrjZv4r8VI/bB
-         06sQKYw5FHFdgM4Bh7EdcBT3yJAUatnZ/rAQE3ccIC4K1MXWRHa5y1UxkS/OETkEKnzI
-         i6WQ==;
+        b=rpO3z24hPpsYDtyWqnU9MvVoDNEJiWwDjimMfV5346MoCN8u2uBXNfvtpfLnQQzgKj
+         ANOew0M2QVXF6Dl77VQ93r8VmCa1N8UPfXsnhiRNr2QP3bwQEbSJTid/8tF9o8sA2A38
+         lBn1rtbs4Kpqqk3qTcRqnGJlppCXJc81X8eMarDd84fE22RLe7F5QYsgbIK4FP/TrTsQ
+         vihXSCjURsCa42CibpQjvqq0npd1flqCiFd8dBhgGAqhDM5wA3L8yzPW0xPis6cBwzOg
+         Ryc4KIp7SU12c7BTZw/pfUGh+Cn89HqKdI0O7KiEZfCqcR3qB3HBO901hsTOiODgc1on
+         AZmQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788893274; x=1789498074; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788893325; x=1789498125; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=UhEHmzke+KQ7j1V3S/wUURk+tLbzSlS1aA+NPmeIjqg=;
-        b=htIQcPr+83ncnADA6UkdYutO02/EkRz/xZcVAaoYs3VYG3nkcqeHRE23iRAozLfz3R
-         GC4ClAZYgN4cp9uZu1H2CRRDXJigH7QDrNlEsThDU2ZUyl8hUhUCP9zP7DXWCMexEoUw
-         qWFME4A4UVp9hlYOTWFkFVUfsM0NixsOhwJ7J2Dk/71bTZwa5sYHmEzpE5Zs1k1SKzBA
-         KTVfMZmrMhFCvZu/rb6pqyR/txr1TDl98zmSpuDSOXDYFWDookFoEwHwDElVIfz1Ojnu
-         WXL4gak4eZE4YWKJazeSp7EpOB38FFTJAVPLtEbC0U8+xBcHDohBvtQvIS41VjVqFhqN
-         4DeQ==
+        bh=Ark7vZ+YqenlnLaYF736Nj8MmLUQwg4Qt7JLPT3KUXo=;
+        b=sRdfvg2ETFRhix/QTka2FfeaIJ5GPUBZ27/0EgiDS7Z1fQ+BYBHHqiWkKQRT7meBT6
+         2x47JFMviK5IS79+4bHbVua6U3KkipiATu3bIo639Ldp+Z4pfUObRMilErA52VwW3i9j
+         fV0OmIy4R1RwUGer+p76eMESFmAlpipKMANWYsKyb3bwZzeZK4+KGgIWyd6q5wMAa62o
+         B0lSzhbd2iVGDEX95ljrqrnQG+CcE4lzUC1zsmH1nyx+BUGq6QEqmbr8R+YqRuL8B31b
+         ktKNrtqtqULPMHECbJvjURhpaiFZivb6d3iS70eK1YKwivlWz5dhACTdkjQYD4FRcjod
+         PvZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788893274; x=1789498074;
+        d=1e100.net; s=20251104; t=1788893325; x=1789498125;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=UhEHmzke+KQ7j1V3S/wUURk+tLbzSlS1aA+NPmeIjqg=;
-        b=TZxemHB8+yzTBO6yGPScQMLvph0nZSiIF7aMtk3LX2VPiEU1GozM8gOeSQcKgqzoDh
-         crMtLinvgBq7IMpBd8KVwjgiTNidFYfCwU8IyxFLbwJixlTK2goBrNgflcbOUsJc4fkQ
-         SfTwMweopU2nRl+u7Wua3QP3y0Znb6BSqUTMPiWC4zc0ofw9ShkiL4o7ecexip0TTjaB
-         mn9w15dEWAYCG5rTurQ/JL15DGq8LiwtzIfSg+SogflYhUpXdNDG82v/+oxOdePvRuw6
-         8RJEOCX1In0Ek3N4m+H1x+yKfY4q9CONdQPDOPDyQF3VXcDHKiPDX5StbVhgtdq1QBjA
-         UvLA==
-X-Gm-Message-State: AFuF++mtQ/gXcE1m20lX+MmPPmw6ikr4jIjRf6/untA8TkgwnHLTa3dy
-	WbKv98YUL8TgjxGCi4r52tdRLXnoDxsIK7kFAyTu5M87ImvAd2B+tCdW5h1UlF2Ea6qgB4Lq9U9
-	7hbxT/1LR3ZL3i3vNVdvYjieEy9EHkyp/dLGyTvCZtA==
-X-Gm-Gg: AYBFou2iVR8VSQesd/dVnApiQ9UHxwykA7LTRJqhGHD+c5YyIRP9QaveqUcyLJw1J1t
-	npnf5Isz3YECEjyWwBj44XzxmOCfkZL23LM4TYfoC+x8owNTs/Hu9AhFo+7T0G9xco2+DvCkS7h
-	6R4MRguHR9l3V9StHnwxyE3n28vL9ufouIQg8Dm73Nx/SnAqjnEHN3jiPcrAiP0CohMTXHYMpmR
-	Se7PWbGFNPu4EDVe1YooU4zsYapC07L2ThsJ/i2ZAh4r50vGY8EmTFcKQhcsBTLyeGRfjhLiwGO
-	kCcPBkA9eAgyjmm4E+9ThevdSy7puqwIbaGBeka19xU4
-X-Received: by 2002:a05:690c:e3ec:b0:873:5bd1:98b5 with SMTP id
- 00721157ae682-8735bd19ff0mr101322187b3.39.1788893274555; Tue, 08 Sep 2026
- 11:47:54 -0700 (PDT)
+        bh=Ark7vZ+YqenlnLaYF736Nj8MmLUQwg4Qt7JLPT3KUXo=;
+        b=UaB3OaUZwKvnYMhY3cvYcC+fqovHJerPRxm+ewWaxhm/K5aodxCyX7skgr+LNgKdcc
+         yKh7GFL4lj1IQjEqRc5g0WP5WRUZ2vrRB5R0OWJn0oaJcU2ZkG/fgLmpa/HCe3W7svj9
+         3PCfXCn8Oxy862snTd4RgDUVokqJwHgBk4WNLGCETrIg0umO9Te7JwIbDaVB3PzpI0vw
+         MdgT906jSOtVJDjPNjEFOjZ+QXfSHbNjWfV76Sv9Z6DCsX9ffQa/krsFm7c+eC4/sP/M
+         mXNYB7Ia9vp+pIsKbH8fJHyfa38vEkwONmJxT0NPZ+Aml8PtdRaC5HWhqRGND4XawVHn
+         LRPA==
+X-Gm-Message-State: AFuF++lbszIghZI9ra+NKA0rSlwSs/5G2EUnLcR9/nwM311L6a5AqHbB
+	xTtiI1DzgKUwJLIi1o673P7t15253k57tNb6LddPe7hKvAcj1kT6R0iRQ3c3VKqsMQNTTT7gmVU
+	HirF+qIZDkwwT/JZx+ynaSJvX0CJ4rO3EXj9oyKqUudn57cM5A7Gfulc=
+X-Gm-Gg: AYBFou1bdcxxKyXSBGcR+USUZ6farQbjMNXYZgZGvUOX8yKbBJZ2kzBmLG6ccK8y8qw
+	DaJnwF5TLUQ33+7GXqA8tm9NSXP44Q59C2KVYGGylc03kx2kEBEcGP6F2x4vTdAuhtlKM3669Af
+	PsKO1V8PYkiPD+qL2CneiAb9Q/r4s6Kl2XID1r6reYwdzIK+cSEasWMqBNJC22Ben1zvsFFoYcZ
+	BlK6/Gz6p88nYsbeweeVy7QgxuSxu+m/grYL64DZ77UPtMH5tHeMV8bni+TbqXBJotedMojwMWX
+	inZOR9JK9bp/iIYim23cJT2CjZuy9naTxEHSVhKs2kuZ
+X-Received: by 2002:a05:690c:802:b0:81f:3556:bc27 with SMTP id
+ 00721157ae682-8712a8f4b12mr116019427b3.27.1788893325137; Tue, 08 Sep 2026
+ 11:48:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260830093514.4105972-1-memxor@gmail.com> <20260830093514.4105972-4-memxor@gmail.com>
-In-Reply-To: <20260830093514.4105972-4-memxor@gmail.com>
+References: <20260830093514.4105972-1-memxor@gmail.com> <20260830093514.4105972-5-memxor@gmail.com>
+In-Reply-To: <20260830093514.4105972-5-memxor@gmail.com>
 From: Emil Tsalapatis <emil@etsalapatis.com>
-Date: Tue, 8 Sep 2026 14:47:41 -0400
-X-Gm-Features: AcwNN1UkMhVOGf4HAzd8pl56tNOAvWYs-TYJaeEvTbGda8QhhOq35NCfQB3ZFFA
-Message-ID: <CABFh=a406HZwo5tdaZGQ6vMaXJ6PjhD7FjcHSAdkYx3+v-MfAQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 3/6] bpf: Separate stream readiness from
- capacity accounting
+Date: Tue, 8 Sep 2026 14:48:34 -0400
+X-Gm-Features: AcwNN1V6oQRqnxYN6eLJpoJUoep2A3gWT4DUC_SZz5QPZxDy9yuBDKPYXYUJnq8
+Message-ID: <CABFh=a7FYmod_AGJxZ-i1Oi2CT265rqSHC17ZrGk3qbCw-JO+Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 4/6] libbpf: Add bpf_prog_stream_open()
 To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
 	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -99,169 +98,113 @@ Content-Transfer-Encoding: quoted-printable
 On Sun, Aug 30, 2026 at 5:35=E2=80=AFAM Kumar Kartikeya Dwivedi
 <memxor@gmail.com> wrote:
 >
-> Stream capacity is charged before allocation and before an element is
-> published to the stream log. Using that reservation counter as the read a=
-nd
-> poll readiness condition can therefore report readable data while no
-> element exists. A blocking reader can then repeatedly retry instead of
-> sleeping, while a non-blocking reader can observe POLLIN followed by
-> EAGAIN.
->
-> Add a separate readable byte counter. Publish bytes with release ordering
-> after adding elements to the lockless log, and use acquire loads before
-> consuming them or reporting readiness. Limit each read to its readable
-> snapshot and subtract only bytes actually copied; this keeps the aggregat=
-e
-> count correct even when concurrent publishers update it out of publicatio=
-n
-> order.
->
-> Keep the existing capacity counter solely for enforcing the stream size
-> limit.
+> Expose the BPF_PROG_STREAM_OPEN command through a low-level libbpf wrappe=
+r.
+> The options structure carries stream open flags, including non-blocking
+> mode, while leaving room for future extensions.
 >
 > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-
-For the Sashiko issue: Do we have a specific policy for what to do with 0
-byte writes? Imo we should completely ignore empty buffers and not even
-stage them unless we have good reason to.
-
 > ---
->  include/linux/bpf.h |  3 ++-
->  kernel/bpf/stream.c | 35 +++++++++++++++++++++++++++--------
->  2 files changed, 29 insertions(+), 9 deletions(-)
+
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+
+>  tools/lib/bpf/bpf.c      | 19 +++++++++++++++++++
+>  tools/lib/bpf/bpf.h      | 24 ++++++++++++++++++++++++
+>  tools/lib/bpf/libbpf.map |  1 +
+>  3 files changed, 44 insertions(+)
 >
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 0af3c79f5d03..2ed1e82391b9 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -1713,7 +1713,8 @@ enum {
->
->  struct bpf_stream {
->         refcount_t refcnt;
-> -       atomic_t capacity;
-> +       atomic_t capacity;      /* bytes reserved against the stream limi=
-t */
-> +       atomic_t readable;      /* published bytes available to readers *=
-/
->         struct llist_head log;  /* list of in-flight stream elements in L=
-IFO order */
->
->         struct mutex lock;  /* lock protecting backlog_{head,tail} */
-> diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
-> index 99a89533eaef..b1e6767d8754 100644
-> --- a/kernel/bpf/stream.c
-> +++ b/kernel/bpf/stream.c
-> @@ -88,6 +88,21 @@ static void bpf_stream_notify(struct irq_work *work)
->         wake_up_interruptible_poll(&stream->waitq, EPOLLIN | EPOLLRDNORM)=
-;
+> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> index 96819c082c77..5186f6245879 100644
+> --- a/tools/lib/bpf/bpf.c
+> +++ b/tools/lib/bpf/bpf.c
+> @@ -1464,6 +1464,25 @@ int bpf_prog_stream_read(int prog_fd, __u32 stream=
+_id, void *buf, __u32 buf_len,
+>         return libbpf_err_errno(err);
 >  }
 >
-> +static int bpf_stream_readable_bytes(struct bpf_stream *stream)
+> +int bpf_prog_stream_open(int prog_fd, __u32 stream_id,
+> +                        const struct bpf_prog_stream_open_opts *opts)
 > +{
-> +       return atomic_read_acquire(&stream->readable);
+> +       const size_t attr_sz =3D offsetofend(union bpf_attr, prog_stream_=
+open);
+> +       union bpf_attr attr;
+> +       int fd;
+> +
+> +       if (!OPTS_VALID(opts, bpf_prog_stream_open_opts))
+> +               return libbpf_err(-EINVAL);
+> +
+> +       memset(&attr, 0, attr_sz);
+> +       attr.prog_stream_open.prog_fd =3D prog_fd;
+> +       attr.prog_stream_open.stream_id =3D stream_id;
+> +       attr.prog_stream_open.flags =3D OPTS_GET(opts, flags, 0);
+> +
+> +       fd =3D sys_bpf_fd(BPF_PROG_STREAM_OPEN, &attr, attr_sz);
+> +       return libbpf_err_errno(fd);
 > +}
 > +
-> +static void bpf_stream_publish(struct bpf_stream *stream, int len)
-> +{
-> +       if (!len)
-> +               return;
+>  int bpf_prog_assoc_struct_ops(int prog_fd, int map_fd,
+>                               struct bpf_prog_assoc_struct_ops_opts *opts=
+)
+>  {
+> diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+> index 7534a593edae..860c5644ec1e 100644
+> --- a/tools/lib/bpf/bpf.h
+> +++ b/tools/lib/bpf/bpf.h
+> @@ -758,10 +758,34 @@ struct bpf_prog_stream_read_opts {
+>   *
+>   * @return The number of bytes read, on success; negative error code, ot=
+herwise
+>   * (errno is also set to the error code)
+> + *
+> + * For blocking reads and polling, prefer **bpf_prog_stream_open**.
+>   */
+>  LIBBPF_API int bpf_prog_stream_read(int prog_fd, __u32 stream_id, void *=
+buf, __u32 buf_len,
+>                                     struct bpf_prog_stream_read_opts *opt=
+s);
+>
+> +struct bpf_prog_stream_open_opts {
+> +       size_t sz;
+> +       __u32 flags;
+> +       size_t :0;
+> +};
+> +#define bpf_prog_stream_open_opts__last_field flags
 > +
-> +       /* Pairs with atomic_read_acquire() in bpf_stream_readable_bytes(=
-). */
-> +       (void)atomic_add_return_release(len, &stream->readable);
-> +       irq_work_queue(&stream->notify_work);
-> +}
+> +/**
+> + * @brief **bpf_prog_stream_open** opens a file descriptor for a BPF str=
+eam of
+> + * a given BPF program.
+> + *
+> + * @param prog_fd FD for the BPF program whose BPF stream is to be opene=
+d.
+> + * @param stream_id ID of the BPF stream to be opened.
+> + * @param opts optional options, can be NULL. BPF_F_STREAM_NONBLOCK requ=
+ests a
+> + * non-blocking descriptor.
+> + *
+> + * @return A new stream FD, on success; negative error code, otherwise (=
+errno
+> + * is also set to the error code)
+> + */
+> +LIBBPF_API int bpf_prog_stream_open(int prog_fd, __u32 stream_id,
+> +                                   const struct bpf_prog_stream_open_opt=
+s *opts);
 > +
->  static int bpf_stream_push_str(struct bpf_stream *stream, const char *st=
-r, int len)
->  {
->         int ret =3D bpf_stream_consume_capacity(stream, len);
-> @@ -98,8 +113,8 @@ static int bpf_stream_push_str(struct bpf_stream *stre=
-am, const char *str, int l
->         ret =3D __bpf_stream_push_str(&stream->log, str, len);
->         if (ret)
->                 bpf_stream_release_capacity(stream, len);
-> -       else if (len)
-> -               irq_work_queue(&stream->notify_work);
-> +       else
-> +               bpf_stream_publish(stream, len);
+>  struct bpf_prog_assoc_struct_ops_opts {
+>         size_t sz;
+>         __u32 flags;
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index 08ab2ea881fb..a89e10811a73 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -458,6 +458,7 @@ LIBBPF_1.7.0 {
 >
->         return ret;
->  }
-> @@ -176,14 +191,16 @@ static bool bpf_stream_consume_elem(struct bpf_stre=
-am_elem *elem, int *len)
->
->  static int bpf_stream_read(struct bpf_stream *stream, void __user *buf, =
-int len)
->  {
-> -       int rem_len =3D len, cons_len, ret =3D 0;
-> +       int read_len, rem_len, cons_len, ret =3D 0;
->         struct bpf_stream_elem *elem =3D NULL;
->         struct llist_node *node;
->
->         mutex_lock(&stream->lock);
-> +       read_len =3D min(len, bpf_stream_readable_bytes(stream));
-> +       rem_len =3D read_len;
->
->         while (rem_len) {
-> -               int pos =3D len - rem_len;
-> +               int pos =3D read_len - rem_len;
->                 int chunk, n;
->                 bool cont;
->
-> @@ -205,7 +222,7 @@ static int bpf_stream_read(struct bpf_stream *stream,=
- void __user *buf, int len)
->                         /* Keep any successfully copied bytes; -EFAULT on=
-ly if none. */
->                         elem->consumed_len -=3D n;
->                         rem_len +=3D n;
-> -                       ret =3D (len =3D=3D rem_len) ? -EFAULT : 0;
-> +                       ret =3D (read_len =3D=3D rem_len) ? -EFAULT : 0;
->                         break;
->                 }
->
-> @@ -216,8 +233,9 @@ static int bpf_stream_read(struct bpf_stream *stream,=
- void __user *buf, int len)
->                 bpf_stream_free_elem(elem);
->         }
->
-> +       atomic_sub(read_len - rem_len, &stream->readable);
->         mutex_unlock(&stream->lock);
-> -       return ret ? ret : len - rem_len;
-> +       return ret ? ret : read_len - rem_len;
->  }
->
->  int bpf_prog_stream_read(struct bpf_prog *prog, enum bpf_stream_id strea=
-m_id, void __user *buf, u32 len)
-> @@ -234,7 +252,7 @@ int bpf_prog_stream_read(struct bpf_prog *prog, enum =
-bpf_stream_id stream_id, vo
->
->  static bool bpf_stream_has_data(struct bpf_stream *stream)
->  {
-> -       return atomic_read(&stream->capacity) > 0;
-> +       return bpf_stream_readable_bytes(stream) > 0;
->  }
->
->  static void bpf_stream_put(struct bpf_stream *stream)
-> @@ -412,6 +430,7 @@ int bpf_prog_stream_init(struct bpf_prog *prog, gfp_t=
- gfp_extra_flags)
->
->                 refcount_set(&stream->refcnt, 1);
->                 atomic_set(&stream->capacity, 0);
-> +               atomic_set(&stream->readable, 0);
->                 init_llist_head(&stream->log);
->                 mutex_init(&stream->lock);
->                 init_waitqueue_head(&stream->waitq);
-> @@ -496,7 +515,7 @@ int bpf_stream_stage_commit(struct bpf_stream_stage *=
-ss, struct bpf_prog *prog,
->                 list =3D tail;
->         }
->         llist_add_batch(head, tail, &stream->log);
-> -       irq_work_queue(&stream->notify_work);
-> +       bpf_stream_publish(stream, ss->len);
->         return 0;
->  }
->
+>  LIBBPF_1.8.0 {
+>         global:
+> +               bpf_prog_stream_open;
+>                 bpf_program__attach_tracing_multi;
+>                 bpf_program__clone;
+>                 btf__find_by_name_kind_own;
 > --
 > 2.53.0
 >
