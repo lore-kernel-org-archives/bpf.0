@@ -1,72 +1,276 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E1259C993;
-	Tue,  8 Sep 2026 22:39:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788907173; cv=none; b=nhy/X1YNIf0IU9Tl4JFVzQjgexa1e92IWcrmIwEAfC/rv4R9+ZyoO2SzKVqkMpuj5xPqY24S8v183RA0Jxbh5XDEhThutNfUs6a08fazjNDtdxZIEtQsKzLH+OxH50SnEXlA8XaM38685VCcwMLGA5B95v/R65Q/dr+1icrN09g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788907173; c=relaxed/simple;
-	bh=zP5g2Ej9xw93NIsfxr58CoDOiPc6XGnBcHqWA/NURLM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iD6/iIjFtuEQjRO+lAg9K/PGYJImUDZnCd28LIt3rCge7ft+a4B58CC81eZpiNn6M9ZFdH95gXvSlgDcnvkeenVCajkniBe+2yb76CJsUpuNYW6GHqNJAXez3qGMLZCEQr+ScDkiAKMr9vTenz1/7I1modNSAMuPN07G+AOcfLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D4viA9O1; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E6F54E80C4
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 23:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788909610; cv=pass; b=hcslrzeD7pLY/2ALAcC1mP/MrhMdMeNY9TOkl8293ebywC2Tp+vY/CoFWMC0rqLJb/zsi293VCIGgsZz2RXtLaIUdueazeCpd0tasCXQAezq49WUyzqBPIWyBQPCh8ZkvhF9WCHRT3forRxENFyHR7jxfyUh77Ng2gcHtWH6ce8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788909610; c=relaxed/simple;
+	bh=BwDbGyznSdFukCRXjgObPw7cGoXwjqQHpB0ltFjAKXs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Xhp6aEvmhuGLyAmaJFTYA7jil4gxd3Iq/R8b0+GkAC0KY/VlHLCADdD8usjSTSP4wnCgS55E99lnep53wzHPZ5SvHljim3G85YVMyIjBnAxybeikKGRdZWoUf7hg4q5ts/JijEnmM3oihVq+7z6zgEa6Yckm0iJoXBfCpSYWL78=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Gd87nDEK; arc=pass smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D4viA9O1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BDA21F00A3A;
-	Tue,  8 Sep 2026 22:39:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788907161;
-	bh=qrDUNxVrl5uGiciXI2FLRPY/zJ1WkrONkbkkE88nB+o=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=D4viA9O1+ZkXxbsaswqiE9SF1FPA1bfeAF9Z8Jax42qK3TWZKD33VLJn4fNf/HAda
-	 qDlMST+4/XjLEh9rOqoTgcq2Fcl92sXypybPtH0nN+nRF25S7YPrAhKe+nrw0Q7aTM
-	 iTzadPxi5uOuuRAea/MokpyYDi+cDajgC6uUFxxrtQx77q99BPe8i9ZuQa1ec6TP7A
-	 6exnNSxRobnX36sOsDWwuhCjg32ypJ/uVXfoBIEb5KyUNr7D7AnxsBR8IZRNEN2pB1
-	 npMjsPRpQGtVZFW32dkaX3i0bushc38s9URTQ+j7iZ3k9Wa0WcaghxqNz0+gdo9vny
-	 lGFM66FYNtjcw==
-From: Sasha Levin <sashal@kernel.org>
-To: stable@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	David Ahern <dsahern@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Lawrence Brakmo <brakmo@fb.com>
-Cc: Sasha Levin <sashal@kernel.org>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Sechang Lim <rhkrqnwk98@gmail.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	"Miguel Gazquez (Schneider Electric)" <miguel.gazquez@bootlin.com>
-Subject: Re: [PATCH 6.12.y v2] tcp: clear sock_ops cb flags before force-closing a child socket
-Date: Tue,  8 Sep 2026 18:39:08 -0400
-Message-ID: <2026-09-08-daily-reply-0001-tcp-sockops-cb-flags-6-12@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260908-cve-2026-74268-v2-1-3f81ea487415@bootlin.com>
-References: <20260908-cve-2026-74268-v2-1-3f81ea487415@bootlin.com>
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Gd87nDEK"
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-867a943b149so83303917b3.1
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 16:20:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788909607; cv=none;
+        d=google.com; s=arc-20260327;
+        b=JPN7rNbois+B2NIQR6DeGxvWcyYNHL89sveYB7SblhLpnIvsC9MCgDgj5C5kZqoFxc
+         mm/xXcpzpeZuDqv2nH4fXQPs/meNs6WSefM0NGGS5vsBanMDWI6J71ehTzFSDZ9N2VbD
+         /m0KMU0HF+Fokn7xCxc1iMcFqfx2we1tALw9VBOvwtJIDEL7i4AOcXyFGAB34I0QJQzu
+         +lcBoxr4sr53HKbKjvKc47YJHCr/caFa8afjSmYJGU11Xy5VYxmqIM27ipECEumsbOal
+         KzqWRmmXNsNyVWzLPegovxzkcxEN7zhZ81CIdr/uiV+eHHpxNoEdgZE62mKawdLt6RDA
+         twMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=26FP9kIUNsB+7HarEjMuFZhQLKe6YlOhbHQM1Yvl7Vo=;
+        fh=JUxPQ9G84apGdqsrDHlxyzhcHqRlwPX1mmt0jfs7mqU=;
+        b=j4fWk6fv5DHbyLypCzM56wm496Su+r1vSSaoFWW8YaDXwOeYLO3J06akgC8b50fnkV
+         vMbVbnGyxiHfZ3MJBhQNOJGm7ihbk2clXJuFk6Rge+xSt4PMjFBLMZYpza23JF1HwBUl
+         ZcRyK0wPyn3/kA+WWvwKKB52AvjMTztPrCBtTAy7pudImgK2tkEGQmGeNQQWSugWLAuP
+         uqTookemWJz6cHAEG7LJnASJIuG7eFCyZBEpx1VnLIWedpMadKyYJdto7L74U8gbnWSu
+         qAfeikPIbDV5Be/Dnv2QU1T80ttRAEnC5xZfrby5rpTCm9KHyQHYTmQdKNcLLGImTCB9
+         be+Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788909607; x=1789514407; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=26FP9kIUNsB+7HarEjMuFZhQLKe6YlOhbHQM1Yvl7Vo=;
+        b=Gd87nDEKouQTEcntjHj+rbyLzYBFLPHGRt+kodv7wqEayzfAS9Nsn1gLFF2XZbMLYH
+         22trZ/vw9HXCz0ukzi74k1M6rtXLIyYeSXtP64r8JZsm1k9kPQMN+dwC9RBzJ2XXjj4J
+         id9c8NY5+sKQsjlDCMgchFtSZ+7MJcqO5JcXnIklE6lZV9by44JWxUR8YTbBQZpY8D4t
+         ATbTf8SVN8r328Z/yNITQTu1V+NysGUX6J2AyVeIqegduPjtbyCFiE+bkiOpcTsv32j3
+         PBr2cVzeNnqpANJtJEhK+VN9HT8Wv1VNTojWb8/NjcK/yJkAZ6nrnR1POJj0tnshWQJr
+         dnsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788909607; x=1789514407;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=26FP9kIUNsB+7HarEjMuFZhQLKe6YlOhbHQM1Yvl7Vo=;
+        b=i0ei5Paft5fjhitk6ZoeDvCnUKqok1f0HAe7k6TS/2OglQ74MWEIGtzjY37/Oq8vcT
+         3Kz01vSRYvb7O0KlalDFYzSoEBPMMy1hZMKeNlF02sGEG50TNU2Fpf3T0WpRnpYpx95X
+         UHXo9yLXR5eVRUu2trkROd0/pZ9xcr/TmeV8S58pd0n1TY4u1OxqsZ5QYR7QX3tPdqu2
+         cLj15+DcFd0ybbmtSAOGA/qQDJbDRGqReU68QUx0ipBOb9Pa9JuqgrQ/b4EVLdds5tRS
+         vm1IcdvXToUW2e2cl0dG/xnV4vPIu7W0oIqvO6+v1YX3rP0XF7/rAn44pX3jnCVqR414
+         kslg==
+X-Gm-Message-State: AFuF++kG6mjoaFrOD4x32TK2Jo/3RCQZCgpWi1oWmab+mM7ifj5yu/ZH
+	5JWxjthKnd9eGFFvBsYTfp5YXWDMFxLHZVKEHOPFdz6ZiuNcyoYDnu0kxtWbWn1ZfgshG+DeQiC
+	1G6QnKycOTc0bOD4uxft9dBw8+ctdwfmuCxsH2zMURQ==
+X-Gm-Gg: AYBFou2Ro/Pwo9Rf3KpBepE6w+aH47VNmF/dQGKH+5rHjwruVeYaVjWyEdOhWSgQ7DF
+	ro2HNAae2uA69Z1fDePstuFKewLFqLjdytsPnSeYGyecqgkGbKT7V+s/rYVPG55Lw7zPrlcL1RU
+	iPJHl2Pk60cLQ5XHOtgSkgPW0rzWm5Y6nrNB5U4Ph1x675pu+PFlRVOu7ezyLRNtgxd+X6lxn6K
+	aLzSso3K+yI+WHaecLxj/hVNpxIfTvq0Ph7mfjrYE/mAuNcK426oqTIsn6pqI9q5lzkED6G5r1k
+	yhL+WZ9gzND0rz3ocJ5TYZmbnzart0e6eZ7dDC+30xDT8nlwa41YV8s=
+X-Received: by 2002:a05:690c:388:b0:873:5bd1:98bf with SMTP id
+ 00721157ae682-8735bd19fbdmr94689867b3.49.1788909606864; Tue, 08 Sep 2026
+ 16:20:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260901183151.16648-1-cenzhang@linux.microsoft.com>
+In-Reply-To: <20260901183151.16648-1-cenzhang@linux.microsoft.com>
+From: Emil Tsalapatis <emil@etsalapatis.com>
+Date: Tue, 8 Sep 2026 19:19:56 -0400
+X-Gm-Features: AcwNN1UfREHp2kMvmYLiVPmJrmYLz8bqciXAdv8jBq1uXxNAjBv_hZQTifzbsuw
+Message-ID: <CABFh=a5iLOEJdPhoaWUhLc0eEqAuhnd83_jJr9MVZZG6gSJAEw@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: Fix non-linear SRH access in bpf_update_srh_state()
+To: "Cen Zhang (Microsoft Security FORGE Labs)" <cenzhang@linux.microsoft.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
+	sdf@fomichev.me, martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org, 
+	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, ihor.solodrai@linux.dev, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
+	m.xhonneux@gmail.com, dlebrun@google.com, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, AutonomousCodeSecurity@microsoft.com, 
+	xmei5@asu.edu, tgopinath@linux.microsoft.com, kys@microsoft.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> A child socket inherits the listener's bpf_sock_ops_cb_flags via
-> sk_clone_lock(). If its setup fails in tcp_v4_syn_recv_sock() /
-> tcp_v6_syn_recv_sock(), the child is freed through put_and_exit, where
-> inet_csk_prepare_forced_close() drops the socket lock and tcp_done() runs
-> without it.
+On Tue, Sep 1, 2026 at 2:32=E2=80=AFPM Cen Zhang (Microsoft Security FORGE
+Labs) <cenzhang@linux.microsoft.com> wrote:
+>
+> bpf_update_srh_state() locates an SRH with ipv6_find_hdr() and caches
+> skb->data + srhoff in the per-CPU SEG6 BPF state. This assumes that the
+> returned offset is within the skb linear head.
+>
+> That assumption is wrong because ipv6_find_hdr() uses skb_header_pointer(=
+)
+> and can locate an SRH in non-linear data. The direct srh->hdrlen read and
+> the cached SRH pointer can therefore access memory outside the linear are=
+a.
+>
+> BUG: KASAN: slab-use-after-free in bpf_update_srh_state+0x1bc/0x200
+>  net/core/filter.c:7027 bpf_update_srh_state()
+>  bpf_lwt_seg6_action()
+>  input_action_end_bpf()
+>  seg6_local_input()
+>  ipv6_rthdr_rcv()
+>
+> Fix this by using seg6_get_srh(), which pulls and validates the complete
+> SRH and reloads its pointer afterwards. Pulling can reallocate skb->head,
+> so refresh the BPF data pointers inside bpf_update_srh_state() immediatel=
+y
+> after the call.
+>
+> For End.DT6, make the inner IPv6 base header linear before removing the
+> outer headers. Pulling only the outer headers can leave the inner header =
+in
+> non-linear data, while ipv6_find_hdr() and the nexthop lookup access it
+> directly. Clear the cached SRH pointer and refresh the BPF data pointers =
+if
+> the pull fails.
+>
+> End.B6 and End.B6.Encap can modify or reallocate the skb before a later
+> nexthop lookup returns an error. Rebuild the SRH state regardless of the
+> action result instead of assuming that an error leaves the skb unchanged.
+>
+> Fixes: 486cdf21583e ("bpf: add End.DT6 action to bpf_lwt_seg6_action help=
+er")
+> Reported-by: Xiang Mei <xmei5@asu.edu>
+> Signed-off-by: Cen Zhang (Microsoft Security FORGE Labs) <cenzhang@linux.=
+microsoft.com>
+> Assisted-by: Copilot:gpt-5.6-sol
 
-Queued for 6.12, thanks.
+This fix has an issue afaict, commenting inline:
 
--- 
-Thanks,
-Sasha
+
+> ---
+> Please queue this fix for stable kernels.
+>
+> Testing:
+> - Static checks only: checkpatch.pl, diff --check and patch replay.
+> - No targeted selftest was added. BPF LWT test-run does not support
+>   non-linear skbs, and the existing SEG6 netns test does not create a
+>   split inner IPv6 header for End.DT6.
+>
+>  net/core/filter.c | 30 ++++++++++++++++--------------
+>  1 file changed, 16 insertions(+), 14 deletions(-)
+>
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 61940e753552..1dd3a685d1b8 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -7018,15 +7018,16 @@ static void bpf_update_srh_state(struct sk_buff *=
+skb)
+>  {
+>         struct seg6_bpf_srh_state *srh_state =3D
+>                 this_cpu_ptr(&seg6_bpf_srh_states);
+> -       int srhoff =3D 0;
+> +       struct ipv6_sr_hdr *srh;
+>
+> -       if (ipv6_find_hdr(skb, &srhoff, IPPROTO_ROUTING, NULL, NULL) < 0)=
+ {
+> -               srh_state->srh =3D NULL;
+> -       } else {
+> -               srh_state->srh =3D (struct ipv6_sr_hdr *)(skb->data + srh=
+off);
+> -               srh_state->hdrlen =3D srh_state->srh->hdrlen << 3;
+> -               srh_state->valid =3D true;
+> -       }
+> +       srh =3D seg6_get_srh(skb, 0);
+> +       bpf_compute_data_pointers(skb);
+> +       srh_state->srh =3D srh;
+> +       if (!srh)
+> +               return;
+> +
+> +       srh_state->hdrlen =3D srh->hdrlen << 3;
+> +       srh_state->valid =3D true;
+>  }
+>
+>  BPF_CALL_4(bpf_lwt_seg6_action, struct sk_buff *, skb,
+> @@ -7059,15 +7060,18 @@ BPF_CALL_4(bpf_lwt_seg6_action, struct sk_buff *,=
+ skb,
+>
+>                 if (ipv6_find_hdr(skb, &hdroff, IPPROTO_IPV6, NULL, NULL)=
+ < 0)
+>                         return -EBADMSG;
+> -               if (!pskb_pull(skb, hdroff))
+> +               if (!pskb_may_pull(skb, hdroff + sizeof(struct ipv6hdr)))=
+ {
+> +                       srh_state->srh =3D NULL;
+> +                       bpf_compute_data_pointers(skb);
+>                         return -EBADMSG;
+> +               }
+> +               __skb_pull(skb, hdroff);
+>
+>                 skb_postpull_rcsum(skb, skb_network_header(skb), hdroff);
+>                 skb_reset_network_header(skb);
+>                 skb_reset_transport_header(skb);
+>                 skb->encapsulation =3D 0;
+>
+> -               bpf_compute_data_pointers(skb);
+>                 bpf_update_srh_state(skb);
+>                 return seg6_lookup_nexthop(skb, NULL, *(int *)param);
+>         case SEG6_LOCAL_ACTION_END_B6:
+> @@ -7075,8 +7079,7 @@ BPF_CALL_4(bpf_lwt_seg6_action, struct sk_buff *, s=
+kb,
+>                         return -EBADMSG;
+>                 err =3D bpf_push_seg6_encap(skb, BPF_LWT_ENCAP_SEG6_INLIN=
+E,
+>                                           param, param_len);
+> -               if (!err)
+> -                       bpf_update_srh_state(skb);
+> +               bpf_update_srh_state(skb);
+>
+
+Here and for the case below, making the SRH state recomputation
+unconditional  can
+cause logic errors. It's only safe to recompute the state if
+bpf_push_seg6_encap()
+actually adds an SRH up front, then fails, because then the header we
+want is the
+very first one.
+
+If we don't add an SRH before calling seg6_get_srh(), it calls
+ipv6_find_hdr() w/o IP6_FH_F_SKIP_RH and
+end up pointing to the first header it finds even if it is a spent
+SRH. That normally doesn't
+matter because the caller should not continue processing after an
+error, but it is still
+inconsistent.
+
+The easy fix on top of this patch is afaict:
+
+1) Track the old length of the skb before the bpf_push_seg6_encap();
+2) in bpf_lwt_seg6_action:
+
+if (new_len !=3D old_len)
+    bpf_update_srh_state(skb);
+
+instead of unconditional.
+
+wdyt?
+
+pw-bot: cr
+
+>                 return err;
+>         case SEG6_LOCAL_ACTION_END_B6_ENCAP:
+> @@ -7084,8 +7087,7 @@ BPF_CALL_4(bpf_lwt_seg6_action, struct sk_buff *, s=
+kb,
+>                         return -EBADMSG;
+>                 err =3D bpf_push_seg6_encap(skb, BPF_LWT_ENCAP_SEG6,
+>                                           param, param_len);
+> -               if (!err)
+> -                       bpf_update_srh_state(skb);
+> +               bpf_update_srh_state(skb);
+>
+>                 return err;
+>         default:
+>
+> base-commit: 28d75dd3eb60812b3a87cbdf0d52c42f51b28a78
+> --
+> 2.55.0
