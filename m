@@ -1,65 +1,67 @@
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D2654939A
-	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 14:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10635552950
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 14:27:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788877665; cv=none; b=caQo1pnupY9NuifCo22XCMVwJWieLUGWc+UDnNppQvkkBu1mK8DRa0W0Bm2uLM3KdYwGiwtTIPKQDWPpCCerlTWw2NnkgBwWTZ1HHCmu5VIJDSImrLCz/uG857SSurnEMZVIISK6Pjo+Qb5a10BMThkIDSlE9vW2rIFFKsKPWKI=
+	t=1788877673; cv=none; b=uUXUcPz5HONOen6ZfH4eWe6lM13tzHSKfCUxdNokRINJYRVnh+z94rKwrnsec7VSOi/Ka2Xd4CrlWJ/PUgQXKUnHdrSRNusa9JMiNBWQokB9JvR0b/gYVGX+yIYbF/s/8apydzQ2AcVHahxisP3/6AcucbXEJa7BlgYxcpb9ryE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788877665; c=relaxed/simple;
-	bh=+TM+zYeX3ygRQvHGcTEUljLUIwOHDrWNq9lU7U+08kE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cHFdF+NmuInDNOoyc7eFaa2lKcVC9B9gDwOm4aavbvAcXMlGmW0NfT5PJ1xOQUmG+C1jQd/mgA4JL4vwGT3rK8BFEOitKJhiU2XRxLyC7xGZNdEt9FUubx/qK+Rc0bCjMzOrNkye5Ic2t+sCd911nv7JuWregkLYqsIs4IvYYTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W8qKOnm7; arc=none smtp.client-ip=209.85.210.52
+	s=arc-20240116; t=1788877673; c=relaxed/simple;
+	bh=ylJicH1a0G2qTlq5ZUtMqKWIxILTNpSxDjkrw1RjPuw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=JqB7yFUyOUYoRncqfT6r2K18WasdllRbYJYM1p4kKraFKnG5bYw5B3jtKWHwnd0ZZTk8zYPjkqLuFgYNZwiYZK1zvS4qK85Yxh7tk3c4lgLzQcwV5LpDk5qTPfaMvDBc3wuAKmJVHW4XC6vQV9EnZkGOv2W/yXxf1LcjrD2PCkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N6ZSCP9F; arc=none smtp.client-ip=209.85.210.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W8qKOnm7"
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7ee37dc91f5so2782443a34.3
-        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 07:27:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N6ZSCP9F"
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7f4df360cc9so5205678a34.1
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 07:27:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788877652; x=1789482452; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=a5Kv6cT/AwOHxG8+33WPtCAWS/EjeBTh4gFEfyRtB4M=;
-        b=W8qKOnm75q05XMcH+6b5jjgBuRfBgSKR4a8qOcw/VqjP/ITIvk5k06HEYgtNEIeRul
-         jGHfjT56yGo/pW0YnpaeUQ6R3JFmY6K9Q9/INLt5D+M0ckXvCPH4EaE5/URN7NahqyDK
-         fLs/OlDH5F5joqHZ3mRufEBVMw/QJNsLnZw5TnwXdwCZIlFqCa+BsWBXB+9XEzpFd60A
-         BrzLcNsSnERLKFCWXpwsZ0mm7qj6XAJ6Tvr3kfwYnaTHi53tduclukfERe3qjqzVntbp
-         iltbuAMBzhduaMKYXfp3KzTTZWO3NBhC4k1IQvZo6GbZLjKCUj1Gk0B3YVlz68C/P/1U
-         QFYQ==
+        d=gmail.com; s=20251104; t=1788877661; x=1789482461; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ZvpP6HuJ+u+IqaXVv4pippmZNZNmLsTFjITz+cfMzuk=;
+        b=N6ZSCP9FZpmGKAfIDOluCDNZqzPt+ZXuvfvgcD1/cibPz3pkXdCKYPdvDjHmJVaxrJ
+         D7gk6ograRNae//7FKvxbWtqq0Ej7fD9UAp2kvWBDAleLD19bKBzBp8Tbhtt05rAwLwy
+         kkhd4OuITP8Tambk5obi4PDZlorSnRN9fsm3JWwtnwAgRXg414dVVg9NICvw35DlNvUh
+         9r1UIVWtD1LCDfF27kKsurVwnN7Tn1DEGtjc3l5zXrEpHdDV2bGBkYxaAEAVVf5t0lLW
+         E7t4kov11zxLqTr11dKivDDKU245Q7uPAyn/V7klVipRvNr/9XjaOO5nBt1PW5MVKeX/
+         D95Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788877652; x=1789482452;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=a5Kv6cT/AwOHxG8+33WPtCAWS/EjeBTh4gFEfyRtB4M=;
-        b=aJdzv06KlJ5qvkW/rOIaHC7rePB/5tgIiqX3yXIrkJq6AwTVfTIkhcit2Is8QNOnWO
-         J/LwopCe3rWpveMQclyKVls8rXF+L7+4AjRpI/rhGgpKFI2Re7Mf3KuIlERMPLJBvvkX
-         m+AtCHfHh7tjXiTDQ7pTx47/WWSNiTYwU8epUQXprb2C3zL1fIFCmFtTrqqNJYJkgTa1
-         jwwp3XsRxidvH9IOQxXU9cKIiCV8ajBxVT6E3ST3CCB6VD6YBFhbI5fg9xDoA2cCqwLK
-         SGbJWTyZM9MGGhuEjIqSlTM+rwAQG3NAz5+PGhQrd7MAU5UjrbbWYtPUk2OYe/SrxSTH
-         UJag==
-X-Gm-Message-State: AFuF++lr6Rg5sFdWhl+JGno/xdfxUgfnMogmWTpRUcELV6H4sYtRB3h/
-	WrxS7dJKmSLUTOvJmuEpSEQXY+kgXPRfZjkA10kAHaF0I59towpmdHAZ
-X-Gm-Gg: AYBFou2aIUVG7Z6y8ESoQSHzQZR6Tul+AbRSZhVWb7WozHwKq5hG9Ay6EEUq7CQpQJX
-	AKK5ADpsL18f3byFSNkjFdiZ1RxixmyyD3TKRV2dpGfroj/LVbXn+eX6+mrp3j2vbi9WdiSQijH
-	tl4PYBKuruNAtFGoB4u0QjRozHQM+TF4pg1cnJSoBD+tQxpDwANTxWLIAGoiJ/jdH688WRMnyYx
-	C3BvDSB60rOsvxgLzdweaPM6iqisCCNSywjzvnBxOALiuA3KkF/nUuGRvXEcbGJL3QTT5scqvdT
-	VWvuEeD3Xf506OjF53Dde2XiytvYmjOnhR9uU7hFmPsEGjqUjbPuit++k0oGwHgsTE4yYMZ/SpO
-	A4ttFrqMkbz7JruCb8Sl6dfTNwDLb017nBrSkXFzORMzEJYKMaysUjvKPycNYA2f0J/bCLGFFw3
-	L3aMSyWZ6y+IVfNKPR4jjCRzxoa3e5/kLZU03mKWgGfXNizNbeBg==
-X-Received: by 2002:a05:6820:218:b0:6b7:46e9:9703 with SMTP id 006d021491bc7-6b746e9a293mr14206611eaf.51.1788877651736;
-        Tue, 08 Sep 2026 07:27:31 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:7::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7fc68d5ae2bsm8456663a34.3.2026.09.08.07.27.30
+        d=1e100.net; s=20251104; t=1788877661; x=1789482461;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ZvpP6HuJ+u+IqaXVv4pippmZNZNmLsTFjITz+cfMzuk=;
+        b=o2OSD3KLyA4PQCbT/kLA30n9J5WIb5I7NZXEbciteM4Vx90le5Ga7gUbNuALyNkUiI
+         Fz7ni6sFIDLMtSbUOlvxi+azmBj0M0OKNTfqfRpYVP84YlNLvr7l6w1ewC7U97p4S53X
+         7TnEpSaJH1DGwh7PwDjGsH7/sSOASszDjbIzYe0TcAxRi74QhkYmHc4WlgCHNV4WOYii
+         VRqWzu1/5P0Kq3mR7t6lqVRSDuSjHsxDOjc/ycKJ5TJ4O9N6A1tI3nnMyqKUbwfjbFoQ
+         mF6taQs2gyDBOV0XZoont9PD0nlpU6YMBS9d2Sk22LLCt5KlS/7n08JfB4rXFUh9KwAw
+         Q9iQ==
+X-Gm-Message-State: AFuF++ndJlxaAS1ZbsPwmP32Dj3yGkGbPHSGD/20XsWtCwnRSv4k2GSu
+	ZIDR6WRVrIusgG8UcSVfktSYEjodwB+NrRYh7Ysd8Fy/YJw5w01a7rTd
+X-Gm-Gg: AYBFou2kzEpXOHatKrcdZ6+x5vJ/oXYwC3WeyT5wgc53wyGu/Lb4NsGLjDbipgZkdCd
+	Wv4+RXHgQYz2u0u886NIZCdpFma4yARR3XF+D0xJU6jakn8jftyQU1ouuu91raodo5q+Es+kYYC
+	HRsr3PrK1wUtkwGWVmz/1Xadn61q01hTjPaU6fe3A6P0lTKpeRYFblMxLuugQ+Tq8NF1sxbSQ/R
+	chxGVRBBRZ3Rqmltf0u2J5iYLRZzwZYyJNIJ20I3dO+97g6wT/4FxEif7U3LV3Db+rf3tSvRto2
+	HE1V96j8Y+jZt2y4BrBlPuOCMbhq6koX3AGyMilOCESfDuAv6Yn9/seRsJY/Y9weOD1X6KNePpb
+	swXbRDwi72gEjc10s3uWkJOQZEWdAmvS1UrnykOzLRVEZ7x7ZJJj9PhLD7XF3Tbnzmjrgnn6Xf1
+	N8pHQcJ0CAqe91GAvF1PUqc56w7JIS1aJ3eNg5xKw98aYu//BlTw==
+X-Received: by 2002:a05:6830:1303:b0:7f9:5a3:c243 with SMTP id 46e09a7af769-7f905a3c495mr10222266a34.26.1788877660597;
+        Tue, 08 Sep 2026 07:27:40 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:8::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7fe72977c16sm4978268a34.10.2026.09.08.07.27.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2026 07:27:31 -0700 (PDT)
+        Tue, 08 Sep 2026 07:27:39 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Subject: [PATCH bpf-next v3 0/3] bpftool: Improve perf counter reporting
-Date: Tue, 08 Sep 2026 07:27:09 -0700
-Message-Id: <20260908-bpftool_cyles_per_run-v3-0-60e86f325c35@meta.com>
+Date: Tue, 08 Sep 2026 07:27:12 -0700
+Subject: [PATCH bpf-next v3 3/3] bpftool: Scale counters and report cycles
+ per run
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,57 +70,375 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAD0boGoC/4XNSwqDMBRA0a2ENzYln2qqo+6jFDHxpQZsIokNi
- rj3gpN2Ujq+cO4GCaPDBA3ZIGJ2yQUPDZEFATN0/oHU9dAQEExU7CIU1ZOdQxhbs46Y2gljG1+
- e1pJXtTVaMq2gIDBFtG453BvoyVKPywz3gsDg0hziegwzP/ofO3PKqVK90tZIw6ry+sS5O5nwP
- MAsPkjNxC9EUE61KXt+7npmsP5C9n1/A/CaQMAIAQAA
-X-Change-ID: 20260827-bpftool_cyles_per_run-93169fcb30b7
+Message-Id: <20260908-bpftool_cyles_per_run-v3-3-60e86f325c35@meta.com>
+References: <20260908-bpftool_cyles_per_run-v3-0-60e86f325c35@meta.com>
+In-Reply-To: <20260908-bpftool_cyles_per_run-v3-0-60e86f325c35@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
  daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com, 
  memxor@gmail.com, qmo@kernel.org, linux-perf-users@vger.kernel.org, 
  acme@kernel.org, namhyung@kernel.org
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788877648; l=1346;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1788877648; l=11029;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=+TM+zYeX3ygRQvHGcTEUljLUIwOHDrWNq9lU7U+08kE=;
- b=zxP6ytb5ElqNaFXIzMX7miGvIJ4epfwVee8pWS84746ePATW5qUF2/Ob0FFeehhmW/VtT108b
- 2I9ZfcIpWPcC7jxcP3+ZqfEaAq38JkEgVhSSPhmU6LufvCFmUDGe0EN
+ bh=SlEK4miKlOUeo8TQ+fVSOkrbLvY65GOJacD5H6FbqrA=;
+ b=4iglO5MttlebanKPr17Ibqv+yb2fL3ovdZNfXDsRNxBOkN+ZqGJNOaHio+lPXwbJlE4HJx5tv
+ umtv9KPA4glDaI69hvMFdGP37TmfEXB5at5IJHA6N8GgFvwW/MPF9u0
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
-Track valid snapshots that have a zero counter value. Scale each per-CPU
-counter before aggregation. Report cycles per included program run.
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
+Perf counters can report too few events when the PMU multiplexes them.
+Scale each per-CPU value before aggregation.
+
+Use the same CPU set for derived ratios. Report cycles per included
+program run, and preserve the total run count in JSON.
+
+Fixes: 47c09d6a9f67 ("bpftool: Introduce "prog profile" command")
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
-Changes in v3:
-- Keep the JSON value field raw. Add value_scaled and run_cnt_valid.
-- Use the same CPU set for all metrics.
-- Move snapshot state tracking to a separate patch.
-- Link to v2: https://patch.msgid.link/20260902-bpftool_cyles_per_run-v2-1-bc5d14ad0ce9@meta.com
-
-Changes in v2:
-- Scale all counters.
-- Use an enum for metric indexes.
-- Link to v1: https://patch.msgid.link/20260827-bpftool_cyles_per_run-v1-1-77d7bfc3c065@meta.com
-
----
-Mykyta Yatsenko (3):
-      bpftool: Track perf counter snapshot state
-      perf bpf_counter: Track valid BPF counter snapshots
-      bpftool: Scale counters and report cycles per run
-
  tools/bpf/bpftool/Documentation/bpftool-prog.rst |  13 +-
  tools/bpf/bpftool/prog.c                         | 159 +++++++++++++++++------
- tools/bpf/bpftool/skeleton/profiler.bpf.c        |  25 ++--
- tools/perf/util/bpf_skel/bpf_prog_profiler.bpf.c |  26 ++--
- 4 files changed, 168 insertions(+), 55 deletions(-)
----
-base-commit: 3fa3128887a4df6057c543aae7c5c7fd2ed41f12
-change-id: 20260827-bpftool_cyles_per_run-93169fcb30b7
+ 2 files changed, 133 insertions(+), 39 deletions(-)
 
-Best regards,
---  
-Mykyta Yatsenko <yatsenko@meta.com>
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-prog.rst b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+index 90fa2a48cc26..0108a1c8be4d 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-prog.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-prog.rst
+@@ -217,7 +217,16 @@ bpftool prog run *PROG* data_in *FILE* [data_out *FILE* [data_size_out *L*]] [ct
+ bpftool prog profile *PROG* [duration *DURATION*] *METRICs*
+     Profile *METRICs* for bpf program *PROG* for *DURATION* seconds or until
+     user hits <Ctrl+C>. *DURATION* is optional. If *DURATION* is not specified,
+-    the profiling will run up to **UINT_MAX** seconds.
++    the profiling will run up to **UINT_MAX** seconds. Plain output scales each
++    per-CPU metric value to correct for perf event multiplexing. When
++    **cycles** is selected, it also reports cycles per included program run. If
++    a selected metric was not scheduled on a CPU, all metric values exclude
++    that CPU so that ratios use a consistent CPU set. The **run_cnt** value
++    still includes all recorded runs.
++
++    In JSON output, **value** is raw, **value_scaled** is scaled, **run_cnt**
++    includes all runs, and **run_cnt_valid** includes only runs used for metric
++    values.
+ 
+ bpftool prog help
+     Print short help message.
+@@ -360,7 +369,7 @@ EXAMPLES
+ ::
+ 
+          51397 run_cnt
+-      40176203 cycles                                                 (83.05%)
++      40176203 cycles          # 781.68 cycles per run                (83.05%)
+       42518139 instructions    #   1.06 insns per cycle               (83.39%)
+            123 llc_misses      #   2.89 LLC misses per million insns  (83.15%)
+ 
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index 8c2f9255b36d..9e126f3823ad 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -2062,37 +2062,52 @@ static int do_profile(int argc, char **argv)
+ 
+ #include "profiler.skel.h"
+ 
++enum ratio_metric {
++	METRIC_NONE = -2,
++	METRIC_RUN_CNT = -1,
++	METRIC_CYCLES = 0,
++	METRIC_INSTRUCTIONS = 1,
++	METRIC_L1D_LOADS = 2,
++	METRIC_LLC_MISSES = 3,
++	METRIC_ITLB_MISSES = 4,
++	METRIC_DTLB_MISSES = 5,
++};
++
+ struct profile_metric {
+ 	const char *name;
+ 	struct bpf_perf_event_value val;
++	__u64 scaled_val;
+ 	struct perf_event_attr attr;
+ 	bool selected;
+ 
+ 	/* calculate ratios like instructions per cycle */
+-	const int ratio_metric; /* 0 for N/A, 1 for index 0 (cycles) */
++	const enum ratio_metric ratio_metric;
+ 	const char *ratio_desc;
+ 	const float ratio_mul;
+ } metrics[] = {
+-	{
++	[METRIC_CYCLES] = {
+ 		.name = "cycles",
+ 		.attr = {
+ 			.type = PERF_TYPE_HARDWARE,
+ 			.config = PERF_COUNT_HW_CPU_CYCLES,
+ 			.exclude_user = 1,
+ 		},
++		.ratio_metric = METRIC_RUN_CNT,
++		.ratio_desc = "cycles per run",
++		.ratio_mul = 1.0,
+ 	},
+-	{
++	[METRIC_INSTRUCTIONS] = {
+ 		.name = "instructions",
+ 		.attr = {
+ 			.type = PERF_TYPE_HARDWARE,
+ 			.config = PERF_COUNT_HW_INSTRUCTIONS,
+ 			.exclude_user = 1,
+ 		},
+-		.ratio_metric = 1,
++		.ratio_metric = METRIC_CYCLES,
+ 		.ratio_desc = "insns per cycle",
+ 		.ratio_mul = 1.0,
+ 	},
+-	{
++	[METRIC_L1D_LOADS] = {
+ 		.name = "l1d_loads",
+ 		.attr = {
+ 			.type = PERF_TYPE_HW_CACHE,
+@@ -2102,8 +2117,9 @@ struct profile_metric {
+ 				(PERF_COUNT_HW_CACHE_RESULT_ACCESS << 16),
+ 			.exclude_user = 1,
+ 		},
++		.ratio_metric = METRIC_NONE,
+ 	},
+-	{
++	[METRIC_LLC_MISSES] = {
+ 		.name = "llc_misses",
+ 		.attr = {
+ 			.type = PERF_TYPE_HW_CACHE,
+@@ -2113,11 +2129,11 @@ struct profile_metric {
+ 				(PERF_COUNT_HW_CACHE_RESULT_MISS << 16),
+ 			.exclude_user = 1
+ 		},
+-		.ratio_metric = 2,
++		.ratio_metric = METRIC_INSTRUCTIONS,
+ 		.ratio_desc = "LLC misses per million insns",
+ 		.ratio_mul = 1e6,
+ 	},
+-	{
++	[METRIC_ITLB_MISSES] = {
+ 		.name = "itlb_misses",
+ 		.attr = {
+ 			.type = PERF_TYPE_HW_CACHE,
+@@ -2127,11 +2143,11 @@ struct profile_metric {
+ 				(PERF_COUNT_HW_CACHE_RESULT_MISS << 16),
+ 			.exclude_user = 1
+ 		},
+-		.ratio_metric = 2,
++		.ratio_metric = METRIC_INSTRUCTIONS,
+ 		.ratio_desc = "itlb misses per million insns",
+ 		.ratio_mul = 1e6,
+ 	},
+-	{
++	[METRIC_DTLB_MISSES] = {
+ 		.name = "dtlb_misses",
+ 		.attr = {
+ 			.type = PERF_TYPE_HW_CACHE,
+@@ -2141,13 +2157,14 @@ struct profile_metric {
+ 				(PERF_COUNT_HW_CACHE_RESULT_MISS << 16),
+ 			.exclude_user = 1
+ 		},
+-		.ratio_metric = 2,
++		.ratio_metric = METRIC_INSTRUCTIONS,
+ 		.ratio_desc = "dtlb misses per million insns",
+ 		.ratio_mul = 1e6,
+ 	},
+ };
+ 
+ static __u64 profile_total_count;
++static __u64 profile_valid_count;
+ 
+ #define MAX_NUM_PROFILE_METRICS 4
+ 
+@@ -2182,9 +2199,39 @@ static int profile_parse_metrics(int argc, char **argv)
+ 	return selected_cnt;
+ }
+ 
+-static void profile_read_values(struct profiler_bpf *obj)
++/*
++ * Filter out CPUs that have any selected metric not scheduled for them. This makes sure all
++ * metrics are using the same CPU set, as a result ratio metrics are consistent.
++ */
++static void profile_filter_cpus(__u32 num_cpu,
++				struct bpf_perf_event_value vals[MAX_NUM_PROFILE_METRICS][num_cpu],
++				__u64 *counts)
++{
++	__u32 m, cpu, key = 0;
++
++	for (m = 0; m < ARRAY_SIZE(metrics); m++) {
++		if (!metrics[m].selected)
++			continue;
++
++		for (cpu = 0; cpu < num_cpu; cpu++) {
++			/*
++			 * CPU has hits, but this metric never scheduled, set counts[cpu] to 0
++			 * so other metrics ignore this CPU too
++			 */
++			if (counts[cpu] && !vals[key][cpu].running) {
++				p_info("%s not scheduled on CPU %u; excluding %llu runs from all metrics",
++				       metrics[m].name, cpu, counts[cpu]);
++				counts[cpu] = 0;
++			}
++		}
++		key++;
++	}
++}
++
++static int profile_read_values(struct profiler_bpf *obj)
+ {
+ 	__u32 m, cpu, num_cpu = obj->rodata->num_cpu;
++	struct bpf_perf_event_value values[MAX_NUM_PROFILE_METRICS][num_cpu], *val;
+ 	int reading_map_fd, count_map_fd;
+ 	__u64 counts[num_cpu];
+ 	__u32 key = 0;
+@@ -2194,38 +2241,61 @@ static void profile_read_values(struct profiler_bpf *obj)
+ 	count_map_fd = bpf_map__fd(obj->maps.counts);
+ 	if (reading_map_fd < 0 || count_map_fd < 0) {
+ 		p_err("failed to get fd for map");
+-		return;
++		return min(reading_map_fd, count_map_fd);
+ 	}
+ 
+ 	err = bpf_map_lookup_elem(count_map_fd, &key, counts);
+ 	if (err) {
+ 		p_err("failed to read count_map: %s", strerror(errno));
+-		return;
++		return err;
++	}
++
++	for (m = 0; m < ARRAY_SIZE(metrics); m++) {
++		if (!metrics[m].selected)
++			continue;
++
++		err = bpf_map_lookup_elem(reading_map_fd, &key, values[key]);
++		if (err) {
++			p_err("failed to read reading_map: %s", strerror(errno));
++			return err;
++		}
++		key++;
+ 	}
+ 
+ 	profile_total_count = 0;
+ 	for (cpu = 0; cpu < num_cpu; cpu++)
+ 		profile_total_count += counts[cpu];
+ 
++	profile_filter_cpus(num_cpu, values, counts);
++
++	profile_valid_count = 0;
++	for (cpu = 0; cpu < num_cpu; cpu++)
++		profile_valid_count += counts[cpu];
++
++	key = 0;
+ 	for (m = 0; m < ARRAY_SIZE(metrics); m++) {
+-		struct bpf_perf_event_value values[num_cpu];
++		double scale;
+ 
+ 		if (!metrics[m].selected)
+ 			continue;
+ 
+-		err = bpf_map_lookup_elem(reading_map_fd, &key, values);
+-		if (err) {
+-			p_err("failed to read reading_map: %s",
+-			      strerror(errno));
+-			return;
+-		}
+ 		for (cpu = 0; cpu < num_cpu; cpu++) {
+-			metrics[m].val.counter += values[cpu].counter;
+-			metrics[m].val.enabled += values[cpu].enabled;
+-			metrics[m].val.running += values[cpu].running;
++			/* Skip CPUs with no runs or with an unscheduled metric. */
++			if (!counts[cpu])
++				continue;
++
++			val = &values[key][cpu];
++
++			metrics[m].val.enabled += val->enabled;
++			metrics[m].val.running += val->running;
++			metrics[m].val.counter += val->counter;
++			/* Scale counter values to account for perf event multiplexing. */
++			scale = (double)val->enabled / val->running;
++			metrics[m].scaled_val += val->counter * scale;
+ 		}
+ 		key++;
+ 	}
++	return 0;
+ }
+ 
+ static void profile_print_readings_json(void)
+@@ -2239,9 +2309,11 @@ static void profile_print_readings_json(void)
+ 		jsonw_start_object(json_wtr);
+ 		jsonw_string_field(json_wtr, "metric", metrics[m].name);
+ 		jsonw_lluint_field(json_wtr, "run_cnt", profile_total_count);
++		jsonw_lluint_field(json_wtr, "run_cnt_valid", profile_valid_count);
+ 		jsonw_lluint_field(json_wtr, "value", metrics[m].val.counter);
+ 		jsonw_lluint_field(json_wtr, "enabled", metrics[m].val.enabled);
+ 		jsonw_lluint_field(json_wtr, "running", metrics[m].val.running);
++		jsonw_lluint_field(json_wtr, "value_scaled", metrics[m].scaled_val);
+ 
+ 		jsonw_end_object(json_wtr);
+ 	}
+@@ -2250,24 +2322,34 @@ static void profile_print_readings_json(void)
+ 
+ static void profile_print_readings_plain(void)
+ {
+-	__u32 m;
++	__u32 i;
+ 
+ 	printf("\n%18llu %-20s\n", profile_total_count, "run_cnt");
+-	for (m = 0; m < ARRAY_SIZE(metrics); m++) {
+-		struct bpf_perf_event_value *val = &metrics[m].val;
++	for (i = 0; i < ARRAY_SIZE(metrics); i++) {
++		struct profile_metric *m = &metrics[i];
++		struct bpf_perf_event_value *val = &m->val;
+ 		int r;
++		__u64 ratio;
+ 
+-		if (!metrics[m].selected)
++		if (!m->selected)
+ 			continue;
+-		printf("%18llu %-20s", val->counter, metrics[m].name);
++		printf("%18llu %-20s", m->scaled_val, m->name);
+ 
+-		r = metrics[m].ratio_metric - 1;
+-		if (r >= 0 && metrics[r].selected &&
+-		    metrics[r].val.counter > 0) {
++		r = m->ratio_metric;
++		switch (r) {
++		case METRIC_RUN_CNT:
++			ratio = profile_valid_count;
++			break;
++		case METRIC_NONE:
++			ratio = 0;
++			break;
++		default:
++			ratio = metrics[r].scaled_val;
++		}
++		if (ratio) {
+ 			printf("# %8.2f %-30s",
+-			       val->counter * metrics[m].ratio_mul /
+-			       metrics[r].val.counter,
+-			       metrics[m].ratio_desc);
++			       m->scaled_val * m->ratio_mul / ratio,
++			       m->ratio_desc);
+ 		} else {
+ 			printf("%-41s", "");
+ 		}
+@@ -2423,9 +2505,12 @@ static int profile_open_perf_events(struct profiler_bpf *obj)
+ 
+ static void profile_print_and_cleanup(void)
+ {
++	int err;
++
+ 	profile_close_perf_events(profile_obj);
+-	profile_read_values(profile_obj);
+-	profile_print_readings();
++	err = profile_read_values(profile_obj);
++	if (!err)
++		profile_print_readings();
+ 	profiler_bpf__destroy(profile_obj);
+ 
+ 	close(profile_tgt_fd);
+
+-- 
+2.53.0-Meta
 
