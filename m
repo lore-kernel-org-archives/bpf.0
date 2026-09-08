@@ -1,66 +1,40 @@
-Received: from mail-ot1-f54.google.com (mail-ot1-f54.google.com [209.85.210.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C7915519B0
-	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 14:27:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2C3538D73;
+	Tue,  8 Sep 2026 14:29:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788877679; cv=none; b=kkUxFqJp+Wrjre6uLanmgYxhLPeynVzU3xBU/oK99qHVjQX1ZMJkRErFI2/mxjd3kkZNrjILwMCMILqGwvdBEwqz1RVb8ZxFFnkhKPn5ks51xg7aqRLTpwiIj+pz7CEf0tNdsLxWZgcevx7puF0tI6dDbCw59t9ML0yykne7LbU=
+	t=1788877760; cv=none; b=NFCBY1sZ2u/OTIR0gRFUU/LWSRiN7CzgdBDJx1OozkdxsoIl6zJdJ8OQhXLfiBZWNAY1Vqft+gDfyXHIS7OlBo6lvbTAl+6QEPscEeLkdgGd+wSVzf7nt1/5Sj9yS8foBE0txUjGeMBJ4tQ5jK4JzJBIULbilH09XytIIOPClig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788877679; c=relaxed/simple;
-	bh=xs47/ZquuRSh5EAxE1ukOHEBk6TzifBU8rys2s3fUy8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BatAuBafAS/W5jJCJIg96rg9zMoQ6txZBXTIwj81KSMsQNJX1gmnf9GgFyws2QqyEAjsTpxskii6HofMyK/LDUs94eN18BNDqJHnOo1Jm9QKVghphfJ5pRclpwe13xj47P6ZaM3PGEWus3WBcBPWUBeDsFQMo0YSZZQY7i6uL1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NIALXBCh; arc=none smtp.client-ip=209.85.210.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788877760; c=relaxed/simple;
+	bh=5V0Cw5Qhc4VFggEnMwC/ejRxL+INGZDaVd9TR2wLQoY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jwbVBNJh1l8Ueb9LXLke0dml30tjqT8KQbCVKtA1kWEXDXkgnWp7aK6NL9auc+ypTuNNy178sADyd8sJ7S9xbJliRTgf0bvXMJWKSzRcuzMTeBQHZiQgWh8pMstUekVEKT5Yi1C0P06aW51TmBhWQZRJhvC+U+aUwB1FR4/ypTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GPOm7smE; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NIALXBCh"
-Received: by mail-ot1-f54.google.com with SMTP id 46e09a7af769-7e9fc3de7ceso2698745a34.1
-        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 07:27:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788877655; x=1789482455; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=/4rGRXmnlx95MB5kVTdxzr1v1/yGYeCfiSVry1Oz1DA=;
-        b=NIALXBChGgrc7uSTQRwn43TvOoj3YGT8A7i3bOH00L+u6QmcrRmhMYtsUx9fUYstSq
-         BMSXOwyP+xm6+nuLN268j7n3lSCP8cZ9W7kC+HL4Oq/dFRGL3dOXA1r+AjPfRAXPsJ/c
-         RGgUQgpMi/B8hd5hw99CxsMCWLjMGFLbIB7ddJEulbyYdP9fzWOmL8WuoHMk+qYsJ5cM
-         Qrvypo38ptf/9As+Se8s4Up1rIZSbU9ZA9csMFyr2O51Ywrygk7unLTkYjq0oTqOKdLV
-         rBDixv5wI08q1FyimJUFs/jGVpZu7Uw+3VB+0E7//mhwGN58nj51vgmzY09pjjzapflY
-         pR2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788877655; x=1789482455;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/4rGRXmnlx95MB5kVTdxzr1v1/yGYeCfiSVry1Oz1DA=;
-        b=oPOMcNkmSfoMa5WAFh580RTCHJufZnUTgJAcf4+s0I9BXW7RJwepjBGQgoPDaodGy8
-         kD8U6SfqKok0ecnNe9CPhHfjgJmIlUWB3ItF9EKGk9U+ScE07gYpTrA+/WgyQCO9NmOz
-         EZdm20JQ199c2V4xg2LKHaGqvWcyRojKUK2Re+UFe2qSjf7vLAnDq4za/eNz5TV7AptX
-         fx4WteqR99qyce9VpxejbEBwPM6/5mCZas18r/mOMS6351hWElcegouH76hhtzy6arWx
-         rO9fwF5ptPdG0gp0P3XP3S4lbp9Aqirjb+4EblAE2+dD6uA8yjWwDWJB9nDG31Ds67sq
-         iMnA==
-X-Gm-Message-State: AFuF++nY9ETr4TJSVyDRRYRW/BPJZlhHNTDIAf1QKLTtlHJvkxqid6ug
-	wbqhmpt14eVL8OTfI+ZHxqOIxF16DdU+aPcBDJ5zJE3O+7ic/hJ5gfsOTKRROgqazpQ=
-X-Gm-Gg: AYBFou268Cyo1pginnLQoCGU8clP7qquew2BAhOZZqXx7iC0YHXlcvZx0Wo2tIG/v1Z
-	GpB32zQUm+0q1yJ+ttTJHsQp7YRw6qg5b3Ff0qtBLkDDmH1In0Eh3NwUxaFrbh1FJo60QVUOUW1
-	fKVgo14I5YTGuNI3E74kCggdOt4pQZwn1OiAmjNfg44tELn0vrlm6GRNyRSUdmCl0j0wm536Cwh
-	46ODIsQt/6IRCDVo+8eKBdrIa45g1so8+eqKyAN+DAPhJhJ594XjyjSQ4/nklBks5bjjU7627NZ
-	v5aWFh0qvt7ayDumvuiMVGBQYnOqFbKd7l5Y4NjNfDaxD9IRD+sNez9PpTbbdESv9m6KQTmEeWn
-	9kxjJRIpma80iKXG73wpue2lIym3MnFdyfXel+VOdqoPKSTAi5qu5Ijl3KbdMOpYHE+WtNWqZ66
-	XW0dIwMYMrD4bFKL/MKDxLwhbp3s69bwAcOSic69JedYi0RSFof38=
-X-Received: by 2002:a05:6830:43ab:b0:7f4:e011:6b2b with SMTP id 46e09a7af769-7fa1dc9d20fmr18168222a34.1.1788877654500;
-        Tue, 08 Sep 2026 07:27:34 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:71::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7fc39e5cf1fsm9459213a34.24.2026.09.08.07.27.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2026 07:27:34 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Tue, 08 Sep 2026 07:27:10 -0700
-Subject: [PATCH bpf-next v3 1/3] bpftool: Track perf counter snapshot state
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GPOm7smE"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 1BF504E41597;
+	Tue,  8 Sep 2026 14:29:00 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id DA5F3603C4;
+	Tue,  8 Sep 2026 14:28:59 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2813B11C7AF4F;
+	Tue,  8 Sep 2026 16:28:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1788877738; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=LQ72/bwE87PZI8NiplH/juFfXWziTHdYYN6vw5Uubd0=;
+	b=GPOm7smEXgBYp1RioQ8yoppNqo4JR6IXrN7iJNWkhqVEchehSF6TTaqjUsaMhpTw038Jtt
+	nGlkNhX+4T/i2VGt6APJUVkvb4bquu0fj5joxHaEowRhSLKUYwzr+RHVOW5vMkpTfjF92i
+	xvmhycbOvgk79KyiTJO17knXPSD1VJVlmtqqxBep2w9x0+exl75bTWWWbYNUJYuhByK015
+	G3YF/vpbfdPda2ppUpg+WBJMOmhtUCDBvShTNLHax1e+nKfgbQa5T+pYcZWCgY2h0jQ3Ce
+	P9nYevjg5d/94EX+UMdvi5Letb1s975SRD0HMVC8pprf/us+EIHi8D9Ifi/aSw==
+From: "Miguel Gazquez (Schneider Electric)" <miguel.gazquez@bootlin.com>
+Date: Tue, 08 Sep 2026 16:28:48 +0200
+Subject: [PATCH 5.10.y] bpf: Enforce expected_attach_type for tailcall
+ compatibility
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,116 +43,126 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260908-bpftool_cyles_per_run-v3-1-60e86f325c35@meta.com>
-References: <20260908-bpftool_cyles_per_run-v3-0-60e86f325c35@meta.com>
-In-Reply-To: <20260908-bpftool_cyles_per_run-v3-0-60e86f325c35@meta.com>
-To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
- daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com, 
- memxor@gmail.com, qmo@kernel.org, linux-perf-users@vger.kernel.org, 
- acme@kernel.org, namhyung@kernel.org
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788877648; l=3143;
- i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=88iWtKcXxUazkWlhxqTHkjP1b2Zga7aQtAYNkuVTgac=;
- b=fmWe15Xe85smC0snYH9s6kKWbpvnTg5AiUs4LoaOm53baFwZsFceC/ccm/N+R/u9zad6i7h2d
- 6JvayRVkZFYCJTtdQcmJmic7UPkB1FmbN9hAYEof8MjnA4aAn1D5zxk
-X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
- pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
+Message-Id: <20260908-cve-2025-40123-v1-1-be62451196fb@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMyw6CMBCF4VchZ82QaaHcXsW40DrqsADSItEQ3
+ t2Ky+8k598QJahE9NmGIKtGncYEk2fwz8v4ENJbMizbmjtuyK9CCY4qNrYk4barW3YNlxbpNAe
+ 56/sInuAKw8UH5/8eX9dB/PKrYd+/Wi36/3oAAAA=
+X-Change-ID: 20260907-cve-2025-40123-e08968057032
+To: stable@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, 
+ Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, 
+ KP Singh <kpsingh@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+ Andrey Ignatov <rdna@fb.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, netdev@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Yinhao Hu <dddddd@hust.edu.cn>, Kaiyan Mei <M202472210@hust.edu.cn>, 
+ Dongliang Mu <dzm91@hust.edu.cn>, Sasha Levin <sashal@kernel.org>, 
+ "Miguel Gazquez (Schneider Electric)" <miguel.gazquez@bootlin.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1788877730; l=4173;
+ i=miguel.gazquez@bootlin.com; s=20250708; h=from:subject:message-id;
+ bh=i0nrpJeTUlNnEvoKERik/V/VV4CvIxY4hKcVnixWGZw=;
+ b=z9wX5y24mP4XRwy0YNfVpo5RNdvBNvc2EvOzmNLulLPeoqlM8ZA7ZWX6dvXYHvCGEEh9Yz2iE
+ ee+leegl5fECaCeoHv4a/t45iL2+5W5EAmsBzhS9s1Xy3hE5FO9sUdA
+X-Developer-Key: i=miguel.gazquez@bootlin.com; a=ed25519;
+ pk=k/2KI9jkmayaF0ghZ8QYUH9Wm/kFHDhl8QoZ0RHbr4w=
+X-Last-TLS-Session-Version: TLSv1.3
 
-From: Mykyta Yatsenko <yatsenko@meta.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
 
-A perf counter can be zero at fentry. PMU multiplexing can schedule the
-event during the BPF program. The old counter check then drops a valid
-sample.
+[ Upstream commit 4540aed51b12bc13364149bf95f6ecef013197c0 ]
 
-Use an armed flag to track each successful fentry snapshot. Reset all
-flags before new reads. The fexit path clears each flag when it consumes
-the snapshot.
+Yinhao et al. recently reported:
 
-Fixes: 47c09d6a9f67 ("bpftool: Introduce "prog profile" command")
-Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+  Our fuzzer tool discovered an uninitialized pointer issue in the
+  bpf_prog_test_run_xdp() function within the Linux kernel's BPF subsystem.
+  This leads to a NULL pointer dereference when a BPF program attempts to
+  deference the txq member of struct xdp_buff object.
+
+The test initializes two programs of BPF_PROG_TYPE_XDP: progA acts as the
+entry point for bpf_prog_test_run_xdp() and its expected_attach_type can
+neither be of be BPF_XDP_DEVMAP nor BPF_XDP_CPUMAP. progA calls into a slot
+of a tailcall map it owns. progB's expected_attach_type must be BPF_XDP_DEVMAP
+to pass xdp_is_valid_access() validation. The program returns struct xdp_md's
+egress_ifindex, and the latter is only allowed to be accessed under mentioned
+expected_attach_type. progB is then inserted into the tailcall which progA
+calls.
+
+The underlying issue goes beyond XDP though. Another example are programs
+of type BPF_PROG_TYPE_CGROUP_SOCK_ADDR. sock_addr_is_valid_access() as well
+as sock_addr_func_proto() have different logic depending on the programs'
+expected_attach_type. Similarly, a program attached to BPF_CGROUP_INET4_GETPEERNAME
+should not be allowed doing a tailcall into a program which calls bpf_bind()
+out of BPF which is only enabled for BPF_CGROUP_INET4_CONNECT.
+
+In short, specifying expected_attach_type allows to open up additional
+functionality or restrictions beyond what the basic bpf_prog_type enables.
+The use of tailcalls must not violate these constraints. Fix it by enforcing
+expected_attach_type in __bpf_prog_map_compatible().
+
+Note that we only enforce this for tailcall maps, but not for BPF devmaps or
+cpumaps: There, the programs are invoked through dev_map_bpf_prog_run*() and
+cpu_map_bpf_prog_run*() which set up a new environment / context and therefore
+these situations are not prone to this issue.
+
+[ Fixed conflict, applied the changes to bpf_prog_array_compatible
+instead of __bpf_prog_map_compatible. Dropped the guard testing for
+BPF_MAP_TYPE_PROG_ARRAY as bpf_prog_array_compatible is only called on maps whose
+map_type is already BPF_MAP_TYPE_PROG_ARRAY, so the check was always true ]
+
+Fixes: 5e43f899b03a ("bpf: Check attach type at prog load time")
+Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/r/20250926171201.188490-1-daniel@iogearbox.net
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Miguel Gazquez (Schneider Electric) <miguel.gazquez@bootlin.com>
 ---
- tools/bpf/bpftool/skeleton/profiler.bpf.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
+ include/linux/bpf.h | 1 +
+ kernel/bpf/core.c   | 4 ++++
+ 2 files changed, 5 insertions(+)
 
-diff --git a/tools/bpf/bpftool/skeleton/profiler.bpf.c b/tools/bpf/bpftool/skeleton/profiler.bpf.c
-index f48c783cb9f7..6c654bd9b346 100644
---- a/tools/bpf/bpftool/skeleton/profiler.bpf.c
-+++ b/tools/bpf/bpftool/skeleton/profiler.bpf.c
-@@ -10,6 +10,11 @@ struct bpf_perf_event_value___local {
- 	__u64 running;
- } __attribute__((preserve_access_index));
- 
-+struct profile_reading {
-+	struct bpf_perf_event_value___local value;
-+	bool armed;
-+};
-+
- /* map of perf event fds, num_cpu * num_metric entries */
- struct {
- 	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
-@@ -21,7 +26,7 @@ struct {
- struct {
- 	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
- 	__uint(key_size, sizeof(u32));
--	__uint(value_size, sizeof(struct bpf_perf_event_value___local));
-+	__uint(value_size, sizeof(struct profile_reading));
- } fentry_readings SEC(".maps");
- 
- /* accumulated readings */
-@@ -45,7 +50,7 @@ const volatile __u32 num_metric = 1;
- SEC("fentry/XXX")
- int BPF_PROG(fentry_XXX)
- {
--	struct bpf_perf_event_value___local *ptrs[MAX_NUM_METRICS];
-+	struct profile_reading *ptrs[MAX_NUM_METRICS];
- 	u32 key = bpf_get_smp_processor_id();
- 	u32 i;
- 
-@@ -56,6 +61,7 @@ int BPF_PROG(fentry_XXX)
- 		ptrs[i] = bpf_map_lookup_elem(&fentry_readings, &flag);
- 		if (!ptrs[i])
- 			return 0;
-+		ptrs[i]->armed = false;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 5d5d0bc7ca50..fb213524ccac 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -876,6 +876,7 @@ struct bpf_array_aux {
+ 		spinlock_t lock;
+ 		enum bpf_prog_type type;
+ 		bool jited;
++		enum bpf_attach_type expected_attach_type;
+ 	} owner;
+ 	/* Programs with direct jumps into programs part of this array. */
+ 	struct list_head poke_progs;
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index db613a97ee5f..c9b3fe8b250a 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1795,10 +1795,14 @@ bool bpf_prog_array_compatible(struct bpf_array *array,
+ 		 */
+ 		array->aux->owner.type  = fp->type;
+ 		array->aux->owner.jited = fp->jited;
++		array->aux->owner.expected_attach_type = fp->expected_attach_type;
+ 		ret = true;
+ 	} else {
+ 		ret = array->aux->owner.type  == fp->type &&
+ 		      array->aux->owner.jited == fp->jited;
++		if (ret &&
++		    array->aux->owner.expected_attach_type != fp->expected_attach_type)
++			ret = false;
  	}
- 
- 	for (i = 0; i < num_metric && i < MAX_NUM_METRICS; i++) {
-@@ -66,7 +72,8 @@ int BPF_PROG(fentry_XXX)
- 						sizeof(reading));
- 		if (err)
- 			return 0;
--		*(ptrs[i]) = reading;
-+		ptrs[i]->value = reading;
-+		ptrs[i]->armed = true;
- 		key += num_cpu;
- 	}
- 
-@@ -76,16 +83,18 @@ int BPF_PROG(fentry_XXX)
- static inline void
- fexit_update_maps(u32 id, struct bpf_perf_event_value___local *after)
- {
--	struct bpf_perf_event_value___local *before, diff;
-+	struct profile_reading *before;
-+	struct bpf_perf_event_value___local diff;
- 
- 	before = bpf_map_lookup_elem(&fentry_readings, &id);
- 	/* only account samples with a valid fentry_reading */
--	if (before && before->counter) {
-+	if (before && before->armed) {
- 		struct bpf_perf_event_value___local *accum;
- 
--		diff.counter = after->counter - before->counter;
--		diff.enabled = after->enabled - before->enabled;
--		diff.running = after->running - before->running;
-+		before->armed = false;
-+		diff.counter = after->counter - before->value.counter;
-+		diff.enabled = after->enabled - before->value.enabled;
-+		diff.running = after->running - before->value.running;
- 
- 		accum = bpf_map_lookup_elem(&accum_readings, &id);
- 		if (accum) {
+ 	spin_unlock(&array->aux->owner.lock);
+ 	return ret;
 
--- 
-2.53.0-Meta
+---
+base-commit: 2a3da1f4966798b0b48ce302944ad356b2c98b5d
+change-id: 20260907-cve-2025-40123-e08968057032
+
+Best regards,
+--  
+Miguel Gazquez (Schneider Electric) <miguel.gazquez@bootlin.com>
 
