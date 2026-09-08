@@ -1,311 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA1C550DB5;
-	Tue,  8 Sep 2026 13:16:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C25E54DAE4
+	for <bpf@vger.kernel.org>; Tue,  8 Sep 2026 13:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788873401; cv=none; b=ekwIqPaPwWFROJhIv4HKizjVxJ8+UwWSXlPb0pWP4un5AnGD9Rh43oo7dBDNPoi1bd4nkMKEnMqThjDXmvzJsRmVYmR4XU/FRuc1sKooFohzQr46QFd+Hb9Zl6oIiT2vpquH8PZidtVqXdxhOsWt1XeLCdE1o45nZjMYlfFJmag=
+	t=1788873627; cv=none; b=p7CHKGxXIFY/96DSemLGlq8xkYqUeEGr+kMkcTr3MMYHbpzcEsa29mZCJgKpLD88CdQaOk9TL/xkgBWWOcfaKw3GyFknxqSiEopLNqAejBPUg20iTMb25KYmYAr60xKdjjfD41U4/UW1fBO5qCNuMTdr29RYDYMYpBtwdXOYuRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788873401; c=relaxed/simple;
-	bh=rw6q01fV3rH8LWshetnCVReEFs0SL+sAvVq67LFYUaY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mIOBxQYBXxRJp8a8Fe20NGMNUVLvyLb1JNJMBzqHWxqKtpx7+UK0Qb6MOav69Toyj1eLBuTzqdoNGOvaMTydNILMsJUWMVaFOk1R44QvHrVNS2h0ta8ORB/7eYPY4W9/DJyM+UU5dUhKjoreaDrzhO3li2rz1jfMKowyr5q1R2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oqeTVtVP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788873627; c=relaxed/simple;
+	bh=ZI1g/vHb9cji6vCcQ+uARVz1H8o1gKWXi33ujmqGvdo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=U4Lv70jxIlIne3BF1M/cO2VZI0ey+EyqCnFKUsgB/U32w4IjDAYaO8ZDKeKeoF8DOxyqmNXVmxpKPtukh65+Aja8DavMA05En4ld+pn/H3ZRisq9OAckLpYDAdUg4B/WmdTSCscw4jn0ttP7lXXVseRJG5hYbUDGG+JNPwFd0Dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Spq2afWz; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oqeTVtVP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA0B31F00A3A;
-	Tue,  8 Sep 2026 13:16:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788873399;
-	bh=eGoipUCnVkQSnrYlG4JuuefvC9x1Ssr7yfDjVV3fi44=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=oqeTVtVP8J4gmkOV/vgaJdwrdFmePsueOXneNkP0K3ZCZxNy/XbNk+Mz3u8yPvv8B
-	 rSJcvMVytF2Wex2GWEtxw3Jmo/U6steSK88MCOpPV2qzOXxtFldeoPnZu/oJdcDjjM
-	 mhW11GCOVUtyhlrgmqkMBozE9lYJzkTafjcL7YGglsbBZ90n9rZK1JNJBFwQBLyX3i
-	 laZwDs0zTiur85XZaUXHRw3RmT77Vb9vNnQ7FsJYwfisjB5J6eGu5yI97mQ74KEz+f
-	 9Bj/yI275o/CX6460g5dfvsVUaGHS9oLnUWg3xP8vYkXlOQL1RZnt0vrBDmJZTYTvW
-	 htwTGDeZI9OXQ==
-Date: Tue, 8 Sep 2026 14:16:31 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-Cc: bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, david@kernel.org, akpm@linux-foundation.org, 
-	andrii@kernel.org, ast@kernel.org, brauner@kernel.org, daniel@iogearbox.net, 
-	eddyz87@gmail.com, kpsingh@kernel.org, matt@bobrowski.net, memxor@gmail.com, 
-	song@kernel.org, sun.jian.kdev@gmail.com, utilityemal77@gmail.com, 
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Spq2afWz"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-484374f54d0so2971717f8f.3
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 06:20:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788873623; x=1789478423; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ZI1g/vHb9cji6vCcQ+uARVz1H8o1gKWXi33ujmqGvdo=;
+        b=Spq2afWzIISzYRMZnn40BGUyGHtdXGNPegfTWPPWbrkmKwNuwxo5ltj6HvKD7u+4Zg
+         jbBbOHamijpL4207qANtaF4LkOCeaVIk26cT+HiRXTdVVEBtyFKjrlTcLv/2KSgbHJpE
+         F2zkzepWY0IS4oI5mhWg8Xpc6DibwXvNtGgWuKyoOZbpgW1BwAYMXlvQsiMWUnX9gSBg
+         IeZGfs+7X6B9oOdciB29NeBl27geUi+UCz7jSZsmDeVFGKgRwLqGceAfpYE8uJe9kcY2
+         BQ44WCGpOgwh3PdswEs1kaZTW7+CeQb5T5yBAOlc2893FjnCRa1KNXWMs/+A9ATe9em+
+         SlFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788873623; x=1789478423;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ZI1g/vHb9cji6vCcQ+uARVz1H8o1gKWXi33ujmqGvdo=;
+        b=nxSl0/HPLgNlHryYKHgh3pkd7T4sX2xxIC1U52+YJJZZ7AgQ1NfqiSdi3aviNgmwqa
+         w/XkbE56Fu+5ZFyyBYnqArfYeEwmefBbiq3ZFFBCWWRKfpoBJE/5abU5vEojv8FutBnc
+         9om0EC2LEMTak5HIcGvYR/yFjKoEvzyVC+ab0qf/6/+UqDFeIRSrCu51eot+WRn/rtXQ
+         JlTWaLee6UsZmZEEWIwqcScDsKn/33ScLgYAHEe4YJLJ+vB6zKMvzC8ASJ7tQw+ox9Vz
+         Px4yNr8LXhy9lXAzcs4R/FvSPh0Ph+J6yKKXxl5bLyX22lEFheIOdypGPZoE4rt935zD
+         6HEA==
+X-Forwarded-Encrypted: i=1; AKwUvByznVYaMfOVAGF0boEodMhsbq3iCiEwDfOotmyfwPcZBGzYMlc+wfzRNrdmvhotMVera60=@vger.kernel.org
+X-Gm-Message-State: AFuF++mCUJE1k7qQgYPcwBjXdEsVLs9HVigyOPZiP8sDY6dGlbQPgG/s
+	LDNFVMx9GnaPylny7eQ/1nxrN/ukk/AgXbCd53zuynlu8MgnCWNL8hKF
+X-Gm-Gg: AYBFou1nDQjhCnTT7yPn/KhJL7NQLGEbbAKuZc1EpkxEUnbEfBby/3BTtSWb+TJTlQV
+	2pD7EDQex+x2wZk6vHbmOFmRa6W9emk0F5ZdTupzSkm18cJ2TkHuZB6rPtb2q2bZjODdlG+Y+OG
+	AwCI2B3Ip3sNNFlm3wXk0ttlg4BAbvp47ahC07pXwQDHT5knMkoTXPVyerDkA5W5Bfb1PY3DwUo
+	MhDZLO4Mk+DTYCsqUH3FLcW//cKuirnRN5EsluS6AiplruD3dYBZrt2ti4b3YBCMyJ8LKDWE/EU
+	hden/Pb1HSqPwbAld32dPrkwtv3cDaiLKVcMD9Xem2F6qCgimheBoeX0hNKIk2A/u5TiRuRBPRh
+	BntJEPj2QIojYCInO/inM54wGXkYbRF9pIlrmf0LedMN10kOnHKKSQRFnfTkliTSU3COjUyag71
+	9Sp3CI2zWRFMje/f5Z7pm2gh2jDRVK7t2wA2BJdF8IyxCd96aN6y5y49MRpDq1/cmxTFMCTDbf1
+	Q==
+X-Received: by 2002:a5d:59c9:0:b0:485:8420:26d with SMTP id ffacd0b85a97d-48587057223mr56490158f8f.8.1788873623214;
+        Tue, 08 Sep 2026 06:20:23 -0700 (PDT)
+Received: from dell-desktop ([2a02:587:4b5f:900:ef25:2f4:1792:4e6f])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485883c074asm35214027f8f.23.2026.09.08.06.20.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2026 06:20:22 -0700 (PDT)
+From: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+To: tasos.papagiannnis@gmail.com
+Cc: akpm@linux-foundation.org,
+	andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	brauner@kernel.org,
+	daniel@iogearbox.net,
+	david@kernel.org,
+	eddyz87@gmail.com,
+	kpsingh@kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	ljs@kernel.org,
+	matt@bobrowski.net,
+	memxor@gmail.com,
+	song@kernel.org,
+	sun.jian.kdev@gmail.com,
+	utilityemal77@gmail.com,
 	viro@zeniv.linux.org.uk
-Subject: Re: [PATCH bpf-next v5 1/7] mm: Add copy_remote_mm_str()
-Message-ID: <aqAKY6dtdxN_cUMi@gremlin>
-References: <20260907165220.52431-1-tasos.papagiannnis@gmail.com>
- <20260907165220.52431-2-tasos.papagiannnis@gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/7] bpf: Allow reads through trusted-or-null BTF pointers
+Date: Tue,  8 Sep 2026 16:19:39 +0300
+Message-ID: <20260908131939.73400-1-tasos.papagiannnis@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260908114736.5342-1-tasos.papagiannnis@gmail.com>
+References: <20260908114736.5342-1-tasos.papagiannnis@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260907165220.52431-2-tasos.papagiannnis@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 07, 2026 at 07:52:14PM +0300, Anastasios Papagiannis wrote:
-> copy_remote_vm_str() gets the target address space from a struct
-> task_struct. This does not work for an address space that exists but is
-> not yet associated with a task_struct, such as the mm held by struct
-> linux_binprm during exec.
->
-> Add copy_remote_mm_str(), which operates directly on a struct mm_struct.
->
-> Use a common internal interface for the MMU and NOMMU implementations
-> and define both public wrappers in mm/util.c. Preserve the existing
-> copy_remote_vm_str() behavior, including handling zero-length requests
-> before acquiring the task's mm.
->
-> Signed-off-by: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+> Out of curiosity, what were the main issues caused by that change?
 
-OK actually doing it this way means we don't have to worry about
-__copy_remote_mm_str() at all since we abstract it with
-copy_remote_mm_str().
+Found the discussions in [1] and [2].
 
-With David's comments addressed LGTM so:
-
-Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-
-> ---
->  include/linux/mm.h |  2 ++
->  mm/internal.h      |  5 ++++
->  mm/memory.c        | 41 ++----------------------------
->  mm/nommu.c         | 41 ++----------------------------
->  mm/util.c          | 62 ++++++++++++++++++++++++++++++++++++++++++++++
->  5 files changed, 73 insertions(+), 78 deletions(-)
->
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index dd09c438fa23..d5bde1f71a97 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -3326,6 +3326,8 @@ extern int access_remote_vm(struct mm_struct *mm, unsigned long addr,
->  		void *buf, int len, unsigned int gup_flags);
->
->  #ifdef CONFIG_BPF_SYSCALL
-> +extern int copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
-> +			      void *buf, int len, unsigned int gup_flags);
->  extern int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
->  			      void *buf, int len, unsigned int gup_flags);
->  #endif
-
-Same comments as David :>)
-
-> diff --git a/mm/internal.h b/mm/internal.h
-> index 38b1165212c9..8264a346d18a 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -25,6 +25,11 @@
->  struct folio_batch;
->  struct hstate;
->
-> +#ifdef CONFIG_BPF_SYSCALL
-> +int __copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
-> +			 void *buf, int len, unsigned int gup_flags);
-> +#endif
-> +
->  struct huge_bootmem_page {
->  	struct list_head list;
->  	struct hstate *hstate;
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 8b0c2c735d3d..fe2f5e988fb9 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -7331,8 +7331,8 @@ EXPORT_SYMBOL_GPL(access_process_vm);
->   * Copy a string from another process's address space as given in mm.
->   * If there is any error return -EFAULT.
->   */
-> -static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr,
-> -				void *buf, int len, unsigned int gup_flags)
-> +int __copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
-> +			 void *buf, int len, unsigned int gup_flags)
->  {
->  	void *old_buf = buf;
->  	int err = 0;
-> @@ -7407,43 +7407,6 @@ static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr,
->  		return err;
->  	return buf - old_buf;
->  }
-> -
-> -/**
-> - * copy_remote_vm_str - copy a string from another process's address space.
-> - * @tsk:	the task of the target address space
-> - * @addr:	start address to read from
-> - * @buf:	destination buffer
-> - * @len:	number of bytes to copy
-> - * @gup_flags:	flags modifying lookup behaviour
-> - *
-> - * The caller must hold a reference on @mm.
-> - *
-> - * Return: number of bytes copied from @addr (source) to @buf (destination);
-> - * not including the trailing NUL. Always guaranteed to leave NUL-terminated
-> - * buffer. On any error, return -EFAULT.
-> - */
-> -int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
-> -		       void *buf, int len, unsigned int gup_flags)
-> -{
-> -	struct mm_struct *mm;
-> -	int ret;
-> -
-> -	if (unlikely(len == 0))
-> -		return 0;
-> -
-> -	mm = get_task_mm(tsk);
-> -	if (!mm) {
-> -		*(char *)buf = '\0';
-> -		return -EFAULT;
-> -	}
-> -
-> -	ret = __copy_remote_vm_str(mm, addr, buf, len, gup_flags);
-> -
-> -	mmput(mm);
-> -
-> -	return ret;
-> -}
-> -EXPORT_SYMBOL_GPL(copy_remote_vm_str);
->  #endif /* CONFIG_BPF_SYSCALL */
->
->  /*
-> diff --git a/mm/nommu.c b/mm/nommu.c
-> index 498e01ee40b0..98596e60311f 100644
-> --- a/mm/nommu.c
-> +++ b/mm/nommu.c
-> @@ -1746,8 +1746,8 @@ EXPORT_SYMBOL_GPL(access_process_vm);
->   * Copy a string from another process's address space as given in mm.
->   * If there is any error return -EFAULT.
->   */
-> -static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr,
-> -				void *buf, int len)
-> +int __copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
-> +			 void *buf, int len, unsigned int gup_flags)
->  {
->  	unsigned long addr_end;
->  	struct vm_area_struct *vma;
-> @@ -1781,43 +1781,6 @@ static int __copy_remote_vm_str(struct mm_struct *mm, unsigned long addr,
->  	mmap_read_unlock(mm);
->  	return ret;
->  }
-> -
-> -/**
-> - * copy_remote_vm_str - copy a string from another process's address space.
-> - * @tsk:	the task of the target address space
-> - * @addr:	start address to read from
-> - * @buf:	destination buffer
-> - * @len:	number of bytes to copy
-> - * @gup_flags:	flags modifying lookup behaviour (unused)
-> - *
-> - * The caller must hold a reference on @mm.
-> - *
-> - * Return: number of bytes copied from @addr (source) to @buf (destination);
-> - * not including the trailing NUL. Always guaranteed to leave NUL-terminated
-> - * buffer. On any error, return -EFAULT.
-> - */
-> -int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
-> -		       void *buf, int len, unsigned int gup_flags)
-> -{
-> -	struct mm_struct *mm;
-> -	int ret;
-> -
-> -	if (unlikely(len == 0))
-> -		return 0;
-> -
-> -	mm = get_task_mm(tsk);
-> -	if (!mm) {
-> -		*(char *)buf = '\0';
-> -		return -EFAULT;
-> -	}
-> -
-> -	ret = __copy_remote_vm_str(mm, addr, buf, len);
-> -
-> -	mmput(mm);
-> -
-> -	return ret;
-> -}
-> -EXPORT_SYMBOL_GPL(copy_remote_vm_str);
->  #endif /* CONFIG_BPF_SYSCALL */
->
->  /**
-> diff --git a/mm/util.c b/mm/util.c
-> index bf0513d1d3d0..2eca27b02791 100644
-> --- a/mm/util.c
-> +++ b/mm/util.c
-> @@ -1061,6 +1061,68 @@ int get_cmdline(struct task_struct *task, char *buffer, int buflen)
->  	return res;
->  }
->
-> +#ifdef CONFIG_BPF_SYSCALL
-> +/**
-> + * copy_remote_mm_str - copy a string from a remote address space.
-> + * @mm:         the remote address space
-> + * @addr:       start address to read from
-> + * @buf:        destination buffer
-> + * @len:        number of bytes to copy
-> + * @gup_flags:  flags modifying lookup behaviour
-> + *
-> + * The caller must hold a reference on @mm.
-> + *
-> + * Return: number of bytes copied from @addr (source) to @buf (destination),
-> + * not including the trailing NUL. If @len is zero, return 0 without accessing
-> + * @buf. Otherwise, @buf is always NUL-terminated. On any error, return
-> + * -EFAULT.
-> + */
-> +int copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
-> +		       void *buf, int len, unsigned int gup_flags)
-> +{
-> +	if (unlikely(len == 0))
-> +		return 0;
-> +
-> +	return __copy_remote_mm_str(mm, addr, buf, len, gup_flags);
-> +}
-> +
-> +/**
-> + * copy_remote_vm_str - copy a string from another process's address space.
-> + * @tsk:	the task of the target address space
-> + * @addr:	start address to read from
-> + * @buf:	destination buffer
-> + * @len:	number of bytes to copy
-> + * @gup_flags:	flags modifying lookup behaviour
-> + *
-> + * Return: number of bytes copied from @addr (source) to @buf (destination),
-> + * not including the trailing NUL. If @len is zero, return 0 without accessing
-> + * @buf. Otherwise, @buf is always NUL-terminated. On any error, return
-> + * -EFAULT.
-> + */
-> +int copy_remote_vm_str(struct task_struct *tsk, unsigned long addr,
-> +		       void *buf, int len, unsigned int gup_flags)
-> +{
-> +	struct mm_struct *mm;
-> +	int ret;
-> +
-> +	if (unlikely(len == 0))
-> +		return 0;
-> +
-> +	mm = get_task_mm(tsk);
-> +	if (!mm) {
-> +		*(char *)buf = '\0';
-> +		return -EFAULT;
-> +	}
-> +
-> +	ret = __copy_remote_mm_str(mm, addr, buf, len, gup_flags);
-> +
-> +	mmput(mm);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(copy_remote_vm_str);
-> +#endif /* CONFIG_BPF_SYSCALL */
-> +
->  int __weak memcmp_pages(struct page *page1, struct page *page2)
->  {
->  	char *addr1, *addr2;
-> --
-> 2.55.0
->
-
---
-Cheers, Lorenzo
+[1] https://lore.kernel.org/bpf/20241213221929.3495062-2-memxor@gmail.com/
+[2] https://lore.kernel.org/bpf/20241206161053.809580-1-memxor@gmail.com/
