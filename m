@@ -1,146 +1,123 @@
-Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7260E16F288
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 04:29:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.38.64.46
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143F12BDC1C
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 04:34:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788928164; cv=none; b=qPMCJPao8gkir9wYr1XDibujgTkWpAYj4PHgXnsYTo6ZtDMHoURVB+nkCQ3JFwLVW3s7umDAY9uP1eRvJddDEUXLARojt5XzJeCMxdH24PZTHL9zAf/4mMqpG+QcqiuCzSk2tYEBYSYh9kvmpJyDeKKNBc+a4vIRgJfZKnnA/G4=
+	t=1788928477; cv=none; b=hqE3gVWUtfkb6f84H5yfH9pksKPvZ2Xn7/WiFnRjOoH7YB1RddAmxBy5ljPx6VBSm+MwDCKT/rNm2Ywhi3ZxmBvlKWCUEAmqwZYx0jcZUAblYOZIed1EZC6RSguedVT0QaPT/OZ+TcoMV1haOPRNPlz1/RhmdtSy+zBlrrWR+wY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788928164; c=relaxed/simple;
-	bh=Ed48g+5AC3GxF0EcCRigYpcR11fxdtnkv7jZM5ahyns=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RrbCj4ZEX02BS5v65mo6a965vtOW/f+Wabr7fXTVnMpvQfpzjCMSzcmc9YP3HpozlZ8HU7JKgrrGInuO82DqmMlehsxMT6B+hiLq8A4j4t+T2bq2XIxRG9KFy+H8JSljNh6+WAwHCgIVGw3cMYxvIxUylIyxAQZlDHcqYUUri/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn; spf=pass smtp.mailfrom=mail.ustc.edu.cn; dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b=ljhTStTE; arc=none smtp.client-ip=202.38.64.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
+	s=arc-20240116; t=1788928477; c=relaxed/simple;
+	bh=oFYpn3xIuZjIdlVsVxaCJkOITsONh6E8DB6XpsjqiX8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=B80lyUwUm2OAIZoNjwkCllwUkxmvsWK1KvV62TIqllCH3BKx0TUI+DzMvrs9y7Yss67I4JhJ50k3myYz7D4i/hfqN2+hStasIvSGNej7EQMxmEje7G64FaBGcnn/SLzwi8a5m7x/SvOhqjj2/tZpkHVRNZIvQburgGwYILVuQaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dYDBJ30I; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b="ljhTStTE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-	Message-ID:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=WZ75AQXmF3znIA8aj1Zc0n/2XTw2DIkS5W
-	jxzEGcxgQ=; b=ljhTStTEbN+6yKEo5AociDf1nYnX8hefxoIQmZNOASYGaQ2gbD
-	CIHQkDhXDmHkQPpdvffViljwvThTp2B86r/V0klht0OzOoGKBNOfZ3jJPZhUK6jL
-	CL3fW1X25QZKCWMFIZOAU45/ka0/AKWKUidfc2T0h5UAhVGKfpH1YAfDs=
-Received: from localhost (unknown [222.195.81.105])
-	by mailimap2024 (Coremail) with SMTP id 3pYKCgBHRSyZ4KBqNz_5AA--.330S2;
-	Wed, 09 Sep 2026 12:29:13 +0800 (CST)
-From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Puranjay Mohan <puranjay@kernel.org>
-Subject: [PATCH bpf 2/2] selftests/bpf: Reject task VMA snapshot use after destroy
-Date: Wed,  9 Sep 2026 12:29:07 +0800
-Message-ID: <20260909042907.1734153-3-xyx2021@mail.ustc.edu.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260909042907.1734153-1-xyx2021@mail.ustc.edu.cn>
-References: <20260909042907.1734153-1-xyx2021@mail.ustc.edu.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dYDBJ30I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A117F1F00A3A;
+	Wed,  9 Sep 2026 04:34:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788928475;
+	bh=2Z4DL6S5YmRhjVMPpGXC6fUfqM/HdHkP4ctNhePvvVk=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=dYDBJ30IcfMOqvR4g/BH74t3x5tw0a029Z1cQW8k4jZo8RCeyv9dbCwP7i8NqOcpZ
+	 BEhJz8rRj4NVpn3G/vSmZ8WGk/jmcOtJvgYgS4pyc2mwhzyRxkot8SnkVGAEBgqV1y
+	 IvzvhixaukAcyqv9Fg07yQZOqeK9GZSVF7kXO7xkaCHeEgf5ftDXlhVt6xcPR+ZEDv
+	 YbONKa64e9LLOb+XKs0FHEL4a4jieBgwnHwZnPAalOO4im7UFb4c5dUsZ0PxJDQv4V
+	 yuYwtCvN3deRDwsSLriusZFHm9Hav7UVJIzH6/G7ct5tYsfBeiMm6LwiGjrtcA/Eid
+	 b/dTImnmQ5iFQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf 2/2] selftests/bpf: Test slices escaping a clone
+ call frame
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Xu Yunxiang" <xyx2021@mail.ustc.edu.cn>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260909042858.1734125-3-xyx2021@mail.ustc.edu.cn>
+References: <20260829040712.B1B511F000E9@smtp.kernel.org>
+ <20260909042858.1734125-1-xyx2021@mail.ustc.edu.cn>
+ <20260909042858.1734125-3-xyx2021@mail.ustc.edu.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 09 Sep 2026 04:34:35 +0000
+Message-Id: <20260909043435.A117F1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:3pYKCgBHRSyZ4KBqNz_5AA--.330S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CF1xtrW5uw1xKw13ur4Durg_yoW5JrWxpa
-	n7C3sIkr4fJa13KF97Jr4Du3Wagan5Za45G34vy3Z8Cr4vyw48WF1rtr4YvF1rArW0qFnI
-	vrWIkanxGr48JaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9ab7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
-	8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x2
-	0xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMc
-	Ij6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l
-	c7CjxVAaw2AFwI0_JF0_Jw1lc2xSY4AK67AK6r45MxAIw28IcxkI7VAKI48JMxC20s026x
-	CaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_
-	JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
-	1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_
-	Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8Jr
-	UvcSsGvfC2KfnxnUUI43ZEXa7IU8tUUUUUUUU==
-X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
 
-Add a verifier test that obtains a task VMA snapshot, destroys its
-iterator, and then attempts to read the snapshot.  The verifier must reject
-the stale access.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Multi-line comments do not follow the strict BPF subsystem comment =
+style.
+--
 
-Also verify that an RCU-protected task pointer remains usable after
-destroying its task iterator.  That iterator's empty destructor must not
-shorten the surrounding RCU protection.  The existing iter_next_trusted
-test continues to cover a trusted-kfunc use while the VMA iterator is live.
+commit 720f5969dc3c0d1bbc8d954089385b04bccca58f
+Author: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 
-Assisted-by: LLM
-Signed-off-by: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
----
- .../selftests/bpf/progs/iters_testmod.c       | 43 +++++++++++++++++++
- 1 file changed, 43 insertions(+)
+selftests/bpf: Test slices escaping a clone call frame
 
-diff --git a/tools/testing/selftests/bpf/progs/iters_testmod.c b/tools/testing/selftests/bpf/progs/iters_testmod.c
-index 76012dbbdb413..b8c8a3b24582f 100644
---- a/tools/testing/selftests/bpf/progs/iters_testmod.c
-+++ b/tools/testing/selftests/bpf/progs/iters_testmod.c
-@@ -28,6 +28,27 @@ int iter_next_trusted(const void *ctx)
- 	return 0;
- }
- 
-+SEC("raw_tp/sys_enter")
-+__failure __msg("invalid mem access 'scalar'")
-+int iter_next_trusted_after_destroy(const void *ctx)
-+{
-+	struct task_struct *cur_task = bpf_get_current_task_btf();
-+	struct bpf_iter_task_vma vma_it;
-+	struct vm_area_struct *vma_ptr;
-+
-+	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
-+
-+	vma_ptr = bpf_iter_task_vma_next(&vma_it);
-+	if (!vma_ptr)
-+		goto out;
-+
-+	bpf_iter_task_vma_destroy(&vma_it);
-+	return vma_ptr->vm_start;
-+out:
-+	bpf_iter_task_vma_destroy(&vma_it);
-+	return 0;
-+}
-+
- SEC("raw_tp/sys_enter")
- __failure __msg("Possibly NULL pointer passed to trusted R1")
- int iter_next_trusted_or_null(const void *ctx)
-@@ -66,6 +87,28 @@ int iter_next_rcu(const void *ctx)
- 	return 0;
- }
- 
-+SEC("raw_tp/sys_enter")
-+__success
-+int iter_next_rcu_after_destroy(const void *ctx)
-+{
-+	struct task_struct *cur_task = bpf_get_current_task_btf();
-+	struct bpf_iter_task task_it;
-+	struct task_struct *task_ptr;
-+
-+	bpf_iter_task_new(&task_it, cur_task, 0);
-+
-+	task_ptr = bpf_iter_task_next(&task_it);
-+	if (!task_ptr)
-+		goto out;
-+
-+	bpf_iter_task_destroy(&task_it);
-+	bpf_kfunc_rcu_task_test(task_ptr);
-+	return 0;
-+out:
-+	bpf_iter_task_destroy(&task_it);
-+	return 0;
-+}
-+
- SEC("raw_tp/sys_enter")
- __failure __msg("Possibly NULL pointer passed to trusted R1")
- int iter_next_rcu_or_null(const void *ctx)
--- 
-2.43.0
+This commit adds a success case and a failure case to test BPF dynptr slice
+behavior when a slice escapes a clone call frame. These tests verify that
+subprogram return behaves correctly with respect to slice validity and
+shared reference release.
 
+> diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/test=
+ing/selftests/bpf/progs/dynptr_fail.c
+> index 1cd61d72c166f..0704662cd32f3 100644
+> --- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
+> +++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+> @@ -1892,6 +1892,52 @@ int clone_invalidate4(void *ctx)
+>  	return 0;
+>  }
+> =20
+> +static __noinline void clone_slice_in_subprog(struct bpf_dynptr *ptr, in=
+t **data)
+> +{
+> +	struct bpf_dynptr clone;
+> +
+> +	bpf_dynptr_clone(ptr, &clone);
+> +	*data =3D bpf_dynptr_data(&clone, 0, sizeof(val));
+> +}
+> +
+> +/* A slice that escapes the clone's call frame remains valid while the
+> + * shared ringbuf reservation is live.
+> + */
+
+[Severity: Low]
+This isn't a bug, but does this multi-line comment format match the BPF
+subsystem requirements? The BPF guidelines specify that multi-line comments
+must have the opening /* on its own line.
+
+> +SEC("?raw_tp")
+> +__success
+> +int clone_slice_returned_frame_valid(void *ctx)
+> +{
+> +	struct bpf_dynptr ptr;
+> +	int *data =3D NULL;
+> +
+> +	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
+> +	clone_slice_in_subprog(&ptr, &data);
+> +	if (data)
+> +		*data =3D 123;
+> +	bpf_ringbuf_submit_dynptr(&ptr, 0);
+> +
+> +	return 0;
+> +}
+> +
+> +/* Releasing the shared reservation must invalidate a slice that escaped
+> + * from a clone's call frame.
+> + */
+
+[Severity: Low]
+Similarly here, could this multi-line comment be updated so the text
+starts on the next line after the opening /* marker?
+
+> +SEC("?raw_tp")
+> +__failure __msg("invalid mem access 'scalar'")
+> +int clone_slice_returned_frame_invalid(void *ctx)
+> +{
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260909042858.1734=
+125-1-xyx2021@mail.ustc.edu.cn?part=3D2
