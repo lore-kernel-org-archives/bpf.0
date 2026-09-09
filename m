@@ -1,110 +1,71 @@
-Received: from mta1.migadu.com (out-104.mta1.migadu.com [95.215.58.104])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70FCB47C0F8
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 13:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.104
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7FB3556BB3;
+	Wed,  9 Sep 2026 13:18:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788959585; cv=none; b=t1exXJE2yWZ9Dce97CbkctGHe4X154qfpus+krgKSp9zLJwovZdFCXhjHkgI9Jx3XX+qyizTfaP3ovXNpxaGjfumhtaRfAWPgTr8ucWetXlchyf+ZPqjxKLDSnlwhJvITLtz8WwSP+lLaNOXHSXM4YbAKeOrkJTG95X/nqmHmp4=
+	t=1788959937; cv=none; b=q1TZK26pv+S9DLhVwP7vCHYcGarmO09y53BYcgwCfsW7Pxa3Rc6UPwp31jPVJcDr1SEK3iuLy0GW21eVXfe8HLAM7RW7wGX5RJ1aYirMBTD3a+lLaP7s+Qa0B6e0EoBP9fgy/u/1Kgl8hXOGSmZAnFVN3shiIVdqla1wn+vjUhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788959585; c=relaxed/simple;
-	bh=pTDfVRoX1U+RIjfQuPegFcGKswGHWQIt1UsGbzs5f/E=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=WrpSqMU4BERMU6PqS3nkJAoEaki/EIL1tPuXW/wrSUqWmjqgEHBLn8Wh39P3JSg6IaXozJzwgXR407m7wqFMmO+x1Xtw25cQqO7Jz7exM5I8lIS5HIUnorw4sW+Df3oZVjucNTKsniHkZGP9kAakAnuGTDiswkDadvWvfQNEcGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OtdeloKO; arc=none smtp.client-ip=95.215.58.104
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788959937; c=relaxed/simple;
+	bh=7//WCo8q7JlyL1h7Jci5kN133upzA3JPxYPsY7CB1OU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=kinTlqmwOWaS6rnSv3/glPHPkAhVJejleO7yi3kZtHenfjkVWAoN8pR7YQjlR9eGQx6C0fXNHxUMrKMmpYT0JYoyan0091Umx4B/FIFqdklmpyyysTHvh26yX6EGBz3jR9vS3Koia9u91o0gWqBJqheKCTgBiJ3HJt651RJDErI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=MV5Tcdc+; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OtdeloKO"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=pTDfVRoX1U+RIjfQuPegFcGKswGHWQIt1UsGbzs5f/E=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788959580; v=1; x=1789564380;
- b=OtdeloKOIruM9qO0qJpX2b+U/7i6FL3ax2sVvxjwMZamfzLli6o5HmujIYltuTKW9+kB0Pcd
- UvVXIgft599AT40Lw210drnTEfY9StLpnk2hBqZudqP/TFjSOnOgBQ09jtX35FBs+icNyiLXqHD
- qnPP6Cty/9atR4fdA0g8K/tA=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b52656f567ea3328;
-	Wed, 09 Sep 2026 13:13:00 +0000
-X-Mizu-Trace-ID: b52656f567ea3328
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <7ff19114-de0c-4118-a000-b236d8d30127@linux.dev>
-Date: Wed, 9 Sep 2026 21:12:54 +0800
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="MV5Tcdc+"
+Received: from localhost.localdomain (unknown [4.194.122.144])
+	by linux.microsoft.com (Postfix) with ESMTPSA id B7DD220B7128;
+	Wed,  9 Sep 2026 06:17:59 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B7DD220B7128
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1788959894;
+	bh=7//WCo8q7JlyL1h7Jci5kN133upzA3JPxYPsY7CB1OU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=MV5Tcdc+5rCCFHR5ckx9IJxg+CiGx2oUC3RgrK6Cnwedp0AaTjHMm4sYbTA90C2Rs
+	 bN8kHuamOYJhZJ5uKf7swD3tNwlfNvnoOZkqr3jXWkL3OnODWBwZNldx1n7OURtVZv
+	 fRDvEIt1DidaC5g0iiuTydE4Kjc+vqmsoY6kD/qg=
+From: "Cen Zhang (Microsoft Security FORGE Labs)" <cenzhang@linux.microsoft.com>
+To: emil@etsalapatis.com
+Cc: AutonomousCodeSecurity@microsoft.com,
+	andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	cenzhang@linux.microsoft.com,
+	daniel@iogearbox.net,
+	davem@davemloft.net,
+	dlebrun@google.com,
+	eddyz87@gmail.com,
+	edumazet@google.com,
+	horms@kernel.org,
+	ihor.solodrai@linux.dev,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kuba@kernel.org,
+	kys@microsoft.com,
+	linux-kernel@vger.kernel.org,
+	m.xhonneux@gmail.com,
+	martin.lau@linux.dev,
+	memxor@gmail.com,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	sdf@fomichev.me,
+	song@kernel.org,
+	tgopinath@linux.microsoft.com,
+	xmei5@asu.edu,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH bpf] bpf: Fix non-linear SRH access in bpf_update_srh_state()
+Date: Wed,  9 Sep 2026 09:18:02 -0400
+Message-ID: <20260909131803.51861-1-cenzhang@linux.microsoft.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <CABFh=a5iLOEJdPhoaWUhLc0eEqAuhnd83_jJr9MVZZG6gSJAEw@mail.gmail.com>
+References: <CABFh=a5iLOEJdPhoaWUhLc0eEqAuhnd83_jJr9MVZZG6gSJAEw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
- cgroups@vger.kernel.org, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, linux-kselftest@vger.kernel.org,
- Tao Cui <cuitao@kylinos.cn>
-Subject: Re: [RFC PATCH 0/8] blk-iocost: BPF struct_ops cost model
-To: Tejun Heo <tj@kernel.org>
-References: <20260908100143.47598-1-cui.tao@linux.dev>
- <178889947167.2.14514677804554939704@kernel.org>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <178889947167.2.14514677804554939704@kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hello, Tejun
-
-在 2026/9/9 04:31, Tejun Heo 写道:
-> Hello, Tao.
-> 
-> On Tue, 08 Sep 2026 18:01:35 +0800, Tao Cui wrote:
-> 
->>  4. One model system-wide vs named models selectable per device (as
->>     tcp-cc names are per-socket)?
-> 
-> The struct_ops instance should be per-device. Loading a model for a device
-> should switch it to BPF automatically. Switching back to the builtin model
-> should detach the struct_ops.
-> 
->>  2. Per-cgroup state lifetime: iocg_id is the css id and is recycled
->>     once the cgroup is removed, so models must treat it as a
->>     transient key.  Does the interface need a release(iocg_id)
->>     callback so models can clean up per-cgroup state instead of
->>     detecting reuse, or is per-cgroup bpf local storage, which
->>     carries its own lifetime, the better home for model state?
-> 
-> I'd pass blkcg as a kptr and add online/offline callbacks so the model can
-> manage its per-cgroup state.
-> 
->> return value of 0 delegates the IO back to the builtin formula, so a
->> model which only handles some IO types cannot make the rest free.
-> 
-> I don't think mixing BPF and builtin pricing makes sense, either per IO or
-> between charging and request sizing. It seems convoluted and error-prone.
-> Implementing the linear model in BPF is straightforward.
-> 
-> Please combine the interface, registration, dispatch and configuration
-> changes into one patch. These patches are small and implement one feature.
-> 
-
-Thanks for the detailed review across the series.
-
-All the comments make sense. I'm reworking the interface for v2
-along those lines: the attachment model will be reworked, the
-mixed builtin/BPF pricing path will go away so a model fully owns
-pricing on a device it's attached to (including flushes), the
-per-cgroup state handling is being reworked, operation flags will
-be preserved, and sleepable models will be rejected during
-verification.
-
-The Kconfig dependency, the example model issues, the selftest
-problems, and the patch organization will all be addressed as well.
-
-I'll post v2 once it's ready.
-
-Thanks,
-Tao
-
-> Thanks.
-> 
-
+Thanks, I'll make this change in v2 shortly.
