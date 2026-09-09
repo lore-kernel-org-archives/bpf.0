@@ -1,117 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB405D531;
-	Wed,  9 Sep 2026 03:31:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA4C30FF08
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 04:08:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788924719; cv=none; b=NS5q/3lBKA/6d3x3lnS5EjvFMQBrz3jhH6AGXkHsQKNisCfiyW7ojcxbcaQ4hbZ620nLJZfMn1gXoFH7dt8jCD+4o9RPqWYsfdGNok0fRGfoWs6e9tHleQZ62r5VcaSUxqm4UxdRPyR+zAZZw0GAGwxT7Gv0nBYbArT01rJ1RsM=
+	t=1788926927; cv=none; b=oFom/QRoDGBWy/WdKaomGgZ/1hPCJ5Yje5qPpLyR2atowjeQPiR4nw+AL4NQjL74KQo3K6pYxLDdKbCrr0xYwKz4eDVDXmHywFsF08Yk9hRrt5katp8QG9L8A92hwxAN/7glLhN9x7MPHCD4jwkVkIMXgr07TeIjCowweu/5ZGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788924719; c=relaxed/simple;
-	bh=Qm+aMJVZ1idBa35wLxEgrLzJcZojK9HIKgUFsthGAJk=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=L5fX1Fd18DQyV2tbYNNGFFthnSkjqRLgRI80hyvXGCfwnttz1tNonsDultp0tzVgsCMhwrhC+2vaoOJYWcOs3vUOMeOkFyO1/Vdcx0mzTI1e5x9svACmHlC0nlUeZQwFD0/8yD0bn3Xq2RhOG6T+jSKNumbo2x9X7cpZe9VHDds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gJ5SdLSS; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788926927; c=relaxed/simple;
+	bh=lHA65J/4a9O7FOIrwW3VPTBo9d0EBd8lH7ceA+nclpA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=dhkWaMK1v10u+rOxQxdF0+CnMQUmyIiyD+F4PSvSjtHQD9J0IVJiW9v0kuKUT7xsVRXkbsaE99/6NsAm6lL4wuacF72gFrOngV6WWaKIQ2fCy+y5Zas8088ECtYucHPC7LQnR6NIB7BCJgIwMYK0GvgPnbLHHSJJyJUOToPmql4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YfhKZ3kn; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gJ5SdLSS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2A3F1F00A3A;
-	Wed,  9 Sep 2026 03:31:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788924718;
-	bh=JvN514bLvBb8o7E32rh5fkZP8pnd+hgZq+omQSQeuT4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=gJ5SdLSShN39mGKbDK+W3PMWstHQ5M6IsZJ3BNvrAzFpoFEFVy49WO43NLHuzVZGs
-	 UrQquZ3vRZVOs8zTyvMynlvXg9J/tGPFs0eoLndkrkITaM203IOeXS31o4RmOsyLAJ
-	 hU+2quI6S6lxW/LjNYksB1EaX9K1PWUDUokVEJWNDt3Y1tsG8VS5Kzm9ePEXVBYTVi
-	 9DFplvxm6WsJlK7o5jamQ+/0KO9pCS4WXImw9mwkb1dCp+jthCFt/2I8tuklkPgBV5
-	 +EvzgyX5fVulJtCIRDQkknWn+oAg1TeMU3JzHJqADQp9my6+RLY7fenVAMiBegsEvX
-	 aLDxzLfZY6YdQ==
-Content-Type: multipart/mixed; boundary="===============7905957693095893453=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YfhKZ3kn"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-39b2ad862bdso5949772a91.2
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 21:08:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788926925; x=1789531725; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=G5OlD5gWWssUWDFczse9ZxRfKKog9YLB57/AAsUi+8E=;
+        b=YfhKZ3knOaU8utuUtRRGo0jkTw32ZrgnlsQSSMjSP2fPOKy9RJbELRrl6evuChmdO5
+         PoS3KMxfaI3oORtfK7U7fsI9LYS1JmhDymwF8z2xOE8YvCBASic2+QQilNqfpfFdd/I/
+         DpQ04F97xABd6+FndUrGcFNBwIXLMQhetNcFFueWpK/U3iA3GhYHtArhPx1jUgDSXCMS
+         D50zm8wDVoWy9WW2Mdr0wsb3gOt6Y7GNEXwLL24a8WzPo1T0W0r31UQWqLmWfoO4j10r
+         dDWQtzSKNOKkRfjQ5jiW0rnVAqmZP6j1xbg1Me8oHfyF4PjWQxQyETXVcsLAMtrZougy
+         RqJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788926925; x=1789531725;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=G5OlD5gWWssUWDFczse9ZxRfKKog9YLB57/AAsUi+8E=;
+        b=ElBhkM+vq3144AhqrSIK5MzYN3JpM+x9v6dm1eqvv2PXfOqFtanMy4epWvcr9ZYbxD
+         JqKWf0qGyS5T5SWJavd64zLOdeY/oGkzxvFchjY7+pEaWzX98BPTC0+HuYM/QgULgvPM
+         Ds75t40jgNJyKriQMeok+D1q8A2ro1qRfrnJ7FbxLkwEkOEX1Y5Gst0igrHRYj73Z2KI
+         Kbj/ouJ0vGCShepAVk31I0WBhRQnAIi9hRmP1D88RiPaFqlRkhHizr8mwAxB54VBj1QU
+         6Orb46nVdIsVGouLPQNTRahOdjq0sH0+U18T89oIe/Iv6qUTL/h2FSK+49bJrA0bUPRQ
+         TVbA==
+X-Gm-Message-State: AFuF++naPekCfi7sLt8Bie4LRmXUCJ6+KOv+pSru2uXOGZVNTEUrOLhY
+	8L4zld1lCXXBZhIa7ptvcy1ekVpdLzRWB60Dt2PGKjD4TfLOle66Oi52
+X-Gm-Gg: AYBFou3nj+CX1xnq1hkob290G2vfROVL1o5EgHKf7V6xzBiOIklxuiQk5tl54lkd/cC
+	BdvL9mVMBMbgqScB/Um4HebmKe9hRief09k3bYR9GRB9RuRcfj7xVblkd6hryxlg5ivjacsbjVU
+	untqOAdtsSoEXLWH+wwELgLfE3RgyyiuPoi7G/9YiJPsl2pNUiqDMwvUYeW34uEv2BEfwP6ZdA/
+	JbzGKd1JLJ3LYkdzq3zmuCvSAq9RgX6qU8UfVpfYQhLS0o+3dfZxORQvCYyRfAzik+yE7WEbXHa
+	zwqVWAGnMUoMJeKKxjzfBV9+vEtyAQaug8LWvdzMr9L4DLHQPOb11ImshVLtCVrcvXeWeqh7V8S
+	Kne5V93f5ja71ns4bffJ8cLz5E/81StQsQCND3Xkut13t3oJCra5ESG+Dt4xXLpk5s7whqm5Fan
+	pZra79KYQnBKiBEDd8p1xiV90gNMGZO6DJolz9LwZpLdNoRLKrK4eXxDCL3ZkvMyf5hFLjLg6T/
+	tmMevZZ0rQUTyyiM9EhBdcev6su6P9Q
+X-Received: by 2002:a17:90b:4c03:b0:398:cb56:e92 with SMTP id 98e67ed59e1d1-39b26130698mr45997775a91.11.1788926924938;
+        Tue, 08 Sep 2026 21:08:44 -0700 (PDT)
+Received: from 192.168.50.3 ([198.176.50.208])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b2615039asm29766867a91.15.2026.09.08.21.08.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2026 21:08:44 -0700 (PDT)
+From: Weiming Shi <bestswngs@gmail.com>
+To: Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	David Lebrun <dlebrun@google.com>,
+	Mathieu Xhonneux <m.xhonneux@gmail.com>,
+	co+adfca3e91be95776@bugs.sh,
+	Xiang Mei <xmei5@asu.edu>,
+	Weiming Shi <bestswngs@gmail.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH bpf v2] bpf: disallow bpf_skb_pull_data() for LWT_SEG6LOCAL
+Date: Wed,  9 Sep 2026 12:08:08 +0800
+Message-ID: <20260909040807.3885815-2-bestswngs@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260907192129.557377-2-bestswngs@gmail.com>
+References: <20260907192129.557377-2-bestswngs@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <90811fbd60e9519d8b1bcc316c4d43cd21c95e24c96b37ed2917d824e007c50b@mail.kernel.org>
-In-Reply-To: <20260909024011.1252694-1-nikhilljatt@gmail.com>
-References: <20260909024011.1252694-1-nikhilljatt@gmail.com>
-Subject: Re: [PATCH bpf] bpf: fix reading neigh ha in bpf_fib_lookup()
-From: bot+bpf-ci@kernel.org
-To: nikhilljatt@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com
-Cc: eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,horms@kernel.org,dsahern@gmail.com,hawk@kernel.org,razor@blackwall.org,stable@vger.kernel.org,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed,  9 Sep 2026 03:31:56 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============7905957693095893453==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+An LWT_SEG6LOCAL program can invalidate its cached SRH with
+bpf_lwt_seg6_adjust_srh() and then call bpf_skb_pull_data(). The latter
+may reallocate skb->head, leaving the per-CPU SRH pointer dangling.
+Post-program SRH validation then writes through that pointer.
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 8513167a858a..a7c7bbfd90e3 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
+Disallow bpf_skb_pull_data() for LWT_SEG6LOCAL programs so the verifier
+rejects this unsafe helper combination. Other LWT program types continue
+to expose the helper through lwt_out_func_proto().
 
-[ ... ]
-
-> @@ -6297,6 +6297,20 @@ static const struct bpf_func_proto bpf_skb_get_xfrm_state_proto = {
->  #endif
->
->  #if IS_ENABLED(CONFIG_INET) || IS_ENABLED(CONFIG_IPV6)
-> +/* Take a stable snapshot of the neighbour's link layer address.
-> + * neigh_ha_snapshot() can not be used here because it copies dev->addr_len
-> + * bytes while params->dmac is only ETH_ALEN long.
-> + */
-> +static void bpf_fib_dmac_snapshot(u8 *dmac, const struct neighbour *neigh)
-> +{
-> +	unsigned int seq;
-> +
-> +	do {
-> +		seq = read_seqbegin(&neigh->ha_lock);
-> +		memcpy(dmac, neigh->ha, ETH_ALEN);
-> +	} while (read_seqretry(&neigh->ha_lock, seq));
-> +}
-> +
-
-The commit message states:
-
->     neigh_ha_snapshot() cannot be used here because it copies dev->addr_len
->     bytes while params->dmac is only ETH_ALEN long (an IPoIB egress device
->     has addr_len 20 and would overflow into params->smac), so open-code the
->     seqlock loop around the ETH_ALEN copy.
-
-Is the overflow destination accurate? Looking at struct bpf_fib_lookup in
-include/uapi/linux/bpf.h, smac precedes dmac in the final union:
-
-    union {
-        struct { __u32 mark; };
-        struct {
-            __u8 smac[6];    /* ETH_ALEN */
-            __u8 dmac[6];    /* ETH_ALEN */
-        };
-    };
-
-That union is the last member of the struct, so smac sits at offset 52 and
-dmac at offset 58 in the 64-byte struct.
-
-Calling neigh_ha_snapshot(params->dmac, neigh, dev) with an IPoIB device
-(addr_len == 20) would write bytes 58..77, which is 6 bytes into dmac and
-14 bytes past the end of struct bpf_fib_lookup. It cannot reach params->smac
-at the lower offset.
-
-Because params points at BPF-program memory that the verifier only sized to
-sizeof(struct bpf_fib_lookup), the actual consequence is an out-of-bounds
-write past the program-supplied buffer, not a clobbered sibling field.
-
-The conclusion that neigh_ha_snapshot() is unusable here is correct, and
-the in-code comment is accurate. Could the changelog's claim about where the
-overflow lands be corrected before this goes to stable, since the
-parenthetical is the sole stated justification for open-coding the loop?
-
-
+Fixes: 004d4b274e2a ("ipv6: sr: Add seg6local action End.BPF")
+Reported-by: co+adfca3e91be95776@bugs.sh
+Closes: https://lore.kernel.org/all/GCy0KRM2IcQGoJQTjJEU9D0maBxXzEDHuQpq@bugs.sh/
+Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Link: https://lore.kernel.org/bpf/DL9COXZQXX4V.1FN45QO2Q77ZH@gmail.com/
+Cc: stable@vger.kernel.org
+Assisted-by: Claude:gpt-5
+Signed-off-by: Weiming Shi <bestswngs@gmail.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Changes in v2:
+- Disallow bpf_skb_pull_data() for LWT_SEG6LOCAL instead of adding a
+  wrapper to refresh the cached SRH pointer, as suggested by Alexei.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34305501194
---===============7905957693095893453==--
+ net/core/filter.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 8513167a858a8..2a84f9d011314 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -9044,6 +9044,8 @@ static const struct bpf_func_proto *
+ lwt_seg6local_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+ {
+ 	switch (func_id) {
++	case BPF_FUNC_skb_pull_data:
++		return NULL;
+ #if IS_ENABLED(CONFIG_IPV6_SEG6_BPF)
+ 	case BPF_FUNC_lwt_seg6_store_bytes:
+ 		return &bpf_lwt_seg6_store_bytes_proto;
+-- 
+2.55.0
