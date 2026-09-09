@@ -1,170 +1,149 @@
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3AE23921E6
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 17:54:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788976473; cv=pass; b=XH3AjQvjZ0nqB3n5FFU4rXPlfburL75qChVV8AbkWmqi2mmj5XBKOF3dUrEUQd/dHcx6odYAW0tc8aBTZiXtyaa88YKc/GcuJfl9Cao86ajiBgq/XkLHG3B+nFM18LJykBvN+5DhZ0CetbBh54CB9zzvjxqYh6nW+o6rIe0ptF8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788976473; c=relaxed/simple;
-	bh=/LafidsCyeqiSc8t/CHXLnG7Q4tnongMjUQKgD2sOeo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AxGY5sVKwaL566VmSgnBi7/cujM5q0S1+hj1/7bsL9n9GsiFe+hQB9058PNOxnPmT82I3uL/rtoA8R7TADE3LqDPoKGL5jX/FGBg8qbAo4F5EIPIxJ1BsyI6ekEd4nv+WVJCn8UKRjwUHhwa3fnmrGD4InWmME+21xDGH7pH39w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LUHiDPvN; arc=pass smtp.client-ip=209.85.161.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5C3F3939BD
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 18:01:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.204
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788976910; cv=none; b=cwyWrUcobne0khQRY9o4q2ktNal1xIv/AR1ytiDZHhILOim9Cn2Kmo/NbeKId30Exr1jX6CInKm0LHWRdtCgRqDXYw+/SRoMSp5IF0W/upXdHUTrv9xYcm1f0ebsvENovqUOHIidUZPBAKRZX+p2oXFtXAKu4vY5eMIdkZ1E6As=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788976910; c=relaxed/simple;
+	bh=GG8pFvCYlju27mE7uNA7NfAlddJXiZpGOvkluyIkBMM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=X9lpf7rEtpKBKtvBkBn+jpqpue5QzTCCvcS+9RcQy26OkWyNM+tm4/P6f6J1KRiJqu20SvQXPVb+wn/fi39HHBWWg5JpN6dsWDvk+T7AZAVGIsLD/mt6vQAmo6U6E589ZLr03D7mvVzEz1HupS4lOvWTbUDryJKKXdzxNTSty6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=Npby1FB1; arc=none smtp.client-ip=74.125.230.204
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LUHiDPvN"
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-6b1b9c3af5cso5014730eaf.2
-        for <bpf@vger.kernel.org>; Wed, 09 Sep 2026 10:54:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788976468; cv=none;
-        d=google.com; s=arc-20260327;
-        b=VVGCMSlBs0EMWSt9Ffeh5m/+xOtJ/jbtoSXwgAWNCEV4aaC7pZYyTXUfAD4+O3mzBH
-         nTRz8SWV9vaIOCKqqdmMb128I3SInfkqj7lLgN9IEnoAancEDAQCOBO6/scWukW4yyyk
-         5lqTX6eLQ7re3kNcD2ex8hMT7d4F+nJRhbgtSP76EAANaAuYtbi8vubnZA0p97fatnZQ
-         jXChF69Ryef2t7B1l4o+9Bs+OaiiA+gQLbHxaru7WuiJwM0K1Gnvg8UmC5TMfRgtVrRb
-         8Lne+9kelli/wxn+afIKZgd7Q9GP36CwIetqWigPAl8nD0JFQZ7xpYiHD4xVeqwK9eOr
-         JNMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=tHifi+n0YLlzsfRl71RQEmNfJE62xqGzn4SHM9nhIkw=;
-        fh=+iofH7kLhUIpDUAo/a2rUbKulXCH8Go9n65YHAt0kP0=;
-        b=qqzpjfyqq2pR9zExohedjQtLUM5LvmBgDEpPajHXofitua6LgNCpb4nzlhzOXOClIW
-         KCXwACU06kL6yQjzixkGPmumZCEcofjQWo0Buq4ZbN/7KAvG/8eb2Rhnn1Q9CoefjBiY
-         jGh5OQcsgiU4hTRqDyhZ2aRJVj2/bMXlxgSDRFZqsRnOqOTiuM4OACrWgutq42WI7qZ6
-         pxlEu9kNsq5ynxMoHj7OJgSAs5/+QjIYK2S9iaAbizo1GpdNnDsB/8HryZ9w5kE8VLDA
-         DxpE/rAlS3Fz8Ph1bxtl5QWlLeOzJXYSfbra9caa1sypcaqnDCX+mHoS8+iJKYlin1R2
-         O0kg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="Npby1FB1"
+Received: by mail-qk2-f12.google.com with SMTP id af79cd13be357-93910ca5aa8so60852485a.3
+        for <bpf@vger.kernel.org>; Wed, 09 Sep 2026 11:01:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788976468; x=1789581268; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=tHifi+n0YLlzsfRl71RQEmNfJE62xqGzn4SHM9nhIkw=;
-        b=LUHiDPvNeLf0O5+OYNpc5HffhEaaqFj87dvT2PrYvgSdT2Fd+ndTug00Hbhk4TYDIN
-         vDjElLjt5DMDCrBwErcaGdPQWP9tJPfQ8OwqusNeMOKdVlgAtmTlr6XwIDqN/nc60kXj
-         9wnVYWsbpgti2tgZjmq39wZJYU3XESIa/lUXdskuKp+qBR3rR9PpVys2d4WLGrT9hKeO
-         QVo5Naa8mYp6qfD+8F5qBmJ2K3jcjeXe3+3M6mvoJGqpUHP3L0U8sG62mUGkZLbJRqpK
-         LZCxgc6yTpeM1klLnfEermEHZSyRjWTHk0XrHj+hqTCPNazKWQwXCiUTIhqiIq/Q5m1g
-         ddhg==
+        d=toxicpanda.com; s=google; t=1788976906; x=1789581706; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=ViCBkdbLW7JdXmtrQtir0eAwLk4ivWB6Xk+gL7SNqv4=;
+        b=Npby1FB1feUrqqGhVK5Jden+msFFDuJUEaGOr7CAmN+XghUrw5D4mA+XIMv1A6dFkn
+         O7+2rhV2wGGmgnWI7bQXKrV7h+qHWICV8a4XkJiENExh4hqyuZzYT5DRoQWYHf9WEIpd
+         A9d4uCPUnyFTE2qi/Kun3dIU53rjqyXal7tYLn8Ef9miLIgjnGr55ikHs0Uu77zoTteB
+         KGfUB4FnxYzBF4HU4aMMDBRc545HOQz2m1zJgJgESbZDZZOxI7awnWhS9mlObB00sGfj
+         REQqJ3Rs+6W0wYDOhPa5oB0oN51+TVgtqQhw9oq2GGjn9QeFghrCfy+G8J91TFtkV1rK
+         dv8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788976468; x=1789581268;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=tHifi+n0YLlzsfRl71RQEmNfJE62xqGzn4SHM9nhIkw=;
-        b=goZw/fIbVh0kicS7I2bi5pMsX0NlboHG7eeaVEfpbwL3NuRhoKdHyg2bN4vF5tdaw5
-         AtjoYey+XWE6aMv5AOAR7N4FXkt6ujWzgHAq+JewXkCL0nUwm0CygKq8zBaGcS3NIdZu
-         XRYrBs94PJ5E9+qiAYNaHDELSBfrxQMA/LSbHvC+c0Enyx53KCq0WtXGvtlkCC1bt83x
-         XhxPm80Qk6+l0Br5ZGuQRpNDVmp1NFQvq3V5eUVw1loBz8AKx8e5qK+cRm+TCu+o+y82
-         XcJwiYF6QYWW2NOh4Vn9Qa9zJh2ssOw4ud07hFE/B59KYCHgkmkoxieidNFuXlCQo0u1
-         H4Vg==
-X-Gm-Message-State: AFuF++nrYZh8SNag29+wBF0+GwoYb7YwYGHCItuVG+z35HDSNCjpimOO
-	S/GoN6Q8bUpcSo89K4/jZ2zKrJLT6xxBTJieEb6p3coptOgQzvbz5b2GT+0Dl57xzZBRec0xFXf
-	Z4ZGIHOve4J+eKXkvaaU+XMXh/79NCHQ=
-X-Gm-Gg: AYBFou0aPbTmVR1fUTsFwrqxlQyaMaqS57iVXwC8A4y4o7OtKZPwIsId4/442aOWGNY
-	GG8tGB7pqEb/Go5e+fHdAlmz3dlUM8B5DlD2JQPn64dJQA3oMfu7RBQhNSrxE2II7NQCc0r7DR+
-	5C554RiSO1KnanWn8VjWLu+uRws8txoAdiMoyHBOPDcdENptu1J4Kb9ZwKDVU5PfJbydLBsE5WF
-	BLHWRA2uitMotmjEAk3BoPoAig2vSimPma+PRgQWp6PR+APVmVG4RaJV2Yz/YkmfaeQFbzA8URC
-	L237bbF9g8JI6/tvoEH52AtQigtWWXtmWrt5tyTqhHNemg365A0OfL55fU5vyXl+7t0jGQP5XGg
-	9I/iC
-X-Received: by 2002:a05:6820:162b:b0:6b7:46fc:1cf with SMTP id
- 006d021491bc7-6b746fc2ed1mr19740954eaf.46.1788976468244; Wed, 09 Sep 2026
- 10:54:28 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1788976906; x=1789581706;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=ViCBkdbLW7JdXmtrQtir0eAwLk4ivWB6Xk+gL7SNqv4=;
+        b=bUol4Rw1fDr7/ArEKiCzKNilgDnO7BnBpsyksvOWEaQkMJS4aU6gZ1exXoQrMKKhOe
+         lYQODeyHQPtdbcOw94eDCQ9YK2PwWnB1Wu8j8AOHx7ugDH6AMJGdlR2p6ieiavPm9yJg
+         OhzIo8YmxsETwvUVhnfq6XXo04ImT5O2DrWjudQ4BKDuAPioJPFKX4QmZlgOELYRzYad
+         V2e3dAdGUqEzVTfTteN8vl/5jeXa295FhYQzILPvWcP9RG9nTR9qlVSlViIIPTPYReY4
+         QyFjFhqL2gcyxZAPANhODoQTDNtmjqucvZmoHAslI//4hBnNA7Wxvxkd8QnaOjo9EoRj
+         TywQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwwtEULB/29PLkj4FkdPGwtDkqkUnRUQd+f0FX04xkLfkdBEVByp+bSTm18s7mafrV8nsE=@vger.kernel.org
+X-Gm-Message-State: AFuF++mndu+MMNgvIeLi1RUHaouxmBx3XLdSP7B6Q0WG+AU0mYhemwTx
+	fT3gzK9KtcVf5cCYqZb1eUOadAWDKPQG52xUry3+scdDcnZ68TIemtOlAUBYvCo4i9U=
+X-Gm-Gg: AYBFou1ks6SEa8FoXMJP1oGDBuU0oXEGkrCUP+q7rf6MvtB3ZU+D/xOCvLqd30zJENR
+	78M9C9bw7cdzNRCOGuRudSrctisWldsOydsQ2rcf6Vxm8JE0gkCIjd7f4jEbPwtUr5hnlgjttKL
+	7zq12fF+Fn/jnHA8wBdujxWKwM9k3qxbJDX8gmLlg/dCHnI8V1FDa+3gR5bWeiLCPdr0sE6uK5T
+	xGirR1oKYYHjGUQRmlkpw6r2xgi5hWd4alMp6elQ3046/xjAZveKukEjJjmpP9t1b1uIYV6GaWV
+	3M6Pt8MjKF/2p80QcZHVE1fpUYAHZN6Gk/CvFHH1SF/TellOG6U+rLFFg+ZnGTnNaL5qdBUu8aG
+	mL4yrFlKm4VybL1ejVBz8rxwsCx6RjWAXaJ2bSik4lqVYbjQaXr0eoTpbKC2tf0KBPbiDwqjzkD
+	3lBl3SWujl36y10kL0Dl9fvnzdCTeM3q0gFO7oFBVlGU2TvXN3rWwydJ3Azkt3X1hkTM70y6ppQ
+	ZCoMSZgab4EuEYFKXOgV3H/E4csHcz2owLE4nXk5L5vy8dYOTULYO8P
+X-Received: by 2002:a05:620a:3941:b0:92e:4927:2002 with SMTP id af79cd13be357-939d4a8ebb0mr452910285a.39.1788976906226;
+        Wed, 09 Sep 2026 11:01:46 -0700 (PDT)
+Received: from toxicpanda.com (ec2-34-228-114-98.compute-1.amazonaws.com. [34.228.114.98])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9398c498610sm1295435685a.43.2026.09.09.11.01.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Sep 2026 11:01:45 -0700 (PDT)
+From: Josef Bacik <josef@toxicpanda.com>
+Date: Wed, 09 Sep 2026 18:01:07 +0000
+Subject: [PATCH] writeback: report a Tasks-RCU quiescent state per cgwb
+ drain pass
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260905220117.922028-6-ameryhung@gmail.com> <51c890fd762298bb1e73a112953c44751f6161de741b57e9239067ed8d19d75f@mail.kernel.org>
-In-Reply-To: <51c890fd762298bb1e73a112953c44751f6161de741b57e9239067ed8d19d75f@mail.kernel.org>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Wed, 9 Sep 2026 10:54:17 -0700
-X-Gm-Features: AcwNN1WBW-yBvC4t9Ud5kn8kkHuJZ1Um5UyeHg3SoRHe8BxlYP6PnvQ13OXvcVs
-Message-ID: <CAMB2axMbqtto=XniD3m0TnSLMC7_AUY0Ls3ennm9nsYQnz_1Dw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 05/22] bpf: Rename ambiguous function argument types
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
-	kernel-team@meta.com, ast@kernel.org, martin.lau@kernel.org, 
-	yonghong.song@linux.dev, mason@kernel.org, ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260909-cgwb-tasks-rcu-qs-v1-1-967a7754771f@toxicpanda.com>
+X-B4-Tracking: v=1; b=H4sIAOKeoWoC/yWMTQ6CMBBGr0Jm7SRtISZ4FeNiWgaoxqozRUkId
+ 7fV5ft+3gbKElnh1Gwg/I4aH6mAPTQQZkoTYxwKgzPuaHrTY5g+HjPpTVHCgi/FzrWdLeXYsoX
+ yewqPcf05z5c/6+KvHHIV1YUnZfRCKcw1upNmFtj3L1UhlqWOAAAA
+X-Change-ID: 20260909-cgwb-tasks-rcu-qs-42341609f3e1
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, Jan Kara <jack@suse.cz>, 
+ Tejun Heo <tj@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+ Dennis Zhou <dennis@kernel.org>
+Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-mm@kvack.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org, 
+ Josef Bacik <josef@toxicpanda.com>
+X-Mailer: b4 0.15.2
 
-On Sat, Sep 5, 2026 at 4:08=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
->
-> > ARG_ANYTHING does not accept just anything: check_func_arg() accepts
-> > an initialized scalar and rejects pointers. Rename it to ARG_SCALAR.
-> >
-> > ARG_DONTCARE is the zero-valued terminator for the fixed-size argument
-> > array rather than an argument whose value is ignored. Rename it to
-> > ARG_UNUSED and stop helper argument iteration explicitly when it
-> > is encountered.
-> >
-> > Also pass ARG_PTR_TO_MEM when checking a global subprogram memory
-> > argument instead of using the prototype terminator as a placeholder.
-> >
-> > No functional change.
-> >
-> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
->
-> The commit message says check_func_arg() "rejects pointers" for
-> ARG_SCALAR (formerly ARG_ANYTHING). Is this claim complete?
->
-> Looking at kernel/bpf/verifier.c, the rejection is conditional on
-> allow_ptr_leaks:
->
->     if (arg_type =3D=3D ARG_SCALAR) {
->         if (__is_pointer_value(env->allow_ptr_leaks, reg)) {
->             verbose(env, "%s leaks addr into helper function\n",
->                     reg_arg_name(env, argno));
->             return -EACCES;
->         }
->         return 0;
->     }
->
-> and __is_pointer_value() short-circuits when allow_ptr_leaks is true:
->
->     static bool __is_pointer_value(bool allow_ptr_leaks,
->                                    const struct bpf_reg_state *reg)
->     {
->         if (allow_ptr_leaks)
->             return false;
->
->         return is_pointer_regtype(reg->type);
->     }
->
-> So a privileged program (one with allow_ptr_leaks set) can pass
-> PTR_TO_MAP_VALUE, PTR_TO_STACK, or other pointer types to an ARG_SCALAR
-> helper argument. The pointer check only applies to unprivileged programs.
->
-> The later commit in this series, a490f49b0c4e, acknowledges this
-> explicitly: "helpers retain their privileged ARG_SCALAR pointer-leak
-> behavior."
->
-> Could the commit message be more precise? Perhaps: "rejects pointers
-> unless the program is allowed to leak pointers" or "rejects pointers for
-> unprivileged programs"?
+cleanup_offline_cgwbs_workfn() drains a dying cgwb by calling
+cleanup_offline_cgwb() until it returns false, with a cond_resched()
+between passes.  On a CONFIG_PREEMPTION kernel that cond_resched() does
+nothing: _cond_resched() is a plain "return 0", and under
+PREEMPT_DYNAMIC the full and lazy modes disable it.  Since commit
+7dadeaa6e851 ("sched: Further restrict the preemption modes") those are
+the only two models on the architectures with PREEMPT_LAZY support,
+arm64 and x86 among them, so the drain loop never reports a Tasks-RCU
+quiescent state.
 
-Since now ARG_SCALAR is introduced outside of this patchset. This
-patch needs to drop most of the changes.
+A worker draining a cgwb with millions of attached inodes runs for
+minutes.  On a 6.18 arm64 host in lazy mode the cgwb worker drained one
+dying cgroup's writeback domain for over 11 minutes.  A BPF program
+unlink (bpf_trampoline_unlink_prog -> bpf_trampoline_update ->
+unregister_ftrace_direct -> ftrace_shutdown -> synchronize_rcu_tasks())
+waited on that grace period while holding the trampoline mutex, 42
+tasks queued behind it in D state, and the hung task detector fired at
+614 s and panicked the host.  Any BPF or ftrace detach during a long
+drain inherits the drain's length.
 
-I will only rename ARG_DONTCARE to ARG_UNUSED and change ARG_ANYTHING
-to ARG_SCALAR for global subprogram.
+Fix this by calling cond_resched_tasks_rcu_qs() so we do not stall out
+anybody who calls sycnrhonize_rcu_tasks().  We put this in a do { } while
+loop because if we have many small cgroups cleanup_offline_cgwb() will
+return false and we will never call cond_resched_tasks_rcu_qs(), creating
+the same problem.
 
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/339954=
-42755
+Fixes: c22d70a162d3 ("writeback, cgroup: release dying cgwbs by switching attached inodes")
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/bpf/9d444098-7c03-4163-af12-bd0a79a51443@paulmck-laptop/
+Assisted-by: LLM
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+---
+ mm/backing-dev.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/mm/backing-dev.c b/mm/backing-dev.c
+index cecbcf9060a6..18e999053bae 100644
+--- a/mm/backing-dev.c
++++ b/mm/backing-dev.c
+@@ -910,8 +910,9 @@ static void cleanup_offline_cgwbs_workfn(struct work_struct *work)
+ 			continue;
+ 
+ 		spin_unlock_irq(&cgwb_lock);
+-		while (cleanup_offline_cgwb(wb))
+-			cond_resched();
++		do {
++			cond_resched_tasks_rcu_qs();
++		} while (cleanup_offline_cgwb(wb));
+ 		spin_lock_irq(&cgwb_lock);
+ 
+ 		wb_put(wb);
+
+---
+base-commit: 893e11787f78e43b534e252249ac3fff4d1333f8
+change-id: 20260909-cgwb-tasks-rcu-qs-42341609f3e1
+
+Best regards,
+--  
+Josef Bacik <josef@toxicpanda.com>
+
