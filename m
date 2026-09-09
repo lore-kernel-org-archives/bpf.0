@@ -1,208 +1,161 @@
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A6439734A
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 18:07:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788977233; cv=pass; b=hrxJXjMriJLcAcitZn3NSZyxAQ0KRzmu+2PcWzXGDvGIEDPhEKuQ/hTGp0QFHbUFidd6sCyk0XwnU6f7g35pY097AhXw7ny/z7Ax0ZpOFYIVCjQjxuKrn6D7PVdGVyk/PQM9+gdC1CVR3YNZV2+FuuEXszHNBJqcLeg1zvaaoJ8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788977233; c=relaxed/simple;
-	bh=ffpLcmhdNr6NOIw4fF/1zoFPIQiK4mOy2UlkzAuwzw4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DPg+EEzOFOyVMj7DgKD/ftdXc8jtc+yOl7OeeastDuLSq8mpyDDuMBXUtvqwKX8nWjrvSjL8rK21xKDCv8Kgk+rsWGHJ35DjkyCfFGdaBudBc52ROSST2sWyJRnO3t21ZH7KJhvVjJwuNIKaN3Wh6zu+uF4mya8ysa4Kh1Tke98=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=u0XRGv88; arc=pass smtp.client-ip=74.125.224.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE9D367F25
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 18:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788977584; cv=none; b=hXecbXMDKv3fzJx9TkXa46x2qAGSUnLLV0KCAFYuzYc2iiGPGyG4i7S/LIU67NcZt1v/XRjrpxcgiSbQgPN3amtHsZWPHj3Q2BAvHsrPXMgo4K4YQ/Wc9JHd6sUKAG7q+yGYOGgKoYnS55DrURWe7tVWhmrVupQlFVDnrtKGP4k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788977584; c=relaxed/simple;
+	bh=4CKO9hNlHuv5iZ/0oVc8Vi3340GmpRnhBvy1964bOwI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=UR23m4E7AQvwfZ7z5pTw+p3sHHHm2DFXUEm2kjV6scr6vuWfX2OWCY3sy24zCsP6+SIoLirK18YeTdEHroE2T9QzbtvjL6aLhqrF+azM29ndWJcMPf7AkQodE4BT/3vI0hWOAntEdmq2zSk1kCGZhjzXjez/IpfihfZlvZb/Cfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c8JhgGGK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="u0XRGv88"
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-66f7f62e915so7130478d50.3
-        for <bpf@vger.kernel.org>; Wed, 09 Sep 2026 11:07:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788977230; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Vfam2ClwNPfLB7E74jndpMcFtkZqmP1BrbWgDthKhvs585EoA6aUB+Wsb8c/EKhrhm
-         uQLlx1dDNs5CX8oyVEsP4rXnNAHNSYBiCM2vRnFlvR51t/Vw540E3PlcCBYDwuz99Qx0
-         +o+3uruFekkhdcfaXdVJMwOVyzH28xXE4Cve3g6X8CGWeb5Z9VnICRu/OpF981U/WZts
-         MIxEZmVjJFzRx/tPMVD3VCeVZthP+evAQo6jK+QpHA7XrABDKU8gzUog2Bg4gUqPBts3
-         +DFzrNHdX25IcmbTtOC3J/pGAlsk/K+r+Vz5HhMZilzVCFOk4k1hdaapJV88o0rCJeMh
-         dz9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Pb5/uK6V0VOSoOpi7HbnquG+ZVFHg8kvhGiqpjo0wEE=;
-        fh=g8MPxiTU8B1fcBnSqXHNw1q0ewShtbui2o48BalZDmI=;
-        b=kqy0BuBxShkFomVoEvBo94ReLXenMk5vIe2Fmq+M6uVUOqzcVXxIqcusLJl3Dkoq9x
-         gJYzDOWo7itlVufVM3nGzyhwfb43xuXn+hejZOYe8YFMqC2Fmcdb3iODsyEM6vva9y0r
-         O7if3wtq0bPv4LJLQ0oKT6/suCr85g8pM/D1lrgq/vzWOlXgTHKk9yve1eGoAeuKD+ZU
-         ax4j4PF1L7dlWFqlR+F9s40SMXQgVZtxkAEOZgOICtO5to6FRQQafIukL2ItfTvYSoDv
-         SXGawKr7ier3cQZOOVNH+1POopfpvDFzXod3iS45XTTj9oifYEV9sGepqVXkD6Mn/gap
-         21Hg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788977230; x=1789582030; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Pb5/uK6V0VOSoOpi7HbnquG+ZVFHg8kvhGiqpjo0wEE=;
-        b=u0XRGv88nCQIxehtLTPevTtlB7TUi3IqgpoQOtUO5BVi3QSvwDPVFZQIfiZwfCa3Jj
-         S4viXBzwtMEnA6JKFy73M9DCvcbpd7MSh/Uu3LXmOYUeMRJF006TRC+B4Y/XhPHffL9X
-         IgFickCE/xsQHHhWihcFWGgHh/hAfTa4cuiU7qac+APhrj81gcm6Bf5JU+XT6Qo9UamS
-         yeRSw4M032rdpGBKMvOy9lMuJTfc4LMPAo/GRZU0FK2pb9LTvbYHouaBa8nsIorSTjD7
-         kPOpWtA9sazTFT+eD5KqrfCFZr/HhV8fgC5vuqTQifEAuSoSqfvrF2MyjUjSYq5p/Wew
-         xHdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788977230; x=1789582030;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Pb5/uK6V0VOSoOpi7HbnquG+ZVFHg8kvhGiqpjo0wEE=;
-        b=ZS+yW0RQlzuvlypLCkxemwI0my30qF+m+jjGwuZyYA+t2qOEUKAwgMzvOh2mrk5zCr
-         /8KZP23u/Q0Z9cZpuPFGjnuJYX+y3gmvJbnCYig3Bdn7HJTs4Oan5TuD51QL11E3u3r6
-         +hAKpkwASfRDAIG57q3uvuMxD5DwdmGM4t+pxvOCGNKRrhWsLc7x9QDkXOTIKKy5gA8D
-         61Ei5Rju6e56xsmufo+NxKcYD3jlr4A12tEpWTGD457pcnM2cLgK28xWqLwCrCjp9y6K
-         qZvlteSy0lEoPkzRSeXNPEitgvwrrNaLIr7c2U9z7h0NhhKvAp2sFMnwSZC3TJPLN3vX
-         85ag==
-X-Gm-Message-State: AFuF++mFJLJOtmRsxaS2AziuT+0MpfdAI2fansnr7Bnpi4dbXCAm9xQQ
-	p1PdrSokqbMF4cYO2AyQzG/KdM1/K03QOvK5Pubv/GgxRJ/P2N/Gigw0dQKUi0N++xMasOXrcTO
-	Lv7BE9E+LF8oSo6RBuPKZ/xtWLhSdOOkTg/aL3KR/CEKGZpdg3zOj/Uc=
-X-Gm-Gg: AYBFou2Ck0pwebBHrrnboWpJ0EVstHoSlHxaCHhJ07+M3RVzFNimJoxwPRgfnmP/3Mg
-	CHcwVhvHB/HcvXUGT90KVN82R/bjQBa1BGDuggzggwrmGSXj9D+PRTwQpCDEecqsfICuI2bdfre
-	vgEDA30zC3erh+GfHlu1W29iFR2zvMUmFKzNgb2dqF2ALYsNoTf5C8nFamjaQMFUkwQbhOES9Iv
-	ULz3/RqSRBpyBDoCpeAndxRZ4ifrqrM3BSJHAvWfcY7EpNnoXpXp1Kye9jenpuZ3EdgF7dVyBaE
-	cLHUDgryljx6J41Ms7O+/lRifPWI5jsYyNypCrRM1up5dQyg1Dh6+t0=
-X-Received: by 2002:a53:5a0c:0:b0:66f:c1be:317a with SMTP id
- 956f58d0204a3-66fc1be35ebmr7665511d50.81.1788977229661; Wed, 09 Sep 2026
- 11:07:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c8JhgGGK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6A711F000FF;
+	Wed,  9 Sep 2026 18:13:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788977583;
+	bh=GnLtL0sujNPeulHdtPxkFtFk05F2qKY7r3wX1IY8FbM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=c8JhgGGK/pJ9evb98ZJFVKYaWXvnsA2CtzwG3+M+nNMa/gaM27SpHGcQZzjK7zr17
+	 DzcHFC7IflhxYPMMkDEsMPjWcgGWQBCjmGSMo4rYAejHPNNwRJeHf9VdSsOyEQ8a0b
+	 /vUD3xGHmJl9H3ouz6eRbT7ifcGKYxTQYpCxAe114f1D1pfrVK2FBNLIj1pn3GrSfs
+	 KOu4DOdRA0Xbs0rNKpmR/4snod1pwKQNY/3/Ulj15OoAU5by4YxoMnfRbme4e2Jh3H
+	 6Mic+5a4Qbjo4RJCK1vwQxttHTBQT9pNGDtdnATZ2hV32OWbuf5YAmh/IWt9cm6z0a
+	 UPJLxgPQdZ8kQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH] writeback: report a Tasks-RCU quiescent state per cgwb
+ drain pass
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Josef Bacik" <josef@toxicpanda.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260909-cgwb-tasks-rcu-qs-v1-1-967a7754771f@toxicpanda.com>
+References: <20260909-cgwb-tasks-rcu-qs-v1-1-967a7754771f@toxicpanda.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 09 Sep 2026 18:13:02 +0000
+Message-Id: <20260909181302.C6A711F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260903100921.113374-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260903100921.113374-1-jiayuan.chen@linux.dev>
-From: Emil Tsalapatis <emil@etsalapatis.com>
-Date: Wed, 9 Sep 2026 14:06:58 -0400
-X-Gm-Features: AcwNN1WgDaem2ZiaTSnvUEhjWeQKvrRPTKih7rvRNQjxGVVOPW6EXSNd9iM6xvY
-Message-ID: <CABFh=a7as_meC0sM5-KmSsGfvBuHd3XCceBEJ9q29Uf8V5E_gw@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: Fix out-of-bounds read of rtt_min in sock_ops
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org, VEGA <vega@nebusec.ai>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Lawrence Brakmo <brakmo@fb.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 3, 2026 at 6:10=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.dev=
-> wrote:
->
-> A sockops prog reading skops->rtt_min never checks the sk type: on the
-> tcp_conn_request() path sock_ops->sk is a request_sock (non-full), and th=
-e
-> ctx rewrite casts it to a tcp_sock (full) and reads rtt_min past the end =
-of
-> the request_sock, returning dirty adjacent memory.
->
->         SEC("sockops")
->         int prog(struct bpf_sock_ops *skops)
->         {
->                 switch (skops->op) {
->                 case BPF_SOCK_OPS_RWND_INIT:
->                         leak =3D skops->rtt_min;   /* reads the request_s=
-ock OOB */
->                 ...
->                 }
->         }
->
-> For instance one such read returned rtt_min=3D0xffff8881, the high half o=
-f a
-> leaked kernel pointer.
->
-> Guarding that cast is exactly what SOCK_OPS_GET_FIELD() does -- it checks
-> is_locked_tcp_sock and returns 0 when sock_ops->sk is not a locked full
-> socket. Every other tcp_sock field in sock_ops goes through it; rtt_min i=
-s
-> the only one open-coded, so it skips the check.
->
-> Read rtt_min through SOCK_OPS_GET_FIELD() too. rtt_min is a bit special:
-> it is a struct minmax and we only want the current min, so pass
-> rtt_min.s[0].v. That is equivalent to the old hand-computed offset
->
->         offsetof(struct tcp_sock, rtt_min) + sizeof_field(struct minmax_s=
-ample, t)
->
-> (s[0] sits at rtt_min + 0 and .v at + sizeof(.t), i.e. what minmax_get()
-> returns), so the loaded field is unchanged and only the full-sock guard i=
-s
-> added. The two BUILD_BUG_ON()s that protected the hand-computed offset
-> are no longer needed.
->
-> Before patch:
->
->         0: r1 =3D *(u64 *)(r1 +0)      ; r1 =3D skops->sk
->         1: r1 =3D *(u32 *)(r1 +2324)   ; ((tcp_sock *)sk)->rtt_min.s[0].v
->
-> After patch:
->
->         0: *(u64 *)(r1 +56) =3D r9
->         1: r9 =3D *(u8 *)(r1 +50)      ; is_locked_tcp_sock
->         2: if r9 =3D=3D 0 goto pc+4      ; not a locked full sock -> 0
->         3: r9 =3D *(u64 *)(r1 +56)
->         4: r1 =3D *(u64 *)(r1 +0)      ; r1 =3D skops->sk
->         5: r1 =3D *(u32 *)(r1 +2324)   ; rtt_min.s[0].v
->         6: goto pc+2
->         7: r9 =3D *(u64 *)(r1 +56)
->         8: r1 =3D 0
->
-> Fixes: 44f0e43037d3 ("bpf: Add support for reading sk_state and more")
-> Reported-by: VEGA <vega@nebusec.ai>
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Pre-existing issues:
+- [High] Unbounded iteration under a spinlock in a list filtering loop.
+- [High] O(N^2) list traversal and spinlock acquisitions when draining cgwb=
+s.
+- [High] Unbounded queueing of work items ignoring WB_FRN_MAX_IN_FLIGHT lim=
+it.
+--
 
->  net/core/filter.c | 13 +------------
->  1 file changed, 1 insertion(+), 12 deletions(-)
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 61940e753552..a043d179ff1a 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -11105,18 +11105,7 @@ static u32 sock_ops_convert_ctx_access(enum bpf_=
-access_type type,
->                 break;
->
->         case offsetof(struct bpf_sock_ops, rtt_min):
-> -               BUILD_BUG_ON(sizeof_field(struct tcp_sock, rtt_min) !=3D
-> -                            sizeof(struct minmax));
-> -               BUILD_BUG_ON(sizeof(struct minmax) <
-> -                            sizeof(struct minmax_sample));
-> -
-> -               *insn++ =3D BPF_LDX_MEM(BPF_FIELD_SIZEOF(
-> -                                               struct bpf_sock_ops_kern,=
- sk),
-> -                                     si->dst_reg, si->src_reg,
-> -                                     offsetof(struct bpf_sock_ops_kern, =
-sk));
-> -               *insn++ =3D BPF_LDX_MEM(BPF_W, si->dst_reg, si->dst_reg,
-> -                                     offsetof(struct tcp_sock, rtt_min) =
-+
-> -                                     sizeof_field(struct minmax_sample, =
-t));
-> +               SOCK_OPS_GET_FIELD(rtt_min, rtt_min.s[0].v, struct tcp_so=
-ck);
->                 break;
->
->         case offsetof(struct bpf_sock_ops, bpf_sock_ops_cb_flags):
-> --
-> 2.43.0
->
+commit 6a4c1184ed4e555add5aa8d7af747c8f54a2713f
+Author: Josef Bacik <josef@toxicpanda.com>
+
+writeback: report a Tasks-RCU quiescent state per cgwb drain pass
+
+This commit addresses an issue where draining a dying cgwb with many attach=
+ed
+inodes can run for minutes without reporting a Tasks-RCU quiescent state,
+causing RCU stalls and watchdog panics. It fixes this by replacing a plain
+cond_resched() with cond_resched_tasks_rcu_qs() in a loop as long as
+cleanup_offline_cgwb() returns true.
+
+Link: https://lore.kernel.org/bpf/9d444098-7c03-4163-af12-bd0a79a51443@paul=
+mck-laptop/
+
+> diff --git a/mm/backing-dev.c b/mm/backing-dev.c
+> index cecbcf9060a65..18e999053bae0 100644
+> --- a/mm/backing-dev.c
+> +++ b/mm/backing-dev.c
+> @@ -910,8 +910,9 @@ static void cleanup_offline_cgwbs_workfn(struct work_=
+struct *work)
+>  			continue;
+
+[Severity: High]
+This isn't a bug introduced by this patch, but doesn't this continue bypass
+the lock-drop at the bottom of the loop?
+
+If a user creates and destroys many cgroups, the offline_cgwbs list can grow
+arbitrarily. Iterating over all of them under spin_lock_irq(&cgwb_lock) and
+hitting this continue creates an unbounded IRQ-disabled critical section,
+which could cause latency spikes and trigger the hard lockup watchdog.
+
+> =20
+>  		spin_unlock_irq(&cgwb_lock);
+> -		while (cleanup_offline_cgwb(wb))
+> -			cond_resched();
+> +		do {
+> +			cond_resched_tasks_rcu_qs();
+> +		} while (cleanup_offline_cgwb(wb));
+
+[Severity: High]
+This is a pre-existing issue, but does cleanup_offline_cgwb() suffer from an
+algorithmic regression that causes the CPU livelocks this patch observes?
+
+When cleanup_offline_cgwb() calls isw_prepare_wbs_switch():
+
+fs/fs-writeback.c:isw_prepare_wbs_switch() {
+	...
+	list_for_each_entry(inode, list, i_io_list) {
+		if (!inode_prepare_wbs_switch(inode, new_wb))
+			continue;
+	...
+}
+
+It processes inodes, sets I_WB_SWITCH, and queues them, but they are not
+removed from the list synchronously. They are removed by an async worker
+after a slow synchronize_rcu(). Because this worker is slow and we
+tightly loop here, the next iteration traverses the same list from the
+head, encountering all previously processed inodes again.
+
+For each one, inode_prepare_wbs_switch() does this:
+
+fs/fs-writeback.c:inode_prepare_wbs_switch() {
+	spin_lock(&inode->i_lock);
+	if (!(inode->i_sb->s_flags & SB_ACTIVE) ||
+	    inode_state_read(inode) & (I_WB_SWITCH | I_FREEING | I_WILL_FREE) ||
+	    inode_to_wb(inode) =3D=3D new_wb) {
+		spin_unlock(&inode->i_lock);
+		goto out_unpin;
+	}
+	...
+}
+
+For N inodes, doesn't this result in an O(N^2) list traversal and O(N^2)
+lock acquisitions, wasting CPU time during the drain?
+
+
+[Severity: High]
+This is also a pre-existing issue, but does this loop queue work items
+without enforcing concurrency limits?
+
+Inside cleanup_offline_cgwb():
+
+fs/fs-writeback.c:cleanup_offline_cgwb() {
+	...
+	atomic_inc(&isw_nr_in_flight);
+	...
+	wb_queue_isw(new_wb, isw);
+	...
+}
+
+This queues a new isw work item for every 125 inodes without checking if
+isw_nr_in_flight exceeds WB_FRN_MAX_IN_FLIGHT (1024). For a large cgroup
+with millions of inodes, doesn't this unconditionally queue thousands of
+work items concurrently, bypassing the limit and potentially flooding the
+workqueue?
+
+>  		spin_lock_irq(&cgwb_lock);
+> =20
+>  		wb_put(wb);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260909-cgwb-tasks=
+-rcu-qs-v1-1-967a7754771f@toxicpanda.com?part=3D1
