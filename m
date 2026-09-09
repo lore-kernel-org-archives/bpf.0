@@ -1,124 +1,142 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B5A37D104
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 06:43:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9BB83B6344
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 06:46:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788936183; cv=none; b=K0TOURtfCQvTDesaySm14pZlf3b9nyywqlPfBO2liysREq8NjOWKeA+cRQ7pWJKb8fSCEPBLyzXruMK+LvCZvHO9ZxstjtUcNn4yiehoPQH58f2RNDIbEQvP6di/+9tSgR06MWDtiTUYGMXDIl1CAi/TdUFfAeSdKOAN74DxPn0=
+	t=1788936400; cv=none; b=Yjfz/ubrXgedG+gHqTfTWW3eX5mk2BnshomgNHv8AUSOXPyyPrwdoNYMzdoBdgUOSwM4239b6AECwD5h8LER2srY/nE3A7V26JLgM7chnaO/OmRG+T3I51xOHnbc98OchiUfGQHHjHJQXaTC3fQRzTCj6pj5ybxg5GfWkTlSGpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788936183; c=relaxed/simple;
-	bh=TVKoq5h1jzomecxa3xaRUn6UTIH8JTWem80beCKp/Mk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rkuV8swNMhtbVQW4zkt4oBnmPW495WZR+1m6+7hMwXAJ7tUp8qkuATaZKsuM+7vm9wK8K9BhdjZxGCVQ5DtftBy16TEdG8yNRV7Jm+DghmHbgHcj0pwhsm/hR6TSid8hc4D66zPBZKtXrK5a0n8VFplg2SINet9y3SYFyJPAExg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XCLM+hhl; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788936400; c=relaxed/simple;
+	bh=0PR7r2ZSRXnLH1J/DJf131MBT4kVTjxFj6KM7tEukKc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=SvjiDCb3ZtCoupfha4O2a1Ca0V4Q8f4wKDpI3BIJOoLngO9d9TRLlQ/09kSOWsWu4St1Evbwsm9+twiv4uH7Wmre7t+isE4AN6OvvAa/UK9j2RYNWWjBZ4OF3v49PugbFrkKH1g/rJYfvAvNdBNSAEZaWLLvE8d+DNUvCTclY5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O0EEKyms; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XCLM+hhl"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-47fe89fb333so3587993f8f.3
-        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 23:43:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788936179; x=1789540979; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=34EbQ0kkkdVKw0vcmyhvRZJ8gkzUUK1Hj8AwcwAqHQY=;
-        b=XCLM+hhlIAu3BnV8Zjoo9oTiZRr88MLFSB7ARF54ecMSQ8+sSmKKdjFxDetZazi5DN
-         FnTPif0083WmqBOAWonLn8mV5ZmcWNIxyjuDujzg2J6lXfV9kXtSHprJvYbMrYZW9n6i
-         5AMR+l7sXwP0fSy6PDzHLs1EuMF+fxMkYL+clA9Mbhu0zOdztn0tza/jp3djivtbTutm
-         X2pP1JiiwsKV/vYhP1JMjc22U+hhOp+f8Lx+6O+b+ExKgggRfetJfTjrYlmGvMmKTOon
-         DCg1TUwb0CufBq5DbL3evtNDiiGrLL1ybWGzrhcXGCqrK83zg4sNdJlbijjOc96ytU5I
-         En0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788936179; x=1789540979;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=34EbQ0kkkdVKw0vcmyhvRZJ8gkzUUK1Hj8AwcwAqHQY=;
-        b=LpGZg16ZJqlU3m5dGxchg3xT3ao/l6r4OK52DzUpeS5YjtrsdPmPDsAaWnlPL/jIRo
-         D0RAGFjOIejg0JG7au1kk2ZVCb/p6Ff/qyvB7jrrK2xzDDe7P4Kko/4lANSQBZgvKwDq
-         c7KvHh3eFpht0NaD/GokqQ5sM7vE6ABkA8gtlHPw5F/iBLvjQePKGVDw1dZ4Q/HcjHs1
-         ksuKgxTMSJFo4Hcgk+Ba9HrvdJ6q2DH78SM9v9BZ9Pj1T+03Lcx34RFn0aRx/3QwaKNt
-         0nMJYHGZXiOxSF+7N35oipIPIUsNNI5vUbJ6oS9z+geg0SOFjjzyD6TnCt1otTBt+Qv0
-         13mg==
-X-Gm-Message-State: AFuF++mgicd7Yt1tHQPZ7sv7wc/++8an66duRnVMhFBkKgcQwXen1O3V
-	DSDCVxgRYPugMmsqoS4Zc8rw0cDBI3jkRP/kua3YZr+56FM6uOEoTlDTTljEhKMaYoU=
-X-Gm-Gg: AYBFou25uEvUNuBnlLMHgnUew9hzNkwgZ7MLHWrUYI3cjk7vkISfOvU0yuUoExvz+iW
-	72UD6gVKYLvFfcUgAXJ2AVrZ6dcK/E3YDI9oVHaVOcwTYtJh5AXMofmpagx/LkOj9ML3W6DpjB/
-	VrAwwbvts7EfB7nGLAo9uDPn1KoNZUROggBMky1ZFbbruvVWgzPeOLFYvXIZVEEdWWuSl5pf/D5
-	DjIP9wVJwTPaO7q2aDL/0y6ZmEE6DYJ9T9KvVqoPk+ah63NiYlrgAI7hWAHTzbEt3GIpLd+FS8G
-	2xsA7u6j4BaJqbLeV0psDU6EkbeCb70A1PhkDbiBNiFRH7i28z9FGHya3pdZJJn/cNierteVrMh
-	rtVz1qj7rBiTXDOHnEy+56K94g4uQguo98IeQ2xOQQDbVkR4NURB/D8pu9vD3qBsqJQh0fsC25x
-	e2Hc9SC8GFZaFRBkswwYupTtt71AONgYOvEZftIwhXiSUPoAlIOXIk6rs1vv1u1m1f3peCo7Vbx
-	M12JCR5FqEd
-X-Received: by 2002:a05:600c:8b8c:b0:49c:e3ad:41d3 with SMTP id 5b1f17b1804b1-49cf7f4aea6mr327332105e9.0.1788936179364;
-        Tue, 08 Sep 2026 23:42:59 -0700 (PDT)
-Received: from dell-desktop ([2a02:587:4b5f:900:ef25:2f4:1792:4e6f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49d20dae82csm25030745e9.3.2026.09.08.23.42.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2026 23:42:58 -0700 (PDT)
-From: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-To: linux-mm@kvack.org,
-	akpm@linux-foundation.org,
-	liam@infradead.org,
-	ljs@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	tasos.papagiannnis@gmail.com
-Subject: [PATCH] mm/nommu: Reject wrapping ranges in access_remote_vm()
-Date: Wed,  9 Sep 2026 09:42:31 +0300
-Message-ID: <20260909064231.18693-1-tasos.papagiannnis@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O0EEKyms"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA26D1F00A3A;
+	Wed,  9 Sep 2026 06:46:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788936398;
+	bh=BMJiYrGCnznqM73+SehzZbOse02ewF/ATkvsYOuUtn8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=O0EEKymsAvgGYOo5MiDLL/sYigOn3PIiCkNgMCPrSQe+mQ0gfjyeGTmnkf1ogGreB
+	 4kzlnuOxD2ywOMpaBgZZixWUSunmRXtSl0TYpXL1V2ZGnIlivj064MzoD5CaYKbSJs
+	 3AQiq0BIYYi4whJuDnxi3apnoydY0cvhFniUy5gFZWc7th3MjDuQJ6LSFazNI+Tl7b
+	 HemgEEuaIX0MkvK+LTOqSsaGuzV2/wRa77EfrSLQZlGNnkFsevZ27IfOclsWdWHOfH
+	 CgyhetWb+0SVh1VcLGp9YstUh/3YaXmuujdHQeS86AFI+8RLPD3YEopHvoyMIhN1TB
+	 bQ+Ope6yOxGSQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 06/12] bpf: Recognize by-value struct and
+ __int128 kfunc arguments
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yonghong Song" <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260909062554.4007131-1-yonghong.song@linux.dev>
+References: <20260909062522.4001896-1-yonghong.song@linux.dev>
+ <20260909062554.4007131-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 09 Sep 2026 06:46:38 +0000
+Message-Id: <20260909064638.AA26D1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The NOMMU implementation of access_process_vm() rejects address ranges
-whose end wraps around, but access_remote_vm() bypasses this check even
-though both functions delegate to __access_remote_vm().
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Move the wraparound check into __access_remote_vm() so it applies to
-both entry points.
+Pre-existing issues:
+- [High] bpf_kfunc_stack_access_bytes incorrectly maps stack slots to BPF_R=
+EG_6 through BPF_REG_9 (or higher), causing an out-of-bounds read and bypas=
+sing uninitialized memory checks.
+--
 
-This is originally reported in [1].
+commit 7f4b25d0dad6ba6fed374b3111fcc89d67434d87
+Author: Yonghong Song <yonghong.song@linux.dev>
 
-[1] https://lore.kernel.org/bpf/4ef240a5bea36ff84df9589671367832860795159386a4c8fba546a0fa8b786f@mail.kernel.org/
+bpf: Recognize by-value struct and __int128 kfunc arguments
 
-Fixes: f55f199b7d76 ("NOMMU: implement access_remote_vm")
-Signed-off-by: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
----
- mm/nommu.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+This commit modifies the BPF verifier to support kfuncs taking structs or
+int128 by value. It updates argument tracking to walk slots rather than just
+registers, rejecting multi-slot arguments until JIT support is fully added.
 
-diff --git a/mm/nommu.c b/mm/nommu.c
-index 498e01ee40b0..ed44510e3770 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -1674,6 +1674,9 @@ static int __access_remote_vm(struct mm_struct *mm, unsigned long addr,
- 	struct vm_area_struct *vma;
- 	int write = gup_flags & FOLL_WRITE;
- 
-+	if (addr + len < addr)
-+		return 0;
-+
- 	if (mmap_read_lock_killable(mm))
- 		return 0;
- 
-@@ -1727,9 +1730,6 @@ int access_process_vm(struct task_struct *tsk, unsigned long addr, void *buf, in
- {
- 	struct mm_struct *mm;
- 
--	if (addr + len < addr)
--		return 0;
--
- 	mm = get_task_mm(tsk);
- 	if (!mm)
- 		return 0;
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index cf526f28f3e5b..94c359351bb69 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-base-commit: 0d9ff90a5422cc7509258aaaba1e7481df4d332a
--- 
-2.55.0
+[ ... ]
 
+> @@ -13765,23 +13850,32 @@ s64 bpf_kfunc_stack_access_bytes(struct bpf_ver=
+ifier_env *env, struct bpf_insn *
+>  	btf =3D meta.btf;
+>  	args =3D btf_params(meta.func_proto);
+>  	nargs =3D btf_type_vlen(meta.func_proto);
+> -	if (arg >=3D nargs)
+> +
+> +	/*
+> +	 * @arg is an argument slot and a 16-byte parameter takes two of them,
+> +	 * so walk the parameters to find the one that starts at this slot. A
+> +	 * slot holding the upper eightbyte of such a parameter belongs to no
+> +	 * pointer, and neither does a slot past the last parameter.
+> +	 */
+> +	for (i =3D 0, slot =3D 0; i < nargs && slot < arg; i++)
+> +		slot +=3D kfunc_arg_slots(btf_type_skip_modifiers(btf, args[i].type, N=
+ULL));
+> +	if (i >=3D nargs || slot !=3D arg)
+>  		return 0;
+> =20
+> -	t =3D btf_type_skip_modifiers(btf, args[arg].type, NULL);
+> +	t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
+>  	if (!btf_type_is_ptr(t))
+>  		return 0;
+> =20
+>  	/* dynptr: fixed 16-byte on-stack representation */
+> -	if (is_kfunc_arg_dynptr(btf, &args[arg])) {
+> +	if (is_kfunc_arg_dynptr(btf, &args[i])) {
+>  		size =3D BPF_DYNPTR_SIZE;
+>  		goto out;
+>  	}
+> =20
+>  	/* ptr + __sz/__szk pair: size is in the next register */
+> -	if (arg + 1 < nargs &&
+> -	    (btf_param_match_suffix(btf, &args[arg + 1], "__sz") ||
+> -	     btf_param_match_suffix(btf, &args[arg + 1], "__szk"))) {
+> +	if (i + 1 < nargs &&
+> +	    (btf_param_match_suffix(btf, &args[i + 1], "__sz") ||
+> +	     btf_param_match_suffix(btf, &args[i + 1], "__szk"))) {
+>  		int size_reg =3D BPF_REG_1 + arg + 1;
+> =20
+>  		if (aux->const_reg_mask & BIT(size_reg)) {
+>  			size =3D (s64)aux->const_reg_vals[size_reg];
+
+[Severity: High]
+This is a pre-existing issue, but does this code lead to an out-of-bounds
+read or bypass uninitialized memory checks when the pointer argument is
+passed on the stack?
+
+The size_reg calculation inherently assumes the size argument is always pas=
+sed
+in a register. If the pointer argument slot is 4 or higher (which might be
+more common now that large by-value structs consume multiple slots), the si=
+ze
+argument lands on the stack.
+
+In that scenario, size_reg maps to BPF_REG_6 or higher, which are
+callee-saved registers. A BPF program could place a fake constant in one of
+these registers to trick the verifier into thinking 0 bytes are read, while
+the runtime stack argument is non-zero. This could bypass stack
+initialization checks and potentially leak uninitialized kernel memory.
+
+Furthermore, if the pointer argument slot is 8 or higher, size_reg becomes
+greater than or equal to 10. Checking BIT(size_reg) and reading from
+aux->const_reg_vals[size_reg] would result in an out-of-bounds array read,
+since const_reg_vals is sized for 10 registers. Should this logic be updated
+to correctly query the BPF stack when the size argument is passed there?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260909062522.4001=
+896-1-yonghong.song@linux.dev?part=3D6
