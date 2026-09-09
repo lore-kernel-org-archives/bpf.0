@@ -1,126 +1,274 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 801C037C0FC;
-	Wed,  9 Sep 2026 17:29:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788974998; cv=none; b=R6/YiAQskoq0KQt6FN+n1A+bmyloJq62Nr8D0IZueSLhK4TQ+RLwipgDSe3JIGX7yWmpx8M+q2ObyOu/12SCEyAIlacxV8Ocpm1i7MATTiLL8T/xtiEpXcHJJCN+panfBiKuXPhpWGLCLvxFzwTjJPmP+RAwCzItkLaVEtXotJQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788974998; c=relaxed/simple;
-	bh=5D7SoVhjzEokScNygSteAqf9Ex3y5nz2gk7swf3GT9c=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=gDmwF+J/rj7iNGvZy3//wBz1/35Picg7f9t1poNBw0/DUxD5eepICxeAVl+LFazpl9xLP0p89B86qUlsMLn/t4T8AyA/J2RZKBC6ioBxB3fQ1NlqIGKe9lu1n92gP6M5r0iwAFB7yqqwxruQpoDsxBasB4WA0viOKdfBu8MVEXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=KMw6Bqep; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04A62378D94
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 17:37:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788975443; cv=pass; b=F7StDmkinraP3ISzVuEidGtGcRfmvJW7IABv5iNUcWLnQl/cYgKrnOBSWWwoRR1nhGdccIi/W4Ahs7rcE4YT67+d6bWACqIki56sRCi58wAZFM5leo4IdWiGZD1jALUZjNHQQlD8U/zsdJLXa9wJfQ+dhWAQrdKMF9WyLTk2op4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788975443; c=relaxed/simple;
+	bh=L6EZGw8SGANGHrrGkcSveLb3zd9izGncX/8VAKQnZiU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ODKlIF09E+JLk//KY3vsByWnBd1mYMpi/EervATRWzo83tp4LUZQzSYNDqmobHn34YGC2BZUc2hszDAFDWHbS6xQ95JtLHxZ78dhFInD961Js4i8r4XhN2uFcNtXTVOJwToZuQkapINaTUc9+R9AXnnGxBXr86HRT7cT93X7fzM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=z8jqWRYA; arc=pass smtp.client-ip=74.125.224.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="KMw6Bqep"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:Content-Type:Message-ID:Subject:Cc:To
-	:From:Date:MIME-Version:From:Reply-To;
-	bh=ixMZSD8+UhNtarF+6aKvQsI19PdlMWk8UdPjHUJ+BP8=; b=KMw6Bqep7POVCO8ABQLqn26u4z
-	Vm92Tg+j/0+PmqqK/dvW828O7HrV+w+lZ60KY8e00z2BinoAcJO+teusI18GQwPZa93g46fWpKzrh
-	AgVGA7OW13ikcCWBdkNHyCF5MJrQ4LKcZ+GKP5SaO3VjFYCmljrmH6AfZWccpFDtmCtNfrdPm7mPs
-	y4KaCldihKnLxKrccLdvn9dRcj2yIzJUCoUAgq4c2VAAZwBqHbq49TxRAg0vo9Q8rWDVmDAvS1GYm
-	9TAWMFQFYzZ/e/mtZNAnThAS4lu2g6BMirzitO5ItyIEr8XkzcaGF4jYGgtJDCV/itEvyRHzncwMa
-	n8Da47kw==;
-Received: from maestria.local.igalia.com ([192.168.10.14] helo=mail.igalia.com)
-	by fanzine2.igalia.com with esmtps 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1x4M72-00HA6O-2e; Wed, 09 Sep 2026 19:29:32 +0200
-Received: from webmail.service.igalia.com ([192.168.21.45])
-	by mail.igalia.com with esmtp (Exim)
-	id 1x4M71-008Hsn-5l; Wed, 09 Sep 2026 19:29:31 +0200
-Received: from localhost ([127.0.0.1] helo=webmail.igalia.com)
-	by webmail.service.igalia.com with esmtp (Exim 4.98.2)
-	(envelope-from <mfo@igalia.com>)
-	id 1x4M71-00000007Q64-0Tnk;
-	Wed, 09 Sep 2026 19:29:30 +0200
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="z8jqWRYA"
+Received: by mail-yx2-f12.google.com with SMTP id 956f58d0204a3-66e50968489so526142d50.0
+        for <bpf@vger.kernel.org>; Wed, 09 Sep 2026 10:37:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788975441; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Aj93B7rr+nTE1rtlGqs3KeteeD0QEZY24TXXEFZYVwCtzQewhByZaAcpFh39d7F9zZ
+         qRjNJ4zDD/1V6XPPVQwyRXuGSf3FkOJhU6aSBQZuu7fTmfCtdLHYHYwksmCrXT0cYBF7
+         SvzIiEhtJ3wVO52+io+GcMR1/oIiaHzKQGwZmxS9BlbjvbPh9Zbi8Hjc9IQk9OLtD+YY
+         yLj38qWH1weJmjyZ+HTsARCmh2kMcjaGPnWfeygpvZHrB1PCZgZU/BPZ2xDMgF77wa5y
+         1V3QiD1/ZiqLh1i5xfBo90UANhwc8A5x+CVesM7AFarSP9+m/ANCOu9/0Gxrh6qzHhaW
+         mquw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Af6ITtfBEfomuP9/zSoltzeiZzdojuJAWeTn9uFF6ek=;
+        fh=JUxPQ9G84apGdqsrDHlxyzhcHqRlwPX1mmt0jfs7mqU=;
+        b=sOkO82TZU0zw1jlYJJ43OHG1ACPiqIxYq2S78JTQt+GHSDVhHIDrSxdOjtMzMXfQd4
+         7uZPbg6+vEo8NhzcYl6r5yPsky4aeAdUzDudyml95kCR0udfP1rR/g9NFHrdlU3AjhmC
+         c5Aoe/dKSTzVuqKqWRDn3lKGe5Wp4dB/BGen8kpSXLLNmLOhuP7bSzRGLMbN8yXrpyq0
+         qI9e+NPu5Dur5xrEvHoyLqvruGlUzpnOShMCmRY9Cm4jCK++FcQB66zK27mutQzDHIyD
+         EkDFPu29PluYDVAP8MCzkpDIHgEmSI6PdEWLQ/tWFaSNmTS52GwMV4Af4ZoRb6a+xE4R
+         GS9g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788975441; x=1789580241; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Af6ITtfBEfomuP9/zSoltzeiZzdojuJAWeTn9uFF6ek=;
+        b=z8jqWRYALdUGBkLxezUs8C+xjV5pUXYMTvjAM+dHk0vJHl285vdrgg+tiQs06BsHzO
+         wgnRt6jtOn4koRztyEO7uUt7jGml4eR8vDalIXRM2dSa4IecKuidumQDJD66h6mA3/hL
+         dnUlh7nWPZTgXLwOLsLrT6fxinNoS6qiitnhAAkU7SDN9IQF7CA16KattG4mqNuKQEkp
+         c1QI0rO1IqhwVnwlBbHvZdQZ0oiL5HP39gJGwGO73V3zy+rmLYGFOKMlUwbuMvGsLbRI
+         thxWKSCd7M7+fVvrtGg0mmBJtrrPeQkZ8RlFFfXV5l6cyati6NxJEnLxjn8qkpIQDlWa
+         ia+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788975441; x=1789580241;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Af6ITtfBEfomuP9/zSoltzeiZzdojuJAWeTn9uFF6ek=;
+        b=G8pktmgMHM4X1sgLNOJrx9zmkNqYkK6BaiUZBmQ3L4wubqFo28Ui2C989oi8DoowPT
+         kHrzlAbyVVC4p0d+CAian11arzSTNfG6+fEeyueJhiMiVEQpRbn8OCP7/+BDTi1sj3PU
+         OpeB3CJIfsdxXbDSo4IMNA9G/BSmLoNsNmbrKZGm0oIneGi8iYZME8O8foLx4zosmdGV
+         G4ks9f4mo+SwlDlQmDOk+2yMHJF/FFZVAOnCxAQ8d1r9t4EwsXrr4tkB/ulhO/ReRw1u
+         ZVoV82bo9DOD3uwlunROTqzWfSqA5cWXKOhM8m8vp+euYNj27GsCuBwA5Ws/1iAPCFpO
+         R/+g==
+X-Gm-Message-State: AFuF++leludSPQ7vt3xDR8D3E2MaoH8QFPNh89vxoVnN0f8jlVaGcfVF
+	nMD2Fmp4wIyOEDzPhkaK2LSRr5HbSagyMIOXnq3NtyDJ8PPVr3s4zCkNTBEgESZZBOTjhs7li0D
+	IhD7+cAG+4RXko49Jj9e8AiC0ISe7KyNC/tywNoUmuQ==
+X-Gm-Gg: AYBFou18m+RsJRK9K9x7rdHQnJyjR6NAU1pW28iSMoshcpmcCog9vtpeJ4Bb2zEtNtO
+	z+YjGlRPT3uNE5aK9mqJAKg/nG2swPR2bmKL8vhqnUWlCpUuuB1Clzhpcfbraj3KOY0swmMVxhP
+	nsac35NnRkTgEw7IkMSa3x/B9Thki2vvgqCnkYBEQSnIDyF+DhHYK0jgudEcS2+/eqC7QL4A5IA
+	svvb4ZZ3weBWeVP5PEdkZNG+Bt2hVkKdS0b+4J7p1YhFjCX9Ntr1cTADGlOfxsBiH7Fe0zUILnt
+	ve9gyYy6OP2olipAKvB7XdZwSi/Nmuhk1l5BESHru8MJxl1w+yOhfYwh2jtBcMyb
+X-Received: by 2002:a05:690e:400a:b0:66d:93e:f06b with SMTP id
+ 956f58d0204a3-671100b5114mr953412d50.38.1788975439124; Wed, 09 Sep 2026
+ 10:37:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Wed, 09 Sep 2026 14:29:30 -0300
-From: Mauricio Faria de Oliveira <mfo@igalia.com>
-To: Joel Granados <joel.granados@kernel.org>
-Cc: Kees Cook <kees@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- kernel-dev@igalia.com, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, fsverity@lists.linux.dev,
- keyrings@vger.kernel.org, bpf@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
- lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
- coreteam@netfilter.org, linux-sctp@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org,
- bridge@lists.linux.dev, mptcp@lists.linux.dev, rds-devel@oss.oracle.com,
- virtualization@lists.linux.dev
-Subject: Re: [PATCH RFC v3 00/13] sysctl: add module aliases
-In-Reply-To: <rywhz6soawf5dzyui5g7dnbufsgpxr7ma7honuhejwgncemzrm@f32at7hl6ugm>
-References: <20260819-sysctl-module-aliases-v3-0-aab90569365d@igalia.com>
- <bpnqwggtidgiec5akns3fa5edbsvl7xf55dxabtwng2xspy4pn@ue554aii2ngk>
- <53155340c897560bfc67e61ba9568fd6@igalia.com>
- <mokz5pdtwswkyab4byfq7q7m6ac2g6ceoi6jflyxmaszaibzqa@su6m4kamtdpy>
- <b1a6cec17e7c828fcebe310ca2a0d25b@igalia.com>
- <rywhz6soawf5dzyui5g7dnbufsgpxr7ma7honuhejwgncemzrm@f32at7hl6ugm>
-Message-ID: <6e93af907298022f077126f1be7bd386@igalia.com>
-X-Sender: mfo@igalia.com
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Report: NO, Score=-2.1, Tests=ALL_TRUSTED=-3,BAYES_50=0.8,KAM_DMARC_NONE=0.125,KAM_DMARC_STATUS=0.005
-X-Spam-Score: -20
-X-Spam-Bar: --
+References: <20260909135324.60165-1-cenzhang@linux.microsoft.com>
+In-Reply-To: <20260909135324.60165-1-cenzhang@linux.microsoft.com>
+From: Emil Tsalapatis <emil@etsalapatis.com>
+Date: Wed, 9 Sep 2026 13:37:08 -0400
+X-Gm-Features: AcwNN1WDkVwiFlZuDNEwXauBrRSu0q6NKwPjowBV4De_y5EG6aHsz-Bo8i1LExM
+Message-ID: <CABFh=a4VyzxsQqsayWpTKjxY3HL2C072u=pbecEpNDbL9eBNKA@mail.gmail.com>
+Subject: Re: [PATCH bpf v2] bpf: Fix non-linear SRH access in bpf_update_srh_state()
+To: "Cen Zhang (Microsoft Security FORGE Labs)" <cenzhang@linux.microsoft.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com, 
+	sdf@fomichev.me, martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org, 
+	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, ihor.solodrai@linux.dev, davem@davemloft.net, 
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, 
+	m.xhonneux@gmail.com, dlebrun@google.com, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, AutonomousCodeSecurity@microsoft.com, 
+	xmei5@asu.edu, tgopinath@linux.microsoft.com, kys@microsoft.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026-09-09 11:07, Joel Granados wrote:
-> On Fri, Sep 04, 2026 at 02:45:23PM -0300, Mauricio Faria de Oliveira wrote:
->> On 2026-09-04 10:41, Joel Granados wrote:
->> > On Thu, Aug 20, 2026 at 06:22:13PM -0300, Mauricio Faria de Oliveira wrote:
->> >> On 2026-08-20 09:51, Joel Granados wrote:
->> >> > On Wed, Aug 19, 2026 at 03:16:13PM -0300, Mauricio Faria de Oliveira wrote:
->> >> >> This series adds 'sysctl:' aliases to modules that register sysctl tables; e.g.:
-> <... snip ...>
->> > use the correct call moving forward?
->> 
->> This scheme currently covers all modules, AFAIK, as it is wrapped in the
->> functions that register sysctl tables.
->> 
->> On moving forward: usage of such functions in a way that breaks a
->> requirement of this series (e.g., failing to specify the template
->> table/path parameter(s), or not having constant initializers) hits a
->> build error, as the requirements are actually from the compiler.
->> 
->> >> I guess that a different design could use MODULE_SYSCTL_TABLE() as
->> >> MODULE_DEVICE_TABLE(), declared per table instead of wrapped into
->> >> register sysctl functions.
->> >> However, it seems to require moving the value of the path argument (or
->> >> its template) into the macro and still referencing it in the function
->> >> (or its instantiation of the template), which adds obfuscation, to all
->> >> callers. 
->> >> 
->> >> What do you think?
->> > It might be that having it inside the module subsys is more work, but I
->> > believe that there is the right place to have it. I still don't see that
->> > adding a module specific arg to the sysctl register is a good thing.
->> 
->> Ok, cool. I can work on a different design.
->> 
->> Please just let me know whether you are OK with the remaining (above),
->> and I'll be happy to tackle this.
-> 
-> What is "the remaining"?
+On Wed, Sep 9, 2026 at 9:53=E2=80=AFAM Cen Zhang (Microsoft Security FORGE
+Labs) <cenzhang@linux.microsoft.com> wrote:
+>
+> bpf_update_srh_state() locates an SRH with ipv6_find_hdr() and caches
+> skb->data + srhoff in the per-CPU SEG6 BPF state. This assumes that the
+> returned offset is within the skb linear head.
+>
+> That assumption is wrong because ipv6_find_hdr() uses skb_header_pointer(=
+)
+> and can locate an SRH in non-linear data. The direct srh->hdrlen read and
+> the cached SRH pointer can therefore access memory outside the linear are=
+a.
+>
+> BUG: KASAN: slab-use-after-free in bpf_update_srh_state+0x1bc/0x200
+>  net/core/filter.c:7027 bpf_update_srh_state()
+>  bpf_lwt_seg6_action()
+>  input_action_end_bpf()
+>  seg6_local_input()
+>  ipv6_rthdr_rcv()
+>
+> Fix this by using seg6_get_srh(), which pulls and validates the complete
+> SRH and reloads its pointer afterwards. Pulling can reallocate skb->head,
+> so refresh the BPF data pointers inside bpf_update_srh_state() immediatel=
+y
+> after the call.
+>
+> For End.DT6, make the inner IPv6 base header linear before removing the
+> outer headers. Pulling only the outer headers can leave the inner header =
+in
+> non-linear data, while ipv6_find_hdr() and the nexthop lookup access it
+> directly. Clear the cached SRH pointer and refresh the BPF data pointers =
+if
+> the pull fails.
+>
+> End.B6 and End.B6.Encap can insert a new SRH and reallocate the skb befor=
+e
+> a later HMAC calculation or nexthop lookup returns an error. Rebuild the
+> SRH state when the skb length changes, which indicates that the new SRH w=
+as
+> inserted. Failures before insertion leave the existing state unchanged.
+>
+> Fixes: 486cdf21583e ("bpf: add End.DT6 action to bpf_lwt_seg6_action help=
+er")
+> Reported-by: Xiang Mei <xmei5@asu.edu>
+> Link: https://lore.kernel.org/bpf/20260901183151.16648-1-cenzhang@linux.m=
+icrosoft.com/
+> Suggested-by: Emil Tsalapatis <emil@etsalapatis.com>
+> Link: https://lore.kernel.org/bpf/CABFh=3Da5iLOEJdPhoaWUhLc0eEqAuhnd83_jJ=
+r9MVZZG6gSJAEw@mail.gmail.com/
+> Signed-off-by: Cen Zhang (Microsoft Security FORGE Labs) <cenzhang@linux.=
+microsoft.com>
+> Assisted-by: Copilot:gpt-5.6-sol
+> ---
+> Changes in v2:
+> - Rebuild the SRH state after End.B6 and End.B6.Encap only when the skb
+>   length changes, avoiding selection of a spent Routing Header on errors
+>   before insertion.
+> - Rebase onto the current bpf master branch.
+>
+> Please queue this fix for stable kernels.
+>
+> Testing:
+> - Static checks only: checkpatch.pl, diff --check and patch replay.
+> - No targeted selftest was added. BPF LWT test-run does not support
+>   non-linear skbs, and the existing SEG6 netns test does not create a
+>   split inner IPv6 header for End.DT6.
+>
+>  net/core/filter.c | 31 +++++++++++++++++++------------
+>  1 file changed, 19 insertions(+), 12 deletions(-)
+>
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 8513167a858a..b037d70e5fe6 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -7017,15 +7017,16 @@ static void bpf_update_srh_state(struct sk_buff *=
+skb)
+>  {
+>         struct seg6_bpf_srh_state *srh_state =3D
+>                 this_cpu_ptr(&seg6_bpf_srh_states);
+> -       int srhoff =3D 0;
+> +       struct ipv6_sr_hdr *srh;
+>
+> -       if (ipv6_find_hdr(skb, &srhoff, IPPROTO_ROUTING, NULL, NULL) < 0)=
+ {
+> -               srh_state->srh =3D NULL;
+> -       } else {
+> -               srh_state->srh =3D (struct ipv6_sr_hdr *)(skb->data + srh=
+off);
+> -               srh_state->hdrlen =3D srh_state->srh->hdrlen << 3;
+> -               srh_state->valid =3D true;
+> -       }
+> +       srh =3D seg6_get_srh(skb, 0);
+> +       bpf_compute_data_pointers(skb);
+> +       srh_state->srh =3D srh;
+> +       if (!srh)
+> +               return;
+> +
+> +       srh_state->hdrlen =3D srh->hdrlen << 3;
+> +       srh_state->valid =3D true;
+>  }
+>
+>  BPF_CALL_4(bpf_lwt_seg6_action, struct sk_buff *, skb,
+> @@ -7033,6 +7034,7 @@ BPF_CALL_4(bpf_lwt_seg6_action, struct sk_buff *, s=
+kb,
+>  {
+>         struct seg6_bpf_srh_state *srh_state =3D
+>                 this_cpu_ptr(&seg6_bpf_srh_states);
+> +       unsigned int old_len;
+>         int hdroff =3D 0;
+>         int err;
+>
+> @@ -7058,32 +7060,37 @@ BPF_CALL_4(bpf_lwt_seg6_action, struct sk_buff *,=
+ skb,
+>
+>                 if (ipv6_find_hdr(skb, &hdroff, IPPROTO_IPV6, NULL, NULL)=
+ < 0)
+>                         return -EBADMSG;
+> -               if (!pskb_pull(skb, hdroff))
+> +               if (!pskb_may_pull(skb, hdroff + sizeof(struct ipv6hdr)))=
+ {
+> +                       srh_state->srh =3D NULL;
+> +                       bpf_compute_data_pointers(skb);
+>                         return -EBADMSG;
+> +               }
+> +               __skb_pull(skb, hdroff);
+>
+>                 skb_postpull_rcsum(skb, skb_network_header(skb), hdroff);
+>                 skb_reset_network_header(skb);
+>                 skb_reset_transport_header(skb);
+>                 skb->encapsulation =3D 0;
+>
+> -               bpf_compute_data_pointers(skb);
+>                 bpf_update_srh_state(skb);
+>                 return seg6_lookup_nexthop(skb, NULL, *(int *)param);
 
-I meant the rest of the email, addressing the points/questions you
-raised.
+Sorry but sth we missed on v1:, We need to do tbl_id =3D *(int *)param;
+before we start
+pulling. The verifier allows the *param pointer to point to packet
+memory, and we may
+be freeing the packet in pskb_may_pull(). There is no good reason for
+*param to be
+pointing to packet memory, but it's still possible.
 
-cheers,
+pw-bot: cr
 
-> 
-> Best
-
--- 
-Mauricio
+>         case SEG6_LOCAL_ACTION_END_B6:
+>                 if (srh_state->srh && !seg6_bpf_has_valid_srh(skb))
+>                         return -EBADMSG;
+> +               old_len =3D skb->len;
+>                 err =3D bpf_push_seg6_encap(skb, BPF_LWT_ENCAP_SEG6_INLIN=
+E,
+>                                           param, param_len);
+> -               if (!err)
+> +               if (skb->len !=3D old_len)
+>                         bpf_update_srh_state(skb);
+>
+>                 return err;
+>         case SEG6_LOCAL_ACTION_END_B6_ENCAP:
+>                 if (srh_state->srh && !seg6_bpf_has_valid_srh(skb))
+>                         return -EBADMSG;
+> +               old_len =3D skb->len;
+>                 err =3D bpf_push_seg6_encap(skb, BPF_LWT_ENCAP_SEG6,
+>                                           param, param_len);
+> -               if (!err)
+> +               if (skb->len !=3D old_len)
+>                         bpf_update_srh_state(skb);
+>
+>                 return err;
+>
+> base-commit: 15e2565f1c43771af0bc5324971cabaad79ac286
+> --
+> 2.55.0
