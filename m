@@ -1,124 +1,104 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 110903AB28D
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 06:57:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A217E3B4E95
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 07:13:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788937066; cv=none; b=CrDjGJSXBejqz3fFBSTmt2WWU18j+HAXTTFjmhHPsEg1+bHqWm6KgNt+7XBuX3S/EXJE285wprMSdB56NyXlKfmbfHWi9YNpEYea6JpEJEbuTrVSphu7V24FHAUH1HMyqKErpVafrbE6kqJ0aqzqVWxVQKM5n4PCY9RsTOZ+DXk=
+	t=1788938015; cv=none; b=VXK7iR8iT06gFgCuu1nKfgVXSLjGykRthHZiVJL/GzMNvOvDRSz9Z7RntLQKScRx5EUetcbyFZy7uN5CUY/3WlvO5zfvW2ZeS7APJnPVR7X7PcO53nUa9eI+g+2G0A1K1WaxP8Db8UVXvJiQkaiLI14JourGnRd4VjeL5sdTNR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788937066; c=relaxed/simple;
-	bh=KlWKlIP500+Cphum5eXH7pELvy5cixqPU+O+NJN94NY=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kamzKIrctsO1v4jbKt41Zr3q3Hchcny4qzt5/+E1kPfs7JuM6a4zEdzfTj4RjRu9N/NM6xMpuZfwjZWeEixSHtCGMCh6TXIHpgl6ZxdeinuD3IChlULCoG1nGDOQdozeMqxspfvjpnz7EjGC47ajjNePDKWr194dxxZaZ0P5DBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=liR/1L+5; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788938015; c=relaxed/simple;
+	bh=yTcfALd4OL6w1zqiNTA/pRFk0iu0iv+mSY4ze7PBMi8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=AdGhmveJXUKAMFMgzvhvl89dD287vKvJH/gKUdoUuFRBekTR/Z4iUEGcT5vN9eszkFjhlscGE5OPJSALDtBDrZ1km//DOVcv+gpbVrLXrNBXmIBXcl+ZKp7ZTAMf2k4gMz6vhqA21UA/SNYT3UhZhDxFH1oMuPZStJ/gDs9DoZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oqKme/yY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="liR/1L+5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AFDC1F00A3A;
-	Wed,  9 Sep 2026 06:57:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oqKme/yY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD6051F00A3A;
+	Wed,  9 Sep 2026 07:13:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788937064;
-	bh=yzK22K0w34+OZ3j+IPlTcnEdUp3k9JAIHCDB6e73ETw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=liR/1L+5OMJX/14Sam1sehmwXKaQIiUOpPswINaqVzteLWVO9XC3Y6WPJ6rN5pnTy
-	 ptbcS0kKwTwmBsO71g6O/dg5ZdISPAtKAd10I0UNPqOCWyrB+NOGuQIR2Op9UoQm1u
-	 NhcTAFdqwgWN+yZJcPR8Q00/q7TT0Qducb8o0aDEueypCTSZUvouT8twaBICquFuY+
-	 YdBHDB5aRnZNDDvTNJIQPB0LPyOEVIKP5E02jeptItmpGy94Xe9RguyZUIUgaikQd9
-	 r6opDE2nBSSzMoR3DwlpGN3/L7wNZ78nQyfTp1U/L7QRm5iF7lb2JIJ1Fgau6byUMI
-	 +uydc2KLejZVQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] mm/nommu: Reject wrapping ranges in access_remote_vm()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Anastasios Papagiannis" <tasos.papagiannnis@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260909064231.18693-1-tasos.papagiannnis@gmail.com>
-References: <20260909064231.18693-1-tasos.papagiannnis@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 09 Sep 2026 06:57:43 +0000
-Message-Id: <20260909065744.3AFDC1F00A3A@smtp.kernel.org>
+	s=k20260515; t=1788938012;
+	bh=gAac+aNd63COSIzW1UwbNeo6BSTCzMuVviCAmrXT8Yo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=oqKme/yYZjA/zAS/7y36LnDdq6c+pB7k6VhsLGJLEa0Ei7t2OmV6sKAPS/iwOVUwS
+	 0PDy/Si+W8Rs4FNIFOuPXov2V+SUbsGXZj2uZjKof6RhIU3N6ZpEE3G18lDeVcDBXY
+	 AQtzfUcWd4mLuuM0CpszlaMUV35O53XyKO6nwRGYo00Z57mmbP+zcOIBqGdSxvR9ku
+	 BV6RIcC0lDcnv6RwZJPLd5E6misYpThWTiZePcZs1L58B1iOCgnmyYsRuWNuBRTpiB
+	 3R+DlfGC3Lag96oWlIndiGL1rLrJwRmYoKkt7e9EFjt6iEbfZmVY4YFtc+LAXSGYXE
+	 BTSZx47ykWx9g==
+Content-Type: multipart/mixed; boundary="===============7629561995378166472=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <015098d2b080372b27acd82b6bea918f3762ba1c4f49a8c26ca273842ba67547@mail.kernel.org>
+In-Reply-To: <20260909062533.4002610-1-yonghong.song@linux.dev>
+References: <20260909062533.4002610-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v2 02/12] bpf: Index global function arguments by argument slot
+From: bot+bpf-ci@kernel.org
+To: yonghong.song@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed,  9 Sep 2026 07:13:31 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+--===============7629561995378166472==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Pre-existing issues:
-- [High] Using `vma->vm_file` as a proxy to check whether a VMA is anonymou=
-s or file-backed.
---
-
-commit 35aeff0bf93ec8eeae453b43c1f6540a0d793165
-Author: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-
-    mm/nommu: Reject wrapping ranges in access_remote_vm()
-   =20
-    The NOMMU implementation of access_process_vm() rejects address ranges
-    whose end wraps around, but access_remote_vm() bypasses this check even
-    though both functions delegate to __access_remote_vm().
-   =20
-    Move the wraparound check into __access_remote_vm() so it applies to
-    both entry points.
-
-    Link: https://lore.kernel.org/bpf/4ef240a5bea36ff84df958967136783286079=
-5159386a4c8fba546a0fa8b786f@mail.kernel.org/
-
-> diff --git a/mm/nommu.c b/mm/nommu.c
-> index 498e01ee40b05..ed44510e37707 100644
-> --- a/mm/nommu.c
-> +++ b/mm/nommu.c
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 31057c8f3a7c..104a91f5ffd5 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -8037,7 +8037,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
+>  	const struct btf_param *args;
+>  	const struct btf_type *t, *ref_t, *fn_t;
+>  	int err;
+> -	u32 i, nargs, btf_id;
+> +	u32 i, slots_used, nargs, btf_id;
+>  	const char *tname;
 
 [ ... ]
 
-This isn't a bug introduced by this patch, but while reviewing mm/nommu.c,
-I noticed a pre-existing issue regarding VMA classification:
+>  	args = (const struct btf_param *)(t + 1);
+>  	nargs = btf_type_vlen(t);
+>  	sub->arg_cnt = nargs;
 
-> 	/* clear anonymous mappings that don't ask for uninitialized data */
-> 	if (!vma->vm_file &&
-> 	    (!IS_ENABLED(CONFIG_MMAP_ALLOW_UNINITIALIZED) ||
-> 	     !(flags & MAP_UNINITIALIZED)))
-> 		memset((void *)region->vm_start, 0,
-> 		       region->vm_end - region->vm_start);
+[ ... ]
 
-[Severity: High]
-Does this code in do_mmap() rely on vma->vm_file to check if a VMA is
-anonymous?
+> @@ -8122,8 +8122,9 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
+>  	/* Convert BTF function arguments into verifier types.
+>  	 * Only PTR_TO_CTX and SCALAR are supported atm.
+>  	 */
+> -	for (i = 0; i < nargs; i++) {
+> +	for (i = 0, slots_used = 0; i < nargs; i++) {
+>  		u32 tags = 0;
+> +
 
-If a driver sets the VMA as anonymous (e.g., via vma_set_anonymous()) but
-leaves vma->vm_file set, the check relying on !vma->vm_file will fail. Could
-this skip the memset and leave kmalloc'd memory uninitialized, exposing
-kernel memory to userspace?
+[ ... ]
 
-The MM VMA guidelines suggest the correct test is vma_is_anonymous(vma).
+> @@ -8254,6 +8260,8 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
+>  		return -EINVAL;
+>  	}
+>
+> +	sub->arg_cnt = slots_used;
+> +
 
-This same pre-existing pattern appears in split_vma():
+This isn't a bug, but would a short comment on the early 'sub->arg_cnt =
+nargs;' noting that it exists only so the error path in
+btf_check_func_arg_match() has a stack-arg count, and that the
+authoritative slot count is set after the loop, make the two meanings of
+arg_cnt easier to keep straight in the later patches?
 
-> 	/* we're only permitted to split anonymous regions (these should have
-> 	 * only a single usage on the region) */
-> 	if (vma->vm_file)
-> 		return -ENOMEM;
+>  	sub->args_cached = true;
+>
+>  	return 0;
 
-[Severity: High]
-Could this incorrectly prevent the splitting of anonymous VMAs that happen =
-to
-have a vm_file set by returning -ENOMEM?
 
-And similarly in do_munmap():
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-> 	/* we're allowed to split an anonymous VMA but not a file-backed one */
-> 	if (vma->vm_file) {
-> 		do {
-> 			if (start > vma->vm_start)
-> 				return -EINVAL;
-
-[Severity: High]
-Does this incorrectly classify the VMA during unmap, applying file-backed
-rules to anonymous VMAs that still have a vm_file, leading to -EINVAL error=
-s?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260909064231.1869=
-3-1-tasos.papagiannnis@gmail.com?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34320399441
+--===============7629561995378166472==--
