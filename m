@@ -1,149 +1,136 @@
-Received: from mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99AFE36B934
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 17:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788975544; cv=none; b=IssUNBfYtZgV/pYumHay/75vA9hoRC78BcS4hocKqhzKzeAoKj7AlJZwT6wtqzVLSrf6pYBWQhu9BE+P1q6HUV8Az7wcuWDgw9cTFI7RsCejuTIi/JC+17l2jAyJA1UgqNirSVK3rjAUczQQJ1CO/5JaSUZSUOWK5wR7nnmQypk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788975544; c=relaxed/simple;
-	bh=EnnRHDWfqBGm5+O+OlUx4K5NSMsJ9BC3rDHa6lTbFgk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HjYFRU1++gB/4yPeI6wmKeTkbqUNnMwrXa0ldLZsn5O9IKux/GzasyRy+gYr6niKh0EI5nhqd4tmpGdHMZ03DfpOQjAPNcMhSyYcutCWfDFU2hGg8SDeK+kIFBKl8gfNNp3aSDMcxVOAZxw3k3tLUcJNyuQ+FCDRDgQmY3sRpTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Vd2XCcfi; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7391138DC79
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 17:47:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788976045; cv=pass; b=jEfc6U22iDJVtv8WLJ+xvoRzoe7eKOCluLz6yi5bz8fS5TmhFt8rR8pJ/Q6Ul5GYQFjIr0XYKCXYYnObhGlzqXhOeCuSedBlLeUErlfbjMkZ6OLncw6lIMLgOJ+m8DDqXHFNV9mQhEMJTuO+Oz3BNnSbNKAHhnsFij185y9dTFA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788976045; c=relaxed/simple;
+	bh=KsqAWLLSXZo92IG1R5rVfZj7CJNUliWyytvzo16n1l8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W92GD9l3GyQmr9qVbMG6kCHcEyUgVP4P19TkP5QWt3lu79+iJW/+6Swu3noF8YeuploEN2WQ4dh6UF8dHwziIiMJjQWn29Uv3FbE4zH/ysJVHWpHfXusG3AGz86odLLosSDSTjzSb+ag1Ht4FdEt2tdhqHqCKCfR5RiV3ZEv8Cs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FbNyVei6; arc=pass smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Vd2XCcfi"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=EnnRHDWfqBGm5+O+OlUx4K5NSMsJ9BC3rDHa6lTbFgk=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788975539; v=1; x=1789580339;
- b=Vd2XCcfifrSyIw5pHWRZ1Tgj+eZNyNYOt8QtpST3i44j1rf7UQQin28KxaftGRhfjTLoCUsT
- AwMUBnwsRxG1SMZvNPay6ZYuKO+BQT6yNCBur8i6xfTkMBtRRKAiuRa4wgXpXfytYJB6P6jFA3w
- 3ZDmZf3RkbYD+gWqyHJfpDwI=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6fd7739b0bf8718a;
-	Wed, 09 Sep 2026 17:38:59 +0000
-X-Mizu-Trace-ID: 6fd7739b0bf8718a
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <c636bef6-9ab4-45cf-8566-bab9c09fc6b7@linux.dev>
-Date: Wed, 9 Sep 2026 10:38:50 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FbNyVei6"
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7f4f53975e6so5868170a34.3
+        for <bpf@vger.kernel.org>; Wed, 09 Sep 2026 10:47:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788976043; cv=none;
+        d=google.com; s=arc-20260327;
+        b=dYrxIefmThM/It65Qphh2qArOI5XSiXX/iIBTpGkoXIbpz5xse+iQJhDGgj/7ewMdl
+         gl7fl4dPfJeEh4X3usr5OWr3jHGjntL843bJDBdXwXSDBCTi7esn0uwa3h5/6KVJyc85
+         0Pr1bARDYuuZCXIn6hzpxNZQXdlA5ioPMqq6p++0XzyEGxfsGjatqEid7LakaY1TMrVn
+         V/sAvG6iR10sBcRU21wpD6bgzO3pnp1oWt3D1Ycoij7FdG9uF68y0fUQBbANsbTNW8uC
+         /YNw8vXJgAv23EvC2++dvidvya5gVrOjZvw7kddKDqmGKnHu2fmsMFlqkGlkdYrAUhCg
+         ZObQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=qNoOl7ztrPCmUz3TRKSDyhyxAS0+0cTZFgolPiVjjcM=;
+        fh=+iofH7kLhUIpDUAo/a2rUbKulXCH8Go9n65YHAt0kP0=;
+        b=ExeUFfXnle6oUKwOA9DEx5nkE+YoWdOZdZB5c5BkyrO7iMU+FdG2HdhWSqS17FnXWW
+         1AN8P2m77K4jvwKC1FlFD3WocOq9B4rLkEEp7X1TNfK+O8Y4nbaqLMgwlgEdoXsKY7CP
+         E2cX82F4qHMIRhzl3+gSBMZ3Q9RiPGdk07d77Gqti8rxaBFgpvNVJjB7fZC5XfuE1U9y
+         KldiAPq6ya8OLRU5r9m05JCY4gZbB3QxhYTFORB+LIbvbJXc+gioXVYVhkyzguuQRA+J
+         J1CDys2rG9Rdy/nXyBYA+1QwqIF95zxTTXh3c1WInchzcwUkrq0q20qxRO7rrH76pgPh
+         /UhQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788976043; x=1789580843; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=qNoOl7ztrPCmUz3TRKSDyhyxAS0+0cTZFgolPiVjjcM=;
+        b=FbNyVei6X9FXnM2IKA9vaialx5roahy0C/T4DDA2JtauhrsUhWV4n23odpsedbUL5z
+         1xFKOXWmcER5Mc/wPZvSQbX/GIjicrdE/eLUNwd9lLGrgKCFng06dwE8V1ZjEH3GEbS3
+         0H+p6A15jzj3qHJUHs1rJTHwc0etDs8RlGIoTypV8isaSeAp/l0GgbuoKItQHKfek20t
+         7PdWWYMilV6hemp2CJBrigz6TJ2LPjrnIKNdl43RGiZ7/OZ7+nb07qN28mwrttiiSx0v
+         denF4Q4Ajun358Cc4YXk136wshTxNV4Ac45a/p5Aw8X4qFWWuuIvz0z2p/8QlrgvSvrj
+         Ec6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788976043; x=1789580843;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=qNoOl7ztrPCmUz3TRKSDyhyxAS0+0cTZFgolPiVjjcM=;
+        b=AWsuzxWq2N1bdR+i4hUNRX1dxaof82Kaw5VrBWtMrsrp2EbN7gu7Ct5YzKQFsEFtdB
+         +nwYeAjwBJPiKsN9L/aayMV9ZGncvbonfOg5+EPdMn1haw79ynNOo15uI9BEZPvI/EyT
+         jPIvVorw2T4h/wmNre4P7UCFtPEKOfEtpgXv9c27ZNxmhmhlUbJ0AQV+l+KNxJ2MEX8g
+         Ob/7WOpCR+MO4xkWR4+siKODe884nJtI53kBDnD4zneyk6vW2Csb9dbI1CmJ7T0L3HS1
+         SVJejuWSSzrcZEdL7DbyfQEI3T/xfB4mXYfWHEkJiRtKyUOBh46ywUNYFPYh5Uyns4vc
+         O15w==
+X-Gm-Message-State: AFuF++kcN6TSCGCSlwNtlz68uKtbZAMz5NUYv+EGCdwtoXW62bBPLinN
+	+inEqvhu/unpCOc9FZ1DwEaoN+nC9D7MGXt1DkB34iyEpjxRER/Vis/FBW6eNerxRGaBrUt107L
+	YG/JDLfG4ycN6Qp9yg3aehtttaa9UXzQ=
+X-Gm-Gg: AYBFou36ZllswdvE4RJIkJi1LCvrgtlv9gjhNg6MWaS5We6Zh1FVbqStv6AwHvn3q4l
+	xuFz1VHkfYutXCXegK6pxC5jHnkHWpOzTNkk/ZZb8pIqvOZ44j6dLnvFFPLBfGMd2+CEcke8q1Y
+	sPj+JyreWqYxzw1Je42G9hzbpmifUHIpZ7KOM7t0aXvsFt8WYmz3UQj3s3LZOqhXeFNrZ2W/Uxr
+	kVlBmWj/PbgjerisnGmn4q/1HPafmxwVw29gHArTXwilUMtKWouJJKXsGwrBs2Gjcx6r6l5gPbL
+	62cjtzHAOlwxmknVF05Bkdxhp5dTde7Cpxq2gn1UZEwl0g32XRK5It0hVmwDfMFmO4fZmw==
+X-Received: by 2002:a05:6820:c86:b0:6be:d716:524d with SMTP id
+ 006d021491bc7-6bed7259579mr1996629eaf.64.1788976043133; Wed, 09 Sep 2026
+ 10:47:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] x86/mm/pat: skip RWX verification until kernel text is
- set to read only
-To: Mike Rapoport <rppt@kernel.org>, Dave Hansen <dave.hansen@linux.intel.com>
-Cc: Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
- Ingo Molnar <mingo@redhat.com>, Nathan Chancellor <nathan@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Peter Zijlstra <peterz@infradead.org>,
- Thomas Gleixner <tglx@kernel.org>, linux-kernel@vger.kernel.org,
- x86@kernel.org, bpf <bpf@vger.kernel.org>
-References: <20260908092730.4002628-1-rppt@kernel.org>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260908092730.4002628-1-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260905220117.922028-5-ameryhung@gmail.com> <5be48987cfe75e107873b539eb72a03021979e0e2a14e8bdd0c4fb8f592b3a8c@mail.kernel.org>
+In-Reply-To: <5be48987cfe75e107873b539eb72a03021979e0e2a14e8bdd0c4fb8f592b3a8c@mail.kernel.org>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Wed, 9 Sep 2026 10:47:12 -0700
+X-Gm-Features: AcwNN1WJbKaoZm-wkeuX6pUYNOc6F2sKzUQFOHIqWtyIIQvNIvxvsQnT5OvdPSc
+Message-ID: <CAMB2axPt5ObMVprJQT42T29zTTXhhcUDjgWfxfWimhK0YUfE6Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 04/22] bpf: Only compare func_id against kfunc
+ BTF IDs for kfunc calls
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
+	kernel-team@meta.com, ast@kernel.org, martin.lau@kernel.org, 
+	yonghong.song@linux.dev, mason@kernel.org, ihor.solodrai@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/8/26 2:27 AM, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> Nathan Chancellor reports the following warning:
-> 
->   CPA detected W^X violation: 8000000000000123 -> 0000000000000123 range: 0xffffffffc0400000 - 0xffffffffc0400fff PFN 100e00
->   WARNING: arch/x86/mm/pat/set_memory.c:722 at __change_page_attr_set_clr+0xde7/0x1290, CPU#0: swapper/0/0
->   Modules linked in:
->   CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 7.3.0-rc1-debug-00006-g453e78594434 #1 PREEMPT(full)  2950d432dd3910251071a66f3134fe0875432786
->   Hardware name: ASUS System Product Name/PRIME Z590M-PLUS, BIOS 1801 12/26/2022
->   RIP: 0010:__change_page_attr_set_clr+0xdff/0x1290
->   Code: 80 7c 24 42 00 0f 85 3a 04 00 00 48 8d 3d 19 8d 79 02 49 89 d9 4c 89 e1 4c 89 d2 4c 89 f6 4d 8d 84 24 ff 0f 00 00 4c 89 14 24 <67> 48 0f b9 3a 4c 8b 14 24 48 8b 0d 81 44 bf 01 41 f6 c2 01
->   RSP: 0000:ffffffff87003c60 EFLAGS: 00010246
->   RAX: 0000000000000002 RBX: 0000000000100e00 RCX: ffffffffc0400000
->   RDX: 0000000000000123 RSI: 8000000000000123 RDI: ffffffff872e50c0
->   RBP: 8000000100e00123 R08: ffffffffc0400fff R09: 0000000000100e00
->   R10: 0000000000000123 R11: 0000000000000001 R12: ffffffffc0400000
->   R13: 0000000100e00123 R14: 8000000000000123 R15: ffffffff87003d58
->   FS:  0000000000000000(0000) GS:ffff8ad1777a7000(0000) knlGS:0000000000000000
->   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->   CR2: ffff8ad0a4201000 CR3: 00000007e3022001 CR4: 0000000000770ef0
->   PKRU: 55555554
->   Call Trace:
->    <TASK>
->    ? _vm_unmap_aliases+0x219/0x280
->    change_page_attr_set_clr+0x161/0x250
->    ? events_sysfs_show+0x5d/0x80
->    set_memory_x+0x39/0x50
->    apply_retpolines+0x656/0x6d0
->    ? events_sysfs_show+0x5d/0x80
->    ? events_sysfs_show+0x6c/0x80
->    ? events_sysfs_show+0x62/0x80
->    alternative_instructions+0x3c/0xd0
->    arch_cpu_finalize_init+0x130/0x190
->    start_kernel+0x97d/0xa10
->    x86_64_start_reservations+0x24/0x30
->    x86_64_start_kernel+0xda/0xe0
->    common_startup_64+0x13e/0x151
->    </TASK>
->   ---[ end trace 0000000000000000 ]---
+On Sat, Sep 5, 2026 at 3:44=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
+>
+> > bpf: Only compare func_id against kfunc BTF IDs for kfunc calls
+> >
+> > Helpers are identified by enum bpf_func_id, while kfuncs are identified
+> > by a BTF ID. Both values are stored in bpf_call_arg_meta::func_id, and
+> > a helper ID can have the same numeric value as a kfunc BTF ID.
+> >
+> > Introduce is_kfunc_call(), which first confirms that the metadata is fo=
+r
+> > a kfunc through meta->btf, and use it for comparisons against the speci=
+al
+> > kfunc BTF ID list. This complements is_helper_call() before later patch=
+es
+> > move these checks into paths shared by helpers and kfuncs.
+> >
+> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
+>
+> This looks like a bug fix for the helper/kfunc metadata unification.
+> Should this include:
+>
+>   Fixes: bf9c1b911f4d ("bpf: Unify helper and kfunc call argument meta")
+>
 
-BPF CI has caught similar splats on linux-next [1].
-The patch fixes it [2][3].
+This is not a bug fix. All converted comparisons are currently reached
+only from kfunc verification, where meta->btf is non-NULL. It is only
+needed later when we move these checks into shared paths.
 
-Tested-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-
-Thanks!
-
-[1] https://github.com/kernel-patches/bpf/actions/runs/33918575854/job/101174705812
-[2] https://github.com/kernel-patches/vmtest/pull/523
-[3] https://github.com/kernel-patches/bpf/actions/runs/34279792157
-
-> 
-> The warning appears because commit 038176c21617f ("x86/mm/pat: fix
-> effective RW computation in lookup_address_in_pgd_attr()") fixed the
-> effective RW checked by verify_rwx() and it exposed that pages used
-> for ITS trampolines temporarily have RWX permissions.
-> 
-> The permissions are updated in its_fini_core() after all the ITS
-> trampolines are generated, but since verify_rwx() detects invalid
-> transitions, it warns when its_alloc() makes RW memory executable.
-> 
-> At the time of alternatives patching the entire kernel text is mapped
-> RWX, so the warning is bogus anyway.
-> 
-> Skip verification of W^X violations in verify_rwx() when they are
-> triggered by transitions happening before the kernel text is remapped as
-> read-only.
-> 
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Closes: https://lore.kernel.org/all/20260905044253.GA3816371@ax162
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+>
 > ---
->  arch/x86/mm/pat/set_memory.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-> index 226660973d515..2eecb76703bb4 100644
-> --- a/arch/x86/mm/pat/set_memory.c
-> +++ b/arch/x86/mm/pat/set_memory.c
-> @@ -708,6 +708,10 @@ static inline pgprot_t verify_rwx(pgprot_t old, pgprot_t new, unsigned long star
->  	if (!(__supported_pte_mask & _PAGE_NX))
->  		return new;
->  
-> +	/* skip verification until kernel text is set to read only */
-> +	if (!kernel_set_to_readonly)
-> +		return new;
-> +
->  	if (!((pgprot_val(old) ^ pgprot_val(new)) & (_PAGE_RW | _PAGE_NX)))
->  		return new;
->  
-> 
-> base-commit: 038176c21617fcc03ccc1ca43230ffedb712c047
-
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/339954=
+42755
