@@ -1,38 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA493D6CC6;
-	Wed,  9 Sep 2026 20:26:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE1B142A168;
+	Wed,  9 Sep 2026 20:27:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788985603; cv=none; b=tSNx8SB2MUrHS9KmHC95KYjMHL9iOEpfWqPIYLH73Dix6xfvq8V3JC2iYCHIgN6f8O/eF/XXeBvF0Gkr0PA6Vtchw6GCzDNmpeSi9jy6WdVldKwlGhf2cb2jvnQW5PN8Pl+9KxCZq67liSh+JUAT14YFrCelPGvmBhwNp0wuQNY=
+	t=1788985631; cv=none; b=WBPXaXu55h+ajNxRXMTsE8hySN8sZUZXl+EB5fH4JVTI6iRESWIfuRDd3tMQxYENrwNCR+Un2Gk6S0EXe3qwwsAU4SLF8lwmbFTjdCmevlMx/cm4MCb4vp3yhlPGzPnz+sJ1c3ZZmvsWbxr8si9y7SCwbCLTgveea6Gqo9HvE7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788985603; c=relaxed/simple;
-	bh=bcrBDx+E9GityqwisS/gDbl8B93mWZVXyTirwMdgPfM=;
+	s=arc-20240116; t=1788985631; c=relaxed/simple;
+	bh=J25A3dPuOdnA/m1lTkwhfvP5N+xRrHCX3pNi38tvZlY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KrQXA5cjwsrSvxA9dKFfbo9CUD3Niuw9Zl1bTTyl6NLzyKDAaW2x1MW03IL0QwGzNaANognSDFTVNoo4QfFP6usIkLbJJuqayOY7vD2RQlEVbIQ9AnQcYf/XknKVZp6bqC8bmV5nektoiccZBDRTqMLHkO12UUeR0Vg/MGmGlkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nBFC+SWW; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=ZpeWorURb3Bsv/d6K76P48p38LgJ7D8erMiasHnEUbpfLYE6TcMzJum5XbsXmWhVPrcC+5UULRJ2LTjzJ/gIbIiMjGqAGF4j+9fdlq0FnXSq72GxUJvZngQEvC5YeFE26UgQVrFMXqaE0gxtl6OfYChYPgkPASesTFa7/m1mIes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=omn3XP22; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nBFC+SWW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B41B31F0089C;
-	Wed,  9 Sep 2026 20:26:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="omn3XP22"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 736171F00899;
+	Wed,  9 Sep 2026 20:27:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788985597;
-	bh=Gm8AidewC3VMgRAvdfYK2VSaL7Lra4560NDSnGAEQBg=;
+	s=k20260515; t=1788985625;
+	bh=1WkAA8rYM1cRIQUgKxx429MxBXubZ1B+gbpFHLpZa7c=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=nBFC+SWWKxJFtdXjyzOhNC/Wki2SvwBHT8Q0c9mG/DOKHV1wUoN/dca30jgXPiJV+
-	 WBinxY3mobKrciDaZfO6d8i0ZeZesYxikUt7WxgBlJSzbWZ81YK29nCmu4KwI1ps33
-	 2+Xm1+jUjWNHX+RC5kavFfeu+Xaiu7mBXfx3LJjRJz/0UychjRJ6aAAw0KfQ3U/Vr1
-	 ORDV0VAAO1xU7JZKpby1Vg1QgVpgI+cUWE4ZZe6MurnpmfkgQ7xs4sGEyq9yNNr/+I
-	 e/IRrfm7IeEgu/eE6VEL7zLLZv2dX31PlPyKCHqrfRDYz2GV0Zq9rld/ETKczy1W2e
-	 k9y3wC+S4172Q==
+	b=omn3XP22Qxae/GpSuV/ewrlt1UM3WMwjbh6Rjn1JRhnxeBugjxzxBIs3O0eXSjnz4
+	 Kb1lIrx0X2Z23mhmFrisut+NTfrduidEulnx13lwBecWH0uHe/WzsdoLlp52vbSxuw
+	 gsGDGw5klT1D4fafjIhedpWDgLHnHLkbC4pCgZSPV75FcH/S0nkT0l+5CejwS1ZxNA
+	 0PBWID9K1Ig3vtLnIUN2tF51ct4P9rwx198Uv5WMKLqNEc5kh7QwzyrVy7miVuIh4u
+	 j7Kzu8iIMztF4F7Mg6hMc2/3z2T49k3PTf0uj1hK2MeHfCqQLY6zoWKmEtTzEU+ZWj
+	 UN5VKHo5NsmDw==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-	David Ahern <dsahern@kernel.org>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -41,22 +36,25 @@ To: stable@vger.kernel.org,
 	Yonghong Song <yhs@fb.com>,
 	John Fastabend <john.fastabend@gmail.com>,
 	KP Singh <kpsingh@kernel.org>,
-	Lawrence Brakmo <brakmo@fb.com>
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Andrey Ignatov <rdna@fb.com>
 Cc: Sasha Levin <sashal@kernel.org>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
-	Sechang Lim <rhkrqnwk98@gmail.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
+	linux-kernel@vger.kernel.org,
+	Yinhao Hu <dddddd@hust.edu.cn>,
+	Kaiyan Mei <M202472210@hust.edu.cn>,
+	Dongliang Mu <dzm91@hust.edu.cn>,
 	"Miguel Gazquez (Schneider Electric)" <miguel.gazquez@bootlin.com>
-Subject: Re: [PATCH 5.15.y] tcp: clear sock_ops cb flags before force-closing a child socket
-Date: Wed,  9 Sep 2026 16:26:00 -0400
-Message-ID: <2026-09-09-daily-reply-0002-tcp-sock-ops-cb-flags-5-15-reused@kernel.org>
+Subject: Re: [PATCH 5.10.y] bpf: Enforce expected_attach_type for tailcall compatibility
+Date: Wed,  9 Sep 2026 16:26:29 -0400
+Message-ID: <2026-09-09-daily-reply-0031-bpf-tailcall-attach-type-5-10@kernel.org>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260909-cve-2026-74268-5-15-v1-1-37bf2b22cb29@bootlin.com>
-References: <20260909-cve-2026-74268-5-15-v1-1-37bf2b22cb29@bootlin.com>
+In-Reply-To: <20260908-cve-2025-40123-v1-1-be62451196fb@bootlin.com>
+References: <20260908-cve-2025-40123-v1-1-be62451196fb@bootlin.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -65,13 +63,14 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-> A child socket inherits the listener's bpf_sock_ops_cb_flags via
-> sk_clone_lock(). If its setup fails in tcp_v4_syn_recv_sock() /
-> tcp_v6_syn_recv_sock(), the child is freed through put_and_exit, where
-> inet_csk_prepare_forced_close() drops the socket lock and tcp_done() runs
-> without it.
+> The underlying issue goes beyond XDP though. Another example are programs
+> of type BPF_PROG_TYPE_CGROUP_SOCK_ADDR. sock_addr_is_valid_access() as well
+> as sock_addr_func_proto() have different logic depending on the programs'
+> expected_attach_type.
 
-Queued for 6.6, 6.1 and 5.15, thanks. The 5.15.y version applied cleanly to 6.6 and 6.1 as well, so it was used for both.
+Thanks for the 5.10.y backport of 4540aed51b12 ("bpf: Enforce
+expected_attach_type for tailcall compatibility"). Holding this until a 5.15.y
+version exists too, since fixes need to land on newer trees first.
 
 -- 
 Thanks,
