@@ -1,180 +1,256 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DE7D3002B9;
-	Wed,  9 Sep 2026 07:38:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D023859C3;
+	Wed,  9 Sep 2026 07:46:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788939485; cv=none; b=LPpDvO14P9dvovPn8DBpbgZboEWgWseOh56r4Yl3HRsELiuo6wI5iGUvzvwyG7C2cybqA2tGiUKe2XyOvDNn17v21zvSMlnoP/DWtW19w+kjr4mq8hfcJYaeIMQkZuEmjQKtYsjAJRIVumrnWTQ1eFr4PDHQJUlqspWXIOWdwrs=
+	t=1788939994; cv=none; b=EcSmRwEPLsT9P12BaTq9FYhYNp9EW3O2OdI/HB9X13MqellbkLsfJ6ReStbcH6s6NUg7bTsQfdMa7mErRlg/yc3pjRq4BjJsifmy58syf7baKP7Cx0Fai3lbpzeZnpgpeUiUns73/RFDjaU55R2YEvSW+M+g6xxnzI32+HoCYtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788939485; c=relaxed/simple;
-	bh=nTAm35845aAqmOQtS6HyRYHkKn+bOdSMAV3QF5uJvY8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZdQmzFnen4pGM4M62lN7CkOLWz1/1MCEJEt2hgKO7FlRi4xKC9STZLFtV+TYQNNzy6w4guOP7Nnf0JOeDgs+Fl7UJqdo2lV+8wa+WPR92q+n7cn+23HaVocVKLhTHI0KyyiHyqIHIp0yxOlO+SUikaYa/YdguoVldsNeaQK4tos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fMvwOMtK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788939994; c=relaxed/simple;
+	bh=yXMrT6IzEUhWBRPcUDnQRqXLpg95d8PdeoBh6GLSwvw=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=MzKm59nixZVi3pm0p8cskghhfEyk8RK66bt9lC4pfcfDYA/V/yyYqYXReAiL2X7c65tuyVAKOxVVzkjj+ZnoG5RcJ+ZSg3AmwqZbXOpWi+6ACb/6rfcSdkMxb4hJ+Is58ppxXqNUZE2FBwKK0IYkuJHXLonPsyGAcg1wf/Gp+Lc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RF0qvh/e; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fMvwOMtK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8484C1F00A3A;
-	Wed,  9 Sep 2026 07:38:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1788939483;
-	bh=z7WoiQ3kTHyw/Ii8U53W3jB43VLKD3M/+zE0Et0v4Dk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=fMvwOMtKjnQJHWqbGOBFRkxLXNBsibipPgj2Q6P064WQJWMW7wfdq4gqVuVvBLOBi
-	 mw2LdSGq7nWqdIa6eYDVqIpvJUSLUA2zonOikKUX6K36rwbteoOJo/Gwa7LLNDfbhI
-	 EHt9w7bjV4yHdhIGfrHtCRftSsoS+o6rrCDY1usY=
-Date: Wed, 9 Sep 2026 09:37:54 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>,
-	Pedro Falcato <pfalcato@suse.de>,
-	David Hildenbrand <david@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-	Paul Moore <paul@paul-moore.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>,
-	Doug Gilbert <dgilbert@interlog.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K. Petersen" <mkp@kernel.org>,
-	Jaya Kumar <jayalk@intworks.biz>, Simona Vetter <simona@ffwll.ch>,
-	Helge Deller <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>,
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>,
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
-	Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-	Muchun Song <muchun.song@linux.dev>,
-	Oscar Salvador <osalvador@suse.de>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Jan Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
-	Byungchul Park <byungchul@sk.com>,
-	Gregory Price <gourry@gourry.net>,
-	Ying Huang <ying.huang@linux.alibaba.com>,
-	Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>,
-	Kairui Song <kasong@tencent.com>,
-	Kemeng Shi <shikemeng@huaweicloud.com>,
-	Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>,
-	Youngjun Park <youngjun.park@lge.com>,
-	Johannes Weiner <hannes@cmpxchg.org>, Qi Zheng <qi.zheng@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
-	Xu Xin <xu.xin16@zte.com.cn>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	Michal Hocko <mhocko@kernel.org>,
-	Miklos Szeredi <miklos@szeredi.hu>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-rdma@vger.kernel.org,
-	selinux@vger.kernel.org, linux-sound@vger.kernel.org,
-	bpf@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org, fuse-devel@lists.linux.dev
-Subject: Re: [PATCH 09/39] drivers/usb/mon: update to use mmap_prepare + map
- kernel pages
-Message-ID: <2026090947-daycare-gentleman-9796@gregkh>
-References: <20260908-b4-mmap-prepare-vma-flag-sanify-v1-0-dacf19cce22b@kernel.org>
- <20260908-b4-mmap-prepare-vma-flag-sanify-v1-9-dacf19cce22b@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RF0qvh/e"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FA1A1F00A3A;
+	Wed,  9 Sep 2026 07:46:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788939992;
+	bh=d7GagPEcixH3H5MMbvg8ksiBnC47o3JwyIOR1AMzKr0=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=RF0qvh/evHvX6JzdJI41FraeMCyq5G2qVA8W4tpKSdpG0HbMuQjaAfjIOUcK3hbar
+	 kuVMz3lFyxAQ8RLc1IUIN+lI9QCOzC6Wajl0DV9+k3T+rK6kbWAwOQkXyngbvXl24N
+	 FKo/UirZGLJyOFuXey9WzNOAamOLHAx+HxZtNcnlHrAXrcpqqfQjrvdT+N6C3/L1LE
+	 RIzdudnvfLZhWrAGp0TpLJpEl/QShLkZh+Q4B3Thi4bf7ZuJJ/KZDt7eFMELnKRNoQ
+	 dPmEJyL7FRRTCmr4q/8+A46NofdTYpzTkadEJJLJSQAg6bZT1rZJG7TIm8OAWl54+j
+	 AXHx2D7YqyRig==
+Subject:
+ Re: [PATCH net-next v3] selftests/bpf: Track test_xdp_features DUT processes
+From: netdev-bot+sashiko@kernel.org
+To: bochaolucky@gmail.com
+Cc: daniel@iogearbox.net, kuba@kernel.org, alexis.lothore@bootlin.com,
+ emil@etsalapatis.com, lorenzo@kernel.org, shuah@kernel.org,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Wed, 09 Sep 2026 07:46:31 +0000
+Message-ID: <178893999152.219967.3747368704885781101@kernel.org>
+In-Reply-To:
+ <20260904-xdp-dut-process-lifecycle-gmail-v3-1-5b7eee4f7009@gmail.com>
+References:
+ <20260904-xdp-dut-process-lifecycle-gmail-v3-1-5b7eee4f7009@gmail.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260908-b4-mmap-prepare-vma-flag-sanify-v1-9-dacf19cce22b@kernel.org>
 
-On Tue, Sep 08, 2026 at 09:01:13PM +0100, Lorenzo Stoakes (ARM) wrote:
-> Replace the deprecated .mmap hook with its replacement .mmap_prepare. As
-> part of this change, additionally take the approach of mapping pages upon
-> mmap rather than providing a fault handler.
-> 
-> The page span cannot be mutated when an mmap mapping is in place, so this
-> is safe to do in advance (the MON_IOCT_RING_SIZE ioctl operation exits
-> -EBUSY if it's attempted, gated by the rp->mmap_active reference count).
-> 
-> Utilise the newly introduced mmap_action_map_discontig_kernel_pages() to do
-> this, which allows for iteration over pages in mon_bin_discontig_get().
-> 
-> mon_bin_discontig_init() increments the rp->mmap_active reference count to
-> stabilise page spans. Should an error arise the core unmaps the VMA and
-> mon_bin_vma_close() drops the reference again.
-> 
-> The vm_ops->close hook implemented in mon_bin_vma_close() will ensure
-> correct reference count arithmetic upon unmap (with mon_bin_vma_open()
-> accounting for splitting).
-> 
-> The existing semantics are all retained, including not mapping past the
-> range of available pages, with a SIGBUS being raised in a userland process
-> that attempts to access past this point.
-> 
-> Ultimately insert_page() is invoked to insert each page, which increments
-> the reference count on each mapped page. This mimics what was being done
-> previously, only we pre-map the entire range rather than doing so on
-> demand.
-> 
-> The existing fault handler did nothing that required demand paging, and was
-> presumably implemented this way due for historic reasons.
-> 
-> One behavioural difference: pages are no longer faulted in on demand, so a
-> page discarded with MADV_DONTNEED is not repopulated and a subsequent
-> access raises SIGBUS, as with other pre-populated kernel mappings.
-> 
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+Thank you for your contribution! Sashiko AI review found 3 potential
+issue(s) to consider:
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Critical: 0 · High: 0 · Medium: 2 (1) · Low: 1
+
+- [Medium] The commit message justifies part of the rewrite with a
+  failure mode that cannot occur in the pre-patch script: "The readiness…
+- [Medium] Signal coverage regression that contradicts the commit
+  message.
+- [Low] Trap race on partially published DUT state in start_dut_server()
+  (tools/testing/selftests/bpf/test_xdp_features.sh, lines 72-76): the…
+
+Pre-existing issues:
+- [Medium] The selftest's pass/fail verdict cannot observe an XDP feature
+  regression.
+
+--
+
+selftests/bpf: Track test_xdp_features DUT processes
+
+This reworks test_xdp_features.sh so that the DUT xdp_features instance is
+tracked by PID and shell job instead of by process name, waits for that
+exact PID to appear in ss output with a bounded retry loop, and reaps it
+after each subtest.  The old signal traps are replaced with an EXIT trap
+plus HUP/INT/TERM handlers.
+
+A few questions below.
+
+> The readiness loop also has no timeout,
+> so a DUT that exits before listening leaves the test hung indefinitely.
+
+[Severity: Medium]
+Is this description of the pre-patch behaviour accurate?  In the baseline
+script, set -e is in effect before test_xdp_features is invoked, and the
+readiness probe sits in the body of the while loop, not in its condition:
+
+	wait_for_dut_server() {
+		while sleep 1; do
+			ss -tlp | grep -q xdp_features
+			[ $? -eq 0 ] && break
+		done
+	}
+
+Bash exempts only the command list immediately following the while or until
+keyword from errexit, which here is sleep 1.  The grep -q in the loop body
+is not exempt, so the first failing probe terminates the script with status
+1.  Wouldn't that mean the loop can never reach a second iteration, and the
+observable pre-patch symptom is a spurious failure about a second after the
+DUT is started (plus a leaked netns and veth, since there was no EXIT trap),
+rather than an indefinite hang?
+
+Since the patch carries a Fixes: tag, could this sentence be reworded to
+describe the failure mode that actually occurs?  The other two motivations
+in the message, name-wide ss matching and pidof killing unrelated
+xdp_features processes, do match the baseline code.
+
+> diff --git a/tools/testing/selftests/bpf/test_xdp_features.sh b/tools/testing/selftests/bpf/test_xdp_features.sh
+> index 0aa71c4455c05..35ce0d4e24180 100755
+> --- a/tools/testing/selftests/bpf/test_xdp_features.sh
+> +++ b/tools/testing/selftests/bpf/test_xdp_features.sh
+
+[ ... ]
+
+> @@ -30,77 +31,118 @@ setup() {
+>  	} > /dev/null 2>&1
+>  }
+>  
+> +terminate_dut_server() {
+> +	[ -z "$dut_pid" ] && return
+> +
+> +	# Use the shell job instead of a PID which may have been reused.
+> +	if [ "$(jobs -pr %% 2> /dev/null)" = "$dut_pid" ]; then
+> +		kill -KILL %% 2> /dev/null || true
+> +	fi
+> +
+> +	wait "$dut_pid" 2> /dev/null || true
+> +	dut_pid=""
+> +}
+> +
+>  cleanup() {
+> -	ip link del v1 2> /dev/null
+> -	ip netns del ${NS} 2> /dev/null
+> -	[ "$(pidof xdp_features)" = "" ] || kill $(pidof xdp_features) 2> /dev/null
+> +	terminate_dut_server
+> +	ip link del v1 2> /dev/null || true
+> +	ip netns del "${NS}" 2> /dev/null || true
+>  }
+
+[ ... ]
+
+> +start_dut_server() {
+> +	./xdp_features "$@" &
+> +	dut_pid=$!
+> +	wait_for_dut_server
+> +}
+
+[Severity: Low]
+Can a trap serviced between these two commands orphan the DUT?  The child is
+forked by the background command, but its identity becomes visible to the
+cleanup path only when the separate assignment dut_pid=$! runs.  Bash runs
+pending trap handlers at command boundaries.
+
+A directed signal in that window, for example kill -TERM on the script pid,
+which does not reach the async child, runs the new TERM handler and then the
+EXIT trap:
+
+	trap 'exit 143' TERM
+	  -> trap cleanup EXIT
+	     -> cleanup()
+	        -> terminate_dut_server()
+
+and terminate_dut_server() starts with:
+
+	[ -z "$dut_pid" ] && return
+
+dut_pid is still empty here, since it is initialised to "" at the top of the
+script and cleared again by reap_dut_server() after each subtest, so the
+just-forked xdp_features is never signalled.  cleanup() then continues into
+ip link del v1 and ip netns del, leaving an xdp_features process behind with
+its XDP program still attached and its device and netns removed underneath
+it.  The removed pidof sweep used to cover this window.
+
+Would signalling the job whenever jobs -pr reports one, rather than keying
+off the variable assignment having completed, close this?
+
+[ ... ]
+
+>  	## XDP_NDO_XMIT
+> -	./xdp_features -f XDP_NDO_XMIT -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1 &
+> -	wait_for_dut_server
+> +	start_dut_server -f XDP_NDO_XMIT -D ::ffff:$V1_IP4 -T ::ffff:$V0_IP4 v1
+>  	ip netns exec ${NS} ./xdp_features -t -f XDP_NDO_XMIT \
+>  					   -D ::ffff:$V1_IP4 \
+>  					   -C ::ffff:$V1_IP4 \
+>  					   -T ::ffff:$V0_IP4 v0
+>  	ret=$?
+> -	cleanup
+> +	reap_dut_server
+>  }
+
+[Severity: Medium]
+This isn't an issue introduced by this patch, but while the ret=$? contract
+is being touched here, can this script actually observe an XDP feature
+regression?  The script's verdict comes only from the tester exit status,
+via ret=$? here and exit $ret at the end.
+
+On the tester side, tester_run() in xdp_features.c collects the result and
+only prints it:
+
+	detected_cap = tester_collect_detected_cap(skel, ntohl(stats));
+
+	fprintf(stdout, "Feature %s: [%s][%s]\n", get_xdp_feature_str(), ...);
+out:
+	bpf_xdp_detach(env.ifindex, flags, NULL);
+	close(sockfd);
+	return err < 0 ? err : 0;
+
+detected_cap never reaches the return value, and main() collapses anything
+non-negative:
+
+	return err < 0 ? -err : 0;
+
+So a NOT DETECTED result for XDP_PASS, XDP_DROP, XDP_ABORTED, XDP_TX,
+XDP_REDIRECT or XDP_NDO_XMIT still exits 0 and the harness records a pass;
+only infrastructure failures such as socket, attach or protocol errors can
+fail the test.  Is that intended?
+
+>  set -e
+> -trap cleanup 2 3 6 9
+> +trap cleanup EXIT
+> +trap 'exit 129' HUP
+> +trap 'exit 130' INT
+> +trap 'exit 143' TERM
+
+[Severity: Medium]
+The old trap covered signals 2, 3, 6 and 9, that is INT, QUIT, ABRT and
+KILL.  The new set covers HUP, INT and TERM, so QUIT and ABRT are no longer
+handled.  A shell killed by an untrapped fatal signal does not run its EXIT
+trap, so does kill -QUIT on the script, or a terminal Ctrl-\, now skip
+cleanup() entirely and leave the v1 veth and the ns1-XXXXXX netns behind?
+
+The background DUT looks affected too.  A non-interactive shell sets
+SIGINT and SIGQUIT to ignored in asynchronous children, so a process-group
+SIGQUIT does not reach the child started by:
+
+	./xdp_features "$@" &
+
+and the catch-all sweep that used to collect it has been removed from
+cleanup():
+
+	-	[ "$(pidof xdp_features)" = "" ] || kill $(pidof xdp_features) 2> /dev/null
+
+That leaves an xdp_features process holding an XDP program plus stale
+network state, and the next run then fails in setup() at ip link add v1.
+
+The commit message says "Install an EXIT trap and signal handlers so failure
+paths also remove network setup" -- would adding trap 'exit 131' QUIT and
+trap 'exit 134' ABRT match that claim?
+
+>  
+>  test_xdp_features
+>
+
+-- 
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260904-xdp-dut-process-lifecycle-gmail-v3-1-5b7eee4f7009%40gmail.com
