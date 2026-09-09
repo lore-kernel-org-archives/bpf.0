@@ -1,189 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-104.mta1.migadu.com [95.215.58.104])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A05B43A7F75
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 13:07:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70FCB47C0F8
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 13:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.104
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788959264; cv=none; b=dfYpUxEp+HPBZ5dtLUzA/p4mcCyLYWceDhrh6qu6oJT2g7HAqmvnbYOkW6GA1upRILoC4FhrhOpSDRZERgR/0xivVz8Oq57rEdKkXWDYLBkX1nRrY0qUEAxIA8lRHW44dNE4p1nAjvuwTW7ipSbK81UU6g07QfwUlhL60b0z9z4=
+	t=1788959585; cv=none; b=t1exXJE2yWZ9Dce97CbkctGHe4X154qfpus+krgKSp9zLJwovZdFCXhjHkgI9Jx3XX+qyizTfaP3ovXNpxaGjfumhtaRfAWPgTr8ucWetXlchyf+ZPqjxKLDSnlwhJvITLtz8WwSP+lLaNOXHSXM4YbAKeOrkJTG95X/nqmHmp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788959264; c=relaxed/simple;
-	bh=VP5+pkkmG3TWRGOGgE7mn6RO1qJsDiSIoy30kHPZk+A=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=rcZaJAyREARO+Xg+XgrAIiL6xg2BGaUmoIX6qKe6T/IAX3KgLjnEMKONFnTb4TzAo6gq/w1J3ZFaMvzwPXaPiDbDRMLGxOdxPXlZ+dObzxJDNbLeUZjucie7o0Wx6apsQIGwek+QoRaQ5epdyaqrUiKWo5uJHeyg2O9KwZsvTTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hJUuRZ8g; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788959585; c=relaxed/simple;
+	bh=pTDfVRoX1U+RIjfQuPegFcGKswGHWQIt1UsGbzs5f/E=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=WrpSqMU4BERMU6PqS3nkJAoEaki/EIL1tPuXW/wrSUqWmjqgEHBLn8Wh39P3JSg6IaXozJzwgXR407m7wqFMmO+x1Xtw25cQqO7Jz7exM5I8lIS5HIUnorw4sW+Df3oZVjucNTKsniHkZGP9kAakAnuGTDiswkDadvWvfQNEcGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OtdeloKO; arc=none smtp.client-ip=95.215.58.104
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hJUuRZ8g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 199CC1F00A3A;
-	Wed,  9 Sep 2026 13:07:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788959262;
-	bh=88AYofoa4+1WZWz2yVSnBoAZLxWjWIUQG8AOQZyHr60=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hJUuRZ8gB+EIV1q2DdYH+tmYnilf5hYyi3hbtF1A75jD9YBKo4ljMP/E5v50fPc3p
-	 17NPln1C7O9+YQOnR7Nc51SnCz6273l/hoEHuNrbLMv3xo+THUTBWZ035uAAOtaq6Z
-	 w3sBZ2NGX3dDYLny/WYiQ6rnX0vqL6r7pQYm+THw9N1FcPmLUSEchYJEnSFFcbZ8Rk
-	 huVd2Rdvu87ngcXqNNRz4VIhDzdF7SqyJOzp435IoM33JsIjjgv42Un9J3XKZeucaZ
-	 aMGfhkQyGWBQNsTd3FdpMAqg/xiLz3HwLPRBU/Jiagx9am5wevJR9qITzU/71vMjRL
-	 RZWSoomcyn1OQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 4/4] soundwire: amd: Add BRA/BPT firmware download
- support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Syed Saba Kareem" <syed.sabakareem@amd.com>
-Cc: dri-devel@lists.freedesktop.org, media-ci@linuxtv.org, bpf@vger.kernel.org
-In-Reply-To: <20260909125605.280973-5-syed.sabakareem@amd.com>
-References: <20260909125605.280973-1-syed.sabakareem@amd.com>
- <20260909125605.280973-5-syed.sabakareem@amd.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 09 Sep 2026 13:07:41 +0000
-Message-Id: <20260909130742.199CC1F00A3A@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OtdeloKO"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=pTDfVRoX1U+RIjfQuPegFcGKswGHWQIt1UsGbzs5f/E=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788959580; v=1; x=1789564380;
+ b=OtdeloKOIruM9qO0qJpX2b+U/7i6FL3ax2sVvxjwMZamfzLli6o5HmujIYltuTKW9+kB0Pcd
+ UvVXIgft599AT40Lw210drnTEfY9StLpnk2hBqZudqP/TFjSOnOgBQ09jtX35FBs+icNyiLXqHD
+ qnPP6Cty/9atR4fdA0g8K/tA=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id b52656f567ea3328;
+	Wed, 09 Sep 2026 13:13:00 +0000
+X-Mizu-Trace-ID: b52656f567ea3328
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <7ff19114-de0c-4118-a000-b236d8d30127@linux.dev>
+Date: Wed, 9 Sep 2026 21:12:54 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, josef@toxicopanda.com, axboe@kernel.dk,
+ cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, linux-kselftest@vger.kernel.org,
+ Tao Cui <cuitao@kylinos.cn>
+Subject: Re: [RFC PATCH 0/8] blk-iocost: BPF struct_ops cost model
+To: Tejun Heo <tj@kernel.org>
+References: <20260908100143.47598-1-cui.tao@linux.dev>
+ <178889947167.2.14514677804554939704@kernel.org>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <178889947167.2.14514677804554939704@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Critical] Releasing `acp_bra_lock` when the DMA engine is wedged allows =
-concurrent instances to hijack shared ATU PTEs, defeating the memory leak m=
-itigation and causing severe memory corruption.
-- [High] False timeout in the BRA DMA busy poll loop due to potential threa=
-d preemption.
-- [High] Invalid SampleInterval calculation for `col_width =3D=3D 1` bypass=
-es mandatory divisibility checks, violating the SoundWire specification.
---
+Hello, Tejun
 
-commit de234f818a1a7580df842fe4d73d149a4880c7ba
-Author: Syed Saba Kareem <Syed.SabaKareem@amd.com>
+在 2026/9/9 04:31, Tejun Heo 写道:
+> Hello, Tao.
+> 
+> On Tue, 08 Sep 2026 18:01:35 +0800, Tao Cui wrote:
+> 
+>>  4. One model system-wide vs named models selectable per device (as
+>>     tcp-cc names are per-socket)?
+> 
+> The struct_ops instance should be per-device. Loading a model for a device
+> should switch it to BPF automatically. Switching back to the builtin model
+> should detach the struct_ops.
+> 
+>>  2. Per-cgroup state lifetime: iocg_id is the css id and is recycled
+>>     once the cgroup is removed, so models must treat it as a
+>>     transient key.  Does the interface need a release(iocg_id)
+>>     callback so models can clean up per-cgroup state instead of
+>>     detecting reuse, or is per-cgroup bpf local storage, which
+>>     carries its own lifetime, the better home for model state?
+> 
+> I'd pass blkcg as a kptr and add online/offline callbacks so the model can
+> manage its per-cgroup state.
+> 
+>> return value of 0 delegates the IO back to the builtin formula, so a
+>> model which only handles some IO types cannot make the rest free.
+> 
+> I don't think mixing BPF and builtin pricing makes sense, either per IO or
+> between charging and request sizing. It seems convoluted and error-prone.
+> Implementing the linear model in BPF is straightforward.
+> 
+> Please combine the interface, registration, dispatch and configuration
+> changes into one patch. These patches are small and implement one feature.
+> 
 
-soundwire: amd: Add BRA/BPT firmware download support
+Thanks for the detailed review across the series.
 
-This commit adds Bulk Register Access (BRA) and Bulk Payload Transport (BPT)
-support for AMD SoundWire platforms to enable high-speed firmware downloads
-to peripherals. It uses the SoundWire stream framework for DP0 programming
-and includes an ATU mapping for scatter-gather DMA.
+All the comments make sense. I'm reworking the interface for v2
+along those lines: the attachment model will be reworked, the
+mixed builtin/BPF pricing path will go away so a model fully owns
+pricing on a device it's attached to (including flushes), the
+per-cgroup state handling is being reworked, operation flags will
+be preserved, and sleepable models will be rejected during
+verification.
 
-> diff --git a/drivers/soundwire/amd_manager.c b/drivers/soundwire/amd_mana=
-ger.c
-> --- a/drivers/soundwire/amd_manager.c
-> +++ b/drivers/soundwire/amd_manager.c
+The Kconfig dependency, the example model issues, the selftest
+problems, and the patch organization will all be addressed as well.
 
-[ ... ]
+I'll post v2 once it's ready.
 
-> +static u32 amd_sdw_bra_sample_interval(u32 nr, u32 nc, u8 hstart, u8 hst=
-op)
-> +{
-> +	u8 col_width =3D hstop - hstart + 1;
-> +	u32 block_count;
-> +
-> +	if (col_width >=3D 8)
-> +		return nc;		/* BlockCount =3D 1 */
-> +	if (col_width =3D=3D 1)
-> +		return nc * 8;
+Thanks,
+Tao
 
-[Severity: High]
-Does this early return bypass the row divisibility requirements for the
-SoundWire port?
+> Thanks.
+> 
 
-The SoundWire specification generally requires the number of rows in a frame
-(nr) to be an integer multiple of the BlockCount. In a standard 125x2 frame
-shape (nr =3D 125, nc =3D 2), this logic would return a SampleInterval that
-implies a BlockCount of 8. Since 125 is not divisible by 8, this produces a
-fractional block arrangement.
-
-[ ... ]
-
-> +static int amd_sdw_execute_bra_transfer(struct amd_sdw_manager *amd_mana=
-ger,
-> +					struct sdw_slave *slave,
-> +					bool *dma_unsafe)
-> +{
-
-[ ... ]
-
-> +	/* Poll DMA_BUSY until transfer completes */
-> +	{
-> +		unsigned long timeout;
-> +
-> +		timeout =3D jiffies + msecs_to_jiffies(BRA_DMA_TIMEOUT_MS);
-> +		do {
-> +			val =3D readl(amd_manager->mmio + ACP_SW_BRA_DMA_BUSY);
-> +			/*
-> +			 * Side-effectful read: reading ACP_SW_BRA_CURRENT_TRANSFER_SIZE
-> +			 * advances the BRA DMA engine to the next frame.  The value is
-> +			 * intentionally discarded (hence the (void) cast); removing this
-> +			 * read stalls multi-frame transfers, which then time out.
-> +			 */
-> +			(void)readl(amd_manager->mmio + ACP_SW_BRA_CURRENT_TRANSFER_SIZE);
-> +			if (!(val & 0x01))
-> +				break;
-> +			if (time_after(jiffies, timeout)) {
-> +				dev_err(amd_manager->dev,
-> +					"BPT: DMA timeout: periph=3D0x%08x len=3D%u EN_STATUS=3D0x%x RESP=
-=3D0x%x I2S_ERR=3D0x%08x\n",
-
-[Severity: High]
-Could this cause a false timeout if the thread is preempted?
-
-If the thread is preempted immediately after reading the busy status into
-val, and the preemption lasts longer than the timeout, the DMA transfer
-might complete successfully in the background.
-
-When the thread resumes, time_after() evaluates to true, and the loop aborts
-without re-evaluating the DMA status. A final read of the status register
-after the timeout check usually prevents this race.
-
-[ ... ]
-
-> +static int amd_sdw_bpt_wait(struct sdw_bus *bus,
-> +			    struct sdw_slave *slave,
-> +			    struct sdw_bpt_msg *msg)
-> +{
-
-[ ... ]
-
-> +deconfigure_pte:
-> +	if (dma_unsafe) {
-> +		/*
-> +		 * PORT_EN_STATUS never cleared: the ACP BPT DMA engine did not
-> +		 * confirm it stopped and may still be bus-mastering through the
-> +		 * ATU into dma_buf.  PORT_EN=3D0 is the only stop control the
-> +		 * hardware exposes -- the audio DMA path relies on the same
-> +		 * enable-clear-then-poll-status primitive -- so there is no
-> +		 * stronger barrier to force it off here.  Leave the ATU PTEs
-> +		 * pointing at dma_buf and do NOT free the buffer: returning
-> +		 * these pages to the allocator while a wedged engine can still
-> +		 * write would corrupt memory reused for another purpose.
-> +		 * Deliberately leak the buffer instead -- the only memory-safe
-> +		 * option, matching the guarantee the managed-buffer audio path
-> +		 * gets from the PCM core (buffer never reused while the engine
-> +		 * may be active).
-> +		 */
-> +		dev_err(amd_manager->dev,
-> +			"BPT: engine did not quiesce; leaking %zu bytes to avoid corruption\n=
-",
-> +			total_len);
-> +		mutex_unlock(amd_manager->acp_bra_lock);
-> +		goto close_stream;
-> +	}
-
-[Severity: Critical]
-Does releasing the acp_bra_lock here allow a concurrent instance to hijack
-the shared ATU PTEs?
-
-The code intentionally leaks the DMA buffer to mitigate corruption from a
-wedged DMA engine. However, since the ATU PTE registers are ACP-global and
-shared between instances (protected by acp_bra_lock), dropping this lock
-allows a concurrent BPT transfer on another manager instance to call
-amd_sdw_bra_configure_pte() and reprogram the global PTEs.
-
-If the first instance's wedged bus-mastering engine is still active, it
-might follow the newly programmed PTEs and overwrite the new transfer's
-buffer or other memory, defeating the mitigation.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260909125605.2809=
-73-1-syed.sabakareem@amd.com?part=3D4
