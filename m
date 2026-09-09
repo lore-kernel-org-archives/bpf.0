@@ -1,233 +1,221 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A739A2EFD9B;
-	Wed,  9 Sep 2026 15:06:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788966381; cv=none; b=rUxskgT3VEyBNghNt+6/kLgDRYiEwu5Ra9qlh81JbqiV2KMwOObsjK6wdbXf4rw1EkTkjJuBKseTm2dBETfbAm16TgQbPw+VPXnbd1ZfSFMfJvPekvW9NyqZTMUPbJentLiJXMrQC3lrGc/f9ToNDnDwZ4iiOUf4u4uehVYli74=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788966381; c=relaxed/simple;
-	bh=yabihiRtc+OyrJ4wRyvigDmme4CVUHpQrO3pHMwLN3s=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UHg1X8wUPjGwUXQMfS3GX0sq0wFBIBeBG4HNJ3n8sesTMq0H/Lz/uCdvpHerA26tHDQ5UN0dFCvv6oINtGaN2Q3+P4hru5zI91Xeiw0E+gjZ1+I5jdDbX3HBPim4C2LtHhPD0/8LHXJIckqwo8MbM3yw3o1vuXExnHOjg6/ffCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ACFPLCrG; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61860559CA7
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 16:35:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788971707; cv=pass; b=T8S6EMaVLh7QS1oZSUTFu+CsD32eyAW3Y0jl8fdozo+vOUIIZk5HCCIA4ddfNTXFx0mnk7iSF7qufdXToNB0vXweT/59oTg2sUDIuiFcweGWR8PMUGYli57YQJx+1S3/3NP9HhoZDjgS3kphwEgiOFtL2xI5joeSOpF6OgaOfM4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788971707; c=relaxed/simple;
+	bh=CaGvruleJgSZ7D4tJOVRAyip+ySuTNDBO1Fgf4mzBjU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z2DhcAsVGR65IDOecx8LBhW+2VzZidqHP6iiamOBsGOt9AnW/rietFhyRyPheUVbwjHUXFpqp5WDddw7zaRenSAYUhGh84jLqs0AJ+/S92VDy7RtvQ6PUYzwPOEQcivHdxNz0BMHBCByOP5HeqaeqIXsOe+HQ76VsumpaJZidJM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eAavCD61; arc=pass smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ACFPLCrG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9825F1F00A3A;
-	Wed,  9 Sep 2026 15:06:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788966379;
-	bh=UENA8jCUZQAc8iZ7vC/BLUZox9hbgrKC9gfsqY1wUAk=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ACFPLCrGYE0DWlpQcP5pNBwyL11aVApKadPScZz0wTGKUf5nJQBRap00SQ8OSknSI
-	 9XHfMiRouE2IPF+P8/cJKPJ/XhnPf2yqD9psJEvStksoSKRQyrC4L22aIsB28nW443
-	 MG0Q6TQcxOvgliNMcPgfHR+nouzaiy7B8NJD5MLbpzgB+0ujNQ0msg1XxpozMn/gWR
-	 ha9pQZwqzXVU2myczZCGWrE6KTTypo5FOtqzbvXIbP7w6KFnW0nJZMBUtQp6OPXC5/
-	 cJqxpHHhOc+usRL/tD7ZLrvAVThBb72x3+pn5GKGjPhnYnmf8c92wWte3shLJ7pVd8
-	 Dv1kblFwOn3Mg==
-Subject:
- Re: [PATCH v2] bpf, sockmap: Fix self-redirect copied_seq double-counting
-From: netdev-bot+sashiko@kernel.org
-To: geliang@kernel.org
-Cc: john.fastabend@gmail.com, jakub@cloudflare.com, jiayuan.chen@linux.dev,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, daniel@iogearbox.net, tanggeliang@kylinos.cn,
- netdev@vger.kernel.org, bpf@vger.kernel.org
-Date: Wed, 09 Sep 2026 15:06:18 +0000
-Message-ID: <178896637807.219967.17814650555231944505@kernel.org>
-In-Reply-To: =?utf-8?q?=3C1d2370f4c81f10834b8dd77524924575c629a464=2E1788591?=
- =?utf-8?q?198=2Egit=2Etanggeliang=40kylinos=2Ecn=3E?=
-References: =?utf-8?q?=3C1d2370f4c81f10834b8dd77524924575c629a464=2E17885911?=
- =?utf-8?q?98=2Egit=2Etanggeliang=40kylinos=2Ecn=3E?=
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eAavCD61"
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-87ffa98d4a9so11308227b3.3
+        for <bpf@vger.kernel.org>; Wed, 09 Sep 2026 09:35:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788971705; cv=none;
+        d=google.com; s=arc-20260327;
+        b=DfhZ3rXUXAV8nRrpn7aZ+FJggicHevMPUPOMaMQqfhcVX4FB22lLWTthytM7uj+5Ep
+         5k9/MzRADZPtaU5oSU9mweUB/uCZn1sVpr8XoJYiLBUkN8kKRNyaoK6aIeeU5k9EWrpH
+         ykJFEUXq2XsgSHy9HZw0WS9J75qf6YoZQvM0GPl8BJhUEAzFraxTVVC2DO8z9rICZukL
+         A77TWkUFUWXOLcb2WMMbS7hGFKgs+65aJIWT36RE4/5exhE5E0rVhrjyQn8hiy80T5JJ
+         otqpUQP4D+A6vBkmVDJHLep2/i4QAFuSeeNCFqdwZnOhovmb6b/DgYHTcJsLi5YaFAK6
+         NMAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=AurL6CS51ZxhuGokqtXHBRLRcchDPoQ4/ZSuDu7JVek=;
+        fh=tvTJESO//2uuLwW4/G6dstzJqdjF5XaaCMpLaqJ46aM=;
+        b=rLhuKvdqwbk3xAmKVj8P256T/zkwRBJg5baKvxMqv9J7dyYjFnM71p+tT0VVQuXtd7
+         E0f6Rpz5b2i8frphwicEO1kzpmR0JOzBTwBAwRRSq5L7wZ6Qstaro3g/rCp3GikhtS/X
+         3I6GMNDFLBtwsNrJMSnjY3dc2RRQM9+Uqv5PPda63MQgz0H8LKkrbRKjZMFembY+SlC1
+         ecpsVrCvhp3+gpTFZwsie/WSPwmFiAG1odtGJ4jZp05p2vPKfIrWqJwPp/sftgIauoc2
+         tyEd77nlpxZSsaA44x2shbdQQy5IrDaaoX3cb7QXjvI4y/k0NatR9TPZaXEwMpWAnRJe
+         O55g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788971705; x=1789576505; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=AurL6CS51ZxhuGokqtXHBRLRcchDPoQ4/ZSuDu7JVek=;
+        b=eAavCD61HoITToJi72MH3kovLTox2K97malcDr3Q9GRDdZasXxxoNnCpeUbAe63y/Q
+         QMuHeZxcrREH8kZDubpkURnw7kXShAaPqa9iDIdDDwW4ouAy6PiWvIsv+i6YDEQIO/oa
+         7LgMb/IIck834sVs8SpX67rjYC9GJRBDwTUay+YzMaFXmrw2vE7fz3thxVGH2IPIODAn
+         ws1i28deTBK0v/yW6HN+nWHfXol6x4up9T59knVRLnThz+1URdJVG8oIMESvxG0qaXGp
+         l8K6PvDT6vyGZOkKgihUfheBKsr7K3rkJ1Pf1+rTGhFKGFs7JJSctONDwm/SaICpQTAY
+         UyPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788971705; x=1789576505;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=AurL6CS51ZxhuGokqtXHBRLRcchDPoQ4/ZSuDu7JVek=;
+        b=WL8CozCb4Kug1sCYAXkC2sqC8lhMeRLrKuOmJwUIZs7QvQcaVpi5zfvGf5T3qM/lGx
+         qW7f7Vu590NRTp7Tz5D8/+9m3XultsbVMNqjrRBBdck3Pp+RBuPt2oP77PsP0ljqnobe
+         nceuDnfo7oGgQbn1v1+ljPl7701knJ5v9gU2/9wXVsHxJuRXqRUBbwJf+n6ZRcL1Xq8y
+         5+Nm+P9IcacGK/B6Td6hmkHoP/KK/wxhIfE+P8aVP2q8pBigbN3WyEcZrCx3tfkaXntS
+         5itOxZzrf3n6KWT5Ae/Bx8n7PAm2ZbjICszGL2kMeCa8N7B6S59Pi8FiDP5THp7cAHlK
+         cN6g==
+X-Gm-Message-State: AFuF++m14pNIOX5fdRy4hclTlDt48eV8f7qHJ6tsbN+cmOPMf0mtj9Kk
+	e3SbWaOEoorkMyyEbr1P2l+tuQZ2i7ba8aHgHWQqcQSIIW//8+utoiZUKEuxPM33zMSIwsJtooc
+	6ZJ/+FleG4Dww1kkrPCQ3kaQgj9tOpXo=
+X-Gm-Gg: AYBFou0l97MUE/EAbn9Q3k75jxBge8hxsiFy8zo3Eho7LjTAwEqcWTGH7p6oJecnLZv
+	t2bF+HvxD4iS2Xv+Dj9FKi7g6v8yaz8OuHbKH3EHE3zQVZRQ9uEtG5AKxx28bdzFk0/B/hG9o5C
+	epb2ad1uF7j8kyNL1mPiAbTVje+NvPDadbMxFd6ZM3BcZmRiqIDrWeBZyh5HB1Er+d3KN8jfDEI
+	widM749FoMm7aJ3pfgFgMgxQoFVK6tjSyt/29cj6WzjeFMDJHouxQ6JrRQAaFHbwGFHzT5lL4SJ
+	mB1L2DOZU2zBBM4tV2UBHtO1FoNgwrOak7i2JnL/Hcx+FH+q8hl9/9IEGUvO78NchJbhZKgky3p
+	+vGgJKIwFKscRqnFx+zWeqVsWGn6O3ZRL98vuBBMS7feg5jMDAHho+YPyvkjQulcZhTkJSBN6jP
+	lvMVDyAaeT4SgSb+0z+kzBk7U=
+X-Received: by 2002:a05:690c:c622:b0:86f:6c64:7eb7 with SMTP id
+ 00721157ae682-87122599769mr119770507b3.1.1788971705167; Wed, 09 Sep 2026
+ 09:35:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260904195132.141068-3-sidchintamaneni@gmail.com> <4866144aa416a8491c9874325394e88f5dc2e66259212baa56032e0428f0772b@mail.kernel.org>
+In-Reply-To: <4866144aa416a8491c9874325394e88f5dc2e66259212baa56032e0428f0772b@mail.kernel.org>
+From: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+Date: Wed, 9 Sep 2026 09:34:53 -0700
+X-Gm-Features: AcwNN1WCeNCqyff3VAuQjYBnYtHIwccOam8Qp1LEGjFOZzxZQ1VjRoRu1i5QAcI
+Message-ID: <CAE5sdEhdsPvK8UD-SEZ=YNX5_GpHkUV8mivRW1j=6hJ6XkM7Zw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 2/7] bpf, x86: Use resolved pointer for timed may_goto
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, jeremy.jean@oss.cyber.gouv.fr, ast@kernel.org, 
+	daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org, 
+	eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	ihor.solodrai@linux.dev, a.s.protopopov@gmail.com, puranjay@kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, rlmenge@gmail.com, 
+	hargar@linux.microsoft.com, apais@microsoft.com, martin.lau@kernel.org, 
+	mason@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider:
+On Fri, 4 Sept 2026 at 13:33, <bot+bpf-ci@kernel.org> wrote:
+>
+> > diff --git a/arch/x86/net/bpf_timed_may_goto.S b/arch/x86/net/bpf_timed_may_goto.S
+> > index 54c690cae190..6e9d9e7c2b1d 100644
+> > --- a/arch/x86/net/bpf_timed_may_goto.S
+> > +++ b/arch/x86/net/bpf_timed_may_goto.S
+> > @@ -11,12 +11,6 @@
+> >  SYM_FUNC_START(arch_bpf_timed_may_goto)
+> >       ANNOTATE_NOENDBR
+> >
+> > -     /*
+> > -      * r10 passes us stack depth, load the pointer to count and timestamp
+> > -      * into r10 by adding it to BPF frame pointer.
+> > -      */
+> > -     leaq (%rbp, %r10, 1), %r10
+> > -
+>
+> A subsystem pattern flags this as potentially concerning: This commit
+> changes the x86 trampoline to the new 'pointer in BPF_REG_AX' ABI, but the
+> producer side of that ABI was changed one commit earlier, in d8319a04dafc
+> ("bpf: Fix timed may_goto stack pointer for private stacks"), which
+> rewrote kernel/bpf/fixups.c to emit:
+>
+>     insn_buf[4] = BPF_MOV64_REG(BPF_REG_AX, BPF_REG_FP);
+>     insn_buf[5] = BPF_ALU64_IMM(BPF_ADD, BPF_REG_AX, stack_off_cnt);
+>
+> At commit d8319a04dafc (i.e. HEAD~1), does x86 still execute
+> 'leaq (%rbp, %r10, 1), %r10' on a register that already holds a resolved
+> pointer, producing r10 = rbp + (frame_ptr + stack_off_cnt) -- roughly
+> 2*rbp, a non-canonical address?
+>
+> bpf_check_timed_may_goto() then reads and writes p->timestamp / p->count
+> through it (kernel/bpf/core.c:3410). Would any BPF program containing
+> may_goto oops on x86_64 at that commit?
+>
+> The same window exists for arm64, riscv, powerpc64 and s390, whose
+> trampolines are only converted in the four later commits d35642770d98,
+> 7053db7d3c0d, 6e03227c5677 and 20356163d51e. Is the tree bisectable across
+> the series?
+>
+> The two halves carry different Fixes: tags (this one 2fb761823ead, the
+> fixups.c one e723608bf428), which invites a partial stable backport that
+> reintroduces exactly this wild-pointer write. Would squashing the fixups.c
+> ABI change with the arch trampoline updates, or ordering all arch updates
+> before the generic change, address the bisectability concern?
+>
+> >       /* Setup frame. */
+> >       pushq %rbp
+> >       movq %rsp, %rbp
+>
 
-Critical: 0 · High: 0 · Medium: 1 (1) · Low: 1 (1)
+I tried to follow the same pattern used when the patches were
+introduced, but this is a valid concern.
+Should I just squash all the patches to one then?
 
-- [Medium] sk_psock_verdict_apply() is the verdict path for every sockmap
-  protocol that implements ->read_skb (TCP, AF_UNIX, vsock, UDP), not…
-- [Low] The changelog names a function that does not exist.
+> The x86-only __xlated expectations for the timed may_goto expansion in
+> tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c were never
+> updated for the new 7-insn -> 8-insn sequence. The test expects:
+>
+>     __xlated("7: if r12 == 0x0 goto pc+6")
+>     __xlated("8: r12 -= 1")
+>     __xlated("9: if r12 != 0x0 goto pc+2")
+>     __xlated("10: r12 = -24")
+>     __xlated("11: call unknown")
+>     __xlated("12: *(u64 *)(r10 -24) = r12")
+>
 
-Pre-existing issues:
-- [Medium] psock->ingress_bytes is a plain non-atomic u32 that is
-  incremented in sk_psock_skb_ingress_enqueue() (net/core/skmsg.c:575)…
-- [Low] Reported concern: routing an ingress self-redirect through `case
-  __SK_PASS` only balances copied_seq when the inline…
+I've fixed this in the selftests patch.
 
---
+> Does this test fail on x86_64 for the whole series? Every line from index
+> 7 onward is now wrong: the first branch becomes 'goto pc+7' (insn->off + 6
+> instead of insn->off + 5), the second becomes 'goto pc+3' instead of
+> 'pc+2', 'r12 = -24' is replaced by the pair 'r12 = r10' / 'r12 += -24',
+> and the trailing indices shift by one ('call unknown' at 12, the store at
+> 13, then 14 and 15).
+>
+> git log 28bd77eb835b..8dc5c7d5340d shows the only selftest commit in the
+> series is 8dc5c7d5340d ("selftests/bpf: Test timed may_goto with private
+> stacks"), which adds new coverage but does not touch
+> verifier_bpf_fastcall.c. Note the original x86 JIT enablement commit
+> 2fb761823ead -- the commit this patch lists in its Fixes: tag -- adjusted
+> this very test for the same reason, so the update belongs with the ABI
+> change.
+>
+> > commit 28bd77eb835bc1a95190315e93afbc6bb186b9ff
+> > Author: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+> >
+> >     bpf, x86: Use resolved pointer for timed may_goto
+> >
+> >     The timed may_goto fixup now passes the resolved counter pointer through
+> >     BPF_REG_AX instead of a stack offset.
+> >
+> >     Use the pointer directly rather than adding it to RBP. This preserves the
+> >     private-stack address selected by the JIT through R9.
+> >
+> >     Fixes: 2fb761823ead ("bpf, x86: Add x86 JIT support for timed may_goto")
+>                  ^^^^^^^^^^^
+>
+> The existing Fixes: tag points to commit 2fb761823ead, which is not an
+> ancestor of this fix and is on a different branch (bpf-next/res_spin_lock).
+>
 
-bpf, sockmap: Fix self-redirect copied_seq double-counting
+I'll fix this in the next iteration
 
-The patch rewrites an ingress self-redirect verdict into __SK_PASS at the
-top of sk_psock_verdict_apply() so the skb goes to the psock ingress queue
-instead of through the __SK_REDIRECT arm. The intent is that copied_seq is
-advanced only once, by the copied_from_self accounting in
-tcp_bpf_recvmsg_parser().
-
-A few questions on the changelog and on the scope of the new check.
-
-The changelog says:
-
-  "This bypasses the __SK_REDIRECT case entirely (which calls
-   sk_psock_eat_skb), letting the __SK_PASS path queue the skb to the
-   psock ingress queue."
-
-and:
-
-  "Cross-socket redirects continue through __SK_REDIRECT with
-   sk_psock_eat_skb() unchanged."
-
-[Severity: Low]
-Is sk_psock_eat_skb() the intended name here? A grep of the tree finds no
-such symbol. The helper actually invoked in the __SK_REDIRECT arm of
-sk_psock_verdict_apply(), and in the drop arm, is tcp_eat_skb() from
-net/ipv4/tcp_bpf.c, which the first paragraph of the same changelog names
-correctly. Since this carries a Fixes: tag and will likely be backported,
-could the name be corrected to tcp_eat_skb()?
-
-> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> index 2521b643fa05d..df385a5a961e8 100644
-> --- a/net/core/skmsg.c
-> +++ b/net/core/skmsg.c
-> @@ -1000,6 +1000,10 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
->  	int err = 0;
->  	u32 len, off;
->  
-> +	if (verdict == __SK_REDIRECT && skb_bpf_ingress(skb) &&
-> +	    skb_bpf_redirect_fetch(skb) == psock->sk)
-> +		verdict = __SK_PASS;
-> +
-
-[Severity: Medium]
-Should this remap be gated on sk_is_tcp(psock->sk)?
-
-sk_psock_verdict_apply() is reached from every protocol that implements
-->read_skb, not only TCP: unix_read_skb() and the vsock/UDP equivalents all
-funnel into sk_psock_verdict_recv() -> sk_psock_verdict_apply(). For those
-protocols there is no copied_seq to fix, since tcp_eat_skb() returns
-immediately for !sk_is_tcp(sk).
-
-For AF_UNIX the skb owner is the sender socket (set by
-sock_alloc_send_pskb()), so before this patch a self-redirect took:
-
-  __SK_REDIRECT
-    sk_psock_skb_redirect()      -> psock->ingress_skb
-      sk_psock_backlog()
-        sk_psock_skb_ingress()
-
-and there the "if (unlikely(skb->sk == sk))" shortcut is not taken, so
-sk_psock_create_ingress_msg() ran its admission test:
-
-net/core/skmsg.c:sk_psock_create_ingress_msg() {
-	if (atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf)
-		return NULL;
-
-	if (!sk_rmem_schedule(sk, skb, skb->truesize))
-		return NULL;
-	...
-}
-
-With the remap, the same traffic enters case __SK_PASS and, whenever
-psock->ingress_skb is empty (now the steady state, since nothing is queued
-there any more), goes straight to sk_psock_skb_ingress_self(), which only
-does skb_set_owner_r() and performs no sk_rcvbuf or sk_rmem_schedule()
-check.
-
-Can psock->ingress_msg then grow past SO_RCVBUF for AF_UNIX/vsock
-self-redirect traffic, with the sender un-throttled once skb_orphan() inside
-skb_set_owner_r() drops its wmem charge?
-
-The changelog describes the change as TCP copied_seq accounting only, so the
-non-TCP behaviour change is not mentioned anywhere. Could the condition be
-scoped to the protocol that actually has the defect?
-
-[Severity: Low]
-This is a pre-existing issue rather than something introduced here, but the
-remap newly routes self-redirected data into it, so it may be worth a note.
-
-Routing the self-redirect through case __SK_PASS only balances copied_seq
-when the inline sk_psock_skb_ingress_self() enqueue succeeds. When
-psock->ingress_skb is non-empty the skb is merely queued and
-psock->ingress_bytes is not incremented during the read pass, while
-tcp_bpf_strp_read_sock() still commits:
-
-net/ipv4/tcp_bpf.c:tcp_bpf_strp_read_sock() {
-	tp->copied_seq = psock->copied_seq - psock->ingress_bytes;
-	...
-	__tcp_cleanup_rbuf(sk, copied - psock->ingress_bytes);
-}
-
-That common deferral looks balanced, because sk_psock_strp_read() clears the
-owner before applying the verdict:
-
-net/core/skmsg.c:sk_psock_strp_read() {
-		ret = sk_psock_map_verd(ret, skb_bpf_redirect_fetch(skb));
-		skb->sk = NULL;
-	}
-	sk_psock_verdict_apply(psock, skb, ret);
-
-so the worker later misses the "skb->sk == sk" shortcut in
-sk_psock_skb_ingress(), msg->sk stays NULL, and "from_self = msg_rx->sk ==
-sk" in __sk_msg_recvmsg() is false.
-
-The one case that does not balance is when sk_psock_skb_ingress_self() has
-already run skb_set_owner_r() (making skb->sk == psock->sk) and then fails
-in sk_psock_skb_ingress_enqueue() because skb_to_sgvec() exceeds
-MAX_MSG_FRAGS and skb_linearize() returns -ENOMEM. The deferred skb then
-does take the self branch, msg->sk is set, and copied_from_self advances
-bytes that tp->copied_seq already covers, giving the same warnings quoted in
-the changelog. The identical window exists for ordinary __SK_PASS strparser
-traffic today.
-
-[Severity: Medium]
-This isn't a bug introduced by this patch either, but since the remap makes
-the socket's own data depend on this counter in strparser mode, is the
-accounting of psock->ingress_bytes safe?
-
-It is a plain u32 with a non-atomic increment in
-sk_psock_skb_ingress_enqueue():
-
-net/core/skmsg.c:sk_psock_skb_ingress_enqueue() {
-#if IS_ENABLED(CONFIG_BPF_STREAM_PARSER)
-	psock->ingress_bytes += len;
-#endif
-}
-
-That site is reached both with the socket lock held (strp_read_sock() ->
-tcp_bpf_strp_read_sock() -> sk_psock_strp_read() ->
-sk_psock_verdict_apply()) and from sk_psock_backlog(), which runs on the
-workqueue holding only psock->work_mutex and never takes lock_sock().
-
-CPU1 (socket lock held)
-tcp_bpf_strp_read_sock()
-    psock->ingress_bytes = 0;
-    tcp_read_sock_noack(...);
-    tp->copied_seq = psock->copied_seq - psock->ingress_bytes;
-    __tcp_cleanup_rbuf(sk, copied - psock->ingress_bytes);
-
-CPU0 (work_mutex only), draining an skb another socket redirected in via
-sk_psock_skb_redirect(), whose bytes were never part of psock->copied_seq:
-
-sk_psock_backlog()
-    sk_psock_handle_skb()
-        sk_psock_skb_ingress_enqueue()
-            psock->ingress_bytes += len;
-
-If the worker increment lands inside that window, does tp->copied_seq end up
-subtracting foreign bytes, and can "copied - psock->ingress_bytes" go
-negative? There is no lock, atomic, or READ_ONCE/WRITE_ONCE pairing on this
-field at any of its three access sites.
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/1d2370f4c81f10834b8dd77524924575c629a464.1788591198.git.tanggeliang%40kylinos.cn
+> The bug was actually introduced by commit 47ab38f3f4d9 in this branch's
+> history, which added the incorrect code 'leaq (%rbp, %r10, 1), %r10' that
+> overwrites r10 instead of preserving it.
+>
+> Should this use:
+>
+>   Fixes: 47ab38f3f4d9 ("adding ci files")
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33914557238
