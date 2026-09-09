@@ -1,111 +1,157 @@
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C953C332615
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 04:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95786218EBA
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 04:27:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788927886; cv=none; b=NYkFwETrKtp47B7NPseyrTn7eLe5z9dYxQqDnCP90faZBpAKwoyrBiNwQr5e8NmX5SAoAW7MiUfC9njNo5tYstziylLGE1xqtV053deHtbenMX0OyudR5GKBMoq/c00mQ9c+RYGObgdOxkRaXWfMcQ5O+tEPznNWoDD784vjmnY=
+	t=1788928060; cv=none; b=DzLDC4bs6jc6B3l5XCZt9uvsJ4XsP0aY3E4GKhbsarO1srYG8pTC5TIlvh64GfbIeYUkRJIQlKyZaiF54np/nefAeaqq/Ac8aWqnhlRfU2vcpaVcQo/SHJk3WvBllb2JLV4TTNHTZ0rx2pCGO/tvmzQf//ufEmpPvuPD1W2HqtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788927886; c=relaxed/simple;
-	bh=K4EJnp/OtkGUkU5fqwk5wI56dSk02gYF3Hq0gumu0NI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=gGep84rJuEhMJNfbdSCswFagMICRd4j0VUhBLwPwoXS245LmgPOXv2tQwGeP9h1xr45OB9d8eZC7V2oq7EDhe57rYpn0WTW7vmxb7BKq9u0tx9OSI0khRFwAUeu8jJQIg1uowlk6wQ0JGsE3ZAtA4pDkYeLAkMHUcvkmmTLyJ4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tB9dn3di; arc=none smtp.client-ip=209.85.215.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tweek.bounces.google.com
+	s=arc-20240116; t=1788928060; c=relaxed/simple;
+	bh=AQh0DnUn/QQR6cYF+IfoPIhyN5htSqg8CRDUSS+ku0M=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=DpRXgQrF+bJQFl+wG9ZtVUvZ6odVD88/cDx8DzxFNA/wPLQwSCLk8bLapXUuO0N77uhgf5Tyk0HAwc8KJq8+ragtdkywvBHXn8y7GpX3akTqShMHKrZJswOJdIdM6atErgJYyUvcWK9SEX9CnTRuDmbRI0mMbt0WhwGTKTg4z4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IzeK653L; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tB9dn3di"
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-cbb92868263so4554937a12.2
-        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 21:24:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788927884; x=1789532684; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=2OX+nWAyzcuztkMjIO1ryU+hNrymKwlyjS5f829o1nw=;
-        b=tB9dn3diQYnCkl0J/pgNLuil2rdKXixH5idnp35CC0mgsqtMpx3gGRM8M6NdM0CyvJ
-         dD1Dah3Zfu9GFrG5142oEP8glVhly0nSaikB/cAzSQWFatoOtGYZF3uiqKsqMWhPC3rM
-         rwfKI+9xe+QsJaETT5V+Cb/wmDudx5g9aINrJnkLLlirIbAWTAUL5ajecmO3pb6J3l9r
-         sdg1ppswFnCmrwRZ+4JuZbKs3yf6AidClcfQNHBjGk1FkxjnQjMpq7ru5nV1Te04ErVR
-         795+9m/O8rfJLRqsVXomEH4iiMH8NbIqALM28F5xhzqg673yp+i8+d3jycD9DmfcKQVm
-         rLtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788927884; x=1789532684;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=2OX+nWAyzcuztkMjIO1ryU+hNrymKwlyjS5f829o1nw=;
-        b=H8VXFiEmsGNnwvS6DS8NZjN5SlCWuoLvAdhb+UtU+XEwzvN+3HFvT6jzFnSG/zjfBN
-         htQxmcIJnlx0bqBKPTLVvHu8Hekhbkqi14sWCASGNgxT/C/6BfLI3qzTL8XWFoXppGtt
-         /vKJ75oe3kZtgAOTAp2hAb4qoDjBXMXYsbYeOm7DMcGpH5vUh+49uzJBpmQYrgUh/djm
-         KpnUqhEBMILyV1MEKV6AoWF8upC7hb24z2/fFCkndsOZg9Skw1I6teKn0ByAKpjD7lKE
-         l7d9+NDzNyPtqukigm+ZtbdRp2wAESKonF/KqzUmg87tmLNK8SyPOeWM2vNVp7hH3Riq
-         uWfA==
-X-Forwarded-Encrypted: i=1; AKwUvBxj9EFH9TYaaCszPIyhBS7ei1nBiE8bYXeKj3TZwC0JNWfcPCBOys9M///eXrK5jBJL5oc=@vger.kernel.org
-X-Gm-Message-State: AFuF++m/+YxeSNAqcvTtRDoMuQJRc7XRob+KPTpeDyotYWAe0InRed7M
-	tgjYm9qYgdUu5S1A/uXImLcuGJVgIWSFKEkoHluLLtJAFYcY6pVD0RJa6PSf5/wcUo0dL0j29hv
-	fHw==
-X-Received: from pfbgh5.prod.google.com ([2002:a05:6a00:6385:b0:84e:a25:1e6b])
- (user=tweek job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:2187:b0:845:e440:d0ca
- with SMTP id d2e1a72fcca58-86166ac231bmr43259395b3a.8.1788927883755; Tue, 08
- Sep 2026 21:24:43 -0700 (PDT)
-Date: Wed,  9 Sep 2026 14:24:33 +1000
-In-Reply-To: <20260909042433.1775591-1-tweek@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IzeK653L"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20D7B1F00A3A;
+	Wed,  9 Sep 2026 04:27:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788928059;
+	bh=0yLqaFh7KINPo8BQZY83oaqMVwEKc6HtBpY5RlsvztQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=IzeK653LKT1uwXguskG2hc58Xo8olOg+3hWCAUkobjOlECpgNNwRPmBJRpXEdE6ej
+	 DkeoTd6twKOB6rSpwXolYEXS2zQkfRmRW+5caW/x1HZjJqdiJ6jQNMrATBg/NjUf0n
+	 FlDaHdC+b+AsHAe59/AZZSmtBgMSEAgSZ+h1L+AgN4my0y9QNMl+bKAJLmvlZVKJWz
+	 oag7D70dgF7StSYPDkWj9VIQHSCGPJHLVUriRh5Wh4iI/3thbKPYbK4vucntyFtxWK
+	 5XYzL+T/xL/Lug77ctnsQXH9WXmT150MR19Iy1jiGkWEi2n2DjsMxoBRee2wYO26dn
+	 Tw0sdDhvRot1Q==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf v2] bpf: disallow bpf_skb_pull_data() for
+ LWT_SEG6LOCAL
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Weiming Shi" <bestswngs@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260909040807.3885815-2-bestswngs@gmail.com>
+References: <20260907192129.557377-2-bestswngs@gmail.com>
+ <20260909040807.3885815-2-bestswngs@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 09 Sep 2026 04:27:38 +0000
+Message-Id: <20260909042739.20D7B1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260909042433.1775591-1-tweek@google.com>
-X-Mailer: git-send-email 2.55.0.979.g7e5102b832-goog
-Message-ID: <20260909042433.1775591-3-tweek@google.com>
-Subject: [PATCH bpf-next v2 3/3] selftests/bpf: Verify program FD after
- non-autoload programs in lskel
-From: "=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>
-To: Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	"=?UTF-8?q?Thi=C3=A9baud=20Weksteen?=" <tweek@google.com>, KP Singh <kpsingh@kernel.org>, Leon Hwang <leon.hwang@linux.dev>, 
-	Emil Tsalapatis <emil@etsalapatis.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-In test_global_percpu_data.c, dump_percpu_data is defined after two
-non-autoload SEC("?kprobe") programs (verifier_strncmp and
-verifier_snprintf). Verify in test_global_percpu_data_lskel() that
-lskel->progs.dump_percpu_data.prog_fd is properly populated (> 0) when
-loaded via the light skeleton.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
----
-No changes since v1.
+Pre-existing issues:
+- [High] LWT-specific SRv6 helpers (bpf_lwt_seg6_action(), bpf_lwt_seg6_adj=
+ust_srh(), and bpf_lwt_seg6_store_bytes()) can leave srh_state->srh danglin=
+g if an error occurs after skb->head is reallocated, leading to a Use-After=
+-Free when the BPF program finishes.
+- [High] bpf_lwt_seg6_adjust_srh() corrupts cloned SKB data when shrinking =
+the header (len < 0).
+--
 
- tools/testing/selftests/bpf/prog_tests/global_data_init.c | 2 ++
- 1 file changed, 2 insertions(+)
+commit 432b32d6ccc70f500393dbc29ce68e92bc184b1c
+Author: Weiming Shi <bestswngs@gmail.com>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/to=
-ols/testing/selftests/bpf/prog_tests/global_data_init.c
-index 7c539cbcf3a1..ebda60200b71 100644
---- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-@@ -214,6 +214,8 @@ static void test_global_percpu_data_lskel(void)
- 	lskel =3D test_global_percpu_data_lskel__open_and_load();
- 	if (!ASSERT_OK_PTR(lskel, "test_global_percpu_data_lskel__open_and_load")=
-)
- 		goto out;
-+	if (!ASSERT_GT(lskel->progs.dump_percpu_data.prog_fd, 0, "dump_percpu_dat=
-a.prog_fd"))
-+		goto out;
-=20
- 	map_fd =3D lskel->maps.percpu.map_fd;
- 	prog_fd =3D lskel->progs.update_percpu_data.prog_fd;
+bpf: disallow bpf_skb_pull_data() for LWT_SEG6LOCAL
+
+An LWT_SEG6LOCAL program can invalidate its cached SRH with
+bpf_lwt_seg6_adjust_srh() and then call bpf_skb_pull_data(), leaving the
+per-CPU SRH pointer dangling. This commit disallows bpf_skb_pull_data() for
+LWT_SEG6LOCAL programs so the verifier rejects this unsafe combination.
+
+Link: https://lore.kernel.org/bpf/DL9COXZQXX4V.1FN45QO2Q77ZH@gmail.com/
+
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 8513167a858a8..2a84f9d011314 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -9044,6 +9044,8 @@ static const struct bpf_func_proto *
+>  lwt_seg6local_func_proto(enum bpf_func_id func_id, const struct bpf_prog=
+ *prog)
+>  {
+>  	switch (func_id) {
+> +	case BPF_FUNC_skb_pull_data:
+> +		return NULL;
+>  #if IS_ENABLED(CONFIG_IPV6_SEG6_BPF)
+>  	case BPF_FUNC_lwt_seg6_store_bytes:
+>  		return &bpf_lwt_seg6_store_bytes_proto;
+>  	case BPF_FUNC_lwt_seg6_action:
+>  		return &bpf_lwt_seg6_action_proto;
+
+[Severity: High]
+This is a pre-existing issue, but do these LWT-specific SRv6 helpers also
+leave srh_state->srh dangling if an error occurs after skb->head is
+reallocated?
+
+For instance, in bpf_lwt_seg6_action(), if bpf_push_seg6_encap() fails, the
+error path skips bpf_update_srh_state(), leaving the cached SRH pointer
+dangling if the head was already reallocated:
+
+net/core/filter.c:bpf_lwt_seg6_action() {
+        ...
+        err =3D bpf_push_seg6_encap(skb, BPF_LWT_ENCAP_SEG6,
+                                  param, param_len);
+        if (!err)
+                bpf_update_srh_state(skb);
+
+        return err;
+}
+
+A similar pattern appears in bpf_lwt_seg6_adjust_srh() where an early return
+on ipv6_find_hdr() failure misses updating srh_state->srh:
+
+net/core/filter.c:bpf_lwt_seg6_adjust_srh() {
+        ...
+        if (ipv6_find_hdr(skb, &srhoff, IPPROTO_ROUTING, NULL, NULL) < 0)
+                return -EINVAL;
+        srh_state->srh =3D (struct ipv6_sr_hdr *)(skb->data + srhoff);
+        ...
+}
+
+If the BPF program ignores the error and exits with BPF_OK, does this allow
+input_action_end_bpf() to call seg6_bpf_has_valid_srh() and write to the
+dangling pointer causing kernel memory corruption?
+
+>  	case BPF_FUNC_lwt_seg6_adjust_srh:
+>  		return &bpf_lwt_seg6_adjust_srh_proto;
+
+[Severity: High]
+This is another pre-existing issue, but does bpf_lwt_seg6_adjust_srh()
+corrupt cloned SKB data when shrinking the header?
+
+When len is less than 0, the code skips skb_cow_head() and directly
+modifies the SKB via memmove():
+
+net/core/filter.c:bpf_lwt_seg6_adjust_srh() {
+        ...
+        } else {
+                ret =3D bpf_skb_net_hdr_pop(skb, offset, -1 * len);
+        }
+        ...
+}
+
+If an LWT_SEG6LOCAL BPF program is executed on a cloned SKB,
+bpf_skb_net_hdr_pop() verifies the buffer via pskb_may_pull() which
+returns 1 without uncloning because the target data is already within the
+linear portion.=20
+
+Will bpf_skb_generic_pop() then use memmove() to modify skb->data,
+corrupting the data buffer for other users of the cloned SKB?
+
+>  #endif
+>  	default:
+>  		return lwt_out_func_proto(func_id, prog);
+>  	}
+>  }
+
 --=20
-2.55.0.979.g7e5102b832-goog
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260909040807.3885=
+815-2-bestswngs@gmail.com?part=3D1
