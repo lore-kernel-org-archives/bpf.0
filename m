@@ -1,270 +1,206 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6656448EC64
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 22:27:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788992824; cv=none; b=qK2sdWsC/1DFllmvBAPa7vvetAVFhfdt1BNs/Z8gkZvIoPnNoHtBSlt3Xrm6Qb03h2x9FA5F+pmn42khdSefRwxjRqpEjy/fQMENZvuxSfqm5p9+vzeewNeae9cY2Sx6j9wP05RxIJWtdydiKi+JOtr3xAwcY2bfgFCYh6o2lv8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788992824; c=relaxed/simple;
-	bh=LB+qfaz6YdnbxjV+2oRihuPw0uTzVF9Yn8GNWXHeuNE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=F9dt6VrKVV6yPVgzEv5IvjJmDhjSsMrVrq+qKpsVlFKgwMb+iIE3rEkxWFdBjiTcBUliB+9p4LwCv8ajY51d/yvBTiF3hevaXC/6/+6Xa9F5abWrW/zMqVumuB6mDi+bP4x9YdjTAArsQD/TxhA6hQFEGTntiT+/Rrspn8tW67w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K3iE208A; arc=none smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A399A446BEA
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 23:08:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788995308; cv=pass; b=BlP/Z2HZL33Lip20MgUnVn8jfpbnPm63XPfPZXusZO4+6Mdk4KjYzQ37OliXUatqIwHrqpgOglQVg/cIp9D3/NKbU0g2m1YiumFy1hmiBuMQHdKVo+bkMyhiyotSQaiHZuW8t2EPkM0BXyaKXHUIAQ1vI3PDU3nXjPn+ztkFxtY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788995308; c=relaxed/simple;
+	bh=PXCiYUIUDFbcVYjS13LmGtnLqgKi8EElaJmcYhZhgTI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=g+dIvdnGanlkR5TVZOd5eoBMhptE6I3Fh4qvS9sgBeRynXKkwOxw9jSO9Qe0ZGHIMPx2WhCdfWvW0VxEYrDMlv1EnfHnMe/wV3X7piOPpNV6Lt18FV+hBOuO6xZRDiRWam1D2+CgpS/A+ZjBnPWxi9IcDoLZYCXD45CvIK7MfK4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=V9+arPla; arc=pass smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K3iE208A"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747f066d8so8602595ad.1
-        for <bpf@vger.kernel.org>; Wed, 09 Sep 2026 15:27:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="V9+arPla"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c2940d16190so138835966b.3
+        for <bpf@vger.kernel.org>; Wed, 09 Sep 2026 16:08:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788995304; cv=none;
+        d=google.com; s=arc-20260327;
+        b=rJ/39CG9SBZ/fG/crq+hlm+PjHR+8fBLIzlwTcKtm1/ECHZ4KVWE031BhMwsKntbDR
+         u0x/pwM1lG8WWOMREFnKGBiVxBf2t1lv3yY++UFZ5v+W6JdbnAex7oqzH1D3A0rjoI2f
+         xq7XrEXNltt3NKYtLrNkN7TSKPckkAsgD/VcSlcNeG9anejEU3D+KlxyES/sF8HnKPVZ
+         YyvMa9EcrVFGyQmmpG0hbGSSISblyUqUhLotFa0JWRuM4xRwLHrc4E1gWMA8NFHqX0cd
+         odXwhCUFY4JHd+wSar/KwvjMY3IB3LOhG8LYt8ib9svYPgYcZzm8jSHXwifnTmnGTpJg
+         lgYQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=3HeYunSbblpdsvV1s5ghuqQTniP2lHfFC4mJtus2dow=;
+        fh=KDvTxKFrDUKYEDJFYKxxUBOkTqiJ/VtFqwnjtm1Myds=;
+        b=enKYQVf74Z6DvjxUdIK0kvYYNvVsML6JMmM3aHVP000moeu8l8BjjP/cLHXXF+TgF8
+         QHZH8pyfIv4pnuvrZX6NebqdYh8sud1xuP2Y6blkod2jQxJHVTMRYbJLvmFL0d88uvbT
+         kQmk2SW2uJHA1K5Jq42sOdWHeZtECaSuQ53KZy1ZjsgI73pYhrWZmlS4VnYaPduKE8aI
+         J0zhScIW2jbSefxhiuDzlCcwCSy6XklyrsjJXmYEbHb1BCdB8o10PYl+ZNFLoqdfVy16
+         1M5opnVNWsEsU8Ww+oQD1II2Au7vTzP4ZphI6nid1R7ZNRAOPpilXqjBSMNSU7e5NZqy
+         W69A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788992822; x=1789597622; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=FoqDybzgM2u1Ti7rz161YwHGpjrOZvM7SVulyrgRa/0=;
-        b=K3iE208ARtRxOlistRuy2sZu47/48gA3RxTnb81QTPJgbGoEeE6w8oHetSBppI+HrE
-         onOqTODbzWR2L9QKIUh7bCTHIgtwXesFL90tPILhMaJhbEY9L2Bi51Q4jTdCXk/cYcsg
-         mfT0Y56h7llcRfi0MpMwXG9dLuuWSWDo7Z8tp77jZjvA/xhug84Vlm04YgH5rYD1vC0e
-         SljidOWmb/LLO70W5gII/3FK91VJ/srH97cCLeEp4SPuKtHgM0fR+3EVUICqRDbSqUU7
-         1c9LhyCYFwwwz/i3woBsoda1WkYGehJt+oOs2PnNrgtpCQX15XuyYIk+hsBzIlzgOnLI
-         1WHQ==
+        d=paul-moore.com; s=google; t=1788995304; x=1789600104; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=3HeYunSbblpdsvV1s5ghuqQTniP2lHfFC4mJtus2dow=;
+        b=V9+arPla0SL8qTc6bDoEa0KlmBKTUybqYAio8v07RTbEGg4p7JUSbkOyCeQlbQiKdm
+         aNUIVrOuFwEvRQHmNAaaPyZQ5ZDpvbVVdAReB7FFGb5oSZGkSuB5h4N8cEhDxeX7Mve6
+         MicGEG/4nRHuFOn9V9UOO1dsrAV6lrA38D0HmFtlV/GGyZh56NYoY7uHUogErRIExnvB
+         rc/6q/KcbCwefGlgkrn2KoD/b12fmj9w+ia7aeqjRwthBCxmkIJYm5R4dgfpAIis38MK
+         7g+8ILGrl9gyjr0XhnF+vN7pjldKPWRTMoh/BxpNZEqe8fs0vmbDxTBowkmMZUt1nmjO
+         Av1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788992822; x=1789597622;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20251104; t=1788995304; x=1789600104;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=FoqDybzgM2u1Ti7rz161YwHGpjrOZvM7SVulyrgRa/0=;
-        b=iI5+A6uzQSJot6ve8J1WGA7w57g4lOf9L300CKeUU4sjNgPZ9GNZ1WHm0x2qdWEF4e
-         zYTGSnWEWg/RCl5QxKIZC+3Yla4PycVoU4SbwxCYaYS46YN3OKoVcsHidpqAX3u8AxpN
-         UPHYDOsR+NjJqZRUEnpBxivSJ0m+fUWXRH/HcIB1xWHA9Poe57DHxnPdgKlsMvymFTvs
-         J+TzfB3bNZ68u04liegJXF5BU4cm8g2Flk/Hqj/zQMJG8AXr9eNVrI/tsVySZsbSh2QG
-         4RFkfqdPzLEV2XJpBE8i3eMecZZ+hyr0SkWQLx5KaJEN0BWSCw5xluiPth1g+tntrnDx
-         93/Q==
-X-Forwarded-Encrypted: i=1; AKwUvBy9LE0EEHqxaW6CC6PkjR1cMRpMj51N9fzx+nmd68oufMLwaflSk3IprGx6ujJOguzJ0fA=@vger.kernel.org
-X-Gm-Message-State: AFuF++l4v/UheKOXrTZ7SCJxLnL9HAnppWtucsI9xE94oMQKDGtBDDSS
-	mO66PcrVd5PVfC6S5s9UCXXdjSqPYzINogC9igYn0zFwuztfTGNwmcNe
-X-Gm-Gg: AYBFou3T33tz/Oa+l9gSBK55IKQwB9n+IGCn+b/EtgqanDZjDbf/4CEQVL31/8hdwtv
-	wJykdvYlwLkhGpP4KmwE+mLlCEP1y0+QI6U1L7IjvdFbuSgG5I5ptr1+15dqqzjVmEKiguEP6x+
-	3Xi9S8mxQTq+Ek+c/Tgwsn0Ff61E4f4x2nx0+Tx4xVmBIJOUBMjFptRQ//ci0Qd/0ihcoC9qg7K
-	59wZk2kdEqWcypPF+N34jyhEkzIjCz832yvGA1e5TWtl+Tj98YLFPdDw/bUJUaVFJf6prgU5Y0a
-	jAzlFgut+gF9iukBhDwTsBtkO6vw+1gvoPgfXw0uZoRV6tZceHWXTEK/kj2JprYtWgEYag0JURH
-	my0aPrsCukr7zONwwp7k2mGfWCqyxp1mnFQFKx5SZ1rZ8+Qf0qsJgy29kTB9beKN6su6mj0BXQS
-	4C9P9RkT7UhnJo5/GoTE9b+JIFkeGjfxcrmnHs/JN+xgkmbmjS8NkG050Mtfo5WI2Ic/m8Nzn8F
-	1jW9TCZ5KRIQWKW7q7mDbFbLlU=
-X-Received: by 2002:a17:902:e551:b0:2d8:d4cf:fe45 with SMTP id d9443c01a7336-2dd0ec7f206mr13292005ad.11.1788992821597;
-        Wed, 09 Sep 2026 15:27:01 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2db195a1a59sm76352065ad.47.2026.09.09.15.27.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2026 15:27:01 -0700 (PDT)
-Message-ID: <e517c80062551871fa9008a223bc0044217354cb.camel@gmail.com>
-Subject: Re: [PATCH v2 bpf-next 02/18] libbpf: Add support for BTF kinds
- LOC[_PARAM|_PROTO|SEC]
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org, andrii@kernel.org
-Cc: daniel@iogearbox.net, jolsa@kernel.org, ihor.solodrai@linux.dev, 
-	yonghong.song@linux.dev, song@kernel.org, qmo@kernel.org,
- martin.lau@linux.dev, 	memxor@gmail.com, emil@etsalapatis.com,
- mcgrof@kernel.org, petr.pavlu@suse.com, 	tj@kernel.org, kees@kernel.org,
- bpf@vger.kernel.org, nathan@kernel.org, 	nsc@kernel.org, arnd@arndb.de,
- puranjay@kernel.org, yatsenko@meta.com, 	atenart@kernel.org,
- ojeda@kernel.org, linux-modules@vger.kernel.org
-Date: Wed, 09 Sep 2026 15:26:58 -0700
-In-Reply-To: <20260901165757.801449-3-alan.maguire@oracle.com>
-References: <20260901165757.801449-1-alan.maguire@oracle.com>
-		 <20260901165757.801449-3-alan.maguire@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10+b1 
+        bh=3HeYunSbblpdsvV1s5ghuqQTniP2lHfFC4mJtus2dow=;
+        b=a/9fZLwe2eVkLoGIkesSVW5UQPluwBqBrRDPGo8DlbVTo5OzcgVujZufo64VqgFpMc
+         pIFAfh9iuut9SElJnJKi1hBQWN+c+NSSq3hUFzPnPPDGqXf46NsGRUEGKdkq7pCX8J/1
+         lEmB6vwegE+whNsZmR9YLaI2cUJihPpLXQY0YjbRPLqfZUCP11dBQZFTgwycoSLDnJIP
+         EtnHZeAY22tUIPhLawVR7oncO/nuuvT56viJb6APu5v7r4IqykKsSLb7ioIC59zhtxu0
+         0YEI7QSjD7ZxFZ4TOD0UchvTP/oUmhtndbmKOzBXNH37Gq2LgwS7iC+GYFz9Um47eyZ4
+         RcIA==
+X-Forwarded-Encrypted: i=1; AKwUvBzUuJj6DQisbfJHSNAG13H8dxqaO4ujG4Yv7wBgS/0ykxMulxuobUZ7SMSnmL7sxYDOC20=@vger.kernel.org
+X-Gm-Message-State: AFuF++lWBzmx+q3pmpQ7Y8EcSBiH6OIDCboRsR7HwN5iiZagj5I+EYGI
+	ZYUUGOQKlxHnvQGWO5oukcMAlncFG0lgbEAa1kGk9iSMX6eH3FuFQq3L7446V1FA/TZKbT4ZVus
+	NhF7QvMLQgy9TDELLbT4QGvU751d1u0wxkPyILBfN
+X-Gm-Gg: AYBFou1Qdox3kTc+DciKZgWZyUbHdknuMYNslKHYhlISc8JAdoGYqaWaRVqONB7y1FD
+	972AVE4ko8xHcDGdGxYgsMEQZdwUyCVcEKiEJ9W0rJ4LxBGhHCwyYgNyIxdirqxnDn0Og0fFHMO
+	omgIE6zrI6FJ7Euez+gV3okMgDpPuO/S0D2xg11RvGZ2qgskC19EUq7IabEuTQpwkoBxkDc9Z13
+	IpKog7ok3eY3EjIPkWkh6KmwAaTRMwWiVYq4nr8WZsgVQKiyTtDFF4VWwos1Lb2q4UtvLobefET
+	FnL5HyiV0dqAs9xT7cIcCSBKpdsrRvlYmgtwZl1ExlJUiXPUqM0AEsqX7zIVRWHWZk1wbaoCN5Q
+	ZWCAp2qPeo9A=
+X-Received: by 2002:a05:6402:51d3:b0:6a7:f25e:31c7 with SMTP id
+ 4fb4d7f45d1cf-6a7f25e3481mr12004386a12.19.1788995303609; Wed, 09 Sep 2026
+ 16:08:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260909193719.518517-1-utilityemal77@gmail.com>
+ <20260909193719.518517-5-utilityemal77@gmail.com> <CAHC9VhQHZ+ngFdzKqmnzBh341CGEg-jexu+QYU8=1qXK=u-x-Q@mail.gmail.com>
+ <aqHUw6k0Mf83CGFT@zenbox>
+In-Reply-To: <aqHUw6k0Mf83CGFT@zenbox>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 9 Sep 2026 19:08:05 -0400
+X-Gm-Features: AcwNN1VWtmI7TVPKE3LPkQppsWuLJXnoUTUb0EBC2ejua9Hn27X6xeBhQULdxgQ
+Message-ID: <CAHC9VhTM7emi9vxs+5Za8Hrc_e9dg7fZx+Z6BGUc4VQ1qhEAUA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 04/15] lsm: Add the bpf_lsm_policy_release
+ kfunc and policy object destructor
+To: Justin Suess <utilityemal77@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	kpsingh@kernel.org, matt@bobrowski.net, mic@digikod.net, 
+	viro@zeniv.linux.org.uk, brauner@kernel.org, kees@kernel.org, 
+	casey@schaufler-ca.com, gnoack@google.com, jack@suse.cz, song@kernel.org, 
+	yonghong.song@linux.dev, martin.lau@linux.dev, eddyz87@gmail.com, 
+	memxor@gmail.com, jolsa@kernel.org, m@maowtm.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2026-09-01 at 17:57 +0100, Alan Maguire wrote:
-> Add support for new kinds to libbpf.=C2=A0 BTF_KIND_LOC_PARAM and
-> BTF_KIND_LOC_PROTO are dedup-able so add support for their
-> deduplication, whereas since BTF_KIND_LOCSEC contains a unique
-> offset it is not.=C2=A0 LOC_PARAM is considered a primary type
-> since it contains no external references; LOC_PROTO is a
-> reference type consisting of LOC_PARAM references so they
-> are handled in the primary and reference dedup phases
-> respectively.
->=20
-> For BTF field iteration, BTF_KIND_LOCSEC needs 2 m_offs[] values
-> for the associated KIND_FUNC and KIND_LOC_PROTO type ids in
-> each LOCSEC entry.
->=20
-> Add APIs to add location param, location prototypes and location
-> sections and btf_is_* tests, data accessors for each.
->=20
-> For BTF distillation we add location info to split BTF.
->=20
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
+On Wed, Sep 9, 2026 at 6:21=E2=80=AFPM Justin Suess <utilityemal77@gmail.co=
+m> wrote:
+> On Wed, Sep 09, 2026 at 05:34:31PM -0400, Paul Moore wrote:
+> > On Wed, Sep 9, 2026 at 3:37=E2=80=AFPM Justin Suess <utilityemal77@gmai=
+l.com> wrote:
+> > >
+> > > Add security/bpf_lsm_kfuncs.c, the home of the kfuncs exposing LSM
+> > > policy objects to BPF programs, with the first of them:
+> > >
+> > >   bpf_lsm_policy_release(object)                KF_RELEASE
+> > >
+> > > The kfuncs are the LSM framework's own BPF interface: there is no
+> > > per-LSM kfunc and no intermediate security_*() layer.  Each kfunc
+> > > walks the matching hook's implementation list and calls the one
+> > > registered by the LSM whose lsmid the policy object carries.  Calling
+> > > a kfunc for an LSM that is not active or has no policy object support
+> > > fails at runtime rather than hiding the kfunc at verification time,
+> > > so BPF program loading is independent of the boot-time LSM
+> > > configuration.
+> > >
+> > > A policy object reference is meant to be handed over through a map
+> > > kptr field, so also register a destructor for struct
+> > > lsm_policy_object: map-held references are dropped on map teardown,
+> > > possibly from a context that cannot sleep, which the
+> > > policy_object_put() hook contract accounts for.  For the same reason
+> > > the kfunc is not KF_SLEEPABLE, and the filter adds no per-kfunc rule:
+> > > releasing a reference must be allowed wherever one can be held.  The
+> > > filter itself is needed because BPF_PROG_TYPE_LSM and
+> > > BPF_PROG_TYPE_SYSCALL, the two registered program types, share their
+> > > kfunc lookup buckets with other program types.
+> > >
+> > > Cc: Paul Moore <paul@paul-moore.com>
+> > > Cc: KP Singh <kpsingh@kernel.org>
+> > > Signed-off-by: Justin Suess <utilityemal77@gmail.com>
+> > > ---
+> > >
+> > > Notes:
+> > >     v2->v3:
+> > >         - No change.
+> > >
+> > >  MAINTAINERS               |  1 +
+> > >  security/Makefile         |  2 +-
+> > >  security/bpf_lsm_kfuncs.c | 98 +++++++++++++++++++++++++++++++++++++=
+++
+> > >  3 files changed, 100 insertions(+), 1 deletion(-)
+> > >  create mode 100644 security/bpf_lsm_kfuncs.c
+> >
+> > While not a new concern, it has been a few months so I want to mention
+> > it again to see where things stand with the BPF crowd: are the BPF
+> > folks still opposed to BPF kfuncs in security/bpf_lsm_kfuncs.c,
+> > similar to fs/bpf_fs_kfuncs.c?
+> >
+> > If the answer remains yes, the BPF devs are not able to tolerate
+> > kfuncs under security/, then I'm afraid this patchset is stuck.
+> > However, if the BPF devs are willing to ACK kfuncs in
+> > security/bpf_lsm_kfuncs.c, I'll add this patchset to the review queue
+> > for the LSM tree.
+> >
+> To avocate for the current placement:
+>
+> Placing these kfuncs outside where it is in security/ would
+> be very awkward, the kfuncs use lsm internal APIs
+> (lsm_for_each_hook, active static keys, lsm dispatch table) that
+> have no buisness outside the LSM framework.
+>
+> And logically, the kfuncs operate entirely on in-tree lsm objects.
+>
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index 6215fcb07770..ba816d7ee127 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -5081,6 +5081,7 @@ F:        kernel/bpf/bpf_lsm.c
+> > >  F:     kernel/bpf/bpf_lsm_proto.c
+> > >  F:     kernel/trace/bpf_trace.c
+> > >  F:     security/bpf/
+> > > +F:     security/bpf_lsm_kfuncs.c
+> >
+> > We would need the maintenence of security/bpf_lsm_kfuncs.c to fall to
+> > the LSM framework, just as the maintenence of bpf_fs_funcs.c falls to
+> > the VFS.
+>
+> Agreed.
+>
+> I intend that any security/ kfuncs go through both LSM and BPF
+> review at a minimum. As a bug in any of these kfuncs or their permitted
+> calling context / signatures could cause regressions in either subsystem.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+While some other subsystems are lax on this, it's general practice in
+the LSM space to *really* try to get ACK's from other affected
+subsystems before merging.  Sometimes we move forward anyway, e.g.
+patches being ignored for almost a year, but those are exceptions
+rather than the rule.
 
-(Please see a few nits below)
+I only bring this up because the MAINTAINERS entry was pointed at the
+BPF devs, not the LSM devs.  I would expect that patches going into
+security/bpf_lsm_kfuncs.c would need to be ACK'd both the LSM
+framework and BPF LSM maintainers.
 
-...
-
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-
-...
-
-> @@ -4395,6 +4653,45 @@ static bool btf_compat_enum(struct btf_type *t1, s=
-truct btf_type *t2)
-
-...
-
-> +static long btf_hash_loc_param(struct btf_type *t)
-> +{
-> +	long h =3D btf_hash_common(t);
-> +	__u32 *v =3D (__u32 *)btf_loc_param(t);
-> +	int i, vlen =3D btf_vlen(t);
-> +
-> +	for (i =3D 0; i <=3D vlen; i++, v++)
-> +		h =3D hash_combine(h, *v);
-> +	return h;
-> +}
-
-should v->flags be hashed as well?
-
-> +static bool btf_equal_loc_param(struct btf_type *t1, struct btf_type *t2=
-)
-> +{
-> +	struct btf_loc_param *p1 =3D btf_loc_param(t1);
-> +	struct btf_loc_param *p2 =3D btf_loc_param(t2);
-> +	__u32 *v1 =3D (__u32 *)(p1 + 1);
-> +	__u32 *v2 =3D (__u32 *)(p2 + 1);
-> +	int i, vlen =3D btf_vlen(t1);
-> +
-
-llm is right, the p{1,2}->flags comparison is missing.
-
-> +	if (!btf_equal_common(t1, t2))
-> +		return false;
-> +	for (i =3D 0; i < vlen; i++, v1++, v2++) {
-> +		if (*v1 !=3D *v2)
-> +			return false;
-> +	}
-> +	return true;
-> +}
-> +
-> =C2=A0/*
-> =C2=A0 * Calculate type signature hash of STRUCT/UNION, ignoring referenc=
-ed type IDs,
-> =C2=A0 * as referenced type IDs equivalence is established separately dur=
-ing type
-> @@ -4622,6 +4919,12 @@ static int btf_dedup_prep(struct btf_dedup *d)
-> =C2=A0		case BTF_KIND_FUNC_PROTO:
-> =C2=A0			h =3D btf_hash_fnproto(t);
-> =C2=A0			break;
-> +		case BTF_KIND_LOC_PARAM:
-> +			h =3D btf_hash_loc_param(t);
-> +			break;
-> +		case BTF_KIND_LOC_PROTO:
-> +			h =3D btf_hash_loc_proto(t);
-> +			break;
-
-Maybe add LOCSEC as an empty case, same as for VAR and DATASEC above?
-Otherwise if someone ever tries to dedup a non-module BTF with a LOCSEC
-the operation would return -EINVAL.
-
-> =C2=A0		default:
-> =C2=A0			pr_debug("unknown kind %d for type [%d]\n", btf_kind(t), type_id=
-);
-> =C2=A0			return -EINVAL;
-
-...
-
-> @@ -5489,6 +5813,41 @@ static int btf_dedup_ref_type(struct btf_dedup *d,=
- __u32 type_id)
-> =C2=A0		break;
-> =C2=A0	}
-> =C2=A0
-> +	case BTF_KIND_LOC_PROTO: {
-> +		__u32 *p1, *p2;
-> +		__u32 i, vlen;
-> +
-> +		p1 =3D btf_loc_proto_params(t);
-> +		vlen =3D btf_vlen(t);
-> +
-> +		for (i =3D 0; i < vlen; i++, p1++) {
-> +			ref_type_id =3D btf_dedup_ref_type(d, *p1);
-> +			if (ref_type_id < 0)
-> +				return ref_type_id;
-> +			*p1 =3D ref_type_id;
-> +		}
-> +
-> +		h =3D btf_hash_loc_proto(t);
-> +		for_each_dedup_cand(d, hash_entry, h) {
-> +			cand_id =3D hash_entry->value;
-> +			cand =3D btf_type_by_id(d->btf, cand_id);
-> +			if (!btf_equal_common(t, cand))
-> +				continue;
-> +			vlen =3D btf_vlen(cand);
-
-Nit: btf_equal_common() checks vlen for equivalence,
-     so it appears that the above line is redundant.
-
-> +			p1 =3D btf_loc_proto_params(t);
-> +			p2 =3D btf_loc_proto_params(cand);
-> +			if (vlen =3D=3D 0) {
-> +				new_id =3D cand_id;
-> +				break;
-> +			}
-
-Nit: It appears that special case for `vlen =3D=3D 0` is not necessary,
-     wouldn't memcmp(..., 0) be 0?
-
-> +			if (memcmp(p1, p2, vlen * sizeof(__u32)) =3D=3D 0) {
-> +				new_id =3D cand_id;
-> +				break;
-> +			}
-> +		}
-> +		break;
-> +	}
-> +
-> =C2=A0	default:
-> =C2=A0		return -EINVAL;
-> =C2=A0	}
-
-...
-
-> --- a/tools/lib/bpf/btf_iter.c
-> +++ b/tools/lib/bpf/btf_iter.c
-
-...
-
-> @@ -94,6 +109,8 @@ int btf_field_iter_init(struct btf_field_iter *it, str=
-uct btf_type *t,
-> =C2=A0		case BTF_KIND_DECL_TAG:
-> =C2=A0		case BTF_KIND_TYPE_TAG:
-> =C2=A0		case BTF_KIND_DATASEC:
-> +		case BTF_KIND_LOC_PARAM:
-> +		case BTF_KIND_LOC_PROTO:
-> =C2=A0			it->desc =3D (struct btf_field_desc) {
-> =C2=A0				1, {offsetof(struct btf_type, name_off)}
-> =C2=A0			};
-> @@ -127,6 +144,11 @@ int btf_field_iter_init(struct btf_field_iter *it, s=
-truct btf_type *t,
-> =C2=A0				1, {offsetof(struct btf_param, name_off)}
-> =C2=A0			};
-> =C2=A0			break;
-> +		case BTF_KIND_LOCSEC:
-> +			it->desc =3D (struct btf_field_desc) {
-> +				1, {offsetof(struct btf_type, name_off)}
-> +			};
-> +			break;
-
-Nit: can this be grouped wit the _PARAM and _PROTO cases?
-
-...
-
+--=20
+paul-moore.com
