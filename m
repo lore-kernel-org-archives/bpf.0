@@ -1,136 +1,138 @@
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC7B3264EA
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 04:38:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C35A39EF0A
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 04:44:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788928706; cv=pass; b=FwCiiZUSC6Fe7TJrGXLeWQCEuQTglrDIEHGBI1cY8bF2DtMQEqdX8bw9UypCRpUkVWU+Z1/nArBX4gdw498hkFcYRGe5s5VOvoGP/LlkRfFAPHl+6cwL2Y+dScsZuFDqxf5JIXlscDCMRJTzJ14mGJDh3ZOh4NRdbsy5svmPfmE=
+	t=1788929064; cv=pass; b=NotdffChUxV7bs9svwfPG+f/82UmqPTyRGELGMieFGaqm45lL+Va/Yas1RA9oIU1f+ekB0ka6cOYj27zieBMEjFKhXPGjCKhEXBePnncM2MCdaFHZJJMzadHbzrDACxd5v7iFcpIi55fEy+wS9/pmYDT5xlC4FmPz7Iu0Tu7zd0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788928706; c=relaxed/simple;
-	bh=/+3eKYYz03dUBjHcHqHQIQKyut0iHUO9Sr1nrn4fiWA=;
+	s=arc-20240116; t=1788929064; c=relaxed/simple;
+	bh=62OIGrsAlLi1rdGfubDO5KjxvcKbptRJ4dObLOMGjuE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qORGfZch3ZRYLdGuHVPa93py/KSaBqbgmxMNX9hoKLdupbKHc+slfMMxZmEU7CF0ZyGyUsRHsgijzCneAPKzquQpjloty6YEeV2M+XvMGb708rcJ7zsrLyV/mCEf2eZW7svG64A2d5EUgGXgt9/ehBKPffoqmpkyC0MaKkIeUH0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=G+slYNMJ; arc=pass smtp.client-ip=209.85.128.175
+	 To:Cc:Content-Type; b=af4LW4xEgbgVbNMCtfMxjvy9TjdoRvdcPj9wGa21RwbeXPVJYqescw9PqY/xW+TX31iZe3evzFffXWh3FOKO62uVdEiJq3NcBrkR1NexeGtils5gwXObCILqOrXgLVjAJQ9CqGAkLIggD2EMSzS+k9QGVCLsBMV8OdC/Y1Z2i+Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=KgDlyz24; arc=pass smtp.client-ip=209.85.128.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="G+slYNMJ"
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-87ffa98d4a9so2469577b3.3
-        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 21:38:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788928703; cv=none;
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="KgDlyz24"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-86c0e4dd49cso69731927b3.3
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 21:44:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788929061; cv=none;
         d=google.com; s=arc-20260327;
-        b=p1HT3KrBJt8pOBYlCSbUPn+8JAEP2nJbEOxC4vYluY1eI6OQwW+W9r9zkE4mzyXFph
-         EAfYMe6f1hxARtsyVCDU394Xb+zqZGoNt9DfU6zxsYmxRznsrbHiNcXpyv29jr2qqsRH
-         nByLCQpmP2LRnT/xT4pqcnbUC4ci9kH2Dn7zTRe3dvULnWPMY+zY09S0rmWM3NMxl1Ao
-         RNZe/SK6NgG6Jrg8D01gcKe/RS4P/AFDkFwvMjLq+e/tIS7eHs55cqCqqUgHtuGDnnAz
-         m2yK64i3skyiG6H0o/l96vrWLmCnEic6Xv285TMtfioID4OLhn6LaetsNj96UW+jqMdG
-         bwNA==
+        b=KNTokqvFCG1MX8WJGdUtnQoEcKKGnNiJFCUzhw8ar5gSxDhoasu4Aa1HQutCHvTQhl
+         JQYjuDql/RalvGQf7By88F6/t6emRxKbaYYI8XpiuCgKegxwhA7hVPXS982ENz7EwaSM
+         51G0+or+YkAs5Ip9QYzSr6APZ3WDlxdow1ptRMAyk3awhDs/oN/OvQ9uHB/nDBixekZZ
+         KHoNRbdtTgpPO4fyu1zsQfLMW2y5TonWpvxgsPd8zcZs6AEeXyX+T4itZtXDwbCMvXUd
+         L4sfuh4jqzuaLJceyxZrTJun7hGFofaX/NaDdBWbK1LWlM9WwVtzrB3C7bxqlNj3Ny9R
+         4cQQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Teu6cC+d3LHtdtN3ePnM4eTc17lML+xatDJgJtdz0Ns=;
-        fh=dD/tw4Drl7/qsMm0h4NNrnxrpYFNDaCSlGEg99R7lA8=;
-        b=hZ1FhZdpyYl5BPOlqhlJcD2I6HegtGvvZbpoC7JgKHf1UmUKNavpm41EC9/RwvodY3
-         NhWU+YNmunwuxuf1LgCcujeLsE2mFSAJsUcG8diB4H47SkCctDZI3b052lAU+EkFsUwX
-         Nk0m/PO34r3JaYIWjKglaRCI2ZI79NcBMoXDN/YDIgOQqculSjzk9781gkS0Q8uEqthk
-         DdHrzD0VEl7tzqFy9RQfwKp2J7jzUwlBQHMteyPBGNEwaG/guySTtwMadp60uG2B2n2y
-         mvO6RNB6mo4MZ3Uj8ZR1KgVcUL5PDc+C7Zja1PwcH0/jEivshd5rhkOFZausewro4Ozq
-         UcDQ==;
+        bh=zFIjJx0Nar7vhUCg7kIa8rwv78ZFcuH0cUsFUt6eVfA=;
+        fh=ROhOUqndz7siXWOvnrz6VYUsprQW1Zp7OWkWKMe0imU=;
+        b=Afw5oF4yUyNjbLk9gKzZiik3n7J9cVAOoq3CTP+eXBxHJ3CRe2mpqfDA4BCL63IhpG
+         n+/QnxLh5tXVaX+ht1TKlB7p5Z7ly13AirdrXpUKyG8k6FTxS3OiTy0chp0sVPxMGoVE
+         BvFqoxv3ukFMbzMfedIF7jEabc/plvaZyOqgSoPvC9jrEz25DAY/lyZbrKvLtWicHphD
+         VVL2hbWo0vpp1SHbpBna0WIzldgVzsSHl08zHfDbCwRst4q4GXi4dCswg+KEsuP5AqAb
+         Ksr3B4KBtXRNqKXspCxbZ4CsVv+i8J915qvUe8g9LZhL/dImJxucxat3N5udRIP0F+Bh
+         IeIA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788928703; x=1789533503; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788929061; x=1789533861; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Teu6cC+d3LHtdtN3ePnM4eTc17lML+xatDJgJtdz0Ns=;
-        b=G+slYNMJ4NeYNov1rDcn3MJkqULMh4eAK7gcukOQB6HThKx6bB05QZKrqxMyyNZDg6
-         qQ7nlvJQp27dtcDujIxhQMxrNeKZLOKfUDGMeyKDpOoKLk+ad9bSIcI6ezlT7yHqihsk
-         h0Z9SjcyRDJfbVk7Jgx28PATGsWAs51SmRg95r0crWFucxkJW8J1+uEaU+5sr50mvVGO
-         BJnLvXTi9B1YqaxczK7sUZF1nJGRAh8x7jTDRAi4DLB9+sOju+Vx8XMcD7aVlcEZE98h
-         u+qKtDkafzy077tmVLUxRqtWLbgCF/FbzhwTCAH6OaWKd9dYs3x7OqEmuwpwC+Df3YPo
-         UjGg==
+        bh=zFIjJx0Nar7vhUCg7kIa8rwv78ZFcuH0cUsFUt6eVfA=;
+        b=KgDlyz24TlRjxVhoF5eToBWuOm07RqHKh24TsXBz5IPP2PgKkplodTYrVi/s1eXo7t
+         gGUYO4nZLrnOc5Ff7Zua7hoEV5Bi3thp3smw0uRotagfs8qOXQ3pTlOW/+GIi5QEtze3
+         XbD7aLnuyATZc/BwQawp1FY79yowRwJlND6x/kt872ORDDePQ3CgysZKJC6T8nQqetbQ
+         FF1cwiK5iuCG+So3T393d778YhBxUEEZmpKXIal2/JgYlMC7N1nlHvGcvAA+I96cDiSh
+         VJuUB8C0nHSx6Uy7It/Jvk15PdDG/h4Im4+14ZqrNmQ4Sf8WdF8vloWiwQV+lZffS6+q
+         R6SQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788928703; x=1789533503;
+        d=1e100.net; s=20251104; t=1788929061; x=1789533861;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Teu6cC+d3LHtdtN3ePnM4eTc17lML+xatDJgJtdz0Ns=;
-        b=KyQBvi29As5kUTXpuG5ea8cf2KfPeEomwVmx0qfOyaKsKNMrf16+dPoqbp7n8RWYCC
-         ruEmPc4f6dXGkQrqsdTnX0rYLC4liiVnhIT+lPyZBf01p1hhirK14cOs3mW8Hss6qQns
-         mSbZ90GMzCWlP9oVs8CvYGlagUjjtvdGIp0ghM/sWtjgbEvjVrbESxMdPzHExPw2aYtL
-         bJJqJWi0WTgGFB93/qMrFpqnUb5D73i9+A+Z5orI7afU+qaNRCxYTaQYI+07bUC69iq8
-         4yKM9/cDqAjFR6GlgVyN5KaUIMhC26UaHyYrhuZoc5Ai/HcEvZ59eRpDaQEzhULSrvmb
-         MP3A==
-X-Forwarded-Encrypted: i=1; AKwUvBzfSVakVmDUSuvuXSjkNAekJUjGcb/NqRdvjA83cPMScvjv5/thW9aSefHp9yDsEbwn8k8=@vger.kernel.org
-X-Gm-Message-State: AFuF++lCTCwLLtAkM6yyDN0+blJ4d6oe8VsMQmm9ks8KmplyWLAvQHKy
-	N1UEts8/+NtoeUFobRcnxaa/DdPT9w+V+NCPMln50rpIGapXnUnEZ2MAiRykaSTj932/BIEIDUT
-	cJxTrH7dtlGOF6rPmr4s+sNsHde4a7bJRe6izCUhjpw==
-X-Gm-Gg: AYBFou2Icb3lpaKYKd/M/eQVYEmuLmvFY8zMPU9zlHQeq4l1TwjXWf8CszeuMkFuz+w
-	3QEobaz5u65xN6z1bm/XxHgCCCBXqOc82U4vq1ElimTBI6wtLBEf4K4tEpwtJgxiuT+Vc4KO5at
-	1jvrQpBgAxSt+bYNpDf8MFq7tM3yqan83tEpdxAgX7RTIS07cUnEIOyeMF/ornsZYqrjexgsrLi
-	nkrsQMu++WznxwW8hhNtL8mu7SDVF0UggSUn/IpFs1Bff5WXj8f0fhSEc0nTi+qjOYNKNmjIFN7
-	iX21KCFiRkvEdyqX+ruLDRC1c9qw4zZs5rx8klPtIgWyHZ1a4YPQHqU=
-X-Received: by 2002:a05:690c:e3e9:b0:870:820e:da66 with SMTP id
- 00721157ae682-87127d2ca36mr124113977b3.23.1788928703258; Tue, 08 Sep 2026
- 21:38:23 -0700 (PDT)
+        bh=zFIjJx0Nar7vhUCg7kIa8rwv78ZFcuH0cUsFUt6eVfA=;
+        b=TQRhBDwLKt/ZU/kktITbfjzzRgfkB/+bNBgkGYA1DL4oiaqw/dsRTbiz80GJkG9sU6
+         llRwzp0b6nOu9XJ19krg0pnNLDKivs+hZ218wfeYBc2prClz4YVxuTeBzg1/0aoCa3dB
+         aVF4mD2yos5L39A3EdZxsVj1pWdfCG+cnQVDIYB9GriZTVU6U1Ip6N3khnuRoP1Dzxn4
+         y8K22DnUE2lh8n3VNbqxjTzwr2xApGZvfQPD18/OooWblu2pL+5GkU0xSTltUbVJbSdn
+         VWRcYVebKVdiyEfLmP8UxmNjwbYAdnC6r23ttf4+fKt+PDaV/+w5Sqwz6ZDLwricIWlw
+         iMIA==
+X-Gm-Message-State: AFuF++nFK5ivh4xmmlkIp+Grwzb8rr/nMBXJHfl8ql0U0stN3nDOa78o
+	JlDcF7KjOYbExSl3Qx9lVWg8T7zH+8Hb60aExPCztLHeWz8ZPx+kQIPHMYse6NOuM4dBd4FcI5P
+	1NSOIWmWizRubqjAlbYCS75zLRpQwyKWM8nYznfTFJA==
+X-Gm-Gg: AYBFou1oaggHdpdUs5W89JDffjULDanMvVLPnbmMZExYa7M2DGY3N0MO2lNPIWFRchr
+	lIToCQ5O8dyDA42ZIrBYWIVMVmkv3q8723Dm1t7MoSMa6EMu4USVTLe2TXRJ/8Mbaa5mwWHWwfc
+	ZsK29k/CcQtqtJOCKvEmuqfpUQavcelajGFBE7mTwJJNEP+l3ht4z+IGPtA4vIGDfqcoaKEAuvd
+	TdgRdOlmmasB1RYgApSYRRPpRvdDuNmFFICc8C9lmp7J2+Ayek4tTLrWESIOT7p69TDHq5oy9hA
+	C19dnkDwTm+qfm+xbsaRHXfTVaEGUxiZI+Zm58d7A+iYLxGEdSxPgl8=
+X-Received: by 2002:a05:690c:710a:b0:873:5c7b:c0fa with SMTP id
+ 00721157ae682-8735c7bc5b3mr93358697b3.50.1788929060853; Tue, 08 Sep 2026
+ 21:44:20 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260903150351.12725-1-colin.i.king@gmail.com>
-In-Reply-To: <20260903150351.12725-1-colin.i.king@gmail.com>
-From: Emil Tsalapatis <emil@etsalapatis.com>
-Date: Wed, 9 Sep 2026 00:38:11 -0400
-X-Gm-Features: AcwNN1WAFyR_AVCv1IXGTjGY0PGid8q5kgFayEO3Y82fm5jIlHk6g71DHjJvDXg
-Message-ID: <CABFh=a7YTi2U2-cx4b5zejWv6MXE-VG-u7K410pPbtJiw6qbWQ@mail.gmail.com>
-Subject: Re: [PATCH][next] selftests/bpf: test_xsk: Fix spelling mistake
- "conigure" -> "configure"
-To: Colin Ian King <colin.i.king@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
-	Bastien Curutchet <bastien.curutchet@bootlin.com>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-janitors@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <20260903104358.29228-1-running910@gmail.com>
+In-Reply-To: <20260903104358.29228-1-running910@gmail.com>
+From: Emil Tsalapatis <linux-lists@etsalapatis.com>
+Date: Wed, 9 Sep 2026 00:44:10 -0400
+X-Gm-Features: AcwNN1XHmJSjRplkzmE5s3GzHdAM9caxMtmJWuRuOUHEMucd9ByHpXggoCVTtUM
+Message-ID: <CABFh=a5=m_WrEoEQ6UMGkF-3_s00T-CnAt3rrp3gcjozZ0juvQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpf: Use kvfree() in xdp_test_run_teardown()
+To: Zhixing Chen <running910@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 3, 2026 at 11:05=E2=80=AFAM Colin Ian King <colin.i.king@gmail.=
-com> wrote:
+On Thu, Sep 3, 2026 at 6:56=E2=80=AFAM Zhixing Chen <running910@gmail.com> =
+wrote:
 >
-> There is a spelling mistake in an assert message. Fix it.
+> xdp_test_run_setup() allocates xdp->frames and xdp->skbs with
+> kvmalloc_array(). The setup error path already releases both arrays with
+> kvfree(), while the normal teardown path still uses kfree().
 >
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Use kvfree() in xdp_test_run_teardown() as well, so the release helper
+> matches the allocator on both paths.
+>
+> Signed-off-by: Zhixing Chen <running910@gmail.com>
+> ---
 
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/xsk.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+
+>  net/bpf/test_run.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/xsk.c b/tools/testing=
-/selftests/bpf/prog_tests/xsk.c
-> index 6e2f63ee2a6c..772f3dd7ce64 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/xsk.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/xsk.c
-> @@ -75,7 +75,7 @@ static void test_xsk(const struct test_spec *test_to_ru=
-n, enum test_mode mode)
->         if (!ASSERT_OK_PTR(ifobj_rx, "create ifobj_rx"))
->                 goto delete_tx;
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index 5d51f6cb7d15..513354e928cb 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -205,8 +205,8 @@ static void xdp_test_run_teardown(struct xdp_test_dat=
+a *xdp)
+>  {
+>         xdp_unreg_mem_model(&xdp->mem);
+>         page_pool_destroy(xdp->pp);
+> -       kfree(xdp->frames);
+> -       kfree(xdp->skbs);
+> +       kvfree(xdp->frames);
+> +       kvfree(xdp->skbs);
+>  }
 >
-> -       if (!ASSERT_OK(configure_ifobj(ifobj_tx, ifobj_rx), "conigure ifo=
-bj"))
-> +       if (!ASSERT_OK(configure_ifobj(ifobj_tx, ifobj_rx), "configure if=
-obj"))
->                 goto delete_rx;
+>  static bool frame_was_changed(const struct xdp_page_head *head)
 >
->         ret =3D get_hw_ring_size(ifobj_tx->ifname, &ifobj_tx->ring);
+> base-commit: 7bf591f26545f5776a4e42d08c06fd94469766dd
 > --
-> 2.55.0
+> 2.34.1
+>
 >
