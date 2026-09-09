@@ -1,127 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from shelob.surriel.com (shelob.surriel.com [96.67.55.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E8F23D9035
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 20:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9C670809;
+	Wed,  9 Sep 2026 21:11:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.67.55.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788987428; cv=none; b=gq4gaQpuOgsRbCuzPV+aCiKKfFHsS+hzdwRiARcs4X8maY7gjQUKXJy6e3+Lsgm5FdO+66xKulvAZM461+9EZDMUTm3oZg/e4MnPLi4RZ9rCtAVigg2xuAyVZunEqi4d43hXicuCg3wYCNDGcsTj2MqV4vJ5+ZJjRotWODzyJCI=
+	t=1788988307; cv=none; b=DPlrJ7MZHc4BadjEZw3YJhFrRuBlrfSU7Yl0QALlLeuX9QSK2uqAr97k+zxTkGzd2sipjmKMc4aEEUjVrN3pre8dgk9xFGFoh8YEzuD3NpgjGcWh1MrHmqCL5nW9ID+T2Ur56aZBm8K2MEKYRdz+PjLo2BiOIZPO+7NGApPPvX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788987428; c=relaxed/simple;
-	bh=FjR34F2PTKNTkp9PlqPjYBD0Gkg7qLzANLo4nSP2Y2A=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=nJHedYUdUvpUSzC/WN52TpvwuT1+cYqMqccBfNiVE4DfTjqRW+HlZYqFJoDaS+2cBIPdB0P6d9n0vOACO96s7JQbipACu+nQSC7akcpjCMVlcacUJj44qEZ7yHMlcedAFmr2nmUEIsu4M9WwP4Dbz8tHPFJAWdCMSE0APP3fvFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=llawDMx9; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788988307; c=relaxed/simple;
+	bh=GUoT4KzhJ0ptKTRFixl7KlEZxiE5gKxOkKNPBs6qT9s=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=is9EHI4baX51hmzFpglRGddDuj88sPYuMD/sPP+R7+PjL165g9MkJ2Udz7pUofyx8ULlj5AvBy+djpXZznaqSBxFe8yMvs4es9vPaM028T5LNzjm296boixKUvCjQ0QWryuMgsFe2n6KZfZ6d78HbVqgEHptI5EG4KmyArwWnWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=surriel.com; spf=pass smtp.mailfrom=surriel.com; dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b=LYStQf7Q; arc=none smtp.client-ip=96.67.55.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=surriel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=surriel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="llawDMx9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C76C1F000FF;
-	Wed,  9 Sep 2026 20:57:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788987422;
-	bh=xMYp+DlEsgHi2yepZt5Cojeii/CVJM7kFlOw7MeGnkI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=llawDMx9T4QvL/4it8nmtJyvbYiw8dMn69kFi80nzm6Y6KJ7fmpZCr0guQhbtVx3u
-	 6y1W7B9OJd1irn16VFqJpKXVHemhWsQPKma+Fe3KCAb8XuERmgw+0Q9pq3c+v+udGf
-	 xdH3bG/Qw7BSfP4AF2e6dgbVP13BM7oolrEqDDkVlCdvYcj7UQzls35oerPJKDBvfS
-	 QfTG1KvtW0mYC2vx+Xguu9aycUCfOBDPGtm0bl54Joyji8uQ83jbPpzGUTtjYZxN/H
-	 5NBPUCLyMXDrpV2cAy414lHzBL8AxAU7W07PAqJeKbPY6weYnFnHhEOdcZsf0zHnYV
-	 oJ2olR7iEUU8Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf 2/6] bpf: Bound the number of indirect jump edges in
- a program
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Daniel Borkmann" <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260909204035.24289-2-daniel@iogearbox.net>
-References: <20260909204035.24289-1-daniel@iogearbox.net>
- <20260909204035.24289-2-daniel@iogearbox.net>
-Content-Type: text/plain; charset=utf-8
+	dkim=pass (2048-bit key) header.d=surriel.com header.i=@surriel.com header.b="LYStQf7Q"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=surriel.com
+	; s=mail; h=MIME-Version:Content-Transfer-Encoding:Content-Type:References:
+	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID; bh=GUoT4KzhJ0ptKTRFixl7KlEZxiE5gKxOkKNPBs6qT9s=; b=LYStQf
+	7Q6uPWWdMGqzOeGtMLo/Y9asjziM5rg33zNU7ru+n0zGoja9Pt7rc6ZAci0StHobVVcH9YptEQdRd
+	D4n35WhFBkTgWnf8D/LAQ+RVZPshfgiAmxOGJrfhr9lL8aE5VkOEMnTl69tw3cBfSFqArL8GUazQP
+	wZj0j3vt0TUYmaS6vNvC/By8l5T9crqLiyzcZGSSc1XdgUa8ypkdeSjsDNUB6aWaedDz07Cb21ssO
+	gECkD3M0LZx3aczbS5vO7bzSZ2OpGzO1XNJqmZBMEuDP+qEo9cNaYV28DI3Qd33hJauKGekKT4R4I
+	4aCtnWTYjWtpqgEgwqVVK5iqE6Mg==;
+Received: from [2601:18c:8100:a0e0:5a47:caff:fe78:8708]
+	by shelob.surriel.com with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.99.5)
+	(envelope-from <riel@surriel.com>)
+	id 1x4OYL-00000004Hxv-1Xph;
+	Wed, 09 Sep 2026 20:05:53 +0000
+Message-ID: <6f1db74b0bfb6c67fbea7e2dbcce72c4ceb04f61.camel@surriel.com>
+Subject: Re: [PATCH bpf-next v2] bpf: Avoid soft lockup in
+ __htab_map_lookup_and_delete_batch()
+From: Rik van Riel <riel@surriel.com>
+To: Josef Bacik <josef@toxicpanda.com>, Alexei Starovoitov <ast@kernel.org>,
+  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,  Kumar Kartikeya
+ Dwivedi	 <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song
+ Liu	 <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa	
+ <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai	
+ <ihor.solodrai@linux.dev>, Brian Vazquez <brianvv@google.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, "Jose Fernandez
+ (Anthropic)" <jose.fernandez@linux.dev>, "Paul E. McKenney"
+ <paulmck@kernel.org>
+Date: Wed, 09 Sep 2026 16:05:51 -0400
+In-Reply-To: <20260909-b4-htab-batch-resched-v2-1-0cb529d8f95a@toxicpanda.com>
+References: 
+	<20260909-b4-htab-batch-resched-v2-1-0cb529d8f95a@toxicpanda.com>
+Autocrypt: addr=riel@surriel.com; prefer-encrypt=mutual;
+ keydata=mQENBFIt3aUBCADCK0LicyCYyMa0E1lodCDUBf6G+6C5UXKG1jEYwQu49cc/gUBTTk33A
+ eo2hjn4JinVaPF3zfZprnKMEGGv4dHvEOCPWiNhlz5RtqH3SKJllq2dpeMS9RqbMvDA36rlJIIo47
+ Z/nl6IA8MDhSqyqdnTY8z7LnQHqq16jAqwo7Ll9qALXz4yG1ZdSCmo80VPetBZZPw7WMjo+1hByv/
+ lvdFnLfiQ52tayuuC1r9x2qZ/SYWd2M4p/f5CLmvG9UcnkbYFsKWz8bwOBWKg1PQcaYHLx06sHGdY
+ dIDaeVvkIfMFwAprSo5EFU+aes2VB2ZjugOTbkkW2aPSWTRsBhPHhV6dABEBAAG0HlJpayB2YW4gU
+ mllbCA8cmllbEByZWRoYXQuY29tPokBHwQwAQIACQUCW5LcVgIdIAAKCRDOed6ShMTeg05SB/986o
+ gEgdq4byrtaBQKFg5LWfd8e+h+QzLOg/T8mSS3dJzFXe5JBOfvYg7Bj47xXi9I5sM+I9Lu9+1XVb/
+ r2rGJrU1DwA09TnmyFtK76bgMF0sBEh1ECILYNQTEIemzNFwOWLZZlEhZFRJsZyX+mtEp/WQIygHV
+ WjwuP69VJw+fPQvLOGn4j8W9QXuvhha7u1QJ7mYx4dLGHrZlHdwDsqpvWsW+3rsIqs1BBe5/Itz9o
+ 6y9gLNtQzwmSDioV8KhF85VmYInslhv5tUtMEppfdTLyX4SUKh8ftNIVmH9mXyRCZclSoa6IMd635
+ Jq1Pj2/Lp64tOzSvN5Y9zaiCc5FucXtB9SaWsgdmFuIFJpZWwgPHJpZWxAc3VycmllbC5jb20+iQE
+ +BBMBAgAoBQJSLd2lAhsjBQkSzAMABgsJCAcDAgYVCAIJCgsEFgIDAQIeAQIXgAAKCRDOed6ShMTe
+ g4PpB/0ZivKYFt0LaB22ssWUrBoeNWCP1NY/lkq2QbPhR3agLB7ZXI97PF2z/5QD9Fuy/FD/jddPx
+ KRTvFCtHcEzTOcFjBmf52uqgt3U40H9GM++0IM0yHusd9EzlaWsbp09vsAV2DwdqS69x9RPbvE/Ne
+ fO5subhocH76okcF/aQiQ+oj2j6LJZGBJBVigOHg+4zyzdDgKM+jp0bvDI51KQ4XfxV593OhvkS3z
+ 3FPx0CE7l62WhWrieHyBblqvkTYgJ6dq4bsYpqxxGJOkQ47WpEUx6onH+rImWmPJbSYGhwBzTo0Mm
+ G1Nb1qGPG+mTrSmJjDRxrwf1zjmYqQreWVSFEt26tBpSaWsgdmFuIFJpZWwgPHJpZWxAZmIuY29tP
+ okBPgQTAQIAKAUCW5LbiAIbIwUJEswDAAYLCQgHAwIGFQgCCQoLBBYCAwECHgECF4AACgkQznneko
+ TE3oOUEQgAsrGxjTC1bGtZyuvyQPcXclap11Ogib6rQywGYu6/Mnkbd6hbyY3wpdyQii/cas2S44N
+ cQj8HkGv91JLVE24/Wt0gITPCH3rLVJJDGQxprHTVDs1t1RAbsbp0XTksZPCNWDGYIBo2aHDwErhI
+ omYQ0Xluo1WBtH/UmHgirHvclsou1Ks9jyTxiPyUKRfae7GNOFiX99+ZlB27P3t8CjtSO831Ij0Ip
+ QrfooZ21YVlUKw0Wy6Ll8EyefyrEYSh8KTm8dQj4O7xxvdg865TLeLpho5PwDRF+/mR3qi8CdGbkE
+ c4pYZQO8UDXUN4S+pe0aTeTqlYw8rRHWF9TnvtpcNzZw==
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 09 Sep 2026 20:57:00 +0000
-Message-Id: <20260909205701.9C76C1F000FF@smtp.kernel.org>
+User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+On Wed, 2026-09-09 at 17:51 +0000, Josef Bacik wrote:
+>=20
+> Plain cond_resched() is not enough either. It is a no-op under
+> PREEMPT
+> and PREEMPT_LAZY, the only models arm64 and x86 have offered since
+> commit 7dadeaa6e851 ("sched: Further restrict the preemption modes").
+> It is also never a Tasks RCU quiescent state, in any model: the
+> reschedule counts as a preemption. The walking task stays a holdout
+> and
+> stalls every synchronize_rcu_tasks() caller, ftrace and BPF
+> trampoline
+> teardown included, until the syscall returns [1].
+> cond_resched_tasks_rcu_qs() is the usual tool for that [2]. It
+> reports
+> the quiescent state at each yield and still reschedules as
+> cond_resched() does on PREEMPT_NONE and PREEMPT_VOLUNTARY kernels.
+>=20
+> Fixes: 057996380a42 ("bpf: Add batch ops to all htab bpf map")
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Rik van Riel <riel@surriel.com>
+> Link:
+> https://lore.kernel.org/bpf/20260715215314.44423f47@fangorn/=C2=A0[1]
+> Link:
+> https://lore.kernel.org/bpf/9d444098-7c03-4163-af12-bd0a79a51443@paulmck-=
+laptop/
+> =C2=A0[2]
+> Assisted-by: LLM
+> Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
+> Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+>=20
 
-Pre-existing issues:
-- [Critical] Integer overflow in jump table size calculation leads to massi=
-ve out-of-bounds memory access.
---
+Looks like you got an RCU quiesce in every path that
+loops back.
 
-commit 4185a35dbc8e33f3114fd8855cb5ca01b0ecf5a9
-Author: Daniel Borkmann <daniel@iogearbox.net>
-
-bpf: Bound the number of indirect jump edges in a program
-
-Bounds the total number of gotox edges across the program at
-BPF_COMPLEXITY_LIMIT_INSNS to prevent excessive memory and CPU usage
-during program loading.
-
-Reported-by: STAR Labs SG <info@starlabs.sg>
-
-[ ... ]
-
-> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-> index 081f7003eae66..e9910228da587 100644
-> --- a/kernel/bpf/cfg.c
-> +++ b/kernel/bpf/cfg.c
-> @@ -388,6 +390,19 @@ static int visit_gotox_insn(int t, struct bpf_verifi=
-er_env *env)
->  			return PTR_ERR(jt);
-> =20
->  		env->insn_aux_data[t].jt =3D jt;
-> +
-> +		if (check_add_overflow(env->cfg.gotox_edges, jt->cnt,
-> +				       &env->cfg.gotox_edges) ||
-> +		    env->cfg.gotox_edges > BPF_MAX_GOTOX_EDGES) {
-> +			verbose(env, "number of indirect jump edges in the program exceeds %u=
-\n",
-> +				BPF_MAX_GOTOX_EDGES);
-> +			bpf_diag_program_structure(
-> +				env, t, "too many indirect jump edges",
-> +				"Reduce the number of indirect jumps, or the number of distinct targ=
-ets they can reach.",
-> +				"The program has more than %u indirect jump edges in total, counted =
-over every gotox instruction.",
-> +				BPF_MAX_GOTOX_EDGES);
-> +			return -E2BIG;
-> +		}
-
-[Severity: Critical]
-This isn't a bug introduced by this patch, but it is a pre-existing issue
-in the CFG discovery logic that remains unfixed in this patch series.
-
-Can jt_from_subprog() in kernel/bpf/cfg.c overflow the shift operation
-when calculating the size for memcpy()?
-
-If a user with CAP_BPF creates an INSN_ARRAY map with a very large
-max_entries (e.g., 0x20000000) and populates it, jt_cur->cnt can be up to
-map->max_entries.
-
-In kernel/bpf/cfg.c:jt_from_subprog():
-
-    memcpy(jt->items + old_cnt, jt_cur->items, jt_cur->cnt << 2);
-
-If jt_cur->cnt reaches 0x20000000, the expression jt_cur->cnt << 2
-evaluates as a signed 32-bit integer, resulting in -2147483648.
-
-When passed to memcpy(), which expects a size_t, this negative value is
-sign-extended to 0xFFFFFFFF80000000 on 64-bit systems. memcpy() attempts
-to copy over 18 exabytes of data, causing a catastrophic page fault.
-
-Additionally, if max_entries is 0x40000000, the shift results in 0,
-leaving jt->items uninitialized before it is passed to
-sort_insn_array_uniq().
-
->  	}
-> =20
->  	mark_prune_point(env, t);
+Reviewed-by: Rik van Riel <riel@surriel.com>
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260909204035.2428=
-9-1-daniel@iogearbox.net?part=3D2
+All Rights Reversed.
