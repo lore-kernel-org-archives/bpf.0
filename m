@@ -1,29 +1,29 @@
 Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61E993368B2
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 04:29:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7260E16F288
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 04:29:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.38.64.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788928159; cv=none; b=NiAm90xFEd8rQAieUpGSoELvLQaFOiIEmXfcwoSL74mGOd1fjWcJ51adobaQtNhA9LmdOBgAIGaC8UcvvQDy2DQ9VnNvDuPMZYIDh1oveVtEnnM44VEvBHTQUcan+sNS/sspEzXE3iwmI1FZ4xuKBeKRGCB/DQujlUQdWjxxYn0=
+	t=1788928164; cv=none; b=qPMCJPao8gkir9wYr1XDibujgTkWpAYj4PHgXnsYTo6ZtDMHoURVB+nkCQ3JFwLVW3s7umDAY9uP1eRvJddDEUXLARojt5XzJeCMxdH24PZTHL9zAf/4mMqpG+QcqiuCzSk2tYEBYSYh9kvmpJyDeKKNBc+a4vIRgJfZKnnA/G4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788928159; c=relaxed/simple;
-	bh=1IxJRjDw8wd8LI1GMz+f+WZIfJzoIv0MFIeXXBfN2mA=;
+	s=arc-20240116; t=1788928164; c=relaxed/simple;
+	bh=Ed48g+5AC3GxF0EcCRigYpcR11fxdtnkv7jZM5ahyns=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UknKFG1SiansKLR74RWB9gyGavUWBHrtEXkW03UlSLHLTkJH9JSxTNIGORs/oT1b2MXPAp5Pi42lUzYodyHoVF85vApvsrt4jxJG7vFyBY4HTMOsAmP938d6nhMU1uzYxF9zSwHC1FJi9OsAFXNq8fQSDzOpDALiBmDUUBOBB44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn; spf=pass smtp.mailfrom=mail.ustc.edu.cn; dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b=p15LgXQd; arc=none smtp.client-ip=202.38.64.46
+	 MIME-Version; b=RrbCj4ZEX02BS5v65mo6a965vtOW/f+Wabr7fXTVnMpvQfpzjCMSzcmc9YP3HpozlZ8HU7JKgrrGInuO82DqmMlehsxMT6B+hiLq8A4j4t+T2bq2XIxRG9KFy+H8JSljNh6+WAwHCgIVGw3cMYxvIxUylIyxAQZlDHcqYUUri/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn; spf=pass smtp.mailfrom=mail.ustc.edu.cn; dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b=ljhTStTE; arc=none smtp.client-ip=202.38.64.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b="p15LgXQd"
+	dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b="ljhTStTE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
 	Message-ID:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=s1Z4jTLf/LFc+EE1oWECLQdvsNueShOK/l
-	z+5lR2f24=; b=p15LgXQd9Srkfp2WGGxYoZF8nlNVFyX2rD8vBXtp+GjYyq5lnp
-	aTAZG2+hoGa8U2VFlf5dKq8HCVI9YhKr4axg71UrNm4VdGiw8ofhpyTLzsHgZvtg
-	e/M3JDXIehZyX0b+8r3ktWYkIgz3Zb7vjtlZfqLI11Eifl7KuOdnBe9eQ=
+	Content-Transfer-Encoding; bh=WZ75AQXmF3znIA8aj1Zc0n/2XTw2DIkS5W
+	jxzEGcxgQ=; b=ljhTStTEbN+6yKEo5AociDf1nYnX8hefxoIQmZNOASYGaQ2gbD
+	CIHQkDhXDmHkQPpdvffViljwvThTp2B86r/V0klht0OzOoGKBNOfZ3jJPZhUK6jL
+	CL3fW1X25QZKCWMFIZOAU45/ka0/AKWKUidfc2T0h5UAhVGKfpH1YAfDs=
 Received: from localhost (unknown [222.195.81.105])
-	by mailimap2024 (Coremail) with SMTP id 3pYKCgDHuSCX4KBqLj_5AA--.5784S2;
-	Wed, 09 Sep 2026 12:29:11 +0800 (CST)
+	by mailimap2024 (Coremail) with SMTP id 3pYKCgBHRSyZ4KBqNz_5AA--.330S2;
+	Wed, 09 Sep 2026 12:29:13 +0800 (CST)
 From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -33,9 +33,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Puranjay Mohan <puranjay@kernel.org>
-Subject: [PATCH bpf 1/2] bpf: Invalidate iterator-owned BTF pointers on destroy
-Date: Wed,  9 Sep 2026 12:29:06 +0800
-Message-ID: <20260909042907.1734153-2-xyx2021@mail.ustc.edu.cn>
+Subject: [PATCH bpf 2/2] selftests/bpf: Reject task VMA snapshot use after destroy
+Date: Wed,  9 Sep 2026 12:29:07 +0800
+Message-ID: <20260909042907.1734153-3-xyx2021@mail.ustc.edu.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260909042907.1734153-1-xyx2021@mail.ustc.edu.cn>
 References: <20260909042907.1734153-1-xyx2021@mail.ustc.edu.cn>
@@ -46,11 +46,11 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:3pYKCgDHuSCX4KBqLj_5AA--.5784S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7CryDGr1kWrW7uw17Zr17GFg_yoW8Cr18pr
-	WruFyqkr4kA3yjkFy7Aa18uFyavFy3Xay3Gr1vk3yrCFn8Ww13KrWUKryYvws0yFn5GFn2
-	vrW09wn0qw1DAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9ab7Iv0xC_Zr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+X-CM-TRANSID:3pYKCgBHRSyZ4KBqNz_5AA--.330S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CF1xtrW5uw1xKw13ur4Durg_yoW5JrWxpa
+	n7C3sIkr4fJa13KF97Jr4Du3Wagan5Za45G34vy3Z8Cr4vyw48WF1rtr4YvF1rArW0qFnI
+	vrWIkanxGr48JaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9ab7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
 	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
 	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
 	jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
@@ -60,53 +60,87 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7CryDGr1kWrW7uw17Zr17GFg_yoW8Cr18pr
 	c7CjxVAaw2AFwI0_JF0_Jw1lc2xSY4AK67AK6r45MxAIw28IcxkI7VAKI48JMxC20s026x
 	CaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_
 	JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
-	1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_
+	1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_
 	Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8Jr
-	UvcSsGvfC2KfnxnUUI43ZEXa7IU0eMKJUUUUU==
+	UvcSsGvfC2KfnxnUUI43ZEXa7IU8tUUUUUUUU==
 X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
 
-Open-coded iterator next kfuncs that return non-struct pointers associate
-the returned PTR_TO_MEM with the iterator's reference ID.  Struct pointer
-returns take a separate PTR_TO_BTF_ID path which omits this relationship.
+Add a verifier test that obtains a task VMA snapshot, destroys its
+iterator, and then attempts to read the snapshot.  The verifier must reject
+the stale access.
 
-This leaves the pointer returned by bpf_iter_task_vma_next() valid in the
-verifier after bpf_iter_task_vma_destroy() frees the iterator's backing
-allocation, including the VMA snapshot.  A BPF program can therefore read
-the released snapshot through the stale pointer.
+Also verify that an RCU-protected task pointer remains usable after
+destroying its task iterator.  That iterator's empty destructor must not
+shorten the surrounding RCU protection.  The existing iter_next_trusted
+test continues to cover a trusted-kfunc use while the VMA iterator is live.
 
-Set the iterator reference ID as the parent of non-RCU PTR_TO_BTF_ID
-results from iterator next kfuncs.  Releasing the iterator reference in
-the destructor then invalidates those results as it already does for
-PTR_TO_MEM results.
-
-Leave MEM_RCU results unchanged.  Their lifetime is independently
-protected by the surrounding RCU read-side critical section, which can
-remain active after an iterator is destroyed.
-
-This issue was found during BPF verifier testing with an in-house
-runtime semantic checker.
-
-Fixes: 4cbee026db54 ("bpf: return VMA snapshot from task_vma iterator")
 Assisted-by: LLM
 Signed-off-by: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 ---
- kernel/bpf/verifier.c | 3 +++
- 1 file changed, 3 insertions(+)
+ .../selftests/bpf/progs/iters_testmod.c       | 43 +++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 72a3f5998dd27..be4978629ae59 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -14105,6 +14105,9 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			regs[BPF_REG_0].btf = desc_btf;
- 			regs[BPF_REG_0].type = type;
- 			regs[BPF_REG_0].btf_id = ptr_type_id;
-+
-+			if (bpf_is_iter_next_kfunc(&meta) && !(type & MEM_RCU))
-+				regs[BPF_REG_0].parent_id = meta.ref_obj.id;
- 		}
+diff --git a/tools/testing/selftests/bpf/progs/iters_testmod.c b/tools/testing/selftests/bpf/progs/iters_testmod.c
+index 76012dbbdb413..b8c8a3b24582f 100644
+--- a/tools/testing/selftests/bpf/progs/iters_testmod.c
++++ b/tools/testing/selftests/bpf/progs/iters_testmod.c
+@@ -28,6 +28,27 @@ int iter_next_trusted(const void *ctx)
+ 	return 0;
+ }
  
- 		if (is_kfunc_ret_null(&meta)) {
++SEC("raw_tp/sys_enter")
++__failure __msg("invalid mem access 'scalar'")
++int iter_next_trusted_after_destroy(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	bpf_iter_task_vma_destroy(&vma_it);
++	return vma_ptr->vm_start;
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
+ SEC("raw_tp/sys_enter")
+ __failure __msg("Possibly NULL pointer passed to trusted R1")
+ int iter_next_trusted_or_null(const void *ctx)
+@@ -66,6 +87,28 @@ int iter_next_rcu(const void *ctx)
+ 	return 0;
+ }
+ 
++SEC("raw_tp/sys_enter")
++__success
++int iter_next_rcu_after_destroy(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task task_it;
++	struct task_struct *task_ptr;
++
++	bpf_iter_task_new(&task_it, cur_task, 0);
++
++	task_ptr = bpf_iter_task_next(&task_it);
++	if (!task_ptr)
++		goto out;
++
++	bpf_iter_task_destroy(&task_it);
++	bpf_kfunc_rcu_task_test(task_ptr);
++	return 0;
++out:
++	bpf_iter_task_destroy(&task_it);
++	return 0;
++}
++
+ SEC("raw_tp/sys_enter")
+ __failure __msg("Possibly NULL pointer passed to trusted R1")
+ int iter_next_rcu_or_null(const void *ctx)
 -- 
 2.43.0
 
