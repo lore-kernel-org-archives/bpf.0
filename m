@@ -1,85 +1,175 @@
-Received: from mta0.migadu.com (out-197.mta0.migadu.com [91.218.175.197])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A7D830E0EE
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 02:26:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAF163264C1
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 02:40:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788920816; cv=none; b=s20kXxWVJ/6aUEFZY2hQnYbAEA9N+g+fHG8wrdcdcnXA1dpKerk9lmpkpequsTpkg4V73Uzw4ToRJJLLPkoVsKyQqpFsv7eIDMQ4R5+Is8hXeQAdity5+LQSESfPNHPjNUSdIaGqzDBVaYPOe4dyQihZzqoTcWPfNqDFSI5YoHg=
+	t=1788921628; cv=none; b=RZy/cpJgZu52QKKsd72ezw3snqVnWIVod7uK174ihz1E6GrL6jnZ5DJPHPxRCMTJ7dzAw06LAfh+6vwf50Ftlvp6jqtDwxd5veNihtmyUoCmatApYqwNyl7Feh6finHYwx/D2fu8jyHMpnann1ttmJYoUICiWJOdqYVooHy/KaU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788920816; c=relaxed/simple;
-	bh=hhi3c8zU+U+EE/Oqa9R3g7YzwauRmJN/Xy5b4xnh/b4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Phc4HaeSgOrdrGHqOOb3hxA5SSjJuw2JKXs99+IKtL3VjX/y346QCAJXMvwmbyQc5jIINM+m3s0Uuhb2BaOe7fbD+Wx96AzVt8nBv1kSyBB8nUrNHC73rpTmAdab8In8RKKptwltaj9F+RmHV27rMewPN24MI2EkLeS1anhXKU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AfNlsM7o; arc=none smtp.client-ip=91.218.175.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788921628; c=relaxed/simple;
+	bh=X1Xh75puVEIf2AgK7qiR8Iu8yQ2Qw0GXyTIhKX5ee8E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=H59e9mtN3JD8nuom6oo09+Hl/8UnyHfSNKdGfMwAXLOJeT9boqXhWoPMopOvb5Jc61XYzcSLVDp2gU8MiOLzbiEiac8eqljt77j6aZIV5iIRsl1dNN6otJKX30akTsMQqQSEYC7dtzZzuvHCqHBYRAyzE96cZnY+uMZe4m4XSSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HlGPVekw; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AfNlsM7o"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=hhi3c8zU+U+EE/Oqa9R3g7YzwauRmJN/Xy5b4xnh/b4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788920812; v=1; x=1789525612;
- b=AfNlsM7o97Br2/sCy3LyFv1cglqrdHrc/mwfcaIcqTIcOatLtpd3zaOEr6eM0C7axcNcxvBm
- +7vOidl348F6u5exW8gV3var8GPZBMJEG6emqdXty5JT/TUT9NgM4adB8xs3szxpTkwa9sNvn+d
- I6NbUW9SyoJK4BTEtjt54v0M=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 23bb6d8fa3f5e24a;
-	Wed, 09 Sep 2026 02:26:51 +0000
-X-Mizu-Trace-ID: 23bb6d8fa3f5e24a
-X-Migadu-Flow: FLOW_OUT
-Date: Wed, 9 Sep 2026 02:26:36 +0000
-From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
-	Alexandre Courbot <acourbot@nvidia.com>, Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, 
-	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, Leon Hwang <leon.hwang@linux.dev>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	bpf@vger.kernel.org, linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	Ben Cressey <ben@cressey.dev>, "Florent Revest (Anthropic)" <florent.revest@linux.dev>
-Subject: Re: [PATCH RFC 8/8] arm64: ftrace: Allow CALL_OPS on kCFI kernels
- built with Rust
-Message-ID: <aqDCSBRtnH4wVQDu@linux.dev>
-References: <20260904-b4-arm64-callops-kcfi-v1-0-ce6687739b0c@linux.dev>
- <20260904-b4-arm64-callops-kcfi-v1-8-ce6687739b0c@linux.dev>
- <CANiq72=xOrSXBBdmrKYfX1=qgF37LRAMzMJd4GJkXaYHMVe9yQ@mail.gmail.com>
- <ap3Z-YDtzmdtMiMk@linux.dev>
- <CANiq72mVXNmqh-RdOunFLBKRwMgYHFBqJOP7NbXrd8WHPb3sAw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HlGPVekw"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8541875f596so2585308b3a.0
+        for <bpf@vger.kernel.org>; Tue, 08 Sep 2026 19:40:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788921626; x=1789526426; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=/fZqpQBGjzjI/DxAL3lk605xnvz1wTJmXUd/sLpFD+Q=;
+        b=HlGPVekw2RyG3wytO5zN/19Es33hbLKy0WSnXvb1Q841eId/oLFiGJPDTt+RZzssg+
+         YOzXaI2NVXX+kGMo2yyL7i8SpFHfD87TYNEfV+wlalWYmn3I682+KqJXaLK+gCBGrvn0
+         zM5OwWEtjYNyRu2WgFO7wuMjqnwPZAdVEDI56k4C8JiJfCMjVxb07qzjQ1a0AlaodsKk
+         7J8tUnu9CIdi0P6bd0c4p5AssSA9+OkTxOmRqi5cAOqt2IiVLQ1358AxqzM9usZVaCLE
+         ohSFyh3LRXqnHqLWAYnz0CkuuyXEdSTDh858WaPgf3UPeS49bysVo7zk9PAa08/MFDi2
+         ZYQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788921626; x=1789526426;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/fZqpQBGjzjI/DxAL3lk605xnvz1wTJmXUd/sLpFD+Q=;
+        b=H1QoB3jAetcSFb+jJFlOjSsPZLAUr7HZCIqep3phtVJn/vzSg0ALPpJgJmvha3wh/5
+         Kat8he1DbohP2A2BpI6oyg9EWPRXx/Vk+2uc/LMyAxQxB5UiMZle1vu0kBAlTGKEMpjZ
+         ncExxEjYikzA0caEA5kYOgp7SSDNwKZWbyZNecZWPN3pf6T4cPGXvN3mTnhChDPEekCr
+         8HsQKB0hR4yY5OsaqEqOX0HbU/jmoT00Rg4AvGBDQOJbs1gofxe99ht1JGXf1NrLYmwt
+         YKPXSKWdF5Wzpl3ZuL3DRfGuwjGTaXZbJnaura/7dh8gLnYyaDw0WiGZlg3W053CrqRY
+         2JeQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxyxsYvE8Z+nxyaeZ8f3/JURtZQMJ0B4MYp4ZcMuiMSK6IR6yt1jITeiLwNjh9qBcwvCZA=@vger.kernel.org
+X-Gm-Message-State: AFuF++k8uYISvwVGJjcWIFWmGY+oDfbz+CUbFJ43lFmOTivv3tSxzU3b
+	xfSEJR6UE/JmNpJUoTknOYYmFJw63PyyaoSk7OgTsgjRjXuE/98f+GbQ
+X-Gm-Gg: AYBFou0TxtomI47dpKEjikSx/+k/ppZ1hZlfsBI8/qB1W4bHh/Fc2iPvT07aXVzcZs+
+	9eglTlo+qVBVvyywEKe5/gdBMNoPCEL7UUi+2kWmd1N7a/L2c8oTLXp+qs3NH36wOYjfMwjxP/+
+	iE65jt299oVLhcdaTA5EIWT4yaWBpZUJOZigAW/3kl9x5FoXDhZeZsicvjdQP/XR9v3KRKfl7yS
+	bDjRTQ7Nz1B0LsqHZhnJ5PdrDS/N0U3IXuf3F38rMl+wPU11tCnQaILxZIr567l0lmVmE1GGh9f
+	zwkI02HWhLSTKAmswqbHN0eNXo2MJ3LxU2VVFI0Azv1tVVff+HjpETgfi8+LEVRQDLxuyRmzuAP
+	8YCjWji2T4tQsJACTUf9uWGwNFX4/3Bo8P2bQCPZP5nsXR37RH3bqoVJJBu6UeEc6fXBRJxygPj
+	XsiZaZB51F6I6BRoWrhBWz+Y+9ygIp+dtWwOCkqExQYmQh4Ecg8Em1YaSNPcBu08h1lWRmjK8fe
+	0lhfEEhalFpGtsq+wt4Vxh1ZwKm7YNtItcYAoyOWEgBSEdQQwNKPP4sXpxeDFQPWVFE/uvnXTLP
+	FFob6VysHMyKhRb4atizD75sniCPuF3hFExrnzyqR0nEcQ3vs84N8NBSC5z9yBMoBlnSk+OFX5T
+	w5n/fpOE1ndMS
+X-Received: by 2002:a05:6a00:f0e:b0:847:770f:da4c with SMTP id d2e1a72fcca58-8616b17644bmr44258694b3a.16.1788921625629;
+        Tue, 08 Sep 2026 19:40:25 -0700 (PDT)
+Received: from bad.. ([43.227.225.58])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-86152045f74sm6270814b3a.10.2026.09.08.19.40.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2026 19:40:25 -0700 (PDT)
+From: Nikhil <nikhilljatt@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Cc: eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	horms@kernel.org,
+	dsahern@gmail.com,
+	hawk@kernel.org,
+	razor@blackwall.org,
+	stable@vger.kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf] bpf: fix reading neigh ha in bpf_fib_lookup()
+Date: Wed,  9 Sep 2026 08:10:11 +0530
+Message-ID: <20260909024011.1252694-1-nikhilljatt@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANiq72mVXNmqh-RdOunFLBKRwMgYHFBqJOP7NbXrd8WHPb3sAw@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Mon, 7 Sep 2026 21:33:03 +0200, Miguel Ojeda wrote:
-> i.e. I guess I would have expected something like "...: its libclang
-> may not support the section argument (Clang >= 21) and the removal of
-> the flag does not change the ABI" or similar.
+bpf_ipv4_fib_lookup() and bpf_ipv6_fib_lookup() copy the neighbour's
+link layer address into params->dmac without any synchronisation, but
+neigh_update() writes neigh->ha under write_seqlock(&neigh->ha_lock)
+exactly because there are lockless readers.  A BPF program calling
+bpf_fib_lookup() while the neighbour is being updated can therefore be
+handed a torn address, and XDP/tc then forwards the packet to a bogus
+L2 destination.
 
-I will use that in v2, thanks!
+neigh_ha_snapshot() cannot be used here because it copies dev->addr_len
+bytes while params->dmac is only ETH_ALEN long (an IPoIB egress device
+has addr_len 20 and would overflow into params->smac), so open-code the
+seqlock loop around the ETH_ALEN copy.
 
-- Jose
+Same problem and same fix as commit 57549ab90791 ("net: bridge: arp/nd
+proxy: fix reading neigh ha") and commit b824059a673b ("vxlan: fix
+reading neigh ha").
+
+Reproduced on x86_64 under qemu: a dummy device holds a permanent
+neighbour whose lladdr is flipped between aa:aa:aa:aa:aa:aa and
+bb:bb:bb:bb:bb:bb with RTM_NEWNEIGH, while an XDP program driven by
+BPF_PROG_TEST_RUN calls bpf_fib_lookup() in a loop and checks that all
+six bytes of the returned dmac are equal.  Before this patch: 211 torn
+addresses out of 16300000 lookups (last one aa:aa:aa:aa:bb:bb).  After
+this patch: 0 out of 38060000 lookups.
+
+Fixes: 87f5fc7e48dd ("bpf: Provide helper to do forwarding lookups in kernel FIB table")
+Cc: stable@vger.kernel.org
+Signed-off-by: Nikhil <nikhilljatt@gmail.com>
+---
+ net/core/filter.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 61940e753552..6fdb85c9af44 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -6298,6 +6298,20 @@ static const struct bpf_func_proto bpf_skb_get_xfrm_state_proto = {
+ #endif
+ 
+ #if IS_ENABLED(CONFIG_INET) || IS_ENABLED(CONFIG_IPV6)
++/* Take a stable snapshot of the neighbour's link layer address.
++ * neigh_ha_snapshot() can not be used here because it copies dev->addr_len
++ * bytes while params->dmac is only ETH_ALEN long.
++ */
++static void bpf_fib_dmac_snapshot(u8 *dmac, const struct neighbour *neigh)
++{
++	unsigned int seq;
++
++	do {
++		seq = read_seqbegin(&neigh->ha_lock);
++		memcpy(dmac, neigh->ha, ETH_ALEN);
++	} while (read_seqretry(&neigh->ha_lock, seq));
++}
++
+ static int bpf_fib_set_fwd_params(struct net_device *dev,
+ 				  struct bpf_fib_lookup *params,
+ 				  u32 flags, u32 mtu, u32 in_ifindex)
+@@ -6491,7 +6505,7 @@ static int bpf_ipv4_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
+ 
+ 	if (!neigh || !(READ_ONCE(neigh->nud_state) & NUD_VALID))
+ 		return BPF_FIB_LKUP_RET_NO_NEIGH;
+-	memcpy(params->dmac, neigh->ha, ETH_ALEN);
++	bpf_fib_dmac_snapshot(params->dmac, neigh);
+ 	memcpy(params->smac, dev->dev_addr, ETH_ALEN);
+ 
+ set_fwd_params:
+@@ -6644,7 +6658,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
+ 	neigh = __ipv6_neigh_lookup_noref(dev, dst);
+ 	if (!neigh || !(READ_ONCE(neigh->nud_state) & NUD_VALID))
+ 		return BPF_FIB_LKUP_RET_NO_NEIGH;
+-	memcpy(params->dmac, neigh->ha, ETH_ALEN);
++	bpf_fib_dmac_snapshot(params->dmac, neigh);
+ 	memcpy(params->smac, dev->dev_addr, ETH_ALEN);
+ 
+ set_fwd_params:
+-- 
+2.43.0
+
