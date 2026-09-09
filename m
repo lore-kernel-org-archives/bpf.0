@@ -1,205 +1,161 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064B43BED7A;
-	Wed,  9 Sep 2026 20:29:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0224A52E069;
+	Wed,  9 Sep 2026 20:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788985808; cv=none; b=TuN/UUxxxRLGHsjKpV+sZjYknhx4k5uMMiqH32T9Dx0VtD/JJIgDAdKz5MCzrEzXK8gyNjQCUICxlFVEw+Tf4tiR0UcxPmxg90o6vpkjbGpkvjWSiHWgZ/W5rTooolnlApR6A8i8yALM95gylQCoGb/aFdXHuAHt9KuQuAa+weo=
+	t=1788985813; cv=none; b=qLoy3OosKPsc6MayQ8rfXzwvoRzosZyrO6IkCfgIO5Z3GazLeFtB/Hv3XIHGyJzdze01L7H7vQ0f05XZnOizWys9mRMzRoi16aQ3TD3wvuEMZ0GNYv4TjjiCCeuvNRaLtn1ygH+4yNb5RkZ7szkLHYh5C0KhtD1qV529pBlhVmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788985808; c=relaxed/simple;
-	bh=s02EU2GNXiVHdlRJ+jyRr/Y7YLTUSaDRYXZzcj7qkc8=;
+	s=arc-20240116; t=1788985813; c=relaxed/simple;
+	bh=rvSvi2a6GoLokrwNhBAxWnhkfbHnNCVQFizxTxPkPJ0=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=GWs9+c9WCWl08Q+SDInMc0xK/GyEhspGdZ48SN13crqSaalMMzq3MYyxTeiIdkiewfEWnf47ScYZKk5xmstNVBAilRhVBg9Q5F40FWTwKjwDoqaRS+OV2h5Wg7MC38Wp4ViezPjo9TKAsd+efOmw8nsRzDJHEBTbuSWDQt/mVDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VFG7AQ9y; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=XKf5VdrSDCJ1JqmnolGlduIwxsy3hoAmd/8+EtOmljRArDIHHrie0MIj9IUOhNIdQwB+st72j/1MClxix+04RwjKVwbr7LLeisWrbqcYE8t21osNpt1+HBZOJbr5OQ7hzTOFisZFlWPTmT4/4cluijGNaDfsUYJx+HJdmLxkBH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xx5f+Dnu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VFG7AQ9y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DDAD1F000FF;
-	Wed,  9 Sep 2026 20:29:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xx5f+Dnu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77A811F00898;
+	Wed,  9 Sep 2026 20:30:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788985796;
-	bh=QuZM46OhKdDN97PeCm8YPFKOdhxXnQF0sSeKdtxBTGw=;
+	s=k20260515; t=1788985804;
+	bh=CsLKGBQjgpG6ZFoeHmOrOaSAKA/qpg7P+mlu9j9MYF8=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=VFG7AQ9y4RUvvHULJsxIXmxp0/vBHuDaRJj4luwBOo//gLicsiaDr6JIUnGH7G539
-	 g1dj3ADSA1vk/xAWo2QiJmmn/Xs9hiHvO5kMqaMqXDTFho/8j62GCWWBUSZe0CrgDD
-	 UKMp9cV6i+QzNW6kvuit3Votz07QFMRQQ4MSZ5C5n7ovVEryHg5vinkSWaOY1MB+V6
-	 0SD7ks1h24/S2LSkGplcS6RUlcWgrNH8Fou6pc3Gs7dPyXAvwffdxxE4/GWv0K/mM9
-	 e+xkTfe5qIU757TCaYS9ApA1maIVuTW6PmAucUnW9lhESf8Iv8LYux4cmczSx84Zxg
-	 kyGIoIpKANuwg==
-Content-Type: multipart/mixed; boundary="===============2822446474814226014=="
+	b=Xx5f+DnuHeduwHWeJMW3xmxTr8yIDF71FJGJTul0g5Ij5b2denwyqYV7iKlIoxnDR
+	 RG4ahXe0CYoK9Hjx/Va3rH6e+BND3CC0F2ADC5o+pHPlrFcRuVk/S0hHjLx/XZeJWg
+	 xObcpTEsQ5dWzHqkmXU0L+c0fW/xlURQfPHT0C6zgrXZjSDrjRj/zIkvZ/0NZPHxAD
+	 mu4NeNxR562lX5UuzTSwCy2EQrAccbmyqc/bHYsWiMRGmQdE7CEMhtKZMmdphUm05l
+	 sg59VgftDJkp0RrSBG2/8jzfOuIsEGMUjuwfm/wr5AiYJlE9M8BM9IclVSd0CQPyw2
+	 NAG+MDFmOiPUg==
+Content-Type: multipart/mixed; boundary="===============0455932225885287739=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <3c28736e3864daa3aca308ac20ca4ddf11da29c951013e0daf7a7a9d2c2c780b@mail.kernel.org>
-In-Reply-To: <20260909193719.518517-12-utilityemal77@gmail.com>
-References: <20260909193719.518517-12-utilityemal77@gmail.com>
-Subject: Re: [PATCH bpf-next v3 11/15] landlock: Factor the credential restriction out of landlock_restrict_self()
+Message-Id: <fcb7ad645956b322d672ea3f562de3016df48f28530c9e1f8ddf0259dbff0e59@mail.kernel.org>
+In-Reply-To: <20260909193719.518517-10-utilityemal77@gmail.com>
+References: <20260909193719.518517-10-utilityemal77@gmail.com>
+Subject: Re: [PATCH bpf-next v3 09/15] selftests/bpf: Add tests for the LSM policy object kfuncs
 From: bot+bpf-ci@kernel.org
 To: utilityemal77@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,kpsingh@kernel.org,matt@bobrowski.net,paul@paul-moore.com,mic@digikod.net,viro@zeniv.linux.org.uk,brauner@kernel.org,kees@kernel.org
 Cc: casey@schaufler-ca.com,gnoack@google.com,jack@suse.cz,song@kernel.org,yonghong.song@linux.dev,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,jolsa@kernel.org,m@maowtm.org,bpf@vger.kernel.org,linux-security-module@vger.kernel.org,linux-kernel@vger.kernel.org,utilityemal77@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed,  9 Sep 2026 20:29:55 +0000 (UTC)
+Date: Wed,  9 Sep 2026 20:30:03 +0000 (UTC)
 
---===============2822446474814226014==
+--===============0455932225885287739==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/security/landlock/cred.c b/security/landlock/cred.c
-> index 03449c26247e..f02706f12c7d 100644
-> --- a/security/landlock/cred.c
-> +++ b/security/landlock/cred.c
-> @@ -8,14 +8,146 @@
->   */
->
->  #include <linux/binfmts.h>
-> +#include <linux/bits.h>
->  #include <linux/cred.h>
-> +#include <linux/err.h>
-> +#include <linux/errno.h>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_policy_kfuncs.c b/tools/testing/selftests/bpf/prog_tests/lsm_policy_kfuncs.c
+> new file mode 100644
+> index 000000000000..9f4ffb5f47be
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/lsm_policy_kfuncs.c
+> @@ -0,0 +1,54 @@
 
-This isn't a bug, but is <linux/errno.h> needed here?  The new code
-returns PTR_ERR(new_dom) (from <linux/err.h>) and never names an -Exxx
-constant.
+[ ... ]
 
-> +#include <linux/lsm_hooks.h>
-> +#include <linux/mutex.h>
-> +#include <uapi/linux/landlock.h>
->
->  #include "common.h"
->  #include "cred.h"
-> +#include "domain.h"
->  #include "ruleset.h"
->  #include "setup.h"
->
-> +#include <trace/events/landlock.h>
-> +
-> +/**
-> + * landlock_prepare_restriction - Compute a credential restriction
-> + *
-> + * @llcred: Landlock credentials to restrict: provides the parent domain and
-> + *          the previous log configuration.  Not modified.
-> + * @ruleset: Ruleset to enforce, or NULL for a log-configuration-only change.
-> + * @flags: landlock_restrict_self(2) flags.  The caller is responsible for
-> + *         validating them against the set of flags it supports.
-> + * @restriction: Computed restriction.  On success, holds a reference on
-> + *               @restriction->domain (if any), which
-> + *               landlock_apply_restriction() transfers to the restricted
-> + *               credentials.
-> + *
-> + * The restriction builds on @llcred's current state: the caller must apply
-> + * it to (or stage it for) these same credentials.
-> + *
-> + * Return: 0 on success, -errno on failure.
-> + */
-> +int landlock_prepare_restriction(
-> +	const struct landlock_cred_security *const llcred,
-> +	struct landlock_ruleset *const ruleset, const u32 flags,
-> +	struct landlock_restriction *const restriction)
+> +static void test_from_fd_null(void)
 > +{
-
-[ ... ]
-
-> +#ifdef CONFIG_SECURITY_LANDLOCK_LOG
-> +	new_dom->hierarchy->log_same_exec = log_same_exec;
-> +	new_dom->hierarchy->log_new_exec = log_new_exec;
-> +	/*
-> +	 * The creation event fired above, so move the domain out of
-> +	 * LANDLOCK_LOG_UNCOMMITTED: its free_domain event must fire
-> +	 * too, even if the domain is dropped before being enforced.
-> +	 * Audit logging may still be disabled (DISABLED); tracing
-> +	 * observes it anyway.
-> +	 */
-> +	if ((!log_same_exec && !log_new_exec) || !prev_log_subdomains)
-> +		new_dom->hierarchy->log_status = LANDLOCK_LOG_DISABLED;
-> +	else
-> +		new_dom->hierarchy->log_status = LANDLOCK_LOG_PENDING;
-> +#endif /* CONFIG_SECURITY_LANDLOCK_LOG */
-
-The LANDLOCK_LOG_UNCOMMITTED -> PENDING/DISABLED transition moves from
-sys_landlock_restrict_self() into landlock_prepare_restriction(), but
-comments that document this contract by naming the old site remain
-unrevisioned, and no later commit in the 02756181d382..1cc3305917e4
-range updates them either.
-
-In security/landlock/domain.c (landlock_init_hierarchy_log):
-
-     /*
-      * The hierarchy is born unobservable: landlock_restrict_self() moves it
-      * out of LANDLOCK_LOG_UNCOMMITTED once it has emitted the creation
-      * event, so the matching free_domain event fires for it and not for a
-      * hierarchy whose creation was never observed.
-      */
-
-In security/landlock/trace.c (landlock_trace_free_domain):
-
-      * Fires only for a hierarchy whose creation event was emitted, i.e. one that
-      * left LANDLOCK_LOG_UNCOMMITTED in landlock_restrict_self().  ...
-      * while a domain that landlock_restrict_self() created and a
-      * thread-sync failure then aborted still fires free_domain, ...
-
-In include/trace/events/landlock.h (Lifecycle consistency block):
-
-The window is still described as 'A rare thread-sync failure aborts the
-just-created domain' even though the new helper's documentation
-(cred.c:89-93) states it also covers an aborted execution, introduced
-two commits later in 0a88c757f4f0.
-
-After this commit, landlock_prepare_restriction() performs the
-transition, and 0a88c757f4f0 adds a second, non-syscall caller
-(bprm_apply_policy_object()), so 'landlock_restrict_self()' no longer
-enforces this invariant nor provides the only path that can create and
-drop a domain.
-
-Behaviour is unaffected, but should these references be updated to
-reflect the new code structure?
-
+> +	LIBBPF_OPTS(bpf_test_run_opts, opts);
+> +	struct lsm_policy_kfuncs *skel;
+> +	char tmp_path[] = "/tmp/lsm_policy_kfuncs_XXXXXX";
+> +	int tmp_fd, err;
 > +
-> +	restriction->domain = new_dom;
-> +	return 0;
-> +}
+> +	tmp_fd = mkstemp(tmp_path);
+> +	if (!ASSERT_GE(tmp_fd, 0, "mkstemp"))
+> +		return;
+> +
+> +	skel = lsm_policy_kfuncs__open_and_load();
+> +	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
+> +		goto out_close;
+> +	skel->bss->plain_fd = tmp_fd;
+> +
+> +	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.check_from_fd),
+> +				     &opts);
+> +	if (!ASSERT_OK(err, "check_from_fd_run") ||
+> +	    !ASSERT_OK(opts.retval, "check_from_fd_retval"))
+> +		goto out_destroy;
+> +
+> +	ASSERT_TRUE(skel->bss->got_null_for_bad_fd, "bad_fd_null");
+> +	ASSERT_TRUE(skel->bss->got_null_for_plain_fd, "plain_fd_null");
+> +	ASSERT_TRUE(skel->bss->got_null_for_bad_flags, "bad_flags_null");
+                                                   ^^^^^^^^^^^^^^^^
+A subsystem pattern flags this as potentially concerning: the
+"bad_flags_null" assertion passes whether or not the kernel honors the
+reserved-flags contract.
+
+The fd used for the flags test is the plain temporary file created above,
+which no LSM claims. In bpf_lsm_policy_from_fd() (security/bpf_lsm_kfuncs.c)
+there are two independent paths to NULL for this input:
+
+    if (flags)
+            return NULL;                    /* the check under test */
+
+    lsm_for_each_hook(scall, policy_object_from_fd) {
+            err = scall->hl->hook.policy_object_from_fd(fd, &object);
+            if (err == -EOPNOTSUPP)
+                    continue;
+            ...
+    }
+    return NULL;                    /* unrelated: nobody claims a /tmp file */
+
+Because the /tmp file is claimed by no LSM, the loop falls through to the
+trailing return NULL on its own. Delete the if (flags) guard entirely and
+"bad_flags_null" still passes. The assertion therefore holds whether or not
+the kernel implements the reserved-flags contract that the commit message
+claims this test verifies.
+
+The other two arms do discriminate once an LSM implements the hook: for
+fd == -1 the owning LSM's policy_object_from_fd() fails with a
+non-EOPNOTSUPP error, and for a plain fd the LSM must return -EOPNOTSUPP
+rather than claiming the file. Only the flags arm is unconditioned.
+
+A discriminating flags test needs an fd that would resolve successfully
+with flags == 0, which by design belongs in the LSM-specific test rather
+than here. Could the commit message and comment clarify that the
+reserved-flags contract is only partially covered here, or could this test
+be deferred to an LSM that provides real policy objects?
+
+> diff --git a/tools/testing/selftests/bpf/progs/lsm_policy_kfuncs_failure.c b/tools/testing/selftests/bpf/progs/lsm_policy_kfuncs_failure.c
+> new file mode 100644
+> index 000000000000..04080838aefd
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/lsm_policy_kfuncs_failure.c
+> @@ -0,0 +1,154 @@
 
 [ ... ]
 
-> diff --git a/security/landlock/syscalls.c b/security/landlock/syscalls.c
-> index cb294a3582ae..9451376ccf50 100644
-> --- a/security/landlock/syscalls.c
-> +++ b/security/landlock/syscalls.c
-> @@ -9,7 +9,6 @@
->
->  #include <asm/current.h>
->  #include <linux/anon_inodes.h>
-> -#include <linux/bitops.h>
->  #include <linux/build_bug.h>
->  #include <linux/capability.h>
->  #include <linux/cleanup.h>
+> +/*
+> + * The fd kfunc is exclusive to syscall programs: it must be rejected
+> + * in an LSM program, even on an allowed hook.
+> + */
+> +SEC("lsm.s/bprm_creds_for_exec")
+> +__failure __msg("calling kernel function bpf_lsm_policy_from_fd is not allowed")
+> +int BPF_PROG(lsm_get, struct linux_binprm *bprm)
+          ^^^^^^^^
 
 [ ... ]
 
-> @@ -546,10 +544,9 @@ SYSCALL_DEFINE2(landlock_restrict_self, const int, ruleset_fd, const __u32,
->  	struct landlock_ruleset *ruleset __free(landlock_put_ruleset) = NULL;
->  	struct landlock_domain *new_dom = NULL;
->  	struct cred *new_cred;
+> +/*
+> + * The enforcement kfunc is exclusive to the sleepable bprm LSM
+> + * hooks: it must be rejected in a syscall program.
+> + */
+> +SEC("syscall")
+> +__failure __msg("calling kernel function bpf_lsm_policy_apply_bprm is not allowed")
+> +int syscall_restrict(void *ctx)
+     ^^^^^^^^^^^^^^^
 
-This isn't a bug, but is the `= NULL` initializer still needed here?
-Before the refactor, new_dom was only assigned inside the if (ruleset)
-block, so the initializer was load-bearing for the later if (ruleset)
-trace_landlock_enforce_domain(new_dom, ...) call. After the split,
-new_dom is assigned unconditionally from restriction.domain, and every
-path between the declaration and that assignment is a plain return.  It
-is the only `= NULL` pointer initializer left in the file apart from the
-__free() declaration on the line above.
-
-> -	struct landlock_cred_security *new_llcred;
-> +	struct landlock_restriction restriction;
->  	bool process_wide;
-> -	bool __maybe_unused log_same_exec, log_new_exec, log_subdomains,
-> -		prev_log_subdomains;
-> +	int err;
-
-[ ... ]
+This isn't a bug, but six of the eight programs in this file are named
+after the condition they pin down (tracing_prog, wrong_hook,
+nonsleepable_prog, leak_policy, acquire_untrusted, leak_shared_policy),
+which makes a RUN_TESTS failure line self-explanatory. The other two are
+named after the program type plus an operation that doesn't appear in the
+interface: lsm_get and syscall_restrict. There is no 'get' or 'restrict'
+kfunc. Would names in the same style as the neighbours - e.g. lsm_from_fd
+and syscall_apply_bprm - make the failing subtest easier to place from
+the RUN_TESTS output?
 
 
 ---
@@ -207,4 +163,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34398515657
---===============2822446474814226014==--
+--===============0455932225885287739==--
