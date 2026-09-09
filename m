@@ -1,116 +1,239 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0873C3C0F
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 20:42:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788986561; cv=none; b=nrSLje/7Q+cQiby4oym9s5ltgg64wBQBY1Ex1wW7KJG/tF+bbVb4G9JaQG8m6mkewiRNDRX9c28TYDEbHGiFCDHNMu4bjZQ0uZIYwccyNw6Ds83MIFPWCwsDN931dmm0zKFlOeu7tBdttM3BON9b2oGl9gJf3G0ZOg9M8Qx6zKE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788986561; c=relaxed/simple;
-	bh=4QK22JD6oH4SvxZHmOyYQJJkExZcrvgo8YM1Io2s18M=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 Content-Type:MIME-Version; b=Oti6OjPRC0aZzxdmObUSK/v4HBnr/5TVgyS1STd/9Fmn5CjPPB/iL1SkrUXJNUYk8CiAnMMP952Cau9MjWKTZutLGCcYWPW4fKopEFAUtRU71HI8+ErI7sjYC4Qt2nlp4m3A2hWt+rlqSLRLvMsqEVoYP5yUsnk8ZtlUQf+LeDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rLL5rnvK; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8643D3339
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 20:42:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788986574; cv=pass; b=l3ZcBN33tFNk6T0NPoadCd4xc8HRJuwKE7BfOFx/HB60JG2vKMU8kDQNFO3qW/VkBNuP1n8ikCVfHBmOrsvVB7XtzDTdBIO3b01y4HEFccT3qnG8NY50U5GcBNmLeJf83SVEAUPpTfM59ZJ4mUoUPan095ceLhCS/7aJZ7N09i4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788986574; c=relaxed/simple;
+	bh=VJ0O7F/5SYKKch2ApWBi8nerShoAoVYemeVpZIg91kk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BefdPhagoSQl3f7sH3FuDn8Ax0TkUZTi5MfaBLnEr+a++PtTKiaMxkJapnJrrITKDYTAC9syIFHvxfqRvrtxYKpf5WMR6jNzGdftW8CI7ZJ29d5aZWct09lb/LL7ePnp/kg8LFBnfJufI3JEAvMsb6qRAal8T2tcK+HSXC2dPrE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U187numU; arc=pass smtp.client-ip=209.85.210.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rLL5rnvK"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-38ec1402b05so6331946a91.2
-        for <bpf@vger.kernel.org>; Wed, 09 Sep 2026 13:42:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U187numU"
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7f48c750afcso5555945a34.0
+        for <bpf@vger.kernel.org>; Wed, 09 Sep 2026 13:42:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788986563; cv=none;
+        d=google.com; s=arc-20260327;
+        b=T8MPnddtkXL3sJOWy5h8+FzGzb4O5j7fAOumnAaOLLrUm5GoTUFrPcxTJEa/KLw11S
+         fbYFgbvdQC3oTHjt9nZvTkZwtYGPJB0xpmmoWhCDUvSN44g1edeagLujVIgXqiqqB5nn
+         9EHTZ4hl15fZ5Wq8HqvJb1ZdgxSZQkWx4L19vps/dU6gcA4ehDz8p79VOLmcokMs5me7
+         m3u3vbkYJpDTbBDCr4Tm+aIZ7TRWOqFkVcvFIg+rkFR2V0CMEdcT+fw5eXtqbnTGgGuE
+         JhcrUkIrEY7fao3u0vSDuHwGjz0hnIuHu3a7XfM+ZPVLosoxakjx3SeZ0LGBg4xlbrTB
+         mj1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=gOjsbIvurbqfkKdZ+bC57o2n3pKexvCsVcU5ZhuN9LY=;
+        fh=+iofH7kLhUIpDUAo/a2rUbKulXCH8Go9n65YHAt0kP0=;
+        b=XCqB5/sStOZisF1A6kaIz1czMkzpZTYQmSOj6VrLyGXpfIM7/aq5bw3P8imInslyMU
+         dvcjFs6hloHANY1r25RmuLcVK3kUK6/twTjQmbKGPexZpO9iFPUYQ2Q64FNC+wogwzLZ
+         gCK3Cf98s2kQfE5dzAD9QZ5d0aJmUY9ICp85O+hEG3eQ0rz1EfbQssTiyrCGTCjB9CCs
+         H3ccQc4qTFE8413bJpEAjDi9JGjJyAABBBWXVcQ9z3a1gBR8qHLRA7XSNMddykD7R2Sr
+         H+RVlaIZOJ0SEP9btTsEUn3G1Q4I0+sDiZyB2JU3dgi7T/aTZ5bAvj5/vKZoQfuOFX2t
+         VuyA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788986544; x=1789591344; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:content-type:message-id:date
-         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=oN/gqs4AWaGEOYc4NXETn7MgtPOtvKlXrZlfFK+KbqY=;
-        b=rLL5rnvKxJ7bimUEcTFKJMabTEqZECh1pV/CVR3V0vpTtduiuEKKDH14JkcVkTV45d
-         1X3JNvE+5ko7Ihvn8ahXUTqh0ngrHVK5lGNB80LtJbLAepPvIcFM1JmR7W9/JzK1UN1F
-         QC+5ddYNQhk08DFWGt7G5OQaH9Um3qRp0mRQrHHmRFt7qa8UGAFah9fq/kLcOrB6CCXS
-         K3m/RvXf9GUkV0CAhd10bPKJeQQfoPS/bl961dDJcTFxHNdMW7YgaW/VsHBK8wB5jo9l
-         5OM4Yn+MEKIM++DCpv9cDPEnmF631Ws6RY9dWAaTFUE1h13FdtksuMFYg0h4sKT5NAoO
-         vVEg==
+        d=gmail.com; s=20251104; t=1788986563; x=1789591363; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=gOjsbIvurbqfkKdZ+bC57o2n3pKexvCsVcU5ZhuN9LY=;
+        b=U187numUMr4ROb+6X49e+DlLdi5OqsQXqk7NZU1DEn7cGvU8XHrs444CTk0oBSEq73
+         66K2A3fa1Fo0JGEIh7BVgJm8hqLODYaT7JwakgUPs8IbaNeDLn6/8jEPnHgQd+eQ0zX6
+         3KUPK6Yo7Sqh1/AJEWIBAZKSyXEOzWXalEYauWX4ScxhuvUclV92b3BYQo1KU+VqNi46
+         Eqzbf0oBhQA3kETRQ4FT6rTUu2JEvc21MKbhbKhm4qPDXQVru9baXACb0oxLVZD8xaX9
+         cLLi6Tzd66C+y1Ius9KUeQtgnNm3hobHuGmweBNwtNtK/7kwyAZ3NP9ct659mJtNv3cA
+         z7Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788986544; x=1789591344;
-        h=mime-version:content-transfer-encoding:content-type:message-id:date
-         :references:in-reply-to:subject:cc:to:from:x-gm-gg
+        d=1e100.net; s=20251104; t=1788986563; x=1789591363;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=oN/gqs4AWaGEOYc4NXETn7MgtPOtvKlXrZlfFK+KbqY=;
-        b=qJktLSFqBpa/hFLpBPp+Rn967MqqqvfOKkHUtNR2rol1mCdftQcqEhUVZwK/FOo2rw
-         LTZV+iwkld86+3uy0zI4Kd127Pc9JNX9IrsyDJVZ5HyLnfDxJdZkgnikxJqgxf6DQJHM
-         Q1eCP84iJTYkNBXp2TmpDDG/pN7EhUUolwdPMoSBWEQ5Zhxv5qASbkt0PIv5iRwLw5t+
-         M/XOZIMtxhEJ4ARGGPVLB7nHcNdvQXRp+Rb7u+GPP/q0oOF94QLXWNEOGw9icGrt/TFJ
-         K66Pt88RV7swylZVlz9sg5PP++jKwLbCklswM7Fw+ySVGjtnzi9oMkc0dBLQQDE6QVGT
-         2U9w==
-X-Forwarded-Encrypted: i=1; AKwUvBw0uS7UbMu9I1SaJZIFXanmfWXuhoiU7j/Q0RMa9EKSa6vQhsqSck5yp2JqkOJIYQXVy/0=@vger.kernel.org
-X-Gm-Message-State: AFuF++kNGkQI5AoO2W0wSxzdd0NeUBaNWaeFKxBiuyMH+ycrhKJr78xQ
-	c9Id+SAX5sKsGygPswDOVd3b69SJDDGYqbWSiApgpKqBcvjekxyjmY9F
-X-Gm-Gg: AYBFou1qaXWvz7RAWO0XKl2pdFHFniIGulQJ8SvXoPkgwPn0SGS7czh+JlA3mAzYQsy
-	5DLDcGTwnVVDSvZymsumNjC/TvnvcZOIpe/29DGK3h82CXLQG3P/10vaibpcAR5i2Z3ac+NvYLP
-	klNE8T0I2ayKfY6gJx5xsJw968s5u7PNkbTHFyWGYlIXlICCn7+Xhc40Ii4mO0oBEm33KmqKp5f
-	IDsGP8zkB+qXpQhw88YNkAwJEJ3onSq0jGTivzwB6dSY3ECoi/aI1GWcg/rXLeM8k5kOcSyzewC
-	SCBAD7CxPyUEh2wFY6LvF+T2IoHkklIVKOFpeWhNNxPnucpEFfnqfr/Lr18Kgv9+l6rcO7+BZAw
-	WsTjctu20yqM42lDGDK25HDSZYCI33sxm1m1J5Owun/8mIFUV504pv0Gw0zxrFHUOEXe/ki+9TO
-	+umNgIYffcD3qL77v37PJuU0htpnYX0MiqC2+jn1B/qkkhm6fu0qVnIajOSiu+BsHmZ8JDEVn8x
-	vGvY+cjV5xO7VA/k7FCtSLCuTtILUO8sEJ4XPIOSCNai9b7sVDmGpLZlGp0EdwSO2MwQjIX5pe9
-	gLMFZvYztF2BYhm1e51RKh5AYCksCWQnM1kHINVTJhcve2BxcK5zgZe91YdbIIWnB5OcCmrjCfh
-	BqfIvHyqV31VbbAuSXjic
-X-Received: by 2002:a17:90b:578c:b0:398:e6b6:acc2 with SMTP id 98e67ed59e1d1-39b261e7649mr58879248a91.12.1788986543953;
-        Wed, 09 Sep 2026 13:42:23 -0700 (PDT)
-Received: from [127.0.1.1] ([43.227.225.58])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d770a010dsm1270437a91.3.2026.09.09.13.42.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Sep 2026 13:42:23 -0700 (PDT)
-From: Nikhil Ludder <nikhilljatt@gmail.com>
-To: Emil Tsalapatis <linux-lists@etsalapatis.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, horms@kernel.org, dsahern@gmail.com, hawk@kernel.org,
- razor@blackwall.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf] bpf: fix reading neigh ha in bpf_fib_lookup()
-In-Reply-To:
- <CABFh=a7Z=heZODVsXwisY3VwULDy-Rq1hwO09exgX2d0-KzgUQ@mail.gmail.com>
-References: <20260909024011.1252694-1-nikhilljatt@gmail.com>
- <CABFh=a7Z=heZODVsXwisY3VwULDy-Rq1hwO09exgX2d0-KzgUQ@mail.gmail.com>
-Date: Thu, 10 Sep 2026 02:12:14 +0530
-Message-ID: <178898653497.1776876.10402414041023036972@gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        bh=gOjsbIvurbqfkKdZ+bC57o2n3pKexvCsVcU5ZhuN9LY=;
+        b=WIA3/P+g9mEAR0G2ypUxDNmYLXe58oSQu1UwUwK92NjpvRIjLNON5rtJQt647ApSY+
+         Hp/HLXkyMaJPoITD9fdZUEMuYWGg5g+/wakqnhMvYvgSQ9lDaSjpK4ej8k6yc+7+km7b
+         9OZqpftJ7YaUkoASLerPTM1mqLCDIjG22OTbdhJIN3YG4n5EFcdGvZ8v7GVl0Sw4P6/n
+         KxlWlg2kAd1jZDFgLziXqRPk4bqBrUXrJp9tVFUMPOTHKB+dE6rDUtLfI2F2fAVX58LK
+         RmgGho8IzYkVy5XolvPGMbedptPutgFPA9QqXw/FNjqefJ2CkqoaAb57CcolSZ6NWUN0
+         6RhQ==
+X-Gm-Message-State: AFuF++mklMdiS5tfhSVKAA0I1OJ7jRj2f3hQ11lYh/d+HTiLFjsYbZ3b
+	xfcHK4BWZ3d1KDeHNCM+VXBNfv7gJAJfAVHiuQIC04nVykj2bR89K2vCq5B0EwtLwV4AQitmlWN
+	YNn8IsmrGTbsVHIIpYNkZzlWUaIzW2Tg=
+X-Gm-Gg: AYBFou20OEqcmMGAxYbpFyUIzhpJVgkIBY6jEvU1Tn1HlhOATXwptZxKVwBeK4lyiMS
+	K6xxFILy5B+fDK8TLfNHaUtayVvoWfUCJ9MQ23Xh+3d2eDUSI8rtycX6KGnk0pw0Xj4yFAdddNY
+	ZhV0YFdHMQ+h/b+58ZiaFXQ87ttdDXRNJIQz0Xh+QnmjBfabpE01o/EXIgR1sJlT8zdkaRHZacC
+	ZiZ9SnDuOGbxWCr334DN5DR1nHl2hEmQNsW0oH0HDlpw3WP+on1YuiM1FaYjufEe2lilyeNLOuZ
+	4vEmNi8OhsIz6wsRDTO2rW0PDNzzU6LY9ACjk0LrQsY/ynzPF+r1sSe2kDGIjF7sX1QFLg==
+X-Received: by 2002:a05:6820:1508:b0:6b7:83c5:fdf8 with SMTP id
+ 006d021491bc7-6b783c673f9mr20420563eaf.57.1788986562714; Wed, 09 Sep 2026
+ 13:42:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260905220117.922028-13-ameryhung@gmail.com> <340e5dbc173faa706ec7029f44c75431cced19fe03e2d18f9ebdbe418ec021ef@mail.kernel.org>
+In-Reply-To: <340e5dbc173faa706ec7029f44c75431cced19fe03e2d18f9ebdbe418ec021ef@mail.kernel.org>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Wed, 9 Sep 2026 13:42:29 -0700
+X-Gm-Features: AcwNN1UfI7bzngeqNVx097GuRXhShHW3Pd1RPVIoICbbIdTbI6Btxzz1uFcx6V4
+Message-ID: <CAMB2axM+4aKMRrjqp+ZrNKQ=mOo+e5=y3TNRAa0ZYe8oomc9Dw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 12/22] bpf: Resolve BTF ID of
+ ARG_PTR_TO_BTF_ID in kfunc bpf_func_proto
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
+	kernel-team@meta.com, ast@kernel.org, martin.lau@kernel.org, 
+	yonghong.song@linux.dev, mason@kernel.org, ihor.solodrai@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 9, 2026 at 1:18 PM Emil Tsalapatis <linux-lists@etsalapatis.com> wrote:
-> Bot is right wrt possible lockups, please adjust the seqlock
-> accordingly. Also please
-> add your full name in the SOB.
+On Sat, Sep 5, 2026 at 4:08=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
+>
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index 1f78746e0601..fe6ab92ceeff 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -1020,13 +1020,13 @@ struct bpf_func_proto {
+> >       };
+> >       union {
+> >               struct {
+> > -                     u32 *arg1_btf_id;
+> > -                     u32 *arg2_btf_id;
+> > -                     u32 *arg3_btf_id;
+> > -                     u32 *arg4_btf_id;
+> > -                     u32 *arg5_btf_id;
+> > +                     const u32 *arg1_btf_id;
+> > +                     const u32 *arg2_btf_id;
+> > +                     const u32 *arg3_btf_id;
+> > +                     const u32 *arg4_btf_id;
+> > +                     const u32 *arg5_btf_id;
+> >               };
+> > -             u32 *arg_btf_id[MAX_BPF_FUNC_ARGS];
+> > +             const u32 *arg_btf_id[MAX_BPF_FUNC_ARGS];
+> >               struct {
+> >                       size_t arg1_size;
+> >                       size_t arg2_size;
+>
+> [ ... ]
+>
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index c5b394e847e6..b6e36df72d13 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+>
+> [ ... ]
+>
+> > @@ -12082,13 +12082,18 @@ bool bpf_is_kfunc_pkt_changing(struct bpf_cal=
+l_arg_meta *meta)
+> >
+> >  static int
+> >  get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_m=
+eta *meta,
+> > -                const struct btf_param *args, int arg, int nargs)
+> > +                const struct btf_param *args, int arg, int nargs,
+> > +                struct bpf_func_proto *proto)
+> >  {
+> >       const struct btf_type *t, *ref_t =3D NULL;
+> > +     const u32 *ref_id_ptr =3D NULL;
+> >       argno_t argno =3D argno_from_arg(arg + 1);
+> >       const char *ref_tname =3D NULL;
+> > +     u32 ref_id;
+> >       int arg_type;
+> >
+> > +     proto->arg_btf_id[arg] =3D NULL;
+> > +
+> >       if (is_kfunc_arg_prog_aux(meta->btf, &args[arg]))
+> >               return ARG_PTR_TO_PROG_AUX;
+> >
+> > @@ -12116,7 +12121,11 @@ get_kfunc_arg_type(struct bpf_verifier_env *en=
+v, struct bpf_call_arg_meta *meta,
+> >                       reg_arg_name(env, argno), btf_type_str(t));
+> >               return -EINVAL;
+> >       }
+> > -     ref_t =3D btf_type_skip_modifiers(meta->btf, t->type, NULL);
+> > +     /* Keep a pointer to the BTF field containing the resolved refere=
+nt ID. */
+> > +     ref_id_ptr =3D &t->type;
+> > +     ref_t =3D btf_type_skip_modifiers(meta->btf, *ref_id_ptr, &ref_id=
+);
+> > +     while (*ref_id_ptr !=3D ref_id)
+> > +             ref_id_ptr =3D &btf_type_by_id(meta->btf, *ref_id_ptr)->t=
+ype;
+> >       ref_tname =3D btf_name_by_offset(meta->btf, ref_t->name_off);
+> >
+> >       /* In this function, we verify the kfunc's BTF as per the argumen=
+t type,
+>
+> [ ... ]
+>
+> > @@ -12239,13 +12248,21 @@ get_kfunc_arg_type(struct bpf_verifier_env *e=
+nv, struct bpf_call_arg_meta *meta,
+> >       if (is_kfunc_release(meta) && arg =3D=3D 0)
+> >               arg_type |=3D OBJ_RELEASE;
+> >
+> > -     /*
+> > -      * A KF_RCU kfunc accepts an RCU-protected pointer where it would
+> > -      * otherwise demand a referenced or trusted one. Only ARG_PTR_TO_=
+BTF_ID
+> > -      * looks at where its register came from, so leave the other kind=
+s alone.
+> > -      */
+> > -     if (base_type(arg_type) =3D=3D ARG_PTR_TO_BTF_ID && is_kfunc_rcu(=
+meta))
+> > -             arg_type |=3D MEM_RCU;
+> > +     if (base_type(arg_type) =3D=3D ARG_PTR_TO_BTF_ID) {
+> > +             /* A __map argument names a vmlinux type rather than one =
+from
+> > +              * the kfunc's own BTF.
+> > +              */
+>                    ^^^^
+>
+> This isn't a bug, but both multi-line comments added in this block start
+> their text on the same line as the opening '/*'. The BPF subsystem's
+> comment style puts the opening '/*' on its own line. The second comment
+> below rewrites one that was previously in the preferred style (with '/*'
+> on its own line), and another comment added by this patch in
+> check_kfunc_args() does follow the standard. Could these two be
+> reformatted to match?
 
-Will fix the SOB in v2, thanks.
+Will fix the comment style.
 
-On the lockup: I don't think it can happen here.  neigh->ha_lock has
-exactly one writer in the tree, __neigh_update() at
-net/core/neighbour.c:1495, and it already runs with softirqs disabled:
-write_lock_bh(&neigh->lock) at line 1384 covers it through
-write_unlock_bh() at line 1524.  A reader in softirq context therefore
-cannot preempt the writer on the same CPU and spin on the sequence
-count.
-
-The same pattern is already used by the other lockless readers of
-neigh->ha on the tx path, neigh_resolve_output() and
-neigh_connected_output() (neighbour.c:1610 and :1639), and by the two
-recent fixes this patch follows, 57549ab90791 ("net: bridge: arp/nd
-proxy: fix reading neigh ha") and b824059a673b ("vxlan: fix reading
-neigh ha").
-
-Am I missing a writer path?  If you would still prefer a different
-form here, I am happy to respin.
-
-Thanks,
-Nikhil
+>
+> > +             if (is_kfunc_arg_map(meta->btf, &args[arg]))
+> > +                     proto->arg_btf_id[arg] =3D reg2btf_ids[CONST_PTR_=
+TO_MAP];
+> > +             else
+> > +                     proto->arg_btf_id[arg] =3D ref_id_ptr;
+> > +
+> > +             /* A KF_RCU kfunc accepts an RCU-protected pointer where =
+it would
+> > +              * otherwise demand a referenced or trusted one.
+> > +              */
+>                    ^^^^
+>
+> > +             if (is_kfunc_rcu(meta))
+> > +                     arg_type |=3D MEM_RCU;
+> > +     }
+> >
+> >       return arg_type;
+> >  }
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/339954=
+42755
