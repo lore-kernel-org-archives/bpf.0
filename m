@@ -1,185 +1,436 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2C058494B
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 14:31:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788964266; cv=pass; b=nE5IZISqKZjC9wYQiMoMdgA20DGm5AkvUJk/x1xgr0Cb9/InODTuR5/sBxR7jj6jmA1MOMPJWkrND//igiCGYx5k6dc1YR+iaFU1sOjjWIg7AlfkoS1STYgXXRnaurjZIbh4QzZfg6uJCfATMhtqXcwxqZNmIHHsrAPWl6CfAUw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788964266; c=relaxed/simple;
-	bh=bL3FhBHPAN/gO0KYh+II+j6VXDmseoWIh8krisyD6DE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lZl/EeCR2FwLwVCZ2MkrBj4lbwJ2tVz5F46yvHUE5zmf2GsJ45r0GJxXjxgckU2XMBkFrMhTtvDo6RWZZZNasmEHL3t3M34lraCvDNCVbQrAfCRjpbJJ/9O/XW2NGh4sytb197dDCTz8BLyHeagQHl6f4Bh3Bo1Nc74n98VNO7w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oVK46is5; arc=pass smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8450C5632A0
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 14:44:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788965091; cv=none; b=QBBfRiWpKY04tNrKFra0v9y8jfvtdPMDI1hKDxnETs10YcJLUoO7lmtLMYbiVo+yM3Hnsh0YN3cULB1a6zd+g17E44xyd7+KCo+4Ef6b8nqMbhDhsy314EamuFNok7+cn+dfkuifH3+BG251wsOAAJ2JOGUfZdTO1Cz7wHzkAcg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788965091; c=relaxed/simple;
+	bh=IykVjcxXUYST/JSVHPZbfZk37oLX8DofUhGpyCT0Glw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=SBs+Fydpucd3ZD3FC3QU4upiExZUUijQedlEfUkPiG0VHLM2bTLKJ1F5rdnpCjENKJ7vy0XwV+TY0hx2qEAwB6UAflasHlEcWbs33qB3DQBtyWDqLslacy6i89xbHDOluK3US6J+1qKhpGwHeCwyLaq0lk1hclWd4YwgjYiNyoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=gW40I7oM; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oVK46is5"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c250f28f1cdso973734666b.0
-        for <bpf@vger.kernel.org>; Wed, 09 Sep 2026 07:31:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788964263; cv=none;
-        d=google.com; s=arc-20260327;
-        b=LKXhZ7t079mtJf3JopUiQEbRO4iCSFSrP/42qJfHyv+4ibIi4nOOtM7nfGbSdl6ITQ
-         juRiKQLJPNY8wghHvTu2i25zmrtudqqOaYWTWxwGBBAziGjvN4GSFd3KJa1YbcKMyNGc
-         IZcGwV0kE1sgFZEeBL7tnfdqZEMqIOVJc1oj6vyYTwfaTsqhl8Fy0RrQW6fddHetQ/Iq
-         0AbuEou7U3sBs9rpZnNkzrKOgf6Vp66GStBwp4NtKdo6VZNkV+NGNKL9VSpssVBHaZaD
-         5QLbonweu2jO86SEbwByXXSEFBxT4J9itx5Il0vzPPaWM3Wfgqlowm/hqwhp+MSmYGYO
-         hKVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=At/1ljdSD4FTvrT5giBI8BEGFXljDafmPB/bhLReTvQ=;
-        fh=TQ+kKhJNo4s9DQan4GAN9zPGO4iMMjXF8Ma6qnMCceU=;
-        b=bLvZKUhjyVdKm75v1IMEqXLiyAkLg9g/pSlS85lsAzrJJPUDv8EbU16PxYeUoYxnq2
-         gJ902GTf6qfuyNJDDNFujnTHQWDrPv+QxlGtO42gAFG9Ho3Ios/F2cLdxZyhINVp4AZ+
-         ZpiUKdgo83TLvefiJ+HKu/2LzoPrE5KhkjVQiZ4uASv0gddEm4WBBCaTyVO1l5PJhuGb
-         veu3hpWohj9rChhOdmJ5FjO6OF5+LkfbIYbnZBVaEsCxmNzpcje4qFKunmMdJtlnVkMe
-         tov1HMwEcBKh5byAUVowCMIN/gh8Wg5Y7ZeXmq4LCSXe7+WAY+4Hm3d/Lo8SzzND5jie
-         Ultg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788964263; x=1789569063; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=At/1ljdSD4FTvrT5giBI8BEGFXljDafmPB/bhLReTvQ=;
-        b=oVK46is54PUpLYbpIBMQLOINYV2JcYG9PO+ngMV/f40+xJBaeGXWpS1X43BK+GMXz2
-         QvTce6LZx4Ji6fP5Ao3OdSGfvaxBuY2MdAoXfdiKcnaEetOAM9Tuv0CE4E9/gylO9I/l
-         Ot0/SbWgcZ/qGRbxDY7mpmLJX7ZJLJFde8xTkwYc7LW8dR0VQ/PbXl3fA3Cq0J/i1ebT
-         wVQpCU/9H6mJh3kgW3h/SWvtwQxAtnGaQAS10RvvCaSUnJVIrnWfEhJ8gFZY+ABVUJEb
-         6Jzn7DjLnHWilz25cHyw95ndg3389UCx96nII7kME8AjDCrnB2jiFlAA3N+gBHBB8Abk
-         bmZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788964263; x=1789569063;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=At/1ljdSD4FTvrT5giBI8BEGFXljDafmPB/bhLReTvQ=;
-        b=rG/HN944ji5RW3rOvjKYGw46gvvwh4mrw/8841NMJqkIbMyff4X/x7n9L1/RxtVnR+
-         tjj0sK5i24pwH2Il0F7xij1nHSTSR+KjW79PV0DUDdBt5kGIrYs8S9HpGdiKD7luS0tb
-         3yYRHEtjpmRrw52g0qZp4GS26g8HVJTvaCm2Df27HMRGTk/dnEbm6qjbByoyigWp2fIF
-         Huk7E4z+PSvCa8aVzxFPqOGYdNXtP0SNhbSYQsL65A8pUBCbUIepgJbTcGTvcCO6+36+
-         D3mn1NIwUOYQUgSJkjQtuDvpRehT9JbstGM55mmf4lKJfzeG+Waw59BRSPbp4KSCq8un
-         ON6A==
-X-Forwarded-Encrypted: i=1; AKwUvBwkrW0yNFs7KxG00ACU1cGhU8F2+bksACjp1Y2NrcIef+OE3UblNfQKArmAEItw9TgSks4=@vger.kernel.org
-X-Gm-Message-State: AFuF++kDQr0PXcpgJlV/N3TaTycHr6d/bO6DDCHB4Nrg6cFeWcPQ56AO
-	BgkII4YH8fi9MFp3D5RC0pVzLcShMelBRSHiflJDhnCbJvd77wUctNTGtTHrhnTUPkoqXy0iVMF
-	VZ0veGdjm3QH2h/sZYeHAlldJilBFw6Y=
-X-Gm-Gg: AYBFou1fVfAWM255sL8ZANCBjfJEHzYA3S/ZxlnHqITlp8TRhRI0vcbhET1tQ1Uoqr2
-	rHCOHnaa9eXfhnpIbZIh8p0qeITothTMhe9HvTYEUUq67x20z7cb9Khewo+M4TfhcR1UTKcP6sp
-	C9VSJ+IgthnV7soSjRmtrC6S1Z9F6iL6jou+2SDdUSpxCpni5Xh8NdZ1tLJ3S08997yylGHiGvf
-	zGRIekMlqqs47CLOEzpnI1cxzrmF1j9lJ63kxDOLR9xSfs8CPUZimSETP9x3l9wtOU3vCbuJoX8
-	q90fVUtiD6AVCfy0KELV2Aheq4v9zCE8jQwK4gyoGUbuDdqQM0We8Z380vOAb0YFV788tTA=
-X-Received: by 2002:a17:907:3f2a:b0:c28:fb3f:fe20 with SMTP id
- a640c23a62f3a-c28fb400053mr726589666b.30.1788964261711; Wed, 09 Sep 2026
- 07:31:01 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="gW40I7oM"
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20260909144439epoutp03f4733898782714ff250922383eecc993~TrkLbGrmK1927919279epoutp03O
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 14:44:39 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20260909144439epoutp03f4733898782714ff250922383eecc993~TrkLbGrmK1927919279epoutp03O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1788965079;
+	bh=tBL5j9IRVlGX8jLcAV3aTrh/xOZEJYDigjJot2BxGYg=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=gW40I7oM7gMxeTx8r07mRxMWbDdz7XZ7XdZ0yWQ5tOLcO+nwJBNjfB67iWZ35Y+1B
+	 aerqo+8fadSi/XvZvoty2deGl7qHsKAApVvIvcRVtF6tV0nW8mE/2VR3Edib+PTv9e
+	 QgrvzaGZL6QVta8E6/SsL439ZtGpzdmUWnptVl5c=
+Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
+	20260909144438epcas5p1bf06c0ffa5e7b3b1854472afef173980~TrkK1dn-X2997829978epcas5p19;
+	Wed,  9 Sep 2026 14:44:38 +0000 (GMT)
+Received: from epcas5p3.samsung.com (unknown [182.195.38.93]) by
+	epsnrtp02.localdomain (Postfix) with ESMTP id 4hg3VY5yvyz2SSKX; Wed,  9 Sep
+	2026 14:44:37 +0000 (GMT)
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+	20260909144437epcas5p282be513a761ca5aec3f2b0fefcd2ecfa~TrkJgB5au3050930509epcas5p2H;
+	Wed,  9 Sep 2026 14:44:37 +0000 (GMT)
+Received: from ws2030076956.sa.corp.samsungelectronics.net (unknown
+	[107.99.235.31]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20260909144434epsmtip2ae087b74a0a6c31dab2647e3fff9bd01~TrkG5HP481140811408epsmtip2H;
+	Wed,  9 Sep 2026 14:44:34 +0000 (GMT)
+From: Irlanki Sandeep <irlanki.s@samsung.com>
+To: netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, ncardwell@google.com, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, corbet@lwn.net,
+	linux-kernel@vger.kernel.org, lorenzo@google.com, maze@google.com,
+	sporeba@google.com, motomuman@google.com, srihari.k@samsung.com,
+	g.pokhra@samsung.com, r.kumawat@samsung.com, raj.kumars@samsung.com,
+	ts413.lee@samsung.com, Irlanki Sandeep <irlanki.s@samsung.com>
+Subject: [PATCH net-next] tcp: add TCP_ECN and TCP_ECN_OPTION socket options
+Date: Wed,  9 Sep 2026 20:15:57 +0530
+Message-Id: <20260909144557.800676-1-irlanki.s@samsung.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260810122758.183765-1-puranjay@kernel.org> <20260810122758.183765-2-puranjay@kernel.org>
- <aqFebI06nXUccuwt@thinkstation>
-In-Reply-To: <aqFebI06nXUccuwt@thinkstation>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Wed, 9 Sep 2026 15:30:48 +0100
-X-Gm-Features: AcwNN1XiH3nsxsI43wM30YdmALjDY-XF6jmsUMiyceN_7aAAFdPSS0ZgK9KjeOs
-Message-ID: <CANk7y0htDA4zC6tK=Fi5H9bbFvQzOEJ57NtxDYhRLuMAxgEe3Q@mail.gmail.com>
-Subject: Re: [PATCH v4 1/6] rcu: Make call_rcu() safe to call from any context
-To: Harry Yoo <harry@kernel.org>
-Cc: Lai Jiangshan <jiangshanlai@gmail.com>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	Josh Triplett <josh@joshtriplett.org>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
-	Joel Fernandes <joelagnelf@nvidia.com>, Boqun Feng <boqun@kernel.org>, 
-	Uladzislau Rezki <urezki@gmail.com>, Davidlohr Bueso <dave@stgolabs.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Zqiang <qiang.zhang@linux.dev>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Matt Fleming <mfleming@cloudflare.com>, 
-	linux-kernel@vger.kernel.org, rcu@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-rt-devel@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20260909144437epcas5p282be513a761ca5aec3f2b0fefcd2ecfa
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+cpgsPolicy: CPGSC10-065,Y
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20260909144437epcas5p282be513a761ca5aec3f2b0fefcd2ecfa
+References: <CGME20260909144437epcas5p282be513a761ca5aec3f2b0fefcd2ecfa@epcas5p2.samsung.com>
 
-On Wed, Sep 9, 2026 at 3:26=E2=80=AFPM Harry Yoo <harry@kernel.org> wrote:
->
-> On Mon, Aug 10, 2026 at 05:27:50AM -0700, Puranjay Mohan wrote:
-> > ---
-> >  kernel/rcu/Kconfig |   6 +++
-> >  kernel/rcu/rcu.h   |  11 ++++
-> >  kernel/rcu/tree.c  | 131 +++++++++++++++++++++++++++++++++++++++++----
-> >  kernel/rcu/tree.h  |   6 +++
-> >  4 files changed, 143 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-> > index f15da8038d0ba..1a5fb3156c062 100644
-> > --- a/kernel/rcu/Kconfig
-> > +++ b/kernel/rcu/Kconfig
-> > @@ -175,6 +175,12 @@ config RCU_STALL_COMMON
-> >  config RCU_NEED_SEGCBLIST
-> >       def_bool ( TREE_RCU || TREE_SRCU || TASKS_RCU_GENERIC )
-> >
-> > +# The deferral (and the IRQ_WORK it uses) is only needed where call_rc=
-u() /
-> > +# call_srcu() can be invoked while a callback-list operation is in fli=
-ght.
-> > +config RCU_DEFER
-> > +     def_bool HAVE_NMI || KPROBES || FUNCTION_TRACER || TRACEPOINTS
-> > +     select IRQ_WORK
->
-> nit: I don't think this config belongs to RCU.
-> Do we really need this when majority of kernels enable those?
+Currently, ECN and Accurate ECN (AccECN) configurations in the Linux
+kernel are controlled globally via the net.ipv4.tcp_ecn and
+net.ipv4.tcp_ecn_option sysctl variables. This global approach lacks the
+granularity required for modern multi-application runtimes.
 
-Paul was worried about some embedded systems paying a performance
-penalty as they might not enable these but would still use RCU.
+In diverse network environments (such as mobile operating systems like
+Android), different applications route their traffic over distinct
+physical and virtual interfaces (cellular, Wi-Fi, VPNs, etc.). In the
+wild, certain legacy network paths or misconfigured middleboxes (such as
+routers, DPIs, or firewalls) are known to blackhole packets with ECN
+negotiation flags in the SYN, or silently drop packets containing AccECN
+option headers during active sessions.
 
->
-> >  config RCU_FANOUT
-> >       int "Tree-based hierarchical RCU fanout value"
-> >       range 2 64 if 64BIT
-> > @@ -3206,6 +3204,103 @@ __call_rcu_common(struct rcu_head *head, rcu_ca=
-llback_t func, bool lazy_in)
-> >       local_irq_restore(flags);
-> >  }
-> >
-> > +/*
-> > + * Stage @head for this CPU's irq_work to re-issue once interrupts are=
- on.  Only
-> > + * the drain side takes a lock, so this stays safe from NMI.
-> > + */
-> > +static void call_rcu_defer(struct rcu_head *head, rcu_callback_t func)
-> > +{
-> > +     struct rcu_data *rdp =3D this_cpu_ptr(&rcu_data);
-> > +
-> > +     /*
-> > +      * Instrumentation on the enqueue path can re-enter here from ins=
-ide the
-> > +      * drain.  Re-queuing would livelock it, so drop the callback; an=
- NMI
-> > +      * cannot loop, so let it through.
-> > +
-> > +      */
-> > +     if (READ_ONCE(rdp->defer_draining) && !in_nmi()) {
-> > +             WARN_ONCE(IS_ENABLED(CONFIG_PROVE_RCU),
-> > +                       "call_rcu() re-entered during callback drain; l=
-eaking callback\n");
-> > +             return;
-> > +     }
-> > +     head->func =3D func;
-> > +     if (llist_add((struct llist_node *)head, &rdp->defer_head))
-> > +             irq_work_queue(&rdp->defer_work);
->
-> Should RCU wait for the IRQ work to be processed during e.g.)
-> rcu_barrier()?
+If ECN or AccECN options are disabled globally to prevent connection
+failures on a single broken path, the system loses the low-latency and
+throughput benefits of L4S across all other compliant network paths.
+Conversely, if enabled globally, connections on broken paths will suffer
+severe packet loss and timeout regressions.
 
-Yes it should and it does, rcu_barrier() now enqueues these deferred
-callbacks from this list before doing the other barrier logic.
+Introduce two new TCP socket options to enable granular, per-connection
+dynamic adaptation based on runtime network metrics and diagnostics:
 
-Thanks
+1. TCP_ECN: Exposes per-socket configuration of ECN negotiation modes
+   (0-5, corresponding to existing sysctl modes, or 255/UNSPEC to
+   revert to the global sysctl default). This allows an application or
+   framework to selectively disable ECN negotiation on sockets where
+   path anomalies are detected.
+2. TCP_ECN_OPTION: Exposes per-socket control of AccECN option sending
+   frequency (0-3, or 255/UNSPEC to revert to the global sysctl default).
+   This allows disabling the option headers on active sockets if
+   middlebox dropping behavior is observed after session establishment.
+
+Provide helper functions tcp_ecn_mode_eff() and tcp_accecn_option_eff()
+to dynamically evaluate per-socket overrides with transparent fallback
+to system sysctl defaults. Also expose these options via BPF sockops
+and update documentation and BPF selftests accordingly.
+
+Signed-off-by: Irlanki Sandeep <irlanki.s@samsung.com>
+---
+ Documentation/networking/ip-sysctl.rst        | 37 +++++++++++++++++++
+ include/linux/tcp.h                           |  7 ++++
+ include/net/tcp_ecn.h                         | 24 +++++++++++-
+ include/uapi/linux/bpf.h                      |  3 +-
+ include/uapi/linux/tcp.h                      |  2 +
+ net/core/filter.c                             |  2 +
+ net/ipv4/tcp.c                                | 22 +++++++++++
+ net/ipv4/tcp_input.c                          |  4 +-
+ net/ipv4/tcp_output.c                         |  6 +--
+ tools/include/uapi/linux/bpf.h                |  3 +-
+ tools/include/uapi/linux/tcp.h                |  3 +-
+ .../selftests/bpf/progs/setget_sockopt.c      |  2 +
+ 12 files changed, 106 insertions(+), 9 deletions(-)
+
+diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+index 208f46967..2e55d9e2e 100644
+--- a/Documentation/networking/ip-sysctl.rst
++++ b/Documentation/networking/ip-sysctl.rst
+@@ -528,6 +528,43 @@ tcp_ecn_fallback - BOOLEAN
+ 
+ 	Default: 1 (enabled)
+ 
++tcp_ecn (socket option) - TCP_ECN
++	Per-socket control of ECN mode, allowing per-connection override of the
++	tcp_ecn sysctl setting. This enables L4S (Low Latency, Low Loss, Scalable
++	Throughput) configuration on a per-socket basis.
++
++	Setting this socket option to any value except 255 will override the
++	system-wide tcp_ecn sysctl for that particular socket. A value of 255
++	(TCP_ECN_MODE_UNSPEC) means use the system default sysctl value.
++
++	Possible values: 0-5 (see tcp_ecn sysctl description above), or 255 to
++	use the system default (sysctl_tcp_ecn).
++
++	Example::
++
++		int val = 3;  /* AccECN mode */
++		setsockopt(fd, SOL_TCP, TCP_ECN, &val, sizeof(val));
++
++	Default: 255 (unspecified - uses tcp_ecn sysctl value)
++
++tcp_ecn_option (socket option) - TCP_ECN_OPTION
++	Per-socket control of Accurate ECN (AccECN) option sending behavior,
++	allowing per-connection override of the tcp_ecn_option sysctl setting.
++
++	Setting this socket option to any value except 255 will override the
++	system-wide tcp_ecn_option sysctl for that particular socket. A value of
++	255 (TCP_ACCECN_OPTION_UNSPEC) means use the system default sysctl value.
++
++	Possible values: 0-3 (see tcp_ecn_option sysctl description above), or 255
++	to use the system default (sysctl_tcp_ecn_option).
++
++	Example::
++
++		int val = 2;  /* Send AccECN option on every packet */
++		setsockopt(fd, SOL_TCP, TCP_ECN_OPTION, &val, sizeof(val));
++
++	Default: 255 (unspecified - uses tcp_ecn_option sysctl value)
++
+ tcp_fack - BOOLEAN
+ 	This is a legacy option, it has no effect anymore.
+ 
+diff --git a/include/linux/tcp.h b/include/linux/tcp.h
+index 6a8c77719..7cb1e765f 100644
+--- a/include/linux/tcp.h
++++ b/include/linux/tcp.h
+@@ -289,6 +289,13 @@ struct tcp_sock {
+ 					 * sacked_out > 0)
+ 					 */
+ 	u8	ecn_flags;	/* ECN status bits.			*/
++	u8	ecn_mode;	/* Per-socket ECN mode override
++				 * (TCP_ECN_MODE_UNSPEC = use sysctl)
++				 */
++	u8	ecn_option;	/* Per-socket AccECN option override
++				 * (TCP_ACCECN_OPTION_UNSPEC = use sysctl)
++				 */
++
+ 	__cacheline_group_end(tcp_sock_write_tx);
+ 
+ 	/* TXRX read-write hotpath cache lines */
+diff --git a/include/net/tcp_ecn.h b/include/net/tcp_ecn.h
+index 865d5c5a7..931e08771 100644
+--- a/include/net/tcp_ecn.h
++++ b/include/net/tcp_ecn.h
+@@ -22,6 +22,7 @@ enum tcp_ecn_mode {
+ 	TCP_ECN_IN_ACCECN_OUT_ACCECN = 3,
+ 	TCP_ECN_IN_ACCECN_OUT_ECN = 4,
+ 	TCP_ECN_IN_ACCECN_OUT_NOECN = 5,
++	TCP_ECN_MODE_UNSPEC = 255,	/* Use sysctl default (per-socket) */
+ };
+ 
+ /* AccECN option sending when AccECN has been successfully negotiated */
+@@ -30,8 +31,29 @@ enum tcp_accecn_option {
+ 	TCP_ACCECN_OPTION_MINIMUM = 1,
+ 	TCP_ACCECN_OPTION_FULL = 2,
+ 	TCP_ACCECN_OPTION_PERSIST = 3,
++	TCP_ACCECN_OPTION_UNSPEC = 255,	/* Use sysctl default (per-socket) */
+ };
+ 
++/* Resolve the effective ECN mode: per-socket override or sysctl fallback */
++static inline u8 tcp_ecn_mode_eff(const struct sock *sk)
++{
++	u8 mode = tcp_sk(sk)->ecn_mode;
++
++	if (mode == TCP_ECN_MODE_UNSPEC)
++		return READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn);
++	return mode;
++}
++
++/* Resolve the effective AccECN option: per-socket override or sysctl fallback */
++static inline u8 tcp_accecn_option_eff(const struct sock *sk)
++{
++	u8 opt = tcp_sk(sk)->ecn_option;
++
++	if (opt == TCP_ACCECN_OPTION_UNSPEC)
++		return READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option);
++	return opt;
++}
++
+ /* Apply either ECT(0) or ECT(1) based on TCP_CONG_ECT_1_NEGOTIATION flag */
+ static inline void INET_ECN_xmit_ect_1_negotiation(struct sock *sk)
+ {
+@@ -599,7 +621,7 @@ static inline void tcp_ecn_send_syn(struct sock *sk, struct sk_buff *skb)
+ 	struct tcp_sock *tp = tcp_sk(sk);
+ 	bool bpf_needs_ecn = tcp_bpf_ca_needs_ecn(sk);
+ 	bool use_ecn, use_accecn;
+-	u8 tcp_ecn = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn);
++	u8 tcp_ecn = tcp_ecn_mode_eff(sk);
+ 
+ 	use_accecn = tcp_ecn == TCP_ECN_IN_ACCECN_OUT_ACCECN ||
+ 		     tcp_ca_needs_accecn(sk);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 732b35cc0..c58b1633b 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -2985,7 +2985,8 @@ union bpf_attr {
+  * 		  **TCP_SYNCNT**, **TCP_USER_TIMEOUT**, **TCP_NOTSENT_LOWAT**,
+  * 		  **TCP_NODELAY**, **TCP_MAXSEG**, **TCP_WINDOW_CLAMP**,
+  * 		  **TCP_THIN_LINEAR_TIMEOUTS**, **TCP_BPF_DELACK_MAX**,
+- *		  **TCP_BPF_RTO_MIN**, **TCP_BPF_SOCK_OPS_CB_FLAGS**.
++ *		  **TCP_BPF_RTO_MIN**, **TCP_BPF_SOCK_OPS_CB_FLAGS**,
++ *		  **TCP_ECN**, **TCP_ECN_OPTION**.
+  * 		* **IPPROTO_IP**, which supports *optname* **IP_TOS**.
+  * 		* **IPPROTO_IPV6**, which supports the following *optname*\ s:
+  * 		  **IPV6_TCLASS**, **IPV6_AUTOFLOWLABEL**.
+diff --git a/include/uapi/linux/tcp.h b/include/uapi/linux/tcp.h
+index 03772dd4d..01ebb348b 100644
+--- a/include/uapi/linux/tcp.h
++++ b/include/uapi/linux/tcp.h
+@@ -142,6 +142,8 @@ enum {
+ #define TCP_RTO_MAX_MS		44	/* max rto time in ms */
+ #define TCP_RTO_MIN_US		45	/* min rto time in us */
+ #define TCP_DELACK_MAX_US	46	/* max delayed ack time in us */
++#define TCP_ECN			47	/* Per-socket ECN mode (0-5, 255=use sysctl) */
++#define TCP_ECN_OPTION		48	/* Per-socket AccECN option (0-3, 255=use sysctl) */
+ 
+ #define TCP_REPAIR_ON		1
+ #define TCP_REPAIR_OFF		0
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 61940e753..993b31e10 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -5670,6 +5670,8 @@ static int sol_tcp_sockopt(struct sock *sk, int optname,
+ 	case TCP_NOTSENT_LOWAT:
+ 	case TCP_SAVE_SYN:
+ 	case TCP_RTO_MAX_MS:
++	case TCP_ECN:
++	case TCP_ECN_OPTION:
+ 		if (*optlen != sizeof(int))
+ 			return -EINVAL;
+ 		break;
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 1c867a302..fb376a97f 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -463,6 +463,8 @@ void tcp_init_sock(struct sock *sk)
+ 
+ 	tp->tsoffset = 0;
+ 	tp->rack.reo_wnd_steps = 1;
++	tp->ecn_mode = TCP_ECN_MODE_UNSPEC;
++	tp->ecn_option = TCP_ACCECN_OPTION_UNSPEC;
+ 
+ 	sk->sk_write_space = sk_stream_write_space;
+ 	sock_set_flag(sk, SOCK_USE_WRITE_QUEUE);
+@@ -4160,6 +4162,18 @@ int do_tcp_setsockopt(struct sock *sk, int level, int optname,
+ 		tcp_enable_tx_delay(sk, val);
+ 		WRITE_ONCE(tp->tcp_tx_delay, val);
+ 		break;
++	case TCP_ECN:
++		if (val != TCP_ECN_MODE_UNSPEC && (val < 0 || val > TCP_ECN_IN_ACCECN_OUT_NOECN))
++			err = -EINVAL;
++		else
++			WRITE_ONCE(tp->ecn_mode, val);
++		break;
++	case TCP_ECN_OPTION:
++		if (val != TCP_ACCECN_OPTION_UNSPEC && (val < 0 || val > TCP_ACCECN_OPTION_PERSIST))
++			err = -EINVAL;
++		else
++			WRITE_ONCE(tp->ecn_option, val);
++		break;
+ 	default:
+ 		err = -ENOPROTOOPT;
+ 		break;
+@@ -4842,6 +4856,12 @@ int do_tcp_getsockopt(struct sock *sk, int level,
+ 	case TCP_DELACK_MAX_US:
+ 		val = jiffies_to_usecs(READ_ONCE(inet_csk(sk)->icsk_delack_max));
+ 		break;
++	case TCP_ECN:
++		val = READ_ONCE(tp->ecn_mode);
++		break;
++	case TCP_ECN_OPTION:
++		val = READ_ONCE(tp->ecn_option);
++		break;
+ 	default:
+ 		return -ENOPROTOOPT;
+ 	}
+@@ -5256,6 +5276,8 @@ static void __init tcp_struct_check(void)
+ 	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_write_tx, tsorted_sent_queue);
+ 	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_write_tx, highest_sack);
+ 	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_write_tx, ecn_flags);
++	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_write_tx, ecn_mode);
++	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_write_tx, ecn_option);
+ 
+ 	/* TXRX read-write hotpath cache lines */
+ 	CACHELINE_ASSERT_GROUP_MEMBER(struct tcp_sock, tcp_sock_write_txrx, pred_flags);
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 0f60a1dbf..b7dea787f 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -7463,7 +7463,7 @@ static void tcp_ecn_create_request(struct request_sock *req,
+ 	u32 ecn_ok_dst;
+ 
+ 	if (tcp_accecn_syn_requested(th) &&
+-	    (READ_ONCE(net->ipv4.sysctl_tcp_ecn) >= 3 ||
++	    (tcp_ecn_mode_eff(listen_sk) >= 3 ||
+ 	     tcp_ca_needs_accecn(listen_sk))) {
+ 		inet_rsk(req)->ecn_ok = 1;
+ 		tcp_rsk(req)->accecn_ok = 1;
+@@ -7477,7 +7477,7 @@ static void tcp_ecn_create_request(struct request_sock *req,
+ 
+ 	ect = !INET_ECN_is_not_ect(TCP_SKB_CB(skb)->ip_dsfield);
+ 	ecn_ok_dst = dst_feature(dst, DST_FEATURE_ECN_MASK);
+-	ecn_ok = READ_ONCE(net->ipv4.sysctl_tcp_ecn) || ecn_ok_dst;
++	ecn_ok = tcp_ecn_mode_eff(listen_sk) || ecn_ok_dst;
+ 
+ 	if (((!ect || th->res1 || th->ae) && ecn_ok) ||
+ 	    tcp_ca_needs_ecn(listen_sk) ||
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 00417a429..82b96c401 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -1045,7 +1045,7 @@ static unsigned int tcp_syn_options(struct sock *sk, struct sk_buff *skb,
+ 	if (unlikely((TCP_SKB_CB(skb)->tcp_flags & TCPHDR_ACK) &&
+ 		     tcp_ecn_mode_accecn(tp) &&
+ 		     inet_csk(sk)->icsk_retransmits < 2 &&
+-		     READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option) &&
++		     tcp_accecn_option_eff(sk) &&
+ 		     remaining >= TCPOLEN_ACCECN_BASE)) {
+ 		opts->use_synack_ecn_bytes = 1;
+ 		remaining -= tcp_options_fit_accecn(opts, 0, remaining);
+@@ -1133,7 +1133,7 @@ static unsigned int tcp_synack_options(const struct sock *sk,
+ 	smc_set_option_cond(tcp_sk(sk), ireq, opts, &remaining);
+ 
+ 	if (treq->accecn_ok &&
+-	    READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option) &&
++	    tcp_accecn_option_eff(sk) &&
+ 	    synack_type != TCP_SYNACK_RETRANS && remaining >= TCPOLEN_ACCECN_BASE) {
+ 		opts->use_synack_ecn_bytes = 1;
+ 		remaining -= tcp_options_fit_accecn(opts, 0, remaining);
+@@ -1221,7 +1221,7 @@ static unsigned int tcp_established_options(struct sock *sk, struct sk_buff *skb
+ 	}
+ 
+ 	if (tcp_ecn_mode_accecn(tp)) {
+-		int ecn_opt = READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option);
++		int ecn_opt = tcp_accecn_option_eff(sk);
+ 
+ 		if (ecn_opt && tp->saw_accecn_opt &&
+ 		    (ecn_opt >= TCP_ACCECN_OPTION_PERSIST ||
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 732b35cc0..c58b1633b 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -2985,7 +2985,8 @@ union bpf_attr {
+  * 		  **TCP_SYNCNT**, **TCP_USER_TIMEOUT**, **TCP_NOTSENT_LOWAT**,
+  * 		  **TCP_NODELAY**, **TCP_MAXSEG**, **TCP_WINDOW_CLAMP**,
+  * 		  **TCP_THIN_LINEAR_TIMEOUTS**, **TCP_BPF_DELACK_MAX**,
+- *		  **TCP_BPF_RTO_MIN**, **TCP_BPF_SOCK_OPS_CB_FLAGS**.
++ *		  **TCP_BPF_RTO_MIN**, **TCP_BPF_SOCK_OPS_CB_FLAGS**,
++ *		  **TCP_ECN**, **TCP_ECN_OPTION**.
+  * 		* **IPPROTO_IP**, which supports *optname* **IP_TOS**.
+  * 		* **IPPROTO_IPV6**, which supports the following *optname*\ s:
+  * 		  **IPV6_TCLASS**, **IPV6_AUTOFLOWLABEL**.
+diff --git a/tools/include/uapi/linux/tcp.h b/tools/include/uapi/linux/tcp.h
+index 13ceeb395..4f52b9df4 100644
+--- a/tools/include/uapi/linux/tcp.h
++++ b/tools/include/uapi/linux/tcp.h
+@@ -128,7 +128,8 @@ enum {
+ #define TCP_CM_INQ		TCP_INQ
+ 
+ #define TCP_TX_DELAY		37	/* delay outgoing packets by XX usec */
+-
++#define TCP_ECN			47	/* Per-socket ECN mode (0-5, 255=use sysctl) */
++#define TCP_ECN_OPTION		48	/* Per-socket AccECN option (0-3, 255=use sysctl) */
+ 
+ #define TCP_REPAIR_ON		1
+ #define TCP_REPAIR_OFF		0
+diff --git a/tools/testing/selftests/bpf/progs/setget_sockopt.c b/tools/testing/selftests/bpf/progs/setget_sockopt.c
+index d96e99b67..fb97fa0bc 100644
+--- a/tools/testing/selftests/bpf/progs/setget_sockopt.c
++++ b/tools/testing/selftests/bpf/progs/setget_sockopt.c
+@@ -64,6 +64,8 @@ static const struct sockopt_test sol_tcp_tests[] = {
+ 	{ .opt = TCP_BPF_DELACK_MAX, .new = 30000, .expected = 30000, },
+ 	{ .opt = TCP_BPF_RTO_MIN, .new = 30000, .expected = 30000, },
+ 	{ .opt = TCP_RTO_MAX_MS, .new = 2000, .expected = 2000, },
++	{ .opt = TCP_ECN, .new = 3, .expected = 3, .restore = 255, },
++	{ .opt = TCP_ECN_OPTION, .new = 2, .expected = 2, .restore = 255, },
+ 	{ .opt = 0, },
+ };
+ 
+
+base-commit: 548b86839f7fb819a4d6c83b71c73ec378d24275
+-- 
+2.34.1
+
