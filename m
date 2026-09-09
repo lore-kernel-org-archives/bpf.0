@@ -1,162 +1,148 @@
-Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2836A3A7F45
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 06:25:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B397430567F
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 06:25:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788935142; cv=none; b=NqT8WOJzd6qIkRUJSLuBIrf1pkwTRIjAOpEfePaJLwwd+dqwKkrxNaHB16xON6n0WSZfcose+7DDTw3YM4zvkt6lxAjqgViLiJLwh5bXBMqgBRuVlZdJAtHHCKAS7CjTeBlDChI3lEV+oykXKqn4su3CtpMn/bTUNs18GQapTcA=
+	t=1788935144; cv=none; b=VpbrxrU/d2KGpz39zVMO4WD7iw4Lr2M9D4/zheQUQC7dThJWJsEZRVzvBJC7nGcWcV1mRa0AQj6PytStHl8Tncf3b1slkF/8xQ5DHqj+2zK1UcCjuiPJE7f5rHEAySbfhY/itOZeBvZdxbJivNK/k8rSieFOPErgbXWbbszJ0pE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788935142; c=relaxed/simple;
-	bh=JgwdUWgS2mhqtkJuPJz6Xn1w3RxQM/KIK0wxrrKkWZo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A0ue5VkDlpVGZQFv4t8eGHOTKtzHDAImbb6YZodVZEKY1xOdMmIviSbiI8zvXHoAQhdt1EkA3VMabHFntb4on47ILyRWbyB2GGFVvnLi8w8fLLb4wDtkXYUiU/6B9R+6jKEeuz6Amc1WEXo2QteTGyu+gn4VzxWY0XJFzx1aYaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 1A898299468AC3; Tue,  8 Sep 2026 23:25:28 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel-team@fb.com
-Subject: [PATCH bpf-next v2 01/12] selftests/bpf: Add a test for an __int128 by-value argument
-Date: Tue,  8 Sep 2026 23:25:28 -0700
-Message-ID: <20260909062528.4002148-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260909062522.4001896-1-yonghong.song@linux.dev>
-References: <20260909062522.4001896-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1788935144; c=relaxed/simple;
+	bh=IalU4VNeJHk8ML5KLI5OspeqrIr8RTuzI6eVNKkAjVI=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Pq+D9GZ+ZanM3golzQeuEiFXxzJUr5pSVHRKX1Yu2EddTy2qnmRYXgyKbtmKTZGtQyiXTaYDtWPbY12Gn1F9eymLufSrtuTBlyJmkzUHdvRToiRQiA9t8mtkdulrtlGLm3UE/C8vXQEZytvoOTsLdYSujL4eCr8Bdag+LGiTteo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PeDk+Ls7; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PeDk+Ls7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 851BF1F00A3A;
+	Wed,  9 Sep 2026 06:25:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788935143;
+	bh=eLf+x/iSmt02QWz7GDMow65kHhgGM401kL+QiPHeeNo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=PeDk+Ls70W5h1p7f/QfTmgP5P0Af7Y++TnUwrNCumN7LsSjYOUmoXWe7+E7ClDllE
+	 bGAwwf/5bVHGnvpBUdfbJYW8dSGu3sDZGpSaRZUcKNjWE8dprhbD4AwGlB1gbBmqFv
+	 HRBzXg1zqOMuzC4/mOL8ReyACh1UloT5UZZCqR8NvwKvJ9mv/ZSLmsJ4PiXCXrCobi
+	 krPJdEEZ3+jmN4q5SzxTIUa8WD5burMqwWSC4ffbTOWBLXid8ezjfX14m8kOTzAJZV
+	 RHzTMrc2NkHKOP/2l8wdtN+w4F6dMzwNVvov0QAB6AX/lKC87lGR0z873mjx9u+bF7
+	 OGojzbYiG+brA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v14 net-next] octeontx2-pf: add mqprio bandwidth offload
+ for NIX TX schedulers
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ratheesh Kannoth" <rkannoth@marvell.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260908062437.251739-1-rkannoth@marvell.com>
+References: <20260908062437.251739-1-rkannoth@marvell.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 09 Sep 2026 06:25:43 +0000
+Message-Id: <20260909062543.851BF1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 
-A 128-bit integer is passed in two consecutive argument registers, but
-the verifier counts one argument register per parameter whatever its
-size. For
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] Data Race / Invalid Cast: Mixing atomic bit operations with non-at=
+omic bitwise operations on `u64 pf->flags` causes data races and memory cor=
+ruption.
+- [Medium] State Desynchronization: Failing to clear hardware shapers in `o=
+tx2_mqprio_down()` skips software state cleanup, permanently bricking mqpri=
+o state.
+--
 
-  __u64 take_i128_global(int a, u128 v, int c)
+commit e74bdebdda4c26c75ad9a6fe1f2ba38bec570025
+Author: Ratheesh Kannoth <rkannoth@marvell.com>
+Subject: octeontx2-pf: add mqprio bandwidth offload for NIX TX schedulers
 
-the compiler passes a in R1, v in R2:R3 and c in R4, while the verifier
-marks only R1 through R3 at the entry of the global function. The callee
-then reads its own third parameter out of a register the verifier
-considers uninitialized, and the program is rejected for a register the
-source never names:
+This commit adds mqprio bandwidth offload for channel-mode mqprio with
+TC_MQPRIO_SHAPER_BW_RATE. It programs per-queue MDQ CIR/PIR through the NIX
+TX scheduler mailbox for each non-QoS transmit queue. The patch also manages
+the tearing down and rebuilding of the TX scheduler hierarchy when adding or
+replacing the qdisc.
 
-  Validating take_i128_global() func#1...
-  20: R1=3Dscalar() R2=3Dscalar() R3=3Dscalar() R10=3Dfp0
-  ; __noinline __u64 take_i128_global(int a, u128 v, int c) @ verifier_in=
-t128_arg.c:12
-  20: (bf) r0 =3D r2                      ; R0=3Dscalar(id=3D4) R2=3Dscal=
-ar(id=3D4)
-  ; return (__u64)a + (__u64)(v >> 64) + (__u64)v + c; @ verifier_int128_=
-arg.c:14
-  21: (bc) w1 =3D w1                      ; R1=3Dscalar(smin=3D0,smax=3Du=
-max=3D0xffffffff,var_off=3D(0x0; 0xffffffff))
-  22: (67) r1 <<=3D 32                    ; R1=3Dscalar(smax=3D0x7fffffff=
-00000000,smin32=3D0,smax32=3Dumax32=3D0,var_off=3D(0x0; 0xffffffff0000000=
-0))
-  23: (c7) r1 s>>=3D 32                   ; R1=3Dscalar(smin=3D0xffffffff=
-80000000,smax=3D0x7fffffff)
-  24: (0f) r0 +=3D r1                     ; R0=3Dscalar() R1=3Dscalar(smi=
-n=3D0xffffffff80000000,smax=3D0x7fffffff)
-  25: (0f) r0 +=3D r3                     ; R0=3Dscalar() R3=3Dscalar()
-  26: (bc) w1 =3D w4
-  R4 !read_ok
+Link: https://lore.kernel.org/netdev/20260904031553.3196916-1-rkannoth@marv=
+ell.com/
 
-The log is from clang 23. LLVM 21/22 place the argument in the same
-registers.
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drive=
+rs/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+> @@ -907,11 +907,13 @@ static int otx2_mbox_up_handler_rep_event_up_notify=
+(struct otx2_nic *pf,
+> =20
+>  	if (info->event =3D=3D RVU_EVENT_PORT_STATE) {
+>  		if (info->evt_data.port_state) {
+> -			pf->flags |=3D OTX2_FLAG_PORT_UP;
+> +			set_bit(__builtin_ctzll(OTX2_FLAG_PORT_UP),
+> +				(unsigned long *)&pf->flags);
 
-Add the test with the failure it produces now. A later patch will fix
-this issue so this test should succeed.
+[Severity: High]
+Could mixing atomic bit operations here with non-atomic bitwise operations
+elsewhere cause data races and memory corruption?
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- .../selftests/bpf/prog_tests/verifier.c       |  2 ++
- .../selftests/bpf/progs/verifier_int128_arg.c | 36 +++++++++++++++++++
- 2 files changed, 38 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_int128_arg=
-.c
+For example, otx2_open() updates pf->flags using non-atomic read-modify-wri=
+te
+operations:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
-sting/selftests/bpf/prog_tests/verifier.c
-index f7f94ccebce2..0d68b92d6692 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -50,6 +50,7 @@
- #include "verifier_helper_packet_access.skel.h"
- #include "verifier_helper_restricted.skel.h"
- #include "verifier_helper_value_access.skel.h"
-+#include "verifier_int128_arg.skel.h"
- #include "verifier_int_ptr.skel.h"
- #include "verifier_iterating_callbacks.skel.h"
- #include "verifier_jeq_infer_not_null.skel.h"
-@@ -214,6 +215,7 @@ void test_verifier_helper_access_var_len(void) { RUN(=
-verifier_helper_access_var_
- void test_verifier_helper_packet_access(void) { RUN(verifier_helper_pack=
-et_access); }
- void test_verifier_helper_restricted(void)    { RUN(verifier_helper_rest=
-ricted); }
- void test_verifier_helper_value_access(void)  { RUN(verifier_helper_valu=
-e_access); }
-+void test_verifier_int128_arg(void)           { RUN_TESTS(verifier_int12=
-8_arg); }
- void test_verifier_int_ptr(void)              { RUN(verifier_int_ptr); }
- void test_verifier_iterating_callbacks(void)  { RUN(verifier_iterating_c=
-allbacks); }
- void test_verifier_jeq_infer_not_null(void)   { RUN(verifier_jeq_infer_n=
-ot_null); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_int128_arg.c b/to=
-ols/testing/selftests/bpf/progs/verifier_int128_arg.c
-new file mode 100644
-index 000000000000..419851f2d8d0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_int128_arg.c
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+#define MIX_A	0xdeadbeefcafef00dULL
-+#define MIX_B	0x0123456789abcdefULL
-+
-+typedef unsigned __int128 u128;
-+
-+__noinline __u64 take_i128_global(int a, u128 v, int c)
-+{
-+	return (__u64)a + (__u64)(v >> 64) + (__u64)v + c;
-+}
-+
-+SEC("tc")
-+/*
-+ * The verifier counts one argument register for the __int128 and marks =
-only
-+ * R1 through R3 at the entry of take_i128_global(), while the compiler =
-passed
-+ * a in R1, v in R2:R3 and c in R4.
-+ */
-+__failure __msg("R4 !read_ok")
-+int aggregate_arg_int128_c_test(struct __sk_buff *skb)
-+{
-+	__u64 a =3D skb->len ^ MIX_A;
-+	__u64 b =3D skb->len ^ MIX_B;
-+	u128 v =3D ((u128)a << 64) | b;
-+
-+	if (take_i128_global(1, v, 2) !=3D a + b + 3)
-+		return 1;
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
+    pf->flags &=3D ~OTX2_FLAG_INTF_DOWN;
+    pf->flags &=3D ~OTX2_FLAG_PORT_UP;
+
+If an asynchronous link event triggers the mbox handler to update
+OTX2_FLAG_PORT_UP atomically while otx2_open() is non-atomically
+modifying pf->flags, the atomic updates could be overwritten and lost.
+
+Additionally, casting a u64 pointer to an unsigned long pointer for
+atomic operations can corrupt memory on 32-bit big-endian architectures.
+
+[ ... ]
+
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drive=
+rs/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+[ ... ]
+> +int otx2_mqprio_down(struct otx2_nic *pfvf)
+> +{
+> +	int err =3D 0;
+> +
+> +	if (!pfvf->mqprio.rate_limit)
+> +		return 0;
+> +
+> +	if (netif_running(pfvf->netdev) &&
+> +	    otx2_mqprio_mdq_allocated(pfvf))
+> +		err =3D otx2_nix_tm_clear_queue_shaper(pfvf);
+> +
+> +	if (err) {
+> +		netdev_err(pfvf->netdev,
+> +			   "mqprio: failed to clear hardware shapers: %d\n",
+> +			   err);
+> +		return err;
+
+[Severity: Medium]
+Does returning early here permanently desynchronize the software state if
+clearing the hardware shapers fails?
+
+When removing the mqprio qdisc via a tc qdisc del command, the kernel
+calls ndo_setup_tc with hw=3D0 and ignores the return value. If
+otx2_nix_tm_clear_queue_shaper() fails (for instance, due to a mailbox
+timeout), returning early skips the call to otx2_mqprio_clear_sw().
+
+Since the kernel unconditionally destroys the qdisc software object, the
+driver will continue to incorrectly enforce rates during ndo_open and
+reject features like XDP, PFC, and HTB because it falsely believes
+mqprio is still active.
+
+> +	}
+> +
+> +	otx2_mqprio_clear_sw(pfvf);
+> +
+> +	return 0;
+> +}
+
 --=20
-2.53.0-Meta
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260908062437.2517=
+39-1-rkannoth@marvell.com?part=3D1
