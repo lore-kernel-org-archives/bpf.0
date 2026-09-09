@@ -1,142 +1,84 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBD039C017
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 18:29:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BDD239CCF7;
+	Wed,  9 Sep 2026 18:41:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788978557; cv=none; b=ffEwx9I/jdoMqK1ZIFLI9BfZb9cNS2Oa56MTLXBXTKnhauHuwDPAx9oGHGo+bv8bqWeldoe0HA1ka3yaAzUwSreIOnEhBm+vU3/1jhmY33PfwbLyiIIBtvlC6OWcM5zvqpm3Wr7ftu9h45oO4hkR0ppQPI0mKTIojmJLrobGjVQ=
+	t=1788979267; cv=none; b=oilqYSkE4xrUiuCV0iGaydHBJ/IND0nUgVj29q8exm1VdZHeGYuw/tWkUdK6byN0Yf3Zdx8dS71KYhcYVBkeA659dWtLBpUn6X5+arB/b42o/xZwfjkCOVjcSK2z3IogNaYvqxAL+AR9oRLK9BjoHme3i0vHRR+kAaI1C8w205w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788978557; c=relaxed/simple;
-	bh=4D/mn8F2dB3f8vcdPsHU1tAUaAcT/+4x9VACwuiFHwo=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=lezKD9l7fw1OANrpnICgZza131pvd/pGJn6dhgPh0acb7SlUoefCvgOhULLjTPjrhVb3UtmZdVrJrGxvoJ4DWYEnnKJM6YWwhnEpg6spbF/B5xd+G/0BnpsHkdAkBPX5W98PR6q1dm6HVB3TpQOM1BmuI9r8gKTtrQz6BWTnva0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=hbT+3/qH; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1788979267; c=relaxed/simple;
+	bh=lPbmmiQL1Wm3rLy+SfX3YcgQ6DzZwAIv7N/fsc+XUPs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=fWglmUZdrPdNNPm3Zp8RA7m9LuV77hO5ljag+KedHa8iMS2ZXG5qQ2F5skcU4zkUk/yrcNTOilEoqIrrYLZbGF1cm4TOq+o7umDpy2zdF8dHbJebaKFzBztBck7+xqu1asU5dQfAuEPhi/+/+eNMfm8Dyv0TEBTzOHyzP9l3SPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LICO0vvQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="hbT+3/qH"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-cc4aa0220f2so449463a12.0
-        for <bpf@vger.kernel.org>; Wed, 09 Sep 2026 11:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788978555; x=1789583355; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=1oUEgD/rN41C0bVeA3gI1cpMDgX5748s/d/3oZ5kHgc=;
-        b=hbT+3/qHCQkvm4u4JN3ZbE/Fwed7LwI7C7lmOZ03xuD3ZPXBfC+v/JzENV9LJbBKyC
-         C4YHGQBcZYJAg/ZOKLHEldIRwvXrDjJ30YAt3RtwLb4ZlXrBoTZBQfX17hFpylOFo6cR
-         hAk+8LKldNCkPondeiBCLLKBOeIAX44XZPjr2GDfUXgP//Ujo1/zqzonepatCHSZNT9I
-         JTxj0lKMhGYcTEkohFI1j/4j0ubNgb6n/3Nl7jk3NwYjzcRm/QoVNwlbnqUcvXEMlYq3
-         NS8GoBxJ9t42NCThDVhbpL3MjTlXCazIxy2wKih4pKFeC6ZrSICnm5DcvDko+Ad/sU9u
-         qLQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788978555; x=1789583355;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=1oUEgD/rN41C0bVeA3gI1cpMDgX5748s/d/3oZ5kHgc=;
-        b=XIBO4loHwa9nx5/GWkwVWI8UsLhLHyg1AKTZphOOyXZgVAfYOFrSKb6HVebjVQSsvq
-         0bUFu4aWRJr4vWXtOB6LBInZBIiWCW6DqbZt2diZZSIsYyhCvsmIUBW9cmy08tmD4FF4
-         Q52Qt8UdE3AeM+Pc+5kK/EEU/dzSWSYRnwe6wxAKKth4VPtxOzAVSoTJkZZXR2EHZruI
-         UpQOP6Ek4zHeD+uH81aJ+PRetywGC++6Z0zB4rezHtSQVekUyfHKDFPlvQIlZdqWy5A3
-         j54c8UySHJ7rmzkkQ/oVn+3bKSY1EjPfHwsIooOAQq2gzkV6HYzawWXL4XwP2Q7NxyBi
-         ci+Q==
-X-Gm-Message-State: AFuF++mvp04zqAG1ZWUHf5X1RhHEChB5puyZRf5c6pHTgbSP06B4XYg+
-	cbOxzAJ8PBYUcNAtomh+MMVg1DMI3sA0U9W5sDBcJmttJs/G65RFgg6CoUqpu+nMIeM=
-X-Gm-Gg: AYBFou0AUAICZyTTMBtHdJU5iL2BILifaHlkHYEGZuUlJCB2ELZse2kg8SiW1Zi5sfd
-	LRdkh5bsr9CDMHcjGEMJrnMBhCYO9zScqPh68v5ykNvzT2yjUtsVun1p+O6/v3jVXX86UWRlyho
-	JrEZM5wKOr4Cmu8CVHmOIYzPzzGBCm3bYDFVus4OOdEDNTRwLj0pFzBZI8vIb2eN/3wuLkm3tdf
-	N3lwmv8vEqKJyl0IRbmpcPRBB1fEKmnw1qSGpCgd9dbZVKSGIid7Prcjrxk0kQuDfuwERKc4cy0
-	o7WdpnlO7sf/xJwWXCcZe/PTQJf2QpxY08QG4AKZiKepYFPkhZMctF3sfB9fo3+DqbnQSa6GKCP
-	vwzYxdJ+CvKo4jTRguBkBUwb02VJrsztylpojEwmoip03iBdwwSWIsmyIvMHt8IYlYqHgwTrTI6
-	LvAYjPvDSaEzqgW0b/mo4m93smwoWuQgYff2OyOUf1iMXRQutuS+T3h0GKlN8L+AVHmwVJFq+uy
-	VdKYfTsXQEA0nmISctWvKlHKTjz
-X-Received: by 2002:a17:90b:264e:b0:398:9bd1:3215 with SMTP id 98e67ed59e1d1-39b262e28cdmr58011908a91.22.1788978554953;
-        Wed, 09 Sep 2026 11:29:14 -0700 (PDT)
-Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39cfa5b2fffsm1727085a91.4.2026.09.09.11.29.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Sep 2026 11:29:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LICO0vvQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD26C1F000FF;
+	Wed,  9 Sep 2026 18:41:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788979265;
+	bh=V8dVU+QStkxPmY4+TTlQDoS1NgA8d65SxXAtC+WMDbQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=LICO0vvQ16k1tULzE6km+NUvjuIkZZFgXRUVn+vU1MF/fetG1+uGL7WN1tsA33PCS
+	 RtalXEuCCtXOmb6Un8JK+CSovHyYPr4AGWE/Jq25Y51rVskJlWlaRPcVBxJuRiqIWj
+	 EdbqxJXk2gORoaf/2HDK4lVI+KUxSlVmAKbXkL+NvqHGD5rXj2fRfBRtxUu2gdWL/q
+	 ZAm9X95sw1GqBQo/r0Ayos3PHgLKOT+pLW99j3ENTOiis7LdHVdRDuqfDSvkhtpEEI
+	 1m6y+mvhOXGxBDiiH8pmDV5hJ4hPtyVUZS88YEeU4+waDGBBr2oWH7flV//ZcORmur
+	 GdiGX3gyCyGLw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1983E380AA52;
+	Wed,  9 Sep 2026 18:40:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 09 Sep 2026 14:29:12 -0400
-Message-Id: <DLAZYXG7B54C.23SY9Z6V3JRT1@etsalapatis.com>
-Cc: <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <linux-kernel@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
- <linux-kselftest@vger.kernel.org>, <sparclinux@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v4 0/7] bpf: fix typos and repeated words in
- comments
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Hemanth Selam" <hemanth.selam@gmail.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Russell King" <linux@armlinux.org.uk>,
- "Puranjay Mohan" <puranjay@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "Hari Bathini" <hbathini@linux.ibm.com>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, "Naveen N Rao"
- <naveen@kernel.org>, "Madhavan Srinivasan" <maddy@linux.ibm.com>, "Michael
- Ellerman" <mpe@ellerman.id.au>, "Nicholas Piggin" <npiggin@gmail.com>,
- "Shuah Khan" <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- "Andreas Larsson" <andreas@gaisler.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260908054853.13820-1-hemanth.selam@gmail.com>
-In-Reply-To: <20260908054853.13820-1-hemanth.selam@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v2] bpf: disallow bpf_skb_pull_data() for
+ LWT_SEG6LOCAL
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178897920389.1001427.18181252445473114035.git-patchwork-notify@kernel.org>
+Date: Wed, 09 Sep 2026 18:40:03 +0000
+References: <20260909040807.3885815-2-bestswngs@gmail.com>
+In-Reply-To: <20260909040807.3885815-2-bestswngs@gmail.com>
+To: Weiming Shi <bestswngs@gmail.com>
+Cc: daniel@iogearbox.net, john.fastabend@gmail.com, sdf@fomichev.me,
+ martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, ihor.solodrai@linux.dev, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ dlebrun@google.com, m.xhonneux@gmail.com, co+adfca3e91be95776@bugs.sh,
+ xmei5@asu.edu, alexei.starovoitov@gmail.com, stable@vger.kernel.org
 
-On Tue Sep 8, 2026 at 1:48 AM EDT, Hemanth Selam wrote:
-> Fix misspellings and repeated words in comments, found with
-> scripts/checkpatch.pl using the misspelling list in scripts/spelling.txt.
-> Comments only, no code changes.
->
-> Changes since v3:
->  - rebased onto bpf-next.  CI reported a conflict on v3 and asked for a
->    rebase and resubmit; the tree has moved on since and the series
->    applies cleanly again.  The patches are otherwise identical to v3.
->
-> Changes since v2:
->  - moved from mainline to bpf-next, which resolved the earlier conflict
->    in stream.c where the typo had already been fixed upstream.
->  - renamed the selftests patches to the selftests/bpf: prefix used by the
->    rest of that directory, as CI suggested.
->
-> Hemanth Selam (7):
->   ARM: net: fix typo "arithmatic" in comment
->   bpf: fix typos in comments
->   powerpc: net: fix typo "upto" in comments
->   selftests/bpf: fix typos in comments
->   sparc: net: fix typo "evalute" in comment
->   libbpf: Fix typos in comments
->   selftests/bpf: fix repeated words in comments
+Hello:
 
-NACK, this kind of churn for no measurable gain is not productive.
+This patch was applied to bpf/bpf.git (master)
+by Daniel Borkmann <daniel@iogearbox.net>:
 
-pw-bot: cr
+On Wed,  9 Sep 2026 12:08:08 +0800 you wrote:
+> An LWT_SEG6LOCAL program can invalidate its cached SRH with
+> bpf_lwt_seg6_adjust_srh() and then call bpf_skb_pull_data(). The latter
+> may reallocate skb->head, leaving the per-CPU SRH pointer dangling.
+> Post-program SRH validation then writes through that pointer.
+> 
+> Disallow bpf_skb_pull_data() for LWT_SEG6LOCAL programs so the verifier
+> rejects this unsafe helper combination. Other LWT program types continue
+> to expose the helper through lwt_out_func_proto().
+> 
+> [...]
 
->
->  arch/arm/net/bpf_jit_32.c                                    | 2 +-
->  arch/powerpc/net/bpf_jit_comp32.c                            | 2 +-
->  arch/powerpc/net/bpf_jit_comp64.c                            | 4 ++--
->  arch/sparc/net/bpf_jit_asm_32.S                              | 2 +-
->  include/linux/filter.h                                       | 4 ++--
->  kernel/bpf/reuseport_array.c                                 | 2 +-
->  tools/lib/bpf/btf.c                                          | 4 ++--
->  tools/lib/bpf/usdt.c                                         | 2 +-
->  tools/testing/selftests/bpf/libarena/src/asan.bpf.c          | 2 +-
->  tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c       | 2 +-
->  tools/testing/selftests/bpf/prog_tests/task_local_data.h     | 2 +-
->  tools/testing/selftests/bpf/progs/freplace_unreliable_prog.c | 2 +-
->  tools/testing/selftests/bpf/progs/iters.c                    | 2 +-
->  tools/testing/selftests/bpf/progs/verifier_var_off.c         | 2 +-
->  14 files changed, 17 insertions(+), 17 deletions(-)
+Here is the summary with links:
+  - [bpf,v2] bpf: disallow bpf_skb_pull_data() for LWT_SEG6LOCAL
+    https://git.kernel.org/bpf/bpf/c/e4a62833adff
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
