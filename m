@@ -1,199 +1,230 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1585847C0E6
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 08:56:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F0A63B14DE
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 09:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788944182; cv=none; b=dgmMNwuUdW+CiytDkV2MZKCFZ4HHqU6vq1zwmDT34vqCyTgWplRUqtISklKb0Z+8yI6OU5X+1T+7b76pLHJHWs5fntQ96RLrsZyy3Gou2ARnYzk7WdgQKZJwT/hOf/l71o/Jx3u7UROBffGQG8eCXgZz7f9XfRg9qBuJp7JP7C8=
+	t=1788945580; cv=none; b=s+faUxCOMV9LlCI7qayIPt2CcuxE0cROW+TYzLJRzcbSzWvge1r6CMfdmQjgc9gDR4vz+ALDWEnAA3LtNvEUBWrjZQb7C9PLYWLP1rJljBoglglHCvqD8qDSJAAehUBfRcEdp13qDg9z8cnJGu+TvRHyieYFKDc0/gSKqfZ4qFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788944182; c=relaxed/simple;
-	bh=vlCDdHlERV7ldMdjAlR87YMzOlw9ABmR7MKXz/mJje0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=qmv1gWw3Gqi+IQzI6uRv7zOKsib+32iXAHyblkdvTv/4uTghuAxDQXgYyz92oBATdaOfygI89lEXK22wyhhW0rTAbFDbPd7YZEcPoLP4JKgXr+NGFGIIhcPNvuWHfL6u8qLbqFVdKG+StYEOJ7Ny7b5kWvdTOEXwORkNRggLLjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=sW6STOlM; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1788945580; c=relaxed/simple;
+	bh=AANUG2Fkiony31zysc7K1vyEm4d3ES6no5aVP8yMNjQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k8BmCIA7kACr5ov93Uh9PYRjUUmRT/ew3NWH8ZEUHNh2uq0DmIkiGyirbOtnExTabmMGagsySnFy6HBFBjvBhSrRHOpUd/UvQMkh4eg8sH5c03n6daE32Ozworzkmu8JL7ggjkyEmJR0hm1OjPajCgMtH0cMgJSqQCyELWcTpAA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HfSMsm/3; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="sW6STOlM"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 732511A1A78;
-	Wed,  9 Sep 2026 08:56:18 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 3DE0D60448;
-	Wed,  9 Sep 2026 08:56:18 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 007DE11C7AF65;
-	Wed,  9 Sep 2026 10:56:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1788944176; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=BzDIG/gMdp8z4Xa0xaBWgKt4+UvBf19IsQl+Zf3hMqM=;
-	b=sW6STOlMRIj94yOR70vXnTmjKZlfa+wY3OmS2s3f39yg7gLFsI7AClOWALD3FFKROmTGRL
-	0+FEqNF1Cby5rfU8wkFO/B0tlkP1azSRnO91Eb22vMNVll3D2kHp6YQPR5VZlqAaGgNxBK
-	zF3VuC2CHmuT6ZByNQKq9avzzB2Iyr9Vixce2cVb9XXj/TmZylmY/KejTRzzc2mTccbxMC
-	JECGmwHDsgXZMbb5J/hDup3CbCdCRaGsypSF7D3yX9cwAekNdYJhLPCpo8hl+T7MkxXNC5
-	F2lsE7ppOIp1UMM4sV1BkCB7lo9u/t2mgwPeL/UWz+M3WaEZJ754WhQm+nl/zA==
-From: "Miguel Gazquez (Schneider Electric)" <miguel.gazquez@bootlin.com>
-Date: Wed, 09 Sep 2026 10:56:09 +0200
-Subject: [PATCH 5.15.y] tcp: clear sock_ops cb flags before force-closing a
- child socket
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HfSMsm/3"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-482dbe4d247so3121838f8f.2
+        for <bpf@vger.kernel.org>; Wed, 09 Sep 2026 02:19:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788945574; x=1789550374; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+AHDOad1N4UeccxVypy7aIabm5nwKXZpXx1x5dAIbqI=;
+        b=HfSMsm/3XsP9U0nAMZX6G4DzBWSdqtSqWUIm0eQNj8cHdqR/aVc35mgDd25bNBXXt2
+         7RKzrO/h/irf11PAn8kL5s6l2mBwoOJUuL8mkkw2/OEDxgrmw4MutveXnvRH8/SlCDqD
+         OBPgKEnrh84YOL03jymR+XjvOUCpe1p/RdyrsesVAGyhHqXiawzyapDLJrjg0Ud1K0Hw
+         KzMgliRVV0lAYal7kkLqvrG2hvaEe5GssaXFzuulSYWKjkdf2TGx3IbXkxDsTxLQpcWU
+         6+5vur2o+Y/8bWhdRNiGLjGahFaXxtS+E5RgY+nxrySkKkqTfrN9tJovyWt7hTgwxN35
+         oZqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788945574; x=1789550374;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=+AHDOad1N4UeccxVypy7aIabm5nwKXZpXx1x5dAIbqI=;
+        b=FUTmtcquOt/C2oSoMTP6jGghaPx5s3HtG9lPbysaVez8VYnSB9RjsubcHk+QaKNjV5
+         JelB9N6MVFyv17om1t7d9x7imkqyWQe7VISlRNiWpa+HlIxyRhgn6lMRo5b3PxjipifS
+         XoBlsrnpHWyru9ss+WgHH/+ifyXVSO0RfiNnWmDqrKjOHbHQ2EUGmmt9YSGG2mxZxSj2
+         psVcl/Vri2cgDqA1mnOByDBC0BgdGL7IK+7NvmVqPBmAgaJqW7LEr60OP/qGDiaOdJdj
+         OI9OH+vSBy0B/fsOeXf2lZLhsEu8smswwBELq+6UeuAbYc1uFI7TxeBOtfgv6EVspmzW
+         eZOA==
+X-Gm-Message-State: AFuF++lchEnEm5Hj3laRikBJYpD81wXnX4z8SD7VOAZNZ3AlFn/a9JV9
+	oo0O+OP6M30CHWEw7plwQk/cErCfrYBbRDHToXOXMf/h5lTVzUWOprA9
+X-Gm-Gg: AYBFou3gl7+yzPwXqbK+B4+ag9CgV5y1coWJjfxVHnPuEF5nDRaurcHmy8Oe0HNh3C+
+	X2WDvV8b0zE41jvJ0flBypOcS6HFh0UqFhxim+txJMXaTuQkxWIMfxmq6IxlSsj/HN1S07WLHz5
+	9ZQrlxt5ckUnv8GvRjIO46T6jyhdirVFlmAsuKc1taDGE0VBwsT3UeixFparJ7W7471a1AQi3mT
+	MgWarXN3/NYUicchn0DKEf22kLZ9xFt4JOewgZaetJEEe706jXLbv6prjgsWv7EVEj0XAj0ESOj
+	xz7E40YtJ7uZ/hnlYVp5TPNNSvnL2819VxIVHK/3UL83fDKqKpnx044+xfZcIaqc4vyZ88HF/zs
+	7un9vVqiEKL4EwGYRZr86WaqSv3rdt28c3205BvqQT0LzZDnVYvBRUUXZt4FBsZahmF8ERgNcBg
+	h7hiR2LnTLa/hIUeyMB5hq9Js2upzlKbS2Gy1cwSRMYffGnNQ6pDtEh4s9I68TbwNosOSS9qeqw
+	5yHgGMxNaRsRGHJmXyrsfRBzGFXFdSK6P9YtIMRZJeDCIID6g4swwJSaGU=
+X-Received: by 2002:a05:600c:4e94:b0:498:943:ccc0 with SMTP id 5b1f17b1804b1-49cf81e368emr593719355e9.6.1788945573356;
+        Wed, 09 Sep 2026 02:19:33 -0700 (PDT)
+Received: from ?IPV6:2a02:8109:a307:d900:dabd:d9e2:64b7:dfc3? ([2a02:8109:a307:d900:dabd:d9e2:64b7:dfc3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49d07b371afsm373554075e9.9.2026.09.09.02.19.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 09 Sep 2026 02:19:32 -0700 (PDT)
+Message-ID: <74544b6e-205f-4878-8d7a-d27fac7bd946@gmail.com>
+Date: Wed, 9 Sep 2026 10:19:31 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260909-cve-2026-74268-5-15-v1-1-37bf2b22cb29@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMwQ6CMBCE4Vchc3ZJW92KvorhIOui6wFNqwRDe
- HeLHr9J5p+RNZlmHKsZSUfL9hgK/KaC3M7DVckuxQguRHdwDcmotIL2uxAbYvJMnQ8qEnnLvaI
- 8n0l7m37VE7j2XH/Q/vf87u4qrzWJZfkCFHe8HH8AAAA=
-X-Change-ID: 20260908-cve-2026-74268-5-15-b12ecc6535fe
-To: stable@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
- Jakub Kicinski <kuba@kernel.org>, Eric Dumazet <edumazet@google.com>, 
- Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>, 
- David Ahern <dsahern@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <kafai@fb.com>, Song Liu <songliubraving@fb.com>, 
- Yonghong Song <yhs@fb.com>, John Fastabend <john.fastabend@gmail.com>, 
- KP Singh <kpsingh@kernel.org>, Lawrence Brakmo <brakmo@fb.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- Sechang Lim <rhkrqnwk98@gmail.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, 
- Kuniyuki Iwashima <kuniyu@google.com>, Sasha Levin <sashal@kernel.org>, 
- "Miguel Gazquez (Schneider Electric)" <miguel.gazquez@bootlin.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788944170; l=4721;
- i=miguel.gazquez@bootlin.com; s=20250708; h=from:subject:message-id;
- bh=p4vtM9qPFpQK2kcv4KsjziTw8xRoZuyTNe8QYOxibQQ=;
- b=ICDUNCgb5iecK5jzpS3p2bBCP2rG6gntLxMrg8jA2iYPK4tblk+I1xH5d64jZBGSP3yWpY9PY
- Av89R7PtqeDDq/ajd2n0v4K6+tX6nZLIsrW1B9GNm75q+Mkh/GdipzS
-X-Developer-Key: i=miguel.gazquez@bootlin.com; a=ed25519;
- pk=k/2KI9jkmayaF0ghZ8QYUH9Wm/kFHDhl8QoZ0RHbr4w=
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 1/3] bpftool: Track perf counter snapshot
+ state
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com,
+ memxor@gmail.com, qmo@kernel.org, linux-perf-users@vger.kernel.org,
+ acme@kernel.org, namhyung@kernel.org, Mykyta Yatsenko <yatsenko@meta.com>
+References: <20260908-bpftool_cyles_per_run-v3-0-60e86f325c35@meta.com>
+ <20260908-bpftool_cyles_per_run-v3-1-60e86f325c35@meta.com>
+ <CAEf4Bza_4ihFJyOJrJKRpiCvU3Mr6KXLVM+5fYnmb9ydNELOJA@mail.gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <CAEf4Bza_4ihFJyOJrJKRpiCvU3Mr6KXLVM+5fYnmb9ydNELOJA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-From: Sechang Lim <rhkrqnwk98@gmail.com>
+On 9/9/26 12:56 AM, Andrii Nakryiko wrote:
+> On Tue, Sep 8, 2026 at 7:27 AM Mykyta Yatsenko
+> <mykyta.yatsenko5@gmail.com> wrote:
+>>
+>> From: Mykyta Yatsenko <yatsenko@meta.com>
+>>
+>> A perf counter can be zero at fentry. PMU multiplexing can schedule the
+>> event during the BPF program. The old counter check then drops a valid
+>> sample.
+>>
+>> Use an armed flag to track each successful fentry snapshot. Reset all
+>> flags before new reads. The fexit path clears each flag when it consumes
+>> the snapshot.
+>>
+>> Fixes: 47c09d6a9f67 ("bpftool: Introduce "prog profile" command")
+>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+>> ---
+>>  tools/bpf/bpftool/skeleton/profiler.bpf.c | 25 +++++++++++++++++--------
+>>  1 file changed, 17 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/tools/bpf/bpftool/skeleton/profiler.bpf.c b/tools/bpf/bpftool/skeleton/profiler.bpf.c
+>> index f48c783cb9f7..6c654bd9b346 100644
+>> --- a/tools/bpf/bpftool/skeleton/profiler.bpf.c
+>> +++ b/tools/bpf/bpftool/skeleton/profiler.bpf.c
+>> @@ -10,6 +10,11 @@ struct bpf_perf_event_value___local {
+>>         __u64 running;
+>>  } __attribute__((preserve_access_index));
+>>
+>> +struct profile_reading {
+>> +       struct bpf_perf_event_value___local value;
+>> +       bool armed;
+>> +};
+>> +
+>>  /* map of perf event fds, num_cpu * num_metric entries */
+>>  struct {
+>>         __uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
+>> @@ -21,7 +26,7 @@ struct {
+>>  struct {
+>>         __uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+>>         __uint(key_size, sizeof(u32));
+>> -       __uint(value_size, sizeof(struct bpf_perf_event_value___local));
+> 
+> this is not a bug, but... ;)
+> 
+> 
+> struct bpf_perf_event_value is UAPI, why do we need CO-RE-relocatable
+> ___local variant?...
+> 
+> 
+>> +       __uint(value_size, sizeof(struct profile_reading));
+>>  } fentry_readings SEC(".maps");
+>>
+>>  /* accumulated readings */
+>> @@ -45,7 +50,7 @@ const volatile __u32 num_metric = 1;
+>>  SEC("fentry/XXX")
+>>  int BPF_PROG(fentry_XXX)
+>>  {
+>> -       struct bpf_perf_event_value___local *ptrs[MAX_NUM_METRICS];
+>> +       struct profile_reading *ptrs[MAX_NUM_METRICS];
+>>         u32 key = bpf_get_smp_processor_id();
+>>         u32 i;
+>>
+>> @@ -56,6 +61,7 @@ int BPF_PROG(fentry_XXX)
+>>                 ptrs[i] = bpf_map_lookup_elem(&fentry_readings, &flag);
+>>                 if (!ptrs[i])
+>>                         return 0;
+>> +               ptrs[i]->armed = false;
+>>         }
+> 
+> this is preexisting, but why do we have two separate loops: first
+> lookup up fentry_readings pointers, and then separately a) reading
+> perf counters into local variable just to b) immediately copy it into
+> map_value.
+> 
+> can you try simplifying this and doing bpf_perf_event_read_value()
+> into ptrs[i] directly? all within the same loop?
+> 
+> it might have been some verifier issue, not sure, but I think this
+> should work just fine
+> 
+>>
+>>         for (i = 0; i < num_metric && i < MAX_NUM_METRICS; i++) {
+>> @@ -66,7 +72,8 @@ int BPF_PROG(fentry_XXX)
+>>                                                 sizeof(reading));
+>>                 if (err)
+>>                         return 0;
+>> -               *(ptrs[i]) = reading;
+>> +               ptrs[i]->value = reading;
+>> +               ptrs[i]->armed = true;
+>>                 key += num_cpu;
+>>         }
+>>
+>> @@ -76,16 +83,18 @@ int BPF_PROG(fentry_XXX)
+>>  static inline void
+>>  fexit_update_maps(u32 id, struct bpf_perf_event_value___local *after)
+>>  {
+>> -       struct bpf_perf_event_value___local *before, diff;
+>> +       struct profile_reading *before;
+>> +       struct bpf_perf_event_value___local diff;
+>>
+>>         before = bpf_map_lookup_elem(&fentry_readings, &id);
+>>         /* only account samples with a valid fentry_reading */
+>> -       if (before && before->counter) {
+>> +       if (before && before->armed) {
+> 
+> this is such an unlikely situation that I wouldn't even bother
+> "fixing" it, tbh. alternatively we can check enabled or running for
+> zero, I don't think realistically enabled can be zero if we actually
+> captured it an fentry
 
-[ Upstream commit 990348e5bb457697c2f1f7f7b65154a3334d9d2b ]
+Here we check before->counter for 0, substituting by enabled or running
+will still have the same risk of dropping the first sample.
 
-A child socket inherits the listener's bpf_sock_ops_cb_flags via
-sk_clone_lock(). If its setup fails in tcp_v4_syn_recv_sock() /
-tcp_v6_syn_recv_sock(), the child is freed through put_and_exit, where
-inet_csk_prepare_forced_close() drops the socket lock and tcp_done() runs
-without it.
-
-If BPF_SOCK_OPS_STATE_CB_FLAG was inherited, tcp_done() -> tcp_set_state()
-calls tcp_call_bpf(), which expects the lock and trips sock_owned_by_me():
-
-  WARNING: include/net/sock.h:1799 at tcp_set_state+0x433/0x550
-  RIP: 0010:tcp_set_state+0x433/0x550 include/net/sock.h:1799
-  Call Trace:
-   <IRQ>
-   tcp_done+0xba/0x250 net/ipv4/tcp.c:5095
-   tcp_v4_syn_recv_sock+0x850/0xa50 net/ipv4/tcp_ipv4.c:1787
-   tcp_check_req+0xf30/0x1360 net/ipv4/tcp_minisocks.c:926
-   tcp_v4_rcv+0x1047/0x1b50 net/ipv4/tcp_ipv4.c:2164
-   </IRQ>
-
-The child is freed before it is ever established, so it should run no
-sock_ops callback. Clear its cb flags in inet_csk_prepare_for_destroy_sock(),
-the common point for the IPv4, IPv6 and chtls forced-close paths and for the
-MPTCP ->syn_recv_sock() failure path (dispose_child), which reaches tcp_done()
-on a child that was never established too.
-
-Suggested-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Fixes: d44874910a26 ("bpf: Add BPF_SOCK_OPS_STATE_CB")
-Signed-off-by: Sechang Lim <rhkrqnwk98@gmail.com>
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://patch.msgid.link/20260611092923.1895982-1-rhkrqnwk98@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
-
-[ Moved inet_csk_prepare_for_destroy_sock() to inet_connection_sock.c due to header dependency,
-  Added a guard arount the call to tcp_clear_sock_ops_cb_flags to avoid
-  calling it for DDCP sockets.]
-
-Signed-off-by: Miguel Gazquez (Schneider Electric) <miguel.gazquez@bootlin.com>
----
- include/net/inet_connection_sock.h | 8 +-------
- include/net/tcp.h                  | 9 +++++++++
- net/ipv4/inet_connection_sock.c    | 9 +++++++++
- 3 files changed, 19 insertions(+), 7 deletions(-)
-
-diff --git a/include/net/inet_connection_sock.h b/include/net/inet_connection_sock.h
-index 7a015055fe6d..21862361a4f5 100644
---- a/include/net/inet_connection_sock.h
-+++ b/include/net/inet_connection_sock.h
-@@ -292,14 +292,8 @@ reqsk_timeout(struct request_sock *req, unsigned long max_timeout)
- 	return (unsigned long)min_t(u64, timeout, max_timeout);
- }
- 
--static inline void inet_csk_prepare_for_destroy_sock(struct sock *sk)
--{
--	/* The below has to be done to allow calling inet_csk_destroy_sock */
--	sock_set_flag(sk, SOCK_DEAD);
--	this_cpu_inc(*sk->sk_prot->orphan_count);
--}
--
- void inet_csk_destroy_sock(struct sock *sk);
-+void inet_csk_prepare_for_destroy_sock(struct sock *sk);
- void inet_csk_prepare_forced_close(struct sock *sk);
- 
- /*
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index be91d81d66ab..e03fb905b6b1 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -2353,6 +2353,11 @@ static inline int tcp_call_bpf_3arg(struct sock *sk, int op, u32 arg1, u32 arg2,
- 	return tcp_call_bpf(sk, op, 3, args);
- }
- 
-+static inline void tcp_clear_sock_ops_cb_flags(struct sock *sk)
-+{
-+	tcp_sk(sk)->bpf_sock_ops_cb_flags = 0;
-+}
-+
- #else
- static inline int tcp_call_bpf(struct sock *sk, int op, u32 nargs, u32 *args)
- {
-@@ -2370,6 +2375,10 @@ static inline int tcp_call_bpf_3arg(struct sock *sk, int op, u32 arg1, u32 arg2,
- 	return -EPERM;
- }
- 
-+static inline void tcp_clear_sock_ops_cb_flags(struct sock *sk)
-+{
-+}
-+
- #endif
- 
- static inline u32 tcp_timeout_init(struct sock *sk)
-diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
-index 042982aaf970..ac9f18861aa7 100644
---- a/net/ipv4/inet_connection_sock.c
-+++ b/net/ipv4/inet_connection_sock.c
-@@ -1074,6 +1074,15 @@ void inet_csk_destroy_sock(struct sock *sk)
- }
- EXPORT_SYMBOL(inet_csk_destroy_sock);
- 
-+void inet_csk_prepare_for_destroy_sock(struct sock *sk)
-+{
-+	/* The below has to be done to allow calling inet_csk_destroy_sock */
-+	if (sk->sk_protocol == IPPROTO_TCP)
-+		tcp_clear_sock_ops_cb_flags(sk);
-+	sock_set_flag(sk, SOCK_DEAD);
-+	this_cpu_inc(*sk->sk_prot->orphan_count);
-+}
-+
- /* This function allows to force a closure of a socket after the call to
-  * tcp/dccp_create_openreq_child().
-  */
-
----
-base-commit: 0996e0926f6b4d6123e1b94407d726bc9810248e
-change-id: 20260908-cve-2026-74268-5-15-b12ecc6535fe
-
-Best regards,
---  
-Miguel Gazquez (Schneider Electric) <miguel.gazquez@bootlin.com>
+I could reproduce it by: 
+1. make PMU busy with 4 events to force multiplexing
+2. then quick profile for 1 second
+Result: first sample gets dropped, because measurement
+at fentry is 0. This is not a huge deal by itself, but the fix is simple enough,
+in my opinion, to make it worth. For a pocket change we get clearer flow:
+fentry arms the counter, fexit disarms it. 
+We have the same code in perf, I thought it would be nice to have this change 
+there (more choice of sparse events, subsecond timeouts possible)
+> 
+> pw-bot: cr
+> 
+> 
+>>                 struct bpf_perf_event_value___local *accum;
+>>
+>> -               diff.counter = after->counter - before->counter;
+>> -               diff.enabled = after->enabled - before->enabled;
+>> -               diff.running = after->running - before->running;
+>> +               before->armed = false;
+>> +               diff.counter = after->counter - before->value.counter;
+>> +               diff.enabled = after->enabled - before->value.enabled;
+>> +               diff.running = after->running - before->value.running;
+>>
+>>                 accum = bpf_map_lookup_elem(&accum_readings, &id);
+>>                 if (accum) {
+>>
+>> --
+>> 2.53.0-Meta
+>>
 
