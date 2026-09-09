@@ -1,21 +1,21 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC77339B484
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 06:25:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A6738B7DC
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 06:25:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788935146; cv=none; b=hMImdnz5X5tHLnfUy0i87HBmYrLX10RvQ/HAhlD1G9kaqxn9w1XVYN5yfqvUoKpJ+uyqjXTXQTfoBO/VFjmBfDIoU4aXuF62VqxINUQKhKingYLMF+lzEIBPv9ZoBfdIgKbFhijDD25zisShqDxmBrmM75BLNwmNff4gP9+Qu7o=
+	t=1788935153; cv=none; b=JnNLla++XVASvjr0/tGTyEAnGS6cQDxjwaJmGZwgv3enbZP610l9OqTG18OBlo1zV78RGgGCmfzwjGjpDmJIggtPq7mr2q933K1Ox6GqO+HurW7OKWTB12lAyFmYxR9OcJ5IOurw9DQT/+Wf1rm+JGQtheeEoaHnsYesm2bdJVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788935146; c=relaxed/simple;
-	bh=/ooW4ICPlSPlOVWII1IkVaTd8EK8qaNpYUBQcRffPfo=;
+	s=arc-20240116; t=1788935153; c=relaxed/simple;
+	bh=QNHYt/BaaQeZeeg+r9rDJjUqD6CK9a4uHGNPfqHsWaM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XRMg+1AEcS7zp9D6H/ae4tsWfeXbZWln5QlALYi7RTQ2jnvbIuzWsBur2XuWsHDs/i/o4GbNwKH110U8Vlp8NcuyQyJSXpopH1G174TsYoAUhIYn47VhWLzQlqRPcXkzQl0pHJsDrpJRSZRDGMZpd7VUAuyTZIkF5AyGhclUBAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
+	 MIME-Version; b=GIISUfV3IZDNNba27QfQ2Vv0ulFnPATgI7s+UAJ8jBd9VFn7oAwqqbrGhNfrZLLhwah9wlWOPtgu45a/wWNh7SO7nsiLxP9pcClPLrXtU8r/T4MzvVIZZTa3MCmEeycOu7KDHLSNAyoccfuGWTFxoMUxCIzG5yS3J0ZgyoRZZLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 36EA6299468AEF; Tue,  8 Sep 2026 23:25:33 -0700 (PDT)
+	id CE20D2994759D0; Tue,  8 Sep 2026 23:25:43 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v2 02/12] bpf: Index global function arguments by argument slot
-Date: Tue,  8 Sep 2026 23:25:33 -0700
-Message-ID: <20260909062533.4002610-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 04/12] bpf: Support __int128 as a by-value function argument
+Date: Tue,  8 Sep 2026 23:25:43 -0700
+Message-ID: <20260909062543.4004523-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260909062522.4001896-1-yonghong.song@linux.dev>
 References: <20260909062522.4001896-1-yonghong.song@linux.dev>
@@ -37,156 +37,73 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-btf_prepare_func_args() indexes sub->args[] by BTF parameter, so a
-parameter can only ever stand for a single argument register. Give the
-loop a second index: 'i' keeps walking the BTF parameters while
-'slots_used' walks the argument slots, and sub->arg_cnt becomes the
-number of slots, so that a later patch can give a parameter two of them.
+A 128-bit integer follows the same calling convention as a 16-byte
+by-value struct: LLVM emits it as a 16-byte BTF_KIND_INT and passes it in
+two consecutive argument registers. So a __int128 gets its two slots.
 
-No functional change: every parameter still takes exactly one slot.
+The test added at the start of the series, which recorded the wrong
+register map as an R4 !read_ok rejection, now passes and is flipped to
+__success.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/btf.c | 40 ++++++++++++++++++++++++----------------
- 1 file changed, 24 insertions(+), 16 deletions(-)
+ kernel/bpf/btf.c                                        | 9 +++------
+ tools/testing/selftests/bpf/progs/verifier_int128_arg.c | 7 +------
+ 2 files changed, 4 insertions(+), 12 deletions(-)
 
 diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 31057c8f3a7c..104a91f5ffd5 100644
+index 4502b888b668..baa370f3f331 100644
 --- a/kernel/bpf/btf.c
 +++ b/kernel/bpf/btf.c
-@@ -8037,7 +8037,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
-env, int subprog)
- 	const struct btf_param *args;
- 	const struct btf_type *t, *ref_t, *fn_t;
- 	int err;
--	u32 i, nargs, btf_id;
-+	u32 i, slots_used, nargs, btf_id;
- 	const char *tname;
-=20
- 	if (sub->args_cached)
-@@ -8122,8 +8122,9 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
-env, int subprog)
- 	/* Convert BTF function arguments into verifier types.
- 	 * Only PTR_TO_CTX and SCALAR are supported atm.
- 	 */
--	for (i =3D 0; i < nargs; i++) {
-+	for (i =3D 0, slots_used =3D 0; i < nargs; i++) {
- 		u32 tags =3D 0;
-+
- 		err =3D btf_scan_decl_tags(env, btf, fn_t, i, is_global, &tags);
- 		if (err)
- 			return err;
-@@ -8145,7 +8146,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
-env, int subprog)
- 			    btf_validate_prog_ctx_type(log, btf, t, i, prog_type,
- 						       prog->expected_attach_type))
- 				return -EINVAL;
--			sub->args[i].arg_type =3D ARG_PTR_TO_CTX;
-+			sub->args[slots_used++].arg_type =3D ARG_PTR_TO_CTX;
- 			continue;
- 		}
- 		if (btf_is_dynptr_ptr(btf, t)) {
-@@ -8153,7 +8154,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
-env, int subprog)
- 				bpf_log(log, "arg#%d has invalid combination of tags\n", i);
- 				return -EINVAL;
- 			}
--			sub->args[i].arg_type =3D ARG_PTR_TO_DYNPTR;
-+			sub->args[slots_used++].arg_type =3D ARG_PTR_TO_DYNPTR;
- 			continue;
- 		}
- 		if (tags & ARG_TAG_TRUSTED) {
-@@ -8168,10 +8169,11 @@ int btf_prepare_func_args(struct bpf_verifier_env=
- *env, int subprog)
- 			if (kern_type_id < 0)
- 				return kern_type_id;
-=20
--			sub->args[i].arg_type =3D ARG_PTR_TO_BTF_ID | PTR_TRUSTED;
-+			sub->args[slots_used].arg_type =3D ARG_PTR_TO_BTF_ID | PTR_TRUSTED;
- 			if (tags & ARG_TAG_NULLABLE)
--				sub->args[i].arg_type |=3D PTR_MAYBE_NULL;
--			sub->args[i].btf_id =3D kern_type_id;
-+				sub->args[slots_used].arg_type |=3D PTR_MAYBE_NULL;
-+			sub->args[slots_used].btf_id =3D kern_type_id;
-+			slots_used++;
- 			continue;
- 		}
- 		if (tags & ARG_TAG_UNTRUSTED) {
-@@ -8185,8 +8187,10 @@ int btf_prepare_func_args(struct bpf_verifier_env =
+@@ -8252,11 +8252,7 @@ int btf_prepare_func_args(struct bpf_verifier_env =
 *env, int subprog)
-=20
- 			ref_t =3D btf_type_skip_modifiers(btf, t->type, NULL);
- 			if (btf_type_is_void(ref_t) || btf_type_is_primitive(ref_t)) {
--				sub->args[i].arg_type =3D ARG_PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTE=
-D;
--				sub->args[i].mem_size =3D 0;
-+				sub->args[slots_used].arg_type =3D ARG_PTR_TO_MEM | MEM_RDONLY |
-+								 PTR_UNTRUSTED;
-+				sub->args[slots_used].mem_size =3D 0;
-+				slots_used++;
- 				continue;
- 			}
-=20
-@@ -8202,8 +8206,9 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
-env, int subprog)
- 					i, btf_type_str(ref_t), tname);
- 				return -EINVAL;
- 			}
--			sub->args[i].arg_type =3D ARG_PTR_TO_BTF_ID | PTR_UNTRUSTED;
--			sub->args[i].btf_id =3D kern_type_id;
-+			sub->args[slots_used].arg_type =3D ARG_PTR_TO_BTF_ID | PTR_UNTRUSTED;
-+			sub->args[slots_used].btf_id =3D kern_type_id;
-+			slots_used++;
- 			continue;
- 		}
- 		if (tags & ARG_TAG_ARENA) {
-@@ -8211,7 +8216,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
-env, int subprog)
- 				bpf_log(log, "arg#%d arena cannot be combined with any other tags\n"=
-, i);
- 				return -EINVAL;
- 			}
--			sub->args[i].arg_type =3D ARG_PTR_TO_ARENA;
-+			sub->args[slots_used++].arg_type =3D ARG_PTR_TO_ARENA;
- 			continue;
- 		}
- 		if (is_global) { /* generic user data pointer */
-@@ -8231,10 +8236,11 @@ int btf_prepare_func_args(struct bpf_verifier_env=
- *env, int subprog)
- 				return -EINVAL;
- 			}
-=20
--			sub->args[i].arg_type =3D ARG_PTR_TO_MEM | PTR_MAYBE_NULL;
-+			sub->args[slots_used].arg_type =3D ARG_PTR_TO_MEM | PTR_MAYBE_NULL;
- 			if (tags & ARG_TAG_NONNULL)
--				sub->args[i].arg_type &=3D ~PTR_MAYBE_NULL;
--			sub->args[i].mem_size =3D mem_size;
-+				sub->args[slots_used].arg_type &=3D ~PTR_MAYBE_NULL;
-+			sub->args[slots_used].mem_size =3D mem_size;
-+			slots_used++;
- 			continue;
- 		}
-=20
-@@ -8244,7 +8250,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
-env, int subprog)
+ 			bpf_log(log, "arg#%d has pointer tag, but is not a pointer type\n", i=
+);
  			return -EINVAL;
  		}
- 		if (btf_type_is_int(t) || btf_is_any_enum(t)) {
--			sub->args[i].arg_type =3D ARG_ANYTHING;
-+			sub->args[slots_used++].arg_type =3D ARG_ANYTHING;
- 			continue;
- 		}
- 		if (!is_global)
-@@ -8254,6 +8260,8 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
+-		if (btf_type_is_int(t) || btf_is_any_enum(t)) {
+-			sub->args[slots_used++].arg_type =3D ARG_ANYTHING;
+-			continue;
+-		}
+-		if (btf_type_is_struct(t)) {
++		if (btf_type_is_int(t) || btf_is_any_enum(t) || btf_type_is_struct(t))=
+ {
+ 			u32 nslots;
+=20
+ 			if (!t->size || t->size > 2 * BPF_REG_SIZE) {
+@@ -8268,7 +8264,8 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
 env, int subprog)
- 		return -EINVAL;
- 	}
+ 					i, btf_type_str(t), tname, t->size, 2 * BPF_REG_SIZE);
+ 				return -EINVAL;
+ 			}
+-			if (!btf_struct_is_composed_of(env, btf, t, BTF_MEMBER_SCALAR)) {
++			if (btf_type_is_struct(t) &&
++			    !btf_struct_is_composed_of(env, btf, t, BTF_MEMBER_SCALAR)) {
+ 				if (!is_global)
+ 					return -EINVAL;
+ 				bpf_log(log, "Arg#%d type %s in %s() is not composed of scalars\n",
+diff --git a/tools/testing/selftests/bpf/progs/verifier_int128_arg.c b/to=
+ols/testing/selftests/bpf/progs/verifier_int128_arg.c
+index 419851f2d8d0..044fc4a80055 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_int128_arg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_int128_arg.c
+@@ -15,12 +15,7 @@ __noinline __u64 take_i128_global(int a, u128 v, int c=
+)
+ }
 =20
-+	sub->arg_cnt =3D slots_used;
-+
- 	sub->args_cached =3D true;
-=20
- 	return 0;
+ SEC("tc")
+-/*
+- * The verifier counts one argument register for the __int128 and marks =
+only
+- * R1 through R3 at the entry of take_i128_global(), while the compiler =
+passed
+- * a in R1, v in R2:R3 and c in R4.
+- */
+-__failure __msg("R4 !read_ok")
++__success __retval(0)
+ int aggregate_arg_int128_c_test(struct __sk_buff *skb)
+ {
+ 	__u64 a =3D skb->len ^ MIX_A;
 --=20
 2.53.0-Meta
 
