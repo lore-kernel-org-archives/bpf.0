@@ -1,105 +1,189 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15EAA568FB8;
-	Wed,  9 Sep 2026 13:01:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A05B43A7F75
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 13:07:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788958884; cv=none; b=uvlionBQJ741sQpCmiP3gnelHYwDxDpcWGfWsiuvTk+mu/zLXtGpLwkAjWH3WRANgovx+NyVVIFgKL8PwGBDN+ZZZDHzLE3d+bnrbJ/hBTlviHdkmjow1+Pi1R1IygH5jWMA+5Lmd4OIRLgoGciUrdPjhwJqYUKlPwUP8/ynaFA=
+	t=1788959264; cv=none; b=dfYpUxEp+HPBZ5dtLUzA/p4mcCyLYWceDhrh6qu6oJT2g7HAqmvnbYOkW6GA1upRILoC4FhrhOpSDRZERgR/0xivVz8Oq57rEdKkXWDYLBkX1nRrY0qUEAxIA8lRHW44dNE4p1nAjvuwTW7ipSbK81UU6g07QfwUlhL60b0z9z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788958884; c=relaxed/simple;
-	bh=wGxs+F/+5Vrhuyz2y5uEWLeuFrAw1YPbFSMnjR0PIic=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=N+iR/tR2s0dqNx3HcJlDucp2MtFU4oRH6vGuzxwFqviC+ZVmo97wZnH3/57evOmucYdgECmrKDlcUQ9yy6m1OIsL5ul83v5CvOFQGySMr3Gl+UuyhniW/DBV5ArS+HkyRYkKt5Dfh6a9wQIdhdoE0g/nIb6961rhDCSvljSMBs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=kIdAIrlX; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1788959264; c=relaxed/simple;
+	bh=VP5+pkkmG3TWRGOGgE7mn6RO1qJsDiSIoy30kHPZk+A=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=rcZaJAyREARO+Xg+XgrAIiL6xg2BGaUmoIX6qKe6T/IAX3KgLjnEMKONFnTb4TzAo6gq/w1J3ZFaMvzwPXaPiDbDRMLGxOdxPXlZ+dObzxJDNbLeUZjucie7o0Wx6apsQIGwek+QoRaQ5epdyaqrUiKWo5uJHeyg2O9KwZsvTTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hJUuRZ8g; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="kIdAIrlX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1788958883; x=1820494883;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:references:in-reply-to:to:cc;
-  bh=wGxs+F/+5Vrhuyz2y5uEWLeuFrAw1YPbFSMnjR0PIic=;
-  b=kIdAIrlX2i5Ws4OKInvWaC8eZ2mFBm7uI3tf2xzKq1aqtRBRgeXVamXU
-   ExlJIcW9aEr/th0kBileXEGtM+XO773hqhLeVKn8iCPllq7cDMqczEdfC
-   LixEkNQRs71VLOnYQYingw0dJB18dd0D+0+xczoCd74/oaKlb2ZjUL5uB
-   aWSlcBSkBQW+wa4399yUZJ9dMqFMRnAzpszSbcfd1xUP4KfrVwfKJsgO7
-   ceKl4UkmSo+0O1CcQV5my8s4GkNimP//enqZjD4FwmCFySWhYethnjA3i
-   h1KWGBZV2QnBPbNgvNaX3pPAODoWll+oQ7VyaOT8FSbogLTq7E/tTmQ/D
-   g==;
-X-CSE-ConnectionGUID: m9VhaSUDSZCeuWHFixm3Lw==
-X-CSE-MsgGUID: UKhMqLabSB+23J0chCn83Q==
-X-IronPort-AV: E=Sophos;i="6.25,270,1779174000"; 
-   d="scan'208";a="294759204"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2026 06:01:22 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex1.mchp-main.com (10.10.87.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.45; Wed, 9 Sep 2026 06:01:21 -0700
-Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Wed, 9 Sep 2026 06:01:17 -0700
-From: Daniel Machon <daniel.machon@microchip.com>
-Date: Wed, 9 Sep 2026 15:00:16 +0200
-Subject: [PATCH net-next v6 14/14] misc: lan966x-pci: dts: add fdma
- interrupt to overlay
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hJUuRZ8g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 199CC1F00A3A;
+	Wed,  9 Sep 2026 13:07:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788959262;
+	bh=88AYofoa4+1WZWz2yVSnBoAZLxWjWIUQG8AOQZyHr60=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=hJUuRZ8gB+EIV1q2DdYH+tmYnilf5hYyi3hbtF1A75jD9YBKo4ljMP/E5v50fPc3p
+	 17NPln1C7O9+YQOnR7Nc51SnCz6273l/hoEHuNrbLMv3xo+THUTBWZ035uAAOtaq6Z
+	 w3sBZ2NGX3dDYLny/WYiQ6rnX0vqL6r7pQYm+THw9N1FcPmLUSEchYJEnSFFcbZ8Rk
+	 huVd2Rdvu87ngcXqNNRz4VIhDzdF7SqyJOzp435IoM33JsIjjgv42Un9J3XKZeucaZ
+	 aMGfhkQyGWBQNsTd3FdpMAqg/xiLz3HwLPRBU/Jiagx9am5wevJR9qITzU/71vMjRL
+	 RZWSoomcyn1OQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 4/4] soundwire: amd: Add BRA/BPT firmware download
+ support
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Syed Saba Kareem" <syed.sabakareem@amd.com>
+Cc: dri-devel@lists.freedesktop.org, media-ci@linuxtv.org, bpf@vger.kernel.org
+In-Reply-To: <20260909125605.280973-5-syed.sabakareem@amd.com>
+References: <20260909125605.280973-1-syed.sabakareem@amd.com>
+ <20260909125605.280973-5-syed.sabakareem@amd.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 09 Sep 2026 13:07:41 +0000
+Message-Id: <20260909130742.199CC1F00A3A@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20260909-lan966x-pci-fdma-v6-14-6f48dab9d671@microchip.com>
-References: <20260909-lan966x-pci-fdma-v6-0-6f48dab9d671@microchip.com>
-In-Reply-To: <20260909-lan966x-pci-fdma-v6-0-6f48dab9d671@microchip.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
-	<horatiu.vultur@microchip.com>, Steen Hegelund
-	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
- Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Herve
- Codina <herve.codina@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Mohsin Bashir
-	<mohsin.bashr@gmail.com>
-CC: Richard Cochran <richardcochran@gmail.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>
-X-Mailer: b4 0.14.3
 
-Add the fdma interrupt (OIC interrupt 14) to the lan966x PCI device
-tree overlay, enabling FDMA-based frame injection/extraction when
-the switch is connected over PCIe.
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [Critical] Releasing `acp_bra_lock` when the DMA engine is wedged allows =
+concurrent instances to hijack shared ATU PTEs, defeating the memory leak m=
+itigation and causing severe memory corruption.
+- [High] False timeout in the BRA DMA busy poll loop due to potential threa=
+d preemption.
+- [High] Invalid SampleInterval calculation for `col_width =3D=3D 1` bypass=
+es mandatory divisibility checks, violating the SoundWire specification.
+--
 
-Tested-by: Herve Codina <herve.codina@bootlin.com>
-Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
----
- drivers/misc/lan966x_pci.dtso | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+commit de234f818a1a7580df842fe4d73d149a4880c7ba
+Author: Syed Saba Kareem <Syed.SabaKareem@amd.com>
 
-diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci.dtso
-index 7bb726550caf..5bb12dbc0843 100644
---- a/drivers/misc/lan966x_pci.dtso
-+++ b/drivers/misc/lan966x_pci.dtso
-@@ -141,8 +141,9 @@ switch: switch@e0000000 {
- 
- 					interrupt-parent = <&oic>;
- 					interrupts = <12 IRQ_TYPE_LEVEL_HIGH>,
-+						     <14 IRQ_TYPE_LEVEL_HIGH>,
- 						     <9 IRQ_TYPE_LEVEL_HIGH>;
--					interrupt-names = "xtr", "ana";
-+					interrupt-names = "xtr", "fdma", "ana";
- 
- 					resets = <&reset 0>;
- 					reset-names = "switch";
+soundwire: amd: Add BRA/BPT firmware download support
 
--- 
-2.34.1
+This commit adds Bulk Register Access (BRA) and Bulk Payload Transport (BPT)
+support for AMD SoundWire platforms to enable high-speed firmware downloads
+to peripherals. It uses the SoundWire stream framework for DP0 programming
+and includes an ATU mapping for scatter-gather DMA.
 
+> diff --git a/drivers/soundwire/amd_manager.c b/drivers/soundwire/amd_mana=
+ger.c
+> --- a/drivers/soundwire/amd_manager.c
+> +++ b/drivers/soundwire/amd_manager.c
+
+[ ... ]
+
+> +static u32 amd_sdw_bra_sample_interval(u32 nr, u32 nc, u8 hstart, u8 hst=
+op)
+> +{
+> +	u8 col_width =3D hstop - hstart + 1;
+> +	u32 block_count;
+> +
+> +	if (col_width >=3D 8)
+> +		return nc;		/* BlockCount =3D 1 */
+> +	if (col_width =3D=3D 1)
+> +		return nc * 8;
+
+[Severity: High]
+Does this early return bypass the row divisibility requirements for the
+SoundWire port?
+
+The SoundWire specification generally requires the number of rows in a frame
+(nr) to be an integer multiple of the BlockCount. In a standard 125x2 frame
+shape (nr =3D 125, nc =3D 2), this logic would return a SampleInterval that
+implies a BlockCount of 8. Since 125 is not divisible by 8, this produces a
+fractional block arrangement.
+
+[ ... ]
+
+> +static int amd_sdw_execute_bra_transfer(struct amd_sdw_manager *amd_mana=
+ger,
+> +					struct sdw_slave *slave,
+> +					bool *dma_unsafe)
+> +{
+
+[ ... ]
+
+> +	/* Poll DMA_BUSY until transfer completes */
+> +	{
+> +		unsigned long timeout;
+> +
+> +		timeout =3D jiffies + msecs_to_jiffies(BRA_DMA_TIMEOUT_MS);
+> +		do {
+> +			val =3D readl(amd_manager->mmio + ACP_SW_BRA_DMA_BUSY);
+> +			/*
+> +			 * Side-effectful read: reading ACP_SW_BRA_CURRENT_TRANSFER_SIZE
+> +			 * advances the BRA DMA engine to the next frame.  The value is
+> +			 * intentionally discarded (hence the (void) cast); removing this
+> +			 * read stalls multi-frame transfers, which then time out.
+> +			 */
+> +			(void)readl(amd_manager->mmio + ACP_SW_BRA_CURRENT_TRANSFER_SIZE);
+> +			if (!(val & 0x01))
+> +				break;
+> +			if (time_after(jiffies, timeout)) {
+> +				dev_err(amd_manager->dev,
+> +					"BPT: DMA timeout: periph=3D0x%08x len=3D%u EN_STATUS=3D0x%x RESP=
+=3D0x%x I2S_ERR=3D0x%08x\n",
+
+[Severity: High]
+Could this cause a false timeout if the thread is preempted?
+
+If the thread is preempted immediately after reading the busy status into
+val, and the preemption lasts longer than the timeout, the DMA transfer
+might complete successfully in the background.
+
+When the thread resumes, time_after() evaluates to true, and the loop aborts
+without re-evaluating the DMA status. A final read of the status register
+after the timeout check usually prevents this race.
+
+[ ... ]
+
+> +static int amd_sdw_bpt_wait(struct sdw_bus *bus,
+> +			    struct sdw_slave *slave,
+> +			    struct sdw_bpt_msg *msg)
+> +{
+
+[ ... ]
+
+> +deconfigure_pte:
+> +	if (dma_unsafe) {
+> +		/*
+> +		 * PORT_EN_STATUS never cleared: the ACP BPT DMA engine did not
+> +		 * confirm it stopped and may still be bus-mastering through the
+> +		 * ATU into dma_buf.  PORT_EN=3D0 is the only stop control the
+> +		 * hardware exposes -- the audio DMA path relies on the same
+> +		 * enable-clear-then-poll-status primitive -- so there is no
+> +		 * stronger barrier to force it off here.  Leave the ATU PTEs
+> +		 * pointing at dma_buf and do NOT free the buffer: returning
+> +		 * these pages to the allocator while a wedged engine can still
+> +		 * write would corrupt memory reused for another purpose.
+> +		 * Deliberately leak the buffer instead -- the only memory-safe
+> +		 * option, matching the guarantee the managed-buffer audio path
+> +		 * gets from the PCM core (buffer never reused while the engine
+> +		 * may be active).
+> +		 */
+> +		dev_err(amd_manager->dev,
+> +			"BPT: engine did not quiesce; leaking %zu bytes to avoid corruption\n=
+",
+> +			total_len);
+> +		mutex_unlock(amd_manager->acp_bra_lock);
+> +		goto close_stream;
+> +	}
+
+[Severity: Critical]
+Does releasing the acp_bra_lock here allow a concurrent instance to hijack
+the shared ATU PTEs?
+
+The code intentionally leaks the DMA buffer to mitigate corruption from a
+wedged DMA engine. However, since the ATU PTE registers are ACP-global and
+shared between instances (protected by acp_bra_lock), dropping this lock
+allows a concurrent BPT transfer on another manager instance to call
+amd_sdw_bra_configure_pte() and reprogram the global PTEs.
+
+If the first instance's wedged bus-mastering engine is still active, it
+might follow the newly programmed PTEs and overwrite the new transfer's
+buffer or other memory, defeating the mitigation.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260909125605.2809=
+73-1-syed.sabakareem@amd.com?part=3D4
