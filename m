@@ -1,101 +1,226 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6888550DBB;
-	Wed,  9 Sep 2026 19:13:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F223BFAE7
+	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 19:37:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788981234; cv=none; b=ITkpipUPZn3tbF460qjkk7BGYyzrLzosdzFTJ32RqttmMGXrAj34Dh35o+jl/c8qfRVTEjpuBNSRdV5UlZS1oIkkShUwfN4n82/4T6uTKOjZesGL6vnNaEa/HMlFYjTfSrQEkha+bzE3JLfkbDYBdLHls9UmRL1wWVSTr3480Rc=
+	t=1788982662; cv=none; b=JscUD5wTaOg3ZCZQUoSSs+yuudvMIsbzRb9CxsR55dNASALUkbkTUU8Hr81w+MuQhs10JIexYGbjcMZP5Cw5dxe185HimIdlE2I/Q2TqxmszT7YudmWHNj1HljNwFQNqQ8bYcAhMEat0GJxqnvmGerNrfl6s3OPV4wDmdzyyJXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788981234; c=relaxed/simple;
-	bh=2zqeMdfMgzgLSz4WalrmXPvdFX+4uJ6wmlBvyPJsE24=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eEuBC+GvAgZoGtPa9U3bfldjvPbhjL+ogYJAvjaSpW6BgIwVTEYq+cy6N6oxAJPzdMh4Tp38c8yl3J6GerSfs0cCzYKX93MbBpDei3NeSRbdmx/ObjSIOYPFs39bsbEjmn85pUl4ypw4CU6scWNZ0muRWkuGqRzhhgpMedIXKZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sp5QCKRG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788982662; c=relaxed/simple;
+	bh=AVov50Izs6mTW2/vlm9mOaKyn9GZMvc84xHZVo4j9kg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=M7iTQzS86YP9BGPMTiPec/eItULVGO08tewbkC2BwJaGoby6zpt43SFS7ejiLI+zi1wQhjHRQE8Ad8BSQVCC5QoT3I3Y4k/VAvk+Bg2qBTsBa4cmLfs8tEBSaOxbkw3KjZk0bvh2Jc0BIKl3K6Dagas5mvgDtgfoWe2Yd9BnWRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dag8zkC0; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sp5QCKRG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 789AF1F000FF;
-	Wed,  9 Sep 2026 19:13:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788981230;
-	bh=GJQLOIo2F/8mgbaZ6MM/HOKjSOsdGspfu+Rgpw9gTLU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Sp5QCKRGqnjtgftM39OzgG9o3glYhC+pUXsZYdO21iDX/IQKGR305FK8SU+gUUHmH
-	 EzvxMEEF5giefLVCAKnxpz42h3RhUGy85cUc9rxoEJGDwAFsQuY++Ir25TD3YrKPvc
-	 ZETtroFS/VizLPnltYkazT64Q8hGpCzwF1OilDSrkgqiCSCsUYr+x7I5XvlDFMAXZh
-	 uLgF1WfYWu/jodY5tkqEjRYJgQS86BFaUfwYL1GL5+TcF06c4VZP9jTTRJEwxsZ9kW
-	 auRlwbJEbnWhhoa4ud0i4CrjYK7SZtm8V25+Txnn0PPSpnBVKn1RswiLii/fnSGGvt
-	 p05HydOIsCMDg==
-Date: Wed, 9 Sep 2026 09:13:49 -1000
-From: Tejun Heo <tj@kernel.org>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Josef Bacik <josef@toxicpanda.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Jan Kara <jack@suse.cz>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Dennis Zhou <dennis@kernel.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] writeback: report a Tasks-RCU quiescent state per cgwb
- drain pass
-Message-ID: <aqGv7R4LTmlrW6QI@slm.duckdns.org>
-References: <20260909-cgwb-tasks-rcu-qs-v1-1-967a7754771f@toxicpanda.com>
- <aqGilhgcEd0qaHjI@slm.duckdns.org>
- <16d13239-8911-4597-bfd6-18aa02135137@paulmck-laptop>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dag8zkC0"
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-87005a0e052so77758347b3.2
+        for <bpf@vger.kernel.org>; Wed, 09 Sep 2026 12:37:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788982659; x=1789587459; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3RWDfMkpqZ2EnvloMST4DPLeQM31Xw13F0J6nj96sv8=;
+        b=Dag8zkC0jJaq45mqDUA0xkMvEFzAXfvQA4fTdZHBbNfObhwH0p4ZgSIfyEyckosAxD
+         VKX7H5TqKGjWc7hri7XMV2ku6Fpk1tk8NvIhtbYAxIMpZTTuq247rCGaXxB0sSnjPb00
+         SDMTXCSHxITmjgt9cnGR3HN813qYaCQA9alL+GZQ10PsVakoFZvQKKeCAPXZ/rEncD4b
+         EEhhL1uj2tGkXreflvUU8AwiPaAHgMOTElUGwoRulOnLbaLte3DW0tXsWNHpO950mJZ4
+         0IBGg7xsm+J28Y9mkoD/Ndp4CS6gVaZhgDnMFbdLGwihV3rh+APxbrozZP36N/G2e88s
+         1NvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788982659; x=1789587459;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=3RWDfMkpqZ2EnvloMST4DPLeQM31Xw13F0J6nj96sv8=;
+        b=Xdk/lenLEfvQDToPWOzX53eILkZeAUMg4qyPvwLlDU34JFnKJgq/LaS1AUz4JDV9xp
+         XT9VspRNhR+Hzg3e1/dVkjT6SBkl5XnCo4G8R+5y3jl5j/4QyF+bLUMW9gd7Sh+85edq
+         yrpC6D/VQklfyt3CqUtzc4L7wpJEz9VDy4xZCwEmdXe5GjN57yIt8+5Kyvq8zuUGG8Zi
+         mAAKxjqINbg9rT6d8x/U0hbCkGNcPN1Gu1SA9+GkuwZWsnv5RobCMpcVfGXJtMQt+T1V
+         YHkc6EYT1UjQusmFkdDDZsx4xl0dTOHVFrZ+JMxan1MZ3XW/GzAypHYZL0FuRsVEzB/e
+         D66w==
+X-Forwarded-Encrypted: i=1; AKwUvByWVYw3zVFo/LzyLGsC9O0EC9PIjg0INA/GaqQgcdfKfFP0lfSf2nASR4zJlt2NK3q+YUE=@vger.kernel.org
+X-Gm-Message-State: AFuF++n0owwrUk6gn1M2FQoLC9Qrai2e8Jyv6Z+rfOmN26nh7D+mlnG8
+	eCpFxDMoKN6j90FQEfoLb2iPDECBTaRyVnoMykrd+IFDkpyhPOdeSABz
+X-Gm-Gg: AYBFou3wLbg3RNne/AQpVga5xVh96KTJNRUpSaRzR+W4PzYPuK4UH7I4AWzfHRRwbp3
+	efWDn924GxwDJK3iD3wtMKn1G2c1Z54eTfQN4XLU0pJvS4q3i50yTfBH24LbikI32Tow9F/Z7Ly
+	iLzp3xAKRl2NF933w9AQPsBazxfp6rLLg5C4CBfIsp01ismuWoFpNot/44Bu1X8nljGFH1+SIS9
+	6FT5KFHmaLwl3a5S17ThQjyNp7JaxLAtre5kRD+G0+Wfi1XTfUTYwqJKGwmtsi03XNUobrZmsTu
+	bcfo0HhfYuGRPPFfRJp+hb/S2BU3HntdWay+VKBQdV9ugBFOcG+pPHCP1aLJmah7si+KwT4ZXDj
+	Er2JKGLUYcxAV8xtVKPzV1CuLAGEwdvOL6PnTpIt5b6xGgcNCIRXB3sXYfJWDPnyexg0yMe2oty
+	vMNacA3fa7nvwyZ/vIOaeOu0gTKIJfNWvZxaKlVX4fVkcC+VWS6ePNRh8idosVqszNlyuMk9R1h
+	kwuoK3L1N/zzCuGM4Ot56JBwcy+SbqY
+X-Received: by 2002:a05:690c:6910:b0:873:5c6b:a313 with SMTP id 00721157ae682-8735c6ba5a9mr120378907b3.65.1788982658508;
+        Wed, 09 Sep 2026 12:37:38 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:bae:bfc2:7e96:e5c8])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-871493155d3sm115277577b3.16.2026.09.09.12.37.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Sep 2026 12:37:38 -0700 (PDT)
+From: Justin Suess <utilityemal77@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	kpsingh@kernel.org,
+	matt@bobrowski.net,
+	paul@paul-moore.com,
+	mic@digikod.net,
+	viro@zeniv.linux.org.uk,
+	brauner@kernel.org,
+	kees@kernel.org
+Cc: casey@schaufler-ca.com,
+	gnoack@google.com,
+	jack@suse.cz,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	jolsa@kernel.org,
+	m@maowtm.org,
+	bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Justin Suess <utilityemal77@gmail.com>
+Subject: [PATCH bpf-next v3 00/15] BPF interface for applying Landlock rulesets
+Date: Wed,  9 Sep 2026 15:37:03 -0400
+Message-ID: <20260909193719.518517-1-utilityemal77@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <16d13239-8911-4597-bfd6-18aa02135137@paulmck-laptop>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hello,
+Howdy,
 
-On Wed, Sep 09, 2026 at 12:03:20PM -0700, Paul E. McKenney wrote:
-> > The patch looks fine but this overall seems fragile. cond_resched() was
-> > already marking "stuff that can take too long" but we need to use
-> > cond_resched_tasks_rcu_qs() if it can take *really* long. There gotta be a
-> > way to make this more maintainable. If always doing tasks_rcu_qs from
-> > cond_resched() is too expensive, can it be be gated behind something cheaper
-> > e.g. some tick based test?
-> 
-> This is the business end of cond_resched_tasks_rcu_qs() in preemptible
-> kernels (in which cond_resched() is nothingness):
-> 
-> # define rcu_tasks_classic_qs(t, preempt)				\
-> 	do {								\
-> 		if (!(preempt) && READ_ONCE((t)->rcu_tasks_holdout))	\
-> 			WRITE_ONCE((t)->rcu_tasks_holdout, false);	\
-> 	} while (0)
-> 
-> This is pretty lightweight.  Adding a jiffies check would likely make
-> it more expensive.
-> 
-> Or am I missing your point?
+This series lets BPF programs apply an existing, userspace-created
+Landlock ruleset to a program during exec.  The goal is unchanged
+from the RFC [1], v1 [2], and v2 [3]: BPF does not create, inspect,
+or mutate Landlock policy, it only decides whether a ruleset that
+was already created and validated through Landlock's existing
+userspace API should be applied, based on runtime exec context.
+The policy is in place before the first instruction of the new
+program runs, closing the race a userspace supervisor cannot.
 
-I found the following thread for why there is a separate variant for
-cond_resched_tasks_rcu_qs():
+v3 is v2 rebased onto bpf-next, plus small fixes; the design is
+unchanged.  The Landlock prerequisites (the ruleset/domain split,
+the tracepoint series, and LANDLOCK_RESTRICT_SELF_NO_NEW_PRIVS)
+went upstream in the 7.3 merge window, so the series now applies
+directly to bpf-next.
 
-  https://lkml.kernel.org/r/20180224151240.0d63a059@vmware.local.home
+The interface, for reference:
 
-The rationale was that it'd make cond_resched() expensive, so I assumed it
-was relatively heavy. If it already comes down to a single test, I'm not
-sure having a separate interface makes a lot of sense. There isn't some
-semantical difference between the two, right? Anything which takes long
-enough needs to do the tasks rcu qs, and that is what we mark with
-cond_resched().
+  bpf_lsm_policy_from_fd(fd, flags)         KF_ACQUIRE | KF_RET_NULL | KF_SLEEPABLE
+  bpf_lsm_policy_acquire(object)            KF_ACQUIRE | KF_RCU | KF_RET_NULL
+  bpf_lsm_policy_release(object)            KF_RELEASE
+  bpf_lsm_policy_apply_bprm(object, bprm, flags)  KF_SLEEPABLE
 
-Thanks.
+The kfuncs are LSM-generic: they operate on struct
+lsm_policy_object, which the owning LSM embeds in its own policy
+structure, and dispatch to that LSM through four ordinary LSM hooks
+(policy_object_from_fd, policy_object_get, policy_object_put,
+bprm_apply_policy_object).  No kfunc argument names an LSM anywhere
+in the interface, yet it is not an ioctl-like multiplexer.
+Landlock is the first provider.
 
+Rather than repeating the whole design here, see the v2
+cover letter [3] for the details, as the core design and API are
+identical to the previous iteration.
+
+Changes since v2
+===
+
+- Rebased onto bpf-next; prerequisites are now met.
+- The kfunc filter's BPF_LSM_CGROUP case is dropped: since
+  commit 5b038319be44 ("bpf: Reject sleepable BPF_LSM_CGROUP
+  programs at load time") such programs cannot be sleepable, so
+  KF_SLEEPABLE already excludes them from the apply kfunc, making
+  that case redundant.
+- The apply_bprm patch now documents why the attach-point filter,
+  not the verifier's argument typing, is the authorization boundary:
+  trusted linux_binprm pointers are also available at the other bprm
+  hooks and to tp_btf programs via the exec tracepoints, which share
+  the LSM programs' kfunc registration bucket.
+- Fixed a pipe fd leak on the fork() error path of
+  test_restrict_binprm_discard() (Sashiko AI review).
+
+Changes since v1 are summarized in the v2 cover letter [3].
+
+The series is structured with LSM framework patches first: patches
+1-2 add the hooks, 3 is trivial macro motion, 4-7 the kfuncs, 8 the
+interface documentation, and 9 its LSM-independent selftests.  The
+Landlock provider follows: patches 10-13 add it, 14 its selftests,
+and 15 its documentation.
+
+[1] https://lore.kernel.org/linux-security-module/20260407200157.3874806-1-utilityemal77@gmail.com/
+[2] https://lore.kernel.org/bpf/20260731022047.189137-1-utilityemal77@gmail.com/
+[3] https://lore.kernel.org/bpf/20260831145858.3869191-1-utilityemal77@gmail.com/
+
+Justin Suess (15):
+  lsm: Add the LSM policy object lifetime hooks
+  lsm: Add the bprm_apply_policy_object LSM hook
+  lsm: Move the lsm_for_each_hook() macro to security/lsm.h
+  lsm: Add the bpf_lsm_policy_release kfunc and policy object destructor
+  lsm: Add the bpf_lsm_policy_from_fd kfunc
+  lsm: Add the bpf_lsm_policy_acquire kfunc
+  lsm: Add the bpf_lsm_policy_apply_bprm kfunc
+  lsm: Document the LSM policy object interface
+  selftests/bpf: Add tests for the LSM policy object kfuncs
+  landlock: Expose the ruleset fd lookup to the rest of Landlock
+  landlock: Factor the credential restriction out of
+    landlock_restrict_self()
+  landlock: Free rulesets after an RCU grace period
+  landlock: Implement the LSM policy object hooks
+  selftests/bpf: Test the LSM policy object kfuncs with Landlock
+  landlock: Document the BPF policy interface
+
+ Documentation/security/landlock.rst           |  38 ++
+ Documentation/security/lsm-development.rst    |  49 ++
+ Documentation/trace/events-landlock.rst       |   5 +-
+ MAINTAINERS                                   |   1 +
+ include/linux/lsm_hook_defs.h                 |   6 +
+ include/linux/security.h                      |  11 +
+ include/trace/events/landlock.h               |  15 +-
+ kernel/bpf/bpf_lsm.c                          |   4 +
+ kernel/bpf/verifier.c                         |   3 +
+ security/Makefile                             |   2 +-
+ security/bpf_lsm_kfuncs.c                     | 247 ++++++++
+ security/landlock/Makefile                    |   2 +
+ security/landlock/bpf.c                       | 152 +++++
+ security/landlock/bpf.h                       |  21 +
+ security/landlock/cred.c                      | 148 ++++-
+ security/landlock/cred.h                      |  47 ++
+ security/landlock/limits.h                    |   4 +
+ security/landlock/ruleset.c                   |  30 +-
+ security/landlock/ruleset.h                   |  75 ++-
+ security/landlock/setup.c                     |   2 +
+ security/landlock/syscalls.c                  | 105 +---
+ security/lsm.h                                |   6 +
+ security/security.c                           |   5 -
+ tools/testing/selftests/bpf/config            |   1 +
+ tools/testing/selftests/bpf/config.x86_64     |   2 +-
+ .../bpf/prog_tests/lsm_policy_kfuncs.c        |  54 ++
+ .../bpf/prog_tests/lsm_policy_landlock.c      | 525 ++++++++++++++++++
+ .../selftests/bpf/progs/lsm_policy_kfuncs.c   |  52 ++
+ .../bpf/progs/lsm_policy_kfuncs_failure.c     | 154 +++++
+ .../selftests/bpf/progs/lsm_policy_landlock.c | 142 +++++
+ 30 files changed, 1785 insertions(+), 123 deletions(-)
+ create mode 100644 security/bpf_lsm_kfuncs.c
+ create mode 100644 security/landlock/bpf.c
+ create mode 100644 security/landlock/bpf.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lsm_policy_kfuncs.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lsm_policy_landlock.c
+ create mode 100644 tools/testing/selftests/bpf/progs/lsm_policy_kfuncs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/lsm_policy_kfuncs_failure.c
+ create mode 100644 tools/testing/selftests/bpf/progs/lsm_policy_landlock.c
+
+
+base-commit: af0b84a9215d951d16f26b7ee34353b970cf5d4e
 -- 
-tejun
+2.55.0
+
