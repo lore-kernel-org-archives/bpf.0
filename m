@@ -1,420 +1,219 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7BD48EC7A;
-	Thu, 10 Sep 2026 13:46:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7BC0489FD1
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 14:02:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789047976; cv=none; b=VVX+nOqmkSJ+PSkNwKNvHkaX5y5IlZ6GjP5g7pB/H1Puyb3ScFveX3i92aqPFU2X8OEPp2xdW7MY93iosAFD8xLUEopB/GGVHTC6xPaimHn01TkOKOs95G36m0EhMM8T7J3xCVU/6lHMEODUQSBA6pG5N7HODva37KeXZ2C/u7Q=
+	t=1789048966; cv=none; b=rsjsOUvSARuLXpsb/Dm+/VSjwDsxFlF81eVegsyWiEmJCc22uDM45wKegi9jsH41XcnwLAyJlC7DIuEL7h82xXDLnM/DHogOql4H250WwUaHfSURPYs38h53pvoEmpWrebVG2KFyomldz65mlvjNllDT5MWkMssmXjS3JkKEWxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789047976; c=relaxed/simple;
-	bh=hoPUdoHpfxf391of+pK/LWIVNo4nsjGbHGMPacKzmgY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=f/PnQmbNZX+aVFb+WwNOJXTbV/2NNf4uBil4s6eHl5On4leWYi9ImTLaals8/68xLH8jA5hCFW0ABqQZPsPviSc0cB/zSaDMHYAoClSIvUVIEHUTioHT4z2mJgSmmWYzVQCkHcgtCBxluKVPhxH4iIbU5jZrjIzhJeNrdRwguAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o2o5jaQc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789048966; c=relaxed/simple;
+	bh=AoTffK0RVfMhEWJqOE4dbqbkq21vbNmGEqhBV8DDP2A=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=EYJnL4jcySrmBvR6PbbdAVGnB4Nn5ZSCvg87vVIT82lyn+5cTzbndKOe6XET2S34Y/dqo8Qa4dQ1UQawmVUMDuuFAm1/CCf0IusUiC1tFhO0Pemp1N0PtM3E4mi3tCi3ZWRbOIBOc8hwFS6m0Qc41OiB0mlzZfgOBYa2pLJefS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=JodYtPE6; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o2o5jaQc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A25F1F00898;
-	Thu, 10 Sep 2026 13:46:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789047975;
-	bh=ZyekFsQ0nxrR4L9N8Ghb6GAkJVnZqSRvKNPOeJH2phA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=o2o5jaQcCOJsfj+q6kQoCNaKUsipIXe18mMhVaqT7OnTX5ibFzInK/1n+fkSHWaZj
-	 M1bMfvQMWtRHiJE7yoBgvssFHDVQf5BbanNqoAKqFyYjKB/XSWw1Z6maBliCt2xaGO
-	 H2dwYjcngCG2gs9IO9piMiZiUQcjnTe/v0zVqs1MGXl1Vstl3gNRLMEhKa8HleIPFZ
-	 AktuLWjbai3CvbORhWMAxBMRzEMd9eKEVu8OY0tDssStEIIlmd28jmdBdPdi9MNtMl
-	 CNY3kVvwe/PHI5edkQTw7ixEdfy4AKUXzsRS+RnBK1Lf6FJ4vCoH1McLSIi9QezUc9
-	 UMoXd0hJ++WGA==
-Content-Type: multipart/mixed; boundary="===============7357494171922306859=="
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="JodYtPE6"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c294bdd76cdso131940466b.0
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 07:02:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1789048963; x=1789653763; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=ZzCWTwY8rHBsIIFWY/SX91KgLEXQq69JPWWLlcB9jtc=;
+        b=JodYtPE6cIaALgHwud+t5DvyT3NAPGrDDZk4ZdbqB6XW9Yx85ncn9KZJceo6UQ49FD
+         mcEqQiVzUGCp0ZgIH8QxpOvkhHYBB4Txk/oflF5kZniicWp4ZESilHtkNQ+a1hRqPIlO
+         9Dxz3autJ++4rWPqgprMYI7EXrB3ql2DX0mmKLS4Gq8y5aLucBx9eHYTxnCEwMdNBf18
+         hIS2NVPyz1wPXFPfHaBqQ9/2gTodJxynD8knrvo6zimE9+JtzUooB0XnR05a5E1G4S68
+         FseZwaV1amNlqi4Oh+Q0UMyZfMK1axM07OQyN1apEKITf8tCHi91UM5UkzKA151VO+X2
+         r8EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789048963; x=1789653763;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=ZzCWTwY8rHBsIIFWY/SX91KgLEXQq69JPWWLlcB9jtc=;
+        b=qZZafjhcnauA9wKNsQZIMp1pljzS9tnRQrPTpDu4PkSrfZosuzfPWbM5Ai4+AQ5Dn5
+         lxIRFaeICKbwXLFDoHbYtXJgopucrxVg5g3y7NhcgazkJQXIM5528YxEoqU5vDxONs1z
+         OSKdGCfOThl7/v8E9Jdrj5oL2F18f3WRO/ajwmHZbcK9c3CtrTWN+eFNMpiK9AJo6I4m
+         Wm0hGFaWT0EdwOcCzjnYWJqWH8Te7NY6rvubamQWX+NYE7QfRC7j8nyelhy+S7KIF3mV
+         pjlFU2JP/83YgWTmduBnnSdOKXXPu6yE9OFZRNUunSKmi3898WbtLMTwD3U5Mvxvm2sr
+         x50w==
+X-Gm-Message-State: AFuF++m8H9zlQgdNi/TdhXse1SZag/UUDBuJhEUwKf94lqGzG5mpfZwo
+	84PRFy2sFRL/tGBvmj28dF1Ae78y/XC5zQEoELlimly7g/60dANfA5GlOAOwVyIFTGk=
+X-Gm-Gg: AYBFou2cOXG2Vr351bOgeQyp7ESupbylEd8Qjw0m1WBR69zvGauqzekugrJ4BIIOB0t
+	bhWevTWgOy78Jw0DLCkkhSqi/EXwp/ASkfkjUSfiVJEPGbEyU5ch02h8MNYR7PmcRfX/fo2ihdw
+	0RLeDZWUPEimbArnpdtTA6NZitS38K2eL/GYzIqRlLfZmkOo9aDuzSe3olMbQlhZP7OgIzNMyrw
+	0GP6IvQS8g+QeWBAkDlEc+XwlVdsxAlEFE1Jo0z4Nk/Gx9uSwVaYYBTuISpobfZNrLAHtU0JgDq
+	FdDLrQpAZKgjzqH0YgnUjxKfB44Az2aBdwbGNuT14hAf7O2rIbR4NCDhM847MWpt08P9kUeWs/2
+	1wD3DXnyqvQY+rV4Yj1K2fCBEK/HWG1p0RWxhGSFxNd7G/NHwTw//zC2ssUeqyjEMG/yjHO4PUG
+	WETEfoodHzMyE4gsDy6hiF4BHZ8Xth6q5hogLI6qMf1rgI7elAy7rY5SJagQ1rFwDfEPuJkqv1H
+	yvIHSUMygv1zQpDDIehOpxchNIUlMbTLSbIxs7YNtoweP3m
+X-Received: by 2002:a17:907:940b:b0:c26:1691:b366 with SMTP id a640c23a62f3a-c261691b9d4mr1613152666b.31.1789048962854;
+        Thu, 10 Sep 2026 07:02:42 -0700 (PDT)
+Received: from cloudflare.com (79.184.140.212.ipv4.supernova.orange.pl. [79.184.140.212])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c260d5b371esm924512366b.54.2026.09.10.07.02.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2026 07:02:42 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+Subject: [PATCH net-next v2 00/14] skb extension for BPF metadata
+Date: Thu, 10 Sep 2026 16:02:35 +0200
+Message-Id: <20260910-bpf-meta-inside-skb-ext-v2-0-0b21e42180b0@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <cf5adc448dc541413def8b6dc4b160345a2f19b5488ce5555f0851256ccfbadc@mail.kernel.org>
-In-Reply-To: <20260910125817.223354-3-cui.tao@linux.dev>
-References: <20260910125817.223354-3-cui.tao@linux.dev>
-Subject: Re: [RFC PATCH v2 2/5] selftests/bpf: add iocost cost model test
-From: bot+bpf-ci@kernel.org
-To: cui.tao@linux.dev,tj@kernel.org,josef@toxicopanda.com,axboe@kernel.dk
-Cc: cgroups@vger.kernel.org,linux-block@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,linux-kselftest@vger.kernel.org,cui.tao@linux.dev,cuitao@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 10 Sep 2026 13:46:14 +0000 (UTC)
-
---===============7357494171922306859==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHu4omoC/4WOQQ6CMBREr2K69htapa2uvIdhAe2vVKGQthAM4
+ e5CXRrjcjIzb2YmAb3FQC67mXgcbbCdWwXb74iqS3dHsHrVhGWMZ5wdoeoNtBhLsC5YjRCeFeA
+ UwRhG1ZlKlMqQtd17NHZK5BtxGMGtKVJ8nDBUD1RxA2/Z2obY+Vc6MdLUSHuCnn7ujRQyyKWgK
+ hOl1JpfVdMN2jSlx4Pq2o2bIPIfRHCBWkvOeP4FKZZleQOPpjdbJAEAAA==
+X-Change-ID: 20260623-bpf-meta-inside-skb-ext-ff21c918e8cf
+To: netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, 
+ Paolo Abeni <pabeni@redhat.com>, Stanislav Fomichev <sdf@fomichev.me>
+Cc: bpf@vger.kernel.org, kernel-team@cloudflare.com, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Simon Horman <horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Florian Westphal <fw@strlen.de>, Jack Wang <163wangjack@gmail.com>
+X-Mailer: b4 0.16.0
 
-> diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-> index 2f79688dcf7c..67a630cb5614 100644
-> --- a/tools/testing/selftests/bpf/config
-> +++ b/tools/testing/selftests/bpf/config
-> @@ -138,3 +138,5 @@ CONFIG_SMC_HS_CTRL_BPF=y
->  CONFIG_DIBS=y
->  CONFIG_DIBS_LO=y
->  CONFIG_PM_WAKELOCKS=y
-> +CONFIG_BLK_CGROUP_IOCOST=y
-> +CONFIG_BLK_CGROUP_IOCOST_BPF=y
-> diff --git a/tools/testing/selftests/bpf/prog_tests/iocost_model.c b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
-> new file mode 100644
-> index 000000000000..e9344b13fba9
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
-> @@ -0,0 +1,193 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include <fcntl.h>
-> +#include <unistd.h>
-> +#include "iocost_model.skel.h"
-> +#include "iocost_ms.skel.h"
+This is the second spin of the per-packet metadata for BPF. See the RFC
+cover letter for the full overview and motivation [1].
 
-Does this commit build?  The new test includes iocost_ms.skel.h and
-calls iocost_ms__open_and_load(), iocost_ms__attach(), and
-iocost_ms__destroy() in serial_test_iocost_model_streams() below, but
-this commit adds only progs/iocost_model.c under the progs directory.
-progs/iocost_ms.c is added two commits later by b33a817eec7c.
+Since v1 the focus has been on getting skb scrubbing and extension sharing
+right, driven by Sashiko's review:
 
-The selftest Makefile derives skeleton generation rules from:
+1) skb scrubbing now simply deactivates all the extensions but the BPF
+metadata. Made possible due to recent change in skb_ext_del semantics [2]
+that already landed in net-next. Thanks to Florian and Paolo for guidance
+on this.
 
-  TRUNNER_BPF_SRCS := $(notdir $(wildcard $(TRUNNER_BPF_PROGS_DIR)/*.c))
-  TRUNNER_BPF_SKELS := $(patsubst %.c,$(TRUNNER_OUTPUT)/%.skel.h, ...)
+2) Clones made by bpf_clone_redirect() share the extension block. A write
+through a previously acquired writable dynptr would land in the shared
+block and become visible to the clone, so v2 makes such writes fail until
+the program re-acquires the dynptr with BPF_SKB_EXT_F_CREATE, which COWs
+the block into a private writable copy.
 
-so iocost_ms.skel.h has no generation rule at this commit and make
-fails with "No rule to make target '.../iocost_ms.skel.h', needed by
-'.../iocost_model.test.o'".  Because prog_tests/*.o files all feed the
-single test_progs binary, this breaks the build of the entire bpf
-selftest suite.
+3) Re-acquiring the extension with BPF_SKB_EXT_F_CREATE can COW and free
+the old block, so a dynptr slice taken before that re-acquire would be left
+pointing into freed memory. bpf_dynptr_from_skb_ext() is therefore marked
+packet-changing, making the verifier invalidate such slices and forcing the
+program to re-take them after the re-acquire.
 
-The multi-stream model and test belong in the later commit, or
-progs/iocost_ms.c belongs in this one.  As-is the series is not
-bisectable.
+4) Tracing and LSM programs can run on a shared skb concurrently on another
+CPU, so creating the extension there would mutate skb->extensions without
+synchronization. v2 rejects BPF_SKB_EXT_F_CREATE in these program types at
+load time; read-only access remains available.
 
-[ ... ]
+Regarding performance compared to consume_skb+kfree_skb tracepoints, I have
+not yet re-run the experiment measuring the overhead when attaching
+metadata to 5% instead of 1% of skbs in flight; happy to do so if it is a
+blocker.
 
-> +static int readback_model(const char *dev, char *model, size_t model_sz)
-> +{
-> +	char line[256], word[256], *m, *end;
-> +	FILE *fp;
-> +	int found = 0;
-> +
-> +	fp = fopen("/sys/fs/cgroup/io.cost.model", "r");
-> +	if (!fp)
-> +		return -1;
-> +	while (fgets(line, sizeof(line), fp)) {
-> +		if (sscanf(line, "%255s", word) == 1 && !strcmp(word, dev)) {
-> +			found = 1;
-> +			break;
-> +		}
-> +	}
-> +	fclose(fp);
-> +	if (!found)
-> +		return -1;
-> +
-> +	m = strstr(line, "model=");
-> +	if (!m)
-> +		return -1;
-> +	m += strlen("model=");
-> +	end = m;
-> +	while (*end && !isspace(*end))
-> +		end++;
+That said, as things stand we have already established in v1 [3] that for
+our existing use case - attaching metadata to <1% of skbs - the
+tracepoint-based approach is prohibitively expensive (+5% of CPU time), as
+Jesper noted.
 
-Does this build?  isspace() is used but <ctype.h> is never included.
-The file includes only <test_progs.h>, <fcntl.h> and <unistd.h>.
-test_progs.h includes stdio.h, unistd.h, errno.h, string.h, assert.h,
-regex.h, stdlib.h, stdarg.h, time.h, signal.h and various linux/ and
-sys/ headers, none of which declare isspace() in glibc.
+The skb-extension-based solution, in contrast, shows comparable-or-lower
+overhead, making it a viable drop-in replacement that enables new use cases
+for us and potentially offers a performance win.
 
-tools/testing/selftests/bpf/Makefile builds userspace objects with
--Wall -Werror, so the implicit declaration is an error (and is an error
-by default in GCC 14+ / C23 regardless).  The existing precedent in the
-same directory, prog_tests/ctx_rewrite.c, is the only other prog_test
-that calls isspace() and it explicitly includes <ctype.h>.
+Thanks,
+-jkbs
 
-[ ... ]
+[1] https://patch.msgid.link/20260714-bpf-meta-inside-skb-ext-v1-0-5871c07a8dd6@cloudflare.com
+[2] https://lore.kernel.org/all/20260831-skb-ext-prep-work-v1-0-ecc2a8542fd9@cloudflare.com/
+[3] https://patch.msgid.link/20260814-bpf-meta-inside-skb-ext-v1-0-767edd862656@cloudflare.com
 
-> +/*
-> + * The dev argument must be present in io.cost.qos already, which
-> + * means iocost is enabled for it.
-> + */
-> +static int dev_has_iocost(const char *dev)
-> +{
-> +	char line[256], word[256];
-> +	FILE *fp;
-> +	int found = 0;
-> +
-> +	fp = fopen("/sys/fs/cgroup/io.cost.qos", "r");
-> +	if (!fp)
-> +		return 0;
-> +	while (fgets(line, sizeof(line), fp)) {
-> +		if (sscanf(line, "%255s", word) == 1 && !strcmp(word, dev)) {
-> +			found = 1;
-> +			break;
-> +		}
-> +	}
-> +	fclose(fp);
-> +	return found;
-> +}
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+---
+Changes in v2:
+- Rework skb_ext_scrub() to simply delete all extensions but bpf_skb_ext
+  now that the delete operation is idempotent. (Florian, sashiko)
+- Fail writes through a dynptr while the extension block is shared with
+  clones: bpf_dynptr_write() now returns -EBUSY and bpf_dynptr_slice_rdwr()
+  returns NULL; re-acquiring the dynptr with BPF_SKB_EXT_F_CREATE COWs the
+  block and restores write access. (sashiko)
+- Mark bpf_dynptr_from_skb_ext() as packet-changing so the verifier
+  invalidates slices from an earlier dynptr when a re-open with F_CREATE
+  can COW the block and leave them dangling (use-after-free). (sashiko)
+- Reject bpf_dynptr_from_skb_ext(BPF_SKB_EXT_F_CREATE) in tracing and LSM
+  programs, which can run on a shared skb concurrently on another CPU;
+  require a constant flags argument without F_CREATE at load time, keeping
+  read-only access. (sashiko)
+- selftests: Add verifier negative tests for the new tracing/LSM
+  restrictions (F_CREATE and non-constant flags rejected). (sashiko)
+- selftests: Add clone_redirect coverage into the cloned-skbs test
+  (clone_redir_ext_write_after / clone_redir_ext_slice_write_after),
+  queueing the clone on a netem-delayed loopback; enable
+  CONFIG_NET_SCH_NETEM.
+- selftests: Fix if_nametoindex() assertions to use ASSERT_GT(..., 0) so a
+  lookup failure is not silently accepted as ifindex 0. (sashiko)
+- selftests: Use int (not __be16) for get_socket_local_port() so a negative
+  error is not truncated and masked. (sashiko)
+- selftests: Validate send()/recv() return values and switch the sk_skb
+  stream test to recv_timeout() to avoid a hang when the data path
+  regresses. (Jack Wang, sashiko)
+- selftests: Split the LWT test cleanup so bpf_tc_hook_destroy() does not
+  delete the base-namespace clsact qdisc on the error path. (sashiko)
+- selftests: Unify multi-line function comments to the "/*" on its own line
+  style. (sashiko)
+- Link to v1: https://patch.msgid.link/20260814-bpf-meta-inside-skb-ext-v1-0-767edd862656@cloudflare.com
 
-Does this helper match its comment?  The comment asserts that presence
-in io.cost.qos "means iocost is enabled", but ioc_qos_prfill() prints
-a line for every device that has the iocost policy activated, including
-devices with enable=0:
-
-block/blk-iocost.c:ioc_qos_prfill()
-  seq_printf(sf, "%s enable=%d ctrl=%s rpct=...", dname, ioc->enabled, ...);
-
-dev_has_iocost() only matches the leading dname and never looks at the
-enable= field, so it returns 1 for a device where iocost is present but
-disabled.  To match its own comment the helper should parse enable=1.
-
-Relatedly, the commit message states "The runner is skipped unless
-$IOCOST_TEST_DEV gives a major:minor of a device with iocost enabled",
-but the code does not skip in that case:
-
-> +void serial_test_iocost_model(void)
-> +{
-> +	struct iocost_model *skel;
-> +	char buf[300], *dev;
-> +	int err;
-> +
-> +	dev = getenv("IOCOST_TEST_DEV");
-> +	if (!dev || geteuid() != 0) {
-> +		test__skip();
-> +		return;
-> +	}
-> +	if (!ASSERT_TRUE(dev_has_iocost(dev), "iocost_mounted"))
-> +		return;
-
-ASSERT_TRUE calls test__fail() if the condition is false, so setting
-IOCOST_TEST_DEV to a device without iocost, or running where cgroup2 is
-not mounted at /sys/fs/cgroup (fopen fails, dev_has_iocost returns 0),
-produces a hard test failure rather than a skip.
-
-[ ... ]
-
-> +/*
-> + * Write a line to io.cost.model with write(2) and return the errno of
-> + * the failed write, or 0 on success.  stdio is not used here on
-> + * purpose: the kernel's rejection happens in the write() syscall,
-> + * not in the userspace buffer copy, and every write, including
-> + * the error paths of the callers below, is checked.
-> + */
-> +static int write_cost_model(const char *buf)
-> +{
-> +	int fd, err = 0;
-> +	ssize_t n;
-> +
-> +	fd = open("/sys/fs/cgroup/io.cost.model", O_WRONLY);
-> +	if (fd < 0)
-> +		return errno;
-> +	n = write(fd, buf, strlen(buf));
-> +	if (n < 0)
-> +		err = errno;
-> +	close(fd);
-> +	return err;
-> +}
-
-[ ... ]
-
-> +	/*
-> +	 * negative: binding an unknown model name must be rejected,
-> +	 * so a typo cannot silently disable cost model updates
-> +	 */
-> +	snprintf(buf, sizeof(buf), "%s model=no_such_model\n", dev);
-> +	err = write_cost_model(buf);
-> +	ASSERT_EQ(err, ENOENT, "unknown_model_rejected");
-
-Can this negative test distinguish the two failure modes?
-write_cost_model() returns the open() errno and the write() errno
-through the same channel, so its callers cannot tell them apart.  ENOENT
-is exactly what open() returns when /sys/fs/cgroup/io.cost.model does
-not exist (cgroup2 mounted elsewhere, or the io controller not enabled
-in the root cgroup's subtree_control).  The assertion then passes
-without the kernel ever having parsed the model name, i.e. it can report
-success for the opposite of what it means to prove.
-
-The helper's own comment says it returns "the errno of the failed
-write", which does not match the open() path.  Distinguishing the two
-(e.g. a separate return code for open failure, or asserting the file is
-openable first) would make the negative test meaningful.
-
-> diff --git a/tools/testing/selftests/bpf/progs/iocost_model.c b/tools/testing/selftests/bpf/progs/iocost_model.c
-> new file mode 100644
-> index 000000000000..f8ad417b3584
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/iocost_model.c
-> @@ -0,0 +1,116 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Example iocost cost model: the builtin linear HDD formula with all
-> + * costs doubled.
-> + *
-> + * The constants mirror what calc_lcoefs() derives from the AUTOP_HDD
-> + * defaults (rbps=174019176 rseqiops=41708 rrandiops=370, w-side
-> + * analog) in vtime units where 1s == 2^37, expressed with the same
-> + * round-up divisions so they cannot drift from the kernel.  A device
-> + * bound to this model through io.cost.model charges exactly twice the
-> + * builtin model under the same workload, which makes it a convenient
-> + * way to verify that accounting goes through the BPF path.
-
-Does this claim hold for arbitrary devices?  "A device bound to this
-model through io.cost.model charges exactly twice the builtin model
-under the same workload" is only true for a rotational device still on
-ctrl=auto.
-
-The builtin model reads ioc->params.lcoefs[], which calc_lcoefs()
-derives from autop[ioc_autop_idx()] or from user-supplied io.cost.model
-coefficients.  ioc_autop_idx() returns AUTOP_HDD only when
-blk_queue_rot(disk->queue); otherwise it returns AUTOP_SSD_QD1 or
-AUTOP_SSD_DFL, and when ioc->user_cost_model is set it keeps whatever
-the user pinned.
-
-This model hardcodes the AUTOP_HDD i_lcoefs (rbps=174019176 etc., from
-block/blk-iocost.c), so on the non-rotational $IOCOST_TEST_DEV that
-most testers will use, the ratio to the builtin is arbitrary rather than
-2x.  The comment should state the rotational/ctrl=auto precondition (or
-the code should not claim exactness).
-
-Secondly, "expressed with the same round-up divisions so they cannot
-drift from the kernel" overstates the coupling: only the RU() divisions
-mirror calc_lcoefs().  RBPS/RSEQIOPS/RRANDIOPS/WBPS/WSEQIOPS/WRANDIOPS,
-IOC_PAGE_SIZE, IOC_SECT_TO_PAGE_SHIFT and LCOEF_RANDIO_PAGES are
-hardcoded copies of kernel values and will drift silently if the kernel
-changes them.
-
-[ ... ]
-
-> +SEC("struct_ops")
-> +u64 BPF_PROG(iocost_2x_calc_cost, u64 opf, u64 nbytes, u64 sector,
-> +	     struct blkcg *blkcg, u64 model_flags)
-> +{
-> +	u64 pages, seek_pages = 0, base, coef_page, randio, cost;
-> +
-> +	if ((opf & IOCOST_REQ_OP_MASK) == REQ_OP_READ) {
-> +		base = RSEQIO; coef_page = RPAGE; randio = RRANDIO;
-> +	} else if ((opf & IOCOST_REQ_OP_MASK) == REQ_OP_WRITE) {
-> +		base = WSEQIO; coef_page = WPAGE; randio = WRANDIO;
-> +	} else {
-> +		/*
-> +		 * a fully owning model must price every op; unknown
-> +		 * ops are priced as a single page write
-> +		 */
-> +		base = 0; coef_page = WPAGE; randio = 0;
-> +	}
-> +
-> +	/*
-> +	 * mirror the builtin single per-cgroup cursor: the model keeps
-> +	 * its own cursor keyed by the blkcg argument
-> +	 */
-
-Does the keying match the builtin?  The comment says this mirrors "the
-builtin single per-cgroup cursor", but the builtin cursor is not
-per-cgroup - it is per blkg, i.e. per (cgroup, device).  The cursor is
-'sector_t cursor;' in struct ioc_gq, and ioc_gq is allocated by
-blkg_to_iocg(blkg).
-
-cursor_store is keyed by blkcg->css.cgroup only, so if two devices are
-bound to this model the same cgroup shares one cursor between them and
-every alternating IO looks random.
-
-> +	{
-> +		__u64 *cursor, cur;
-> +
-> +		cursor = bpf_cgrp_storage_get(&cursor_store,
-> +					      blkcg->css.cgroup, NULL,
-> +					      BPF_LOCAL_STORAGE_GET_F_CREATE);
-> +		if (!cursor)
-> +			return 2 * (base + RU(nbytes, IOC_PAGE_SIZE) * coef_page);
-> +		cur = *cursor;
-> +		seek_pages = sector > cur ? sector - cur : cur - sector;
-> +		seek_pages >>= IOC_SECT_TO_PAGE_SHIFT;
-
-Does this handle a freshly created cgroup?  bpf_cgrp_storage_get() with
-BPF_LOCAL_STORAGE_GET_F_CREATE returns a zero-filled value
-(bpf_selem_alloc() allocates with __GFP_ZERO), so a new entry has
-cur == 0, which this code treats as a real cursor position rather than
-'no previous IO'.
-
-The builtin only computes a seek distance when the cursor is non-zero:
-
-block/blk-iocost.c:calc_vtime_cost_builtin()
-  if (iocg->cursor) {
-      seek_pages = abs(bio->bi_iter.bi_sector - iocg->cursor);
-      seek_pages >>= IOC_SECT_TO_PAGE_SHIFT;
-  }
-
-Without this guard, the first bio of every cgroup landing past sector
-32768 is priced with randio (368,221,632) instead of seqio (60,266).
-
-> +		if (seek_pages > LCOEF_RANDIO_PAGES)
-> +			base = randio;
-> +		if (!(model_flags & IOCOST_COST_F_MERGE))
-> +			*cursor = sector + RU(nbytes, 512);
-> +	}
-
-Does this cursor update match the builtin?  The cursor is advanced for
-every non-merge call, including calls the builtin model never accounts
-for.
-
-calc_vtime_cost_builtin() returns cost 0 both for
-'!bio->bi_iter.bi_size' and for any op that is not REQ_OP_READ or
-REQ_OP_WRITE, and ioc_rqos_throttle() then does 'if (!abs_cost) return;'
-before 'iocg->cursor = bio_end_sector(bio);'.  So the builtin leaves the
-cursor untouched for flush and discard bios.
-
-This model instead writes 'sector + RU(nbytes, 512)' for them.  A
-dataless flush from blkdev_issue_flush() is 'bio_init(&bio, bdev, NULL,
-0, REQ_OP_WRITE | REQ_PREFLUSH)': bi_sector == 0 and bi_size == 0.
-It matches the REQ_OP_WRITE arm, so this line sets *cursor = 0 + 0 = 0.
-REQ_OP_FLUSH hits the 'unknown op' arm and does the same.
-
-The next read/write in that cgroup is then compared against cursor 0, so
-seek_pages == sector >> 3 and any sector beyond 32768 (16 MiB into the
-device) trips 'seek_pages > LCOEF_RANDIO_PAGES' and is priced with
-randio instead of seqio.  With the AUTOP_HDD constants in this file that
-is RRANDIO = 368,221,632 instead of RSEQIO = 60,266.  For a 4 KiB read,
-roughly 113x instead of the 2x the file comment claims.
-
-On an fsync-heavy workload a flush precedes almost every IO, so a cgroup
-bound to this model is throttled orders of magnitude harder than under
-the builtin model it is supposed to double.  A large discard has the
-mirror-image effect: 'sector + RU(nbytes, 512)' jumps the cursor by the
-whole discard length, so the following sequential read looks random.
-
-Matching the builtin requires only advancing the cursor for the ops that
-were actually priced (READ/WRITE with nbytes != 0).
-
-> +
-> +	pages = RU(nbytes, IOC_PAGE_SIZE);
-> +	if (!pages)
-> +		pages = 1;	/* dataless flush: one page */
-
-Does the page count match the builtin?  The page count rounds up where
-the builtin truncates, so the cost is not 2x for bios that are not a
-whole number of 4 KiB pages.
-
-The builtin uses:
-
-block/blk-iocost.c:calc_vtime_cost_builtin()
-  u64 pages = max_t(u64, bio_sectors(bio) >> IOC_SECT_TO_PAGE_SHIFT, 1);
-
-which is max(nbytes >> 12, 1) - a truncating shift.  RU(nbytes,
-IOC_PAGE_SIZE) is a round-up.  For a 6 KiB bio the builtin charges 1
-page and this model charges 2, i.e. 2*(base + 2*coef_page) instead of
-2*(base + 1*coef_page).  Bios whose size is not a multiple of 4096 are
-routine (writeback of a partial tail, and merged bios on the
-ioc_rqos_merge() path).
-
-Note the file comment claims the constants use "the same round-up
-divisions so they cannot drift from the kernel" - the page count is the
-one division the kernel deliberately does not round up.
-
+Changes in v1:
+- Don't scrub BPF skb extension. Remove F_NO_SCRUB flag. (Stan)
+- Allow calling bpf_dynptr_from_skb_ext from NETFILTER, LWT_*, SK_SKB progs.
+- Reorg tests into smaller commits. Add missing coverage.
+- Link to RFC: https://patch.msgid.link/20260714-bpf-meta-inside-skb-ext-v1-0-5871c07a8dd6@cloudflare.com
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Jakub Sitnicki (14):
+      bpf: Introduce per-packet metadata storage for BPF programs
+      bpf: Allow access to bpf_sock_ops_kern->skb
+      bpf: Make BPF skb extension survive packet scrubbing
+      selftests/bpf: Add tests for bpf_dynptr_from_skb_ext
+      selftests/bpf: Test skb_ext on cloned skbs
+      selftests/bpf: Test skb_ext survival across veth and GRE
+      selftests/bpf: Test skb_ext read from cgroup_skb and sk_filter hooks
+      selftests/bpf: Test skb_ext read from sock_ops and LSM hooks
+      selftests/bpf: Test skb_ext read from kfree_skb tracepoint
+      selftests/bpf: Test skb_ext read from netfilter hook
+      selftests/bpf: Test skb_ext from LWT in, out, and xmit hooks
+      selftests/bpf: Test skb_ext read from seg6local End.BPF hook
+      selftests/bpf: Test skb_ext read from sk_skb stream verdict hook
+      selftests/bpf: Use non-trivial test payload in xdp_context tests
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34481298417
---===============7357494171922306859==--
+ include/linux/bpf.h                                |   10 +
+ include/linux/filter.h                             |   27 +
+ include/linux/skbuff.h                             |   13 +
+ include/uapi/linux/bpf.h                           |    5 +
+ kernel/bpf/helpers.c                               |   21 +-
+ kernel/bpf/log.c                                   |    2 +
+ kernel/bpf/verifier.c                              |   25 +-
+ net/Kconfig                                        |   20 +
+ net/core/filter.c                                  |  149 +++
+ net/core/skbuff.c                                  |   27 +-
+ net/ipv4/udp.c                                     |    6 +-
+ tools/testing/selftests/bpf/config                 |    2 +
+ .../selftests/bpf/prog_tests/socket_helpers.h      |    1 +
+ tools/testing/selftests/bpf/prog_tests/verifier.c  |    2 +
+ .../bpf/prog_tests/xdp_context_test_run.c          | 1117 +++++++++++++++++++-
+ tools/testing/selftests/bpf/progs/test_xdp_meta.c  |  569 +++++++++-
+ .../testing/selftests/bpf/progs/verifier_skb_ext.c |  122 +++
+ 17 files changed, 2094 insertions(+), 24 deletions(-)
+
