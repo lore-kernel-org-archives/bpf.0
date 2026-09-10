@@ -1,98 +1,132 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BA1E3AFB06
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 19:15:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC7F03AB498;
+	Thu, 10 Sep 2026 19:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789067756; cv=none; b=WZyZIqsUsCdqT7CE5ZlGxswhF4uvp3AEigYBFDSZhFblbb8T7+V+SRCnS/k8qywWXZXrvlizr2AKid/br3dXH53pI48S1MNND2a8FwLWM5V4C9rUfhlrPvOtQhJvXfkS/3CUdce4Ml6c3yY4fbwqc/89TGJn6A0alUhFhhSSW88=
+	t=1789067796; cv=none; b=TbWgyx1pETy37uGx2Mt1ntc9g+4nbYFAOJxRvlB97r3cHLs4eo13ZI6MawbF5mS4ocXeqgEdxDo5tBxoVk7Qf21x6EhfbRx3powSrHaEmTGTguXDU5L689vvGncQWMKTT4MAquERyaGXrTen9U/Jx0uzBlLwG8vy4axlaXXWVhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789067756; c=relaxed/simple;
-	bh=Rf19Xsc/u33WjgVP2NLj6qqTmgUhqc6BV1N0Ol7tH4Y=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BWMGe9tR1OHqE+ZPAqxJy/vZ9pDTZKFXCfDIycPcck8AXWH6QQHzGRya8TWEgr2mbZMKijzdLf86f+JZHwuiqpPdS2eQP2nHOBsJQAbCFsOlfcILkH5ZSL/WB7xMCxjJS2vFJ9AUYqsXGI0jLAdzU2YE15AspmlWortkyloRbUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W6P9Ml3Q; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789067796; c=relaxed/simple;
+	bh=BAdCt9RS3clpRWFXQ2FQLe4e57p616vRG6XQpvCmoiM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=bUv5T8dAh0BETo07Ktc/rKd88sP5/JsZW9Xqqe/mga03lUWycTTdPB8z3vVSrp8JsOAqvtzEkVrpKf5GK2pL1KqF3qoEdLZcKYXgzA12crP7KJkQ3t7WKG12xZylRV8sSH1DSbtuktWFX3qLafuhPkCAeSYeRsG6E+4Z5wLc4qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T3ZEWQ1Q; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W6P9Ml3Q"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2caced6038eso1837105ad.0
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 12:15:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789067755; x=1789672555; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=Rf19Xsc/u33WjgVP2NLj6qqTmgUhqc6BV1N0Ol7tH4Y=;
-        b=W6P9Ml3QVxJhWPzUNd8RJyo1TuqWkMKTs36y/bhG2tu37lFZ440j/OuiUvjNWHLcSz
-         l7JWHF+8icggp8HmYbCH/jEyHu5vbiAHJv2ZhSAvj85lT5BaamrhnPnmvIRcrBIFmKwP
-         89fVOgtEu2hEO+wuZXevYBKGnG2oV3Heq9dDcaBJBKNDwGIDtZUYPSG+7Rre+ehEJK86
-         mVVAb1w+XIdbb5JwSXhVqQYrqwHYjSos4XZtzKUqZa19/url1uCaB+iree/igDODJSXi
-         VCY6acL5rUrUEF31ABCv8mYOGAbbxROzeOjN5qTA7hi1a8SvZDo8YQdzQqm/cnwzRceD
-         JqGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789067755; x=1789672555;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Rf19Xsc/u33WjgVP2NLj6qqTmgUhqc6BV1N0Ol7tH4Y=;
-        b=jC+E/1Qc02xtgy8pl89XTW+vvto1qh0ijgvUtiZ9eJ8NHCeRtVpUddJs1ix2jsQ6nS
-         7ZPWf6J8AlkFbxCw7zEE4Gs0lRgJk0xpt3+Zn7QkmCjwaHBFu7E9D54QnfstDLg1/u3s
-         pAU0RJQv+KDMCkOP8a05UGUx+88GIjHVycw9KCeln5IXDcgtQsouyLmYILzDKIHfMY7a
-         KfOKhIla2e/PvE4BhtsSFOiHWKUN/CDVS1UkT/0OwiVlMKJb2V/LvmyiC3DfUv6lvvqk
-         6m9hYv0+fGQPMFnYjYFCHrccULV9vdH26m7QB1LlgaXFMpBApxnNpPLpb2yYfNMbzaDx
-         IFUw==
-X-Gm-Message-State: AFuF++nM7DJxVG03l66hZfr8rp+30TibLl/bFZsD35icsybUicEaCI3U
-	IzPdtWpkV6UnCKjsJFYwwE/bJvmvdxkoPwxhhHJOKPyBhws121qwMpscwFrSelj3jMY=
-X-Gm-Gg: AYBFou0cewWxuDC2aMd8ZuYrm2RtUPmWHGrJIlJ5g/+FUs0fGnw814rdRQkh4EcNlin
-	HkH+Qk8dBhoFHuiMLlzYLyeSlQnURks1KnRaaVJLMzF3NmduW5cTrX6ZLNLnAIUAD2hWzaTwCFP
-	Qob7nnz1UlbP/1nxVNP3ovM8eJiDDI06q1wk2xcNrsnJg5M+R0XGNw9AcwQc2z6lCjqf6NZ3fGx
-	Iphmci8eBDqWjxPTI+W7ZSlMn1ph4u4nAOHtq0TbeHtYLQ3DLSaYyn+6ze+rj0genqbcBQLlM1x
-	1KkKYGByuXVNhB/lrWFytI73/dKGyYWcPrvUiuN3RnQeUaBxCy+jZS0CYXK4knx2USUQ3JJokZn
-	w6/nElsPOLyKzcyGo0JlwuZucXL4ae4Z/r90RBOwuJ7pJre2eSHqHoi9TIAN9kq2MMjUtYkhrBy
-	XOwOS+L+sIBigDSg41kcqbdscATnqzMtdQgVY6CxdLASawC9RuF6MZ+WAfMpeoYhu+F0N8W1gjw
-	XYPI354Q6158l+LQL1spejOa+1p7SjFW9tiBSBHOCxjW/MPX2/ODKgfrlI=
-X-Received: by 2002:a17:902:e74d:b0:2d7:1b20:e98f with SMTP id d9443c01a7336-2dd0e8a1969mr64089575ad.2.1789067754496;
-        Thu, 10 Sep 2026 12:15:54 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:a3ce:533a:7492:3ff3? ([2620:10d:c090:500::4:d279])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33ba4e5182fsm202796eec.9.2026.09.10.12.15.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 12:15:53 -0700 (PDT)
-Message-ID: <46e462389445a0fbc005f549d3fdd52c65805fc4.camel@gmail.com>
-Subject: Re: [PATCH bpf] bpf: Clear scalar delta on narrowing stack spill
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: bpf@vger.kernel.org
-Date: Thu, 10 Sep 2026 12:15:52 -0700
-In-Reply-To: <20260910185604.44949-1-daniel@iogearbox.net>
-References: <20260910185604.44949-1-daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T3ZEWQ1Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D7C21F00893;
+	Thu, 10 Sep 2026 19:16:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789067794;
+	bh=jXfsaX1BfQOAVNb87FA7OjU8P/nSxR0EPutIjtn2a+c=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=T3ZEWQ1QIJRrcdLlqtLxokcmey9PCv7cLsA+OeWwc2Z5Wtrl68Al6V9WaL4hImpgb
+	 XfeYN+hH8aycLhTeP/jiE6AFz+7e3o4i3vt2fRm8kVHEDb/TyB3n0NQ0oraePdHg10
+	 Rijny+s8Oh83vPz1HSVnFOR/VQQlbqUnkzyDKZ8fLhRLUbD7OCxeQ/uVyQCrzcMfpK
+	 YTnRTCbWMEVu7PfHS8CRtEBD7X+BJ+xPVYd9XpAmfT1t5nbYgfIQrjLKYAtTvFf9+0
+	 E8tqd6fTk8Ru994+9n4iH3iI8/i/ybvqNdGiqZPpinZBic8a5/x2bgr85tT4Na9baz
+	 s6Tsbefz0aUOg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH RFC 04/13] kprobes: Let Tasks RCU recognise tasks
+ preempted in an optprobe jump window
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Josef Bacik" <josef@toxicpanda.com>
+Cc: linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20260910-b4-rcu-tasks-preempt-qs-v1-4-d4469f4cc101@toxicpanda.com>
+References: <20260910-b4-rcu-tasks-preempt-qs-v1-0-d4469f4cc101@toxicpanda.com>
+ <20260910-b4-rcu-tasks-preempt-qs-v1-4-d4469f4cc101@toxicpanda.com>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+Date: Thu, 10 Sep 2026 19:16:33 +0000
+Message-Id: <20260910191634.5D7C21F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Thu, 2026-09-10 at 20:56 +0200, Daniel Borkmann wrote:
-> check_stack_write_fixed_off() breaks the scalar link on a narrowing spill
-> by zeroing the id of the destination stack slot, but leaves the delta in
-> place. save_register_state() has just copied the source register verbatim=
-,
-> so the slot keeps the BPF_ADD_CONST delta of a register it is no longer
-> linked to. This is the same shape as the case addressed in 1b327732c846
-> ("bpf: Clear delta when clearing reg id for non-{add,sub} ops"). Unlike
-> the latter, no miscomputation seems reachable, so mainly consistency.
->=20
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> ---
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] Massive performance overhead in the kernel preemption fast-path du=
+e to unbounded hash table lookups.
+- [High] kprobe_optimizer() frees kprobes without synchronize_rcu(), causin=
+g a Use-After-Free when get_kprobe() is called from irqentry_preempt() on i=
+dle CPUs.
+--
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+commit c6c38cd5a975e6f9c2037bf63fa6d732d6cd1fab
+Author: Josef Bacik <josef@toxicpanda.com>
 
-It appears there are no other instances.
-Remaining .id =3D 0 are for non-scalar types.
+kprobes: Let Tasks RCU recognise tasks preempted in an optprobe jump window
 
-...
+This patch adds kprobe_in_optimized_region() to determine if an instruction
+pointer falls within the bytes of an optimized kprobe. It then updates
+rcu_tasks_ip_in_trampoline() to use this check, allowing Tasks RCU to
+recognize and hold off grace periods for tasks preempted within these jump
+windows.
+
+> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+> --- a/kernel/kprobes.c
+> +++ b/kernel/kprobes.c
+
+[ ... ]
+
+> +bool kprobe_in_optimized_region(unsigned long addr)
+> +{
+> +	int i;
+> +
+> +	for (i =3D 1; i < MAX_OPTIMIZED_LENGTH / sizeof(kprobe_opcode_t); i++)
+> +		if (get_kprobe((kprobe_opcode_t *)addr - i))
+
+[Severity: High]
+Could this loop introduce significant overhead in the preemption fast-path?
+
+On architectures like x86, this loop executes up to 18 times, querying the
+kprobe hash table via get_kprobe() on each iteration. Since the hash table
+can have long chains on systems with many active kprobes, this could result
+in thousands of pointer dereferences during a preemption event.
+
+Also, does this introduce a use-after-free risk for interrupted idle tasks?
+
+kprobe_optimizer() unlinks kprobes and frees them after waiting only for
+synchronize_rcu_tasks(). Because synchronize_rcu_tasks() explicitly ignores
+idle tasks, an idle CPU that is interrupted could end up traversing the
+kprobe_table here via get_kprobe() while the kprobe is concurrently freed,
+as Tasks RCU will not wait for the idle task's traversal to finish.
+
+> +			return true;
+> +	return false;
+> +}
+
+[ ... ]
+
+> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+> --- a/kernel/rcu/tasks.h
+> +++ b/kernel/rcu/tasks.h
+
+[ ... ]
+
+>  bool rcu_tasks_ip_in_trampoline(unsigned long ip)
+>  {
+> +	if (kprobe_in_optimized_region(ip))
+
+[Severity: High]
+Is it safe to place this expensive check unconditionally at the start of th=
+is
+function?
+
+When CONFIG_RCU_TASKS_PREEMPT_QS is enabled, rcu_tasks_ip_in_trampoline()
+is called on every kernel preemption via irqentry_preempt(). By placing
+kprobe_in_optimized_region() before cheaper checks like
+core_kernel_text(ip), every preemption event incurs the cost of the loop
+and hash table lookups, which could severely degrade system performance.
+
+> +		return true;
+> +
+>  	if (core_kernel_text(ip))
+>  		return arch_rcu_tasks_ip_in_trampoline(ip);
+>  	return !is_module_text_address(ip);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260910-b4-rcu-tas=
+ks-preempt-qs-v1-0-d4469f4cc101@toxicpanda.com?part=3D4
