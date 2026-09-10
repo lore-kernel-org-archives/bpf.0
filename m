@@ -1,171 +1,252 @@
-Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
+Received: from mail-lr2-f12.google.com (mail-lr2-f12.google.com [74.125.230.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E71448E0FF
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 15:03:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED7174A1DE5
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 15:08:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789052629; cv=none; b=LIemlKk49D3FTQTst9zUbjRSndwAsRtlbh0WTUsPwwJpsk0JMzM1994E5p6B2iOIGudb7OTXsy9TD91zHp0nIZhVObPGC0yXRodt9muyO9ywUfRL1hdtroGaBjnWJtx5KJOmYa7VlIe40i+1v5XqYuzf1IMwLDQG1WFOkuCVQdA=
+	t=1789052940; cv=none; b=DWFUJckM3CMIkMLh94tINVv4lgWzzcfkvcGZB4MP6LIpaMPnX53R8np8xk3fBanmCAC5OE1jTSx+WNRK+spmoOA9wfPm7XGPTrxELyxb4iXBAJOmxwiWZY09vXqoUo4ZsvS/G+zCUzxZtKx5mYvxzAAYDuaTDMOCQagcGQcm3ic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789052629; c=relaxed/simple;
-	bh=0BLOl0V511fQm0/dq0n9miYuEXEfjBrCRozA/DheL2Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k6ZW9TP9tKrzkvlXmzW0HWCh5xxGcqOsWcBlKwP8LvvH+oAikZcYiQCB8/TRyQj5iWoaJsAPBZkCl1K/7bRsqkmUdbD8KV0D8tmxNsOVMyZyFmX8efdsq8qUtbnUH3qZWKgqw8MTo9EVFfaBc1HqieyPu8J8DLlgdg9JWXP7IHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gl3wUhWo; arc=none smtp.client-ip=74.125.225.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789052940; c=relaxed/simple;
+	bh=3DbHv+iTX4L3PJMeVnUlH/TtcwZtYZl3I9H/zJtf8Z4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=LSXiDbeAFH3cmNpM8uV23x/OkwIrDdHl7hnAv1kVf80Wf7iRDH5e67Gu3R+BC2xvqdKK+l1JUUrtQ8G46valTmeqlsA4Jlrc7BrQyoG198PE0ycScQfjtvvuJ+DbVtb6VuVTfm/4JvxjJY01n21BvIpIWDZdboFw1nvZcytB6+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=WFgCb8Il; arc=none smtp.client-ip=74.125.230.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gl3wUhWo"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-4843cedd129so1503811f8f.0
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 08:03:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="WFgCb8Il"
+Received: by mail-lr2-f12.google.com with SMTP id 38308e7fff4ca-3a354118856so13816621fa.1
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 08:08:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789052625; x=1789657425; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=DPT1g/8kvXrQ081Um1YYJLe7xxs33IT2WMAPKokYw00=;
-        b=gl3wUhWotOFUSbdQCgPUSNDhGKKZpBhMutokQAjlMIyZ8KZ96Ez/79mmWJElkxx8g7
-         eaYL8yvfHBKFes+MwP+EupaxlFY6Ct9+6OgBgyRlp3Ndj/l7AwMY4+CmvKeRlrTwCrOy
-         QzNICzJCxqk94MMIVJH7pMIAncSMh0Dt00CIkSGVXfwLj5EjVoyEzT5L19N1V+w3pL63
-         NjsK5UfEFK9x4wknxuCJZFS4lr10ucOS4uxTwRkHHtSmsKBGGysYmMBtj60sEcXlN/p2
-         jhH3DX43UzoSL2CtUI7QCRQnTqaWWEsDuVH+aeru5M6U+ydKXJfFFoM44N73r5y3zgyV
-         YSNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789052625; x=1789657425;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=cloudflare.com; s=google09082023; t=1789052933; x=1789657733; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DPT1g/8kvXrQ081Um1YYJLe7xxs33IT2WMAPKokYw00=;
-        b=OlQsW4x5mDCCUGBtgL3M4TgMzLxpdPWK0R00H43FUiyRoRAJU/p8qhWiukWwB7aeA9
-         LlvBGZmod6jsJrzzo/O9YedPVfkXGDzXW03WxWvnecJpVB4r0O68DhEJT/6hSmpQ0/Rk
-         48fvAr9nFO7zHFqtkNQmaIaVpZdeaXznhztlu9EmO+W0loBLK6KX5Uc7DSTykRq+wuqm
-         l1rZYpCIjqQQ8h5msb6nfC8HVAQKsDSO81xAVOxOmBSicEOqd40Kb/M5bszr3GQi/o0O
-         QQwZ/H6x9CkCBEEMixCi4iTRFjpiRc07EAlDYFU5x6BeQS3BoKIxBtd7wQp05sUa74K8
-         zSWg==
-X-Forwarded-Encrypted: i=1; AKwUvBxc6i7BK7Mtx15WVBNUOehkqv9nSIFaq+ZOI/KJz3hBxkK268DmfTJhMV0O0XPhi1IMDh4=@vger.kernel.org
-X-Gm-Message-State: AFuF++kid7dXbPK1io8gg5D+2vmece8LzmvF1zy/TZenFXY37Y1k7pR1
-	udQuUBXBcFhR6VBNxTET3xjLT4iZqEFi6bMiW+707LmWMrF2FzYADW5U
-X-Gm-Gg: AYBFou1XLKJbMDQNW3AYl8ACtEraz6Ld/eNKjtb5O58IJmnO+pJeX8t6FxlXJ1wPpDU
-	W7fxNgjOPCdUKMq+wdiCel7aAbMH3zwxO+9eG3EdROaAaNzRLMeD/88JaE5DXKSANn45VFAwhCP
-	RVMpRG1jdVix3KKful/HyXdphurficMf8oZruRrc9ObOHMyTP4bdsnLr0JFtX3RzB3anEIXG5ck
-	WsxYwxDK3m+8tiRpab4bVFvYAd1xSOyk0074wj6f76LwVqX9Ix1TaH4Ecmwa59J4hnkZilnbA6K
-	c3l34d416Xqdwcvj1jowDW7dpHT5n3u0VzFHlLWvS9FXGK/EkAnSGHTfCwpabTVh7Olq/72nKuh
-	O4o7GcX+EkkQXkhBRMD9W/+LHPSPP68uYRCdgDFjJ3BObH+AW8cEDMyEoqF08sszCp+WSWHVeRE
-	K0n1vwZ2hbwqtfaH8AdLC4PKLEGEsEXUTUxxdYOQIVsh7LCzFue0c1xZj9haj3WxW3S4Ap6Es31
-	1uod1FnTrXqVXl9XpB6SZq/k1nGIJd8AfO7
-X-Received: by 2002:a05:6000:2489:b0:485:8e72:93ad with SMTP id ffacd0b85a97d-485aac58437mr22521169f8f.0.1789052625013;
-        Thu, 10 Sep 2026 08:03:45 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1126:4:4821:971b:60ec:d55c? ([2620:10d:c092:500::7:3747])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48594172546sm42974342f8f.15.2026.09.10.08.03.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Sep 2026 08:03:44 -0700 (PDT)
-Message-ID: <ea68b32c-1af2-47ae-b168-4fd6791f607b@gmail.com>
-Date: Thu, 10 Sep 2026 16:03:42 +0100
+        bh=42dvhu2SyGXAENM7Q7aMtAhVbORcgby5xBEV1XxO6q4=;
+        b=WFgCb8IlvANt4TEJLxYScr75C4qA6CHHltoEJo2pUztSAMWyrc+NzC3+nuT8pgyoIC
+         c0znlYpAjTVGeplChNfExcVnQ9iNunw4VnixpvIyZIxTreNhP950ADd/XN/glRBGpOIK
+         tjoaR0htRz4j4V4UToEZxPPcYlYyxHOpcvGE+ygPFDL8Tt1kRSrgensnnQSAjkAdYL+0
+         fvYUmsWYLo8Vg4OB4gdvO05Zgg/4zwuGjMwpry8jLQung0mor6/u11vnwRNIdbpDD3FK
+         1XMt1/oFgFF9zEWJk5aDbbbu5VX7IAHqmNVy0eb1OAsgEzUgxxSoXesEz32WKc82lQfP
+         EBvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789052933; x=1789657733;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=42dvhu2SyGXAENM7Q7aMtAhVbORcgby5xBEV1XxO6q4=;
+        b=sARnassq229tjvdmzLTf89rgJeEkwjQARlRvOFvA1kiTkcWABcxR40QPtXl19XBuqo
+         G1cksKHWM+pMCY6qQ4LDevIeJ5CSERiGiPws41ZqzDsmjLvNzF1I2z+hNYLJTWukXvVD
+         wMYwkzqRJymmZVlHxer0od9dwn69PqECfMf2rEPRRXFZRQuyeUDHDh/Z1A1rZmPRs3WP
+         D0WD0Tk0tcwT4nykTLm0fMnPCtwJdd+q2Js49nq+v6nY+zfHe2p0munnljPtpRuwjl5s
+         Je0AtBZ9GfCW661l9FHJbK+vZNBXNiMYQKAXfYig20PIXMOwbDf4l+zbdumriXY63v10
+         m68A==
+X-Gm-Message-State: AFuF++m+5HfE/H+0b0uzfPJrH6wxSFC67NRUcFLxuRW49Ugq99vYrWg3
+	rBQfmHZVkmdljparA+KToNO3UWVL554V/B0tG79anxsq6+Y98ANY0nZwGsWdYl0JzR2hEumlloG
+	stw3/W0Y=
+X-Gm-Gg: AYBFou2g1Bil7Bf7shLi9g1cO1bawoGzulW750nU3VGleb8TedAbY6fbco3yIZ7Pr+K
+	0Op+tS4cws+qRJqENpcVrDHaFKm4mYr7KL0wEI99m9A4fyYf97PJtwJA1bWMDx3wjvmv4mSrFrw
+	+dEl2vk3iEWGIBfkh/avMoU98l+D9mguBP9hl6vPjjtXyJ0krDD5rVfYC5EZuTHpyifU9AaNjjU
+	d4bLyaOnqYePne178pkzvnnkh4fysV23aqNmqy+wZg2Y7hijFzD31HUrz1H3wdSf0lN9AcyMMBg
+	jDKdvY+618o4p3QS0MDDYBlwlE3+oe2VoDquHVltkLWBfLwS7Y8AAthBWR9WvZtqKb/Yt/BrI3Y
+	9kIdPB2hY0mSLE/2p0ryZ/8Ky9/ciKONtJsAkDAqW7QYOQv3eY8NXARmI++XqZOl4mQ2qCJw56h
+	i9QkE2CKGUpl3Xde/d95gPUwsBDMMIO2uCcatBZUS8BEspe/pB30AnwY3oQWuNRYVwAmRKmFxeI
+	cjCj/c1wUwD0fwIMyOneTXSbBjrUjI+E+jnL77KQmbhjdgK
+X-Received: by 2002:a17:906:ba85:b0:c26:1648:a066 with SMTP id a640c23a62f3a-c2941b3a8bdmr347406966b.33.1789048983836;
+        Thu, 10 Sep 2026 07:03:03 -0700 (PDT)
+Received: from cloudflare.com (79.184.140.212.ipv4.supernova.orange.pl. [79.184.140.212])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c260d036440sm928281666b.5.2026.09.10.07.03.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2026 07:03:03 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+Date: Thu, 10 Sep 2026 16:02:48 +0200
+Subject: [PATCH net-next v2 13/14] selftests/bpf: Test skb_ext read from
+ sk_skb stream verdict hook
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 1/4] bpf: Add KF_PERFMON kfunc flag
-To: Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org
-Cc: memxor@gmail.com, eddyz87@gmail.com, info@starlabs.sg, bpf@vger.kernel.org
-References: <20260910142107.40582-1-daniel@iogearbox.net>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <20260910142107.40582-1-daniel@iogearbox.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260910-bpf-meta-inside-skb-ext-v2-13-0b21e42180b0@cloudflare.com>
+References: <20260910-bpf-meta-inside-skb-ext-v2-0-0b21e42180b0@cloudflare.com>
+In-Reply-To: <20260910-bpf-meta-inside-skb-ext-v2-0-0b21e42180b0@cloudflare.com>
+To: netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+ Jakub Kicinski <kuba@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, 
+ Paolo Abeni <pabeni@redhat.com>, Stanislav Fomichev <sdf@fomichev.me>
+Cc: bpf@vger.kernel.org, kernel-team@cloudflare.com, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Simon Horman <horms@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Florian Westphal <fw@strlen.de>, Jack Wang <163wangjack@gmail.com>
+X-Mailer: b4 0.16.0
 
-On 9/10/26 3:21 PM, Daniel Borkmann wrote:
-> Tracing related BPF helpers e.g. under bpf_base_func_proto() are gated
-> behind CAP_PERFMON. However, the same is currently not true for kfuncs
-> and they are accessible via plain CAP_BPF. Add a new KF_PERFMON flag
-> which can be used such that check_kfunc_call() ensures env->allow_ptr_leaks
-> is permitted. This follows similar pattern to existing KF_DESTRUCTIVE flag.
-> 
+Test bpf_dynptr_from_skb_ext() from sk_skb context. Write to skb_ext from
+TC on loopback; read from skb_ext from the sockmap verdict program.
 
-This problem has been reported and patch sent some time ago:
-https://lore.kernel.org/all/20260615-f01-07-dynptr-probe-read-cap-v1-0-e626cd61a381@mails.tsinghua.edu.cn/
+Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+---
+ .../selftests/bpf/prog_tests/socket_helpers.h      |  1 +
+ .../bpf/prog_tests/xdp_context_test_run.c          | 80 ++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_xdp_meta.c  | 18 +++++
+ 3 files changed, 99 insertions(+)
 
-> The rejection returns -EPERM to match the other CAP_PERFMON gates in the
-> verifier, that is, check_ptr_to_btf_access() and check_ptr_to_map_access(),
-> which report the very same policy to user space.
-> 
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> ---
->  Documentation/bpf/kfuncs.rst | 10 ++++++++++
->  include/linux/btf.h          |  1 +
->  kernel/bpf/verifier.c        | 15 +++++++++++++++
->  3 files changed, 26 insertions(+)
-> 
-> diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> index 85f73e0bbd0f..6691fe8a32c3 100644
-> --- a/Documentation/bpf/kfuncs.rst
-> +++ b/Documentation/bpf/kfuncs.rst
-> @@ -486,6 +486,16 @@ Example usage in BPF program:
->  	/* note that the last argument is omitted */
->          bpf_task_work_schedule_signal(task, &work->tw, &arrmap, task_work_callback);
->  
-> +2.5.10 KF_PERFMON flag
-> +----------------------
-> +
-> +The KF_PERFMON flag is used for kfuncs that can expose kernel memory or kernel
-> +addresses to the BPF program, for example by reading through a pointer that the
-> +verifier does not check. Calling such a kfunc requires CAP_PERFMON, or
-> +CAP_SYS_ADMIN, in the same way that the equivalent BPF helpers are gated in
-> +bpf_base_func_proto(). A program loaded with CAP_BPF alone is rejected at load
-> +time.
-> +
->  2.6 Registering the kfuncs
->  --------------------------
->  
-> diff --git a/include/linux/btf.h b/include/linux/btf.h
-> index 89d5a5c4f117..7c62ea17b116 100644
-> --- a/include/linux/btf.h
-> +++ b/include/linux/btf.h
-> @@ -80,6 +80,7 @@
->  #define KF_ARENA_ARG2   (1 << 15) /* kfunc takes an arena pointer as its second argument */
->  #define KF_IMPLICIT_ARGS (1 << 16) /* kfunc has implicit arguments supplied by the verifier */
->  #define KF_SPINLOCK_SAFE (1 << 17) /* kfunc is allowed inside bpf_spin_lock-ed region */
-> +#define KF_PERFMON      (1 << 18) /* kfunc requires CAP_PERFMON */
->  
->  /*
->   * Tag marking a kernel function as a kfunc. This is meant to minimize the
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 45234e2fbee6..5d61e74865a8 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -11356,6 +11356,11 @@ static bool is_kfunc_destructive(struct bpf_call_arg_meta *meta)
->  	return meta->kfunc_flags & KF_DESTRUCTIVE;
->  }
->  
-> +static bool is_kfunc_perfmon(struct bpf_call_arg_meta *meta)
-> +{
-> +	return meta->kfunc_flags & KF_PERFMON;
-> +}
-> +
->  static bool is_kfunc_rcu(struct bpf_call_arg_meta *meta)
->  {
->  	return meta->kfunc_flags & KF_RCU;
-> @@ -13834,6 +13839,16 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  		return -EACCES;
->  	}
->  
-> +	if (is_kfunc_perfmon(&meta) && !env->allow_ptr_leaks) {
-> +		verbose(env, "%s is allowed only to CAP_PERFMON and CAP_SYS_ADMIN\n",
-> +			func_name);
-> +		operation = bpf_diag_fmt(env, "kfunc %s", func_name);
-> +		bpf_diag_policy(
-> +			env, insn_idx, operation, "the kfunc requires CAP_PERFMON",
-> +			"Load the program with CAP_PERFMON, or avoid the kfunc.");
-> +		return -EPERM;
-> +	}
-> +
->  	sleepable = bpf_is_kfunc_sleepable(&meta);
->  	if (sleepable && !in_sleepable(env)) {
->  		verbose(env, "program must be sleepable to call sleepable kfunc %s\n", func_name);
+diff --git a/tools/testing/selftests/bpf/prog_tests/socket_helpers.h b/tools/testing/selftests/bpf/prog_tests/socket_helpers.h
+index 0d59503a0c73..eb114a6ea6f9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/socket_helpers.h
++++ b/tools/testing/selftests/bpf/prog_tests/socket_helpers.h
+@@ -3,6 +3,7 @@
+ #ifndef __SOCKET_HELPERS__
+ #define __SOCKET_HELPERS__
+ 
++#include <error.h>
+ #include <sys/un.h>
+ #include <linux/vm_sockets.h>
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
+index 2814bfa0d6b5..01241276c4d3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_context_test_run.c
+@@ -4,6 +4,7 @@
+ #include <linux/ipv6.h>
+ #include <linux/netfilter.h>
+ #include <arpa/inet.h>
++#include "socket_helpers.h"
+ #include "test_xdp_context_test_run.skel.h"
+ #include "test_xdp_meta.skel.h"
+ 
+@@ -1678,6 +1679,83 @@ static void test_skb_ext_seg6local(struct test_xdp_meta *skel)
+ 		unlink(SEG6_PIN_PATH);
+ }
+ 
++/*
++ * Test skb_ext survival across TC ingress -> sk_skb verdict hook.  TC ingress
++ * writes skb_ext on loopback; the verdict program reads it on skb delivery to a
++ * socket in the sockmap.
++ */
++static void test_skb_ext_sk_skb(struct test_xdp_meta *skel)
++{
++	LIBBPF_OPTS(bpf_tc_hook, tc_hook,
++		    .ifindex = 1 /* IFINDEX_LO */,
++		    .attach_point = BPF_TC_INGRESS);
++	LIBBPF_OPTS(bpf_tc_opts, tc_opts, .handle = 1, .priority = 1);
++	struct bpf_link *verdict_link = NULL;
++	struct sockaddr_in addr;
++	socklen_t addr_len = sizeof(addr);
++	struct netns_obj *ns = NULL;
++	char buf[TEST_PAYLOAD_LEN];
++	int c1 = -1, p1 = -1;
++	int map = -1, zero = 0;
++	ssize_t n;
++	int ret;
++
++	ns = netns_new("tc_to_sk_skb", true);
++	if (!ASSERT_OK_PTR(ns, "netns_new"))
++		return;
++
++	skel->bss->test_pass = false;
++
++	ret = bpf_tc_hook_create(&tc_hook);
++	if (!ASSERT_OK(ret, "bpf_tc_hook_create"))
++		goto cleanup;
++
++	tc_opts.prog_fd = bpf_program__fd(skel->progs.tc_skb_ext_write_port);
++	ret = bpf_tc_attach(&tc_hook, &tc_opts);
++	if (!ASSERT_OK(ret, "bpf_tc_attach"))
++		goto cleanup;
++
++	map = bpf_map_create(BPF_MAP_TYPE_SOCKMAP, NULL, sizeof(int),
++			     sizeof(int), 1, NULL);
++	if (!ASSERT_GE(map, 0, "bpf_map_create"))
++		goto cleanup;
++
++	verdict_link = bpf_program__attach_sockmap(skel->progs.sk_skb_skb_ext_read,
++						   map);
++	if (!ASSERT_OK_PTR(verdict_link, "attach_sockmap"))
++		goto cleanup;
++
++	if (!ASSERT_OK(create_pair(AF_INET, SOCK_STREAM, &c1, &p1), "create_pair"))
++		goto cleanup;
++
++	if (!ASSERT_OK(bpf_map_update_elem(map, &zero, &c1, BPF_NOEXIST), "map_update"))
++		goto cleanup;
++
++	if (!ASSERT_OK(getsockname(c1, (struct sockaddr *)&addr, &addr_len),
++		       "getsockname"))
++		goto cleanup;
++	skel->bss->target_port = addr.sin_port;
++
++	n = send(p1, test_payload, TEST_PAYLOAD_LEN, 0);
++	if (!ASSERT_EQ(n, TEST_PAYLOAD_LEN, "send"))
++		goto cleanup;
++
++	n = recv_timeout(c1, buf, sizeof(buf), MSG_DONTWAIT, IO_TIMEOUT_SEC);
++	ASSERT_EQ(n, TEST_PAYLOAD_LEN, "recv");
++	ASSERT_TRUE(skel->bss->test_pass, "test_pass");
++
++cleanup:
++	if (c1 >= 0)
++		close(c1);
++	if (p1 >= 0)
++		close(p1);
++	bpf_link__destroy(verdict_link);
++	if (map >= 0)
++		close(map);
++	bpf_tc_hook_destroy(&tc_hook);
++	netns_free(ns);
++}
++
+ void test_skb_ext_cross_hook(void)
+ {
+ 	struct test_xdp_meta *skel = NULL;
+@@ -1709,6 +1787,8 @@ void test_skb_ext_cross_hook(void)
+ 				 skel->progs.lwt_xmit_skb_ext_write, "xmit", true);
+ 	if (test__start_subtest("tc_to_seg6local"))
+ 		test_skb_ext_seg6local(skel);
++	if (test__start_subtest("tc_to_sk_skb"))
++		test_skb_ext_sk_skb(skel);
+ 
+ 	test_xdp_meta__destroy(skel);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_meta.c b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
+index 00312a549ea9..5b1a5b9b610e 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_meta.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_meta.c
+@@ -1232,4 +1232,22 @@ int seg6local_skb_ext_read(struct __sk_buff *ctx)
+ 	return BPF_OK;
+ }
+ 
++/* Read skb_ext from sk_skb stream verdict hook */
++SEC("sk_skb/stream_verdict")
++int sk_skb_skb_ext_read(struct __sk_buff *ctx)
++{
++	__u8 meta_have[META_SIZE];
++	struct bpf_dynptr meta;
++
++	if (bpf_dynptr_from_skb_ext(ctx, 0, 0, &meta))
++		return SK_PASS;
++	if (bpf_dynptr_read(meta_have, META_SIZE, &meta, 0, 0))
++		return SK_PASS;
++	if (!check_metadata(meta_have))
++		return SK_PASS;
++
++	test_pass = true;
++	return SK_PASS;
++}
++
+ char _license[] SEC("license") = "GPL";
+
+-- 
+2.43.0
 
