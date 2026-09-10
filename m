@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A32A45921FF
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 19:11:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC5458E2A9
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 19:11:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789067518; cv=none; b=BYq4VyyJXg81Reo7B34SXNh3YRQIZUOM700WliAh1VstBI13uKYAyPy5qXa1uj/xcKDp9IyiBNriHc3RA2nxIBb2v/YHZnSFRulkMnuO4a+8osLXJdUxVhS3yuzZ7VBR1lCgYJxPvBrlol9GmJwIlyVBWalU+JpZUbDbpim8J8k=
+	t=1789067518; cv=none; b=YNQQdhQlkNKVZ5zxXT/SUvfnYbBK3BQPC8Yo4HPh6oeMtmOh2jo0ei8NbYcPaO3yPpHy00GyFLjxEg7BxnqJMpZ3c8yZ/k/Q9uzlH1mWCV3Di8ugUjmqbWJ1slBSOqwzcD7pI60P/GC8keaC/p+hmCRjL+h3ud+7gb25ch1Yl5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789067518; c=relaxed/simple;
-	bh=xJGdi3fl0rxPMiBcCa6QNwByUS2VlDMhm+htbUcairE=;
+	bh=adqn5x6gVvLnk967S0BJyHoEI35Rxgoylr9+NtmrIXE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Rrjysb+c8ddSH3D85Xwfne4JmwifFB3Kc/qhGRc2d03kkyvkMp3oKmBwERZLIhwio+xfPNmAgi48Abs8GoB+CSC7Qq4q8R57i3BK2ffuzEkEVBCJW2HTslCyX/7qdy8KNci70g2OwJ3UMl/JahWWss619aL9eOiC5jkXj9E2Xds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HPhWywdC; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=g7lSVLt2ig++FoCDPzqv4zJX5h/bMc0eW2Gos83NG9tHKTuI7GsCu4U1fCnvj6dUzpz/E/2BWqmHTmn9EdqvSfLtwR4Tj9WXTTkh+JKjY49gu9OyJEIFatX+dTBDKsd3jAuIDMf/f8yIghO52pOKmcqbzf6AStIWsjkvftUeiWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eoj66l5f; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HPhWywdC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 436B31F000FF;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eoj66l5f"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00DCC1F00898;
 	Thu, 10 Sep 2026 19:11:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789067516;
-	bh=QBoA9I8oha6mw02oz7FFZy0vyFA2MiQGDM+nb0h73Rg=;
+	s=k20260515; t=1789067517;
+	bh=vMrGKgBwfVXEmgNI1zs1oCxe3yFiNn8dSnUFWYAMJjU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HPhWywdClE58D0nNJiNpQxby5ObJO34NnEEF36OzqrSLG6HIrXRlLGY5sphrX2Vi9
-	 S66N+MBOyl/TuWWwsrbnowq4BG29XJgBByXmflLmRscDXZvhYJDYe/15Lg7i8AS54x
-	 pe4xpLtGhXSbsRNMP+5D6Qu8lGhMWBAPAKAvtQDiNEyA21HJgyw//SZric4kuy9MBT
-	 2ZcR9upZ8KBQrPOE6ucJz52qXOfdvIi2CseQTxHsYec7Rt16FmS4JYylvBsTZiK48V
-	 8gXBTPqYDCrhucXD90KBoVLJiYwj0VMWHvOfYeNvjtR4YQhizgW+KQZbyTQASYJ6zX
-	 QBAfPMCPTSPTQ==
+	b=Eoj66l5f2o72AGWhvMpkj3uYwmnU7shjQHjrsngYi5T6QZI4s3n/YsjWAOKvxLOT8
+	 BZOvVmTWqFUlWM94HnOGxLARHyQcHPG29+v6pdqcdk/eKUSoz5irxj0H7P7GbIid16
+	 GC66lTD+PNVE7ew7mG/IkQErnLuy/HSRa16IKPCHX6apEqvdMe2cySsNRw9Y/Ogq/R
+	 B4mc+9joxy+lK4XmgiL32lkkcW0+BsYBDDcH8aAe0y4DGFZTQkXGgLytyJLnT49WUk
+	 EONRmOomBfZpqZCPNe3MRaROxAhStcSRsIdJDp7f4PMoyvNvTKqWhv57ih5IkLiMoV
+	 trLPdjrc+niEg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v6 01/12] gve: add struct gve_device_info to
- hold device properties
+Subject: Re: [PATCH net-next v6 06/12] gve: simplify reset logic
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Harshitha Ramamurthy" <hramamurthy@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260909191136.3811892-2-hramamurthy@google.com>
+In-Reply-To: <20260909191136.3811892-7-hramamurthy@google.com>
 References: <20260909191136.3811892-1-hramamurthy@google.com>
- <20260909191136.3811892-2-hramamurthy@google.com>
+ <20260909191136.3811892-7-hramamurthy@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 10 Sep 2026 19:11:55 +0000
-Message-Id: <20260910191156.436B31F000FF@smtp.kernel.org>
+Date: Thu, 10 Sep 2026 19:11:56 +0000
+Message-Id: <20260910191157.00DCC1F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,63 +46,68 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] Leftover fields `default_min_ring_size` and `default_num_queues` in=
- `struct gve_priv` are completely unused and should have been removed.
+
+Pre-existing issues:
+- [High] Silent state loss of AF_XDP configuration and hardware flow rules =
+after device reset.
 --
 
-commit 1e8912b037c461a4e97b883a09cc8e52ac72a6ed
-Author: Harshitha Ramamurthy <hramamurthy@google.com>
+commit bcda352ad7c739e9f63ce9eefb6fb5309a234230
+Author: Joshua Washington <joshwash@google.com>
 
-gve: add struct gve_device_info to hold device properties
+gve: simplify reset logic
 
-This commit introduces struct gve_device_info to encapsulate device
-properties in preparation for MailboxQ support. It updates the driver logic
-to populate and read from this new structure instead of setting the fields
-directly in struct gve_priv.
+This commit simplifies the GVE reset logic by removing recursive resets,
+avoiding resets during teardown, and decomposing allocation/teardown of
+control plane resources.
 
-> diff --git a/drivers/net/ethernet/google/gve/gve.h b/drivers/net/ethernet=
-/google/gve/gve.h
-> index c280ff35ee771..021adb9108dff 100644
-> --- a/drivers/net/ethernet/google/gve/gve.h
-> +++ b/drivers/net/ethernet/google/gve/gve.h
-> @@ -797,6 +797,34 @@ struct gve_ptp {
->  	struct gve_priv *priv;
->  };
-> =20
-> +struct gve_device_info {
-> +	enum gve_queue_format queue_format;
-> +	u16 default_tx_queues;
-> +	u16 default_rx_queues;
+> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
+ernet/google/gve/gve_main.c
+> --- a/drivers/net/ethernet/google/gve/gve_main.c
+> +++ b/drivers/net/ethernet/google/gve/gve_main.c
 [ ... ]
-> +	bool default_min_ring_size;
-> +	bool nic_timestamp_supported;
-> +	bool modify_ring_size_enabled;
-> +	bool cache_rss_config;
-> +};
+> @@ -590,7 +594,22 @@ static void gve_free_notify_blocks(struct gve_priv *=
+priv)
+>  	priv->msix_vectors =3D NULL;
+>  }
+> =20
+> -static int gve_setup_device_resources(struct gve_priv *priv)
+> +static void gve_free_control_plane_resources(struct gve_priv *priv)
+> +{
+> +	bitmap_free(priv->xsk_pools);
+> +	priv->xsk_pools =3D NULL;
+
+[Severity: High]
+This is a pre-existing issue, but does this cause a silent state loss of
+AF_XDP configuration after a device reset?
+
+Because the driver clears xsk_pools without restoring the state, any active
+AF_XDP applications could silently stop receiving traffic and require a
+manual restart to recover after a routine reset (such as from a TX timeout
+or an ethtool reset). This breaks the ABI contract for AF_XDP, making the
+networking features permanently unusable after a transparent recovery.
+
 > +
->  struct gve_priv {
->  	struct net_device *dev;
+> +	kvfree(priv->ptype_lut_dqo);
+> +	priv->ptype_lut_dqo =3D NULL;
+> +
+> +	gve_free_stats_report(priv);
+> +	gve_free_notify_blocks(priv);
+> +	gve_free_counter_array(priv);
+> +	gve_free_rss_config_cache(priv);
+> +	gve_free_flow_rule_caches(priv);
 
-[Severity: Low]
-With the introduction of struct gve_device_info and the migration of the lo=
-gic
-to use device_info.default_min_ring_size and device_info.default_tx_queues /
-device_info.default_rx_queues, should the old fields default_min_ring_size
-and default_num_queues be removed from struct gve_priv?
+[Severity: High]
+This is a pre-existing issue, but does this destroy the software cache of
+ethtool flow rules without restoring them?
 
-Looking at struct gve_priv in gve.h, these fields appear to be left over:
+User-configured hardware flow rules appear to be permanently deleted from
+both the hardware and the software cache upon a device reset. They are never
+restored to the hardware, requiring manual user intervention to reapply
+them.
 
-struct gve_priv {
-    ...
-    bool default_min_ring_size;
-    ...
-    u16 default_num_queues; /* default num queues to set up */
-    ...
-};
-
-They seem to be completely unused now and are left occupying memory as dead
-code.
+> +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260909191136.3811=
-892-1-hramamurthy@google.com?part=3D1
+892-1-hramamurthy@google.com?part=3D6
