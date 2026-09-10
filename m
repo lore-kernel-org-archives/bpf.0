@@ -1,50 +1,62 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E82948F84E
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 14:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B64A747986B;
+	Thu, 10 Sep 2026 14:25:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789050076; cv=none; b=s0uynj11id4bX7fU2xpN9dST1t7EeXk1dYTXY1zdsvi3b8RYhoQOuFxN/mYKzBA5aQUYH4yh4jrH15g8t7oIb0nfglJv0zTziSHhzSLiST9sA0jo6VTogw+B5hpo7AdKXu3wgm+0494RZ5QPNf9dRmRDi7AeWWlcBIM3WhsWNoA=
+	t=1789050348; cv=none; b=HtpYp01Luj0whELekN2MAl+e4nwMpe4Pb6ps6TtFtHmeVjZnrD8OxU8dzpImkK7FUXBy2W2NtJ/KfnHkjg+idd/mLBQ7Y58DaLd2eRxph5/Pr8/uBIhhqvAWCoiG+nvJ2mdOGyAEpvctELDsfHfQYTGCYRVAGLpPk/dtnAA7Yzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789050076; c=relaxed/simple;
-	bh=PvMtEFMaJl5nGXc4qpNyJ8ZQkhXBuA4i4FDTwTXjgkA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JRnuRWHLsLE42YzjJ8PpI6Wk3Jkavg+n/Q7M+oDsQVlutEjbMlRDgQ3Tb8KWOy6FEu7wWvhtSnqXWDer4mQmLR8nZWTcfwrcw7yxRNu1mZWPclxBLDxwgCro/s0r2xox/PMdu0yFa9jzFusdQAnYDxwDCWnKj1ZF7rlhbPJiXXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=H2zSPG4I; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1789050348; c=relaxed/simple;
+	bh=3ra37ooCDgR5+2l6sK4AZHFsADOHiRoGfYj0u+rb3Os=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XALzjRiZOuNuLr1FqdhF9xTtZrUfPSfJurIkQ3kXW0nyGx1ljEE7aVOF83HWI3NQb2ylEl6tdvaiu01qJU8blMvfvVmYm4BFn0lsroAOCovs2aNlC8u2hBPcX1E/FRM385Xluq/4KQ2FD2Ncs7On8OFCzjSexdrz352f81udiGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=ERmhnF9t; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="H2zSPG4I"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=QchnXzdzWnK0f13cJWqvPcXH5w7iSJjz0U5Wv1QS5zQ=; b=H2zSPG4IYhnZDMsxfBtitWGYlU
-	o5KwoH229U4PnQYZzgWzhgXyf9L5xwCu+HcNkuIJhAhvFrGo2GejEyS48RVpHFfJv99xbw3XPrSkn
-	SO+BPTX1Y4E6eLofb5I+gaOiHVl1KFxxD981c3f5HDQBWWxq/jr7v56GBpjizu/IQXfQ2gM+b9PC9
-	m9Im87YKY8n8Iivsl6TfN+icSFms9aarLFW8M/J4WMklu/fJIvZdyvye3qOaFdrYopo+BOamFGMVv
-	E5eOxJfgQWH3mbCC3jrKnfXDE6FLuXJgK9tF/fx7bnGrayli9GXH5YjTjtmrtW4dDfrHHKxb2CiCY
-	IwPIaNKA==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1x4feH-000Gm2-1z;
-	Thu, 10 Sep 2026 16:21:09 +0200
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: ast@kernel.org
-Cc: memxor@gmail.com,
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="ERmhnF9t"
+Received: from mac.lan (unknown [4.194.122.144])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 86C5C20B7166;
+	Thu, 10 Sep 2026 07:24:50 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 86C5C20B7166
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1789050305;
+	bh=qHiKWmSesiOCgUaouXwZSDbZh30pM0hVLCmj06DKstE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ERmhnF9tu4qDv8FeS2ftC0IGfXmd9pOYfvMTG73aPwgv+1IIrEtPmRKiJV1BHwpuH
+	 DPPKvhYAAQRFsBQXWCLCFuCcn+E2fB8qOUH8hSIjSgBAx7esxNID06DmfwHRUSx+jD
+	 EdXdFKJgvg98rPxQv3MVJlKN+9DiaQ2hPNBgGXNw=
+From: "Cen Zhang (Microsoft Security FORGE Labs)" <cenzhang@linux.microsoft.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	martin.lau@linux.dev,
+	ast@kernel.org,
+	andrii@kernel.org,
 	eddyz87@gmail.com,
-	info@starlabs.sg,
-	bpf@vger.kernel.org
-Subject: [PATCH bpf 3/4] bpf: Require CAP_PERFMON for untrusted read-only memory reads
-Date: Thu, 10 Sep 2026 16:21:06 +0200
-Message-ID: <20260910142107.40582-3-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260910142107.40582-1-daniel@iogearbox.net>
-References: <20260910142107.40582-1-daniel@iogearbox.net>
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	m.xhonneux@gmail.com,
+	dlebrun@google.com,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	AutonomousCodeSecurity@microsoft.com,
+	xmei5@asu.edu,
+	tgopinath@linux.microsoft.com,
+	kys@microsoft.com,
+	"Cen Zhang (Microsoft Security FORGE Labs)" <cenzhang@linux.microsoft.com>
+Subject: [PATCH bpf v3] bpf: Fix non-linear SRH access in bpf_update_srh_state()
+Date: Thu, 10 Sep 2026 10:25:22 -0400
+Message-ID: <20260910142522.45014-1-cenzhang@linux.microsoft.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,41 +64,165 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28119/Thu Sep 10 08:24:09 2026)
 
-Marking bpf_rdonly_cast() KF_PERFMON CAP-limits one producer of PTR_TO_MEM |
-MEM_RDONLY | PTR_UNTRUSTED, but not the type itself. A global subprogram
-argument tagged __arg_untrusted results in the same register with no kfunc
-call.
+bpf_update_srh_state() locates an SRH with ipv6_find_hdr() and caches
+skb->data + srhoff in the per-CPU SEG6 BPF state. This assumes that the
+returned offset is within the skb linear head.
 
-Fixes: c4aa454c64ae ("bpf: support for void/primitive __arg_untrusted global func params")
-Reported-by: STAR Labs SG <info@starlabs.sg>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+That assumption is wrong because ipv6_find_hdr() uses skb_header_pointer()
+and can locate an SRH in non-linear data. The direct srh->hdrlen read and
+the cached SRH pointer can therefore access memory outside the linear area.
+
+BUG: KASAN: slab-use-after-free in bpf_update_srh_state+0x1bc/0x200
+ net/core/filter.c:7027 bpf_update_srh_state()
+ bpf_lwt_seg6_action()
+ input_action_end_bpf()
+ seg6_local_input()
+ ipv6_rthdr_rcv()
+
+Fix this by using seg6_get_srh(), which pulls and validates the complete
+SRH and reloads its pointer afterwards. Pulling can reallocate skb->head,
+so refresh the BPF data pointers inside bpf_update_srh_state() immediately
+after the call.
+
+For End.DT6, make the inner IPv6 base header linear before removing the
+outer headers. Pulling only the outer headers can leave the inner header in
+non-linear data, while ipv6_find_hdr() and the nexthop lookup access it
+directly. The helper parameter may point into packet data, so copy the
+table ID before pulling and potentially replacing skb->head. Clear the
+cached SRH pointer and refresh the BPF data pointers if the pull fails.
+
+End.B6 and End.B6.Encap can insert a new SRH and reallocate the skb before
+a later HMAC calculation or nexthop lookup returns an error. Rebuild the
+SRH state when the skb length changes, which indicates that the new SRH was
+inserted. Failures before insertion leave the existing state unchanged.
+
+Fixes: 486cdf21583e ("bpf: add End.DT6 action to bpf_lwt_seg6_action helper")
+Reported-by: Xiang Mei <xmei5@asu.edu>
+Link: https://lore.kernel.org/bpf/20260901183151.16648-1-cenzhang@linux.microsoft.com/
+Suggested-by: Emil Tsalapatis <emil@etsalapatis.com>
+Link: https://lore.kernel.org/bpf/CABFh=a5iLOEJdPhoaWUhLc0eEqAuhnd83_jJr9MVZZG6gSJAEw@mail.gmail.com/
+Link: https://lore.kernel.org/bpf/CABFh=a4VyzxsQqsayWpTKjxY3HL2C072u=pbecEpNDbL9eBNKA@mail.gmail.com/
+Signed-off-by: Cen Zhang (Microsoft Security FORGE Labs) <cenzhang@linux.microsoft.com>
+Assisted-by: Copilot:gpt-5.6-sol
 ---
- kernel/bpf/verifier.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Changes in v3:
+- Copy the End.DT6 table ID before pskb_may_pull() can replace skb->head
+  and invalidate a packet-backed helper parameter.
+- Rebase onto the current bpf master branch.
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 5d61e74865a8..3f99b20e04fc 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -6453,6 +6453,16 @@ static int check_mem_access(struct bpf_verifier_env *env, int insn_idx, struct b
- 			return -EACCES;
- 		}
+Changes in v2:
+- Rebuild the SRH state after End.B6 and End.B6.Encap only when the skb
+  length changes, avoiding selection of a spent Routing Header on errors
+  before insertion.
+- Rebase onto the current bpf master branch.
+
+Please queue this fix for stable kernels.
+
+Testing:
+- Built net/core/filter.o with CONFIG_IPV6_SEG6_BPF=y.
+- checkpatch.pl, diff --check and exact-base patch replay.
+- No targeted runtime selftest was added. BPF LWT test-run does not support
+  non-linear skbs, and the existing SEG6 netns test does not create a
+  split inner IPv6 header for End.DT6.
+
+ net/core/filter.c | 39 +++++++++++++++++++++++++--------------
+ 1 file changed, 25 insertions(+), 14 deletions(-)
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 2a84f9d01131..06a748c07747 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -7017,15 +7017,16 @@ static void bpf_update_srh_state(struct sk_buff *skb)
+ {
+ 	struct seg6_bpf_srh_state *srh_state =
+ 		this_cpu_ptr(&seg6_bpf_srh_states);
+-	int srhoff = 0;
++	struct ipv6_sr_hdr *srh;
  
-+		if (rdonly_untrusted && !env->allow_ptr_leaks) {
-+			verbose(env, "%s access is allowed only to CAP_PERFMON and CAP_SYS_ADMIN\n",
-+				reg_type_str(env, reg->type));
-+			bpf_diag_policy(
-+				env, insn_idx, "read from untrusted read-only memory",
-+				"the access requires CAP_PERFMON",
-+				"Load the program with CAP_PERFMON, or avoid dereferencing untrusted pointers.");
-+			return -EPERM;
-+		}
+-	if (ipv6_find_hdr(skb, &srhoff, IPPROTO_ROUTING, NULL, NULL) < 0) {
+-		srh_state->srh = NULL;
+-	} else {
+-		srh_state->srh = (struct ipv6_sr_hdr *)(skb->data + srhoff);
+-		srh_state->hdrlen = srh_state->srh->hdrlen << 3;
+-		srh_state->valid = true;
+-	}
++	srh = seg6_get_srh(skb, 0);
++	bpf_compute_data_pointers(skb);
++	srh_state->srh = srh;
++	if (!srh)
++		return;
 +
- 		/*
- 		 * Accesses to untrusted PTR_TO_MEM are done through probe
- 		 * instructions, hence no need to check bounds in that case.
--- 
-2.43.0
++	srh_state->hdrlen = srh->hdrlen << 3;
++	srh_state->valid = true;
+ }
+ 
+ BPF_CALL_4(bpf_lwt_seg6_action, struct sk_buff *, skb,
+@@ -7033,6 +7034,7 @@ BPF_CALL_4(bpf_lwt_seg6_action, struct sk_buff *, skb,
+ {
+ 	struct seg6_bpf_srh_state *srh_state =
+ 		this_cpu_ptr(&seg6_bpf_srh_states);
++	unsigned int old_len;
+ 	int hdroff = 0;
+ 	int err;
+ 
+@@ -7050,40 +7052,49 @@ BPF_CALL_4(bpf_lwt_seg6_action, struct sk_buff *, skb,
+ 		if (param_len != sizeof(int))
+ 			return -EINVAL;
+ 		return seg6_lookup_nexthop(skb, NULL, *(int *)param);
+-	case SEG6_LOCAL_ACTION_END_DT6:
++	case SEG6_LOCAL_ACTION_END_DT6: {
++		int tbl_id;
++
+ 		if (!seg6_bpf_has_valid_srh(skb))
+ 			return -EBADMSG;
+ 		if (param_len != sizeof(int))
+ 			return -EINVAL;
++		tbl_id = *(int *)param;
+ 
+ 		if (ipv6_find_hdr(skb, &hdroff, IPPROTO_IPV6, NULL, NULL) < 0)
+ 			return -EBADMSG;
+-		if (!pskb_pull(skb, hdroff))
++		if (!pskb_may_pull(skb, hdroff + sizeof(struct ipv6hdr))) {
++			srh_state->srh = NULL;
++			bpf_compute_data_pointers(skb);
+ 			return -EBADMSG;
++		}
++		__skb_pull(skb, hdroff);
+ 
+ 		skb_postpull_rcsum(skb, skb_network_header(skb), hdroff);
+ 		skb_reset_network_header(skb);
+ 		skb_reset_transport_header(skb);
+ 		skb->encapsulation = 0;
+ 
+-		bpf_compute_data_pointers(skb);
+ 		bpf_update_srh_state(skb);
+-		return seg6_lookup_nexthop(skb, NULL, *(int *)param);
++		return seg6_lookup_nexthop(skb, NULL, tbl_id);
++	}
+ 	case SEG6_LOCAL_ACTION_END_B6:
+ 		if (srh_state->srh && !seg6_bpf_has_valid_srh(skb))
+ 			return -EBADMSG;
++		old_len = skb->len;
+ 		err = bpf_push_seg6_encap(skb, BPF_LWT_ENCAP_SEG6_INLINE,
+ 					  param, param_len);
+-		if (!err)
++		if (skb->len != old_len)
+ 			bpf_update_srh_state(skb);
+ 
+ 		return err;
+ 	case SEG6_LOCAL_ACTION_END_B6_ENCAP:
+ 		if (srh_state->srh && !seg6_bpf_has_valid_srh(skb))
+ 			return -EBADMSG;
++		old_len = skb->len;
+ 		err = bpf_push_seg6_encap(skb, BPF_LWT_ENCAP_SEG6,
+ 					  param, param_len);
+-		if (!err)
++		if (skb->len != old_len)
+ 			bpf_update_srh_state(skb);
+ 
+ 		return err;
 
+base-commit: e4a62833adff6ef0fe7c0b90393204fe3c26b5c5
+-- 
+2.55.0
