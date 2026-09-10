@@ -1,106 +1,101 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2600B356766
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 18:32:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7712D7DDB
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 18:32:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789065162; cv=none; b=dFl2cnwZOax/fCSEzZq6trFNKGvk2+9eW5LfYpEH8Y+CY9kSTm0LUK38ipLUVLBnUPdodJH0pzg6K3VP5Z1XH1FpJjrNvBS0L3c/OFhjk/q5bJAFhvJtbLq04Vi1uJI30f3lSsN4F1n62b4fhi7PctIWLAtiMxNEctdkgnViCYw=
+	t=1789065161; cv=none; b=U0yr+tLGZburiVjzASsukg90wkX9wGXQ5UGhRrpMhPTrRrYfQiVhWjlF6C1tgTiMbkNSzy0dnx5MfsDmqMOZMTIiDyxdjQN8VkSsLTzvC3nqyWwzeRWHjW4054bi84MD1o9YMp+GCtRyl9bvqyIV2YgvMOSUlkOifhx2CSvMzuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789065162; c=relaxed/simple;
-	bh=wqIXxPryIBD+qpnTAML1VsX5jPCUetcLu67p2mKXcRI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Dw/zQGMwgOAZNUqs6huVT4y6cVe+cMifJ6ZQheYa20h8yn6dXFnAbWYDWpaj27SNetr9mjUm5oSLSx4V6Tymz8quY+UkxBWiAl8qdYpZLP4+BwwozMJAjnIKmHNm1dfiOBKi3aAgjrLQsY2wT4QhSeKZ2sxgXmicJahteUCovOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=R7zp5bDA; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=XKsNkWyp; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1789065161; c=relaxed/simple;
+	bh=8KfehZnOG3UMJkozjY/bQF5ANROg0rDRAgmtbiQOYYs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GeUE54XQpwtOkarrMNBNW5FMZFKjb0ZLx1KGwxR61+OO85TwceZyrbjZ9X2iITvFugGVi54BXEC5/Uf26Yvk5TEgdl42sba3hMhNQgUbCoVf4iTc3EyI/P5QXneHfWSryL5mD5lLvblqZzB6NlPqgDD8gOaplINPdXuxlf3j4Xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UPpyA1is; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=oimPPDOH; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="R7zp5bDA";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="XKsNkWyp"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UPpyA1is";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="oimPPDOH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1789065155;
+	s=mimecast20190719; t=1789065152;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pSgNGI7auaX5Wzahh0Ju110gqPyYVLHgiTEYAP31fQs=;
-	b=R7zp5bDAArZHBj1LbxFlmN74GYTDbt6SbW5v04/FzbP/Gjsj9cd37daPDSyAvb4pybiBp0
-	yMBgDYdx6sae5WenC2gRqVTcv8xh5hl1aPBUTNEyglYnoW5OMxwUQ1cYkSCCUXjlE43ypp
-	cPYqBycRF8CtwnGGbx3XPijSRoQGlCw=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=etpzICpD0Gll8HM694WIeEO1BPO7Cbi/5lHamRkjCn8=;
+	b=UPpyA1is72uVGbi+odZP/Z/qdMobvcGHYjXT73cBn7OQcW72KtWJs4UOemIkKgvM+qYrls
+	MYdfhbOHhBkemxDuDNH1ZD6Lc6nxLv8s1RvEgdEsNd1lZeaX09OqY8R6TIdwk9SiWdGk0a
+	EzR9Ct8cCIxPH2QweoEpq6MLKwC2sDc=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-441-LEmukXAxP3yvIISK_Bv8NQ-1; Thu, 10 Sep 2026 14:32:34 -0400
-X-MC-Unique: LEmukXAxP3yvIISK_Bv8NQ-1
-X-Mimecast-MFC-AGG-ID: LEmukXAxP3yvIISK_Bv8NQ_1789065153
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-49b8c651ac0so2042475e9.2
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 11:32:33 -0700 (PDT)
+ us-mta-693-pUYF_bSuODKSOVLAB1VZpw-1; Thu, 10 Sep 2026 14:32:31 -0400
+X-MC-Unique: pUYF_bSuODKSOVLAB1VZpw-1
+X-Mimecast-MFC-AGG-ID: pUYF_bSuODKSOVLAB1VZpw_1789065150
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-482e2541c30so59269f8f.1
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 11:32:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1789065153; x=1789669953; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=pSgNGI7auaX5Wzahh0Ju110gqPyYVLHgiTEYAP31fQs=;
-        b=XKsNkWypy/aT18GXJ67u30F6uWeiRx35nrqsY8Q9AHiVJVhkjByeHMH1bY63GAgWLK
-         urZ/1zKIf8ryG+K5edD3lPau+RyHomtdsU+7sl4RdtN2qA6Le+jR38oXfK99OxD89tL6
-         d4LHQHFjn3wqvnJjIRMGauWiWoIweM1Sn3zI0eiRCVL0GZzR6t2cynb7dNbbfhKe3ZMV
-         VqnS0IeYPTRrMRrSRSxbnNc/QygVxb4AZtD3LlYzjhF2NmsbTjs6eY7xkqlw+YNpBXNa
-         zCOoRHzVnw+gwayk2fP2tzD1V+/C8BJsllnbs5qcwsEq9Krxp1ZU+5x+fgBHamHfmm7q
-         W2IA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789065153; x=1789669953;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=redhat.com; s=google; t=1789065150; x=1789669950; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=pSgNGI7auaX5Wzahh0Ju110gqPyYVLHgiTEYAP31fQs=;
-        b=hfcsKFqa8fLgTXuOuy/zzWWgk/ehiolyC3XI1WAufzfc845Kr6N/hP1sumRrUxOYX8
-         nNz0hG0iHW+riRfiUyqKm5bVpmqi9Uc5Zt1gXPLEKeRfu+6DqBkuh+eiHq+LLQfg3H2n
-         RXWkwZFt5ZiYan05KMOPiScGIyU0Uaarf5xfNmi5ilRiir+39cpdfa5zYXuf8Pv9qad6
-         euqStgVAlU/VMesFkO99W53BRfUky0mXvtqyhLTYB1ZUTi0oGFKC9tXOUhmuz5dD7zqW
-         v1MqwFJ95Zje9tPRqBSx0QqiuQesNCdlNfuUnpyjs3RnfffLBIj4abHFmngvM/El41Lj
-         dgxA==
-X-Forwarded-Encrypted: i=1; AKwUvBz5GdlVkEkbUHYrtSXAB2QhVfcodwbdcq8ttJz6hpmqvn7e41YMfRSuaijHydeoaywxPhU=@vger.kernel.org
-X-Gm-Message-State: AFuF++mCgkJJEWoemugezo+/Mk4inNLAY8pYvsjhnfpRc7PVblRdunjA
-	/7dVJribxJp94FFoJ2+dxwKTzusMf+OOyqLhTeluhFkLlhJjPrSUB/+153zFgJg2JlY+WyksctB
-	JMTgKme+PimencxQ5vtRtMLOT/XV0ih+QLGi6iMaRI+iYoEWED0DilA==
-X-Gm-Gg: AYBFou2sOVEK3gPy5yO1SKpnR+NSn4XUWjv9NNprmdbggeRzjhTQI07WnRdm8ed+9ys
-	nwY1PN8yqmM5gFmek+LhP24psLbVRtdDzhLckFDJx2oKr6n0NdFJ3dBHlZEew5gG9o7rfrdniru
-	xeK3UqrS4ytR82mEoi9Im/3gnjHsjTjv+QD7oimGrTEztATi6A+r8vqg8YeFCGGiygNGvOzag4G
-	ue8tt3NOTohagUrTFYPz5uzA5U6wChqoWPbdhr+JIegHYfTcPJmRULEjvw7lJUcMhWYvNp1QiIO
-	En4gNTWR7e/hcrTS0Bj2k4bv8MZCsr9stcu2vklvlQ9PgjARFcl/JgSToADXh0eSvIsIBx6TQ3Y
-	sY2NNEsY4O5sg+bxHB/6yYmJ1
-X-Received: by 2002:a05:600c:1f8d:b0:499:be2d:c290 with SMTP id 5b1f17b1804b1-49e6198933cmr3974985e9.9.1789065152944;
-        Thu, 10 Sep 2026 11:32:32 -0700 (PDT)
-X-Received: by 2002:a05:600c:1f8d:b0:499:be2d:c290 with SMTP id 5b1f17b1804b1-49e6198933cmr3974615e9.9.1789065152598;
-        Thu, 10 Sep 2026 11:32:32 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e61a33d72sm2629355e9.2.2026.09.10.11.32.31
+        bh=etpzICpD0Gll8HM694WIeEO1BPO7Cbi/5lHamRkjCn8=;
+        b=oimPPDOHvlpbAxR1N6ZaPWJozltSOupTiOwwEeOFM9dWswi6tywqFi3EItGaBMRBcJ
+         SPtnw3+l6a9mK3aj2bwNOY1QR9OTw7dZXDH/Y9MuzfnJSx+07Fvt/S9RQAC22Lw9ku47
+         nzzP2vdVe/HPxzRtmHsi8UUdoAKwnji42Evel//dvgPBG61JxXHAVf9i076Y7Y42vLqa
+         UaD0C92gT82Ve9QyWo5JBNQbUEAYNRTRZ9GH4sBTkNegFkP8F5o24T7pbBB0e7kmd2jd
+         YezqVw7zgnPualUOHcD3ekLxM+uFfnRsXkM4cEqp6MPsaZo0awxjmH0CzEw/2XKAYMQt
+         hHfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789065150; x=1789669950;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=etpzICpD0Gll8HM694WIeEO1BPO7Cbi/5lHamRkjCn8=;
+        b=W7NxKJEWOtEWNoKbofyqfNQGjLajF8FEGYMgp1tBCHIRRJN1gwkfn2H6P9z0OCVL8+
+         TBdtzb0LafLM/tiE2QSF+7ep6YsR3JzU0IwWyVtAxzYy6RTdp3ZfMU4yaLxf7V9TcXFU
+         5Ja37uJGRU3PNMS+BSxDpBQrRZSnFkbHV4AO6WzpT0pdEtumdI70zKqHCF9ZQ4tfUFLc
+         Q5vNhJ6yolRGOkvBt1+ivKSB9oJ8YE8ee7UNDt3ZERqAzM4JvUP5dV7gJkhckCMuPfHs
+         mFlRlM1n1NY4q86xdA5YkKL3rSMyCg423ZCxFNTqPYje2Auwe0oF9VYy6rvQ7TNRT4vB
+         2vUA==
+X-Forwarded-Encrypted: i=1; AKwUvBw9es/sXiakV8Hx/9aivlPKcWM+w+pBc4rY6wOjD1oVPqJ9T7bp3Bg6ty1hZn45ZkbvuV4=@vger.kernel.org
+X-Gm-Message-State: AFuF++mwvhhybwDYvIIby4u2Llgtr61M9ss0fuV4p7XkREfMONii9q0N
+	WaCjCRYgijI6opG/M8TqUO38Ts4Yz6ZYi15NfAcsh2LseyuthUGSBbrNbKzbmpfcbuuUe66EWE4
+	GBZBed2vjvyDMHRzaoO5ZaxXju6bIzIfZiAJuWhQMzr8WPbhfvgd7tA==
+X-Gm-Gg: AYBFou0DJ0LT4UJohAdTAmBxlZ+q9fcVfGHW/dqSmvaJW8c5eub4yZMcQsmnqINXpQl
+	ZynLlKJLVgnHhTfJ6lXIo91q4f7kFXI4boSct0htt40eC1p3jk+wcrvmk+F+uqXAq1p4OJMOTBC
+	tUlxhw4r5FvSjc6YtFBpxv/+Sr/ZI+Ws5YwaNKEFLIXh/gnEMOfGkeVs24HTnLtcD5UrOajrOTL
+	P335RUJ7YITNAq5+Ke9nfnB9q6uvVYUgvMZiKKehu1SNptGd3YqvbMrpjzdFdaLUgbW8vlniJrg
+	QbEtpe4G7Uuh9/IYp50S+RrbA+nrVfzAIZ3Jgyf3/PH7Ted+QSZRxMXkUzs36paJW/Cdz6jJSCy
+	yoKB9dU8wsBnj2b8iTNbR26bbAzc=
+X-Received: by 2002:a05:6000:290f:b0:486:e6a2:2d8f with SMTP id ffacd0b85a97d-486e9887d65mr818897f8f.19.1789065150031;
+        Thu, 10 Sep 2026 11:32:30 -0700 (PDT)
+X-Received: by 2002:a05:6000:290f:b0:486:e6a2:2d8f with SMTP id ffacd0b85a97d-486e9887d65mr818865f8f.19.1789065149638;
+        Thu, 10 Sep 2026 11:32:29 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-486eb32d5f1sm347938f8f.12.2026.09.10.11.32.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 11:32:32 -0700 (PDT)
+        Thu, 10 Sep 2026 11:32:29 -0700 (PDT)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 3AFA69B97F0; Thu, 10 Sep 2026 20:32:31 +0200 (CEST)
+	id E24459B97EA; Thu, 10 Sep 2026 20:32:27 +0200 (CEST)
 From: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Quentin Monnet <qmo@kernel.org>
-Cc: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Cc: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 4/4] bpftool: Adopt bpf_program__add_flags() helper
-Date: Thu, 10 Sep 2026 20:32:17 +0200
-Message-ID: <20260910183222.307208-4-toke@redhat.com>
+Subject: [PATCH bpf-next v2 1/4] libbpf: Add bpf_program__add_flags() and bpf_program__clear_flags()
+Date: Thu, 10 Sep 2026 20:32:14 +0200
+Message-ID: <20260910183222.307208-1-toke@redhat.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260910183222.307208-1-toke@redhat.com>
-References: <20260910183222.307208-1-toke@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -110,29 +105,78 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Adopt the newly added bpf_program__add_flags() helper to
-non-destructively add the BPF_F_XDP_DEV_BOUND_ONLY flag to XDP programs.
+When changing BPF program flags, applications often need to just add or
+remove a single flag, without touching the existing ones. When using the
+bpf_program__set_flags() function, this requires reading the existing
+flags and doing bitwise manipulations before resetting the result, which
+is slightly awkward to do, and easy to forget.
 
-Acked-by: Quentin Monnet <qmo@kernel.org>
+Add two new convenience helpers, bpf_program__add_flags() and
+bpf_program__clear_flags(), which wraps bpf_program__set_flags() in the
+bitwise operations required to modify flags without clobbering the
+existing ones.
+
+Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
 ---
- tools/bpf/bpftool/prog.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/lib/bpf/libbpf.c   | 10 ++++++++++
+ tools/lib/bpf/libbpf.h   |  6 ++++++
+ tools/lib/bpf/libbpf.map |  2 ++
+ 3 files changed, 18 insertions(+)
 
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 8c2f9255b36d..6ab911e82155 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -1769,7 +1769,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
- 		}
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index c036e8a91ed8..221c4fe1fb31 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9938,6 +9938,16 @@ int bpf_program__set_flags(struct bpf_program *prog, __u32 flags)
+ 	return 0;
+ }
  
- 		if (prog_type == BPF_PROG_TYPE_XDP && xdpmeta_ifindex) {
--			bpf_program__set_flags(pos, bpf_program__flags(pos) | BPF_F_XDP_DEV_BOUND_ONLY);
-+			bpf_program__add_flags(pos, BPF_F_XDP_DEV_BOUND_ONLY);
- 			bpf_program__set_ifindex(pos, xdpmeta_ifindex);
- 		} else {
- 			bpf_program__set_ifindex(pos, offload_ifindex);
++int bpf_program__add_flags(struct bpf_program *prog, __u32 flags)
++{
++	return bpf_program__set_flags(prog, prog->prog_flags | flags);
++}
++
++int bpf_program__clear_flags(struct bpf_program *prog, __u32 flags)
++{
++	return bpf_program__set_flags(prog, prog->prog_flags & ~flags);
++}
++
+ __u32 bpf_program__log_level(const struct bpf_program *prog)
+ {
+ 	return prog->log_level;
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index b965ad571540..3932bf9cb490 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -1011,6 +1011,12 @@ bpf_program__set_expected_attach_type(struct bpf_program *prog,
+ LIBBPF_API __u32 bpf_program__flags(const struct bpf_program *prog);
+ LIBBPF_API int bpf_program__set_flags(struct bpf_program *prog, __u32 flags);
+ 
++/* Convenience helpers to non-destructively add or clear the specified flags
++ * instead of clobbering them as bpf_program__set_flags() does.
++ */
++LIBBPF_API int bpf_program__add_flags(struct bpf_program *prog, __u32 flags);
++LIBBPF_API int bpf_program__clear_flags(struct bpf_program *prog, __u32 flags);
++
+ /* Per-program log level and log buffer getters/setters.
+  * See bpf_object_open_opts comments regarding log_level and log_buf
+  * interactions.
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 08ab2ea881fb..a811a1b3a085 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -458,7 +458,9 @@ LIBBPF_1.7.0 {
+ 
+ LIBBPF_1.8.0 {
+ 	global:
++		bpf_program__add_flags;
+ 		bpf_program__attach_tracing_multi;
++		bpf_program__clear_flags;
+ 		bpf_program__clone;
+ 		btf__find_by_name_kind_own;
+ 		btf__new_empty_opts;
 -- 
 2.55.0
 
