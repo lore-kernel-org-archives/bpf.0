@@ -1,206 +1,163 @@
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A399A446BEA
-	for <bpf@vger.kernel.org>; Wed,  9 Sep 2026 23:08:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788995308; cv=pass; b=BlP/Z2HZL33Lip20MgUnVn8jfpbnPm63XPfPZXusZO4+6Mdk4KjYzQ37OliXUatqIwHrqpgOglQVg/cIp9D3/NKbU0g2m1YiumFy1hmiBuMQHdKVo+bkMyhiyotSQaiHZuW8t2EPkM0BXyaKXHUIAQ1vI3PDU3nXjPn+ztkFxtY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788995308; c=relaxed/simple;
-	bh=PXCiYUIUDFbcVYjS13LmGtnLqgKi8EElaJmcYhZhgTI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g+dIvdnGanlkR5TVZOd5eoBMhptE6I3Fh4qvS9sgBeRynXKkwOxw9jSO9Qe0ZGHIMPx2WhCdfWvW0VxEYrDMlv1EnfHnMe/wV3X7piOPpNV6Lt18FV+hBOuO6xZRDiRWam1D2+CgpS/A+ZjBnPWxi9IcDoLZYCXD45CvIK7MfK4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=V9+arPla; arc=pass smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45EE1364E89;
+	Thu, 10 Sep 2026 01:40:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789004403; cv=none; b=ic4jfSKfZX1TeEG4I5jX/ufAVNGX8+85D6bDizXA4g+T7Jfqd75w5RJ1TYKsxScx3SdnfPXTVuauNGUZ4bFXCfpj2b6JMtY0cTSlcfpTRIgDev8P0ugIakYI6635DhkWodKbHI546ZAd2vHEOy+ZOOR/p/4jBQl9IS3MiT6gNAs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789004403; c=relaxed/simple;
+	bh=7eJlRhYUSCRjBQJUVrGhLJFMHDY2ri2GxDXNKikWGFQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aiwdKWyUiFd7VSVXWs3n+fjAyEIDlXbRTfpk80RjiqjT3i41Q71398MwH9rPD7MEpe+8WYegdd4zFSPf5SwSsuo07a+jZ01jSXUKXKge2PMtqTXHdwGWzO1SFG3H4CKnO5OH6vP8DpZwP7orB8B1OffHuXuxMewANaBv+Fjn2tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Tkz72tDj; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="V9+arPla"
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c2940d16190so138835966b.3
-        for <bpf@vger.kernel.org>; Wed, 09 Sep 2026 16:08:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788995304; cv=none;
-        d=google.com; s=arc-20260327;
-        b=rJ/39CG9SBZ/fG/crq+hlm+PjHR+8fBLIzlwTcKtm1/ECHZ4KVWE031BhMwsKntbDR
-         u0x/pwM1lG8WWOMREFnKGBiVxBf2t1lv3yY++UFZ5v+W6JdbnAex7oqzH1D3A0rjoI2f
-         xq7XrEXNltt3NKYtLrNkN7TSKPckkAsgD/VcSlcNeG9anejEU3D+KlxyES/sF8HnKPVZ
-         YyvMa9EcrVFGyQmmpG0hbGSSISblyUqUhLotFa0JWRuM4xRwLHrc4E1gWMA8NFHqX0cd
-         odXwhCUFY4JHd+wSar/KwvjMY3IB3LOhG8LYt8ib9svYPgYcZzm8jSHXwifnTmnGTpJg
-         lgYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=3HeYunSbblpdsvV1s5ghuqQTniP2lHfFC4mJtus2dow=;
-        fh=KDvTxKFrDUKYEDJFYKxxUBOkTqiJ/VtFqwnjtm1Myds=;
-        b=enKYQVf74Z6DvjxUdIK0kvYYNvVsML6JMmM3aHVP000moeu8l8BjjP/cLHXXF+TgF8
-         QHZH8pyfIv4pnuvrZX6NebqdYh8sud1xuP2Y6blkod2jQxJHVTMRYbJLvmFL0d88uvbT
-         kQmk2SW2uJHA1K5Jq42sOdWHeZtECaSuQ53KZy1ZjsgI73pYhrWZmlS4VnYaPduKE8aI
-         J0zhScIW2jbSefxhiuDzlCcwCSy6XklyrsjJXmYEbHb1BCdB8o10PYl+ZNFLoqdfVy16
-         1M5opnVNWsEsU8Ww+oQD1II2Au7vTzP4ZphI6nid1R7ZNRAOPpilXqjBSMNSU7e5NZqy
-         W69A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1788995304; x=1789600104; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=3HeYunSbblpdsvV1s5ghuqQTniP2lHfFC4mJtus2dow=;
-        b=V9+arPla0SL8qTc6bDoEa0KlmBKTUybqYAio8v07RTbEGg4p7JUSbkOyCeQlbQiKdm
-         aNUIVrOuFwEvRQHmNAaaPyZQ5ZDpvbVVdAReB7FFGb5oSZGkSuB5h4N8cEhDxeX7Mve6
-         MicGEG/4nRHuFOn9V9UOO1dsrAV6lrA38D0HmFtlV/GGyZh56NYoY7uHUogErRIExnvB
-         rc/6q/KcbCwefGlgkrn2KoD/b12fmj9w+ia7aeqjRwthBCxmkIJYm5R4dgfpAIis38MK
-         7g+8ILGrl9gyjr0XhnF+vN7pjldKPWRTMoh/BxpNZEqe8fs0vmbDxTBowkmMZUt1nmjO
-         Av1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788995304; x=1789600104;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3HeYunSbblpdsvV1s5ghuqQTniP2lHfFC4mJtus2dow=;
-        b=a/9fZLwe2eVkLoGIkesSVW5UQPluwBqBrRDPGo8DlbVTo5OzcgVujZufo64VqgFpMc
-         pIFAfh9iuut9SElJnJKi1hBQWN+c+NSSq3hUFzPnPPDGqXf46NsGRUEGKdkq7pCX8J/1
-         lEmB6vwegE+whNsZmR9YLaI2cUJihPpLXQY0YjbRPLqfZUCP11dBQZFTgwycoSLDnJIP
-         EtnHZeAY22tUIPhLawVR7oncO/nuuvT56viJb6APu5v7r4IqykKsSLb7ioIC59zhtxu0
-         0YEI7QSjD7ZxFZ4TOD0UchvTP/oUmhtndbmKOzBXNH37Gq2LgwS7iC+GYFz9Um47eyZ4
-         RcIA==
-X-Forwarded-Encrypted: i=1; AKwUvBzUuJj6DQisbfJHSNAG13H8dxqaO4ujG4Yv7wBgS/0ykxMulxuobUZ7SMSnmL7sxYDOC20=@vger.kernel.org
-X-Gm-Message-State: AFuF++lWBzmx+q3pmpQ7Y8EcSBiH6OIDCboRsR7HwN5iiZagj5I+EYGI
-	ZYUUGOQKlxHnvQGWO5oukcMAlncFG0lgbEAa1kGk9iSMX6eH3FuFQq3L7446V1FA/TZKbT4ZVus
-	NhF7QvMLQgy9TDELLbT4QGvU751d1u0wxkPyILBfN
-X-Gm-Gg: AYBFou1Qdox3kTc+DciKZgWZyUbHdknuMYNslKHYhlISc8JAdoGYqaWaRVqONB7y1FD
-	972AVE4ko8xHcDGdGxYgsMEQZdwUyCVcEKiEJ9W0rJ4LxBGhHCwyYgNyIxdirqxnDn0Og0fFHMO
-	omgIE6zrI6FJ7Euez+gV3okMgDpPuO/S0D2xg11RvGZ2qgskC19EUq7IabEuTQpwkoBxkDc9Z13
-	IpKog7ok3eY3EjIPkWkh6KmwAaTRMwWiVYq4nr8WZsgVQKiyTtDFF4VWwos1Lb2q4UtvLobefET
-	FnL5HyiV0dqAs9xT7cIcCSBKpdsrRvlYmgtwZl1ExlJUiXPUqM0AEsqX7zIVRWHWZk1wbaoCN5Q
-	ZWCAp2qPeo9A=
-X-Received: by 2002:a05:6402:51d3:b0:6a7:f25e:31c7 with SMTP id
- 4fb4d7f45d1cf-6a7f25e3481mr12004386a12.19.1788995303609; Wed, 09 Sep 2026
- 16:08:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Tkz72tDj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789004400; x=1820540400;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=7eJlRhYUSCRjBQJUVrGhLJFMHDY2ri2GxDXNKikWGFQ=;
+  b=Tkz72tDjtyBNxArgDXe7CE0eMJkbtkumosGoEbsHMVXzVbLeTmf4CSbV
+   qlmMcHR8SAwY7aUIQAEhDk5t+4w7WqXu3QxOotMnJPPbZej2DCxKI7LcT
+   CUPcZL8ZDuwfSQHv4tPcndRutCGgqV7sZR0m9PE81pppmd8ZqOZJUWSQi
+   drLAYZFquITwac+BhXRqJh8rXrQCDRmFlmH9/+EpGWTZSJGrSP/O4FX7E
+   VeqvCs9SqZbQ3i78X1W+IOjg5I6jyXb8DDSp3IxwDXFL6LKAdTMjPHsKP
+   wp3P9AEpKIIPnJKiVcKdoIoXSgrzrSP3zNvjoQmqj2pfq4u3EuHcXNJjt
+   g==;
+X-CSE-ConnectionGUID: Ep4aKt7yS8aDxcmm9XzVfw==
+X-CSE-MsgGUID: aocPNhtFRQGu8/nwVJ0PhA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11900"; a="93269745"
+X-IronPort-AV: E=Sophos;i="6.25,271,1779174000"; 
+   d="scan'208";a="93269745"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2026 18:39:59 -0700
+X-CSE-ConnectionGUID: EYP87P8xRN6nqNsrDMlwtw==
+X-CSE-MsgGUID: /Rm+jYFORf29YO6rb2bdrA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,271,1779174000"; 
+   d="scan'208";a="269720277"
+Received: from lkp-server01.sh.intel.com (HELO a3e91e2cf319) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 09 Sep 2026 18:39:52 -0700
+Received: from kbuild by a3e91e2cf319 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x4TlU-000000001EK-25yq;
+	Thu, 10 Sep 2026 01:39:48 +0000
+Date: Thu, 10 Sep 2026 09:38:48 +0800
+From: kernel test robot <lkp@intel.com>
+To: Irlanki Sandeep <irlanki.s@samsung.com>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, ncardwell@google.com,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	corbet@lwn.net, linux-kernel@vger.kernel.org, lorenzo@google.com,
+	maze@google.com, sporeba@google.com, motomuman@google.com,
+	srihari.k@samsung.com, g.pokhra@samsung.com, r.kumawat@samsung.com,
+	raj.kumars@samsung.com, ts413.lee@samsung.com,
+	Irlanki Sandeep <irlanki.s@samsung.com>
+Subject: Re: [PATCH net-next] tcp: add TCP_ECN and TCP_ECN_OPTION socket
+ options
+Message-ID: <202609100957.cYRwpjGl-lkp@intel.com>
+References: <20260909144557.800676-1-irlanki.s@samsung.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260909193719.518517-1-utilityemal77@gmail.com>
- <20260909193719.518517-5-utilityemal77@gmail.com> <CAHC9VhQHZ+ngFdzKqmnzBh341CGEg-jexu+QYU8=1qXK=u-x-Q@mail.gmail.com>
- <aqHUw6k0Mf83CGFT@zenbox>
-In-Reply-To: <aqHUw6k0Mf83CGFT@zenbox>
-From: Paul Moore <paul@paul-moore.com>
-Date: Wed, 9 Sep 2026 19:08:05 -0400
-X-Gm-Features: AcwNN1VWtmI7TVPKE3LPkQppsWuLJXnoUTUb0EBC2ejua9Hn27X6xeBhQULdxgQ
-Message-ID: <CAHC9VhTM7emi9vxs+5Za8Hrc_e9dg7fZx+Z6BGUc4VQ1qhEAUA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 04/15] lsm: Add the bpf_lsm_policy_release
- kfunc and policy object destructor
-To: Justin Suess <utilityemal77@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	kpsingh@kernel.org, matt@bobrowski.net, mic@digikod.net, 
-	viro@zeniv.linux.org.uk, brauner@kernel.org, kees@kernel.org, 
-	casey@schaufler-ca.com, gnoack@google.com, jack@suse.cz, song@kernel.org, 
-	yonghong.song@linux.dev, martin.lau@linux.dev, eddyz87@gmail.com, 
-	memxor@gmail.com, jolsa@kernel.org, m@maowtm.org, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260909144557.800676-1-irlanki.s@samsung.com>
 
-On Wed, Sep 9, 2026 at 6:21=E2=80=AFPM Justin Suess <utilityemal77@gmail.co=
-m> wrote:
-> On Wed, Sep 09, 2026 at 05:34:31PM -0400, Paul Moore wrote:
-> > On Wed, Sep 9, 2026 at 3:37=E2=80=AFPM Justin Suess <utilityemal77@gmai=
-l.com> wrote:
-> > >
-> > > Add security/bpf_lsm_kfuncs.c, the home of the kfuncs exposing LSM
-> > > policy objects to BPF programs, with the first of them:
-> > >
-> > >   bpf_lsm_policy_release(object)                KF_RELEASE
-> > >
-> > > The kfuncs are the LSM framework's own BPF interface: there is no
-> > > per-LSM kfunc and no intermediate security_*() layer.  Each kfunc
-> > > walks the matching hook's implementation list and calls the one
-> > > registered by the LSM whose lsmid the policy object carries.  Calling
-> > > a kfunc for an LSM that is not active or has no policy object support
-> > > fails at runtime rather than hiding the kfunc at verification time,
-> > > so BPF program loading is independent of the boot-time LSM
-> > > configuration.
-> > >
-> > > A policy object reference is meant to be handed over through a map
-> > > kptr field, so also register a destructor for struct
-> > > lsm_policy_object: map-held references are dropped on map teardown,
-> > > possibly from a context that cannot sleep, which the
-> > > policy_object_put() hook contract accounts for.  For the same reason
-> > > the kfunc is not KF_SLEEPABLE, and the filter adds no per-kfunc rule:
-> > > releasing a reference must be allowed wherever one can be held.  The
-> > > filter itself is needed because BPF_PROG_TYPE_LSM and
-> > > BPF_PROG_TYPE_SYSCALL, the two registered program types, share their
-> > > kfunc lookup buckets with other program types.
-> > >
-> > > Cc: Paul Moore <paul@paul-moore.com>
-> > > Cc: KP Singh <kpsingh@kernel.org>
-> > > Signed-off-by: Justin Suess <utilityemal77@gmail.com>
-> > > ---
-> > >
-> > > Notes:
-> > >     v2->v3:
-> > >         - No change.
-> > >
-> > >  MAINTAINERS               |  1 +
-> > >  security/Makefile         |  2 +-
-> > >  security/bpf_lsm_kfuncs.c | 98 +++++++++++++++++++++++++++++++++++++=
-++
-> > >  3 files changed, 100 insertions(+), 1 deletion(-)
-> > >  create mode 100644 security/bpf_lsm_kfuncs.c
-> >
-> > While not a new concern, it has been a few months so I want to mention
-> > it again to see where things stand with the BPF crowd: are the BPF
-> > folks still opposed to BPF kfuncs in security/bpf_lsm_kfuncs.c,
-> > similar to fs/bpf_fs_kfuncs.c?
-> >
-> > If the answer remains yes, the BPF devs are not able to tolerate
-> > kfuncs under security/, then I'm afraid this patchset is stuck.
-> > However, if the BPF devs are willing to ACK kfuncs in
-> > security/bpf_lsm_kfuncs.c, I'll add this patchset to the review queue
-> > for the LSM tree.
-> >
-> To avocate for the current placement:
->
-> Placing these kfuncs outside where it is in security/ would
-> be very awkward, the kfuncs use lsm internal APIs
-> (lsm_for_each_hook, active static keys, lsm dispatch table) that
-> have no buisness outside the LSM framework.
->
-> And logically, the kfuncs operate entirely on in-tree lsm objects.
->
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index 6215fcb07770..ba816d7ee127 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -5081,6 +5081,7 @@ F:        kernel/bpf/bpf_lsm.c
-> > >  F:     kernel/bpf/bpf_lsm_proto.c
-> > >  F:     kernel/trace/bpf_trace.c
-> > >  F:     security/bpf/
-> > > +F:     security/bpf_lsm_kfuncs.c
-> >
-> > We would need the maintenence of security/bpf_lsm_kfuncs.c to fall to
-> > the LSM framework, just as the maintenence of bpf_fs_funcs.c falls to
-> > the VFS.
->
-> Agreed.
->
-> I intend that any security/ kfuncs go through both LSM and BPF
-> review at a minimum. As a bug in any of these kfuncs or their permitted
-> calling context / signatures could cause regressions in either subsystem.
+Hi Irlanki,
 
-While some other subsystems are lax on this, it's general practice in
-the LSM space to *really* try to get ACK's from other affected
-subsystems before merging.  Sometimes we move forward anyway, e.g.
-patches being ignored for almost a year, but those are exceptions
-rather than the rule.
+kernel test robot noticed the following build warnings:
 
-I only bring this up because the MAINTAINERS entry was pointed at the
-BPF devs, not the LSM devs.  I would expect that patches going into
-security/bpf_lsm_kfuncs.c would need to be ACK'd both the LSM
-framework and BPF LSM maintainers.
+[auto build test WARNING on 548b86839f7fb819a4d6c83b71c73ec378d24275]
 
---=20
-paul-moore.com
+url:    https://github.com/intel-lab-lkp/linux/commits/Irlanki-Sandeep/tcp-add-TCP_ECN-and-TCP_ECN_OPTION-socket-options/20260909-201557
+base:   548b86839f7fb819a4d6c83b71c73ec378d24275
+patch link:    https://lore.kernel.org/r/20260909144557.800676-1-irlanki.s%40samsung.com
+patch subject: [PATCH net-next] tcp: add TCP_ECN and TCP_ECN_OPTION socket options
+config: i386-randconfig-141-20260910 (https://download.01.org/0day-ci/archive/20260910/202609100957.cYRwpjGl-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.4.0-5) 12.4.0
+smatch: v0.5.0-9187-g5189e3fb
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260910/202609100957.cYRwpjGl-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609100957.cYRwpjGl-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   net/ipv4/tcp_input.c: In function 'tcp_ecn_create_request':
+>> net/ipv4/tcp_input.c:7460:27: warning: unused variable 'net' [-Wunused-variable]
+    7460 |         const struct net *net = sock_net(listen_sk);
+         |                           ^~~
+
+
+vim +/net +7460 net/ipv4/tcp_input.c
+
+1fb6f159fd21c64 Octavian Purdila                      2014-06-25  7436  
+d82bd1229885d55 Florian Westphal                      2014-09-29  7437  /* RFC3168 : 6.1.1 SYN packets must not have ECT/ECN bits set
+d82bd1229885d55 Florian Westphal                      2014-09-29  7438   *
+d82bd1229885d55 Florian Westphal                      2014-09-29  7439   * If we receive a SYN packet with these bits set, it means a
+d82bd1229885d55 Florian Westphal                      2014-09-29  7440   * network is playing bad games with TOS bits. In order to
+d82bd1229885d55 Florian Westphal                      2014-09-29  7441   * avoid possible false congestion notifications, we disable
+f4e715c3254e3c0 stephen hemminger                     2014-10-29  7442   * TCP ECN negotiation.
+d82bd1229885d55 Florian Westphal                      2014-09-29  7443   *
+d82bd1229885d55 Florian Westphal                      2014-09-29  7444   * Exception: tcp_ca wants ECN. This is required for DCTCP
+843c2fdf7a12951 Florian Westphal                      2015-01-30  7445   * congestion control: Linux DCTCP asserts ECT on all packets,
+843c2fdf7a12951 Florian Westphal                      2015-01-30  7446   * including SYN, which is most optimal solution; however,
+843c2fdf7a12951 Florian Westphal                      2015-01-30  7447   * others, such as FreeBSD do not.
+f6fee16dbbe3fe4 Tilmans, Olivier (Nokia - BE/Antwerp  2019-04-03  7448)  *
+f6fee16dbbe3fe4 Tilmans, Olivier (Nokia - BE/Antwerp  2019-04-03  7449)  * Exception: At least one of the reserved bits of the TCP header (th->res1) is
+f6fee16dbbe3fe4 Tilmans, Olivier (Nokia - BE/Antwerp  2019-04-03  7450)  * set, indicating the use of a future TCP extension (such as AccECN). See
+f6fee16dbbe3fe4 Tilmans, Olivier (Nokia - BE/Antwerp  2019-04-03  7451)  * RFC8311 §4.3 which updates RFC3168 to allow the development of such
+f6fee16dbbe3fe4 Tilmans, Olivier (Nokia - BE/Antwerp  2019-04-03  7452)  * extensions.
+d82bd1229885d55 Florian Westphal                      2014-09-29  7453   */
+d82bd1229885d55 Florian Westphal                      2014-09-29  7454  static void tcp_ecn_create_request(struct request_sock *req,
+d82bd1229885d55 Florian Westphal                      2014-09-29  7455  				   const struct sk_buff *skb,
+f7b3bec6f5167ef Florian Westphal                      2014-11-03  7456  				   const struct sock *listen_sk,
+f7b3bec6f5167ef Florian Westphal                      2014-11-03  7457  				   const struct dst_entry *dst)
+d82bd1229885d55 Florian Westphal                      2014-09-29  7458  {
+d82bd1229885d55 Florian Westphal                      2014-09-29  7459  	const struct tcphdr *th = tcp_hdr(skb);
+d82bd1229885d55 Florian Westphal                      2014-09-29 @7460  	const struct net *net = sock_net(listen_sk);
+d82bd1229885d55 Florian Westphal                      2014-09-29  7461  	bool th_ecn = th->ece && th->cwr;
+843c2fdf7a12951 Florian Westphal                      2015-01-30  7462  	bool ect, ecn_ok;
+c3a8d9474684d39 Daniel Borkmann                       2015-08-31  7463  	u32 ecn_ok_dst;
+d82bd1229885d55 Florian Westphal                      2014-09-29  7464  
+3cae34274c79e0c Ilpo Järvinen                         2025-09-16  7465  	if (tcp_accecn_syn_requested(th) &&
+4ea2ce8e35e36ab Irlanki Sandeep                       2026-09-09  7466  	    (tcp_ecn_mode_eff(listen_sk) >= 3 ||
+100f946b8d44b64 Chia-Yu Chang                         2026-01-31  7467  	     tcp_ca_needs_accecn(listen_sk))) {
+3cae34274c79e0c Ilpo Järvinen                         2025-09-16  7468  		inet_rsk(req)->ecn_ok = 1;
+3cae34274c79e0c Ilpo Järvinen                         2025-09-16  7469  		tcp_rsk(req)->accecn_ok = 1;
+3cae34274c79e0c Ilpo Järvinen                         2025-09-16  7470  		tcp_rsk(req)->syn_ect_rcv = TCP_SKB_CB(skb)->ip_dsfield &
+3cae34274c79e0c Ilpo Järvinen                         2025-09-16  7471  					    INET_ECN_MASK;
+3cae34274c79e0c Ilpo Järvinen                         2025-09-16  7472  		return;
+3cae34274c79e0c Ilpo Järvinen                         2025-09-16  7473  	}
+3cae34274c79e0c Ilpo Järvinen                         2025-09-16  7474  
+d82bd1229885d55 Florian Westphal                      2014-09-29  7475  	if (!th_ecn)
+d82bd1229885d55 Florian Westphal                      2014-09-29  7476  		return;
+d82bd1229885d55 Florian Westphal                      2014-09-29  7477  
+d82bd1229885d55 Florian Westphal                      2014-09-29  7478  	ect = !INET_ECN_is_not_ect(TCP_SKB_CB(skb)->ip_dsfield);
+c3a8d9474684d39 Daniel Borkmann                       2015-08-31  7479  	ecn_ok_dst = dst_feature(dst, DST_FEATURE_ECN_MASK);
+4ea2ce8e35e36ab Irlanki Sandeep                       2026-09-09  7480  	ecn_ok = tcp_ecn_mode_eff(listen_sk) || ecn_ok_dst;
+d82bd1229885d55 Florian Westphal                      2014-09-29  7481  
+3cae34274c79e0c Ilpo Järvinen                         2025-09-16  7482  	if (((!ect || th->res1 || th->ae) && ecn_ok) ||
+3cae34274c79e0c Ilpo Järvinen                         2025-09-16  7483  	    tcp_ca_needs_ecn(listen_sk) ||
+91b5b21c7c16899 Lawrence Brakmo                       2017-06-30  7484  	    (ecn_ok_dst & DST_FEATURE_ECN_CA) ||
+91b5b21c7c16899 Lawrence Brakmo                       2017-06-30  7485  	    tcp_bpf_ca_needs_ecn((struct sock *)req))
+d82bd1229885d55 Florian Westphal                      2014-09-29  7486  		inet_rsk(req)->ecn_ok = 1;
+d82bd1229885d55 Florian Westphal                      2014-09-29  7487  }
+d82bd1229885d55 Florian Westphal                      2014-09-29  7488  
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
