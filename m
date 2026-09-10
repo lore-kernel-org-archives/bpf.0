@@ -1,197 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABA7F49E158
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 22:33:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA5A52F6931
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 22:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789079599; cv=none; b=YtGmbKfQKuHeen4VACp5bJ6w8wBUARdu1OOHuO8BayFTxmJU6f3ibeqSeHKscTKyGYMUXq20cwW7P49Vr4EHTokI31yb3f49E4aTPZrd3RXyV+UjLTaSy2THVS0LjzOz2/+GfiYLVt8nud5X5fJMKjraoUr4Kx2i+tmSzs7TDVk=
+	t=1789080199; cv=none; b=Onv1jwMDa6RW//IqIHGYbYuN44+o4s9lffETW3ejnnbvLti5ud9/tVGKfZ5QTtG0sIiv4K1eOr0VDbsu2AapeTPZc8Ufq21yb50YZmpm1nCEMPIOJgn+XWioBiL0JK1MfcXZks7KZzr2etdMEkKdzrIVlt7RxDtd/BYkl8ngUjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789079599; c=relaxed/simple;
-	bh=nE4YzJPBvXC2xF72Ej6BeUc96QFQgir7K9+nPVy/U4o=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=EO1oJ78GmLBJzmiBHhPMvLg7Or0VEiDhbs1C14LnyH3U0a8Cg5gMPRJNdD23umt1uDc0yrj3hvE4llseNLn0qrA4A8Dj055MJS/+jHzmXr92WCyt78BAplaHCmxZ/qkcM21GZUGNOleabPSGZwBzqmrA7H+kXibcAwxm7Jhs4aU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SFSyj3Bc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789080199; c=relaxed/simple;
+	bh=7PIpecPJpoZvOhrKSUYeeB1ES+6HUYRNIU6T+EOhjRc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZPUI3rx8+BkZbT2ksfr+eVkChxxHdbNmdiEn8XNqVmFAuinWRUgTiIKb+10COLfw1SXAxUci3TqAqo9h1tXi2h/kpP2JoFnGPIZFAW6vK8xyzaG5DUvuinyj8RIdzf9WI9cFPVWfjkZWOOm9Kbe0ACcJL+sLEaipwMao7HQhrGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lxsXGw+i; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SFSyj3Bc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C05F81F000FF;
-	Thu, 10 Sep 2026 22:33:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789079597;
-	bh=CU/b3tvTmFlqFI0K0MY3DjCLpUkAuh/ygzMUSspEBIk=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=SFSyj3BczWHh5AWZbLJNvG7uWvl0Dd7n0TuobjPHOU4/2BIJ2Rc9Y1gEreVwT3vbw
-	 SM1r5V8qOszAf2qSyrDNjidzZWdBNVB/EJTu1yGmxWeiBoLajpYJIxqf6wbzuUPQ2K
-	 u8WGB7A6x23SBRbEvpeYnGZVY1HT1FwwmZq+NfDtQ3HlaN7juKHEuQXto7sArPdtXs
-	 BMrJE7qNk0bgSTyJNG1x2ieBkMeLfJGyflMaUv7hSthctnRh7j9/GOrrfcpPIfwQRn
-	 G50XUPf+8OrlY19A5urAkB0VNlhlCzrV3Qp5xfFuYHESGsGdrZkkWsnvq58w9vhclx
-	 sa3qOUN5mDWAA==
-Content-Type: multipart/mixed; boundary="===============6653278619955552026=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lxsXGw+i"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8557c3f270eso238829b3a.3
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 15:43:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789080197; x=1789684997; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=7PIpecPJpoZvOhrKSUYeeB1ES+6HUYRNIU6T+EOhjRc=;
+        b=lxsXGw+iFlotqJmOIzVIPsXak+C3B/Q2oNS0F/EptOK7ApORnjrzjAi5GkpMvNXGog
+         HWWXtcB9Vh6n8IgBOtvk7yKKDbfWCTQGsc6z4LRy9Q/sb7Ee6RBBY2v5mUCsC8JZGeyr
+         aCx8Z5diA1bCwKgEiFORQgWzJ5l84uoszbon5G9kYflsJKs/cu6/3YM+rgPg/nYR1rh+
+         Ml94r14mcLA2xnZ568YE489JChJEJ5YDV/vIo0H7p0gdcoKsGW62+8opE/JTMSmzOwaI
+         sjs5vaZ5fd2LL6Y5eMTWmXGb+7m61yE9kEIuCBD7rMJyVA1hYh9w+lDi+myxOrANHs39
+         lmtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789080197; x=1789684997;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7PIpecPJpoZvOhrKSUYeeB1ES+6HUYRNIU6T+EOhjRc=;
+        b=To+4s6emMAxkXT4T1fsTdSozKQqJcedG9vlWDYOx5jkwrWmkM4FKLZPy7ir1frJr6r
+         hXqOM5hVJkymirxi10Q3B1Q28b4KkEFn7Mt6ocdzbEgfWtx9VCgcDefcQL6jQ+zNjDWB
+         eEfFY1eblkRgUqesArJRwjz2rasL7pWbchNnWlLnbj9DH1vA5u7KxFobxKegYHwimQda
+         5QjYZueKE7h8ZXdWPqFDRq7QryLjula5QpJq2cwv5qEsmEKGqXcSM9rfy7xqemDfc9Ix
+         susgZs+AONJB2HDSpbQQ5W9jM+oAt+aNhoPtTBNbAgTgLrEWZi6fC7OwF6lyJArJvGVE
+         G4dw==
+X-Forwarded-Encrypted: i=1; AKwUvBzUd8xbathLMFfR98hoVEsXvyTKaeaDWBBGFQs9jFM0juOrLcZOfEfebq9ilVdJiXernlc=@vger.kernel.org
+X-Gm-Message-State: AFuF++liQKwf2QfYdhKXmhlwSS+ofUsIs121femhFJ+6S2pRTyvY8Uvs
+	9SD2R4YodNAj9meLbnFr/lRsEcZ2I+F8rsJIjFOtp7l5Hv7SIEozzXkc
+X-Gm-Gg: AYBFou1pxrBJkhF36MKKQlcawwgslPKvqgQECrW+PvmcF3EBfdPmsTIp5gppUqzUvQR
+	irgVr0L2Cg++4UEAz/MZt+rS6FSHgbOIpZX7bFwLmDIxpO0361RPGsGiD/qepZi8rBUMJ78Fvpb
+	itR6XlK8+/lqM80w4D8IMePsRwc7gjkROke+B9wVvHZqNDn+HR6cd5ovtHO+FuQ1/XDl70f1xQj
+	AV+nz2d5ANU6LwxXo6pTj8d60B0pKRrcOfVArR0QvrpUdTAyFikfSXcg/vAjdilhmW03YvGMIgf
+	c0EZH/XWsXb4Gp1WsKQvh80GmOQe3f8FETmRMJPoUMviXZdYa+81JPQqLwzvMpvD/MUWFfc3ReF
+	S5Eq5JR+rfSrb7Fmn6IrwgD0pftTRdiyrudOzFNBAu5Am8GbKcSzSTHE2xUclO2n9rIlBGRUDLe
+	DnbK+LdmLqb0HvvLnnAB2zD2KJG6S6tOD2fXoT4FPy8LR8F8W0EuJ6dknEKWL04f/AQEKt86on7
+	fHzlRGrlpIU1p/tB/aZBCo59gtV3HBVBxkRQ6sywg3d/YFU9ltl01YWBw==
+X-Received: by 2002:a05:6a21:8cc1:b0:3d1:af47:5f80 with SMTP id adf61e73a8af0-3daed18c27emr2348554637.11.1789080197109;
+        Thu, 10 Sep 2026 15:43:17 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:a3ce:533a:7492:3ff3? ([2620:10d:c090:500::4:d279])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33ba4fa50efsm1216425eec.28.2026.09.10.15.43.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2026 15:43:15 -0700 (PDT)
+Message-ID: <9f28bead21b014edf092ca07c03de7380bfe5390.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/4] libbpf: Add bpf_program__add_flags()
+ and bpf_program__clear_flags()
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Toke =?ISO-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>, Andrii
+ Nakryiko <andrii@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Alexei Starovoitov	 <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,  Yonghong
+ Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil
+ Tsalapatis <emil@etsalapatis.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, bpf@vger.kernel.org
+Date: Thu, 10 Sep 2026 15:43:13 -0700
+In-Reply-To: <20260910183222.307208-1-toke@redhat.com>
+References: <20260910183222.307208-1-toke@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <ff35c7a25baaa4167d7440342358e90b18a30ac12136354dd42a4f0a0623b1ff@mail.kernel.org>
-In-Reply-To: <20260910213510.49358-4-daniel@iogearbox.net>
-References: <20260910213510.49358-4-daniel@iogearbox.net>
-Subject: Re: [PATCH bpf v2 4/4] selftests/bpf: Add tests for the KF_PERFMON gates
-From: bot+bpf-ci@kernel.org
-To: daniel@iogearbox.net,ast@kernel.org
-Cc: memxor@gmail.com,eddyz87@gmail.com,info@starlabs.sg,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 10 Sep 2026 22:33:16 +0000 (UTC)
 
---===============6653278619955552026==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Thu, 2026-09-10 at 20:32 +0200, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
+> When changing BPF program flags, applications often need to just add or
+> remove a single flag, without touching the existing ones. When using the
+> bpf_program__set_flags() function, this requires reading the existing
+> flags and doing bitwise manipulations before resetting the result, which
+> is slightly awkward to do, and easy to forget.
+>=20
+> Add two new convenience helpers, bpf_program__add_flags() and
+> bpf_program__clear_flags(), which wraps bpf_program__set_flags() in the
+> bitwise operations required to modify flags without clobbering the
+> existing ones.
+>=20
+> Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> ---
 
-> selftests/bpf: Add tests for the KF_PERFMON gates
->
-> Add test cases where each one loads with CAP_BPF alone and checks that
-> the program is correctly rejected.
->
->   # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t verifier_kfunc_perfmon
->   [...]
->   #627/1   verifier_kfunc_perfmon/rdonly_cast_noperfmon:OK
->   #627/2   verifier_kfunc_perfmon/rdonly_cast_noperfmon @unpriv:OK
->   #627/3   verifier_kfunc_perfmon/probe_read_kernel_dynptr_noperfmon:OK
->   #627/4   verifier_kfunc_perfmon/probe_read_kernel_dynptr_noperfmon @unpriv:OK
->   #627/5   verifier_kfunc_perfmon/stream_vprintk_noperfmon:OK
->   #627/6   verifier_kfunc_perfmon/stream_vprintk_noperfmon @unpriv:OK
->   #627/7   verifier_kfunc_perfmon/get_kmem_cache_noperfmon:OK
->   #627/8   verifier_kfunc_perfmon/get_kmem_cache_noperfmon @unpriv:OK
->   #627/9   verifier_kfunc_perfmon/arg_untrusted_read_noperfmon:OK
->   #627/10  verifier_kfunc_perfmon/arg_untrusted_read_noperfmon @unpriv:OK
->   #627     verifier_kfunc_perfmon:OK
->   Summary: 1/10 PASSED, 0 SKIPPED, 0/0 FAILED
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-This isn't a bug, but would it be worth saying in the changelog which gates
-are covered? The changelog describes only the rejection half (CAP_BPF alone
-correctly rejects), but each program also carries __success so it asserts
-the privileged load still succeeds. The series gates roughly 30 kfuncs plus
-one mem-access path, and this new file exercises four kfuncs
-(bpf_rdonly_cast, bpf_probe_read_kernel_dynptr, bpf_stream_vprintk,
-bpf_get_kmem_cache) and __arg_untrusted read. Could the changelog mention
-this coverage, perhaps also adding a stream_print_stack case alongside
-stream_vprintk_noperfmon since it sits in the same helpers.c hunk with the
-same flags?
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-> index 64ac49ad67e6..ec9e3907c75d 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-> @@ -53,6 +53,7 @@
->  #include "verifier_iterating_callbacks.skel.h"
->  #include "verifier_jeq_infer_not_null.skel.h"
->  #include "verifier_jit_convergence.skel.h"
-> +#include "verifier_kfunc_perfmon.skel.h"
->  #include "verifier_ld_ind.skel.h"
->  #include "verifier_ldsx.skel.h"
->  #include "verifier_leak_ptr.skel.h"
-> @@ -216,6 +217,7 @@ void test_verifier_int_ptr(void)              { RUN(verifier_int_ptr); }
->  void test_verifier_iterating_callbacks(void)  { RUN(verifier_iterating_callbacks); }
->  void test_verifier_jeq_infer_not_null(void)   { RUN(verifier_jeq_infer_not_null); }
->  void test_verifier_jit_convergence(void)      { RUN(verifier_jit_convergence); }
-> +void test_verifier_kfunc_perfmon(void)        { RUN(verifier_kfunc_perfmon); }
->  void test_verifier_load_acquire(void)         { RUN(verifier_load_acquire); }
->  void test_verifier_ld_ind(void)               { RUN(verifier_ld_ind); }
->  void test_verifier_ldsx(void)                  { RUN(verifier_ldsx); }
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_kfunc_perfmon.c b/tools/testing/selftests/bpf/progs/verifier_kfunc_perfmon.c
-> new file mode 100644
-> index 000000000000..76c39ef30e96
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_kfunc_perfmon.c
-> @@ -0,0 +1,75 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include "bpf_misc.h"
-> +
-> +void *user_ptr;
-> +char dynptr_buf[8];
-> +u64 kaddr;
-> +
-> +extern struct kmem_cache *bpf_get_kmem_cache(u64 addr) __ksym;
-> +
-> +SEC("socket")
-> +__success
-> +__caps_unpriv(CAP_BPF)
-> +__failure_unpriv
-> +__msg_unpriv("bpf_rdonly_cast is allowed only to CAP_PERFMON and CAP_SYS_ADMIN")
-> +int rdonly_cast_noperfmon(void *ctx)
-> +{
-> +	char *p = bpf_rdonly_cast(0, 0);
-> +
-> +	return p[0x7fff];
-> +}
-> +
-> +SEC("socket")
-> +__success
-> +__caps_unpriv(CAP_BPF)
-> +__failure_unpriv
-> +__msg_unpriv("bpf_probe_read_kernel_dynptr is allowed only to CAP_PERFMON and CAP_SYS_ADMIN")
-> +int probe_read_kernel_dynptr_noperfmon(void *ctx)
-> +{
-> +	struct bpf_dynptr dptr;
-> +
-> +	bpf_dynptr_from_mem(dynptr_buf, sizeof(dynptr_buf), 0, &dptr);
-> +	bpf_probe_read_kernel_dynptr(&dptr, 0, sizeof(dynptr_buf), user_ptr);
-> +	return 0;
-> +}
-
-This isn't a bug, but could probe_read_kernel_dynptr_noperfmon() use kaddr
-(or a separate kernel-address global) rather than user_ptr? The same file
-already uses kaddr for the other two kernel-address kfuncs
-(stream_vprintk_noperfmon and get_kmem_cache_noperfmon). A kernel-read
-kfunc taking an argument named user_ptr inverts the meaning of the name.
-This doesn't affect the test outcome since the KF_PERFMON check fires before
-any argument is validated, but it makes the case harder to read.
-
-> +
-> +SEC("socket")
-> +__success
-> +__caps_unpriv(CAP_BPF)
-> +__failure_unpriv
-> +__msg_unpriv("bpf_stream_vprintk is allowed only to CAP_PERFMON and CAP_SYS_ADMIN")
-> +int stream_vprintk_noperfmon(void *ctx)
-> +{
-> +	bpf_stream_printk(BPF_STDOUT, "%pB", (void *)kaddr);
-> +	return 0;
-> +}
-> +
-> +SEC("socket")
-> +__success
-> +__caps_unpriv(CAP_BPF)
-> +__failure_unpriv
-> +__msg_unpriv("bpf_get_kmem_cache is allowed only to CAP_PERFMON and CAP_SYS_ADMIN")
-> +int get_kmem_cache_noperfmon(void *ctx)
-> +{
-> +	return !!bpf_get_kmem_cache(kaddr);
-> +}
-> +
-> +__weak int subprog_untrusted_read(void *p __arg_untrusted)
-> +{
-> +	return *(char *)p;
-> +}
-> +
-> +SEC("socket")
-> +__success
-> +__caps_unpriv(CAP_BPF)
-> +__failure_unpriv
-> +__msg_unpriv("rdonly_untrusted_mem access is allowed only to CAP_PERFMON and CAP_SYS_ADMIN")
-> +int arg_untrusted_read_noperfmon(void *ctx)
-> +{
-> +	return subprog_untrusted_read(0);
-> +}
-> +
-> +char _license[] SEC("license") = "GPL";
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34534885787
---===============6653278619955552026==--
+...
