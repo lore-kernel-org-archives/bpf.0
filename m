@@ -1,300 +1,122 @@
-Received: from mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69F0F472535
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 11:28:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569E347143C
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 11:32:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789039714; cv=none; b=S8FBZOK6Y6bU84tQy7q2mRTfLO1DdoN+Gvs2O+ZIHLcey/jAG/CagXiM21txa7y7htcikLzS61zrQeVekXQltdEhdB/PdpMopvQBJbchZgA50RsfAJZz4OjeOdCFImXzTTGY6Nqymx6lmVaFUwB/4Ikln+VlBkFgxN54hTsBRbo=
+	t=1789039928; cv=none; b=cBNYVaFBQgboSU1B9NbMiZE5lGi8xSBDXjrNys4NeHkccoQK8EZIMcNJPdD23NTlZWFMspBj7XzlJ/uxi/mc3h9M/cZYAf+qcso4E9jV/ej5HK2XRgbiHq0YMFu5Sl6PBZGPV6O2C+XnZns8Dbm0jRuGXHCWdznB7KUJP4tReno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789039714; c=relaxed/simple;
-	bh=hqlLi6bTP/oiCg2WQijATvjJsdlPO5fSQ16lKd07OH4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GHC2vb1XmvHEIgtfRw74J59kgN1uYaGjWYgs7OsOP6IjtvTlqagX8zbPusLWo50wFjuFmBPvvz1iACj5Iuhg/F+HWPHBijJbGHCPYPCgIF3SvHddp3Id9sj79S7Y4NgIVL0fVvJ8HuYH70ZcCXBwnJN7B2PXPH8nKtaatENVck8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fesafNvI; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789039928; c=relaxed/simple;
+	bh=lJZi95WZB7yzdlKPvBofx8mF9bEAbVe5sXoFviCtnMo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 Content-Type:MIME-Version; b=QAheGUhPYqi2VUDA5LsMa3U4i8xKmlN1ehvVJ3lW/o7g5ATu93uFL6AcgdC6Fz+kDmWiEgs29AiqOzryeA9j6hrvTTEieLGLir54bBhB9f53ru5NzYvL7nWmbK03nMETWFRs0h7f78sro0LtxmkrhxQIVhJVTgVXOSm5hF/nFGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WSCSCPQ9; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fesafNvI"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=hqlLi6bTP/oiCg2WQijATvjJsdlPO5fSQ16lKd07OH4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789039708; v=1; x=1789644508;
- b=fesafNvIEyKVfmCYrYX8ESzc44qb08gEiQa2UzgBJMNRkLR526Vr2EdST0JtHq13fNndaDoG
- 4F9LPxmt4QMWg9u4EAsYEi7PqH/xveMstkhG3Ht4MDZAmB9ACQhuc/vv3muW4qrLBdZY0YZJCGR
- gmkATMvfDEs3OzVDBMLrUdTE=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id e46b3dd9f2c8c11f;
-	Thu, 10 Sep 2026 11:28:28 +0000
-X-Mizu-Trace-ID: e46b3dd9f2c8c11f
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Neal Cardwell <ncardwell@google.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Aditi Ghag <aditi.ghag@isovalent.com>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v3 3/3] selftests/bpf: Test bpf_sock_destroy() on TIME_WAIT and listener socks
-Date: Thu, 10 Sep 2026 19:28:02 +0800
-Message-ID: <20260910112810.153801-1-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260910112107.148770-1-jiayuan.chen@linux.dev>
-References: <20260910112107.148770-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WSCSCPQ9"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-86a46577018so518933b3a.2
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 04:32:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789039923; x=1789644723; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:content-type:message-id:date
+         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=IPKZJQlP21ww4LrqqKoCC3eq7Co68DwS+hHs4a+8eYc=;
+        b=WSCSCPQ99WEhgSMG29hwUfvzAE3NRCZmk95Rkda+PLeIQkZanHPraZ0QjEZkVPgXPS
+         vOnKwJ4Q/B8B9BSmuLSqIS+ASAkKLS4gTOH8hPU9RJkJEZ0SDhIU5fJnADChtiECHTSK
+         +liJjWjepGcOfeYCe/BRUGnpGKCrPSuX2RYafwjSd3ZM7cAoS0psbumsut1OMxAveEvQ
+         wzt0lUAfB51nUDw2UblJGPTHScLleSZIkQOux2U+XpR73R2FrFrZZuS2Z3tyE7YJ8QtY
+         bPxNoWRGuKmYyxhzD44rBb39oWacp2TKBpbQow2nDSiIxfggRcsZh0MJFutUCXsSlL+4
+         h0Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789039923; x=1789644723;
+        h=mime-version:content-transfer-encoding:content-type:message-id:date
+         :references:in-reply-to:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=IPKZJQlP21ww4LrqqKoCC3eq7Co68DwS+hHs4a+8eYc=;
+        b=iqynl5D366YJJmubOsotfdJenvkwCa00W8Y1c576eaZz8Vm6fgpnhx3kHv/VNC3mxU
+         1p89J3o4NeRtt5+Bz00CFLAbF7yu/FzM0C9YDxWgN7AMkl+SLUgaQWSh1YcYtzfahQEn
+         riVrXP8pGlSoc1M4vIC4m67Q+Mg58JKZBeSzJq5a1PkVyfbPAdz2HbMKhjuqKaICPQnc
+         lLylTaA0srp3+LxefZCSq8snoDvHnLGp/dC5b3SSmo1CLQL7I/C1EiuUg4WmpqMPLjGW
+         Wb+o3ZYaOpEGF+ythFeK4z8fVXuy+8uFnPxG3e9cu6wOd0kj+Un3BPwdEVTCQEIu6IWS
+         /18Q==
+X-Forwarded-Encrypted: i=1; AKwUvBzqzHzpvteLNG+RQ66dMXQF2eOkLsQ3LahVthnHwA6H9tOq7wnfGhgnghr+QGLluLNn2iI=@vger.kernel.org
+X-Gm-Message-State: AFuF++nlF8l9kj2aa+feDt7vG7gZhNM5HJn/UAZtpKxPaA9pb9HtAUfR
+	N4VC1EKvodj+oLPTKz7/aUOaF3qgdH0DY5H+dBhvk8JueivGPSL7Zrbb
+X-Gm-Gg: AYBFou1XHv5NBNBrv69xAA1kFOGJx9DJn5zIMo7+CBruUwt8j1V5CcVQeKQ2Run8CB+
+	XEYxPN/Tr426b5azRYtJBP5nx5+XBZHu5jH027cbwUB2C0usVy7w4ZzPSjqhMcLbSghXc6gukGp
+	GYPu7VhyLJ4LyDVV+cxROCnZbgowBjmYIEYKu89zIbbwWM16ZWh72YVUc2XYGZjWxiiU2T0K/14
+	xHlZdd9qSjUlt1EN/L7stkouiHTrLhb9jPGCEKs2YnfrsWRdPCoWjl75nZ/vLGo+Hx9ZnlO/2/p
+	MqhkjFGZKvZuKzIJlMf0WdjwJLB1QKEMjeyZJB64RrPQ0sOSloxQ2la+jzU5bDNBOyTeVCsIpw8
+	Y7Ul7Th9k8NWukmHWzaUh/adV/7lWUp8hc1mgJsvBR8NOHmiQHOJ9s/q02alxiXaO9+NNO6Wk+T
+	F+7BGCux/IvR/IjFgyqDd3x1gnrMSgs8noNXJ09bEZiML6uy769Atfw0aZOF9JkH9621QlenQsg
+	QLTPNXLPx0sQkFCDTAOLf3F92kiVbNlLxfEiuNMvPZfjZI3q0PahhoAUqVPBY4hZefRz7/tNH8c
+	+WP9/N/S40qmsHZlQbQ2LhI9Jy4JcBK/EM+xBxIpFm3KcakGp/rZT27Gh8vykxLSPvTlTcygUHr
+	5L7q54QRNsSf4j3/A+uxD
+X-Received: by 2002:a05:6a00:13a0:b0:86a:59ca:6cb6 with SMTP id d2e1a72fcca58-86a59ca7130mr2870537b3a.20.1789039922659;
+        Thu, 10 Sep 2026 04:32:02 -0700 (PDT)
+Received: from [127.0.1.1] ([43.227.225.58])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-869a5b727f6sm818032b3a.28.2026.09.10.04.31.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2026 04:32:02 -0700 (PDT)
+From: Nikhil Ludder <nikhilljatt@gmail.com>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: Emil Tsalapatis <linux-lists@etsalapatis.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, eddyz87@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, john.fastabend@gmail.com,
+ sdf@fomichev.me, horms@kernel.org, dsahern@gmail.com, hawk@kernel.org,
+ razor@blackwall.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf] bpf: fix reading neigh ha in bpf_fib_lookup()
+In-Reply-To: <7f3e237e-ac5c-46af-ae21-8b437a099fe3@linux.dev>
+References: <20260909024011.1252694-1-nikhilljatt@gmail.com>
+ <CABFh=a7Z=heZODVsXwisY3VwULDy-Rq1hwO09exgX2d0-KzgUQ@mail.gmail.com>
+ <178898653497.1776876.10402414041023036972@gmail.com>
+ <7f3e237e-ac5c-46af-ae21-8b437a099fe3@linux.dev>
+Date: Thu, 10 Sep 2026 17:01:52 +0530
+Message-ID: <178903991209.1916825.3991149870565892141@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add two subtests.
+On 9/10/26 12:59 PM, Jiayuan Chen wrote:
+> Yes, no deadlock.
 
-tcp_timewait: the client shuts down first and the server closes after
-it, so the client sock ends up in TIME_WAIT. A tcp iterator then finds
-the timewait sock by the cookie it inherited from the client sock and
-destroys it. Iterate once more to make sure it is gone. Without the
-first fix bpf_sock_destroy() reads past the timewait sock and KASAN
-complains.
+Thanks for confirming.
 
-tcp_listen_pending: connect to a listener but never accept, so the child
-sits in the accept queue, then destroy the listener. Without the second
-fix the cond_resched() in inet_csk_listen_stop() trips the might_sleep
-check under rcu_read_lock().
+> BTW, if an IPoIB device can show up here, dmac is already truncated
+> today and the packet can't be forwarded anyway.
+> Shouldn't we just reject addr_len != ETH_ALEN instead of open-coding
+> the copy? Then you can use the native function instead.
 
-  ./test_progs -a sock_destroy
+You are right, and it is worse than just dmac: the line immediately
+below copies dev->dev_addr into params->smac with a fixed ETH_ALEN and
+no addr_len check either, so both addresses are already truncated for
+such a device.  struct bpf_fib_lookup declares smac[6] and dmac[6], so
+the helper is ethernet-only by contract and a non-ethernet nexthop is
+already outside it.
 
-  #444/1   sock_destroy/tcp_client:OK
-  #444/2   sock_destroy/tcp_server:OK
-  #444/3   sock_destroy/tcp_listen_pending:OK
-  #444/4   sock_destroy/tcp_timewait:OK
-  #444/5   sock_destroy/udp_client:OK
-  #444/6   sock_destroy/udp_server:OK
-  #444/7   sock_destroy/trace_tcp_destroy_sock:OK
-  #444     sock_destroy:OK
-  Summary: 1/7 PASSED, 0 SKIPPED, 0/0 FAILED
+I would rather not fold that into this patch though.  This one is a
+race fix with Cc: stable and no behaviour change, whereas rejecting a
+device that today returns a (garbage) success is uapi visible and does
+not belong in a stable backport.  Would you be happy with the seqlock
+fix as it stands, and a follow-up for bpf-next that rejects
+addr_len != ETH_ALEN and covers smac as well?  I am happy to write it.
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../selftests/bpf/prog_tests/sock_destroy.c   | 121 ++++++++++++++++++
- .../selftests/bpf/progs/sock_destroy_prog.c   |  30 +++++
- 2 files changed, 151 insertions(+)
+If so, which return code would you want for that?  None of the existing
+BPF_FIB_LKUP_RET_* really fits: NO_NEIGH is untrue since the neighbour
+is there, NOT_FWDED is vague, and adding a new BPF_FIB_LKUP_RET_* is
+uapi, which is another reason to keep it out of this patch.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-index 9c11938fe597d..78d642a02bdb6 100644
---- a/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_destroy.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <poll.h>
- #include <test_progs.h>
- #include <bpf/bpf_endian.h>
- 
-@@ -110,6 +111,122 @@ static void test_tcp_server(struct sock_destroy_prog *skel)
- 		close(serv);
- }
- 
-+static void test_tcp_listen_pending(struct sock_destroy_prog *skel)
-+{
-+	int serv = -1, clien = -1, accept_serv = -1, n, serv_port;
-+	struct pollfd pfd = { .events = POLLIN };
-+	char buf[1];
-+
-+	serv = start_server(AF_INET6, SOCK_STREAM, NULL, 0, 0);
-+	if (!ASSERT_GE(serv, 0, "start_server"))
-+		goto cleanup;
-+	serv_port = get_socket_local_port(serv);
-+	if (!ASSERT_GE(serv_port, 0, "get_sock_local_port"))
-+		goto cleanup;
-+	skel->bss->serv_port = (__be16)serv_port;
-+
-+	/*
-+	 * Connect but never accept, so the child sits in the accept queue
-+	 * of the listener. Wait until it's actually there.
-+	 */
-+	clien = connect_to_fd(serv, 0);
-+	if (!ASSERT_GE(clien, 0, "connect_to_fd"))
-+		goto cleanup;
-+	pfd.fd = serv;
-+	if (!ASSERT_EQ(poll(&pfd, 1, -1), 1, "poll listener"))
-+		goto cleanup;
-+
-+	/* Run iterator program that destroys server sockets. */
-+	start_iter_sockets(skel->progs.iter_tcp6_server);
-+
-+	accept_serv = accept(serv, NULL, NULL);
-+	if (!ASSERT_LT(accept_serv, 0, "accept on destroyed listener"))
-+		goto cleanup;
-+	ASSERT_EQ(errno, EINVAL, "error code on destroyed listener");
-+
-+	/* The unaccepted child was reset along with the listener. */
-+	n = recv(clien, buf, sizeof(buf), 0);
-+	if (!ASSERT_LT(n, 0, "client recv on reset child"))
-+		goto cleanup;
-+	ASSERT_EQ(errno, ECONNRESET, "error code on reset child");
-+
-+cleanup:
-+	if (clien != -1)
-+		close(clien);
-+	if (accept_serv != -1)
-+		close(accept_serv);
-+	if (serv != -1)
-+		close(serv);
-+}
-+
-+static void test_tcp_timewait(struct sock_destroy_prog *skel)
-+{
-+	int serv = -1, clien = -1, accept_serv = -1, n;
-+	struct timeval tv = {};
-+	char buf[1];
-+
-+	serv = start_server(AF_INET6, SOCK_STREAM, NULL, 0, 0);
-+	if (!ASSERT_GE(serv, 0, "start_server"))
-+		goto cleanup;
-+
-+	clien = connect_to_fd(serv, 0);
-+	if (!ASSERT_GE(clien, 0, "connect_to_fd"))
-+		goto cleanup;
-+
-+	accept_serv = accept(serv, NULL, NULL);
-+	if (!ASSERT_GE(accept_serv, 0, "serv accept"))
-+		goto cleanup;
-+
-+	/*
-+	 * Active close from the client, then close the server side. Once
-+	 * recv() sees EOF the server FIN has been processed and the client
-+	 * sock is in TIME_WAIT. Block without timeout so a loaded CI box
-+	 * can't race us.
-+	 */
-+	if (!ASSERT_OK(setsockopt(clien, SOL_SOCKET, SO_RCVTIMEO, &tv,
-+				  sizeof(tv)), "clear rcvtimeo"))
-+		goto cleanup;
-+	if (!ASSERT_OK(shutdown(clien, SHUT_WR), "client shutdown"))
-+		goto cleanup;
-+
-+	/*
-+	 * Make sure the server has seen the client FIN before it closes,
-+	 * so the two FINs never cross.
-+	 */
-+	n = recv(accept_serv, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(n, 0, "server recv EOF"))
-+		goto cleanup;
-+
-+	close(accept_serv);
-+	accept_serv = -1;
-+
-+	/* block until return EOF */
-+	n = recv(clien, buf, sizeof(buf), 0);
-+	if (!ASSERT_EQ(n, 0, "client recv EOF"))
-+		goto cleanup;
-+
-+	/* Run iterator program that destroys the timewait client sock. */
-+	skel->bss->tw_found = 0;
-+	start_iter_sockets(skel->progs.iter_tcp6_timewait);
-+	if (!ASSERT_EQ(skel->bss->tw_found, 1, "timewait sock found"))
-+		goto cleanup;
-+
-+	ASSERT_OK(skel->bss->tw_destroy_err, "destroy timewait sock");
-+
-+	/* The destroyed timewait sock must be gone. */
-+	skel->bss->tw_found = 0;
-+	start_iter_sockets(skel->progs.iter_tcp6_timewait);
-+	ASSERT_EQ(skel->bss->tw_found, 0, "timewait sock destroyed");
-+
-+cleanup:
-+	if (clien != -1)
-+		close(clien);
-+	if (accept_serv != -1)
-+		close(accept_serv);
-+	if (serv != -1)
-+		close(serv);
-+}
-+
- static void test_udp_client(struct sock_destroy_prog *skel)
- {
- 	int serv = -1, clien = -1, n = 0;
-@@ -204,6 +321,10 @@ void test_sock_destroy(void)
- 		test_tcp_client(skel);
- 	if (test__start_subtest("tcp_server"))
- 		test_tcp_server(skel);
-+	if (test__start_subtest("tcp_listen_pending"))
-+		test_tcp_listen_pending(skel);
-+	if (test__start_subtest("tcp_timewait"))
-+		test_tcp_timewait(skel);
- 	if (test__start_subtest("udp_client"))
- 		test_udp_client(skel);
- 	if (test__start_subtest("udp_server"))
-diff --git a/tools/testing/selftests/bpf/progs/sock_destroy_prog.c b/tools/testing/selftests/bpf/progs/sock_destroy_prog.c
-index 9e0bf7a54cec9..0a8887543218a 100644
---- a/tools/testing/selftests/bpf/progs/sock_destroy_prog.c
-+++ b/tools/testing/selftests/bpf/progs/sock_destroy_prog.c
-@@ -7,6 +7,8 @@
- #include "bpf_tracing_net.h"
- 
- __be16 serv_port = 0;
-+int tw_found = 0;
-+int tw_destroy_err = 0;
- 
- int bpf_sock_destroy(struct sock_common *sk) __ksym;
- 
-@@ -100,6 +102,34 @@ int iter_tcp6_server(struct bpf_iter__tcp *ctx)
- 	return 0;
- }
- 
-+SEC("iter/tcp")
-+int iter_tcp6_timewait(struct bpf_iter__tcp *ctx)
-+{
-+	struct sock_common *sk_common = ctx->sk_common;
-+	__u64 *val;
-+	int key = 0;
-+
-+	if (!sk_common)
-+		return 0;
-+
-+	if (sk_common->skc_family != AF_INET6)
-+		return 0;
-+
-+	if (!bpf_skc_to_tcp_timewait_sock(sk_common))
-+		return 0;
-+
-+	val = bpf_map_lookup_elem(&tcp_conn_sockets, &key);
-+	if (!val)
-+		return 0;
-+	/* The timewait sock inherits the cookie of the closed client sock. */
-+	if (bpf_get_socket_cookie(sk_common) != *val)
-+		return 0;
-+
-+	tw_found++;
-+	tw_destroy_err = bpf_sock_destroy(sk_common);
-+
-+	return 0;
-+}
- 
- SEC("iter/udp")
- int iter_udp6_client(struct bpf_iter__udp *ctx)
--- 
-2.43.0
-
+Thanks,
+Nikhil
