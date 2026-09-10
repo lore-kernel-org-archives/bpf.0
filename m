@@ -1,140 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-240.mta1.migadu.com [95.215.58.240])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B705B329E5D
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 05:01:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D99836A363
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 05:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789016488; cv=none; b=TV5l401IEfpAzpsiyclMXkJlUkLOd0VhmOaUlC844lsCsK3y0HwYMdkO8eE3phDeYdf7pwz6bjIw+laLs9KVk+QcynY1+lj4HW1z46QfXNCerREGcIRDlS6dS8qLD4umQrREHMXM7SGCnTWIpLzg2uJK/H5KPjFwLt2oR/wWtbU=
+	t=1789019387; cv=none; b=ussZ+Q+yKqq5xtckxX2BXZDvLDKRvhcYiL5r3Y8FyBR5iCU9fmDxCE9y4GFIpYaGWFbXisljH2GTV9xEJzABHfBj0dRs0CqZgl3CR+jcjY+rDaiNOvkkv3yChGzL+FBcG8wbj2y4Gjd5JqFCoGQOduYlmCNS0uw58LPF5cUYfXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789016488; c=relaxed/simple;
-	bh=gRUtaVWOWxFlJ+VS3FKcWDUPIs+M9zsArx3Nv7lMeT8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Ed7Iz3/uwQ1lEsuNFxFJhP97ZbzA13xC79BREjwLIFfP5cMCpWwYjPSS0J8BaVgv4R9CZLFtyVn0msqqQ9gJ+1WKewPbeI1XHDFGVjp1grqSMhDFnjL1GRoGqAGbhvsRLPXE1NSBhd+RfS4aRRHj2vIO7uYAqJOydnZgGy7JfVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UHQnnhs7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789019387; c=relaxed/simple;
+	bh=EsjpiLCg3j4sSZFIaJZiwYu7gVBnOusP/hUoo6eG9Ng=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LjR+gyTz6pdSRxHtZwVqQ8dlU7tciOXxM/3Fo/LW/V7yoxdlKsM4wPomrw53WjiJ8IMDnQMH+JXy8j/OCu3XRj12F9ZnIKUgyY6HSfU4OqWh50h0s7k7jWAtdSvQEovNWDl/m6YI1c9cy2tcSBudJ2z8TBit06JLg5IRsmquwk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h7V4gHeo; arc=none smtp.client-ip=95.215.58.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UHQnnhs7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31A8E1F000FF;
-	Thu, 10 Sep 2026 05:01:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789016487;
-	bh=hwenWM6AMZglNltYB0m8OvjvNYE7rUwd2aakNm2iWpo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=UHQnnhs7eQYCKP726ivbS5K85II9xMQF1cOTrs5yQh4RLAvWPDhesMcHGSKQMwBtx
-	 NRbuhUKPxrabJO4P6LPcyBtOdhPD2x0kF44tCkL57cyAi7EBfcJ+GjqbFLyYJxRBA/
-	 ok9cR1eLnFyOCB8ka0hoNmYOzyQ3tN7o9zFiFMK58CLdqhX377ZWSrt+4yfowe711i
-	 a4pUU/Zv5j6S4iHEf3R6crA2ly2CLLVRXt6xUvoRxk6Nqp9m3DnN5GlYRuPKD3cb1X
-	 BuZeP96ht9YhYbq4UxMqMylNv6ObLGunu3U5l/RYT1C/6ivZ0sLNLAVGMm/3P0BQnM
-	 vllvBk9beu5MQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2 1/2] bpf: Preserve escaped dynptr slice ancestry
- on subprog return
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Xu Yunxiang" <xyx2021@mail.ustc.edu.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260910044006.2279547-2-xyx2021@mail.ustc.edu.cn>
-References: <20260910044006.2279547-1-xyx2021@mail.ustc.edu.cn>
- <20260910044006.2279547-2-xyx2021@mail.ustc.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 10 Sep 2026 05:01:26 +0000
-Message-Id: <20260910050127.31A8E1F000FF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h7V4gHeo"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=EsjpiLCg3j4sSZFIaJZiwYu7gVBnOusP/hUoo6eG9Ng=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789019382; v=1; x=1789624182;
+ b=h7V4gHeohvvPxmraEtOHyNdHRIB+VoMhuZJLi8wX2rT96B+Xq7kTaWQ2ZowGGZePetoEp0RB
+ qlkBw9LYtxI8/QMzHZNXRKVRjH6nD1/u3vqKQdaUTruYtsp3g+4iFM7kszmzFKFzK6tHit5JvoB
+ UUojjrqBJ42hykPqOa6yMJDg=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 1cf7bbdbdc900923;
+	Thu, 10 Sep 2026 05:49:42 +0000
+X-Mizu-Trace-ID: 1cf7bbdbdc900923
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <424ef244-f0e0-46e7-bc27-fffee80f348d@linux.dev>
+Date: Thu, 10 Sep 2026 13:49:34 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 3/3] selftests/bpf: Verify program FD after
+ non-autoload programs in lskel
+To: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>,
+ Quentin Monnet <qmo@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ KP Singh <kpsingh@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260909042433.1775591-1-tweek@google.com>
+ <20260909042433.1775591-3-tweek@google.com>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <20260909042433.1775591-3-tweek@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
+On 9/9/26 12:24, Thiébaud Weksteen wrote:
+> In test_global_percpu_data.c, dump_percpu_data is defined after two
+> non-autoload SEC("?kprobe") programs (verifier_strncmp and
+> verifier_snprintf). Verify in test_global_percpu_data_lskel() that
+> lskel->progs.dump_percpu_data.prog_fd is properly populated (> 0) when
+> loaded via the light skeleton.
+> 
+> Signed-off-by: Thiébaud Weksteen <tweek@google.com>
+> ---
+> No changes since v1.
 
-Pre-existing issues:
-- [Critical] A subprogram can return or spill a memory slice (PTR_TO_MEM) d=
-erived from a local dynptr backed by its own stack frame, leading to a stac=
-k Use-After-Free in the caller.
-- [Critical] Creating a local dynptr from a referenced dynptr slice via bpf=
-_dynptr_from_mem strips lifetime tracking, allowing use-after-free.
---
+The Fixes tags of v1 are dropped.
 
-commit 670ebab06aaf35b7713f2c4efe3dba56988a2162
-Author: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
+> 
+>  tools/testing/selftests/bpf/prog_tests/global_data_init.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> index 7c539cbcf3a1..ebda60200b71 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> @@ -214,6 +214,8 @@ static void test_global_percpu_data_lskel(void)
+>  	lskel = test_global_percpu_data_lskel__open_and_load();
+>  	if (!ASSERT_OK_PTR(lskel, "test_global_percpu_data_lskel__open_and_load"))
+>  		goto out;
+> +	if (!ASSERT_GT(lskel->progs.dump_percpu_data.prog_fd, 0, "dump_percpu_data.prog_fd"))
+> +		goto out;
 
-bpf: Preserve escaped dynptr slice ancestry on subprog return
+When the light skeleton does not skip the non-autoload progs,
+lskel->progs.dump_percpu_data.prog_fd is 0, actually.
 
-Before freeing a callee, reparent surviving PTR_TO_MEM slices of every
-dynptr with a parent to that parent. This preserves the lifetime link after
-the local dynptr disappears for both reference-owning dynptrs and dynptrs
-constructed from referenced objects.
+But, theoretically, this ASSERT_GT() is not good enough to prove the FD
+is the correct FD of dump_percpu_data prog.
 
-Link: https://lore.kernel.org/r/20260829040712.B1B511F000E9@smtp.kernel.org
+How about running the iter subtest against the lskel? Factor out
+test_global_percpu_data_iter_fd() helper first. Then, add an iter
+subtest using lskel.
+When factoring out test_global_percpu_data_iter_fd() helper, pls change
+'do { } while (0);' to '{ /* no-op */ }' btw.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 72a3f5998dd27..ee41b7386f752 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -800,6 +800,39 @@ static int dynptr_ref_cnt(struct bpf_verifier_env *e=
-nv, int v_parent_id)
->  	return ref_cnt;
->  }
-> =20
-> +static void reparent_dynptr_slices_on_func_exit(struct bpf_verifier_env =
-*env,
-> +						struct bpf_func_state *callee)
-> +{
-> +	struct bpf_verifier_state *vstate =3D env->cur_state;
-> +	struct bpf_func_state *state;
-> +	struct bpf_reg_state *reg;
-> +	int i;
-> +
-> +	for (i =3D 0; i < callee->allocated_stack / BPF_REG_SIZE; i++) {
-> +		struct bpf_stack_state *slot =3D &callee->stack[i];
-> +		struct bpf_reg_state *dynptr =3D &slot->spilled_ptr;
-> +
-> +		if (slot->slot_type[0] !=3D STACK_DYNPTR ||
-> +		    !dynptr->dynptr.first_slot ||
-> +		    !dynptr->parent_id)
-> +			continue;
+Thanks,
+Leon
 
-[Severity: Critical]
-This is a pre-existing issue, but does this logic leave a gap for local
-dynptrs backed by a callee's stack frame?
-
-Because local dynptrs have parent_id =3D 0, they are skipped here. This see=
-ms
-to allow a subprogram to return or spill a PTR_TO_MEM slice derived from a
-local dynptr into the caller's state.
-
-Since prepare_func_exit() only prevents returning PTR_TO_STACK in R0, could=
- a
-PTR_TO_MEM alias created via bpf_dynptr_data() escape and allow a stack
-use-after-free in the caller?
-
-[ ... ]
-
-[Severity: Critical]
-This is also a pre-existing issue, but does bpf_dynptr_from_mem() strip
-lifetime tracking when used with referenced dynptr slices?
-
-If a program reserves a ringbuf dynptr, gets a PTR_TO_MEM slice via
-bpf_dynptr_data(), and then passes that slice to bpf_dynptr_from_mem():
-
-kernel/bpf/helpers.c:bpf_dynptr_from_mem_proto() {
-    ...
-    .arg1_type =3D ARG_PTR_TO_UNINIT_MEM,
-    ...
-}
-
-kernel/bpf/verifier.c:mark_stack_slots_dynptr() {
-    ...
-    parent_id =3D ref_obj->id;
-    ...
-}
-
-The new dynptr's parent_id is incorrectly assigned 0 because the slice's
-parent_id is not propagated. Could the resulting local dynptr be accessed
-after the original ringbuf reservation is discarded, leading to a
-use-after-free of referenced kernel objects?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260910044006.2279=
-547-1-xyx2021@mail.ustc.edu.cn?part=3D1
