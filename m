@@ -1,110 +1,159 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6347C4A2623
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 15:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0F84A0905;
+	Thu, 10 Sep 2026 15:18:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789053279; cv=none; b=TwpTd94hL2SRjHg1jvOHr5CEw0aFpYjCgnlTb54hu2NrZQ5JgVO15/IWcGO6aUh3N24YOW+ow93OswPJhGYsI/DubSRRfoXKRQAiZOiRM3E5gO3caqXahbVeqv1loYDbQp1GzBo70O6pTAQCXGJUolwzRg27HkEnEKXA4gzYKs0=
+	t=1789053531; cv=none; b=Bn60vIKaYVWtUwKnRZKsvvrZGiuYh3Deo3zOTa68m6/NHfROSfL5VQ51E+qjtxryPZAr/6WjelLU8R3txpqGlwiIeC47bD5JcFfWckXB5Ad+zbPZHY+C6+Jgs522iM4xEzjaVcqnkL8M8xFF5FVIcTTHaqb4JxMu+5ktsdpt3Z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789053279; c=relaxed/simple;
-	bh=MuvCfBGrpiMokNLw2X70H7wAoM2pSZ0bAcmXjWR4v5k=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=eTxak/vU6qzTVQxhJgZY+KGfb+6cmUpYFU80Q00AsTlNtjaEv04oibYq4BYrqEqe860HLiwn3dP9IGzMyC7kIB6bOyGQOCOaR2RpF78aLllea17oA7l9W2I6sP0VE7dEBpC3tLwfNo396c1Fo99zGxFqdaYNddFSoYmpLE2LC2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JGxzaRJQ; arc=none smtp.client-ip=74.125.225.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789053531; c=relaxed/simple;
+	bh=6tfqr90qp+Pt3hhDdxlIsSvQU6RFtqVvzJCVe/1d2rw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QIouD+vMhctKmhR4Dedzfsqhj7Topcl9Gp1SlYfPHb+dCOVae1GSX2Dk/ny2X67h6tzmOjGzdzVL8LBchx8vuaNLEOl9oLimY/xJCqkFHjPCuHzb6yUW6YbBsBOY4vEQT8+B4w7NIuvWNSjDTz972/z/zzBQngV1bQUH7Va0Weo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eNgEda4j; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JGxzaRJQ"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49556ce3549so40139645e9.0
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 08:14:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789053270; x=1789658070; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=CLHEmEXnxpW1Ptm76l16XHUNIxt+SG6NikWZasVRlWc=;
-        b=JGxzaRJQ6FJeIMLaHpboNNujvb1XUBwoia7HSZBiS5WfvVMnFNs9w+ktm5sKyzCUok
-         taYf9/lKSH6fbbKmTDsh4KR0O+khcW3ihgTNkF+nNcXGhlitX7dA65ZsU31r9HojoXZg
-         OXi04k6h+k2zWfC+deCyRoli8d7GQdbodjbd+BF9y8U4H0AnKJVmemVsuJGmgsnMh3XJ
-         aCGwZWB+8EAiHBnBSf592RX+G6ZoNb0OFUoU7KUW2Jb4i1vgTywnPp2gBUcoWP1sA7bv
-         URslHxA8l3s7dcgNAfhnbnRGy4mZvtyHUMCT1l4tNGA8oOvDgYxrnp9ZKrMpiNo9bVwd
-         WPbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789053270; x=1789658070;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=CLHEmEXnxpW1Ptm76l16XHUNIxt+SG6NikWZasVRlWc=;
-        b=Yk3ySXBL2TR0Y0uKF1UqsbajXddQ+fjQbH/AtLUNrNU3pWLF5YxKIWmqB66mVRLjsV
-         njQkfN4SSE9MLcQiZmqDrAqLzL9sVVsfbPsrGePLbsTcoLoEsbQrK8kVenEwecQiJRiC
-         jgpVcarDtxGfSznvYLc2IP7y59RQqIv+FnA/cAiDwwAq/MnnylaM6BhoSQuJjWAJCyU1
-         uvb9jlAQm4gGh33LJpeJNy657HNs/7I26ZViMo/lctFJhJNkLyXMV6pYW1HEApbk5Sp0
-         kgOw2y0NQxBtZq7qwBExZel8zhAaznH2lapfl96Sg+J1ebMQKvzapflQUc+hrySwPzJP
-         sXSA==
-X-Forwarded-Encrypted: i=1; AKwUvBzXfOTNrje/2PSrNMiXQNU3OtapNSji20NqpxR0hs+aV+cMEwusc7RXVs+i6DUxQYGTKvs=@vger.kernel.org
-X-Gm-Message-State: AFuF++l8u7pWDIJ/TqlI+K3O/5DFwWSMCDtVKYIzEhlB1hCKiQzgk0qE
-	yw7Q9WdQpPSrtOTwJ+6AP4Opw4pvflgB42B1pL5xJcenC7UOuhvXvfqq
-X-Gm-Gg: AYBFou2RmLcy5NH3pNPY7oIXBywKd87NQe55xikH/7Ss1o9DkgBCwXnilkq/vf/5tT+
-	nOPE/ukmmJkaPOxCDMdDsnUOj4kRzT13jPIBnqx4EsxB3d3sETVazRdEzfClorVxiwO5KthR3Ek
-	KuQsfmNyXLcMBLKpbQNCMEfHZui+KOQNsihhjW8P6KhP1qvwcIegTCQWKATKyxB1hoB5UZ8pEsV
-	IJmCa7Tl+vvS8dTG79a81Et0lU0qB2HtTWWgCeFRV2GGhgR738imvQiUFYlqVVwz4WPaYw6XGo7
-	xJTNjAjoXN6Oiq2cFQvdfzdHGAaLKsDq8PfjeGEJE6ziISBuLPw0XUF55CPTi3KVMca/yAVyQ+n
-	n9koQ/JdESi28O7crUhc4+DQtTlW1S6DfVqyt18Rcyy+y3maAklsn7gW2x/zjHcDDJ3waigOBQC
-	td/mMhDXOLIc9WQPrvRtd2Ph20RTb+rwehIoyAtzN56O5zqyXDEyDxKnI6LeaTrJ4hU1zi49KW9
-	6P+I1tjYnVnQibmc+1tLEcVRO2Ikj+ugoe4jvMg0wS3u0Rsu+qTqm3RiuXazGH4AWDyv34DOx7p
-	zLsJnZtEmWFrbLwjUV27g57zTTFdyE7yM1DqTwA=
-X-Received: by 2002:a05:600c:548c:b0:49c:c96a:d36b with SMTP id 5b1f17b1804b1-49cf8267dd3mr435083895e9.12.1789053269706;
-        Thu, 10 Sep 2026 08:14:29 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485883acd33sm52207742f8f.18.2026.09.10.08.14.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Sep 2026 08:14:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eNgEda4j"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 33D41C2BCC7;
+	Thu, 10 Sep 2026 15:18:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1789053530;
+	bh=6tfqr90qp+Pt3hhDdxlIsSvQU6RFtqVvzJCVe/1d2rw=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=eNgEda4jC8tpQhCZWS0+smJvOujWNlmX6TGiiiX+S9wbbKNRrzyRUEbpRzaeqRK/M
+	 Uv+0jpWQMa8d8A86Zipg9mwMB8saMCDN6jstyu6Rvjwyl3m/RWuOtdxLolabHzbeVV
+	 PZqW1qkfCv18BVBRRUdU66g+06gMfVEfgMldqGyYt6KE/crETJhs+xV3FdWRkBQ+Rj
+	 FdoJwuu2FYTRwYGxDQwDXC4E5lXbKdGcP7rX2GzLe4fAJAWTKud4k2trKI6D1+c047
+	 1a9Hf4Vkd0aUgukG65kPvA0J7iLHIMW18/vF/6ue3bBPsVfhUMGx6S7SV7DLpxe4ju
+	 CPXFK/Q/r5ssA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 08A85C79FBF;
+	Thu, 10 Sep 2026 15:18:50 +0000 (UTC)
+From: Gunter Woytowitz via B4 Relay <devnull+gunter.vcinity.io@kernel.org>
+Date: Thu, 10 Sep 2026 11:17:47 -0400
+Subject: [PATCH net] net: mana: never hand a non-page_pool buffer to XDP
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 10 Sep 2026 17:14:23 +0200
-Message-Id: <DLBQGB3CXTSB.EXQVL3ZIQ3QO@gmail.com>
-Cc: <eddyz87@gmail.com>, <info@starlabs.sg>, <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf 1/4] bpf: Add KF_PERFMON kfunc flag
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>, "Daniel Borkmann"
- <daniel@iogearbox.net>, <ast@kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260910142107.40582-1-daniel@iogearbox.net>
- <ea68b32c-1af2-47ae-b168-4fd6791f607b@gmail.com>
-In-Reply-To: <ea68b32c-1af2-47ae-b168-4fd6791f607b@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260910-mana-xdp-pagepool-v1-1-dab140d91fed@vcinity.io>
+X-B4-Tracking: v=1; b=H4sIABrKomoC/yWMwQrCMBAFf6W8swtJkEr8FfGwbbZ1RZOQVCmU/
+ rtRjzMws6FKUak4dxuKvLVqig3socN44zgLaWgMZ1xvvDX05Mi0hkyZZ8kpPSj0lk9Hb9zgJ7Q
+ uF5l0/T0viLLg+pf1NdxlXL437PsH5/mPFHoAAAA=
+X-Change-ID: 20260910-mana-xdp-pagepool-d61a74902b9f
+To: "K. Y. Srinivasan" <kys@microsoft.com>, 
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
+ Dexuan Cui <decui@microsoft.com>, Long Li <longli@microsoft.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>
+Cc: "open list:Hyper-V/Azure CORE AND DRIVERS" <linux-hyperv@vger.kernel.org>, 
+ "open list:NETWORKING DRIVERS" <netdev@vger.kernel.org>, 
+ open list <linux-kernel@vger.kernel.org>, 
+ "open list:XDP eXpress Data Path:Keyword:?:b|_xdp?:b|_" <bpf@vger.kernel.org>, 
+ Gunter Woytowitz <gunter@vcinity.io>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1789053514; l=3692;
+ i=gunter@vcinity.io; s=20260910; h=from:subject:message-id;
+ bh=t35EUXvqFJ2uE2i3MYOOcxmhW+Pix8QOFDeXbTpTRo0=;
+ b=NKaAMktkjRymX7yeIUQMcFSX4xXFQO1p857Cw9i+09qUKmkP9XE+M6xbd3BtmFug/Js4+KWft
+ qyu9RTS81xNCSgon0yLahJiPGi8+Qlqu6LQsm8RGoRCLk9sBeRnGX4m
+X-Developer-Key: i=gunter@vcinity.io; a=ed25519;
+ pk=6nOwIllYdhcDoigio1cuWODQHYf4rmE6FCJmKXcGH7w=
+X-Endpoint-Received: by B4 Relay for gunter@vcinity.io/20260910 with
+ auth_id=1021
+X-Original-From: Gunter Woytowitz <gunter@vcinity.io>
+Reply-To: gunter@vcinity.io
 
-On Thu Sep 10, 2026 at 5:03 PM CEST, Mykyta Yatsenko wrote:
-> On 9/10/26 3:21 PM, Daniel Borkmann wrote:
->> Tracing related BPF helpers e.g. under bpf_base_func_proto() are gated
->> behind CAP_PERFMON. However, the same is currently not true for kfuncs
->> and they are accessible via plain CAP_BPF. Add a new KF_PERFMON flag
->> which can be used such that check_kfunc_call() ensures env->allow_ptr_le=
-aks
->> is permitted. This follows similar pattern to existing KF_DESTRUCTIVE fl=
-ag.
->>
->
-> This problem has been reported and patch sent some time ago:
-> https://lore.kernel.org/all/20260615-f01-07-dynptr-probe-read-cap-v1-0-e6=
-26cd61a381@mails.tsinghua.edu.cn/
->
+From: Gunter Woytowitz <gunter@vcinity.io>
 
-We ended up discussing this and decided to go ahead, since it's a bit weird=
- to
-continue to have the discrepancy against helpers that have similar restrict=
-ions.
-In practice it won't matter much to actual users, but easier to just fix it=
- and
-put the thing to rest.  This one is also a more comprehensive fix compared =
-to
-Nuoqi's.
+mana_create_rxq() registers MEM_TYPE_PAGE_POOL for the rxq
+unconditionally, so every buffer XDP can see must be owned by that
+page_pool: on XDP_REDIRECT the frame is freed through __xdp_return()
+-> page_pool_put_full_page().
 
-> [...]
+mana_xdp_set() assigns apc->bpf_prog before calling
+mana_pre_alloc_rxbufs(), which allocates with dev_alloc_pages(), and
+mana_fill_rx_oob() prefers those buffers whenever mpc->rxbufs_pre is
+set, leaving from_pool false. So for a port that is up when a program
+is attached, the entire re-created ring is filled with pages the
+page_pool does not own.
+
+The page_pool then sees pp_ref_count == 0 when such a frame is
+returned, so the atomic_long_sub_return() in page_pool_unref_netmem()
+goes negative and trips its WARN_ON(ret < 0), once per redirected
+frame. Observed on a 5.14-based distro kernel, where that warning sits
+at helpers.h:269:
+
+  WARNING: CPU: 3 PID: 0 at include/net/page_pool/helpers.h:269
+                                            __xdp_return+0x2b3/0x2c0
+  mana_process_rx_cqe -> mana_run_xdp -> mana_rx_skb -> xsk_map_redirect
+                                            -> __xdp_return
+
+On a VM booted with console=ttyS0 the resulting stack traces peg the
+console thread and the machine becomes unusable.
+
+Fill from the page_pool when a program is attached, using
+mana_xdp_get() -- the predicate mana_get_rxbuf_cfg() already uses to
+choose the XDP buffer geometry. With no program attached nothing
+changes, so the pre-allocation still does its job of keeping
+mana_attach() from failing on allocation.
+
+Leaving the pre-allocated buffers unconsumed is safe:
+mana_pre_dealloc_rxbufs() dma-unmaps and put_page()s the remainder,
+and every caller (mana_xdp_set(), mana_change_mtu(), and both ethtool
+ring and channel paths) already runs it after mana_attach().
+
+The rxq->xdp_save_va reuse in mana_get_rxfrag() also leaves from_pool
+false, but that cache is fed only by the drop path's non-pool branch,
+which this change makes unreachable while a program is attached, so
+it needs no fix.
+
+Found and fixed on a 5.14-based distro kernel running AF_XDP over
+MANA in copy mode: 24M+ redirected frames with no warnings, where the
+unpatched driver warned on essentially every redirected frame. All of
+the code involved is unchanged in mainline.
+
+Fixes: b1d13f7a3b53 ("net: mana: Add page pool for RX buffers")
+Signed-off-by: Gunter Woytowitz <gunter@vcinity.io>
+---
+ drivers/net/ethernet/microsoft/mana/mana_en.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
+index 7a1ac853e..a2cb66753 100644
+--- a/drivers/net/ethernet/microsoft/mana/mana_en.c
++++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+@@ -2925,7 +2925,14 @@ static int mana_fill_rx_oob(struct mana_recv_buf_oob *rx_oob, u32 mem_key,
+ 	dma_addr_t da;
+ 	void *va;
+ 
+-	if (mpc->rxbufs_pre)
++	/* The pre-allocated buffers come from dev_alloc_pages(), not from the
++	 * rxq's page_pool. With a program attached any buffer can reach
++	 * __xdp_return(), which returns it to the pool the rxq registered, so
++	 * fill from the pool instead. The unused pre-allocated buffers are
++	 * released by the mana_pre_dealloc_rxbufs() every caller already runs
++	 * after mana_attach().
++	 */
++	if (mpc->rxbufs_pre && !mana_xdp_get(mpc))
+ 		va = mana_get_rxbuf_pre(rxq, &da);
+ 	else
+ 		va = mana_get_rxfrag(rxq, dev, &da, &from_pool, &pp_page,
+
+---
+base-commit: 50d05c7c76c96b90462f24debacca971d2e86713
+change-id: 20260910-mana-xdp-pagepool-d61a74902b9f
+
+Best regards,
+--  
+Gunter Woytowitz <gunter@vcinity.io>
+
+
