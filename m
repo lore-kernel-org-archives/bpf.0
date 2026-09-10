@@ -1,102 +1,79 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 540873D9691
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 09:00:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C78E3DE43B;
+	Thu, 10 Sep 2026 09:06:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789030856; cv=none; b=cMIdRhxvl2sYGiGTel7wDLPYTQvicG2KBWowbzC88U/0Wz++P5/hwfLIgANtZtLgxca5HVhYe9Mpgzt4JnTrC/kt1fQ9UNi3P6UHSkDIcu6ABQKLiTYaUBpQq1xlwW3EYK7eQldiVloUyIu37dDWzq6qvcjqobJxYoyM+CDCDmg=
+	t=1789031163; cv=none; b=gPNk1ymzsWPomgA+ALtCZrkZ4MN3NBterFGAMkrVsVX13ngQyiBAR57sbWEVlz1OZFJvdj0XZTRA304L1+Xrt9EXdZLY1rwm+Rftp7HkTdN7QuVgaQPYMlVw0Sxou2gMQa6zlTrdfxOY5Im0tdxXXr0U23UO19o2R4z3xTtS6wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789030856; c=relaxed/simple;
-	bh=r2ERtI6ml5NxXFYRqY+kl69JfEx9qVlx5UIKxXympuQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=a7ScxdaNz2jgNcsunnD39OQ939v7b47jVvRzLv4B9TI6oxAn38pyyCJGV81XAZoEicrCquJelwBLy1EA7c0UWzg8Jjo7i9GsOHaHSyKLkXTJSCVLDgw885eqCthnTIY5gChyP8ELHfPWTFu4eju6Ih8Uv965g7jjDOizTD9BkJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Q7IEmC7B; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=jaQSI1aC; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1789031163; c=relaxed/simple;
+	bh=1xueSEs1Lf1/iaVYDjuyvTMGzK9+IYhL8XIuERTyBuA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TdPQE1NNusQmW/yel0Em7Qi9QCGAfz9DNA4jSPXViXVtjlhmZsg6tuQuvnWAio4kvAsPp0hW7vQDP+MzZhnRt8l99hry8g/xuog6JA5/cG4A59QIrJKoHiSnhLYVwc1B/ZFoZx0w/1BUqW7bs2zYiu0ag8zmuvQpoGHBZeR2QCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wWMZPehr; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gVC5LMNq; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Q7IEmC7B";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="jaQSI1aC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1789030845;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wWMZPehr";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gVC5LMNq"
+Date: Thu, 10 Sep 2026 11:05:57 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1789031159;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Tn7jiwjS+8AdQjcpXNuBrdgygnnhCmQHZ+dQYaJk7Cg=;
-	b=Q7IEmC7BgMXBdm8cSXewSPxGw2ynqZC2/Lrieqte+fTQ5XXiQc/KdBPnH0cCYahDrz15F1
-	lq0gya3mhPjhVtXNP9hwf1+61jkEwUHyGuapMAW+BNCmT2EvNQhuBiI2askSbAseQpm9sy
-	4ZwJSqNKHCW+7A4Sj5uN088gzGY23s8=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-252-4Fwl0VmuPMilF0LljfARUw-1; Thu, 10 Sep 2026 05:00:43 -0400
-X-MC-Unique: 4Fwl0VmuPMilF0LljfARUw-1
-X-Mimecast-MFC-AGG-ID: 4Fwl0VmuPMilF0LljfARUw_1789030843
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-c25501f4aa2so98979666b.1
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 02:00:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1789030842; x=1789635642; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Tn7jiwjS+8AdQjcpXNuBrdgygnnhCmQHZ+dQYaJk7Cg=;
-        b=jaQSI1aCAE1ACip5nR9ib+BXtDgOittHKHoyLoM+bfgjeGgIkar+cR1HXWGFHh9UVe
-         zGSbOJa0MrC1+Qz/I8UIMAu+jiEXuC1Nk4IfvZ+alCNdQgNOIIdgyaWkJVKqwwIZfBuz
-         OE5K/1X8mQjzZnGL2IsjoJwHxFEvqtEXbghNBX7zteJQsdY90JCSex5xBp8xJxL4QAZx
-         ILN8qa9xhZnCrnglNcvDhcJKPAZcIzlz8TJjvRT0RVAQvJzUlEuANgCBQ8QL4GzZa/aQ
-         ZCHUnzwen4wYOnWjVtQ+3RVICLC0RCJEJkbABl43/Vs3xJzZgpZbEFQK+j9aie9kMgKp
-         jSBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789030842; x=1789635642;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :references:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Tn7jiwjS+8AdQjcpXNuBrdgygnnhCmQHZ+dQYaJk7Cg=;
-        b=C7wxJ5Unpi/65AMulj/8jysmhv5EmbmAdv/i1ewBeeTQ93cR8TwlOcApVyA+1+1MCT
-         V8m+jMnqpquVbo1TsaIRZkh+qdjeMd22uegBrBWoc05X+XV1C2I041M8E4g17M/QzZEq
-         ut4WapMrjnCQm6KObRXt6efciO9I+LbdykqCWoKfdOI1d3S64ypDXMYu2MXA2jLLVxze
-         9IUTZq1K2C6wODlD65cFGWOu5VVH2ZDwUR03UHsGP6g7Ke7Pv0xWTeKzOLZ7i07SOCc+
-         r2XXfLZvm7D5QFWPi90iedsmIy9clWZlcCy1nb55/vtqid0UckrX/LesbryWI95BEC3R
-         ZLJg==
-X-Forwarded-Encrypted: i=1; AKwUvBwgg4EmY4Nrr2v7e2tziSC9Bqb71nhbXuQS0Ag9MtijQ/cWoxaSrJufOAFInc7JmUDh7DE=@vger.kernel.org
-X-Gm-Message-State: AFuF++lpN0YFFlYOQxeNDuwb3UA1OQidOxuTmyT+hY4XdiFHhYfElaX1
-	aa9ZDuXsaGJpgQUvNu3DwHg078d8ty+JizHwTKbOLwRRqGMpAfMgkUU/irv1VRWR6MDmz651DO+
-	GqC3YK2Bwa4PRqvvqdHPfH7DSjPyWR/T08Y7Rx3VCquriG3lxNHe9wA==
-X-Gm-Gg: AYBFou10UgxEeCV7kCe+qUFAdQEn8fjZi+uUobHD2NSfz8m2oTndH5Ayo2/Rcm5A6/p
-	GAo0W0oryp8crN7lNzc0sUv1yGSLJ0pr8fcTf/kdwCqZ3HabSxZoIqRasNdCpWTeMgrGbT5GZ9/
-	qi+p5m7lhz678Iu2lXrIQVAp2xMMgK6w3P8P5zL9TNFhyzEsUes0Yw3/x9vDd/Wj8v+T9Yxqd55
-	UpHh7SOqrYRUHqxzXWyvQSVRF2GEuMLrMbViKEbX/pG31Zr/s/RkevsymqXHi6g4C1TK7k61VTN
-	kUu9PNhJtPwtICJNO4lZWgHGS0+Amvp3igN1sTyS9d56XNThzxZG0z5d5SomtPuvX3bRPY9L8uV
-	xDIama87KZA==
-X-Received: by 2002:a17:907:6ea3:b0:c24:6382:2648 with SMTP id a640c23a62f3a-c2945dd4853mr193765866b.5.1789030842539;
-        Thu, 10 Sep 2026 02:00:42 -0700 (PDT)
-X-Received: by 2002:a17:907:6ea3:b0:c24:6382:2648 with SMTP id a640c23a62f3a-c2945dd4853mr193760466b.5.1789030841682;
-        Thu, 10 Sep 2026 02:00:41 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c260d501662sm896809466b.23.2026.09.10.02.00.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 02:00:38 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 226799B972F; Thu, 10 Sep 2026 11:00:37 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next 1/4] libbpf: Add bpf_program__add_flags() and
- bpf_program__clear_flags()
-In-Reply-To: <261c5e00-31d8-4090-aab4-a633924d336c@linux.dev>
-References: <20260903092416.223294-1-toke@redhat.com>
- <261c5e00-31d8-4090-aab4-a633924d336c@linux.dev>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Thu, 10 Sep 2026 11:00:37 +0200
-Message-ID: <87jyoteb0q.fsf@toke.dk>
+	bh=ojT9pNL33Xeb8UjNXG8w6sJZoICmBryWtIIq+k4hPQM=;
+	b=wWMZPehrkZ8NjWyZmQ92P5Q7zhqVr0RHrZUGla3YpuherDKC0WgPptXEvOK1evbvBK96W5
+	QNS5s408Dw1pPaUcTzlecVi4XrMWvr9WIDmSCmGcmeR6VbiiVxlI/2EzUs2FIaJeIxyjq3
+	c7qrnfV4bRE+L8EvjA2vmUERsYGdvv2MdBlkFyBILx1FyjW99fUHIVUuXyokdoV9Qyxv16
+	nNbp8Wgzo2LbEIsZX+GxL9FMAC3EAwbjEoEEElXC9XIjXbM67Hly+boglbatpLnCclZ3Lc
+	/cKDmgqHsUgt+hOkGTOStoba7pom3243YkTmAKSu9QmpBJSp8eRPvaQ5C7hMZA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1789031159;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ojT9pNL33Xeb8UjNXG8w6sJZoICmBryWtIIq+k4hPQM=;
+	b=gVC5LMNqMPzB/TeKKTtexb6gNooOm4s8J8rOeDagddmlatGItL5XKaGgk5YqJ9eqiKyr9v
+	EWIIgzikXPW8LICg==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Boqun Feng <boqun@kernel.org>, Uladzislau Rezki <urezki@gmail.com>,
+	Davidlohr Bueso <dave@stgolabs.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Zqiang <qiang.zhang@linux.dev>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Matt Fleming <mfleming@cloudflare.com>,
+	"Harry Yoo (Oracle)" <harry@kernel.org>,
+	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+	bpf@vger.kernel.org, linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH v4 1/6] rcu: Make call_rcu() safe to call from any context
+Message-ID: <20260910090557.zz62jtMt@linutronix.de>
+References: <20260810122758.183765-1-puranjay@kernel.org>
+ <20260810122758.183765-2-puranjay@kernel.org>
+ <20260826144636.3IRUXeFV@linutronix.de>
+ <CANk7y0hbwXL7nBDgjTgrneBejEgGrsZnc02RztG-aSBEEvAcwQ@mail.gmail.com>
+ <20260902082657.yPEhNFlo@linutronix.de>
+ <CANk7y0gMh6McuLnFwxGO-nH_g3TnstwTK2rtT5pq=b8qq9ykKQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -104,40 +81,108 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CANk7y0gMh6McuLnFwxGO-nH_g3TnstwTK2rtT5pq=b8qq9ykKQ@mail.gmail.com>
 
-Ihor Solodrai <ihor.solodrai@linux.dev> writes:
+On 2026-09-02 15:14:20 [+0100], Puranjay Mohan wrote:
+> >
+> > But it is wrong to talk about NMI and do this for other reasons not
+> > mentioning why this was needed/ made sense.
+> > Can this be fixed?
+> > Also what is the reasoning for doing it from any IRQ disabled region?
+>=20
+> So, the main reason for this patchset is to make call_(s)rcu() work
+> from BPF programs, and these BPF programs can run from any context
+> like an NMI perf event interrupt or maybe attached to a function
+> through ftrace which is in the call chain of call_rcu() itself.
 
-> On 9/3/26 2:24 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
->> When changing BPF program flags, applications often need to just add or
->> remove a single flag. The bpf_program__set_flags() function clobbers any
->> existing flags value, making this awkward to do non-destructively.
->
-> I think the whole "non-destructively" language in the series is misleadin=
-g.
->
->     bpf_program__add_flags(prog, BPF_F_XDP_DEV_BOUND_ONLY);
->
-> does exactly the same thing as=20
->
->     bpf_program__set_flags(prog, bpf_program__flags(prog) | BPF_F_XDP_DEV=
-_BOUND_ONLY);
->
-> That is: overwriting the prog->prog_flags value. Where is the
-> non-destructiveness?
+This I expected.
 
-bpf_program__add_flags(prog, BPF_F_XDP_DEV_BOUND_ONLY) doesn't overwrite
-any existing flag values, but bpf_program__set_flags(prog,
-BPF_F_XDP_DEV_BOUND_ONLY) does. In your example you handle this in the
-caller, but you have to take pains to do that (which, judging from the
-fixups I had to do earlier, was not something everyone did :)).
+> call_rcu() takes locks with irqs disabled or it modifies lists
+> non-atomically with irqs disabled. This means that a BPF program that
+> runs from NMI with the lock already taken will deadlock, or if it runs
+> between these non-atomic list modifications, it will corrupt the
+> lists. A BPF program can also synchronously re-enter call_rcu() if it
+> is attached to a function in the call chain of call_rcu() that is
+> called with a lock taken. So, all these cases are detected with
+> irqs_disabled() and on detection we do stuff that doesn't require
+> taking any locks and is safe even if re-entered.
 
-However,
+Attaching a BPF program to call_rcu() and re-entering sounds great. But
+there is nothing unique about call_rcu(), is there? We do have certain
+amount of functions which can be invoked from NMI and their usage is
+limited.
 
-> Let's call this for what it is: a convenience API.
+Anyway. If this is the sole reason for stunt then it _has_ to be part of
+the commit message. Now it looks like an ooopsie where you talk about
+NMI and do hardirq check.
 
-I don't mind changing the description - will respin with this change.
-Thanks for reviewing!
+> > > > > +static void __rcu_defer_drain(struct rcu_data *rdp)
+> > > > > +{
+> > > > > +     struct llist_node *node, *next;
+> > > > > +     unsigned long flags;
+> > > > > +
+> > > > > +     if (!IS_ENABLED(CONFIG_RCU_DEFER))
+> > > > > +             return;
+> > > > > +
+> > > > > +     raw_spin_lock_irqsave(&rdp->defer_lock, flags);
+> > > > > +     llist_for_each_safe(node, next, llist_del_all(&rdp->defer_h=
+ead)) {
+> > > > > +             struct rcu_head *head =3D (struct rcu_head *)node;
+> > > >
+> > > > Why do you need the lock. This is still not clear to me despite the
+> > > > comment. You can do llist_del_all() towards another list and then f=
+eed
+> > > > it into rcu_do_enqueue() one by one. And you use the LAZY part.
+> > >
+> > > Because rcu_barrier() can call this for each cpu and at the same time
+> > > rcu_defer_drain() can call it too, so this would cause a race where
+> > > the irq work can remove the callbacks (llist_del_all) and before it
+> > > can enqueue them, rcu_barrier will see that the list is already empty
+> > > and will not wait for these callbacks. We want the llist_del_all() and
+> > > rcu_do_enqueue() to happen atomically so rcu_barrier() can work
+> > > correctly.
+> >
+> > So you collect a bunch of callbacks and spent time re-arranging
+> > everything with irqs off.
+> > What is wrong with keeping it in the llist and consuming it like the
+> > regular rcu_segcblist?
+>=20
+> I don't understand your last point, all the collection and delayed
+> addition into rcu_segcblist is because it is not safe to do it
+> directly as I explained above.
 
--Toke
+That is correct. My point is the more callbacks you add, the more time
+you spend to re-add them here. It is not just the one NMI callback
+injected from NMI, it is everyone within interrupts disabled region.
+After each one you trigger an IRQ. And with LAZY-irq-work or on
+architectures which don't have an IRQ-work interrupt, you accumulate
+every callback from IRQ disabled region since the last HZ tick.
 
+The question is why not have an additional list which is handled the
+same way in terms of grace period like the current one?
+
+> > It does not look like you defer them for long at all. Every callback
+> > enqueued in an IRQ-off region will be immediately re-enqueued to the
+> > regular list the moment interrupts are enabled again.
+> > Except on architectures which don't implement irq-work interrupts where
+> > it will be delayed to the next HZ tick. And the next HZ tick does not
+> > sound like a long time either.
+>=20
+> Yeah, I get your point, and when a CPU goes offline will its LAZY irq
+> works be drained or left in the queue? Because we want to make sure
+> this irq work is executed before a CPU goes offline.
+
+Hmm. There is smpcfd_dying_cpu() running before rcutree_dying_cpu().
+smpcfd_dying_cpu() flushes irq-work near the end. On PREEMPT_RT we have
+this thread handling them and this one is parked smpboot_park_threads()
+a bit earlier. So here smpcfd_dying_cpu() will wake the parked thread
+which then waits until the CPU comes back on.
+We can't run the work directly due to the IRQ-off context. We could move
+them to another CPU but then the irq-work might expect to be run on the
+other CPU=E2=80=A6
+But we could flush the queue before parking at the very least I suppose=E2=
+=80=A6
+
+Sebastian
