@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2C949B5A3;
-	Thu, 10 Sep 2026 22:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5179D3DDDA1;
+	Thu, 10 Sep 2026 22:13:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789078432; cv=none; b=ffN6E3JFYg9PZdDBaTLdHrL9PuMb4rkoOXJYwLQGa5J2LB23vJtQAZx8TZ7P2v+JCfL1vKiLHceDdyUhRmfFB2Kd8UoXhRFdbSA2X9GEijMAakzJxt/cxm+crLt8FiAyi4gMxbSE7ezQGULHFNUK32pvBeGR2rLawANBRz9oE88=
+	t=1789078434; cv=none; b=uVb0KOjmbzM27zZ7xol9LNVBg9FATgawgtKebMR4IzyozE2SSj7Q2z9fQxUKbOJhK3lv7IDXY2b/9ezXgIZiSSVtlkWBGvl2zUs9zrMLkTbF20P2carxAkwH1UgvL2tjaLEyZ5Ru4CzyB8kfl2bSUdgeaJnwptRLk26gRkD2MN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789078432; c=relaxed/simple;
-	bh=aVaPhzFJe0kiVgrN+krqPQXtueIVryKDfM0tDSAmv+M=;
+	s=arc-20240116; t=1789078434; c=relaxed/simple;
+	bh=TH1fEbP2k4BmopJ4z1U2mkvLKw1fQLDiLd+a8AqPa8A=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rwagjaQszuu3mW15KRyWee9h+NdKyObrk3wynq53PvbOzL+S5nWmGRDm/SED3GIZokq9kT3nrAKuWXazQf9R1D6ocscWDJhGWS3jg8ymvRFqys0Dz0HYU9QRezo8oiyNPNuv5VcBN7lNC9EsFa0XE4EILnojD27gtLUliv3EOY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BU65/p1F; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=qrpTvyDUFx0x6ycOAmZ2TRRpLOmbVsIh1uB4tkWVPUQdntMfCZtd47x9NYj+MYRA0b7/rvoI/ZqQR+iKtez8FSRAVIzFFtQle9q6NqSEAPW4jiCJpm/e6HnhHVnNKXMR2fJNIloPc4Xc+hr+uVQv/48RERnEkTX9dpOpqIhiJwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QeTIWLk2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BU65/p1F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A5FD1F000FF;
-	Thu, 10 Sep 2026 22:13:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QeTIWLk2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D3B1F00893;
+	Thu, 10 Sep 2026 22:13:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789078431;
-	bh=uhBenbHPmIXUhZifIELN6Fcx9o0WllfIGn7Pt9L8k0U=;
+	s=k20260515; t=1789078432;
+	bh=gcfVqyi3bSSOO/DVQ4TIe/SiIuRbmRSjKcADJEFMvlI=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=BU65/p1FDRdeUJYG/JyEjNRqeF4taGqUlSUQnm9SDc5Pmwt5Ck2hSC6NWCGO655Rg
-	 6BvkBFBiwk2s49S2KfsFbE5oUReMMWYvJS739hNXb2jAYnulbAyw1229lDvPekLIbe
-	 YyRNJKfLSnGQgY4GTsc3awrWPe1Ql7WNm/F8pm44rSsUkdtq5Fv/JxI4eXAkb7QnJO
-	 lDQ5C8/TeRCLz10He4/g4TfzUsBNQIp+/JQvibirzcfTvH0sGuvo/VggH5YKxh0Ua2
-	 WAezkB6S9+a4n6l2uQ7KQAGOv3QtwDkqcZiZ9R+8ksL6qKVZ/et8zz8NdWF2XJOB/K
-	 K4yn8m8zBD8IA==
-Subject: Re: [PATCH net-next v6 01/12] gve: add struct gve_device_info to hold
- device properties
+	b=QeTIWLk2AdN6PmpKc/bI4oDy6eAxb+uifaFag8jz7nFnFkTmLE4o5Q8HzIhLOMAmk
+	 I9pH3240NeK0R78WBGnuUCvcgbjHSK/JriErFd69VzoFNAUHeXfIxuo5ZX0rzdpcQN
+	 Jq1dW98driD+lRfz3ekiCWrV7P31SZ5tuKQi+ouqIndGRiGZmuR5sfYssRtoEaq7oc
+	 32eVKouKr+02UtYCtTW4IU5cD8n4LRsSuaPCn5yu/q62SuZi/Jv2+HySYAxX349c91
+	 idbjCLnXZxaG9FciRObauHjU5G9nc4eYTHQJfO4up3HZiSLPtDrrsVwuvVmMT5TPNT
+	 QgKvTdWgb9kOg==
+Subject: Re: [PATCH net-next v6 04/12] gve: introduce
+ gve_adminq_get_device_properties()
 From: netdev-bot+sashiko@kernel.org
 To: hramamurthy@google.com
 Cc: netdev@vger.kernel.org, joshwash@google.com, andrew+netdev@lunn.ch,
@@ -38,10 +38,10 @@ Cc: netdev@vger.kernel.org, joshwash@google.com, andrew+netdev@lunn.ch,
  jacob.e.keller@intel.com, debarghyak@google.com, kees@kernel.org,
  bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  przemyslaw.kitszel@intel.com
-Date: Thu, 10 Sep 2026 22:13:49 +0000
-Message-ID: <178907842956.219967.4077695444710153181@kernel.org>
-In-Reply-To: <20260909191136.3811892-2-hramamurthy@google.com>
-References: <20260909191136.3811892-2-hramamurthy@google.com>
+Date: Thu, 10 Sep 2026 22:13:51 +0000
+Message-ID: <178907843138.219967.17268659724650641980@kernel.org>
+In-Reply-To: <20260909191136.3811892-5-hramamurthy@google.com>
+References: <20260909191136.3811892-5-hramamurthy@google.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -52,201 +52,167 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 0 · Low: 2
+Critical: 0 · High: 0 · Medium: 0 (1) · Low: 1
 
-- [Low] After this patch, struct gve_priv still declares `u16
-  default_num_queues; /* default num queues to set up */` (gve.h:856)…
-- [Low] Stale comment: gve_probe() still states "Features might be set in
-  other locations as well (such as `gve_adminq_describe_device`)."…
+- [Low] gve_adminq_get_device_properties()
+  (drivers/net/ethernet/google/gve/gve_adminq.c:1148) bundles…
+
+Pre-existing issues:
+- [Medium] gve_adminq_verify_driver_compatibility()
+  (drivers/net/ethernet/google/gve/gve_adminq.c:1264, moved verbatim…
 
 --
 
-gve: add struct gve_device_info to hold device properties
+gve: introduce gve_adminq_get_device_properties()
 
-This adds struct gve_device_info as a single place to hold the properties
-negotiated with the device, converts gve_adminq_describe_device() and its
-helpers to fill that structure, and moves the code that applies those
-properties to priv/netdev into gve_init_priv().
+This adds gve_adminq_get_device_properties(), a helper that runs the
+VERIFY_DRIVER_COMPATIBILITY and DESCRIBE_DEVICE admin queue commands in
+sequence, and moves the driver-info allocation and fill-in from
+gve_main.c into gve_adminq_verify_driver_compatibility().  The commit
+message describes it as pure code movement with no functional change.
 
-A couple of questions on leftovers from the conversion.
-
-> diff --git a/drivers/net/ethernet/google/gve/gve.h b/drivers/net/ethernet/google/gve/gve.h
-> index c280ff35ee771..021adb9108dff 100644
-> --- a/drivers/net/ethernet/google/gve/gve.h
-> +++ b/drivers/net/ethernet/google/gve/gve.h
-> @@ -797,6 +797,34 @@ struct gve_ptp {
->  	struct gve_priv *priv;
->  };
->  
-> +struct gve_device_info {
-> +	enum gve_queue_format queue_format;
-> +	u16 default_tx_queues;
-> +	u16 default_rx_queues;
-> +	u16 max_tx_queues;
-> +	u16 max_rx_queues;
-> +	u16 default_tx_ring_size;
-> +	u16 default_rx_ring_size;
-> +	u16 max_tx_ring_size;
-> +	u16 max_rx_ring_size;
-> +	u16 min_tx_ring_size;
-> +	u16 min_rx_ring_size;
-> +	u16 max_mtu;
-> +	u8 mac[ETH_ALEN];
-> +	u16 max_rx_buffer_size;
-> +	u16 header_buf_size;
-> +	u32 max_flow_rules;
-> +	u16 rss_key_size;
-> +	u16 rss_lut_size;
-> +	u16 tx_pages_per_qpl;
-> +	u16 num_event_counters;
-> +	u64 max_registered_pages;
-> +	bool default_min_ring_size;
-> +	bool nic_timestamp_supported;
-> +	bool modify_ring_size_enabled;
-> +	bool cache_rss_config;
-> +};
-> +
-
-[ ... ]
+No Link: tags present in the commit header.
 
 > diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
-> index f05f4895f4c74..512349c5517f4 100644
+> index 046155ae7d669..f420a8e1dd3df 100644
 > --- a/drivers/net/ethernet/google/gve/gve_adminq.c
 > +++ b/drivers/net/ethernet/google/gve/gve_adminq.c
 
 [ ... ]
 
-> @@ -190,7 +190,7 @@ void gve_parse_device_option(struct gve_priv *priv,
+> @@ -1143,6 +1145,27 @@ int gve_adminq_describe_device(struct gve_priv *priv)
+>  	return err;
+>  }
 >  
->  		/* device has not provided min ring size */
->  		if (option_length == GVE_DEVICE_OPTION_NO_MIN_RING_SIZE)
-> -			priv->default_min_ring_size = true;
-> +			priv->device_info.default_min_ring_size = true;
->  		break;
-
-[ ... ]
-
-> @@ -946,77 +949,105 @@ static void gve_enable_supported_features(struct gve_priv *priv,
-
-[ ... ]
-
->  	if (dev_op_flow_steering &&
->  	    (supported_features_mask & GVE_SUP_FLOW_STEERING_MASK)) {
->  		if (dev_op_flow_steering->max_flow_rules) {
-> -			priv->max_flow_rules =
-> +			info->max_flow_rules =
->  				be32_to_cpu(dev_op_flow_steering->max_flow_rules);
-> -			priv->dev->hw_features |= NETIF_F_NTUPLE;
->  			dev_info(&priv->pdev->dev,
->  				 "FLOW STEERING device option enabled with max rule limit of %u.\n",
-> -				 priv->max_flow_rules);
-> +				 info->max_flow_rules);
->  		}
->  	}
+> +int gve_adminq_get_device_properties(struct gve_priv *priv)
+> +{
+> +	int err;
+> +
+> +	err = gve_adminq_verify_driver_compatibility(priv);
+> +	if (err) {
+> +		dev_err(&priv->pdev->dev,
+> +			"Could not verify driver compatibility: err=%d\n", err);
+> +		return err;
+> +	}
+> +
+> +	/* Get the initial information we need from the device */
+> +	err = gve_adminq_describe_device(priv);
+> +	if (err) {
+> +		dev_err(&priv->pdev->dev,
+> +			"Could not get device information: err=%d\n", err);
+> +		return err;
+> +	}
+> +	return 0;
+> +}
 
 [Severity: Low]
-With this hunk, the NETIF_F_NTUPLE assignment leaves the describe-device
-path entirely, so is the comment in gve_probe() now stale?
+Should this helper also carry the state handling that gve_init_priv()
+currently performs around the same two commands?
 
-drivers/net/ethernet/google/gve/gve_main.c:gve_probe() {
-	/* Set default and supported features.
-	 *
-	 * Features might be set in other locations as well (such as
-	 * `gve_adminq_describe_device`).
-	 */
-	dev->hw_features = NETIF_F_HIGHDMA;
-	...
-}
+gve_init_priv() in gve_main.c does this before calling
+gve_adminq_describe_device():
 
-A grep of gve_adminq.c at this commit shows no remaining write to
-priv->dev->hw_features (only dev_err() logging and a read of
-priv->dev->features in gve_adminq_create_rx_queue()), since the only such
-write moved to gve_init_priv():
+	priv->num_registered_pages = 0;
 
-	priv->max_flow_rules = device_info->max_flow_rules;
-	if (priv->max_flow_rules)
-		priv->dev->hw_features |= NETIF_F_NTUPLE;
+	if (skip_describe_device)
+		goto setup_device;
 
-Should the comment point at gve_init_priv() instead, given a second
-describe-device implementation (MailboxQ) is being added on top of this?
+	device_info->queue_format = GVE_QUEUE_FORMAT_UNSPECIFIED;
+	/* Get the initial information we need from the device */
+	err = gve_adminq_describe_device(priv);
+
+The queue_format reset matters because gve_adminq_describe_device()
+consumes the incoming value:
+
+	} else if (device_info->queue_format == GVE_GQI_RDA_FORMAT) {
+		dev_info(&priv->pdev->dev,
+			 "Driver is running with GQI RDA queue format.\n");
+
+A caller that invokes gve_adminq_get_device_properties() with a stale
+non-zero device_info.queue_format would keep the previous format and end
+up with supported_features_mask left at 0, silently disabling jumbo
+frames, buffer sizes, modify-ring, flow steering, RSS and timestamps.
+
+For the record, this does not appear to be reachable anywhere: at this
+commit gve_adminq_get_device_properties() has no callers, only the
+prototype in gve_adminq.h and the definition, and gve_init_priv() still
+calls gve_adminq_describe_device() directly with the reset in place.  By
+the end of the series the concern is resolved rather than left latent:
+the single call site in gve_probe() does
+
+	priv->device_info.queue_format = GVE_QUEUE_FORMAT_UNSPECIFIED;
+	err = gve_adminq_get_device_properties(priv);
+
+skip_describe_device no longer exists in the driver, and
+priv->num_registered_pages = 0 has moved into gve_setup_device().  Would
+it be worth a note in the commit message that the surrounding state
+handling stays with the caller?
+
+> @@ -1205,20 +1228,53 @@ int gve_adminq_report_stats(struct gve_priv *priv, u64 stats_report_len,
+>  	return gve_adminq_execute_cmd(priv, &cmd);
+>  }
+>  
+> -int gve_adminq_verify_driver_compatibility(struct gve_priv *priv,
+> -					   u64 driver_info_len,
+> -					   dma_addr_t driver_info_addr)
+> +int gve_adminq_verify_driver_compatibility(struct gve_priv *priv)
+>  {
+> +	struct gve_driver_info *driver_info;
+>  	union gve_adminq_command cmd;
+> +	dma_addr_t driver_info_bus;
+> +	int err;
+> +
+> +	driver_info = dma_alloc_coherent(&priv->pdev->dev,
+> +					 sizeof(struct gve_driver_info),
+> +					 &driver_info_bus, GFP_KERNEL);
+> +	if (!driver_info)
+> +		return -ENOMEM;
 
 [ ... ]
 
-> @@ -1595,6 +1618,8 @@ int gve_set_num_ntfy_blks(struct gve_priv *priv)
->  
->  void gve_set_num_queues(struct gve_priv *priv)
->  {
-> +	struct gve_device_info *device_info = &priv->device_info;
+> -	return gve_adminq_execute_cmd(priv, &cmd);
+> +	err = gve_adminq_execute_cmd(priv, &cmd);
 > +
->  	priv->tx_cfg.max_queues =
->  		min_t(int, priv->tx_cfg.max_queues, priv->num_ntfy_blks / 2);
->  	priv->rx_cfg.max_queues =
-> @@ -1602,10 +1627,13 @@ void gve_set_num_queues(struct gve_priv *priv)
->  
->  	priv->tx_cfg.num_queues = priv->tx_cfg.max_queues;
->  	priv->rx_cfg.num_queues = priv->rx_cfg.max_queues;
-> -	if (priv->default_num_queues > 0) {
-> -		priv->tx_cfg.num_queues = min_t(int, priv->default_num_queues,
-> +	if (device_info->default_tx_queues > 0)
-> +		priv->tx_cfg.num_queues = min_t(int,
-> +						device_info->default_tx_queues,
->  						priv->tx_cfg.num_queues);
-> -		priv->rx_cfg.num_queues = min_t(int, priv->default_num_queues,
+> +	/* It's ok if the device doesn't support this */
+> +	if (err == -EOPNOTSUPP)
+> +		err = 0;
 > +
-> +	if (device_info->default_rx_queues > 0)
-> +		priv->rx_cfg.num_queues = min_t(int,
-> +						device_info->default_rx_queues,
->  						priv->rx_cfg.num_queues);
-> -	}
+> +	dma_free_coherent(&priv->pdev->dev,
+> +			  sizeof(struct gve_driver_info),
+> +			  driver_info, driver_info_bus);
+> +	return err;
 >  }
 
-[Severity: Low]
-Should the now-unused copies of these fields be dropped from struct
-gve_priv in the same patch?
+[Severity: Medium]
+This isn't a bug introduced by this patch, but is it safe to hand
+driver_info back to the DMA allocator when the admin queue timed out?
 
-After this conversion, struct gve_priv still declares:
+The identical sequence lived in gve_verify_driver_compatibility() in
+gve_main.c before the move, so this is only being relocated here.
 
-	bool default_min_ring_size;
-	...
-	u16 default_num_queues; /* default num queues to set up */
+On the timeout path gve_adminq_kick_and_wait() has already rung the
+doorbell and gives up without quiescing the queue:
 
-but nothing in drivers/net/ethernet/google/gve/ writes or reads either one
-any more.  The last writer of priv->default_num_queues was
-gve_set_queue_properties(), which became gve_fill_device_info() setting
-device_info->default_tx_queues/default_rx_queues, and the last reader is
-this gve_set_num_queues() hunk.  Similarly gve_parse_device_option() now
-sets priv->device_info.default_min_ring_size and
-gve_enable_supported_features() reads info->default_min_ring_size.
+	gve_adminq_kick_cmd(priv, head);
+	if (!gve_adminq_wait_for_cmd(priv, head)) {
+		dev_err(&priv->pdev->dev, "AQ commands timed out, need to reset AQ\n");
+		priv->adminq_timeouts++;
+		return -ENOTRECOVERABLE;
+	}
 
-A grep at this commit only finds the declarations:
+The VERIFY_DRIVER_COMPATIBILITY descriptor still carries
+driver_info_bus, so after gve_adminq_execute_cmd() returns
+-ENOTRECOVERABLE the buffer is released while the device may still
+fetch it.  Can the NIC read driver_info after dma_free_coherent() has
+returned it to the allocator?
 
-	drivers/net/ethernet/google/gve/gve.h
-	  822:	bool default_min_ring_size;    /* gve_device_info */
-	  849:	bool default_min_ring_size;    /* gve_priv, no users */
-	  856:	u16 default_num_queues;        /* gve_priv, no users */
-
-Since the leftover gve_priv fields share names with live gve_device_info
-members, could later code (for instance the MailboxQ path) read
-priv->default_num_queues or priv->default_min_ring_size and silently get
-0/false?
-
-> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-> index 9cc343a162712..d3882de584e36 100644
-> --- a/drivers/net/ethernet/google/gve/gve_main.c
-> +++ b/drivers/net/ethernet/google/gve/gve_main.c
-
-[ ... ]
-
-> @@ -2507,12 +2523,34 @@ static int gve_init_priv(struct gve_priv *priv, bool skip_describe_device)
-> +	priv->max_flow_rules = device_info->max_flow_rules;
-> +	if (priv->max_flow_rules)
-> +		priv->dev->hw_features |= NETIF_F_NTUPLE;
-> +
-
-[ ... ]
+The same unconditional-free-after-execute pattern is used by
+gve_adminq_register_page_list(), gve_adminq_execute_extended_cmd() and
+gve_adminq_describe_device(), so if this is worth addressing it looks
+like a separate change rather than something for this code movement.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909191136.3811892-1-hramamurthy%40google.com
