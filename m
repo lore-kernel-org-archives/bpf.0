@@ -1,150 +1,213 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DCD23101A9
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 21:49:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3F0309EE7
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 21:52:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789076987; cv=none; b=LPE3C6mIupgbE3pYylMnRFU83GQtqlIUhYBeN8LUCgAXRFf2AOn0FkwuwvJaTi1zMYmHdXWTE8HLnl0ilhCtzaxinBS6XBad5H5zE4OkSOHKYzsVSMS/hjUwB/Y/tLNN/bXdawRXRn+XASwY459mBBKlSdEkHzR2C2RQNvXkva8=
+	t=1789077125; cv=none; b=mLo6auLuq6aTm0MWZlr1bd/wpP6I6wh8KJER3eqh1h6s52V7iQaucQazYseskahJZLqk84BIsu0rxujCtsIJdpbd8d0gcRqVSS/oi40gEOz3Ee3+LotzVdsXmrNuPbiGKN+qd9T7CWvt8Er7UIi8Eram+r6hwup3IgjIEHSh0lk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789076987; c=relaxed/simple;
-	bh=VcCpfU+gr5mgq5UoFOwg28wtM6kRA+JD9Sc904H5qVA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=uwfRvL7Y6bFhBMmfp8DVOgV+T/hTL6l4fjGA7aerMZfSSq58NZGTzZVFiU+QJpbgDU9Wx5rO9IbsYQ6h7hQvbVF1rTtdc4L7e2y6cOeg1DfTLQUJc1HlYPcfzJj/EOUvWNFEYZXOGz4KdSAMc5qtw36IBIFvQ2uIz3A05an7pFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZgcgVPXq; arc=none smtp.client-ip=209.85.216.51
+	s=arc-20240116; t=1789077125; c=relaxed/simple;
+	bh=J8UTQ6JIxoJJR6aibxfqdrGuAfR0T3qIsxa+5dRX2fk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=Km/71JCfxMni6Q/ZeCRSYtawFhE2MbI3W1TMk74gyY/6UhqlKSnewN14KoWyBXBQ/fDSCHdxJg9C7ZMzQeoTtKxLh1thXA73yXtI/dmbBI0HbBfntZTR5h6S6cmacDpoIpCIEVE3fXj4oDOb1N/QxFVjW014dAvb6UL1jXgGiNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W7HJ7gt5; arc=none smtp.client-ip=209.85.167.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZgcgVPXq"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-39b9a99469fso226859a91.3
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 14:49:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W7HJ7gt5"
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-495b27007d0so310048b6e.1
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 14:52:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789076985; x=1789681785; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=cTbSlvf8fbaSW1pTt9kouKoPX2DRhtNPjD5pkOj6vjg=;
-        b=ZgcgVPXqx32BW21bfu2C+ylVamslb0ft/n4XG7az3SIHeTdsBn+J5+bsACRi5hQVd3
-         pnvb8qUHfYX+nvi6Wlyop/pWmemXsPp9L9e97Il6FxGasYqaCh9dtsaDetQKHDyPh3J1
-         hORBJUN8FqxfqZngZQd8vw8uXHbhLrL8+EVYT8i3C/gjomYxYF3gKZqfJYHjXjbBJ/PH
-         5Iz2H/xr3fo3HzPOU0mXyWYTe4sqSzlnPzfa5dP1WejuGZTZWj2F468eVVe8KUGiFVZU
-         ZyUn8Ia+F08hUQpEhjDlYaM5GIGAj40r38bSnRTS3m4nxG97E8tjESb9V2zkr+cQd8KS
-         IZcw==
+        d=gmail.com; s=20251104; t=1789077123; x=1789681923; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=m3VMX7gqt4b9SIQ+rVsRsK/GVZVPUiTl2do3nw+FipE=;
+        b=W7HJ7gt5rtfKvAkPdtTXoae0KeTf3TqOMTpY9D1c8xxuzjviMkWsqPJ7Tyo7piOGE2
+         bUUXn3j5kJ7TtGAYRfYedTMHhgn4p96gWd7ZA3KsyYIAcui3Hp+5efENRmR0LbnJCIG+
+         wdc5LnmdvbpIU0B+TOAJBfxqwyjTi5sxqOBo4xjHoMH3G3jVtSbb5ULUxUlf7LShgIll
+         flOSeT0txaG6PbQlshsbVrPo304pwbjsZaAyL6rkWe3/i7+KBeTUySHLh1suy6CF59L7
+         4qzRQcNTAKYkbLb1u9F/U61Rq68q1QIBwOuKfqqOWv6s0i08qpKEaYifeu81rUeZqV9I
+         uG6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789076985; x=1789681785;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20251104; t=1789077123; x=1789681923;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=cTbSlvf8fbaSW1pTt9kouKoPX2DRhtNPjD5pkOj6vjg=;
-        b=nrRMrN14LMFQuAwLfJPfzUyHFq03WXwq8Vr2jhby0TKuocleylUHX2iThNEuylenrK
-         Wfz0o7KD3s9AkxZjS6tQd7B0aYlfEkXeabJVtaPVZdY3SN1Nq5cNUNTr9HReNYTxY/xB
-         OCRKmdvlBUIi7+X4TEbENZWg7RGKf0ZY1LI5sXqiV9eRNpwVKi5sLrAV6Gq4+fQFwMHb
-         7hzQPjIEfwdFjbh97zPQE09870X1r8Ih9XPEUKsIN2A/EG2s6g3jo6II6InlnPBMZMbI
-         Ap1KCvZ68EpzkR+ML8lSvxZv/cQaxmNQ+bSI7Ry4Cp92MIiGkogfP0nKQq52VloMVHCZ
-         +o+A==
-X-Forwarded-Encrypted: i=1; AKwUvBx57ILS2Q01/RajqH3sIVYFJSjEYOpoapar8DmIB5uRySrdH+uq/ECGKt2Ru7Ot6zihQaI=@vger.kernel.org
-X-Gm-Message-State: AFuF++lFK1vm7Rz3v6IMUkIWshBcSFjmaif9BRT/FFlvsds7a/TnRbHA
-	AyijWVcUG9cwLybrTJTzRLX4WM2j7T7XS5rSPomRiDJZ+RRXN6BDS3Qw
-X-Gm-Gg: AYBFou3GN+M09pD7MGWWZRX2Mxn+0aKg4KLiTJvwxjINXFUznkjS7SiwloCXQdRX6XX
-	hZpkVAu8WeA1d5zVnXGoeefRsRpkOHLP5mdzQsg5uQsaf3AlTmBxvbrQ4Fr9TTOstlYO2IcjyqI
-	lUTFFTPlapwuHVP8CU4OIGaJZV6r4tGixqKdAw+q92RSYGzxLgSdZpxNYhbtdLfcoqU91Nac0ot
-	aEPP5NndA1E+61qyD/uBc5Vla/0Sq0YXDUfB9fmp/SsnN3WamJMdcelIstur94Exb6XwszV0n8Z
-	JhZ56RlXWogBR5V9nCzttK9X7Un44u2cEWEUhEMINl1vKphOh0JIpJmr2CzMo23okYVGZEiDeXG
-	1MuX42evL6rZEnsMkt4zbM0ff+BVFKex6Uq5TQAnQUFtJFnPmX1CwxPPsUl0alsgHnQ1lKvVX9c
-	gLpUDaTjMdxdFEcVFRDMBif6Dk6B1ivhDqVK3LZPtS2O9TWTnGEMzsQYvjiDKMHfteO5MDvVZfN
-	0vIM7qS+KEC/7SwvwGfiE4HRNqu27tGhNJR0f3py3UZnymA3Jh2bsm+tQ==
-X-Received: by 2002:a17:90b:5790:b0:396:4c63:7193 with SMTP id 98e67ed59e1d1-39d9bda7ba2mr1320522a91.11.1789076985602;
-        Thu, 10 Sep 2026 14:49:45 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:a3ce:533a:7492:3ff3? ([2620:10d:c090:500::4:d279])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d9d8cd962sm102522a91.2.2026.09.10.14.49.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 14:49:45 -0700 (PDT)
-Message-ID: <87c1060d5233c9b7a73fcaf1b6d96bc1a700c49e.camel@gmail.com>
-Subject: Re: [PATCH bpf 1/2] bpf: Fix divide-by-zero in btf_struct_walk()
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau	
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	
- <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan
-	 <shuah@kernel.org>, Amery Hung <ameryhung@gmail.com>, Tejun Heo
- <tj@kernel.org>,  Matt Bobrowski <mattbobrowski@google.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Thu, 10 Sep 2026 14:49:42 -0700
-In-Reply-To: <20260910122316.186384-1-jiayuan.chen@linux.dev>
-References: <20260910122316.186384-1-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+        bh=m3VMX7gqt4b9SIQ+rVsRsK/GVZVPUiTl2do3nw+FipE=;
+        b=qlKbIhv3JPJ0mJducsyWGzdagOdlLdaWV33etZ45WDMHZkZcKsxOyDFU9Kke7jsUwC
+         oNrC02BBZwAdllNAUPQ6467zboJOsjzJu3LT0LwrrwITPqHSeGe0jhv7zOXac/w3q67r
+         CSwkQ+B7DSpRhcrVKUmGWgyQMSMS0YghWAMTexNfLQhPTluNG736LTv+Ws3CBkCWt0v4
+         QZUktFs3jmDMQK6HrzeYqHlwPZX6FNf0dvjGSJp23gAtgos4JOOyFJZrPNYvm0y8w0lE
+         SUwZSGxlMn8Ugq375EQgRCSycFWKb8K3L0AoYxsEpSR+2LsFSdxkazY5jlPiJLLUKnsP
+         C1wg==
+X-Forwarded-Encrypted: i=1; AKwUvBxCLh7snXmHU1vw1mAaDJlf8ETr0COoI0VZnswt7kk8PQ5dNbTeYqdnB+BtCzi9VIALJ2k=@vger.kernel.org
+X-Gm-Message-State: AFuF++mOTRjf0FqQtjhD1RrPrKPF6hRwO5hUj7/EQW1mM+5nmQqM5LZ+
+	/SI2l/r7fU+JHRqEW91egzTj6eoKj2QQEFEC/w41maCtsWfoHh+JpCoH
+X-Gm-Gg: AYBFou3QBh0o4c8uYXvAbwZTJs2K4O0VIv07+akr6k94bIGjZVj++xVxuNec/BgNT8F
+	T1ZPTqbljkpb0mTjJWblXtsWkOuUNu3f++z6VoNbbVKf1j98906tIg8BgfQkXd0XI3CVomllShs
+	Yj5l4L5cGrVuO0pllE9VlaTrYuTfZeEL5uwEaGS/lZQAdA51Km6Wn6hkWAWU1UKo1PTK+ECGrOV
+	JOwlN64FfSBAZt7JySfvRQm+bHDFvy2HAKSKvbTWhx2xBoEZ87ibeYDdDNHhhv4m8t2ikXfLEM3
+	pqxA1iv0r7R3hCvoWRjWOnY4BwHJRv5kioy2cNtX5ynCM2Q9/ksqwKzVmIrCxB18oO6nZCmrNAX
+	YOJQgL+Spopp7f/9A5XQYxnFcFVtEP75Fu8z4yXKv38qKSYQ+C9IOsfezDVWlI/06SqSXNafKeg
+	wV5MQyJUEB1Rc2J9s2zMithMxoVCNFN8H57Xu4ih9UnzCLappq7oOv23OpygNRuTxIPbi5K7f2d
+	4rKKGgSasbjy+frEXtB6dE9iEd/TkDKRmX0aum1DmLkd9AR/vZwINNCzun3WD1M8g==
+X-Received: by 2002:a05:6808:2384:b0:495:e5a5:d62 with SMTP id 5614622812f47-4c318f28416mr826343b6e.6.1789077122622;
+        Thu, 10 Sep 2026 14:52:02 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:24::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-47df90f5b1asm421048fac.11.2026.09.10.14.52.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Sep 2026 14:52:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 10 Sep 2026 14:52:01 -0700
+Message-Id: <DLBYWR47GK83.33M4TZ2YKQU5W@gmail.com>
+To: "Amery Hung" <ameryhung@gmail.com>, <bpf@vger.kernel.org>
+Cc: <andrii@kernel.org>, <daniel@iogearbox.net>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v1 14/22] bpf: Consolidate runtime argument
+ type resolution
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+X-Mailer: aerc
+References: <20260905220117.922028-1-ameryhung@gmail.com>
+ <20260905220117.922028-15-ameryhung@gmail.com>
+In-Reply-To: <20260905220117.922028-15-ameryhung@gmail.com>
 
-On Thu, 2026-09-10 at 20:22 +0800, Jiayuan Chen wrote:
-> When an access goes past the struct and the last member is a flexible
-> array, btf_struct_walk() folds the offset back into a single element with
-> (off - moff) % t->size, but never checks that the element type has a size=
-.
->=20
-> BTF takes an empty struct, so this in program BTF
->=20
-> 	/* event could be empty */
-> 	struct event {
->  #ifdef HAVE_TIMESTAMP
-> 		__u64 ts;
->  #endif
-> 	};
->=20
-> 	struct batch {
-> 		int nr;
-> 		struct event events[];
-> 	};
->=20
-> divides by zero at prog load time. Getting there needs a PTR_TO_BTF_ID th=
-at
-> is not MEM_ALLOC, e.g. a plain read of a local kptr stashed in a map from=
- a
-> sleepable program.
->=20
-> Oops: divide error: 0000 [#1] SMP KASAN PTI
-> RIP: 0010:btf_struct_walk+0x53f/0x1570
-> Call Trace:
->  <TASK>
->  btf_struct_access+0x42a/0xcd0
->  check_ptr_to_btf_access+0x4dc/0x1160
->  check_mem_access+0x3a45/0x8740
->  check_load_mem+0x36a/0xd10
->  do_check_common+0x3ef0/0xb210
->  bpf_check+0x6d3b/0x8580
->  bpf_prog_load+0xf7c/0x2720
->  __sys_bpf+0xa83/0x3690
->  __x64_sys_bpf+0xc7/0x150
->  x64_sys_call+0x1f3f/0x27e0
->  do_syscall_64+0xe5/0x610
->  entry_SYSCALL_64_after_hwframe+0x76/0x7e
->  </TASK>
->=20
-> Reject a zero-sized element type. The fixed array path in the same functi=
-on
-> already bails out on the same thing:
->=20
-> 	btf_struct_walk()
-> 	...
-> 		/* skip empty array */
-> 		if (moff =3D=3D mtrue_end)
-> 			continue;
->=20
-> 		msize /=3D total_nelems;
->=20
-> Fixes: 9c5f8a1008a1 ("bpf: Support variable length array in tracing progr=
-ams")
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+On Sat Sep 5, 2026 at 3:01 PM PDT, Amery Hung wrote:
+> A function argument type can require call-site refinement before
+> register admission. Helpers refine map-value arguments according to the
+> recorded map type, while kfuncs reinterpret a pointer to a scalar-only
+> BTF struct as fixed-size memory when the register does not carry a
+> BTF ID.
+>
+> Add resolve_func_arg_type() as the common entry point. It delegates
+> helper map-value refinement to the existing resolve_map_arg_type(),
+> then handles the kfunc BTF-to-memory fallback. It updates the effective
+> argument type and size consumed by the subsequent checks.
+>
+> Preserve PTR_MAYBE_NULL when changing the base type so later
+> nullability validation observes the BTF contract. Keep OBJ_RELEASE
+> arguments in their original pointer class. The latter is not a bug fix:
+> existing kfunc checking already validates ownership before this
+> resolver. It preserves release metadata for the later shared checking
+> order, where ownership validation follows register admission.
+>
+> Moving the kfunc fallback before admission lets the resulting
+> fixed-size memory argument enter the compatibility check directly.
+> This is another step toward routing both call types through
+> check_func_arg().
+>
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
 > ---
+>  kernel/bpf/verifier.c | 199 +++++++++++++++++++++++-------------------
+>  1 file changed, 110 insertions(+), 89 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2e068c095436..15ed47b90316 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -8151,8 +8151,8 @@ static bool is_kfunc_call(const struct bpf_call_arg=
+_meta *meta, u32 btf_id)
+>  }
+> =20
+>  static int resolve_map_arg_type(struct bpf_verifier_env *env,
+> -				 const struct bpf_call_arg_meta *meta,
+> -				 enum bpf_arg_type *arg_type)
+> +				const struct bpf_call_arg_meta *meta,
+> +				enum bpf_arg_type *arg_type)
+>  {
+>  	if (!meta->map.ptr) {
+>  		/* kernel subsystem misconfigured verifier */
+> @@ -8180,6 +8180,11 @@ static int resolve_map_arg_type(struct bpf_verifie=
+r_env *env,
+>  	return 0;
+>  }
+> =20
+> +static int resolve_func_arg_type(struct bpf_verifier_env *env,
+> +				 struct bpf_reg_state *reg, u32 arg,
+> +				 struct bpf_call_arg_meta *meta, int insn_idx,
+> +				 enum bpf_arg_type *arg_type, u32 *arg_size);
+> +
+>  struct bpf_reg_types {
+>  	const enum bpf_reg_type types[10];
+>  	u32 *btf_id;
+> @@ -8794,6 +8799,7 @@ static int check_func_arg(struct bpf_verifier_env *=
+env, u32 arg,
+>  	int regno =3D reg_from_argno(argno);
+>  	enum bpf_reg_type type =3D reg->type;
+>  	const u32 *arg_btf_id =3D NULL;
+> +	u32 arg_size =3D arg_type & MEM_FIXED_SIZE ? fn->arg_size[arg] : 0;
+>  	u32 key_size;
+>  	int err =3D 0;
+> =20
+> @@ -8823,11 +8829,9 @@ static int check_func_arg(struct bpf_verifier_env =
+*env, u32 arg,
+>  		return -EACCES;
+>  	}
+> =20
+> -	if (base_type(arg_type) =3D=3D ARG_PTR_TO_MAP_VALUE) {
+> -		err =3D resolve_map_arg_type(env, meta, &arg_type);
+> -		if (err)
+> -			return err;
+> -	}
+> +	err =3D resolve_func_arg_type(env, reg, arg, meta, insn_idx, &arg_type,=
+ &arg_size);
+> +	if (err)
+> +		return err;
+> =20
+>  	if (bpf_register_is_null(reg) && type_may_be_null(arg_type))
+>  		/* A NULL register has a SCALAR_VALUE type, so skip
+> @@ -8965,12 +8969,12 @@ static int check_func_arg(struct bpf_verifier_env=
+ *env, u32 arg,
+>  		 * next is_mem_size argument below.
+>  		 */
+>  		if (arg_type & MEM_FIXED_SIZE) {
+> -			err =3D check_mem_reg(env, reg, argno, fn->arg_size[arg],
+> +			err =3D check_mem_reg(env, reg, argno, arg_size,
+>  					    arg_type & MEM_WRITE ? BPF_WRITE : BPF_READ, meta, NULL);
+>  			if (err)
+>  				return err;
+>  			if (arg_type & MEM_ALIGNED)
+> -				err =3D check_ptr_alignment(env, reg, 0, fn->arg_size[arg], true);
+> +				err =3D check_ptr_alignment(env, reg, 0, arg_size, true);
+>  		}
+>  		break;
+>  	case ARG_MEM_SIZE:
+> @@ -11814,6 +11818,65 @@ static bool btf_type_is_scalar_struct(struct bpf=
+_verifier_env *env,
+>  	return btf_struct_is_composed_of(env, btf, t, BTF_MEMBER_SCALAR);
+>  }
+> =20
+> +static int resolve_func_arg_type(struct bpf_verifier_env *env,
+> +				 struct bpf_reg_state *reg, u32 arg,
+> +				 struct bpf_call_arg_meta *meta, int insn_idx,
+> +				 enum bpf_arg_type *arg_type, u32 *arg_size)
+> +{
+> +	argno_t argno =3D argno_from_arg(arg + 1);
+> +	const struct btf_param *args;
+> +	const struct btf_type *ref_t, *resolve_ret;
+> +	const struct btf *btf;
+> +	const char *ref_tname;
+> +	u32 ref_id;
+> +
+> +	if (base_type(*arg_type) =3D=3D ARG_PTR_TO_MAP_VALUE)
+> +		return resolve_map_arg_type(env, meta, arg_type);
+> +
+> +	if (base_type(*arg_type) =3D=3D ARG_PTR_TO_BTF_ID) {
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Overall, it all looks great to me.
+
+Here can reduce indent by:
+ if (base_type(*arg_type) !=3D ARG_PTR_TO_BTF_ID)=20
+    return 0;
+
+Pls address AI nits and respin, so we can land asap.
+
