@@ -1,158 +1,228 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0A447A87A
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 14:44:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21F764825CC
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 14:46:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789051497; cv=none; b=uRW8HbUQ6wtRk88leTI4viTTYbDUfLkyQuzWE7Q/3L9T4HThKOYaUzJ3NMP219wdyb2PWumhg6/9/0SL9Dnrwa0QF3+BzsqKPyRW9SAEyBOE2Tq7wuAWcLB94VXEvvFxtvACRTwyc+XI+W2FhDRfv1Hw3PGtdvXKP52Zh1AQ3ow=
+	t=1789051583; cv=none; b=KYFonqhf/9FPU3LnHUT9jsNX4H+vzMnnA9O1vP3/sY2P3fV2rIrFItSdgG+xbRun8336i/aruGZ8D9seZ84J7lVrlZ9C5Ns4nrmiHjmE5KAtcMd+WahAy9u0/0/cpvXknBs9celhYY7FzhJcZ8afpJJ3NZboeXeWnwoRyhCY/Bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789051497; c=relaxed/simple;
-	bh=Dy8Z803XDfghR8/4ba3+M6AxpqqfANzGJm5UtJe3DVU=;
+	s=arc-20240116; t=1789051583; c=relaxed/simple;
+	bh=/J1wuwnRGh/6mDO96IsZp7HVISUd14IirkUlM6AjAqc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=digOMQztDVv107YeFmWdUdrjeUF6nmJiGQH3FklCZ09CC33s+OiemipElQ2f3X/QNDlm6DsY7WB40Z7KepsnMEmycKYz9V+w8SwPOP3s9/FgD7WFzT9AvcmKETHrEv0NVT1sVPUBC119u2rFXbJDohNBHYHP48ZGM8JXBQvdwig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TbHLiNpG; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=NFbOPg9B/owWtqXbBQlcAtkTfK1KSwyYUJHPKLq731ffMfTclgZbDXEtnOVsOT4Fv41uW7ezocHQ1S9Ck58OJgEo469YMk08GUpbBrKAYvLQO/uYcX7yk8T1Z627pUN0xdqxUqNMtACzLRteQYKrBiDlGV56oj80dao4t//N2ME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jqG8+NXF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TbHLiNpG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA7751F00893;
-	Thu, 10 Sep 2026 14:44:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jqG8+NXF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99D7B1F000FF;
+	Thu, 10 Sep 2026 14:46:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789051496;
-	bh=o+NF4No6PjdHpjmQXfk++Obe57M5syCSgj5vN2Spl5Y=;
+	s=k20260515; t=1789051581;
+	bh=1/K0nzc1i/FSgU4//yLck/pOpZEPUsIxhASatcypkg0=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=TbHLiNpGMEjCfGjdfpOYJfzZux9O4wHvufmlh5akc3aGG7Ru5wIrurlsrMMs9xdwy
-	 rTJeV+xreD40ikl7168rlX80eoPIq/dL6infgWBX320KTGXQ59qVv7lu1gvFe5jVJu
-	 ix591yyq9AP50YpFlpJ+IA/zXvRYQOA2YcFj8zk06dzbz1w3SRja3E8XEyYZ9c2egB
-	 K5+nHS4u8mDUOke3nwxMT89PQk3hE3v661QpGsUC8jppIGyRGnroa0eWA4v6CQzYIq
-	 LuLgzXFP4PcCLnu3rKFN55sqbRiS1ma5sdbfW0tUxz6TjhY8VLUBVADw80vmkvyoL7
-	 xkCsVIf8J8EJw==
+	b=jqG8+NXFIV1ysuaTjFX9vv+JJFte1SWfAa58yMpzrm2nCE4gZGyS5afnU5SR2zaHe
+	 OinQXPIIh2RyYiL8RRGKE2E1hFkfR3COkM3nhtxDtorAcFs5vhs1Yuj93kyFL9eGOQ
+	 YDYRH+XAOcRvy2d8aHRz4OqiTXf5iC0JNygWo3CE+edSMPfk7ULE9xkk+dGG/zrX1C
+	 ZKG+94+ORG5KyPr6ev/aXE/sz5ODQz6f/BUvuwlg4NMzEsF/34DJ5MSynnXUJOCsQQ
+	 dQdgDifY39nXKH3qT69CoYiMP1FRbOwY+US97egkKCPpg2DoseTfVY0z5b6c9xZWKb
+	 ub5FgOFpePE4g==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next] tcp: add TCP_ECN and TCP_ECN_OPTION socket
- options
+Subject: Re: [PATCH bpf v3] bpf: Fix non-linear SRH access in
+ bpf_update_srh_state()
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Irlanki Sandeep" <irlanki.s@samsung.com>
+To: =?utf-8?b?Q2VuIFpoYW5nIChNaWNyb3NvZnQgU2VjdXJpdHkgRk9SR0UgTGFicyk=?= <cenzhang@linux.microsoft.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260909144557.800676-1-irlanki.s@samsung.com>
-References: <CGME20260909144437epcas5p282be513a761ca5aec3f2b0fefcd2ecfa@epcas5p2.samsung.com>
- <20260909144557.800676-1-irlanki.s@samsung.com>
+In-Reply-To: <20260910142522.45014-1-cenzhang@linux.microsoft.com>
+References: <20260910142522.45014-1-cenzhang@linux.microsoft.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 10 Sep 2026 14:44:55 +0000
-Message-Id: <20260910144455.CA7751F00893@smtp.kernel.org>
+Date: Thu, 10 Sep 2026 14:46:21 +0000
+Message-Id: <20260910144621.99D7B1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
 s) to consider:
-- [High] Per-socket TCP_ECN configuration is ignored during SYN floods beca=
-use syncookies validation checks the global sysctl instead of the listener =
-socket's effective ECN mode.
-- [Medium] Missing READ_ONCE() when reading `ecn_mode` and `ecn_option` int=
-roduces a data race and double-fetch vulnerability, leaking the UNSPEC plac=
-eholder (255) into TCP operational logic.
+
+Pre-existing issues:
+- [High] Use-After-Free in bpf_lwt_seg6_action() during END_B6 and END_B6_E=
+NCAP actions due to SKB reallocation.
+- [High] Incomplete SRH linearization and potential dangling pointer in bpf=
+_lwt_seg6_store_bytes().
+- [High] Use-After-Free in bpf_lwt_seg6_store_bytes() via invalidated 'from=
+' pointer.
+- [High] Use-After-Free in bpf_skb_store_bytes() via invalidated 'from' poi=
+nter.
 --
 
-commit d87f9153f9de86df8e7de5798f8dffdac8f0e2fd
-Author: Irlanki Sandeep <irlanki.s@samsung.com>
-Subject: tcp: add TCP_ECN and TCP_ECN_OPTION socket options
+commit a33b7a64a031c2a48a228616879e253a6490be94
+Author: Cen Zhang (Microsoft Security FORGE Labs) <cenzhang@linux.microsoft=
+.com>
 
-This patch introduces granular, per-connection dynamic adaptation for ECN a=
-nd
-AccECN configurations. It adds two new socket options, TCP_ECN and
-TCP_ECN_OPTION, which override the system-wide sysctl settings to prevent
-connection failures or packet loss on paths with anomalous middleboxes.
+bpf: Fix non-linear SRH access in bpf_update_srh_state()
 
-> diff --git a/include/net/tcp_ecn.h b/include/net/tcp_ecn.h
-> index 865d5c5a7718d..931e0877176c7 100644
-> --- a/include/net/tcp_ecn.h
-> +++ b/include/net/tcp_ecn.h
+bpf_update_srh_state() assumes the SRH offset is within the skb linear
+head, which can be incorrect if ipv6_find_hdr() locates it in non-linear
+data. This patch replaces ipv6_find_hdr() with seg6_get_srh() to correctly
+pull and validate the SRH. It also adjusts End.DT6, End.B6, and End.B6.Encap
+actions to properly handle skb reallocation.
+
+Link: https://lore.kernel.org/bpf/20260901183151.16648-1-cenzhang@linux.mic=
+rosoft.com/
+Link: https://lore.kernel.org/bpf/CABFh=3Da5iLOEJdPhoaWUhLc0eEqAuhnd83_jJr9=
+MVZZG6gSJAEw@mail.gmail.com/
+Link: https://lore.kernel.org/bpf/CABFh=3Da4VyzxsQqsayWpTKjxY3HL2C072u=3Dpb=
+ecEpNDbL9eBNKA@mail.gmail.com/
+
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 2a84f9d011314..06a748c077479 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
 [ ... ]
-> @@ -30,8 +31,29 @@ enum tcp_accecn_option {
->  	TCP_ACCECN_OPTION_MINIMUM =3D 1,
->  	TCP_ACCECN_OPTION_FULL =3D 2,
->  	TCP_ACCECN_OPTION_PERSIST =3D 3,
-> +	TCP_ACCECN_OPTION_UNSPEC =3D 255,	/* Use sysctl default (per-socket) */
->  };
+> @@ -7050,40 +7052,49 @@ BPF_CALL_4(bpf_lwt_seg6_action, struct sk_buff *,=
+ skb,
+>  		if (param_len !=3D sizeof(int))
+>  			return -EINVAL;
+>  		return seg6_lookup_nexthop(skb, NULL, *(int *)param);
+> -	case SEG6_LOCAL_ACTION_END_DT6:
+> +	case SEG6_LOCAL_ACTION_END_DT6: {
+> +		int tbl_id;
+> +
+>  		if (!seg6_bpf_has_valid_srh(skb))
+>  			return -EBADMSG;
+>  		if (param_len !=3D sizeof(int))
+>  			return -EINVAL;
+> +		tbl_id =3D *(int *)param;
 > =20
-> +/* Resolve the effective ECN mode: per-socket override or sysctl fallbac=
-k */
-> +static inline u8 tcp_ecn_mode_eff(const struct sock *sk)
-> +{
-> +	u8 mode =3D tcp_sk(sk)->ecn_mode;
-> +
-> +	if (mode =3D=3D TCP_ECN_MODE_UNSPEC)
-> +		return READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn);
-> +	return mode;
-> +}
-
-[Severity: Medium]
-Is it possible for the compiler to double-fetch tcp_sk(sk)->ecn_mode here?
-
-Since the ecn_mode field is updated concurrently via WRITE_ONCE() (for
-example, during a setsockopt call while handling an incoming SYN packet in
-softirq context), a lack of READ_ONCE() on the reader side could result in
-the UNSPEC placeholder (255) leaking into the return evaluation.=20
-
-If that placeholder leaks, could it cause AccECN to be incorrectly enabled=
-=20
-later in tcp_ecn_create_request(), where 255 >=3D 3 would evaluate to true?
-
-> +
-> +/* Resolve the effective AccECN option: per-socket override or sysctl fa=
-llback */
-> +static inline u8 tcp_accecn_option_eff(const struct sock *sk)
-> +{
-> +	u8 opt =3D tcp_sk(sk)->ecn_option;
-> +
-> +	if (opt =3D=3D TCP_ACCECN_OPTION_UNSPEC)
-> +		return READ_ONCE(sock_net(sk)->ipv4.sysctl_tcp_ecn_option);
-> +	return opt;
-> +}
-
-[Severity: Medium]
-Does tcp_sk(sk)->ecn_option also require a READ_ONCE() here to prevent a=20
-similar data race and double-fetch?
-
-[ ... ]
-> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> index 0f60a1dbf9274..b7dea787f8237 100644
-> --- a/net/ipv4/tcp_input.c
-> +++ b/net/ipv4/tcp_input.c
-> @@ -7463,7 +7463,7 @@ static void tcp_ecn_create_request(struct request_s=
-ock *req,
->  	u32 ecn_ok_dst;
+>  		if (ipv6_find_hdr(skb, &hdroff, IPPROTO_IPV6, NULL, NULL) < 0)
+>  			return -EBADMSG;
+> -		if (!pskb_pull(skb, hdroff))
+> +		if (!pskb_may_pull(skb, hdroff + sizeof(struct ipv6hdr))) {
+> +			srh_state->srh =3D NULL;
+> +			bpf_compute_data_pointers(skb);
+>  			return -EBADMSG;
+> +		}
+> +		__skb_pull(skb, hdroff);
 > =20
->  	if (tcp_accecn_syn_requested(th) &&
-> -	    (READ_ONCE(net->ipv4.sysctl_tcp_ecn) >=3D 3 ||
-> +	    (tcp_ecn_mode_eff(listen_sk) >=3D 3 ||
->  	     tcp_ca_needs_accecn(listen_sk))) {
->  		inet_rsk(req)->ecn_ok =3D 1;
->  		tcp_rsk(req)->accecn_ok =3D 1;
+>  		skb_postpull_rcsum(skb, skb_network_header(skb), hdroff);
+>  		skb_reset_network_header(skb);
+>  		skb_reset_transport_header(skb);
+>  		skb->encapsulation =3D 0;
+> =20
+> -		bpf_compute_data_pointers(skb);
+>  		bpf_update_srh_state(skb);
+> -		return seg6_lookup_nexthop(skb, NULL, *(int *)param);
+> +		return seg6_lookup_nexthop(skb, NULL, tbl_id);
+> +	}
+>  	case SEG6_LOCAL_ACTION_END_B6:
+>  		if (srh_state->srh && !seg6_bpf_has_valid_srh(skb))
+>  			return -EBADMSG;
+> +		old_len =3D skb->len;
+>  		err =3D bpf_push_seg6_encap(skb, BPF_LWT_ENCAP_SEG6_INLINE,
+>  					  param, param_len);
 
 [Severity: High]
-Does the SYN cookies path also need to be updated to respect this new=20
-per-socket configuration?
+This is a pre-existing issue, but since param can point to packet data,
+could passing it directly to bpf_push_seg6_encap() lead to a use-after-free?
 
-During a SYN flood, this standard tcp_ecn_create_request() path is bypassed
-in favor of syncookies. Currently, cookie_v4_check() and cookie_v6_check()=
-=20
-determine ECN support by calling cookie_ecn_ok(), which only checks the
-global sysctl:
+In the END_DT6 case above, the code correctly copies param to tbl_id before
+reallocating the skb head. For END_B6, bpf_push_seg6_encap() calls down to
+__seg6_do_srh_inline(), which can trigger skb_cow_head() to reallocate the
+skb, freeing the original packet data.
 
-static inline bool cookie_ecn_ok(const struct net *net, const struct dst_en=
-try *dst)
-{
-        return READ_ONCE(net->ipv4.sysctl_tcp_ecn) ||
-                dst_feature(dst, RTAX_FEATURE_ECN);
+If param points to this freed packet data, would the subsequent memcpy() in
+__seg6_do_srh_inline() read from freed memory?
+
+net/ipv6/seg6_iptunnel.c:__seg6_do_srh_inline() {
+    ...
+    err =3D skb_cow_head(skb, hdrlen + dst_dev_overhead(cache_dst, skb));
+    ...
+    memcpy(isrh, osrh, hdrlen);  // osrh aliases the dangling param
+    ...
 }
 
-If the system has the global sysctl_tcp_ecn disabled but a service has
-enabled it locally via TCP_ECN on its listener socket, will established
-connections silently lose their ECN capability during a SYN flood?
+> -		if (!err)
+> +		if (skb->len !=3D old_len)
+>  			bpf_update_srh_state(skb);
+> =20
+>  		return err;
+>  	case SEG6_LOCAL_ACTION_END_B6_ENCAP:
+>  		if (srh_state->srh && !seg6_bpf_has_valid_srh(skb))
+>  			return -EBADMSG;
+> +		old_len =3D skb->len;
+>  		err =3D bpf_push_seg6_encap(skb, BPF_LWT_ENCAP_SEG6,
+>  					  param, param_len);
+
+[Severity: High]
+This is a pre-existing issue, but this appears to have the same vulnerabili=
+ty
+as END_B6. Does this need to copy the param data before calling
+bpf_push_seg6_encap() to prevent a use-after-free if skb_cow_head()
+reallocates the skb?
+
+
+I also noticed a few other pre-existing issues in this file related to
+pointers being invalidated by skb head reallocation:
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does bpf_lwt_seg6_store_byte=
+s()
+have a similar use-after-free if the from argument points to packet data?
+
+net/core/filter.c:bpf_lwt_seg6_store_bytes() {
+    ...
+    if (unlikely(bpf_try_make_writable(skb, offset + len)))
+        return -EFAULT;
+    ...
+    memcpy(skb->data + offset, from, len);
+}
+
+If bpf_try_make_writable() reallocates the skb head, the packet memory
+from points to could be freed before the memcpy() dereferences it.
+
+
+[Severity: High]
+This is a pre-existing issue, but bpf_lwt_seg6_store_bytes() also appears to
+leave the cached SRH pointer dangling if ipv6_find_hdr() fails after an skb
+reallocation:
+
+net/core/filter.c:bpf_lwt_seg6_store_bytes() {
+    ...
+    if (unlikely(bpf_try_make_writable(skb, offset + len)))
+        return -EFAULT;
+
+    if (ipv6_find_hdr(skb, &srhoff, IPPROTO_ROUTING, NULL, NULL) < 0)
+        return -EINVAL;
+
+    srh_state->srh =3D (struct ipv6_sr_hdr *)(skb->data + srhoff);
+    ...
+}
+
+If bpf_try_make_writable() frees the old skb head, but ipv6_find_hdr()
+fails (e.g., because the SRH is only partially linearized), the function
+returns -EINVAL without updating srh_state->srh. Could a subsequent helper
+then access the dangling srh_state->srh pointer?
+
+
+[Severity: High]
+This is a pre-existing issue, but does bpf_skb_store_bytes() also suffer fr=
+om
+the same use-after-free with the from pointer?
+
+net/core/filter.c:bpf_skb_store_bytes() {
+    ...
+    if (unlikely(bpf_try_make_writable(skb, offset + len)))
+        return -EFAULT;
+    ...
+    memcpy(ptr, from, len);
+}
+
+If from points to packet memory, bpf_try_make_writable() could reallocate
+the skb, freeing the data that from points to before the memcpy().
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260909144557.8006=
-76-1-irlanki.s@samsung.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260910142522.4501=
+4-1-cenzhang@linux.microsoft.com?part=3D1
