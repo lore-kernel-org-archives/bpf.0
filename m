@@ -1,32 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2935F48F823;
-	Thu, 10 Sep 2026 13:05:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C0D490C00;
+	Thu, 10 Sep 2026 13:05:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789045554; cv=none; b=s8Y138CqNRpdKfy8U/j8WOLLuCZ6Q5EfVnzQ0ISstKYmPJZz77DreTl9FGkEgYDPXeUJ4m2FEZIPFYsRk+uMffa3jwc9q5WPPJVR9oy/QjUm2t/BjPCCoAz77XWfs9uTfYhRGa6ZIIMdyV/Hmfr8rfkpc7nLTPz9NQbGftc4qvQ=
+	t=1789045557; cv=none; b=iT849wNasxvn/q6gOjambpgbMaVq1qGU5IYWMZKfTTCAjKgYin99wqSW92D1QcPF4yjIZk5/K1PQX/ENXmheDtpRnM31/7F3yIfdXYUF65EEwgjuRwtSkS1ZvAyVNgKNAIl5aQzjObuzVUiZ96DVDYADtMb79e1AK7CmcqcD3Ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789045554; c=relaxed/simple;
-	bh=2BM3Kgrx6IKnaPuau/ag3+DHrIZNrb6PzEIcFyv/gBM=;
+	s=arc-20240116; t=1789045557; c=relaxed/simple;
+	bh=3MjUcIDPftNtv/doowUtVKbtOO4aZEwH8fEs4QjGcSc=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=FC+ECRRcL+qqqFIj55xSNhLzFx7uBp5e7U6P90Q4cT8ik0QNrzg/DUvOZsrSqwO7MPm4UAdT8asGWihLLF8KJSQZN3XzrCVBtpWNXQi3+BmYDLCERmov3evZTgEqsmbsowydjWh9RjrmwARCj7ZSGtF5IAldJIWPCotCLDBWB3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oMswmUb6; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=P2NCK9s53r5V3iFFfEAKYpHpue6qcRsNhCHoTrV/Uujlp3vH4WlD8Cc/COPRftnzvRl1ch4LXuEy5I3crYqoL0hvpH8x/VW4I6HN1pr0+OAGVfXbDOZKj1lKFUts2NJ1eBZk2ikqsLyPgbGwG8kxrll+uLqbMgA1R5yRm05rwc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eMVbN06t; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oMswmUb6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E4C11F00893;
-	Thu, 10 Sep 2026 13:05:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eMVbN06t"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 752C71F000FF;
+	Thu, 10 Sep 2026 13:05:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789045552;
-	bh=05JqaFBeFEoQ2fVd/vXC0wIOHHckjhCp9F0L301SgEs=;
+	s=k20260515; t=1789045554;
+	bh=MEARMROxwEnqR/mfCzYtDxrp/hAYhtP/dZwuqgrxQ9A=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=oMswmUb6eg3Tll5EF2xsdbpXrhXxaQMiQvHzCNWSK+3kpuVxphOLK9YWNqTZElwsD
-	 DM2oxIvfkfivDx8wV2DSRahqTgvZdRAiBeWRz9Da+58K+nnc8vA2FR1356iSNxTvZw
-	 clX4CazWt7cxNDaSwsXRCrW+d4oEOFxGIPvRUkhszAYVSOL4i3qO/Gqh07H4KpkVSh
-	 UJ8hGbYWIoc0ihmBOVkFU/W4LvPP2Lm1B8fJMolq/GMmM/WSweTrkEPvzGXWrsMgND
-	 f7qL0PNKnwbP2lS5XmE5AQzc0fq0Ujp7k+/HKU+xpPSLJDjUvgRk46WAW9hGbR1rfP
-	 k6jT5K9Quj3qw==
-Subject: Re: [PATCH net-next v6 12/14] net: lan966x: add PCIe FDMA XDP support
+	b=eMVbN06tBehl96YDs0m9/79PxxoZaGFh947PiTzoibfVrQKRRFR5AuoCpxIY59NJS
+	 qquiHZI+ox8WyjtWuSIskE5zP/xZmciimZFH0IhAGPQSWgIhhlAvZWiw/GWIQnQXxg
+	 nZlCEzrVEDQ4CtnnWpAq1dlcg2nMYvBeSsd3ivl/vVqqd9/fcTblmq8dfodcHqMDEX
+	 HnuVwr7bqBuwIucK/Bk/XEysXy+JF3Ze9F9a15QvS60pA/9/Yrpky6W4LG3TvGjuej
+	 dX3zUGDl46gXMkGHGSJvAPK1JGpivGJg14DEu6e35XUms5sFS1ixQ5ggzvJ1VTC8pZ
+	 kkSfKGwQzJ6HA==
+Subject: Re: [PATCH net-next v6 13/14] misc: lan966x-pci: dts: extend cpu reg
+ to cover PCIE DBI space
 From: netdev-bot+sashiko@kernel.org
 To: daniel.machon@microchip.com
 Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
@@ -37,11 +38,11 @@ Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
  gregkh@linuxfoundation.org, mohsin.bashr@gmail.com, richardcochran@gmail.com,
  netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org
-Date: Thu, 10 Sep 2026 13:05:51 +0000
-Message-ID: <178904555117.219967.2055099842496630976@kernel.org>
-In-Reply-To: <20260909-lan966x-pci-fdma-v6-12-6f48dab9d671@microchip.com>
-References: <20260909-lan966x-pci-fdma-v6-12-6f48dab9d671@microchip.com>
-X-sashiko-severity: Medium
+Date: Thu, 10 Sep 2026 13:05:53 +0000
+Message-ID: <178904555304.219967.9327319194988391867@kernel.org>
+In-Reply-To: <20260909-lan966x-pci-fdma-v6-13-6f48dab9d671@microchip.com>
+References: <20260909-lan966x-pci-fdma-v6-13-6f48dab9d671@microchip.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -54,144 +55,77 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Critical: 0 · High: 0 · Medium: 0 · Low: 1
 
-- [Medium] Inconsistent XDP frame presentation between the two RX hooks
-  of the same driver: after this patch lan966x has two in-tree XDP RX…
+- [Low] Claimed patch-ordering / bisectability bug: the "cpu" reg window
+  is enlarged from 0x100000 to 0x800000 only in this commit, while the…
 
 --
 
-net: lan966x: add PCIe FDMA XDP support
+misc: lan966x-pci: dts: extend cpu reg to cover PCIE DBI space
 
-This adds XDP support to the lan966x PCIe FDMA path, using contiguous
-ATU-mapped buffers and a memcpy-based XDP_TX instead of the page_pool
-scheme used by the platform path. The IFH and FCS are stripped before
-the BPF program runs, and lan966x_xdp_setup() now skips the page_pool
-reload for the PCIe case. Only XDP_ACT_BASIC is advertised for PCIe.
+This grows the "cpu" register window of the switch node in the lan966x PCI
+device tree overlay from 0x100000 to 0x800000 so that the PCIE DBI and iATU
+registers at offset 0x400000+ are covered. Those registers are programmed
+when the FDMA engine sets up the ATU outbound windows.
 
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> index 6cabbb8b47f2..02c021617a3e 100644
-> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
+No Link: tags in the commit header.
 
-[ ... ]
-
-> @@ -126,7 +127,123 @@ static bool lan966x_fdma_pci_rx_size_fits(struct fdma *fdma, u32 blockl)
-
-[ ... ]
-
-> +static int lan966x_xdp_pci_run(struct lan966x_port *port, void *data,
-> +			       u32 data_len, void **xdp_data, u32 *xdp_len)
-> +{
-
-[ ... ]
-
-> +	xdp_prepare_buff(&xdp,
-> +			 data - XDP_PACKET_HEADROOM,
-> +			 XDP_PACKET_HEADROOM + IFH_LEN_BYTES,
-> +			 data_len,
-> +			 false);
-> +
-> +	act = bpf_prog_run_xdp(xdp_prog, &xdp);
-
-[ ... ]
-
-> @@ -158,38 +275,33 @@ static int lan966x_fdma_pci_rx_check_frame(struct lan966x_rx *rx, u64 *src_port)
->  	if (!lan966x_fdma_pci_rx_size_fits(fdma, blockl))
->  		return FDMA_ERROR;
+> diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci.dtso
+> index 7b196b0a0eb6..7bb726550caf 100644
+> --- a/drivers/misc/lan966x_pci.dtso
+> +++ b/drivers/misc/lan966x_pci.dtso
+> @@ -135,7 +135,7 @@ lan966x_phy1: ethernet-lan966x_phy@2 {
 >  
-> -	return FDMA_PASS;
-> +	/* Present the Ethernet frame (no IFH, no FCS). HW re-inserts the
-> +	 * FCS on TX; see lan966x_fdma_pci_xmit_xdpf(). May be overridden
-> +	 * by XDP. The FCS strip is unconditional because NETIF_F_RXFCS
-> +	 * is not advertised in hw_features.
-> +	 */
-> +	*data = virt_addr + IFH_LEN_BYTES;
-> +	*data_len = blockl - IFH_LEN_BYTES - ETH_FCS_LEN;
-> +
-> +	return lan966x_xdp_pci_run(port, virt_addr, *data_len, data, data_len);
->  }
+>  				switch: switch@e0000000 {
+>  					compatible = "microchip,lan966x-switch";
+> -					reg = <0xe0000000 0x0100000>,
+> +					reg = <0xe0000000 0x0800000>,
+>  					      <0xe2000000 0x0800000>;
+>  					reg-names = "cpu", "gcb";
 
-[Severity: Medium]
-Should the two lan966x XDP receive hooks agree on whether the FCS is part
-of the window handed to the BPF program?
+[Severity: Low]
 
-On the PCIe path, lan966x_fdma_pci_rx_check_frame() subtracts the FCS
-before calling into the program:
+This isn't a bug, just a question about the ordering of the series.
 
-	*data_len = blockl - IFH_LEN_BYTES - ETH_FCS_LEN;
+The earlier commits "net: lan966x: add PCIe FDMA support", "net: lan966x: add
+PCIe FDMA MTU change support" and "net: lan966x: add PCIe FDMA XDP support"
+already derive regs[TARGET_PCIE_DBI] from the "cpu" base plus 0x400000, and
+fdma_pci_atu_init() writes at DBI + 0x300000 + idx * 0x200:
 
-	return lan966x_xdp_pci_run(port, virt_addr, *data_len, data, data_len);
-
-On the platform path, lan966x_fdma_rx_check_frame() passes the raw BLOCKL
-value and lan966x_xdp_run() only removes the IFH:
-
-drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:lan966x_fdma_rx_check_frame() {
-	...
-	return lan966x_xdp_run(port, page, FDMA_DCB_STATUS_BLOCKL(db->status));
+drivers/net/ethernet/microchip/fdma/fdma_pci.c
+static void __iomem *fdma_pci_atu_addr_get(void __iomem *addr, int offset, int idx)
+{
+	return addr + FDMA_PCI_ATU_ADDR + FDMA_PCI_ATU_IDX_SIZE * idx + offset;
 }
 
-drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c:lan966x_xdp_run() {
+That lands roughly 0x700000 from the "cpu" base, i.e. outside the 0x100000
+mapping that exists until this commit. Would it be clearer to move this
+overlay change before the driver commits that compute the DBI offset, so
+that the mapping is never smaller than the offsets the driver derives from
+it?
+
+For what it is worth, the intermediate commits do look safe in practice,
+since the ATU access in lan966x_fdma_pci_init() is gated:
+
+drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
+	if (!lan966x->fdma)
+		return 0;
 	...
-	xdp_prepare_buff(&xdp, page_address(page),
-			 IFH_LEN_BYTES + XDP_PACKET_HEADROOM,
-			 data_len - IFH_LEN_BYTES, false);
-}
+	fdma_pci_atu_init(&lan966x->atu, lan966x->regs[TARGET_PCIE_DBI]);
 
-That BLOCKL value still contains the FCS, as shown by the trim done later
-on the same path:
+and lan966x->fdma is only set when the node names an "fdma" interrupt in
+lan966x_probe():
 
-drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:lan966x_fdma_rx_get_frame() {
-	...
-	skb_put(skb, FDMA_DCB_STATUS_BLOCKL(db->status));
-	...
-	skb_pull(skb, IFH_LEN_BYTES);
+	lan966x->fdma_irq = platform_get_irq_byname(pdev, "fdma");
+	if (lan966x->fdma_irq > 0) {
+		...
+		lan966x->fdma = true;
+	}
 
-	if (likely(!(skb->dev->features & NETIF_F_RXFCS)))
-		skb_trim(skb, skb->len - ETH_FCS_LEN);
-}
-
-So xdp.data_end points four bytes past the end of the Ethernet payload on
-the platform path, and exactly at the end of the payload on the new PCIe
-path. Both windows stay inside the DMA buffer, so this looks like a
-behavioural difference rather than an out-of-bounds access.
-
-A program that parses backwards from data_end, compares data_end - data
-against an L3 length field, or trims via bpf_xdp_adjust_tail() would get
-different results depending on whether the switch is platform- or
-PCIe-attached. The PCIe framing matches the usual XDP convention of no
-FCS, which would make the platform hook the one that differs from
-convention.
-
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> index e089c08b9c37..9ada497767c6 100644
-> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> @@ -874,11 +874,13 @@ static int lan966x_probe_port(struct lan966x *lan966x, u32 p,
->  
->  	port->phylink = phylink;
->  
-> -	/* XDP is not supported on the PCIe FDMA path. */
-> -	if (lan966x->fdma && !lan966x_is_pci(lan966x))
-> -		dev->xdp_features = NETDEV_XDP_ACT_BASIC |
-> -				    NETDEV_XDP_ACT_REDIRECT |
-> -				    NETDEV_XDP_ACT_NDO_XMIT;
-> +	if (lan966x->fdma) {
-> +		dev->xdp_features = NETDEV_XDP_ACT_BASIC;
-> +
-> +		if (!lan966x_is_pci(lan966x))
-> +			dev->xdp_features |= NETDEV_XDP_ACT_REDIRECT |
-> +					     NETDEV_XDP_ACT_NDO_XMIT;
-> +	}
-
-[Severity: Medium]
-Both paths now report the same NETDEV_XDP_ACT_BASIC bit from
-lan966x_probe_port(), so is there anything in the uAPI that lets a
-program distinguish the FCS-included window of lan966x_xdp_run() from
-the FCS-stripped window of lan966x_xdp_pci_run()?
-
-Would it make sense to make one of the two hooks match the other so that
-the frame presentation is the same for identically-advertised netdevs?
+The overlay here still carries only interrupt-names = "xtr", "ana", and the
+"fdma" interrupt is added by the following commit, so the enlarged window is
+in place before the FDMA path can be enabled. Is that ordering intentional?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909-lan966x-pci-fdma-v6-0-6f48dab9d671%40microchip.com
