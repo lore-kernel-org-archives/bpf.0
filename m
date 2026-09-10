@@ -1,282 +1,203 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6E0531AF8
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 16:52:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA7983B0AEA
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 17:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789059182; cv=none; b=J63Y8Iw0oIrQa+OeNbOcSAu9qrtbB3G+hK83HcmuHtOkGgQLX1Q/pSAzjSrqsf5X7NZRQmd9+/SPRtrR7CIZQSqqKrVs5NlHsInwsNfX8ZluEXwjygwhod9Ro+bc9AwNneav6qek0QksjhppK8q7TT+kAa9qToEaYtXLpiPIH4M=
+	t=1789059630; cv=none; b=o8itdfrAbHtXOVnPhzr5m+vkbW6s8i/D+vhG4DxbTnSvrFcCMbQ/WavGhvXAEk7f5QqsFg9zUD/b9BJlwyRmsQBSsuPC0K809nQxPi8A9OCThNgqmeFSy6cBpDgXVc5EFK28IWS8pzLMu1QlGY000fQisFBzMkZp7THVwXLWObI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789059182; c=relaxed/simple;
-	bh=IUh1cWchmC0vld51ke7tyVFS0qPx15TlB96mZ8dNts4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gANOQsOvE+YSneA3b6y3uhQgfigzUmdEAJ42SN300hQbxmFrayJUcqDN4Dkyy4B+FN+8elrYOrMjr/QMgOT6QH58ijU6cvT90uwYIeKOXm22nTB+Wxxjp06jCPs/Wmw3nhvkMWimAewBLu0vzVPAXVLW7vhIP+dV5ytmYZuHzI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q0xTAEql; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789059630; c=relaxed/simple;
+	bh=IFz0gVlUaQfReX3mzNLHFXbdVRZnqOXVp/ms0k4PuFs=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=qSFAzW/SnebYhY91Gg7QiCLjlRSTO2xXs4jKhvhNIBEr4PGdhX5NSxbhv+eYKTpoH/WTTbsTWhDHLkA/8us5/opLcIEt2s7ZyOlBBOAEv1Qzr9fDgGIn7hu5cbVzqXtYX3zoVc5uWBD0GyIr3d2Zc21Fj4Br1EHe/FZW8Wa4DF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ba1Uwtze; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q0xTAEql"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-39b9a99469fso3224985a91.3
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 09:52:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789059176; x=1789663976; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=tyS0dUys65sGsGrVA9hi3CkVbRxamfGAlz/CIe+hAe0=;
-        b=Q0xTAEqlQHR+lhWxzbXufxvdVq9tgLfjuV09WToxglPDJnPDwieUvc4jeXzYda7y43
-         rl+/PQLWpHwtgnaFgEfNu3tbL/n48o7nmp8qbnCQdliNuF9zikCoTznFG5kWumjiPnri
-         yTaiNDh49EWz2qjwhYgv8p+ga2a4G+BMWuMdOVy3JBKBloQITSl7bb0I3iCVNQCimCsV
-         kfbXgqSvXjg8ZoIE7PN56wwUParWGpuJaWPomflRLa3sVZATienHN3LKrJZa3HNAhynz
-         MIMOItOpzvjAzoamESmQ0uTKpPnu1W8MH/ERG7L8dnGxL+0hvIcPKmsG1CftmHNwG1go
-         n+Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789059176; x=1789663976;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tyS0dUys65sGsGrVA9hi3CkVbRxamfGAlz/CIe+hAe0=;
-        b=gAq9Y2D9bNIYmUy20mM6r/OnEXoYvCQ/J6iymYDS4TZinU+7P2nRpGHRRuvpwrH5gp
-         o7bVj6K59H3tvkaqhCKATB32dTyxS42EOk1yKb9B3oGdOSsDnBJGw5U/9rCGBdeAEBZk
-         eA9EU3ws1w2/bQKk+Lt7MqLUuKfOWgyd8L1fr4M9G/TAG3cq9sZEA1goiHUEho1PUspx
-         JGiE0dCEP0/ila3gDrflEteYtguSkKELGAnuVRLsQx76yUxhB56ndFnRqN3Mak5NzCVq
-         9LuMiFnj4W8WOuNGftrXpN1sC5VaxREFS+o6urPaS25ie1EOxxHLa4npr7/zvkgg8sdF
-         IxRQ==
-X-Forwarded-Encrypted: i=1; AKwUvByvqJhIB9BG387gDVVZIvzNRMRQvVTQRnuZ6sMzjGIKb/8jJnpzdPT+ujLfGuon4d9Y5lM=@vger.kernel.org
-X-Gm-Message-State: AFuF++lX4+6HshYpsTTR96X+R19gkuZtTCgxcyFx8GVu9ykp0hLt9Jkr
-	jaL9r/dVm32w2jpuDYSrExXXbYGjBjCEwjUrPVL7osit7pK4LmcIVVqt
-X-Gm-Gg: AYBFou1ZqCovj/7reCHCZ67EtaogoFKO6E1kdN0xU2vmGTP9/S+f4YvoRZCV/cLveId
-	CFdjHcq5qBRdca5Ih4tdmKOGvep/mck4aCb92ofQbDNx7bWSThskGziymB7uSjBwW7n7MS0sIs2
-	2584RQDTKZc4WaKWowLgt/ViMUHuezYSaq2vBIU2wYMgLA/8ggfvCdXNNiyFjPuswA7PHgHtHKB
-	eIzNOb0KLwnlLLdih9lKClvBlnNVD4axOqf1TAaG790iWrac4vT8XF+O0bfkp9hAgc0Qmp54iZz
-	XRBKVKdwtzDUovCoRi4r53uXDXJerc+bG2w1twwBNlaE9zMt4hYPSohZrhLXpz7/pwASYFvxf9n
-	WQZ6k2ocNLTBAg8WwwBTWFvLYhLAxAYF0FYo2AEUsCQbD8yiQeu9P1HNeAPnuVDkK1zXRmkSNLZ
-	QBGdePy/lfUBO6xYK2iU/OQGTnOsKhZ+77LRy8MKCbb0CA4MKO8TzC6GOx3jyXSSP7ZXF51uYw1
-	d0JFJOEoRjolXhsoTC6kOIPaL/sM2prSfNPuH0OQJgJ6c9cvxsu/h2CGP6piUuzHGt4crV1RHEB
-X-Received: by 2002:a17:90b:4fd1:b0:398:bd37:6a49 with SMTP id 98e67ed59e1d1-39b261cfd8cmr63877483a91.12.1789059175828;
-        Thu, 10 Sep 2026 09:52:55 -0700 (PDT)
-Received: from visitorckw-work01.c.googlers.com.com (202.176.229.35.bc.googleusercontent.com. [35.229.176.202])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d98e602d8sm64821a91.3.2026.09.10.09.52.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 09:52:55 -0700 (PDT)
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: song@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	kpsingh@kernel.org,
-	matt@bobrowski.net,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	akpm@linux-foundation.org
-Cc: jolsa@kernel.org,
-	ihor.solodrai@linux.dev,
-	martin.lau@linux.dev,
-	yonghong.song@linux.dev,
-	emil@etsalapatis.com,
-	mathieu.desnoyers@efficios.com,
-	hch@infradead.org,
-	jserv@ccns.ncku.edu.tw,
-	eleanor15x@gmail.com,
-	marscheng@google.com,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Kuan-Wei Chiu <visitorckw@gmail.com>
-Subject: [PATCH v2 2/2] Revert "lib/sort.c: add _nonatomic() variants with cond_resched()"
-Date: Thu, 10 Sep 2026 16:52:21 +0000
-Message-ID: <20260910165222.1186628-3-visitorckw@gmail.com>
-X-Mailer: git-send-email 2.55.0.1003.g10538fe699-goog
-In-Reply-To: <20260910165222.1186628-1-visitorckw@gmail.com>
-References: <20260910165222.1186628-1-visitorckw@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ba1Uwtze"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A4E1F000FF;
+	Thu, 10 Sep 2026 17:00:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789059620;
+	bh=oui7bGJIFg4wz2m2B+DzPH3RZZe1hdEC0i7ig70oXdM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Ba1Uwtze9ACHqoOBxURR7u1Eu9xdU57YhS/PAF8ryj/BlDtOOaD4eSM9hFDQ87/2Y
+	 1MMOqhJFth4O/HpZHJofFrAsnKDqoQ5ufztFzUevNd8bUgxKziMJIIeQdydAULk6kB
+	 RI47+uWCqabQlrkeUZvot8b0qBh7kZjHl03veXYB9eU8rTBjYpx5CTf8TZghDbQrvr
+	 iUeTMBkAk9rT8ZL/cXCy22eJJAki/9sHsVEZXjcaqa86SoLMvw1JCS8b8fTUw8qgsC
+	 PKyzwZyoUeS/nahHNwJsq54elk3OecnBHS4dq8v7Nw6UHijdJDYydrtpAJdiPN3E4P
+	 eAgX2DvhGl9Mw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 10/13] selftests/bpf: cover the low-32 link
+ for narrowing stack fills
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Vineet Gupta" <vineet.gupta@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260910164635.459558-11-vineet.gupta@linux.dev>
+References: <20260910164635.459558-1-vineet.gupta@linux.dev>
+ <20260910164635.459558-11-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 10 Sep 2026 17:00:19 +0000
+Message-Id: <20260910170020.04A4E1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-This reverts commit e2a33a2a3258794891cdd6ca4b1318da6594d157.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] The newly added tests for narrow stack fills hardcode memory off=
+sets (e.g., `(r10 - 8)`) which are only correct on little-endian architectu=
+res. On big-endian architectures like s390x, these offsets do not point to =
+the lower bits, causing the BPF verifier to reject the programs and resulti=
+ng in test failures.
+--
 
-With no remaining users in the kernel tree, remove sort_nonatomic() and
-sort_r_nonatomic() to clean up dead code. This effectively drops the
-wrapper function __sort_r() and eliminates the may_schedule branch and
-cond_resched() call from the inner loop of the core sorting routine,
-slightly simplifying and optimizing the code.
+commit a42f9a6d4d49f17385f014eede55d6e82094a838
+Author: Vineet Gupta <vineet.gupta@linux.dev>
 
-Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
----
-Build test only
+selftests/bpf: cover the low-32 link for narrowing stack fills
 
- include/linux/sort.h |  11 -----
- lib/sort.c           | 110 ++++++++++++-------------------------------
- 2 files changed, 31 insertions(+), 90 deletions(-)
+This commit adds five new BPF programs to test the verifier's handling of
+narrowing stack fills, specifically targeting low-32 links and sign-extensi=
+on
+behavior.
 
-diff --git a/include/linux/sort.h b/include/linux/sort.h
-index c01ef804a0eb..871775978af0 100644
---- a/include/linux/sort.h
-+++ b/include/linux/sort.h
-@@ -23,15 +23,4 @@ void sort(void *base, size_t num, size_t size,
- 	  cmp_func_t cmp_func,
- 	  swap_func_t swap_func);
- 
--/* Versions that periodically call cond_resched(): */
--
--void sort_r_nonatomic(void *base, size_t num, size_t size,
--		      cmp_r_func_t cmp_func,
--		      swap_r_func_t swap_func,
--		      const void *priv);
--
--void sort_nonatomic(void *base, size_t num, size_t size,
--		    cmp_func_t cmp_func,
--		    swap_func_t swap_func);
--
- #endif
-diff --git a/lib/sort.c b/lib/sort.c
-index 52363995ccc5..8e73dc55476b 100644
---- a/lib/sort.c
-+++ b/lib/sort.c
-@@ -186,13 +186,36 @@ static size_t parent(size_t i, unsigned int lsbit, size_t size)
- 	return i / 2;
- }
- 
--#include <linux/sched.h>
--
--static void __sort_r(void *base, size_t num, size_t size,
--		     cmp_r_func_t cmp_func,
--		     swap_r_func_t swap_func,
--		     const void *priv,
--		     bool may_schedule)
-+/**
-+ * sort_r - sort an array of elements
-+ * @base: pointer to data to sort
-+ * @num: number of elements
-+ * @size: size of each element
-+ * @cmp_func: pointer to comparison function
-+ * @swap_func: pointer to swap function or NULL
-+ * @priv: third argument passed to comparison function
-+ *
-+ * This function does a heapsort on the given array.  You may provide
-+ * a swap_func function if you need to do something more than a memory
-+ * copy (e.g. fix up pointers or auxiliary data), but the built-in swap
-+ * avoids a slow retpoline and so is significantly faster.
-+ *
-+ * The comparison function must adhere to specific mathematical
-+ * properties to ensure correct and stable sorting:
-+ * - Antisymmetry: cmp_func(a, b) must return the opposite sign of
-+ * cmp_func(b, a).
-+ * - Transitivity: if cmp_func(a, b) <= 0 and cmp_func(b, c) <= 0, then
-+ * cmp_func(a, c) <= 0.
-+ *
-+ * Sorting time is O(n log n) both on average and worst-case. While
-+ * quicksort is slightly faster on average, it suffers from exploitable
-+ * O(n*n) worst-case behavior and extra memory requirements that make
-+ * it less suitable for kernel use.
-+ */
-+void sort_r(void *base, size_t num, size_t size,
-+	    cmp_r_func_t cmp_func,
-+	    swap_r_func_t swap_func,
-+	    const void *priv)
- {
- 	/* pre-scale counters for performance */
- 	size_t n = num * size, a = (num/2) * size;
-@@ -263,9 +286,6 @@ static void __sort_r(void *base, size_t num, size_t size,
- 			b = parent(b, lsbit, size);
- 			do_swap(base + b, base + c, size, swap_func, priv);
- 		}
--
--		if (may_schedule)
--			cond_resched();
- 	}
- 
- 	n -= size;
-@@ -273,63 +293,8 @@ static void __sort_r(void *base, size_t num, size_t size,
- 	if (n == size * 2 && do_cmp(base, base + size, cmp_func, priv) > 0)
- 		do_swap(base, base + size, size, swap_func, priv);
- }
--
--/**
-- * sort_r - sort an array of elements
-- * @base: pointer to data to sort
-- * @num: number of elements
-- * @size: size of each element
-- * @cmp_func: pointer to comparison function
-- * @swap_func: pointer to swap function or NULL
-- * @priv: third argument passed to comparison function
-- *
-- * This function does a heapsort on the given array.  You may provide
-- * a swap_func function if you need to do something more than a memory
-- * copy (e.g. fix up pointers or auxiliary data), but the built-in swap
-- * avoids a slow retpoline and so is significantly faster.
-- *
-- * The comparison function must adhere to specific mathematical
-- * properties to ensure correct and stable sorting:
-- * - Antisymmetry: cmp_func(a, b) must return the opposite sign of
-- * cmp_func(b, a).
-- * - Transitivity: if cmp_func(a, b) <= 0 and cmp_func(b, c) <= 0, then
-- * cmp_func(a, c) <= 0.
-- *
-- * Sorting time is O(n log n) both on average and worst-case. While
-- * quicksort is slightly faster on average, it suffers from exploitable
-- * O(n*n) worst-case behavior and extra memory requirements that make
-- * it less suitable for kernel use.
-- */
--void sort_r(void *base, size_t num, size_t size,
--	    cmp_r_func_t cmp_func,
--	    swap_r_func_t swap_func,
--	    const void *priv)
--{
--	__sort_r(base, num, size, cmp_func, swap_func, priv, false);
--}
- EXPORT_SYMBOL(sort_r);
- 
--/**
-- * sort_r_nonatomic - sort an array of elements, with cond_resched
-- * @base: pointer to data to sort
-- * @num: number of elements
-- * @size: size of each element
-- * @cmp_func: pointer to comparison function
-- * @swap_func: pointer to swap function or NULL
-- * @priv: third argument passed to comparison function
-- *
-- * Same as sort_r, but preferred for larger arrays as it does a periodic
-- * cond_resched().
-- */
--void sort_r_nonatomic(void *base, size_t num, size_t size,
--		      cmp_r_func_t cmp_func,
--		      swap_r_func_t swap_func,
--		      const void *priv)
--{
--	__sort_r(base, num, size, cmp_func, swap_func, priv, true);
--}
--EXPORT_SYMBOL(sort_r_nonatomic);
--
- void sort(void *base, size_t num, size_t size,
- 	  cmp_func_t cmp_func,
- 	  swap_func_t swap_func)
-@@ -339,19 +304,6 @@ void sort(void *base, size_t num, size_t size,
- 		.swap = swap_func,
- 	};
- 
--	return __sort_r(base, num, size, _CMP_WRAPPER, SWAP_WRAPPER, &w, false);
-+	return sort_r(base, num, size, _CMP_WRAPPER, SWAP_WRAPPER, &w);
- }
- EXPORT_SYMBOL(sort);
--
--void sort_nonatomic(void *base, size_t num, size_t size,
--		    cmp_func_t cmp_func,
--		    swap_func_t swap_func)
--{
--	struct wrapper w = {
--		.cmp  = cmp_func,
--		.swap = swap_func,
--	};
--
--	return __sort_r(base, num, size, _CMP_WRAPPER, SWAP_WRAPPER, &w, true);
--}
--EXPORT_SYMBOL(sort_nonatomic);
--- 
-2.55.0.1003.g10538fe699-goog
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c =
+b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+> --- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
 
+[ ... ]
+
+> +SEC("socket")
+> +__success
+> +__naked void zext_fill_narrow_from_wide_spill(void)
+> +{
+> +	asm volatile ("						\
+> +	call %[bpf_get_prandom_u32];				\
+> +	r6 =3D r0;						\
+> +	call %[bpf_get_prandom_u32];				\
+> +	r0 <<=3D 32;						\
+> +	r6 |=3D r0;		/* r6 =3D full 64-bit unknown */	\
+> +	*(u64 *)(r10 - 8) =3D r6;	/* slot linked to r6 */		\
+> +	r2 =3D *(u32 *)(r10 - 8);	/* narrowing fill, forms the link */ \
+
+[Severity: Medium]
+On big-endian architectures like s390x, won't reading 32 bits from offset -8
+target the upper 32 bits instead of the lower 32 bits?
+
+The bpf_stack_narrow_access_ok() check in the verifier expects to read the
+least significant bytes of the spill slot, which on big-endian are located
+at offset -4 for a 32-bit read. Could this hardcoded offset cause the verif=
+ier
+to reject the program and break the test on big-endian systems?
+
+> +	if w6 !=3D 0 goto 1f;	/* narrows r6, propagates to r2 */ \
+> +	if r2 =3D=3D 0 goto 1f;					\
+> +	r0 /=3D 0;						\
+> +1:								\
+> +	r0 =3D 0;							\
+> +	exit;							\
+> +"	:
+> +	: __imm(bpf_get_prandom_u32)
+> +	: __clobber_all);
+> +}
+
+[ ... ]
+
+> +SEC("socket")
+> +__failure __msg("div by zero")
+> +__naked void zext_fill_byte_forms_no_link(void)
+> +{
+> +	asm volatile ("						\
+> +	call %[bpf_get_prandom_u32];				\
+> +	r6 =3D r0;						\
+> +	call %[bpf_get_prandom_u32];				\
+> +	r0 <<=3D 32;						\
+> +	r6 |=3D r0;						\
+> +	*(u64 *)(r10 - 8) =3D r6;					\
+> +	r2 =3D *(u8 *)(r10 - 8);	/* 1-byte fill: no link */	\
+
+[Severity: Medium]
+Does this hardcoded 8-bit read from offset -8 target the most significant b=
+yte
+rather than the least significant byte on big-endian architectures?
+
+> +	if w6 !=3D 0 goto 1f;					\
+> +	if r2 =3D=3D 0 goto 1f;	/* not deduced */		\
+> +	r0 /=3D 0;						\
+> +1:								\
+> +	r0 =3D 0;							\
+> +	exit;							\
+> +"	:
+> +	: __imm(bpf_get_prandom_u32)
+> +	: __clobber_all);
+> +}
+
+[ ... ]
+
+> +SEC("socket")
+> +__success
+> +__naked void sext_fill_narrow_from_wide_spill(void)
+> +{
+> +	asm volatile ("						\
+> +	call %[bpf_get_prandom_u32];				\
+> +	r6 =3D r0;						\
+> +	call %[bpf_get_prandom_u32];				\
+> +	r0 <<=3D 32;						\
+> +	r6 |=3D r0;		/* r6 =3D full 64-bit unknown */	\
+> +	*(u64 *)(r10 - 8) =3D r6;	/* slot linked to r6 */		\
+> +	r2 =3D *(s32 *)(r10 - 8);	/* narrowing sx fill */		\
+
+[Severity: Medium]
+Similar to the previous cases, will this 32-bit read from offset -8 read the
+upper 32 bits on big-endian systems and cause verifier bounds tracking to f=
+ail?
+
+> +	if w6 !=3D -1 goto 1f;	/* narrows r6, propagates to r2 */ \
+> +	if r2 =3D=3D -1 goto 1f;	/* sign-extended, not 0xffffffff */ \
+> +	r0 /=3D 0;						\
+> +1:								\
+> +	r0 =3D 0;							\
+> +	exit;							\
+> +"	:
+> +	: __imm(bpf_get_prandom_u32)
+> +	: __clobber_all);
+> +}
+
+[ ... ]
+
+> +SEC("socket")
+> +__failure __msg("div by zero")
+> +__flag(BPF_F_TEST_STATE_FREQ)
+> +__naked void fill_kinds_reach_different_values(void)
+> +{
+> +	asm volatile ("						\
+> +	call %[bpf_get_prandom_u32];				\
+> +	r6 =3D r0;						\
+> +	r6 &=3D 1;						\
+> +	call %[bpf_get_prandom_u32];				\
+> +	r8 =3D r0;						\
+> +	call %[bpf_get_prandom_u32];				\
+> +	r0 <<=3D 32;						\
+> +	r8 |=3D r0;						\
+> +	*(u64 *)(r10 - 8) =3D r8;					\
+> +	if r6 >=3D 1 goto 2f;					\
+> +	r2 =3D *(s32 *)(r10 - 8);	/* sign-extending fill */	\
+
+[Severity: Medium]
+Will these narrow fills also fail verifier checks on big-endian machines due
+to the fixed -8 offset pointing to the wrong 32-bit half?
+
+> +	goto 1f;						\
+> +2:								\
+> +	r2 =3D *(u32 *)(r10 - 8);	/* zero-extending fill */	\
+> +1:								\
+> +	if w8 !=3D -1 goto 3f;					\
+> +	if r2 =3D=3D -1 goto 3f;	/* only the sign-extending path */ \
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260910164635.4595=
+58-1-vineet.gupta@linux.dev?part=3D10
