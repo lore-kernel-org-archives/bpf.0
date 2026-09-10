@@ -1,71 +1,71 @@
 Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E042551998
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 17:23:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393E3562617
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 17:24:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789061058; cv=none; b=YjuPcr/WXJEFF2HruyPonM//4ARr09jcgkLPi3pmNwlWQ4LNCupqwWJKlxo7EWmpFAViGPdia9963A1dUvmjqlMd9BBDfCDCps8NIwN0YtoTrimuVfef+MhxVDXiER0t/MiUStCDtYEkL4n3db1rT88YkpNXCer9Wxa7pQrclIg=
+	t=1789061057; cv=none; b=cLHfTdauMkRjLHbZOy1ffQGoKzABy4TgXPB/yylvv2CLjRZW1myjZAqrkXI1Y/L+xOBbTyN6NFkh68mpwmncUhvScWSO+vBUjOTbz1wxDrYdbc1wVIjRfzcz2hEtYYEl/JfjOqproQMGljYtranYw0QfmalJHPHq7/ilcExa99Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789061058; c=relaxed/simple;
-	bh=x9Lj3qHTY5Wkc5C6YWsmWE4XGd2tZm0DcXaGKkRvE3k=;
+	s=arc-20240116; t=1789061057; c=relaxed/simple;
+	bh=zO/SPNdon2pdqyZUxl36yf0nSMTSVAwzDRVEhNiLIDg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WNqT/EPOH2J+GfuSBkmQsuD0YJwQfbl8BD/5+Ko8nqjavsoo1wUZr8O/LLSRI3Joy+SAhWqtDPg5SsZNvZ4X/B7473x8gYYcYhDmCTSHFwtO8wMfI8IuwXNXF6oGTCWeXSnpoPvJp4+z7985V4hjmSzvNhrlNkcqwWnwkWflcGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qSmZchPZ; arc=none smtp.client-ip=74.125.227.140
+	 MIME-Version; b=lpjU87dh4NldZWPPQwevxIiXRVh3yNVhwtCH+a/VkaJspxKXBWl1gdq9diZq77IniAqgthxV61kd8g1GUuxH9mYQiX5nY8fuNiTNJKCD5gI+/lt95I00yDf/RXAvfLjgdgfMDIqm0HlRGBX8z+44BXothjAzHchiDZ4BjNljLrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jPkTKwJ1; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qSmZchPZ"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccdaea76so1459416a91.0
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 10:23:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jPkTKwJ1"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccafb752so2644363a91.0
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 10:24:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789061037; x=1789665837; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789061039; x=1789665839; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=BAaY6hBsQ0LUtb9I4qyj1phWCf3HpvuU2902p4lanHk=;
-        b=qSmZchPZtcWj9YhX3VghQSqmupdBHfqkUlgbP/1B/Vn9TFoemm2ErFcfwvOQTU7H/w
-         HATx66zC/0bfJ9EGzm2t7UMR898QwW0jCYR47g4Voiz2fdsgkQe/W6M0WcMAjzXgS9Px
-         ENGAHq6sRaRxc8NDb61vrquUhJp3NyIzSYWr+71D3iTY8SghgwNapRTmGuMEBgyC3KPT
-         PF83AM2MUUxKr5NWsfNNdlIzthG1tFdM9FWQ6HiB2OLzDZS/Dsqxdoj5v/BAiut4gDWw
-         ZH3Z/kmNV9OTQEdC0kwHSUxd+q4AgjsYgJ5lX5h01t+p+ULNmoJ4xXGJ38i+U8MhU6rw
-         t+AQ==
+        bh=hxmfltWUCBswI++r7Px5zoeRZX2z1LT+ChZwk/CFaaA=;
+        b=jPkTKwJ1qSLVYSTlLUX7FeYgSxc1igQEAohraR+h4cIiuMHhpobfYHx5CnG6IGqRks
+         YEBiFeONJ8MpK6OGw2G0IuRqf+ubMgi8oaEPLgXw2Ikbeixrda/2754DrQBMyA/E11NF
+         BefgvrwTBzkjA+eAY5wIITnmEykyy8M8McM+BSXqURoGJ+ZruZdxFKO8v7mT49HLIZoh
+         rP/plFogkZfEUmABsbAyE7J49bbFGt6lDoznpvYWAWB4GL/EMp5xU4ZGVgZcGpxEwmsL
+         oKAiR3hz512/P/hRrbRTSQrHuRo4GV5z/+J0m3ebxRs9xpdrC01GQ5eZKLKTZrkOB1QM
+         BeAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789061037; x=1789665837;
+        d=1e100.net; s=20251104; t=1789061039; x=1789665839;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=BAaY6hBsQ0LUtb9I4qyj1phWCf3HpvuU2902p4lanHk=;
-        b=aP4QAmrkr/HD6lEAYyFlpgSQt0QA+Riqn2GE4uzh04w4EtZykzjJBELejDEMmUD2s2
-         8fDxw66CeZ6RwP+blJGYe0iSMxJ1oPIrS6KpBK2wnZ/OVnv8xiZel4UlpfNqQavI9eLe
-         gFmblMclQ5l/ArczwCaO4+aI1i9QTX7x6J7R9jp58Adn0ge9NgL1LFKxSLttt2mD9S71
-         OjpnaoSAft+vIozAPa0nKskL9etQNtcuS/MIDKZgy47XU2hGLE1oRloHepdXdPLYP5Rm
-         W4BImNyqS623iz+vO1H7bh6WIuu5joRqxq5VWvbqu/tbhSxDwsPcEvlJyfckj85cj9cG
-         j4jw==
-X-Gm-Message-State: AFuF++m86em2pg3vDKtq/Ff8HzVgBSUK8QHH69o5OExOaStiX/uy357R
-	sWQ2RfdtF0dIw7/HkRg0vflj7gglST52D4zL0gpiLy7XCwHOi7alru7Gke4z8WOY
-X-Gm-Gg: AYBFou1SKsftAGNuSpOceX81dZzd0eFVgoH/6kB5Dy5XpDIBsG7vNFEa3/x5uDZ+srr
-	pVRnOAJbxup6bTPoOFO0gk0p4BeT5sjM59PIJIqFUByxMY+qBZVEjnlJMSXYN8ovGKM8Z2fCqb7
-	hNQ+yrFC30ORkHS2BWHEZ3IMrCBbieRW6nX9wL9m3JZJHos3iWAAF8v5j4dbaF+zwH2PnKrKV28
-	I7fWpnGopmWiyeeCoPjpYP6RlV6sm7ME6bUd003PNLtJx4bh6a6HK8m4ivMw/eSakoz8PtzGNBw
-	xzMRhi1HJ4Yw33VHAL1A0tSgdPki5+kfCf07yL4cEhiAftZtOO8Ko5IAq+AQie9MgbGUcE95bvX
-	tRePWt3g5PIz9bEsyKbtQmRXC/NxPAPorbaPo/68wE8ZIsgmFG1raUlSX84obyDRq4ify65l2aJ
-	/1en7c5dbesUgGTh8eUwJVdzNZhi9eelXVW72Og3xDOpkW3T/slnAV4yU8RSJ6B4gUInpFIQK0+
-	8YxrRwwNhAs71uPT0gFbhAcgxajtc62Tvm2CcMxyRFCXgTq1Db7e0c=
-X-Received: by 2002:a17:90b:4d0d:b0:38e:6d55:b1a6 with SMTP id 98e67ed59e1d1-39d97ea0248mr382004a91.3.1789061036701;
-        Thu, 10 Sep 2026 10:23:56 -0700 (PDT)
+        bh=hxmfltWUCBswI++r7Px5zoeRZX2z1LT+ChZwk/CFaaA=;
+        b=eI/sjuA//kUgKpAwktzXkk731oE6TwdrYikOpb9vo+bCaFJHWMCFySKmWOP7/mQQ0X
+         B2mCjOihBX8l68up3lpDADOV5ebZJTvNwVKl/8NcIdM5pWxn5ie1iHnqPVu+BKI3aVux
+         1kgZC30U83LiW23RSqQqCSvgopZjn81CmQ7wAA5J6OpSYBMdw/kvN6YEMFf9LUONuUSr
+         I2KoROZ8M30g+D5q9bNStPUJkPK684tFAm3IniglYpXbqBNooWTFLLvhi/jhlD2NSinZ
+         +dW2hgeEBk6lgKy4n+51fSS36L8kgPxHy0jTghj2RTP4vZnUVvFTW6RHJUM9sVT0iMD/
+         NAzg==
+X-Gm-Message-State: AFuF++nIPETdN+J+agB9BtL5O2RxVeCNP8RXanK/EIG0umcN2JcwWp/8
+	7cwU+wuqzGvk6LV6FCUM3pDYHm5fdq4mcr4cAcwNMvxY8cS5xcDk0nVj3gNi7JjC1iQ=
+X-Gm-Gg: AYBFou3szbITl75emDv3FKAxAAdtFpKXv+G0nAiVMXy45S60VKmJxpRJg/ExVzYnStU
+	/Pf0THPT9Qp7FeLQ3xThefuopwhzU6W6bE2iP1z66bhk4HOYcN6NCrjRxJseNH2e00c4k0xxYBE
+	+CdG5EpOy/eUpSWaCRpw9YRzuVIyI57MCQabwtJuBUqpD8cTYNu6bUVeFXwu4+f2viGr6xDjsXC
+	PYWAQvuBfhpvoed07iK3elmO/30Knbjt3l4cn7nqowmFwiCaTFVgujxJiASGqL5BE0Bu6+ICX+z
+	qxW72sRf5zpyZmS8cK3BVXE3veDNNKNRGTBdYIiSNxUj5kALiPv1F+WV83kQMxk8sUNbRrZYYU6
+	Nf5yGY+NB3OVqu1dKwH7T20necUrXlB2OZdC0dTxX8tysPzBnYnn7FuTIxAKJIa/eH18rtU+r0V
+	YRJQps6wXilkxTuUP7yy1wo/sc6TfD4+YofSI9gmKUWY+ZshbBAaR908AIVo7zCrUe3dDEYPbU2
+	fdLloi+/2pxoinjGKeetByFNrBNrPr0Pd+ziKPBkJKF1LwW/WKxlI4H
+X-Received: by 2002:a17:90b:3d89:b0:398:dcfe:968e with SMTP id 98e67ed59e1d1-39bac3f9063mr22147992a91.20.1789061038350;
+        Thu, 10 Sep 2026 10:23:58 -0700 (PDT)
 Received: from ubuntu2204.comp.polyu.edu.hk ([158.132.255.104])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d995a42a5sm164304a91.17.2026.09.10.10.23.55
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d995a42a5sm164304a91.17.2026.09.10.10.23.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 10:23:56 -0700 (PDT)
+        Thu, 10 Sep 2026 10:23:58 -0700 (PDT)
 From: Mingpei CAO <caomingpei@gmail.com>
 To: bpf@vger.kernel.org
 Cc: andrii@kernel.org,
 	eddyz87@gmail.com,
 	Mingpei CAO <caomingpei@gmail.com>
-Subject: [PATCH bpf 1/2] libbpf: Reject struct_ops bitfields before accessing data
-Date: Thu, 10 Sep 2026 17:23:39 +0000
-Message-ID: <20260910172340.1467764-2-caomingpei@gmail.com>
+Subject: [PATCH bpf 2/2] selftests/bpf: Test private struct_ops bitfield rejection
+Date: Thu, 10 Sep 2026 17:23:40 +0000
+Message-ID: <20260910172340.1467764-3-caomingpei@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260910172340.1467764-1-caomingpei@gmail.com>
 References: <20260910172340.1467764-1-caomingpei@gmail.com>
@@ -77,55 +77,85 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A Clang-generated struct_ops mirror with an all-zero private bitfield can
-crash libbpf. With kind_flag set, the BTF member offset also encodes the
-bitfield width.
+Add an optional all-zero private bitfield to the struct_ops test. Verify
+that libbpf returns -ENOTSUP and emits the bitfield diagnostic.
 
-bpf_map__init_kern_struct_ops() divided this encoded value by eight
-before rejecting bitfields. A 31-bit field therefore selects
-data + 0x3e00000, where libbpf_is_mem_zeroed() triggers an ASan SEGV.
+Keep the existing all-zero scalar test as the compatibility control.
 
-The issue was found by comparing the same ELF in JIT and interpreter
-configurations. JIT+BTF reached the faulty struct_ops path, while the
-interpreter configuration rejected the object before this code.
-
-Reject local bitfields before calculating the data pointer. Preserve the
-existing all-zero compatibility path for ordinary private fields.
-
-Fixes: c911fc61a7ce ("libbpf: Skip zeroed or null fields if not found in the kernel type.")
 Assisted-by: LLM
 Signed-off-by: Mingpei CAO <caomingpei@gmail.com>
 ---
- tools/lib/bpf/libbpf.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ .../bpf/prog_tests/test_struct_ops_module.c   | 31 +++++++++++++++++++
+ .../selftests/bpf/progs/struct_ops_module.c   |  7 +++++
+ 2 files changed, 38 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index b749c01742ee0..1738a42220f0c 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -1223,6 +1223,12 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
- 		const char *mname;
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+index 75a0dea511b3f..517e5abe67c0c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
+@@ -150,6 +150,35 @@ static void test_struct_ops_not_zeroed(void)
+ 	struct_ops_module__destroy(skel);
+ }
  
- 		mname = btf__name_by_offset(btf, member->name_off);
-+		if (btf_member_bitfield_size(type, i)) {
-+			pr_warn("struct_ops init_kern %s: bitfield %s is not supported\n",
-+				map->name, mname);
-+			return -ENOTSUP;
-+		}
++static void test_struct_ops_private_bitfield(void)
++{
++	struct struct_ops_module *skel;
++	char *log = NULL;
++	int err;
 +
- 		moff = member->offset / 8;
- 		mdata = data + moff;
- 		msize = btf__resolve_size(btf, member->type);
-@@ -1259,8 +1265,7 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
- 		}
++	skel = struct_ops_module__open();
++	if (!ASSERT_OK_PTR(skel, "struct_ops_module_open_private_bitfield"))
++		return;
++
++	bpf_map__set_autocreate(skel->maps.testmod_zeroed, false);
++	err = bpf_map__set_autocreate(skel->maps.testmod_private_bitfield, true);
++	if (!ASSERT_OK(err, "enable_private_bitfield_map"))
++		goto cleanup;
++
++	if (start_libbpf_log_capture())
++		goto cleanup;
++	err = struct_ops_module__load(skel);
++	log = stop_libbpf_log_capture();
++	ASSERT_EQ(err, -ENOTSUP, "struct_ops_module_load_private_bitfield");
++	ASSERT_HAS_SUBSTR(log,
++			  "bitfield private_bitfield is not supported",
++			  "private_bitfield_rejection_log");
++
++cleanup:
++	free(log);
++	struct_ops_module__destroy(skel);
++}
++
+ /* The signature of an implementation might not match the signature of the
+  * function pointer prototype defined in the BPF program. This mismatch
+  * should be allowed as long as the behavior of the operator program
+@@ -304,6 +333,8 @@ void serial_test_struct_ops_module(void)
+ 		test_struct_ops_load();
+ 	if (test__start_subtest("struct_ops_not_zeroed"))
+ 		test_struct_ops_not_zeroed();
++	if (test__start_subtest("struct_ops_private_bitfield"))
++		test_struct_ops_private_bitfield();
+ 	if (test__start_subtest("struct_ops_incompatible"))
+ 		test_struct_ops_incompatible();
+ 	if (test__start_subtest("struct_ops_null_out_cb"))
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_module.c b/tools/testing/selftests/bpf/progs/struct_ops_module.c
+index 71c420c3a5a6c..423caf78f4207 100644
+--- a/tools/testing/selftests/bpf/progs/struct_ops_module.c
++++ b/tools/testing/selftests/bpf/progs/struct_ops_module.c
+@@ -76,6 +76,13 @@ struct bpf_testmod_ops___zeroed testmod_zeroed = {
+ 	.zeroed_op = (void *)zeroed_op,
+ };
  
- 		kern_member_idx = kern_member - btf_members(kern_type);
--		if (btf_member_bitfield_size(type, i) ||
--		    btf_member_bitfield_size(kern_type, kern_member_idx)) {
-+		if (btf_member_bitfield_size(kern_type, kern_member_idx)) {
- 			pr_warn("struct_ops init_kern %s: bitfield %s is not supported\n",
- 				map->name, mname);
- 			return -ENOTSUP;
++struct bpf_testmod_ops___private_bitfield {
++	unsigned int private_bitfield:31;
++};
++
++SEC("?.struct_ops.link")
++struct bpf_testmod_ops___private_bitfield testmod_private_bitfield;
++
+ struct bpf_testmod_ops___incompatible {
+ 	int (*test_1)(void);
+ 	void (*test_2)(int *a);
 -- 
 2.43.0
 
