@@ -1,284 +1,224 @@
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B954158FD1A
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 18:51:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E20E59220E
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 18:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789066295; cv=none; b=ejdyfMK4LE7WeDe//gVfkQ4tIXlxZq198PKAxhTn2Qt0QnGfgyM1RZ0bE5z+FVGucRWzsxpVXq6CGfbDQbWF/zL0kl06fCL5xEk1247LKLqF3egdUgu360NcvhrkkoO/cdqf8DNnBWFhWD+O9Nm8etKN8PujbTwJlywYn1uW1og=
+	t=1789066486; cv=none; b=O/JjYXNWS8lJgAU8ysJmF3m5AF+HVoqm9aDK2etYKYmIiHVlzSJojmtbFSc4QoTygsWpHYFoG2oIFN6dcCNcoWgKkv8NuK9PU9S63ydN1ecU78HKcI4D+5VX/wVgJ2Ec1WKMLYb0KuuK2uEaDJwt9z4XuPZpT2j+AlzwryIGo1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789066295; c=relaxed/simple;
-	bh=yDXq4+Pa2J9q8/ETFFwhgnijvgDUnmRh/u0MBvZPngE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AGF8h9bf0Jl8QomLYZ9TQgo8s1sMWHVo6K68oKU4vc3nrzLTOPTfYJORhYGKkXyQp5eLDJGPLSn5vWzTikTCULovEY6ypL0//+L6Pr6VwOknNy+vH7EkdGDvG1lQA9nL/03ZcvLJWAuX/lJ98G+pfc+CwUAA9ru7IQNAIP1zTx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=PkgoRUy7; arc=none smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
+	s=arc-20240116; t=1789066486; c=relaxed/simple;
+	bh=RmctG5NZSfYRm/FwiEf62pwo8PO0/3lzYDxKXVA4F0c=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pD4/W7S+MD57ROWL2/w60vdMGV0ib67VIV/r2Zyq65U2ohnUu3tG6UjHBgfwzj2VZ1yXqHnl/iqIUrHHv+jW29uFgJjCe080/wGdCVcmW4eTzc9Zh+5VVoUXWeHb41vDn7BaP0hhCnnPV28wXH0y3DmWJv2EQl83DKgyJk0xPlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QRFigFbH; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="PkgoRUy7"
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-92e85499ffbso1182385a.0
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 11:51:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QRFigFbH"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cbee846deecso211434a12.1
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 11:54:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1789066278; x=1789671078; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=lBIdGtm0mo8q5590yjvGhNrcgQrhEpuiN5lFQ+hlgEA=;
-        b=PkgoRUy78M0SdpxAQudnPkg9gxMggG3+FB6Yno6oH4m5u1lo+2N9kGApI/i5FJRT5J
-         hSk8Sub6ggqOCtXdZfJTTYAZkehip7EP+fYkrlzOTETaqc6IKtttQ96DZiwJ3L4BgAeF
-         SxqqmIy30oyHTjxHrRoNq/qI1uuihaid9Tc3hYA9A3/k89ATWpHv1iP0WPyIx2jEQaal
-         IPwqQveGPSZYeD+whKTB5G1rK7PPBud6pvTiiFGsPM6n4eNWmvNFQWNjJvK/UkOTclz6
-         39mqNm6NJV1r5XW63hKzBufUUaMbu4zw4ofny8aqUntqL/TSLGVPGRzG5i97jd6BsOXd
-         uHjA==
+        d=gmail.com; s=20251104; t=1789066483; x=1789671283; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=KqrkI1H7pcpPRuK+7k3BRc/EtSvLBGjZYKAlH9/o/kY=;
+        b=QRFigFbH9lbvESYyobCK/WnaVs9MRYVeEaGMOv6J5Klg/0h3eJiBqZSPG6mGLH1mN1
+         xWnvww1C0kKffsz9XSmTBLxgY95zcmpCtfZPKwnJfj0BaM70cKvEeX4Oa48BQwT0/10k
+         GQhKp1U51eiX6BqLHuKyJCmJFmHkE7hmwek2HjhWrHpkUKV6Afj1kQpplFKSqp5Dl7rs
+         WjHQDK842GW04IOjH18jmAJduzP//L5R9ovvptbHLTI6qTmna4SFCgJbbsE2XKWwdgEU
+         Po0ytbMv76OZOwQP2KRLZaBig5aFJBb1U04DmnMqfG5dUGnbKOKUtoXV0rfTnQtSMIES
+         MRGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789066278; x=1789671078;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
+        d=1e100.net; s=20251104; t=1789066483; x=1789671283;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=lBIdGtm0mo8q5590yjvGhNrcgQrhEpuiN5lFQ+hlgEA=;
-        b=f7LgD2FVb+gJABmSRAKOGv+5EuUD2JkHrOubpzn96keUbu7h0M6Q6Va4v3CvK1GG9J
-         HQd2j5eumFhR8uDR65gQ/NH4zSLsNg765m4G1TNXSCS4VCvp+5RiKo8Hdbke9c4TtoZp
-         zn9Y1cVFYdyCid5R6TtFKq1dv3Bp9b63M9khZEV9OVm5xDrxCA93LLgznXD2nigrUWJC
-         +Ckr+K9GBOFFUgt3jZ1VbW2D9gqsess955swfpYdugjYwnEUHxpzbjNox9VggxGiMfIH
-         86CTyyfxtH+FHb6T7+iKpaU6oPSBkOdHvktKbce9YiYhPk7WnBvV58sWlKTI5cWTjYsK
-         EFUw==
-X-Forwarded-Encrypted: i=1; AKwUvBwUAWOD3eFbhpdfw958Ew8V//MYDFYhMo2RIOttaaV7t3cnUhRPCLa3APMA4E/Vz6/K3SA=@vger.kernel.org
-X-Gm-Message-State: AFuF++l5VkQnFZ+xIsgaEDTbNRxUlUxZpGvfDlHjZIIP8YtTQEJp6oZW
-	XUFeh3DWcWtzqco/9iO5ralta0evIvH1AnFT3WByoduNns7gc5P+hU1Ue0X/mLaC5RU=
-X-Gm-Gg: AYBFou1Iwla2FSTRNP34UQlQKE3To1fboyWoqY3PAiES17JnafLsvkO/gXCnM032iyP
-	RxTHIyiDr1YuS5oD4e4qc/xIfxyTsSJNJiqd+CVdnWF8sLtVWqpJHotzTiJRbLrQ1d0HIjsUJfI
-	m7+sabDCVHK4WCtbvIj8ZnEwHUxW3YM0hxBW5uk9uqajRiD89H477Z9gTUjU/sv+j1GRZIQ/7aM
-	VE0O/2KJLgaAp2T6iLgKcOjX3x23LXRXVBou/wZbH91QJy+sQOhvnWgtSQTKobcmq2rGj04mOGi
-	8ICW8pl1cHB36AZIpb7l6KV/1PCsK8j5SAy5jvV51htw73Q2uHaSLpJhKuhJHutwqReSo24hMWE
-	LltHsnP4sAlX7ySAtTrDTKuMcxoD1SjKZpq6IsNCZ8JBWaP16I4jKnCYlgoTtmmN3yQlZnZGRpV
-	mF6It31ndNz1mXFsF+9bpLYxIG2jyq2cGdqG0TZNwa/ybGWqIpjCC1LdJ1TbsG1hjOlWru6Otj8
-	0yilUDQXGTZbFLG+fUQGPl8xRCcb7mehACFaK/545ARqQXmB70TvQfC
-X-Received: by 2002:a05:620a:6a04:b0:937:4e12:5db6 with SMTP id af79cd13be357-939ea2a1e5dmr15410485a.43.1789066277808;
-        Thu, 10 Sep 2026 11:51:17 -0700 (PDT)
-Received: from toxicpanda.com (ec2-34-228-114-98.compute-1.amazonaws.com. [34.228.114.98])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-939e80f8142sm49848385a.43.2026.09.10.11.51.16
+        bh=KqrkI1H7pcpPRuK+7k3BRc/EtSvLBGjZYKAlH9/o/kY=;
+        b=IQ8n/x01kopIC9PBCmnf2J2ChccVPvJmyAIP7dZZcXW1uB9FaOa013izHelWTSIYTj
+         uy/rlw7OtitiMda+sXvD9EPEIF40TzlqfuAFBQ+wpCnGE0AqeKvYsJrVsA3jbEZ0THOX
+         9ZVlQP1Dh/wsrDo2GYU8E1bZzBBXIbw8sIZg/8FN6HuNH0/vPegkX9hVEbAGuE5W6vNu
+         odKgp2CnS3yoWOdzqROjlte4qhy3XmF3YqqIku8k6s4okZd1C5YJFSu6+jDaojJs8ITB
+         yej/iwyJGSjzkhnbmPJ1F+I/mIev5/sjTjNHmuUMxfmMldVKXWpbVyyfQJ8WilbmgSei
+         a/yg==
+X-Forwarded-Encrypted: i=1; AKwUvBx46xS4gCdRxzCBbrt2Xw+2Wj66IBopokrSORyYGXFccoarZI+7m2BF5NACv+a9JMi1W04=@vger.kernel.org
+X-Gm-Message-State: AFuF++mCADsE8Nm2mlnLWD+mTVklEmtJHnVRq1XnmhF61GOEsF1Q09zy
+	JwkmSzou4VIOaz5GX/I6WpY6jPXt18OBuLIM6EdY5a3PIkFajVm3abvD
+X-Gm-Gg: AYBFou3pYO80T0meS5jSomEoD/36NpZYkce/pFEpNUbMejUJ3Sa+N4NCvc8bNDaO6iC
+	hpa6SeSn5vcltTdmMUhCCGi9UpnWrT8ucw3f5Y6ZF4QSKBZiuDsxb+bjSsIqG1SWmOyy03vrC97
+	78BomYy4Cpn/wUTMngG89CZifenbl68xdZGK8JdyCAncBV6Go0ZObztwmNDrtCUusVLqRiaF8sg
+	C3iG+X8lEQezozll24xjnyLeCRww6EJk3FiGdyu82NYJ+4U86ZRlRXczOYT+h7lfjQ4Z5jvrQaN
+	IRxrnE89yF9vYIYyfgWb8LShKLrN5+Y5vZGRldTSNwxmRZuk6saV7OlPPCdVH9UTqJYpNwxC67C
+	oWB98X5VvqGLqTygJbS+AW1TBy8rSkLHc2tqW40jcPX0XCkOdFMGT6ABxFuliR+YPCDfZdYrQEg
+	ohbDScHFzBj0no+5h4wyLYzbM9Gjlg8k6pSQzpwpFu/i05qIDvfLvdhTpYlbM3yub45fFTSb+/R
+	xdLu/zi5UZP45db36kQFveCQq5Tgl+jlUuPWVNSoDoetzs9aisoPSG10A==
+X-Received: by 2002:a17:90b:164b:b0:398:9be5:b419 with SMTP id 98e67ed59e1d1-39d9c22e219mr89776a91.20.1789066483166;
+        Thu, 10 Sep 2026 11:54:43 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:a3ce:533a:7492:3ff3? ([2620:10d:c090:500::4:d279])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14365b759d0sm592951c88.7.2026.09.10.11.54.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 11:51:17 -0700 (PDT)
-From: Josef Bacik <josef@toxicpanda.com>
-Date: Thu, 10 Sep 2026 18:50:36 +0000
-Subject: [PATCH RFC 13/13] rcu-tasks: Treat preemption outside trampolines
- as a quiescent state
+        Thu, 10 Sep 2026 11:54:42 -0700 (PDT)
+Message-ID: <c90de371d062295815dfff1bdeca4b15adb4a57e.camel@gmail.com>
+Subject: Re: [PATCH bpf 1/6] bpf: Avoid quadratic successor rescan in
+ bpf_compute_scc
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org
+Cc: memxor@gmail.com, a.s.protopopov@gmail.com, info@starlabs.sg, 
+	bpf@vger.kernel.org
+Date: Thu, 10 Sep 2026 11:54:40 -0700
+In-Reply-To: <20260909204035.24289-1-daniel@iogearbox.net>
+References: <20260909204035.24289-1-daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260910-b4-rcu-tasks-preempt-qs-v1-13-d4469f4cc101@toxicpanda.com>
-References: <20260910-b4-rcu-tasks-preempt-qs-v1-0-d4469f4cc101@toxicpanda.com>
-In-Reply-To: <20260910-b4-rcu-tasks-preempt-qs-v1-0-d4469f4cc101@toxicpanda.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>, 
- Frederic Weisbecker <frederic@kernel.org>, 
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
- Joel Fernandes <joelagnelf@nvidia.com>, Boqun Feng <boqun@kernel.org>, 
- Thomas Gleixner <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
- Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- x86@kernel.org, Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
- Xu Kuohai <xukuohai@huaweicloud.com>
-Cc: Andy Lutomirski <luto@kernel.org>, 
- Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, 
- Juergen Gross <jgross@suse.com>, Luis Chamberlain <mcgrof@kernel.org>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, linux-kernel@vger.kernel.org, 
- rcu@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- xen-devel@lists.xenproject.org, Josef Bacik <josef@toxicpanda.com>
-X-Mailer: b4 0.15.2
 
-Tasks RCU only accepts a voluntary context switch, usermode or idle as a
-quiescent state, because a task that was preempted may be sitting in a
-trampoline whose text is about to be freed.  On PREEMPT_LAZY kernels,
-where cond_resched() is a no-op and CPU-bound kernel threads only ever
-lose the CPU through preemption, that means any long-running kthread or
-kworker stalls every synchronize_rcu_tasks() caller -- BPF and LSM
-program detach and DYNAMIC ftrace_ops teardown via ftrace_shutdown(),
-and kprobe (un)registration via the jump optimizer, which waits under
-kprobe_mutex, text_mutex and cpus_read_lock() -- for its entire run,
-unless someone sprinkles cond_resched_tasks_rcu_qs() into it.  A cgroup
-writeback worker draining a large cgwb for eleven minutes was enough to
-back 40+ tasks up behind trampoline_mutex and trip the hung-task panic.
+On Wed, 2026-09-09 at 22:40 +0200, Daniel Borkmann wrote:
+> The iterative Tarjan DFS in bpf_compute_scc() emulates recursion with an
+> explicit 'dfs' stack: when a successor has not been visited yet, the
+> successor is pushed and the walk restarts at the top of the loop. On the
+> way back to a vertex the successor scan starts over at index zero, so a
+> vertex with k successors rescans up to k successors on each of its up to =
+k
+> descents, i.e. O(k^2) work.
+>=20
+> For ordinary instructions k <=3D 2 and this is irrelevant. For a gotox th=
+e
+> successors are the jump table of the containing subprogram, whose size is
+> bounded only by the max_entries of the insn_array map, so k can reach the
+> 1M instruction complexity limit. Loading such a program keeps a CPU busy
+> in the loop for a very long time before verification even begins.
+>=20
+> Record in 'dfs_pos' the successor index each frame stopped at and resume
+> the scan there. Each edge is therefore examined a bounded number of times
+> and the walk becomes linear in the number of edges.
+>=20
+> Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
+> Reported-by: STAR Labs SG <info@starlabs.sg>
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> ---
 
-With the previous patches, every Tasks-RCU-protected trampoline on
-x86-64 and arm64 (ftrace_caller and its dynamic copies, BPF trampoline
-images, the optprobe template, out-of-line direct trampolines) holds
-current->rcu_tramp_nesting across its call-out, and the irq-exit
-preemption path holds it across preempt_schedule_irq() whenever the
-interrupted IP is somewhere the counter cannot cover: trampoline
-entry/exit instructions and other dynamically allocated text, the static
-ftrace stubs and x86 return thunks on the way into a direct-call target,
-modules hosting their own direct trampolines, and the kprobe
-jump-optimization window.  A task that is context-switched with the
-count at zero therefore cannot be inside, called from, or about to
-resume into anything Tasks RCU protects.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-So let rcu_tasks_classic_qs() clear the holdout flag on a preemption
-too when rcu_tramp_nesting is zero, on architectures that select
-ARCH_HAS_RCU_TASKS_PREEMPT_QS, and select it for x86-64 and for arm64
-with DYNAMIC_FTRACE_WITH_ARGS.  A running holdout is already poked via
-rcu_request_urgent_qs_task(), which makes the next tick set
-NEED_RESCHED; the resulting preemption -- from irq exit, or synchronously
-at the next preempt_enable() -- now retires it, so a Tasks RCU grace
-period is bounded by roughly a tick plus the longest preempt-disabled
-section instead of by the longest stretch without a voluntary schedule().
-Other architectures keep the voluntary-only rule.  Update the Tasks RCU
-documentation comments and the FORCE_TASKS_RCU help text to match.
+The change looks correct, but I'd cleanup the comments a bit,
+to me these look too LLM-ish.
 
-Cost: one load of current plus an inc/dec per trampoline entry and exit,
-and on irq-exit preemption one core_kernel_text() check plus, with
-OPTPROBES, MAX_OPTIMIZED_LENGTH-1 lockless kprobe hash lookups.
+>  kernel/bpf/cfg.c | 41 +++++++++++++++++++++++++++++++++++------
+>  1 file changed, 35 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
+> index 842c7d1eabcc..081f7003eae6 100644
+> --- a/kernel/bpf/cfg.c
+> +++ b/kernel/bpf/cfg.c
+> @@ -749,7 +749,7 @@ int bpf_compute_scc(struct bpf_verifier_env *env)
+>  	struct bpf_insn_aux_data *aux =3D env->insn_aux_data;
+>  	const u32 insn_cnt =3D env->prog->len;
+>  	int stack_sz, dfs_sz, err =3D 0;
+> -	u32 *stack, *pre, *low, *dfs;
+> +	u32 *stack, *pre, *low, *dfs, *dfs_pos;
+>  	u32 i, j, t, w;
+>  	u32 next_preorder_num;
+>  	u32 next_scc_id;
+> @@ -762,13 +762,16 @@ int bpf_compute_scc(struct bpf_verifier_env *env)
+>  	 * - 'stack' accumulates vertices in DFS order, see invariant comment b=
+elow;
+>  	 * - 'pre[t] =3D=3D p' =3D> preorder number of vertex 't' is 'p';
+>  	 * - 'low[t] =3D=3D n' =3D> smallest preorder number of the vertex reac=
+hable from 't' is 'n';
+> -	 * - 'dfs' DFS traversal stack, used to emulate explicit recursion.
+> +	 * - 'dfs' DFS traversal stack, used to emulate explicit recursion;
+> +	 * - 'dfs_pos[k] =3D=3D j' =3D> the frame 'dfs[k]' resumes visiting its
+> +	 *   successors at index 'j'.
+>  	 */
+>  	stack =3D kvcalloc(insn_cnt, sizeof(int), GFP_KERNEL_ACCOUNT);
+>  	pre =3D kvcalloc(insn_cnt, sizeof(int), GFP_KERNEL_ACCOUNT);
+>  	low =3D kvcalloc(insn_cnt, sizeof(int), GFP_KERNEL_ACCOUNT);
+>  	dfs =3D kvcalloc(insn_cnt, sizeof(*dfs), GFP_KERNEL_ACCOUNT);
+> -	if (!stack || !pre || !low || !dfs) {
+> +	dfs_pos =3D kvcalloc(insn_cnt, sizeof(*dfs_pos), GFP_KERNEL_ACCOUNT);
+> +	if (!stack || !pre || !low || !dfs || !dfs_pos) {
+>  		err =3D -ENOMEM;
+>  		goto exit;
+>  	}
+> @@ -851,6 +854,7 @@ int bpf_compute_scc(struct bpf_verifier_env *env)
+>  		stack_sz =3D 0;
+>  		dfs_sz =3D 1;
+>  		dfs[0] =3D i;
+> +		dfs_pos[0] =3D 0;
+>  dfs_continue:
+>  		while (dfs_sz) {
+>  			w =3D dfs[dfs_sz - 1];
+> @@ -860,13 +864,37 @@ int bpf_compute_scc(struct bpf_verifier_env *env)
+>  				next_preorder_num++;
+>  				stack[stack_sz++] =3D w;
+>  			}
+> -			/* Visit 'w' successors */
+> +			/*
+> +			 * Visit 'w' successors, resuming at the successor this
+> +			 * frame last descended into. Restarting the scan at zero
+> +			 * on every return to 'w' would examine each successor
+> +			 * once per descent, i.e. quadratic in the number of
+> +			 * successors, which for a gotox is the size of the jump
+> +			 * table.
 
-Not covered: x86-32 and the other GENERIC_IRQ_ENTRY architectures, and
-return_to_handler / the rethook trampoline, whose C callees take the
-ftrace recursion lock before touching any ops.
+Please drop the paragraph above, this fact was already stated in the
+commit message.
 
-Tested under QEMU (x86-64, PREEMPT_LAZY, PREEMPT_RCU=n, PROVE_RCU, with
-and without PREEMPT_DYNAMIC) against a kthread spinning in-kernel for
-30s with the function tracer, an ftrace kprobe, an optimized kprobe and
-fentry/fexit programs live: synchronize_rcu_tasks() 29.7s -> 0.1-0.3s,
-ftrace_shutdown() of a DYNAMIC ops 27s -> 0.2-0.8s, the ftrace-direct
-sample modules load/fire/unload in ~2.5s each during the spin, no
-warnings.  arm64 is build-tested only.
+> +			 *
+> +			 * Re-folding the successors before that index would be a
 
-Assisted-by: LLM
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
----
- arch/arm64/Kconfig       |  1 +
- arch/x86/Kconfig         |  1 +
- include/linux/rcupdate.h | 14 +++++++++++++-
- kernel/rcu/Kconfig       |  7 ++++---
- kernel/rcu/tasks.h       | 15 +++++++++++----
- 5 files changed, 30 insertions(+), 8 deletions(-)
+I think "visiting" is a better term in this context.
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index b5a51b0ef944..0e6c1e0b236f 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -44,6 +44,7 @@ config ARM64
- 	select ARCH_HAS_PREEMPT_LAZY
- 	select ARCH_HAS_PTDUMP
- 	select ARCH_HAS_PTE_SPECIAL
-+	select ARCH_HAS_RCU_TASKS_PREEMPT_QS if DYNAMIC_FTRACE_WITH_ARGS
- 	select ARCH_HAS_HW_PTE_YOUNG
- 	select ARCH_HAS_SETUP_DMA_OPS
- 	select ARCH_HAS_SET_DIRECT_MAP
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 15fd9ec5ecac..0a6427019345 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -99,6 +99,7 @@ config X86
- 	select ARCH_HAS_PREEMPT_LAZY
- 	select ARCH_HAS_PTDUMP
- 	select ARCH_HAS_PTE_SPECIAL
-+	select ARCH_HAS_RCU_TASKS_PREEMPT_QS	if X86_64
- 	select ARCH_HAS_HW_PTE_YOUNG
- 	select ARCH_HAS_NONLEAF_PMD_YOUNG	if PGTABLE_LEVELS > 2
- 	select ARCH_HAS_UACCESS_FLUSHCACHE	if X86_64
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index e9afbbb1b061..356b1d6ef226 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -204,6 +204,11 @@ bool arch_rcu_tasks_ip_in_trampoline(unsigned long ip);
-  * non-trampoline user, kprobe jump optimization, which waits for tasks
-  * preempted inside the instruction bytes it is about to overwrite.
-  *
-+ * With both in place, on architectures that select
-+ * ARCH_HAS_RCU_TASKS_PREEMPT_QS, a preemption with rcu_tramp_nesting == 0 is
-+ * a Tasks RCU quiescent state, and a CPU-bound kernel thread no longer needs
-+ * to volunteer one via cond_resched_tasks_rcu_qs().
-+ *
-  * Only current writes the count and only current (or an interrupt on the same
-  * CPU) reads it, so plain accesses suffice.
-  */
-@@ -228,9 +233,16 @@ static __always_inline void rcu_tasks_trampoline_assert_none(void)
- 
- bool rcu_tasks_ip_in_trampoline(unsigned long ip);
- 
-+#ifdef CONFIG_RCU_TASKS_PREEMPT_QS
-+#define rcu_tasks_preempt_is_qs(t)	(!READ_ONCE((t)->rcu_tramp_nesting))
-+#else
-+#define rcu_tasks_preempt_is_qs(t)	false
-+#endif
-+
- # define rcu_tasks_classic_qs(t, preempt)				\
- 	do {								\
--		if (!(preempt) && READ_ONCE((t)->rcu_tasks_holdout))	\
-+		if (READ_ONCE((t)->rcu_tasks_holdout) &&		\
-+		    (!(preempt) || rcu_tasks_preempt_is_qs(t)))		\
- 			WRITE_ONCE((t)->rcu_tasks_holdout, false);	\
- 	} while (0)
- void call_rcu_tasks(struct rcu_head *head, rcu_callback_t func);
-diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-index 999f8228a13d..8e7c94329105 100644
---- a/kernel/rcu/Kconfig
-+++ b/kernel/rcu/Kconfig
-@@ -94,9 +94,10 @@ config FORCE_TASKS_RCU
- 	default n
- 	help
- 	  This option force-enables a task-based RCU implementation
--	  that uses only voluntary context switch (not preemption!),
--	  idle, and user-mode execution as quiescent states.  Not for
--	  manual selection in most cases.
-+	  that uses only voluntary context switch (not preemption, unless
-+	  the architecture selects ARCH_HAS_RCU_TASKS_PREEMPT_QS and the
-+	  task is outside any trampoline), idle, and user-mode execution
-+	  as quiescent states.  Not for manual selection in most cases.
- 
- config NEED_TASKS_RCU
- 	bool
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index df68a330769a..78d2b78d3043 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -905,7 +905,10 @@ static void rcu_tasks_wait_gp(struct rcu_tasks *rtp)
- //
- // Simple variant of RCU whose quiescent states are voluntary context
- // switch, cond_resched_tasks_rcu_qs(), user-space execution, and idle.
--// As such, grace periods can take one good long time.  There are no
-+// With CONFIG_RCU_TASKS_PREEMPT_QS, a preemption taken while the task is
-+// not inside a trampoline (current->rcu_tramp_nesting == 0, see
-+// rcu_tasks_trampoline_enter()) is a quiescent state as well; without it,
-+// grace periods can take one good long time.  There are no
- // read-side primitives similar to rcu_read_lock() and rcu_read_unlock()
- // because this implementation is intended to get the system into a safe
- // state for some of the manipulations involved in tracing and the like.
-@@ -1246,8 +1249,11 @@ static void tasks_rcu_exit_stall(struct timer_list *unused)
-  * period elapses, in other words after all currently executing rcu-tasks
-  * read-side critical sections have completed. call_rcu_tasks() assumes
-  * that the read-side critical sections end at a voluntary context
-- * switch (not a preemption!), cond_resched_tasks_rcu_qs(), entry into idle,
-- * or transition to usermode execution.  As such, there are no read-side
-+ * switch, cond_resched_tasks_rcu_qs(), entry into idle, transition to
-+ * usermode execution, or, with CONFIG_RCU_TASKS_PREEMPT_QS, a preemption
-+ * taken outside any trampoline (current->rcu_tramp_nesting == 0, see
-+ * rcu_tasks_trampoline_enter()); otherwise a preemption is not a
-+ * quiescent state.  As such, there are no read-side
-  * primitives analogous to rcu_read_lock() and rcu_read_unlock() because
-  * this primitive is intended to determine that all tasks have passed
-  * through a safe state, not so much for data-structure synchronization.
-@@ -1269,7 +1275,8 @@ EXPORT_SYMBOL_GPL(call_rcu_tasks);
-  * executing rcu-tasks read-side critical sections have elapsed.  These
-  * read-side critical sections are delimited by calls to schedule(),
-  * cond_resched_tasks_rcu_qs(), idle execution, userspace execution, calls
-- * to synchronize_rcu_tasks(), and (in theory, anyway) cond_resched().
-+ * to synchronize_rcu_tasks(), (in theory, anyway) cond_resched(), and,
-+ * with CONFIG_RCU_TASKS_PREEMPT_QS, preemption outside any trampoline.
-  *
-  * This is a very specialized primitive, intended only for a few uses in
-  * tracing and other situations requiring manipulation of function
+> +			 * no-op. Such a successor 's' has 'pre[s] !=3D 0' by then,
+> +			 * so it is never pushed onto 'dfs' again, and low[s] can
+> +			 * only decrease while 's' is the top of 'dfs'. If 's' is
+> +			 * still on 'dfs' it sits below 'w' and cannot become the
+> +			 * top before 'w' is popped; otherwise the only remaining
+> +			 * write to low[s] is the pop of its SCC, setting it to
+> +			 * NOT_ON_STACK, for which the min below is a no-op.
+> +			 */
 
--- 
-2.55.0
+Tbh, I find this paragraph extremely hard to parse.
+Why not simply /* Visit the next 'w' successor */ ?
 
+>  			succ =3D bpf_insn_successors(env, w);
+> -			for (j =3D 0; j < succ->cnt; ++j) {
+> +			for (j =3D dfs_pos[dfs_sz - 1]; j < succ->cnt; ++j) {
+>  				if (pre[succ->items[j]]) {
+>  					low[w] =3D min(low[w], low[succ->items[j]]);
+>  				} else {
+> -					dfs[dfs_sz++] =3D succ->items[j];
+> +					/*
+> +					 * Resume at 'j', not 'j + 1': the successor
+> +					 * is revisited once its DFS completes, to
+> +					 * fold its low[] into low[w].
+> +					 */
+
+/*
+ * Once DFS for succ->items[j] is complete, the pre[succ->items[j]] would b=
+e non-zero,
+ * hence resuming at 'j' allows to follow the update low[w] =3D min(...) br=
+anch above.
+ */
+
+> +					dfs_pos[dfs_sz - 1] =3D j;
+> +					dfs_pos[dfs_sz] =3D 0;
+> +					dfs[dfs_sz] =3D succ->items[j];
+> +					dfs_sz++;
+>  					goto dfs_continue;
+>  				}
+>  			}
+> @@ -916,5 +944,6 @@ int bpf_compute_scc(struct bpf_verifier_env *env)
+>  	kvfree(pre);
+>  	kvfree(low);
+>  	kvfree(dfs);
+> +	kvfree(dfs_pos);
+>  	return err;
+>  }
