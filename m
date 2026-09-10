@@ -1,64 +1,64 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E479B52ED5D
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 16:52:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6E0531AF8
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 16:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789059176; cv=none; b=Kj9uqYTTQS1mSbbJKqCQvAlibxHhMHF1CAxI1ZljUbNF9DRLtU+YD2SA4lLJ271koWKPUsrnyng5FTxrS6wuGjG4513qP2XVTGmUeXI+QFeQMdV/x0GCm5XnsDDHQcN3gx3voW65e4fJAzeWExRHA3mzicn8P0opLPNWlVs15G8=
+	t=1789059182; cv=none; b=J63Y8Iw0oIrQa+OeNbOcSAu9qrtbB3G+hK83HcmuHtOkGgQLX1Q/pSAzjSrqsf5X7NZRQmd9+/SPRtrR7CIZQSqqKrVs5NlHsInwsNfX8ZluEXwjygwhod9Ro+bc9AwNneav6qek0QksjhppK8q7TT+kAa9qToEaYtXLpiPIH4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789059176; c=relaxed/simple;
-	bh=IgALGRDOofcqRheiguSNaLkVcTRz8oPngUcPlnxx8O8=;
+	s=arc-20240116; t=1789059182; c=relaxed/simple;
+	bh=IUh1cWchmC0vld51ke7tyVFS0qPx15TlB96mZ8dNts4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TteS+rutlQ2k87v/b7+1l0Fp70eFv9HeitVzosxcj2vFFGaXYVVDM1RYI/x5PxTGuybRarGIt19yw1CMLJkWlY2gIPWbkAfxiooC0q24u8hAEBCVIbDCLL4WnLmToDxOXcN6OO/w0eLYpjfiST0TF0erAbc2zhUtfKS/M6hwEIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mIj09DhG; arc=none smtp.client-ip=209.85.216.45
+	 MIME-Version; b=gANOQsOvE+YSneA3b6y3uhQgfigzUmdEAJ42SN300hQbxmFrayJUcqDN4Dkyy4B+FN+8elrYOrMjr/QMgOT6QH58ijU6cvT90uwYIeKOXm22nTB+Wxxjp06jCPs/Wmw3nhvkMWimAewBLu0vzVPAXVLW7vhIP+dV5ytmYZuHzI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q0xTAEql; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mIj09DhG"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-398b3c37877so6874727a91.0
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 09:52:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q0xTAEql"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-39b9a99469fso3224985a91.3
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 09:52:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789059168; x=1789663968; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789059176; x=1789663976; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=qGkO5SPpG8vTsJvK+53ZWmDGMdLio9cfh5UfDSl6S68=;
-        b=mIj09DhG734A7EElZRB9Cp7/iu7KbLUrANknfmERC3DXHxE8m1JTtKU0FblPo/G1BW
-         f1TC/w27AHFMEfmchFMAcMoUB9cUcLkirdrJQAnmbS+G1FMLnyGwdYRqL8pctXb81aaz
-         JPfz7SBcpHcRHVcELONJc6wyRzLurOAdPdhez1LFm3RDfH2CgyNdOUxc8v1sirok5463
-         zwp5w1iiLBY7FktRkDplYHlwc9cNs6PCHb0nELzoX0TQkD0PxR8gFZlc7OPb1NHv8qe/
-         gkLO3YiNJRDLkzlojd4FZ0sune9rrIy4YIRfc5GDY5Ggvg4Ri6jyAfv+1upELnz0j1E3
-         1Opg==
+        bh=tyS0dUys65sGsGrVA9hi3CkVbRxamfGAlz/CIe+hAe0=;
+        b=Q0xTAEqlQHR+lhWxzbXufxvdVq9tgLfjuV09WToxglPDJnPDwieUvc4jeXzYda7y43
+         rl+/PQLWpHwtgnaFgEfNu3tbL/n48o7nmp8qbnCQdliNuF9zikCoTznFG5kWumjiPnri
+         yTaiNDh49EWz2qjwhYgv8p+ga2a4G+BMWuMdOVy3JBKBloQITSl7bb0I3iCVNQCimCsV
+         kfbXgqSvXjg8ZoIE7PN56wwUParWGpuJaWPomflRLa3sVZATienHN3LKrJZa3HNAhynz
+         MIMOItOpzvjAzoamESmQ0uTKpPnu1W8MH/ERG7L8dnGxL+0hvIcPKmsG1CftmHNwG1go
+         n+Dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789059168; x=1789663968;
+        d=1e100.net; s=20251104; t=1789059176; x=1789663976;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=qGkO5SPpG8vTsJvK+53ZWmDGMdLio9cfh5UfDSl6S68=;
-        b=RzlaoE/v8b4vEuclNiNM9y4dbgSSeOjQaN4VVF8vyULU1PSfpFp4OBrytVGugYv6k+
-         rB6B45TxlmCsmZzeW8nkinVZoZlNSuB+pgn0Fxrv+hbxEngG3h2bP+3Kzxk7ZSQsLDvB
-         H1tLH+Ro+g7849UgjZzQTA+cqBhzLCU4SlhaFQhGvv5hoCCgJNLRt2XeY7wyJ/n8bSFx
-         jbPcqavSQCmdJaj/jVW5NgSMU2SDyDuYr7hYPKLz0HmTD7poNPeHJpdP/o1pJUycHlkt
-         NB4NSZouwtgQmkqBWxKwBWYrghhVB859+bjCW8mH0D3pUHoBf5ZuB9X6HxYn9K0fmhB4
-         tr3Q==
-X-Forwarded-Encrypted: i=1; AKwUvBztZAjxQR2jRJJ8faGudL+kmUzqX0aVIZ6c38kP8KcIeg3f7hnxYkySSSx/x2GhxZ6iyR8=@vger.kernel.org
-X-Gm-Message-State: AFuF++nQUjp7VHJ+X1ge0nVK8NJI9KWdQZK5TwxHUsjrtWa8QCwcVdUV
-	eEmb/Oor1M/YWxNPzjKwozYGWo5mL646pYC9pJKk+LcEUyNtYcwZtND6
-X-Gm-Gg: AYBFou0V5y7H0gCVK28a743fiAPXm4NG+QiiSFmSh09shC8okwxpxDiWkJLZ7B+PKVY
-	0YlwcC6WNumTgfRNSvQhvkTunDjvNXTdFWYtQbxPiJbqDJD0nc8jbCazOiikSU//vzmLj7CWIQA
-	+19H2ucw4OixAm1VjkG1jwwoxf01NJoInAGBAH/8x94Mlblut/MLV3a1NfJ7Pytv1ek9Hpw9g/K
-	D06DjRZV8kM9OACOQUQZetybvKPuWH1N5T9Q+kgPGE6MAbOzudfgSo1ty0hjJhj5myMG8LDUGQP
-	tsVwSC7Dmkgp29Wx9irxicH4zXcR035/eXD3bDhqxgMQdLnMudsP4r72HTPgUbT7kxyWfjnCtoh
-	l04D3mBnYYKBvvcK+kauAyqdKrxZWgKGf0J8gOPuIhjL9ljwIqkV3CnFouckujnZePQY/DqNIg6
-	y74f0ObNROLBXnVryKLkwySVYuFpKBDOiGkng1m0yMN5qxUf74P9A37bn72l2j4b53Yr67zZ8+o
-	4EeoEn/YjdWE1Zc3KX0eYy75Tmkf9TuvisSwXZPiBcMxOIBcUI5TppHL7/ejJDbJ9QxI0Cxh9jJ
-X-Received: by 2002:a17:90b:2687:b0:398:9c0c:7c71 with SMTP id 98e67ed59e1d1-39b26277b88mr64406221a91.24.1789059167593;
-        Thu, 10 Sep 2026 09:52:47 -0700 (PDT)
+        bh=tyS0dUys65sGsGrVA9hi3CkVbRxamfGAlz/CIe+hAe0=;
+        b=gAq9Y2D9bNIYmUy20mM6r/OnEXoYvCQ/J6iymYDS4TZinU+7P2nRpGHRRuvpwrH5gp
+         o7bVj6K59H3tvkaqhCKATB32dTyxS42EOk1yKb9B3oGdOSsDnBJGw5U/9rCGBdeAEBZk
+         eA9EU3ws1w2/bQKk+Lt7MqLUuKfOWgyd8L1fr4M9G/TAG3cq9sZEA1goiHUEho1PUspx
+         JGiE0dCEP0/ila3gDrflEteYtguSkKELGAnuVRLsQx76yUxhB56ndFnRqN3Mak5NzCVq
+         9LuMiFnj4W8WOuNGftrXpN1sC5VaxREFS+o6urPaS25ie1EOxxHLa4npr7/zvkgg8sdF
+         IxRQ==
+X-Forwarded-Encrypted: i=1; AKwUvByvqJhIB9BG387gDVVZIvzNRMRQvVTQRnuZ6sMzjGIKb/8jJnpzdPT+ujLfGuon4d9Y5lM=@vger.kernel.org
+X-Gm-Message-State: AFuF++lX4+6HshYpsTTR96X+R19gkuZtTCgxcyFx8GVu9ykp0hLt9Jkr
+	jaL9r/dVm32w2jpuDYSrExXXbYGjBjCEwjUrPVL7osit7pK4LmcIVVqt
+X-Gm-Gg: AYBFou1ZqCovj/7reCHCZ67EtaogoFKO6E1kdN0xU2vmGTP9/S+f4YvoRZCV/cLveId
+	CFdjHcq5qBRdca5Ih4tdmKOGvep/mck4aCb92ofQbDNx7bWSThskGziymB7uSjBwW7n7MS0sIs2
+	2584RQDTKZc4WaKWowLgt/ViMUHuezYSaq2vBIU2wYMgLA/8ggfvCdXNNiyFjPuswA7PHgHtHKB
+	eIzNOb0KLwnlLLdih9lKClvBlnNVD4axOqf1TAaG790iWrac4vT8XF+O0bfkp9hAgc0Qmp54iZz
+	XRBKVKdwtzDUovCoRi4r53uXDXJerc+bG2w1twwBNlaE9zMt4hYPSohZrhLXpz7/pwASYFvxf9n
+	WQZ6k2ocNLTBAg8WwwBTWFvLYhLAxAYF0FYo2AEUsCQbD8yiQeu9P1HNeAPnuVDkK1zXRmkSNLZ
+	QBGdePy/lfUBO6xYK2iU/OQGTnOsKhZ+77LRy8MKCbb0CA4MKO8TzC6GOx3jyXSSP7ZXF51uYw1
+	d0JFJOEoRjolXhsoTC6kOIPaL/sM2prSfNPuH0OQJgJ6c9cvxsu/h2CGP6piUuzHGt4crV1RHEB
+X-Received: by 2002:a17:90b:4fd1:b0:398:bd37:6a49 with SMTP id 98e67ed59e1d1-39b261cfd8cmr63877483a91.12.1789059175828;
+        Thu, 10 Sep 2026 09:52:55 -0700 (PDT)
 Received: from visitorckw-work01.c.googlers.com.com (202.176.229.35.bc.googleusercontent.com. [35.229.176.202])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d98e602d8sm64821a91.3.2026.09.10.09.52.40
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d98e602d8sm64821a91.3.2026.09.10.09.52.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 09:52:46 -0700 (PDT)
+        Thu, 10 Sep 2026 09:52:55 -0700 (PDT)
 From: Kuan-Wei Chiu <visitorckw@gmail.com>
 To: song@kernel.org,
 	ast@kernel.org,
@@ -84,9 +84,9 @@ Cc: jolsa@kernel.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	Kuan-Wei Chiu <visitorckw@gmail.com>
-Subject: [PATCH v2 1/2] bpf: Replace sort_r_nonatomic() with sort_r() in check_dup_ids()
-Date: Thu, 10 Sep 2026 16:52:20 +0000
-Message-ID: <20260910165222.1186628-2-visitorckw@gmail.com>
+Subject: [PATCH v2 2/2] Revert "lib/sort.c: add _nonatomic() variants with cond_resched()"
+Date: Thu, 10 Sep 2026 16:52:21 +0000
+Message-ID: <20260910165222.1186628-3-visitorckw@gmail.com>
 X-Mailer: git-send-email 2.55.0.1003.g10538fe699-goog
 In-Reply-To: <20260910165222.1186628-1-visitorckw@gmail.com>
 References: <20260910165222.1186628-1-visitorckw@gmail.com>
@@ -98,33 +98,185 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_kprobe_multi_link_attach() in the same file has been using sort_r()
-under the exact same limit (1U << 20) for 4 years without issues.
-Switch check_dup_ids() from sort_r_nonatomic() to sort_r() to match it.
+This reverts commit e2a33a2a3258794891cdd6ca4b1318da6594d157.
 
-This removes the last in-tree user of sort_r_nonatomic(), allowing the
-unused _nonatomic() sort variants to be dropped from the core library.
+With no remaining users in the kernel tree, remove sort_nonatomic() and
+sort_r_nonatomic() to clean up dead code. This effectively drops the
+wrapper function __sort_r() and eliminates the may_schedule branch and
+cond_resched() call from the inner loop of the core sorting routine,
+slightly simplifying and optimizing the code.
 
 Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
 ---
 Build test only
 
- kernel/trace/bpf_trace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/linux/sort.h |  11 -----
+ lib/sort.c           | 110 ++++++++++++-------------------------------
+ 2 files changed, 31 insertions(+), 90 deletions(-)
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 29260951aa87..1d7e73ddbafb 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -3826,7 +3826,7 @@ static int check_dup_ids(u32 *ids, u64 *cookies, u32 cnt)
- 	 * and check it for duplicates. The ids and cookies arrays
- 	 * are left sorted.
- 	 */
--	sort_r_nonatomic(ids, cnt, sizeof(ids[0]), ids_cmp_r, ids_swap_r, data);
-+	sort_r(ids, cnt, sizeof(ids[0]), ids_cmp_r, ids_swap_r, data);
+diff --git a/include/linux/sort.h b/include/linux/sort.h
+index c01ef804a0eb..871775978af0 100644
+--- a/include/linux/sort.h
++++ b/include/linux/sort.h
+@@ -23,15 +23,4 @@ void sort(void *base, size_t num, size_t size,
+ 	  cmp_func_t cmp_func,
+ 	  swap_func_t swap_func);
  
- 	for (int i = 1; i < cnt; i++) {
- 		if (ids[i] == ids[i - 1]) {
+-/* Versions that periodically call cond_resched(): */
+-
+-void sort_r_nonatomic(void *base, size_t num, size_t size,
+-		      cmp_r_func_t cmp_func,
+-		      swap_r_func_t swap_func,
+-		      const void *priv);
+-
+-void sort_nonatomic(void *base, size_t num, size_t size,
+-		    cmp_func_t cmp_func,
+-		    swap_func_t swap_func);
+-
+ #endif
+diff --git a/lib/sort.c b/lib/sort.c
+index 52363995ccc5..8e73dc55476b 100644
+--- a/lib/sort.c
++++ b/lib/sort.c
+@@ -186,13 +186,36 @@ static size_t parent(size_t i, unsigned int lsbit, size_t size)
+ 	return i / 2;
+ }
+ 
+-#include <linux/sched.h>
+-
+-static void __sort_r(void *base, size_t num, size_t size,
+-		     cmp_r_func_t cmp_func,
+-		     swap_r_func_t swap_func,
+-		     const void *priv,
+-		     bool may_schedule)
++/**
++ * sort_r - sort an array of elements
++ * @base: pointer to data to sort
++ * @num: number of elements
++ * @size: size of each element
++ * @cmp_func: pointer to comparison function
++ * @swap_func: pointer to swap function or NULL
++ * @priv: third argument passed to comparison function
++ *
++ * This function does a heapsort on the given array.  You may provide
++ * a swap_func function if you need to do something more than a memory
++ * copy (e.g. fix up pointers or auxiliary data), but the built-in swap
++ * avoids a slow retpoline and so is significantly faster.
++ *
++ * The comparison function must adhere to specific mathematical
++ * properties to ensure correct and stable sorting:
++ * - Antisymmetry: cmp_func(a, b) must return the opposite sign of
++ * cmp_func(b, a).
++ * - Transitivity: if cmp_func(a, b) <= 0 and cmp_func(b, c) <= 0, then
++ * cmp_func(a, c) <= 0.
++ *
++ * Sorting time is O(n log n) both on average and worst-case. While
++ * quicksort is slightly faster on average, it suffers from exploitable
++ * O(n*n) worst-case behavior and extra memory requirements that make
++ * it less suitable for kernel use.
++ */
++void sort_r(void *base, size_t num, size_t size,
++	    cmp_r_func_t cmp_func,
++	    swap_r_func_t swap_func,
++	    const void *priv)
+ {
+ 	/* pre-scale counters for performance */
+ 	size_t n = num * size, a = (num/2) * size;
+@@ -263,9 +286,6 @@ static void __sort_r(void *base, size_t num, size_t size,
+ 			b = parent(b, lsbit, size);
+ 			do_swap(base + b, base + c, size, swap_func, priv);
+ 		}
+-
+-		if (may_schedule)
+-			cond_resched();
+ 	}
+ 
+ 	n -= size;
+@@ -273,63 +293,8 @@ static void __sort_r(void *base, size_t num, size_t size,
+ 	if (n == size * 2 && do_cmp(base, base + size, cmp_func, priv) > 0)
+ 		do_swap(base, base + size, size, swap_func, priv);
+ }
+-
+-/**
+- * sort_r - sort an array of elements
+- * @base: pointer to data to sort
+- * @num: number of elements
+- * @size: size of each element
+- * @cmp_func: pointer to comparison function
+- * @swap_func: pointer to swap function or NULL
+- * @priv: third argument passed to comparison function
+- *
+- * This function does a heapsort on the given array.  You may provide
+- * a swap_func function if you need to do something more than a memory
+- * copy (e.g. fix up pointers or auxiliary data), but the built-in swap
+- * avoids a slow retpoline and so is significantly faster.
+- *
+- * The comparison function must adhere to specific mathematical
+- * properties to ensure correct and stable sorting:
+- * - Antisymmetry: cmp_func(a, b) must return the opposite sign of
+- * cmp_func(b, a).
+- * - Transitivity: if cmp_func(a, b) <= 0 and cmp_func(b, c) <= 0, then
+- * cmp_func(a, c) <= 0.
+- *
+- * Sorting time is O(n log n) both on average and worst-case. While
+- * quicksort is slightly faster on average, it suffers from exploitable
+- * O(n*n) worst-case behavior and extra memory requirements that make
+- * it less suitable for kernel use.
+- */
+-void sort_r(void *base, size_t num, size_t size,
+-	    cmp_r_func_t cmp_func,
+-	    swap_r_func_t swap_func,
+-	    const void *priv)
+-{
+-	__sort_r(base, num, size, cmp_func, swap_func, priv, false);
+-}
+ EXPORT_SYMBOL(sort_r);
+ 
+-/**
+- * sort_r_nonatomic - sort an array of elements, with cond_resched
+- * @base: pointer to data to sort
+- * @num: number of elements
+- * @size: size of each element
+- * @cmp_func: pointer to comparison function
+- * @swap_func: pointer to swap function or NULL
+- * @priv: third argument passed to comparison function
+- *
+- * Same as sort_r, but preferred for larger arrays as it does a periodic
+- * cond_resched().
+- */
+-void sort_r_nonatomic(void *base, size_t num, size_t size,
+-		      cmp_r_func_t cmp_func,
+-		      swap_r_func_t swap_func,
+-		      const void *priv)
+-{
+-	__sort_r(base, num, size, cmp_func, swap_func, priv, true);
+-}
+-EXPORT_SYMBOL(sort_r_nonatomic);
+-
+ void sort(void *base, size_t num, size_t size,
+ 	  cmp_func_t cmp_func,
+ 	  swap_func_t swap_func)
+@@ -339,19 +304,6 @@ void sort(void *base, size_t num, size_t size,
+ 		.swap = swap_func,
+ 	};
+ 
+-	return __sort_r(base, num, size, _CMP_WRAPPER, SWAP_WRAPPER, &w, false);
++	return sort_r(base, num, size, _CMP_WRAPPER, SWAP_WRAPPER, &w);
+ }
+ EXPORT_SYMBOL(sort);
+-
+-void sort_nonatomic(void *base, size_t num, size_t size,
+-		    cmp_func_t cmp_func,
+-		    swap_func_t swap_func)
+-{
+-	struct wrapper w = {
+-		.cmp  = cmp_func,
+-		.swap = swap_func,
+-	};
+-
+-	return __sort_r(base, num, size, _CMP_WRAPPER, SWAP_WRAPPER, &w, true);
+-}
+-EXPORT_SYMBOL(sort_nonatomic);
 -- 
 2.55.0.1003.g10538fe699-goog
 
