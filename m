@@ -1,158 +1,226 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo2-f43.google.com (mail-oo2-f43.google.com [74.125.231.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F9353B5E3;
-	Thu, 10 Sep 2026 17:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789062756; cv=none; b=HnUDaDsZb/adaZrNAEcyLo02+93stS3aCX17EmN6dpireZ6eCuYhBhotPkoicTUIfgfCANP+oaLYA6tpKuIFIB6PEdNyA+Xnt7GPRHRnGVF1jftmLjT2rgVWFfcw7UecFu2RmVGdAaFzA4H2R+exXoXd7KKckHMt/5RoHXeBNaw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789062756; c=relaxed/simple;
-	bh=xaUIP7n1vRovqFFarET0qSQmfFa91wnH3xTLRR96a/s=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=oE01S6GSc60Wam3GxmRhI7A8deBDBcqT7AwSJQMV7OZO8ouSfxgmAjzWMA0Ku/p9JHaa7wu6a23Vdf42mfnWhif5vwyUp1KBPTdo+1jVK0x0VBTay+dpdJ6N7pzb6Un4zLL9Yx0RqvXBLloZx+VhR8doJ55I0kUidaIFc7VcpuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fk/MPjbv; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E2945650E5
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 18:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789063895; cv=pass; b=WBE/OvME93hqtGMmPAWs6rXMIJ0lx0mvnMYHcLoyVW+pa+L2VVyf8n2krhOVQrky4ua+777TUNhB2IYNEcCNgE5guEPPjqaBirQCBJyYAcxo3m1Y2lXoqnxUvqBIUsOu8V3lL8hAV1Du/pX3o5DwD4PSBT3v2y0xFjyylJdHNO0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789063895; c=relaxed/simple;
+	bh=NT0Z/LF1SMhtkavx81DR2GGYYK6aB7iX5ZVgmCMPgvQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lKpO1BSIzXanHX4ajKDZSE6HacXj4ByF/Y8M6raJW30UmgHDCGpvXrvRaMRP7HNYG2cD1IwRxEdsZfsmY4qG1WKi9pLFnqdex1DkU+aM7UksFArlbOFE269RwpOgYpG5+BpV3Q9yswVsST7hP/UtbCNY6s4ySfoIdURRMYiD67U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FKybIG7v; arc=pass smtp.client-ip=74.125.231.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fk/MPjbv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 882BE1F0089A;
-	Thu, 10 Sep 2026 17:52:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789062739;
-	bh=qqvn6SX16yUt3ZvxTs86qVtzcoYy6wgfsp1EjnqBJa8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Fk/MPjbveeULQfCifG6gUd0yT3jL3M7rGZRioZ/V41Cd5OcgLsb4SS/W2wwrlRVJ+
-	 Z+trqQ07nmhRotODgj+WVWNIDJvPIPU/vIZQ+RPMgIvmm34nuEXXtYmwymlE6/kPsa
-	 BybRO3uiPmLqdZChrwkjYYNDVchf2ckWnnJuhRnAUJ5VvgSw95ag7gqyhT0kEEtiBv
-	 M7rc7HUfEHbrCCwq39smEOfdHDH8b9R/1KRIfHir18jR+0lTgsBTAOD9JtXDv1HBbN
-	 wH3lczzdej/7hS8PYueNGZNcM57/6TUeyBvBNZRKQ624dIiPuU/TcLcauEVXcoJPqq
-	 J1XIcrbS6RycQ==
-Content-Type: multipart/mixed; boundary="===============0634230615040165694=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FKybIG7v"
+Received: by mail-oo2-f43.google.com with SMTP id 006d021491bc7-6b1ae71686cso88714eaf.1
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 11:11:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789063890; cv=none;
+        d=google.com; s=arc-20260327;
+        b=EPwAsl3qrGkoGUICslk+srQGu1kmRFZMzSzigK7Tt8P16fOYYfvVe5fM/Z+aVy4hZ3
+         4JlqNjkVMrBTuJC88Kwc2BJ1q0zEMDWa6WHYyioeyCEUN96MmsMQMtJrxio0zg2Pppac
+         oPxfnDdK/KHEqNSGd3hTpQUfuzOuXqXcUJRvvJavC87Z726QRk5x8337AOZE2yK+iWQG
+         cNph1N3poSLTduU0S+zjD2DnwBO9UxaB7EUOdy0d0YxlUmaA7FH4GqpP/xW6GSm9+FSo
+         FUPH0mf90jGhj8olhAbpR2cp77k5IVF7nbeEZj2pmMS3yew4XteR/MbctlD7SUbNmcic
+         lgJg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=gxuS67QpsgmiVo7SJODgVn7jNGL8PaTVeXELBYXj9Vc=;
+        fh=Yu2bQV/Hl9ZHjxhAiXuI79KnNcRAWTt+rrJK8ITAzjA=;
+        b=djvG/4SVJbrjkP+QxKO7DsE/6suQ7VwM6F9REu42qpSonhABnmh0UFBnExmm3A/EtP
+         JGADpodgBhDiNYHElvWdixiKrvVupp2bl6k3u/j4PYWX0ahVztUR9oqOLL0vW1x8wZub
+         m38vDsQR4lWiaN+CwacqWwrq8tUnQGnIQ/bTwyzl5ITRGTO7gvtilN0eBkru70GgVqg9
+         MEKxMmiKbZrjNuFUj1s28SinnNvLQHpVAGShlA15F9cf1XWj1O7tt8yH40sswfNhNhj7
+         LQHLF0zt0HsYhCqPZOQCkPhb/Y5Xnyj4gMvc5uKtOw7Htf6dFVKb4C1visq/t0qJkT6/
+         eGYw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789063890; x=1789668690; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=gxuS67QpsgmiVo7SJODgVn7jNGL8PaTVeXELBYXj9Vc=;
+        b=FKybIG7vbPrID6z1nHaj6kVvqnRQk9kvLUdCSO2+2ma9Rrzv9SNsMhpf6H6ntsMUds
+         JkyN3NfvnmjEM6fiuIEbDJ9ubreYKGMr4WB5YW+WP8daIgGmV93h2QhGZncGxUruNTVl
+         xb2WebfNbk637VrINs16GyzSfy6Udi4tcRoeH/5/HvD6JJC39vardYEfjksmVtn+eq90
+         6nNKA546KE5FFVTONnyAW7NH0ZI0JriDM3YVglc1gMZq/J8BylnjF7IuIBmBXSUxR5sk
+         pKWbcKzTldmYVXmq15a181+DQWmWqY+Hy9X3XmqX1apU7j5PpWG+JMXCx6tSMMlVkN1h
+         l9ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789063890; x=1789668690;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gxuS67QpsgmiVo7SJODgVn7jNGL8PaTVeXELBYXj9Vc=;
+        b=ODQZ5LO3za9NCsR4MORU+6p7Iw0oiJKm4r3+jmTvzG4DiC70M2l9cp3F6gJfXDNlsy
+         f1zsuGDdbgq4V7UxVoxErAxYMck3xcITzJDnMScdN/orJ1q3o5JcJRaFJgUYuLysm9hF
+         hBgie6XOMWYddUoCOEnVIvRIhAdm514Puv+ZqxuIOUoKI2i/q8qnLHHgPAQA2M/KN4yu
+         yrV6EHwmBmMLRTYYbIG3ST2O6C6sS2KKBr4Rgzrd2JLn5zvSCPCxV/5t81QvGV4R9WQG
+         rmdWziZsUBTNRf4yzUtBTAxAEjVTxGQzrK1tbFqP42PakvVyG7B5RAidrzAUD/WySdUI
+         oOsw==
+X-Forwarded-Encrypted: i=1; AKwUvBynD/OlI/ongvlDk9RqTRmMD+GzuT16U/YS5ev4WIog8dp4ec6E7OF8dUu4g8V0psyO5SI=@vger.kernel.org
+X-Gm-Message-State: AFuF++l9yvZAqwiPDEG4l9qsrY8UC2C4qMwhlYbWLZhp0GC59XMWGN5Y
+	/z/12onxfp/hY+SspwckONP2Ae0cRP8CC9w1fZ507Hgbei+kHuOAmWafagXslLYESluyWEnyTui
+	bwBSb4eYzk2urReYI+aEr/jSEbpM0BPY=
+X-Gm-Gg: AYBFou1LUNl6IbHL33ahbTvx42tWS1b9dKZ2YxMbR2AawW07IAKtG7F4rV58GlUjVy8
+	5hro86ZUwGt34uwhl/3tn1kEAIYFzP2lPM7l1eqhuZJCtKXWMesL+jkC7NkcDl7Nd4Rf279NsC7
+	h78nZ1gPyiilT/VUDAa9AIGbI2AHm5ygvwRbdJeya4mQx6/5lh8uxeigcLTmjc3ycVu4IBp2cm9
+	etXL+ulsZ8uDoHaslSrLbF+frSt0RM42eAWvKrjz5nsLbEkZUiPdsL7VdhCEBScZc01aRiwbQ3I
+	vVspUczTDVpAjzHeBfUDncJAbCo1Vpzy9xdZyNs8GDaNLBQ5ZdsCip8=
+X-Received: by 2002:a05:6820:55d3:20b0:6b1:ac4f:f708 with SMTP id
+ 006d021491bc7-6c0bc1d3ad3mr241038eaf.17.1789063890425; Thu, 10 Sep 2026
+ 11:11:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <654adc93a03b1bbeef530ffb6adb9a2d204e5bb01d7707dc0b16889fb05fc3dd@mail.kernel.org>
-In-Reply-To: <20260910164635.459558-8-vineet.gupta@linux.dev>
-References: <20260910164635.459558-8-vineet.gupta@linux.dev>
-Subject: Re: [PATCH bpf-next v2 07/13] bpf: track low-32 scalar equality across sign-extending movs
-From: bot+bpf-ci@kernel.org
-To: vineet.gupta@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,shuah@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,vineet.gupta@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 10 Sep 2026 17:52:18 +0000 (UTC)
+References: <20260908-b4-mmap-prepare-vma-flag-sanify-v1-0-dacf19cce22b@kernel.org>
+ <20260908-b4-mmap-prepare-vma-flag-sanify-v1-11-dacf19cce22b@kernel.org>
+In-Reply-To: <20260908-b4-mmap-prepare-vma-flag-sanify-v1-11-dacf19cce22b@kernel.org>
+From: Stephen Smalley <stephen.smalley.work@gmail.com>
+Date: Thu, 10 Sep 2026 14:11:18 -0400
+X-Gm-Features: AcwNN1XLr_yN2lEzELD3PcXDse2cuW9BBHCwsQpnROCV_SxzPvFmiqhSaiK704I
+Message-ID: <CAEjxPJ7hXSi=oLtQPV+7GEvN+txfYwZ-u-v_EysNHM0gSGNrCw@mail.gmail.com>
+Subject: Re: [PATCH 11/39] selinux: reject writable opens of policy file, drop
+ mmap shared/write check
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, Jaroslav Kysela <perex@perex.cz>, 
+	Takashi Iwai <tiwai@suse.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K. Petersen" <mkp@kernel.org>, Jaya Kumar <jayalk@intworks.biz>, Simona Vetter <simona@ffwll.ch>, 
+	Helge Deller <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, 
+	Peter Xu <peterx@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Muchun Song <muchun.song@linux.dev>, 
+	Oscar Salvador <osalvador@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, 
+	Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
+	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
+	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
+	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, 
+	Baoquan He <baoquan.he@linux.dev>, Youngjun Park <youngjun.park@lge.com>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Qi Zheng <qi.zheng@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Axel Rasmussen <axelrasmussen@google.com>, 
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, Xu Xin <xu.xin16@zte.com.cn>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
+	Miklos Szeredi <miklos@szeredi.hu>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, selinux@vger.kernel.org, 
+	linux-sound@vger.kernel.org, bpf@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-trace-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
+	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
+	fuse-devel@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============0634230615040165694==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index eb093194e2a3..308ff53232f0 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-> @@ -16248,12 +16258,23 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
->  						return -EACCES;
->  					} else if (src_reg->type == SCALAR_VALUE) {
->  						bool no_sext;
-> +						/*
-> +						 * A 32-bit sign extension keeps the low 32
-> +						 * bits, so record a low-32 link as the
-> +						 * zero-extending mov does. A self-mov
-> +						 * qualifies only if src is already linked.
-> +						 */
-> +						bool subreg_link = (insn->off >> 3) == 4 &&
-> +								   (src_reg != dst_reg ||
-> +								    src_reg->id);
+On Tue, Sep 8, 2026 at 4:07=E2=80=AFPM Lorenzo Stoakes (ARM) <ljs@kernel.or=
+g> wrote:
 >
->  						no_sext = reg_umax(src_reg) < (1ULL << (insn->off - 1));
-> -						if (no_sext)
-> +						if (no_sext || subreg_link)
->  							assign_scalar_id_before_mov(env, src_reg);
-                                                        ^^^^
+> The policy file has no write method and is exposed read-only (S_IRUGO in
+> selinux_files[]), yet sel_open_policy() performs no open mode check, so a
+> CAP_DAC_OVERRIDE caller can open it O_RDWR. Reject FMODE_WRITE at open, a=
+s
+> kernfs does.
+>
+> The file can then never be mapped with FMODE_WRITE, so do_mmap() always
+> clears VM_MAYWRITE and VM_SHARED for MAP_SHARED mappings and the VM_SHARE=
+D
+> check in sel_mmap_policy() cannot be reached. Remove it.
+>
+> This also stops sel_mmap_policy() clearing VM_MAYWRITE on a mapping that =
+is
+> neither a PFN map nor a mixed map, ahead of the core enforcing that only
+> such mappings may do so.
+>
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-Can widening this guard drop an existing ADD_CONST link on the source
-register?  With 'no_sext || subreg_link', assign_scalar_id_before_mov() now
-also runs on src_reg when !no_sext, and that helper discards the source's
-delta tracking:
+We should likely do something similar for the other sel_open_*() and
+sel_mmap_*() functions too.
+In particular, truncation of the status file can bring down systemd
+since it is mapped by libselinux.
 
-kernel/bpf/verifier.c:assign_scalar_id_before_mov() {
-	...
-	if (src_reg->add_const)
-		clear_scalar_id(src_reg);
-	if (!src_reg->id && !tnum_is_const(src_reg->var_off))
-		src_reg->id = ++env->id_gen;
-	...
-}
+Acked-by: Stephen Smalley <stephen.smalley.work@gmail.com>
 
-clear_scalar_id() zeroes id, delta, add_const and subreg, and the following
-statement then mints a brand-new id, so src_reg is unlinked from the
-register set it was tracking.  Before this commit the !no_sext arm left
-src_reg untouched.
-
-For a BPF_ALU64 | BPF_MOV | BPF_X with insn->off == 32:
-
-	r1 = r2			/* r1, r2 share id N */
-	r1 += 8			/* r1->add_const = ADD_CONST_64, r1->delta = 8 */
-	r3 = (s32)r1		/* r1 is wide -> !no_sext, subreg_link true */
-	if r2 < 100 goto out	/* sync_linked_regs() no longer reaches r1 */
-	... use r1 ...
-
-At the mov, r1 loses its ADD_CONST_64 / delta = 8 link and gets a fresh id,
-so the following 'if r2 < 100' compare no longer refines r1 to [8, 107].
-Is that the intent?  This is the compiler idiom described in the comment
-above adjust_reg_min_max_vals()'s delta handling.
-
-The clear also does not look necessary for the new link: since !no_sext, the
-SUBREG_SEXT link is established through the freshly minted id.
-
-Would excluding add_const sources be enough, something like:
-
-	bool subreg_link = (insn->off >> 3) == 4 && !src_reg->add_const &&
-			   (src_reg != dst_reg || src_reg->id);
-
-The zero-extending arm added earlier in the series uses the same guard
-shape, so a fix likely wants to cover both.  Looking forward through
-2c5433cf9fbb..1d3c4a0831be, the later commits extend the same mechanism to
-narrowing stack fills and spills and reuse the identical guard, so none of
-them change this.
-
->  						*dst_reg = *src_reg;
-> -						if (!no_sext)
-> +						if (!no_sext && subreg_link && src_reg->id)
-> +							dst_reg->subreg = SUBREG_SEXT;
-                                                        ^^^^
-
-On a related note, for 'r0 = (s32)r0' where r0 carries add_const,
-subreg_link is evaluated before the clear and sees the old src_reg->id as
-non-zero, so it is true.  assign_scalar_id_before_mov() then clears and
-re-mints the id, and SUBREG_SEXT is applied to a register that is the sole
-holder of that id.
-
-The changelog says:
-
-> Unlike the zero-extending arm, a self-mov can form a link here, but only
-> when src is already linked: r0 = (s32)r0 is how a sign-extended int return
-> lands. On an unlinked register there is nothing to link to, and minting an
-> id would leave the register describing itself.
-
-bpf_clear_singular_ids() drops singleton ids before state comparison, so
-this does not look unsound, but does it match the rationale above?
-
-> +						else if (!no_sext)
->  							clear_scalar_id(dst_reg);
->  						coerce_reg_to_size_sx(dst_reg, insn->off >> 3);
->  					} else {
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34506184282
---===============0634230615040165694==--
+> ---
+>  security/selinux/selinuxfs.c | 11 +++--------
+>  1 file changed, 3 insertions(+), 8 deletions(-)
+>
+> diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
+> index c7d91476971c..545a6f89f9e7 100644
+> --- a/security/selinux/selinuxfs.c
+> +++ b/security/selinux/selinuxfs.c
+> @@ -340,6 +340,9 @@ static int sel_open_policy(struct inode *inode, struc=
+t file *filp)
+>         struct policy_load_memory *plm =3D NULL;
+>         int rc;
+>
+> +       if (filp->f_mode & FMODE_WRITE)
+> +               return -EACCES;
+> +
+>         rc =3D avc_has_perm(current_sid(), SECINITSID_SECURITY,
+>                           SECCLASS_SECURITY, SECURITY__READ_POLICY, NULL)=
+;
+>         if (rc)
+> @@ -424,14 +427,6 @@ static const struct vm_operations_struct sel_mmap_po=
+licy_ops =3D {
+>
+>  static int sel_mmap_policy(struct file *filp, struct vm_area_struct *vma=
+)
+>  {
+> -       if (vma->vm_flags & VM_SHARED) {
+> -               /* do not allow mprotect to make mapping writable */
+> -               vm_flags_clear(vma, VM_MAYWRITE);
+> -
+> -               if (vma->vm_flags & VM_WRITE)
+> -                       return -EACCES;
+> -       }
+> -
+>         vm_flags_set(vma, VM_DONTEXPAND | VM_DONTDUMP);
+>         vma->vm_ops =3D &sel_mmap_policy_ops;
+>
+>
+> --
+> 2.55.0
+>
