@@ -1,58 +1,91 @@
-Received: from mta0.migadu.com (out-80.mta0.migadu.com [91.218.175.80])
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C54DB4AA030
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 16:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6213C456B
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 16:52:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789058882; cv=none; b=bhpFr5eS7t913MoHUb0m+iRXQqDZysTxWHZMk1N9+n36tpqUt9bgldLwHu8OvBCW2W9IWLbn3xQiutd7AOdnn7q9zHoZ07BDZsVP6GaKRslD04/spRKA+V6ulP9aEJgggLwkVxeRY9VLvobdcbBntWLzlSWhhVPYzYDSPkiHvao=
+	t=1789059169; cv=none; b=KByOGcPq1iDfHSU40RVJtKrj55BU6UNJf4rObOACP08D5YI3M1Kg7TyGCc3U4nfDKIiE85NRSroo1eWtZPPOTozpi99XemkyVmrIEm/K4AQYpzmJY2yb5UKHlLQ3kGl6VXMWSkFwvhOXajf5EGHSF8KQT5Mw6UN520RfcJjIlRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789058882; c=relaxed/simple;
-	bh=0ha2sGkGjon+eeZcJRjjPBS803qtaTj8dM/pQbd2s7w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hCoDU0cURUGVdIuiTENDXwFZ6DrwHwIBadUTZ5VzHhJfKj1TGaxWqfeP0yc11O4Hosd5Y+Y9Ws+suPXTXPorTMhXyuSklng3MAqiBNR8/uYbrsrkBc8hftls3jcy6cIBts9vjs7JKqg0WfkhLcgy1zWjoMT3SFnMqkBgUfZdFrg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Nw7nC7sZ; arc=none smtp.client-ip=91.218.175.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789059169; c=relaxed/simple;
+	bh=8VTeG0Ho6cFvSJNkf54wBCx4DhvWxyo9Ru1l0bh5feY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GeO2/qtjcBqMS1eGf2k3VPzpSfUR4ke3Q/z7gz4xcZucdJ6ppZrepoc7fOhW3y/jrVRUk50wapDdc7/YxdH2MgGVLa+Pnjn4hiIE8WxA0JEHphyJxCXTiV/N1XOIV8Qrl0oSv5y00/zzPHZSeTAG3LRKv6ZwoMrU+sIuukJ+n3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mXzLLnmu; arc=none smtp.client-ip=74.125.228.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Nw7nC7sZ"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=0ha2sGkGjon+eeZcJRjjPBS803qtaTj8dM/pQbd2s7w=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789058873; v=1; x=1789663673;
- b=Nw7nC7sZHlrBu1Mxta+EC44VdEdsyWl8pqsRoTjoZgl1d/85uUZ6L8DcVoHFVJS4Bo2k69FT
- r5fvZ1B9iZiBfRALjaYwDgZobKQHrg+07C7mPjMyc7hbqeqicGp6T199iTXaMHyYTnAuu2ILE2f
- ME+2kvdlju54kfBpVBxVCb34=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b8644919bbe2bd5d;
-	Thu, 10 Sep 2026 16:47:53 +0000
-X-Mizu-Trace-ID: b8644919bbe2bd5d
-X-Migadu-Flow: FLOW_OUT
-From: Vineet Gupta <vineet.gupta@linux.dev>
-To: ast@kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mXzLLnmu"
+Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc1cea4ae2dso27300a12.3
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 09:52:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789059159; x=1789663959; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=/Zk4iEyi9QGGhchmtmeLL8zDpDHB/77Pq2fO+dXFevo=;
+        b=mXzLLnmuYTaBg1Y2hU19ydNb0Rp1r7hl+NGT37OHWoYNfsR4XyEJFodvJU7isiEPzn
+         oLsGnaXZ2gn8h619aIMVULGVlQr9n/bkxrdYXJOxXnhHLBXgao+1msaajKieCeirLLjD
+         KgwEqQ5qPE1uL2ee4LGjrsU7cSAKzjADMBWRMGHXIa9I40VGF3o6Ro6hBHwtAoPnsrpQ
+         qRrqguZnlzMzRYZ1E3GT5ejFRGTZwTQyjAP9iBjJ47VwR/IjcJRRnKuVXz/iElyj3/4u
+         9teUAEMkG7KvuNMpRkfGsq/zihZrkAuTi6zxfnUriH9hUZAeBxcwDc4KmYsSTnsqI/FI
+         ssQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789059159; x=1789663959;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/Zk4iEyi9QGGhchmtmeLL8zDpDHB/77Pq2fO+dXFevo=;
+        b=dczEZ3CFlZsObgyzv1RcG3s4rVZ9lAbdt/X6D4Mb5o3Iz6C0gafWw4wCQ3fZ6WFEcF
+         DCUDBnt7RVjhJhiAXoNv/wq00msuX5YCBM+rajvjWW4Tu7A5UEZTgZzTNDBZrlvFtQA7
+         bPbAfdPdz0MXRBanBcXKEqOtOqvdqXKeRfBN0Givk0WMwaozbLPkTkybVpdVvztIe54S
+         Ft74Yf9EAqxW3GB3CqKXbG8W7+u/IGRdU+FbY24e9p0/8j/7CDKnEm5bpwfYywpHD4qT
+         Ef33lCLAqu4/ByfJT4znmsrmwNhkKUrcjryj5hk6qIYz/yMvlKKb0zaUlljfZBucNaef
+         owdQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxX/ZNAMrsg3komBvMcIWeE5whqNAjUVoBJgxYoAZaOuAsy9Emc+bbBFlHuwaEIVEHBjNU=@vger.kernel.org
+X-Gm-Message-State: AFuF++mn3cHgWm6+G2Nq2UeEbfk8kbS0ZtBq3I9XDfFADx2bm1TTviTx
+	3P3bmR8GtJI2WG0AzyAbJ6jkQ3DCqLeGrXkhLWhyc18fOum8/QTlIL9t
+X-Gm-Gg: AYBFou0G+kQXcf4hdsi14QGidWVcHOyjeDKrCJo8ZIispM7u0+PACYgSBGvY4Hs11Xc
+	7MeKZ7lI7t0hHOVLKslf9TJ9ZPNKhP7pNLqPyACvHEvYarbFiupBkRl0uHuTUmFa/MZpwYMq+ns
+	thuDhnorbAOjupktumE38dvKDVYaOVxSbUx3pCPHQOrqamyaPCRdJV2FqDPTt5ceFzmMFzuogZD
+	Oeuxe9YpzeGB5wqyd9+eDfEga7FtrbwOXgbTn8x5AYF7FYTFKK+1y9DoV1I03RNC4XsVTjZFIBC
+	+YperLtgEVkfNMjjUN+AY+1eEmj6iGbzrZIs3KY3uBCQGAHstKdrLSUAhgknIgos9PHAkW/I5CW
+	7mTTjG1nQQ1FK/KTbyBm4HTRtTEGinnpUg128ntHUwAm+ueAXsv+iOTs2feurcV7ZTXT5mf0J/W
+	MTGGJ8yShhEeFz7Ffw2z1F0+VZZne8/xXLDzejjtHLeezMvI4bEBxX0kmKH9C5PIE2McoJ4Z7cX
+	6Y2gTW5MwN4LYnFJRpK+vPJusk9s14CgTPieHZauBcBRLA1Jj4WGu0uf0QOydacsOS+Boz3IL1v
+X-Received: by 2002:a17:90b:5292:b0:398:e969:87ef with SMTP id 98e67ed59e1d1-39d70b7d864mr11936280a91.24.1789059159298;
+        Thu, 10 Sep 2026 09:52:39 -0700 (PDT)
+Received: from visitorckw-work01.c.googlers.com.com (202.176.229.35.bc.googleusercontent.com. [35.229.176.202])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d98e602d8sm64821a91.3.2026.09.10.09.52.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2026 09:52:38 -0700 (PDT)
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: song@kernel.org,
+	ast@kernel.org,
 	daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
-	memxor@gmail.com
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
+	memxor@gmail.com,
+	kpsingh@kernel.org,
+	matt@bobrowski.net,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	akpm@linux-foundation.org
+Cc: jolsa@kernel.org,
 	ihor.solodrai@linux.dev,
-	john.fastabend@gmail.com,
-	shuah@kernel.org,
-	bpf@vger.kernel.org,
+	martin.lau@linux.dev,
+	yonghong.song@linux.dev,
+	emil@etsalapatis.com,
+	mathieu.desnoyers@efficios.com,
+	hch@infradead.org,
+	jserv@ccns.ncku.edu.tw,
+	eleanor15x@gmail.com,
+	marscheng@google.com,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [PATCH bpf-next v2 13/13] selftests/bpf: cover the low-32 link for narrowing stack spills
-Date: Thu, 10 Sep 2026 22:16:35 +0530
-Message-ID: <20260910164635.459558-14-vineet.gupta@linux.dev>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260910164635.459558-1-vineet.gupta@linux.dev>
-References: <20260910164635.459558-1-vineet.gupta@linux.dev>
+	bpf@vger.kernel.org,
+	Kuan-Wei Chiu <visitorckw@gmail.com>
+Subject: [PATCH v2 0/2] lib/sort: Clean up sort_nonatomic() and sort_r_nonatomic()
+Date: Thu, 10 Sep 2026 16:52:19 +0000
+Message-ID: <20260910165222.1186628-1-visitorckw@gmail.com>
+X-Mailer: git-send-email 2.55.0.1003.g10538fe699-goog
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -61,84 +94,29 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Two programs:
+kernel/trace/bpf_trace.c is the sole remaining user of
+sort_r_nonatomic(). Switch check_dup_ids() to sort_r() to match
+bpf_kprobe_multi_link_attach() in the same file, which has safely
+used sort_r() under the same limit (1U << 20) for 4 years.
 
- - zext_narrowing_spill_keeps_link: a 32-bit spill of a wide register,
-   filled back out, still follows a later narrowing of the source
- - zext_narrowing_spill_byte_no_link: a 1-byte spill forms no link, since
-   the relation is not expressible
-
-Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+With no users left in the tree, remove the unused sort_nonatomic() and
+sort_r_nonatomic() APIs. This drops the __sort_r() wrapper and
+eliminates the may_schedule branch and cond_resched() from the inner
+sorting loop.
 ---
-v2: new, with 12/13.
- .../bpf/progs/verifier_linked_scalars.c       | 54 +++++++++++++++++++
- 1 file changed, 54 insertions(+)
+Changes in v2:
+- Drop the already accepted arm-smmu-v3 patch.
+- Convert bpf_trace.c to sort_r() instead.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-index e8a44e7579c8..ca7471f0293d 100644
---- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-@@ -1048,6 +1048,60 @@ __naked void zext_fill_byte_forms_no_link(void)
- 	: __clobber_all);
- }
- 
-+/*
-+ * A narrowing spill stores only the source's low 32 bits, so the slot is their
-+ * zero-extension. A later narrowing of the source must still reach anything
-+ * filled back out of that slot.
-+ */
-+SEC("socket")
-+__success
-+__naked void zext_narrowing_spill_keeps_link(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r6 = r0;						\
-+	call %[bpf_get_prandom_u32];				\
-+	r0 <<= 32;						\
-+	r6 |= r0;		/* r6 = full 64-bit unknown */	\
-+	*(u32 *)(r10 - 8) = r6;	/* narrowing spill, forms the link */ \
-+	r2 = *(u32 *)(r10 - 8);	/* fill it back */		\
-+	if w6 != 0 goto 1f;	/* narrows r6, propagates to r2 */ \
-+	if r2 == 0 goto 1f;					\
-+	r0 /= 0;						\
-+1:								\
-+	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * A sub-word spill is below the low-32 model, so no link is formed there.
-+ */
-+SEC("socket")
-+__failure __msg("div by zero")
-+__naked void zext_narrowing_spill_byte_no_link(void)
-+{
-+	asm volatile ("						\
-+	call %[bpf_get_prandom_u32];				\
-+	r6 = r0;						\
-+	call %[bpf_get_prandom_u32];				\
-+	r0 <<= 32;						\
-+	r6 |= r0;						\
-+	*(u8 *)(r10 - 8) = r6;	/* 1-byte spill: no link */	\
-+	r2 = *(u8 *)(r10 - 8);					\
-+	if w6 != 0 goto 1f;					\
-+	if r2 == 0 goto 1f;	/* not deduced */		\
-+	r0 /= 0;						\
-+1:								\
-+	r0 = 0;							\
-+	exit;							\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- #ifdef CAN_USE_MOVSX
- 
- /*
+Kuan-Wei Chiu (2):
+  bpf: Replace sort_r_nonatomic() with sort_r() in check_dup_ids()
+  Revert "lib/sort.c: add _nonatomic() variants with cond_resched()"
+
+ include/linux/sort.h     |  11 ----
+ kernel/trace/bpf_trace.c |   2 +-
+ lib/sort.c               | 110 +++++++++++----------------------------
+ 3 files changed, 32 insertions(+), 91 deletions(-)
+
 -- 
-2.53.0-Meta
+2.55.0.1003.g10538fe699-goog
 
