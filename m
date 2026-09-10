@@ -1,109 +1,203 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AA874B4897
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 15:21:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789053700; cv=none; b=RmZAwQTBi5qPj++SVbiZpX888d3Lfy4G7kEvj9JrY2kTu2vwNzS0XKY31jrIO1gngHZehIPT8NMwMVghbGw+aMokzb+n1Ay0o+Ka5JI1WUn83jnYYUHSD8/ermxBuhowmDKGoApYB48N/0SbMgrZqEgVvPf0pY6zc+EfvBMP28s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789053700; c=relaxed/simple;
-	bh=6EAcZ+Us8WapBgHYVsI1qI9jonTLifGiN6hiq2IjM4A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZvWrRfHQbTtIY5xa7Uu+LS6LxCABMwSkIzouKwRPVlzkFuo0Dkk1kvN5wPkxs4LkFzp+c2yMsmfZzE8bDq7Cj9Agi0oVMMBHOErXVxW6hqnOZglwPK4nyNsyt2fRhMixJQyjU0oJoC4fMcoPFyzzjM4sF3rd/7hCuwPlfsWpQqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RY3fSkhp; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE6B44A3F25
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 15:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.204
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789054651; cv=pass; b=JsO6E1WiaL6E7IinGsutxOHetHzFNo/hVz5yLKN8USC/yjUbsjtGkzzHutpO3+nCqAMIRWE1b+EeHuubdtFlU7TmQDno1R7cIjJoPGmqnthIQxAP46W+XjBoRIvpsY12JfU+DCEX/Tk+T0KP7PxcmAFiBal2lCseA9xD8WqP4Hc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789054651; c=relaxed/simple;
+	bh=ynSxNuDkxhKdE/yGw9XYokMd7L14dEwjnifpIUDbrDQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Xj76jiCT7D21CTV5wlQS5Ng/fT2nw+BZylAqstEG2Ca2NXhVd0UhvvzgTnyktG4AsPMDgfhebKmGHCmJoS4FaJaEDEq3LKuymHAlcYVBGgoiJ77lDzzkdkdsyxqsDVOtg4wsB0mM2dzfW2c6dmQxUiIoi1EfOk0eZRI1jiuWgHk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wd8vwnNR; arc=pass smtp.client-ip=74.125.230.204
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RY3fSkhp"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49cd38e0f79so13500125e9.3
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 08:21:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wd8vwnNR"
+Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-5307425f44bso265981cf.1
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 08:37:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789054648; cv=none;
+        d=google.com; s=arc-20260327;
+        b=BoWUURvB9zQnQ9oOUIYJE7zJOS5w2kwyNtnVPR7/Cp4uoEClKm4LRVe+0WXWL3vN1N
+         iXHcNvQVyuiZawBfFoi5Bb1NmKASsBhNaXjSq2xRqS/uivXCoJnYrWvF5wrNSBj5Wd6R
+         TjMI4/xX+IG98q9Hb0YNOTWh574bfeyCwymnxfgGbbSM5yIa2WRztP765wSfpTh5CT7J
+         UHfjeVpfTr9WR86BuXSFGH4YptdxpOv3yrOGCzCtDhktroaLL2VNRaWgUPeni6pmr2y9
+         AZT0pB5WrjK3voR+IzOA+pm8PXYqPHG0I8YZHZYa33xGSua3+4xFwrrVUHNhkSEyLSGB
+         0lWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=2fzJmHe53im+RdRlFHTdcZykU88bTlrtsEb9uv7A3KM=;
+        fh=aHVJtDG9ZDsBXX9i4OwhL+2BFAs9XekPs/tI0lnkEfA=;
+        b=YvYT9RKEYYtJCf6euXLcvwxHliS+G0pyqdI2plVD+vy9qAMGTIkPODMgEcvIMLuEJE
+         Ul9MOR0FU/hGpHWRcP9v+ThWbCbBdEutWsJ0PWvJC+X7wYwvQ6qweU3ZUfUZMGZVUty3
+         66dvfW1VRvoUsOFjov3vmEX2+S7/DjwkfP/3HPA4eBQuFR6EsKS8GU91S3amVJoxaqen
+         iKnW9eMWPw4ViRA9RKj3BGeRqGtLdoZIvUgfEZXXC01KT48tulOGUL2/9qmPLcMWvMYs
+         AM/EY2C2MsuIKPX9teIDPZUTP9YeAxfSTwyAxP105wqcSeKoROzf5oKT7RndfQ8ph+0A
+         fg+g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789053689; x=1789658489; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6EzQRhO0rt2cj9dunvGOTIWGEl+7bOny3zQpjJd2RpU=;
-        b=RY3fSkhpGC3VEVYHXeJ1t+oyclkdq5MODWsKoinMQb7US7ZdTnxBnPpqj3JaalGXgr
-         E5X3wPqJsTPcqzvOzWT0pFU5c+YiR8XWjLXNEDxkHQNFMAnKy6IafsSK9N4ZVrn/wsI3
-         i8y1U80lhED5O+bi/e12ZAYFmaklFbQMedqUFyWBjDRBIUOPBh2GWSQsVKxvZ6iguu0/
-         m29gcNpBpEud/RhC03MwgasbhJvFlDkrcjKNC1Vs527aH/xAoDJgd5Wn0w8f0u0WmUDN
-         i/pBU1fOdY8vd80aV8QZqumM7v3HC5j9ZUe7175cMme4IC8vhcOz2Tg+h8FD8bN0FvLI
-         m+Ew==
+        d=google.com; s=20251104; t=1789054648; x=1789659448; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=2fzJmHe53im+RdRlFHTdcZykU88bTlrtsEb9uv7A3KM=;
+        b=wd8vwnNRXgVHoy9xVoIX50iGQJxor55X1x214F6cv6Zb/Q/yCojNIy4Gn8J+JUJs+i
+         l6r9+FoVQpzxjJD404IOrhPh8ClFNuYMakxyuaMSEtiYXhlA1GRDfliYP4raZMb+bIT5
+         FeYl+tzvOPCyRohKGWRodf61Ad69RnbUVYyVsBHmo91dTKkvN1sVleiTiEzOZZj/PEK8
+         exo7Gzzqhgkv+J2lkuaRCRmKxXL2VbU1zUvjpO3pB8e9eHtMzO3IP7xt2/n2Uvm1OFft
+         +o1JxutEq7GJLzi6mkY0CMr7+6qWWVQsfm0c5pTHFxmrp3di7UYD0RsF83f9jZ+scD+O
+         bt7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789053689; x=1789658489;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=6EzQRhO0rt2cj9dunvGOTIWGEl+7bOny3zQpjJd2RpU=;
-        b=pyY/qdKb5vLlLwslVcUiySTvglnZRuQldHpQKO+i3DIxT/e3x07PU9LKt4AkdNUV2n
-         sbxWwl1X+oZ0CcdFpAWNk48NvTFoC5MFmpVwAGhBvJDpv+yLMJYItfvy+EeMngf+2cyd
-         5jlLaruXZ5cSoNdHkAfxFRr8bT/RboN40XBwfD6FL05xtXVE+rwNr1t2n1D52o8tR8G7
-         pAxyiQ/wQFwVa38ib6VEmqxbM26VLLqMvIwDdw5TiaC7VcvsCT0IwbKWVu37tgdXyH2q
-         eHnL4iBRQCFh5HJLVXT/AqLfkTN7c2PJXZw8aN7NE3ZkutnNLKWlcrmAzxGdotJGdaxW
-         uceg==
-X-Forwarded-Encrypted: i=1; AKwUvByPTC8EPmxUZF7iZdivuwm1KuzxR5K20rDavXHMthjEqoaWLq8aqkAFXWvc0z4UXyh8rdQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++mFm8ZHVU3Kc4mNplTtv5wJtq9c8UdtzQKd5eF9ODqfm4ENN5uq
-	w0j/C7mTSpEZpJ5rsmjC5BSnZJpadrnNmVw+xasa8Fz9ZxXpg6L+uF3+
-X-Gm-Gg: AYBFou36lE2Y6K08IWm8LQoR/DMsfZlpb4d6/x/moS3UFJdao//3sS3I28U9iROvkXj
-	MINFaJtu5NdbsuJwoU8hDJHbqJOwLn7Bu03BtQCasjTR5c6873nbA3AwkneuzdOTqq/286bfY9O
-	lvQ3Mg0MJET+yolLF3qE6m5a4MlfHin9eyWobWeLg/j9t7k1lkJTarEaJBAs1P48BieKzfKcBEX
-	RD/OC/Erm0sgTHJN/8LiAWrZ9T99kKiJ5ZPjccPu0rno03DXTS5QB+TsGtTTP5gq27AMrr9frua
-	JHnLOn8clpyydA04au1gJRaJ5Im2k/EApcRvIy+mn7E8bnzqgpALx0ehhRmkI1fZvd3T+4EMv4h
-	wv8aOC09vMyMZ5wG3US318U8XU/cfU5lYxyQb/GqkKMtA3Db4wAjozUikEFnXAL6iPDab7piYdN
-	0btGTsXKOIZ/L0mbfwVDh8QI0Ce6AAHAng9rP0pn/1hyK14H0/UJRdbT2PcEJeZjlZii+El7Zh5
-	kDhZuaJym7mKy+ZJjfBmQm5hjdtlbOC4yRv
-X-Received: by 2002:a05:600c:c178:b0:49d:870:7a69 with SMTP id 5b1f17b1804b1-49d1f362a92mr204968765e9.12.1789053689122;
-        Thu, 10 Sep 2026 08:21:29 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1126:4:4821:971b:60ec:d55c? ([2620:10d:c092:500::7:3747])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e60ababd5sm2334635e9.4.2026.09.10.08.21.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Sep 2026 08:21:28 -0700 (PDT)
-Message-ID: <79d579fd-7392-48ab-83da-454599217981@gmail.com>
-Date: Thu, 10 Sep 2026 16:21:27 +0100
+        d=1e100.net; s=20251104; t=1789054648; x=1789659448;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2fzJmHe53im+RdRlFHTdcZykU88bTlrtsEb9uv7A3KM=;
+        b=IR/cfY6C29hvq1xc0OrEhKz7qWE0SUwb8VE86xqloFhKMXy7So5rxRGGfFCvDHFIDQ
+         3NE6NI80xla5bjXVSDDTa+RwRPYw3bfm0cL0zGqwb9jjMotatnk8nodSJHpQ/IHekXa3
+         w1m4Iqt2MP9mkbVZoJQkCU0SzCAS/DBCM1XWa5JA2ULVe4GtAzQ7Yc8nWLNz6JnrK8po
+         bK8XCYb+Ln754TrYRc6eFLbYLR+xLw6rjYP3cyggsXIIR3q6zizD+j+ch73WNj3of1at
+         HCa7bkDihQP2xCwgHfHS4qlsSjzE1zPH+ztvoFQfl6+UuYRG6fTJimjL7h6ZBJQEiWsC
+         2Syw==
+X-Forwarded-Encrypted: i=1; AKwUvBxm1d8UrpQGbahGVZGwkOjVTfRuifVqjdKOOkih22BdVk6PXX2fWcko5OL4U2Wa68fxcDk=@vger.kernel.org
+X-Gm-Message-State: AFuF++nPeZQVKg9ywW3qZE7zKWCAvCO5W+pOdIx/YQnuq634I2MTgStJ
+	KrOVM9e0eNCyElTGxkzqXxUJC26Xgqz1M8zYPIo7K/Rc8F0XYsYd4gBqS+5atAUu1J/N3SW7E9V
+	LbBq2zcIUjl/FSPgDlyI7JBGFOuEJ/r6+9z37OyXY
+X-Gm-Gg: AYBFou27jg9JNDcI7DV86Ovf3RkqhExStt57uVL43zz2eipaimhR4W72g90UUeZLug3
+	rnzjQNF6xp1iN8fHm4iaDIWffwuWiThj4AP680zgavpNV7Pc/GdCmAi1BYC8gskgipgTuqNx5Nj
+	YeAUp597yrDDmd2bO0GivpYwqZV+DOjZDuTZeqRIYFPMGH3VCLlalOCqTdMlDoafnWOH1VDtDcI
+	cQO/9G9AT4UQMPEAxyQ6RQ4wWVjoGW/AC5vcVcAGsDDeDS18zagcmiBwG/jGXUltekDoMMGbge3
+	CARFLBpamvo9nw3IrgrXDxGQKbkA8MZbe3hgQuh4LBzvnPpEyyP3neRGxuagzm/boSjNoKZO+A2
+	Jk5AJuBM+gdlYiQ+yTVFs
+X-Received: by 2002:ac8:5711:0:b0:527:f08f:56a2 with SMTP id
+ d75a77b69052e-530b48fee7bmr20271511cf.8.1789054646975; Thu, 10 Sep 2026
+ 08:37:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 1/4] bpf: Add KF_PERFMON kfunc flag
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org
-Cc: eddyz87@gmail.com, info@starlabs.sg, bpf@vger.kernel.org
-References: <20260910142107.40582-1-daniel@iogearbox.net>
- <ea68b32c-1af2-47ae-b168-4fd6791f607b@gmail.com>
- <DLBQGB3CXTSB.EXQVL3ZIQ3QO@gmail.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <DLBQGB3CXTSB.EXQVL3ZIQ3QO@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260909204122.1993010-1-irogers@google.com> <20260909204122.1993010-4-irogers@google.com>
+ <36a64b34-bb69-4352-9e84-c31d0793b6a4@kernel.org>
+In-Reply-To: <36a64b34-bb69-4352-9e84-c31d0793b6a4@kernel.org>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 10 Sep 2026 08:37:15 -0700
+X-Gm-Features: AcwNN1VPdFbSJ00CKGszV1vwicAKF7OS9Ew-KRRognhOG4ktLaQZIRP5UUupJ2I
+Message-ID: <CAP-5=fUC+2+qafs=GjfC6K5X1o8t8BTxj8L7NuGAm40n_UTYWg@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] bpftool: Add explicitly sequenced -lzstd to libbfd
+ feature fallback
+To: Quentin Monnet <qmo@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	Nick Terrell <terrelln@fb.com>, David Sterba <dsterba@suse.com>, Tomas Glozar <tglozar@redhat.com>, 
+	Costa Shulyupin <costa.shul@redhat.com>, Michael Jeanson <mjeanson@efficios.com>, 
+	Dmitrii Dolgov <9erthalion6@gmail.com>, Leo Yan <leo.yan@arm.com>, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Sep 10, 2026 at 2:20=E2=80=AFAM Quentin Monnet <qmo@kernel.org> wro=
+te:
+>
+> On 09/09/2026 21:41, Ian Rogers wrote:
+> > Distributions like Fedora currently ship a statically compiled binutils
+> > libbfd that natively depends on zstd to decompress sections (e.g.
+> > undefined reference to 'ZSTD_decompress').
+> >
+> > Extend the newly supplemented libbfd-liberty-z-zstd feature probe into
+> > bpftool's Makefile so it can natively build against static binutils
+> > distributions.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > Assisted-by: Antigravity:gemini-3.1-pro
+> > ---
+> >  tools/bpf/bpftool/Makefile | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
+> > index b0f7168e7943..1cac4508eb0c 100644
+> > --- a/tools/bpf/bpftool/Makefile
+> > +++ b/tools/bpf/bpftool/Makefile
+> > @@ -125,6 +125,7 @@ FEATURE_TESTS +=3D libcap
+> >  FEATURE_TESTS +=3D libbfd
+> >  FEATURE_TESTS +=3D libbfd-liberty
+> >  FEATURE_TESTS +=3D libbfd-liberty-z
+> > +FEATURE_TESTS +=3D libbfd-liberty-z-zstd
+> >  FEATURE_TESTS +=3D disassembler-four-args
+> >  FEATURE_TESTS +=3D disassembler-init-styled
+> >  FEATURE_TESTS +=3D libelf-zstd
+> > @@ -135,6 +136,7 @@ FEATURE_DISPLAY +=3D libcap
+> >  FEATURE_DISPLAY +=3D libbfd
+> >  FEATURE_DISPLAY +=3D libbfd-liberty
+> >  FEATURE_DISPLAY +=3D libbfd-liberty-z
+> > +FEATURE_DISPLAY +=3D libbfd-liberty-z-zstd
+> >  endif
+> >
+> >  check_feat :=3D 1
+> > @@ -201,6 +203,8 @@ else
+> >      LIBS +=3D -lbfd -ldl -lopcodes -liberty
+> >    else ifeq ($(feature-libbfd-liberty-z),1)
+> >      LIBS +=3D -lbfd -ldl -lopcodes -liberty -lz
+> > +  else ifeq ($(feature-libbfd-liberty-z-zstd),1)
+> > +    LIBS +=3D -lbfd -ldl -lopcodes -liberty -lz -lzstd
+> >    endif
+> >
+> >    # If one of the above feature combinations is set, we support libbfd
+>
+>
+> Hi Ian, thanks for this!
+>
+> Just checking: my understanding is that if libbfd depends on libzstd,
+> then it always also depends on zlib, so we never need to check some
+> variant such as "feature-libbfd-liberty-zstd" (without the "-z"), is
+> this correct?
 
+Hi,
 
-On 9/10/26 4:14 PM, Kumar Kartikeya Dwivedi wrote:
-> On Thu Sep 10, 2026 at 5:03 PM CEST, Mykyta Yatsenko wrote:
->> On 9/10/26 3:21 PM, Daniel Borkmann wrote:
->>> Tracing related BPF helpers e.g. under bpf_base_func_proto() are gated
->>> behind CAP_PERFMON. However, the same is currently not true for kfuncs
->>> and they are accessible via plain CAP_BPF. Add a new KF_PERFMON flag
->>> which can be used such that check_kfunc_call() ensures env->allow_ptr_leaks
->>> is permitted. This follows similar pattern to existing KF_DESTRUCTIVE flag.
->>>
->>
->> This problem has been reported and patch sent some time ago:
->> https://lore.kernel.org/all/20260615-f01-07-dynptr-probe-read-cap-v1-0-e626cd61a381@mails.tsinghua.edu.cn/
->>
-> 
-> We ended up discussing this and decided to go ahead, since it's a bit weird to
-> continue to have the discrepancy against helpers that have similar restrictions.
-> In practice it won't matter much to actual users, but easier to just fix it and
-> put the thing to rest.  This one is also a more comprehensive fix compared to
-> Nuoqi's.
-> 
-Thanks for the context, appreciate it!>> [...]
+You make a good point. Normally we want to use pkg-config to get the
+libraries necessary for a dependency. Unfortunately pkg-config is
+generally broken around binutils/libbfd. This is why we have all of
+these tests to determine the list of libraries we need to link with
+libbfd for things to work, which pkg-config normally provides. It is
+perfectly possible to build libbfd with libzstd and without libz, but
+currently, we haven't encountered a distribution doing this. I can
+imagine a memory hardened future where libz has become zlib-rs that
+conveniently provides C headers.
 
+For perf we don't build with binutils by default; this matter is only
+an issue for our build tests. We don't depend on libbfd because its
+GPLv3+ license isn't compatible with perf's GPLv2 license, which would
+create an undistributable binary. This isn't an issue for bpftool
+because its BSD 2-clause license is compatible with libbfd. In perf
+we've been replacing libbfd based functionality with that in elfutils.
+libLLVM is another consideration, but it's generally too heavyweight
+for the effort to be worthwhile (it is generally large, distributions
+don't want a dependency on it, and it runs many initialization hooks
+at startup that don't benefit perf). Hopefully elfutils can provide a
+stable API for its disassembler (libasm) as that would cover pretty
+much everything perf needs without requiring us to fork objdump, use
+libcapstone or use libLLVM.
+
+Anyway, we could add another flavor (zstd without libz) to the feature
+tests for libbfd but since this isn't currently an issue I think we
+can cross our fingers for binutils to fix pkg-config or for other
+tools in the kernel, like perf, to migrate away from the use of
+libbfd. If we add every flavor of libbfd's dependencies, it feels like
+a lot of build clutter (imo) and I don't know where we stop.
+
+Thanks,
+Ian
+
+> Quentin
