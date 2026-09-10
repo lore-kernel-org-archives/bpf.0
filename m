@@ -1,65 +1,65 @@
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+Received: from mail-oo2-f42.google.com (mail-oo2-f42.google.com [74.125.231.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A9BB4A4828
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 15:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D874A68B7
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 15:42:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789054923; cv=none; b=M7ew13K1Ywn0rTknhtWBEM+yaaOzNNlQt53UrsIrYYEBk4a633+fWMLrziwknvJV4gD78lVEVwauzvDhBWo6SiMEundjDg2INJM9TpcEF54zFVE29DiBLrD4xHh+WzWYXMLvXbaUPxD19XmWi0XUtpXeiWNwD7X+YTNGA9Hg3h0=
+	t=1789054977; cv=none; b=cN0OU2+rNG2wAzuh+XhD9gD58SUC6E7ju7GpOy85idZUcyXeHXCylC8kuwWRbE4KGydDhDEcgYeL60oQK3BX3AnkuDz7iDdhvXo1ys/CAGJPuLyIMUU0fY8d07sXnXX2Yc4hH8kSQS1tfnusmcuxMNnwGRH+BvG1hBP6mimOETM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789054923; c=relaxed/simple;
-	bh=gEWjIyP23zKOlG/fhdA01oSG85S2cPvjWdCJqXMoQ/s=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=hY7r30VIx/sUrkn8lg4d4062Wwmm19Ahq7ce5E2Nm1pC5U7/r7oBXlM3Wh8EIAiMp4K6Z5M6lbvRjaIyJyji9lFgxeDdhBSIKbbcTFpODLkZ5yndNO7N4YqVrW3s2TBDYDU1lE6U/Iube7xLYT+mnNgxW9eXhZzlZsRsWmXOKoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YkmNjG7s; arc=none smtp.client-ip=209.85.210.50
+	s=arc-20240116; t=1789054977; c=relaxed/simple;
+	bh=A/nCDgyDPUPU1RSCTCEMlXBoBaDdeCZCssb3K4mcjCE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=G67No1yhTGOxXm4Gj0sjc5RdQ048H5M1ht6nqGrtsQihqxPPZZvzW76qMVXmzGMwRLFnINoZ+66YFKCdmaLfnZIHdkhFOPBHMI5bvwJevYhXwT418Blw+sJQYBrk49CnHmBEXi1Ci9Ny4iqtqMx5M06pQ7i9vjAzN8KreC/qgOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gAv6lxyX; arc=none smtp.client-ip=74.125.231.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YkmNjG7s"
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7f4f824de5dso3310694a34.2
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 08:42:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gAv6lxyX"
+Received: by mail-oo2-f42.google.com with SMTP id 46e09a7af769-7fcb425fb6bso1044075a34.2
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 08:42:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789054920; x=1789659720; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=gmail.com; s=20251104; t=1789054974; x=1789659774; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=gEWjIyP23zKOlG/fhdA01oSG85S2cPvjWdCJqXMoQ/s=;
-        b=YkmNjG7sFFdNJdWkOeybOC5mPao/pkoQTKjb3Dqlgp6T4+D7us3GY2TrhOVpVjjvPf
-         pQdYyrcnYlolxO2xk4yd4qg8l247ItxNAcNLPpokvYL2hSGuUGxDUt+xW1A1Z/+LHh+S
-         teABER7Cug+3DG2nRSnbF0a90o/2/Ru/1LAlmob0sOMeXWXUM5Ab2lt8C0eCpNvUbO5f
-         GK2FWBb9SGHFpEE/Ob9L9fwg8CR4aaxE/yoNB0m5z9ZOy1IWX3xCZjGE4fTtQVVRosvp
-         BHSdlTNIrEyIngHekhhnsD5vwipNuZEbBhXL4ecgvRTF8t2eMyk2DsVKWzFOjU5jwLOo
-         w2bg==
+        bh=VMVAvPPStqPTw7eCOoENioqc61FRpj+jpgH7CPpMJ1Q=;
+        b=gAv6lxyXpRFTn3U/u1uPriCuliGH41NI3j9rp8OLHWcbrqR94iVkP2G6WoZEoiBHzk
+         4hbelOe7bRb0jnR1dxP8b4TcLSLia7wSp6MZ20fiz2HeIn620Iqc2/vBA6w0Ve+wB6Di
+         1/FgoaBsSu37sLBfz1KW0KhMLq7Ur/XBPWv7jS9DUykfc/xm4HTeB359NskZSv7fdfnG
+         bKwbMUbc34fOn5Y+VdBcVSw1F5ZC3xDmged2fc/x/QXwdMBhWjSm81peA2SFZ5Qcs1c+
+         JhgrFXLnhx/F6H5H5QqTZ43Jd67MCLOEDZfWAOX3Th4DNFL7hziiHgMH2r/hxFFTgv52
+         nqtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789054920; x=1789659720;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=1e100.net; s=20251104; t=1789054974; x=1789659774;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gEWjIyP23zKOlG/fhdA01oSG85S2cPvjWdCJqXMoQ/s=;
-        b=EyNekmJHxIIf3TCnEVYIxs/rnBUMtrsCtivq2qvQ2uGNOGIcnp6dbUJw2R5vK3YhqR
-         HsUAfO4Xo3xJ7+7vSd8jwuUjIZey0BVyIHac9KPsNN0N0062RTsULUycRmW/Nz4JFm+L
-         pqjwUta11hKBTsoWWiE1uZcsIieeajdljQutGMaRrXkehUtQ6csTYjctUjYxYQY2v/Kj
-         hP5Vyqb0N/rG4SCnVKRV9SYKY0vRpWQfKzIH2P+ssfRlRkyRaeXNve7VL3aPZ0r5Kdjx
-         NsNuUHLD1d2WyvnwxeRpp3gecSAEKcAQA1uPLqZGXYEfhcR0dPA3Q31bCYHdGBbq7fCt
-         uoWQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzXOTuZgM8nZNoLw1udovfNJW6zfv/ex88qoMF550t88jgU/7NKf2cQYi5EG60GwBeBQHw=@vger.kernel.org
-X-Gm-Message-State: AFuF++k/Rw3pZ+By7ngodm13Hcupq5cDCIR1GBY4W+y0J9xobVOSRqLg
-	1V0t4bT1nn1BE12l1eOOwHFkdyS2hS95pZ1s87XGSYjKmq/h0+x5S8tSLvMN7Q==
-X-Gm-Gg: AYBFou2Dy8DUWBwQIiWppxZXsMnlGVDi2HpIuMPAQQljHJdpspNmEQGX+1BoQWkTrpk
-	BaMwWtu3f/6mxvvWvwYkKe+0RK00k2VSnIeZ1dGQqPqzcE4x8L2fGZKAeg5gqYGZUWv6YwiBcnD
-	MFG8dLZVZQtbU+hJsWiYFjkj5goV9NdW1bmksF1zH9PM022WHgebbH4ul6mD4iW5jzcirbtKrBC
-	u3i0DsElY+wiLPcr8GmqlL6WpEAskgGdU3NlBheq6dy3yI+6M8Fb5gM1lBGpVqz/fqTsoxDZrgn
-	JSkj8+7RlKHfM+56f2whDGTJuIdSmGR9/jxC/htpYMxz6lFeb1Mgy2oyuuq9n6nXTFDYEByWH/d
-	osfOG21TvHFkwcUAjcLfZqsWkmLkDHyyyndllhfQmN5SgQymQtu6XicG6BjAcRaFqR3K7txM1aB
-	JXbR/elNIGKNp0XAdTevXL8QtTTDBhzKSmoY6+rrGR42Vbjte6EUKjWyRxeZvx19YONyhKkSq8r
-	w8RPv3Zv8+ASS+NrJHGewB92ojQhHi8FcpQ+g0LqiRRURcWvn0O9X5fKK8TAxN+M72qhJehsd75
-X-Received: by 2002:a05:6820:2208:b0:6b1:c841:f8e1 with SMTP id 006d021491bc7-6b6fbfcd2d6mr26002076eaf.14.1789054919990;
-        Thu, 10 Sep 2026 08:41:59 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:45::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6c0990cc05fsm145311eaf.3.2026.09.10.08.41.58
+        bh=VMVAvPPStqPTw7eCOoENioqc61FRpj+jpgH7CPpMJ1Q=;
+        b=LOZQM5E1K3b4SEu1F5cSJZyJ7bYbYgAvcA8RhQtzw77W+CMzyUZpOR8juC1VwdOT+N
+         ECGA0Ur6qcTw3s2mjrMsG2+iOEGRp2Vl4JCCpMwpurvmlh1XrZrCP6c1Del9hxHS2q1x
+         WAqo5n6XpW7KQohKklZRx3D9uWnGo81Mh5hjBLaFGCoHsizWR4k4yenz7x6t/jZZYL2e
+         x5oLEh01aPFYdKs3UYzHxKZUR0Guj0ar2I1Lut+dbI+pp6RoLp3Ia+bchLvhnoKg0AOw
+         QNsaZt/RjcelmUZMsNZ6Dj2sUl8kD7DCjlVS5FNFtv2ZLzX864c+auo83/ofdOF5sWey
+         kstw==
+X-Forwarded-Encrypted: i=1; AKwUvBzJph1pJ9t/F6bTLTg9zTT9sBZnq2d1SgQ1zRd0H5W83/fZ0CKrHoj7l1W/cLYTkuPQWr0=@vger.kernel.org
+X-Gm-Message-State: AFuF++l297SvKUs3HbOFMUFAuBePjluQM56QmUMAjzEiXe+uGM4f9udV
+	rZ9obBaWYd7hyRLAqwIgrUCY6YjBAFeH/AJ5ih9RyItN9vtWi2EsTTgw
+X-Gm-Gg: AYBFou1nVL980obbCHwdlBE0lfaxrMdEsTOF7TDMxStcJ5ZYtZlfcOIsPh8mH11Rdcf
+	3JWFJu7u3m7DP9a9T8aqmtVcgSERCQh9mjTn5ZN29vj5CBVLIuAiisOT6wolhKc/yaA3BCJPCUZ
+	9tSXHJXVB6SaFQ5zNwBMJrvTUJVF7BtHN5zZvT2XB+ek29uXcTYtfiyN78R63jKYWoJip5qfsW1
+	BTN9DayyLIRZIq6uBI36K8kuW9qqZlE8xW7xRw2Ifzd3PjdWxERSIBh7XDNWUF2l5BqLaJvlQtC
+	yHpbh/AXU5YDdF66fHDdL18xCdD7/TaY7ArXEFksLsIoktTlfiyBc7Xr0pWZ0RQyjKpfxzkOWEg
+	F7N/YrxD/QB/V1ZgWzdxdzwDQSFRIhDGx23dHmlknBcvB23M7ihXIG58kuqR7RncSfZcpeH9Q93
+	UN9Wq1PmBlLUsryewxyMTuO1rXmDwM5yr4CL/3if7C7wVuQ49O5eJTqLydNbSB4pMcHifZihhld
+	nK0H82ICNq95Hu1kO4PvruwWkKnqSw2Mztseg2N7ePfrKcQfAndYTgjgMDBr8nH7w==
+X-Received: by 2002:a05:6820:820:b0:6b1:a812:987b with SMTP id 006d021491bc7-6bee2f1f13fmr7998958eaf.14.1789054974256;
+        Thu, 10 Sep 2026 08:42:54 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:33::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6c0990cc05fsm147707eaf.3.2026.09.10.08.42.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Sep 2026 08:41:59 -0700 (PDT)
+        Thu, 10 Sep 2026 08:42:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,61 +68,58 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 10 Sep 2026 08:41:58 -0700
-Message-Id: <DLBR1FDW787I.2PNNYKF8PP4MY@gmail.com>
-Subject: Re: [PATCH bpf 2/4] bpf: Require CAP_PERFMON for kfuncs reading
- memory
+Date: Thu, 10 Sep 2026 08:42:52 -0700
+Message-Id: <DLBR23ZSPNHT.49259869EXRH@gmail.com>
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
 To: "Daniel Borkmann" <daniel@iogearbox.net>, <ast@kernel.org>
 Cc: <memxor@gmail.com>, <eddyz87@gmail.com>, <info@starlabs.sg>,
  <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf 3/4] bpf: Require CAP_PERFMON for untrusted
+ read-only memory reads
 X-Mailer: aerc
 References: <20260910142107.40582-1-daniel@iogearbox.net>
- <20260910142107.40582-2-daniel@iogearbox.net>
-In-Reply-To: <20260910142107.40582-2-daniel@iogearbox.net>
+ <20260910142107.40582-3-daniel@iogearbox.net>
+In-Reply-To: <20260910142107.40582-3-daniel@iogearbox.net>
 
 On Thu Sep 10, 2026 at 7:21 AM PDT, Daniel Borkmann wrote:
-> Mark fault-safe probe reading kfuncs as KF_PERFMON, similarly as we do fo=
-r
-> the old-style BPF helper equivalents. bpf_rdonly_cast() is included in th=
-is
-> list as well as it returns PTR_TO_MEM | MEM_RDONLY | PTR_UNTRUSTED for an
-> unchecked object and is using fault-safe BPF_PROBE_MEM.
+> Marking bpf_rdonly_cast() KF_PERFMON CAP-limits one producer of PTR_TO_ME=
+M |
+> MEM_RDONLY | PTR_UNTRUSTED, but not the type itself. A global subprogram
+> argument tagged __arg_untrusted results in the same register with no kfun=
+c
+> call.
 >
-> Note that only the void form of bpf_rdonly_cast() produced a register tha=
-t
-> was readable without CAP_PERFMON. For a struct type id the kfunc returns
-> PTR_TO_BTF_ID | PTR_UNTRUSTED, whose dereference has always been gated in
-> check_ptr_to_btf_access(). The flag is not conditional on the type id, so
-> for the latter it only moves the rejection from the dereference to the ca=
-ll
-> itself, which is the better place to report it anyway.
+> Fixes: c4aa454c64ae ("bpf: support for void/primitive __arg_untrusted glo=
+bal func params")
+> Reported-by: STAR Labs SG <info@starlabs.sg>
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> ---
+>  kernel/bpf/verifier.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 >
-> The bpf_stream_vprintk() and bpf_stream_print_stack() kfuncs are marked
-> as well. The former ends up in the same bpf_bprintf_prepare() as the
-> bpf_snprintf() helper, where %pks, %pus and %pI4 read through a program-
-> supplied address and %pB resolves one into a symbol. The latter walks the
-> stack and prints each instruction pointer via %pS.
->
-> Fixes: 4665415975b0 ("bpf: Add bits iterator")
-> Fixes: 65ab5ac4df01 ("bpf: Add bpf_copy_from_user_str kfunc")
-> Fixes: f0f8a5b58f78 ("bpf: Add bpf_copy_from_user_task_str() kfunc")
-> Fixes: a498ee7576de ("bpf: Implement dynptr copy kfuncs")
-> Fixes: f2362a57aeff ("bpf: allow void* cast using bpf_rdonly_cast()")
-> Fixes: e91370550f1f ("bpf: Add kfuncs for read-only string operations")
-> Fixes: 5ab154f1463a ("bpf: Introduce BPF standard streams")
-> Fixes: 19559e844184 ("bpf: add bpf_strcasecmp kfunc")
-> Fixes: b5b693f73589 ("bpf: add bpf_strcasestr,bpf_strncasestr kfuncs")
-> Fixes: 1dc669646762 ("bpf: add bpf_strncasecmp kfunc")
-> Fixes: 63328bb23f26 ("bpf: Add bpf_stream_print_stack stack dumping kfunc=
-")
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 5d61e74865a8..3f99b20e04fc 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -6453,6 +6453,16 @@ static int check_mem_access(struct bpf_verifier_en=
+v *env, int insn_idx, struct b
+>  			return -EACCES;
+>  		}
+> =20
+> +		if (rdonly_untrusted && !env->allow_ptr_leaks) {
+> +			verbose(env, "%s access is allowed only to CAP_PERFMON and CAP_SYS_AD=
+MIN\n",
+> +				reg_type_str(env, reg->type));
+> +			bpf_diag_policy(
+> +				env, insn_idx, "read from untrusted read-only memory",
+> +				"the access requires CAP_PERFMON",
+> +				"Load the program with CAP_PERFMON, or avoid dereferencing untrusted=
+ pointers.");
 
-Let's drop this Fixes list altogether, since it will only cause
-headaches to stable folks. We don't need to backport this everywhere.
-Not really an issue.
-CAP_BPF alone can leak memory via HW speculation,
-so this patch isn't strictly necessary, but I don't mind closing the hole
-since AI keeps reporting it.
+That's an odd formatting.
+	bpf_diag_policy(env, insn_idx, "read from untrusted read-only memory",
+			"the access requires CAP_PERFMON",
 
-Also pls add bpf_get_kmem_cache() as AI suggested.
+would look more normal.
 
+pw-bot: cr
