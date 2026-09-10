@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C0D490C00;
-	Thu, 10 Sep 2026 13:05:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD2E24908BD;
+	Thu, 10 Sep 2026 13:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789045557; cv=none; b=iT849wNasxvn/q6gOjambpgbMaVq1qGU5IYWMZKfTTCAjKgYin99wqSW92D1QcPF4yjIZk5/K1PQX/ENXmheDtpRnM31/7F3yIfdXYUF65EEwgjuRwtSkS1ZvAyVNgKNAIl5aQzjObuzVUiZ96DVDYADtMb79e1AK7CmcqcD3Ao=
+	t=1789045558; cv=none; b=HYdFrrvwuuyflFw3QtSQ6hx/4WK0Zdsgzi97knVgeER+mQfEQGdiWg6XeY5+rP/QHPahTmerJ3fJn5wfGhsEbdt/zmTe9TT6g3Gmx/K4ehT/egp0GG8V6vZLVoBFH+SJelMob3V+xphpyniF9YtI1p711fIP7byY8Xr8IKt/RWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789045557; c=relaxed/simple;
-	bh=3MjUcIDPftNtv/doowUtVKbtOO4aZEwH8fEs4QjGcSc=;
+	s=arc-20240116; t=1789045558; c=relaxed/simple;
+	bh=8xrp+PLWGWnGNr1R2Q9RlDhdl4OMwI9ky7GEV/tOcfw=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=P2NCK9s53r5V3iFFfEAKYpHpue6qcRsNhCHoTrV/Uujlp3vH4WlD8Cc/COPRftnzvRl1ch4LXuEy5I3crYqoL0hvpH8x/VW4I6HN1pr0+OAGVfXbDOZKj1lKFUts2NJ1eBZk2ikqsLyPgbGwG8kxrll+uLqbMgA1R5yRm05rwc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eMVbN06t; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=QAaR3hxlZ0oSmFVmUiLSxBqQBMKSJpw5TQHmM4Kj5bOFViYLYthkVvEu+6S8O9cYYk3WxAa3E3BRh7/SaWCCUMgaNdNsp3iZsyld1c0xJ2Cfhdr01/ZlkTOb4XoDOwzNynNOi2Bv8Gn7OJZsxKv10iE7YCLx5CLLSwsDSNH9LbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J5oDrT12; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eMVbN06t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 752C71F000FF;
-	Thu, 10 Sep 2026 13:05:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J5oDrT12"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ACEE1F00893;
+	Thu, 10 Sep 2026 13:05:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789045554;
-	bh=MEARMROxwEnqR/mfCzYtDxrp/hAYhtP/dZwuqgrxQ9A=;
+	s=k20260515; t=1789045556;
+	bh=Cdo+rmDstdi/wv4Vrglb7Q5HOr6Q/8S05d4OuI8eWG4=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=eMVbN06tBehl96YDs0m9/79PxxoZaGFh947PiTzoibfVrQKRRFR5AuoCpxIY59NJS
-	 qquiHZI+ox8WyjtWuSIskE5zP/xZmciimZFH0IhAGPQSWgIhhlAvZWiw/GWIQnQXxg
-	 nZlCEzrVEDQ4CtnnWpAq1dlcg2nMYvBeSsd3ivl/vVqqd9/fcTblmq8dfodcHqMDEX
-	 HnuVwr7bqBuwIucK/Bk/XEysXy+JF3Ze9F9a15QvS60pA/9/Yrpky6W4LG3TvGjuej
-	 dX3zUGDl46gXMkGHGSJvAPK1JGpivGJg14DEu6e35XUms5sFS1ixQ5ggzvJ1VTC8pZ
-	 kkSfKGwQzJ6HA==
-Subject: Re: [PATCH net-next v6 13/14] misc: lan966x-pci: dts: extend cpu reg
- to cover PCIE DBI space
+	b=J5oDrT12yCwmsUKLG9nicehVw3jTNlBNGaqYxZOQe1B+nB8odrDQ8RSpt5b9+85bZ
+	 gC2zUpht3+5ySeGRRnC1AuPSehaUspWuKS3cYunfWyMCXY4vf55YEQCsyBv+60BNAS
+	 wys4QZN5tTRxpPFN2Cs/xKxjsXYLtPbRYL1sf2y3N3E+e+SsbeDlRTtTeIUsheau1R
+	 tVB0zRpKAWj+KC7CwgGycXPPJdgQGQtVW6mJ5+a5tbfsuGTuiyc1fJ8T/zlHf4Vgsf
+	 6W007kjJKQNvwpOjkVqQ3NYtM3evI6aUsTWp0g12lhvUBOsyh+Z45r8DXMiu+V+qTe
+	 bPBM5ZGbpBESA==
+Subject: Re: [PATCH net-next v6 14/14] misc: lan966x-pci: dts: add fdma
+ interrupt to overlay
 From: netdev-bot+sashiko@kernel.org
 To: daniel.machon@microchip.com
 Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
@@ -38,11 +38,11 @@ Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
  gregkh@linuxfoundation.org, mohsin.bashr@gmail.com, richardcochran@gmail.com,
  netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org
-Date: Thu, 10 Sep 2026 13:05:53 +0000
-Message-ID: <178904555304.219967.9327319194988391867@kernel.org>
-In-Reply-To: <20260909-lan966x-pci-fdma-v6-13-6f48dab9d671@microchip.com>
-References: <20260909-lan966x-pci-fdma-v6-13-6f48dab9d671@microchip.com>
-X-sashiko-severity: Low
+Date: Thu, 10 Sep 2026 13:05:54 +0000
+Message-ID: <178904555475.219967.711870735307370384@kernel.org>
+In-Reply-To: <20260909-lan966x-pci-fdma-v6-14-6f48dab9d671@microchip.com>
+References: <20260909-lan966x-pci-fdma-v6-14-6f48dab9d671@microchip.com>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -55,77 +55,102 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 0 · Low: 1
+Critical: 0 · High: 0 · Medium: 1 · Low: 0
 
-- [Low] Claimed patch-ordering / bisectability bug: the "cpu" reg window
-  is enlarged from 0x100000 to 0x800000 only in this commit, while the…
+- [Medium] The FDMA interrupt is hooked up (and thereby unmasked in the
+  OIC) long before any FDMA state exists.
 
 --
 
-misc: lan966x-pci: dts: extend cpu reg to cover PCIE DBI space
+misc: lan966x-pci: dts: add fdma interrupt to overlay
 
-This grows the "cpu" register window of the switch node in the lan966x PCI
-device tree overlay from 0x100000 to 0x800000 so that the PCIE DBI and iATU
-registers at offset 0x400000+ are covered. Those registers are programmed
-when the FDMA engine sets up the ATU outbound windows.
-
-No Link: tags in the commit header.
+This adds OIC interrupt 14 as the "fdma" named interrupt to the lan966x
+PCI device tree overlay, so FDMA-based injection/extraction can be used
+when the switch is reached over PCIe.
 
 > diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci.dtso
-> index 7b196b0a0eb6..7bb726550caf 100644
+> index 7bb726550caf..5bb12dbc0843 100644
 > --- a/drivers/misc/lan966x_pci.dtso
 > +++ b/drivers/misc/lan966x_pci.dtso
-> @@ -135,7 +135,7 @@ lan966x_phy1: ethernet-lan966x_phy@2 {
+> @@ -141,8 +141,9 @@ switch: switch@e0000000 {
 >  
->  				switch: switch@e0000000 {
->  					compatible = "microchip,lan966x-switch";
-> -					reg = <0xe0000000 0x0100000>,
-> +					reg = <0xe0000000 0x0800000>,
->  					      <0xe2000000 0x0800000>;
->  					reg-names = "cpu", "gcb";
+>  					interrupt-parent = <&oic>;
+>  					interrupts = <12 IRQ_TYPE_LEVEL_HIGH>,
+> +						     <14 IRQ_TYPE_LEVEL_HIGH>,
+>  						     <9 IRQ_TYPE_LEVEL_HIGH>;
+> -					interrupt-names = "xtr", "ana";
+> +					interrupt-names = "xtr", "fdma", "ana";
 
-[Severity: Low]
+[Severity: Medium]
+With source 14 now named "fdma", platform_get_irq_byname(pdev, "fdma")
+starts succeeding on the PCIe path, and lan966x_probe() requests the
+handler right there:
 
-This isn't a bug, just a question about the ordering of the series.
-
-The earlier commits "net: lan966x: add PCIe FDMA support", "net: lan966x: add
-PCIe FDMA MTU change support" and "net: lan966x: add PCIe FDMA XDP support"
-already derive regs[TARGET_PCIE_DBI] from the "cpu" base plus 0x400000, and
-fdma_pci_atu_init() writes at DBI + 0x300000 + idx * 0x200:
-
-drivers/net/ethernet/microchip/fdma/fdma_pci.c
-static void __iomem *fdma_pci_atu_addr_get(void __iomem *addr, int offset, int idx)
-{
-	return addr + FDMA_PCI_ATU_ADDR + FDMA_PCI_ATU_IDX_SIZE * idx + offset;
-}
-
-That lands roughly 0x700000 from the "cpu" base, i.e. outside the 0x100000
-mapping that exists until this commit. Would it be clearer to move this
-overlay change before the driver commits that compute the DBI offset, so
-that the mapping is never smaller than the offsets the driver derives from
-it?
-
-For what it is worth, the intermediate commits do look safe in practice,
-since the ATU access in lan966x_fdma_pci_init() is gated:
-
-drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-	if (!lan966x->fdma)
-		return 0;
-	...
-	fdma_pci_atu_init(&lan966x->atu, lan966x->regs[TARGET_PCIE_DBI]);
-
-and lan966x->fdma is only set when the node names an "fdma" interrupt in
-lan966x_probe():
-
+drivers/net/ethernet/microchip/lan966x/lan966x_main.c:lan966x_probe() {
 	lan966x->fdma_irq = platform_get_irq_byname(pdev, "fdma");
 	if (lan966x->fdma_irq > 0) {
+		err = devm_request_irq(&pdev->dev, lan966x->fdma_irq,
+				       lan966x_fdma_irq_handler, 0,
+				       "fdma irq", lan966x);
 		...
 		lan966x->fdma = true;
 	}
+}
 
-The overlay here still carries only interrupt-names = "xtr", "ana", and the
-"fdma" interrupt is added by the following commit, so the enlarged window is
-in place before the FDMA path can be enabled. Is that ordering intentional?
+Is this ordering safe?  The OIC maps and unmasks source 14 at
+devm_request_irq() time, but at that point no FDMA state exists yet:
+
+- netif_napi_add()/napi_enable() only run later, from
+  lan966x_port_init() -> lan966x_fdma_netdev_init() in the per-port
+  probe loop, so lan966x->napi is still the zeroed devm_kzalloc()
+  memory and napi.poll is NULL.
+
+- the DCB rings, the LLP/ATU windows and the FDMA_CTRL NRESET pulse are
+  all done even later, from lan966x->ops->fdma_init() ->
+  lan966x_fdma_pci_init().
+
+If the OIC delivers an FDMA interrupt in that window, the handler
+schedules NAPI unconditionally:
+
+drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:lan966x_fdma_irq_handler() {
+	db = lan_rd(lan966x, FDMA_INTR_DB);
+	err = lan_rd(lan966x, FDMA_INTR_ERR);
+
+	if (db) {
+		lan_wr(0, lan966x, FDMA_INTR_DB_ENA);
+		lan_wr(db, lan966x, FDMA_INTR_DB);
+
+		napi_schedule(&lan966x->napi);
+	}
+}
+
+Can this then oops in __napi_poll(), either calling n->poll() while it
+is still NULL, or running lan966x_fdma_pci_napi_poll() against
+rx->fdma.dcbs == NULL and n_dcbs == 0, where fdma_has_frames() ->
+fdma_db_get() dereferences the dcbs array?
+
+How reachable is that window in practice?  The series itself describes
+the card arriving with FDMA state from a previous boot.  The commit
+"net: lan966x: clear FDMA interrupt stickies after switch reset" says
+the stickies "sit in FDMA_INTR_ERR until the FDMA IRQ is requested later
+in probe, at which point the handler fires immediately and WARNs", and
+"net: lan966x: add shutdown callback to stop FDMA on reboot" says that
+on the endpoint "channels stay active and interrupt sources stay armed
+across the reset" and that "FDMA_INTR_ENA persists on the card across a
+warm reboot".
+
+The sticky clear in lan966x_reset_switch() clears the latched bits at
+one instant, but does not mask FDMA_INTR_ENA/FDMA_INTR_DB_ENA and does
+not stop the channels.  After a reboot that skips device_shutdown()
+(panic reboot, kexec/kdump, watchdog warm reset with the card still
+powered), could a still-active channel latch FDMA_INTR_DB again after
+the clear and have it delivered as soon as source 14 is unmasked?
+
+Would it be more robust to reset and mask the FDMA block (the
+FDMA_CTRL NRESET pulse that already exists in lan966x_fdma_pci_init(),
+plus clearing FDMA_INTR_ENA/FDMA_INTR_DB_ENA) before
+devm_request_irq(), or to request the FDMA IRQ only after fdma_init()
+has built the rings and added the NAPI instance?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909-lan966x-pci-fdma-v6-0-6f48dab9d671%40microchip.com
