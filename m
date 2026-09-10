@@ -1,32 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD8E486E67;
-	Thu, 10 Sep 2026 13:05:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E5B48EC8A;
+	Thu, 10 Sep 2026 13:05:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789045551; cv=none; b=HpokaodSW7E/Yxeq+tr++IJ8rPx6NihQ4SDh5itqx2fEKW/CuKNOhJjuV/9jGx+AdIXFV+hE669b1XLaqdCmhJQSr67qMBXIbQWeSp0s7OP+Q0bxbUHbFqKlbYahMx/kXCr5g/C2OhD3LIuCecs7Q53s7ZXvSAsBFMOxzS5/qrA=
+	t=1789045552; cv=none; b=C7KM5NOl53Lm9Z0c3qnTfWwy9VxhTrRzkLxi8Tr0Oqc5pxOyAowUPtjy7ZyC/uBsFxT3nPZ+It8/FqzBWZhorfPC9GZpSNOUvW2YHW1IgNQDVhLyMv9WIqfheb8vk1CXMUVnrjcBFeuKCS+7XoZ8/tOg6n7gWxAhvsd4zK4RjZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789045551; c=relaxed/simple;
-	bh=AIcPlROLZYJRT3LF6fszMq09HDa7DPGeq8eIhufMjrY=;
+	s=arc-20240116; t=1789045552; c=relaxed/simple;
+	bh=bi3yd2xSnegsVcu+g+E55bVO4rRgW7JnbrhSVY+118I=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=g31oiixnSGesrx2zG7XLaB/SrwThd4cHDNSY1Cv4lbN8szqXwc7lV3XbCYUUoSEZpvgWlfiWuV2aLc6AEst7un4ZwMzj61isg5WqMlwPMQqdr56OKlM6hyd1ZiQ+MDEGZ8GGWXjpSfZ99CWF0dlNOT3JKXvwZGeth/sKx4KahNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EvJpCLHX; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=Gu/oR1PU2wtQuhCO8VUUv0iW5ZxsSHOfhiRtDl+mckHc8Gl1gAQeDkAH4ERZqMirHuQzmBLuWahwbQ1pm+xCJD7+OeNnFcGemBdUEHIAlLgBVyTZ9yUAT7lsd3jGNz6a2jTqhB5YRmWwefJUy4lk4uZcHrYAuwA61RmM6dSq9q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z/wZ9aNX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EvJpCLHX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB6371F0089A;
-	Thu, 10 Sep 2026 13:05:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z/wZ9aNX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C457A1F000FF;
+	Thu, 10 Sep 2026 13:05:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789045549;
-	bh=soVxyxS8LHzU6+KouZ11cXays4Dkr+9r+gqYpoz1J6g=;
+	s=k20260515; t=1789045551;
+	bh=vJ6Vg++bvEGs/vibllPkuI9N/1Hdd/7+b+dnGkn5m1A=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=EvJpCLHXxHMUajmuZKlp2lsHJX4zPVyAKKijkY4Ud3tslXtlKqWXaaXm9OcM/jxdG
-	 spA3AqHElhScXhCb+81VulTtk6Ewe7cq1TJxWm5u2vESE/z3FFpfp7B6tMp2ris84r
-	 NX475eu1CMpBHuVcsvL8bSZOAjbj0MxLT8ieicj1IinAuiy+8Q30AROwESaojhOE5V
-	 Tvwn1KhCNw/ysHH9LGL+kJG5BStA9PZJdg+VpDn/K27MbjYclHiVEzzxpG8u4I7UAY
-	 kQXxdbwUJvicgEGFvNWrdv7L593/Px+TVDgPVLCnKduHwh3lRA4w5yhrHX12XIYT17
-	 Ve+eUC2IQ6hLw==
-Subject: Re: [PATCH net-next v6 10/14] net: lan966x: add PCIe FDMA support
+	b=Z/wZ9aNXqYU/ennLlluFW5ij624ki0J+cKRQH4xuOYT+s2WOt25uKp+lO3H7VzvX7
+	 9lpQEeHP6hLg91eJuhPwxqlZ51JDlpZ9V+z2V9RCdezUjah3Sr9HChmojH1NW1qn1d
+	 ZhpLW+hH/MD/YP6AFF6shG9pBOrzNzWhX3Hfh+DjAOt9vR/LRhrL++am0/I6cINKWB
+	 7GukSf6JBT9M2l9PNVIH5l/YjLLCfe7Ak5KgUVuPSuLujCg0aD8GpomuUNPft6ksXi
+	 XjbmaE/4GiT0+i77K5boPPii9svxzA1khMOaG9vNL/Cb+uDUKVMcgmsXGCJFvX4rmF
+	 N+40mqDNGx6Uw==
+Subject:
+ Re: [PATCH net-next v6 11/14] net: lan966x: add PCIe FDMA MTU change support
 From: netdev-bot+sashiko@kernel.org
 To: daniel.machon@microchip.com
 Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
@@ -37,11 +38,11 @@ Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
  gregkh@linuxfoundation.org, mohsin.bashr@gmail.com, richardcochran@gmail.com,
  netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org
-Date: Thu, 10 Sep 2026 13:05:47 +0000
-Message-ID: <178904554750.219967.2010862453597890441@kernel.org>
-In-Reply-To: <20260909-lan966x-pci-fdma-v6-10-6f48dab9d671@microchip.com>
-References: <20260909-lan966x-pci-fdma-v6-10-6f48dab9d671@microchip.com>
-X-sashiko-severity: Medium
+Date: Thu, 10 Sep 2026 13:05:49 +0000
+Message-ID: <178904554934.219967.15514762105046273538@kernel.org>
+In-Reply-To: <20260909-lan966x-pci-fdma-v6-11-6f48dab9d671@microchip.com>
+References: <20260909-lan966x-pci-fdma-v6-11-6f48dab9d671@microchip.com>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -54,113 +55,321 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 4 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 (1) · Medium: 1 (1) · Low: 3
+Critical: 0 · High: 2 · Medium: 1 · Low: 1
 
-- [Medium] DISCARDED — fixed later in the series.
-- [Low] DISCARDED — fixed later in the series.
-- [Low] DISCARDED — fixed later in the series.
-- [Low] DISCARDED — fixed later in the series.
-
-Pre-existing issues:
-- [High] Use-after-free in the new PCIe receive path:
-  `lan966x_fdma_pci_rx_get_frame()`…
-- [Medium] DISCARDED — pre-existing shared-library ordering weakness.
+- [High] NULL pointer dereference in the new lan966x_fdma_pci_reset_mem()
+  restore path.
+- [High] Unbalanced/unguarded napi_disable()/napi_enable() in the new MTU
+  reload path.
+- [Medium] Netdev MTU contract mismatch on the PCIe FDMA path.
+- [Low] Inverted restart ordering in lan966x_fdma_pci_reload(): both the
+  success path (lines 458-460) and the restore path (lines 476-478) call…
 
 --
 
-net: lan966x: add PCIe FDMA support
+net: lan966x: add PCIe FDMA MTU change support
 
-Adds a second FDMA backend for lan966x used when the switch is reached over
-PCIe, using contiguous ATU-mapped DMA buffers and memcpy-based frame
-transfer instead of per-page mappings. XDP and PTP are not advertised or
-allowed on this path.
+This adds MTU change support to the PCIe FDMA path by reallocating the
+contiguous ATU-mapped RX and TX buffers, falling back to resetting and
+reusing the existing buffers if the reallocation fails. It also caps the
+PCIe DCB ring at 256 entries so the contiguous allocation stays below
+MAX_PAGE_ORDER at jumbo MTU.
+
+A few questions about the new reload and resize paths below.
 
 > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> new file mode 100644
-> index 000000000000..f1f3c789d3a6
-> --- /dev/null
+> index f1f3c789d3a6..6cabbb8b47f2 100644
+> --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
 > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> @@ -0,0 +1,404 @@
+> @@ -1,8 +1,15 @@
+>  // SPDX-License-Identifier: GPL-2.0+
+>  
+> +#include <linux/mmzone.h>
+> +
+>  #include "fdma_api.h"
+>  #include "lan966x_main.h"
+>  
+> +/* Ring must fit in one MAX_PAGE_ORDER DMA block; 512 DCBs overflows
+> + * at jumbo MTU.
+> + */
+> +#define FDMA_PCI_DCB_MAX	256
+> +
 
 [ ... ]
 
-> +/* Return true if blockl is a valid RX frame size. */
-> +static bool lan966x_fdma_pci_rx_size_fits(struct fdma *fdma, u32 blockl)
+> @@ -374,9 +381,164 @@ static int lan966x_fdma_pci_init(struct lan966x *lan966x)
+>  	return 0;
+>  }
+>  
+> +/* Reset existing rx and tx buffers. */
+> +static void lan966x_fdma_pci_reset_mem(struct lan966x *lan966x)
 > +{
-> +	return blockl >= IFH_LEN_BYTES + ETH_HLEN + ETH_FCS_LEN &&
-> +	       blockl <= fdma->db_size - XDP_PACKET_HEADROOM;
-> +}
-
-[ ... ]
-
-> +	skb->protocol = eth_type_trans(skb, skb->dev);
+> +	struct lan966x_rx *rx = &lan966x->rx;
+> +	struct lan966x_tx *tx = &lan966x->tx;
 > +
-> +	if (lan966x->bridge_mask & BIT(src_port)) {
-> +		skb->offload_fwd_mark = 1;
+> +	memset(rx->fdma.dcbs, 0, rx->fdma.size);
+> +	memset(tx->fdma.dcbs, 0, tx->fdma.size);
 > +
-> +		skb_reset_network_header(skb);
-> +		if (!lan966x_hw_offload(lan966x, src_port, skb))
-> +			skb->offload_fwd_mark = 0;
-> +	}
+> +	fdma_dcbs_init(&rx->fdma,
+> +		       FDMA_DCB_INFO_DATAL(rx->fdma.db_size - XDP_PACKET_HEADROOM),
+> +		       FDMA_DCB_STATUS_INTR);
 > +
-> +	skb->dev->stats.rx_bytes += skb->len;
-> +	skb->dev->stats.rx_packets++;
+> +	fdma_dcbs_init(&tx->fdma,
+> +		       FDMA_DCB_INFO_DATAL(tx->fdma.db_size),
+> +		       FDMA_DCB_STATUS_DONE);
 > +
-> +	return skb;
-> +}
+> +	lan966x_fdma_llp_configure(lan966x,
+> +				   tx->fdma.atu_region->base_addr,
+> +				   tx->fdma.channel_id);
 
 [Severity: High]
-This isn't a bug introduced by this patch - lan966x_fdma_rx_get_frame() in
-lan966x_fdma.c has the same caller pattern - but can lan966x_fdma_pci_rx_get_frame()
-touch skb after lan966x_hw_offload() has already freed it?
+Can tx->fdma.atu_region be NULL here?
 
-lan966x_hw_offload() replaces the buffer and reports only a boolean:
+lan966x_fdma_pci_reset_mem() is only reached from the restore label of
+lan966x_fdma_pci_reload(), and that label is taken when the ring
+allocation failed.  Probe registers the netdevs from
+lan966x_probe_port() -> register_netdev() inside the ports loop, while
+lan966x->fdma is already true, and ops->fdma_init() (which sets
+n_dcbs/db_size/size and maps the ATU regions) only runs after that loop.
 
-drivers/net/ethernet/microchip/lan966x/lan966x_main.c:lan966x_hw_offload() {
+An MTU change in that window passes the !lan966x->fdma guard in
+lan966x_port_change_mtu() and reaches lan966x_fdma_pci_resize() with a
+zeroed fdma:
+
+  rx.max_mtu == 0, so the "max_mtu == lan966x->rx.max_mtu" early return
+  does not fire
+
+  n_dcbs == 0, so fdma_get_size_contiguous() returns ALIGN(0, PAGE_SIZE)
+  == 0 and both -ERANGE guards pass
+
+lan966x_fdma_pci_reload() then recomputes size, which stays 0, and:
+
+  lan966x_fdma_pci_rx_alloc()
+    fdma_alloc_coherent_and_map()
+      fdma_pci_atu_region_map()
+        if (size <= 0)
+                return ERR_PTR(-EINVAL);
+
+so control reaches restore, memcpy's the still-zeroed fdma structs back
+(atu_region == NULL, dcbs == NULL, size == 0), and calls reset_mem().
+memset(NULL, 0, 0) and fdma_dcbs_init() with n_dcbs == 0 are both
+no-ops, so nothing stops execution before tx->fdma.atu_region->base_addr
+is evaluated.  Would a NULL check on atu_region (or an early bail in
+resize() when the FDMA is not initialized yet) be appropriate here?
+
+> +	lan966x_fdma_llp_configure(lan966x,
+> +				   rx->fdma.atu_region->base_addr,
+> +				   rx->fdma.channel_id);
+> +}
+> +
+> +/* Wake all TX queues on every port (undoes lan966x_fdma_tx_disable_netdev). */
+> +static void lan966x_fdma_pci_wakeup_netdev(struct lan966x *lan966x)
+> +{
+> +	for (int i = 0; i < lan966x->num_phys_ports; ++i) {
+> +		struct lan966x_port *port = lan966x->ports[i];
+> +
+> +		if (port)
+> +			netif_tx_wake_all_queues(port->dev);
+> +	}
+> +}
+> +
+> +static int lan966x_fdma_pci_reload(struct lan966x *lan966x, int new_mtu)
+> +{
+> +	struct fdma tx_fdma_old = lan966x->tx.fdma;
+> +	struct fdma rx_fdma_old = lan966x->rx.fdma;
+> +	u32 old_mtu = lan966x->rx.max_mtu;
+> +	int err;
+> +
+> +	napi_disable(&lan966x->napi);
+
+[Severity: High]
+Should this napi_disable() be guarded the way the other users of
+lan966x->napi in this driver are?
+
+lan966x_fdma_pci_deinit() does:
+
+	if (lan966x->fdma_ndev)
+		napi_disable(&lan966x->napi);
+
+and lan966x_shutdown() has the same guard, with a comment noting that the
+reload paths disable this NAPI under rtnl.  Two states look problematic
+for the unguarded call:
+
+The NAPI may not have been added yet.  netif_napi_add() only runs from
+lan966x_fdma_netdev_init(), called by lan966x_port_init(), which happens
+after lan966x_probe_port() already did register_netdev().  An MTU change
+in that window reaches napi_disable() with n->dev == NULL (lan966x is
+devm_kzalloc'ed), and napi_disable() does netdev_lock(n->dev).
+
+The NAPI may already be disabled.  lan966x_remove() calls
+ops->fdma_deinit() (which disables the NAPI and frees/unmaps both rings)
+before lan966x_cleanup_ports() unregisters the netdevs, and
+lan966x_shutdown() disables the NAPI without clearing fdma_ndev.  A
+concurrent MTU change then calls napi_disable() a second time and
+napi_disable_locked() spins:
+
+net/core/dev.c:napi_disable_locked() {
 	...
-	if (eth_type_vlan(skb->protocol)) {
-		skb = skb_vlan_untag(skb);
-		if (unlikely(!skb))
-			return false;
+	while (val & (NAPIF_STATE_SCHED | NAPIF_STATE_NPSVC)) {
+		usleep_range(20, 200);
+		val = READ_ONCE(n->state);
 	}
 	...
 }
 
-and skb_vlan_untag() frees the caller's skb on failure:
+There is no timeout and no other wake condition, and ndo_change_mtu
+holds rtnl throughout, which also blocks the unregister_netdev() that
+would end the window.  The matching napi_enable() calls on both exit
+paths below have the same issue.
 
-net/core/skbuff.c:skb_vlan_untag() {
+> +	lan966x_fdma_tx_disable_netdev(lan966x);
+> +	lan966x_fdma_rx_disable(&lan966x->rx);
+> +	lan966x_fdma_tx_disable(&lan966x->tx);
+> +
+> +	lan966x->rx.max_mtu = new_mtu;
+> +
+> +	/* Must be NULL'ed in order to realloc them. */
+> +	lan966x->rx.fdma.atu_region = NULL;
+> +	lan966x->tx.fdma.atu_region = NULL;
+> +
+> +	lan966x->tx.fdma.db_size = FDMA_PCI_DB_SIZE(lan966x->rx.max_mtu);
+> +	lan966x->tx.fdma.size = fdma_get_size_contiguous(&lan966x->tx.fdma);
+> +	lan966x->rx.fdma.db_size = FDMA_PCI_DB_SIZE(lan966x->rx.max_mtu);
+> +	lan966x->rx.fdma.size = fdma_get_size_contiguous(&lan966x->rx.fdma);
+> +
+> +	err = lan966x_fdma_pci_rx_alloc(&lan966x->rx);
+> +	if (err)
+> +		goto restore;
+> +
+> +	err = lan966x_fdma_pci_tx_alloc(&lan966x->tx);
+> +	if (err) {
+> +		fdma_free_coherent_and_unmap(lan966x->dma_dev,
+> +					     &lan966x->rx.fdma);
+> +		goto restore;
+> +	}
+> +
+> +	/* Free and unmap old memory. */
+> +	fdma_free_coherent_and_unmap(lan966x->dma_dev, &rx_fdma_old);
+> +	fdma_free_coherent_and_unmap(lan966x->dma_dev, &tx_fdma_old);
+> +
+> +	napi_enable(&lan966x->napi);
+> +	lan966x_fdma_rx_start(&lan966x->rx);
+> +	lan966x_fdma_pci_wakeup_netdev(lan966x);
+
+[Severity: Low]
+This isn't a bug as such, but the restart order here is the reverse of
+the pre-existing non-PCI path.  lan966x_fdma_reload() does:
+
+	lan966x_fdma_rx_start(&lan966x->rx);
 	...
-	if (unlikely(!pskb_may_pull(skb, VLAN_HLEN + sizeof(unsigned short))))
-		goto err_free;
-	...
-err_free:
-	kfree_skb(skb);
-	return NULL;
-}
+	lan966x_fdma_wakeup_netdev(lan966x);
+	napi_enable(&lan966x->napi);
 
-So on the false return the caller's pointer is dangling, and
-lan966x_fdma_pci_rx_get_frame() then does:
+Once napi_enable() clears NAPI_STATE_DISABLE, a pending FDMA DB
+interrupt reaching napi_schedule() from lan966x_fdma_irq_handler() can
+run lan966x_fdma_pci_napi_poll() on another CPU concurrently with
+lan966x_fdma_rx_start().  Both then do unsynchronized read-modify-write
+on FDMA_INTR_DB_ENA:
 
-	skb->offload_fwd_mark = 0;
-	skb->dev->stats.rx_bytes += skb->len;
-	skb->dev->stats.rx_packets++;
-	return skb;
+lan966x_fdma_pci_napi_poll():
+	if (counter < weight && napi_complete_done(napi, counter))
+		lan_wr(0xff, lan966x, FDMA_INTR_DB_ENA);
 
-with the returned skb going to napi_gro_receive() in
-lan966x_fdma_pci_napi_poll().
+lan966x_fdma_rx_start() instead does lan_rd() followed by lan_rmw() on
+the same register, and the poll can also issue FDMA_CH_RELOAD for a
+channel rx_start() has not activated yet.  Would matching the ordering
+used by lan966x_fdma_reload() be preferable?
 
-Is the new lower bound in lan966x_fdma_pci_rx_size_fits() wide enough to let
-this happen? IFH_LEN_BYTES + ETH_HLEN + ETH_FCS_LEN is 46, so a BLOCKL of
-46..51 is accepted, and after skb_pull(IFH_LEN_BYTES),
-skb_trim(skb->len - ETH_FCS_LEN) and eth_type_trans() there are only 0..5
-bytes left. For a frame with h_proto 0x8100 on a bridged port that has IGMP
-or MLD redirection enabled, the pskb_may_pull(VLAN_HLEN + 2) inside
-skb_vlan_untag() then fails and the buffer is freed.
+> +
+> +	return err;
+> +restore:
+> +
+> +	/* No new buffers are allocated at this point. Use the old buffers,
+> +	 * but reset them before starting the FDMA again.
+> +	 */
+> +
+> +	memcpy(&lan966x->tx.fdma, &tx_fdma_old, sizeof(struct fdma));
+> +	memcpy(&lan966x->rx.fdma, &rx_fdma_old, sizeof(struct fdma));
+> +
+> +	lan966x->rx.max_mtu = old_mtu;
+> +
+> +	lan966x_fdma_pci_reset_mem(lan966x);
+> +
+> +	napi_enable(&lan966x->napi);
+> +	lan966x_fdma_rx_start(&lan966x->rx);
+> +	lan966x_fdma_pci_wakeup_netdev(lan966x);
+> +
+> +	return err;
+> +}
+> +
 
-Would it make sense to have lan966x_hw_offload() take a struct sk_buff **,
-or to have the caller stop using skb once it returns false?
+[ ... ]
 
->  static int lan966x_fdma_pci_xmit(struct sk_buff *skb, __be32 *ifh,
+>  static int lan966x_fdma_pci_resize(struct lan966x *lan966x)
+>  {
+> -	return -EOPNOTSUPP;
+> +	struct fdma rx_fdma;
+> +	int max_mtu;
+> +
+> +	max_mtu = lan966x_fdma_get_max_frame(lan966x);
+> +	if (max_mtu == lan966x->rx.max_mtu)
+> +		return 0;
+> +
+> +	/* rx and tx have n_dbs == 1, so both rings need the same contiguous
+> +	 * dma_alloc_coherent() block, which can't exceed MAX_PAGE_ORDER. The
+> +	 * allocation is padded to the ATU region granularity, so test the
+> +	 * padded size.
+> +	 */
+> +	rx_fdma = lan966x->rx.fdma;
+> +	rx_fdma.db_size = FDMA_PCI_DB_SIZE(max_mtu);
+> +	if (ALIGN(fdma_get_size_contiguous(&rx_fdma),
+> +		  FDMA_PCI_ATU_REGION_ALIGN) > (PAGE_SIZE << MAX_PAGE_ORDER))
+> +		return -ERANGE;
+
+[Severity: Medium]
+Does the MTU range the netdev advertises still match what this path can
+actually do?
+
+lan966x_probe_port() sets dev->max_mtu = ETH_MAX_MTU for the PCIe
+instantiation too, but with n_dcbs == FDMA_PCI_DCB_MAX (256),
+n_dbs == FDMA_RX_DCB_MAX_DBS (1) and db_size == ALIGN(max_frame, 128),
+the padded contiguous allocation crosses PAGE_SIZE << MAX_PAGE_ORDER at
+roughly 15.7 KiB of MTU on a 4 KiB-page build, so larger requests get a
+bare -ERANGE that lan966x_port_change_mtu() passes straight to
+userspace, and the cut-off moves with PAGE_SIZE and MAX_PAGE_ORDER.
+
+There is a second effect for MTUs in [65518, 65535], which the
+advertised max_mtu still permits.  lan966x_port_change_mtu() programs
+the register before calling the resize callback:
+
+	lan_wr(DEV_MAC_MAXLEN_CFG_MAX_LEN_SET(LAN966X_HW_MTU(new_mtu)),
+	       lan966x, DEV_MAC_MAXLEN_CFG(port->chip_port));
+
+DEV_MAC_MAXLEN_CFG_MAX_LEN is GENMASK(15, 0) and LAN966X_HW_MTU(mtu) is
+mtu + 18, so FIELD_PREP() masks the runtime value, e.g. mtu 65535
+programs MAX_LEN = 65553 & 0xffff = 17.  lan966x_fdma_pci_resize() then
+derives max_mtu from that already-truncated register via
+lan966x_fdma_get_max_frame() -> lan966x_fdma_get_max_mtu() ->
+lan_rd(DEV_MAC_MAXLEN_CFG), so it either returns 0 (multi-port case,
+where the max over ports is unchanged) or reloads with a tiny db_size,
+and the MTU change is reported as successful while the MAC is configured
+for a 17-byte frame.
+
+Before this patch the PCIe callback returned -EOPNOTSUPP for every
+resize, so lan966x_port_change_mtu() always rolled the register back;
+this patch is what makes the path reachable.  Would capping dev->max_mtu
+for the PCIe path (to both the ring limit and the 16-bit MAC field) be
+the better fix, so the resize-time rejection becomes unreachable?
+
+> +
+> +	/* db_size is also handed to the FDMA in the 16-bit DCB DATAL field,
+> +	 * where a larger value would be silently truncated.
+> +	 */
+> +	if (rx_fdma.db_size > GENMASK(15, 0))
+> +		return -ERANGE;
+> +
+> +	return __lan966x_fdma_pci_reload(lan966x, max_mtu);
+>  }
 
 [ ... ]
 
