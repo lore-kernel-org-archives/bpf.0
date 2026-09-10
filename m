@@ -1,189 +1,161 @@
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B6DF513576
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 18:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789064329; cv=pass; b=GhGI6Mw9KWEIMJSny6YRaft+BZLK3QTUKiPyXm/FVA/tI/srTWGj/yMsmGqdVEEIgRYBwd7RTsuCbbZgT5aV9uEHQNG6lOOHJKS3PrlxLRtu6On97Zeuwy2OS9UrMVJS390E6JyOlHGR5IP3VRNMPrCjbxxPw/NFzpRB5nJh188=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789064329; c=relaxed/simple;
-	bh=ISIfoa1VRwTQjIpK+hxvC4tDAoHyveatCbi/M+4SjQM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t2ouSqSJ5+x0F4GAvBw5aQGCItqtJMHZarwxzC0pziWRSsqp8MCQQa5b3fs1FXmx83IgAf0fFKK0swFxUYC80wRsO2X/61XHQ92DB7ZAlJ9vfXWBG2PWV/tF++m84wX+48PAOtl9ERgHuil6EDl6+FNZ7RRpTpI7YDTTVt/KR30=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aqSAR0Fc; arc=pass smtp.client-ip=209.85.161.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E393D4BE45D
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 18:26:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789064796; cv=none; b=pGN28W+UDPYs9LRZSML3/RiZh2vVvt++LZGwajjcW/5WeASpClhq3Oq5ADoywPT36i5LofAbDRp36sUaaozW3Sljq+E9rAAzPROwp8v+gE/0+rjb/uOdSC9MhN4pYGtyvJ0EufBSkpNzXoW0LjOEqaGk0/oBDsWm/IsYei5X0wI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789064796; c=relaxed/simple;
+	bh=L9ZVnYLx+80JTL3HFIUZDQiDPjW/WKyUtP4c72jx4a4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=H7vu0UHxm6TJwyzHdnS9F3W4HQ3RPuHPiDdYDr8D+5v5ZC+a9AfRP28Ev2AQ5+MEWRwujx0L0W/HJcOhg0VboA27QPz12LAbiHX/vUjXEggEqAVjwCIBB7O+2QkJV/vsrOfIgF5FGDOQdqHvWEVUCNjdvKfKsFGYi1n0pkBL37E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BudIREQm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aqSAR0Fc"
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-6bd07679624so160303eaf.1
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 11:18:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789064326; cv=none;
-        d=google.com; s=arc-20260327;
-        b=e28pOt5wuOXP+C4U9jq2VYI5mJ+UnjNPf4LdRLnfz0wwq5XF5CwaB4EHhe6CysAd4c
-         ad1Trq1dIP3I6A582Lv1H2h4a/cCHIYkvwKbfEqipw3BAbjIB6Gg4pQ+tRT/KD4Skm2H
-         2jhk8nHL2pJFtGeviZGVS9QHLYAyroBLT1iqRnxHC4NJcq22DXUObgRSZXSbIRphheF7
-         kTrotQ+uzeHUzlSo9H1bG3U6d4MumZX9XDUW5yt0r5HN5PJ570cHUdNebutBSRJTsglY
-         mXlMUAKF06P+PjH+uEYq+kTsJo9hvKKaWMBNpE5UmURvFDMTcn6D6yaRnbut9yp8bvKj
-         BPjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=HdWlLgJ8/V7xB2th0sWe9mpqwZit9bzE41yesMRMbK8=;
-        fh=b0nTke/dWNZNVxYYun7OzhjBPrEmqbca3P2CX/fBOFk=;
-        b=TmgMvsOxMjAchCYthi6YOIX4rjynL6YalrbjEe2SphU1Esj+G5yjZovmJiPhGJlP6s
-         +OQr3/K3zbxTvMRuF3gRGAVyJ0T5WUTRL8QXe3as80xg84OKGUjmN8b2MLeQIWBWve9E
-         7nKkwhi/DaigIMCApEa6F2qzQfy0N06VAlsY1czGNsgBMK0mysaHjB7CgHIQbGWyEhqO
-         SuGW1xVegp1ED4/4gY3QnBPwKyhY1WcE/6YJ15puKzJhwzz4Gz+SmTjPyRNeZTfjdZFn
-         5jBPJfGMreRt/pjzAulfmz/+kaEQbxICY2yqIzSE2Xh+3FDY4Nvj0yoTTgLgVBFRDpzC
-         g5RA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789064326; x=1789669126; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=HdWlLgJ8/V7xB2th0sWe9mpqwZit9bzE41yesMRMbK8=;
-        b=aqSAR0FcOIDL7qqXVzlHl6TgUswyZM9OpQUJVTAfsNUUDUeJSq56PattsuSu3cctod
-         nXfcnYJ8aVfbNGUkGplB8NxEXhTE6z/2oWUVGdnffJjQqQmrpvYMJ/tQohCNRaSlCIrj
-         1Km0/kqX+oF/fVwQVYJYsMTAckm1alJWeytsdH7YPOEU+l4381l9Vf58XCuQGQ2ITGib
-         qWn5iLXLs3c2EJAIDKZfZD9J09dZjuzvl+6Z6FGSedAaaCPEwvNIlEptYo/XTToOmlbN
-         bYmRkJq5Y6cpy7a3SgRWAeO9ZJWnX9lT+0FaUFoAMfyQv3Nk8Pq6ozdlw+/3pS5p2xgE
-         wOjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789064326; x=1789669126;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HdWlLgJ8/V7xB2th0sWe9mpqwZit9bzE41yesMRMbK8=;
-        b=rKfzWh7Fq33BwGWLb0vxn/AjxGZ+4tgJVm7zosVbxhdQLwlqVWZi5vlFUIQ2QOVM6D
-         YCon12fCFlCUswiz2l1wTIq1IGDRZ5WzBHOQmhkK1j1ZL5ethGXSFr1CZ81t6Y2Jy/iF
-         WJ124kBSQkBEl4iRq0Z17wkELO1RmbwJSQB8GYl9LKOvqk6Nd0xVr+yfBhtZg78PlLmd
-         7iltVmpdNfnEsODL37Scs1hc4N54yKSJoRhgqso6B+EXotosc9xHr6VQXesv8hq65//8
-         n0pKreof9dqyWvtNGvyn2JF8Cyfgii/7eJy26SOM/+YooleX/GZPc9D566SuMxCTEw9c
-         35zA==
-X-Gm-Message-State: AFuF++lysr1WcFUIC6MAugxTW3UkvIYUHDeSS7E1K7AW4du1JTH8Wii5
-	e+gNmvM25haGvl1BZwA8bMc5M3HMapUVLGrGn1S+PXgcl4v2mMqKqgLyDVRN4DOT3bq6a3ne34f
-	yiDWihcR5W+nAZuFbjdmrP9XhAOaFXvY=
-X-Gm-Gg: AYBFou0R7nYFMBqSMT3cCr3lk2k33Iy3GAfOdSl6C3ty/xz6bX61jCIXjXBjKcuXv+C
-	Ud67+5OGetClulZHboymdCytDhpJkLU5k5PUmR7CbXRxM8rBMz3mbU8Mqu1D1jsXmylBcWJncaf
-	bzHlsyLx3pzhDfZA1VydcZJHlWNaGEeGjRrxZ9sKGN4EGlrTfO1ZEWuVDv1wikD9pRksJKABxZb
-	XVRnWeeOh0mK2gKGUbJ+dbODkYKJNYZy0p2c1nqPuTnr7VaaxXY+pbNFt3tTt1Ck762Fw6u7npK
-	6dHv99IzoiJrltkUUZhCifQSBL4nBUeIIEHx7uCRbCOV3fQKs1RIXbo=
-X-Received: by 2002:a05:6820:4d04:b0:6be:7782:5a5f with SMTP id
- 006d021491bc7-6c0ba245684mr184408eaf.5.1789064326133; Thu, 10 Sep 2026
- 11:18:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BudIREQm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA55F1F00893;
+	Thu, 10 Sep 2026 18:26:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789064793;
+	bh=BTvvgTPGK4FSSVRtlSiCteaK4HpCsS5LZXlM9kgE/tA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=BudIREQmNP7V1uWPrtXvdT1JQJABDiuwGoFdQkC2wbG1bDSmB5YpalV6jIpZSTkQq
+	 ZBe46wjJxxJ9n9S9/+9Jtg4WzyLz+2bHnLPFMh124Kvm9w/nuj9YmFyu2ZBpiGE6tn
+	 UpA/OrUuhtJwT6OFrhXOgTjL//yopAKHP71tmeO6BjoyHGd82Xqt01yQGnlxazSRkh
+	 yZz5BQH9j1DYh1ekhW36f5PF2/lPlZ/KtdQ9R+ckI7Qt6nqGfocHhGeRVX1bWkLjoL
+	 hXC/KCxj+KhjyTOvZJ+B6EYglLjpPu6p80Hmo+DexUrfpJYUBYq6m8BFLOfa2j6WN5
+	 /5nBsBqcR6NFg==
+Content-Type: multipart/mixed; boundary="===============5039265452617411727=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260910044021.2279628-1-xyx2021@mail.ustc.edu.cn> <20260910044021.2279628-2-xyx2021@mail.ustc.edu.cn>
-In-Reply-To: <20260910044021.2279628-2-xyx2021@mail.ustc.edu.cn>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Thu, 10 Sep 2026 11:18:33 -0700
-X-Gm-Features: AcwNN1Wpi8VAzEUHWps3WWgehY76GZSBf_rJKmBEUCDgtxFqok1zotYvKd96K_U
-Message-ID: <CAMB2axMV4rZ_Mb91OdzGH6T4Yym7nB+wz+EtxP_wUEniwA+EzA@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 1/2] bpf: Invalidate iterator-owned BTF pointers on destroy
-To: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, Puranjay Mohan <puranjay@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <f7de19edd155dc147030e6d648e75c2a239e3970772c83e2b6d2679ebba25bb3@mail.kernel.org>
+In-Reply-To: <20260910172340.1467764-2-caomingpei@gmail.com>
+References: <20260910172340.1467764-2-caomingpei@gmail.com>
+Subject: Re: [PATCH bpf 1/2] libbpf: Reject struct_ops bitfields before accessing data
+From: bot+bpf-ci@kernel.org
+To: caomingpei@gmail.com,bpf@vger.kernel.org
+Cc: andrii@kernel.org,eddyz87@gmail.com,caomingpei@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 10 Sep 2026 18:26:32 +0000 (UTC)
 
-On Wed, Sep 9, 2026 at 9:41=E2=80=AFPM Xu Yunxiang <xyx2021@mail.ustc.edu.c=
-n> wrote:
->
-> Open-coded iterator next kfuncs that return non-struct pointers associate
-> the returned PTR_TO_MEM with the iterator's reference ID.  Struct pointer
-> returns take a separate PTR_TO_BTF_ID path which omits this relationship.
+--===============5039265452617411727==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-I understand this patch ties PTR_TO_BTF_ID results to the iterator
-reference, matching the existing PTR_TO_MEM handling. But does the
-iterator lifetime correctly model these results?
+> libbpf: Reject struct_ops bitfields before accessing data
+>
+> A Clang-generated struct_ops mirror with an all-zero private bitfield can
+> crash libbpf. With kind_flag set, the BTF member offset also encodes the
+> bitfield width.
+>
+> bpf_map__init_kern_struct_ops() divided this encoded value by eight
+> before rejecting bitfields. A 31-bit field therefore selects
+> data + 0x3e00000, where libbpf_is_mem_zeroed() triggers an ASan SEGV.
+>
+> The issue was found by comparing the same ELF in JIT and interpreter
+> configurations. JIT+BTF reached the faulty struct_ops path, while the
+> interpreter configuration rejected the object before this code.
 
-Current PTR_TO_MEM iterators return iterator-owned storage that
-remains allocated until destroy(). In contrast, several struct
-iterators release the previous element when _next() advances: css_task
-, kmem_cache, dmabuf and task_vma.
+This isn't a bug, but is the JIT/interpreter distinction load-bearing
+here, or was the real difference kernel BTF availability?
+find_struct_ops_kern_types() bails out with "struct %s is not found
+in kernel BTF" when vmlinux BTF is unavailable, which matches the
+"+BTF" half rather than the JIT half.
 
-This patch therefore leaves pointers from a previous _next()
-verifier-valid. Should non-RCU PTR_TO_BTF_ID results and their
-dependent pointers also be invalidated on each _next() call?
-
+> Reject local bitfields before calculating the data pointer. Preserve the
+> existing all-zero compatibility path for ordinary private fields.
 >
-> This leaves the pointer returned by bpf_iter_task_vma_next() valid in the
-> verifier after bpf_iter_task_vma_destroy() frees the iterator's backing
-> allocation, including the VMA snapshot.  A BPF program can therefore read
-> the released snapshot through the stale pointer.
->
-> Set the iterator reference ID as the parent of non-RCU PTR_TO_BTF_ID
-> results from iterator next kfuncs. Preserve the parent across BTF field
-> loads when the result remains fully trusted and its lifetime is tied to t=
-he
-> parent. This invalidates trusted vm_file and vm_mm pointers derived from
-> the snapshot.
->
-> Do not propagate the parent to MEM_RCU, MEM_PERCPU, or MEM_USER field
-> results. Those result types obtain their usable lifetime or access domain
-> independently from the owning pointer. Untrusted results continue to foll=
-ow
-> their existing fault-tolerant access rules.
->
-> This issue was found during BPF verifier testing with an in-house
-> runtime semantic checker.
->
-> Fixes: 4cbee026db54 ("bpf: return VMA snapshot from task_vma iterator")
+> Fixes: c911fc61a7ce ("libbpf: Skip zeroed or null fields if not found in the kernel type.")
 > Assisted-by: LLM
-> Signed-off-by: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
-> ---
->  kernel/bpf/verifier.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
+> Signed-off-by: Mingpei CAO <caomingpei@gmail.com>
+
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index b749c01742ee..1738a42220f0 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -1223,6 +1223,12 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
+>  		const char *mname;
 >
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 72a3f5998dd27..55ba1be0b6a8a 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -6140,9 +6140,16 @@ static int check_ptr_to_btf_access(struct bpf_veri=
-fier_env *env,
->         }
->
->         if (atype =3D=3D BPF_READ && value_regno >=3D 0) {
-> -               ret =3D mark_btf_ld_reg(env, regs, value_regno, ret, reg-=
->btf, btf_id, flag);
-> +               enum bpf_reg_type reg_type =3D ret;
-> +               u32 parent_id =3D reg->parent_id;
+>  		mname = btf__name_by_offset(btf, member->name_off);
+> +		if (btf_member_bitfield_size(type, i)) {
+> +			pr_warn("struct_ops init_kern %s: bitfield %s is not supported\n",
+> +				map->name, mname);
+> +			return -ENOTSUP;
+> +		}
 > +
-> +               ret =3D mark_btf_ld_reg(env, regs, value_regno, reg_type,
-> +                                     reg->btf, btf_id, flag);
->                 if (ret < 0)
->                         return ret;
-> +               if ((regs[value_regno].type & PTR_TRUSTED) &&
-> +                   !(regs[value_regno].type & (MEM_RCU | MEM_PERCPU | ME=
-M_USER)))
-> +                       regs[value_regno].parent_id =3D parent_id;
->         }
+>  		moff = member->offset / 8;
+>  		mdata = data + moff;
+>  		msize = btf__resolve_size(btf, member->type);
+
+A subsystem pattern flags this as potentially concerning: the fix
+guards only the bitfield-width half of the kind_flag member offset
+encoding; the bit-offset half is still used unvalidated to form the
+pointer that libbpf_is_mem_zeroed()/memcpy() read from.
+
+st_ops->data is sized to the local struct in init_struct_ops_maps():
+
+  st_ops->data = malloc(type->size)
+
+But moff comes straight from BTF:
+
+  moff = member->offset / 8
+
+BTF_MEMBER_BIT_OFFSET is the low 24 bits, so moff can be up to
+0x1FFFFF (~2 MiB) even with bitfield_size == 0 (or with kflag clear,
+where btf_member_bitfield_size() returns 0 by construction).
+
+libbpf does not bound-check member offsets against the struct size.
+btf_sanity_check() in btf.c calls btf_validate_type(), whose
+BTF_KIND_STRUCT/UNION case validates only m->name_off and m->type:
+
+  for (i = 0; i < n; i++, m++) {
+          err = btf_validate_str(btf, m->name_off, "field name", id);
+          err = err ?: btf_validate_id(btf, m->type, id);
+
+m->offset is never checked. So the same ASan SEGV the changelog
+describes is still reachable from bpf_object__open_file() with a
+crafted .BTF that gives a struct_ops member a large bits_offset and
+bitfield_size == 0: mdata lands up to ~2 MiB past a small malloc()
+and libbpf_is_mem_zeroed(mdata, msize) walks it.
+
+This is pre-existing and was introduced by the same commit named in
+the Fixes: tag. The diff does not make it worse. It is noted here
+because the patch's stated purpose is to stop this expression from
+producing a wild pointer, so a reviewer will reasonably ask whether
+a single bound such as:
+
+  if (moff >= type->size || msize > type->size - moff)
+          return -EINVAL;
+
+would cover the whole class rather than just the bitfield encoding?
+
+> @@ -1259,8 +1265,7 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
+>  		}
 >
->         return 0;
-> @@ -14105,6 +14112,9 @@ static int check_kfunc_call(struct bpf_verifier_e=
-nv *env, struct bpf_insn *insn,
->                         regs[BPF_REG_0].btf =3D desc_btf;
->                         regs[BPF_REG_0].type =3D type;
->                         regs[BPF_REG_0].btf_id =3D ptr_type_id;
-> +
-> +                       if (bpf_is_iter_next_kfunc(&meta) && !(type & MEM=
-_RCU))
-> +                               regs[BPF_REG_0].parent_id =3D meta.ref_ob=
-j.id;
->                 }
->
->                 if (is_kfunc_ret_null(&meta)) {
-> --
-> 2.43.0
->
->
+>  		kern_member_idx = kern_member - btf_members(kern_type);
+> -		if (btf_member_bitfield_size(type, i) ||
+> -		    btf_member_bitfield_size(kern_type, kern_member_idx)) {
+> +		if (btf_member_bitfield_size(kern_type, kern_member_idx)) {
+>  			pr_warn("struct_ops init_kern %s: bitfield %s is not supported\n",
+>  				map->name, mname);
+>  			return -ENOTSUP;
+
+This isn't a bug, but now that this check is split in two, would it
+help to distinguish the two warnings so the log says which side of
+the comparison has the bitfield? Everywhere else in this function the
+warnings are distinct enough to identify which side failed ("Cannot
+find member %s in kernel BTF", "kernel member %s is not a func ptr",
+"%zd != %zd(kernel)").
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34510539779
+--===============5039265452617411727==--
