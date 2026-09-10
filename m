@@ -1,156 +1,122 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD2E24908BD;
-	Thu, 10 Sep 2026 13:05:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 550184756CC
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 13:10:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789045558; cv=none; b=HYdFrrvwuuyflFw3QtSQ6hx/4WK0Zdsgzi97knVgeER+mQfEQGdiWg6XeY5+rP/QHPahTmerJ3fJn5wfGhsEbdt/zmTe9TT6g3Gmx/K4ehT/egp0GG8V6vZLVoBFH+SJelMob3V+xphpyniF9YtI1p711fIP7byY8Xr8IKt/RWk=
+	t=1789045831; cv=none; b=dwo2O+VvxvxAsDJg7G+sgOzeElVuecfQkbWuQA3V2pqHZCm9wXyKK1wS+kE8ma63oYsSYS3aYdRP+D0LBLzCC65gixtnKTW/xsmR8BXAC+athtyhZIwJvvfWIzIiGNzWVUG2E/uBsMxo8LezNnoLptDNBQZa6Ch6/L4hzVxmAN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789045558; c=relaxed/simple;
-	bh=8xrp+PLWGWnGNr1R2Q9RlDhdl4OMwI9ky7GEV/tOcfw=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QAaR3hxlZ0oSmFVmUiLSxBqQBMKSJpw5TQHmM4Kj5bOFViYLYthkVvEu+6S8O9cYYk3WxAa3E3BRh7/SaWCCUMgaNdNsp3iZsyld1c0xJ2Cfhdr01/ZlkTOb4XoDOwzNynNOi2Bv8Gn7OJZsxKv10iE7YCLx5CLLSwsDSNH9LbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J5oDrT12; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789045831; c=relaxed/simple;
+	bh=Z+Dfwq2jn4++rAorMvSbcick1L2UQwWVuYXiZpm++Lg=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=D6I72vnmh46SwH4CNK+ycVgrWUH2/Sj/RNxWAdozNk49tGeaToFZFJov4+CippAi9mJmDmXP+uF3Ac+JVjc9Vgtl8H38vaYSAFR0IEd3QN0s1aQg41uKQGqYUIjOFa5HoWtWk9EtmYM+2WY7U/qTZqwgVRaQ+yyy90jN0MqEGVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lrFq+gIn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J5oDrT12"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ACEE1F00893;
-	Thu, 10 Sep 2026 13:05:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lrFq+gIn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B3A31F000FF;
+	Thu, 10 Sep 2026 13:10:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789045556;
-	bh=Cdo+rmDstdi/wv4Vrglb7Q5HOr6Q/8S05d4OuI8eWG4=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=J5oDrT12yCwmsUKLG9nicehVw3jTNlBNGaqYxZOQe1B+nB8odrDQ8RSpt5b9+85bZ
-	 gC2zUpht3+5ySeGRRnC1AuPSehaUspWuKS3cYunfWyMCXY4vf55YEQCsyBv+60BNAS
-	 wys4QZN5tTRxpPFN2Cs/xKxjsXYLtPbRYL1sf2y3N3E+e+SsbeDlRTtTeIUsheau1R
-	 tVB0zRpKAWj+KC7CwgGycXPPJdgQGQtVW6mJ5+a5tbfsuGTuiyc1fJ8T/zlHf4Vgsf
-	 6W007kjJKQNvwpOjkVqQ3NYtM3evI6aUsTWp0g12lhvUBOsyh+Z45r8DXMiu+V+qTe
-	 bPBM5ZGbpBESA==
-Subject: Re: [PATCH net-next v6 14/14] misc: lan966x-pci: dts: add fdma
- interrupt to overlay
-From: netdev-bot+sashiko@kernel.org
-To: daniel.machon@microchip.com
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horatiu.vultur@microchip.com,
- steen.hegelund@microchip.com, UNGLinuxDriver@microchip.com, ast@kernel.org,
- daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com,
- sdf@fomichev.me, herve.codina@bootlin.com, arnd@arndb.de,
- gregkh@linuxfoundation.org, mohsin.bashr@gmail.com, richardcochran@gmail.com,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org
-Date: Thu, 10 Sep 2026 13:05:54 +0000
-Message-ID: <178904555475.219967.711870735307370384@kernel.org>
-In-Reply-To: <20260909-lan966x-pci-fdma-v6-14-6f48dab9d671@microchip.com>
-References: <20260909-lan966x-pci-fdma-v6-14-6f48dab9d671@microchip.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20260515; t=1789045828;
+	bh=NcE0W7+mTLMlM7wr6zP6gCEJSdzPSLKmCmqvNx18GMs=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=lrFq+gInOn66tMTTSVjCGk6LtIFoTap99cllcMWbAf/1jo9CHD914mU0Gd4iPXM1I
+	 fMx9VNz+4TxWHhmqRwTWjl0DkthX3QhSpgSNJjsTKXEj4Nhc57XH/k1IoMwfY1jRpz
+	 m10B7ekr/geJJKVI05qcnFy6iMduiYqac833+3tjFNgbXm6FWoz3umZDr54SxiRf+o
+	 bctowVjK/EtSxTXSZBDyLYuq7eGNCZUxmoKzAoBQIpPKAW5gIF+y/cNvlMsrsYb17E
+	 zdsLdAX3jy9KYc3YXcz6Jxswyg7OPgZLN9ebiODxPaK/IY7arbYLctd6tEOJZGRNCs
+	 t9M7vZSrwzTQA==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH v2 4/5] selftests/bpf: add multi-stream
+ sequentiality example model
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tao Cui" <cui.tao@linux.dev>
+Cc: tj@kernel.org, mkoutny@suse.com, hannes@cmpxchg.org, bpf@vger.kernel.org
+In-Reply-To: <20260910125817.223354-5-cui.tao@linux.dev>
+References: <20260910125817.223354-1-cui.tao@linux.dev>
+ <20260910125817.223354-5-cui.tao@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 10 Sep 2026 13:10:28 +0000
+Message-Id: <20260910131028.9B3A31F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider:
-
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
-
-- [Medium] The FDMA interrupt is hooked up (and thereby unmasked in the
-  OIC) long before any FDMA state exists.
-
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] Concurrent accesses and modifications to shared cgroup storage w=
+ithout synchronization.
 --
 
-misc: lan966x-pci: dts: add fdma interrupt to overlay
+commit 00d96497e1688fa01fa5b76f7ec3a10048823d74
+Author: Tao Cui <cuitao@kylinos.cn>
 
-This adds OIC interrupt 14 as the "fdma" named interrupt to the lan966x
-PCI device tree overlay, so FDMA-based injection/extraction can be used
-when the switch is reached over PCIe.
+selftests/bpf: add multi-stream sequentiality example model
 
-> diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci.dtso
-> index 7bb726550caf..5bb12dbc0843 100644
-> --- a/drivers/misc/lan966x_pci.dtso
-> +++ b/drivers/misc/lan966x_pci.dtso
-> @@ -141,8 +141,9 @@ switch: switch@e0000000 {
->  
->  					interrupt-parent = <&oic>;
->  					interrupts = <12 IRQ_TYPE_LEVEL_HIGH>,
-> +						     <14 IRQ_TYPE_LEVEL_HIGH>,
->  						     <9 IRQ_TYPE_LEVEL_HIGH>;
-> -					interrupt-names = "xtr", "ana";
-> +					interrupt-names = "xtr", "fdma", "ana";
+This commit introduces a new example cost model for iocost using eBPF,
+replacing the single-cursor sequentiality heuristic with a per-cgroup table
+of stream slots. The stream state is maintained in a CGRP_STORAGE map keyed
+by the cgroup.
+
+> diff --git a/tools/testing/selftests/bpf/progs/iocost_ms.c b/tools/testin=
+g/selftests/bpf/progs/iocost_ms.c
+> new file mode 100644
+> index 0000000000000..3cc57c03d3c88
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/iocost_ms.c
+
+[ ... ]
+
+> +	now =3D bpf_ktime_get_ns();
+> +	for (i =3D 0; i < NSLOTS; i++) {
+> +		if (s->expected[i] =3D=3D sector && s->stamp[i]) {
+> +			found =3D i;
+> +			break;
+> +		}
+> +	}
+> +	if (found !=3D 0xFFFFFFFF) {
+> +		/* sequential: keep the seq base from the op branch */
+> +		s->expected[found] =3D sector + advance;
+> +		s->stamp[found] =3D now;
 
 [Severity: Medium]
-With source 14 now named "fdma", platform_get_irq_byname(pdev, "fdma")
-starts succeeding on the PCIe path, and lan966x_probe() requests the
-handler right there:
+Are these lockless updates susceptible to data races? Multiple CPUs process=
+ing
+IO for the same cgroup could concurrently execute iocost_ms_calc_cost() and
+modify the shared cgroup storage.
 
-drivers/net/ethernet/microchip/lan966x/lan966x_main.c:lan966x_probe() {
-	lan966x->fdma_irq = platform_get_irq_byname(pdev, "fdma");
-	if (lan966x->fdma_irq > 0) {
-		err = devm_request_irq(&pdev->dev, lan966x->fdma_irq,
-				       lan966x_fdma_irq_handler, 0,
-				       "fdma irq", lan966x);
-		...
-		lan966x->fdma = true;
-	}
-}
+Could this concurrency result in lost updates or interleaved reads and writ=
+es,
+leading to inaccuracies in the sequential IO heuristic?
 
-Is this ordering safe?  The OIC maps and unmasks source 14 at
-devm_request_irq() time, but at that point no FDMA state exists yet:
+> +	} else {
+> +		base =3D randio;
+> +		for (i =3D 1; i < NSLOTS; i++) {
+> +			if (s->stamp[i] < s->stamp[victim])
+> +				victim =3D i;
+> +		}
+> +		s->expected[victim] =3D sector + advance;
+> +		s->stamp[victim] =3D now;
 
-- netif_napi_add()/napi_enable() only run later, from
-  lan966x_port_init() -> lan966x_fdma_netdev_init() in the per-port
-  probe loop, so lan966x->napi is still the zeroed devm_kzalloc()
-  memory and napi.poll is NULL.
+[Severity: Medium]
+Similarly, when claiming and updating a new stream slot, could multiple
+CPUs select the same victim concurrently?
 
-- the DCB rings, the LLP/ATU windows and the FDMA_CTRL NRESET pulse are
-  all done even later, from lan966x->ops->fdma_init() ->
-  lan966x_fdma_pci_init().
+While lockless updates are often an intentional performance tradeoff in IO
+hotpaths and this is an example model, could the resulting data races on the
+expected and stamp arrays cause unintended behavior when tracking interleav=
+ed
+streams?
 
-If the OIC delivers an FDMA interrupt in that window, the handler
-schedules NAPI unconditionally:
+> +	}
+> +
+> +	pages =3D RU(nbytes, IOC_PAGE_SIZE);
 
-drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:lan966x_fdma_irq_handler() {
-	db = lan_rd(lan966x, FDMA_INTR_DB);
-	err = lan_rd(lan966x, FDMA_INTR_ERR);
+[ ... ]
 
-	if (db) {
-		lan_wr(0, lan966x, FDMA_INTR_DB_ENA);
-		lan_wr(db, lan966x, FDMA_INTR_DB);
-
-		napi_schedule(&lan966x->napi);
-	}
-}
-
-Can this then oops in __napi_poll(), either calling n->poll() while it
-is still NULL, or running lan966x_fdma_pci_napi_poll() against
-rx->fdma.dcbs == NULL and n_dcbs == 0, where fdma_has_frames() ->
-fdma_db_get() dereferences the dcbs array?
-
-How reachable is that window in practice?  The series itself describes
-the card arriving with FDMA state from a previous boot.  The commit
-"net: lan966x: clear FDMA interrupt stickies after switch reset" says
-the stickies "sit in FDMA_INTR_ERR until the FDMA IRQ is requested later
-in probe, at which point the handler fires immediately and WARNs", and
-"net: lan966x: add shutdown callback to stop FDMA on reboot" says that
-on the endpoint "channels stay active and interrupt sources stay armed
-across the reset" and that "FDMA_INTR_ENA persists on the card across a
-warm reboot".
-
-The sticky clear in lan966x_reset_switch() clears the latched bits at
-one instant, but does not mask FDMA_INTR_ENA/FDMA_INTR_DB_ENA and does
-not stop the channels.  After a reboot that skips device_shutdown()
-(panic reboot, kexec/kdump, watchdog warm reset with the card still
-powered), could a still-active channel latch FDMA_INTR_DB again after
-the clear and have it delivered as soon as source 14 is unmasked?
-
-Would it be more robust to reset and mask the FDMA block (the
-FDMA_CTRL NRESET pulse that already exists in lan966x_fdma_pci_init(),
-plus clearing FDMA_INTR_ENA/FDMA_INTR_DB_ENA) before
-devm_request_irq(), or to request the FDMA IRQ only after fdma_init()
-has built the rings and added the NAPI instance?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909-lan966x-pci-fdma-v6-0-6f48dab9d671%40microchip.com
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260910125817.2233=
+54-1-cui.tao@linux.dev?part=3D4
