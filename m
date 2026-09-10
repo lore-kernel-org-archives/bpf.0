@@ -1,43 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC5458E2A9
-	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 19:11:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD209595732
+	for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 19:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789067518; cv=none; b=YNQQdhQlkNKVZ5zxXT/SUvfnYbBK3BQPC8Yo4HPh6oeMtmOh2jo0ei8NbYcPaO3yPpHy00GyFLjxEg7BxnqJMpZ3c8yZ/k/Q9uzlH1mWCV3Di8ugUjmqbWJ1slBSOqwzcD7pI60P/GC8keaC/p+hmCRjL+h3ud+7gb25ch1Yl5M=
+	t=1789067520; cv=none; b=avl0h2m3EawkL4PttkBwMM+SFYANo3PPogqCrMpS4/8yuxJQCsikd0Yc2uR5UuEBiwyad6xlIZp1L27HxB/Kug/jnZ1/i6dxh1yN3xS7I6QhMsR0stFs9+XQR04Yg+dm2N/UrhSmJqcnEjIFow/3CABXw9/513Fr3xMwlz1BE7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789067518; c=relaxed/simple;
-	bh=adqn5x6gVvLnk967S0BJyHoEI35Rxgoylr9+NtmrIXE=;
+	s=arc-20240116; t=1789067520; c=relaxed/simple;
+	bh=s8XQqwCuZAJnWmuPiYLduJYb7gN6gbr3eLfGW626nCA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=g7lSVLt2ig++FoCDPzqv4zJX5h/bMc0eW2Gos83NG9tHKTuI7GsCu4U1fCnvj6dUzpz/E/2BWqmHTmn9EdqvSfLtwR4Tj9WXTTkh+JKjY49gu9OyJEIFatX+dTBDKsd3jAuIDMf/f8yIghO52pOKmcqbzf6AStIWsjkvftUeiWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Eoj66l5f; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=nfNXGK8dvDXnU+2AXXvTIS8G+mvN4oEC5InQgLdQsPyFs6h1kepJw6B06ByxHX8VPLQBrOzYbB07tVwhv0TSWhIeop//W5bdJ62QDqDZctcyZRTePrBO7gOCCJxpadv6KMQTs+Jf+oEbSgrQsQc3UjOeFMdltAn1Xr7Jd3y9r4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PMtL/gL5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Eoj66l5f"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00DCC1F00898;
-	Thu, 10 Sep 2026 19:11:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PMtL/gL5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 715221F000FF;
+	Thu, 10 Sep 2026 19:11:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789067517;
-	bh=vMrGKgBwfVXEmgNI1zs1oCxe3yFiNn8dSnUFWYAMJjU=;
+	s=k20260515; t=1789067518;
+	bh=3Dm6YuJeeQhOsxtaAr/OgQRYgT7uk6NNVnyMZ6GEW3c=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Eoj66l5f2o72AGWhvMpkj3uYwmnU7shjQHjrsngYi5T6QZI4s3n/YsjWAOKvxLOT8
-	 BZOvVmTWqFUlWM94HnOGxLARHyQcHPG29+v6pdqcdk/eKUSoz5irxj0H7P7GbIid16
-	 GC66lTD+PNVE7ew7mG/IkQErnLuy/HSRa16IKPCHX6apEqvdMe2cySsNRw9Y/Ogq/R
-	 B4mc+9joxy+lK4XmgiL32lkkcW0+BsYBDDcH8aAe0y4DGFZTQkXGgLytyJLnT49WUk
-	 EONRmOomBfZpqZCPNe3MRaROxAhStcSRsIdJDp7f4PMoyvNvTKqWhv57ih5IkLiMoV
-	 trLPdjrc+niEg==
+	b=PMtL/gL5HHj8PqiO6UUraJzr8nf+QNye+pdSsqvniwMIhsYKmuVIyaNxH5NJSK1sE
+	 hQ3lP9AqPiTdAk+Q4PLjgWClkwneJ3loV0EjB5NVpNcHiTkPlOgAEM3MLMz3XsFoKr
+	 dwT71XEO28VgfcByQEYb1gf9rFYxc66US2mqcwVV0u9glroNGdzhGmlfSwRF4O1JP1
+	 RciDM3dWie94e4rZXiH1baDiQobyJ16ktvaQw05hzqPHskyg2Fpes7VDwb27/ORdMP
+	 sGjimrCOwtjlKk9w6fjf/OTfI1oFmuRPNTTEz/248d4YR+QVpxT6TiWwVou+EymzMm
+	 r4Qg9okRRoIig==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v6 06/12] gve: simplify reset logic
+Subject: Re: [PATCH net-next v6 12/12] gve: add link status/speed ctrl ops
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Harshitha Ramamurthy" <hramamurthy@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260909191136.3811892-7-hramamurthy@google.com>
+In-Reply-To: <20260909191136.3811892-13-hramamurthy@google.com>
 References: <20260909191136.3811892-1-hramamurthy@google.com>
- <20260909191136.3811892-7-hramamurthy@google.com>
+ <20260909191136.3811892-13-hramamurthy@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 10 Sep 2026 19:11:56 +0000
-Message-Id: <20260910191157.00DCC1F00898@smtp.kernel.org>
+Date: Thu, 10 Sep 2026 19:11:58 +0000
+Message-Id: <20260910191158.715221F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,66 +48,80 @@ Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Silent state loss of AF_XDP configuration and hardware flow rules =
-after device reset.
+- [Critical] AdminQ commands that allocate a DMA buffer, send it to the dev=
+ice, and free it on timeout create a DMA-after-free vulnerability.
 --
 
-commit bcda352ad7c739e9f63ce9eefb6fb5309a234230
+commit e2461d13b564589c9ca69a35d656bc9e72b3ea2b
 Author: Joshua Washington <joshwash@google.com>
 
-gve: simplify reset logic
+gve: add link status/speed ctrl ops
 
-This commit simplifies the GVE reset logic by removing recursive resets,
-avoiding resets during teardown, and decomposing allocation/teardown of
-control plane resources.
+This commit refactors the link status check to use a control plane operatio=
+n.
+It introduces new operations for retrieving the link status and speed in AQ
+mode, reading from the device status register.
 
-> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
-ernet/google/gve/gve_main.c
-> --- a/drivers/net/ethernet/google/gve/gve_main.c
-> +++ b/drivers/net/ethernet/google/gve/gve_main.c
-[ ... ]
-> @@ -590,7 +594,22 @@ static void gve_free_notify_blocks(struct gve_priv *=
-priv)
->  	priv->msix_vectors =3D NULL;
->  }
+> diff --git a/drivers/net/ethernet/google/gve/gve_ethtool.c b/drivers/net/=
+ethernet/google/gve/gve_ethtool.c
+> index dd1c44fedc771..a3220c6514382 100644
+> --- a/drivers/net/ethernet/google/gve/gve_ethtool.c
+> +++ b/drivers/net/ethernet/google/gve/gve_ethtool.c
+> @@ -749,12 +749,11 @@ static int gve_get_link_ksettings(struct net_device=
+ *netdev,
+>  	int err =3D 0;
 > =20
-> -static int gve_setup_device_resources(struct gve_priv *priv)
-> +static void gve_free_control_plane_resources(struct gve_priv *priv)
-> +{
-> +	bitmap_free(priv->xsk_pools);
-> +	priv->xsk_pools =3D NULL;
+>  	if (priv->link_speed =3D=3D 0)
+> -		err =3D gve_adminq_report_link_speed(priv);
+> +		err =3D priv->ctrl_ops->report_link_speed(priv);
 
-[Severity: High]
-This is a pre-existing issue, but does this cause a silent state loss of
-AF_XDP configuration after a device reset?
+[Severity: Critical]
+This is a pre-existing issue, but does gve_adminq_report_link_speed() have a
+DMA-after-free vulnerability when the AdminQ command times out?
 
-Because the driver clears xsk_pools without restoring the state, any active
-AF_XDP applications could silently stop receiving traffic and require a
-manual restart to recover after a routine reset (such as from a TX timeout
-or an ethtool reset). This breaks the ABI contract for AF_XDP, making the
-networking features permanently unusable after a transparent recovery.
+Looking at the underlying implementation in gve_adminq_report_link_speed() =
+in
+drivers/net/ethernet/google/gve/gve_adminq.c:
 
-> +
-> +	kvfree(priv->ptype_lut_dqo);
-> +	priv->ptype_lut_dqo =3D NULL;
-> +
-> +	gve_free_stats_report(priv);
-> +	gve_free_notify_blocks(priv);
-> +	gve_free_counter_array(priv);
-> +	gve_free_rss_config_cache(priv);
-> +	gve_free_flow_rule_caches(priv);
+    err =3D gve_adminq_execute_cmd(priv, &gvnic_cmd);
 
-[Severity: High]
-This is a pre-existing issue, but does this destroy the software cache of
-ethtool flow rules without restoring them?
+    priv->link_speed =3D be64_to_cpu(*link_speed_region);
+    dma_free_coherent(&priv->pdev->dev, sizeof(*link_speed_region),
+                      link_speed_region, link_speed_region_bus);
+    return err;
 
-User-configured hardware flow rules appear to be permanently deleted from
-both the hardware and the software cache upon a device reset. They are never
-restored to the hardware, requiring manual user intervention to reapply
-them.
+If the hardware fails to respond within the loop in gve_adminq_wait_for_cmd=
+(),
+gve_adminq_execute_cmd() returns -ENOTRECOVERABLE. The driver then
+unconditionally calls dma_free_coherent() on the link_speed_region buffer
+while the hardware might still be processing the request.
 
-> +}
+If the hardware is merely slow and completes the operation after the driver=
+'s
+timeout, it will perform a DMA write to the freed IOVA. This IOVA may have
+been reallocated by the kernel for other purposes, leading to memory
+corruption.
+
+A similar pattern appears to exist in gve_adminq_execute_extended_cmd() whe=
+re
+the inner_cmd DMA buffer is unconditionally freed on failure:
+
+    err =3D gve_adminq_execute_cmd(priv, &cmd);
+
+    dma_free_coherent(&priv->pdev->dev, cmd_size, inner_cmd, inner_cmd_bus);
+    return err;
+
+Could this memory corruption be triggered by local users querying link
+settings via ethtool if the vNIC is temporarily unresponsive?
+
+> =20
+>  	cmd->base.speed =3D priv->link_speed;
+> =20
+>  	cmd->base.duplex =3D DUPLEX_FULL;
+> -
+>  	return err;
+>  }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260909191136.3811=
-892-1-hramamurthy@google.com?part=3D6
+892-1-hramamurthy@google.com?part=3D12
