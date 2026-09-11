@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-125.mta0.migadu.com [91.218.175.125])
+Received: from mta0.migadu.com (out-141.mta0.migadu.com [91.218.175.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B26737189C
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 05:34:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.125
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287FE39022A
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 05:34:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789104862; cv=none; b=XxfODybbTNHv5Mc6utRLDVGaL2SfkZY0YhwGuu/GZtOOEzwlmHnHx+5JwQ3Ls7Bmjta+QUjY0nbluksnZq388zwo2/8+A8hq37oVtUwjRIwTK7ufa5uaonUQ0ymRH8vNr2d/Aw5rAjjf1BiAtLCYK7gRGqzNeUyQfN3VwxpDqo0=
+	t=1789104875; cv=none; b=j5zzCHeSDKhNfs4Ld//ZQbqfI6XbQ1BCPpkLuArGvJlb4v62xhGQkDd0v3YqvNd8vtsfErIML/pjErq46JyqqKyujhMsVIePy9HMqNCyRKjMlhHA7KdtUJbWU+nx16V5JyFJFkbKA5RelQbcYpgObk7827jZR6DT65gA7qv57Es=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789104862; c=relaxed/simple;
-	bh=QLrUQdoEb+WRmIhtbNrc93z1UP3HxRiY7UU2z3nJbfo=;
+	s=arc-20240116; t=1789104875; c=relaxed/simple;
+	bh=sVEV/XK5D/oco1XqkmpUo65zt1a8V9JerTrhuFHJw6g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=s/dgwXTeG0ohqkR7ULzVSP6W/kADXWt3pIpUznXKdkALmtByrZmkGpEqQ1YIeMAxH+T0xY0PxNSeX1gl49T9pP9Bx+gTzpAq5tyhpTaSHBAP0V1YKiqjjnBAW9J2bWjLv6vCwoJt4vqWlVIwwpbx7QACAzRPralkBJ9+MSi3/C8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZkF+7KTR; arc=none smtp.client-ip=91.218.175.125
+	 In-Reply-To:Content-Type; b=KMWr+1Wgpz2HyHcF/LLCDJfs8O0osdjJWL3IItH9CVbHjyz46SUtGi792aSnWaVt/MupefgOVwwJUh1DoH8TqRrkNDI+op65q0h1TxF1kWt/JUyq9dSZvbcFznKfeiuoL+hRcOySg57kRERNP4q1PWa7HyqKVWsZumWocMG30/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G4zKQY9q; arc=none smtp.client-ip=91.218.175.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZkF+7KTR"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G4zKQY9q"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=QLrUQdoEb+WRmIhtbNrc93z1UP3HxRiY7UU2z3nJbfo=;
+DKIM-Signature: a=rsa-sha256; bh=sVEV/XK5D/oco1XqkmpUo65zt1a8V9JerTrhuFHJw6g=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789104858; v=1; x=1789709658;
- b=ZkF+7KTR7LIzvy7+s9m1uUW7ClwtLQZdWnT6FOPBs4QVxxvU59spb56VdECMqyAF85QwwugM
- AsaiztUBnhiq9u5LtHxjzdzQSGq/veGuxY/8gmeixc5OLCniSa9gYn0cKo9ZDz+2UqoaxbwkTfe
- Zu5iq209Y5zR8sOjC0DyEfho=
+ t=1789104872; v=1; x=1789709672;
+ b=G4zKQY9qaI3yjlu50QdOouUiJYgJ5lk6JSnQIk4tOXnUS6dKNKKKVn4f9YRvtokiJxGsLx71
+ ahuJqvsKAK/65Lx6UMs9G7Qbe2tpJhujr5Eh9xlYz2HFUmZp5Yxj/Y4nJjuxR6ndrxQ2UWCDhdM
+ AWaAsipVogXR8GsXwYcNN6wg=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 5439cc4172ab65c8;
-	Fri, 11 Sep 2026 05:34:18 +0000
-X-Mizu-Trace-ID: 5439cc4172ab65c8
+Received: by smtp.migadu.com with ESMTPS id 7b98c62012699b19;
+	Fri, 11 Sep 2026 05:34:32 +0000
+X-Mizu-Trace-ID: 7b98c62012699b19
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <4b6edd53-acda-4852-963d-fe233fd2d192@linux.dev>
-Date: Thu, 10 Sep 2026 22:34:14 -0700
+Message-ID: <4ef9a3d4-7a79-4144-baff-e236f8eb7c5e@linux.dev>
+Date: Fri, 11 Sep 2026 11:04:29 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,163 +38,161 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 09/12] bpf, arm64: Move kfunc arguments into
- the arm64 calling convention
-Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
- mason@kernel.org, ihor.solodrai@linux.dev
-References: <20260909062610.4008921-1-yonghong.song@linux.dev>
- <41db2f5f6481cb0e9ca5a73d5a597578ebffa4bd39cbcf98aabbcaf87048809f@mail.kernel.org>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <41db2f5f6481cb0e9ca5a73d5a597578ebffa4bd39cbcf98aabbcaf87048809f@mail.kernel.org>
+Subject: Re: [PATCH bpf-next v2 10/13] selftests/bpf: cover the low-32 link
+ for narrowing stack fills
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260910164635.459558-1-vineet.gupta@linux.dev>
+ <20260910164635.459558-11-vineet.gupta@linux.dev>
+ <20260910170020.04A4E1F000FF@smtp.kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20260910170020.04A4E1F000FF@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-
-
-On 9/9/26 12:30 AM, bot+bpf-ci@kernel.org wrote:
->> commit 7c4f41d1b9c4dfdbada8f6d1b1097849ccb20de8
->> Author: Yonghong Song <yonghong.song@linux.dev>
->>
->>      bpf, arm64: Move kfunc arguments into the arm64 calling convention
->>
->>      Do proper move from bpf calling convention to arm64 calling convention
->>      to satisfy native requirement. AAPCS64 only ever moves an argument to a
->>      higher slot, so the moves need one scratch register to carry an eightbyte
->>      from one stack slot to another, and never the one a convention moving an
->>      argument down would need.
->>
->>      In addition, the arena argument walk counts eightbytes rather than
->>      parameters, as an argument may take two registers. The walk takes the
->>      func model from the caller now, as the moves need it too, and runs first
->>      so that they carry the rebased value.
->>
->>      Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> This looks like a bug fix for multi-slot kfunc argument support.
-> Should this include:
+On 9/10/26 10:30 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] The newly added tests for narrow stack fills hardcode memory offsets (e.g., `(r10 - 8)`) which are only correct on little-endian architectures. On big-endian architectures like s390x, these offsets do not point to the lower bits, causing the BPF verifier to reject the programs and resulting in test failures.
+> --
 >
->    Fixes: 2092c3247e45 ("bpf: Prepare kfunc arguments for the JIT from an ABI description")
+> commit a42f9a6d4d49f17385f014eede55d6e82094a838
+> Author: Vineet Gupta <vineet.gupta@linux.dev>
 >
-> In v1 of this series, Alexei Starovoitov raised a design concern about
-> the overall approach. He questioned why the BPF calling convention should
-> diverge from x86-64/arm64, noting that both JIT patches doing argument
-> shuffling is a sign that the approach may be wrong on the BPF side. He
-> suggested adjusting the BPF calling convention to match arm64 (the
-> stricter of the two architectures) rather than forcing all JITs to adapt:
+> selftests/bpf: cover the low-32 link for narrowing stack fills
 >
->    "Why cannot we adjust bpf calling convention to match arm64/x86 the
->    best? Since arm64 is stricter, I'd pick that style. There are no kfuncs
->    that use int128 or 16+ byte args, so it's a matter of bpf subprogs
->    calling bpf subprogs. Seems cleaner to adjust what llvm emits instead of
->    forcing all jits to adapt."
+> This commit adds five new BPF programs to test the verifier's handling of
+> narrowing stack fills, specifically targeting low-32 links and sign-extension
+> behavior.
 >
-> The v2 took the opposite approach - keeping the BPF calling convention
-> and implementing JIT argument shuffling in both x86 and arm64. Was this
-> design decision explicitly discussed and agreed upon?
-
-Yes, we will keep original bpf calling convention and then jit will
-do proper adjustment.
-
->
->> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
->> index 3aa3ea0bc30b..bdac930dbdec 100644
->> --- a/arch/arm64/net/bpf_jit_comp.c
->> +++ b/arch/arm64/net/bpf_jit_comp.c
+>> diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+>> --- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+>> +++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
 > [ ... ]
 >
->> @@ -1262,19 +1268,20 @@ static void emit_stack_arg_store_imm(s32 imm, s16 bpf_off, const u8 tmp, struct
->>    * kern_vm_start. A nullable arg preserves NULL by skipping the add, tested
->>    * on the truncated value as arena NULL is offset 0.
->>    */
->> -static int emit_kfunc_arena_args(struct jit_ctx *ctx, const struct bpf_insn *insn)
->> +static int emit_kfunc_arena_args(struct jit_ctx *ctx, const struct btf_func_model *fm)
->>   {
->>   	const u8 arena_vm_base = bpf2a64[ARENA_VM_START];
->> -	const struct btf_func_model *fm;
->> -	int i;
->> -
->> -	fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
->> -	if (!fm)
->> -		return -EINVAL;
->> +	int i, slot;
->>
->> -	for (i = 0; i < min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS); i++) {
->> -		const u8 reg = bpf2a64[BPF_REG_1 + i];
->> +	for (i = 0, slot = 0; i < fm->nr_args; i++) {
->> +		u32 arg_regs = (fm->arg_size[i] + 7) / 8;
->>   		u8 flags = fm->arg_flags[i];
->> +		u8 reg;
->> +
->> +		if (slot + arg_regs > MAX_BPF_FUNC_REG_ARGS)
->> +			break;
->> +		reg = bpf2a64[BPF_REG_1 + slot];
->> +		slot += arg_regs;
->>
->>   		if (!(flags & BTF_FMODEL_ARENA_ARG))
->>   			continue;
+>> +SEC("socket")
+>> +__success
+>> +__naked void zext_fill_narrow_from_wide_spill(void)
+>> +{
+>> +	asm volatile ("						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r6 = r0;						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r0 <<= 32;						\
+>> +	r6 |= r0;		/* r6 = full 64-bit unknown */	\
+>> +	*(u64 *)(r10 - 8) = r6;	/* slot linked to r6 */		\
+>> +	r2 = *(u32 *)(r10 - 8);	/* narrowing fill, forms the link */ \
+> [Severity: Medium]
+> On big-endian architectures like s390x, won't reading 32 bits from offset -8
+> target the upper 32 bits instead of the lower 32 bits?
+>
+> The bpf_stack_narrow_access_ok() check in the verifier expects to read the
+> least significant bytes of the spill slot, which on big-endian are located
+> at offset -4 for a 32-bit read. Could this hardcoded offset cause the verifier
+> to reject the program and break the test on big-endian systems?
+
+Goot catch. Fixed for BE and LE.
+
+>> +	if w6 != 0 goto 1f;	/* narrows r6, propagates to r2 */ \
+>> +	if r2 == 0 goto 1f;					\
+>> +	r0 /= 0;						\
+>> +1:								\
+>> +	r0 = 0;							\
+>> +	exit;							\
+>> +"	:
+>> +	: __imm(bpf_get_prandom_u32)
+>> +	: __clobber_all);
+>> +}
 > [ ... ]
 >
->> @@ -1293,6 +1300,45 @@ static int emit_kfunc_arena_args(struct jit_ctx *ctx, const struct bpf_insn *ins
->>   	return 0;
->>   }
->>
->> +static bool a64_arg_on_stack(u8 slot)
+>> +SEC("socket")
+>> +__failure __msg("div by zero")
+>> +__naked void zext_fill_byte_forms_no_link(void)
 >> +{
->> +	return slot >= arm64_arg_abi.nr_arg_regs;
->> +}
->> +
->> +static s32 a64_arg_stack_off(u8 slot)
->> +{
->> +	return (slot - arm64_arg_abi.nr_arg_regs) * sizeof(u64);
->> +}
->> +
->> +/*
->> + * AAPCS64 only ever moves an argument to a higher slot, so the planner asks
->> + * for the scratch only to carry an eightbyte from one stack slot to another.
->> + */
->> +static void emit_kfunc_arg_moves(struct jit_ctx *ctx, const struct btf_func_model *fm)
->> +{
->> +	struct bpf_jit_arg_move moves[BPF_JIT_MAX_ARG_MOVES];
->> +	const u8 tmp = bpf2a64[TMP_REG_1];
->> +	u32 i, n;
->> +
->> +	n = bpf_jit_plan_arg_moves(&arm64_arg_abi, fm, moves);
->> +
->> +	for (i = 0; i < n; i++) {
->> +		u8 dst = moves[i].dst, src = moves[i].src, reg;
->> +
->> +		if (a64_arg_on_stack(src)) {
->> +			reg = a64_arg_on_stack(dst) ? tmp : dst;
->> +			emit(A64_LDR64I(reg, A64_SP, a64_arg_stack_off(src)), ctx);
->> +		} else {
->> +			reg = src;
->> +		}
->> +
->> +		if (a64_arg_on_stack(dst))
->> +			emit(A64_STR64I(reg, A64_SP, a64_arg_stack_off(dst)), ctx);
->> +		else if (reg != dst)
->> +			emit(A64_MOV(1, dst, reg), ctx);
->> +	}
->> +}
-> This isn't a bug, but would it be clearer to say the plan never needs a
-> scratch on AAPCS64 and that TMP_REG_1 is only this helper's
-> stack-to-stack carrier? As written, the comment reads as though moves[]
-> can contain BPF_JIT_ARG_TMP (which the loop does not handle - unlike the
-> x86 version at arch/x86/net/bpf_jit_comp.c which does), and the ': dst'
-> arm in the conditional looks unreachable for the same reason (src on the
-> stack implies dst on the stack, since dst >= src >= nr_arg_regs).
+>> +	asm volatile ("						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r6 = r0;						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r0 <<= 32;						\
+>> +	r6 |= r0;						\
+>> +	*(u64 *)(r10 - 8) = r6;					\
+>> +	r2 = *(u8 *)(r10 - 8);	/* 1-byte fill: no link */	\
+> [Severity: Medium]
+> Does this hardcoded 8-bit read from offset -8 target the most significant byte
+> rather than the least significant byte on big-endian architectures?
 
-Okay, will fix.
+Fixed.
 
->
+>> +	if w6 != 0 goto 1f;					\
+>> +	if r2 == 0 goto 1f;	/* not deduced */		\
+>> +	r0 /= 0;						\
+>> +1:								\
+>> +	r0 = 0;							\
+>> +	exit;							\
+>> +"	:
+>> +	: __imm(bpf_get_prandom_u32)
+>> +	: __clobber_all);
+>> +}
 > [ ... ]
 >
+>> +SEC("socket")
+>> +__success
+>> +__naked void sext_fill_narrow_from_wide_spill(void)
+>> +{
+>> +	asm volatile ("						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r6 = r0;						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r0 <<= 32;						\
+>> +	r6 |= r0;		/* r6 = full 64-bit unknown */	\
+>> +	*(u64 *)(r10 - 8) = r6;	/* slot linked to r6 */		\
+>> +	r2 = *(s32 *)(r10 - 8);	/* narrowing sx fill */		\
+> [Severity: Medium]
+> Similar to the previous cases, will this 32-bit read from offset -8 read the
+> upper 32 bits on big-endian systems and cause verifier bounds tracking to fail?
+
+Fixed.
+
+>> +	if w6 != -1 goto 1f;	/* narrows r6, propagates to r2 */ \
+>> +	if r2 == -1 goto 1f;	/* sign-extended, not 0xffffffff */ \
+>> +	r0 /= 0;						\
+>> +1:								\
+>> +	r0 = 0;							\
+>> +	exit;							\
+>> +"	:
+>> +	: __imm(bpf_get_prandom_u32)
+>> +	: __clobber_all);
+>> +}
+> [ ... ]
 >
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>> +SEC("socket")
+>> +__failure __msg("div by zero")
+>> +__flag(BPF_F_TEST_STATE_FREQ)
+>> +__naked void fill_kinds_reach_different_values(void)
+>> +{
+>> +	asm volatile ("						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r6 = r0;						\
+>> +	r6 &= 1;						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r8 = r0;						\
+>> +	call %[bpf_get_prandom_u32];				\
+>> +	r0 <<= 32;						\
+>> +	r8 |= r0;						\
+>> +	*(u64 *)(r10 - 8) = r8;					\
+>> +	if r6 >= 1 goto 2f;					\
+>> +	r2 = *(s32 *)(r10 - 8);	/* sign-extending fill */	\
+> [Severity: Medium]
+> Will these narrow fills also fail verifier checks on big-endian machines due
+> to the fixed -8 offset pointing to the wrong 32-bit half?
+
+Fixed.
+
 >
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34320399441
+>> +	goto 1f;						\
+>> +2:								\
+>> +	r2 = *(u32 *)(r10 - 8);	/* zero-extending fill */	\
+>> +1:								\
+>> +	if w8 != -1 goto 3f;					\
+>> +	if r2 == -1 goto 3f;	/* only the sign-extending path */ \
 
