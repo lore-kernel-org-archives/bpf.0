@@ -1,185 +1,198 @@
-Received: from mta0.migadu.com (out-115.mta0.migadu.com [91.218.175.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8316542CB05
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 10:37:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.115
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A986F41C6A;
+	Fri, 11 Sep 2026 10:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789123083; cv=none; b=imcpDdE+J3Dws3p20V0Ewi06iS+RLKcKf2skW2V36J6EVkvCoBhT/rP5aHrKLAebm8uvhgROJQYLBbAxxvpX7xoytm25bu9fEzSgWFeK7U84iV5XqGjM32jxbKQnrW5MnaHMPsLrmHYYXvWhhYNCypVXO6rRKyC8/ImV6VVzo5Y=
+	t=1789124179; cv=none; b=bSDu+5jw/O5CSYmC3NaJ6UEvqo372jFxBCZUjgHagpih57gp0PC/oQfGPR+6R8m1M8TGfyPtOKhUgeVm27AeVmB6lPTO+ezIphtRn0W3REpZhqZxBjkuQQGrXxvQA7AKlzTiHbHOy5r+MlS8kTHH7/xJ3ynpSbPD4i0spQacoFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789123083; c=relaxed/simple;
-	bh=qcidQxwh1HceK3n0EKSlmvhY5SFvKe+nZW7HpSIIh40=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OoEbGvfJyA1b7V+PTB6UsBk8Lw3TbI9DnQlhBGD0AigUnbCk+6C6RwUGc0AmjQh/VXZXiD5ZAQv79ijaH2B52hyCqdJHiBDL/6y5HjLHNos8MPVtio78Yb6Esr4nIv1lDmqKZg25ZS7S+0A6iswaleIhzuERB6bzPLK+KWmnjQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FeqWRFZj; arc=none smtp.client-ip=91.218.175.115
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789124179; c=relaxed/simple;
+	bh=ccd5XcXKYsL+2AgAx552ENjUdUAjkgwvUd42kOX4FO8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NZMOGUkeUEm2Da0D2t+JuUc0C0s9eHyMaVXmXNOB1FKryxgOF6q99RhQRyza28IIMTYnJtfY9wG6QaAgd54BC9R45TdD4N2f/pS3j76+v1uiFzaHcq0Ci6KlfjX1czXlW/jSgVa87HY7rc7Km3F2bLPN1SI4759ZM1W1z2+u0n8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=MVlliPIj; arc=none smtp.client-ip=67.231.148.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FeqWRFZj"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=qcidQxwh1HceK3n0EKSlmvhY5SFvKe+nZW7HpSIIh40=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789123076; v=1; x=1789727876;
- b=FeqWRFZjB8+M+Fh50goi/A+OFT+O+HoW+UcXUzMyc+keEYtc8vXgvqs7sjmqfyU1CZNlAvJm
- vqmT6wIAgWVFD/Vq4JI2c7t5jzOSMgZYOHKf71wTj88DVAzYPVZ+hgwYzJehSJ9do1xajFlRx0t
- hJNQ9IlD44neFpl8/JxZ7IPo=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 53bf64e9feeab3da;
-	Fri, 11 Sep 2026 10:37:56 +0000
-X-Mizu-Trace-ID: 53bf64e9feeab3da
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <74387fa7-b2e3-4b12-a75d-d192f08d14ac@linux.dev>
-Date: Fri, 11 Sep 2026 16:07:50 +0530
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="MVlliPIj"
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68BAooRq919477;
+	Fri, 11 Sep 2026 03:55:34 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pfpt0220; bh=E3WI/LBj/jyNky1eZ7wi5je
+	rXNLJWRyC09VzPWhMjkc=; b=MVlliPIjNWkRvQvyAeIyNiTNMfQAYqKB+X7vKZh
+	aIUdxtJyJ2w7RgHCkwBcielxNxIg0DN17KiBhazAsvB82TcLC34QUB5ah6d57XNc
+	3j+SU76kG5O0Tpjl1ahKahumxNnqgYxq1Cvs27L64dzk3LcXl24uKpLlToHBctYT
+	kXRD0taUYuEqVblRc0j1Qft82KpnuHEB0MVJLT6fuRc6i7QDZBCa5opT0jLCvevc
+	9O7la86H0pOwnWxpEVmGprHW3WVXIVKtoSDbQmN0GZ1sYoLUraAiFZPALanWecus
+	2T98emxGqpkNJTFmWw+rmDs3Dz3S05U04Qj7yeqp9ucCE6A==
+Received: from dc5-exch05.marvell.com ([199.233.59.128])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4gmb958wa5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 11 Sep 2026 03:55:34 -0700 (PDT)
+Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
+ DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Fri, 11 Sep 2026 03:55:33 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
+ (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
+ Transport; Fri, 11 Sep 2026 03:55:33 -0700
+Received: from rkannoth-OptiPlex-7090.. (unknown [10.28.36.165])
+	by maili.marvell.com (Postfix) with ESMTP id CDEFD5C68E9;
+	Fri, 11 Sep 2026 03:55:28 -0700 (PDT)
+From: Ratheesh Kannoth <rkannoth@marvell.com>
+To: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+CC: <andrew+netdev@lunn.ch>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <davem@davemloft.net>, <edumazet@google.com>, <hawk@kernel.org>,
+        <john.fastabend@gmail.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <sdf@fomichev.me>, <sgoutham@marvell.com>,
+        Ratheesh Kannoth
+	<rkannoth@marvell.com>
+Subject: [PATCH v15 net-next 0/2] octeontx2-pf: mqprio bandwidth offload for NIX TX schedulers
+Date: Fri, 11 Sep 2026 16:25:19 +0530
+Message-ID: <20260911105521.689565-1-rkannoth@marvell.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 05/13] bpf: keep the range across a sign
- extension that cannot change it
-To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20260910164635.459558-6-vineet.gupta@linux.dev>
- <92fc8746a5a16b3e0e544244b584cc6b287a466539230bdb4043e0e8a716c9af@mail.kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <92fc8746a5a16b3e0e544244b584cc6b287a466539230bdb4043e0e8a716c9af@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTExMDE1MyBTYWx0ZWRfX7Xg4XLo2wNGX
+ VoUqiBIlYu+dP3htDXPfOpg5LLLqePEa4m2+EEwwrpt45pkXQKQXnS3C+DFuRWsa/4M+TkF9+hp
+ omuZAyxNpJMoxLT0DSDXhhQCcHrRo7mzszX+evYf8ii1gME9E22nXjmMYxHnvtRfigeMMokRCyx
+ 45ZVnTfTYfNUGlVCCC2atE6KebcIXmcom9r8Mob5ITx5bbTQE3rzDGVnM8rmMVt1FV5KcmaxJWE
+ PKOfdnZIUODwMy179tCOb6Seru6VHmGDkEJXDQc6kzqTj/euyb/1jFHdABLGs/kPhhafbh2OLmK
+ gHUtp5m6sNkh7YC5bwvmMP6aZdf0fdrXVFQ4THQfVuy9EQBy9s4YPC3MZTF7xknIYRAnbmoPgEH
+ uvMekgR+NQkYrUN3qMGpY9nCHZwiTtf79V/VTnV2tdl54Aff2LjxsJi7RKzc1TTeK/wrBlIPJoM
+ Io07kBcDn6erEV0AITw==
+X-Proofpoint-GUID: pgYzvEFFVLYfJNq_rI44UHp9euQRnzPR
+X-Proofpoint-ORIG-GUID: pgYzvEFFVLYfJNq_rI44UHp9euQRnzPR
+X-Authority-Analysis: v=2.4 cv=c6M+0h9l c=1 sm=1 tr=0 ts=6aa3de26 cx=c_pps
+ a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
+ a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22 a=l0iWHRpgs5sLHlkKQ1IR:22
+ a=EAYMVhzMl8SCOHhVQcBL:22 a=VwQbUJbxAAAA:8 a=M5GUcnROAAAA:8 a=c92rfblmAAAA:8
+ a=mw16rXp6IqdJ9hzCCQkA:9 a=OBjm3rFKGHvpk9ecZwUJ:22 a=GvGzcOZaWPEFPQC_NcjD:22
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTExMDE1MyBTYWx0ZWRfX0pqKKSz6MWaq
+ KQfGoOO+VCYmjzY3HcTTj/6SjA0hFpqhX35JcUCDxUjXVYeoSN34OsfkjgqMfIPwBSIj2ORl8gM
+ Q3IG4gC4Ex7FsTZ86JoQ5iQVjuNsQgg=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-11_04,2026-09-09_02,2025-10-01_01
 
-On 9/10/26 11:22 PM, bot+bpf-ci@kernel.org wrote:
->> bpf: keep the range across a sign extension that cannot change it
->>
->> coerce_reg_to_size_sx() decides whether a sign extension is lossless by
->> comparing the bits above the field in smin and smax:
->>
->>          top_smax_value = ((u64)reg_smax(reg) >> num_bits) << num_bits;
->>          top_smin_value = ((u64)reg_smin(reg) >> num_bits) << num_bits;
->>          if (top_smax_value != top_smin_value)
->>                  goto out;
->>
->> Equal high bits do imply the truncation is lossless, but the converse does
->> not hold. Whenever the range straddles zero the high bits necessarily
->> differ -- smin sign-extends to all ones, smax to all zeroes -- even when
->> every value in the range fits the field and (sN)v == v throughout. The
->> second gate, "both of s64_max/s64_min positive or negative", rejects the
->> same shape again for the same reason.
->>
->> So a register holding an errno-or-zero value, [-4095, 0], comes out of r0
->> = (s32)r0 as the full [S32_MIN, S32_MAX] even though the instruction is a
->> no-op on it. The no_sext test at the call site does not help: it is an
->> unsigned check, so it only covers non-negative values that fit.
->>
->> Test the range against the field directly and return early when it fits.
->> Sign extension is then the identity, so nothing needs updating -- which
->> also preserves var_off, where the existing path would have replaced known
->> bits with a coarse tnum_range().
->>
->> This only tightens: the early return fires exactly where the value is
->> provably unchanged, and the cases the current tests do accept still take
->> the same path and produce the same bounds.
-> Does the last sentence accurately describe the change? The early return
-> is placed before the top_s*_value and sign gates, so it intercepts every
-> fitting range, including those the existing gates accept.
->
-> For example, with 'w0 &= 0x3c; r0 = (s8)r0', the register holds [0, 60]
-> with var_off = (0; 0x3c). The old path passed both gates (equal top bits,
-> both non-negative) and set var_off = tnum_range(0, 60) = TNUM(0, 0x3f),
-> losing the known low bits. The early return now keeps (0; 0x3c).
->
-> This is the var_off preservation the message describes two sentences
-> earlier, so "produce the same bounds" seems inaccurate. Would "produce
-> bounds no wider than before" be more precise, given that the accepted
-> cases are where the behaviour actually changes?
+This series adds hardware offload for channel-mode mqprio with
+TC_MQPRIO_SHAPER_BW_RATE on Marvell octeontx2 PF devices. Each
+non-QoS transmit queue is shaped by programming MDQ CIR/PIR on the NIX TX
+scheduler. When bandwidth offload is active, the driver allocates one
+SMQ per queue, parents every MDQ under TL4[0], and maps each traffic
+class min/max rate to the queue(s) in that class.
 
-Yes this is the right phrasing.
+The NIX TX scheduler hierarchy cannot be reprogrammed live today, so
+mqprio add, replace, delete, and failed-replace rollback rebuild it by
+bouncing the netdev through ndo_stop()/ndo_open(). That intentionally
+drops in-flight traffic on each change. Before ndo_stop(), quiesce the
+transmit path with dev_deactivate() so xmit cannot race queue teardown.
+After a successful bounce on a running interface, reactivate TX queues
+with dev_activate(). Cache the active rates and restore MDQ shapers from
+otx2_mqprio_up() during ndo_open(); fail open if restoration fails.
 
+Track mqprio configuration in mq_offload_snap snapshots (TC layout and
+rates). On tc qdisc replace, stage the new configuration while keeping
+the previous snapshot for rollback: failed setup restores the old
+snapshot via netdev restart when the interface is running, successful
+graft is recorded through TC_ROOT_GRAFT, and teardown of the replaced
+qdisc instance commits the staged snapshot without tearing down the live
+offload.
 
->> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
-> This looks like a bug fix for sign extension handling in the verifier.
-> Should this include:
->
->    Fixes: 1f9a1ea821ff ("bpf: Support new sign-extension load insns")
+Patch 1 converts PF/VF and representor flag access to atomic bitops.
+Patch 2 depends on it for safe OTX2_FLAG_INTF_DOWN and OTX2_FLAG_PORT_UP
+updates on asynchronous mbox paths and during the mqprio netdev bounce.
 
-This is a limitation not really a regression - I doubt if this would be 
-backported.
-but up to the maintainers.
+The driver rejects offload unless the interface is running and the device
+advertises CIR+PIR support. Per-TC rates are rejected when a traffic class
+spans more than one queue. Concurrent PFC, XDP, SDP rep, or HTB use is
+blocked, and ethtool channel count changes are blocked while mqprio
+bandwidth offload is active.
 
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 58e788f53ae5..eb093194e2a3 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -5754,6 +5754,7 @@ static void set_sext64_default_val(struct bpf_reg_state *reg, int size)
->>   static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
->>   {
->>   	s64 init_s64_max, init_s64_min, s64_max, s64_min, u64_cval;
->> +	s64 field_smin, field_smax;
->>   	u64 top_smax_value, top_smin_value;
->>   	u64 num_bits = size * 8;
->>
->> @@ -5773,6 +5774,27 @@ static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
->>   		return;
->>   	}
->>
->> +	if (size == 1) {
->> +		field_smin = S8_MIN;
->> +		field_smax = S8_MAX;
->> +	} else if (size == 2) {
->> +		field_smin = S16_MIN;
->> +		field_smax = S16_MAX;
->> +	} else {
->> +		/* size == 4 */
->> +		field_smin = S32_MIN;
->> +		field_smax = S32_MAX;
->> +	}
->> +
->> +	/*
->> +	 * The range already fits the field, so (sN)v == v for every value the
->> +	 * register can hold and the sign extension changes nothing. The tests
->> +	 * below cannot reach this case once smin is negative: a negative smin
->> +	 * and a non-negative smax never share their high bits.
->> +	 */
-> Is the comment's condition accurate? It says the tests below cannot
-> reach this case once smin is negative, but the justification only covers
-> a negative smin together with a non-negative smax.
->
-> A fitting range that is entirely negative is reached and accepted by
-> the tests below. For reg_smin = -63, reg_smax = -1 with size == 1:
->
->    top_smax_value = ((u64)-1 >> 8) << 8 = 0xffffffffffffff00
->    top_smin_value = ((u64)-63 >> 8) << 8 = 0xffffffffffffff00
->
-> The first gate passes (equal top bits), and the second gate also accepts
-> since (s64_max >= 0) == (s64_min >= 0) holds for both negative. The same
-> is true for entirely non-negative fitting cases like [0, 60] with size == 1.
->
-> So the early return intercepts cases the tests below handle, which is
-> the var_off-preserving improvement the commit message describes. Should
-> the condition be "once the range straddles zero" rather than "once smin
-> is negative"?
+Ratheesh Kannoth (2):
+  octeontx2: use atomic bitops for PF/VF and rep flags
+  octeontx2-pf: add mqprio bandwidth offload for NIX TX schedulers
 
-Yes this needs fixing.
+ .../net/ethernet/marvell/octeontx2/af/rvu_nix.c    |   6 +-
+ .../ethernet/marvell/octeontx2/nic/cn10k_ipsec.c   |   8 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_common.c   | 154 +++-
+ .../ethernet/marvell/octeontx2/nic/otx2_common.h   | 100 ++-
+ .../ethernet/marvell/octeontx2/nic/otx2_dcbnl.c    |   6 +
+ .../ethernet/marvell/octeontx2/nic/otx2_devlink.c  |   2 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_ethtool.c  |  29 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_flows.c    |  34 +-
+ .../net/ethernet/marvell/octeontx2/nic/otx2_pf.c   |  94 +--
+ .../net/ethernet/marvell/octeontx2/nic/otx2_tc.c   | 776 ++++++++++++++++++++-
+ .../net/ethernet/marvell/octeontx2/nic/otx2_txrx.c |  16 +-
+ .../net/ethernet/marvell/octeontx2/nic/otx2_vf.c   |  10 +-
+ .../net/ethernet/marvell/octeontx2/nic/otx2_xsk.c  |   4 +-
+ drivers/net/ethernet/marvell/octeontx2/nic/qos.c   |  11 +
+ .../net/ethernet/marvell/octeontx2/nic/qos_sq.c    |   4 +-
+ drivers/net/ethernet/marvell/octeontx2/nic/rep.c   |  32 +-
+ drivers/net/ethernet/marvell/octeontx2/nic/rep.h   |   3 +-
+ 17 files changed, 1138 insertions(+), 151 deletions(-)
 
-Thx,
--Vineet
+---
 
->> +	if (reg_smin(reg) >= field_smin && reg_smax(reg) <= field_smax)
->> +		return;
->> +
->>   	top_smax_value = ((u64)reg_smax(reg) >> num_bits) << num_bits;
->>   	top_smin_value = ((u64)reg_smin(reg) >> num_bits) << num_bits;
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34506184282
+v14 -> v15: Addressed sashiko comments.
+- Split atomic PF/VF and representor flag access into a preparatory patch
+  so mqprio netdev-restart and mbox paths can update OTX2_FLAG_INTF_DOWN
+  and OTX2_FLAG_PORT_UP without data races on the shared flags word.
+- Clear mqprio software state when hardware shaper teardown fails, warn,
+  and still bounce the netdev on delete so offload does not remain stuck
+  active after a mailbox error.
+	https://lore.kernel.org/netdev/20260904031553.3196916-1-rkannoth@marvell.com/
 
+v13 -> v14: Addressed sashiko comments.
+- Quiesce TX with dev_deactivate() before ndo_stop() and dev_activate()
+  after ndo_open() in otx2_mqprio_restart_netdev() to avoid xmit racing
+  queue teardown.
+- Use atomic set_bit()/clear_bit() for OTX2_FLAG_INTF_DOWN and
+  OTX2_FLAG_PORT_UP updates on netdev-restart and mbox paths.
+- Block concurrent mqprio bandwidth offload and HTB shaping.
+- Fail ndo_open() if otx2_mqprio_up() cannot restore MDQ shapers.
+- Rebuild the TX scheduler via netdev restart in otx2_mqprio_restore_old()
+  when rolling back a failed replace on a running interface.
+- Return an error from otx2_mqprio_down() if clearing hardware shapers
+  fails instead of clearing software state anyway.
+	https://lore.kernel.org/netdev/20260904031553.3196916-1-rkannoth@marvell.com/
+
+v12 -> v13: Addressed sashiko comments.
+	https://sashiko.dev/#/patchset/20260903023324.3078284-1-rkannoth%40marvell.com
+
+v11 -> v12: Addressed sashiko comments.
+	https://sashiko.dev/#/patchset/20260902015500.2985371-1-rkannoth%40marvell.com
+v10 -> v11: Addressed sashiko comments.
+	https://sashiko.dev/#/patchset/20260831131014.2639581-1-rkannoth%40marvell.com
+
+v9 -> v10: Addressed sashiko/jacub comments.
+	https://sashiko.dev/#/message/20260817032747.1765883-1-rkannoth%40marvell.com
+
+v8 -> v9: Addressed Sashiko comments
+	https://lore.kernel.org/netdev/aoJ6FhtWue0FHDQV@rkannoth-OptiPlex-7090/
+v7 -> v8: Addressed Sashiko comments
+	https://sashiko.dev/#/patchset/20260811085050.3212280-1-rkannoth%40marvell.com
+v6 -> v7: Addressed Sashiko comments
+	https://sashiko.dev/#/message/20260810034738.1786029-1-rkannoth%40marvell.com
+v5 -> v6: Addressed Sashiko comments
+	https://lore.kernel.org/netdev/20260806095434.1144397-1-rkannoth@marvell.com/
+v4 -> v5: Addressed sashiko comments
+	https://sashiko.dev/#/patchset/20260803042724.3380209-1-rkannoth%40marvell.com
+v3 -> v4: Addressed sashiko comments
+	https://lore.kernel.org/netdev/20260729105139.2302908-1-rkannoth@marvell.com/
+v2 -> v3: Addressed sashiko comments
+	https://lore.kernel.org/netdev/amnYX866mYx02cBe@rkannoth-OptiPlex-7090/T/#m67310cbec48b21c7720858ab3a1ea083a0f8dc10
+v1 -> v2: Addressed sashiko comments
+	https://lore.kernel.org/netdev/20260724075010.2665758-1-rkannoth@marvell.com/
+
+--
+2.43.0
