@@ -1,21 +1,21 @@
-Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54BBC493657
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:50:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33290496D23
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:50:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789141803; cv=none; b=TkS01XZrRUK40b8lUir1CUPc8V+F6+pCVSUWgWJ6G6JNd/FCtFmqQNy+rBkZutfjGuwxtbaOI3ziveTcBUESI09YHB45ll72OLlcY+ZqdLvDTg8CwaTRQAuZAE8sjsB/SEA+IjE2YpCLfCD0pLDsuWjn/eBN6mrkuWV+J0ltofw=
+	t=1789141811; cv=none; b=s9AGhQ8LT7xnZ2v4s225ZPQdoEB0LVIJ/WllkGD5hCKVBGg4Br7g2HEnrR/ecScNc6Dh2Vz1/XkburdjNXXbqRTsGi+zUtIhSYCDU276xWgbzZXVcl2LFRQrLPOnjblkfOMt01OATqxUw+cWiEouTwFxsD/dEq8V5c1jebKwzQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789141803; c=relaxed/simple;
-	bh=JV1OchikxMGDOJV3oLdNh//RdVJ8eh6Yyj1YUythJI0=;
+	s=arc-20240116; t=1789141811; c=relaxed/simple;
+	bh=i5iCq5HkbQ3QXqz7CtH0K3OdY5Sc41IuaOzRKFiSLeo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QzM5c4Ji+DveYdBZyxXa9nNwalpbxI85/d1hGM8spplUUyhr0uoikPn0fAZnF85lqB4DjqCM7eLqVpfGg6Nn0LmNGF2amvoSTZAMuhFVerI4BbCQCpuv0KRPcZtEeGMbglak1Cn9Ny0VdmDGwtNKzN/PUrjJQ2OY8ma5FIn2Okk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
+	 MIME-Version; b=rTyEXAAqxFFnnjlflYiNyPNfHmVDsJW5b160zSBz1Rz/WO9t4zrB7thnnNXBKv4Es7FGnL6us3jioR4diLJoJOC6PYQxMvQtTjGFdZVejv1OtK/YSUmTOIDTyIK+Sdctv6o4d6OuWouUTq3MVpzQg16QI4/kfUA/GcYI1rw1Hhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id DA15B2A1843033; Fri, 11 Sep 2026 08:49:49 -0700 (PDT)
+	id 2B0F12A18430A3; Fri, 11 Sep 2026 08:50:05 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v3 07/15] bpf: Rename bpf_call_summary::num_params to arg_slot_cnt
-Date: Fri, 11 Sep 2026 08:49:49 -0700
-Message-ID: <20260911154949.2008169-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 10/15] bpf, x86: Move kfunc arguments into the x86-64 calling convention
+Date: Fri, 11 Sep 2026 08:50:05 -0700
+Message-ID: <20260911155005.2010021-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260911154914.2004336-1-yonghong.song@linux.dev>
 References: <20260911154914.2004336-1-yonghong.song@linux.dev>
@@ -37,122 +37,133 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The field 'num_params' counts the argument registers and outgoing
-stack slots a helper or kfunc call takes. The next patch gives a
-16-byte parameter two slots, so the name stops describing what the
-field holds.
+Do the proper move from the BPF calling convention to the x86-64 calling
+convention to satisfy the native requirement.
 
-Rename 'num_params' to 'arg_slot_cnt'. No functional change.
+In addition, the arena argument walk counts eightbytes rather than
+parameters, as an argument may take two registers.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf_verifier.h |  2 +-
- kernel/bpf/liveness.c        | 10 +++++-----
- kernel/bpf/verifier.c        |  8 ++++----
- 3 files changed, 10 insertions(+), 10 deletions(-)
+ arch/x86/net/bpf_jit_comp.c | 73 +++++++++++++++++++++++++++++++++++--
+ 1 file changed, 70 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index edb904424aba..64dfa29f6b45 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1066,7 +1066,7 @@ static inline bool bpf_ret_reg_pair(struct bpf_veri=
-fier_env *env, int subprog)
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index bba351944202..0496607a7003 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -1839,6 +1839,60 @@ static int emit_spectre_bhb_barrier(u8 **pprog, u8=
+ *ip,
+ 	return 0;
  }
 =20
- struct bpf_call_summary {
--	u8 num_params;
-+	u8 arg_slot_cnt;
- 	bool is_void;
- 	bool fastcall;
- };
-diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-index 7165ea325961..44ecdc5b4ec2 100644
---- a/kernel/bpf/liveness.c
-+++ b/kernel/bpf/liveness.c
-@@ -1434,21 +1434,21 @@ static int record_call_access(struct bpf_verifier=
-_env *env,
++static const struct bpf_jit_arg_abi x86_arg_abi =3D {
++	.nr_arg_regs		=3D 6,
++	.backfill_after_stack	=3D true,
++	.even_stack_align	=3D true,
++};
++
++static const u8 x86_arg_reg[] =3D {
++	BPF_REG_1, BPF_REG_2, BPF_REG_3, BPF_REG_4, BPF_REG_5, X86_REG_R9,
++};
++
++/*
++ * Move the arguments the x86-64 ABI places somewhere other than the arg=
+ument
++ * slot the BPF calling convention gave them. @stack_base addresses the
++ * outgoing stack argument area from RBP. Return the number of emitted b=
+ytes.
++ */
++static int emit_kfunc_arg_moves(const struct btf_func_model *fm, s32 sta=
+ck_base, u8 **pprog)
++{
++	struct bpf_jit_arg_move moves[BPF_JIT_MAX_ARG_MOVES];
++	const u8 nreg =3D x86_arg_abi.nr_arg_regs;
++	u8 *prog =3D *pprog, *start =3D prog;
++	u32 i, n;
++
++	n =3D bpf_jit_plan_arg_moves(&x86_arg_abi, fm, moves);
++
++	for (i =3D 0; i < n; i++) {
++		u8 dst =3D moves[i].dst, src =3D moves[i].src, reg;
++		bool dst_mem =3D dst !=3D BPF_JIT_ARG_TMP && dst >=3D nreg;
++		bool src_mem =3D src !=3D BPF_JIT_ARG_TMP && src >=3D nreg;
++
++		/* Take the value into a register. */
++		if (src =3D=3D BPF_JIT_ARG_TMP) {
++			reg =3D AUX_REG;
++		} else if (src_mem) {
++			reg =3D dst_mem || dst =3D=3D BPF_JIT_ARG_TMP ? BPF_REG_AX : x86_arg_=
+reg[dst];
++			emit_ldx(&prog, BPF_DW, reg, BPF_REG_FP,
++				 stack_base + (src - nreg) * 8);
++		} else {
++			reg =3D x86_arg_reg[src];
++		}
++
++		/* And leave it where the argument belongs. */
++		if (dst =3D=3D BPF_JIT_ARG_TMP)
++			emit_mov_reg(&prog, true, AUX_REG, reg);
++		else if (dst_mem)
++			emit_stx(&prog, BPF_DW, BPF_REG_FP, reg,
++				 stack_base + (dst - nreg) * 8);
++		else if (reg !=3D x86_arg_reg[dst])
++			emit_mov_reg(&prog, true, x86_arg_reg[dst], reg);
++	}
++
++	*pprog =3D prog;
++	return prog - start;
++}
++
+ /*
+  * Rebase the __arena args of a kfunc call to arena kernel addresses,
+  * rN =3D kern_vm_start + (u32)rN, with R12 holding kern_vm_start. A nul=
+lable
+@@ -1850,11 +1904,17 @@ static int emit_kfunc_arena_args(struct bpf_prog =
+*bpf_prog,
  {
- 	struct bpf_insn *insn =3D &env->prog->insnsi[insn_idx];
- 	struct bpf_call_summary cs;
--	int r, err, num_params =3D 5;
-+	int r, err, arg_slot_cnt =3D 5;
+ 	u8 *prog =3D *pprog;
+ 	u8 *start =3D prog;
+-	int i;
++	int i, slot;
 =20
- 	if (bpf_pseudo_call(insn))
- 		return 0;
+-	for (i =3D 0; i < min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS); i++) =
+{
++	for (i =3D 0, slot =3D 0; i < fm->nr_args; i++) {
++		u32 arg_regs =3D (fm->arg_size[i] + 7) / 8;
+ 		u8 flags =3D fm->arg_flags[i];
+-		u32 reg =3D BPF_REG_1 + i;
++		u32 reg;
++
++		if (slot + arg_regs > MAX_BPF_FUNC_REG_ARGS)
++			break;
++		reg =3D BPF_REG_1 + slot;
++		slot +=3D arg_regs;
 =20
- 	if (bpf_get_call_summary(env, insn, &cs))
--		num_params =3D cs.num_params;
-+		arg_slot_cnt =3D cs.arg_slot_cnt;
+ 		if (!(flags & BTF_FMODEL_ARENA_ARG))
+ 			continue;
+@@ -2837,6 +2897,8 @@ static int do_jit(struct bpf_verifier_env *env, str=
+uct bpf_prog *bpf_prog, int *
+ 				if (err < 0)
+ 					return err;
+ 				ip +=3D err;
++				ip +=3D emit_kfunc_arg_moves(fm, outgoing_arg_base -
++							   outgoing_rsp, &prog);
+ 			}
+ 			if (priv_frame_ptr) {
+ 				push_r9(&prog);
+@@ -4351,6 +4413,11 @@ bool bpf_jit_supports_kfunc_ret_reg_pair(void)
+ 	return true;
+ }
 =20
--	for (r =3D BPF_REG_1; r < BPF_REG_1 + min(num_params, MAX_BPF_FUNC_REG_=
-ARGS); r++) {
-+	for (r =3D BPF_REG_1; r < BPF_REG_1 + min(arg_slot_cnt, MAX_BPF_FUNC_RE=
-G_ARGS); r++) {
- 		err =3D record_arg_access(env, instance, insn, &at[r], r - 1, insn_idx=
-);
- 		if (err)
- 			return err;
- 	}
-=20
--	for (r =3D 0; r < MAX_STACK_ARG_SLOTS && r < num_params - MAX_BPF_FUNC_=
-REG_ARGS; r++) {
-+	for (r =3D 0; r < MAX_STACK_ARG_SLOTS && r < arg_slot_cnt - MAX_BPF_FUN=
-C_REG_ARGS; r++) {
- 		err =3D record_arg_access(env, instance, insn, &at[MAX_BPF_REG + r],
- 					r + MAX_BPF_FUNC_REG_ARGS, insn_idx);
- 		if (err)
-@@ -2199,7 +2199,7 @@ static void compute_insn_live_regs(struct bpf_verif=
-ier_env *env,
- 			def =3D ALL_CALLER_SAVED_REGS;
- 			use =3D def & ~BIT(BPF_REG_0);
- 			if (bpf_get_call_summary(env, insn, &cs))
--				use =3D GENMASK(min_t(u8, cs.num_params, MAX_BPF_FUNC_REG_ARGS), 1);
-+				use =3D GENMASK(min_t(u8, cs.arg_slot_cnt, MAX_BPF_FUNC_REG_ARGS), 1=
-);
- 			def =3D mask_widen(def);
- 			use =3D mask_widen(use);
- 			break;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 500092a2c924..c520c37bb3c9 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17973,11 +17973,11 @@ bool bpf_get_call_summary(struct bpf_verifier_e=
-nv *env, struct bpf_insn *call,
- 			       (bpf_verifier_inlines_helper_call(env, call->imm) ||
- 				bpf_jit_inlines_helper_call(call->imm));
- 		cs->is_void =3D fn->ret_type =3D=3D RET_VOID;
--		cs->num_params =3D 0;
-+		cs->arg_slot_cnt =3D 0;
- 		for (i =3D 0; i < ARRAY_SIZE(fn->arg_type); ++i) {
- 			if (fn->arg_type[i] =3D=3D ARG_DONTCARE)
- 				break;
--			cs->num_params++;
-+			cs->arg_slot_cnt++;
- 		}
- 		return true;
- 	}
-@@ -17989,7 +17989,7 @@ bool bpf_get_call_summary(struct bpf_verifier_env=
- *env, struct bpf_insn *call,
- 		if (err < 0)
- 			/* error would be reported later */
- 			return false;
--		cs->num_params =3D btf_type_vlen(meta.func_proto);
-+		cs->arg_slot_cnt =3D btf_type_vlen(meta.func_proto);
- 		cs->fastcall =3D meta.kfunc_flags & KF_FASTCALL;
- 		cs->is_void =3D btf_type_is_void(btf_type_by_id(meta.btf, meta.func_pr=
-oto->type));
- 		return true;
-@@ -18098,7 +18098,7 @@ static void mark_fastcall_pattern_for_call(struct=
- bpf_verifier_env *env,
- 	 * - includes R1-R5 if corresponding parameter has is described
- 	 *   in the function prototype.
- 	 */
--	clobbered_regs_mask =3D GENMASK(cs.num_params, cs.is_void ? 1 : 0);
-+	clobbered_regs_mask =3D GENMASK(cs.arg_slot_cnt, cs.is_void ? 1 : 0);
- 	/* e.g. if helper call clobbers r{0,1}, expect r{2,3,4,5} in the patter=
-n */
- 	expected_regs_mask =3D ~clobbered_regs_mask & ALL_CALLER_SAVED_REGS;
-=20
++const struct bpf_jit_arg_abi *bpf_jit_arg_abi(void)
++{
++	return &x86_arg_abi;
++}
++
+ bool bpf_jit_supports_stack_args(void)
+ {
+ 	return true;
 --=20
 2.52.0
 
