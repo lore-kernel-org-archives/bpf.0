@@ -1,142 +1,165 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-145.mta0.migadu.com [91.218.175.145])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D4C33A7D73
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 09:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE34A3E0C7A
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 10:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789120403; cv=none; b=cs4sibYsTs+5Cp+716VRRLgIZf8/LIKmDbMHKTdr2/xchKW5FZvk9Zuqu976pzbfgbag7m5EeDnjxxcentV2HcA9vYcMdhZY737BHCIMK/oDCTUUFrSL3kMg0JMbvmGZcA36Py+5D/bQoQWFyPQwTJmNaQ0XwmMv3okkteiJ1NM=
+	t=1789120828; cv=none; b=uslhMsrC0XVkTO7s+y/5pS8/xgTKzwlow9Y4CMGvjhEoJUgW+b/IxCc+gZjdooi0A0C7bzGRhMsHRcLMCYe/38cHnE1nCLwK2saWzDLUGQ8+GED4l8uOmPWBXmTPtk5uXfDEIfFwchOFWjcHS67TjeKDykE7aTtfeyuEuOtvK6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789120403; c=relaxed/simple;
-	bh=5W92TlywX+R5WCObWv/kGX/hST6LPx/5MCVw8z+toPk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Jth+l7px0jBScTW2Tw7kEuDCZNSxYF9F48AvTC+fgK6z4Hpjn+FqBmiFsVWztXJXJ87zSa2K0fJaT2n5UIii27eofss+7as73G4FzTZgnYtAqo6rVv4YJhgD3iURqyR1lLHYEfr0yYf7EGh4DoCmBb07rwGlVKDvtfn1WLEHrjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Lhak6Pkr; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZdotVWtI; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1789120828; c=relaxed/simple;
+	bh=a4FPr2KXlsFkRV0vRSFXbaQhHPOfudnmvDVa+wHqJbs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=beHIO7+b4PhJth5LykLl2Viu2ik5UkgCm+1oQZtsBObvfnRUd0KwatFjuALzzO5d2GZzTyhAuSrfdVNMAp0t7L1IAzJm84VNfOHiGaSiTteCxmf5ENC8sopilNabUHNN/V2bGxW/OJJd6y7DTO9yRnVy+Bjafg5G4PsUL/+/Jc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Jan8ZJqV; arc=none smtp.client-ip=91.218.175.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Lhak6Pkr";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZdotVWtI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1789120401;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5W92TlywX+R5WCObWv/kGX/hST6LPx/5MCVw8z+toPk=;
-	b=Lhak6PkrXex8ohaXRSmlhXX6xtH/s9fRLz7+X6BRB6fJl8EnDRXJHGIPw7FxEfbKGSkkF9
-	fWQYdyjieznDKj5Fr1V0YDUkL0jFwJokmQNOqGeiFnCJMb3sWp/av4etBojLLHCVmhO05b
-	/0QievtyDUhPPla+Zy/l9XlEBtkwD58=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-690-cg1b13R1MBy00t7OeQgQ9w-1; Fri, 11 Sep 2026 05:53:20 -0400
-X-MC-Unique: cg1b13R1MBy00t7OeQgQ9w-1
-X-Mimecast-MFC-AGG-ID: cg1b13R1MBy00t7OeQgQ9w_1789120399
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-4839f9edb08so370832f8f.0
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 02:53:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1789120399; x=1789725199; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=5W92TlywX+R5WCObWv/kGX/hST6LPx/5MCVw8z+toPk=;
-        b=ZdotVWtIPpFntTMGMHqNYmhC7e1wfNzYj76pJPwupRoRinVoUa7aPLc2pT+lsyFSxW
-         aFSvyaR4kUzzPyhxuPQMJhM1FnMqdAmLu4dwfwQAnzkj6RH4jO3dotpYV5VMmCfx5Znq
-         edNcM/HKWmkujll0MISg41JmundXTxTX+STRW2FRpAm4jUa/oiJKPCAzCW2slztkozLI
-         1lUe69jnKhGR3HQRRHtCgXbqTIr/K8b/Rl3MiaJk/rOvB7z/zvez4HQFGc+iGXDouw3u
-         KiG2fgvBwe61QMiFvFC0YVuVRfRggeLBvRpvq9sZvleKd6/0/+jXSq0qU2mEMRh6ZIQ5
-         01gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789120399; x=1789725199;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :references:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5W92TlywX+R5WCObWv/kGX/hST6LPx/5MCVw8z+toPk=;
-        b=Ujr0Ha3GFiJpDOgk34JGS/7cKeg3gGIPE46ut2cccHomfy7xRJzQOQr7TYOf51HP0W
-         oaQvrsoQ/n+mldwXvqftMMbL9Euko7P0XAQDWyMk5SGejSj8+W1pxE1uEGlpr4XhkahY
-         ZKVrG6ny6ZvuS5tWxCzlYw1s0lXE0ETajQ/pxyyB7j4IjSWSAmdD3GiqUCA8I2+yTPdN
-         JeLrAe8xJVT1pNgUfPAR5kecc0QP3psMGGzobWU5q90D6vsHilRExmtsX6uRlYgCIoW0
-         s7pt4dPjcKjzYqt1AuO7nK4YnqHe2AIvuHSECbIHkvUeeLBtaVfuN/hI72v/F/mOiQzs
-         TeYA==
-X-Forwarded-Encrypted: i=1; AKwUvBxX+ZS2G2rTy/J5GoYY/3pZMCDP6rbDAfRpRoe1tSR20F4Ek0AiBVieqetvViR4XDQ2sp0=@vger.kernel.org
-X-Gm-Message-State: AFuF++lFUeBdbiWuhiZrKWxroUqqfc+6fq3t/laeWyF1CjDoLWj0VTSy
-	s9Xy+V2tyL5ZDowbmS5gg/0OMG4xBRmNiY9aogOSJlDt7R+DGyZSQsV8AndCWjftz9a58rnObUx
-	AFQHcEeJGAEbR1KR6f8szjjFJ14LKDZo6TnXBCFkKMsBbxr5hYn1djA==
-X-Gm-Gg: AYBFou3BxxCFvDv971aA8vOCmp0EWyGHwUoZp6FPUK4T4Qxoqx1Nx5mGm2t73fvSLcv
-	R7VrBzB6F0/gjap45+VXsNy3C16hyDuYR7sxxJOr8NbasePKgrGfF4DXPYyPqnEnAipy4T8ujpQ
-	WSMdMxpBaAA/YWD0lL97UgjBfK35ZbA63sI9TKUWcJAZqknyvrOZ5s5GsFe76k1uxoOM3cyr9GU
-	8R2j+J1S87WSeBYKif+5BcwxysbaoqcjmBLmqLEtpVJ81gdFUS8+vl49Ez4foD1l1vPy3TqxaR/
-	VVTBPFknJoiSvvnwWWdoOK9y/F0AyhhJKdT0UkYq9zapGHJASesqUwPDcqAYxHXVDjdD+3ghEtQ
-	Qeg3ne6rSV1qSaIic8NkXYJHi
-X-Received: by 2002:a05:6000:471c:b0:484:3317:a19 with SMTP id ffacd0b85a97d-486eb2ff57dmr3413187f8f.26.1789120398968;
-        Fri, 11 Sep 2026 02:53:18 -0700 (PDT)
-X-Received: by 2002:a05:6000:471c:b0:484:3317:a19 with SMTP id ffacd0b85a97d-486eb2ff57dmr3413148f8f.26.1789120398603;
-        Fri, 11 Sep 2026 02:53:18 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-486eb33ee8bsm4693194f8f.15.2026.09.11.02.53.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 02:53:17 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 1FFDA9B9976; Fri, 11 Sep 2026 11:53:17 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, "David S.
- Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Jesper
- Dangaard Brouer <hawk@kernel.org>, John Fastabend
- <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Andrii
- Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 3/4] selftests/bpf: Adopt
- bpf_program__add_flags() helper
-In-Reply-To: <0e8f9a9c-6295-49ad-b29b-84613dfbfd65@linux.dev>
-References: <20260910183222.307208-1-toke@redhat.com>
- <20260910183222.307208-3-toke@redhat.com>
- <0e8f9a9c-6295-49ad-b29b-84613dfbfd65@linux.dev>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Fri, 11 Sep 2026 11:53:17 +0200
-Message-ID: <871pb0dshe.fsf@toke.dk>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Jan8ZJqV"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=a4FPr2KXlsFkRV0vRSFXbaQhHPOfudnmvDVa+wHqJbs=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789120824; v=1; x=1789725624;
+ b=Jan8ZJqVUQv4W3QPPSkmZr9su4pC/FyGyJCGpseluAbczInlnR4O9VqbP4H1vHkTzIhXnDtK
+ Rzj6ZhblK+PrIBdL0xLLoba4L0Au3t42uoeJexizfCjactPvZmZGwLGIA3l0GJpGQwhlhKDDFgE
+ YIxMnZLSQI/aEDRuvt58Wh3k=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id fb675a7ecc21192d;
+	Fri, 11 Sep 2026 10:00:20 +0000
+X-Mizu-Trace-ID: fb675a7ecc21192d
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <d2bfd056-2147-4002-a9ee-fa13bbf50dd9@linux.dev>
+Date: Fri, 11 Sep 2026 15:30:15 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 07/13] bpf: track low-32 scalar equality
+ across sign-extending movs
+To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@kernel.org, mason@kernel.org
+References: <20260910164635.459558-8-vineet.gupta@linux.dev>
+ <654adc93a03b1bbeef530ffb6adb9a2d204e5bb01d7707dc0b16889fb05fc3dd@mail.kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <654adc93a03b1bbeef530ffb6adb9a2d204e5bb01d7707dc0b16889fb05fc3dd@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Jiayuan Chen <jiayuan.chen@linux.dev> writes:
-
-> On 9/11/26 2:32 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
->> Adopt the newly added bpf_program__add_flags() helper everywhere the
->> selftests non-destructively modifies program flags (which turns out to
->> be every use of bpf_program__set_flags() in the tests).
+On 9/10/26 11:22 PM, bot+bpf-ci@kernel.org wrote:
+>> @@ -16248,12 +16258,23 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+>>   						return -EACCES;
+>>   					} else if (src_reg->type == SCALAR_VALUE) {
+>>   						bool no_sext;
+>> +						/*
+>> +						 * A 32-bit sign extension keeps the low 32
+>> +						 * bits, so record a low-32 link as the
+>> +						 * zero-extending mov does. A self-mov
+>> +						 * qualifies only if src is already linked.
+>> +						 */
+>> +						bool subreg_link = (insn->off >> 3) == 4 &&
+>> +								   (src_reg != dst_reg ||
+>> +								    src_reg->id);
 >>
->> Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
->> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+>>   						no_sext = reg_umax(src_reg) < (1ULL << (insn->off - 1));
+>> -						if (no_sext)
+>> +						if (no_sext || subreg_link)
+>>   							assign_scalar_id_before_mov(env, src_reg);
+>                                                          ^^^^
 >
+> Can widening this guard drop an existing ADD_CONST link on the source
+> register?  With 'no_sext || subreg_link', assign_scalar_id_before_mov() now
+> also runs on src_reg when !no_sext, and that helper discards the source's
+> delta tracking:
 >
-> Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> kernel/bpf/verifier.c:assign_scalar_id_before_mov() {
+> 	...
+> 	if (src_reg->add_const)
+> 		clear_scalar_id(src_reg);
+> 	if (!src_reg->id && !tnum_is_const(src_reg->var_off))
+> 		src_reg->id = ++env->id_gen;
+> 	...
+> }
 >
+> clear_scalar_id() zeroes id, delta, add_const and subreg, and the following
+> statement then mints a brand-new id, so src_reg is unlinked from the
+> register set it was tracking.  Before this commit the !no_sext arm left
+> src_reg untouched.
 >
-> =E2=80=8CAI pays excessive attention to wording.
+> For a BPF_ALU64 | BPF_MOV | BPF_X with insn->off == 32:
 >
-> maybe just delete whole parenthetical notes=E2=80=8C "(which turns out ..=
-.)"
+> 	r1 = r2			/* r1, r2 share id N */
+> 	r1 += 8			/* r1->add_const = ADD_CONST_64, r1->delta = 8 */
+> 	r3 = (s32)r1		/* r1 is wide -> !no_sext, subreg_link true */
+> 	if r2 < 100 goto out	/* sync_linked_regs() no longer reaches r1 */
+> 	... use r1 ...
+>
+> At the mov, r1 loses its ADD_CONST_64 / delta = 8 link and gets a fresh id,
+> so the following 'if r2 < 100' compare no longer refines r1 to [8, 107].
+> Is that the intent?  This is the compiler idiom described in the comment
+> above adjust_reg_min_max_vals()'s delta handling.
+>
+> The clear also does not look necessary for the new link: since !no_sext, the
+> SUBREG_SEXT link is established through the freshly minted id.
+>
+> Would excluding add_const sources be enough, something like:
+>
+> 	bool subreg_link = (insn->off >> 3) == 4 && !src_reg->add_const &&
+> 			   (src_reg != dst_reg || src_reg->id);
 
-Well, the two instances the bot is complaining about turns out to have
-been added after I wrote that commit message; I didn't re-run the 'git
-grep' after rebasing for v2, so I didn't notice this.
+Indeed it needs to fixed with the additional !add_const check.
 
-I'm not sure if those two are candidates for conversion as well, TBH. I
-can respin with your suggested change to the commit message, or just
-convert those two as well. Or just leave it as-is, I suppose. What do
-the maintainers think? :)
+> The zero-extending arm added earlier in the series uses the same guard
+> shape, so a fix likely wants to cover both.  Looking forward through
+> 2c5433cf9fbb..1d3c4a0831be, the later commits extend the same mechanism to
+> narrowing stack fills and spills and reuse the identical guard, so none of
+> them change this.
+>
+>>   						*dst_reg = *src_reg;
+>> -						if (!no_sext)
+>> +						if (!no_sext && subreg_link && src_reg->id)
+>> +							dst_reg->subreg = SUBREG_SEXT;
+>                                                          ^^^^
+>
+> On a related note, for 'r0 = (s32)r0' where r0 carries add_const,
+> subreg_link is evaluated before the clear and sees the old src_reg->id as
+> non-zero, so it is true.  assign_scalar_id_before_mov() then clears and
+> re-mints the id, and SUBREG_SEXT is applied to a register that is the sole
+> holder of that id.
+>
+> The changelog says:
+>
+>> Unlike the zero-extending arm, a self-mov can form a link here, but only
+>> when src is already linked: r0 = (s32)r0 is how a sign-extended int return
+>> lands. On an unlinked register there is nothing to link to, and minting an
+>> id would leave the register describing itself.
+> bpf_clear_singular_ids() drops singleton ids before state comparison, so
+> this does not look unsound, but does it match the rationale above?
 
--Toke
+yes the changelog needs to be fixed.
+
+Thx,
+-Vineet
+
+>> +						else if (!no_sext)
+>>   							clear_scalar_id(dst_reg);
+>>   						coerce_reg_to_size_sx(dst_reg, insn->off >> 3);
+>>   					} else {
+> [ ... ]
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34506184282
 
