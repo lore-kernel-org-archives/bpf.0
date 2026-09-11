@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-249.mta0.migadu.com [91.218.175.249])
+Received: from mta0.migadu.com (out-90.mta0.migadu.com [91.218.175.90])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D04A47728F
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 09:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2F337A481
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 09:30:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.90
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789118444; cv=none; b=RhP2+uKz9Gqno1QHmyQOqB5jhyV5QNMle2NGREZNHYt40VC8lEITvTYp+iq+7i6H9+uhNGziu2FtBI3t3YbGBtVdos31eOcAEXp2fueAHOKOyaBUhT8D1zLeiG9PC13yOEIZBXygwFoa9tx4d1T4tJ6XfkGy9bBbs7TVk46loio=
+	t=1789119024; cv=none; b=gW/deXLwlwqtS3qC/Iuv0A+BCznNonoeW1C/ghbP7y6gCEPws9SMGS3txLUE4DlFNjkmQI7I+3azgU29fOR3pFEx8t1ON6soZFg9WNjQ/qCPRSNlfwTNP+haSi2vPkm3qyWtihECj9w6YRVPp6VwtZalmP7Gkl0PjORcubZh5k0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789118444; c=relaxed/simple;
-	bh=UFu6gOupqmD/1GxGmRJLoTDZNWK4bDj00hEqeQH1j/k=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Ly8rrgIzBRzu7csjdOZ89n/LhQV3KVwPvzLx7/pVkZprFp2mhgiqEeOtlO2kzn6FZ74yZa/6AZf0zFLw/ZHmgOvmDR/SywYbp5dOCnggORtyo5brdJR/T41IZX36O6v9ILauynnn6Ft4nhUAJdVxb7NCZDJqXIhYhpqDQpBPkdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=E2ulxXNj; arc=none smtp.client-ip=91.218.175.249
+	s=arc-20240116; t=1789119024; c=relaxed/simple;
+	bh=UgDP47cPkmBb/mueTtjUDjQ+T7ZjtzXnEDLcKSfkTG0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=j/3WeIF0/3SJcFAddEksL1pQ8304fGfzh4MbC73BPh98GW2T5x3diHGSE72HYcM/qYv4wPFpwxcqsJo1A2hkNoxupemhOpUWzIARlZJuBC3KrrUo7nwMONzT5uehFeVNubNgDrDYTbsWfHeUo5u1sRpqVZNFRoff317r5meGkSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=s3rUynAM; arc=none smtp.client-ip=91.218.175.90
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="E2ulxXNj"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="s3rUynAM"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=UFu6gOupqmD/1GxGmRJLoTDZNWK4bDj00hEqeQH1j/k=;
+DKIM-Signature: a=rsa-sha256; bh=UgDP47cPkmBb/mueTtjUDjQ+T7ZjtzXnEDLcKSfkTG0=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789118438; v=1; x=1789723238;
- b=E2ulxXNjXQ0I2slO6KOU+cyIDHVI/odAdpIPOCDzn2tXeMHcDm6AeqKldGkOW1kYLUk42YS4
- 1F+kSVAH9FlosF02q7trFc2LJpzW2f/mpbWZct47TRtwQHhIbGqT78muOaxyZLVqh2boXy2AFRR
- JrVAZDDPDN1HRHzeh3XFm7Fo=
+ t=1789119019; v=1; x=1789723819;
+ b=s3rUynAMUddhG/IT+Lxn7P+wt+NzaIJOze3GYTNh+twvdDK10HnRWejtV6xIyUN2Cxz4a8iP
+ Qa6K0SyURpWYUzCfzdsefEultbZmoUVvxejISLP5MIwBIvewK4E9crU/rnM+enxcz7l91OAjYVv
+ nR7BH45jJ+xtShoDRT102uFo=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6ca65b37e596c222;
-	Fri, 11 Sep 2026 09:20:38 +0000
-X-Mizu-Trace-ID: 6ca65b37e596c222
+Received: by smtp.migadu.com with ESMTPS id b64bfc29917c1b89;
+	Fri, 11 Sep 2026 09:30:03 +0000
+X-Mizu-Trace-ID: b64bfc29917c1b89
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <b941d2aa-db3f-4473-ab4b-54105e277bf8@linux.dev>
-Date: Fri, 11 Sep 2026 17:20:28 +0800
+Message-ID: <c0a15bf9-0922-42a7-b2a9-d7eff50669a5@linux.dev>
+Date: Fri, 11 Sep 2026 14:59:57 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,225 +38,156 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, cgroups@vger.kernel.org, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, linux-kselftest@vger.kernel.org,
- cuitao@kylinos.cn
-Subject: Re: [RFC PATCH v2 0/5] blk-iocost: BPF struct_ops cost model
-To: tj@kernel.org, josef@toxicopanda.com, axboe@kernel.dk
-References: <20260910125817.223354-1-cui.tao@linux.dev>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <20260910125817.223354-1-cui.tao@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
+ across zero-extending movs
+To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@kernel.org, mason@kernel.org
+References: <20260910164635.459558-4-vineet.gupta@linux.dev>
+ <ad011852b5532901853fbc1c16d5a27d50231065dad9b1e4bbfee1c02b4735e5@mail.kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <ad011852b5532901853fbc1c16d5a27d50231065dad9b1e4bbfee1c02b4735e5@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+On 9/10/26 11:22 PM, bot+bpf-ci@kernel.org wrote:
+>> @@ -17115,6 +17126,23 @@ static void collect_linked_regs(struct bpf_verifier_env *env,
+>>   	}
+>>   }
+>>
+>> +/*
+>> + * Set @reg to the zero-extension of @known_reg's low 32 bits: it shares those
+>> + * bits and its high half is zero. Copy the base to keep its precise low-32
+>> + * tnum, then re-apply the zext_32_to_64() the 32-bit mov itself used.
+>> + * @reg->id and ->delta already equal @known_reg's; only ->subreg is its own.
+>> + */
+>> +static void reconstruct_zext32(struct bpf_reg_state *reg,
+>> +			       struct bpf_reg_state *known_reg)
+>> +{
+>> +	enum bpf_subreg subreg = reg->subreg;
+>> +
+>> +	*reg = *known_reg;
+>> +	reg->subreg = subreg;
+>> +	zext_32_to_64(reg);
+>> +	reg_bounds_sync(reg);
+>> +}
+>> +
+>>   /* For all R in linked_regs, copy known_reg range into R
+>>    * if R->id == known_reg->id.
+>>    */
+>> @@ -17134,6 +17162,27 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+>>   			continue;
+>>   		if (reg->id != known_reg->id)
+>>   			continue;
+>> +		/*
+>> +		 * A ->subreg register shares only the base's low 32 bits, so it
+>> +		 * is rebuilt rather than copied. Not modelled together with a
+>> +		 * delta, so skip if either side has one (sound, less precise).
+>> +		 */
+>> +		if (reg->subreg) {
+>> +			if (reg->add_const || known_reg->add_const)
+>> +				continue;
+>> +			reconstruct_zext32(reg, known_reg);
+>> +			if (e->is_reg)
+>> +				mark_reg_scratched(env, e->regno);
+>> +			else
+>> +				mark_stack_slot_scratched(env, e->spi);
+>> +			continue;
+>> +		}
+>> +		/*
+>> +		 * The reverse: known_reg knows only its low 32 bits, which say
+>> +		 * nothing about reg's high half.
+>> +		 */
+>> +		if (known_reg->subreg)
+>> +			continue;
+>>   		/*
+>>   		 * Skip mixed 32/64-bit links: the delta relationship doesn't
+>>   		 * hold across different ALU widths.
+> Can reconstruct_zext32() lose bounds that reg already learned on its own?
+>
+> Looking at the code, reconstruct_zext32() does:
+>
+>      *reg = *known_reg;
+>      reg->subreg = subreg;
+>      zext_32_to_64(reg);
+>
+> This overwrites reg's state wholesale without intersecting it with what reg
+> already knew.
+>
+> For pre-existing full-64-bit links, sync_linked_regs() propagates changes
+> in both directions, so the base is always at least as narrow as every
+> member and the overwrite can only narrow. But the new low-32 link skips
+> the member->base direction:
+>
+>      if (known_reg->subreg)
+>          continue;
+>
+> so the base can end up strictly wider than the ->subreg member.
+>
+> Consider this sequence:
+>
+>    call bpf_get_prandom_u32;    /* r0 -> 64-bit unknown */
+>    r6 = r0;                     /* r6 is 64-bit unknown */
+>    w7 = w6;                     /* r7->id = r6->id, r7->subreg = SUBREG_ZEXT */
+>    if w7 > 7 goto out;          /* fall-through: r7 u32 range [0,7]
+>                                  * sync_linked_regs(known_reg=r7) skips r6 due
+>                                  * to `if (known_reg->subreg) continue;`
+>                                  * so r6 stays fully unknown */
+>    if r6 > 100 goto out;        /* fall-through: r6 narrows to [0,100]
+>                                  * sync_linked_regs(known_reg=r6) reaches r7
+>                                  * via reconstruct_zext32(r7, r6) which does
+>                                  * *r7 = *r6 then zext_32_to_64() */
+>
+> After the second jump, does r7 become [0,100] instead of staying [0,7]?
 
+Yes it does and that's a problem.
 
-在 2026/9/10 20:58, Tao Cui 写道:
-> From: Tao Cui <cuitao@kylinos.cn>
-> 
-> This is v2 of the RFC.  It incorporates the feedback from the first
-> review round: the attachment model, pricing ownership and per-cgroup
-> state handling have all been reworked, and the interface,
-> registration, dispatch and configuration changes are now folded
-> into a single patch.  Thanks for the detailed review.
-> 
+> If so, a jump on an unrelated wide register would widen the bounds of a
+> narrow copy that the verifier had already proved tighter, on a
+> straight-line path. That would reject programs that narrowed the 32-bit
+> copy first and the wide original second, then relied on the copy's
+> narrower bound for a memory access or helper argument.
 
-Thanks for running the automated review.
+Right, sound, but loss of precision.
 
-I've gone through the reports. Some point out real issues or places that
-can be improved, while others need a closer look. I'll sort through
-them and address the valid ones in the next revision, including the
-documentation updates where appropriate.
+> The changelog acknowledges the other precision loss this patch introduces
+> ("forming one costs the source its delta ... That loses tracking a wide
+> source used to keep") and the follow-up selftest commit 36b84852a200 pins
+> it down with zext_mov_breaks_add_const_src. But neither the changelog nor
+> reconstruct_zext32()'s comment ("Copy the base to keep its precise low-32
+> tnum"), nor any of the 10 new tests in 36b84852a200, mentions or covers
+> this path. The only test that checks the member's fate is
+> zext_narrow_dst_keeps_base, which verifies the base is not narrowed but
+> does not check what happens to the member afterwards.
 
-Thanks.
+Ok. zext_sync_keeps_narrower_member() added and same for sext variant as 
+reconstruct_sext32 gets similar fix.
 
-> Why a pluggable model at all
-> ----------------------------
-> 
-> When iocost landed in 2019, its commit message already promised that
-> "a later patch will also allow using bpf progs for cost models", and
-> the code has carried the split for it ever since: calc_vtime_cost()
-> is a dispatcher whose only implementation is calc_vtime_cost_builtin().
-> Seven years later the builtin linear model is still the only one.
-> This series fills that slot, following the TCP congestion control
-> model registration pattern: builtin algorithms remain the default
-> while new ones can be prototyped in BPF.
-> 
-> The measured problems
-> ---------------------
-> 
-> The builtin model prices each IO with a binary sequential/random base
-> picked by a single per-cgroup cursor and a 16MB seek threshold, plus
-> a per-page cost.  On a virtio-blk device with the HDD autop profile,
-> a 4k IO costs ~24us when judged sequential and ~2.7ms when judged
-> random, a 112x spread, so a wrong judgement becomes a wrong price.
-> Three classes of mispricing, all measured:
-> 
->  1. Heuristic rigidity.  Two legitimate sequential readers in one
->     cgroup (a database with multiple tablespaces, a threaded backup)
->     ping-pong the single cursor and are all priced random: a
->     measured 89x overcharge collapses throughput under the same
->     weight.
->     Random IO within a hot window smaller than the 16MB threshold is
->     priced sequential: measured 107x undercharge, an accounting
->     escape for hotspot workloads.  No setting of the six builtin
->     parameters seems able to fix this: telling the streams apart
->     requires per-IO state tracking, which looks like logic rather
->     than coefficients.
-> 
->  2. Device nonlinearity.  SLC-cache phases, SMR band placement and
->     shared controllers (multiple NVMe namespaces multiplexing one
->     device) make the real cost of an identical IO vary by an order of
->     magnitude over time or across namespaces.  A static
->     6-parameter linear model has no way to express that.
-> 
->  3. Unpriced operations.  Flush and zone append fall through to a
->     cost of zero and bypass throttling entirely (fixed in a separate
->     series already posted), but the same pattern extends to device
->     quirks the builtin model was never taught.
-> 
-> Mispricing feeds directly into the control loop: vtime budgets,
-> surplus donation and the vrate feedback all consume the model's
-> output, so a wrong model can skew the whole controller.
-> 
-> How
+> Would intersecting the rebuilt state with the member's existing one,
+
+This one.
+
++       cnum64_intersect_with(&reg->r64, prev.r64);
++       cnum32_intersect_with(&reg->r32, prev.r32);
++       reg->var_off = tnum_intersect(reg->var_off, prev.var_off);
+
+> narrowing the base's low half on the member->base direction instead of
+> skipping it, prevent the member from ever being wider than what it already
+> proved?
+
+This is a new propagation path, trying to be conservative here.
+
+Thx,
+-Vineet
+
 > ---
-> 
-> A bound BPF model fully owns pricing for every IO on the device:
-> both the bio charging path and the request-level sizing path consult
-> it, there is no per-IO or per-path fallback to the builtin formula,
-> and the model prices every operation including flushes.  The builtin
-> cursor is not exposed; a model is expected to track its own stream
-> state.
-> 
->     u64 calc_cost(u64 opf, u64 nbytes, sector_t sector,
-> 		  struct blkcg *blkcg, u64 model_flags)
-> 
-> opf is the full bio->bi_opf (the operation must be extracted with a
-> mask, and the REQ_* flag bits, including PREFLUSH/FUA, are part of
-> it); model_flags carries iocost-specific metadata which is not
-> part of bio->bi_opf, such as whether the cost calculation is for
-> a merged request; the return value is vtime, clamped to 1 second
-> of device time per IO.  blkcg is passed so the model can key
-> per-cgroup state; state stored in BPF_MAP_TYPE_CGRP_STORAGE
-> follows the cgroup lifetime, and optional blkcg_online()/
-> blkcg_offline() callbacks mirror the css lifecycle for models
-> which want eager setup or teardown.
-> 
-> The registration and binding model follows the TCP congestion
-> control model registration pattern: registering a struct_ops makes
-> the model available by its name, while io.cost.model binds one
-> registered model to a device with "model=<name>" and restores the
-> builtin model with "model=linear".  Unregistering a model removes
-> it from the registry so it can no longer be selected by name;
-> devices already using the model keep using it until they are
-> switched back to the builtin model, at which point the reference
-> is released.  Sleepable models are rejected at
-> verification, since calc_cost() runs under RCU read lock.
-> Patch overview:
-> 
->  1/5: the BPF struct_ops cost model support: Kconfig, ops
->       definition, name registry, registration, io.cost.model
->       binding, unified dispatch and verifier checks
->  2/5: selftest with the 2x example model (the full builtin linear
->       HDD formula at double cost) plus a runner and the selftest
->       kernel config entries
->  3/5: add an iocost_ioc_tick tracepoint emitting the per-period
->       controller state, so model quality can be evaluated without
->       drgn (existing events are state-change driven and silent in
->       steady state)
->  4/5: a second example model which replaces the single-cursor
->       sequentiality heuristic with per-cgroup multi-stream detection
->       keyed by the cgroup, the first consumer of the state interface
->  5/5: document the model=<name> binding in cgroup-v2.rst
-> 
-> Does it work
-> ------------
-> 
-> Mechanism, verified functionally (QEMU, virtio-blk with the HDD
-> profile, same 8s sequential-read workload from a 1%-weight cgroup,
-> builtin vs the 2x example model):
-> 
->  - per-IO charge: 2882us -> 5722us, a factor of 1.985x; the
->    completed IO count halves and total cost.usage is conserved,
->    i.e. the model output drives both charging and budgeting
->  - the same ratio held across four hosts and 4k/64k/1M block sizes
->    in the v1 measurements (2.00-2.03x on flash-backed hosts, within
->    2% of 2x on a real HDD behind a loaded host); the charging
->    measurement is consistent with the v1 mechanism test, while v2
->    additionally dispatches the request sizing path through the
->    model
->  - edge cases: binding an unknown model name fails with ENOENT;
->    unregistering a bound model leaves the device correctly priced
->    until it is switched back to the builtin model; the readback
->    shows the bound model name; the selftest runner checks the
->    write error and errno of every step, including the restoration
-> 
-> Payoff, demonstrated with the multi-stream example model (4/5) on
-> the same setup, 4k IOs at weight 1000, builtin vs the model:
-> 
->  - two sequential readers in one cgroup: priced 1961us/op by builtin
->    (both judged random by the single cursor) and 23us/op by the
->    model (each stream keeps its own slot); the completed IO count
->    rises by two orders of magnitude
->  - random IO inside an 8M window: priced 24us/op by builtin
->    (undercharge, an accounting escape) and 2607us/op by the model
->  - single-stream sequential and whole-disk random pricing are
->    unchanged, so the model fixes both directions of mispricing
->    without introducing a new one
-> 
-> Non-interference, measured on enterprise NVMe: no measurable
-> overhead when the BPF model is not attached.
-> 
-> ---
-> Changes in v2:
-> - struct_ops models are now registered by name and bound per
->   device through io.cost.model; the previous ctrl=bpf selection
->   mechanism, the system-wide single-instance limit and its mutex
->   are gone
-> - a bound model fully owns pricing: the return-0 delegation to the
->   builtin formula is gone, the request-level sizing path dispatches
->   to the model too, and the builtin cursor is no longer exposed
-> - iocg_id is replaced by the blkcg kptr; per-cgroup state uses
->   cgroup storage with its lifetime, plus optional
->   blkcg_online/offline callbacks
-> - the full bio->bi_opf including PREFLUSH/FUA is preserved in
->   opf, while model_flags carries iocost-specific metadata
-> - sleepable models are rejected in .check_member
-> - Kconfig depends on DEBUG_INFO_BTF
-> - tracepoint renamed to iocost_ioc_tick; the example model fixes
->   the merged-bio stream advancement and the map exhaustion
->   limitation (cgroup storage), the selftest checks real write
->   errors and the selftest kernel config carries the new options
-> - the interface, registration, dispatch and configuration changes
->   are folded into one patch
-> 
-> Tao Cui (5):
->   blk-iocost: add BPF struct_ops cost model support
->   selftests/bpf: add iocost cost model test
->   blk-iocost: add iocost_ioc_tick tracepoint for per-period device
->     summary
->   selftests/bpf: add multi-stream sequentiality example model
->   docs: cgroup-v2: document io.cost model=<name> binding
-> 
->  Documentation/admin-guide/cgroup-v2.rst       |  11 +
->  block/Kconfig                                 |   9 +
->  block/Makefile                                |   1 +
->  block/blk-cgroup.c                            |   3 +
->  block/blk-iocost-bpf.c                        | 252 ++++++++++++++++++
->  block/blk-iocost.c                            | 138 +++++++++-
->  include/linux/blk-iocost.h                    |  82 ++++++
->  include/trace/events/iocost.h                 |  40 +++
->  tools/testing/selftests/bpf/config            |   2 +
->  .../selftests/bpf/prog_tests/iocost_model.c   | 194 ++++++++++++++
->  .../selftests/bpf/progs/iocost_model.c        | 117 ++++++++
->  tools/testing/selftests/bpf/progs/iocost_ms.c | 137 ++++++++++
->  12 files changed, 979 insertions(+), 7 deletions(-)
->  create mode 100644 block/blk-iocost-bpf.c
->  create mode 100644 include/linux/blk-iocost.h
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/iocost_model.c
->  create mode 100644 tools/testing/selftests/bpf/progs/iocost_model.c
->  create mode 100644 tools/testing/selftests/bpf/progs/iocost_ms.c
-> 
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34506184282
 
