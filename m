@@ -1,62 +1,62 @@
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
+Received: from mail-oo2-f41.google.com (mail-oo2-f41.google.com [74.125.231.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D0B486406
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 22:04:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C471486434
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 22:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789164279; cv=none; b=JgwCqWwo7F8dRFlvbKl//7POMl+B4PF/QIuha60+d5lmrA0TSU7S5/ZWBtE1CTFom3KC72wsaySAw+6ZbBQOCVPLy3rfkZevuirneQx8CVS9fpKVAFq1l59iVqPXHy0k9cMTF81flrDCBT5zvxU82Vwd5i1ErvdYPZwxhn5VJQQ=
+	t=1789164281; cv=none; b=MDiYD4oVDiI0bBYPaAGOvUjrgartgeetFYTUDLR0mCRYIz4MaUXKFn52aGBM1VRxMdExZkmyIwk0JuMzd28wP0VE7jBPxauErJij59mK4hDArrc0z+ugQtDquEU5O9cKTqAQs1z4rGfOfXIYtKUGyq5fh/2tLkzrOcnVQ6GrALM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789164279; c=relaxed/simple;
-	bh=y3pYyRIGDkYNnNMY5cXg9EvzkDiyIZ6zKjcBZE7/uhM=;
+	s=arc-20240116; t=1789164281; c=relaxed/simple;
+	bh=7+ewtS8UKoJuzSrNJX/ajvfxy5NffxF9AkAlWK7jReU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZlGOvnwz4CYfNGS9Zv8WJjP1D5+A0DzspNgqBCg2Sg+AVn9fFBMa9uwNPBtr6e0zXOIKJDJ1evF6AEF4gpvfKMDNEXN9/pW87K7cjKZ+R73w1lXseM+MZ9+Hyf3kkzkV79GAywQgNM2V2rk4GPTd6kHIchK4QcmdJskgBc6EgK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aQKC4wtp; arc=none smtp.client-ip=209.85.210.47
+	 MIME-Version; b=j57raD6kK6lgtEbaigNpNbaw0SkRF6WP5MIlk68b0knbZCqz75gFiuF1PUEAdIIuWKFGorNwUkKDGIH08e4YYLcsVfFPN4pBwfs0LUe1/PkBi6Ej7qzrbELtR4mfSxxIb1nN9hqbcjdJrGOS7Wz4B+jQNzWhyOtlzCZPj6FhQQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IXpMKQMf; arc=none smtp.client-ip=74.125.231.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aQKC4wtp"
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-80587a80992so82314a34.0
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:04:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IXpMKQMf"
+Received: by mail-oo2-f41.google.com with SMTP id 46e09a7af769-7f4f0dd5507so37225a34.3
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:04:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789164274; x=1789769074; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789164276; x=1789769076; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=I6D1ybLhZjpRjvJgolAFbhLRdt4Uc+0cM9T0q6Y9XfI=;
-        b=aQKC4wtp0CcmA4snjFGIl8EmyaXgu6LfHGJGvLgg6/jVBfeNjVnKHirQDne4yo+kvu
-         YdjsLOr9zHJp/fOrvap93us53QxT0Do/QAOx50FI3lpwq/4sS4uHrdhfeXvcYXRKE4FK
-         kW8Hy5dt7Lvy8El/KIWzAagSkxA3yQWspn1tZVaYtq8ewZrsqW443xAHql5ZlM1jQapU
-         6cpmd/Pn4cDIJESuy3+jpIJ5CVUpXqxy8kvSZA8+EAj/sHHrtZ3djgwnM61qJidv4OPc
-         /kN79xhk1bwAhywtZ8uzG0parCufFw5ByyIHzNKxH/zi/y5C1VzE2GNOB8FqMEc6fpdo
-         R2BQ==
+        bh=sKUSe+Zw6EJCKp1jwfC8Ud1tfVIbj+CkaQi8U9etPW4=;
+        b=IXpMKQMftqOfLPaSUut65SzzYsxl5ztLbu2lO+sDNpw3+0taeaZzpE0DjzgLbDe4wL
+         MoWp/9AbMLM/R/9C8N+UcmFYQuX1Ip2h6TBx1ki4FiWyo71ymaX4YcEJcfJIxWvhpeD7
+         lpTBoWv+SlhneDaKZkTNH+zq+wMx5vnZCxl0WtxcZJQ5s+DHj1jMnc8hy0PmDrLcy99z
+         +bsWmvm1IV7cLphBwhtMsY4YSTmNDuJ+O87D2mXRYKAlx2nsniEn36Jp7Uts4McU18NK
+         PSCwM2qGUM3asfvC08ClLb5TenyioD3aX9Lhpv6a8jZT/OeplzC8BDEANOZMQD2W4BNH
+         v0CA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789164274; x=1789769074;
+        d=1e100.net; s=20251104; t=1789164276; x=1789769076;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=I6D1ybLhZjpRjvJgolAFbhLRdt4Uc+0cM9T0q6Y9XfI=;
-        b=PvV6nI6zUVc3ZDwTKop1COjgyfyf68jmZ/6i2YQoaGfNHpLjbpQAeqKrgzOYV/xkZ7
-         3cno9qKo38QhNwqYvrzloPAXAxCuL5+gao4E4BJoMZ2wEMVqtsYUYIj/Rbu2T53JGwe3
-         U/Inst178t8MvBgxDwmG4iHil36kWZu77yEax8ltlNfcPteD3B0LoaC82gIvOhI+M6tC
-         vtUGuaIR42K0GSxlIuN3Pd5fxSRS2MwoqhoVfAxGCz8zsxWl02mYl0LlpYscnhgDJLu/
-         wwtWOHLCsDSicb5U1ZFDQRvJ5o+WPzvLDf3Yf+BbPAfwsk1/WFHhWrRm4KgacrPArN13
-         aelQ==
-X-Gm-Message-State: AFuF++nGlYLIT33NwxYTfuR1BkOXBwJYUtDcpgIhKIUSbWIDrSwFpL2w
-	s9fwocQw+hDYgfMKGWS1wwYq4yT1exagMZ+mkSjhBmRGkISV0tNGGoW9+0/vxA==
-X-Gm-Gg: AYBFou3mEvIt5nYFGJH7Dwe5BCJSpenHWfaAAgH7b/tmcLOhT1jA+iuZeR0IKDIj4Mp
-	AL1prAuTl60hvzobQagjYSN3ycEPoU5nRA2rNNcssUwXnQPCdmw1mIs8kC/7m8zZ6sCa8KHtMHq
-	60zWkx+s7mJnAJuEE5IMGQ+CmF6OJBsvnAxKAtsFLK1WTVcjXi6e4ImbKkvIuxFS9zIfPiV8G02
-	lO4lWlZLgiyXrVfSZZmTvmlENRHM/SW+JLNZSFLr3us4jUDvrmDZ+U7geZwd9l9ehk/TvTxLSYH
-	6jhvkO85gxwZ7fzguRrOzivAX3CF3Nd7Ozt096obCJnEECa6bTYALc3dBMKvATyhsNtprYBneEJ
-	5yzl9UozULOynpzL3SLRmceNpuW0afEV3l0vgQogoX0PK/SH19NWMZAHhOz5n8wws079Np/S5g2
-	piuaMC59wlBAE44MpRefZxFKT33ky3Hp8XqdgbLa75XxrHkxy7xoZqm/gonFfN4JuRb/CyZxW9
-X-Received: by 2002:a05:6830:698c:b0:7fa:ac4f:77c with SMTP id 46e09a7af769-803ffea3670mr4776459a34.27.1789164273724;
-        Fri, 11 Sep 2026 15:04:33 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:55::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-803f5adf677sm4236824a34.4.2026.09.11.15.04.33
+        bh=sKUSe+Zw6EJCKp1jwfC8Ud1tfVIbj+CkaQi8U9etPW4=;
+        b=hi7yeyekJUZPNKV7mMCq5b0RxeCA8BfPxGoKjghUeEc+WJT55n6uZWgP15m/5o0Fh+
+         3PwjOHtFcvrijtx3soshlTxw2/fNIEOrCPkWlpxNJyl5RZAgdBiXlgFCpJDL3y0zujRS
+         epo3HJx3fff0zZ5wIRI7v1oR0UtkdLulk9KwYNZkNFcSejrqxsscnAoKYEOy07IEqXGI
+         7Dl15H5e5PkXrkwAz4N33lDZAgwMBRhxZ/g7GQyxdOwQi0LTdxaOslWGq84bdGaGCDul
+         Hy2NZczSXhzGbmgV8lBAarM7QDxBvmAK/rG6Hzi7acS5ZYod1mlmt8R660K3shQUfE5T
+         ETVw==
+X-Gm-Message-State: AFuF++mHPgXIepG1Gre9EX/K4lLo4zJLM2o5lKcsyZ/Nl6QrQFo36beR
+	2OhLMvJdKSUErIO+6U8uOTuf6YN7LIgzCxpzqnDLlceIvCVMzsQcFPF1+pD2cw==
+X-Gm-Gg: AYBFou3sJSYiVpKPU6DwKPQV1rdzr8TzQNYuTjn7a8RdRQslsru3gbI7TfTN4SZzCvb
+	bMmclhS67DepcITCy/CRV7Mei35+V+i4TOOytRPuLrxtlneJsjQEOhAIMeqp1OB09S+WPdmlhRz
+	c1MLaCNw3QmuyyHt4uDzr0tbd1bDZbei/YYRDBT5cO+opAgeiYRLMJMmsYxjMqiqIQNmvvZB/w+
+	YEU3etorJJeAT8+0ashYJoAA3xir69+aJ0BN9RYVW2z2oGVd6VlcXHp1+MR8nuv/Wj0Iv7ipIdF
+	eXN3ORVz5AN9pvuQf2UUuSnZWXE/lVldJV6gL7HapDfVOy9u2GV1ZjMIU2wxiG25N9IHhtKKBu3
+	BKryOGI8oHZkZpNsMeRavBOYBrDkLUFJHISN5/pSAtkXLfO6jE6r4BB572JMLvwP25+7K8afxc/
+	xYroeK6oCqjn03m4v3VhYIkKqvB4fXcZN+MRIb1uZ3IGxVDILOcYVpoqb8KXCB
+X-Received: by 2002:a05:6830:dc6:b0:7fa:ab72:9df9 with SMTP id 46e09a7af769-805a071941dmr167091a34.17.1789164276231;
+        Fri, 11 Sep 2026 15:04:36 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:7::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-803f670ec82sm3946427a34.20.2026.09.11.15.04.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 15:04:33 -0700 (PDT)
+        Fri, 11 Sep 2026 15:04:35 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -66,9 +66,9 @@ Cc: alexei.starovoitov@gmail.com,
 	memxor@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 11/23] bpf: Set MEM_RCU when generating kfunc argument types
-Date: Fri, 11 Sep 2026 15:04:03 -0700
-Message-ID: <20260911220415.1396439-12-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v2 13/23] bpf: Resolve ARG_PTR_TO_MEM | MEM_FIXED_SIZE size in kfunc bpf_func_proto
+Date: Fri, 11 Sep 2026 15:04:05 -0700
+Message-ID: <20260911220415.1396439-14-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260911220415.1396439-1-ameryhung@gmail.com>
 References: <20260911220415.1396439-1-ameryhung@gmail.com>
@@ -80,53 +80,118 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The BTF ID argument of a kfunc has to be referenced or trusted unless
-the kfunc is KF_RCU, in which case an RCU-protected pointer is accepted
-too. check_kfunc_args() reads that off meta->kfunc_flags on every
-verification of the call, which is the last thing keeping the argument
-policy of ARG_PTR_TO_BTF_ID out of the generated prototype.
+A generated kfunc prototype classifies a pointer to scalar memory
+without an adjacent size argument as ARG_PTR_TO_MEM | MEM_FIXED_SIZE.
+The kfunc path currently walks BTF and resolves the pointee size each
+time it verifies a call. The common check_func_arg() path instead
+expects that size in bpf_func_proto::arg_size[].
 
-Set MEM_RCU in get_kfunc_arg_type() for ARG_PTR_TO_BTF_ID arguments of
-KF_RCU kfuncs, the way it already sets OBJ_RELEASE for release
-arguments, and test the generated flag instead. MEM_RCU represents the
-KF_RCU relaxation applied by the ARG_PTR_TO_BTF_ID trust check; other
-argument kinds have their own provenance requirements.
+Resolve the size when generating the prototype and teach the existing
+kfunc path to consume the cached value. This prepares fixed-size memory
+arguments to move to the common checker.
 
-No functional change intended.
+arg_size[] shares storage with arg_btf_id[]. An ARG_PTR_TO_BTF_ID
+argument that falls back to scalar-struct memory therefore keeps its BTF
+ID pointer and continues resolving the size when that fallback is taken.
+
+No functional change.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- kernel/bpf/verifier.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 37 ++++++++++++++++++++++++-------------
+ 1 file changed, 24 insertions(+), 13 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index c602007bf583..39f7f633b4d6 100644
+index 0547fbeeebbe..615a5667e569 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -12336,6 +12336,14 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 	if (is_kfunc_release(meta) && arg == 0)
- 		arg_type |= OBJ_RELEASE;
+@@ -12182,11 +12182,11 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+ 		   const struct btf_param *args, int arg, int nargs,
+ 		   struct bpf_func_proto *proto)
+ {
+-	const struct btf_type *t, *ref_t = NULL;
++	const struct btf_type *t, *ref_t = NULL, *resolve_ret;
+ 	const u32 *ref_id_ptr = NULL;
+ 	argno_t argno = argno_from_arg(arg + 1);
+ 	const char *ref_tname = NULL;
+-	u32 ref_id;
++	u32 ref_id, type_size;
+ 	int arg_type;
  
-+	/*
-+	 * A KF_RCU kfunc accepts an RCU-protected pointer where it would
-+	 * otherwise demand a referenced or trusted one. Other argument kinds
-+	 * have their own provenance requirements and must not inherit MEM_RCU.
-+	 */
-+	if (base_type(arg_type) == ARG_PTR_TO_BTF_ID && is_kfunc_rcu(meta))
-+		arg_type |= MEM_RCU;
-+
- 	return arg_type;
- }
+ 	proto->arg_btf_id[arg] = NULL;
+@@ -12329,6 +12329,15 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+ 				reg_arg_name(env, argno), btf_type_str(ref_t), ref_tname);
+ 			return -EINVAL;
+ 		}
++		resolve_ret = btf_resolve_size(meta->btf, ref_t, &type_size);
++		if (IS_ERR(resolve_ret)) {
++			verbose(env,
++				"%s reference type('%s %s') size cannot be determined: %ld\n",
++				reg_arg_name(env, argno), btf_type_str(ref_t),
++				ref_tname, PTR_ERR(resolve_ret));
++			return -EINVAL;
++		}
++		proto->arg_size[arg] = type_size;
+ 		arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE;
+ 	}
  
-@@ -13275,7 +13283,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
- 			    reg2btf_ids[base_type(reg->type)]) {
- 				if (!is_trusted_reg(env, reg) ||
- 				    bpf_type_has_unsafe_modifiers(reg->type)) {
--					if (!is_kfunc_rcu(meta)) {
-+					if (!(arg_type & MEM_RCU)) {
- 						const char *expected_type;
+@@ -12984,7 +12993,8 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 		const struct btf_type *t, *ref_t, *resolve_ret;
+ 		argno_t argno = argno_from_arg(i + 1);
+ 		int regno = reg_from_argno(argno);
+-		u32 ref_id = args[i].type, type_size;
++		u32 ref_id = args[i].type;
++		u32 arg_size = arg_type & MEM_FIXED_SIZE ? meta->fn->arg_size[i] : 0;
  
- 						expected_type = bpf_diag_fmt_btf_type(env, btf, ref_id);
+ 		if (arg_type == ARG_PTR_TO_PROG_AUX) {
+ 			cur_aux(env)->arg_prog = regno;
+@@ -13360,20 +13370,21 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 			 * If the register does not contain btf id but the argument type is a pointer to
+ 			 * scalar-only struct, allow verifying it as a fixed size memory.
+ 			 */
++			resolve_ret = btf_resolve_size(btf, ref_t, &arg_size);
++			if (IS_ERR(resolve_ret)) {
++				verbose(env,
++					"%s reference type('%s %s') size cannot be determined: %ld\n",
++					reg_arg_name(env, argno), btf_type_str(ref_t),
++					ref_tname, PTR_ERR(resolve_ret));
++				return -EINVAL;
++			}
+ 			arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE;
+ 			fallthrough;
+ 		case ARG_PTR_TO_MEM:
+ 			if (arg_type & MEM_FIXED_SIZE) {
+ 				bool known_memory;
+ 
+-				resolve_ret = btf_resolve_size(btf, ref_t, &type_size);
+-				if (IS_ERR(resolve_ret)) {
+-					verbose(env, "%s reference type('%s %s') size cannot be determined: %ld\n",
+-						reg_arg_name(env, argno), btf_type_str(ref_t),
+-						ref_tname, PTR_ERR(resolve_ret));
+-					return -EINVAL;
+-				}
+-				ret = check_mem_reg(env, reg, argno, type_size, BPF_READ | BPF_WRITE,
++				ret = check_mem_reg(env, reg, argno, arg_size, BPF_READ | BPF_WRITE,
+ 						    meta, &known_memory);
+ 				if (ret < 0) {
+ 					const char *expected_type;
+@@ -13384,14 +13395,14 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 							env, insn_idx, argno, func_name,
+ 							"Pass memory with at least the required number of accessible bytes and suitable read and write access.",
+ 							"the kfunc expects %u bytes of memory for %s, but the verifier cannot prove that %s provides a readable and writable range of that size",
+-							type_size, expected_type,
++							arg_size, expected_type,
+ 							bpf_diag_reg_type_plain(env, reg->type));
+ 					else
+ 						bpf_diag_call_arg_fmt(
+ 							env, insn_idx, argno, func_name,
+ 							"Pass stack, map, context, or other verifier-known memory of the expected type and size, not an integer cast to a pointer.",
+ 							"the kfunc expects %u bytes of memory for %s, but it is %s and not verifier-known memory",
+-							type_size, expected_type,
++							arg_size, expected_type,
+ 							bpf_diag_reg_type_plain(env, reg->type));
+ 					return ret;
+ 				}
 -- 
 2.52.0
 
