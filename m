@@ -1,138 +1,194 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A963D429802
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 19:26:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789154774; cv=none; b=H6J51jh2pDqG9069nUM6UEfdlfKdx7VNYMPhA76Fn8HQyvmGk/+zf/PC4UpL4TJPcfid6FDEBdG7lHMGt++acpsU2X4B83VLgGwJOgPCgUJ/gaf8rsOL2Urq1k5YIHu6FgjMZlijmfzf+vYSWxvPpk1EBtA0R8JDyNoqjl0+T7A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789154774; c=relaxed/simple;
-	bh=E0nuT63K1UCUhatTxp/WsmIphFJjewYYXC7EfPUxVmM=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YTe08KMcn9Fz3ZEOizBIchFsXchPf+fz1nWYrjBmpYcTNLh5BV16OXx3M8HuRSV4NywKKtRIglh685fPb47HfB/5wnJiNEBanghana0JOco3XuH8NdsafckzwziwrDDkP9aSNTXRWJngSE/2L1+2LdrH9l6SnJj4PO6CT8DHbik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T2WZsFs8; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD884CB8C9
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 19:27:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789154838; cv=pass; b=otZco+WZZfOBIaiF6ToFql407X7PAnT4grfaY8R7AeUZ0ebdfUR4tvWQj5s3R1M2F+o87oFKeVRObUmBef+UgfnGUCU1m5/NW3Nsq/pE8QIUuJF0EUHM5/4mFufuidhjXk8QAhDmYG/YsguOeYJRCcuXRqTvwCM+Uru4EP83Ik8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789154838; c=relaxed/simple;
+	bh=iY6+Zin828BJjnJazjv6iEdlZ1WQ1OB501bXh0Oqe1Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CFOmrdvLbhh1sRj7NFX54z0bXWKDwOT25p/UBZPNyL0yLjwnewrz9PE564wvOAvsSivh/Y3BQURbaM7EKS3EH/nyBaehYdUQw0hTlEiBQJvIINWJIPNlbVK3NpvX0EBXDuWZHOJPQO8VDqONHhRE2lCkZi6o+e0V24y1tumyj78=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r833c/1g; arc=pass smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T2WZsFs8"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-48436216a98so811561f8f.0
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 12:26:09 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r833c/1g"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccdaea75so37752a91.1
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 12:27:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789154836; cv=none;
+        d=google.com; s=arc-20260327;
+        b=atKoY1fakLt2a09mu6C4HyeBURE13Bqvz1k6Pv0MM2yRtrBILk5ZH5S28nYxVJfd8y
+         JfKNpngJTPJWNvMIlO21jpencIT0VdGvULbTVJaGOoMJktSA/N7o8otFDwNm58Lhbj6O
+         c+q/uYILugeNiM7c+DyZVLkD1MTn3ngvPoffbzQvLkitSxNof0qUVNOkePgp7FQSCfMz
+         9/n5EP3CkVyd7RUF/YOSmlR3s9evSJrkf8wNFSvtLUlnZfkA9ffmEUongVO/71Z82cOd
+         y8bDoKlGlYQVBzhv9pRTmm0+s5kaKdI6ntnN3UqMHhF9KjjHfgdJZ4sZv9hRH/i+AE6i
+         Zz6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=CJ5qRpTQWRM2qmLNECtZnQwDRdWUV4ql8mZet62Id0s=;
+        fh=fbNHKAEKBY02QyBr6qJCPB+2HenG1oLtoYcSQluwGsY=;
+        b=oorPrbUOC9F6WQaFNKCBiDFks7y89UMsCz/G3I1LJqhykXhM41eaasjGWa89sjy3pD
+         cPFToZj4lBB0Tf6BDOw7EqCt+7XnUOh7lcAIrv3Lj9208GHxuZ8awWJM9fD8JLrFcCOB
+         sXcZ2qKyk5TRCu24qLJYYtt9kBdGnZC5Qv5rZV/XDeiPtQG0WYRAsSwjwQXGOoW4Bsrt
+         svpBv09UDOpLSvNioNRJ10ZP7jmcUCuntMZVihBeP/xUtTHRiMCR6xLXp9rkF8pD2rVg
+         VfM66qQ/5KJMEBM7TaKjLM5Ce3/omhxCEz9dQ2T2nHoSKBlmbRNzerVygsDcPOMmQjcy
+         yveg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789154766; x=1789759566; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1789154836; x=1789759636; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Nb+C2vqHps7zZGaA3lhpp4CjL1HIbRuVbwq1v+iSsLM=;
-        b=T2WZsFs8+9Q1osND1zjFruum/Zhexy9Az6EhSEXD4dttx9oi1Anev1UmGzdt5Se+4/
-         xTYmRrzBYPW/AfYyBq2rqr5/G2bf3+h5O7R+Tu08czj+20eVXOvDqaFRT4RAB+jdI520
-         tbs1Zi3T6aSntQ9hqpzjy0CEP0DoJrwqvqNtk2vYMSAwU3o9GCFLwIukT84dR/eEN3u2
-         e5bWgy5ojzpvvjz/fJ+tfB70sCi63OluaDuRb7YThDHuCp45bh8rGVunh8bBfPNvspLS
-         Y980HqdKvIMI3Wcpxs+0EZmApbQFl01FXIL+jIdqdu2CY7KRG2onPDFo/Y4KDrEeH78w
-         TUWQ==
+        bh=CJ5qRpTQWRM2qmLNECtZnQwDRdWUV4ql8mZet62Id0s=;
+        b=r833c/1gz52GdConixD5HRGtz0K7RirHPWpLJ3Xvk6J7HyUNLTrBByK/Xi394Haga0
+         bBBtZhoZbRfIa9qOmXo2FyKKdKxs/0uTLxlyaUQdhk/qVwuz8yiMsJCmXKHBnYYTGMKp
+         olpd0h75BUNI/zgSNkeU4f3HwigJVqvaA4xnRRQETizmdV5Toheu2MHwVcesZlTnhLM5
+         Mcc1pSm4pgsLBkQ5OzZzVrbydz4FFb3X50eLdhYhDUjrk6ird+4p5cNJCJoQvvj6dUa+
+         Wx+L72s3r8oHlSJe/e+kyPvOxQ0SX1J27sDcazKY/l4Jq2PKaLwvLK00v049P4cqOpbG
+         hPGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789154766; x=1789759566;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
+        d=1e100.net; s=20251104; t=1789154836; x=1789759636;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Nb+C2vqHps7zZGaA3lhpp4CjL1HIbRuVbwq1v+iSsLM=;
-        b=ZWENhl3fbTQQLj5Xr2hwDo6D8BsG5NCFgpAmf7iot5jdQV6spVfATZcy/kn4Yyitmx
-         2RY4DHUuS1yvO32Aw49UlJqODnLVOQuvBEvRY0+QAsIFF6Z0yNs4gBdQLEOiJduPZgZP
-         qp/fz5FjFx3AxYM+RDGefZTpVcqqROiZEyb7tUEmzFekSL62scny3RWcqWBajN4hy8eQ
-         jLe8el/65RNdZxG/ryAvlCDwEu44x0dkVUys3yIgBVfrxcwJHqRX6FcK5jTOsCjMJ/vl
-         +/sck6b+mpfLLbE3gaTT6KcnRCjxoXo7hqtPVuqhjRFuHYrHEpO6or7smakYEIlwasvT
-         DKzQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwIZl1gfuhi1HZ/9BAFws+eHLINHsot+1kMR4XVWLXXe0rKiFY/8tia8umf9rdRrtquE7A=@vger.kernel.org
-X-Gm-Message-State: AFuF++kkHSq19TAb4lHCdjn3U4IEOjPIE45qahjJJuG/yJgnwOjui6Fb
-	9nigb0KXp7xGcc46nT+3mOwSRv99FybjhoxFWjvHG4V75jwagfhWcHpl
-X-Gm-Gg: AYBFou02Phgz90VWHb3Kzfm/Fxqxv3eQfMo8U8AV7FlnrP4TCDKTpsHDKqgzyERj2f9
-	LMXVQs9UgiitSDyvtIQA0QQW88x6PbFmOUZFBLOI8iu1QYznu9FeX3MLct9FYKNNMqhphN+D6yj
-	WItrl799nssE30k2e1m8UROawG1CsQGeOa8g9/YeOZedxTlKL2jNNZkB3Xm/+jLeVBF1IZitFL7
-	USyjDdg0y8VhxW/CItGDIyEXGcQdAjUQkReCaSWJPG9gq34IsmuyE9frKUl1TFbKtMRUFNjUW6C
-	9OKBspotuEorMbCkCb0zXzMsjL4U+aJP0yuBHI/xU5HqlbZhPODTJaAK+njv94zwn+smYbS0mgS
-	v+qHY4v9AqzhPJ2WJ+iZVVaaiWkzbhXX3iAIUuBcBTEqh6bx4pcMQH2CNBI0s7kCM5ZlRQumbZj
-	WdQ/+dxetC3Nsozj4Cg/3GYz0x+FcBw1cK34E8DwRX6gCWmrERTRVtCst1gJTFaC2DODxE
-X-Received: by 2002:a05:600c:c4a8:b0:49d:1df6:2592 with SMTP id 5b1f17b1804b1-49e619e0f7amr61198905e9.21.1789154764976;
-        Fri, 11 Sep 2026 12:26:04 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e62232cb7sm71030065e9.4.2026.09.11.12.26.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 12:26:04 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 11 Sep 2026 21:26:02 +0200
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-	eddyz87@gmail.com, ihor.solodrai@linux.dev, yonghong.song@linux.dev,
-	song@kernel.org, qmo@kernel.org, martin.lau@linux.dev,
-	memxor@gmail.com, emil@etsalapatis.com, mcgrof@kernel.org,
-	petr.pavlu@suse.com, tj@kernel.org, kees@kernel.org,
-	bpf@vger.kernel.org, nathan@kernel.org, nsc@kernel.org,
-	arnd@arndb.de, puranjay@kernel.org, yatsenko@meta.com,
-	atenart@kernel.org, ojeda@kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH v2 bpf-next 01/18] btf: Extend UAPI to support BTF
- location (inline site) info
-Message-ID: <aqRVysZxIpP5lSOT@krava>
-References: <20260901165757.801449-1-alan.maguire@oracle.com>
- <20260901165757.801449-2-alan.maguire@oracle.com>
+        bh=CJ5qRpTQWRM2qmLNECtZnQwDRdWUV4ql8mZet62Id0s=;
+        b=UA/u1FNhoIjvcMde0vkKb1FWn850pPp9BndzUTZ2sqEPAnjbetq1bJCYSqKq+dDCpK
+         xzQ1xUl+NR2AN+8fBehnYn1YE9Vdrl7RbwB9p4pluuSVUhi3MN1VDgvqJ0boEhzfmJjA
+         yexYUsYktrR4bANGzbMoLx3O9C+Mtt8Xawzwz3yG7t6cHJWg9GIB/wI58KMFLfrx/7Oa
+         n/39x/K0zPB/pkR4cleMIvDGRuUH0zKz71YfuN0PbdkUk0mU0Rb/mq4RRut929ajMGMQ
+         dmhMyLGz2e7chPKIPvoS9slVfXYNcqMB7JMxrZiauifEOJji6rP0YT3bMFsWlRekh3uo
+         O9MQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzDKRyxSGygDpiLyCTgFh32oCJzfJTrBuCZT6GSfcQ6dDSUQXjeTifodM0G+A90cEDhTns=@vger.kernel.org
+X-Gm-Message-State: AFuF++lLuU459y8IwHBVG8nzWV80fQbKlHYxnw49rxCdrx1YBJ3plDUp
+	/hZNUnWRtNzxaJvPXo8jS0OO3gssuEHfWRUsqVN3Qf0Jtt1I8IIZAu7gboPojlsQl4WeXZ4R/mq
+	weRGU5qgPEiwapPh0bL8jhsKY0/RGNDs=
+X-Gm-Gg: AYBFou0t2D/BiOqLz9f/ODxVBI+GOPYkt8Dvh6xDEzOwNeAAmZHUGveGBk7TctnJnI0
+	FnmyPT0EkiMtYn6bYCqpluTg+4lkqJZTZElUwVyzOWbhmMQkaRnKJm4r8ztr3EZrcmNTUp5YXqL
+	JhDRBxOo+HHFvXtwh1CKPlRrqf/657ODUrD3NgokY+yxO5A8jaJhCPTcaSAnAk7bYm5MuF+wy8f
+	uqB8TeZijX7dNw3pwPHLtDSwkZeQxm233xxZuZNUX9ePs+kzpTlecUP/+Q3/EHJddWP1FupGLNW
+	zRaMEhIh6oUnyveKXLGhSOg3MppdNUzrpGM9PD2u2WC2F9F1BmxhuVmC8Zdy1A8X+i27nYlqA65
+	ZzEJtqojxrgk7sj8MASHMwVV+DR+RQZamxHxm
+X-Received: by 2002:a17:90b:3eca:b0:398:ceef:edde with SMTP id
+ 98e67ed59e1d1-39d980f90cdmr5086059a91.15.1789154836024; Fri, 11 Sep 2026
+ 12:27:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260901165757.801449-2-alan.maguire@oracle.com>
+References: <20260910183222.307208-1-toke@redhat.com>
+In-Reply-To: <20260910183222.307208-1-toke@redhat.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 11 Sep 2026 12:27:02 -0700
+X-Gm-Features: AcwNN1VvzA_XPWR72Irr7kq27h97s4KZM2FmB8Fff61mgZ8sLCtrR4cxw0QVVqw
+Message-ID: <CAEf4BzbJsrAgVykX+JO8j5E51v9aUpGaeLKiQvc7uhzRMyKkgQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/4] libbpf: Add bpf_program__add_flags() and bpf_program__clear_flags()
+To: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 01, 2026 at 05:57:40PM +0100, Alan Maguire wrote:
-
-SNIP
-
+On Thu, Sep 10, 2026 at 11:32=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen <=
+toke@redhat.com> wrote:
+>
+> When changing BPF program flags, applications often need to just add or
+> remove a single flag, without touching the existing ones. When using the
+> bpf_program__set_flags() function, this requires reading the existing
+> flags and doing bitwise manipulations before resetting the result, which
+> is slightly awkward to do, and easy to forget.
+>
+> Add two new convenience helpers, bpf_program__add_flags() and
+> bpf_program__clear_flags(), which wraps bpf_program__set_flags() in the
+> bitwise operations required to modify flags without clobbering the
+> existing ones.
+>
+> Suggested-by: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> ---
+>  tools/lib/bpf/libbpf.c   | 10 ++++++++++
+>  tools/lib/bpf/libbpf.h   |  6 ++++++
+>  tools/lib/bpf/libbpf.map |  2 ++
+>  3 files changed, 18 insertions(+)
+>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index c036e8a91ed8..221c4fe1fb31 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -9938,6 +9938,16 @@ int bpf_program__set_flags(struct bpf_program *pro=
+g, __u32 flags)
+>         return 0;
+>  }
+>
+> +int bpf_program__add_flags(struct bpf_program *prog, __u32 flags)
+> +{
+> +       return bpf_program__set_flags(prog, prog->prog_flags | flags);
+> +}
 > +
-> +/*
-> + * BTF_KIND_LOC_PROTO specifies location prototypes; i.e. how locations relate
-> + * to parameters; a struct btf_type of BTF_KIND_LOC_PROTO is followed by a
-> + * a vlen-specified number of __u32 BTF type ids which specify the associated
-> + * BTF_KIND_LOC_PARAM for each function parameter associated with the
-> + * location.  The type should either be 0 (no location info) or point at
-> + * a BTF_KIND_LOC_PARAM.
+> +int bpf_program__clear_flags(struct bpf_program *prog, __u32 flags)
+> +{
+> +       return bpf_program__set_flags(prog, prog->prog_flags & ~flags);
+> +}
+> +
+>  __u32 bpf_program__log_level(const struct bpf_program *prog)
+>  {
+>         return prog->log_level;
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index b965ad571540..3932bf9cb490 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -1011,6 +1011,12 @@ bpf_program__set_expected_attach_type(struct bpf_p=
+rogram *prog,
+>  LIBBPF_API __u32 bpf_program__flags(const struct bpf_program *prog);
+>  LIBBPF_API int bpf_program__set_flags(struct bpf_program *prog, __u32 fl=
+ags);
+>
+> +/* Convenience helpers to non-destructively add or clear the specified f=
+lags
+> + * instead of clobbering them as bpf_program__set_flags() does.
 > + */
+
+I don't think this is a correct format for doc comment, please follow
+the pattern established by other API comments
+
+pw-bot: cr
+
+
+> +LIBBPF_API int bpf_program__add_flags(struct bpf_program *prog, __u32 fl=
+ags);
+> +LIBBPF_API int bpf_program__clear_flags(struct bpf_program *prog, __u32 =
+flags);
 > +
-> +/*
-> + * BTF_KIND_LOCSEC consists of vlen-specified number of "struct btf_loc"
-> + * containing location site-specific information;
-> + *
-> + * - function (func)
-> + * - location prototype type id (loc_proto)
-> + * - address offset (offset) relative to kernel base address
-> + */
-> +
-> +struct btf_loc {
-> +	__u32 func;
-> +	__u32 loc_proto;
-> +	__u32 offset;
-> +};
 
-would it be possible to include btf id of the immediate parent function?
-we have use cases for tracing just inlined function called from particular
-parent
-
-I thought we could use the location offset for that, but because inline
-functions could be nested, this seems like hard search.. also we do not
-know the size of the inlined code, so not sure how reliable it'd be
-
-I checked the dwarves code and I wonder we could instead store parent
-function (struct inline_expansion) during dwarf decoding and use that
-later to get parent function FUNC_ID and have:
-
-	struct btf_loc {
-	     __u32 func;
-	     __u32 parent;
-	     __u32 loc_proto;
-	     __u32 offset;
-	};
-
-wdyt? thanks,
-jirka
+>  /* Per-program log level and log buffer getters/setters.
+>   * See bpf_object_open_opts comments regarding log_level and log_buf
+>   * interactions.
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index 08ab2ea881fb..a811a1b3a085 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -458,7 +458,9 @@ LIBBPF_1.7.0 {
+>
+>  LIBBPF_1.8.0 {
+>         global:
+> +               bpf_program__add_flags;
+>                 bpf_program__attach_tracing_multi;
+> +               bpf_program__clear_flags;
+>                 bpf_program__clone;
+>                 btf__find_by_name_kind_own;
+>                 btf__new_empty_opts;
+> --
+> 2.55.0
+>
