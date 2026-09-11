@@ -1,95 +1,95 @@
 Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0621A5B9E
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 00:58:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9AF18DF80
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 01:06:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.140
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789088313; cv=pass; b=u5pD28PtcUavFCnQF7IHW+a/tpHcE01HqDPzEMLofwIQK0TqStrOcb67Yt6107XN2n8oolgKDlZhFioMgUGVbi4VD73nEE7KdHVRgR2PVAuFZh/Iwu9NZ++DDSZJoe6Uh/gvjVoPy7rzya1De1H61+6I5I4UKHbFrOLe93EYzDs=
+	t=1789088787; cv=pass; b=mlNZNpXjFvyaQneYdZGuhMl75nL8FCLYn7/h36LNXmUpXdlsGtxPtwkMs/ZQozStrAeVPhLfQfc/8BztESj9Ze9pxBRJyECRbEQtCEsBkD07d9ErI+Af5FfPjFFfnq5joEA1CfRb6qmxOfwK1VdSYlMXKxaEPGkFhvqHG7GbeRM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789088313; c=relaxed/simple;
-	bh=4drBGv6YyhxyX+VShit8G9MBohafzwBZaOD9UZFnRQg=;
+	s=arc-20240116; t=1789088787; c=relaxed/simple;
+	bh=3anrTnb9b6fjm1Z1Gs58eq0Nwh9F0aeBL5GbmkzMyeI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kj7BV9JDLQoW3U5wHndTMInjuA9Cohr7LWOY6M7EQJoBK46HsO/jAO20lo16/ttpVZsgKOriZa4NPQFnwYzn1kc+wj8i11yVT4l156ZdiNstXrsMHoMO9btsLuTGYIyOrkrGwQLvm6rP4Kya/baO0feEFqPUK0vRTCnp5+dYOwA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Kw0wluWR; arc=pass smtp.client-ip=74.125.227.140
+	 To:Cc:Content-Type; b=PuLVlQlTM4KtQfrYZZFLZqzWZtQjexqfmub0//F7HBXvj2RjoVuSRtjZx1ijHay0ipC/3YXTgP21D7vy6T+gsqBBzWc3ARK/pfYQD+aByR1dd5a2XNEc6jY44AVbzeO4e6NIZZzHe37n+wnwtXyhJgu2qVd6/0AY1c7VQXu3jpc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uKaoqAfy; arc=pass smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Kw0wluWR"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d6ff390a6cso17465ad.1
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 17:58:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789088310; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uKaoqAfy"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d6ff3aca06so24145ad.0
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 18:06:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789088785; cv=none;
         d=google.com; s=arc-20260327;
-        b=nyf6QyAz3NMrTOF7ixqJRTmh8Qns1BriGdGXjBF16x8OfxtNVnXRya7d/txNMjKQhX
-         GSb/0BNeQLPoRoe2UWMHaO7CkAMdu7b2cMt5OFBuhI5ngZi2PirSEaBTLdqyMrp9b2Jw
-         Pkd9NciKo++2cuw6ZzPWItG27NrM3Xcc7At2ycSN+BkI1ElpdfSLQIqt6n4p+d1Yh8iz
-         0h+kS9OqQCpLfyA4N24BjWJISlROiXgZOqbERAR+m5QgjKRfjzLOdxyl8Ir5du37IWQQ
-         R2Bb2ij8rk7rKecQjJhHRnP9MwGkgcOA/4+Xsz0Y0w9wNC8pGo2fDjZmI6PO+tAlCTIu
-         5vyQ==
+        b=Is+ol76DBkUUnqLkY3g+3I+ZNB4ibkdFpaTHFdqlN9hYCSrcCEJO/WzoxMTTx2RDo2
+         FoaOjIRD8k2Daz9xBDzZ6ipWmB4pnEQg2VozcKQgv3m34IQBts8TCxUKkluucRpWruYe
+         qE5EgoBLCQZhLJtzFzIWCSRhzCTUZ1kQA7/bcEyiesYB2BVvlr1WJq8SfQkflEWJwXYI
+         //z3VPz65taA/+cnroteiecpRPZyKxGhYQXzlwXTe1Y88or75XC8BhD8G/LnLo9LFw09
+         elV7OiND3ZSU3oPRmwsiyUKWAhzZgtCTHzp9e5EPlNWsPvSUKH90A9+i9aMQZlOP8h7M
+         tt5g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=nMOObWcWSTTmBPNIJxB9A2ZkbRi5NCB7Xm1BYtKAyac=;
-        fh=QinFNgPSLj906GUu+FJMKLbp9Zw2LGsUW9LLJ6e8F5s=;
-        b=O2Kb4ly3n6SOZyu52i9KwFUYpBLn/+fKvUZBN/KvvTiebeLqI4qi0vxSA/gIJxVKJh
-         18C/nv5dw1+x4y21JcE5toGkaefyRqxVXE1l0F7GHdEkiE4eVUsvAdgkdPRr7nc8WccZ
-         16HWLdVH1oLaZLlgdoJeE8pD+trXiWV5/zKjt01+NjUSAzNJgRyqN3NMPVGFsRu3ysqd
-         /KOG/HyE3s/sjgm3NZ9YEjQ0X2/PxWV1ioxjBsX2vuQRIooSebAo/EJ0fknssmJMstsS
-         ujJdHU3CNMc/9ENjs3kS+OKZaMLz66eGln3Oerwpr2kzC9giyXKZOYHs2oi7WbiXar7n
-         5lQg==;
+        bh=kU6ol/MFIe6+8xDTyzZWs/daSwbhi6L9UOvBpCwlXMg=;
+        fh=calQdykbcp8b+H5EuWR8M/qRCvxXQe7I4WbUT8LHMw8=;
+        b=iGBo0dV70224LJZydY61RaXugLF6wPzQ9AsVVLrSe2rm93JdxHZvOZLUoI/qt55TKC
+         pImfOB/c6W0EvZoQnL87S4xGmFcnFY9lPcPb5Ss/tSwH62GFlCo7Pw2tfh4dd40AxykU
+         Etn0LXkjWU1noAFwtrApxTOL7ERh5E+uQggtAoHUtNGOur78jmuCd0Hs4cuOtkZW/UsQ
+         fLz2//ZSqRY2I7smqz0hJAsttv/sjgKSWTLI48gX3qFvyZ9T2fXNiFMWyzYO4e8YtcvS
+         kJ9T61AplAFwAeWIdolqSS4X0mSIJk54HmgW9De3sdSP53rLqWJGD+HNT7IpB9JeyCqW
+         NuOg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789088310; x=1789693110; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1789088785; x=1789693585; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=nMOObWcWSTTmBPNIJxB9A2ZkbRi5NCB7Xm1BYtKAyac=;
-        b=Kw0wluWRedRrcMdEgZz1C7knjgl71xNhzL+jxjanDdyM3D7bOb+S26t01D7taZgTPU
-         MQ2YH3d70/sl2e70XaiN6xocyXFTC/VsIioObNmqpSaaxSIW+E69a/DJuCR77GsilF+L
-         XqRdSRtt3Ey5Nv+W0OBTSndKKZ4/cseeK/HULMHhPFYAXyEBiKGudu50KA0nvUgc3BTj
-         0QNtoZVoFccm1VVOtosWf2+lPAzVzLtHzSF4aoRSmEvgNweAXgrNkO2K/OwPgip03OEk
-         kHcC+qZe3q5E3h4s+AINILraJaQwkX+wbFr5wPAnwAKXGWOvSqTW3uYebqsKKpyQRTcA
-         emkA==
+        bh=kU6ol/MFIe6+8xDTyzZWs/daSwbhi6L9UOvBpCwlXMg=;
+        b=uKaoqAfyAK1US82kJrofqYNSq/aXj8ugYa/215IRJcx/Je7PFnh9F+t8deidOgXV1H
+         NbBQdiloRub5AvcYPObRPfDRdQxw6sfgRvXzP6fsYSOFGtFH+WBWqNoxoRa7fdF22qmE
+         HbS7L9CCBxZZwAts9m5UajjiMXoV+SJQka7WZGWyLwATxkTgum8OFbzm2mH/HdwA1ahs
+         J6nWy9d939Ux9RpM/j81/6zJPXRFsloS6b21W9n2LTyOMCIAnFtXX1BEXDnbp54zDIFx
+         QHg+mcoSnJJvQKDAQ5sArlsv+TPnoYDIDb52Iw2xbA784/oWeAKGDSn5jhFplNRZeYbv
+         h9eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789088310; x=1789693110;
+        d=1e100.net; s=20251104; t=1789088785; x=1789693585;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=nMOObWcWSTTmBPNIJxB9A2ZkbRi5NCB7Xm1BYtKAyac=;
-        b=Pi5ldazEM8OIstLpr+AzJ7WhFMRMwu2DKERL+AAEAwzkxUkKglBz6Ozdl34W1B4RqI
-         a10D6UDtp5Z7gIhx+dhh5wXG01E7r7HjcurxuHYZX9Bk3NSulgda/voLPdAl0wPwNBET
-         G/7CUmYj35OnDCt1sXza9lxKfpWJbFg4kO2G6yLqQ7Vw57j5mKfuqAikSAwqMJavMwIm
-         ppgtXV12b+tTOCMw+WFKJrriiJ6Duuwkmt+3Wqvm+Z1r5zvX0XSFD5p1UKGBALzfQlyc
-         N1oIkDH1zPfYarEZriy8AhNyFDOUcrcWvI9Shw+/GduB3jFypcHCwE8PURuwx99EzCzB
-         Ehkg==
-X-Forwarded-Encrypted: i=1; AKwUvBxvh8uh464iLheDDsFS1Q6zAeNCI55aH0qSFCR7WEc1XxW0bcYHxzJ3gFbsPQbEKifNkkM=@vger.kernel.org
-X-Gm-Message-State: AFuF++nGKifmWIPsVZCTKeVzmIQK1OVrQPBRDXLKDJFesx89k4YuKcpo
-	TrZYFWyFbau4k6/g0zOhausLGKB29Tg+SMrXAj2SKjbcUtqaPxhMYZivpcT1Po+gtdqfENtRZUA
-	SjvA1h5b+HCtA1PcQnx1Wv9E9WhbL2p6FHpFhTGMnR2+u/YzU3/NEWA9qzSZNSg==
-X-Gm-Gg: AYBFou0timhBsqKbXq5OYoWScB4gx6F+YmLZP7+cBW/+tLAh2hJk8beABUVziu4ppQC
-	iSKaoeQPqz9ubYZFpcNia0rBAm8+seVGScd5Ur8mjh3P3O7X8K7G+cY1hMfI2pGd6FiBCoHTjmm
-	d6GXPiDqd8024O6DeG6LcIDh9sBh3X1TSAvFeo4LVgSEOa1BJCsXmy2IgnwyDBR1ctfxK5W7uvP
-	pElqChRiHw/fe2PlezAT+wKhlCs06WD0yR8Ejy24l372Jrh4q9qpCZFMtn59hK9AeRwNdCuFK6n
-	gjLzX9yGXVHh8AdPX253ZOKaFrhZjw0VacvpERymIuFzVuaVLlJQTBD62OV/3h2byaXdBIK/DQd
-	PcVrJmY/l7wstryNq0dCV+CPI0lxmffRTpQ==
-X-Received: by 2002:a17:902:f686:b0:2db:a1c:be59 with SMTP id
- d9443c01a7336-2dd2f53925emr1750545ad.7.1789088309766; Thu, 10 Sep 2026
- 17:58:29 -0700 (PDT)
+        bh=kU6ol/MFIe6+8xDTyzZWs/daSwbhi6L9UOvBpCwlXMg=;
+        b=IljlvLlO6teefPdE1GM/AHm8CzsnvEV/z+uOlfJdeupCHKWN0dCbVHQHk8TTHpl58X
+         VHkRyH51J7w13HnR/HWP1jKoFYBeXWD2+SD2nHqRurZIU3d6oGZx+Z98XIMZtdKJZqDq
+         2Y+Wcu2ZeY39OIq1VdAOMHLgNYgpQc0VlitbUsvdJhDvsbxb4OJ/79avtEGcUaAMyrDW
+         ydvr4bRzqFaySsp+sArwRPUCEn3IthOcy1KoNxc4+8YMjlZ46noZhIJGoBWZ1kFSpTiF
+         XPzg4K/GSaAv2zmnbvs5YdAcLqiWzjYIsfKcBjbtYjqN1nQkMjdTaA6NZ/LXxT+7xG4P
+         zXAw==
+X-Forwarded-Encrypted: i=1; AKwUvBzaO/FVFLIefcVrNghBaMqOEXcv1vZEj5EPq2C2EU/lWMfcmG/7XfxilYcgpGAMSleYpj0=@vger.kernel.org
+X-Gm-Message-State: AFuF++nQfIaZLv7j90vq8lXCyLtxZMuj1nhUtvg9BNwXAf3B3a5kGGfb
+	GQhMvvU4t2XujJoOY55pcuJRcrc+WuD+ZvFLcHCf4hkU51IaNLkOLvxSboi3hKKMJN38FX8mr+I
+	lUN3lENSW4061p4bIZQ1XkpGkqRJO+qgxHoXSLfWU
+X-Gm-Gg: AYBFou2FhOtfgDYh0CPXyP+IPt2aFITKm+cZxa44M6+QxNfDhtzvdnStxdhggJt81cn
+	T6K8EPyK+Kdj2QbRWQtZ85a3q6wexwJASFjfQhHwiTJ6cBt4PTzirf9us1tkt6u/q+laBm6GU4y
+	M4R8XEPPszARQqyxCGpzLTuD+AnvJmpHVBBox8DiZtDxDKbIurLiYYRBDwX0Efbk8bIp2NwalGl
+	ukZM+b4SPkqhRk5GrrH729CWl5SGyWozHpEvkecSQ+WHz7+wcGYz+eFYaogVA7Rbwyvw3oMARm/
+	aM3EoPodCcelss53bImnknbOPHFX/wFyUBmZKDOGduSVbf4CcdwsdH6BcGoJ6J2A9iKzppvmP/N
+	yR7jqgNgnJzXOSnTrdbw/P8A=
+X-Received: by 2002:a17:902:ce09:b0:2db:2225:d2fd with SMTP id
+ d9443c01a7336-2dd2ce422edmr3459955ad.16.1789088784189; Thu, 10 Sep 2026
+ 18:06:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260909191136.3811892-5-hramamurthy@google.com> <178907843138.219967.17268659724650641980@kernel.org>
-In-Reply-To: <178907843138.219967.17268659724650641980@kernel.org>
+References: <20260909191136.3811892-6-hramamurthy@google.com> <178907843311.219967.13433516854329401694@kernel.org>
+In-Reply-To: <178907843311.219967.13433516854329401694@kernel.org>
 From: Harshitha Ramamurthy <hramamurthy@google.com>
-Date: Thu, 10 Sep 2026 17:58:18 -0700
-X-Gm-Features: AcwNN1VDb-6nUoUNVsNwOs9BNQUF7tG5NDKWvlmE8TeyMwOHffTvadhBRirJUzo
-Message-ID: <CAEAWyHf63MgBXY2UvdyUx4M=Kb_73rBmwD2rUBGfAk1XOFMPmQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v6 04/12] gve: introduce gve_adminq_get_device_properties()
+Date: Thu, 10 Sep 2026 18:06:13 -0700
+X-Gm-Features: AcwNN1Uk7_qMvIJF9mycrrKKlRnRcORMjJ7A-sPV6chshJ4vmGdQiU29r_8muRM
+Message-ID: <CAEAWyHdVGwmQzL8uki7081YCydV4v=vL9cXjz_5XY2Kn=ad4rg@mail.gmail.com>
+Subject: Re: [PATCH net-next v6 05/12] gve: refactor gve_init_priv for reset path
 To: netdev-bot+sashiko@kernel.org
 Cc: netdev@vger.kernel.org, joshwash@google.com, andrew+netdev@lunn.ch, 
 	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
@@ -110,177 +110,137 @@ te:
 >
 > Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 0 (1) =C2=B7 Low: 1
 >
-> - [Low] gve_adminq_get_device_properties()
->   (drivers/net/ethernet/google/gve/gve_adminq.c:1148) bundles=E2=80=A6
+> - [Low] In `gve_reset_recovery()`
+>   (drivers/net/ethernet/google/gve/gve_main.c:2561-2564) a `gve_open()`=
+=E2=80=A6
 >
 > Pre-existing issues:
-> - [Medium] gve_adminq_verify_driver_compatibility()
->   (drivers/net/ethernet/google/gve/gve_adminq.c:1264, moved verbatim=E2=
-=80=A6
+> - [Medium] Hardware-state divergence after a failed queue bring-up in
+>   reset recovery: when `gve_reset_recovery()` gets an error from=E2=80=A6
 >
 > --
 >
-> gve: introduce gve_adminq_get_device_properties()
+> gve: refactor gve_init_priv for reset path
 >
-> This adds gve_adminq_get_device_properties(), a helper that runs the
-> VERIFY_DRIVER_COMPATIBILITY and DESCRIBE_DEVICE admin queue commands in
-> sequence, and moves the driver-info allocation and fill-in from
-> gve_main.c into gve_adminq_verify_driver_compatibility().  The commit
-> message describes it as pure code movement with no functional change.
+> gve_init_priv() is reduced to only populating priv with device properties
+> so it can be called once from gve_probe(), with the new gve_adminq_init()
+> and gve_setup_device() helpers taking over adminq allocation and device
+> setup. gve_reset_recovery() now calls those helpers directly instead of
+> going through gve_init_priv().
 >
-> No Link: tags present in the commit header.
->
-> > diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net=
-/ethernet/google/gve/gve_adminq.c
-> > index 046155ae7d669..f420a8e1dd3df 100644
-> > --- a/drivers/net/ethernet/google/gve/gve_adminq.c
-> > +++ b/drivers/net/ethernet/google/gve/gve_adminq.c
+> > diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/e=
+thernet/google/gve/gve_main.c
+> > index addfd8dc1a1a2..2fe280cf7e680 100644
+> > --- a/drivers/net/ethernet/google/gve/gve_main.c
+> > +++ b/drivers/net/ethernet/google/gve/gve_main.c
 >
 > [ ... ]
 >
-> > @@ -1143,6 +1145,27 @@ int gve_adminq_describe_device(struct gve_priv *=
-priv)
-> >       return err;
-> >  }
+> > @@ -2566,15 +2541,32 @@ static int gve_reset_recovery(struct gve_priv *=
+priv, bool was_up)
+> >  {
+> >       int err;
 > >
-> > +int gve_adminq_get_device_properties(struct gve_priv *priv)
-> > +{
-> > +     int err;
+> > -     err =3D gve_init_priv(priv, true);
+> > -     if (err)
+> > +     err =3D gve_adminq_init(priv);
+> > +     if (err) {
+> > +             dev_err(&priv->pdev->dev,
+> > +                     "Failed to alloc admin queue: err=3D%d\n", err);
+> >               goto err;
+> > +     }
 > > +
 > > +     err =3D gve_adminq_verify_driver_compatibility(priv);
 > > +     if (err) {
 > > +             dev_err(&priv->pdev->dev,
 > > +                     "Could not verify driver compatibility: err=3D%d\=
 n", err);
-> > +             return err;
+> > +             goto err_free_adminq;
 > > +     }
 > > +
-> > +     /* Get the initial information we need from the device */
-> > +     err =3D gve_adminq_describe_device(priv);
-> > +     if (err) {
-> > +             dev_err(&priv->pdev->dev,
-> > +                     "Could not get device information: err=3D%d\n", e=
-rr);
-> > +             return err;
-> > +     }
-> > +     return 0;
-> > +}
+> > +     err =3D gve_setup_device(priv);
+> > +     if (err)
+> > +             goto err_free_adminq;
+> >       if (was_up) {
+> >               err =3D gve_open(priv->dev);
+> >               if (err)
+> > -                     goto err;
+> > +                     return err;
+> >       }
 >
 > [Severity: Low]
-> Should this helper also carry the state handling that gve_init_priv()
-> currently performs around the same two commands?
 >
-> gve_init_priv() in gve_main.c does this before calling
-> gve_adminq_describe_device():
+> The gve_open() failure in gve_reset_recovery() changes from "goto err" to
+> "return err", so it no longer reaches the shared label:
 >
->         priv->num_registered_pages =3D 0;
+> err:
+>         dev_err(&priv->pdev->dev, "Reset failed! !!! DISABLING ALL QUEUES=
+ !!!\n");
+>         gve_turndown(priv);
+>         return err;
 >
->         if (skip_describe_device)
->                 goto setup_device;
+> Is dropping the "Reset failed" message and the gve_turndown(priv) call on
+> that path intended?  A failing gve_open() during recovery (for example
+> gve_queues_mem_alloc() returning -ENOMEM under memory pressure) now
+> returns silently to gve_reset(), which only prints its own message.
 >
->         device_info->queue_format =3D GVE_QUEUE_FORMAT_UNSPECIFIED;
->         /* Get the initial information we need from the device */
->         err =3D gve_adminq_describe_device(priv);
+> The commit message says:
 >
-> The queue_format reset matters because gve_adminq_describe_device()
-> consumes the incoming value:
+>     These changes are only code movement, no functional change.
 >
->         } else if (device_info->queue_format =3D=3D GVE_GQI_RDA_FORMAT) {
->                 dev_info(&priv->pdev->dev,
->                          "Driver is running with GQI RDA queue format.\n"=
-);
+> Would it be worth mentioning this behaviour change above the "---" line s=
+o
+> it survives in git history?  The v3 changelog note "don't free device
+> resources if gve_open() fails in the reset path" is below the cut and doe=
+s
+> not mention the lost diagnostic or the skipped gve_turndown().
 >
-> A caller that invokes gve_adminq_get_device_properties() with a stale
-> non-zero device_info.queue_format would keep the previous format and end
-> up with supported_features_mask left at 0, silently disabling jumbo
-> frames, buffer sizes, modify-ring, flow steering, RSS and timestamps.
->
-> For the record, this does not appear to be reachable anywhere: at this
-> commit gve_adminq_get_device_properties() has no callers, only the
-> prototype in gve_adminq.h and the definition, and gve_init_priv() still
-> calls gve_adminq_describe_device() directly with the reset in place.  By
-> the end of the series the concern is resolved rather than left latent:
-> the single call site in gve_probe() does
->
->         priv->device_info.queue_format =3D GVE_QUEUE_FORMAT_UNSPECIFIED;
->         err =3D gve_adminq_get_device_properties(priv);
-
-Like the AI notes, when gve_adminq_get_device_properties() is actually
-used later in the series, things are setup to run properly.
->
-> skip_describe_device no longer exists in the driver, and
-> priv->num_registered_pages =3D 0 has moved into gve_setup_device().  Woul=
-d
-> it be worth a note in the commit message that the surrounding state
-> handling stays with the caller?
->
-> > @@ -1205,20 +1228,53 @@ int gve_adminq_report_stats(struct gve_priv *pr=
-iv, u64 stats_report_len,
-> >       return gve_adminq_execute_cmd(priv, &cmd);
-> >  }
-> >
-> > -int gve_adminq_verify_driver_compatibility(struct gve_priv *priv,
-> > -                                        u64 driver_info_len,
-> > -                                        dma_addr_t driver_info_addr)
-> > +int gve_adminq_verify_driver_compatibility(struct gve_priv *priv)
-> >  {
-> > +     struct gve_driver_info *driver_info;
-> >       union gve_adminq_command cmd;
-> > +     dma_addr_t driver_info_bus;
-> > +     int err;
-> > +
-> > +     driver_info =3D dma_alloc_coherent(&priv->pdev->dev,
-> > +                                      sizeof(struct gve_driver_info),
-> > +                                      &driver_info_bus, GFP_KERNEL);
-> > +     if (!driver_info)
-> > +             return -ENOMEM;
->
-> [ ... ]
->
-> > -     return gve_adminq_execute_cmd(priv, &cmd);
-> > +     err =3D gve_adminq_execute_cmd(priv, &cmd);
-> > +
-> > +     /* It's ok if the device doesn't support this */
-> > +     if (err =3D=3D -EOPNOTSUPP)
-> > +             err =3D 0;
-> > +
-> > +     dma_free_coherent(&priv->pdev->dev,
-> > +                       sizeof(struct gve_driver_info),
-> > +                       driver_info, driver_info_bus);
-> > +     return err;
-> >  }
+> For what it is worth, the later commit "gve: simplify reset logic"
+> (84559f54c263) restores both: gve_recover() sends a gve_open() failure to
+> its teardown_device label, which logs "Recover failed! !!! DISABLING ALL
+> QUEUES !!!" and calls gve_teardown_device().
 >
 > [Severity: Medium]
-> This isn't a bug introduced by this patch, but is it safe to hand
-> driver_info back to the DMA allocator when the admin queue timed out?
 >
-> The identical sequence lived in gve_verify_driver_compatibility() in
-> gve_main.c before the move, so this is only being relocated here.
+> This isn't a bug introduced by this patch, but the same "return err" path
+> leaves the device without any reset after a partially completed queue
+> bring-up, and the refactor is a good opportunity to ask about it.
 >
-> On the timeout path gve_adminq_kick_and_wait() has already rung the
-> doorbell and gives up without quiescing the queue:
+> When gve_open() -> gve_queues_start() fails after gve_register_qpls() or
+> after some queues were created, it takes its reset label, and because
+> GVE_PRIV_FLAGS_RESET_IN_PROGRESS is set it skips the reset and frees the
+> ring and QPL memory instead:
 >
->         gve_adminq_kick_cmd(priv, head);
->         if (!gve_adminq_wait_for_cmd(priv, head)) {
->                 dev_err(&priv->pdev->dev, "AQ commands timed out, need to=
- reset AQ\n");
->                 priv->adminq_timeouts++;
->                 return -ENOTRECOVERABLE;
->         }
+> reset:
+>         if (gve_get_reset_in_progress(priv))
+>                 goto stop_and_free_rings;
+>         gve_reset_and_teardown(priv, true);
+> ...
+> stop_and_free_rings:
+>         gve_tx_stop_rings(priv, gve_num_tx_queues(priv));
+>         gve_rx_stop_rings(priv, priv->rx_cfg.num_queues);
+>         gve_queues_mem_remove(priv);
+>         return err;
 >
-> The VERIFY_DRIVER_COMPATIBILITY descriptor still carries
-> driver_info_bus, so after gve_adminq_execute_cmd() returns
-> -ENOTRECOVERABLE the buffer is released while the device may still
-> fetch it.  Can the NIC read driver_info after dma_free_coherent() has
-> returned it to the allocator?
+> gve_register_qpls() and gve_create_rings() rely on the assumption that
+> "this failure will trigger a reset - no need to clean up", but on this pa=
+th
+> no gve_adminq_free()/gve_adminq_release() runs, so nothing writes
+> GVE_DRIVER_STATUS_RESET_MASK.
+>
+> Can the NIC then be left with queues created and page lists registered th=
+at
+> reference DMA memory the driver has just released?  The baseline code had
+> the same gap, since its "goto err" only logged and called gve_turndown().
+>
+> Here too the end of the series appears to close this: gve_recover() route=
+s
+> the gve_open() failure to gve_teardown_device(), which calls
+> gve_adminq_free() and therefore gve_adminq_release().
 
-This is a non-issue. If there is a timeout and the device is not
-responding, the driver resets the device and frees the AdminQ.
->
-> The same unconditional-free-after-execute pattern is used by
-> gve_adminq_register_page_list(), gve_adminq_execute_extended_cmd() and
-> gve_adminq_describe_device(), so if this is worth addressing it looks
-> like a separate change rather than something for this code movement.
+As the AI notes, both the issues it has flagged are resolved in the
+next patch in the series.
+
 >
 > --
 > Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
