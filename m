@@ -1,29 +1,29 @@
 Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D5E46DFE7
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 08:43:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A766C46E019
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 08:43:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.38.64.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789116186; cv=none; b=QUMIZ4r9ij6o6roi6OnWJTiQfMK/XX7Jlp91b7WaOlk1mO4pZXvrg+hk18EVUqjpnf5D9m1MHaAZQoZ+TDI6lklZ4FliICAIX4k/p37770H/ngjYrcSM4FbpdAxpyRGEsuytIfNqz8OLnBJxYC4dDWr7CjKGu4+rDuWnz38lQnE=
+	t=1789116188; cv=none; b=VQrLCJnvjT0X+BkrXcg4N6ocpfnaVaUX8+MQeAHvGJ5825WHN3Pl9gX4I19QvwNl84oD4vzyCtsP4nlxiblm/aRtoZkGm7C1yPRGygjcWmdFcsAmV7dUvv9fvQHKbKDtkT0zgyx+PU6bgP0SURUp+ghggZDbhshYqSaDQdd1Ehs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789116186; c=relaxed/simple;
-	bh=xGoCuHo7mUQPDlmsqurPa1B3XkoCPGMyc0yg9T6bD/c=;
+	s=arc-20240116; t=1789116188; c=relaxed/simple;
+	bh=0sE7aaIqPzn3JxTaI6eG9R0eumVe7BHcHL/QQeDjb3A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LsCcsL3GXz2W1lWeA85X2hcyPH+/hQGutnRFklFrbCvYf3Wrg7yWuptc2EK6Cjpfb9LKYP0D7ArCJjVubaK45569/bck+P+8Cd6HagLVhv93IefRDXeQ03EcKO+F4M9IRZPKgM6XfTMk+vn06dCEL/+MPREV9aPXRoxA78ye2Ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn; spf=pass smtp.mailfrom=mail.ustc.edu.cn; dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b=o+dcgZEf; arc=none smtp.client-ip=202.38.64.46
+	 MIME-Version; b=VyzzU3Ap5VvVQ+DF6V4wyXQyQq2vOkZg4Q4wjuEKRjVUHGqFw3O3qg3Lrki6S99aoWtXTSczP8kpKGCI89VQzNqcpejm1se3kd6UrWbuKQnFBUXBFBspVgM9W7wcKU4uDBo6838WKBspsukH1erZ/qehIbp3jbDEvh1rvVf/A9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn; spf=pass smtp.mailfrom=mail.ustc.edu.cn; dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b=HUByhvfX; arc=none smtp.client-ip=202.38.64.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b="o+dcgZEf"
+	dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b="HUByhvfX"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
 	Message-ID:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=xzxgUgmrWni180JWr5nLwUS0QOxdA0fFbq
-	Wot3NtMVk=; b=o+dcgZEfQ7xip55/bbTCSrYkaNN9TX4pSr7I0cdvsmOACx29CD
-	GEdpgdtWhPwXTg+pIHG1szkgqsH20RAGYtoyYYp25Lk3u16bbxrsU40G1+ymhiX/
-	FZQ/PWGpraK651eO4P/9Qio/LJP3XWNRmyLAJmKryYq0yLwjZ9yRN1nSE=
+	Content-Transfer-Encoding; bh=3tRxNyHji++ZugnpZBG/TtYztoo3/+TGL5
+	Bb5N2XaLY=; b=HUByhvfX21wNRINk741UYyY2e6MFSZQe/zbKcCcH8hzx+/Cbjd
+	AswZeTx4b6iPGIq8sowcZC9codBKVGM8nDXt2E+oTH3W83sY0y+lQnfEW8j4utTg
+	gGuNW6i1i/98/Ee3MK+z+tDjmhg+7OranMHRi5ovNjqaMal4sXLdjp/bs=
 Received: from localhost (unknown [222.195.81.105])
-	by mailimap2024 (Coremail) with SMTP id 3pYKCgDn5i0Sv6Nqu+8GAQ--.885S2;
-	Fri, 11 Sep 2026 16:42:58 +0800 (CST)
+	by mailimap2024 (Coremail) with SMTP id 3pYKCgA3LyYTv6NqzO8GAQ--.484S2;
+	Fri, 11 Sep 2026 16:42:59 +0800 (CST)
 From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -34,9 +34,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Amery Hung <ameryhung@gmail.com>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	Puranjay Mohan <puranjay@kernel.org>
-Subject: [PATCH bpf v3 1/2] bpf: Invalidate iterator-owned BTF pointers on next and destroy
-Date: Fri, 11 Sep 2026 16:42:53 +0800
-Message-ID: <20260911084254.3481508-2-xyx2021@mail.ustc.edu.cn>
+Subject: [PATCH bpf v3 2/2] selftests/bpf: Test iterator BTF pointer lifetimes
+Date: Fri, 11 Sep 2026 16:42:54 +0800
+Message-ID: <20260911084254.3481508-3-xyx2021@mail.ustc.edu.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260911084254.3481508-1-xyx2021@mail.ustc.edu.cn>
 References: <20260911084254.3481508-1-xyx2021@mail.ustc.edu.cn>
@@ -47,11 +47,11 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:3pYKCgDn5i0Sv6Nqu+8GAQ--.885S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxKw43uFWrGrWrJF4xKw47twb_yoWfKF18pF
-	s7WrWDtF4kAF40grsrAa1DAryF9rW0q3y3Cry8K34fCF1rGryDAFy0gryYvF45AFWkGw17
-	Aw40va98ZayUJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9Sb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+X-CM-TRANSID:3pYKCgA3LyYTv6NqzO8GAQ--.484S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3CF4ruF47ZF43Kw4rGryrtFb_yoWDWFy5pa
+	1xA3srCw4fX3y3KF1kCanruFy3Kw1kZa4UW340va1Fkw48tr4kWFyrJr1Yy3W5AFykGFyS
+	qrW0ka9xGrW8JFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9qb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
 	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
 	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
 	jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
@@ -61,274 +61,382 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxKw43uFWrGrWrJF4xKw47twb_yoWfKF18pF
 	MxkF7I0En4kS14v26r1q6r43MxkIecxEwVAFwVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxV
 	CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
 	6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
-	WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG
-	6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
-	1UYxBIdaVFxhVjvjDU0xZFpf9x07bwzuZUUUUU=
+	WUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0
+	rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
+	4UJbIYCTnIWIevJa73UjIFyTuYvjxU4iL0UUUUU
 X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
 
-Open-coded iterator next kfuncs that return non-struct pointers associate
-the returned PTR_TO_MEM with the iterator's reference ID. Struct pointer
-returns take a separate PTR_TO_BTF_ID path which omits this relationship.
+Add verifier coverage for struct pointers returned by open-coded iterator
+next kfuncs. Verify that the pointer is trusted for kfunc arguments while
+the iterator element is current, then rejected after either next or
+destroy. Cover both non-NULL and NULL next results.
 
-This leaves such pointers verifier-valid after their lifetime ends. The
-task_vma iterator resets its VMA snapshot and drops the previous vm_file
-reference when next advances, then frees the snapshot on destroy. Other
-non-RCU struct iterators also release or replace their previous element on
-advance.
+Exercise a trusted vm_file field as well as the direct VMA pointer. Verify
+that a FILE dynptr derived from vm_file must be discarded before iterator
+next or destroy, and that advancing after an explicit discard remains
+accepted. Keep a MEM_RCU field reachable through the snapshot's vm_mm field
+valid across iterator transitions because its lifetime is independent of
+the iterator.
 
-A trusted field derived from an iterator result can also back a
-resource-tracked object. In particular, bpf_dynptr_from_file() does not
-take its own file reference. Losing vm_file's iterator parent while
-constructing a FILE dynptr therefore lets the dynptr outlive the snapshot's
-file reference.
+Also cover the existing RCU iterator behavior to make sure it retains its
+current lifetime and trust semantics.
 
-Associate non-RCU PTR_TO_BTF_ID results with the iterator reference. Before
-modeling another next result, invalidate older BTF pointers carrying that
-parent. Do this before constructing R0 and for both the ACTIVE and DRAINED
-iterator branches. The existing iterator reference release invalidates the
-current result on destroy.
-
-Preserve the parent across BTF field loads when the result remains fully
-trusted and its lifetime is tied to the parent. Do not propagate it to
-MEM_RCU, MEM_PERCPU, MEM_USER, or untrusted results, whose lifetime or
-access domain follows separate rules.
-
-When bpf_dynptr_from_file() consumes a borrowed file carrying such a
-parent, use that parent as the FILE dynptr's lifetime anchor. Reject
-iterator next or destroy while a resource child remains live, requiring
-the program to discard the dynptr before its backing file can be released.
-
-This issue was found during BPF verifier testing with an in-house runtime
-semantic checker.
-
-Fixes: 4cbee026db54 ("bpf: return VMA snapshot from task_vma iterator")
-Suggested-by: Amery Hung <ameryhung@gmail.com>
-Link: https://lore.kernel.org/bpf/CAMB2axMV4rZ_Mb91OdzGH6T4Yym7nB+wz+EtxP_wUEniwA+EzA@mail.gmail.com
 Assisted-by: LLM
 Signed-off-by: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 ---
- include/linux/bpf_verifier.h |   6 +-
- kernel/bpf/verifier.c        | 110 ++++++++++++++++++++++++++++-------
- 2 files changed, 92 insertions(+), 24 deletions(-)
+ .../selftests/bpf/progs/iters_testmod.c       | 332 ++++++++++++++++++
+ 1 file changed, 332 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 36b65797877d0..ae30df629d5b3 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1518,9 +1518,9 @@ struct bpf_dynptr_desc {
- 
- /*
-  * The last seen rereferenced object; Updated by update_ref_obj() when a register refers to a
-- * referenced object. Used when the helper or kfunc is casting a referenced object, returning
-- * allocated memory derived from referenced object or creating a dynptr with a referenced
-- * object as parent.
-+ * referenced object or another verifier-tracked lifetime anchor. Used when the helper or kfunc
-+ * is casting a referenced object, returning allocated memory derived from a referenced object
-+ * or creating a dynptr whose backing object has a tracked lifetime.
-  */
- struct ref_obj_desc {
- 	u32 id;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 72a3f5998dd27..eb013954182f2 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -238,13 +238,18 @@ static void bpf_map_key_store(struct bpf_insn_aux_data *aux, u64 state)
- 			     (poisoned ? BPF_MAP_KEY_POISON : 0ULL);
- }
- 
--static void update_ref_obj(struct ref_obj_desc *ref_obj, struct bpf_reg_state *reg)
-+static void update_ref_obj_id(struct ref_obj_desc *ref_obj, u32 id, u32 parent_id)
- {
--	ref_obj->id = reg->id;
--	ref_obj->parent_id = reg->parent_id;
-+	ref_obj->id = id;
-+	ref_obj->parent_id = parent_id;
- 	ref_obj->cnt++;
- }
- 
-+static void update_ref_obj(struct ref_obj_desc *ref_obj, struct bpf_reg_state *reg)
-+{
-+	update_ref_obj_id(ref_obj, reg->id, reg->parent_id);
-+}
-+
- static int validate_ref_obj(struct bpf_verifier_env *env, struct ref_obj_desc *ref_obj)
- {
- 	if (ref_obj->cnt > 1) {
-@@ -977,7 +982,7 @@ static int unmark_stack_slots_iter(struct bpf_verifier_env *env,
- 				   struct bpf_reg_state *reg, int nr_slots)
- {
- 	struct bpf_func_state *state = bpf_func(env, reg);
--	int spi, i, j;
-+	int spi, i, j, err;
- 
- 	spi = iter_get_spi(env, reg, nr_slots);
- 	if (spi < 0)
-@@ -987,8 +992,11 @@ static int unmark_stack_slots_iter(struct bpf_verifier_env *env,
- 		struct bpf_stack_state *slot = &state->stack[spi - i];
- 		struct bpf_reg_state *st = &slot->spilled_ptr;
- 
--		if (i == 0)
--			WARN_ON_ONCE(release_reference(env, st->id));
-+		if (i == 0) {
-+			err = release_reference(env, st->id);
-+			if (err)
-+				return err;
-+		}
- 
- 		bpf_mark_reg_not_init(env, st);
- 
-@@ -6140,9 +6148,16 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
- 	}
- 
- 	if (atype == BPF_READ && value_regno >= 0) {
--		ret = mark_btf_ld_reg(env, regs, value_regno, ret, reg->btf, btf_id, flag);
-+		enum bpf_reg_type reg_type = ret;
-+		u32 parent_id = reg->parent_id;
-+
-+		ret = mark_btf_ld_reg(env, regs, value_regno, reg_type,
-+				      reg->btf, btf_id, flag);
- 		if (ret < 0)
- 			return ret;
-+		if ((regs[value_regno].type & PTR_TRUSTED) &&
-+		    !(regs[value_regno].type & (MEM_RCU | MEM_PERCPU | MEM_USER)))
-+			regs[value_regno].parent_id = parent_id;
- 	}
- 
+diff --git a/tools/testing/selftests/bpf/progs/iters_testmod.c b/tools/testing/selftests/bpf/progs/iters_testmod.c
+index 76012dbbdb413..a55e5cf29474a 100644
+--- a/tools/testing/selftests/bpf/progs/iters_testmod.c
++++ b/tools/testing/selftests/bpf/progs/iters_testmod.c
+@@ -28,6 +28,298 @@ int iter_next_trusted(const void *ctx)
  	return 0;
-@@ -9456,6 +9471,24 @@ static int idstack_pop(struct bpf_idmap *idmap)
- 	return idmap->map[--idmap->cnt].old;
  }
  
-+static int check_reference_children(struct bpf_verifier_env *env, int parent_id)
++SEC("raw_tp/sys_enter")
++__failure __msg("invalid mem access 'scalar'")
++int iter_next_trusted_after_destroy(const void *ctx)
 +{
-+	struct bpf_verifier_state *vstate = env->cur_state;
-+	int i;
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
 +
-+	for (i = 0; i < vstate->acquired_refs; i++) {
-+		if (vstate->refs[i].type != REF_TYPE_PTR)
-+			continue;
-+		if (vstate->refs[i].parent_id != parent_id)
-+			continue;
-+		verbose(env, "Leaking reference id=%d alloc_insn=%d. Release it first.\n",
-+			vstate->refs[i].id, vstate->refs[i].insn_idx);
-+		return -EINVAL;
-+	}
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
 +
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	bpf_iter_task_vma_destroy(&vma_it);
++	return vma_ptr->vm_start;
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
 +	return 0;
 +}
 +
- /* Release id and objects derived from it iteratively in a DFS manner */
- static int release_reference(struct bpf_verifier_env *env, int id)
- {
-@@ -9465,31 +9498,25 @@ static int release_reference(struct bpf_verifier_env *env, int id)
- 	struct bpf_stack_state *stack;
- 	struct bpf_func_state *state;
- 	struct bpf_reg_state *reg;
--	int i, err;
-+	int err;
- 
- 	idstack->cnt = 0;
- 	err = idstack_push(idstack, id);
- 	if (err)
- 		return err;
- 
--	if (find_reference_state(vstate, id)) {
--		err = release_reference_nomark(env, id);
--		WARN_ON_ONCE(err);
--	}
--
- 	while ((id = idstack_pop(idstack))) {
- 		/*
- 		 * Child references are inaccessible after parent is released,
- 		 * any child references that exist at this point are a leak.
- 		 */
--		for (i = 0; i < vstate->acquired_refs; i++) {
--			if (vstate->refs[i].type != REF_TYPE_PTR)
--				continue;
--			if (vstate->refs[i].parent_id != id)
--				continue;
--			verbose(env, "Leaking reference id=%d alloc_insn=%d. Release it first.\n",
--				vstate->refs[i].id, vstate->refs[i].insn_idx);
--			return -EINVAL;
-+		err = check_reference_children(env, id);
-+		if (err)
-+			return err;
-+
-+		if (find_reference_state(vstate, id)) {
-+			err = release_reference_nomark(env, id);
-+			WARN_ON_ONCE(err);
- 		}
- 
- 		bpf_for_each_reg_in_vstate_mask(vstate, state, reg, stack, mask, ({
-@@ -9541,6 +9568,33 @@ static void invalidate_non_owning_refs(struct bpf_verifier_env *env)
- 	}));
- }
- 
-+static int invalidate_iter_owned_btf_ptrs(struct bpf_verifier_env *env, u32 parent_id)
++SEC("raw_tp/sys_enter")
++__failure __msg("invalid mem access 'scalar'")
++int iter_next_trusted_after_next(const void *ctx)
 +{
-+	struct bpf_func_state *unused;
-+	struct bpf_reg_state *reg;
-+	int err;
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr, *next_vma_ptr;
++	u64 vm_start;
 +
-+	if (WARN_ON_ONCE(!parent_id))
-+		return -EFAULT;
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
 +
-+	err = check_reference_children(env, parent_id);
-+	if (err)
-+		return err;
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
 +
-+	/*
-+	 * Struct iterators can release the previous element on each next call.
-+	 * PTR_TO_MEM iterator results use storage that remains valid until destroy.
-+	 */
-+	bpf_for_each_reg_in_vstate(env->cur_state, unused, reg, ({
-+		if (base_type(reg->type) != PTR_TO_BTF_ID || reg->parent_id != parent_id)
-+			continue;
-+		bpf_diag_record_scrub(env, reg, BPF_DIAG_MOD_REF_RELEASE);
-+		mark_reg_invalid(env, reg);
-+	}));
++	next_vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!next_vma_ptr)
++		goto out;
 +
++	vm_start = vma_ptr->vm_start;
++	bpf_iter_task_vma_destroy(&vma_it);
++	return vm_start;
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
 +	return 0;
 +}
 +
- static void invalidate_rcu_protected_refs(struct bpf_verifier_env *env)
- {
- 	struct bpf_stack_state *stack;
-@@ -13100,6 +13154,10 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
- 				ret = process_kf_arg_ptr_to_btf_id(env, reg, ref_t, ref_tname, ref_id, meta, i, argno);
- 				if (ret < 0)
- 					return ret;
-+				if (meta->btf == btf_vmlinux &&
-+				    meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_file] &&
-+				    i == 0 && !reg_is_referenced(env, reg) && reg->parent_id)
-+					update_ref_obj_id(&meta->ref_obj, reg->parent_id, 0);
- 				break;
- 			}
- 
-@@ -13995,6 +14053,13 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		}
- 	}
- 
-+	if (bpf_is_iter_next_kfunc(&meta) &&
-+	    !(get_iter_from_state(env->cur_state, &meta)->type & MEM_RCU)) {
-+		err = invalidate_iter_owned_btf_ptrs(env, meta.ref_obj.id);
-+		if (err)
-+			return err;
++SEC("raw_tp/sys_enter")
++__failure __msg("invalid mem access 'scalar'")
++int iter_next_trusted_after_next_null(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr, *next_vma_ptr;
++	u64 vm_start;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	next_vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (next_vma_ptr)
++		goto out;
++
++	vm_start = vma_ptr->vm_start;
++	bpf_iter_task_vma_destroy(&vma_it);
++	return vm_start;
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__failure __msg("invalid mem access 'scalar'")
++int iter_next_trusted_field_after_destroy(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
++	struct file *file_ptr;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	file_ptr = vma_ptr->vm_file;
++	bpf_iter_task_vma_destroy(&vma_it);
++	if (file_ptr)
++		return file_ptr->f_mode;
++	return 0;
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__failure __msg("invalid mem access 'scalar'")
++int iter_next_trusted_field_after_next(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr, *next_vma_ptr;
++	struct file *file_ptr;
++	u32 mode;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	file_ptr = vma_ptr->vm_file;
++	if (!file_ptr)
++		goto out;
++
++	next_vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!next_vma_ptr)
++		goto out;
++
++	mode = file_ptr->f_mode;
++	bpf_iter_task_vma_destroy(&vma_it);
++	return mode;
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__failure __msg("Leaking reference id=")
++int iter_next_file_dynptr_after_next(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
++	struct bpf_dynptr dynptr;
++	struct file *file_ptr;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	file_ptr = vma_ptr->vm_file;
++	if (!file_ptr)
++		goto out;
++
++	bpf_dynptr_from_file(file_ptr, 0, &dynptr);
++	bpf_iter_task_vma_next(&vma_it);
++	bpf_dynptr_file_discard(&dynptr);
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__failure __msg("Leaking reference id=")
++int iter_next_file_dynptr_after_destroy(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
++	struct bpf_dynptr dynptr;
++	struct file *file_ptr;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	file_ptr = vma_ptr->vm_file;
++	if (!file_ptr)
++		goto out;
++
++	bpf_dynptr_from_file(file_ptr, 0, &dynptr);
++	bpf_iter_task_vma_destroy(&vma_it);
++	bpf_dynptr_file_discard(&dynptr);
++	return 0;
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__success
++int iter_next_file_dynptr_discard_before_advance(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
++	struct bpf_dynptr dynptr;
++	struct file *file_ptr;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	file_ptr = vma_ptr->vm_file;
++	if (!file_ptr)
++		goto out;
++
++	bpf_dynptr_from_file(file_ptr, 0, &dynptr);
++	bpf_dynptr_file_discard(&dynptr);
++	bpf_iter_task_vma_next(&vma_it);
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__success
++int iter_next_trusted_current_after_next(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (!vma_ptr)
++		goto out;
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (vma_ptr)
++		bpf_kfunc_trusted_vma_test(vma_ptr);
++out:
++	bpf_iter_task_vma_destroy(&vma_it);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__success
++int iter_next_trusted_rcu_field_after_destroy(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
++	struct mm_struct *mm_ptr;
++	struct file *file_ptr = NULL;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (vma_ptr) {
++		mm_ptr = vma_ptr->vm_mm;
++		/* exe_file has RCU protection independent of the iterator. */
++		if (mm_ptr)
++			file_ptr = mm_ptr->exe_file;
 +	}
 +
- 	bpf_diag_record_caller_saved(env, regs);
- 	bpf_diag_mod_begin(env, &regs[BPF_REG_0], NULL, BPF_DIAG_MOD_WRITE);
- 	for (i = 0; i < CALLER_SAVED_REGS; i++) {
-@@ -14105,6 +14170,9 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			regs[BPF_REG_0].btf = desc_btf;
- 			regs[BPF_REG_0].type = type;
- 			regs[BPF_REG_0].btf_id = ptr_type_id;
++	bpf_iter_task_vma_destroy(&vma_it);
++	if (file_ptr)
++		return file_ptr->f_mode;
++	return 0;
++}
 +
-+			if (bpf_is_iter_next_kfunc(&meta) && !(type & MEM_RCU))
-+				regs[BPF_REG_0].parent_id = meta.ref_obj.id;
- 		}
++SEC("raw_tp/sys_enter")
++__success
++int iter_next_trusted_rcu_field_after_next(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma vma_it;
++	struct vm_area_struct *vma_ptr;
++	struct mm_struct *mm_ptr;
++	struct file *file_ptr = NULL;
++	u32 mode = 0;
++
++	bpf_iter_task_vma_new(&vma_it, cur_task, 0);
++
++	vma_ptr = bpf_iter_task_vma_next(&vma_it);
++	if (vma_ptr) {
++		mm_ptr = vma_ptr->vm_mm;
++		if (mm_ptr)
++			file_ptr = mm_ptr->exe_file;
++	}
++
++	bpf_iter_task_vma_next(&vma_it);
++	if (file_ptr)
++		mode = file_ptr->f_mode;
++	bpf_iter_task_vma_destroy(&vma_it);
++	return mode;
++}
++
+ SEC("raw_tp/sys_enter")
+ __failure __msg("Possibly NULL pointer passed to trusted R1")
+ int iter_next_trusted_or_null(const void *ctx)
+@@ -66,6 +358,46 @@ int iter_next_rcu(const void *ctx)
+ 	return 0;
+ }
  
- 		if (is_kfunc_ret_null(&meta)) {
++SEC("raw_tp/sys_enter")
++__success
++int iter_next_rcu_after_destroy(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task task_it;
++	struct task_struct *task_ptr;
++
++	bpf_iter_task_new(&task_it, cur_task, 0);
++
++	task_ptr = bpf_iter_task_next(&task_it);
++	bpf_iter_task_destroy(&task_it);
++	if (!task_ptr)
++		return 0;
++
++	bpf_kfunc_rcu_task_test(task_ptr);
++	return 0;
++}
++
++SEC("raw_tp/sys_enter")
++__success
++int iter_next_rcu_after_next(const void *ctx)
++{
++	struct task_struct *cur_task = bpf_get_current_task_btf();
++	struct bpf_iter_task task_it;
++	struct task_struct *task_ptr;
++
++	bpf_iter_task_new(&task_it, cur_task, 0);
++
++	task_ptr = bpf_iter_task_next(&task_it);
++	if (!task_ptr)
++		goto out;
++
++	bpf_iter_task_next(&task_it);
++	bpf_kfunc_rcu_task_test(task_ptr);
++out:
++	bpf_iter_task_destroy(&task_it);
++	return 0;
++}
++
+ SEC("raw_tp/sys_enter")
+ __failure __msg("Possibly NULL pointer passed to trusted R1")
+ int iter_next_rcu_or_null(const void *ctx)
 -- 
 2.43.0
 
