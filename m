@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-141.mta0.migadu.com [91.218.175.141])
+Received: from mta0.migadu.com (out-49.mta0.migadu.com [91.218.175.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 287FE39022A
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 05:34:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48DD830568B
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 05:37:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789104875; cv=none; b=j5zzCHeSDKhNfs4Ld//ZQbqfI6XbQ1BCPpkLuArGvJlb4v62xhGQkDd0v3YqvNd8vtsfErIML/pjErq46JyqqKyujhMsVIePy9HMqNCyRKjMlhHA7KdtUJbWU+nx16V5JyFJFkbKA5RelQbcYpgObk7827jZR6DT65gA7qv57Es=
+	t=1789105056; cv=none; b=EnRg+wCsIYAUMq5Erb/pWjFDsKW8CMxDemcK2t+kFP7F7euWggkBSF2tKPTJ2texp4BarxG5lYXYmyExLx2KrdGSIzZ7cm49cvyXYAT/ZmoeEy66zJO7pnToOyXENSWvA4MhhLIylN3t/JVfHe/YGpVvuomwHXwoD/YnmVpimRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789104875; c=relaxed/simple;
-	bh=sVEV/XK5D/oco1XqkmpUo65zt1a8V9JerTrhuFHJw6g=;
+	s=arc-20240116; t=1789105056; c=relaxed/simple;
+	bh=uamY+EXaVHr/3FC04Ra4Clq8F5JpZVLPHVRmXkkkLak=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KMWr+1Wgpz2HyHcF/LLCDJfs8O0osdjJWL3IItH9CVbHjyz46SUtGi792aSnWaVt/MupefgOVwwJUh1DoH8TqRrkNDI+op65q0h1TxF1kWt/JUyq9dSZvbcFznKfeiuoL+hRcOySg57kRERNP4q1PWa7HyqKVWsZumWocMG30/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G4zKQY9q; arc=none smtp.client-ip=91.218.175.141
+	 In-Reply-To:Content-Type; b=s31wri4U9Y+lD0m88WebJllvcnd/O4/ETyxcYmr4hxECkBO1sggByjX0pgCCTAUNrLbhXbnrB4+t2skQafnPr2H3gSbzJBv87VPi2C/7dGoDTNPVcn24Lxp+4DYAfZLPU2xvrTftD3rKdoUo4DMtqvxqLiUrEgjJ/lzcbVCe3FQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JBPTOHe6; arc=none smtp.client-ip=91.218.175.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G4zKQY9q"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JBPTOHe6"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=sVEV/XK5D/oco1XqkmpUo65zt1a8V9JerTrhuFHJw6g=;
+DKIM-Signature: a=rsa-sha256; bh=uamY+EXaVHr/3FC04Ra4Clq8F5JpZVLPHVRmXkkkLak=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789104872; v=1; x=1789709672;
- b=G4zKQY9qaI3yjlu50QdOouUiJYgJ5lk6JSnQIk4tOXnUS6dKNKKKVn4f9YRvtokiJxGsLx71
- ahuJqvsKAK/65Lx6UMs9G7Qbe2tpJhujr5Eh9xlYz2HFUmZp5Yxj/Y4nJjuxR6ndrxQ2UWCDhdM
- AWaAsipVogXR8GsXwYcNN6wg=
+ t=1789105052; v=1; x=1789709852;
+ b=JBPTOHe6vnQnrJec+xU8pNUV1HG3AW+EslaqyU0Xd7C2K122PeYU5sXCZAmcFaNRA2ctu5S+
+ MHADL6CMU5AjxolC43lX/dempFNfyA33T8m/Z7q7j8SRYUdzL9mVLIKGaWk1RLDeHd+ZgteJyNR
+ AVEjSffYb1Dw1Sbp6gGdi44Q=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 7b98c62012699b19;
-	Fri, 11 Sep 2026 05:34:32 +0000
-X-Mizu-Trace-ID: 7b98c62012699b19
+Received: by smtp.migadu.com with ESMTPS id b7a8002dbb4ef931;
+	Fri, 11 Sep 2026 05:37:32 +0000
+X-Mizu-Trace-ID: b7a8002dbb4ef931
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <4ef9a3d4-7a79-4144-baff-e236f8eb7c5e@linux.dev>
-Date: Fri, 11 Sep 2026 11:04:29 +0530
+Message-ID: <f4454509-b84c-4923-9983-11bc1518a4f8@linux.dev>
+Date: Thu, 10 Sep 2026 22:37:29 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,161 +38,105 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 10/13] selftests/bpf: cover the low-32 link
- for narrowing stack fills
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260910164635.459558-1-vineet.gupta@linux.dev>
- <20260910164635.459558-11-vineet.gupta@linux.dev>
- <20260910170020.04A4E1F000FF@smtp.kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <20260910170020.04A4E1F000FF@smtp.kernel.org>
+Subject: Re: [PATCH bpf-next v2 11/12] selftests/bpf: Add inline-asm tests for
+ by-value arguments
+Content-Language: en-GB
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20260909062621.4009625-1-yonghong.song@linux.dev>
+ <14888dbc8203cddca1f5affa396a0620902c0104604e6eb8dfd9d4a0470b78fc@mail.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <14888dbc8203cddca1f5affa396a0620902c0104604e6eb8dfd9d4a0470b78fc@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/10/26 10:30 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] The newly added tests for narrow stack fills hardcode memory offsets (e.g., `(r10 - 8)`) which are only correct on little-endian architectures. On big-endian architectures like s390x, these offsets do not point to the lower bits, causing the BPF verifier to reject the programs and resulting in test failures.
-> --
->
-> commit a42f9a6d4d49f17385f014eede55d6e82094a838
-> Author: Vineet Gupta <vineet.gupta@linux.dev>
->
-> selftests/bpf: cover the low-32 link for narrowing stack fills
->
-> This commit adds five new BPF programs to test the verifier's handling of
-> narrowing stack fills, specifically targeting low-32 links and sign-extension
-> behavior.
->
->> diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
->> --- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
->> +++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+
+
+On 9/9/26 12:30 AM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/aggregate_arg.c b/tools/testing/selftests/bpf/prog_tests/aggregate_arg.c
 > [ ... ]
 >
->> +SEC("socket")
->> +__success
->> +__naked void zext_fill_narrow_from_wide_spill(void)
+>> diff --git a/tools/testing/selftests/bpf/progs/aggregate_arg_func.c b/tools/testing/selftests/bpf/progs/aggregate_arg_func.c
+>> new file mode 100644
+>> index 000000000000..61dd5f86c3a4
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/aggregate_arg_func.c
+>> @@ -0,0 +1,155 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+>> +#include <vmlinux.h>
+>> +#include <bpf/bpf_helpers.h>
+>> +#include "bpf_misc.h"
+>> +
+>> +typedef unsigned __int128 u128;
+>> +
+>> +struct pair {
+>> +	__u64 lo;
+>> +	__u64 hi;
+>> +};
+>> +
+>> +struct too_big {
+>> +	__u64 a;
+>> +	__u64 b;
+>> +	__u64 c;
+>> +};
+>> +
+>> +#if defined(__clang__)
+>> +
+>> +__noinline __u64 global_arg_pair(int a, struct pair p, int c)
 >> +{
->> +	asm volatile ("						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r6 = r0;						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r0 <<= 32;						\
->> +	r6 |= r0;		/* r6 = full 64-bit unknown */	\
->> +	*(u64 *)(r10 - 8) = r6;	/* slot linked to r6 */		\
->> +	r2 = *(u32 *)(r10 - 8);	/* narrowing fill, forms the link */ \
-> [Severity: Medium]
-> On big-endian architectures like s390x, won't reading 32 bits from offset -8
-> target the upper 32 bits instead of the lower 32 bits?
->
-> The bpf_stack_narrow_access_ok() check in the verifier expects to read the
-> least significant bytes of the spill slot, which on big-endian are located
-> at offset -4 for a 32-bit read. Could this hardcoded offset cause the verifier
-> to reject the program and break the test on big-endian systems?
-
-Goot catch. Fixed for BE and LE.
-
->> +	if w6 != 0 goto 1f;	/* narrows r6, propagates to r2 */ \
->> +	if r2 == 0 goto 1f;					\
->> +	r0 /= 0;						\
->> +1:								\
->> +	r0 = 0;							\
->> +	exit;							\
->> +"	:
->> +	: __imm(bpf_get_prandom_u32)
->> +	: __clobber_all);
+>> +	return (__u64)a + p.lo + p.hi + c;
 >> +}
 > [ ... ]
 >
->> +SEC("socket")
->> +__failure __msg("div by zero")
->> +__naked void zext_fill_byte_forms_no_link(void)
+>> +#endif
+>> +
+>> +__noinline __u64 global_arg_too_big(struct too_big s)
 >> +{
->> +	asm volatile ("						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r6 = r0;						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r0 <<= 32;						\
->> +	r6 |= r0;						\
->> +	*(u64 *)(r10 - 8) = r6;					\
->> +	r2 = *(u8 *)(r10 - 8);	/* 1-byte fill: no link */	\
-> [Severity: Medium]
-> Does this hardcoded 8-bit read from offset -8 target the most significant byte
-> rather than the least significant byte on big-endian architectures?
-
-Fixed.
-
->> +	if w6 != 0 goto 1f;					\
->> +	if r2 == 0 goto 1f;	/* not deduced */		\
->> +	r0 /= 0;						\
->> +1:								\
->> +	r0 = 0;							\
->> +	exit;							\
->> +"	:
->> +	: __imm(bpf_get_prandom_u32)
->> +	: __clobber_all);
+>> +	return s.a + s.b + s.c;
 >> +}
 > [ ... ]
 >
->> +SEC("socket")
->> +__success
->> +__naked void sext_fill_narrow_from_wide_spill(void)
+>> +#if defined(__BPF_FEATURE_STACK_ARGUMENT)
+>> +
+>> +__noinline __u64 global_arg_split(int a, int b, int c, int d, struct pair p)
 >> +{
->> +	asm volatile ("						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r6 = r0;						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r0 <<= 32;						\
->> +	r6 |= r0;		/* r6 = full 64-bit unknown */	\
->> +	*(u64 *)(r10 - 8) = r6;	/* slot linked to r6 */		\
->> +	r2 = *(s32 *)(r10 - 8);	/* narrowing sx fill */		\
-> [Severity: Medium]
-> Similar to the previous cases, will this 32-bit read from offset -8 read the
-> upper 32 bits on big-endian systems and cause verifier bounds tracking to fail?
-
-Fixed.
-
->> +	if w6 != -1 goto 1f;	/* narrows r6, propagates to r2 */ \
->> +	if r2 == -1 goto 1f;	/* sign-extended, not 0xffffffff */ \
->> +	r0 /= 0;						\
->> +1:								\
->> +	r0 = 0;							\
->> +	exit;							\
->> +"	:
->> +	: __imm(bpf_get_prandom_u32)
->> +	: __clobber_all);
+>> +	return (__u64)a + b + c + d + p.lo + p.hi;
 >> +}
 > [ ... ]
 >
->> +SEC("socket")
->> +__failure __msg("div by zero")
->> +__flag(BPF_F_TEST_STATE_FREQ)
->> +__naked void fill_kinds_reach_different_values(void)
->> +{
->> +	asm volatile ("						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r6 = r0;						\
->> +	r6 &= 1;						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r8 = r0;						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r0 <<= 32;						\
->> +	r8 |= r0;						\
->> +	*(u64 *)(r10 - 8) = r8;					\
->> +	if r6 >= 1 goto 2f;					\
->> +	r2 = *(s32 *)(r10 - 8);	/* sign-extending fill */	\
-> [Severity: Medium]
-> Will these narrow fills also fail verifier checks on big-endian machines due
-> to the fixed -8 offset pointing to the wrong 32-bit half?
+>> +#endif
+> This isn't a bug, but would it help a later reader to carry the
+> changelog's gcc-invisible-reference rationale into a short comment above
+> the #if defined(__clang__), and to note why the last three cases need
+> __BPF_FEATURE_STACK_ARGUMENT (and maybe label the two #endif closures)?
 
-Fixed.
+stack argument is implemented in llvm23, and that is why we want this
+feature gating.
 
 >
->> +	goto 1f;						\
->> +2:								\
->> +	r2 = *(u32 *)(r10 - 8);	/* zero-extending fill */	\
->> +1:								\
->> +	if w8 != -1 goto 3f;					\
->> +	if r2 == -1 goto 3f;	/* only the sign-extending path */ \
+> The sibling file aggregate_ret_func.c documents its equivalent gate:
+>
+>    /*
+>     * gcc returns a by-value struct through a hidden pointer, and emits the
+>     * 'r0 = r1' returning it after the __naked body's exit, leaving the
+>     * subprogram falling through. Build these with clang only.
+>     */
+>    #if defined(__clang__)
+>
+> and other progs files label the closing directive, for example
+> verifier_ldsx.c uses #endif /* __BPF_FEATURE_ADDR_SPACE_CAST */.
+
+This is fine. We do not want to have this comment in many places.
+The commit message should explain this.
+
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34320399441
 
