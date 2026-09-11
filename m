@@ -1,116 +1,132 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70213D3339;
-	Fri, 11 Sep 2026 22:30:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C184373BE6
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 22:36:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789165819; cv=none; b=Bp/goz8PRRBI1tDoUK/AVyhUJNF0NE8+PXV21xy0zwo2s268D7b2X4BWJcubB8qBH0oRLLNbFNAkbijo0uGXUISCzoj0lT5D7cQqHs7gVIozPJylMERm6SY9Hj8Pl6F8YMkr/TlM38fW2zQ7BreDeQWJntnN+O6KCIlbIofra6o=
+	t=1789166186; cv=none; b=tkujQ0+qwbbmcPsD35E0xghfsjQxeYSWrpE3c/QDX1YTvFGPkwXBjAmj+2If3LeGlX/JP2Xe4rXXGK6lnQqb8vQV/dpO3OLJmqugQVE8EGcyvD9cqGoJfrx41QrIkYfGHBYHzPVmVlpSYyKhI8CnionwGp8kqd8ebtZs4Qnv5Nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789165819; c=relaxed/simple;
-	bh=e8yVe9qIqjoioS5C7h20iphB56OPQ6veH4x4Pj5/lAQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=f+aI6O2MbBWynSSZw9KFzakEIa5R2X5cZWbLX7ZXlUyjRB65xQ7qmsac4QYlsXPkJ9FnyA+CpZWAE15ruZPfUi+Fcebo9URI5iwy4xGp5UiTwRCBJG4Y/u0yuCfS32/aXg3rG0hEn0Vo2MIW4n/vYAGd6jHcKFaasZMbd8tv3Jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sva3XPKR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789166186; c=relaxed/simple;
+	bh=Em8WyYE7Mwj2CXzT3dUQZ9ImjUemFfadIKZvDOF8LXo=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=TdJya6EtcpwHuV+65cG3fU/cYbW32bktR5Gd4cIx0WSDMkowr3u+vozvnvro6wJgvTDQ3hRYOubdBUNKE270EY8Kt1kV0Z6xTFiAt1UMQbKl9ssmfVAMyFpLMgiZJHqc6yUqJ4bFDgSx8bAjJN13ctLNbPy5IKXgKe5mUh5qNWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kqxA6s+p; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sva3XPKR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA351F000FF;
-	Fri, 11 Sep 2026 22:30:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kqxA6s+p"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB4321F000FF;
+	Fri, 11 Sep 2026 22:36:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789165817;
-	bh=jSlyNHdS9fii1fOyMnpNZJZSuNeAq37ngDR+QTaHy2Q=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Sva3XPKRX9HlRA/K2voQSsV3oTveqMaHFcapkkCHCD9IJqVZNgpjaUkBoOAWk/Lud
-	 p6QWTv7ZttCaY62xBfTdfAEnJzvjknSdsSOfIYbp3pNl0j+7+/QVKlfADxRLlAfZp/
-	 AQvsOj6nXqmyX4+XNTL8F+ifeTXELjNlx1sy9M0XURuROHAa6kcOWIB16RgnU0a725
-	 FrCpanuXt2Q3PozVuKLJP33pBZiKNDigUnEQRwfQc2Nwdmq+08sHuCn4EkzBRpojha
-	 vGs9z834IDPHTL9uQ1HVGFv9F7pnUa2ZDOUEjA8sVuq4yU8w8r1R+htM8Pqu97hI4a
-	 51UtZr6FvslMQ==
-Content-Type: multipart/mixed; boundary="===============8230321728291267727=="
+	s=k20260515; t=1789166185;
+	bh=+5OtKnRt5ja6rvcDuE/m+So1a5uhUCkOVZbCE3Qz7oI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=kqxA6s+pPEyfZ0r1DZx4bR/A3ej9n0EIU85FE6jIO4yAR9jTSGP2AEA9ekYZtRHdb
+	 k9PfYbXmkxo0L7/zSDeU2kUUjCnnuAo2Fx5eonU2jsBY1vQ6O+Rgjxb38iqFCf+FO4
+	 1YiYt49L6IBW1q6HMtEWokBGm2Ore19NZhPgqq6MGVa8aj5HdQRcmsFqqyeuZHQ4jl
+	 XbIskey4MljCZNckkzyDWKNWQWoianDONL/wuqFXcsrh8ZWo915QeK6ekIaCAONeJb
+	 p0rHT7pJ+FZ/xEUNcHeqEnswQcbIVZydBwixCwZ/G060+j5psU0FeUHGFeg3Q1vqSD
+	 CS/gneo0DOxYA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v2 20/23] selftests/bpf: Test kfunc packet
+ memory direct writes
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Amery Hung" <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260911220415.1396439-21-ameryhung@gmail.com>
+References: <20260911220415.1396439-1-ameryhung@gmail.com>
+ <20260911220415.1396439-21-ameryhung@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 11 Sep 2026 22:36:24 +0000
+Message-Id: <20260911223624.CB4321F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <c440fa97680eae9966579d51586c2e6b9936bfc3157225269166e1c133515f8c@mail.kernel.org>
-In-Reply-To: <20260911213340.3767930-3-main.kalliope@gmail.com>
-References: <20260911213340.3767930-3-main.kalliope@gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/3] MIPS: uasm: Add signed div/mod and sign-extension emitters
-From: bot+bpf-ci@kernel.org
-To: main.kalliope@gmail.com,tsbogend@alpha.franken.de,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,johan.almbladh@anyfinetworks.com,paulburton@kernel.org
-Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,linux-mips@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,philmd@oss.qualcomm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 11 Sep 2026 22:30:16 +0000 (UTC)
 
---===============8230321728291267727==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
 
-> diff --git a/arch/mips/include/asm/uasm.h b/arch/mips/include/asm/uasm.h
-> index b43bfd445252..adea35df0f8d 100644
-> --- a/arch/mips/include/asm/uasm.h
-> +++ b/arch/mips/include/asm/uasm.h
-> @@ -85,15 +85,20 @@ Ip_u1u2(_ctc1);
->  Ip_u2u1(_ctcmsa);
->  Ip_u2u1s3(_daddiu);
->  Ip_u3u1u2(_daddu);
-> +Ip_u1u2(_ddiv);
-> +Ip_u3u1u2(_ddiv_r6);
->  Ip_u1u2(_ddivu);
->  Ip_u3u1u2(_ddivu_r6);
+Pre-existing issues:
+- [High] Passing packet data to a kfunc expecting a struct causes unaligned=
+ memory accesses, which panics the kernel on strict-alignment architectures.
+- [Medium] The verifier unconditionally treats all `ARG_PTR_TO_MEM` kfunc a=
+rguments as writable, causing unnecessary packet unsharing (cloning) for re=
+ad-only kfuncs.
+--
 
+commit 4fcd6afbde5f30a90a43ed9c7692746d4f5d5555
+Author: Amery Hung <ameryhung@gmail.com>
+
+selftests/bpf: Test kfunc packet memory direct writes
+
+A kfunc memory argument may be backed by packet data. Exercise this
+with bpf_skb_ct_lookup(), which writes errors through its opts memory
+argument. Verify that the verifier marks the program as directly
+writing packet data, causing TC to emit its writable-skb prologue.
+
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_kfunc_packet_acce=
+ss.c b/tools/testing/selftests/bpf/progs/verifier_kfunc_packet_access.c
+> new file mode 100644
+> index 0000000000000..88009566d92f9
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/verifier_kfunc_packet_access.c
 [ ... ]
+> +int kfunc_packet_write(struct __sk_buff *skb)
+> +{
+> +	void *data_end =3D (void *)(long)skb->data_end;
+> +	void *data =3D (void *)(long)skb->data;
+> +	struct bpf_sock_tuple tuple =3D {};
+> +	struct nf_conn *nfct;
+> +
+> +	if (data + sizeof(struct bpf_ct_opts) > data_end)
+> +		return 0;
+> +
+> +	/* An invalid tuple size makes bpf_skb_ct_lookup() write opts->error. */
+> +	nfct =3D bpf_skb_ct_lookup(skb, &tuple, 1, data, sizeof(struct bpf_ct_o=
+pts));
 
-> @@ -156,6 +162,8 @@ Ip_u2s3u1(_sb);
->  Ip_u2s3u1(_sc);
->  Ip_u2s3u1(_scd);
->  Ip_u2s3u1(_sd);
-> +Ip_u2u1(_seb);
-> +Ip_u2u1(_seh);
->  Ip_u3u1u2(_seleqz);
->  Ip_u3u1u2(_selnez);
->  Ip_u2s3u1(_sh);
+[Severity: High]
+This is a pre-existing issue, but will this test cause a kernel panic on
+strict-alignment architectures?
 
-[ ... ]
+The verifier's get_kfunc_arg_type() assigns ARG_PTR_TO_MEM | MEM_FIXED_SIZE
+for kfunc struct arguments but fails to set MEM_ALIGNED. This allows BPF
+programs to pass unaligned pointers like skb->data to kfuncs expecting stru=
+cts.
 
-> diff --git a/arch/mips/mm/uasm.c b/arch/mips/mm/uasm.c
-> index 125140979d62..139afb0e14cd 100644
-> --- a/arch/mips/mm/uasm.c
-> +++ b/arch/mips/mm/uasm.c
-> @@ -49,19 +49,21 @@ enum opcode {
+When this selftest intentionally passes data as the opts parameter, the kfu=
+nc's
+underlying C code in __bpf_nf_ct_lookup() dereferences the struct fields
+directly (e.g., READ_ONCE(opts->netns_id)). On strict-alignment architectur=
+es
+like SPARC or older ARM, this unaligned 32-bit read causes a hardware excep=
+tion
+and panics the kernel. Executing this selftest acts as a concrete panic vec=
+tor.
 
-[ ... ]
+[Severity: Medium]
+This is a pre-existing issue, but does the verifier unconditionally treat a=
+ll
+ARG_PTR_TO_MEM kfunc arguments as writable?
 
->  	insn_sb, insn_sc, insn_scd, insn_seb, insn_seh,
->  	insn_seleqz, insn_selnez, insn_sd, insn_sh, insn_sll,
+While this selftest verifies the writable-skb prologue, the verifier's
+get_kfunc_arg_type() never sets MEM_RDONLY based on the BTF const modifier.
+Additionally, check_func_arg() forcefully applies BPF_READ | BPF_WRITE via
+the if (meta->btf) condition.
 
-[ ... ]
+Consequently, any memory argument passed to a kfunc is treated as writable.
+When packet data (PTR_TO_PACKET) is passed to a purely read-only kfunc, the
+verifier sets env->seen_direct_write =3D true, unnecessarily triggering the
+bpf_unclone_prologue(). This forces a packet reallocation and copy for every
+packet at runtime, degrading performance.
 
-> @@ -353,6 +361,8 @@ I_u2s3u1(_sb)
->  I_u2s3u1(_sc)
->  I_u2s3u1(_scd)
->  I_u2s3u1(_sd)
-> +I_u2u1(_seb)
-> +I_u2u1(_seh)
->  I_u3u1u2(_seleqz)
->  I_u3u1u2(_selnez)
->  I_u2s3u1(_sh)
+> +	if (nfct)
+> +		bpf_ct_release(nfct);
+> +	return 0;
+> +}
 
-This isn't a bug, but would it read better to add the SEB and SEH emitters
-together with their first caller in the BPF_MOVSX series?
-
-A tree-wide search at series end shows uasm_i_seb() and uasm_i_seh() have
-no callers yet. The six division emitters (div, div_r6, mod, ddiv, ddiv_r6,
-dmod) added alongside them do get used by the final patch in this series.
-The commit message notes SEB/SEH are for a different follow-on series,
-and CONFIG_CPU_MICROMIPS kernels would hit build_insn()'s panic for them
-since arch/mips/mm/uasm-micromips.c isn't updated with their encodings.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34651585043
---===============8230321728291267727==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260911220415.1396=
+439-1-ameryhung@gmail.com?part=3D20
