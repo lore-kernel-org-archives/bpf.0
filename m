@@ -1,21 +1,21 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C4649505D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828A5493D54
 	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:50:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789141803; cv=none; b=ICaEaJu7TBz8NAbYRoXx466enmbFbRICL012bgQMt45XpbJlObsYcW5sFT+IJ3ZDBgcJF+Mv8MP6+3iq70qIAupJtZ45+4rF95csfzyZJ42YcIyvwl9KL6KxUtzmuCyJtD+lx5uVy9KZ0StPYUHTG5MRha7usZhYugypJ2I7g9g=
+	t=1789141803; cv=none; b=TSgfLv3lhnJ/ZGxYlZQSL0WKIDVeVsv3GMVyNOAkiRHzgYtXKQ97LI9cKb1BBv9aYiB287sbWwQDASlbJdTYgDvHkfsfabD7miqthdY1B6IYAk6jqVEi7x/Y0Cyk+PLEUMo/ZzegdESvXyf7ouSz5WbNRg3IkgLhvefsyxGxkNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789141803; c=relaxed/simple;
-	bh=RmaeQNMxsW54L6VTjOuIMIfiRgk4HH8Njt7sdkD7IIQ=;
+	bh=flLDG5nJUhl26Ap8DcH3zGtzwIdey3uzewYFvFWV0VQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EhxBrFja0C2XnlGBpOZi+m6Jf+bfyg5PQY9i6RzwRySlWj08rZcw0Dm1xJTVxV8B+KymL7V3oC0x4gzrbvjcM8WArvcRs3J4gxNnXe3Wvj+brg8x2A583zZtz+WmmUNcl/eYO8I0EHkPHbytnlblPFKaTURw50D+8jQOlIiKzwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+	 MIME-Version; b=d6SPkYsThadzwRXBDsTvBCRVSpuyY4QvhRPuJ2oiZpC6A+ejYrLExVNygpn+v5YGQC9H2Pcl228z8EDQ0Y3ezDI/xDZm1/gmnABxtq0fHpwDDrS9307Tsxf+Ke4VIc9LFGs9eXezDJThUoDg8MJSs8XC0RHushtL5ZmlO4GGf64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 151922A1843071; Fri, 11 Sep 2026 08:50:00 -0700 (PDT)
+	id F2CD02A1843051; Fri, 11 Sep 2026 08:49:54 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v3 09/15] bpf: Prepare kfunc arguments for the JIT from an ABI description
-Date: Fri, 11 Sep 2026 08:50:00 -0700
-Message-ID: <20260911155000.2008967-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 08/15] bpf: Recognize by-value struct and __int128 kfunc arguments
+Date: Fri, 11 Sep 2026 08:49:54 -0700
+Message-ID: <20260911154954.2008505-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260911154914.2004336-1-yonghong.song@linux.dev>
 References: <20260911154914.2004336-1-yonghong.song@linux.dev>
@@ -37,435 +37,414 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The previous patch refuses a kfunc argument of more than one eightbyte.
-This patch allows up to 16 byte kfunc arguments.
+A kfunc taking a struct or union by value is rejected today, and one
+taking an __int128 is accepted but mis-counted:
 
-But different architectures have different ways to map the BPF calling
-convention (no gap, no backfill) to the native one. Rather than have each
-arch open-code where it wants an argument, describe the convention with a
-register count and four booleans, and let each arch set what applies to
-it:
+  Unrecognized R2 type STRUCT
 
-  struct bpf_jit_arg_abi {
-        u8   nr_arg_regs;
-        bool even_reg_align;
-        bool even_stack_align;
-        bool split_at_boundary;
-        bool backfill_after_stack;
-  };
+The kfunc arguments walk the same slot as a BPF-to-BPF call:
+one argument register per eightbyte, and a 16-byte value takes two.
+The outgoing stack argument count at the call site follows the slots for
+the same reason. Similar to BPF-to-BPF aggregate handling, a kfunc
+aggregate argument is only supported when it is composed of scalars.
+Everything that maps a kfunc argument to a register has to follow the
+slots too.
 
-The four booleans are meant to cover x86-64, arm64, RISC-V LP64 and
-PowerPC64 ELFv2, although only x86-64 and arm64 fill the struct in here.
-bpf_jit_place_args() and bpf_jit_plan_arg_moves() use that description to
-work out where each argument belongs and which slots the JIT then has to
-move, to be used in the JIT later on.
+An argument of a single eightbyte lands in the same place under every
+calling convention, so those are taken. The conventions the JIT has to
+reconcile do not agree on where a larger one goes, so refuse it for now
+with
+
+  Function f arg#1 type INT cannot be passed at argument slot 1 on this
+  architecture
+
+which the next patch turns into an answer from the JIT. The paths that
+handle a two-slot argument are therefore unreachable until then.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf.h          | 15 ++++++
- include/linux/bpf_verifier.h |  1 +
- include/linux/filter.h       | 32 ++++++++++++
- kernel/bpf/btf.c             |  3 ++
- kernel/bpf/core.c            | 94 ++++++++++++++++++++++++++++++++++
- kernel/bpf/verifier.c        | 98 +++++++++++++++++++++++++++++++-----
- 6 files changed, 230 insertions(+), 13 deletions(-)
+ kernel/bpf/verifier.c | 177 +++++++++++++++++++++++++++++++++---------
+ 1 file changed, 141 insertions(+), 36 deletions(-)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index e80963971f68..e939fb448197 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -977,6 +977,13 @@ static_assert(__BPF_RET_TYPE_MAX <=3D BPF_BASE_TYPE_=
-LIMIT);
-  */
- #define MAX_BPF_FUNC_REG_ARGS 5
-=20
-+/* A by-value argument takes two eightbytes at most, so the maximum numb=
-er of
-+ * argument slots of any function is 2 * MAX_BPF_FUNC_ARGS. A local arra=
-y may
-+ * need that size for processing, although eventually the maximum slots =
-will
-+ * be capped at MAX_BPF_FUNC_ARGS.
-+ */
-+#define MAX_BPF_FUNC_ARG_SLOTS (2 * MAX_BPF_FUNC_ARGS)
-+
- /* eBPF function prototype used by verifier to allow BPF_CALLs from eBPF=
- programs
-  * to in-kernel helper functions and for adjusting imm32 field in BPF_CA=
-LL
-  * instructions after verifying
-@@ -1194,6 +1201,9 @@ struct bpf_prog_offload {
- 	u32			jited_len;
- };
-=20
-+/* The argument is aligned to 16 bytes. */
-+#define BTF_FMODEL_ALIGN16_ARG		BIT(0)
-+
- /* The argument is signed. */
- #define BTF_FMODEL_SIGNED_ARG		BIT(1)
-=20
-@@ -1211,6 +1221,11 @@ struct btf_func_model {
- 	u8 arg_flags[MAX_BPF_FUNC_ARGS];
- };
-=20
-+static inline u32 btf_func_model_arg_slots(const struct btf_func_model *=
-m, u32 arg)
-+{
-+	return (m->arg_size[arg] + sizeof(u64) - 1) / sizeof(u64);
-+}
-+
- /* Restore arguments before returning from trampoline to let original fu=
-nction
-  * continue executing. This flag is used for fentry progs when there are=
- no
-  * fexit progs.
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 64dfa29f6b45..65d6d5444dc4 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1512,6 +1512,7 @@ enum btf_member_kind {
-=20
- bool btf_struct_is_composed_of(struct bpf_verifier_env *env, const struc=
-t btf *btf,
- 			       const struct btf_type *t, u32 member_kinds);
-+u32 btf_func_arg_align(const struct btf *btf, const struct btf_type *t);
-=20
- int bpf_find_subprog(struct bpf_verifier_env *env, int off);
- bool bpf_is_throw_kfunc(struct bpf_insn *insn);
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 00ad8b63aa47..b17222db2efc 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1248,6 +1248,38 @@ bool bpf_jit_supports_insn(struct bpf_insn *insn, =
-bool in_arena);
- bool bpf_jit_supports_private_stack(void);
- bool bpf_jit_supports_timed_may_goto(void);
- bool bpf_jit_supports_fsession(void);
-+
-+struct bpf_jit_arg_abi {
-+	/* Argument registers of the kernel convention. */
-+	u8 nr_arg_regs;
-+	/* Round the register number up to an even one for 16-byte alignment. *=
-/
-+	bool even_reg_align;
-+	/* Round the stack slot up to an even one for 16-byte alignment. */
-+	bool even_stack_align;
-+	/* An argument may straddle the last register and the stack. */
-+	bool split_at_boundary;
-+	/* A later argument may reuse a register a stack-passed one skipped. */
-+	bool backfill_after_stack;
-+};
-+
-+const struct bpf_jit_arg_abi *bpf_jit_arg_abi(void);
-+u32 bpf_jit_place_args(const struct bpf_jit_arg_abi *abi,
-+		       const struct btf_func_model *fm, u8 *pos_of_slot);
-+
-+/* The JIT's scratch register, in place of an argument slot. */
-+#define BPF_JIT_ARG_TMP		0xff
-+
-+/* Every argument slot moves at most once, and the scratch goes out and =
-back. */
-+#define BPF_JIT_MAX_ARG_MOVES	(MAX_BPF_FUNC_ARG_SLOTS + 2)
-+
-+struct bpf_jit_arg_move {
-+	u8 dst;
-+	u8 src;
-+};
-+
-+u32 bpf_jit_plan_arg_moves(const struct bpf_jit_arg_abi *abi,
-+			   const struct btf_func_model *fm,
-+			   struct bpf_jit_arg_move *moves);
- u64 bpf_arch_uaddress_limit(void);
- void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp=
-, u64 bp), void *cookie);
- u64 arch_bpf_timed_may_goto(void);
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 088788e29b03..12f216515447 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -7579,6 +7579,9 @@ static u8 __get_arg_fmodel_flags(const struct btf *=
-btf,
- {
- 	u8 flags =3D __get_type_fmodel_flags(t);
-=20
-+	if (btf_func_arg_align(btf, t) > sizeof(u64))
-+		flags |=3D BTF_FMODEL_ALIGN16_ARG;
-+
- 	if (btf_param_match_suffix(btf, arg, "__arena__nullable"))
- 		flags |=3D BTF_FMODEL_ARENA_ARG | BTF_FMODEL_NULLABLE_ARG;
- 	else if (btf_param_match_suffix(btf, arg, "__arena"))
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index c673b02d55a6..4e208cc94752 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -3287,6 +3287,100 @@ bool __weak bpf_jit_supports_kfunc_ret_reg_pair(v=
-oid)
- 	return false;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c520c37bb3c9..9e70995c763f 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -12149,12 +12149,36 @@ bool bpf_is_kfunc_pkt_changing(struct bpf_call_=
+arg_meta *meta)
+ 	return meta->func_id =3D=3D special_kfunc_list[KF_bpf_xdp_pull_data];
  }
 =20
 +/*
-+ * How this arch places a by-value kfunc argument, or NULL for one that =
-has
-+ * not opted in and so only takes an argument of a single eightbyte, whi=
-ch
-+ * every convention places in slot order.
++ * The slots a parameter takes, from its BTF type. This has to agree wit=
+h
++ * btf_func_model_arg_slots(), which answers the same from the size the
++ * func model recorded, or the verifier would check an argument at a slo=
+t
++ * the JIT does not place it at.
 + */
-+const struct bpf_jit_arg_abi * __weak bpf_jit_arg_abi(void)
++static u32 kfunc_arg_slots(const struct btf_type *t)
 +{
-+	return NULL;
++	if (btf_type_is_int(t) || btf_type_is_struct(t))
++		return (t->size + BPF_REG_SIZE - 1) / BPF_REG_SIZE;
++	return 1;
 +}
 +
-+u32 bpf_jit_place_args(const struct bpf_jit_arg_abi *abi,
-+		       const struct btf_func_model *fm, u8 *pos_of_slot)
++static u32 kfunc_proto_slots(const struct btf *btf, const struct btf_typ=
+e *func_proto)
 +{
-+	u32 i, k, nslots, slot =3D 0, nregs_used =3D 0, stack_off =3D 0;
-+	bool on_stack =3D false;
++	const struct btf_param *args =3D btf_params(func_proto);
++	u32 i, nargs =3D btf_type_vlen(func_proto), slots_used =3D 0;
 +
-+	for (i =3D 0; i < fm->nr_args; i++) {
-+		bool align16 =3D fm->arg_flags[i] & BTF_FMODEL_ALIGN16_ARG;
-+		u32 pos;
++	for (i =3D 0; i < nargs; i++)
++		slots_used +=3D kfunc_arg_slots(btf_type_skip_modifiers(btf, args[i].t=
+ype, NULL));
 +
-+		nslots =3D btf_func_model_arg_slots(fm, i);
-+
-+		if (align16 && abi->even_reg_align)
-+			nregs_used =3D round_up(nregs_used, 2);
-+
-+		if (!on_stack && nregs_used + nslots <=3D abi->nr_arg_regs) {
-+			/* wholly in registers */
-+			pos =3D nregs_used;
-+			nregs_used +=3D nslots;
-+		} else if (!on_stack && abi->split_at_boundary) {
-+			/* the last registers hold what fits, the stack the rest */
-+			pos =3D nregs_used;
-+			stack_off =3D (nregs_used + nslots - abi->nr_arg_regs) * BPF_REG_SIZE=
-;
-+			nregs_used =3D abi->nr_arg_regs;
-+			on_stack =3D true;
-+		} else {
-+			/* wholly on the stack */
-+			if (align16 && abi->even_stack_align)
-+				stack_off =3D round_up(stack_off, 2 * BPF_REG_SIZE);
-+			pos =3D abi->nr_arg_regs + stack_off / BPF_REG_SIZE;
-+			stack_off +=3D nslots * BPF_REG_SIZE;
-+			if (!abi->backfill_after_stack)
-+				on_stack =3D true;
-+		}
-+
-+		for (k =3D 0; k < nslots; k++)
-+			pos_of_slot[slot + k] =3D pos + k;
-+		slot +=3D nslots;
-+	}
-+
-+	return slot;
-+}
-+
-+u32 bpf_jit_plan_arg_moves(const struct bpf_jit_arg_abi *abi,
-+			   const struct btf_func_model *fm,
-+			   struct bpf_jit_arg_move *moves)
-+{
-+	u8 pos_of_slot[MAX_BPF_FUNC_ARG_SLOTS];
-+	u32 nslots, n =3D 0, s, back;
-+
-+	nslots =3D bpf_jit_place_args(abi, fm, pos_of_slot);
-+	back =3D nslots;
-+
-+	/*
-+	 * An argument is two eightbytes at most, so it frees one register at
-+	 * most and only one argument ever moves down. Its destination is
-+	 * still in use, so carry it in the scratch. Only a lower slot can
-+	 * take the one it leaves, so the walk reaches it first.
-+	 */
-+	for (s =3D nslots; s > 0; s--) {
-+		u8 slot =3D s - 1, pos =3D pos_of_slot[slot];
-+
-+		if (pos =3D=3D slot)
-+			continue;
-+
-+		if (pos < slot) {
-+			moves[n].dst =3D BPF_JIT_ARG_TMP;
-+			back =3D slot;
-+		} else {
-+			moves[n].dst =3D pos;
-+		}
-+		moves[n].src =3D slot;
-+		n++;
-+	}
-+
-+	if (back < nslots) {
-+		moves[n].dst =3D pos_of_slot[back];
-+		moves[n].src =3D BPF_JIT_ARG_TMP;
-+		n++;
-+	}
-+
-+	return n;
-+}
-+
- bool __weak bpf_jit_supports_stack_args(void)
- {
- 	return false;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9e70995c763f..723b695d7ded 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -2840,7 +2840,7 @@ static int fetch_kfunc_meta(struct bpf_verifier_env=
- *env,
- }
-=20
- static int gen_kfunc_arg_proto(struct bpf_verifier_env *env, struct bpf_=
-call_arg_meta *meta,
--			       struct bpf_func_proto *proto);
-+			       const struct btf_func_model *fm, struct bpf_func_proto *proto)=
-;
-=20
- int bpf_add_kfunc_call(struct bpf_verifier_env *env, u32 func_id, u16 of=
-fset)
- {
-@@ -2957,7 +2957,7 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *env=
-, u32 func_id, u16 offset)
- 	desc =3D &tab->descs[tab->nr_descs];
- 	memset(desc, 0, sizeof(*desc));
-=20
--	err =3D gen_kfunc_arg_proto(env, &meta, &desc->proto);
-+	err =3D gen_kfunc_arg_proto(env, &meta, &func_model, &desc->proto);
- 	if (err)
- 		return err;
-=20
-@@ -12173,6 +12173,58 @@ static u32 kfunc_proto_slots(const struct btf *b=
-tf, const struct btf_type *func_
- 	return slots_used;
- }
-=20
-+static u32 kfunc_abi_slots(const struct btf_func_model *fm)
-+{
-+	const struct bpf_jit_arg_abi *abi =3D bpf_jit_arg_abi();
-+	u8 pos_of_slot[MAX_BPF_FUNC_ARG_SLOTS];
-+	u32 i, nslots, slots =3D 0;
-+
-+	for (i =3D 0; i < fm->nr_args; i++)
-+		slots +=3D btf_func_model_arg_slots(fm, i);
-+
-+	if (!abi)
-+		return slots;
-+
-+	nslots =3D bpf_jit_place_args(abi, fm, pos_of_slot);
-+	for (i =3D 0; i < nslots; i++)
-+		if (pos_of_slot[i] + 1 > slots)
-+			slots =3D pos_of_slot[i] + 1;
-+
-+	return slots;
-+}
-+
-+static u32 __btf_func_arg_align(const struct btf *btf, const struct btf_=
-type *t, int rec)
-+{
-+	const struct btf_member *member;
-+	const struct btf_type *mt;
-+	u32 align, i;
-+
-+	while (btf_type_is_array(t))
-+		t =3D btf_type_skip_modifiers(btf, btf_array(t)->type, NULL);
-+
-+	if (btf_type_is_int(t))
-+		return t->size > BPF_REG_SIZE ? t->size : BPF_REG_SIZE;
-+	if (!btf_type_is_struct(t))
-+		return BPF_REG_SIZE;
-+	if (rec >=3D BTF_MEMBER_MAX_DEPTH)
-+		return 0;
-+
-+	for_each_member(i, t, member) {
-+		mt =3D btf_type_skip_modifiers(btf, member->type, NULL);
-+		align =3D __btf_func_arg_align(btf, mt, rec + 1);
-+		if (!align)
-+			return 0;
-+		if (align > BPF_REG_SIZE)
-+			return 2 * BPF_REG_SIZE;
-+	}
-+	return BPF_REG_SIZE;
-+}
-+
-+u32 btf_func_arg_align(const struct btf *btf, const struct btf_type *t)
-+{
-+	return __btf_func_arg_align(btf, t, 0);
++	return slots_used;
 +}
 +
  static int
  get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_met=
 a *meta,
- 		   const struct btf_param *args, int arg, int nargs, u32 slot)
-@@ -12326,10 +12378,12 @@ get_kfunc_arg_type(struct bpf_verifier_env *env=
-, struct bpf_call_arg_meta *meta,
- }
-=20
- static int gen_kfunc_arg_proto(struct bpf_verifier_env *env, struct bpf_=
-call_arg_meta *meta,
--			       struct bpf_func_proto *proto)
-+			       const struct btf_func_model *fm, struct bpf_func_proto *proto)
+-		   const struct btf_param *args, int arg, int nargs)
++		   const struct btf_param *args, int arg, int nargs, u32 slot)
  {
-+	const struct bpf_jit_arg_abi *abi;
- 	const struct btf *btf =3D meta->btf;
- 	const struct btf_param *args;
-+	const struct btf_type *t;
- 	u32 i, nargs, slots_used;
+ 	const struct btf_type *t, *ref_t =3D NULL;
+-	argno_t argno =3D argno_from_arg(arg + 1);
++	argno_t argno =3D argno_from_arg(slot + 1);
+ 	const char *ref_tname =3D NULL;
  	int arg_type;
 =20
-@@ -12347,17 +12401,35 @@ static int gen_kfunc_arg_proto(struct bpf_verif=
-ier_env *env, struct bpf_call_arg
+@@ -12174,6 +12198,23 @@ get_kfunc_arg_type(struct bpf_verifier_env *env,=
+ struct bpf_call_arg_meta *meta,
+ 		return KF_ARG_ANYTHING;
  	}
 =20
- 	for (i =3D 0, slots_used =3D 0; i < nargs; i++) {
--		const struct btf_type *t;
--		u32 nslots;
-+		u32 nslots =3D btf_func_model_arg_slots(fm, i);
++	if (btf_type_is_struct(t)) {
++		if (!t->size || t->size > 2 * BPF_REG_SIZE) {
++			verbose(env,
++				"%s type %s has size %u, only 1 to %d bytes "
++				"can be passed by value\n",
++				reg_arg_name(env, argno), btf_type_str(t), t->size,
++				2 * BPF_REG_SIZE);
++			return -EINVAL;
++		}
++		if (!btf_type_is_scalar_struct(env, meta->btf, t)) {
++			verbose(env, "%s type %s is not composed of scalars\n",
++				reg_arg_name(env, argno), btf_type_str(t));
++			return -EINVAL;
++		}
++		return KF_ARG_ANYTHING;
++	}
++
+ 	if (!btf_type_is_ptr(t)) {
+ 		verbose(env, "Unrecognized %s type %s\n",
+ 			reg_arg_name(env, argno), btf_type_str(t));
+@@ -12289,7 +12330,7 @@ static int gen_kfunc_arg_proto(struct bpf_verifie=
+r_env *env, struct bpf_call_arg
+ {
+ 	const struct btf *btf =3D meta->btf;
+ 	const struct btf_param *args;
+-	u32 i, nargs;
++	u32 i, nargs, slots_used;
+ 	int arg_type;
 =20
--		t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
--		nslots =3D kfunc_arg_slots(t);
--		/*
--		 * The calling conventions the JIT has to reconcile do not
--		 * agree on where an argument of more than one eightbyte goes,
--		 * so refuse one until the JIT can say where this arch puts it.
--		 */
- 		if (nslots > 1) {
-+			t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
-+			if (!btf_func_arg_align(btf, t)) {
-+				verbose(env,
-+					"Function %s arg#%d type %s nests structs more than "
-+					"%d levels deep\n",
-+					meta->func_name, i, btf_type_str(t),
-+					BTF_MEMBER_MAX_DEPTH);
-+				return -EINVAL;
-+			}
+ 	args =3D (const struct btf_param *)(meta->func_proto + 1);
+@@ -12305,19 +12346,44 @@ static int gen_kfunc_arg_proto(struct bpf_verif=
+ier_env *env, struct bpf_call_arg
+ 		return -ENOTSUPP;
+ 	}
+=20
+-	for (i =3D 0; i < nargs; i++) {
++	for (i =3D 0, slots_used =3D 0; i < nargs; i++) {
++		const struct btf_type *t;
++		u32 nslots;
++
++		t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
++		nslots =3D kfunc_arg_slots(t);
++		/*
++		 * The calling conventions the JIT has to reconcile do not
++		 * agree on where an argument of more than one eightbyte goes,
++		 * so refuse one until the JIT can say where this arch puts it.
++		 */
++		if (nslots > 1) {
++			verbose(env,
++				"Function %s arg#%d type %s cannot be passed at "
++				"argument slot %d on this architecture\n",
++				meta->func_name, i, btf_type_str(t), slots_used);
++			return -EINVAL;
 +		}
 +		slots_used +=3D nslots;
++
+ 		if (is_kfunc_arg_prog_aux(btf, &args[i]) ||
+ 		    is_kfunc_arg_ignore(btf, &args[i]) ||
+ 		    is_kfunc_arg_implicit(meta, i))
+ 			continue;
+=20
+-		arg_type =3D get_kfunc_arg_type(env, meta, args, i, nargs);
++		arg_type =3D get_kfunc_arg_type(env, meta, args, i, nargs, slots_used =
+- nslots);
+ 		if (arg_type < 0)
+ 			return arg_type;
+=20
+ 		proto->arg_type[i] =3D arg_type;
+ 	}
+=20
++	if (slots_used > MAX_BPF_FUNC_REG_ARGS && !bpf_jit_supports_stack_args(=
+)) {
++		verbose(env, "JIT does not support kfunc %s() with %d argument slots\n=
+",
++			meta->func_name, slots_used);
++		return -ENOTSUPP;
 +	}
 +
-+	if (slots_used > MAX_BPF_FUNC_ARGS) {
-+		verbose(env, "Function %s needs %d > %d argument slots\n", meta->func_=
-name,
-+			slots_used, MAX_BPF_FUNC_ARGS);
-+		return -EINVAL;
-+	}
+ 	return 0;
+ }
+=20
+@@ -12883,6 +12949,26 @@ static bool check_css_task_iter_allowlist(struct=
+ bpf_verifier_env *env)
+ 	}
+ }
+=20
++/* The argument slot @slot of the call has to hold a scalar. */
++static int check_kfunc_scalar_arg(struct bpf_verifier_env *env, struct b=
+pf_func_state *caller,
++				  struct bpf_reg_state *regs, u32 slot, int insn_idx,
++				  const char *func_name)
++{
++	struct bpf_reg_state *reg =3D get_func_arg_reg(caller, regs, slot);
++	argno_t argno =3D argno_from_arg(slot + 1);
 +
-+	abi =3D bpf_jit_arg_abi();
++	if (reg->type =3D=3D SCALAR_VALUE)
++		return 0;
 +
-+	for (i =3D 0, slots_used =3D 0; i < nargs; i++) {
-+		u32 nslots =3D btf_func_model_arg_slots(fm, i);
++	verbose(env, "%s is not a scalar\n", reg_arg_name(env, argno));
++	bpf_diag_call_arg_fmt(env, insn_idx, argno, func_name,
++			      "Pass an integer scalar value for this argument, not a pointer =
+or resource object.",
++			      "the kfunc expects an integer scalar, but %s is %s",
++			      reg_arg_name(env, argno),
++			      bpf_diag_reg_type_plain(env, reg->type));
++	return -EINVAL;
++}
 +
-+		if (!abi && nslots > 1) {
-+			t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
- 			verbose(env,
- 				"Function %s arg#%d type %s cannot be passed at "
- 				"argument slot %d on this architecture\n",
-@@ -14523,7 +14595,7 @@ static int check_kfunc_call(struct bpf_verifier_e=
+ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_cal=
+l_arg_meta *meta,
+ 			    int insn_idx)
+ {
+@@ -12892,29 +12978,35 @@ static int check_kfunc_args(struct bpf_verifier=
+_env *env, struct bpf_call_arg_me
+ 	const struct btf *btf =3D meta->btf;
+ 	const struct btf_param *args;
+ 	struct btf_record *rec;
+-	u32 i, nargs;
++	u32 i, k, nargs, proto_slots, slots_used, prev_slot =3D 0, nslots =3D 0=
+;
+ 	int ret;
+=20
+ 	args =3D (const struct btf_param *)(meta->func_proto + 1);
+ 	nargs =3D btf_type_vlen(meta->func_proto);
++	proto_slots =3D kfunc_proto_slots(btf, meta->func_proto);
+=20
+-	ret =3D check_outgoing_stack_args(env, caller, nargs, func_name, btf, a=
+rgs);
++	ret =3D check_outgoing_stack_args(env, caller, proto_slots, func_name, =
+btf,
++					proto_slots =3D=3D nargs ? args : NULL);
+ 	if (ret)
+ 		return ret;
+=20
+ 	/* Check that BTF function arguments match actual types that the
+ 	 * verifier sees.
+ 	 */
+-	for (i =3D 0; i < nargs; i++) {
+-		struct bpf_reg_state *reg =3D get_func_arg_reg(caller, regs, i);
++	for (i =3D 0, slots_used =3D 0; i < nargs;
++	     i++, prev_slot =3D slots_used, slots_used +=3D nslots) {
++		struct bpf_reg_state *reg =3D get_func_arg_reg(caller, regs, slots_use=
+d);
+ 		const struct btf_type *t, *ref_t, *resolve_ret;
+ 		enum bpf_arg_type arg_type =3D ARG_DONTCARE;
+-		argno_t argno =3D argno_from_arg(i + 1);
++		argno_t argno =3D argno_from_arg(slots_used + 1);
+ 		int regno =3D reg_from_argno(argno);
+ 		bool btf_id_fixed_off_ok =3D true;
+ 		u32 ref_id =3D args[i].type, type_size;
+ 		int kf_arg_type =3D meta->fn->arg_type[i];
+=20
++		t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
++		nslots =3D kfunc_arg_slots(t);
++
+ 		if (is_kfunc_arg_prog_aux(btf, &args[i])) {
+ 			/* Reject repeated use bpf_prog_aux */
+ 			if (meta->arg_prog) {
+@@ -12934,8 +13026,6 @@ static int check_kfunc_args(struct bpf_verifier_e=
+nv *env, struct bpf_call_arg_me
+ 		if (is_kfunc_arg_ignore(btf, &args[i]) || is_kfunc_arg_implicit(meta, =
+i))
+ 			continue;
+=20
+-		t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
+-
+ 		if (btf_type_is_ptr(t)) {
+ 			ref_t =3D btf_type_skip_modifiers(btf, t->type, &ref_id);
+ 			ref_tname =3D btf_name_by_offset(btf, ref_t->name_off);
+@@ -12986,6 +13076,17 @@ static int check_kfunc_args(struct bpf_verifier_=
+env *env, struct bpf_call_arg_me
+ 			ref_tname =3D btf_name_by_offset(btf, ref_t->name_off);
+ 		}
+=20
++		/*
++		 * The first slot is checked in below KF_ARG_ANYTHING.
++		 * The rest of it has to be a scalar.
++		 */
++		for (k =3D 1; k < nslots; k++) {
++			ret =3D check_kfunc_scalar_arg(env, caller, regs, slots_used + k,
++						     insn_idx, func_name);
++			if (ret)
++				return ret;
++		}
++
+ 		switch (base_type(kf_arg_type)) {
+ 		case KF_ARG_CONST:
+ 		case KF_ARG_CONST_MEM_SIZE:
+@@ -13055,15 +13156,10 @@ static int check_kfunc_args(struct bpf_verifier=
+_env *env, struct bpf_call_arg_me
+ 			}
+ 			break;
+ 		case KF_ARG_ANYTHING:
+-			if (reg->type !=3D SCALAR_VALUE) {
+-				verbose(env, "%s is not a scalar\n", reg_arg_name(env, argno));
+-				bpf_diag_call_arg_fmt(env, insn_idx, argno, func_name,
+-						      "Pass an integer scalar value for this argument, not a point=
+er or resource object.",
+-						      "the kfunc expects an integer scalar, but %s is %s",
+-						      reg_arg_name(env, argno),
+-						      bpf_diag_reg_type_plain(env, reg->type));
+-				return -EINVAL;
+-			}
++			ret =3D check_kfunc_scalar_arg(env, caller, regs, slots_used,
++						     insn_idx, func_name);
++			if (ret)
++				return ret;
+ 			break;
+ 		case KF_ARG_CONST_ALLOC_SIZE_OR_ZERO:
+ 			if (reg->type !=3D SCALAR_VALUE) {
+@@ -13403,9 +13499,9 @@ static int check_kfunc_args(struct bpf_verifier_e=
+nv *env, struct bpf_call_arg_me
+ 			fallthrough;
+ 		case KF_ARG_MEM_SIZE:
+ 		{
+-			struct bpf_reg_state *buff_reg =3D get_func_arg_reg(caller, regs, i -=
+ 1);
++			struct bpf_reg_state *buff_reg =3D get_func_arg_reg(caller, regs, pre=
+v_slot);
+ 			struct bpf_reg_state *size_reg =3D reg;
+-			argno_t buff_argno =3D argno_from_arg(i);
++			argno_t buff_argno =3D argno_from_arg(prev_slot + 1);
+ 			enum bpf_mem_size_failure failure;
+=20
+ 			if (reg->type !=3D SCALAR_VALUE) {
+@@ -13751,7 +13847,7 @@ s64 bpf_kfunc_stack_access_bytes(struct bpf_verif=
+ier_env *env, struct bpf_insn *
+ 	const struct btf_param *args;
+ 	const struct btf_type *t, *ref_t;
+ 	const struct btf *btf;
+-	u32 nargs, type_size;
++	u32 i, slot, nargs, type_size;
+ 	s64 size;
+=20
+ 	if (bpf_fetch_kfunc_arg_meta(env, insn->imm, insn->off, &meta) < 0)
+@@ -13760,23 +13856,32 @@ s64 bpf_kfunc_stack_access_bytes(struct bpf_ver=
+ifier_env *env, struct bpf_insn *
+ 	btf =3D meta.btf;
+ 	args =3D btf_params(meta.func_proto);
+ 	nargs =3D btf_type_vlen(meta.func_proto);
+-	if (arg >=3D nargs)
++
++	/*
++	 * @arg is an argument slot and a 16-byte parameter takes two of them,
++	 * so walk the parameters to find the one that starts at this slot. A
++	 * slot holding the upper eightbyte of such a parameter belongs to no
++	 * pointer, and neither does a slot past the last parameter.
++	 */
++	for (i =3D 0, slot =3D 0; i < nargs && slot < arg; i++)
++		slot +=3D kfunc_arg_slots(btf_type_skip_modifiers(btf, args[i].type, N=
+ULL));
++	if (i >=3D nargs || slot !=3D arg)
+ 		return 0;
+=20
+-	t =3D btf_type_skip_modifiers(btf, args[arg].type, NULL);
++	t =3D btf_type_skip_modifiers(btf, args[i].type, NULL);
+ 	if (!btf_type_is_ptr(t))
+ 		return 0;
+=20
+ 	/* dynptr: fixed 16-byte on-stack representation */
+-	if (is_kfunc_arg_dynptr(btf, &args[arg])) {
++	if (is_kfunc_arg_dynptr(btf, &args[i])) {
+ 		size =3D BPF_DYNPTR_SIZE;
+ 		goto out;
+ 	}
+=20
+ 	/* ptr + __sz/__szk pair: the size follows the pointer */
+-	if (arg + 1 < nargs &&
+-	    (btf_param_match_suffix(btf, &args[arg + 1], "__sz") ||
+-	     btf_param_match_suffix(btf, &args[arg + 1], "__szk"))) {
++	if (i + 1 < nargs &&
++	    (btf_param_match_suffix(btf, &args[i + 1], "__sz") ||
++	     btf_param_match_suffix(btf, &args[i + 1], "__szk"))) {
+ 		int size_reg =3D BPF_REG_1 + arg + 1;
+=20
+ 		if (size_reg <=3D MAX_BPF_FUNC_REG_ARGS &&
+@@ -13799,7 +13904,7 @@ s64 bpf_kfunc_stack_access_bytes(struct bpf_verif=
+ier_env *env, struct bpf_insn *
+ 	/* KF_ITER_NEW kfuncs initialize the iterator state at arg 0 */
+ 	if (arg =3D=3D 0 && meta.kfunc_flags & KF_ITER_NEW)
+ 		return -size;
+-	if (is_kfunc_arg_uninit(btf, &args[arg]))
++	if (is_kfunc_arg_uninit(btf, &args[i]))
+ 		return -size;
+ 	return size;
+ }
+@@ -13992,7 +14097,7 @@ static int check_kfunc_call(struct bpf_verifier_e=
 nv *env, struct bpf_insn *insn,
+ 	struct bpf_insn_aux_data *insn_aux;
+ 	const char *operation;
+ 	int err, insn_idx =3D *insn_idx_p;
+-	u32 i, nargs, ptr_type_id, ret_nregs =3D 1;
++	u32 i, proto_slots, ptr_type_id, ret_nregs =3D 1;
+ 	struct bpf_kfunc_desc *desc;
+ 	struct btf *desc_btf;
+ 	int id;
+@@ -14418,11 +14523,11 @@ static int check_kfunc_call(struct bpf_verifier=
+_env *env, struct bpf_insn *insn,
  	if (bpf_is_kfunc_pkt_changing(&meta))
  		clear_all_pkt_pointers(env);
 =20
--	proto_slots =3D kfunc_proto_slots(desc_btf, meta.func_proto);
-+	proto_slots =3D kfunc_abi_slots(&desc->func_model);
- 	if (proto_slots > MAX_BPF_FUNC_REG_ARGS) {
+-	nargs =3D btf_type_vlen(meta.func_proto);
+-	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
++	proto_slots =3D kfunc_proto_slots(desc_btf, meta.func_proto);
++	if (proto_slots > MAX_BPF_FUNC_REG_ARGS) {
  		struct bpf_func_state *caller =3D cur_func(env);
  		struct bpf_subprog_info *caller_info =3D &env->subprog_info[caller->su=
 bprogno];
+-		u16 out_stack_arg_cnt =3D nargs - MAX_BPF_FUNC_REG_ARGS;
++		u16 out_stack_arg_cnt =3D proto_slots - MAX_BPF_FUNC_REG_ARGS;
+ 		u16 stack_arg_cnt =3D bpf_in_stack_arg_cnt(caller_info) + out_stack_ar=
+g_cnt;
+=20
+ 		if (stack_arg_cnt > caller_info->stack_arg_cnt)
+@@ -17989,7 +18094,7 @@ bool bpf_get_call_summary(struct bpf_verifier_env=
+ *env, struct bpf_insn *call,
+ 		if (err < 0)
+ 			/* error would be reported later */
+ 			return false;
+-		cs->arg_slot_cnt =3D btf_type_vlen(meta.func_proto);
++		cs->arg_slot_cnt =3D kfunc_proto_slots(meta.btf, meta.func_proto);
+ 		cs->fastcall =3D meta.kfunc_flags & KF_FASTCALL;
+ 		cs->is_void =3D btf_type_is_void(btf_type_by_id(meta.btf, meta.func_pr=
+oto->type));
+ 		return true;
 --=20
 2.52.0
 
