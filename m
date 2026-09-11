@@ -1,21 +1,21 @@
-Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4708397922
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865414A3D42
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789141782; cv=none; b=FpReXUCD6V0A8KvPMENjHxR0egQhWaMiSvLjkGa8Dmu5BA4gSUbLs/nX/x2TrEQoet7fNciO3+BgANh0oWov3ElfpSgs/miLhUOReDdl84jlIaWo802B11nLgkEEiQuApIIIk6322kNbz0KctaUnplhlaLwrjCTg9IEpj/YIjy0=
+	t=1789141791; cv=none; b=O9kcgbo1xDEzzXHOX+GqkRikbExF5Z7ii/dvHWgEdWD5zF8mbt3RVaXxPtSl/UNdSWxXM1v5UyLuRBTHU0PyHKVY5pejUbIws4LwLzRuMnq3gpGbuTjQ/jc/hN4/yQNY/SOdJVg61pmFkPLO1WOZHGYb0Ohg6bqn/i0N2txkcX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789141782; c=relaxed/simple;
-	bh=iyEK+4oEzZwWv8UIFfJGu816Vg1FMZWdF9NFMqWq3mg=;
+	s=arc-20240116; t=1789141791; c=relaxed/simple;
+	bh=Win9fpzD9nOZfRkd0qbvss68Ce2rKTO62kXE+b4Y2vM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=W1qMuzBqZKmQLUYnul9LjlST41hSFOWpVrbOWyu2OuRlu7wYqYSym0fdueohWZbJuyZE32cvX3w4IWQJRp4G0YLcYWkn++klGdXL2WB7IrzomXnUBmMqiONx9k9i8mOZJgyBVSkhNihiOcL06hW18YUc02ZFcUQwK8D69Pl7K7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
+	 MIME-Version; b=Qiv2l9oD4yKFPAoyiE0Mg7XaKvTM409QsVAy99ya64hG81c2A7OmT32ouRsbLvKFowxwrF5IuDyVMJ1R+SpGpzMmpK9xqrqb/YeXUuGuysSnMbUApf/pquLq37rx3M5GyckQjdO+qCupJ3xH36bIfHllsbcThHHR9k7b9xHuqLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 811DE2A1842FB5; Fri, 11 Sep 2026 08:49:29 -0700 (PDT)
+	id AD0642A1842FF3; Fri, 11 Sep 2026 08:49:39 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v3 03/15] bpf: Rename bpf_subprog_info::arg_cnt to arg_slot_cnt
-Date: Fri, 11 Sep 2026 08:49:29 -0700
-Message-ID: <20260911154929.2006014-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 05/15] bpf: Support by-value struct arguments up to 16 bytes
+Date: Fri, 11 Sep 2026 08:49:39 -0700
+Message-ID: <20260911154939.2006395-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260911154914.2004336-1-yonghong.song@linux.dev>
 References: <20260911154914.2004336-1-yonghong.song@linux.dev>
@@ -37,164 +37,180 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Rename arg_cnt to arg_slot_cnt, as a later patch gives a parameter that
-takes two argument registers, an __int128 or a 16-byte aggregate, two
-slots. No functional change.
+A global function taking a struct or union by value is rejected today:
+
+  Arg#1 type STRUCT in tar() is not supported yet.
+
+Accept one of at most 16 bytes, which arrives in one or two consecutive
+argument registers. Only structs composed entirely of scalars are taken
+for now; btf_struct_is_composed_of() enforces that.
+
+The slots of a value are independent of each other, so the compiler may
+split one across the last argument register and the stack, as in
+
+  static void f(int a, int b, int c, int d, struct pair p);
+
+or place it wholly past the registers, and the verifier describes either
+the same way. What has to follow the slots is stack_arg_cnt, recomputed
+from the slots consumed, together with the "no stack args in global
+functions" and JIT support checks, and the MAX_BPF_FUNC_ARGS bound, which
+now has to account for a parameter that takes two slots at once.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf_verifier.h                  |  6 +++---
- kernel/bpf/btf.c                              |  2 +-
- kernel/bpf/verifier.c                         | 19 +++++++++++--------
- .../bpf/progs/verifier_stack_arg_order.c      |  4 ++--
- 4 files changed, 17 insertions(+), 14 deletions(-)
+ kernel/bpf/btf.c      | 80 +++++++++++++++++++++++++++++++++++--------
+ kernel/bpf/verifier.c |  2 ++
+ 2 files changed, 68 insertions(+), 14 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 9727df5af83a..edb904424aba 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -828,7 +828,7 @@ struct bpf_subprog_info {
- 	bool keep_fastcall_stack: 1;
- 	bool changes_pkt_data: 1;
- 	bool might_sleep: 1;
--	u8 arg_cnt:4;
-+	u8 arg_slot_cnt:4;
-=20
- 	enum priv_stack_mode priv_stack_mode;
- 	struct bpf_subprog_arg_info args[MAX_BPF_FUNC_ARGS];
-@@ -838,8 +838,8 @@ struct bpf_subprog_info {
-=20
- static inline u16 bpf_in_stack_arg_cnt(const struct bpf_subprog_info *su=
-b)
- {
--	if (sub->arg_cnt > MAX_BPF_FUNC_REG_ARGS)
--		return sub->arg_cnt - MAX_BPF_FUNC_REG_ARGS;
-+	if (sub->arg_slot_cnt > MAX_BPF_FUNC_REG_ARGS)
-+		return sub->arg_slot_cnt - MAX_BPF_FUNC_REG_ARGS;
- 	return 0;
- }
-=20
 diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 31057c8f3a7c..01ec2b40f376 100644
+index 35eaa28c85b5..5bbc1ba00ae2 100644
 --- a/kernel/bpf/btf.c
 +++ b/kernel/bpf/btf.c
-@@ -8081,7 +8081,7 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
-env, int subprog)
- 	}
- 	args =3D (const struct btf_param *)(t + 1);
- 	nargs =3D btf_type_vlen(t);
--	sub->arg_cnt =3D nargs;
-+	sub->arg_slot_cnt =3D nargs;
- 	if (nargs > MAX_BPF_FUNC_ARGS) {
- 		bpf_log(log, "kernel supports at most %d parameters, function %s has %=
-d\n",
+@@ -8018,6 +8018,29 @@ static int btf_validate_return_type(struct bpf_ver=
+ifier_env *env, struct btf *bt
+ 	return -EOPNOTSUPP;
+ }
+=20
++static int btf_check_arg_slots(struct bpf_verifier_log *log, const char =
+*tname,
++			       bool is_global, u32 slot_cnt,
++			       struct bpf_subprog_info *sub)
++{
++	if (slot_cnt <=3D MAX_BPF_FUNC_REG_ARGS)
++		return 0;
++
++	if (is_global) {
++		bpf_log(log,
++			"global function %s() needs %d > %d argument slots, "
++			"stack args not supported\n",
++			tname, slot_cnt, MAX_BPF_FUNC_REG_ARGS);
++		return -EINVAL;
++	}
++	if (!bpf_jit_supports_stack_args()) {
++		bpf_log(log, "JIT does not support function %s() with %d argument slot=
+s\n",
++			tname, slot_cnt);
++		return -EFAULT;
++	}
++	sub->stack_arg_cnt =3D slot_cnt - MAX_BPF_FUNC_REG_ARGS;
++	return 0;
++}
++
+ /* Process BTF of a function to produce high-level expectation of functi=
+on
+  * arguments (like ARG_PTR_TO_CTX, or ARG_PTR_TO_MEM, etc). This informa=
+tion
+  * is cached in subprog info for reuse.
+@@ -8087,20 +8110,9 @@ int btf_prepare_func_args(struct bpf_verifier_env =
+*env, int subprog)
  			MAX_BPF_FUNC_ARGS, tname, nargs);
+ 		return -EFAULT;
+ 	}
+-	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
+-		if (!bpf_jit_supports_stack_args()) {
+-			bpf_log(log, "JIT does not support function %s() with %d args\n",
+-				tname, nargs);
+-			return -EFAULT;
+-		}
+-		sub->stack_arg_cnt =3D nargs - MAX_BPF_FUNC_REG_ARGS;
+-	}
+-
+-	if (is_global && nargs > MAX_BPF_FUNC_REG_ARGS) {
+-		bpf_log(log, "global function %s has %d > %d args, stack args not supp=
+orted\n",
+-			tname, nargs, MAX_BPF_FUNC_REG_ARGS);
+-		return -EINVAL;
+-	}
++	err =3D btf_check_arg_slots(log, tname, is_global, nargs, sub);
++	if (err)
++		return err;
+=20
+ 	err =3D btf_validate_return_type(env, btf, t, subprog, is_global);
+ 	if (err) {
+@@ -8125,6 +8137,9 @@ int btf_prepare_func_args(struct bpf_verifier_env *=
+env, int subprog)
+ 	for (i =3D 0, slots_used =3D 0; i < nargs; i++) {
+ 		u32 tags =3D 0;
+=20
++		if (slots_used >=3D MAX_BPF_FUNC_ARGS)
++			goto too_many_slots;
++
+ 		err =3D btf_scan_decl_tags(env, btf, fn_t, i, is_global, &tags);
+ 		if (err)
+ 			return err;
+@@ -8253,6 +8268,33 @@ int btf_prepare_func_args(struct bpf_verifier_env =
+*env, int subprog)
+ 			sub->args[slots_used++].arg_type =3D ARG_ANYTHING;
+ 			continue;
+ 		}
++		if (btf_type_is_struct(t)) {
++			u32 nslots;
++
++			if (!t->size || t->size > 2 * BPF_REG_SIZE) {
++				if (!is_global)
++					return -EINVAL;
++				bpf_log(log,
++					"Arg#%d type %s in %s() has size %u, only 1 to %d bytes "
++					"can be passed by value\n",
++					i, btf_type_str(t), tname, t->size, 2 * BPF_REG_SIZE);
++				return -EINVAL;
++			}
++			if (!btf_struct_is_composed_of(env, btf, t, BTF_MEMBER_SCALAR)) {
++				if (!is_global)
++					return -EINVAL;
++				bpf_log(log, "Arg#%d type %s in %s() is not composed of scalars\n",
++					i, btf_type_str(t), tname);
++				return -EINVAL;
++			}
++
++			nslots =3D (t->size + BPF_REG_SIZE - 1) / BPF_REG_SIZE;
++			if (slots_used + nslots > MAX_BPF_FUNC_ARGS)
++				goto too_many_slots;
++			while (nslots--)
++				sub->args[slots_used++].arg_type =3D ARG_ANYTHING;
++			continue;
++		}
+ 		if (!is_global)
+ 			return -EINVAL;
+ 		bpf_log(log, "Arg#%d type %s in %s() is not supported yet.\n",
+@@ -8260,11 +8302,21 @@ int btf_prepare_func_args(struct bpf_verifier_env=
+ *env, int subprog)
+ 		return -EINVAL;
+ 	}
+=20
++	err =3D btf_check_arg_slots(log, tname, is_global, slots_used, sub);
++	if (err)
++		return err;
+ 	sub->arg_slot_cnt =3D slots_used;
+=20
+ 	sub->args_cached =3D true;
+=20
+ 	return 0;
++
++too_many_slots:
++	if (!is_global)
++		return -EINVAL;
++	bpf_log(log, "Arguments of %s() need more than %d argument slots\n",
++		tname, MAX_BPF_FUNC_ARGS);
++	return -EINVAL;
+ }
+=20
+ static void btf_type_show(const struct btf *btf, u32 type_id, void *obj,
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index fed576b8f7fe..e8f4c17fb27d 100644
+index e8f4c17fb27d..500092a2c924 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -9772,7 +9772,7 @@ static int btf_check_func_arg_match(struct bpf_veri=
-fier_env *env, int subprog,
- 	ret =3D btf_prepare_func_args(env, subprog);
- 	if (ret) {
- 		if (bpf_in_stack_arg_cnt(sub) > 0) {
--			err =3D check_outgoing_stack_args(env, caller, sub->arg_cnt,
-+			err =3D check_outgoing_stack_args(env, caller, sub->arg_slot_cnt,
- 							bpf_subprog_name(env, subprog),
- 							NULL, NULL);
- 			if (err)
-@@ -9784,7 +9784,7 @@ static int btf_check_func_arg_match(struct bpf_veri=
+@@ -9784,6 +9784,8 @@ static int btf_check_func_arg_match(struct bpf_veri=
 fier_env *env, int subprog,
  	func =3D btf_type_by_id(btf, env->prog->aux->func_info[subprog].type_id=
 );
  	func_proto =3D btf_type_by_id(btf, func->type);
  	args =3D btf_params(func_proto);
--	ret =3D check_outgoing_stack_args(env, caller, sub->arg_cnt,
-+	ret =3D check_outgoing_stack_args(env, caller, sub->arg_slot_cnt,
++	if (sub->arg_slot_cnt !=3D btf_type_vlen(func_proto))
++		args =3D NULL;
+ 	ret =3D check_outgoing_stack_args(env, caller, sub->arg_slot_cnt,
  					bpf_subprog_name(env, subprog), btf, args);
  	if (ret)
- 		return ret;
-@@ -9792,7 +9792,7 @@ static int btf_check_func_arg_match(struct bpf_veri=
-fier_env *env, int subprog,
- 	/* check that BTF function arguments match actual types that the
- 	 * verifier sees.
- 	 */
--	for (i =3D 0; i < sub->arg_cnt; i++) {
-+	for (i =3D 0; i < sub->arg_slot_cnt; i++) {
- 		argno_t argno =3D argno_from_arg(i + 1);
- 		struct bpf_reg_state *reg =3D get_func_arg_reg(caller, regs, i);
- 		struct bpf_subprog_arg_info *arg =3D &sub->args[i];
-@@ -19777,13 +19777,14 @@ static int do_check_common(struct bpf_verifier_=
-env *env, int subprog)
- 			}
-=20
- 			/* Also ensure the callback only has a single scalar argument. */
--			if (sub->arg_cnt !=3D 1 || sub->args[0].arg_type !=3D ARG_ANYTHING) {
-+			if (sub->arg_slot_cnt !=3D 1 || sub->args[0].arg_type !=3D ARG_ANYTHI=
-NG) {
- 				verbose(env, "exception cb only supports single integer argument\n")=
-;
- 				ret =3D -EINVAL;
- 				goto out;
- 			}
- 		}
--		for (i =3D BPF_REG_1; i <=3D min_t(u32, sub->arg_cnt, MAX_BPF_FUNC_REG=
-_ARGS); i++) {
-+		for (i =3D BPF_REG_1;
-+		     i <=3D min_t(u32, sub->arg_slot_cnt, MAX_BPF_FUNC_REG_ARGS); i++)=
- {
- 			arg =3D &sub->args[i - BPF_REG_1];
- 			reg =3D &regs[i];
-=20
-@@ -19826,7 +19827,8 @@ static int do_check_common(struct bpf_verifier_en=
-v *env, int subprog)
- 				goto out;
- 			}
- 		}
--		if (env->prog->type =3D=3D BPF_PROG_TYPE_EXT && sub->arg_cnt > MAX_BPF=
-_FUNC_REG_ARGS) {
-+		if (env->prog->type =3D=3D BPF_PROG_TYPE_EXT &&
-+		    sub->arg_slot_cnt > MAX_BPF_FUNC_REG_ARGS) {
- 			verbose(env, "freplace programs with >%d args not supported yet\n",
- 				MAX_BPF_FUNC_REG_ARGS);
- 			ret =3D -EINVAL;
-@@ -19839,9 +19841,10 @@ static int do_check_common(struct bpf_verifier_e=
-nv *env, int subprog)
- 		 */
- 		if (env->prog->aux->func_info_aux) {
- 			ret =3D btf_prepare_func_args(env, 0);
--			if (ret || sub->arg_cnt !=3D 1 || sub->args[0].arg_type !=3D ARG_PTR_=
-TO_CTX) {
-+			if (ret || sub->arg_slot_cnt !=3D 1 ||
-+			    sub->args[0].arg_type !=3D ARG_PTR_TO_CTX) {
- 				env->prog->aux->func_info_aux[0].unreliable =3D true;
--				sub->arg_cnt =3D 1;
-+				sub->arg_slot_cnt =3D 1;
- 				sub->stack_arg_cnt =3D 0;
- 			}
- 		}
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c=
- b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-index 57f22691744a..ab1955852233 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-@@ -116,8 +116,8 @@ __naked void stack_arg_pruning_load_after_call(void)
- /*
-  * "bad_ptr": the first arg is 'long *', which is not a recognized point=
-er
-  * type for static subprogs (not ctx, dynptr, or tagged).  btf_prepare_f=
-unc_args()
-- * sets arg_cnt =3D 7 / stack_arg_cnt =3D 2, then fails with -EINVAL.  T=
-he subprog
-- * is marked unreliable but the call still proceeds for static subprogs.
-+ * sets arg_slot_cnt =3D 7 / stack_arg_cnt =3D 2, then fails with -EINVA=
-L.  The
-+ * subprog is marked unreliable but the call still proceeds for static s=
-ubprogs.
-  */
- __noinline __used __naked
- static void subprog_bad_ptr_7args(long *a, int b, int c, int d, int e, i=
-nt f, int g)
 --=20
 2.52.0
 
