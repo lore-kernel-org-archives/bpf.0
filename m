@@ -1,44 +1,42 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52B5C352022
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:15:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EEE8327C08;
+	Fri, 11 Sep 2026 15:18:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789139742; cv=none; b=Y4pHitOxwu5Le5rqurS1eBO9kDQTC5CwInKYeZEVX+kD7aOMA3PXEzGnNSfxyLi27GC135kacWLiywNk91uuiN6TOM1rcwQROxnMNF9u3zWVccg3gVKUi0SD/doEVKuYLVeP6KtAD62mdBENsV0xL4cVjMidJcFcRO8FovKe1/s=
+	t=1789139939; cv=none; b=j/QrPJO4qsiWnSj8CCCcHPLnPnyP3opQfkcKRDqkhe8LdP0OVasECo1aIG1nqQavcLRKe7v2z7NXzKO5ngaeFrJHQVyGrlk8WXtp66KAE2A8E05iL8Dvbha/m1iKa1uDVZ1vuWwrNf8GUj7Bob1vpEWHAoR2LFzqFVc5Td3dc1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789139742; c=relaxed/simple;
-	bh=NRDP0MfR1Q68cCPKPCmZFquU1b+MMuT8gJHnevIbfDo=;
+	s=arc-20240116; t=1789139939; c=relaxed/simple;
+	bh=bI8u4HrrpuXxdBeBsnuOY99g7VSyogN9yG9H/ZTvBCY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hicNzwr8XZlDT4qP6IIIXb1xHkWWrsaxFMwPDwZQTwtqI5zi2yUJwnrbbZxKUGmafT6sJqmR8QZYxzDOKC9svJJ8XVSCN9vgB5Too2W0XVjxI59/zW8n91reIxpSUwYX5u6iVkr8vIz7chFi/FWgdb19M0uwV02qzUO/KaSowXM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SWZJQLCH; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=pDnsAoV/TBoFRptjB4zQ+H8FI56bwtvLjeKw1C6kf76zbWS2QOFQOLrB2grnyhvCGFvJoazzaDL5OVwKycwGvJok8nimi6jgPtUdoqgwNrKOv7IFbSOg+x0cKJ+mkgx1BbAzOu2iDUPhXcH46SMAjhZrXdv21zXI45qWqCBjKPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SIud03vl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SWZJQLCH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B89271F00893;
-	Fri, 11 Sep 2026 15:15:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SIud03vl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5835B1F000FF;
+	Fri, 11 Sep 2026 15:18:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789139739;
-	bh=59hsyzU+rmq1Nt6YQA/XDUl3dLIgBQnV5WJH8EYxD5A=;
+	s=k20260515; t=1789139938;
+	bh=r6ofjwgxcQlev3mQDjvqEpmStxJ3qB6+1/brwgypw9g=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SWZJQLCHVXOwVgx9u/KkGr/sInXylrsK/fOdF8H31nwJ0wIjawxSphSL6Le97TGck
-	 9WtxjBF3FuqqXmduAbYOGgvzq9s8RUsQ7cC2v6u8rnHKzOpF0R+72SUC7n2BiqrFsq
-	 iUrQNb9eMU6bNWZWDqwQSAIcz7OM52/70FQVK2d0BIw7k8MTlwY99CWpYtUxNhJ0p4
-	 YZAs5nhpih7tOggTvFNayp6BVJxwBoo7WvmiHVHAPbpzuK4jKnHDGiMeHgADjOfKX9
-	 OXZTI8VHa/egh9nW2QvnHTo0Rs57lXHSnrxhC3ucmSHUN/DBo3wtABDZd5hYs8YUzk
-	 u5Qck18jMbBqg==
+	b=SIud03vlzZtl2jMPbS8GzPiT1G5CBN2iZy4vPiRd0WMOZVUt0Rtt5qlAxZ2bJlBLT
+	 mst+BiservAiRBcOQ7wiZHXno1BkAgjsY/N42W32M29zT5BCqeGB0mcUgPlgvQw7uG
+	 WogRDe+n4mO97YHeYPOKYt2BU1PD8hH4ZTMx8maUdUHYZBpCQBIrNm47YuES7jItLV
+	 QR2xvq55CZbwQw9RBfcWL5+qfvMsJnGuJPyG7u470TTqwsAGQqnTUnRsWSH+DZbFO+
+	 LYJMw+pk5zxEjY3BvMNic8TJ7WJZDU4Z6Z7DCurG18FicygQItEdKqM8NM0xjQMWiF
+	 iW1USeXzETWCQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 09/13 net-next] net: fib: split common nexthop logic to
- fib_core.c
+Subject: Re: [PATCH net] net: mana: never hand a non-page_pool buffer to XDP
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Fernando Fernandez Mancera" <fmancera@suse.de>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260910144914.8025-10-fmancera@suse.de>
-References: <20260910144914.8025-1-fmancera@suse.de>
- <20260910144914.8025-10-fmancera@suse.de>
+To: "Gunter Woytowitz" <gunter@vcinity.io>
+Cc: bpf@vger.kernel.org, linux-hyperv@vger.kernel.org
+In-Reply-To: <20260910-mana-xdp-pagepool-v1-1-dab140d91fed@vcinity.io>
+References: <20260910-mana-xdp-pagepool-v1-1-dab140d91fed@vcinity.io>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 11 Sep 2026 15:15:39 +0000
-Message-Id: <20260911151539.B89271F00893@smtp.kernel.org>
+Date: Fri, 11 Sep 2026 15:18:57 +0000
+Message-Id: <20260911151858.5835B1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,81 +45,109 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Low] Syntax error in `nh_netdev_event` when `CONFIG_IPV4` is enabled, ca=
-using a build failure.
-- [Low] Parameter name mismatch in the dummy inline function for `fib_nh_in=
-it`.
+
+New issues:
+- [High] Bypassing pre-allocated buffers when XDP is attached defeats anti-=
+OOM protections, risking permanent interface disablement.
+
+Pre-existing issues:
+- [Critical] Dangling pointer in apc->bpf_prog leading to Use-After-Free an=
+d Double Free if mana_pre_alloc_rxbufs fails.
 --
 
-commit 243925357332d15aa13a077472006e05019dde8d
-Author: Fernando Fernandez Mancera <fmancera@suse.de>
+commit 47baeb3edbb2306dafb469762d4ed1350e2c78f3
+Author: Gunter Woytowitz <gunter@vcinity.io>
 
-net: fib: split common nexthop logic to fib_core.c
+net: mana: never hand a non-page_pool buffer to XDP
 
-This commit creates fib_core.c and moves functions for common nexthop
-initialization and release from fib_semantics.c to fib_core.c. This makes
-shared FIB and nexthop logic accessible to IPv6 when the IPv4 routing
-stack is omitted.
+This commit ensures that all buffers handled by XDP are allocated from
+the page_pool to prevent warnings when __xdp_return() frees them. It
+bypasses the pre-allocated buffers when an XDP program is attached,
+falling back to dynamic allocation. Unused pre-allocated buffers are
+safely freed by existing cleanup paths.
 
-> diff --git a/include/net/ip_fib.h b/include/net/ip_fib.h
-> index 0a35355fb0f33..4bbafb7b723f2 100644
-> --- a/include/net/ip_fib.h
-> +++ b/include/net/ip_fib.h
-[ ... ]
-> @@ -578,10 +584,23 @@ void fib_select_multipath(struct fib_result *res, i=
-nt hash,
->  void fib_select_path(struct net *net, struct fib_result *res,
->  		     struct flowi4 *fl4, const struct sk_buff *skb);
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/=
+ethernet/microsoft/mana/mana_en.c
+> index 7a1ac853e3abc..a2cb667530a06 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> @@ -2925,7 +2925,14 @@ static int mana_fill_rx_oob(struct mana_recv_buf_o=
+ob *rx_oob, u32 mem_key,
+>  	dma_addr_t da;
+>  	void *va;
 > =20
-> +#if IS_ENABLED(CONFIG_IPV4)
->  int fib_nh_init(struct net *net, struct fib_nh *fib_nh,
->  		struct fib_config *cfg, int nh_weight,
->  		struct netlink_ext_ack *extack);
->  void fib_nh_release(struct net *net, struct fib_nh *fib_nh);
-> +#else
-> +static inline int fib_nh_init(struct net *net, struct fib_nh *fib_nh,
-> +			      struct fib_config *cfg, int gfp,
-                                                              ^^^
+> -	if (mpc->rxbufs_pre)
+> +	/* The pre-allocated buffers come from dev_alloc_pages(), not from the
+> +	 * rxq's page_pool. With a program attached any buffer can reach
+> +	 * __xdp_return(), which returns it to the pool the rxq registered, so
+> +	 * fill from the pool instead. The unused pre-allocated buffers are
+> +	 * released by the mana_pre_dealloc_rxbufs() every caller already runs
+> +	 * after mana_attach().
+> +	 */
+> +	if (mpc->rxbufs_pre && !mana_xdp_get(mpc))
+>  		va =3D mana_get_rxbuf_pre(rxq, &da);
+>  	else
+>  		va =3D mana_get_rxfrag(rxq, dev, &da, &from_pool, &pp_page,
 
-[Severity: Low]
-Does this code use the correct parameter name here? The actual definition of
-fib_nh_init in the IPv4 block uses int nh_weight for the fourth parameter.
-Using gfp in the stub obscures the API contract and might mislead developers
-into passing a GFP flag instead of a routing weight.
+[Severity: High]
+Does bypassing the pre-allocated buffers when XDP is attached defeat the
+anti-OOM protections?
 
-> +			      struct netlink_ext_ack *extack)
-> +{
-> +	return -EAFNOSUPPORT;
-> +}
-[ ... ]
-> diff --git a/net/ipv4/nexthop.c b/net/ipv4/nexthop.c
-> index a7c2b8dced4e7..ea747fc2223c4 100644
-> --- a/net/ipv4/nexthop.c
-> +++ b/net/ipv4/nexthop.c
-[ ... ]
-> @@ -4004,8 +4005,12 @@ static int nh_netdev_event(struct notifier_block *=
-this,
->  			nexthop_flush_dev(dev, event);
->  		break;
->  	case NETDEV_CHANGEMTU:
-> +#if IS_ENABLED(CONFIG_IPV4)
-> +		struct netdev_notifier_info_ext *info_ext;
-> +
->  		info_ext =3D ptr;
->  		nexthop_sync_mtu(dev, info_ext->ext.mtu);
-> +#endif
+When attaching an XDP program under memory pressure, mana_pre_alloc_rxbufs()
+succeeds, but the dynamic page_pool allocations in mana_fill_rx_oob()
+can now fail.
 
-[Severity: Low]
-Can this sequence cause a build failure when CONFIG_IPV4 is enabled? In C, a
-case label cannot be immediately followed by a declaration. This causes a
-compilation error because a label can only be part of a statement, and a
-declaration is not a statement. Could we add a block or move the declaration
-to avoid breaking the build?
+If mana_attach() fails halfway through due to these allocation failures:
 
->  		rt_cache_flush(dev_net(dev));
->  		break;
->  	}
+drivers/net/ethernet/microsoft/mana/mana_bpf.c:mana_xdp_set() {
+    ...
+		err =3D mana_attach(ndev);
+		if (err) {
+			netdev_err(ndev,
+				   "mana_attach failed at xdp set: %d\n", err);
+			NL_SET_ERR_MSG_MOD(extack,
+					   "XDP: Re-config failed at attach");
+			goto err_dealloc_rxbuffs;
+		}
+    ...
+}
+
+Could this leave the network interface permanently detached until manually
+reset, effectively doubling the peak memory requirement during the XDP atta=
+ch
+process?
+
+
+[Severity: Critical]
+This is a pre-existing issue, but I noticed a potential use-after-free
+in mana_xdp_set() during error handling.
+
+drivers/net/ethernet/microsoft/mana/mana_bpf.c:mana_xdp_set() {
+    ...
+	apc->bpf_prog =3D prog;
+
+	if (apc->port_is_up) {
+		/* Pre-allocate buffers to prevent failure in mana_attach */
+		err =3D mana_pre_alloc_rxbufs(apc, ndev->mtu, apc->num_queues);
+		if (err) {
+			NL_SET_ERR_MSG_MOD(extack,
+					   "XDP: Insufficient memory for tx/rx re-config");
+			return err;
+		}
+    ...
+}
+
+If mana_pre_alloc_rxbufs() fails, we return early without restoring
+apc->bpf_prog to old_prog.
+
+Can this leave a dangling pointer in apc->bpf_prog?
+
+The caller dev_xdp_attach() in net/core/dev.c drops the reference to the
+program on error, freeing it. A subsequent call to mana_xdp_set() will read
+this pointer as old_prog and call bpf_prog_put(old_prog).
+
+Will this result in a double-free of the BPF program?
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260910144914.8025=
--1-fmancera@suse.de?part=3D9
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260910-mana-xdp-p=
+agepool-v1-1-dab140d91fed@vcinity.io?part=3D1
