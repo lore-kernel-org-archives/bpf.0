@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9229D3515F8
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:09:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B2D374A05
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:15:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789139345; cv=none; b=s4uDHPSr+zPrYnNDh5j3uGjZvK10So2JN0rbJ3awR15x9p/kJSgt2aRhTxqtdmNoKMumiXncado4+CWpc352I2F4O8bN1CbX88xnaGbu9nhXSSxIyKKUkiZbZimhEHKQmYggZMigkAnZPvtO54+uhmnzUNAWMjX4ZhQ6f3xYuSY=
+	t=1789139739; cv=none; b=qNrAM2cfx4EahCz+ymlqMVzVLQMpDSt1ssNlHoVIeaKLS7l5Mu56E425S1PBCkrdNsQbjqK66BSYTl4lkIY/KT0a8cPiNuL3YEHegRjWuMdRGIR4hT1nJN/myii1xKg6shzFg9wkYhZqAyCfte4v7JfNQmbPbz72j6Le4FzMAgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789139345; c=relaxed/simple;
-	bh=TGVxIFLiDFNk/TaJsCA//rn6/bXLkUsuybmt36cPwqM=;
+	s=arc-20240116; t=1789139739; c=relaxed/simple;
+	bh=Fy3vVmZFQKyiQvLTe3aYCuWhcgKe8joTr3WiBwtqY/M=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=cfwhjRNV5zRUiNggwGFNX1LoJenhK/oySvAMxDMkgox9cxlKUrZsaBlGHwLcknDwNJF9+axc5NGhHcNVppFPotAsfpE98apibxl3cv9ThMdoXRXCljMXFYs2e0YFSV77+d5r+J1CU51Yea1ioYD4e4/Go0tbXThm4/vVWaWR2Ic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L5cQazLH; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Lycr3TpCFbeiDKOUBKd50BH+oP5MP0Ev0nfk9YKovlzLGzhQBJ7ISiDU7bf05XacxxDBVJwPe43mBrKBDDXYy5e1U8d9BGJNmDUg3a0KRYnQbuTpecWzwlPVQSbOb9EHZ2qopYwZJ8I1zqD+4BfijwVnQ65Le/o/avdxMkQQc0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jS14WRCe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L5cQazLH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44CF61F00898;
-	Fri, 11 Sep 2026 15:09:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jS14WRCe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB9111F000FF;
+	Fri, 11 Sep 2026 15:15:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789139344;
-	bh=DGCQrSArTmr+zU+Tzkrl9fIqGWxMsjPyYSvw0efrTe0=;
+	s=k20260515; t=1789139737;
+	bh=xrfySFkPeIIPBNGWrc28P6XWT7JkbJuh+uxoP2KEEjg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=L5cQazLHV63aTH1AsA5fw7nt/a+kputl/JHdP77t00XNkxjJIzaAR3K72WJRhU+va
-	 bbgUXKi9a7cUR6oj9t/F3oTmwjeqCkm1fx6KHIZAQLa6YkMZPc0KTgACitmOjYEI0s
-	 HkVaNUbN7tFXZ79Okgjn6p/AQPYIvjjsT0Zx/eOOVmdi+RzEHSSnyRfNuU+UP4Bsce
-	 XTpuGuxFo7Tn2d5PDKf6bKHuZkZ6277/2yQ9rcyEH9vA7nvng5B+0Gg+ZwHo47X1jx
-	 C961605HceLF60gmnx5p+oglZGkfL6Mcx+UO9MNkW/xoXYUgeXvF6NQE8+AUQ8UR4e
-	 Rt7sy0/pBx13Q==
+	b=jS14WRCeX18PCLr568UBQRNS5C9maQA6dlZ5Pgw+deLjzZ7pEmDGNq2Tq+0mxjyaq
+	 qQMRjvDDw62of/RIJnQs+yUuJmFzmtYXAqIOLVCk1aD6Ydhr92WYUsrcFwqhN4sKkQ
+	 FTG8JS+C5uy/AT2IYUPzMqrJUv3wLwa4qgG1Sayih9fdXtfY4GoTkTKewGk1bG32wO
+	 Lj8ce6cvrTm/AkrH+iOtdXt09SLm/JA9+QJudG8vHE1ai8imv4tmeArmQ+cxzZynwW
+	 tIfG6x6ddvJTN8ca3sv3RJttGRr2rGa0Xp1GPuZTiKIvdniulMdPQhssPICWkr8rjU
+	 dGOVQ8pkCpIOA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v2 05/14] selftests/bpf: Test skb_ext on cloned
- skbs
+Subject: Re: [PATCH 06/13 net-next] net: udp: split IPv4 specific logic into
+ udp_ipv4.c
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jakub Sitnicki" <jakub@cloudflare.com>
+To: "Fernando Fernandez Mancera" <fmancera@suse.de>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260910-bpf-meta-inside-skb-ext-v2-5-0b21e42180b0@cloudflare.com>
-References: <20260910-bpf-meta-inside-skb-ext-v2-0-0b21e42180b0@cloudflare.com>
- <20260910-bpf-meta-inside-skb-ext-v2-5-0b21e42180b0@cloudflare.com>
+In-Reply-To: <20260910144914.8025-7-fmancera@suse.de>
+References: <20260910144914.8025-1-fmancera@suse.de>
+ <20260910144914.8025-7-fmancera@suse.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 11 Sep 2026 15:09:03 +0000
-Message-Id: <20260911150904.44CF61F00898@smtp.kernel.org>
+Date: Fri, 11 Sep 2026 15:15:37 +0000
+Message-Id: <20260911151537.BB9111F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,77 +47,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] Missing __msg() macro in __failure verifier tests.
+- [High] Aggregated IPv4 UDP packets are silently dropped during GRO comple=
+tion when CONFIG_IPV4 is disabled.
 --
 
-commit 3dc92388d2fd6ba878aeec16668062f704faf681
-Author: Jakub Sitnicki <jakub@cloudflare.com>
+commit d963ce43c73f11f406bea2e26b36c86cf494d30c
+Author: Fernando Fernandez Mancera <fmancera@suse.de>
+   =20
+net: udp: split IPv4 specific logic into udp_ipv4.c
+   =20
+This commit moves IPv4-specific UDP socket logic from udp.c into a new=20
+udp_ipv4.c file. This isolates the IPv4 functions from the generic UDP=20
+socket infrastructure, allowing the INET subsystem to be compiled without=20
+IPv4.
 
-selftests/bpf: Test skb_ext on cloned skbs
-
-This commit adds coverage for skb_ext behavior when an skb is cloned,
-using TC mirred and bpf_clone_redirect(). It tests whether extensions are
-readable across clones and verifies copy-on-write isolation.
-
+> diff --git a/net/ipv4/udp_offload.c b/net/ipv4/udp_offload.c
+> --- a/net/ipv4/udp_offload.c
+> +++ b/net/ipv4/udp_offload.c
 [ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_skb_ext.c b/tools=
-/testing/selftests/bpf/progs/verifier_skb_ext.c
-> index db43f10514001..c2611c9315aa7 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_skb_ext.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_skb_ext.c
-> @@ -7,6 +7,51 @@
+> @@ -954,6 +960,7 @@ int udp_gro_complete(struct sk_buff *skb, int nhoff,
 > =20
->  __u64 flags;
+>  INDIRECT_CALLABLE_SCOPE int udp4_gro_complete(struct sk_buff *skb, int n=
+hoff)
+>  {
+> +#if IS_ENABLED(CONFIG_IPV4)
+>  	const u16 offset =3D NAPI_GRO_CB(skb)->network_offsets[skb->encapsulati=
+on];
+>  	const struct iphdr *iph =3D (struct iphdr *)(skb->data + offset);
+>  	struct udphdr *uh =3D (struct udphdr *)(skb->data + nhoff);
+[ ... ]
+> @@ -975,6 +982,9 @@ INDIRECT_CALLABLE_SCOPE int udp4_gro_complete(struct =
+sk_buff *skb, int nhoff)
+>  					  iph->daddr, 0);
 > =20
-> +SEC("tc")
-> +__description("skb_ext slice is invalidated by bpf_clone_redirect")
-> +__failure
+>  	return udp_gro_complete(skb, nhoff, udp4_lib_lookup_skb);
+> +#else
+> +	return -EAFNOSUPPORT;
+> +#endif
+>  }
 
-[Severity: Medium]
-Should this test include a __msg("...") macro to verify the exact error
-string from the verifier?
+[Severity: High]
+Does this cause aggregated IPv4 UDP packets to be silently dropped during
+GRO completion when CONFIG_IPV4 is disabled?=20
 
-If the test fails to load due to an unrelated verifier error (such as a
-syntax issue, invalid BTF, or missing kfunc declarations), the test loader
-merely checks if loading fails for any reason. This can incorrectly report
-a PASS, hiding regressions in the specific slice invalidation logic it is
-designed to test.
+When an IPv4 UDP packet stream is aggregated by GRO on a system compiled
+with CONFIG_IPV4=3Dn, returning -EAFNOSUPPORT causes the GRO engine=20
+(gro_complete) to treat the completion as a failure, invoking kfree_skb()
+and dropping the packet.
 
-> +int skb_ext_stale_slice_after_clone_redirect(struct __sk_buff *ctx)
-> +{
-> +	struct bpf_dynptr meta;
-> +	__u8 *slice;
-
-[ ... ]
-
-> +	bpf_clone_redirect(ctx, 1, 0);
-> +
-> +	/* Stale: the clone shares the ext block the slice points into. */
-> +	*slice =3D 0;
-> +
-> +	return 0;
-> +}
-> +
-> +SEC("tc")
-> +__description("skb_ext slice is invalidated when ext is re-opened with F=
-_CREATE")
-> +__failure
-
-[Severity: Medium]
-Similarly, does this test also need a __msg() macro?=20
-
-Without exact error message string verification, the test infrastructure
-will pass this test if it fails to load for any reason, rather than
-verifying the intended failure reason.
-
-> +int skb_ext_stale_slice_after_recreate(struct __sk_buff *ctx)
-> +{
-> +	struct bpf_dynptr d1, d2;
-> +	__u8 *slice;
-
-[ ... ]
+Since udp4_gro_receive remains unconditionally enabled in udpv4_offload_init
+(as net/ipv4/udp_offload.c is compiled when CONFIG_INET=3Dy), untrusted
+network input can reach this path. Even on an IPv6-only node, an L2 bridge
+or packet sniffer expects to see L2 traffic correctly. Dropping aggregated
+packets breaks L2 bridging of IPv4 UDP traffic and prevents packet sniffers
+from seeing bulk traffic streams.
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260910-bpf-meta-i=
-nside-skb-ext-v2-0-0b21e42180b0@cloudflare.com?part=3D5
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260910144914.8025=
+-1-fmancera@suse.de?part=3D6
