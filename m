@@ -1,173 +1,96 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from mta0.migadu.com (out-239.mta0.migadu.com [91.218.175.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7892C387363
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 04:10:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33850353A71
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 04:26:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789099816; cv=none; b=mbvJgsgbA1/M9xX0W/PdXeTCMb143gdGroYukixcGK2AUEO/wAHA6Rrp6dK72yP0Qg0d9c+1XJUKHPijWj6bKJLt3zRxNRc38Thx/aRVDeKkzYsDNoO/kOTDVSclf+evuAe//4fktGjI2kDilom6vztQMNt7Fi9wx6dZg267FRw=
+	t=1789100764; cv=none; b=d7Z1tNE1Sm9GppUC1rcWDcSPaUAd+SoWBDk0azHXkCxecaZM5pr7sAdfDkpQQ1JxBrU0BD+wdsQlbv1IK0fwxUsWNPbggpHkqGKX4IEWTK/g6hptXFB7J+irEzp13TJQ6h2fyNbC4ibpg5Ha7+UaQetHBZXuWDEy9y1UghyxSbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789099816; c=relaxed/simple;
-	bh=97a7RdYdiN707NQHEf1vAgoKhgDkIk+l/W4WLUeCG/o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pdtjNOlL+3+WtuXu+Q+2u716XJc4H/rl4VU1g1LE3AwDqt6pudpDgjmKk8U2uAIxZ7hjfBGY6PdhBEj3DJYXooXrw4YLK+4yl1dGSrAooreIXO0Df2VItOhEJHnrMejY3Gha6oR15VdgMBRnGkzLFTOnVqRM063PHUrgwl8OUis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id CB83A29FDA2C50; Thu, 10 Sep 2026 21:10:00 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: Alan Maguire <alan.maguire@oracle.com>,
-	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-	dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	bpf@vger.kernel.org,
-	kernel-team@fb.com
-Subject: [PATCH dwarves 2/2] tests: tests: Add test for 16-byte aligned arguments on arm64
-Date: Thu, 10 Sep 2026 21:10:00 -0700
-Message-ID: <20260911041000.340219-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260911040955.339939-1-yonghong.song@linux.dev>
-References: <20260911040955.339939-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1789100764; c=relaxed/simple;
+	bh=Mh3NLDyamj1qprcRnO11jC1WhEgxNIZeMS2iEalJdGg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n6masfvDN28Yf38ewXEiL9dLcMIJuEHTKRjSFXWBLN7onmPAgw4fm5ZQRJyy3u2yWtNXfvDGyvxrtExxG6oOxJcFnul08pG7dMvW2+V/dU4Td9MlpUj8Y7dvptYni7Zx0FfMcdQr0fUNSCwwF/nkw/Si1v4vKi8D9Ab6tVlBtRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LK+cnGfx; arc=none smtp.client-ip=91.218.175.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LK+cnGfx"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Mh3NLDyamj1qprcRnO11jC1WhEgxNIZeMS2iEalJdGg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789100758; v=1; x=1789705558;
+ b=LK+cnGfx36xtFvfAjSPts/7LVBr13nparvE3UKYfYiDqfTypR+kf4lLI6YXew2GXjkno97xz
+ UdfsAUYu6qI/FkA7h1rjtmtBiF8eiClVXiks2sF4ImC6Q0rS2n/SB4GztzxvP2AcPUTwKQtG4e0
+ K0ia9zZKvNRwy5KBrY7UGZLc=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id a0f004790152da85;
+	Fri, 11 Sep 2026 04:25:48 +0000
+X-Mizu-Trace-ID: a0f004790152da85
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <a363f511-8c65-4098-ac95-4f5b47a1d0a7@linux.dev>
+Date: Thu, 10 Sep 2026 21:25:44 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 01/12] selftests/bpf: Add a test for an
+ __int128 by-value argument
+Content-Language: en-GB
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20260909062528.4002148-1-yonghong.song@linux.dev>
+ <5b5eb3abbefc69c22b09fb686c4ff7cc3d334c9b3f73110a064252f545ff88cb@mail.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <5b5eb3abbefc69c22b09fb686c4ff7cc3d334c9b3f73110a064252f545ff88cb@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Cover the arm64 even-register rule for 16-byte aligned arguments:
-f_even() and f_stack() where the rule does not bite, f_odd() and
-f_odd_tail() where it leaves a register hole, and f_box() where the
-alignment comes from a struct member rather than from the parameter
-type itself.
 
-The test results on arm64:
-  $ VERBOSE=3D1 ./clang_parm_align16.sh
-  Validation of BTF encoding of over-aligned arguments.
-     BTF: u64 f_even(u64 a, u64 b, __int128 v);
-     BTF: u64 f_odd(u64 a, __int128 v, u64 b);
-     BTF: u64 f_odd_tail(u64 a, __int128 v, u64 b, u64 c, u64 d);
-     BTF: u64 f_stack(u64 a, u64 b, u64 c, u64 d, u64 e, u64 f, u64 g, __=
-int128 v);
-     BTF: u64 f_box(u64 a, struct box s, u64 b);
-  Test ./clang_parm_align16.sh passed
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- tests/clang_parm_align16.sh | 77 +++++++++++++++++++++++++++++++++++++
- tests/test_lib.sh           |  3 +-
- 2 files changed, 78 insertions(+), 2 deletions(-)
- create mode 100755 tests/clang_parm_align16.sh
+On 9/9/26 12:13 AM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+>> index f7f94ccebce2..0d68b92d6692 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+>> @@ -50,6 +50,7 @@
+>>   #include "verifier_helper_packet_access.skel.h"
+>>   #include "verifier_helper_restricted.skel.h"
+>>   #include "verifier_helper_value_access.skel.h"
+>> +#include "verifier_int128_arg.skel.h"
+> [ ... ]
+>
+>> @@ -214,6 +215,7 @@ void test_verifier_helper_access_var_len(void) { RUN(verifier_helper_access_var_
+>>   void test_verifier_helper_packet_access(void) { RUN(verifier_helper_packet_access); }
+>>   void test_verifier_helper_restricted(void)    { RUN(verifier_helper_restricted); }
+>>   void test_verifier_helper_value_access(void)  { RUN(verifier_helper_value_access); }
+>> +void test_verifier_int128_arg(void)           { RUN_TESTS(verifier_int128_arg); }
+>>   void test_verifier_int_ptr(void)              { RUN(verifier_int_ptr); }
+> This isn't a bug, but the name verifier_int128_arg describes only the
+> one case progs/verifier_int128_arg.c holds at this commit. Two patches
+> later in the same series, f4da9830f5a9 adds by-value struct argument
+> tests (struct pair, struct small, struct with_ptr) to the same file,
+> none of which are __int128. The sibling entry two lines up is
+> test_verifier_aggregate_ret for the aggregate-return family.
+>
+> Since progs/verifier_int128_arg.c later grows to cover by-value struct
+> arguments too, would a name in the same family as verifier_aggregate_ret
+> -- say verifier_aggregate_arg -- fit the file better and save a rename
+> later in the series?
 
-diff --git a/tests/clang_parm_align16.sh b/tests/clang_parm_align16.sh
-new file mode 100755
-index 0000000..484aeb6
---- /dev/null
-+++ b/tests/clang_parm_align16.sh
-@@ -0,0 +1,77 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+source test_lib.sh
-+
-+outdir=3D$(make_tmpdir)
-+
-+# Comment this out to save test data.
-+trap cleanup EXIT
-+
-+title_log "Validation of BTF encoding of over-aligned arguments."
-+
-+align16=3D"${outdir}/align16"
-+CC=3D$(which clang 2>/dev/null)
-+
-+if [[ -z "$CC" ]]; then
-+	info_log "skip: clang not available"
-+	test_skip
-+fi
-+
-+arch=3D$(uname -m)
-+if [[ "$arch" !=3D "aarch64" ]]; then
-+	info_log "skip: test is arm64 only, running on $arch"
-+	test_skip
-+fi
-+
-+# arm64 makes an argument whose alignment is 16 start on an even-numbere=
-d
-+# argument register, so f_odd() passes a in x0, v in x2:x3 -- leaving x1=
- as a
-+# hole -- and b in x4.  pahole has to account for that hole, otherwise e=
-very
-+# parameter after v looks like it is in an unexpected register and the w=
-hole
-+# function is dropped from BTF.
-+cat > ${align16}.c << EOF
-+typedef unsigned long long u64;
-+struct box { __int128 v; };
-+
-+__attribute__((noinline)) u64 f_even(u64 a, u64 b, __int128 v)
-+{ return a + b + (u64)v; }
-+
-+__attribute__((noinline)) u64 f_odd(u64 a, __int128 v, u64 b)
-+{ return a + b + (u64)v; }
-+
-+__attribute__((noinline)) u64 f_odd_tail(u64 a, __int128 v, u64 b, u64 c=
-, u64 d)
-+{ return a + b + c + d + (u64)v; }
-+
-+__attribute__((noinline)) u64 f_stack(u64 a, u64 b, u64 c, u64 d, u64 e,=
- u64 f,
-+				      u64 g, __int128 v)
-+{ return a + b + c + d + e + f + g + (u64)v; }
-+
-+__attribute__((noinline)) u64 f_box(u64 a, struct box s, u64 b)
-+{ return a + b + (u64)s.v; }
-+
-+u64 (*keep[])() =3D { (u64(*)())f_even, (u64(*)())f_odd, (u64(*)())f_odd=
-_tail,
-+		    (u64(*)())f_stack, (u64(*)())f_box };
-+EOF
-+
-+${CC} -g -O2 -c -o ${align16}.o ${align16}.c 2>/dev/null
-+if [[ $? -ne 0 ]]; then
-+	info_log "skip: clang could not compile ${align16}.c"
-+	test_skip
-+fi
-+
-+LLVM_OBJCOPY=3Dobjcopy pahole -J --btf_features=3Dconsistent_func ${alig=
-n16}.o
-+if [[ $? -ne 0 ]]; then
-+	error_log "Could not encode BTF for ${align16}.o"
-+	test_fail
-+fi
-+
-+for fn in f_even f_odd f_odd_tail f_stack f_box; do
-+	encoded=3D$(pfunct --all --format_path=3Dbtf ${align16}.o | grep " ${fn=
-}(")
-+	verbose_log "BTF: $encoded"
-+	if [[ -z "$encoded" ]]; then
-+		error_log "${fn}() is missing from BTF"
-+		test_fail
-+	fi
-+done
-+
-+test_pass
-diff --git a/tests/test_lib.sh b/tests/test_lib.sh
-index e2a7218..e2d0b0c 100755
---- a/tests/test_lib.sh
-+++ b/tests/test_lib.sh
-@@ -661,8 +661,7 @@ check_bpftool_btf_support()
- cleanup()
- {
- 	if [ -n "$outdir" ] && [ -d "$outdir" ]; then
--		rm ${outdir}/*
--		rmdir $outdir
-+		rm -rf "$outdir"
- 	fi
- 	return 0
- }
---=20
-2.53.0-Meta
+Correct, will use verifier_aggregate_arg.
+
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34320399441
 
