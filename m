@@ -1,244 +1,208 @@
-Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011022.outbound.protection.outlook.com [40.107.208.22])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C107463B60
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 21:01:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 920B6434984;
+	Fri, 11 Sep 2026 21:33:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.22
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789160502; cv=pass; b=kBuLYF56f34N0kKzpcDNHW7ERDXdehs2NfzPXaM9kBlTNJTjdypII6ggQsxPsm7HCqvAgrGCLPYay/mDv/bKs+SZDqx4RgbLJIBUrRnqENrVqhvDEh30P/K4PPUu+SbYy02OvIyuCKsLEyvBc0MW3eDGvDHPbNLenxrkXvXhEUo=
+	t=1789162399; cv=fail; b=iX+v+0HOqkR0hGLwPU0saLRoPTx2Y80x5cuXNlwBZLn2erUDlz3uqSULatC2PTMJOlYlsw7UOPI8qLGhGyimFoXtaS36B/nPPmclb43mBbZxhFHMhaPQz9vyEYqWGCvvtHgWfUI+xOPh3KUhNc5kA6U8bh/eE4AWztyIfEpyPeY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789160502; c=relaxed/simple;
-	bh=ZnNCTQg42ONX2ZidYqMg3tCg29YmjwfQK6KtWU+ovcg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g5CWkEaJ3JGPJ/jk9yHwmtdEIn9OlQRADv75PBH+hcmngIakBPavK5oCaCedH6F/h9VZyq0FRf963ZkjXD0OARguwDp5oD7ZurRhH410c/m+MHVp36atqXx5xMyC2V2yAtvufkwWTwq43+MnJceipf5EUtrdparBdo45RnXHpiE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZYRHkzIo; arc=pass smtp.client-ip=209.85.210.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789162399; c=relaxed/simple;
+	bh=D8DkvyELPLPSrqOjwLLVgxvIDVyFbJ8cPfCAl7sknsM=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=TlpBb6b/Kf0SySQ6x+I4r8LpLWpcsNQlUk8bvkxgIXjujWLAUlO1clDRBvv4ACaeWqQQzaK9Odi9e3fTAxYboblmHhSJ+IP1GxYSAPmz4inOquM1zgk1XlTaxSWD+vbJwG7Mz9LQlPb8lwZzilV277n8AOrKbBIohtwy/gZUHP8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=AGEmBuB9; arc=fail smtp.client-ip=40.107.208.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZYRHkzIo"
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7f48c750afcso1400016a34.0
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 14:01:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789160499; cv=none;
-        d=google.com; s=arc-20260327;
-        b=DWFv+BzcZR9+HgG5AOHMQn5qWsjW94qJXsIF0AwNmR7B0/t2zf0mN2nMlhIZ2N0y1o
-         4lHbjiRYVCMkcTcgOjEKVIoxuG41V7whgWeOYdOjyFl4XWeTrg5uu2uHQZd1blY5HJho
-         iNVZe0VFbIlV45KHgpMAn3OzwJ/1ggtS8SO49HCmk1WAD7qDz5bnTLUNMi1M9eaYCK9r
-         rCSV6yjz4z8zgRHMByv7zzZZNSfooqmFWYmtBckw8YROwgU2iEmeOpQCYduRKDB1tyuG
-         gbPXsGeLwwaYcnNmL2VxDgTWsDj6U+x+8QZD6FowgyKXCa4tZKyY3k3HJVP19Q55yEyE
-         ZKPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=peEQX8VEDQkCoCW2ZXlhNTZ6VuPwoZVoNHsmEy4L8oM=;
-        fh=2MBOojPsOSARizhxuWgT5BqcaOh4dFXJJ9MmFSYnYEA=;
-        b=XVfTat05UveFUgpMDOy+SNa1f0nKDKYxBwlZ1G/HWAiVwLiZkB3Ug8hN5zRo+ojWtL
-         2f/5I/0vwbTNaYPT4KLXuzZLhtX9EM4onlw/SsLUCNLBWfdO4AGtnHZAzjJsMYCBexdQ
-         lovIea3EG3xhLY5qTIas28g269IQe/NLFabWCbf0EuAmZaIS58CGTaBMbBsDDEJBiC53
-         /EqgExZh9s27pgnRfkRm6MQ8JNID0XbYlN1YuHVQheIVX3n3wOSApMFzIhxHm77ASaDN
-         2o1N/BdSl7NajuOiIPrOIoc+Jf1zl3eRpDhmtg8Qase3xk0rUhsdNxVjrby8ryw1mD4k
-         Pbcg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789160499; x=1789765299; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=peEQX8VEDQkCoCW2ZXlhNTZ6VuPwoZVoNHsmEy4L8oM=;
-        b=ZYRHkzIokDD8FbXvXOURnT7n40x3ioeVoMieBqRuJIYckbfD4fLZdXzEx2D7lQYrE2
-         RH0zeLeu7a1gnEv8Q2ZH4DcoBfFUMMkIJMZHU4Ug58XbIsXXIm4ix1kCRPfK68HeXEQX
-         4xzvXrxNU67SSD9B7ys6KlnVp71+EsY+ul6P+CVxSp41m+18u6CoVCgpL8ffCIVbpnqa
-         m2q+dF7zqrYKNz9Q7C38Jva6EueJoV6lq2EDZdMlIT72X7FlIc6xDv6r1P+tvZzngT5I
-         ZHSQxXSuQje6ZvokFDOJg3NA0r2McgtT3/eWVIFpaaQm8of9c2ZC7nW4rK+l9uwM3Mwy
-         b4dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789160499; x=1789765299;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=peEQX8VEDQkCoCW2ZXlhNTZ6VuPwoZVoNHsmEy4L8oM=;
-        b=sjFbO7xv4oMLY6u44IBqxaNJLGvd96tQeEb6UtyO5LbAb23b5qsd5u+yj9Pcg+EYGd
-         TSIfcyRTJ4dIg1tp+qRLvN3DV4g2HbK73uhOjbgvQbtK1RzNTFLCZ284g684uaa1oHs+
-         T5O3W6M12VOtoaFCQNSZvz8wScldAw3eSOqcNYer/na0mRwYqg8Psipd9bAaVzH1cFNC
-         LQzSs620GW+RgKJBe192qDmQJZH4PZE7zQR6SWOsQ3gjd+LYJZw3fXKLvmXvoeUeTrlw
-         SpiqvfBbWiQ7WBUkuj8SoX7GgnfGbaFzaNa0y+4HWMwTY6brnz2NlesXzF3XSptDhNNe
-         VPhQ==
-X-Gm-Message-State: AFuF++nZheR+pO+tePvKNHsd+w1G03+BPo639qEXyPPkDq6QFQstBa0b
-	fUdC+WybEXF/rWUQASCAdkRExctHqEfASBlU+pUPoU0K+w21LE2JLOOtq+5IuTpy75GtdjdRNVc
-	SX8itaaWQsbxlz6r5Km5tL2WaDD5Dm7M=
-X-Gm-Gg: AYBFou2qWuXBuyh5Uo537b4gR1mb3raeXbtNPrbUoDTphu13jhGAtpOp8ugoVP6JfU4
-	M2e+f+KWzj39Aog6rNSo36aDwSXw6Yc8V8gvt0kCc4AexOZHhca/fOfoms+26UCZmAPqB6c1YYT
-	n36QKApYrxbDLUWJjHOKo7biTQtMIuJJeqehBSwXsEsRX3bH66fugjHN0ztdxeL9GKS/gBrQQ9z
-	5oK+l90BpyJcEoAsSNJzAIHqaU/Jqt932qDA7K0+45ItKzu9AIwF1ItAQ2H1y2v58NgSlerqVup
-	ks7nXTpQiR/tvyVwzelPmUHYCV7juWfn+B8s8aEBe+BRTScC0bitwUswV6t27UXwF8+fms8=
-X-Received: by 2002:a05:6820:a281:20b0:6bd:e592:2c66 with SMTP id
- 006d021491bc7-6c0bb8f2546mr3602363eaf.46.1789160498963; Fri, 11 Sep 2026
- 14:01:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="AGEmBuB9"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=en/uOWf9yXdxAYdhbi4woQ3TpQCtkHQXywUvXTcKZlJ1xlQlt7kAIhrzSpUXgfdWCoJFpj9Xog2h43EUfTFUceQBivZiU/hjbRj6MA6p5RO430cnCLGVAFyO1wEnS4+nR1ON5qVcVAEw19s2CjOMLLAu+mecmb74XJe5U0cHuvwgbrBD8icmnHE1LvABZxnV7mnNLm3IDtsTNBf/0yQAGdeEx/e/SvkA6DcAYKmJRUTIeFayyG0keV+ZI1Ium1m3qL9XT+B+K1AIubpZdXkBrZDaXVXBUlW6BpxwSGJdy8PWsATMpPYCLDyt8BJzZhB7hI2Uo74Cc5MfZ5CEoq+ASw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2qdghTQevxM8KIiVLJ6eqtb+jyznEXPtqu2M2ejfvV8=;
+ b=FN2empKUDS0kJgRhS5/NZ0aIYls2fl4vetuhQgsq6fYibgG/CvSYZfIXAfmXBh4np4oAiFLZKMUlL4C//0RulkNT8j2ZYl5LawKbfKGqG4oOmaTvblX5F8X0pKB5XVq2e9JBnPBIvpwBxyAyGSyX/eoPt7n0651a7ew/BNXsYpk8LLADL7mPsOJBx4+A9pa6+1EuJujPkXdwHvZ48CSCoNmhIG3y7Zl3hfLA8WBsvDn+CLdzdntl5w9tOS4M0686DMiEQzT25LvcL066XsIhk44/M1P7sVlh699sKZ6+0IfgdukjzyKQbnQ20VclgU2gIZUdnJ2ZnYB3jMsHQRBDUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2qdghTQevxM8KIiVLJ6eqtb+jyznEXPtqu2M2ejfvV8=;
+ b=AGEmBuB9ktymTc2pz7i2zoHHH4Qqm4XOk+NP4VpoIBAZpFofowrlSc5dfXqYGuwHdW2zX64eLPkRxO9mo22xTorkyPYM5KHeUE2xCCS60unRKBeprJFrTPiddfxGR4KBBZ1eXNOS5A51UJHsXyQtBXK5Q+IbARNk/Kjxg9njzNeh+kIeQtsCrH0rZqOsWasbZJRGJLkBY/ebf6EV67DnJRfktDXygzRGnWO9lgnvrihuM5ppBpW1byA0QrFwZFBC8VcuqeweYUXMmOl1LUMCpawO6IWfzcDoG8mODFO+V/hlDcNqFp/vz1WvMHoYROY9VOnR+7JrGubzKK4QihZLkg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DM6PR12MB4827.namprd12.prod.outlook.com (2603:10b6:5:1d6::14)
+ by SA1PR12MB6728.namprd12.prod.outlook.com (2603:10b6:806:257::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.9; Fri, 11 Sep
+ 2026 21:33:12 +0000
+Received: from DM6PR12MB4827.namprd12.prod.outlook.com
+ ([fe80::6261:3040:864b:159c]) by DM6PR12MB4827.namprd12.prod.outlook.com
+ ([fe80::6261:3040:864b:159c%7]) with mapi id 15.21.0406.007; Fri, 11 Sep 2026
+ 21:33:11 +0000
+From: Andrea Righi <arighi@nvidia.com>
+To: Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Gabriele Monaco <gmonaco@redhat.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] sched: Set need-resched flags before tracing
+Date: Fri, 11 Sep 2026 23:33:00 +0200
+Message-ID: <20260911213300.1305763-1-arighi@nvidia.com>
+X-Mailer: git-send-email 2.55.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: MI1P293CA0029.ITAP293.PROD.OUTLOOK.COM
+ (2603:10a6:290:3::15) To DM6PR12MB4827.namprd12.prod.outlook.com
+ (2603:10b6:5:1d6::14)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260905220117.922028-1-ameryhung@gmail.com> <20260905220117.922028-15-ameryhung@gmail.com>
- <DLBYWR47GK83.33M4TZ2YKQU5W@gmail.com>
-In-Reply-To: <DLBYWR47GK83.33M4TZ2YKQU5W@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Fri, 11 Sep 2026 14:01:25 -0700
-X-Gm-Features: AcwNN1XjNZ6Cr25J1gbZjhwEReJ8kOWi1vIYj3RbZFqRmpnz3032PjCSNO3vFTQ
-Message-ID: <CAMB2axP+p3e9XxBxE4nN0UPsFsqBq4Wd6O9vRcqgaz5sfOYnQw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 14/22] bpf: Consolidate runtime argument type resolution
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, daniel@iogearbox.net, 
-	eddyz87@gmail.com, memxor@gmail.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB4827:EE_|SA1PR12MB6728:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1281fea0-ee98-4288-0059-08df104c474d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|23010399003|7416014|376014|10067099003|5023799004|18002099003|6133799003|11063799006|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	yR148qyjDFY9OVOq/X/ywRnYIYGZDChfz10W3paKiGEASgI3oU1OFuAa4KHDMxJ8oALgM/Zb1QLcYUsAiVnBxD4fZiUG3rDKdyOaXIjNvnCQVs7NMQhbwPMSnUHfyvBug1rKsh3QSD8L6XSjqdqeaLrhMpnnIgMhYX7jJbU35652hBEZ/haRX5f3b+wwQ37ReN7q8mCNmfWTDFv7cKKMEgBloOBsyhNPrBOkLOVjpnaGUfjLu/CyPVVDbOZwWQqk4yfJErddHoNVXf2DlntArx9+2i/LDpLfZwYcByTvL7UoxUY87mTKdS5awqK0tgm6rBUYBpewOS5dJJAYqHj6WPdlGb/E/2xpdN9kFAxVC3zSw/mkvqdSrd7DfQoQhqjHJvEBPTFHGoI2IxtBTOcv5xj/7YLEU52/xhyN7agYid7ovLCt0igoZTgKJhp6l1v8p9UwxFbcDNlbc8QWWNvHEHRNSfnXsfN0q/mzF31xHYGcokJstOTKqMdtcqrSBxFtX+B8SfkRoBgCU/vKCfJS/+m2X6dEE84kmSGevdGzc/qfIXIYxvZ2Bnxb9Kq18wkCRuSlBK9XbzBac0WYlYgiPpnB7YhIhTcoYs5cL3ns2hTTWPn4XmRFjn/Xl1ldle0eIsCVr3/OyZBdOZWL8mfG0FsHUBfbLjhf0Mq6HP+N9Gc=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB4827.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(23010399003)(7416014)(376014)(10067099003)(5023799004)(18002099003)(6133799003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?/mvBZHbHP5V3nWQOx6RUoSM1wd6SNQi8pVWSyDqV9r6wIp24M16fr4r5PRA3?=
+ =?us-ascii?Q?QHOunWqv284PmCwpRnAwa8TIo8Q/2DmDMAxbPw737N3ybc5BI9BRN/57pgVd?=
+ =?us-ascii?Q?HGy5Wta8q0OJC4nQrQkkD3hsLcXhH6UwWuEoin4TMemqZzcor1zod9SczW0x?=
+ =?us-ascii?Q?BZPz+P69l66diaVeC90KKhNZdHnpTSJJsOZ83cJ5QqtUfcbT4XjwM/UbB2pN?=
+ =?us-ascii?Q?6qgoIl5GPD5qEWtNbfDD+li2aWRtvl4z8Jg6D1s/4TdfZkj0keFemrr6vKkA?=
+ =?us-ascii?Q?AO9T90Lhch5Tld4Kwkr/og0R7J+j17OVIdslhliBO8utmEsAzqyVAWvpoKi7?=
+ =?us-ascii?Q?wNwcfLKcuLpETwzkLJeSKO4yX0Ht6KMizwjEPg615tudYA34U11L3Uj/GPH9?=
+ =?us-ascii?Q?ugIE4tugaqIykCFUN8IDece4knlKyBIuNubRdtrQjg62FJ406st0gSfz8P4d?=
+ =?us-ascii?Q?8CFsGF30tceZKkDYHvXFdo6L6FlgsczH2sj+lHvzasjWLjLRMjdPsnki+7VW?=
+ =?us-ascii?Q?stKM0t8E7t/iUpoMLVDua+LVcddV8CqEzdgWeOibqNB2hR1ptm5nVjaR3ktM?=
+ =?us-ascii?Q?U1mmyux35doUZ0s5a0WY18u0g2FhnSbR333QJDdrLyYC6LSzGR05DJObZdrC?=
+ =?us-ascii?Q?9DljgOGTx1IN6J24PELrY7KDyn2KSdFYxSSrqXiAJd6fF0Jt2TlXAu7mLuCQ?=
+ =?us-ascii?Q?q0YgqJKqQIZqTJS+oTIBRAllWf6frZlMQlNpIZMfr7vtqJCowuTzOodJ5yMX?=
+ =?us-ascii?Q?k16t9NVezGkGuL4VczArdR5JFK6s3NVm5x2HQN2hrsN0eMqpoJfXF4fEd97F?=
+ =?us-ascii?Q?ignAH+9q/rwb8Knc1PsqQjXoElG+BM/xafZ20y9GqOCerGDwDeus4ciy/F2u?=
+ =?us-ascii?Q?WtO1u67B2dVG5Vhao2Bbfu92c44e+eqFmFdp90kU+WGO5Msfdj6yIvUC+ZPW?=
+ =?us-ascii?Q?F4qkycWsrxn7H3y6cbTPuUVDHqjHFhSeWCIjw20bAW0y8cV76K+HgAQC63RN?=
+ =?us-ascii?Q?Axo/hBRzW+HGHHdrlO9VBpQvh+/2/XDOBA7bSKc2tf2BAGDh6qsMUcJcezyR?=
+ =?us-ascii?Q?d/rFJ5C9b4wMkVEzNOXUNPzL1BsU2hkRgiOOl+GpPA2UXMswu7mWOwFZeUZ2?=
+ =?us-ascii?Q?Y316wCNcSiWsVpPY/0g5rkMPRrCoCODhmDy97nuyQirB6QbDvvH3MbIdJAwb?=
+ =?us-ascii?Q?ENQ3v8J3PXAUQD+PEgcf4NUNMAhgwNXhKaKTxSaxsWzf5Mgmkxi3Nz10TtTC?=
+ =?us-ascii?Q?leVhsf3Z5++xgJPw4/7mw9ORWe8PAblmsqiAJbJtvt4lT+RMsXbNA8kb6y3t?=
+ =?us-ascii?Q?OLTuoAHlI8Ndr9/Xiyy8A1paEGGDK9SoMApteT5NfPWrdbfL9Xp1ktTCo7G5?=
+ =?us-ascii?Q?/1xQvu0juogYtz0yTBaDo54D+vDJ2p0w2zS8P7ZG44p51usQD/KFgN6xFCNx?=
+ =?us-ascii?Q?89hPWVI+3po4vSmJQe9U2fhJsU7VrgKnIbHNSK3yvYxXQEXH4ZlStzrJ4SGt?=
+ =?us-ascii?Q?8WFgDaCICGdhmsbh5oMCgZzvS9M2G5MLhfg/AsSq7Zl/bIdfcvEQCp1CWQnT?=
+ =?us-ascii?Q?Q6zw/IMDHFeUGpf8oLfWTe6494uBc+irVAe4wnfuMA6D9JQdbu6zADXEt8Tu?=
+ =?us-ascii?Q?t3E4U3Vj9VJuM2s49JHoVPYOzp2UfaDueTLqiuQmCeTRI+t/rRl3oGH3PKbh?=
+ =?us-ascii?Q?7g2HY5krSjn0GItJIgYdWNvlAGMjR6TypIvQTeaBbKhs+DtxB/PhlbDAaSb5?=
+ =?us-ascii?Q?WPLYlaJamA=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1281fea0-ee98-4288-0059-08df104c474d
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB4827.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2026 21:33:11.2137
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qAX5wxMSaMOh+m1+xSEHbU6c8zRBplzzm1YRgeO/2mwR3NOpJ3rQ1wh1q2bbvxtv+7zvc6Ir+lMKwyqOTdcZog==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6728
 
-On Thu, Sep 10, 2026 at 2:52=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Sat Sep 5, 2026 at 3:01 PM PDT, Amery Hung wrote:
-> > A function argument type can require call-site refinement before
-> > register admission. Helpers refine map-value arguments according to the
-> > recorded map type, while kfuncs reinterpret a pointer to a scalar-only
-> > BTF struct as fixed-size memory when the register does not carry a
-> > BTF ID.
-> >
-> > Add resolve_func_arg_type() as the common entry point. It delegates
-> > helper map-value refinement to the existing resolve_map_arg_type(),
-> > then handles the kfunc BTF-to-memory fallback. It updates the effective
-> > argument type and size consumed by the subsequent checks.
-> >
-> > Preserve PTR_MAYBE_NULL when changing the base type so later
-> > nullability validation observes the BTF contract. Keep OBJ_RELEASE
-> > arguments in their original pointer class. The latter is not a bug fix:
-> > existing kfunc checking already validates ownership before this
-> > resolver. It preserves release metadata for the later shared checking
-> > order, where ownership validation follows register admission.
-> >
-> > Moving the kfunc fallback before admission lets the resulting
-> > fixed-size memory argument enter the compatibility check directly.
-> > This is another step toward routing both call types through
-> > check_func_arg().
-> >
-> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> > ---
-> >  kernel/bpf/verifier.c | 199 +++++++++++++++++++++++-------------------
-> >  1 file changed, 110 insertions(+), 89 deletions(-)
-> >
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 2e068c095436..15ed47b90316 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -8151,8 +8151,8 @@ static bool is_kfunc_call(const struct bpf_call_a=
-rg_meta *meta, u32 btf_id)
-> >  }
-> >
-> >  static int resolve_map_arg_type(struct bpf_verifier_env *env,
-> > -                              const struct bpf_call_arg_meta *meta,
-> > -                              enum bpf_arg_type *arg_type)
-> > +                             const struct bpf_call_arg_meta *meta,
-> > +                             enum bpf_arg_type *arg_type)
-> >  {
-> >       if (!meta->map.ptr) {
-> >               /* kernel subsystem misconfigured verifier */
-> > @@ -8180,6 +8180,11 @@ static int resolve_map_arg_type(struct bpf_verif=
-ier_env *env,
-> >       return 0;
-> >  }
-> >
-> > +static int resolve_func_arg_type(struct bpf_verifier_env *env,
-> > +                              struct bpf_reg_state *reg, u32 arg,
-> > +                              struct bpf_call_arg_meta *meta, int insn=
-_idx,
-> > +                              enum bpf_arg_type *arg_type, u32 *arg_si=
-ze);
-> > +
-> >  struct bpf_reg_types {
-> >       const enum bpf_reg_type types[10];
-> >       u32 *btf_id;
-> > @@ -8794,6 +8799,7 @@ static int check_func_arg(struct bpf_verifier_env=
- *env, u32 arg,
-> >       int regno =3D reg_from_argno(argno);
-> >       enum bpf_reg_type type =3D reg->type;
-> >       const u32 *arg_btf_id =3D NULL;
-> > +     u32 arg_size =3D arg_type & MEM_FIXED_SIZE ? fn->arg_size[arg] : =
-0;
-> >       u32 key_size;
-> >       int err =3D 0;
-> >
-> > @@ -8823,11 +8829,9 @@ static int check_func_arg(struct bpf_verifier_en=
-v *env, u32 arg,
-> >               return -EACCES;
-> >       }
-> >
-> > -     if (base_type(arg_type) =3D=3D ARG_PTR_TO_MAP_VALUE) {
-> > -             err =3D resolve_map_arg_type(env, meta, &arg_type);
-> > -             if (err)
-> > -                     return err;
-> > -     }
-> > +     err =3D resolve_func_arg_type(env, reg, arg, meta, insn_idx, &arg=
-_type, &arg_size);
-> > +     if (err)
-> > +             return err;
-> >
-> >       if (bpf_register_is_null(reg) && type_may_be_null(arg_type))
-> >               /* A NULL register has a SCALAR_VALUE type, so skip
-> > @@ -8965,12 +8969,12 @@ static int check_func_arg(struct bpf_verifier_e=
-nv *env, u32 arg,
-> >                * next is_mem_size argument below.
-> >                */
-> >               if (arg_type & MEM_FIXED_SIZE) {
-> > -                     err =3D check_mem_reg(env, reg, argno, fn->arg_si=
-ze[arg],
-> > +                     err =3D check_mem_reg(env, reg, argno, arg_size,
-> >                                           arg_type & MEM_WRITE ? BPF_WR=
-ITE : BPF_READ, meta, NULL);
-> >                       if (err)
-> >                               return err;
-> >                       if (arg_type & MEM_ALIGNED)
-> > -                             err =3D check_ptr_alignment(env, reg, 0, =
-fn->arg_size[arg], true);
-> > +                             err =3D check_ptr_alignment(env, reg, 0, =
-arg_size, true);
-> >               }
-> >               break;
-> >       case ARG_MEM_SIZE:
-> > @@ -11814,6 +11818,65 @@ static bool btf_type_is_scalar_struct(struct b=
-pf_verifier_env *env,
-> >       return btf_struct_is_composed_of(env, btf, t, BTF_MEMBER_SCALAR);
-> >  }
-> >
-> > +static int resolve_func_arg_type(struct bpf_verifier_env *env,
-> > +                              struct bpf_reg_state *reg, u32 arg,
-> > +                              struct bpf_call_arg_meta *meta, int insn=
-_idx,
-> > +                              enum bpf_arg_type *arg_type, u32 *arg_si=
-ze)
-> > +{
-> > +     argno_t argno =3D argno_from_arg(arg + 1);
-> > +     const struct btf_param *args;
-> > +     const struct btf_type *ref_t, *resolve_ret;
-> > +     const struct btf *btf;
-> > +     const char *ref_tname;
-> > +     u32 ref_id;
-> > +
-> > +     if (base_type(*arg_type) =3D=3D ARG_PTR_TO_MAP_VALUE)
-> > +             return resolve_map_arg_type(env, meta, arg_type);
-> > +
-> > +     if (base_type(*arg_type) =3D=3D ARG_PTR_TO_BTF_ID) {
->
-> Overall, it all looks great to me.
->
-> Here can reduce indent by:
->  if (base_type(*arg_type) !=3D ARG_PTR_TO_BTF_ID)
->     return 0;
+sched_set_need_resched_tp is emitted before the corresponding thread
+flag is set. This allows a BPF tracepoint program to recursively invoke
+the same tracepoint while leaving its RCU read-side critical section.
 
-Will change.
+If rcu_read_unlock_special() must defer a quiescent state while
+preemption or interrupts are disabled, it calls
+set_need_resched_current(). Since TIF_NEED_RESCHED is still clear, this
+emits the tracepoint again and repeats until the kernel stack overflows:
 
->
-> Pls address AI nits and respin, so we can land asap.
->
+  __trace_set_need_resched()
+    bpf_trace_run3()
+      rcu_read_unlock_migrate()
+        rcu_read_unlock_special()
+          set_need_resched_current()
+            set_tsk_need_resched()
+              __trace_set_need_resched()
 
-Thanks for reviewing the set. I will respin soon.
+Set the thread flag before emitting the tracepoint in both
+set_tsk_need_resched() and __resched_curr(). For a remote reschedule,
+retain the result of set_nr_and_not_polling() so that tracing remains
+ahead of IPI delivery while still observing the updated flag.
+
+Fixes: adcc3bfa8806 ("sched: Adapt sched tracepoints for RV task model")
+Signed-off-by: Andrea Righi <arighi@nvidia.com>
+---
+ include/linux/sched.h | 5 ++++-
+ kernel/sched/core.c   | 7 +++++--
+ 2 files changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 59f6366fdf501..6003dcd080e6c 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -2105,8 +2105,11 @@ static inline int test_tsk_thread_flag(struct task_struct *tsk, int flag)
+ static inline void set_tsk_need_resched(struct task_struct *tsk)
+ {
+ 	if (tracepoint_enabled(sched_set_need_resched_tp) &&
+-	    !test_tsk_thread_flag(tsk, TIF_NEED_RESCHED))
++	    !test_tsk_thread_flag(tsk, TIF_NEED_RESCHED)) {
++		set_tsk_thread_flag(tsk, TIF_NEED_RESCHED);
+ 		__trace_set_need_resched(tsk, TIF_NEED_RESCHED);
++		return;
++	}
+ 	set_tsk_thread_flag(tsk,TIF_NEED_RESCHED);
+ }
+ 
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 91f059a556950..aed403fd2f82e 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -1196,6 +1196,7 @@ static void __resched_curr(struct rq *rq, int tif)
+ {
+ 	struct task_struct *curr = rq->curr;
+ 	struct thread_info *cti = task_thread_info(curr);
++	bool send_ipi;
+ 	int cpu;
+ 
+ 	lockdep_assert_rq_held(rq);
+@@ -1212,15 +1213,17 @@ static void __resched_curr(struct rq *rq, int tif)
+ 
+ 	cpu = cpu_of(rq);
+ 
+-	trace_sched_set_need_resched_tp(curr, cpu, tif);
+ 	if (cpu == smp_processor_id()) {
+ 		set_ti_thread_flag(cti, tif);
+ 		if (tif == TIF_NEED_RESCHED)
+ 			set_preempt_need_resched();
++		trace_sched_set_need_resched_tp(curr, cpu, tif);
+ 		return;
+ 	}
+ 
+-	if (set_nr_and_not_polling(cti, tif)) {
++	send_ipi = set_nr_and_not_polling(cti, tif);
++	trace_sched_set_need_resched_tp(curr, cpu, tif);
++	if (send_ipi) {
+ 		if (tif == TIF_NEED_RESCHED)
+ 			smp_send_reschedule(cpu);
+ 	} else {
+-- 
+2.55.0
+
