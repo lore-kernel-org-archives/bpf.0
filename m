@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-78.mta0.migadu.com [91.218.175.78])
+Received: from mta0.migadu.com (out-85.mta0.migadu.com [91.218.175.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A74287518
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 04:31:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91ABD30AD05
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 05:05:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.85
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789101097; cv=none; b=s8+okDUvYKjp52SZoMKUZvdMwEsg6AL7dzmejDYjL1mMy+XHnQloMw805CwfVue5sw1mqN+lOKywpD0Tx7Skwt3W3Pl+Nf6BKOVtQIc/YunviyU2ZIUtCvfJe/wN1DDyHOK99h7EG5aRqcQ5KQaWAhPcpXwpy09YRv/gWf2p4To=
+	t=1789103139; cv=none; b=dEH9YM/TPAo2A8ICJPhAMfmTPDWzPwvLj2zqmVz+Yf+iWJVQ9V2zc0V076yZmzrsIktdFKLVEB2ovtrejR8V4vtqmrgN1di41t8uCom/fj7U2Gu82wK9kMLi4cZWMUZIslwP3gnjDy97SlM3Cx7sBap0B+csRkBa54Cs2FLq0Sw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789101097; c=relaxed/simple;
-	bh=49+fXp8HAJ/oeMWxjcITITOpfTZZUcA5bozm756fYyk=;
+	s=arc-20240116; t=1789103139; c=relaxed/simple;
+	bh=2Gkj5VJt7SRjzEW/QyXw+AWkCyZdehrXf3Pt3IETZ+g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OHXxBRZsqsA87Shw4oJXbsuJd0QcWoiGHUdDQj2Q0WBkoPK9+axHqnKcFFyyOOcT3wz73gK4EF6jSgk+RUoi4rYeb7sCxspZ9+qT7mZnOw4UYItV+cAKtqh8wFq0YhvC9+iPEf56X6SnAFtSO5UAaPUymlnKp1/89DdO2yb/F+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=na27CaW3; arc=none smtp.client-ip=91.218.175.78
+	 In-Reply-To:Content-Type; b=hKF7cJ6JdqIp4qG6XlbJXbCUq9WDz9BqJmjuABGosjpnRx0TfLGbwwhtZKLjPbK96fDKaeAwEuIyw+mh/8gXdmpsfyHxzvP5NbOvjPJuLjVBKDvALS4DrSwxNYt/KnxXSQ6QACh6zNYns9Yl3IorWYfoZfdwEWIINrtXvFQps5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=c+ulu6J8; arc=none smtp.client-ip=91.218.175.85
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="na27CaW3"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="c+ulu6J8"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=49+fXp8HAJ/oeMWxjcITITOpfTZZUcA5bozm756fYyk=;
+DKIM-Signature: a=rsa-sha256; bh=2Gkj5VJt7SRjzEW/QyXw+AWkCyZdehrXf3Pt3IETZ+g=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789101092; v=1; x=1789705892;
- b=na27CaW3DUJoakpEEyRnveDZP9B9CJSaaZNQUSTxObp4hpZ9qpFGaX2NHJqw2ZzgR+ASiTRD
- ZrFPmZG8tIsgtXrVW3QKWcL3q+LLF6w/6i725Eq0B8vy1VCBbzmSY3uTsTpDw3QjUKX+JVxXLWz
- xYGWpiGUm627TT4ORBzRcTcs=
+ t=1789103132; v=1; x=1789707932;
+ b=c+ulu6J8MaG2fEKq//g5Ad3MndVuP7OKB7l8dfkRKJVl2/doI75SHnGNu8awfXmW1/LMBWg/
+ l7YQkrjbhoYLtIn2yhAnpSdIgkHU5fsgJWQef+7RQxxUL/G0PTbIz3sf77/pdPflIWpO+WvKFlp
+ gZ63uQ8S0KToWwHWu4r8vxOo=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b6697cd5c2ae9746;
-	Fri, 11 Sep 2026 04:31:32 +0000
-X-Mizu-Trace-ID: b6697cd5c2ae9746
+Received: by smtp.migadu.com with ESMTPS id 66dadd09ed6c7452;
+	Fri, 11 Sep 2026 05:05:28 +0000
+X-Mizu-Trace-ID: 66dadd09ed6c7452
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <1720a0f5-5eaf-45e0-9cf1-6cdd3995ce66@linux.dev>
-Date: Thu, 10 Sep 2026 21:31:30 -0700
+Message-ID: <8d5905b3-ab49-46c9-96c0-4709646f12b3@linux.dev>
+Date: Thu, 10 Sep 2026 22:05:26 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,106 +38,172 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 06/12] bpf: Recognize by-value struct and
- __int128 kfunc arguments
+Subject: Re: [PATCH bpf-next v2 07/12] bpf: Prepare kfunc arguments for the
+ JIT from an ABI description
 Content-Language: en-GB
 To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
 References: <20260909062522.4001896-1-yonghong.song@linux.dev>
- <20260909062554.4007131-1-yonghong.song@linux.dev>
- <20260909064638.AA26D1F00A3A@smtp.kernel.org>
+ <20260909062559.4007404-1-yonghong.song@linux.dev>
+ <20260909064649.55C691F00A3A@smtp.kernel.org>
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260909064638.AA26D1F00A3A@smtp.kernel.org>
+In-Reply-To: <20260909064649.55C691F00A3A@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
 
 On 9/8/26 11:46 PM, sashiko-bot@kernel.org wrote:
 > Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
->
-> Pre-existing issues:
-> - [High] bpf_kfunc_stack_access_bytes incorrectly maps stack slots to BPF_REG_6 through BPF_REG_9 (or higher), causing an out-of-bounds read and bypassing uninitialized memory checks.
+> - [Medium] Stack buffer overflow in `bpf_jit_plan_arg_moves` and `kfunc_abi_slots` due to undersized arrays based on maximum arguments rather than maximum slots.
 > --
 >
-> commit 7f4b25d0dad6ba6fed374b3111fcc89d67434d87
+> commit 180655f49c406c35435ba5ebc05f2900a3c56656
 > Author: Yonghong Song <yonghong.song@linux.dev>
 >
-> bpf: Recognize by-value struct and __int128 kfunc arguments
+> bpf: Prepare kfunc arguments for the JIT from an ABI description
+>      
+> The previous patch refuses a kfunc argument of more than one eightbyte.
+> This patch allows up to 16 byte kfunc arguments.
 >
-> This commit modifies the BPF verifier to support kfuncs taking structs or
-> int128 by value. It updates argument tracking to walk slots rather than just
-> registers, rejecting multi-slot arguments until JIT support is fully added.
+>> diff --git a/include/linux/filter.h b/include/linux/filter.h
+>> index 00ad8b63aa477..01b52d0259d18 100644
+>> --- a/include/linux/filter.h
+>> +++ b/include/linux/filter.h
+> [ ... ]
+>> @@ -1248,6 +1248,38 @@ bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena);
+>> +
+>> +/* The JIT's scratch register, in place of an argument slot. */
+>> +#define BPF_JIT_ARG_TMP		0xff
+>> +
+>> +/* Every argument slot moves at most once, and the scratch goes out and back. */
+>> +#define BPF_JIT_MAX_ARG_MOVES	(MAX_BPF_FUNC_ARGS + 2)
+> [Severity: Medium]
+> Since arguments can now take up to 2 slots (for 16-byte arguments), could the
+> maximum number of slot moves actually be up to 26 (24 slots + 2) instead of 14?
+
+In jit, for x86_64, we have
+
+         /* x86-64 supports up to MAX_BPF_FUNC_ARGS arguments. 1-6
+          * are passed through regs, the remains are through stack.
+          */
+         if (nr_regs > MAX_BPF_FUNC_ARGS)
+                 return -ENOTSUPP;
+
+So the maximum number of regs is 12, so we are okay for x86_64.
+
+But arm64 is different. It has
+
+static int calc_arg_aux(const struct btf_func_model *m,
+                          struct arg_aux *a)
+{
+         int stack_slots, nregs, slots, i;
+
+         /* verifier ensures m->nr_args <= MAX_BPF_FUNC_ARGS */
+         for (i = 0, nregs = 0; i < m->nr_args; i++) {
+                 slots = (m->arg_size[i] + 7) / 8;
+                 if (nregs + slots <= 8) /* passed through register ? */
+                         nregs += slots;
+                 else
+                         break;
+         }
+
+	...
+}
+
+So the maximum number of reg arguments can be 24. I think I will
+add a patch similar to x86_64 above.
+
 >
+>> +
+>> +struct bpf_jit_arg_move {
+>> +	u8 dst;
+>> +	u8 src;
+>> +};
+> [ ... ]
+>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>> index c673b02d55a65..d4bd2ba9aadee 100644
+>> --- a/kernel/bpf/core.c
+>> +++ b/kernel/bpf/core.c
+> [ ... ]
+>> @@ -3287,6 +3287,100 @@ bool __weak bpf_jit_supports_kfunc_ret_reg_pair(void)
+>> +
+>> +u32 bpf_jit_place_args(const struct bpf_jit_arg_abi *abi,
+>> +		       const struct btf_func_model *fm, u8 *pos_of_slot)
+>> +{
+>> +	u32 i, k, nslots, slot = 0, nregs_used = 0, stack_off = 0;
+>> +	bool on_stack = false;
+>> +
+>> +	for (i = 0; i < fm->nr_args; i++) {
+>> +		bool align16 = fm->arg_flags[i] & BTF_FMODEL_ALIGN16_ARG;
+>> +		u32 pos;
+>> +
+>> +		nslots = btf_func_model_arg_slots(fm, i);
+> [ ... ]
+>> +		for (k = 0; k < nslots; k++)
+>> +			pos_of_slot[slot + k] = pos + k;
+> [Severity: Medium]
+> Will this overflow the pos_of_slot array if an architecture adopts this API
+> for BPF trampolines?
+>
+> The callers currently size the array based on MAX_BPF_FUNC_ARGS (12), but
+> slot + k can reach up to 23 because some arguments can require multiple slots.
+
+I will add a check to ensure maximum reg arguments is 12.
+
+>
+>> +		slot += nslots;
+>> +	}
+>> +
+>> +	return slot;
+>> +}
+>> +
+>> +u32 bpf_jit_plan_arg_moves(const struct bpf_jit_arg_abi *abi,
+>> +			   const struct btf_func_model *fm,
+>> +			   struct bpf_jit_arg_move *moves)
+>> +{
+>> +	u8 pos_of_slot[MAX_BPF_FUNC_ARGS];
+> [Severity: Medium]
+> Does this stack array need to be sized for the maximum number of slots
+> (e.g., MAX_BPF_FUNC_ARGS * 2) instead of the maximum number of arguments?
+
+This is for kfunc. I will check whether we need to do
+   MAX_BPF_FUNC_ARGS * 2
+or not.
+
+>
+>> +	u32 nslots, n = 0, s, back;
+>> +
+>> +	nslots = bpf_jit_place_args(abi, fm, pos_of_slot);
+> [ ... ]
 >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index cf526f28f3e5b..94c359351bb69 100644
+>> index 94c359351bb69..2b8df8c7f098c 100644
 >> --- a/kernel/bpf/verifier.c
 >> +++ b/kernel/bpf/verifier.c
 > [ ... ]
+>> @@ -12172,6 +12172,58 @@ static u32 kfunc_proto_slots(const struct btf *btf, const struct btf_type *func_
+>>   	return slots_used;
+>>   }
+>>   
+>> +static u32 kfunc_abi_slots(const struct btf_func_model *fm)
+>> +{
+>> +	const struct bpf_jit_arg_abi *abi = bpf_jit_arg_abi();
+>> +	u8 pos_of_slot[MAX_BPF_FUNC_ARGS];
+> [Severity: Medium]
+> Similarly, does this stack array also need to be sized to accommodate up to
+> 24 slots rather than 12 arguments to prevent an out-of-bounds write in
+> bpf_jit_place_args()?
+
+Yes, I will check whether we need to have 24 slots or not.
+
 >
->> @@ -13765,23 +13850,32 @@ s64 bpf_kfunc_stack_access_bytes(struct bpf_verifier_env *env, struct bpf_insn *
->>   	btf = meta.btf;
->>   	args = btf_params(meta.func_proto);
->>   	nargs = btf_type_vlen(meta.func_proto);
->> -	if (arg >= nargs)
+>> +	u32 i, nslots, slots = 0;
 >> +
->> +	/*
->> +	 * @arg is an argument slot and a 16-byte parameter takes two of them,
->> +	 * so walk the parameters to find the one that starts at this slot. A
->> +	 * slot holding the upper eightbyte of such a parameter belongs to no
->> +	 * pointer, and neither does a slot past the last parameter.
->> +	 */
->> +	for (i = 0, slot = 0; i < nargs && slot < arg; i++)
->> +		slot += kfunc_arg_slots(btf_type_skip_modifiers(btf, args[i].type, NULL));
->> +	if (i >= nargs || slot != arg)
->>   		return 0;
->>   
->> -	t = btf_type_skip_modifiers(btf, args[arg].type, NULL);
->> +	t = btf_type_skip_modifiers(btf, args[i].type, NULL);
->>   	if (!btf_type_is_ptr(t))
->>   		return 0;
->>   
->>   	/* dynptr: fixed 16-byte on-stack representation */
->> -	if (is_kfunc_arg_dynptr(btf, &args[arg])) {
->> +	if (is_kfunc_arg_dynptr(btf, &args[i])) {
->>   		size = BPF_DYNPTR_SIZE;
->>   		goto out;
->>   	}
->>   
->>   	/* ptr + __sz/__szk pair: size is in the next register */
->> -	if (arg + 1 < nargs &&
->> -	    (btf_param_match_suffix(btf, &args[arg + 1], "__sz") ||
->> -	     btf_param_match_suffix(btf, &args[arg + 1], "__szk"))) {
->> +	if (i + 1 < nargs &&
->> +	    (btf_param_match_suffix(btf, &args[i + 1], "__sz") ||
->> +	     btf_param_match_suffix(btf, &args[i + 1], "__szk"))) {
->>   		int size_reg = BPF_REG_1 + arg + 1;
->>   
->>   		if (aux->const_reg_mask & BIT(size_reg)) {
->>   			size = (s64)aux->const_reg_vals[size_reg];
-> [Severity: High]
-> This is a pre-existing issue, but does this code lead to an out-of-bounds
-> read or bypass uninitialized memory checks when the pointer argument is
-> passed on the stack?
->
-> The size_reg calculation inherently assumes the size argument is always passed
-> in a register. If the pointer argument slot is 4 or higher (which might be
-> more common now that large by-value structs consume multiple slots), the size
-> argument lands on the stack.
->
-> In that scenario, size_reg maps to BPF_REG_6 or higher, which are
-> callee-saved registers. A BPF program could place a fake constant in one of
-> these registers to trick the verifier into thinking 0 bytes are read, while
-> the runtime stack argument is non-zero. This could bypass stack
-> initialization checks and potentially leak uninitialized kernel memory.
->
-> Furthermore, if the pointer argument slot is 8 or higher, size_reg becomes
-> greater than or equal to 10. Checking BIT(size_reg) and reading from
-> aux->const_reg_vals[size_reg] would result in an out-of-bounds array read,
-> since const_reg_vals is sized for 10 registers. Should this logic be updated
-> to correctly query the BPF stack when the size argument is passed there?
-
-You are right. Will fix.
-
->
+>> +	for (i = 0; i < fm->nr_args; i++)
+>> +		slots += btf_func_model_arg_slots(fm, i);
+>> +
+>> +	if (!abi)
+>> +		return slots;
+>> +
+>> +	nslots = bpf_jit_place_args(abi, fm, pos_of_slot);
 
