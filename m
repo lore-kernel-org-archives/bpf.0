@@ -1,148 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9897D4A0924
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 16:19:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789143575; cv=none; b=LueSOBnBWADOaXWd5NCKc6qs4a19kQRUdHSeiTBGLxozOkKuQ3pEwpid7CDGuf9OhDiZmFRhCd0lRwcSABBD8mLzgxpgqbccdaeXzIrOiyiAm/erMfc6CorxgA17uLXyeKBpaCGvQixfDkEvOW2kpXCcMZrwXrWJwwL339XFzJs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789143575; c=relaxed/simple;
-	bh=1uR5awNRtdbIVnZtq/VUTOni1QwgUBR1DKXzAujxEok=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=TExQBLhMcl5m6l4cNznuX6SNOtNveHNnbQgXTq38DHgr1B4BO3rve7HIAIHzbCxUWWBqdlGr9I9Q2ouqX+owKFHgTYlFzVO7t/1/H3Y/poMkAThCIadTx/DMVbq7RI3FosDxa7k3Yuy87NBcxyX89Z+KB8E1H0aeWAuBP/is4ss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HngGm51l; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7075633BBAF
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 16:38:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789144693; cv=pass; b=FJB5p095IVpPHYUCs1UzHY6nV/G2DxnqxUREj82IBZf6/EKjzrvPi3ZVgOYuFAQMCEZNQxgVaxNKDPKrCPXW64Ti6kqSos64cJNxhcHloKN7qNc8jit24D1cmZn2Yz/GldUcTzUIWjOyk4/hF05FMIFWPa4FfZL6nto+bp771NY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789144693; c=relaxed/simple;
+	bh=Z05kgezgeQBnAhHNLQ06IrbWptjbuPKQZgHZ1hJUBJw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZjoJ/hA1b7rmebhAWsUlURb/ZODJUvc17zjfhzqsxeQk19cFYV7GKoRIeKqmvofwMg5Aw30nhK2DmjU3rhW8Q1KFJl9d0AN0B9UiIZudnjVsQ6Tq44tMmeRBdyhBn89dr9urgFnzebJ6ofmJFUknMeoBe1Glvy7En5wDiG6B5aI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g2M4yfDS; arc=pass smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HngGm51l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01B9B1F000FF;
-	Fri, 11 Sep 2026 16:19:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789143573;
-	bh=3zizEVrwjZoYjx+sJFwRWO5N3A+1hXHva+wkxbApbyQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HngGm51lKgZkwZAbjsBgLPyArKUSSEXEZ2Q3JKkg3TPHxjuP0sFPGXQ/scfymv5g7
-	 F4Lp/Ld1ded7PyaOI38AVqO+sIzIBNCgZ4vfdnmNXLr1N8ZZdWrjvhI1QGaDk1DogG
-	 RUvfkjP4za0nIfSUkr38OuDYxRsm0Wi6mysB4pa8EaVW4cnS4YnDA5EE5iJRDub17b
-	 D43j1CqCclux0+0EDLRb3bIrRFP4Y3rKoaj8B93maWlv58d78X2jeVXSmTwqm1Buce
-	 7z+jyMxB9qm0RsqEGydgdDHWwuvY1eOHwhA02qJATlkr4GR4whLsiVBMx4Qwk4yI85
-	 C+6vkzo9c+1DA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 11/15] bpf, arm64: Move kfunc arguments into
- the arm64 calling convention
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260911155010.2011265-1-yonghong.song@linux.dev>
-References: <20260911154914.2004336-1-yonghong.song@linux.dev>
- <20260911155010.2011265-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 11 Sep 2026 16:19:32 +0000
-Message-Id: <20260911161933.01B9B1F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g2M4yfDS"
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c297931c2a0so62868366b.1
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 09:38:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789144687; cv=none;
+        d=google.com; s=arc-20260327;
+        b=RPHeDJ+waf0wPTpDz9EQLwtdTekKIDhWAXKvReFQBSn8OIoPi8AM/i2Y2c4I9oBvUy
+         vGyp0IrrJipqNTS78CZOWLLHFNvls0n0xKmspJ0daPDKHWzLIZqqirYfPh+rJ8dvRNek
+         hh2xeUNgmYTzxNADVi++0TWDKyxIJ5XK2oErA6N+c2NHTWh/RMBKK9vc+/jxeW/lZXMi
+         EpwZakW8i/7prVAjPp9ztT3eBK+dLpLkgrR2/6ODLp2rBQWspzbJFndhuHoJdUWRX9aS
+         CvsOEmpidjEHAe8m9eOcNVUPxn3HmcViKw1wOq/Ivk+tp9A+ZV8Iu+HZoj0+mlRg9I0H
+         rY1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=Z05kgezgeQBnAhHNLQ06IrbWptjbuPKQZgHZ1hJUBJw=;
+        fh=Q1UHcNlsgAQGO1mqRYKVGo3oFUs9RzH1kzdVlX/gzyM=;
+        b=pdyNAYfNg41EYUja2GjQJT+chMRtBXamQJrJemUutP+Wmn3tNFrorPFex30nJbAKNB
+         kobD7jv/Khdckrtzl5SznptypouxKfast9q2GENcQDfOomF09kuQjm+O+BCTTpf0z9wr
+         MQJU+WIQegICOUGRGplZtczjJKornXGMDtQTW36q4b0GmeTOxua8+gOhHsYzXfKbZszY
+         dQK86mAbx+0AemTdvzON7e+UvMBfKQC4NFXwN+7K+yKfkPjh8mJ3O+gjgIywbNVMI28b
+         YNkhyZ5avCpdxzE/aEo/hiJOX2LiwI1KoVLldQG3g5rv+yaCBczH5+pJEE4UsqcVSDnP
+         Z4Sw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789144687; x=1789749487; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Z05kgezgeQBnAhHNLQ06IrbWptjbuPKQZgHZ1hJUBJw=;
+        b=g2M4yfDSACO/61PjGPBqrQrc0uxYXzpECVYGcmNPOYeaVOercFn43MaC34b7TKeOyQ
+         /vboXhT84q4ct7WEnTdjtTEPCkIxDqVol49N9RvYqqrqJFZ2+kouvQKAB4ziBlVuN7ci
+         +UH/CzRekC6lUCYwHDjF38Xv6OPAmykgyhQ1LZvh/YZd43KOUnp+HhIAP41WbAl8jbuN
+         crgTVbtRD9D+cDvw1ZIS+QSLRRUbXrnlA69krUc3znpM/G5PTzsiJ7+J77KVPhNc7MMg
+         H1OnUKJfSWUe1oixFPMtZZmH0g1nfLBX8DY5S3Bl5pUjx6/aVqpvRHp66BaDgp1IbvW3
+         Pswg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789144687; x=1789749487;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Z05kgezgeQBnAhHNLQ06IrbWptjbuPKQZgHZ1hJUBJw=;
+        b=egMSfFrjpU8T6hq0qojgirzUXcw9icacu1mgebK+GeEhyPwGH5UooZL0dziehHZc+G
+         KixIG9ANQCVuAKTxT/acNfd1pFr8KfGYlrrxQfQfhoJAqo17yR9Zv3tqdBOD8XvzCepD
+         d1ommdRmZnsKDmlspL+eL0xHUcZp9BCLTbUAMwHO7pve2qj5VACRTqTwWYOTm0ti8NEx
+         EPw3A+lYcwcJAaCX4pqyJu1O4v7T77z9Tod6/+5+qslZgQHKzKKJIBg20aCN/I2dkw4+
+         GxifV6pqssN5FBhyjm1k2aeR94jQ1zDBp1EK+67W9LeQVQMcJtfwWk85Sv8pYax57Hud
+         rkdQ==
+X-Forwarded-Encrypted: i=1; AKwUvBx7TaxVBOuwEtEo/oy7pR0Hk21JWonCFqugPNyzWLOyyyp8EDEYJxc1Hy3oghvxhKjIDc8=@vger.kernel.org
+X-Gm-Message-State: AFuF++msrookwkyQr85IcIxglAEWgxR//SgZgbgJ5HJyKEPXbAppTyNJ
+	mXeWMuIS0Cn8u1Rz8wsenRANWNSuRX1bADWbCQqrbZKjP2XMrHlpmtVx5vNtuXkipQlYzaId5Tp
+	cbbqwQt1HHBJKDovvhfoFgQyjurvG4jY=
+X-Gm-Gg: AYBFou2rE7Xd5zhtNDkmw+k32o+pMcyTEa7qvZ4tvaicVbj7AFeCvK1JGCaSnFq8jID
+	16rk4sratq+amhA1Qf7GBlTT+kvDDoSFHVtbwUpuzF5xBRxWw857S3KjQe+ftaTBsgo4V2Cf/EX
+	fGoG84HURGHY95gc50REigZsZwMBfi9ryzuYNAZgPUVXP2G+faYXN+k15616Lr0ilZtxeMd9TzP
+	DsundkHDAeMR42Q/4D0dVHR+M8n9jCNhm9X5xpMF93tfFHSPvMj3J+cvRcp3nzbGwHHcTbJpOM8
+	9uk32QaMxaHl+3amL67v0pRDJ0Hlnp4JWLdQF1UGH5EKmKIUmfjh6mSio+wAl+BE
+X-Received: by 2002:a17:907:73cd:b0:c1c:2007:298e with SMTP id
+ a640c23a62f3a-c29666bc8e7mr228183666b.24.1789144686888; Fri, 11 Sep 2026
+ 09:38:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260904111731.673341-1-main.kalliope@gmail.com>
+ <20260904111731.673341-3-main.kalliope@gmail.com> <CAM1=_QTN3JJ6jtckf32F8wxBzLDbHSrzUttyMBWNqZKmRe=2rg@mail.gmail.com>
+In-Reply-To: <CAM1=_QTN3JJ6jtckf32F8wxBzLDbHSrzUttyMBWNqZKmRe=2rg@mail.gmail.com>
+From: Nicholas Dudar <main.kalliope@gmail.com>
+Date: Fri, 11 Sep 2026 12:37:53 -0400
+X-Gm-Features: AcwNN1UBDacB_mdUgPo31Abc79q-kaSzXTwE_yQATKEr1z50cei1mPjcgBoyYeY
+Message-ID: <CAJZwKkghmHn1twrwTtfGSZg5NZ5FMu8L_=6N_pb0VrP75GMKGg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] bpf, mips: Add support for BPF_MOVSX in
+ the JITs
+To: Johan Almbladh <johan.almbladh@anyfinetworks.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, paulburton@kernel.org, tsbogend@alpha.franken.de, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	bpf@vger.kernel.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+> I would suggest that we do this optimization.
 
-Pre-existing issues:
-- [High] The ARM64 BPF trampoline incorrectly saves and restores 16-byte al=
-igned arguments, violating AAPCS64 alignment rules.
---
+Thanks for reviewing. I'll get working on the seb/seh additions and
+ISA-specific MOVSX handling. I'll send SDIV/SMOD v4 with the updated
+uasm patch, followed by MOVSX v3.
 
-commit cd40aa31f4bf1158416008f7fcb9c0b7717dda3f
-Author: Yonghong Song <yonghong.song@linux.dev>
-
-bpf, arm64: Move kfunc arguments into the arm64 calling convention
-
-Do the proper move from the BPF calling convention to the arm64 calling
-convention to satisfy the native requirement. AAPCS64 only ever moves an
-argument to a higher slot, so the moves need one scratch register to carry
-an eightbyte from one stack slot to another, and never the one a
-convention moving an argument down would need.
-
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> index 3aa3ea0bc30bb..bbde7c0836ae5 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-
-[ ... ]
-
-> @@ -2534,7 +2598,13 @@ struct arg_aux {
->  static int calc_arg_aux(const struct btf_func_model *m,
->  			 struct arg_aux *a)
->  {
-> -	int stack_slots, nregs, slots, i;
-> +	int stack_slots, nregs, slots, i, total;
-> +
-> +	/* arm64 supports up to MAX_BPF_FUNC_ARGS argument slots */
-> +	for (i =3D 0, total =3D 0; i < m->nr_args; i++)
-> +		total +=3D (m->arg_size[i] + 7) / 8;
-> +	if (total > MAX_BPF_FUNC_ARGS)
-> +		return -ENOTSUPP;
-> =20
->  	/* verifier ensures m->nr_args <=3D MAX_BPF_FUNC_ARGS */
->  	for (i =3D 0, nregs =3D 0; i < m->nr_args; i++) {
-
-[Severity: High]
-This isn't a bug introduced by this patch, but since the series introduces
-support for by-value 16-byte arguments, this previously dormant ABI violati=
-on
-in the BPF trampoline appears to now be actively reachable.
-
-Does calc_arg_aux() fail to account for skipped registers due to alignment
-requirements?
-
-If a user attaches a BPF program to a kernel function (or struct_ops
-callback) that takes a 16-byte aligned argument (e.g., __int128 or
-by-value struct) preceded by an odd number of register-sized arguments,
-the native AAPCS64 caller places the 16-byte argument in an even/odd
-register pair (like x2 and x3, skipping x1).
-
-However, the nregs calculation here simply increments by slots without
-checking for skipped odd registers:
-
-arch/arm64/net/bpf_jit_comp.c:calc_arg_aux() {
-    ...
-    for (i =3D 0, nregs =3D 0; i < m->nr_args; i++) {
-        slots =3D (m->arg_size[i] + 7) / 8;
-        if (nregs + slots <=3D 8) /* passed through register ? */
-            nregs +=3D slots;
-    ...
-}
-
-This strictly sequential register handling seems to propagate to both
-save_args() and restore_args() in the trampoline, where arguments are
-read and written sequentially without skipping odd registers:
-
-arch/arm64/net/bpf_jit_comp.c:save_args() {
-    ...
-    slots =3D (m->arg_size[i] + 7) / 8;
-    while (slots-- > 0) {
-        ...
-        emit(A64_STR64I(reg, A64_SP, bargs_off), ctx);
-        reg++;
-        bargs_off +=3D 8;
-    }
-    ...
-}
-
-arch/arm64/net/bpf_jit_comp.c:restore_args() {
-    ...
-    for (reg =3D 0; reg < nregs; reg++) {
-        emit(A64_LDR64I(reg, A64_SP, bargs_off), ctx);
-        bargs_off +=3D 8;
-    }
-    ...
-}
-
-Could this cause data corruption for arguments passed to BPF programs
-attached via fentry, fexit, or struct_ops when 16-byte arguments are
-involved?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260911154914.2004=
-336-1-yonghong.song@linux.dev?part=3D11
+Nicholas
