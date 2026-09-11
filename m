@@ -1,163 +1,145 @@
-Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44FEB353A83
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 14:10:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 201862D5C7A
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 14:16:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789135845; cv=none; b=aIthOWeu+71RaRCeahj2UCTpJLszbevtpOgWLnxKZqKAOIJYbBzVxSBHd/dWMhIzaCnU5QaaK4F9XQu/mcKVorPyj8v8UJQOHAmSc4+q/E9C/cISy/ysqLc+DKmyCpKkatzPZkqN4Dak+BXOoxYhpUHGyxW2W+Jl58nYXGMDRlA=
+	t=1789136194; cv=none; b=OY0pcTWLI0IcrafwJWA0kMmtfd/8SvHpISSdNBu1tziKewjskIZXoWDlpO139zuR33pVxf2lHmxUSxFvP7YTgD2/JldRfMxEZHNGXqJr+6vjwD3XFgNyITrvaWc1LK+PpliaaWm07LqqppsLPiYg3QU5U1d6VEc/8SjGwCTqJ8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789135845; c=relaxed/simple;
-	bh=K9+ZKIgsGRgsc959M4tS0rMKOB/eZlOXTQ8Ho0gK2m4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=V4eL5g276WlbKBcTPRHZ91z71N8+WjbxppyrjhjT//4GEOZPBGnOT1QaATZ2KtNjbUa5BPHJ1FOEbOhhl6kzjt1N2of6pRArah0PzABKDoZDWIqIXvinziar5uYrSQPr/KwzQSFhK/MxK1bcPKeJxPevxTLuZ7E22NX5mQSAE5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=DlojXtNQ; arc=none smtp.client-ip=74.125.230.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
+	s=arc-20240116; t=1789136194; c=relaxed/simple;
+	bh=0mZHJkoBKZVg6KtObC8eJA7MPHUd6muWxiLT/UsPSFQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NukqTl7j+n8+GImowybSI3Kb5D8dZGYADvltpl5iSc5pb0wMkTJ9qR0PClSaa10BMxUM1yO8APmErKw9BUoCWhlOHO+5ukxCOYmYvaxUMSyUsJX1ZPrc4g3wqh3GAt3d87adbWyarHaFo1DrFV+5wtEw+G+6kROw9KHJHGXbyOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j5hQTjQj; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="DlojXtNQ"
-Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-530280b8234so3701181cf.0
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 07:10:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j5hQTjQj"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2d944747d41so11555815ad.0
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 07:16:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1789135842; x=1789740642; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=qrCxqh0lkRJGK/msNx4sQvIno2OGGDXwsMjyZ+inPRg=;
-        b=DlojXtNQUMI+4RY2899Vd4IPmVGYjdfubWPeJfZpIUvjJBU3wym3CQSinEvyvDr9pK
-         082SvIG7BLzZLFY79cZL8B70om+Olx3fXxpAcQQR1qCc591L7hzuznE4vhfcDug9oYzN
-         Nr2s2ZDFpiRGrI4U6t3n8BBycDUuL98yWwZaNenafr0YfxKl8p5iZtwwD+H5tGylC0ct
-         r0vS+8Sfrp3pA0mXnjnnJCktcs+aqWnZCuT0uONmPA/cwW3Lx0yD3xB0L3dhCTO7sASw
-         wE1kkzSkDG1EJ1nLU/KszNnGOj1bg3TQDvvf/zzzO5i6M4HjgFs7HaRiQ3jZqZRXMvvx
-         Cg3Q==
+        d=gmail.com; s=20251104; t=1789136192; x=1789740992; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=3UtoV/pw3leuZYVI4/SY6nx/n06s07Bocud6331VQDU=;
+        b=j5hQTjQjzLGhp506AT+QmAqOe9AApqT8JtQihNYUeFqtdcJuvZGoyNlG1diGo7mKOY
+         O257Qxy4zmD562aP31CUAOS9PlP+jtIRKAYfKT5seE5tvc60OxDbSg1RgCDSENHh2Mje
+         dGbd3K3K6gvGRJRMBWlT+EUDX5Wcevnm35W/iP9+lBt/IThYObATWNvBIdouEDf4JkMR
+         3JZ/sM81q9Bwv2yGNC4vXzmGoW/lYcrPpqR93BzuCFsdAEeIl5/q/MsHW5yyscnu8Xz4
+         YFIi2RCjYHaEN6fJiF6nCSqOHovinozB4x9UhIDfhWheX7nPIdfMZKGlk/lG8V4VxkFy
+         9qpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789135842; x=1789740642;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qrCxqh0lkRJGK/msNx4sQvIno2OGGDXwsMjyZ+inPRg=;
-        b=CJJ4tuQnvY+PN7T18qlCTgHnpZc5N42ajKNVekwfasA7nekZq9CxYie4ajUjESijE5
-         PRrQ+mW8EecKYwT/NCWMRBbDk4hbzTgXD4xxIj7TmfKwgTT5tN6T0xmGg1u0GmCPUIgN
-         Zv8tEXqdcdGYq6S0yaxd4hU7NDQMBWjPk+rlGpChbA9KMK42Ks6YbX12T6BtCPv3PwGA
-         ZW4tln0Jg2CWJcvh4LnRf4wEfyQ6D+41Nz4Vj6W+5isS/mtclYBRkxoivDDnSpq7D+Ty
-         Oiqhw3iJizYsUIltHC8aT4Y3RFbcVEK9Bxhydk7GzP7qDCxts41DgagkMBCHuULa76rO
-         m82w==
-X-Forwarded-Encrypted: i=1; AKwUvBw6WXb1kvt8IfKA0sNW4v8O/BNu8kf7uOXSq/0gCxdrhj24BCM6E7sxKeQ6/AbNxE3XPA0=@vger.kernel.org
-X-Gm-Message-State: AFuF++kPjW8Gb870GxafU4vuc1CagRe1+odcLK3r7IQhvMxdFxdVTFLo
-	XsLHSjxvblZi+/zsgyqTx9ELyqb67vxYOu24G50Xawh+NjxVxYk386iJHkRF+yKv9rQ=
-X-Gm-Gg: AYBFou3HEzV2b1ix++LXeEzWXA7J1fEYHzR1Y11MDpWK/pI5KKSn7A9RgKl3f8Isstj
-	TvI563m+pf5XxPgxo6Zu+4kgYarslEEGnOA9esODC6tvyJJ4WlvbKL/RK/C5NBJhyePGW0K2z+F
-	how2kAHuFDzSzSR73uk+j7RQIWRu+MEiUUcdbM/hefha09Dqh3E0F90i0Q808D8QqcXyeA+AFGq
-	cBKCdiSX0s2k6wSby9wxYNEZyvlbuerSeMvYMDmih53w1OY8VsUW39981SjxlInNdcDOUR9stiV
-	52DR6DalqDqpHiY4jeZo4BU2jG7XMXq9+B1xq2+a7BJm1YTz568m8iWsQBnCA9YbKBTW5TUS8Lm
-	la7VD5UNVAXgu0w31osGWH4xPr3aLreLmO4/vd5Xre0LmhXHBChcRuN3smV+qfDubs8wv0CYY6r
-	Vv2NDrBmUbf7eYTjG6+BYsZjvG4FE3Jty5soGZ/Ho85bBS9x7kVYf60/Dh34xlmYUDP16qBOwd7
-	dWKKbSQmHnact3GNhJ5YaVAQTIz0zpeLACaWAMnLCCi347Vsu9K577p
-X-Received: by 2002:a05:622a:53c5:b0:51c:b98c:f772 with SMTP id d75a77b69052e-530c86f6195mr51379741cf.15.1789135827987;
-        Fri, 11 Sep 2026 07:10:27 -0700 (PDT)
-Received: from toxicpanda.com (ec2-34-228-114-98.compute-1.amazonaws.com. [34.228.114.98])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-530ca460a32sm20960711cf.9.2026.09.11.07.10.27
+        d=1e100.net; s=20251104; t=1789136192; x=1789740992;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=3UtoV/pw3leuZYVI4/SY6nx/n06s07Bocud6331VQDU=;
+        b=Vwnscxw77OFsaVEO3yIam3mcfESc+ifPk7EPERgMbGBT3cTdpZ8XqsrJaEh61YgG5M
+         KoHEu5rr230Zukv6yrKmNYMxDGphdgXqVTpqZij7PwDMmCNNsZ7hkW1hVWTlhnwDRppN
+         UNLhaQWzBECvfaqDpP/FrOsQOu3tEGbi1t/JQ4kO0vQad1FaiofrJDp/eoXDDGiBLyCQ
+         SJgVl40u/R9SZ5iov5gj4WhK5VACik/QvC1HA1AH5v1M/O1q4c5t5huClo7HFVOV+8va
+         u+Rp9I4iF2pls9zBGBv7YC5pg4jwHQTdJhoSzh0r559GCi3QiCwYkVeHD/x5SiEmVQc8
+         HVkw==
+X-Gm-Message-State: AFuF++mq6PlMaUyNlOxsz/gGcP4soML8Poa89X7PnGoR0Qo+d/xhQ6Rh
+	vxfZwhxgVU8mbn+5F01ngCAlLK7sBIeVVMd5fPQAzSCbx3IyS2XofF6je4w8U57C
+X-Gm-Gg: AYBFou0QmUzrCO1mchFUI8YS6RvAoIhMUPoy6AB+8SQre4h53KM5DehjKXZSc6tC6eg
+	q1i5hj/nLm6HAa8TmFrdRnVvXEpeP/RruTs80k2spGvRzg3AtldGrHKiyPa5j6zkx0EvuqnlIFu
+	hP5Sr2fskkGXVFuk/SClhCUf6P05Ec3EIQCN0vF4CfQreL7voUA19f/+cVcFm0wPuMF253o8nt1
+	hkHZ71+t6O7+QNK4FdUSQMUDHvBkhA6qk7kxGPvkrNIFzy4RrtncRy9BCL8TLXDRiQKHnzA9ET4
+	MSMwgQ1WvIzC6HhpIFeEmZpkaRaV0ug/Wn4rdgs5mZMiWIMuwvvoWxhj2wlZXWNU/pB5WUOvRay
+	nN0INvX9DoUgfL5doqGAfUTVz/S/sT4USplx8o80/4Py3xC3q9QuVJItEMeOd19VXku832U+1ST
+	u8rYcwR1vF451pXoXdfC9GfagVSccW9uPtsTB4/ZOStx2kZopBgLmasO9Hou4Mh/OQ5koNYBt6Z
+	IfwebWd9iZ2FQzsINPyI4mMdU3N0Yswu1XXcq8TkNxcd9vDmGm9m0cZymGu6am4BHGZhR5I1qT2
+X-Received: by 2002:a17:90b:53d0:b0:38e:bfe:81e9 with SMTP id 98e67ed59e1d1-39d9bc1b0demr6575516a91.1.1789136192365;
+        Fri, 11 Sep 2026 07:16:32 -0700 (PDT)
+Received: from nugod-NUC15CRHU5.tail9f095a.ts.net ([218.237.104.87])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d995a42a5sm5172740a91.17.2026.09.11.07.16.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 07:10:27 -0700 (PDT)
-From: Josef Bacik <josef@toxicpanda.com>
-Date: Fri, 11 Sep 2026 14:08:53 +0000
-Subject: [PATCH RFC v2 15/15] rcu-tasks: Kick running holdouts through the
- scheduler
+        Fri, 11 Sep 2026 07:16:31 -0700 (PDT)
+From: HyeongJun An <sammiee5311@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	=?UTF-8?q?Ricardo=20B=20=2E=20Marli=C3=A8re?= <rbm@suse.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Mykola Lysenko <nickolay.lysenko@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	HyeongJun An <sammiee5311@gmail.com>
+Subject: [PATCH bpf-next] selftests/bpf: Tolerate libarena skeleton failures under BPF_STRICT_BUILD=0
+Date: Fri, 11 Sep 2026 23:16:21 +0900
+Message-ID: <20260911141621.1944900-1-sammiee5311@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260911-b4-rcu-tasks-preempt-qs-v2-15-eaaa61ed2da4@toxicpanda.com>
-References: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com>
-In-Reply-To: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>, 
- Frederic Weisbecker <frederic@kernel.org>, 
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
- Joel Fernandes <joelagnelf@nvidia.com>, Boqun Feng <boqun@kernel.org>, 
- Thomas Gleixner <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
- Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- x86@kernel.org, Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
- Xu Kuohai <xukuohai@huaweicloud.com>
-Cc: Andy Lutomirski <luto@kernel.org>, 
- Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, 
- Juergen Gross <jgross@suse.com>, Luis Chamberlain <mcgrof@kernel.org>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, linux-kernel@vger.kernel.org, 
- rcu@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- xen-devel@lists.xenproject.org, Josef Bacik <josef@toxicpanda.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1789135737; l=1790;
- i=josef@toxicpanda.com; h=from:subject:message-id;
- bh=K9+ZKIgsGRgsc959M4tS0rMKOB/eZlOXTQ8Ho0gK2m4=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgUBr36M/n0nWN0DNbnxwzIiCZez6MG
- JiruuNaSCI/zXsAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QFxu9w6oKo935Kq6bYpzSj4sd/pud6qAfpTImYrmpDnci7BPIoYh09XWotebu7q/uE6z/VGg6k/
- nk0bYtqCcqAg=
-X-Developer-Key: i=josef@toxicpanda.com; a=openssh;
- fpr=SHA256:C8kOX2QUJCMqnCX+KEeoqRAjLo9L+ELOSH2NSAJHqGA
+Content-Transfer-Encoding: 8bit
 
-A holdout that is running on a CPU with nothing else runnable is only
-preempted if the tick acts on rcu_request_urgent_qs_task()'s flag, and
-there may be no tick.  Now that a preemption outside a trampoline is a
-quiescent state, have check_holdout_task() call resched_cpu() on a
-running holdout as well, so the scheduler IPIs it and it goes through
-__schedule() and reports (or, if it is inside a trampoline, does not
-report) its own state with purely local ordering.  Nothing reads a
-running task's rcu_tramp_nesting remotely.
+The Makefile documents BPF_STRICT_BUILD=0 as tolerating any BPF object,
+skeleton, test object or benchmark failure so that the remaining tests
+still build.  Every skeleton rule honours that through
+$(if $(PERMISSIVE),...), except the three that build the libarena
+skeletons.  Those invoke a sub-make with no guard, so a libarena failure
+is fatal even in permissive mode.
 
-Only under CONFIG_RCU_TASKS_PREEMPT_QS; other architectures are
-unchanged.
+With a libarena source that fails to compile, BPF_STRICT_BUILD=0 stops at
 
-Suggested-by: Paul E. McKenney <paulmck@kernel.org>
-Assisted-by: LLM
-Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+  make: *** [libarena/libarena.skel.h] Error 2
+
+while an ordinary program failing the same way prints SKIP-BPF and the
+build carries on.
+
+Guard the three sub-makes the way the other skeleton rules are guarded.
+The build then prints SKIP-SKEL and continues, and test_progs,
+test_progs-no_alu32, test_progs-cpuv4 and bench all link.  Nothing
+downstream needs a change, because the missing skeleton drops out through
+the existing permissive paths and libarena.test.o is reported as
+SKIP-TEST.  The default BPF_STRICT_BUILD=1 still fails on the same input.
+
+Fixes: a6850fa388f6 ("selftests/bpf: Add BPF_STRICT_BUILD toggle")
+Signed-off-by: HyeongJun An <sammiee5311@gmail.com>
+Assisted-by: Claude:claude-opus-5
 ---
- kernel/rcu/tasks.h | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ tools/testing/selftests/bpf/Makefile | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index ba432bd922e2..02d2592ab7a3 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -1038,8 +1038,18 @@ static bool rcu_tasks_preempted_qs(struct task_struct *t)
- {
- 	return task_call_func(t, rcu_tasks_switched_out_clean, NULL);
- }
-+
-+/* Make a running holdout pass through __schedule() soon, tick or no tick. */
-+static void rcu_tasks_kick_running(struct task_struct *t)
-+{
-+	int cpu = task_cpu(t);
-+
-+	if (task_curr(t) && cpu_online(cpu))
-+		resched_cpu(cpu);
-+}
- #else
- static bool rcu_tasks_preempted_qs(struct task_struct *t) { return false; }
-+static void rcu_tasks_kick_running(struct task_struct *t) { }
- #endif
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 7ea5ba1df29e..a9951774e5c8 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -835,17 +835,20 @@ LIBARENA_SKEL := libarena/libarena.skel.h
+ LIBARENA_BENCH_SKEL := libarena/libarena_bench.skel.h
  
- /* Per-task initial processing. */
-@@ -1219,6 +1229,7 @@ static void check_holdout_task(struct task_struct *t,
- 		return;
- 	}
- 	rcu_request_urgent_qs_task(t);
-+	rcu_tasks_kick_running(t);
- 	if (!needreport)
- 		return;
- 	if (*firstreport) {
+ $(LIBARENA_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(LIBARENA_BPF_DEPS)
+-	+$(MAKE) -C libarena libarena.skel.h $(LIBARENA_MAKE_ARGS)
++	+$(MAKE) -C libarena libarena.skel.h $(LIBARENA_MAKE_ARGS) $(if $(PERMISSIVE),|| \
++		printf '  %-12s %s\n' 'SKIP-SKEL' '$(notdir $@)' 1>&2)
+ 
+ $(LIBARENA_BENCH_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(LIBARENA_BENCH_BPF_DEPS) | $(LIBARENA_SKEL)
+-	+$(MAKE) -C libarena benchmarks $(LIBARENA_MAKE_ARGS)
++	+$(MAKE) -C libarena benchmarks $(LIBARENA_MAKE_ARGS) $(if $(PERMISSIVE),|| \
++		printf '  %-12s %s\n' 'SKIP-SKEL' '$(notdir $@)' 1>&2)
+ 
+ ifneq ($(CLANG_HAS_ARENA_ASAN),)
+ LIBARENA_ASAN_SKEL := libarena/libarena_asan.skel.h
+ CFLAGS += -DHAS_BPF_ARENA_ASAN
+ 
+ $(LIBARENA_ASAN_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(LIBARENA_BPF_DEPS)
+-	+$(MAKE) -C libarena libarena_asan.skel.h $(LIBARENA_MAKE_ARGS)
++	+$(MAKE) -C libarena libarena_asan.skel.h $(LIBARENA_MAKE_ARGS) $(if $(PERMISSIVE),|| \
++		printf '  %-12s %s\n' 'SKIP-SKEL' '$(notdir $@)' 1>&2)
+ endif
+ 
+ # Define test_progs test runner.
 
+base-commit: af0b84a9215d951d16f26b7ee34353b970cf5d4e
 -- 
-2.55.0
+2.43.0
 
