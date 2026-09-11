@@ -1,89 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 281AC322C6D;
-	Fri, 11 Sep 2026 15:27:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348B436D9F9
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:28:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789140441; cv=none; b=igfbpX20DO/l4lApRnf+G+EXfFv4yBfEoXKbmYuxnPV2B9y7FOQr9qeWFd5cJjNtd3bSNoouWwy756ebv4BXbrU06KMWzco/HTJEBxOGJqH03FmTmzjRTX+N9qAgaWmMGVfeOI0gp/pTuluBYSbuWtsDCbWAkytP7PsQUZOOBfM=
+	t=1789140491; cv=none; b=MBD6tysjw3K8S+eqXN2/oXw+Pq7FqCCAveQOEVKjcYUjlQrGz8WugTHG+com5psVJ4mwqGC2xbwel61mZhDd63zWVt/OS2V5Mj2fFonJMvlqIMMlp9YthfyGLGib22W72F3VXATM8Wcv4oj/s56WBsyYZZVZ/6Y/TeUaoKOD33I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789140441; c=relaxed/simple;
-	bh=/5ngQOz0Fr8fdgWYP5DEuPldXuC86Zqli3ZKMfiIHN4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=kvZbtrVRBggV4Y8Mlxr+tNY/QMofy8Pf8LKw82W/WZSo02yJ9VB/Hsn77Ia9tQVZyTY/GnE33ql5VLlaZfkMeO6jCsRPLuBUqFMZd8+fWBhskbKk86MYlkM4WWv0UaDCS9XNHvmNpOVdzzOd3PCVf4C+0zDRAzpIy/WTTDrOnqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mc+MqGTZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789140491; c=relaxed/simple;
+	bh=FhC1BGc+izFGRSVhsr6TbpR9BgsKGiF2SuSQ1pALooY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=lTsQb/JVgoE8Rexp1VQwALvul5KRtUAZAvJ9ZbWXnXGq5grvvJxTAPt9vQs6XNfiFsAPBpKhDKNmSkeWbYDsFZ1umDE1/x16QTXixFujSdioXUfGUs57y7V10gvfEJZT1C76HNwWZmCfzT4hfzQTJiv/ND+Ui8mVh1MQOT2s5Fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ryUTerWU; arc=none smtp.client-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mc+MqGTZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDA101F000FF;
-	Fri, 11 Sep 2026 15:27:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789140439;
-	bh=8BJjhrhS+0Oxmm6z0xTBYFFxEtdSj4DGbwn14Xt9haw=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Mc+MqGTZCtk4Kp02/a3LLiMpT8xvAjbcK0AaiPqoc+pP/DmZsoFW+uxCBEHwaZKq2
-	 2x6xRErxisglzqqC3UIDxH4aZLu+fUd6c/6NfxwF3TTKm+2XDLCpMUcaMJRNjmT01q
-	 4DK+4+OC3w1ZxO07Ztd7wigs8hkMwebitlVuGIuNoSlL/mwpQyDYeYPva5+TSY4yPQ
-	 8Z85+zDs4l9xQ/aOPZL202F5AtXqTNHo8NDjwBrRpt5mMP76jPeUafzcS5cLyVelNf
-	 kgX/jo4G2Ij2YabAouQaxmVOfnDm9yo1c4aYRAqG1qH+/Y2kvPcugkk0Bn76DtZ7bH
-	 Bw781eWfPUmNg==
-Content-Type: multipart/mixed; boundary="===============1584994168545175848=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ryUTerWU"
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-8200b55dc47so12022147b3.3
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 08:28:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789140489; x=1789745289; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=wQzcuFPYkAadTcMKWgFjkOZlpHbtRvNH6B7KXfZ46WU=;
+        b=ryUTerWUF3R4IkMvaNV1k5u2/OHYEhgHfcxKb62+78w/vZaarAMoev+UPQjMVCcZf/
+         D31h/Zoy7/rPNKtqflKdVWE2lN/f9sD8ChZyWDsxNehadFqAPdcoT9bW3ClFxv+kK7Cq
+         kCDYFj4+3vCbmWmqvBcUIvVO2lDY0axCsuqABEO9ig+bJFhDfgXfR3BM5iK8Gds2a24s
+         S6VY/pd9SA6pHDDzqTOV9VIWwo8Y04l4FMZrnRd09W7XMdoN3h+EmZd9OB1mFnVbdtzK
+         xr/+dq0bE79gM1IjOFRdVc61EE9PRu5VJp0mNDGugjIAz2cSkufFJvZ+uOHH13ri9RlU
+         N25w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789140489; x=1789745289;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=wQzcuFPYkAadTcMKWgFjkOZlpHbtRvNH6B7KXfZ46WU=;
+        b=R/tTYqZ70CfKH4qCfnfZCMDY4DzCdu1T6Pq3VaUW1gIRY1EiZ8n6nTP7/BgdDz4nD0
+         hMgIZ7asbVv+/tOc7wyvTY9eFKRaYJwroOgPEYqErsQkBSr3iVR1rgii00u4TLyNn+v3
+         ufe/4hglgzLSBmA/7DVD2s7z2aI+c+8mHeTmyFzfXf3fyhXxDkJ38Bz1O9tiIV3Gp+9j
+         iOhPbSDg2Ma7A0wBoQMlr9T/lcTWPV4gtg12qYK//3xoK4MvUQGoA5dcHf9xABonVZR8
+         xDEGP5SNLGVKB18p0OjrGxTxbMZXL0a9QWUd+R+9Lc5WWG9XG2kByWIGlNG7Fu9Iuqtk
+         JzuQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzIoDPuTS2FCLm8+92Vw3/AaUinrzht14ezyfpX1f7ZcwYhrjzSSCla+zpVI3CPZaxi9fA=@vger.kernel.org
+X-Gm-Message-State: AFuF++mdHp/TtWA0P3/XWH7r6Sq4/CNE4Ciw5spbgGvxAzmyPQRvf2SL
+	Ll0RIwok1Ji2oOUOf4gtSFbjSHhxfVXR5HVPLucBlqVjmYfTQDQCMW5a
+X-Gm-Gg: AYBFou18i06BU9/+bbMB9Rq32ZUvouBdITS/WC2yZ6Fl/+166QnHZ5D58x44/ez5EkK
+	hGo4/JwqycFlTL4L1toL2CKoKrBqnRrtlU30tEqmi0iX0iXWk66gxPRtRGqqWYcMMRmP45lV/zn
+	Y8gO/k79zFFAfSZruZWOwh6qLw64WW6R/k9IOLABjgeyyQo2cd4LY7BFgu+0ngcTGFD0l4MyfbE
+	sM9OKR6RmT+quZkellHs3v5+yQ/hZDtU9JfZKi1n496e+T5BDvQ/1PU61LHhwch5obCDR7N9Qnd
+	PAfGSiaRGX0ZMJE6NjlUc3GzjeaRlv/8B6iLh/bEEYa8S0A7vPGkgx4ksqVJPAVdR7gmpaLCh4j
+	GmtcxlBIs05z36cfZwKm4gvBNfur+vMESkjc6SYp30a/+ohSPTxooHTbPNtzwiOL+lsZdn4bpdq
+	m2YcH+/9M/eVpltmkoZVYpg7JLJcyVJSlWgP/GBLBezYcPNPrsnHLnA72FhPG3Zu9H/jUDImLHk
+	ri5XdoHKD/ijodZCj9Q7aXes1EL773SFt1wXRx1ia4IF1rt38UmmGYrDLfaK3jB/g==
+X-Received: by 2002:a05:690c:660a:b0:873:5c6b:a2f7 with SMTP id 00721157ae682-884b23029e1mr17446467b3.37.1789140488900;
+        Fri, 11 Sep 2026 08:28:08 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:5f::])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-884876e5780sm11951597b3.27.2026.09.11.08.28.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Sep 2026 08:28:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <42eecdb6f344f592a4764f367f13550c93417fa903f5e58a832c2aa01841c9e4@mail.kernel.org>
-In-Reply-To: <20260911141621.1944900-1-sammiee5311@gmail.com>
-References: <20260911141621.1944900-1-sammiee5311@gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Tolerate libarena skeleton failures under BPF_STRICT_BUILD=0
-From: bot+bpf-ci@kernel.org
-To: sammiee5311@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,martin.lau@linux.dev,rbm@suse.com,emil@etsalapatis.com,nickolay.lysenko@gmail.com,shuah@kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,sammiee5311@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 11 Sep 2026 15:27:18 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 11 Sep 2026 08:28:07 -0700
+Message-Id: <DLCLDD3KN3WJ.2PUS28BYG2QVK@gmail.com>
+Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <memxor@gmail.com>, <linux-kernel@vger.kernel.org>,
+ "Aohan Mei" <henrymei@tencent.com>, "TencentOS Corvus AI"
+ <corvus@tencent.com>, <stable@vger.kernel.org>
+Subject: Re: [PATCH bpf] bpf: Hash lock addresses in rqspinlock violation
+ reports
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Aohan Mei" <ljp1205831794@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc
+References: <20260901114755.1165703-1-ljp1205831794@gmail.com>
+In-Reply-To: <20260901114755.1165703-1-ljp1205831794@gmail.com>
 
---===============1584994168545175848==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> The Makefile documents BPF_STRICT_BUILD=0 as tolerating any BPF object,
-> skeleton, test object or benchmark failure so that the remaining tests
-> still build.  Every skeleton rule honours that through
-> $(if $(PERMISSIVE),...), except the three that build the libarena
-> skeletons.  Those invoke a sub-make with no guard, so a libarena failure
-> is fatal even in permissive mode.
+On Tue Sep 1, 2026 at 4:47 AM PDT, Aohan Mei wrote:
+> From: Aohan Mei <henrymei@tencent.com>
 >
-> With a libarena source that fails to compile, BPF_STRICT_BUILD=0 stops at
+> bpf_prog_report_rqspinlock_violation() prints the attempted lock and
+> every held lock with %px, which expands to the raw pointer value.
+> The report lands in the program's BPF_STDERR stream, and that stream
+> is readable through BPF_PROG_STREAM_READ_BY_FD with no privilege
+> check on the read side: prog_stream_read() only validates the fd
+> with bpf_prog_get().
 >
->   make: *** [libarena/libarena.skel.h] Error 2
+> Any user with read access to the program fd (a shared fd, a BPF
+> token delegation, or an unprivileged child) can therefore read back
+> the raw kernel addresses of the rqspinlock objects, which are
+> dynamic allocations whose placement depends on KASLR and the slab
+> layout.  The verifier-facing log path gates pointer printing on
+> allow_ptr_leaks; the stream path has no equivalent gate.
 >
-> while an ordinary program failing the same way prints SKIP-BPF and the
-> build carries on.
+> Print the ptr_to_hashval() hash of each address instead, so the
+> report still allows correlating the attempted lock with the held
+> locks within a boot, without exposing the raw addresses.  Fall back
+> to printing 0 if hashing fails.
 >
-> Guard the three sub-makes the way the other skeleton rules are guarded.
-> The build then prints SKIP-SKEL and continues, and test_progs,
-> test_progs-no_alu32, test_progs-cpuv4 and bench all link.  Nothing
-> downstream needs a change, because the missing skeleton drops out through
-> the existing permissive paths and libarena.test.o is reported as
-> SKIP-TEST.  The default BPF_STRICT_BUILD=1 still fails on the same input.
+> Fixes: ecec5b5743bf ("bpf: Report rqspinlock deadlocks/timeout to BPF std=
+err")
+> Reported-by: TencentOS Corvus AI <corvus@tencent.com>
+> Cc: stable@vger.kernel.org
+> Assisted-by: CodeBuddy:Kimi-K3
+> Signed-off-by: Aohan Mei <henrymei@tencent.com>
+> ---
+>  kernel/bpf/rqspinlock.c | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
 >
-> Fixes: a6850fa388f6 ("selftests/bpf: Add BPF_STRICT_BUILD toggle")
-> Signed-off-by: HyeongJun An <sammiee5311@gmail.com>
-> Assisted-by: Claude:claude-opus-5
+> diff --git a/kernel/bpf/rqspinlock.c b/kernel/bpf/rqspinlock.c
+> index 111ec80ea958..5721dc1a9577 100644
+> --- a/kernel/bpf/rqspinlock.c
+> +++ b/kernel/bpf/rqspinlock.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/smp.h>
+>  #include <linux/bug.h>
+>  #include <linux/bpf.h>
+> +#include <linux/string.h>
+>  #include <linux/err.h>
+>  #include <linux/cpumask.h>
+>  #include <linux/percpu.h>
+> @@ -673,6 +674,7 @@ __bpf_kfunc_start_defs();
+>  static void bpf_prog_report_rqspinlock_violation(const char *str, void *=
+lock, bool irqsave)
+>  {
+>  	struct rqspinlock_held *rqh =3D this_cpu_ptr(&rqspinlock_held_locks);
+> +	unsigned long hashval;
+>  	struct bpf_stream_stage ss;
+>  	struct bpf_prog *prog;
+> =20
+> @@ -681,10 +683,15 @@ static void bpf_prog_report_rqspinlock_violation(co=
+nst char *str, void *lock, bo
+>  		return;
+>  	bpf_stream_stage(ss, prog, BPF_STDERR, ({
+>  		bpf_stream_printk(ss, "ERROR: %s for bpf_res_spin_lock%s\n", str, irqs=
+ave ? "_irqsave" : "");
+> -		bpf_stream_printk(ss, "Attempted lock   =3D 0x%px\n", lock);
+> +		if (ptr_to_hashval(lock, &hashval))
+> +			hashval =3D 0;
+> +		bpf_stream_printk(ss, "Attempted lock   =3D 0x%08lx\n", hashval);
 
-The Fixes: tag points to a6850fa388f6 which introduced BPF_STRICT_BUILD,
-but the inconsistency where other skeleton rules use PERMISSIVE while
-libarena rules don't was actually introduced by commit 7e729028d7ff. That
-commit added PERMISSIVE guards to most skeleton generation rules but
-missed the three libarena skeleton rules. Should the tag be:
+No. This is not necessary.
 
-  Fixes: 7e729028d7ff ("adding ci files")
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34611055093
---===============1584994168545175848==--
+pw-bot: cr
