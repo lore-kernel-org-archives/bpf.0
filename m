@@ -1,69 +1,69 @@
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C92D837473A
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 14:10:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709D7374A0A
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 14:10:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.204
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789135828; cv=none; b=b3+8aWB15aIYbiLRk2pVk80y8MN5QOTGpUyf8NsL6JYtK47fEF0KpK/Ud6XQqcw3f8tqPHNUPLCWckdJf0pdCiaPxtAZ0xYE1xqSdgfSG5P7UezlWlRpqwqgS+U1St38hf8XemYc5zDusICpT4MUhv5QuUKT+iyKuVhn95tB7cQ=
+	t=1789135830; cv=none; b=oWL61q/+7FLbswLmO97kE0G6TBs4xNL8dGy1RAHY/MJYrK8q7KgeVy3n82VlzEJDV2WhVGj82Af5DPQ3lwxu5R85G27CLT2KQx9RQJEaMGgf/EEiQnMVUi9YadvVXJnOhabwSyLrdjfeBgM1KT2QVnx0lCjp7mJ7F/HQPsXMgfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789135828; c=relaxed/simple;
-	bh=782IiL7t8C+T7tHuP+fr7fuNKyJIY5LyrSPvir4aYJ4=;
+	s=arc-20240116; t=1789135830; c=relaxed/simple;
+	bh=CHfEJf4XyY3zn8RyomjOM2Uc3mVFT7MUycrwjg2RabY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=U0ScqaclHNIqyidmBMaHWsYziVHCsUETRG2uyMnUU40MsF2Q/hwFzFyfmibpQjd3lQDabL4w0Mz4rPT3zTdE3jIONBAFCTqerbNhXfM/bBE6nq7OhL5UOlAZ28I+uevd5DdbUWLbhjVM5XGLSbSrW9AKw9tFHN713cS8HGFt4E8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=hLLaGoJZ; arc=none smtp.client-ip=209.85.222.169
+	 In-Reply-To:To:Cc; b=oztTV8rf/Z8pZUYLmMRHYlxlCwtxNwnpE1LB91Jcf1b3oU7WCgVFRsPb8r6Yon4DfHoDr4v3B7Jw+8AnBC40xwZhP0+0t6BDtKOxBri8JOb6Bs5WsRRdfKYA1+Yz0pZOR7lZPrUPTW4pSFGgMwgcS5yuYP970G7eCK7lCq2g9qU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=mt4DmxKM; arc=none smtp.client-ip=74.125.230.204
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="hLLaGoJZ"
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-939fc329d35so13510285a.0
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 07:10:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="mt4DmxKM"
+Received: by mail-qk2-f12.google.com with SMTP id af79cd13be357-939109fafddso76702885a.0
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 07:10:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1789135824; x=1789740624; darn=vger.kernel.org;
+        d=toxicpanda.com; s=google; t=1789135826; x=1789740626; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=WT/8H/cMArsJRoufbqdgzsmAKwU5NTozjyFMdjWjsc8=;
-        b=hLLaGoJZppM4zK0atM90Nj0fQpwFsj08kX3VvrzD4jvzgzs21Z/Q39hmrmbyIItc2C
-         aShIS1x6G8SXe4GGjuEtCAI9geSAnURZzQxRnzLyouKxXli0tHlnrIvAn6sUpJpkyTEV
-         XBdd8IRda0wYXPgk2zKw4L+ITQviagPa944zKvrYnOZaqTvlDwLeJY5khHbqYHi0hjgI
-         1gjpYIe5YegKxBIE2C6OA/J9lR1d5wdZZhrOdVaRSoKWoGNOq/ART0GjYkGjGSSmr9/M
-         nvpGRr84qKU/m2R9LkOW3u6tSuRx9c4MagdFtvZA52PZIpAHLSCX2dMjZDN/AlrMqneS
-         +s0A==
+        bh=tDcwMwF0CqD/SLUwt7lLP/Zeny+NN6n073A4kvHv5Ng=;
+        b=mt4DmxKMFOa54vKaT7P7rC0nknUec5SG40ykFBll3pCY7tJxqt/x+SOCkXo3KNe18M
+         yedzxk53shlT7hl4bnCF93vW8Y8pISo2hDuG8GRWZ/63qMENZom+pJ0aLDwuU3F8URLY
+         sw2cIbuAA0M8+dqVCdaDdIwG5iib83Y3t4wTDLLWgp+XYVAQr1orQF86xBjSQEUfDkuI
+         m1WVGkAxwPOHg/lTHRo1qpU7itzlq3ZKGLp28y4/aiV/Z3+87tG6AJ4lwxpq8U8eYIam
+         2Zoa7ytfUf8k+ZLC8eMWbTFPq7Fa+oTvHEHxNMUgVKDtXmGQ6Pl0liwZ2dOx/DYlFOQP
+         Q1mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789135824; x=1789740624;
+        d=1e100.net; s=20251104; t=1789135826; x=1789740626;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=WT/8H/cMArsJRoufbqdgzsmAKwU5NTozjyFMdjWjsc8=;
-        b=Ko6BWbv5Kn1dOoSqngw8x02gQjBuzUC8Ue8ZPIIr+zCjhcqvLoYuIN6xs4g2LSdn07
-         +CjwMF5mP6zPDCkeOKtY2i04vbyLlI42FI5kVYR9EYmHmS8UFRxC2gzwkjl/JZA5nbAh
-         dxou4gVgWN3wDpySgr54LObFgAEsnciOydxzJ/XZzj0agio0ChR1eO+hrTE9Hhp52GE7
-         6XbwnfliKt9rKWUi9z2Hiws6u0LpORw6vtbjazB/DtACa0TQjL+bq3lz0gGOOhm8klU8
-         zDCZWoJt+ylHOBGGNtvsHAWj1/QQbtPsQwWEYOm5g8JHvyTuCsj5+r8Tg6UiReXFA77E
-         jzFQ==
-X-Forwarded-Encrypted: i=1; AKwUvBycKKqFs+vox6+Zb9kNVtr+8oT3qHObqRjQLp8I/JHLhmYJoPpJokmD1vlA+N0xvdk+aME=@vger.kernel.org
-X-Gm-Message-State: AFuF++kKtL2BqHWLM+r1l95/6sk4TtmdiJXRtGFHe/0JvNraefdEFiER
-	EMyhbQuljXpqKRFMH9ycZDnKXVlNAVoo/FXPb+Set3m7pDxxj8l1pliKlzzgvPEGYDc=
-X-Gm-Gg: AYBFou3uij3M86rtp4dLEWHPQSRwxl5gmJiayhM5X7Hx3WAXTYFUno/sYxdHIOHXUJx
-	jtK+DSTJQD3G31XxcSLcFCSKOgNio+HUDv6ZNY2Mg8uH3wSEVitgthC6Aq23VTuw8Fkf4tg+kgv
-	4qM6uwd97CHsXbBtf0+QE6A8sUjnrJEiygvpNyXknMrHZPOyIM4P305Lj3BOBiAIRXecVbYoeEa
-	W+RJuyc0jA4BY9V+K4EEuUb8/311DD6hC60WSYrFFR4AerqJlc1w3ztuKtFL81KUZkz5y5LyT3H
-	Gz2/A9oJJCxJAn5gxeYe1TT2j6+iZBiaNtZ0paC/Eh9I2amlfKdOR3aoSK0+d2OAPZhzj6KfgX/
-	nK0ZcofaRBGexBMqvXmM4RQhZBBqsTYeNhXY2Dtj48aa/u+YtZ+FaLUgowBrJSKsf76v8BU7Hm9
-	ARV133tGkzul1DfALC+4XCFhTuszLYjz1RKfIc4lHhA3OrEbnx+HTUaDKuQs1VTgpaloa6xlKT7
-	n/i/EA2X1AIf4qWSl46tuYMRIQxVgYnq8XMugFblNWlxAfpsfE+xfDU
-X-Received: by 2002:a05:620a:444d:b0:939:cab7:8651 with SMTP id af79cd13be357-939ea0cff3cmr508758285a.21.1789135824016;
-        Fri, 11 Sep 2026 07:10:24 -0700 (PDT)
+        bh=tDcwMwF0CqD/SLUwt7lLP/Zeny+NN6n073A4kvHv5Ng=;
+        b=BjSpQ0HydvoPJFF+0zbBzRlkkC7fD4Zb43HfzWxBM/cvfjHNJo7nA/YnDItePfY01m
+         mvo7HgcDirqMbzwENZ/P9DSf75q5cOojOT0mqA+7u1HZrmM7NuGlac1RXn1nIUt6DC9g
+         Eo4YL8LDGH8716/JBUZUW/EnwC1IlaQ8MFxrgEk0YyV4G8jF75z+GiK/r3n8+Rq9X9mY
+         sHvU9FVCuxTTKSIJCZTsCjxMiDogrXjG9iLUL/S2who61JYVQoZzXGMF65wKZYo9WNSV
+         +CTDVGVz3e+wRGoC8CpQO+gFO/KLtbb+kUdJRqAaAXbzfDDaA95Bn+25/gDPBBNt5zdc
+         Vs6g==
+X-Forwarded-Encrypted: i=1; AKwUvBzGjtQNMzoEpkLFSGOJtnJcJzpsoDysEmNMXXaump24+afhjwBye2gfDk88Khso6fTmRxw=@vger.kernel.org
+X-Gm-Message-State: AFuF++lHhleJrXTBy24DdffTI14/Edrt8lBMYD4w2Uy/DOzyIYLi702M
+	dmvDwgBVPQqAz3BOuYTSHmUib9n4rKh8o3VsMeE4I3fVj/x2YSDkJ06Tb+Y4KTKdJo0=
+X-Gm-Gg: AYBFou3z22yk6IrXRJoEmHtfd7eENblQTbMcstKLhGwG4DXU9H19hBbe5UKEiKlEfzr
+	6nmh+1iW9rohRJPfH9JfRjWYkkUd99FX2UdGFbSFLp5/wgPsBrYsoH2KF+P3OQH8nS7RIiir5TF
+	wdk8lcZ2W0j6rPpDp7aF1tyuBQTGWXTXzwJlfBGdYAVdpstiERj1+s2mBPbHuhYNc62NOCb/3ax
+	rEfc1VikNtX1Ukl5rh4XmGzWcz1cv/HY0YessoEklcRieZIt4t7eNLcMxR9tdebDXW9qtMPxjXk
+	czq4TK4HFHk+nMf/NTJ4bbXr7SSr1bOKvGweECZK9sJDdGAiilNdWjvE3X7ATsRsQqd/KPaqvbW
+	tQ/3dNEIR2mjKlgmF2BZq+4mS7ub/gkR3DLjsgwtT0ea4ZT7cBMoRbD2sW6YnzKMm/tbOeCJO6/
+	cz2hFZuAkplF5L5KxubqKMZvcBswMx/mGOrvpifLxoqkCD0UAy3sQ+haRYXfhQRk3JMIVPJTUYz
+	m+dm0zTg1I43n2Zn6k/GeDsOnU2YSP/6mcBSc/O6X4Jhm8ZackkWyR8
+X-Received: by 2002:a05:620a:2a01:b0:92e:6c15:24cd with SMTP id af79cd13be357-939ea096ac1mr525489385a.15.1789135826040;
+        Fri, 11 Sep 2026 07:10:26 -0700 (PDT)
 Received: from toxicpanda.com (ec2-34-228-114-98.compute-1.amazonaws.com. [34.228.114.98])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-939e80801c0sm248912485a.30.2026.09.11.07.10.22
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-939f19f94a1sm128350685a.42.2026.09.11.07.10.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 07:10:22 -0700 (PDT)
+        Fri, 11 Sep 2026 07:10:25 -0700 (PDT)
 From: Josef Bacik <josef@toxicpanda.com>
-Date: Fri, 11 Sep 2026 14:08:51 +0000
-Subject: [PATCH RFC v2 13/15] rcu-tasks: Treat preemption outside
- trampolines as a quiescent state
+Date: Fri, 11 Sep 2026 14:08:52 +0000
+Subject: [PATCH RFC v2 14/15] rcu-tasks: Retire switched-out tasks with no
+ trampoline nesting at scan time
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,7 +72,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260911-b4-rcu-tasks-preempt-qs-v2-13-eaaa61ed2da4@toxicpanda.com>
+Message-Id: <20260911-b4-rcu-tasks-preempt-qs-v2-14-eaaa61ed2da4@toxicpanda.com>
 References: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com>
 In-Reply-To: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com>
 To: "Paul E. McKenney" <paulmck@kernel.org>, 
@@ -97,261 +97,101 @@ Cc: Andy Lutomirski <luto@kernel.org>,
  bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  xen-devel@lists.xenproject.org, Josef Bacik <josef@toxicpanda.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1789135737; l=13377;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1789135737; l=3915;
  i=josef@toxicpanda.com; h=from:subject:message-id;
- bh=782IiL7t8C+T7tHuP+fr7fuNKyJIY5LyrSPvir4aYJ4=;
+ bh=CHfEJf4XyY3zn8RyomjOM2Uc3mVFT7MUycrwjg2RabY=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgUBr36M/n0nWN0DNbnxwzIiCZez6MG
  JiruuNaSCI/zXsAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QLUZnTIeq2lPY+NhGtgUM19AxK92AiGBaR4ReDiwvRRgaRGOQrROuHTyqXvXkEa5pxrRzrRbB/J
- mvbDi+9g+vAw=
+ QCsPahyd7Oix02uJZsqv3hNKRWBYJbR9ZWsmEzIdYJha+M3Xp7J5xDeZFd/3etSxBmrSG0gewnR
+ pnh9QNzgnXwY=
 X-Developer-Key: i=josef@toxicpanda.com; a=openssh;
  fpr=SHA256:C8kOX2QUJCMqnCX+KEeoqRAjLo9L+ELOSH2NSAJHqGA
 
-Tasks RCU only accepts a voluntary context switch, usermode or idle as a
-quiescent state, because a task that was preempted may be sitting in a
-trampoline whose text is about to be freed.  On PREEMPT_LAZY kernels,
-where cond_resched() is a no-op and CPU-bound kernel threads only ever
-lose the CPU through preemption, that means any long-running kthread or
-kworker stalls every synchronize_rcu_tasks() caller -- BPF and LSM
-program detach and DYNAMIC ftrace_ops teardown via ftrace_shutdown(),
-and kprobe (un)registration via the jump optimizer, which waits under
-kprobe_mutex, text_mutex and cpus_read_lock() -- for its entire run,
-unless someone sprinkles cond_resched_tasks_rcu_qs() into it.  A cgroup
-writeback worker draining a large cgwb for eleven minutes was enough to
-back 40+ tasks up behind trampoline_mutex and trip the hung-task panic.
+The previous patch lets a task report its own quiescent state when it is
+preempted with rcu_tramp_nesting == 0, but a task that was preempted
+before the grace period started and simply has not run since is still
+listed as a holdout until it next passes through __schedule().  As Paul
+pointed out, the grace-period kthread can settle that case itself.
 
-With the previous patches, every Tasks-RCU-protected trampoline on
-x86-64 and arm64 (ftrace_caller and its dynamic copies, BPF trampoline
-images, the optprobe template, out-of-line direct trampolines) holds
-current->rcu_tramp_nesting across its call-out, and the irq-exit
-preemption path holds it across preempt_schedule_irq() whenever the
-interrupted IP is somewhere the counter cannot cover: trampoline
-entry/exit instructions and other dynamically allocated text, the static
-ftrace stubs and x86 return thunks on the way into a direct-call target,
-modules hosting their own direct trampolines.  The kprobe
-jump-optimization window, which is ordinary text a task may have been
-parked in before the kprobe existed, is instead re-checked against the
-recorded irq-preemption IP at each decision (rcu_tasks_irq_ip_holds()).
-A task that is context-switched with the count at zero and no such IP
-therefore cannot be inside, called from, or about to resume into
-anything Tasks RCU protects.
+For a task that is switched out, task_call_func() pins it and
+!task_curr() tells us it left the CPU through __schedule(), whose
+locking orders its last rcu_tramp_nesting and rcu_tasks_irq_ip updates
+before ours; a task preempted from irq exit inside trampoline text has
+the count held non-zero across the switch by irqentry_preempt().  So a
+pinned, not-running task with a zero count is neither in nor called
+from a trampoline, and with rcu_tasks_irq_ip_holds() also clear (the
+kprobe jump window, which can open after the task was switched out) it
+is quiescent now, whether or not it ever runs again.  Check that in
+rcu_tasks_pertask() so such tasks never become holdouts, and in
+check_holdout_task() so they are retired on the next scan.
 
-So let rcu_tasks_classic_qs() clear the holdout flag on a preemption
-too when rcu_tramp_nesting is zero, on architectures that select
-ARCH_HAS_RCU_TASKS_PREEMPT_QS, and select it for x86-64 and for arm64
-with DYNAMIC_FTRACE_WITH_ARGS.  A running holdout is already poked via
-rcu_request_urgent_qs_task(), which makes the next tick set
-NEED_RESCHED; the resulting preemption -- from irq exit, or synchronously
-at the next preempt_enable() -- now retires it, so a Tasks RCU grace
-period is bounded by roughly a tick plus the longest preempt-disabled
-section instead of by the longest stretch without a voluntary schedule().
-Other architectures keep the voluntary-only rule.  Update the Tasks RCU
-comments, Documentation/RCU (Requirements.rst, checklist.rst) and the
-FORCE_TASKS_RCU help text to match.
+This is the only remote reader of the count, and it only reads it for a
+pinned, switched-out task, so the trampoline-side increment and
+decrement stay plain on every preemption model, PREEMPT_RT included.
 
-Cost: one load of current plus an inc/dec per trampoline entry and exit,
-and on irq-exit preemption one core_kernel_text() check plus, with
-OPTPROBES, MAX_OPTIMIZED_LENGTH-1 lockless kprobe hash lookups.
+Only under CONFIG_RCU_TASKS_PREEMPT_QS; other architectures are
+unchanged.
 
-Not covered: x86-32 and the other GENERIC_IRQ_ENTRY architectures, and
-return_to_handler / the rethook trampoline, whose C callees take the
-ftrace recursion lock before touching any ops.
-
-Tested under QEMU (x86-64, PREEMPT_LAZY, PREEMPT_RCU=n, PROVE_RCU, with
-and without PREEMPT_DYNAMIC) against a kthread spinning in-kernel for
-30s with the function tracer, an ftrace kprobe, an optimized kprobe and
-fentry/fexit programs live: synchronize_rcu_tasks() 29.7s -> 0.1-0.3s,
-ftrace_shutdown() of a DYNAMIC ops 27s -> 0.2-0.8s, the ftrace-direct
-sample modules load/fire/unload in ~2.5s each during the spin, no
-warnings.  arm64 is build-tested only.
-
+Suggested-by: Paul E. McKenney <paulmck@kernel.org>
 Assisted-by: LLM
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 ---
- .../RCU/Design/Requirements/Requirements.rst       | 28 ++++++++++++++++------
- Documentation/RCU/checklist.rst                    |  8 ++++++-
- arch/arm64/Kconfig                                 |  1 +
- arch/x86/Kconfig                                   |  1 +
- include/linux/rcupdate.h                           | 15 +++++++++++-
- kernel/rcu/Kconfig                                 |  7 +++---
- kernel/rcu/tasks.h                                 | 15 ++++++++----
- 7 files changed, 59 insertions(+), 16 deletions(-)
+ kernel/rcu/tasks.h | 32 +++++++++++++++++++++++++++++++-
+ 1 file changed, 31 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/RCU/Design/Requirements/Requirements.rst b/Documentation/RCU/Design/Requirements/Requirements.rst
-index 8101fe6229d5..428b5e8f4b4e 100644
---- a/Documentation/RCU/Design/Requirements/Requirements.rst
-+++ b/Documentation/RCU/Design/Requirements/Requirements.rst
-@@ -2739,13 +2739,27 @@ userspace execution also delimit tasks-RCU read-side critical sections.
- Idle tasks are ignored by Tasks RCU, and Tasks Rude RCU may be used to
- interact with them.
- 
--Note well that involuntary context switches are *not* Tasks-RCU quiescent
--states.  After all, in preemptible kernels, a task executing code in a
--trampoline might be preempted.  In this case, the Tasks-RCU grace period
--clearly cannot end until that task resumes and its execution leaves that
--trampoline.  This means, among other things, that cond_resched() does
--not provide a Tasks RCU quiescent state.  (Instead, use rcu_softirq_qs()
--from softirq or rcu_tasks_classic_qs() otherwise.)
-+Note well that, by default, involuntary context switches are *not*
-+Tasks-RCU quiescent states.  After all, in preemptible kernels, a task
-+executing code in a trampoline might be preempted.  In this case, the
-+Tasks-RCU grace period clearly cannot end until that task resumes and its
-+execution leaves that trampoline.  This means, among other things, that
-+cond_resched() does not provide a Tasks RCU quiescent state.  (Instead,
-+use rcu_softirq_qs() from softirq or rcu_tasks_classic_qs() otherwise.)
-+
-+Architectures that select ``CONFIG_ARCH_HAS_RCU_TASKS_PREEMPT_QS`` relax
-+this: there, every trampoline whose lifetime Tasks RCU guards (the ftrace
-+and BPF trampolines, optprobe slots, out-of-line ftrace direct-call
-+trampolines) increments ``current->rcu_tramp_nesting`` before calling out
-+and decrements it before returning, and the irq-exit preemption path
-+covers the few instructions the counter cannot (see
-+rcu_tasks_ip_in_trampoline() and rcu_tasks_irq_ip_holds()).  A task that
-+is preempted with that count at zero is therefore known not to be in, or
-+called from, any trampoline, and such a preemption *is* a Tasks-RCU
-+quiescent state.  The obligation moves to the trampolines: anything that
-+relies on synchronize_rcu_tasks() to protect code a task may be preempted
-+in must maintain the count (see register_ftrace_direct()), or Tasks RCU
-+will not wait for it on those architectures.
- 
- The tasks-RCU API is quite compact, consisting only of
- call_rcu_tasks(), synchronize_rcu_tasks(), and
-diff --git a/Documentation/RCU/checklist.rst b/Documentation/RCU/checklist.rst
-index 4b30f701225f..28df48fecac7 100644
---- a/Documentation/RCU/checklist.rst
-+++ b/Documentation/RCU/checklist.rst
-@@ -252,7 +252,13 @@ over a rather long period of time, but improvements are always welcome!
- 	a.	If the updater uses synchronize_rcu_tasks() or
- 		call_rcu_tasks(), then the readers must refrain from
- 		executing voluntary context switches, that is, from
--		blocking.
-+		blocking.  On architectures that select
-+		CONFIG_ARCH_HAS_RCU_TASKS_PREEMPT_QS an involuntary
-+		context switch is also a quiescent state unless
-+		current->rcu_tramp_nesting is non-zero, so a reader
-+		there is a trampoline that maintains that count (see
-+		rcu_tasks_trampoline_enter()), not an arbitrary
-+		stretch of kernel code.
- 
- 	b.	If the updater uses call_rcu_tasks_trace()
- 		or synchronize_rcu_tasks_trace(), then the
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index b5a51b0ef944..0e6c1e0b236f 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -44,6 +44,7 @@ config ARM64
- 	select ARCH_HAS_PREEMPT_LAZY
- 	select ARCH_HAS_PTDUMP
- 	select ARCH_HAS_PTE_SPECIAL
-+	select ARCH_HAS_RCU_TASKS_PREEMPT_QS if DYNAMIC_FTRACE_WITH_ARGS
- 	select ARCH_HAS_HW_PTE_YOUNG
- 	select ARCH_HAS_SETUP_DMA_OPS
- 	select ARCH_HAS_SET_DIRECT_MAP
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 15fd9ec5ecac..0a6427019345 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -99,6 +99,7 @@ config X86
- 	select ARCH_HAS_PREEMPT_LAZY
- 	select ARCH_HAS_PTDUMP
- 	select ARCH_HAS_PTE_SPECIAL
-+	select ARCH_HAS_RCU_TASKS_PREEMPT_QS	if X86_64
- 	select ARCH_HAS_HW_PTE_YOUNG
- 	select ARCH_HAS_NONLEAF_PMD_YOUNG	if PGTABLE_LEVELS > 2
- 	select ARCH_HAS_UACCESS_FLUSHCACHE	if X86_64
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index 4cfe096d624f..9509f99ec965 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -210,6 +210,11 @@ bool arch_rcu_tasks_ip_in_trampoline(unsigned long ip);
-  * preemption and rcu_tasks_irq_ip_holds() checks it at every quiescent-state
-  * decision, locally and from the grace-period kthread.
-  *
-+ * With both in place, on architectures that select
-+ * ARCH_HAS_RCU_TASKS_PREEMPT_QS, a preemption with rcu_tramp_nesting == 0 is
-+ * a Tasks RCU quiescent state, and a CPU-bound kernel thread no longer needs
-+ * to volunteer one via cond_resched_tasks_rcu_qs().
-+ *
-  * Only current writes the count and only current (or an interrupt on the same
-  * CPU) reads it, so plain accesses suffice.
-  */
-@@ -241,9 +246,17 @@ static __always_inline void rcu_tasks_note_irq_ip(unsigned long ip)
- 	WRITE_ONCE(current->rcu_tasks_irq_ip, ip);
+diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
+index bab08a666dc0..ba432bd922e2 100644
+--- a/kernel/rcu/tasks.h
++++ b/kernel/rcu/tasks.h
+@@ -1014,10 +1014,39 @@ static bool rcu_tasks_is_holdout(struct task_struct *t)
+ 	return true;
  }
  
 +#ifdef CONFIG_RCU_TASKS_PREEMPT_QS
-+#define rcu_tasks_preempt_is_qs(t)					\
-+	(!READ_ONCE((t)->rcu_tramp_nesting) && !rcu_tasks_irq_ip_holds(t))
++/* task_call_func() callback: is @t switched out with no trampoline in play? */
++static int rcu_tasks_switched_out_clean(struct task_struct *t, void *arg)
++{
++	/*
++	 * With @t pinned, !task_curr() means it last left the CPU through
++	 * __schedule(), so its rcu_tramp_nesting and rcu_tasks_irq_ip are
++	 * stable and ordered before the rq lock we hold.  A task preempted
++	 * from irq exit inside trampoline text has the count held non-zero
++	 * across the switch by irqentry_preempt(), so zero here means neither
++	 * in nor called from a trampoline; rcu_tasks_irq_ip_holds() covers the
++	 * one case that can become true after the task was switched out (a
++	 * kprobe jump-optimization window).  Both clear: already quiescent,
++	 * whether or not it ever runs again.
++	 */
++	return !task_curr(t) && !READ_ONCE(t->rcu_tramp_nesting) &&
++	       !rcu_tasks_irq_ip_holds(t);
++}
++
++/* Is @t, right now, switched out somewhere that is a quiescent state? */
++static bool rcu_tasks_preempted_qs(struct task_struct *t)
++{
++	return task_call_func(t, rcu_tasks_switched_out_clean, NULL);
++}
 +#else
-+#define rcu_tasks_preempt_is_qs(t)	false
++static bool rcu_tasks_preempted_qs(struct task_struct *t) { return false; }
 +#endif
 +
- # define rcu_tasks_classic_qs(t, preempt)				\
- 	do {								\
--		if (!(preempt) && READ_ONCE((t)->rcu_tasks_holdout))	\
-+		if (READ_ONCE((t)->rcu_tasks_holdout) &&		\
-+		    (!(preempt) || rcu_tasks_preempt_is_qs(t)))		\
- 			WRITE_ONCE((t)->rcu_tasks_holdout, false);	\
- 	} while (0)
- void call_rcu_tasks(struct rcu_head *head, rcu_callback_t func);
-diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-index 999f8228a13d..8e7c94329105 100644
---- a/kernel/rcu/Kconfig
-+++ b/kernel/rcu/Kconfig
-@@ -94,9 +94,10 @@ config FORCE_TASKS_RCU
- 	default n
- 	help
- 	  This option force-enables a task-based RCU implementation
--	  that uses only voluntary context switch (not preemption!),
--	  idle, and user-mode execution as quiescent states.  Not for
--	  manual selection in most cases.
-+	  that uses only voluntary context switch (not preemption, unless
-+	  the architecture selects ARCH_HAS_RCU_TASKS_PREEMPT_QS and the
-+	  task is outside any trampoline), idle, and user-mode execution
-+	  as quiescent states.  Not for manual selection in most cases.
- 
- config NEED_TASKS_RCU
- 	bool
-diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-index 1b9fe1bfa591..bab08a666dc0 100644
---- a/kernel/rcu/tasks.h
-+++ b/kernel/rcu/tasks.h
-@@ -905,7 +905,10 @@ static void rcu_tasks_wait_gp(struct rcu_tasks *rtp)
- //
- // Simple variant of RCU whose quiescent states are voluntary context
- // switch, cond_resched_tasks_rcu_qs(), user-space execution, and idle.
--// As such, grace periods can take one good long time.  There are no
-+// With CONFIG_RCU_TASKS_PREEMPT_QS, a preemption taken while the task is
-+// not inside a trampoline (current->rcu_tramp_nesting == 0, see
-+// rcu_tasks_trampoline_enter()) is a quiescent state as well; without it,
-+// grace periods can take one good long time.  There are no
- // read-side primitives similar to rcu_read_lock() and rcu_read_unlock()
- // because this implementation is intended to get the system into a safe
- // state for some of the manipulations involved in tracing and the like.
-@@ -1263,8 +1266,11 @@ static void tasks_rcu_exit_stall(struct timer_list *unused)
-  * period elapses, in other words after all currently executing rcu-tasks
-  * read-side critical sections have completed. call_rcu_tasks() assumes
-  * that the read-side critical sections end at a voluntary context
-- * switch (not a preemption!), cond_resched_tasks_rcu_qs(), entry into idle,
-- * or transition to usermode execution.  As such, there are no read-side
-+ * switch, cond_resched_tasks_rcu_qs(), entry into idle, transition to
-+ * usermode execution, or, with CONFIG_RCU_TASKS_PREEMPT_QS, a preemption
-+ * taken outside any trampoline (current->rcu_tramp_nesting == 0, see
-+ * rcu_tasks_trampoline_enter()); otherwise a preemption is not a
-+ * quiescent state.  As such, there are no read-side
-  * primitives analogous to rcu_read_lock() and rcu_read_unlock() because
-  * this primitive is intended to determine that all tasks have passed
-  * through a safe state, not so much for data-structure synchronization.
-@@ -1286,7 +1292,8 @@ EXPORT_SYMBOL_GPL(call_rcu_tasks);
-  * executing rcu-tasks read-side critical sections have elapsed.  These
-  * read-side critical sections are delimited by calls to schedule(),
-  * cond_resched_tasks_rcu_qs(), idle execution, userspace execution, calls
-- * to synchronize_rcu_tasks(), and (in theory, anyway) cond_resched().
-+ * to synchronize_rcu_tasks(), (in theory, anyway) cond_resched(), and,
-+ * with CONFIG_RCU_TASKS_PREEMPT_QS, preemption outside any trampoline.
-  *
-  * This is a very specialized primitive, intended only for a few uses in
-  * tracing and other situations requiring manipulation of function
+ /* Per-task initial processing. */
+ static void rcu_tasks_pertask(struct task_struct *t, struct list_head *hop)
+ {
+-	if (t != current && rcu_tasks_is_holdout(t)) {
++	if (t != current && rcu_tasks_is_holdout(t) &&
++	    !rcu_tasks_preempted_qs(t)) {
+ 		get_task_struct(t);
+ 		t->rcu_tasks_nvcsw = READ_ONCE(t->nvcsw);
+ 		WRITE_ONCE(t->rcu_tasks_holdout, true);
+@@ -1181,6 +1210,7 @@ static void check_holdout_task(struct task_struct *t,
+ 	if (!READ_ONCE(t->rcu_tasks_holdout) ||
+ 	    t->rcu_tasks_nvcsw != READ_ONCE(t->nvcsw) ||
+ 	    !rcu_tasks_is_holdout(t) ||
++	    rcu_tasks_preempted_qs(t) ||
+ 	    (IS_ENABLED(CONFIG_NO_HZ_FULL) &&
+ 	     !is_idle_task(t) && READ_ONCE(t->rcu_tasks_idle_cpu) >= 0)) {
+ 		WRITE_ONCE(t->rcu_tasks_holdout, false);
 
 -- 
 2.55.0
