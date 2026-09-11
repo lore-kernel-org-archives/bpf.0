@@ -1,238 +1,155 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4CF026982C;
-	Fri, 11 Sep 2026 03:37:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B085757EA;
+	Fri, 11 Sep 2026 03:37:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789097844; cv=none; b=P1tF1+neLNKb1e7oFKbw9HKu9OGj+CzTf20aeJjq9hLhVLGyA5yos0QpVMyWaOwWUBOEgV9MFX1y8aWBiV/p23CE8Rn0EThSFfe2moel9zmZhGbJkQ7Yz/Qky/QhlueV8XBavS5Yx4EeJ02KpkxZLq154ndOhwlT9ZS4oqSOW6Y=
+	t=1789097857; cv=none; b=rKcUE9ECYlDVaEs+UYc29v77y1XEXCtPhiaeIdvTI1rjTQ+GFOnFkTJaVqfE/kyP2YWKvoO721y1loL6dWzEbXBtlnotP7DRx0gaaPZJnCeLTV9xni+pqn8EM0sqeO7yOvJFeGpryq04BU1v0idD31zymx8TGEUI0PxXsrAH1uQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789097844; c=relaxed/simple;
-	bh=1lb6ZFYHgEHGifnI40eeUkfTB1aQZMAMGpfPPV8TFNE=;
+	s=arc-20240116; t=1789097857; c=relaxed/simple;
+	bh=p0u8qKkj93CYxdnho7G5XW/+KK9xoVl7o1K95gsq2IQ=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=HX7sKMMRgkdcfu+SLGoIbKORn2JaNNWJo4biUa+ZC8ugK8NAJqxEcMtRRe6qTdrnmT7yqEaAAfQYXxm0437asX9Gx715VH/v+b9eXhFPVspgk5F1xt4c+kPeMbc83IObrnMkPTkzL/xnuFzxKteLuDXtAmLYITpoYdRnkAk29uM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kku8MdvT; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=g1c0qRt2mnMC0zfd1ETBTmqiSzMWofYMMtwH9Bg7B2JDD6xMOEkPyMycRL3ZJRd04V4hB1RppVH38dz+kJJGcLpZfc+d6xbvXOhMQgKtyG3pBzIMvzqpgGmDWiKwO64dDlZje7A8eRVmXh5XLWAGw+PVKoSAxyyfTjusGTo57Rg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aabIGn3s; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kku8MdvT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBAD11F000FF;
-	Fri, 11 Sep 2026 03:37:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aabIGn3s"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D9DA1F00893;
+	Fri, 11 Sep 2026 03:37:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789097842;
-	bh=FKYnrf3dD+z8x65x76FNrtG9n0yMZCHQ0U8gHF5I4OM=;
+	s=k20260515; t=1789097855;
+	bh=zUGypeBcGLiaFjJaHQWcw9fb92LvMNy8T3HOZfFpc2o=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Kku8MdvTjidDWd57cbk8dA9rH/SoZYWx/Di02bl0Noa0GzBewlUYaMHsjg6je7tk8
-	 oARnt98LfJEljYcU157HV6xdP85IDAjDaxX9DABKj3sbPxvwvTTktZAgW+d1zimhBM
-	 Ni1SZwQkdedf2hY6FlLjy9dL4ZWwWIOeRjkkHqv1/dng2PCuZD7pQBkWU+s3uRHEA6
-	 6h7X+At6d3JdM1vwLmr+GWG8NW9/3f+s/3EO5mhAGwBiU7U2PznNiczvecs/xz1HF8
-	 wkcAgG70i9RUUXAOsvNa09lmr+R3XastSGT+xdxo3+S7uIIeuYe6Ilr5CbWBZRzCc3
-	 4MbHFuNnpZDNQ==
-Content-Type: multipart/mixed; boundary="===============7405869757073996078=="
+	b=aabIGn3sTNJgdcXcH0u/LlRa6YVrCpEnbJTS6I2sRFrIVsQVYyiBImfZoy8Rikj30
+	 oWogdgHb5oFhD+k/JU90n4DtyASVNHQM1K5eZpSt6stwwFsQ/apolKvzaKta+WCSZW
+	 //F8h27sJuq255xJ/9c+SzzO6zkRYvFI0/YdYwDMIbIqjom2H/bRDnuHBAeZdk3qkj
+	 gIirIzHZAo6y0DwnpbekKXzuHbuH0OCGrZxJeM+MjjFxvGXL2eI47HPXzFPDZ7jd6S
+	 shjVdK9VE2lhx9VHuhxyI9OVZWHtUHGrvCjj8Jioabj/SisgXzTkPLboavmEZb/9OK
+	 wMdgaxRRJOnuQ==
+Content-Type: multipart/mixed; boundary="===============8717046814699199885=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <523c73e7f76e0634a3e061e76ca4c39eb21cb006fc78875ddaf6a35e38bfd500@mail.kernel.org>
-In-Reply-To: <20260911025044.190540-2-diannaaav@gmail.com>
-References: <20260911025044.190540-2-diannaaav@gmail.com>
-Subject: Re: [PATCH bpf-next v4 1/2] bpftool: Accept symbolic map creation flags
+Message-Id: <43836e91c05ebc17a327d26c28c018d8e09ed2dcaca6fd02b562e37a17a55dd4@mail.kernel.org>
+In-Reply-To: <20260911025100.190706-3-diannaaav@gmail.com>
+References: <20260911025100.190706-3-diannaaav@gmail.com>
+Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: Cover recursive bpftool map dumps
 From: bot+bpf-ci@kernel.org
 To: diannaaav@gmail.com,qmo@kernel.org,bpf@vger.kernel.org
 Cc: andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 11 Sep 2026 03:37:21 +0000 (UTC)
+Date: Fri, 11 Sep 2026 03:37:35 +0000 (UTC)
 
---===============7405869757073996078==
+--===============8717046814699199885==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-feature.rst b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-> index c7f837898bc7..597f2426d255 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
+> new file mode 100644
+> index 000000000000..db547a68d0a2
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
 
 [ ... ]
 
-> @@ -68,12 +68,14 @@ bpftool feature probe dev *NAME* [full] [macros [prefix *PREFIX*]]
->
->  bpftool feature list_builtins *GROUP*
->      List items known to bpftool. These can be BPF program types
-> -    (**prog_types**), BPF map types (**map_types**), attach types
-> +    (**prog_types**), BPF map types (**map_types**), map creation flags
-> +    (**map_create_flags**), attach types
->      (**attach_types**), link types (**link_types**), or BPF helper functions
->      (**helpers**). The command does not probe the system, but simply lists the
->      elements that bpftool knows from compilation time, as provided from libbpf
-> -    (for all object types) or from the BPF UAPI header (list of helpers). This
-> -    can be used in scripts to iterate over BPF types or helpers.
-> +    (for all object types) or from the BPF UAPI header (helpers and map creation
-> +    flags). This can be used in scripts to iterate over BPF types, helpers, or
-> +    the symbolic flags accepted by **map create**.
+> +	/*
+> +	 * Compare the complete JSON document: a flat array with the root first,
+> +	 * one copy of the shared inner map, and unchanged entry representations.
+> +	 */
+> +	if (entries)
+> +		snprintf(expected, sizeof(expected),
+> +			 "[{\"id\":%u,\"type\":\"%s\",\"name\":\"dump_outer\","
+> +			 "\"flags\":0,\"elements\":%s},{\"id\":%u,\"type\":\"hash\","
+> +			 "\"name\":\"dump_inner\",\"flags\":0,\"elements\":%s}]",
+> +			 root_id, type_name, outer, inner_id, inner);
 
-This isn't a bug, but could this paragraph be re-wrapped so the new
-group folds in at the same width as the surrounding lines? The second
-half was re-flowed to match the file's usual 78-column width, but the
-first half wasn't, leaving "(**map_create_flags**), attach types" about
-half as wide as the lines around it.
-
-> diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> index 5daf3de5c744..5a5c26f789cd 100644
-> --- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-> +++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+This isn't a bug, but the map-object JSON template appears six times
+across test_outer(), test_multiple_roots() and test_unreadable() - would
+a small helper that formats one {"id":..,"elements":..} object keep them
+from drifting apart?
 
 [ ... ]
 
-> diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-> index 75cbcb512eba..ea3f521b6f08 100644
-> --- a/tools/bpf/bpftool/bash-completion/bpftool
-> +++ b/tools/bpf/bpftool/bash-completion/bpftool
-
-[ ... ]
-
-> diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
-> index 0f6070a0c8e7..b5419d5a661a 100644
-> --- a/tools/bpf/bpftool/feature.c
-> +++ b/tools/bpf/bpftool/feature.c
-
-[ ... ]
-
-> diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-> index 9315a1db1f7c..3e2856c9f595 100644
-> --- a/tools/bpf/bpftool/main.h
-> +++ b/tools/bpf/bpftool/main.h
-
-[ ... ]
-
-> diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-> index 684a8fb72414..4445014247d6 100644
-> --- a/tools/bpf/bpftool/map.c
-> +++ b/tools/bpf/bpftool/map.c
-> @@ -1250,6 +1250,81 @@ static int do_pin(int argc, char **argv)
->  	return err;
->  }
->
-> +static const struct {
-> +	const char *name;
-> +	__u32 value;
-> +} map_create_flags[] = {
-> +#define MAP_CREATE_FLAG(flag) { #flag, flag }
-> +	MAP_CREATE_FLAG(BPF_F_NO_PREALLOC),
-> +	MAP_CREATE_FLAG(BPF_F_NO_COMMON_LRU),
-> +	MAP_CREATE_FLAG(BPF_F_NUMA_NODE),
-> +	MAP_CREATE_FLAG(BPF_F_RDONLY),
-> +	MAP_CREATE_FLAG(BPF_F_WRONLY),
-> +	MAP_CREATE_FLAG(BPF_F_STACK_BUILD_ID),
-> +	MAP_CREATE_FLAG(BPF_F_ZERO_SEED),
-> +	MAP_CREATE_FLAG(BPF_F_RDONLY_PROG),
-> +	MAP_CREATE_FLAG(BPF_F_WRONLY_PROG),
-> +	MAP_CREATE_FLAG(BPF_F_CLONE),
-> +	MAP_CREATE_FLAG(BPF_F_MMAPABLE),
-> +	MAP_CREATE_FLAG(BPF_F_PRESERVE_ELEMS),
-> +	MAP_CREATE_FLAG(BPF_F_INNER_MAP),
-> +	MAP_CREATE_FLAG(BPF_F_LINK),
-> +	MAP_CREATE_FLAG(BPF_F_VTYPE_BTF_OBJ_FD),
-> +	MAP_CREATE_FLAG(BPF_F_TOKEN_FD),
-> +	MAP_CREATE_FLAG(BPF_F_SEGV_ON_FAULT),
-> +	MAP_CREATE_FLAG(BPF_F_NO_USER_CONV),
-> +	MAP_CREATE_FLAG(BPF_F_RB_OVERWRITE),
-> +#undef MAP_CREATE_FLAG
-> +};
-
-This isn't a bug, but the table walks bits 0-19 of the map creation
-flags in include/uapi/linux/bpf.h in order, except bit 14
-(BPF_F_PATH_FD) is left out between BPF_F_LINK and BPF_F_VTYPE_BTF_OBJ_FD,
-with nothing in the source recording why.
-
-The omission looks deliberate (BPF_F_PATH_FD's comment says it is for
-BPF_OBJ_PIN/BPF_OBJ_GET, and the follow-up selftest asserts that
-`flags BPF_F_PATH_FD` is rejected), but nothing marks it as intentional,
-so the next person adding a flag to that enum has no way to tell a
-skipped bit from a forgotten one.
-
-The wording added to bpftool-map.rst - "full, case-sensitive map
-creation flag names from the bpf.h UAPI header" - also reads as
-covering the whole enum, so a user who finds BPF_F_PATH_FD there and
-passes it by name gets "can't parse" while `flags 16384` is accepted.
-
-Would a one-line comment next to the gap (something like
-"BPF_F_PATH_FD is an OBJ_PIN/OBJ_GET flag, not a map creation flag")
-help, and should the manpage wording narrow "from the bpf.h UAPI
-header" a little so BPF_F_PATH_FD doesn't look like an accepted name?
-
-> +
-> +const char *map_create_flag_name(unsigned int id)
+> +static void test_many_inner_maps(bool json)
 > +{
-> +	if (id >= ARRAY_SIZE(map_create_flags))
-> +		return NULL;
+> +	LIBBPF_OPTS(bpf_map_create_opts, opts);
+> +	const struct rlimit limit = { .rlim_cur = 32, .rlim_max = 32 };
+> +	char command[MAX_BPFTOOL_CMD_LEN], token[64];
+> +	__u32 ids[64], root_id, key;
+> +	int inner_fd = -1, outer_fd = -1, status;
+> +	int inherited_fds[32], nr_inherited = 0, i;
+> +	char *output = NULL;
+> +	pid_t pid;
+
+[ ... ]
+
+> +	pid = fork();
+> +	if (!ASSERT_GE(pid, 0, "fork"))
+> +		goto out;
+> +	if (!pid) {
+> +		struct dirent *entry;
+> +		DIR *dir;
 > +
-> +	return map_create_flags[id].name;
-> +}
+> +		/* Reserve a slot for the directory even if the parent is full. */
+> +		close(inherited_fds[nr_inherited - 1]);
+> +		dir = opendir("/proc/self/fd");
+> +		if (!dir)
+> +			_exit(6);
+> +		/* The parent keeps the outer map and its inner maps alive. */
+> +		for (;;) {
+> +			char *end;
+> +			long fd;
 > +
-> +static int parse_map_create_flags(const char *arg, __u32 *flags)
-> +{
-> +	const char *name = arg, *comma;
-> +	long long value;
-> +	__u32 parsed = 0;
-> +	size_t len, i;
-> +	char *end;
-> +
-> +	/* Keep base-0 numeric input, including bits unknown to this bpftool. */
-> +	if (strncmp(arg, "BPF_F_", 6)) {
-> +		errno = 0;
-> +		value = strtoll(arg, &end, 0);
-> +		if (errno || end == arg || *end || value < 0 || value > UINT32_MAX)
-> +			goto invalid;
-> +		*flags = value;
-> +		return 0;
-> +	}
-> +
-> +	do {
-> +		comma = strchr(name, ',');
-> +		len = comma ? (size_t)(comma - name) : strlen(name);
-> +		for (i = 0; i < ARRAY_SIZE(map_create_flags); i++) {
-> +			if (strlen(map_create_flags[i].name) == len &&
-> +			    !strncmp(name, map_create_flags[i].name, len))
+> +			errno = 0;
+> +			entry = readdir(dir);
+> +			if (!entry) {
+> +				if (errno)
+> +					_exit(6);
 > +				break;
+> +			}
+> +			fd = strtol(entry->d_name, &end, 10);
+> +			if (*end || fd < 3 || fd == dirfd(dir))
+> +				continue;
+> +			close(fd);
 > +		}
-> +		if (i == ARRAY_SIZE(map_create_flags))
-> +			goto invalid;
-> +		parsed |= map_create_flags[i].value;
-> +		if (comma)
-> +			name = comma + 1;
-> +	} while (comma);
-> +
-> +	*flags = parsed;
-> +	return 0;
-> +invalid:
-> +	p_err("can't parse %s as map creation flags", arg);
-> +	return -1;
-> +}
+> +		if (closedir(dir))
+> +			_exit(6);
+> +		if (setrlimit(RLIMIT_NOFILE, &limit))
+> +			_exit(1);
+> +		snprintf(command, sizeof(command), "%s -r map dump id %u",
+> +			 json ? "-j" : "", root_id);
+> +		if (get_bpftool_command_output(command, output, 65535))
+> +			_exit(2);
+> +		if (count_token(output, json ? "\"id\":" : "Found ") != ARRAY_SIZE(ids) + 1 ||
+> +		    count_token(output, json ? "\"inner_map_id\":" : "inner_map_id:") !=
+> +		    ARRAY_SIZE(ids))
+> +			_exit(3);
+> +		for (key = 0; key < ARRAY_SIZE(ids); key++) {
+> +			if (json)
+> +				snprintf(token, sizeof(token), "\"id\":%u,", ids[key]);
+> +			else
+> +				snprintf(token, sizeof(token), "\n%u: hash  name dump_inner  ",
+> +					 ids[key]);
+> +			if (count_token(output, token) != 1)
+> +				_exit(4);
+> +		}
+> +		if (json && (output[0] != '[' ||
+> +			     strcmp(output + strlen(output) - 2, "]\n")))
+> +			_exit(5);
+> +		_exit(0);
+> +	}
 
-[ ... ]
-
-The changelog presents the new rejections as added validation, but
-three of them are inputs the old parser accepted, so they are a
-user-visible behaviour change rather than new strictness.
-
-The previous branch was parse_u32_arg() -> strtoul(**argv, &endptr, 0)
-with only `if (*endptr)` checked, so `flags ""` quietly became 0,
-`flags 0x100000000` quietly truncated to 0, and `flags -1` quietly
-wrapped to 0xffffffff. The new strtoll() path rejects all three.
-
-That compatibility note is the part a reviewer would most want spelled
-out, and it is the one thing the message leaves implicit while the
-closing paragraphs restate the documentation and bash-completion hunks.
-
-Could the changelog say that these numeric forms were previously
-accepted (empty string and out-of-range values were silently
-truncated), so the tightening is visible as an intentional behaviour
-change?
+This isn't a bug, but would small named constants (or a one-line comment
+table) for these exit codes make a CI failure easier to triage than the
+bare numbers?
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34557157318
---===============7405869757073996078==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34557170753
+--===============8717046814699199885==--
