@@ -1,165 +1,333 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7648371889;
-	Fri, 11 Sep 2026 18:46:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789152385; cv=none; b=Sj5Jj6QTnDN7u5qJBg1ydbivdps1BT7B4mzSmjagHsIDQw91gGJ6pI6NOJFmFHvauO9/mk6PKl5A1AQqh+8MFS8vVrTFxzPjANo6cZQK2JkGj+wX26ICb8rkppT0UW259uVbyXAgR4n2s52g4Oq7tWY0WnbtHaN+DFk/VRMI2gE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789152385; c=relaxed/simple;
-	bh=xH88kKB/TWb1etYT/yCGES3CbrdWa7hLAr9ou1VFtHA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=etiGbeBgj9t4+RuiTU41jCmQtJyewNk0oiU1rAazH5rEp9rpxzhYW0sHb6M2Nt7tsso/KMgNJ+OQg0LpY7Y/wR/qh1Nuv0qbFdZPlnXiUPMwQ+I7x88YP2MK9ixxxnj6cJZyvqmJ1Ku4KUL+87LWwAoQe4utlAKgf7NHwjWl8LE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M9R+fJHe; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE90C3F8898
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 19:09:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789153793; cv=pass; b=VqBngq8OxNtWK+TOtsHLrCJLbOS8iJ1PDc7OBvju1+NCbjhTLDF1wD7ylmdgPCZ8bUX+RwxHFuU/Wll/21gKNWPshesszQiFUSTipZOMD3IjCpRhnqPcB9T9l9r+vhPl/OWQTqxOUELPSXYrgY/l3Ui6DaLJAOHicwaqANkVKk8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789153793; c=relaxed/simple;
+	bh=t68U1RhcMfyku4E1nHiQ0z7KjaiJOw8gSWlsWBs9Ulo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=NfqztwAm5/DfQmXYUaS3yglaWvuqRMlksGv62BSsQIsjZq4XlKLtCVpkVPnOSlQQDK5mn+2IEBpWtv3YtVQuPZthQ3kOOx59Q0ySQhcXC9eoldilpDkUhpgiFsydPEhduFPZNHIV2wSjRM2iudVKNfHuuPwEE+TY2z6VKLaTWpo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RUT96gMm; arc=pass smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M9R+fJHe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52E991F000FF;
-	Fri, 11 Sep 2026 18:46:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789152384;
-	bh=BEH5L0y3LixWWPpE999YsoF8vwfZIA/JtkIUSaMP+LE=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=M9R+fJHeZmy6WEfJ+D6CNLH+c3kjB5rut7ErP2+h8nVsKa7j3etNfbwtdp8rS80MS
-	 fPhFABuFdrUdvOlZdTQAQCr61orU4wm/RjC2OU7poW1VrwvZyfgZGrC+qE1sarkPq0
-	 QuxzQZPObBkWqJyMQach0VVskbIlHcGS9oQDOKxfOvJgnVD5bycCjFRDIgaYdLH17Q
-	 UJmHrZwzXcEdIcRWoMRdQtTKfYNAHGRWaw/E2J3Bjse6JBE5JIuSHCfhhwe6AtNnRq
-	 Z179pIn76KHvhsX6T+IKzErceu3YloUEBWmwjn5CgynJh7djSuiFdwsOpDYYGmPtoi
-	 fH4mBz7X+Zqjw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 17178CE1902; Fri, 11 Sep 2026 11:46:24 -0700 (PDT)
-Date: Fri, 11 Sep 2026 11:46:24 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Josef Bacik <josef@toxicpanda.com>
-Cc: Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Boqun Feng <boqun@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, x86@kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>, Juergen Gross <jgross@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	xen-devel@lists.xenproject.org
-Subject: Re: [PATCH RFC v2 15/15] rcu-tasks: Kick running holdouts through
- the scheduler
-Message-ID: <78c438b0-9c9a-4307-a6f7-19e69adc20c0@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com>
- <20260911-b4-rcu-tasks-preempt-qs-v2-15-eaaa61ed2da4@toxicpanda.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RUT96gMm"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2d58efc7356so18428055ad.1
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 12:09:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789153788; cv=none;
+        d=google.com; s=arc-20260327;
+        b=gp1LlUJpAadj4sqIxWvMDSOCAS2l1Y99re7Oj28T0brRZyy2jsxPve2UTvQIknHHl8
+         viV4QYWgXTli72GmpwqQH0nIaSwnxgno6WgVmAloH3MwrzOpFsGUcs8Ws/l+3UK3l5K9
+         SJIRsQHN1FHFHOLaZxq9xIjAGk4HirqziNcPUAVAIZV5/reGNEs+T4nUKJdUs8gxiF9d
+         0tTNt+HFkeXeL6XO7ZrapHA4dLoDnyF8YD+4GIvmP2Nn2yKNql9K8Y4vXQwvVWMTdqdt
+         fv5Br6Imj6XLENKPpfVKCURW1yLHY+Gkkt2GJq7Og6yLidjYTAZWcymJIHiEx3VVzDH+
+         n95w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=HxBnYviaKnot3JD7Ip8qV0PmKuDvoY1dcqiPFDgt9VM=;
+        fh=zDR7lc7fd0IPA0mjkPtyGEAByUJjbdvR+OYeIV4wiJ0=;
+        b=RFG2fm+xYalNiV93sLU1Ntqm/nieGXHRuZ98Y0BIiIemltD91trr8KIkX6UIF/8G3J
+         wQn7W8TdD96ojkWbwL1tFdbiybq5bjjLzEgnUxLoT6OSngjg7nv2Al3Tz41VNmZE8pJN
+         i4X30TCtETbecqm44uygdQkN7ZVmeITuppINM8VGH7GLfTkSeVCieTGtu9a+M32WTkWD
+         P6+9iv/CZPh7E5RalBiQHMFi2wdI0x9f5FBN1YrUda7sc8cGbUT08/R3c9zZ9/LWwtMj
+         rFGax24CwjHyKQwbWMU4A1+U52L/vw7aEjlPOZeNp77/RK+/DK3Y8vFoVwNpDBbCe84k
+         UOrw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789153788; x=1789758588; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=HxBnYviaKnot3JD7Ip8qV0PmKuDvoY1dcqiPFDgt9VM=;
+        b=RUT96gMmrSCY25YczBpHCEJT8NY8e8gU7TMg1AMkhwZXv+iYp7pj0G8xfqw7xQ78dC
+         8nKv//Sf9SZWfEEwqae5t9tFoIesfqx2VRzOlEpDJkjjd87MpzFIqf12BfYjWyjhcRnM
+         SvnmJIgkbC5+ZY5BjtRCRNFUcWTKCxrgR7795LKza1eUskHSNyPVM4TogN9VBTUFogRF
+         pdD8mLwKjcwQvG/846NsMLZRrVNGg3eRJdeORkmSa8RxEo5Gmc4bHIzU6S89izuG2PgU
+         6GiowsjTGhjm+gBLmNu1JQjLXfP7I39j9PbUO7Ou34j2gyDc+aHQGPy0osgIvJXsKcy0
+         i/Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789153788; x=1789758588;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HxBnYviaKnot3JD7Ip8qV0PmKuDvoY1dcqiPFDgt9VM=;
+        b=Ea7ToscEimzhWI4zoGfmDL2NkxtNmO9+oL9lUrsO+qFEImg78178sRBxWpSP+nh5/z
+         vBRQTG+i2s9el+sQfEDZx2f/5AKxidw+Sq24D5kvMqa8CoN8CiUSNKhBl1e+RaSDJwsC
+         rpPZFoE/AcSD0wBdH+vyClQUJqQD8TouslvHn4R9BhRz3hoBq2FcLc+xakxESsZE7G/p
+         zhZYktbX3AyPXutkJoFuBv+rWafssHQ+vFKJPP8+x/59EiLGi1nSst/hySQ+wtbecbXe
+         jVOaaiSk7GgjJExlaUeoAOdALuflELNbOpxsDm/DKILnBw061nWXHDw2RiyDFFKt+uxy
+         aDVQ==
+X-Gm-Message-State: AFuF++mmWz/TkoDMHafiENSD4kyyvXkH9gZ5MigzjxMzddlDwAs+WC4j
+	1xxettBefJwUYSq+ubVcR/gB0YbBJRxyguVLkUhMvG1jZe2ogMnpAxtEKJ7FrE+G2dp+CzlWX93
+	MyH66wH4HXdLnlqMhqzlTsKtlXiQkCnQ=
+X-Gm-Gg: AYBFou1Gr+/2seBLChcHF8D0o95u18zboQXQywXPAHsH3OeMBUd9j2aZ7gUogviWI5l
+	dpI0jb0Y8JxS7Yjxyldm+sxg2UJbJP6ssfdKkTv5KHJVB8Xk+2Zs51Gxi6zDGEgl5jvXez6vSfl
+	LQ3Ox5UlPOvM8baiVKlUNaN1IezLlKzI7sLwsAX7qEQ55gpEk5dK3Lyx97xOOfrsMg/lnCsl4II
+	iQXxUT+Ov0iX/jLwldYZPEdYrytkYI+vxCPVBix93TzX6y2CkKHwij35sTT6m19WT0cG4bso832
+	AecaNYVX6jiuhlXB6Nowe4y2OoFcCLX2AOUtBpuuK/mrwmWR2gLXuBOUrf6bAZeaHhEh1fK/zc8
+	b36Qw0VAgn6A/ftlW6JNMebUnBLCC8+IfDSZJstYLNjXfMHk=
+X-Received: by 2002:a17:90b:2d03:b0:38e:67e1:15b with SMTP id
+ 98e67ed59e1d1-39d9bc3f8c8mr9089834a91.6.1789153787860; Fri, 11 Sep 2026
+ 12:09:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260911-b4-rcu-tasks-preempt-qs-v2-15-eaaa61ed2da4@toxicpanda.com>
+References: <20260911145914.23676-1-leon.hwang@linux.dev>
+In-Reply-To: <20260911145914.23676-1-leon.hwang@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 11 Sep 2026 12:09:36 -0700
+X-Gm-Features: AcwNN1XpdaLHjnOIrzt8AsZjQzusOGkcm82c6vNUfKKJSZjajLO4amshejVAhjA
+Message-ID: <CAEf4BzZQW2=gxMRQVtMpCF3pA2N-O6Z0o5POBzHGQG6rc3sdrQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] bpftool: Compute map size of light skeletons at runtime
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Quentin Monnet <qmo@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 11, 2026 at 02:08:53PM +0000, Josef Bacik wrote:
-> A holdout that is running on a CPU with nothing else runnable is only
-> preempted if the tick acts on rcu_request_urgent_qs_task()'s flag, and
-> there may be no tick.  Now that a preemption outside a trampoline is a
-> quiescent state, have check_holdout_task() call resched_cpu() on a
-> running holdout as well, so the scheduler IPIs it and it goes through
-> __schedule() and reports (or, if it is inside a trampoline, does not
-> report) its own state with purely local ordering.  Nothing reads a
-> running task's rcu_tramp_nesting remotely.
-> 
-> Only under CONFIG_RCU_TASKS_PREEMPT_QS; other architectures are
-> unchanged.
-> 
-> Suggested-by: Paul E. McKenney <paulmck@kernel.org>
-> Assisted-by: LLM
-> Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-
-Much better!  But please see below.
-
-							Thanx, Paul
-
+On Fri, Sep 11, 2026 at 7:59=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
+>
+> bpftool rounds memory-mapped data map sizes to the host page size when
+> generating a light skeleton. The generated code therefore uses a 64K
+> mapping size when bpftool runs on a 64K-page host, even if the skeleton
+> runs on a 4K-page target. The target rejects the oversized map mmap(),
+> causing failure of loading the light skeleton.
+>
+> When try to run 64K-page selftests on 4K-page VM, the error message does
+> not provide the reason about page size.
+>
+>  test_atomics:PASS:atomics skeleton open 0 nsec
+>  test_atomics:FAIL:atomics skeleton load unexpected error: -12 (errno 22)
+>  #15      atomics:FAIL
+>
+> Pass the original map value size to the generated code and round it to th=
+e
+> runtime page size in the user-space light skeleton helpers. This keeps
+> generated light skeletons independent of the build host page size.
+>
+> Fixes: d510296d331a ("bpftool: Use syscall/loader program in "prog load" =
+and "gen skeleton" command.")
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 > ---
->  kernel/rcu/tasks.h | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-> index ba432bd922e2..02d2592ab7a3 100644
-> --- a/kernel/rcu/tasks.h
-> +++ b/kernel/rcu/tasks.h
-> @@ -1038,8 +1038,18 @@ static bool rcu_tasks_preempted_qs(struct task_struct *t)
->  {
->  	return task_call_func(t, rcu_tasks_switched_out_clean, NULL);
+>  tools/bpf/bpftool/gen.c       | 27 ++++++++-------------------
+>  tools/lib/bpf/skel_internal.h | 18 +++++++++++++-----
+>  2 files changed, 21 insertions(+), 24 deletions(-)
+>
+> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+> index a50540ef6521..77f04c28fee9 100644
+> --- a/tools/bpf/bpftool/gen.c
+> +++ b/tools/bpf/bpftool/gen.c
+> @@ -500,16 +500,6 @@ static void print_hex(const char *data, int data_sz)
+>         }
 >  }
-> +
-> +/* Make a running holdout pass through __schedule() soon, tick or no tick. */
-> +static void rcu_tasks_kick_running(struct task_struct *t)
-> +{
-> +	int cpu = task_cpu(t);
-> +
-> +	if (task_curr(t) && cpu_online(cpu))
-> +		resched_cpu(cpu);
-> +}
+>
+> -static size_t bpf_map_mmap_sz(const struct bpf_map *map)
+> -{
+> -       long page_sz =3D sysconf(_SC_PAGE_SIZE);
+> -       size_t map_sz;
+> -
+> -       map_sz =3D (size_t)roundup(bpf_map__value_size(map), 8) * bpf_map=
+__max_entries(map);
+> -       map_sz =3D roundup(map_sz, page_sz);
+> -       return map_sz;
+> -}
+> -
+>  /* Emit type size asserts for all top-level fields in memory-mapped inte=
+rnal maps. */
+>  static void codegen_asserts(struct bpf_object *obj, const char *obj_name=
+)
+>  {
+> @@ -686,8 +676,8 @@ static void codegen_destroy(struct bpf_object *obj, c=
+onst char *obj_name)
+>                 if (!get_map_ident(map, ident, sizeof(ident)))
+>                         continue;
+>                 if (is_skel_data(map, ident, sizeof(ident)))
+> -                       printf("\tskel_free_map_data(skel->%1$s, skel->ma=
+ps.%1$s.initial_value, %2$zu);\n",
+> -                              ident, bpf_map_mmap_sz(map));
+> +                       printf("\tskel_free_map_data(skel->%1$s, skel->ma=
+ps.%1$s.initial_value, %2$u);\n",
+> +                              ident, bpf_map__value_size(map));
+>                 codegen("\
+>                         \n\
+>                                 skel_closenz(skel->maps.%1$s.map_fd);    =
+   \n\
+> @@ -771,13 +761,12 @@ static int gen_trace(struct bpf_object *obj, const =
+char *obj_name, const char *h
+>                 \n\
+>                 \";                                                      =
+   \n\
+>                                                                          =
+   \n\
+> -                               skel->%1$s =3D (__typeof__(skel->%1$s))sk=
+el_prep_map_data((void *)data, %2$zd,\n\
+> -                                                               sizeof(da=
+ta) - 1);\n\
+> +                               skel->%1$s =3D (__typeof__(skel->%1$s))sk=
+el_prep_map_data((void *)data, sizeof(data) - 1);\n\
+>                                 if (!skel->%1$s)                         =
+   \n\
+>                                         goto cleanup;                    =
+   \n\
+>                                 skel->maps.%1$s.initial_value =3D (__u64)=
+ (long) skel->%1$s;\n\
+>                         }                                                =
+   \n\
+> -                       ", ident, bpf_map_mmap_sz(map));
+> +                       ", ident);
+>         }
+>         codegen("\
+>                 \n\
+> @@ -871,14 +860,14 @@ static int gen_trace(struct bpf_object *obj, const =
+char *obj_name, const char *h
+>                 if (bpf_map__type(map) =3D=3D BPF_MAP_TYPE_PERCPU_ARRAY) =
+{
+>                         codegen("\
+>                 \n\
+> -                       err =3D skel_protect_map_data(skel->%1$s, &skel->=
+maps.%1$s.initial_value, %2$zd);\n\
+> +                       err =3D skel_protect_map_data(skel->%1$s, &skel->=
+maps.%1$s.initial_value, %2$u);\n\
+>                         if (err)                                         =
+   \n\
+>                                 return err;                              =
+   \n\
+>                 #ifdef __KERNEL__                                        =
+   \n\
+>                         skel->%1$s =3D NULL;                             =
+     \n\
+>                 #endif                                                   =
+   \n\
+>                         ",
+> -                       ident, bpf_map_mmap_sz(map));
+> +                       ident, bpf_map__value_size(map));
+>                         continue;
+>                 }
+>
+> @@ -890,11 +879,11 @@ static int gen_trace(struct bpf_object *obj, const =
+char *obj_name, const char *h
+>                 codegen("\
+>                 \n\
+>                         skel->%1$s =3D (__typeof__(skel->%1$s))skel_final=
+ize_map_data(&skel->maps.%1$s.initial_value,\n\
+> -                                                       %2$zd, %3$s, skel=
+->maps.%1$s.map_fd);\n\
+> +                                                       %2$u, %3$s, skel-=
+>maps.%1$s.map_fd);\n\
+>                         if (!skel->%1$s)                                 =
+   \n\
+>                                 return -ENOMEM;                          =
+   \n\
+>                         ",
+> -                      ident, bpf_map_mmap_sz(map), mmap_flags);
+> +                      ident, bpf_map__value_size(map), mmap_flags);
+>         }
+>         codegen("\
+>                 \n\
+> diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.=
+h
+> index 1f3f332dffbe..5787911f17f5 100644
+> --- a/tools/lib/bpf/skel_internal.h
+> +++ b/tools/lib/bpf/skel_internal.h
+> @@ -11,6 +11,7 @@
+>  #include <linux/bpf.h>
 >  #else
->  static bool rcu_tasks_preempted_qs(struct task_struct *t) { return false; }
-> +static void rcu_tasks_kick_running(struct task_struct *t) { }
->  #endif
->  
->  /* Per-task initial processing. */
-> @@ -1219,6 +1229,7 @@ static void check_holdout_task(struct task_struct *t,
->  		return;
->  	}
->  	rcu_request_urgent_qs_task(t);
-> +	rcu_tasks_kick_running(t);
+>  #include <unistd.h>
+> +#include <sys/param.h>
+>  #include <sys/syscall.h>
+>  #include <sys/mman.h>
+>  #include <linux/keyctl.h>
+> @@ -138,7 +139,7 @@ static inline void skel_free_map_data(void *p, __u64 =
+addr, size_t sz)
+>          */
+>  }
+>
+> -static inline void *skel_prep_map_data(const void *val, size_t mmap_sz, =
+size_t val_sz)
+> +static inline void *skel_prep_map_data(const void *val, size_t val_sz)
+>  {
+>         void *addr;
+>
+> @@ -149,7 +150,7 @@ static inline void *skel_prep_map_data(const void *va=
+l, size_t mmap_sz, size_t v
+>         return addr;
+>  }
+>
+> -static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_=
+sz, int flags, int fd)
+> +static inline void *skel_finalize_map_data(__u64 *init_val, size_t val_s=
+z, int flags, int fd)
+>  {
+>         struct bpf_map *map;
+>         void *addr =3D NULL;
+> @@ -193,13 +194,19 @@ static inline void skel_free(void *p)
+>         free(p);
+>  }
+>
+> +static inline size_t skel_map_mmap_sz(size_t sz)
+> +{
+> +       return roundup(sz, sysconf(_SC_PAGE_SIZE));
 
-Something I learned the hard way, though Google paid most of the tuition
-for this lesson:  There can be a *lot* of tasks on large systems, as
-in hundreds of thousands of them.  If these tasks are consuming CPU in
-very short bursts, we could easily repeatedly invoke resched_cpu() on
-the same CPU, and all invocations other than the last one are redundant.
+original code had this logic:
 
-I instead suggest doing something similar to force_qs_rnp(), where a
-cpumask is accumulated and at the end resched_cpu() is invoked for each
-CPU with a bit set in that mask.
+map_sz =3D (size_t)roundup(bpf_map__value_size(map), 8) *
+bpf_map__max_entries(map);
+map_sz =3D roundup(map_sz, page_sz);
 
-Of course, if a CPU appears twice while traversing the tasks list, then
-each of those tasks did a context switch, which would have reported a
-Tasks RCU quiescent state.  Unless those tasks happened to have non-zero
-->rcu_tramp_nesting at that time.
+you completely ignore max_entries in a new code now, which works for
+global data because that have max_entires 1, but at the very least we
+should add some check or assert for that so that we don't miss a case
+when max_entries is not 1
 
-Which suggests that each task have a pair of counters.  Or that
-rcu_tasks_trampoline_exit() should check for zero ->rcu_tramp_nesting,
-and report a quiescent state at that point.
+pw-bot: cr
 
-Either way, if a CPU appears only once in the tasks_list traversal,
-hitting it with resched_cpu() makes sense.  Though we might also
-need to suppress calls to resched_cpu() for grace periods that are
-(say) less than one second old.
-
-Thoughts?
-
-							Thanx, Paul
-
->  	if (!needreport)
->  		return;
->  	if (*firstreport) {
-> 
-> -- 
+> +}
+> +
+>  static inline void skel_free_map_data(void *p, __u64 addr, size_t sz)
+>  {
+> -       munmap(p, sz);
+> +       munmap(p, skel_map_mmap_sz(sz));
+>  }
+>
+> -static inline void *skel_prep_map_data(const void *val, size_t mmap_sz, =
+size_t val_sz)
+> +static inline void *skel_prep_map_data(const void *val, size_t val_sz)
+>  {
+> +       size_t mmap_sz =3D skel_map_mmap_sz(val_sz);
+>         void *addr;
+>
+>         addr =3D mmap(NULL, mmap_sz, PROT_READ | PROT_WRITE,
+> @@ -210,8 +217,9 @@ static inline void *skel_prep_map_data(const void *va=
+l, size_t mmap_sz, size_t v
+>         return addr;
+>  }
+>
+> -static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_=
+sz, int flags, int fd)
+> +static inline void *skel_finalize_map_data(__u64 *init_val, size_t val_s=
+z, int flags, int fd)
+>  {
+> +       size_t mmap_sz =3D skel_map_mmap_sz(val_sz);
+>         void *addr;
+>
+>         addr =3D mmap((void *) (long) *init_val, mmap_sz, flags, MAP_SHAR=
+ED | MAP_FIXED, fd, 0);
+> --
 > 2.55.0
-> 
-> 
+>
