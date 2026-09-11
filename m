@@ -1,162 +1,138 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B52542D746
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 19:19:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789154344; cv=pass; b=L5D1Nk+9eYVHKo57BRWUpPG+Kz4zSow02pKmhatc2Z7uHl3zqySmGJeElqwtCfSQTmcxvXEGzfohKY7c/x4PEVXqo5iOaWQl7AN6hiTNkidBFdzdY0HAKCWRI7W/AqOTNI8or2l8yme7PS1xxzYmzRCRDucAG9EPIt6vbI0zu7o=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789154344; c=relaxed/simple;
-	bh=8dTPVK5zTUn5+CAz97Lf+XW3+b0Lur90wBZjQrZ+i9g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pwamuSlf3QXiXUL8YTxJIzMA8e5Iw+X2g64k+l8mvVo6SZSE8wswxuQk8WuGljf4LPzrLbgoaFzAX0PRkm+5YbbATEEJ741UTOquRh2OErIkX/B1cBCUXpb4YXRI+Elys5tu7VpZE1cX2B3wuhwhK0QxEyHsV0NO8fNHc+Px+CA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P6u6aQCA; arc=pass smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A963D429802
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 19:26:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789154774; cv=none; b=H6J51jh2pDqG9069nUM6UEfdlfKdx7VNYMPhA76Fn8HQyvmGk/+zf/PC4UpL4TJPcfid6FDEBdG7lHMGt++acpsU2X4B83VLgGwJOgPCgUJ/gaf8rsOL2Urq1k5YIHu6FgjMZlijmfzf+vYSWxvPpk1EBtA0R8JDyNoqjl0+T7A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789154774; c=relaxed/simple;
+	bh=E0nuT63K1UCUhatTxp/WsmIphFJjewYYXC7EfPUxVmM=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YTe08KMcn9Fz3ZEOizBIchFsXchPf+fz1nWYrjBmpYcTNLh5BV16OXx3M8HuRSV4NywKKtRIglh685fPb47HfB/5wnJiNEBanghana0JOco3XuH8NdsafckzwziwrDDkP9aSNTXRWJngSE/2L1+2LdrH9l6SnJj4PO6CT8DHbik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T2WZsFs8; arc=none smtp.client-ip=209.85.221.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P6u6aQCA"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-38ea87caafeso1351544a91.3
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 12:18:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789154337; cv=none;
-        d=google.com; s=arc-20260327;
-        b=jzREQ9O/kqwLCP7udVyf9FU35aDfwyJeDu8hKEcSeDRjFu2xOkJ8VtiZf6XT3GEfAn
-         xtPriUfnn5LABDngv2zEj/SAaML2cgMNiwQWqDFU6so0x6WkZL9Ct/rIWnLFMxDnQtGk
-         ZDzmL655/4HA/nEVouQ68+4LQfGMevx9Cvck5BhTS3qCJwgygbqU8TtR9Hu9+2oBm86u
-         u+FmkgBC7JUcOaOFAsuTwcOhNJTT7eDTG4q7CydLp/SPzZzhmnwsMm6mTZfjUXNtl6MQ
-         Q9xwRdDUpCW39G39GFHItjSTsNqCUnuaCuhghAPjEXejze07X3ys6A0Dy22O0cOXiYeb
-         j4Rg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=oE3Ul1qqMxtq5ttXP4sCVTjSb05miK34hj7ST3jfoQA=;
-        fh=1UtBZlvMSndr6WRsxCPgbgneZEc+/UUSCiFYC4CU0Rw=;
-        b=YSuj75pFNVl6E6sSTrc9mbMFzjW5CYKBUGKk9xzOvudpJaSqEypJ/Om6yjwx3dfTDn
-         R4uR++56dmbraKLLut7eYfv+iM+EoGBQ/QFNU3Ig0O8M1usrkmXQ1FsePaDhAz1zovJd
-         G3yGQ5T9KP6XHr5KTAv3aZ1Nnl4Mqoolhl2I7cNqbPJIp0NYEIJOk/ot0qVdXDnl2zur
-         j1qEMPRBHW+xCRC2YeZml8aCbbNmK53BBdA4I61O74bXN7Dlc6OYsGrEEebAsf7wyxYk
-         cCDRwaoESEzTJqw160M2tzknjVKyfbkqR8KeU4o3lS24/0wzTUw5KHzgfDRDun8drODm
-         HayA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T2WZsFs8"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-48436216a98so811561f8f.0
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 12:26:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789154337; x=1789759137; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1789154766; x=1789759566; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=oE3Ul1qqMxtq5ttXP4sCVTjSb05miK34hj7ST3jfoQA=;
-        b=P6u6aQCAgJNRlPCfbhfew4r+dXA6pG3Bn4hr4/e9jbfu1puoSGyTH7hR46deQ/bYr2
-         3VRJIz3PepYvD9fOeBjjQWG4CNZvoKgG45+DKei3DMjIYdXK16SwA53YC4v4Yo9R+9nn
-         8avtSheI6NkBldv9//fiwqcThnF6pu+QIUtxFyuMTmoPxxzcqZFas3cyHBvhhA6xaJF0
-         taCF69WpPnaKLwFWNdU/3yS8F95lbF5w5hixb+Xcg5RFdZPKVpU/y3ZJwsIrTU9vxIcD
-         BTwhoj1jlsEzEO8ViiVNqKFCnSYU114OYeRpWJya8xbX56mZia/ZWPxJAz0tfJAInZVW
-         C1gQ==
+        bh=Nb+C2vqHps7zZGaA3lhpp4CjL1HIbRuVbwq1v+iSsLM=;
+        b=T2WZsFs8+9Q1osND1zjFruum/Zhexy9Az6EhSEXD4dttx9oi1Anev1UmGzdt5Se+4/
+         xTYmRrzBYPW/AfYyBq2rqr5/G2bf3+h5O7R+Tu08czj+20eVXOvDqaFRT4RAB+jdI520
+         tbs1Zi3T6aSntQ9hqpzjy0CEP0DoJrwqvqNtk2vYMSAwU3o9GCFLwIukT84dR/eEN3u2
+         e5bWgy5ojzpvvjz/fJ+tfB70sCi63OluaDuRb7YThDHuCp45bh8rGVunh8bBfPNvspLS
+         Y980HqdKvIMI3Wcpxs+0EZmApbQFl01FXIL+jIdqdu2CY7KRG2onPDFo/Y4KDrEeH78w
+         TUWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789154337; x=1789759137;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1789154766; x=1789759566;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=oE3Ul1qqMxtq5ttXP4sCVTjSb05miK34hj7ST3jfoQA=;
-        b=DP1/FGn1fwjoLpKA/hdhPRC7DBQv+PMfwD2tLeX8yoEKF24RVpBOZFUBDdWErzp1I2
-         LV4Fbb3BGLTxXcy9Kp8OQ4HD8/RiLO9mgdKixPQppPkm+IoEh4UmN56nBB8+gbtTM7Md
-         7KQaCNiANH4lr1r9mJfK/9K9DoTy0+sQZhd+dq1wcm2I/IQmmdCL5URdNfGHeORaTfFs
-         WH9vJMGpSRUH17nENNObDyom+wcL+cDNnzfi86j0kGW1kJFAMjTyIT3dQ0LE2DUDCvRr
-         c+qjlAZu7uzBUjY+KMvj8PYkG3ht9Ir023cVbBUHK5Rh3jPndUt3+ejKMo5OJVcj653F
-         hb8A==
-X-Gm-Message-State: AFuF++kS4CGfcptyf/5BXWnoweW7ynHIJILyQMuZVmmpSfH3wIij8GnS
-	Y60D+Us6f+ssB0E8fnIeswkBmxA8Nv+Zp/0NWzTVh5TWel67nZR4SzN4m35+8g7OFyoSt+7LoPB
-	tW3KjlvZxJe/ZmNKvbB3J5TsNmHV5Fd4xnx+e
-X-Gm-Gg: AYBFou3HyHfJB9f5FL1Jar1lXNDH/hBYWvs/lEj2qY9k0Wx5BqX0A4QxZYhjozl1WkR
-	wY6L5cZOU8bCBRpy7z02uggAQUYZxu69ZDKzRv6TiXdRmkiAsRMaBmSMtlPE6QC8anKX+ajnzlq
-	Alkl0xKIE6HNyNpdpdtg5jRzJxd9EZ0MJiIt58LiiXSGSrZq4pNR+lkia68OjH4IWSr7GqwE3av
-	O+SUm7LhACW1WkhbgaVmZxkVRBp8Y+54QSAWKF2lB4kS2lBVdea4CqR+rdUiHo1JaXOSQTmuF0U
-	zL/wjQ6wLyXnDZMTGbMsKDDalClgxPeMwXSlIVClrlAZPEVfYmNwIyxCkyrPK/X1V7+xUFx0Crw
-	2/YnYzUoHMvG7KT0jffTjRBbR75yozU2ATsHs
-X-Received: by 2002:a17:90b:3ecc:b0:39b:4877:ae90 with SMTP id
- 98e67ed59e1d1-39d9c352654mr8818460a91.22.1789154336660; Fri, 11 Sep 2026
- 12:18:56 -0700 (PDT)
+        bh=Nb+C2vqHps7zZGaA3lhpp4CjL1HIbRuVbwq1v+iSsLM=;
+        b=ZWENhl3fbTQQLj5Xr2hwDo6D8BsG5NCFgpAmf7iot5jdQV6spVfATZcy/kn4Yyitmx
+         2RY4DHUuS1yvO32Aw49UlJqODnLVOQuvBEvRY0+QAsIFF6Z0yNs4gBdQLEOiJduPZgZP
+         qp/fz5FjFx3AxYM+RDGefZTpVcqqROiZEyb7tUEmzFekSL62scny3RWcqWBajN4hy8eQ
+         jLe8el/65RNdZxG/ryAvlCDwEu44x0dkVUys3yIgBVfrxcwJHqRX6FcK5jTOsCjMJ/vl
+         +/sck6b+mpfLLbE3gaTT6KcnRCjxoXo7hqtPVuqhjRFuHYrHEpO6or7smakYEIlwasvT
+         DKzQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwIZl1gfuhi1HZ/9BAFws+eHLINHsot+1kMR4XVWLXXe0rKiFY/8tia8umf9rdRrtquE7A=@vger.kernel.org
+X-Gm-Message-State: AFuF++kkHSq19TAb4lHCdjn3U4IEOjPIE45qahjJJuG/yJgnwOjui6Fb
+	9nigb0KXp7xGcc46nT+3mOwSRv99FybjhoxFWjvHG4V75jwagfhWcHpl
+X-Gm-Gg: AYBFou02Phgz90VWHb3Kzfm/Fxqxv3eQfMo8U8AV7FlnrP4TCDKTpsHDKqgzyERj2f9
+	LMXVQs9UgiitSDyvtIQA0QQW88x6PbFmOUZFBLOI8iu1QYznu9FeX3MLct9FYKNNMqhphN+D6yj
+	WItrl799nssE30k2e1m8UROawG1CsQGeOa8g9/YeOZedxTlKL2jNNZkB3Xm/+jLeVBF1IZitFL7
+	USyjDdg0y8VhxW/CItGDIyEXGcQdAjUQkReCaSWJPG9gq34IsmuyE9frKUl1TFbKtMRUFNjUW6C
+	9OKBspotuEorMbCkCb0zXzMsjL4U+aJP0yuBHI/xU5HqlbZhPODTJaAK+njv94zwn+smYbS0mgS
+	v+qHY4v9AqzhPJ2WJ+iZVVaaiWkzbhXX3iAIUuBcBTEqh6bx4pcMQH2CNBI0s7kCM5ZlRQumbZj
+	WdQ/+dxetC3Nsozj4Cg/3GYz0x+FcBw1cK34E8DwRX6gCWmrERTRVtCst1gJTFaC2DODxE
+X-Received: by 2002:a05:600c:c4a8:b0:49d:1df6:2592 with SMTP id 5b1f17b1804b1-49e619e0f7amr61198905e9.21.1789154764976;
+        Fri, 11 Sep 2026 12:26:04 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e62232cb7sm71030065e9.4.2026.09.11.12.26.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Sep 2026 12:26:04 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 11 Sep 2026 21:26:02 +0200
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+	eddyz87@gmail.com, ihor.solodrai@linux.dev, yonghong.song@linux.dev,
+	song@kernel.org, qmo@kernel.org, martin.lau@linux.dev,
+	memxor@gmail.com, emil@etsalapatis.com, mcgrof@kernel.org,
+	petr.pavlu@suse.com, tj@kernel.org, kees@kernel.org,
+	bpf@vger.kernel.org, nathan@kernel.org, nsc@kernel.org,
+	arnd@arndb.de, puranjay@kernel.org, yatsenko@meta.com,
+	atenart@kernel.org, ojeda@kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH v2 bpf-next 01/18] btf: Extend UAPI to support BTF
+ location (inline site) info
+Message-ID: <aqRVysZxIpP5lSOT@krava>
+References: <20260901165757.801449-1-alan.maguire@oracle.com>
+ <20260901165757.801449-2-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260911120820.46900-1-zhaofuyu@vivo.com> <20260911120820.46900-2-zhaofuyu@vivo.com>
-In-Reply-To: <20260911120820.46900-2-zhaofuyu@vivo.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 11 Sep 2026 12:18:43 -0700
-X-Gm-Features: AcwNN1UhbRDYeM_rWKGd9EPNDyqhKSNY6NtAMmZrvAGVB6RpCJVmB007op-PGW0
-Message-ID: <CAEf4BzYkY3ehPGei5Ra2xUJZHu-JcKLfPOuKeo3Ckks8w=OrEQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v8 1/2] libbpf: support selective kernel module
- BTF loading via bpf_object_open_opts
-To: Fuyu Zhao <zhaofuyu@vivo.com>
-Cc: bpf@vger.kernel.org, eddyz87@gmail.com, alan.maguire@oracle.com, 
-	olsajiri@gmail.com, Andrii Nakryiko <andrii@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260901165757.801449-2-alan.maguire@oracle.com>
 
-On Fri, Sep 11, 2026 at 5:08=E2=80=AFAM Fuyu Zhao <zhaofuyu@vivo.com> wrote=
-:
->
-> Add btf_module_allowlist and btf_module_allowlist_cnt fields to
-> bpf_object_open_opts to limit which kernel module BTFs libbpf is
-> allowed to load.
->
-> When the option is not specified, the existing behavior remains
-> unchanged. An explicitly specified empty allowlist prevents libbpf from
-> consulting any kernel module BTFs.
->
-> The allowlist limits which kernel module BTFs libbpf will consult
-> wherever module BTF might be needed.
->
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> Signed-off-by: Fuyu Zhao <zhaofuyu@vivo.com>
-> ---
->  tools/lib/bpf/libbpf.c | 72 +++++++++++++++++++++++++++++++++++++++++-
->  tools/lib/bpf/libbpf.h | 16 +++++++++-
->  2 files changed, 86 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index c036e8a91ed8..4ab7ddc3b4cc 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -751,6 +751,8 @@ struct bpf_object {
->         bool btf_modules_loaded;
->         size_t btf_module_cnt;
->         size_t btf_module_cap;
-> +       char **btf_module_allowlist;
-> +       int btf_module_allowlist_cnt;
+On Tue, Sep 01, 2026 at 05:57:40PM +0100, Alan Maguire wrote:
 
-please use size_T for this count, just like other counts (both
-internally in bpf_object and in public UAPI opts struct)
+SNIP
 
+> +
+> +/*
+> + * BTF_KIND_LOC_PROTO specifies location prototypes; i.e. how locations relate
+> + * to parameters; a struct btf_type of BTF_KIND_LOC_PROTO is followed by a
+> + * a vlen-specified number of __u32 BTF type ids which specify the associated
+> + * BTF_KIND_LOC_PARAM for each function parameter associated with the
+> + * location.  The type should either be 0 (no location info) or point at
+> + * a BTF_KIND_LOC_PARAM.
+> + */
+> +
+> +/*
+> + * BTF_KIND_LOCSEC consists of vlen-specified number of "struct btf_loc"
+> + * containing location site-specific information;
+> + *
+> + * - function (func)
+> + * - location prototype type id (loc_proto)
+> + * - address offset (offset) relative to kernel base address
+> + */
+> +
+> +struct btf_loc {
+> +	__u32 func;
+> +	__u32 loc_proto;
+> +	__u32 offset;
+> +};
 
-other than that, looks good, I was about to apply before that `int j`
-in bpf_object__close() caught my attention
+would it be possible to include btf id of the immediate parent function?
+we have use cases for tracing just inlined function called from particular
+parent
 
-pw-bot: cr
+I thought we could use the location offset for that, but because inline
+functions could be nested, this seems like hard search.. also we do not
+know the size of the inlined code, so not sure how reliable it'd be
 
->
->         /* optional log settings passed to BPF_BTF_LOAD and BPF_PROG_LOAD=
- commands */
->         char *log_buf;
+I checked the dwarves code and I wonder we could instead store parent
+function (struct inline_expansion) during dwarf decoding and use that
+later to get parent function FUNC_ID and have:
 
-[...]
+	struct btf_loc {
+	     __u32 func;
+	     __u32 parent;
+	     __u32 loc_proto;
+	     __u32 offset;
+	};
 
->         err =3D bpf_object__elf_init(obj);
->         err =3D err ? : bpf_object__elf_collect(obj);
->         err =3D err ? : bpf_object__collect_externs(obj);
-> @@ -9626,6 +9691,7 @@ static void bpf_map__destroy(struct bpf_map *map)
->  void bpf_object__close(struct bpf_object *obj)
->  {
->         size_t i;
-> +       int j;
-
-you don't need j with count defined as size_t
-
->
->         if (IS_ERR_OR_NULL(obj))
->                 return;
-
-[...]
+wdyt? thanks,
+jirka
