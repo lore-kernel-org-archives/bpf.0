@@ -1,63 +1,63 @@
-Received: from mail-pj2-f1.google.com (mail-pj2-f1.google.com [74.125.227.129])
+Received: from mail-pj2-f11.google.com (mail-pj2-f11.google.com [74.125.227.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF493E9C11
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 02:51:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7298D3D7D83
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 02:51:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789095090; cv=none; b=UVDBZthxE7TeaC8U6g6vwwbkBYU7nVW6C57R0MyRP8ORos3eJGXasAlOGw62LjshoXRDhkfFCcePd2W3mictpbQO1C6T4Kg21ergEYmDudumFplY9tRe7thbOPJN2nPrB9ei7/XaOSXSOhaapHjofmw4w3uZKBTtoRBOY+uEGik=
+	t=1789095092; cv=none; b=DJuEFF66XrilzXvCaTm6pa98RjTvvALzfeKeGN6GfJ05xlCoeyNkAGDdPRddfYU3QWEuCAXRQSNAwBw5EA6bskfstXgbHrFRmYE/7QEU58RLt/Zzst/uYjx3EdSUZou0EuK8V7r+UdXTgU1MpB7eiNrZn2/JhVMgdcFHX9YRc7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789095090; c=relaxed/simple;
-	bh=I+xjaNQIGpA52O4lGfUvgCc2hDog1MRkZXm86PwYM88=;
+	s=arc-20240116; t=1789095092; c=relaxed/simple;
+	bh=FouYbvEM2lO7vdPJTT34MhBLEDSZOTxtF6Hbb+lKWmA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=C0QVuQ2xiOhau++AyuUYw2LMGwALq/X63+4kj44XPdPCGUiNuPAVc97cHcXFX3oyUkotmyoMHUXUgktzGqkeja/s03L0smW4ITLig/Rg41W/XA28DSat1vUY4FCSHLCpm1jWbeFxgzSsMnb/StxWUxez6++bCt6lZQ2bQpTlhcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QvQeP+mQ; arc=none smtp.client-ip=74.125.227.129
+	 MIME-Version; b=ZHTU0DeSpmGg+HC/uLXz0Fv3KdduPsKy5lZfaufGyWuBM5TX6JbQkSE6oX/AXBiHerCdVR295Lor+womfXpxAfZz0S3LwII95fSGpXJJkFg/YozYdi5g8A+Wt6DV5WTaSoFQ9SmBaIDJMAYSvymVwMlmPG6PWW0FrSDHb3qKz+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ec2lnLcl; arc=none smtp.client-ip=74.125.227.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QvQeP+mQ"
-Received: by mail-pj2-f1.google.com with SMTP id 98e67ed59e1d1-399213ef56cso163499a91.1
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 19:51:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ec2lnLcl"
+Received: by mail-pj2-f11.google.com with SMTP id 98e67ed59e1d1-398a0a87595so336058a91.1
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 19:51:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789095086; x=1789699886; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789095090; x=1789699890; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=n1qZKhLv/Pc4noJta6NtrrqBWyhSdm9xzXOyIqtBQG0=;
-        b=QvQeP+mQxclKzBix9rV43fzxr22K3dyB6ECXqXIjk0oyz+Y46jG4PfhiYJomt1i+/D
-         TpMJbJZSu4aUd7cLJbaaA6V0w3VNkt6XnyZOrKa6GAqv3K50fZ5gr+tLBSqD4k+lWxWs
-         Mv+cyjjJnmAZm6Y6IoHuyI99w1URs67QUd1MfnNouPf1qbP8nWjQLx7iAHwMFzc/3wYQ
-         HDy0o6QLiSp3smHfClKw0yygqiklJiViNifo7lcGgtImZSIFbfDEE3Ur8aihSvjMZj29
-         4blgeEHjuBi9Jqm3qiARnfLZei8Efpam7tqdni9OHZlXX0yPC1ckCLJtWlanV3oGCcq7
-         qhcA==
+        bh=soNhewvU0osbofmpAbWm1Yy/iu5ffmrPNiSS40mr2Zk=;
+        b=Ec2lnLcl1w4ZPEfYkA0OaoqSALNcF64+0UGshGNiQ87vLyA2glvajWsGfqdq329jTS
+         D5Exgkw/uJ69aBR1XGTHXbdj4q/fMQUUt2uZ1+Ka+N2LEu24zmX6qSfzylUd99AwxHxN
+         1BGvaCpfCMLufstZcD725WdW9vtUvWA32tbn7icLEM+uMzpY+E1R7lklMQpXKfXzTsQ/
+         W8ELNIw2d9iw7Vj2Kx/IpotlD7UxaxV9PahfuOoqliMukjksPBwnUEPCXd4CtAa6n+Zo
+         1pHnAtGDAIFuI7ybsKW9Ce6DfhcPPzbJveSO360hGyRtC+kLDM74R5u/gjSB/g6KBmbV
+         tFYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789095086; x=1789699886;
+        d=1e100.net; s=20251104; t=1789095090; x=1789699890;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=n1qZKhLv/Pc4noJta6NtrrqBWyhSdm9xzXOyIqtBQG0=;
-        b=KTj+TY9ppFC1XVB5QdaL1v5JQ4RBuiVw4sUR9QhLMHAAI3gMXFfea0eFITbcFTTU4U
-         fHKlI5uJBbUvH1tc8+ajiCXbRI6gG0UCsQW/CGqc7Bamam+wkAjUzmjkITXOENYMnGib
-         Grsm2NUJ9Vj5BePy+lO0up8fpwjiS3ZNsNrWWIfQvMirsWEh0qZDJF8k+EXd6dv4vHjs
-         Z52/odJ3/P/c66XmYYamVyrUEPd6FpR75e3PqHCd0T3jKCxb676o2uYALZSOQ0Eb/Fnv
-         BD2rzYC/e+jUpxp53jzRyORBR+dNHi0W3TsoizlK3c6HZkFajT4V3g8MPQ9uccqB5Ce+
-         qMHw==
-X-Forwarded-Encrypted: i=1; AKwUvBxprlLjtIrYBuXSU9TRPUBqADJ1JUiDLTLOcr3nRAcp4NSUYpXnur/N0sxn/oQKB+D67rQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++m810XWlUkLZ1ahn+3m1Q45Szfpv+lWmGheBetAFhgoDW4EyXlw
-	wdY20ISQSmYfQrVUEbebLSSDL5hGxS7HYT4JLYNz/exyQNWetzBDQidb
-X-Gm-Gg: AYBFou0CP0aCPgCsd+aJ/PVGpSEUP8pZ8r1xWWPGzeTjn7+U63iV4sdlznFCbD7eaBA
-	zkvHiYmE/n/hRMOhypC+1LdamPqCLeqaaI1wT08GvxjbFJpauLLEkmLYlqJq8kws6hE8N8TBqMg
-	dP00T4Ub9jcPKoQY2NzOJ94QT5d4yN04PGSVE2VC25XNtcSw4eozLP/2u/1Y1zH4mUVKVokbwBc
-	YAGJHifHNEnSITAo2vKf1h9WXBSMgVBbo1RMJ4+1eJM8NjxUSjAe6svkZdNTGR6Kep+igm7md6p
-	CV0KPS2T+HtNUrIkd+wc7GBsGURobartOcLF5Or4kk4rVu2joHVE+99IQcYgxIPkdMn6kEOzXbv
-	Ibzc5oeA1sZUJPUc4F4Uv7WRISM/oVcKakzaxE5MI/27wOLKRPwqVyzvX1GXlSipGpupBqc4EHA
-	jccBS8aEW48mEiubQ1H6GuKmgmlTDOLY2mm0R/t8fpI55095A6eiolNugZDPU04HsT
-X-Received: by 2002:a17:90b:4cce:b0:38e:7168:281 with SMTP id 98e67ed59e1d1-39d9bec4d91mr3232114a91.10.1789095086232;
-        Thu, 10 Sep 2026 19:51:26 -0700 (PDT)
+        bh=soNhewvU0osbofmpAbWm1Yy/iu5ffmrPNiSS40mr2Zk=;
+        b=B5ShCKdDIe/J5G2OU02Dj4V7jBHgpqCXjGzY0txPXFhP/jBg8jJKm35k+PGZvK0y6i
+         P1lwgtoKvKq40OH/JDIUV3BoFbUOSW0/FDI/7o9U6oEKl7avY68KBYA4qpOTfQgprc+i
+         pD/RKmiTPOl6z3BPWPqAQgSUC67EsHhP5uh61iKcbwqv+T5t2XZG8bVeL4AZv/IodxK9
+         S1gfpW5EXmPCiS8rP4C6fpzeqqP6Cy3tMnoGE0xgw5l50H6ld8dkPjk+XYSM7YPUG2ma
+         3BBva5AXzkt1dQTFU9maivjcOcxp1CkgTtUWvNw3hq62tEaA7f/EMMyMhPZjje8G7Xcd
+         yh/Q==
+X-Forwarded-Encrypted: i=1; AKwUvBw/qLhQKxKNvZ092/cTJe7mmCaiZhxQamancWhhTn3sm0TuCjtseIq/E0u6riJSlTTUvY0=@vger.kernel.org
+X-Gm-Message-State: AFuF++k7Zb7LyRgb6s/4omucujln+dTTDHng41sRXzCWoI6kvKXVrqgr
+	KcEDOa9wDNPjnk9Yo4Ux3B7FVMOCxQ8HarXUi16Yo03mGqb0+0MJKSNG
+X-Gm-Gg: AYBFou2QnV2pe5WSw7cFYjKlyRwnc49BmzqHhpR5BloU6gGVDva3O8iZUdtVuadfQvT
+	gukwnoXviBaoXaP8AwUf7H5P2P0tx6jG++N4OEIesz6g4zHYcIb7+meHa0pKAPJ5oF5e1yv2PQy
+	c8+H2f3bxHGa2yF92wTCA2WL58KoQcSQJBcNFLmoSwCgT/eby/ngTVTV3XJgpvTNagaL3uHWLGH
+	5CJY/YJKjz2yMWsheRz5feMe6oc9muhXhOYiDPaUMOxVEWYVcKauChSZGdFpUf6Y7BFafi2g3h3
+	hdkTxOZOzPGDPevXGkjIUW4zk14bNYlChn/TTUWnJ3ShVmhIEW5XhaEsXHOBP4R4atzUHlAq5Qs
+	nC/RiVmNJjlBzzzEI96Lo+9tRSqdqVm47dJtT6Hii4c+uKnm5cumsxkfkmCv87ol7I4rNjkT8WA
+	wyVnJ0JzFSkwFZFcq+00AnlZG5WZf1hreuXaK4OpoxgeyOBK70pdEy0HdJ7v5jHkTFgA==
+X-Received: by 2002:a17:90b:5388:b0:38e:4f41:83df with SMTP id 98e67ed59e1d1-39d9c0ac792mr3213229a91.15.1789095089882;
+        Thu, 10 Sep 2026 19:51:29 -0700 (PDT)
 Received: from 192.168.5.7 ([69.5.53.41])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d95092c06sm2396002a91.4.2026.09.10.19.51.22
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d95092c06sm2396002a91.4.2026.09.10.19.51.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 19:51:25 -0700 (PDT)
+        Thu, 10 Sep 2026 19:51:29 -0700 (PDT)
 From: Tianyi Chen <diannaaav@gmail.com>
 To: qmo@kernel.org,
 	bpf@vger.kernel.org
@@ -65,9 +65,9 @@ Cc: andrii@kernel.org,
 	eddyz87@gmail.com,
 	ihor.solodrai@linux.dev,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v3 1/2] bpftool: Read ring buffer maps with event_pipe
-Date: Fri, 11 Sep 2026 10:51:13 +0800
-Message-ID: <20260911025114.190899-2-diannaaav@gmail.com>
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Cover bpftool ring buffer event_pipe
+Date: Fri, 11 Sep 2026 10:51:14 +0800
+Message-ID: <20260911025114.190899-3-diannaaav@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260911025114.190899-1-diannaaav@gmail.com>
 References: <20260911025114.190899-1-diannaaav@gmail.com>
@@ -81,233 +81,508 @@ Content-Transfer-Encoding: 8bit
 
 From: Tianyi Chen <hi@tychen.cc>
 
-map event_pipe only accepts perf event arrays, leaving no built-in way
-to inspect records produced through the BPF ring buffer API. Extend it
-to consume queued and live BPF_MAP_TYPE_RINGBUF records in plain or
-JSON output, retaining the existing perf event array path.
+Produce known ring buffer records and check complete plain, JSON and
+pretty JSON output. Exercise ID and pinned map selection, SIGINT and
+SIGTERM shutdown, empty streams and invalid map types or selectors.
 
-Ring buffers have a shared consumer position and no implicit CPU or
-timestamp. Document that this command consumes records rather than
-observing them passively, and reject perf-only CPU/index selectors.
-
-A producer can keep ring_buffer__poll() busy after a stop signal, so
-return -EINTR from the record callback when stopping. Keep stdio out of
-the shared signal handler and preserve callback output errors.
-
-Link: https://github.com/libbpf/bpftool/issues/54
+Also produce a perf event sample and check its existing header and raw
+payload output. Use a payload whose size plus the raw sample length
+field is aligned to eight bytes so the expected bytes exclude implicit
+perf padding.
 
 Assisted-by: LLM
 Signed-off-by: Tianyi Chen <hi@tychen.cc>
 ---
- .../bpf/bpftool/Documentation/bpftool-map.rst | 14 ++-
- tools/bpf/bpftool/bash-completion/bpftool     |  4 +-
- tools/bpf/bpftool/map_perf_ring.c             | 87 ++++++++++++++-----
- 3 files changed, 81 insertions(+), 24 deletions(-)
+ .../bpf/prog_tests/bpftool_ringbuf.c          | 425 ++++++++++++++++++
+ .../selftests/bpf/progs/bpftool_ringbuf.c     |  47 ++
+ 2 files changed, 472 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpftool_ringbuf.c
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-index 5daf3de5c744..e4ed7e701c9e 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-@@ -120,7 +120,8 @@ bpftool map pin     *MAP*  *FILE*
-     character ('.'), which is reserved for future extensions of *bpffs*.
- 
- bpftool map event_pipe *MAP* [cpu *N* index *M*]
--    Read events from a **BPF_MAP_TYPE_PERF_EVENT_ARRAY** map.
-+    Read events from a **BPF_MAP_TYPE_PERF_EVENT_ARRAY** or
-+    **BPF_MAP_TYPE_RINGBUF** map.
- 
-     Install perf rings into a perf event array map and dump output of any
-     **bpf_perf_event_output**\ () call in the kernel. By default read the
-@@ -134,6 +135,17 @@ bpftool map event_pipe *MAP* [cpu *N* index *M*]
-     existing ring.  Any other application will stop receiving events if it
-     installed its rings earlier.
- 
-+    For a ring buffer map, consume records submitted by BPF programs, including
-+    records already queued before the command starts. **cpu** and **index**
-+    are not supported. Each record is printed in full, including embedded zero
-+    bytes. Plain output reports the record size followed by hexadecimal
-+    bytes; JSON output contains **size** and **data** fields, with **data** an
-+    array of byte values. Ring buffer records have no implicit CPU or timestamp.
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c b/tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
+new file mode 100644
+index 000000000000..1a4ae88c05a0
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
+@@ -0,0 +1,425 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <ctype.h>
++#include <fcntl.h>
++#include <poll.h>
++#include <signal.h>
++#include <sys/mman.h>
++#include <sys/wait.h>
++#include <test_progs.h>
++#include "bpftool_ringbuf.skel.h"
 +
-+    Consuming a ring buffer advances its shared consumer position, so this
-+    command must not run alongside another consumer of the same map.
-+    **BPF_MAP_TYPE_USER_RINGBUF** maps are not supported.
++#define WAIT_STEPS 500
++#define WAIT_US 10000
 +
- bpftool map peek  *MAP*
-     Peek next value in the queue or stack.
- 
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index 75cbcb512eba..1750b488c9e3 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -878,11 +878,11 @@ _bpftool()
-                             return 0
-                             ;;
-                         id)
--                            _bpftool_get_map_ids_for_type perf_event_array
-+                            _bpftool_get_map_ids_for_type '"type": "\(perf_event_array\|ringbuf\)"'
-                             return 0
-                             ;;
-                         name)
--                            _bpftool_get_map_names_for_type perf_event_array
-+                            _bpftool_get_map_names_for_type '"type": "\(perf_event_array\|ringbuf\)"'
-                             return 0
-                             ;;
-                         cpu)
-diff --git a/tools/bpf/bpftool/map_perf_ring.c b/tools/bpf/bpftool/map_perf_ring.c
-index bcb767e2d673..7d555331f443 100644
---- a/tools/bpf/bpftool/map_perf_ring.c
-+++ b/tools/bpf/bpftool/map_perf_ring.c
-@@ -27,7 +27,7 @@
- 
- #define MMAP_PAGE_CNT	16
- 
--static volatile bool stop;
-+static volatile sig_atomic_t stop;
- 
- struct perf_event_sample {
- 	struct perf_event_header header;
-@@ -44,7 +44,6 @@ struct perf_event_lost {
- 
- static void int_exit(int signo)
- {
--	fprintf(stderr, "Stopping...\n");
- 	stop = true;
- }
- 
-@@ -107,6 +106,27 @@ print_bpf_output(void *private_data, int cpu, struct perf_event_header *event)
- 	return LIBBPF_PERF_EVENT_CONT;
- }
- 
-+static int print_ringbuf_output(void *ctx, void *data, size_t size)
++struct consumer {
++	pid_t pid;
++	int fd;
++};
++
++static const char *bpftool_path(void)
 +{
-+	if (json_output) {
-+		jsonw_start_object(json_wtr);
-+		jsonw_uint_field(json_wtr, "size", size);
-+		jsonw_name(json_wtr, "data");
-+		print_data_json(data, size);
-+		jsonw_end_object(json_wtr);
-+	} else {
-+		printf("== size: %zu =====\n", size);
-+		fprint_hex(stdout, data, size, " ");
-+		printf("\n");
-+	}
++	const char *path = getenv("BPFTOOL");
 +
-+	if (fflush(stdout))
-+		return errno ? -errno : -EIO;
-+
-+	/* A producer can keep poll() busy even after a signal arrives. */
-+	return stop ? -EINTR : 0;
++	if (path)
++		return access(path, X_OK) ? NULL : path;
++	if (!access("./tools/sbin/bpftool", X_OK))
++		return "./tools/sbin/bpftool";
++	if (!access("../tools/sbin/bpftool", X_OK))
++		return "../tools/sbin/bpftool";
++	return NULL;
 +}
 +
- int do_event_pipe(int argc, char **argv)
- {
- 	struct perf_event_attr perf_attr = {
-@@ -123,18 +143,26 @@ int do_event_pipe(int argc, char **argv)
- 		.cpu = -1,
- 		.idx = -1,
- 	};
--	struct perf_buffer *pb;
-+	struct perf_buffer *pb = NULL;
-+	struct ring_buffer *rb = NULL;
- 	__u32 map_info_len;
- 	int err, map_fd;
- 
-+	stop = false;
- 	map_info_len = sizeof(map_info);
- 	map_fd = map_parse_fd_and_info(&argc, &argv, &map_info, &map_info_len,
- 				       0);
- 	if (map_fd < 0)
- 		return -1;
- 
--	if (map_info.type != BPF_MAP_TYPE_PERF_EVENT_ARRAY) {
--		p_err("map is not a perf event array");
-+	if (map_info.type != BPF_MAP_TYPE_PERF_EVENT_ARRAY &&
-+	    map_info.type != BPF_MAP_TYPE_RINGBUF) {
-+		p_err("map is not a perf event array or ring buffer");
-+		goto err_close_map;
++static void consumer_cleanup(struct consumer *child)
++{
++	if (child->pid > 0) {
++		kill(child->pid, SIGKILL);
++		while (waitpid(child->pid, NULL, 0) < 0 && errno == EINTR)
++			;
++		child->pid = -1;
 +	}
++	if (child->fd >= 0) {
++		close(child->fd);
++		child->fd = -1;
++	}
++}
 +
-+	if (map_info.type == BPF_MAP_TYPE_RINGBUF && argc) {
-+		p_err("ring buffer maps do not support cpu or index arguments");
- 		goto err_close_map;
- 	}
- 
-@@ -184,15 +212,24 @@ int do_event_pipe(int argc, char **argv)
- 		ctx.idx = 0;
- 	}
- 
--	opts.cpu_cnt = ctx.all_cpus ? 0 : 1;
--	opts.cpus = &ctx.cpu;
--	opts.map_keys = &ctx.idx;
--	pb = perf_buffer__new_raw(map_fd, MMAP_PAGE_CNT, &perf_attr,
--				  print_bpf_output, &ctx, &opts);
--	if (!pb) {
--		p_err("failed to create perf buffer: %s (%d)",
--		      strerror(errno), errno);
--		goto err_close_map;
-+	if (map_info.type == BPF_MAP_TYPE_RINGBUF) {
-+		rb = ring_buffer__new(map_fd, print_ringbuf_output, NULL, NULL);
-+		if (!rb) {
-+			p_err("failed to create ring buffer: %s (%d)",
-+			      strerror(errno), errno);
-+			goto err_close_map;
++static bool consumer_start(struct consumer *child, int map_fd, const char *format,
++			   const char *pin_path, const char *option,
++			   bool pair, bool capture_errors)
++{
++	struct bpf_map_info info = {};
++	__u32 len = sizeof(info);
++	const char *path = bpftool_path();
++	char *argv[12], id[16];
++	int out[2], ready[2], n = 0, err, err_fd;
++	struct pollfd pfd;
++
++	if (!ASSERT_OK_PTR(path, "bpftool path (set BPFTOOL to override)") ||
++	    !ASSERT_OK(bpf_map_get_info_by_fd(map_fd, &info, &len), "map info"))
++		return false;
++	snprintf(id, sizeof(id), "%u", info.id);
++	argv[n++] = (char *)path;
++	if (format)
++		argv[n++] = (char *)format;
++	argv[n++] = "map";
++	argv[n++] = "event_pipe";
++	argv[n++] = pin_path ? "pinned" : "id";
++	argv[n++] = pin_path ? (char *)pin_path : id;
++	if (option) {
++		argv[n++] = (char *)option;
++		argv[n++] = "0";
++		if (pair) {
++			argv[n++] = "index";
++			argv[n++] = "0";
 +		}
-+	} else {
-+		opts.cpu_cnt = ctx.all_cpus ? 0 : 1;
-+		opts.cpus = &ctx.cpu;
-+		opts.map_keys = &ctx.idx;
-+		pb = perf_buffer__new_raw(map_fd, MMAP_PAGE_CNT, &perf_attr,
-+					  print_bpf_output, &ctx, &opts);
-+		if (!pb) {
-+			p_err("failed to create perf buffer: %s (%d)",
-+			      strerror(errno), errno);
-+			goto err_close_map;
-+		}
- 	}
- 
- 	signal(SIGINT, int_exit);
-@@ -202,25 +239,33 @@ int do_event_pipe(int argc, char **argv)
- 	if (json_output)
- 		jsonw_start_array(json_wtr);
- 
-+	err = 0;
- 	while (!stop) {
--		err = perf_buffer__poll(pb, 200);
-+		err = rb ? ring_buffer__poll(rb, 200) : perf_buffer__poll(pb, 200);
- 		if (err < 0 && err != -EINTR) {
--			p_err("perf buffer polling failed: %s (%d)",
--			      strerror(errno), errno);
--			goto err_close_pb;
-+			fprintf(stderr, "Error: %s buffer polling failed: %s (%d)\n",
-+				rb ? "ring" : "perf", strerror(-err), -err);
-+			break;
- 		}
-+		err = 0;
- 	}
- 
-+	if (stop)
-+		fprintf(stderr, "Stopping...\n");
- 	if (json_output)
- 		jsonw_end_array(json_wtr);
-+	if (fflush(stdout)) {
-+		fprintf(stderr, "Error: failed to write events: %s\n", strerror(errno));
-+		err = -1;
 +	}
- 
-+	ring_buffer__free(rb);
- 	perf_buffer__free(pb);
-+	/* Both buffer managers borrow map_fd. */
- 	close(map_fd);
- 
--	return 0;
-+	return err < 0 ? -1 : 0;
- 
--err_close_pb:
--	perf_buffer__free(pb);
- err_close_map:
- 	close(map_fd);
- 	return -1;
++	argv[n] = NULL;
++	if (!ASSERT_OK(pipe2(out, O_CLOEXEC), "output pipe"))
++		return false;
++	if (!ASSERT_OK(pipe2(ready, O_CLOEXEC), "exec pipe")) {
++		close(out[0]);
++		close(out[1]);
++		return false;
++	}
++	child->pid = fork();
++	if (!child->pid) {
++		close(out[0]);
++		close(ready[0]);
++		err_fd = capture_errors ? out[1] : open("/dev/null", O_WRONLY);
++		if (dup2(out[1], STDOUT_FILENO) < 0 ||
++		    dup2(err_fd, STDERR_FILENO) < 0)
++			goto exec_fail;
++		if (!capture_errors)
++			close(err_fd);
++		close(out[1]);
++		execv(path, argv);
++exec_fail:
++		err = errno;
++		write(ready[1], &err, sizeof(err));
++		_exit(127);
++	}
++	close(out[1]);
++	close(ready[1]);
++	child->fd = out[0];
++	pfd = (struct pollfd) { .fd = ready[0], .events = POLLIN };
++	/* EOF on the close-on-exec pipe distinguishes exec from inherited handlers. */
++	err = child->pid > 0 ? poll(&pfd, 1, WAIT_STEPS * WAIT_US / 1000) : -1;
++	if (!ASSERT_GT(child->pid, 0, "fork") ||
++	    !ASSERT_GT(err, 0, "exec timeout") ||
++	    !ASSERT_EQ(read(ready[0], &err, sizeof(err)), 0, "exec")) {
++		close(ready[0]);
++		consumer_cleanup(child);
++		return false;
++	}
++	close(ready[0]);
++	return true;
++}
++
++static bool consumer_finish(struct consumer *child, int signo, bool success,
++			    char *output, size_t size)
++{
++	int status = 0, i;
++	pid_t ret = 0;
++	ssize_t n;
++	size_t used = 0;
++
++	if (!ASSERT_OK(fcntl(child->fd, F_SETFL, O_NONBLOCK), "nonblocking output"))
++		return false;
++	if (signo && !ASSERT_OK(kill(child->pid, signo), "signal consumer"))
++		return false;
++	for (i = 0; i < WAIT_STEPS; i++) {
++		while (used < size - 1 &&
++		       (n = read(child->fd, output + used, size - 1 - used)) > 0)
++			used += n;
++		ret = waitpid(child->pid, &status, WNOHANG);
++		if (ret == child->pid)
++			break;
++		if (ret < 0 && errno != EINTR)
++			break;
++		usleep(WAIT_US);
++	}
++	if (!ASSERT_EQ(ret, child->pid, "bounded consumer exit"))
++		return false;
++	child->pid = -1;
++	while (used < size - 1 && (n = read(child->fd, output + used, size - 1 - used)) > 0)
++		used += n;
++	output[used] = '\0';
++	return ASSERT_TRUE(WIFEXITED(status), "normal exit") &&
++	       ASSERT_EQ(WEXITSTATUS(status) == 0, success, "exit status");
++}
++
++static bool consumer_ready(struct consumer *child)
++{
++	unsigned long long caught;
++	char path[64], line[256];
++	int i;
++	FILE *f;
++
++	snprintf(path, sizeof(path), "/proc/%d/status", child->pid);
++	for (i = 0; i < WAIT_STEPS; i++) {
++		f = fopen(path, "r");
++		if (!f)
++			break;
++		while (fgets(line, sizeof(line), f)) {
++			if (sscanf(line, "SigCgt: %llx", &caught) == 1 &&
++			    (caught & (1ULL << (SIGINT - 1))) &&
++			    (caught & (1ULL << (SIGTERM - 1)))) {
++				fclose(f);
++				return true;
++			}
++		}
++		fclose(f);
++		usleep(WAIT_US);
++	}
++	return ASSERT_TRUE(false, "consumer signal handlers ready");
++}
++
++static bool emit_record(struct bpftool_ringbuf *skel, int record)
++{
++	char packet[64] = {};
++
++	LIBBPF_OPTS(bpf_test_run_opts, opts,
++		    .data_in = packet,
++		    .data_size_in = sizeof(packet),
++	);
++
++	skel->bss->record = record;
++	return ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.produce),
++					      &opts), "produce record") &&
++	       ASSERT_OK(skel->bss->output_err, "ringbuf output");
++}
++
++static bool consumed(unsigned long *position, unsigned long expected)
++{
++	int i;
++
++	for (i = 0; i < WAIT_STEPS; i++) {
++		if (__atomic_load_n(position, __ATOMIC_ACQUIRE) == expected)
++			return true;
++		usleep(WAIT_US);
++	}
++	return ASSERT_EQ(*position, expected, "consumer position");
++}
++
++static void check_json(char *output, const char *expected)
++{
++	char *src = output, *dst = output;
++	bool quoted = false, escaped = false;
++
++	/* Ignore formatting whitespace while checking the entire JSON document. */
++	while (*src) {
++		if (quoted || !isspace((unsigned char)*src))
++			*dst++ = *src;
++		if (!escaped && *src == '"')
++			quoted = !quoted;
++		escaped = !escaped && quoted && *src == '\\';
++		src++;
++	}
++	*dst = '\0';
++	ASSERT_STREQ(output, expected, "JSON records");
++}
++
++static void test_consumer(const char *format, bool idle, int signo, bool pinned)
++{
++	struct consumer child = { .pid = -1, .fd = -1 };
++	struct bpftool_ringbuf *skel;
++	unsigned long *position = MAP_FAILED;
++	int page_size = getpagesize(), fd;
++	char pin_dir[] = "/sys/fs/bpf/bpftool_ringbuf_XXXXXX";
++	char pin_path[sizeof(pin_dir) + sizeof("/map")];
++	bool dir_created = false, map_pinned = false;
++	char output[4096];
++	struct pollfd pfd;
++
++	skel = bpftool_ringbuf__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return;
++	bpf_map__set_max_entries(skel->maps.ringbuf, page_size);
++	if (!ASSERT_OK(bpftool_ringbuf__load(skel), "load"))
++		goto out;
++	fd = bpf_map__fd(skel->maps.ringbuf);
++	if (pinned) {
++		if (!ASSERT_OK_PTR(mkdtemp(pin_dir), "create pin directory"))
++			goto out;
++		dir_created = true;
++		snprintf(pin_path, sizeof(pin_path), "%s/map", pin_dir);
++		if (!ASSERT_OK(bpf_obj_pin(fd, pin_path), "pin ringbuf"))
++			goto out;
++		map_pinned = true;
++	}
++	position = mmap(NULL, page_size, PROT_READ, MAP_SHARED, fd, 0);
++	if (!ASSERT_NEQ(position, MAP_FAILED, "consumer mmap"))
++		goto out;
++	if (!idle && (!emit_record(skel, 0) || !emit_record(skel, 1)))
++		goto out;
++	if (!consumer_start(&child, fd, format, pinned ? pin_path : NULL,
++			    NULL, false, false) ||
++	    !consumer_ready(&child))
++		goto out;
++	if (!idle) {
++		/* Both prefilled records occupy 16 bytes including their headers. */
++		if (!consumed(position, 32))
++			goto out;
++		pfd = (struct pollfd) { .fd = child.fd, .events = POLLIN };
++		if (!ASSERT_GT(poll(&pfd, 1, WAIT_STEPS * WAIT_US / 1000), 0,
++			       "records flushed before exit") ||
++		    !ASSERT_TRUE(pfd.revents & POLLIN, "record output readable") ||
++		    !emit_record(skel, 2) || !consumed(position, 64))
++			goto out;
++	}
++	if (!consumer_finish(&child, signo, true, output, sizeof(output)))
++		goto out;
++	if (format && !strcmp(format, "-p"))
++		ASSERT_STREQ(output, idle ? "[]\n" :
++			     "[{\n"
++			     "        \"size\": 2,\n"
++			     "        \"data\": [0,255\n"
++			     "        ]\n"
++			     "    },{\n"
++			     "        \"size\": 5,\n"
++			     "        \"data\": [1,2,3,4,5\n"
++			     "        ]\n"
++			     "    },{\n"
++			     "        \"size\": 17,\n"
++			     "        \"data\": [16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32\n"
++			     "        ]\n"
++			     "    }\n"
++			     "]\n", "pretty JSON records");
++	else if (format)
++		check_json(output, idle ? "[]" :
++			   "[{\"size\":2,\"data\":[0,255]},"
++			   "{\"size\":5,\"data\":[1,2,3,4,5]},"
++			   "{\"size\":17,\"data\":[16,17,18,19,20,21,22,23,"
++			   "24,25,26,27,28,29,30,31,32]}]");
++	else
++		ASSERT_STREQ(output, idle ? "" :
++			     "== size: 2 =====\n00 ff\n"
++			     "== size: 5 =====\n01 02 03 04 05\n"
++			     "== size: 17 =====\n10 11 12 13 14 15 16 17  "
++			     "18 19 1a 1b 1c 1d 1e 1f\n20\n", "plain records");
++out:
++	consumer_cleanup(&child);
++	if (position != MAP_FAILED)
++		munmap(position, page_size);
++	if (map_pinned)
++		ASSERT_OK(unlink(pin_path), "unpin ringbuf");
++	if (dir_created)
++		ASSERT_OK(rmdir(pin_dir), "remove pin directory");
++	bpftool_ringbuf__destroy(skel);
++}
++
++static void test_perf_consumer(void)
++{
++	struct consumer child = { .pid = -1, .fd = -1 };
++	unsigned long long seconds, nanoseconds;
++	struct bpftool_ringbuf *skel;
++	char output[16384], expected[16384];
++	int nr_cpus, cpu, index, offset = 0, i, used = 0, fields;
++	struct pollfd pfd;
++
++	nr_cpus = libbpf_num_possible_cpus();
++	if (!ASSERT_GT(nr_cpus, 0, "possible cpus"))
++		return;
++	skel = bpftool_ringbuf__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return;
++	bpf_map__set_max_entries(skel->maps.ringbuf, getpagesize());
++	bpf_map__set_max_entries(skel->maps.perfbuf, nr_cpus);
++	if (!ASSERT_OK(bpftool_ringbuf__load(skel), "load") ||
++	    !consumer_start(&child, bpf_map__fd(skel->maps.perfbuf), NULL,
++			    NULL, NULL, false, false) || !consumer_ready(&child) ||
++	    !emit_record(skel, 3))
++		goto out;
++	/* One large record flushes the existing buffered perf output callback. */
++	pfd = (struct pollfd) { .fd = child.fd, .events = POLLIN };
++	if (!ASSERT_GT(poll(&pfd, 1, WAIT_STEPS * WAIT_US / 1000), 0,
++		       "perf record output") ||
++	    !ASSERT_TRUE(pfd.revents & POLLIN, "perf output readable") ||
++	    !consumer_finish(&child, SIGINT, true, output, sizeof(output)))
++		goto out;
++	fields = sscanf(output, "== @%llu.%llu CPU: %d index: %d =====\n%n",
++			&seconds, &nanoseconds, &cpu, &index, &offset);
++	if (!ASSERT_EQ(fields, 4, "perf header") ||
++	    !ASSERT_GT(offset, 0, "perf payload offset"))
++		goto out;
++	ASSERT_GT(seconds * 1000000000ULL + nanoseconds, 0, "perf timestamp");
++	ASSERT_LT(nanoseconds, 1000000000ULL, "perf timestamp nanoseconds");
++	ASSERT_GE(cpu, 0, "perf cpu");
++	ASSERT_LT(cpu, nr_cpus, "perf cpu range");
++	ASSERT_EQ(index, cpu, "perf index");
++	for (i = 0; i < sizeof(skel->rodata->perf_payload); i++) {
++		const char *separator = !i ? "" : !(i % 16) ? "\n" :
++					!(i % 8) ? "  " : " ";
++
++		used += snprintf(expected + used, sizeof(expected) - used,
++				 "%s%02x", separator, i == 1 ? 0xff : 0);
++	}
++	snprintf(expected + used, sizeof(expected) - used, "\n");
++	ASSERT_STREQ(output + offset, expected, "perf payload");
++out:
++	consumer_cleanup(&child);
++	bpftool_ringbuf__destroy(skel);
++}
++
++static void test_reject(enum bpf_map_type type, const char *option, bool pair, bool json)
++{
++	struct consumer child = { .pid = -1, .fd = -1 };
++	bool ring = type == BPF_MAP_TYPE_RINGBUF || type == BPF_MAP_TYPE_USER_RINGBUF;
++	const char *expected = option ?
++		"{\"error\":\"ring buffer maps do not support cpu or index arguments\"}" :
++		"{\"error\":\"map is not a perf event array or ring buffer\"}";
++	char output[4096];
++	int fd;
++
++	fd = bpf_map_create(type, NULL, ring ? 0 : 4, ring ? 0 : 4,
++			    ring ? getpagesize() : 1, NULL);
++	if (!ASSERT_GE(fd, 0, "create map"))
++		return;
++	if (consumer_start(&child, fd, json ? "-j" : NULL, NULL, option, pair, true) &&
++	    consumer_finish(&child, 0, false, output, sizeof(output))) {
++		if (json)
++			check_json(output, expected);
++		else
++			ASSERT_GT(strlen(output), 0, "error diagnostic");
++	}
++	consumer_cleanup(&child);
++	close(fd);
++}
++
++void test_bpftool_ringbuf(void)
++{
++	if (test__start_subtest("perf_event_array"))
++		test_perf_consumer();
++	if (test__start_subtest("plain"))
++		test_consumer(NULL, false, SIGINT, false);
++	if (test__start_subtest("json"))
++		test_consumer("-j", false, SIGTERM, false);
++	if (test__start_subtest("pretty_json"))
++		test_consumer("-p", false, SIGINT, false);
++	if (test__start_subtest("pinned_plain"))
++		test_consumer(NULL, false, SIGTERM, true);
++	if (test__start_subtest("pinned_json"))
++		test_consumer("-j", false, SIGINT, true);
++	if (test__start_subtest("pinned_pretty_json"))
++		test_consumer("-p", false, SIGTERM, true);
++	if (test__start_subtest("idle_sigint"))
++		test_consumer(NULL, true, SIGINT, false);
++	if (test__start_subtest("idle_sigterm_json"))
++		test_consumer("-j", true, SIGTERM, false);
++	if (test__start_subtest("idle_sigint_pretty_json"))
++		test_consumer("-p", true, SIGINT, false);
++	if (test__start_subtest("reject_array"))
++		test_reject(BPF_MAP_TYPE_ARRAY, NULL, false, false);
++	if (test__start_subtest("reject_user_ringbuf"))
++		test_reject(BPF_MAP_TYPE_USER_RINGBUF, NULL, false, false);
++	if (test__start_subtest("reject_cpu"))
++		test_reject(BPF_MAP_TYPE_RINGBUF, "cpu", false, false);
++	if (test__start_subtest("reject_index"))
++		test_reject(BPF_MAP_TYPE_RINGBUF, "index", false, false);
++	if (test__start_subtest("reject_cpu_index"))
++		test_reject(BPF_MAP_TYPE_RINGBUF, "cpu", true, false);
++	if (test__start_subtest("reject_user_ringbuf_json"))
++		test_reject(BPF_MAP_TYPE_USER_RINGBUF, NULL, false, true);
++	if (test__start_subtest("reject_cpu_index_json"))
++		test_reject(BPF_MAP_TYPE_RINGBUF, "cpu", true, true);
++}
+diff --git a/tools/testing/selftests/bpf/progs/bpftool_ringbuf.c b/tools/testing/selftests/bpf/progs/bpftool_ringbuf.c
+new file mode 100644
+index 000000000000..bbbc93c30a83
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpftool_ringbuf.c
+@@ -0,0 +1,47 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_RINGBUF);
++} ringbuf SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++	__uint(max_entries, 1);
++} perfbuf SEC(".maps");
++
++/*
++ * Include the u32 raw size in perf's 8-byte alignment to avoid padding.
++ * Keep plain output large enough to flush stdio before the consumer exits.
++ */
++const unsigned char perf_payload[4092] = { 0x00, 0xff };
++
++int record;
++int output_err;
++
++SEC("socket")
++int produce(struct __sk_buff *skb)
++{
++	unsigned char first[] = { 0x00, 0xff };
++	unsigned char second[] = { 1, 2, 3, 4, 5 };
++	unsigned char third[] = {
++		0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
++		0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d, 0x1e, 0x1f, 0x20,
++	};
++
++	if (record == 0)
++		output_err = bpf_ringbuf_output(&ringbuf, first, sizeof(first), 0);
++	else if (record == 1)
++		output_err = bpf_ringbuf_output(&ringbuf, second, sizeof(second), 0);
++	else if (record == 2)
++		output_err = bpf_ringbuf_output(&ringbuf, third, sizeof(third), 0);
++	else
++		output_err = bpf_perf_event_output(skb, &perfbuf, BPF_F_CURRENT_CPU,
++						   (void *)perf_payload, sizeof(perf_payload));
++	return 0;
++}
++
++char LICENSE[] SEC("license") = "GPL";
 -- 
 2.55.0
 
