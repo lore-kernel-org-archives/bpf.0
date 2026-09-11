@@ -1,82 +1,73 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4486143B4BB
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 08:36:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9180145D902
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 08:41:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789115794; cv=none; b=BP8bAWL20rZIlES4DcWGlXK84h4AiDwRxZ06iFbVCl4B1Dvc9BI4ehsCk0paIiJmq2a8lhT81ctUHlNPXoln99hJEESErsxDjyXgTO12uDqmH0xaW1W8hm+zu+MxRFED8nJpfHE9kDpMXruGIdQVYqNAfMPeSM0Fqi8AiJi4Kl0=
+	t=1789116102; cv=none; b=Y7yeDHLsO56xNkZi0t0EGYCyLRWNAeyofhrNWUrYWyhG62QOU9DaGNBLnElvSJN7RdE4GLg3007KzAqJZvB3N2EoPZkfI8Gvcj3LozDV7QD553TLmnLdb17z0DfILjw91zYOvm5wYTIjYLbiT5TSgGTw1jZdLnQ1V3Xo5K96a9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789115794; c=relaxed/simple;
-	bh=Vc3ke0ay4ZIsbqVFdQwr9M1YL4tDSowwtOtBmj13i1s=;
+	s=arc-20240116; t=1789116102; c=relaxed/simple;
+	bh=bAKGZZAtcB22YjUyN0E0BXvuhEg3lH7+KTKSkhyH6nI=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=grqPfCRleXIHGFDO1ffI5YlaMlaIdl1sd0tre0xYcIpvvGjc9NxLV32F0DhtoOp4pEpmvwSYWCggK6WWHMVCm0ikYnLIvAHO24Z837ezRz6dISmbpByARmErOFPCk3bgoeZz4w3UCNnLVTEXFPLnwOhjCQXREmGhOpMWm0oJPFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lpOtc1OA; arc=none smtp.client-ip=74.125.225.140
+	 Content-Type:Content-Disposition:In-Reply-To; b=sniOtoU59xdaEI1pmF35vt6MDELUEyulkI9D1YHHcJ1Dm4BzctYL3Mx8wh/65J9uOTFcXLA2tjisbBnwFKezxjQBkYPmKkOTrII7411dSYPgKp1p4tQQFbsPxvZlXKmfhR73fUdHmnPSv8ERYSOFe1xSKv0kG09tFd5CEFF/vZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=p5jWKXFP; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lpOtc1OA"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912e2406so2751585e9.1
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 01:36:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p5jWKXFP"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-49e625d5a2fso3033105e9.1
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 01:41:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789115790; x=1789720590; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789116099; x=1789720899; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:date:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=AwcqdZ770QLscwW/qnLvteUOSMyAGgQxOPg3tQUK1ak=;
-        b=lpOtc1OAcsLQkPG1rMP4Q3RuxQDnimMzKhIIkAar+W2vswIXViZBY0Xc2XIcPSiFwc
-         bnJ0AWGysyNTIuxmwGEzJMSEYpnSTFc75TnWuW8vwys0OiJyEKlitv9Ci1vUsedLziB8
-         +QSrpzoCHryZPIeRTwRoImcOyo7UZCMHk8iaZGpL2DlfrS2ePmOtFD+DhvDOwnul7q9P
-         HozxMRNkK0dwHah7/keToneTuyhDRH0J7rt6k4pTTR1dmw6PtlA2Sta7fMAbdc6E0bLR
-         UQU0Uhi6u6IkcV3RmU1XHUtDsOEt9bN9Sb1XZyNjluZjnalWXPmzus1uaWOrR+ees1pV
-         44mw==
+        bh=zFqh0Z3ymXsNZ8CzwCshHZWIQRM7kqFalTjbGJDgPe8=;
+        b=p5jWKXFP2TATHdgonnOuK6ujGmIHyUptXEnYU+R17xtOZ38Dw/73rFib2hQTCD6mYf
+         hRFiBb2QU7KIvNNtSHAL3uKWPmqI5VeroPRaK1hzS8K8qeUJ52+myQ2yB9Wj4WRknMqi
+         /Rj1HLZz0aKSHcsFRXdyoPH9L8uTk1xeEunNbO8e/GE+QrdR2TugU8zvK4CuH56GE9Q0
+         84xJhtaqX4zpOnEN92tgll1B5mZXrPqam49JBZIhARl/L5zQyutuVwRncp6S6OOhzuy1
+         PRErBIG8oDiX7KQrjvP8/j0lgaf1+Qc+RcKQXJg4nq6ft2TXXxH1IA+yItuQVR5F70Kw
+         ljTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789115790; x=1789720590;
+        d=1e100.net; s=20251104; t=1789116099; x=1789720899;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=AwcqdZ770QLscwW/qnLvteUOSMyAGgQxOPg3tQUK1ak=;
-        b=Hy988dqCGIhVZlYbHf19CE7NXX56hPh1talm7Kz/0J0kBt/zWHfTvNaM/hADQMf/Cl
-         XHY0/RqC8SwBsXKP6IIMOX3ZMrwV53eOvD+Cus403gzJsRg6DPA8lwEQqQwKEqFCsjtm
-         xhdh1oIcX0Rw4B5EhQ2NtxKrM35wPxtsUyeHVZCZWkwADbb5oKnUiJu7wy3aUXO3vE+A
-         TnyD7VharnOTcgVboqeAwDyCYB3UJytSZPYaF/E4R3ONnxYeJo4FxxQjq+bWYuVYtbsF
-         cEikNHxNjZl4QtZFhnqV8Sf5JLK0JGniH611YcqJZNAB/ZmybCyTVJf7xeA1vKqX1GTx
-         kyMw==
-X-Forwarded-Encrypted: i=1; AKwUvBw8Dref9+aHVh9KrzsFxSoRPrI4ILEzuqQadtX2DhlqJ7s37uI/k7yeKW//jmC//51DO2c=@vger.kernel.org
-X-Gm-Message-State: AFuF++mTw1oZFxBgsFAbKxuaDBPB54pf1UwVisxaKR4XaAkRm4VMY/zC
-	sEOjBxf07b6euyjL2jkdgL/zKEitBoObcPnLSxjXFMVmxtrbGENVyflT
-X-Gm-Gg: AYBFou0HD58M4Ylz7Ds3mUek6q9TXbYvEwjek4+aOXU/EviWYB5tSt0hwb0EYUjA9SR
-	rlgSKKUZ3d/JZz3Zz+qMa5u30MoBO2u2DqVZGYehduMA3aCeEwasD69yWVmx3UID0Q7ATAt02hj
-	8dtDgvG9v70XaBHz0Gmk2lPt2dY9rEPUHj00lHDDmPoPc1GLhSjux3Kq3wZ1upXDNzkJJkpoXMr
-	nkiXKnOgexBzOZkpoubsx+Y+BtFz7zF2i51mK78MQmXlN3nFM9bcTMe8IWkgSWtU/ZW1xbrqDNG
-	zs5CSAp/xLep3LIVGYTcbQ82EKY1sYCnfBBTKnayNDcHye7rEqC4yL5/UVI/bILq5JGS+zPFM3P
-	EnUAnCoUoTHnXlSVbQq1Hrg//qeax3vWV1mE5M38/J4KkoWbl46iHQXWWaMPyyDehVE5HDOBoH2
-	C+iqJtv1IudapF+CPSQykOaSHoafX1RzVmtGAC43qr3dfvVyJkSY46f03YfsrlfAYumozX
-X-Received: by 2002:a05:600c:3115:b0:49d:1e79:35d6 with SMTP id 5b1f17b1804b1-49e61094b9bmr40223525e9.14.1789115790162;
-        Fri, 11 Sep 2026 01:36:30 -0700 (PDT)
+        bh=zFqh0Z3ymXsNZ8CzwCshHZWIQRM7kqFalTjbGJDgPe8=;
+        b=T8aTU8MgLiFmQb/uZpERMARVDVnT+c4unX5JILusEYZiBRLUmERUVcq7pR7qmPQljy
+         vcTMMD/o0n9SFDHJzy2QuW+r3ky0knSRy8SX8Cacbd24YYlYVXCqBcs8moJXroPPipfd
+         OxNIwWrHnjqfk8LwbKxHxZe1NgHt5poveONZIRuA6u2g15s+ewoaM6qy0f1+1CJ4D+IV
+         tK9Dg8ch1ZFRWIAMCOyjiDgoKqAVLSPRtb0Nt4BHV5sIBTYE5XjC9S57QFXuf7dTWWR5
+         2nl94YxF/xfIu+3V9cxaoHixqE8pUMwNb1E2fWTN984wDIc7ZX88EIzaCXNdoRmXdz14
+         8iVg==
+X-Gm-Message-State: AFuF++nklemw0STJrWbfDj135JWXHZTUZ0hDldcwt/nST4V9uPNJQADX
+	KYhv05NpQ06UPAiD1ioB4m/e8LN4PdChaBr5QOw0OElppVrQq/wubhlt
+X-Gm-Gg: AYBFou06WucD+fUea+aieiZiesfzbOzPLK6vpcYfJQHtNn4qOpuBYG1VIttAWRwenYo
+	h8MxWQ2sctKLXh52tX5j4UyJ9eb89ScOuIc0MxoLBeBr4WAR9KzMRCk0WWMWErFtwda6p5wE18r
+	E42oWCQXOlgalFTMxttKGThR9hvgqUggq4KOLcjWP27Ad+UlbA6gTtZdiRfhr0GTbF3gX/4mse6
+	EJTXZ+VHgwRtguZ7cu5BfOimBHPgVNGgYCdmZk9/KBZS8y0YdE4nkt9vu26Aoewr37a5b3fl1Kr
+	kKYo0KPnmxYh8GrZZn7ZKy4zPe9+9Ok2xJI7HBh+ohv9NXtijLNuGyluUpeLZ6QdNwrQZHL2SR5
+	ibOzU/s8d+Gihli7GT10Sl7JtjsoLKkiCeFa/dKLRV0Xd703UfdPVzI21lQ0rbDIVxqois9nCNP
+	0pPXn9JsKafOjAlyXNnQ4BaAhbd/pYUdPmVTIP36c8GePNNwhtEfIpBv0ZZg==
+X-Received: by 2002:a05:600c:3f0d:b0:49c:fa21:1c86 with SMTP id 5b1f17b1804b1-49e619cee90mr30192355e9.27.1789116098711;
+        Fri, 11 Sep 2026 01:41:38 -0700 (PDT)
 Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49d26c38e3asm151299535e9.9.2026.09.11.01.36.28
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-486eb32e8d1sm4307067f8f.11.2026.09.11.01.41.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 01:36:29 -0700 (PDT)
+        Fri, 11 Sep 2026 01:41:38 -0700 (PDT)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 11 Sep 2026 10:36:27 +0200
-To: Kuan-Wei Chiu <visitorckw@gmail.com>
-Cc: song@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
-	kpsingh@kernel.org, matt@bobrowski.net, rostedt@goodmis.org,
-	mhiramat@kernel.org, akpm@linux-foundation.org,
-	ihor.solodrai@linux.dev, martin.lau@linux.dev,
-	yonghong.song@linux.dev, emil@etsalapatis.com,
-	mathieu.desnoyers@efficios.com, hch@infradead.org,
-	jserv@ccns.ncku.edu.tw, eleanor15x@gmail.com, marscheng@google.com,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] bpf: Replace sort_r_nonatomic() with sort_r() in
- check_dup_ids()
-Message-ID: <aqO9iw319w0Z11U6@krava>
-References: <20260910165222.1186628-1-visitorckw@gmail.com>
- <20260910165222.1186628-2-visitorckw@gmail.com>
+Date: Fri, 11 Sep 2026 10:41:36 +0200
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCHv2 bpf-next] bpf, x86: Use global buffer for trampoline
+ size generation
+Message-ID: <aqO-wNLX-fjdW5pM@krava>
+References: <20260910094353.1256316-1-jolsa@kernel.org>
+ <20260910095556.706F11F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -85,51 +76,108 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260910165222.1186628-2-visitorckw@gmail.com>
+In-Reply-To: <20260910095556.706F11F000FF@smtp.kernel.org>
 
-On Thu, Sep 10, 2026 at 04:52:20PM +0000, Kuan-Wei Chiu wrote:
-> bpf_kprobe_multi_link_attach() in the same file has been using sort_r()
-> under the exact same limit (1U << 20) for 4 years without issues.
+On Thu, Sep 10, 2026 at 09:55:56AM +0000, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+> - [Medium] Concurrent calls to arch_bpf_trampoline_size() write to the globally shared, unsynchronized `trampoline_size_image` buffer, resulting in a data race (Undefined Behavior) and cache-line contention.
+> --
+> 
+> commit 4c6aeb9264cf2877d767fb9a021802485dd9d3a7
+> Author: Jiri Olsa <jolsa@kernel.org>
+> 
+> bpf, x86: Use global buffer for trampoline size generation
+> 
+> This commit changes the BPF trampoline size calculation to use a single,
+> globally allocated executable memory buffer instead of allocating a temporary
+> one per invocation. This change aims to improve attachment time during tracing
+> by eliminating the overhead of repeated memory allocations and frees.
+> 
+> Link: https://lore.kernel.org/bpf/20260907160538.922450-1-jolsa@kernel.org/
+> 
+> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> > index bba351944202c..9f9b1456dab0d 100644
+> > --- a/arch/x86/net/bpf_jit_comp.c
+> > +++ b/arch/x86/net/bpf_jit_comp.c
+> [ ... ]
+> > @@ -35,6 +36,21 @@ void __asan_store8(void *p);
+> >  
+> >  static bool all_callee_regs_used[4] = {true, true, true, true};
+> >  
+> > +static void *trampoline_size_image;
+> > +
+> > +static int __init init_trampoline_size_image(void)
+> > +{
+> > +	/*
+> > +	 * The generated trampoline contains calls and jumps with 32bit relative
+> > +	 * offsets, so the scratch image must be in the execmem range.
+> > +	 * On x86, module data and executable memory share the same address range,
+> > +	 * so using EXECMEM_MODULE_DATA to get writable memory.
+> > +	 */
+> > +	trampoline_size_image = execmem_alloc(EXECMEM_MODULE_DATA, PAGE_SIZE);
+> 
+> [Severity: Medium]
+> Is this global allocation safe against concurrent access? Multiple threads
+> could compute trampoline sizes concurrently, for example when attaching BPF
+> programs to kernel functions that hash to different buckets in
+> trampoline_locks, or when concurrently updating different struct_ops maps.
 
-true
-
-> Switch check_dup_ids() from sort_r_nonatomic() to sort_r() to match it.
-
-I looked it up and I used that based on sashiko comment,
-it seems like switching to sort_r sould be fine
-
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+we can have multiple instances running without the lock, the trampoline
+does not depend on already generated code and we do not use the image
+we need just the size
 
 > 
-> This removes the last in-tree user of sort_r_nonatomic(), allowing the
-> unused _nonatomic() sort variants to be dropped from the core library.
+> > +	return trampoline_size_image ? 0 : -ENOMEM;
+> > +}
+> > +late_initcall(init_trampoline_size_image);
+> [ ... ]
+> > @@ -4000,24 +4016,14 @@ int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
+> >  			     struct bpf_tramp_nodes *tnodes, void *func_addr)
+> >  {
+> >  	struct bpf_tramp_image im;
+> > -	void *image;
+> > -	int ret;
+> >  
+> > -	/* Allocate a temporary buffer for __arch_prepare_bpf_trampoline().
+> > -	 *
+> > -	 * We cannot use kvmalloc here, because we need image to be in
+> > -	 * module memory range.
+> > -	 * Since it must be writable use execmem_alloc(EXECMEM_MODULE_DATA)
+> > -	 * that returns writable memory in the module address space.
+> > -	 */
+> > -	image = execmem_alloc(EXECMEM_MODULE_DATA, PAGE_SIZE);
+> > -	if (!image)
+> > +	if (!trampoline_size_image)
+> >  		return -ENOMEM;
+> >  
+> > -	ret = __arch_prepare_bpf_trampoline(&im, image, image + PAGE_SIZE, image,
+> > -					    m, flags, tnodes, func_addr);
+> > -	execmem_free(image);
+> > -	return ret;
+> > +	return __arch_prepare_bpf_trampoline(&im, trampoline_size_image,
+> > +					     trampoline_size_image + PAGE_SIZE,
+> > +					     trampoline_size_image, m, flags,
+> > +					     tnodes, func_addr);
+> >  }
 > 
-> Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
-> ---
-> Build test only
+> [Severity: Medium]
+> When __arch_prepare_bpf_trampoline() writes to trampoline_size_image, could
+> this lead to a data race if called concurrently?
+> 
+> Since trampoline_size_image is globally shared and no lock protects it here,
+> writers in emit_code() might overwrite each other's data:
+> 
+> arch_bpf_trampoline_size()
+>   __arch_prepare_bpf_trampoline()
+>     emit_code()
+>       *(u32 *)ptr = bytes;
+> 
+> While the memory contents aren't executed, concurrent writes will cause
+> undefined behavior and cache-line ping-ponging, which could trigger KCSAN
+> warnings and crash systems with panic_on_warn enabled. Should this use a
+> per-CPU buffer or have explicit synchronization?
 
-I ran bpf ci on this, it passed
+the image for arch_bpf_trampoline_size is just a scratch pad that's
+never used/executed, we take just the size, so no problem here
 
 jirka
-
-
-> 
->  kernel/trace/bpf_trace.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 29260951aa87..1d7e73ddbafb 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -3826,7 +3826,7 @@ static int check_dup_ids(u32 *ids, u64 *cookies, u32 cnt)
->  	 * and check it for duplicates. The ids and cookies arrays
->  	 * are left sorted.
->  	 */
-> -	sort_r_nonatomic(ids, cnt, sizeof(ids[0]), ids_cmp_r, ids_swap_r, data);
-> +	sort_r(ids, cnt, sizeof(ids[0]), ids_cmp_r, ids_swap_r, data);
->  
->  	for (int i = 1; i < cnt; i++) {
->  		if (ids[i] == ids[i - 1]) {
-> -- 
-> 2.55.0.1003.g10538fe699-goog
-> 
