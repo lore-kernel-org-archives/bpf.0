@@ -1,56 +1,60 @@
-Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11013005.outbound.protection.outlook.com [52.101.127.5])
+Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11013013.outbound.protection.outlook.com [52.101.127.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE854582F6
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 12:08:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E2202BE7AB
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 12:08:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.13
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789128516; cv=fail; b=YbZCzHls+9ldIG42KqF9k3OLjPjNf0Ul2K0BYDbcNZmyhBy3LTaFEt7g1YIT7j3CHvjqDcOhoKZtbAmLYGzz8lcn4e06IxEB6ya6h7TJ/wwrrsTOd2enohLRY59AvNRYSbmWJaONLssf/0/5aIUtTe7KRS+Hj3UvIzVzL1VJHKQ=
+	t=1789128523; cv=fail; b=fGNWvvJGFl2lcXbiXZ/uvSIZQUrU+mYYpVDEYzPEu09Hywo/w3RdAiOImQb2QNFVwFjKgkb43P6BtDfmO6aDu7Dc1+geFAG0uaJDuO1XMcYC39hLn5V5Wzj6uOgJAYWZREHY2YYqC0ov/vwWMUiaCSudam2OnyI0ZqTOeBRuDi4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789128516; c=relaxed/simple;
-	bh=VZho9qSDRaXbzntJ42vgHEyUJPh4sOq6PYSJmpbQ4LA=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=pyTQGWCJaGV6ueGepJxUNNXENkEF6moPomPhXYV9kdNpcrPUthPbA5tCyd9G5Ppld44B1X1NOq2QnnemIFxOKyp402MuME2XEqXtiepH6kU9IBxqHa7JMYFgrzmMz0+cvwxNbhe6ecpe0VPgGblNZOlsSKxvyQ37Q0/X7XlSIrs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=nc/v7CJl; arc=fail smtp.client-ip=52.101.127.5
+	s=arc-20240116; t=1789128523; c=relaxed/simple;
+	bh=v9Iy5Nf+fFyidZxqsMAhSKyB4U5c1ImcXITshswxClw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=c9RLaC2Ui2L1TDP6b+nlML1nAERwynpyHBsK4/cm6aSWX9e54m9MlLo/UcevulaS6Z/8/oa9ZlTHCL9Coa980qi6rMmf20Lk+i3S/DdZmowAo6j5+vOFf4q3uN8UFo4T2DkCZrIjswUvme+3MMKB41Bly/78PKFL5Wcp7m9BM0I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=WGyp0nAi; arc=fail smtp.client-ip=52.101.127.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="nc/v7CJl"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="WGyp0nAi"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Ol4gOgXrK3e4pZXMfZQD1jifL4LX0RipaiY3eVhwSdNZkeK+V+M+8st95CLwSnGZH0V4H0QI0Lwnrgbgw7KJAcIWeCwr1VRJLDes703sVb+I7pQuGhma85sdN53XbtL3mDtch7EgGfyM/rBIAV4vkdW5AUnTSQCgOZZGgoP9Lo2W7jShDgGbg8bIdzRe0/B4C7osjY7vBYKkYCmL1QuI7Y4YFmxo8k/Qn135B6t96JcEL1PfTiPuP3P1Los6yvDLgpMBajDubIUO2muhCCvtjOhL0vHfwNJk2KzzmMZRt8GvLGzs/AVAwmdPSlfFblfnCHgmiU0XAychy8ELnwEbAA==
+ b=hLAClkgE5ku6kIGVmV+pCU0v4OxQdmr8J4AUOcO73sZ7tERsKqkx3ns+30+VVD95sxkYVMHRIk4icpoc70U+vJROjh9+qvpegjAROkZLVQHKDSdAcQIqcd4WSnnrpsEDltu8m7CPJIw3xZjt0KE98XqvIdJx6wvTDgODFJyam9+0b4VGAtynyTJlNeKp1OqtXzkIjGEO9nl2KvGhWXn/+SHzKiXdvIQrrBbZ3GksXiD4wi5uKhOMB5KnKhMrbeNqg1OWWNfpWwPSCeqiuw//N0sjy5U/FIr4wMcoHkm3mZVATPFLh6o46INMEVygKkOH4bdRjxbcy81xQ9znVdAM6Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vMdebXZHipY+mJY8PHS7a73u5M/iWzvE6/2INf7X9hs=;
- b=f8N661EaD7dtBo6IC+0rFJyJeT7JvUwGJoG3M09cuDWQwjtYuk2eEn5ykL3uC1+vq3Ov0sJNrKAKhI3/qAWGDrPUZLVeZRtnIvouVbPbuiz8e3iMRq7hu8gC9HC/GGQUPDxMWZaTXb4r5bEOIxT///QhCPzb1xOuL5tyX9BTgsaqNQZo3mUNYMSi3nax1mqO3Lhk3fR77RFr2tAAigiygIrj4xIpAsMzcf4cbUaxRPxzW2PHPAMN6ykht3mwrPPkoz5N54j9iJl9Jx5BkLBJkscWplcX3mb8GasYDWY64D1iiYCexBlJ8RwV/kjBR1o3C2/7srsu34jTD98mp7sFlA==
+ bh=/wCCD1mndzE1/rCubY0JbQTQghJplfIkLhZECJUdqns=;
+ b=T2BP7BunyLmU/FH2vAPnqv2PS6eewMzL9aEp2/baZQEEv1uPMMXoICUAnoDGZKXrbdnU3WoMsNCEDNaDzYH5blM2YmezNj4faq6ICATkTVfEQOj3dXKkhjdLQrqAGk5D81rN2it0ddtYJoL3jnO2m32lEOS16AkCb9MtWEVQOWsnq7X2t3AVXHqFeTnwPdAJNbNybnsLwcRbUSbJB91chj68tq+s+Rv8FzjETOBA6OsbdTkV9VH+mXTgUJs3M3FaHfVV2zviqU/6NZjHrxgw6NMdQv6Ph8H8oLYp0lV63+7cTPNuTk4pekqDbEw6+GGifJK4+qTtwPwi5ChwDCqi4Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vMdebXZHipY+mJY8PHS7a73u5M/iWzvE6/2INf7X9hs=;
- b=nc/v7CJlqmClRa6/+kJvRlEQTrIZUOqEfAz4PwKQM6lVV1a70jJyK/BBQLWRqQbqRVFgo1U4pzUulMHegUaViQQbhlKcEcUrsIYe2DHwuK+bNIW3E+KKF0mCDLvskozqOTt3fcH/vcw7ZlUi/1TwHcf9PYwGIbXARHpOeV3DTDK4tnBlke88Om8GQ+YMkJoMD8I2OYqyrIo0mQUwlWOj9dtJP0Lj8yEQA4H2YV4eXQqVTVZpdgJpyoB43/W/YMu3Ek0NxsAHNuRGQZctm1LgLq/28VsyEGFsMzs/Te0i1H0aO1Crc41jJIRR2RMjnzZLhAk3UjQugl6WjeWPq89rmQ==
+ bh=/wCCD1mndzE1/rCubY0JbQTQghJplfIkLhZECJUdqns=;
+ b=WGyp0nAiWCZ147hyDjvXJy/U8pMKcd33oaxr+W0NbXpkceoNb/zbQ18ll8xS0zkKNc/QNcefzkDA5cJ5XqIWQY4TH/CC9qB7VqAn+RqAOBHNw0WMqfWP7sECTWjH1HeSaGX33PJXnX9Jv1//GFBH5DpfQ40pNO+/86AZEIlPYE40h6hG47pviDq3swubYTPi8mVUYGJ/V50drvCtHcKnuafOF5Py3O6I31IFn+JrqyYHxOrdIizwzEIWMyJv+OZYZD8tETgMUGel+NK4rqHRx8SfVj+Kbqcb/xKaJpQRrVWxwX64ArFyoydGS/+rUOJmLhgKXftEzin5xPx+OdiOHw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
  by SEYPR06MB6755.apcprd06.prod.outlook.com (2603:1096:101:165::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.9; Fri, 11 Sep
- 2026 12:08:30 +0000
+ 2026 12:08:32 +0000
 Received: from PUZPR06MB4742.apcprd06.prod.outlook.com
  ([fe80::206c:c661:9838:5571]) by PUZPR06MB4742.apcprd06.prod.outlook.com
  ([fe80::206c:c661:9838:5571%3]) with mapi id 15.21.0406.007; Fri, 11 Sep 2026
- 12:08:30 +0000
+ 12:08:32 +0000
 From: Fuyu Zhao <zhaofuyu@vivo.com>
 To: bpf@vger.kernel.org
 Cc: eddyz87@gmail.com,
 	andrii.nakryiko@gmail.com,
 	alan.maguire@oracle.com,
 	olsajiri@gmail.com,
-	Fuyu Zhao <zhaofuyu@vivo.com>
-Subject: [PATCH bpf-next v8 0/2] libbpf: improve BPF load performance by selectively loading module BTFs
-Date: Fri, 11 Sep 2026 20:08:18 +0800
-Message-Id: <20260911120820.46900-1-zhaofuyu@vivo.com>
+	Fuyu Zhao <zhaofuyu@vivo.com>,
+	Andrii Nakryiko <andrii@kernel.org>
+Subject: [PATCH bpf-next v8 1/2] libbpf: support selective kernel module BTF loading via bpf_object_open_opts
+Date: Fri, 11 Sep 2026 20:08:19 +0800
+Message-Id: <20260911120820.46900-2-zhaofuyu@vivo.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260911120820.46900-1-zhaofuyu@vivo.com>
+References: <20260911120820.46900-1-zhaofuyu@vivo.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SI1PR02CA0030.apcprd02.prod.outlook.com
@@ -64,168 +68,254 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PUZPR06MB4742:EE_|SEYPR06MB6755:EE_
-X-MS-Office365-Filtering-Correlation-Id: 435eadbe-8a80-4bf1-da36-08df0ffd64a7
+X-MS-Office365-Filtering-Correlation-Id: 41c7b0c2-0baf-4aa3-0130-08df0ffd65cf
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|23010399003|366016|376014|52116014|6133799003|18002099003|56012099006|11063799006|10067099003|38350700014;
+	BCL:0;ARA:13230040|1800799024|23010399003|366016|376014|52116014|6133799003|18002099003|22082099003|56012099006|3023799007|11063799006|10067099003|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	0+0vLpHONAZCA2g88dReIOjwnl1VGBBZ1PCsHMc/tLmjusJH0CslDn0U151HdXFPNKn1VEDi9iq6Q1sQRF1zpyZnq54+79ASsQLhvAMvPTsyVtFhnRa6xKGRttduX9g+aKquEUPO+csUxhK33W2kkJmFYPZyaAKu5q6urEbfpA46cZs/Cbx7AE8iLJK2DpT7sle+aAAvaRTE2ey9zs98gp6kqyoGM/WRxahP+W1uHLROW4Fs4obIqgFCGjas9Ex4gznYbuFdsLjkS4gF0cs2xfxAC7CuKAc7CgQFnmrV3MotZB0FHBYfad/jRHK/ypax1/XDokkxCTqoB/27sfaX4MJtahQL3TiKFEheIEOhBe4tkyQhI/hQPFpg0ZQi0PJCqI3Y2eLylsbgJG8dSEJgdus/hWmi1RVg4QI6VdbsqphjCMiFB10CfP4yBUrZqbKMU3LuCVIXdPTiq2YDg7f54JwEVCez5bD8/BA5c6pHh3dUS1Su1xvB8Sqo7czxv7yvKixV37Fsu3bZROM7BIO/mPhRc+HdBURE+sTWbPIFgkdBvChq7Ei0l+Lex19khPP39XUuVeCUyVE+8Ep1GR2wzPldYjlQOwytQ81kEFjr1wlJYSoFADmyMiQuqDJ5D+yxeXbUXfpp2LhLJxv1CvByNIIXroEoNAsDbkI6rON8PbsyVXHD/e56z+NjeHdprH44mP2MOY/+p0+UT1Rqvob2ODscKopjRucwrRMYLkUKLpc=
+	MBE10fLZkalNPJy7tkKLYASYvQnjGT7jZW0Vurg35DjBNBLIVZiNmdXLtB8tx9SBepSCjqq5Trt8m3o3OyV5sjrOWsdRtcETVDFyBxgG+K1re+GAJbgmt1cRvQT2lJ9y/1gx1ikfBxzVih3pK/dC1Hwu+hTDYRMb0Odj49v6i0O/yQfnEgnPhskeejQyDSDls7TJHrFPWvpzc+5+j8aTHpKg1u0uMpiRtq99FVmf7oQayEBxOgD8osHD8x0/4zTA+YZtPP6A7Srb5Npu1WAz6yk+emcMRpd5n5pZWt2s4Ju+qh2LBLGNnCbputiLjQxKOd8sCjvYfBofHLxDXVfggviRbp9CbNVgQRpI0WejxXVoeXkw74XseTDbouA5BakZjrX4KSy6HoUH9T+opet9vHu1/JjFUYIUF5kK6HrNjdZhf24hW6ywthtcq7PEJPc66nkUPemlfbleO8zRtZhCuXlAavWhnMN3RBLv0euWNH0Ns8qMLf/hrY5k7qo4yA+o8/PVJkqu22yPR+izkwv7pP178sIWgAVZh2SazUogYNB3UcDM3AKcShRWIjXXA6T+1cbZeelqLvRRVDS5J3VKJxmgQ9aV7iKnk2fnVW/h3rBxRyYfdbHvA6R3VnE9o5i9lXyKM1p7x9EvPWog8Z6wvH4x4WXlqfVB8C48bpXSoKzuuIeDyb5j/DUJMyb6xyKl79AMXtAGlcoCcgsCASBa6mqdaHkPRMGHjRY0E6jMJsI=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(366016)(376014)(52116014)(6133799003)(18002099003)(56012099006)(11063799006)(10067099003)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(366016)(376014)(52116014)(6133799003)(18002099003)(22082099003)(56012099006)(3023799007)(11063799006)(10067099003)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?LbyHFrPY0Cl32reAknL+qKMzyqV0U5ywYDhuJkthded7M5phV5bZDJaN1kSo?=
- =?us-ascii?Q?SuCu+FU9fts9MbUnKdlKxjuuOUYOY7tdjMNe0z1Ryvv/JC2OJzCOwBwNeqcc?=
- =?us-ascii?Q?jf3OAWHLm4DM/71L5fggcW+iRoRXp9QU1XfiuZ2vS+TORy+2AAnmnb1QbjGp?=
- =?us-ascii?Q?sk08BoInILd6VLmAiI0vKAL0GUoCOtLK+LF5ZwquqbtcJZmdpgjRB7hHbFmO?=
- =?us-ascii?Q?WU7GFyEjAGCcf/juvNYT3LvP1yZCtt2cWxK/kxpp2u8Vj9DS0omI6SXhUPbr?=
- =?us-ascii?Q?L8QQlYh/i/I0lazb0hY3UISjU2YDTbs9KDRkZ8ik7c7fhwI80INliUuAfCjw?=
- =?us-ascii?Q?8sYiHYCNkVrgcNl8TquPzjuIpLgNPgfEeVLoQeMXmda58csQUDw1tCryu7Iu?=
- =?us-ascii?Q?lK9O65AHKVy1OZBCfiDLUvhZcI2LRE+g1GkDMgxWMjVbw9uT/newEdInzTSy?=
- =?us-ascii?Q?xOMRl341xT3w7deHdMDFhhyyNfpYCqxhpM8/fBjawaVIOE/XGMpOM27+dozu?=
- =?us-ascii?Q?qHRsKZmwyS6eQpmytZRu2EEB1mk+OxASeBJhHsDttiXEddPbgai8w4DNJBsp?=
- =?us-ascii?Q?Xe7wW0cleiUyLn+Hqq4FoHbrj+8/EJ8tT4UDaRq3z6QNmmqE7znxaD2ihxQj?=
- =?us-ascii?Q?D4YoLm+LquJLNlXgH+jlgcuDTcZ5P8IH/cmjLO+qqkCpCUOuUA59LnX5HEuQ?=
- =?us-ascii?Q?l4jZEeAlpeVILLOckrUt+oPQoZ5fu/OQhyz6lgwfJMaEih7gKTXY0qry0agD?=
- =?us-ascii?Q?O3vGHDKEkN/VlZzjyfPZLVFpFJ1S0+ELogPNgEuzRjal8J1hxp3Ql0we1nLQ?=
- =?us-ascii?Q?0yLWU2KKszjpVJaE6UAbf8bgEcimTVXZ6iP9ZnOAiY980PSIofWtiRAJPnzC?=
- =?us-ascii?Q?TmDXdpSjW8u1JNcdZxJqCpXuYcKwZxlxCijFXmYqDmrzWl4Iw0nSzA3QTZSX?=
- =?us-ascii?Q?Gr1T1wzWi1/3Mc9Wms/9/oYyHBtD2EWU3HWts2cbydKO2g/F7IO24Us5G1bq?=
- =?us-ascii?Q?xxN+NmfpuF27/5odgjUiDHDfyQW24WSzUtBMBSw0XcuV20vkwD1m52TvXF49?=
- =?us-ascii?Q?ySarOWNW512FQa1ybyWv9nnV0CCjL/NTKgZ4N+PZ+1u6s+v2R2qDFbPL9i6K?=
- =?us-ascii?Q?CDDZPjKg/lFP0o4yyVjIdP4qb3aY2mc+8du845PGSCN8Ov0GhnC1rlAlhG90?=
- =?us-ascii?Q?Cnqtg9GTZizFHk5wKYkXA2xCZSAN0B4wnZYjfIu439tQMoptqT1s3Su8EkWX?=
- =?us-ascii?Q?xk1Gq3J8Q8iLb44X6WL0H3uAG2WsuCv0l/nlmJ51oBPdvWJM6/gl3fgE5Bk7?=
- =?us-ascii?Q?NzULOw/HMNI+GHBY1+WxECMtqFcQt99REpS16GQ1b1xAn8ueb8LhWUtIY/w7?=
- =?us-ascii?Q?D2/NT4/TG+GXqFqLVSB3Ju4sVYXB+ABM10z4J+rljVtoJPP9PRJy/lFcV3uo?=
- =?us-ascii?Q?Q0s7UFpm1NDuOvF/KNJZlTwliOWWaeRlWHP1PHvBLY2/S+SZWe1onBMOO95z?=
- =?us-ascii?Q?n+CDbwT3WbbmwCvsYGt5x1AwuHEKsmbu3JNsI2vVsioOsZAL59707rhUXwmu?=
- =?us-ascii?Q?kL0/PGtB2+o2+5NI7w1yVAiGCbKnptpyKyNKnSQRMrdaa1ux5uRKfbqdKPQa?=
- =?us-ascii?Q?mwxvYqVjSsvnbHrjc9X6DXHRUsVF6NoFHi8vHxHz10fQ7fGsJPxQJxLErA6O?=
- =?us-ascii?Q?AbqyYPjogrEEN2wibt99XyJO1ljkX89Sliiqnw6TQX6c8I/prOd/ecs3Snvz?=
- =?us-ascii?Q?uNGR77KBDg=3D=3D?=
+	=?us-ascii?Q?JCRXg97dpKJfZzQjTv69Qc50BQYkx4SNMMCsh3qiuWqnjey/t3eJs4yt73VP?=
+ =?us-ascii?Q?4fsK1T835paP7RttWd0jLQmqXCOI2F1j6iWypnK7ED84aCslUE+4ejNVfUdx?=
+ =?us-ascii?Q?aVI9Tlxh393xWjpQg0a+1Q1D+2SDd3LjLUaYbfJtLPCJnoYB/KZqlF+BK+Bj?=
+ =?us-ascii?Q?ffp1JKXtgRcyOuKliid5RGSKH4vJSBIjbEngkbmaazgtu7I+9oPwpoRx/ZQu?=
+ =?us-ascii?Q?EJpoL3Louud4jivU4Z04HniOzlUkF8z57zxBnPrbpgttwS0phj8VNa/WwpGu?=
+ =?us-ascii?Q?llLjgXfDWbdHQYaA0Pvcyoxyyx4jc7Ilc3LqvsFBNqi0QRZOBXLFmxWURvRL?=
+ =?us-ascii?Q?BXCStA+JIcExBiSPjiHb7nfZ+IhW3JvIoEMtYdadoW+CDwgkRUo5pZ9LW64J?=
+ =?us-ascii?Q?CG5G+bs+KayBeXGzs+0JvDD7ZjsVCE0AXmDfCe/do3DRMzczz9la7TDZQ5Mz?=
+ =?us-ascii?Q?X1Kl/aqns6v2EUQJahEH3FHdkO+kAYGX4iTIAzT36bjNOxhSD7tQhna8c4UP?=
+ =?us-ascii?Q?sxHk5d+1HhhbgcV8TcJJWvtfiYK073cuIIjXpS1Yqs21bD4MBVci6jmjit5j?=
+ =?us-ascii?Q?lmS/PUemgDEgFa+h1uWSDck+pfAGJp7KRzD9P6iLszwW62k2dksnzy1Yedi4?=
+ =?us-ascii?Q?BOjwU+9S6uD0Nom8oc1lnLjuMNPW/Y0Obn+tH2ZyovuFCxlS9wIxhvl+2m3t?=
+ =?us-ascii?Q?vvg86geCQxJcvyWRT1Ra+VReVNJ/AyU9YJODDn1E0xrGsWGZ660th8HycfSY?=
+ =?us-ascii?Q?UBlCsxHYrk5HtCSwpRl2lDfKAo4LLIw7Fnev7G+3OgejLU8KuZg3izsThea+?=
+ =?us-ascii?Q?hcN46k77Yk1TzA6aKNreejWTylBsavFs1zFIOa+zuQhNbnT7++xrndMzAoz3?=
+ =?us-ascii?Q?BbIL5ARzXzbPD3k88exlACkhqcDqeoXGmazwwatxE8uJm/N5+JMCUC0IyXUD?=
+ =?us-ascii?Q?sFK3qS+wQG+9Cl1xYAPtBREYDt9L6fp5TFDf42rK9n/UrkrC/TX059gFch70?=
+ =?us-ascii?Q?0WmUbzZ/0R4UEqBrzyitwZiYJp8C4oirUTNI8hSwCr5/BN/WZiKWQFyxszuA?=
+ =?us-ascii?Q?O7HRKJ9RumB742bHB6spEt7o4ixk6Av0WZDxGvsTjwooIiE28ane3K5GNFW5?=
+ =?us-ascii?Q?ig1VJsesZWfHpZUNqeQhjk6wpZ6mbDyEBqnsvRElOxZdw6S6OrXdmcg2PzHR?=
+ =?us-ascii?Q?xRZSUhWe1PjwbDCc0HKwufwjLGt2D4OKf35SZYtQswu+K+g/qUpCxfETQPZv?=
+ =?us-ascii?Q?tP5ewtRH2qsHLeGvTCK1jNkzylML8thxQdCsbATGABUsf/WZtM5E/cRl6ByU?=
+ =?us-ascii?Q?MiW1V9e8FMKWTihcY0k+nwn4tJ97NN1tPN7LM5Y/tt7F+MzyMvgwlzS+EZNw?=
+ =?us-ascii?Q?zD8dCplMS82CToUgGPFqXzDVf/MDN7qY7GQrUsNMriqlgdoAbS+fka+vWKHi?=
+ =?us-ascii?Q?h2h0YFemFxJhBSPpQrAJP71kcaDE94yH9+79hV7BQGTn3A8R4Kzt3HNta1r6?=
+ =?us-ascii?Q?fUsBfUfuUKTlAZSJ3/fDXEzpu0dC3Prn+wlCa0jGAliH5x+w0exT5996sk9w?=
+ =?us-ascii?Q?8OyQK/THA5hn4vBUphLThvzckPmZxZvmnW47yeVJuTppoI4+WvZ+pnbgNp3v?=
+ =?us-ascii?Q?laQTjvjUfYs5t5eISE6fMqscQrs4+4Br3IkKHYnTBB9Zt+Wtz4GX3yE2CdJ4?=
+ =?us-ascii?Q?jS6Pg5zQ+LMSVZU17dXHgsz9xkK+eRf0ET8NmLOPbek79qJD6VJ4EEJQR+Pc?=
+ =?us-ascii?Q?/0X/qrLRAw=3D=3D?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 435eadbe-8a80-4bf1-da36-08df0ffd64a7
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41c7b0c2-0baf-4aa3-0130-08df0ffd65cf
 X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB4742.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2026 12:08:30.3857
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2026 12:08:32.0684
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BG5xoi6ao7OfyBJsMHSncqp18pw8zzaku7Zc9kQxlbvC2Y6Fe/7gNVDzRcuP0NR5GJXckNY3yFFUBFWehd3afg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: C0Lz64br2952GyQ5HWixekxfgP0AFLAMhHuwPlpsSnmRoyYefeUxq+yo6t4NH8Dz45UDfjBhvEeO/CGnEPRQXw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB6755
 
-Currently, load_module_btfs() unconditionally iterates over all kernel
-module BTFs and loads each one. This introduces unnecessary overhead
-when a BPF program only needs BTFs from a small subset of modules.
+Add btf_module_allowlist and btf_module_allowlist_cnt fields to
+bpf_object_open_opts to limit which kernel module BTFs libbpf is
+allowed to load.
 
-In our Android testing, BPF programs are loaded on demand rather than
-preloaded to avoid unnecessary memory usage from unused programs. With
-93 module BTFs present, the total BPF loading time exceeds 300 ms, with
-module BTF loading accounting for around 69% of the total loading time.
+When the option is not specified, the existing behavior remains
+unchanged. An explicitly specified empty allowlist prevents libbpf from
+consulting any kernel module BTFs.
 
-The existing module qualification in SEC(), such as
-SEC("fentry/mymod:foo"), does not reduce this overhead, as module BTFs
-are loaded before the module-qualified target is resolved.
+The allowlist limits which kernel module BTFs libbpf will consult
+wherever module BTF might be needed.
 
-Use btf_module_allowlist and btf_module_allowlist_cnt to skip unrelated
-module BTFs during iteration and stop once all allowed module BTFs have
-been loaded. When the allowlist is not specified, the existing behavior
-remains unchanged.
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Fuyu Zhao <zhaofuyu@vivo.com>
+---
+ tools/lib/bpf/libbpf.c | 72 +++++++++++++++++++++++++++++++++++++++++-
+ tools/lib/bpf/libbpf.h | 16 +++++++++-
+ 2 files changed, 86 insertions(+), 2 deletions(-)
 
-Performance impact (BPF skeleton open and load time):
-
-  Module BTFs | Default | Selective loading | Time reduction
-  ------------|---------|-------------------|---------------
-  1           | 35.6 ms | 35.6 ms           | Baseline
-  10          | 37.2 ms | 35.7 ms           | 4.0%
-  100         | 46.7 ms | 36.5 ms           | 21.8%
-  300         | 65.2 ms | 38.5 ms           | 40.9%
-
-Changelog:
-v8:
-- Reset btf_module_allowlist_cnt on allocation failure to avoid a NULL
-  pointer dereference during cleanup. (sashiko-bot)
-- Fix errno handling in invalid input tests. (sashiko-bot)
-- Remove the redundant default opts test. (Jiri)
-- Test skipping unlisted module BTFs using bpf_program__set_attach_target(). (Jiri)
-- Simplify module BTF loading logic by using btf_module_allowlist_cnt
-  alone for subsequent checks. (Jiri)
-- Fix remaining libbpf_get_error() usage in selftests. (Andrii)
-
-v7:
-- Link: https://lore.kernel.org/bpf/20260907053847.1115-1-zhaofuyu@vivo.com/
-- Rename btf_module_names to btf_module_allowlist and use _cnt naming.
-  (Andrii)
-- Simplify allowlist handling and documentation, and drop unnecessary
-  logging, cleanup, and helper logic. (Andrii)
-- Simplify selftests, add invalid allowlist/count coverage, and add skip
-  reasons for missing BTF prerequisites. (Andrii, bot+bpf-ci)
-
-v6:
-- Link: https://lore.kernel.org/bpf/20260831133809.1161-1-zhaofuyu@vivo.com/
-- Document module-qualified tracing multi-attach targets and invalid
-  module name handling. (bot+bpf-ci)
-- Remove unnecessary `static` qualifiers from test module name arrays.
-  (bot+bpf-ci)
-- Check that bpf_testmod BTF is available before running the tests.
-  (bot+bpf-ci)
-
-v5:
-- Link: https://lore.kernel.org/bpf/20260826131428.302-1-zhaofuyu@vivo.com/
-- Add no_module_btfs_needed() to skip loading module BTFs early when the
-  module BTF name list is empty. (sashiko-bot)
-- Document struct_ops as an affected use case for btf_module_names.
-  (bot+bpf-ci)
-- Add invalid input tests and assert expected error codes for negative
-  cases. (bot+bpf-ci)
-
-v4:
-- Link: https://lore.kernel.org/bpf/20260824125310.1384-1-zhaofuyu@vivo.com/
-- Simplify and rename newly added struct members and their documentation.
-  (Eduard)
-- Use array search instead of a hashmap for module name matching to
-  simplify the code. (Eduard)
-- Allow an empty module name list to skip loading all module BTFs.
-  (Eduard, sashiko-bot)
-- Move btf_module_names option handling before bpf_object__elf_init().
-  (Eduard)
-- Rename internal helpers to follow libbpf naming conventions. (Andrii)
-- Reject duplicate module names and document the rejection rule. (Andrii)
-- Replace log interception with functional tests and simplify selftests.
-  (Andrii)
-
-v3:
-- Link: https://lore.kernel.org/bpf/20260819090426.267-1-zhaofuyu@vivo.com/
-- Use bpf_object_open_opts to specify kernel module BTFs to load rather
-  than introducing a new .kmod_btfs ELF section, as suggested by Andrii.
-
-v2:
-- Link: https://lore.kernel.org/bpf/20260813032613.2755-1-zhaofuyu@vivo.com/
-- Addressed issues with allocation error handling, multiple .kmod_btfs
-  sections, the transient stack pointer in is_kmod_btf_needed(), and
-  selftest dependency and comment formatting. (sashiko-bot)
-- Removed KMODS_BTF_LOADED and KMODS_BTF_UNLOADED and simplified the
-  related logic.
-
-v1:
-- Link: https://lore.kernel.org/bpf/20260806042042.3239428-1-zhaofuyu@vivo.com/
-
-Fuyu Zhao (2):
-  libbpf: support selective kernel module BTF loading via
-    bpf_object_open_opts
-  selftests/bpf: add tests for selective module BTF loading
-
- tools/lib/bpf/libbpf.c                        |  72 +++++++-
- tools/lib/bpf/libbpf.h                        |  16 +-
- .../bpf/prog_tests/btf_module_allowlist.c     | 159 ++++++++++++++++++
- .../bpf/progs/btf_module_allowlist.c          |  13 ++
- 4 files changed, 258 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_module_allowlist.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf_module_allowlist.c
-
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index c036e8a91ed8..4ab7ddc3b4cc 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -751,6 +751,8 @@ struct bpf_object {
+ 	bool btf_modules_loaded;
+ 	size_t btf_module_cnt;
+ 	size_t btf_module_cap;
++	char **btf_module_allowlist;
++	int btf_module_allowlist_cnt;
+ 
+ 	/* optional log settings passed to BPF_BTF_LOAD and BPF_PROG_LOAD commands */
+ 	char *log_buf;
+@@ -5851,6 +5853,21 @@ int bpf_core_add_cands(struct bpf_core_cand *local_cand,
+ 	return 0;
+ }
+ 
++static bool is_btf_mod_allowed(const struct bpf_object *obj, const char *name)
++{
++	int i;
++
++	if (obj->btf_module_allowlist_cnt < 0)
++		return true;
++
++	for (i = 0; i < obj->btf_module_allowlist_cnt; i++) {
++		if (strcmp(obj->btf_module_allowlist[i], name) == 0)
++			return true;
++	}
++
++	return false;
++}
++
+ static int load_module_btfs(struct bpf_object *obj)
+ {
+ 	struct bpf_btf_info info;
+@@ -5873,6 +5890,9 @@ static int load_module_btfs(struct bpf_object *obj)
+ 	if (!kernel_supports(obj, FEAT_MODULE_BTF))
+ 		return 0;
+ 
++	if (obj->btf_module_allowlist_cnt == 0)
++		return 0;
++
+ 	while (true) {
+ 		err = bpf_btf_get_next_id(id, &id);
+ 		if (err && errno == ENOENT)
+@@ -5915,6 +5935,11 @@ static int load_module_btfs(struct bpf_object *obj)
+ 			continue;
+ 		}
+ 
++		if (!is_btf_mod_allowed(obj, name)) {
++			close(fd);
++			continue;
++		}
++
+ 		btf = btf_get_from_fd(fd, obj->btf_vmlinux);
+ 		err = libbpf_get_error(btf);
+ 		if (err) {
+@@ -5939,6 +5964,9 @@ static int load_module_btfs(struct bpf_object *obj)
+ 			break;
+ 		}
+ 		obj->btf_module_cnt++;
++
++		if (obj->btf_module_allowlist_cnt == obj->btf_module_cnt)
++			break;
+ 	}
+ 
+ 	if (err) {
+@@ -8481,8 +8509,10 @@ static struct bpf_object *bpf_object_open(const char *path, const void *obj_buf,
+ 					  const struct bpf_object_open_opts *opts)
+ {
+ 	const char *kconfig, *btf_tmp_path, *token_path;
++	const char **mod_allow;
++	int mod_allow_cnt;
+ 	struct bpf_object *obj;
+-	int err;
++	int err, i, j;
+ 	char *log_buf;
+ 	size_t log_size;
+ 	__u32 log_level;
+@@ -8525,6 +8555,22 @@ static struct bpf_object *bpf_object_open(const char *path, const void *obj_buf,
+ 	if (token_path && strlen(token_path) >= PATH_MAX)
+ 		return ERR_PTR(-ENAMETOOLONG);
+ 
++	mod_allow = OPTS_GET(opts, btf_module_allowlist, NULL);
++	mod_allow_cnt = OPTS_GET(opts, btf_module_allowlist_cnt, 0);
++
++	if ((!mod_allow && mod_allow_cnt > 0) || mod_allow_cnt < 0)
++		return ERR_PTR(-EINVAL);
++
++	for (i = 0; i < mod_allow_cnt; i++) {
++		if (!mod_allow[i] || !mod_allow[i][0])
++			return ERR_PTR(-EINVAL);
++
++		for (j = 0; j < i; j++) {
++			if (strcmp(mod_allow[i], mod_allow[j]) == 0)
++				return ERR_PTR(-EINVAL);
++		}
++	}
++
+ 	obj = bpf_object__new(path, obj_buf, obj_buf_sz, obj_name);
+ 	if (IS_ERR(obj))
+ 		return obj;
+@@ -8563,6 +8609,25 @@ static struct bpf_object *bpf_object_open(const char *path, const void *obj_buf,
+ 		}
+ 	}
+ 
++	obj->btf_module_allowlist_cnt = mod_allow ? mod_allow_cnt : -1;
++	if (obj->btf_module_allowlist_cnt > 0) {
++		obj->btf_module_allowlist = calloc(obj->btf_module_allowlist_cnt,
++						   sizeof(*obj->btf_module_allowlist));
++		if (!obj->btf_module_allowlist) {
++			obj->btf_module_allowlist_cnt = 0;
++			err = -ENOMEM;
++			goto out;
++		}
++
++		for (i = 0; i < obj->btf_module_allowlist_cnt; i++) {
++			obj->btf_module_allowlist[i] = strdup(mod_allow[i]);
++			if (!obj->btf_module_allowlist[i]) {
++				err = -ENOMEM;
++				goto out;
++			}
++		}
++	}
++
+ 	err = bpf_object__elf_init(obj);
+ 	err = err ? : bpf_object__elf_collect(obj);
+ 	err = err ? : bpf_object__collect_externs(obj);
+@@ -9626,6 +9691,7 @@ static void bpf_map__destroy(struct bpf_map *map)
+ void bpf_object__close(struct bpf_object *obj)
+ {
+ 	size_t i;
++	int j;
+ 
+ 	if (IS_ERR_OR_NULL(obj))
+ 		return;
+@@ -9684,6 +9750,10 @@ void bpf_object__close(struct bpf_object *obj)
+ 		close(obj->jumptable_maps[i].fd);
+ 	zfree(&obj->jumptable_maps);
+ 
++	for (j = 0; j < obj->btf_module_allowlist_cnt; j++)
++		zfree(&obj->btf_module_allowlist[j]);
++	zfree(&obj->btf_module_allowlist);
++
+ 	free(obj);
+ }
+ 
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index b965ad571540..b1602c769f3d 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -224,10 +224,24 @@ struct bpf_object_open_opts {
+ 	 * point (/sys/fs/bpf), in case this default behavior is undesirable.
+ 	 */
+ 	const char *bpf_token_path;
++	/*
++	 * Optional allowlist of kernel module names whose BTFs libbpf is
++	 * allowed to load. The allowlist limits which kernel module BTFs libbpf
++	 * will consult wherever module BTF might be needed.
++	 *
++	 * When the option is not specified, the existing behavior remains
++	 * unchanged. An explicitly specified empty list prevents libbpf from
++	 * consulting any kernel module BTFs.
++	 *
++	 * The list must contain valid, non-empty module names and must not
++	 * contain duplicate entries; otherwise -EINVAL is returned.
++	 */
++	const char **btf_module_allowlist;
++	int btf_module_allowlist_cnt;
+ 
+ 	size_t :0;
+ };
+-#define bpf_object_open_opts__last_field bpf_token_path
++#define bpf_object_open_opts__last_field btf_module_allowlist_cnt
+ 
+ /**
+  * @brief **bpf_object__open()** creates a bpf_object by opening
 -- 
 2.34.1
 
