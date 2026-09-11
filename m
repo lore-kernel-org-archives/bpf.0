@@ -1,62 +1,62 @@
-Received: from mail-oo2-f43.google.com (mail-oo2-f43.google.com [74.125.231.171])
+Received: from mail-oi2-f12.google.com (mail-oi2-f12.google.com [74.125.231.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9387C4BEE3A
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 22:04:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6AB44237F
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 22:04:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.204
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789164265; cv=none; b=exJ764GURkzv4uXBIQFSQSk3yr6RRQjXrfmCk5gq/rO4JQmhky9bS2gnRUaPGM1y+IrnClIEACncQf23Hd/OG7ofLdgb4pDDNMXNPihn285ecOpuiWBy3CmOfTN+j5KHPuEIthsLISg4ThCUYK+zCSTFwOBaj9nB7d/+LXo3NTk=
+	t=1789164266; cv=none; b=a5C63aHy+yKQP0lHkuRJ8FSQlImMNbNVuuIZl2fLLbmAs7NhNT8ra0BQZQiG5WdSrNI9xT9SS0hWBaWtw/Xt5B1Ui4oCJ+bMU21jLB1WL4eIng0+QQxs7Ty85YufqUF9iBwUFfbAFkbM1OgATwoD+r9YTLEtCi/6KK7XKTZgqYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789164265; c=relaxed/simple;
-	bh=AHI0652UnU63u/JUlscJ2ckNRDnte1v7KcZRO+RIOOs=;
+	s=arc-20240116; t=1789164266; c=relaxed/simple;
+	bh=gSNCXQ6FTlwUkZf9alhBi9GaI0Cnw6+7WmI7ZGEFFIg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h2tlPxBBsAtsPa2kw+Djse+iRQDW7na+rsZV5DfKPIpQaNhA64LNbOx5ovdRu+tSKKX0inYSKtKVyrHQJ7UpepDjKSlenHBjfhh5lnyau55dKj8GQvWDw4rhqIrzhgdi6R+9h7xqPIkOLootYCjOsT0ko8jZbBvO56vwjNXLco4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ew/kRncv; arc=none smtp.client-ip=74.125.231.171
+	 MIME-Version; b=pk3FHa5kjAs6B/CBm9ux1jYqLwA3G0BQ9NUqNjWUvpRDslvXQ3ohUoDibzznaPo2Cd/KXRVspaIOxIDCrB7wEQWQBhdzU1/Lx59Fo1eOskPqhz0vaFO6VxITL9UgwTW98O8zSPNuPiYddXksWJA0roAGdagDi2Xk1Ome7JTmA24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FyhxvdRN; arc=none smtp.client-ip=74.125.231.204
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ew/kRncv"
-Received: by mail-oo2-f43.google.com with SMTP id 46e09a7af769-7f4f0d298caso28162a34.0
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:04:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FyhxvdRN"
+Received: by mail-oi2-f12.google.com with SMTP id 5614622812f47-4b37a2ffef2so35568b6e.3
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:04:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789164262; x=1789769062; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789164264; x=1789769064; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=GUVG7Pm4GAz5IXewalYnZKrXV7OVwpUdUWuBSnnT/Ok=;
-        b=Ew/kRncvP4GvGX6OFnML4JV52K5D5fPPDbAyL0GrMFzSqFYlOb9Zkqt1gnvP2XFMMu
-         ED8iYOK4Rpzb3iJW1mNEEVurcW5kGdEzr8yGKrdyau3+PoODdTMoNzioG+o7sMF5jrMK
-         APHdVs5xWeytNBHUDhy+++RRio0tb9pEjJzUDvYFNWenN5bCrbaXU6U7dGTaeBvwhrlw
-         tmbXbON8Zeh5CmsPWI5A1QmFA7WWxUW9y2rBSlBgk2gim7wYmnkGerhMuNPjDuJKyLE1
-         IDb03i3Rb3tFgid+PL2qZqUJHhbFQR8DnKjA03TRQJt9y2evXeFMcBukLRJk2GEaAvVe
-         Qmgg==
+        bh=bWT3wvnWaFPRuGbZIZ1xiz+1ZnbV5NhCa9zTBAPU9Iw=;
+        b=FyhxvdRNW9nmjic0KKmBHYWkNF00m4p9HNM81sAx0jAAp7uBAmiSGq1+CuuqyD0qIG
+         f8BOZYAH98DivmcjpIXPhCkViZ9roAI20YS8x7xcR1Z0oNx6ARHg36cPphz+4jT7r6Px
+         ySffJM9tUZcfUJN2yu580MiC5HTs0qI1aQtYlepc1kvtK3rpAsPtDkVoU9IUQ/GsWQ+B
+         387frBKZmh9OEMP1rR3VZWdaLGf7uKnsL+1FofWOP3wMmkSxwcUi8yH3Ig7mZ9raIE7c
+         3PeatPBjiRiFOC1jdM36SQGZ+AxTyLGb8owQlJLHz9GdVu6DfWy6qJ9AMthfSGSX/0ka
+         K2hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789164262; x=1789769062;
+        d=1e100.net; s=20251104; t=1789164264; x=1789769064;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GUVG7Pm4GAz5IXewalYnZKrXV7OVwpUdUWuBSnnT/Ok=;
-        b=QREPeuxrmbZT7CVSZTadrkdBqZYQUA4+cxsxHyeRtJN1yJu8mgIjsvGkPwItvMXf7z
-         FAUhbtoagyaY8+ewvttQ4EFdlisB1qy01Di3oK8w/3u2vs07LcE8IcuQhrYG0lOoKR14
-         CXM7rM5hk0F1dc2U1Dhv9fMsZDmGpyzQD3gzZObGjYuutTTGgNW1zDyY0TA8ErqAnUs1
-         OArtTNeYl+VSW10V0fHxQT36yUuMiMEkeCHUPq+TRSha8gbdqew94sbGURdU86bOifDa
-         R3Ti9eQh12/V+CixsPj+1BNwzzXb9f7c0Ms7Usp5D42mrfHL7Pyndsye09Fxcd1s8831
-         27jQ==
-X-Gm-Message-State: AFuF++m1M5FsjQeEQFQarRbNW2TXG5LLWg+epcziOAxX01c1E3ieTfV3
-	jAK39lcANlrMDObbDswGHh0tCw3rAOxRkR2+S/D5GlDEkHxSZ/rQx4fW4JsSKQ==
-X-Gm-Gg: AYBFou3YT4vZ5qm5FBWfxkzAxW6ospapP7EmRLRAHYKw3/1nHojBsnXth4idhLVm8fB
-	5n4dCM++gOLgVIT123uAWblZYJkCtbSyMsvx+NKPfsaOb4xPPcLbJxMdE/wSsZzbCDLjleBPvhK
-	KKT/3dPbFPjlPPqIKBwaxDkgDLdWuusuPGcctetDMolo4r3L0YFQ3VGliak8NnuK7HCSK4zOdPG
-	OHqTXnuk5C5cbCV1GlydFFIESGdke7aoF7iX2qOEkWA8jp7tOv1dHwTiBloJ88w5JKz2WCgTOe0
-	edbXziSCMIYPp0ywY1H1SZxamvlsK8lcTZbTSybpGGZ4I+wuf3XopsuQSSh3r/Bg7UU177vgJjZ
-	ICV2nVf8cwPQBY02YVN/P2Pfc/qyHE3YoEMSuOpWvybjqOMpB+8ceifL5QzPJmqIaaM+8nZ5BVX
-	EQZBvbrNsvkGDzQz4MJ4AwJvQBuK/9BlNwGUNGQ0ch6g7uOQl5Zx0r6F4RoGjy6w==
-X-Received: by 2002:a05:6830:6f8c:b0:7eb:9464:ac2e with SMTP id 46e09a7af769-8059e8504bdmr195583a34.11.1789164262454;
-        Fri, 11 Sep 2026 15:04:22 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:46::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-803f3b16ee7sm3732186a34.3.2026.09.11.15.04.21
+        bh=bWT3wvnWaFPRuGbZIZ1xiz+1ZnbV5NhCa9zTBAPU9Iw=;
+        b=boru/IaHDF6s4ytj7R/hweNGrHjF1TbI01fz36uhf02Twk/c8/X3mWWnuM3ivzJ8n+
+         T3NQPQZSTWgP0KHBg55uYbmL+3yqGIBsALOlNk202CGlK6r1p0Fdh242HMYTRIVeLpko
+         JGKYmzFzYi0VlG+u9KWm6Khi7L3QTLGfaNFZJosMMkD5NKift8mtf34ArjDaBqL65psE
+         s8yQ+97/jFrheSCtoxp5t2HLnEhSTNvqZM3aDLvpzVFJKe0BCxUKS3LCdtb5CYLM80Nm
+         9weQs5E4TiF26RB0CdFO6pxzUrpNsg73aiywztFcLqiwlGOPgpPh6dr0BDX+Hia5Sxwb
+         ge4Q==
+X-Gm-Message-State: AFuF++nV9tfOXPU38Ngyux1FAbwP/0FlRGZUdTfMDgNFJqWUTR3Alq9j
+	UCEaVKrU7A+Zm5JW6yHzXv5x1DlvFhz6hDxU7Sx4/eJI8CCl57wmJmhh7lGcXw==
+X-Gm-Gg: AYBFou2BsqJalcA0gUBhNALFYp0nNsmPr5tc2HDufC/tuqQPEK/wbm1JooY4EdyR+u8
+	Rz4u3CjLgQjy1qBXX5rLo1uIHqOeods9BfeU88nDc+e9EmZy97x8pFdOn6r+5qeOjFnRFyLg8yR
+	wFyrIuP76zUmfGa7U8DeoJtSb9DqQYfaKOe/TfZuezIyB4STMM4NQcjUTcZsVybNsmM1Six4e8v
+	Ydc3EGVao3LjSVQJGC0WvSODIbPvP/54jpIuwfNeZOxLUyQWPv7rJk51/fFKltWz4s77sIZaRQ3
+	p4A+ijlwCrM9UTiNdaMta4IHenzcgqm2E9XTGePvO9O2+ejVeLq+pLyNGdVxFwf1JaGQJdayAzS
+	X3PkyfimliSKDb6jDGKZyyHgqtxcHHhVpYdDTtbG9MGaG2seBO9ah3LkwdBnyo0DG3f3d9URtON
+	Cw1CyhPf+ve03kxZQVEg4KBmRMMyzFKwGo4CCNJVXCu+4Ogmcp2UrinpHWsHGeqQ==
+X-Received: by 2002:a05:6808:2e4c:b0:4c1:83fb:8c7b with SMTP id 5614622812f47-4c4a75161f8mr420859b6e.12.1789164263780;
+        Fri, 11 Sep 2026 15:04:23 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:73::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4c331bc9342sm3388810b6e.12.2026.09.11.15.04.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 15:04:22 -0700 (PDT)
+        Fri, 11 Sep 2026 15:04:23 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: alexei.starovoitov@gmail.com,
@@ -66,9 +66,9 @@ Cc: alexei.starovoitov@gmail.com,
 	memxor@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 03/23] bpf: Only compare func_id against BPF_FUNC_* for helper calls
-Date: Fri, 11 Sep 2026 15:03:55 -0700
-Message-ID: <20260911220415.1396439-4-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v2 04/23] bpf: Only compare func_id against kfunc BTF IDs for kfunc calls
+Date: Fri, 11 Sep 2026 15:03:56 -0700
+Message-ID: <20260911220415.1396439-5-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260911220415.1396439-1-ameryhung@gmail.com>
 References: <20260911220415.1396439-1-ameryhung@gmail.com>
@@ -82,120 +82,196 @@ Content-Transfer-Encoding: 8bit
 
 Helpers are identified by enum bpf_func_id, while kfuncs are identified
 by a BTF ID. Both values are stored in bpf_call_arg_meta::func_id, and
-a kfunc BTF ID can have the same numeric value as a BPF_FUNC_* constant.
+a helper ID can have the same numeric value as a kfunc BTF ID.
 
-Later patches extend check_reg_type() and check_func_arg() to kfuncs.
-A bare func_id comparison in those common paths could then mistake a
-kfunc for a helper.
-
-Introduce is_helper_call(), which first excludes kfunc metadata through
-meta->btf, and use it for every BPF_FUNC_* comparison. This keeps
-helper-specific behavior out of the shared path from the start.
+Introduce is_kfunc_call(), which first confirms that the metadata is for
+a kfunc through meta->btf, and use it for comparisons against the special
+kfunc BTF ID list. This complements is_helper_call() before later patches
+move these checks into paths shared by helpers and kfuncs.
 
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- kernel/bpf/verifier.c | 32 ++++++++++++++++++++++----------
- 1 file changed, 22 insertions(+), 10 deletions(-)
+ kernel/bpf/verifier.c | 68 +++++++++++++++++++++++--------------------
+ 1 file changed, 37 insertions(+), 31 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d5e885435bb6..5bf31fbdaac1 100644
+index 5bf31fbdaac1..42d89db5df07 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -8176,6 +8176,16 @@ static bool arg_type_is_dynptr(enum bpf_arg_type type)
- 	return base_type(type) == ARG_PTR_TO_DYNPTR;
+@@ -8186,6 +8186,11 @@ static bool is_helper_call(const struct bpf_call_arg_meta *meta, enum bpf_func_i
+ 	return !meta->btf && meta->func_id == func_id;
  }
  
-+/*
-+ * A kfunc is named by a BTF ID, which can take the same numeric value as an
-+ * enum bpf_func_id. Only test meta->func_id against a BPF_FUNC_* once the call
-+ * is known to be to a helper; meta->btf is set only for a kfunc.
-+ */
-+static bool is_helper_call(const struct bpf_call_arg_meta *meta, enum bpf_func_id func_id)
++static bool is_kfunc_call(const struct bpf_call_arg_meta *meta, u32 btf_id)
 +{
-+	return !meta->btf && meta->func_id == func_id;
++	return meta->btf && meta->func_id == btf_id;
 +}
 +
  static int resolve_map_arg_type(struct bpf_verifier_env *env,
  				 const struct bpf_call_arg_meta *meta,
  				 enum bpf_arg_type *arg_type)
-@@ -8197,7 +8207,7 @@ static int resolve_map_arg_type(struct bpf_verifier_env *env,
+@@ -12137,27 +12142,27 @@ static bool is_kfunc_ret_null(struct bpf_call_arg_meta *meta)
+ 
+ static bool is_kfunc_bpf_rcu_read_lock(struct bpf_call_arg_meta *meta)
+ {
+-	return meta->func_id == special_kfunc_list[KF_bpf_rcu_read_lock];
++	return is_kfunc_call(meta, special_kfunc_list[KF_bpf_rcu_read_lock]);
+ }
+ 
+ static bool is_kfunc_bpf_rcu_read_unlock(struct bpf_call_arg_meta *meta)
+ {
+-	return meta->func_id == special_kfunc_list[KF_bpf_rcu_read_unlock];
++	return is_kfunc_call(meta, special_kfunc_list[KF_bpf_rcu_read_unlock]);
+ }
+ 
+ static bool is_kfunc_bpf_preempt_disable(struct bpf_call_arg_meta *meta)
+ {
+-	return meta->func_id == special_kfunc_list[KF_bpf_preempt_disable];
++	return is_kfunc_call(meta, special_kfunc_list[KF_bpf_preempt_disable]);
+ }
+ 
+ static bool is_kfunc_bpf_preempt_enable(struct bpf_call_arg_meta *meta)
+ {
+-	return meta->func_id == special_kfunc_list[KF_bpf_preempt_enable];
++	return is_kfunc_call(meta, special_kfunc_list[KF_bpf_preempt_enable]);
+ }
+ 
+ bool bpf_is_kfunc_pkt_changing(struct bpf_call_arg_meta *meta)
+ {
+-	return meta->func_id == special_kfunc_list[KF_bpf_xdp_pull_data];
++	return is_kfunc_call(meta, special_kfunc_list[KF_bpf_xdp_pull_data]);
+ }
+ 
+ static int
+@@ -12198,9 +12203,9 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+ 	 * type to our caller. When a set of conditions hold in the BTF type of
+ 	 * arguments, we resolve it to a known kfunc_ptr_arg_type.
+ 	 */
+-	if (meta->func_id == special_kfunc_list[KF_bpf_cast_to_kern_ctx] ||
+-	    meta->func_id == special_kfunc_list[KF_bpf_session_is_return] ||
+-	    meta->func_id == special_kfunc_list[KF_bpf_session_cookie])
++	if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_cast_to_kern_ctx]) ||
++	    is_kfunc_call(meta, special_kfunc_list[KF_bpf_session_is_return]) ||
++	    is_kfunc_call(meta, special_kfunc_list[KF_bpf_session_cookie]))
+ 		arg_type = KF_ARG_PTR_TO_CTX;
+ 	else if (btf_is_prog_ctx_type(&env->log, meta->btf, t, resolve_prog_type(env->prog), arg))
+ 		arg_type = KF_ARG_PTR_TO_CTX;
+@@ -12411,15 +12416,15 @@ static int process_irq_flag(struct bpf_verifier_env *env, struct bpf_reg_state *
+ 	int err, spi, kfunc_class = IRQ_NATIVE_KFUNC;
+ 	bool irq_save;
+ 
+-	if (meta->func_id == special_kfunc_list[KF_bpf_local_irq_save] ||
+-	    meta->func_id == special_kfunc_list[KF_bpf_res_spin_lock_irqsave]) {
++	if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_local_irq_save]) ||
++	    is_kfunc_call(meta, special_kfunc_list[KF_bpf_res_spin_lock_irqsave])) {
+ 		irq_save = true;
+-		if (meta->func_id == special_kfunc_list[KF_bpf_res_spin_lock_irqsave])
++		if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_res_spin_lock_irqsave]))
+ 			kfunc_class = IRQ_LOCK_KFUNC;
+-	} else if (meta->func_id == special_kfunc_list[KF_bpf_local_irq_restore] ||
+-		   meta->func_id == special_kfunc_list[KF_bpf_res_spin_unlock_irqrestore]) {
++	} else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_local_irq_restore]) ||
++		   is_kfunc_call(meta, special_kfunc_list[KF_bpf_res_spin_unlock_irqrestore])) {
+ 		irq_save = false;
+-		if (meta->func_id == special_kfunc_list[KF_bpf_res_spin_unlock_irqrestore])
++		if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_res_spin_unlock_irqrestore]))
+ 			kfunc_class = IRQ_LOCK_KFUNC;
+ 	} else {
+ 		verifier_bug(env, "unknown irq flags kfunc");
+@@ -13111,7 +13116,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 				return -EINVAL;
+ 			}
+ 
+-			if (meta->func_id == special_kfunc_list[KF_bpf_cast_to_kern_ctx]) {
++			if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_cast_to_kern_ctx])) {
+ 				ret = get_kern_ctx_btf_id(&env->log, resolve_prog_type(env->prog));
+ 				if (ret < 0)
+ 					return -EINVAL;
+@@ -13168,17 +13173,17 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 			if (is_kfunc_arg_uninit(btf, &args[i]))
+ 				dynptr_arg_type |= MEM_UNINIT;
+ 
+-			if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_skb]) {
++			if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_from_skb])) {
+ 				dynptr_arg_type |= DYNPTR_TYPE_SKB;
+-			} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_xdp]) {
++			} else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_from_xdp])) {
+ 				dynptr_arg_type |= DYNPTR_TYPE_XDP;
+-			} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_skb_meta]) {
++			} else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_from_skb_meta])) {
+ 				dynptr_arg_type |= DYNPTR_TYPE_SKB_META;
+-			} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_file]) {
++			} else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_from_file])) {
+ 				dynptr_arg_type |= DYNPTR_TYPE_FILE;
+-			} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_file_discard]) {
++			} else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_file_discard])) {
+ 				dynptr_arg_type |= DYNPTR_TYPE_FILE | OBJ_RELEASE;
+-			} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_clone] &&
++			} else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_clone]) &&
+ 				   (dynptr_arg_type & MEM_UNINIT)) {
+ 				enum bpf_dynptr_type parent_type = meta->dynptr.type;
+ 
+@@ -13197,7 +13202,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
+ 			break;
  		}
- 		break;
- 	case BPF_MAP_TYPE_BLOOM_FILTER:
--		if (meta->func_id == BPF_FUNC_map_peek_elem)
-+		if (is_helper_call(meta, BPF_FUNC_map_peek_elem))
- 			*arg_type = ARG_PTR_TO_MAP_VALUE;
- 		break;
- 	default:
-@@ -8413,7 +8423,8 @@ static int check_reg_type(struct bpf_verifier_env *env, struct bpf_reg_state *re
- 		type &= ~DYNPTR_TYPE_FLAG_MASK;
+ 		case KF_ARG_PTR_TO_ITER:
+-			if (meta->func_id == special_kfunc_list[KF_bpf_iter_css_task_new]) {
++			if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_iter_css_task_new])) {
+ 				if (!check_css_task_iter_allowlist(env)) {
+ 					verbose(env, "css_task_iter is only allowed in bpf_lsm, bpf_iter and sleepable progs\n");
+ 					return -EINVAL;
+@@ -13578,11 +13583,12 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
  
- 	/* Local kptr types are allowed as the source argument of bpf_kptr_xchg */
--	if (meta->func_id == BPF_FUNC_kptr_xchg && type_is_alloc(type) && reg_from_argno(argno) == BPF_REG_2) {
-+	if (is_helper_call(meta, BPF_FUNC_kptr_xchg) && type_is_alloc(type) &&
-+	    reg_from_argno(argno) == BPF_REG_2) {
- 		type &= ~MEM_ALLOC;
- 		type &= ~MEM_PERCPU;
- 	}
-@@ -8467,7 +8478,7 @@ static int check_reg_type(struct bpf_verifier_env *env, struct bpf_reg_state *re
- 		 * allows bpf_sk_release to work for multiple socket types.
- 		 */
- 		bool strict_type_match = arg_type_is_release(arg_type) &&
--					 meta->func_id != BPF_FUNC_sk_release;
-+					 !is_helper_call(meta, BPF_FUNC_sk_release);
+ 			if (!is_bpf_res_spin_lock_kfunc(meta->func_id))
+ 				return -EFAULT;
+-			if (meta->func_id == special_kfunc_list[KF_bpf_res_spin_lock] ||
+-			    meta->func_id == special_kfunc_list[KF_bpf_res_spin_lock_irqsave])
++			if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_res_spin_lock]) ||
++			    is_kfunc_call(meta, special_kfunc_list[KF_bpf_res_spin_lock_irqsave]))
+ 				flags |= PROCESS_SPIN_LOCK;
+-			if (meta->func_id == special_kfunc_list[KF_bpf_res_spin_lock_irqsave] ||
+-			    meta->func_id == special_kfunc_list[KF_bpf_res_spin_unlock_irqrestore])
++			if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_res_spin_lock_irqsave]) ||
++			    is_kfunc_call(meta,
++					  special_kfunc_list[KF_bpf_res_spin_unlock_irqrestore]))
+ 				flags |= PROCESS_LOCK_IRQ;
+ 			ret = process_spin_lock(env, reg, argno, flags);
+ 			if (ret < 0)
+@@ -13925,12 +13931,12 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_call_arg
+ 		struct btf_field *field = meta->arg_rbtree_root.field;
  
- 		if (type_may_be_null(reg->type) &&
- 		    (!type_may_be_null(arg_type) || arg_type_is_release(arg_type))) {
-@@ -8488,7 +8499,7 @@ static int check_reg_type(struct bpf_verifier_env *env, struct bpf_reg_state *re
- 			arg_btf_id = compatible->btf_id;
+ 		mark_reg_graph_node(regs, BPF_REG_0, &field->graph_root);
+-	} else if (meta->func_id == special_kfunc_list[KF_bpf_cast_to_kern_ctx]) {
++	} else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_cast_to_kern_ctx])) {
+ 		mark_reg_known_zero(env, regs, BPF_REG_0);
+ 		regs[BPF_REG_0].type = PTR_TO_BTF_ID | PTR_TRUSTED;
+ 		regs[BPF_REG_0].btf = desc_btf;
+ 		regs[BPF_REG_0].btf_id = meta->ret_btf_id;
+-	} else if (meta->func_id == special_kfunc_list[KF_bpf_rdonly_cast]) {
++	} else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_rdonly_cast])) {
+ 		ret_t = btf_type_by_id(desc_btf, meta->arg_constant.value);
+ 		if (!ret_t) {
+ 			verbose(env, "Unknown type ID %lld passed to kfunc bpf_rdonly_cast\n",
+@@ -13950,8 +13956,8 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_call_arg
+ 				"kfunc bpf_rdonly_cast type ID argument must be of a struct or void\n");
+ 			return -EINVAL;
  		}
+-	} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_slice] ||
+-		   meta->func_id == special_kfunc_list[KF_bpf_dynptr_slice_rdwr]) {
++	} else if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_slice]) ||
++		   is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_slice_rdwr])) {
+ 		enum bpf_type_flag type_flag = get_dynptr_type_flag(meta->dynptr.type);
  
--		if (meta->func_id == BPF_FUNC_kptr_xchg) {
-+		if (is_helper_call(meta, BPF_FUNC_kptr_xchg)) {
- 			if (map_kptr_match_type(env, meta->kptr_field, reg, reg_from_argno(argno)))
- 				return -EACCES;
+ 		mark_reg_known_zero(env, regs, BPF_REG_0);
+@@ -13966,7 +13972,7 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_call_arg
+ 		/* PTR_MAYBE_NULL will be added when is_kfunc_ret_null is checked */
+ 		regs[BPF_REG_0].type = PTR_TO_MEM | type_flag;
+ 
+-		if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_slice]) {
++		if (is_kfunc_call(meta, special_kfunc_list[KF_bpf_dynptr_slice])) {
+ 			regs[BPF_REG_0].type |= MEM_RDONLY;
  		} else {
-@@ -8519,13 +8530,14 @@ static int check_reg_type(struct bpf_verifier_env *env, struct bpf_reg_state *re
- 	case PTR_TO_BTF_ID | MEM_PERCPU | MEM_ALLOC:
- 	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF:
- 	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU:
--		if (meta->func_id != BPF_FUNC_spin_lock && meta->func_id != BPF_FUNC_spin_unlock &&
--		    meta->func_id != BPF_FUNC_kptr_xchg) {
-+		if (!is_helper_call(meta, BPF_FUNC_spin_lock) &&
-+		    !is_helper_call(meta, BPF_FUNC_spin_unlock) &&
-+		    !is_helper_call(meta, BPF_FUNC_kptr_xchg)) {
- 			verifier_bug(env, "unimplemented handling of MEM_ALLOC");
- 			return -EFAULT;
- 		}
- 		/* Check if local kptr in src arg matches kptr in dst arg */
--		if (meta->func_id == BPF_FUNC_kptr_xchg) {
-+		if (is_helper_call(meta, BPF_FUNC_kptr_xchg)) {
- 			int regno = reg_from_argno(argno);
- 
- 			if (regno == BPF_REG_2 &&
-@@ -8948,7 +8960,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 		 * Disable raw mode for bpf_map_peek_elem() on a bloom filter. The helper reads
- 		 * the value buffer as an input rather than filling it.
- 		 */
--		if (meta->func_id == BPF_FUNC_map_peek_elem &&
-+		if (is_helper_call(meta, BPF_FUNC_map_peek_elem) &&
- 		    meta->map.ptr->map_type == BPF_MAP_TYPE_BLOOM_FILTER)
- 			meta->arg_raw_mem.regno = 0;
- 
-@@ -8969,11 +8981,11 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
- 			verbose(env, "can't spin_{lock,unlock} in rbtree cb\n");
- 			return -EACCES;
- 		}
--		if (meta->func_id == BPF_FUNC_spin_lock) {
-+		if (is_helper_call(meta, BPF_FUNC_spin_lock)) {
- 			err = process_spin_lock(env, reg, argno, PROCESS_SPIN_LOCK);
- 			if (err)
- 				return err;
--		} else if (meta->func_id == BPF_FUNC_spin_unlock) {
-+		} else if (is_helper_call(meta, BPF_FUNC_spin_unlock)) {
- 			err = process_spin_lock(env, reg, argno, 0);
- 			if (err)
- 				return err;
+ 			/* this will set env->seen_direct_write to true */
 -- 
 2.52.0
 
