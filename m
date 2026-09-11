@@ -1,193 +1,231 @@
-Received: from mta0.migadu.com (out-90.mta0.migadu.com [91.218.175.90])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2F337A481
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 09:30:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.90
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA43D382284
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 09:39:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789119024; cv=none; b=gW/deXLwlwqtS3qC/Iuv0A+BCznNonoeW1C/ghbP7y6gCEPws9SMGS3txLUE4DlFNjkmQI7I+3azgU29fOR3pFEx8t1ON6soZFg9WNjQ/qCPRSNlfwTNP+haSi2vPkm3qyWtihECj9w6YRVPp6VwtZalmP7Gkl0PjORcubZh5k0=
+	t=1789119586; cv=none; b=cuMN/1oA9hBd7t9yYhjupr5g256m8gUtNoK7OBX4iW0koLWpJwRL1AY/W+WBY+klo6dAn4yhwdp7tOFQvcbAgfnGd1aEgD29+dBroDfwMM4JwfHnfw90/xgVkmavVgUWZh0cneAVLfuNqKOlUrkjBqzyr+kvP76LkCzfgde9Eeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789119024; c=relaxed/simple;
-	bh=UgDP47cPkmBb/mueTtjUDjQ+T7ZjtzXnEDLcKSfkTG0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j/3WeIF0/3SJcFAddEksL1pQ8304fGfzh4MbC73BPh98GW2T5x3diHGSE72HYcM/qYv4wPFpwxcqsJo1A2hkNoxupemhOpUWzIARlZJuBC3KrrUo7nwMONzT5uehFeVNubNgDrDYTbsWfHeUo5u1sRpqVZNFRoff317r5meGkSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=s3rUynAM; arc=none smtp.client-ip=91.218.175.90
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789119586; c=relaxed/simple;
+	bh=jl90nXtUKlOiv+N5LNjswTh72eVBnbJpKdMd3tf4ONk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=MfnT/c9AYAiJSeIiKvNXisspJWUn7+2U2/6b83nzhp0IJmgeXm8Ten9JnSKCegxdgf+qaN4CKye0aFfQeTzN/90AhRt0w7x0d3mJwwHKZRZxHkNvrFDi1Rx3sifDRVTVZbwZCZ2HWt0SrLFA1e1GRFvU5HkCmIJzMsNTI2yGxBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=myZQmAWD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="s3rUynAM"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=UgDP47cPkmBb/mueTtjUDjQ+T7ZjtzXnEDLcKSfkTG0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789119019; v=1; x=1789723819;
- b=s3rUynAMUddhG/IT+Lxn7P+wt+NzaIJOze3GYTNh+twvdDK10HnRWejtV6xIyUN2Cxz4a8iP
- Qa6K0SyURpWYUzCfzdsefEultbZmoUVvxejISLP5MIwBIvewK4E9crU/rnM+enxcz7l91OAjYVv
- nR7BH45jJ+xtShoDRT102uFo=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b64bfc29917c1b89;
-	Fri, 11 Sep 2026 09:30:03 +0000
-X-Mizu-Trace-ID: b64bfc29917c1b89
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <c0a15bf9-0922-42a7-b2a9-d7eff50669a5@linux.dev>
-Date: Fri, 11 Sep 2026 14:59:57 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="myZQmAWD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 762AB1F000FF;
+	Fri, 11 Sep 2026 09:39:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789119583;
+	bh=Jmkg1urZAx+vHR5X/Pk9P9OitQsgEkHroL2nIRCCwtk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=myZQmAWDlYCDc22gTLRke6TuppOqRdH0Lh0CB71OPF4LvZ7BjEoiN1YmiGSZDfY1Q
+	 zHLDFEWj7FWaWUps6OwZkD1S3yA9mYYeJOCqDS6u8bEHkKXgG5CccqN5pFpj4V0bfm
+	 4tv4Gyv4JfNBgswzP/BO0Q0C7+ngiFC/AQtrFDuaTpz2yfKyFyw3bQwt12OHCXm8m0
+	 o7Rf+aYkqLllp/PI84ITQ+mfrap6Wlb8JCHBrvlVFnvfuUofZM0mXAGj+d9LoEGccn
+	 RgCYpbBOkm4UNdB+/pWtECJmWPG81zax2FeHNAPZQ5EJ8X1pa6E8DzC7WlF8bYJ9Kt
+	 /8jBkGq9hX0aw==
+Content-Type: multipart/mixed; boundary="===============1260246229495050407=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
- across zero-extending movs
-To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20260910164635.459558-4-vineet.gupta@linux.dev>
- <ad011852b5532901853fbc1c16d5a27d50231065dad9b1e4bbfee1c02b4735e5@mail.kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <ad011852b5532901853fbc1c16d5a27d50231065dad9b1e4bbfee1c02b4735e5@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Message-Id: <74c957a3200eb508bb44b0e0033a28d79a35e78a7d135e5067c85e69fb25b5f6@mail.kernel.org>
+In-Reply-To: <20260911084209.3481285-3-xyx2021@mail.ustc.edu.cn>
+References: <20260911084209.3481285-3-xyx2021@mail.ustc.edu.cn>
+Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: Test dynptr teardown on subprog return
+From: bot+bpf-ci@kernel.org
+To: xyx2021@mail.ustc.edu.cn,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ameryhung@gmail.com,sashiko-bot@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 11 Sep 2026 09:39:42 +0000 (UTC)
 
-On 9/10/26 11:22 PM, bot+bpf-ci@kernel.org wrote:
->> @@ -17115,6 +17126,23 @@ static void collect_linked_regs(struct bpf_verifier_env *env,
->>   	}
->>   }
->>
->> +/*
->> + * Set @reg to the zero-extension of @known_reg's low 32 bits: it shares those
->> + * bits and its high half is zero. Copy the base to keep its precise low-32
->> + * tnum, then re-apply the zext_32_to_64() the 32-bit mov itself used.
->> + * @reg->id and ->delta already equal @known_reg's; only ->subreg is its own.
->> + */
->> +static void reconstruct_zext32(struct bpf_reg_state *reg,
->> +			       struct bpf_reg_state *known_reg)
->> +{
->> +	enum bpf_subreg subreg = reg->subreg;
->> +
->> +	*reg = *known_reg;
->> +	reg->subreg = subreg;
->> +	zext_32_to_64(reg);
->> +	reg_bounds_sync(reg);
->> +}
->> +
->>   /* For all R in linked_regs, copy known_reg range into R
->>    * if R->id == known_reg->id.
->>    */
->> @@ -17134,6 +17162,27 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
->>   			continue;
->>   		if (reg->id != known_reg->id)
->>   			continue;
->> +		/*
->> +		 * A ->subreg register shares only the base's low 32 bits, so it
->> +		 * is rebuilt rather than copied. Not modelled together with a
->> +		 * delta, so skip if either side has one (sound, less precise).
->> +		 */
->> +		if (reg->subreg) {
->> +			if (reg->add_const || known_reg->add_const)
->> +				continue;
->> +			reconstruct_zext32(reg, known_reg);
->> +			if (e->is_reg)
->> +				mark_reg_scratched(env, e->regno);
->> +			else
->> +				mark_stack_slot_scratched(env, e->spi);
->> +			continue;
->> +		}
->> +		/*
->> +		 * The reverse: known_reg knows only its low 32 bits, which say
->> +		 * nothing about reg's high half.
->> +		 */
->> +		if (known_reg->subreg)
->> +			continue;
->>   		/*
->>   		 * Skip mixed 32/64-bit links: the delta relationship doesn't
->>   		 * hold across different ALU widths.
-> Can reconstruct_zext32() lose bounds that reg already learned on its own?
+--===============1260246229495050407==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c b/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
+> index 6dbd1487343c..122ecb7e98e2 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
+> @@ -11,6 +11,7 @@
+>  #include "bpf_qdisc_fail__invalid_dynptr.skel.h"
+>  #include "bpf_qdisc_fail__invalid_dynptr_slice.skel.h"
+>  #include "bpf_qdisc_fail__invalid_dynptr_cross_frame.skel.h"
+> +#include "bpf_qdisc_fail__invalid_dynptr_returned_slice.skel.h"
+>  #include "bpf_qdisc_fail__untrusted_write.skel.h"
+>  #include "bpf_qdisc_dynptr_use_after_invalidate_clone.skel.h"
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+> index 1cd61d72c166..f57e6162dbf5 100644
+> --- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
+> +++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+> @@ -127,7 +127,7 @@ static int missing_release_callback_fn(__u32 index, void *data)
 >
-> Looking at the code, reconstruct_zext32() does:
+>  /* Any dynptr initialized within a callback must have bpf_dynptr_put called */
+>  SEC("?raw_tp")
+> -__failure __msg("Unreleased reference id")
+> +__failure __msg("cannot overwrite referenced dynptr")
+>  int ringbuf_missing_release_callback(void *ctx)
+>  {
+>  	bpf_loop(10, missing_release_callback_fn, NULL, 0);
+
+Does this __msg() update break bisectability?
+
+Looking at missing_release_callback_fn():
+
+static int missing_release_callback_fn(__u32 index, void *data)
+{
+	struct bpf_dynptr ptr;
+
+	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
+	return 0;
+}
+
+The callback reserves into its own (frame 1) stack and returns without
+releasing.
+
+Before patch 1/2, prepare_func_exit() calls check_resource_leak(), but
+check_reference_leak() bails immediately on 'if (!exception_exit &&
+cur_func(env)->frameno) return 0;' at verifier.c:10611, so the lingering
+entry in vstate->refs[] is only diagnosed later, at the frame-0 BPF_EXIT,
+as "Unreleased reference id".
+
+With patch 1/2 applied, prepare_func_exit() now calls
+destroy_dynptrs_on_func_exit() -> destroy_if_dynptr_stack_slot(), where
+dynptr_type_referenced(BPF_DYNPTR_TYPE_RINGBUF) is true and
+dynptr_ref_cnt() == 1, so verification aborts at the callback return with
+"cannot overwrite referenced dynptr" and never reaches the frame-0 leak
+check.
+
+So at commit 02912d1bbebc ("bpf: Destroy callee-local dynptrs on subprog
+return") the old __msg() no longer matches and 'test_progs -t dynptr'
+reports a failure at that intermediate commit.
+
+Should the expectation update for this existing test move into patch 1/2,
+since that's where the verifier output changes?
+
+Also, the surviving comment "/* Any dynptr initialized within a callback
+must have bpf_dynptr_put called */" and the test name 'missing_release'
+still describe the old leak diagnostic that the verifier no longer emits
+here. Should the comment be reworded to reflect that the program is now
+rejected for losing the last dynptr that can release the reservation,
+rather than for leaking it?
+
+[ ... ]
+
+> @@ -1892,6 +1892,101 @@ int clone_invalidate4(void *ctx)
+>  	return 0;
+>  }
 >
->      *reg = *known_reg;
->      reg->subreg = subreg;
->      zext_32_to_64(reg);
->
-> This overwrites reg's state wholesale without intersecting it with what reg
-> already knew.
->
-> For pre-existing full-64-bit links, sync_linked_regs() propagates changes
-> in both directions, so the base is always at least as narrow as every
-> member and the overwrite can only narrow. But the new low-32 link skips
-> the member->base direction:
->
->      if (known_reg->subreg)
->          continue;
->
-> so the base can end up strictly wider than the ->subreg member.
->
-> Consider this sequence:
->
->    call bpf_get_prandom_u32;    /* r0 -> 64-bit unknown */
->    r6 = r0;                     /* r6 is 64-bit unknown */
->    w7 = w6;                     /* r7->id = r6->id, r7->subreg = SUBREG_ZEXT */
->    if w7 > 7 goto out;          /* fall-through: r7 u32 range [0,7]
->                                  * sync_linked_regs(known_reg=r7) skips r6 due
->                                  * to `if (known_reg->subreg) continue;`
->                                  * so r6 stays fully unknown */
->    if r6 > 100 goto out;        /* fall-through: r6 narrows to [0,100]
->                                  * sync_linked_regs(known_reg=r6) reaches r7
->                                  * via reconstruct_zext32(r7, r6) which does
->                                  * *r7 = *r6 then zext_32_to_64() */
->
-> After the second jump, does r7 become [0,100] instead of staying [0,7]?
+> +static __noinline void clone_slice_in_subprog(struct bpf_dynptr *ptr, int **data)
+> +{
+> +	struct bpf_dynptr clone;
+> +
+> +	bpf_dynptr_clone(ptr, &clone);
+> +	*data = bpf_dynptr_data(&clone, 0, sizeof(val));
+> +}
+> +
+> +static __noinline void caller_slice_in_subprog(struct bpf_dynptr *ptr, int **data)
+> +{
+> +	struct bpf_dynptr clone;
+> +
+> +	*data = bpf_dynptr_data(ptr, 0, sizeof(val));
+> +	bpf_dynptr_clone(ptr, &clone);
+> +}
+> +
+> +static __noinline void reserve_dynptr_in_subprog(void)
+> +{
+> +	struct bpf_dynptr ptr;
+> +
+> +	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
+> +}
 
-Yes it does and that's a problem.
+[ ... ]
 
-> If so, a jump on an unrelated wide register would widen the bounds of a
-> narrow copy that the verifier had already proved tighter, on a
-> straight-line path. That would reject programs that narrowed the 32-bit
-> copy first and the wide original second, then relied on the copy's
-> narrower bound for a memory access or helper argument.
+> +/*
+> + * A slice that escapes a clone's call frame is invalid once the local
+> + * clone is destroyed on return.
+> + */
+> +SEC("?raw_tp")
+> +__failure __msg("invalid mem access 'scalar'")
+> +int clone_slice_returned_frame_invalid(void *ctx)
+> +{
+> +	struct bpf_dynptr ptr;
+> +	int *data = NULL;
+> +
+> +	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
+> +	clone_slice_in_subprog(&ptr, &data);
+> +	if (data)
+> +		/* this should fail */
+> +		*data = 123;
+> +	bpf_ringbuf_submit_dynptr(&ptr, 0);
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * Releasing the shared reservation must invalidate a slice that escaped
+> + * from a clone's call frame.
+> + */
+> +SEC("?raw_tp")
+> +__failure __msg("invalid mem access 'scalar'")
+> +int clone_slice_returned_frame_release_invalid(void *ctx)
+> +{
+> +	struct bpf_dynptr ptr;
+> +	int *data = NULL;
+> +
+> +	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
+> +	clone_slice_in_subprog(&ptr, &data);
+> +	bpf_ringbuf_submit_dynptr(&ptr, 0);
+> +	if (data)
+> +		/* this should fail */
+> +		*data = 123;
+> +
+> +	return 0;
+> +}
 
-Right, sound, but loss of precision.
+Does clone_slice_returned_frame_release_invalid() actually test what the
+comment claims?
 
-> The changelog acknowledges the other precision loss this patch introduces
-> ("forming one costs the source its delta ... That loses tracking a wide
-> source used to keep") and the follow-up selftest commit 36b84852a200 pins
-> it down with zext_mov_breaks_add_const_src. But neither the changelog nor
-> reconstruct_zext32()'s comment ("Copy the base to keep its precise low-32
-> tnum"), nor any of the 10 new tests in 36b84852a200, mentions or covers
-> this path. The only test that checks the member's fate is
-> zext_narrow_dst_keeps_base, which verifies the base is not narrowed but
-> does not check what happens to the member afterwards.
+The comment says "Releasing the shared reservation must invalidate a slice
+that escaped from a clone's call frame", suggesting that
+bpf_ringbuf_submit_dynptr(&ptr, 0) is what kills 'data'.
 
-Ok. zext_sync_keeps_narrower_member() added and same for sext variant as 
-reconstruct_sext32 gets similar fix.
+But with this series, 'data' is already dead one instruction earlier: when
+clone_slice_in_subprog() returns, destroy_dynptrs_on_func_exit() calls
+destroy_if_dynptr_stack_slot() which calls release_reference(clone.id).
+That walks every frame (bpf_for_each_reg_in_vstate_mask, mask includes
+STACK_SPILL) and marks the spilled slice in the caller's stack invalid,
+because bpf_dynptr_data() set regs[R0].parent_id = clone's dynptr id
+(verifier.c:11305).
 
-> Would intersecting the rebuilt state with the member's existing one,
+So the verifier rejects '*data = 123' for exactly the same reason as
+clone_slice_returned_frame_invalid(): the clone is destroyed at subprog
+return. The position of bpf_ringbuf_submit_dynptr() doesn't matter and
+this test can't distinguish a kernel where release-time invalidation of
+escaped slices works from one where it does not.
 
-This one.
+The two functions differ only in where the submit is placed, making this
+second test a copy of the first with a comment that overstates it. The
+commit message also says "Cover immediate use of a ring buffer clone
+slice, use after the shared reservation is released", but both fail at the
+same point.
 
-+       cnum64_intersect_with(&reg->r64, prev.r64);
-+       cnum32_intersect_with(&reg->r32, prev.r32);
-+       reg->var_off = tnum_intersect(reg->var_off, prev.var_off);
+Would it make sense to either drop this test, or make it actually test
+release-time invalidation? For example, deriving the escaping slice from
+the caller-owned dynptr (as caller_slice_in_subprog() does) would let the
+slice survive the subprog return, so only the submit can invalidate it.
 
-> narrowing the base's low half on the member->base direction instead of
-> skipping it, prevent the member from ever being wider than what it already
-> proved?
 
-This is a new propagation path, trying to be conservative here.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Thx,
--Vineet
-
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34506184282
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34582138838
+--===============1260246229495050407==--
