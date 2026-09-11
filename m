@@ -1,63 +1,63 @@
 Received: from mail-pj2-f11.google.com (mail-pj2-f11.google.com [74.125.227.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB4F3AAF6A
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 03:47:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5128038910F
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 03:47:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789098432; cv=none; b=JPXfjAsC21tiYgP3YmZE4LydrF5HXoIcTfHWtIUsa3+VJ3BJMQHPpwJTBSiuAzN1+pb7GKMa9RagIx1Bed/bBi4R2m/Di1Cw6EQgeBMwY9O/CvSwQ98mrTSxAVdBtIRH5BS70eo6iS5MrjhssEM1jl6OvhEJ99d0ng5CJ5b1A6w=
+	t=1789098436; cv=none; b=BukPREU6MLNFEwsgqkvn1V/qj9BoKy8CCwYemDJ6/gO37eDsJfipI0KgA7tWjTgn7SEkKC1Eth6qJBzMcRsoD7yXqKa8YQQQbPb2DnPd6Tw2VAU5Bsq8Ik4CoFyhbE5gJsjPWNGMmGEzHmS6b5hVt0uZSiYc1d6FUdg6E4XvgPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789098432; c=relaxed/simple;
-	bh=Px6YMCS7alQ0hC+MCuBrJS6+RtKZJP5xwq6PvaHZGvI=;
+	s=arc-20240116; t=1789098436; c=relaxed/simple;
+	bh=qCj5KxpbmLsxDHpp8TuDuSjn3hoLwqME9LrygCQAZec=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BhL5sieWMslpS7WWEwXT67vo7jfhv7YH9JHmnnPH9pcv5+MqlJgNCi0ldw+ncJTYg2K6Lxsa7vC1NRI60X11u+QzjKM2Jqv/EmK/R26zVn2oLP6s1YTJ9OO6FrAvUFw/9/PrvJgAEbAx3KOS6E16wlFAshUuDpYI9w16iXy9ld8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KdvC8Z4P; arc=none smtp.client-ip=74.125.227.139
+	 MIME-Version; b=OEQ2KsLUlF4b+r4KKHGbLY43WdOP2kSPoyq3n5nEmbzpg60ag5vQsi6LYqqTR57skpbWZS5mngTOIINOwXxkzr238F3m5Xyfquv4ZN6TB0PyqhytJu7iRvmEsefj8M9OX31S3nUUSwwUSDSY1NAB9hXSij2TbkblSgk5MnOgi5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lYemkd1c; arc=none smtp.client-ip=74.125.227.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KdvC8Z4P"
-Received: by mail-pj2-f11.google.com with SMTP id 98e67ed59e1d1-396a51b2605so204148a91.0
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 20:47:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lYemkd1c"
+Received: by mail-pj2-f11.google.com with SMTP id 98e67ed59e1d1-398a384b5f7so235754a91.0
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 20:47:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789098430; x=1789703230; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789098434; x=1789703234; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=KxO9xckzpQFJK+vCemppGSlZt+kd6zyn//X+ZaDalos=;
-        b=KdvC8Z4PEZYvbDCnqDAZY521SWFTxc2xjv8CqpqCq6lZbjmLrAeOdDOjKYTx18LLxp
-         6cAhwwPX317SUWfJThq/Uzs/gy9fQXqlcvZiZ2laLO4zUguJK6EHuQNudXv0kAFImsVO
-         hwrNbHt/bCOpikX1hgBPXqVcop8R81qIbxTfmSgQtU5M50WvmYIIh7wKvMVyVsVO0ZKx
-         C5eCvu7tN2CdJ5mQTWaa2RvdH3EMqBV/qiAnuoNimx6eCEReN+ooidJzS4Tu0cyvTqRD
-         eF7fs5TV65WQXOjUjNiVPsDrcGCc09W0kGaCUtRk03wOQqYkGSbHwyNKp//SLV/b4tZF
-         kuGg==
+        bh=lMD4l39AzBLBX/0QKoGNGV2GkIHoHPkT1yUxuLkPpaU=;
+        b=lYemkd1c3JfRBAnjkmN7hBaPRU4uqL8fOziTnWSDePq5Uiw9NK7suzO+pYs9pvLaBW
+         y7OD/dg+oSQ50NwQJoXWz+brqXa9Qy4pV0OYZpRF4AjSrZlfr7BU+rt492+YFQpoNJHW
+         wNNDCLe8lDu4ZvaSXHH9ut5GOOnliOxLGzyoFxuRMaW4yp3ZMun8amaCrYmss59O6eW0
+         +QK3kpjsBOPjIIz8P6lnAYhYilaEIIILj2lgUE9cjfD7cv55AfesomRB2WenxEk+bkn+
+         VHtLhANN1oBrmHoFohn1h8WS5JNK2if3NFNpqWUGdoHIew2PXp7g1DGEfYukyxV/hozW
+         ODGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789098430; x=1789703230;
+        d=1e100.net; s=20251104; t=1789098434; x=1789703234;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KxO9xckzpQFJK+vCemppGSlZt+kd6zyn//X+ZaDalos=;
-        b=Z8nF/M7XeWZUAFQlfwDaVnoW8BF0emfz0qT6qIySQcS4vSWAnVINEG3pClupmyro4M
-         ShsZOyh7+oV6SSnTtNUTDB0D9CBTzq/DortP4aLW6mJy9AzxQTyb0mzX0SS5AxvX+jaw
-         eSraCuuLmOmPeUTaCQWeHyCdUNygjeAE6RwtBqHhdnmMOdRIymu2aVxn3o3Voxh12yRF
-         ZNy1gtaISkev+Uag7trRoMtR25z4nLPo/0v+o0BNG5x3KR2Cu48sFzPDheSwamX7jau5
-         gGbOSDW8pjUZPhARlPuUTiqAF1tvG0e1WMror8puw2hRTV31bVSEJEEltlQPYHansx/M
-         sugg==
-X-Forwarded-Encrypted: i=1; AKwUvBwQYi6LOAQBJ4S98pHz5w/et4qAN54+J5cBNzSTbneFf43lqjVRLsA+4H621QGkdTXS66U=@vger.kernel.org
-X-Gm-Message-State: AFuF++k7cLDY8L+bLKUy8XBLl5fNQQ+2iyHxmQS3t6x5doXNtnjopSk7
-	u0X5qK/RCsnLs5ksyJEHcC3pMsfODZ0hWcDtQm9hnxLEAhCScqrDHR31fQGj3jz3DEvvHg==
-X-Gm-Gg: AYBFou2Tx1rGmHVXNBSsniBlvZqCxaj07U7gnO9U/VVD5+dNPj31FHKXfEGYppI2vL0
-	4sk05jQ1j4z+ZSF5nLo6tdLDBQ5CbWExWNMwze2NkP+CICMCkRPuIp+hN4rCMIvHE5Nmgekn/SR
-	rzetGSmCaxPVoERW6eQhW2DGV2TsYOs/Gf8vIy0/jSQuLDimhmyxnLdiaRRMFHuIBs3iCB2MFyv
-	T0IKPhsggJq3fLRoZMilsXyVppfPxgLWnpUmlmFET1Oy74yJNd1DisNmTQjiZUGXNOZqoDE68XD
-	u8aeypqVfpiPh4K0q6P9ndsIubDi22WLuLdOQxEn5oAF5eS1AfPOI92Rq3hR7QcnPFReF5koxtA
-	jIMzEOrzCTv9NW3rfJAalTes1I0RS3HIRJ3guUFS4ehg+MAGQDFf63+R116oDURwWlX9+0mGwm3
-	8yZ0d78Erelf8gXcvH+13ZLctQqAHmo4f3v3d2z9I7mPk26cHAhmE9GPSCBk4huY3o
-X-Received: by 2002:a17:90b:4d0c:b0:395:5f43:4ec4 with SMTP id 98e67ed59e1d1-39d9b97d29emr3471216a91.0.1789098429787;
-        Thu, 10 Sep 2026 20:47:09 -0700 (PDT)
+        bh=lMD4l39AzBLBX/0QKoGNGV2GkIHoHPkT1yUxuLkPpaU=;
+        b=R4W4cOZle5bqD+qo37qROwwmfc50wpWg8tu0mcoUYpUF/UGbSFZgKfrxUOxEO4stF+
+         AiKGIpW2Qos17AGQEyS7jCU4P0v96hpDF8R5WQPz2wng0gVPIKq2SNvYpxIY+L5wcyem
+         07T/zF1r2BQ0+N0S/BZcD1ziieEiq+tpCVv/JsaN4pUTjiYIgiWknlwL6RSzltgGI+Gq
+         hFLm0Ld7oKX/P0rO0jzZM/l/gnEPFrjEf1bv2zM8mvZnASU45maVH9tKMqvxstlM06Zz
+         OVOz4MS34WI7sCnXTtCqLH/O8mmsa71kECoyzqO1k4l1YmnoEQW8sav8O+laQMjZnx4c
+         yHVw==
+X-Forwarded-Encrypted: i=1; AKwUvBzHYwcn2xhHTKfCnBlOSd6acBSLk7CazntnYrmuHXpuV3pmeH7YMw46ZkmGqYLgRwQXWw0=@vger.kernel.org
+X-Gm-Message-State: AFuF++kwMwvEcX8XL8Jz/eQFXMELTxLYjujLfSp5A4FP7v5P8JMFKHFr
+	lnQBqN9oMp9TBsgkiS1Uxc7Tuz6l6uVy2HBA/rKnyzQvyHDtRpy9ncKYTBA0krXLu4czJQ==
+X-Gm-Gg: AYBFou3MMYKtI5N60KaK44UAGEc7bOx6hta1u9V8PNVix3iU1UELpcKOXGx3bZLI3za
+	JajIwmWmGCIif2L4Ap/nOnkSwyYBdx/YC/FICHFiT3wAxeMzBF0CSvbMSFpAesTj4KppnqFw4wG
+	d8xjdl5ULhrxvBelwzYs4o+2ycvBaz+xgWAYlyq0JZybNFtYYjJANaxpqwZB3041rOHiJaj4xAa
+	fW1K/2BQ+QV9itiQ05rYEDnERxNNoXk5jKt6WV9OlGzgVFSo2KyamKa/Tj/zJISp2nv6oEz+ayE
+	p+QV7Da8CryNyuzr+FG8B4OMhj0DKD84nUaEaVYS+nlT+Y+daJQJO/lI9VkYPVNst3Fpe3CkXIQ
+	qcWS9xFepI/U4B1KhiIyqHb4W5je+rSmizKB8oGg1tmGte6EHrFhi5Hjttx45igiF/ru34KJxNx
+	xxs+RhkLjIiMx3WpYMoceoXqzBgPZAOyvL6y8ed3qQkSkWelZStVsP4Z76qeB10Nhy
+X-Received: by 2002:a17:90b:560e:b0:398:a2ed:7b5c with SMTP id 98e67ed59e1d1-39d9c3a1fc2mr3848027a91.24.1789098434445;
+        Thu, 10 Sep 2026 20:47:14 -0700 (PDT)
 Received: from 192.168.5.7 ([69.5.53.41])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d9959ac65sm2119710a91.16.2026.09.10.20.47.05
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d9959ac65sm2119710a91.16.2026.09.10.20.47.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 20:47:09 -0700 (PDT)
+        Thu, 10 Sep 2026 20:47:14 -0700 (PDT)
 From: Tianyi Chen <diannaaav@gmail.com>
 To: qmo@kernel.org,
 	bpf@vger.kernel.org
@@ -65,9 +65,9 @@ Cc: andrii@kernel.org,
 	eddyz87@gmail.com,
 	ihor.solodrai@linux.dev,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v5 1/2] bpftool: Accept symbolic map creation flags
-Date: Fri, 11 Sep 2026 11:46:57 +0800
-Message-ID: <20260911034658.219396-2-diannaaav@gmail.com>
+Subject: [PATCH bpf-next v5 2/2] selftests/bpf: Cover symbolic bpftool map creation flags
+Date: Fri, 11 Sep 2026 11:46:58 +0800
+Message-ID: <20260911034658.219396-3-diannaaav@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260911034658.219396-1-diannaaav@gmail.com>
 References: <20260911034658.219396-1-diannaaav@gmail.com>
@@ -81,303 +81,124 @@ Content-Transfer-Encoding: 8bit
 
 From: Tianyi Chen <hi@tychen.cc>
 
-Accept comma-separated BPF_F_* names for map create flags, so callers
-can use the UAPI names without looking up their numeric values. Keep
-base-0 unsigned 32-bit numeric input, including bits unknown to bpftool.
-
-Reject empty names, unknown names and mixed numeric and symbolic lists.
-The old numeric parser accepted an empty string as zero and could
-truncate or wrap out-of-range values; reject those inputs as well.
-Parser acceptance still leaves the kernel to validate the flags for
-the requested map type.
-
-List accepted symbolic names through feature list_builtins and use the
-same list for completion. Avoid appending a space to completed list
-elements so another flag can be added to the same argument.
-
-Link: https://github.com/libbpf/bpftool/issues/57
+Check numeric and symbolic map creation flags, including combined and
+repeated names, against map information read independently with libbpf.
+Exercise malformed names and lists, update-only flags, empty input and
+numeric range errors. Verify rejected input leaves no pinned map.
 
 Assisted-by: LLM
 Signed-off-by: Tianyi Chen <hi@tychen.cc>
 ---
- .../bpftool/Documentation/bpftool-feature.rst | 16 ++--
- .../bpf/bpftool/Documentation/bpftool-map.rst | 15 +++-
- tools/bpf/bpftool/bash-completion/bpftool     | 22 ++++-
- tools/bpf/bpftool/feature.c                   |  7 +-
- tools/bpf/bpftool/main.h                      |  1 +
- tools/bpf/bpftool/map.c                       | 86 ++++++++++++++++++-
- 6 files changed, 131 insertions(+), 16 deletions(-)
+ .../bpf/prog_tests/bpftool_map_flags.c        | 100 ++++++++++++++++++
+ 1 file changed, 100 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-feature.rst b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-index c7f837898bc..fb10d2b6a55 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-feature.rst
-@@ -28,7 +28,7 @@ FEATURE COMMANDS
- | **bpftool** **feature help**
- |
- | *COMPONENT* := { **kernel** | **dev** *NAME* }
--| *GROUP* := { **prog_types** | **map_types** | **attach_types** | **link_types** | **helpers** }
-+| *GROUP* := { **prog_types** | **map_types** | **map_create_flags** | **attach_types** | **link_types** | **helpers** }
- 
- DESCRIPTION
- ===========
-@@ -68,12 +68,14 @@ bpftool feature probe dev *NAME* [full] [macros [prefix *PREFIX*]]
- 
- bpftool feature list_builtins *GROUP*
-     List items known to bpftool. These can be BPF program types
--    (**prog_types**), BPF map types (**map_types**), attach types
--    (**attach_types**), link types (**link_types**), or BPF helper functions
--    (**helpers**). The command does not probe the system, but simply lists the
--    elements that bpftool knows from compilation time, as provided from libbpf
--    (for all object types) or from the BPF UAPI header (list of helpers). This
--    can be used in scripts to iterate over BPF types or helpers.
-+    (**prog_types**), BPF map types (**map_types**), map creation flags
-+    (**map_create_flags**), attach types (**attach_types**), link types
-+    (**link_types**), or BPF helper functions (**helpers**). The command does
-+    not probe the system, but simply lists the elements that bpftool knows
-+    from compilation time, as provided from libbpf (for all object types) or
-+    from the BPF UAPI header (helpers and map creation flags). This can be used
-+    in scripts to iterate over BPF types, helpers, or the symbolic flags
-+    accepted by **map create**.
- 
- bpftool feature help
-     Print short help message.
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-index 5daf3de5c74..15739a0806f 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
-@@ -48,6 +48,7 @@ MAP COMMANDS
- | *DATA* := { [**hex**] *BYTES* }
- | *PROG* := { **id** *PROG_ID* | **pinned** *FILE* | **tag** *PROG_TAG* | **name** *PROG_NAME* }
- | *VALUE* := { *DATA* | *MAP* | *PROG* }
-+| *FLAGS* := { integer | **BPF_F_NAME[,BPF_F_NAME...]** }
- | *UPDATE_FLAGS* := { **any** | **exist** | **noexist** }
- | *TYPE* := { **hash** | **array** | **prog_array** | **perf_event_array** | **percpu_hash**
- |     | **percpu_array** | **stack_trace** | **cgroup_array** | **lru_hash**
-@@ -76,9 +77,17 @@ bpftool map { show | list }   [*MAP*]
- bpftool map create *FILE* type *TYPE* key *KEY_SIZE* value *VALUE_SIZE*  entries *MAX_ENTRIES* name *NAME* [flags *FLAGS*] [inner_map *MAP*] [offload_dev *NAME*]
-     Create a new map with given parameters and pin it to *bpffs* as *FILE*.
- 
--    *FLAGS* should be an integer which is the combination of desired flags,
--    e.g. 1024 for **BPF_F_MMAPABLE** (see bpf.h UAPI header for existing
--    flags).
-+    *FLAGS* accepts an unsigned 32-bit integer combining the desired flags
-+    (decimal, hexadecimal with a **0x** prefix, or octal with a **0** prefix),
-+    or a comma-separated list of full, case-sensitive map creation flag names
-+    from the bpf.h UAPI header. Use **bpftool feature list_builtins
-+    map_create_flags** to list accepted symbolic names. For example, **1024**,
-+    **0x400**, and **BPF_F_MMAPABLE** are equivalent. Multiple names are combined
-+    with bitwise OR, for example **BPF_F_NO_PREALLOC,BPF_F_RDONLY_PROG**.
-+    Repeated names are allowed. Empty list elements, abbreviated names, and
-+    lists mixing numbers with names are not accepted. Use **0** for no flags.
-+    Numeric values can include bits unknown to bpftool. The kernel checks
-+    whether the flags are valid for the requested map type.
- 
-     To create maps of type array-of-maps or hash-of-maps, the **inner_map**
-     keyword must be used to pass an inner map. The kernel needs it to collect
-diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
-index 75cbcb512eb..ea3f521b6f0 100644
---- a/tools/bpf/bpftool/bash-completion/bpftool
-+++ b/tools/bpf/bpftool/bash-completion/bpftool
-@@ -718,6 +718,10 @@ _bpftool()
-                     esac
-                     ;;
-                 create)
-+                    # Keep a flags list together if readline splits at commas.
-+                    if [[ $COMP_WORDBREAKS == *,* && ( $cur == , || $prev == , ) ]]; then
-+                        _get_comp_words_by_ref -n , cur prev
-+                    fi
-                     case $prev in
-                         $command)
-                             _filedir
-@@ -729,7 +733,21 @@ _bpftool()
-                             COMPREPLY=( $( compgen -W "$BPFTOOL_MAP_CREATE_TYPES" -- "$cur" ) )
-                             return 0
-                             ;;
--                        key|value|flags|entries)
-+                        flags)
-+                            compopt -o nospace
-+                            local flags="$(bpftool feature list_builtins map_create_flags 2>/dev/null)"
-+                            local prefix= flag
-+                            # If comma is not a word break, Readline replaces the whole
-+                            # word, so preserve the flags before the last comma.
-+                            if [[ $cur == *,* && $COMP_WORDBREAKS != *,* ]]; then
-+                                prefix="${cur%,*},"
-+                            fi
-+                            for flag in $(compgen -W "$flags" -- "${cur##*,}"); do
-+                                COMPREPLY+=( "${prefix}${flag}" )
-+                            done
-+                            return 0
-+                            ;;
-+                        key|value|entries)
-                             return 0
-                             ;;
-                         inner_map)
-@@ -1192,7 +1210,7 @@ _bpftool()
-                     ;;
-                 list_builtins)
-                     [[ $prev != "$command" ]] && return 0
--                    COMPREPLY=( $( compgen -W 'prog_types map_types \
-+                    COMPREPLY=( $( compgen -W 'prog_types map_types map_create_flags \
-                         attach_types link_types helpers' -- "$cur" ) )
-                     ;;
-                 *)
-diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
-index 0f6070a0c8e..b5419d5a661 100644
---- a/tools/bpf/bpftool/feature.c
-+++ b/tools/bpf/bpftool/feature.c
-@@ -1220,6 +1220,8 @@ static int do_list_builtins(int argc, char **argv)
- 		get_name = (const char *(*)(unsigned int))libbpf_bpf_prog_type_str;
- 	} else if (is_prefix(*argv, "map_types")) {
- 		get_name = (const char *(*)(unsigned int))libbpf_bpf_map_type_str;
-+	} else if (is_prefix(*argv, "map_create_flags")) {
-+		get_name = map_create_flag_name;
- 	} else if (is_prefix(*argv, "attach_types")) {
- 		get_name = (const char *(*)(unsigned int))libbpf_bpf_attach_type_str;
- 	} else if (is_prefix(*argv, "link_types")) {
-@@ -1227,7 +1229,7 @@ static int do_list_builtins(int argc, char **argv)
- 	} else if (is_prefix(*argv, "helpers")) {
- 		get_name = get_helper_name;
- 	} else {
--		p_err("expected 'prog_types', 'map_types', 'attach_types', 'link_types' or 'helpers', got: %s", *argv);
-+		p_err("expected 'prog_types', 'map_types', 'map_create_flags', 'attach_types', 'link_types' or 'helpers', got: %s", *argv);
- 		return -1;
- 	}
- 
-@@ -1265,7 +1267,8 @@ static int do_help(int argc, char **argv)
- 		"       %1$s %2$s help\n"
- 		"\n"
- 		"       COMPONENT := { kernel | dev NAME }\n"
--		"       GROUP := { prog_types | map_types | attach_types | link_types | helpers }\n"
-+		"       GROUP := { prog_types | map_types | map_create_flags |\n"
-+		"                  attach_types | link_types | helpers }\n"
- 		"       " HELP_SPEC_OPTIONS " }\n"
- 		"",
- 		bin_name, argv[-2]);
-diff --git a/tools/bpf/bpftool/main.h b/tools/bpf/bpftool/main.h
-index 9315a1db1f7..3e2856c9f59 100644
---- a/tools/bpf/bpftool/main.h
-+++ b/tools/bpf/bpftool/main.h
-@@ -180,6 +180,7 @@ int do_token(int argc, char **argv) __weak;
- int parse_u32_arg(int *argc, char ***argv, __u32 *val, const char *what);
- int prog_parse_fd(int *argc, char ***argv);
- int prog_parse_fds(int *argc, char ***argv, int **fds);
-+const char *map_create_flag_name(unsigned int id);
- int map_parse_fd(int *argc, char ***argv, __u32 open_flags);
- int map_parse_fds(int *argc, char ***argv, int **fds, __u32 open_flags);
- int map_parse_fd_and_info(int *argc, char ***argv, struct bpf_map_info *info,
-diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
-index 684a8fb7241..e3b643246c6 100644
---- a/tools/bpf/bpftool/map.c
-+++ b/tools/bpf/bpftool/map.c
-@@ -1250,6 +1250,82 @@ static int do_pin(int argc, char **argv)
- 	return err;
- }
- 
-+static const struct {
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c
+new file mode 100644
+index 00000000000..d617b43273a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c
+@@ -0,0 +1,100 @@
++// SPDX-License-Identifier: GPL-2.0-only
++
++#include <errno.h>
++#include <unistd.h>
++#include <bpf/bpf.h>
++#include <bpftool_helpers.h>
++#include <test_progs.h>
++
++static const struct map_flags_test {
 +	const char *name;
-+	__u32 value;
-+} map_create_flags[] = {
-+#define MAP_CREATE_FLAG(flag) { #flag, flag }
-+	MAP_CREATE_FLAG(BPF_F_NO_PREALLOC),
-+	MAP_CREATE_FLAG(BPF_F_NO_COMMON_LRU),
-+	MAP_CREATE_FLAG(BPF_F_NUMA_NODE),
-+	MAP_CREATE_FLAG(BPF_F_RDONLY),
-+	MAP_CREATE_FLAG(BPF_F_WRONLY),
-+	MAP_CREATE_FLAG(BPF_F_STACK_BUILD_ID),
-+	MAP_CREATE_FLAG(BPF_F_ZERO_SEED),
-+	MAP_CREATE_FLAG(BPF_F_RDONLY_PROG),
-+	MAP_CREATE_FLAG(BPF_F_WRONLY_PROG),
-+	MAP_CREATE_FLAG(BPF_F_CLONE),
-+	MAP_CREATE_FLAG(BPF_F_MMAPABLE),
-+	MAP_CREATE_FLAG(BPF_F_PRESERVE_ELEMS),
-+	MAP_CREATE_FLAG(BPF_F_INNER_MAP),
-+	MAP_CREATE_FLAG(BPF_F_LINK),
-+	/* BPF_F_PATH_FD applies only to BPF_OBJ_PIN/BPF_OBJ_GET. */
-+	MAP_CREATE_FLAG(BPF_F_VTYPE_BTF_OBJ_FD),
-+	MAP_CREATE_FLAG(BPF_F_TOKEN_FD),
-+	MAP_CREATE_FLAG(BPF_F_SEGV_ON_FAULT),
-+	MAP_CREATE_FLAG(BPF_F_NO_USER_CONV),
-+	MAP_CREATE_FLAG(BPF_F_RB_OVERWRITE),
-+#undef MAP_CREATE_FLAG
++	const char *flags;
++	__u32 expected_flags;
++	const char *error;
++} tests[] = {
++	{ "zero", "0", 0 },
++	{ "decimal", "129", BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
++	{ "hexadecimal", "0x81", BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
++	{ "octal", "0201", BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
++	{ "positive_sign", "+1", BPF_F_NO_PREALLOC },
++	{ "single_name", "BPF_F_NO_PREALLOC", BPF_F_NO_PREALLOC },
++	{ "combined_names", "BPF_F_NO_PREALLOC,BPF_F_RDONLY_PROG",
++	  BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
++	{ "repeated_name", "BPF_F_NO_PREALLOC,BPF_F_NO_PREALLOC", BPF_F_NO_PREALLOC },
++	{ "unknown_name", "BPF_F_NOT_A_MAP_FLAG", 0, "can't parse" },
++	{ "other_command_flag", "BPF_F_PATH_FD", 0, "can't parse" },
++	{ "update_flag", "BPF_F_LOCK", 0, "can't parse" },
++	{ "abbreviated_name", "BPF_F_NO_PRE", 0, "can't parse" },
++	{ "lowercase_name", "bpf_f_no_prealloc", 0, "can't parse" },
++	{ "empty", "", 0, "can't parse" },
++	{ "whitespace", " ", 0, "can't parse" },
++	{ "empty_list", ",", 0, "can't parse" },
++	{ "leading_comma", ",BPF_F_NO_PREALLOC", 0, "can't parse" },
++	{ "trailing_comma", "BPF_F_NO_PREALLOC,", 0, "can't parse" },
++	{ "empty_element", "BPF_F_NO_PREALLOC,,BPF_F_RDONLY_PROG", 0, "can't parse" },
++	{ "number_then_name", "1,BPF_F_RDONLY_PROG", 0, "can't parse" },
++	{ "name_then_number", "BPF_F_NO_PREALLOC,128", 0, "can't parse" },
++	{ "numeric_list", "1,128", 0, "can't parse" },
++	{ "whitespace_in_list", "BPF_F_NO_PREALLOC, BPF_F_RDONLY_PROG", 0, "can't parse" },
++	{ "overflow_u32", "4294967296", 0, "can't parse" },
++	{ "overflow_hex", "0x100000000", 0, "can't parse" },
++	{ "overflow_u64", "18446744073709551616", 0, "can't parse" },
++	{ "negative", "-1", 0, "can't parse" },
++	/* Numeric bits unknown to bpftool must still reach the kernel. */
++	{ "all_bits", "0xffffffff", 0, "map create failed" },
++	/* The kernel validates combinations of known map creation flags. */
++	{ "invalid_combination", "BPF_F_RDONLY,BPF_F_WRONLY", 0, "map create failed" },
 +};
 +
-+const char *map_create_flag_name(unsigned int id)
++static void test_map_flags(const struct map_flags_test *test, const char *path)
 +{
-+	if (id >= ARRAY_SIZE(map_create_flags))
-+		return NULL;
++	char cmd[MAX_BPFTOOL_CMD_LEN], output[1024] = {};
++	struct bpf_map_info info = {};
++	__u32 info_len = sizeof(info);
++	int fd, err;
 +
-+	return map_create_flags[id].name;
-+}
++	/* Let the flags parser handle negative numbers instead of getopt(). */
++	err = snprintf(cmd, sizeof(cmd),
++		       "-- map create %s type hash key 4 value 4 entries 1 name flags_test flags '%s' 2>&1",
++		       path, test->flags);
++	if (!ASSERT_GT(err, 0, "format_command") ||
++	    !ASSERT_LT(err, sizeof(cmd), "command_length"))
++		return;
 +
-+static int parse_map_create_flags(const char *arg, __u32 *flags)
-+{
-+	const char *name = arg, *comma;
-+	long long value;
-+	__u32 parsed = 0;
-+	size_t len, i;
-+	char *end;
-+
-+	/* Keep base-0 numeric input, including bits unknown to this bpftool. */
-+	if (strncmp(arg, "BPF_F_", 6)) {
-+		errno = 0;
-+		value = strtoll(arg, &end, 0);
-+		if (errno || end == arg || *end || value < 0 || value > UINT32_MAX)
-+			goto invalid;
-+		*flags = value;
-+		return 0;
++	err = get_bpftool_command_output(cmd, output, sizeof(output));
++	if (test->error) {
++		ASSERT_NEQ(err, 0, "reject_flags");
++		ASSERT_HAS_SUBSTR(output, test->error, "error_message");
++		err = access(path, F_OK);
++		ASSERT_EQ(err, -1, "no_pin");
++		ASSERT_EQ(errno, ENOENT, "pin_absent");
++		goto cleanup;
 +	}
++	if (!ASSERT_OK(err, "create_map"))
++		goto cleanup;
 +
-+	do {
-+		comma = strchr(name, ',');
-+		len = comma ? (size_t)(comma - name) : strlen(name);
-+		for (i = 0; i < ARRAY_SIZE(map_create_flags); i++) {
-+			if (strlen(map_create_flags[i].name) == len &&
-+			    !strncmp(name, map_create_flags[i].name, len))
-+				break;
-+		}
-+		if (i == ARRAY_SIZE(map_create_flags))
-+			goto invalid;
-+		parsed |= map_create_flags[i].value;
-+		if (comma)
-+			name = comma + 1;
-+	} while (comma);
-+
-+	*flags = parsed;
-+	return 0;
-+invalid:
-+	p_err("can't parse %s as map creation flags", arg);
-+	return -1;
++	fd = bpf_obj_get(path);
++	if (!ASSERT_OK_FD(fd, "open_map"))
++		goto cleanup;
++	if (ASSERT_OK(bpf_map_get_info_by_fd(fd, &info, &info_len), "map_info"))
++		ASSERT_EQ(info.map_flags, test->expected_flags, "map_flags");
++	close(fd);
++cleanup:
++	unlink(path);
 +}
 +
- static int do_create(int argc, char **argv)
- {
- 	LIBBPF_OPTS(bpf_map_create_opts, attr);
-@@ -1301,9 +1377,14 @@ static int do_create(int argc, char **argv)
- 					  "max entries"))
- 				goto exit;
- 		} else if (is_prefix(*argv, "flags")) {
--			if (parse_u32_arg(&argc, &argv, &attr.map_flags,
--					  "flags"))
-+			NEXT_ARG();
-+			if (attr.map_flags) {
-+				p_err("flags already specified");
- 				goto exit;
-+			}
-+			if (parse_map_create_flags(*argv, &attr.map_flags))
-+				goto exit;
-+			NEXT_ARG();
- 		} else if (is_prefix(*argv, "dev")) {
- 			p_info("Warning: 'bpftool map create [...] dev <ifname>' syntax is deprecated.\n"
- 			       "Going further, please use 'offload_dev <ifname>' to request hardware offload for the map.");
-@@ -1474,6 +1555,7 @@ static int do_help(int argc, char **argv)
- 		"       DATA := { [hex] BYTES }\n"
- 		"       " HELP_SPEC_PROGRAM "\n"
- 		"       VALUE := { DATA | MAP | PROG }\n"
-+		"       FLAGS := { integer | BPF_F_NAME[,BPF_F_NAME...] }\n"
- 		"       UPDATE_FLAGS := { any | exist | noexist }\n"
- 		"       TYPE := { hash | array | prog_array | perf_event_array | percpu_hash |\n"
- 		"                 percpu_array | stack_trace | cgroup_array | lru_hash |\n"
++void test_bpftool_map_flags(void)
++{
++	char dir[] = "/sys/fs/bpf/bpftool_flags_XXXXXX";
++	char path[sizeof(dir) + sizeof("/map")];
++	int i;
++
++	if (!ASSERT_OK_PTR(mkdtemp(dir), "create_pin_dir"))
++		return;
++	snprintf(path, sizeof(path), "%s/map", dir);
++	for (i = 0; i < ARRAY_SIZE(tests); i++) {
++		if (test__start_subtest(tests[i].name))
++			test_map_flags(&tests[i], path);
++	}
++	ASSERT_OK(rmdir(dir), "remove_pin_dir");
++}
 -- 
 2.55.0
 
