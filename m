@@ -1,252 +1,128 @@
-Received: from mta0.migadu.com (out-120.mta0.migadu.com [91.218.175.120])
+Received: from mail-pj2-f5.google.com (mail-pj2-f5.google.com [74.125.227.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450DA3876D5
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 05:07:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5689B3EA963
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 05:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789103247; cv=none; b=HDY4e4stfFJ78z5Jvy8msBYakhT2LFvVFFeLw4M26HjU6uSDqUoOB+lUE76vmDjt5b6g26Ao1OfsZGXqyJYUvXp4lRUmhwJgLOberfyCeeG6pPN8NuiedZADVN9I/y4kPR0yY3l6tUij3tEeVm4iyAeh1YP8KFktjfbsU6zdO+Y=
+	t=1789103470; cv=none; b=jldFi0U9//m5bt5X4ePPgxVt3l9B26E0AY1qAaIEW3hWFeKPQF3TD2QyaMUw0mtTu4z0xMaAkoSOoYNP8aTGSYeUVG7/JHwx1QxnyjOZwPr5cHZN0lEcWV25tBYvCnnrvozGQbQ/QrTveSL6wj7xyCqPTXDKi+sbeU0M2Q2cy1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789103247; c=relaxed/simple;
-	bh=g/LrzPMwU2k6a3uVq6mtOPg0IBqdWkXM7p18brGZkUo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VMYwKzCrV6aj99KRvhvJmdQ5785tKhCtzZ99uJeSzClclQOZd3tEbnrheIsvBMH0xgI0KwHdkUzzh9Jyva41/YlW/8c1hqouyuXVqvUWNSCftrRCB7jpoKp/+8tnpGau1TnILfUbi9g6S24KV22LQUXeI+NVohpJ0uyB0Ii8Hzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=m7truXR3; arc=none smtp.client-ip=91.218.175.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789103470; c=relaxed/simple;
+	bh=7IvC7itx4XTxq3spcZoa8LyRZc07ShqqbOnpseo9EUs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pPHojPxoFQRtIBSHkdkGLuSwr+pUl4TSbGP/hAdgsy6oOr2szdU8EDvo4VqX4jAWYWjM8cV02IcnZtZQ87YCGQhydm6KNwJZaXfCANy8WH3PoOt1Y3WFHTXYrb2H5Q30EhKijxhduVW+lQv74O8guG4O82HuEytvx45yCOHFHi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=etT9271o; arc=none smtp.client-ip=74.125.227.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="m7truXR3"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=g/LrzPMwU2k6a3uVq6mtOPg0IBqdWkXM7p18brGZkUo=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789103242; v=1; x=1789708042;
- b=m7truXR36I2P/ByGvOgaBHWOeFlcRGiCCEvt/cLCaREhVF6mt39/qaSZOn0PqKKMIXZaznqt
- TrVFFE/Pprg3fhyy90mVcPuiuAtwuLMLYLGKk4pjSvJHd88nJ6Bw1+IA+hH4S1DDTp0mqhPEWas
- p03Yd7QCOMaq+SP/Y8s8tDeA=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 8b2f10adbf184df0;
-	Fri, 11 Sep 2026 05:07:22 +0000
-X-Mizu-Trace-ID: 8b2f10adbf184df0
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <242a06a6-dad9-4a0c-83c8-c3cf52707652@linux.dev>
-Date: Fri, 11 Sep 2026 10:37:16 +0530
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="etT9271o"
+Received: by mail-pj2-f5.google.com with SMTP id d9443c01a7336-2d6fbdc8772so1790885ad.0
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 22:11:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789103469; x=1789708269; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=+y0Q5tFoIi1MyCWL57hyIY3/f1lBE/4yfnjE9Ega5LU=;
+        b=etT9271oK5A23hpDWNTPRyYPQi6TYatjpbwrDFlA/4A5Yaon6+7Lmev0nNbN5JDd50
+         2hQCKO0OY89gceouR+yEGGE0Ghm9u2evA40udDUiTtOMl7JhAQgiHNAAMlN3Ad7Tqu39
+         FuDJocSpJSsE7pfJdZus6X2vcdYlOAJUz1Eim5O5bNLZzX2pJMuuKsiQkXWepRgeXd1s
+         BKo1AfIc7M/cYn+jyt/sggWHciefvrpQ1f1+Nz5BG3AsTAW2eadmrfFSAdLX3M+slV6f
+         xzV+qPao7Vz5tQdNDdPPrxKZyCqA6e9LQ/hIPkWmvmU/zs78xLWPYVq+ltc27ysXC1yh
+         MKZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789103469; x=1789708269;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=+y0Q5tFoIi1MyCWL57hyIY3/f1lBE/4yfnjE9Ega5LU=;
+        b=mZRM7SDtXJPUJn6a3PIV5qGKOOz9A9VqZ93eceE9dJkUBEMQKkb/ACjVLnlqR8Tl4L
+         TidvekGDeUqYExOstEQsYSDXu7GrQdhN6XhQXHXCou3RYN7ATWUeJg/Mbq9yhgx1z5V0
+         eOuBzGrhzRpL6s6FSkiPrDa2GT7Oe+9jqt7pS58bM+cAJ7GKHSY7I1E1PQygQTOWgGvj
+         24GMRe6IuPhABPzTLbb8iEGtYpMMPhY7VY8bKoprkpSaKJat0Lwift86vvl7SxMbNasU
+         cscGJs/BQ9v1bQ8spk0Zh/huHAX2vzvLD34OrPuaMyFRW0FRhwv0VQVfNQgqrsMMiICU
+         Cdww==
+X-Forwarded-Encrypted: i=1; AKwUvByU4varNelVqojYSXzBuC2vwuRAYKX0pqmqD7xJYYLisn8kL7QiUSFw3CHcfZJI8gWnxnc=@vger.kernel.org
+X-Gm-Message-State: AFuF++n5X4LqAfiR0fJFPdW8z0QDmi4/WOgA4DHPY8MHYxaMEsK+c4Gr
+	0xMc96BLV0brb+JRDe1TNa89OnLUCfAsG6WoNakKwnMhrfV91ry5ZNiQ
+X-Gm-Gg: AYBFou25itTWEO2zbFqqWgKwzlwtgcb7KGTYllNNBXoDRDmQYk2hSZQYvezpZqFNgdc
+	K0SCJCbc5a/AHsopEHpeP1ltiKliATixylq3epzQGEV6+WpC758ZM8CJoiSMzX9SY4h2K1+FRvv
+	StAl5pwxtIDgJjQYEhwQOB+ynOI4l0I5617wbUkHSkOFbJSqrWm4mlgCDG5qUfmOQTQ7OI7TBRL
+	ceQGbENmjFIAYmrwS+719aKpqaixBFbFgY0EIMrm6at+wH9npVPQXDQtveZ4HdPI0gR69sywSrb
+	+bEaPBFROn5FdfiaReDs/RMHPzmKiANYa2X9QpKmgbD+1QXs1IgBRzbR8KolsAMqtco0bOFCGal
+	cypbrlLewP8paG3SjSwjx+0o/JZGPWpUSZTihZGsEQvLvmaaTcmH/gQH3qtKF4B0E8hlI4YG2Cz
+	uNOIHQogTZ0bGv+mjuNHW4kZPDEU5l2PeOaGpf1NjvmA==
+X-Received: by 2002:a17:902:ea0f:b0:2dd:319:c9ef with SMTP id d9443c01a7336-2dd2a1c41camr49447845ad.3.1789103468401;
+        Thu, 10 Sep 2026 22:11:08 -0700 (PDT)
+Received: from fedora ([2602:f921:f20:17::a])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33ba4e5182fsm3018993eec.9.2026.09.10.22.11.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2026 22:11:07 -0700 (PDT)
+From: Tianyi Chen <diannaaav@gmail.com>
+To: qmo@kernel.org,
+	bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	eddyz87@gmail.com,
+	ihor.solodrai@linux.dev,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v6 0/2] bpftool: Add recursive map dumping
+Date: Fri, 11 Sep 2026 13:10:51 +0800
+Message-ID: <20260911051053.283421-1-diannaaav@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 10/13] selftests/bpf: cover the low-32 link
- for narrowing stack fills
-To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20260910164635.459558-11-vineet.gupta@linux.dev>
- <f5c0c236ba1f062cb0ab363bf6672e7aef2c278ba7193bef5891ab18d86c9b38@mail.kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <f5c0c236ba1f062cb0ab363bf6672e7aef2c278ba7193bef5891ab18d86c9b38@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+
+Add -r/--recursive to dump referenced inner maps after the selected roots,
+with deduplication and bounded descriptor use. The second patch checks
+output formats and operation under a low descriptor limit.
+
+Changes in v6:
+- Grow the pending inner-map ID array with libbpf_ensure_mem() instead of
+  reallocating for every ID. Keep the existing bound on open descriptors.
+- Check snprintf() failures and truncation before advancing the expected
+  JSON buffer offset in the multiple-root selftest.
+- Clarify the unused array-slot comment, name the large output buffer
+  size, and shorten the selftest commit message.
+
+The formatting check is defensive; I have not established the reported
+stack overflow in v5's fixed four-map fixture.
+
+v5: https://lore.kernel.org/r/20260911034715.219552-1-diannaaav@gmail.com
+AI reviews:
+https://lore.kernel.org/r/c55811f4eb2a0d4884ee2eb3167557cd405a5b7aecd988a51acf525c77e3a0e1@mail.kernel.org
+https://lore.kernel.org/r/4fba1aedc906d6c5072a1ae9a72496e6d307abd60c456cb870077cf93cc8f4ce@mail.kernel.org
+https://lore.kernel.org/r/20260911035503.891321F000FF@smtp.kernel.org
+
+Validation:
+- Rebuilt bpftool and the focused selftest runner.
+- All 12 bpftool_map_dump subtests passed, including the 64-inner-map
+  cases under RLIMIT_NOFILE=32 and the multiple-root JSON check.
+- Tested alongside the pending batch-dump series: all 23 selected
+  subtests passed, with no skips or failures, in an x86-64 KVM guest
+  running Linux 7.3.0-rc2 from bpf/master, using LLVM 20 BPF objects.
+- Diff and bpftool synchronization checks passed; checkpatch reported
+  no errors. The generated patches apply cleanly to current bpf-next.
+
+This was a focused run. Unrelated selftests requiring unavailable kernel
+features were excluded from the build with PERMISSIVE=1.
+
+Tianyi Chen (2):
+  bpftool: Add recursive map dumping
+  selftests/bpf: Cover recursive bpftool map dumps
+
+ .../bpf/bpftool/Documentation/bpftool-map.rst |  22 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |   2 +-
+ tools/bpf/bpftool/main.c                      |   7 +-
+ tools/bpf/bpftool/main.h                      |   1 +
+ tools/bpf/bpftool/map.c                       | 130 ++++-
+ .../bpf/prog_tests/bpftool_map_dump.c         | 480 ++++++++++++++++++
+ 6 files changed, 631 insertions(+), 11 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
 
 
-
-On 9/10/26 11:01 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
->> index 9d060d8b0c1f..e8a44e7579c8 100644
->> --- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
->> +++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-> [ ... ]
->
->> @@ -966,6 +966,88 @@ __naked void zext_mov_breaks_add_const_src(void)
->>   	: __clobber_all);
->>   }
->>
->> +/*
->> + * A narrowing fill keeps only the slot's low 32 bits, so a later narrowing of
->> + * the spilled value must still reach the filled register. Same relation as a
->> + * 32-bit mov from a wide source, with the stack slot as the base.
->> + */
->> +SEC("socket")
->> +__success
->> +__naked void zext_fill_narrow_from_wide_spill(void)
->> +{
->> +	asm volatile ("						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r6 = r0;						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r0 <<= 32;						\
->> +	r6 |= r0;		/* r6 = full 64-bit unknown */	\
->> +	*(u64 *)(r10 - 8) = r6;	/* slot linked to r6 */		\
->> +	r2 = *(u32 *)(r10 - 8);	/* narrowing fill, forms the link */ \
->> +	if w6 != 0 goto 1f;	/* narrows r6, propagates to r2 */ \
->> +	if r2 == 0 goto 1f;					\
->> +	r0 /= 0;						\
->> +1:								\
->> +	r0 = 0;							\
->> +	exit;							\
->> +"	:
->> +	: __imm(bpf_get_prandom_u32)
->> +	: __clobber_all);
->> +}
->> +
->> +/*
->> + * A full-width fill of a wide slot is a plain 64-bit equality, not a low-32
->> + * link, so it must keep propagating exactly as before.
->> + */
->> +SEC("socket")
->> +__success
->> +__naked void zext_fill_full_width_keeps_full_link(void)
->> +{
->> +	asm volatile ("						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r6 = r0;						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r0 <<= 32;						\
->> +	r6 |= r0;						\
->> +	*(u64 *)(r10 - 8) = r6;					\
->> +	r2 = *(u64 *)(r10 - 8);	/* no narrowing */		\
->> +	if r6 != 0 goto 1f;					\
->> +	if r2 == 0 goto 1f;					\
->> +	r0 /= 0;						\
->> +1:								\
->> +	r0 = 0;							\
->> +	exit;							\
->> +"	:
->> +	: __imm(bpf_get_prandom_u32)
->> +	: __clobber_all);
->> +}
->> +
->> +/*
->> + * A sub-word fill is below the low-32 model, so no link is formed and the
->> + * relation is dropped as before.
->> + */
->> +SEC("socket")
->> +__failure __msg("div by zero")
->> +__naked void zext_fill_byte_forms_no_link(void)
->> +{
->> +	asm volatile ("						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r6 = r0;						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r0 <<= 32;						\
->> +	r6 |= r0;						\
->> +	*(u64 *)(r10 - 8) = r6;					\
->> +	r2 = *(u8 *)(r10 - 8);	/* 1-byte fill: no link */	\
->> +	if w6 != 0 goto 1f;					\
->> +	if r2 == 0 goto 1f;	/* not deduced */		\
->> +	r0 /= 0;						\
->> +1:								\
->> +	r0 = 0;							\
->> +	exit;							\
->> +"	:
->> +	: __imm(bpf_get_prandom_u32)
->> +	: __clobber_all);
->> +}
->> +
->>   #ifdef CAN_USE_MOVSX
-> Should the guard here be checking for LDSX support instead? The two
-> programs added below (sext_fill_narrow_from_wide_spill and
-> fill_kinds_reach_different_values) both use BPF_LDX | BPF_MEMSX
-> instructions (`r2 = *(s32 *)(r10 - 8)`), not MOVSX.
->
-> Other LDSX users in the suite gate on the LDSX feature - for instance,
-> verifier_ldsx.c checks:
->
->      (__clang_major__ >= 18 || defined(__BPF_FEATURE_LDSX))
->
-> The two macros happen to align for clang >= 18 and gcc-bpf -mcpu=v4, but
-> a compiler advertising MOVSX without LDSX would fail to build these
-> programs rather than skipping them.
-
-The bot is right, LDSX needs to be checked here.
-I've introduced the macro in bpf_misc.h and used here as applicable.
-
-There are some other in-tree users of this infra, but I'm holding off on 
-converting them as have slightly different definition which I'd rather 
-deal with separately outside of this series.
-
-
-> [ ... ]
->
->> @@ -1129,6 +1211,68 @@ __naked void sext_kinds_reach_different_values(void)
->>   	: __clobber_all);
->>   }
->>
->> +/*
->> + * The sign-extending counterpart: the filled register is the sign extension of
->> + * the slot's low 32 bits, so a narrowing of those bits arrives sign-extended.
->> + */
->> +SEC("socket")
->> +__success
->> +__naked void sext_fill_narrow_from_wide_spill(void)
->> +{
->> +	asm volatile ("						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r6 = r0;						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r0 <<= 32;						\
->> +	r6 |= r0;		/* r6 = full 64-bit unknown */	\
->> +	*(u64 *)(r10 - 8) = r6;	/* slot linked to r6 */		\
->> +	r2 = *(s32 *)(r10 - 8);	/* narrowing sx fill */		\
->> +	if w6 != -1 goto 1f;	/* narrows r6, propagates to r2 */ \
->> +	if r2 == -1 goto 1f;	/* sign-extended, not 0xffffffff */ \
->> +	r0 /= 0;						\
->> +1:								\
->> +	r0 = 0;							\
->> +	exit;							\
->> +"	:
->> +	: __imm(bpf_get_prandom_u32)
->> +	: __clobber_all);
->> +}
->> +
->> +/*
->> + * The same, for the two fill kinds off one slot.
->> + */
->> +SEC("socket")
->> +__failure __msg("div by zero")
->> +__flag(BPF_F_TEST_STATE_FREQ)
->> +__naked void fill_kinds_reach_different_values(void)
->> +{
->> +	asm volatile ("						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r6 = r0;						\
->> +	r6 &= 1;						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r8 = r0;						\
->> +	call %[bpf_get_prandom_u32];				\
->> +	r0 <<= 32;						\
->> +	r8 |= r0;						\
->> +	*(u64 *)(r10 - 8) = r8;					\
->> +	if r6 >= 1 goto 2f;					\
->> +	r2 = *(s32 *)(r10 - 8);	/* sign-extending fill */	\
->> +	goto 1f;						\
->> +2:								\
->> +	r2 = *(u32 *)(r10 - 8);	/* zero-extending fill */	\
->> +1:								\
->> +	if w8 != -1 goto 3f;					\
->> +	if r2 == -1 goto 3f;	/* only the sign-extending path */ \
->> +	r0 /= 0;						\
->> +3:								\
->> +	r0 = 0;							\
->> +	exit;							\
->> +"	:
->> +	: __imm(bpf_get_prandom_u32)
->> +	: __clobber_all);
->> +}
->> +
->>   #endif /* CAN_USE_MOVSX */
->>
->>   char _license[] SEC("license") = "GPL";
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34506184282
-
+base-commit: af0b84a9215d951d16f26b7ee34353b970cf5d4e
+-- 
+2.55.0
