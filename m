@@ -1,107 +1,214 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7075633BBAF
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 16:38:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789144693; cv=pass; b=FJB5p095IVpPHYUCs1UzHY6nV/G2DxnqxUREj82IBZf6/EKjzrvPi3ZVgOYuFAQMCEZNQxgVaxNKDPKrCPXW64Ti6kqSos64cJNxhcHloKN7qNc8jit24D1cmZn2Yz/GldUcTzUIWjOyk4/hF05FMIFWPa4FfZL6nto+bp771NY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789144693; c=relaxed/simple;
-	bh=Z05kgezgeQBnAhHNLQ06IrbWptjbuPKQZgHZ1hJUBJw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZjoJ/hA1b7rmebhAWsUlURb/ZODJUvc17zjfhzqsxeQk19cFYV7GKoRIeKqmvofwMg5Aw30nhK2DmjU3rhW8Q1KFJl9d0AN0B9UiIZudnjVsQ6Tq44tMmeRBdyhBn89dr9urgFnzebJ6ofmJFUknMeoBe1Glvy7En5wDiG6B5aI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g2M4yfDS; arc=pass smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 283A04A43F3
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 16:47:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789145247; cv=none; b=PbncnjYume9RJq4oXHnAeNlGP+3FKPhTBNrQVZ7E2y0rpNFMXfuGqsvgU82tzZFC00W9BaRhFffmKVdFyHcBrsBPSmZuqhwEtJH1LKblWW3jrljJaXmP/IKBNLWR7I0m1u8+WhxFk6RSQ9PHRoG/GKeFDCdfRtsGlC9+QTzeKFA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789145247; c=relaxed/simple;
+	bh=CANybaM5o3iHp/pVcGfKheTt6otRk+91iTQOgJi7ps8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=e6q6JFeZ2ZguBhy0tNVSR0n3LwIw8tux31BxfeDlKiAQiQpCLl1G3Fl+lXSjUkn4V0g9RqoWOLKc9/KJtOuiRAyf2zqhDB9qYxHvGSnzNcYnUsnsiPG+9FrwH1iIWxIUxOzB/NBBjQgqSCKG4bFV9ET91UwbrYzLzXmaoWH6ECQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lWfIWzbs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g2M4yfDS"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-c297931c2a0so62868366b.1
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 09:38:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789144687; cv=none;
-        d=google.com; s=arc-20260327;
-        b=RPHeDJ+waf0wPTpDz9EQLwtdTekKIDhWAXKvReFQBSn8OIoPi8AM/i2Y2c4I9oBvUy
-         vGyp0IrrJipqNTS78CZOWLLHFNvls0n0xKmspJ0daPDKHWzLIZqqirYfPh+rJ8dvRNek
-         hh2xeUNgmYTzxNADVi++0TWDKyxIJ5XK2oErA6N+c2NHTWh/RMBKK9vc+/jxeW/lZXMi
-         EpwZakW8i/7prVAjPp9ztT3eBK+dLpLkgrR2/6ODLp2rBQWspzbJFndhuHoJdUWRX9aS
-         CvsOEmpidjEHAe8m9eOcNVUPxn3HmcViKw1wOq/Ivk+tp9A+ZV8Iu+HZoj0+mlRg9I0H
-         rY1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=Z05kgezgeQBnAhHNLQ06IrbWptjbuPKQZgHZ1hJUBJw=;
-        fh=Q1UHcNlsgAQGO1mqRYKVGo3oFUs9RzH1kzdVlX/gzyM=;
-        b=pdyNAYfNg41EYUja2GjQJT+chMRtBXamQJrJemUutP+Wmn3tNFrorPFex30nJbAKNB
-         kobD7jv/Khdckrtzl5SznptypouxKfast9q2GENcQDfOomF09kuQjm+O+BCTTpf0z9wr
-         MQJU+WIQegICOUGRGplZtczjJKornXGMDtQTW36q4b0GmeTOxua8+gOhHsYzXfKbZszY
-         dQK86mAbx+0AemTdvzON7e+UvMBfKQC4NFXwN+7K+yKfkPjh8mJ3O+gjgIywbNVMI28b
-         YNkhyZ5avCpdxzE/aEo/hiJOX2LiwI1KoVLldQG3g5rv+yaCBczH5+pJEE4UsqcVSDnP
-         Z4Sw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789144687; x=1789749487; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Z05kgezgeQBnAhHNLQ06IrbWptjbuPKQZgHZ1hJUBJw=;
-        b=g2M4yfDSACO/61PjGPBqrQrc0uxYXzpECVYGcmNPOYeaVOercFn43MaC34b7TKeOyQ
-         /vboXhT84q4ct7WEnTdjtTEPCkIxDqVol49N9RvYqqrqJFZ2+kouvQKAB4ziBlVuN7ci
-         +UH/CzRekC6lUCYwHDjF38Xv6OPAmykgyhQ1LZvh/YZd43KOUnp+HhIAP41WbAl8jbuN
-         crgTVbtRD9D+cDvw1ZIS+QSLRRUbXrnlA69krUc3znpM/G5PTzsiJ7+J77KVPhNc7MMg
-         H1OnUKJfSWUe1oixFPMtZZmH0g1nfLBX8DY5S3Bl5pUjx6/aVqpvRHp66BaDgp1IbvW3
-         Pswg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789144687; x=1789749487;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Z05kgezgeQBnAhHNLQ06IrbWptjbuPKQZgHZ1hJUBJw=;
-        b=egMSfFrjpU8T6hq0qojgirzUXcw9icacu1mgebK+GeEhyPwGH5UooZL0dziehHZc+G
-         KixIG9ANQCVuAKTxT/acNfd1pFr8KfGYlrrxQfQfhoJAqo17yR9Zv3tqdBOD8XvzCepD
-         d1ommdRmZnsKDmlspL+eL0xHUcZp9BCLTbUAMwHO7pve2qj5VACRTqTwWYOTm0ti8NEx
-         EPw3A+lYcwcJAaCX4pqyJu1O4v7T77z9Tod6/+5+qslZgQHKzKKJIBg20aCN/I2dkw4+
-         GxifV6pqssN5FBhyjm1k2aeR94jQ1zDBp1EK+67W9LeQVQMcJtfwWk85Sv8pYax57Hud
-         rkdQ==
-X-Forwarded-Encrypted: i=1; AKwUvBx7TaxVBOuwEtEo/oy7pR0Hk21JWonCFqugPNyzWLOyyyp8EDEYJxc1Hy3oghvxhKjIDc8=@vger.kernel.org
-X-Gm-Message-State: AFuF++msrookwkyQr85IcIxglAEWgxR//SgZgbgJ5HJyKEPXbAppTyNJ
-	mXeWMuIS0Cn8u1Rz8wsenRANWNSuRX1bADWbCQqrbZKjP2XMrHlpmtVx5vNtuXkipQlYzaId5Tp
-	cbbqwQt1HHBJKDovvhfoFgQyjurvG4jY=
-X-Gm-Gg: AYBFou2rE7Xd5zhtNDkmw+k32o+pMcyTEa7qvZ4tvaicVbj7AFeCvK1JGCaSnFq8jID
-	16rk4sratq+amhA1Qf7GBlTT+kvDDoSFHVtbwUpuzF5xBRxWw857S3KjQe+ftaTBsgo4V2Cf/EX
-	fGoG84HURGHY95gc50REigZsZwMBfi9ryzuYNAZgPUVXP2G+faYXN+k15616Lr0ilZtxeMd9TzP
-	DsundkHDAeMR42Q/4D0dVHR+M8n9jCNhm9X5xpMF93tfFHSPvMj3J+cvRcp3nzbGwHHcTbJpOM8
-	9uk32QaMxaHl+3amL67v0pRDJ0Hlnp4JWLdQF1UGH5EKmKIUmfjh6mSio+wAl+BE
-X-Received: by 2002:a17:907:73cd:b0:c1c:2007:298e with SMTP id
- a640c23a62f3a-c29666bc8e7mr228183666b.24.1789144686888; Fri, 11 Sep 2026
- 09:38:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lWfIWzbs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 347A51F000FF;
+	Fri, 11 Sep 2026 16:47:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789145244;
+	bh=deBk9ITn87eQCp/oyahGFGTffZxyTGfJ3WW8wp1FJoo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=lWfIWzbswlyIh+HYgYypTGfPUMZiS9T4eKCboEcGSfPlKgSZUFLXGjsX5PMdJmPQb
+	 y/RVJN7zXg93IIKa65gdDC1QXWDgr+UGolFI5kKiqcS8wo6ZKjI1Q6sNaObXVT9BVt
+	 4Ih3kRWSpWHdT+eogMHH/cGF3bCXd9YEcUvuwAYJKwjml2H6otSZc8qJ072iKCJIog
+	 /TlUZ9UP386wU8Sn8dRUVOwgx5RqW4JAYtFfHv5jQH5NzyZ3i6KMR9sOi0lBBNulvY
+	 ByyASxmQiOQPtU+rMn/p8hTEvdyUTgU9jAdD1iLFluAty/X3eer3R1VJgy61rmfysz
+	 GgAh0hHy9U4mA==
+Content-Type: multipart/mixed; boundary="===============6592194633517518590=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260904111731.673341-1-main.kalliope@gmail.com>
- <20260904111731.673341-3-main.kalliope@gmail.com> <CAM1=_QTN3JJ6jtckf32F8wxBzLDbHSrzUttyMBWNqZKmRe=2rg@mail.gmail.com>
-In-Reply-To: <CAM1=_QTN3JJ6jtckf32F8wxBzLDbHSrzUttyMBWNqZKmRe=2rg@mail.gmail.com>
-From: Nicholas Dudar <main.kalliope@gmail.com>
-Date: Fri, 11 Sep 2026 12:37:53 -0400
-X-Gm-Features: AcwNN1UBDacB_mdUgPo31Abc79q-kaSzXTwE_yQATKEr1z50cei1mPjcgBoyYeY
-Message-ID: <CAJZwKkghmHn1twrwTtfGSZg5NZ5FMu8L_=6N_pb0VrP75GMKGg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] bpf, mips: Add support for BPF_MOVSX in
- the JITs
-To: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, paulburton@kernel.org, tsbogend@alpha.franken.de, 
-	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
-	bpf@vger.kernel.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <d4a8dbbae302e4a8038e8162764432030a5b2eb51c2ec1c81fc0e1f926879eb7@mail.kernel.org>
+In-Reply-To: <20260911155030.2012652-1-yonghong.song@linux.dev>
+References: <20260911155030.2012652-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v3 15/15] selftests/bpf: Temporary hack to disable register mismatch in arm64
+From: bot+bpf-ci@kernel.org
+To: yonghong.song@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 11 Sep 2026 16:47:24 +0000 (UTC)
 
-> I would suggest that we do this optimization.
+--===============6592194633517518590==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Thanks for reviewing. I'll get working on the seb/seh additions and
-ISA-specific MOVSX handling. I'll send SDIV/SMOD v4 with the updated
-uasm patch, followed by MOVSX v3.
+> selftests/bpf: Temporary hack to disable register mismatch in arm64
+>
+> There are 3 kfuncs like below:
+>    __u64 bpf_kfunc_call_test_i128_arg_odd(__u64 a, __int128 v, __u64 b) __ksym;
+>    __u64 bpf_kfunc_call_test_i128_arg_shift(__u64 a, __int128 v, __u64 b, __u64 c,
+>                                             __u64 d) __ksym;
+>    __u64 bpf_kfunc_call_test_i128_arg_ovf(__u64 a, __int128 v, __u64 b, __u64 c,
+>                                           __u64 d, __u64 e, __u64 f) __ksym;
+> which requires that '__int128 v' must be 16-byte align on arm64.
+>
+> Current pahole will reject BTF generation since pahole expects
+> '__int128 v' has start register 'x1' while arm64 abi requires 'x2'.
+> Hence, btf generation will fail.
+>
+> This patch is a hack to disable a few related tests to satisfy CI.
+> The following is the fix in pahole:
+>   https://lore.kernel.org/bpf/20260911040955.339939-1-yonghong.song@linux.dev/
+> Once pahole patch is merged, this patch can be discarded.
+>
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 
-Nicholas
+The changelog states the patch is a temporary hack that 'can be
+discarded' once the pahole fix is merged, but the patch is submitted as
+the last patch of the series with no marker keeping it out of a merge.
+Should this have [DO NOT APPLY] or RFC in the subject, or a note under
+the --- line where non-applied notes belong?
+
+A few smaller notes: 'must be 16-byte align' should read '16-byte
+aligned', and the pahole reference would normally be a Link: tag.
+
+> diff --git a/tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c b/tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c
+> index 2100f0ab1abe..59f56ab39413 100644
+> --- a/tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c
+> +++ b/tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c
+> @@ -50,6 +50,7 @@ int aggregate_arg_kfunc_int128(struct __sk_buff *skb)
+>  	return 0;
+>  }
+>
+> +#if 0
+>  /*
+>   * arm64 rounds the register number up to an even one for an argument
+>   * aligned to 16 bytes, so it wants this __int128 in x2 and x3.
+
+Five #if 0 regions are added and none carries an in-tree comment
+explaining the disable. The reason (the pahole dependency), the fact
+that it's meant to be reverted, and the link to the pahole fix exist
+only in the commit message. Once applied, the tree contains unexplained
+dead code with nothing that would prompt anyone to re-enable it after
+the pahole fix lands. Should each #if 0 have a short comment or TODO
+naming the toolchain dependency, or could these use a
+version/arch-conditional guard rather than a blanket #if 0?
+
+> @@ -70,6 +71,7 @@ int aggregate_arg_kfunc_int128_odd(struct __sk_buff *skb)
+>
+>  	return 0;
+>  }
+> +#endif
+>
+>  #endif /* __SIZEOF_INT128__ */
+>
+> @@ -152,6 +154,7 @@ int aggregate_arg_kfunc_split8(struct __sk_buff *skb)
+>
+>  #ifdef __SIZEOF_INT128__
+>
+> +#if 0
+>  /*
+>   * The same hole, with enough arguments after the __int128 that the shift
+>   * reaches the registers the BPF convention counts as stack slots: arm64
+
+The three programs disabled here (aggregate_arg_kfunc_int128_odd,
+aggregate_arg_kfunc_int128_shift, and aggregate_arg_kfunc_int128_ovf)
+are the only tests that observably exercise the arm64 even-register
+round-up added by 7189ec8b9091 in this same series.
+
+Looking at bpf_jit_place_args() in kernel/bpf/core.c, it applies the
+round-up only for args flagged BTF_FMODEL_ALIGN16_ARG, i.e. __int128 by
+value:
+
+    if (align16 && abi->even_reg_align)
+            nregs_used = round_up(nregs_used, 2);
+
+arm64_arg_abi sets .even_reg_align = true. Of the __int128 kfunc tests
+that remain enabled:
+
+  - aggregate_arg_kfunc_int128 -> bpf_kfunc_call_test_i128_arg(u64, u64,
+    __int128): nregs_used is 2 at the __int128, round_up(2, 2) == 2, so
+    placement is the identity and emit_kfunc_arg_moves() emits nothing.
+
+  - aggregate_arg_kfunc_int128_pad ->
+    bpf_kfunc_call_test_i128_arg_pad(7 x u64, __int128): nregs_used is
+    7, round_up(7, 2) == 8, but 7 + 2 > 8 already forces the argument
+    wholly onto the stack, so the round-up changes nothing observable;
+    only the even_stack_align path is covered.
+
+After this commit, does the arm64 register-shift path (the headline
+behaviour of the arm64 patch in this series) and the
+alignment-hole-pushes-an-argument-to-the-stack path have any test
+coverage on any architecture?
+
+The surrounding code already uses #if defined(__x86_64__) ||
+defined(__aarch64__) (bpf_testmod.c and earlier in the same file), and
+BPF progs are built with -D__TARGET_ARCH_$(SRCARCH). Would an arm64-only
+guard (plus dropping __arch_arm64 from the affected programs) keep the
+x86-64 arm of these tests running?
+
+> @@ -193,6 +196,7 @@ int aggregate_arg_kfunc_int128_ovf(struct __sk_buff *skb)
+>
+>  	return 0;
+>  }
+> +#endif
+>
+>  /*
+>   * Both conventions pad the stack to align this __int128, and the BPF
+> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> index baccee6fdad4..c367442ce086 100644
+> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> @@ -1039,6 +1039,7 @@ __bpf_kfunc u64 bpf_kfunc_call_test_i128_arg(u64 a, u64 b, __int128 v)
+>  	return a + b + (u64)((unsigned __int128)v >> 64) + (u64)v;
+>  }
+>
+> +#if 0
+>  __bpf_kfunc u64 bpf_kfunc_call_test_i128_arg_odd(u64 a, __int128 v, u64 b)
+>  {
+>  	return a + b + (u64)((unsigned __int128)v >> 64) + (u64)v;
+
+[ ... ]
+
+> @@ -1735,9 +1737,11 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_deep)
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_ii)
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test_pair_arg)
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg)
+> +#if 0
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_odd)
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_shift)
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_ovf)
+> +#endif
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_pad)
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test_pair_arg_nofit)
+>  BTF_ID_FLAGS(func, bpf_kfunc_call_test_pair_arg_tail)
+> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+> index 195ec37d5bbc..0f098045856e 100644
+> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+> @@ -234,11 +234,13 @@ struct prog_test_ret_ii bpf_kfunc_call_test_ret_ii(int a, int b) __ksym;
+>  __u64 bpf_kfunc_call_test_pair_arg(__u64 a, struct prog_test_pair_arg s, __u64 b) __ksym;
+>  #ifdef __SIZEOF_INT128__
+>  __u64 bpf_kfunc_call_test_i128_arg(__u64 a, __u64 b, __int128 v) __ksym;
+> +#if 0
+>  __u64 bpf_kfunc_call_test_i128_arg_odd(__u64 a, __int128 v, __u64 b) __ksym;
+>  __u64 bpf_kfunc_call_test_i128_arg_shift(__u64 a, __int128 v, __u64 b, __u64 c,
+>  					 __u64 d) __ksym;
+>  __u64 bpf_kfunc_call_test_i128_arg_ovf(__u64 a, __int128 v, __u64 b, __u64 c,
+>  				       __u64 d, __u64 e, __u64 f) __ksym;
+> +#endif
+>  __u64 bpf_kfunc_call_test_i128_arg_pad(__u64 a, __u64 b, __u64 c, __u64 d, __u64 e,
+>  				       __u64 f, __u64 g, __int128 v) __ksym;
+>  #endif
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34620351527
+--===============6592194633517518590==--
