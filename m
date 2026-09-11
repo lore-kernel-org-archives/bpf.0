@@ -1,272 +1,222 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f1.google.com (mail-pz2-f1.google.com [74.125.228.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E52B3515C5;
-	Fri, 11 Sep 2026 17:23:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED5A3B38AF
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 17:23:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789147398; cv=none; b=H/g7EWNPVhQQ/RMpPuPd6KfTPIbBfbw+nE6V43z86+cdbcjd0plmbNi8B+oFWs0aUC4Jg337Q26JMT2MtlDaVKo5nUkpt4zga5sXB/jW/NHW4CuYeLNwKGuNSP4v5Sn8lrXEvW/LS8YXi7AIqXEP/VSTjPeZ5cufygHDpit/1oQ=
+	t=1789147422; cv=none; b=MaU/Dyt3e+9Rh5MHidA7fJzgmu4OR6kTE5yrKLCIdh1qqLSuBgYl6/OLAUc85MYHp09ig0llQqgYQNgc63M0IJZkjq9pyPjjjtJy7Nv3eWrhKZ7RmIh5SnxMfn7kChdQ+t14bvkAH0KMYo91SPadF1zlbZ+pOJ4YSahSDED71VU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789147398; c=relaxed/simple;
-	bh=D1to0PZKc/KA50LSwHQ80T7kQBF1FvK+a9r6MqytDzY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bP5d70b9cec5ODsHii7jDnJCM2s8JeJP7PpTfxtoN5AMk2ByCA9cm2kigkkrBKs1pudXyW+/0xuBCenjSZU6mwcofJYcKfDqqxwsxTTE70SXkk15Duw2KdLDxindVuRErEBDCWSOL6SXCL1RhWu+X+TD0T8/sa2q6M3s8yGm/sU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HIZ7yScn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789147422; c=relaxed/simple;
+	bh=B94fuPPQ1bnAoKm0lCdvRXcL2N2fserIpoovwFRRsyM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k5ihWg0fHxIj5Sh92LbUTMBLrN7AZS274eznpYOeqhTnWbbbBdVvT6tDCnsuP7YHW2ztIQXi+PHClxjlHqw+XQEaJwYpfPJlp/JZmT4WVDMQ8/VRlN66AjDJK+4ydIeWhxOPbdtkugAZ43Z1LaBpbaJBpWu/LnvoHrPeiok/LOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aXSndz7+; arc=none smtp.client-ip=74.125.228.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HIZ7yScn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB6981F00893;
-	Fri, 11 Sep 2026 17:23:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789147396;
-	bh=OJP8Kr91re/1TLbUGmF1tDEabRFooEc7DLwpbkUU1SE=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=HIZ7yScn+Y/fJxVNeSGNMIluX+kW3qXFuO1J42ABZc2Lyzd4l390tPeIoz72ca9zZ
-	 xSMOd5mDJ9gPxF1vih4YdipWkGCmMX83+qhriXF0pGjSdAJ78J+BcCTDRhqZ1ZPHz7
-	 xwlRqpD4V42PB00qiY52yy9/bmaSCE8EkR1DRGP8DZD5cYZMwSC4bSUjzABOA39olo
-	 T9dHHVXgcLFoDm6fTUEmqpgpEgsNQkaDiiIKCvN2KVaVANuEFlOrbv0Zwg94T0wdoV
-	 L/4VpbQZgXxnSfXLkj2JRzRNuZbw+jeSgaG4gqFT/akeeog9pLPeb4xdWJTmUlyv+Q
-	 WWdU9cKD1lpDQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 8E68DCE1902; Fri, 11 Sep 2026 10:23:16 -0700 (PDT)
-Date: Fri, 11 Sep 2026 10:23:16 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Josef Bacik <josef@toxicpanda.com>
-Cc: Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Boqun Feng <boqun@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, x86@kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>, Juergen Gross <jgross@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	xen-devel@lists.xenproject.org
-Subject: Re: [PATCH RFC v2 01/15] rcu-tasks: Add per-task trampoline nesting
- count
-Message-ID: <90c2dfbe-e796-4125-b178-e854b40f68cd@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com>
- <20260911-b4-rcu-tasks-preempt-qs-v2-1-eaaa61ed2da4@toxicpanda.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aXSndz7+"
+Received: by mail-pz2-f1.google.com with SMTP id 41be03b00d2f7-cbb818e57c9so398332a12.0
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 10:23:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789147420; x=1789752220; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=uZCf1M3wsJ6bfzqwhwc39vyj8+h7HAZ76J8nI4RK/4Y=;
+        b=aXSndz7+1foYzW5RTbfH0VX6wr7jfr1DNHVUmlX94wILr5p3P7dDgqpXLHMLwPnwwa
+         kPEByJY42qEItkwwRiSuLxygC1NDQjavgFsqrWr1YJAAm5D7AjAij4E5JOVPORTNH6pO
+         orTpMdqdfywzSEJDMA/EkjLsLYcsCxuHoM6e6N8chu6Xp8FZAMAZhP57X5WDAKsswFKG
+         yUd+61xitSTLp2UVMXBjgbBby5Gae0eIz8eiOG7aBj2sW6fakRhX06JjIgl7wllnyXX6
+         EnWtoHs6gkg44PHaWOiAK4ozCSCe9Q2vIsA83ovsQLLC4K9qJRB//UE3/GL0bUI2DCRz
+         aKbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789147420; x=1789752220;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=uZCf1M3wsJ6bfzqwhwc39vyj8+h7HAZ76J8nI4RK/4Y=;
+        b=gblBbQ9aTUgUvs3GBbnZsF+U5gX4gVzkugLvZiqwkzAg9YDuRmzprLsvTeH7QvSr1R
+         Cp7jgWn7XQRgUUjJeUKR5d3kdSf7qLWAHaMSd0ZZRm8W6WGIqdtN/ClPf0drlk/l4rxv
+         G+YEJQRMdQa2Ixo+GStRhKJFg+v66vMdtpvEo8amjCOTj8lIrpLX6WcBVhBVDqtMbSoT
+         810LkkGBq69NDppyujLr/B8QEy+uN/nq0Zf9sXPyS99+DF+a68ZUvrn/6C3T2ao0UgZG
+         KejLE9mEIZoI75dcyIdTy9PbegpI/5vysjSJQ8NS5GPxMD6thycHUkEJc4PkW0KWhDzT
+         Zuaw==
+X-Gm-Message-State: AFuF++mYIvnaexGVYto1poj2AcnoAA4XHFo1PIX2zbCmdNckb4+5L1R5
+	LOkz3m+0fCzd7GOOBdm/LNd80suLQWuf9YHeynT85mCT9D+rgJAPkJpC
+X-Gm-Gg: AYBFou0pVGXH9gd39BmlXTpyduoKoWeEdQkaMIQd1wJqPwkPy46r7TUpKayhXiFD7Zp
+	ZuEG+1kYfv5n1xgW9qhmWWGK5k7Vfd4blC0Rwhnd1wR1784Xe2bxCuK5z3zroMqRj8vzIPpIYfm
+	8oAHRl+ZVsOHyF5Kp67sWLczgIZXOG8AUx4nkghbhX2os9Wgg+dhqOnoOeSAXzbYk56H5Pwrkv7
+	UwToeqRZxuoUaZFB08yZGz3df9bTHLCNmwMurNWEIFjeyP2J+yUU2fFUR68NyHhasTSaSxWZaPx
+	CjVew5xDt/yTRUGyu0tmsSFbXgxtj/CEHMRYQe5x3BhMYVZ3VXKiff0EZvgENNj4zC9JzFGIQyh
+	RN6+M7qXFET1WhPTgQ2caTin64V2s0tj6WsNAsE1V0X5/3a63nUCfQP8flWQrniLq5/0vT1QQwb
+	wPZ8mBpK2fK5J7r6hOxygzNsV/PN/jIz144XcM+CZDygcuK3U6iRW8ZVmpNnIoysiErChFusbC3
+	bnuRluk5+8FT9r0SAK6TWonXg==
+X-Received: by 2002:a05:6a00:6caa:b0:848:4754:28e4 with SMTP id d2e1a72fcca58-86b32aebb27mr8559815b3a.15.1789147419952;
+        Fri, 11 Sep 2026 10:23:39 -0700 (PDT)
+Received: from J4f-Laptop.localdomain ([183.36.237.80])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-86b2a2b5c72sm1418774b3a.52.2026.09.11.10.23.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Sep 2026 10:23:39 -0700 (PDT)
+From: Shihuang Liu <shlomojune6@gmail.com>
+To: netdev@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	akpm@linux-foundation.org,
+	leon.hwang@linux.dev,
+	yatsenko@meta.com,
+	kpsingh@kernel.org,
+	dmitry.baryshkov@oss.qualcomm.com,
+	jordan@jrife.io,
+	nhudson@akamai.com,
+	avinash.duduskar@gmail.com,
+	rongtao@cestc.cn,
+	joe@wand.net.nz,
+	Shihuang Liu <shlomojune6@gmail.com>
+Subject: [PATCH bpf v2 1/2] bpf: reject incompatible socket assignments
+Date: Sat, 12 Sep 2026 01:23:12 +0800
+Message-ID: <20260911172313.64009-1-shlomojune6@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260911-b4-rcu-tasks-preempt-qs-v2-1-eaaa61ed2da4@toxicpanda.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 11, 2026 at 02:08:39PM +0000, Josef Bacik wrote:
-> Tasks RCU exists so that ftrace, BPF and kprobes can free trampoline
-> text once no task can still be executing in it.  Today the only way a
-> task tells Tasks RCU "I am not in a trampoline" is a voluntary context
-> switch, so a preempted task is always assumed to be inside one.
-> 
-> Add task_struct::rcu_tramp_nesting so that trampolines can say so
-> directly: a trampoline increments it before calling out and decrements
-> it before returning, and while it is non-zero the task must not be
-> treated as Tasks-RCU quiescent.  Provide rcu_tasks_trampoline_enter()
-> and rcu_tasks_trampoline_exit() for C users, report the count in the
-> Tasks RCU stall output, and, under CONFIG_PROVE_RCU, assert that it is
-> zero on every return to userspace since no task can legitimately reach
-> userspace with a trampoline on its stack.
-> 
-> Only current ever writes the count and every nested user (interrupts
-> running their own trampolines) is balanced, so plain accesses suffice.
-> 
-> The callbacks reached from static trampolines (return_to_handler, the
-> rethook and kretprobe trampolines) are covered by the preempt_disable()
-> in the ftrace recursion protection rather than by the count; note that
-> dependency in trace_recursion.h so it is not lost if the
-> preempt_disable() is ever removed from there.
-> 
-> Nothing increments the count and nothing consults it for quiescent-state
-> decisions yet; both come in later patches.
-> 
-> Assisted-by: LLM
-> Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+bpf_sk_assign() permits TC ingress programs to associate an IPv6 packet
+with an AF_INET socket. The receive path can then interpret IPv6 skb
+control data as IPv4 metadata. When IP_RETOPTS is enabled, this can cause
+__ip_options_echo() to copy beyond its stack buffer.
 
-Please see below for a line-saving nit.
+Reject incompatible packet and socket families in bpf_sk_assign() and
+bpf_sk_assign_tcp_reqsk(). Continue to allow IPv4 packets to use
+dual-stack AF_INET6 sockets.
 
-							Thanx, Paul
+Check request sockets against rsk_ops->family, since their sk_family is
+inherited from the listener and sk_ipv6only is not initialized.
 
-> ---
->  include/linux/irq-entry-common.h |  2 ++
->  include/linux/rcupdate.h         | 37 +++++++++++++++++++++++++++++++++++++
->  include/linux/sched.h            |  1 +
->  include/linux/trace_recursion.h  | 11 +++++++++++
->  kernel/fork.c                    |  1 +
->  kernel/rcu/tasks.h               |  3 ++-
->  6 files changed, 54 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/irq-entry-common.h b/include/linux/irq-entry-common.h
-> index 0bb6c03481fa..8da571622000 100644
-> --- a/include/linux/irq-entry-common.h
-> +++ b/include/linux/irq-entry-common.h
-> @@ -5,6 +5,7 @@
->  #include <linux/context_tracking.h>
->  #include <linux/hrtimer_rearm.h>
->  #include <linux/kmsan.h>
-> +#include <linux/rcupdate.h>
->  #include <linux/rseq_entry.h>
->  #include <linux/static_call_types.h>
->  #include <linux/syscalls.h>
-> @@ -214,6 +215,7 @@ static __always_inline void __exit_to_user_mode_validate(void)
->  {
->  	/* Ensure that kernel state is sane for a return to userspace */
->  	kmap_assert_nomap();
-> +	rcu_tasks_trampoline_assert_none();
->  	lockdep_assert_irqs_disabled();
->  	lockdep_sys_exit();
->  }
-> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-> index 44c07a66edff..b5c666c82479 100644
-> --- a/include/linux/rcupdate.h
-> +++ b/include/linux/rcupdate.h
-> @@ -180,6 +180,37 @@ static inline void rcu_nocb_flush_deferred_wakeup(void) { }
->  #ifdef CONFIG_TASKS_RCU_GENERIC
->  
->  # ifdef CONFIG_TASKS_RCU
-> +
-> +/*
-> + * Trampoline nesting: dynamically allocated text (ftrace trampolines, BPF
-> + * trampoline images, kprobe optinsn slots) that relies on Tasks RCU for its
-> + * lifetime brackets itself with an increment/decrement of
-> + * current->rcu_tramp_nesting.  While the count is non-zero the task is inside,
-> + * or was called from, such text and an involuntary context switch must not be
-> + * treated as a Tasks RCU quiescent state.
-> + *
-> + * Only current writes the count and only current (or an interrupt on the same
-> + * CPU) reads it, so plain accesses suffice.
-> + */
-> +static __always_inline void rcu_tasks_trampoline_enter(void)
-> +{
-> +	current->rcu_tramp_nesting++;
-> +	barrier();
-> +}
-> +
-> +static __always_inline void rcu_tasks_trampoline_exit(void)
-> +{
-> +	barrier();
-> +	current->rcu_tramp_nesting--;
-> +}
-> +
-> +/* A task must never reach userspace with a trampoline on its stack. */
-> +static __always_inline void rcu_tasks_trampoline_assert_none(void)
-> +{
-> +	if (IS_ENABLED(CONFIG_PROVE_RCU))
-> +		WARN_ON_ONCE(current->rcu_tramp_nesting);
+Fixes: cf7fbe660f2d ("bpf: Add socket assign support")
+Assisted-by: LLM
+Signed-off-by: Shihuang Liu <shlomojune6@gmail.com>
+---
+Changes since v1:
+- Move family validation out of the IPv6 receive fast path and into
+  bpf_sk_assign() and bpf_sk_assign_tcp_reqsk().
+- Preserve IPv4 assignments to dual-stack AF_INET6 sockets.
+- Check request sockets using rsk_ops->family.
+- Split the fix into two patches and target the BPF fixes tree.
 
-Save a line as follows?
+v1:
+https://lore.kernel.org/netdev/20260823101809.26802-1-shlomojune6@gmail.com/
 
-	WARN_ON_ONCE(IS_ENABLED(CONFIG_PROVE_RCU) && current->rcu_tramp_nesting);
+ include/uapi/linux/bpf.h       |  4 ++++
+ net/core/filter.c              | 31 +++++++++++++++++++++++++++++++
+ tools/include/uapi/linux/bpf.h |  4 ++++
+ 3 files changed, 39 insertions(+)
 
-> +}
-> +
->  # define rcu_tasks_classic_qs(t, preempt)				\
->  	do {								\
->  		if (!(preempt) && READ_ONCE((t)->rcu_tasks_holdout))	\
-> @@ -192,6 +223,9 @@ void rcu_tasks_torture_stats_print(char *tt, char *tf);
->  # define rcu_tasks_classic_qs(t, preempt) do { } while (0)
->  # define call_rcu_tasks call_rcu
->  # define synchronize_rcu_tasks synchronize_rcu
-> +static inline void rcu_tasks_trampoline_enter(void) { }
-> +static inline void rcu_tasks_trampoline_exit(void) { }
-> +static inline void rcu_tasks_trampoline_assert_none(void) { }
->  # endif
->  
->  #define rcu_tasks_qs(t, preempt) rcu_tasks_classic_qs((t), (preempt))
-> @@ -208,6 +242,9 @@ void exit_tasks_rcu_finish(void);
->  #define rcu_tasks_classic_qs(t, preempt) do { } while (0)
->  #define rcu_tasks_qs(t, preempt) do { } while (0)
->  #define rcu_note_voluntary_context_switch(t) do { } while (0)
-> +static inline void rcu_tasks_trampoline_enter(void) { }
-> +static inline void rcu_tasks_trampoline_exit(void) { }
-> +static inline void rcu_tasks_trampoline_assert_none(void) { }
->  #define call_rcu_tasks call_rcu
->  #define synchronize_rcu_tasks synchronize_rcu
->  static inline void exit_tasks_rcu_start(void) { }
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 8b3d47a325cc..d2e7b1b3c9d2 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -956,6 +956,7 @@ struct task_struct {
->  	unsigned long			rcu_tasks_nvcsw;
->  	u8				rcu_tasks_holdout;
->  	u8				rcu_tasks_idx;
-> +	int				rcu_tramp_nesting;
->  	int				rcu_tasks_idle_cpu;
->  	struct list_head		rcu_tasks_holdout_list;
->  	int				rcu_tasks_exit_cpu;
-> diff --git a/include/linux/trace_recursion.h b/include/linux/trace_recursion.h
-> index e6ca052b2a85..2da23a52ca4a 100644
-> --- a/include/linux/trace_recursion.h
-> +++ b/include/linux/trace_recursion.h
-> @@ -153,6 +153,17 @@ static __always_inline int trace_test_and_set_recursion(unsigned long ip, unsign
->  	current->trace_recursion = val;
->  	barrier();
->  
-> +	/*
-> +	 * Callbacks reached from static trampoline text (return_to_handler,
-> +	 * the rethook and kretprobe trampolines) do not maintain
-> +	 * current->rcu_tramp_nesting themselves; they rely on this
-> +	 * preempt_disable() to keep the task from being preempted, and thus
-> +	 * from reporting a Tasks RCU quiescent state, while an ftrace_ops or
-> +	 * its data is in use.  If the preempt_disable() is ever removed from
-> +	 * the recursion protection, this must rcu_tasks_trampoline_enter()
-> +	 * here and rcu_tasks_trampoline_exit() in trace_clear_recursion()
-> +	 * instead.  See CONFIG_RCU_TASKS_PREEMPT_QS.
-> +	 */
->  	preempt_disable_notrace();
->  
->  	return bit;
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 416758c8a3d4..cfe3a8e53fbd 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -1869,6 +1869,7 @@ static inline void rcu_copy_process(struct task_struct *p)
->  #endif /* #ifdef CONFIG_PREEMPT_RCU */
->  #ifdef CONFIG_TASKS_RCU
->  	p->rcu_tasks_holdout = false;
-> +	p->rcu_tramp_nesting = 0;
->  	INIT_LIST_HEAD(&p->rcu_tasks_holdout_list);
->  	p->rcu_tasks_idle_cpu = -1;
->  	INIT_LIST_HEAD(&p->rcu_tasks_exit_list);
-> diff --git a/kernel/rcu/tasks.h b/kernel/rcu/tasks.h
-> index 627295396cd9..1662ba18bf34 100644
-> --- a/kernel/rcu/tasks.h
-> +++ b/kernel/rcu/tasks.h
-> @@ -1113,10 +1113,11 @@ static void check_holdout_task(struct task_struct *t,
->  		*firstreport = false;
->  	}
->  	cpu = task_cpu(t);
-> -	pr_alert("%p: %c%c nvcsw: %lu/%lu holdout: %d idle_cpu: %d/%d\n",
-> +	pr_alert("%p: %c%c nvcsw: %lu/%lu holdout: %d tramp_nesting: %d idle_cpu: %d/%d\n",
->  		 t, ".I"[is_idle_task(t)],
->  		 "N."[cpu < 0 || !tick_nohz_full_cpu(cpu)],
->  		 t->rcu_tasks_nvcsw, t->nvcsw, t->rcu_tasks_holdout,
-> +		 data_race(t->rcu_tramp_nesting),
->  		 data_race(t->rcu_tasks_idle_cpu), cpu);
->  	sched_show_task(t);
->  }
-> 
-> -- 
-> 2.55.0
-> 
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 732b35cc08d1c..5d8f5e2c8db38 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -4568,6 +4568,10 @@ union bpf_attr {
+  *		**-EOPNOTSUPP** if the operation is not supported, for example
+  *		a call from outside of TC ingress.
+  *
++ *		**-EAFNOSUPPORT** if the socket family is not compatible with
++ *		the network layer of the packet, for example an **AF_INET**
++ *		socket and an IPv6 packet.
++ *
+  * long bpf_sk_assign(struct bpf_sk_lookup *ctx, struct bpf_sock *sk, u64 flags)
+  *	Description
+  *		Helper is overloaded depending on BPF program type. This
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 61940e7535523..e9cc76b775c0c 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -3491,6 +3491,32 @@ static int bpf_skb_proto_xlat(struct sk_buff *skb, __be16 to_proto)
+ 	return -ENOTSUPP;
+ }
+ 
++static bool bpf_sk_assign_family_ok(const struct sk_buff *skb,
++				    const struct sock *sk)
++{
++	unsigned short family;
++
++	switch (skb->protocol) {
++	case htons(ETH_P_IP):
++		family = AF_INET;
++		break;
++	case htons(ETH_P_IPV6):
++		family = AF_INET6;
++		break;
++	default:
++		return true;
++	}
++
++	/* Requests inherit the listener family, but have family-specific ops. */
++	if (sk->sk_state == TCP_NEW_SYN_RECV)
++		return inet_reqsk(sk)->rsk_ops->family == family;
++
++	return sk->sk_family == family ||
++	       (family == AF_INET &&
++		sk->sk_family == AF_INET6 &&
++		!ipv6_only_sock(sk));
++}
++
+ BPF_CALL_3(bpf_skb_change_proto, struct sk_buff *, skb, __be16, proto,
+ 	   u64, flags)
+ {
+@@ -7989,6 +8015,8 @@ BPF_CALL_3(bpf_sk_assign, struct sk_buff *, skb, struct sock *, sk, u64, flags)
+ 		return -ENETUNREACH;
+ 	if (sk_unhashed(sk))
+ 		return -EOPNOTSUPP;
++	if (!bpf_sk_assign_family_ok(skb, sk))
++		return -EAFNOSUPPORT;
+ 	if (sk_is_refcounted(sk) &&
+ 	    unlikely(!refcount_inc_not_zero(&sk->sk_refcnt)))
+ 		return -ENOENT;
+@@ -12526,6 +12554,9 @@ __bpf_kfunc int bpf_sk_assign_tcp_reqsk(struct __sk_buff *s, struct sock *sk,
+ 	if (net != sock_net(sk))
+ 		return -ENETUNREACH;
+ 
++	if (!bpf_sk_assign_family_ok(skb, sk))
++		return -EAFNOSUPPORT;
++
+ 	switch (skb->protocol) {
+ 	case htons(ETH_P_IP):
+ 		ops = &tcp_request_sock_ops;
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 732b35cc08d1c..5d8f5e2c8db38 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -4568,6 +4568,10 @@ union bpf_attr {
+  *		**-EOPNOTSUPP** if the operation is not supported, for example
+  *		a call from outside of TC ingress.
+  *
++ *		**-EAFNOSUPPORT** if the socket family is not compatible with
++ *		the network layer of the packet, for example an **AF_INET**
++ *		socket and an IPv6 packet.
++ *
+  * long bpf_sk_assign(struct bpf_sk_lookup *ctx, struct bpf_sock *sk, u64 flags)
+  *	Description
+  *		Helper is overloaded depending on BPF program type. This
+-- 
+2.43.0
