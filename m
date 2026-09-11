@@ -1,107 +1,127 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51B2D374A05
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:15:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52B5C352022
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:15:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789139739; cv=none; b=qNrAM2cfx4EahCz+ymlqMVzVLQMpDSt1ssNlHoVIeaKLS7l5Mu56E425S1PBCkrdNsQbjqK66BSYTl4lkIY/KT0a8cPiNuL3YEHegRjWuMdRGIR4hT1nJN/myii1xKg6shzFg9wkYhZqAyCfte4v7JfNQmbPbz72j6Le4FzMAgc=
+	t=1789139742; cv=none; b=Y4pHitOxwu5Le5rqurS1eBO9kDQTC5CwInKYeZEVX+kD7aOMA3PXEzGnNSfxyLi27GC135kacWLiywNk91uuiN6TOM1rcwQROxnMNF9u3zWVccg3gVKUi0SD/doEVKuYLVeP6KtAD62mdBENsV0xL4cVjMidJcFcRO8FovKe1/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789139739; c=relaxed/simple;
-	bh=Fy3vVmZFQKyiQvLTe3aYCuWhcgKe8joTr3WiBwtqY/M=;
+	s=arc-20240116; t=1789139742; c=relaxed/simple;
+	bh=NRDP0MfR1Q68cCPKPCmZFquU1b+MMuT8gJHnevIbfDo=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Lycr3TpCFbeiDKOUBKd50BH+oP5MP0Ev0nfk9YKovlzLGzhQBJ7ISiDU7bf05XacxxDBVJwPe43mBrKBDDXYy5e1U8d9BGJNmDUg3a0KRYnQbuTpecWzwlPVQSbOb9EHZ2qopYwZJ8I1zqD+4BfijwVnQ65Le/o/avdxMkQQc0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jS14WRCe; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=hicNzwr8XZlDT4qP6IIIXb1xHkWWrsaxFMwPDwZQTwtqI5zi2yUJwnrbbZxKUGmafT6sJqmR8QZYxzDOKC9svJJ8XVSCN9vgB5Too2W0XVjxI59/zW8n91reIxpSUwYX5u6iVkr8vIz7chFi/FWgdb19M0uwV02qzUO/KaSowXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SWZJQLCH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jS14WRCe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB9111F000FF;
-	Fri, 11 Sep 2026 15:15:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SWZJQLCH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B89271F00893;
+	Fri, 11 Sep 2026 15:15:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789139737;
-	bh=xrfySFkPeIIPBNGWrc28P6XWT7JkbJuh+uxoP2KEEjg=;
+	s=k20260515; t=1789139739;
+	bh=59hsyzU+rmq1Nt6YQA/XDUl3dLIgBQnV5WJH8EYxD5A=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=jS14WRCeX18PCLr568UBQRNS5C9maQA6dlZ5Pgw+deLjzZ7pEmDGNq2Tq+0mxjyaq
-	 qQMRjvDDw62of/RIJnQs+yUuJmFzmtYXAqIOLVCk1aD6Ydhr92WYUsrcFwqhN4sKkQ
-	 FTG8JS+C5uy/AT2IYUPzMqrJUv3wLwa4qgG1Sayih9fdXtfY4GoTkTKewGk1bG32wO
-	 Lj8ce6cvrTm/AkrH+iOtdXt09SLm/JA9+QJudG8vHE1ai8imv4tmeArmQ+cxzZynwW
-	 tIfG6x6ddvJTN8ca3sv3RJttGRr2rGa0Xp1GPuZTiKIvdniulMdPQhssPICWkr8rjU
-	 dGOVQ8pkCpIOA==
+	b=SWZJQLCHVXOwVgx9u/KkGr/sInXylrsK/fOdF8H31nwJ0wIjawxSphSL6Le97TGck
+	 9WtxjBF3FuqqXmduAbYOGgvzq9s8RUsQ7cC2v6u8rnHKzOpF0R+72SUC7n2BiqrFsq
+	 iUrQNb9eMU6bNWZWDqwQSAIcz7OM52/70FQVK2d0BIw7k8MTlwY99CWpYtUxNhJ0p4
+	 YZAs5nhpih7tOggTvFNayp6BVJxwBoo7WvmiHVHAPbpzuK4jKnHDGiMeHgADjOfKX9
+	 OXZTI8VHa/egh9nW2QvnHTo0Rs57lXHSnrxhC3ucmSHUN/DBo3wtABDZd5hYs8YUzk
+	 u5Qck18jMbBqg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH 06/13 net-next] net: udp: split IPv4 specific logic into
- udp_ipv4.c
+Subject: Re: [PATCH 09/13 net-next] net: fib: split common nexthop logic to
+ fib_core.c
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Fernando Fernandez Mancera" <fmancera@suse.de>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260910144914.8025-7-fmancera@suse.de>
+In-Reply-To: <20260910144914.8025-10-fmancera@suse.de>
 References: <20260910144914.8025-1-fmancera@suse.de>
- <20260910144914.8025-7-fmancera@suse.de>
+ <20260910144914.8025-10-fmancera@suse.de>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 11 Sep 2026 15:15:37 +0000
-Message-Id: <20260911151537.BB9111F000FF@smtp.kernel.org>
+Date: Fri, 11 Sep 2026 15:15:39 +0000
+Message-Id: <20260911151539.B89271F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] Aggregated IPv4 UDP packets are silently dropped during GRO comple=
-tion when CONFIG_IPV4 is disabled.
+- [Low] Syntax error in `nh_netdev_event` when `CONFIG_IPV4` is enabled, ca=
+using a build failure.
+- [Low] Parameter name mismatch in the dummy inline function for `fib_nh_in=
+it`.
 --
 
-commit d963ce43c73f11f406bea2e26b36c86cf494d30c
+commit 243925357332d15aa13a077472006e05019dde8d
 Author: Fernando Fernandez Mancera <fmancera@suse.de>
-   =20
-net: udp: split IPv4 specific logic into udp_ipv4.c
-   =20
-This commit moves IPv4-specific UDP socket logic from udp.c into a new=20
-udp_ipv4.c file. This isolates the IPv4 functions from the generic UDP=20
-socket infrastructure, allowing the INET subsystem to be compiled without=20
-IPv4.
 
-> diff --git a/net/ipv4/udp_offload.c b/net/ipv4/udp_offload.c
-> --- a/net/ipv4/udp_offload.c
-> +++ b/net/ipv4/udp_offload.c
+net: fib: split common nexthop logic to fib_core.c
+
+This commit creates fib_core.c and moves functions for common nexthop
+initialization and release from fib_semantics.c to fib_core.c. This makes
+shared FIB and nexthop logic accessible to IPv6 when the IPv4 routing
+stack is omitted.
+
+> diff --git a/include/net/ip_fib.h b/include/net/ip_fib.h
+> index 0a35355fb0f33..4bbafb7b723f2 100644
+> --- a/include/net/ip_fib.h
+> +++ b/include/net/ip_fib.h
 [ ... ]
-> @@ -954,6 +960,7 @@ int udp_gro_complete(struct sk_buff *skb, int nhoff,
+> @@ -578,10 +584,23 @@ void fib_select_multipath(struct fib_result *res, i=
+nt hash,
+>  void fib_select_path(struct net *net, struct fib_result *res,
+>  		     struct flowi4 *fl4, const struct sk_buff *skb);
 > =20
->  INDIRECT_CALLABLE_SCOPE int udp4_gro_complete(struct sk_buff *skb, int n=
-hoff)
->  {
 > +#if IS_ENABLED(CONFIG_IPV4)
->  	const u16 offset =3D NAPI_GRO_CB(skb)->network_offsets[skb->encapsulati=
-on];
->  	const struct iphdr *iph =3D (struct iphdr *)(skb->data + offset);
->  	struct udphdr *uh =3D (struct udphdr *)(skb->data + nhoff);
-[ ... ]
-> @@ -975,6 +982,9 @@ INDIRECT_CALLABLE_SCOPE int udp4_gro_complete(struct =
-sk_buff *skb, int nhoff)
->  					  iph->daddr, 0);
-> =20
->  	return udp_gro_complete(skb, nhoff, udp4_lib_lookup_skb);
+>  int fib_nh_init(struct net *net, struct fib_nh *fib_nh,
+>  		struct fib_config *cfg, int nh_weight,
+>  		struct netlink_ext_ack *extack);
+>  void fib_nh_release(struct net *net, struct fib_nh *fib_nh);
 > +#else
+> +static inline int fib_nh_init(struct net *net, struct fib_nh *fib_nh,
+> +			      struct fib_config *cfg, int gfp,
+                                                              ^^^
+
+[Severity: Low]
+Does this code use the correct parameter name here? The actual definition of
+fib_nh_init in the IPv4 block uses int nh_weight for the fourth parameter.
+Using gfp in the stub obscures the API contract and might mislead developers
+into passing a GFP flag instead of a routing weight.
+
+> +			      struct netlink_ext_ack *extack)
+> +{
 > +	return -EAFNOSUPPORT;
+> +}
+[ ... ]
+> diff --git a/net/ipv4/nexthop.c b/net/ipv4/nexthop.c
+> index a7c2b8dced4e7..ea747fc2223c4 100644
+> --- a/net/ipv4/nexthop.c
+> +++ b/net/ipv4/nexthop.c
+[ ... ]
+> @@ -4004,8 +4005,12 @@ static int nh_netdev_event(struct notifier_block *=
+this,
+>  			nexthop_flush_dev(dev, event);
+>  		break;
+>  	case NETDEV_CHANGEMTU:
+> +#if IS_ENABLED(CONFIG_IPV4)
+> +		struct netdev_notifier_info_ext *info_ext;
+> +
+>  		info_ext =3D ptr;
+>  		nexthop_sync_mtu(dev, info_ext->ext.mtu);
 > +#endif
->  }
 
-[Severity: High]
-Does this cause aggregated IPv4 UDP packets to be silently dropped during
-GRO completion when CONFIG_IPV4 is disabled?=20
+[Severity: Low]
+Can this sequence cause a build failure when CONFIG_IPV4 is enabled? In C, a
+case label cannot be immediately followed by a declaration. This causes a
+compilation error because a label can only be part of a statement, and a
+declaration is not a statement. Could we add a block or move the declaration
+to avoid breaking the build?
 
-When an IPv4 UDP packet stream is aggregated by GRO on a system compiled
-with CONFIG_IPV4=3Dn, returning -EAFNOSUPPORT causes the GRO engine=20
-(gro_complete) to treat the completion as a failure, invoking kfree_skb()
-and dropping the packet.
-
-Since udp4_gro_receive remains unconditionally enabled in udpv4_offload_init
-(as net/ipv4/udp_offload.c is compiled when CONFIG_INET=3Dy), untrusted
-network input can reach this path. Even on an IPv6-only node, an L2 bridge
-or packet sniffer expects to see L2 traffic correctly. Dropping aggregated
-packets breaks L2 bridging of IPv4 UDP traffic and prevents packet sniffers
-from seeing bulk traffic streams.
+>  		rt_cache_flush(dev_net(dev));
+>  		break;
+>  	}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260910144914.8025=
--1-fmancera@suse.de?part=3D6
+-1-fmancera@suse.de?part=3D9
