@@ -1,193 +1,89 @@
-Received: from mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB69A49B5B7
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 16:02:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B9113939B5
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 16:06:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789142562; cv=none; b=ojpVEWW6QszGH85CxEUB0btKVYMewtyQbwRllAPDFchFSDNFlfvXZ7mDtmtxdHi963g0u/Ko1897n77XZcxN7ztY+EuJwEHfmJKSSbm8uJc24sXMtPCvFDwWs1sVYwGWzoEGEAjPGNZOiRP5+usaueZYW67YAzDsYcJGoUbY8Jk=
+	t=1789142770; cv=none; b=T8uavHoOPz8zl0Bi29WWSZd6Z0+Jyzk5pZUGMU3WlJM5l0kjRojrln54xk6QSa4xrKHh7pOkpD9RM85QAaNySsVYVzsUf4TqCLV08YVQFg/p8z+slGorANqlrvFkjAuZE4vs0QMApFOrT/WV4epPbI4q1VkggGh7EfIDuzUrHs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789142562; c=relaxed/simple;
-	bh=Yzu4lELF2/wu31YhDvHBWMP/NO98sJKx0FXvxqvX1/s=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=XatZmGbkzbCRgVera9Gas9iKR7XvcC06REBr/9tQDm4hK8AjBjQiYnf8g7TEAKc4thAaaKuoBHzqS+hE7i8cvmNwSNip2PIBTZNVDq8FJUokJY5M1s1mP+ogg961glRnJukLYeQHzZX/rUCfWSbHm+RO3MVbB5BBIK1AyPBMR5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TTbAZpgc; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789142770; c=relaxed/simple;
+	bh=xv3h7r6Oi7984ZPae4SoiWAAPyjh7bl3pzZs5/eG4tM=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=pFo+HOQVfPsoTCtqI5otcaVJx+mfhlPdA2c12HEjlA7nojwvGKeLabn9DRFCcs/r2tMP9W+MWgLfeKRH2qNVAbLMPmZKsJquq003RwWCUDrD187uMm3IYhgKVP6J4Xlb82ixhWwEjXIe5GKw5Sl0flLP3H/0a8mmI4mVVtDqFyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WDiFJG1v; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TTbAZpgc"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Yzu4lELF2/wu31YhDvHBWMP/NO98sJKx0FXvxqvX1/s=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789142557; v=1; x=1789747357;
- b=TTbAZpgcyN6lkRhV5JixIyiD9ibsNvaJ+YKYK7uBI5X8RiDF8xkfrfhNQxiUdUZwSIAI5a/H
- QGgoveLxQbyHf2UXUxVJ7k5dWETa+iqsRdjgQTqk6tskoogr5Hg82frdWTCFE082FvskyM8ToAz
- L6FUR4aKVTrm3xFfKdf8vgVo=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 49b2b93d59cf757f;
-	Fri, 11 Sep 2026 16:02:27 +0000
-X-Mizu-Trace-ID: 49b2b93d59cf757f
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <9ab375a7-be14-4479-80cd-41735539e8ef@linux.dev>
-Date: Fri, 11 Sep 2026 09:02:23 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WDiFJG1v"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9D3C1F000FF;
+	Fri, 11 Sep 2026 16:06:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789142768;
+	bh=xv3h7r6Oi7984ZPae4SoiWAAPyjh7bl3pzZs5/eG4tM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=WDiFJG1vujCvCmKq/li+SxAafSwVMzMHAxAL/9oEetgGAPuTatAr7s45etgfPAL0A
+	 L84j8T9pFd3TGb1RXIsW3Qb52pAdwxSIau+ek+Y5QOUjAkJTanjzpKQxuRD5hnDEN5
+	 5kzHLAFyIeqzT3h4XM0y4GYYwj+urf/8FDmCBrtDRVGQ08cy1dHXnDl+qWvggirFMi
+	 C8yB7vPKVBjetylT+ePF7fNIKFuRrtUESyEFmRypA3ugYvIRqHbgBnozPgkLaKpIfZ
+	 UNGIC0RgG+zMk34un8vVbbkjFX5NY5NARZQx0nh1kxrIU9jf50ICzoqYlqtztSIqT6
+	 YQ7u2L+9Q4NVQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 13/15] selftests/bpf: Add inline-asm tests
+ for by-value arguments
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yonghong Song" <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260911155020.2012089-1-yonghong.song@linux.dev>
+References: <20260911154914.2004336-1-yonghong.song@linux.dev>
+ <20260911155020.2012089-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 11 Sep 2026 16:06:08 +0000
+Message-Id: <20260911160608.B9D3C1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH dwarves 1/2] dwarf_loader: Skip the argument register the
- arm64 ABI leaves as a hole
-Content-Language: en-GB
-From: Yonghong Song <yonghong.song@linux.dev>
-To: Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, kernel-team@fb.com
-References: <20260911040955.339939-1-yonghong.song@linux.dev>
-In-Reply-To: <20260911040955.339939-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] Multi-line comment does not follow the required kernel BPF comment =
+style.
+--
 
+commit d1826c8bebe9c02679f7bde2ef6a1536675d8bf2
+Author: Yonghong Song <yonghong.song@linux.dev>
+selftests/bpf: Add inline-asm tests for by-value arguments
 
-On 9/10/26 9:09 PM, Yonghong Song wrote:
-> arm64 requires an argument whose alignment is twice the register size to
-> start on an even-numbered argument register, so such an argument arriving
-> when the next free register is an odd one leaves that register unused:
->
->    u64 f_odd(u64 a, __int128 v, u64 b);
->
-> passes a in x0, v in x2:x3 -- skipping x1 -- and b in x4.  The x86-64 ABI
-> has no such rule and packs v into rsi:rdx instead.
+This commit adds inline-asm tests to cover struct argument passing,
+specifically for structs passed in register pairs, refused pointers, and
+structs too large for by-value passing. It also checks various placements
+that global functions cannot have.
 
-The kernel patch (bpf: Support by-value struct and __int128 arguments)
-   https://lore.kernel.org/bpf/20260911154914.2004336-1-yonghong.song@linux.dev/
-depends on this pahole patch. See kernel patch 15.
+> diff --git a/tools/testing/selftests/bpf/progs/aggregate_arg_func.c b/too=
+ls/testing/selftests/bpf/progs/aggregate_arg_func.c
+> new file mode 100644
+> index 0000000000000..ae3faa8a4a940
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/aggregate_arg_func.c
 
-It would be great if this patch can be reviewed soon.
+[ ... ]
 
->
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->   dwarf_loader.c | 53 +++++++++++++++++++++++++++++++++++++++++++++++---
->   dwarves.h      |  1 +
->   2 files changed, 51 insertions(+), 3 deletions(-)
->
-> diff --git a/dwarf_loader.c b/dwarf_loader.c
-> index 61ef52f..81c2076 100644
-> --- a/dwarf_loader.c
-> +++ b/dwarf_loader.c
-> @@ -1501,6 +1501,23 @@ static bool arch__agg_use_two_regs(const GElf_Ehdr *ehdr)
->   	}
->   }
->   
-> +/*
-> + * Some ABIs require an argument whose alignment is twice the register size to
-> + * start on an even-numbered argument register, leaving a hole when the next
-> + * free register is an odd one. For example, on arm64,
-> + *	u64 f(u64 a, __int128 v, u64 b)
-> + * passes a in x0, v in x2:x3 -- skipping x1 -- and b in x4.
+> +#if defined(__BPF_FEATURE_STACK_ARGUMENT)
+> +
+> +/* One slot per parameter, so the slot count is settled before the param=
+eters
+> + * are walked. The cases below reach the same count only once they have =
+been.
 > + */
-> +static bool arch__arg_align_two_regs(const GElf_Ehdr *ehdr)
-> +{
-> +	switch (ehdr->e_machine) {
-> +	case EM_AARCH64:
-> +		return true;
-> +	default:
-> +		return false;
-> +	}
-> +}
-> +
->   static struct template_type_param *template_type_param__new(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
->   {
->   	struct template_type_param *ttparm = tag__alloc(cu, sizeof(*ttparm));
-> @@ -3634,6 +3651,28 @@ static int parameter__abi_slots(const struct parameter *parm, const struct cu *c
->   	return slots > 0 ? slots : 1;
->   }
->   
-> +static int parameter__abi_reg_align(const struct parameter *parm, const struct cu *cu)
-> +{
-> +	struct tag *type;
-> +
-> +	if (!cu->arg_align_two_regs || parm->type_byte_size <= cu->addr_size)
-> +		return 1;
-> +
-> +	type = tag__strip_typedefs_and_modifiers(&parm->tag, cu);
-> +	if (type == NULL)
-> +		return 1;
-> +
-> +	return tag__natural_alignment(type, cu) > cu->addr_size ? 2 : 1;
-> +}
-> +
-> +static int parameter__align_reg_idx(const struct parameter *parm, int reg_idx,
-> +				    const struct cu *cu)
-> +{
-> +	int align = parameter__abi_reg_align(parm, cu);
-> +
-> +	return (reg_idx + align - 1) & ~(align - 1);
-> +}
-> +
->   static bool parameter__has_piece_info(const struct parameter *parm)
->   {
->   	return parm->first_reg_fields || parm->second_reg_fields;
-> @@ -3653,7 +3692,7 @@ static bool ftype__next_parameter_preserves_slots(struct ftype *ftype, struct pa
->   	if (!next || next->loc_reg == PARAMETER_UNKNOWN_REG)
->   		return false;
->   
-> -	next_reg_idx = reg_idx + slots;
-> +	next_reg_idx = parameter__align_reg_idx(next, reg_idx + slots, cu);
->   	return next_reg_idx < cu->nr_register_params &&
->   	       next->loc_reg == cu->register_params[next_reg_idx];
->   }
-> @@ -3702,6 +3741,7 @@ static void function__match_clang_parameter_locations(struct ftype *ftype, struc
->   		if (pos->passed_in_memory)
->   			continue;
->   
-> +		reg_idx = parameter__align_reg_idx(pos, reg_idx, cu);
->   		if (reg_idx >= cu->nr_register_params)
->   			break;
->   
-> @@ -3732,11 +3772,17 @@ static void function__analyze_parameter_locations(struct function *fn, struct cu
->   
->   	ftype__for_each_parameter(ftype, pos) {
->   		bool consumes_register = true;
-> -		bool regs_available = reg_idx < cu->nr_register_params;
-> +		bool regs_available;
->   		int slots = parameter__abi_slots(pos, cu);
-> -		int expected_reg = regs_available ? cu->register_params[reg_idx] : -1;
-> +		int expected_reg;
->   		int reg_slots = pos->passed_in_memory ? 1 : slots;
->   
-> +		if (!pos->passed_in_memory)
-> +			reg_idx = parameter__align_reg_idx(pos, reg_idx, cu);
-> +
-> +		regs_available = reg_idx < cu->nr_register_params;
-> +		expected_reg = regs_available ? cu->register_params[reg_idx] : -1;
-> +
->   		if (pos->has_loc) {
->   			if (true_sig_enabled && pos->loc_const_value) {
->   				pos->optimized = 1;
-> @@ -4467,6 +4513,7 @@ static int cu__set_common(struct cu *cu, struct conf_load *conf,
->   	cu->little_endian = ehdr.e_ident[EI_DATA] == ELFDATA2LSB;
->   	cu->nr_register_params = arch__nr_register_params(&ehdr);
->   	cu->agg_use_two_regs = arch__agg_use_two_regs(&ehdr);
-> +	cu->arg_align_two_regs = arch__arg_align_two_regs(&ehdr);
->   	arch__set_register_params(&ehdr, cu);
->   	return 0;
->   }
-> diff --git a/dwarves.h b/dwarves.h
-> index df77f1e..70adbbf 100644
-> --- a/dwarves.h
-> +++ b/dwarves.h
-> @@ -304,6 +304,7 @@ struct cu {
->   	uint8_t		 little_endian:1;
->   	uint8_t		 producer_clang:1;
->   	uint8_t		 agg_use_two_regs:1;	/* An aggregate like {long a; long b;} */
-> +	uint8_t		 arg_align_two_regs:1;	/* An over-aligned arg starts on an even register */
->   	uint8_t		 nr_register_params;
->   	int		 register_params[ARCH_MAX_REGISTER_PARAMS];
->   	int		 functions_saved;
+> +__noinline __u64 global_arg_six_scalars(int a, int b, int c, int d, int =
+e, int f)
 
+[Severity: Low]
+This isn't a bug, but does this multi-line comment follow the preferred BPF
+subsystem comment style? The guidelines require multi-line comments to have
+the opening /* on its own line, with the text starting on the next line.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260911154914.2004=
+336-1-yonghong.song@linux.dev?part=3D13
