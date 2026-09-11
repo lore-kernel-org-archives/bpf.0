@@ -1,29 +1,29 @@
 Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EF893F8251
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 08:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 015B8468C17
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 08:42:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.38.64.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789116172; cv=none; b=tglMmPLMzOICKGArLU0tD5W1u84fnHGlwR/Ue2jvpkhP8CIPMCnWOmHEUwEdxBOIoXzzjs5hR5NUwrdJq2TKoYbJacgRY/V8WdjQCl/oL0gDva+ry1Uv2bN2VSV5jg4jt6BQXug1MdwPH2oMe54thvD25hW8E20m68I+FWdb5+M=
+	t=1789116173; cv=none; b=ZK4A1YLZEcflcJS+Obo7kWlut53ohDIEFCYvyczQPev4K64ky9i8mTZ9IUcdRAdhLMe9f/8PTwJxClrRZzHlH+FxPg+bvibI1v7J4aiWqOMXbAazEFagg+zUF7qNCORJY54FqNNmFh2kMKTntoYMMsbjNqgK8ms0cuOFTVuTNtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789116172; c=relaxed/simple;
-	bh=/2U9/KamnahY5ShAuAZlF7f9V0nZs8RaasoWfCZttgc=;
+	s=arc-20240116; t=1789116173; c=relaxed/simple;
+	bh=4bRje7jSJXUkCC9Y2cSYdykmhK5nlCj4zFCGIW45EG4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Fl3KcvDLTVPiXiuHPIeXQVKQKiu+s47GrXBWXFaaNowGtvENfBW9G8R8RIruEj9FyrcfyO1oCVdRLs8x8z8UKxM+WvD1kkNBc7pkQqR9SxyeB8hOPaHLigzMskvVvcIpEQk/FXbr8vDSlDhTZ4lpTgX8jRX2lccLJ7uaGQuH5gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn; spf=pass smtp.mailfrom=mail.ustc.edu.cn; dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b=t6YcMNte; arc=none smtp.client-ip=202.38.64.46
+	 MIME-Version; b=tdm7u3+RbczXMqSjfjFfWfG15CKJ5iTeiidBsnu2N2ABap67V1ucgukq9Ue5pW4Xi5HUACHdbJlKjKMXoEWJgJl/i83rGhy4GNe/bfPL0yQC97TtYzPHNWHrJYUpG03ChvAZ475j9Ti790gReJrvcUzuTJtTGhJPoZXQLdUOkp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn; spf=pass smtp.mailfrom=mail.ustc.edu.cn; dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b=Yuru1cC/; arc=none smtp.client-ip=202.38.64.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b="t6YcMNte"
+	dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b="Yuru1cC/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
 	Message-ID:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=1N2zqIvZCdLwtrChz0qeYTs9Zc9DpB/P/y
-	gluz9PV84=; b=t6YcMNte27siYzW+McH3d73a4ND8Q8qEzgDEY7K5L7+ZzefBBb
-	uCEkQjRosbTiZ3MnD/gQ3sPutxC6lyFSDySwhnC0v6mviGr/B5zkdUu81wlunsBb
-	JEnI2umyCFHv9ccul+1V/c0b/LzxGH2Ucd6XFT0CDp72mfBxsAg5N5Hxk=
+	Content-Transfer-Encoding; bh=cd3yzMUdejFhMBpp8mRl9z7i6/YFi+Wx0N
+	w6XNPyQEY=; b=Yuru1cC/0cScDdYX3EIaRVOSg+hIVxrXJ9UdDrdDqaX+bw4Ir7
+	lXnoL8C3bal0wgLaXk4gyTX/mI+6l+sBBfWPGaCKoxCkCTjT8d/BTK7pik0dTuNA
+	LuNHdPYy/UHxPuruhTCMe8BdQz2YZW+9Cy+KRsuHDcq0a9Z+JAGv/buZA=
 Received: from localhost (unknown [222.195.81.105])
-	by mailimap2024 (Coremail) with SMTP id 3pYKCgBXSyIBv6Nqae8GAQ--.483S2;
-	Fri, 11 Sep 2026 16:42:41 +0800 (CST)
+	by mailimap2024 (Coremail) with SMTP id 3pYKCgCXiyL_vqNqXe8GAQ--.482S2;
+	Fri, 11 Sep 2026 16:42:40 +0800 (CST)
 From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -33,9 +33,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Amery Hung <ameryhung@gmail.com>,
 	Sashiko <sashiko-bot@kernel.org>
-Subject: [PATCH bpf v3 2/2] selftests/bpf: Test dynptr teardown on subprog return
-Date: Fri, 11 Sep 2026 16:42:09 +0800
-Message-ID: <20260911084209.3481285-3-xyx2021@mail.ustc.edu.cn>
+Subject: [PATCH bpf v3 1/2] bpf: Destroy callee-local dynptrs on subprog return
+Date: Fri, 11 Sep 2026 16:42:08 +0800
+Message-ID: <20260911084209.3481285-2-xyx2021@mail.ustc.edu.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260911084209.3481285-1-xyx2021@mail.ustc.edu.cn>
 References: <20260911084209.3481285-1-xyx2021@mail.ustc.edu.cn>
@@ -46,264 +46,107 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:3pYKCgBXSyIBv6Nqae8GAQ--.483S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Wry5XrW3JF4kZF18Cr4DJwb_yoW3Wr1kpF
-	W8uryYvry8JF47KryxXr4xZa1F9Fs3ur13Gry3K345Aw1UJr98ZF4xKa4UXrn8Kr45u3y5
-	Zay7KFW3uF18GFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9Sb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+X-CM-TRANSID:3pYKCgCXiyL_vqNqXe8GAQ--.482S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxXrWDGF4UGr1fZFWxAFy8Grg_yoW5Kr15pF
+	4fCFZFgF48J3WIkwsxAr4UZFyYkan5X3y3Gryav3yfAF4Fyry5ZF40gry5XFn0yrW0yw4j
+	vF4SvFs8G3yUt3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Sb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
 	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
 	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xII
 	jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
 	C2z280aVCY1x0267AKxVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x0
-	82IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAw
+	82IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXw
 	Av7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48J
 	MxkF7I0En4kS14v26r126r1DMxkIecxEwVAFwVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxV
 	CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
 	6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
 	WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG
 	6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
-	1UYxBIdaVFxhVjvjDU0xZFpf9x07j4ksDUUUUU=
+	1UYxBIdaVFxhVjvjDU0xZFpf9x07bF6pQUUUUU=
 X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
 
-Add failure tests for slices that escape a subprogram from a dynptr in the
-callee stack. Cover immediate use of a ring buffer clone slice, use after
-the shared reservation is released, and immediate use of an skb dynptr
-slice in a qdisc program.
+A data slice is valid only while the specific dynptr that produced it
+remains valid. prepare_func_exit() copies a subprogram return value into
+the caller and then frees the callee state without applying the normal
+destruction semantics to dynptrs in the callee stack.
 
-Cover the error path where a subprogram would otherwise lose the last
-dynptr capable of releasing a referenced resource. Update the existing
-callback leak test for the same earlier return-time diagnostic.
+A callee can therefore derive a slice from a local dynptr, return or spill
+the slice into its caller, and then let the dynptr disappear with the
+callee frame. The slice retains the id of a dynptr that is no longer in the
+verifier state, so the verifier continues to accept accesses through it.
 
-Also add a success control which derives a slice from a caller-owned dynptr
-and creates a separate clone in the callee. Destroying that local clone on
-return must not invalidate the caller dynptr's slice.
+Before the object relationship refactor, bpf_dynptr_data() slices from
+referenced dynptrs also carried the shared reference id, allowing a later
+release to catch some of these escaped slices. The refactor made those
+slices precise children of their source dynptr and exposed the missing
+teardown as an accepted stale access even after the shared resource is
+released.
 
+Before freeing a callee, scan the first slot of every dynptr in its stack
+and call destroy_if_dynptr_stack_slot(). The existing teardown rejects
+losing the last dynptr for a referenced resource and invalidates the dynptr
+and all of its descendants, including slices held in the caller. Propagate
+any teardown error through prepare_func_exit().
+
+Fixes: 308c7a0ae885 ("bpf: Refactor object relationship tracking and fix dynptr UAF bug")
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Closes: https://lore.kernel.org/r/20260829040712.B1B511F000E9@smtp.kernel.org
+Suggested-by: Amery Hung <ameryhung@gmail.com>
+Link: https://lore.kernel.org/r/CAMB2axOmdHwSrHihSRskDywkCmEGQOX+6dZPN_A9u-HhxY3UDA@mail.gmail.com
 Assisted-by: LLM
 Signed-off-by: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 ---
- .../selftests/bpf/prog_tests/bpf_qdisc.c      |  2 +
- ...disc_fail__invalid_dynptr_returned_slice.c | 76 +++++++++++++++
- .../testing/selftests/bpf/progs/dynptr_fail.c | 97 ++++++++++++++++++-
- 3 files changed, 174 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_returned_slice.c
+ kernel/bpf/verifier.c | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c b/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
-index 6dbd1487343c0..122ecb7e98e2a 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
-@@ -11,6 +11,7 @@
- #include "bpf_qdisc_fail__invalid_dynptr.skel.h"
- #include "bpf_qdisc_fail__invalid_dynptr_slice.skel.h"
- #include "bpf_qdisc_fail__invalid_dynptr_cross_frame.skel.h"
-+#include "bpf_qdisc_fail__invalid_dynptr_returned_slice.skel.h"
- #include "bpf_qdisc_fail__untrusted_write.skel.h"
- #include "bpf_qdisc_dynptr_use_after_invalidate_clone.skel.h"
- 
-@@ -230,6 +231,7 @@ void test_ns_bpf_qdisc(void)
- 		test_incompl_ops();
- 	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr);
- 	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr_cross_frame);
-+	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr_returned_slice);
- 	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr_slice);
- 	RUN_TESTS(bpf_qdisc_fail__untrusted_write);
- 	RUN_TESTS(bpf_qdisc_dynptr_use_after_invalidate_clone);
-diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_returned_slice.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_returned_slice.c
-new file mode 100644
-index 0000000000000..8217f4c4c00c4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_returned_slice.c
-@@ -0,0 +1,76 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include "bpf_experimental.h"
-+#include "bpf_qdisc_common.h"
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int proto;
-+
-+static __noinline struct ethhdr *slice_in_subprog(struct sk_buff *skb)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_skb((struct __sk_buff *)skb, 0, &ptr);
-+	return bpf_dynptr_slice(&ptr, 0, NULL, sizeof(struct ethhdr));
-+}
-+
-+SEC("struct_ops")
-+__failure __msg("invalid mem access 'scalar'")
-+int BPF_PROG(invalid_dynptr_returned_slice, struct sk_buff *skb,
-+	     struct Qdisc *sch, struct bpf_sk_buff_ptr *to_free)
-+{
-+	struct ethhdr *hdr;
-+
-+	hdr = slice_in_subprog(skb);
-+	if (!hdr) {
-+		bpf_qdisc_skb_drop(skb, to_free);
-+		return NET_XMIT_DROP;
-+	}
-+
-+	/* this should fail */
-+	proto = hdr->h_proto;
-+
-+	bpf_qdisc_skb_drop(skb, to_free);
-+
-+	return NET_XMIT_DROP;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+struct sk_buff *BPF_PROG(bpf_qdisc_test_dequeue, struct Qdisc *sch)
-+{
-+	return NULL;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+int BPF_PROG(bpf_qdisc_test_init, struct Qdisc *sch, struct nlattr *opt,
-+	     struct netlink_ext_ack *extack)
-+{
-+	return 0;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+void BPF_PROG(bpf_qdisc_test_reset, struct Qdisc *sch)
-+{
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+void BPF_PROG(bpf_qdisc_test_destroy, struct Qdisc *sch)
-+{
-+}
-+
-+SEC(".struct_ops")
-+struct Qdisc_ops test = {
-+	.enqueue   = (void *)invalid_dynptr_returned_slice,
-+	.dequeue   = (void *)bpf_qdisc_test_dequeue,
-+	.init      = (void *)bpf_qdisc_test_init,
-+	.reset     = (void *)bpf_qdisc_test_reset,
-+	.destroy   = (void *)bpf_qdisc_test_destroy,
-+	.id        = "bpf_qdisc_test",
-+};
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-index 1cd61d72c166f..f57e6162dbf5b 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -127,7 +127,7 @@ static int missing_release_callback_fn(__u32 index, void *data)
- 
- /* Any dynptr initialized within a callback must have bpf_dynptr_put called */
- SEC("?raw_tp")
--__failure __msg("Unreleased reference id")
-+__failure __msg("cannot overwrite referenced dynptr")
- int ringbuf_missing_release_callback(void *ctx)
- {
- 	bpf_loop(10, missing_release_callback_fn, NULL, 0);
-@@ -1892,6 +1892,101 @@ int clone_invalidate4(void *ctx)
- 	return 0;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 72a3f5998dd27..c9c1df27b2699 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -800,6 +800,31 @@ static int dynptr_ref_cnt(struct bpf_verifier_env *env, int v_parent_id)
+ 	return ref_cnt;
  }
  
-+static __noinline void clone_slice_in_subprog(struct bpf_dynptr *ptr, int **data)
++static int destroy_dynptrs_on_func_exit(struct bpf_verifier_env *env,
++					struct bpf_func_state *callee)
 +{
-+	struct bpf_dynptr clone;
++	int i, err;
 +
-+	bpf_dynptr_clone(ptr, &clone);
-+	*data = bpf_dynptr_data(&clone, 0, sizeof(val));
-+}
++	for (i = 0; i < callee->allocated_stack / BPF_REG_SIZE; i++) {
++		struct bpf_stack_state *slot = &callee->stack[i];
 +
-+static __noinline void caller_slice_in_subprog(struct bpf_dynptr *ptr, int **data)
-+{
-+	struct bpf_dynptr clone;
++		if (slot->slot_type[0] != STACK_DYNPTR ||
++		    !slot->spilled_ptr.dynptr.first_slot)
++			continue;
 +
-+	*data = bpf_dynptr_data(ptr, 0, sizeof(val));
-+	bpf_dynptr_clone(ptr, &clone);
-+}
-+
-+static __noinline void reserve_dynptr_in_subprog(void)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
-+}
-+
-+/* A subprogram cannot lose the last dynptr that can release a resource. */
-+SEC("?raw_tp")
-+__failure __msg("cannot overwrite referenced dynptr")
-+int referenced_dynptr_lost_on_subprog_return(void *ctx)
-+{
-+	reserve_dynptr_in_subprog();
++		/*
++		 * A callee-local dynptr is destroyed when its stack frame goes
++		 * away. Apply the normal stack-slot teardown so references cannot
++		 * be lost and slices derived from that dynptr are invalidated.
++		 */
++		err = destroy_if_dynptr_stack_slot(env, callee, i);
++		if (err)
++			return err;
++	}
 +
 +	return 0;
 +}
 +
-+/*
-+ * Destroying a local clone on return must not invalidate a slice whose
-+ * source dynptr belongs to the caller.
-+ */
-+SEC("?raw_tp")
-+__success
-+int caller_dynptr_slice_across_subprog_valid(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	int *data = NULL;
-+
-+	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
-+	caller_slice_in_subprog(&ptr, &data);
-+	if (data)
-+		*data = 123;
-+	bpf_ringbuf_submit_dynptr(&ptr, 0);
-+
-+	return 0;
-+}
-+
-+/*
-+ * A slice that escapes a clone's call frame is invalid once the local
-+ * clone is destroyed on return.
-+ */
-+SEC("?raw_tp")
-+__failure __msg("invalid mem access 'scalar'")
-+int clone_slice_returned_frame_invalid(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	int *data = NULL;
-+
-+	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
-+	clone_slice_in_subprog(&ptr, &data);
-+	if (data)
-+		/* this should fail */
-+		*data = 123;
-+	bpf_ringbuf_submit_dynptr(&ptr, 0);
-+
-+	return 0;
-+}
-+
-+/*
-+ * Releasing the shared reservation must invalidate a slice that escaped
-+ * from a clone's call frame.
-+ */
-+SEC("?raw_tp")
-+__failure __msg("invalid mem access 'scalar'")
-+int clone_slice_returned_frame_release_invalid(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	int *data = NULL;
-+
-+	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
-+	clone_slice_in_subprog(&ptr, &data);
-+	bpf_ringbuf_submit_dynptr(&ptr, 0);
-+	if (data)
-+		/* this should fail */
-+		*data = 123;
-+
-+	return 0;
-+}
-+
- /* Invalidating a dynptr should invalidate any data slices
-  * of its parent
-  */
+ static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
+ 				        struct bpf_func_state *state, int spi)
+ {
+@@ -10399,6 +10424,9 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+ 		print_verifier_state(env, state, caller->frameno, true);
+ 	}
+ 	account_processed_insns(env, callee, caller);
++	err = destroy_dynptrs_on_func_exit(env, callee);
++	if (err)
++		return err;
+ 	/* clear everything in the callee. In case of exceptional exits using
+ 	 * bpf_throw, this will be done by copy_verifier_state for extra frames. */
+ 	free_func_state(callee);
+
+base-commit: e4a62833adff6ef0fe7c0b90393204fe3c26b5c5
 -- 
 2.43.0
 
