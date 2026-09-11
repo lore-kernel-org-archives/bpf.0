@@ -1,173 +1,193 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
+Received: from mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1FB49B5A3
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:50:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB69A49B5B7
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 16:02:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789141839; cv=none; b=UIoaCmxSStQKAbAKQAEuZyuR8/RK/CZDhdsCMyWHDF91VD2RCey0khWamPZNts6IAC0gVHu3Tx74o64/B3rVMDrRx5IMjC9r8oj5XXQN17mN4euvzRD0XKmAmz5NthiZliFTd5NOMfM/T+dGBnTyIK4EBWgqqopxUBfF2/yQlHE=
+	t=1789142562; cv=none; b=ojpVEWW6QszGH85CxEUB0btKVYMewtyQbwRllAPDFchFSDNFlfvXZ7mDtmtxdHi963g0u/Ko1897n77XZcxN7ztY+EuJwEHfmJKSSbm8uJc24sXMtPCvFDwWs1sVYwGWzoEGEAjPGNZOiRP5+usaueZYW67YAzDsYcJGoUbY8Jk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789141839; c=relaxed/simple;
-	bh=WlPmkMdBFTO6cgqG+6WgEtCS1neof9O2D9Ylmgb6HQ4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UNcu64dGLCxt4pZnalb+6HeX4wbUeB9n3VONPSRHe7kd03JDQH7qU4uyTdTpyyiTDEQcNwg4CDsdWEOXx1jhgOMHUneyg1xh+qIC+uNaJWnBFVzWoeJeCWOIUG/PWDsWJk7OOHwRUadXtniP12Bf4+bSgsUM6dMopRE9ouHXCCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 9A9EE2A18431CD; Fri, 11 Sep 2026 08:50:30 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel-team@fb.com
-Subject: [PATCH bpf-next v3 15/15] selftests/bpf: Temporary hack to disable register mismatch in arm64
-Date: Fri, 11 Sep 2026 08:50:30 -0700
-Message-ID: <20260911155030.2012652-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260911154914.2004336-1-yonghong.song@linux.dev>
-References: <20260911154914.2004336-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1789142562; c=relaxed/simple;
+	bh=Yzu4lELF2/wu31YhDvHBWMP/NO98sJKx0FXvxqvX1/s=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=XatZmGbkzbCRgVera9Gas9iKR7XvcC06REBr/9tQDm4hK8AjBjQiYnf8g7TEAKc4thAaaKuoBHzqS+hE7i8cvmNwSNip2PIBTZNVDq8FJUokJY5M1s1mP+ogg961glRnJukLYeQHzZX/rUCfWSbHm+RO3MVbB5BBIK1AyPBMR5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TTbAZpgc; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TTbAZpgc"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Yzu4lELF2/wu31YhDvHBWMP/NO98sJKx0FXvxqvX1/s=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789142557; v=1; x=1789747357;
+ b=TTbAZpgcyN6lkRhV5JixIyiD9ibsNvaJ+YKYK7uBI5X8RiDF8xkfrfhNQxiUdUZwSIAI5a/H
+ QGgoveLxQbyHf2UXUxVJ7k5dWETa+iqsRdjgQTqk6tskoogr5Hg82frdWTCFE082FvskyM8ToAz
+ L6FUR4aKVTrm3xFfKdf8vgVo=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 49b2b93d59cf757f;
+	Fri, 11 Sep 2026 16:02:27 +0000
+X-Mizu-Trace-ID: 49b2b93d59cf757f
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <9ab375a7-be14-4479-80cd-41735539e8ef@linux.dev>
+Date: Fri, 11 Sep 2026 09:02:23 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH dwarves 1/2] dwarf_loader: Skip the argument register the
+ arm64 ABI leaves as a hole
+Content-Language: en-GB
+From: Yonghong Song <yonghong.song@linux.dev>
+To: Alan Maguire <alan.maguire@oracle.com>,
+ Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ bpf@vger.kernel.org, kernel-team@fb.com
+References: <20260911040955.339939-1-yonghong.song@linux.dev>
+In-Reply-To: <20260911040955.339939-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-There are 3 kfuncs like below:
-   __u64 bpf_kfunc_call_test_i128_arg_odd(__u64 a, __int128 v, __u64 b) _=
-_ksym;
-   __u64 bpf_kfunc_call_test_i128_arg_shift(__u64 a, __int128 v, __u64 b,=
- __u64 c,
-                                            __u64 d) __ksym;
-   __u64 bpf_kfunc_call_test_i128_arg_ovf(__u64 a, __int128 v, __u64 b, _=
-_u64 c,
-                                          __u64 d, __u64 e, __u64 f) __ks=
-ym;
-which requires that '__int128 v' must be 16-byte align on arm64.
 
-Current pahole will reject BTF generation since pahole expects
-'__int128 v' has start register 'x1' while arm64 abi requires 'x2'.
-Hence, btf generation will fail.
 
-This patch is a hack to disable a few related tests to satisfy CI.
-The following is the fix in pahole:
-  https://lore.kernel.org/bpf/20260911040955.339939-1-yonghong.song@linux=
-.dev/
-Once pahole patch is merged, this patch can be discarded.
+On 9/10/26 9:09 PM, Yonghong Song wrote:
+> arm64 requires an argument whose alignment is twice the register size to
+> start on an even-numbered argument register, so such an argument arriving
+> when the next free register is an odd one leaves that register unused:
+>
+>    u64 f_odd(u64 a, __int128 v, u64 b);
+>
+> passes a in x0, v in x2:x3 -- skipping x1 -- and b in x4.  The x86-64 ABI
+> has no such rule and packs v into rsi:rdx instead.
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c    | 4 ++++
- tools/testing/selftests/bpf/test_kmods/bpf_testmod.c       | 4 ++++
- tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h | 2 ++
- 3 files changed, 10 insertions(+)
+The kernel patch (bpf: Support by-value struct and __int128 arguments)
+   https://lore.kernel.org/bpf/20260911154914.2004336-1-yonghong.song@linux.dev/
+depends on this pahole patch. See kernel patch 15.
 
-diff --git a/tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c b/to=
-ols/testing/selftests/bpf/progs/aggregate_arg_kfunc.c
-index 2100f0ab1abe..59f56ab39413 100644
---- a/tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c
-+++ b/tools/testing/selftests/bpf/progs/aggregate_arg_kfunc.c
-@@ -50,6 +50,7 @@ int aggregate_arg_kfunc_int128(struct __sk_buff *skb)
- 	return 0;
- }
-=20
-+#if 0
- /*
-  * arm64 rounds the register number up to an even one for an argument
-  * aligned to 16 bytes, so it wants this __int128 in x2 and x3.
-@@ -70,6 +71,7 @@ int aggregate_arg_kfunc_int128_odd(struct __sk_buff *sk=
-b)
-=20
- 	return 0;
- }
-+#endif
-=20
- #endif /* __SIZEOF_INT128__ */
-=20
-@@ -152,6 +154,7 @@ int aggregate_arg_kfunc_split8(struct __sk_buff *skb)
-=20
- #ifdef __SIZEOF_INT128__
-=20
-+#if 0
- /*
-  * The same hole, with enough arguments after the __int128 that the shif=
-t
-  * reaches the registers the BPF convention counts as stack slots: arm64
-@@ -193,6 +196,7 @@ int aggregate_arg_kfunc_int128_ovf(struct __sk_buff *=
-skb)
-=20
- 	return 0;
- }
-+#endif
-=20
- /*
-  * Both conventions pad the stack to align this __int128, and the BPF
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools=
-/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index baccee6fdad4..c367442ce086 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -1039,6 +1039,7 @@ __bpf_kfunc u64 bpf_kfunc_call_test_i128_arg(u64 a,=
- u64 b, __int128 v)
- 	return a + b + (u64)((unsigned __int128)v >> 64) + (u64)v;
- }
-=20
-+#if 0
- __bpf_kfunc u64 bpf_kfunc_call_test_i128_arg_odd(u64 a, __int128 v, u64 =
-b)
- {
- 	return a + b + (u64)((unsigned __int128)v >> 64) + (u64)v;
-@@ -1056,6 +1057,7 @@ __bpf_kfunc u64 bpf_kfunc_call_test_i128_arg_ovf(u6=
-4 a, __int128 v, u64 b, u64 c
- 	return a + b + c + d + e + f +
- 	       (u64)((unsigned __int128)v >> 64) + (u64)v;
- }
-+#endif
-=20
- __bpf_kfunc u64 bpf_kfunc_call_test_i128_arg_pad(u64 a, u64 b, u64 c, u6=
-4 d, u64 e,
- 						 u64 f, u64 g, __int128 v)
-@@ -1735,9 +1737,11 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_deep)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_ret_ii)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_pair_arg)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg)
-+#if 0
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_odd)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_shift)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_ovf)
-+#endif
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_i128_arg_pad)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_pair_arg_nofit)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test_pair_arg_tail)
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b=
-/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index 195ec37d5bbc..0f098045856e 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -234,11 +234,13 @@ struct prog_test_ret_ii bpf_kfunc_call_test_ret_ii(=
-int a, int b) __ksym;
- __u64 bpf_kfunc_call_test_pair_arg(__u64 a, struct prog_test_pair_arg s,=
- __u64 b) __ksym;
- #ifdef __SIZEOF_INT128__
- __u64 bpf_kfunc_call_test_i128_arg(__u64 a, __u64 b, __int128 v) __ksym;
-+#if 0
- __u64 bpf_kfunc_call_test_i128_arg_odd(__u64 a, __int128 v, __u64 b) __k=
-sym;
- __u64 bpf_kfunc_call_test_i128_arg_shift(__u64 a, __int128 v, __u64 b, _=
-_u64 c,
- 					 __u64 d) __ksym;
- __u64 bpf_kfunc_call_test_i128_arg_ovf(__u64 a, __int128 v, __u64 b, __u=
-64 c,
- 				       __u64 d, __u64 e, __u64 f) __ksym;
-+#endif
- __u64 bpf_kfunc_call_test_i128_arg_pad(__u64 a, __u64 b, __u64 c, __u64 =
-d, __u64 e,
- 				       __u64 f, __u64 g, __int128 v) __ksym;
- #endif
---=20
-2.52.0
+It would be great if this patch can be reviewed soon.
+
+>
+> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+> ---
+>   dwarf_loader.c | 53 +++++++++++++++++++++++++++++++++++++++++++++++---
+>   dwarves.h      |  1 +
+>   2 files changed, 51 insertions(+), 3 deletions(-)
+>
+> diff --git a/dwarf_loader.c b/dwarf_loader.c
+> index 61ef52f..81c2076 100644
+> --- a/dwarf_loader.c
+> +++ b/dwarf_loader.c
+> @@ -1501,6 +1501,23 @@ static bool arch__agg_use_two_regs(const GElf_Ehdr *ehdr)
+>   	}
+>   }
+>   
+> +/*
+> + * Some ABIs require an argument whose alignment is twice the register size to
+> + * start on an even-numbered argument register, leaving a hole when the next
+> + * free register is an odd one. For example, on arm64,
+> + *	u64 f(u64 a, __int128 v, u64 b)
+> + * passes a in x0, v in x2:x3 -- skipping x1 -- and b in x4.
+> + */
+> +static bool arch__arg_align_two_regs(const GElf_Ehdr *ehdr)
+> +{
+> +	switch (ehdr->e_machine) {
+> +	case EM_AARCH64:
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
+>   static struct template_type_param *template_type_param__new(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
+>   {
+>   	struct template_type_param *ttparm = tag__alloc(cu, sizeof(*ttparm));
+> @@ -3634,6 +3651,28 @@ static int parameter__abi_slots(const struct parameter *parm, const struct cu *c
+>   	return slots > 0 ? slots : 1;
+>   }
+>   
+> +static int parameter__abi_reg_align(const struct parameter *parm, const struct cu *cu)
+> +{
+> +	struct tag *type;
+> +
+> +	if (!cu->arg_align_two_regs || parm->type_byte_size <= cu->addr_size)
+> +		return 1;
+> +
+> +	type = tag__strip_typedefs_and_modifiers(&parm->tag, cu);
+> +	if (type == NULL)
+> +		return 1;
+> +
+> +	return tag__natural_alignment(type, cu) > cu->addr_size ? 2 : 1;
+> +}
+> +
+> +static int parameter__align_reg_idx(const struct parameter *parm, int reg_idx,
+> +				    const struct cu *cu)
+> +{
+> +	int align = parameter__abi_reg_align(parm, cu);
+> +
+> +	return (reg_idx + align - 1) & ~(align - 1);
+> +}
+> +
+>   static bool parameter__has_piece_info(const struct parameter *parm)
+>   {
+>   	return parm->first_reg_fields || parm->second_reg_fields;
+> @@ -3653,7 +3692,7 @@ static bool ftype__next_parameter_preserves_slots(struct ftype *ftype, struct pa
+>   	if (!next || next->loc_reg == PARAMETER_UNKNOWN_REG)
+>   		return false;
+>   
+> -	next_reg_idx = reg_idx + slots;
+> +	next_reg_idx = parameter__align_reg_idx(next, reg_idx + slots, cu);
+>   	return next_reg_idx < cu->nr_register_params &&
+>   	       next->loc_reg == cu->register_params[next_reg_idx];
+>   }
+> @@ -3702,6 +3741,7 @@ static void function__match_clang_parameter_locations(struct ftype *ftype, struc
+>   		if (pos->passed_in_memory)
+>   			continue;
+>   
+> +		reg_idx = parameter__align_reg_idx(pos, reg_idx, cu);
+>   		if (reg_idx >= cu->nr_register_params)
+>   			break;
+>   
+> @@ -3732,11 +3772,17 @@ static void function__analyze_parameter_locations(struct function *fn, struct cu
+>   
+>   	ftype__for_each_parameter(ftype, pos) {
+>   		bool consumes_register = true;
+> -		bool regs_available = reg_idx < cu->nr_register_params;
+> +		bool regs_available;
+>   		int slots = parameter__abi_slots(pos, cu);
+> -		int expected_reg = regs_available ? cu->register_params[reg_idx] : -1;
+> +		int expected_reg;
+>   		int reg_slots = pos->passed_in_memory ? 1 : slots;
+>   
+> +		if (!pos->passed_in_memory)
+> +			reg_idx = parameter__align_reg_idx(pos, reg_idx, cu);
+> +
+> +		regs_available = reg_idx < cu->nr_register_params;
+> +		expected_reg = regs_available ? cu->register_params[reg_idx] : -1;
+> +
+>   		if (pos->has_loc) {
+>   			if (true_sig_enabled && pos->loc_const_value) {
+>   				pos->optimized = 1;
+> @@ -4467,6 +4513,7 @@ static int cu__set_common(struct cu *cu, struct conf_load *conf,
+>   	cu->little_endian = ehdr.e_ident[EI_DATA] == ELFDATA2LSB;
+>   	cu->nr_register_params = arch__nr_register_params(&ehdr);
+>   	cu->agg_use_two_regs = arch__agg_use_two_regs(&ehdr);
+> +	cu->arg_align_two_regs = arch__arg_align_two_regs(&ehdr);
+>   	arch__set_register_params(&ehdr, cu);
+>   	return 0;
+>   }
+> diff --git a/dwarves.h b/dwarves.h
+> index df77f1e..70adbbf 100644
+> --- a/dwarves.h
+> +++ b/dwarves.h
+> @@ -304,6 +304,7 @@ struct cu {
+>   	uint8_t		 little_endian:1;
+>   	uint8_t		 producer_clang:1;
+>   	uint8_t		 agg_use_two_regs:1;	/* An aggregate like {long a; long b;} */
+> +	uint8_t		 arg_align_two_regs:1;	/* An over-aligned arg starts on an even register */
+>   	uint8_t		 nr_register_params;
+>   	int		 register_params[ARCH_MAX_REGISTER_PARAMS];
+>   	int		 functions_saved;
 
