@@ -1,96 +1,95 @@
 Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 127D91E520A
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 00:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0621A5B9E
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 00:58:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.140
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789086241; cv=pass; b=WCKQscostapktORlge6N/D6EcJhIJ6x6p/iYet+54cqbvl1rKI8DaC5RaJrSVUU7p7pJaBOso+M04z2g/j1nnKwMDspR3Hz8sKLgMSpVYx2Ia/rFyRIehY4NM5xe+VaQS3PcZtqmGTE4dgIto9E7LMSU4xFTKNJI2Z0Du6c/8+A=
+	t=1789088313; cv=pass; b=u5pD28PtcUavFCnQF7IHW+a/tpHcE01HqDPzEMLofwIQK0TqStrOcb67Yt6107XN2n8oolgKDlZhFioMgUGVbi4VD73nEE7KdHVRgR2PVAuFZh/Iwu9NZ++DDSZJoe6Uh/gvjVoPy7rzya1De1H61+6I5I4UKHbFrOLe93EYzDs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789086241; c=relaxed/simple;
-	bh=nmdKc/a5wnE8PDWAlKyr1buTBobwOO09KZmLFJnzqoY=;
+	s=arc-20240116; t=1789088313; c=relaxed/simple;
+	bh=4drBGv6YyhxyX+VShit8G9MBohafzwBZaOD9UZFnRQg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Un2AaD34Pnm/26E+rI1WgJvsLBnCWoyE+0SpOATyYYx/PwDMX+k8bowrRymFgkATrZu8e0V+qsDwEGBKGDoOaIDKHlXU9xvNkQjnbNdIGkmNFB7S0KQLquSHWnBJsvQLqnlw1fg5JG4KS9p/BY/UstkUKzbNMfu0H3VGTxKQSZY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VlGpdJLi; arc=pass smtp.client-ip=74.125.227.140
+	 To:Cc:Content-Type; b=kj7BV9JDLQoW3U5wHndTMInjuA9Cohr7LWOY6M7EQJoBK46HsO/jAO20lo16/ttpVZsgKOriZa4NPQFnwYzn1kc+wj8i11yVT4l156ZdiNstXrsMHoMO9btsLuTGYIyOrkrGwQLvm6rP4Kya/baO0feEFqPUK0vRTCnp5+dYOwA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Kw0wluWR; arc=pass smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VlGpdJLi"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d6ff3aca07so17545ad.1
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 17:24:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789086239; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Kw0wluWR"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d6ff390a6cso17465ad.1
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 17:58:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789088310; cv=none;
         d=google.com; s=arc-20260327;
-        b=qq7UWjbYtq/X4R4pISMACtwM5r6zvkuheXK6SOgXYflaJSJB03+S7YuxFWC8ApVzzo
-         xjaT2+OM6ZRwY3/jdNC6cnBCJgDRSkJHgwA6tOiMWCvjx5D661ZrNU2twJ8pYv8ZEhX4
-         11f/qJ6aYucUY/ku2TTqe375qBhp9KYXYzSjCygdHA6uwh4ISGZd81tTm6AbOc/yP/Hn
-         2uHxqoqYJia0JNRoTyr0gk7t5FYSGj0wJXGZKExD/bUQqAoMTnylBIuHD/hfqDxS27MG
-         1oBgK7HeerIJroqqsY3P42Oo5qu0C6OOnOu0OsVGTP/ANgpt++WO+K0QwTPAE6MwwaW/
-         GffA==
+        b=nyf6QyAz3NMrTOF7ixqJRTmh8Qns1BriGdGXjBF16x8OfxtNVnXRya7d/txNMjKQhX
+         GSb/0BNeQLPoRoe2UWMHaO7CkAMdu7b2cMt5OFBuhI5ngZi2PirSEaBTLdqyMrp9b2Jw
+         Pkd9NciKo++2cuw6ZzPWItG27NrM3Xcc7At2ycSN+BkI1ElpdfSLQIqt6n4p+d1Yh8iz
+         0h+kS9OqQCpLfyA4N24BjWJISlROiXgZOqbERAR+m5QgjKRfjzLOdxyl8Ir5du37IWQQ
+         R2Bb2ij8rk7rKecQjJhHRnP9MwGkgcOA/4+Xsz0Y0w9wNC8pGo2fDjZmI6PO+tAlCTIu
+         5vyQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=zqEdcnUoGpZiwMUleMzp5ubvFf8h672eTAjjjl3YB6k=;
-        fh=pyP9m93ZtWRFBmZA91f3wSvRutNdjmfxSR6cabpybMM=;
-        b=fshjuW9NWfTYs/GkwkXn6bDQUi28Ftix72O/dr2u/jha25Z9toUxZoP8kI8inhBcfr
-         rL4gQaIvQhNYc9qx+EsrrHeFPkpD5qujOVV4Skpj6hMcVw8eki5qmhIO0oLzbd2p840Q
-         GAKVDuCON07LWcrFeb6DRui3AO7RUv/eL4FiyMFTrbLtE7cXnCD6Uu6UKMq7+TSDyv+O
-         9kIZ1J5HGl5kwPe8G8hZX33HnGKSivq7i+ZZC+mCd+qZjZH82R+EicJhTQg4N9pFJMnw
-         9YiNgkvv3f5elEXd3IbqLnd2ELpAJzAIj65wionq3z+4hq5ch/sb9aAluVgbAli1PJ9g
-         L7iQ==;
+        bh=nMOObWcWSTTmBPNIJxB9A2ZkbRi5NCB7Xm1BYtKAyac=;
+        fh=QinFNgPSLj906GUu+FJMKLbp9Zw2LGsUW9LLJ6e8F5s=;
+        b=O2Kb4ly3n6SOZyu52i9KwFUYpBLn/+fKvUZBN/KvvTiebeLqI4qi0vxSA/gIJxVKJh
+         18C/nv5dw1+x4y21JcE5toGkaefyRqxVXE1l0F7GHdEkiE4eVUsvAdgkdPRr7nc8WccZ
+         16HWLdVH1oLaZLlgdoJeE8pD+trXiWV5/zKjt01+NjUSAzNJgRyqN3NMPVGFsRu3ysqd
+         /KOG/HyE3s/sjgm3NZ9YEjQ0X2/PxWV1ioxjBsX2vuQRIooSebAo/EJ0fknssmJMstsS
+         ujJdHU3CNMc/9ENjs3kS+OKZaMLz66eGln3Oerwpr2kzC9giyXKZOYHs2oi7WbiXar7n
+         5lQg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789086239; x=1789691039; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1789088310; x=1789693110; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=zqEdcnUoGpZiwMUleMzp5ubvFf8h672eTAjjjl3YB6k=;
-        b=VlGpdJLi4lUVoiBvcJWGAGO4NY33SuDUaO1V6CjjMq73IrClR7irJs7S/bK3tjCgrS
-         +sUUuZTWyCrPqXr0axFZ3JpI4zSuJoowyd7P8q1MbMNA3fwGs4MWKcXVa+Bydk+1tB+N
-         Z17a+n5QhmRXv/5NdhMXp6exlcXA3sxJ975OHtfiY17io3jWLiVfEk8MAbIDhUr3QGqz
-         xpzmCs4v5j5hhA5KrhLgNl0hdrY3zekzA+7DBAlqchvstfCH+nXYkG7SGDHTyADoTE4K
-         JFPXjTl/ahCbhEjtLICiTZoFmu2lNiZpQGrbrXC7K1MdxKl0MIWsm28wqWomiyl51qTH
-         SoPw==
+        bh=nMOObWcWSTTmBPNIJxB9A2ZkbRi5NCB7Xm1BYtKAyac=;
+        b=Kw0wluWRedRrcMdEgZz1C7knjgl71xNhzL+jxjanDdyM3D7bOb+S26t01D7taZgTPU
+         MQ2YH3d70/sl2e70XaiN6xocyXFTC/VsIioObNmqpSaaxSIW+E69a/DJuCR77GsilF+L
+         XqRdSRtt3Ey5Nv+W0OBTSndKKZ4/cseeK/HULMHhPFYAXyEBiKGudu50KA0nvUgc3BTj
+         0QNtoZVoFccm1VVOtosWf2+lPAzVzLtHzSF4aoRSmEvgNweAXgrNkO2K/OwPgip03OEk
+         kHcC+qZe3q5E3h4s+AINILraJaQwkX+wbFr5wPAnwAKXGWOvSqTW3uYebqsKKpyQRTcA
+         emkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789086239; x=1789691039;
+        d=1e100.net; s=20251104; t=1789088310; x=1789693110;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=zqEdcnUoGpZiwMUleMzp5ubvFf8h672eTAjjjl3YB6k=;
-        b=Y9f9/ERY2GaGvgntIitL7bgdpfqo1jIKk0kA2O3w21XHp+v4b4CkZFRtM4Vaxm7tc0
-         +FiJo9M0ai8CaUT/lD0FyNz1UkM2wlgbSd52M4KxxlFpzvIJKn8BO360ijHDa+SuMcgs
-         DxBSPClZArnhfpd4Zv+QXCQunao6O80PsJD41rAXGMtfzYZ8y+ZFjjsqjy75VnC77EGr
-         97GQ7vMCv20F1CmnKC3PCI+VoRCYF1OIzNfc5hHGj2RkFY6/PSm8+EnmhEMko+65UU4f
-         7qE5QLweccYrZ6eGWQm2gS5vjD6jzRVW5B6dFTM7bbYUW5OOYA9iQbF6WxcyyhybX8kf
-         LJ4g==
-X-Forwarded-Encrypted: i=1; AKwUvBzxrd0DOFbAh/jPgDiIuwdDPMPWEkk41sCtYxct0+EhI41iUccPlUdYbtjg25UDDMkz1os=@vger.kernel.org
-X-Gm-Message-State: AFuF++kKSq0/M096HNotBR+Uef8d+as8jDHI+pc6L43x62YB6l/YWHrp
-	w/+zC7NZg+fXMY83K8ZK4O85UeyqKhyD/c9VA+No+rG1ux8JL8IjOmhIFLE5eR6MUOWMY42q0/f
-	BPdhFKy1i4cXv5y2ziVHUiXAzJhMPAxpBJqLUBeii
-X-Gm-Gg: AYBFou0tIGdLCSs0+vwx9FaaKVqbSjmce1OTBQmTZ2e4hIBmgT6Iz8C9VoSQQkSBD3i
-	2IdEsYFhhZEd/EJ5vFf+52z32vRjNU44EJ2+KCjkwXSx3S1E9kv2skwFr5xLbRoJd67oPF0ONm3
-	XCMmbc6rxZesJwhkReiSHRhjeAZytGNij5heEpQ22m0havK64MPYUGnXcRtp4vII8gXki/r18oM
-	N24ldPWwPDJAuhoLZ7eg6AtqDShkRK8SDmPbQIWvVgwVblhOUkCfp5lIz8bm7fE7+zZ3fwvukrr
-	LKLOCBmIPRcM/klP8+dZcd6exuEOHUHlfJrrf4OAhnpi+XScfGTYzoUxs6h7XMZTb4wvFrmiv1y
-	o5I6CgqZDYwCINlse6ac88DhUv1HPVmktIg==
-X-Received: by 2002:a17:902:ea09:b0:2ca:6bf:5bac with SMTP id
- d9443c01a7336-2dd2ce1d368mr3248775ad.8.1789086238978; Thu, 10 Sep 2026
- 17:23:58 -0700 (PDT)
+        bh=nMOObWcWSTTmBPNIJxB9A2ZkbRi5NCB7Xm1BYtKAyac=;
+        b=Pi5ldazEM8OIstLpr+AzJ7WhFMRMwu2DKERL+AAEAwzkxUkKglBz6Ozdl34W1B4RqI
+         a10D6UDtp5Z7gIhx+dhh5wXG01E7r7HjcurxuHYZX9Bk3NSulgda/voLPdAl0wPwNBET
+         G/7CUmYj35OnDCt1sXza9lxKfpWJbFg4kO2G6yLqQ7Vw57j5mKfuqAikSAwqMJavMwIm
+         ppgtXV12b+tTOCMw+WFKJrriiJ6Duuwkmt+3Wqvm+Z1r5zvX0XSFD5p1UKGBALzfQlyc
+         N1oIkDH1zPfYarEZriy8AhNyFDOUcrcWvI9Shw+/GduB3jFypcHCwE8PURuwx99EzCzB
+         Ehkg==
+X-Forwarded-Encrypted: i=1; AKwUvBxvh8uh464iLheDDsFS1Q6zAeNCI55aH0qSFCR7WEc1XxW0bcYHxzJ3gFbsPQbEKifNkkM=@vger.kernel.org
+X-Gm-Message-State: AFuF++nGKifmWIPsVZCTKeVzmIQK1OVrQPBRDXLKDJFesx89k4YuKcpo
+	TrZYFWyFbau4k6/g0zOhausLGKB29Tg+SMrXAj2SKjbcUtqaPxhMYZivpcT1Po+gtdqfENtRZUA
+	SjvA1h5b+HCtA1PcQnx1Wv9E9WhbL2p6FHpFhTGMnR2+u/YzU3/NEWA9qzSZNSg==
+X-Gm-Gg: AYBFou0timhBsqKbXq5OYoWScB4gx6F+YmLZP7+cBW/+tLAh2hJk8beABUVziu4ppQC
+	iSKaoeQPqz9ubYZFpcNia0rBAm8+seVGScd5Ur8mjh3P3O7X8K7G+cY1hMfI2pGd6FiBCoHTjmm
+	d6GXPiDqd8024O6DeG6LcIDh9sBh3X1TSAvFeo4LVgSEOa1BJCsXmy2IgnwyDBR1ctfxK5W7uvP
+	pElqChRiHw/fe2PlezAT+wKhlCs06WD0yR8Ejy24l372Jrh4q9qpCZFMtn59hK9AeRwNdCuFK6n
+	gjLzX9yGXVHh8AdPX253ZOKaFrhZjw0VacvpERymIuFzVuaVLlJQTBD62OV/3h2byaXdBIK/DQd
+	PcVrJmY/l7wstryNq0dCV+CPI0lxmffRTpQ==
+X-Received: by 2002:a17:902:f686:b0:2db:a1c:be59 with SMTP id
+ d9443c01a7336-2dd2f53925emr1750545ad.7.1789088309766; Thu, 10 Sep 2026
+ 17:58:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260909191136.3811892-2-hramamurthy@google.com> <178907842956.219967.4077695444710153181@kernel.org>
-In-Reply-To: <178907842956.219967.4077695444710153181@kernel.org>
+References: <20260909191136.3811892-5-hramamurthy@google.com> <178907843138.219967.17268659724650641980@kernel.org>
+In-Reply-To: <178907843138.219967.17268659724650641980@kernel.org>
 From: Harshitha Ramamurthy <hramamurthy@google.com>
-Date: Thu, 10 Sep 2026 17:23:47 -0700
-X-Gm-Features: AcwNN1W7h8BCT1HfUY5jlvBtlhd4Vt-El5VfmDAA3SO96n8igRuwiM-3v0cCp9E
-Message-ID: <CAEAWyHdw=W9P3OWwc+=wHe4-=kMKquRddkoSX9om8PW-mfjKjQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v6 01/12] gve: add struct gve_device_info to hold
- device properties
+Date: Thu, 10 Sep 2026 17:58:18 -0700
+X-Gm-Features: AcwNN1VDb-6nUoUNVsNwOs9BNQUF7tG5NDKWvlmE8TeyMwOHffTvadhBRirJUzo
+Message-ID: <CAEAWyHf63MgBXY2UvdyUx4M=Kb_73rBmwD2rUBGfAk1XOFMPmQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v6 04/12] gve: introduce gve_adminq_get_device_properties()
 To: netdev-bot+sashiko@kernel.org
 Cc: netdev@vger.kernel.org, joshwash@google.com, andrew+netdev@lunn.ch, 
 	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
@@ -106,223 +105,182 @@ Content-Transfer-Encoding: quoted-printable
 On Thu, Sep 10, 2026 at 3:13=E2=80=AFPM <netdev-bot+sashiko@kernel.org> wro=
 te:
 >
-> Thank you for your contribution! Sashiko AI review found 2 potential
+> Thank you for your contribution! Sashiko AI review found 1 potential
 > issue(s) to consider:
 >
-> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 0 =C2=B7 Low: 2
+> Critical: 0 =C2=B7 High: 0 =C2=B7 Medium: 0 (1) =C2=B7 Low: 1
 >
-> - [Low] After this patch, struct gve_priv still declares `u16
->   default_num_queues; /* default num queues to set up */` (gve.h:856)=E2=
+> - [Low] gve_adminq_get_device_properties()
+>   (drivers/net/ethernet/google/gve/gve_adminq.c:1148) bundles=E2=80=A6
+>
+> Pre-existing issues:
+> - [Medium] gve_adminq_verify_driver_compatibility()
+>   (drivers/net/ethernet/google/gve/gve_adminq.c:1264, moved verbatim=E2=
 =80=A6
-> - [Low] Stale comment: gve_probe() still states "Features might be set in
->   other locations as well (such as `gve_adminq_describe_device`)."=E2=80=
-=A6
 >
 > --
 >
-> gve: add struct gve_device_info to hold device properties
+> gve: introduce gve_adminq_get_device_properties()
 >
-> This adds struct gve_device_info as a single place to hold the properties
-> negotiated with the device, converts gve_adminq_describe_device() and its
-> helpers to fill that structure, and moves the code that applies those
-> properties to priv/netdev into gve_init_priv().
+> This adds gve_adminq_get_device_properties(), a helper that runs the
+> VERIFY_DRIVER_COMPATIBILITY and DESCRIBE_DEVICE admin queue commands in
+> sequence, and moves the driver-info allocation and fill-in from
+> gve_main.c into gve_adminq_verify_driver_compatibility().  The commit
+> message describes it as pure code movement with no functional change.
 >
-> A couple of questions on leftovers from the conversion.
->
-> > diff --git a/drivers/net/ethernet/google/gve/gve.h b/drivers/net/ethern=
-et/google/gve/gve.h
-> > index c280ff35ee771..021adb9108dff 100644
-> > --- a/drivers/net/ethernet/google/gve/gve.h
-> > +++ b/drivers/net/ethernet/google/gve/gve.h
-> > @@ -797,6 +797,34 @@ struct gve_ptp {
-> >       struct gve_priv *priv;
-> >  };
-> >
-> > +struct gve_device_info {
-> > +     enum gve_queue_format queue_format;
-> > +     u16 default_tx_queues;
-> > +     u16 default_rx_queues;
-> > +     u16 max_tx_queues;
-> > +     u16 max_rx_queues;
-> > +     u16 default_tx_ring_size;
-> > +     u16 default_rx_ring_size;
-> > +     u16 max_tx_ring_size;
-> > +     u16 max_rx_ring_size;
-> > +     u16 min_tx_ring_size;
-> > +     u16 min_rx_ring_size;
-> > +     u16 max_mtu;
-> > +     u8 mac[ETH_ALEN];
-> > +     u16 max_rx_buffer_size;
-> > +     u16 header_buf_size;
-> > +     u32 max_flow_rules;
-> > +     u16 rss_key_size;
-> > +     u16 rss_lut_size;
-> > +     u16 tx_pages_per_qpl;
-> > +     u16 num_event_counters;
-> > +     u64 max_registered_pages;
-> > +     bool default_min_ring_size;
-> > +     bool nic_timestamp_supported;
-> > +     bool modify_ring_size_enabled;
-> > +     bool cache_rss_config;
-> > +};
-> > +
->
-> [ ... ]
+> No Link: tags present in the commit header.
 >
 > > diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net=
 /ethernet/google/gve/gve_adminq.c
-> > index f05f4895f4c74..512349c5517f4 100644
+> > index 046155ae7d669..f420a8e1dd3df 100644
 > > --- a/drivers/net/ethernet/google/gve/gve_adminq.c
 > > +++ b/drivers/net/ethernet/google/gve/gve_adminq.c
 >
 > [ ... ]
 >
-> > @@ -190,7 +190,7 @@ void gve_parse_device_option(struct gve_priv *priv,
+> > @@ -1143,6 +1145,27 @@ int gve_adminq_describe_device(struct gve_priv *=
+priv)
+> >       return err;
+> >  }
 > >
-> >               /* device has not provided min ring size */
-> >               if (option_length =3D=3D GVE_DEVICE_OPTION_NO_MIN_RING_SI=
-ZE)
-> > -                     priv->default_min_ring_size =3D true;
-> > +                     priv->device_info.default_min_ring_size =3D true;
-> >               break;
->
-> [ ... ]
->
-> > @@ -946,77 +949,105 @@ static void gve_enable_supported_features(struct=
- gve_priv *priv,
->
-> [ ... ]
->
-> >       if (dev_op_flow_steering &&
-> >           (supported_features_mask & GVE_SUP_FLOW_STEERING_MASK)) {
-> >               if (dev_op_flow_steering->max_flow_rules) {
-> > -                     priv->max_flow_rules =3D
-> > +                     info->max_flow_rules =3D
-> >                               be32_to_cpu(dev_op_flow_steering->max_flo=
-w_rules);
-> > -                     priv->dev->hw_features |=3D NETIF_F_NTUPLE;
-> >                       dev_info(&priv->pdev->dev,
-> >                                "FLOW STEERING device option enabled wit=
-h max rule limit of %u.\n",
-> > -                              priv->max_flow_rules);
-> > +                              info->max_flow_rules);
-> >               }
-> >       }
+> > +int gve_adminq_get_device_properties(struct gve_priv *priv)
+> > +{
+> > +     int err;
+> > +
+> > +     err =3D gve_adminq_verify_driver_compatibility(priv);
+> > +     if (err) {
+> > +             dev_err(&priv->pdev->dev,
+> > +                     "Could not verify driver compatibility: err=3D%d\=
+n", err);
+> > +             return err;
+> > +     }
+> > +
+> > +     /* Get the initial information we need from the device */
+> > +     err =3D gve_adminq_describe_device(priv);
+> > +     if (err) {
+> > +             dev_err(&priv->pdev->dev,
+> > +                     "Could not get device information: err=3D%d\n", e=
+rr);
+> > +             return err;
+> > +     }
+> > +     return 0;
+> > +}
 >
 > [Severity: Low]
-> With this hunk, the NETIF_F_NTUPLE assignment leaves the describe-device
-> path entirely, so is the comment in gve_probe() now stale?
+> Should this helper also carry the state handling that gve_init_priv()
+> currently performs around the same two commands?
 >
-> drivers/net/ethernet/google/gve/gve_main.c:gve_probe() {
->         /* Set default and supported features.
->          *
->          * Features might be set in other locations as well (such as
->          * `gve_adminq_describe_device`).
->          */
->         dev->hw_features =3D NETIF_F_HIGHDMA;
->         ...
-> }
+> gve_init_priv() in gve_main.c does this before calling
+> gve_adminq_describe_device():
 >
-> A grep of gve_adminq.c at this commit shows no remaining write to
-> priv->dev->hw_features (only dev_err() logging and a read of
-> priv->dev->features in gve_adminq_create_rx_queue()), since the only such
-> write moved to gve_init_priv():
+>         priv->num_registered_pages =3D 0;
 >
->         priv->max_flow_rules =3D device_info->max_flow_rules;
->         if (priv->max_flow_rules)
->                 priv->dev->hw_features |=3D NETIF_F_NTUPLE;
+>         if (skip_describe_device)
+>                 goto setup_device;
 >
-> Should the comment point at gve_init_priv() instead, given a second
-> describe-device implementation (MailboxQ) is being added on top of this?
+>         device_info->queue_format =3D GVE_QUEUE_FORMAT_UNSPECIFIED;
+>         /* Get the initial information we need from the device */
+>         err =3D gve_adminq_describe_device(priv);
+>
+> The queue_format reset matters because gve_adminq_describe_device()
+> consumes the incoming value:
+>
+>         } else if (device_info->queue_format =3D=3D GVE_GQI_RDA_FORMAT) {
+>                 dev_info(&priv->pdev->dev,
+>                          "Driver is running with GQI RDA queue format.\n"=
+);
+>
+> A caller that invokes gve_adminq_get_device_properties() with a stale
+> non-zero device_info.queue_format would keep the previous format and end
+> up with supported_features_mask left at 0, silently disabling jumbo
+> frames, buffer sizes, modify-ring, flow steering, RSS and timestamps.
+>
+> For the record, this does not appear to be reachable anywhere: at this
+> commit gve_adminq_get_device_properties() has no callers, only the
+> prototype in gve_adminq.h and the definition, and gve_init_priv() still
+> calls gve_adminq_describe_device() directly with the reset in place.  By
+> the end of the series the concern is resolved rather than left latent:
+> the single call site in gve_probe() does
+>
+>         priv->device_info.queue_format =3D GVE_QUEUE_FORMAT_UNSPECIFIED;
+>         err =3D gve_adminq_get_device_properties(priv);
+
+Like the AI notes, when gve_adminq_get_device_properties() is actually
+used later in the series, things are setup to run properly.
+>
+> skip_describe_device no longer exists in the driver, and
+> priv->num_registered_pages =3D 0 has moved into gve_setup_device().  Woul=
+d
+> it be worth a note in the commit message that the surrounding state
+> handling stays with the caller?
+>
+> > @@ -1205,20 +1228,53 @@ int gve_adminq_report_stats(struct gve_priv *pr=
+iv, u64 stats_report_len,
+> >       return gve_adminq_execute_cmd(priv, &cmd);
+> >  }
+> >
+> > -int gve_adminq_verify_driver_compatibility(struct gve_priv *priv,
+> > -                                        u64 driver_info_len,
+> > -                                        dma_addr_t driver_info_addr)
+> > +int gve_adminq_verify_driver_compatibility(struct gve_priv *priv)
+> >  {
+> > +     struct gve_driver_info *driver_info;
+> >       union gve_adminq_command cmd;
+> > +     dma_addr_t driver_info_bus;
+> > +     int err;
+> > +
+> > +     driver_info =3D dma_alloc_coherent(&priv->pdev->dev,
+> > +                                      sizeof(struct gve_driver_info),
+> > +                                      &driver_info_bus, GFP_KERNEL);
+> > +     if (!driver_info)
+> > +             return -ENOMEM;
 >
 > [ ... ]
 >
-> > @@ -1595,6 +1618,8 @@ int gve_set_num_ntfy_blks(struct gve_priv *priv)
-> >
-> >  void gve_set_num_queues(struct gve_priv *priv)
-> >  {
-> > +     struct gve_device_info *device_info =3D &priv->device_info;
+> > -     return gve_adminq_execute_cmd(priv, &cmd);
+> > +     err =3D gve_adminq_execute_cmd(priv, &cmd);
 > > +
-> >       priv->tx_cfg.max_queues =3D
-> >               min_t(int, priv->tx_cfg.max_queues, priv->num_ntfy_blks /=
- 2);
-> >       priv->rx_cfg.max_queues =3D
-> > @@ -1602,10 +1627,13 @@ void gve_set_num_queues(struct gve_priv *priv)
-> >
-> >       priv->tx_cfg.num_queues =3D priv->tx_cfg.max_queues;
-> >       priv->rx_cfg.num_queues =3D priv->rx_cfg.max_queues;
-> > -     if (priv->default_num_queues > 0) {
-> > -             priv->tx_cfg.num_queues =3D min_t(int, priv->default_num_=
-queues,
-> > +     if (device_info->default_tx_queues > 0)
-> > +             priv->tx_cfg.num_queues =3D min_t(int,
-> > +                                             device_info->default_tx_q=
-ueues,
-> >                                               priv->tx_cfg.num_queues);
-> > -             priv->rx_cfg.num_queues =3D min_t(int, priv->default_num_=
-queues,
+> > +     /* It's ok if the device doesn't support this */
+> > +     if (err =3D=3D -EOPNOTSUPP)
+> > +             err =3D 0;
 > > +
-> > +     if (device_info->default_rx_queues > 0)
-> > +             priv->rx_cfg.num_queues =3D min_t(int,
-> > +                                             device_info->default_rx_q=
-ueues,
-> >                                               priv->rx_cfg.num_queues);
-> > -     }
+> > +     dma_free_coherent(&priv->pdev->dev,
+> > +                       sizeof(struct gve_driver_info),
+> > +                       driver_info, driver_info_bus);
+> > +     return err;
 > >  }
 >
-> [Severity: Low]
-> Should the now-unused copies of these fields be dropped from struct
-> gve_priv in the same patch?
+> [Severity: Medium]
+> This isn't a bug introduced by this patch, but is it safe to hand
+> driver_info back to the DMA allocator when the admin queue timed out?
 >
-> After this conversion, struct gve_priv still declares:
+> The identical sequence lived in gve_verify_driver_compatibility() in
+> gve_main.c before the move, so this is only being relocated here.
 >
->         bool default_min_ring_size;
->         ...
->         u16 default_num_queues; /* default num queues to set up */
+> On the timeout path gve_adminq_kick_and_wait() has already rung the
+> doorbell and gives up without quiescing the queue:
 >
-> but nothing in drivers/net/ethernet/google/gve/ writes or reads either on=
-e
-> any more.  The last writer of priv->default_num_queues was
-> gve_set_queue_properties(), which became gve_fill_device_info() setting
-> device_info->default_tx_queues/default_rx_queues, and the last reader is
-> this gve_set_num_queues() hunk.  Similarly gve_parse_device_option() now
-> sets priv->device_info.default_min_ring_size and
-> gve_enable_supported_features() reads info->default_min_ring_size.
+>         gve_adminq_kick_cmd(priv, head);
+>         if (!gve_adminq_wait_for_cmd(priv, head)) {
+>                 dev_err(&priv->pdev->dev, "AQ commands timed out, need to=
+ reset AQ\n");
+>                 priv->adminq_timeouts++;
+>                 return -ENOTRECOVERABLE;
+>         }
 >
-> A grep at this commit only finds the declarations:
->
->         drivers/net/ethernet/google/gve/gve.h
->           822:  bool default_min_ring_size;    /* gve_device_info */
->           849:  bool default_min_ring_size;    /* gve_priv, no users */
->           856:  u16 default_num_queues;        /* gve_priv, no users */
->
-> Since the leftover gve_priv fields share names with live gve_device_info
-> members, could later code (for instance the MailboxQ path) read
-> priv->default_num_queues or priv->default_min_ring_size and silently get
-> 0/false?
+> The VERIFY_DRIVER_COMPATIBILITY descriptor still carries
+> driver_info_bus, so after gve_adminq_execute_cmd() returns
+> -ENOTRECOVERABLE the buffer is released while the device may still
+> fetch it.  Can the NIC read driver_info after dma_free_coherent() has
+> returned it to the allocator?
 
-No, MailboxQ won't use these fields. Since this patch was already
-quite substantial, I wanted it focused on the introduction of the
-struct gve_device_info and its usage in the driver. I can send a clean
-up patch later for this and the comment clean-up comment above.
-
+This is a non-issue. If there is a timeout and the device is not
+responding, the driver resets the device and frees the AdminQ.
 >
-> > diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/e=
-thernet/google/gve/gve_main.c
-> > index 9cc343a162712..d3882de584e36 100644
-> > --- a/drivers/net/ethernet/google/gve/gve_main.c
-> > +++ b/drivers/net/ethernet/google/gve/gve_main.c
->
-> [ ... ]
->
-> > @@ -2507,12 +2523,34 @@ static int gve_init_priv(struct gve_priv *priv,=
- bool skip_describe_device)
-> > +     priv->max_flow_rules =3D device_info->max_flow_rules;
-> > +     if (priv->max_flow_rules)
-> > +             priv->dev->hw_features |=3D NETIF_F_NTUPLE;
-> > +
->
-> [ ... ]
+> The same unconditional-free-after-execute pattern is used by
+> gve_adminq_register_page_list(), gve_adminq_execute_extended_cmd() and
+> gve_adminq_describe_device(), so if this is worth addressing it looks
+> like a separate change rather than something for this code movement.
 >
 > --
 > Sashiko AI review =C2=B7 https://netdev-ai.bots.linux.dev/sashiko/#/patch=
