@@ -1,63 +1,62 @@
-Received: from mail-pz2-f11.google.com (mail-pz2-f11.google.com [74.125.228.11])
+Received: from mail-pj2-f5.google.com (mail-pj2-f5.google.com [74.125.227.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648373E5EF2
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 02:51:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7B03E835F
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 02:51:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789095061; cv=none; b=BGcun2g5w25Ibqi33pljqekKi/boTlHhdIks25suSmDmdshfl85XIiipx/mUpejELo7to7uv0kpXmbCu+J+dsmc73PqlXsUH7P4UIhHd+8QR7sEaWKjDR9tEu3lxFFGANHVlMH7r56VhEbVQnkMsgEUtowXuOst11UI3fKPi2Qs=
+	t=1789095072; cv=none; b=l+bmSKxtsq8VxTHhJVKXRRewJEGe5XTKkj+WUBZvyN+mbveVviHCsiWbx8xGXsu3R/qCZ+9gCRPGPmaT5I5LlKh4ZkUoc6+nD780oRQu72eLbwFtQmAdpFwO9X18HBmdL5EigWNELUopxkM3z6BBV/dGFijvQhqj0JQ502zE96Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789095061; c=relaxed/simple;
-	bh=kpSLrnfA/vUl/c5jXmXhseDA+FfRKhJiHbrBlYcKj9w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=apBAknDv2vJIt1iJFLzxKwXr/A1sMYtU7D8rr1LHlyrfFx3gIxViqx5eAMmIVBwSSgJOsY5Qc2J04qDSVOj28WOS5bYsMvJM3+D3Zg0yIZAbn7Qqy/nSPJ9RthQh95YAUwsLVty9t+dn3csKGQmwl27zT+OyJkCfpsP4FlHfu+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n6uL8611; arc=none smtp.client-ip=74.125.228.11
+	s=arc-20240116; t=1789095072; c=relaxed/simple;
+	bh=/1qRY3m/FPGd4V86Exhepsjs1cVobk91A0esgwxfHOA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JvdSust72vrxey1/dDyzP63u2OHtxSxBbA7/18c7J4j7dzKAdDfdrefFXyS+dK52ZD8O+tO/WlHU1pvjLIP9PWBisO49x0kH4XI7Wq/UM4/N6NF6xyfAFioq57ddzw7HXRiFIOQ7oWL00WE0yQ9cDCSUDQYdfA1GD2xWg6HtF6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aHQ2ldoZ; arc=none smtp.client-ip=74.125.227.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n6uL8611"
-Received: by mail-pz2-f11.google.com with SMTP id 41be03b00d2f7-cc1c2963c92so107381a12.0
-        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 19:51:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aHQ2ldoZ"
+Received: by mail-pj2-f5.google.com with SMTP id 98e67ed59e1d1-3965683e9e9so227854a91.1
+        for <bpf@vger.kernel.org>; Thu, 10 Sep 2026 19:51:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789095060; x=1789699860; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=0knv+5p0Y2agkMleFRrU/WI3Z2Rc8uFoKLD1T3IoWWA=;
-        b=n6uL8611J5SkSrtn1xtLmh+Hm9Qobi/n92JY0UXyAlxkb3r3JA8zeQBAmkhlGUw2/m
-         yU8GkirX83k+oqIruVTHU0eDvqKeJQAkPDt5YwUPk47dex2C0YaCFuDPkr5gGwuJ8HD/
-         0jYEoGjt9URJFUtgVA9sQ0uswn0v0eiHMa+wEfjZNTltissmsHSDJnRCHdfABUHcuq9k
-         psRETH2jbsDC6oj0yIdbuTLwx2oFVYMuG8ja/YT1vvq7imX0Z4bAlVSo+d01a5bFzhCQ
-         fwL0S+FJH9BB093WdVC41tUhdYrQca57YR1DbMTMy1q8czFecJ1AsJfMZ5gVdPeX1mnN
-         2C2Q==
+        d=gmail.com; s=20251104; t=1789095067; x=1789699867; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=WLGO9CaahpWipcWtrC1IVp16amqxGQHf0ZihHnYfAkI=;
+        b=aHQ2ldoZNq1zO4R2j0MxVYyDlj5trLpZxh5Uw7TsuiC3rCJbXAWgik4S7BG89ngMy0
+         2UFNqgTQaQnmAQSSP9YaeHTJCy4+5wTGVBWLXcJG3kGRYh/eiFENPiGitCkHhCMTK8BL
+         xBKPYWOq58BsaurGIj+SMt/W/laVI2etpzB8I9pM4yfMZMJtpG4+KgDI88Khsk5m5Uvs
+         7VVPREhfPqkmfTKS/W6A+2/kcxhX33xuqTU0DUXu2F8guSebcYseuc9K+K5kyX39UPKf
+         fg6ch7AI9Ffy/Pxuu0mG5LBaxHBN9XIdLrbrfPnB7F8g/sEcFldQWdpx5uqeBQw0dGd6
+         reMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789095060; x=1789699860;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=0knv+5p0Y2agkMleFRrU/WI3Z2Rc8uFoKLD1T3IoWWA=;
-        b=Lg+7YjTUQK2XUgB6uHNVMq3u32MtkS7KELuhNFmefyuA2E1FZCynt6i8/4DGxtx3H9
-         LzYrutFl+/aArWTbhjeHtRTNJYuCAQmBWEqb3xq7nrIrd7LcSIOrutPO6imdxx+ZRXUZ
-         /cZdKDggIgtuwk0uSp4Y+P0gK4gCZOzMdwokMGKKHb0SLJ++eH8KCaSLnMJmUBnicK3C
-         1atrd2MvNccrgVCPhsoWiUsC42vr1lJUCpFwRpQV78JWrK7Is+dhYVupuiZW12L20zYn
-         6U3qaD0eJHpFa1HzWKUbrQdVUM5+VVvjWvgr+F3mq97wfwfKjiBH+c45UFIvBzkjkBwE
-         8+7g==
-X-Forwarded-Encrypted: i=1; AKwUvBybf3mRCWwD8Fmk8B7XLu1x9WMVegquKKvNIDPwoikreMiN25RqIhIbINFcZOX/Tqq9rTs=@vger.kernel.org
-X-Gm-Message-State: AFuF++niPyHa7GIS3Ca2ZJ1Y9vlCqNNM7MqV+XFztM2Em+WdTZb7gB/k
-	Bym1PpZaFTY3iIZOhsM7errmpVXDk+he9chM/aYv9gHNrJySfZPuV+1w
-X-Gm-Gg: AYBFou0DVOzoTLTXBNGIBvY9xqlo7Vcc1cGWxIZ10xz3pzepN+z+caMtgaLqqctmSTZ
-	wE7qjQ3+1GvCZlh+GgkQ1czTiRgNiO7yjC2KqVglVPd49zd/9lvoxv34nD5AIrUxAAImQuyOKcK
-	qRk6Y3x3GjXTiukeNr5qFwD0nnOAeMYiaWdNTdu7G7iJem/4JJYu2odSoCC9Bh+rucCwPubO/o8
-	o66SdcGpth79nr7NNUZ+dH05hdaaVFNbGVClUJi05qVDZtH3A3LwHbdZ5KEXdtGz7LWG4cVNMk8
-	rK5ATc6t36EW1aW7Jok8VSDyNOcLyjutrJrHb4DDtxz4a1mtnUWjAf/WRxMM363LS80F5RSYF+Y
-	dNA5rvlfe4f1P+bvnoKBppXmFMXVHEgHiVL+XGBY+7EoBctzU4u92NoTSS16A/VosKOmaFNs5J+
-	kk2j5uOqkaeEspS+5bwrzl+CfN89RLZPr128TcJioLeO885AtXWvEhbBlsRY95Al6+
-X-Received: by 2002:a05:6a00:a02:b0:847:770f:da4c with SMTP id d2e1a72fcca58-86b32df12d7mr3002967b3a.16.1789095059576;
-        Thu, 10 Sep 2026 19:50:59 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1789095067; x=1789699867;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=WLGO9CaahpWipcWtrC1IVp16amqxGQHf0ZihHnYfAkI=;
+        b=rY4c3TFKi1f/feowtAw5Hx1TEQfs8OEAT+5/c5d4ER9M0oaNv0XP5z6rXM7oZNA0QW
+         QdwG3vhuxxQ0hJCpqXlkApkpkBQdfQXBfW1U9AAF1y3XaD6prilHRriTb/IgjB6bvpj2
+         WGwa5eZD8XRvMcjM/+C0mIEPdBGP79jGkzyaVpNGhYkFNgeHbHJGAy5imhSa/Ml05YUa
+         wKlUsru8w/Yax3T7ja6IrmuW8FpplgyXBLXm47VNHxTHfZkCmcc26w+eiparUrVvNwOs
+         cT8oKd+wxWno/x37MlEvenGlLTILT7JGQRx3DgMgEO+41kvjHgmephj/j4nT1l48J3C9
+         Mi8g==
+X-Forwarded-Encrypted: i=1; AKwUvByRFplSNiGWa6i4zCWALKCH6PEN4EiihpK/wOmDwknWKLaMbS4cGooOTBpF+SD+V91E/PY=@vger.kernel.org
+X-Gm-Message-State: AFuF++k5OGQllUbysdgjtxyVjf2YiTjRfaa6dAiR7JEiNS+g9zkMNNbp
+	pyXVr34ZoJEORYzV4252AGS1SHcRa8wzZAPbQlMf0dNPawguZvJjiUpm
+X-Gm-Gg: AYBFou25YUXNSsLI97vNcD01nEhCjT4fCNyvrb5fX7i2UOzZtKnqWFgJMuk14hLB8Vl
+	B20D0PtvXNNV7Y3cgePxgWh1h4x5qztrcTtIBDF1JhH+yAmA9Zf46uUVsZGF8RjMTGV3okVmKmQ
+	ZQYvuM52C640cUO/hzp8eYLQA2d/V9JY64dCKmaG7soc69U/lnqKoqrGdjh6kGrPUMiqoXPFxyW
+	ca66HR/HpW0Z2MybPAaIgUUEMg2v2BxTjodiE0lupd/jDkkVjx14uxD3MwvYuEVooYHL0YAysWJ
+	KYVE60QokBCuIL1Qv58XMFtiqZfFQVU/WAob10FtFVjfu/fJ649olSGl7nizdzrrqMMwlFlHVrY
+	ur9KSINutdVmIlF+9NERcby42/PzSsgSjeYUwp/zkF3RicE+fvvf/Od92ipkqbxbdIljMSJYkqF
+	bz7SkJUuqjCsgEFMdtgh5HgniAEaT0Zpc9LTaQ+fKdtP5kC8sS1+AydLXh/orVYy4pqX5gtWTUW
+	EQ=
+X-Received: by 2002:a17:90b:5246:b0:398:d2a0:87ff with SMTP id 98e67ed59e1d1-39d9bc67660mr3396866a91.1.1789095066655;
+        Thu, 10 Sep 2026 19:51:06 -0700 (PDT)
 Received: from 192.168.5.7 ([69.5.53.41])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-86b29bb8f28sm385299b3a.40.2026.09.10.19.50.56
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39d95095946sm2363350a91.5.2026.09.10.19.51.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 19:50:59 -0700 (PDT)
+        Thu, 10 Sep 2026 19:51:06 -0700 (PDT)
 From: Tianyi Chen <diannaaav@gmail.com>
 To: qmo@kernel.org,
 	bpf@vger.kernel.org
@@ -65,12 +64,10 @@ Cc: andrii@kernel.org,
 	eddyz87@gmail.com,
 	ihor.solodrai@linux.dev,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Cover symbolic bpftool map creation flags
-Date: Fri, 11 Sep 2026 10:50:44 +0800
-Message-ID: <20260911025044.190540-3-diannaaav@gmail.com>
+Subject: [PATCH bpf-next v4 0/2] bpftool: Add recursive map dumping
+Date: Fri, 11 Sep 2026 10:50:58 +0800
+Message-ID: <20260911025100.190706-1-diannaaav@gmail.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260911025044.190540-1-diannaaav@gmail.com>
-References: <20260911025044.190540-1-diannaaav@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,126 +76,55 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Tianyi Chen <hi@tychen.cc>
+Add -r/--recursive to dump the contents of referenced inner maps after
+the selected roots, with deduplication and bounded descriptor use.
+The second patch covers output formats, shared and empty maps,
+unsupported lookups, and operation under a low descriptor limit.
 
-Check numeric and symbolic map creation flags, including combined and
-repeated names, against map information read independently with libbpf.
-Exercise malformed names and lists, update-only flags, empty input and
-numeric range errors. Verify rejected input leaves no pinned map.
+Changes in v4:
+- Clarify that the map-of-maps helper returns whether the map is outer.
+- Return -1 consistently after reporting failure to track a root map.
+- Explain the descriptor bound and deferred ID lookup in the commit
+  description.
+- Rebase onto current bpf-next and use Assisted-by: LLM.
 
-Assisted-by: LLM
-Signed-off-by: Tianyi Chen <hi@tychen.cc>
----
- .../bpf/prog_tests/bpftool_map_flags.c        | 100 ++++++++++++++++++
- 1 file changed, 100 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c
+The earlier functional review changes, including closing each discovered
+inner-map FD after dumping it, are retained.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c
-new file mode 100644
-index 000000000000..d617b43273a8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_flags.c
-@@ -0,0 +1,100 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <errno.h>
-+#include <unistd.h>
-+#include <bpf/bpf.h>
-+#include <bpftool_helpers.h>
-+#include <test_progs.h>
-+
-+static const struct map_flags_test {
-+	const char *name;
-+	const char *flags;
-+	__u32 expected_flags;
-+	const char *error;
-+} tests[] = {
-+	{ "zero", "0", 0 },
-+	{ "decimal", "129", BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
-+	{ "hexadecimal", "0x81", BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
-+	{ "octal", "0201", BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
-+	{ "positive_sign", "+1", BPF_F_NO_PREALLOC },
-+	{ "single_name", "BPF_F_NO_PREALLOC", BPF_F_NO_PREALLOC },
-+	{ "combined_names", "BPF_F_NO_PREALLOC,BPF_F_RDONLY_PROG",
-+	  BPF_F_NO_PREALLOC | BPF_F_RDONLY_PROG },
-+	{ "repeated_name", "BPF_F_NO_PREALLOC,BPF_F_NO_PREALLOC", BPF_F_NO_PREALLOC },
-+	{ "unknown_name", "BPF_F_NOT_A_MAP_FLAG", 0, "can't parse" },
-+	{ "other_command_flag", "BPF_F_PATH_FD", 0, "can't parse" },
-+	{ "update_flag", "BPF_F_LOCK", 0, "can't parse" },
-+	{ "abbreviated_name", "BPF_F_NO_PRE", 0, "can't parse" },
-+	{ "lowercase_name", "bpf_f_no_prealloc", 0, "can't parse" },
-+	{ "empty", "", 0, "can't parse" },
-+	{ "whitespace", " ", 0, "can't parse" },
-+	{ "empty_list", ",", 0, "can't parse" },
-+	{ "leading_comma", ",BPF_F_NO_PREALLOC", 0, "can't parse" },
-+	{ "trailing_comma", "BPF_F_NO_PREALLOC,", 0, "can't parse" },
-+	{ "empty_element", "BPF_F_NO_PREALLOC,,BPF_F_RDONLY_PROG", 0, "can't parse" },
-+	{ "number_then_name", "1,BPF_F_RDONLY_PROG", 0, "can't parse" },
-+	{ "name_then_number", "BPF_F_NO_PREALLOC,128", 0, "can't parse" },
-+	{ "numeric_list", "1,128", 0, "can't parse" },
-+	{ "whitespace_in_list", "BPF_F_NO_PREALLOC, BPF_F_RDONLY_PROG", 0, "can't parse" },
-+	{ "overflow_u32", "4294967296", 0, "can't parse" },
-+	{ "overflow_hex", "0x100000000", 0, "can't parse" },
-+	{ "overflow_u64", "18446744073709551616", 0, "can't parse" },
-+	{ "negative", "-1", 0, "can't parse" },
-+	/* Numeric bits unknown to bpftool must still reach the kernel. */
-+	{ "all_bits", "0xffffffff", 0, "map create failed" },
-+	/* The kernel validates combinations of known map creation flags. */
-+	{ "invalid_combination", "BPF_F_RDONLY,BPF_F_WRONLY", 0, "map create failed" },
-+};
-+
-+static void test_map_flags(const struct map_flags_test *test, const char *path)
-+{
-+	char cmd[MAX_BPFTOOL_CMD_LEN], output[1024] = {};
-+	struct bpf_map_info info = {};
-+	__u32 info_len = sizeof(info);
-+	int fd, err;
-+
-+	/* Let the flags parser handle negative numbers instead of getopt(). */
-+	err = snprintf(cmd, sizeof(cmd),
-+		       "-- map create %s type hash key 4 value 4 entries 1 name flags_test flags '%s' 2>&1",
-+		       path, test->flags);
-+	if (!ASSERT_GT(err, 0, "format_command") ||
-+	    !ASSERT_LT(err, sizeof(cmd), "command_length"))
-+		return;
-+
-+	err = get_bpftool_command_output(cmd, output, sizeof(output));
-+	if (test->error) {
-+		ASSERT_NEQ(err, 0, "reject_flags");
-+		ASSERT_HAS_SUBSTR(output, test->error, "error_message");
-+		err = access(path, F_OK);
-+		ASSERT_EQ(err, -1, "no_pin");
-+		ASSERT_EQ(errno, ENOENT, "pin_absent");
-+		goto cleanup;
-+	}
-+	if (!ASSERT_OK(err, "create_map"))
-+		goto cleanup;
-+
-+	fd = bpf_obj_get(path);
-+	if (!ASSERT_OK_FD(fd, "open_map"))
-+		goto cleanup;
-+	if (ASSERT_OK(bpf_map_get_info_by_fd(fd, &info, &info_len), "map_info"))
-+		ASSERT_EQ(info.map_flags, test->expected_flags, "map_flags");
-+	close(fd);
-+cleanup:
-+	unlink(path);
-+}
-+
-+void test_bpftool_map_flags(void)
-+{
-+	char dir[] = "/sys/fs/bpf/bpftool_flags_XXXXXX";
-+	char path[sizeof(dir) + sizeof("/map")];
-+	int i;
-+
-+	if (!ASSERT_OK_PTR(mkdtemp(dir), "create_pin_dir"))
-+		return;
-+	snprintf(path, sizeof(path), "%s/map", dir);
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		if (test__start_subtest(tests[i].name))
-+			test_map_flags(&tests[i], path);
-+	}
-+	ASSERT_OK(rmdir(dir), "remove_pin_dir");
-+}
+v3: https://lore.kernel.org/r/178874362960.1415955.17339804697296063298.recursive-v3-1@tychen.cc
+Request: https://github.com/libbpf/bpftool/issues/58
+
+The previous version's CI PR expired after repeated "Patch is empty"
+reports. The revised series applies cleanly to the current tree and is
+sent as a new thread using git format-patch and git send-email.
+
+Validation:
+- Built bpftool and its manual pages, and built the focused selftest
+  runner with LLVM 20.
+- All 12 bpftool_map_dump subtests passed with no skips or failures
+  in an x86-64 KVM guest running Linux 7.3.0-rc2 from current bpf/master.
+- The four bpftool series were tested together: all 69 subtests passed.
+  The cpumask suite (36 subtests) and test_maps also passed with no skips.
+- Bash syntax and the existing bpftool synchronization checks passed.
+
+This was a focused run; unrelated selftests requiring unavailable kernel
+features were excluded from the build with PERMISSIVE=1.
+
+Tianyi Chen (2):
+  bpftool: Add recursive map dumping
+  selftests/bpf: Cover recursive bpftool map dumps
+
+ .../bpf/bpftool/Documentation/bpftool-map.rst |  22 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |   2 +-
+ tools/bpf/bpftool/main.c                      |   7 +-
+ tools/bpf/bpftool/main.h                      |   1 +
+ tools/bpf/bpftool/map.c                       | 131 ++++-
+ .../bpf/prog_tests/bpftool_map_dump.c         | 465 ++++++++++++++++++
+ 6 files changed, 617 insertions(+), 11 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
+
+
+base-commit: af0b84a9215d951d16f26b7ee34353b970cf5d4e
 -- 
 2.55.0
 
