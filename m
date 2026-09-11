@@ -1,147 +1,116 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818853D4118
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 22:26:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70213D3339;
+	Fri, 11 Sep 2026 22:30:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789165612; cv=none; b=RCZWVTtUedzQ+XviS0BJLP2woYOMhn3d0FX02rzYb85epebAcebCm6YwZJ4W2IOcB3LpqP2+dBcUYpDMTHwCVQeZLm/ZGNHJgW7kM1HSsupNXzzPGCoEGhzt9ESHIKtAr99NvJyOHhDVOvQiZe/JA8LZHuzfqSMPs5VZlQ7F1sk=
+	t=1789165819; cv=none; b=Bp/goz8PRRBI1tDoUK/AVyhUJNF0NE8+PXV21xy0zwo2s268D7b2X4BWJcubB8qBH0oRLLNbFNAkbijo0uGXUISCzoj0lT5D7cQqHs7gVIozPJylMERm6SY9Hj8Pl6F8YMkr/TlM38fW2zQ7BreDeQWJntnN+O6KCIlbIofra6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789165612; c=relaxed/simple;
-	bh=DStV3sp1pc5hcMm6xx0gQE71u2SYCMU0UmLH2xVLeAQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=O2cuFS7twbVYaom6uYihpESaBEOYc/j7hIJ24xJkT324EkaEO5TlnQeAXEikZz9MaYZ3yLMpyj76pDPWD+vHab+4hsqcX1P/92/xsbf5xFHBj2cJmlAG+cM0rmVK1xNGH+dKX6+nhptw23yK/N6dNEY530M/8CqdFV+uBZOzz/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O9f1DdL3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789165819; c=relaxed/simple;
+	bh=e8yVe9qIqjoioS5C7h20iphB56OPQ6veH4x4Pj5/lAQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=f+aI6O2MbBWynSSZw9KFzakEIa5R2X5cZWbLX7ZXlUyjRB65xQ7qmsac4QYlsXPkJ9FnyA+CpZWAE15ruZPfUi+Fcebo9URI5iwy4xGp5UiTwRCBJG4Y/u0yuCfS32/aXg3rG0hEn0Vo2MIW4n/vYAGd6jHcKFaasZMbd8tv3Jk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sva3XPKR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O9f1DdL3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72A931F00893;
-	Fri, 11 Sep 2026 22:26:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sva3XPKR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CA351F000FF;
+	Fri, 11 Sep 2026 22:30:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789165602;
-	bh=mkPPHYK9YzPqKUf38l8o9B8t+QvKvDjha6pIHWNmk4I=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=O9f1DdL3UklUaX5saDi4LZMTB7rmCjJ6lhVR5/sGG1M6xDo+vhBN7z0Wx7Prac0qx
-	 y0sdqYv0cDY1elM4nSu2HNUZEyz2RJ75tIn92YQo+EQG0WHsYFzUjk1CS1S146VFIJ
-	 rJt95Fp8GuulE+bxyixmOdXlp0se3cvFtvkhzfy3aVUu4jhFRIxMqgyx/oz+Ey5fzq
-	 QsF1R/1TE0vs/BPJ7uFSGd0BmYAZviVtpGfM94FgoCVQTYV1UjZH1ZboqLfmr/zUxO
-	 NwmsdlznLUKiI7ki4srb7CUR6o0sxhBGeXsSYIJAchI0CJQsDKEIdqis1GR3ukA5uQ
-	 2zbHFdvgftCrw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 06/23] bpf: Unify kfunc argument kinds with
- enum bpf_arg_type
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Amery Hung" <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260911220415.1396439-7-ameryhung@gmail.com>
-References: <20260911220415.1396439-1-ameryhung@gmail.com>
- <20260911220415.1396439-7-ameryhung@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 11 Sep 2026 22:26:42 +0000
-Message-Id: <20260911222642.72A931F00893@smtp.kernel.org>
+	s=k20260515; t=1789165817;
+	bh=jSlyNHdS9fii1fOyMnpNZJZSuNeAq37ngDR+QTaHy2Q=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Sva3XPKRX9HlRA/K2voQSsV3oTveqMaHFcapkkCHCD9IJqVZNgpjaUkBoOAWk/Lud
+	 p6QWTv7ZttCaY62xBfTdfAEnJzvjknSdsSOfIYbp3pNl0j+7+/QVKlfADxRLlAfZp/
+	 AQvsOj6nXqmyX4+XNTL8F+ifeTXELjNlx1sy9M0XURuROHAa6kcOWIB16RgnU0a725
+	 FrCpanuXt2Q3PozVuKLJP33pBZiKNDigUnEQRwfQc2Nwdmq+08sHuCn4EkzBRpojha
+	 vGs9z834IDPHTL9uQ1HVGFv9F7pnUa2ZDOUEjA8sVuq4yU8w8r1R+htM8Pqu97hI4a
+	 51UtZr6FvslMQ==
+Content-Type: multipart/mixed; boundary="===============8230321728291267727=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <c440fa97680eae9966579d51586c2e6b9936bfc3157225269166e1c133515f8c@mail.kernel.org>
+In-Reply-To: <20260911213340.3767930-3-main.kalliope@gmail.com>
+References: <20260911213340.3767930-3-main.kalliope@gmail.com>
+Subject: Re: [PATCH bpf-next v4 2/3] MIPS: uasm: Add signed div/mod and sign-extension emitters
+From: bot+bpf-ci@kernel.org
+To: main.kalliope@gmail.com,tsbogend@alpha.franken.de,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,johan.almbladh@anyfinetworks.com,paulburton@kernel.org
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,linux-mips@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,philmd@oss.qualcomm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 11 Sep 2026 22:30:16 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+--===============8230321728291267727==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Pre-existing issues:
-- [High] Missing negative bounds check for enum parameter used as array ind=
-ex in kfuncs allows out-of-bounds kernel memory read.
---
+> diff --git a/arch/mips/include/asm/uasm.h b/arch/mips/include/asm/uasm.h
+> index b43bfd445252..adea35df0f8d 100644
+> --- a/arch/mips/include/asm/uasm.h
+> +++ b/arch/mips/include/asm/uasm.h
+> @@ -85,15 +85,20 @@ Ip_u1u2(_ctc1);
+>  Ip_u2u1(_ctcmsa);
+>  Ip_u2u1s3(_daddiu);
+>  Ip_u3u1u2(_daddu);
+> +Ip_u1u2(_ddiv);
+> +Ip_u3u1u2(_ddiv_r6);
+>  Ip_u1u2(_ddivu);
+>  Ip_u3u1u2(_ddivu_r6);
 
-commit 187c3e4699e70b4609c73e9f7618935e9265b164
-Author: Amery Hung <ameryhung@gmail.com>
-Date:   Fri Sep 11 22:03:58 2026 +0000
-
-    bpf: Unify kfunc argument kinds with enum bpf_arg_type
-
-    This commit folds the kfunc argument kinds into enum bpf_arg_type. It
-    reuses ARG_SCALAR and maps kfunc callbacks to ARG_PTR_TO_FUNC, adding
-    enumerators for kfunc-only kinds to allow check_kfunc_args() to carry o=
-ne
-    classification throughout verification.
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 5d21bee458055..dc849e6708762 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
 [ ... ]
-> @@ -12178,15 +12145,15 @@ get_kfunc_arg_type(struct bpf_verifier_env *env=
-, struct bpf_call_arg_meta *meta,
->  	/* Scalar arguments are classified from their BTF suffix/name alone. */
->  	if (btf_type_is_scalar(t)) {
->  		if (is_kfunc_arg_constant(meta->btf, &args[arg]))
-> -			return KF_ARG_CONST;
-> +			return ARG_CONST_SCALAR;
->  		if (is_kfunc_arg_const_mem_size(meta->btf, &args[arg]))
-> -			return KF_ARG_CONST_MEM_SIZE;
-> +			return ARG_CONST_MEM_SIZE;
->  		if (is_kfunc_arg_mem_size(meta->btf, &args[arg]))
-> -			return KF_ARG_MEM_SIZE;
-> +			return ARG_MEM_SIZE;
->  		if (is_kfunc_arg_scalar_with_name(meta->btf, &args[arg], "rdonly_buf_s=
-ize") ||
->  		    is_kfunc_arg_scalar_with_name(meta->btf, &args[arg], "rdwr_buf_siz=
-e"))
-> -			return KF_ARG_CONST_ALLOC_SIZE_OR_ZERO;
-> -		return KF_ARG_ANYTHING;
-> +			return ARG_CONST_ALLOC_SIZE_OR_ZERO;
-> +		return ARG_SCALAR;
->  	}
 
-[Severity: High]
-This isn't a bug introduced by this patch, but while reviewing how the
-verifier classifies kfunc scalar/enum arguments, I noticed a pre-existing
-issue where several memcg kfuncs take enums as array indices but lack
-negative bounds checks.
+> @@ -156,6 +162,8 @@ Ip_u2s3u1(_sb);
+>  Ip_u2s3u1(_sc);
+>  Ip_u2s3u1(_scd);
+>  Ip_u2s3u1(_sd);
+> +Ip_u2u1(_seb);
+> +Ip_u2u1(_seh);
+>  Ip_u3u1u2(_seleqz);
+>  Ip_u3u1u2(_selnez);
+>  Ip_u2s3u1(_sh);
 
-Because the verifier treats enums as signed integers and does not enforce
-valid enum ranges, a BPF program can pass negative values to these kfuncs
-to bypass the upper-bound checks and read out-of-bounds kernel memory.
+[ ... ]
 
-For example, in mm/bpf_memcontrol.c:bpf_mem_cgroup_memory_events():
+> diff --git a/arch/mips/mm/uasm.c b/arch/mips/mm/uasm.c
+> index 125140979d62..139afb0e14cd 100644
+> --- a/arch/mips/mm/uasm.c
+> +++ b/arch/mips/mm/uasm.c
+> @@ -49,19 +49,21 @@ enum opcode {
 
-__bpf_kfunc unsigned long bpf_mem_cgroup_memory_events(struct mem_cgroup *m=
-emcg,
-						       enum memcg_memory_event event)
-{
-	if (unlikely(event >=3D MEMCG_NR_MEMORY_EVENTS))
-		return (unsigned long)-1;
+[ ... ]
 
-	return atomic_long_read(&memcg->memory_events[event]);
-}
+>  	insn_sb, insn_sc, insn_scd, insn_seb, insn_seh,
+>  	insn_seleqz, insn_selnez, insn_sd, insn_sh, insn_sll,
 
-A negative event value bypasses the signed upper bounds check and directly
-indexes memory_events[-1].
+[ ... ]
 
-A similar missing negative bounds check exists in
-mm/bpf_memcontrol.c:bpf_mem_cgroup_vm_events():
+> @@ -353,6 +361,8 @@ I_u2s3u1(_sb)
+>  I_u2s3u1(_sc)
+>  I_u2s3u1(_scd)
+>  I_u2s3u1(_sd)
+> +I_u2u1(_seb)
+> +I_u2u1(_seh)
+>  I_u3u1u2(_seleqz)
+>  I_u3u1u2(_selnez)
+>  I_u2s3u1(_sh)
 
-__bpf_kfunc unsigned long bpf_mem_cgroup_vm_events(struct mem_cgroup *memcg,
-						   enum vm_event_item event)
-{
-	if (unlikely(!memcg_vm_event_item_valid(event)))
-		return (unsigned long)-1;
+This isn't a bug, but would it read better to add the SEB and SEH emitters
+together with their first caller in the BPF_MOVSX series?
 
-The negative integer is forwarded to mm/memcontrol.c:memcg_vm_event_item_va=
-lid()
-which also lacks a lower bound check:
+A tree-wide search at series end shows uasm_i_seb() and uasm_i_seh() have
+no callers yet. The six division emitters (div, div_r6, mod, ddiv, ddiv_r6,
+dmod) added alongside them do get used by the final patch in this series.
+The commit message notes SEB/SEH are for a different follow-on series,
+and CONFIG_CPU_MICROMIPS kernels would hit build_insn()'s panic for them
+since arch/mips/mm/uasm-micromips.c isn't updated with their encodings.
 
-bool memcg_vm_event_item_valid(enum vm_event_item idx)
-{
-	if (idx >=3D NR_VM_EVENT_ITEMS)
-		return false;
 
-	return !BAD_STAT_IDX(memcg_events_index(idx));
-}
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Could this allow users capable of loading BPF programs to bypass KASLR or
-leak adjacent kernel heap memory?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260911220415.1396=
-439-1-ameryhung@gmail.com?part=3D6
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34651585043
+--===============8230321728291267727==--
