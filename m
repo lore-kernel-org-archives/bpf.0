@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4DFB3BED6A
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 22:19:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818853D4118
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 22:26:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789165197; cv=none; b=l7M0ICf3uts3DT04nK4SWHoQdtbBW4XkIXDWR9Fo2FmmdG8o1kXmYtht5+yWkisxKosVKSHwcZsQ9u/Cm3Y7b2yqQjpe9y+jIkTVQG9zSq9hY9IrRU5afxadrA61UYD66uurE/287vkH0bflDdSpODpnQWmtwj9JVRBQAQ7b7Uk=
+	t=1789165612; cv=none; b=RCZWVTtUedzQ+XviS0BJLP2woYOMhn3d0FX02rzYb85epebAcebCm6YwZJ4W2IOcB3LpqP2+dBcUYpDMTHwCVQeZLm/ZGNHJgW7kM1HSsupNXzzPGCoEGhzt9ESHIKtAr99NvJyOHhDVOvQiZe/JA8LZHuzfqSMPs5VZlQ7F1sk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789165197; c=relaxed/simple;
-	bh=Lt6Sfke4WcWzt+tpBVWjX1Hgbiek91kk8TJbP/Bvets=;
+	s=arc-20240116; t=1789165612; c=relaxed/simple;
+	bh=DStV3sp1pc5hcMm6xx0gQE71u2SYCMU0UmLH2xVLeAQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=USieoaAcUdJ4iEIGKs5JMmiXA0DliyqWqeuSlgMdH9xva0O7TMrX7XGN6ju0DSY7le7YiIy3jd3Prc2NBuUaXQZJnfmlkdW9N2SFNcC7DUG8Tx56Uu2CUN3EUobrzldhP4dmcx/8gW8QZ9Y+wluC1czkQleJnv8wTqdD1mu1tX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X0vchACr; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=O2cuFS7twbVYaom6uYihpESaBEOYc/j7hIJ24xJkT324EkaEO5TlnQeAXEikZz9MaYZ3yLMpyj76pDPWD+vHab+4hsqcX1P/92/xsbf5xFHBj2cJmlAG+cM0rmVK1xNGH+dKX6+nhptw23yK/N6dNEY530M/8CqdFV+uBZOzz/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O9f1DdL3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X0vchACr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F62A1F00893;
-	Fri, 11 Sep 2026 22:19:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O9f1DdL3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72A931F00893;
+	Fri, 11 Sep 2026 22:26:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789165196;
-	bh=E5EHD2mVzSlENXXvAmNNnpB09EDVaBe5QAPMbRujQzA=;
+	s=k20260515; t=1789165602;
+	bh=mkPPHYK9YzPqKUf38l8o9B8t+QvKvDjha6pIHWNmk4I=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=X0vchACr4XqQbWzVTKXnuO2cJN9UVpIDlXX6CPVcvEyRnzolzYA5KHFchppbG30px
-	 tMvriXGDB9Ebjz+5OkH1Ws43/mZs1GHsQ1g/UCEhbP6OgQKpm1I4haHdKA1jdhm9Ne
-	 L8ErX3V/n4jWm9BRYs4pAVTnpjCyBQiLnKLsZskWS3Z2P5cQKjVAkr5CMG/ZTUEB1Y
-	 gnbCELPkJnufdYbTnH/SItDtLH0CrbkkrX+9TploZB4rfBBvgWxvIwjWeu5KUVGmZO
-	 YNpk0pYy03Uoo8C14b1gdENAnqFX5ZrWI+igjJUE5HBCQM70JEdZdHE2gxBJXgVQmD
-	 WAI1lEAgFukPA==
+	b=O9f1DdL3UklUaX5saDi4LZMTB7rmCjJ6lhVR5/sGG1M6xDo+vhBN7z0Wx7Prac0qx
+	 y0sdqYv0cDY1elM4nSu2HNUZEyz2RJ75tIn92YQo+EQG0WHsYFzUjk1CS1S146VFIJ
+	 rJt95Fp8GuulE+bxyixmOdXlp0se3cvFtvkhzfy3aVUu4jhFRIxMqgyx/oz+Ey5fzq
+	 QsF1R/1TE0vs/BPJ7uFSGd0BmYAZviVtpGfM94FgoCVQTYV1UjZH1ZboqLfmr/zUxO
+	 NwmsdlznLUKiI7ki4srb7CUR6o0sxhBGeXsSYIJAchI0CJQsDKEIdqis1GR3ukA5uQ
+	 2zbHFdvgftCrw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 05/23] bpf: Clarify unused and scalar
- function argument types
+Subject: Re: [PATCH bpf-next v2 06/23] bpf: Unify kfunc argument kinds with
+ enum bpf_arg_type
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Amery Hung" <ameryhung@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260911220415.1396439-6-ameryhung@gmail.com>
+In-Reply-To: <20260911220415.1396439-7-ameryhung@gmail.com>
 References: <20260911220415.1396439-1-ameryhung@gmail.com>
- <20260911220415.1396439-6-ameryhung@gmail.com>
+ <20260911220415.1396439-7-ameryhung@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 11 Sep 2026 22:19:55 +0000
-Message-Id: <20260911221956.1F62A1F00893@smtp.kernel.org>
+Date: Fri, 11 Sep 2026 22:26:42 +0000
+Message-Id: <20260911222642.72A931F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,78 +49,99 @@ Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
 
 Pre-existing issues:
-- [High] Out-of-bounds array access in memcg kfuncs (`bpf_mem_cgroup_memory=
-_events` and `bpf_mem_cgroup_vm_events`) due to missing negative bounds che=
-cks for enum arguments.
+- [High] Missing negative bounds check for enum parameter used as array ind=
+ex in kfuncs allows out-of-bounds kernel memory read.
 --
 
-commit a779fb1811c9555981f50c14118ca53a762cdd76
+commit 187c3e4699e70b4609c73e9f7618935e9265b164
 Author: Amery Hung <ameryhung@gmail.com>
+Date:   Fri Sep 11 22:03:58 2026 +0000
 
-bpf: Clarify unused and scalar function argument types
+    bpf: Unify kfunc argument kinds with enum bpf_arg_type
 
-This commit renames ARG_DONTCARE to ARG_UNUSED to indicate it terminates
-argument iteration. It also reuses ARG_SCALAR for integer, enum, and=20
-exception callback arguments to reflect that they require SCALAR_VALUE.
+    This commit folds the kfunc argument kinds into enum bpf_arg_type. It
+    reuses ARG_SCALAR and maps kfunc callbacks to ARG_PTR_TO_FUNC, adding
+    enumerators for kfunc-only kinds to allow check_kfunc_args() to carry o=
+ne
+    classification throughout verification.
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 42d89db5df07b..5d21bee458055 100644
+> index 5d21bee458055..dc849e6708762 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
 [ ... ]
-> @@ -9818,7 +9815,7 @@ static int btf_check_func_arg_match(struct bpf_veri=
-fier_env *env, int subprog,
->  		struct bpf_reg_state *reg =3D get_func_arg_reg(caller, regs, i);
->  		struct bpf_subprog_arg_info *arg =3D &sub->args[i];
-> =20
-> -		if (arg->arg_type =3D=3D ARG_ANYTHING) {
-> +		if (arg->arg_type =3D=3D ARG_SCALAR) {
->  			if (reg->type !=3D SCALAR_VALUE) {
->  				bpf_log(log, "%s is not a scalar\n", reg_arg_name(env, argno));
->  				return -EINVAL;
+> @@ -12178,15 +12145,15 @@ get_kfunc_arg_type(struct bpf_verifier_env *env=
+, struct bpf_call_arg_meta *meta,
+>  	/* Scalar arguments are classified from their BTF suffix/name alone. */
+>  	if (btf_type_is_scalar(t)) {
+>  		if (is_kfunc_arg_constant(meta->btf, &args[arg]))
+> -			return KF_ARG_CONST;
+> +			return ARG_CONST_SCALAR;
+>  		if (is_kfunc_arg_const_mem_size(meta->btf, &args[arg]))
+> -			return KF_ARG_CONST_MEM_SIZE;
+> +			return ARG_CONST_MEM_SIZE;
+>  		if (is_kfunc_arg_mem_size(meta->btf, &args[arg]))
+> -			return KF_ARG_MEM_SIZE;
+> +			return ARG_MEM_SIZE;
+>  		if (is_kfunc_arg_scalar_with_name(meta->btf, &args[arg], "rdonly_buf_s=
+ize") ||
+>  		    is_kfunc_arg_scalar_with_name(meta->btf, &args[arg], "rdwr_buf_siz=
+e"))
+> -			return KF_ARG_CONST_ALLOC_SIZE_OR_ZERO;
+> -		return KF_ARG_ANYTHING;
+> +			return ARG_CONST_ALLOC_SIZE_OR_ZERO;
+> +		return ARG_SCALAR;
+>  	}
 
 [Severity: High]
-This is a pre-existing issue, but while reviewing how the verifier treats
-enum arguments as SCALAR_VALUE, I noticed that the memcg kfuncs might be
-vulnerable to negative enum values.
+This isn't a bug introduced by this patch, but while reviewing how the
+verifier classifies kfunc scalar/enum arguments, I noticed a pre-existing
+issue where several memcg kfuncs take enums as array indices but lack
+negative bounds checks.
 
-Because the BPF verifier treats enum arguments as scalars without enforcing
-their ranges, a BPF program can pass a negative value (like -1).=20
+Because the verifier treats enums as signed integers and does not enforce
+valid enum ranges, a BPF program can pass negative values to these kfuncs
+to bypass the upper-bound checks and read out-of-bounds kernel memory.
 
-In bpf_mem_cgroup_memory_events(), the bounds check uses a signed
-comparison:
+For example, in mm/bpf_memcontrol.c:bpf_mem_cgroup_memory_events():
 
-mm/bpf_memcontrol.c:bpf_mem_cgroup_memory_events() {
+__bpf_kfunc unsigned long bpf_mem_cgroup_memory_events(struct mem_cgroup *m=
+emcg,
+						       enum memcg_memory_event event)
+{
 	if (unlikely(event >=3D MEMCG_NR_MEMORY_EVENTS))
 		return (unsigned long)-1;
 
 	return atomic_long_read(&memcg->memory_events[event]);
 }
 
-If event is negative, does this code overflow the memory_events[] array
-and allow an out-of-bounds read?
+A negative event value bypasses the signed upper bounds check and directly
+indexes memory_events[-1].
 
-Similarly, in bpf_mem_cgroup_vm_events(), it relies on
-memcg_vm_event_item_valid() for bounds checking:
+A similar missing negative bounds check exists in
+mm/bpf_memcontrol.c:bpf_mem_cgroup_vm_events():
 
-mm/bpf_memcontrol.c:bpf_mem_cgroup_vm_events() {
+__bpf_kfunc unsigned long bpf_mem_cgroup_vm_events(struct mem_cgroup *memcg,
+						   enum vm_event_item event)
+{
 	if (unlikely(!memcg_vm_event_item_valid(event)))
 		return (unsigned long)-1;
-}
 
-mm/memcontrol.c:memcg_vm_event_item_valid() {
+The negative integer is forwarded to mm/memcontrol.c:memcg_vm_event_item_va=
+lid()
+which also lacks a lower bound check:
+
+bool memcg_vm_event_item_valid(enum vm_event_item idx)
+{
 	if (idx >=3D NR_VM_EVENT_ITEMS)
 		return false;
 
 	return !BAD_STAT_IDX(memcg_events_index(idx));
 }
 
-If idx is negative, will this bypass the >=3D NR_VM_EVENT_ITEMS check and
-cause an out-of-bounds access in memcg_events_index()?=20
-
-Should these kfuncs be updated to explicitly check for negative values
-(e.g., event < 0 || event >=3D MEMCG_NR_MEMORY_EVENTS)?
+Could this allow users capable of loading BPF programs to bypass KASLR or
+leak adjacent kernel heap memory?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260911220415.1396=
-439-1-ameryhung@gmail.com?part=3D5
+439-1-ameryhung@gmail.com?part=3D6
