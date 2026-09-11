@@ -1,95 +1,94 @@
 Received: from mail-oo2-f42.google.com (mail-oo2-f42.google.com [74.125.231.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE6937D118
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 20:46:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D42448D18
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 20:48:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.170
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789159597; cv=pass; b=chhzYx9VqYaDmK9r4E1vhdV3Ruqt5TWDMoye9U0RtEKocXu0evdTqIFFhYyXEAw8MpW+CdbjMwUg6HGbE+naYRFhRzvHHcfOzNvwvHZD4NhK1Fv87LZxlg3nFsWnuGnFPQStvcE1J9myVM8reP3qiQfAD+nEG7Le5xZq8Es+bk4=
+	t=1789159694; cv=pass; b=JwnLsqlrBgLKYCasqX3BS0cymQe3B0rb2imoLE86+is9Un9+2zX6RlfkWxIORSka4vrzhKu6B+afw8eDOFWBH1iGOb6l4qhddfjIB6YAlyXiaoh0DjQW5phsNrA7KexYyd+VxVA9sfzDExuK8Mg/WLUExhJPCZS/xmm38YIH3wY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789159597; c=relaxed/simple;
-	bh=pgwhRLCLSRiHCfZ6Q4DWcrC2j2S41ntskCgCclN/KPw=;
+	s=arc-20240116; t=1789159694; c=relaxed/simple;
+	bh=WJJUxMQnIYlqTY7weddpVLkgDOQJ2l1v5sv9+4HFY30=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ekKNBK7URSANhuGdKcZ3qNiUnvts2+Qv4j2jFsvMwqtnxDN3+mqmEZu3+ALSPmVi8F0viiITm3/+h5hbuC2FHHld+Htvw4PWvIJwx2X9qLaeVAZXxxCUZfRzgohDceJDesYW98YbXsC9BOSnujE76Tu79FBGiGZaFZXMlF9OUio=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lYxj9eB6; arc=pass smtp.client-ip=74.125.231.170
+	 To:Cc:Content-Type; b=Uo+uRFurtotc9xxEKNuc+sdxdgGIffyzlmbbpNRaESATKZtlajN/fOOBwyvq8K8uq9NfZsbihufjw5z1G3vqiFw15zU06P7gjBLTY6pqvZSDk0e6mmGqhNTRObn7poJh1YCmbtgZl/xiC5kAFmo5iL+qei5fHenJLT8zg2WxV3c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IJMzsuKb; arc=pass smtp.client-ip=74.125.231.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lYxj9eB6"
-Received: by mail-oo2-f42.google.com with SMTP id 006d021491bc7-6c197ff1f53so199775eaf.1
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 13:46:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789159595; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IJMzsuKb"
+Received: by mail-oo2-f42.google.com with SMTP id 006d021491bc7-6bda350b708so13225eaf.1
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 13:48:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789159692; cv=none;
         d=google.com; s=arc-20260327;
-        b=nAlgaoru4ZgZ0N4ibivydr2QIJHQMqYiUWtUvq3BHyA7XTJH32KPyMwjzH/w/6pIv1
-         Fy05Xa2Zdn00TlOKIV/o/Og+1VG2mD9BkmJRtc05SF2ZCLYFn95I4hFK4zPLO2QPGG6W
-         EKVkKqb13PK54H27HmA7SNZT0qVeD6K608RKD6azmWiu8+y0EeTAwE/FwKmcqhM6mLyH
-         mTpyxoqhs3Sl7zZ6J/hgMrh2l4y/v4BwnbuVGvkpczZtFZDaj7OZO+0/NXQES5F/5J4y
-         WGcN9IdOR8E6Ks/qjCRqQIola00h3mgrbBx0JjMaRZjyDYe6vAAZEmnKLdcjKxjaeNCd
-         SaWw==
+        b=NllZgEHxQzz/bIPjybGGsCB+NZ/hank52ARkxoTEypVM5t/iFurb67q378wba0t2ge
+         P+6wFrCAGROCUWasA8b+y946nXNds70YQkqfEdZGANGVExYG+lYnD76PzfHe45JdOCla
+         gC+umfHLDZ7PioFZLALTfpD2dErBHI55TCYW9SiXQ6nNM3w7UATP4iie35atJszTgSrW
+         2N9R43yEDAoFD7T0ZFpj7mJsqLWpoqfrHtYMHiMW+Iq8ZmWi9to3i+UzxslSpMqKYJ9V
+         A4TgsoiEAsJow0LUGH0ZRdnKjxWyNPzk7TWC6z7fiDkxjIiB8D68hx/YQLFvpRtARQYe
+         tmYA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=RR0RcXEnr6mtTig17fEytXD1zbKJdvDf+b0apNmu1qw=;
+        bh=gynqWXK1xgfql7bTl8aLcrJkuClGPb6RM+NHBdDTwcM=;
         fh=+iofH7kLhUIpDUAo/a2rUbKulXCH8Go9n65YHAt0kP0=;
-        b=N1U0fTEHoclm+g6MKNc1KAacIq1ItQJ4ept/KK+7h+uHRFvaujwGd4RzpcHlWlMyHQ
-         J1oqGUr++5MefjQDByvs4Oxa7tmxEC2/JzAHLG5oSkoh8PgMrPFtuAohLzXsMHjMvP5j
-         FVl8odSjXzXRsVojD0XPO4HpS+Aq4hraUyV4aSVhEWwsCJEYa4DJUtH0Iuw+lQRDtJPT
-         FYY37R47PMpUgNyBUfIwuCjzdrE/+fs6bpTdGeJX3UWQgEfQrFuvt7nWS94IUvUNTbPW
-         x2UnXQcRHXz7XaqcQtQUtq6x/XL0wSweivTr+APi3n23Bpyeu0MfY27+oHdMkuOjoaQ1
-         KHfA==;
+        b=QUaCV+qSrdxPNMkkdcEv5cekWT81F70zhFhjr4yo4li6XDtEK419E2gk0pQ+YbPn+8
+         jD1XR/SzHTniCZ8ulQwnFPMkoyKe/aJy3J+gbnW41R/qbtL6e1PPQ5D/DYoX9IBhm2ow
+         NntZgm9Dh1/2YSQLvNLzEjH5K/WnrPL6W7fuatmHyT4aUqqZoGD+EVLcGIEmTU5lTWv4
+         OH9Cn/z77aha3jhDtyP+9OpHUwX2G8xYzxQosx8qkw43vPveNklXxx9KQO126zdUkpMZ
+         plB5roWhijSf3ifXBjZYxKmdbCcWlMYQCQlUvnSJgQTh0lxwDXqCMsK8Stn0pUqIAzWx
+         YlOg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789159595; x=1789764395; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789159692; x=1789764492; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=RR0RcXEnr6mtTig17fEytXD1zbKJdvDf+b0apNmu1qw=;
-        b=lYxj9eB6goizYul20hfBbF7R/wJ36olmQtdyY6qAAvS7KS9iu3YhuPwoUq0WuBqJZQ
-         RC90+LSDqrPHdaWro+8DEazCXpSzR+gEroMQMJRE4JXk106XA1QQYxrBMJ1QfSHZaM/d
-         hOHV3b5o1gsqW0y+VPLN0uCAEQp76kclGq6Y5zHPyOmtt/ddyepMpiF94k/U5D37J27f
-         ClgIQcBnlg7F1mF+wm05y+C9x9hJe7VTr0AYbg1JL2y+EosEDBpcpqWKEO4noGwQm41y
-         lYe+jfXpHveQgheXXD3Uub4+J7WWGGjwbArDQlfWr0KxvuVETgfQMfTB+8xxTgnhrNtT
-         n49g==
+        bh=gynqWXK1xgfql7bTl8aLcrJkuClGPb6RM+NHBdDTwcM=;
+        b=IJMzsuKbaFwByQExGl3ZkWCqlTwCjqbxjYo+TWomTU+jH7BUpg+kfAzG6r92Qvs9aC
+         kZ7y0Ng9G9Lq9699EfQF/9jigUt5282LtiqPRI71jx3l56d1U6JbNzPxMa0xtuur8ZXS
+         MV+Y2b7XNTPcNDa8+qRVKNiRfXx34kw7HuiJGeG7LBLn6VD+j4tMzXQOYjlGZr9gp+ER
+         vB58RUTIdd70tOclCJTRrQOE3+CqpIQ60wkxqHv10pnZwOJdYiIvZ/RjnlLa447JonSE
+         JuBQDYLcr2XVQpvx6IOX/MGo2OXKiKj37mm+HyEP6P8S3PXmb6TmuKMTZINGYEgJfLEq
+         6c9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789159595; x=1789764395;
+        d=1e100.net; s=20251104; t=1789159692; x=1789764492;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=RR0RcXEnr6mtTig17fEytXD1zbKJdvDf+b0apNmu1qw=;
-        b=NTPQkyYMZxKdMk5ecJk3kUaHVvFaB+j7EPsHEpNGD9gamDDQeiB3yuors7fnHvfN/k
-         zbfSPzbBuLbvc6i1PyocOBuXtl1GXePVXRqVv6yRqXp1sQMcMD0SRaU7bqJWeIyvXFFu
-         z0sNqmv4547PEsfN7qOOUkRahW+gPBZ/GMoTlFrRqfQ1pW3sswcG99TUOREyujfBkYrk
-         0SKs62CrUnyna3TAXdHiw8M/q9vt+DqXCHqwASoYu7S3HaYiY8+IQWYaMuIwcx3ZVb4L
-         oqmSxjH0YRK5rdeIEKv29VmG/MQ3n1wbodgVtd2oYny0qYd3BNDfYKeJNkQ601lzHlBA
-         fxjA==
-X-Gm-Message-State: AFuF++ku4pY7VtlXrqCkKbXKwpKi4UQ4X6gq93xE0BMsoMQghnM3LjUk
-	Gceu0VgkuGMOiEzEWz/TEAuQIdgydXNdJFst0eM6e/UoQUOj/BeDKzwnKLQsv20apYXFPfhJ2WT
-	upd5ZoCmQ2czBKxYBHvlUxjJh2fw2T94=
-X-Gm-Gg: AYBFou2Heshcqp9/ZyP6atPHf0CISeDQu+FTdqOR/WOlPv792waE9KmbyGIT66VjGor
-	qZW4+DZkQNpEw1v9eyZfMqfq2BCjQAQG3/LE1msM5HQ6gylRPoOUtUXEbOL6hdKEDuQhbr7fd6h
-	tTKNTplbTxCM8PbWHR6KZ6Tzih9zR0ivfqfLJt2zDyaM6CCWKYwLDAgzGv923hwkG9c9sKjocS/
-	2JNJmi25V0+ujW8CAbaR+cT5NdB8+rgNfVJfz/d3C6s0OLIOGzni4J+Beprej+KFoabhbnlXDj/
-	/WeNs8Mq4sd+r1seKpF1FH1EMXbzjST+NaKAdkg3g1x2JK/xwC9UHqsigP7XQC7nWJGZE1weYiq
-	E8GkXIA==
-X-Received: by 2002:a05:6820:c452:10b0:6aa:cce3:ab61 with SMTP id
- 006d021491bc7-6c0ba923c37mr6414656eaf.9.1789159594720; Fri, 11 Sep 2026
- 13:46:34 -0700 (PDT)
+        bh=gynqWXK1xgfql7bTl8aLcrJkuClGPb6RM+NHBdDTwcM=;
+        b=ZG698dcFbvTLA3pX0TyoLg3J4M1qc9wwWgFpGOGj9JVN5BojeRZASKy+RmIChaIO43
+         PpURgu6x8/Jwe6d6QK0/3hyASXuBrT1zXBhkhDCZYz/0v/HYVDdSkkrgYR4280Y9/sw0
+         Y3nwHLY9Ei8qRMHAhMn+q0DVS/YFa++TnqfVm4EwIFrbkh7acuuHFYwQqjDN0ptePny1
+         STTaeE9HneHwUrgEg7UePWtVNC9CxnzzkRCeaZebCfLS2F99MZN+vJhHrH27/lpf9pLd
+         Tyi3HCpA3D/OBQcDOvOKVEkesO4dpDlDk9Me4lGeeVXKq5+83F8f6vFbsahLWZ2GNc3F
+         J5kw==
+X-Gm-Message-State: AFuF++lTt1WFLZAmOQ6QmboW8lESOd+lAb3aCml+azWlUEak8P0g8Wpf
+	3Y1/aiv7/S06Xiym4lZFSs4I3e3NB3GhWorZvbvk23o7jF7j+2HSvAcXEkTcRK7a+4+ENCquLcX
+	+vlpjAp1v5My2bj9RXfyR6q/FbY/d0/A=
+X-Gm-Gg: AYBFou33P1Y9uq4St9uYXDEDLZL4Mn5XxNE/QFm8WXAyBfBcNIE2kDGxJXONAwFH/Z4
+	mNPUL8FmVQeSK9yyI4VjKqCiOaGE8UPyMjrNs0oDb+kMO+D60iW/AnCeCzFauepzKOSNnz2Cvki
+	YcDeTCt/Ji7mRUqBipF4cXOitePLQsxRIxpnc33OIeCZ86jVJ4750JhenskDNDG2BebB1OS7F2X
+	36aEe5zxmQXOssiB7KutdachPoYB5T/jVChnpns3cM7fzA7yoocVXLl44PNup4b5etnNsUCag9A
+	ZnfMO1kzoLXUl5VAVHWWhh/m0Y5n0+kXahBBYpkfWcawL6PSLlXgNuIOckEzq9KOMFKh5znDKcC
+	DgJFeAw==
+X-Received: by 2002:a05:6820:1ca7:b0:6bd:5506:aadc with SMTP id
+ 006d021491bc7-6c24ec5982amr87583eaf.35.1789159691846; Fri, 11 Sep 2026
+ 13:48:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260905220117.922028-20-ameryhung@gmail.com> <44341c2c66e3c9d2256dfdfbe10c7164152ea6ba3d45ef3aec833ddb7f468f8d@mail.kernel.org>
-In-Reply-To: <44341c2c66e3c9d2256dfdfbe10c7164152ea6ba3d45ef3aec833ddb7f468f8d@mail.kernel.org>
+References: <20260905220117.922028-22-ameryhung@gmail.com> <2f4372e64739b68cece2725901e21e0a9437726f003a2c454edda97ee10d0cb7@mail.kernel.org>
+In-Reply-To: <2f4372e64739b68cece2725901e21e0a9437726f003a2c454edda97ee10d0cb7@mail.kernel.org>
 From: Amery Hung <ameryhung@gmail.com>
-Date: Fri, 11 Sep 2026 13:46:21 -0700
-X-Gm-Features: AcwNN1WAiZcIjQtZnnZLhMxkoTOIaLwd6ceIo4buU5QonmLbOC1mlISXgIO-bOg
-Message-ID: <CAMB2axOXtckkWsymKG9addof98sRV4_y8Wbcx9vbDJSihi0cbg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 19/22] selftests/bpf: Test kfunc packet memory
- direct writes
+Date: Fri, 11 Sep 2026 13:47:58 -0700
+X-Gm-Features: AcwNN1U5sm4yM-UVn0KzUiq0smL0hT-bv_XE4IDDipeq2oA-ld6C1OKuGT0jFaY
+Message-ID: <CAMB2axNuEBgYnRyxo5+2XiB_QNoJgCOY+sQsQ5s7651KK3ixWg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 21/22] bpf: Consolidate release argument validation
 To: bot+bpf-ci@kernel.org
 Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
 	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
@@ -98,115 +97,206 @@ Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Sep 5, 2026 at 3:44=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
+On Sat, Sep 5, 2026 at 4:08=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
 >
-> > diff --git a/tools/testing/selftests/bpf/progs/verifier_kfunc_packet_ac=
-cess.c b/tools/testing/selftests/bpf/progs/verifier_kfunc_packet_access.c
-> > new file mode 100644
-> > index 000000000000..9ae63c9eab02
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/progs/verifier_kfunc_packet_access.c
-> > @@ -0,0 +1,47 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +#include <vmlinux.h>
-> > +#include <bpf/bpf_helpers.h>
-> > +#include "bpf_misc.h"
-> > +
-> > +struct nf_conn *bpf_skb_ct_lookup(struct __sk_buff *skb_ctx,
-> > +                               struct bpf_sock_tuple *bpf_tuple,
-> > +                               u32 tuple__sz, struct bpf_ct_opts *opts=
-,
-> > +                               u32 opts__sz) __ksym;
-> > +void bpf_ct_release(struct nf_conn *nfct) __ksym;
-> > +
-> > +char _license[] SEC("license") =3D "GPL";
-> > +
-> > +SEC("tc")
-> > +__description("kfunc packet write requests writable skb")
-> > +__success
-> > +/* bpf_unclone_prologue() */
-> > +__xlated("r6 =3D *(u8 *)(r1 +{{[0-9]+}})")
-> > +__xlated("...")
-> > +__xlated("w6 &=3D {{1|128}}")
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 487ad1ee4179..6c5d7e544f84 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
 >
-> Is this test expected to pass at this commit? Looking at the verifier
-> code at this commit, the kfunc memory-argument path goes through
-> check_helper_mem_access() for PTR_TO_PACKET, which calls
-> check_packet_access() directly:
+> [ ... ]
 >
-> kernel/bpf/verifier.c:check_helper_mem_access():
->     case PTR_TO_PACKET:
->     case PTR_TO_PACKET_META:
->             return check_packet_access(env, reg, argno, 0, access_size,
->                                        zero_size_allowed);
+> > @@ -8825,29 +8862,9 @@ static int check_func_arg(struct bpf_verifier_en=
+v *env, u32 arg,
+> >               return err;
+> >
+> >  skip_type_check:
+> > -     if (arg_type_is_release(arg_type)) {
+> > -             if (type_may_be_null(reg->type)) {
+> > -                     verbose(env, "Possibly NULL pointer passed to tru=
+sted %s\n",
+> > -                             reg_arg_name(env, argno));
+> > -                     bpf_diag_call_arg(
+> > -                             env, insn_idx, argno, meta->func_name,
+> > -                             "the pointer may be NULL, but this call r=
+equires a non-NULL pointer",
+> > -                             "Add a NULL check and make the call only =
+on the non-NULL path.");
+> > -                     return -EACCES;
+> > -             }
+> > -
+> > -             if (!arg_type_is_dynptr(arg_type) &&
+> > -                 !reg_is_referenced(env, reg) && !bpf_register_is_null=
+(reg)) {
+> > -                     verbose(env,
+> > -                             "release helper %s expects referenced PTR=
+_TO_BTF_ID passed to %s\n",
+> > -                             meta->func_name, reg_arg_name(env, argno)=
+);
+> > -                     bpf_diag_call_arg(
+> > -                             env, insn_idx, argno, meta->func_name,
+> > -                             "release helpers require a value that own=
+s a live resource returned by a matching acquire helper",
+> > -                             "Pass the resource-owning pointer returne=
+d by the matching acquire helper, and avoid calling the release helper afte=
+r ownership has already been transferred or released.");
+> > -                     return -EINVAL;
+> > -             }
+> > -     }
+> > +     err =3D check_func_arg_release(env, reg, argno, arg_type, meta, i=
+nsn_idx);
+> > +     if (err)
+> > +             return err;
 >
-> This path never calls may_access_direct_pkt_data(), so
-> env->seen_direct_write remains false. Without seen_direct_write set,
-> net/core/filter.c:tc_cls_act_prologue() -> bpf_unclone_prologue()
-> returns 0:
+> Does removing the type_may_be_null() check here break the percpu kptr
+> RCU conversion path?
 >
-> net/core/filter.c:bpf_unclone_prologue():
->     if (!direct_write)
->             return 0;
+> The deleted block rejected maybe-null registers passed to OBJ_RELEASE
+> helper arguments. Only bpf_kptr_xchg() arg2 has ARG_PTR_TO_BTR_ID_OR_NULL
+> | OBJ_RELEASE, so it is the only argument whose admission changes.
 >
-> The kfunc_packet_write() program performs no direct packet store, so
-> it won't trigger the may_access_direct_pkt_data() call that would set
-> env->seen_direct_write. This means no prologue instructions are emitted
-> and the __xlated() patterns from here to the end would fail to match.
+> check_func_arg_release() only keeps the ownership half of the test:
 >
-> This appears to be fixed by a later commit in the series that moves the
-> check into check_helper_mem_access(). Should this test be reordered to
-> appear after that commit to avoid breaking bisection?
+> kernel/bpf/verifier.c:check_func_arg_release() {
+>     if (arg_type_is_dynptr(arg_type) || reg_is_referenced(env, reg) ||
+>         bpf_register_is_null(reg))
+>         return 0;
+> }
+>
+> but for the percpu-kptr RCU conversion path, release_reg() assumes the
+> released register is known non-NULL. In check_helper_call():
+>
+>     bool convert_rcu =3D (func_id =3D=3D BPF_FUNC_kptr_xchg) && in_rcu_cs=
+(env) &&
+>                        (reg->type & MEM_ALLOC) && (reg->type & MEM_PERCPU=
+);
+>     err =3D release_reg(env, reg, convert_rcu, !!meta.dynptr.id);
+>
+> release_reg() then calls ref_convert_alloc_rcu_protected(), which for
+> every register carrying the id does:
+>
+>     reg->id =3D 0;
+>     reg->type &=3D ~MEM_ALLOC;
+>     reg->type |=3D MEM_RCU;
+>
+> PTR_MAYBE_NULL is deliberately not touched, and reg->id is zeroed. Before
+> this patch that combination was unreachable because a maybe-null register
+> could not be passed to bpf_kptr_xchg() at all. Now the verifier can
+> produce PTR_TO_BTF_ID | MEM_PERCPU | MEM_RCU | PTR_MAYBE_NULL with
+> reg->id =3D=3D 0.
+>
+> That state breaks NULL-check identity matching. check_cond_jmp_op() calls
+> mark_ptr_or_null_regs() for any JEQ/JNE-against-0 on a maybe-null
+> register, and mark_ptr_or_null_regs() uses u32 id =3D regs[regno].id, i.e=
+.
+> 0. mark_ptr_or_null_reg() then matches on:
+>
+>     if (type_may_be_null(reg->type) && reg->id =3D=3D id &&
+>         (is_rcu_reg(reg) || !WARN_ON_ONCE(!reg->id))) {
+>
+> is_rcu_reg() is just "reg->type & MEM_RCU", so the id=3D=3D0 sanity WARN =
+is
+> bypassed and every maybe-null MEM_RCU register with id 0 in the state is
+> marked non-NULL by a NULL check on any one of them.
+>
+> Concrete accepted-but-unsafe program with percpu kptr fields pc1/pc2 in a
+> map value:
+>
+>     p1 =3D bpf_percpu_obj_new(struct val_t);
+>       /* MEM_ALLOC|MEM_PERCPU|PTR_MAYBE_NULL, id=3DN1 */
+>
+>     p2 =3D bpf_percpu_obj_new(struct val_t);
+>       /* MEM_ALLOC|MEM_PERCPU|PTR_MAYBE_NULL, id=3DN2 */
+>
+>     bpf_rcu_read_lock();
+>
+>     old =3D bpf_kptr_xchg(&v->pc1, p1);
+>       /* p1 -> MEM_RCU|MEM_PERCPU|PTR_MAYBE_NULL, id=3D0 */
+>
+>     old =3D bpf_kptr_xchg(&v->pc2, p2);
+>       /* p2 -> MEM_RCU|MEM_PERCPU|PTR_MAYBE_NULL, id=3D0 */
+>
+>     if (p1) {
+>       /* clears PTR_MAYBE_NULL on p1 AND on p2 (both id 0, both MEM_RCU) =
+*/
+>
+>       q =3D bpf_this_cpu_ptr(p2);
+>       /* R1 now looks non-NULL, so ARG_PTR_TO_PERCPU_BTF_ID is accepted *=
+/
+>
+>       q->field =3D 1;
+>       /* q is PTR_TO_BTF_ID|MEM_ALLOC|MEM_RCU, non-NULL, writable */
+>     }
+>     bpf_rcu_read_unlock();
+>
+> If bpf_percpu_obj_new() for p2 returned NULL at runtime, the program
+> stores NULL into the percpu kptr field and then executes
+> this_cpu_ptr(NULL), which writes at NULL + __per_cpu_offset[cpu].
+>
+> This would be an unchecked write into the per-CPU area from a
+> verifier-accepted program.
+>
+> Note that progs/map_kptr_fail.c:kptr_xchg_possibly_null was deliberately
+> flipped from __failure to __success, so the relaxation is intentional,
+> but the changelog does not address the percpu/RCU conversion path, and no
+> test covers a nullable percpu source xchg'd inside an RCU critical
+> section.
+>
+> Should the verifier keep rejecting type_may_be_null(reg->type) for
+> OBJ_RELEASE helper arguments when the destination kptr field is
+> BPF_KPTR_PERCPU, or should ref_convert_alloc_rcu_protected() leave a
+> fresh non-zero reg->id so that maybe-null identity tracking stays intact?
+>
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/cb_refs.c b/tools/t=
+esting/selftests/bpf/prog_tests/cb_refs.c
+> > index 50ea3d72d446..8743f52e755d 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/cb_refs.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/cb_refs.c
+> > @@ -11,8 +11,8 @@ struct {
+> >       const char *prog_name;
+> >       const char *err_msg;
+> >  } cb_refs_tests[] =3D {
+> > -     { "underflow_prog", "release kfunc bpf_kfunc_call_test_release ex=
+pects referenced PTR_TO_BTF_ID passed to R1" },
+> > -     { "leak_prog", "Possibly NULL pointer passed to trusted R2" },
+> > +     { "underflow_prog", "release function bpf_kfunc_call_test_release=
+ expects referenced PTR_TO_BTF_ID passed to R1" },
+> > +     { "leak_prog", "Unreleased reference id=3D4 alloc_insn=3D33" },
+>
+> This isn't a bug, but could the leak_prog expectation be more robust?
+>
+> The new expectation hard-codes a full instruction index, "Unreleased
+> reference id=3D4 alloc_insn=3D33", which pins the test to one compiler's
+> instruction layout for the callback subprog cb2().
+>
+> Every neighbouring expectation in the same table deliberately truncates
+> the digits and documents why:
+>
+>     { "nested_cb", "Unreleased reference id=3D4 alloc_insn=3D2" },
+>       /* alloc_insn=3D2{4,5} */
+>
+>     { "non_cb_transfer_ref", "Unreleased reference id=3D4 alloc_insn=3D1"=
+ },
+>       /* alloc_insn=3D1{1,2} */
+>
+> and the equivalent expectation added for the same verifier message in
+> map_kptr_fail.c drops the number entirely:
+>
+>     __failure __msg("Unreleased reference id=3D4 alloc_insn=3D")
+>
+> Matching in test_cb_refs() is strstr(log_buf, cb_refs_tests[i].err_msg),
+> so a truncated prefix such as "Unreleased reference id=3D4 alloc_insn=3D3=
+"
+> matches equally well while tolerating a one- or two-instruction shift fro=
+m
+> a different clang version.
+>
 
-Yes. They should be reordered. I forgot to swap them back after testing.
+Test. It should be { "leak_prog", "Unreleased reference id=3D4
+alloc_insn=3D3" }, /* alloc_insn=3D3{2,3} */
 
->
-> > +__xlated("...")
-> > +__xlated("if r6 =3D=3D 0x0 goto")
-> > +__xlated("r6 =3D r1")
-> > +__xlated("r2 ^=3D r2")
-> > +__xlated("call")
-> > +__xlated("if r0 =3D=3D 0x0 goto")
-> > +__xlated("w0 =3D 2")
-> > +__xlated("...")
-> > +__xlated("exit")
-> > +__xlated("r1 =3D r6")
-> > +int kfunc_packet_write(struct __sk_buff *skb)
-> > +{
-> > +     void *data_end =3D (void *)(long)skb->data_end;
-> > +     void *data =3D (void *)(long)skb->data;
-> > +     struct bpf_sock_tuple tuple =3D {};
-> > +     struct nf_conn *nfct;
-> > +
-> > +     if (data + sizeof(struct bpf_ct_opts) > data_end)
-> > +             return 0;
-> > +
-> > +     /* An invalid tuple size makes bpf_skb_ct_lookup() write opts->er=
-ror. */
-> > +     nfct =3D bpf_skb_ct_lookup(skb, &tuple, 1, data, sizeof(struct bp=
-f_ct_opts));
-> > +     if (nfct)
-> > +             bpf_ct_release(nfct);
-> > +     return 0;
-> > +}
->
-> Going back to the alternation pattern above:
->
-> > +__xlated("w6 &=3D {{1|128}}")
->
-> This isn't a bug, but does the regex match what the commit message
-> describes? The pattern text "w6 &=3D {{1|128}}" compiles to the POSIX ERE
-> "w6 &=3D 1|128" since tools/testing/selftests/bpf/test_loader.c only
-> escapes metacharacters outside {{ }}. Without grouping, this is
-> (w6 &=3D 1)|(128) due to '|' having lowest precedence, so the second
-> alternative matches a bare "128" anywhere in the xlated dump rather than
-> constraining the cloned-bit mask value. Should this be "w6 &=3D {{(1|128)=
-}}"
-> to properly match the endian-specific mask?
-
-This did cause selftest to fail. Will fix.
-
+> As written, the entry breaks with any layout change in cb2(), and unlike
+> the two neighbours it carries no comment recording the observed range.
 >
 >
 > ---
