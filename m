@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-55.mta0.migadu.com [91.218.175.55])
+Received: from mta0.migadu.com (out-78.mta0.migadu.com [91.218.175.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82752EAB6F
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 04:29:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A74287518
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 04:31:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789100973; cv=none; b=EEpiD14uaZRE43WmcJUWhGbPx+ln7Sdm3g/1+kDHOKTExlgRdpwtV8JNnPZdRTDgXaz98r4axt1CuN1vifZWUuI0AuXjRpp+1nbD7Ne/ja4HrZYNY1lIMeql53vtc1rbEPWe6t9vPL3rcsAsYqEG2sK7CuBYNRjmbScBmVStHHI=
+	t=1789101097; cv=none; b=s8+okDUvYKjp52SZoMKUZvdMwEsg6AL7dzmejDYjL1mMy+XHnQloMw805CwfVue5sw1mqN+lOKywpD0Tx7Skwt3W3Pl+Nf6BKOVtQIc/YunviyU2ZIUtCvfJe/wN1DDyHOK99h7EG5aRqcQ5KQaWAhPcpXwpy09YRv/gWf2p4To=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789100973; c=relaxed/simple;
-	bh=d3ip24AT2UUraNkutcdkAzwuAPj40b2p4ICb/6OTYJ0=;
+	s=arc-20240116; t=1789101097; c=relaxed/simple;
+	bh=49+fXp8HAJ/oeMWxjcITITOpfTZZUcA5bozm756fYyk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QIu5GxX+qax4oonFoDZZmP1+xhhFWT1QucAwW/WxoLGwi6vR4Si1sYsZTRVnH3iPLQPVE4sjnIe0ewdMeiI2WF407kDQAj+/6+w4dk+vz5TNTQ1MMd6bUiDtke+afeNcQJNujv5IyxEMThA+W+kbpgie/i8IpT9uUogf1UG+zOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=twAm11Wx; arc=none smtp.client-ip=91.218.175.55
+	 In-Reply-To:Content-Type; b=OHXxBRZsqsA87Shw4oJXbsuJd0QcWoiGHUdDQj2Q0WBkoPK9+axHqnKcFFyyOOcT3wz73gK4EF6jSgk+RUoi4rYeb7sCxspZ9+qT7mZnOw4UYItV+cAKtqh8wFq0YhvC9+iPEf56X6SnAFtSO5UAaPUymlnKp1/89DdO2yb/F+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=na27CaW3; arc=none smtp.client-ip=91.218.175.78
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="twAm11Wx"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="na27CaW3"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=d3ip24AT2UUraNkutcdkAzwuAPj40b2p4ICb/6OTYJ0=;
+DKIM-Signature: a=rsa-sha256; bh=49+fXp8HAJ/oeMWxjcITITOpfTZZUcA5bozm756fYyk=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789100969; v=1; x=1789705769;
- b=twAm11WxQM7w9cqTiHs79Cg20SvMKLpLv701S8PvYUFM1tTy1EjO8Wv5HpFW1aIs1DDG8AQJ
- LSdHnoate27bgg/2IMNIKoZN90glmUF/V0Nq6eszw+PjrNcNevdRjDiE4998FEwktSAAIlATz9n
- oaRQnaXsAqn9Ct5yOL63rzvY=
+ t=1789101092; v=1; x=1789705892;
+ b=na27CaW3DUJoakpEEyRnveDZP9B9CJSaaZNQUSTxObp4hpZ9qpFGaX2NHJqw2ZzgR+ASiTRD
+ ZrFPmZG8tIsgtXrVW3QKWcL3q+LLF6w/6i725Eq0B8vy1VCBbzmSY3uTsTpDw3QjUKX+JVxXLWz
+ xYGWpiGUm627TT4ORBzRcTcs=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 7b867455830121f6;
-	Fri, 11 Sep 2026 04:29:29 +0000
-X-Mizu-Trace-ID: 7b867455830121f6
+Received: by smtp.migadu.com with ESMTPS id b6697cd5c2ae9746;
+	Fri, 11 Sep 2026 04:31:32 +0000
+X-Mizu-Trace-ID: b6697cd5c2ae9746
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <ccb524ec-1438-4c31-90d5-c01c37b0e858@linux.dev>
-Date: Thu, 10 Sep 2026 21:29:25 -0700
+Message-ID: <1720a0f5-5eaf-45e0-9cf1-6cdd3995ce66@linux.dev>
+Date: Thu, 10 Sep 2026 21:31:30 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,140 +38,106 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 03/12] bpf: Support by-value struct arguments
- up to 16 bytes
+Subject: Re: [PATCH bpf-next v2 06/12] bpf: Recognize by-value struct and
+ __int128 kfunc arguments
 Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
- mason@kernel.org, ihor.solodrai@linux.dev
-References: <20260909062538.4003426-1-yonghong.song@linux.dev>
- <0a9ac5bad4c131e896916f00fe93d4d7c6accef6711d1ee477969a8a7d330ae9@mail.kernel.org>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260909062522.4001896-1-yonghong.song@linux.dev>
+ <20260909062554.4007131-1-yonghong.song@linux.dev>
+ <20260909064638.AA26D1F00A3A@smtp.kernel.org>
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <0a9ac5bad4c131e896916f00fe93d4d7c6accef6711d1ee477969a8a7d330ae9@mail.kernel.org>
+In-Reply-To: <20260909064638.AA26D1F00A3A@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 
 
-On 9/9/26 12:13 AM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
->> index 104a91f5ffd5..4502b888b668 100644
->> --- a/kernel/bpf/btf.c
->> +++ b/kernel/bpf/btf.c
->> @@ -8125,6 +8125,9 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
->>   	for (i = 0, slots_used = 0; i < nargs; i++) {
->>   		u32 tags = 0;
->>
->> +		if (slots_used >= MAX_BPF_FUNC_ARGS)
->> +			goto too_many_slots;
->> +
->>   		err = btf_scan_decl_tags(env, btf, fn_t, i, is_global, &tags);
->>   		if (err)
->>   			return err;
+On 9/8/26 11:46 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
+>
+> Pre-existing issues:
+> - [High] bpf_kfunc_stack_access_bytes incorrectly maps stack slots to BPF_REG_6 through BPF_REG_9 (or higher), causing an out-of-bounds read and bypassing uninitialized memory checks.
+> --
+>
+> commit 7f4b25d0dad6ba6fed374b3111fcc89d67434d87
+> Author: Yonghong Song <yonghong.song@linux.dev>
+>
+> bpf: Recognize by-value struct and __int128 kfunc arguments
+>
+> This commit modifies the BPF verifier to support kfuncs taking structs or
+> int128 by value. It updates argument tracking to walk slots rather than just
+> registers, rejecting multi-slot arguments until JIT support is fully added.
+>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index cf526f28f3e5b..94c359351bb69 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
 > [ ... ]
 >
->> @@ -8253,6 +8256,33 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
->>   			sub->args[slots_used++].arg_type = ARG_ANYTHING;
->>   			continue;
->>   		}
->> +		if (btf_type_is_struct(t)) {
->> +			u32 nslots;
+>> @@ -13765,23 +13850,32 @@ s64 bpf_kfunc_stack_access_bytes(struct bpf_verifier_env *env, struct bpf_insn *
+>>   	btf = meta.btf;
+>>   	args = btf_params(meta.func_proto);
+>>   	nargs = btf_type_vlen(meta.func_proto);
+>> -	if (arg >= nargs)
 >> +
->> +			if (!t->size || t->size > 2 * BPF_REG_SIZE) {
->> +				if (!is_global)
->> +					return -EINVAL;
->> +				bpf_log(log,
->> +					"Arg#%d type %s in %s() has size %u, only 1 to %d bytes "
->> +					"can be passed by value\n",
->> +					i, btf_type_str(t), tname, t->size, 2 * BPF_REG_SIZE);
->> +				return -EINVAL;
->> +			}
->> +			if (!btf_struct_is_composed_of(env, btf, t, BTF_MEMBER_SCALAR)) {
->> +				if (!is_global)
->> +					return -EINVAL;
->> +				bpf_log(log, "Arg#%d type %s in %s() is not composed of scalars\n",
->> +					i, btf_type_str(t), tname);
->> +				return -EINVAL;
->> +			}
->> +
->> +			nslots = (t->size + BPF_REG_SIZE - 1) / BPF_REG_SIZE;
->> +			if (slots_used + nslots > MAX_BPF_FUNC_ARGS)
->> +				goto too_many_slots;
->> +			while (nslots--)
->> +				sub->args[slots_used++].arg_type = ARG_ANYTHING;
->> +			continue;
->> +		}
->>   		if (!is_global)
->>   			return -EINVAL;
->>   		bpf_log(log, "Arg#%d type %s in %s() is not supported yet.\n",
->> @@ -8260,11 +8290,33 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
->>   		return -EINVAL;
+>> +	/*
+>> +	 * @arg is an argument slot and a 16-byte parameter takes two of them,
+>> +	 * so walk the parameters to find the one that starts at this slot. A
+>> +	 * slot holding the upper eightbyte of such a parameter belongs to no
+>> +	 * pointer, and neither does a slot past the last parameter.
+>> +	 */
+>> +	for (i = 0, slot = 0; i < nargs && slot < arg; i++)
+>> +		slot += kfunc_arg_slots(btf_type_skip_modifiers(btf, args[i].type, NULL));
+>> +	if (i >= nargs || slot != arg)
+>>   		return 0;
+>>   
+>> -	t = btf_type_skip_modifiers(btf, args[arg].type, NULL);
+>> +	t = btf_type_skip_modifiers(btf, args[i].type, NULL);
+>>   	if (!btf_type_is_ptr(t))
+>>   		return 0;
+>>   
+>>   	/* dynptr: fixed 16-byte on-stack representation */
+>> -	if (is_kfunc_arg_dynptr(btf, &args[arg])) {
+>> +	if (is_kfunc_arg_dynptr(btf, &args[i])) {
+>>   		size = BPF_DYNPTR_SIZE;
+>>   		goto out;
 >>   	}
->>
->> +	if (slots_used > MAX_BPF_FUNC_REG_ARGS) {
->> +		if (is_global) {
->> +			bpf_log(log,
->> +				"global function %s() needs %d > %d argument slots, "
->> +				"stack args not supported\n",
->> +				tname, slots_used, MAX_BPF_FUNC_REG_ARGS);
->> +			return -EINVAL;
->> +		}
->> +		if (!bpf_jit_supports_stack_args()) {
->> +			bpf_log(log, "JIT does not support function %s() with %d argument slots\n",
->> +				tname, slots_used);
->> +			return -EFAULT;
->> +		}
->> +		sub->stack_arg_cnt = slots_used - MAX_BPF_FUNC_REG_ARGS;
->> +	}
->>   	sub->arg_cnt = slots_used;
-> This isn't a bug, but now that slots_used is always >= nargs, is the
-> pre-loop nargs-based block still needed? Looking earlier in the function:
+>>   
+>>   	/* ptr + __sz/__szk pair: size is in the next register */
+>> -	if (arg + 1 < nargs &&
+>> -	    (btf_param_match_suffix(btf, &args[arg + 1], "__sz") ||
+>> -	     btf_param_match_suffix(btf, &args[arg + 1], "__szk"))) {
+>> +	if (i + 1 < nargs &&
+>> +	    (btf_param_match_suffix(btf, &args[i + 1], "__sz") ||
+>> +	     btf_param_match_suffix(btf, &args[i + 1], "__szk"))) {
+>>   		int size_reg = BPF_REG_1 + arg + 1;
+>>   
+>>   		if (aux->const_reg_mask & BIT(size_reg)) {
+>>   			size = (s64)aux->const_reg_vals[size_reg];
+> [Severity: High]
+> This is a pre-existing issue, but does this code lead to an out-of-bounds
+> read or bypass uninitialized memory checks when the pointer argument is
+> passed on the stack?
 >
-> 	if (nargs > MAX_BPF_FUNC_REG_ARGS) {
-> 		if (!bpf_jit_supports_stack_args()) {
-> 			bpf_log(log, "JIT does not support function %s() with %d args\n",
-> 				tname, nargs);
-> 			return -EFAULT;
-> 		}
-> 		sub->stack_arg_cnt = nargs - MAX_BPF_FUNC_REG_ARGS;
-> 	}
+> The size_reg calculation inherently assumes the size argument is always passed
+> in a register. If the pointer argument slot is 4 or higher (which might be
+> more common now that large by-value structs consume multiple slots), the size
+> argument lands on the stack.
 >
-> 	if (is_global && nargs > MAX_BPF_FUNC_REG_ARGS) {
-> 		bpf_log(log, "global function %s has %d > %d args, stack args not supported\n",
-> 			tname, nargs, MAX_BPF_FUNC_REG_ARGS);
-> 		return -EINVAL;
-> 	}
+> In that scenario, size_reg maps to BPF_REG_6 or higher, which are
+> callee-saved registers. A BPF program could place a fake constant in one of
+> these registers to trick the verifier into thinking 0 bytes are read, while
+> the runtime stack argument is non-zero. This could bypass stack
+> initialization checks and potentially leak uninitialized kernel memory.
 >
-> The new block above recomputes stack_arg_cnt from slots_used. Since every
-> parameter consumes at least one slot, whenever nargs > MAX_BPF_FUNC_REG_ARGS,
-> slots_used > MAX_BPF_FUNC_REG_ARGS as well, so the assignment
-> `sub->stack_arg_cnt = nargs - MAX_BPF_FUNC_REG_ARGS` in the earlier block
-> is always overwritten by the new `sub->stack_arg_cnt = slots_used -
-> MAX_BPF_FUNC_REG_ARGS` assignment.
->
-> Also, the two blocks order their tests differently. The earlier block tests
-> bpf_jit_supports_stack_args() before is_global, while the new block tests
-> is_global first. On an architecture without stack-arg JIT support, a global
-> function needing stack args therefore fails with -EFAULT and "JIT does not
-> support function f() with 6 args" when the sixth slot comes from a sixth
-> parameter, but with -EINVAL and "global function f() needs 6 > 5 argument
-> slots, stack args not supported" when it comes from a two-slot struct.
->
-> Could this new block be the only place that sets stack_arg_cnt and applies
-> the global/JIT checks, or does the earlier nargs-based block serve a
-> purpose I'm missing?
+> Furthermore, if the pointer argument slot is 8 or higher, size_reg becomes
+> greater than or equal to 10. Checking BIT(size_reg) and reading from
+> aux->const_reg_vals[size_reg] would result in an out-of-bounds array read,
+> since const_reg_vals is sized for 10 registers. Should this logic be updated
+> to correctly query the BPF stack when the size argument is passed there?
 
-As you mentioned, actually we do have some issues. The above nargs and is_global
-chcking is before going through all arguments. So they works. But we should
-check again after all arguments processing since some arguments may have
-two registers.
+You are right. Will fix.
 
 >
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34320399441
 
