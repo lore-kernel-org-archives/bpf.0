@@ -1,21 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 69-171-232-180.mail-mxout.facebook.com (69-171-232-180.mail-mxout.facebook.com [69.171.232.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC44B496D59
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:50:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A192493D2E
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 15:50:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789141815; cv=none; b=iRRO68wSXYLzi8b29vXHjhGlgLr7yFJ0uQFqP4fSf9EJKKYhqZ9dnuvg+o1NdywENV3on1L326On1x85BHKUH5w6Ex7S8XpUsGiQ9Fc4ZMLLQ0wlqgL5Gj3MTYUktO9d9x893ggWDiFFdd5wVtIwjlDr5mLEy7Nb0+kQA3Fy/Ng=
+	t=1789141827; cv=none; b=tjbh3rAtaCkWKPa4UvXBl0NacFJtNwWlkmfJUPbApujQeVl/a57YEY2D2mCU5qIjsRU4YU0vw+LXKG1dzPTKZiHxANA7uMXOkagFBXL2NCckNZ2M/F+xxFfK7N8Dsut0ftX6jCV5PzZhkRME8bskLlQCLmR/tMCczwE78jugCJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789141815; c=relaxed/simple;
-	bh=wOgcVARhlHpMSdVDvkz4AMwYoSGaZdUyap16Uk9vt8s=;
+	s=arc-20240116; t=1789141827; c=relaxed/simple;
+	bh=E5fdFAvK/r7O4nIjqjYATp46oOPdq4QYQajvwl6gphc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EfthJ/q32RfZ8OGeZJa1WEx3X6upb7Su5q/RmfgpBgLBYavDvqXyN/0LpGgL0cMIJJt2LYiEKHtSlDSE2W68sOddj3sfpAdXVCpG0PaCdtJAQaBSS1ReqqMKC78aZawXcA+3/UiC+wPn2kMRaRQ4MZCt0xUCn0MpdZFHyLEMabQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	 MIME-Version; b=ncWPaC75aBVfGUpQmZfAiv36E/H5q2rT4wt78kNun9hflAxcg+sQy3IOxo0HMzQvywOIQryrdTBxLHLd1vlAtxmcPWhRLk0SqpoiSbGaM1jdTC8g/uEcjg2gN8JuJfatjXvPKBZEDxGabSUgsXeumFTi43H58ls29gpPBzDqHCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 4140C2A18430D8; Fri, 11 Sep 2026 08:50:10 -0700 (PDT)
+	id 574B52A184311A; Fri, 11 Sep 2026 08:50:15 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v3 11/15] bpf, arm64: Move kfunc arguments into the arm64 calling convention
-Date: Fri, 11 Sep 2026 08:50:10 -0700
-Message-ID: <20260911155010.2011265-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 12/15] selftests/bpf: Add C tests for by-value arguments up to 16 bytes
+Date: Fri, 11 Sep 2026 08:50:15 -0700
+Message-ID: <20260911155015.2011762-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260911154914.2004336-1-yonghong.song@linux.dev>
 References: <20260911154914.2004336-1-yonghong.song@linux.dev>
@@ -37,186 +37,214 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Do the proper move from the BPF calling convention to the arm64 calling
-convention to satisfy the native requirement. AAPCS64 only ever moves an
-argument to a higher slot, so the moves need one scratch register to carr=
-y
-an eightbyte from one stack slot to another, and never the one a
-convention moving an argument down would need.
+Extend the by-value argument test with the aggregate cases, written in C
+so that they depend on the compiler lowering the argument into a pair of
+argument registers rather than on a hand-written register layout.
 
-In addition, the arena argument walk counts eightbytes rather than
-parameters, as an argument may take two registers. The walk takes the
-func model from the caller now, as the moves need it too, and runs first
-so that they carry the rebased value.
+The programs cover a struct and a union that fill two registers, a
+smaller struct that fills one, and two struct arguments in a row,
+alongside the __int128 already there. Each has an int argument around it
+so that a wrong slot count shows up as a wrong value in the parameters
+beside it; two pairs leave room for only one, which follows them. A
+global function taking a struct with a pointer member is rejected: the
+callee would receive the pointer as an opaque scalar.
 
-btf_distill_func_proto() only bounds the argument count although a
-by-value argument could take two slots. Similar to x86-64, let us support
-up to MAX_BPF_FUNC_ARGS argument slots.
+A struct the argument registers cannot hold reaches the callee partly on
+the stack, which the interpreter does not implement, so that case is
+loaded only when the JIT is on.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- arch/arm64/net/bpf_jit_comp.c | 92 ++++++++++++++++++++++++++++++-----
- 1 file changed, 81 insertions(+), 11 deletions(-)
+ .../bpf/progs/verifier_aggregate_arg.c        | 165 ++++++++++++++++++
+ 1 file changed, 165 insertions(+)
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
-c
-index 3aa3ea0bc30b..bbde7c0836ae 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1220,6 +1220,12 @@ static int add_exception_handler(const struct bpf_=
-insn *insn,
- 	return 0;
- }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_aggregate_arg.c b=
+/tools/testing/selftests/bpf/progs/verifier_aggregate_arg.c
+index fc7c1b18bc40..b0ecccede47e 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_aggregate_arg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_aggregate_arg.c
+@@ -7,6 +7,131 @@
+ #define MIX_A	0xdeadbeefcafef00dULL
+ #define MIX_B	0x0123456789abcdefULL
 =20
-+static const struct bpf_jit_arg_abi arm64_arg_abi =3D {
-+	.nr_arg_regs		=3D 8,
-+	.even_reg_align		=3D true,
-+	.even_stack_align	=3D true,
++struct pair {
++	__u64 lo;
++	__u64 hi;
 +};
 +
- static const u8 stack_arg_reg[] =3D { A64_R(5), A64_R(6), A64_R(7) };
-=20
- #define NR_STACK_ARG_REGS	ARRAY_SIZE(stack_arg_reg)
-@@ -1262,19 +1268,20 @@ static void emit_stack_arg_store_imm(s32 imm, s16=
- bpf_off, const u8 tmp, struct
-  * kern_vm_start. A nullable arg preserves NULL by skipping the add, tes=
-ted
-  * on the truncated value as arena NULL is offset 0.
-  */
--static int emit_kfunc_arena_args(struct jit_ctx *ctx, const struct bpf_i=
-nsn *insn)
-+static int emit_kfunc_arena_args(struct jit_ctx *ctx, const struct btf_f=
-unc_model *fm)
- {
- 	const u8 arena_vm_base =3D bpf2a64[ARENA_VM_START];
--	const struct btf_func_model *fm;
--	int i;
--
--	fm =3D bpf_jit_find_kfunc_model(ctx->prog, insn);
--	if (!fm)
--		return -EINVAL;
-+	int i, slot;
-=20
--	for (i =3D 0; i < min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS); i++) =
-{
--		const u8 reg =3D bpf2a64[BPF_REG_1 + i];
-+	for (i =3D 0, slot =3D 0; i < fm->nr_args; i++) {
-+		u32 arg_regs =3D (fm->arg_size[i] + 7) / 8;
- 		u8 flags =3D fm->arg_flags[i];
-+		u8 reg;
++struct small {
++	__u32 a;
++	__u32 b;
++};
 +
-+		if (slot + arg_regs > MAX_BPF_FUNC_REG_ARGS)
-+			break;
-+		reg =3D bpf2a64[BPF_REG_1 + slot];
-+		slot +=3D arg_regs;
-=20
- 		if (!(flags & BTF_FMODEL_ARENA_ARG))
- 			continue;
-@@ -1293,6 +1300,52 @@ static int emit_kfunc_arena_args(struct jit_ctx *c=
-tx, const struct bpf_insn *ins
- 	return 0;
- }
-=20
-+static bool a64_arg_on_stack(u8 slot)
++union upair {
++	__u64 halves[2];
++	struct {
++		__u64 lo;
++		__u64 hi;
++	} parts;
++};
++
++struct with_ptr {
++	void *p;
++	__u64 x;
++};
++
++static __noinline __u64 take_pair(int a, struct pair p, int c)
 +{
-+	return slot >=3D arm64_arg_abi.nr_arg_regs;
++	return (__u64)a + p.lo + p.hi + c;
 +}
 +
-+static s32 a64_arg_stack_off(u8 slot)
++SEC("tc")
++__success __retval(0)
++int aggregate_arg_static_struct_c_test(struct __sk_buff *skb)
 +{
-+	return (slot - arm64_arg_abi.nr_arg_regs) * sizeof(u64);
++	__u64 a =3D skb->len ^ MIX_A;
++	__u64 b =3D skb->len ^ MIX_B;
++	struct pair p =3D { .lo =3D a, .hi =3D b };
++
++	if (take_pair(1, p, 2) !=3D a + b + 3)
++		return 1;
++
++	return 0;
 +}
 +
-+/*
-+ * Move the arguments AAPCS64 places somewhere other than the argument s=
-lot the
-+ * BPF calling convention gave them. Slot N is X(N) up to the eighth, an=
-d the
-+ * outgoing stack argument area from SP beyond it, both for the slot an
-+ * argument comes from and for the one it goes to.
-+ *
-+ * AAPCS64 only ever moves an argument to a higher slot, so no move here=
- ever
-+ * takes BPF_JIT_ARG_TMP: bpf_jit_plan_arg_moves() hands out the scratch=
- only
-+ * for a convention that moves one down, which needs a register to carry=
- the
-+ * value past its own destination.
-+ */
-+static void emit_kfunc_arg_moves(struct jit_ctx *ctx, const struct btf_f=
-unc_model *fm)
++#if defined(__clang__)
++
++__noinline __u64 take_pair_global(int a, struct pair p, int c)
 +{
-+	struct bpf_jit_arg_move moves[BPF_JIT_MAX_ARG_MOVES];
-+	const u8 tmp =3D bpf2a64[TMP_REG_1];
-+	u32 i, n;
-+
-+	n =3D bpf_jit_plan_arg_moves(&arm64_arg_abi, fm, moves);
-+
-+	for (i =3D 0; i < n; i++) {
-+		u8 dst =3D moves[i].dst, src =3D moves[i].src, reg;
-+
-+		if (a64_arg_on_stack(src)) {
-+			reg =3D tmp;
-+			emit(A64_LDR64I(reg, A64_SP, a64_arg_stack_off(src)), ctx);
-+		} else {
-+			reg =3D src;
-+		}
-+
-+		if (a64_arg_on_stack(dst))
-+			emit(A64_STR64I(reg, A64_SP, a64_arg_stack_off(dst)), ctx);
-+		else if (reg !=3D dst)
-+			emit(A64_MOV(1, dst, reg), ctx);
-+	}
++	return (__u64)a + p.lo + p.hi + c;
 +}
 +
- /* JITs an eBPF instruction.
-  * Returns:
-  * 0  - successfully JITed an 8-byte eBPF instruction.
-@@ -1716,9 +1769,15 @@ static int build_insn(const struct bpf_verifier_en=
-v *env, const struct bpf_insn
- 		if (ret < 0)
- 			return ret;
- 		if (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL) {
--			ret =3D emit_kfunc_arena_args(ctx, insn);
-+			const struct btf_func_model *fm;
++SEC("tc")
++__success __retval(0)
++int aggregate_arg_global_struct_c_test(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len ^ MIX_A;
++	__u64 b =3D skb->len ^ MIX_B;
++	struct pair p =3D { .lo =3D a, .hi =3D b };
 +
-+			fm =3D bpf_jit_find_kfunc_model(ctx->prog, insn);
-+			if (!fm)
-+				return -EINVAL;
-+			ret =3D emit_kfunc_arena_args(ctx, fm);
- 			if (ret < 0)
- 				return ret;
-+			emit_kfunc_arg_moves(ctx, fm);
- 		}
- 		emit_call(func_addr, ctx);
- 		/*
-@@ -2393,6 +2452,11 @@ bool bpf_jit_supports_kfunc_ret_reg_pair(void)
- 	return true;
- }
++	if (take_pair_global(1, p, 2) !=3D a + b + 3)
++		return 1;
++
++	return 0;
++}
++
++__noinline __u64 take_two_pairs_global(struct pair p, struct pair q, int=
+ d)
++{
++	return p.lo + p.hi + q.lo + q.hi + d;
++}
++
++SEC("tc")
++__success __retval(0)
++int aggregate_arg_two_structs_c_test(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len ^ MIX_A;
++	__u64 b =3D skb->len ^ MIX_B;
++	struct pair p =3D { .lo =3D a, .hi =3D b };
++	struct pair q =3D { .lo =3D a + 1, .hi =3D b + 2 };
++
++	if (take_two_pairs_global(p, q, 3) !=3D 2 * a + 2 * b + 6)
++		return 1;
++
++	return 0;
++}
++
++__noinline __u64 take_small_global(int a, struct small s, int c)
++{
++	return (__u64)a + s.a + s.b + c;
++}
++
++SEC("tc")
++__success __retval(0)
++int aggregate_arg_small_struct_c_test(struct __sk_buff *skb)
++{
++	__u32 a =3D skb->len ^ (__u32)MIX_A;
++	__u32 b =3D skb->len ^ (__u32)MIX_B;
++	struct small s =3D { .a =3D a, .b =3D b };
++
++	if (take_small_global(1, s, 2) !=3D (__u64)a + b + 3)
++		return 1;
++
++	return 0;
++}
++
++__noinline __u64 take_upair_global(int a, union upair u, int c)
++{
++	return (__u64)a + u.parts.lo + u.parts.hi + c;
++}
++
++SEC("tc")
++__success __retval(0)
++int aggregate_arg_union_c_test(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len ^ MIX_A;
++	__u64 b =3D skb->len ^ MIX_B;
++	union upair u;
++
++	u.halves[0] =3D a;
++	u.halves[1] =3D b;
++	if (take_upair_global(1, u, 2) !=3D a + b + 3)
++		return 1;
++
++	return 0;
++}
++
++#endif
++
+ #ifdef __SIZEOF_INT128__
 =20
-+const struct bpf_jit_arg_abi *bpf_jit_arg_abi(void)
+ typedef unsigned __int128 u128;
+@@ -32,4 +157,44 @@ int aggregate_arg_int128_c_test(struct __sk_buff *skb=
+)
+=20
+ #endif /* __SIZEOF_INT128__ */
+=20
++#if defined(__BPF_FEATURE_STACK_ARGUMENT)
++
++static __noinline __u64 take_spilled_pair(int a, int b, int c, int d, st=
+ruct pair p)
 +{
-+	return &arm64_arg_abi;
++	return (__u64)a + b + c + d + p.lo + p.hi;
 +}
 +
- bool bpf_jit_supports_stack_args(void)
- {
- 	return true;
-@@ -2534,7 +2598,13 @@ struct arg_aux {
- static int calc_arg_aux(const struct btf_func_model *m,
- 			 struct arg_aux *a)
- {
--	int stack_slots, nregs, slots, i;
-+	int stack_slots, nregs, slots, i, total;
++SEC("tc")
++__arch_x86_64 __arch_arm64
++__load_if_JITed()
++__success __retval(0)
++int aggregate_arg_spilled_struct_c_test(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len ^ MIX_A;
++	__u64 b =3D skb->len ^ MIX_B;
++	struct pair p =3D { .lo =3D a, .hi =3D b };
++	int n =3D skb->len;
 +
-+	/* arm64 supports up to MAX_BPF_FUNC_ARGS argument slots */
-+	for (i =3D 0, total =3D 0; i < m->nr_args; i++)
-+		total +=3D (m->arg_size[i] + 7) / 8;
-+	if (total > MAX_BPF_FUNC_ARGS)
-+		return -ENOTSUPP;
-=20
- 	/* verifier ensures m->nr_args <=3D MAX_BPF_FUNC_ARGS */
- 	for (i =3D 0, nregs =3D 0; i < m->nr_args; i++) {
++	if (take_spilled_pair(n, n + 1, n + 2, n + 3, p) !=3D a + b + 4 * n + 6=
+)
++		return 1;
++
++	return 0;
++}
++
++#endif
++
++__noinline __u64 take_with_ptr_global(struct with_ptr s)
++{
++	return s.x;
++}
++
++SEC("tc")
++__failure __msg("type STRUCT in take_with_ptr_global() is not composed o=
+f scalars")
++int aggregate_arg_ptr_member_fail(struct __sk_buff *skb)
++{
++	struct with_ptr s =3D { .p =3D skb, .x =3D skb->len };
++
++	return take_with_ptr_global(s);
++}
++
+ char _license[] SEC("license") =3D "GPL";
 --=20
 2.52.0
 
