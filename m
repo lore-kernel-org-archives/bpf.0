@@ -1,143 +1,159 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE1B4CCDC9
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 19:27:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789154840; cv=pass; b=MKwxeRduiKs+ku4OBVnNywwjs8a7QHOiPcYZ1l5X44OjHDCx5OYIRqtPV1MYu/78kpoZEbHcrchB3aq8X1bRsjjGDJYlrrtnpF92PBCQOu46tWmZ1OHZoKV5Ak8PCac5lfJfUiOUXDqrV3K5ZZHVTkxiRrL0LfEMyUIifPsYBSc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789154840; c=relaxed/simple;
-	bh=w6/9piynRRKXPssCmFy5vTu4brh1mtSocO/C/Q3IPQc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sOI32QFoAQ7DQ6ZSx3vYHgom86IWGvWtN5jLBA1/7QXK1c64j0RsaBksDYfZNTjhDqLfOBjokUEfRBUaf/80vE3ZpzjQ7+Tt+qryNzvQLKPsoGeokt20kpyvNO73z2icbwcEphtE4EIDM4k+NrqLgIoYorwl6wo6rRj9hUo9HZ4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JMKI/3a+; arc=pass smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB537378D8D
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 20:20:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789158027; cv=none; b=WGWMcBN9PPJmuGEBbzB8jxgOwnJUgtnZfb876LKdLRLcNbAbkqhX6tBq09Sv7xiGtbEu+efdhM9GFaXCMRpICWtdFbH+JcNXsmda57sCUJ54uncoEqwarm8uTSBSx978tnpoSDX/zPpI3YKHXXP8xKAE78HbdwWmcYQ5O6e1zMM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789158027; c=relaxed/simple;
+	bh=/Ber2a/bRTZVfIvHZqB/+gxypI/8tqNm2AiOUMW82ps=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=l9pBbY//xZeO1QnsWjfPARDL2VbsN6UnR+LV1NDd3y5oC9HqDc3XdfIXukNBnxtJKQ9ZYcBdkoa0xbCZ36UZ2e9hgAHHB1J8524/WRrm/46AkguIV7FWDokmHs+pgSWQjgRyQ45asB4AxKvg7Ev7SD3vqQaePdjDAK2EJNyQFYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GYx9pDTw; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JMKI/3a+"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2d58efc7356so18755545ad.1
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 12:27:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789154839; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Ps15v7wPOByHrWdeCXyz1zk3bZk0QBqKRePIuGl9m+yC2NX84JizaGxwDYuo/TCAVU
-         5jq46Sfdz4gonoIhGSIViRT/KZNARQIMeTuHR2khadwue6e9hlueSIQyM7LT0BbLiBI8
-         7QIfnDoZYlcvjt6qVcmN+X/9ZX8SGAPnX5AZ9bdgOoelmaDBNCEyClmtVCKCnnGFG3y8
-         VOwQhZSmTg3qENFe3oHmTi7b76zF6A1FDm1nE6+Tu3r5XgYuXd2HwI0mwuda43ur5hxD
-         Sxs33f3d1Q/KO3SGpZT4f63ELlUpo8xJe5ESV5l7MqtgW2Gljm48qBZN8l8roB0vId5Q
-         8ipQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=w6/9piynRRKXPssCmFy5vTu4brh1mtSocO/C/Q3IPQc=;
-        fh=HcEwcAOsUSs2gvuUepopR3Yw+WU9bvtqgNvY9fpN77Y=;
-        b=c96aCJ3iprcMeY6lmrj22oubS23OPJZVvXpocsixWqStjEDluZmgZV/TtOlBLG5GGZ
-         K8h+JB52U4Vkk4vA49TvTsPBhH0cImnHIaGuRwq61UwOGCrSEQ/XjiNytC4VDcaWUsLK
-         h2+GrXvydxfffjV1VXOOARHdbELn9vxvlN8G556jU0sB6uYRrvUOD0BRCj18M6M2N1J4
-         czBef0gnJsb70zYPVP+96rbq9AET3V8iXsfjinCM126ZCYwWcSoBEb2KgWP4o1GHY8sd
-         tBtKIxt8LOVOf/dvqfDWQy0JaADXqFpMOMeZib/1qYugnaau8x1SJkySJzzdDIPnxb5o
-         l47w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GYx9pDTw"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-398e9698a70so1512656a91.0
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 13:20:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789154839; x=1789759639; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=w6/9piynRRKXPssCmFy5vTu4brh1mtSocO/C/Q3IPQc=;
-        b=JMKI/3a+3wv3uiuCWz41fwmldb5i20HYq9c7xiJMPkNgNuzA0Gv3bDmbSbRzTHwW77
-         U5qjTO5xxxuJtMC3Kzd+vdy7yTPyvVCJBFo518i4NIOTwI17Nl/4M74P1cyfFaescYwg
-         Qbb2iBpSZ6RoAKD+nNPS0LCf8t1QJxFI7yi3Ilq0Wh+nBmFPT0UHEDksx6eqYLnMkY0X
-         iWcrTrIBIg6Lam42Gfh0CwBnMrYntWB/78rQxlDudtkK6Hhnx45hy/Rqvye6mMXAvfUm
-         AJ1lfdN2DEtrkfNHDLfcFlqp/an7LNa3kJDbrRKdlerNil1jcMb2iG5YZFOCymPbsgkQ
-         3nsw==
+        d=gmail.com; s=20251104; t=1789158025; x=1789762825; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=+jeSNh7SQgdgVvxZgQYK5oHH9o8y2bQYLv0pEhjVpkY=;
+        b=GYx9pDTwW1MWOjXhqd4yiDBUXqfM9zP7ZGhsSURzV+KMWw2VpT2XtUKqg3Bqe3Yn04
+         VMOVT47rgjImKZWDCou2R7poziYvjX260V18h7Adz8s8hNmoS210SznQeOWzmDS82Nu2
+         q/f0ztYhLqvD/s/rHGi3VeVT0eiUqrUA1wS0Pk6L3W2+KMqZG7ZfjoyE7Y518Z5xi1It
+         Z+PTefFyCRgNzs5J9gAK3K9//MHh783m1sic/DpBp3NxkQze4gs/SjW8BDaIbXUZW65X
+         ZnsEoFde2glwt2xByB86ifUfZ4spU1rhZw58+jb2j8LGoCUuN+03bfW4b2Z7jlvuq2Ba
+         BZXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789154839; x=1789759639;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1789158025; x=1789762825;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=w6/9piynRRKXPssCmFy5vTu4brh1mtSocO/C/Q3IPQc=;
-        b=enhcLIf0LD25k1rWJLDGDrb1zbf/+Tm7ZefBw/0puHY8FjJ6jB9adbb/AqJYPZ48z6
-         4IV6UfwjktJSA4vuW8q7RK10Yr0pVAVYWQ1B2S1ApXwX3gFjXvPUfnimWsIsUG6liSw3
-         /wsCvD9iiFuAU8wFhwt9pEZ0bvVLa95h6NEXd6fJrBZIkCUj0rwdoXEGeGj6JrWNuETn
-         TLxRzsWKXPUMcZzmcNucjfeXzY6zcsAHWJt7pbUtyuWYo3sC9Q6UFRcvDHfSn2jPwa3h
-         7izhGo3F2Dk2OyLC6cqkx0+Ot+qW4g+XvrDgZbVRHtVSY7b7O2hK2XCt7W/cBHB0d3dJ
-         QtfQ==
-X-Forwarded-Encrypted: i=1; AKwUvBw7EAoYW7f/wwWpokcWCkd2GMDVb/eVqAGQeghLxI1I7QuCtzXqjT1PUh7KgkIDUcCMbzc=@vger.kernel.org
-X-Gm-Message-State: AFuF++mY5A6CCIH3tduldqp1LchALTvEzPqn+u/L+mwJEF3W+KwMQglZ
-	hmFdOfT+nrPpkWIT2+2bwsVWtmew057hAoJfls+MQC9yiDHQwkLRGZ79a1yXOwTBj7BHa1/6xRq
-	Is/yMnqUzD9O1fmrDw17QPRepyRniaG8=
-X-Gm-Gg: AYBFou1QfZUSrf9sbhxAHu9NhvGRnD0aQrKK4asj/4AHDTDEZiJk0rit0SCbM7Bmp0t
-	egzEJoAkvhiYeWXbx1w8RKOYnkTRrDaKAAxasFjmciXis2I9RgYDxmIsEVgZCc+SHyk50t5bI67
-	ui2+kH8ciFEXB5WcESuI8xaJeZxB+8IeiZzYTD3mYk9YBdJb0NNv7mlRKGamhhbPVP1o+aJJVp2
-	LAnS2FcqhV0fBgvvCLe5/CaryGUMHG8FYlH5ADEVgM8DYMbefsFQPYMKhORvyJmmUz7w1XxKv69
-	Fj/tK8x+otBQyN6Hmc4VlB/uglFYpuhuV1hdOSgMdUDH2Q/0/aXUqmlUyBQfcuHXVG3FecUOQSB
-	v3WH238isaSbCXsCPXJhmV6AqHW10z/BaIY+EkgiU1z6rh3fh
-X-Received: by 2002:a17:90b:1847:b0:395:4de0:b78f with SMTP id
- 98e67ed59e1d1-39d9bbe0f12mr10387705a91.1.1789154838863; Fri, 11 Sep 2026
- 12:27:18 -0700 (PDT)
+        bh=+jeSNh7SQgdgVvxZgQYK5oHH9o8y2bQYLv0pEhjVpkY=;
+        b=pHwcFDFSN3CQzY2/gka8vTnsBmpZ/FhjF/o0yqHF3NcpWvf+uNHiW64+CDpeQD+bgi
+         uNthFBdRf+CM9e90TOmoNgpU45laeBF++rBXa/hBn2hhR905yC95SJkeWBjTWelCz32Q
+         szQIMss1/fHAV7faBqYuNQp4q1oNiUAarwpS2AR13cUWmhaTkWA0w7fRbQcF3dF1fiGU
+         r9uUjmWLxphRJFjQGE/yTh4bi25Lx+ErO+dSs7whMysXMts+z4COmOIj2m7HcBrz5FJT
+         AxgHeJwRHzHjZF5QIjDmNWpszf97K+oYhOwsd0q7HMpYJIN5NBhm4GcN/e/LHOxZKi9p
+         v63w==
+X-Forwarded-Encrypted: i=1; AKwUvBxJSlWkH2cvLmt5//pSRAVbaVqKioBn8Caj/EJ/tdIIsoT11xYwQ/OurmekLUoiHT8eq3w=@vger.kernel.org
+X-Gm-Message-State: AFuF++ltmpMEi+Bfxq+TGQOhDK4eLS48mz88b1b5AuBnKLiObru3xxnS
+	OEu2MpAGptjQKxcGD8eZS2xMqTWl3CSriGnItlTnujXbceSEjfalR5nP
+X-Gm-Gg: AYBFou0PBTmk5rY8UcKJmNc30rY3+0ngsd6jjHKR4MRLn4MkMmWVXja4dhxxoR+q7G3
+	zOVBXbNs3kd2KelE+rPnb2GQ52yv+CjPU7cbg4/ikbElarHK/USU+or1MSK/ZLu7P+7y+WdRSxU
+	f/c3iGwtu8olXvfT4YUMfqCG2FqhRPCFHVByrKJ5TtzFDXZNWdV1/rRyFBTnDG7wNzBuiLw4SAs
+	HuE+5OuF45/nP8VMwE0ogia1KiF/bRhbmovv9ML7mNcWnaZ4xcqXtx4jh+lPdO7O3hyzKcLOCBp
+	rBOnezQhsv1zsRNa+xDuyZ2P5sDOwrxO15pHK3RlM3JnjoTI8NMDsPA42nLeJ73sd2gsBLREu5b
+	hgjN23hX8yUkJCTb3QtxqpU213mYmcCiGGfGUmrzhs6FpvjlA7rIQOJ9S8gVaRQtJk2wRjJQNp9
+	MMD5MjkhaYJMgw9aQHb/a9zcIb/Tui/9dyk9tkAobLhyQyO1WT0IOmI9G7/XHDiPD545aBJBjLe
+	o9f3+U3YUOKK7i2f5Cs4Fr73RW847z/7UR6acwzDoq452W4KZYfBQwCzA==
+X-Received: by 2002:a17:90b:3a0c:b0:366:10f1:3d91 with SMTP id 98e67ed59e1d1-39d9bc10065mr9687179a91.1.1789158025081;
+        Fri, 11 Sep 2026 13:20:25 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:c52f:3686:673c:704a? ([2620:10d:c090:500::4:b9a9])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33ba4efc398sm9705357eec.19.2026.09.11.13.20.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Sep 2026 13:20:24 -0700 (PDT)
+Message-ID: <ed7fb81ef39f8e21bce6fb79698f5fbb6998159e.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Test global subprog
+ callback contexts
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis <emil@etsalapatis.com>, Nicholas Carlini <npc@anthropic.com>, 
+	kkd@meta.com, kernel-team@meta.com
+Date: Fri, 11 Sep 2026 13:20:22 -0700
+In-Reply-To: <20260905051224.2325381-3-memxor@gmail.com>
+References: <20260905051224.2325381-1-memxor@gmail.com>
+	 <20260905051224.2325381-3-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260910183222.307208-1-toke@redhat.com> <20260910183222.307208-3-toke@redhat.com>
- <0e8f9a9c-6295-49ad-b29b-84613dfbfd65@linux.dev> <871pb0dshe.fsf@toke.dk>
-In-Reply-To: <871pb0dshe.fsf@toke.dk>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 11 Sep 2026 12:27:06 -0700
-X-Gm-Features: AcwNN1UNE_XMfGnmmE1hCum3jv72pXAvdmmsUQvigC_2xKHdjhV4FMljr04cN54
-Message-ID: <CAEf4BzbToKWpKwkYNovhOrB-ZvXXyMr71BBaTQN9DsM7KrFzPQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 3/4] selftests/bpf: Adopt bpf_program__add_flags()
- helper
-To: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, 
-	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 11, 2026 at 2:53=E2=80=AFAM Toke H=C3=B8iland-J=C3=B8rgensen <t=
-oke@redhat.com> wrote:
->
-> Jiayuan Chen <jiayuan.chen@linux.dev> writes:
->
-> > On 9/11/26 2:32 AM, Toke H=C3=B8iland-J=C3=B8rgensen wrote:
-> >> Adopt the newly added bpf_program__add_flags() helper everywhere the
-> >> selftests non-destructively modifies program flags (which turns out to
-> >> be every use of bpf_program__set_flags() in the tests).
-> >>
-> >> Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> >> Signed-off-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-> >
-> >
-> > Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> >
-> >
-> > =E2=80=8CAI pays excessive attention to wording.
-> >
-> > maybe just delete whole parenthetical notes=E2=80=8C "(which turns out =
-...)"
->
-> Well, the two instances the bot is complaining about turns out to have
-> been added after I wrote that commit message; I didn't re-run the 'git
-> grep' after rebasing for v2, so I didn't notice this.
->
-> I'm not sure if those two are candidates for conversion as well, TBH. I
-> can respin with your suggested change to the commit message, or just
-> convert those two as well. Or just leave it as-is, I suppose. What do
-> the maintainers think? :)
->
+On Sat, 2026-09-05 at 07:12 +0200, Kumar Kartikeya Dwivedi wrote:
+> Exercise global subprogram verification from workqueue and task-work
+> callbacks. Both callback types can run in a sleepable context even when t=
+he
+> containing program is not sleepable, so an unprotected callback must not =
+let
+> the global subprogram use implicit RCU protection inherited from the prog=
+ram.
+>=20
+> Add negative cases which load an RCU-protected task kptr in a global
+> subprogram reached from each callback type. The tests fail on an unfixed
+> kernel because the programs are incorrectly accepted.
+>=20
+> Also cover a workqueue callback protected by an explicit RCU read-side
+> critical section. Finally, call the same harmless global subprogram direc=
+tly
+> from the main program and from an unprotected callback. This requires bot=
+h
+> non-sleepable and sleepable verification roots and proves that global cal=
+ls
+> from callbacks are not rejected wholesale.
+>=20
+> Keep the harmless global opaque to LLVM with barrier() so both call sites
 
-let's replace, you'll need another revision anyways, thanks!
+__weak is another useful trick for such things.
 
-> -Toke
->
+> remain in the generated BPF object and the positive case cannot pass
+> vacuously. Have workqueue callbacks return zero explicitly after calling =
+a
+> global subprogram, as required by their callback contract, instead of rel=
+ying
+> on interprocedural return-value optimization.
+>=20
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+
+...
+
+> @@ -179,3 +285,29 @@ int task_work_sleepable_prog(void *ctx)
+>  	bpf_task_work_schedule_resume(task, &val->tw, &task_work_map, task_work=
+_cb);
+>  	return 0;
+>  }
+> +
+> +static int task_work_global_rcu_cb(struct bpf_map *map, void *key, void =
+*value)
+> +{
+> +	return wq_global_acquire();
+> +}
+> +
+> +SEC("fentry/bpf_fentry_test1")
+> +__failure __msg("R1 must be a rcu pointer")
+> +int task_work_global_rcu_prog(void *ctx)
+> +{
+> +	struct task_work_elem *val;
+> +	struct task_struct *task;
+> +	int key =3D 0;
+> +
+> +	val =3D bpf_map_lookup_elem(&task_work_map, &key);
+> +	if (!val)
+> +		return 0;
+> +
+> +	task =3D bpf_get_current_task_btf();
+> +	if (!task)
+> +		return 0;
+> +
+> +	bpf_task_work_schedule_resume(task, &val->tw, &task_work_map,
+> +				      task_work_global_rcu_cb);
+> +	return 0;
+> +}
+
+I think this test is redundant.
