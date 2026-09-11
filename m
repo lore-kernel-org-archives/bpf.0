@@ -1,224 +1,244 @@
-Received: from mail-oi2-f12.google.com (mail-oi2-f12.google.com [74.125.231.204])
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5CA378D89
-	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 21:00:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C107463B60
+	for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 21:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789160408; cv=pass; b=MP6w4xCmfLZ+tFZEZ2gd+MbvVcipwxBaiKK4CnKffZ1rXeVuNr3k7Q/P+AX3DOVk30FJVhgmQ91r6o37DEJj14rrDlV+MnBxuOjRVC4WmuWmHvYQlMUkyL478MHZ6vDQFS8ZmyUia3KM8+V5PKJp81eINbtA28YvGoCrjeVLOVA=
+	t=1789160502; cv=pass; b=kBuLYF56f34N0kKzpcDNHW7ERDXdehs2NfzPXaM9kBlTNJTjdypII6ggQsxPsm7HCqvAgrGCLPYay/mDv/bKs+SZDqx4RgbLJIBUrRnqENrVqhvDEh30P/K4PPUu+SbYy02OvIyuCKsLEyvBc0MW3eDGvDHPbNLenxrkXvXhEUo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789160408; c=relaxed/simple;
-	bh=xKKFYQhcHRuYG9ir/hwetHkc290PBnHmyac6P8Dgcmo=;
+	s=arc-20240116; t=1789160502; c=relaxed/simple;
+	bh=ZnNCTQg42ONX2ZidYqMg3tCg29YmjwfQK6KtWU+ovcg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cpbk7rt+/jmS9EbRyWUSW1XyDKA2OVWDuxBA8tMxg7nlPt+CSfW0/kycLLQW1Vpu7uyY+X5OZyLapjQUfmC5WmNwevSMyeI9zO2zKDwYMWjLP41MpFJ+pQ0qG2H8qqQzyX1dD7YGZST2uFa2O8SfhVZezNBr6B+HuC/oAsebt5o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VFQbz+jQ; arc=pass smtp.client-ip=74.125.231.204
+	 To:Cc:Content-Type; b=g5CWkEaJ3JGPJ/jk9yHwmtdEIn9OlQRADv75PBH+hcmngIakBPavK5oCaCedH6F/h9VZyq0FRf963ZkjXD0OARguwDp5oD7ZurRhH410c/m+MHVp36atqXx5xMyC2V2yAtvufkwWTwq43+MnJceipf5EUtrdparBdo45RnXHpiE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZYRHkzIo; arc=pass smtp.client-ip=209.85.210.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VFQbz+jQ"
-Received: by mail-oi2-f12.google.com with SMTP id 5614622812f47-4b37a30eb3bso236513b6e.1
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 14:00:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789160404; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZYRHkzIo"
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7f48c750afcso1400016a34.0
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 14:01:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789160499; cv=none;
         d=google.com; s=arc-20260327;
-        b=oSIJjIiSyn4NPnvlptAGqetGk/TVHhEjFybXf8Rcloxod4KG9nNU+QRqKTGJ7iyrP/
-         WelR9ntlrulZg0xcCoQphNQu5bb/zt3noAnQaTeU36Ub6rwSCDTlBw4mM9fQL5HY0yBY
-         VbEeYiT1iEPCORQZ9jQFBBlXvqhjs+rsl0mD3FU3chBbnE4461Aoeno4CrYfOHHCloLj
-         P738d5FybKKSh0IJyJw9EuMBliBEHmkl5WTVMn/ezia60iUtYAqb1McF/CZpy1ERGrGc
-         3lq22m/2wEMew+ZRLxBwe9m1exAaBR7RV/2C3fuUAlA/omg2d+wX7SwSrsmTflzGRPO9
-         TEOw==
+        b=DWFv+BzcZR9+HgG5AOHMQn5qWsjW94qJXsIF0AwNmR7B0/t2zf0mN2nMlhIZ2N0y1o
+         4lHbjiRYVCMkcTcgOjEKVIoxuG41V7whgWeOYdOjyFl4XWeTrg5uu2uHQZd1blY5HJho
+         iNVZe0VFbIlV45KHgpMAn3OzwJ/1ggtS8SO49HCmk1WAD7qDz5bnTLUNMi1M9eaYCK9r
+         rCSV6yjz4z8zgRHMByv7zzZZNSfooqmFWYmtBckw8YROwgU2iEmeOpQCYduRKDB1tyuG
+         gbPXsGeLwwaYcnNmL2VxDgTWsDj6U+x+8QZD6FowgyKXCa4tZKyY3k3HJVP19Q55yEyE
+         ZKPg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=MH9IX5hIuMzODpkeT8csfNAVdxr4YmQhsEyInmF9M8U=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=gApK6XHVDkDbmZoQFhDhVymJ+FHcmBxYwbjYTNd4QdtT1hwnb3Daj9w2J6pS7IX8Hu
-         5UVnFYeIl+SzvnrdX4EwhzYfvuYCK5v0yZ/bALFWCOR6r8cvldifMjijlbCEJwfFrVZO
-         8tNiCAMKgoiyceT1gCKJpzFRCL3YOpPOwUxIAlScos1uS6yuOpPolHieTOqAco7FeFBe
-         /Px2kMs8Q/gMEX+1bbMZxIuAKaVuTxVI7aG2QQhdgiW1mFmjF3p1r/W/HgE2JSGX/7yX
-         dGaz335G7u2HQ96YWcGUaLwFcvEgKnkWayIxWJ0JpEUc4qCEe3HfYZwuz4N4N6tfept5
-         VNWQ==;
+        bh=peEQX8VEDQkCoCW2ZXlhNTZ6VuPwoZVoNHsmEy4L8oM=;
+        fh=2MBOojPsOSARizhxuWgT5BqcaOh4dFXJJ9MmFSYnYEA=;
+        b=XVfTat05UveFUgpMDOy+SNa1f0nKDKYxBwlZ1G/HWAiVwLiZkB3Ug8hN5zRo+ojWtL
+         2f/5I/0vwbTNaYPT4KLXuzZLhtX9EM4onlw/SsLUCNLBWfdO4AGtnHZAzjJsMYCBexdQ
+         lovIea3EG3xhLY5qTIas28g269IQe/NLFabWCbf0EuAmZaIS58CGTaBMbBsDDEJBiC53
+         /EqgExZh9s27pgnRfkRm6MQ8JNID0XbYlN1YuHVQheIVX3n3wOSApMFzIhxHm77ASaDN
+         2o1N/BdSl7NajuOiIPrOIoc+Jf1zl3eRpDhmtg8Qase3xk0rUhsdNxVjrby8ryw1mD4k
+         Pbcg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789160404; x=1789765204; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789160499; x=1789765299; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=MH9IX5hIuMzODpkeT8csfNAVdxr4YmQhsEyInmF9M8U=;
-        b=VFQbz+jQsxfDt6Ngd9ryEH/AsQTnXjeAoAvF0EuyOkbdRuiyAsbEzv6S3XSkorkXp/
-         1wh8xlG1bEoZHX8KPMTp2tcfmqV3GJ5HStMEVezF+WpT5LL88ZuLyjCIG/GOPZ/ur0kd
-         /GaaeYn3pQh9AhhMpIrIC88n8/P9laEWHmlnJ/y23entEkWQkXlzJDN+Ld0scVZH+CSn
-         NNgNVPiF16G++u1CyTmD/BRebn+ZqedsJ0MuIpBYMmuRggo7LD02jEyNs9DNSrXV/0+d
-         ag4m19GTKhf/kz1/twSym8qcsu2wrc6r3o7lGQoDXmRWEKPo4c/SEqJJAZfdk9sIyifT
-         29hQ==
+        bh=peEQX8VEDQkCoCW2ZXlhNTZ6VuPwoZVoNHsmEy4L8oM=;
+        b=ZYRHkzIokDD8FbXvXOURnT7n40x3ioeVoMieBqRuJIYckbfD4fLZdXzEx2D7lQYrE2
+         RH0zeLeu7a1gnEv8Q2ZH4DcoBfFUMMkIJMZHU4Ug58XbIsXXIm4ix1kCRPfK68HeXEQX
+         4xzvXrxNU67SSD9B7ys6KlnVp71+EsY+ul6P+CVxSp41m+18u6CoVCgpL8ffCIVbpnqa
+         m2q+dF7zqrYKNz9Q7C38Jva6EueJoV6lq2EDZdMlIT72X7FlIc6xDv6r1P+tvZzngT5I
+         ZHSQxXSuQje6ZvokFDOJg3NA0r2McgtT3/eWVIFpaaQm8of9c2ZC7nW4rK+l9uwM3Mwy
+         b4dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789160404; x=1789765204;
+        d=1e100.net; s=20251104; t=1789160499; x=1789765299;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=MH9IX5hIuMzODpkeT8csfNAVdxr4YmQhsEyInmF9M8U=;
-        b=NYkcIubE2d4xjfkAUZEzof2vTUQHLcKZcHjCKsa7KsoC2J5Qm3CKV8y6iruTKNtmRi
-         NLeCrIpNH51iMkH630Hxixh8+54hOQHA58mSoGZotZDTAAJVsWXCS0trtrZORc8XCSCj
-         We7N7Pfl5psFVecR/OI70JH64YCB+XI7tPKQPh6y3IYPdJT6Lmg8yuY/Fc5oivp0DMYn
-         9LhMLsrXPlZ46X9hl4X1uJPCkWN264ZwibheCspicRXGqat8vfBEvPwvuok2x2nECq8p
-         uvOaPFBhK4nkRtArm5hZ61nAylk6ZExGMlncVd7yo4EGzo+pfeUvAKoim1rjKx0Faydr
-         01GA==
-X-Gm-Message-State: AFuF++nDSFgMtA/2or3d/9vad8OSIutat0jBR2c72xu6L7qlzNF1S3mv
-	+HZppaaGStwgHgbmwLVR0W3TWbbEZtZuE5Jgyig73Y/4q5aUuTbF0sIFCltePu+yndYU2OGSi93
-	Kuch8lPetIFBKa4jLEM2ucHIhyIoK/qvT6E3G
-X-Gm-Gg: AYBFou0yAi1H+W7WlC+fVEcugV93f9tlza1Xg4F1za0+sgKrQDaA69958KWoMYT8/ME
-	Gk4i7iN7gMK8SHm+DzjaE9zLE1/33bTRcYWKMXtN9Eh0TBYdlsu4OuGJPL/NiGJIXWV9l6qxeft
-	lyFrnnMojq8wUnY1K6HLQkNaw2HZqInQBxakxd0ra2xav68YfN7H61CCO9fwYHa/AF+wy30e9KY
-	HQSGcgTi0ELXKJe8P/THlX6UDubzd7i/NRwVlL3lmdQY9MQ90t5Hujvkq7b0ETJ5bko4ie1lE41
-	o/T180g6rBMwQ2Ai/SZE7GQBRnj6gjtdeTHOiNdprYo7oGQIY1usw2yR0fLhXXUxLxLNBLU=
-X-Received: by 2002:a05:6820:c452:10b0:6aa:cce3:ab61 with SMTP id
- 006d021491bc7-6c0ba923c37mr6468380eaf.9.1789160404591; Fri, 11 Sep 2026
- 14:00:04 -0700 (PDT)
+        bh=peEQX8VEDQkCoCW2ZXlhNTZ6VuPwoZVoNHsmEy4L8oM=;
+        b=sjFbO7xv4oMLY6u44IBqxaNJLGvd96tQeEb6UtyO5LbAb23b5qsd5u+yj9Pcg+EYGd
+         TSIfcyRTJ4dIg1tp+qRLvN3DV4g2HbK73uhOjbgvQbtK1RzNTFLCZ284g684uaa1oHs+
+         T5O3W6M12VOtoaFCQNSZvz8wScldAw3eSOqcNYer/na0mRwYqg8Psipd9bAaVzH1cFNC
+         LQzSs620GW+RgKJBe192qDmQJZH4PZE7zQR6SWOsQ3gjd+LYJZw3fXKLvmXvoeUeTrlw
+         SpiqvfBbWiQ7WBUkuj8SoX7GgnfGbaFzaNa0y+4HWMwTY6brnz2NlesXzF3XSptDhNNe
+         VPhQ==
+X-Gm-Message-State: AFuF++nZheR+pO+tePvKNHsd+w1G03+BPo639qEXyPPkDq6QFQstBa0b
+	fUdC+WybEXF/rWUQASCAdkRExctHqEfASBlU+pUPoU0K+w21LE2JLOOtq+5IuTpy75GtdjdRNVc
+	SX8itaaWQsbxlz6r5Km5tL2WaDD5Dm7M=
+X-Gm-Gg: AYBFou2qWuXBuyh5Uo537b4gR1mb3raeXbtNPrbUoDTphu13jhGAtpOp8ugoVP6JfU4
+	M2e+f+KWzj39Aog6rNSo36aDwSXw6Yc8V8gvt0kCc4AexOZHhca/fOfoms+26UCZmAPqB6c1YYT
+	n36QKApYrxbDLUWJjHOKo7biTQtMIuJJeqehBSwXsEsRX3bH66fugjHN0ztdxeL9GKS/gBrQQ9z
+	5oK+l90BpyJcEoAsSNJzAIHqaU/Jqt932qDA7K0+45ItKzu9AIwF1ItAQ2H1y2v58NgSlerqVup
+	ks7nXTpQiR/tvyVwzelPmUHYCV7juWfn+B8s8aEBe+BRTScC0bitwUswV6t27UXwF8+fms8=
+X-Received: by 2002:a05:6820:a281:20b0:6bd:e592:2c66 with SMTP id
+ 006d021491bc7-6c0bb8f2546mr3602363eaf.46.1789160498963; Fri, 11 Sep 2026
+ 14:01:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260905220117.922028-1-ameryhung@gmail.com> <20260905220117.922028-23-ameryhung@gmail.com>
- <20260905223348.85D551F00A3A@smtp.kernel.org>
-In-Reply-To: <20260905223348.85D551F00A3A@smtp.kernel.org>
+References: <20260905220117.922028-1-ameryhung@gmail.com> <20260905220117.922028-15-ameryhung@gmail.com>
+ <DLBYWR47GK83.33M4TZ2YKQU5W@gmail.com>
+In-Reply-To: <DLBYWR47GK83.33M4TZ2YKQU5W@gmail.com>
 From: Amery Hung <ameryhung@gmail.com>
-Date: Fri, 11 Sep 2026 13:59:51 -0700
-X-Gm-Features: AcwNN1XAVZWJkpdmxs5hktIsCs5XyxE_eHvb_ZIjvgNU9BY4E8vMsIjooOO66AU
-Message-ID: <CAMB2axNjqLtLeKbVqKwf0yEQ4OvjTq3ifJq19wWTg5YkRDtWcw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 22/22] bpf: Check helper and kfunc arguments
- in one path
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
+Date: Fri, 11 Sep 2026 14:01:25 -0700
+X-Gm-Features: AcwNN1XjNZ6Cr25J1gbZjhwEReJ8kOWi1vIYj3RbZFqRmpnz3032PjCSNO3vFTQ
+Message-ID: <CAMB2axP+p3e9XxBxE4nN0UPsFsqBq4Wd6O9vRcqgaz5sfOYnQw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 14/22] bpf: Consolidate runtime argument type resolution
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, daniel@iogearbox.net, 
+	eddyz87@gmail.com, memxor@gmail.com, kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Sep 5, 2026 at 3:33=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+On Thu, Sep 10, 2026 at 2:52=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Critical] Out-of-bounds reads on `meta->fn->arg_type` and `meta->fn->a=
-rg_btf_id` for kfuncs with more than 5 arguments, allowing bypass of eBPF v=
-erifier safety checks.
-> --
->
-> commit a1895fafaa5219b7b972d20a932c550f7862cec8
-> Author: Amery Hung <ameryhung@gmail.com>
->
-> bpf: Check helper and kfunc arguments in one path
->
-> This commit unifies the argument checking logic for BPF helpers and kfunc=
-s
-> by introducing check_func_args(). It moves kfunc-specific argument handli=
-ng
-> into the shared check_func_arg() path to avoid duplicating the argument
-> iteration and switch logic.
->
+> On Sat Sep 5, 2026 at 3:01 PM PDT, Amery Hung wrote:
+> > A function argument type can require call-site refinement before
+> > register admission. Helpers refine map-value arguments according to the
+> > recorded map type, while kfuncs reinterpret a pointer to a scalar-only
+> > BTF struct as fixed-size memory when the register does not carry a
+> > BTF ID.
+> >
+> > Add resolve_func_arg_type() as the common entry point. It delegates
+> > helper map-value refinement to the existing resolve_map_arg_type(),
+> > then handles the kfunc BTF-to-memory fallback. It updates the effective
+> > argument type and size consumed by the subsequent checks.
+> >
+> > Preserve PTR_MAYBE_NULL when changing the base type so later
+> > nullability validation observes the BTF contract. Keep OBJ_RELEASE
+> > arguments in their original pointer class. The latter is not a bug fix:
+> > existing kfunc checking already validates ownership before this
+> > resolver. It preserves release metadata for the later shared checking
+> > order, where ownership validation follows register admission.
+> >
+> > Moving the kfunc fallback before admission lets the resulting
+> > fixed-size memory argument enter the compatibility check directly.
+> > This is another step toward routing both call types through
+> > check_func_arg().
+> >
+> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> > ---
+> >  kernel/bpf/verifier.c | 199 +++++++++++++++++++++++-------------------
+> >  1 file changed, 110 insertions(+), 89 deletions(-)
+> >
 > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 6c5d7e544f844..54656fb31bbe7 100644
+> > index 2e068c095436..15ed47b90316 100644
 > > --- a/kernel/bpf/verifier.c
 > > +++ b/kernel/bpf/verifier.c
-> [ ... ]
-> > @@ -8808,6 +8840,7 @@ static int check_func_arg(struct bpf_verifier_env=
- *env, u32 arg,
-> >                         struct bpf_call_arg_meta *meta,
-> >                         int insn_idx)
-> >  {
-> > +     const struct btf_param *btf_arg =3D meta->btf ? &btf_params(meta-=
->func_proto)[arg] : NULL;
-> >       const struct bpf_func_proto *fn =3D meta->fn;
-> >       struct bpf_func_state *caller =3D cur_func(env);
-> >       struct bpf_reg_state *regs =3D cur_regs(env);
-> >       argno_t argno =3D argno_from_arg(arg + 1);
-> >       struct bpf_reg_state *reg =3D get_func_arg_reg(caller, regs, arg)=
-;
-> >       enum bpf_arg_type arg_type =3D fn->arg_type[arg];
->
-> [Severity: Critical]
-> Can this read out of bounds when processing kfuncs with more than 5
-> arguments? The fn->arg_type array is sized for MAX_BPF_FUNC_ARGS (5), but
-> kfuncs can have more arguments. For stack arguments (arg >=3D 5), this ap=
-pears
-> to read past the end of the array.
-
-The review is a false positive. MAX_BPF_FUNC_ARGS is 12 not
-MAX_BPF_FUNC_REG_ARGS, which is 5.
-
->
-> [ ... ]
-> > @@ -8935,6 +8980,7 @@ static int check_func_arg(struct bpf_verifier_env=
- *env, u32 arg,
-> >       case ARG_PTR_TO_BTF_ID_SOCK_COMMON:
-> >       {
-> >               const u32 *arg_btf_id =3D fn->arg_btf_id[arg];
->
-> [Severity: Critical]
-> Does this also read out of bounds for kfuncs with more than 5 arguments?
-> Similar to arg_type, the arg_btf_id array in struct bpf_func_proto is lim=
-ited
-> to MAX_BPF_FUNC_ARGS. If a garbage pointer is dereferenced here, could it
-> crash the verifier?
-
-Same false positive as the previous one.
-
->
-> [ ... ]
-> > @@ -9056,6 +9389,37 @@ static int check_func_arg(struct bpf_verifier_en=
-v *env, u32 arg,
-> >       return err;
+> > @@ -8151,8 +8151,8 @@ static bool is_kfunc_call(const struct bpf_call_a=
+rg_meta *meta, u32 btf_id)
 > >  }
 > >
-> > +static int check_func_args(struct bpf_verifier_env *env, struct bpf_ca=
-ll_arg_meta *meta,
-> > +                        int insn_idx)
+> >  static int resolve_map_arg_type(struct bpf_verifier_env *env,
+> > -                              const struct bpf_call_arg_meta *meta,
+> > -                              enum bpf_arg_type *arg_type)
+> > +                             const struct bpf_call_arg_meta *meta,
+> > +                             enum bpf_arg_type *arg_type)
+> >  {
+> >       if (!meta->map.ptr) {
+> >               /* kernel subsystem misconfigured verifier */
+> > @@ -8180,6 +8180,11 @@ static int resolve_map_arg_type(struct bpf_verif=
+ier_env *env,
+> >       return 0;
+> >  }
+> >
+> > +static int resolve_func_arg_type(struct bpf_verifier_env *env,
+> > +                              struct bpf_reg_state *reg, u32 arg,
+> > +                              struct bpf_call_arg_meta *meta, int insn=
+_idx,
+> > +                              enum bpf_arg_type *arg_type, u32 *arg_si=
+ze);
+> > +
+> >  struct bpf_reg_types {
+> >       const enum bpf_reg_type types[10];
+> >       u32 *btf_id;
+> > @@ -8794,6 +8799,7 @@ static int check_func_arg(struct bpf_verifier_env=
+ *env, u32 arg,
+> >       int regno =3D reg_from_argno(argno);
+> >       enum bpf_reg_type type =3D reg->type;
+> >       const u32 *arg_btf_id =3D NULL;
+> > +     u32 arg_size =3D arg_type & MEM_FIXED_SIZE ? fn->arg_size[arg] : =
+0;
+> >       u32 key_size;
+> >       int err =3D 0;
+> >
+> > @@ -8823,11 +8829,9 @@ static int check_func_arg(struct bpf_verifier_en=
+v *env, u32 arg,
+> >               return -EACCES;
+> >       }
+> >
+> > -     if (base_type(arg_type) =3D=3D ARG_PTR_TO_MAP_VALUE) {
+> > -             err =3D resolve_map_arg_type(env, meta, &arg_type);
+> > -             if (err)
+> > -                     return err;
+> > -     }
+> > +     err =3D resolve_func_arg_type(env, reg, arg, meta, insn_idx, &arg=
+_type, &arg_size);
+> > +     if (err)
+> > +             return err;
+> >
+> >       if (bpf_register_is_null(reg) && type_may_be_null(arg_type))
+> >               /* A NULL register has a SCALAR_VALUE type, so skip
+> > @@ -8965,12 +8969,12 @@ static int check_func_arg(struct bpf_verifier_e=
+nv *env, u32 arg,
+> >                * next is_mem_size argument below.
+> >                */
+> >               if (arg_type & MEM_FIXED_SIZE) {
+> > -                     err =3D check_mem_reg(env, reg, argno, fn->arg_si=
+ze[arg],
+> > +                     err =3D check_mem_reg(env, reg, argno, arg_size,
+> >                                           arg_type & MEM_WRITE ? BPF_WR=
+ITE : BPF_READ, meta, NULL);
+> >                       if (err)
+> >                               return err;
+> >                       if (arg_type & MEM_ALIGNED)
+> > -                             err =3D check_ptr_alignment(env, reg, 0, =
+fn->arg_size[arg], true);
+> > +                             err =3D check_ptr_alignment(env, reg, 0, =
+arg_size, true);
+> >               }
+> >               break;
+> >       case ARG_MEM_SIZE:
+> > @@ -11814,6 +11818,65 @@ static bool btf_type_is_scalar_struct(struct b=
+pf_verifier_env *env,
+> >       return btf_struct_is_composed_of(env, btf, t, BTF_MEMBER_SCALAR);
+> >  }
+> >
+> > +static int resolve_func_arg_type(struct bpf_verifier_env *env,
+> > +                              struct bpf_reg_state *reg, u32 arg,
+> > +                              struct bpf_call_arg_meta *meta, int insn=
+_idx,
+> > +                              enum bpf_arg_type *arg_type, u32 *arg_si=
+ze)
 > > +{
-> > +     struct bpf_func_state *caller =3D cur_func(env);
-> > +     const struct btf_param *args =3D NULL;
-> > +     u32 arg, nargs =3D MAX_BPF_FUNC_REG_ARGS;
-> > +     int err;
+> > +     argno_t argno =3D argno_from_arg(arg + 1);
+> > +     const struct btf_param *args;
+> > +     const struct btf_type *ref_t, *resolve_ret;
+> > +     const struct btf *btf;
+> > +     const char *ref_tname;
+> > +     u32 ref_id;
 > > +
-> > +     if (meta->btf) {
-> > +             args =3D btf_params(meta->func_proto);
-> > +             nargs =3D btf_type_vlen(meta->func_proto);
-> > +     }
+> > +     if (base_type(*arg_type) =3D=3D ARG_PTR_TO_MAP_VALUE)
+> > +             return resolve_map_arg_type(env, meta, arg_type);
 > > +
-> > +     if (nargs > MAX_BPF_FUNC_REG_ARGS) {
-> > +             err =3D check_outgoing_stack_args(env, caller, nargs, met=
-a->func_name,
-> > +                                             meta->btf, args);
-> > +             if (err)
-> > +                     return err;
-> > +     }
-> > +
-> > +     for (arg =3D 0; arg < nargs; arg++) {
-> > +             if (meta->fn->arg_type[arg] =3D=3D ARG_UNUSED)
-> > +                     break;
+> > +     if (base_type(*arg_type) =3D=3D ARG_PTR_TO_BTF_ID) {
 >
-> [Severity: Critical]
-> Could this loop early-exit and bypass verifier checks for stack arguments=
-?
+> Overall, it all looks great to me.
 >
-> Since nargs can exceed 5 for kfuncs, the out-of-bounds read on
-> meta->fn->arg_type[arg] might evaluate to ARG_UNUSED (0). If this happens=
-,
-> the loop breaks and skips the safety checks for all remaining stack
-> arguments, potentially allowing unverified memory access.
+> Here can reduce indent by:
+>  if (base_type(*arg_type) !=3D ARG_PTR_TO_BTF_ID)
+>     return 0;
 
-Same false positive here. No out-of-bound read, and there is also no
-ARG_UNUSED holes in kfunc arguments.
+Will change.
 
 >
-> > +             err =3D check_func_arg(env, arg, meta, insn_idx);
-> > +             if (err)
-> > +                     return err;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
+> Pls address AI nits and respin, so we can land asap.
 >
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260905220117.92=
-2028-1-ameryhung@gmail.com?part=3D22
+
+Thanks for reviewing the set. I will respin soon.
