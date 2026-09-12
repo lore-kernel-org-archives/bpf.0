@@ -1,234 +1,204 @@
-Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7AB337C0E2
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 05:39:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EFD73C1D43
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 07:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789191598; cv=none; b=EIroQXxFM7xVopvtrqHvmh851aN0xIEeScAWpHmALSvHTFiXnKFmzzFoetAt7My3Mab85t0Eeu88P11kCgX4ROaUxFjlSUWxNWZcY3d/DmF1kMfzN6E8+Lmt67OV9K8q8JHFeeGBZg31AhRx/LzCUuBDjFwYRtL04GjEj7/D1PA=
+	t=1789197236; cv=none; b=NN+dE1QHpfDVU/e9rBjGjCvSoFrG2BCAubtiUXf2npm1VGzYxUKiW9ZY1oA/cScNK7BsS6DPtKfvsj6y83IaoprpFNNvJbB14N9ADOLS0D2g9J/Ez779HnwjvXYt9dIbnQJps5r2MhDu8EZirdfvRLu2cLY26PA3vq75Pgy+668=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789191598; c=relaxed/simple;
-	bh=EkFebyEhROfUpGMY14FIxRPanKfoSxiWxg0RxsaITyw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YPK2MeiHxFZ0F3YhQmi3r/xdhANbkVmHJ71Gka+Hilynh3Pc6r4lvZYmUbbk6XJDyj2f320ViCayu6M9QHK8tWZYazeOP5qHmuSzy38iGMMTeH4kI0l8SR+ql1ipzevoCq4kn1XO5ghW2QqOIr6l7ULUP5ajNUF5uZ1Jjbmnn9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YCVzpFMf; arc=none smtp.client-ip=74.125.224.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789197236; c=relaxed/simple;
+	bh=F3MOECaxR3CJhTRes5N5fgMTP57ppQy59xIDCNNHQyE=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=a3MA8YOqJkuDAsPA/g16VELWVMEzV0dElRvwGK0QYGrXrxLMAxjLhSnES7dkeHB76nHkdLuW24SEaYY7+413tPTvLND4UT4MMIrXwriHRycKiZLqRUPTB57B/MlSc9Gd9g+//9aRe2qdlDTX1aVUjeMen3nKcaL1xtzdSLXeQ+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EfeTesji; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=W3qNy96u; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YCVzpFMf"
-Received: by mail-yx2-f12.google.com with SMTP id 956f58d0204a3-66e4aaf2ecfso209704d50.1
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 22:39:56 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EfeTesji";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="W3qNy96u"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1789197234;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XDLXH37HEbl6yRUp2dcCM+7uDlwa6YnDWzki8R5Rn8A=;
+	b=EfeTesjiglVoCvHZCU0XFFGDGYpfcc4Q9oQMnSesRcFuB3SYneNexKndK1K0jiXi/GVV4L
+	tBTfwi4g+5G4L3VRke+fEvDnWNMjgbqt9KNqCLdjV4l+bp6jzqOUsQLHFyuG15PY8ofneT
+	SjnZ7Ih2k4NSIemke+dHxAShOfFik0E=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-499-Kz2JctNgPMK_QFWNadsWLw-1; Sat, 12 Sep 2026 03:13:52 -0400
+X-MC-Unique: Kz2JctNgPMK_QFWNadsWLw-1
+X-Mimecast-MFC-AGG-ID: Kz2JctNgPMK_QFWNadsWLw_1789197231
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-49e64b80b94so8774275e9.3
+        for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 00:13:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789191596; x=1789796396; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+        d=redhat.com; s=google; t=1789197231; x=1789802031; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id
+         :references:in-reply-to:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=CYxmSci5RsA6cvKpTRXhPLC+rNBAf6+Oj4ac05xenYM=;
-        b=YCVzpFMfN71QA0n9Z4B5YekyPAAYtNWA9WYZ3IT3SPiSgE1js6BeRuHSmopaIMMmRP
-         GwZpf98kq1bHvt9/XlIRjcd/BlpUbjZux6XUbrVlylgeV3TtJ9kz1hKJGhDa7bB6C26x
-         9j4NcQrpdq2nx+VVvgfzr9odi9i2JT6Eyc8t7fbMQzqXmAKjnNF/URUr84zbqUqR2XOc
-         mUks2JWU40G5TC1uI1Tglz5ALxZ8L09+VkNTEBN/3Pi93n7fVskgdUpfQDMlWT2/n2CK
-         6kadvaBuMaA8nbSSUES8Pa/UbNKoX8RKgvkObSNthYl8RTlZBCC5hCGAjEXn52QdYn23
-         pZkA==
+        bh=XDLXH37HEbl6yRUp2dcCM+7uDlwa6YnDWzki8R5Rn8A=;
+        b=W3qNy96usdq9RDx9sINpZh1lM2xN1V04t+qi5TQRmUcNrTz+PaYMkogWQQ88SlJc4f
+         968364DFRAlRoMgcWgPJMXycPotfavazTqAUV82TW2Bis+/xDLv/yYpaBUIbRVXyxlQD
+         5Z55r6QtgXBVb98N/BTaq1Xw7jqRwrpmzkATZr5BkJSec2T7e7cQWFE/BuePzFjZATca
+         tT2+A9SIQh3Bw6hNWRdSMeh/v3LMgXtsUfCc2Pm3OjuOm+1ACO+wEw/mNlgBx9/KpDFL
+         FIMrJesB35GRd3c1KJ96o0DRWVTpItLrTGwJsv6qMNv3LkeF8sik+ToZaJuEpJamrwJM
+         o/Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789191596; x=1789796396;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1789197231; x=1789802031;
+        h=content-transfer-encoding:content-type:mime-version:message-id
+         :references:in-reply-to:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=CYxmSci5RsA6cvKpTRXhPLC+rNBAf6+Oj4ac05xenYM=;
-        b=f7yKu3S2ilyTh2/2lPUHMr07lFngAr4iLhn+EchghxYxIsqpeA6hDOXqtZUhzwpOco
-         +2oNfk6oWRbX2hAnoLXoN/NxsP3cZ+rcs4e8+NBL56FJM5l9ST65aGYrN8eDj9jmcpip
-         FvSd9HTVoAHo0ihZHiVO6Yd14i4D/LS1b+Fu1EePkCkLI08YfQeO8vT9eUrKFTgG8LuU
-         4q9UsywiaxkUpL1NL+Ldm16pwRD3704cZvBebJlWVS+IJceXL+kEzFq3oh5O5TejU7sn
-         VXtO88sUjh4n4drl/hh4dsZWGD2QhQNV0fKT8Ys36Q+uqkAcYS5pQrL05iWJPkfB6qGL
-         aPdw==
-X-Forwarded-Encrypted: i=1; AKwUvBx+GV3Vo2zn/5q+Abw8dBxENVjtO65hR8xR9w0Uyd9VHz8DPni9i9Q0iIYafZ9Df57VlG0=@vger.kernel.org
-X-Gm-Message-State: AFuF++nSObwuaN5FR78BjHRtK6aHbhhw0jPcNn+IFrv4pXD8k2/1QjvM
-	SnZHpih+jJsF3LgPdR+w8i/j3DD8tj5NPjheWghstssl1tvMkbZbq7cF
-X-Gm-Gg: AYBFou1BHKUCb9+G7DsTAwOz0ezGthPeSa8EYpwAtgr1bWF8NPhLhedNF+va0KJteVw
-	yEZg06Xpm9Hzs5wmXiJEqqfHwrmUq7TZM4KCPYgiITKuoKWFJGrA0j6/5WgeOENV78AI1yysaIb
-	ICqVafLWEXEmXVUtMhGZWtVkPtLksCXkrubuWsvfDzIl5lgQEmtzbawm8wJg+ITmkrF5rpgC/lg
-	KU+AQ9ynK7eEWWlYi1KRH2zx98uLpXrwAuysGwuVwT9mzNrZEsrsK93ivyuQws9u2OXD6gT/IxO
-	s9PaRG5TXxHq1RlCajQOwFwRGyVuBe/mu0cv2yoXykq+39lwAOvCyKFF8/c5DRxYDKWXKyfpTDX
-	wV+TGuZmS72c14SIO763OZuLODl1iyl4vxu0ZCWqc8eXzUClEkPuhqnUMY/b5ZKzQR5+UeY9pkV
-	FM2QeVs4nSiyzOaqPXUFSNQWcM4UmHieyDJQRMdAG2nPRmx1DkojmsIB19pYw9SUVBF/8Vhe7bJ
-	f7OKa6Hq/LRjq9Shj4AFBGvAmdViAtBzrm0XK+Diysh
-X-Received: by 2002:a05:690e:c4c:b0:671:2c69:78aa with SMTP id 956f58d0204a3-67135997185mr282518d50.42.1789191595731;
-        Fri, 11 Sep 2026 22:39:55 -0700 (PDT)
-Received: from zenbox ([2600:1700:18fb:6011:70da:1bc0:eb81:aa1b])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67125e3159fsm1940360d50.12.2026.09.11.22.39.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 22:39:55 -0700 (PDT)
-Date: Sat, 12 Sep 2026 01:39:54 -0400
-From: Justin Suess <utilityemal77@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	kpsingh@kernel.org, matt@bobrowski.net, paul@paul-moore.com, mic@digikod.net, 
-	viro@zeniv.linux.org.uk, brauner@kernel.org, kees@kernel.org, casey@schaufler-ca.com, 
-	gnoack@google.com, jack@suse.cz, song@kernel.org, yonghong.song@linux.dev, 
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, jolsa@kernel.org, 
-	m@maowtm.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 07/15] lsm: Add the bpf_lsm_policy_apply_bprm
- kfunc
-Message-ID: <aqTiqL2QCJtzwW_x@zenbox>
-References: <20260909193719.518517-1-utilityemal77@gmail.com>
- <20260909193719.518517-8-utilityemal77@gmail.com>
- <DLD0WER9K97K.2V2NOAJ840CR7@gmail.com>
+        bh=XDLXH37HEbl6yRUp2dcCM+7uDlwa6YnDWzki8R5Rn8A=;
+        b=YfB+Hm6GtUdsTOSpMDicbn54VNZ73ZQzY3W3inDy8rrPK1V7Fyh2OZoafzUIkGdTsM
+         IPxnN9wQY19JFNEnj6AXlbF8PfTrjEOTtnAS/2fxImvIsyeWAYnZ0BRpGBbq4eY2KP9f
+         CoIDLffqe1GqePwI62kbXuA1QCq6mJF0ihEP0UbGNeldCx08XtJ3uxIHPSMTtS5HOcuA
+         y+ex96o1+pmFyFoPBnVbORNQCsoyntI58JbStD9F8IKc3FBj2mjgQsa0PPnty/1C8JzX
+         RCkPMpOU4h7JfqbDoEju9iRHwOJkYE/51/+4cYIfi7aKJiHBQ7CdQ36Dk3WkgPGD97Wj
+         r6kQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxk5dG31E0Cu5lfO+o0SjTP/UbFW4AtmR0KfoU4J45536oUMj3hsrSiibjKUzxjtxeQMZ0=@vger.kernel.org
+X-Gm-Message-State: AFuF++mET9hIev1ePci3X9HTcFiYriRiWgyJx48aZYZKHOT3Mj7bTVLP
+	AE5Ohna3oIM+ftmM8EO3yTwCAz4YJ7pZ/wiFbjHxVNtxT10ZXyrHzehnP37AmIvHm6XrW7+Yzm3
+	kRMyKoG4X+bajlmEXnlzWSwM/dh/anDvoSHG0BdGrQv3RerAxNTYRog==
+X-Gm-Gg: AYBFou3aeeLWaasG8vm33g//+SkXvhIQigp4hKJvWyyV+ZkL9B5Cd6DQmpa+ylwFGIt
+	9rXiMFl37ljxR2//iYnyYJfRfyRu2f4ckU8SnhvP4b3uSunXEIyf8oqDDqoOsYrls7nJwYYXEDe
+	hzKCZlbRfcGRY9OJYxELO/Zu9+dj5pw7hVB9EOh711fyhTDcJI8ARspAQsqvAePxkb4MCZ6SgU6
+	CUr51oxPV2Os9jcNzeebhA4Kek24yimsd08+9IOkXt25p3RijmaaYTLK5PWAfhmCkm60jKbGfm/
+	0TS2PJMhoIw1du11AddZ5m9V63w/LQmhdK35cdg5sctxIetUGrgocsy5qsn1BQrDcLiVpla8Db8
+	CvDxYEn7j0NEvHsT8XaX8zguKpw==
+X-Received: by 2002:a05:600c:4692:b0:49c:ff8d:b548 with SMTP id 5b1f17b1804b1-49e619ad0e1mr160450825e9.11.1789197231468;
+        Sat, 12 Sep 2026 00:13:51 -0700 (PDT)
+X-Received: by 2002:a05:600c:4692:b0:49c:ff8d:b548 with SMTP id 5b1f17b1804b1-49e619ad0e1mr160450365e9.11.1789197231095;
+        Sat, 12 Sep 2026 00:13:51 -0700 (PDT)
+Received: from ehlo.thunderbird.net (air210.wispotter.com. [212.2.212.210])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e6499d57bsm169819125e9.3.2026.09.12.00.13.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Sep 2026 00:13:50 -0700 (PDT)
+Date: Sat, 12 Sep 2026 07:13:48 +0000
+From: Gabriele Monaco <gmonaco@redhat.com>
+To: Andrea Righi <arighi@nvidia.com>, Ingo Molnar <mingo@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>
+CC: Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
+ K Prateek Nayak <kprateek.nayak@amd.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched: Set need-resched flags before tracing
+In-Reply-To: <20260911213300.1305763-1-arighi@nvidia.com>
+References: <20260911213300.1305763-1-arighi@nvidia.com>
+Message-ID: <71619AD0-A163-40DA-94B1-39052E808DDC@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DLD0WER9K97K.2V2NOAJ840CR7@gmail.com>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 11, 2026 at 08:38:16PM -0700, Alexei Starovoitov wrote:
-> On Wed Sep 9, 2026 at 12:37 PM PDT, Justin Suess wrote:
-> > Add the kfunc applying a policy object to an execution:
-> >
-> >   bpf_lsm_policy_apply_bprm(object, bprm, flags)        KF_SLEEPABLE
-> >
-> > It asks the LSM owning @object, through the bprm_apply_policy_object
-> > hook, to restrict the credentials prepared in @bprm, so that the
-> > executed task starts confined by the policy.  The meaning of @flags
-> > and the composition with restrictions the credentials already carry
-> > are the owning LSM's; an LSM without execution policy support makes
-> > the call fail with -EOPNOTSUPP.
-> >
-> > The kfunc runs the hook in a root memcg charging scope: the policy
-> > restricts the execution on behalf of the BPF program, not of the
-> > mediated task, so what the owning LSM allocates to compute it, e.g.
-> > Landlock's merged domain, is not charged to the task the program
-> > supervises.
-> >
-> > The filter makes the kfunc exclusive to the sleepable LSM programs
-> > attached to the bprm_creds_for_exec() or bprm_creds_from_file()
-> > hooks, the only contexts where the bprm's credentials are prepared
-> > but not yet committed.  The verifier's argument typing does not draw
-> > this boundary on its own: a trusted struct linux_binprm pointer is
-> > also available at the other bprm hooks -- bprm_check_security(),
-> > which runs per binfmt while an interpreter may still rewrite the
-> > execution, and bprm_committing_creds()/bprm_committed_creds(), which
-> > run at or past the point of no return, where the prepared
-> > credentials are frozen or installed -- and to tp_btf programs via
-> > the sched_prepare_exec and sched_process_exec tracepoints, which
-> > resolve kfuncs from the same registration bucket as LSM programs.
-> > The attach-point filter, not the argument type, is the authorization
-> > boundary.
-> >
-> > No filter case is needed for BPF_LSM_CGROUP programs: since
-> > commit 5b038319be44 ("bpf: Reject sleepable BPF_LSM_CGROUP programs
-> > at load time") they cannot be sleepable, so KF_SLEEPABLE already
-> > excludes them.
-> >
-> > Cc: Paul Moore <paul@paul-moore.com>
-> > Cc: KP Singh <kpsingh@kernel.org>
-> > Signed-off-by: Justin Suess <utilityemal77@gmail.com>
-> > ---
-> >
-> > Notes:
-> >     v2->v3:
-> >         - Drop the BPF_LSM_CGROUP case from the kfunc filter: since
-> >           commit 5b038319be44 ("bpf: Reject sleepable BPF_LSM_CGROUP
-> >           programs at load time") such programs cannot be sleepable, so
-> >           KF_SLEEPABLE already excludes them from the apply kfunc.
-> >         - Document, in the commit message and the filter comment, why the
-> >           attach-point filter rather than the verifier's argument typing
-> >           is the authorization boundary.
-> >
-> >  security/bpf_lsm_kfuncs.c | 68 +++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 68 insertions(+)
-> >
-> > diff --git a/security/bpf_lsm_kfuncs.c b/security/bpf_lsm_kfuncs.c
-> > index 43a4bf57fd31..857e9a316d1c 100644
-> > --- a/security/bpf_lsm_kfuncs.c
-> > +++ b/security/bpf_lsm_kfuncs.c
-> > @@ -2,16 +2,25 @@
-> >  
-> >  /* BPF kfuncs exposing LSM policy objects. */
-> >  
-> > +#include <linux/binfmts.h>
-> >  #include <linux/bpf.h>
-> >  #include <linux/btf.h>
-> >  #include <linux/btf_ids.h>
-> >  #include <linux/cfi.h>
-> >  #include <linux/init.h>
-> >  #include <linux/lsm_hooks.h>
-> > +#include <linux/memcontrol.h>
-> > +#include <linux/sched/mm.h>
-> >  #include <linux/security.h>
-> >  
-> >  #include "lsm.h"
-> >  
-> > +/* The sleepable LSM hooks bpf_lsm_policy_apply_bprm() may be called from. */
-> > +BTF_SET_START(bpf_lsm_policy_bprm_hooks)
-> > +BTF_ID(func, bpf_lsm_bprm_creds_for_exec)
-> > +BTF_ID(func, bpf_lsm_bprm_creds_from_file)
-> > +BTF_SET_END(bpf_lsm_policy_bprm_hooks)
-> > +
-> >  __bpf_kfunc_start_defs();
-> >  
-> >  /**
-> > @@ -44,6 +53,49 @@ bpf_lsm_policy_acquire(struct lsm_policy_object *object)
-> >  	return NULL;
-> >  }
-> >  
-> > +/**
-> > + * bpf_lsm_policy_apply_bprm - Apply a policy object to exec credentials
-> > + * @object: policy object to apply
-> > + * @bprm: execution context providing the prepared credentials to
-> > + *        restrict
-> > + * @flags: flags defined by the LSM owning @object
-> > + *
-> > + * Ask the LSM owning @object to restrict the credentials prepared in
-> > + * @bprm with it, so that the executed task starts confined by the
-> > + * policy.  How the policy composes with restrictions the credentials
-> > + * already carry, and the meaning of @flags, are defined by the owning
-> > + * LSM.  @object is only borrowed: the caller keeps its reference.
-> > + * The hook runs in a root memcg charging scope: policy the LSM
-> > + * computes on behalf of the program is not charged to the mediated
-> > + * task.
-> > + *
-> > + * Return: 0 on success, -EOPNOTSUPP if the LSM owning @object does
-> > + * not support applying policy to an execution, -EINVAL on unsupported
-> > + * @flags, other negative values on LSM-specific failures.
-> > + */
-> > +__bpf_kfunc int bpf_lsm_policy_apply_bprm(struct lsm_policy_object *object,
-> > +					  struct linux_binprm *bprm, u32 flags)
-> > +{
-> > +	struct lsm_static_call *scall;
-> > +	struct mem_cgroup *old_memcg;
-> > +	int err;
-> > +
-> > +	lsm_for_each_hook(scall, bprm_apply_policy_object) {
-> > +		if (scall->hl->lsmid->id != object->lsmid)
-> > +			continue;
-> > +		/*
-> > +		 * The hook runs on behalf of the BPF program, not of the
-> > +		 * mediated task: charge its allocations to the root memcg.
-> > +		 */
-> > +		old_memcg = set_active_memcg(root_mem_cgroup);
-> > +		err = scall->hl->hook.bprm_apply_policy_object(bprm, object,
-> > +							       flags);
-> > +		set_active_memcg(old_memcg);
-> > +		return err;
-> > +	}
-> > +	return -EOPNOTSUPP;
-> 
-> Nack.
 
-It was hard to tell why you Nack'd this patch in particular from the
-context.
 
-If you wouldn't mind, providing some guidance as to why the code is
-unacceptable in the current form would give a direction to work
-towards...
+Il 11 settembre 2026 21:33:00 UTC, Andrea Righi <arighi@nvidia=2Ecom> ha s=
+critto:
+>sched_set_need_resched_tp is emitted before the corresponding thread
+>flag is set=2E This allows a BPF tracepoint program to recursively invoke
+>the same tracepoint while leaving its RCU read-side critical section=2E
+>
+>If rcu_read_unlock_special() must defer a quiescent state while
+>preemption or interrupts are disabled, it calls
+>set_need_resched_current()=2E Since TIF_NEED_RESCHED is still clear, this
+>emits the tracepoint again and repeats until the kernel stack overflows:
+>
+>  __trace_set_need_resched()
+>    bpf_trace_run3()
+>      rcu_read_unlock_migrate()
+>        rcu_read_unlock_special()
+>          set_need_resched_current()
+>            set_tsk_need_resched()
+>              __trace_set_need_resched()
+>
+>Set the thread flag before emitting the tracepoint in both
+>set_tsk_need_resched() and __resched_curr()=2E For a remote reschedule,
+>retain the result of set_nr_and_not_polling() so that tracing remains
+>ahead of IPI delivery while still observing the updated flag=2E
+>
+>Fixes: adcc3bfa8806 ("sched: Adapt sched tracepoints for RV task model")
+>Signed-off-by: Andrea Righi <arighi@nvidia=2Ecom>
+>---
 
-(This is for the kfunc placement in security/ I assume?)
+Hi Andrea,
+
+Isn't this mostly what was done in [1]? I wonder if that patch was just fo=
+rgotten=2E
+
+There was a discussion that apparently didn't go anywhere, but it doesn't =
+look like a blocker for the change to me=2E
 
 Thanks,
-Justin
+Gabriele
+
+[1] - https://lore=2Ekernel=2Eorg/lkml/20260627081657=2E499781-1-rhkrqnwk9=
+8@gmail=2Ecom
+
+> include/linux/sched=2Eh | 5 ++++-
+> kernel/sched/core=2Ec   | 7 +++++--
+> 2 files changed, 9 insertions(+), 3 deletions(-)
+>
+>diff --git a/include/linux/sched=2Eh b/include/linux/sched=2Eh
+>index 59f6366fdf501=2E=2E6003dcd080e6c 100644
+>--- a/include/linux/sched=2Eh
+>+++ b/include/linux/sched=2Eh
+>@@ -2105,8 +2105,11 @@ static inline int test_tsk_thread_flag(struct task=
+_struct *tsk, int flag)
+> static inline void set_tsk_need_resched(struct task_struct *tsk)
+> {
+> 	if (tracepoint_enabled(sched_set_need_resched_tp) &&
+>-	    !test_tsk_thread_flag(tsk, TIF_NEED_RESCHED))
+>+	    !test_tsk_thread_flag(tsk, TIF_NEED_RESCHED)) {
+>+		set_tsk_thread_flag(tsk, TIF_NEED_RESCHED);
+> 		__trace_set_need_resched(tsk, TIF_NEED_RESCHED);
+>+		return;
+>+	}
+> 	set_tsk_thread_flag(tsk,TIF_NEED_RESCHED);
+> }
+>=20
+>diff --git a/kernel/sched/core=2Ec b/kernel/sched/core=2Ec
+>index 91f059a556950=2E=2Eaed403fd2f82e 100644
+>--- a/kernel/sched/core=2Ec
+>+++ b/kernel/sched/core=2Ec
+>@@ -1196,6 +1196,7 @@ static void __resched_curr(struct rq *rq, int tif)
+> {
+> 	struct task_struct *curr =3D rq->curr;
+> 	struct thread_info *cti =3D task_thread_info(curr);
+>+	bool send_ipi;
+> 	int cpu;
+>=20
+> 	lockdep_assert_rq_held(rq);
+>@@ -1212,15 +1213,17 @@ static void __resched_curr(struct rq *rq, int tif=
+)
+>=20
+> 	cpu =3D cpu_of(rq);
+>=20
+>-	trace_sched_set_need_resched_tp(curr, cpu, tif);
+> 	if (cpu =3D=3D smp_processor_id()) {
+> 		set_ti_thread_flag(cti, tif);
+> 		if (tif =3D=3D TIF_NEED_RESCHED)
+> 			set_preempt_need_resched();
+>+		trace_sched_set_need_resched_tp(curr, cpu, tif);
+> 		return;
+> 	}
+>=20
+>-	if (set_nr_and_not_polling(cti, tif)) {
+>+	send_ipi =3D set_nr_and_not_polling(cti, tif);
+>+	trace_sched_set_need_resched_tp(curr, cpu, tif);
+>+	if (send_ipi) {
+> 		if (tif =3D=3D TIF_NEED_RESCHED)
+> 			smp_send_reschedule(cpu);
+> 	} else {
+
