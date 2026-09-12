@@ -1,93 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D59630568E
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 20:10:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBA0376A13
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 21:14:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789243849; cv=none; b=VN5pt9WMJkcZavmysuiTqQljsJF3jpZSUUE403g+AbOu3Ecgmhe9GbBke7tovJHoq2i5F6mDgiC8rHksDtGZebUlJd/sdkzzcNw599NZ6EFsL9KNk3IZYnmIa7PA768DeFaW8FP12G25wUUJEWPyzotD6vFgdTCqP2cVxZY+8I0=
+	t=1789247645; cv=none; b=klScqaBVfft8XrZy3eIXersL05fYPjNsrtouLXugvGDsno3isaj1dpueV3BE8YgbyeJcoJoqzaag7Ns97L5CT0T/JecROyDBehXHhlTg7VRJW87bVAysBMCpUWIspRKHqDH2UpgbWNmjBafBBg52QeOp90UovIcshVdSC+DrfcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789243849; c=relaxed/simple;
-	bh=04+RUC3OXaqRcoITvjh3gDcTwHUuoI6LEkDasCu6f64=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=RVObRAV6owEa7sgcTVFepQz+CyhiV0ZZxlZBIEC/MIKHM3Pz3IWhbGetXCUDIwO42HLWRA4wqk1DFKnZR4WKPjk4p+3vAAX3OlgGZTFQmRlXNZv3KeRoAf6GxCPuUgCOYlocssyg+3/2blceONEgToufBsvILhsnW6wRXBg1mOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oUk5LDzE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789247645; c=relaxed/simple;
+	bh=+aDuxa4ipJlMz1JaxCLfhKnz1rTsjziNdNYQxmJYJ7M=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=US7LYIl/UcPva3lYe/pioJ4e67Kv/fLA7yQ8+CzGwPdAkMVMsm3spSfj+34TpK+ERv47AppLp/ZOhGr2HtL+aNtsOfYh7EwjvDDddv72nGolFcjQNBN0oyaakxgt6r9g3QxW3pltjenExejMT5Ezu0+MkEXPwU0VdUupvw9R2YM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pUALi5ON; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oUk5LDzE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30C631F000FF;
-	Sat, 12 Sep 2026 20:10:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789243848;
-	bh=f7q3Mq+5YS0zsiuzAbG7LLFTZEIuYrgAL1i+j6+x6Rk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=oUk5LDzEhxYj4uz+SzKMXXrMr8W1ehhjhcfcwIpZjM6BOkYWgZAlwKoT5wFtqpv70
-	 p8cHkGcMObUyD8H8jEzKkhKAOHyKqIqGYQeo7sQuRh6psG1XUXKb1Dr61CV5oKEJ3S
-	 XRpZJz/9L9CIeCmDd7CFMq64daI1jJ9ZUZtQSfKy4azYpuPLxTKjtBTtZTzZmsh5UW
-	 MRzkdCRj6dk+WDnCOW2VzHIEcINjGRv7y6z0iGVLkl7UgMueQIpN8eTvgmGRNQbyhe
-	 gCbSvQCShHm+ArXCSusp25camPm4ycsDChWVmrS8Eh2mMxEqHoDTVp3HY42iyyPRPl
-	 G2JHdcfnEj+EQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 09/15] bpf: Prepare kfunc arguments for the
- JIT from an ABI description
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260912195242.989416-1-yonghong.song@linux.dev>
-References: <20260912195156.980886-1-yonghong.song@linux.dev>
- <20260912195242.989416-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 12 Sep 2026 20:10:47 +0000
-Message-Id: <20260912201048.30C631F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pUALi5ON"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-47ddf7b09e5so2082885f8f.1
+        for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 14:14:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789247642; x=1789852442; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=RN6NlWXNxbscB16yrp/7Xyb7tbAGCIZghMiPDdHQJK4=;
+        b=pUALi5ON86yZWWJyWkB1mt6oSZxlDCbQgn9I+Vco8t+HbaOSkeIO1VwjgzqD7aQh3f
+         OYZ7xp3pP6LdiubLFn+WuZpmS8kn9REQ1qX8nyeTjQ9KYwaQb/9cFs6VygZG6uZa8b1H
+         gaaleLq8U/XbC5np1icH0ckgK043LVZhky/3aW/O5JWixxpheYCoRVoW0fhWF+EKkKhY
+         vGINxwsh4gaX7tullJQbxgkBmtMSE+tRQ8jhSzw4/Ri8hUJjLs+Ewoo1fMbubxus0qLO
+         1qC216/sY4X7yEkFQf34vPRzxIq8yIGLnw98LsMCodpdQvU9cM9LnSviYY8aHWhiosDd
+         VRKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789247642; x=1789852442;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=RN6NlWXNxbscB16yrp/7Xyb7tbAGCIZghMiPDdHQJK4=;
+        b=CGVaLLut7uF7ZKRlXOMnd9Z+ToNLApGIm+CzIIxAK/ut1gabt2oA6A0QBZNlKtyaYF
+         EzHdsom7bIoeNf1fqgEpHEqy0ehlMgd3tZDqL0tjkUxTKTX9Std+tuW30gHVYZeNdFZe
+         qGVRhRtwj+Xtip2J9wuWTzaPX9lN4wKSzHjCkF7tBCMxZF28LvR2vTYRNrJJEYliTF2v
+         A9C+vy/PGyKBcjKe7PxNAABQ0Vu5qJHAPq48fAVVjSHa9lLgjBC/pVeV0THXjj+tCo2B
+         cDmqlJSS/r0LUsTfPtXrp4/DDycKh14CvAnxV2YuPZPwGJcctsdyMe7IDuWXSxMjLvSY
+         Bu+g==
+X-Forwarded-Encrypted: i=1; AKwUvBxTWeWE9pPW/9AMKh4TRzkySxVenGZIEJhzu8hAKMRWJLYLnH7XjYEscL5F0y44cAxlrHA=@vger.kernel.org
+X-Gm-Message-State: AFuF++lcYHCSJScF2aF5Pf9po0qfjSCKw3Xw6L2cz1+prjO785syWSi0
+	wDbA13sO6I0xAa0vOgRA3vg6VzmUDZlubWn+rQ1TWr51i99dWoxi+gQt
+X-Gm-Gg: AYBFou0ubKAyIqVsGfMuiNjRtWv9yAEw9o08qd9wrYFM6i9rB+ArciikCRn/T1ZCM38
+	NmYKz8MNmNm7goehzQ4T5bTjRNbwFBn2QBJ7x5euH4fw5wk8e/R1LgqrM1LqWXcE1pSDS0BgQoY
+	pe8f2dNyjL1B2Sw92Np7ZlDgUnDTIk54R1i855GV/EDX8Bof7UMKYWnh44h9G1qCW5Ze15Yz45i
+	NqKkugvQnGg/shR4T6/jrRh4dWyhPeD/GBeqUFH7rs0acBNBs7Ia/nRBjjlepCIvGcy9cJc9QCg
+	hzb0FIIzwo3lPftv1gmRy9ZPxyL3Pk0wYrzV2X3Nvhra5BgRuE1WuNqPSOuRU/c59AkCAGF3E/8
+	XotAKmLhjGW+bZ76dP/PL+XE3FB+uoKu3ZmnINBsVTip9p/phgSB9unYIZFn1muvMUdHYF9B7VF
+	PkcXW4JQafPSf0td6C9hcVd5PPnu8+I+YcWI3kA2op80WTJbYRoSUoB1/N/dBh3AnCyTjiA2uLb
+	nOEZgJIeNr5H1dZJ0s+onTvpGNwbCDg/ugC
+X-Received: by 2002:a05:600c:3513:b0:49d:28c4:b304 with SMTP id 5b1f17b1804b1-49e619d479emr105307385e9.29.1789247641902;
+        Sat, 12 Sep 2026 14:14:01 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49d26c39086sm240080175e9.10.2026.09.12.14.14.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Sep 2026 14:14:01 -0700 (PDT)
+Date: Sat, 12 Sep 2026 22:14:00 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Josef Bacik
+ <josef@toxicpanda.com>, Frederic Weisbecker <frederic@kernel.org>, Neeraj
+ Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes
+ <joelagnelf@nvidia.com>, Boqun Feng <boqun@kernel.org>, Thomas Gleixner
+ <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Steven Rostedt
+ <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, x86@kernel.org, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Puranjay Mohan
+ <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, Andy
+ Lutomirski <luto@kernel.org>, Josh Triplett <josh@joshtriplett.org>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang@linux.dev>, Juergen Gross <jgross@suse.com>, Luis
+ Chamberlain <mcgrof@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, xen-devel@lists.xenproject.org
+Subject: Re: [PATCH RFC v2 08/15] bpf, x86: Maintain Tasks RCU trampoline
+ nesting in the BPF trampoline
+Message-ID: <20260912221400.4045198b@pumpkin>
+In-Reply-To: <8c51a669-eb6b-455b-a829-b537da5209f8@paulmck-laptop>
+References: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com>
+	<20260911-b4-rcu-tasks-preempt-qs-v2-8-eaaa61ed2da4@toxicpanda.com>
+	<DLD0OHX8C4ME.VNR49VC2UYH4@gmail.com>
+	<14cb8a91-497d-49f5-aa20-c6cb8b9a27fc@paulmck-laptop>
+	<DLDICNLENSRI.2R6EJ0ZFJE45T@gmail.com>
+	<8c51a669-eb6b-455b-a829-b537da5209f8@paulmck-laptop>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] Multi-line comment does not follow the required BPF subsystem style.
---
+On Sat, 12 Sep 2026 11:03:34 -0700
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 
-commit 68032f34d921b02fbe1d286d103a8c0c09435a42
-Author: Yonghong Song <yonghong.song@linux.dev>
+> In the old kernels, yes, we have current->trc_reader_nesting++.
+> In the newer kernels, Tasks Trace RCU is instead implemented in terms
+> of SRCU-fast, which instead increments per-CPU counters.  Which among
+> other thins is a bit faster and does not need to hook into the scheduler.
 
-bpf: Prepare kfunc arguments for the JIT from an ABI description
+Isn't that rather architecture dependant?
+It is fine on x86, but on arm incrementing a per-cpu variable is
+significantly expensive.
 
-This commit introduces bpf_jit_arg_abi to describe BPF calling
-conventions based on architecture-specific rules. It replaces open-coded
-argument placement with a generalized approach used by bpf_jit_place_args()
-and bpf_jit_plan_arg_moves().
-
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index d0066d744ceb9..2a5fa346aadaa 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-
-[ ... ]
-
-> @@ -993,6 +993,13 @@ static_assert(__BPF_RET_TYPE_MAX <=3D BPF_BASE_TYPE_=
-LIMIT);
->   */
->  #define MAX_BPF_FUNC_REG_ARGS 5
-> =20
-> +/* A by-value argument takes two eightbytes at most, so the maximum numb=
-er of
-> + * argument slots of any function is 2 * MAX_BPF_FUNC_ARGS. A local arra=
-y may
-> + * need that size for processing, although eventually the maximum slots =
-will
-> + * be capped at MAX_BPF_FUNC_ARGS.
-> + */
-> +#define MAX_BPF_FUNC_ARG_SLOTS (2 * MAX_BPF_FUNC_ARGS)
-
-[Severity: Low]
-This isn't a bug, but does the multi-line comment block above
-MAX_BPF_FUNC_ARG_SLOTS follow the required BPF subsystem style? The BPF
-subsystem guidelines specify that multi-line comments must have the
-opening /* on its own line.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260912195156.9808=
-86-1-yonghong.song@linux.dev?part=3D9
+David
