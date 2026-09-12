@@ -1,192 +1,197 @@
-Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
+Received: from mta0.migadu.com (out-10.mta0.migadu.com [91.218.175.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3289C345EA7
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 17:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94F2F3630AE
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 17:19:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789233534; cv=none; b=e6+o7NPGV9TPsjRfCbh4DSnWdUAIqOcxsGU4PW2jUTlp/FZpC7JwZXn0UuMUa1P0+rqBblhETIs1O5vv73lLcq8Elg25MJym6Q66oRZnB0AzL0VYWZLhHe97qtN59egcYvXrS6z+Ea926PO7EPRWizt3bGIx4qREyJ5Mf8InPuQ=
+	t=1789233579; cv=none; b=PQi9TIY0Z8q1jJKN1wXScTF/PSSp6XrmgFTFpdsemnM+MsbILE0YqDjGyITYZYKwqJ39GcUFZIi9e1ffijWcDaNxsAIYciv25hywYNP4bYeQ5OUjkAgaT75kOGQO/Jl6Dike4oRBLmdzu6Mg0fUR1HNeHaEoX1xZq5/GF9ge8eA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789233534; c=relaxed/simple;
-	bh=jBtZBjDlT8Qi3VYpNIp72jmf1UAXzlM9TkhK/45vnWc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=UYZ3pNaVDiJbtre7wFqrGpdwTChl0Ciz6vaBLZBIN5e7we0/xM+WqQCcFGKawibNPhCELnVvXJH75FzVXnNQZvEAjvLIzLJmeSYHCYlpBsPOF81/6IQb1yG9khKgZMBzLLyEAFWpMYwCQDL3seml/G5y9oCg2bhF6ahKtgXLcvI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LLufjg9t; arc=none smtp.client-ip=74.125.231.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789233579; c=relaxed/simple;
+	bh=O2/cRBFHOrxbSwTw3Ox1FCotxFubSMfLmcAOSYNnWdI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Na7c3SvooUJdA8nIa9UDb+JljR7PStoizIIwpnMhaXhqjCyObOjcaDDh+KinTwZhoirdbppiEyUHzO2EUnjTEtDNh962RQHvPmhHv8/rhVZcQ5ABd5LeuV3EGlCNtOALM5QfF71JGZwjNc/zGo+1tkTtN7yIrySUlOEEqf9FEgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FU+q+4x2; arc=none smtp.client-ip=91.218.175.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LLufjg9t"
-Received: by mail-oi2-f13.google.com with SMTP id 5614622812f47-4b37a3ed714so388035b6e.0
-        for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 10:18:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789233531; x=1789838331; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=M1c6suOtzZ2rRuH1TXxQJyOcddxpg3oryXf9dCc4tZI=;
-        b=LLufjg9tkDHfboL43zM8EhB8/3TC5sqvSGrfLsnHpXY5oKIZhyLB12Mpf/1tRBn0Qt
-         aUTmkwDr6K1fXlg42wE3St71lnXgY16DGhmZZsHQvWDX2pFVJrt5xBash1IGri8ujw+K
-         Dos33rufshNrGVyoXmhoAMIEpr8fIqzOJFk56h7oRwrJuSCYgqjWRXrzK1ZwBBeWgsiL
-         mr9G3buIXNvAzpRm2IDzqETuhVXtEVWc5aDnZYcYd8lkAR3CX8wWFuJv8SBGHhH90wdt
-         z0lgJu+7pvtMQKcaKQ+3nUEpjKi4ykmWxRmG4eJoqROjAOq8cGeK8F7PH7wAPuFFmXFw
-         9uoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789233531; x=1789838331;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=M1c6suOtzZ2rRuH1TXxQJyOcddxpg3oryXf9dCc4tZI=;
-        b=HdAVa+F7fthc6B5eXnCf+MTjhZLx6cnCaWN/0ylUyx96iTOVNaYNPUAt6glMfobY0/
-         zSvpHQ/RonjNW0nQQiuYStjWB3TIxpU+2hLVyWne0mGpAwcvMzjn5bHPu31/CM6W5Dv9
-         zk+sdTqPsW+kj4j1jXa/bXTq2SiULvh5oR5IpK57IbKRMhH9j7ZVV/shjVuPYsXoM7WX
-         uxZYcx8pi0YE8SJDbFyT4uz5zbsG4mChVx1zoASfGm+dAZkrvUDiuGpEf+U4DHDLtVUG
-         TGGBEk4qyK7e6RyRu4+UmY/2n89+F5WRSy0iTgFwTVOItjE/6zW/5JxyEiQfuoQGxAz+
-         9HcQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwM5HNN9XNW6pvNxlH5vX61ZiWTVtuWzQa8d7Av959vmeC1CR9rEad92Pl7RzTFNF1Y+OM=@vger.kernel.org
-X-Gm-Message-State: AFuF++nP0WmYlmVz0guBaQUK4K8ZE1NZEdlPYMj0vN/DFG4ik+QblmXO
-	nxD5Njn82Cd8EAR9ed4pWryq+fsomyA620avOOMhXydCJyXGOgaizeQf
-X-Gm-Gg: AYBFou3EcoizeE5Y/LFTEhQJ3NprLz4Big41FNriSF/mSIMxFQLqlxD2DlGHbHcjfPq
-	6p1mvy7nNvcwpeuUmnGqjJUsA8pAoMiKRadaE6tEmrrPhOOoyZHEX0aIHrT+BV/9tI5MA2YrV2U
-	gZ4U+SS9wDDnL7Ia5Y47+OFsPwtbzUSYiAHy+niiG2OzB+rrPlcYLLQtmAcS1fDCZY9m2otEP8E
-	gBfrFr+yGFLla5CpbxWx+Nw96VEAs4xpa1v/71+U23Lgujygm2s5UxeC8GXuaG1vqv2U1dwXfZA
-	+UrIhveizHTNWkVoHv0n9VMJ+cfQfDeBWQ1B0zXYJfALxa8qO4txGslxXH08mTvjsAfKCLgcZXC
-	M0P24gF+hrTwPu3jZj8kYuXCN++awW7p3CpsNzhUX/DWtLHqLf5ahKr1OI/x8cAL34Lo7NxCSPP
-	NT2yDJwSN3ACcylf8ACjC36t5kIqEvme8GBWEvfX4aWkGieEenSWfLawNLBWrssO9m/hlpeHiSi
-	+pi3UT7zS749kByoI/YH7aQEl364pkwRlKvHcGbpUi5+F/2s5vcJ3NdfcffnR8+OA==
-X-Received: by 2002:a05:6808:3503:b0:4b3:8323:8cd8 with SMTP id 5614622812f47-4c4a751294bmr2617971b6e.5.1789233530981;
-        Sat, 12 Sep 2026 10:18:50 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:72::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4c3315b19afsm5495263b6e.10.2026.09.12.10.18.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Sep 2026 10:18:49 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FU+q+4x2"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=O2/cRBFHOrxbSwTw3Ox1FCotxFubSMfLmcAOSYNnWdI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789233575; v=1; x=1789838375;
+ b=FU+q+4x2qiKvUKRwtRMasCMkGGxyo7aqrt7Gg74WlUSAEeke5HNaC+NQx3ek5466f9AiHLbG
+ u+TPoqthoS6x11CBHh8FeL7z4lb/3PL1medY3jQHyReglL0bF8lOvF0mQva2ooLM1cXw83LGdfQ
+ 5972TJlJ2dEyLc6/Z9SY5Ve8=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id aee5926d5ebd7bf4;
+	Sat, 12 Sep 2026 17:19:25 +0000
+X-Mizu-Trace-ID: aee5926d5ebd7bf4
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <253573f1-eea7-4d4f-a083-20b7404fdd84@linux.dev>
+Date: Sat, 12 Sep 2026 10:19:21 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 12 Sep 2026 10:18:48 -0700
-Message-Id: <DLDICNLENSRI.2R6EJ0ZFJE45T@gmail.com>
-Cc: "Josef Bacik" <josef@toxicpanda.com>, "Frederic Weisbecker"
- <frederic@kernel.org>, "Neeraj Upadhyay" <neeraj.upadhyay@kernel.org>,
- "Joel Fernandes" <joelagnelf@nvidia.com>, "Boqun Feng" <boqun@kernel.org>,
- "Thomas Gleixner" <tglx@kernel.org>, "Peter Zijlstra"
- <peterz@infradead.org>, "Steven Rostedt" <rostedt@goodmis.org>, "Masami
- Hiramatsu" <mhiramat@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>,
- "Jiri Olsa" <jolsa@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, <x86@kernel.org>, "Catalin Marinas"
- <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>, "Puranjay
- Mohan" <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huaweicloud.com>, "Andy
- Lutomirski" <luto@kernel.org>, "Josh Triplett" <josh@joshtriplett.org>,
- "Uladzislau Rezki" <urezki@gmail.com>, "Mathieu Desnoyers"
- <mathieu.desnoyers@efficios.com>, "Lai Jiangshan" <jiangshanlai@gmail.com>,
- "Zqiang" <qiang.zhang@linux.dev>, "Juergen Gross" <jgross@suse.com>, "Luis
- Chamberlain" <mcgrof@kernel.org>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, <linux-kernel@vger.kernel.org>,
- <rcu@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
- <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <xen-devel@lists.xenproject.org>
-Subject: Re: [PATCH RFC v2 08/15] bpf, x86: Maintain Tasks RCU trampoline
- nesting in the BPF trampoline
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <paulmck@kernel.org>
-X-Mailer: aerc
-References: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com> <20260911-b4-rcu-tasks-preempt-qs-v2-8-eaaa61ed2da4@toxicpanda.com> <DLD0OHX8C4ME.VNR49VC2UYH4@gmail.com> <14cb8a91-497d-49f5-aa20-c6cb8b9a27fc@paulmck-laptop>
-In-Reply-To: <14cb8a91-497d-49f5-aa20-c6cb8b9a27fc@paulmck-laptop>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 11/15] bpf, arm64: Move kfunc arguments into
+ the arm64 calling convention
+Content-Language: en-GB
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20260911155010.2011265-1-yonghong.song@linux.dev>
+ <f4f7cb06233a74fad41e9ebb3da63dd916eb11b3842346e9fa7da6c9061211b7@mail.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <f4f7cb06233a74fad41e9ebb3da63dd916eb11b3842346e9fa7da6c9061211b7@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri Sep 11, 2026 at 10:10 PM PDT, Paul E. McKenney wrote:
-> On Fri, Sep 11, 2026 at 08:27:56PM -0700, Alexei Starovoitov wrote:
->> On Fri Sep 11, 2026 at 7:08 AM PDT, Josef Bacik wrote:
->> > Emit an increment of current->rcu_tramp_nesting once the trampoline's
->> > frame is set up and a decrement before the final register restore, so
->> > that a task preempted while running fentry/fexit/fmod_ret/LSM programs
->> > or the __bpf_tramp_enter()/__bpf_tramp_exit() glue is not treated as
->> > Tasks-RCU quiescent.  Drop the count around the call to the original
->> > function: that may run arbitrarily long without sleeping and must not =
-pin
->> > a Tasks RCU grace period, and the trampoline frame above it is held by
->> > im->pcref rather than by Tasks RCU (see bpf_tramp_image_put()).  The
->> > fmod_ret early-exit branch and the ip_after_call -> ip_epilogue poke b=
-oth
->> > skip the decrement/increment pair around the original call, so the cou=
-nt
->> > stays balanced on every path.
->> >
->> > The sequence is "mov r11, gs:[current_task]; inc/dec dword [r11 + off]=
-";
->> > r11 is scratch at every emission point and (u32)&current_task is a val=
-id
->> > sign-extended %gs-absolute with the current per-CPU layout, the same f=
-orm
->> > the JIT already uses for this_cpu_off.  The image is dynamically
->> > allocated text, so the instructions outside the bracketed region are
->> > covered by the irq-exit IP check.
->> >
->> > Assisted-by: LLM
->> > Signed-off-by: Josef Bacik <josef@toxicpanda.com>
->> > ---
->> >  arch/x86/net/bpf_jit_comp.c | 43 ++++++++++++++++++++++++++++++++++++=
-+++++++
->> >  1 file changed, 43 insertions(+)
->> >
->> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
->> > index 2853e87797a7..a375c1b7bd50 100644
->> > --- a/arch/x86/net/bpf_jit_comp.c
->> > +++ b/arch/x86/net/bpf_jit_comp.c
->> > @@ -722,6 +722,31 @@ static void emit_indirect_jump(u8 **pprog, int bp=
-f_reg, u8 *ip)
->> >  	*pprog =3D prog;
->> >  }
->> > =20
->> > +/*
->> > + * Tasks RCU trampoline nesting, see rcu_tasks_trampoline_enter().
->> > + *
->> > + *   mov r11, QWORD PTR gs:[current_task]
->> > + *   inc/dec DWORD PTR [r11 + offsetof(struct task_struct, rcu_tramp_=
-nesting)]
->> > + *
->> > + * r11 (AUX_REG) is scratch in the trampoline at every point this is =
-emitted.
->> > + */
->> > +static void emit_rcu_tasks_tramp_nesting(u8 **pprog, bool enter)
->> > +{
->> > +#ifdef CONFIG_TASKS_RCU
->> > +	u8 *prog =3D *pprog;
->> > +
->> > +	/* mov r11, gs:[abs32] */
->> > +	EMIT2(0x65, 0x4C);
->> > +	EMIT3(0x8B, 0x1C, 0x25);
->> > +	EMIT((u32)(unsigned long)&current_task, 4);
->> > +	/* inc/dec dword ptr [r11 + disp32] */
->> > +	EMIT3(0x41, 0xFF, enter ? 0x83 : 0x8B);
->> > +	EMIT(offsetof(struct task_struct, rcu_tramp_nesting), 4);
->> > +
->> > +	*pprog =3D prog;
->> > +#endif
->>=20
->> It's not a lot of overhead, but I feel it will be the death by thousand =
-cuts.
->> rcu_read_lock_trace() in bpf_prog_enter_sleepable is doing the same thin=
-g...
->> increamenting a variable inside current.
->> Can they be combined? Like treat current->trc_reader_nesting > 0 as
->>  current->rcu_tramp_nesting > 0 ?
->> Or replace one with the other?
->> Two current->foo++ operations look redundant.
->>=20
->> bpf trampoline is already quite heavy. I'd like to find ways to reduce
->> its overhead instead of adding more.
+
+
+On 9/11/26 9:47 AM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+>> index 3aa3ea0bc30b..bbde7c0836ae 100644
+>> --- a/arch/arm64/net/bpf_jit_comp.c
+>> +++ b/arch/arm64/net/bpf_jit_comp.c
+> [ ... ]
 >
-> Replace rcu_read_lock_trace() with Josef's rcu_tasks_trampoline_enter)?
+>> @@ -1262,19 +1268,20 @@ static void emit_stack_arg_store_imm(s32 imm, s16 bpf_off, const u8 tmp, struct
+>>    * kern_vm_start. A nullable arg preserves NULL by skipping the add, tested
+>>    * on the truncated value as arena NULL is offset 0.
+>>    */
+>> -static int emit_kfunc_arena_args(struct jit_ctx *ctx, const struct bpf_insn *insn)
+>> +static int emit_kfunc_arena_args(struct jit_ctx *ctx, const struct btf_func_model *fm)
+>>   {
+>>   	const u8 arena_vm_base = bpf2a64[ARENA_VM_START];
+>> -	const struct btf_func_model *fm;
+>> -	int i;
+>> -
+>> -	fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
+>> -	if (!fm)
+>> -		return -EINVAL;
+>> +	int i, slot;
+>>
+>> -	for (i = 0; i < min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS); i++) {
+>> -		const u8 reg = bpf2a64[BPF_REG_1 + i];
+>> +	for (i = 0, slot = 0; i < fm->nr_args; i++) {
+>> +		u32 arg_regs = (fm->arg_size[i] + 7) / 8;
+>>   		u8 flags = fm->arg_flags[i];
+>> +		u8 reg;
+>> +
+>> +		if (slot + arg_regs > MAX_BPF_FUNC_REG_ARGS)
+>> +			break;
+>> +		reg = bpf2a64[BPF_REG_1 + slot];
+>> +		slot += arg_regs;
+>>
+>>   		if (!(flags & BTF_FMODEL_ARENA_ARG))
+>>   			continue;
+>> @@ -1293,6 +1300,52 @@ static int emit_kfunc_arena_args(struct jit_ctx *ctx, const struct bpf_insn *ins
+>>   	return 0;
+>>   }
+>>
+>> +static bool a64_arg_on_stack(u8 slot)
+>> +{
+>> +	return slot >= arm64_arg_abi.nr_arg_regs;
+>> +}
+>> +
+>> +static s32 a64_arg_stack_off(u8 slot)
+>> +{
+>> +	return (slot - arm64_arg_abi.nr_arg_regs) * sizeof(u64);
+>> +}
+> This isn't a bug, but would it be worth expressing
+> emit_stack_arg_load()/emit_stack_arg_store() in terms of
+> a64_arg_on_stack()/a64_arg_stack_off() (or noting in a comment that the
+> two forms describe the same slot-to-location map), so the layout lives
+> in one place? The file now carries two independent encodings of the same
+> physical outgoing-argument layout: the pre-existing helpers express it
+> as 'idx = bpf slot - 5', register when idx < NR_STACK_ARG_REGS
+> (x5/x6/x7) and memory at SP + (idx - NR_STACK_ARG_REGS) * 8 otherwise;
+> the new helpers express it as 'slot', register when slot <
+> arm64_arg_abi.nr_arg_regs and memory at SP + (slot - nr_arg_regs) * 8.
 
-If necessary...
-what I don't understand why we need another rcu_tasks_trampoline_enter-like=
- counter.
-Can existing rcu_read_lock_trace() current be used ?
-It's already doing current->trc_reader_nesting++
-so use that as a signal ?
+I think the code is self explained.
+
+>
+>> +
+>> +/*
+>> + * Move the arguments AAPCS64 places somewhere other than the argument slot the
+>> + * BPF calling convention gave them. Slot N is X(N) up to the eighth, and the
+>> + * outgoing stack argument area from SP beyond it, both for the slot an
+>> + * argument comes from and for the one it goes to.
+>> + *
+>> + * AAPCS64 only ever moves an argument to a higher slot, so no move here ever
+>> + * takes BPF_JIT_ARG_TMP: bpf_jit_plan_arg_moves() hands out the scratch only
+>> + * for a convention that moves one down, which needs a register to carry the
+>> + * value past its own destination.
+>> + */
+>> +static void emit_kfunc_arg_moves(struct jit_ctx *ctx, const struct btf_func_model *fm)
+>> +{
+>> +	struct bpf_jit_arg_move moves[BPF_JIT_MAX_ARG_MOVES];
+>> +	const u8 tmp = bpf2a64[TMP_REG_1];
+>> +	u32 i, n;
+>> +
+>> +	n = bpf_jit_plan_arg_moves(&arm64_arg_abi, fm, moves);
+>> +
+>> +	for (i = 0; i < n; i++) {
+>> +		u8 dst = moves[i].dst, src = moves[i].src, reg;
+>> +
+>> +		if (a64_arg_on_stack(src)) {
+>> +			reg = tmp;
+>> +			emit(A64_LDR64I(reg, A64_SP, a64_arg_stack_off(src)), ctx);
+>> +		} else {
+>> +			reg = src;
+>> +		}
+>> +
+>> +		if (a64_arg_on_stack(dst))
+>> +			emit(A64_STR64I(reg, A64_SP, a64_arg_stack_off(dst)), ctx);
+>> +		else if (reg != dst)
+>> +			emit(A64_MOV(1, dst, reg), ctx);
+>> +	}
+>> +}
+> [ ... ]
+>
+>> @@ -2534,7 +2598,13 @@ struct arg_aux {
+>>   static int calc_arg_aux(const struct btf_func_model *m,
+>>   			 struct arg_aux *a)
+>>   {
+>> -	int stack_slots, nregs, slots, i;
+>> +	int stack_slots, nregs, slots, i, total;
+>> +
+>> +	/* arm64 supports up to MAX_BPF_FUNC_ARGS argument slots */
+>> +	for (i = 0, total = 0; i < m->nr_args; i++)
+>> +		total += (m->arg_size[i] + 7) / 8;
+>> +	if (total > MAX_BPF_FUNC_ARGS)
+>> +		return -ENOTSUPP;
+>>
+>>   	/* verifier ensures m->nr_args <= MAX_BPF_FUNC_ARGS */
+>>   	for (i = 0; i < m->nr_args; i++) {
+> This isn't a bug, but could the changelog say explicitly that arm64's
+> trampoline path now rejects models whose arguments exceed
+> MAX_BPF_FUNC_ARGS eightbytes (previously it accepted up to twice that),
+> so the narrowing is visible to anyone bisecting an fentry attach
+> failure? The third changelog paragraph describes the calc_arg_aux() hunk
+> as adding support ('let us support up to MAX_BPF_FUNC_ARGS argument
+> slots'), while on the trampoline path the hunk is a new restriction:
+> calc_arg_aux() previously accepted any model btf_distill_func_proto()
+> admitted (up to 12 arguments of up to 16 bytes, i.e. up to 24
+> eightbytes), and now returns -ENOTSUPP for anything above 12 eightbytes,
+> so arch_prepare_bpf_trampoline()/arch_bpf_trampoline_size() fail for
+> those targets.
+
+You are right. We shouldn't just reject. I will do proper implementation
+to fix the issue.
+
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34620351527
 
