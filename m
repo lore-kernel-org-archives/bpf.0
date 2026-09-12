@@ -1,117 +1,168 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CBA0376A13
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 21:14:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05D73C3C0C;
+	Sat, 12 Sep 2026 21:30:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789247645; cv=none; b=klScqaBVfft8XrZy3eIXersL05fYPjNsrtouLXugvGDsno3isaj1dpueV3BE8YgbyeJcoJoqzaag7Ns97L5CT0T/JecROyDBehXHhlTg7VRJW87bVAysBMCpUWIspRKHqDH2UpgbWNmjBafBBg52QeOp90UovIcshVdSC+DrfcM=
+	t=1789248618; cv=none; b=tCFWaEdCtV8jZaH1N4YiZ4Bd2dsypqpoWFzBlXVbF7yeNcB+x5FshC6AGz6CF8qZKhbShv8zPGaeMGK0a43elv+BwLx9Q6z3MHVNago/aA7dcLb3YtL0DepwdmA7ToKn0y6UsjhSjbffnJBUgE46DyfeqrnuIMU2JS1pp1M77SQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789247645; c=relaxed/simple;
-	bh=+aDuxa4ipJlMz1JaxCLfhKnz1rTsjziNdNYQxmJYJ7M=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=US7LYIl/UcPva3lYe/pioJ4e67Kv/fLA7yQ8+CzGwPdAkMVMsm3spSfj+34TpK+ERv47AppLp/ZOhGr2HtL+aNtsOfYh7EwjvDDddv72nGolFcjQNBN0oyaakxgt6r9g3QxW3pltjenExejMT5Ezu0+MkEXPwU0VdUupvw9R2YM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pUALi5ON; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789248618; c=relaxed/simple;
+	bh=Qnpy72KVgwG0R3XGEoqvK+FPvQohNeo5FejtAC1zp4c=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Exj/pFe1HUzBMU6/otz39ZXC5YnBKAGbtGy8D0rNdfB2yqUfGrlA73BA0jS0E0C6lnSmJClz6iPg0fRs34AfomQda3z3hjzxLF9zCKacwKuM21+Ieap+amUzeW9MglwfhhoqKhnmO2CVtZsaMkBOV2j59SdgW6geLFpgECPsGTU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BQQuAofG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pUALi5ON"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-47ddf7b09e5so2082885f8f.1
-        for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 14:14:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789247642; x=1789852442; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=RN6NlWXNxbscB16yrp/7Xyb7tbAGCIZghMiPDdHQJK4=;
-        b=pUALi5ON86yZWWJyWkB1mt6oSZxlDCbQgn9I+Vco8t+HbaOSkeIO1VwjgzqD7aQh3f
-         OYZ7xp3pP6LdiubLFn+WuZpmS8kn9REQ1qX8nyeTjQ9KYwaQb/9cFs6VygZG6uZa8b1H
-         gaaleLq8U/XbC5np1icH0ckgK043LVZhky/3aW/O5JWixxpheYCoRVoW0fhWF+EKkKhY
-         vGINxwsh4gaX7tullJQbxgkBmtMSE+tRQ8jhSzw4/Ri8hUJjLs+Ewoo1fMbubxus0qLO
-         1qC216/sY4X7yEkFQf34vPRzxIq8yIGLnw98LsMCodpdQvU9cM9LnSviYY8aHWhiosDd
-         VRKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789247642; x=1789852442;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=RN6NlWXNxbscB16yrp/7Xyb7tbAGCIZghMiPDdHQJK4=;
-        b=CGVaLLut7uF7ZKRlXOMnd9Z+ToNLApGIm+CzIIxAK/ut1gabt2oA6A0QBZNlKtyaYF
-         EzHdsom7bIoeNf1fqgEpHEqy0ehlMgd3tZDqL0tjkUxTKTX9Std+tuW30gHVYZeNdFZe
-         qGVRhRtwj+Xtip2J9wuWTzaPX9lN4wKSzHjCkF7tBCMxZF28LvR2vTYRNrJJEYliTF2v
-         A9C+vy/PGyKBcjKe7PxNAABQ0Vu5qJHAPq48fAVVjSHa9lLgjBC/pVeV0THXjj+tCo2B
-         cDmqlJSS/r0LUsTfPtXrp4/DDycKh14CvAnxV2YuPZPwGJcctsdyMe7IDuWXSxMjLvSY
-         Bu+g==
-X-Forwarded-Encrypted: i=1; AKwUvBxTWeWE9pPW/9AMKh4TRzkySxVenGZIEJhzu8hAKMRWJLYLnH7XjYEscL5F0y44cAxlrHA=@vger.kernel.org
-X-Gm-Message-State: AFuF++lcYHCSJScF2aF5Pf9po0qfjSCKw3Xw6L2cz1+prjO785syWSi0
-	wDbA13sO6I0xAa0vOgRA3vg6VzmUDZlubWn+rQ1TWr51i99dWoxi+gQt
-X-Gm-Gg: AYBFou0ubKAyIqVsGfMuiNjRtWv9yAEw9o08qd9wrYFM6i9rB+ArciikCRn/T1ZCM38
-	NmYKz8MNmNm7goehzQ4T5bTjRNbwFBn2QBJ7x5euH4fw5wk8e/R1LgqrM1LqWXcE1pSDS0BgQoY
-	pe8f2dNyjL1B2Sw92Np7ZlDgUnDTIk54R1i855GV/EDX8Bof7UMKYWnh44h9G1qCW5Ze15Yz45i
-	NqKkugvQnGg/shR4T6/jrRh4dWyhPeD/GBeqUFH7rs0acBNBs7Ia/nRBjjlepCIvGcy9cJc9QCg
-	hzb0FIIzwo3lPftv1gmRy9ZPxyL3Pk0wYrzV2X3Nvhra5BgRuE1WuNqPSOuRU/c59AkCAGF3E/8
-	XotAKmLhjGW+bZ76dP/PL+XE3FB+uoKu3ZmnINBsVTip9p/phgSB9unYIZFn1muvMUdHYF9B7VF
-	PkcXW4JQafPSf0td6C9hcVd5PPnu8+I+YcWI3kA2op80WTJbYRoSUoB1/N/dBh3AnCyTjiA2uLb
-	nOEZgJIeNr5H1dZJ0s+onTvpGNwbCDg/ugC
-X-Received: by 2002:a05:600c:3513:b0:49d:28c4:b304 with SMTP id 5b1f17b1804b1-49e619d479emr105307385e9.29.1789247641902;
-        Sat, 12 Sep 2026 14:14:01 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49d26c39086sm240080175e9.10.2026.09.12.14.14.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Sep 2026 14:14:01 -0700 (PDT)
-Date: Sat, 12 Sep 2026 22:14:00 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Josef Bacik
- <josef@toxicpanda.com>, Frederic Weisbecker <frederic@kernel.org>, Neeraj
- Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes
- <joelagnelf@nvidia.com>, Boqun Feng <boqun@kernel.org>, Thomas Gleixner
- <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Steven Rostedt
- <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, x86@kernel.org, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Puranjay Mohan
- <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, Andy
- Lutomirski <luto@kernel.org>, Josh Triplett <josh@joshtriplett.org>,
- Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
- Zqiang <qiang.zhang@linux.dev>, Juergen Gross <jgross@suse.com>, Luis
- Chamberlain <mcgrof@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>,
- linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, xen-devel@lists.xenproject.org
-Subject: Re: [PATCH RFC v2 08/15] bpf, x86: Maintain Tasks RCU trampoline
- nesting in the BPF trampoline
-Message-ID: <20260912221400.4045198b@pumpkin>
-In-Reply-To: <8c51a669-eb6b-455b-a829-b537da5209f8@paulmck-laptop>
-References: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com>
-	<20260911-b4-rcu-tasks-preempt-qs-v2-8-eaaa61ed2da4@toxicpanda.com>
-	<DLD0OHX8C4ME.VNR49VC2UYH4@gmail.com>
-	<14cb8a91-497d-49f5-aa20-c6cb8b9a27fc@paulmck-laptop>
-	<DLDICNLENSRI.2R6EJ0ZFJE45T@gmail.com>
-	<8c51a669-eb6b-455b-a829-b537da5209f8@paulmck-laptop>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BQQuAofG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 963051F000FF;
+	Sat, 12 Sep 2026 21:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789248616;
+	bh=R2TpiCmLhnVYOi4/KKeCzseOcBdpoomJehEiKb7Q1Tk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=BQQuAofG+Q9xqSPbH04pypz7tjw84ppQPagkx11Y/DKrjgtYr6SySn5XEbqAN+xyE
+	 jSuWr19RX6rsfiG8sNIWNDcH6kBN6SCUx1Jh90hMLmt3Jm8VXbE1iIYrUknQaY34Oh
+	 JXjaYuVe4nj25AQLZ7/uK4hfoLpuY0Z5KWO1xax9E5HADV219Uk+DxCXJvkIJPj5ri
+	 qBTl2LoEENITgMvQxQHwi2omj6bqx+YUrUt8IG193HPm4d8Zru17zSRQR9c+klKpKH
+	 azwyEBu8p2OY96CphtdLX+zNYiJIEVn89czGhRUrxgSzrc3OzwkUiYZxilT93BsXwT
+	 UDixTM2TnAC/w==
+Content-Type: multipart/mixed; boundary="===============4214904970316862522=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-Id: <9577bd41c257d6510512104a7043602ecacacf60bf50399013240d5abe65539a@mail.kernel.org>
+In-Reply-To: <20260911213300.1305763-1-arighi@nvidia.com>
+References: <20260911213300.1305763-1-arighi@nvidia.com>
+Subject: Re: [PATCH] sched: Set need-resched flags before tracing
+From: bot+bpf-ci@kernel.org
+To: arighi@nvidia.com,mingo@redhat.com,peterz@infradead.org,juri.lelli@redhat.com,vincent.guittot@linaro.org,dietmar.eggemann@arm.com
+Cc: rostedt@goodmis.org,bsegall@google.com,mgorman@suse.de,vschneid@redhat.com,kprateek.nayak@amd.com,gmonaco@redhat.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 12 Sep 2026 21:30:15 +0000 (UTC)
+
+--===============4214904970316862522==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On Sat, 12 Sep 2026 11:03:34 -0700
-"Paul E. McKenney" <paulmck@kernel.org> wrote:
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 8b3d47a325cc..ff3ce1ccf92a 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -2105,8 +2105,11 @@ static inline int test_tsk_thread_flag(struct task_struct *tsk, int flag)
+>  static inline void set_tsk_need_resched(struct task_struct *tsk)
+>  {
+>  	if (tracepoint_enabled(sched_set_need_resched_tp) &&
+> -	    !test_tsk_thread_flag(tsk, TIF_NEED_RESCHED))
+> +	    !test_tsk_thread_flag(tsk, TIF_NEED_RESCHED)) {
+> +		set_tsk_thread_flag(tsk, TIF_NEED_RESCHED);
+>  		__trace_set_need_resched(tsk, TIF_NEED_RESCHED);
+> +		return;
+> +	}
+>  	set_tsk_thread_flag(tsk,TIF_NEED_RESCHED);
+>  }
+>
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index b998ef6b87af..e896d5d2c72f 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -1196,6 +1196,7 @@ static void __resched_curr(struct rq *rq, int tif)
+>  {
+>  	struct task_struct *curr = rq->curr;
+>  	struct thread_info *cti = task_thread_info(curr);
+> +	bool send_ipi;
+>  	int cpu;
+>
+>  	lockdep_assert_rq_held(rq);
 
-> In the old kernels, yes, we have current->trc_reader_nesting++.
-> In the newer kernels, Tasks Trace RCU is instead implemented in terms
-> of SRCU-fast, which instead increments per-CPU counters.  Which among
-> other thins is a bit faster and does not need to hook into the scheduler.
+[ ... ]
 
-Isn't that rather architecture dependant?
-It is fine on x86, but on arm incrementing a per-cpu variable is
-significantly expensive.
+> @@ -1212,15 +1213,17 @@ static void __resched_curr(struct rq *rq, int tif)
+>
+>  	cpu = cpu_of(rq);
+>
+> -	trace_sched_set_need_resched_tp(curr, cpu, tif);
+>  	if (cpu == smp_processor_id()) {
+>  		set_ti_thread_flag(cti, tif);
+>  		if (tif == TIF_NEED_RESCHED)
+>  			set_preempt_need_resched();
+> +		trace_sched_set_need_resched_tp(curr, cpu, tif);
+>  		return;
+>  	}
+>
+> -	if (set_nr_and_not_polling(cti, tif)) {
+> +	send_ipi = set_nr_and_not_polling(cti, tif);
+> +	trace_sched_set_need_resched_tp(curr, cpu, tif);
+> +	if (send_ipi) {
 
-David
+In the remote-CPU branch, does this ordering break the runtime
+verification nrp monitor?
+
+On TIF_POLLING_NRFLAG builds, set_nr_and_not_polling() is implemented
+as:
+
+  return !(fetch_or(&ti->flags, 1 << tif) & _TIF_POLLING_NRFLAG);
+
+so the fetch_or commits the TIF_NEED_RESCHED store before the
+tracepoint's probe-list walk begins. The remote CPU can react to the
+flag without waiting for any IPI:
+
+  CPU0 (holds rq1 lock)                        CPU1 (running target task)
+  -----------------------------------          --------------------------
+  send_ipi = set_nr_and_not_polling(cti, tif)
+    -> target's TIF_NEED_RESCHED now set
+                                               returns from any IRQ to a
+                                               preemptible context:
+                                               raw_irqentry_exit_cond_resched()
+                                                 if (need_resched() && ...)
+                                                     preempt_schedule_irq();
+                                                       __schedule(SM_PREEMPT)
+                                                         trace_sched_entry_tp(true)
+  trace_sched_set_need_resched_tp(curr,...)    <- arrives too late
+
+The nrp automaton rejects schedule_entry_preempt from state
+any_thread_running (the steady state after every schedule_entry).
+Row any_thread_running in kernel/trace/rv/monitors/nrp/nrp.h is
+
+  { any_thread_running, rescheduling, any_thread_running, INVALID_STATE }
+
+so schedule_entry_preempt transitions to INVALID_STATE, printing "rv:
+monitor nrp does not allow event schedule_entry_preempt on state
+any_thread_running" and resetting the monitor. With the panic reactor
+selected it panics the box.
+
+The changelog says "For a remote reschedule, retain the result of
+set_nr_and_not_polling() so that tracing remains ahead of IPI delivery
+while still observing the updated flag." Staying ahead of the IPI is
+not sufficient for correctness, because the target CPU preempts on
+need_resched() alone without any IPI. raw_irqentry_exit_cond_resched()
+tests need_resched() on any interrupt return, exit_to_user_mode_loop()
+tests TIF_NEED_RESCHED directly, and in the polling-idle case
+set_nr_and_not_polling() returns false so no IPI is ever sent while the
+idle loop polls tif_need_resched().
+
+The local-CPU branch does not have this problem: __resched_curr() runs
+under the rq raw_spinlock, so preemption is disabled and rq->curr
+cannot schedule before the probe returns. Likewise set_tsk_need_resched()
+is safe: all three callers act on a task that cannot run concurrently
+(current with IRQs disabled, or rq->idle under the rq lock).
+
+Could the remote path emit the tracepoint before the flag store for the
+remote case only (the recursion this patch fixes goes through
+set_tsk_need_resched() on the local CPU, not through the remote branch
+of __resched_curr()), or document why an out-of-order sched_need_resched
+event is acceptable to the RV monitors?
+
+>  		if (tif == TIF_NEED_RESCHED)
+>  			smp_send_reschedule(cpu);
+>  	} else {
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34717210328
+--===============4214904970316862522==--
