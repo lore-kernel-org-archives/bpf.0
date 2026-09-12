@@ -1,234 +1,196 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DD92D0C94
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 10:56:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39C3429000;
+	Sat, 12 Sep 2026 11:11:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789210590; cv=none; b=CThjpcBv5iP7BWpZaugyfrDp4LUz69pJV313C8qr3pEcscVKT9hnh2gXCWQV79dq1lUCk+95oPDyOEsVBw26f74uXMbzvti9Ud4G7pOm81NnoULmJR4o44jq7ONyo756FC7YgTuZx5Gy1vjfGn4p/aR44qIGusvxGhHdQnXv7aI=
+	t=1789211481; cv=none; b=t0/dy6D74eIDER1YPNUlsP2j9fwJyzf6xX2ShCrZVEC4AQTppwFKYBbW0/4shmrvh8/KByolvQ6G1xJ4GavR4jdl0o6efuBrF/kgCfugPs0kIwCo7FUNB2K/G2Uie3aE3x/G+2HavwGUX0Vh38Z7sDBS8GumtTLgCvNl34gGan0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789210590; c=relaxed/simple;
-	bh=ZPU+MA4AQOuUJBvYAW2v2Xv43mX/KlhAc/k5Lj6k0KE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=d+naq2qK6B2/dvqw+tAJGTtZq4mFnIgs/fg2flRWJ9BDBSMJY4MHL+YN/g1T1oSITX4IOu0KWlF7dbxRhVx9FGiGdB+tvshp5JwRTEEZ2lvKv40lMA2x6tPR+1rOjnpRJhWge8Ts6Pb9Bc/QGio5zfYXFNPn/y9JMLaAXaa733k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k8mr3V3J; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789211481; c=relaxed/simple;
+	bh=RyYLhLuGGL/X5+6M8M6vstsnUIR/qykkQ6oE71q43Lk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=KqH9sRl1S3ne/v+JCNOXbnZxa+QJ6o2sEvpT0PO0Lq6I3iHwlO7iEorhT+adDybSFQZ/IbNUwOw+E/kBPIjZNuNtg+Shqj8AqSWLmbKwly3KRRAQ79RNzIozRc7KHK6jAp8+/QH8Ie2uZQtqnkd9yE6MwMTK9rKGfeXuxpIledk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bu7y13jP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k8mr3V3J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3E251F000FF;
-	Sat, 12 Sep 2026 10:56:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bu7y13jP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66C201F00898;
+	Sat, 12 Sep 2026 11:11:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789210588;
-	bh=hs3orKu9GK5m8dcp8ZdKQyeGp7d1gUKoRWxcT0LfoXQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=k8mr3V3JB3Y3sa9YoAgfU6g1mfVJqKnuxovDwAPbh/YEXkwJO8cbmcpna7Rns62Fh
-	 DxrtsgxOGeuDTEghexqzjOrBiEWpx5oaKrgFN5yQlPm6V7r12YhqVpZsyYpSxspV9w
-	 Gx+43VJH2FuhEDBlAo8n7s794gvv1UZEfQzNCKdjzQdwWDP3DeiQq+i6XXS4mxsW3N
-	 HzF15IxX4TtUlW/jpoEpVySuotFiaftD2Q4yYSNGKhKrNfxRpdJIM4OgCIO8eErgPn
-	 WX3QdicqMg8BAEG6mef/J3FJNSMpAuFAoxC3jntUmdiWa3TFj1pT8NRaip1zqHjAiz
-	 MAYjI5vGuqxJw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v15 net-next 1/2] octeontx2: use atomic bitops for PF/VF
- and rep flags
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Ratheesh Kannoth" <rkannoth@marvell.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260911105521.689565-2-rkannoth@marvell.com>
-References: <20260911105521.689565-1-rkannoth@marvell.com>
- <20260911105521.689565-2-rkannoth@marvell.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 12 Sep 2026 10:56:28 +0000
-Message-Id: <20260912105628.B3E251F000FF@smtp.kernel.org>
+	s=k20260515; t=1789211479;
+	bh=YmxGJgRErJMTgGMl4gFEV6eVzM7Y1PU9efzzgGgS47M=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=bu7y13jPj2uqBBgzltp0n2bR8UW2M59MdWDOGGiT/MifLFdUu878ElGMQKO9LOqeV
+	 Z7M7m6WF75zxyB4pCu2H6ug3m0c0k/LIOEIsNnwowRYE4QVW78nZtTT4GmmTPvhyWB
+	 d0B5OoHmPyBcI6ZzZR80Run5WJDzQmpRj0kD4mp/Mf3G+HYqFEl5aa9v1PRnMKazVd
+	 dgC2TWd4KQxXAaV/NWUXqCxu3c3N62hCs3zLbbE7pg2wybYUWhaDWtqaj5UshSNCdY
+	 6mez2u4yQHDdNYI8jvPUwWUTmmzG0mZRGEIkNoXjJuWJqUkR/tE3dSUsC4tYJE+5ia
+	 Xt4yxcmw8OE9w==
+Content-Type: multipart/mixed; boundary="===============7598360419197445268=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <701db29c4de4f408d9c82041d51586a88ccbd9c19f4dc739253733c4cc5edd7a@mail.kernel.org>
+In-Reply-To: <20260912095924.866254-2-florent.revest@linux.dev>
+References: <20260912095924.866254-2-florent.revest@linux.dev>
+Subject: Re: [PATCH bpf v2 1/2] bpf: Skip detached progs in trampoline images that are still in use
+From: bot+bpf-ci@kernel.org
+To: florent.revest@linux.dev,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
+Cc: florent.revest@linux.dev,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,kpsingh@kernel.org,john.fastabend@gmail.com,leon.hwang@linux.dev,zirajs7@gmail.com,rhkrqnwk98@gmail.com,puranjay@kernel.org,xukuohai@huaweicloud.com,iii@linux.ibm.com,hbathini@linux.ibm.com,chleroy@kernel.org,naveen@kernel.org,bjorn@kernel.org,pulehui@huawei.com,yangtiezhu@loongson.cn,hengqi.chen@gmail.com,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sat, 12 Sep 2026 11:11:18 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
-s) to consider:
+--===============7598360419197445268==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Pre-existing issues:
-- [High] TC offload setup on representors corrupts the shared physical func=
-tion (PF) device state by locklessly overwriting its netdev and clobbering =
-its flags via a non-atomic bitwise sync loop.
-- [High] Inverted logic in `otx2_tc_del_flow()` prematurely disables TC MAR=
-K hardware offload when any single mark rule is deleted.
-- [High] Missing cancellation of `stats_wrk` leads to a Use-After-Free duri=
-ng representor teardown.
-- [High] `rvu_rep_mcam_flow_init()` interacts with the mailbox without acqu=
-iring its lock and executes an unbalanced `mutex_unlock()`.
---
-
-commit 5dc6aa35da96ae18ff3fd015c81c420c4cead463
-Author: Ratheesh Kannoth <rkannoth@marvell.com>
-
-octeontx2: use atomic bitops for PF/VF and rep flags
-
-This commit replaces non-atomic u64 flag read-modify-write operations
-with unsigned long bitmaps across the octeontx2 driver. It introduces
-helpers for atomic bitwise flag updates and representor state sync.
-
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/d=
-rivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-> index eecee612b7b2c..7e09c1444a6d5 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
-> @@ -594,6 +595,34 @@ struct otx2_nic {
->  	unsigned long		*af_xdp_zc_qidx;
->  };
-> =20
-> +static inline void otx2_set_flag(struct otx2_nic *nic, unsigned int flag)
-> +{
-> +	set_bit(flag, &nic->flags);
-> +}
-> +
-> +static inline void otx2_clear_flag(struct otx2_nic *nic, unsigned int fl=
-ag)
-> +{
-> +	clear_bit(flag, &nic->flags);
-> +}
-> +
-> +static inline bool otx2_test_flag(struct otx2_nic *nic, unsigned int fla=
-g)
-> +{
-> +	return test_bit(flag, &nic->flags);
-> +}
-> +
-> +static inline void otx2_sync_flags_from_rep(struct otx2_nic *dst,
-> +					    unsigned long *src_flags)
-> +{
-> +	unsigned int flag;
-> +
-> +	for (flag =3D 0; flag <=3D OTX2_REP_VF_INITIALIZED; flag++) {
-> +		if (test_bit(flag, src_flags))
-> +			set_bit(flag, &dst->flags);
-> +		else
-> +			clear_bit(flag, &dst->flags);
-> +	}
-> +}
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does this loop corrupt
-the physical function (PF) state by blindly overwriting its flags?
-
-If a TC rule is configured on a representor, rvu_rep_setup_tc_cb() calls
-this sync loop. It iteratively clears all global PF-specific flags (like
-OTX2_FLAG_REP_MODE_ENABLED and OTX2_FLAG_INTF_DOWN) that aren't set
-on the local representor, breaking datapath routing.
-
-Additionally, is this 22-step bitwise copy susceptible to race conditions
-with concurrent interrupt state changes since the updates are not atomic as
-a single block?
-
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drive=
-rs/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> index 039fd47ebf522..ddb46b580c3b6 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
-> @@ -1195,12 +1195,12 @@ static int otx2_tc_del_flow(struct otx2_nic *nic,
->  	/* Disable TC MARK flag if they are no rules with skbedit mark action */
->  	if (flow_node->req.match_id)
->  		if (!refcount_dec_and_test(&flow_cfg->mark_flows))
-> -			nic->flags &=3D ~OTX2_FLAG_TC_MARK_ENABLED;
-> +			otx2_clear_flag(nic, OTX2_FLAG_TC_MARK_ENABLED);
-
-[Severity: High]
-This is a pre-existing issue, but does this inverted logic prematurely
-disable TC MARK hardware offload when any single mark rule is deleted?
-
-Because the base refcount is 1, deleting a rule drops the count to > 0,
-causing refcount_dec_and_test() to return false. The logical NOT operator
-inverts this to true, triggering the clear flag while other flows are
-still active.
-
-> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/rep.c b/drivers/n=
-et/ethernet/marvell/octeontx2/nic/rep.c
-> index 0f5d5642d3f7a..8a8c0088fd204 100644
-> --- a/drivers/net/ethernet/marvell/octeontx2/nic/rep.c
-> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/rep.c
-> @@ -93,9 +93,9 @@ static int rvu_rep_mcam_flow_init(struct rep_dev *rep)
->  	rep->flow_cfg->max_flows =3D allocated;
-> =20
->  	if (allocated) {
-> -		rep->flags |=3D OTX2_FLAG_MCAM_ENTRIES_ALLOC;
-> -		rep->flags |=3D OTX2_FLAG_NTUPLE_SUPPORT;
-> -		rep->flags |=3D OTX2_FLAG_TC_FLOWER_SUPPORT;
-> +		set_bit(OTX2_FLAG_MCAM_ENTRIES_ALLOC, &rep->flags);
-> +		set_bit(OTX2_FLAG_NTUPLE_SUPPORT, &rep->flags);
-> +		set_bit(OTX2_FLAG_TC_FLOWER_SUPPORT, &rep->flags);
->  	}
-
-[Severity: High]
-This isn't a bug introduced by this patch, but does this function interact
-with the mailbox without acquiring its lock and execute an unbalanced
-mutex_unlock?
-
-When called by rvu_rep_setup_tc_cb(), the function enters without acquiring
-priv->mbox.lock, issues mailbox allocation commands directly, and
-unconditionally unlocks the mutex right before this block on the exit path.
-This could trigger a lockdep splat or panic, and risks ring corruption.
-
-> @@ -109,14 +109,14 @@ static int rvu_rep_setup_tc_cb(enum tc_setup_type t=
-ype,
->  	struct rep_dev *rep =3D cb_priv;
->  	struct otx2_nic *priv =3D rep->mdev;
-> =20
-> -	if (!(rep->flags & RVU_REP_VF_INITIALIZED))
-> +	if (!test_bit(OTX2_REP_VF_INITIALIZED, &rep->flags))
->  		return -EINVAL;
-> =20
-> -	if (!(rep->flags & OTX2_FLAG_TC_FLOWER_SUPPORT))
-> +	if (!test_bit(OTX2_FLAG_TC_FLOWER_SUPPORT, &rep->flags))
->  		rvu_rep_mcam_flow_init(rep);
-> =20
->  	priv->netdev =3D rep->netdev;
-> -	priv->flags =3D rep->flags;
-> +	otx2_sync_flags_from_rep(priv, &rep->flags);
->  	priv->pcifunc =3D rep->pcifunc;
->  	priv->flow_cfg =3D rep->flow_cfg;
-
-[Severity: High]
-This is a pre-existing issue, but does this locklessly overwrite the shared
-PF's netdev with the representor's netdev?
-
-By reassigning priv->netdev to rep->netdev, subsequent TX completions in
-otx2_tx_napi_handler() will incorrectly route packets to this single
-representor's netdev.
-
-> @@ -382,7 +382,7 @@ static void rvu_rep_get_stats64(struct net_device *de=
-v,
->  {
->  	struct rep_dev *rep =3D netdev_priv(dev);
-> =20
-> -	if (!(rep->flags & RVU_REP_VF_INITIALIZED))
-> +	if (!test_bit(OTX2_REP_VF_INITIALIZED, &rep->flags))
->  		return;
-> =20
->  	stats->rx_packets =3D rep->stats.rx_frames;
+> diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+> index 4da278900938..0e6f1ad36c2d 100644
+> --- a/arch/loongarch/net/bpf_jit.c
+> +++ b/arch/loongarch/net/bpf_jit.c
 
 [ ... ]
 
-> @@ -632,7 +632,7 @@ void rvu_rep_destroy(struct otx2_nic *priv)
->  	int rep_id;
-> =20
->  	rvu_eswitch_config(priv, false);
-> -	priv->flags |=3D OTX2_FLAG_INTF_DOWN;
-> +	otx2_set_flag(priv, OTX2_FLAG_INTF_DOWN);
->  	rvu_rep_free_cq_rsrc(priv);
->  	for (rep_id =3D 0; rep_id < priv->rep_cnt; rep_id++) {
->  		rep =3D priv->reps[rep_id];
+> @@ -2178,7 +2189,7 @@ int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
+>  {
+>  	int ret;
+>  	struct jit_ctx ctx;
+> -	struct bpf_tramp_image im;
+> +	struct bpf_tramp_image im = {};
+>
+>  	ctx.image = NULL;
+>  	ctx.idx = 0;
 
-[Severity: High]
-This is a pre-existing issue, but can this lead to a Use-After-Free during
-representor teardown?
+Does arch_bpf_trampoline_size() need to initialize ctx.ro_image?
+invoke_bpf_prog() now reads ctx->ro_image unconditionally:
 
-If a user queries interface statistics (e.g., via ip -s link),
-rvu_rep_get_stats64() schedules the delayed work stats_wrk. If the
-representor is destroyed via rvu_rep_destroy() before the timer expires,
-the struct is unregistered and freed without canceling the pending work.
-When the timer fires, the workqueue executes and accesses the freed memory.
+arch/loongarch/net/bpf_jit.c:invoke_bpf_prog()
+    void *skip = ctx->ro_image + ctx->idx;
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260911105521.6895=
-65-1-rkannoth@marvell.com?part=3D1
+but arch_bpf_trampoline_size() only assigns ctx.image and ctx.idx. Before
+this patch the sizing path read ctx->ro_image only under
+BPF_TRAMP_F_CALL_ORIG, so fentry-only trampolines never touched it. The
+result is discarded (bpf_tramp_image_add_skip() returns immediately
+because im.skips == NULL), so there is no functional misbehaviour, but it
+is a read of an uninitialized automatic variable.
+
+The arm64 side of the same patch already uses a designated initializer:
+
+arch/arm64/net/bpf_jit_comp.c:arch_bpf_trampoline_size()
+    struct jit_ctx ctx = { .image = NULL, .idx = 0, };
+
+Making the loongarch declaration 'struct jit_ctx ctx = {};' would avoid
+the issue.
+
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+> index 151031e97a24..21f8ce2ec89a 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -904,12 +904,18 @@ static void emit_store_stack_imm64(u8 reg, int stack_off, u64 imm64,
+>  	emit_sd(RV_REG_FP, stack_off, reg, ctx);
+>  }
+>
+> -static int invoke_bpf_prog(struct bpf_tramp_node *node, int args_off, int retval_off,
+> -			   int run_ctx_off, bool save_ret, struct rv_jit_context *ctx)
+> +static int invoke_bpf_prog(struct bpf_tramp_image *im, struct bpf_tramp_node *node,
+> +			   int args_off, int retval_off, int run_ctx_off, bool save_ret,
+> +			   struct rv_jit_context *ctx)
+>  {
+>  	int ret, branch_off;
+>  	struct bpf_prog *p = node->link->prog;
+>  	int cookie_off = offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
+> +	void *skip = ctx->ro_insns + ctx->ninsns;
+> +
+> +	/* 2 nops for auipc+jalr, patched to skip this prog when it is detached */
+> +	emit(rv_nop(), ctx);
+> +	emit(rv_nop(), ctx);
+
+This isn't a bug, but should BPF_MAX_TRAMP_LINKS be lowered for riscv64?
+
+The commit message states "With the extra nops, BPF_MAX_TRAMP_LINKS progs
+no longer fit in a page on arm64 and loongarch ... so lower the limit
+there like s390 does." The limits in include/linux/bpf.h were changed:
+
+  arch       added per prog   BPF_MAX_TRAMP_LINKS change
+  arm64      4 bytes            38 -> 37
+  loongarch  20 bytes           38 -> 33
+  powerpc64  4 bytes            38 -> 27
+  s390x      6 bytes            27 (already lowered)
+  riscv64    8 bytes            38 (unchanged)
+  x86_64     5 bytes            38 (unchanged)
+
+riscv64 gains 8 bytes per prog (two rv_nop()s) but its limit is
+unchanged. For 38 progs that is 304 extra bytes, which could push
+trampolines close to the PAGE_SIZE limit over the boundary.
+bpf_trampoline_update() rejects the update with -E2BIG if size exceeds
+PAGE_SIZE, so this is a graceful reduction in the maximum attachable
+progs on riscv64 rather than memory corruption.
+
+> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> index 90b70ea0d370..b82d8592319a 100644
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
+
+[ ... ]
+
+> @@ -565,14 +566,21 @@ static void bpf_tramp_image_free(struct bpf_tramp_image *im)
+>  	arch_free_bpf_trampoline(im->image, im->size);
+>  	bpf_jit_uncharge_modmem(im->size);
+>  	percpu_ref_exit(&im->pcref);
+> +	kfree(im->skips);
+>  	kfree_rcu(im, rcu);
+>  }
+>
+>  static void __bpf_tramp_image_put_deferred(struct work_struct *work)
+>  {
+> +	struct bpf_trampoline *tr;
+>  	struct bpf_tramp_image *im;
+>
+>  	im = container_of(work, struct bpf_tramp_image, work);
+> +	tr = im->tr;
+> +	trampoline_lock(tr);
+> +	list_del(&im->list);
+> +	trampoline_unlock(tr);
+> +	bpf_trampoline_put(tr);
+>  	bpf_tramp_image_free(im);
+>  }
+
+[ ... ]
+
+This isn't a bug, but the comment at the call site of
+__bpf_tramp_image_put_deferred() appears stale. bpf_trampoline_update()
+now does:
+
+kernel/bpf/trampoline.c:bpf_trampoline_update()
+    /* track the image until it is freed, for bpf_trampoline_skip_prog() */
+    refcount_inc(&tr->refcnt);
+    im->tr = tr;
+    list_add(&im->list, &tr->images);
+
+so every live bpf_tramp_image holds a reference on the trampoline and
+tr->refcnt cannot reach 0 while any image is alive. The comment in
+bpf_trampoline_put() says:
+
+kernel/bpf/trampoline.c:bpf_trampoline_put()
+    /* This code will be executed even when the last bpf_tramp_image
+     * is alive. All progs are detached from the trampoline and the
+     * trampoline image is patched with jmp into epilogue to skip
+     * fexit progs. The fentry-only trampoline will be freed via
+     * multiple rcu callbacks.
+     */
+    hlist_del(&tr->hlist_key);
+
+but the guarded block is now reached only after the last image has been
+unlinked, typically from __bpf_tramp_image_put_deferred() rather than
+from the detach syscall.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34688142088
+--===============7598360419197445268==--
