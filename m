@@ -1,205 +1,234 @@
 Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A44A37DE9B
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 05:26:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7AB337C0E2
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 05:39:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789190812; cv=none; b=r7vBz6ko2S+ZirNF66TYsydbHBOey47i3o84fytIPy0P3jJMqXOTlRQyiuai9z8GJRyVk5/RrJuf2+lBe6S4aEU+YSw0zTE19ZMO9IJVxT19lVs7Br+ld/8jva3W9SrXlwaEQPyeWVR+shF1IRG7k/OQ04ja1dWM7APbch/18ek=
+	t=1789191598; cv=none; b=EIroQXxFM7xVopvtrqHvmh851aN0xIEeScAWpHmALSvHTFiXnKFmzzFoetAt7My3Mab85t0Eeu88P11kCgX4ROaUxFjlSUWxNWZcY3d/DmF1kMfzN6E8+Lmt67OV9K8q8JHFeeGBZg31AhRx/LzCUuBDjFwYRtL04GjEj7/D1PA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789190812; c=relaxed/simple;
-	bh=oGrqY7oiATnnJ5ATU1qCem3mCbK4/B1ftouNKkjMoYs=;
+	s=arc-20240116; t=1789191598; c=relaxed/simple;
+	bh=EkFebyEhROfUpGMY14FIxRPanKfoSxiWxg0RxsaITyw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fuI50IAgz2HM9dBXRaRggobUuFyvPNe85mzfm6ZuIl/1tyHbxwjwZMh3eutizahHi8cKRi03Tm5I0VV3XJNDBjDobwS7JRXscBYYNFhLT6BMJ5oKyJ49sY3WYC3V1Jdnt2oGdibF8QV3GYSPY8jLwm44tDWPXi3kIFm0LFFXMe4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fZ+qtsEJ; arc=none smtp.client-ip=74.125.224.140
+	 Content-Type:Content-Disposition:In-Reply-To; b=YPK2MeiHxFZ0F3YhQmi3r/xdhANbkVmHJ71Gka+Hilynh3Pc6r4lvZYmUbbk6XJDyj2f320ViCayu6M9QHK8tWZYazeOP5qHmuSzy38iGMMTeH4kI0l8SR+ql1ipzevoCq4kn1XO5ghW2QqOIr6l7ULUP5ajNUF5uZ1Jjbmnn9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YCVzpFMf; arc=none smtp.client-ip=74.125.224.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fZ+qtsEJ"
-Received: by mail-yx2-f12.google.com with SMTP id 956f58d0204a3-66e4aae3147so441646d50.1
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 22:26:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YCVzpFMf"
+Received: by mail-yx2-f12.google.com with SMTP id 956f58d0204a3-66e4aaf2ecfso209704d50.1
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 22:39:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789190809; x=1789795609; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KgbaZUuPh6OacHvhQLfbnUE+2CYqd4A1QNPAO9N6LkA=;
-        b=fZ+qtsEJ0wnjv9KwJ+uFnwcrHWMzceLrYZyZiltgctQqmsvcstaaKRCxxdTZXgJpQZ
-         WWVDLh/i/eaiEebsaPp9i7r8Ohp6wJcFqbhHeKSIZHDpDP3U9uWVddBfYJEV9A0u1vPW
-         ImvUwc2V/iuFfJunzuBUbRnorCgdzIgL5l1x75Sxf/MLmkmuH4xJcq56qzz4cjhjHt/V
-         mTfzwGKrqZ4vsF4xYzBvQWPitR9Djol3XTzcTdD85MxyMptIXKudxmrPPV23wFDkhq+a
-         5rlxwhSr/lTWDn1YGcBGk9Y129+fxYrKTNO5ZN99+CTIp8sj3dDhrKJetmj6VSrCKFAo
-         0c+w==
+        d=gmail.com; s=20251104; t=1789191596; x=1789796396; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=CYxmSci5RsA6cvKpTRXhPLC+rNBAf6+Oj4ac05xenYM=;
+        b=YCVzpFMfN71QA0n9Z4B5YekyPAAYtNWA9WYZ3IT3SPiSgE1js6BeRuHSmopaIMMmRP
+         GwZpf98kq1bHvt9/XlIRjcd/BlpUbjZux6XUbrVlylgeV3TtJ9kz1hKJGhDa7bB6C26x
+         9j4NcQrpdq2nx+VVvgfzr9odi9i2JT6Eyc8t7fbMQzqXmAKjnNF/URUr84zbqUqR2XOc
+         mUks2JWU40G5TC1uI1Tglz5ALxZ8L09+VkNTEBN/3Pi93n7fVskgdUpfQDMlWT2/n2CK
+         6kadvaBuMaA8nbSSUES8Pa/UbNKoX8RKgvkObSNthYl8RTlZBCC5hCGAjEXn52QdYn23
+         pZkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789190809; x=1789795609;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=KgbaZUuPh6OacHvhQLfbnUE+2CYqd4A1QNPAO9N6LkA=;
-        b=SaTK7cRQ9I9qcs5SDm4h6whnWvv6+fmbMJsB2XI4arPE3aF76sSNmV9Zn1yULNugBq
-         gmH9lNkHh+ro6Qk7KBgwAS3tMup4M4md/B2JS7xtn5WlVDvDYbD+ZPC4aiNOiXC+BNvS
-         eBJgIlr8N4e9U7dRmkR1tsrITKtwb0Uwd3zIGikK1zLzZD5TUEuKSrumOEns/7hB00Tv
-         7ieQh/PJDevp1j2tLyaGm2QoeaEafgvYteJvFq1LFLvZ4t8mI/NQZ6yAmjLY9zVm6OZk
-         IDjToEEOIk8I5jXvKX2jaq+Bs73jgMzRLUB5iQ8wO3Og43v/vfW6cWRmrwWnDoqGty7E
-         0HWg==
-X-Forwarded-Encrypted: i=1; AKwUvByPnfJcOM10B6PZUgU1DbpsBvjUr4P/IWKzlz1o5H6sRp4EBGu50NInwkTQchNgepntL4s=@vger.kernel.org
-X-Gm-Message-State: AFuF++ngYt9LnGoIKxWwWKs07xSYxP/c3+zIN+l5BXv7TpO5Pa+J9tVE
-	cXUQxHKl75GwFeDcSEME0X7bb5ZWC5LN8MCwrP0inKEUYj7ZrbdhLOLs
-X-Gm-Gg: AYBFou1Lp+mmfCltti24EcfY1rEYBGwRkRvdsvFEV2e13xLNEpCSL07Yj2RojozoJPU
-	oHiNtlMcD0lukTiF4WGIJf2R+wThw9+QboLVA6/U9+hk8qof/oTEGIvfAdjhQAzHC25Q97j4R6q
-	MmAxrgmUr+Ki4/wia7TdEZ1JMmQnWjIwwIjlh+OQ3+oNDQSU4ITP1tDBAcLZYwuaNLtXElfn/Ar
-	XXcHPPSQBrork+Lu8GPHLzHYohqU2JnWrbHKjZf+ET2IAkZmgXaDGBTkmdQViCPs406d4u0tHLP
-	XCmiZxiDn8duqCOhgANvLMJIRdTFhJfLmvCyGIGiKxZN31f6O/VIPCyCwdBOKgBhkKu7MwnU/bI
-	7Grn44B4GvEDaeWDId2/4e215EEHYWCy0oyf4R/W4J+ipRElkTZ0NvzZ9llwKxfzVoXG+0aflCI
-	FWI9Bd9YDZEd7eGVj1eAFt1FQcB/tI/gVrJVAKWiIWl/LY+u7GeCmkNZXkVGc+hU3xOKHw38sL+
-	QgaILJx5xr9U5VPYrX8nmKty+wOGE5n9A==
-X-Received: by 2002:a05:690e:144e:b0:671:2832:efe8 with SMTP id 956f58d0204a3-6712832f61dmr2567610d50.47.1789190808818;
-        Fri, 11 Sep 2026 22:26:48 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1789191596; x=1789796396;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=CYxmSci5RsA6cvKpTRXhPLC+rNBAf6+Oj4ac05xenYM=;
+        b=f7yKu3S2ilyTh2/2lPUHMr07lFngAr4iLhn+EchghxYxIsqpeA6hDOXqtZUhzwpOco
+         +2oNfk6oWRbX2hAnoLXoN/NxsP3cZ+rcs4e8+NBL56FJM5l9ST65aGYrN8eDj9jmcpip
+         FvSd9HTVoAHo0ihZHiVO6Yd14i4D/LS1b+Fu1EePkCkLI08YfQeO8vT9eUrKFTgG8LuU
+         4q9UsywiaxkUpL1NL+Ldm16pwRD3704cZvBebJlWVS+IJceXL+kEzFq3oh5O5TejU7sn
+         VXtO88sUjh4n4drl/hh4dsZWGD2QhQNV0fKT8Ys36Q+uqkAcYS5pQrL05iWJPkfB6qGL
+         aPdw==
+X-Forwarded-Encrypted: i=1; AKwUvBx+GV3Vo2zn/5q+Abw8dBxENVjtO65hR8xR9w0Uyd9VHz8DPni9i9Q0iIYafZ9Df57VlG0=@vger.kernel.org
+X-Gm-Message-State: AFuF++nSObwuaN5FR78BjHRtK6aHbhhw0jPcNn+IFrv4pXD8k2/1QjvM
+	SnZHpih+jJsF3LgPdR+w8i/j3DD8tj5NPjheWghstssl1tvMkbZbq7cF
+X-Gm-Gg: AYBFou1BHKUCb9+G7DsTAwOz0ezGthPeSa8EYpwAtgr1bWF8NPhLhedNF+va0KJteVw
+	yEZg06Xpm9Hzs5wmXiJEqqfHwrmUq7TZM4KCPYgiITKuoKWFJGrA0j6/5WgeOENV78AI1yysaIb
+	ICqVafLWEXEmXVUtMhGZWtVkPtLksCXkrubuWsvfDzIl5lgQEmtzbawm8wJg+ITmkrF5rpgC/lg
+	KU+AQ9ynK7eEWWlYi1KRH2zx98uLpXrwAuysGwuVwT9mzNrZEsrsK93ivyuQws9u2OXD6gT/IxO
+	s9PaRG5TXxHq1RlCajQOwFwRGyVuBe/mu0cv2yoXykq+39lwAOvCyKFF8/c5DRxYDKWXKyfpTDX
+	wV+TGuZmS72c14SIO763OZuLODl1iyl4vxu0ZCWqc8eXzUClEkPuhqnUMY/b5ZKzQR5+UeY9pkV
+	FM2QeVs4nSiyzOaqPXUFSNQWcM4UmHieyDJQRMdAG2nPRmx1DkojmsIB19pYw9SUVBF/8Vhe7bJ
+	f7OKa6Hq/LRjq9Shj4AFBGvAmdViAtBzrm0XK+Diysh
+X-Received: by 2002:a05:690e:c4c:b0:671:2c69:78aa with SMTP id 956f58d0204a3-67135997185mr282518d50.42.1789191595731;
+        Fri, 11 Sep 2026 22:39:55 -0700 (PDT)
 Received: from zenbox ([2600:1700:18fb:6011:70da:1bc0:eb81:aa1b])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-88489500e19sm18296697b3.47.2026.09.11.22.26.47
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67125e3159fsm1940360d50.12.2026.09.11.22.39.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 22:26:48 -0700 (PDT)
-Date: Sat, 12 Sep 2026 01:26:47 -0400
+        Fri, 11 Sep 2026 22:39:55 -0700 (PDT)
+Date: Sat, 12 Sep 2026 01:39:54 -0400
 From: Justin Suess <utilityemal77@gmail.com>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Paul Moore <paul@paul-moore.com>, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, kpsingh@kernel.org, matt@bobrowski.net, mic@digikod.net, 
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	kpsingh@kernel.org, matt@bobrowski.net, paul@paul-moore.com, mic@digikod.net, 
 	viro@zeniv.linux.org.uk, brauner@kernel.org, kees@kernel.org, casey@schaufler-ca.com, 
 	gnoack@google.com, jack@suse.cz, song@kernel.org, yonghong.song@linux.dev, 
 	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, jolsa@kernel.org, 
 	m@maowtm.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 04/15] lsm: Add the bpf_lsm_policy_release
- kfunc and policy object destructor
-Message-ID: <aqTZdCz6JaoK16Fp@zenbox>
+Subject: Re: [PATCH bpf-next v3 07/15] lsm: Add the bpf_lsm_policy_apply_bprm
+ kfunc
+Message-ID: <aqTiqL2QCJtzwW_x@zenbox>
 References: <20260909193719.518517-1-utilityemal77@gmail.com>
- <20260909193719.518517-5-utilityemal77@gmail.com>
- <CAHC9VhQHZ+ngFdzKqmnzBh341CGEg-jexu+QYU8=1qXK=u-x-Q@mail.gmail.com>
- <aqHUw6k0Mf83CGFT@zenbox>
- <CAHC9VhTM7emi9vxs+5Za8Hrc_e9dg7fZx+Z6BGUc4VQ1qhEAUA@mail.gmail.com>
- <DLD0VQ3D8CYC.3V5ZT8HDMY4IH@gmail.com>
+ <20260909193719.518517-8-utilityemal77@gmail.com>
+ <DLD0WER9K97K.2V2NOAJ840CR7@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DLD0VQ3D8CYC.3V5ZT8HDMY4IH@gmail.com>
+In-Reply-To: <DLD0WER9K97K.2V2NOAJ840CR7@gmail.com>
 
-On Fri, Sep 11, 2026 at 08:37:22PM -0700, Alexei Starovoitov wrote:
-> On Wed Sep 9, 2026 at 4:08 PM PDT, Paul Moore wrote:
-> > On Wed, Sep 9, 2026 at 6:21 PM Justin Suess <utilityemal77@gmail.com> wrote:
-> >> On Wed, Sep 09, 2026 at 05:34:31PM -0400, Paul Moore wrote:
-> >> > On Wed, Sep 9, 2026 at 3:37 PM Justin Suess <utilityemal77@gmail.com> wrote:
-> >> > >
-> >> > > Add security/bpf_lsm_kfuncs.c, the home of the kfuncs exposing LSM
-> >> > > policy objects to BPF programs, with the first of them:
-> >> > >
-> >> > >   bpf_lsm_policy_release(object)                KF_RELEASE
-> >> > >
-> >> > > The kfuncs are the LSM framework's own BPF interface: there is no
-> >> > > per-LSM kfunc and no intermediate security_*() layer.  Each kfunc
-> >> > > walks the matching hook's implementation list and calls the one
-> >> > > registered by the LSM whose lsmid the policy object carries.  Calling
-> >> > > a kfunc for an LSM that is not active or has no policy object support
-> >> > > fails at runtime rather than hiding the kfunc at verification time,
-> >> > > so BPF program loading is independent of the boot-time LSM
-> >> > > configuration.
-> >> > >
-> >> > > A policy object reference is meant to be handed over through a map
-> >> > > kptr field, so also register a destructor for struct
-> >> > > lsm_policy_object: map-held references are dropped on map teardown,
-> >> > > possibly from a context that cannot sleep, which the
-> >> > > policy_object_put() hook contract accounts for.  For the same reason
-> >> > > the kfunc is not KF_SLEEPABLE, and the filter adds no per-kfunc rule:
-> >> > > releasing a reference must be allowed wherever one can be held.  The
-> >> > > filter itself is needed because BPF_PROG_TYPE_LSM and
-> >> > > BPF_PROG_TYPE_SYSCALL, the two registered program types, share their
-> >> > > kfunc lookup buckets with other program types.
-> >> > >
-> >> > > Cc: Paul Moore <paul@paul-moore.com>
-> >> > > Cc: KP Singh <kpsingh@kernel.org>
-> >> > > Signed-off-by: Justin Suess <utilityemal77@gmail.com>
-> >> > > ---
-> >> > >
-> >> > > Notes:
-> >> > >     v2->v3:
-> >> > >         - No change.
-> >> > >
-> >> > >  MAINTAINERS               |  1 +
-> >> > >  security/Makefile         |  2 +-
-> >> > >  security/bpf_lsm_kfuncs.c | 98 +++++++++++++++++++++++++++++++++++++++
-> >> > >  3 files changed, 100 insertions(+), 1 deletion(-)
-> >> > >  create mode 100644 security/bpf_lsm_kfuncs.c
-> >> >
-> >> > While not a new concern, it has been a few months so I want to mention
-> >> > it again to see where things stand with the BPF crowd: are the BPF
-> >> > folks still opposed to BPF kfuncs in security/bpf_lsm_kfuncs.c,
-> >> > similar to fs/bpf_fs_kfuncs.c?
-> >> >
-> >> > If the answer remains yes, the BPF devs are not able to tolerate
-> >> > kfuncs under security/, then I'm afraid this patchset is stuck.
-> >> > However, if the BPF devs are willing to ACK kfuncs in
-> >> > security/bpf_lsm_kfuncs.c, I'll add this patchset to the review queue
-> >> > for the LSM tree.
-> >> >
-> >> To avocate for the current placement:
-> >>
-> >> Placing these kfuncs outside where it is in security/ would
-> >> be very awkward, the kfuncs use lsm internal APIs
-> >> (lsm_for_each_hook, active static keys, lsm dispatch table) that
-> >> have no buisness outside the LSM framework.
-> >>
-> >> And logically, the kfuncs operate entirely on in-tree lsm objects.
-> >>
-> >> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> >> > > index 6215fcb07770..ba816d7ee127 100644
-> >> > > --- a/MAINTAINERS
-> >> > > +++ b/MAINTAINERS
-> >> > > @@ -5081,6 +5081,7 @@ F:        kernel/bpf/bpf_lsm.c
-> >> > >  F:     kernel/bpf/bpf_lsm_proto.c
-> >> > >  F:     kernel/trace/bpf_trace.c
-> >> > >  F:     security/bpf/
-> >> > > +F:     security/bpf_lsm_kfuncs.c
-> >> >
-> >> > We would need the maintenence of security/bpf_lsm_kfuncs.c to fall to
-> >> > the LSM framework, just as the maintenence of bpf_fs_funcs.c falls to
-> >> > the VFS.
-> >>
-> >> Agreed.
-> >>
-> >> I intend that any security/ kfuncs go through both LSM and BPF
-> >> review at a minimum. As a bug in any of these kfuncs or their permitted
-> >> calling context / signatures could cause regressions in either subsystem.
+On Fri, Sep 11, 2026 at 08:38:16PM -0700, Alexei Starovoitov wrote:
+> On Wed Sep 9, 2026 at 12:37 PM PDT, Justin Suess wrote:
+> > Add the kfunc applying a policy object to an execution:
 > >
-> > While some other subsystems are lax on this, it's general practice in
-> > the LSM space to *really* try to get ACK's from other affected
-> > subsystems before merging.  Sometimes we move forward anyway, e.g.
-> > patches being ignored for almost a year, but those are exceptions
-> > rather than the rule.
+> >   bpf_lsm_policy_apply_bprm(object, bprm, flags)        KF_SLEEPABLE
 > >
-> > I only bring this up because the MAINTAINERS entry was pointed at the
-> > BPF devs, not the LSM devs.  I would expect that patches going into
-> > security/bpf_lsm_kfuncs.c would need to be ACK'd both the LSM
-> > framework and BPF LSM maintainers.
+> > It asks the LSM owning @object, through the bprm_apply_policy_object
+> > hook, to restrict the credentials prepared in @bprm, so that the
+> > executed task starts confined by the policy.  The meaning of @flags
+> > and the composition with restrictions the credentials already carry
+> > are the owning LSM's; an LSM without execution policy support makes
+> > the call fail with -EOPNOTSUPP.
+> >
+> > The kfunc runs the hook in a root memcg charging scope: the policy
+> > restricts the execution on behalf of the BPF program, not of the
+> > mediated task, so what the owning LSM allocates to compute it, e.g.
+> > Landlock's merged domain, is not charged to the task the program
+> > supervises.
+> >
+> > The filter makes the kfunc exclusive to the sleepable LSM programs
+> > attached to the bprm_creds_for_exec() or bprm_creds_from_file()
+> > hooks, the only contexts where the bprm's credentials are prepared
+> > but not yet committed.  The verifier's argument typing does not draw
+> > this boundary on its own: a trusted struct linux_binprm pointer is
+> > also available at the other bprm hooks -- bprm_check_security(),
+> > which runs per binfmt while an interpreter may still rewrite the
+> > execution, and bprm_committing_creds()/bprm_committed_creds(), which
+> > run at or past the point of no return, where the prepared
+> > credentials are frozen or installed -- and to tp_btf programs via
+> > the sched_prepare_exec and sched_process_exec tracepoints, which
+> > resolve kfuncs from the same registration bucket as LSM programs.
+> > The attach-point filter, not the argument type, is the authorization
+> > boundary.
+> >
+> > No filter case is needed for BPF_LSM_CGROUP programs: since
+> > commit 5b038319be44 ("bpf: Reject sleepable BPF_LSM_CGROUP programs
+> > at load time") they cannot be sleepable, so KF_SLEEPABLE already
+> > excludes them.
+> >
+> > Cc: Paul Moore <paul@paul-moore.com>
+> > Cc: KP Singh <kpsingh@kernel.org>
+> > Signed-off-by: Justin Suess <utilityemal77@gmail.com>
+> > ---
+> >
+> > Notes:
+> >     v2->v3:
+> >         - Drop the BPF_LSM_CGROUP case from the kfunc filter: since
+> >           commit 5b038319be44 ("bpf: Reject sleepable BPF_LSM_CGROUP
+> >           programs at load time") such programs cannot be sleepable, so
+> >           KF_SLEEPABLE already excludes them from the apply kfunc.
+> >         - Document, in the commit message and the filter comment, why the
+> >           attach-point filter rather than the verifier's argument typing
+> >           is the authorization boundary.
+> >
+> >  security/bpf_lsm_kfuncs.c | 68 +++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 68 insertions(+)
+> >
+> > diff --git a/security/bpf_lsm_kfuncs.c b/security/bpf_lsm_kfuncs.c
+> > index 43a4bf57fd31..857e9a316d1c 100644
+> > --- a/security/bpf_lsm_kfuncs.c
+> > +++ b/security/bpf_lsm_kfuncs.c
+> > @@ -2,16 +2,25 @@
+> >  
+> >  /* BPF kfuncs exposing LSM policy objects. */
+> >  
+> > +#include <linux/binfmts.h>
+> >  #include <linux/bpf.h>
+> >  #include <linux/btf.h>
+> >  #include <linux/btf_ids.h>
+> >  #include <linux/cfi.h>
+> >  #include <linux/init.h>
+> >  #include <linux/lsm_hooks.h>
+> > +#include <linux/memcontrol.h>
+> > +#include <linux/sched/mm.h>
+> >  #include <linux/security.h>
+> >  
+> >  #include "lsm.h"
+> >  
+> > +/* The sleepable LSM hooks bpf_lsm_policy_apply_bprm() may be called from. */
+> > +BTF_SET_START(bpf_lsm_policy_bprm_hooks)
+> > +BTF_ID(func, bpf_lsm_bprm_creds_for_exec)
+> > +BTF_ID(func, bpf_lsm_bprm_creds_from_file)
+> > +BTF_SET_END(bpf_lsm_policy_bprm_hooks)
+> > +
+> >  __bpf_kfunc_start_defs();
+> >  
+> >  /**
+> > @@ -44,6 +53,49 @@ bpf_lsm_policy_acquire(struct lsm_policy_object *object)
+> >  	return NULL;
+> >  }
+> >  
+> > +/**
+> > + * bpf_lsm_policy_apply_bprm - Apply a policy object to exec credentials
+> > + * @object: policy object to apply
+> > + * @bprm: execution context providing the prepared credentials to
+> > + *        restrict
+> > + * @flags: flags defined by the LSM owning @object
+> > + *
+> > + * Ask the LSM owning @object to restrict the credentials prepared in
+> > + * @bprm with it, so that the executed task starts confined by the
+> > + * policy.  How the policy composes with restrictions the credentials
+> > + * already carry, and the meaning of @flags, are defined by the owning
+> > + * LSM.  @object is only borrowed: the caller keeps its reference.
+> > + * The hook runs in a root memcg charging scope: policy the LSM
+> > + * computes on behalf of the program is not charged to the mediated
+> > + * task.
+> > + *
+> > + * Return: 0 on success, -EOPNOTSUPP if the LSM owning @object does
+> > + * not support applying policy to an execution, -EINVAL on unsupported
+> > + * @flags, other negative values on LSM-specific failures.
+> > + */
+> > +__bpf_kfunc int bpf_lsm_policy_apply_bprm(struct lsm_policy_object *object,
+> > +					  struct linux_binprm *bprm, u32 flags)
+> > +{
+> > +	struct lsm_static_call *scall;
+> > +	struct mem_cgroup *old_memcg;
+> > +	int err;
+> > +
+> > +	lsm_for_each_hook(scall, bprm_apply_policy_object) {
+> > +		if (scall->hl->lsmid->id != object->lsmid)
+> > +			continue;
+> > +		/*
+> > +		 * The hook runs on behalf of the BPF program, not of the
+> > +		 * mediated task: charge its allocations to the root memcg.
+> > +		 */
+> > +		old_memcg = set_active_memcg(root_mem_cgroup);
+> > +		err = scall->hl->hook.bprm_apply_policy_object(bprm, object,
+> > +							       flags);
+> > +		set_active_memcg(old_memcg);
+> > +		return err;
+> > +	}
+> > +	return -EOPNOTSUPP;
 > 
-> There is will be no kfuncs under security/.
-> Period.
-> 
-Howdy Alexei,
+> Nack.
 
-If fs/, mm/, drivers/, net/, are permitted to have kfuncs, then why not
-security/? kfuncs.rst doesn't seem to forbid this.
+It was hard to tell why you Nack'd this patch in particular from the
+context.
 
-Placement in security/, on my initial thought, was the most logically relevant place
-for kfuncs that interact with in-tree LSMs, as we place fs kfuncs under fs/,
-net kfuncs under net/ etc.
+If you wouldn't mind, providing some guidance as to why the code is
+unacceptable in the current form would give a direction to work
+towards...
 
-Where would you point me to?
+(This is for the kfunc placement in security/ I assume?)
 
 Thanks,
 Justin
