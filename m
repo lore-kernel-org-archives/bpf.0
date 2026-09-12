@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-197.mta0.migadu.com [91.218.175.197])
+Received: from mta0.migadu.com (out-214.mta0.migadu.com [91.218.175.214])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 039AB30DEA3
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 17:13:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3510B47ACF6
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 17:14:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.214
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789233201; cv=none; b=E6BduO77Q7allffHyn9FC36HZ9f7zpdlE7DFvnZ5N5MbfnexdlTiZZeElZld43fEkWQ+IIVm1q9O7jqhmYAiNHeifBIiVpll+XKL8/AGP175qyvZgqx3L3vPYeDmZwsAdKESSA1tXYXkVlEZy6ZyKQAvhR7UdmLpSQ3T3+p3BFo=
+	t=1789233300; cv=none; b=jX8sPBZ8vnCSMuBaWQDZGxlyO3q2SF2ZBJNTvclpyJOsR5QuDasHDN4AJ0/wcyD8mUSUSoDt6U9nTFLPfl7C4ZQ2M5RCl+dOZDwP6jZWrFJ7zJ/mgLB5G85MO9JWfHZki0rBYcOH5jMBrJAeOomzv7wVHsMs4peV/seey+E7ZfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789233201; c=relaxed/simple;
-	bh=OAPaw3J0/rCygPzOJwlLjucLuEGFUMt+RM1orCn81rw=;
+	s=arc-20240116; t=1789233300; c=relaxed/simple;
+	bh=JCgdaj5HVXALxwhW1vBwIuV/H6AsN72ghVFOqNws5f4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pHbwL6D/g7Ns8o09KfsIFt9MXXss0507FBJLQ+pHqGmSUEOb+jApMtBqLjkkgqEaG1TLINDK1nvIqLd76KVeZFizsQY/W/mWEM9avjx0FPf0IBfGsyJpA9mYS/a6EoLb30HepOUprBuzr6buOS7fgk7/P5cnmwbjBZ7knYsDP7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sbgr1doM; arc=none smtp.client-ip=91.218.175.197
+	 In-Reply-To:Content-Type; b=Pki+Ko48KcI84hij9zOoX0F3Y7Op6XRhNbySHb8jh9UjL5vbGd6GxEeYcj+5B1pSRs6Rg+bDVo/3HAwkEWepDEwTMcwo7rLMk1Zn5dXFGBc997qLikza7/nEgRcAGhT38yin+jbd01vZEWB2Y/LGH119AIt1iBzPkbT49fXvoko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UDKA/9UF; arc=none smtp.client-ip=91.218.175.214
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sbgr1doM"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UDKA/9UF"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=OAPaw3J0/rCygPzOJwlLjucLuEGFUMt+RM1orCn81rw=;
+DKIM-Signature: a=rsa-sha256; bh=JCgdaj5HVXALxwhW1vBwIuV/H6AsN72ghVFOqNws5f4=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789233196; v=1; x=1789837996;
- b=sbgr1doMxsOMU/UOlCRjFI000wTz6Hl0aY4usMX6XfE+E0xaJWpMhdef45W9kVay2v4HP13p
- M/ibIZPaNJ6d0tb34CIis1Jn2qmyXzpzIPqtOr6SPb/6qPOtpuyveccODDjq+3tC+P+BL2Svd3w
- 8Zmgwx+06xqiUdQAFwsDK09k=
+ t=1789233294; v=1; x=1789838094;
+ b=UDKA/9UFSZN4SyF7uVT/AAl9XIwIwNpgb/SiHv5f8CC1FwvEVmb06dXE6bBTi5Fc4u4pNhPH
+ Luun8ixJpaEKo2/iuLWL6Ey4NOS7IjLdTefc48s8F7DA3OLKSYgrC4cTCYFrLd0Njx0YoTXnL4E
+ yejIoudADCH65AixYvnSo8Xw=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 02a9444df0ec142b;
-	Sat, 12 Sep 2026 17:13:16 +0000
-X-Mizu-Trace-ID: 02a9444df0ec142b
+Received: by smtp.migadu.com with ESMTPS id 21b783b58ee0e74b;
+	Sat, 12 Sep 2026 17:14:54 +0000
+X-Mizu-Trace-ID: 21b783b58ee0e74b
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <754a6f66-7304-47f8-92fa-5c57d454109b@linux.dev>
-Date: Sat, 12 Sep 2026 10:13:12 -0700
+Message-ID: <2c9edda1-1565-4742-ae21-55c9533bdf6a@linux.dev>
+Date: Sat, 12 Sep 2026 10:14:50 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,127 +38,138 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 08/15] bpf: Recognize by-value struct and
- __int128 kfunc arguments
+Subject: Re: [PATCH bpf-next v3 10/15] bpf, x86: Move kfunc arguments into the
+ x86-64 calling convention
 Content-Language: en-GB
 To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
 Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
  eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
  mason@kernel.org, ihor.solodrai@linux.dev
-References: <20260911154954.2008505-1-yonghong.song@linux.dev>
- <255ff7973d5971f95d7a43241872424eac7694cf5c8fd3d2c86030e04ba63fcb@mail.kernel.org>
+References: <20260911155005.2010021-1-yonghong.song@linux.dev>
+ <0b84d8722fb6870aa98302b2ee8a71a0be1da1f4925204529c5545a66e1a4ba1@mail.kernel.org>
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <255ff7973d5971f95d7a43241872424eac7694cf5c8fd3d2c86030e04ba63fcb@mail.kernel.org>
+In-Reply-To: <0b84d8722fb6870aa98302b2ee8a71a0be1da1f4925204529c5545a66e1a4ba1@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
 
 On 9/11/26 9:47 AM, bot+bpf-ci@kernel.org wrote:
->> bpf: Recognize by-value struct and __int128 kfunc arguments
+>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>> index bba351944202..0496607a7003 100644
+>> --- a/arch/x86/net/bpf_jit_comp.c
+>> +++ b/arch/x86/net/bpf_jit_comp.c
+>> @@ -1839,6 +1839,60 @@ static int emit_spectre_bhb_barrier(u8 **pprog, u8 *ip,
+>>   	return 0;
+>>   }
 >>
->> A kfunc taking a struct or union by value is rejected today, and one
->> taking an __int128 is accepted but mis-counted:
->>
->>    Unrecognized R2 type STRUCT
->>
->> The kfunc arguments walk the same slot as a BPF-to-BPF call:
->> one argument register per eightbyte, and a 16-byte value takes two.
->> The outgoing stack argument count at the call site follows the slots for
->> the same reason. Similar to BPF-to-BPF aggregate handling, a kfunc
->> aggregate argument is only supported when it is composed of scalars.
->> Everything that maps a kfunc argument to a register has to follow the
->> slots too.
->>
->> An argument of a single eightbyte lands in the same place under every
->> calling convention, so those are taken. The conventions the JIT has to
->> reconcile do not agree on where a larger one goes, so refuse it for now
->> with
->>
->>    Function f arg#1 type INT cannot be passed at argument slot 1 on this
->>    architecture
->>
->> which the next patch turns into an answer from the JIT. The paths that
->> handle a two-slot argument are therefore unreachable until then.
->>
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> This looks like a bug fix for kfunc struct argument support. Should this
-> include:
->
->    Fixes: 0ab8eb34abe4 ("bpf: Support by-value struct arguments up to 16 bytes")
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index c520c37bb3c9..9e70995c763f 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
-> [ ... ]
->
->> @@ -12892,29 +12978,35 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
->>   	const struct btf *btf = meta->btf;
->>   	const struct btf_param *args;
->>   	struct btf_record *rec;
->> -	u32 i, nargs;
->> +	u32 i, k, nargs, proto_slots, slots_used, prev_slot = 0, nslots = 0;
->>   	int ret;
->>
->>   	args = (const struct btf_param *)(meta->func_proto + 1);
->>   	nargs = btf_type_vlen(meta->func_proto);
->> +	proto_slots = kfunc_proto_slots(btf, meta->func_proto);
->>
->> -	ret = check_outgoing_stack_args(env, caller, nargs, func_name, btf, args);
->> +	ret = check_outgoing_stack_args(env, caller, proto_slots, func_name, btf,
->> +					proto_slots == nargs ? args : NULL);
->>   	if (ret)
->>   		return ret;
->>
->>   	/* Check that BTF function arguments match actual types that the
->>   	 * verifier sees.
->>   	 */
->> -	for (i = 0; i < nargs; i++) {
->> -		struct bpf_reg_state *reg = get_func_arg_reg(caller, regs, i);
->> +	for (i = 0, slots_used = 0; i < nargs;
->> +	     i++, prev_slot = slots_used, slots_used += nslots) {
->> +		struct bpf_reg_state *reg = get_func_arg_reg(caller, regs, slots_used);
->>   		const struct btf_type *t, *ref_t, *resolve_ret;
->>   		enum bpf_arg_type arg_type = ARG_DONTCARE;
->> -		argno_t argno = argno_from_arg(i + 1);
->> +		argno_t argno = argno_from_arg(slots_used + 1);
->>   		int regno = reg_from_argno(argno);
->>   		bool btf_id_fixed_off_ok = true;
->>   		u32 ref_id = args[i].type, type_size;
->>   		int kf_arg_type = meta->fn->arg_type[i];
->>
->> +		t = btf_type_skip_modifiers(btf, args[i].type, NULL);
->> +		nslots = kfunc_arg_slots(t);
+>> +static const struct bpf_jit_arg_abi x86_arg_abi = {
+>> +	.nr_arg_regs		= 6,
+>> +	.backfill_after_stack	= true,
+>> +	.even_stack_align	= true,
+>> +};
 >> +
->>   		if (is_kfunc_arg_prog_aux(btf, &args[i])) {
->>   			/* Reject repeated use bpf_prog_aux */
->>   			if (meta->arg_prog) {
-> [ ... ]
->
->> @@ -12986,6 +13076,17 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_call_arg_me
->>   			ref_tname = btf_name_by_offset(btf, ref_t->name_off);
->>   		}
->>
->> +		/*
->> +		 * The first slot is checked in below KF_ARG_ANYTHING.
->> +		 * The rest of it has to be a scalar.
->> +		 */
->> +		for (k = 1; k < nslots; k++) {
->> +			ret = check_kfunc_scalar_arg(env, caller, regs, slots_used + k,
->> +						     insn_idx, func_name);
->> +			if (ret)
->> +				return ret;
+>> +static const u8 x86_arg_reg[] = {
+>> +	BPF_REG_1, BPF_REG_2, BPF_REG_3, BPF_REG_4, BPF_REG_5, X86_REG_R9,
+>> +};
+>> +
+>> +/*
+>> + * Move the arguments the x86-64 ABI places somewhere other than the argument
+>> + * slot the BPF calling convention gave them. @stack_base addresses the
+>> + * outgoing stack argument area from RBP. Return the number of emitted bytes.
+>> + */
+>> +static int emit_kfunc_arg_moves(const struct btf_func_model *fm, s32 stack_base, u8 **pprog)
+>> +{
+>> +	struct bpf_jit_arg_move moves[BPF_JIT_MAX_ARG_MOVES];
+>> +	const u8 nreg = x86_arg_abi.nr_arg_regs;
+>> +	u8 *prog = *pprog, *start = prog;
+>> +	u32 i, n;
+>> +
+>> +	n = bpf_jit_plan_arg_moves(&x86_arg_abi, fm, moves);
+>> +
+>> +	for (i = 0; i < n; i++) {
+>> +		u8 dst = moves[i].dst, src = moves[i].src, reg;
+>> +		bool dst_mem = dst != BPF_JIT_ARG_TMP && dst >= nreg;
+>> +		bool src_mem = src != BPF_JIT_ARG_TMP && src >= nreg;
+>> +
+>> +		/* Take the value into a register. */
+>> +		if (src == BPF_JIT_ARG_TMP) {
+>> +			reg = AUX_REG;
+>> +		} else if (src_mem) {
+>> +			reg = dst_mem || dst == BPF_JIT_ARG_TMP ? BPF_REG_AX : x86_arg_reg[dst];
+>> +			emit_ldx(&prog, BPF_DW, reg, BPF_REG_FP,
+>> +				 stack_base + (src - nreg) * 8);
+>> +		} else {
+>> +			reg = x86_arg_reg[src];
 >> +		}
 >> +
-> This isn't a bug, but would it be worth rewording this comment to name
-> the KF_ARG_ANYTHING case explicitly and speak of the remaining slots in
-> the plural? The phrase "checked in below KF_ARG_ANYTHING" is a bit hard
-> to parse, and "the rest of it" refers to slots while the sentence subject
-> is singular.
+>> +		/* And leave it where the argument belongs. */
+>> +		if (dst == BPF_JIT_ARG_TMP)
+>> +			emit_mov_reg(&prog, true, AUX_REG, reg);
+> This isn't a bug, but for the memory-source case, could reg be AUX_REG when
+> dst == BPF_JIT_ARG_TMP so the load lands directly in the scratch instead of
+> going through BPF_REG_AX?
+>
+> The case is reachable: a prototype such as (u64 a..e, struct {u64; u64;}
+> s, u64 f) backfills f into R9 and hands the planner a down-move whose
+> source is a stack slot. With the current code, emit_kfunc_arg_moves()
+> generates:
+>
+>      mov r10, [rbp+off]
+>      mov r11, r10
+>
+> when this would do:
+>
+>      mov r11, [rbp+off]
+>
+> Picking AUX_REG when dst == BPF_JIT_ARG_TMP (and BPF_REG_AX only for the
+> memory-to-memory case) would drop the extra instruction from every such
+> call site.
 
-I will update above comments to be clear about 'below KF_ARG_ANYTHING'.
+Sounds good. A little bit optimization. Will do.
 
+>> +		else if (dst_mem)
+>> +			emit_stx(&prog, BPF_DW, BPF_REG_FP, reg,
+>> +				 stack_base + (dst - nreg) * 8);
+>> +		else if (reg != x86_arg_reg[dst])
+>> +			emit_mov_reg(&prog, true, x86_arg_reg[dst], reg);
+>> +	}
+>> +
+>> +	*pprog = prog;
+>> +	return prog - start;
+>> +}
+> [ ... ]
+>
+>> @@ -2837,6 +2897,8 @@ static int do_jit(struct bpf_verifier_env *env, struct bpf_prog *bpf_prog, int *
+>>   				if (err < 0)
+>>   					return err;
+>>   				ip += err;
+>> +				ip += emit_kfunc_arg_moves(fm, outgoing_arg_base -
+>> +							   outgoing_rsp, &prog);
+>>   			}
+> [ ... ]
+>
+>>      bpf, x86: Move kfunc arguments into the x86-64 calling convention
+>>
+>>      Do the proper move from the BPF calling convention to the x86-64 calling
+>>      convention to satisfy the native requirement.
+> This isn't a bug, but could the changelog name the case that actually
+> needs a move (a by-value argument spilling to the stack followed by a
+> backfilled register argument) and note that at most one argument moves
+> down, so the scratch register carry is safe?
+>
+> The current wording says what the patch does without saying which
+> arguments actually end up somewhere other than their BPF slot, or why a
+> reviewer has to reconstruct that from bpf_jit_place_args() and
+> bpf_jit_plan_arg_moves().
+
+Indeed, the above description is not enough. I will add more things like you
+mentioned above.
+
+>
+>>      In addition, the arena argument walk counts eightbytes rather than
+>>      parameters, as an argument may take two registers.
+> (This second paragraph reads well and is concrete.)
 >
 >
 > ---
