@@ -1,153 +1,205 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2AE2D7380;
-	Sat, 12 Sep 2026 05:10:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A44A37DE9B
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 05:26:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789189842; cv=none; b=bB3kxkbFJ+U2EgDkijPT/0/Fe5B99LdypMRCSfNa+2TSBFrMI7+BcEeMgZvvp37RC9poj2Z9j6EnMlP3aldW5Ej/ASceYaa8iISAtJZvVcfLrNNPXZjjYyrwKZ7tcqX3zc8my3nuvuaPfrklnO45ucSicZzhg0+gk36dlJMZ9vk=
+	t=1789190812; cv=none; b=r7vBz6ko2S+ZirNF66TYsydbHBOey47i3o84fytIPy0P3jJMqXOTlRQyiuai9z8GJRyVk5/RrJuf2+lBe6S4aEU+YSw0zTE19ZMO9IJVxT19lVs7Br+ld/8jva3W9SrXlwaEQPyeWVR+shF1IRG7k/OQ04ja1dWM7APbch/18ek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789189842; c=relaxed/simple;
-	bh=hVsHNEchk19ZFl5Ele9nkgAwvZ85K0YSzOU9gj44rBU=;
+	s=arc-20240116; t=1789190812; c=relaxed/simple;
+	bh=oGrqY7oiATnnJ5ATU1qCem3mCbK4/B1ftouNKkjMoYs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PDz8JTfpn4vHaU50rVP5r/0OIVg4jFcFHhtqhHpk+qJIrf23empJgDNZvjiB1/E9ddDtbjuWzaUwI5iteUgHgQ1OKzG4SuaHOhD3Dc1L4P7hwe9+lfp5EogfBsVggz/U507o5EhkdrlpV/Qjry3DauY2/OOYN2QR+UxNghJL5mA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OEZphzm3; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=fuI50IAgz2HM9dBXRaRggobUuFyvPNe85mzfm6ZuIl/1tyHbxwjwZMh3eutizahHi8cKRi03Tm5I0VV3XJNDBjDobwS7JRXscBYYNFhLT6BMJ5oKyJ49sY3WYC3V1Jdnt2oGdibF8QV3GYSPY8jLwm44tDWPXi3kIFm0LFFXMe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fZ+qtsEJ; arc=none smtp.client-ip=74.125.224.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OEZphzm3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F2201F000FF;
-	Sat, 12 Sep 2026 05:10:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789189841;
-	bh=b7gamaM3ocBB+4O2hg6ustnV02tbiSJQKUzLHib6YK0=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=OEZphzm3wMMRqTwmUnagcM+KkWkkTEvAT3wcp93TZCJkN2dazyFetMFqVZVuf+zV7
-	 drMfqy3/azCvyRO4GZwYRU62gKX9R/h4JnLkota4GImeWvztGmQ6gwzOEl9t+pkiVf
-	 BDyS7frnNnG5/bK6UOHkPheXHOc+Ms5TmGLMpESOjUDdK4nK60SgDxKyQ8zj52lyzc
-	 wcMR2QrQ2oOSEEYg/HXgIsIeY8gxve2Ade2bJEbOR4QQA4BcQ9oOAbXJ23ExBEaMJr
-	 fjuNwfEtxx9Jn4UMZiVSKI/wMEB0jAsmzu3W4RnVLmA/qTJBuYAwblXEdcX6uU/UsY
-	 1IvqTxEnYzpUg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id C2B99CE1580; Fri, 11 Sep 2026 22:10:40 -0700 (PDT)
-Date: Fri, 11 Sep 2026 22:10:40 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fZ+qtsEJ"
+Received: by mail-yx2-f12.google.com with SMTP id 956f58d0204a3-66e4aae3147so441646d50.1
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 22:26:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789190809; x=1789795609; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=KgbaZUuPh6OacHvhQLfbnUE+2CYqd4A1QNPAO9N6LkA=;
+        b=fZ+qtsEJ0wnjv9KwJ+uFnwcrHWMzceLrYZyZiltgctQqmsvcstaaKRCxxdTZXgJpQZ
+         WWVDLh/i/eaiEebsaPp9i7r8Ohp6wJcFqbhHeKSIZHDpDP3U9uWVddBfYJEV9A0u1vPW
+         ImvUwc2V/iuFfJunzuBUbRnorCgdzIgL5l1x75Sxf/MLmkmuH4xJcq56qzz4cjhjHt/V
+         mTfzwGKrqZ4vsF4xYzBvQWPitR9Djol3XTzcTdD85MxyMptIXKudxmrPPV23wFDkhq+a
+         5rlxwhSr/lTWDn1YGcBGk9Y129+fxYrKTNO5ZN99+CTIp8sj3dDhrKJetmj6VSrCKFAo
+         0c+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789190809; x=1789795609;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=KgbaZUuPh6OacHvhQLfbnUE+2CYqd4A1QNPAO9N6LkA=;
+        b=SaTK7cRQ9I9qcs5SDm4h6whnWvv6+fmbMJsB2XI4arPE3aF76sSNmV9Zn1yULNugBq
+         gmH9lNkHh+ro6Qk7KBgwAS3tMup4M4md/B2JS7xtn5WlVDvDYbD+ZPC4aiNOiXC+BNvS
+         eBJgIlr8N4e9U7dRmkR1tsrITKtwb0Uwd3zIGikK1zLzZD5TUEuKSrumOEns/7hB00Tv
+         7ieQh/PJDevp1j2tLyaGm2QoeaEafgvYteJvFq1LFLvZ4t8mI/NQZ6yAmjLY9zVm6OZk
+         IDjToEEOIk8I5jXvKX2jaq+Bs73jgMzRLUB5iQ8wO3Og43v/vfW6cWRmrwWnDoqGty7E
+         0HWg==
+X-Forwarded-Encrypted: i=1; AKwUvByPnfJcOM10B6PZUgU1DbpsBvjUr4P/IWKzlz1o5H6sRp4EBGu50NInwkTQchNgepntL4s=@vger.kernel.org
+X-Gm-Message-State: AFuF++ngYt9LnGoIKxWwWKs07xSYxP/c3+zIN+l5BXv7TpO5Pa+J9tVE
+	cXUQxHKl75GwFeDcSEME0X7bb5ZWC5LN8MCwrP0inKEUYj7ZrbdhLOLs
+X-Gm-Gg: AYBFou1Lp+mmfCltti24EcfY1rEYBGwRkRvdsvFEV2e13xLNEpCSL07Yj2RojozoJPU
+	oHiNtlMcD0lukTiF4WGIJf2R+wThw9+QboLVA6/U9+hk8qof/oTEGIvfAdjhQAzHC25Q97j4R6q
+	MmAxrgmUr+Ki4/wia7TdEZ1JMmQnWjIwwIjlh+OQ3+oNDQSU4ITP1tDBAcLZYwuaNLtXElfn/Ar
+	XXcHPPSQBrork+Lu8GPHLzHYohqU2JnWrbHKjZf+ET2IAkZmgXaDGBTkmdQViCPs406d4u0tHLP
+	XCmiZxiDn8duqCOhgANvLMJIRdTFhJfLmvCyGIGiKxZN31f6O/VIPCyCwdBOKgBhkKu7MwnU/bI
+	7Grn44B4GvEDaeWDId2/4e215EEHYWCy0oyf4R/W4J+ipRElkTZ0NvzZ9llwKxfzVoXG+0aflCI
+	FWI9Bd9YDZEd7eGVj1eAFt1FQcB/tI/gVrJVAKWiIWl/LY+u7GeCmkNZXkVGc+hU3xOKHw38sL+
+	QgaILJx5xr9U5VPYrX8nmKty+wOGE5n9A==
+X-Received: by 2002:a05:690e:144e:b0:671:2832:efe8 with SMTP id 956f58d0204a3-6712832f61dmr2567610d50.47.1789190808818;
+        Fri, 11 Sep 2026 22:26:48 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:70da:1bc0:eb81:aa1b])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-88489500e19sm18296697b3.47.2026.09.11.22.26.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Sep 2026 22:26:48 -0700 (PDT)
+Date: Sat, 12 Sep 2026 01:26:47 -0400
+From: Justin Suess <utilityemal77@gmail.com>
 To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Josef Bacik <josef@toxicpanda.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Boqun Feng <boqun@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, x86@kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>, Juergen Gross <jgross@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	xen-devel@lists.xenproject.org
-Subject: Re: [PATCH RFC v2 08/15] bpf, x86: Maintain Tasks RCU trampoline
- nesting in the BPF trampoline
-Message-ID: <14cb8a91-497d-49f5-aa20-c6cb8b9a27fc@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com>
- <20260911-b4-rcu-tasks-preempt-qs-v2-8-eaaa61ed2da4@toxicpanda.com>
- <DLD0OHX8C4ME.VNR49VC2UYH4@gmail.com>
+Cc: Paul Moore <paul@paul-moore.com>, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, kpsingh@kernel.org, matt@bobrowski.net, mic@digikod.net, 
+	viro@zeniv.linux.org.uk, brauner@kernel.org, kees@kernel.org, casey@schaufler-ca.com, 
+	gnoack@google.com, jack@suse.cz, song@kernel.org, yonghong.song@linux.dev, 
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, jolsa@kernel.org, 
+	m@maowtm.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 04/15] lsm: Add the bpf_lsm_policy_release
+ kfunc and policy object destructor
+Message-ID: <aqTZdCz6JaoK16Fp@zenbox>
+References: <20260909193719.518517-1-utilityemal77@gmail.com>
+ <20260909193719.518517-5-utilityemal77@gmail.com>
+ <CAHC9VhQHZ+ngFdzKqmnzBh341CGEg-jexu+QYU8=1qXK=u-x-Q@mail.gmail.com>
+ <aqHUw6k0Mf83CGFT@zenbox>
+ <CAHC9VhTM7emi9vxs+5Za8Hrc_e9dg7fZx+Z6BGUc4VQ1qhEAUA@mail.gmail.com>
+ <DLD0VQ3D8CYC.3V5ZT8HDMY4IH@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <DLD0OHX8C4ME.VNR49VC2UYH4@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <DLD0VQ3D8CYC.3V5ZT8HDMY4IH@gmail.com>
 
-On Fri, Sep 11, 2026 at 08:27:56PM -0700, Alexei Starovoitov wrote:
-> On Fri Sep 11, 2026 at 7:08 AM PDT, Josef Bacik wrote:
-> > Emit an increment of current->rcu_tramp_nesting once the trampoline's
-> > frame is set up and a decrement before the final register restore, so
-> > that a task preempted while running fentry/fexit/fmod_ret/LSM programs
-> > or the __bpf_tramp_enter()/__bpf_tramp_exit() glue is not treated as
-> > Tasks-RCU quiescent.  Drop the count around the call to the original
-> > function: that may run arbitrarily long without sleeping and must not pin
-> > a Tasks RCU grace period, and the trampoline frame above it is held by
-> > im->pcref rather than by Tasks RCU (see bpf_tramp_image_put()).  The
-> > fmod_ret early-exit branch and the ip_after_call -> ip_epilogue poke both
-> > skip the decrement/increment pair around the original call, so the count
-> > stays balanced on every path.
+On Fri, Sep 11, 2026 at 08:37:22PM -0700, Alexei Starovoitov wrote:
+> On Wed Sep 9, 2026 at 4:08 PM PDT, Paul Moore wrote:
+> > On Wed, Sep 9, 2026 at 6:21 PM Justin Suess <utilityemal77@gmail.com> wrote:
+> >> On Wed, Sep 09, 2026 at 05:34:31PM -0400, Paul Moore wrote:
+> >> > On Wed, Sep 9, 2026 at 3:37 PM Justin Suess <utilityemal77@gmail.com> wrote:
+> >> > >
+> >> > > Add security/bpf_lsm_kfuncs.c, the home of the kfuncs exposing LSM
+> >> > > policy objects to BPF programs, with the first of them:
+> >> > >
+> >> > >   bpf_lsm_policy_release(object)                KF_RELEASE
+> >> > >
+> >> > > The kfuncs are the LSM framework's own BPF interface: there is no
+> >> > > per-LSM kfunc and no intermediate security_*() layer.  Each kfunc
+> >> > > walks the matching hook's implementation list and calls the one
+> >> > > registered by the LSM whose lsmid the policy object carries.  Calling
+> >> > > a kfunc for an LSM that is not active or has no policy object support
+> >> > > fails at runtime rather than hiding the kfunc at verification time,
+> >> > > so BPF program loading is independent of the boot-time LSM
+> >> > > configuration.
+> >> > >
+> >> > > A policy object reference is meant to be handed over through a map
+> >> > > kptr field, so also register a destructor for struct
+> >> > > lsm_policy_object: map-held references are dropped on map teardown,
+> >> > > possibly from a context that cannot sleep, which the
+> >> > > policy_object_put() hook contract accounts for.  For the same reason
+> >> > > the kfunc is not KF_SLEEPABLE, and the filter adds no per-kfunc rule:
+> >> > > releasing a reference must be allowed wherever one can be held.  The
+> >> > > filter itself is needed because BPF_PROG_TYPE_LSM and
+> >> > > BPF_PROG_TYPE_SYSCALL, the two registered program types, share their
+> >> > > kfunc lookup buckets with other program types.
+> >> > >
+> >> > > Cc: Paul Moore <paul@paul-moore.com>
+> >> > > Cc: KP Singh <kpsingh@kernel.org>
+> >> > > Signed-off-by: Justin Suess <utilityemal77@gmail.com>
+> >> > > ---
+> >> > >
+> >> > > Notes:
+> >> > >     v2->v3:
+> >> > >         - No change.
+> >> > >
+> >> > >  MAINTAINERS               |  1 +
+> >> > >  security/Makefile         |  2 +-
+> >> > >  security/bpf_lsm_kfuncs.c | 98 +++++++++++++++++++++++++++++++++++++++
+> >> > >  3 files changed, 100 insertions(+), 1 deletion(-)
+> >> > >  create mode 100644 security/bpf_lsm_kfuncs.c
+> >> >
+> >> > While not a new concern, it has been a few months so I want to mention
+> >> > it again to see where things stand with the BPF crowd: are the BPF
+> >> > folks still opposed to BPF kfuncs in security/bpf_lsm_kfuncs.c,
+> >> > similar to fs/bpf_fs_kfuncs.c?
+> >> >
+> >> > If the answer remains yes, the BPF devs are not able to tolerate
+> >> > kfuncs under security/, then I'm afraid this patchset is stuck.
+> >> > However, if the BPF devs are willing to ACK kfuncs in
+> >> > security/bpf_lsm_kfuncs.c, I'll add this patchset to the review queue
+> >> > for the LSM tree.
+> >> >
+> >> To avocate for the current placement:
+> >>
+> >> Placing these kfuncs outside where it is in security/ would
+> >> be very awkward, the kfuncs use lsm internal APIs
+> >> (lsm_for_each_hook, active static keys, lsm dispatch table) that
+> >> have no buisness outside the LSM framework.
+> >>
+> >> And logically, the kfuncs operate entirely on in-tree lsm objects.
+> >>
+> >> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> >> > > index 6215fcb07770..ba816d7ee127 100644
+> >> > > --- a/MAINTAINERS
+> >> > > +++ b/MAINTAINERS
+> >> > > @@ -5081,6 +5081,7 @@ F:        kernel/bpf/bpf_lsm.c
+> >> > >  F:     kernel/bpf/bpf_lsm_proto.c
+> >> > >  F:     kernel/trace/bpf_trace.c
+> >> > >  F:     security/bpf/
+> >> > > +F:     security/bpf_lsm_kfuncs.c
+> >> >
+> >> > We would need the maintenence of security/bpf_lsm_kfuncs.c to fall to
+> >> > the LSM framework, just as the maintenence of bpf_fs_funcs.c falls to
+> >> > the VFS.
+> >>
+> >> Agreed.
+> >>
+> >> I intend that any security/ kfuncs go through both LSM and BPF
+> >> review at a minimum. As a bug in any of these kfuncs or their permitted
+> >> calling context / signatures could cause regressions in either subsystem.
 > >
-> > The sequence is "mov r11, gs:[current_task]; inc/dec dword [r11 + off]";
-> > r11 is scratch at every emission point and (u32)&current_task is a valid
-> > sign-extended %gs-absolute with the current per-CPU layout, the same form
-> > the JIT already uses for this_cpu_off.  The image is dynamically
-> > allocated text, so the instructions outside the bracketed region are
-> > covered by the irq-exit IP check.
+> > While some other subsystems are lax on this, it's general practice in
+> > the LSM space to *really* try to get ACK's from other affected
+> > subsystems before merging.  Sometimes we move forward anyway, e.g.
+> > patches being ignored for almost a year, but those are exceptions
+> > rather than the rule.
 > >
-> > Assisted-by: LLM
-> > Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-> > ---
-> >  arch/x86/net/bpf_jit_comp.c | 43 +++++++++++++++++++++++++++++++++++++++++++
-> >  1 file changed, 43 insertions(+)
-> >
-> > diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> > index 2853e87797a7..a375c1b7bd50 100644
-> > --- a/arch/x86/net/bpf_jit_comp.c
-> > +++ b/arch/x86/net/bpf_jit_comp.c
-> > @@ -722,6 +722,31 @@ static void emit_indirect_jump(u8 **pprog, int bpf_reg, u8 *ip)
-> >  	*pprog = prog;
-> >  }
-> >  
-> > +/*
-> > + * Tasks RCU trampoline nesting, see rcu_tasks_trampoline_enter().
-> > + *
-> > + *   mov r11, QWORD PTR gs:[current_task]
-> > + *   inc/dec DWORD PTR [r11 + offsetof(struct task_struct, rcu_tramp_nesting)]
-> > + *
-> > + * r11 (AUX_REG) is scratch in the trampoline at every point this is emitted.
-> > + */
-> > +static void emit_rcu_tasks_tramp_nesting(u8 **pprog, bool enter)
-> > +{
-> > +#ifdef CONFIG_TASKS_RCU
-> > +	u8 *prog = *pprog;
-> > +
-> > +	/* mov r11, gs:[abs32] */
-> > +	EMIT2(0x65, 0x4C);
-> > +	EMIT3(0x8B, 0x1C, 0x25);
-> > +	EMIT((u32)(unsigned long)&current_task, 4);
-> > +	/* inc/dec dword ptr [r11 + disp32] */
-> > +	EMIT3(0x41, 0xFF, enter ? 0x83 : 0x8B);
-> > +	EMIT(offsetof(struct task_struct, rcu_tramp_nesting), 4);
-> > +
-> > +	*pprog = prog;
-> > +#endif
+> > I only bring this up because the MAINTAINERS entry was pointed at the
+> > BPF devs, not the LSM devs.  I would expect that patches going into
+> > security/bpf_lsm_kfuncs.c would need to be ACK'd both the LSM
+> > framework and BPF LSM maintainers.
 > 
-> It's not a lot of overhead, but I feel it will be the death by thousand cuts.
-> rcu_read_lock_trace() in bpf_prog_enter_sleepable is doing the same thing...
-> increamenting a variable inside current.
-> Can they be combined? Like treat current->trc_reader_nesting > 0 as
->  current->rcu_tramp_nesting > 0 ?
-> Or replace one with the other?
-> Two current->foo++ operations look redundant.
+> There is will be no kfuncs under security/.
+> Period.
 > 
-> bpf trampoline is already quite heavy. I'd like to find ways to reduce
-> its overhead instead of adding more.
+Howdy Alexei,
 
-Replace rcu_read_lock_trace() with Josef's rcu_tasks_trampoline_enter)?
+If fs/, mm/, drivers/, net/, are permitted to have kfuncs, then why not
+security/? kfuncs.rst doesn't seem to forbid this.
 
-But if this means reverting the re-implementation of RCU Tasks Trace in
-terms of SRCU, I will be rather annoyed with myself.  ;-)
+Placement in security/, on my initial thought, was the most logically relevant place
+for kfuncs that interact with in-tree LSMs, as we place fs kfuncs under fs/,
+net kfuncs under net/ etc.
 
-							Thanx, Paul
+Where would you point me to?
+
+Thanks,
+Justin
