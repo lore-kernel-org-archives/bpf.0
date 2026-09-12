@@ -1,65 +1,65 @@
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 323553921CC
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 03:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEAE224B05
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 03:32:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789183681; cv=none; b=kGPakICFHE2dSYq611EpD1Yc78qshmEvseq6os7tW7DhCaLMjJC/LBxqzZ/k/WI6L8tf5xRivfsQKHutV0ROZkI34JwZvcwjCnCwB+llIVoUPyEM9XecYNhtIrRw+hlsIzL8EJBEhPKwI3V/R077hLezvTeYhaRn2utxngr+QnU=
+	t=1789183925; cv=none; b=QvCLVXaThDEtl8kxWsaFkiKVMG5wnsKENx1MmNEyNtlzDQMIH/bvTecqcdeBxI/ToJgapztzaQpUXRR4uNu8EPFxqvBeOVQjxOETQuNVP/gfueHL8EwsWlsuv+DK/090QWVra5RxQb9mA/8QP/L0RHElQP4ztCHJgZOs/zVakFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789183681; c=relaxed/simple;
-	bh=evOAXfBovvBe6YEwcJhGdatosPUGmIApLgiwGdgXRZ4=;
+	s=arc-20240116; t=1789183925; c=relaxed/simple;
+	bh=kAi997qdy2ovmm3AfFVJSykrYNXUxKxyQ2JZeYlp77k=;
 	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=I0HnoYMPk2WIeCd1G1IpsoeR+xc1T5bsZRZb4sn4eDCCwCR2FMJYhfJrBIwBctn/p8Zt+V5322ITLV1hNUm0vtRnDPqHHpNUTgLdtzrJRWbK5gWahh1T8M3dmHBhSikOtHfs+ikGOMiiGoMHU51g93uM881iuhyhOt9PmlVJt4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WbAxp6GY; arc=none smtp.client-ip=209.85.210.53
+	 References:In-Reply-To; b=gudqGnzxZaGyXzklo5YLfOHsH8ABkCrNPI6WUXATTzPHeb7pEd67MKwDaUD/WbGFc6NztHBqZLtGIf4JwefGPDofO2rjgJmx0Dvd8qieyQ4e0goP5sw7DbholYmjhZ5rk9BLyj6wvj5kS/CHSe1RSVErchHXkItTmb7O8/aB45Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KEtOtDdq; arc=none smtp.client-ip=74.125.231.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WbAxp6GY"
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7f4e729368fso1719808a34.0
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 20:27:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KEtOtDdq"
+Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-46accbdfc20so621033fac.0
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 20:32:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789183679; x=1789788479; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789183923; x=1789788723; darn=vger.kernel.org;
         h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=ud1ZpqadGMe+QubhUEhtcVCLKFg2sCSQ6NPZYlf26Tg=;
-        b=WbAxp6GYqCCXfFThYBrGdLtLLoMXTZMpTlNWKcBiUm/ojmzaQnTyDTmr7hDWQ1tdno
-         9no58945yT19pjlKp9GDl76DZvF6LzrI3ezHbLg1qrhPacZA2VJHmrheC1CkQ8xBJh5U
-         akA4C43cVuZSeuYRki3HangHKoSyaJwoQlQ8JOIhDz4ePUhk4OgMXh1b5GKWDp5aq3bR
-         ym+yxeGoDTHX9RLUGApXQcvhZ1uEmjC7PZAs8q3GGC0H5i5wFlxSfL8ScuZ4i+vk+30H
-         pKOcES1JikouMIn7XNGIWwm8PEWzDOks3dUfDdQCmzJEdwx7y9O2GZlmA8sRZIClTW7d
-         Pjsg==
+        bh=kAi997qdy2ovmm3AfFVJSykrYNXUxKxyQ2JZeYlp77k=;
+        b=KEtOtDdqtPxO+NB5mn9hqI+StiWNtUuHPhRdPsDIeQzkIO48DbF7cp0EObvQudZO1K
+         ULco0kA8rrZG+5xFs/wgUc4W/DYz/7T02F4V0+dCvAiyHSeQtOCObTThN4w1q1sG6qMd
+         0OnG+O0UcxaDrfVAkSk5KfC/34uWUyQXJGwJTQZqYQ7DVSronymiqO6zzPsMPfjRNNs+
+         7ukikb864uQVzZED5/6CZzloFLVycqu44qzI4Bq2n1NGK3YcaSxZA7YBg2/y5Owfe/93
+         pjLsbDrYIM0YE8PmHMRyJJiUQZLB0SIY3mHHxzuPe0a8Ck0wW+q35UmAv6TMnDJO7mr+
+         K8wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789183679; x=1789788479;
+        d=1e100.net; s=20251104; t=1789183923; x=1789788723;
         h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ud1ZpqadGMe+QubhUEhtcVCLKFg2sCSQ6NPZYlf26Tg=;
-        b=BZe8wepWLFNOfHaJ1WDxn7QA8xCc75g1cJP5KqgQiEr9bfiAlv22W+e8wS+CQ6fiIJ
-         ak3JhZ+zZRB9QTxVG3BzQp9ciC7AOHUDeNbWR9A58yOdLlSy1EcLJl/HdGKDm/B9Ub8z
-         2VtjN/n/lAWiLxLDX0YKEE/mEJhuGgNbtpRvjR9RE4hBN8pcuWx+mdsMFnjIrPDK85oS
-         wVqQtkfRQlRrMwBiiZlHxRZs2I+fz7DA6+Zqgs85vxjgYIPAsra4qZNyE04nkMafxnd1
-         2K8CUX577DB8SQgzK7JeHxX8IXusUDhomv2U5G3XQuzHss+qch4a9iiSYCkH37wSWbgP
-         DOyA==
-X-Forwarded-Encrypted: i=1; AKwUvBzUGPPxt5YpJxmnRWvGmg2Ng/XTIp+HRnbG9c/TghR0Igh93smu6k7uv655vOaBbcBLL4A=@vger.kernel.org
-X-Gm-Message-State: AFuF++n9RMXA8DUzwqyxDB2Yr9i6gXfVyRaIXK0g9Hz5Mg2/wDRnGsQE
-	6GW330YbKEOYatuYmx2mCko7H+FCHmr9oNYiByKXIttMR/v7flwuUqUO
-X-Gm-Gg: AYBFou2dbxtEhM7otImBPndZZgT3Q7NZ5/5SAu0Bn+CaFahYArK+yNwwfkf+HxzOY34
-	h6yaSYfMcBUQs95i7UAGCfONnjr3l19yue5vHJ/p+31Omc962g6ZiknjjalzJ6fqkuBn98lWwe7
-	cXQn/qdbD247WNMTWVule5a7viVfL+u7MhgSgn+scIIUjFTz77EdC3tY7BytUftZor54+quKCrq
-	OcVHIPYNtWOcysPLZRnpWV1lQ2A1DzEaWC+vo0eBdt982dQzbdmbofG8rxPPZXjx7PUTjdC1F4q
-	UOmFmZzAKL8XQuttv/9FSCgP5RMtRiyvKUx3GisdvFEJ7V+3Yq2srEsoGnRj/LVVBIfedGeWKcU
-	ZGKzpvm0+BiU9aE3B3heBukkCyN3j0ZCi/2r0hq4Zy3zYlbp1lYGXN3eXsHgwAmbC/ZfGwhIURN
-	r8oxsJojgQdirHb9tWo6sQll+WI1HgDuALdIqkgW5hCnqf0NukKDGxx8+tdMh5LAjB79/rtKOrW
-	jnGYDByeXPJpnc5p0LNpJspc1Dn3My3OMkg4C8+Ow5as18uHSV3Z4eZcfJ+ytetLg==
-X-Received: by 2002:a05:6830:2786:b0:7fa:ac4f:785 with SMTP id 46e09a7af769-80400b2042dmr6714669a34.17.1789183678934;
-        Fri, 11 Sep 2026 20:27:58 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:15::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-803f6d208f5sm4822052a34.25.2026.09.11.20.27.56
+        bh=kAi997qdy2ovmm3AfFVJSykrYNXUxKxyQ2JZeYlp77k=;
+        b=oWGtrhccL8p5xIyF3TFU4eEUoBEKBpymRo+83jM3FKpaaJNebbbGByGHG4JPqDTKsK
+         vBvBx9E8tsCJKI8+6afZP/OXrpu1r4N1C+B+S3CP9LtKOPceFaJp1DPTrJSQ/q6JdaLW
+         lbuw4Nldd7EbaRRD0YCWq9Co11Bl7qNL/AKF6z+gerVN6tEnT7oCg/mOuEHKmPDe7GC7
+         eQDKARH+uwNqClnjA4/LqOT8GvxJFXyTAISpJkMPvVW/xyXQTzgDN7cd8lng/HpA8y8t
+         iBc7fJvzM5Nvk7KLFuSZW5/GHBXGNejmd4QeZDUjbWGnZFkZALrf9VHVPWzp19Aj7p2W
+         gAgw==
+X-Forwarded-Encrypted: i=1; AKwUvBz2g58Cy9qH/AjZMbgb9gAs7qYeeR5NLL384yi+j7QpzcLpm7rLV2odzPCyGc7xADUgiWI=@vger.kernel.org
+X-Gm-Message-State: AFuF++kJymm0MJb4zVIWMLiuL5WDjF+fUyM3mi6rusL3ZLRa7HwmqHnT
+	Ppnr/kO/z0f/XssspkOVtClFtGkE7ejELn11QznZsZXJ0TP5Ls/YUPyN
+X-Gm-Gg: AYBFou1ggQ35KnLH+w1n1MnQe88XD9bOW3DOyFoqJKerJkNSJpbTtRe6VHzloE4odCB
+	hloO1Kh0rEOyzp+jdWz/rWrKsY/YdhNjUoMh/tsvQ1EdFhXnywCoIWiobtscJ9YHeUYW/bX+k8U
+	gdYw+vrU8+9QHx2y08eEUsIl/UcondP7NBbr2I6HEjVjQMQBQNNqdl6VDD0NZBE13XH4mZqDfei
+	Wjb3KHlKYiNQu+a+1bcDy/7MeDztaBfUOJYV3xHNUTrY13Dhq2RYF+kBn89f6t1dBaSpvtxokOF
+	SgDyFuRlRwcxOpeQPQNARebJaqaWW6BcvhtpDKyB06mD0H1KMA7jmthCenR2jNG3aLVL7Q+8Pkv
+	40wcfhrWEf+zWShRf8R9SeA73t9Kq63yvwspk1bSEJ+ygkesA1gC0RASkRbp0MLanfvwaHrmlHM
+	aQ+r3mW6aAe5zI00eHRibdmKuA8JLRhcFRDZtIG020lv0f8ierVbr4EJUVXWU4KBqV38ZxrTplM
+	magLv4R5cwN+tE2rbvxZG3pxBAmqGkk9Y84kEZwIZ+dRJyMhSNH5TLVRMFb0cpYJWGR9Eir34fD
+X-Received: by 2002:a05:6820:811:b0:6b6:1868:9811 with SMTP id 006d021491bc7-6c0bc3ce018mr8649547eaf.21.1789183922687;
+        Fri, 11 Sep 2026 20:32:02 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:4e::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6c09690af1dsm4358827eaf.1.2026.09.11.20.32.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Sep 2026 20:27:58 -0700 (PDT)
+        Fri, 11 Sep 2026 20:32:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,108 +68,85 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 11 Sep 2026 20:27:56 -0700
-Message-Id: <DLD0OHX8C4ME.VNR49VC2UYH4@gmail.com>
+Date: Fri, 11 Sep 2026 20:32:00 -0700
+Message-Id: <DLD0RM0A2YPJ.1HFYZFHZPR2WI@gmail.com>
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Josef Bacik" <josef@toxicpanda.com>, "Paul E. McKenney"
- <paulmck@kernel.org>, "Frederic Weisbecker" <frederic@kernel.org>, "Neeraj
- Upadhyay" <neeraj.upadhyay@kernel.org>, "Joel Fernandes"
- <joelagnelf@nvidia.com>, "Boqun Feng" <boqun@kernel.org>, "Thomas Gleixner"
- <tglx@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>, "Steven
- Rostedt" <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>, "Jiri Olsa" <jolsa@kernel.org>,
- "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
- <x86@kernel.org>, "Catalin Marinas" <catalin.marinas@arm.com>, "Will
- Deacon" <will@kernel.org>, "Puranjay Mohan" <puranjay@kernel.org>, "Xu
- Kuohai" <xukuohai@huaweicloud.com>
-Cc: "Andy Lutomirski" <luto@kernel.org>, "Josh Triplett"
- <josh@joshtriplett.org>, "Uladzislau Rezki" <urezki@gmail.com>, "Mathieu
- Desnoyers" <mathieu.desnoyers@efficios.com>, "Lai Jiangshan"
- <jiangshanlai@gmail.com>, "Zqiang" <qiang.zhang@linux.dev>, "Juergen Gross"
- <jgross@suse.com>, "Luis Chamberlain" <mcgrof@kernel.org>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, <linux-kernel@vger.kernel.org>,
- <rcu@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
- <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <xen-devel@lists.xenproject.org>
-Subject: Re: [PATCH RFC v2 08/15] bpf, x86: Maintain Tasks RCU trampoline
- nesting in the BPF trampoline
+To: "Jakub Sitnicki" <jakub@cloudflare.com>
+Cc: <netdev@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Kuniyuki Iwashima" <kuniyu@google.com>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Stanislav Fomichev" <sdf@fomichev.me>,
+ <bpf@vger.kernel.org>, <kernel-team@cloudflare.com>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "David S. Miller"
+ <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Simon Horman"
+ <horms@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>, "Willem de
+ Bruijn" <willemdebruijn.kernel@gmail.com>, "Florian Westphal"
+ <fw@strlen.de>, "Jack Wang" <163wangjack@gmail.com>
+Subject: Re: [PATCH net-next v2 00/14] skb extension for BPF metadata
 X-Mailer: aerc
-References: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com> <20260911-b4-rcu-tasks-preempt-qs-v2-8-eaaa61ed2da4@toxicpanda.com>
-In-Reply-To: <20260911-b4-rcu-tasks-preempt-qs-v2-8-eaaa61ed2da4@toxicpanda.com>
+References: <20260910-bpf-meta-inside-skb-ext-v2-0-0b21e42180b0@cloudflare.com> <DLBRCN9O0MAE.9NCB79Y636SS@gmail.com> <874ifw2faz.fsf@cloudflare.com>
+In-Reply-To: <874ifw2faz.fsf@cloudflare.com>
 
-On Fri Sep 11, 2026 at 7:08 AM PDT, Josef Bacik wrote:
-> Emit an increment of current->rcu_tramp_nesting once the trampoline's
-> frame is set up and a decrement before the final register restore, so
-> that a task preempted while running fentry/fexit/fmod_ret/LSM programs
-> or the __bpf_tramp_enter()/__bpf_tramp_exit() glue is not treated as
-> Tasks-RCU quiescent.  Drop the count around the call to the original
-> function: that may run arbitrarily long without sleeping and must not pin
-> a Tasks RCU grace period, and the trampoline frame above it is held by
-> im->pcref rather than by Tasks RCU (see bpf_tramp_image_put()).  The
-> fmod_ret early-exit branch and the ip_after_call -> ip_epilogue poke both
-> skip the decrement/increment pair around the original call, so the count
-> stays balanced on every path.
+On Fri Sep 11, 2026 at 4:33 AM PDT, Jakub Sitnicki wrote:
+> On Thu, Sep 10, 2026 at 08:56 AM -07, Alexei Starovoitov wrote:
+>> On Thu Sep 10, 2026 at 7:02 AM PDT, Jakub Sitnicki wrote:
+>>>
+>>> That said, as things stand we have already established in v1 [3] that f=
+or
+>>> our existing use case - attaching metadata to <1% of skbs - the
+>>
+>> so you'll be using this bpf_skb_ext only on <1% of skb-s ?
+>> How about we add a bit in skb 'special_cleanup' or something.
+>> If set it will trigger a new tracepoint during kfree_skb/consume_skb.=20
+>> Then use bpf_rhashtable, populate when necessary, set bit,
+>> attach to that new tracepoint and delete from rhash where key=3D=3Dskb.
+>> bpf_rhash is specifically optimized for 8-byte keys.
+>> I suspect it would be faster than this approach.
+>>
+>> Overall this approach is fine from bpf perspective, but if it can be
+>> done with 1 bit + tracepoint approach that would be better.
 >
-> The sequence is "mov r11, gs:[current_task]; inc/dec dword [r11 + off]";
-> r11 is scratch at every emission point and (u32)&current_task is a valid
-> sign-extended %gs-absolute with the current per-CPU layout, the same form
-> the JIT already uses for this_cpu_off.  The image is dynamically
-> allocated text, so the instructions outside the bracketed region are
-> covered by the irq-exit IP check.
+> Thanks for taking a look.
 >
-> Assisted-by: LLM
-> Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-> ---
->  arch/x86/net/bpf_jit_comp.c | 43 +++++++++++++++++++++++++++++++++++++++=
-++++
->  1 file changed, 43 insertions(+)
+> Yes, our existing use case attaches metadata to only <1% of skbs.
+> Even if we implemented all other use cases we have in mind, we would
+> still only go up to ~5% of skbs by my best estimates.
 >
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index 2853e87797a7..a375c1b7bd50 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -722,6 +722,31 @@ static void emit_indirect_jump(u8 **pprog, int bpf_r=
-eg, u8 *ip)
->  	*pprog =3D prog;
->  }
-> =20
-> +/*
-> + * Tasks RCU trampoline nesting, see rcu_tasks_trampoline_enter().
-> + *
-> + *   mov r11, QWORD PTR gs:[current_task]
-> + *   inc/dec DWORD PTR [r11 + offsetof(struct task_struct, rcu_tramp_nes=
-ting)]
-> + *
-> + * r11 (AUX_REG) is scratch in the trampoline at every point this is emi=
-tted.
-> + */
-> +static void emit_rcu_tasks_tramp_nesting(u8 **pprog, bool enter)
-> +{
-> +#ifdef CONFIG_TASKS_RCU
-> +	u8 *prog =3D *pprog;
-> +
-> +	/* mov r11, gs:[abs32] */
-> +	EMIT2(0x65, 0x4C);
-> +	EMIT3(0x8B, 0x1C, 0x25);
-> +	EMIT((u32)(unsigned long)&current_task, 4);
-> +	/* inc/dec dword ptr [r11 + disp32] */
-> +	EMIT3(0x41, 0xFF, enter ? 0x83 : 0x8B);
-> +	EMIT(offsetof(struct task_struct, rcu_tramp_nesting), 4);
-> +
-> +	*pprog =3D prog;
-> +#endif
+> So the gated-tracepoint, if we can call it that, makes much sense.
+> Plus the idea of having a separate RHASH for each user is very
+> appealing. No coordination between users needed, just like for BPF local
+> storage.
+>
+> I did some digging what it would take to make the gated-tracepoint idea
+> wholesome:
+>
+> 1. kfree_skb/consume_skb cover only the normal free path. We would also
+> need to hook up to GRO merge/recycle and TCP coallesce/collapse. IOW
+> everywhere where we call skb_ext_reset/put today.
+>
+> 2. cloning - we would have to hook up to __copy_skb_header, so where we
+> call __skb_ext_copy. Plus some handling of fast clones would be needed -
+> perhaps a way to resolve &skb to its fclone twin address?
+>
+> I think it deserves at least a prototype before we make a call.
 
-It's not a lot of overhead, but I feel it will be the death by thousand cut=
-s.
-rcu_read_lock_trace() in bpf_prog_enter_sleepable is doing the same thing..=
-.
-increamenting a variable inside current.
-Can they be combined? Like treat current->trc_reader_nesting > 0 as
- current->rcu_tramp_nesting > 0 ?
-Or replace one with the other?
-Two current->foo++ operations look redundant.
+code is free. Pls produce patches and benchmark them.
 
-bpf trampoline is already quite heavy. I'd like to find ways to reduce
-its overhead instead of adding more.
+> Code-wise I'm thinking it might be easiest to take advantage of the fact
+> that skb_ext already hook ups to all the right places where we
+> free/clone skbs and add the new tracepoints there.
+
+fair enough.
+
+> If we did it like that, we could then just gate on a bit from
+> skb->active_extensions, and just handle activating the bpf_skb_ext in a
+> special way, meaning it wouldn't result in allocating the skb_ext slab.
+>
+> Let me give it a try and get back to you.
+
+Thanks!
 
