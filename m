@@ -1,134 +1,137 @@
-Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com [74.125.228.140])
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 156BE37EFE2
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 19:37:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.140
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789241837; cv=pass; b=D0bGncyd3mF+JlmNqQdUjFEjhZK9kpX/ZgR1ccbB67tiWmIjxlUL+fSnH1fjT+7z+Ytyc3ZbkmvV5lvz8DgAhu3YogM3k65GnMWWfPgNUgG8+vuDeTDIBdoJXD/myK7nl5yDQuYeWxSQQVN25Du3p3iFnfyCqDwNKUEhfDKl078=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789241837; c=relaxed/simple;
-	bh=rTTsBHK4um1yjRGf2YHu9S8y6qTmA6zHLJxC9T3Jyao=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nhRK1mWwQmlRcNiKOZKH0xREudDI+nD7WD+JNNRCxQhdhx9uazbwjAALMnce/+/U27VzVIAsvQAHgdCLoNgnkD7vB9vVRN58caIISb844mUon1tP3fLxzr/knUPKpUf/6IFkHMmJ/C3fJjE5UlfjzNbrTI1aUERwCyeAROqKB2w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S5BPX/27; arc=pass smtp.client-ip=74.125.228.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8AB309EE2
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 19:40:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789242060; cv=none; b=EIP+a9XVk6BsffxosiPT0fxfoYUmggpCNscpSxDZc6Xt7PkvrHr9SuI32mFe9hAQnx4AtbHR7sAdE9LsbcfqkydEzrm/YhxapFLqZIXXFUTsv922jpdXJ0+juUn4sWHcIA+CpoqXhkyRhQ91ClUh6hTE+NY07I+qG4Jr0VnbO7M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789242060; c=relaxed/simple;
+	bh=Fg3k93J+NnauWx+3Z+BYbTT2WHUzh/cuAEcclS6y3ms=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=H16RVmCxE3eSmQVjioNUHKaDlwr4/sJR3MH51Twazhe7/0xNi59ARXzeFCKXZtHfGUo2sYAuj1YYz4tDMnaTqEUT3kg9PPYNwS6/YlS3sCy8bGAvduW/icgmt6oMGeuEXbxdrpFOsDfJFyq6rf+12yij37pU8EoMedAJ/SdetbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hdL8Tpdf; arc=none smtp.client-ip=209.85.161.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S5BPX/27"
-Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c254fa663c1so126589966b.0
-        for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 12:37:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789241834; cv=none;
-        d=google.com; s=arc-20260327;
-        b=j3xZMz4ReRTpHSZuJei5oBS3E+j9yUZlOKmZdpZtqx4u+Z12oQWZdvec/Hiz1UwiEW
-         goUkj0cj1yNbGNUkB5LXve6Jaid5abWgYMAhNidKAZMnsvzR3+S0ihC1WadEMjE5rjU2
-         Cwg4oIoNxarjnR3Ig2bLZfC30th8AW8VWFUiuTFgFqUqvKx2U+f6FKGKrquR7saOnkdz
-         lJIyjFdnddn9zIpk5flpiNb05stOITY/4IoX6VuOuPssVZoDRiviS3c4Lf3sfWAo/tvT
-         SFyvHGlVMpZwWdNLnOWPNpgsijzNR92Va0BHJG8LwegO6caG+aKl7BiBTnL/yCgvjSDL
-         nFiw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=rTTsBHK4um1yjRGf2YHu9S8y6qTmA6zHLJxC9T3Jyao=;
-        fh=G2E2WjagNqimDkTDz9hNe7buVw0kp90fMN8CyQU2WB4=;
-        b=gO9OOUCOyQbpoPsis8MyhVxxqE/AVPfBMQlgod32/zkj7wZuOc0CCVxExNLuKhVvUu
-         5bCVEoQ7wC5tMjzkoKhhbks/0vS32M0tCCAMjSJLD0P5neyAbnpE70QYWkIuq/iWatmi
-         m0/EyYV7RemL0GOsOPgxQHv2zwFfmGfq5HfxLBtBZIg6DtT5frhPSgoU5kiaHw+CkpwH
-         de6zA6Q2ZShFvB2vi+oFr9tz2d3qOt8CL3jH1XbahMjE6E7vezpIyEbXgVUPF7fJ822W
-         pYo+3VSGsueQZcZtKLm4AHT2Oe6aVwURSS9zbhiJRTkx80rRX3an860q6P6YiovihNye
-         rpBw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hdL8Tpdf"
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-6aa9606ddadso1715206eaf.0
+        for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 12:40:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789241834; x=1789846634; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=rTTsBHK4um1yjRGf2YHu9S8y6qTmA6zHLJxC9T3Jyao=;
-        b=S5BPX/273smdf5hGu1RZqsnKIeG9jaEAApfwcb3c3vcOS+iRFwsRGpQq+7OjUMoi15
-         kX4sHxeOONT3uDDQ4eEUuo0CMxSDaCepgYZ5nYxFTdvkhG//sGuoHXn1sgIx/Q+BjQ/Q
-         1CIAkvlwwjlZSYUmNtYzxdBkwVQjHKbVu1FundhKsNpUft/gKcPtSAFTTzcX86GRp7hY
-         oeHg208vN7VnE4fv1maRPx4P22lBp2Y4+ORQ46jrk5NsCPr8G4hSWKl42/gjuuq6EsT5
-         QxrV0CZhcE9wGY5BuOhG1gScvJPw6TKmltQfZNIGOnTrE4sti4I4em7Y9vO2yo2a0CAL
-         tWcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789241834; x=1789846634;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20251104; t=1789242058; x=1789846858; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=rTTsBHK4um1yjRGf2YHu9S8y6qTmA6zHLJxC9T3Jyao=;
-        b=rks+S7Fm9TpLfrQ232/HHMUGn0JdfrHWyvN1t80En4yyv2Pq9+Dk6TkSHMLeQ7aHTl
-         YRYAYyfNj4rBqaAraLXUcWaQGnk0sfxXveMVNnXEeqT8lbBW2rtao63pDCXtYQyDHlCV
-         BWtlNj+EpW/Ts26Xc5yYRCmB17uQzc0MJCknRXW42oJohlmkNt+kPwrE035k4eJo0HVl
-         /+uhuzmZnKWP4R6yXRc3v5gk4NdIXhdZ53lScFY81yArBkVnO/jihROwXijc+6IEkmCG
-         865MHG+1JUOV524lDALdj94KMoyQShMqWInIVKN+/O2C6mzphb4qIIQzzFDbFomQoQa1
-         M+pg==
-X-Forwarded-Encrypted: i=1; AKwUvBzbPSoQ4Qm5BUe8qJCWQ66YE7YEX5x9NgupF3IkaEJQBIY+AQvXgXlc4I09qEyZl/6BzIA=@vger.kernel.org
-X-Gm-Message-State: AFuF++lu8JJhDaMvsZxpCGpwnz+VAEKTyBShPxPiXexJrZ53qivMbMHV
-	L2kTyALUkWuPXM0S18nVLCL1yXYmpAQRuhwX65woezc6Hh5pn+Ohvnresl3fR11x5mivZ5DQq1l
-	ADTZ8oPCYKLu2i8I67mVvi97pv5yQ9ik=
-X-Gm-Gg: AYBFou1525jtCdmHV7RBRkfVN+ZvWvn2gSXN5iOMYGKLLQficsIGNu7V5sEHcm25sAM
-	pfIHU00vizegkzNnUwekmXmIw8P9HUK7NlYsYzRaHEQBOIWQjxxqbTRRKjcD5T/3AIbTAGjjvv4
-	3db8NO6Qr02DqdljlC8S8TOMtzf+NisODTI1ISdtYnG407b+dqbptAzqYT1QkUUX4XlMKIPw0i8
-	36nRYcKEa1bDqvifs9SgEqD+gAuU5bm/hD2tBARrwE+axaGM9yM59aRTZlc8JSzp4lBuFZKC0do
-	8YweEonmFVjfhDFFzYbIMoCSk+Wvop5EEzj9+ljre1RTbhrDdzjipQ==
-X-Received: by 2002:a17:907:7245:b0:c26:2a5:819 with SMTP id
- a640c23a62f3a-c29666f6d30mr953226066b.18.1789241834024; Sat, 12 Sep 2026
- 12:37:14 -0700 (PDT)
+        bh=/mW9uIl4IQ84J3enCrJFqvgB+YMh25zxbJWRDQHZcYo=;
+        b=hdL8TpdfrOnsp8icWzp7H9iP1o4b4ff7BeOjoL79h4VOB7Mi6IPUtkUAsdZtSvGWwY
+         G5S4oixFN/qeznuCur5B4gc2bSVe1MLjnzZkQ7sCtiMWHNDvIpW7Njy83RaekEGJfsR8
+         uBar9fpNP8lY8JkBGfS5tr+LkGAtKGPJe5TmeIp8OLJfC6ZUfW1aY64veWs450nV/hiG
+         lAAeDTT4Nb6gB9crfFPc3Hnu0lUOghQtcutwfJGRfdY/gWa0Rle4PGL5cYr/WxeqduxL
+         t9HwIy3rA8i+vi44eDI2IZZE+xh853xSBvG4vdqzZ5ApW6bDRml9lMb+xYwImLjcHGLM
+         YUyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789242058; x=1789846858;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/mW9uIl4IQ84J3enCrJFqvgB+YMh25zxbJWRDQHZcYo=;
+        b=OlHJ+3OPYA2FO/6qJGxVcsQm4pO+PZ7XWydlgZ0ogCrIG2erHqaZUtJ2mnpYsfl7lN
+         obOmsvTPEiSkyP0ny+Cy1UwGTsao7q+lw1qSiMmVl82rtarJF4uij/vmetm68soKQudz
+         bnIr0YKHBoc4yw04jY5//9BO0M1mvsJZJuK67eOx2BNl7V18a/P9w812jYo69zZvAl6f
+         uSJclC5DdvikwIupdZupTb4SXgx96X8pYPD6S2z9X+QWOaw8u2t+luihmuPxQFR87fnM
+         qijVrN8b1T8jWfeTgu+S5mo6X3WeY3TBSXYz/f7S4gKQoP4AzyRomjTpovmB6sDnOG76
+         hpVg==
+X-Forwarded-Encrypted: i=1; AKwUvBzQW+w+SYjSc53oXAF/se66U7REoXMjtmm3SBiON5KKHz8WufxMxwqbJDQ5//Ld0FwpsBE=@vger.kernel.org
+X-Gm-Message-State: AFuF++neI9b1O43gPBUs/vJxpUWCrpxxjZPEfKfpWPHfKwkaimphUVCT
+	exxYnDRsRXvFmAiOrTSI0S4Byis8iuAzG7qNfuNH2KbKuNZwAd4Rl1Ue
+X-Gm-Gg: AYBFou0/Qvht5r6hTgMxW0E9bUxuYPcyKq8Z8S73+raX9DSggbln/5ku+dSrPFkYVJr
+	5RPHhuQNiY2FhDSVTR8GM31oC57zRRz3jXcunedNfU7dF/AQ3gtyFUDNGvYcsLaT5B3cyJ98QYY
+	jmDnHkbUH00mfra9Ihous/VylQmRyiLRiR6FNK4WwrZe+D6h0YGtRCZEiav8D/65nPGYv4emuek
+	NX5Ug131TGI+eWfu1p2CCEvwc7zRW/qMp7EapCWJ4dNi7I02iJn3D06Wuk8JDwhA8TIh8sves04
+	d8Jkn+SQ5vEQcKEGiVk7NDxkq6/rSyPWmAJCM2whdrDhGGRDQN3T+kwurM+/SEb3/ilPkIVov7E
+	IWpk5Zh9hioGWQ69rI//iZHNUTgyQNhd3/NAK/xjz1kGdDd/25ipWNn9Fz0Z12xypQ8OnxyimtD
+	JoqP2yoaiFssuQn177JyUJ1gtIZ1JMKh4ng6+CkHpP7deJMVnSWL5hMoN1tkcZhRqgRcCQsyAGh
+	uTnB8CcjVo/VrKUp3t5WdzbJ3gtPl8xDOm9nxXJlOaU2n4Lp6vq1kbSldlbf82T9bnTyTr22UM=
+X-Received: by 2002:a05:6820:f034:b0:6c0:c954:e534 with SMTP id 006d021491bc7-6c0c9550c4dmr5760632eaf.38.1789242057820;
+        Sat, 12 Sep 2026 12:40:57 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:5::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6c0996dc5a6sm6404372eaf.6.2026.09.12.12.40.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 12 Sep 2026 12:40:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260912041220.444715-3-main.kalliope@gmail.com> <1b4cc37b0ee6e1aa473c372e07c89f8fd60ac5f89bad550275edd3f7dc8f8e24@mail.kernel.org>
-In-Reply-To: <1b4cc37b0ee6e1aa473c372e07c89f8fd60ac5f89bad550275edd3f7dc8f8e24@mail.kernel.org>
-From: Nicholas Dudar <main.kalliope@gmail.com>
-Date: Sat, 12 Sep 2026 15:37:02 -0400
-X-Gm-Features: AcwNN1WgyD2ePwBCZDxRvueIh3zWMk4fdTmPoVsiLcsmEMMRdq6RUEG1P4mLE08
-Message-ID: <CAJZwKkiwTqeVrB=KRYOVrN3h1CD-K60FbYPg7aH-NaqiLecwxA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/2] bpf, mips: Add support for BPF_MOVSX in
- the JITs
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, johan.almbladh@anyfinetworks.com, paulburton@kernel.org, 
-	tsbogend@alpha.franken.de, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	ihor.solodrai@linux.dev, bpf@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, martin.lau@kernel.org, mason@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 12 Sep 2026 12:40:55 -0700
+Message-Id: <DLDLDGTSBHA0.32TYNBSKKPFXH@gmail.com>
+Cc: "Josef Bacik" <josef@toxicpanda.com>, "Frederic Weisbecker"
+ <frederic@kernel.org>, "Neeraj Upadhyay" <neeraj.upadhyay@kernel.org>,
+ "Joel Fernandes" <joelagnelf@nvidia.com>, "Boqun Feng" <boqun@kernel.org>,
+ "Thomas Gleixner" <tglx@kernel.org>, "Peter Zijlstra"
+ <peterz@infradead.org>, "Steven Rostedt" <rostedt@goodmis.org>, "Masami
+ Hiramatsu" <mhiramat@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>,
+ "Jiri Olsa" <jolsa@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, <x86@kernel.org>, "Catalin Marinas"
+ <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>, "Puranjay
+ Mohan" <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huaweicloud.com>, "Andy
+ Lutomirski" <luto@kernel.org>, "Josh Triplett" <josh@joshtriplett.org>,
+ "Uladzislau Rezki" <urezki@gmail.com>, "Mathieu Desnoyers"
+ <mathieu.desnoyers@efficios.com>, "Lai Jiangshan" <jiangshanlai@gmail.com>,
+ "Zqiang" <qiang.zhang@linux.dev>, "Juergen Gross" <jgross@suse.com>, "Luis
+ Chamberlain" <mcgrof@kernel.org>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, <linux-kernel@vger.kernel.org>,
+ <rcu@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+ <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ <xen-devel@lists.xenproject.org>
+Subject: Re: [PATCH RFC v2 08/15] bpf, x86: Maintain Tasks RCU trampoline
+ nesting in the BPF trampoline
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: <paulmck@kernel.org>
+X-Mailer: aerc
+References: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com> <20260911-b4-rcu-tasks-preempt-qs-v2-8-eaaa61ed2da4@toxicpanda.com> <DLD0OHX8C4ME.VNR49VC2UYH4@gmail.com> <14cb8a91-497d-49f5-aa20-c6cb8b9a27fc@paulmck-laptop> <DLDICNLENSRI.2R6EJ0ZFJE45T@gmail.com> <8c51a669-eb6b-455b-a829-b537da5209f8@paulmck-laptop>
+In-Reply-To: <8c51a669-eb6b-455b-a829-b537da5209f8@paulmck-laptop>
 
-> The changelog describes a silent miscompilation of already-loadable BPF
-> programs, which indicates this is a bug fix. Should this include a Fixes:
-> tag pointing to the commit that introduced BPF_MOVSX to the instruction
-> set?
+On Sat Sep 12, 2026 at 11:03 AM PDT, Paul E. McKenney wrote:
+>
+> In the old kernels, yes, we have current->trc_reader_nesting++.
+> In the newer kernels, Tasks Trace RCU is instead implemented in terms
+> of SRCU-fast, which instead increments per-CPU counters.  Which among
+> other thins is a bit faster and does not need to hook into the scheduler.
 
-This adds MOVSX support that the MIPS JITs have not previously
-implemented. I classified it as architecture enablement and targeted
-bpf-next on that basis. The incorrect ordinary-MOV lowering described
-in the changelog is real.
+old kernels? I'm confused.
+rcu_read_lock_trace() in bpf-next is doing t->trc_reader_nesting++
+and then calls __srcu_read_lock_fast().
 
-This distinction was discussed during the RV32 MOVSX review. Pu Lehui
-explicitly requested an "Add support" title and removal of the same
-Fixes: 8100928c8814 tag, treating the change as added JIT support:
+Are you talking about some RCU branch that you target for next merge window=
+?
 
-https://lore.kernel.org/bpf/2ca2a85a-d4a9-4459-a534-6159de6e5890@huawei.com/
+>
+> So we have several ways forward:
+>
+> 1.	Revert the implementation of RCU Tasks Trace in terms of
+> 	SRCU-fast, and use the existing current->trc_reader_nesting++,
+> 	as you suggest.
+>
+> 2.	Deprecate RCU Tasks Trace entirely in favor of RCU Tasks
+> 	augmented by rcu_tasks_trampoline_enter() and friends, as
+> 	I was suggesting.
+>
+> 3.	Implement rcu_tasks_trampoline_enter() in terms of SRCU-fast,
+> 	keeping the speedup, and put a synchronize_srcu() in the
+> 	RCU Tasks grace-period mechanism.  This again deprecates
+> 	RCU Tasks Trace entirely in favor of the augmented RCU Tasks.
+>
+> 4.	It is always good to explicitly state the apparent status quo,
+> 	which involves redundant trampoline entry/exit overhead.
+>
+> 5.	As always, your additional ideas here!
+>
+> 							Thanx, Paul
 
-> Does this compile? The MIPS uasm assembler appears to have no seb/seh
-> emitter.
-
-Yes, with the prerequisite declared in the cover letter. Patch 2/3 of
-SDIV/SMOD v4 adds the uasm declarations, encodings and emitters for
-seb/seh:
-
-https://lore.kernel.org/bpf/20260911213340.3767930-3-main.kalliope@gmail.com/
-
-The MOVSX cover letter links that series and includes its prerequisite
-patch IDs. Applying MOVSX without it leaves those emitters undefined.
-
-I built the combined stack and ran test_bpf under QEMU Malta on
-little-endian MIPS32 R1/R2/R6 and MIPS64 R2/R6. All five MOVSX cases
-passed with the JIT on each profile and all 16 signed DIV/MOD cases also
-passed.
-
-Nicholas
