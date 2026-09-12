@@ -1,143 +1,234 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FAAB384232;
-	Sat, 12 Sep 2026 10:53:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DD92D0C94
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 10:56:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789210398; cv=none; b=oxP4kgItHOsGVj/Q01GdN+LgGBb9WUxL7VyP3D7OH9fm1ATuRm3ULdOz7NRtvpHfJzJ5Yc+I6EwtMmfL/uVfodPo7yldkUvsYq/gutJznjJl2c+ACh0R1Yytgmct9ag/KkofvWFCsYpXKc0G3Xz3deLuHekn6BP04UchGSusRhc=
+	t=1789210590; cv=none; b=CThjpcBv5iP7BWpZaugyfrDp4LUz69pJV313C8qr3pEcscVKT9hnh2gXCWQV79dq1lUCk+95oPDyOEsVBw26f74uXMbzvti9Ud4G7pOm81NnoULmJR4o44jq7ONyo756FC7YgTuZx5Gy1vjfGn4p/aR44qIGusvxGhHdQnXv7aI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789210398; c=relaxed/simple;
-	bh=/+KZg0RKCSnx65PjYKfMuysZFyRk2WJLynvH5ZSYUoI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=o/x4ySC17OPhpA5hhqcdpRJtRL7J2JctaDlwN1FhKLSs8ItG3XBW2eYjtEBQoTrfa2HvGftleRYIuhmiphjwdLvkyE0ZS462tICQBZFq+ZqWni4Qoc60dfXZjh5NShTYH6UbzRoFwZDcgnJOwupb9/763UNtNJWCyUvYJaHBnW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cea0OrAS; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789210590; c=relaxed/simple;
+	bh=ZPU+MA4AQOuUJBvYAW2v2Xv43mX/KlhAc/k5Lj6k0KE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=d+naq2qK6B2/dvqw+tAJGTtZq4mFnIgs/fg2flRWJ9BDBSMJY4MHL+YN/g1T1oSITX4IOu0KWlF7dbxRhVx9FGiGdB+tvshp5JwRTEEZ2lvKv40lMA2x6tPR+1rOjnpRJhWge8Ts6Pb9Bc/QGio5zfYXFNPn/y9JMLaAXaa733k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k8mr3V3J; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cea0OrAS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D60501F000FF;
-	Sat, 12 Sep 2026 10:53:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k8mr3V3J"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3E251F000FF;
+	Sat, 12 Sep 2026 10:56:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789210397;
-	bh=byZPI+r2Fr+aYMUGbjM0ZtK8dE0rAJeeApwUYkR2mNw=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=cea0OrAS7lPCJZCrzoKLi9a6R1AZShc42sxqpnm+4YoE3AGef81SrrruoBIc+x5qw
-	 aSwZelQsn/xKiM/JefuBYbjKJKBqJ6Uq3o20GhFxWc8Nt0Dk/gY7Wu7c0vhU/1wQFi
-	 x4Z/MMGEzb1ddxBSCxNS07IV2QJuxBWQRAWU6mm1P9euBgKiNMf8Yv0Jfu8unppPs2
-	 TT7STocGIkK0sNlHGWyZ9J6DVSYjE3ozJTkRaHQKeHVjAASiMytu3RzK2Q7CS1UWrW
-	 TjtSRrEizztgCPn9kVusHMSq5i+vXHM31WrdJ33pxL0Z1H1JVFNFVhsR4mNFOq7oe9
-	 tsjOPdb+mJ2Ow==
-Content-Type: multipart/mixed; boundary="===============3303375958296002518=="
+	s=k20260515; t=1789210588;
+	bh=hs3orKu9GK5m8dcp8ZdKQyeGp7d1gUKoRWxcT0LfoXQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=k8mr3V3JB3Y3sa9YoAgfU6g1mfVJqKnuxovDwAPbh/YEXkwJO8cbmcpna7Rns62Fh
+	 DxrtsgxOGeuDTEghexqzjOrBiEWpx5oaKrgFN5yQlPm6V7r12YhqVpZsyYpSxspV9w
+	 Gx+43VJH2FuhEDBlAo8n7s794gvv1UZEfQzNCKdjzQdwWDP3DeiQq+i6XXS4mxsW3N
+	 HzF15IxX4TtUlW/jpoEpVySuotFiaftD2Q4yYSNGKhKrNfxRpdJIM4OgCIO8eErgPn
+	 WX3QdicqMg8BAEG6mef/J3FJNSMpAuFAoxC3jntUmdiWa3TFj1pT8NRaip1zqHjAiz
+	 MAYjI5vGuqxJw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v15 net-next 1/2] octeontx2: use atomic bitops for PF/VF
+ and rep flags
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Ratheesh Kannoth" <rkannoth@marvell.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260911105521.689565-2-rkannoth@marvell.com>
+References: <20260911105521.689565-1-rkannoth@marvell.com>
+ <20260911105521.689565-2-rkannoth@marvell.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 12 Sep 2026 10:56:28 +0000
+Message-Id: <20260912105628.B3E251F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <1846328ba25c25cd5bfe44219f2836f50f90e4c5e243a40042800f67e8d5f372@mail.kernel.org>
-In-Reply-To: <20260912095924.866254-3-florent.revest@linux.dev>
-References: <20260912095924.866254-3-florent.revest@linux.dev>
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Detach a trampoline prog while a task sleeps before it
-From: bot+bpf-ci@kernel.org
-To: florent.revest@linux.dev,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: florent.revest@linux.dev,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,kpsingh@kernel.org,john.fastabend@gmail.com,leon.hwang@linux.dev,zirajs7@gmail.com,rhkrqnwk98@gmail.com,puranjay@kernel.org,xukuohai@huaweicloud.com,iii@linux.ibm.com,hbathini@linux.ibm.com,chleroy@kernel.org,naveen@kernel.org,bjorn@kernel.org,pulehui@huawei.com,yangtiezhu@loongson.cn,hengqi.chen@gmail.com,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sat, 12 Sep 2026 10:53:15 +0000 (UTC)
 
---===============3303375958296002518==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tramp_prog_detach.c b/tools/testing/selftests/bpf/prog_tests/tramp_prog_detach.c
-> new file mode 100644
-> index 000000000000..9a0e1fc44c74
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/tramp_prog_detach.c
-> @@ -0,0 +1,191 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include <pthread.h>
-> +#include <poll.h>
-> +#include <sys/mman.h>
-> +#include <sys/syscall.h>
-> +#include <linux/userfaultfd.h>
-> +#include "tramp_prog_detach.skel.h"
-> +#include "testing_helpers.h"
-> +
-> +/*
-> + * Detach and free a prog while a task sleeps in the prog that runs before it
-> + * in the same trampoline image, then let that task continue through the
-> + * image. It must not call into the freed prog.
-> + *
-> + * The task is held in a sleepable fentry prog with userfaultfd, like
-> + * bpf_mod_race does.
-> + */
+Pre-existing issues:
+- [High] TC offload setup on representors corrupts the shared physical func=
+tion (PF) device state by locklessly overwriting its netdev and clobbering =
+its flags via a non-atomic bitwise sync loop.
+- [High] Inverted logic in `otx2_tc_del_flow()` prematurely disables TC MAR=
+K hardware offload when any single mark rule is deleted.
+- [High] Missing cancellation of `stats_wrk` leads to a Use-After-Free duri=
+ng representor teardown.
+- [High] `rvu_rep_mcam_flow_init()` interacts with the mailbox without acqu=
+iring its lock and executes an unbalanced `mutex_unlock()`.
+--
 
-This isn't a bug, but does "a sleepable fentry prog" still cover both
-subtests?  serial_test_tramp_prog_detach() runs test_detach(false) and
-test_detach(true), and the second one holds the task in the prog from
-SEC("?fexit.s/bpf_fentry_test1").
+commit 5dc6aa35da96ae18ff3fd015c81c420c4cead463
+Author: Ratheesh Kannoth <rkannoth@marvell.com>
 
-Would dropping "fentry" here, so it just reads "a sleepable prog", match
-what the file does now?  The per-subtest comments in
-serial_test_tramp_prog_detach() already spell out the fentry and fexit
-cases.
+octeontx2: use atomic bitops for PF/VF and rep flags
 
-> +
-> +static int test_setup_uffd(void *fault_addr)
+This commit replaces non-atomic u64 flag read-modify-write operations
+with unsigned long bitmaps across the octeontx2 driver. It introduces
+helpers for atomic bitwise flag updates and representor state sync.
+
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/d=
+rivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+> index eecee612b7b2c..7e09c1444a6d5 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+> @@ -594,6 +595,34 @@ struct otx2_nic {
+>  	unsigned long		*af_xdp_zc_qidx;
+>  };
+> =20
+> +static inline void otx2_set_flag(struct otx2_nic *nic, unsigned int flag)
 > +{
-> +	struct uffdio_register uffd_register = {};
-> +	struct uffdio_api uffd_api = {};
-> +	int uffd;
+> +	set_bit(flag, &nic->flags);
+> +}
 > +
-> +	uffd = syscall(__NR_userfaultfd, O_CLOEXEC);
-> +	if (uffd < 0)
-> +		return -errno;
+> +static inline void otx2_clear_flag(struct otx2_nic *nic, unsigned int fl=
+ag)
+> +{
+> +	clear_bit(flag, &nic->flags);
+> +}
 > +
-> +	uffd_api.api = UFFD_API;
-> +	uffd_api.features = 0;
-> +	if (ioctl(uffd, UFFDIO_API, &uffd_api)) {
-> +		close(uffd);
-> +		return -1;
+> +static inline bool otx2_test_flag(struct otx2_nic *nic, unsigned int fla=
+g)
+> +{
+> +	return test_bit(flag, &nic->flags);
+> +}
+> +
+> +static inline void otx2_sync_flags_from_rep(struct otx2_nic *dst,
+> +					    unsigned long *src_flags)
+> +{
+> +	unsigned int flag;
+> +
+> +	for (flag =3D 0; flag <=3D OTX2_REP_VF_INITIALIZED; flag++) {
+> +		if (test_bit(flag, src_flags))
+> +			set_bit(flag, &dst->flags);
+> +		else
+> +			clear_bit(flag, &dst->flags);
 > +	}
-> +
-> +	uffd_register.range.start = (unsigned long)fault_addr;
-> +	uffd_register.range.len = getpagesize();
-> +	uffd_register.mode = UFFDIO_REGISTER_MODE_MISSING;
-> +	if (ioctl(uffd, UFFDIO_REGISTER, &uffd_register)) {
-> +		close(uffd);
-> +		return -1;
-> +	}
-> +	return uffd;
 > +}
 
-This isn't a bug either, but this test_setup_uffd() looks like the
-same helper that already lives in prog_tests/bpf_mod_race.c: same
-name, same uffd_register/uffd_api/uffd locals, same UFFDIO_API then
-UFFDIO_REGISTER order, and the same close()/return -1 handling.  The
-only difference is that bpf_mod_race.c goes through its local
-sys_userfaultfd() wrapper instead of calling
-syscall(__NR_userfaultfd, O_CLOEXEC) directly.
+[Severity: High]
+This isn't a bug introduced by this patch, but does this loop corrupt
+the physical function (PF) state by blindly overwriting its flags?
 
-There is no shared userfaultfd helper in testing_helpers.h today, so
-the two copies would have to be kept in sync by hand.  Would it be
-worth moving it into testing_helpers.c so both tests share one copy?
+If a TC rule is configured on a representor, rvu_rep_setup_tc_cb() calls
+this sync loop. It iteratively clears all global PF-specific flags (like
+OTX2_FLAG_REP_MODE_ENABLED and OTX2_FLAG_INTF_DOWN) that aren't set
+on the local representor, breaking datapath routing.
+
+Additionally, is this 22-step bitwise copy susceptible to race conditions
+with concurrent interrupt state changes since the updates are not atomic as
+a single block?
+
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drive=
+rs/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> index 039fd47ebf522..ddb46b580c3b6 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+> @@ -1195,12 +1195,12 @@ static int otx2_tc_del_flow(struct otx2_nic *nic,
+>  	/* Disable TC MARK flag if they are no rules with skbedit mark action */
+>  	if (flow_node->req.match_id)
+>  		if (!refcount_dec_and_test(&flow_cfg->mark_flows))
+> -			nic->flags &=3D ~OTX2_FLAG_TC_MARK_ENABLED;
+> +			otx2_clear_flag(nic, OTX2_FLAG_TC_MARK_ENABLED);
+
+[Severity: High]
+This is a pre-existing issue, but does this inverted logic prematurely
+disable TC MARK hardware offload when any single mark rule is deleted?
+
+Because the base refcount is 1, deleting a rule drops the count to > 0,
+causing refcount_dec_and_test() to return false. The logical NOT operator
+inverts this to true, triggering the clear flag while other flows are
+still active.
+
+> diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/rep.c b/drivers/n=
+et/ethernet/marvell/octeontx2/nic/rep.c
+> index 0f5d5642d3f7a..8a8c0088fd204 100644
+> --- a/drivers/net/ethernet/marvell/octeontx2/nic/rep.c
+> +++ b/drivers/net/ethernet/marvell/octeontx2/nic/rep.c
+> @@ -93,9 +93,9 @@ static int rvu_rep_mcam_flow_init(struct rep_dev *rep)
+>  	rep->flow_cfg->max_flows =3D allocated;
+> =20
+>  	if (allocated) {
+> -		rep->flags |=3D OTX2_FLAG_MCAM_ENTRIES_ALLOC;
+> -		rep->flags |=3D OTX2_FLAG_NTUPLE_SUPPORT;
+> -		rep->flags |=3D OTX2_FLAG_TC_FLOWER_SUPPORT;
+> +		set_bit(OTX2_FLAG_MCAM_ENTRIES_ALLOC, &rep->flags);
+> +		set_bit(OTX2_FLAG_NTUPLE_SUPPORT, &rep->flags);
+> +		set_bit(OTX2_FLAG_TC_FLOWER_SUPPORT, &rep->flags);
+>  	}
+
+[Severity: High]
+This isn't a bug introduced by this patch, but does this function interact
+with the mailbox without acquiring its lock and execute an unbalanced
+mutex_unlock?
+
+When called by rvu_rep_setup_tc_cb(), the function enters without acquiring
+priv->mbox.lock, issues mailbox allocation commands directly, and
+unconditionally unlocks the mutex right before this block on the exit path.
+This could trigger a lockdep splat or panic, and risks ring corruption.
+
+> @@ -109,14 +109,14 @@ static int rvu_rep_setup_tc_cb(enum tc_setup_type t=
+ype,
+>  	struct rep_dev *rep =3D cb_priv;
+>  	struct otx2_nic *priv =3D rep->mdev;
+> =20
+> -	if (!(rep->flags & RVU_REP_VF_INITIALIZED))
+> +	if (!test_bit(OTX2_REP_VF_INITIALIZED, &rep->flags))
+>  		return -EINVAL;
+> =20
+> -	if (!(rep->flags & OTX2_FLAG_TC_FLOWER_SUPPORT))
+> +	if (!test_bit(OTX2_FLAG_TC_FLOWER_SUPPORT, &rep->flags))
+>  		rvu_rep_mcam_flow_init(rep);
+> =20
+>  	priv->netdev =3D rep->netdev;
+> -	priv->flags =3D rep->flags;
+> +	otx2_sync_flags_from_rep(priv, &rep->flags);
+>  	priv->pcifunc =3D rep->pcifunc;
+>  	priv->flow_cfg =3D rep->flow_cfg;
+
+[Severity: High]
+This is a pre-existing issue, but does this locklessly overwrite the shared
+PF's netdev with the representor's netdev?
+
+By reassigning priv->netdev to rep->netdev, subsequent TX completions in
+otx2_tx_napi_handler() will incorrectly route packets to this single
+representor's netdev.
+
+> @@ -382,7 +382,7 @@ static void rvu_rep_get_stats64(struct net_device *de=
+v,
+>  {
+>  	struct rep_dev *rep =3D netdev_priv(dev);
+> =20
+> -	if (!(rep->flags & RVU_REP_VF_INITIALIZED))
+> +	if (!test_bit(OTX2_REP_VF_INITIALIZED, &rep->flags))
+>  		return;
+> =20
+>  	stats->rx_packets =3D rep->stats.rx_frames;
 
 [ ... ]
 
-> +void serial_test_tramp_prog_detach(void)
-> +{
-> +	/* a task sleeping before the original function is called */
-> +	if (test__start_subtest("fentry"))
-> +		test_detach(false);
-> +	/* a task sleeping after it returned, past the jmp that detach installs */
-> +	if (test__start_subtest("fexit"))
-> +		test_detach(true);
-> +}
+> @@ -632,7 +632,7 @@ void rvu_rep_destroy(struct otx2_nic *priv)
+>  	int rep_id;
+> =20
+>  	rvu_eswitch_config(priv, false);
+> -	priv->flags |=3D OTX2_FLAG_INTF_DOWN;
+> +	otx2_set_flag(priv, OTX2_FLAG_INTF_DOWN);
+>  	rvu_rep_free_cq_rsrc(priv);
+>  	for (rep_id =3D 0; rep_id < priv->rep_cnt; rep_id++) {
+>  		rep =3D priv->reps[rep_id];
 
+[Severity: High]
+This is a pre-existing issue, but can this lead to a Use-After-Free during
+representor teardown?
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+If a user queries interface statistics (e.g., via ip -s link),
+rvu_rep_get_stats64() schedules the delayed work stats_wrk. If the
+representor is destroyed via rvu_rep_destroy() before the timer expires,
+the struct is unregistered and freed without canceling the pending work.
+When the timer fires, the workqueue executes and accesses the freed memory.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34688142088
---===============3303375958296002518==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260911105521.6895=
+65-1-rkannoth@marvell.com?part=3D1
