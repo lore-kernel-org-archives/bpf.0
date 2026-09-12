@@ -1,128 +1,121 @@
-Received: from mta0.migadu.com (out-3.mta0.migadu.com [91.218.175.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D3F722D7A9
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 02:34:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B583921EC
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 03:21:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789180462; cv=none; b=W3kQJ8pPuAsAwA18bCsq5zbRGoPrb+OZvKZyEmxk+nhr7c7EkzmduklMzfrZkHdGmXJifh+Unh4SqoAE9p383YGpvrrChKJorD79jcW+egqLvp2xi4QxUTjguLx+yiR7vvZgNdgRKnGghzIHlIHM9ed/nQa7akEI7OsVLJuEPAU=
+	t=1789183287; cv=none; b=DLtVLG74Jb8oXptsRO99LD87wSZ9ftvjgkR9gGE2eTRGWbJon9GS4YDJtw4C7UsKJxZzq2bEmXKTCRqaMVdtiw3ZSGIyu6mlqxeYMqx2DCsNdGj+DJiuHKaLa3KGMyIVcOcfv1qhg4FWtM6ztvU7zHUVX+fY542naPPiGZQMpUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789180462; c=relaxed/simple;
-	bh=zSQjQvhYOnGzd7hAHQuCLG2FK3IiuJqAjJQXsA/SV0k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t89iwDLwgdO7Gb6QerY77OwJwZMNlbDwmijBt4NUyhHuisfmC8bF71E2TDBpis0Njk3re3HkMYHzcQzQNzXVUKlmNiFYEPIIdUI+OKx+18PRhxA0MZzCfBQt57j6U0HKZ8pX7C80AMm/1fzdt237uZnIMU1AR/d40QjeJsQysN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Gu+OiJpN; arc=none smtp.client-ip=91.218.175.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789183287; c=relaxed/simple;
+	bh=wcWSw0fh8dK/mwCMEJ5cMeiRf75RADu8wufQ+3G2Fkc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=jMN/ryscmHJyj9noh1e2zLbT7Rxkh/ablCEreX/PSqVvwuxzGCK743EZ/N7qOigIKzw/ym/FbYHf78+RJb6F1nggVGMo4dmFe9V3Vbg/C9zlIAEK41r/muPm4kk20Ard5WwnIYS/59HLvM4bHAJe2DlI3k7BqyOSL1wG454nyiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AIJhlPVe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Gu+OiJpN"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=zSQjQvhYOnGzd7hAHQuCLG2FK3IiuJqAjJQXsA/SV0k=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789180457; v=1; x=1789785257;
- b=Gu+OiJpN2Y4aAJimyke5Wz7QRMHHuqlPGo1mOy0/7ki/0w/3YanZiZ4Tet4GXL3KxqsjiWGn
- mF+SuMExHtl5hKJiT/9pjHpzmQG2FhlUg1ywQUdS41eGJ85Ect93ale97zeifVNljmp66R7y2OB
- Rlms/X6pxEitNY1ywe0BdOH8=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 2018c4a972a27159;
-	Sat, 12 Sep 2026 02:34:17 +0000
-X-Mizu-Trace-ID: 2018c4a972a27159
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <649ddc23-81b1-40e0-87aa-ff0821a33c34@linux.dev>
-Date: Sat, 12 Sep 2026 10:34:13 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AIJhlPVe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84B471F000FF;
+	Sat, 12 Sep 2026 03:21:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789183284;
+	bh=i3O65EIVt1WfnAQ0D61e48oIvpC5BI3vQab33Eq3e9I=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=AIJhlPVeK6MYwDp4SLJUWEokGRaD+ZVkMsi1+CbQ0fyvaQ/V8k9qgglr3yl799tyF
+	 YYOnfdT4SD+307XrG/9Q71fJk/XizeXpCmX6jA4B2CflKodNwzvsF4tEpEiixTnT19
+	 cDg4N8Dkbq5mhoZvSxkvW/gDJNcBCeB8C89PygHsFJJPJhFRhrFPaYXK/+4H0je8fr
+	 lFhrHGfePsfeSdyv2sOqarOcwzQ+6rFf+KHf+IKSx9rJQJHe936eHBKfCfDGDCd7Vn
+	 fpRe8cQyQrnf7e6IE9BphGyGSUrTR64mapxdWpOpQRxO82jmbGHXfLPiZGHfqGiUUW
+	 R1oleXMHCdxdA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 5699D392445E;
+	Sat, 12 Sep 2026 03:20:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v3 2/2] selftests/bpf: add xdp_shrink_frags
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-References: <20260911135711.109338-1-jiayuan.chen@linux.dev>
- <20260911135711.109338-3-jiayuan.chen@linux.dev>
- <20260911144631.A7A4C1F000FF@smtp.kernel.org>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260911144631.A7A4C1F000FF@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v1 00/22] bpf: Unify helper and kfunc argument
+ checks
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178918322113.3208623.7651069330846979270.git-patchwork-notify@kernel.org>
+Date: Sat, 12 Sep 2026 03:20:21 +0000
+References: <20260905220117.922028-1-ameryhung@gmail.com>
+In-Reply-To: <20260905220117.922028-1-ameryhung@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
+ kernel-team@meta.com
+
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Sat,  5 Sep 2026 15:00:55 -0700 you wrote:
+> Hi,
+> 
+> This is the 3rd and final patchset unifying helepr and kfunc checks.
+> 
+> Helper and kfunc calls currently validate arguments through separate
+> loops despite enforcing many of the same contracts. This duplicates
+> type admission, nullability, memory, BTF, packet-access, and resource
+> ownership handling.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v1,01/22] bpf: Pass call metadata through shared argument checks
+    (no matching commit)
+  - [bpf-next,v1,02/22] bpf: Address check_func_arg() arguments by argno
+    (no matching commit)
+  - [bpf-next,v1,03/22] bpf: Only compare func_id against BPF_FUNC_* for helper calls
+    https://git.kernel.org/bpf/bpf-next/c/d18bcf4537e0
+  - [bpf-next,v1,04/22] bpf: Only compare func_id against kfunc BTF IDs for kfunc calls
+    https://git.kernel.org/bpf/bpf-next/c/0bddc59e33a4
+  - [bpf-next,v1,05/22] bpf: Rename ambiguous function argument types
+    (no matching commit)
+  - [bpf-next,v1,06/22] bpf: Unify kfunc argument kinds with enum bpf_arg_type
+    (no matching commit)
+  - [bpf-next,v1,07/22] bpf: Align helper and kfunc ARG_PTR_TO_PROG_AUX handling
+    (no matching commit)
+  - [bpf-next,v1,08/22] bpf: Classify kfunc arguments the verifier ignores
+    (no matching commit)
+  - [bpf-next,v1,09/22] bpf: Set OBJ_RELEASE when generating kfunc argument types
+    https://git.kernel.org/bpf/bpf-next/c/57e181cde7e6
+  - [bpf-next,v1,10/22] bpf: Set MEM_UNINIT and dynptr subtypes when generating kfunc arg types
+    https://git.kernel.org/bpf/bpf-next/c/78811eac7ae6
+  - [bpf-next,v1,11/22] bpf: Set MEM_RCU when generating kfunc argument types
+    (no matching commit)
+  - [bpf-next,v1,12/22] bpf: Resolve BTF ID of ARG_PTR_TO_BTF_ID in kfunc bpf_func_proto
+    (no matching commit)
+  - [bpf-next,v1,13/22] bpf: Resolve ARG_PTR_TO_MEM | MEM_FIXED_SIZE size in kfunc bpf_func_proto
+    https://git.kernel.org/bpf/bpf-next/c/6ca151e7cc32
+  - [bpf-next,v1,14/22] bpf: Consolidate runtime argument type resolution
+    (no matching commit)
+  - [bpf-next,v1,15/22] bpf: Consolidate nullable argument validation
+    (no matching commit)
+  - [bpf-next,v1,16/22] bpf: Drop redundant BTF pointer helper write rejection
+    (no matching commit)
+  - [bpf-next,v1,17/22] bpf: Consolidate helper and kfunc PTR_TO_BTF_ID argument matching
+    (no matching commit)
+  - [bpf-next,v1,18/22] bpf: Admit kfunc argument registers through check_reg_type()
+    (no matching commit)
+  - [bpf-next,v1,19/22] selftests/bpf: Test kfunc packet memory direct writes
+    (no matching commit)
+  - [bpf-next,v1,20/22] bpf: Consolidate function call pkt_access validation
+    https://git.kernel.org/bpf/bpf-next/c/8fe994c80af2
+  - [bpf-next,v1,21/22] bpf: Consolidate release argument validation
+    (no matching commit)
+  - [bpf-next,v1,22/22] bpf: Check helper and kfunc arguments in one path
+    (no matching commit)
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-On 9/11/26 10:46 PM, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issue(s) to consider:
-> - [Medium] Type punning a byte array into a struct pointer violates strict aliasing rules.
-> --
->
-> commit 7d6829eaaf619b188a1baf1e3f7bf91fc5a0a765
-> Author: Jiayuan Chen <jiayuan.chen@linux.dev>
->
-> selftests/bpf: add xdp_shrink_frags
->
-> This commit adds a BPF selftest for XDP that shrinks fragments and
-> triggers a page_pool leak on a generic XDP path. The test exercises
-> test_tun, test_veth, and test_veth_tx to cover different data path
-> behaviors on 4K pages.
->
->> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c b/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c
->> new file mode 100644
->> index 0000000000000..ee8f9034a2684
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c
-> [ ... ]
->> +static void test_tun(struct xdp_shrink_frags *skel)
->> +{
->> +	__u8 head[74], frag1[2048], frag2[2048];
->> +	struct ethhdr *eth = (void *)head;
->> +	int tap_fd = -1, ifindex, err;
->> +	struct netns_obj *ns = NULL;
->> +	struct iovec iov[3];
->> +	ssize_t n;
-> [ ... ]
->> +	memset(head, 0, sizeof(head));
->> +	memset(frag1, 0x41, sizeof(frag1));
->> +	memset(frag2, 0x42, sizeof(frag2));
->> +	eth->h_proto = htons(ETH_P_IP);
-> [Severity: Medium]
-> Does this code violate strict aliasing rules by type-punning a byte array
-> into a struct pointer?
->
-> When test_tun() executes, it accesses an object declared as an array of
-> characters (__u8) through an unrelated larger struct pointer (struct ethhdr *).
-
-
-I don't think there is anything wrong with
-
-     struct foo *ptr = (struct foo *)binary
-
-
-it's a pretty normal thing to do, and other tests in the same directory 
-do exactly the same:
-
-     prog_tests/xdp_context_test_run.c
-
-     __u8 pkt[...];
-
-     struct ethhdr *eth = (void *)pkt;
-
-     struct ipv6hdr *ip6 = (void *)(eth + 1);
-
-     ....
-
-
-Not sure why the AI complains about this one.
-
-
-> Since this code is located in a test program running in user space (under
-> tools/), standard -fstrict-aliasing rules apply.
->
-> Could the compiler assume that eth does not alias head, leading it to reorder
-> or drop the write to eth->h_proto entirely during optimization?
->
->> +
->> +	iov[0].iov_base = head;  iov[0].iov_len = sizeof(head);
->> +	iov[1].iov_base = frag1; iov[1].iov_len = sizeof(frag1);
->> +	iov[2].iov_base = frag2; iov[2].iov_len = sizeof(frag2);
-> [ ... ]
->
