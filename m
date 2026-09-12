@@ -1,122 +1,175 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AFC438F95B
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 03:21:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 323553921CC
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 03:28:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789183291; cv=none; b=M8kf0oMuW+XnN4M2ljIL+6kieu+hrvOa/IxrTnd4emEiDqKwJCY2IK3UYNy64UYedB4FyshGhYHJZCjmzmq3h4dB1aM6Zv7kGRkJQvdzcrhsRcchUoDibxEFAuyW9Tr+nr4uNuBF/OoqssPO23quzJJDiBc2nqHeGBiFm3N/DhE=
+	t=1789183681; cv=none; b=kGPakICFHE2dSYq611EpD1Yc78qshmEvseq6os7tW7DhCaLMjJC/LBxqzZ/k/WI6L8tf5xRivfsQKHutV0ROZkI34JwZvcwjCnCwB+llIVoUPyEM9XecYNhtIrRw+hlsIzL8EJBEhPKwI3V/R077hLezvTeYhaRn2utxngr+QnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789183291; c=relaxed/simple;
-	bh=vbEP4XvkUHDZU2Z/U7R3ZivOpDkkAazgDGyLw3jn+H4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=MpwP/J9Qhdr4FxXLfO9uJQ7PgRKv+Qc2WOm//Z6to84Uo4CWvb2wrU3nZwTe6PtgJaLeiXJjFu7FzzDxTlPGzNB2iVYRZvET95YvPrrp0tiqgtQzRC6IvWKYQ0YgdIoal7+8f2yPeMPsg9pf1hABVogFssNo/AZfLIRkYCvXUW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ChsAnkss; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789183681; c=relaxed/simple;
+	bh=evOAXfBovvBe6YEwcJhGdatosPUGmIApLgiwGdgXRZ4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=I0HnoYMPk2WIeCd1G1IpsoeR+xc1T5bsZRZb4sn4eDCCwCR2FMJYhfJrBIwBctn/p8Zt+V5322ITLV1hNUm0vtRnDPqHHpNUTgLdtzrJRWbK5gWahh1T8M3dmHBhSikOtHfs+ikGOMiiGoMHU51g93uM881iuhyhOt9PmlVJt4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WbAxp6GY; arc=none smtp.client-ip=209.85.210.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ChsAnkss"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C3891F00893;
-	Sat, 12 Sep 2026 03:21:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789183286;
-	bh=mxZtiPz9X6/M+cgVO45WD42H5/CJ0o81h5NOIUv1T/w=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=ChsAnksstTyCZypRLHNXKhIYW/DGdN1tFxMtfetQJcXGAdmVI7At7ykyM+27beK7m
-	 5OAzpZpbeEWHVXDErQSvPfedjkDMMcPxeScdRm0icjoO5mC731TjonzGr+6tvKb9kD
-	 wlw6cYvGX7RKE+XtDPNQZhE1WT9SGiUQUqFrI19dbwf6ET9UhB9L5Bqqs1RlmgLe1Q
-	 oh4ediZTn/hc+dCMGM2UPcd9VT5i/Rhnr6PGCv8gTrqb0s15yfA3NJ31799r3IXAlz
-	 ulAYEMZA5HxCYOE3Ek79S7IRguz8ng6I4zV7wfTeRJbhqbPzazQW2ACt8TfZo22y/y
-	 FS4VkTOsT0n0A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D08FA392445E;
-	Sat, 12 Sep 2026 03:20:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WbAxp6GY"
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7f4e729368fso1719808a34.0
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 20:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789183679; x=1789788479; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=ud1ZpqadGMe+QubhUEhtcVCLKFg2sCSQ6NPZYlf26Tg=;
+        b=WbAxp6GYqCCXfFThYBrGdLtLLoMXTZMpTlNWKcBiUm/ojmzaQnTyDTmr7hDWQ1tdno
+         9no58945yT19pjlKp9GDl76DZvF6LzrI3ezHbLg1qrhPacZA2VJHmrheC1CkQ8xBJh5U
+         akA4C43cVuZSeuYRki3HangHKoSyaJwoQlQ8JOIhDz4ePUhk4OgMXh1b5GKWDp5aq3bR
+         ym+yxeGoDTHX9RLUGApXQcvhZ1uEmjC7PZAs8q3GGC0H5i5wFlxSfL8ScuZ4i+vk+30H
+         pKOcES1JikouMIn7XNGIWwm8PEWzDOks3dUfDdQCmzJEdwx7y9O2GZlmA8sRZIClTW7d
+         Pjsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789183679; x=1789788479;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ud1ZpqadGMe+QubhUEhtcVCLKFg2sCSQ6NPZYlf26Tg=;
+        b=BZe8wepWLFNOfHaJ1WDxn7QA8xCc75g1cJP5KqgQiEr9bfiAlv22W+e8wS+CQ6fiIJ
+         ak3JhZ+zZRB9QTxVG3BzQp9ciC7AOHUDeNbWR9A58yOdLlSy1EcLJl/HdGKDm/B9Ub8z
+         2VtjN/n/lAWiLxLDX0YKEE/mEJhuGgNbtpRvjR9RE4hBN8pcuWx+mdsMFnjIrPDK85oS
+         wVqQtkfRQlRrMwBiiZlHxRZs2I+fz7DA6+Zqgs85vxjgYIPAsra4qZNyE04nkMafxnd1
+         2K8CUX577DB8SQgzK7JeHxX8IXusUDhomv2U5G3XQuzHss+qch4a9iiSYCkH37wSWbgP
+         DOyA==
+X-Forwarded-Encrypted: i=1; AKwUvBzUGPPxt5YpJxmnRWvGmg2Ng/XTIp+HRnbG9c/TghR0Igh93smu6k7uv655vOaBbcBLL4A=@vger.kernel.org
+X-Gm-Message-State: AFuF++n9RMXA8DUzwqyxDB2Yr9i6gXfVyRaIXK0g9Hz5Mg2/wDRnGsQE
+	6GW330YbKEOYatuYmx2mCko7H+FCHmr9oNYiByKXIttMR/v7flwuUqUO
+X-Gm-Gg: AYBFou2dbxtEhM7otImBPndZZgT3Q7NZ5/5SAu0Bn+CaFahYArK+yNwwfkf+HxzOY34
+	h6yaSYfMcBUQs95i7UAGCfONnjr3l19yue5vHJ/p+31Omc962g6ZiknjjalzJ6fqkuBn98lWwe7
+	cXQn/qdbD247WNMTWVule5a7viVfL+u7MhgSgn+scIIUjFTz77EdC3tY7BytUftZor54+quKCrq
+	OcVHIPYNtWOcysPLZRnpWV1lQ2A1DzEaWC+vo0eBdt982dQzbdmbofG8rxPPZXjx7PUTjdC1F4q
+	UOmFmZzAKL8XQuttv/9FSCgP5RMtRiyvKUx3GisdvFEJ7V+3Yq2srEsoGnRj/LVVBIfedGeWKcU
+	ZGKzpvm0+BiU9aE3B3heBukkCyN3j0ZCi/2r0hq4Zy3zYlbp1lYGXN3eXsHgwAmbC/ZfGwhIURN
+	r8oxsJojgQdirHb9tWo6sQll+WI1HgDuALdIqkgW5hCnqf0NukKDGxx8+tdMh5LAjB79/rtKOrW
+	jnGYDByeXPJpnc5p0LNpJspc1Dn3My3OMkg4C8+Ow5as18uHSV3Z4eZcfJ+ytetLg==
+X-Received: by 2002:a05:6830:2786:b0:7fa:ac4f:785 with SMTP id 46e09a7af769-80400b2042dmr6714669a34.17.1789183678934;
+        Fri, 11 Sep 2026 20:27:58 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:15::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-803f6d208f5sm4822052a34.25.2026.09.11.20.27.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 11 Sep 2026 20:27:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 00/23] Unify helper and kfunc argument checks
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178918322237.3208623.2482210545600015868.git-patchwork-notify@kernel.org>
-Date: Sat, 12 Sep 2026 03:20:22 +0000
-References: <20260911220415.1396439-1-ameryhung@gmail.com>
-In-Reply-To: <20260911220415.1396439-1-ameryhung@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
- kernel-team@meta.com
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 11 Sep 2026 20:27:56 -0700
+Message-Id: <DLD0OHX8C4ME.VNR49VC2UYH4@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Josef Bacik" <josef@toxicpanda.com>, "Paul E. McKenney"
+ <paulmck@kernel.org>, "Frederic Weisbecker" <frederic@kernel.org>, "Neeraj
+ Upadhyay" <neeraj.upadhyay@kernel.org>, "Joel Fernandes"
+ <joelagnelf@nvidia.com>, "Boqun Feng" <boqun@kernel.org>, "Thomas Gleixner"
+ <tglx@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>, "Steven
+ Rostedt" <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mark Rutland" <mark.rutland@arm.com>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
+ <x86@kernel.org>, "Catalin Marinas" <catalin.marinas@arm.com>, "Will
+ Deacon" <will@kernel.org>, "Puranjay Mohan" <puranjay@kernel.org>, "Xu
+ Kuohai" <xukuohai@huaweicloud.com>
+Cc: "Andy Lutomirski" <luto@kernel.org>, "Josh Triplett"
+ <josh@joshtriplett.org>, "Uladzislau Rezki" <urezki@gmail.com>, "Mathieu
+ Desnoyers" <mathieu.desnoyers@efficios.com>, "Lai Jiangshan"
+ <jiangshanlai@gmail.com>, "Zqiang" <qiang.zhang@linux.dev>, "Juergen Gross"
+ <jgross@suse.com>, "Luis Chamberlain" <mcgrof@kernel.org>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, <linux-kernel@vger.kernel.org>,
+ <rcu@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+ <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ <xen-devel@lists.xenproject.org>
+Subject: Re: [PATCH RFC v2 08/15] bpf, x86: Maintain Tasks RCU trampoline
+ nesting in the BPF trampoline
+X-Mailer: aerc
+References: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com> <20260911-b4-rcu-tasks-preempt-qs-v2-8-eaaa61ed2da4@toxicpanda.com>
+In-Reply-To: <20260911-b4-rcu-tasks-preempt-qs-v2-8-eaaa61ed2da4@toxicpanda.com>
 
-Hello:
+On Fri Sep 11, 2026 at 7:08 AM PDT, Josef Bacik wrote:
+> Emit an increment of current->rcu_tramp_nesting once the trampoline's
+> frame is set up and a decrement before the final register restore, so
+> that a task preempted while running fentry/fexit/fmod_ret/LSM programs
+> or the __bpf_tramp_enter()/__bpf_tramp_exit() glue is not treated as
+> Tasks-RCU quiescent.  Drop the count around the call to the original
+> function: that may run arbitrarily long without sleeping and must not pin
+> a Tasks RCU grace period, and the trampoline frame above it is held by
+> im->pcref rather than by Tasks RCU (see bpf_tramp_image_put()).  The
+> fmod_ret early-exit branch and the ip_after_call -> ip_epilogue poke both
+> skip the decrement/increment pair around the original call, so the count
+> stays balanced on every path.
+>
+> The sequence is "mov r11, gs:[current_task]; inc/dec dword [r11 + off]";
+> r11 is scratch at every emission point and (u32)&current_task is a valid
+> sign-extended %gs-absolute with the current per-CPU layout, the same form
+> the JIT already uses for this_cpu_off.  The image is dynamically
+> allocated text, so the instructions outside the bracketed region are
+> covered by the irq-exit IP check.
+>
+> Assisted-by: LLM
+> Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+> ---
+>  arch/x86/net/bpf_jit_comp.c | 43 +++++++++++++++++++++++++++++++++++++++=
+++++
+>  1 file changed, 43 insertions(+)
+>
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 2853e87797a7..a375c1b7bd50 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -722,6 +722,31 @@ static void emit_indirect_jump(u8 **pprog, int bpf_r=
+eg, u8 *ip)
+>  	*pprog =3D prog;
+>  }
+> =20
+> +/*
+> + * Tasks RCU trampoline nesting, see rcu_tasks_trampoline_enter().
+> + *
+> + *   mov r11, QWORD PTR gs:[current_task]
+> + *   inc/dec DWORD PTR [r11 + offsetof(struct task_struct, rcu_tramp_nes=
+ting)]
+> + *
+> + * r11 (AUX_REG) is scratch in the trampoline at every point this is emi=
+tted.
+> + */
+> +static void emit_rcu_tasks_tramp_nesting(u8 **pprog, bool enter)
+> +{
+> +#ifdef CONFIG_TASKS_RCU
+> +	u8 *prog =3D *pprog;
+> +
+> +	/* mov r11, gs:[abs32] */
+> +	EMIT2(0x65, 0x4C);
+> +	EMIT3(0x8B, 0x1C, 0x25);
+> +	EMIT((u32)(unsigned long)&current_task, 4);
+> +	/* inc/dec dword ptr [r11 + disp32] */
+> +	EMIT3(0x41, 0xFF, enter ? 0x83 : 0x8B);
+> +	EMIT(offsetof(struct task_struct, rcu_tramp_nesting), 4);
+> +
+> +	*pprog =3D prog;
+> +#endif
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+It's not a lot of overhead, but I feel it will be the death by thousand cut=
+s.
+rcu_read_lock_trace() in bpf_prog_enter_sleepable is doing the same thing..=
+.
+increamenting a variable inside current.
+Can they be combined? Like treat current->trc_reader_nesting > 0 as
+ current->rcu_tramp_nesting > 0 ?
+Or replace one with the other?
+Two current->foo++ operations look redundant.
 
-On Fri, 11 Sep 2026 15:03:52 -0700 you wrote:
-> Hi,
-> 
-> This is the third and final patchset unifying helper and kfunc checks.
-> 
-> Helper and kfunc calls currently validate arguments through separate
-> loops despite enforcing many of the same contracts. This duplicates
-> type admission, nullability, memory, BTF, packet-access, and resource
-> ownership handling.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v2,01/23] bpf: Pass call metadata through shared argument checks
-    https://git.kernel.org/bpf/bpf-next/c/6523af719a21
-  - [bpf-next,v2,02/23] bpf: Address check_func_arg() arguments by argno
-    https://git.kernel.org/bpf/bpf-next/c/47f4215b8b54
-  - [bpf-next,v2,03/23] bpf: Only compare func_id against BPF_FUNC_* for helper calls
-    https://git.kernel.org/bpf/bpf-next/c/d18bcf4537e0
-  - [bpf-next,v2,04/23] bpf: Only compare func_id against kfunc BTF IDs for kfunc calls
-    https://git.kernel.org/bpf/bpf-next/c/0bddc59e33a4
-  - [bpf-next,v2,05/23] bpf: Clarify unused and scalar function argument types
-    https://git.kernel.org/bpf/bpf-next/c/6db166056c25
-  - [bpf-next,v2,06/23] bpf: Unify kfunc argument kinds with enum bpf_arg_type
-    https://git.kernel.org/bpf/bpf-next/c/5e7edfe68654
-  - [bpf-next,v2,07/23] bpf: Classify kfunc arguments the verifier ignores
-    https://git.kernel.org/bpf/bpf-next/c/5fa6e69e2e66
-  - [bpf-next,v2,08/23] bpf: Align helper and kfunc ARG_PTR_TO_PROG_AUX handling
-    https://git.kernel.org/bpf/bpf-next/c/0cc91f0e7241
-  - [bpf-next,v2,09/23] bpf: Set OBJ_RELEASE when generating kfunc argument types
-    https://git.kernel.org/bpf/bpf-next/c/57e181cde7e6
-  - [bpf-next,v2,10/23] bpf: Set MEM_UNINIT and dynptr subtypes when generating kfunc arg types
-    https://git.kernel.org/bpf/bpf-next/c/78811eac7ae6
-  - [bpf-next,v2,11/23] bpf: Set MEM_RCU when generating kfunc argument types
-    https://git.kernel.org/bpf/bpf-next/c/2b2b08c277cb
-  - [bpf-next,v2,12/23] bpf: Resolve BTF ID of ARG_PTR_TO_BTF_ID in kfunc bpf_func_proto
-    https://git.kernel.org/bpf/bpf-next/c/fb8d353bb58f
-  - [bpf-next,v2,13/23] bpf: Resolve ARG_PTR_TO_MEM | MEM_FIXED_SIZE size in kfunc bpf_func_proto
-    https://git.kernel.org/bpf/bpf-next/c/6ca151e7cc32
-  - [bpf-next,v2,14/23] bpf: Consolidate runtime argument type resolution
-    https://git.kernel.org/bpf/bpf-next/c/2e418779a00e
-  - [bpf-next,v2,15/23] bpf: Consolidate nullable argument validation
-    https://git.kernel.org/bpf/bpf-next/c/750f3770809a
-  - [bpf-next,v2,16/23] bpf: Drop redundant BTF pointer helper write rejection
-    https://git.kernel.org/bpf/bpf-next/c/a583d56e8de3
-  - [bpf-next,v2,17/23] bpf: Consolidate helper and kfunc PTR_TO_BTF_ID argument matching
-    https://git.kernel.org/bpf/bpf-next/c/b472f03e3141
-  - [bpf-next,v2,18/23] bpf: Admit kfunc argument registers through check_reg_type()
-    https://git.kernel.org/bpf/bpf-next/c/2bd4a975ea5d
-  - [bpf-next,v2,19/23] bpf: Consolidate function call pkt_access validation
-    https://git.kernel.org/bpf/bpf-next/c/8fe994c80af2
-  - [bpf-next,v2,20/23] selftests/bpf: Test kfunc packet memory direct writes
-    https://git.kernel.org/bpf/bpf-next/c/5647b77587ce
-  - [bpf-next,v2,21/23] bpf: Consolidate release argument validation
-    https://git.kernel.org/bpf/bpf-next/c/5dc1549afac9
-  - [bpf-next,v2,22/23] selftests/bpf: Test nullable per-CPU kptr identity after exchange
-    https://git.kernel.org/bpf/bpf-next/c/4f18de58a44c
-  - [bpf-next,v2,23/23] bpf: Check helper and kfunc arguments in one path
-    https://git.kernel.org/bpf/bpf-next/c/ab7fff217fd1
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+bpf trampoline is already quite heavy. I'd like to find ways to reduce
+its overhead instead of adding more.
 
