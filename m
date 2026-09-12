@@ -1,137 +1,164 @@
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8AB309EE2
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 19:40:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCAB38F236
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 19:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789242060; cv=none; b=EIP+a9XVk6BsffxosiPT0fxfoYUmggpCNscpSxDZc6Xt7PkvrHr9SuI32mFe9hAQnx4AtbHR7sAdE9LsbcfqkydEzrm/YhxapFLqZIXXFUTsv922jpdXJ0+juUn4sWHcIA+CpoqXhkyRhQ91ClUh6hTE+NY07I+qG4Jr0VnbO7M=
+	t=1789242731; cv=none; b=HWqf2U2WRpoSEBJ3/gpanMNpl/P4GFhn8zZZlwQQ1XAcEcJkMUijIuNR+2A+4UEJkGehUHXKp4kicE9gH5nfPjaNqkU+WN26a7xrbTxCu+gh7k7QG/OcRonm1iIbrzNubDtg1B8zWcocHQcHtiKNQGT0arEEPhBljITxE5pH0L0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789242060; c=relaxed/simple;
-	bh=Fg3k93J+NnauWx+3Z+BYbTT2WHUzh/cuAEcclS6y3ms=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=H16RVmCxE3eSmQVjioNUHKaDlwr4/sJR3MH51Twazhe7/0xNi59ARXzeFCKXZtHfGUo2sYAuj1YYz4tDMnaTqEUT3kg9PPYNwS6/YlS3sCy8bGAvduW/icgmt6oMGeuEXbxdrpFOsDfJFyq6rf+12yij37pU8EoMedAJ/SdetbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hdL8Tpdf; arc=none smtp.client-ip=209.85.161.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hdL8Tpdf"
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-6aa9606ddadso1715206eaf.0
-        for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 12:40:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789242058; x=1789846858; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=/mW9uIl4IQ84J3enCrJFqvgB+YMh25zxbJWRDQHZcYo=;
-        b=hdL8TpdfrOnsp8icWzp7H9iP1o4b4ff7BeOjoL79h4VOB7Mi6IPUtkUAsdZtSvGWwY
-         G5S4oixFN/qeznuCur5B4gc2bSVe1MLjnzZkQ7sCtiMWHNDvIpW7Njy83RaekEGJfsR8
-         uBar9fpNP8lY8JkBGfS5tr+LkGAtKGPJe5TmeIp8OLJfC6ZUfW1aY64veWs450nV/hiG
-         lAAeDTT4Nb6gB9crfFPc3Hnu0lUOghQtcutwfJGRfdY/gWa0Rle4PGL5cYr/WxeqduxL
-         t9HwIy3rA8i+vi44eDI2IZZE+xh853xSBvG4vdqzZ5ApW6bDRml9lMb+xYwImLjcHGLM
-         YUyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789242058; x=1789846858;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/mW9uIl4IQ84J3enCrJFqvgB+YMh25zxbJWRDQHZcYo=;
-        b=OlHJ+3OPYA2FO/6qJGxVcsQm4pO+PZ7XWydlgZ0ogCrIG2erHqaZUtJ2mnpYsfl7lN
-         obOmsvTPEiSkyP0ny+Cy1UwGTsao7q+lw1qSiMmVl82rtarJF4uij/vmetm68soKQudz
-         bnIr0YKHBoc4yw04jY5//9BO0M1mvsJZJuK67eOx2BNl7V18a/P9w812jYo69zZvAl6f
-         uSJclC5DdvikwIupdZupTb4SXgx96X8pYPD6S2z9X+QWOaw8u2t+luihmuPxQFR87fnM
-         qijVrN8b1T8jWfeTgu+S5mo6X3WeY3TBSXYz/f7S4gKQoP4AzyRomjTpovmB6sDnOG76
-         hpVg==
-X-Forwarded-Encrypted: i=1; AKwUvBzQW+w+SYjSc53oXAF/se66U7REoXMjtmm3SBiON5KKHz8WufxMxwqbJDQ5//Ld0FwpsBE=@vger.kernel.org
-X-Gm-Message-State: AFuF++neI9b1O43gPBUs/vJxpUWCrpxxjZPEfKfpWPHfKwkaimphUVCT
-	exxYnDRsRXvFmAiOrTSI0S4Byis8iuAzG7qNfuNH2KbKuNZwAd4Rl1Ue
-X-Gm-Gg: AYBFou0/Qvht5r6hTgMxW0E9bUxuYPcyKq8Z8S73+raX9DSggbln/5ku+dSrPFkYVJr
-	5RPHhuQNiY2FhDSVTR8GM31oC57zRRz3jXcunedNfU7dF/AQ3gtyFUDNGvYcsLaT5B3cyJ98QYY
-	jmDnHkbUH00mfra9Ihous/VylQmRyiLRiR6FNK4WwrZe+D6h0YGtRCZEiav8D/65nPGYv4emuek
-	NX5Ug131TGI+eWfu1p2CCEvwc7zRW/qMp7EapCWJ4dNi7I02iJn3D06Wuk8JDwhA8TIh8sves04
-	d8Jkn+SQ5vEQcKEGiVk7NDxkq6/rSyPWmAJCM2whdrDhGGRDQN3T+kwurM+/SEb3/ilPkIVov7E
-	IWpk5Zh9hioGWQ69rI//iZHNUTgyQNhd3/NAK/xjz1kGdDd/25ipWNn9Fz0Z12xypQ8OnxyimtD
-	JoqP2yoaiFssuQn177JyUJ1gtIZ1JMKh4ng6+CkHpP7deJMVnSWL5hMoN1tkcZhRqgRcCQsyAGh
-	uTnB8CcjVo/VrKUp3t5WdzbJ3gtPl8xDOm9nxXJlOaU2n4Lp6vq1kbSldlbf82T9bnTyTr22UM=
-X-Received: by 2002:a05:6820:f034:b0:6c0:c954:e534 with SMTP id 006d021491bc7-6c0c9550c4dmr5760632eaf.38.1789242057820;
-        Sat, 12 Sep 2026 12:40:57 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:5::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6c0996dc5a6sm6404372eaf.6.2026.09.12.12.40.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Sep 2026 12:40:57 -0700 (PDT)
+	s=arc-20240116; t=1789242731; c=relaxed/simple;
+	bh=BzB2BghcuTaswLOy6KlHMa2T1ki1qYr8FCBtfLzdnF4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Uf4MaBiMk42R5HpAQ7z4GU7LJbXeQk8UzVQ2bsGwGUZx4DNcJ9hQ9Sh4c7fSnDV6TJOAX0z+8ENmupwDNtR8LVT/JrjVVnX/B5E+rskmfwFJeDpE8tq50k4mUB9I2kN8ri9woamcYmv0vJxyj2Dex7tzvPv802PrpWVldqN5k9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 96B242A58A0B5C; Sat, 12 Sep 2026 12:52:06 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	kernel-team@fb.com
+Subject: [PATCH bpf-next v4 02/15] selftests/bpf: Add a test for an __int128 by-value argument
+Date: Sat, 12 Sep 2026 12:52:06 -0700
+Message-ID: <20260912195206.984633-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260912195156.980886-1-yonghong.song@linux.dev>
+References: <20260912195156.980886-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 12 Sep 2026 12:40:55 -0700
-Message-Id: <DLDLDGTSBHA0.32TYNBSKKPFXH@gmail.com>
-Cc: "Josef Bacik" <josef@toxicpanda.com>, "Frederic Weisbecker"
- <frederic@kernel.org>, "Neeraj Upadhyay" <neeraj.upadhyay@kernel.org>,
- "Joel Fernandes" <joelagnelf@nvidia.com>, "Boqun Feng" <boqun@kernel.org>,
- "Thomas Gleixner" <tglx@kernel.org>, "Peter Zijlstra"
- <peterz@infradead.org>, "Steven Rostedt" <rostedt@goodmis.org>, "Masami
- Hiramatsu" <mhiramat@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>,
- "Jiri Olsa" <jolsa@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, <x86@kernel.org>, "Catalin Marinas"
- <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>, "Puranjay
- Mohan" <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huaweicloud.com>, "Andy
- Lutomirski" <luto@kernel.org>, "Josh Triplett" <josh@joshtriplett.org>,
- "Uladzislau Rezki" <urezki@gmail.com>, "Mathieu Desnoyers"
- <mathieu.desnoyers@efficios.com>, "Lai Jiangshan" <jiangshanlai@gmail.com>,
- "Zqiang" <qiang.zhang@linux.dev>, "Juergen Gross" <jgross@suse.com>, "Luis
- Chamberlain" <mcgrof@kernel.org>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, <linux-kernel@vger.kernel.org>,
- <rcu@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
- <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <xen-devel@lists.xenproject.org>
-Subject: Re: [PATCH RFC v2 08/15] bpf, x86: Maintain Tasks RCU trampoline
- nesting in the BPF trampoline
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <paulmck@kernel.org>
-X-Mailer: aerc
-References: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com> <20260911-b4-rcu-tasks-preempt-qs-v2-8-eaaa61ed2da4@toxicpanda.com> <DLD0OHX8C4ME.VNR49VC2UYH4@gmail.com> <14cb8a91-497d-49f5-aa20-c6cb8b9a27fc@paulmck-laptop> <DLDICNLENSRI.2R6EJ0ZFJE45T@gmail.com> <8c51a669-eb6b-455b-a829-b537da5209f8@paulmck-laptop>
-In-Reply-To: <8c51a669-eb6b-455b-a829-b537da5209f8@paulmck-laptop>
 
-On Sat Sep 12, 2026 at 11:03 AM PDT, Paul E. McKenney wrote:
->
-> In the old kernels, yes, we have current->trc_reader_nesting++.
-> In the newer kernels, Tasks Trace RCU is instead implemented in terms
-> of SRCU-fast, which instead increments per-CPU counters.  Which among
-> other thins is a bit faster and does not need to hook into the scheduler.
+A 128-bit integer is passed in two consecutive argument registers, but
+the verifier counts one argument register per parameter whatever its
+size. For
 
-old kernels? I'm confused.
-rcu_read_lock_trace() in bpf-next is doing t->trc_reader_nesting++
-and then calls __srcu_read_lock_fast().
+  __u64 take_i128_global(int a, u128 v, int c)
 
-Are you talking about some RCU branch that you target for next merge window=
-?
+the compiler passes a in R1, v in R2:R3 and c in R4, while the verifier
+marks only R1 through R3 at the entry of the global function. The callee
+then reads its own third parameter out of a register the verifier
+considers uninitialized, and the program is rejected for a register the
+source never names:
 
->
-> So we have several ways forward:
->
-> 1.	Revert the implementation of RCU Tasks Trace in terms of
-> 	SRCU-fast, and use the existing current->trc_reader_nesting++,
-> 	as you suggest.
->
-> 2.	Deprecate RCU Tasks Trace entirely in favor of RCU Tasks
-> 	augmented by rcu_tasks_trampoline_enter() and friends, as
-> 	I was suggesting.
->
-> 3.	Implement rcu_tasks_trampoline_enter() in terms of SRCU-fast,
-> 	keeping the speedup, and put a synchronize_srcu() in the
-> 	RCU Tasks grace-period mechanism.  This again deprecates
-> 	RCU Tasks Trace entirely in favor of the augmented RCU Tasks.
->
-> 4.	It is always good to explicitly state the apparent status quo,
-> 	which involves redundant trampoline entry/exit overhead.
->
-> 5.	As always, your additional ideas here!
->
-> 							Thanx, Paul
+  Validating take_i128_global() func#1...
+  20: R1=3Dscalar() R2=3Dscalar() R3=3Dscalar() R10=3Dfp0
+  ; __noinline __u64 take_i128_global(int a, u128 v, int c) @ verifier_ag=
+gregate_arg.c:12
+  20: (bf) r0 =3D r2                      ; R0=3Dscalar(id=3D4) R2=3Dscal=
+ar(id=3D4)
+  ; return (__u64)a + (__u64)(v >> 64) + (__u64)v + c; @ verifier_aggrega=
+te_arg.c:14
+  21: (bc) w1 =3D w1                      ; R1=3Dscalar(smin=3D0,smax=3Du=
+max=3D0xffffffff,var_off=3D(0x0; 0xffffffff))
+  22: (67) r1 <<=3D 32                    ; R1=3Dscalar(smax=3D0x7fffffff=
+00000000,smin32=3D0,smax32=3Dumax32=3D0,var_off=3D(0x0; 0xffffffff0000000=
+0))
+  23: (c7) r1 s>>=3D 32                   ; R1=3Dscalar(smin=3D0xffffffff=
+80000000,smax=3D0x7fffffff)
+  24: (0f) r0 +=3D r1                     ; R0=3Dscalar() R1=3Dscalar(smi=
+n=3D0xffffffff80000000,smax=3D0x7fffffff)
+  25: (0f) r0 +=3D r3                     ; R0=3Dscalar() R3=3Dscalar()
+  26: (bc) w1 =3D w4
+  R4 !read_ok
+
+The log is from clang 23. LLVM 21/22 place the argument in the same
+registers.
+
+Add the test with the failure it produces now. A later patch, "bpf:
+Support __int128 as a by-value function argument", places the two slots
+and flips this test to __success.
+
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
+ .../selftests/bpf/prog_tests/verifier.c       |  2 +
+ .../bpf/progs/verifier_aggregate_arg.c        | 40 +++++++++++++++++++
+ 2 files changed, 42 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_aggregate_=
+arg.c
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/te=
+sting/selftests/bpf/prog_tests/verifier.c
+index b97381448248..7732df9bc870 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -5,6 +5,7 @@
+ #include "arena_kfunc.skel.h"
+ #include "arena_kfunc_jit.skel.h"
+ #include "cap_helpers.h"
++#include "verifier_aggregate_arg.skel.h"
+ #include "verifier_aggregate_ret.skel.h"
+ #include "verifier_align.skel.h"
+ #include "verifier_and.skel.h"
+@@ -172,6 +173,7 @@ void test_arena_kfunc(void)                   { RUN_T=
+ESTS(arena_kfunc); }
+=20
+ void test_arena_kfunc_jit(void)               { RUN_TESTS(arena_kfunc_ji=
+t); }
+=20
++void test_verifier_aggregate_arg(void)        { RUN_TESTS(verifier_aggre=
+gate_arg); }
+ void test_verifier_aggregate_ret(void)        { RUN_TESTS(verifier_aggre=
+gate_ret); }
+ void test_verifier_align(void)                { RUN(verifier_align); }
+ void test_verifier_and(void)                  { RUN(verifier_and); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_aggregate_arg.c b=
+/tools/testing/selftests/bpf/progs/verifier_aggregate_arg.c
+new file mode 100644
+index 000000000000..d90f754396d0
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_aggregate_arg.c
+@@ -0,0 +1,40 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++#define MIX_A	0xdeadbeefcafef00dULL
++#define MIX_B	0x0123456789abcdefULL
++
++#ifdef __SIZEOF_INT128__
++
++typedef unsigned __int128 u128;
++
++__noinline __u64 take_i128_global(int a, u128 v, int c)
++{
++	return (__u64)a + (__u64)(v >> 64) + (__u64)v + c;
++}
++
++SEC("tc")
++/*
++ * The verifier counts one argument register for the __int128 and marks =
+only
++ * R1 through R3 at the entry of take_i128_global(), while the compiler =
+passed
++ * a in R1, v in R2:R3 and c in R4.
++ */
++__failure __msg("R4 !read_ok")
++int aggregate_arg_int128_c_test(struct __sk_buff *skb)
++{
++	__u64 a =3D skb->len ^ MIX_A;
++	__u64 b =3D skb->len ^ MIX_B;
++	u128 v =3D ((u128)a << 64) | b;
++
++	if (take_i128_global(1, v, 2) !=3D a + b + 3)
++		return 1;
++
++	return 0;
++}
++
++#endif /* __SIZEOF_INT128__ */
++
++char _license[] SEC("license") =3D "GPL";
+--=20
+2.53.0-Meta
 
