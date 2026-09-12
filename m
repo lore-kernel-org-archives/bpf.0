@@ -1,108 +1,132 @@
-Received: from mail-pz2-f19.google.com (mail-pz2-f19.google.com [74.125.228.19])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BB825776
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 00:47:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789174044; cv=none; b=b5wT+jkWEXDh1PJ66UcmdvPLSRisl4Mq0GR/qwgcfuj0aaiXWaJ0RYBFtQTtEXzjlSe+/rawBkBdpbtUjl5FQHcV5DddML8O1BcmWOeepHvS/d60XnG6c7zNMNeUW+KvVgBtwcKFhylkNflToxppc5fwBEFUwbNJGQlEKbPWxns=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789174044; c=relaxed/simple;
-	bh=UM4owinUOMoIRCg48l083DCebXwOaCZOmO/zB8KlSow=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KBLzX/JS94Sz5xJArzGCDKX/lzPrxm3utvmb0p9U/e5vSvV5DTK1dYTljoagSxrRsF6I+2nL+pxGqXkf+w98dsbVwSWi9ePTYqlQVXs9kn2ohosKS0tGD4vU8P91L8qzIfrdqBaylnY8q5/yBt8Hist1pqERaopf0nHR59Qduy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ov/kTBvT; arc=none smtp.client-ip=74.125.228.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E12D019E96D
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 00:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789174392; cv=pass; b=bnrK0lv+poWAgXDAzZVzBug855JdXRBmr49H303ZW84U02i9bar63TEkqtSVl47NvppMtONHGjqjHkWt1D8IdWezhFKJQ4odUE2uhOIC+HtQ+0gKN+xusdrqa0rykB9IoyqKpvfzAf5jx2VPtV3yJ87Yb61ziWGr7k27hCYPu30=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789174392; c=relaxed/simple;
+	bh=CQQ5uxI5LJywT10nnwzEUlbjvcuF9cqEPowouB9NJYM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AGdvfhj02Aljm7uMUOvuQWUaaoYB6X3LeEY3W0uoKLuxpWUNjrt9NjJekihzxWl7zq9VA8tT4MNYhN3ao630ETzhG2o7WKhZtAmx1Hf4Qy03rOouFu5XdVPdvAeYardIBugM5qy5BD75XxCRSdpUWioPb3mGD2mMR9znU8gfqKg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M6nXHCLg; arc=pass smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ov/kTBvT"
-Received: by mail-pz2-f19.google.com with SMTP id 41be03b00d2f7-cc1cea48edcso94398a12.2
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 17:47:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M6nXHCLg"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-c250a2bc3b3so207511566b.2
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 17:53:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789174389; cv=none;
+        d=google.com; s=arc-20260327;
+        b=mAn2YMdtImhrr7RLbPM8POdpdlfoeTs0i9nAg0DQVMTnnMbyIRI2UcCg0rTPVp9Ye2
+         45Jfk3l9EzyP9u4Zkrw9ifi4B0k+lnAiB+NlQi9POzAcwR9UWmlTcFrivZ5V7jEzD3EV
+         Ny2SlcCFjbxFH1+WtQdkAhHvJpE0wRRowYkNlc/kMuwVmA2c582NTZEt4U4fioYlOxUt
+         Z9ZykD1+HP0W94KLkMkovjptAquLD8tVEd5nWiI5/mLru1HdUR3/zGTGu/WaalvVZnKc
+         FaWDXShy5OBIeHgU9ZFKGaazCr6NiFtROljEc+AviW7NtiylTwic8OzEramQK26STR+u
+         EFdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=CQQ5uxI5LJywT10nnwzEUlbjvcuF9cqEPowouB9NJYM=;
+        fh=NjdiLFujb1zExMY585h6FjhiNWMLm+Mg6Cg/ZK47Hf8=;
+        b=KlPLmBPu87f6fNMhN8NvCVUrY6gNWxp4xrOWTvFhd0Sv4spEymtBKzcjwlIPuBRjQ5
+         mTadRKo2kOdj5x9IZtW0wsO+2BWuQrlQoY4AZ7Ruhb9JuanXMiKPa5h+Bke4C7phfxi6
+         yM81LfnbAjntIBHCD7dKXjaKZfJ3Qx/xgEO3TD7nlcX9G4TQcNZE63vHPMiik//SUXJT
+         9GhYCHCNvtDLLInYw7dSJQRf4fLv7RfbBQxgqsD3AKAV/vFqxSWK54VSdzNexWwJHdKz
+         ePjgDM4QfRZWGvzucdbD46/EmRmVfcz4qR75dvcn/Q1XceRldrcqa/eagHLoQHJDtBEf
+         mW5Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789174042; x=1789778842; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=UM4owinUOMoIRCg48l083DCebXwOaCZOmO/zB8KlSow=;
-        b=ov/kTBvTRbUOzEiD3AWH57jR2+uQNkFZwi9cfNCEDAbM4Oc48yrHxgyxsMgR84Dj1m
-         M7shOwQF55+gomRpEsO4MTW5w5S2pnHwH6uGeRB8EG0zDLCiCSsDp67bnDXH1L81rKy4
-         uP0nQd2D32OelNPh9su6lME7237aD5RVTtl0ucgpF8oAwkdjr07eszs2oI5lpbuaPhu/
-         xU8R6KXv3QH/h1sXflKIlSGzjLYHPAVvy980A5jcpcjlczojs0L4J3BmuIFuVyW/NqOP
-         calXwUbqqc4rvwCa6DHmSYMjbxcdVnHzBl/6wCVADMNrGnTRYKcqnCQuVIE1K/JOIorD
-         PwGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789174042; x=1789778842;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1789174389; x=1789779189; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=UM4owinUOMoIRCg48l083DCebXwOaCZOmO/zB8KlSow=;
-        b=LRlNtNqkD95gHUXfLSv38t8g9+e7kgAIIqr+17/N+edIbj7AKKoByLAy1J+H2zjsyk
-         ZOs59qMXyLayjOOBr7ksVskI4/p9T/CsqDh/AapH9v+m+tHMeqrxVRTRj0kOL4gy+Y4x
-         NUrFx/yr0L5ojpgPW8FeiGWRdYCiHpMpEkPY5e1g07ny7QmiWPmbjSxkJaxkn7mgKANf
-         cZ3oHp3fhdIeDOweg+SN3OoZ3ozls+UB5hKo4xCSKP9NAer682bR39nkUuE9ZxBdsZ2y
-         bb7n+OvRJIY0PtrsysvsovBiK5u9UZ+J3aaSf9SBRWMCQFh4ldjyTkUVHr844asmeUyF
-         mN3Q==
-X-Gm-Message-State: AFuF++n6ohetm3VSFrGzk9gyLCwgzM99T2V1Lu/E2uf404QMrW7zlvJ1
-	z1Qg9W0X/A12XJuhAVmrRqA0wXFH8ORkj/yZy8gxqy3z/ni8jTGbL7Tr
-X-Gm-Gg: AYBFou1p/BrYvit3Os8Kgj5J2RW9yuDIYCwBrRHIbZbHCTEgnxxc1TBatUUlYUf2PSy
-	Dhpl5BFfu4/53A48DBHndNzi5HiLrlgCKex+AmDV/v2Zyr8rTYTYJ6pN0+71UrvbkImYL1x1DFb
-	WYPRsNd8XxpFAP+Bm2VF1KbXTt+otZrPu+rOvxWuhGfGp7gong9bAih478i4QNt1VlhoPNvDJmo
-	/uunRlqJbAvvc7dBG/Qfn30NAzZnc4j/XKNOLkMDto88RHb2ce4hwCrpvAlq0jvJSs+3yg0J09S
-	UO/apnHNXHRB6mzOSqB4S+TnodsWJ1HRTuAn3PREdu4A5qMlWwy3/DYJzkgVR9DxD5qoyImJYUy
-	IdHJoyA4Zrp1cpFFxyrb3wJPFIG+r+FfQP8LX7ZruzNgx1V0A0SCQIorf63pS4ylF8CaV5MonqF
-	wQThNoRwRYTzPn5j+hqQ7F1E6rh0ff+jSnr6yan5zjLdfS5dzJAWVC8PSRBnUd1sMPbELPcgiT+
-	bMy0jLCvCLV8QE6Z4evpG5CoYaS07B1/dKGUijfGvOyISNOMsleRlIU557kUS7PDlWYbyluixAh
-	1iPXpL6V/1Y=
-X-Received: by 2002:a05:6300:220c:b0:3d0:57c3:65f4 with SMTP id adf61e73a8af0-3db0e0ad192mr1140052637.5.1789174042271;
-        Fri, 11 Sep 2026 17:47:22 -0700 (PDT)
-Received: from nugod-NUC15CRHU5.tail9f095a.ts.net ([218.237.104.87])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc4c6572ecasm1800565a12.22.2026.09.11.17.47.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 17:47:21 -0700 (PDT)
-From: HyeongJun An <sammiee5311@gmail.com>
-To: =?UTF-8?q?Ricardo=20B=20=2E=20Marli=C3=A8re?= <ricardo@marliere.net>
-Cc: bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Mykola Lysenko <nickolay.lysenko@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: Tolerate libarena skeleton failures under BPF_STRICT_BUILD=0
-Date: Sat, 12 Sep 2026 09:47:15 +0900
-Message-ID: <20260912004716.2042864-1-sammiee5311@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <DLCONMRV8YJN.2JBF36K590AXX@marliere.net>
-References: <DLCONMRV8YJN.2JBF36K590AXX@marliere.net>
+        bh=CQQ5uxI5LJywT10nnwzEUlbjvcuF9cqEPowouB9NJYM=;
+        b=M6nXHCLgKnJz4RWXriSUPlzYrFaCIph0CapgEoDCVGumdGLXCy9dHgs5YIpz74mfrg
+         b+yNKGpNJgLcRRtb8vi2BC215CfpFuabnyscg/ZCKSw1subIrni867Q56obS505FXtyO
+         yXU/+XqdNsqHNL38TCFRE55ZF4DCGaLHPPBx2E2zKYInrcfNywFh1EBu4axQ32QmgTF8
+         8gCJRwnwS2Qt/Pud4RFTXgZzCC7nF+EoJEXXA2TApZy0MCE0TfnJm87VbZo2fysfA7IV
+         BZ3pjLWYGxHc727jFJRM3UC2twiFfjTaszCR35Gw4CHV05K+tlL9UQutozGzEFuWHhJf
+         kA/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789174389; x=1789779189;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=CQQ5uxI5LJywT10nnwzEUlbjvcuF9cqEPowouB9NJYM=;
+        b=pGgR18oe0hlqCIwAOvWHJldXYmlo8+KvLSio+gC/QE4jJoetSnvkVndLQnZs+CFkRK
+         pxgB8VDRlK5CVsCuOYBHjFIVzxlAps9cw/0bJX+fOAR34i8nRIRZ5ZwdVfgjxBQxLvuR
+         rg3AD/ldPUGOpJeCtMabEhQaam94QYAyr5j520k9XhwEluP1gtZbfgtaSzMujgtGXFL+
+         Ns9XXpiJn4O7C2oqSOdX/hPZfjysSn4A2Hw10X8zVMhBtyr7p4sVZStOCG3qgEmMGqXG
+         GqTaREqEhyZKLe54S5bOIrOFIXB2LPf54e4dwXG8aYnJA9VG2hdW4SfCvn4lIxrKIRwU
+         HX4A==
+X-Forwarded-Encrypted: i=1; AKwUvBxz3cC2mhR1VfgNOBLvG5uOam18aZjfWmMKT9zU+19cNnOHpndKWfZoctQvhRLc3NZMfO0=@vger.kernel.org
+X-Gm-Message-State: AFuF++kNTveC8ieSwECTVNqTNjgCnqG/NJzMXXUliBvYc6e8OnGAYmVd
+	hnOfmsOqurgiCLx8At2v+E+wpd4pghEcAI6C3l5IJrUBbdUOQiunWJiXmqdSZjuNWTxYdqogoIT
+	A0Mbr9yu7i3r2f87Wb0SvTlrY+wdK71o=
+X-Gm-Gg: AYBFou3++6P+oyL3bCOf1t+K12xjjQoc8aNercQIvJDfdR3yj3VWuMYGoXHVhyimOiW
+	rFe8nbj3ExchB8qix/5gdsSO3V01BvpuoFc8/WmX0Iju2NdZ06azcOicHBikh8J0T7VqXvqZxDz
+	YrdC74EQ9ErJAzSF6njsIpoBU1J/uxa9p60Ouj00xJDccWFj8qXS1HISDn/SqX8VCRCsccP9Zbu
+	ZVTd5gGNY0JDPy92fle36upoE6lziZvo7vrAZMpOQnU+p8THjlMuWj/1b57T/TWp3I4v3MRsvzy
+	yKwb5KrKDfi+NAcQxzc7C2OxYFiuy+iXJ4jCKA1B02F6z5Qsr17A/X+sQy3RNwQy
+X-Received: by 2002:a17:907:8b91:b0:c28:f9e4:836c with SMTP id
+ a640c23a62f3a-c2966746c86mr293173366b.28.1789174388992; Fri, 11 Sep 2026
+ 17:53:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260911213340.3767930-3-main.kalliope@gmail.com> <c440fa97680eae9966579d51586c2e6b9936bfc3157225269166e1c133515f8c@mail.kernel.org>
+In-Reply-To: <c440fa97680eae9966579d51586c2e6b9936bfc3157225269166e1c133515f8c@mail.kernel.org>
+From: Nicholas Dudar <main.kalliope@gmail.com>
+Date: Fri, 11 Sep 2026 20:52:57 -0400
+X-Gm-Features: AcwNN1Ur_WOJSfWbT1nTjTcNVZl3abwhTBIueEcresXiT5wFs3FL9dx_llrHL2k
+Message-ID: <CAJZwKkgKjSOsHADdupd8cFdyUXKQeVzNmwLyX0jDorru1p1W7A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 2/3] MIPS: uasm: Add signed div/mod and
+ sign-extension emitters
+To: bot+bpf-ci@kernel.org
+Cc: tsbogend@alpha.franken.de, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
+	johan.almbladh@anyfinetworks.com, paulburton@kernel.org, martin.lau@linux.dev, 
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org, 
+	emil@etsalapatis.com, ihor.solodrai@linux.dev, linux-mips@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, philmd@oss.qualcomm.com, 
+	martin.lau@kernel.org, mason@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri Sep 11, 2026 at 03:02:35PM -0300, Ricardo B. Marlière (SUSE) wrote:
+> This isn't a bug, but would it read better to add the SEB and SEH emitters
+> together with their first caller in the BPF_MOVSX series?
 
-> Under which circumstances does this happen to you? I missed this because I
-> was using defconfig + DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT + DEBUG_INFO_BTF +
-> BPF_SYSCALL + BPF_JIT
+I grouped the native-MIPS uasm additions for SDIV/SMOD and MOVSX in one
+preparatory patch, with instruction selection handled by their respective
+JIT changes. MOVSX v3 will declare this series as a dependency. Keeping
+SEB/SEH with their first callers would also be a valid split.
 
-Building against the distro kernel's BTF rather than one from the tree.
-On Ubuntu 6.17, /sys/kernel/btf/vmlinux carries no bpf_kfunc DECL_TAGs,
-so the vmlinux.h generated from it has 5 __ksym declarations where a
-tree-built kernel gives 269, and all six libarena BPF sources fail on
-undeclared bpf_preempt_disable, bpf_preempt_enable and
-bpf_stream_vprintk. It seems that is why you did not run into it with a
-kernel you built yourself.
+Until those callers arrive, the emitters are unused. Their definitions
+do not generate instructions, and the existing opcode encodings are
+preserved.
 
-Thanks for the ack. I checked what the two bots raised and they are both
-right, including the Fixes: tag, so the patch needs more work than this.
+> and CONFIG_CPU_MICROMIPS kernels would hit build_insn()'s panic for them
+> since arch/mips/mm/uasm-micromips.c isn't updated with their encodings.
 
-HyeongJun
+That requires a microMIPS caller. Neither this series nor the existing
+kernel code calls these emitters, and the planned MOVSX callers cannot
+be built for microMIPS: MIPS only selects HAVE_EBPF_JIT when
+!CPU_MICROMIPS.
+
+I checked this on the posted v4: olddefconfig removes the attempted BPF
+JIT settings with CPU_MICROMIPS enabled, and the microMIPS uasm object
+builds successfully. Compiled-table comparisons also confirm that every
+existing native and microMIPS opcode entry is preserved.
+
+I also ran test_bpf on the official base and standalone v4, without
+MOVSX, under QEMU Malta on little-endian MIPS32 R2 and MIPS64 R2.
+Both showed exactly 14 signed DIV/MOD failures becoming passes, with
+no other test-status changes.
+
+Nicholas
