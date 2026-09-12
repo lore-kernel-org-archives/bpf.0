@@ -1,139 +1,163 @@
-Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
+Received: from mta0.migadu.com (out-155.mta0.migadu.com [91.218.175.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0FD72E06E4
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 16:42:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F799344DBD
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 17:07:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789231333; cv=none; b=tWaGDjP6v+fy357MUYh//Y4VZpjZufFUHnMl1uPayD2N+aXNH70JQBFK+67S0XLRbVwFpMQ99xxS2ypjmj85GY30zB9eAWCDw6lsO51Zm/57afz3wXXadwo8NxE0xTozBK8/2AUqtQXiSQ3Vi/gcsW9UyFm9hQ8lnvpdN/BO8Io=
+	t=1789232846; cv=none; b=eyaPeqmok5tnKIF+2eXk12CTtw8CH0dxxPIeCHnnhY6tcW4bnB38rrR/2s+ILk+78Nq5yo3+5cisC+3tFpykKbcOhxfbec1CctBRb2IQnEMtLS2TfR6y4BCjZ2/jPqUvlfjmS1EH/UGJAEZfoJO6mAVwwneayJMTEUYhXD6sI8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789231333; c=relaxed/simple;
-	bh=T60Nqt2c8Xn5Gatb3hVDWMSkm5r5sH3Ts3mlaHRL2CI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=UuAYUKp0Qnxj3E+SaoYPQ6exNvZyuLWX4nDzRaZ+rHpaNnriPsAyTu+2g3aVKS1hKaz10y0rWv9l0yNCa8ny7dr/voPlQCgRUdz5/1eEdw2NemuTf4CdJdZ23PX+DRtVh6dm1Ns8erF4Niim1RnePJ5eSBaMz8urHfuYBOoQTgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E+gptKKG; arc=none smtp.client-ip=74.125.231.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789232846; c=relaxed/simple;
+	bh=oY44/fejyNqCEamb5L+LP/THGG5yIDG+mSfjlPh3E7s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TZBnlD+GE4NC7GWuVvlya6pnafkoh1xhzqtDouCBN1LB8XFs8To23HHVPxlh65f2wPvUnlkm7vIoRFmW6Mmuk3W5t4Nzv8uyupnEjTF8oJqNraoNVeZ8LsB2yGYiT4G13N3rljGTw95mvnvLicWne6MKALExDUxDW51+jXFXk5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Og2v8nwa; arc=none smtp.client-ip=91.218.175.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E+gptKKG"
-Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-478cbd5b48aso796912fac.2
-        for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 09:42:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789231330; x=1789836130; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=5EoE7eZ2BnjQmEntJT5alFbk0z3p9k1vzuNo2TJIcNY=;
-        b=E+gptKKGvTaVCfBw9yxRqKWzuvyKh4kqEXhh0x5WA/0V3oXvEu5swb8vzFcfoEQ9Fk
-         Av/Bm7ystT4sOWfYqEMFD2wStyuiEgxMSmPGiEPO4x3irWqcT0N/Bfd2eCTEFC/v+6Y7
-         JEMJ1S3Z2J4mmEZ7qYk12+0dh8735CVFy7uXK1OVEt/FwanF7j5JePRqSvWqvEQnWBFP
-         +TfI2yDeqkXWsMzl4YOK3nWZ/zaWu2xGC6nuLzuqtLX16Wabc4Rcw9yAq9amqaoHXcA2
-         cMR5TNBDdA4L9MOuzvvnlwAeIEPZjeoWo/VSj5uA5srWECzyUfdQnJ4gENlFFYLhlfMc
-         IPmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789231330; x=1789836130;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5EoE7eZ2BnjQmEntJT5alFbk0z3p9k1vzuNo2TJIcNY=;
-        b=o+I0grg/Td4Z4ct7z/vov9JEucapA3FxsVFizySlvNEDMimkj+iRX3Ewg4Ij77j2HQ
-         dYIzAgR/CBtTKaan81wHlKa9nTgkckYPOwpWsgLQuVVgrfRpD/p4TDKs2ezoiFQmRiE5
-         xY8aA1ONno7nsCLFih3M2On2m4K8Mc4pHVobdwcPDm5BHnuL+mp/zQL94diLXiZup2vw
-         memi+IAmgGuMzUP4Uc+lr3KpxNWj6pkoMgoh9dCJC4xv9CGeyrsRADtxPHSPYkyfit1v
-         rDLO8NUZlYaxVY0VbK72lnmN9JEGdNpQ1wCpsVV++t/hl4/PO05sd1adwcIouMh1yPph
-         O8ew==
-X-Forwarded-Encrypted: i=1; AKwUvBybsXvwUHlWqUIy9dD1Q8+l5H9UaTF1aBkSVu8TRjdBG1sMb76nPVmTSM0I2oV1gQA8eeE=@vger.kernel.org
-X-Gm-Message-State: AFuF++nblAw6KVt9+Lmnae6vgN+tksuyNGDfO2AIbmgGL0xmeb8zqS82
-	+fnHXvfKlTxfhyqElCCRvxigR74xknM3Xg45/8O//ImJ50TW0D8cmn99
-X-Gm-Gg: AYBFou1DCUwYzaZdg0++ov78tR8eIp+OUKhzDO++TC2TEulUopsVh7ro5CUrH00DXyK
-	ZuNhKYqzITIy4KObrMqI/K5NKbVvgg4Gzi4y2SK531E2UJ79Up1xUL/BVRFmox1Xe+oN9bz8bcr
-	XZJt/3tZDqz2SX2tmxnQ9Pz0D8+wbxuqh4pTFpJAaPxi89AKVpF5YTCmhyOMZd6WUpQofebAJ+l
-	+bNtCJGeY0PD1qqR89to3vp1RJ0UR4sL7tNd9OndQr+81Q01cOMZgArFZ/wtajtPK0sFO7Ebb7E
-	vkRrIDeb4TfofStpYDmE2HFYS5bIr4KxqNrwLaWMa5SR4pFS7ULpKP1flYU0OeezkRSIC6XCXKx
-	zplzA2p2Z6PdVMs39f80OJAXG0Ir1moL3xClGaIUQewRXJOA69Ry66JVLB47U4YvcLHJfbik27S
-	rK46Uc6jDGplhG/kx0nLA21Yxv+usMwbJ3kSs9EvR+eZ5sHnraE6KErzipB3gD0NzSnKu7zCWZ8
-	WfugYwIkNe3HDETIDLpY7ktifsBSoI0dg2es6f86mb46FxOozDWgSpAsvYPe+JrMw==
-X-Received: by 2002:a05:6820:83cb:10b0:6b1:b23c:2142 with SMTP id 006d021491bc7-6c0b9a5fbb1mr4774103eaf.1.1789231330275;
-        Sat, 12 Sep 2026 09:42:10 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:4e::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6c2072f33fbsm3117683eaf.12.2026.09.12.09.42.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Sep 2026 09:42:09 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Og2v8nwa"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=oY44/fejyNqCEamb5L+LP/THGG5yIDG+mSfjlPh3E7s=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789232840; v=1; x=1789837640;
+ b=Og2v8nwaaFargKK9w5VzkZfYJNou52X32rBIbtJpdmNE6VbzyD/zqQ1S+CbyQB/fIjAyazQN
+ NnGvZ9FDZXbu7cG9BQlloayQZFJpf5jMDam5FYaiWsgflJnFS2ULi/VZjRRydzG4uRFROLWg5Hd
+ K4AOOjYLQ7ZtwfkLoEwQQ/8A=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 21a51625be3e3dea;
+	Sat, 12 Sep 2026 17:07:10 +0000
+X-Mizu-Trace-ID: 21a51625be3e3dea
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <b2ad4fe4-6c25-4614-b07c-8f078d81e455@linux.dev>
+Date: Sat, 12 Sep 2026 10:07:06 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 12 Sep 2026 09:42:07 -0700
-Message-Id: <DLDHKKLCOAVR.3PHQ832S121Q2@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Florent Revest (Anthropic)" <florent.revest@linux.dev>,
- <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song
- Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
- Olsa" <jolsa@kernel.org>, "KP Singh" <kpsingh@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "Leon Hwang" <leon.hwang@linux.dev>, "Junseo
- Lim" <zirajs7@gmail.com>, "Sechang Lim" <rhkrqnwk98@gmail.com>, "Puranjay
- Mohan" <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huaweicloud.com>, "Ilya
- Leoshkevich" <iii@linux.ibm.com>, "Hari Bathini" <hbathini@linux.ibm.com>,
- "Christophe Leroy" <chleroy@kernel.org>, "Naveen N Rao"
- <naveen@kernel.org>, =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>,
- "Pu Lehui" <pulehui@huawei.com>, "Tiezhu Yang" <yangtiezhu@loongson.cn>,
- "Hengqi Chen" <hengqi.chen@gmail.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf v2 1/2] bpf: Skip detached progs in trampoline
- images that are still in use
-X-Mailer: aerc
-References: <20260912095924.866254-1-florent.revest@linux.dev>
- <20260912095924.866254-2-florent.revest@linux.dev>
-In-Reply-To: <20260912095924.866254-2-florent.revest@linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 02/15] selftests/bpf: Add a test for an
+ __int128 by-value argument
+Content-Language: en-GB
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
+ mason@kernel.org, ihor.solodrai@linux.dev
+References: <20260911154924.2005771-1-yonghong.song@linux.dev>
+ <034515b18553e09288479d75768b362839532503a5ca15889c035acdcdf41b06@mail.kernel.org>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <034515b18553e09288479d75768b362839532503a5ca15889c035acdcdf41b06@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat Sep 12, 2026 at 2:59 AM PDT, Florent Revest (Anthropic) wrote:
-> +/*
-> + * Each prog call in a trampoline image is preceded by a nop. When the p=
-rog is
-> + * detached, the nop is patched to a jump to target, right after the cal=
-l, so
-> + * that tasks still running in the image skip the prog.
-> + */
-> +struct bpf_tramp_skip {
-> +	struct bpf_prog *prog;
 
-prog pointer shouldn't be necessary.
 
-> +	void *nop;
-> +	void *target;
-> +};
-> +
->  struct bpf_tramp_image {
->  	void *image;
->  	int size;
-> @@ -1374,8 +1389,27 @@ struct bpf_tramp_image {
->  		struct rcu_head rcu;
->  		struct work_struct work;
->  	};
-> +	/* entry in tr->images, the image holds a reference on tr */
-> +	struct bpf_trampoline *tr;
-> +	struct list_head list;
-> +	struct bpf_tramp_skip *skips;
-> +	int nr_skips;
+On 9/11/26 9:47 AM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+>> index f7f94ccebce2..3c7ded537314 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+>> @@ -5,6 +5,7 @@
+>>   #include "arena_kfunc.skel.h"
+>>   #include "arena_kfunc_jit.skel.h"
+>>   #include "cap_helpers.h"
+>> +#include "verifier_aggregate_arg.skel.h"
+>>   #include "verifier_aggregate_ret.skel.h"
+>>   #include "verifier_align.skel.h"
+>>   #include "verifier_and.skel.h"
+>> @@ -171,6 +172,7 @@ void test_arena_kfunc(void)                   { RUN_TESTS(arena_kfunc); }
+>>
+>>   void test_arena_kfunc_jit(void)               { RUN_TESTS(arena_kfunc_jit); }
+>>
+>> +void test_verifier_aggregate_arg(void)        { RUN_TESTS(verifier_aggregate_arg); }
+>>   void test_verifier_aggregate_ret(void)        { RUN_TESTS(verifier_aggregate_ret); }
+>>   void test_verifier_align(void)                { RUN(verifier_align); }
+>>   void test_verifier_and(void)                  { RUN(verifier_and); }
+>> diff --git a/tools/testing/selftests/bpf/progs/verifier_aggregate_arg.c b/tools/testing/selftests/bpf/progs/verifier_aggregate_arg.c
+>> new file mode 100644
+>> index 000000000000..d90f754396d0
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/verifier_aggregate_arg.c
+>> @@ -0,0 +1,40 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
+>> +#include <vmlinux.h>
+>> +#include <bpf/bpf_helpers.h>
+>> +#include "bpf_misc.h"
+>> +
+>> +#define MIX_A	0xdeadbeefcafef00dULL
+>> +#define MIX_B	0x0123456789abcdefULL
+>> +
+>> +#ifdef __SIZEOF_INT128__
+>> +
+>> +typedef unsigned __int128 u128;
+>> +
+>> +__noinline __u64 take_i128_global(int a, u128 v, int c)
+>> +{
+>> +	return (__u64)a + (__u64)(v >> 64) + (__u64)v + c;
+>> +}
+>> +
+>> +SEC("tc")
+>> +/*
+>> + * The verifier counts one argument register for the __int128 and marks only
+>> + * R1 through R3 at the entry of take_i128_global(), while the compiler passed
+>> + * a in R1, v in R2:R3 and c in R4.
+>> + */
+>> +__failure __msg("R4 !read_ok")
+>> +int aggregate_arg_int128_c_test(struct __sk_buff *skb)
+>> +{
+>> +	__u64 a = skb->len ^ MIX_A;
+>> +	__u64 b = skb->len ^ MIX_B;
+>> +	u128 v = ((u128)a << 64) | b;
+>> +
+>> +	if (take_i128_global(1, v, 2) != a + b + 3)
+>> +		return 1;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +#endif /* __SIZEOF_INT128__ */
+>> +
+>> +char _license[] SEC("license") = "GPL";
+> A subsystem pattern flags this as potentially concerning: every program
+> in the new file is wrapped in '#ifdef __SIZEOF_INT128__' with no '#else'
+> branch.
+>
+> When a BPF compiler does not define __SIZEOF_INT128__ (for example, when
+> building with bpf-gcc via BPF_GCC=1), the generated verifier_aggregate_arg.bpf.o
+> contains no programs at all. The skeleton still compiles because bpftool
+> guards maps/progs/links members on their counts, but test_loader__run_subtests()
+> then iterates zero programs and test_progs.c reports the test as passing with
+> no indication that the __int128 coverage was compiled out.
+>
+> Every sibling prog file in progs/ that wraps all of its tests in a feature
+> #ifdef adds an '#else' dummy carrying __description()/__skip() so the result
+> is a visible SKIP instead. For instance, verifier_aggregate_ret.c (from the
+> same series) includes such a dummy at lines 167-175 with the message "needs
+> LLVM 23, dummy test". The same pattern appears in verifier_gotol.c,
+> verifier_bswap.c, verifier_ldsx.c, verifier_movsx.c, verifier_sdiv.c,
+> verifier_private_stack.c, verifier_stack_arg_order.c, verifier_load_acquire.c,
+> verifier_store_release.c, arena_kfunc.c, stack_arg_precision.c, and
+> stack_arg_fail.c.
+>
+> Should this file include an '#else' dummy with __skip() to match the
+> pattern used by its sibling tests, so that builds without __SIZEOF_INT128__
+> report SKIP rather than silently passing?
+>
+> Note: __SIZEOF_INT128__ is defined by every clang for the bpf target, so
+> the normal CI matrix (clang test_progs, no_alu32, cpuv4) does compile and
+> run the test. Only the optional bpf-gcc flavor would be affected.
 
-I don't follow why you need link list and 'tr' pointer here.
-Also why keep ip_after_call ?
+This should be okay. Later selftest will have more contents in file verifier_aggregate_arg.c
+which has some not-guarded bpf programs.
 
-Replace ip_after_call with array of bpf_tramp_skip { void *nop, *target; }
-and then in bpf_tramp_image_put() instead of ip_after_call do:
-for (i =3D 0; i < im->nr_skips; i++) {
-	struct bpf_tramp_skip *skip =3D &im->skips[i];
-
-	err =3D bpf_arch_text_poke(skip->nop, BPF_MOD_NOP, BPF_MOD_JUMP,
-				 NULL, skip->target);
-}
-
-what am I missing?
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34620351527
 
