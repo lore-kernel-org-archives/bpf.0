@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-28.mta0.migadu.com [91.218.175.28])
+Received: from mta0.migadu.com (out-46.mta0.migadu.com [91.218.175.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B17C42594BD
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 09:59:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA6CC41B8CC
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 09:59:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789207183; cv=none; b=oUX+5VL035/9TLvhYDJ1MgAeYIGIcULDVIF915DhJUPPQmVClniEd6hWrQiDLSjRLNDyeoo2DDKw01984YQIeyDB2hhXK0hsA396Y/hltD767aWk5sEIBiwKnsPXq/14JTxCVtj7AIxs0qf5uvFBs5QT7XJIvK70LB2xgTnWSQo=
+	t=1789207186; cv=none; b=SrIo0x4vh4BsMbX1CnhOLoCkjXSi9PA7dgpX+hQhIBJv2OANUSX5d4jj3Y2WpJkeM9M6xlpEdaXMgkI9pRrqS6ESCCxGvX/cK2dqB9rWY56XERRinTV20A5eIlrTjUUuokO9dqNWhgt4TujPwZeF7Fps9hh/NOGFDpvoQlG1kAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789207183; c=relaxed/simple;
-	bh=SKZjZKNmRFpZ6MsOZbMhJ+UUBDGkkriHaKU6Zl53azs=;
+	s=arc-20240116; t=1789207186; c=relaxed/simple;
+	bh=tgZl06z7/4xhjayGkETWgxJojl5Inx70waXLFgymCrk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Cf1HwAB3GdxZ5Q7SRv45Hc2RKP+9VfoUBfBa6nWNZHAOo3bIXBmUwFMVFc3vUWRB2oYxZGhWzCqHktxUUh6HeAv0bCtzbknWO5quX5gsgKnxqL58+fDZfmJ2e0mKpVji3QBSawnqydDvdExrXdvIizA8jbcv1mYaJiRaSRF8KZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ux2tb9xS; arc=none smtp.client-ip=91.218.175.28
+	 MIME-Version; b=V6DIhQCYylUoe5jsPjOXlax2CObCxHhvTGJtj2CEkmFIp1HfQ3n5igvW2SRmXTsd08N0dcaOny002N3tTp8cQzDvSzNn3VLIug2NhYebJTdGjnxvX9etC+4R2cjVjLEGygUZUfDtETUjlVxb4mAx22XeKmLTie7MsdC9SLYjB/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qtevVlTo; arc=none smtp.client-ip=91.218.175.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ux2tb9xS"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qtevVlTo"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=SKZjZKNmRFpZ6MsOZbMhJ+UUBDGkkriHaKU6Zl53azs=;
+DKIM-Signature: a=rsa-sha256; bh=tgZl06z7/4xhjayGkETWgxJojl5Inx70waXLFgymCrk=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789207177; v=1; x=1789811977;
- b=Ux2tb9xSyKw2ziUx7hJNmxWdMKpQ7i1AmSA+dYq4ePb4wMqVcjTngXv6YuE7nZZFZ8uwddnd
- mLioNjkiU9eL/lmlimeEu5ByuCc2o4qPGTaLLewHfTdlmhv9BjKXg03spIy8vZ/tcqSdtqnvDQ1
- k9mWKk38w0PGI3RB/bx/1EZ0=
+ t=1789207182; v=1; x=1789811982;
+ b=qtevVlToj1pXTGvSyeTy3gQ9dqPswoKegU3R7bfx6ZEsTaivdQgFN3qDJjH+KMyGqQUYW92H
+ BcN9ZsUuRUkCU+Z1wMD6ru4pb3EXHzQrPDqnjYOCVJH6E9FVFQri4MbbLWKfhTdwOnb98mjfSKn
+ 4yFW3fHBLHHrqujFG8l7sL1w=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id d7eab75b6bbea5a3;
-	Sat, 12 Sep 2026 09:59:37 +0000
-X-Mizu-Trace-ID: d7eab75b6bbea5a3
+Received: by smtp.migadu.com with ESMTPS id bb9540d5f7ec6256;
+	Sat, 12 Sep 2026 09:59:42 +0000
+X-Mizu-Trace-ID: bb9540d5f7ec6256
 X-Migadu-Flow: FLOW_OUT
 From: "Florent Revest (Anthropic)" <florent.revest@linux.dev>
 To: bpf@vger.kernel.org,
@@ -57,9 +57,9 @@ Cc: "Florent Revest (Anthropic)" <florent.revest@linux.dev>,
 	Tiezhu Yang <yangtiezhu@loongson.cn>,
 	Hengqi Chen <hengqi.chen@gmail.com>,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf v2 1/2] bpf: Skip detached progs in trampoline images that are still in use
-Date: Sat, 12 Sep 2026 09:59:14 +0000
-Message-ID: <20260912095924.866254-2-florent.revest@linux.dev>
+Subject: [PATCH bpf v2 2/2] selftests/bpf: Detach a trampoline prog while a task sleeps before it
+Date: Sat, 12 Sep 2026 09:59:15 +0000
+Message-ID: <20260912095924.866254-3-florent.revest@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260912095924.866254-1-florent.revest@linux.dev>
 References: <20260912095924.866254-1-florent.revest@linux.dev>
@@ -71,888 +71,296 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_tramp_image_put() makes sure a trampoline image is not freed while
-a task may still be running in it, but nothing similar is done for the
-progs called by that image. Detach drops the last prog reference right
-away and the prog is freed after a grace period of its own RCU flavor,
-on the basis that a task inside the prog holds rcu_read_lock() or
-rcu_read_lock_trace(), and that a task still in the traced function
-skips the fexit progs once the nop at ip_after_call is patched to a
-jump.
+Add a test for the use-after-free fixed by the previous commit. A
+sleepable prog on bpf_fentry_test1() blocks a task on a userfaultfd
+page, like bpf_mod_race does, while the prog that runs after it in the
+same trampoline is detached and freed. The task is then released and
+must not call into the freed prog. This is done once with fentry progs
+and once with fexit progs, where the task is already past the jmp that
+bpf_tramp_image_put() installs.
 
-That leaves out a task elsewhere in the image: sleeping in a sleepable
-prog that runs before the detached one (with any preemption model), or
-preempted in the few instructions between two progs. Neither holds
-anything that delays the free of the prog it is about to call:
+Without the fix, on a kernel with KASAN:
 
-  CPU 0                               CPU 1
-  in image I, sleeping in prog S
-                                      detach P from I's trampoline
-                                       -> new image, bpf_tramp_image_put(I)
-                                      bpf_prog_put(P), last ref
-                                      RCU / tasks trace GP, P freed
-  back from S
-  __bpf_prog_enter(P)
-  call P->bpf_func
-
-If S and P are fexit progs the task is already past the patched jump,
-and fentry only images don't have one. On x86 this is an int3 in
-poisoned bpf_prog_pack memory:
-
-  Oops: int3: 0000 [#1] SMP NOPTI
-  CPU: 18 UID: 0 PID: 94573 Comm: x169 Not tainted 6.18.44 #1 PREEMPT(lazy)
-  RIP: 0010:0xffffffffc0601d8d
+  BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_enter_recur+0xed/0x1e0
+  Read of size 8 at addr ffa0000000144040 by task test_progs/171
+  CPU: 6 UID: 0 PID: 171 Comm: test_progs Tainted: G           OE       7.2.0+ #1 PREEMPT(full)
   Call Trace:
    <TASK>
-   ? bpf_trampoline_6442515411+0x1a4/0x21b
-   bpf_lsm_bprm_committed_creds+0x5/0x10
-   security_bprm_committed_creds+0x5f/0x70
-   begin_new_exec+0x2d6/0x410
+   __bpf_prog_enter_recur+0xed/0x1e0
+   bpf_trampoline_6442545468+0x72/0xe3
+   bpf_fentry_test1+0x9/0x20
+   bpf_prog_test_run_tracing+0x183/0x3e0
+   __sys_bpf+0xd3f/0x38f0
    ...
 
-We hit this in production on preemptible kernels when progs attached
-through trampolines got detached while their hooks were busy, and it was
-independently found with a fuzzer and KASAN.
-
-Extend the ip_after_call mechanism to every prog: have the JITs emit a
-patchable nop in front of each prog call sequence and record it in the
-image, and when a prog is detached, patch its nop to a jump over the
-call sequence in every image of the trampoline that is not freed yet.
-The trampoline keeps a list of those images for that, and they hold a
-reference on it until they are freed. Only the detached prog is skipped
-so tasks in an old image keep running the progs that are still
-attached. With the extra nops, BPF_MAX_TRAMP_LINKS progs no longer fit
-in a page on arm64 and loongarch (and already didn't on powerpc), so
-lower the limit there like s390 does.
-
-Fixes: e21aa341785c ("bpf: Fix fexit trampoline.")
-Reported-by: Sechang Lim <rhkrqnwk98@gmail.com>
-Closes: https://lore.kernel.org/bpf/20260815071927.147049-1-zirajs7@gmail.com/
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
 Assisted-by: Claude:unspecified
 Signed-off-by: Florent Revest (Anthropic) <florent.revest@linux.dev>
 ---
- arch/arm64/net/bpf_jit_comp.c   | 29 ++++++++++++-------
- arch/loongarch/net/bpf_jit.c    | 35 ++++++++++++++--------
- arch/powerpc/net/bpf_jit_comp.c | 38 ++++++++++++++----------
- arch/riscv/net/bpf_jit_comp64.c | 34 ++++++++++++++--------
- arch/s390/net/bpf_jit_comp.c    | 35 ++++++++++++++++++----
- arch/x86/net/bpf_jit_comp.c     | 23 ++++++++++-----
- include/linux/bpf.h             | 40 ++++++++++++++++++++++++--
- kernel/bpf/trampoline.c         | 51 +++++++++++++++++++++++++++++++--
- 8 files changed, 218 insertions(+), 67 deletions(-)
+ .../bpf/prog_tests/tramp_prog_detach.c        | 191 ++++++++++++++++++
+ .../selftests/bpf/progs/tramp_prog_detach.c   |  56 +++++
+ 2 files changed, 247 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tramp_prog_detach.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tramp_prog_detach.c
 
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index c18e005a41db..9c166bdfbc6a 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -2416,10 +2416,11 @@ bool bpf_jit_supports_subprog_tailcalls(void)
- 	return true;
- }
- 
--static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_node *node,
--			    int bargs_off, int retval_off, int run_ctx_off,
--			    bool save_ret)
-+static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_image *im,
-+			    struct bpf_tramp_node *node, int bargs_off,
-+			    int retval_off, int run_ctx_off, bool save_ret)
- {
-+	void *skip;
- 	__le32 *branch;
- 	u64 enter_prog;
- 	u64 exit_prog;
-@@ -2429,6 +2430,10 @@ static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_node *node,
- 	enter_prog = (u64)bpf_trampoline_enter(p);
- 	exit_prog = (u64)bpf_trampoline_exit(p);
- 
-+	/* nop, patched to skip this prog when it is detached */
-+	skip = ctx->ro_image + ctx->idx;
-+	emit(A64_NOP, ctx);
+diff --git a/tools/testing/selftests/bpf/prog_tests/tramp_prog_detach.c b/tools/testing/selftests/bpf/prog_tests/tramp_prog_detach.c
+new file mode 100644
+index 000000000000..9a0e1fc44c74
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/tramp_prog_detach.c
+@@ -0,0 +1,191 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include <pthread.h>
++#include <poll.h>
++#include <sys/mman.h>
++#include <sys/syscall.h>
++#include <linux/userfaultfd.h>
++#include "tramp_prog_detach.skel.h"
++#include "testing_helpers.h"
 +
- 	if (node->cookie == 0) {
- 		/* if cookie is zero, one instruction is enough to store it */
- 		emit(A64_STR64I(A64_ZR, A64_SP, run_ctx_off + cookie_off), ctx);
-@@ -2481,11 +2486,13 @@ static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_node *node,
- 	emit(A64_ADD_I(1, A64_R(2), A64_SP, run_ctx_off), ctx);
- 
- 	emit_call(exit_prog, ctx);
++/*
++ * Detach and free a prog while a task sleeps in the prog that runs before it
++ * in the same trampoline image, then let that task continue through the
++ * image. It must not call into the freed prog.
++ *
++ * The task is held in a sleepable fentry prog with userfaultfd, like
++ * bpf_mod_race does.
++ */
 +
-+	bpf_tramp_image_add_skip(im, p, skip, ctx->ro_image + ctx->idx);
- }
- 
--static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_nodes *tn,
--			       int bargs_off, int retval_off, int run_ctx_off,
--			       __le32 **branches)
-+static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_image *im,
-+			       struct bpf_tramp_nodes *tn, int bargs_off,
-+			       int retval_off, int run_ctx_off, __le32 **branches)
- {
- 	int i;
- 
-@@ -2494,7 +2501,7 @@ static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_nodes *tn,
- 	 */
- 	emit(A64_STR64I(A64_ZR, A64_SP, retval_off), ctx);
- 	for (i = 0; i < tn->nr_nodes; i++) {
--		invoke_bpf_prog(ctx, tn->nodes[i], bargs_off, retval_off,
-+		invoke_bpf_prog(ctx, im, tn->nodes[i], bargs_off, retval_off,
- 				run_ctx_off, true);
- 		/* if (*(u64 *)(sp + retval_off) !=  0)
- 		 *	goto do_fexit;
-@@ -2880,7 +2887,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
- 			store_func_meta(ctx, meta, func_meta_off);
- 			cookie_bargs_off--;
- 		}
--		invoke_bpf_prog(ctx, fentry->nodes[i], bargs_off,
-+		invoke_bpf_prog(ctx, im, fentry->nodes[i], bargs_off,
- 				retval_off, run_ctx_off,
- 				flags & BPF_TRAMP_F_RET_FENTRY_RET);
- 	}
-@@ -2891,7 +2898,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
- 		if (!branches)
- 			return -ENOMEM;
- 
--		invoke_bpf_mod_ret(ctx, fmod_ret, bargs_off, retval_off,
-+		invoke_bpf_mod_ret(ctx, im, fmod_ret, bargs_off, retval_off,
- 				   run_ctx_off, branches);
- 	}
- 
-@@ -2928,7 +2935,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
- 			store_func_meta(ctx, meta, func_meta_off);
- 			cookie_bargs_off--;
- 		}
--		invoke_bpf_prog(ctx, fexit->nodes[i], bargs_off, retval_off,
-+		invoke_bpf_prog(ctx, im, fexit->nodes[i], bargs_off, retval_off,
- 				run_ctx_off, false);
- 	}
- 
-@@ -2992,7 +2999,7 @@ int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
- 		.image = NULL,
- 		.idx = 0,
- 	};
--	struct bpf_tramp_image im;
-+	struct bpf_tramp_image im = {};
- 	struct arg_aux aaux;
- 	int ret;
- 
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index 4da278900938..0e6f1ad36c2d 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -1696,13 +1696,19 @@ static void restore_stk_args(struct jit_ctx *ctx, int nr_stk_args, int args_off,
- 	}
- }
- 
--static int invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_node *n,
--			   int args_off, int retval_off, int run_ctx_off, bool save_ret)
-+static int invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_image *im,
-+			   struct bpf_tramp_node *n, int args_off, int retval_off,
-+			   int run_ctx_off, bool save_ret)
- {
--	int ret;
-+	int i, ret;
- 	u32 *branch;
- 	struct bpf_prog *p = n->link->prog;
- 	int cookie_off = offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
-+	void *skip = ctx->ro_image + ctx->idx;
++static int test_setup_uffd(void *fault_addr)
++{
++	struct uffdio_register uffd_register = {};
++	struct uffdio_api uffd_api = {};
++	int uffd;
 +
-+	/* nops for move_imm+jirl, patched to skip this prog when it is detached */
-+	for (i = 0; i < LOONGARCH_LONG_JUMP_NINSNS; i++)
-+		emit_insn(ctx, nop);
- 
- 	if (n->cookie)
- 		emit_store_stack_imm64(ctx, LOONGARCH_GPR_T1,
-@@ -1755,13 +1761,17 @@ static int invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_node *n,
- 	/* arg3: &run_ctx */
- 	emit_insn(ctx, addid, LOONGARCH_GPR_A2, LOONGARCH_GPR_FP, -run_ctx_off);
- 	ret = emit_call(ctx, (const u64)bpf_trampoline_exit(p));
-+	if (ret)
-+		return ret;
- 
--	return ret;
-+	bpf_tramp_image_add_skip(im, p, skip, ctx->ro_image + ctx->idx);
-+	return 0;
- }
- 
--static int invoke_bpf(struct jit_ctx *ctx, struct bpf_tramp_nodes *tn,
--		      int args_off, int retval_off, int run_ctx_off,
--		      int func_meta_off, bool save_ret, u64 func_meta, int cookie_off)
-+static int invoke_bpf(struct jit_ctx *ctx, struct bpf_tramp_image *im,
-+		      struct bpf_tramp_nodes *tn, int args_off, int retval_off,
-+		      int run_ctx_off, int func_meta_off, bool save_ret,
-+		      u64 func_meta, int cookie_off)
- {
- 	int i, cur_cookie = (cookie_off - args_off) / 8;
- 
-@@ -1774,7 +1784,8 @@ static int invoke_bpf(struct jit_ctx *ctx, struct bpf_tramp_nodes *tn,
- 			emit_store_stack_imm64(ctx, LOONGARCH_GPR_T1, -func_meta_off, meta);
- 			cur_cookie--;
- 		}
--		err = invoke_bpf_prog(ctx, tn->nodes[i], args_off, retval_off, run_ctx_off, save_ret);
-+		err = invoke_bpf_prog(ctx, im, tn->nodes[i], args_off, retval_off,
-+				      run_ctx_off, save_ret);
- 		if (err)
- 			return err;
- 	}
-@@ -2017,7 +2028,7 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 	}
- 
- 	if (fentry->nr_nodes) {
--		ret = invoke_bpf(ctx, fentry, args_off, retval_off, run_ctx_off, func_meta_off,
-+		ret = invoke_bpf(ctx, im, fentry, args_off, retval_off, run_ctx_off, func_meta_off,
- 				 flags & BPF_TRAMP_F_RET_FENTRY_RET, func_meta, cookie_off);
- 		if (ret)
- 			return ret;
-@@ -2029,7 +2040,7 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 
- 		emit_insn(ctx, std, LOONGARCH_GPR_ZERO, LOONGARCH_GPR_FP, -retval_off);
- 		for (i = 0; i < fmod_ret->nr_nodes; i++) {
--			ret = invoke_bpf_prog(ctx, fmod_ret->nodes[i],
-+			ret = invoke_bpf_prog(ctx, im, fmod_ret->nodes[i],
- 					      args_off, retval_off, run_ctx_off, true);
- 			if (ret)
- 				goto out;
-@@ -2068,7 +2079,7 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 		emit_store_stack_imm64(ctx, LOONGARCH_GPR_T1, -func_meta_off, func_meta);
- 
- 	if (fexit->nr_nodes) {
--		ret = invoke_bpf(ctx, fexit, args_off, retval_off, run_ctx_off,
-+		ret = invoke_bpf(ctx, im, fexit, args_off, retval_off, run_ctx_off,
- 				 func_meta_off, false, func_meta, cookie_off);
- 		if (ret)
- 			goto out;
-@@ -2178,7 +2189,7 @@ int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
- {
- 	int ret;
- 	struct jit_ctx ctx;
--	struct bpf_tramp_image im;
-+	struct bpf_tramp_image im = {};
- 
- 	ctx.image = NULL;
- 	ctx.idx = 0;
-diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-index 7b07b43575f1..95ea27148c91 100644
---- a/arch/powerpc/net/bpf_jit_comp.c
-+++ b/arch/powerpc/net/bpf_jit_comp.c
-@@ -602,14 +602,18 @@ int arch_protect_bpf_trampoline(void *image, unsigned int size)
- }
- 
- static int invoke_bpf_prog(u32 *image, u32 *ro_image, struct codegen_context *ctx,
--			   struct bpf_tramp_node *n, int regs_off, int retval_off,
--			   int run_ctx_off, bool save_ret)
-+			   struct bpf_tramp_image *im, struct bpf_tramp_node *n,
-+			   int regs_off, int retval_off, int run_ctx_off, bool save_ret)
- {
- 	struct bpf_prog *p = n->link->prog;
- 	ppc_inst_t branch_insn;
--	u32 jmp_idx;
-+	u32 jmp_idx, skip_idx;
- 	int ret = 0;
- 
-+	/* nop, patched to skip this prog when it is detached */
-+	skip_idx = ctx->idx;
-+	EMIT(PPC_RAW_NOP());
++	uffd = syscall(__NR_userfaultfd, O_CLOEXEC);
++	if (uffd < 0)
++		return -errno;
 +
- 	/* Save cookie */
- 	if (IS_ENABLED(CONFIG_PPC64)) {
- 		PPC_LI64(_R3, n->cookie);
-@@ -679,13 +683,17 @@ static int invoke_bpf_prog(u32 *image, u32 *ro_image, struct codegen_context *ct
- 	EMIT(PPC_RAW_ADDI(_R5, _R1, run_ctx_off));
- 	ret = bpf_jit_emit_func_call_rel(image, ro_image, ctx,
- 					 (unsigned long)bpf_trampoline_exit(p));
-+	if (ret)
-+		return ret;
- 
--	return ret;
-+	if (ro_image) /* image is NULL for dummy pass */
-+		bpf_tramp_image_add_skip(im, p, &ro_image[skip_idx], &ro_image[ctx->idx]);
-+	return 0;
- }
- 
- static int invoke_bpf_mod_ret(u32 *image, u32 *ro_image, struct codegen_context *ctx,
--			      struct bpf_tramp_nodes *tn, int regs_off, int retval_off,
--			      int run_ctx_off, u32 *branches)
-+			      struct bpf_tramp_image *im, struct bpf_tramp_nodes *tn,
-+			      int regs_off, int retval_off, int run_ctx_off, u32 *branches)
- {
- 	int i;
- 
-@@ -696,8 +704,8 @@ static int invoke_bpf_mod_ret(u32 *image, u32 *ro_image, struct codegen_context
- 	EMIT(PPC_RAW_LI(_R3, 0));
- 	EMIT(PPC_RAW_STL(_R3, _R1, retval_off));
- 	for (i = 0; i < tn->nr_nodes; i++) {
--		if (invoke_bpf_prog(image, ro_image, ctx, tn->nodes[i], regs_off, retval_off,
--				    run_ctx_off, true))
-+		if (invoke_bpf_prog(image, ro_image, ctx, im, tn->nodes[i], regs_off,
-+				    retval_off, run_ctx_off, true))
- 			return -EINVAL;
- 
- 		/*
-@@ -1043,8 +1051,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 			cookie_ctx_off--;
- 		}
- 
--		if (invoke_bpf_prog(image, ro_image, ctx, fentry->nodes[i], regs_off, retval_off,
--				    run_ctx_off, flags & BPF_TRAMP_F_RET_FENTRY_RET))
-+		if (invoke_bpf_prog(image, ro_image, ctx, im, fentry->nodes[i], regs_off,
-+				    retval_off, run_ctx_off, flags & BPF_TRAMP_F_RET_FENTRY_RET))
- 			return -EINVAL;
- 	}
- 
-@@ -1053,7 +1061,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 		if (!branches)
- 			return -ENOMEM;
- 
--		if (invoke_bpf_mod_ret(image, ro_image, ctx, fmod_ret, regs_off, retval_off,
-+		if (invoke_bpf_mod_ret(image, ro_image, ctx, im, fmod_ret, regs_off, retval_off,
- 				       run_ctx_off, branches)) {
- 			ret = -EINVAL;
- 			goto cleanup;
-@@ -1123,8 +1131,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 			cookie_ctx_off--;
- 		}
- 
--		if (invoke_bpf_prog(image, ro_image, ctx, fexit->nodes[i], regs_off, retval_off,
--				    run_ctx_off, false)) {
-+		if (invoke_bpf_prog(image, ro_image, ctx, im, fexit->nodes[i], regs_off,
-+				    retval_off, run_ctx_off, false)) {
- 			ret = -EINVAL;
- 			goto cleanup;
- 		}
-@@ -1192,7 +1200,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
- 			     struct bpf_tramp_nodes *tnodes, void *func_addr)
- {
--	struct bpf_tramp_image im;
-+	struct bpf_tramp_image im = {};
- 	int ret;
- 
- 	ret = __arch_prepare_bpf_trampoline(&im, NULL, NULL, NULL, m, flags, tnodes, func_addr);
-@@ -1320,7 +1328,7 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
- 
- 	/*
- 	 * If we are not poking at bpf prog entry, then we are simply patching in/out
--	 * an unconditional branch instruction at im->ip_after_call
-+	 * an unconditional branch instruction in a trampoline image
- 	 */
- 	if (offset) {
- 		if (old_t == BPF_MOD_CALL || new_t == BPF_MOD_CALL) {
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 151031e97a24..21f8ce2ec89a 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -904,12 +904,18 @@ static void emit_store_stack_imm64(u8 reg, int stack_off, u64 imm64,
- 	emit_sd(RV_REG_FP, stack_off, reg, ctx);
- }
- 
--static int invoke_bpf_prog(struct bpf_tramp_node *node, int args_off, int retval_off,
--			   int run_ctx_off, bool save_ret, struct rv_jit_context *ctx)
-+static int invoke_bpf_prog(struct bpf_tramp_image *im, struct bpf_tramp_node *node,
-+			   int args_off, int retval_off, int run_ctx_off, bool save_ret,
-+			   struct rv_jit_context *ctx)
- {
- 	int ret, branch_off;
- 	struct bpf_prog *p = node->link->prog;
- 	int cookie_off = offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
-+	void *skip = ctx->ro_insns + ctx->ninsns;
++	uffd_api.api = UFFD_API;
++	uffd_api.features = 0;
++	if (ioctl(uffd, UFFDIO_API, &uffd_api)) {
++		close(uffd);
++		return -1;
++	}
 +
-+	/* 2 nops for auipc+jalr, patched to skip this prog when it is detached */
-+	emit(rv_nop(), ctx);
-+	emit(rv_nop(), ctx);
- 
- 	if (node->cookie)
- 		emit_store_stack_imm64(RV_REG_T1, -run_ctx_off + cookie_off, node->cookie, ctx);
-@@ -962,13 +968,17 @@ static int invoke_bpf_prog(struct bpf_tramp_node *node, int args_off, int retval
- 	/* arg3: &run_ctx */
- 	emit_addi(RV_REG_A2, RV_REG_FP, -run_ctx_off, ctx);
- 	ret = emit_call((const u64)bpf_trampoline_exit(p), true, ctx);
-+	if (ret)
-+		return ret;
- 
--	return ret;
-+	bpf_tramp_image_add_skip(im, p, skip, ctx->ro_insns + ctx->ninsns);
-+	return 0;
- }
- 
--static int invoke_bpf(struct bpf_tramp_nodes *tn, int args_off, int retval_off,
--		      int run_ctx_off, int func_meta_off, bool save_ret, u64 func_meta,
--		      int cookie_off, struct rv_jit_context *ctx)
-+static int invoke_bpf(struct bpf_tramp_image *im, struct bpf_tramp_nodes *tn,
-+		      int args_off, int retval_off, int run_ctx_off, int func_meta_off,
-+		      bool save_ret, u64 func_meta, int cookie_off,
-+		      struct rv_jit_context *ctx)
- {
- 	int i, cur_cookie = (cookie_off - args_off) / 8;
- 
-@@ -981,8 +991,8 @@ static int invoke_bpf(struct bpf_tramp_nodes *tn, int args_off, int retval_off,
- 			emit_store_stack_imm64(RV_REG_T1, -func_meta_off, meta, ctx);
- 			cur_cookie--;
- 		}
--		err = invoke_bpf_prog(tn->nodes[i], args_off, retval_off, run_ctx_off,
--				      save_ret, ctx);
-+		err = invoke_bpf_prog(im, tn->nodes[i], args_off, retval_off,
-+				      run_ctx_off, save_ret, ctx);
- 		if (err)
- 			return err;
- 	}
-@@ -1170,7 +1180,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 	}
- 
- 	if (fentry->nr_nodes) {
--		ret = invoke_bpf(fentry, args_off, retval_off, run_ctx_off, func_meta_off,
-+		ret = invoke_bpf(im, fentry, args_off, retval_off, run_ctx_off, func_meta_off,
- 				 flags & BPF_TRAMP_F_RET_FENTRY_RET, func_meta, cookie_off, ctx);
- 		if (ret)
- 			return ret;
-@@ -1184,7 +1194,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 		/* cleanup to avoid garbage return value confusion */
- 		emit_sd(RV_REG_FP, -retval_off, RV_REG_ZERO, ctx);
- 		for (i = 0; i < fmod_ret->nr_nodes; i++) {
--			ret = invoke_bpf_prog(fmod_ret->nodes[i], args_off, retval_off,
-+			ret = invoke_bpf_prog(im, fmod_ret->nodes[i], args_off, retval_off,
- 					      run_ctx_off, true, ctx);
- 			if (ret)
- 				goto out;
-@@ -1230,7 +1240,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 		emit_store_stack_imm64(RV_REG_T1, -func_meta_off, func_meta, ctx);
- 
- 	if (fexit->nr_nodes) {
--		ret = invoke_bpf(fexit, args_off, retval_off, run_ctx_off, func_meta_off,
-+		ret = invoke_bpf(im, fexit, args_off, retval_off, run_ctx_off, func_meta_off,
- 				 false, func_meta, cookie_off, ctx);
- 		if (ret)
- 			goto out;
-@@ -1299,7 +1309,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
- 			     struct bpf_tramp_nodes *tnodes, void *func_addr)
- {
--	struct bpf_tramp_image im;
-+	struct bpf_tramp_image im = {};
- 	struct rv_jit_context ctx;
- 	int ret;
- 
-diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index c4b47070bb59..286a7c9215cb 100644
---- a/arch/s390/net/bpf_jit_comp.c
-+++ b/arch/s390/net/bpf_jit_comp.c
-@@ -2566,6 +2566,8 @@ struct bpf_tramp_jit {
- 	int r14_off;		/* Offset of saved %r14, has to be at the
- 				 * bottom */
- 	int do_fexit;		/* do_fexit: label */
-+	int skip[BPF_MAX_TRAMP_LINKS];	/* skip: labels after each prog */
-+	int nr_progs;
- };
- 
- static void load_imm64(struct bpf_jit *jit, int dst_reg, u64 val)
-@@ -2584,6 +2586,7 @@ static void emit_store_stack_imm64(struct bpf_jit *jit, int tmp_reg, int stack_o
- }
- 
- static int invoke_bpf_prog(struct bpf_tramp_jit *tjit,
-+			   struct bpf_tramp_image *im,
- 			   const struct btf_func_model *m,
- 			   struct bpf_tramp_node *node, bool save_ret)
- {
-@@ -2591,8 +2594,20 @@ static int invoke_bpf_prog(struct bpf_tramp_jit *tjit,
- 	int cookie_off = tjit->run_ctx_off +
- 			 offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
- 	struct bpf_prog *p = node->link->prog;
-+	void *skip = jit->prg_buf + jit->prg;
-+	int idx = tjit->nr_progs++;
- 	int patch;
- 
-+	if (idx >= ARRAY_SIZE(tjit->skip))
-+		return -E2BIG;
++	uffd_register.range.start = (unsigned long)fault_addr;
++	uffd_register.range.len = getpagesize();
++	uffd_register.mode = UFFDIO_REGISTER_MODE_MISSING;
++	if (ioctl(uffd, UFFDIO_REGISTER, &uffd_register)) {
++		close(uffd);
++		return -1;
++	}
++	return uffd;
++}
++
++static struct bpf_program *pick_prog(struct tramp_prog_detach *skel,
++				     bool fexit, bool sleepable)
++{
++	if (fexit)
++		return sleepable ? skel->progs.fexit_sleepable :
++				   skel->progs.fexit_victim;
++	return sleepable ? skel->progs.fentry_sleepable :
++			   skel->progs.fentry_victim;
++}
++
++static struct bpf_program *sleepable_prog;
++
++static void *run_sleepable(void *arg)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++
++	/* calls bpf_fentry_test1() */
++	return (void *)(long)bpf_prog_test_run_opts(bpf_program__fd(sleepable_prog),
++						    &topts);
++}
++
++static struct tramp_prog_detach *load_one(bool fexit, bool sleepable)
++{
++	struct tramp_prog_detach *skel;
++	int err;
++
++	skel = tramp_prog_detach__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return NULL;
++
++	bpf_program__set_autoload(pick_prog(skel, fexit, sleepable), true);
++	err = tramp_prog_detach__load(skel);
++	if (!ASSERT_OK(err, "load"))
++		goto err;
++	skel->bss->pid = getpid();
++	err = tramp_prog_detach__attach(skel);
++	if (!ASSERT_OK(err, "attach"))
++		goto err;
++	return skel;
++err:
++	tramp_prog_detach__destroy(skel);
++	return NULL;
++}
++
++static void test_detach(bool fexit)
++{
++	struct tramp_prog_detach *sleepable = NULL, *victim = NULL;
++	struct pollfd pfd = { .events = POLLIN };
++	struct uffdio_copy uffd_copy = {};
++	struct uffd_msg uffd_msg;
++	void *fault_page, *src_page = MAP_FAILED;
++	long page_size = getpagesize();
++	bool started = false;
++	void *thread_ret;
++	pthread_t thread;
++	int uffd = -1;
++
++	fault_page = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
++			  MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	if (!ASSERT_NEQ(fault_page, MAP_FAILED, "mmap fault_page"))
++		return;
++	src_page = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
++			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
++	if (!ASSERT_NEQ(src_page, MAP_FAILED, "mmap src_page"))
++		goto out;
++
++	/* The most recently attached prog runs first */
++	victim = load_one(fexit, false);
++	if (!victim)
++		goto out;
++	sleepable = load_one(fexit, true);
++	if (!sleepable)
++		goto out;
++	sleepable_prog = pick_prog(sleepable, fexit, true);
++
++	/* Not armed yet so this doesn't block, make sure sleepable runs first */
++	if (!ASSERT_OK((long)run_sleepable(NULL), "dry run"))
++		goto out;
++	if (!ASSERT_LT(sleepable->bss->ts, victim->bss->ts, "prog order"))
++		goto out;
++
++	uffd = test_setup_uffd(fault_page);
++	if (!ASSERT_GE(uffd, 0, "userfaultfd open + register address"))
++		goto out;
++	sleepable->bss->fault_addr = fault_page;
++
++	if (!ASSERT_OK(pthread_create(&thread, NULL, run_sleepable, NULL),
++		       "pthread_create"))
++		goto out;
++	started = true;
++
++	/* Wait for the thread to sleep in bpf_copy_from_user() */
++	pfd.fd = uffd;
++	if (!ASSERT_EQ(poll(&pfd, 1, 10000), 1, "poll uffd"))
++		goto out;
++	if (!ASSERT_EQ(read(uffd, &uffd_msg, sizeof(uffd_msg)), sizeof(uffd_msg),
++		       "read uffd"))
++		goto out;
++	if (!ASSERT_EQ(uffd_msg.event, UFFD_EVENT_PAGEFAULT, "uffd pagefault"))
++		goto out;
++
++	/* Detach and unload the victim prog, and make sure it is gone */
++	tramp_prog_detach__destroy(victim);
++	victim = NULL;
++	kern_sync_rcu();
++	usleep(100 * 1000);
++	kern_sync_rcu();
 +
 +	/*
-+	 * nop, patched to skip this prog when it is detached
++	 * That was enough to test the use-after-free but do it once more, so
++	 * that an older image with an already patched nop gets patched too.
 +	 */
++	victim = load_one(fexit, false);
++	tramp_prog_detach__destroy(victim);
++	victim = NULL;
 +
-+	/* brcl 0,skip */
-+	EMIT6_PCREL_RILC(0xc0040000, 0, tjit->skip[idx]);
++out:
++	/* Let the thread proceed with the rest of the trampoline */
++	if (uffd >= 0) {
++		uffd_copy.dst = (unsigned long)fault_page;
++		uffd_copy.src = (unsigned long)src_page;
++		uffd_copy.len = page_size;
++		ASSERT_OK(ioctl(uffd, UFFDIO_COPY, &uffd_copy), "uffd copy");
++		close(uffd);
++	}
++	if (started &&
++	    ASSERT_OK(pthread_join(thread, &thread_ret), "pthread_join"))
++		ASSERT_NULL(thread_ret, "blocking run");
 +
- 	/*
- 	 * run_ctx.cookie = node->cookie;
- 	 */
-@@ -2652,10 +2667,15 @@ static int invoke_bpf_prog(struct bpf_tramp_jit *tjit,
- 	/* brasl %r14,__bpf_prog_exit */
- 	EMIT6_PCREL_RILB_PTR(0xc0050000, REG_14, bpf_trampoline_exit(p));
- 
-+	/* skip: */
-+	tjit->skip[idx] = jit->prg;
-+	bpf_tramp_image_add_skip(im, p, skip, jit->prg_buf + jit->prg);
-+
- 	return 0;
- }
- 
- static int invoke_bpf(struct bpf_tramp_jit *tjit,
-+		      struct bpf_tramp_image *im,
- 		      const struct btf_func_model *m,
- 		      struct bpf_tramp_nodes *tn, bool save_ret,
- 		      u64 func_meta, int cookie_off)
-@@ -2670,7 +2690,7 @@ static int invoke_bpf(struct bpf_tramp_jit *tjit,
- 			emit_store_stack_imm64(jit, REG_0, tjit->func_meta_off, meta);
- 			cur_cookie--;
- 		}
--		if (invoke_bpf_prog(tjit, m, tn->nodes[i], save_ret))
-+		if (invoke_bpf_prog(tjit, im, m, tn->nodes[i], save_ret))
- 			return -EINVAL;
- 	}
- 
-@@ -2712,6 +2732,11 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 	u64 func_meta;
- 	int i, j;
- 
-+	/* The skip labels are taken from the previous pass. */
-+	tjit->nr_progs = 0;
-+	if (im)
-+		im->nr_skips = 0;
-+
- 	/* Support as many stack arguments as "mvc" instruction can handle. */
- 	nr_reg_args = min_t(int, m->nr_args, MAX_NR_REG_ARGS);
- 	nr_stack_args = m->nr_args - nr_reg_args;
-@@ -2875,7 +2900,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 		emit_store_stack_imm64(jit, REG_0, tjit->retval_off, 0);
- 	}
- 
--	if (invoke_bpf(tjit, m, fentry, flags & BPF_TRAMP_F_RET_FENTRY_RET,
-+	if (invoke_bpf(tjit, im, m, fentry, flags & BPF_TRAMP_F_RET_FENTRY_RET,
- 		       func_meta, cookie_off))
- 		return -EINVAL;
- 
-@@ -2889,7 +2914,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 		       0xf000 | tjit->retval_off);
- 
- 		for (i = 0; i < fmod_ret->nr_nodes; i++) {
--			if (invoke_bpf_prog(tjit, m, fmod_ret->nodes[i], true))
-+			if (invoke_bpf_prog(tjit, im, m, fmod_ret->nodes[i], true))
- 				return -EINVAL;
- 
- 			/*
-@@ -2962,7 +2987,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- 
- 	/* do_fexit: */
- 	tjit->do_fexit = jit->prg;
--	if (invoke_bpf(tjit, m, fexit, false, func_meta, cookie_off))
-+	if (invoke_bpf(tjit, im, m, fexit, false, func_meta, cookie_off))
- 		return -EINVAL;
- 
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
-@@ -3016,7 +3041,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
- int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
- 			     struct bpf_tramp_nodes *tnodes, void *orig_call)
- {
--	struct bpf_tramp_image im;
-+	struct bpf_tramp_image im = {};
- 	struct bpf_tramp_jit tjit;
- 	int ret;
- 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 2853e87797a7..0d974da4f509 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -3217,16 +3217,21 @@ static void restore_regs(const struct btf_func_model *m, u8 **prog,
- }
- 
- static int invoke_bpf_prog(const struct btf_func_model *m, u8 **pprog,
-+			   struct bpf_tramp_image *im,
- 			   struct bpf_tramp_node *node, int stack_size,
- 			   int run_ctx_off, bool save_ret,
- 			   void *image, void *rw_image)
- {
- 	u8 *prog = *pprog;
--	u8 *jmp_insn;
-+	u8 *jmp_insn, *skip;
- 	int ctx_cookie_off = offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
- 	struct bpf_prog *p = node->link->prog;
- 	u64 cookie = node->cookie;
- 
-+	/* nop, patched to skip this prog when it is detached */
-+	skip = image + (prog - (u8 *)rw_image);
-+	emit_nops(&prog, X86_PATCH_SIZE);
-+
- 	/* mov rdi, cookie */
- 	emit_mov_imm64(&prog, BPF_REG_1, (long) cookie >> 32, (u32) (long) cookie);
- 
-@@ -3301,6 +3306,8 @@ static int invoke_bpf_prog(const struct btf_func_model *m, u8 **pprog,
- 	if (emit_rsb_call(&prog, bpf_trampoline_exit(p), image + (prog - (u8 *)rw_image)))
- 		return -EINVAL;
- 
-+	bpf_tramp_image_add_skip(im, p, skip, image + (prog - (u8 *)rw_image));
-+
- 	*pprog = prog;
- 	return 0;
- }
-@@ -3332,6 +3339,7 @@ static int emit_cond_near_jump(u8 **pprog, void *func, void *ip, u8 jmp_cond)
- }
- 
- static int invoke_bpf(const struct btf_func_model *m, u8 **pprog,
-+		      struct bpf_tramp_image *im,
- 		      struct bpf_tramp_nodes *tl, int stack_size,
- 		      int run_ctx_off, int func_meta_off, bool save_ret,
- 		      void *image, void *rw_image, u64 func_meta,
-@@ -3346,7 +3354,7 @@ static int invoke_bpf(const struct btf_func_model *m, u8 **pprog,
- 				func_meta | (cur_cookie << BPF_TRAMP_COOKIE_INDEX_SHIFT));
- 			cur_cookie--;
- 		}
--		if (invoke_bpf_prog(m, &prog, tl->nodes[i], stack_size,
-+		if (invoke_bpf_prog(m, &prog, im, tl->nodes[i], stack_size,
- 				    run_ctx_off, save_ret, image, rw_image))
- 			return -EINVAL;
- 	}
-@@ -3355,6 +3363,7 @@ static int invoke_bpf(const struct btf_func_model *m, u8 **pprog,
- }
- 
- static int invoke_bpf_mod_ret(const struct btf_func_model *m, u8 **pprog,
-+			      struct bpf_tramp_image *im,
- 			      struct bpf_tramp_nodes *tl, int stack_size,
- 			      int run_ctx_off, u8 **branches,
- 			      void *image, void *rw_image)
-@@ -3368,7 +3377,7 @@ static int invoke_bpf_mod_ret(const struct btf_func_model *m, u8 **pprog,
- 	emit_mov_imm32(&prog, false, BPF_REG_0, 0);
- 	emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_0, -8);
- 	for (i = 0; i < tl->nr_nodes; i++) {
--		if (invoke_bpf_prog(m, &prog, tl->nodes[i], stack_size, run_ctx_off, true,
-+		if (invoke_bpf_prog(m, &prog, im, tl->nodes[i], stack_size, run_ctx_off, true,
- 				    image, rw_image))
- 			return -EINVAL;
- 
-@@ -3640,7 +3649,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 	}
- 
- 	if (fentry->nr_nodes) {
--		if (invoke_bpf(m, &prog, fentry, regs_off, run_ctx_off, func_meta_off,
-+		if (invoke_bpf(m, &prog, im, fentry, regs_off, run_ctx_off, func_meta_off,
- 			       flags & BPF_TRAMP_F_RET_FENTRY_RET, image, rw_image,
- 			       func_meta, cookie_off))
- 			return -EINVAL;
-@@ -3652,7 +3661,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 		if (!branches)
- 			return -ENOMEM;
- 
--		if (invoke_bpf_mod_ret(m, &prog, fmod_ret, regs_off,
-+		if (invoke_bpf_mod_ret(m, &prog, im, fmod_ret, regs_off,
- 				       run_ctx_off, branches, image, rw_image)) {
- 			ret = -EINVAL;
- 			goto cleanup;
-@@ -3708,7 +3717,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 		emit_store_stack_imm64(&prog, BPF_REG_0, -func_meta_off, func_meta);
- 
- 	if (fexit->nr_nodes) {
--		if (invoke_bpf(m, &prog, fexit, regs_off, run_ctx_off, func_meta_off,
-+		if (invoke_bpf(m, &prog, im, fexit, regs_off, run_ctx_off, func_meta_off,
- 			       false, image, rw_image, func_meta, cookie_off)) {
- 			ret = -EINVAL;
- 			goto cleanup;
-@@ -3811,7 +3820,7 @@ int arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *image, void *i
- int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
- 			     struct bpf_tramp_nodes *tnodes, void *func_addr)
- {
--	struct bpf_tramp_image im;
-+	struct bpf_tramp_image im = {};
- 	void *image;
- 	int ret;
- 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index e57af902560c..9dcd3bc395eb 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1258,11 +1258,15 @@ struct btf_func_model {
- #define BPF_TRAMP_F_INDIRECT		BIT(8)
- 
- /* Each call __bpf_prog_enter + call bpf_func + call __bpf_prog_exit is ~50
-- * bytes on x86.
-+ * bytes on x86. The trampoline image has to fit in PAGE_SIZE.
-  */
- enum {
--#if defined(__s390x__)
-+#if defined(__s390x__) || defined(__powerpc64__)
- 	BPF_MAX_TRAMP_LINKS = 27,
-+#elif defined(__loongarch__)
-+	BPF_MAX_TRAMP_LINKS = 33,
-+#elif defined(__aarch64__)
-+	BPF_MAX_TRAMP_LINKS = 37,
- #else
- 	BPF_MAX_TRAMP_LINKS = 38,
- #endif
-@@ -1363,6 +1367,17 @@ enum bpf_tramp_prog_type {
- 	BPF_TRAMP_FSESSION,
- };
- 
-+/*
-+ * Each prog call in a trampoline image is preceded by a nop. When the prog is
-+ * detached, the nop is patched to a jump to target, right after the call, so
-+ * that tasks still running in the image skip the prog.
-+ */
-+struct bpf_tramp_skip {
-+	struct bpf_prog *prog;
-+	void *nop;
-+	void *target;
-+};
-+
- struct bpf_tramp_image {
- 	void *image;
- 	int size;
-@@ -1374,8 +1389,27 @@ struct bpf_tramp_image {
- 		struct rcu_head rcu;
- 		struct work_struct work;
- 	};
-+	/* entry in tr->images, the image holds a reference on tr */
-+	struct bpf_trampoline *tr;
-+	struct list_head list;
-+	struct bpf_tramp_skip *skips;
-+	int nr_skips;
- };
- 
-+static inline void bpf_tramp_image_add_skip(struct bpf_tramp_image *im, struct bpf_prog *prog,
-+					    void *nop, void *target)
-+{
-+	struct bpf_tramp_skip *skip;
-+
-+	/* struct_ops trampolines and arch_bpf_trampoline_size() have no image */
-+	if (!im || !im->skips)
-+		return;
-+	skip = &im->skips[im->nr_skips++];
-+	skip->prog = prog;
-+	skip->nop = nop;
-+	skip->target = target;
++	tramp_prog_detach__destroy(victim);
++	tramp_prog_detach__destroy(sleepable);
++	if (src_page != MAP_FAILED)
++		munmap(src_page, page_size);
++	munmap(fault_page, page_size);
 +}
 +
- struct bpf_trampoline {
- 	/* hlist for trampoline_key_table */
- 	struct hlist_node hlist_key;
-@@ -1402,6 +1436,8 @@ struct bpf_trampoline {
- 	int progs_cnt[BPF_TRAMP_MAX];
- 	/* Executable image of trampoline */
- 	struct bpf_tramp_image *cur_image;
-+	/* Images not freed yet, cur_image and older ones still in use */
-+	struct list_head images;
- 	/* Used as temporary old image storage for multi_attach */
- 	struct {
- 		struct bpf_tramp_image *old_image;
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 90b70ea0d370..b82d8592319a 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -403,6 +403,7 @@ static struct bpf_trampoline *bpf_trampoline_lookup(u64 key, unsigned long ip)
- 	refcount_set(&tr->refcnt, 1);
- 	for (i = 0; i < BPF_TRAMP_MAX; i++)
- 		INIT_HLIST_HEAD(&tr->progs_hlist[i]);
-+	INIT_LIST_HEAD(&tr->images);
- out:
- 	mutex_unlock(&trampoline_mutex);
- 	return tr;
-@@ -565,14 +566,21 @@ static void bpf_tramp_image_free(struct bpf_tramp_image *im)
- 	arch_free_bpf_trampoline(im->image, im->size);
- 	bpf_jit_uncharge_modmem(im->size);
- 	percpu_ref_exit(&im->pcref);
-+	kfree(im->skips);
- 	kfree_rcu(im, rcu);
- }
- 
- static void __bpf_tramp_image_put_deferred(struct work_struct *work)
- {
-+	struct bpf_trampoline *tr;
- 	struct bpf_tramp_image *im;
- 
- 	im = container_of(work, struct bpf_tramp_image, work);
-+	tr = im->tr;
-+	trampoline_lock(tr);
-+	list_del(&im->list);
-+	trampoline_unlock(tr);
-+	bpf_trampoline_put(tr);
- 	bpf_tramp_image_free(im);
- }
- 
-@@ -658,7 +666,7 @@ static void bpf_tramp_image_put(struct bpf_tramp_image *im)
- 	call_rcu_tasks_trace(&im->rcu, __bpf_tramp_image_put_rcu_tasks);
- }
- 
--static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key, int size)
-+static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key, int size, int nr_progs)
- {
- 	struct bpf_tramp_image *im;
- 	struct bpf_ksym *ksym;
-@@ -669,6 +677,10 @@ static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key, int size)
- 	if (!im)
- 		goto out;
- 
-+	im->skips = kzalloc_objs(*im->skips, nr_progs);
-+	if (!im->skips)
-+		goto out_free_im;
-+
- 	err = bpf_jit_charge_modmem(size);
- 	if (err)
- 		goto out_free_im;
-@@ -695,11 +707,37 @@ static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key, int size)
- out_uncharge:
- 	bpf_jit_uncharge_modmem(size);
- out_free_im:
-+	kfree(im->skips);
- 	kfree(im);
- out:
- 	return ERR_PTR(err);
- }
- 
-+/*
-+ * prog was detached and can be freed, but tasks may still be running in images
-+ * that call it, sleeping in an earlier prog for example. Patch these images to
-+ * jump over prog.
-+ */
-+static void bpf_trampoline_skip_prog(struct bpf_trampoline *tr, struct bpf_prog *prog)
++void serial_test_tramp_prog_detach(void)
 +{
-+	struct bpf_tramp_image *im;
-+	int i, err;
++	/* a task sleeping before the original function is called */
++	if (test__start_subtest("fentry"))
++		test_detach(false);
++	/* a task sleeping after it returned, past the jmp that detach installs */
++	if (test__start_subtest("fexit"))
++		test_detach(true);
++}
+diff --git a/tools/testing/selftests/bpf/progs/tramp_prog_detach.c b/tools/testing/selftests/bpf/progs/tramp_prog_detach.c
+new file mode 100644
+index 000000000000..507d372167ec
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tramp_prog_detach.c
+@@ -0,0 +1,56 @@
++// SPDX-License-Identifier: GPL-2.0
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
 +
-+	list_for_each_entry(im, &tr->images, list) {
-+		for (i = 0; i < im->nr_skips; i++) {
-+			struct bpf_tramp_skip *skip = &im->skips[i];
++char _license[] SEC("license") = "GPL";
 +
-+			if (skip->prog != prog)
-+				continue;
-+			err = bpf_arch_text_poke(skip->nop, BPF_MOD_NOP, BPF_MOD_JUMP,
-+						 NULL, skip->target);
-+			WARN_ON_ONCE(err);
-+			/* not a nop anymore, and prog's address can be reused */
-+			skip->prog = NULL;
-+		}
-+	}
++int pid;
++void *fault_addr;
++__u64 ts;
++
++static int do_sleepable(void)
++{
++	char dst;
++
++	if (bpf_get_current_pid_tgid() >> 32 != pid)
++		return 0;
++
++	ts = bpf_ktime_get_ns();
++	/* blocks for as long as user space wants when fault_addr is armed */
++	bpf_copy_from_user(&dst, sizeof(dst), fault_addr);
++	return 0;
 +}
 +
- void bpf_trampoline_set_flags(struct bpf_trampoline *tr, u32 flags)
- {
- 	trampoline_lock(tr);
-@@ -771,7 +809,7 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
- 		goto out;
- 	}
- 
--	im = bpf_tramp_image_alloc(tr->key, size);
-+	im = bpf_tramp_image_alloc(tr->key, size, total);
- 	if (IS_ERR(im)) {
- 		err = PTR_ERR(im);
- 		goto out;
-@@ -806,8 +844,14 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
- #endif
- 
- out_free:
--	if (err)
-+	if (err) {
- 		bpf_tramp_image_free(im);
-+	} else {
-+		/* track the image until it is freed, for bpf_trampoline_skip_prog() */
-+		refcount_inc(&tr->refcnt);
-+		im->tr = tr;
-+		list_add(&im->list, &tr->images);
-+	}
- out:
- 	/* If any error happens, restore previous flags */
- 	if (err)
-@@ -937,6 +981,7 @@ static void bpf_trampoline_remove_prog(struct bpf_trampoline *tr,
- 	}
- 	hlist_del_init(&node->tramp_hlist);
- 	tr->progs_cnt[kind]--;
-+	bpf_trampoline_skip_prog(tr, node->link->prog);
- }
- 
- static int __bpf_trampoline_link_prog(struct bpf_tramp_node *node,
++static int do_victim(void)
++{
++	if (bpf_get_current_pid_tgid() >> 32 != pid)
++		return 0;
++
++	ts = bpf_ktime_get_ns();
++	return 0;
++}
++
++SEC("?fentry.s/bpf_fentry_test1")
++int BPF_PROG(fentry_sleepable, int a)
++{
++	return do_sleepable();
++}
++
++SEC("?fentry/bpf_fentry_test1")
++int BPF_PROG(fentry_victim, int a)
++{
++	return do_victim();
++}
++
++SEC("?fexit.s/bpf_fentry_test1")
++int BPF_PROG(fexit_sleepable, int a, int ret)
++{
++	return do_sleepable();
++}
++
++SEC("?fexit/bpf_fentry_test1")
++int BPF_PROG(fexit_victim, int a, int ret)
++{
++	return do_victim();
++}
 -- 
 2.55.0
 
