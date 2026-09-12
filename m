@@ -1,65 +1,65 @@
-Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
+Received: from mail-oo2-f43.google.com (mail-oo2-f43.google.com [74.125.231.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47BD0224B05
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 03:40:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C54C2F6931
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 03:57:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789184428; cv=none; b=Xdbeqrx5WEbOBNL8K3x3TDMP1ptzNTuh75ddokcwq8USjPu+sbW3iolrsWEaf9vOn6BtHPaOLETerGLrEXeWKtGQv7q2kYxPdR1MgL7b3WemQGA7w/VCCNsMeWSfeh88Yx9KCMv5ORdUMnKzk0ym/4lzH3Lp2qWbxb0PzfAVXLc=
+	t=1789185430; cv=none; b=q6fLK0VzinVWDFSjnoEQI+/q+qCmd6ykurNFDvx43EbXxzb6HHxqC9wmO0c77CV46UoIiNhvrfvuL30lxaBV06NqsJdfaYZxGBfvAB+d0bEo6HDS8ojq0u5iWeX0kiUPWvDqg14lzNJ+X85GFPSzzJJRCfZagu7kH6q/kHk5T3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789184428; c=relaxed/simple;
-	bh=eF3Gy+Lsphr1WsOIcmLkqvY2bLEQeHUUT7hY/kCxbhU=;
+	s=arc-20240116; t=1789185430; c=relaxed/simple;
+	bh=rhCg/f1btHEhgY6jaJxTDBRKbVMyPzNywCnyXnU9k/M=;
 	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=aPWpDX7Fzg4W70cqAACIkm1B9ATrzAqgvkqHKFscRbFI+X6cyrdgXyQK2wbyTSBHEpu+zNBI0RcKudPvdmwHwplBpMBbDqLR6zBCDdx2uaZs5JBEuqJNvh4WlKKTF8UxLYng/bSPR6dtZLxmIVGxo+dk3WrS7a0Dc2753rHc51Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aJ+AtIFc; arc=none smtp.client-ip=74.125.231.76
+	 References:In-Reply-To; b=Ry/RozcgkyM/fXsR5Q6NIlVZmIZy+cb089/LD37eHc9b71jz0dl/fdqJb7Z/ka8V5MAPXPHKABJUXp8Aw/zORfVLRSkCklMHSsT2KHwLWiQtrt0/MkgRH60gZQgmpxnwqd69F6JuCuXTcez+AmyOqyjkmdIh+WEY+hbjGCdzc8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jvz6Lo6u; arc=none smtp.client-ip=74.125.231.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aJ+AtIFc"
-Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-466ccdd77e2so92737fac.3
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 20:40:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jvz6Lo6u"
+Received: by mail-oo2-f43.google.com with SMTP id 46e09a7af769-7f4f1354074so90244a34.0
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 20:57:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789184425; x=1789789225; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789185428; x=1789790228; darn=vger.kernel.org;
         h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=ls9A85qgn2n1bUqUhJgiKWwU66NsW1Izo7ULsZD7w7s=;
-        b=aJ+AtIFc75pszR5EedICJs/vLWh7agqLHZzpcCSB8S58VhbWJEKtprVOEOxHKs5onb
-         fmOS1pev57SXUYNwzKHzeRmkgYe/YwCuOapOFpiV8NGauZsuAmb527HJ64fZOPsdTiHg
-         tgRbxt44KLmaRbIP23D64daxb4TjCusYvzMApVYkQ+X5KOGg+sn7dNPtwKaSU2M/zSna
-         rQX0NGx6OSEqEOf/EVMO+6mcByYl/VYaNNqQOOEEDXB4oNLoTyq5lOGWPPDI3LZNGaLf
-         Okb6hqRz9utmgbX/1dA1fHVTGCR1VCiJVMrAgPqDQSJFRXRkXtRWNXClD4l9SNMaf8D5
-         GwUg==
+        bh=koxO9eqWuwWfNZ2ZsfWk2w0ONjfrf6P4wItJwq6Zrog=;
+        b=Jvz6Lo6u+J1PYLV29VSMIXZgTibsEvbIt0Rpbbh1DiY8lWKHTZ2aokRMYrSP9WINVt
+         NzHNao4emzi5du5G5DcZnvKrecjb1ZzhrOYYUyVAwXC5JgIW//KZQrh9dU4wLx99uIFJ
+         810wXxxjV9T4FtAZAM0WF9xVBLmuECv43l3vGDyqUI3EiCGnmbHUJghqDMWJkYk3+3cL
+         yo8MqKMm/hpzJeDp2Ir03WrZ8QCnNZ+Bb+rM8o2Teq6xRbNfXpom0fbOj0e8ZVdKUWEQ
+         9Lj7n1QO6TD0nJ763e6WyliWwQ2ilUmHAyYeFgNswILhqZbcPVuRLcKT+flA6JvI3E+j
+         lvjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789184425; x=1789789225;
+        d=1e100.net; s=20251104; t=1789185428; x=1789790228;
         h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ls9A85qgn2n1bUqUhJgiKWwU66NsW1Izo7ULsZD7w7s=;
-        b=F+sGo+b+yeuhGSJIgYncAZWjI9mX0Et2EuFGs8tcmPBUaDNt681BVkQvtjgNiOMxE7
-         tK/z9KIhwvvD3Vu5A5t/NGDBs8mYBj4js6CLEVl/rFjDDZlrKo5KgUJd+UUOMYu2lu+Y
-         FTGni9RuHc0uh8ZXYvMcTDFL/2H/aLtnxEYh0bGMZB8ZNj9QtPLroZEwRL8k6omZ/PIy
-         tsqPsoqsc9o1J4fcnMUZ4wGfxA7192lrw/e4IOPqiAI1xpJ6HfNESFtwGPkkXEEkUQcu
-         bISQChWfpImq43fMQXfiwHAQi+BllXJiHqT0VyyRZhQWA5RAdAlo9Cjc0JZmjKI2LkOO
-         +bTQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwoZsXXu2GM7/8sdH1pDjG8ef2vQg3wOVu8HCXZoO24gzc4gJzdwSZFye/UgP4Ay7k0aoY=@vger.kernel.org
-X-Gm-Message-State: AFuF++kErb3tkubjVHPhIfHKfWlAlYRcUVZfW9NRpNfG9iRHHZDYI3x5
-	aBRfuUC0qPk/saGnrOc2IXuJGj6DEg7Qwr+f2YKwIxlCkjvrwItEwY+i
-X-Gm-Gg: AYBFou1/qBHL09KJZLmRg3+GRFWeK2GRQq4iphL+1pIhjzQEG6EnDITgUJWljMmQnAX
-	5ofiUI64F2ebGrpNI2lNYOFTZvIYdOQFy9US3R4iXk9BqTAm2HvDDdF4DpSYz0akTHIkF0S2l3l
-	x1ZI1vJrwvpybvAQ+oM8bkh1kf8m0s8CHiydneNMcEQndOifsrdZmIr5T4pKL7yQOM+b6XlQfs+
-	dVO7+aunMR8YtRmVztKER5ONxLXZ/zJmMj4To0BhsXB+vuQeftIy5bfoz/emCwBJ5KABsarWaCh
-	KLMIOBt3RLtXQcXc6/jEtNls4amYv5ntcPrzlKS6MU/VrcNBD0h0Jr2cTU2ppTMbfYdbcsobLJi
-	mbzXAcIeUoKt12ikuZY2J9uUW/yuOIeknWGtc45T6+OcZM53qvXM9Uh9HD207aR5EtSdTDZxCCv
-	rS96oo8GKm69q1IpOHeKp7A1/JnjmQXdH/LXINlF65HGHuv9/OT76bFx5MxcliGGP4b+IUVW/jk
-	dBJSMYO/Atacg6/GTKKZK7HlSKTQaRe6gtYJ7Ce6z+zQD8UKexSFpfFlXf8il3vfWpi4S2v8UmU
-X-Received: by 2002:a05:6870:1692:b0:475:a112:1270 with SMTP id 586e51a60fabf-47f59b8537cmr897239fac.29.1789184424990;
-        Fri, 11 Sep 2026 20:40:24 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:24::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-47df90fb975sm3563679fac.13.2026.09.11.20.40.22
+        bh=koxO9eqWuwWfNZ2ZsfWk2w0ONjfrf6P4wItJwq6Zrog=;
+        b=KRUus+8RAAC10tTR9PxWaYCjWyqW9W8SZbvHfBC0vDISxi/sI7qTb6hK1heasLukj4
+         YVOjRWd54E2PHaVkOp8bD2llM9VBaE5CtK1jFUO8z1LeTI+8WcEniQBPzm2NcixZTzmU
+         wK0AQxeTYDzJUBFmjXuHIHNSBGmzwLDyA9zmDGjuf1p9lu2lDFgycjPHZRsgjbHj30qR
+         UlkpV0twI6lC+SmtpN/1GqAiSutZrsIPJMGAQGwL9gt5u+Woxz+ctr1B28nSXgtYf9yu
+         DA6/yOFJrm0fK2miqO3FBDX0dOg1whxzXT8Y4//lQLrHlIp+pKiR8sdebT1RFiQMQPya
+         q/Pw==
+X-Forwarded-Encrypted: i=1; AKwUvByG1WmcXlxgC2CT9EOl+4fsbHdb0H/MgyAJyzPWW9wihPneIzAX/0q5gU1Cfounv7Yi8XE=@vger.kernel.org
+X-Gm-Message-State: AFuF++mGRZsU44hXeBlhMKQtEELBCPZ2Qyxvp2Qy8uDJCXya5nKWFVh2
+	cUE/k93uX20G36jr5S16pRImmIXAkos7BbAZTaaJHYmt6Jpus88TS8LQ
+X-Gm-Gg: AYBFou1A35OcdlNeda0i6s4NhvUgWe5otP8zr65TewGUEHXD0vnRGHFazYXuH5G9yfb
+	Kj1oCFlrWhK4nYpe4ytCyw0bTp2GNU8GiH6fP/9mqdl/r0Cmqpr8FxkkUTJKcvHPrhWZWzqLVXg
+	0HFHVFS/DUI3SXU86KsWLDEKbD5qBkx+cca58nf8kLL5cerEKcHUCoUb65mf4XG4+ng/Ei9xbSX
+	rEJIpupuXjXp+D9JqWwzNuLieQKgUIPpVQVwi220UiyV7vQi+vWnRjWAR++A5EZcs0E5LTrKyv3
+	QpW+JYuL2OQUvkME3sfdanJNW2+LSC8gs2zONK4ir1m4cM6V5AIJ7L3RyZQ9Q8wSzKbOT11jcdv
+	A/vLAK2sGGD+O6KP7dl0BankmjVRTiGG0vjtj6fmCiDz0189IgzF/q13edlI+UISudcCs4auqjL
+	hliUWdZ/71KLjLfIJwQ+xhcxXR7PFkBNCByKF+CD68WLP1O1Qow4N+Zpus4/TiNK2xVBflGq3fV
+	lOeP30D+ygmMTiBOYuyAk9NZKCHgrPRU6UFrC9LjuQxVQU2pBzC/4ILjAABBIZu
+X-Received: by 2002:a05:6820:6ae8:b0:6a1:64df:7324 with SMTP id 006d021491bc7-6c0a5abdaacmr3938966eaf.7.1789185428014;
+        Fri, 11 Sep 2026 20:57:08 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:c::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6c0996e0f19sm5245040eaf.7.2026.09.11.20.57.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Sep 2026 20:40:22 -0700 (PDT)
+        Fri, 11 Sep 2026 20:57:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,64 +68,52 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 11 Sep 2026 20:40:21 -0700
-Message-Id: <DLD0Y0CFA97S.3RC5RTORRYY9N@gmail.com>
-To: "Yazhou Tang" <tangyazhou@zju.edu.cn>, <bpf@vger.kernel.org>,
- <ast@kernel.org>, <eddyz87@gmail.com>
-Cc: <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
- <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
- <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
- <jolsa@kernel.org>, <tangyazhou518@outlook.com>,
- <shenghaoyuan0928@163.com>, <ziye@zju.edu.cn>
-Subject: Re: [RFC PATCH bpf-next 1/6] bpf: Add UHMUL and SHMUL instructions
+Date: Fri, 11 Sep 2026 20:57:04 -0700
+Message-Id: <DLD1ASZFWOJ1.WRUC6EDWQ9CM@gmail.com>
+To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, <kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next v3 15/15] selftests/bpf: Temporary hack to
+ disable register mismatch in arm64
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
 X-Mailer: aerc
-References: <20260902070534.2141812-1-tangyazhou@zju.edu.cn>
- <20260902070534.2141812-2-tangyazhou@zju.edu.cn>
- <DL9CGP0NFZ37.25Y31VZH6PKPQ@gmail.com>
- <94eba3a8-6bca-432b-859b-d14e608d34f2@zju.edu.cn>
-In-Reply-To: <94eba3a8-6bca-432b-859b-d14e608d34f2@zju.edu.cn>
+References: <20260911154914.2004336-1-yonghong.song@linux.dev>
+ <20260911155030.2012652-1-yonghong.song@linux.dev>
+In-Reply-To: <20260911155030.2012652-1-yonghong.song@linux.dev>
 
-On Tue Sep 8, 2026 at 1:30 AM PDT, Yazhou Tang wrote:
+On Fri Sep 11, 2026 at 8:50 AM PDT, Yonghong Song wrote:
+> There are 3 kfuncs like below:
+>    __u64 bpf_kfunc_call_test_i128_arg_odd(__u64 a, __int128 v, __u64 b) _=
+_ksym;
+>    __u64 bpf_kfunc_call_test_i128_arg_shift(__u64 a, __int128 v, __u64 b,=
+ __u64 c,
+>                                             __u64 d) __ksym;
+>    __u64 bpf_kfunc_call_test_i128_arg_ovf(__u64 a, __int128 v, __u64 b, _=
+_u64 c,
+>                                           __u64 d, __u64 e, __u64 f) __ks=
+ym;
+> which requires that '__int128 v' must be 16-byte align on arm64.
 >
+> Current pahole will reject BTF generation since pahole expects
+> '__int128 v' has start register 'x1' while arm64 abi requires 'x2'.
+> Hence, btf generation will fail.
 >
-> On 9/8/26 3:51 AM, Alexei Starovoitov wrote:
->> On Wed Sep 2, 2026 at 12:05 AM PDT, Yazhou Tang wrote:
->>> From: Tianci Cao <ziye@zju.edu.cn>
->>>
->>> Define UHMUL and SHMUL as BPF_ALU64 BPF_MUL variants selected by insn->=
-off.
->>> UHMUL returns the high 64 bits of an unsigned 64-by-64-bit product, whi=
-le
->>> SHMUL returns the high 64 bits of a signed product. Keep off =3D=3D 0 a=
-s the
->>> existing low-half multiplication, and assign off =3D=3D 1 and off =3D=
-=3D 2 to
->>> UHMUL and SHMUL, respectively.
->>>
->>> These operations are inspired by the UHMUL and SHMUL instructions
->>> introduced as part of the PQR instruction class in Solana sBPF[1].
->>>
->>> The encoding and immediate semantics differ from current sBPF.
->>>
->>> 1. Solana sBPF assigns these operations dedicated opcodes in the BPF_PQ=
-R
->>>     class, whereas this implementation selects them through the offset
->>>     field of BPF_MUL.
->>>
->>> 2. Solana sBPF initially sign-extended the immediate operand of UHMUL,
->>>     but later changed unsigned PQR immediates, including UHMUL, to be
->>>     zero-extended[2].
->>=20
->> Why did you switch to zero-extend ?
->> Sounds odd to do zero extend just for these ops.
->
-> Sorry, I wasn't clear. This patch does not zero-extend the UHMUL immediat=
-e.
->
-> Both UHMUL and SHMUL follow the existing BPF_ALU64 convention and
-> sign-extend the 32-bit immediate to 64 bits first. The zero-extension
-> I mentioned refers only to current Solana sBPF behavior. I'll clarify
-> this in the respin.
+> This patch is a hack to disable a few related tests to satisfy CI.
+> The following is the fix in pahole:
+>   https://lore.kernel.org/bpf/20260911040955.339939-1-yonghong.song@linux=
+.dev/
+> Once pahole patch is merged, this patch can be discarded.
 
-My question was "why in Solana you switched to zero-extend?"
+You're adding them in patch 14 only to disable them in patch 15?
+sure, pahole needs to be fixed, but let's carry such selftests for pahole
+out of tree of the time being.
+Once it is fixed and we have a mechanism to detect that it is fixed
+then we will add these tests.
+I'm not sure what would be such pahole detection mechanism.
+We don't want to bump the version just for that.
+So imo just drop such tests.
+
+Also rebase to bpf-next is needed.
+
+pw-bot: cr
