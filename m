@@ -1,65 +1,65 @@
 Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C06722D7A9
-	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 03:38:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47BD0224B05
+	for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 03:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789184302; cv=none; b=f+14RCXVRaSL3QJG7IottsnETlvW5ln/kJwO6gNruPDix6xjC8E4WrV9UwJEcOtQsXsprUacBd1Uixw+Lyns+2Et1hFHW743yh89jDYIiTObuGWjSFmCElybEn1KQYHgSc3ag/eX77lX7pb2GqvmPAlPlc/tvLvqqls9e8AViZs=
+	t=1789184428; cv=none; b=Xdbeqrx5WEbOBNL8K3x3TDMP1ptzNTuh75ddokcwq8USjPu+sbW3iolrsWEaf9vOn6BtHPaOLETerGLrEXeWKtGQv7q2kYxPdR1MgL7b3WemQGA7w/VCCNsMeWSfeh88Yx9KCMv5ORdUMnKzk0ym/4lzH3Lp2qWbxb0PzfAVXLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789184302; c=relaxed/simple;
-	bh=KC+UqVfL9UqJKpxIQMOygXmXYZtPFOQIR+oOnjMHYG0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=iVLxzpr+svJ58l3aSuOd2GFupHphfKEZV0pOUryjqRpf2vmtrK5/sgTcqWHJfHoZl82xABkFnebHW5RmcenaXbFKGhUJOzQ4JjAAV1fJQ5T9rK8MQ3shx+06fskhDvOL5Wn0MZtZNUkcNzvY//X9RKtVRYnZm960kYq2QXpmREk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mGh1YbDY; arc=none smtp.client-ip=74.125.231.76
+	s=arc-20240116; t=1789184428; c=relaxed/simple;
+	bh=eF3Gy+Lsphr1WsOIcmLkqvY2bLEQeHUUT7hY/kCxbhU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=aPWpDX7Fzg4W70cqAACIkm1B9ATrzAqgvkqHKFscRbFI+X6cyrdgXyQK2wbyTSBHEpu+zNBI0RcKudPvdmwHwplBpMBbDqLR6zBCDdx2uaZs5JBEuqJNvh4WlKKTF8UxLYng/bSPR6dtZLxmIVGxo+dk3WrS7a0Dc2753rHc51Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aJ+AtIFc; arc=none smtp.client-ip=74.125.231.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mGh1YbDY"
-Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-46accbdfc20so624791fac.0
-        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 20:38:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aJ+AtIFc"
+Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-466ccdd77e2so92737fac.3
+        for <bpf@vger.kernel.org>; Fri, 11 Sep 2026 20:40:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789184300; x=1789789100; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=gmail.com; s=20251104; t=1789184425; x=1789789225; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=byHgOSMC0udxAsSgGbQwrR3Tvn2bMZ/JmBBvuMT0KGo=;
-        b=mGh1YbDYBjvfUVBoqmm/fySt1SxgWxr3UN+Ry6ud/7EMhuJTRtowTAVH+5GzctqT0K
-         u1Ie8Beqk9hNW0w6rMx8+E4inaw4bxYQXnT1qrt8eWBUK728iioNPYf1lzTupFSHlxDK
-         5mO/e43ddaIJtF6+LOxcSYmSCZaSd/7LVfSXO1zPLvrA3T/HXjQywj135ucQvYs5vVsO
-         Ft39w1UKd7VaqYmPX5o2N6DVJ2K8JtcdJnwcTccVzth4hQIp6164NIkV6HOEoLhxYrc8
-         iyVqUTQRALMl6L9j6oI1cCLznD/KodSvEDTkbuzO6WfC3e9QO9vvWfcCHQuJ8kvMY3Lu
-         /oQA==
+        bh=ls9A85qgn2n1bUqUhJgiKWwU66NsW1Izo7ULsZD7w7s=;
+        b=aJ+AtIFc75pszR5EedICJs/vLWh7agqLHZzpcCSB8S58VhbWJEKtprVOEOxHKs5onb
+         fmOS1pev57SXUYNwzKHzeRmkgYe/YwCuOapOFpiV8NGauZsuAmb527HJ64fZOPsdTiHg
+         tgRbxt44KLmaRbIP23D64daxb4TjCusYvzMApVYkQ+X5KOGg+sn7dNPtwKaSU2M/zSna
+         rQX0NGx6OSEqEOf/EVMO+6mcByYl/VYaNNqQOOEEDXB4oNLoTyq5lOGWPPDI3LZNGaLf
+         Okb6hqRz9utmgbX/1dA1fHVTGCR1VCiJVMrAgPqDQSJFRXRkXtRWNXClD4l9SNMaf8D5
+         GwUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789184300; x=1789789100;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=1e100.net; s=20251104; t=1789184425; x=1789789225;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=byHgOSMC0udxAsSgGbQwrR3Tvn2bMZ/JmBBvuMT0KGo=;
-        b=gkS1gSThzWyzRvdGajRm5bQhvFPgXskQtYR5mUN+PTmBQR4rvH6zGUAkg+30HXIeA7
-         qtDZjnul1NG2NIr+HkJbDACfU0qiDu5ktKWqTCShm6UHQMYLsDPpNWryaJyDLR3Ke4AV
-         vJGWz2KDsDOwBgeiK1nWbq8DQi6Ini7YkwaYCBKnHduxAz9cK4YXgI8QCQfDQnyHb15d
-         TduKLFXEvjBeqV5pdbyCCmFFCUejXm29hKzIMLxyJZMEb6vhraPjMACjkBquh5r4zyJi
-         QQMuAiOfKQ71ZztDeHE272b7LtwUTxUDjQPMcErp1GPjwTcku9zCLkMDOyBJzGvHB3+R
-         NeSw==
-X-Forwarded-Encrypted: i=1; AKwUvBzDwXZfGKHO5B4an9dUdok9atFyg4uJyYZ7RIEYMB/HEupJgtQjDBBwnFKCxhO9huPpLLE=@vger.kernel.org
-X-Gm-Message-State: AFuF++mlZ3gS5sF+RqP3eJGEKlJ0wEgOdx1d4MQITmFs0UJbdClDlCSQ
-	HPeAl0vHht5rdaEz1Z48b9zlHfsPEgAOYfS0Kctk7pETqZ0hGDNevYgv
-X-Gm-Gg: AYBFou1brc5XlFy8OlPdtQmODzt2CSGrdykEysuthNNyRY8+d0CR9npZKWc/ODxVWgm
-	JCPR5l55i59Y8j6LULj3jpaqDPNk1QbSldgE56n4gkSU2QaNgahWQmuoH3gMScDUb4Je9ItzsiS
-	enOSjo/oPprltV2WbfnMvRN9xIfAVNt6PR6mit6wvX8SETVblOIsdm135H38VE0ZQc1cWj31wz4
-	bZQp1qB4MXrRNiyR1DG7zeiywTJCXTrnyGocwHqF6+uU/T/SwuRpUw3XPww4+DizVWO68/CPxlT
-	c5gpofY9WMhMOBoHBqQYKO7qbDuQJn65S3DI396WzV4xDmVXqErndq+2jpNTgkj2S5uKge4AUok
-	Gy8LhmDVGLLgg9yD1wEAOUNh0ei1tIx/YIu3vD6tAEm5tjcxPaKy099KkVuSVX7OaqFbRT25ouV
-	coXaFizPJRPJ3rCm/1lC+UVaG//DOcFhzK7h0MIkG3oovKOGd/w1leso5c/rOIDM8upbtxvpn/r
-	L0hYvmbsPjzeYqeUc7H6nkNXybuwapRZJ0aFgq4gZHmXuzwUq3tYYOG219T+zulmw==
-X-Received: by 2002:a05:6871:113:b0:448:71f4:a28 with SMTP id 586e51a60fabf-47de7720e6amr10502335fac.2.1789184299775;
-        Fri, 11 Sep 2026 20:38:19 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:12::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-47df8699647sm3683938fac.5.2026.09.11.20.38.16
+        bh=ls9A85qgn2n1bUqUhJgiKWwU66NsW1Izo7ULsZD7w7s=;
+        b=F+sGo+b+yeuhGSJIgYncAZWjI9mX0Et2EuFGs8tcmPBUaDNt681BVkQvtjgNiOMxE7
+         tK/z9KIhwvvD3Vu5A5t/NGDBs8mYBj4js6CLEVl/rFjDDZlrKo5KgUJd+UUOMYu2lu+Y
+         FTGni9RuHc0uh8ZXYvMcTDFL/2H/aLtnxEYh0bGMZB8ZNj9QtPLroZEwRL8k6omZ/PIy
+         tsqPsoqsc9o1J4fcnMUZ4wGfxA7192lrw/e4IOPqiAI1xpJ6HfNESFtwGPkkXEEkUQcu
+         bISQChWfpImq43fMQXfiwHAQi+BllXJiHqT0VyyRZhQWA5RAdAlo9Cjc0JZmjKI2LkOO
+         +bTQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwoZsXXu2GM7/8sdH1pDjG8ef2vQg3wOVu8HCXZoO24gzc4gJzdwSZFye/UgP4Ay7k0aoY=@vger.kernel.org
+X-Gm-Message-State: AFuF++kErb3tkubjVHPhIfHKfWlAlYRcUVZfW9NRpNfG9iRHHZDYI3x5
+	aBRfuUC0qPk/saGnrOc2IXuJGj6DEg7Qwr+f2YKwIxlCkjvrwItEwY+i
+X-Gm-Gg: AYBFou1/qBHL09KJZLmRg3+GRFWeK2GRQq4iphL+1pIhjzQEG6EnDITgUJWljMmQnAX
+	5ofiUI64F2ebGrpNI2lNYOFTZvIYdOQFy9US3R4iXk9BqTAm2HvDDdF4DpSYz0akTHIkF0S2l3l
+	x1ZI1vJrwvpybvAQ+oM8bkh1kf8m0s8CHiydneNMcEQndOifsrdZmIr5T4pKL7yQOM+b6XlQfs+
+	dVO7+aunMR8YtRmVztKER5ONxLXZ/zJmMj4To0BhsXB+vuQeftIy5bfoz/emCwBJ5KABsarWaCh
+	KLMIOBt3RLtXQcXc6/jEtNls4amYv5ntcPrzlKS6MU/VrcNBD0h0Jr2cTU2ppTMbfYdbcsobLJi
+	mbzXAcIeUoKt12ikuZY2J9uUW/yuOIeknWGtc45T6+OcZM53qvXM9Uh9HD207aR5EtSdTDZxCCv
+	rS96oo8GKm69q1IpOHeKp7A1/JnjmQXdH/LXINlF65HGHuv9/OT76bFx5MxcliGGP4b+IUVW/jk
+	dBJSMYO/Atacg6/GTKKZK7HlSKTQaRe6gtYJ7Ce6z+zQD8UKexSFpfFlXf8il3vfWpi4S2v8UmU
+X-Received: by 2002:a05:6870:1692:b0:475:a112:1270 with SMTP id 586e51a60fabf-47f59b8537cmr897239fac.29.1789184424990;
+        Fri, 11 Sep 2026 20:40:24 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:24::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-47df90fb975sm3563679fac.13.2026.09.11.20.40.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Sep 2026 20:38:18 -0700 (PDT)
+        Fri, 11 Sep 2026 20:40:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,158 +68,64 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Fri, 11 Sep 2026 20:38:16 -0700
-Message-Id: <DLD0WER9K97K.2V2NOAJ840CR7@gmail.com>
-Subject: Re: [PATCH bpf-next v3 07/15] lsm: Add the
- bpf_lsm_policy_apply_bprm kfunc
+Date: Fri, 11 Sep 2026 20:40:21 -0700
+Message-Id: <DLD0Y0CFA97S.3RC5RTORRYY9N@gmail.com>
+To: "Yazhou Tang" <tangyazhou@zju.edu.cn>, <bpf@vger.kernel.org>,
+ <ast@kernel.org>, <eddyz87@gmail.com>
+Cc: <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
+ <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
+ <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
+ <jolsa@kernel.org>, <tangyazhou518@outlook.com>,
+ <shenghaoyuan0928@163.com>, <ziye@zju.edu.cn>
+Subject: Re: [RFC PATCH bpf-next 1/6] bpf: Add UHMUL and SHMUL instructions
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Justin Suess" <utilityemal77@gmail.com>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>, <kpsingh@kernel.org>,
- <matt@bobrowski.net>, <paul@paul-moore.com>, <mic@digikod.net>,
- <viro@zeniv.linux.org.uk>, <brauner@kernel.org>, <kees@kernel.org>
-Cc: <casey@schaufler-ca.com>, <gnoack@google.com>, <jack@suse.cz>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <martin.lau@linux.dev>,
- <eddyz87@gmail.com>, <memxor@gmail.com>, <jolsa@kernel.org>,
- <m@maowtm.org>, <bpf@vger.kernel.org>,
- <linux-security-module@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 X-Mailer: aerc
-References: <20260909193719.518517-1-utilityemal77@gmail.com>
- <20260909193719.518517-8-utilityemal77@gmail.com>
-In-Reply-To: <20260909193719.518517-8-utilityemal77@gmail.com>
+References: <20260902070534.2141812-1-tangyazhou@zju.edu.cn>
+ <20260902070534.2141812-2-tangyazhou@zju.edu.cn>
+ <DL9CGP0NFZ37.25Y31VZH6PKPQ@gmail.com>
+ <94eba3a8-6bca-432b-859b-d14e608d34f2@zju.edu.cn>
+In-Reply-To: <94eba3a8-6bca-432b-859b-d14e608d34f2@zju.edu.cn>
 
-On Wed Sep 9, 2026 at 12:37 PM PDT, Justin Suess wrote:
-> Add the kfunc applying a policy object to an execution:
+On Tue Sep 8, 2026 at 1:30 AM PDT, Yazhou Tang wrote:
 >
->   bpf_lsm_policy_apply_bprm(object, bprm, flags)        KF_SLEEPABLE
 >
-> It asks the LSM owning @object, through the bprm_apply_policy_object
-> hook, to restrict the credentials prepared in @bprm, so that the
-> executed task starts confined by the policy.  The meaning of @flags
-> and the composition with restrictions the credentials already carry
-> are the owning LSM's; an LSM without execution policy support makes
-> the call fail with -EOPNOTSUPP.
+> On 9/8/26 3:51 AM, Alexei Starovoitov wrote:
+>> On Wed Sep 2, 2026 at 12:05 AM PDT, Yazhou Tang wrote:
+>>> From: Tianci Cao <ziye@zju.edu.cn>
+>>>
+>>> Define UHMUL and SHMUL as BPF_ALU64 BPF_MUL variants selected by insn->=
+off.
+>>> UHMUL returns the high 64 bits of an unsigned 64-by-64-bit product, whi=
+le
+>>> SHMUL returns the high 64 bits of a signed product. Keep off =3D=3D 0 a=
+s the
+>>> existing low-half multiplication, and assign off =3D=3D 1 and off =3D=
+=3D 2 to
+>>> UHMUL and SHMUL, respectively.
+>>>
+>>> These operations are inspired by the UHMUL and SHMUL instructions
+>>> introduced as part of the PQR instruction class in Solana sBPF[1].
+>>>
+>>> The encoding and immediate semantics differ from current sBPF.
+>>>
+>>> 1. Solana sBPF assigns these operations dedicated opcodes in the BPF_PQ=
+R
+>>>     class, whereas this implementation selects them through the offset
+>>>     field of BPF_MUL.
+>>>
+>>> 2. Solana sBPF initially sign-extended the immediate operand of UHMUL,
+>>>     but later changed unsigned PQR immediates, including UHMUL, to be
+>>>     zero-extended[2].
+>>=20
+>> Why did you switch to zero-extend ?
+>> Sounds odd to do zero extend just for these ops.
 >
-> The kfunc runs the hook in a root memcg charging scope: the policy
-> restricts the execution on behalf of the BPF program, not of the
-> mediated task, so what the owning LSM allocates to compute it, e.g.
-> Landlock's merged domain, is not charged to the task the program
-> supervises.
+> Sorry, I wasn't clear. This patch does not zero-extend the UHMUL immediat=
+e.
 >
-> The filter makes the kfunc exclusive to the sleepable LSM programs
-> attached to the bprm_creds_for_exec() or bprm_creds_from_file()
-> hooks, the only contexts where the bprm's credentials are prepared
-> but not yet committed.  The verifier's argument typing does not draw
-> this boundary on its own: a trusted struct linux_binprm pointer is
-> also available at the other bprm hooks -- bprm_check_security(),
-> which runs per binfmt while an interpreter may still rewrite the
-> execution, and bprm_committing_creds()/bprm_committed_creds(), which
-> run at or past the point of no return, where the prepared
-> credentials are frozen or installed -- and to tp_btf programs via
-> the sched_prepare_exec and sched_process_exec tracepoints, which
-> resolve kfuncs from the same registration bucket as LSM programs.
-> The attach-point filter, not the argument type, is the authorization
-> boundary.
->
-> No filter case is needed for BPF_LSM_CGROUP programs: since
-> commit 5b038319be44 ("bpf: Reject sleepable BPF_LSM_CGROUP programs
-> at load time") they cannot be sleepable, so KF_SLEEPABLE already
-> excludes them.
->
-> Cc: Paul Moore <paul@paul-moore.com>
-> Cc: KP Singh <kpsingh@kernel.org>
-> Signed-off-by: Justin Suess <utilityemal77@gmail.com>
-> ---
->
-> Notes:
->     v2->v3:
->         - Drop the BPF_LSM_CGROUP case from the kfunc filter: since
->           commit 5b038319be44 ("bpf: Reject sleepable BPF_LSM_CGROUP
->           programs at load time") such programs cannot be sleepable, so
->           KF_SLEEPABLE already excludes them from the apply kfunc.
->         - Document, in the commit message and the filter comment, why the
->           attach-point filter rather than the verifier's argument typing
->           is the authorization boundary.
->
->  security/bpf_lsm_kfuncs.c | 68 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 68 insertions(+)
->
-> diff --git a/security/bpf_lsm_kfuncs.c b/security/bpf_lsm_kfuncs.c
-> index 43a4bf57fd31..857e9a316d1c 100644
-> --- a/security/bpf_lsm_kfuncs.c
-> +++ b/security/bpf_lsm_kfuncs.c
-> @@ -2,16 +2,25 @@
-> =20
->  /* BPF kfuncs exposing LSM policy objects. */
-> =20
-> +#include <linux/binfmts.h>
->  #include <linux/bpf.h>
->  #include <linux/btf.h>
->  #include <linux/btf_ids.h>
->  #include <linux/cfi.h>
->  #include <linux/init.h>
->  #include <linux/lsm_hooks.h>
-> +#include <linux/memcontrol.h>
-> +#include <linux/sched/mm.h>
->  #include <linux/security.h>
-> =20
->  #include "lsm.h"
-> =20
-> +/* The sleepable LSM hooks bpf_lsm_policy_apply_bprm() may be called fro=
-m. */
-> +BTF_SET_START(bpf_lsm_policy_bprm_hooks)
-> +BTF_ID(func, bpf_lsm_bprm_creds_for_exec)
-> +BTF_ID(func, bpf_lsm_bprm_creds_from_file)
-> +BTF_SET_END(bpf_lsm_policy_bprm_hooks)
-> +
->  __bpf_kfunc_start_defs();
-> =20
->  /**
-> @@ -44,6 +53,49 @@ bpf_lsm_policy_acquire(struct lsm_policy_object *objec=
-t)
->  	return NULL;
->  }
-> =20
-> +/**
-> + * bpf_lsm_policy_apply_bprm - Apply a policy object to exec credentials
-> + * @object: policy object to apply
-> + * @bprm: execution context providing the prepared credentials to
-> + *        restrict
-> + * @flags: flags defined by the LSM owning @object
-> + *
-> + * Ask the LSM owning @object to restrict the credentials prepared in
-> + * @bprm with it, so that the executed task starts confined by the
-> + * policy.  How the policy composes with restrictions the credentials
-> + * already carry, and the meaning of @flags, are defined by the owning
-> + * LSM.  @object is only borrowed: the caller keeps its reference.
-> + * The hook runs in a root memcg charging scope: policy the LSM
-> + * computes on behalf of the program is not charged to the mediated
-> + * task.
-> + *
-> + * Return: 0 on success, -EOPNOTSUPP if the LSM owning @object does
-> + * not support applying policy to an execution, -EINVAL on unsupported
-> + * @flags, other negative values on LSM-specific failures.
-> + */
-> +__bpf_kfunc int bpf_lsm_policy_apply_bprm(struct lsm_policy_object *obje=
-ct,
-> +					  struct linux_binprm *bprm, u32 flags)
-> +{
-> +	struct lsm_static_call *scall;
-> +	struct mem_cgroup *old_memcg;
-> +	int err;
-> +
-> +	lsm_for_each_hook(scall, bprm_apply_policy_object) {
-> +		if (scall->hl->lsmid->id !=3D object->lsmid)
-> +			continue;
-> +		/*
-> +		 * The hook runs on behalf of the BPF program, not of the
-> +		 * mediated task: charge its allocations to the root memcg.
-> +		 */
-> +		old_memcg =3D set_active_memcg(root_mem_cgroup);
-> +		err =3D scall->hl->hook.bprm_apply_policy_object(bprm, object,
-> +							       flags);
-> +		set_active_memcg(old_memcg);
-> +		return err;
-> +	}
-> +	return -EOPNOTSUPP;
+> Both UHMUL and SHMUL follow the existing BPF_ALU64 convention and
+> sign-extend the 32-bit immediate to 64 bits first. The zero-extension
+> I mentioned refers only to current Solana sBPF behavior. I'll clarify
+> this in the respin.
 
-Nack.
+My question was "why in Solana you switched to zero-extend?"
