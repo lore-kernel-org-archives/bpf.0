@@ -1,275 +1,139 @@
-Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A72F3B14B2
-	for <bpf@vger.kernel.org>; Sun, 13 Sep 2026 07:14:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.140
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789283673; cv=pass; b=e/lw9PAQOkNOMMnJkBbvQz09QE+QymH45Q8XcD3+NYzGlW4LZpcSyFG0ryKVtOGQD3T2theLYj95uMkx0iAxmg+UtvQbR0IA+M/VuGKHPv69JR6wfFRHNdS8WOslT86IswXBLLtlGsRKa02siEO/d5f75VUoj3x8b7ADHkQ0LQs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789283673; c=relaxed/simple;
-	bh=s8jhCDS6DypoAkPUhEeNBzWAxC4U8w7kKhE16KEqpZY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mtbpwmpWlEvR9aNSpP2o+cwp6Q8w6X38yRUFyECLM3gGFCrk9RWTJpbjRKzVPJNwc1irW6NEYCoRQPk+YnfsWFb75pUjOKSGuacVFLOHo2wT+rMMSsigFhm42WqouLB9BD6OoK1o/x+iOaxuOhkK8tTux49o3MbiDjVn1IWwWOA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OP5lxNDp; arc=pass smtp.client-ip=74.125.224.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DDA360EDC
+	for <bpf@vger.kernel.org>; Sun, 13 Sep 2026 11:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789298949; cv=none; b=lXSHNqTn3A5lPDhzootIGfge4kBFoC90jW1lukTNJ3xwcpb5LlNTtbELe099N44ewzKy1wOouA+GOHH7bc2JvqEInCdxetwP10tRjc20XuSgButXI2Rmp3H3fIicsJLnODt7BInBClVQ/bI+nCcssJ1EsnYTwhHfI6n1PzeGDl8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789298949; c=relaxed/simple;
+	bh=Tj8qk0XwgG6OI6eappubnNJZNj7JVE4Eznyplit1vfU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Aw5OSTAP1ZZsSajiTD+AhSI3obuBYjrCPhTq/8+5TCTyUD+rW1Ge+QaaHHXlGUothEYiW6/8EJwfzSxJLTPjv9vobFOsloseopQ7YfBz2RiwwIcIvQQpoIh2zlyisg1+cfuyFuibrUgNPy3l8uxiDb68ws17TsqW65lFyaWumbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TCAbM6aM; arc=none smtp.client-ip=74.125.225.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OP5lxNDp"
-Received: by mail-yx2-f12.google.com with SMTP id 00721157ae682-85d46e4cdccso8924447b3.1
-        for <bpf@vger.kernel.org>; Sun, 13 Sep 2026 00:14:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789283670; cv=none;
-        d=google.com; s=arc-20260327;
-        b=WLYMVVsVOnic3Eamgs+XT1FGaE2gCh4tTE9NUN9JlZcVDCxVy7GPQHIizxSx+KfD3e
-         CzNA5KDmn1I8VEXSV5y7ubL1jHv2LZayRui/j6hqrak19wU5bFzE+ohnpQrT0S3ZpWV8
-         G5XY3P0Wc+JQ4omeTLVxGzZP0oGPAagAbcZA7rDDrp90p7fxjX4ihx/44xVpGqeU6Bhs
-         7YpoqaZ4PJbJIeQMMz2HN6U1+8IEw29u0WTEKEwDNzfe3Lu3h6YKSSU7Z1aAjbxOs5ks
-         poezdBgGDLBNwgMgihEHLL3NBtinpABJKtsv5rf5udHd/gtoWOu82VlgbwLbMWXcQYGI
-         qHXw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=hs7PCl8ZdlMvhgHWX0PHVYVp8DWBXv1h24H33tOaVTY=;
-        fh=O47k9w50c5tBBBka98tKZKdVH5kLuQYmBk5gJoIu6Qw=;
-        b=iXo50ca/gyJnGw3vG79WhfVlDi6vcdOdPETSCam3vMh9u7KcFgjMfKJUokhmIZg8x9
-         zSPXEh6kzyRkp50xOH2BkdAtWC4NkORHe98XM0CHD79u1bvCKHUU9GCcQ9BAibIEyOpR
-         7sOHpX+W+Yja9i0PzM0nBmTpOb5aEOChQMNZkCHJ2y81AEW2vAWxA4Ck9tvmlzKJUk5U
-         YjiYo4UHAAd4S/GgevCR1foxh55hckeF06ywtg7+HZ0ZFDP+ZyfGQutqCbzhLB2knJr/
-         yX3/3FVEsIPXe4H1yL0HwqTjPm0Nv8OVkhKCQyfiPx6QmIYY1EIjLiTQKn9x2qOtRdMj
-         RL+Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TCAbM6aM"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912d37b5so7344915e9.2
+        for <bpf@vger.kernel.org>; Sun, 13 Sep 2026 04:29:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789283670; x=1789888470; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1789298946; x=1789903746; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=hs7PCl8ZdlMvhgHWX0PHVYVp8DWBXv1h24H33tOaVTY=;
-        b=OP5lxNDpd8DMWxUVrNyGUdFp9IM5OJLWD99Cz/2yE9N4rCQ3pO6NFX4vmlIotvsDxe
-         Xgx4gJZG140abj3nhVTKL5XmY97AOarvI5vmIoK9xcDOmNHL3PjoLy9XO0PeBJH0RPtn
-         Lflhlj9C3tl3qjhz0PHGpnPL1XxiJRO9C4jcJgCI8K137NIiDugHpusA7SOQ7sBNTUvD
-         VRi/4gPWQkJnqWTEYQy8UomoXx7/lGkhKilnk8NhJYl3vQstQatMyQHfHIYtZJ52JXyf
-         VoiIKsPZbJoQPaRBxh7wuoMS4IGiTeaQiAPEaE6foL+k2Fk/2dqAQuvKCP1vb8cjUBhc
-         pEwQ==
+        bh=U8/tv6bYjr/JxaCBgXPuXjqSK44p/M/ZKAj7rPsQHeE=;
+        b=TCAbM6aMgt4CNBcwAm76o0w4qBImbbdr1uw7o6QOWqjTkAEBk8sC9r0NPDvKkcz7HS
+         OTByZNqKT1gTq7ZS4b/WlCR2kXfuJ8+MXvRbmS/aw1cG48lSQZg0P6guMqB1esqsWH7m
+         EjZnBXlMs1N0dPccOm9gPspEd7iuPafYVHONk9U2QS1A7LKhAuZjjcdqtL9tU2QR/K9Y
+         miTa9ghh0HlG2iwYE/4bTo1oHPMeQwLSQdSlLSumanabf9WkS7E66q18Ii5mKLwx6BHo
+         5IqtJIHyJvxVFSY/3lVF/dOOlhyYsTP1uyCURzY/dVs8HnBoNL2lBT4+JoPlC7v7zSCc
+         pmXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789283670; x=1789888470;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1789298946; x=1789903746;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=hs7PCl8ZdlMvhgHWX0PHVYVp8DWBXv1h24H33tOaVTY=;
-        b=OnGuOcELHKuZCMciTl3xTir88RieHz0uUj3KE2G27oLZOR6S5N6705tNN2m02Wzijp
-         55Ae0K7ybzuckTX8THqw28vT5PdV2T//9wn3yxQ8kj+Ddca4t46Sk4hbu4CvRTRLgH/K
-         UirxVceVY+D3DHlM0Kl9mFlpIxwGVZ7WEIA4wXllCx69bV2yH0Spe6PA8yJPcgPO6ZHX
-         F5LfjVYQLN4r0VjI5s9/fsBW19Ei40BxfcVoeD0//gQ6THLTF8UfGon1kDfUOCGEXv4I
-         idLIGKZ5RExXysMS7ZlIRPtpPoRz8kBZ7O+jYD3G+jVfvwyqV4y4+CK2umcbxFg9E/XH
-         wzOQ==
-X-Forwarded-Encrypted: i=1; AKwUvByYVVUEsaX/8kd2YUCtDHUTFFczYF4qPWlLTKaUW8I63vtBNnWDCTAO6AogGqOygtnkrd0=@vger.kernel.org
-X-Gm-Message-State: AFuF++kwB3NXjb3p69+xkm5iuTpCwZkBK7cQ1e4ZpQERLoZkQYTYzxZW
-	t/a0Pglq8DZBjM6IpbH6dxlcN1eOmA/9qiCYJORl/butE6X531enj6MYjOyoZFjhByUaPwI2Fyp
-	42GV1Jhwia8wDNLlLzC1B8jbpfj2B6JM=
-X-Gm-Gg: AYBFou3r9dkNvQpUyEAwpfPQK+co8/jWlUtI8c+cOXZpuqV63Bma5q+sx4tUNF10Efz
-	Cwa9yQk66vVjvjVRUnELfDdg9REHPoLH6OrIOfcjqVsz2LsTJwS05/lFvdlNoDYQgz5ke28nB6l
-	M2Dqqj3loXr+HcpWcViKQfKOOqq+zy/5E6eIwrwW62ctgQcmLYo4/FwjhmYJcBqg6Qny2ZtuGcw
-	kPXKvLyoPDb5smQh/uXXFSbtVCUihZ0a8fYjJCzOv4tEAA069WwNzk8QEGbRQoWIZafgl/AV5z/
-	n1XHeau9wQZvVVlobDx0ytM/Qt4DFcZFbRVyrbD/KajmO0SzyZQMSeDuwkMxEMn58B2VLrcPxJF
-	NwUlOHfp5DSUY
-X-Received: by 2002:a05:690c:e3cd:b0:87f:a9c6:470b with SMTP id
- 00721157ae682-884ae7afba1mr42342687b3.2.1789283670033; Sun, 13 Sep 2026
- 00:14:30 -0700 (PDT)
+        bh=U8/tv6bYjr/JxaCBgXPuXjqSK44p/M/ZKAj7rPsQHeE=;
+        b=jagb8qkku/1s/Q4adS+mpyDWckKxRbsUVL/zr1KKEF+728YdsnisYakPfv0WIIfmq7
+         BfyO7iCOZt1y2Oux5rGqUfO42cGmkfRcvAFh2od4bcmxmla1fSU/YNE+KRYqYvkqFYnS
+         u2ggnNgR2WN4jb5gTY2JnG+o7EQVsj4x2C2b6oPGHOXqa0fki9dRmYMnwHcJxZ6RvTQ/
+         8exnEsm79xNkxnkWMZCQdwlY3u/bYF/07nQlMtNxx0tGYzngPU07pJq8J5Cj93dwrei1
+         ceX3HsF2L0cUd3iH/GWAhSJbDlvlry5Kw8SjYPI7jQ5RHiqDV30bTLsokTErABzTJNQ1
+         Rfzg==
+X-Forwarded-Encrypted: i=1; AKwUvBzKndEyou6fYd9aO454f7uBvdZak2nz+rnZ/kFJFNi8mPBrDq9g9RBIYqCWcqKOF2PI2uY=@vger.kernel.org
+X-Gm-Message-State: AFuF++mhpcEVXWJSm2OQaKbLSgjn15AyzK2Y74vb8NM/pR7bLFZSqoJ/
+	ZpjZ9kADShsHV+NhhfiI2jB8f69spb819OsrXGIqsEw1VpiDdWRnRp6w
+X-Gm-Gg: AYBFou1aG1TNM3bkbfMNzgDuvu5Dgvmx/rDWgVFnb6ikOWKZKEhBSCN1dQojSBctdG6
+	nAtTSV3biXLgLf4zCByGgDlLz3yaKylDskvrbOSO4FUGGpwf+YBtIoRYAhxgkPgKXzOhqGz2FVA
+	UNBZcdQ3Z2vDJnoYQNH4793wd7Hf6buTImOeOfvaPtNbIwxCFSFzXp2e/xhZ8YYFmtt9dteK7kd
+	xkhHdxZffLGCXIY92+7oeweIjPyftvnimfNHzOwxNm4VCcqGS77EfhSwnAsskEvKdMcE5BPqgDP
+	oQQVP02CjCYNK3qIoTiOdE1lgNUIoXykg6sfeX+VAa+X0YqQXNOCUwju+my91hReGYO9EcokXYP
+	JyIVWbeVlfGHKz1Q82bCEXsa0XbDsJdjEJXEU+ZE+0+QT/swKvCuWFETSMUmUuiq3jsVCe/C5kW
+	gASFXvmVVinGBCO7JOw+30ugC9HUPMYpxqWbmr4fPkrBzwhGa47fLTZ5NedoipDgnluvQdFpj0D
+	JLPBnR4opcZf6MTgtk3wdS8iwf+LobNcmxC
+X-Received: by 2002:a05:600c:4ecc:b0:49e:6be6:d783 with SMTP id 5b1f17b1804b1-49e6be6d9dbmr138768675e9.0.1789298945625;
+        Sun, 13 Sep 2026 04:29:05 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-486eb32d3c7sm17806381f8f.10.2026.09.13.04.29.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Sep 2026 04:29:05 -0700 (PDT)
+Date: Sun, 13 Sep 2026 12:28:59 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Josef Bacik
+ <josef@toxicpanda.com>, Frederic Weisbecker <frederic@kernel.org>, Neeraj
+ Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes
+ <joelagnelf@nvidia.com>, Boqun Feng <boqun@kernel.org>, Thomas Gleixner
+ <tglx@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Steven Rostedt
+ <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, x86@kernel.org, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Puranjay Mohan
+ <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, Andy
+ Lutomirski <luto@kernel.org>, Josh Triplett <josh@joshtriplett.org>,
+ Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
+ Zqiang <qiang.zhang@linux.dev>, Juergen Gross <jgross@suse.com>, Luis
+ Chamberlain <mcgrof@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, xen-devel@lists.xenproject.org
+Subject: Re: [PATCH RFC v2 08/15] bpf, x86: Maintain Tasks RCU trampoline
+ nesting in the BPF trampoline
+Message-ID: <20260913122859.4d5067cd@pumpkin>
+In-Reply-To: <ffffa178-c475-4249-a609-c5d222704987@paulmck-laptop>
+References: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com>
+	<20260911-b4-rcu-tasks-preempt-qs-v2-8-eaaa61ed2da4@toxicpanda.com>
+	<DLD0OHX8C4ME.VNR49VC2UYH4@gmail.com>
+	<14cb8a91-497d-49f5-aa20-c6cb8b9a27fc@paulmck-laptop>
+	<DLDICNLENSRI.2R6EJ0ZFJE45T@gmail.com>
+	<8c51a669-eb6b-455b-a829-b537da5209f8@paulmck-laptop>
+	<20260912221400.4045198b@pumpkin>
+	<ffffa178-c475-4249-a609-c5d222704987@paulmck-laptop>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com>
-In-Reply-To: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com>
-From: Yafang Shao <laoar.shao@gmail.com>
-Date: Sun, 13 Sep 2026 15:13:54 +0800
-X-Gm-Features: AcwNN1UspbNtkItJTCvCtD3l6jewbKb17CHUZA9TTmeWwkQ5AKSxYWpYJfiUJCk
-Message-ID: <CALOAHbAE1Lq=EZE=HpNJS3dxm_sVDmjWxNm5m0ugerwWr9RN6g@mail.gmail.com>
-Subject: Re: [PATCH RFC v2 00/15] rcu-tasks: let preemption outside
- trampolines be a quiescent state
-To: Josef Bacik <josef@toxicpanda.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>, Frederic Weisbecker <frederic@kernel.org>, 
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Joel Fernandes <joelagnelf@nvidia.com>, 
-	Boqun Feng <boqun@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, x86@kernel.org, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
-	Andy Lutomirski <luto@kernel.org>, Josh Triplett <josh@joshtriplett.org>, 
-	Uladzislau Rezki <urezki@gmail.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, 
-	Juergen Gross <jgross@suse.com>, Luis Chamberlain <mcgrof@kernel.org>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, linux-kernel@vger.kernel.org, rcu@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, xen-devel@lists.xenproject.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, Sep 12, 2026 at 2:54=E2=80=AFAM Josef Bacik <josef@toxicpanda.com> =
-wrote:
->
-> v1: https://lore.kernel.org/all/20260910-b4-rcu-tasks-preempt-qs-v1-0-d44=
-69f4cc101@toxicpanda.com/
->
-> v1->v2:
-> - Only walk the kprobe hash while the optimizer is actually waiting (Sash=
-iko).
-> - Re-check the kprobe jump window at every QS decision instead of once at
->   preemption time (AI review).
-> - Updated Documentation/RCU for the new rule (AI review).
-> - Added 14/15 and 15/15 to address Paul's comments.
-> - Added a comment in trace_recursion.h per Steve.
-> - No change for the arm64 ftrace_static_tramp_end report, the Kconfig
->   dependency already covers it (Sashiko).
-> - Re-ran the x86-64 QEMU tests, still 0.2-0.3s and clean.
->
-> --- Original email ---
->
-> Tasks RCU only treats a voluntary context switch, usermode or idle as a
-> quiescent state, because a preempted task may be sitting in a trampoline
-> that is about to be freed. That was a fine trade when PREEMPT_NONE
-> servers compiled Tasks RCU away and PREEMPT desktops rarely ran
-> long-lived in-kernel loops. PREEMPT_LAZY changes both halves at once:
-> Tasks RCU is now real on server configs, and cond_resched() is a no-op,
-> so a CPU-bound kthread or kworker only ever loses the CPU by being
-> preempted, which is exactly the event Tasks RCU refuses to count.
->
-> The way this showed up for us was a cgroup writeback worker draining a
-> very large cgwb for around eleven minutes on an arm64 box. Nothing wrong
-> with that on its own, but a BPF program detach on another CPU went
-> bpf_trampoline_update() -> ftrace_shutdown() -> synchronize_rcu_tasks()
-> while holding trampoline_mutex, forty-odd tasks piled up behind the
-> mutex, and the hung task detector panicked the machine. The kprobe jump
-> optimizer is worse in principle: it does synchronize_rcu_tasks() under
-> kprobe_mutex, text_mutex and cpus_read_lock(), so one long-running
-> kthread can stall static key updates and CPU hotplug for its whole run.
-> The current answer is to find each such loop and add
-> cond_resched_tasks_rcu_qs() to it, which is the kind of annotation
-> PREEMPT_LAZY was supposed to let us stop writing.
+On Sat, 12 Sep 2026 15:31:24 -0700
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 
-Hello Josef,
+> On Sat, Sep 12, 2026 at 10:14:00PM +0100, David Laight wrote:
+> > On Sat, 12 Sep 2026 11:03:34 -0700
+> > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> >   
+> > > In the old kernels, yes, we have current->trc_reader_nesting++.
+> > > In the newer kernels, Tasks Trace RCU is instead implemented in terms
+> > > of SRCU-fast, which instead increments per-CPU counters.  Which among
+> > > other thins is a bit faster and does not need to hook into the scheduler.  
+> > 
+> > Isn't that rather architecture dependant?
+> > It is fine on x86, but on arm incrementing a per-cpu variable is
+> > significantly expensive.  
+> 
+> Last I heard, slow ARM increments of per-CPU variables were to be a
+> transitory phenomemon.  Plus changes late last year greatly sped up the
+> per-CPU increment operations.
 
-Thanks for the great work!
+There are some unapplied patches to improve per-cpu operations for both
+arm64 and s390.
+Without those preemption has to be disabled (in current->xxx) which requires
+a conditional call in the preempt enable path.
 
-We've run into exactly the same issue on our production servers
-running the 6.18.y stable kernel:
+David
 
-[   84.393333] INFO: task bpf-thp:10274 blocked for more than 28 seconds.
-[   84.393880]       Not tainted 6.18.44-3 #3.infra
-[   84.394214] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-disables this message.
-[   84.394759] task:bpf-thp      state:D stack:0     pid:10274
-tgid:10274 ppid:10266  task_flags:0x400100 flags:0x00080001
-[   84.394764] Call Trace:
-[   84.394765]  <TASK>
-[   84.394767]  __schedule+0x2c1/0x6f0
-[   84.394772]  schedule+0x2a/0xb0
-[   84.394775]  schedule_preempt_disabled+0x15/0x30
-[   84.394777]  __mutex_lock.constprop.0+0x3a2/0x9c0
-[   84.394781]  __mutex_lock_slowpath+0x13/0x20
-[   84.394784]  mutex_lock+0x37/0x50
-[   84.394786]  bpf_trampoline_get+0x2a/0x80
-[   84.394791]  check_attach_btf_id+0x32c/0x3d0
-[   84.394796]  ? __pfx_mem_cgroup_css_offline+0x10/0x10
-[   84.394800]  bpf_check+0x4d6/0xf20
-[   84.394804]  bpf_prog_load+0x4d7/0xb00
-[   84.394808]  ? avc_has_perm+0x42/0xd0
-[   84.394811]  __sys_bpf+0x729/0xd50
-[   84.394815]  __x64_sys_bpf+0x1a/0x30
-[   84.394816]  x64_sys_call+0x19e1/0x2190
-[   84.394820]  do_syscall_64+0x67/0xe10
-[   84.394823]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[   84.394825] RIP: 0033:0x7f2aa7e3ee5d
-[   84.394831] RSP: 002b:00007ffd2b3e2a88 EFLAGS: 00000246 ORIG_RAX:
-0000000000000141
-[   84.394834] RAX: ffffffffffffffda RBX: 0000000000000005 RCX: 00007f2aa7e=
-3ee5d
-[   84.394835] RDX: 0000000000000094 RSI: 00007ffd2b3e2b10 RDI: 00000000000=
-00005
-[   84.394837] RBP: 0000000000000094 R08: 00007ffd2b3e2c30 R09: 00000000000=
-00018
-[   84.394838] R10: 0000000000000070 R11: 0000000000000246 R12: 00007ffd2b3=
-e2b10
-[   84.394840] R13: 00007ffd2b3e2b10 R14: 0000000000000005 R15: 00000000215=
-804c0
-[   84.394843]  </TASK>
-[   84.394848] INFO: task bpf-thp:10274 is blocked on a mutex likely
-owned by task kworker/1:1:80.
-[   84.395463] task:kworker/1:1     state:I stack:0     pid:80
-tgid:80    ppid:2      task_flags:0x4208060 flags:0x00080000
-[   84.395468] Workqueue: events bpf_link_put_deferred
-[   84.395474] Call Trace:
-[   84.395475]  <TASK>
-[   84.395477]  __schedule+0x2c1/0x6f0
-[   84.395482]  schedule+0x2a/0xb0
-[   84.395485]  schedule_timeout+0xea/0x100
-[   84.395488]  ? trace_hardirqs_off+0x30/0x90
-[   84.395492]  ? trace_hardirqs_on+0x2b/0xa0
-[   84.395494]  __wait_for_common+0x94/0x1b0
-[   84.395498]  ? __pfx_schedule_timeout+0x10/0x10
-[   84.395502]  wait_for_completion_state+0x21/0x40
-[   84.395505]  __wait_rcu_gp+0x135/0x140
-[   84.395510]  ? 0xffffffffc03fed00
-[   84.395514]  synchronize_rcu_tasks+0x56/0xb0
-[   84.395517]  ? __pfx_call_rcu_tasks+0x10/0x10
-[   84.395521]  ? __pfx_wakeme_after_rcu+0x10/0x10
-[   84.395525]  ftrace_shutdown.part.0+0xd8/0x1f0
-[   84.395530]  ? 0xffffffffc03fed00
-[   84.395533]  unregister_ftrace_function+0x47/0x150
-[   84.395537]  ? 0xffffffffc03fed00
-[   84.395539]  unregister_ftrace_direct+0x49/0xc0
-[   84.395542]  bpf_trampoline_update+0x448/0x4e0
-[   84.395545]  ? __radix_tree_delete+0x84/0x100
-[   84.395547]  bpf_trampoline_unlink_prog+0x8f/0x150
-[   84.395550]  bpf_tracing_link_release+0x1a/0x50
-[   84.395553]  bpf_link_free+0x57/0xd0
-[   84.395555]  bpf_link_put_deferred+0x12/0x20
-[   84.395558]  process_one_work+0x1b3/0x400
-[   84.395561]  worker_thread+0x1a3/0x310
-[   84.395564]  kthread+0x107/0x240
-[   84.395567]  ? trace_hardirqs_on+0x2b/0xa0
-[   84.395569]  ? __pfx_worker_thread+0x10/0x10
-[   84.395571]  ? _raw_spin_unlock_irq+0x11/0x30
-[   84.395574]  ? __pfx_kthread+0x10/0x10
-[   84.395577]  ret_from_fork+0x10d/0x150
-[   84.395580]  ? __pfx_kthread+0x10/0x10
-[   84.395583]  ret_from_fork_asm+0x1a/0x30
-[   84.395588]  </TASK>
-[   93.199020] rcu_tasks_wait_gp: rcu_tasks grace period number 1
-(since boot) is 40249 jiffies old.
+> Plus this change removed some hundreds
+> of lines of RCU code.
+> 
+> 							Thanx, Paul
+> 
 
-We eventually traced the root cause to a problematic BPF program
-looping inside do_check() in the BPF verifier, and we've worked around
-it with the following change:
-
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -20411,8 +20411,7 @@ static int do_check(struct bpf_verifier_env *env)
-                if (signal_pending(current))
-                        return -EAGAIN;
-
--               if (need_resched())
--                       cond_resched();
-+               cond_resched_tasks_rcu_qs();
-
-                if (env->log.level & BPF_LOG_LEVEL2 && do_print_state) {
-                        verbose(env, "\nfrom %d to %d%s:",
-
-We've also observed random Tasks RCU stalls caused by kcompactd, but
-since they don't result in hung tasks, we haven't applied a workaround
-for those yet.
-
-Hopefully we can come up with a generic solution for these Tasks RCU stalls=
-.
-
-[...]
-
---=20
-Regards
-Yafang
