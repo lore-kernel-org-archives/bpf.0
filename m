@@ -1,140 +1,123 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B903368D76
-	for <bpf@vger.kernel.org>; Sun, 13 Sep 2026 15:49:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BFE9386C1E;
+	Sun, 13 Sep 2026 18:20:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789314581; cv=none; b=qWqdRb/hZ1tmAdudtOsYBWVgcsfX2RrMySxxR5j4vekxAKHh2+rySQVJIWILIuZyhVMs83Kh1IdsEyWbefcmtDc+nfk//eTYI/dakbBvcsNj9FsIbrJOubJl1gzTVyuNO1Tcs8vy30vE5x9tInR3NUgH53P4AY/3xiytjPqlSk8=
+	t=1789323607; cv=none; b=AE6vIpKlGy9PNPL8XFsMlg++h1ZnPXm2EeUauIy5sjuRkCg9BCVD37F/VT4IvioWvWzQL85+HIYIOePenKvTEx+aqYxSSYn366Pam27QbeKgL4uASbDNRvYpDjyg3nof1cl3r7lMhhwPVZBQlcrDKf0iBeygSUFmxsXZT/ckGqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789314581; c=relaxed/simple;
-	bh=X75EtRD2388NtG0Oa1NqeZrIwCyzXn/H4pYUA6iHync=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=VkolkWAi17+9klfbUiQFb+R4IU5Whh5B3S/PfvxS2dhB6UH51SgpSdUXLGRpMxQWvd4PY1H5DbV0ntonJe8Di0rzAxMPc2w7r+GfEtW93UniWICHU6bdHzoBVe9TtL/05SXvdcmsh4ERX+E9l+SEaepPQ/gLvKjqaQOtdOnDLRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q+Vy/shq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789323607; c=relaxed/simple;
+	bh=Q+nGyMUGaQTwqMQM5whVz6yevzek+nloFB/V7n8BuKg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OJyqt1a04CnaH1B82lUJYmCQ/fRAekDjStHc9RlSFWWKoI1GGFOlq2sQ7AVruJE/UYVxX0RWasVUwndWOP8i9OokNZSwJWcYBy8kZcu8H6iR2S98WmgKMMKG06JSIGR4Y6lYPLy8x6uK+kEzE8xTYVicq5eHDZhhFcLdOkAk8Ks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mJ27Jmv/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q+Vy/shq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BAD41F000FF;
-	Sun, 13 Sep 2026 15:49:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mJ27Jmv/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1B411F000FF;
+	Sun, 13 Sep 2026 18:20:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789314579;
-	bh=xKZ61gLka90CyeTFxYGpjMbJ38y4zLm+D02llTwH6e0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Q+Vy/shqa2Dj0zHnYS6GIuLaYC1VuhXB8A611mgjow3ae+1ODjUbCjwYpA3C2lRq6
-	 2cXojpHlGigZPsYoh0HCvoleVf06TlPf0XDZykFO3WfAuzL5FvJCWN7lwBvqCkRrP0
-	 pvPu+e/208AjojUYOP5e5BsbAJvdVOWRIySzXel1XmjIjnuTpS0rNHXL29SPrcfWyS
-	 v6IdgWfrRUruATqYVKy1wjquWBvrguZq8OlXj/uvEwFXapz1JMMGl+4gdoRi6vinr0
-	 3Il9c9GjeIa+1LNFXX3tDz0rrT0FIyjGqKudnXfk1NGOJYQaNjZPlNfOpfZY6GBzLL
-	 xPoNy7A/Jg1mA==
-Content-Type: multipart/mixed; boundary="===============7879078182914649759=="
+	s=k20260515; t=1789323606;
+	bh=NVD5gFDBWDGN0X6QVeDbX5tNYhDXBkX15MX3Yd3diVU=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=mJ27Jmv/mJW2LDKw6I+T6hZEXq/ZvlwdOOJIHR64P4TERWpoC7uE4AYU4tWeybXKS
+	 IhEEGOMy0Mt1H/gMxVqeZRc1xjWs0hG72HL8fR9lzWZCJc+s6AutqyHSEJpptygnro
+	 0ujyQ1jCJ2NdnkjiFiXL8AbMmC7IeFuaFqdm2wUUxnfYQ0605UquUF6v3IpXy6Hh9K
+	 ExMw4X6yCJv4rFys9evu9uD9jNFtrK5cQCDs3clrr7SgfUfCJke6/bv86T4a0uTWDQ
+	 s4J25tAJVZdbivSXe28DjPBWF9KgO0IoG9LWXGLAfbcUZYrE/yT1BmJCadTMNrOycI
+	 H5sJ25eSRm+gQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 53A0ACE107B; Sun, 13 Sep 2026 11:20:05 -0700 (PDT)
+Date: Sun, 13 Sep 2026 11:20:05 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Boqun Feng <boqun@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, x86@kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>, Juergen Gross <jgross@suse.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	xen-devel@lists.xenproject.org
+Subject: Re: [PATCH RFC v2 08/15] bpf, x86: Maintain Tasks RCU trampoline
+ nesting in the BPF trampoline
+Message-ID: <e88514c6-296f-431f-a7bc-7429967b01a9@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com>
+ <20260911-b4-rcu-tasks-preempt-qs-v2-8-eaaa61ed2da4@toxicpanda.com>
+ <DLD0OHX8C4ME.VNR49VC2UYH4@gmail.com>
+ <14cb8a91-497d-49f5-aa20-c6cb8b9a27fc@paulmck-laptop>
+ <DLDICNLENSRI.2R6EJ0ZFJE45T@gmail.com>
+ <8c51a669-eb6b-455b-a829-b537da5209f8@paulmck-laptop>
+ <20260912221400.4045198b@pumpkin>
+ <ffffa178-c475-4249-a609-c5d222704987@paulmck-laptop>
+ <20260913122859.4d5067cd@pumpkin>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f85793fdaef592ac92c1a8a338ea3973f859920d50dc6eab84293dbd1257b048@mail.kernel.org>
-In-Reply-To: <20260913145233.1446643-4-caomingpei@gmail.com>
-References: <20260913145233.1446643-4-caomingpei@gmail.com>
-Subject: Re: [PATCH bpf v2 3/3] selftests/bpf: Cover struct_ops bitfield and offset validation
-From: bot+bpf-ci@kernel.org
-To: caomingpei@gmail.com,bpf@vger.kernel.org
-Cc: andrii@kernel.org,eddyz87@gmail.com,ameryhung@gmail.com,qmo@kernel.org,caomingpei@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun, 13 Sep 2026 15:49:39 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260913122859.4d5067cd@pumpkin>
 
---===============7879078182914649759==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Sun, Sep 13, 2026 at 12:28:59PM +0100, David Laight wrote:
+> On Sat, 12 Sep 2026 15:31:24 -0700
+> "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> 
+> > On Sat, Sep 12, 2026 at 10:14:00PM +0100, David Laight wrote:
+> > > On Sat, 12 Sep 2026 11:03:34 -0700
+> > > "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > >   
+> > > > In the old kernels, yes, we have current->trc_reader_nesting++.
+> > > > In the newer kernels, Tasks Trace RCU is instead implemented in terms
+> > > > of SRCU-fast, which instead increments per-CPU counters.  Which among
+> > > > other thins is a bit faster and does not need to hook into the scheduler.  
+> > > 
+> > > Isn't that rather architecture dependant?
+> > > It is fine on x86, but on arm incrementing a per-cpu variable is
+> > > significantly expensive.  
+> > 
+> > Last I heard, slow ARM increments of per-CPU variables were to be a
+> > transitory phenomemon.  Plus changes late last year greatly sped up the
+> > per-CPU increment operations.
+> 
+> There are some unapplied patches to improve per-cpu operations for both
+> arm64 and s390.
+> Without those preemption has to be disabled (in current->xxx) which requires
+> a conditional call in the preempt enable path.
 
-> diff --git a/tools/testing/selftests/bpf/progs/struct_ops_module.c b/tools/testing/selftests/bpf/progs/struct_ops_module.c
-> index 71c420c3a5a6..846b5a934dc8 100644
-> --- a/tools/testing/selftests/bpf/progs/struct_ops_module.c
-> +++ b/tools/testing/selftests/bpf/progs/struct_ops_module.c
+These are on top of the patches that provided an order of magnitude
+improvement late last year?  Very cool if so!
 
-[ ... ]
+							Thanx, Paul
 
-> @@ -76,6 +76,23 @@ struct bpf_testmod_ops___zeroed testmod_zeroed = {
->  	.zeroed_op = (void *)zeroed_op,
->  };
->
-> +struct bpf_testmod_ops___local_bitfield {
-> +	int data;
-> +	unsigned int extra_bitfield:31;
-> +	unsigned int extra_bitfield2:1;
-> +	char onebyte;
-> +};
-> +
-> +SEC("?.struct_ops.link")
-> +struct bpf_testmod_ops___local_bitfield testmod_local_bitfield;
-> +
-> +struct bpf_testmod_ops___bad_offset {
-> +	unsigned int extra;
-> +};
-> +
-> +SEC("?.struct_ops.link")
-> +struct bpf_testmod_ops___bad_offset testmod_bad_offset;
-
-This is the first place in the tree that puts two struct_ops variables
-into the same '?'-prefixed section. Does libbpf handle this correctly?
-
-Looking at init_struct_ops_maps() in tools/lib/bpf/libbpf.c, the code
-receives one sec_name for the whole section and advances it inside the
-per-variable loop:
-
-    for (i = 0; i < btf_vlen(datasec); i++, vsi++) {
-            ...
-            map = bpf_object__add_map(obj);
-            ...
-            if (sec_name[0] == '?') {
-                    map->autocreate = false;
-                    sec_name++;    /* persists across iterations */
-            }
-
-Both new variables live in the same ELF section "?.struct_ops.link", so
-they are handled by a single init_struct_ops_maps() call. libbpf sorts
-DATASEC var_secinfos by offset (btf_fixup_datasec()), so iteration 0 is
-testmod_local_bitfield (offset 0, size 12): sec_name[0] == '?',
-autocreate is set to false and sec_name is advanced to ".struct_ops.link".
-
-On iteration 1 (testmod_bad_offset, offset 12) sec_name[0] is now '.', the
-branch is not taken, and testmod_bad_offset keeps the default
-autocreate == true from bpf_object__add_map().
-
-As a result:
-
-1. The SEC("?...") annotation on testmod_bad_offset is inert.
-   bpf_map__set_autocreate(skel->maps.testmod_bad_offset, true) in the new
-   test_struct_ops_bad_member_offset() is a no-op, so the test's apparent
-   opt-in isolation is not real.
-
-2. testmod_bad_offset is now initialised and created during every other
-   subtest that loads this shared skeleton: struct_ops_load,
-   struct_ops_not_zeroed, struct_ops_incompatible, struct_ops_null_out_cb,
-   struct_ops_forgotten_cb, test_detach_link, plus test_cpp.cpp:127
-   (struct_ops_module__open_and_load()). Those loads happen to still
-   succeed today only because 'extra' is absent from the kernel struct
-   bpf_testmod_ops and the zero-filled variable passes the
-   libbpf_is_mem_zeroed() fallback in bpf_map__init_kern_struct_ops() -
-   i.e. the negative-test map is now silently registered as a real
-   struct_ops map in unrelated tests.
-
-3. The outcome depends on which variable LLVM emits first in the section.
-   If testmod_bad_offset were emitted at offset 0 and testmod_local_bitfield
-   after it, then testmod_local_bitfield would be the one with
-   autocreate == true, and every other subtest plus test_cpp would fail
-   their load with -ENOTSUP "local bitfield extra_bitfield is not
-   supported". The patch works only by relying on unspecified
-   global-emission ordering.
-
-Giving each optional map its own section name (e.g. distinct sections or
-fixing libbpf's init_struct_ops_maps() to not advance the shared sec_name
-inside the loop) removes the coupling.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34765254213
---===============7879078182914649759==--
+> David
+> 
+> > Plus this change removed some hundreds
+> > of lines of RCU code.
+> > 
+> > 							Thanx, Paul
+> > 
+> 
