@@ -1,152 +1,157 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7C7351C1E
-	for <bpf@vger.kernel.org>; Sun, 13 Sep 2026 15:03:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 904852F60B2
+	for <bpf@vger.kernel.org>; Sun, 13 Sep 2026 15:49:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789311799; cv=none; b=XxexhDZw55Iplt7ixCYCm3sFr/BkXeCZqHiMLO2q3K/qSnA1nde5ylHz8ZrRCt6C1OK7uRkhiizIrveIcGcn/QqcC6QUlIj1eI9ObinjFtQYqD8TkyULTekykp6abiVhDqcZsVNHQAzRsn60irWTiJ0o9vRM3kkHRR/YrJSdIAU=
+	t=1789314577; cv=none; b=dI9+Y6PXp0wXPpQ2E1Wf0OwdlhUeP30W+CiJ14soEoHQAdkiwQ3VUPY888WPOnKQyMuZKqkL25rbkkTq4rI8kafOfwLw4zIPQJAAtNEXrrchG9RxfqMSEjAzr+i9D7ffdYuZf5GyEHO6vamiHDl4Vt+kGaFuWQJOUb+7LzxNAAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789311799; c=relaxed/simple;
-	bh=RxuOkVH2cumPN0ZwxIf7v/CASp/tjA0TPtTg/G/+LPQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=jFc2ELbyvhYGAU8qDXpTd9wDIrhShanGAEMz5TmPvnliqh7a29WsSRuig7l0QdUyse5XW9W/E+HQ4r7RNBMxShcXK7ge+NroVBwIdhpGVTioU7WYAo3y3RL77mVpasfWy9WY3TX2bfLxPuMAjfyQ6eRHAy5gMaSWL6pRNJfr3kI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fnJqmKiZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789314577; c=relaxed/simple;
+	bh=WBwBlyt5GTNWCRURF/BUfPDWlA9HR/MBXF526IRokHw=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=og/vr5PhgBtDgRXDg64Eo3gIU2QTBHv8ffqlXi4L1rot+fLxF71qqrB4fdvqOXl4Tc65QZg2tW2a+G0vccFB0a2DBiucKRW5fTWzMCaOtWCzISIe1xJxh2mBxZmrNxDq1ifc3pUil8fl7xThnEcgiDW9RnXAJcyueB09fJyooss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y8urCCuo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fnJqmKiZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A83B51F000FF;
-	Sun, 13 Sep 2026 15:03:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y8urCCuo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD63D1F000FF;
+	Sun, 13 Sep 2026 15:49:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789311796;
-	bh=soQLE7BySlblMALrybZLgumVBitiRM53YWIpkMqfJSY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=fnJqmKiZFLYnVJViWjJ8FutDM/Q4ejpMXC5jn+Yi9PGl96KHRzo6mQC/MuYFbyNVS
-	 MrdCr/33Em0btHSwHQT24QC79Lag2kYhySmTrGcit2qJRDNwkWctwA1QeCFKBD7A4i
-	 jL5df2zQB99LcOlMVBKoSsbBeS9nTr6Ulh+k+7RnPWC2UtT14DxryfaYHM+EDXWG4z
-	 8Kcsk6xd+PXqqrCzPA1dwVHWHdkY+YGrTv4aAN0McXqGPH4kypDLEZeA1Qy5Wj3J9W
-	 fA+sAll6fKXmGkkDnolUKycEu0NZQsEFRWBypH5xzaP9dd6p5ZHYDZ4OgNQANX4a64
-	 WMmXnXh4H6vuQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v2 3/3] selftests/bpf: Cover struct_ops bitfield and
- offset validation
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Mingpei CAO" <caomingpei@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260913145233.1446643-4-caomingpei@gmail.com>
-References: <20260913145233.1446643-1-caomingpei@gmail.com>
- <20260913145233.1446643-4-caomingpei@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 13 Sep 2026 15:03:16 +0000
-Message-Id: <20260913150316.A83B51F000FF@smtp.kernel.org>
+	s=k20260515; t=1789314576;
+	bh=U7pgyZRdoUsn5xFqu0UPRArOMWjQXOnvyVr7jq7EuTs=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Y8urCCuowTEb94cGWHxUkIMeRqnuJul6hB6aH/piRC1/ShkGRjob7Zn+e8I392wVK
+	 Jdyye5KdomA5nsTksOISVdG+rYc9yLnadQQca4ItMMQIFwIfFGJt33IlUPPv26mw+m
+	 Lw8bZBcY6aG7sd/YrjAyCdoySqBcL/nwALk6KFW5ZKXzXxJ5jAOlsDHhkWBjFTLbD7
+	 A/IG/a6YPw4T8wvQ3fQTkfU6KIllJo69x2YbcxTwvWS4VDJ0kCpUsA2FscsN0dQE8I
+	 dEoc6nuFsPn1ZNBFfZ6EynsFzGwXRC53oQcY/U9cbPaZFQdCJp9JJaHfZnBo1mweC1
+	 7OTxhrW4G0Drg==
+Content-Type: multipart/mixed; boundary="===============5879122226337089223=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <4c88b94cceb5d2332a02316af00f61b39582683fad8d75358b2d40aaec133790@mail.kernel.org>
+In-Reply-To: <20260913145233.1446643-2-caomingpei@gmail.com>
+References: <20260913145233.1446643-2-caomingpei@gmail.com>
+Subject: Re: [PATCH bpf v2 1/3] libbpf: Validate struct_ops member offsets before data access
+From: bot+bpf-ci@kernel.org
+To: caomingpei@gmail.com,bpf@vger.kernel.org
+Cc: andrii@kernel.org,eddyz87@gmail.com,ameryhung@gmail.com,qmo@kernel.org,caomingpei@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun, 13 Sep 2026 15:49:35 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] The newly added tests `test_struct_ops_local_bitfield` and `test=
-_struct_ops_bad_member_offset` fail during skeleton load because they forge=
-t to disable autocreation of the `testmod_zeroed` map.
---
+--===============5879122226337089223==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 69d278fe659a33375aee90852a40642cb2fe6e03
-Author: Mingpei CAO <caomingpei@gmail.com>
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index b749c01742ee..2791b4858593 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
 
-selftests/bpf: Cover struct_ops bitfield and offset validation
-
-This commit adds selftests to verify libbpf's handling of struct_ops bitfie=
-ld
-members and incorrect member offsets. It ensures that unsupported local
-bitfields are rejected and bad offsets yield an EINVAL error.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_modul=
-e.c b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-> index 75a0dea511b3f..41029ebb22f01 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_struct_ops_module.c
 [ ... ]
-> @@ -150,6 +151,91 @@ static void test_struct_ops_not_zeroed(void)
->  	struct_ops_module__destroy(skel);
->  }
-> =20
-> +static void test_struct_ops_local_bitfield(void)
-> +{
-> +	struct struct_ops_module *skel;
-> +	char *log =3D NULL;
-> +	int err;
+
+> @@ -1208,29 +1228,50 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
+>  		return -ENOMEM;
+>
+>  	data = st_ops->data;
+> -	kern_data_off = kern_data_member->offset / 8;
+>  	kern_data = st_ops->kern_vdata + kern_data_off;
+>
+>  	member = btf_members(type);
+>  	for (i = 0; i < btf_vlen(type); i++, member++) {
+>  		const struct btf_type *mtype, *kern_mtype;
+> -		__u32 mtype_id, kern_mtype_id;
+> +		__u32 bit_offset, mtype_id, kern_mtype_id;
+>  		void *mdata, *kern_mdata;
+>  		struct bpf_program *prog;
+>  		__s64 msize, kern_msize;
+> +		__u64 maccess_size;
+>  		__u32 moff, kern_moff;
+>  		__u32 kern_member_idx;
+>  		const char *mname;
+>
+>  		mname = btf__name_by_offset(btf, member->name_off);
+> -		moff = member->offset / 8;
+> -		mdata = data + moff;
+> +		if (btf_member_bitfield_size(type, i)) {
+> +			pr_warn("struct_ops init_kern %s: local bitfield %s is not supported\n",
+> +				map->name, mname);
+> +			return -ENOTSUP;
+> +		}
+> +
+>  		msize = btf__resolve_size(btf, member->type);
+>  		if (msize < 0) {
+>  			pr_warn("struct_ops init_kern %s: failed to resolve the size of member %s\n",
+>  				map->name, mname);
+>  			return msize;
+>  		}
+> +		mtype = skip_mods_and_typedefs(btf, member->type, &mtype_id);
+> +		maccess_size = msize;
+> +		if (btf_is_ptr(mtype) && maccess_size < sizeof(prog))
+> +			maccess_size = sizeof(prog);
+> +		bit_offset = btf_member_bit_offset(type, i);
+> +		if (bit_offset % 8) {
+> +			pr_warn("struct_ops init_kern %s: member %s has a non-byte-aligned offset\n",
+> +				map->name, mname);
+> +			return -EINVAL;
+> +		}
+> +		moff = bit_offset / 8;
+> +		if (moff > type->size || maccess_size > type->size - moff) {
+> +			pr_warn("struct_ops init_kern %s: member %s is outside the %u-byte local struct_ops type\n",
+> +				map->name, mname, type->size);
+> +			return -EINVAL;
+> +		}
+> +		mdata = data + moff;
+
+This isn't a bug, but could the commit message mention the pointer load
+change and the maccess_size widening? The changelog describes rejecting
+bitfields and checking ranges, but doesn't explain why the punned load
+prog = *(void **)mdata becomes memcpy(&prog, mdata, sizeof(prog)) or why
+maccess_size is widened to sizeof(prog) for pointer members. Both look
+deliberate - once an arbitrary moff is accepted, mdata need not be
+pointer-aligned, and the read is sizeof(struct bpf_program *) wide rather
+than msize wide - but a reader has to reconstruct that rationale from the
+code.
+
 [ ... ]
-> +	err =3D bpf_map__set_autocreate(skel->maps.testmod_local_bitfield, true=
-);
-> +	if (!ASSERT_OK(err, "enable_local_bitfield_map"))
-> +		goto cleanup;
-> +
-> +	if (start_libbpf_log_capture())
-> +		goto cleanup;
-> +	err =3D struct_ops_module__load(skel);
 
-[Severity: Medium]
-Will this skeleton load fail prematurely due to testmod_zeroed?
+> @@ -1281,7 +1338,7 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
+>  		}
+>
+>  		if (btf_is_ptr(mtype)) {
+> -			prog = *(void **)mdata;
+> +			memcpy(&prog, mdata, sizeof(prog));
+>  			/* just like for !kern_member case above, reset declaratively
+>  			 * set (at compile time) program's autload to false,
+>  			 * if user replaced it with another program or NULL
 
-When struct_ops_module__load() is called, libbpf iterates over all
-autocreate maps in the BPF object and initializes them. The testmod_zeroed
-map is defined first in the BPF object and is set to autocreate by default.
-
-Since its zeroed_op member is initialized to a non-NULL program pointer but
-does not exist in the kernel BTF, bpf_map__init_kern_struct_ops() returns
--ENOTSUP.
-
-This causes the skeleton load to abort early before testmod_local_bitfield
-is fully evaluated, leading to false negatives in the test suite. Does
-this test need to disable autocreation for the testmod_zeroed map before
-calling struct_ops_module__load()?
-
-> +	log =3D stop_libbpf_log_capture();
-> +	if (!ASSERT_EQ(err, -ENOTSUP, "struct_ops_module_load_local_bitfield"))
-> +		goto cleanup;
-> +	ASSERT_HAS_SUBSTR(log, "local bitfield extra_bitfield is not supported",
-> +			  "local_bitfield_rejection_log");
-> +
-> +cleanup:
-> +	free(log);
-> +	struct_ops_module__destroy(skel);
-> +}
-> +
-> +static void test_struct_ops_bad_member_offset(void)
-> +{
-> +	struct struct_ops_module *skel;
-> +	struct btf_member *member;
 [ ... ]
-> +	err =3D bpf_map__set_autocreate(skel->maps.testmod_bad_offset, true);
-> +	if (!ASSERT_OK(err, "enable_bad_offset_map"))
-> +		goto cleanup;
-> +
-> +	if (start_libbpf_log_capture())
-> +		goto cleanup;
-> +	err =3D struct_ops_module__load(skel);
 
-[Severity: Medium]
-Does this suffer from the same early skeleton load failure?
+> @@ -1352,8 +1409,7 @@ static int bpf_map__init_kern_struct_ops(struct bpf_map *map)
+>  			continue;
+>  		}
+>
+> -		kern_msize = btf__resolve_size(kern_btf, kern_mtype_id);
+> -		if (kern_msize < 0 || msize != kern_msize) {
+> +		if (msize != kern_msize) {
+>  			pr_warn("struct_ops init_kern %s: Error in size of member %s: %zd != %zd(kernel)\n",
+>  				map->name, mname, (ssize_t)msize,
+>  				(ssize_t)kern_msize);
 
-Since testmod_zeroed is still set to autocreate, the load will return
--ENOTSUP instead of the expected -EINVAL, causing the subsequent ASSERT_EQ
-check to fail unconditionally. Should autocreation of testmod_zeroed be
-disabled in this function as well?
+This isn't a bug, but with the btf__resolve_size(kern_btf, kern_mtype_id)
+call gone, is kern_mtype_id still read anywhere? The patch writes it via
+skip_mods_and_typedefs() calls but the last consumer is removed here.
+skip_mods_and_typedefs() accepts NULL for res_id, so both call sites could
+pass NULL and the local could be dropped.
 
-> +	log =3D stop_libbpf_log_capture();
-> +	if (!ASSERT_EQ(err, -EINVAL, "struct_ops_module_load_bad_offset"))
-> +		goto cleanup;
-> +	ASSERT_HAS_SUBSTR(log, "member extra is outside the 4-byte local struct=
-_ops type",
-> +			  "bad_offset_rejection_log");
-> +
-> +cleanup:
-> +	free(log);
-> +	struct_ops_module__destroy(skel);
-> +}
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260913145233.1446=
-643-1-caomingpei@gmail.com?part=3D3
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34765254213
+--===============5879122226337089223==--
