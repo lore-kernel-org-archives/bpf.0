@@ -1,128 +1,109 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68B74BEE58;
-	Sun, 13 Sep 2026 03:07:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C8C725B093
+	for <bpf@vger.kernel.org>; Sun, 13 Sep 2026 04:01:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789268859; cv=none; b=VFDNccYLOTNDTf7SKYhhkKtUY7jnnTzF3Bwwm63Ooo1U5l3N5l6GkLlny/VHcAOyShNOhGaiiftPE6ifn/KmvkZ4Zm5yQ0qagkL68vZP63w1Iky84d5OtxqYJagLDZ/UxjM4O4Ez1JXU2Wpye/b0u4H2pqEaLA/UGiV9UFNJo7A=
+	t=1789272072; cv=none; b=ndVFfki518JsiT7UUE11vCjD5QKrE4SDMpE+BO0u9ZiAeEbBpgsB69DOsX2NaLBWEhzjzR0fM37eVrrzwmPjOdMEcIJJVXR6figNM9zMULGqR8gNUeBkqWE111F8Vfe/zE1y40QjPOTkxaz2z03iW8jTR8q5HLrnNwZUDqU/e0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789268859; c=relaxed/simple;
-	bh=W/3xtVk0o34kiF+8UCp7ZVY3yI8DFhfYs6U4DoIP7kQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p+NYXX825vfP+PNksME/SY1d7YfDW6/B2gL+eOqlV2voEHUrbzQj5KXhWcYu7LgLwJ6ZdGB0teNR531oewrH9Sac2hGqwLVOn1FE5AGp3og7bpR3UfLz7t26evlI0DnikpS0OxwG0CH281R1bZuNhbI7hoXGJqfSs3IiF+clvBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CuSv2pXm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789272072; c=relaxed/simple;
+	bh=8QL3w5F7OS5hRlkG/GsZtWxRtPm9bg+8oaQqADrSF9g=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=JZzCCqLbTm41VzqWeQSeqqT4puS0Q4Fg7MkhscqMkGRqHUwFY1lJ3ciKCS1Lz2mIuJx0+UP4YxpsTL/narwR18cfjvEsoL6ezYitsuSK5N80SzoYAWoLxfhJWw2JQ7WFBBxp52sVxV6tWRHdM4Jq4ilA/Un0OquUHmz1+Nu4IOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d3T+ehU/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CuSv2pXm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 524621F000FF;
-	Sun, 13 Sep 2026 03:07:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d3T+ehU/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A111F000FF;
+	Sun, 13 Sep 2026 04:01:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789268857;
-	bh=KdhlkMkoM3bS0HNmhu6FPeXNMD9uLWI8hS4d5wSjOX4=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=CuSv2pXmX2je4sRvmHKKZCalCD4vMRFoFyu9Z7kjqib0HJZ0R96u12SmyJngVxR2d
-	 CSNggnMjRbuvaNfpOxA6kKMng4amlgHfCnKyRffj3AMRXMMXauRj9OaXw5P8g9hq4g
-	 0Z6jqwCBeRqIaINZKgWOtW/1/1bcaqhLqkyXwoXoLd2+dn2NIgd0vZi2yb8bASDNLv
-	 piKOj5Fgnde2tv2VXvS/Qdfwbv8zZb8k7djWMTU3jTaLAmygk5QLxZBQxBQre6yGdu
-	 +uOGZV0+QeWDGdOrI+TtWo4puMNcmdgECkEQg0EnCDjhQv4usxIOb1Vf5UzttNUsW+
-	 4U1q7S5+5p0zA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 15EE5CE0ABC; Sat, 12 Sep 2026 20:07:37 -0700 (PDT)
-Date: Sat, 12 Sep 2026 20:07:37 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Josef Bacik <josef@toxicpanda.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Boqun Feng <boqun@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, X86 ML <x86@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>, Juergen Gross <jgross@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	LKML <linux-kernel@vger.kernel.org>, rcu@vger.kernel.org,
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
-	bpf <bpf@vger.kernel.org>,
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-	xen-devel@lists.xenproject.org
-Subject: Re: [PATCH RFC v2 08/15] bpf, x86: Maintain Tasks RCU trampoline
- nesting in the BPF trampoline
-Message-ID: <509e8eff-2a9c-4927-956c-73708ee4fe5a@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20260911-b4-rcu-tasks-preempt-qs-v2-0-eaaa61ed2da4@toxicpanda.com>
- <20260911-b4-rcu-tasks-preempt-qs-v2-8-eaaa61ed2da4@toxicpanda.com>
- <DLD0OHX8C4ME.VNR49VC2UYH4@gmail.com>
- <14cb8a91-497d-49f5-aa20-c6cb8b9a27fc@paulmck-laptop>
- <DLDICNLENSRI.2R6EJ0ZFJE45T@gmail.com>
- <8c51a669-eb6b-455b-a829-b537da5209f8@paulmck-laptop>
- <DLDLDGTSBHA0.32TYNBSKKPFXH@gmail.com>
- <8fbfb3fc-cf5d-4dfb-b144-bc021faa13ff@paulmck-laptop>
- <CAADnVQLQs-+-cu2R3QrHppcxOQt9m7Hi+grr4fOnw8m73kQn0Q@mail.gmail.com>
+	s=k20260515; t=1789272070;
+	bh=2rOA4il9KCXxUjuuVMox42qOqw7niBO03goilwZmGAo=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=d3T+ehU/ljlyV5KTNiYy2y8pU0guDFel8GyxF3iMHXVz4VvJivYI91PxVwu9Jyhj2
+	 3sdHSvSl80y5IKnj6w2mA1NJZj4sOb+l30TEbyPT4iDXqZKPie1jo6u/8TOg/N473x
+	 t0R92diftykg2/uvxI2UlIkkHxClfbw0CsoNa76Ksl0+bJ0QbNxstN0eMjThBrFVdw
+	 yOckZG2XLCvkCNE19iN5cT6SIbbLDszU802Wkf5WebmXLbKhXwzzJ5Xay2ia6e/vY7
+	 WcQY7Qs3dNt7pQOITz4jYDKzVyqjccKlJu64tAWl/GM0slK4hxLt/KFukGFR66nxX9
+	 6vUqG7oC8qdIA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D08A03809A35;
+	Sun, 13 Sep 2026 04:00:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQLQs-+-cu2R3QrHppcxOQt9m7Hi+grr4fOnw8m73kQn0Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 00/15] bpf: Support by-value struct and
+ __int128
+ arguments
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178927200638.3732794.3320350937871230371.git-patchwork-notify@kernel.org>
+Date: Sun, 13 Sep 2026 04:00:06 +0000
+References: <20260912195156.980886-1-yonghong.song@linux.dev>
+In-Reply-To: <20260912195156.980886-1-yonghong.song@linux.dev>
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, kernel-team@fb.com
 
-On Sat, Sep 12, 2026 at 04:59:02PM -0700, Alexei Starovoitov wrote:
-> On Sat, Sep 12, 2026 at 3:28 PM Paul E. McKenney <paulmck@kernel.org> wrote:
-> >
-> > On Sat, Sep 12, 2026 at 12:40:55PM -0700, Alexei Starovoitov wrote:
-> > > On Sat Sep 12, 2026 at 11:03 AM PDT, Paul E. McKenney wrote:
-> > > >
-> > > > In the old kernels, yes, we have current->trc_reader_nesting++.
-> > > > In the newer kernels, Tasks Trace RCU is instead implemented in terms
-> > > > of SRCU-fast, which instead increments per-CPU counters.  Which among
-> > > > other thins is a bit faster and does not need to hook into the scheduler.
-> > >
-> > > old kernels? I'm confused.
-> > > rcu_read_lock_trace() in bpf-next is doing t->trc_reader_nesting++
-> > > and then calls __srcu_read_lock_fast().
-> > >
-> > > Are you talking about some RCU branch that you target for next merge window?
-> >
-> > No, I was thinking of rcu_read_lock_tasks_trace(), forgetting that
-> > rcu_read_lock_trace() is still used.  (For good reason, just be clear.)
-> > Your comments are quite correct for rcu_read_lock_trace().
-> >
-> > Hmmm...  Josep's using t->trc_reader_nesting would break for
-> > partially overlapping RCU Tasks and rcu_read_lock_trace() readers.
-> >
-> > But yes, your #5 makes sense:  Deprecate RCU Tasks, upgrade RCU Tasks
-> > Trace to check for preemption from within trampolines, and move RCU
-> > Tasks users over to the rcu_read_lock_trace() variant of RCU Tasks Trace.
-> > (Or am I still missing your point?)
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Sat, 12 Sep 2026 12:51:56 -0700 you wrote:
+> A global function or a kfunc taking a struct or union by value is rejected
+> today:
 > 
-> Pretty much. This way bpf trampoline stays as-is. No extra overhead there.
-> rcu tasks users (faultable tracepoints and what else ? )
-> switch to rcu_read_lock_trace().
-> The only difference for faultable tracepoints is
-> extra t->trc_reader_nesting++.
+>   Arg#1 type STRUCT in tar() is not supported yet.
+>   Unrecognized R2 type STRUCT
+> 
+> and an __int128 argument is accepted but mis-counted: the compiler passes
+> it in two registers while the verifier gives it one, so every argument
+> after it is checked against the wrong register and the program is rejected
+> for a register its source never names.
+> 
+> [...]
 
-Let's see what the other tracing guys think.
+Here is the summary with links:
+  - [bpf-next,v4,01/15] bpf: Read a kfunc's __sz argument only when it is in a register
+    https://git.kernel.org/bpf/bpf-next/c/afe897e89918
+  - [bpf-next,v4,02/15] selftests/bpf: Add a test for an __int128 by-value argument
+    https://git.kernel.org/bpf/bpf-next/c/4196b1064bf2
+  - [bpf-next,v4,03/15] bpf: Rename bpf_subprog_info::arg_cnt to arg_slot_cnt
+    https://git.kernel.org/bpf/bpf-next/c/3bd9d96710f0
+  - [bpf-next,v4,04/15] bpf: Index global function arguments by argument slot
+    https://git.kernel.org/bpf/bpf-next/c/3f1023cab813
+  - [bpf-next,v4,05/15] bpf: Support by-value struct arguments up to 16 bytes
+    https://git.kernel.org/bpf/bpf-next/c/4dd676ca5b7a
+  - [bpf-next,v4,06/15] bpf: Support __int128 as a by-value function argument
+    https://git.kernel.org/bpf/bpf-next/c/00cfeb9554e2
+  - [bpf-next,v4,07/15] bpf: Rename bpf_call_summary::num_params to arg_slot_cnt
+    https://git.kernel.org/bpf/bpf-next/c/c6ff4e06033f
+  - [bpf-next,v4,08/15] bpf: Recognize by-value struct and __int128 kfunc arguments
+    https://git.kernel.org/bpf/bpf-next/c/ae6abae582b7
+  - [bpf-next,v4,09/15] bpf: Prepare kfunc arguments for the JIT from an ABI description
+    https://git.kernel.org/bpf/bpf-next/c/1e6c598b02e7
+  - [bpf-next,v4,10/15] bpf, x86: Move kfunc arguments into the x86-64 calling convention
+    https://git.kernel.org/bpf/bpf-next/c/a3195057406f
+  - [bpf-next,v4,11/15] bpf, arm64: Place trampoline arguments by the arm64 calling convention
+    https://git.kernel.org/bpf/bpf-next/c/afdbb4cdd3d2
+  - [bpf-next,v4,12/15] bpf, arm64: Move kfunc arguments into the arm64 calling convention
+    https://git.kernel.org/bpf/bpf-next/c/e1891a2c6474
+  - [bpf-next,v4,13/15] selftests/bpf: Add C tests for by-value arguments up to 16 bytes
+    https://git.kernel.org/bpf/bpf-next/c/9b55be31d16d
+  - [bpf-next,v4,14/15] selftests/bpf: Add inline-asm tests for by-value arguments
+    https://git.kernel.org/bpf/bpf-next/c/a7a97c37c58f
+  - [bpf-next,v4,15/15] selftests/bpf: Add tests for by-value kfunc arguments
+    https://git.kernel.org/bpf/bpf-next/c/4006c4b06c2c
 
-> I have studied the rest of the patches in the series,
-> so this proposal can be completely off the mark.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-This last is highly ambiguous.  Help?  ;-)
 
-							Thanx, Paul
