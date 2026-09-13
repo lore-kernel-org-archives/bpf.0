@@ -1,138 +1,292 @@
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E78529ACCD
-	for <bpf@vger.kernel.org>; Sun, 13 Sep 2026 01:26:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E27F7233944;
+	Sun, 13 Sep 2026 02:21:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789262820; cv=none; b=Yanjtv/Zwr+UNPN8JE1faHrasJ6bHkgw/8NMXLyWXx6uxN1MNjfh1EWuM0lv8E6trobKRpgESuP/17qDE9d1ZhZM8JE7CNqOMfe4FeLUzB3wL1YJQK49lI3o7WiPinU0y15faYp37Qfrsfz6j5vBfU0KhtoAfot6m/511UpZeRM=
+	t=1789266090; cv=none; b=s8iHXkAyVKNdbkbGutylnLaLQNdqtUfoDBXLopW1qgf0AuCPC4cI1LXSHsCm5pKzaxrr3V7vmDwjixmnWIkobLrUS6w4lC9uIgNNgdwSYM7726RBPNVdbo04DgwWFz0mNZpxdyobK2t2x2EwMWZAQVbUisNiIJGHIk4NeJMj5Sg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789262820; c=relaxed/simple;
-	bh=TSHs88GMB6DHBXH5X+N97OQWghhZeYcRWgEaIBLM84o=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=lO5UGnD+VPk1Pa40nYJ2ZaJD1IWJ1c++e7oMqzHaMXgULNfWVDzbL0w3lJNnZ5vHiEWyunbs0EktvQf2sMZ9DfNEbKuYfsNH17Cm6ABpJmU0pdLIb3BUicpCLOlxEl2TOSSnsslG4GBkC3JZDPJLi91G9SJzoqixtFzTBtRQu/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b1A0Tq4q; arc=none smtp.client-ip=209.85.161.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789266090; c=relaxed/simple;
+	bh=EDCQ6TRxWWLVY6KzBg/QxrPJsB7OcvQmxaIXpgPtK+I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=uX22RtIm/YyUSDcnuk3ECukxkmVvCYS0KXQg80Kc/5E7uPrbGfTXDKqsw0aBe2I6vG1K6Phw9BGwYwKsJMvZVRG6hcKc275C50dOKk6jdCif+GsE+UyQxVf6r6doJybVEZfXEDQGGA3snOo/qxYSFedHDcfeisc586DWI0HrHig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iUd7OCQV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b1A0Tq4q"
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6be1f18687bso1337376eaf.2
-        for <bpf@vger.kernel.org>; Sat, 12 Sep 2026 18:26:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789262817; x=1789867617; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=TSHs88GMB6DHBXH5X+N97OQWghhZeYcRWgEaIBLM84o=;
-        b=b1A0Tq4qeTahp1fZe74KI3PV5/kpr0BjIYOKlgrhpVIgvZctHXmrIKiDoUKMzgvfoy
-         Ezv6LVhfXyQhFawgeYB73T5QQNtRgwDL7gpMca09Qfw686QJTGcJycl19HWP+Yc3UNhW
-         uiAFXPkrGGCH3WgZvgWHmeo/faag6bKTZ3BcjBWgAw8/acS/KRyqBcaiG4rwRvupY8WK
-         tXnPt/N52F4NJ8fqZqmuPCidrGFx76zT9RUWECuvUtV/Fuy7sKBlk28uAwCX/vGiewNi
-         B0qWM2VPo0OjQdFlhPd7a3aVgG/sGU7iNXViVH9cRmPmyo13gtpxNc8fEwzVe5UcSiCV
-         Qsyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789262817; x=1789867617;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=TSHs88GMB6DHBXH5X+N97OQWghhZeYcRWgEaIBLM84o=;
-        b=M0LoOdrnIuLDXF8ygVC8wPYXIRwSAVDMZjOfbofmiawOawfKcLpBCDHQWVvzZyO0Cq
-         GdxW0Lu10R+RhEcVAZIpeaFVBthQI4ahdvy46Eph7BZw2UZaNxa0BNQQFBnoan5jYnZN
-         yUPimgRuBehPtUjAmFFg4K+WxVAdcOXOpyfJAi9/5I5PgtzArgrWKM/otTtVrdOD4j6t
-         YCxXzO82b8Tg2gTlzD2oIPZQCiiYknJZBPrA8wPWA05FZITGcae0a39T+MAFgcFSTyzJ
-         KuWHb8J1Jv6vp9It9ypcR2W+0xcgNcVTqp9m5Ydc+UvHJ4KdqYXYtfc/DZc2s/1H0UJd
-         +thQ==
-X-Forwarded-Encrypted: i=1; AKwUvByFObvyAh5Icls/KMdOA5XMKPSpZuqH9dmnEiwr/nvwfPGSdqsi+lHJBp4JGmsSWEqB9m0=@vger.kernel.org
-X-Gm-Message-State: AFuF++kpbtIlyclYZMXaMmu8XWh6is10iecLDDXJcpgTuprDBuIG3nCC
-	znFUIhQQNzKEt8BFJn7fwXPs6Wi9XpC8imSFLsnkziEHy7T4MnZ4Oe05
-X-Gm-Gg: AYBFou1CTNbh2692/3GRgq2OWy1MaC/JTTREZd+0HbNorfSKym8M0lv93YCWkFWKi97
-	xfaOQgp9ZDowAtoE8n2m99v9YvSAfds6a515I2oKv2np9/90gk/MM4LNTHL82VMr1g4WD/CDZNh
-	Ab5hjlBydhe21r/LEiXwZP6TRAIVfJnNQcf/LntASO6fv4X6vFWwk6p1KSvv3mCbadoPKil0gIZ
-	ALskpKq74+NAkG+QK1K0c99IgtxzQO0VszlQsEJor09K2m7a7CwbIn//tI67ApvbWY3AMQQLnzU
-	RGaQAV0tjS2lHssIEUS69Lo2e0QJ71SYvW8ZO2sVM8r6fnxZo6gHAqP9VBaGb+0m3ZW4eZ9dEmw
-	rtTQv9LC/zOGM31tH3/5dgXDqP+2Cqv6CxoccbWV7joq1Yk69B3SKuVgRcwTkLJYKvFfqKQMCLY
-	NOrsslNmQrcdH1On92dj2TxA29RSZyVS94Yq+GhjQ/SpClrD6cuM2PDzk7YLhAxJcRXz3jtLVX3
-	gaYhtypvNrD5CD/1B5q/vpOZ7yUfQj1jetaHWScGE04Kxu+eL3WMYxQcCDCR93I9w==
-X-Received: by 2002:a05:6820:160e:b0:6c2:3bff:3ef6 with SMTP id 006d021491bc7-6c23bff5dfdmr3227980eaf.29.1789262817080;
-        Sat, 12 Sep 2026 18:26:57 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:17::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-47df90faa62sm5431368fac.12.2026.09.12.18.26.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Sep 2026 18:26:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iUd7OCQV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F159F1F000FF;
+	Sun, 13 Sep 2026 02:21:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789266088;
+	bh=3RLEF3QrfNkDe4grxNTz/2ZEnivcqDKZSfyDCO+N2us=;
+	h=Date:From:To:Cc:Subject;
+	b=iUd7OCQVAY4mZ2XdHvO4Z4sJFhnT1iD/J2E5Jb6D+v8PpFCpj0jTrjC4S+HYX/pvb
+	 X0FwqN/m2tuit0Q3oCxgUmPdRBXVzB7obfSpPCnv8KS/Y0z+dXSwvKC9eBbj+rOVyg
+	 0bjyS0BlgTK0d2ayNCzFT2zljYWVbj++T7SfOGJDqMpG0gMjOeWdV9tPf5bIWqhGan
+	 V7LZGrB2cnIxHBhS0xwQZpJMgvQFRvJDVBnSAlbmz3Sw1QyXNzTWQsBPKIbhwCLm9n
+	 jskz1iT3sO22/6fByIbejGsI+bfvzXMBF9McxPM0u3wIAu5moGJpJ8QdF+SkWdVFwE
+	 VhQbyrr+ve+hw==
+Date: Sat, 12 Sep 2026 23:21:25 -0300
+From: Arnaldo Carvalho de Melo <acme@kernel.org>
+To: dwarves@vger.kernel.org
+Cc: Alan Maguire <alan.maguire@oracle.com>,
+	Ihor Solodrai <ihor.solodrai@pm.me>,
+	Eduard Zingerman <eddyz87@gmail.com>, Jiri Olsa <jolsa@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Alexis =?iso-8859-1?Q?Lothor=E9?= <alexis.lothore@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Jan Alexander Steffens <heftig@archlinux.org>,
+	Domenico Andreoli <cavok@debian.org>,
+	Matthias Schwarzott <zzam@gentoo.org>,
+	Dominique Leuenberger <dimstar@opensuse.org>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: ANNOUNCE: pahole v1.32 (DWZ alt files, lots of new regression tests,
+ BTF signatures, coverage analysis)
+Message-ID: <aqYIpbH800bWBnH3@x2>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 12 Sep 2026 18:26:55 -0700
-Message-Id: <DLDSQDSVXFHF.18X2UQUL5Y42D@gmail.com>
-Cc: "Nam Cao" <namcao@linutronix.de>, "LKML" <linux-kernel@vger.kernel.org>,
- "linux-trace-kernel" <linux-trace-kernel@vger.kernel.org>, "bpf"
- <bpf@vger.kernel.org>, "Wen Yang" <wen.yang@linux.dev>, "Tobias Schaffner"
- <tobias.schaffner@siemens.com>, "Viktor Malik" <vmalik@redhat.com>, "Linus
- Torvalds" <torvalds@linux-foundation.org>
-Subject: Re: [RFC PATCH 00/20] rv: Add support for BPF monitors
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Gabriele Monaco" <gmonaco@redhat.com>, "Steven Rostedt"
- <rostedt@goodmis.org>
-X-Mailer: aerc
-References: <20260831090524.106845-1-gmonaco@redhat.com>
- <87se3sakgi.fsf@yellow.woof>
- <df6e9168cb06c35e21db7f9d17cfbca6bd87005b.camel@redhat.com>
- <DL5B40CU17WD.3KD75URQZ6RRR@gmail.com>
- <eb3dd8158942d663ec8ad4c529eacd666c5f96d9.camel@redhat.com>
- <20260903090211.50d15220@gandalf.local.home>
- <CAADnVQK8e1Qp9rf1zThZxb3vr4Gc_bpo0nqpEO2LdnEwHdKokA@mail.gmail.com>
- <20260904074317.01b2c0e1@robin> <DL6O0KLPXLTA.2HJJUXQUVCP5@gmail.com>
- <20260904123108.1fa1d815@gandalf.local.home>
- <20260904132421.111c0279@gandalf.local.home>
- <DL6XBKITK7ZT.3RXK9YGGUYZZE@gmail.com>
- <20260904194620.0c7a8363@gandalf.local.home>
- <CAADnVQJH1SYR_GN6gewF3w_z_Sex9HFE1T1oXkQe6+v18bDTWA@mail.gmail.com>
- <20260904201741.2986efca@gandalf.local.home>
- <CAADnVQ+x4iRNXOg69nUmuJ53pB3-JtroePcyoReATy9+V1aRPg@mail.gmail.com>
- <228FE969-EBFF-4B60-B0E7-C1E4FD82FB8B@redhat.com>
-In-Reply-To: <228FE969-EBFF-4B60-B0E7-C1E4FD82FB8B@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri Sep 4, 2026 at 9:53 PM PDT, Gabriele Monaco wrote:
->
+Hi,
 
-Sorry for the delay.
+	The v1.32 release of pahole is out, with a lot of new regression
+tests, support for dwz alt files, which makes pahole finally support
+most if not all userspace DWARF files, signature improvements in the BTF
+encoder, support to LLVM based coverage analysis, and several scripts
+to help develop and test these utilities.
 
-> Alexei, what I read from your opinion is: if you really want to do this R=
-V thing, then you should just implement it all in BPF.
+Main git repo:
 
-yes.
+   https://git.kernel.org/pub/scm/devel/pahole/pahole.git
 
-> like the panic() one. Something BPF just shouldn't do, as I get it.
+Mirror git repo:
 
-There is a disconnect here.
-we have one KF_DESTRUCTIVE kfunc already. bpf_panic() can be another one.
-It will require CAP_SYS_BOOT.
+   https://github.com/acmel/dwarves.git
 
-> I'd rather discuss on what is the best approach /today/. And that's preci=
-sely why I submitted the talk for LPC.
+tarball + gpg signature:
 
-Excellent. We can start this discussion over email and continue at LPC.
-My understanding of RV is primitive, but from reading kernel/trace/rv/*.c
-it seems to me that it's a thin glue between tracepoints and monitors,
-a bit of boiler plate code via tracefs to enable monitors and seq file for =
-visibility.
-What you're proposing is "yet another monitor" that is reusing this glue co=
-de,
-and that's my main objection. I don't see the value in kernel/trace/rv/*.c.
-(kernel/trace/rv/monitors/* are useful, of course)
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.32.tar.xz
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.32.tar.bz2
+   https://fedorapeople.org/~acme/dwarves/dwarves-1.32.tar.sign
 
-What stops you from attaching tracing bpf progs to all tracepoints that you=
- need,
-pinning few "bpf iterator" progs in bpffs that will provide text or binary
-output via seq files, run a state machine inside the prog,
-and do whatever "verification" logic inside them ?
-You don't need the rv/*.c glue. I see no need to introduce new bpf struct-o=
-ps api
-just to look-like-a-monitor from RV glue perspective.
-"runtime verification" as a concept makes sense, so focus on that.
+	Thanks a lot to all the contributors and distro packagers,
+you're on the CC list, we appreciate a lot the work you put into these
+tools,
+
+Best Regards,
+
+- Arnaldo & Alan
+
+DWARF loader:
+
+- Support DW_FORM_GNU_ref_alt references to dwz alternate debug files
+- Add cu parameter to tag__set_spec() and dwarf_tag__set_attr_type()
+- Fix cus__merging_cu failing to detect DW_FORM_ref_addr
+- Support DW_TAG_imported_unit for same-file partial units
+- Allow forcing the merge of CUs for solving inter CU tag references
+- Initial support for DW_TAG_subprogram in DW_TAG_enumeration
+- Initial support for DW_TAG_variant_part
+- Replace stale FIXME/XXX comments with explanations
+- Fix data race in tag__init() decl_file string cache
+- Skip libdw__lock when elfutils is built thread-safe
+- Fix --fixup_silly_bitfields condition check
+- Fix annotation failure leaks in variable and typedef creation
+- Allocate type_dcu via dwarf_cu__new to fix dangling stack pointer
+- Analyze per-parameter information for true signatures
+- Collect per-parameter information
+- Detect aggregate ABI register usage and signature changes
+- Add support for DW_TAG_GNU_annotation
+- Extract die__add_btf_type_tag() helper [NFC]
+- Detect reordered parameters
+- Handle DW_AT_location attrs containing DW_OP_plus_uconst
+
+BTF loader:
+
+- Fix multi-dimensional array loading
+- Handle decl tag component_idx for parameters
+- Fix warnings due to type permutation
+
+BTF encoder:
+
+- Fix multi-dimensional array encoding
+- Fall back to objcopy when llvm-objcopy is not available
+- Add elf_strptr NULL checks and fix kfunc bounds
+- Fix early cleanup crashes in btf_encoder__new/delete
+- Use btf_encoder__tag_type() for all type ID computations
+- Fix interior pointer free and missing NULL check
+- Ensure the first same-name function has a non-zero address
+- Add O_TRUNC to btf_encoder__write_raw_file()
+- Only skip optimized parms when ABI changed
+- Emit true function signatures
+- Prefer strong function definitions for BTF generation
+- Add true_signature feature support for "."-suffixed functions
+- Fix a verbose output issue
+- Factor out BPF kfunc emission
+- Refactor btf_encoder__add_func_proto
+- Remove encoder pointer from btf_encoder_func_state
+
+pahole:
+
+- Fix -C -T segfault
+- Fix option name in the -m/-C error message
+- Apply the struct-only filters to unions
+- Don't match unions with --with_flexible_array
+- Fix --unions --packable segfault
+- Guard pipe_seek() against negative offsets
+- Use fseek for seekable files in --prettify and --seek_bytes
+- Skip inline expansions during BTF encoding
+- Fix parse_btf_features("all") being a silent no-op
+- Fix --errno typo that decrements instead of negating
+- Fix instance memory leak on early returns in
+  prototype__stdio_fprintf_value
+- Fix BTF function parameter type match check
+- Add "layout" BTF encoding feature
+- Fix discarded-qualifiers for strchr/strstr.
+- Refactor selftests
+
+Regression tests:
+
+- Add pfunct split BTF test to btf_split
+- Verify the downloaded perf tarball checksum before extracting
+- Use a portable high-resolution timestamp
+- Build the test_bin fixture in the per-test tmpdir
+- Use POSIX [ instead of [[ in test_lib.sh
+- btf_type_tag_order.sh: Use gawk for capture-group match()
+- Fix coverage build by respecting build-coverage/ in PATH
+- Add automatic perf building for cross-distro compatibility
+- Check minimum perf metadata records instead of exact counts
+- Fix perf tests for container environments
+- Force DWARF 5 in atomic_types test for _Atomic support
+- Skip tests gracefully on old bpftool versions
+- Skip instead of fail when old toolchains lack feature support
+- Fix gcc_true_signatures.sh compiler detection and awk syntax
+- Add prototype expression parsing and prettify test
+- Add codiff_multi_cu.sh to cover __cus__find_cu_by_name
+- Add BTF vmlinux encoding test
+- Add typedef chain display test
+- Add _Atomic type compile emission test
+- Add pahole scattered option paths coverage test
+- Add pahole --header_type, --range and --seek_bytes prettify test
+- Add codiff member type change and function prototype diff test
+- Add dwarf_loader.c bitfield recode and inlining edge case test
+- Add dwarves.c core API coverage test
+- Add prefcnt type reference counting coverage test
+- Add elf_symtab, gobuffer, dutil and pglobal coverage test
+- Add dwarves_emit and dwarves_reorganize coverage test
+- Add bitfield, cross-boundary and mixed member type test
+- Add BTF encoder coverage test for vars, floats and multi-CU
+- Add codiff terse, verbose and multi-CU diff test
+- Add pfunct CLI option coverage
+- Add pglobal variable and function listing test
+- Add multi-file loading test
+- Add 5 btf_encoder.c targeted coverage tests
+- Add medium-effort coverage tests for 5 uncovered code paths
+- Add CLI display, BTF encoding options and auxiliary tools tests
+- Add enumerator search test, in 2 csets
+- Add type containment and pointer search test, in 2 csets
+- Add coverage-diff.sh workflow and coverage_table.py reporter
+- Add LLVM source-based code coverage support
+- Add split BTF encoding test (vmlinux base + kernel module)
+- Add BTF_KIND_FWD encoding and loading round-trip test
+- Add BTF bitfield encoding/loading round-trip test
+- Add BTF FLOAT and ENUM64 type encoding tests
+- Add BTF VAR and DATASEC encoding test
+- Add expand_pointers, pfunct_stats and class_list_file tests
+- Add BTF arena type tag encoding test
+- Add pdwtags DWARF tag display test
+- Add codiff struct comparison test
+- Add bitfield layout and data member filtering test
+- Add sort output and separator test
+- Add display format options test
+- Add class name filtering test
+- Add compilable output and type filtering test
+- Add type expansion and anonymous struct test
+- Add sizes and holes display test
+- Fix mktemp suffix portability for Alpine Linux
+- Add emit_atomic.sh test and fix pfunct-btf-decl-tags.sh quoting
+- Reduce reproducible_build thread count iterations
+- Add --dump-artifacts to capture DWARF/BTF from binaries
+- Add --jobs/-j option to limit parallel test execution
+- Show referenced log file contents in verbose mode
+- Add --verbose/-v option for better failure diagnosis
+- Add PERF_BIN support and preserve build logs on failure
+- Add test number filtering and waiting status line
+- Add dynamic test timing and reordering to avoid slow tests blocking
+  results
+- Add --vmlinux option to specify vmlinux file for tests
+- Run test scripts in parallel
+- Fix test_lib.sh and test scripts to run from any directory
+- Guard cleanup() against empty outdir to prevent rm /*
+- Add BTF_FUNCTIONS_QUICK mode for fast CI iteration
+- Skip and find vmlinux tests when the running kernel vmlinux is not
+  available
+- Add inter-CU type reference comparison test
+- Add GCC default-BTF optimized parameter coverage
+- Add BTF true_signature encoding tests
+- Add btf_type_tag ordering test
+- Support GCC in pfunct-btf-decl-tags test
+- add gcc true signature test
+
+Build:
+
+- Automate the steps needed to release a new version
+- Add build-check-series.sh for bisectability verification
+- Add tarball targets similar to kernel's perf-tar-src-pkg
+- Add git SHA tracking via --devel_version option
+- Add test, coverage and list-targets make targets
+- Warn loudly when coverage instrumentation is enabled
+- Add vmlinux_comparison.py for DWARF/BTF analysis
+- Update minimum required version from 3.5 to 3.10
+
+Library:
+
+- Remove 11 dead functions found via coverage analysis, in 2 csets
+- Add exec_objcopy() shell-injection-safe helper
+- Fix variable shadowing in __cus__find_struct_by_name()
+- Fix heap buffer overflow in languages__parse realloc
+- Don't search for holes before member byte sizes are cached
+- Fix missing list head initialization in type__clone_members
+- libbpf sync with 1.8
+- Fix NULL dereference in remove_dyn()
+
+Man pages:
+
+- Improve language and formatting
+- Fix incorrect command line argument in documentation
+- describe layout BTF feature
+- document true_signature btf_feature
+
+CI:
+
+- Update LLVM version to 22
+- Add clang+aarch64 to matrix
+- build/install bpftool from kernel tree
+- Support building kernel with LLVM
+
+pfunct:
+
+- Add man page
+- Add support for split BTF
+- Mark file-local functions as static
+
+Other:
+
+- build-and-test-cmd.sh: Move build-dir detection to test_lib.sh, fix
+  container PATH
+- build-and-test-cmd.sh: Add CI build+test script
+- Fix -Wsign-compare warnings across the codebase
+
+btfdiff:
+
+- Remove leftover comment about --flat_arrays usage
+- Remove --flat_arrays now that pahole encodes multi dim arrays in BTF
+
+CTF loader:
+
+- Fix error path resource leaks
