@@ -1,104 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-6.mta0.migadu.com [91.218.175.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8713F327D
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 08:11:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 706A93EB81E
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 08:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789373483; cv=none; b=lw3Qlrlvx6yTVQqtSpjC6K8t+ebZWsKYkaSWMCrKhL4TPgWjqa5ReH4wl87wV4QoEOFjqLvtoWjDo+0KOnsZG9uvGM/CCi2ZJsNXmXA328CPE8Ui7F+Zat3HP3X86Y2lldx7ghB0eYmaSygTp2LXAjP9KntRTlsiiiALsIOT92w=
+	t=1789374273; cv=none; b=Rm7KZuXoQBcXPu5+5kABLmno5eT1DcGsUJK/M6YS9bZ8wlySldHnpExSXD/aQsd1+m9DWCoe1wD/XKOZ82Ff3R/YhHBTGXmnJ0swYOUgTpNY65lY6r2iL2zUMHMGz3CFKSg5so09OMwDgpCFZpYJ4zgXimsJKpiPVjA/ripNcZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789373483; c=relaxed/simple;
-	bh=LzNKOOtsB7XvUNiX+ePEJ42beuiwVnk8QTEK2XnY39s=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=HJHscxMsfETD8Ee/psMkVr9Fl/3c/ripp7RXvP1rR0wo+TYODuyjQE/JF6TMOQ6v9zcEz718ZYdqUE9H7h4MASeJrBMeyRol2/8SAOjLXxz49j5AswP0khE4xJU6LoY8jAV3nzE7V0PIqzDoZCLomRpHreOzMfLGZllNjQXTjfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSdg3oVA; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789374273; c=relaxed/simple;
+	bh=2CejH3qnQToq8Lckt6cRiGOTw0v5Aus/f1gzF5KY5j0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=R2vV6ul5oJ/DQiAOYe0pKYxIrw4L+9enHxeOLY8kqzSwEVDB4qsDAHQOybGh+BxoUIk6NuvztRm89eA0nI3cSQf36hZAmkasZoZp0tZmfLG6Eaup00j8qvgaE3HrqDQMnFFGtdqc3ipuADj9UEsXXGdJMLyCMY1eMmNGg1KTbP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NwuSyX6z; arc=none smtp.client-ip=91.218.175.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSdg3oVA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EB301F000FF;
-	Mon, 14 Sep 2026 08:11:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789373481;
-	bh=D2T0coOxde1+vHpNWOoD68p5jIgCFkQDORBG0Hgvjv8=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=lSdg3oVAp4i5+oZZdWF/TaT6buDkgSXmqEQHLnbaGq60+Kq7BvUxgOjquq8oAasq7
-	 Js+5oaQP/YOJw7dRS4gAewZmwG1oAZZjzs9Qkb1EX10u28YO+lHxSxqZoRESvwnxRy
-	 eaiLkG5q1+QQNHH2T2uBIj3DuV8uZpJjUL1I9wn1r+GZoNyBS/06LeHm+JJ7HCkro0
-	 FC9PBGBVlsNjR6iHk8Zy9mQrHAAAT6XpyJIncakInCrZ3DgbzlrFHvIrFauFxY/Z6L
-	 7wOfaz+rPmec6m+Ns6Iu2DFwTngzc5w/ZSCH5MyfHGqyzfcmFXt38JjiL9+vtBW2Oo
-	 hxbwoG/Q5K0qQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v3 3/5] blk-iocost: add iocost_ioc_tick tracepoint
- for per-period device summary
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tao Cui" <cui.tao@linux.dev>
-Cc: tj@kernel.org, bpf@vger.kernel.org, hannes@cmpxchg.org, mkoutny@suse.com
-In-Reply-To: <20260914073356.791518-4-cui.tao@linux.dev>
-References: <20260914073356.791518-1-cui.tao@linux.dev>
- <20260914073356.791518-4-cui.tao@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 14 Sep 2026 08:11:21 +0000
-Message-Id: <20260914081121.7EB301F000FF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NwuSyX6z"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=2CejH3qnQToq8Lckt6cRiGOTw0v5Aus/f1gzF5KY5j0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789374269; v=1; x=1789979069;
+ b=NwuSyX6zOkYl0/CMIDei0mL+vctK4IjBPo3H74nhkCeijXXLNd0CntAz0XSQoS5cBOhxoiPo
+ 2HHjUZ/ci+usTjfnTvutqaWycEUdBLuNWwWaKh8DQEGyYPSyS37/xuRFbb1XP0JCc3TMe1bKAGD
+ YEyDvmp9pZea8uavhrLB0kMc=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id faa09a68a2868c7b;
+	Mon, 14 Sep 2026 08:24:29 +0000
+X-Mizu-Trace-ID: faa09a68a2868c7b
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <da26d2f3-7283-4e9f-85b4-6c12b9beda99@linux.dev>
+Date: Mon, 14 Sep 2026 16:24:22 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf 1/2] bpf: drop duplicate check_app_limited in
+ tcp_bpf_push
+To: Geliang Tang <geliang@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Eric Dumazet <edumazet@google.com>,
+ Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Sabrina Dubroca <sd@queasysnail.net>, David Howells <dhowells@redhat.com>,
+ Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, mptcp@lists.linux.dev
+References: <cover.1789368148.git.tanggeliang@kylinos.cn>
+ <f12f1d886c8ff2b6f6e48f797ccc861037eda685.1789368148.git.tanggeliang@kylinos.cn>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <f12f1d886c8ff2b6f6e48f797ccc861037eda685.1789368148.git.tanggeliang@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] The tracepoint `iocost_ioc_tick` uses `div_u64()` with a 64-bit di=
-visor (`tick_dur`), which implicitly truncates the divisor to 32 bits and c=
-an cause a divide-by-zero kernel panic.
---
 
-commit 1f0b986a96c58d14982b08bd292007816d7d5b50
-Author: Tao Cui <cuitao@kylinos.cn>
+On 9/14/26 3:14 PM, Geliang Tang wrote:
+> From: Geliang Tang <tanggeliang@kylinos.cn>
+>
+> When the sendpage->MSG_SPLICE_PAGES migration series replaced
+> do_tcp_sendpages() with direct tcp_sendmsg_locked() calls, callers that
+> had used do_tcp_sendpages() kept an explicit tcp_rate_check_app_limited(sk)
+> that was originally needed to cover do_tcp_sendpages() (which did not call
+> tcp_rate_check_app_limited()). After the inlining, tcp_sendmsg_locked()
+> always provides the check, and the outer call became redundant.
+>
+> The site changed here, tcp_bpf_push(), is a MSG_SPLICE_PAGES loop that
+> holds the socket lock and only iterates when size > 0; tcp_sendmsg_locked()
+> is invoked on every iteration with state identical to what the outer call
+> sees, so dropping the outer call is safe and behavior-preserving.
+>
+> A potential benefit of this change is that it facilitates future reuse of
+> tcp_bpf_push() for sockmap support in protocols beyond TCP, such as MPTCP.
+> Since tcp_rate_check_app_limited() is TCP-specific while sendmsg_locked()
+> is a generic interface in struct proto_ops, this change allows us to switch
+> to different protocols via sk->sk_socket->ops->sendmsg_locked() without
+> carrying protocol-specific assumptions.
+>
+> Fixes: ebf2e8860eea ("tcp_bpf: Inline do_tcp_sendpages as it's now a wrapper around tcp_sendmsg")
 
-blk-iocost: add iocost_ioc_tick tracepoint for per-period device summary
 
-This commit adds a new iocost_ioc_tick tracepoint to the blk-iocost
-controller. It emits the overall controller state once per period from the
-tail of ioc_timer_fn(). This allows observability of steady-state and
-dormancy conditions without needing drgn to read kernel memory.
+Same as the tls one: this looks like a cleanup to me. Is there a real 
+regression that affects kernel or user behavior?
 
-[ ... ]
-> diff --git a/include/trace/events/iocost.h b/include/trace/events/iocost.h
-> index e772b1bc60d60..ec5d9c453d55a 100644
-> --- a/include/trace/events/iocost.h
-> +++ b/include/trace/events/iocost.h
-> @@ -178,6 +178,52 @@ TRACE_EVENT(iocost_ioc_vrate_adj,
-[ ... ]
-> +	TP_fast_assign(
-> +		__assign_str(devname);
-> +		__entry->cur_period =3D cur_period;
-> +		__entry->period_us =3D tick_period_us;
-> +		__entry->vrate =3D tick_vrate;
-> +		__entry->busy_level =3D tick_busy;
-> +		__entry->nr_active =3D nr_active;
-> +		__entry->usage_pct =3D tick_dur ?
-> +			div_u64(usage_us_sum * 100, tick_dur) : 0;
+Do we really need a Fixes tag?
 
-[Severity: High]
-Could this lead to a division by zero kernel panic?
 
-The div_u64() function expects a u32 divisor, but tick_dur is passed in as a
-u64 representing a time delta in microseconds. If the system experiences a
-long delay (such as a ~4294 second pause from a VM suspend/resume or a
-debugger session), tick_dur can be a multiple of 2^32.
-
-In that scenario, the full 64-bit value is non-zero, allowing it to pass
-the tick_dur ? safety check. However, the implicit cast to u32 inside
-div_u64() truncates the lower 32 bits to exactly 0, which would result in a
-divide by zero panic when the tracepoint is evaluated.
-
-Would it be better to use div64_u64() here to safely handle the 64-bit
-divisor?
-
-> +		__entry->running =3D tick_running;
-> +	),
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914073356.7915=
-18-1-cui.tao@linux.dev?part=3D3
+> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+> ---
+>   net/ipv4/tcp_bpf.c | 1 -
+>   1 file changed, 1 deletion(-)
+>
+> diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+> index 2e234d155b5e..d5fcf3ce4861 100644
+> --- a/net/ipv4/tcp_bpf.c
+> +++ b/net/ipv4/tcp_bpf.c
+> @@ -108,7 +108,6 @@ static int tcp_bpf_push(struct sock *sk, struct sk_msg *msg, u32 apply_bytes,
+>   		off  = sge->offset;
+>   		page = sg_page(sge);
+>   
+> -		tcp_rate_check_app_limited(sk);
+>   retry:
+>   		msghdr.msg_flags = flags | MSG_SPLICE_PAGES;
+>   		has_tx_ulp = tls_sw_has_ctx_tx(sk);
