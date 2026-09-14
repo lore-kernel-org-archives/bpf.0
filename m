@@ -1,116 +1,111 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-164.mta0.migadu.com [91.218.175.164])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1600E4119F9
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 08:43:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4EC3A5E6F
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 08:45:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.164
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789375402; cv=none; b=DKax98um2r+BicOsfxVFWU1Q1agt9zHqDTRTVQpgY7U2GSS3+s94fOdB5yLxDzdtK31A0Py+syxoZjUCUcNVDqTHMagWMgbtUhR+QdcvHvpH/q1yVg+FvC1iNR33zKDn/Tsyc0cwK7k8YXxC8nkaCN2vQr84fjDvDWH8pkXwpqY=
+	t=1789375542; cv=none; b=UR2+osfSRCg6EwkPnS5yHGd6DfdeTvjK0kJSLXQsrjj08zVWwEvwDs7h67PvVhLldj3seoR8XDOI+4ZELyfSXTTT2f8KLLQ8ybM0U/tqFTV8wnmhMFDN3Z8h2Kt/djE2BLN5/gQlaY8VSrPJ/8uNM4mdJZEYgaqS4YHOebEvqHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789375402; c=relaxed/simple;
-	bh=gd+qqjAMIqUJHMXe/UiAHncDTJYLgPQAMR6AsYzuoBA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eaBd62d3Jkkp4OK5CAawG08b+T9jNoeFKdzJgAvxtmFBKXSYnG5yvc/qYwQz0GdNKG8xbSNff2q++imCtK5k93H21o3a4SscZ1NMsIdg/4di9ufUBu1gDbdF+4BnhbJHvMlnRl39mRLA4WFe6JtDNt2sA7jydLrByUVBGbCm8o4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ODdIDkbu; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=rDOTwdKQ; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1789375542; c=relaxed/simple;
+	bh=fCmcEN2w/YvBwaV3b9hefPqZ881UJA7yaCsX2bSiwBE=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=eZ1E9xMSoUfOINiRq+s3tViIQ/XpHRcOFqWhShS48DL2sieUIzAR4IZK4WglwP2zJrPFJ7AJj7aU22aygkM1jtbRR6M86QJZh9OwJEIp0NnCFSf37iw4ogeeNENwfuqf4TywiVDF1ZNmkcd3sGe3+vxwhH6v2yWyMpNBGYu8rl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rggdLDl+; arc=none smtp.client-ip=91.218.175.164
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ODdIDkbu";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="rDOTwdKQ"
-Date: Mon, 14 Sep 2026 10:43:09 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1789375391;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ctiLvc9YkV+cVDeINxTojItvigNoXWATmW0CCJq6NUQ=;
-	b=ODdIDkbumMAcCWwMLx5PyrO8NixoHAI0XTWcxQzToORqpgoy2UJW5z4IBNGtFXeQJs9J5w
-	0fPvNz8GuF8vZB2k3L9qYF9888M4BnQBauCizml42HreKueCvVsrGqamAS4Od4TY3hMuIv
-	XL2lv9ldPYDIhRr3MtYjM2Qh1k3qhYhdEX4wGNt/SOp37hqjqfBcSQIfgre9Bq11UFyVQt
-	bA39jtqmPT62Qa7MOPH0H58BzaJWbZZxRpFs0apz6DRcO+FUekHhHq0e5kNKJxTpWgSAWO
-	rpFd7P4TCIXxuziknVF3eDVzG1n7BKKcQ0GicNPL4XEzApX98BaUFKFWw1cISA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1789375391;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ctiLvc9YkV+cVDeINxTojItvigNoXWATmW0CCJq6NUQ=;
-	b=rDOTwdKQDXAdYXTZI3N6NzGapyRKZineqcl2dG5w9Yu1l8vbgZGPLoZxXQy4PKs191Tgyl
-	+FKR8ZzinIX8/ACA==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: Replace %pK output with 0
-Message-ID: <20260914084309.f4ivXcU5@linutronix.de>
-References: <20260911145011.kErTVDkS@linutronix.de>
- <20260911150338.91D3E1F000FF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rggdLDl+"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=fCmcEN2w/YvBwaV3b9hefPqZ881UJA7yaCsX2bSiwBE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789375536; v=1; x=1789980336;
+ b=rggdLDl+ux+RGwDHHa9XHFZGs/Um7kD6ex8qfp/R/mxvKEbF4Rflx1jIq13ruUvxiw45vB2J
+ N2wkbcV4q6Mc9KqnX6IB++ftkJhPxtNRqvtiyZwLfYt6AG8RP3gWO1XxNTxZH3ic1jGu8x88gqJ
+ 9Bdv/Av19bL9PtrpvE599VtQ=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 454b48ababe58b17;
+	Mon, 14 Sep 2026 08:45:08 +0000
+X-Mizu-Trace-ID: 454b48ababe58b17
+X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Date: Mon, 14 Sep 2026 08:45:07 +0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20260911150338.91D3E1F000FF@smtp.kernel.org>
+From: gang.yan@linux.dev
+Message-ID: <0b7ac0ea84f0dea0092aa84d4aff3db0b6dc0f93@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH bpf 1/2] bpf: drop duplicate check_app_limited in
+ tcp_bpf_push
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, "Geliang Tang"
+ <geliang@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>, "Jakub
+ Sitnicki" <jakub@cloudflare.com>, "Eric Dumazet" <edumazet@google.com>,
+ "Neal Cardwell" <ncardwell@google.com>, "Kuniyuki Iwashima"
+ <kuniyu@google.com>, "David S. Miller" <davem@davemloft.net>, "Jakub
+ Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Simon
+ Horman" <horms@kernel.org>, "Sabrina Dubroca" <sd@queasysnail.net>,
+ "David Howells" <dhowells@redhat.com>, "Matthieu Baerts"
+ <matttbe@kernel.org>, "Mat Martineau" <martineau@kernel.org>
+Cc: "Geliang Tang" <tanggeliang@kylinos.cn>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, mptcp@lists.linux.dev
+In-Reply-To: <da26d2f3-7283-4e9f-85b4-6c12b9beda99@linux.dev>
+References: <cover.1789368148.git.tanggeliang@kylinos.cn>
+ <f12f1d886c8ff2b6f6e48f797ccc861037eda685.1789368148.git.tanggeliang@kylinos.cn>
+ <da26d2f3-7283-4e9f-85b4-6c12b9beda99@linux.dev>
 
-On 2026-09-11 15:03:37 [+0000], sashiko-bot@kernel.org wrote:
-> > diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c b/tools/=
-testing/selftests/bpf/progs/bpf_iter_udp4.c
-> > index 23b2aa2604de2..9b789f09f1462 100644
-> > --- a/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
-> > +++ b/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
-> > @@ -57,13 +57,13 @@ int dump_udp4(struct bpf_iter__udp *ctx)
-> >  	BPF_SEQ_PRINTF(seq, "%5d: %08X:%04X %08X:%04X ",
-> >  		       ctx->bucket, src, srcp, dest, destp);
-> > =20
-> > -	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %p=
-K %u\n",
-> > +	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %8=
-d %u\n",
->=20
-> [Severity: Low]
-> Does this %8d format incorrectly pad the 0 with spaces?
->=20
-> The networking subsystem replaced %pK with a literal 0, but replacing it =
-with
-> %8d here in dump_udp4() causes a mismatch with the native /proc/net/ outp=
-ut.
-> Since BPF iterators are designed as exact drop-in replacements, could this
-> mismatch break parsers that rely on strict spacing?
+September 14, 2026 at 4:24 PM, "Jiayuan Chen" <jiayuan.chen@linux.dev mai=
+lto:jiayuan.chen@linux.dev?to=3D%22Jiayuan%20Chen%22%20%3Cjiayuan.chen%40=
+linux.dev%3E > wrote:
 
-Indeed. I tried to match the pointer spacing for some reason. The
-formatting in net does not align with the columns starting with the
-inode which is %lu instead having 5 width same goes for ref. So I just
-ignored and moved on with a plain 0. I could update if this is
-considered important.
-
-> [ ... ]
+> Same as the tls one: this looks like a cleanup to me. Is there a real r=
+egression that affects kernel or user behavior?
 >=20
-> > diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c b/tools/=
-testing/selftests/bpf/progs/bpf_iter_udp6.c
-> > index c48b05aa2a4b2..9766eff7069ff 100644
-> > --- a/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
-> > +++ b/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
-> > @@ -65,13 +65,13 @@ int dump_udp6(struct bpf_iter__udp *ctx)
-> >  		       dest->s6_addr32[0], dest->s6_addr32[1],
-> >  		       dest->s6_addr32[2], dest->s6_addr32[3], destp);
-> > =20
-> > -	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %p=
-K %u\n",
-> > +	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %8=
-d %u\n",
+>=20Do we really need a Fixes tag?
 >=20
-> [Severity: Low]
-> Is the use of %8d here in dump_udp6() introducing the same formatting
-> mismatch as in dump_udp4()?
->=20
-> It seems it should use a literal 0 instead of %8d to exactly match the
-> networking subsystem's native output format.
+Hi=20Jiayuan,
 
-Yes it does but the extra spacing intends to align with the columns=E2=80=A6
+It's a part of the thread in [1], just kindly remind that there had some =
+comments from Matt:
 
-Sebastian
+'''
+Also, should this be seen as a fix? From what I understand, some
+behaviours have changed, and it is only recently that this call is no
+longer needed.
+'''
+
+From my view, it seems like that there have some misses in the 'fixed' co=
+mmit, so the fix tag
+should be kept, right?
+
+
+[1] https://lore.kernel.org/mptcp/b5f9e8d7-b738-1df6-3b5e-1d54cbbc663c@gm=
+ail.com/T/#m1fbcb32408236e2c68554fd26353c98bb59633f9
+
+Thanks
+Gang
+> >=20
+>=20> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+> >  ---
+> >  net/ipv4/tcp_bpf.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> >=20
+>=20>  diff --git a/net/ipv4/tcp_bpf.c b/net/ipv4/tcp_bpf.c
+> >  index 2e234d155b5e..d5fcf3ce4861 100644
+> >  --- a/net/ipv4/tcp_bpf.c
+> >  +++ b/net/ipv4/tcp_bpf.c
+> >  @@ -108,7 +108,6 @@ static int tcp_bpf_push(struct sock *sk, struct =
+sk_msg *msg, u32 apply_bytes,
+> >  off =3D sge->offset;
+> >  page =3D sg_page(sge);
+> >  > - tcp_rate_check_app_limited(sk);
+> >  retry:
+> >  msghdr.msg_flags =3D flags | MSG_SPLICE_PAGES;
+> >  has_tx_ulp =3D tls_sw_has_ctx_tx(sk);
+> >
+>
