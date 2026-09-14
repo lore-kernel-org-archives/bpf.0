@@ -1,147 +1,199 @@
-Received: from mail.avm.de (mail.avm.de [212.42.244.119])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D00F3EB81E;
-	Mon, 14 Sep 2026 07:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC19331EC7
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 08:04:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789372216; cv=none; b=T3AWLgI27eW1mrqQBcaqd15W61VGtE8U08ikEUe35hQmAO5k4r6siMSzY9MZ9m1e7tDm21lm/P/Sre82kt7N1G+sWJVFyfSzdfAy+8WoaTlymhXEugQAyPnkyQF7QW89kgPTIHpZYOulLOxGHXYnykiDNYU3esEiYOasY777eSU=
+	t=1789373046; cv=none; b=BfjqYNh+0Ky4onrbyDpZrcHkAOoxdRbIIUTIbZi6YDGKDCp3IdHAms7kpUQh+rdqsVFrpSappnjXDmRDFC6wOTdCMtWpCgNsLsgMtRSlY3WmHiilqfKof5qlniLpguEVkXZLSbSR22JAVg/mnHcYTNFfRMoaJkDlf54RsyE963Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789372216; c=relaxed/simple;
-	bh=Dz9apUf+u84aOX9At9CtayQ2nOTt9/cxRnAI075CIK8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K9OCCCymZANLo9HQof0lT/kOX9J7oqjfLUEu3Ljr1o4leeWTKuhIYhJi+P+gTzGH0U+bSuudmO74egBbNWoszfIAJkvHz/8x6+SqOC6OEfedjiw1hviEya4BE6lLSX1Hf1kiCjyfZ4BrKYfCWjOBaLbdGbjdr9dJGtpKQFpQaJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com; spf=pass smtp.mailfrom=fritz.com; dkim=pass (2048-bit key) header.d=fritz.com header.i=@fritz.com header.b=q6ST5aRZ; arc=none smtp.client-ip=212.42.244.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fritz.com
+	s=arc-20240116; t=1789373046; c=relaxed/simple;
+	bh=XF96A6qcrqKXndSv/XxZGp7N1fnoi1huM7jmpxURo40=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=D4Q9CtsALz+UggiAGnCOutP6vsY6v8YiSWRpTWx2jR+24BJPs0UpKV5jkrQMRK1PcunNxj+iUGhNdrnrAlqU1SIMjhgFE9rQscll9Q2cC/PUsb7vB59OhLIoPba3r4zQbBR6VZQq+PLIC6prcICpDIzyMT0qR+RYWQexWxCoRKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AUDACHvU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fritz.com header.i=@fritz.com header.b="q6ST5aRZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fritz.com; s=mail;
-	t=1789372202; bh=Dz9apUf+u84aOX9At9CtayQ2nOTt9/cxRnAI075CIK8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q6ST5aRZEJjpDhj7xywJe9leI/SVoCecBMa93qBOib3DJCAo4WdEJNBn8fH4P2F7L
-	 Zdj4aDRR1VNFFpQkz37WO+23ZFkbCDEqYeBq+AMV24Qpxo+pUhfePHITOI71oSofSt
-	 vEGGmhvuHFvBFuSAj5yhL7AAhE1lrVlvhW7RprnsW/hZ+QaQH7aIfgStTNkTqckfFS
-	 p3t68uJj3fLNwuWrEGjZ/fJYLlNmFClPItmb/r0omlwcYM5713AThlaMqV5SKBM+tO
-	 4g6mjXp/YpT/WxcPtgqUhR0fvhPHujEGm5Lr9K1nnI5e4yDYdiytXAgD5a0wRJjjmm
-	 AqpLQ3Bcyw3GQ==
-Received: from [2001:bf0:244:244::78] (helo=mail.avm.de)
-	by mail.avm.de with ESMTP (eXpurgate 4.57.1)
-	(envelope-from <n.schier@fritz.com>)
-	id 6aa7a72a-ea3f-7f0000032729-7f000001b804-1
-	for <multiple-recipients>; Mon, 14 Sep 2026 09:50:02 +0200
-Received: from mail-auth.fritz.com (unknown [IPv6:2001:bf0:244:244::78])
-	by mail.avm.de (Postfix) with ESMTPS;
-	Mon, 14 Sep 2026 09:50:02 +0200 (CEST)
-Date: Mon, 14 Sep 2026 09:50:01 +0200
-From: Nicolas Schier <n.schier@fritz.com>
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-	eddyz87@gmail.com, jolsa@kernel.org, ihor.solodrai@linux.dev,
-	yonghong.song@linux.dev, song@kernel.org, qmo@kernel.org,
-	martin.lau@linux.dev, memxor@gmail.com, emil@etsalapatis.com,
-	mcgrof@kernel.org, petr.pavlu@suse.com, tj@kernel.org,
-	kees@kernel.org, bpf@vger.kernel.org, nathan@kernel.org,
-	arnd@arndb.de, puranjay@kernel.org, yatsenko@meta.com,
-	atenart@kernel.org, ojeda@kernel.org, linux-modules@vger.kernel.org
-Subject: Re: [PATCH v2 bpf-next 13/18] kbuild: Add support for BTF inline
- information
-Message-ID: <20260914-axiomatic-meaty-lynx-8a5dc7@l-nschier-aarch64>
-References: <20260901165757.801449-1-alan.maguire@oracle.com>
- <20260901165757.801449-14-alan.maguire@oracle.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AUDACHvU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BF031F00893;
+	Mon, 14 Sep 2026 08:04:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789373044;
+	bh=GlM+5yiX0WMSIr0PYQ2g66awestSLY5v1RqK2Ii1HRw=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=AUDACHvUBweEBO6obF0KFALlVxUtXhyu4cetSEpAteOsW9XGY4uGcqPQMplPiTlnn
+	 FPIAL68fymeOrDajIYBkdKyCh4RpLEL0FCTYiFNq+bkUPwdV8ohzit/yApjYuED7NO
+	 VtByz3nkjLvbTPyoWHOidf+BsaDLBhlvri5l1wQkupKbAVS1XOZVvZ7/rWWB4uDYi7
+	 T4Dr3YVZTBBWFEC7UCBXkYUjDz/Ll0ipsNVC8flqgupJORxE1tVcdKrt68+rP3/mD8
+	 wmVY6gljdRgeX09mRkLuqw6P/80xK5cCra1SBj7DBN7AGiSCBsKPd32lsVdukEuUzY
+	 53TEkowsTsIgQ==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH v3 2/5] selftests/bpf: add iocost cost model test
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tao Cui" <cui.tao@linux.dev>
+Cc: bpf@vger.kernel.org, tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com
+In-Reply-To: <20260914073356.791518-3-cui.tao@linux.dev>
+References: <20260914073356.791518-1-cui.tao@linux.dev>
+ <20260914073356.791518-3-cui.tao@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 14 Sep 2026 08:04:03 +0000
+Message-Id: <20260914080404.5BF031F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260901165757.801449-14-alan.maguire@oracle.com>
-Organization: FRITZ! Technology GmbH
-x-ms-reactions: disallow
-X-purgate-ID: 149429::1789372202-0B4EA720-B279DB67/0/0
-X-purgate-type: clean
-X-purgate-size: 2754
-X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
-X-purgate: clean
-X-pfmilter: host: postfix-mx-02  mail-id: C6763A0446  external: no
 
-On Tue, Sep 01, 2026 at 05:57:52PM +0100, Alan Maguire wrote:
-> Add CONFIG_DEBUG_INFO_BTF_INLINE to generate BTF inline-location
-> information with pahole v1.31 and later.
-> 
-> Enable pahole's inline feature and pass --inline to resolve_btfids.
-> This extracts LOC_PARAM, LOC_PROTO, and LOCSEC types into a split BTF
-> blob named <output>.BTF.inline while the ordinary BTF remains in .BTF.
-> 
-> Embed the resulting blob in a .BTF.inline ELF section for vmlinux and
-> modules.  Add the vmlinux linker-script output section to avoid it
-> being treated as an orphan.
-> 
-> Use the inline pahole feature unconditionally for both in-tree and
-> external modules; the generated split BTF has the same format in both
-> cases.
-> 
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->  include/asm-generic/vmlinux.lds.h | 11 +++++++++++
->  lib/Kconfig.debug                 | 17 +++++++++++++++++
->  scripts/Makefile.btf              |  7 +++++++
->  scripts/gen-btf.sh                | 17 +++++++++++++++--
->  4 files changed, 50 insertions(+), 2 deletions(-)
-> 
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [Medium] Error path for cgroup storage allocation failure skips IOCOST_CO=
+ST_F_MERGE adjustment.
+- [Low] Multi-line comments do not follow the BPF subsystem strict guidelin=
+es.
+- [Low] IOC_PAGE_SHIFT is undeclared in the BPF program, causing a compilat=
+ion failure.
+--
 
-[...]
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 1244dcac2294..dd1b2d9ebe99 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -425,6 +425,12 @@ config PAHOLE_HAS_LANG_EXCLUDE
->  	  otherwise it would emit malformed kernel and module binaries when
->  	  using DEBUG_INFO_BTF_MODULES.
->  
-> +config PAHOLE_HAS_INLINE
-> +	def_bool PAHOLE_VERSION >= 131
-[...]
-> +config DEBUG_INFO_BTF_INLINE
-> +	bool "Provide information about inline sites in BTF"
-> +	default n
-> +	depends on DEBUG_INFO_BTF && PAHOLE_HAS_INLINE && SYSFS
+commit 1e892fcbbd8ad235ee3890cec52bb54f2b43ddb9
+Author: Tao Cui <cuitao@kylinos.cn>
 
-[...]
-> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
-> index a1812985a61a..d42dbc8d7199 100644
-> --- a/scripts/Makefile.btf
-> +++ b/scripts/Makefile.btf
-> @@ -22,7 +22,14 @@ endif
->  
->  pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)		+= --lang_exclude=rust
->  
-> +btf-inline := $(CONFIG_DEBUG_INFO_BTF_INLINE)
-> +ifneq ($(btf-inline),)
-> +btf-inline-feat := inline
-> +pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=$(btf-inline-feat)
-> +endif
+selftests/bpf: add iocost cost model test
+
+This commit adds an example cost model test implementing the builtin linear
+HDD formula at double cost. It registers the model via struct_ops and binds
+it to a device using io.cost.model, verifying the readback and testing write
+errors during restoration.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/iocost_model.c b/tool=
+s/testing/selftests/bpf/prog_tests/iocost_model.c
+> new file mode 100644
+> index 0000000000000..bf9f245e29a52
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
+[ ... ]
+> +static int bind_model(const char *dev, const char *name)
+> +{
+> +	char buf[300], got[64];
+> +	int err;
 > +
->  export PAHOLE_FLAGS := $(pahole-flags-y)
-> +export BTF_INLINE := $(btf-inline)
+> +	snprintf(buf, sizeof(buf), "%s model=3D%s\n", dev, name);
+> +	err =3D write_cost_model(buf);
+> +	if (err)
+> +		return err > 0 ? -err : -EIO;
+> +	err =3D readback_model(dev, got, sizeof(got));
+> +	if (!err && !strcmp(got, name)) {
+> +		/* restore the builtin linear model on every path so the
+> +		 * device is not left bound to a model the caller may
+> +		 * unregister right after; the write is checked too */
 
+[Severity: Low]
+This isn't a bug, but does this violate the BPF subsystem comment style
+guidelines? The BPF subsystem strict guidelines require multi-line comments
+to have the opening /* on its own line.
 
-As btf-inline and btf-inline-feat are not used anywhere else, and 
-CONFIG_DEBUG_INFO_BTF_INLINE can only be set for PAHOLE_VERSION >= 131, 
-this looks a bit noisy to me.  I think it would be good to keep that 
-change in scripts/Makefile.btf as short as possible, e.g.:
+> +		snprintf(buf, sizeof(buf), "%s model=3Dlinear\n", dev);
+> +		err =3D write_cost_model(buf);
+> +		return err > 0 ? -err : (err ? -EIO : 0);
+> +	}
+> +
+> +	/* bind failed or does not read back: still restore; prefer
+> +	 * the original failure, but surface the restore error too */
 
-    pahole-flags-$(CONFIG_DEBUG_INFO_BTF_INLINE) += --btf_features=inline
+[Severity: Low]
+This isn't a bug, but this comment also places the opening /* on the same
+line as the text, which doesn't match the required BPF multi-line comment
+style.
 
-and for scripts/gen-btf.sh something like:
+> +	snprintf(buf, sizeof(buf), "%s model=3Dlinear\n", dev);
+> +	{
+> +		int rerr =3D write_cost_model(buf);
+> +
+> +		return err ? (err > 0 ? -err : -EIO)
+> +			   : (rerr > 0 ? -rerr : -EIO);
+> +	}
+> +}
+[ ... ]
+> diff --git a/tools/testing/selftests/bpf/progs/iocost_model.c b/tools/tes=
+ting/selftests/bpf/progs/iocost_model.c
+> new file mode 100644
+> index 0000000000000..81928f897297c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/iocost_model.c
+[ ... ]
+> +#define IOC_PAGE_SIZE		4096
+> +#define IOC_SECT_TO_PAGE_SHIFT	3	/* 512B sectors to 4kB pages */
+> +#define LCOEF_RANDIO_PAGES	4096	/* 16MB seek threshold */
+> +#define IOCOST_COST_F_MERGE	(1ULL << 0)	/* not in BTF: a plain macro */
+> +#define IOCOST_REQ_OP_MASK	0xff		/* REQ_OP_MASK, not in BTF */
 
-    if is_enabled CONFIG_DEBUG_INFO_BTF_INLINE; then
-    	BTF_INLINE=inline
-    fi
+[Severity: Low]
+Is IOC_PAGE_SHIFT missing from these manual constant definitions?
 
+> +
+> +/*
+> + * DIV64_U64_ROUND_UP / DIV_ROUND_UP_ULL equivalents, folded at
+> + * compile time
+> + */
+[ ... ]
+> +SEC("struct_ops")
+> +u64 BPF_PROG(iocost_2x_calc_cost, u64 opf, u64 nbytes, u64 sector,
+> +	     struct blkcg *blkcg, u64 model_flags)
+> +{
+> +	u64 pages, seek_pages =3D 0, base, coef_page, randio, cost;
+> +
+> +	/* builtin truncates: max(sectors >> IOC_SECT_TO_PAGE_SHIFT, 1) */
+> +	pages =3D nbytes >> IOC_PAGE_SHIFT;
 
+[Severity: Low]
+Does this code compile? IOC_PAGE_SHIFT is defined in an anonymous enum with=
+in
+block/blk-iocost.c and is not exported to vmlinux.h. Attempting to use it
+here directly seems like it would cause a build error.
 
-Kind regards,
-Nicolas
+> +	if (!pages)
+> +		pages =3D 1;
+> +
+> +	if ((opf & IOCOST_REQ_OP_MASK) =3D=3D REQ_OP_READ) {
+[ ... ]
+> +	{
+> +		__u64 *cursor, cur;
+> +		int priced =3D (opf & IOCOST_REQ_OP_MASK) =3D=3D REQ_OP_READ ||
+> +			     (opf & IOCOST_REQ_OP_MASK) =3D=3D REQ_OP_WRITE;
+> +
+> +		cursor =3D bpf_cgrp_storage_get(&cursor_store,
+> +					      blkcg->css.cgroup, NULL,
+> +					      BPF_LOCAL_STORAGE_GET_F_CREATE);
+> +		if (!cursor)
+> +			return 2 * (base + pages * coef_page);
+
+[Severity: Medium]
+Does this early return miss the IOCOST_COST_F_MERGE adjustment?
+
+If bpf_cgrp_storage_get() returns NULL, we return immediately here, which
+skips the subsequent logic that zeros out base when model_flags has
+IOCOST_COST_F_MERGE set. Could this result in merged operations being
+incorrectly charged a base cost under failure conditions?
+
+> +		cur =3D *cursor;
+> +		if (cur && priced) {
+> +			seek_pages =3D sector > cur ? sector - cur
+> +						   : cur - sector;
+> +			seek_pages >>=3D IOC_SECT_TO_PAGE_SHIFT;
+> +			if (seek_pages > LCOEF_RANDIO_PAGES)
+> +				base =3D randio;
+> +		}
+> +		if (priced && nbytes &&
+> +		    !(model_flags & IOCOST_COST_F_MERGE))
+> +			*cursor =3D sector + (nbytes >> 9);
+> +	}
+> +
+> +	if (model_flags & IOCOST_COST_F_MERGE)
+> +		base =3D 0;
+> +
+> +	cost =3D 2 * (base + pages * coef_page);
+> +	return cost;
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914073356.7915=
+18-1-cui.tao@linux.dev?part=3D2
