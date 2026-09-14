@@ -1,116 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3B946F4BA
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 17:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A86B368D78;
+	Mon, 14 Sep 2026 17:18:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789406205; cv=none; b=mWDENEQdYT7Y+oVs57icIAOcrxsot6O9JxkWlir0TK6OPgCS1gwn/DwAIqy4hE0uE8JT4wtOfmnqRdnHHvkYqg5avFWW8c68Vm8eq4fGWLi2zeH7AJGFiA25XlwFXyZ9RZ6AwgyYTQxBGA3Q8HiPKYgE1dLe+5q2Xh0EFuc/we8=
+	t=1789406302; cv=none; b=AWONmy239gryeApOulMgK1UwrIJwL5M2Ayhc5n8yn7+YMYJ4p+5E+ITz4rPNMIB/amIQW1BatOkClKBl4bBYQODAwIYAgSWrZS9dc/oqFiEVDoYZGAW+0z3ZC0jHEaed/9WQeP8cx8/XbHLbViJsy06SfLFdaAGLbpJVF/+ryjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789406205; c=relaxed/simple;
-	bh=BWRmDAwW8/TQJtGMlGFLKIinMWFYb6Q5nBxjGnQ8lSc=;
+	s=arc-20240116; t=1789406302; c=relaxed/simple;
+	bh=pauKHZWnefu0Gep+Yagb66UL066ySpulAaOVGUW/esM=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=ckL6BjOHyiqwQ0gBsG1OPNx5uPcui/mi0Y2zQridAT1/8wbbBqUCG2PorJarzSPYw8mIihFPdqH90xUQbDJPpJpaCoxBaWLoWq5Eyq2zB8tUk19ndYEZ9OUmztjydnofZw9AI7dwlbBp9I6o+P0Y1anoj93Lpu44awbfdl8Dqlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KHvn0OwG; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=E+3totgCV23ycw+37cWOGe8UdIyPAX2GGVkUqZ+jhXipYv3BJvMj+PnP/bVUrNdPJ40aFUXcGBBJeJiqUV3UgzPYbteeN03ZhQOzcheDccYBPiSnwFftIiIyj0Lx3AjBr3qK0bETmKZmM42oEvcAxRf7eQQDfLuiZEjlpKB9Yj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jqegBZjG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KHvn0OwG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 438DE1F000FF;
-	Mon, 14 Sep 2026 17:16:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jqegBZjG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 219E01F00893;
+	Mon, 14 Sep 2026 17:18:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789406204;
-	bh=Lol7C2YQ87PNzXkMFR1B5g23cgY0acOVoZfUy8Re/Fk=;
+	s=k20260515; t=1789406301;
+	bh=pauKHZWnefu0Gep+Yagb66UL066ySpulAaOVGUW/esM=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=KHvn0OwGnqFvPkzfnk0lc0/gYjO/w90shfd0fftPEuw/nqptSrmxCpjQtThc0yUP1
-	 Q4hldpvhj/hlijl0TL64wVs9KP2W6lpBUUXsWqGfhNN5SusKt0BVnDKfwuSyDRudzu
-	 2r0SD35yZmT3q4oyD1A7E1nkDrrqppqsENCHJCn6gusKOdTLUu51e8TtY1pEAmHX1D
-	 Lzqc0LwLjZGnWkSHl/z5cHLM6a3qbz7nuEYRfBek0WuPBAs+/Rk5vxhvUkwMVSUJep
-	 TQnA9iFeZKwdr5NjKI9uqMU9Xg9znCl7jd6yVw46ogXcv53LhJKWeqqclLaG2khi1y
-	 1kTL41Rv9TjRw==
+	b=jqegBZjGFHivvTOkcrd4LsU6SjsE8bS8wg2bRQG8dmb2zUi5lEW0EoUQKKt/mVLPM
+	 R3j92zYpwoXFeJm9yoBqTTi+o+hA+S3S+Soqt2apm6sVHlfgLona+cic7xsflOyCyQ
+	 wWv8L14X10AIIUfCi9+tttmMuNTPrWTXiuX+subvlixhkxhMz1C6GdwjctkMGXUkjW
+	 B1vkJW21v8DOTs5PcgL6Pdfm2k62grfrGkl1/ewXLbSmcMBzdQV/ZGPheKIyDArAhF
+	 NfObdDplPUCHMeK1yHqjpNVRk7/vrkwnmceVPoN1FvBX40nA8kE17QCq850HUDR5BX
+	 1g27ty4UyIF6w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf] bpf: Skip unsettled links in link iterator
+Subject: Re: [PATCH v2 10/40] drivers/usb/mon: update to use mmap_prepare +
+ map kernel pages
 Reply-To: sashiko-reviews@lists.linux.dev
-To: "Weiming Shi" <bestswngs@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260914170206.170723-2-bestswngs@gmail.com>
-References: <20260914170206.170723-2-bestswngs@gmail.com>
+To: =?utf-8?b?TG9yZW56byBTdG9ha2VzIChBUk0p?= <ljs@kernel.org>
+Cc: "Heiko Carstens" <hca@linux.ibm.com>, "Oliver Upton" <oupton@kernel.org>, kvmarm@lists.linux.dev, kvm@vger.kernel.org, "Vasily
+ Gorbik" <gor@linux.ibm.com>, "Marc Zyngier" <maz@kernel.org>, linux-scsi@vger.kernel.org, linux-s390@vger.kernel.org, selinux@vger.kernel.org, linux-rdma@vger.kernel.org, "Alexander
+ Gordeev" <agordeev@linux.ibm.com>, linux-perf-users@vger.kernel.org, linux-trace-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, "Christian
+ Borntraeger" <borntraeger@linux.ibm.com>, bpf@vger.kernel.org
+In-Reply-To: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-10-7d9781ed5361@kernel.org>
+References: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org>
+ <20260914-b4-mmap-prepare-vma-flag-sanify-v2-10-7d9781ed5361@kernel.org>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 14 Sep 2026 17:16:43 +0000
-Message-Id: <20260914171644.438DE1F000FF@smtp.kernel.org>
+Date: Mon, 14 Sep 2026 17:18:19 +0000
+Message-Id: <20260914171820.219E01F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
+> Replace the deprecated .mmap hook with its replacement .mmap_prepare. As
+> part of this change, additionally take the approach of mapping pages upon
+> mmap rather than providing a fault handler.
+>=20
+> The page span cannot be mutated when an mmap mapping is in place, so this
+> is safe to do in advance (the MON_IOCT_RING_SIZE ioctl operation exits
+> -EBUSY if it's attempted, gated by the rp->mmap_active reference count).
+>=20
+> Utilise the newly introduced mmap_action_map_discontig_kernel_pages() to =
+do
+> this, which allows for iteration over pages in mon_bin_discontig_get().
+>=20
+> mon_bin_discontig_init() increments the rp->mmap_active reference count to
+> stabilise page spans. Should an error arise the core unmaps the VMA and
+> mon_bin_vma_close() drops the reference again.
+>=20
+> [ ... ]
+> page discarded with MADV_DONTNEED is not repopulated and a subsequent
+> access raises SIGBUS, as with other pre-populated kernel mappings.
+>=20
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-Pre-existing issues:
-- [High] Preexisting race condition between btf_put() and btf_idr iteration=
- causes refcount saturation and Use-After-Free.
---
-
-commit c9cafeb12312032e3482a8253aec4ec8da20e91f
-Author: Weiming Shi <bestswngs@gmail.com>
-
-bpf: Skip unsettled links in link iterator
-
-This commit fixes a use-after-free in the BPF link iterator by ensuring
-unsettled links (with ID zero) are skipped during IDR traversal. It prevents
-taking references on transient links that might be freed concurrently.
-
-> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-> index 853b47f813842..244a939b9d2da 100644
-> --- a/kernel/bpf/syscall.c
-> +++ b/kernel/bpf/syscall.c
-> @@ -6042,7 +6042,10 @@ struct bpf_link *bpf_link_get_curr_or_next(u32 *id)
->  again:
->  	link =3D idr_get_next(&link_idr, id);
->  	if (link) {
-> -		link =3D bpf_link_inc_not_zero(link);
-> +		if (link->id)
-> +			link =3D bpf_link_inc_not_zero(link);
-> +		else
-> +			link =3D ERR_PTR(-EAGAIN);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but while looking at this fix for
-bpf_link IDR iteration, is there a similar race condition in the BTF IDR
-iteration?
-
-In kernel/bpf/btf.c, btf_put() decrements the refcount outside the IDR lock:
-
-kernel/bpf/btf.c:btf_put() {
-    if (btf && refcount_dec_and_test(&btf->refcnt)) {
-        ...
-        /* btf_free_id(btf) is called later, acquiring the lock */
-
-Concurrently, iterators like bpf_find_btf_id() or bpf_core_add_cands()
-iterate over btf_idr holding btf_idr_lock and unconditionally increment
-the refcount via btf_get() (which maps to refcount_inc()).
-
-Could this lead to btf_get() incrementing a 0-refcount object before it is
-removed from the IDR?
-
-If the refcount is incremented from 0, it saturates the refcount and trigge=
-rs
-a kernel warning.
-
-Furthermore, after the iterator drops btf_idr_lock to do a slow linear
-search without holding rcu_read_lock(), btf_put() can proceed to remove
-the ID and schedule the RCU callback to free the BTF memory.
-
-Does this expose the iterator to a use-after-free when accessing the BTF
-object later?
-
-Would it be safer to use refcount_inc_not_zero() during BTF IDR traversal,
-similar to how bpf_link_inc_not_zero() is used here?
-
->  		if (IS_ERR(link)) {
->  			(*id)++;
->  			goto again;
+Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914170206.1707=
-23-2-bestswngs@gmail.com?part=3D1
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914-b4-mmap-pr=
+epare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org?part=3D10
+
