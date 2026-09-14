@@ -1,115 +1,132 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5FF935E92B
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 18:53:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ECCF3BCD3F;
+	Mon, 14 Sep 2026 19:14:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789412007; cv=none; b=tNq6882mMfcNo7YIwS7czDM2xM4qBq3s77VIK8p8pIwixgxDcUsmlMMfXnA7D5Jlh1Q+p+mzJGQIn6h8sV7uNs6sqAygyABHRQCnluNVFiQJidjggOo0q3Uc9X84HqP44/S3iNfvhnVPApvxU0F6PBjOVBvR4JeNaFdlwWTBueY=
+	t=1789413257; cv=none; b=Hm5mRLwOeUAoYrB+qOyhnsf0grcsgO8kCEqRChdpgUC3FwYVfcNmcl2lbYLsYEsob/Z92QuIFkqt9DhhaWIRWRfNto0RWLcE0GAJVoHG3ynttgeGsPXPd0hiWHHMi9JWDja2WdP+diPssiVxs/B3qicwWGr6Ul7Cnj+eHL5Fs6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789412007; c=relaxed/simple;
-	bh=2b/76hpgaSQP0hQ7+44gyLU8NATJXUjkuyIUA2DxYck=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cKj52THcBmM/eSJlA/0Gig2eOx6jc2fmqRUC1aG7eGk7GTEwq9kL5dVAqJCsF37AeZl29jo2fg5Z2bkLaRBIr0aDY5L+WQ/9XgoxbE7s/4CcsTdNnjGhoScajl3ZpwzKCqK2RqOW5TjTxPucp3rvoGArBotxXmHPBBDvaMK2gvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fuiRWAqn; arc=none smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789413257; c=relaxed/simple;
+	bh=SRFDGk3qpnc8cxJg10D+z8x4vSYb1keyRTEcClt1Qac=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=CeveRaekH8d3G8N0ENUqsj5CgI1wVDNyztLje4TngvTJZMyig7SiHQxoH9vmaAKkkS0T3uX1LBAOp6zZM8jpPUqKCJxcAgjWKPisAYZlD3vJC8ONbQK3DhRCwW2ZF/SL7SoQxXd1nP+iExYH7rn2P/+q2K83a+KMjELxOGPS/Jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fdyOzcNX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fuiRWAqn"
-Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2dd53691be5so21321465ad.1
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 11:53:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789412005; x=1790016805; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=2b/76hpgaSQP0hQ7+44gyLU8NATJXUjkuyIUA2DxYck=;
-        b=fuiRWAqns/wSie2131XsH/F0ggm0KZ0iMHc2QmRNjhWPTw99aj8tONixIM31b6xv7u
-         kxswAFNLDH4tr75ThAJg12ZO5hAwmVPRU0Xc1tXC/7Dhwm6d//7UZlu/6KspjKt8oDXU
-         qqt6Coce//sjSONArkaNCnu8QzjdhaIvMBCxUqB41UNDS3+m9yobBltsv+BJ86LLEMed
-         w4UvAtBh1MFBvu8KBZM7OiXIM/70AEqshPeiWicGXRjX8YiGqlIM7SYVSjgivVqStvrK
-         hPJ+V7+tm7e1dbqO4gtwnxY/wkYUisTUjRHOKppQAWBZ9CwNdb88xhFXutluDTgKZl5/
-         NkTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789412005; x=1790016805;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=2b/76hpgaSQP0hQ7+44gyLU8NATJXUjkuyIUA2DxYck=;
-        b=XHTJN5rDux0OUqhUulZDsJPY+83ls3T0lh2unK8YrhG6BnkLFYbVxRqYYWogar0xqo
-         3Q4HaAcMsiAYw3bHIaxF3Dl0v6ihUjm0tlzcEMjHBNdNIzc8WPj33lMVgXNCTEpdV2E6
-         9+1hB55C1YKxeU1GryJsPjFMPhUgsq55iNVPo6WOXmUd6XHFFbk3oYXcFW1qpOb287CI
-         a9vL8QVp3towF9HZdOSBarYbWwnp7CSXe1Uf7+fBUwypCgaE6KmAl43V+llpATaj87KS
-         m8quPU1v9nt9sA+PYYHkOAdeDr1maCGbnrkl05054i6ySbqapmoEh1X6OGaUnGtKZtsG
-         IdOQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwjC7/xNIo18dCR9m48RQhmXR4Oie5qNmWpk8kFccPA8X/tyS8bcc/LtFXY+gn2gEbIhFs=@vger.kernel.org
-X-Gm-Message-State: AFuF++nUqwaSEFbfYEy7n8ntxXDOzrn8uRYD6muzBe5CpXysPaEI6r0L
-	+WR8Fu51EMViuoyq7QUO3UkTX23kTKzjXqXl267BTUWevoojJLZ+2WJL
-X-Gm-Gg: AYBFou1nbrg0Keqa3FBCXd+I/AC3YaOJqaCrfyv0pGEMP2EjPn9sFk4Z58wZl1HB0xj
-	jIlFOj/GM6+3yuM/E1I9rzNNK3eemksGvwlCbKNOr/t7gn/pWmdl/KbO4Ck7pXg5g0/k0d+Xj2Q
-	FBDzLmDtMMeUvbVzyq71RSbG0ZNioOejGmXWyb3PP2WDBTkcd7jv+OuH0Um7uFenmZpUMLtalkq
-	Og4/722cBZrVVA29ymBgXzTlZmPuX37A5LOB9e0oCsfOQ8PcFpiC+Er5ZyF9jXUns82BWz0krFS
-	HEYimUz8T5R5aP0h+niuyYZ5zj84zMBWiiGK6BiY2d7y5N+Xl6IXMk5fxzRNJcjyIJlBYemUVhI
-	IuraQ0+EnK/CuOole9NlrkFc00o+CnvrjmZ36KzcvgA8cK0LfAdEJ4q5jSpPJRN0XO1hBehaQ4+
-	6XOFKzKuRlHwfmIvL0kZUbViB/UQoxfpToZHKcpLhpjqOPmgZ9qL/3yKXONxXt7JEEl+CvIbcZp
-	otkOfWx+guv9BauTD9CH1Gkots=
-X-Received: by 2002:a17:90b:164d:b0:398:9c00:29ec with SMTP id 98e67ed59e1d1-39dec0a8e92mr6752885a91.20.1789412004886;
-        Mon, 14 Sep 2026 11:53:24 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39dfda7d765sm790763a91.10.2026.09.14.11.53.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 11:53:24 -0700 (PDT)
-Message-ID: <88c41074d181feb8d1c9e22eee4a0f25de1dac15.camel@gmail.com>
-Subject: Re: [PATCH bpf v3 2/7] bpf: Preserve packet pointer class
- displacement in regsafe()
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Nicholas Carlini <npc@anthropic.com>, Alexei Starovoitov
- <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	kkd@meta.com, kernel-team@meta.com
-Date: Mon, 14 Sep 2026 11:53:21 -0700
-In-Reply-To: <20260914131701.2529725-3-memxor@gmail.com>
-References: <20260914131701.2529725-1-memxor@gmail.com>
-	 <20260914131701.2529725-3-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fdyOzcNX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 601501F000FF;
+	Mon, 14 Sep 2026 19:14:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789413248;
+	bh=qqxU0Tn+w3Hq00cDDV6qBR7mESGDkdB5AXWrXBPmMYo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=fdyOzcNXteGBR+HJ16HFzmf2Ocq5Jt8sfM5EH6vMJ7T+zPMdR4Dl2pc2jPpc8L+Kh
+	 P/KbIo7c59agqkkQ5OZMKCQbzKTfagtUUv2IpxJ29pB6ZOAzWPs4Rmh8frKdylgb5j
+	 j6ZcoEgypvV4fpIvRFM9yU2FJAu2Jf4hUzxgUsTBscpmLrq5X1BRYZ3biRuT67UKO6
+	 f1uhUuQy20b3kMZF+yxm2/yHksUQoGzX3CbwCZTR7J7onEFAr0TABQnjEF8+Jz1wL3
+	 0SEgHEgGUx1j6IKLOUWUlsN22yQB0oUvc0Mn7dv5aSiqh49wd75yuhb28dTQU9MkwJ
+	 QxO8+18KURdZA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 16/40] mm/vma: only allow mmap to clear
+ VMA_MAYWRITE_BIT if kernel-owned
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?TG9yZW56byBTdG9ha2VzIChBUk0p?= <ljs@kernel.org>
+Cc: bpf@vger.kernel.org, "Heiko Carstens" <hca@linux.ibm.com>, linux-perf-users@vger.kernel.org, linux-trace-kernel@vger.kernel.org, kvm@vger.kernel.org, "Alexander
+ Gordeev" <agordeev@linux.ibm.com>, linux-scsi@vger.kernel.org, "Marc
+ Zyngier" <maz@kernel.org>, kvmarm@lists.linux.dev, selinux@vger.kernel.org, linux-s390@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org, "Christian
+ Borntraeger" <borntraeger@linux.ibm.com>, "Vasily Gorbik" <gor@linux.ibm.com>, "Oliver
+ Upton" <oupton@kernel.org>
+In-Reply-To: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-16-7d9781ed5361@kernel.org>
+References: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org>
+ <20260914-b4-mmap-prepare-vma-flag-sanify-v2-16-7d9781ed5361@kernel.org>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10+b1 
+Date: Mon, 14 Sep 2026 19:14:06 +0000
+Message-Id: <20260914191407.601501F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Mon, 2026-09-14 at 15:16 +0200, Kumar Kartikeya Dwivedi wrote:
-> regsafe() maps packet pointer IDs between states and checks that each
-> current register range is a subset of the corresponding explored
-> register range. It does not, however, preserve the displacement between
-> registers that share a packet pointer ID.
->=20
-> This is unsound because packet range is shared by ID. A bounds check on
-> one class member updates every member, and a later access can consume the
-> range through another member. Commit 022ac0750883 ("bpf: use reg->var_off
-> instead of reg->off for pointers") folded the fixed pointer offset into
-> r64 and removed the old off equality check, so two individually narrower
-> registers can prune even when their displacement has changed. The
-> explored path can then license an out-of-bounds packet access on the
-> pruned path.
->=20
-> Require matching range bases for packet pointers with an ID. Together
-> with the existing ID mapping, this preserves the displacement between
-> members of each packet-pointer class without adding per-ID state.
-> Packet pointers without an ID remain unaffected.
->=20
-> Fixes: 022ac0750883 ("bpf: use reg->var_off instead of reg->off for point=
-ers")
-> Reported-by: Nicholas Carlini <npc@anthropic.com>
-> Suggested-by: Nicholas Carlini <npc@anthropic.com>
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Pre-existing issues:
+- [Critical] VMA flags and `pgoff` modifications performed by `mmap_action_=
+prepare()` are lost in `call_mmap_prepare()`, resulting in missing `VM_MIXE=
+DMAP` / `VM_PFNMAP` flags on the final VMA.
+--
 
-...
+commit 7ddd38612e8ff73188b344ec633bfe65678e0dce
+Author: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+
+mm/vma: only allow mmap to clear VMA_MAYWRITE_BIT if kernel-owned
+
+For ordinary files the only way the VMA_MAYWRITE_BIT flag is cleared is if
+the underlying file is itself read-only.
+
+[ ... ]
+
+As all drivers which clear VMA_MAYWRITE_BIT establish kernel-owned
+mappings, no functional change is intended.
+
+> diff --git a/mm/vma.c b/mm/vma.c
+> index 2648fb0e19959..d71ec51255b18 100644
+> --- a/mm/vma.c
+> +++ b/mm/vma.c
+> @@ -2795,6 +2795,11 @@ static int mmap_validate(unsigned long prev_start,
+>  	if (WARN_ON_ONCE(!was_maywrite && is_maywrite))
+>  		return -EINVAL;
+> =20
+> +	/* Only kernel-owned mappings may clear VMA_MAYWRITE_BIT. */
+> +	if (!vma_flags_is_kernel_owned(curr_flags) &&
+> +	    WARN_ON_ONCE(was_maywrite && !is_maywrite))
+> +		return -EINVAL;
+> +
+>  	return mmap_validate_vma_flags(curr_flags);
+>  }
+
+[Severity: Critical]
+This isn't a bug introduced by this patch, but while reviewing mm/vma.c,
+I noticed a potential issue in call_mmap_prepare():
+
+mm/vma.c:call_mmap_prepare() {
+	/* Update fields permitted to be changed. */
+	map->pgoff =3D desc->pgoff;
+	if (desc->vm_file !=3D map->vm_file)
+		map->vm_file =3D desc->vm_file;
+	map->vma_flags =3D desc->vma_flags;
+	map->page_prot =3D desc->page_prot;
+	/* User-defined fields. */
+	map->vm_ops =3D desc->vm_ops;
+	map->vm_private_data =3D desc->private_data;
+
+	/* It's invalid for mmap_prepare hooks to clear vm_ops. */
+	if (!desc->vm_ops)
+		return -EINVAL;
+
+	err =3D call_action_prepare(map, desc);
+	if (err)
+		return err;
+}
+
+Are the VMA flags and pgoff modifications performed by call_action_prepare()
+lost here? Since map->vma_flags and map->pgoff are initialized from desc
+before calling call_action_prepare(), the updated fields in desc are never
+synchronized back to map.
+
+Could this lead to missing VM_MIXEDMAP or VM_PFNMAP flags on the final VMA?
+
+If unprivileged userspace calls mmap() on a driver using remap_pfn_range(),
+might the core memory management subsystem treat hardware/PFN mapped pages
+as normal anonymous or file-backed RAM pages?=20
+
+This could result in the kernel attempting to manage page reference counts =
+on
+arbitrary physical I/O memory PFNs when the VMA is later unmapped or
+accessed, potentially leading to immediate crashes or silent corruption.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914-b4-mmap-pr=
+epare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org?part=3D16
