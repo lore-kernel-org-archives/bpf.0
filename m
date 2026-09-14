@@ -1,199 +1,123 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC19331EC7
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 08:04:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 299C2331EC7;
+	Mon, 14 Sep 2026 08:07:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789373046; cv=none; b=BfjqYNh+0Ky4onrbyDpZrcHkAOoxdRbIIUTIbZi6YDGKDCp3IdHAms7kpUQh+rdqsVFrpSappnjXDmRDFC6wOTdCMtWpCgNsLsgMtRSlY3WmHiilqfKof5qlniLpguEVkXZLSbSR22JAVg/mnHcYTNFfRMoaJkDlf54RsyE963Q=
+	t=1789373236; cv=none; b=tqPps2Iv/4qUonVt+sDIc9FOHoCD7YMcv01PTKLF1ypfq23Usl0N4zxY1SCzXFqiqnRy9EWBy2LtnKFowBT5toh/v+mG7rz8yxSpy/gWo6vO7WWgadQmEasQdHGATrkPHdMh5BzT42GbVF4mPqh7W4VfgkHI+Ynszc7o0SNRZ2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789373046; c=relaxed/simple;
-	bh=XF96A6qcrqKXndSv/XxZGp7N1fnoi1huM7jmpxURo40=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=D4Q9CtsALz+UggiAGnCOutP6vsY6v8YiSWRpTWx2jR+24BJPs0UpKV5jkrQMRK1PcunNxj+iUGhNdrnrAlqU1SIMjhgFE9rQscll9Q2cC/PUsb7vB59OhLIoPba3r4zQbBR6VZQq+PLIC6prcICpDIzyMT0qR+RYWQexWxCoRKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AUDACHvU; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789373236; c=relaxed/simple;
+	bh=gLguI1Dvj1p9Hs1Gtajg0sdQbCBo0v751JRhitynJ/0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=iNToaLbPcdJQlqn9a3cLbsbKlwDQ5orKd8K15lQg9/gacU1AEsy0Hpo+DkKVdLVSeYLq+TgFMZlavDEYcMkoCqzAPUuUBUO6TmhsK1/7lfKV7fiQA1WxJQ4k9OMiB8HuhEiWlU3x4pCiUx+GvAhhRRQIKNjcuQHkuWHNPSqgpBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XUlLGMdJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AUDACHvU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BF031F00893;
-	Mon, 14 Sep 2026 08:04:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XUlLGMdJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 805B51F000FF;
+	Mon, 14 Sep 2026 08:07:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789373044;
-	bh=GlM+5yiX0WMSIr0PYQ2g66awestSLY5v1RqK2Ii1HRw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=AUDACHvUBweEBO6obF0KFALlVxUtXhyu4cetSEpAteOsW9XGY4uGcqPQMplPiTlnn
-	 FPIAL68fymeOrDajIYBkdKyCh4RpLEL0FCTYiFNq+bkUPwdV8ohzit/yApjYuED7NO
-	 VtByz3nkjLvbTPyoWHOidf+BsaDLBhlvri5l1wQkupKbAVS1XOZVvZ7/rWWB4uDYi7
-	 T4Dr3YVZTBBWFEC7UCBXkYUjDz/Ll0ipsNVC8flqgupJORxE1tVcdKrt68+rP3/mD8
-	 wmVY6gljdRgeX09mRkLuqw6P/80xK5cCra1SBj7DBN7AGiSCBsKPd32lsVdukEuUzY
-	 53TEkowsTsIgQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v3 2/5] selftests/bpf: add iocost cost model test
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tao Cui" <cui.tao@linux.dev>
-Cc: bpf@vger.kernel.org, tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com
-In-Reply-To: <20260914073356.791518-3-cui.tao@linux.dev>
-References: <20260914073356.791518-1-cui.tao@linux.dev>
- <20260914073356.791518-3-cui.tao@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 14 Sep 2026 08:04:03 +0000
-Message-Id: <20260914080404.5BF031F00893@smtp.kernel.org>
+	s=k20260515; t=1789373234;
+	bh=bUESejhHEH3ffsQbUQdnbBFslDvX6q6Ex6c04pHGd1I=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=XUlLGMdJqf8ThjYG5If3HiL3sunkq4qlh2J7gR0dY7dh8rfPxdOGWWnbIJinsy7NU
+	 IAMHyYW/Ff5If7Mbp7E3sC6AD6vggyIYVRh3PMQaLGM4Rsw2AH40pepP3Bq1hHG+tU
+	 uVSV6Yvg6YI8SaBJa+lL5kqiE149fCR7gAWPgYYtpj71WZzqUYMoijkFcl8Gr/nQ8A
+	 sIpPyzTEVOxtoPf4/gqJ+Aatct0Y/yA/e8TGLOenckNSL0yXcsP5AhTk44WRBT3l9c
+	 PDdEC5d/LNXifsmIOz+r8lLn7vj7pxhHddmFs21V7TxReqwLo1e7Ptk7wXnefhzjNP
+	 78TIXM6Sni8cQ==
+Content-Type: multipart/mixed; boundary="===============8455009711460534272=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <f960ceb7616cb646c818809a3b5f7890d5c63573c6175f3b92f2fa19bfe54a2e@mail.kernel.org>
+In-Reply-To: <d98eef55bd417f7166a30a9998a3b34e7f0b229d.1789368148.git.tanggeliang@kylinos.cn>
+References: <d98eef55bd417f7166a30a9998a3b34e7f0b229d.1789368148.git.tanggeliang@kylinos.cn>
+Subject: Re: [PATCH net 2/2] tls: drop duplicate check_app_limited in tls_push_sg
+From: bot+bpf-ci@kernel.org
+To: geliang@kernel.org,john.fastabend@gmail.com,jakub@cloudflare.com,jiayuan.chen@linux.dev,edumazet@google.com,ncardwell@google.com,kuniyu@google.com,davem@davemloft.net,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,sd@queasysnail.net,dhowells@redhat.com,matttbe@kernel.org,martineau@kernel.org
+Cc: tanggeliang@kylinos.cn,netdev@vger.kernel.org,bpf@vger.kernel.org,mptcp@lists.linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 14 Sep 2026 08:07:13 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Medium] Error path for cgroup storage allocation failure skips IOCOST_CO=
-ST_F_MERGE adjustment.
-- [Low] Multi-line comments do not follow the BPF subsystem strict guidelin=
-es.
-- [Low] IOC_PAGE_SHIFT is undeclared in the BPF program, causing a compilat=
-ion failure.
---
+--===============8455009711460534272==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 1e892fcbbd8ad235ee3890cec52bb54f2b43ddb9
-Author: Tao Cui <cuitao@kylinos.cn>
+> When the sendpage->MSG_SPLICE_PAGES migration series replaced
+> do_tcp_sendpages() with direct tcp_sendmsg_locked() calls, callers that
+> had used do_tcp_sendpages() kept an explicit tcp_rate_check_app_limited(sk)
+> that was originally needed to cover do_tcp_sendpages() (which did not call
+> tcp_rate_check_app_limited()). After the inlining, tcp_sendmsg_locked()
+> always provides the check, and the outer call became redundant.
+>
+> Fixes: e117dcfd646e ("tls: Inline do_tcp_sendpages()")
 
-selftests/bpf: add iocost cost model test
+Does the Fixes: tag identify the correct commit? The changelog states the
+outer call "was originally needed to cover do_tcp_sendpages() (which did
+not call tcp_rate_check_app_limited())" and that it "became redundant"
+only "after the inlining". But e117dcfd646e did not introduce the
+redundancy.
 
-This commit adds an example cost model test implementing the builtin linear
-HDD formula at double cost. It registers the model via struct_ops and binds
-it to a device using io.cost.model, verifying the readback and testing write
-errors during restoration.
+At e117dcfd646e's parent, do_tcp_sendpages() was already a thin wrapper
+that funnels into tcp_sendmsg_locked():
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/iocost_model.c b/tool=
-s/testing/selftests/bpf/prog_tests/iocost_model.c
-> new file mode 100644
-> index 0000000000000..bf9f245e29a52
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
-[ ... ]
-> +static int bind_model(const char *dev, const char *name)
-> +{
-> +	char buf[300], got[64];
-> +	int err;
-> +
-> +	snprintf(buf, sizeof(buf), "%s model=3D%s\n", dev, name);
-> +	err =3D write_cost_model(buf);
-> +	if (err)
-> +		return err > 0 ? -err : -EIO;
-> +	err =3D readback_model(dev, got, sizeof(got));
-> +	if (!err && !strcmp(got, name)) {
-> +		/* restore the builtin linear model on every path so the
-> +		 * device is not left bound to a model the caller may
-> +		 * unregister right after; the write is checked too */
+  ssize_t do_tcp_sendpages(struct sock *sk, struct page *page, int offset,
+                           size_t size, int flags)
+  {
+          struct bio_vec bvec;
+          struct msghdr msg = { .msg_flags = flags | MSG_SPLICE_PAGES, };
+          bvec_set_page(&bvec, page, size, offset);
+          iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bvec, 1, size);
+          if (flags & MSG_SENDPAGE_NOTLAST)
+                  msg.msg_flags |= MSG_MORE;
+          return tcp_sendmsg_locked(sk, &msg, size);
+  }
 
-[Severity: Low]
-This isn't a bug, but does this violate the BPF subsystem comment style
-guidelines? The BPF subsystem strict guidelines require multi-line comments
-to have the opening /* on its own line.
+The conversion that made this true - and therefore the commit that made
+the tls_push_sg() call redundant - is c5c37af6ecad9 ("tcp: Convert
+do_tcp_sendpages() to use MSG_SPLICE_PAGES"), three commits earlier in
+the same series. Before c5c37af6ecad9, do_tcp_sendpages() open-coded the
+send loop and indeed had no rate check, and tcp_sendmsg_locked() already
+carried tcp_rate_check_app_limited() at that point. e117dcfd646e only
+replaced the wrapper call with its body; it left the
+tcp_rate_check_app_limited(sk) line untouched as diff context.
 
-> +		snprintf(buf, sizeof(buf), "%s model=3Dlinear\n", dev);
-> +		err =3D write_cost_model(buf);
-> +		return err > 0 ? -err : (err ? -EIO : 0);
-> +	}
-> +
-> +	/* bind failed or does not read back: still restore; prefer
-> +	 * the original failure, but surface the restore error too */
+If a Fixes: tag is kept, should it be:
 
-[Severity: Low]
-This isn't a bug, but this comment also places the opening /* on the same
-line as the text, which doesn't match the required BPF multi-line comment
-style.
+  Fixes: c5c37af6ecad9 ("tcp: Convert do_tcp_sendpages() to use MSG_SPLICE_PAGES")
 
-> +	snprintf(buf, sizeof(buf), "%s model=3Dlinear\n", dev);
-> +	{
-> +		int rerr =3D write_cost_model(buf);
-> +
-> +		return err ? (err > 0 ? -err : -EIO)
-> +			   : (rerr > 0 ? -rerr : -EIO);
-> +	}
-> +}
-[ ... ]
-> diff --git a/tools/testing/selftests/bpf/progs/iocost_model.c b/tools/tes=
-ting/selftests/bpf/progs/iocost_model.c
-> new file mode 100644
-> index 0000000000000..81928f897297c
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/iocost_model.c
-[ ... ]
-> +#define IOC_PAGE_SIZE		4096
-> +#define IOC_SECT_TO_PAGE_SHIFT	3	/* 512B sectors to 4kB pages */
-> +#define LCOEF_RANDIO_PAGES	4096	/* 16MB seek threshold */
-> +#define IOCOST_COST_F_MERGE	(1ULL << 0)	/* not in BTF: a plain macro */
-> +#define IOCOST_REQ_OP_MASK	0xff		/* REQ_OP_MASK, not in BTF */
+Both commits landed in the same merge window, so the practical backport
+range is unchanged.
 
-[Severity: Low]
-Is IOC_PAGE_SHIFT missing from these manual constant definitions?
 
-> +
-> +/*
-> + * DIV64_U64_ROUND_UP / DIV_ROUND_UP_ULL equivalents, folded at
-> + * compile time
-> + */
-[ ... ]
-> +SEC("struct_ops")
-> +u64 BPF_PROG(iocost_2x_calc_cost, u64 opf, u64 nbytes, u64 sector,
-> +	     struct blkcg *blkcg, u64 model_flags)
-> +{
-> +	u64 pages, seek_pages =3D 0, base, coef_page, randio, cost;
-> +
-> +	/* builtin truncates: max(sectors >> IOC_SECT_TO_PAGE_SHIFT, 1) */
-> +	pages =3D nbytes >> IOC_PAGE_SHIFT;
+> so dropping the outer call is safe and behavior-preserving.
+>
+> A potential benefit of this change is that it facilitates future reuse of
+> tls_push_sg() for KTLS support in protocols beyond TCP, such as MPTCP.
+>
+> Fixes: e117dcfd646e ("tls: Inline do_tcp_sendpages()")
 
-[Severity: Low]
-Does this code compile? IOC_PAGE_SHIFT is defined in an anonymous enum with=
-in
-block/blk-iocost.c and is not exported to vmlinux.h. Attempting to use it
-here directly seems like it would cause a build error.
+Should this patch carry a Fixes: tag? The changelog describes the change
+as "safe and behavior-preserving" and motivates it as cleanup plus
+preparation for future MPTCP reuse. No user-visible bug, regression, crash
+or misbehaviour is described or fixed: the removed
+tcp_rate_check_app_limited(sk) is duplicated by the identical call inside
+tcp_sendmsg_locked(), so tp->app_limited ends up with the same value
+either way.
 
-> +	if (!pages)
-> +		pages =3D 1;
-> +
-> +	if ((opf & IOCOST_REQ_OP_MASK) =3D=3D REQ_OP_READ) {
-[ ... ]
-> +	{
-> +		__u64 *cursor, cur;
-> +		int priced =3D (opf & IOCOST_REQ_OP_MASK) =3D=3D REQ_OP_READ ||
-> +			     (opf & IOCOST_REQ_OP_MASK) =3D=3D REQ_OP_WRITE;
-> +
-> +		cursor =3D bpf_cgrp_storage_get(&cursor_store,
-> +					      blkcg->css.cgroup, NULL,
-> +					      BPF_LOCAL_STORAGE_GET_F_CREATE);
-> +		if (!cursor)
-> +			return 2 * (base + pages * coef_page);
+A Fixes: tag on a no-op cleanup mainly serves to draw the patch into
+automated stable selection (AUTOSEL) for no benefit. Either drop the tag,
+or state concretely what observable behaviour was wrong before so the tag
+is justified.
 
-[Severity: Medium]
-Does this early return miss the IOCOST_COST_F_MERGE adjustment?
 
-If bpf_cgrp_storage_get() returns NULL, we return immediately here, which
-skips the subsequent logic that zeros out base when model_flags has
-IOCOST_COST_F_MERGE set. Could this result in merged operations being
-incorrectly charged a base cost under failure conditions?
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-> +		cur =3D *cursor;
-> +		if (cur && priced) {
-> +			seek_pages =3D sector > cur ? sector - cur
-> +						   : cur - sector;
-> +			seek_pages >>=3D IOC_SECT_TO_PAGE_SHIFT;
-> +			if (seek_pages > LCOEF_RANDIO_PAGES)
-> +				base =3D randio;
-> +		}
-> +		if (priced && nbytes &&
-> +		    !(model_flags & IOCOST_COST_F_MERGE))
-> +			*cursor =3D sector + (nbytes >> 9);
-> +	}
-> +
-> +	if (model_flags & IOCOST_COST_F_MERGE)
-> +		base =3D 0;
-> +
-> +	cost =3D 2 * (base + pages * coef_page);
-> +	return cost;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914073356.7915=
-18-1-cui.tao@linux.dev?part=3D2
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34817950722
+--===============8455009711460534272==--
