@@ -1,129 +1,123 @@
-Received: from mail-yx2-f9.google.com (mail-yx2-f9.google.com [74.125.224.137])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355FD486B95
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 16:42:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD68336B927;
+	Mon, 14 Sep 2026 16:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789404131; cv=none; b=GGGcV2ax7XxzDkcdUJqbuFirp0tWv//wB5nLwval/FTyB4N90NgIbUBJhkIDrRULFbxc28qdYuTg0DeFOda38h6zUgKPgoxH8b2CJshy/fgjsqD+Is9rEZftdqKVnW07ZCJmlCFg54i7Mvh+QuU/baCAtV8s3BkZyNvF266BA0k=
+	t=1789404320; cv=none; b=c3/+d7RJ8cLGDb02m7AyTuiqpN9bUeP5KAY4CGKj0AbOiAAGXWWZoisTCEt4mXUEk74GGc0dU9301Pu94n8HEJk7xE+Mqi8WQ/ltoZIQ27zZaBUSO08Qguf0S9y4QkEE9pDVk3a/OHPKFV4OzxD5NFp2YZ9SjnyWwJ/9Kj3aM8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789404131; c=relaxed/simple;
-	bh=fyPrl3WvozGTDDVsDO8MGVfKnhRCs2T8g6qKeea9uQc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UiB8xLrm8wosYctoj9wB2z/jzWwCU8V1HOADlQ54RJ4QctI151sDJRXRpUbUJilJpMZ6OhFxeOy75WDWMG1mFBKR+hzUAswPVTrXCrF6PewZv652q2tHCVF0+zCuIf0zGMUTcUe5Bo2Fu7u9Mz8QyUC7H1892Dbzia0hlhzLUGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com; spf=pass smtp.mailfrom=amutable.com; dkim=pass (2048-bit key) header.d=amutable-com.20251104.gappssmtp.com header.i=@amutable-com.20251104.gappssmtp.com header.b=f5lMeVgu; arc=none smtp.client-ip=74.125.224.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
+	s=arc-20240116; t=1789404320; c=relaxed/simple;
+	bh=XIls4RBFFsg1eWKlYNWozBn3d3TN1RYolmOyIKZv0NA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=W4/yNuUgDddGS5Ds/MsD+qpIyJl2hVnERRxcoAYa6MqaILZUhQ7/4vV/NGK3wDX11h30Rl/ugtJ9p/Qh3yuy0KkLNgsRr34hUWfJ8KtaWnRLZr/0QMkw+O5Vc2ihPeStosObUWhWu95uH6EOSLoHWzTUWiE5U5v6WNNlY6zWM9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CFN8zg1n; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amutable-com.20251104.gappssmtp.com header.i=@amutable-com.20251104.gappssmtp.com header.b="f5lMeVgu"
-Received: by mail-yx2-f9.google.com with SMTP id 956f58d0204a3-66e5f4dc13bso944253d50.1
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 09:42:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amutable-com.20251104.gappssmtp.com; s=20251104; t=1789404124; x=1790008924; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ndMM0TFrryHnZOvHnxhOWJr9tGmJVwIhyX6o7UKbX40=;
-        b=f5lMeVguGh1mH4Nna49X7IZNiBsDiRwwgHAAwhJRQY+ZByij2jyEx4lsK54K5OA2+e
-         jFm9UiDUQT3kDyC5tHE/XGiNnorfF2b4xKZPEvrPqNyY0+M2Hgz/zCdPva7/qr/9dOOm
-         UfQzb0QXf+wLNVjOK6HTBvlVi0SsMFokmKKGN5+bduK+hDLiRorkhsn+7G7qYXHj2siE
-         beLXJ/xcGk867HZ5ZqoElH6M34ATJo2y9mFIG4m878j12sup1h1i0S/LryjR/yf3yBHv
-         LLAqBHUl72QrDEwXVRhWS0cv2jeK0+wGMdBDFwu3ZMOQ2VNx0SBCK4ibsE4f/lm5Ur4n
-         6cyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789404124; x=1790008924;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ndMM0TFrryHnZOvHnxhOWJr9tGmJVwIhyX6o7UKbX40=;
-        b=JFybl1Waf4IZHKNEk9PXySAidFJQ0j/Z9BJ/E/3sM5ThKDNjUIXzlgV9s0wKilhMjg
-         tb52hPb8vmZdNST1M4Q19vXQi4lTYNc54kMzEshbWrrodSKRnSnFez5Oq0iJo8ZlpWVp
-         xtQLj6a06ViUloe1/dyVW8pCDVleLTrs5dx7OPPC4fVgNIjrOpx3RRPxFzEa1xkrDIg7
-         0JLS2IdoBH48DxFW5OVPp8AMkv91LATvIa1OtrWkSjhXgvW1gxtthUuEZwM562KONCq+
-         rKeM0DrVSd44NW27NK0SKUMWeQZEKZ/rKMGmFTSg/x5ZGaE2GuipkGHeXjinDImWuMYG
-         41Pw==
-X-Forwarded-Encrypted: i=1; AKwUvBzGlrKiCKsp/t4STaN6rJe7wNpagQJwvCjHnN8B8MUrTOKqkuGe2DJooJRPiJgQRFJ9Z20=@vger.kernel.org
-X-Gm-Message-State: AFuF++kneFR0rN8e0ZcwyBrCgJ9f/q5Nw1g7PgSWRvugfBujHstQGtL2
-	XVVkPCPA5hBf+YuGF+x3P0qlY1CeX/cfK2F0Y3D3EmJd1UES+iPmZSMaJqwR3QuvU6pk
-X-Gm-Gg: AYBFou0rCaa1wOBcu76xNOmaevdfWJ70eiyDjZZgT+fluIzf59O1lHXhk4J8Z1Y7zPi
-	rmC1VvIkHx7Ok9GlQxii7v4luR0gM3BgKhdJRIIFYQE1zew+LKjsW2BAMOJNXqKzdR7tFs0/E0N
-	p2YM1Fo/4ntuIJpgifckg874hXQ0G82G0HTZNVpg/wrR3qzShNJMRs2By5HU2+Y5RgnkZhBRiiS
-	TOelfL3XCH0ewK4dGtM9JYcJt1q8qsSCNLR4zpght9JMfeYEd13ZvN2uPJllNGksm7Q0HsVvvpC
-	EYssAc7TsmVoT8UkUELAQzV5rbSJ7BemEF3MU7RjyQMiyeY3uY3lUakBT8Vnw9zw4F3mxKhIu2U
-	+gnIX+V8A30kK/YwoBuNADN8hu3bjW/9nKzKNNC78wLwO4+juJUz5vNhKcuOwJehQjtD1qdFPXv
-	++Zc0uDrR/fFYj2izv3MysIdEA99Sy8vj81ksMrazLpWyiS/Ni1bwgvv8v1dO2
-X-Received: by 2002:a05:690e:810:20b0:671:4a9e:7c91 with SMTP id 956f58d0204a3-6714dfd252cmr743318d50.10.1789404124390;
-        Mon, 14 Sep 2026 09:42:04 -0700 (PDT)
-Received: from [192.168.1.110] ([2600:1700:1ff0:d0ef::d15])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-67125df42a8sm4879023d50.8.2026.09.14.09.42.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 09:42:04 -0700 (PDT)
-From: Andrew Halaney <andrew@amutable.com>
-Date: Mon, 14 Sep 2026 11:41:44 -0500
-Subject: [PATCH 3/3] Documentation: keys: document IDs added since
- KEY_SPEC_REQKEY_AUTH_KEY
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CFN8zg1n"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61A411F000FF;
+	Mon, 14 Sep 2026 16:45:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789404318;
+	bh=GzzUgpg5T3Fw7SIJWr0k/zDCNh06mog6jFMZsTNMkEA=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=CFN8zg1nrQKpSH9hKVbpq0yf2EVgikSGjZPZk55eTjlY98JNX4Rk2OEAvNFgYtgkH
+	 M/HhnW4sXS3+DFMHs+GYXdqaEtphQuANd7xb1xkEMeIaifMeXnZ9kVzSh1b+0rzbE5
+	 UF1kjreA3QUxTNDqjUY0nvz3VYrm5E+VQNJ59ywSKdc2JarhaA43ySTRVjrFd2IgPN
+	 wrXFGRCwvLIAzzcSLsiFDUfl3RWIgaX/5jNiLwBBS78j/xOGP8hwY/plRY1WZ0NBoF
+	 IMeLywf8hMHYz9O4eLOZJCb9ldQXctwKh/yuY8XHmq18C3mT1TU6lwLiuh7O8En7rJ
+	 xwwPiAjJVNk3w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 05/40] mm/vma: ensure mmap_prepare doesn't set
+ actions on a mergeable vma
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?TG9yZW56byBTdG9ha2VzIChBUk0p?= <ljs@kernel.org>
+Cc: selinux@vger.kernel.org, "Vasily Gorbik" <gor@linux.ibm.com>, "Heiko
+ Carstens" <hca@linux.ibm.com>, "Alexander Gordeev" <agordeev@linux.ibm.com>, "Marc
+ Zyngier" <maz@kernel.org>, linux-s390@vger.kernel.org, linux-rdma@vger.kernel.org, "Christian
+ Borntraeger" <borntraeger@linux.ibm.com>, linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, bpf@vger.kernel.org, kvm@vger.kernel.org, linux-trace-kernel@vger.kernel.org, "Oliver
+ Upton" <oupton@kernel.org>, linux-perf-users@vger.kernel.org, kvmarm@lists.linux.dev
+In-Reply-To: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-5-7d9781ed5361@kernel.org>
+References: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org>
+ <20260914-b4-mmap-prepare-vma-flag-sanify-v2-5-7d9781ed5361@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 14 Sep 2026 16:45:16 +0000
+Message-Id: <20260914164517.61A411F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260914-ajhalaney-dmverity-key-identifier-v1-3-01922dc1366a@amutable.com>
-References: <20260914-ajhalaney-dmverity-key-identifier-v1-0-01922dc1366a@amutable.com>
-In-Reply-To: <20260914-ajhalaney-dmverity-key-identifier-v1-0-01922dc1366a@amutable.com>
-To: Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>, 
- Mikulas Patocka <mpatocka@redhat.com>, 
- Benjamin Marzinski <bmarzins@redhat.com>, 
- David Howells <dhowells@redhat.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
- Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
- "Serge E. Hallyn" <serge@hallyn.com>, Eric Biggers <ebiggers@kernel.org>, 
- "Theodore Y. Ts'o" <tytso@mit.edu>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, 
- Randy Dunlap <rdunlap@infradead.org>
-Cc: dm-devel@lists.linux.dev, linux-kernel@vger.kernel.org, 
- keyrings@vger.kernel.org, linux-security-module@vger.kernel.org, 
- bpf@vger.kernel.org, fsverity@lists.linux.dev, linux-doc@vger.kernel.org, 
- Andrew Halaney <andrew@amutable.com>, 
- "Christian Brauner (Amutable)" <brauner@kernel.org>
-X-Mailer: b4 0.14.3
 
-The table of special key IDs stops at KEY_SPEC_REQKEY_AUTH_KEY.
-Fill in all the new ones.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Critical] State modification applied to `desc->vma_flags` during action =
+preparation is not propagated back to `map->vma_flags`, resulting in incorr=
+ect VMA merging and the silent loss of critical flags like `VM_PFNMAP` and =
+`VM_IO`.
+--
 
-Suggested-by: Christian Brauner (Amutable) <brauner@kernel.org>
-Signed-off-by: Andrew Halaney <andrew@amutable.com>
----
- Documentation/security/keys/core.rst | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+commit 31f214221abd5db93fe1f46874d29ea3c59a0cc7
+Author: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-diff --git a/Documentation/security/keys/core.rst b/Documentation/security/keys/core.rst
-index 326b8a973828..37ed42382f16 100644
---- a/Documentation/security/keys/core.rst
-+++ b/Documentation/security/keys/core.rst
-@@ -372,6 +372,19 @@ process making the call::
- 	KEY_SPEC_GROUP_KEYRING		-6	GID-specific keyring
- 	KEY_SPEC_REQKEY_AUTH_KEY	-7	assumed request_key()
- 						  authorisation key
-+	KEY_SPEC_REQUESTOR_KEYRING	-8	request_key() destination
-+						  keyring
-+
-+There are also values that refer to a specific kernel keyring rather than to
-+anything belonging to the caller.  These keyrings are not linked into any
-+keyring, so a search cannot reach them and the ID is the only way to name
-+one::
-+
-+	CONSTANT			VALUE	KEY REFERENCED
-+	==============================	======	===========================
-+	KEY_SPEC_BPF_KEYRING		-9	the ".bpf" keyring
-+	KEY_SPEC_DM_VERITY_KEYRING	-10	the ".dm-verity" keyring
-+	KEY_SPEC_FS_VERITY_KEYRING	-11	the ".fs-verity" keyring
- 
- 
- The main syscalls are:
+mm/vma: ensure mmap_prepare doesn't set actions on a mergeable vma
 
--- 
-2.55.0
+When a user requests an mmap_action be performed in mmap_prepare, this
+involves populating the VMA range with data. This patch asserts that no
+future mmap action is performed on a mergeable VMA upon mmap_prepare
+validation.
 
+> diff --git a/mm/vma.c b/mm/vma.c
+> index 626a18c08a269..2648fb0e19959 100644
+> --- a/mm/vma.c
+> +++ b/mm/vma.c
+> @@ -2809,6 +2809,15 @@ static int mmap_validate(unsigned long prev_start,
+>  int mmap_prepare_validate(const struct vm_area_desc *prev_desc,
+>  			  const struct vm_area_desc *desc)
+>  {
+> +	/*
+> +	 * It is not valid to execute mmap actions for VMAs which can be merged,
+> +	 * as any such merge would leave portions of the mapping incorrectly
+> +	 * unmapped.
+> +	 */
+> +	if (vma_flags_can_merge(&desc->vma_flags) &&
+> +	    WARN_ON_ONCE(desc->action.type !=3D MMAP_NOTHING))
+> +		return -EINVAL;
+> +
+
+[Severity: Critical]
+Does this check actually prevent the merge? Looking at call_mmap_prepare(),
+map->vma_flags is copied from desc->vma_flags before call_action_prepare()
+is called:
+
+mm/vma.c:call_mmap_prepare() {
+	...
+	map->vma_flags =3D desc->vma_flags;
+	...
+	err =3D call_action_prepare(map, desc);
+	if (err)
+		return err;
+
+	err =3D mmap_prepare_validate(&prev_desc, desc);
+	...
+}
+
+If call_action_prepare() mutates desc->vma_flags to include action-specific
+unmergeable flags, vma_flags_can_merge(&desc->vma_flags) will be false here,
+allowing the validation to pass. However, these changes don't appear to be
+synchronized back to map->vma_flags.
+
+Could this cause the actual VMA operations to operate on the stale and
+mergeable map->vma_flags?
+
+If a VMA lacks VM_PFNMAP or VM_IO but contains PFN-mapped pages, could this
+lead to memory corruption if kernel mechanisms assume the pages are normal
+memory and call put_page() on raw PFNs?
+
+>  	return mmap_validate(prev_desc->start, desc->start,
+>  			     &prev_desc->vma_flags, &desc->vma_flags);
+>  }
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914-b4-mmap-pr=
+epare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org?part=3D5
