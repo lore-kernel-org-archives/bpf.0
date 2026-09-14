@@ -1,77 +1,77 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+Received: from mail-wr2-f9.google.com (mail-wr2-f9.google.com [74.125.225.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 040A74746DD
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 13:17:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813C946D0A2
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 13:17:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789391838; cv=none; b=tvdEpk0l9nNwt3tLWohoA6qSLCYckwBURou58NVSNbZlc4DUUwuCim+a9KYWRQF/AhGB1tB/KTfchlJmbN3qfnceQL0Cd42EzNoXPqkKpZEVJZF5uTRIRccTSKjSNPT4EQqjbigSsw9ZWOWGcdtKGn4JgNP8xrOyq6UFoz0r1fg=
+	t=1789391839; cv=none; b=I11CRxOAmTKf19boO0RouMrY9fkh1hCCX504xS0LL8nJr64Mf9M/RmMd6RvydMc6Ag3v0LCUceOBZS4P4f2gmjETcqWFRtWAf4NwOHHMuuwvPv0XRH1ZmedPpCcLe7RoQfahu0Pf0z+AduXIoYhzKAogfulGi/n6j1w9uxsj6FA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789391838; c=relaxed/simple;
-	bh=GSuwfGSAtuZPL28xtJ9IDZShk+nj3QolK02JQs+jJWw=;
+	s=arc-20240116; t=1789391839; c=relaxed/simple;
+	bh=JIrYCQUVKUk560+R4Z3OJg+lO34upRZld/mwJHn4V1k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=J+DBUe+h+usZ5dZqlhpxBTINp65aPMpvVBuwfZv40opsEKsUmczs1r4kEBPXeFts8hd8qCwjxt/KTI4j6W352tQKNI7qwQSe+wFCvDOY+jdPF2j83huykq9Jm9fUBxTc/UWhW//zGxFEFFthGXWxkr8HAudOcewsh1IdVYZ0cpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qx+ljL6n; arc=none smtp.client-ip=74.125.225.137
+	 MIME-Version; b=EX0aYTjJf6MxbGtXmes21r/p4TLU/fO0sUE9app3wOcN5upPzfzVy8IbYzE6DPrMWwjJZq/AAooRHTS/yIg0wMeoZm2X93sTmMDYyXmuaAPzQLUw+j9r1RFaZgVeFofRqKHBLQq1xDaFbNaH4c9qp9UcRXf4+2L9CyW7aZfJ6w4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pnzdaAiO; arc=none smtp.client-ip=74.125.225.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qx+ljL6n"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49e6bd65693so11650065e9.0
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 06:17:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pnzdaAiO"
+Received: by mail-wr2-f9.google.com with SMTP id ffacd0b85a97d-4858866f7ffso847945f8f.0
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 06:17:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789391833; x=1789996633; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789391835; x=1789996635; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ZwakKEMSXkdJ0oIaoOIKquLuCFX7Ga+lHKiVg9ftGP8=;
-        b=qx+ljL6nfl4eUGINMTGsrm90cW3Xyu2A7uJOm53INp2LiKXcB2VIQjfIp88gIjsWcL
-         kBycF3EOYfqalb0E9mri/uruNYGXwiOUd1Z75lx0yi1+6z2b56NVgU47mi6aXjMYfzMn
-         01u5bobl3vBE/ymcHQZiv7OOzj7dT5ZucBrusHLwYAQVQLlMJiCDNdXaWRRuXHSc3poJ
-         StK7GBJ7Jayq+onz7EweOSPqsyUEqbGwN0LkzuNfzo38S4GvkUbfA988GFp8aFX5gzmV
-         rTDwOkle8mZmpgQbC0eIsQ3XuqsyaCc9dta1PsLX5MXqg0BOmpZoSMiC7HU5xkePN0qR
-         wOBg==
+        bh=SXcLSHH35OWRapgVtDMftnE6kms58XO6F9CpqVDJO2o=;
+        b=pnzdaAiOQWKgkW9VafCSRXUxYpiEcOONrWI63nHCjjxylMGlbIJNoN0lPUcJXg4n2u
+         U/W0C2jMhePqxqTHPERdvwTjQL5xQsS8/csbAH4MFCx+eO5vhReiEtILY9bqHEIykRDf
+         fsqaKIG4oEQD/dl3+Ni9mqXm+fNPp0SsdWKFhxhYhJx2SUN8UgkH0Iu9vJ6xlieJwlvI
+         rTQ57aPntBPoHprkxZvwhnju5jEAsSRkF8nFMAfxZd7Xq4N8P25xri4DgfuIOzFS5JP6
+         033l2EVo7WYJ6RXNiDQXiWkXe1smhrXAxy6eMBBnubiFbnRl2nwpzqG1BHmBpg2NSlQ4
+         YGfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789391833; x=1789996633;
+        d=1e100.net; s=20251104; t=1789391835; x=1789996635;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ZwakKEMSXkdJ0oIaoOIKquLuCFX7Ga+lHKiVg9ftGP8=;
-        b=WmKcUywVGbMmN5M6chWOMuyf6xTO0TUAwFrGdxlHpLxId0gOqqmslap0nP+j6/fxKW
-         tIvI1nl0RmP/yJ4Y0KZcbHTv1CHwQgixlEC/4zDeWdmsDjbyosZCEXb987HKpt6iyomo
-         eoNHGkOLhL0DR6l8ghG73DHd8BObF+N6igFBTQBOfwe0NF7Gub7u9IzeGEK0RYVrNJC5
-         HQyhdVLurh35qub5hZ/AwOKzyyZRhNbULCKxrIDixXLNLM6L0u07zYKOyVvdomW0DKqb
-         0aRzGOt9GYt+MbGzFjBTfHAd5cmYZeDi1BsJXObtKOXHuipdb7909uEmNbASSAKgEubd
-         YsBg==
-X-Gm-Message-State: AFuF++k7wWySE8GZhRBiyslStsDvBTgVRdlzy41ROaqodD1WTYD87rZD
-	5OSQRuuQQEImkfQMOI9qRHCF9uyOmZs3mjLkTNpKy6K+NBEmKMi58KjAjdl0CUr1
-X-Gm-Gg: AYBFou0uzBVlyPn7/dLalV8MosL1pFYZaVe11c68H4ZDLEAEJPbCQGEnTyQeqEZYb9M
-	tjcodFQh6DrZZWEmcKjqTBur8DpoNX0wuPOYAzHwzRTi+K0A9pbsz9Ltne8OfTv8GS3t+4sysr+
-	Uyqks4WyN7YXITGCPiimmINoIDRCDJxrhLJ9dqjeyUJTHq9IZjQiU7/ufMAWwIFu4885GRzRuMa
-	uFVMNau5FE008FyqFZcrEw+1QP9BUbc56w9dze2XB1V0chL+jlV4qRGiVnHaYwYaoDksowet+hJ
-	z0dCQ2+7tWc9AxwyMr8LUQLQhYJrpLT1lIhW0nRDHFZ8+xKHsCMZaYKxO7iJ/yWMwAcv25L+TZ3
-	dOw0dZ946YEjJVwlPHO9DuDDe9e8JO9jgHRrRsl9ayi+t7OjBbTD/aj+VDRF5voNZ4bUpLtKjqB
-	Tt8O0YG//HpHFGmaT30642NmoP7vrmch6QlhLgbooRZVcq5W+Biz6bxwvJjAY0If0MnV2ZXVuoN
-	Cdmpsx7mrqix8bHV/Wx8ewA408DKvXjtG5/tmUtrJ1y6EGJLzhKWVck+1XpNleb/+AkZQGMP5AF
-	bWr/21eXaCIzqCPdh5AIEknfdvrEpyLUNEnYpQ==
-X-Received: by 2002:a05:600c:6217:b0:49e:6bc7:4e1b with SMTP id 5b1f17b1804b1-49e7a656ca0mr29854295e9.15.1789391833425;
-        Mon, 14 Sep 2026 06:17:13 -0700 (PDT)
+        bh=SXcLSHH35OWRapgVtDMftnE6kms58XO6F9CpqVDJO2o=;
+        b=fhJXdlhL/tM8UoT5527RMtBg0AUaSXDuhOUylKZsnuyKVkcGw2uHlFJHtK8W6LYZzn
+         RRyy4N9Bag6i7losKZ0Vst8BOucF0uD6a7s2FWbdIGjmlKialV0O04abyqnCdfALvo9P
+         YF0oS+nxyjsEmM4uVtGCjr5JQgZxsah0lSpp3b5Wmr/v1rqbrqSUQeRwE0/AtxiKl41m
+         4mqGsnoC4kXEsJdU85OK3B+i1T0WURIyZ6TqqEo5uYLZ7LnRqYrCbkPzl1weisjZNv5e
+         XkidpLQgiADqqaMucJxx/pKSCZEp078Al1BFTJ3Uq4GIlJ1u5UE0zWrTje0kuCjiBjzP
+         psDQ==
+X-Gm-Message-State: AFuF++mEi48fGlR/rdVLlzR7H2eTZaHg3sBj+S+AvA3r6isC966GFC2V
+	IjLgRfw5nkA755lTZ5PtkO0dh1Nw8pVpN6AJgVNoTGVlHIcLGkihpXkkwWJJgqf0
+X-Gm-Gg: AYBFou1Avr6CCsVXZ2GfpTB0g7s8jE257BO+M8u6O5pmTSrkrDU4X8DLuxGbMAfSKjv
+	QP3MQCZ9/rjt6kBLHmvPgSWoOiyX1N91GLRyFq1lXhQpRjM1Za3/Nm0Jcn7AVKkm4hDYUDT8UUf
+	sSynun2+IbyPIHQw1aSviirt8aKi6rBThikaCQW9Xf1DSNUpQpXVCiq+B+rj6dP+lpmHA/gEf0e
+	v6E3ZaNF/a3tGyXfjXGc5dIbBoTWM9dPiOZkVgwZSMMphSb3n0v5sVVDB1kNiQY3ADmVdYEr2oh
+	I3EGWpXEi4AYnfohxKnNxmRBXKX4r0ZE1NZnhOV0U3EYM67jMJsN9il8twftgfNzjbx8LbJuTkU
+	Ww0p3lDg5CmiTEsNLP2do/ZjB9mfst/Aw3ioouJXHafc20WPyw+OgEr1JxcJXbEdmysHL1c1lo/
+	43wUqvoQhRQASIwF4GGaLusq5ZX/Xa3Q9Aq/LjQab9KfmIj573sebovbsgDutG7U3IxLVMcSQod
+	deOlrFq2tihdHSm41l/llSx2oJ91UhKCUM70BAivXrT31I1ewE6xP77di8dTKX7a9PXOSAborMS
+	zC0mGYpnPiXhF2RPLESyeJ7W4YgqtJRVeq7s6A==
+X-Received: by 2002:a05:6000:2502:b0:485:8c17:9760 with SMTP id ffacd0b85a97d-48702affd11mr3232344f8f.34.1789391835209;
+        Mon, 14 Sep 2026 06:17:15 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-486eb2ecf23sm27401046f8f.5.2026.09.14.06.17.12
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-486eb34f1f7sm26706842f8f.24.2026.09.14.06.17.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 06:17:12 -0700 (PDT)
+        Mon, 14 Sep 2026 06:17:14 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Nicholas Carlini <npc@anthropic.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
+	Nicholas Carlini <npc@anthropic.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v3 6/7] bpf: Assign lock identity to callback map values
-Date: Mon, 14 Sep 2026 15:16:56 +0200
-Message-ID: <20260914131701.2529725-7-memxor@gmail.com>
+Subject: [PATCH bpf v3 7/7] selftests/bpf: Check callback map value lock identity
+Date: Mon, 14 Sep 2026 15:16:57 +0200
+Message-ID: <20260914131701.2529725-8-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260914131701.2529725-1-memxor@gmail.com>
 References: <20260914131701.2529725-1-memxor@gmail.com>
@@ -81,191 +81,318 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7355; i=memxor@gmail.com; h=from:subject; bh=GSuwfGSAtuZPL28xtJ9IDZShk+nj3QolK02JQs+jJWw=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv551ks5bdfvstf9PQ4y9ayTlkpLdOtC4TOyAbfCFRR3 upsb9rfUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIk0zmL4H/57x8P3Cl/l72Zb B9bes1+w9Zu0xI/tAaJHW5gX+He82MHwP/N8/cVSHqVdn+s4jwaru9eHs606eXhj6q0zr2fHJSX /4QMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10569; i=memxor@gmail.com; h=from:subject; bh=JIrYCQUVKUk560+R4Z3OJg+lO34upRZld/mwJHn4V1k=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv551kXyjcxZBp6eUROZrt6aMvaG/khIT4t9s8V4jNZI 9QmbmHqKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwEQe3mf4714071ViRKzlg/mT Py+aWsN/wvvFwhPOPb+T4r5mT7lytJuR4bWY56QUG6t8L6tXtv/CN31rYTqU+ULe4PGRiIcvJqz KZQAA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-A nested bpf_for_each_map_elem() callback can unlock a different element
-of the same map:
+Add a verifier test which retains a map value from an outer callback and
+then acquires a lock through an inner callback value before attempting to
+release the outer callback value. Both values can denote different elements,
+so the verifier must reject the mismatched unlock.
 
-  static long inner(void *map, int *key, struct value *v,
-                    struct value **outer_value)
-  {
-          bpf_spin_lock(&v->lock);
-          bpf_spin_unlock(&(*outer_value)->lock);
-          return 0;
-  }
+Also exercise callbacks reached through two inner-map lookups. The lookup
+results share inner_map_meta but may refer to different one-element
+arrays, so their callback values must retain distinct lock identities.
 
-  static long outer(void *map, int *key, struct value *v, void *ctx)
-  {
-          bpf_for_each_map_elem(map, inner, &v, 0);
-          return 0;
-  }
+Keep nested and one-element array callbacks as positive controls for
+balanced locking through one callback argument.
 
-Both callback values currently have ID zero and the same map_ptr.
-process_spin_lock() compares those two fields, so it accepts the unlock
-even though the two callbacks can receive different map elements.
+For timer, workqueue, and task-work callbacks, lock and unlock the value,
+then pass it to bpf_this_cpu_ptr() to expose its ID in the verifier error
+log. Require a nonzero ID, following the existing lock identity tests.
+Balanced locking alone would still succeed if a constructor stopped
+assigning an ID.
 
-Assign a fresh ID to every callback map value in the for-each,
-timer/workqueue, and task-work constructors. Copies of one callback
-argument retain its ID, so locking and unlocking through that argument
-continues to work. Distinct callbacks also get distinct IDs for
-single-element arrays, including inner arrays sharing inner_map_meta.
+Extend the existing spin_lock test table and reuse its array and inner-map
+fixtures to keep the callback cases alongside the other lock identity tests.
 
-Preserve map_uid for every inner-map lookup and compare it through
-check_ids() during state pruning. This preserves relationships between
-maps, keys, and values while allowing equivalent states with different
-lookup IDs to match. It avoids field-specific rules for when an inner map
-needs an identity.
+Update the nested callback reference-leak expectation for the extra
+callback value ID.
 
-Move map_uid out of the metadata union and next to the other IDs, so
-register comparisons can use the existing memcmp() ranges and remap the
-IDs separately. Clear it when resetting a register or converting a map
-lookup result to a socket pointer. Shrink frameno to u8, which is enough
-for MAX_CALL_FRAMES, to make room without growing bpf_reg_state.
-
-Fixes: d0d78c1df9b1 ("bpf: Allow locking bpf_spin_lock global variables")
-Reported-by: Nicholas Carlini <npc@anthropic.com>
-Suggested-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf_verifier.h | 24 ++++++++++++------------
- kernel/bpf/states.c          |  6 ++++--
- kernel/bpf/verifier.c        | 15 ++++++++++-----
- 3 files changed, 26 insertions(+), 19 deletions(-)
+ .../selftests/bpf/prog_tests/cb_refs.c        |   2 +-
+ .../selftests/bpf/prog_tests/spin_lock.c      |  33 +++-
+ .../selftests/bpf/progs/test_spin_lock_fail.c | 167 +++++++++++++++++-
+ 3 files changed, 192 insertions(+), 10 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 36b65797877d..8f769ee14bd6 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -46,17 +46,10 @@ struct bpf_reg_state {
- 		/* valid when type == PTR_TO_PACKET */
- 		int range;
- 
--		/* valid when type == CONST_PTR_TO_MAP | PTR_TO_MAP_VALUE |
--		 *   PTR_TO_MAP_VALUE_OR_NULL
-+		/*
-+		 * For CONST_PTR_TO_MAP, PTR_TO_MAP_KEY and PTR_TO_MAP_VALUE.
- 		 */
--		struct {
--			struct bpf_map *map_ptr;
--			/* To distinguish map lookups from outer map
--			 * the map_uid is non-zero for registers
--			 * pointing to inner maps.
--			 */
--			u32 map_uid;
--		};
-+		struct bpf_map *map_ptr;
- 
- 		/* for PTR_TO_BTF_ID */
- 		struct {
-@@ -155,13 +148,20 @@ struct bpf_reg_state {
- 	 * gets parent_id set to the dynptr's id.
- 	 */
- 	u32 parent_id;
--	/* Inside the callee two registers can be both PTR_TO_STACK like
-+	/*
-+	 * Distinguishes inner-map lookups and their keys and values. Zero for
-+	 * other registers. Kept outside the metadata union for ID remapping
-+	 * during state comparisons.
-+	 */
-+	u32 map_uid;
-+	/*
-+	 * Inside the callee two registers can be both PTR_TO_STACK like
- 	 * R1=fp-8 and R2=fp-8, but one of them points to this function stack
- 	 * while another to the caller's stack. To differentiate them 'frameno'
- 	 * is used which is an index in bpf_verifier_state->frame[] array
- 	 * pointing to bpf_func_state.
- 	 */
--	u32 frameno;
-+	u8 frameno;
- 	/* if (!precise && SCALAR_VALUE) min/max/tnum don't affect safety */
- 	bool precise;
+diff --git a/tools/testing/selftests/bpf/prog_tests/cb_refs.c b/tools/testing/selftests/bpf/prog_tests/cb_refs.c
+index 78566b817fd7..490e15e7126d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/cb_refs.c
++++ b/tools/testing/selftests/bpf/prog_tests/cb_refs.c
+@@ -13,7 +13,7 @@ struct {
+ } cb_refs_tests[] = {
+ 	{ "underflow_prog", "release kfunc bpf_kfunc_call_test_release expects referenced PTR_TO_BTF_ID passed to R1" },
+ 	{ "leak_prog", "Possibly NULL pointer passed to helper R2" },
+-	{ "nested_cb", "Unreleased reference id=4 alloc_insn=2" }, /* alloc_insn=2{4,5} */
++	{ "nested_cb", "Unreleased reference id=5 alloc_insn=2" }, /* alloc_insn=2{4,5} */
+ 	{ "non_cb_transfer_ref", "Unreleased reference id=4 alloc_insn=1" }, /* alloc_insn=1{1,2} */
  };
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index 6c88ad95b63b..e4ec007f7fa6 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -491,7 +491,8 @@ static bool regs_exact(const struct bpf_reg_state *rold,
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/spin_lock.c b/tools/testing/selftests/bpf/prog_tests/spin_lock.c
+index 5c3579438427..d49f52a8f822 100644
+--- a/tools/testing/selftests/bpf/prog_tests/spin_lock.c
++++ b/tools/testing/selftests/bpf/prog_tests/spin_lock.c
+@@ -10,8 +10,8 @@ static char log_buf[1024 * 1024];
+ 
+ static struct {
+ 	const char *prog_name;
+-	const char *err_msg;
+-} spin_lock_fail_tests[] = {
++	const char *err_msg; /* NULL if loading should succeed. */
++} spin_lock_tests[] = {
+ 	{ "lock_id_kptr_preserve",
+ 	  "[0-9]\\+: (bf) r1 = r0                       ; R0=ptr_foo(id=2)"
+ 	  " R1=ptr_foo(id=2) refs=2\n"
+@@ -54,6 +54,22 @@ static struct {
+ 	{ "lock_global_sleepable_helper_subprog", "global function calls are not allowed while holding a lock" },
+ 	{ "lock_global_sleepable_kfunc_subprog", "global function calls are not allowed while holding a lock" },
+ 	{ "lock_global_sleepable_subprog_indirect", "global function calls are not allowed while holding a lock" },
++	{ "callback_value_lock_identity", "bpf_spin_unlock of different lock" },
++	{ "callback_inner_map_value_lock_identity", "bpf_spin_unlock of different lock" },
++	{ "callback_value_lock_identity_same", NULL },
++	{ "callback_single_value_lock_identity_same", NULL },
++	{ "lock_id_timer_preserve",
++	  "R1=map_value(id=[1-9][0-9]*,map=async_lock_map,[^\n]*\n"
++	  "[0-9]\\+: (85) call bpf_this_cpu_ptr#154\n"
++	  "R1 type=map_value expected=percpu_ptr_" },
++	{ "lock_id_wq_preserve",
++	  "R1=map_value(id=[1-9][0-9]*,map=async_lock_map,[^\n]*\n"
++	  "[0-9]\\+: (85) call bpf_this_cpu_ptr#154\n"
++	  "R1 type=map_value expected=percpu_ptr_" },
++	{ "lock_id_task_work_preserve",
++	  "R1=map_value(id=[1-9][0-9]*,map=async_lock_map,[^\n]*\n"
++	  "[0-9]\\+: (85) call bpf_this_cpu_ptr#154\n"
++	  "R1 type=map_value expected=percpu_ptr_" },
+ };
+ 
+ static int match_regex(const char *pattern, const char *string)
+@@ -74,7 +90,7 @@ static int match_regex(const char *pattern, const char *string)
+ 	return rc == 0 ? 1 : 0;
+ }
+ 
+-static void test_spin_lock_fail_prog(const char *prog_name, const char *err_msg)
++static void test_spin_lock_prog(const char *prog_name, const char *err_msg)
  {
- 	return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
- 	       check_ids(rold->id, rcur->id, idmap) &&
--	       check_ids(rold->parent_id, rcur->parent_id, idmap);
-+	       check_ids(rold->parent_id, rcur->parent_id, idmap) &&
-+	       check_ids(rold->map_uid, rcur->map_uid, idmap);
- }
+ 	LIBBPF_OPTS(bpf_object_open_opts, opts, .kernel_log_buf = log_buf,
+ 						.kernel_log_size = sizeof(log_buf),
+@@ -94,6 +110,10 @@ static void test_spin_lock_fail_prog(const char *prog_name, const char *err_msg)
+ 	bpf_program__set_autoload(prog, true);
  
- enum exact_level {
-@@ -616,7 +617,8 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 		       range_within(rold, rcur) &&
- 		       tnum_in(rold->var_off, rcur->var_off) &&
- 		       check_ids(rold->id, rcur->id, idmap) &&
--		       check_ids(rold->parent_id, rcur->parent_id, idmap);
-+		       check_ids(rold->parent_id, rcur->parent_id, idmap) &&
-+		       check_ids(rold->map_uid, rcur->map_uid, idmap);
- 	case PTR_TO_PACKET_META:
- 	case PTR_TO_PACKET:
- 		/* We must have at least as much range as the old ptr
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ddba53eaa333..ab4f0ea2647b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -1864,6 +1864,7 @@ static void __mark_reg_known(struct bpf_reg_state *reg, u64 imm)
- 	       offsetof(struct bpf_reg_state, var_off) - sizeof(reg->type));
- 	reg->id = 0;
- 	reg->parent_id = 0;
-+	reg->map_uid = 0;
- 	___mark_reg_known(reg, imm);
- }
+ 	ret = test_spin_lock_fail__load(skel);
++	if (!err_msg) {
++		ASSERT_OK(ret, "test_spin_lock_fail__load");
++		goto end;
++	}
+ 	if (!ASSERT_ERR(ret, "test_spin_lock_fail__load must fail"))
+ 		goto end;
  
-@@ -1925,17 +1926,18 @@ static void refine_map_lookup_value(struct bpf_reg_state *reg)
- 	if (map->inner_map_meta) {
- 		reg->type = CONST_PTR_TO_MAP | maybe_null;
- 		reg->map_ptr = map->inner_map_meta;
--		/* transfer reg's id which is unique for every map_lookup_elem
--		 * as UID of the inner map.
-+		/*
-+		 * Each lookup gets a unique ID. Preserve it as the inner map's
-+		 * identity, since different inner maps share inner_map_meta.
- 		 */
--		if (btf_record_has_field(map->inner_map_meta->record,
--					 BPF_TIMER | BPF_WORKQUEUE | BPF_TASK_WORK))
--			reg->map_uid = reg->id;
-+		reg->map_uid = reg->id;
- 	} else if (map->map_type == BPF_MAP_TYPE_XSKMAP) {
- 		reg->type = PTR_TO_XDP_SOCK | maybe_null;
-+		reg->map_uid = 0;
- 	} else if (map->map_type == BPF_MAP_TYPE_SOCKMAP ||
- 		   map->map_type == BPF_MAP_TYPE_SOCKHASH) {
- 		reg->type = PTR_TO_SOCKET | maybe_null;
-+		reg->map_uid = 0;
+@@ -166,10 +186,9 @@ void test_spin_lock(void)
+ 
+ 	test_spin_lock_success();
+ 
+-	for (i = 0; i < ARRAY_SIZE(spin_lock_fail_tests); i++) {
+-		if (!test__start_subtest(spin_lock_fail_tests[i].prog_name))
++	for (i = 0; i < ARRAY_SIZE(spin_lock_tests); i++) {
++		if (!test__start_subtest(spin_lock_tests[i].prog_name))
+ 			continue;
+-		test_spin_lock_fail_prog(spin_lock_fail_tests[i].prog_name,
+-					 spin_lock_fail_tests[i].err_msg);
++		test_spin_lock_prog(spin_lock_tests[i].prog_name, spin_lock_tests[i].err_msg);
  	}
  }
+diff --git a/tools/testing/selftests/bpf/progs/test_spin_lock_fail.c b/tools/testing/selftests/bpf/progs/test_spin_lock_fail.c
+index f678ee6bd7ea..a27bbbe3523f 100644
+--- a/tools/testing/selftests/bpf/progs/test_spin_lock_fail.c
++++ b/tools/testing/selftests/bpf/progs/test_spin_lock_fail.c
+@@ -14,17 +14,18 @@ struct array_map {
+ 	__type(key, int);
+ 	__type(value, struct foo);
+ 	__uint(max_entries, 1);
+-} array_map SEC(".maps");
++} array_map SEC(".maps"), array_map_b SEC(".maps");
  
-@@ -10048,6 +10050,7 @@ int map_set_for_each_callback_args(struct bpf_verifier_env *env,
- 	__mark_reg_known_zero(&callee->regs[BPF_REG_3]);
- 	callee->regs[BPF_REG_3].map_ptr = caller->regs[BPF_REG_1].map_ptr;
- 	callee->regs[BPF_REG_3].map_uid = caller->regs[BPF_REG_1].map_uid;
-+	callee->regs[BPF_REG_3].id = ++env->id_gen;
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
+-	__uint(max_entries, 1);
++	__uint(max_entries, 2);
+ 	__type(key, int);
+ 	__type(value, int);
+ 	__array(values, struct array_map);
+ } map_of_maps SEC(".maps") = {
+ 	.values = {
+ 		[0] = &array_map,
++		[1] = &array_map_b,
+ 	},
+ };
  
- 	/* pointer to stack or null */
- 	callee->regs[BPF_REG_4] = caller->regs[BPF_REG_3];
-@@ -10144,6 +10147,7 @@ static int set_timer_callback_state(struct bpf_verifier_env *env,
- 	__mark_reg_known_zero(&callee->regs[BPF_REG_3]);
- 	callee->regs[BPF_REG_3].map_ptr = map_ptr;
- 	callee->regs[BPF_REG_3].map_uid = map_uid;
-+	callee->regs[BPF_REG_3].id = ++env->id_gen;
+@@ -314,4 +315,166 @@ int lock_global_sleepable_subprog_indirect(struct __sk_buff *ctx)
+ 	return ret;
+ }
  
- 	/* unused */
- 	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
-@@ -10262,6 +10266,7 @@ static int set_task_work_schedule_callback_state(struct bpf_verifier_env *env,
- 	__mark_reg_known_zero(&callee->regs[BPF_REG_3]);
- 	callee->regs[BPF_REG_3].map_ptr = map_ptr;
- 	callee->regs[BPF_REG_3].map_uid = map_uid;
-+	callee->regs[BPF_REG_3].id = ++env->id_gen;
- 
- 	/* unused */
- 	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_4]);
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 2);
++	__type(key, int);
++	__type(value, struct foo);
++} callback_array_map SEC(".maps");
++
++struct callback_ctx {
++	struct foo *value;
++};
++
++static long lock_different_value(struct bpf_map *map, int *key,
++				 struct foo *value, struct callback_ctx *ctx)
++{
++	bpf_spin_lock(&value->lock);
++	bpf_spin_unlock(&ctx->value->lock);
++	return 0;
++}
++
++static long nest_lock_different_value(struct bpf_map *map, int *key,
++				      struct foo *value, void *data)
++{
++	struct callback_ctx ctx = { .value = value };
++
++	bpf_for_each_map_elem(&callback_array_map, lock_different_value, &ctx, 0);
++	return 0;
++}
++
++SEC("?tc")
++int callback_value_lock_identity(void *ctx)
++{
++	bpf_for_each_map_elem(&callback_array_map, nest_lock_different_value, NULL, 0);
++	return 0;
++}
++
++static long nest_lock_different_inner_value(struct bpf_map *map, int *key,
++					    struct foo *value, void *data)
++{
++	struct callback_ctx ctx = { .value = value };
++	int inner_key = 1;
++	void *inner_map;
++
++	inner_map = bpf_map_lookup_elem(&map_of_maps, &inner_key);
++	if (!inner_map)
++		return 0;
++	bpf_for_each_map_elem(inner_map, lock_different_value, &ctx, 0);
++	return 0;
++}
++
++SEC("?tc")
++int callback_inner_map_value_lock_identity(void *ctx)
++{
++	int inner_key = 0;
++	void *inner_map;
++
++	inner_map = bpf_map_lookup_elem(&map_of_maps, &inner_key);
++	if (!inner_map)
++		return 0;
++	bpf_for_each_map_elem(inner_map, nest_lock_different_inner_value, NULL, 0);
++	return 0;
++}
++
++static long lock_same_value(struct bpf_map *map, int *key,
++			    struct foo *value, void *data)
++{
++	bpf_spin_lock(&value->lock);
++	bpf_spin_unlock(&value->lock);
++	return 0;
++}
++
++static long nest_lock_same_value(struct bpf_map *map, int *key,
++				 struct foo *value, void *data)
++{
++	bpf_for_each_map_elem(&callback_array_map, lock_same_value, NULL, 0);
++	return 0;
++}
++
++SEC("?tc")
++int callback_value_lock_identity_same(void *ctx)
++{
++	bpf_for_each_map_elem(&callback_array_map, nest_lock_same_value, NULL, 0);
++	return 0;
++}
++
++SEC("?tc")
++int callback_single_value_lock_identity_same(void *ctx)
++{
++	bpf_for_each_map_elem(&array_map, lock_same_value, NULL, 0);
++	return 0;
++}
++
++struct async_lock_value {
++	struct bpf_spin_lock lock;
++	struct bpf_timer timer;
++	struct bpf_wq work;
++	struct bpf_task_work task_work;
++	int counter;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 2);
++	__type(key, int);
++	__type(value, struct async_lock_value);
++} async_lock_map SEC(".maps");
++
++/*
++ * Expose the callback value ID in the verifier log, as in lock_id_mapval_preserve().
++ */
++static int async_lock_id_preserve(void *map, int *key, void *data)
++{
++	struct async_lock_value *value = data;
++
++	bpf_spin_lock(&value->lock);
++	value->counter++;
++	bpf_spin_unlock(&value->lock);
++	bpf_this_cpu_ptr(value);
++	return 0;
++}
++
++SEC("?tc")
++int lock_id_timer_preserve(void *ctx)
++{
++	struct async_lock_value *value;
++	int key = 0;
++
++	value = bpf_map_lookup_elem(&async_lock_map, &key);
++	if (value && !bpf_timer_init(&value->timer, &async_lock_map, 1))
++		bpf_timer_set_callback(&value->timer, async_lock_id_preserve);
++	return 0;
++}
++
++SEC("?tc")
++int lock_id_wq_preserve(void *ctx)
++{
++	struct async_lock_value *value;
++	int key = 0;
++
++	value = bpf_map_lookup_elem(&async_lock_map, &key);
++	if (value && !bpf_wq_init(&value->work, &async_lock_map, 0))
++		bpf_wq_set_callback(&value->work, async_lock_id_preserve, 0);
++	return 0;
++}
++
++static int task_work_lock_id_preserve(struct bpf_map *map, void *key, void *data)
++{
++	return async_lock_id_preserve(map, key, data);
++}
++
++SEC("?tc")
++int lock_id_task_work_preserve(void *ctx)
++{
++	struct async_lock_value *value;
++	int key = 0;
++
++	value = bpf_map_lookup_elem(&async_lock_map, &key);
++	if (value)
++		bpf_task_work_schedule_resume(bpf_get_current_task_btf(), &value->task_work,
++					      &async_lock_map, task_work_lock_id_preserve);
++	return 0;
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.53.0
 
