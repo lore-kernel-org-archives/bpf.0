@@ -1,229 +1,143 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33ECC382F1A
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 18:19:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99FD381EA0
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 18:19:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789409961; cv=none; b=SczAfcCS2ODu67k4Xh3BT5/jB1Xr6Yy1uQoCOrtGMpfpQH2ocNbzcbW6Vuk9fYCaEFz8CoTiIEvom3crC68pnJYzK6vfjCOcdEhaemQAWvevI5TXCr3YTipJRpqqmCamM/0CtRDGYDuKB4wnCoBfLqzocylb+i56SMf/iCI/go0=
+	t=1789409963; cv=none; b=Y+RzhsXx/bCHvozsws5krDj47OXuKgbJT+xPsLbcPmqHsljoCKVzDs9QaBYC3TBJnzmA8MrNmn+43nh6LGvHGNcN5KpaJs97MOlwZH+uZq378MgdaYGEH8jOXqD0BmIOIJtTB7x0NDiOdOsoDRRRM+PNZulBM5+hD6FShRdoUuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789409961; c=relaxed/simple;
-	bh=W0TYdT7KuZ0PMzJtv4eFNhb4WyLhiWKsQ8MnLZNUV0E=;
+	s=arc-20240116; t=1789409963; c=relaxed/simple;
+	bh=hy56b/PtBkVhFLI5LKf4pDyM4C4J7GZqaJ9coNE0ZJ8=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ICG9ZR8eWExY1CIcsZ+MVHoCeNJa6i4fDmuqzjvikQ3VS1iy0IDd6X97ejULK4Q4YTemzNXqYPh9/VFDpBES6oAhLT44br7Dc0aHJddzLGNeSClrxCH6xhv9DoRVWtCyMSZo4D+0nS7HCFNCr0x/iQlO0BWsaZLiG/lDCql22jA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LWKS1c07; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=OuMzyytfOW3uj14fI9fWw4NLhImeQ28X6YYxPDrfguM2PwkZAH2y9+Za61EoB0OLRGKHD1eYEksqDCSP2xf7pR7HwnPX2UeUkfaLcSBwOV1uHo0SXAnHlbdNuW/riP9keibwclSn4iO76KWEC6Ur9iYPcZmR+TeBB+UR0E+d2XI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PoUbN/Dy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LWKS1c07"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDA581F00893;
-	Mon, 14 Sep 2026 18:19:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PoUbN/Dy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B74AD1F000FF;
+	Mon, 14 Sep 2026 18:19:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789409959;
-	bh=Q8D6fmZvqKTlfPrPwBVeZ/+YNWoM90BApfeTiU96j6I=;
+	s=k20260515; t=1789409961;
+	bh=2Z/i5jIL2ut5BDBXuBs21UtQJqQduyVSCwyc7fgyh2o=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=LWKS1c07+QHqgYFuiYS4w7VPgdfAI1HDoBUEeZLaQ2dpCXBqfHS8ywpZZMdnhQa/X
-	 BplDExroATj/H67pRueLEvG6EHBvz/0ZM7pt5COosp8PsCgL7VCFvSGXVBMOcGZ77p
-	 2aomi123ZdaE9YM+1eMY2snHVEP7JaLrESgtWdYzBsZMWMvht32EcpaJV6eFRTF6GD
-	 KjXA9I/52TOFyEDdjtupbMzKfEKywzcOFYhASFdpAbYQrlu6puUTZRQ008Dof5Ont1
-	 XIvIMHsUrpOh8FWBLTXct1MSeb+qz2Nd7p34ySEUq08f61o0gySQre+QhOWKmzBa4n
-	 rWTUa20iDNwnA==
-Content-Type: multipart/mixed; boundary="===============2499098142792978847=="
+	b=PoUbN/DyOEdQRBM5EDRHvNXVMe+sjop91NT6bI+16dkO/bB6dS693dBo4ZtJeF6LU
+	 jsMnZgXLilmFOSTHiDQyFNXOk6xz5vWiw6nkRB8CcYdnwxrPXJbNYsId83r11RGdv2
+	 Q1SeJBezk3s/e9logceQtCDkbRkTFCVnwKnYYK4TsNxkfKicFqvFYVfrrE9yGTO2HN
+	 Q202Ke09v3AB7NwoBdnDBPikLUAAxYqm/a7NP0932jxWNgTwYc2HRR/Pw1jYOos3cI
+	 ajKy332p4gwR7Rwh5/NoZE9546U17RaC9tsPFYDHQIswVe8M5udUIlEgA8SDd1wIBp
+	 S3AL4Ha7QodSg==
+Content-Type: multipart/mixed; boundary="===============2896433261446549126=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <943d0ea6eb679a95e9c2e43ab4b3903b8a0df628225377a83b2d7582095d3ad3@mail.kernel.org>
-In-Reply-To: <20260914170326.249953-12-daniel@iogearbox.net>
-References: <20260914170326.249953-12-daniel@iogearbox.net>
-Subject: Re: [PATCH bpf v2 11/11] selftests/bpf: Add tests for gotox targets across prologue prepends
+Message-Id: <bd3031fea55606071e3d51cca06e09c51d419bd22b479547f66d819dd5c52038@mail.kernel.org>
+In-Reply-To: <20260914170326.249953-3-daniel@iogearbox.net>
+References: <20260914170326.249953-3-daniel@iogearbox.net>
+Subject: Re: [PATCH bpf v2 02/11] bpf: Bound the number of indirect jump edges in a program
 From: bot+bpf-ci@kernel.org
 To: daniel@iogearbox.net,ast@kernel.org
 Cc: memxor@gmail.com,eddyz87@gmail.com,a.s.protopopov@gmail.com,info@starlabs.sg,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 14 Sep 2026 18:19:18 +0000 (UTC)
+Date: Mon, 14 Sep 2026 18:19:20 +0000 (UTC)
 
---===============2499098142792978847==
+--===============2896433261446549126==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c b/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
-> index 9908e538c022b..f102435675c2b 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
-> @@ -1376,77 +1376,161 @@ static void check_insn_array_stale_reuse(void)
->  		close(jt_fd);
-> }
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 36b65797877d0..04bb8f71cabe3 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -977,6 +977,7 @@ struct bpf_verifier_env {
+>  		int cur_stack;
+>  		/* current position in the insn_postorder vector */
+>  		int cur_postorder;
+> +		u32 gotox_edges;
+>  	} cfg;
+>  	struct backtrack_state bt;
+>  	struct bpf_jmp_history_entry *cur_hist_ent;
+> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
+> index 5cfd02c42afd5..df4513e71c80a 100644
+> --- a/kernel/bpf/cfg.c
+> +++ b/kernel/bpf/cfg.c
+> @@ -9,6 +9,8 @@
 >
-> +static void check_gotox_target_prologue_shift(void)
-> +{
-> +	struct bpf_insn insns[] = {
-> +		/* insn 0: gotox target and subprog start */
-> +		BPF_MOV64_IMM(BPF_REG_0, 0),
-> +		/* may_goto +4 -> exit block, bounds the loop */
-> +		BPF_RAW_INSN(BPF_JMP | BPF_JCOND, 0, 0, 4, 0),
-> +		/* r1 = &jt[0] (insns 2 and 3) */
-> +		BPF_LD_IMM64_RAW(BPF_REG_1, BPF_PSEUDO_MAP_IDX_VALUE, 0),
-> +		BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_1, 0), /* r1 = ips[0] */
-> +		/* insn 5: gotox r1 -> insn 0 */
-> +		BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X, BPF_REG_1, 0, 0, 0),
-> +		BPF_MOV64_IMM(BPF_REG_0, XDP_PASS), /* insn 6: exit block */
-> +		BPF_EXIT_INSN(),
-> +	};
-> +	LIBBPF_OPTS(bpf_prog_load_opts, opts);
-> +	struct bpf_insn_array_value val = {};
-> +	int prog_fd = -1, map_fd;
-> +	__u32 key = 0;
-> +
-> +	map_fd = map_create(BPF_MAP_TYPE_INSN_ARRAY, 1);
-> +	if (!ASSERT_GE(map_fd, 0, "map_create"))
-> +		return;
-> +
-> +	val.orig_off = 0;
-> +	if (!ASSERT_EQ(bpf_map_update_elem(map_fd, &key, &val, 0), 0, "bpf_map_update_elem"))
-> +		goto cleanup;
-> +	if (!ASSERT_EQ(bpf_map_freeze(map_fd), 0, "bpf_map_freeze"))
-> +		goto cleanup;
-> +
-> +	opts.fd_array = &map_fd;
-> +	opts.fd_array_cnt = 1;
-> +	prog_fd = bpf_prog_load(BPF_PROG_TYPE_XDP, NULL, "GPL", insns, ARRAY_SIZE(insns), &opts);
-> +	if (!ASSERT_GE(prog_fd, 0, "bpf(BPF_PROG_LOAD)"))
-> +		goto cleanup;
-> +
-> +	if (!ASSERT_EQ(bpf_map_lookup_elem(map_fd, &key, &val), 0, "bpf_map_lookup_elem"))
-> +		goto cleanup;
-> +	ASSERT_NEQ(val.xlated_off, 0, "gotox target retargeted past prepend");
-> +	ASSERT_NEQ(val.xlated_off, (__u32)-1, "gotox target not INSN_DELETED");
-> +	ASSERT_NEQ(val.jitted_off, 0, "gotox target has a jitted address");
-> +cleanup:
-> +	if (prog_fd >= 0)
-> +		close(prog_fd);
-> +	close(map_fd);
-> +}
-> +
-> +static void check_gotox_target_ctx_prologue_shift(void)
-> +{
-> +	struct bpf_insn insns[] = {
-> +		/* insn 0: gotox target and subprog start */
-> +		BPF_LDX_MEM(BPF_DW, BPF_REG_7, BPF_REG_10, -8),
-> +		BPF_JMP_IMM(BPF_JEQ, BPF_REG_7, 0x5a5a, 12), /* second visit exits */
-> +		BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, 0x5a5a),
-> +		BPF_MOV64_REG(BPF_REG_6, BPF_REG_1), /* r6 = ctx */
-> +		BPF_LDX_MEM(BPF_W, BPF_REG_2, BPF_REG_6, offsetof(struct __sk_buff, data)),
-> +		BPF_LDX_MEM(BPF_W, BPF_REG_3, BPF_REG_6, offsetof(struct __sk_buff, data_end)),
-> +		BPF_MOV64_REG(BPF_REG_4, BPF_REG_2),
-> +		BPF_ALU64_IMM(BPF_ADD, BPF_REG_4, 1),
-> +		BPF_JMP_REG(BPF_JGT, BPF_REG_4, BPF_REG_3, 5),
-> +		/* insn 9: direct packet write -> tc unclone prologue prepended at insn 0 */
-> +		BPF_ST_MEM(BPF_B, BPF_REG_2, 0, 0),
-> +		/* r5 = &jt[0] (insns 10 and 11) */
-> +		BPF_LD_IMM64_RAW(BPF_REG_5, BPF_PSEUDO_MAP_IDX_VALUE, 0),
-> +		BPF_LDX_MEM(BPF_DW, BPF_REG_5, BPF_REG_5, 0), /* r5 = ips[0] */
-> +		/* insn 13: gotox r5 -> insn 0 */
-> +		BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X, BPF_REG_5, 0, 0, 0),
-> +		BPF_MOV64_IMM(BPF_REG_0, 0), /* insn 14: exit block */
-> +		BPF_EXIT_INSN(),
-> +	};
-> +	LIBBPF_OPTS(bpf_prog_load_opts, opts);
-> +	struct bpf_insn_array_value val = {};
-> +	int prog_fd = -1, map_fd;
-> +	__u32 key = 0;
-> +
-> +	map_fd = map_create(BPF_MAP_TYPE_INSN_ARRAY, 1);
-> +	if (!ASSERT_GE(map_fd, 0, "map_create"))
-> +		return;
-> +
-> +	val.orig_off = 0;
-> +	if (!ASSERT_EQ(bpf_map_update_elem(map_fd, &key, &val, 0), 0, "bpf_map_update_elem"))
-> +		goto cleanup;
-> +	if (!ASSERT_EQ(bpf_map_freeze(map_fd), 0, "bpf_map_freeze"))
-> +		goto cleanup;
-> +
-> +	opts.fd_array = &map_fd;
-> +	opts.fd_array_cnt = 1;
-> +	prog_fd = bpf_prog_load(BPF_PROG_TYPE_SCHED_CLS, NULL, "GPL", insns,
-> +				ARRAY_SIZE(insns), &opts);
-> +	if (!ASSERT_GE(prog_fd, 0, "bpf(BPF_PROG_LOAD)"))
-> +		goto cleanup;
-> +
-> +	if (!ASSERT_EQ(bpf_map_lookup_elem(map_fd, &key, &val), 0, "bpf_map_lookup_elem"))
-> +		goto cleanup;
-> +	ASSERT_NEQ(val.xlated_off, 0, "gotox target retargeted past prepend");
-> +	ASSERT_NEQ(val.xlated_off, (__u32)-1, "gotox target not INSN_DELETED");
-> +	ASSERT_NEQ(val.jitted_off, 0, "gotox target has a jitted address");
-> +cleanup:
-> +	if (prog_fd >= 0)
-> +		close(prog_fd);
-> +	close(map_fd);
-> +}
-
-This isn't a bug, but the ~30-line body after the insns[] array in
-check_gotox_target_ctx_prologue_shift() is a verbatim copy of the same
-block in check_gotox_target_prologue_shift() above. The only differences
-are BPF_PROG_TYPE_SCHED_CLS vs BPF_PROG_TYPE_XDP and the wrapping of the
-bpf_prog_load() call.
-
-The file's earlier check_gotox_target_nop() test (added in the same
-series) is a third near-copy of the same
-map-create/update/freeze/load/lookup/assert/cleanup sequence, differing
-only in orig_off and the assertion labels. The file otherwise tends to
-factor this kind of setup out with helpers like map_create(), prog_load(),
-gotox_jt_create(), gotox_prog_load(), and __check_success().
-
-Could these three tests share a small helper - something like
-check_gotox_target(prog_type, insns, insn_cnt, orig_off) - instead of
-repeating the map create/freeze/load/lookup/cleanup sequence a third time?
-
+>  #define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##args)
 >
-> static void __test_bpf_insn_array(void)
-> {
->  	/* Test if offsets are adjusted properly */
-> -
->  	if (test__start_subtest("one2one"))
->  		check_one_to_one_mapping();
-> -
->  	if (test__start_subtest("simple"))
->  		check_simple();
-> -
->  	if (test__start_subtest("deletions"))
->  		check_deletions();
-> -
->  	if (test__start_subtest("deletions-with-functions"))
->  		check_deletions_with_functions();
-> -
->  	if (test__start_subtest("blindness"))
->  		check_blindness();
-> -
->  	/* Check all kinds of operations and related restrictions */
-> -
->  	if (test__start_subtest("incorrect-index"))
->  		check_incorrect_index();
+> +#define BPF_MAX_GOTOX_EDGES	BPF_COMPLEXITY_LIMIT_INSNS
+> +
+>  /* non-recursive DFS pseudo code
+>   * 1  procedure DFS-iterative(G,v):
+>   * 2      label v as discovered
+> @@ -388,6 +390,18 @@ static int visit_gotox_insn(int t, struct bpf_verifier_env *env)
+>  			return PTR_ERR(jt);
+>
+>  		env->insn_aux_data[t].jt = jt;
+> +
+> +		if (check_add_overflow(env->cfg.gotox_edges, jt->cnt,
+> +				       &env->cfg.gotox_edges) ||
+> +		    env->cfg.gotox_edges > BPF_MAX_GOTOX_EDGES) {
+> +			verbose(env, "number of indirect jump edges in the program exceeds %u\n",
+> +				BPF_MAX_GOTOX_EDGES);
+> +			bpf_diag_program_structure(env, t, "too many indirect jump edges",
+> +				"Reduce the number of indirect jumps, or the number of distinct targets they can reach.",
+> +				"The program has more than %u indirect jump edges in total, counted over every gotox instruction.",
+> +				BPF_MAX_GOTOX_EDGES);
+> +			return -E2BIG;
+> +		}
+>  	}
+>
+>  	mark_prune_point(env, t);
 
-[ ... ]
+Does this bound prevent the load-time DoS the commit message describes?
 
-> -
->  	if (test__start_subtest("insn-array-stale-reuse"))
->  		check_insn_array_stale_reuse();
-> +	if (test__start_subtest("gotox-target-prologue-shift"))
-> +		check_gotox_target_prologue_shift();
-> +	if (test__start_subtest("gotox-target-ctx-prologue-shift"))
-> +		check_gotox_target_ctx_prologue_shift();
-> }
+The accounting itself is correct: the counter increments only inside the
+if (!jt) block, so each gotox contributes jt->cnt exactly once, and the
+counter is program-wide across both walk_cfg passes.
 
-This isn't a bug, but besides adding the two new subtests, the patch drops
-the blank line between every existing subtest in __test_bpf_insn_array(),
-which accounts for 44 of the 130 changed lines. It is a pure reflow with
-no bearing on the new tests, and it also removes the blank line that used
-to set the two grouping comments apart, so '/* Test if offsets are
-adjusted properly */' and '/* Check all kinds of operations and related
-restrictions */' now abut the surrounding calls and no longer read as
-section headers.
+However, gotox_edges counts the CFG edges added, not the work that
+check_cfg() performs. The expensive operations happen before this check:
 
-Would it be worth splitting the blank-line cleanup in
-__test_bpf_insn_array() into its own patch, so the diff for the two new
-subtests stays small - and keeping a blank line before the two grouping
-comments so they still stand out?
+  visit_gotox_insn() -> create_jt() -> jt_from_subprog()
+
+jt_from_subprog() loops over every insn_array map in the program, and
+for each map it allocates map->max_entries u32s and calls
+bpf_copy_insn_array_uniq(), which does one map_lookup_elem() per entry
+and then sorts them. This runs once per gotox instruction.
+
+The edges added per gotox are only the distinct targets that survive the
+sort and dedup, which can be 1 or 2 no matter how large the maps are.
+
+So the cost is O(gotox_count * total_map_entries * log) while the limit
+constrains gotox_count * distinct_targets. A program can sit at a small
+fraction of BPF_MAX_GOTOX_EDGES and still take arbitrarily long to reject.
+
+The commit message states "1024 such gotox are already ~1e6 edges and
+about 4s of CPU to load" and "Progs with real switch statements are
+orders of magnitude below this", which reads as if the 1e6-edge bound
+caps load time in the seconds range. It does not.
+
+This is confirmed by the next patch in the series, b94c1f057586
+("bpf: Cache the jump table of a subprogram during CFG discovery"),
+which measures with this bound already applied: "A program of 4003
+instructions with 2000 gotox and one 500k entry map holding two distinct
+targets has 4000 indirect jump edges, 0.4% of the limit, and takes 343s
+to be rejected. [...] At the insn limit, with a single 1M entry map, the
+same shape extrapolates to 41 hours." That patch carries the edge
+accounting over verbatim and instead builds each subprogram's jump table
+once, which makes check_cfg linear.
+
+For the unprivileged load path, bpf_check() holds bpf_verifier_lock, so
+a single such program stalls all other non-privileged program loads for
+the duration.
+
+Given the Fixes: tag and Reported-by:, should the commit message clarify
+that this patch bounds the edge count only, and that the per-gotox
+jump-table construction cost is addressed separately in the next patch?
+Otherwise the series might be read as closing the DoS at this commit.
 
 
 ---
@@ -231,4 +145,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34875126886
---===============2499098142792978847==--
+--===============2896433261446549126==--
