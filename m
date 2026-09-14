@@ -1,148 +1,268 @@
-Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E748233126
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 22:35:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFAD34D382
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 23:02:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789425347; cv=pass; b=WNajCDQdiMdavfpJraS6lMu2nUE94vLC/s+NSwP+zBZ58dNCwQgQ0zV1tHRGjGzFvlLONXmCCyqbxnPcVlaGEfPqHDdG+zF93LgCCVDfY3SUkerLYYKgc54ekvdn6qNRccuVfeKBznxFA5J8jBVt0U+s8Wg2fNQhtabHT2886g4=
+	t=1789426959; cv=pass; b=qeqvQDVknkjigsPzgqG5+n4JgsQrOPcdDxGM4mfbWPTtd2Kb32OKK9PQrDNNrM+Eao3dpw/X4+jWSkKzuddlxYS6V7zuhI9JdFBNiM/JurXwme8IcX5vEsFj9b8YSe4MywiwzLn49i+/8thi2jgwUwzrnfbOy9UuF0AqQju396E=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789425347; c=relaxed/simple;
-	bh=mMH1ijQVK/BHrqtJkvFNFIAYi7VmNkP+j6GhBHqzUEQ=;
+	s=arc-20240116; t=1789426959; c=relaxed/simple;
+	bh=HnZj22pjlGHIEfM6bhLJdkIF85ojkiFcxZaEA0PyVZk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IjneZ+cl/ctCs6Yi2lH97ncM4UUP/I06zlbonNuNqJcnq2gRFT3jusMC/cTmHixPyX7lYgdmYXpIC5FIgmUYzBULRPI7FJBDk62FranOwCTtLkxUZ7LEKF0xNyFJBFc6U7ZT+K24i9IdwmvuB8oLrI5t10wDFuw6ZP3MVWf37vk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=V81Xlc/N; arc=pass smtp.client-ip=74.125.224.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	 To:Cc:Content-Type; b=t6EGNR4y1PZEfl347Lva842mrJ0JCBpO/W/8xYJpTh+FCEDHJ9Xls0htlJCy6KEZobUitMFr/n3cA+/crEtGwzSPjmN/IgeIN84pLK1g2RcIsvrD1hcVVMonQ+GoKshsHAOZR0yzda7IVaBXfA2Nq0B1GMMUWUWZQek+0gRVVRc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=njLUo9f6; arc=pass smtp.client-ip=209.85.161.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="V81Xlc/N"
-Received: by mail-yx2-f12.google.com with SMTP id 956f58d0204a3-66e4ab19127so2653788d50.1
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 15:35:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789425344; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="njLUo9f6"
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6b1334a3b16so2724059eaf.1
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 16:02:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789426956; cv=none;
         d=google.com; s=arc-20260327;
-        b=lArMLkWAab4dBwMGMGvDz0SNyzAuIJSH7452lrdmmAjYYiZhpjv89N2y6XpeQJttE1
-         64xH4luW8pIzQIe3u+hD9qk/+DiKANpfP3AtV7LkghMIONULYfRCBL+LrD06hjeBFyFT
-         ETNtz63+H3mjcCrUGLgD5E2HujEFqfVbT9BSMr9f7bosBI3NaN6pjT5TpuqPz8TMITMV
-         ikE4Ut19VQby1a8kqrP+qk5420BaqtRBQ4tTFSL5e1B2LOaICNMPxx6X/jkAPO77WRpx
-         uG41X/WLceKVLbl5PKoLIwZPKA9+nUyp8FjSjeZ3oZfHIjSQhE17mqwlDM5vIr7uMf1o
-         dwdw==
+        b=jr5bVzoPULsfAMCf9quJCswWyOi3rWQ7LvgwgFeD7IrEjIzC0mGHqyZ/eDSEUuKgSl
+         nXcb+SOMFoquobOsumWFzBwVSBC6iabUwFbhJKvhkqLZXJsCAVui1CEuop+Y4/Zg1+/+
+         NYxslLn/6W8jkVBPXncDrbL9Ym1Vuzvm+PW1RGM4elEP8pqEECjQVKUB+MCijdIN10Xx
+         sB+UzuF3djGJGCyjg0MzEDavUxslHV9q90cpXzXRLKXcvMOdjwUQ896SXCBc2sHJFsWH
+         kDW0xw8msssnmyNTTxQW5v4ptfUjM9YmolXbJLdaQmJk6nZTaDOyzzamZSGwPc+XVe+U
+         79CA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6f+ibT+gH2nKFJxetkwt2/sBz4ITIBK8m+P62pM4ISU=;
-        fh=kohaj8+/CxpjGSiai1o69ZempdnBqbTCxE4iuJ8y+n4=;
-        b=eh4xqUY59g4hhYoav+BBV3sqlBgWq9jky59bZGu5zTyhtXHsWxf6VTR9+gZgpOTR2V
-         SALgwdrSAgLbztj9GRoygKFL1/Aomv3mtdlsDy6aRAh9WVvG+sscF0BfWBmo5T5mdc0f
-         2+T7+TqaPMe9D+HSrImxUos6DJVsp3DhqpNV5NxLQqRKXWlDQURTCxQjy26B88Yl/H4u
-         ofSjyEF66Mhk2S+wLf7GSDfF3r4ngvK9o/L5Uy+GRDsOWUTenlPugSEv0mF3GIJxUMvQ
-         12XV39k1Pp+f00IRIGhFb5tRV9b7WrMZcC/aDMGuzq0S4GaNJ3kQixxr6RW4Xw9ToBwD
-         OLNw==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=pOUFKWLA82ZDA522DpGzRiQP4xIkyg70D3qyVuxPWKQ=;
+        fh=slIclTQ5apa2Oq5/E1qGbL7JWOP1Tq0UMTQVgttIFok=;
+        b=nIPFT0XFdYR5xV63R3TADsULeh5cZ+gUwXkXZllyzrq4tGcHalcch1Ya+BcAUQ/IEq
+         hNjK3xPOxNJN2phNewcJ5pTv0REvp0nGROSbHMF2mMuKN9XWb4UvsIbbllWp80f20n/M
+         e/CLo0OxLa09uXqvLH3UZOdJxhEksd9LlutuqdN7GCSZ62kH0rqpzjq5ta++yWJFw29p
+         +9vKHVeOt8MTKfS64UI7W5C3dUu+nrz4MdYukP0FO/GX40tlK/VI+gcmpVkUpFr/A3++
+         k4Ju3D7AdHp+cjvtZ9p8PE0SAS7L37gd3XBjO8SwNzzc54yba7PcNOES1oU9QX0Bid3H
+         ISOQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1789425344; x=1790030144; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=6f+ibT+gH2nKFJxetkwt2/sBz4ITIBK8m+P62pM4ISU=;
-        b=V81Xlc/NWPaz+8j708oFZ9Cwx3qobsfk4X0e+skD6d3IRwC7bJfAxTzG4K5+ByfVk/
-         Flve/duxMycoxsxG6QbdkG5mv4gPHGwdKhZKoiswuE5aIL6iAn3Hgn9xMkS3br9vPcY7
-         o/hJZaZlE9t1HqFCC61BShbV2SxzlxU+7Rf4C99ci/+nwVBaYib0x5XRlH+7qqj1Ak9z
-         GA0Bf9TqZoieWauQrIheOyVUp77RGxLxYaP3skq0kpPzZMIqrNUCsKBSvJVR1uafl7I8
-         F28c+e4pNNKhAFRUwlbTlgBQndPwL9UJ/YyzB4sHEWY9hiBDMH0bi7hBW/zi9CxQIKzS
-         tceg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789425344; x=1790030144;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1789426956; x=1790031756; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6f+ibT+gH2nKFJxetkwt2/sBz4ITIBK8m+P62pM4ISU=;
-        b=10pl4f2ylUKLJc/GbIMkfe2t3s2DQ35mXziQXn4w2dto8rzEPMbhThuPqrZRdavGfV
-         4yzUoEacbI/n0d7azjZBsMF1MfloflrSyo6+qXhjYEuiqnh2Gkehz+QzBk0PexHLVuZW
-         TXKQfcXf899OOl2MkJeAMP0Ol0I1fr1TbcTCkgLhq/5lLAJznzzKgg+NghmgG6pJhAS9
-         ALpyFzqBhTxJqeXRQn1F35ZagI9n4GrUBDKZigVpBYQ8sDOccxSCsdYL1tPQphB8i6kf
-         xdygAqYRT4gLRGUeYMW7Mfl3+kGMxH55JBvlstvwZ7Sp23tnxt1jKU+wRNS58HV3Qldk
-         66/w==
-X-Forwarded-Encrypted: i=1; AKwUvBz77QZl5kXXFT8UwtqNP5AZ6kE8E/jqhSTsBDc6odXAZnyxs1U5jeOl7aY15pDwcqN0es0=@vger.kernel.org
-X-Gm-Message-State: AFuF++nZT5U4CsRus70rsbcqZhkSe0elOl+SwTRwzJVaysZ7H2QCMBtp
-	608BlP5eI9BBYYwMtMeIDFnaq2aVofbk0wfYoSernq4F/RejFlqU9JgivI24BSHtepLwNPPVQ2I
-	wtPmzF6CfkGtLUo7tR2eV933jvzNRiofaUzb8veKxzEwr6V6MDuARc7E=
-X-Gm-Gg: AYBFou2ib2FDU4r1PzKH3USkQhA6fvqpPigjRPT/nQlV300FpDGqzRGxxwS5nvalpom
-	e7IVlOPouw9lRhcWzWnjcioHuLQ5mzxsyZ3XxggLGWB9z+zDN7wZ6JKY/4tqZC0g0dL/GFqC8uf
-	o2Dest2jFL4quVhbg4DTKGepeF98IptOZnqxXOan52ko0c5sy+1sisTX/RxBYEGyk6IHPzNmJmg
-	+Iu6rB8pUnkC1WnycKwAq98HYb/GOS+MAXw3j1GP8RrUgtTD4juzimZi8UIarW/vViyG5czO2aY
-	kS5OsO3mZHUm9yyJQHgnpJYHVk3BONt8zaGZNGmMdn/gakDHS7R0aFo=
-X-Received: by 2002:a05:690e:1286:b0:66c:c215:ef75 with SMTP id
- 956f58d0204a3-6714dfeeeb9mr1693024d50.19.1789425344497; Mon, 14 Sep 2026
- 15:35:44 -0700 (PDT)
+        bh=pOUFKWLA82ZDA522DpGzRiQP4xIkyg70D3qyVuxPWKQ=;
+        b=njLUo9f613ETcTM0BuZQ/4VcFKGxPrUlgbNcdOnqGn1fpgDzwp1a5Q+vdz6tDUJDrZ
+         McuIdpwa0U1GX97oEpWaoSnjchGBZ7wpohw1URwfNZm95eWAWjrRuVaLSWzierLNoTi0
+         07PqvdfTBb0sG5IDKXJU5B3jrSJ6LT5fF7Otz6TywYI0cAVi9GHmD5F73G7dSpsA0/UK
+         C8Nev/wxrYSqIl1F2SGoL2XAUbw5kndaG/pvZsUAv+fIpulOoU6upAXBL1e4JR1qFzfX
+         fdlzqM4JazG9sFpLcubUSpj+hVWNfnpd7fZf5lthjq/189Fw0GAzdh+dQQXrgjGoldfV
+         9qFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789426956; x=1790031756;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=pOUFKWLA82ZDA522DpGzRiQP4xIkyg70D3qyVuxPWKQ=;
+        b=Xs8o2VKvl+gFGmBwPVh+bbgr5bcyX1gncHAAcX3U93g+kIVPvVuv7e1/Ne86lwlImN
+         Sj2MCFNCQCYgDraJ8UFC1+hpgf54JYyy50MVTSNUNzal+flGGnmQAbTasqpSYjmlapZK
+         RkJyFDNb5Qx3AzhP8VdpGjvlkUgYZDwkwi0cawSzD514IXD8igG62Es0OVvlBtigGiDb
+         3XBR9ShGmjMFowePYRlddiGHeV1ttnVtZCF+N+NFoUOpdkT3FKOn7LzJCKlyUwod2b1r
+         l7y2ShmNrws61SptKuWyPUrrKF5m/oCvRj71pIOj82/pxyIZK9MJqKNgljYTPignFmNW
+         NASQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwMbROZ8yBiYntLQdvJXuJQ4XMtahWgWYvkLVigLJ2eqqB8xsfLrvTTAgex7K7lqWJwyP8=@vger.kernel.org
+X-Gm-Message-State: AFuF++mVUeTXp4822/KDIiB2fanMmH61QY6qtRDXVOmV3D7GKqRyGnFY
+	eHRUz/ob0VaMXbBzX6MVudsNOE2npyPNPtOtD+QT4rjlwUH9mxo4P00OhBrPqEPxlwyO3SMfcpD
+	cxyvq03HQxYz48zAAeIEYbhNLyB/W4Wc=
+X-Gm-Gg: AYBFou2Xm7sYnMq1EvwzKLJpWsKqmSJ0QbJSmbMfGY1FOXrjAhPotd41BWlbofs/I4v
+	zK6sbdtJO2XmUanRSSteGy3y8vK+dxoSJsBeWrBycGFoZQuMN+ykTVG1NL6ll7GjdZoxsDZnA4C
+	rFV+GmHOkoLaQqCq1RtkqzjhJjUGA6GE2oNR3hMZeXH/ea8KhvaRbzOQ60j6g8QPcJilQIKWsIN
+	fY6gltpZXutG5nkc23wE9KDgSKx4DBE7105/kd95uv0Ltwtvvs1M2HIPQpZg2DnxlvwsviA6hWP
+	56yOX9cqi5DXr9jMUmlWFNed4f3X8kpRz51DmJK/h+UcdOuOMUdJ4mg=
+X-Received: by 2002:a05:6820:2226:b0:6ba:1878:2a6c with SMTP id
+ 006d021491bc7-6c540088554mr2619502eaf.4.1789426956040; Mon, 14 Sep 2026
+ 16:02:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1789056660.git.zhilinz@nebusec.ai> <7d2cb8e8dfaa9eb8fdff85156987a60960787dc3.1789056660.git.zhilinz@nebusec.ai>
-In-Reply-To: <7d2cb8e8dfaa9eb8fdff85156987a60960787dc3.1789056660.git.zhilinz@nebusec.ai>
-From: Emil Tsalapatis <linux-lists@etsalapatis.com>
-Date: Mon, 14 Sep 2026 22:35:33 +0000
-X-Gm-Features: AcwNN1WUa8mlYWrVLO0LqM9p8NTaYEkhDdFDcjWZEzIHDnE_gBeKM8jut5VcLDo
-Message-ID: <CABFh=a5jv9KG2g-8mU+kxmEawr0aMt15du0aemA73uq9k9McAA@mail.gmail.com>
-Subject: Re: [PATCH bpf 1/1] xsk: use a 32-bit compare in xsk_map_gen_lookup
-To: Zhiling Zou <zhilinz@nebusec.ai>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com, 
-	maciej.fijalkowski@intel.com, sdf@fomichev.me, davem@davemloft.net, 
-	edumazet@google.com, pabeni@redhat.com, horms@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, 
-	jonathan.lemon@gmail.com, vega@nebusec.ai
+References: <20260914073356.791518-1-cui.tao@linux.dev> <20260914073356.791518-2-cui.tao@linux.dev>
+In-Reply-To: <20260914073356.791518-2-cui.tao@linux.dev>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Mon, 14 Sep 2026 16:02:24 -0700
+X-Gm-Features: AcwNN1VZkBQqQYfMVd7gQUm6WpRn7TeG3A6jO20_KXpKUTM9cv8b_LakI3YB1JE
+Message-ID: <CAMB2axNkTS-UuH-KctiY+5qh-JZZkKsiyQr_KOnGJt1bPoL3eA@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 1/5] blk-iocost: add BPF struct_ops cost model support
+To: Tao Cui <cui.tao@linux.dev>
+Cc: tj@kernel.org, josef@toxicopanda.com, axboe@kernel.dk, 
+	cgroups@vger.kernel.org, linux-block@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org, 
+	ast@kernel.org, daniel@iogearbox.net, linux-kselftest@vger.kernel.org, 
+	cuitao@kylinos.cn
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 10, 2026 at 5:07=E2=80=AFPM Zhiling Zou <zhilinz@nebusec.ai> wr=
-ote:
->
-> xsk_map_gen_lookup() loads a u32 key and compares it with max_entries
-> using BPF_JMP_IMM. BPF immediates are sign-extended to 64 bits, so a
-> max_entries value of 0x80000000 or higher becomes a threshold larger
-> than every zero-extended 32-bit key. An out-of-range index then skips
-> the bounds check and the generated lookup reads past xsk_map[].
->
-> Compare with BPF_JMP32_IMM so the check stays in 32-bit unsigned range.
->
-> Fixes: e65650f291ee ("bpf: Implement map_gen_lookup() callback for XSKMAP=
-")
-> Cc: stable@vger.kernel.org
-> Reported-by: Vega <vega@nebusec.ai>
-> Signed-off-by: Zhiling Zou <zhilinz@nebusec.ai>
-> ---
+I mostly looked from a struct_ops perspective.
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> +
+> +static const struct bpf_func_proto *
+> +bpf_iocost_get_func_proto(enum bpf_func_id func_id,
+> +                         const struct bpf_prog *prog)
+> +{
+> +       switch (func_id) {
+> +#ifdef CONFIG_CGROUPS
+> +       case BPF_FUNC_cgrp_storage_get:
+> +               return &bpf_cgrp_storage_get_proto;
 
-For xskmap specifically this scenario is pretty unlikely, so this could als=
-o
-go through bpf-next. Feel free to follow up on Sashiko's feedback, but
-they qualify as followup work and shouldn't block us from merging this.
+This seems redundant. BPF_FUNC_cgrp_storage_get should already be part
+of bpf_base_func_proto.
 
->  net/xdp/xskmap.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/xdp/xskmap.c b/net/xdp/xskmap.c
-> index 3bff346308d0f..bf00d6463c191 100644
-> --- a/net/xdp/xskmap.c
-> +++ b/net/xdp/xskmap.c
-> @@ -124,7 +124,7 @@ static int xsk_map_gen_lookup(struct bpf_map *map, st=
-ruct bpf_insn *insn_buf)
->         struct bpf_insn *insn =3D insn_buf;
->
->         *insn++ =3D BPF_LDX_MEM(BPF_W, ret, index, 0);
-> -       *insn++ =3D BPF_JMP_IMM(BPF_JGE, ret, map->max_entries, 5);
-> +       *insn++ =3D BPF_JMP32_IMM(BPF_JGE, ret, map->max_entries, 5);
->         *insn++ =3D BPF_ALU64_IMM(BPF_LSH, ret, ilog2(sizeof(struct xsk_s=
-ock *)));
->         *insn++ =3D BPF_ALU64_IMM(BPF_ADD, mp, offsetof(struct xsk_map, x=
-sk_map));
->         *insn++ =3D BPF_ALU64_REG(BPF_ADD, ret, mp);
-> --
-> 2.43.0
->
->
+> +#endif
+> +       default:
+> +               return bpf_base_func_proto(func_id, prog);
+> +       }
+> +}
+> +
+> +static int bpf_iocost_check_member(const struct btf_type *t,
+> +                                  const struct btf_member *member,
+> +                                  const struct bpf_prog *prog)
+> +{
+> +       /* calc_cost() is called with RCU read lock held */
+> +       if (prog->sleepable)
+> +               return -EINVAL;
+> +       return 0;
+> +}
+> +
+> +static int bpf_iocost_init_member(const struct btf_type *t,
+> +                                 const struct btf_member *member,
+> +                                 void *kdata, const void *udata)
+> +{
+> +       struct iocost_model_ops *ops = kdata;
+> +       const struct iocost_model_ops *uops = udata;
+> +       u32 moff = __btf_member_bit_offset(t, member) / 8;
+> +
+> +       switch (moff) {
+> +       case offsetof(struct iocost_model_ops, name):
+> +               if (bpf_obj_name_cpy(ops->name, uops->name,
+> +                                    sizeof(ops->name)) <= 0)
+> +                       return -EINVAL;
+> +               return 1;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static u64 bpf_iocost_calc_cost_stub(u64 opf, u64 nbytes, u64 sector,
+> +                                    struct blkcg *blkcg, u64 model_flags);
+> +
+> +/*
+> + * kdata is seeded from the CFI stubs, so calc_cost is never NULL; a
+> + * model which did not implement it inherits the stub, which prices
+> + * every IO at 0.  Compare against the stub to reject it.
+> + */
+> +static int bpf_iocost_validate(void *kdata)
+> +{
+> +       struct iocost_model_ops *ops = kdata;
+> +
+> +       if (ops->calc_cost == bpf_iocost_calc_cost_stub)
+> +               return -EINVAL;
+
+This should check !ops->calc_cost. CFI stubs are used to construct
+trampolines; they are not copied into kdata for callbacks omitted by
+userspace. Also, should the reserved name "linear" be rejected here?
+
+> +       return 0;
+> +}
+> +
+> +static int bpf_iocost_reg(void *kdata, struct bpf_link *link)
+> +{
+> +       struct iocost_model_ops *ops = kdata;
+> +       struct iocost_bpf_model *m;
+> +       int ret = 0;
+> +
+> +       if (!bpf_struct_ops_get(ops))
+> +               return -ENOENT;
+
+struct_ops core should hold a map reference when calling .reg().
+Calling bpf_struct_ops_get() in reg() and bpf_struct_ops_put() in
+unreg() doesn't seem necessary.
+
+> +
+> +       m = kzalloc(sizeof(*m), GFP_KERNEL);
+> +       if (!m) {
+> +               bpf_struct_ops_put(ops);
+> +               return -ENOMEM;
+> +       }
+> +       refcount_set(&m->refs, 1);
+> +
+> +       mutex_lock(&iocost_bpf_reg_lock);
+> +       {
+> +               struct iocost_bpf_model *other;
+> +
+> +               list_for_each_entry(other, &iocost_bpf_models, list) {
+> +                       if (!strcmp(other->ops->name, ops->name)) {
+> +                               ret = -EEXIST;
+> +                               break;
+> +                       }
+> +               }
+> +       }
+> +       if (!ret) {
+> +               m->ops = ops;
+> +               list_add(&m->list, &iocost_bpf_models);
+> +               list_add(&m->lifecycle, &iocost_bpf_lifecycle);
+
+This seems to contradict what the changelog says: "blkcg
+online/offline notifications follow the model binding, not the name
+registry"
+
+> +       }
+> +       mutex_unlock(&iocost_bpf_reg_lock);
+> +
+> +       if (ret) {
+> +               bpf_struct_ops_put(ops);
+> +               kfree(m);
+> +       }
+> +       return ret;
+> +}
+> +
+> +/*
+> + * Unregistering drops the registration reference.  When the last
+> + * reference is gone (no device bound), the node leaves the lifecycle
+> + * list and is freed; otherwise bound devices keep it alive and it
+> + * keeps receiving blkcg online/offline notifications.
+> + */
+> +static void bpf_iocost_unreg(void *kdata, struct bpf_link *link)
+> +{
+> +       struct iocost_model_ops *ops = kdata;
+> +       struct iocost_bpf_model *m;
+> +
+> +       mutex_lock(&iocost_bpf_reg_lock);
+> +       m = iocost_bpf_model_lookup(ops);
+> +       if (m) {
+> +               list_del(&m->list);
+> +               if (refcount_dec_and_test(&m->refs)) {
+> +                       list_del(&m->lifecycle);
+> +                       kfree(m);
+> +               }
+> +       }
+> +       mutex_unlock(&iocost_bpf_reg_lock);
+> +
+> +       bpf_struct_ops_put(ops);
+
+Mentioned above. Doesn't seem to be necessary.
+
+[...]
+
+> +static const struct iocost_model_ops *
+> +ioc_bpf_model_prepare(const char *name)
+> +{
+> +#ifdef CONFIG_BLK_CGROUP_IOCOST_BPF
+> +       const struct iocost_model_ops *new = NULL;
+> +       int ret;
+> +
+> +       if (!name[0])
+> +               return NULL;
+> +       ret = iocost_bpf_model_get(name, &new);
+
+It looks more straightforward if iocost_bpf_model_get() just return
+the ops ptr and ERR_PTR on error.
+
+> +       return ret ? ERR_PTR(ret) : new;
+> +#else
+> +       return name[0] ? ERR_PTR(-ENOENT) : NULL;
+> +#endif
+> +}
