@@ -1,186 +1,264 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2884F442B2F
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 11:56:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A7744C51B
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 11:59:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789386994; cv=none; b=RexzQ43HiqnlRdbpc1qTdX+5vjWcG4mu+hBsGZp1SPm/pl+S5WVMF7WR3sCXcwv83H0CTjAHLX3ElEKhAFQ5A6QCDQQhzRzMHwdUnfw50nXQ7tLmqGJPrmudQIVbyOCcaGhYRqyZEj37SzmL81kcra4whwQWlzgde3XVzLJQy6o=
+	t=1789387202; cv=none; b=K0LrwUIng+a41qohVmnDANYfMCbOGUQOf6lJb44/Itl5oKsN2R383ThG3BvHyoC2FafrDjx0w95BzhqpV0U0BPLqUQwhkE8MDaFR2Q66T9Bi4b9RJrbfqNfzcmImpSsLKt6FXjEBQfkE77ZNiGg0X8X5kXwXp4DBatPCUXgLnko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789386994; c=relaxed/simple;
-	bh=ET3d2dn8RoQYW9nZ6+dhkdZsWN6D3bvRnc5MAY8T+ak=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ba8TQR77vO5irgBtX6USY+AmKVpHXVX2UtG2d+gSZKZXk0p4ZI80fYktsPYu4soKTxH8heFC04XcVajOUHbGD5dIohsadxw9NXbaDzN8WYO0tIG1qzAyyqVH6G5/anHR/zTrLpuDsCxpvLL0Vk/eqtkqB501lWruQXA3FjxEuYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=caPDihUA; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1789387202; c=relaxed/simple;
+	bh=A10D0NZw3RFvU9sAwBciZM8nUIdNfoZYYMeX2y6NBj0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Iqggc+Ozse5Q3mqEC4iBT07hnaVjU4DjKV5CB7iuxPXjWjR0i4D+Z4BKEyvpxR7j80l/iMEh7cs2sl1YWgfwgWOuMdulJdnXjLiutZUWxIBe+xXvLgT02Rq8fTTB0rzpbCe5ruRYhjCCzW6QiU13zOZGi4xy0AqbPZW0aEMUWhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ak6Uch9+; arc=none smtp.client-ip=209.85.221.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="caPDihUA"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-853f8c34ba4so4253584b3a.0
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 04:56:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ak6Uch9+"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-482ea739de2so2160290f8f.0
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 04:59:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789386992; x=1789991792; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6cZnP6MDZU5vZQxpJOfJKbElTvy88Q385dtzTC3MYtw=;
-        b=caPDihUArpD/nF+7f1YrvOK3j1U0yCHR3EGAfy6mWiUqe3M5GWIiXmu930sDBFpsZ5
-         WkBqDpxnNkVMMt+sEb52biZ15gQwjC19/0PVHdyLe5StvqS1qIoYTr7ql3OKQHjZSuBh
-         yx8EvqF80syAqJAekncrZadEZLBh3HAj9YV++Xxtif39IBMpuDf8ds3Tg6NfQWFojHho
-         wu94pjPJbLmRQ076N96bYjL99jXRh0GSprWuHQ/g0NIyx4jnYIMj7qM0Ov2ffoc5fnd8
-         CP/rf43DcbA0cUJsOunfQxXQH0Cjq566JK/g2AP/GgkAY4MRdnxpPwMV5ZliqCfGSbNl
-         BObQ==
+        d=gmail.com; s=20251104; t=1789387183; x=1789991983; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=CKGEBXocfkP1cYm0xLoNtz8l8ywke8IK/b2q2YtiWKg=;
+        b=ak6Uch9+Op5Z4TK6F4Njw4mJBE6yY9iWdb1fMwbigHcwVLOsZxMRSeITI/974UUk55
+         3p1n7FuSe17HmZX6jqQkuXPrqw/nyen8Z8LQezwl/SCgeD53aXiQJnxPxqM+pEAbXFmQ
+         BYzHgIXL5m5qfB65StM7KELToNgVuZdo1vkQuTDfWEiHDx9YUxSktgioqCzkQfG6DUxk
+         CJpzWLdJZ1XV33yMUsqmEiuuEvrObhIz39vE+hcoxrX3CqttDUeczTNzhq9sjA2BYB8q
+         9+0THkDrJdnv9wiJn8qPSzjqn0uJDR21meeSmkPzrjFZ0OjGvaR3vNBuK7Yz3JkFNGor
+         Tz2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789386992; x=1789991792;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1789387183; x=1789991983;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=6cZnP6MDZU5vZQxpJOfJKbElTvy88Q385dtzTC3MYtw=;
-        b=AuHt5h5RyI6NkA9l83SQenr8/XTnYgXBTu9oBhpLSAbpo097uOvVsjL8+PcfkOu4yh
-         Al/qwA8lvvHBUoWm/1LX8rQGnBDMo3HQHEAeSajzz7XbarLLH5Oi5J9dtYY9W0WAlDZh
-         gYrjUu/EIY1pxiNIxs82HoKuakS9l9Dn8hEidbeX8XbZirSKLQrxofwinWqqOnPuBis1
-         +7u0zmq6EKFov8tNCpRY+iSctH2o1awEyP47ai8O3JzkT2vowN7Yrxu+it6nQWdm6W1a
-         vampSF+zZ/hKUnEIVTXHyYbdQsIfnl6JR+Ml4kqLB80hzMWo3GNtL0Ahmlmgb1rl/yPb
-         bcow==
-X-Forwarded-Encrypted: i=1; AKwUvBzAg+pQNqtlTVu5XJ5oNcnTCIEVe5DXlh4JW3ovIZKAqm1xzDpA3q1JAUSeDfDJOrD+KCU=@vger.kernel.org
-X-Gm-Message-State: AFuF++mUf5XEMdCfDNrpFpsAiJjQ/21eXko4VeqVcBRv3F+I5WtuWbJn
-	n3mha2YeKjuGPMabWNgi9Oemusc/P75y2yxPS8HLndG4yDhqawky6QVu
-X-Gm-Gg: AYBFou0wWWhB6bKb95yhsrfxNVxds0wHHJqfIhF2B7qsuietnUyi7ir3CKRMwBWdRD1
-	JGnNT4OnzAIdpIwwPTunGMRpOHjm3karnvLbT8AxBptj37I4KIH89UIKJYwHOjLMqD2oYMlfrcc
-	C+i0C9vHZsh3VkLWejbzzmO+qH/y/bqK6DPYmY2ZNpiXboAcPQ9ufhgVbGSsitMox+ipuMqnJN9
-	JbCzambrdL7ZF3mlPkU7EMwh69Hh50X80LMF0ClzKCQnFaPJ3qra94Fx/EP68GiADcgcpgLmE4r
-	VRLYARei06gRIEPPi7bo3nqoJP53JE6Ps6hVqGQ1OFIyC8YFfvVCviB/3VlV1Kvuqx0k307flkt
-	dms7qe7eylIVUuG8ZCmAk67BhDWqCcuQbW4kJnrLPnvvnZxuHmLiS3yG0xzt3GRjlK7KbDqW+o2
-	sOYjB7PKXJBEGuSuxMeo2DoPNvUMaMEZLNeTffdW/8o2EsN19XFkHS5ALK0KohzT386Dkd+lGlB
-	4eF6/kOsxsRPjDisN0CURG66OmLNNNvbm4KfFYdkqZuK6nkoeMacmHHjFIKf1E=
-X-Received: by 2002:a05:6a00:44c8:b0:857:726d:270c with SMTP id d2e1a72fcca58-86f866b8c0fmr5070563b3a.24.1789386992211;
-        Mon, 14 Sep 2026 04:56:32 -0700 (PDT)
-Received: from 56e-726.realtek.com.tw (61-219-240-249.hinet-ip.hinet.net. [61.219.240.249])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-86cc50c786bsm2729281b3a.41.2026.09.14.04.56.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 04:56:31 -0700 (PDT)
-From: Wei-Jie Hung <imbigking12@gmail.com>
-To: Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>
-Cc: Alexandre Ghiti <alex@ghiti.fr>,
-	Mike Rapoport <rppt@kernel.org>,
-	Xiaofeng Yuan <xiaofengmian@163.com>,
-	Klara Modin <klara@kasm.eu>,
-	linux-riscv@lists.infradead.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Wei-Jie Hung <imbigking12@gmail.com>
-Subject: [PATCH] riscv: patch: fix handling of bpf-jit execmem addresses
-Date: Mon, 14 Sep 2026 19:56:07 +0800
-Message-ID: <20260914115607.350097-1-imbigking12@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        bh=CKGEBXocfkP1cYm0xLoNtz8l8ywke8IK/b2q2YtiWKg=;
+        b=JiuzgFYMFyzDXjtbcQJ3YzjceX3yFQmdy78hY4inNSbFRVVCW86fXWQd+PvhVBFRK5
+         kcoDY2FOCLhcPEYaonEPrbh74FoZYAJdQccYAkb5L9UflhYyKfIdpTwgGjUQU+NAOpXo
+         QvVfaL6vrb2ox6NJV7S/RwP3NV5TBQGRQkD4fyEbZjd+q+gP6Iysb501PJgq4+Va/BBY
+         bTDs72l7+SC6antZ1zuJxSG/G6eHpwECY9rYlw3jPoGLqEF5dZ/fD6T8uqNs1FA0rJWO
+         dyEq8S6ll8UwAOD7tQbAqwMBJ093n1zq5NnL93+8jmn7lKuAKYR/sXd/+TLDGWgqph1X
+         TW7w==
+X-Gm-Message-State: AFuF++lwbw3DRpAkWHM3hImGTJJotLFW4KbUwNExHkVAGn9QvYEZ/V/B
+	bgLRKS2CQ666ysCHkQSUsC4lWJ/fwTt5ft2/ahyZE/+aoQtvqqkZ7ITC
+X-Gm-Gg: AYBFou17PikeGkrw/kWwnDzQ6Bt4gDXlMrQKOxs2xtkTFylsUUh0/rVkSUQ6VAdd1qA
+	UNkhF9YQFPkcNCZU25pQtrhI72QfxkBQQefHpC2UP3tggaPAxq/GaDRNV0n5zb1+nSO9w9ausv8
+	knB6AGeWQVEIJtIIRQe4lje9UYVmlXPPzc2wE3JKh/BGaZSN4aN80l3jw4Qk0uNCYPJIhd9USrp
+	D3fMw8qy22U/kvkHXgIKQHxx4jAPrjJQ9yH7x5e5gmvuDdzVUdgMwo51PuFRE068ITMSJz14tWi
+	m7GuB0wtddwp6HEqRQICltjJR3cRioCA99V2ViK28icZ3Ap49Pkyt6rhBzqgBTkyUu8A1TBZii/
+	2VjhABhBbaCimQJGWxsS87/fkron+TIEwVS+n1qZBw8+ClZVFz3MvnLggBmqZoMmCzv/7uryTrt
+	RSGnDWGVpJ8WArzeMdtRG7s4FPz7Ls3moDf55pjZlBiZASzHF1stqUVZWz9lkbMJavbwnF139lK
+	gxrMVtEw6baL5Iei2gy/8QM8wJuF8sLGsPiCSgaBHWtCA==
+X-Received: by 2002:a05:600c:190d:b0:49e:7a00:b9a5 with SMTP id 5b1f17b1804b1-49e7a63a894mr28181985e9.4.1789387183142;
+        Mon, 14 Sep 2026 04:59:43 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1126:4:37f5:891d:1d21:b3d3? ([2620:10d:c092:500::7:35f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e63c9a7c9sm523350055e9.13.2026.09.14.04.59.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Sep 2026 04:59:42 -0700 (PDT)
+Message-ID: <123fb2fb-8342-439c-8a9f-c5d27fb6e323@gmail.com>
+Date: Mon, 14 Sep 2026 12:59:41 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 1/3] bpftool: Track perf counter snapshot
+ state
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com,
+ memxor@gmail.com, qmo@kernel.org, linux-perf-users@vger.kernel.org,
+ acme@kernel.org, namhyung@kernel.org, Mykyta Yatsenko <yatsenko@meta.com>
+References: <20260908-bpftool_cyles_per_run-v3-0-60e86f325c35@meta.com>
+ <20260908-bpftool_cyles_per_run-v3-1-60e86f325c35@meta.com>
+ <CAEf4Bza_4ihFJyOJrJKRpiCvU3Mr6KXLVM+5fYnmb9ydNELOJA@mail.gmail.com>
+ <74544b6e-205f-4878-8d7a-d27fac7bd946@gmail.com>
+ <CAEf4BzYhMGP5Bcj-qnyTqLAXnZDs3JGsVqVg+-XB9pqEvNKfjA@mail.gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <CAEf4BzYhMGP5Bcj-qnyTqLAXnZDs3JGsVqVg+-XB9pqEvNKfjA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Commit 8718e5a3090b ("riscv: patch: skip fixmap mapping when kernel text
-is already writable") gated the core_kernel_text() branch of patch_map()
-on CONFIG_STRICT_KERNEL_RWX, and explicitly left the vmalloc branch
-unchanged. That branch has a separate problem.
 
-That branch only creates a temporary writable fixmap alias when
-CONFIG_STRICT_MODULE_RWX is enabled, and otherwise assumes the target is
-directly writable and returns the address unchanged. That assumption no
-longer holds: bpf_prog_pack_alloc calls set_memory_rox() on every pack
-unconditionally in alloc_new_pack(), independently of any
-CONFIG_STRICT_*_RWX option, so BPF text in the vmalloc area is read-only
-regardless of what CONFIG_STRICT_MODULE_RWX says.
 
-With CONFIG_STRICT_MODULE_RWX=n, patch_map() returns the read-only
-address directly, the subsequent copy_to_kernel_nofault() takes a
-page fault and returns -EFAULT. bpf_arch_text_copy() turns that into
--EINVAL, which propagates through bpf_jit_binary_pack_finalize() to the
-WARN_ON() in bpf_int_jit_compile() and leaves the program un-JITed.
+On 9/12/26 12:57 AM, Andrii Nakryiko wrote:
+> On Wed, Sep 9, 2026 at 2:19 AM Mykyta Yatsenko
+> <mykyta.yatsenko5@gmail.com> wrote:
+>>
+>> On 9/9/26 12:56 AM, Andrii Nakryiko wrote:
+>>> On Tue, Sep 8, 2026 at 7:27 AM Mykyta Yatsenko
+>>> <mykyta.yatsenko5@gmail.com> wrote:
+>>>>
+>>>> From: Mykyta Yatsenko <yatsenko@meta.com>
+>>>>
+>>>> A perf counter can be zero at fentry. PMU multiplexing can schedule the
+>>>> event during the BPF program. The old counter check then drops a valid
+>>>> sample.
+>>>>
+>>>> Use an armed flag to track each successful fentry snapshot. Reset all
+>>>> flags before new reads. The fexit path clears each flag when it consumes
+>>>> the snapshot.
+>>>>
+>>>> Fixes: 47c09d6a9f67 ("bpftool: Introduce "prog profile" command")
+>>>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+>>>> ---
+>>>>  tools/bpf/bpftool/skeleton/profiler.bpf.c | 25 +++++++++++++++++--------
+>>>>  1 file changed, 17 insertions(+), 8 deletions(-)
+>>>>
+>>>> diff --git a/tools/bpf/bpftool/skeleton/profiler.bpf.c b/tools/bpf/bpftool/skeleton/profiler.bpf.c
+>>>> index f48c783cb9f7..6c654bd9b346 100644
+>>>> --- a/tools/bpf/bpftool/skeleton/profiler.bpf.c
+>>>> +++ b/tools/bpf/bpftool/skeleton/profiler.bpf.c
+>>>> @@ -10,6 +10,11 @@ struct bpf_perf_event_value___local {
+>>>>         __u64 running;
+>>>>  } __attribute__((preserve_access_index));
+>>>>
+>>>> +struct profile_reading {
+>>>> +       struct bpf_perf_event_value___local value;
+>>>> +       bool armed;
+>>>> +};
+>>>> +
+>>>>  /* map of perf event fds, num_cpu * num_metric entries */
+>>>>  struct {
+>>>>         __uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
+>>>> @@ -21,7 +26,7 @@ struct {
+>>>>  struct {
+>>>>         __uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+>>>>         __uint(key_size, sizeof(u32));
+>>>> -       __uint(value_size, sizeof(struct bpf_perf_event_value___local));
+>>>
+>>> this is not a bug, but... ;)
+>>>
+>>>
+>>> struct bpf_perf_event_value is UAPI, why do we need CO-RE-relocatable
+>>> ___local variant?...
+>>>
+>>>
+>>>> +       __uint(value_size, sizeof(struct profile_reading));
+>>>>  } fentry_readings SEC(".maps");
+>>>>
+>>>>  /* accumulated readings */
+>>>> @@ -45,7 +50,7 @@ const volatile __u32 num_metric = 1;
+>>>>  SEC("fentry/XXX")
+>>>>  int BPF_PROG(fentry_XXX)
+>>>>  {
+>>>> -       struct bpf_perf_event_value___local *ptrs[MAX_NUM_METRICS];
+>>>> +       struct profile_reading *ptrs[MAX_NUM_METRICS];
+>>>>         u32 key = bpf_get_smp_processor_id();
+>>>>         u32 i;
+>>>>
+>>>> @@ -56,6 +61,7 @@ int BPF_PROG(fentry_XXX)
+>>>>                 ptrs[i] = bpf_map_lookup_elem(&fentry_readings, &flag);
+>>>>                 if (!ptrs[i])
+>>>>                         return 0;
+>>>> +               ptrs[i]->armed = false;
+>>>>         }
+>>>
+>>> this is preexisting, but why do we have two separate loops: first
+>>> lookup up fentry_readings pointers, and then separately a) reading
+>>> perf counters into local variable just to b) immediately copy it into
+>>> map_value.
+>>>
+>>> can you try simplifying this and doing bpf_perf_event_read_value()
+>>> into ptrs[i] directly? all within the same loop?
+>>>
+>>> it might have been some verifier issue, not sure, but I think this
+>>> should work just fine
+> 
+> you haven't answered this
+> 
 
-Note that BPF cannot be fixed the way kprobes was in
-commit bdc46e507b59 ("riscv: mm: make EXECMEM_KPROBES writable without
-CONFIG_STRICT_MODULE_RWX"). EXECMEM_BPF is already PAGE_KERNEL, i.e.
-writable at allocation time; the read-only mapping is established
-afterwards by generic code in alloc_new_pack(), which arch code cannot
-influence. The only place this can be handled is patch_map().
+Yes, I can try this, but should we care to support those older kernels
+in case someone tries fresh bpftool on old verifier?
 
-This is the same problem that was fixed on arm64 by commit b1480ed230ac
-("arm64: patching: fix handling of execmem addresses"), and the fix is
-the same: CONFIG_EXECMEM is what actually tracks whether the vmalloc
-area can hold executable memory that needs a temporary alias to be
-written. CONFIG_BPF_JIT, CONFIG_KPROBES and CONFIG_MODULES all select
-it.
+>>>
+>>>>
+>>>>         for (i = 0; i < num_metric && i < MAX_NUM_METRICS; i++) {
+>>>> @@ -66,7 +72,8 @@ int BPF_PROG(fentry_XXX)
+>>>>                                                 sizeof(reading));
+>>>>                 if (err)
+>>>>                         return 0;
+>>>> -               *(ptrs[i]) = reading;
+>>>> +               ptrs[i]->value = reading;
+>>>> +               ptrs[i]->armed = true;
+>>>>                 key += num_cpu;
+>>>>         }
+>>>>
+>>>> @@ -76,16 +83,18 @@ int BPF_PROG(fentry_XXX)
+>>>>  static inline void
+>>>>  fexit_update_maps(u32 id, struct bpf_perf_event_value___local *after)
+>>>>  {
+>>>> -       struct bpf_perf_event_value___local *before, diff;
+>>>> +       struct profile_reading *before;
+>>>> +       struct bpf_perf_event_value___local diff;
+>>>>
+>>>>         before = bpf_map_lookup_elem(&fentry_readings, &id);
+>>>>         /* only account samples with a valid fentry_reading */
+>>>> -       if (before && before->counter) {
+>>>> +       if (before && before->armed) {
+>>>
+>>> this is such an unlikely situation that I wouldn't even bother
+>>> "fixing" it, tbh. alternatively we can check enabled or running for
+>>> zero, I don't think realistically enabled can be zero if we actually
+>>> captured it an fentry
+>>
+>> Here we check before->counter for 0, substituting by enabled or running
+>> will still have the same risk of dropping the first sample.
+>>
+>> I could reproduce it by:
+>> 1. make PMU busy with 4 events to force multiplexing
+>> 2. then quick profile for 1 second
+>> Result: first sample gets dropped, because measurement
+>> at fentry is 0. This is not a huge deal by itself, but the fix is simple enough,
+>> in my opinion, to make it worth. For a pocket change we get clearer flow:
+>> fentry arms the counter, fexit disarms it.
+>> We have the same code in perf, I thought it would be nice to have this change
+>> there (more choice of sparse events, subsecond timeouts possible)
+>>>
+> 
+> are you saying that you get zero even for before->enabled?
+> 
 
-Note that this is not limited to CONFIG_MODULES=n. Unlike arm64, riscv
-selects CONFIG_ARCH_OPTIONAL_KERNEL_RWX, so CONFIG_STRICT_MODULE_RWX can
-be disabled with CONFIG_MODULES=y as well, and the bug is reachable in
-that configuration too.
+yes, for sparse events like itlb misses + PMU contention 
+that can happen.
+for example log from one of the runs:
+bpf_trace_printk: counter: 0, enabled: 29431875, running: 13638505
+bpf_trace_printk: counter: 0, enabled: 60395630, running: 30502953
+bpf_trace_printk: counter: 0, enabled: 60608030, running: 30502953
+bpf_trace_printk: counter: 0, enabled: 5609314, running: 0
+bpf_trace_printk: counter: 0, enabled: 5918970, running: 382474
+bpf_trace_printk: counter: 0, enabled: 6243798, running: 542435
+bpf_trace_printk: counter: 0, enabled: 6623769, running: 1087273
+bpf_trace_printk: counter: 0, enabled: 7078241, running: 1376878
+bpf_trace_printk: counter: 0, enabled: 7326934, running: 1625571
+bpf_trace_printk: counter: 0, enabled: 7440054, running: 1738691
 
-The !CONFIG_MMU build is unaffected: it has its own __patch_insn_set()
-and __patch_insn_write() implementations and never calls patch_map().
-
-Fixes: 2c9e5d4a0082 ("bpf: remove CONFIG_BPF_JIT dependency on CONFIG_MODULES of")
-Signed-off-by: Wei-Jie Hung <imbigking12@gmail.com>
----
-Based on riscv/fixes (b94cec5761d2).
-
-Reproduced on qemu-system-riscv64 -M virt with CONFIG_BPF_JIT=y,
-CONFIG_BPF_JIT_ALWAYS_ON=y and CONFIG_STRICT_MODULE_RWX=n. 
-ptp_classifier_init() builds a cBPF filter from sock_init(), 
-so the failure happens during boot without any userspace involved:
-
-  WARNING: arch/riscv/net/bpf_jit_core.c:156 at bpf_int_jit_compile+0x3dc/0x43e
-  Call Trace:
-   bpf_int_jit_compile+0x3dc/0x43e
-   __bpf_prog_select_runtime+0xec/0x186
-   bpf_prog_select_runtime+0x12/0x1a
-   bpf_prepare_filter+0x368/0x46a
-   bpf_prog_create+0x66/0x90
-   ptp_classifier_init+0x3e/0x60
-   sock_init+0xc4/0xe6
-   do_one_initcall+0x78/0x14a
-
-  kernel BUG at net/core/ptp_classifier.c:227!
-  Kernel panic - not syncing: Fatal exception in interrupt
-
-The BUG_ON() is reached because CONFIG_BPF_JIT_ALWAYS_ON=y turns the
-silent interpreter fallback into -ENOTSUPP. With
-CONFIG_BPF_JIT_ALWAYS_ON=n the failure is silent: writing 1 to
-/proc/sys/net/core/bpf_jit_enable and loading any program reproduces the
-same warning, but the program simply falls back to the interpreter and
-the kernel keeps running.
-
-Tested with CONFIG_BPF_JIT=y:
-  - CONFIG_MODULES=n, CONFIG_BPF_JIT_ALWAYS_ON=y:
-    panics before this patch, boots after
-  - CONFIG_MODULES=y, CONFIG_STRICT_MODULE_RWX=n,
-    CONFIG_BPF_JIT_ALWAYS_ON=y: same panic before this patch, boots after
-  - CONFIG_BPF_JIT_ALWAYS_ON=n: the warning above is emitted when a
-    program is loaded from userspace before this patch, and gone after
-  - riscv defconfig (CONFIG_STRICT_MODULE_RWX=y): unaffected, boots
-    before and after
-  - kprobes (kretprobe on __riscv_sys_openat via kprobe_events):
-    works before and after this patch
-
- arch/riscv/kernel/patch.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
-index 2239c28981bc..2b5adf01c550 100644
---- a/arch/riscv/kernel/patch.c
-+++ b/arch/riscv/kernel/patch.c
-@@ -48,7 +48,7 @@ static __always_inline void *patch_map(void *addr, const unsigned int fixmap)
- 		if (!IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
- 			return addr;
- 		phys = __pa_symbol(addr);
--	} else if (IS_ENABLED(CONFIG_STRICT_MODULE_RWX)) {
-+	} else if (IS_ENABLED(CONFIG_EXECMEM)) {
- 		struct page *page = vmalloc_to_page(addr);
- 
- 		BUG_ON(!page);
--- 
-2.43.0
+>>> pw-bot: cr
+>>>
+>>>
+>>>>                 struct bpf_perf_event_value___local *accum;
+>>>>
+>>>> -               diff.counter = after->counter - before->counter;
+>>>> -               diff.enabled = after->enabled - before->enabled;
+>>>> -               diff.running = after->running - before->running;
+>>>> +               before->armed = false;
+>>>> +               diff.counter = after->counter - before->value.counter;
+>>>> +               diff.enabled = after->enabled - before->value.enabled;
+>>>> +               diff.running = after->running - before->value.running;
+>>>>
+>>>>                 accum = bpf_map_lookup_elem(&accum_readings, &id);
+>>>>                 if (accum) {
+>>>>
+>>>> --
+>>>> 2.53.0-Meta
+>>>>
+>>
 
