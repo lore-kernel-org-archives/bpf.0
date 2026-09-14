@@ -1,169 +1,131 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B487747887F;
-	Mon, 14 Sep 2026 14:09:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 767F847CC75
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 14:15:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789394990; cv=none; b=gYkwJmxpE21oXJMXUachFRRhj8hoWSZEKUryoG0Mr78Wjv2t+OJvty3xijGAJsS6WUi8o8V+Cd/Vem39OhJlpq4I/XIx3ZKShwesK3C+fX6pn/dzOeX7AwKmgRh5W7beghZYGUDQB8vC/xTmvP+8t4WeFcTbFaJozegb0AGuLkQ=
+	t=1789395357; cv=none; b=FLxCARZeosSAwdla94/K71mG1f7bGW8WJzZoFAR1FcwTD/J46kPoaXrx6LFvx1Flwy0W1DRKhDETFy/u3rI57sCacK1mNwToF6G7a2xBON2XpDglgf2QuxlEC1dlz2kkngz25Od5gTS8Ja8EAs+0US8xH+SuNHiEjA9RWSC4ytY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789394990; c=relaxed/simple;
-	bh=kXyZcf9mVRUP9nMLt2/MVgHhc0OPsuWGYpRhhFqEPKc=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WKjubpvKEufWgv2hmuQI2sUc2vjVOzoS/eO4gkUTentCdXrGpAdfDW/uX4BU3dYwoRajDsY8tSUShISGDhUfJTCg9qmY1yMjjOPzFxEcpPoBqXKTMsb/Ul7yIllyaT5IN7o7u60t3W2j3TLRyfpKEIRUnFQq2UnPO9MYWivC9B4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=yLA8gBwI; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1789395357; c=relaxed/simple;
+	bh=29WG/dDEAp7YBs1oF/uh9i6/uMvC/LlQED7HsAjuhqI=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=iv5fRMcxuy+O1m3n8+fMQclYsRnYXPZkC/x4vofG4uLhFo8BeAMFTwwtN8shU5O43kj62L2WL7kM64UlWd0/8OExMlFnRxqs+Dj5BKtdR7nl1rbTW9hMDhtjO5MOM+QbacE3EWKFetotRY6TPkMhPkBqaZJ7lYkFZfrHIYOf0Fc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IExlmsUS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="yLA8gBwI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1789394988; x=1820930988;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=kXyZcf9mVRUP9nMLt2/MVgHhc0OPsuWGYpRhhFqEPKc=;
-  b=yLA8gBwI7TujHyIAtGwTFaXHDmuJO5ynF0hbGw/uThoi13bENbP4t+XC
-   BrCzyAEbC8zDPEJgsuxCvMojqxH3wNYWwHzvISl6wyFQNBr9TeYf2cXvF
-   8QrLQimP4JDATU0JWlfXj0k1XfQ2lGfInD88/gBF/E+TKoCdNNJJHrO4G
-   xFVTcvnR1qapO69WX/FK6bpLgbz7UbnBB37ipupwnT9SqtDNAn/y7zDuF
-   +wfOJ16+JGgt7kuh7lsKQNpLxGtCKcQLOWaU24EYhZduJyLTuQ0y900w6
-   dcIFfmkn330wEQjocqbFeCqGMeYt1s+WzRsacg1W0XHM5gCSWw3JSXfka
-   Q==;
-X-CSE-ConnectionGUID: rVLQJSZ6ShGlku+t+zZqfg==
-X-CSE-MsgGUID: +9pA80GKSjCe+q/7ZmKqbQ==
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="62642258"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Sep 2026 07:09:41 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Mon, 14 Sep 2026 07:09:40 -0700
-Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Mon, 14 Sep 2026 07:09:36 -0700
-Date: Mon, 14 Sep 2026 16:09:36 +0200
-From: Daniel Machon <daniel.machon@microchip.com>
-To: <netdev-bot+sashiko@kernel.org>
-CC: <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
-	<kuba@kernel.org>, <pabeni@redhat.com>, <horatiu.vultur@microchip.com>,
-	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
-	<ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
-	<john.fastabend@gmail.com>, <sdf@fomichev.me>, <herve.codina@bootlin.com>,
-	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <mohsin.bashr@gmail.com>,
-	<richardcochran@gmail.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH net-next v6 08/14] net: lan966x: clear FDMA interrupt
- stickies after switch reset
-Message-ID: <20260914140936.kqsqxbovxvsihv42@DEN-DL-M70577>
-References: <20260909-lan966x-pci-fdma-v6-8-6f48dab9d671@microchip.com>
- <178904554399.219967.11177166628090236711@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IExlmsUS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F5A41F00898;
+	Mon, 14 Sep 2026 14:15:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789395355;
+	bh=OTi4noIVxdVluqQgGMQtHVPuYFOjF/WubTdIvvK7ZmU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=IExlmsUS4LiGJIQvCHGvGwMXFdaf39z71Aa8i0KPMqbcnLCOgJJhspzn9duXa0eX/
+	 O0zCvgXVsKSCRSHAU8u4dTj+79zhwZQ9McBgXJYba/X+hh1ejTOR+jsvvnCVb6GIxb
+	 zejdUDh3DlOEmy9kxn1Ojr062hUBrrZHKJRht9b/AMUiNMEf05+Kd/sJrnq/Yo7L6a
+	 rqWtY5vZTB8dVkDy8VGWJSbaC5uj7rEEJsQMJ+AnVOdJ6+z0Bz2/4ksYCAGRf7mdY+
+	 JpnuV4Pmc2oNDQEcAKr/XU2NPX0r82/eyae/CWsOfjKTBVWmfKjdjernG2NYDbGvfl
+	 /xbdTD5AYsKRQ==
+Content-Type: multipart/mixed; boundary="===============1683806218629715175=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <178904554399.219967.11177166628090236711@kernel.org>
+Message-Id: <e5f571dcc350b1f28f4058988abe4a0b8d90efc1eeb6e83100f34a21953cbdfa@mail.kernel.org>
+In-Reply-To: <20260914131701.2529725-5-memxor@gmail.com>
+References: <20260914131701.2529725-5-memxor@gmail.com>
+Subject: Re: [PATCH bpf v3 4/7] bpf: Restrict CO-RE poisoning to relocatable instructions
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: npc@anthropic.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 14 Sep 2026 14:15:55 +0000 (UTC)
 
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue(s) to consider:
-> 
-> Critical: 0 · High: 0 · Medium: 0 · Low: 1
-> 
-> - [Low] Commit-message/comment vs. reachability at this revision: the
->   added FDMA sticky clear in lan966x_reset_switch()…
-> 
-> --
-> 
-> net: lan966x: clear FDMA interrupt stickies after switch reset
-> 
-> The patch acks FDMA_ERRORS, FDMA_INTR_ERR and FDMA_INTR_DB right after
-> reset_control_reset() in lan966x_reset_switch(), so that spurious sticky
-> bits latched by the GCB soft reset in PCI mode do not make the FDMA IRQ
-> handler fire as soon as the IRQ is requested. The clear is unconditional and
-> is described as a no-op on the platform path.
-> 
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> > index 6e6c08bb8eea..11094a381ec2 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> > @@ -1067,6 +1067,15 @@ static int lan966x_reset_switch(struct lan966x *lan966x)
-> >
-> >       reset_control_reset(switch_reset);
-> >
-> > +     /* When in PCI mode, the GCB soft reset issued by the reset
-> > +      * controller can latch spurious bits in the FDMA error stickies.
-> > +      * Clear them before request_irq hooks up the FDMA IRQ line,
-> > +      * otherwise the handler fires immediately on probe.
-> > +      */
-> > +     lan_wr(lan_rd(lan966x, FDMA_ERRORS), lan966x, FDMA_ERRORS);
-> > +     lan_wr(lan_rd(lan966x, FDMA_INTR_ERR), lan966x, FDMA_INTR_ERR);
-> > +     lan_wr(lan_rd(lan966x, FDMA_INTR_DB), lan966x, FDMA_INTR_DB);
-> 
-> [Severity: Low]
-> This isn't a bug in the register writes themselves, but is the failure
-> described in the changelog reachable at this point in the series?
+--===============1683806218629715175==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-No, but this is a preparation patch that makes sure that once the FDMA support
-lands, in a later patch, the failure is not introduced.
+> diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
+> index 8ad2715721cfd..a884bc2bff198 100644
+> --- a/tools/lib/bpf/relo_core.c
+> +++ b/tools/lib/bpf/relo_core.c
+> @@ -1047,17 +1047,6 @@ int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
+>
+>  	class = BPF_CLASS(insn->code);
+>
+> -	if (res->poison) {
+> -poison:
+> -		/* poison second part of ldimm64 to avoid confusing error from
+> -		 * verifier about "unknown opcode 00"
+> -		 */
+> -		if (is_ldimm64_insn(insn))
+> -			bpf_core_poison_insn(prog_name, relo_idx, insn_idx + 1, insn + 1);
+> -		bpf_core_poison_insn(prog_name, relo_idx, insn_idx, insn);
+> -		return 0;
+> -	}
+> -
+>  	orig_val = res->orig_val;
+>  	new_val = res->new_val;
+>
+> @@ -1066,6 +1055,8 @@ int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
+>  	case BPF_ALU64:
+>  		if (BPF_SRC(insn->code) != BPF_K)
+>  			return -EINVAL;
+> +		if (res->poison)
+> +			goto poison;
 
-> 
-> The commit message says the latched bits "sit in FDMA_INTR_ERR until the FDMA
-> IRQ is requested later in probe, at which point the handler fires immediately
-> and WARNs". In lan966x_probe() the FDMA handler is only installed when a named
-> "fdma" interrupt exists:
-> 
->         lan966x->fdma_irq = platform_get_irq_byname(pdev, "fdma");
->         if (lan966x->fdma_irq > 0) {
->                 err = devm_request_irq(&pdev->dev, lan966x->fdma_irq,
->                                        lan966x_fdma_irq_handler, 0,
->                                        "fdma irq", lan966x);
->                 ...
->                 lan966x->fdma = true;
->         }
-> 
-> At this commit the PCI overlay in drivers/misc/lan966x_pci.dtso does not
-> describe that interrupt:
-> 
->         interrupts = <12 IRQ_TYPE_LEVEL_HIGH>,
->                      <9 IRQ_TYPE_LEVEL_HIGH>;
->         interrupt-names = "xtr", "ana";
-> 
-> so platform_get_irq_byname(pdev, "fdma") fails and lan966x_fdma_irq_handler()
-> is never requested on the PCI path.
-> 
-> The overlay also disagrees with the positional list in
-> Documentation/devicetree/bindings/net/microchip,lan966x-switch.yaml, where the
-> second entry is reserved for "fdma":
-> 
->         interrupt-names:
->           minItems: 1
->           items:
->             - const: xtr
->             - const: fdma
->             - const: ana
-> 
-> Both points are resolved later in the same series by "misc: lan966x-pci: dts:
-> add fdma interrupt to overlay", which switches the overlay to
-> interrupts <12>,<14>,<9> and interrupt-names = "xtr", "fdma", "ana", so this is
-> only an observation about the ordering of the changelog against the code state
-> here rather than an actionable defect.
-> 
-> Would it help to mention in the commit message that the WARN only becomes
-> reachable once the overlay gains the "fdma" interrupt?
+Moving the poison handling after the class/operand-form checks makes the
+silent return -EINVAL reachable for unresolved relocations. Would adding a
+pr_warn() on this path help with debugging?
 
-The changelog already scopes itself with "When in PCI mode".
+Before this change, relocations with res->poison set jumped to the poison
+label at the top of the function and always returned 0 without reaching
+the BPF_SRC check. Now an unresolved relocation targeting a register-source
+ALU or ALU64 instruction (BPF_MOV32_REG, BPF_MOV64_REG, or
+BPF_ALU|BPF_END|BPF_TO_BE which encodes BPF_SRC == BPF_X) fails program
+load with -EINVAL and nothing in the verifier or libbpf log explaining why.
 
-> 
-> >       /* Don't reinitialize the switch core, if it is already initialized. In
-> >        * case it is initialized twice, some pointers inside the queue system
-> >        * in HW will get corrupted and then after a while the queue system gets
-> 
-> --
-> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909-lan966x-pci-fdma-v6-0-6f48dab9d671%40microchip.com
+The other rejection paths in this function do log diagnostics. The LDIMM64
+form check at line 1129 does pr_warn("... (LDIMM64) has unexpected form"),
+and the default: case at line 1155 does pr_warn("... trying to relocate
+unrecognized insn #%d, code:0x%x ..."). This newly-reachable path is the
+only one that returns -EINVAL silently.
+
+The new selftest at f4f5a2c61d21 shows the gap. For poison_exit it can
+assert ASSERT_HAS_SUBSTR(log, "trying to relocate unrecognized insn #2"),
+but for poison_alu_reg and poison_alu64_reg it can only assert prog_fd < 0
+and that "substituting insn" is absent, because no message is produced.
+
+>  		if (res->validate && insn->imm != orig_val) {
+>  			pr_warn("prog '%s': relo #%d: unexpected insn #%d (ALU/ALU64) value: got %d, exp %llu -> %llu\n",
+>  				prog_name, relo_idx,
+
+[ ... ]
+
+> @@ -1164,6 +1160,16 @@ int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
+>  	}
+>
+>  	return 0;
+> +
+> +poison:
+> +	/*
+> +	 * Only relocatable instructions reach here. Poison both halves of
+> +	 * ldimm64 so the verifier reports the bad relocation, not opcode 00.
+> +	 */
+> +	if (is_ldimm64_insn(insn))
+> +		bpf_core_poison_insn(prog_name, relo_idx, insn_idx + 1, insn + 1);
+> +	bpf_core_poison_insn(prog_name, relo_idx, insn_idx, insn);
+> +	return 0;
+>  }
+>
+>  /* Output spec definition in the format:
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34849913056
+--===============1683806218629715175==--
