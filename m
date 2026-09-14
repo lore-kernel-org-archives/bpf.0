@@ -1,188 +1,331 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A01A41443F
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 21:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70AA82F28FC
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 21:04:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.140
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789419786; cv=pass; b=fyVADbrNuaDH1nd5rRGxAaz1q0eHcarI47uGfw+2z0Kc0tLxYsqGJI31RZbdNtL/2KXQLY27kKD0iSjF2QJP99KXpzKoL8+qIIM25Pn+rnjqOv2SXG/juWLfjgdB/pxZrFIGOgX1iTD3BDJKYU3tdRHCpc5C6ZO5icxiiU0GtmU=
+	t=1789419842; cv=pass; b=kbI0gy1h25YhGwm0rAQ2vPrXRIpyQz5dC0DewZEzl8Bm+4hqV756FrIw7rTS67GmmRQ1Npuvp1IQuXeY3Q2bK1Fzij3Ekni7WrN2bs+RJbJqKpgnBtkyRNe4EfJsXXDliAD4OHUPKG37P0x84hRJyRZmFidx56ll0pysdA2x33Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789419786; c=relaxed/simple;
-	bh=TcMIKztAxPUEwbcBrlMBI5zKh5KEIYOF+Cd0/8pmdYc=;
+	s=arc-20240116; t=1789419842; c=relaxed/simple;
+	bh=CgrKu7Zs/00QElfUvrqtZz+nxPvLPlwemeLf4emGtT4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZWqNJAA1Qzqb3aPxX5Bm5JuoNv3EfdOm2IGaq3JyykxD9UAFucFvqsfIIjJORD68Pt08BBqD6B3jeQfX4uIW4iV1GKw2E8b8UdxEc7meZUulo8CTSO5AMowYefIArNJowA66fksfOXdVD06rRwAn61d3ltbvs69hgzmw5QC+6Sw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mr6foiPT; arc=pass smtp.client-ip=209.85.216.54
+	 To:Cc:Content-Type; b=Vris72jtZkYHghSVJA7wPntq4oyNTkOBbm3xLbQhDVkznP+ItTE1LJZOmFsP+ZnIT/3GE4Kdf2BAJmQxejTBOvsTjWdpdOgqEw9sky0snyXqhu+5FrRnD1qZcLZi1bjZEnLGCC0dcP11S4Bl//DplMgAJhIV7XnLU/8kxdGtiJ4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Se/NJczQ; arc=pass smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mr6foiPT"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-381b831d535so6769595a91.0
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 14:03:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789419784; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Se/NJczQ"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccafb751so2554746a91.2
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 14:04:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789419840; cv=none;
         d=google.com; s=arc-20260327;
-        b=cC59cBw8JAxhLrb3N8HSd+4/SFZcJH0LdY4i+wUWMOu+4UfBPZx2+Cao95dM0WvBG5
-         jNZAHk+QH8jZbBM5WyfIFKW20Y2WNkAIdkXJur14C9h4XkG2wVsQoqr3/r5oRZ6QmoEq
-         RVd3l5rZ5e8ggQ7bxSBIrjktYlQnVcckmYnIZn1mgy6zYD7D2tVRwxVo++0TQP3FQcGL
-         n8sTbuHw64F9suT31hb1xKtwmreJodmDYoMuZJbTIj6xUVrtk0g3LRLAwt6Hli0FnUMX
-         mo7Lzwx/o9xnFZ84hL6UStb80DtgAVorkTjNRC5PgQPNefK0xF8ppkl2l6PIgM2l8SS0
-         AmDg==
+        b=NxDrsStiSipZuoE2a4hI3lhNSEEjdz9JHNVJSNbOKvOjzZzHZ8yTncsXMS7pX39bWI
+         j61DblI8wFI3UZn1X183gnnzU4gN2ddHYgz6cbtMxN0zu4uDT3Dgvy2ywXtXFZGLDD0O
+         sK1w1i6pE7mFVnIg6X8baHSkdQxjtXcFtCQFoxt7sGQAJxzMgUwKhNeWW+FtTRygw4GW
+         qIWIPfmrbS9IEcFlDDMKVzNP9j2g15+2wiK9ivq+PBGEVkD18ShMHvknBoJxBmEDi8Os
+         vwEyVygVKHMwgpNy9dt5jY/KOXHtAKM4FzWxihwVDpbzznyijJ4p59oj7vvhfmor/giV
+         CwZg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=riaN4hZS/UPot0dC/2/kTznbgofvthWGK+p8JsaAblM=;
-        fh=jX/El12euiQ1g499ziyGHKoTj/szcVkfmpUxd07P6mo=;
-        b=L280SGEYsemYgIovPP69U2JtFTD1GnNoJlZFJsZAUO8PAizdBLLa9k596UEp3jnDoM
-         NhA7ErQBZrEUHQEGddG+VpnwMRQFm5g6JGy4WooVJ4FoTT8q6kahDiJWEc8EyQTYQbf1
-         CYCZaM+CBq0tr+kjdK7prGcs/iqloh357+iLwko+f5fXP4/98ACpFbRF1jPbd6mHWXWf
-         ms68zHDVReMzwTeRsRLk7zEx6Wyoz5aUMm6TDOwo0BJ5bNA90G2b7ab+SKPEgQgWz5Iu
-         bk75JPpyXFXhMNJ2f6zaaGP/4EGGboB98rnmi/67Y2WWrrQ1XWN28mEhOonS5Tlkhyjg
-         3UPw==;
+        bh=aSoIi4TMGObut+6RiOF0Y1sT5N7W9UXkCoOWPUwVKn4=;
+        fh=A2o1Vx4ZLd+A2Zx0NvPI/qz//F2+c6xPgeap4Yu/3O4=;
+        b=LgGYM/+VmeuvZI9vyoVGgU7n9lTOURpBCuzkTeuJVEBGn3F8ArJgWklLBbJNv35ucz
+         HlNNh5SYU2FYa12xnc8wRdbi8ar4QyqYD2DhJLSStrIl8Y0e7zsTgYnyxDV3fixoWPGu
+         t7BZo9dJBwXZzbN94xgBkxsRRSCG1k1MGeZJMbIagG24ptGtPDWAjt7NOw2H8bchOF06
+         nsr1UUU+v7GWDCsLK4++9Y1+49CB9lzOe8eLGlppjQe5ftdyYabtB5j6BDj2GvVzprlw
+         aIE1R4bL1lhnqzg7iRgyNKyTktPVaYUd5bc25y7a/qo5mUgiGbU88+cXpDHoEzY0JN1q
+         5jNw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789419784; x=1790024584; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789419840; x=1790024640; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=riaN4hZS/UPot0dC/2/kTznbgofvthWGK+p8JsaAblM=;
-        b=Mr6foiPTdx/MNimFwQP/1I/W4B1j03r6dRt5asL4CRbPeW42Dle0ukHVMvPqmGCCip
-         8kZxytDwuSu/TZnHBN/pc8ID3RrUDgF9hf2uMyyl28qFzP0v0RLJxAOFOgaERuuRQfRc
-         TKWniiwsQDGm7J4YwUa940zZPF9RSBrGDk8xlYJKq7z1gTgpFBkkiM4NBoHSUpz4FFiB
-         OMsxLEWPS3FZj3Km8lueTtcIDyMTPlxc1kWlOnam99m6N0psdxnegNK24A7k0qjExW1v
-         5x1E1Q9jkbndlArK4s0QUNl1YgEnsqiTqqMk99wUFrb9N9Rutny6TS31ys4QEdUjJ2tK
-         proA==
+        bh=aSoIi4TMGObut+6RiOF0Y1sT5N7W9UXkCoOWPUwVKn4=;
+        b=Se/NJczQfYevCQhDuyKHcTjzV6x5cSKlsMizMx5dn/b7CjVIFFv2Twg2eer4YcanO9
+         8qPeparXPP7eoP+W4k2+bdxxGYFe1sOBZgK0g7IDNvMqvhDS/sCfhs8LDhVF9KFKsvML
+         4DFbPDQHVZHvKT7FvEaOFIJXqxukkj7kog17+VmeUfHOsViCRCUfld8irr873qGNOyx1
+         MiJtmP8b2flJ324GSOoghh1ULHk0QR2zVRRreKRYolZeApxok28GCAi6q1Q+o65TXtqd
+         aX2aNsA1tQ1JUX5064Gh/85JAW/Q2N06LVTk5BAxwgIuYBIpDDi4eoCxYxeyOB8ULFD0
+         896g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789419784; x=1790024584;
+        d=1e100.net; s=20260707; t=1789419840; x=1790024640;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=riaN4hZS/UPot0dC/2/kTznbgofvthWGK+p8JsaAblM=;
-        b=aAr+ougO3PQgfAlUZoA73YdGJXN/ZMTS7ZIDRukuyzRAkYBCdzJUT/py0JoNRE1fBf
-         WNBu/KZBwmxXSom7h3FbA1nezh1oxXNya/96a4Y/Vkk2RmsbSmzUko42qPSWDv3gkrBM
-         FiiEKkpPv8LNKAxaKHs1fy+Ti/bo353mtLcmVnfTVkl1pwnFr+iEwcQEhv6dlArd5RxW
-         3l68d6YrIK34VATFReqiNAS2H1Vb/87b0T7aIt5CwcrBtXM2WvjqXx2EtB+tXOycl0bD
-         cJE1njNSE/1VeZES2+w8TjnVi+GhlN1QPeW6etqkZbcI2NNgZV54VgIgF1lKJT6LHg9e
-         KkZw==
-X-Forwarded-Encrypted: i=1; AKwUvBwXW3cTVEaz/MDimIIgjjdSH4IJ0l22KRd9n16/czC6KFw/u9fZU1D35MgPktSLd4D+AiU=@vger.kernel.org
-X-Gm-Message-State: AFuF++ku/fWKnZaKLqgRrIKJl5CS2ZX3aI3sT3TG+151ZbOsrGh4a41I
-	p7IDgs23O3taECURVvLdqUpkjJdHOIKubEeBW+zRzmsjgB6FYGIodGox5gl73Dei2DCoswtvXFJ
-	IFPzEipZTmNUZvL4hT3Cvk1k/0V1K2sE=
-X-Gm-Gg: AYBFou0JGgXi+B+HgyQDlAbbtF8rR5ycp+Ebt79nl476pSqVLEB3DYOYBQVZMAxXHWG
-	qOdR8r0R6cUTaqEyYwUeWKYs4pTy+64zBK40a1HD3RT5pBBo76V7jKgdJKjFwVt3/NAiLdvv3HC
-	iNPoG8DTQlKUfvRkmGec40uswauL72gsvSZvLFoxkalDbSGDNvVm5s4aHCZ6x2rMAwJNhAAx4b7
-	KGhYbDTxiYjRvM5mR3Y3+w0XM+rcPYog1NNaEMJIqkDZNEWpG49cFHO905RFGbv1qhHSX+/hRG6
-	3n4W1cYFwAe19x0+EANyXf7Kul9/MjvWz/9lO288DeZI1fR53M+0iYLTbJi8LtjSvrpfQS8O9ld
-	4a1IRKcHtrC8Icg72GFhBfImlDc6ig8U7nN+5hGloY4c45xEHteS9
-X-Received: by 2002:a17:90b:4c88:b0:399:ecd:d68d with SMTP id
- 98e67ed59e1d1-39dec0e0267mr8150189a91.22.1789419783499; Mon, 14 Sep 2026
- 14:03:03 -0700 (PDT)
+        bh=aSoIi4TMGObut+6RiOF0Y1sT5N7W9UXkCoOWPUwVKn4=;
+        b=d3CQV1MPzEcsAQff/gGU4Ytlq/QFw8fa6Pobf5hjvALFuI0/npYR6Tmk6IWVh4ZmH0
+         gscX+cBbHBWcK88KQfo3slHT24E94uF72XfyaehBIHOwPkjigBqvwyHryg8sbYZADu8x
+         hHIslsP9VOFh34V7t/B5c3Doy2XSE32U89YCf0fp8vlyhoC66x1GSgzk4ca+/cdfH7Wn
+         4PyUC8wyM0d5o/ICu4nnT/kxqfnVY5NkmcO37iLlp0C0ecIvD7nsxzOjQP5Y/Qn9mLDT
+         bAKBiYgw9FVrWzGSQEb9OEyAPjmV/X09MMMGrRz4eWxMEH3pzAJtpfpniavS4EtEXOOt
+         542Q==
+X-Gm-Message-State: AFuF++mk5fxRC3eyAzZKNXQLsLcct1w/+gmhCeilY/his203kQoQk1KW
+	y4LNdcB4+h2YsFMGp+7QHTooowMasU7BgGqE0pHCDuT9ild+sv6YDpSoHkRqdrSeMcjk9IV+7du
+	lDGiCPAzE71ca+lTvQ1L46blTBPKiGEw=
+X-Gm-Gg: AYBFou2LE69zeABNuBS6Z7+nrteobMF7TXg0nw361UFgxSy1Zvo9i4bfUQbKa7U5Ttd
+	GQb7550aMk35vvOuPfKmvxZKj3FTWPEeHQejAhakaA+tyG/m+S9dNgVXyRDrqlUdNKvtD5O+DhB
+	7MQjQEzFbi8SOEh9QPP2uSb+RHGtKnl+a1yvf9UrMDEspwZmbVn2fSZwaryPV1KZzZkXTJnq8Dq
+	CZVPRvHQfV8FJ30QWryAnANvEU5Lr7Gvx33RdoCOdlY0VKONEKd1ZSq3j7AC4ajEVQ0Hqz5AobB
+	Vgrow4aQp5svCKbR7ZznviCplucJPYJxN+wQF3RoeVQ03QxsogyJ/cznCRV6CBcmjoDLhBuRW/E
+	upy06PRzZM0Ylo74+34k414CLU4c01W3i/F7DUnfpCaMzyjrZjn8A
+X-Received: by 2002:a17:90a:b89:b0:39d:ec44:28b8 with SMTP id
+ 98e67ed59e1d1-39dec442921mr5988660a91.13.1789419839653; Mon, 14 Sep 2026
+ 14:03:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260914131701.2529725-1-memxor@gmail.com> <20260914131701.2529725-5-memxor@gmail.com>
- <CAEf4BzZjrWzQxaZ1kXyvXHXuUFDsgZe6NwQHH6seqfoMLpJLZw@mail.gmail.com>
- <CAADnVQ+SOswCXzZbCbjtjXQDd++Zkrxpg4k3gHMsMPsN9BRQEA@mail.gmail.com> <DLFBY0XAL5NW.33SRTMMYCWJHZ@gmail.com>
-In-Reply-To: <DLFBY0XAL5NW.33SRTMMYCWJHZ@gmail.com>
+References: <20260908-bpftool_cyles_per_run-v3-0-60e86f325c35@meta.com>
+ <20260908-bpftool_cyles_per_run-v3-1-60e86f325c35@meta.com>
+ <CAEf4Bza_4ihFJyOJrJKRpiCvU3Mr6KXLVM+5fYnmb9ydNELOJA@mail.gmail.com>
+ <74544b6e-205f-4878-8d7a-d27fac7bd946@gmail.com> <CAEf4BzYhMGP5Bcj-qnyTqLAXnZDs3JGsVqVg+-XB9pqEvNKfjA@mail.gmail.com>
+ <123fb2fb-8342-439c-8a9f-c5d27fb6e323@gmail.com> <CAEf4BzYVceGdJcM_TS_odTgG=L9c2YvsDRW-dic+G9RrCwDTPg@mail.gmail.com>
+ <031948ac-13d1-46e7-aafa-16d3323e2aa3@gmail.com>
+In-Reply-To: <031948ac-13d1-46e7-aafa-16d3323e2aa3@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 14 Sep 2026 14:02:48 -0700
-X-Gm-Features: AcwNN1UHdHP5f_aHlpDLP9t4celHa3xijbL4B1U1BkXyn76YSo68UkLZrWj5pO4
-Message-ID: <CAEf4BzZ9S+xCAXrzOeYCRJK-j5irjfuRqxWWTPAK3VDvaoSTPw@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 4/7] bpf: Restrict CO-RE poisoning to relocatable instructions
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Nicholas Carlini <npc@anthropic.com>, Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, Kernel Team <kernel-team@meta.com>
+Date: Mon, 14 Sep 2026 14:03:45 -0700
+X-Gm-Features: AcwNN1XNn2ddmOTpn7w8YlSs38NXJAfaDbKNtrI7zu8M55JjoNGHrjuHJSlDbq4
+Message-ID: <CAEf4Bzbv_+Rpjj0F_KmPGjqQMeJFUdCQNHUEro8Jgtj9SqO0Pw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] bpftool: Track perf counter snapshot state
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com, 
+	memxor@gmail.com, qmo@kernel.org, linux-perf-users@vger.kernel.org, 
+	acme@kernel.org, namhyung@kernel.org, Mykyta Yatsenko <yatsenko@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 14, 2026 at 1:42=E2=80=AFPM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
+On Mon, Sep 14, 2026 at 11:00=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
 >
-> On Mon Sep 14, 2026 at 10:21 PM CEST, Alexei Starovoitov wrote:
-> > On Mon, Sep 14, 2026 at 12:54=E2=80=AFPM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
+>
+>
+> On 9/14/26 4:57 PM, Andrii Nakryiko wrote:
+> > On Mon, Sep 14, 2026 at 4:59=E2=80=AFAM Mykyta Yatsenko
+> > <mykyta.yatsenko5@gmail.com> wrote:
 > >>
-> >> On Mon, Sep 14, 2026 at 6:17=E2=80=AFAM Kumar Kartikeya Dwivedi
-> >> <memxor@gmail.com> wrote:
-> >> >
-> >> > check_subprogs() verifies that each subprogram ends in an exit or an
-> >> > unconditional jump before in-kernel CO-RE relocations are applied.
-> >> > An unresolved relocation can then replace that terminal instruction =
-with
-> >> > an invalid helper call. The resulting fall-through into another subp=
-rogram
-> >> > breaks the CFG invariant used by postorder and stack liveness analys=
-is,
-> >> > which can write past their per-subprogram arrays.
-> >> >
-> >> > Handle instruction poisoning after the instruction has passed the sa=
-me
-> >> > class and operand-form checks used for a resolved relocation. This r=
-ejects
-> >> > relocations targeting jumps, calls, exits, register-source arithmeti=
-c, or
-> >> > non-immediate loads before they can alter the control flow. Keep poi=
-soning
-> >> > supported instructions, including both halves of a plain ldimm64, so=
- an
-> >> > unresolved relocation in dead code remains valid.
-> >> >
-> >> > The shared relocation code applies this restriction to both libbpf a=
-nd
-> >> > in-kernel CO-RE.
-> >> >
-> >> > Fixes: efcda22aa541 ("bpf: compute instructions postorder per subpro=
-gram")
-> >> > Reported-by: Nicholas Carlini <npc@anthropic.com>
-> >> > Suggested-by: Nicholas Carlini <npc@anthropic.com>
-> >> > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> >> > ---
-> >> >  tools/lib/bpf/relo_core.c | 28 +++++++++++++++++-----------
-> >> >  1 file changed, 17 insertions(+), 11 deletions(-)
-> >> >
 > >>
-> >> Kumar, can you please see if we can move check_core_relo() to right
-> >> after bpf_prepare_btf_info() instead of trying to guard against
-> >> malicious CO-RE relocation? I think what CO-RE logic is doing here
-> >> with poisoning is correct, it marks instruction as invalid because
-> >> CO-RE relocation couldn't be resolved/applied/whatever. That's sane
-> >> generic behavior, IMO.
 > >>
-> >> The fact that this breaks subprog validation is more of a sign that we
-> >> do this CO-RE application too late, perhaps?
+> >> On 9/12/26 12:57 AM, Andrii Nakryiko wrote:
+> >>> On Wed, Sep 9, 2026 at 2:19=E2=80=AFAM Mykyta Yatsenko
+> >>> <mykyta.yatsenko5@gmail.com> wrote:
+> >>>>
+> >>>> On 9/9/26 12:56 AM, Andrii Nakryiko wrote:
+> >>>>> On Tue, Sep 8, 2026 at 7:27=E2=80=AFAM Mykyta Yatsenko
+> >>>>> <mykyta.yatsenko5@gmail.com> wrote:
+> >>>>>>
+> >>>>>> From: Mykyta Yatsenko <yatsenko@meta.com>
+> >>>>>>
+> >>>>>> A perf counter can be zero at fentry. PMU multiplexing can schedul=
+e the
+> >>>>>> event during the BPF program. The old counter check then drops a v=
+alid
+> >>>>>> sample.
+> >>>>>>
+> >>>>>> Use an armed flag to track each successful fentry snapshot. Reset =
+all
+> >>>>>> flags before new reads. The fexit path clears each flag when it co=
+nsumes
+> >>>>>> the snapshot.
+> >>>>>>
+> >>>>>> Fixes: 47c09d6a9f67 ("bpftool: Introduce "prog profile" command")
+> >>>>>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> >>>>>> ---
+> >>>>>>  tools/bpf/bpftool/skeleton/profiler.bpf.c | 25 +++++++++++++++++-=
+-------
+> >>>>>>  1 file changed, 17 insertions(+), 8 deletions(-)
+> >>>>>>
+> >>>>>> diff --git a/tools/bpf/bpftool/skeleton/profiler.bpf.c b/tools/bpf=
+/bpftool/skeleton/profiler.bpf.c
+> >>>>>> index f48c783cb9f7..6c654bd9b346 100644
+> >>>>>> --- a/tools/bpf/bpftool/skeleton/profiler.bpf.c
+> >>>>>> +++ b/tools/bpf/bpftool/skeleton/profiler.bpf.c
+> >>>>>> @@ -10,6 +10,11 @@ struct bpf_perf_event_value___local {
+> >>>>>>         __u64 running;
+> >>>>>>  } __attribute__((preserve_access_index));
+> >>>>>>
+> >>>>>> +struct profile_reading {
+> >>>>>> +       struct bpf_perf_event_value___local value;
+> >>>>>> +       bool armed;
+> >>>>>> +};
+> >>>>>> +
+> >>>>>>  /* map of perf event fds, num_cpu * num_metric entries */
+> >>>>>>  struct {
+> >>>>>>         __uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
+> >>>>>> @@ -21,7 +26,7 @@ struct {
+> >>>>>>  struct {
+> >>>>>>         __uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
+> >>>>>>         __uint(key_size, sizeof(u32));
+> >>>>>> -       __uint(value_size, sizeof(struct bpf_perf_event_value___lo=
+cal));
+> >>>>>
+> >>>>> this is not a bug, but... ;)
+> >>>>>
+> >>>>>
+> >>>>> struct bpf_perf_event_value is UAPI, why do we need CO-RE-relocatab=
+le
+> >>>>> ___local variant?...
+> >>>>>
+> >>>>>
+> >>>>>> +       __uint(value_size, sizeof(struct profile_reading));
+> >>>>>>  } fentry_readings SEC(".maps");
+> >>>>>>
+> >>>>>>  /* accumulated readings */
+> >>>>>> @@ -45,7 +50,7 @@ const volatile __u32 num_metric =3D 1;
+> >>>>>>  SEC("fentry/XXX")
+> >>>>>>  int BPF_PROG(fentry_XXX)
+> >>>>>>  {
+> >>>>>> -       struct bpf_perf_event_value___local *ptrs[MAX_NUM_METRICS]=
+;
+> >>>>>> +       struct profile_reading *ptrs[MAX_NUM_METRICS];
+> >>>>>>         u32 key =3D bpf_get_smp_processor_id();
+> >>>>>>         u32 i;
+> >>>>>>
+> >>>>>> @@ -56,6 +61,7 @@ int BPF_PROG(fentry_XXX)
+> >>>>>>                 ptrs[i] =3D bpf_map_lookup_elem(&fentry_readings, =
+&flag);
+> >>>>>>                 if (!ptrs[i])
+> >>>>>>                         return 0;
+> >>>>>> +               ptrs[i]->armed =3D false;
+> >>>>>>         }
+> >>>>>
+> >>>>> this is preexisting, but why do we have two separate loops: first
+> >>>>> lookup up fentry_readings pointers, and then separately a) reading
+> >>>>> perf counters into local variable just to b) immediately copy it in=
+to
+> >>>>> map_value.
+> >>>>>
+> >>>>> can you try simplifying this and doing bpf_perf_event_read_value()
+> >>>>> into ptrs[i] directly? all within the same loop?
+> >>>>>
+> >>>>> it might have been some verifier issue, not sure, but I think this
+> >>>>> should work just fine
+> >>>
+> >>> you haven't answered this
+> >>>
 > >>
-> >> Also looking at current bpf_check_btf_info() logic, seems like we'll
-> >> skip CO-RE relocations altogether if we don't have
-> >> func_info/line_info, which is... fine, I guess, in modern world. But
-> >> it certainly is a bit orthogonal. So check_core_relo() seems like a
-> >> stand-alone step to me, which hopefully can be done very-very early,
-> >> so that no matter what patching we did will be properly validated by
-> >> verifier.
+> >> Yes, I can try this, but should we care to support those older kernels
+> >> in case someone tries fresh bpftool on old verifier?
+> >>
 > >
-> > Let's do both:
-> > - move bpf_check_btf_info() right after bpf_prepare_btf_info()
+> > did you check that this logic will not verify on older kernels?
+> >
+> no, if you are ok with the change, I'll do it in the next version.>>>>>
+
+yeah, let's try, I think it's a good change
+
+> >>>>>>
+> >>>>>>         for (i =3D 0; i < num_metric && i < MAX_NUM_METRICS; i++) =
+{
+> >>>>>> @@ -66,7 +72,8 @@ int BPF_PROG(fentry_XXX)
+> >>>>>>                                                 sizeof(reading));
+> >>>>>>                 if (err)
+> >>>>>>                         return 0;
+> >>>>>> -               *(ptrs[i]) =3D reading;
+> >>>>>> +               ptrs[i]->value =3D reading;
+> >>>>>> +               ptrs[i]->armed =3D true;
+> >>>>>>                 key +=3D num_cpu;
+> >>>>>>         }
+> >>>>>>
+> >>>>>> @@ -76,16 +83,18 @@ int BPF_PROG(fentry_XXX)
+> >>>>>>  static inline void
+> >>>>>>  fexit_update_maps(u32 id, struct bpf_perf_event_value___local *af=
+ter)
+> >>>>>>  {
+> >>>>>> -       struct bpf_perf_event_value___local *before, diff;
+> >>>>>> +       struct profile_reading *before;
+> >>>>>> +       struct bpf_perf_event_value___local diff;
+> >>>>>>
+> >>>>>>         before =3D bpf_map_lookup_elem(&fentry_readings, &id);
+> >>>>>>         /* only account samples with a valid fentry_reading */
+> >>>>>> -       if (before && before->counter) {
+> >>>>>> +       if (before && before->armed) {
+> >>>>>
+> >>>>> this is such an unlikely situation that I wouldn't even bother
+> >>>>> "fixing" it, tbh. alternatively we can check enabled or running for
+> >>>>> zero, I don't think realistically enabled can be zero if we actuall=
+y
+> >>>>> captured it an fentry
+> >>>>
+> >>>> Here we check before->counter for 0, substituting by enabled or runn=
+ing
+> >>>> will still have the same risk of dropping the first sample.
+> >>>>
+> >>>> I could reproduce it by:
+> >>>> 1. make PMU busy with 4 events to force multiplexing
+> >>>> 2. then quick profile for 1 second
+> >>>> Result: first sample gets dropped, because measurement
+> >>>> at fentry is 0. This is not a huge deal by itself, but the fix is si=
+mple enough,
+> >>>> in my opinion, to make it worth. For a pocket change we get clearer =
+flow:
+> >>>> fentry arms the counter, fexit disarms it.
+> >>>> We have the same code in perf, I thought it would be nice to have th=
+is change
+> >>>> there (more choice of sparse events, subsecond timeouts possible)
+> >>>>>
+> >>>
+> >>> are you saying that you get zero even for before->enabled?
+> >>>
+> >>
+> >> yes, for sparse events like itlb misses + PMU contention
+> >> that can happen.
+> >> for example log from one of the runs:
+> >> bpf_trace_printk: counter: 0, enabled: 29431875, running: 13638505
+> >> bpf_trace_printk: counter: 0, enabled: 60395630, running: 30502953
+> >> bpf_trace_printk: counter: 0, enabled: 60608030, running: 30502953
+> >> bpf_trace_printk: counter: 0, enabled: 5609314, running: 0
+> >
+> > But enabled doesn't, see? I keep forgetting which of enabled/running
+> > means "PMU event would like to be active" (that seems to be "enabled"
+> > judging by this output you shared) and which one is "PMU event was
+> > actually active", but the one with "would like to be active" should
+> > never be zero after activation, so why not use that instead of adding
+> > extra layer of armed/unarmed?
+> >
 >
-> This won't be a copy paste, since it depends on various checks on subprog=
-s we
-> would end up skipping, but let me see how we can split some of the steps =
-and
-> whether that ends up looking too bad.
+> yes, agree, checking for enabled should fix dropping 0 counters.
+
+cool, thanks
+
 >
-> > - check that relo applies to relocatable insns only
-> >   and hard error if it's not.
+> >> bpf_trace_printk: counter: 0, enabled: 5918970, running: 382474
+> >> bpf_trace_printk: counter: 0, enabled: 6243798, running: 542435
+> >> bpf_trace_printk: counter: 0, enabled: 6623769, running: 1087273
+> >> bpf_trace_printk: counter: 0, enabled: 7078241, running: 1376878
+> >> bpf_trace_printk: counter: 0, enabled: 7326934, running: 1625571
+> >> bpf_trace_printk: counter: 0, enabled: 7440054, running: 1738691
+> >>
+> >>>>> pw-bot: cr
+> >>>>>
+> >>>>>
+> >>>>>>                 struct bpf_perf_event_value___local *accum;
+> >>>>>>
+> >>>>>> -               diff.counter =3D after->counter - before->counter;
+> >>>>>> -               diff.enabled =3D after->enabled - before->enabled;
+> >>>>>> -               diff.running =3D after->running - before->running;
+> >>>>>> +               before->armed =3D false;
+> >>>>>> +               diff.counter =3D after->counter - before->value.co=
+unter;
+> >>>>>> +               diff.enabled =3D after->enabled - before->value.en=
+abled;
+> >>>>>> +               diff.running =3D after->running - before->value.ru=
+nning;
+> >>>>>>
+> >>>>>>                 accum =3D bpf_map_lookup_elem(&accum_readings, &id=
+);
+> >>>>>>                 if (accum) {
+> >>>>>>
+> >>>>>> --
+> >>>>>> 2.53.0-Meta
+> >>>>>>
+> >>>>
+> >>
 >
-> Ok.
-
-let's also extract poisoning logic into separate function, so we have
-less goto-ing unnecessarily
-
-if (res->poison)
-    return bpf_core_poison_insn(prog_name, relo_idx, insn, insn_idx);
-
-
-and bpf_core_poison_insn() will be free to return error, if necessary
