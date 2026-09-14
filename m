@@ -1,167 +1,235 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBFF383985;
-	Mon, 14 Sep 2026 19:44:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789415081; cv=none; b=LbkX+vu+h3T906LMTJDrDlK0keTSYnGugyuTCPR/OFfOU5soIqhMrPHqQcK9OFUY0rC0D8C2SpVxfbg0mZ5XTH9UhBMiJDbjJqyGrRA+8I7fg6aTHmgg61GRvvlCLjtn0bSKP0khkhCBwhN3CsHUdB+iIKH6Epa07kdWuv3AUJU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789415081; c=relaxed/simple;
-	bh=ctiiM6vJqJ++ghuOO2EvQkAwGIF6KNL58iWGR/JZBH8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=UAxLIAwTXGq51HVw+6Ytza/RjrONvkPAuIuI8tpAfIaJ37Cj2ADHdwC+U0G0wrmsCM9z0SNkaUpXkO/TgsacL95rPkpU1OFgg2RIcz1od/s6va9qJ8/mDOHv8VibJFlBY0TmZxRCuM1tLOb3xdmnwAdPxWXqxDjBNr71+7IASyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Aa9RX4NE; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3B3363095
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 19:54:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.141
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789415681; cv=pass; b=nQJE9OUvBcsztBVcyiGbzEfEwKQU46q/HFmIeYLEG8nscYCUP/GJH0AF8fzQM5WVGksv/heZybhshbuUlfjduC+PBsMpd2eOWi+p1D6c9eWzbqmnXEgxLx+0NoOWNBvKX3t7PwJAd1t6d/jJiNLjqeuFJOSrIkI7sFjyqAn/tH4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789415681; c=relaxed/simple;
+	bh=fSapdCDZQ6QLFIEqMM1MeGmV8MwvDQGmJdKKe2cHLPM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OTkIyQUPXiyjobrdgw+gbb7d9Trs/8n/Rm/lovVtDzsx6KmFZYEH5UVgQYe5/B9kIFty1On7NpAluz9SnsR1WSzXDpG64SmgIVH+5YYrJp/lweJRsq0R5VNo3rHpplfj7TcAdmrIev5e2NgT+/ZrYJgkslZQWTfJNXnkJOmkXD0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D99QjmqV; arc=pass smtp.client-ip=74.125.227.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Aa9RX4NE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 960DB1F000FF;
-	Mon, 14 Sep 2026 19:44:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789415076;
-	bh=dAIamB9o96xWXDBcRkq+/H0si90404IoSC8KyMPldZw=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Aa9RX4NETC9n15P4OBlFDQsPzC9XjIuOtUHcYgFRMSR9QFgm0bbVVhxKu0M8wRgDj
-	 U2jklQLyh4IzZ0H+3MHP8kcHulROBBL5SZwu8TEoW3jsW8g12yWV9RV1BKlMNnWggX
-	 61WpUC3uZnkGyZO1jxhozUWpbMBwFodtfctbTbrphUE8/csJArkmbq2JQKLEZb/2nX
-	 OkARX43MWFEQV5bfl7ZQvpJl6JuaYXuD8O9OU6yXFnODyYK4vZ67Z/GCIHsn+IqLmO
-	 zF3LTrI9XHu+t2Df2uG5iq6n8dsxpNLvl/UPexqRY1SUgB4XV91cnHLp4Jaf/QLLWV
-	 /BU+iQDoVNOQg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v2 19/40] fbdev: defio: assert FBINFO_VIRTFB, drop
- VM_IO, add VM_MIXEDMAP
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?TG9yZW56byBTdG9ha2VzIChBUk0p?= <ljs@kernel.org>
-Cc: linux-perf-users@vger.kernel.org, "Marc Zyngier" <maz@kernel.org>, dri-devel@lists.freedesktop.org, "Oliver
- Upton" <oupton@kernel.org>, kvm@vger.kernel.org, selinux@vger.kernel.org, "Vasily
- Gorbik" <gor@linux.ibm.com>, kvmarm@lists.linux.dev, "Heiko Carstens" <hca@linux.ibm.com>, bpf@vger.kernel.org, linux-rdma@vger.kernel.org, linux-s390@vger.kernel.org, linux-trace-kernel@vger.kernel.org, "Alexander
- Gordeev" <agordeev@linux.ibm.com>, linux-scsi@vger.kernel.org, "Christian
- Borntraeger" <borntraeger@linux.ibm.com>
-In-Reply-To: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-19-7d9781ed5361@kernel.org>
-References: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org>
- <20260914-b4-mmap-prepare-vma-flag-sanify-v2-19-7d9781ed5361@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 14 Sep 2026 19:44:35 +0000
-Message-Id: <20260914194435.960DB1F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D99QjmqV"
+Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-398b3b189e0so1885632a91.2
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 12:54:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789415679; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ZE6YJaJzeeHNj2LdFg/B3AaELhzacJcg+sJRAVc+RstIgJ5b7kG/f7wDD3T3aJuNNS
+         +CR8fZUmcyO5DpZpdn37ZFenF/NR6B88rEXrJvgoH7oxKv8NTQzlKoI8Nmuw/Av0z5V4
+         HaGsRqQxZajGM8KM//RKXJSzTuD6AJXfas2ncO0fSgptHyUSHBUDipmpWjJeYtmvQm94
+         0YhjPUKhsLjZ/m4NcIgsrQOdWY3KAA1tjRXa5vvQE9xfZE3EV/cUvnfdeuhPGEvJuPE4
+         1JMm8drs8PP5yTOynQ1oewem2D8yjh+iRAIOt2g2uTHhDqZJVfYrHrG0zMzaZzHublkj
+         7cng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=NH5JWH9+8ywBNkaYo4fuAfeFL7cCQ5kLjBxDoQ+Ftzw=;
+        fh=k+96ManRf2cL4KLU0yCSwZe66ZSjd4F4fA87/2F2CvI=;
+        b=gO5vYshS1Dz2rKxRG5/08Pz9MKMvpBynh6Rpr5c52y8X77c+3kkz2iQgKvYXz8BCY8
+         fc2TA7pwms2lOAYcu56/IyPt2Ntt3eVfIGipa1aSo8jtTiXLlrDIDfTyvnu3fjEh2rvx
+         8muZ1ZCd7man0J4yZEBVVn0ua9mZ+dtWJgSDwmbyZ7zIMy9ILabqFjIntro85WHo8nm0
+         eRAVNuthreDk+40+Gw+PZX3xKH6LZbeQ1t60TWtCtjHfuRjpRNfLpGbNsdJwtE/SEvmD
+         y7mCF/FmgBq/a+Fx2Jzc7XWrsqmtofGhJfmlOPaRSb5rZZudgGAU55e9m01w+zSclzFR
+         ijxg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789415679; x=1790020479; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=NH5JWH9+8ywBNkaYo4fuAfeFL7cCQ5kLjBxDoQ+Ftzw=;
+        b=D99QjmqVpFFIJmj5cD9QI/GoJnswqJt4CW6JmAVjcdJhSMzNlmR+wh3A4sZlqob5sm
+         E9oscYKVHOciDhm7+tK2dn1z/ZegCCLa3DUEQ6w+vtWEPRDMErbvRRdGqYLXupR8X31S
+         yjSWDPmu4I0/oc9b7sYK9vXKN7kWXln55uH1YCFRiqw8X1nfL7+q2yz79fUDGlmsQaev
+         wr1Tj7oXRXKNboisSm4a1v7rGh2+uxVl0VhOtcFBWTSoO9AvTYRlwD7s+dqlTNVgduEE
+         np2MfIKC8a3JDsJ9OqBItvotemcvCIHqqgY+S29zAKmA6S6EmON4oiUs0fdBaUZMFldj
+         vrRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789415679; x=1790020479;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NH5JWH9+8ywBNkaYo4fuAfeFL7cCQ5kLjBxDoQ+Ftzw=;
+        b=GsR8RX6xB18MEiw+yjiFuANOlgaEAejrlQEUjvh34HdldWY8M0KImVcJUtNdtBMV/T
+         flnrmsOxHwWFfdto9xaoWWNW26UnfjXU2xNKl0HXBpks6Wyas9BkMN0HGr/0zX73aaPv
+         JrJIaVQYn2XxiDMeZsyS81UFA05AVy2Wa2GfwoL2YjWFtr7TrYGMXHGBatH7jZpLMDBz
+         1YcVM16pGLQQHv0gShR0Rc04tLkI6GDQwuif6JmmftoXgI49IoENUDerzNez4NfWp7XR
+         tfWhSQnC3JfXg3Kd1i2aRYA32OUTnUtstYAgY8xLMxNJBmYd0Cp3605+oItGZeLsUfbq
+         qs1Q==
+X-Gm-Message-State: AFuF++kRt6wgGht6gf+QpG41mSYS6gP2aqeRuU8JlQovnsA6/km96W4H
+	3h0/islXmug1NgDRhY6KHkTdqfRgVxJkeW6kspajPbnSfsVt4uwb6xn0YZhWbM8p9DkXG3g4sE1
+	6E6jGhEX1zJZT4FvciG8MWvKEklC49jY=
+X-Gm-Gg: AYBFou1sk3A6TWvsX8fC84zO6j97McNKlY+oDdPGmu0k4/aky/rl4JxQ/zzW2EjNCPu
+	O5SdHJOApOI5W1xGLFZAsKi9sUDr9kIG3ST1rasTaPJIXhMGxIRzmidiNlHgFeuxGEWI2ju3bWC
+	ln09STSDKt7pEW3+dPiz9lpGcSSBP/EYjDm8XbcLhsmwsy5hAT/H7E/tAaQvRuvf9Vg7v0K1Hd4
+	viqp2Y2zGLjUC21kuyq3rov0nbB1n++/9Nt6JYyNviXWY15UWESVy1dLr0XULCnM41QI3RgWRv9
+	SKuyQB9XPLLpNbFo99DhWFvrtW360BjhrYK/Q/e2A0AWWZuepzK6I7SoHz9cuQQZToOJ4flqoR9
+	N/ugC8cxIOYbf4gtkjjlYE7O4Lv9d9pDwpGZrUZDbmVjc6f7KpbVv
+X-Received: by 2002:a17:90b:384f:b0:39d:f770:774 with SMTP id
+ 98e67ed59e1d1-39df77007e9mr4251508a91.20.1789415679511; Mon, 14 Sep 2026
+ 12:54:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260914131701.2529725-1-memxor@gmail.com> <20260914131701.2529725-5-memxor@gmail.com>
+In-Reply-To: <20260914131701.2529725-5-memxor@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 14 Sep 2026 12:54:24 -0700
+X-Gm-Features: AcwNN1Wu6M71qyfnT4DTMJ4fws26On6V9VuPbGQGO9xsTtPzErePNNHFBrXts5c
+Message-ID: <CAEf4BzZjrWzQxaZ1kXyvXHXuUFDsgZe6NwQHH6seqfoMLpJLZw@mail.gmail.com>
+Subject: Re: [PATCH bpf v3 4/7] bpf: Restrict CO-RE poisoning to relocatable instructions
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, Nicholas Carlini <npc@anthropic.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
+On Mon, Sep 14, 2026 at 6:17=E2=80=AFAM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> check_subprogs() verifies that each subprogram ends in an exit or an
+> unconditional jump before in-kernel CO-RE relocations are applied.
+> An unresolved relocation can then replace that terminal instruction with
+> an invalid helper call. The resulting fall-through into another subprogra=
+m
+> breaks the CFG invariant used by postorder and stack liveness analysis,
+> which can write past their per-subprogram arrays.
+>
+> Handle instruction poisoning after the instruction has passed the same
+> class and operand-form checks used for a resolved relocation. This reject=
+s
+> relocations targeting jumps, calls, exits, register-source arithmetic, or
+> non-immediate loads before they can alter the control flow. Keep poisonin=
+g
+> supported instructions, including both halves of a plain ldimm64, so an
+> unresolved relocation in dead code remains valid.
+>
+> The shared relocation code applies this restriction to both libbpf and
+> in-kernel CO-RE.
+>
+> Fixes: efcda22aa541 ("bpf: compute instructions postorder per subprogram"=
+)
+> Reported-by: Nicholas Carlini <npc@anthropic.com>
+> Suggested-by: Nicholas Carlini <npc@anthropic.com>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
+>  tools/lib/bpf/relo_core.c | 28 +++++++++++++++++-----------
+>  1 file changed, 17 insertions(+), 11 deletions(-)
+>
 
-Pre-existing issues:
-- [Critical] The driver passes a virtual address to __free_pages(), causing=
- an out-of-bounds pointer dereference and kernel panic.
-- [High] Ignored return value of fb_deferred_io_init() leads to NULL pointe=
-r dereferences in mmap, open, and cleanup error paths.
-- [High] Missing .driver_data initialization in i2c_device_id array leads t=
-o NULL pointer dereference on sysfs instantiation.
---
+Kumar, can you please see if we can move check_core_relo() to right
+after bpf_prepare_btf_info() instead of trying to guard against
+malicious CO-RE relocation? I think what CO-RE logic is doing here
+with poisoning is correct, it marks instruction as invalid because
+CO-RE relocation couldn't be resolved/applied/whatever. That's sane
+generic behavior, IMO.
 
-commit d46565518c57c096a66d45b42bbe529fae5740d7
-Author: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+The fact that this breaks subprog validation is more of a sign that we
+do this CO-RE application too late, perhaps?
 
-fbdev: defio: assert FBINFO_VIRTFB, drop VM_IO, add VM_MIXEDMAP
+Also looking at current bpf_check_btf_info() logic, seems like we'll
+skip CO-RE relocations altogether if we don't have
+func_info/line_info, which is... fine, I guess, in modern world. But
+it certainly is a bit orthogonal. So check_core_relo() seems like a
+stand-alone step to me, which hopefully can be done very-very early,
+so that no matter what patching we did will be properly validated by
+verifier.
 
-Currently all drivers which use defio allocate system memory. All of them
-also set FBINFO_VIRTFB, other than ssd1307fb, however this driver allocates
-system RAM, so simply failed to set this flag when it ought to.
-
-> diff --git a/drivers/video/fbdev/ssd1307fb.c b/drivers/video/fbdev/ssd130=
-7fb.c
-> index c4fdecafd8560..958514a354338 100644
-> --- a/drivers/video/fbdev/ssd1307fb.c
-> +++ b/drivers/video/fbdev/ssd1307fb.c
-> @@ -763,6 +763,8 @@ static int ssd1307fb_probe(struct i2c_client *client)
->  	info->fix.smem_start =3D __pa(vmem);
->  	info->fix.smem_len =3D vmem_size;
-> =20
-> +	info->flags =3D FBINFO_VIRTFB;
+> diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
+> index 8ad2715721cf..a884bc2bff19 100644
+> --- a/tools/lib/bpf/relo_core.c
+> +++ b/tools/lib/bpf/relo_core.c
+> @@ -1047,17 +1047,6 @@ int bpf_core_patch_insn(const char *prog_name, str=
+uct bpf_insn *insn,
+>
+>         class =3D BPF_CLASS(insn->code);
+>
+> -       if (res->poison) {
+> -poison:
+> -               /* poison second part of ldimm64 to avoid confusing error=
+ from
+> -                * verifier about "unknown opcode 00"
+> -                */
+> -               if (is_ldimm64_insn(insn))
+> -                       bpf_core_poison_insn(prog_name, relo_idx, insn_id=
+x + 1, insn + 1);
+> -               bpf_core_poison_insn(prog_name, relo_idx, insn_idx, insn)=
+;
+> -               return 0;
+> -       }
+> -
+>         orig_val =3D res->orig_val;
+>         new_val =3D res->new_val;
+>
+> @@ -1066,6 +1055,8 @@ int bpf_core_patch_insn(const char *prog_name, stru=
+ct bpf_insn *insn,
+>         case BPF_ALU64:
+>                 if (BPF_SRC(insn->code) !=3D BPF_K)
+>                         return -EINVAL;
+> +               if (res->poison)
+> +                       goto poison;
+>                 if (res->validate && insn->imm !=3D orig_val) {
+>                         pr_warn("prog '%s': relo #%d: unexpected insn #%d=
+ (ALU/ALU64) value: got %d, exp %llu -> %llu\n",
+>                                 prog_name, relo_idx,
+> @@ -1082,6 +1073,8 @@ int bpf_core_patch_insn(const char *prog_name, stru=
+ct bpf_insn *insn,
+>         case BPF_LDX:
+>         case BPF_ST:
+>         case BPF_STX:
+> +               if (res->poison)
+> +                       goto poison;
+>                 if (res->validate && insn->off !=3D orig_val) {
+>                         pr_warn("prog '%s': relo #%d: unexpected insn #%d=
+ (LDX/ST/STX) value: got %d, exp %llu -> %llu\n",
+>                                 prog_name, relo_idx, insn_idx, insn->off,=
+ (unsigned long long)orig_val,
+> @@ -1140,6 +1133,9 @@ int bpf_core_patch_insn(const char *prog_name, stru=
+ct bpf_insn *insn,
+>                         return -EINVAL;
+>                 }
+>
+> +               if (res->poison)
+> +                       goto poison;
 > +
->  	fb_deferred_io_init(info);
-
-[Severity: High]
-This isn't a bug introduced by this patch, but if memory allocation fails
-in fb_deferred_io_init(), it returns -ENOMEM but ssd1307fb_probe() ignores
-it, leaving info->fbdefio_state as NULL and info->deferred_work
-uninitialized.
-
-Subsequent probe failure or device removal calls fb_deferred_io_cleanup(),
-which can unconditionally call flush_delayed_work() on the uninitialized
-workqueue and then dereference the NULL fbdefio_state:
-
-drivers/video/fbdev/core/fb_defio.c:fb_deferred_io_cleanup() {
-	...
-	mutex_lock(&fbdefio_state->lock);
-	...
-}
-
-Additionally, userspace calling open() or mmap() could trigger NULL pointer
-dereferences in fb_deferred_io_open() and fb_deferred_io_mmap().
-
-Does the ignored return value of fb_deferred_io_init() lead to NULL pointer
-dereferences in mmap, open, and cleanup error paths?
-
-> =20
->  	i2c_set_clientdata(client, info);
-
-[Severity: Critical]
-This is a pre-existing issue, but the driver allocates video memory using
-__get_free_pages(), which returns a virtual address (void *).
-
-During probe failure, it passes this virtual address directly to
-__free_pages():
-
-drivers/video/fbdev/ssd1307fb.c:ssd1307fb_probe() {
-	...
-fb_defio_error:
-	__free_pages(vmem, get_order(vmem_size));
-	...
-}
-
-And during module unload, it does the same:
-
-drivers/video/fbdev/ssd1307fb.c:ssd1307fb_remove() {
-	...
-	__free_pages(__va(info->fix.smem_start), get_order(info->fix.smem_len));
-	...
-}
-
-Because C implicitly casts void * to struct page *, the kernel could treat
-the zeroed video memory as a page struct, reading garbage PFNs, corrupting
-the buddy allocator state, and crashing.
-
-Does passing a virtual address to __free_pages() in these paths cause an
-out-of-bounds pointer dereference and kernel panic? Should this be using
-free_pages() instead?
-
-
-[Severity: High]
-This isn't a bug introduced by this patch, but if the driver is instantiated
-via the legacy I2C sysfs interface, device_get_match_data() falls back to
-matching against ssd1307fb_i2c_id:
-
-drivers/video/fbdev/ssd1307fb.c:ssd1307fb_i2c_id[] =3D {
-	{ .name =3D "ssd1305fb" },
-	...
-};
-
-Because entries in this array omit the .driver_data field, it defaults to
-NULL. The probe function then unconditionally dereferences this NULL pointe=
-r:
-
-drivers/video/fbdev/ssd1307fb.c:ssd1307fb_probe() {
-	...
-	par->vcomh =3D par->device_info->default_vcomh;
-	...
-}
-
-Does the missing .driver_data initialization in the i2c_device_id array
-lead to a NULL pointer dereference on sysfs instantiation?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914-b4-mmap-pr=
-epare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org?part=3D19
+>                 imm =3D (__u32)insn[0].imm | ((__u64)insn[1].imm << 32);
+>                 if (res->validate && imm !=3D orig_val) {
+>                         pr_warn("prog '%s': relo #%d: unexpected insn #%d=
+ (LDIMM64) value: got %llu, exp %llu -> %llu\n",
+> @@ -1164,6 +1160,16 @@ int bpf_core_patch_insn(const char *prog_name, str=
+uct bpf_insn *insn,
+>         }
+>
+>         return 0;
+> +
+> +poison:
+> +       /*
+> +        * Only relocatable instructions reach here. Poison both halves o=
+f
+> +        * ldimm64 so the verifier reports the bad relocation, not opcode=
+ 00.
+> +        */
+> +       if (is_ldimm64_insn(insn))
+> +               bpf_core_poison_insn(prog_name, relo_idx, insn_idx + 1, i=
+nsn + 1);
+> +       bpf_core_poison_insn(prog_name, relo_idx, insn_idx, insn);
+> +       return 0;
+>  }
+>
+>  /* Output spec definition in the format:
+> --
+> 2.53.0
+>
