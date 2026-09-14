@@ -1,203 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo2-f16.google.com (mail-oo2-f16.google.com [74.125.231.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A373822B1
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 18:19:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789409968; cv=none; b=GmbQ5DwSz8Z363fEw3R1qwrWYMqENebkBhuWveytRo6bafQ6ISnTzLMfUoZhUxeAh9+/reOJpmIslUQfl5e8vgTZZhD9XN+l4hDE5HotufZQWECtuwnH59wTc6BozBLZgND2uWmPbgD1VwbxfTK5T0H29qOOpZrMF8kKGrY95VY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789409968; c=relaxed/simple;
-	bh=OHemRYf9sd1vbiFTWIeCmoHjma3zPM2r7gtNYnBqhAA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ucAf3cO7tGWnpy2kLmK78xNf96JaRXiqzRMOBbgoGQTjFjncTb2cH6TsB2CjEDZgWNsdERvOz0w4WpHEBDraGtSGSpYVMTwT9kgn5qsPZu+vO8BiTrV99Zipa7mesPUiF5vn+VsOTuZDdaciu54FQOgBfP8buObK/21pBlf0/sc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hTDoNEwX; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 584EE38645E
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 18:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.144
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789410342; cv=pass; b=eRwluY3CFvMLUC4zUwC/CL9Z3wj28CudOuXgyGHEqGkbfbj8jkjFErsqOCEKETTrzliAuEF7Q51zwMKouegSPW5zauH7aOdF5ncJmwSOlX8fWcCLPYD+lM8YuK3+dbDtinAUbmDqJ0+aQYHBr5XnRFk36oQMppHN4bvfuz+LLYY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789410342; c=relaxed/simple;
+	bh=M05cKKzyMe6gEci7W/N5xN6B2lG87e4rRXDr2YH4Gn0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=syS0HJ2V4Gq8xTt7dO9hrXs3hFJ5UJh01eJQh62OC6WXkaQq+1nhMNRaQtFcT3glVcasmMg+E0CRWl098iK8CJwVdsOsc+yiZUJjanepUhPsBCSIG+Dm608VtZLeU0fO9Zr/pm9GbtiRpA1EiiT3Lf+YoLuxqnKyilNfQf+nhx8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lhRwOt5L; arc=pass smtp.client-ip=74.125.231.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hTDoNEwX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E3E01F00893;
-	Mon, 14 Sep 2026 18:19:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789409966;
-	bh=zsv3DOK1z6di+4JD9HWbCcsiMGFP7Wdz0N67HNJxtZo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=hTDoNEwXU138VQsAvrZzfoA8+qKcGyUlz94sSXEZ9dIPMWVr6/nShNGgIRbCdeph8
-	 1yOo/sOA0v9HPZAqXY1DzhGbW9gQkvsOw9d1XbeH20kOndVhkHcubF4k7Uzv68H97l
-	 hCuKiFjGJjQCZRDEvT9WF3rI4F9MDto4Mrqy1mv4KWVOCoEHwnJZDdFKJ9amFIqbpz
-	 3oSSHIr7HjQssJ22lQyiuPV8w5pNhsju1vzAn4yAfKoI3IsuD4qW6A8Fb3kElfA0b3
-	 5H15FfMxgcAkFqV8LIzwmmaoz21hXAloFCPmOZsemj2KRd8FbfQsxw3PjDG3i9fGSn
-	 ka7pZJNBKoQKQ==
-Content-Type: multipart/mixed; boundary="===============4992885252515047981=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lhRwOt5L"
+Received: by mail-oo2-f16.google.com with SMTP id 46e09a7af769-805bf8c2661so1606507a34.3
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 11:25:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789410340; cv=none;
+        d=google.com; s=arc-20260327;
+        b=sSw0xNtQg3jVLI4+YIrg26itspXqdXRHYxs3yzh3V3ghlxmBc5ISEphZYblKheHNDc
+         YV+o7AvYZWtXDjGff4S2VkNs5nxbDSbythaosrxLAPhP9SZkpJJc0Su5slVk3PjsW+yW
+         sBquuQ1Ei+b+n8h+IkNbnfVLKveLuKkTgDuFnJTbBJhPUD791dX2V/7TyOBM2FlxdEbe
+         XV3e+rJEN5Lv6csbeN1h+hac4AW4oDF+Kxxq8onpgqdtIrOR/KbBgThN3B5v7XrfkC1o
+         sLVmCtjRPMRCIXxdtuS6sJsSOtOYJo525hl6OcDApwFscpn5v0ODT7McUsFQc22A4oyN
+         Ipqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=U651fx6dEYbgcs9HadXqwVgaBN2uUjOTpkPkaj2tUlo=;
+        fh=UyILnoCeHYJ+Auaz3rzrPjPA6v7KARKY2uz4udGGDFk=;
+        b=stA+iF8l7DA+1Q5lo4MgyuPgbAi/zQ1+RuCb2ou2ZITBvAILIfbYUyqsGYTS44CyQ3
+         IgaGfuYIgb21onQTj6bZZ9erqd7+FONvWVuDU/B9j4KW1BMQNGWw/v1LzfozT18v9yGu
+         SbFCFxv/+H+qccKtj0/F+rGV3Nk8suhbzjYEfil0eDlMAFRswQUnJRlBa/KJTNZ1bPhX
+         sN4d8cLIGC1MrcMjuQn0po/+Dt8BWZHb22lb9sQXrQ6sxn3DqnFv/wXjrHcmgOrlP7Kn
+         bTqygiWV1ZRqSYLD9uVF5b6MM7SsGjlDwMmCaFzGdWNvnBldsn3QaF3nZrrQCJ+Z1UaS
+         GIPA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789410340; x=1790015140; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=U651fx6dEYbgcs9HadXqwVgaBN2uUjOTpkPkaj2tUlo=;
+        b=lhRwOt5LcPQwCa23RxJjpcmFP5PNada84hRS1iRL67lMg7oGzS9VrD8XU+P5YhNfpN
+         kVKGwa6dNvlSj4PxxZfhzG9IunzlkJ31g1C8og2Jxiw1o/dsKzZKe8tLqxIURssaZi0b
+         uWl9mu6gAInzTgOJ80IUgCqsuY1TVBeBJMVTKmWnmfVPgPLYg8pFqU77nWy1jvwRPvs6
+         EfN+bh/wZlT5W3C30hOHBIB1M/8whF5vf2V24xsVSgQgjkC3xPC1Nve1d+qn7J/C1eiO
+         LIDt9qg8AUeHD7ojQ34+3TJK1W8gn/wHDafrq8RY3bjqpnro1DHFJ/nm6ENioRA1DaZk
+         t9yA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789410340; x=1790015140;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=U651fx6dEYbgcs9HadXqwVgaBN2uUjOTpkPkaj2tUlo=;
+        b=DaI7bYrZIDfPUWJ3kbA17rxY8SseK+OWNV0W0FMvIZP088S8a45Gs8HjHvvWpOyjB9
+         W69RnqUfl++O+Y1QAQVa2mGZSMjuULdYnDRlZuEeFsZ3ldL39VsIkgFTWr591Ytspht8
+         QeJkbVUIMcAyN85EOu4N93EYDF0k8xfSVvHHtZmI8FOtTsD9Am9U3YlLpIfed2zHbzKq
+         eKhv/XtUkB926OPXstq7rN118jC9bhB2Gdk0QNGYcMHYIq8ILpY/WWkxD1HEdma6VCku
+         PbHGcIEYKzILH4OaHVeAZCZPDhcpH5yDoUVmgEFBGe2L85t8Oulm9nQT9nCDjoQZtPkp
+         fbng==
+X-Forwarded-Encrypted: i=1; AKwUvBzBz63yNhNnlBNghG0zM+YQJtr1htJlRq6Q/qjj6CtDLPwyjFOFgK7STNayeo4BsQujiHM=@vger.kernel.org
+X-Gm-Message-State: AFuF++l2JqiSRy9HGLbREaHrvRyIW7oQq/tJ/qwVQIuosvzUVvCueZqo
+	41sTaL5oyqlywjnuBXoh1Cehx8vvNZXLofHJyNTEIIyn1YaWMEPw3hHkNLn7WBPyn+T+WjLg0tc
+	3RKGLoAxcwhfEc3eczDXTRvSorqpYKTs=
+X-Gm-Gg: AYBFou3MdJC18UsPpZE+2jD6uDn+28xF1WFnT6Zp0OtUf6wDLtnXkEfsu7On1r+BazA
+	kSa7RzcgY1p6pSyCXxK+L1V81tlmdULuw5zjXwnpWll2pAdAgJu96yXXHj1uA1JbtpXd1lUuDJc
+	aJ2KvBlloIlw47RRHA744qSrKW2/ZnHmUD1DYTYVsqYzr1OIHwcNw3WpQmlA+R+iGMKelcr8jgz
+	hqCiA1xX0Qf1x39Vf3S8MnFMKcgTvaHA/xSuhQ5NDM/ayKVdGA/ju2cT0X+CGbSwuCsofrfqmrs
+	JYnLdUtjKKCRkgPUx8kMgTeMZMPe0EEq5bSWjl3lMZ/9ZXLbIByuMNkNiQ==
+X-Received: by 2002:a05:6820:2213:b0:6b7:46fa:16aa with SMTP id
+ 006d021491bc7-6c54292a26fmr2212816eaf.63.1789410340130; Mon, 14 Sep 2026
+ 11:25:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <850a6d1cc01f20f2157f097cba13fb46ca8f7c48c8c8dc7f4eba41d7c171e36c@mail.kernel.org>
-In-Reply-To: <20260914170326.249953-4-daniel@iogearbox.net>
-References: <20260914170326.249953-4-daniel@iogearbox.net>
-Subject: Re: [PATCH bpf v2 03/11] bpf: Cache the jump table of a subprogram during CFG discovery
-From: bot+bpf-ci@kernel.org
-To: daniel@iogearbox.net,ast@kernel.org
-Cc: memxor@gmail.com,eddyz87@gmail.com,a.s.protopopov@gmail.com,info@starlabs.sg,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 14 Sep 2026 18:19:26 +0000 (UTC)
+References: <20260914-libbpf-log-buf-fix-v1-1-f592caffcc71@gmail.com> <05221557-59b5-4d93-ac55-d9e372d0862b@gmail.com>
+In-Reply-To: <05221557-59b5-4d93-ac55-d9e372d0862b@gmail.com>
+From: =?UTF-8?B?THXDrXMgVmllaXJh?= <luisflavieira@gmail.com>
+Date: Mon, 14 Sep 2026 15:25:27 -0300
+X-Gm-Features: AcwNN1WpiCNo8BkMZsFY2qQC5nwNASs0EdBNHmV87IALQDdz9LKh29qKxXvtpoQ
+Message-ID: <CAFTBxmixD6bHH0Rn+Tr432tbgfzbKcrMd98s7_NTTF-Mibqh2Q@mail.gmail.com>
+Subject: Re: [PATCH bpf] libbpf: Fix program log buffer size validation
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============4992885252515047981==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Mon, Sep 14, 2026 at 10:22=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
+> The change looks correct, few questions:
+>  * Do we really need a unit test for this? We are not testing those error
+> conditions now.
 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 04bb8f71cabe3..754e24d41f47f 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -670,7 +670,6 @@ struct bpf_insn_aux_data {
->  		/* remember the offset of node field within type to rewrite */
->  		u64 insert_off;
->  	};
-> -	struct bpf_iarray *jt;	/* jump table for gotox or bpf_tailcall call instruction */
->  	struct btf_struct_meta *kptr_struct_meta;
->  	u64 map_key_state; /* constant (32 bit) key tracking for maps */
->  	int ctx_field_size; /* the ctx field size for load insn, maybe 0 */
-> @@ -805,6 +804,7 @@ struct bpf_subprog_info {
->  	u32 linfo_idx; /* The idx to the main_prog->aux->linfo */
->  	u32 postorder_start; /* The idx to the env->cfg.insn_postorder */
->  	u32 exit_idx; /* Index of one of the BPF_EXIT instructions in this subprogram */
-> +	struct bpf_iarray *jt; /* jump table shared by all gotox of this subprogram */
-                                ^^^^
-The patch moves jt ownership into bpf_subprog_info but doesn't update the
-code that removes instructions. When verifier_remove_insns() deletes a
-whole subprogram, adjust_subprog_starts_after_remove() in
-kernel/bpf/fixups.c compacts the array with memmove:
+Agreed. I'll drop the selftest in v2.
 
-    move = env->subprog_cnt + 1 - j;
-    memmove(env->subprog_info + i,
-            env->subprog_info + j,
-            sizeof(*env->subprog_info) * move);
-    env->subprog_cnt -= j - i;
+>  * While here should we rewrite the first check as (!!log_buf !=3D !!log_=
+size), to
+> cover the case when log_size =3D=3D 0 but log_buf is nonnull (we check it=
+ later in
+> bpf_prog_load()) (AI)
 
-If subprogram 3 owns a jump table and subprograms 1 and 2 are removed
-(i=1, j=3), slots 3 and 4 are never rewritten, so subprog_info[1].jt and
-subprog_info[3].jt both point to the same kvmalloc'd buffer.
+Makes sense. I'll update the setter to validate the buffer/size pair
+consistently with bpf_prog_load().
 
-Does bpf_free_subprog_jts() then double-free that buffer? Its loop walks
-the entire fixed-size array rather than stopping at env->subprog_cnt:
+>  * Fixes tag is probably not needed, because this is libbpf, target bpf-n=
+ext.
 
-    for (i = 0; i < ARRAY_SIZE(env->subprog_info); i++)
-        kvfree(env->subprog_info[i].jt);
+Agreed. I'll retarget v2 to bpf-next and drop the Fixes tag.
 
-so both the moved copy at index 1 and the stale alias at index 3 would be
-freed.
-
-Also, when verifier_remove_insns() overwrites subprog_info[i..j), doesn't
-that leak the jump table of any subprogram in that range?
-
-Before this patch, verifier_remove_insns() called
-bpf_clear_insn_aux_data(env, off, cnt) to free the jt of every removed
-instruction and then memmoved the aux array. The new owner needs the same
-handling: kvfree the tables of removed subprograms and clear the stale
-tail slots left by the memmove, or bound bpf_free_subprog_jts() to
-env->subprog_cnt and explicitly zero the tail.
-
-[ ... ]
-
-> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-> index df4513e71c80a..c38d33f0b0ba5 100644
-> --- a/kernel/bpf/cfg.c
-> +++ b/kernel/bpf/cfg.c
-
-[ ... ]
-
-> +void bpf_free_subprog_jts(struct bpf_verifier_env *env)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(env->subprog_info); i++) {
-> +		kvfree(env->subprog_info[i].jt);
-> +		env->subprog_info[i].jt = NULL;
-> +	}
-> +	env->cfg.subprog_jts_ready = false;
-> +}
-
-This iterates over all BPF_MAX_SUBPROGS + 2 slots (258 entries), but
-adjust_subprog_starts_after_remove() only updates env->subprog_cnt when
-subprograms are removed. Slots beyond that count can hold stale pointers
-duplicated by the memmove. Is there a risk of freeing the same allocation
-twice, once from its new index and once from the old stale slot?
-
-[ ... ]
-
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index 52d3cec336727..f3cf66b8147a4 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -500,23 +500,6 @@ static int bpf_adj_linfo_after_remove(struct bpf_verifier_env *env, u32 off,
->  	return 0;
->  }
->
-> -/*
-> - * Clean up dynamically allocated fields of aux data for instructions [start, ...]
-> - */
-> -void bpf_clear_insn_aux_data(struct bpf_verifier_env *env, int start, int len)
-> -{
-> -	struct bpf_insn_aux_data *aux_data = env->insn_aux_data;
-> -	int end = start + len;
-> -	int i;
-> -
-> -	for (i = start; i < end; i++) {
-> -		if (aux_data[i].jt) {
-> -			kvfree(aux_data[i].jt);
-> -			aux_data[i].jt = NULL;
-> -		}
-> -	}
-> -}
-> -
->  static int verifier_remove_insns(struct bpf_verifier_env *env, u32 off, u32 cnt)
->  {
->  	struct bpf_insn_aux_data *aux_data = env->insn_aux_data;
-> @@ -526,8 +509,6 @@ static int verifier_remove_insns(struct bpf_verifier_env *env, u32 off, u32 cnt)
->  	if (bpf_prog_is_offloaded(env->prog->aux))
->  		bpf_prog_offload_remove_insns(env, off, cnt);
->
-> -	bpf_clear_insn_aux_data(env, off, cnt);
-> -
-                          ^^^^
-Removing bpf_clear_insn_aux_data() makes sense for insn_aux_data, since
-it no longer owns the jt allocation. But subprog_info[].jt is still an
-owned pointer, and adjust_subprog_starts_after_remove() will memmove
-those structs when entire subprograms disappear.
-
-Does verifier_remove_insns() need equivalent cleanup for the new owner?
-When j - i removed subprograms are dropped, the memmove copies slots
-[j, subprog_cnt] down to [i, ...] and decrements subprog_cnt by j - i,
-but it doesn't kvfree the jt pointers being overwritten in [i, j) or
-NULL the duplicates left in the tail slots.
-
->  	err = bpf_remove_insns(env->prog, off, cnt);
->  	if (err)
->  		return err;
-
-[ ... ]
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index ddba53eaa3331..32157d145a609 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -21477,8 +21477,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
->  	release_maps(env);
->  	release_btfs(env);
->  err_free_env:
-> -	if (env->insn_aux_data)
-> -		bpf_clear_insn_aux_data(env, 0, env->insn_aux_data_len);
-> +	bpf_free_subprog_jts(env);
->  	vfree(env->insn_aux_data);
->  	kvfree(env->fd_array);
->  	bpf_stack_liveness_free(env);
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34875126886
---===============4992885252515047981==--
+Thanks for the review.
