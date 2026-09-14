@@ -1,77 +1,77 @@
-Received: from mail-wm2-f0.google.com (mail-wm2-f0.google.com [74.125.225.128])
+Received: from mail-wm2-f6.google.com (mail-wm2-f6.google.com [74.125.225.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA23049EC54
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 22:25:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9699C49E5FA
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 22:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789424725; cv=none; b=hYaEhoxWJhegP/hM+r+Qv+lzT9WTDWtExcSktJnsQLw/5Z5QIIzTvzqrw8W6f+tR71vJ1Ilvz4JOrOEdw16fdFIwdlCPdauXJe8B9fzLdhQhKSOdgx+z3irYfcJGr+SrxLjCGS4U728K9kDF3MYbdYyePvDxwwVCXMsoRLQv97s=
+	t=1789424727; cv=none; b=cPo74pNCoK3GexC3J6gaj55zGgojesCerOYFS8E3oubv72f1XzmBEKYOag7+5/grtWHMtsQoztznl/MfhtpUyop5jwJ0xqaFeg1E1XQBBeZxbkmdru5nhSR3S0sRhNRBOc9q5IzZwWBsok8EOqrVGO0uJk4xxPOa+ikBXYHru+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789424725; c=relaxed/simple;
-	bh=ID6Y65CwWHga0hnCKzuyxwrWH8xyC9r5Sy1cao8fU14=;
+	s=arc-20240116; t=1789424727; c=relaxed/simple;
+	bh=sPPlAO2GpP6ZT11W4B6oE0Ekzhisk6AHjjJsYcpc9qQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aPPtwRAYczY3c/B0SY/CekwUN3h4RDKwLDF01AIm/bxwDzAPInIdUVgmkRS1bp6n7diCWItXGRK0UiahQekXeqalGtXkiS+923c0fnlxtMpVSz+dgTk4mu8o5ISJ7Yg/oo2Tv9E8Ken9qgy+kVNTd0+jzfEN+pixFCoCladk/OQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hyaAxy9V; arc=none smtp.client-ip=74.125.225.128
+	 MIME-Version; b=LyXYysBWLKPJAYA8IEj3/9MLvjBdRWdN4X/x1SL3+qzbFlslbf/6POPGKy4Az9aWyz8xZ7+cwR+33FgXmgkryf48csPaXhiA5liWsrWacPV+fNmoIky8UF4SStxReaUmxR37vyfIVXUgPieXYICSpkVuYiRLiXRo4liRWBnP9Fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vs3p22FT; arc=none smtp.client-ip=74.125.225.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hyaAxy9V"
-Received: by mail-wm2-f0.google.com with SMTP id 5b1f17b1804b1-49ced856e8dso16195785e9.0
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 15:25:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vs3p22FT"
+Received: by mail-wm2-f6.google.com with SMTP id 5b1f17b1804b1-49b0dd21eb8so10435865e9.0
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 15:25:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789424722; x=1790029522; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789424724; x=1790029524; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=re5addDA1VV6xer0u5y9owcslkAeqlEbuLGhZh6ysp4=;
-        b=hyaAxy9VDiIBm5mjg3rXk0R24MYwWgf5KVRv18mda0HjN9MI5LUUv+u50jkZySLkuq
-         KMf+K3bGlZbVLKuRBxqm/0cVf29atp2BiQ5g8RfwKCCw0NBf/IqtPtYdM8gglkOadr2g
-         X45e9gr6tYwcbMiWhlIrsRjgDzY5A5ieXS0QQuoAdFE3OO9Ne1vU6HIcb8sSZa1crTad
-         +MBMhTJpjnkkn6Dnyj8pp9lg1WsjByFPgflEYdddIkUvkzq8tNC2AYFOUE7xHVET31a+
-         V3SNF0XcrQxOCyCtNWmm7+awpWdTk+9GVmpwf2gZjLGrvHZbV8BzkOwcUlDsBlAdtq6f
-         yxFQ==
+        bh=KiLZyFd7UW53t616wY9h0QJ+tml8IQNAz9spCuinTx8=;
+        b=Vs3p22FTTCCZNpFgCEicYPMZE2Bz9XUVZXWXQBtPbXyMOFHnVZrP/4P2IuNx5pEG4f
+         AiDsYp3qXxrdpHHNrQ+/QQvH5PDupc/SuSdGFiyp6VRZPUGE2M1F4hfAC17hbqq+7kPj
+         D7OwQm/Gm8nF9ZPVMKFc0MgBzag1LoLnIQPScSN0NN0g3HQTfvAIaNmtdM3kDIqBzFnV
+         +TiFgirirSSzBexMCTU808HQJGDy0U6ufkMGziP5lC/rocKM1XKSaTE3PloQ17Xu2OEb
+         jTgIoksrRMR6YemGr3SSy1TxWMRvtNyeKKR5SdC/iALus+3h0IwPrGlCGfiL+1Mmvi73
+         Yn3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789424722; x=1790029522;
+        d=1e100.net; s=20260707; t=1789424724; x=1790029524;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=re5addDA1VV6xer0u5y9owcslkAeqlEbuLGhZh6ysp4=;
-        b=nxrbD9Yw53hqON9dALEgPqRWUrl7kcs0YaTkBXYlGkDGEQ+Ufv/2ah9pMHlYkmTfPB
-         0zh/vJUkDRvbD3/QcE8eXK4zeUhK76ixdiYdvpV5mDqgZpk6j33+J1PMAf330gr40T8b
-         Faw6JRSkdkbkdbxAbfWIu3WqwuT7iLF3/7AGGwcz94BFDs5PnshOdJvFYLZ9brwf4fHT
-         RaNy2VEWdNNST4Naesuks9pN9dPYml0U9hkDF2IS+EMmW97jGqqTFSOUaDzwKzpm1kBN
-         glUBKP1ddpqcLuGFKmX5xnWljQMVm4mtNaxSkbmmKXu354pDYAk/YPpRmCuKSUm5L+zA
-         OqBg==
-X-Gm-Message-State: AFuF++n16nuhwDpP/aulb34J8BmG52bKC6RSa/pT25fgxGtLA1bWU8eT
-	6j4MY0aM/mZXHgd+4HJr5KgK0s/xN55K4Rj59dq90GL16f6cxjTG23CmgzZ8XCfZ4HI=
-X-Gm-Gg: AYBFou0hPvU4sJDXlADICOa6ANOKIQafKVTHC+j20GX4LL8ASRBPhdgko7Flsj5YWQQ
-	0jzWKKdADx8sXq/LIwIFy5+qWkndpjJROqCPlDmq29X44rg5e7XTwQtxrn2HVnmn2jgPoOwis1q
-	HNqi6hi1ZIRu6jCUr2khCemwVepryRhSlvFccswXL6s5zJxTAYrcW9+c45Hc3hX0K6Dmsw8mlLW
-	ejOC/df8tAGLgwjRwyVrUsqT+bytj3Wjg4+7FBHBBoJgxn0a44eUIsaVKrb7eBu/cuttKRspB8I
-	ucYCmsv3qywr4kddKkV9a/Jb3KDP1II3gg+qbn4AqfJsY08s2qa4rKsIuaHm9Lkc7zy+zHMjgMO
-	m0lojY8+Zvz2FgM8UTTcenOWTM+zm109Xk7ThPHBsQPubzF9FdKIOJFkXtN7vyfmzvvkvUh/I8Q
-	jJpMLGRMJFbI9f/3VIx09MivRwNm90qjBGTufTaeQTBhOqEC+IdrUyBju3BUB3Q4Rtuc/y82CJM
-	r75ffE+eW9x60ZyQMcjWChWq798evtNaJs2Bekpp+XPY92NpBvOzyamyF7cJTaDpi8fTwcnANzB
-	XgMY05V1UNd5CnsExMvTdh4PhzfenQuc+p3Ijw==
-X-Received: by 2002:a05:600c:4e02:b0:49d:272d:74b4 with SMTP id 5b1f17b1804b1-49e7a6387bcmr142238945e9.2.1789424722127;
-        Mon, 14 Sep 2026 15:25:22 -0700 (PDT)
+        bh=KiLZyFd7UW53t616wY9h0QJ+tml8IQNAz9spCuinTx8=;
+        b=0QKfQtGi/ZknctqRmLZPNJzgF0pjjtobcVPNlmh8VuK7rwdWjQFMRJj+tWfu/uJgtL
+         c4s1CD5i9xK1u41eho3vkfs/lkjNFFcK29wXTiES1mTRMGodKfkYfH4jYBUfcRefUQDM
+         7iOm/mbtdO57+QVunwRd1rDKMZo8Us6nRksriFJZmUSE9w5QQtC2dKPhOBxYkneGRt68
+         DHv5GtY7GfB99iO8Y7Jp/DRoV9K+UV7C7EStk/b85/S3wcGxU/yJkixhogZnTMd17K0X
+         ARNnsfgjTB2TIHQGKkben8oZyusEQQU1Un8FT862tLnS2/+wqVTqAkrvj6GaaAdTHe09
+         BZ9Q==
+X-Gm-Message-State: AFuF++ldYJ7UjjvUOtg6t7zf/X3o2dXPTtcyInhebiuk9/O4vrpmIcQu
+	QDGXL+1A9PXqYXFxRzzoeoJCsYAm7VUWOEJaPAdu6UJ1BpybaGCNRd/tDbEZnVpOtUo=
+X-Gm-Gg: AYBFou1eKxj4qQzd5CvJjtXQPBsouHMuGdBsyo9Y1IySX1+CyWxNWb6hy39GghAWtdH
+	Sl35PS1VSo5KoCfmF0Ea8gXCvtAM/UuRcf5bQxSAWc+OGMH7GfjiTF3Y4R0TFrdsMRluYAZC5+v
+	v1lV1We99iyMXaiECCJTlRxp67JS+l2rpNNjxBdlswoCs2zNTg/gV0XZ0CHiceVREOWWm+HsPXl
+	8BWOaNtEoHwSQnUFQW5cRmp02EjW9MfqlkmNcWzBXUkmYnZbp7nHHj1J9ftohpJPJy/ESA+jei7
+	/fz7UKfsnWMF9K/vFjKfoIYeGPUD3gFk7vcmzripE2zSw086jwPWIoJSx3rTsp57hLaCHTeZpWN
+	3vok2l/N/cVcnUukoUfncL9CrFAOeFdlHvYZQjMQ5QX3TQkvUMP89Vof9WuYcSQ+fOMvnn9erRC
+	f923RCU3IXcWG+kDkXTVYIWKvE1Ys52gidW00FY14iORQjEGFkzeF47NOrOgTN8eMg1DUwoPblg
+	9VQ30QwHol1kgIbJ2V9QVqS4GCNuuBiEpej/8s6ua7voQC2GQyJHkIrBKWEy3KfXjl77A/BTDwG
+	5CsTxLd8J0utrE6wsKBJxn7DNlL9KQ4O0JTxUA==
+X-Received: by 2002:a05:600c:470a:b0:49c:fea3:8633 with SMTP id 5b1f17b1804b1-49e7a677427mr53722155e9.24.1789424723663;
+        Mon, 14 Sep 2026 15:25:23 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e7d6a9d1dsm23148745e9.10.2026.09.14.15.25.21
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e7d6a8d5asm19427095e9.9.2026.09.14.15.25.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 15:25:21 -0700 (PDT)
+        Mon, 14 Sep 2026 15:25:23 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Nicholas Carlini <npc@anthropic.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v4 04/11] bpf: Apply CO-RE relocations before subprogram validation
-Date: Tue, 15 Sep 2026 00:25:01 +0200
-Message-ID: <20260914222514.1635018-5-memxor@gmail.com>
+Subject: [PATCH bpf v4 05/11] selftests/bpf: Test early in-kernel CO-RE relocation
+Date: Tue, 15 Sep 2026 00:25:02 +0200
+Message-ID: <20260914222514.1635018-6-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260914222514.1635018-1-memxor@gmail.com>
 References: <20260914222514.1635018-1-memxor@gmail.com>
@@ -81,109 +81,174 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3995; i=memxor@gmail.com; h=from:subject; bh=ID6Y65CwWHga0hnCKzuyxwrWH8xyC9r5Sy1cao8fU14=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtFid6eLeVFV544Xlc4EnJmZfzplRPy+DxP/RWap/FR4 YjfG4lXHaUsDGJcDLJiiiwl//cxGZ+o/B1ou4wbZg4rE8gQBi5OAZhIwWmG/54J6uwdfyz65/6Z maX05Uvf0/rIRdM3Np09f8/n2UXJZF5GhltdrPnGa7iLuh+fd/rRkhtwobd2um3CfQW1BRGiqU8 V2AE=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5801; i=memxor@gmail.com; h=from:subject; bh=sPPlAO2GpP6ZT11W4B6oE0Ekzhisk6AHjjJsYcpc9qQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtFiZ5c0l399u3rhVpv/N75KP+0/I8V/SJTjGrTFE24P 2bllN7oKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwERuWjP8s7s5M0FmErf2vueM JpuOepZ8fsWgoFmWJPBmqW/vN/cT3IwMu+ef8ZRUCXvFwlzyOONpu6Y144mtE3u23Dz368XD7Lr v3AA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-check_subprogs() verifies that each subprogram ends in an exit or an
-unconditional jump before in-kernel CO-RE relocations are applied. An
-unresolved relocation can then replace that terminal instruction with an
-invalid helper call. The resulting fall-through into another subprogram
-breaks the CFG invariant used by postorder and stack liveness analysis,
-which can write past their per-subprogram arrays.
+Add a raw program load with CO-RE relocation metadata but no func_info or
+line_info. Place the relocation in dead code and require the poisoning log,
+proving that the kernel processes standalone CO-RE metadata instead of
+silently skipping it.
 
-Apply CO-RE relocations immediately after preparing the program BTF, before
-subprogram discovery and validation. Keep func_info and line_info validation
-after subprogram discovery because those records depend on the complete
-subprogram layout.
+Also poison a subprogram's terminal exit and require check_subprogs() to
+reject the resulting fall-through. This confirms that in-kernel CO-RE runs
+before the verifier validates the subprogram layout and before later CFG
+consumers rely on it.
 
-Include core_relo_cnt when deciding whether to prepare program BTF. A load
-that supplied only CO-RE relocation metadata previously skipped both BTF
-setup and relocation processing.
+Load both instruction streams without relocation metadata first to ensure
+that CO-RE processing causes the rejection and diagnostic.
 
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf_verifier.h |  2 ++
- kernel/bpf/check_btf.c       | 12 ++++--------
- kernel/bpf/verifier.c        |  7 ++++++-
- 3 files changed, 12 insertions(+), 9 deletions(-)
+ .../selftests/bpf/prog_tests/core_reloc_raw.c | 128 ++++++++++++++++++
+ 1 file changed, 128 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 36b65797877d..bba5a727c651 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1197,6 +1197,8 @@ static inline void bpf_trampoline_unpack_key(u64 key, u32 *obj_id, u32 *btf_id)
+diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c b/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c
+index a18d3680fb16..6fdeba6d7eaa 100644
+--- a/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c
++++ b/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c
+@@ -14,6 +14,133 @@
  
- int bpf_prepare_btf_info(struct bpf_verifier_env *env,
- 			 const union bpf_attr *attr, bpfptr_t uattr);
-+int bpf_check_core_relo(struct bpf_verifier_env *env,
-+			const union bpf_attr *attr, bpfptr_t uattr);
- int bpf_check_btf_info(struct bpf_verifier_env *env,
- 		       const union bpf_attr *attr, bpfptr_t uattr);
+ static char log[16 * 1024];
  
-diff --git a/kernel/bpf/check_btf.c b/kernel/bpf/check_btf.c
-index 0e8b3ccc7a5b..4c1ed842f661 100644
---- a/kernel/bpf/check_btf.c
-+++ b/kernel/bpf/check_btf.c
-@@ -338,9 +338,9 @@ static int check_btf_line(struct bpf_verifier_env *env,
- #define MIN_CORE_RELO_SIZE	sizeof(struct bpf_core_relo)
- #define MAX_CORE_RELO_SIZE	MAX_FUNCINFO_REC_SIZE
- 
--static int check_core_relo(struct bpf_verifier_env *env,
--			   const union bpf_attr *attr,
--			   bpfptr_t uattr)
-+int bpf_check_core_relo(struct bpf_verifier_env *env,
-+			const union bpf_attr *attr,
-+			bpfptr_t uattr)
- {
- 	u32 i, nr_core_relo, ncopy, expected_size, rec_size;
- 	struct bpf_core_relo core_relo = {};
-@@ -414,7 +414,7 @@ int bpf_prepare_btf_info(struct bpf_verifier_env *env,
- 	struct btf *btf;
- 	int err;
- 
--	if (!attr->func_info_cnt && !attr->line_info_cnt) {
-+	if (!attr->func_info_cnt && !attr->line_info_cnt && !attr->core_relo_cnt) {
- 		if (check_abnormal_return(env))
- 			return -EINVAL;
- 		return 0;
-@@ -455,9 +455,5 @@ int bpf_check_btf_info(struct bpf_verifier_env *env,
- 	if (err)
- 		return err;
- 
--	err = check_core_relo(env, attr, uattr);
--	if (err)
--		return err;
--
- 	return 0;
- }
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ddba53eaa333..68d1b67b8c1a 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -21271,6 +21271,11 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	if (ret < 0)
- 		goto skip_full_check;
- 
-+	/* Apply CO-RE before validating the program's instruction layout. */
-+	ret = bpf_check_core_relo(env, attr, uattr);
-+	if (ret < 0)
-+		goto skip_full_check;
++static int load_core_relo_insns(int btf_fd, struct bpf_insn *insns, int insn_cnt,
++				struct bpf_func_info *funcs, int func_cnt,
++				int enum_id, int access_str_off, int insn_idx,
++				bool relocate)
++{
++	struct bpf_core_relo relo = {
++		.insn_off = insn_idx * sizeof(struct bpf_insn),
++		.type_id = enum_id,
++		.access_str_off = access_str_off,
++		.kind = BPF_CORE_ENUMVAL_VALUE,
++	};
++	union bpf_attr attr = {
++		.prog_type = BPF_PROG_TYPE_SOCKET_FILTER,
++		.insn_cnt = insn_cnt,
++		.insns = (__u64)insns,
++		.license = (__u64)"GPL",
++		.log_buf = (__u64)log,
++		.log_size = sizeof(log),
++		.log_level = 2,
++		.prog_btf_fd = btf_fd,
++		.func_info_rec_size = sizeof(struct bpf_func_info),
++		.func_info = (__u64)funcs,
++		.func_info_cnt = func_cnt,
++	};
 +
- 	/* Discover all subprograms before validating their layout and BTF. */
- 	ret = add_subprogs(env);
- 	if (ret < 0)
-@@ -21280,7 +21285,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	if (ret < 0)
- 		goto skip_full_check;
++	if (relocate) {
++		attr.core_relo_cnt = 1;
++		attr.core_relos = (__u64)&relo;
++		attr.core_relo_rec_size = sizeof(relo);
++	}
++	memset(log, 0, sizeof(log));
++	return sys_bpf_prog_load(&attr, sizeof(attr), 1);
++}
++
++static void test_early_core_relo(void)
++{
++	struct bpf_insn core_only[] = {
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	struct bpf_insn subprog[] = {
++		BPF_CALL_REL(2),
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	struct bpf_func_info funcs[2];
++	const void *raw_btf;
++	struct btf *btf;
++	__u32 raw_btf_size;
++	int access_str_off, btf_fd = -1, enum_id;
++	int int_id, main_id, prog_fd = -1, proto_id, sub_id;
++
++	btf = btf__new_empty();
++	if (!ASSERT_OK_PTR(btf, "btf_new_empty"))
++		return;
++	int_id = btf__add_int(btf, "int", 4, BTF_INT_SIGNED);
++	if (!ASSERT_GT(int_id, 0, "add_int"))
++		goto cleanup;
++	proto_id = btf__add_func_proto(btf, int_id);
++	if (!ASSERT_GT(proto_id, 0, "add_func_proto"))
++		goto cleanup;
++	main_id = btf__add_func(btf, "main_fn", BTF_FUNC_STATIC, proto_id);
++	if (!ASSERT_GT(main_id, 0, "add_main_func"))
++		goto cleanup;
++	sub_id = btf__add_func(btf, "sub_fn", BTF_FUNC_STATIC, proto_id);
++	if (!ASSERT_GT(sub_id, 0, "add_sub_func"))
++		goto cleanup;
++	enum_id = btf__add_enum(btf, "core_relo_poison_missing", 4);
++	if (!ASSERT_GT(enum_id, 0, "add_enum") ||
++	    !ASSERT_OK(btf__add_enum_value(btf, "value", 0), "add_enum_value"))
++		goto cleanup;
++	access_str_off = btf__add_str(btf, "0");
++	if (!ASSERT_GT(access_str_off, 0, "add_access_str"))
++		goto cleanup;
++
++	raw_btf = btf__raw_data(btf, &raw_btf_size);
++	if (!ASSERT_OK_PTR(raw_btf, "raw_btf"))
++		goto cleanup;
++	btf_fd = bpf_btf_load(raw_btf, raw_btf_size, NULL);
++	if (!ASSERT_GE(btf_fd, 0, "btf_load"))
++		goto cleanup;
++	funcs[0] = (struct bpf_func_info) { .insn_off = 0, .type_id = main_id };
++	funcs[1] = (struct bpf_func_info) { .insn_off = 3, .type_id = sub_id };
++
++	if (test__start_subtest("without_func_info")) {
++		prog_fd = load_core_relo_insns(btf_fd, core_only, ARRAY_SIZE(core_only), NULL, 0,
++					       enum_id, access_str_off, 2, false);
++		if (!ASSERT_GE(prog_fd, 0, "control_load"))
++			goto cleanup;
++		close(prog_fd);
++		prog_fd = load_core_relo_insns(btf_fd, core_only, ARRAY_SIZE(core_only), NULL, 0,
++					       enum_id, access_str_off, 2, true);
++		if (!ASSERT_GE(prog_fd, 0, "poisoned_load"))
++			goto cleanup;
++		ASSERT_HAS_SUBSTR(log, "substituting insn #2", "poison_log");
++		close(prog_fd);
++		prog_fd = -1;
++	}
++
++	if (test__start_subtest("poisoned_subprog_terminator")) {
++		prog_fd = load_core_relo_insns(btf_fd, subprog, ARRAY_SIZE(subprog), funcs, 2,
++					       enum_id, access_str_off, 2, false);
++		if (!ASSERT_GE(prog_fd, 0, "control_load"))
++			goto cleanup;
++		close(prog_fd);
++		prog_fd = load_core_relo_insns(btf_fd, subprog, ARRAY_SIZE(subprog), funcs, 2,
++					       enum_id, access_str_off, 2, true);
++		if (!ASSERT_LT(prog_fd, 0, "poisoned_load"))
++			goto cleanup;
++		ASSERT_HAS_SUBSTR(log, "last insn is not an exit or jmp", "poisoned_load_log");
++	}
++
++cleanup:
++	if (env.verbosity > VERBOSE_NORMAL && log[0]) {
++		printf("-------- program load log start --------\n");
++		printf("%s", log);
++		printf("-------- program load log end ----------\n");
++	}
++	close(prog_fd);
++	close(btf_fd);
++	btf__free(btf);
++}
++
+ /* Check that verifier rejects BPF program containing relocation
+  * pointing to non-existent BTF type.
+  */
+@@ -120,6 +247,7 @@ static void test_bad_local_id(void)
  
--	/* Validate BTF against the complete subprogram layout and apply CO-RE. */
-+	/* Validate BTF against the complete subprogram layout. */
- 	ret = bpf_check_btf_info(env, attr, uattr);
- 	if (ret < 0)
- 		goto skip_full_check;
+ void test_core_reloc_raw(void)
+ {
++	test_early_core_relo();
+ 	if (test__start_subtest("bad_local_id"))
+ 		test_bad_local_id();
+ }
 -- 
 2.53.0
 
