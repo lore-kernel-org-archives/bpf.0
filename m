@@ -1,516 +1,145 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f0.google.com (mail-wm2-f0.google.com [74.125.225.128])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275AC478E39
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 13:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F206442B23
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 13:17:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789391518; cv=none; b=I3DxsTf2K6/4Nyn+aXh0PL6ka5GSUOj9Ro4HK46KInz5N6+QjgZu1TnA0nEJ96wV8yPiPNSejq5vcEMoWhy3bJQXh3TrvKTIhR10wQ7LuuvO36rEhOYVsppvzEc+ykflAHGUvywDqgx0oVKUX7b8sW1tXZ6Wmwpl2UFbkE4nubA=
+	t=1789391826; cv=none; b=OwqUzqQ0cUU0dTteo7xZPyN1OvznCu04r9KE4GpFToBOzju5l8Cginh9DmwNHqpbCt1SpVFYi4n7LT4FuSGnsUPFEWzllWe1Hes9xpYrGPpP9tIUWo4yvcFoeyniiwscCTJ6OQvuLj5DLXqERif16kkAAlNdbbKBKIOcSQ4qxos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789391518; c=relaxed/simple;
-	bh=Sbj9mtDdu1BAfgToq9lpr4KCIWI4vtnyQZqbZ8Kkspw=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=AwSsjz5+wzqp4OVtX9lxSqL1DWJ0QtU+nwEUDyqn/gOFAq/eol03trKlBsgNlPK/HAB8gsmkJxKA4sOApbA+43bumy5wRsHAhz14b6BiJQSvLk40/bz0wLjOA+UzlmGBbm0ApPqTzaDs8PG2i+VFtYTSda1NyAln+5fV6c5q85E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hk5C60ncXzYQtpg
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 21:11:46 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 9EF2540573
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 21:11:47 +0800 (CST)
-Received: from [10.174.176.103] (unknown [10.174.176.103])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgC3hyqQ8qdqaakcAQ--.25372S2;
-	Mon, 14 Sep 2026 21:11:47 +0800 (CST)
-Subject: Re: bpf: BPF_MAP_UPDATE_BATCH into a fresh NO_PREALLOC LPM trie /
- hash map returns -ENOMEM at element 2 on AWS Graviton5 (bpf_mem_alloc refill
- IPI races the syscall)
-To: musthaq ahamed <amusthaq56@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, toke@redhat.com
-References: <CADxQDVrOwfhz8B_ijEzTqFj7CG7TLQacALd1Odv2Tyc3x21Z-g@mail.gmail.com>
- <1ccc1901-f171-e44b-835f-1e9482956183@huaweicloud.com>
- <CADxQDVrzs7+Jy+Jvf+f43cF2juCJzVxfVpheeYV6McGGrLKHsg@mail.gmail.com>
-From: Hou Tao <houtao@huaweicloud.com>
-Message-ID: <9e528d28-4ebc-b279-e82d-29fda9ed896e@huaweicloud.com>
-Date: Mon, 14 Sep 2026 21:11:43 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+	s=arc-20240116; t=1789391826; c=relaxed/simple;
+	bh=uRSylaCg5R5r3YkPI+JRMVgc1IjxWaSwhAKv8y+npg4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=El4JRfzgzeXAovydLzibI4dFeoDqBHyYYjiw/hv8z4VgbnjKZxpA9KPD3zrhE2WE/OwqJvG5S8TiLAAyBbgRXhZgHMaWDc1PsgiysRQG9ZXKaed5/8LRKEatfFcT9xP08IEQIfJGQFoXutWJnImNoPDsfJfuZUoQc0FoN5RIiDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bE1b4CBj; arc=none smtp.client-ip=74.125.225.128
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bE1b4CBj"
+Received: by mail-wm2-f0.google.com with SMTP id 5b1f17b1804b1-49ced856e8dso14631925e9.0
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 06:17:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789391823; x=1789996623; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=cR/7qNVtXDvU6/rgT1LxSP4uHUMLHK0iCADuUBSjZyA=;
+        b=bE1b4CBj8pskkAWelP8XN+ePEH2okr26FxlvSbBeW/pmb8zaNNwjh95QtM4vgGXXev
+         8b+mmKDU9hfhxx6SQAJ9f+COw2MZ7Vr7bx+0RZEQgMFG/ijbb2wwMFB8GCz/i55N6tFe
+         YE2rnqo21GQnoeiDVhvKwfjODmMahAMHSX4iaGv5MGG7PlVO/4cwsvkVaIESWx+ILz7R
+         z8YJ+xk7mEmtKHxDGyPP5uTs45wjlhW5kTMt9BKSIl96IHqBJz6OeVft39eo8dvRL/iq
+         fo/pTMmry351V7WMkJCcbbdYZ5gZLucsiQY4KJmr3s7Ao6s0BVSdDM5m5TlA8cEljdte
+         Ujpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789391823; x=1789996623;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=cR/7qNVtXDvU6/rgT1LxSP4uHUMLHK0iCADuUBSjZyA=;
+        b=pEbEb3/ZVUck8I86T8XA8MiiI+wdrD0IGGX6CAeJjwj/4aFV+OOIdeemjEUVrrKkwe
+         kENy0uFG6d49ppioPHn1PysywBxCHyHxQYD7AS6bNy9dRQYehwb8e711lKDpkbr+Szzx
+         bQ8AXlJa/krgBhT/nTNtAdb6NZ8SPP37WdVrf1KoOHRjseYp/VqzdMdEDsylMpR1yuk9
+         HGQQWwl59PGdPmcoBBnaO0nDdHFcibII90H8F4JmlpLL0wADEUqA0n64mNIMvKVaSOdh
+         Pcz0Qt/iVKpcF4HWFR+i2O2uOwTEyyoJvn3NyhJVjuWzpBLgVy7firKBncOz+Aq3nlms
+         60uA==
+X-Gm-Message-State: AFuF++m7UxRu3TOQo6/e2t4ipL0zcie1Pe9ci52VwI0Wryzu+pbPm3st
+	wkNKo4T9DWWRkUhfN1vfCnAAbg7f7F5NGsUmrNxAAIsZKHQkvAIfHLyDpoq9nyCK
+X-Gm-Gg: AYBFou074nrEExgeBmMVKVk1bGshif5BGzvED8sGnYCEtvu/A+VrpUThsHI7YMMv9KJ
+	FEH/RwKxZVZ5a3rxamCcwjq+Mm36n1ZI1hDysE0M5Au/AQcphuCC65d3xMSnUGlI3vIgstIOR0X
+	WSHHNZioU0il27IoSPwvMJFkjgybBI3creKol8wv56Pwpcwdvsz3ePooeiSahcKGdRh3Tt1fdkx
+	586iK6SleMZFQHuNGbrHG8u8MUW9Pz9hODfHMnx2f1pORw0pTExZNOrMPQGCGaFFDpxdtAye17+
+	C/HHyeOdydIMN6xa0ULBMQvV7vwtwtfUdUAeCE4iVdnM8WB97tTYOTVQagTcAS7FLTXjtUg2uo4
+	2Ie3SBtBykNgJeZeOHH0Ruu9fPNVvctgat1+92dP3QLkJMBEz2ySYBIEJMbEEslo1yqZ470EI0v
+	rUjAnVlBsZgnochcPqmv7eOYFevSRsa5GqBHepJUoat7FML4WTErEAIy5NBX5rH8LAoS6ozzj4N
+	AOBubHiKkLe0HX9p1ykNlBsQcbKZtoirKqtIQfxNj4qtbgS1lqRAbc5nGqDTppg0NXPEp4x5tuv
+	loD3dvNvjEWUvRPodfPJimFNIVN0788LLt2w8Q==
+X-Received: by 2002:a05:600c:5490:b0:49c:cee0:e7c1 with SMTP id 5b1f17b1804b1-49e7a68c9c5mr59197285e9.16.1789391823067;
+        Mon, 14 Sep 2026 06:17:03 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e6c0cb676sm235289595e9.14.2026.09.14.06.17.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2026 06:17:02 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Nicholas Carlini <npc@anthropic.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf v3 0/7] Misc bug fixes - part 5
+Date: Mon, 14 Sep 2026 15:16:50 +0200
+Message-ID: <20260914131701.2529725-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CADxQDVrzs7+Jy+Jvf+f43cF2juCJzVxfVpheeYV6McGGrLKHsg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2960; i=memxor@gmail.com; h=from:subject; bh=uRSylaCg5R5r3YkPI+JRMVgc1IjxWaSwhAKv8y+npg4=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv55xkalu2vPxaxrGA4/WyZR+vf1ULf7Fp3sNgE3heXO i92bVlZRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACaimcvwh3sS10XTLMWJ7Dte LuSPfM5tt9Jar0yW+UOgqerU9H+N0owMPeZfcy9uv3yE/bdCbukimavTD7zNyfn39tDOwxMMbjy N4QEA
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID:gCh0CgC3hyqQ8qdqaakcAQ--.25372S2
-X-Coremail-Antispam: 1UD129KBjvAXoW3Cw4rWF1xuF4DGw1xKr1fXrb_yoW8AFykGo
-	WfZr47Aa18Kry7ArykCa4kt3y5u3WkCws8ArWIgw13Aa4Yqayjka1UGr43ZFWaqFy0kr4x
-	Aa48J3yF9FZ3XFyfn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUYw7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK
-	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
-	AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF
-	7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AF
-	wI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jjVb
-	kUUUUU=
-X-CM-SenderInfo: xkrx3t3r6k3tpzhluzxrxghudrp/
 
-Hi,
+A set of miscellaneous fixes for bugs reported by Nicholas. See commit
+logs for details.
 
-On 9/11/2026 11:02 PM, musthaq ahamed wrote:
-> Hi Hou,
->
-> Thanks for looking at this and for the patch.
->
->> Do you know why is the IPI asynchronous ? Will it be fixed ?
-> I can only describe what is observable from the guest. On Graviton5
-> the ICC_SGI1R_EL1 write in arch_irq_work_raise() returns in ~170 ns
-> and the IRQ-work interrupt is delivered ~700 ns later; on Graviton3
-> (m7g) the same write takes ~1.5 us and the interrupt is already
-> pending when the guest resumes, so the refill runs inside
-> unit_alloc()'s local_irq_restore(). Whether the write traps cannot be
-> decided from inside the guest; Graviton5 runs AWS's newer hypervisor
-> stack, so the cheap asynchronous self-IPI is most likely a property of
-> that platform rather than something a guest kernel can change. There
-> is also host-to-host variation: one m9gd host in ~8 delivers the IPI
-> ~250 ns sooner and fails only on a subset of CPUs. AWS is following
-> the report at
-> https://github.com/amazonlinux/amazon-linux-2023/issues/1129; I have
-> pointed them at your question.
+Changelog:
+----------
+v2 -> v3
+v2: https://lore.kernel.org/bpf/20260905083418.3723623-1-memxor@gmail.com
 
-Thanks for the info and the test for the patch. The patch indeed doesn't
-handle the irq disabled case. But it is also a hack in my opinion and
-there will be no v2. The priority is to understanding why is the IPI on
-Graviton5 Guest is relatively slow. Does it have something to do with
-the QEMU version or Host kernel kvm ?
->
->> it only handles the syscall path. Why if the bpf update helper is
->> invoked from a bpf program ?
-> Agreed, the RFC covered the syscall path only, deliberately, since a
-> program-context caller cannot safely enter slab. Your approach of
-> waiting for the raised irq_work covers both and fits the measurements:
-> the wait would be ~700 ns on Graviton5 and effectively zero on
-> Graviton3.
->
-> On testing: we do not build or run custom kernels here, so I cannot
-> test the patch myself. Amazon Linux has said they will look at the
-> reproducer and the issue above; they would be the natural place to try
-> your patch on the affected hardware, and I have asked them to. The
-> reproducer in the report gives a quick before/after (99-100 % failure
-> today; the same hardware on 6.12 passes 0/6400).
->
-> Thanks,
-> Musthaq Ahamed
->
-> On Fri, 11 Sept 2026 at 12:24, Hou Tao <houtao@huaweicloud.com> wrote:
->> Hi,
->>
->> On 9/8/2026 6:59 PM, musthaq ahamed wrote:
->>> Hi,
->>>
->>> Bug report with a reproducer and an untested RFC patch. Amazon Linux
->>> asked me to raise it here
->>> (https://github.com/amazonlinux/amazon-linux-2023/issues/1129).
->>>
->>> Symptom
->>> -------
->>> On AWS EC2 generation-9 instances (Graviton5, Neoverse-V3: m9g, m9gd,
->>> c9g) running Amazon Linux 2023 kernel 6.18.41 (arm64, PREEMPT_NONE,
->>> HZ=100), a single bpf(BPF_MAP_UPDATE_BATCH) of 7 elements into a freshly
->>> created BPF_MAP_TYPE_LPM_TRIE (key_size 260, value_size 8, max_entries
->>> 128, BPF_F_NO_PREALLOC) returns -1/ENOMEM with batch.count written back
->>> as 1. The node has >100 GB free, memcg limits are unset, nothing in
->>> dmesg. It fails on 99-100 % of attempts on every CPU of every such
->>> instance we launched (8 instances, spot and on-demand, 3 AZs), and one
->>> host in ~8 fails only on a subset of CPUs.
->>>
->>> The same call passes 100 % on Graviton3/4 (m7g, m8g, c7g, c8g) with the
->>> same kernel image, and 100 % on Graviton5 with kernel 6.12.100. A
->>> BPF_MAP_TYPE_HASH with the same key/value/flags fails identically on
->>> Graviton5 on BOTH 6.18.41 and 6.12.100 and passes on Graviton3. Seven
->>> single BPF_MAP_UPDATE_ELEM calls, a batch of 1, or elements <= 256 bytes
->>> never fail.
->>>
->>> Analysis
->>> --------
->>> kernel/bpf/memalloc.c: for unit_size > 256 prefill_mem_cache() seeds ONE
->>> object per CPU; the per-CPU free list is refilled only from
->>> bpf_mem_refill() in an irq_work raised through a self-IPI when
->>> unit_alloc() sees the list below its low watermark. unit_alloc() has no
->>> fallback: an empty list returns NULL and trie_update_elem() /
->>> alloc_htab_elem() return -ENOMEM. generic_map_update_batch() stops at the
->>> first error and writes back the count.
->>>
->>> Since 3d8dc43eb2a3 ("bpf: Switch to bpf mem allocator for LPM trie") the
->>> trie leaf (296 bytes for a 260-byte key) comes from this allocator.
->>> Element 1 of the batch consumes the prefilled object and raises the
->>> IPI; element 2 runs a few hundred ns later in the same syscall.
->>>
->>> bpftrace on the failing hosts: arch_irq_work_raise() takes ~170 ns on
->>> Graviton5 and the IRQ-work interrupt lands ~715 ns after the raise,
->>> after element 2 has already failed; bpf_mem_refill() then runs exactly
->>> once per failed batch. On Graviton3 the same raise takes ~1.5 us (the
->>> SGI write exits to the hypervisor) and the interrupt is pending when
->>> the guest resumes, so the refill runs inside element 1's
->>> local_irq_restore() and element 2 succeeds. IRQ-work IPI counters
->>> advance on both, so no IPI is lost; the refill is late, not missing.
->> Thanks for the analysis. To summarize the problem: on Graviton5 the
->> raise of irq_worker is fast, but the running of irq worker is slow due
->> to async IPI. Do you know why is the IPI asynchronous ? Will it be fixed
->> ?  The similar refill problem also exists for PREEMPT_RT, because the
->> irq_work is running in a per-cpu kthread. In my understanding, bpf mem
->> will be replaced by kmalloc no_lock variants and the problem will be
->> solved eventually although I don't know the exact time.
->>> Interrupts are enabled for almost the whole path between the two
->>> inserts (bpf_map_update_value() uses migrate_disable(), not IRQ-off), so
->>> this is a latency race the batch loses on a platform with a cheap
->>> asynchronous self-IPI. Kernel 6.12 is immune for LPM tries only because
->>> its trie still uses bpf_map_kmalloc_node() directly; NO_PREALLOC hash
->>> maps have taken >256-byte elements from bpf_mem_alloc since 6.1 and
->>> fail there too.
->>>
->>> I believe this is the same class as the Feb-2025 thread "bpf: Add a
->>> retry after refilling the free list when unit_alloc() fails".
->>>
->>> Reproducer
->>> ----------
->>> Raw bpf(2) via Python ctypes, fresh map per iteration, one CPU pinned
->>> per loop; inline in the GitHub issue above. Results (100 iterations x
->>> 32 CPUs):
->>>
->>>   variant                                  m9gd 6.18.41  m7g 6.18.41
->>> m9gd 6.12.100
->>>   LPM key260 batch x7                      3192/3200     0/3200       0/3200
->>>   HASH key260 NO_PREALLOC batch x7         3117/3200     0/3200       3183/3200
->>>   LPM 7 x UPDATE_ELEM                      0/3200        0/3200       0/3200
->>>   LPM batch x1                             0/3200        0/3200       0/3200
->>>   HASH key8 batch x7                       0/3200        0/3200       0/3200
->>>
->>> RFC patch (untested)
->>> --------------------
->>> Attached to the GitHub issue: on the bpf(2) syscall path,
->>> bpf_map_update_value() pushes a run context so map implementations can
->>> recognise "syscall, no program running"; trie_update_elem() and
->>> htab_map_update_elem() then call a new bpf_mem_cache_reserve(ma, cnt)
->>> BEFORE taking the map lock, which tops up this CPU's free list with
->>> GFP_NOWAIT | __GFP_NOWARN | __GFP_ACCOUNT objects charged to the map's
->>> memcg (the same allocation the irq_work refill does). Nothing changes
->>> for BPF programs and nothing allocates under trie->lock or a bucket
->>> lock. I have not built or booted it; I am reporting rather than
->>> submitting. Happy to test a fix on the affected hardware.
->> Have checked the patch in github link and paste it below:
->>
->>> >From 99356e7bc9b90770fb0eeb1d216a47aa71f029fa Mon Sep 17 00:00:00 2001
->>> From: Musthaq Ahamed <redacted>
->>> Date: Mon, 7 Sep 2026 18:15:34 +0530
->>> Subject: [PATCH 1/2] bpf: Refill bpf_mem_alloc synchronously for map updates
->>>  from syscall
->>>
->>> A BPF_MAP_UPDATE_BATCH of 7 elements into a fresh BPF_F_NO_PREALLOC LPM
->>> trie (key_size 260, value_size 8, max_entries 128) fails with -ENOMEM at
->>> the second element on AWS Graviton5 instances, with more than 100 GB of
->>> memory free:
->>>
->>>   bpf(BPF_MAP_UPDATE_BATCH, {batch={keys=..., values=..., count=7,
->>>       map_fd=3, elem_flags=BPF_ANY}}, 56) = -1 ENOMEM
->>>   batch.count written back = 1, one element in the map
->>>
->>>
->>> +
->>> +/* True while the current task updates a map on behalf of the bpf(2)
->>> syscall
->>> + * and no BPF program is running: task context, and the innermost run
->>> context
->>> + * is the one pushed by bpf_map_update_value(). A program nested inside the
->>> + * syscall (fentry, raw tracepoint) pushes its own run context, and
->>> interrupt
->>> + * or NMI context fails in_task().
->>> + */
->>> +static inline bool bpf_map_update_from_syscall(void)
->>> +{
->>> +    return in_task() && current->bpf_ctx == &bpf_map_update_run_ctx;
->>> +}
->>> +
->> SNIP
->>> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
->>> index 7f8e029..014f72e 100644
->>> --- a/kernel/bpf/hashtab.c
->>> +++ b/kernel/bpf/hashtab.c
->>> @@ -1134,6 +1134,9 @@ static long htab_map_update_elem(struct bpf_map
->>> *map, void *key, void *value,
->>>           */
->>>      }
->>>
->>> +    if (!htab_is_prealloc(htab) && bpf_map_update_from_syscall())
->>> +        bpf_mem_cache_reserve(&htab->ma, 1);
->>> +
->>>      ret = htab_lock_bucket(b, &flags);
->>>      if (ret)
->>>          return ret;
->>> @@ -1287,6 +1290,12 @@ static long htab_map_update_elem_in_place(struct
->>> bpf_map *map, void *key,
->>>      b = __select_bucket(htab, hash);
->>>      head = &b->head;
->>>
->>> +    if (!htab_is_prealloc(htab) && bpf_map_update_from_syscall()) {
->>> +        bpf_mem_cache_reserve(&htab->ma, 1);
->>> +        if (percpu)
->>> +            bpf_mem_cache_reserve(&htab->pcpu_ma, 1);
->>> +    }
->>> +
->>>      ret = htab_lock_bucket(b, &flags);
->>>      if (ret)
->>>          return ret;
->>> diff --git a/kernel/bpf/lpm_trie.c b/kernel/bpf/lpm_trie.c
->>> index b051806..fdd5b08 100644
->>> --- a/kernel/bpf/lpm_trie.c
->>> +++ b/kernel/bpf/lpm_trie.c
->>> @@ -338,6 +338,10 @@ static long trie_update_elem(struct bpf_map *map,
->>>      if (key->prefixlen > trie->max_prefixlen)
->>>          return -EINVAL;
->>>
->>> +    /* The update may need a leaf and an intermediate node */
->>> +    if (bpf_map_update_from_syscall())
->>> +        bpf_mem_cache_reserve(&trie->ma, 2);
->>> +
->> You ensure __alloc() is invoked under syscall to prevent the possible
->> dead-lock caused by locks in mm subsystem, but it only handles the
->> syscall path. Why if the bpf update helper is invoked from a bpf program ?
->>
->> How about invoking irq_work_sync() when an irq_work has been queued ? so
->> when unit_alloc returns the refill must have been done.
->>
->> ﻿From 179bf9721f26842630ed9ef5a38c914b0dde79ca Mon Sep 17 00:00:00 2001
->> From: Hou Tao <houtao1@huawei.com>
->> Date: Fri, 11 Sep 2026 14:47:40 +0800
->> Subject: [PATCH] bpf: Wait for asynchrous IPI
->>
->> Signed-off-by: Hou Tao <houtao1@huawei.com>
->> ---
->>  kernel/bpf/memalloc.c | 34 +++++++++++++++++++++++++++++-----
->>  1 file changed, 29 insertions(+), 5 deletions(-)
->>
->> diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
->> index bc9b4b3d9c3a..44cc8ec0a338 100644
->> --- a/kernel/bpf/memalloc.c
->> +++ b/kernel/bpf/memalloc.c
->> @@ -446,9 +446,20 @@ static void bpf_mem_refill(struct irq_work *work)
->>      check_free_by_rcu(c);
->>  }
->>
->> -static void notrace irq_work_raise(struct bpf_mem_cache *c)
->> +static bool notrace irq_work_raise(struct bpf_mem_cache *c)
->>  {
->> -    irq_work_queue(&c->refill_work);
->> +    return irq_work_queue(&c->refill_work);
->> +}
->> +
->> +static void notrace irq_work_wait(struct bpf_mem_cache *c)
->> +{
->> +    /* FIXME: the wait might sleep */
->> +    if (IS_ENABLED(CONFIG_PREEMPT_RT) || !arch_irq_work_has_interrupt())
->> +        return;
->> +
->> +    /* Wait for asynchronous IPI if any */
->> +    while (irq_work_is_busy(&c->refill_work))
->> +        cpu_relax();
->>  }
->>
->>  /* For typical bpf map case that uses bpf_mem_cache_alloc and single bucket
->> @@ -795,6 +806,7 @@ static void notrace *unit_alloc(struct bpf_mem_cache *c)
->>  {
->>      struct llist_node *llnode = NULL;
->>      unsigned long flags;
->> +    bool wait = false;
->>      int cnt = 0;
->>
->>      /* Disable irqs to prevent the following race for majority of prog
->> types:
->> @@ -820,13 +832,17 @@ static void notrace *unit_alloc(struct
->> bpf_mem_cache *c)
->>      WARN_ON(cnt < 0);
->>
->>      if (cnt < c->low_watermark)
->> -        irq_work_raise(c);
->> +        wait = irq_work_raise(c);
->> +
->>      /* Enable IRQ after the enqueue of irq work completes, so irq work
->>       * will run after IRQ is enabled and free_llist may be refilled by
->>       * irq work before other task preempts current task.
->>       */
->>      local_irq_restore(flags);
->>
->> +    if (wait)
->> +        irq_work_wait(c);
->> +
->>      return llnode;
->>  }
->>
->> @@ -838,6 +854,7 @@ static void notrace unit_free(struct bpf_mem_cache
->> *c, void *ptr)
->>  {
->>      struct llist_node *llnode = ptr - LLIST_NODE_SZ;
->>      unsigned long flags;
->> +    bool wait = false;
->>      int cnt = 0;
->>
->>      BUILD_BUG_ON(LLIST_NODE_SZ > 8);
->> @@ -865,19 +882,23 @@ static void notrace unit_free(struct bpf_mem_cache
->> *c, void *ptr)
->>
->>      if (cnt > c->high_watermark)
->>          /* free few objects from current cpu into global kmalloc pool */
->> -        irq_work_raise(c);
->> +        wait = irq_work_raise(c);
->>      /* Enable IRQ after irq_work_raise() completes, otherwise when current
->>       * task is preempted by task which does unit_alloc(), unit_alloc() may
->>       * return NULL unexpectedly because irq work is already pending but can
->>       * not been triggered and free_llist can not be refilled timely.
->>       */
->>      local_irq_restore(flags);
->> +
->> +    if (wait)
->> +        irq_work_wait(c);
->>  }
->>
->>  static void notrace unit_free_rcu(struct bpf_mem_cache *c, void *ptr)
->>  {
->>      struct llist_node *llnode = ptr - LLIST_NODE_SZ;
->>      unsigned long flags;
->> +    bool wait = false;
->>
->>      c->tgt = *(struct bpf_mem_cache **)llnode;
->>
->> @@ -891,8 +912,11 @@ static void notrace unit_free_rcu(struct
->> bpf_mem_cache *c, void *ptr)
->>      local_dec(&c->active);
->>
->>      if (!atomic_read(&c->call_rcu_in_progress))
->> -        irq_work_raise(c);
->> +        wait = irq_work_raise(c);
->>      local_irq_restore(flags);
->> +
->> +    if (wait)
->> +        irq_work_wait(c);
->>  }
->>
->>  /* Called from BPF program or from sys_bpf syscall.
->> --
->> 2.29.2
->>
->>
->>>      /* Allocate and fill a new node */
->>>      new_node = lpm_trie_node_alloc(trie, value);
->>>      if (!new_node)
->>> diff --git a/kernel/bpf/memalloc.c b/kernel/bpf/memalloc.c
->>> index bd45dda..8e48c9a 100644
->>> --- a/kernel/bpf/memalloc.c
->>> +++ b/kernel/bpf/memalloc.c
->>> @@ -1005,6 +1005,45 @@ void notrace *bpf_mem_cache_alloc_flags(struct
->>> bpf_mem_alloc *ma, gfp_t flags)
->>>      return !ret ? NULL : ret + LLIST_NODE_SZ;
->>>  }
->>>
->>> +/* Make sure the free list of this CPU holds at least @cnt objects.
->>> + *
->>> + * The refill done by unit_alloc() is an irq_work raised through a self-IPI
->>> + * and is asynchronous. A batch of map updates from user space can find the
->>> + * free list still empty at its second element and fail with -ENOMEM.
->>> + *
->>> + * Only for the bpf(2) syscall map update path: task context, IRQs enabled,
->>> + * no map lock held, so a non-sleeping slab allocation is safe.
->>> + */
->>> +void bpf_mem_cache_reserve(struct bpf_mem_alloc *ma, int cnt)
->>> +{
->>> +    struct bpf_mem_cache *c = this_cpu_ptr(ma->cache);
->>> +    struct mem_cgroup *memcg, *old_memcg;
->>> +    void *obj;
->>> +    int i;
->>> +
->>> +    if (WARN_ON_ONCE(!bpf_map_update_from_syscall()))
->>> +        return;
->>> +    lockdep_assert_irqs_enabled();
->>> +
->>> +    /* Racy read like in bpf_mem_refill(), it doesn't need to be
->>> accurate */
->>> +    i = READ_ONCE(c->free_cnt);
->>> +    if (i >= cnt)
->>> +        return;
->>> +
->>> +    memcg = get_memcg(c);
->>> +    old_memcg = set_active_memcg(memcg);
->>> +    for (; i < cnt; i++) {
->>> +        obj = __alloc(c, NUMA_NO_NODE, GFP_NOWAIT | __GFP_NOWARN |
->>> __GFP_ACCOUNT);
->>> +        if (!obj)
->>> +            break;
->>> +        /* unit_free() reads the owning cache from the object header */
->>> +        *(struct bpf_mem_cache **)obj = c;
->>> +        unit_free(c, obj + LLIST_NODE_SZ);
->>> +    }
->>> +    set_active_memcg(old_memcg);
->>> +    mem_cgroup_put(memcg);
->>> +}
->>> +
->>>  int bpf_mem_alloc_check_size(bool percpu, size_t size)
->>>  {
->>>      /* The size of percpu allocation doesn't have LLIST_NODE_SZ overhead */
->>> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
->>> index e92fd2b..c20e5de 100644
->>> --- a/kernel/bpf/syscall.c
->>> +++ b/kernel/bpf/syscall.c
->>> @@ -56,6 +56,8 @@
->>>  #define BPF_OBJ_FLAG_MASK   (BPF_F_RDONLY | BPF_F_WRONLY)
->>>
->>>  DEFINE_PER_CPU(int, bpf_prog_active);
->>> +/* Marks map updates done on behalf of the syscall, only its address is
->>> used */
->>> +struct bpf_run_ctx bpf_map_update_run_ctx;
->>>  DEFINE_COOKIE(bpf_map_cookie);
->>>  static DEFINE_IDR(prog_idr);
->>>  static DEFINE_SPINLOCK(prog_idr_lock);
->>> @@ -247,6 +249,7 @@ unpin_all:
->>>  static int bpf_map_update_value(struct bpf_map *map, struct file *map_file,
->>>                  void *key, void *value, __u64 flags)
->>>  {
->>> +    struct bpf_run_ctx *old_run_ctx;
->>>      int err;
->>>
->>>      /* Need to create a kthread, thus must support schedule */
->>> @@ -265,6 +268,7 @@ static int bpf_map_update_value(struct bpf_map *map,
->>> struct file *map_file,
->>>      }
->>>
->>>      bpf_disable_instrumentation();
->>> +    old_run_ctx = bpf_set_run_ctx(&bpf_map_update_run_ctx);
->>>      if (map->map_type == BPF_MAP_TYPE_PERCPU_HASH ||
->>>          map->map_type == BPF_MAP_TYPE_LRU_PERCPU_HASH) {
->>>          err = bpf_percpu_hash_update(map, key, value, flags);
->>> @@ -297,6 +301,7 @@ static int bpf_map_update_value(struct bpf_map *map,
->>> struct file *map_file,
->>>                  bpf_obj_unpin_uptrs(map->record, value);
->>>          }
->>>      }
->>> +    bpf_reset_run_ctx(old_run_ctx);
->>>      bpf_enable_instrumentation();
->>>
->>>      return err;
->>>
->>> Real-world impact: an eBPF egress agent for CI runners makes exactly
->>> this call per pod; on these hosts every pod loses DNS.
->>>
->>> Thanks,
->>> Musthaq Ahamed
->>> .
+ * Propagate cancellation from constant blinding through both JIT fallback
+   paths instead of rechecking fatal signals in bpf_check(). (Eduard)
+ * Preserve packet-pointer displacement by comparing range bases, without
+   extending the generic ID map. Veristat showed identical verdicts and
+   successful-program instruction/state counts across 2773 loads. (Eduard,
+   Alexei)
+ * Reduce the packet pruning regression to 20 instructions and force state
+   checkpoints. (Alexei, BPF CI)
+ * Reject unsupported CO-RE poisoning targets in the shared relocation
+   code instead of adding a CFG fall-through check. (Alexei)
+ * Cover unsupported poison targets and supported relocations in dead code,
+   including both halves of ldimm64.
+ * Assign callback value IDs unconditionally and compare inner-map lookup
+   IDs through check_ids(); explain the bug with a small program. (Eduard)
+ * Move map_uid beside the other IDs and shrink frameno to preserve the
+   register state size, keeping the existing memcmp() ranges.
+ * Consolidate callback tests into the existing spinlock tests and reuse
+   their map fixtures. Retain one-element and nested locking controls, and
+   check nonzero IDs in timer, workqueue, and task-work callbacks. Clarify
+   the inner-map lookup test description. (BPF CI)
+
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260905070003.3193366-1-memxor@gmail.com
+
+ * Address inner map corner case for callback map value patch.
+ * Drop patch 2 since the test can be flaky.
+
+Kumar Kartikeya Dwivedi (7):
+  bpf: Make post-verification instruction rewrites killable
+  bpf: Preserve packet pointer class displacement in regsafe()
+  selftests/bpf: Test packet pointer class displacement pruning
+  bpf: Restrict CO-RE poisoning to relocatable instructions
+  selftests/bpf: Test CO-RE instruction poisoning restrictions
+  bpf: Assign lock identity to callback map values
+  selftests/bpf: Check callback map value lock identity
+
+ include/linux/bpf_verifier.h                  |  24 +--
+ kernel/bpf/core.c                             |  19 +-
+ kernel/bpf/fixups.c                           |  24 ++-
+ kernel/bpf/states.c                           |   9 +-
+ kernel/bpf/verifier.c                         |  15 +-
+ tools/lib/bpf/relo_core.c                     |  28 +--
+ .../selftests/bpf/prog_tests/cb_refs.c        |   2 +-
+ .../selftests/bpf/prog_tests/core_reloc_raw.c | 168 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/spin_lock.c      |  33 +++-
+ .../selftests/bpf/progs/test_spin_lock_fail.c | 167 ++++++++++++++++-
+ .../progs/verifier_xdp_direct_packet_access.c |  35 ++++
+ 11 files changed, 477 insertions(+), 47 deletions(-)
+
+
+base-commit: ee363e055895364039bf28348ff13c615afad4ba
+-- 
+2.53.0
 
