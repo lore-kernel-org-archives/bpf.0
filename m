@@ -1,261 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.avm.de (mail.avm.de [212.42.244.119])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0CAC3E7BA9
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 07:49:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D00F3EB81E;
+	Mon, 14 Sep 2026 07:50:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.119
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789372180; cv=none; b=D146H6ucl42D6hGpO1pb24jspcq/eThLWokg835/Q960x7LuDCWlHuE400XNVXUIfh6/Nz0oJ/B9Vi8QDHIBvtGEFkzURx4IDDcq71YA50/K4aVBlYgpuUZ2j4m6i/m4LcBfzmJgazUEYuGNLxspXsmT43Z9f/cPqVHMeVqzu/Y=
+	t=1789372216; cv=none; b=T3AWLgI27eW1mrqQBcaqd15W61VGtE8U08ikEUe35hQmAO5k4r6siMSzY9MZ9m1e7tDm21lm/P/Sre82kt7N1G+sWJVFyfSzdfAy+8WoaTlymhXEugQAyPnkyQF7QW89kgPTIHpZYOulLOxGHXYnykiDNYU3esEiYOasY777eSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789372180; c=relaxed/simple;
-	bh=/WJgMa4cEk1gyRRAbHaR1lr3lZExWd30PaQwgCmuETI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=QBqF/a8MW1cOAeRcFT6ESbkGrF+7tftDMxl7mqkhQWruaHmmfHU3RRtYZOJ/XW6BWgY4P/egolLTmk8Dp/22iYoxseth+x1gnouxAMPOdFOJ3zr5NgQr93Ojsk37VnjHBa2SqnWCey3S/S+GWdY17Rvbn7LLvvL5b6yCGm314QI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nbQ3yPID; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789372216; c=relaxed/simple;
+	bh=Dz9apUf+u84aOX9At9CtayQ2nOTt9/cxRnAI075CIK8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K9OCCCymZANLo9HQof0lT/kOX9J7oqjfLUEu3Ljr1o4leeWTKuhIYhJi+P+gTzGH0U+bSuudmO74egBbNWoszfIAJkvHz/8x6+SqOC6OEfedjiw1hviEya4BE6lLSX1Hf1kiCjyfZ4BrKYfCWjOBaLbdGbjdr9dJGtpKQFpQaJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com; spf=pass smtp.mailfrom=fritz.com; dkim=pass (2048-bit key) header.d=fritz.com header.i=@fritz.com header.b=q6ST5aRZ; arc=none smtp.client-ip=212.42.244.119
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fritz.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nbQ3yPID"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F2A1F000FF;
-	Mon, 14 Sep 2026 07:49:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789372178;
-	bh=8lJomVYYRls5+kWLl/CEBGgTd0NlCyZwbFUZLKPN+4w=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nbQ3yPIDVH6Sz+Fp3sSHsUDJGvpNsIlZRN7Ke7RaVtHImOMtX9GFseVvfQSogqoQ1
-	 HekCyOej9oVVcDgCrWbTMBOjbW698+7nRA+6a6CwxFQKrIGzv2f0GriimShbiu1dNN
-	 jEba7i5WFjEdhgEaAyuc8Zw6GLP9uGlWTkgDT0zFjILRSlfx/krc3dCIYeAWbfsPFt
-	 SVM51EJBmGsThSaIfZ9cFZvEf0mUllWOrKyOOA2672HxK7r6KpzaOWIVnmHWRXuf/y
-	 JgYHj+BdKOu/Z/sLikJ2MFLLM6wz1Inyn4qh0x8YCAntl/Oxr7Gt1f/uK4o1nSSuxY
-	 gDJf3dH3Kgljw==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v3 1/5] blk-iocost: add BPF struct_ops cost model
- support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tao Cui" <cui.tao@linux.dev>
-Cc: tj@kernel.org, mkoutny@suse.com, hannes@cmpxchg.org, bpf@vger.kernel.org
-In-Reply-To: <20260914073356.791518-2-cui.tao@linux.dev>
-References: <20260914073356.791518-1-cui.tao@linux.dev>
- <20260914073356.791518-2-cui.tao@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 14 Sep 2026 07:49:37 +0000
-Message-Id: <20260914074938.48F2A1F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=fritz.com header.i=@fritz.com header.b="q6ST5aRZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fritz.com; s=mail;
+	t=1789372202; bh=Dz9apUf+u84aOX9At9CtayQ2nOTt9/cxRnAI075CIK8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=q6ST5aRZEJjpDhj7xywJe9leI/SVoCecBMa93qBOib3DJCAo4WdEJNBn8fH4P2F7L
+	 Zdj4aDRR1VNFFpQkz37WO+23ZFkbCDEqYeBq+AMV24Qpxo+pUhfePHITOI71oSofSt
+	 vEGGmhvuHFvBFuSAj5yhL7AAhE1lrVlvhW7RprnsW/hZ+QaQH7aIfgStTNkTqckfFS
+	 p3t68uJj3fLNwuWrEGjZ/fJYLlNmFClPItmb/r0omlwcYM5713AThlaMqV5SKBM+tO
+	 4g6mjXp/YpT/WxcPtgqUhR0fvhPHujEGm5Lr9K1nnI5e4yDYdiytXAgD5a0wRJjjmm
+	 AqpLQ3Bcyw3GQ==
+Received: from [2001:bf0:244:244::78] (helo=mail.avm.de)
+	by mail.avm.de with ESMTP (eXpurgate 4.57.1)
+	(envelope-from <n.schier@fritz.com>)
+	id 6aa7a72a-ea3f-7f0000032729-7f000001b804-1
+	for <multiple-recipients>; Mon, 14 Sep 2026 09:50:02 +0200
+Received: from mail-auth.fritz.com (unknown [IPv6:2001:bf0:244:244::78])
+	by mail.avm.de (Postfix) with ESMTPS;
+	Mon, 14 Sep 2026 09:50:02 +0200 (CEST)
+Date: Mon, 14 Sep 2026 09:50:01 +0200
+From: Nicolas Schier <n.schier@fritz.com>
+To: Alan Maguire <alan.maguire@oracle.com>
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+	eddyz87@gmail.com, jolsa@kernel.org, ihor.solodrai@linux.dev,
+	yonghong.song@linux.dev, song@kernel.org, qmo@kernel.org,
+	martin.lau@linux.dev, memxor@gmail.com, emil@etsalapatis.com,
+	mcgrof@kernel.org, petr.pavlu@suse.com, tj@kernel.org,
+	kees@kernel.org, bpf@vger.kernel.org, nathan@kernel.org,
+	arnd@arndb.de, puranjay@kernel.org, yatsenko@meta.com,
+	atenart@kernel.org, ojeda@kernel.org, linux-modules@vger.kernel.org
+Subject: Re: [PATCH v2 bpf-next 13/18] kbuild: Add support for BTF inline
+ information
+Message-ID: <20260914-axiomatic-meaty-lynx-8a5dc7@l-nschier-aarch64>
+References: <20260901165757.801449-1-alan.maguire@oracle.com>
+ <20260901165757.801449-14-alan.maguire@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260901165757.801449-14-alan.maguire@oracle.com>
+Organization: FRITZ! Technology GmbH
+x-ms-reactions: disallow
+X-purgate-ID: 149429::1789372202-0B4EA720-B279DB67/0/0
+X-purgate-type: clean
+X-purgate-size: 2754
+X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
+X-purgate: clean
+X-pfmilter: host: postfix-mx-02  mail-id: C6763A0446  external: no
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] Kernel panic due to NULL pointer dereference in the bio charging p=
-ath when a BPF struct_ops map is loaded without implementing calc_cost.
-- [Medium] The cgroup interface breaks save/restore symmetry because `ctrl=
-=3Dbpf` is printed on read but rejected on write.
-- [Medium] Any write to io.cost.model that updates linear coefficients with=
-out explicitly specifying model=3D... silently unbinds the active BPF model.
---
+On Tue, Sep 01, 2026 at 05:57:52PM +0100, Alan Maguire wrote:
+> Add CONFIG_DEBUG_INFO_BTF_INLINE to generate BTF inline-location
+> information with pahole v1.31 and later.
+> 
+> Enable pahole's inline feature and pass --inline to resolve_btfids.
+> This extracts LOC_PARAM, LOC_PROTO, and LOCSEC types into a split BTF
+> blob named <output>.BTF.inline while the ordinary BTF remains in .BTF.
+> 
+> Embed the resulting blob in a .BTF.inline ELF section for vmlinux and
+> modules.  Add the vmlinux linker-script output section to avoid it
+> being treated as an orphan.
+> 
+> Use the inline pahole feature unconditionally for both in-tree and
+> external modules; the generated split BTF has the same format in both
+> cases.
+> 
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  include/asm-generic/vmlinux.lds.h | 11 +++++++++++
+>  lib/Kconfig.debug                 | 17 +++++++++++++++++
+>  scripts/Makefile.btf              |  7 +++++++
+>  scripts/gen-btf.sh                | 17 +++++++++++++++--
+>  4 files changed, 50 insertions(+), 2 deletions(-)
+> 
 
-commit 7407199b3c34d6a89c70eca2c0e70034c01c2bd7
-Author: Tao Cui <cuitao@kylinos.cn>
+[...]
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index 1244dcac2294..dd1b2d9ebe99 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -425,6 +425,12 @@ config PAHOLE_HAS_LANG_EXCLUDE
+>  	  otherwise it would emit malformed kernel and module binaries when
+>  	  using DEBUG_INFO_BTF_MODULES.
+>  
+> +config PAHOLE_HAS_INLINE
+> +	def_bool PAHOLE_VERSION >= 131
+[...]
+> +config DEBUG_INFO_BTF_INLINE
+> +	bool "Provide information about inline sites in BTF"
+> +	default n
+> +	depends on DEBUG_INFO_BTF && PAHOLE_HAS_INLINE && SYSFS
 
-blk-iocost: add BPF struct_ops cost model support
-
-This commit introduces a BPF struct_ops-based cost model for the IO
-controller, allowing the replacement of the built-in linear model. It
-provides lifecycle callbacks and integration with the IO charging path
-to price IO operations based on the bound BPF model.
-
-> diff --git a/block/blk-iocost-bpf.c b/block/blk-iocost-bpf.c
-> new file mode 100644
-> index 0000000000000..7ad88600c203a
-> --- /dev/null
-> +++ b/block/blk-iocost-bpf.c
-
-[ ... ]
-
-> +/*
-> + * kdata is seeded from the CFI stubs, so calc_cost is never NULL; a
-> + * model which did not implement it inherits the stub, which prices
-> + * every IO at 0.  Compare against the stub to reject it.
-> + */
-> +static int bpf_iocost_validate(void *kdata)
-> +{
-> +	struct iocost_model_ops *ops =3D kdata;
+[...]
+> diff --git a/scripts/Makefile.btf b/scripts/Makefile.btf
+> index a1812985a61a..d42dbc8d7199 100644
+> --- a/scripts/Makefile.btf
+> +++ b/scripts/Makefile.btf
+> @@ -22,7 +22,14 @@ endif
+>  
+>  pahole-flags-$(CONFIG_PAHOLE_HAS_LANG_EXCLUDE)		+= --lang_exclude=rust
+>  
+> +btf-inline := $(CONFIG_DEBUG_INFO_BTF_INLINE)
+> +ifneq ($(btf-inline),)
+> +btf-inline-feat := inline
+> +pahole-flags-$(call test-ge, $(pahole-ver), 131) += --btf_features=$(btf-inline-feat)
+> +endif
 > +
-> +	if (ops->calc_cost =3D=3D bpf_iocost_calc_cost_stub)
-> +		return -EINVAL;
+>  export PAHOLE_FLAGS := $(pahole-flags-y)
+> +export BTF_INLINE := $(btf-inline)
 
-[Severity: High]
-Does this validation catch the case where a user provides an incomplete
-BPF map without a calc_cost implementation? The BPF subsystem does not
-copy cfi_stubs values into kdata for unimplemented members, so they
-remain NULL. Comparing ops->calc_cost to the stub address might fail to
-detect a NULL value, allowing an invalid model to be registered.
 
-> +	return 0;
-> +}
+As btf-inline and btf-inline-feat are not used anywhere else, and 
+CONFIG_DEBUG_INFO_BTF_INLINE can only be set for PAHOLE_VERSION >= 131, 
+this looks a bit noisy to me.  I think it would be good to keep that 
+change in scripts/Makefile.btf as short as possible, e.g.:
 
-[ ... ]
+    pahole-flags-$(CONFIG_DEBUG_INFO_BTF_INLINE) += --btf_features=inline
 
-> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-> index 2745bffcd5eef..3cc21092cf47f 100644
-> --- a/block/blk-iocost.c
-> +++ b/block/blk-iocost.c
+and for scripts/gen-btf.sh something like:
 
-[ ... ]
+    if is_enabled CONFIG_DEBUG_INFO_BTF_INLINE; then
+    	BTF_INLINE=inline
+    fi
 
-> @@ -2571,10 +2577,28 @@ static void calc_vtime_cost_builtin(struct bio *b=
-io, struct ioc_gq *iocg,
-> =20
->  static u64 calc_vtime_cost(struct bio *bio, struct ioc_gq *iocg, bool is=
-_merge)
->  {
-> +#ifdef CONFIG_BLK_CGROUP_IOCOST_BPF
-> +	const struct iocost_model_ops *model;
->  	u64 cost;
-> =20
-> -	calc_vtime_cost_builtin(bio, iocg, is_merge, &cost);
-> -	return cost;
-> +	rcu_read_lock();
-> +	model =3D rcu_dereference(iocg->ioc->model);
-> +	if (model) {
-> +		cost =3D model->calc_cost(bio->bi_opf, bio->bi_iter.bi_size,
 
-[Severity: High]
-If bpf_iocost_validate() allowed an empty calc_cost through, could this
-lead to a NULL pointer dereference here in the bio charging path? A
-missing bounds check here combined with the validation hole might cause a
-deterministic kernel panic reachable by a privileged user loading an
-incomplete BPF map.
 
-> +					bio->bi_iter.bi_sector,
-> +					iocg_to_blkg(iocg)->blkcg,
-> +					is_merge ? IOCOST_COST_F_MERGE : 0);
-> +		rcu_read_unlock();
-> +		return min(cost, VTIME_PER_SEC);
-> +	}
-> +	rcu_read_unlock();
-> +#endif
-
-[ ... ]
-
-> @@ -3438,12 +3493,30 @@ static u64 ioc_cost_model_prfill(struct seq_file =
-*sf,
->  		return 0;
-> =20
->  	spin_lock_irq(&ioc->lock);
-> +#ifdef CONFIG_BLK_CGROUP_IOCOST_BPF
-> +	{
-> +		const struct iocost_model_ops *model =3D
-> +			rcu_dereference_protected(ioc->model,
-> +					lockdep_is_held(&ioc->lock));
-> +
-> +		seq_printf(sf, "%s ctrl=3D%s model=3D%s "
-> +			   "rbps=3D%llu rseqiops=3D%llu rrandiops=3D%llu "
-> +			   "wbps=3D%llu wseqiops=3D%llu wrandiops=3D%llu\n",
-> +			   dname, model ? "bpf" :
-> +				   ioc->user_cost_model ? "user" : "auto",
-
-[Severity: Medium]
-When a BPF model is active, this prints "ctrl=3Dbpf". Does this break the
-cgroup interface save/restore symmetry? ioc_cost_model_write() below
-seems to reject the "ctrl=3Dbpf" string.
-
-> +			   model ? model->name : "linear",
-> +			   u[I_LCOEF_RBPS], u[I_LCOEF_RSEQIOPS],
-> +			   u[I_LCOEF_RRANDIOPS], u[I_LCOEF_WBPS],
-> +			   u[I_LCOEF_WSEQIOPS], u[I_LCOEF_WRANDIOPS]);
-> +	}
-> +#else
-
-[ ... ]
-
-> @@ -3512,6 +3632,7 @@ static ssize_t ioc_cost_model_write(struct kernfs_o=
-pen_file *of, char *input,
->  	spin_lock_irq(&ioc->lock);
->  	memcpy(u, ioc->params.i_lcoefs, sizeof(u));
->  	user =3D ioc->user_cost_model;
-> +	bpf_model[0] =3D '\0';
-
-[Severity: Medium]
-If a user writes an update to linear coefficients (e.g., rbps=3D1000)
-without explicitly specifying "model=3D...", bpf_model remains an empty
-string because it is not initialized with the currently active model's
-name. Could this inadvertently cause the active BPF model to be silently
-unbound when the configuration is applied later in this function?
-
-> =20
->  	ret =3D -EINVAL;
-> =20
-> @@ -3533,11 +3654,16 @@ static ssize_t ioc_cost_model_write(struct kernfs=
-_open_file *of, char *input,
->  				user =3D true;
->  			else
->  				goto unlock;
-
-[Severity: Medium]
-It appears that if the input contains "ctrl=3Dbpf" (as output by
-ioc_cost_model_prfill), it hits the "else" branch and goes to unlock,
-failing the write. Cgroup attributes usually need to parse their own
-output to support configuration backup and restore (like systemd or
-cgroup-tools). Could this prevent restoring valid saved configurations?
-
-> +			bpf_model[0] =3D '\0';
->  			continue;
->  		case COST_MODEL:
-
-[ ... ]
-
-> @@ -3550,19 +3676,41 @@ static ssize_t ioc_cost_model_write(struct kernfs=
-_open_file *of, char *input,
->  		user =3D true;
->  	}
-> =20
-> -	if (user) {
-> -		memcpy(ioc->params.i_lcoefs, u, sizeof(u));
-> -		ioc->user_cost_model =3D true;
-> -	} else {
-> -		ioc->user_cost_model =3D false;
-> -	}
-> -	ioc_refresh_params(ioc, true);
-> -
->  	ret =3D 0;
-> =20
->  unlock:
->  	spin_unlock_irq(&ioc->lock);
-> =20
-> +	/*
-> +	 * Resolve the model name outside ioc->lock (the registry lookup
-> +	 * takes a mutex), so a bad name rejects the whole write before
-> +	 * anything is applied.  The resolved model is this write's own
-> +	 * state, not per-device state, so concurrent writers cannot
-> +	 * clobber each other's staged model.  On success, re-take the
-> +	 * lock to apply the coefficients and swap the model in one go.
-> +	 */
-> +	if (!ret) {
-> +		const struct iocost_model_ops *new, *old;
-> +
-> +		new =3D ioc_bpf_model_prepare(bpf_model);
-> +		if (IS_ERR(new)) {
-> +			ret =3D PTR_ERR(new);
-> +		} else {
-> +			spin_lock_irq(&ioc->lock);
-> +			if (user) {
-> +				memcpy(ioc->params.i_lcoefs, u, sizeof(u));
-> +				ioc->user_cost_model =3D true;
-> +			} else {
-> +				ioc->user_cost_model =3D false;
-> +			}
-> +			ioc_refresh_params(ioc, true);
-> +			old =3D ioc_bpf_model_commit(ioc, new);
-
-[Severity: Medium]
-If the BPF model name wasn't explicitly provided during this write,
-bpf_model is "", making new NULL. ioc_bpf_model_commit() then unbinds the
-existing BPF model, falling back to the linear model. Since users have
-legitimate reasons to tune linear coefficients while a BPF model is active
-(for request sizing), this silent unbinding could drop their QoS policy.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914073356.7915=
-18-1-cui.tao@linux.dev?part=3D1
+Kind regards,
+Nicolas
