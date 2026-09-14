@@ -1,152 +1,207 @@
-Received: from mta0.migadu.com (out-198.mta0.migadu.com [91.218.175.198])
+Received: from mail-ed2-f11.google.com (mail-ed2-f11.google.com [74.125.228.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28DBD49BD61
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 18:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ECA02D77F7
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 18:17:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789408965; cv=none; b=MUf/hM21uf0GjaFNAxmJdlzk0ajvMV7eI3NCQouNSWRgulfVV+3j+L9BIkpLU4TYnDXXuNoWgBLFVQAZVLgw5dATC28qTRV1PvazdPIavf12fJyweN3gCmxn68YgIz/l/Mz+l1Pzq0wqEavJB7GLW6lLyRvRPYZCN3JS8pUN/pc=
+	t=1789409836; cv=none; b=XM9GyPUsbQcqyG/1oKCpXemZhbJva+xia9RrU8j7qqu2+r3cjYfO0RmTlKM774TGs94vKB78+XftLzwlWnbrE6N53ENMc/IUToLdV4MgOGjVYAWpEf6MjTz5f6xqMFhGrMs6b7rPs1yJrt8XHjSy52CHGYJqeYYu4tLBv4pow4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789408965; c=relaxed/simple;
-	bh=CDrNn5tYB+7ik9rYD8HaesjBeC1wNSiymp7q5LHmmgI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vB1965am7Jc02IJNR5PEfP1wTmP3S8LIYsSSK0zVUsBBVhyFLnzrCHWzTNTaswOs5BVYWvpJlwh85FqjqMfpBM1CSXO2s4pLimZ5unGfg81AoTciPVg6BPKKVTis4tzAqm+Nxa0YWdmMLgq1ANyvgH5AuGDCKa9M5O4ZftLZ9HQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sEPJS6zp; arc=none smtp.client-ip=91.218.175.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789409836; c=relaxed/simple;
+	bh=Z6tnLZmfbZY9KJukSWtadBsrV3bxYzT97i5mms5gBBU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=u5IfdMx0J9mBDrVORBVs6NuZbHrOhktrD/kdaMIENidHr+lASACOJZqrt+gntGB7g682pRb2i36BDA3L3FxsFsSDU9Cmy7ML+RBEvcu9/bN4T4+c5E7I4wFzNWRltB8VYN3Dz8wNahYunNr4xT3Mq/B4xqEKBtMVSA7efCb8GDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ljEN20HE; arc=none smtp.client-ip=74.125.228.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sEPJS6zp"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=CDrNn5tYB+7ik9rYD8HaesjBeC1wNSiymp7q5LHmmgI=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789408960; v=1; x=1790013760;
- b=sEPJS6zpSPQZHGZFOT5vhLulq2pY+TDpQCPnFDRNYDeo7Vvtf8l/9KWnamj0xNyl2bVX+puH
- D13SNHfIpUm3rTd8GXu2nYR/DlZHlEl1ManlhgynLZ36DsCH3Uy68S430cnCulwQ4Ulu+Ttct7B
- 8iEIyYoTWg7gRP7YX+akevTA=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 3bd1142eb17dcc35;
-	Mon, 14 Sep 2026 18:02:40 +0000
-X-Mizu-Trace-ID: 3bd1142eb17dcc35
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <4cddd4a4-d684-46c9-862e-5708797f399d@linux.dev>
-Date: Mon, 14 Sep 2026 11:02:31 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ljEN20HE"
+Received: by mail-ed2-f11.google.com with SMTP id 4fb4d7f45d1cf-6a144c8f038so2237571a12.0
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 11:17:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789409831; x=1790014631; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=MhwZKQH3naP48pBWrsTvWrJs+Fp5fgGMTIobqvnavu8=;
+        b=ljEN20HElxd9H8T1EKn4LuHkQus18lX3szBzvlm9slxRPtKIOPJ6rNRFfKffuaxnyU
+         ybyDiR/1RIl6QqA1UbElBeVpnOLpYOwuH9yrBPJW6XbA/VUw8sa3ewplFAAqkZ0hLOpj
+         eQpJPwQk2mikEFr5Oczfyd+l0sRywPHnFKqnN+4RjTiE48ARLt5oGtr/gkMdsfMVRfAg
+         Q3FWQ0M9uSBaYcNUIV0xzMfJzECrpVQNz3ZrTtzDCcQnuWD63zeiXmrGAycM+9+QFVrv
+         iPyXrlURabFvZxNgzVxQLMKF623pvmIaAsMZxbaobJlqKYikJfdKbiKTr0hfMSXBAa+m
+         UlZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789409831; x=1790014631;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=MhwZKQH3naP48pBWrsTvWrJs+Fp5fgGMTIobqvnavu8=;
+        b=AzRNFcL2MvI1W5m5fFPvN82TZDIeGr7F2+u66jEbYN6EtFdihlD8BqDNAo594FhFAg
+         G04hANpYCDzIX+ONUCphd0gtYGmVQynSxl9Wzp9DfiZYvv9hjtHt8tpkSs1zeRHqq57u
+         y3C7p1MOWo8iybmnnWSaZV7ZdR9LcUwyM7hhmwyq67b8i+zHxh3fXxlPG/Ph4bGEgh8d
+         aG0GuBySAD9QEryHTFW/pPhROAQTvcUgr3SCVHa27WXMDYUoZd7Jy1ANSlubW7fzDTjl
+         8NhSJgVx9KpAzw5crM+A1dEoYdzX1aiUaGETnC6q+wjxtcXsZA9Qjh63C+4g4OcH4A6+
+         uYWQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwjpVz7N2dJuadCQy0iuL85Z1dPMgEcXDEv1VuUkS6RAXjfbhwKWeLXIjK9N1i/+pVZvns=@vger.kernel.org
+X-Gm-Message-State: AFuF++k8TZBQQLxDQeImHINVwkI0q6qQWIlGr+mJTjxKPR/MBTMo53JT
+	zOEYDw9a6Ea1dnB+1r2DkKvjRwFgv28YxWoAZVeEBm5z3HGtL33PFa8R
+X-Gm-Gg: AYBFou1VKE7UMxthbgBiCxRaEfTbvfnFYjVFPXEYPqRb349FuM52ZPhyB3RLKa+zwTa
+	t+/8EMpfleXMt++FI0dnKjyR7CW3mClvjXQhkm2borOPzAnubz4GgmR1tZaz53haygHJjoQsdWN
+	OKdqH3nCKbtz3HjnFpoCqToDfjX52oCng/8/7ePhqRqJdqGCNIIdDk85GjSYMSqP86LuD6/QLPt
+	QhIGgX7yh1qWda3YIUEluNb+2s9r2YJStGXB1EdXWTjJUUeNgAfBj3ctPbKbAXi5jrRCtIaOkwF
+	yHpCo55zbBoqHU0a6cfL0ZxGr5KjU7XQnPi6GmxNJWZ7W5+wWZhUftRLfyIn/qyAOVY7QIeaDXC
+	K5KzyMxrsLnRB8e4xDxqRHpAtnXiWtzrheN90W8mqzokqjseguZ0v2q/VpNiN6Qfv3pqtYYgLds
+	Lig3qnQCCo2szIT4hfUEwMRe4fa27sH5TO1+Uibf+fKraKNFYliwY35b9RLIUP7/ykNaXwxa6VW
+	GW4GXW7AXGMEvs+irW1iBhyOespUL7Ic/SEIlBUXRQ2IGs/6LB71Ci62EiHdnKt7V6BfUEE7f0k
+	dqQEuFhpVMz5xFcoSForsSLg5U6ZLcqcml3sJA==
+X-Received: by 2002:a05:6402:4149:b0:6a6:c4b:c92f with SMTP id 4fb4d7f45d1cf-6a9f6227feamr2295917a12.9.1789409830894;
+        Mon, 14 Sep 2026 11:17:10 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a9ba8f3ab9sm4370429a12.15.2026.09.14.11.17.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Sep 2026 11:17:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 01/13] bpf: move linked-scalar flags out of
- bpf_reg_state->id [NFC]
-To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20260910164635.459558-2-vineet.gupta@linux.dev>
- <6ba21fcb39349c144c340d3605e25a30710ff43c5ea0c53045e78f4408411fdd@mail.kernel.org>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <6ba21fcb39349c144c340d3605e25a30710ff43c5ea0c53045e78f4408411fdd@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 14 Sep 2026 20:17:09 +0200
+Message-Id: <DLF8UFBL6NEL.MAD9F5418DIG@gmail.com>
+Cc: "Hui Zhu" <zhuhui@kylinos.cn>
+Subject: Re: [PATCH bpf-next v10 1/2] mm/bpf: Add bpf_proactive_reclaim
+ kfunc
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Hui Zhu" <hui.zhu@linux.dev>, "Roman Gushchin"
+ <roman.gushchin@linux.dev>, "JP Kobryn" <inwardvessel@gmail.com>, "Shakeel
+ Butt" <shakeel.butt@linux.dev>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song
+ Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
+ Olsa" <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah
+ Khan" <shuah@kernel.org>, "Barry Song" <baohua@kernel.org>, "Geliang Tang"
+ <geliang@kernel.org>, <linux-kernel@vger.kernel.org>,
+ <bpf@vger.kernel.org>, <linux-mm@kvack.org>,
+ <linux-kselftest@vger.kernel.org>
+X-Mailer: aerc 0.21.0
+References: <cover.1789091855.git.zhuhui@kylinos.cn>
+ <e00910f328c129fea716e9fd031dada328e60313.1789091855.git.zhuhui@kylinos.cn>
+In-Reply-To: <e00910f328c129fea716e9fd031dada328e60313.1789091855.git.zhuhui@kylinos.cn>
 
-
-
-On 9/10/26 11:22 PM, bot+bpf-ci@kernel.org wrote:
->> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
->> index 66fb11b6c6a7..d974baad37ee 100644
->> --- a/kernel/bpf/states.c
->> +++ b/kernel/bpf/states.c
-> [ ... ]
+On Fri Sep 11, 2026 at 4:20 AM CEST, Hui Zhu wrote:
+> From: Hui Zhu <zhuhui@kylinos.cn>
 >
->> @@ -369,13 +369,6 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
->>    * and r7.id=0 (both independent), without temp IDs both would map old_id=X
->>    * to cur_id=0 and pass. With temp IDs: r6 maps X->temp1, r7 tries to map
->>    * X->temp2, but X is already mapped to temp1, so the check fails correctly.
->> - *
->> - * When old_id has BPF_ADD_CONST set, the compound id (base | flag) and the
->> - * base id (flag stripped) must both map consistently. Example: old has
->> - * r2.id=A, r3.id=A|flag (r3 = r2 + delta), cur has r2.id=B, r3.id=C|flag
->> - * (r3 derived from unrelated r4). Without the base check, idmap gets two
->> - * independent entries A->B and A|flag->C|flag, missing that A->C conflicts
->> - * with A->B. The base ID cross-check catches this.
->>    */
->>   static bool check_scalar_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
->>   {
->> @@ -384,15 +377,7 @@ static bool check_scalar_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
->>
->>   	cur_id = cur_id ? cur_id : ++idmap->tmp_id_gen;
->>
->> -	if (!check_ids(old_id, cur_id, idmap))
->> -		return false;
->> -	if (old_id & BPF_ADD_CONST) {
->> -		old_id &= ~BPF_ADD_CONST;
->> -		cur_id &= ~BPF_ADD_CONST;
->> -		if (!check_ids(old_id, cur_id, idmap))
->> -			return false;
->> -	}
->> -	return true;
->> +	return check_ids(old_id, cur_id, idmap);
->>   }
-> [ ... ]
+> BPF programs can observe memory pressure on a cgroup (e.g. refault
+> stats via bpf_mem_cgroup_page_state()), but cannot act on it:
+> triggering reclaim on a chosen cgroup requires writing to
+> memory.reclaim, which BPF cannot do. Add bpf_proactive_reclaim(),
+> a sleepable kfunc which performs one proactive reclaim pass on a
+> given memory cgroup, similar to a write to memory.reclaim but
+> without retrying until the target is reached, so that when and how
+> hard to reclaim is BPF policy rather than hard-coded thresholds.
 >
->> diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
->> index d571fbfc86a3..da6cb961a520 100644
->> --- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
->> +++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-> [ ... ]
+> Since some bpf program types may be invoked while holding fs locks,
+> limit the kfunc to BPF_PROG_TYPE_SYSCALL only, to avoid deadlocking
+> in filesystem shrinkers on the reclaim path. A SYSCALL program can
+> invoke the kfunc directly, or asynchronously from its bpf_wq or
+> task_work callbacks, which run in process context and keep the
+> SYSCALL program type.
 >
->> @@ -648,10 +648,10 @@ l_exit_%=:							\
->>   }
->>
->>   /*
->> - * Test that regsafe() verifies base_id consistency for BPF_ADD_CONST
->> + * Test that regsafe() verifies base_id consistency for ADD_CONST_*
->>    * linked scalars during state pruning.
->>    *
->> - * The false branch (explored first) links R3 to R2 via ADD_CONST.
->> + * The false branch (explored first) links R3 to R2 via ADD_CONST_64.
->>    * The true branch (runtime path) links R3 to R4 (unrelated base_id).
->>    * At the merge point, pruning must fail because the linkage topology
->>    * differs.
-> Does this comment still match what the code does? The patch removes the
-> "base_id" concept from kernel/bpf/states.c (deleted the paragraph that
-> defined it, removed the two-level compound/base id check from
-> check_scalar_ids), but the comment here still describes the test as
-> verifying "base_id consistency" and refers to "unrelated base_id" on the
-> next line.
+> The reclaim target of a single call is capped at MEMCG_CHARGE_BATCH,
+> following the precedent of high_work_func(), the memory.high
+> workqueue fallback. Note that only the reclaim target is capped: the
+> actual scanning work and its duration are not bounded. Reclaiming more
+> than one batch is left to the BPF program rather than enforced by the
+> kfunc: with one call per bpf_wq callback and the same work item
+> requeued for the next batch, the program can also stop submitting
+> batches in between, e.g. once the target cgroup is dying.
 >
-> Looking at the function name and __description below:
->
->>    */
->>   __description("add_const base_id must be consistent for pruning")
->>   __failure __msg("invalid variable-offset")
->>   __naked void add_const_base_id_pruning(void)
-> and later at line 695:
->
->>   	/* Runtime: R2.id=A, R4.id=C: base_ids A vs C inconsistent,
->>   	 * pruning should have failed. */
-> Should these be updated to use current terminology, or does "base_id"
-> still have meaning in this context? The test itself still works correctly
-> after the patch, so this appears to be a documentation consistency
-> question rather than a functional issue.
-
-Indeed base_id as a term is gone, but just id alone might be confusing 
-as well.
-How about link id as a replacement for base_id
-
--Vineet
-
->
->
+> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
 > ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>  mm/bpf_memcontrol.c | 88 ++++++++++++++++++++++++++++++++++++++++++++-
+>  mm/internal.h       | 10 +++---
+>  2 files changed, 93 insertions(+), 5 deletions(-)
 >
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34506184282
+> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+> index 716df49d7647..d8827bc388ef 100644
+> --- a/mm/bpf_memcontrol.c
+> +++ b/mm/bpf_memcontrol.c
+> @@ -8,6 +8,8 @@
+>  #include <linux/memcontrol.h>
+>  #include <linux/bpf.h>
+>
+> +#include "internal.h"
+> +
+>  __bpf_kfunc_start_defs();
+>
+>  /**
+> @@ -159,6 +161,74 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct m=
+em_cgroup *memcg)
+>  	mem_cgroup_flush_stats(memcg);
+>  }
+>
+> +/**
+> + * bpf_proactive_reclaim - proactively reclaim memory from a memory
+> + *                         cgroup
+> + * @memcg: the target memory cgroup to reclaim from
+> + * @size:  the amount of memory to reclaim, in bytes, clamped to
+> + *         MEMCG_CHARGE_BATCH (64 pages)
+> + * @swappiness: the reclaim swappiness, in the range
+> + *         [MIN_SWAPPINESS, SWAPPINESS_ANON_ONLY], where
+> + *         SWAPPINESS_ANON_ONLY means anon-only reclaim, or -1 to use
+> + *         the memcg's own swappiness
+> + *
+> + * Trigger one proactive reclaim pass on @memcg, similar to a write to
+> + * memory.reclaim, but without retrying until @size is reached.
+> + *
+> + * Only the reclaim target is capped: @size is clamped to
+> + * MEMCG_CHARGE_BATCH, following the precedent of high_work_func(),
+> + * the memory.high workqueue fallback, which bounds each reclaim
+> + * request the same way. The actual scanning work and its duration
+> + * are not bounded. To reclaim more, call this kfunc repeatedly
+> + * instead of passing a larger @size.
+> + *
+> + * The kfunc can be called directly from a BPF_PROG_TYPE_SYSCALL
+> + * program, synchronously in the context of the thread running the
+> + * program, or from the bpf_wq and task_work callbacks of a SYSCALL
+> + * program, which run in process context and keep the SYSCALL program
+> + * type. It is registered for BPF_PROG_TYPE_SYSCALL only, because
+> + * generic sleepable programs may run with filesystem locks held or
+> + * in NOFS/NOIO contexts, where the reclaim path could deadlock on
+> + * those locks via filesystem shrinkers.
+> + *
+> + * For asynchronous reclaim of more than one batch, driving the
+> + * reclaim from a bpf_wq callback is recommended: call this kfunc
+> + * once per callback and requeue the same work item for the next
+> + * batch, instead of looping inside the callback and monopolizing a
+> + * workqueue worker, and give each target memcg its own work item,
+> + * as high_work_func() does with one work item per memcg. Whether
+> + * to submit the next batch is up to the BPF program, which can stop
+> + * at any point, e.g. once the target cgroup is dying.
+> + *
+> + * Return: The amount of memory reclaimed, in bytes, or 0 if @size is
+> + * smaller than a page, or (unsigned long)-1 if @swappiness is out of
+> + * range.
+> + */
+> +__bpf_kfunc unsigned long bpf_proactive_reclaim(struct mem_cgroup *memcg=
+,
+> +						unsigned long size,
+> +						int swappiness)
 
+I'm going to have to request one final change, sorry.
+
+I think long is more meaningful as return value than unsigned long. It's al=
+ready
+restricted to MEMCG_CHARGE_BATCH. We return error for various arguments, we
+should probably change to -EINVAL.
+
+Apart from that it looks ok to me, but please, also wait for Shakeel to rev=
+iew
+the set before you respin v11.
+
+> [...]
