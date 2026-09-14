@@ -1,145 +1,187 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EA4D3839A1
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 18:19:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78CCF383C8F
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 18:19:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789409965; cv=none; b=ExkXgMpwQlVU1pA7sNGuVXAxPA+wHG1aAdL/SmjYmMDAVgwDIMF7ziejBWr4l1s7yKV70ZAGv/KVZyFICcfGXvHitVCXlrhYnjxnSxJPA+xtlb+gmYq1e8UJNhL5n7tTUCDMteazV4lH9h9QRla37Zr9OzEGxJdV1XVmygj2PLM=
+	t=1789409967; cv=none; b=i0Z7xwnHCA2ktPQTbHhr/P04NzR5NF0oufkq2drEFcU224Axz00LS4tinhxHlXg+Be8UZDy+9l3Voa3zxkhb6OcZOh1hmWTB2S/S+WqaDwiGboBFoWUyzgzJ5sPYf/P+9xUgVjgyyPTF0jmmf+hZ2cpuo7lwIIOp8EfcHDoe784=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789409965; c=relaxed/simple;
-	bh=pxBGJIF1flUnCdORHWoitiu2SpH+jVE2BdYWu9L8ILI=;
+	s=arc-20240116; t=1789409967; c=relaxed/simple;
+	bh=cSplGNGSwVBrHU+YX9bf9HevhQP+km9ltS37ed8fMK0=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=IHyawISZ8G/l5EHHjNjTkemfuAgmFoxdyuzSE4f98RwZZ3762myu0Vi1f5SYuHRPH5GaT4bJops+J2olYXhf2fyZpd3Wdou67Ffq8UmjqH7HBJs9VCMS9cQErzjdEmQ+NHrcBpU/uReQZkz65vjyfI2eOtQIua0NmR9P/9RdRSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hm557rlZ; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=ZAeZHpS/Je+/M97uxk36PGBliomM5VcTP47hCw5q/oBNH8/ZY88UJQsFG1NLu6fO1hmtZAJVPxVdhv6xetaiInsUQ1QPDtRfFD3LnM5vhsMw4aIraAadNtufjQ8CZunnXmx+qd1rZEUOcbs5CbkHFkzpl1RX6E9PYg3tW5WJIj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MBllnWGl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hm557rlZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C931F00893;
-	Mon, 14 Sep 2026 18:19:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MBllnWGl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 657431F000FF;
+	Mon, 14 Sep 2026 18:19:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789409963;
-	bh=K8yI/VVqwGalSvVMNr/7UUHPkH4dSvNn6dEeDk160c4=;
+	s=k20260515; t=1789409965;
+	bh=Rl2yfqw5z2hK4CzdquBVweVync+JYzck9uRaRj+fnTk=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=hm557rlZf3LEam2u2gZ+cCL+ICV1yGHwNK477ihmBcnhAGUN02gtVv3OlWeQLg5JF
-	 XvQ07y3kFZQFj9IqeH9XCNv6pekrW9+Qf4pN0wDqYIMZONb4eDS8eAsFoUFjF+gQrI
-	 fSYSJSBzGqppa8GaR3s86KQrI7E6Tn/GMpLDzO4ZZGK/6aGpNMNHrFvAHbiv0wIs1W
-	 IXI7ohLuCI7mDmv4WFy55uCH88pR+xS4vWOUiaxtSd8xXS+6jYYxyZ9fc/JrlIkedm
-	 Q/g1Bu6tIWvo207evxcBK4SWsytbW3pGvkiRWVw8zxRHCUkT2uxTJTZoBCkxqODvLD
-	 njgt/qZ5DY1sg==
-Content-Type: multipart/mixed; boundary="===============0792866299318455631=="
+	b=MBllnWGlDQYUlA0NnQlwOlLgivmiI1TMTUFO1Nh6nLZsjs/didX9I1wcjlG+W6NM6
+	 OxfGHfE0dLizXPXaLRvfrzOE7Lk+emjNXEbtlMtaIQwg/0Sk0oHDcKlxbzrXfc3kt0
+	 25IwwbyVbrw0yjfOnV/S1rv2c47OupDOWlkT/5431e1HHJk9Zv7t1c+GNxyWwc6DbJ
+	 27dNDg4HMOS26DweDCKLet7R1XMZqeS2knrSeHAyI5GQI6eKYM5IFeVjZFBEJht3wY
+	 uRJSAsBwscrZ/NaSldVHwPMvG03MokoWeQVGjR7WRcnGUsxW66GDKJR842JQQ55auv
+	 UYblVNLBY/hoQ==
+Content-Type: multipart/mixed; boundary="===============6218484638467025812=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f9e72071befb87bfe1aa000446941f6e682b97ff505a91d6244fd26c58495938@mail.kernel.org>
-In-Reply-To: <20260914170326.249953-8-daniel@iogearbox.net>
-References: <20260914170326.249953-8-daniel@iogearbox.net>
-Subject: Re: [PATCH bpf v2 07/11] bpf: Retarget indirect jump targets across prologue prepends
+Message-Id: <e87bfe0e001324e0c1ff10c5c65cc7cf5cc0d786982158516e4bb4fa88bcc460@mail.kernel.org>
+In-Reply-To: <20260914170326.249953-9-daniel@iogearbox.net>
+References: <20260914170326.249953-9-daniel@iogearbox.net>
+Subject: Re: [PATCH bpf v2 08/11] selftests/bpf: Add tests for the indirect jump edge limit
 From: bot+bpf-ci@kernel.org
 To: daniel@iogearbox.net,ast@kernel.org
-Cc: memxor@gmail.com,eddyz87@gmail.com,a.s.protopopov@gmail.com,info@starlabs.sg,bpf@vger.kernel.org,npc@anthropic.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 14 Sep 2026 18:19:22 +0000 (UTC)
+Cc: memxor@gmail.com,eddyz87@gmail.com,a.s.protopopov@gmail.com,info@starlabs.sg,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 14 Sep 2026 18:19:24 +0000 (UTC)
 
---===============0792866299318455631==
+--===============6218484638467025812==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index e57af902560c3..8115f307444ad 100644
-> --- a/include/linux/bpf.h
-> +++ b/include/linux/bpf.h
-> @@ -4165,7 +4165,7 @@ struct bpf_prog *bpf_prog_find_from_stack(void);
->  int bpf_insn_array_init(struct bpf_map *map, const struct bpf_prog *prog);
->  int bpf_insn_array_ready(struct bpf_map *map);
->  void bpf_insn_array_release(struct bpf_map *map);
-> -void bpf_insn_array_adjust(struct bpf_map *map, u32 off, u32 len);
-> +void bpf_insn_array_adjust(struct bpf_map *map, u32 first, u32 len);
->  void bpf_insn_array_adjust_after_remove(struct bpf_map *map, u32 off, u32 len);
-
-[ ... ]
-
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index aa3fb7b87fb06..e132bd0600c7e 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -213,12 +213,18 @@ static int get_callee_stack_depth(struct bpf_verifier_env *env,
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c b/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
+> index 0222a9a5d0761..08f5d4f3d64fb 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c
+> @@ -453,6 +453,263 @@ static void check_bpf_no_lookup(void)
+>  	close(map_fd);
 >  }
->  #endif
 >
-> +enum bpf_patch_mode {
-> +	BPF_APPEND,
-> +	BPF_PREPEND,
-> +};
+> +#define GOTOX_CNT_AT_LIMIT	1000
+> +#define GOTOX_LOG_SZ		(256 * 1024)
 > +
+> +static const char gotox_limit_msg[] =
+> +	"number of indirect jump edges in the program exceeds";
+> +
+> +static int gotox_jt_create(__u32 first_gotox, __u32 gotox_cnt)
+> +{
+> +	/* the run of gotox itself, plus the insn right after it */
+> +	const __u32 jt_cnt = gotox_cnt + 1;
+> +	struct bpf_insn_array_value val = {};
+> +	int map_fd;
+> +	__u32 i;
+> +
+> +	map_fd = map_create(BPF_MAP_TYPE_INSN_ARRAY, jt_cnt);
+> +	if (!ASSERT_GE(map_fd, 0, "map_create"))
+> +		return map_fd;
+> +
+> +	for (i = 0; i < jt_cnt; i++) {
+> +		val.orig_off = first_gotox + i;
+> +		if (!ASSERT_EQ(bpf_map_update_elem(map_fd, &i, &val, 0), 0,
+> +			       "bpf_map_update_elem"))
+> +			goto err;
+> +	}
+> +
+> +	if (!ASSERT_EQ(bpf_map_freeze(map_fd), 0, "bpf_map_freeze"))
+> +		goto err;
+> +
+> +	return map_fd;
+> +err:
+> +	close(map_fd);
+> +	return -1;
+> +}
+> +
+> +static int gotox_prog_load(struct bpf_insn *insns, __u32 insn_cnt,
+> +			   int *fd_array, __u32 fd_array_cnt, char *log)
+> +{
+> +	LIBBPF_OPTS(bpf_prog_load_opts, opts);
+> +	int prog_fd;
+> +
+> +	log[0] = 0;
+> +	opts.fd_array = fd_array;
+> +	opts.fd_array_cnt = fd_array_cnt;
+> +	opts.log_buf = log;
+> +	opts.log_size = GOTOX_LOG_SZ;
+> +	opts.log_level = 1;
+> +
+> +	prog_fd = bpf_prog_load(BPF_PROG_TYPE_XDP, NULL, "GPL", insns, insn_cnt, &opts);
+> +	if (prog_fd >= 0) {
+> +		close(prog_fd);
+> +		return 0;
+> +	}
+> +	return prog_fd;
+> +}
+> +
+> +/* Fill in 'r1 = 0; gotox_cnt x gotox r1' at 'insns'. */
+> +static void gotox_run_fill(struct bpf_insn *insns, __u32 gotox_cnt)
+> +{
+> +	__u32 i;
+> +
+> +	insns[0] = BPF_MOV64_IMM(BPF_REG_1, 0);
+> +	for (i = 1; i <= gotox_cnt; i++)
+> +		insns[i] = BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X, BPF_REG_1, 0, 0, 0);
+> +}
+> +
+> +static void check_gotox_limit_hit(const char *log, int err)
+> +{
+> +	ASSERT_EQ(err, -E2BIG, "program should have been rejected");
+> +	ASSERT_HAS_SUBSTR(log, gotox_limit_msg, "verifier log");
+> +}
+> +
+> +static bool try_load_gotox_prog(__u32 gotox_cnt, char *log, int *err)
+> +{
+> +	const __u32 insn_cnt = gotox_cnt + 3;
+> +	struct bpf_insn *insns;
+> +	bool attempted = false;
+> +	int map_fd;
+> +
+> +	insns = calloc(insn_cnt, sizeof(*insns));
+> +	if (!ASSERT_OK_PTR(insns, "calloc insns"))
+> +		return false;
+> +
+> +	gotox_run_fill(insns, gotox_cnt);
+> +	insns[gotox_cnt + 1] = BPF_MOV64_IMM(BPF_REG_0, 0);
+> +	insns[gotox_cnt + 2] = BPF_EXIT_INSN();
+> +
+> +	map_fd = gotox_jt_create(1, gotox_cnt);
+> +	if (map_fd < 0)
+> +		goto free_insns;
+> +
+> +	*err = gotox_prog_load(insns, insn_cnt, &map_fd, 1, log);
+> +	close(map_fd);
+> +	attempted = true;
+> +free_insns:
+> +	free(insns);
+> +	return attempted;
+> +}
 
-This isn't a bug, but since BPF_APPEND also covers buffers that prepend
-to the original insn (like the BPF_ST_NOSPEC sites where the original
-insn is copied to the end of the buffer), would names describing whether
-the target index moves be clearer here?
+This isn't a bug, but could try_load_gotox_prog() be inlined or simplified?
+It has a single caller in check_too_many_gotox_edges(), and the bool
+return plus int *err out-parameter split makes that test read differently
+from check_gotox_edges_at_limit() and check_gotox_edges_across_subprogs(),
+which open-code the identical scaffolding (calloc log, calloc insns, fill
+insns, create map, load, close map, free) inline.
 
-The mode really selects whether the original instruction stays at 'off'
-or moves to 'off + len - 1', which is why the BPF_PREPEND sites coincide
-exactly with the two adjust_jmp_off() call sites. Something like
-BPF_PATCH_KEEP_TARGET vs BPF_PATCH_MOVE_TARGET, or at least
-BPF_PATCH_APPEND / BPF_PATCH_PREPEND to match the usual stem pairing in
-this subsystem, might read less contradicted by neighbouring APPEND call
-sites.
-
->  /* single env->prog->insni[off] instruction was replaced with the range
->   * insni[off, off + cnt).  Adjust corresponding insn_aux_data by copying
->   * [0, off) and [off, end) to new locations, so the patched range stays zero
->   */
->  static void adjust_insn_aux_data(struct bpf_verifier_env *env,
-> -				 struct bpf_prog *new_prog, u32 off, u32 cnt)
-> +				 struct bpf_prog *new_prog, u32 off, u32 cnt,
-> +				 enum bpf_patch_mode mode)
->  {
+> +
+> +/*
+> + * The extra exit target in the jump table makes for gotox_cnt * (gotox_cnt
+> + * + 1) edges, hence the program is over the limit by gotox_cnt edges.
+> + */
+> +static void check_too_many_gotox_edges(void)
+> +{
+> +	const __u32 gotox_cnt = GOTOX_CNT_AT_LIMIT;
+> +	char *log;
+> +	int err;
+> +
+> +	log = calloc(1, GOTOX_LOG_SZ);
+> +	if (!ASSERT_OK_PTR(log, "calloc log"))
+> +		return;
+> +
+> +	if (try_load_gotox_prog(gotox_cnt, log, &err))
+> +		check_gotox_limit_hit(log, err);
+> +
+> +	free(log);
+> +}
 
 [ ... ]
-
-> @@ -755,7 +769,8 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
->  			insn_buf[cnt++] = BPF_STX_MEM(BPF_DW, BPF_REG_FP, BPF_REG_1,
->  						      -subprogs[0].stack_depth);
->  			insn_buf[cnt++] = env->prog->insnsi[0];
-> -			new_prog = bpf_patch_insn_data(env, 0, insn_buf, cnt);
-> +			new_prog = __bpf_patch_insn_data(env, 0, insn_buf, cnt,
-> +							 BPF_PREPEND);
->  			if (!new_prog)
->  				return -ENOMEM;
->  			env->prog = new_prog;
-> @@ -778,7 +793,8 @@ int bpf_convert_ctx_accesses(struct bpf_verifier_env *env)
->  			verifier_bug(env, "prologue is too long");
->  			return -EFAULT;
->  		} else if (cnt) {
-> -			new_prog = bpf_patch_insn_data(env, 0, insn_buf, cnt);
-> +			new_prog = __bpf_patch_insn_data(env, 0, insn_buf, cnt,
-> +							 BPF_PREPEND);
->  			if (!new_prog)
->  				return -ENOMEM;
-
-[ ... ]
-
->    bpf: Retarget indirect jump targets across prologue prepends
->
->    A few patches do not expand in place, they prepend: gen_epilogue and
->    gen_prologue splice their instructions in front of insn 0 in
->    bpf_convert_ctx_accesses(), and bpf_do_misc_fixups() prepends the may_goto
->    counter init at every subprog start.
-
-This isn't a bug, but would the changelog read more precisely if it said
-that for the gen_epilogue case, the ctx-save insn is prepended at insn 0,
-and that gen_prologue is the one that splices its own instructions there?
-
-In bpf_convert_ctx_accesses() above, when ops->gen_epilogue is present,
-the epilogue body is patched in at the BPF_EXIT insn (still BPF_APPEND).
-What is actually prepended at insn 0 is the single ctx-saving
-'BPF_STX_MEM(BPF_DW, BPF_REG_FP, BPF_REG_1, ...)' plus the copied
-insnsi[0]. A reader trying to match the three converted call sites to
-the sentence "gen_epilogue and gen_prologue splice their instructions in
-front of insn 0" has to re-derive that distinction.
 
 
 ---
@@ -147,4 +189,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34875126886
---===============0792866299318455631==--
+--===============6218484638467025812==--
