@@ -1,184 +1,202 @@
-Received: from mail-ej2-f9.google.com (mail-ej2-f9.google.com [74.125.228.137])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F06C4028F2
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 16:13:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D7845C701;
+	Mon, 14 Sep 2026 16:18:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789402428; cv=none; b=gNQ8KOFuiE5Jl8N2YoT//Y1JZH3yCBI89c67MfdNPGoP7GD0GOifkLzws2r32ioSH5T0qbiEkVR58erxx+EzIcwT4FaSCcNH8g00xsZxHDthdIQtkLeh1LQm3gznmoHBmed9y4C7+8kyHp23bYQFT1x3Vo6a0UZVfVVTgFlYFXM=
+	t=1789402688; cv=none; b=EGl3geq8bxehDa7B/5atL5uoHMlwpxazu4zo+mqmibl6u0bbwEk1GFgvZdw2W3faywJh5Fz6NrsKkogDyh9IBm6k3dUKHKCO5hDELTT8wmRM7VALZpk6zjqbSvB3Fg6GUvPsOSoWGGuHrtA3HoKxhZfd7SslpzMg19WLZZm4pRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789402428; c=relaxed/simple;
-	bh=i1BCVUMUegIE2FpzIVV4AW3zVYMJT+2JCdkA+tqNM6g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qZGN1xvk40tR5rps8kvTWLs/4y0e3WYF45M92BUEh4MBwCveCOM7XaiWLcHXwERkLqG/8C+SzT5d7MSxKWbmudM2EInrCniEq35e3nzi0uGpnQqKd/5HgOGOML9NZQUAJiaHnK3dl3YgBa0rdDLQ1tKKpYa/w11aLIRgZlX4/Tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LiZh0ngD; arc=none smtp.client-ip=74.125.228.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789402688; c=relaxed/simple;
+	bh=1owmOdr4P0WV06uy2lm39eCfjnzfe9vtxRt7Pr4+Irc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=LZuo9OOVDAFbjhDZEgJhGOkxHMv475e0ZfQG0cWYTXNfIcSaZn9Wy14NwgKtVul9H+x/231wq7RgN4ilDuLU6cu5WijrjO9CUQW2bZIgrXoJ1Xtdm0+ejmrBSBsofiPhZdsGAJXpOpWUn91JUPKyqOWGkKs52XM2y7modPar2/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AzSMaKiH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LiZh0ngD"
-Received: by mail-ej2-f9.google.com with SMTP id a640c23a62f3a-c2630e38cffso208494466b.0
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 09:13:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789402425; x=1790007225; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=RSx+lGXUemg9oTuBHvdbjcBwszRorSqIQH/RKl6XdGw=;
-        b=LiZh0ngDqAArEnfeK4sAUqiec0VNohs8ajbQbvfPnMcGwZG75dLxpaHKv1N7VrQZdE
-         rPCbzgqbNaxAJSFl3S/nGJ9iPitV66uQpi7H+JDXMgCqETsvRb0ePShlsk3X+e8i1jN0
-         Chx2T1viRFGI3ndEig9VckvLoySlU0BiCwD0uCelmAOnAjmV3pIqKkvNVYjSphx4NEjV
-         0KzqSiknQ9lBRVkMPKGL93NdAvZwFs1r6/fCPgNLqeUN4zLzgAYYve0aXVB2fcdOXaME
-         xl/f1kCEizH7ZVuuyyuiFiDJ4XifvtmMAuTD3RmtDf4Ri62iNtiRpBLXD+o2Gu4iFjYw
-         A2dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789402425; x=1790007225;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=RSx+lGXUemg9oTuBHvdbjcBwszRorSqIQH/RKl6XdGw=;
-        b=LsEIjSgXqpUtqPjgqDuQJvd4cULYsh5OTFjQWgAhZN8lMKGdWHZKjVy4D3M0/XKrNn
-         BaC6AfTK7V3hMwwMNBCBjF/U7JfVa2jfb7p5lgq5d40VlMYPHMCNXW7vZj5JiJ9iTcgf
-         YtqJmGpU96jIEYCeAmG6l0KF95RjavSriP+0hEOtWnlmujJY/GHu+BG1G2fiIpO5ZWwE
-         hlLvHUASen9Ricx96Z/SN5jsB31LD47IIjzyliHrAw3qURXAnyjQeJdEZigqRi5JDMsV
-         s83q/zIng8asYK7yGJgWAFF5ki9VP67KDQIUeiRKCARHK2UuTouy9/f8D+TFhgErQGL2
-         pwfQ==
-X-Gm-Message-State: AFuF++kJG+wiZwct/rJR+XDJf8xFe2huJcHdlEh/zSiaetVEKZ0odjn5
-	ajeBYEK2MZRdpvr6eSl2HPtt8N9/TtFyg1n0QCLqZ9aMEVjkY1WaKa6GZLmd8jUa
-X-Gm-Gg: AYBFou21Q1uM5bQAypuPuh1SISX7yIfYx8RZt8O7+4eDltTmWEbm6HrRh/3Un6aZm6h
-	4lf5db4InQEJFQ4O/fGM7lZgOPrIV8vAABQS4dCpwvPULkfmlsb6CDUIb7oAiGh4YF+re3V3h4J
-	BXVpAOdphb9OU4AOcCLHnBfzm26tF8TsgFnoqng6shI5qQdoH4kpRNB4vdhjobPCWJUpMbjtWDn
-	K4yloOK3MMwcHe7VA5JeXZmrsKUmZ5YQT8kTaD3HeWplG0pH+55AUD9F9x7Ni19E5SqQG9Xgumf
-	jUVdQGg+lOMaaxRypyDdPjLGN6gyXOhfJA++OlNFtnLIfCNibrcvphXS/HgRTulX1aYaUs+YkIp
-	w+of4YlE1N1vOT+djgAJ9ibADAX8L70Z3woyKaF6o3eZMHADjVHqW2S0TLL968UOojV5eQoURTB
-	3fe3RdhUTnd6XAm5gs8OL8PMa3NOM3iGRUXdnvv8MhyRMQuVhfA1ZWS7G057PE7GoR6qGxpzyio
-	QKgpwwmo1n9V0VtIYmtv8I9+WcFSkGu2vEoQOtUes2/P+z3cTDi8L9SRst9gBXHNQlNpFJN9rDw
-	U+jR6n3SKmxnsQGwmyjtQ1+cWeSKyNDr1q8B8g==
-X-Received: by 2002:a17:907:9806:b0:c29:4503:35a9 with SMTP id a640c23a62f3a-c29b874b239mr214204766b.44.1789402425206;
-        Mon, 14 Sep 2026 09:13:45 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2966026e2esm454190366b.19.2026.09.14.09.13.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 09:13:44 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Nicholas Carlini <npc@anthropic.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf v1 2/2] selftests/bpf: Cover frame changes in bounded loops
-Date: Mon, 14 Sep 2026 18:13:38 +0200
-Message-ID: <20260914161340.3419141-3-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260914161340.3419141-1-memxor@gmail.com>
-References: <20260914161340.3419141-1-memxor@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AzSMaKiH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2594A1F000FF;
+	Mon, 14 Sep 2026 16:18:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789402687;
+	bh=9od9Up32sF6E9LMweXBSOobe1mrdOP2km13EpNw1aaI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=AzSMaKiHvPImX3wB6bWcLxw3ylXaQMX+dybvo62fPF2shgf6NhQAs+k1WCQ5tWo4y
+	 ONhgtm+5rmM0ilTwVlkaNoTbsJvo5yP4RJn2/z8P5hkM/4DAeHIExQ/1JSKYrvmm6Q
+	 XYW5fxIlIN2hgjWVe/QrjDI9nqIiII5bWdGLuX/+k8yvSRJHKCAfRaFA4CiLx00cf8
+	 4i8jzLBhNhfME7yLhgRhoA2/gkFtw0DBRG7skQT3AHrhXN9wK1CQRnIUZWSgQ7mmEj
+	 gR94eX8m1v/RyPdglBpSBLb4F03AMeO4z1TfGlGll4K0bBmes6V8p7s6cSvnlKQm6s
+	 ZhttbbKt88/Pg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v2 04/40] mm: consistently validate VMA state after
+ mmap[_prepare] hooks
+Reply-To: sashiko-reviews@lists.linux.dev
+To: =?utf-8?b?TG9yZW56byBTdG9ha2VzIChBUk0p?= <ljs@kernel.org>
+Cc: linux-scsi@vger.kernel.org, "Vasily Gorbik" <gor@linux.ibm.com>, dri-devel@lists.freedesktop.org, "Heiko
+ Carstens" <hca@linux.ibm.com>, selinux@vger.kernel.org, kvmarm@lists.linux.dev, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, kvm@vger.kernel.org, "Oliver
+ Upton" <oupton@kernel.org>, "Christian Borntraeger" <borntraeger@linux.ibm.com>, "Marc
+ Zyngier" <maz@kernel.org>, linux-rdma@vger.kernel.org, "Alexander Gordeev" <agordeev@linux.ibm.com>, linux-s390@vger.kernel.org
+In-Reply-To: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-4-7d9781ed5361@kernel.org>
+References: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org>
+ <20260914-b4-mmap-prepare-vma-flag-sanify-v2-4-7d9781ed5361@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 14 Sep 2026 16:18:05 +0000
+Message-Id: <20260914161806.2594A1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2971; i=memxor@gmail.com; h=from:subject; bh=i1BCVUMUegIE2FpzIVV4AW3zVYMJT+2JCdkA+tqNM6g=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWuFyL+t6j7eXg8jyuYt7WJVaNF/8jLZsSbX+4tEQ6ttU UWrxfaOEhYGMS4GWTFFlpL/+5iMT1T+DrRdxg0zh5UJZAgDF6cATMQyhuF7xI9IMbUJm36mCEmy 34tcmOQ7n3vadhkONsPKtekiF8sY/heJMnLLPOybO+/MdKdHwus54y9uqtT55f19ovii1DCFUFY A
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
-Content-Transfer-Encoding: 8bit
 
-Add two finite loops whose progress is represented only by changing the
-frame number of a stack pointer. Each loop first reads zero from the
-caller's stack, switches to the same offset in the callee's stack, and
-exits after reading one on its next iteration.
+Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+s) to consider:
 
-Keep the pointer in a register in one test and spill it in the other to
-exercise both regsafe() and stacksafe() during exact state comparison.
-Force frequent checkpoints so the tests exercise infinite-loop detection,
-and check that both programs return one when run.
+New issues:
+- [High] Premature execution of vma_close() before unmap_region() during va=
+lidation failure creates a Use-After-Free race window.
+- [High] Restoring vma->vm_start before calling unmap_region() on the valid=
+ation error path leaves orphaned PTEs, causing permanent UAF.
 
-Without the frameno comparison in regs_exact(), both programs are
-rejected with an "infinite loop detected" diagnostic instead of loading
-successfully.
+Pre-existing issues:
+- [High] mmap_validate() fails to check if a driver erroneously sets VMA_WR=
+ITE_BIT on a mapping without VMA_MAYWRITE_BIT, allowing read-only files to =
+be mapped writable.
+- [High] mmap_validate() fails to check if a driver alters vma->vm_end, whi=
+ch silently corrupts the maple tree.
+--
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../selftests/bpf/progs/verifier_loops1.c     | 66 +++++++++++++++++++
- 1 file changed, 66 insertions(+)
+commit d07b85544000595b057fc1ff43289af0359a7b6c
+Author: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_loops1.c b/tools/testing/selftests/bpf/progs/verifier_loops1.c
-index d248ce877f14..f8b7ba1bf6b8 100644
---- a/tools/testing/selftests/bpf/progs/verifier_loops1.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_loops1.c
-@@ -303,4 +303,70 @@ __naked void maybe_exit_scc_bug1(void)
- 	::: __clobber_all);
- }
- 
-+/*
-+ * The loop reads zero from the caller's stack on its first iteration and
-+ * one from the callee's stack on its second iteration. At the loop header,
-+ * only the frame number of the pointer in r1 changes.
-+ */
-+static __naked __noinline __used
-+void loop_stack_frames_reg(void)
-+{
-+	asm volatile ("*(u64 *)(r10 - 8) = 1;"
-+	"1: r0 = *(u64 *)(r1 + 0);"
-+	"if r0 != 0 goto 2f;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"goto 1b;"
-+	"2: exit;"
-+	::: __clobber_all);
-+}
-+
-+SEC("xdp")
-+__description("bounded loop changing stack frame in a register")
-+__success __retval(1)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void bounded_loop_stack_frames_reg(void)
-+{
-+	asm volatile ("*(u64 *)(r10 - 8) = 0;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call loop_stack_frames_reg;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+/*
-+ * Exercise the same frame change through a spilled pointer. All registers
-+ * at the loop header are identical, while fp-16 points to a different frame.
-+ */
-+static __naked __noinline __used
-+void loop_stack_frames_spill(void)
-+{
-+	asm volatile ("*(u64 *)(r10 - 8) = 1;"
-+	"*(u64 *)(r10 - 16) = r1;"
-+	"1: r1 = *(u64 *)(r10 - 16);"
-+	"r0 = *(u64 *)(r1 + 0);"
-+	"if r0 != 0 goto 2f;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"*(u64 *)(r10 - 16) = r1;"
-+	"goto 1b;"
-+	"2: exit;"
-+	::: __clobber_all);
-+}
-+
-+SEC("xdp")
-+__description("bounded loop changing stack frame in a spill")
-+__success __retval(1)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void bounded_loop_stack_frames_spill(void)
-+{
-+	asm volatile ("*(u64 *)(r10 - 8) = 0;"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call loop_stack_frames_spill;"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.53.0
+mm: consistently validate VMA state after mmap[_prepare] hooks
 
+This patch generalizes VMA state validation checks for both mmap_prepare
+and legacy mmap hooks. It aims to ensure that drivers do not violate
+invariants, such as altering the VMA start address or creating writable
+mappings on read-only files, and adds validations for insert_vm_struct().
+
+> diff --git a/mm/internal.h b/mm/internal.h
+> index fe576d468af45..1ed11eaf276a7 100644
+> --- a/mm/internal.h
+> +++ b/mm/internal.h
+[ ... ]
+> @@ -239,26 +260,16 @@ static inline int mmap_file(struct file *file, stru=
+ct vm_area_struct *vma)
+>  	 */
+>  	if (unlikely(err || !vma->vm_ops))
+>  		vma->vm_ops =3D &vma_dummy_vm_ops;
+> +	if (unlikely(err))
+> +		return err;
+> =20
+> -	return err;
+> -}
+> -
+> -/*
+> - * If the VMA has a close hook then close it, and since closing it might=
+ leave
+> - * it in an inconsistent state which makes the use of any hooks suspect,=
+ clear
+> - * them down by installing dummy empty hooks.
+> - */
+> -static inline void vma_close(struct vm_area_struct *vma)
+> -{
+> -	if (vma->vm_ops && vma->vm_ops->close) {
+> -		vma->vm_ops->close(vma);
+> -
+> -		/*
+> -		 * The mapping is in an inconsistent state, and no further hooks
+> -		 * may be invoked upon it.
+> -		 */
+> -		vma->vm_ops =3D &vma_dummy_vm_ops;
+> +	err =3D mmap_hook_validate(prev_start, &prev_flags, vma);
+> +	if (unlikely(err)) {
+> +		vma->vm_start =3D prev_start;
+
+[Severity: High]
+If a driver's legacy mmap hook erroneously decreases vma->vm_start (expandi=
+ng
+the VMA downwards) and populates PTEs in that expanded range,
+mmap_hook_validate() catches the violation. By forcing vma->vm_start back to
+prev_start here before __mmap_new_file_vma() invokes unmap_region(), doesn't
+that initialize the unmap operation with the smaller, restored address rang=
+e?
+This would cause unmap_region() to skip the expanded PTEs, leaving them
+orphaned and causing a permanent use-after-free since the backing memory ge=
+ts
+freed. Should the unmap occur before restoring the start address?
+
+> +		vma_close(vma);
+
+[Severity: High]
+Is it safe to invoke vma_close() here immediately on validation failure?
+If a driver successfully populates page tables (for example, via
+remap_pfn_range) but fails the mmap_hook_validate() checks, calling
+vma_close() frees driver memory prematurely. Since unmap_region() is not
+called until mmap_file() returns to __mmap_new_file_vma(), hardware PTEs
+remain populated while the backing resources are freed, creating a
+use-after-free race window.
+
+>  	}
+> +
+> +	return err;
+>  }
+> =20
+>  /* unmap_vmas is in mm/memory.c */
+> diff --git a/mm/vma.c b/mm/vma.c
+> index dc74b3d721cc5..626a18c08a269 100644
+> --- a/mm/vma.c
+> +++ b/mm/vma.c
+[ ... ]
+> @@ -2777,6 +2762,76 @@ static void __mmap_complete(struct mmap_state *map=
+, struct vm_area_struct *vma)
+>  	vma_set_page_prot(vma);
+>  }
+> =20
+> +/* Check to ensure that the VMA flags of a newly mapped VMA are sane. */
+> +static int mmap_validate_vma_flags(const vma_flags_t *flags)
+> +{
+[ ... ]
+> +/* Check to ensure a driver hasn't done something crazy. */
+> +static int mmap_validate(unsigned long prev_start,
+> +			 unsigned long curr_start,
+> +			 const vma_flags_t *prev_flags,
+> +			 const vma_flags_t *curr_flags)
+> +{
+> +	bool was_maywrite, is_maywrite;
+> +
+> +	/* Drivers cannot alter the address of the VMA. */
+> +	if (WARN_ON_ONCE(prev_start !=3D curr_start))
+> +		return -EINVAL;
+
+[Severity: High]
+This isn't a bug introduced by this patch, but since the patch aims to
+implement comprehensive VMA state validation after mmap hooks, shouldn't it
+also verify that the end address (vma->vm_end) remains unmodified? If a
+buggy driver alters vm_end, the VMA object's bounds will mismatch the maple
+tree node's pre-allocated bounds. This structural inconsistency corrupts
+the maple tree and can lead to kernel panics later.
+
+> +
+> +	was_maywrite =3D vma_flags_test(prev_flags, VMA_MAYWRITE_BIT);
+> +	is_maywrite =3D vma_flags_test(curr_flags, VMA_MAYWRITE_BIT);
+> +
+> +	/* A driver may not make a previously unwritable mapping writable. */
+> +	if (WARN_ON_ONCE(!was_maywrite && is_maywrite))
+> +		return -EINVAL;
+
+[Severity: High]
+This is a pre-existing issue, but this check appears to bypass a critical
+condition. It only evaluates VMA_MAYWRITE_BIT. If a malicious or buggy
+driver bitwise-ORs VMA_WRITE_BIT into vma->flags in its mmap hook without
+setting VMA_MAYWRITE_BIT, wouldn't it bypass this check completely? This
+could allow a read-only file mapping to be committed with VM_WRITE set,
+granting hardware write permissions and allowing an unprivileged user to
+overwrite read-only files.
+
+> +
+> +	return mmap_validate_vma_flags(curr_flags);
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260914-b4-mmap-pr=
+epare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org?part=3D4
