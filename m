@@ -1,117 +1,174 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBFBA14A619;
-	Mon, 14 Sep 2026 00:16:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B051B142D
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 00:20:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789344984; cv=none; b=AKLnVsELpLurAwVljsy1lpRKJAhdSF4sxNxZizRiLLkfCcrAHGW/qYaQwaXO0MVtW8XNamfhQyHBl+WzBgnE3XXz27IqlcpOMnsGNa5d5AWqsa+XerwBwrfqcy+FcJtNehsVFcQEsO3MD/UFK2wyczZhkxtArhNgY/RPXuPT4F0=
+	t=1789345246; cv=none; b=YXBar2Lcs6x9oFLbKFbNeMoSzQoGUu9wwp9liOkRnaFXne10gvZ0OwKI9AKefgdJRgy1Q84WZaQ3CqnNXCuujdqP8k2RKCKFJa7H05TogEkb0xuPXJx9joL8EFCmodWYXimR/fWXklO0DuU06U7RZw0Igw055+e0mTHMGKuWj5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789344984; c=relaxed/simple;
-	bh=7262WMo+xwCJLCR2Nlton5MXTY01hmIGDEcpBdE9S4w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=d8lAg1u036Wiu1iJt3cbJDtwkQBacISN+PBiB+quKCowmDpablu3pIpgEPYqWJnCtPEkZgJXUn7IYZGt/uJP/oRs47zWtqq+b/Ht9nPFdosAhqRSZRMRR5IDs8RSxHgK36TMVvQRHDzpF8AhNbCDJ0jFU+T6NBiJOhaBrgseAkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KUsMLnQR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1789345246; c=relaxed/simple;
+	bh=3aTF+AWXZ+myUFI7Wq6W+X6+VCBL+ZBF0FBjLK6jDM0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oNRoQc3gUTzFc/JaxCBayM1wpUct6fsx6HQtBqnjEuLkB3s77fGhU/RXwu4SIhEctjF3NDAyeQlzAs0av6EBie9KcPHsjJRtUfFIVWlsi7h8QcuRlBdbV/vZLbnLODln/pNMOxIqYxMoAzwq/2/3xH619pSiwEl9LwDUm/DxLHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G6FJn5wS; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KUsMLnQR"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5AB75C2BCC7;
-	Mon, 14 Sep 2026 00:16:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1789344984;
-	bh=7262WMo+xwCJLCR2Nlton5MXTY01hmIGDEcpBdE9S4w=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=KUsMLnQRIthGeAAlziGQTWA8fchPCsU+M8TAuNgF5IcuLA/5l4shSeSV/g3l+hNRK
-	 NGL6TsLoczJoOU47lLY2UgoeE8mO8vVMwuxe7PTnv4az+YT8RqxXLl8bfm/+F/Wy7X
-	 1pCEEfYad/Jd/T3o4eiylAdlsd84n83WSZRuePQ/7hhjZX/D5GarFNXIGu+Qw/x0JZ
-	 qEj7dn8myp4fedDMkq7RDD4XnhRGksr7GissFRwqGg8VJLu3ArrjvWz5LlOMhSeax+
-	 wPEqs2+gqmsHPZhtpv30IxjGrKx1fFFwdvcCKbsLa50b0/XiRz5tb8KC/wuq+5Y+wF
-	 41kAmRoEJbSFQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 37E6DC88E64;
-	Mon, 14 Sep 2026 00:16:24 +0000 (UTC)
-From: Mark Amirkan via B4 Relay <devnull+markdamirkan.gmail.com@kernel.org>
-Date: Sun, 13 Sep 2026 17:15:52 -0700
-Subject: [PATCH] HID: bpf: reject oversized device events before copying
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G6FJn5wS"
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-8871ada1a26so12959977b3.1
+        for <bpf@vger.kernel.org>; Sun, 13 Sep 2026 17:20:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789345244; x=1789950044; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=8tBYt5yyCc29GaDe3JLWH4eveOS5QO7Xbs0vt0s6lq0=;
+        b=G6FJn5wSKvpa/TN9ivlNxhv17eNOCaAU2T5Sb9DfMag8QRmcw8eTtwmbfa6Lry5YHE
+         Cr2I3TA0Off5ubTfv7R4YCLMWhDq0yaEQX7vR6BKsDcEccw2cbJXXdDrs4XxiXudu9ea
+         KabNU+O1JYSUXbPRlVgRCd2LHVFwpbyjGQW2lzPR3XpSyfRfncJkHAW/byDrsoA3QSy4
+         pzQyrMHeOs+kv76MrY7tFHjVj3HvZHGtZxhDkHBNafYSyqvthW8SXZVX62Ok9MB+n/xw
+         oqv5TdJyM7UFsP7DYFqF0KXP7BPgm0U9ABMunLMiUdVTirWNO2acoNw0RJF1nDeL0EXp
+         MuQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789345244; x=1789950044;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8tBYt5yyCc29GaDe3JLWH4eveOS5QO7Xbs0vt0s6lq0=;
+        b=djmXF2P6uSIi3E7lFHF3SkprWALT167+ddRGlu9NvbHp/xXp0Am60npQImMlJnxWED
+         9UUN+T46KWtUfX5o3TvclfsurBalzJe2X0stb+Bu/OgJMTMGedlJzicaqhxbksaLXdlh
+         JiKnGKKNd9W/qx0isrHv5Jlzf09xuMI5DD433s44Db4e1vDOXRC7iCOnqR5aAQoBzQrU
+         pT/cnyEo29f6lexzfZ1ER81yiTlLlGvzygTV72mNRJ6SCqYoBeXoNslM60Bv/1dQ1E0m
+         8icE3OIF/IP20uziWVk/pqfdZKn33IlPuulUnEjH3Z3XOLfMrWBZAqb8NO8lbWf1wjeD
+         7q0Q==
+X-Forwarded-Encrypted: i=1; AKwUvBzRCYLCIdSzKG1eEE6qMrAqYYz08c0/ZfMdLg3PRcVnoTcDFF0ZEMOvnow8ggJ6EQQWmr0=@vger.kernel.org
+X-Gm-Message-State: AFuF++ns82GoxBJqoNz1d5dkQ9M7pza6nWhDaFa+psWXEIQZvySN4y2Y
+	IWIF6fpAWlU3Ki5jhZse1VxiZ+Rvz4XbqOTlEeMYtlT8b370e2vdfc5A
+X-Gm-Gg: AYBFou3SXFr49isMcWN9zU/PiTzjzQgQu2gRkZxTRUFfwPUeou/3MPsCzV2kMNoj9Ss
+	BrO3lKh6G2rAI+4rLRf6HwpufDmhZ2TUnwEoVRRBD0qj7gkoD1aA3DsxrXElS75pEJxhgxLF4uL
+	8u5BeE0ZhxQSlNcZ0VDxWJxI4fGVSwcVeyJQz09QCgUxazZNX+GX6GhOX1n4ETKM7dAoYCDA4S6
+	2EK7u5WwoR8qm7bDE2vu0sgTOqM7kj4udHp/U8DvmK2d1GcleKYv509r2TMTV0V5BFEGuWTV/r7
+	M9xEMPWYZJUmr4YwPlzdp2RHhy1p6FusC/oZiz6IfZWNwkmrqhx5gi+p5FO2vDoVidiCrwO8PY/
+	FbibdVOvtSv6GZ07WDF+4ePs9uxejuyhriPGve2SP0PyzTrA+0PT+E/6OTmtqbx8qI3KHM8Ox4q
+	8YIW4IKAHj+WDW8ulaeo47NJRa2x54xJeho5+KDVLBgK9GTth9HD8luTN4zxMphRBBmdzk9x5Zn
+	VbxGiQTo9RLpycONn/JpGz4DyX10rimEg==
+X-Received: by 2002:a05:690c:e3c1:b0:845:1064:5c03 with SMTP id 00721157ae682-88d1fbd5731mr809377b3.23.1789345243709;
+        Sun, 13 Sep 2026 17:20:43 -0700 (PDT)
+Received: from zenbox ([2600:1700:18fb:6011:b74e:37b6:46bb:6c50])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-88486c2df1csm31255777b3.19.2026.09.13.17.20.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 13 Sep 2026 17:20:43 -0700 (PDT)
+Date: Sun, 13 Sep 2026 20:20:41 -0400
+From: Justin Suess <utilityemal77@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Paul Moore <paul@paul-moore.com>, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, kpsingh@kernel.org, matt@bobrowski.net, mic@digikod.net, 
+	viro@zeniv.linux.org.uk, brauner@kernel.org, kees@kernel.org, casey@schaufler-ca.com, 
+	gnoack@google.com, jack@suse.cz, song@kernel.org, yonghong.song@linux.dev, 
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, jolsa@kernel.org, 
+	m@maowtm.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 04/15] lsm: Add the bpf_lsm_policy_release
+ kfunc and policy object destructor
+Message-ID: <aqcb2eXw61LaFaqY@zenbox>
+References: <20260909193719.518517-1-utilityemal77@gmail.com>
+ <20260909193719.518517-5-utilityemal77@gmail.com>
+ <CAHC9VhQHZ+ngFdzKqmnzBh341CGEg-jexu+QYU8=1qXK=u-x-Q@mail.gmail.com>
+ <aqHUw6k0Mf83CGFT@zenbox>
+ <CAHC9VhTM7emi9vxs+5Za8Hrc_e9dg7fZx+Z6BGUc4VQ1qhEAUA@mail.gmail.com>
+ <DLD0VQ3D8CYC.3V5ZT8HDMY4IH@gmail.com>
+ <aqTZdCz6JaoK16Fp@zenbox>
+ <DLDL7KK3FZKU.17ADLLWJVXB5F@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260913-b4-send-hid-bpf-event-bounds-v1-1-614fb56a0635@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMTQ6CMBAG0KuQWTtJi41/VzEsnPZDxkUhHSAmh
- Ltbdfk2byNDURjdmo0KVjUdc4U/NBSHR36CNVVT69qTu/ojS2BDTjxoYpl6xoo8s4xLTsYhOVz
- 82UVIoFpMBb2+f/29+9sWeSHO35P2/QN9qlUagAAAAA==
-X-Change-ID: 20260913-b4-send-hid-bpf-event-bounds-4d0e8170ceb4
-To: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
-Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, stable@vger.kernel.org, 
- Mark Amirkan <markdamirkan@gmail.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1789344983; l=2003;
- i=markdamirkan@gmail.com; s=pscsi-20260818; h=from:subject:message-id;
- bh=Ia7zUbF957KqlNGyqwYypZyyCwU42rijJnHEBVEKNhk=;
- b=/ogx9vdoMRR7AlMAI52cVD4nGYJ2/YRgv9iUk25VVCPdxw4rOqGtU80OanuLdFs4XcUedo0at
- v1g/vX0R8LPDexYwhHBG8kYNxIxHsLcWdv5W7A4/Yt3mRET+GkVUpCJ
-X-Developer-Key: i=markdamirkan@gmail.com; a=ed25519;
- pk=/wb49ibt4gZFDncmhFQBYtjPvzT1tfJtvK4Mqt1P2Wc=
-X-Endpoint-Received: by B4 Relay for markdamirkan@gmail.com/pscsi-20260818
- with auth_id=961
-X-Original-From: Mark Amirkan <markdamirkan@gmail.com>
-Reply-To: markdamirkan@gmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DLDL7KK3FZKU.17ADLLWJVXB5F@gmail.com>
 
-From: Mark Amirkan <markdamirkan@gmail.com>
-
-HID-BPF allocates its device-event buffer from the largest report in the
-device's parsed report descriptor.  dispatch_hid_bpf_device_event() then
-copies the transport-provided report into that buffer before checking its
-size.
-
-An input report larger than the allocated event buffer therefore causes
-a heap out-of-bounds write when a device-event program is attached.  The
-later check of the BPF program's return value cannot prevent the initial
-copy.
-
-Reject reports that exceed either the transport buffer or the persistent
-HID-BPF event buffer before clearing or copying the data.
-
-With a 64-byte event allocation, a same-file KUnit test produced a
-one-byte KASAN out-of-bounds write for a 65-byte report in three runs.
-The 64-byte boundary remained clean.  After this change, both cases were
-clean in three runs and the oversized report returned -EINVAL.  The test
-exercised the production dispatch function but not the complete UHID and
-BPF attachment path.
-
-Fixes: 658ee5a64fcf ("HID: bpf: allocate data memory for device_event BPF programs")
-Cc: stable@vger.kernel.org
-Assisted-by: LLM Symbolic
-Signed-off-by: Mark Amirkan <markdamirkan@gmail.com>
----
- drivers/hid/bpf/hid_bpf_dispatch.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-index 536f6d01fd..06ba833eb9 100644
---- a/drivers/hid/bpf/hid_bpf_dispatch.c
-+++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-@@ -50,6 +50,9 @@ dispatch_hid_bpf_device_event(struct hid_device *hdev, enum hid_report_type type
- 	if (!hdev->bpf.device_data)
- 		return data;
- 
-+	if (*size > *buf_size || *size > ctx_kern.ctx.allocated_size)
-+		return ERR_PTR(-EINVAL);
-+
- 	memset(ctx_kern.data, 0, hdev->bpf.allocated_data);
- 	memcpy(ctx_kern.data, data, *size);
- 
-
----
-base-commit: 9cdc7e6dc7a99ad7311ad5e7c145f2b9ce4e24b0
-change-id: 20260913-b4-send-hid-bpf-event-bounds-4d0e8170ceb4
-
-Best regards,
---  
-Mark Amirkan <markdamirkan@gmail.com>
+On Sat, Sep 12, 2026 at 12:33:13PM -0700, Alexei Starovoitov wrote:
+> On Fri Sep 11, 2026 at 10:26 PM PDT, Justin Suess wrote:
+> >
+> > If fs/, mm/, drivers/, net/, are permitted to have kfuncs, then why not
+> > security/? kfuncs.rst doesn't seem to forbid this.
+> 
+> because fs, mm, net see the value in bpf. bpf helps these subsytems
+> to focus on their core technologies and moves policy decisions out of
+> kernel and into bpf.
+> while lsm people treat bpf as arch-enemy.
+> kfuncs are not stable. we keep refactoring them.
+> while lsm folks treat anything within *lsm* and *security* as stable apis.
+> So any kfunc where they have a say, will become a huge burden for further
+> bpf development.
+>
+There are patches on the front page of 
+lore.kernel.org/linux-security-module refactoring security
+hooks and changing signatures. Security hooks and the LSM interface
+is not stable, this is explicitly documented. 
+I deliberately chose kfuncs over helpers to avoid having the interface
+be ossified.
 
 
+> > Where would you point me to?
+> 
+> landlock was designed for unprivileged users. bpf needs CAP_BPF.
+> There is a fundamental disconnect. If you can tolerate CAP_BPF then
+Landlock is for privileged and unprivileged users alike.
+This patchset is designed to compose with unprivileged use seamlessly,
+which works because of Landlock's monotonicity.
+> just use bpf-lsm and implement whatever policy you need there.
+> If bpf-lsm is missing a feature we can fix that.
+Sure, in some perfect world in the future where every verifier
+challenge is solved and BPF has feature parity with in-tree c on
+a 1:1 basis, you could implement something like SELinux, or Landlock
+in pure eBPF. It would be about as easy and trivial as building a
+skyscraper from lego bricks.
+
+There is an entire in-tree ecosystem of LSMs that would provide
+BPF users with well-maintained, versioned, and tested access
+control. Why force every eBPF program that needs to make security
+decisions to reeinvent the wheel? 
+
+There are real eBPF users such as Tetragon, Falco, Tracee, that
+could use an actively maintained implementation of security models that
+exist in-tree in security/. This would make access control in eBPF much
+less painful.
+
+Instead of implementing every filesystem, network, and 
+socket access control, they can use existing solutions, and with
+the userspace tooling that already exists. And they can
+mix-and-match, doing custom logic/policy in BPF, and use what
+they need in LSM, with BPF making policy decisions.
+
+It would fix a real challenge that users have with eBPF, and wouldn't
+take away from BPF's ability to do what it already does.
+
+> 
+> and bpf shouldn't be calling into selinux/landlock internals.
+>
+Agreed. And this patchset doesn't call into landlock, it calls a
+security hook. The LSM hook then dispatches to whatever LSM
+owns the object.
+
+BPF already calls into LSM through security hooks. This is no
+different than bpf_map_create hooks.
+
+Nothing about the way BPF works changes with this patchset.
+There's no verifier internal changes. It doesn't call into
+BPF internals at all, or define any new core constructs.
+It just uses the same kfunc and kptr interface that is available
+to everyone else in the kernel. I think this code could even
+be written with zero changes in kernel/bpf, or files in
+BPF's maintainer's entry, though I'd rather have both subsystems
+coordinating and cooperating on the interface.
+
+Thanks for your feedback (genuinely), I hope you know I make these
+arguments in good faith even when things seem heated.
+
+Thanks,
+Justin
