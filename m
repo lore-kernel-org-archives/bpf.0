@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40EC37B3FE;
-	Mon, 14 Sep 2026 05:01:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B4DA36F42D
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 05:01:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789362074; cv=none; b=JeDEjENCtpr5Kjh/Oe1Hjw6g0LNTWnxSkTB13BidkM7NkvV6QISMITY1zrjZ/dEICpACCkwvDTgkRkNwC8IDStUkytP07+DtdnKf1sPepfer3pQrVmgC+W3tJEqwdCG35m4J57zhuAnNR9+biP6Olqwff3AcBlYvbOVvc1/L/j4=
+	t=1789362077; cv=none; b=YYK7bWUQI9XK4230BGzI9h+ARXkN9cHuSiQeBcVQVeQGDL1ZuvQHpFkb2M+pBwd8FgTHHIKojhlyOP1PxExovIXD7/Buzl46WRMijGA8M6IvooU1E2Zrz15mJfJXvCEyuaGqGuR4+RF+EOWtZL9pxSxv4KY3wH5d2caCzQD1Yi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789362074; c=relaxed/simple;
-	bh=ewZIE3ef2XnRz9+1nhTss0M1bLQ1L4PxJBQ+vmRBxE4=;
+	s=arc-20240116; t=1789362077; c=relaxed/simple;
+	bh=6rJ07SZuai0GwVg7XqiepAsAUYUqJOb7lcFEm8tC+xg=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=kMoZ8q7jX+UMyfNXfGweuZiGJv1Hg5XD9G2X3Q0dr0lxPY+XH/0sHCPt6r5B/KNkyyrHrBcjGvDjdGPnIvAJKiEeysbw0TN2E6VJG4VeNavqkokVxFvaRUvyu0FFjTWSeATqkfUEek1dLyDXDl05U9zOpUAVfcIbCPXPZWizfP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UlToqecI; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=EIliXA4ofExeNX4HE60oa4Evhgs31aj6ylFBlT3hmrgu5BsGIXxbVn8LhAuBYU9mT0Yzfw3umImvYxSSMXibF4nWXXf00rA3fgxHWnTqaIyruEQFQYV2kR3RmPSYimCSbeA0f12Z/inAw8foAwgReU4StptPU4hLpFkhTmbwRPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eSz4XXw+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UlToqecI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE92B1F000FF;
-	Mon, 14 Sep 2026 05:01:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eSz4XXw+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE2831F00893;
+	Mon, 14 Sep 2026 05:01:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789362072;
-	bh=ub9JoCNGO52ku7WWQ5b06moZ+72/o9Aisxb6nxgD9y8=;
+	s=k20260515; t=1789362075;
+	bh=2PTFmH4202PJk84L6OdjVpUeOPFFtanw/x1OXUOHWMA=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=UlToqecITGtto3XNZvWgs8wBYFTVAQgRhojo2B1KI57agIMJMchuFdvfvSnbzrVSB
-	 vlVyKVGdt2RvaznUMbx+svn+u7d2djLQJE+X/tTH+T4PWxmSxHoVmcLGYcNZE1Cz6F
-	 6EK1wznP13NZT8G8ph6qOJ3FNJzsrFhB5ZMKLsd1PC32ORz1qEiOpmN3HQgDNaqqOY
-	 Pr9m6fOfFl+piSyQb4CJwkJZU6Xszq2unDuQ5jrqaYiztcHXyrJgA6xW/9iAwu4VqA
-	 9ef50co/9vB0rghp6tCCHz7R4dKEX0oeAzLzfEk95CQJkT7Dr5OQYx9r2KkCBzyb6F
-	 pP8ulNPORbrPQ==
+	b=eSz4XXw+XuZRO70q5JPZ9ZR4LdV7PHi5JLg4C5cnH3flVg3aTFk0PwmK9ZAl+BknK
+	 3XpOWtXpIr2H9TESKB0H+XLWZhnIvX5XYnQh+KpXehcQhq8JQb+yFCyAhu6+qGV9No
+	 ujImgHuvKkBaBxh6qMv907YVKvGe10skqzK8VYeFDGgPjGtlGWEtLt+WkR+tA8Xbhf
+	 QK2nLAQrCxKKsLbQzjl3RmidB/+qLJZ+TCXiYDA/kYjh08nBgZjxrfObq9BIROeGpm
+	 qf4nHR8iLOvgO+MDoC/FNOhGflGmte/va4EiUqYVo5h9piHBxt8UBp9uafIn4Aeu/h
+	 0nB52/uFdPNQA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 568F6380AA63;
-	Mon, 14 Sep 2026 05:00:09 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56983380AA63;
+	Mon, 14 Sep 2026 05:00:12 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,43 +37,39 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v3] bpf,
- sockmap: Fix self-redirect copied_seq double-counting
+Subject: Re: [PATCHv2 bpf-next] bpf,
+ x86: Use global buffer for trampoline size generation
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <178936200789.325205.10800114319681909179.git-patchwork-notify@kernel.org>
-Date: Mon, 14 Sep 2026 05:00:07 +0000
-References: 
- <1a8e797a1b26e2f695aaac22ac644c2862f63466.1788858299.git.tanggeliang@kylinos.cn>
-In-Reply-To: 
- <1a8e797a1b26e2f695aaac22ac644c2862f63466.1788858299.git.tanggeliang@kylinos.cn>
-To: Geliang Tang <geliang@kernel.org>
-Cc: john.fastabend@gmail.com, jakub@cloudflare.com, jiayuan.chen@linux.dev,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- horms@kernel.org, daniel@iogearbox.net, tanggeliang@kylinos.cn,
- netdev@vger.kernel.org, bpf@vger.kernel.org
+ <178936201088.325205.11694378615444726589.git-patchwork-notify@kernel.org>
+Date: Mon, 14 Sep 2026 05:00:10 +0000
+References: <20260910094353.1256316-1-jolsa@kernel.org>
+In-Reply-To: <20260910094353.1256316-1-jolsa@kernel.org>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ bpf@vger.kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, rppt@kernel.org
 
 Hello:
 
-This patch was applied to bpf/bpf.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Tue,  8 Sep 2026 17:08:32 +0800 you wrote:
-> From: Geliang Tang <tanggeliang@kylinos.cn>
+On Thu, 10 Sep 2026 11:43:53 +0200 you wrote:
+> Currently arch_bpf_trampoline_size allocates and frees a temporary
+> trampoline buffer on every invocation. The buffer is only used as a
+> scratch space while __arch_prepare_bpf_trampoline() calculates the
+> required size, and the generated trampoline is discarded.
 > 
-> When a BPF stream_verdict program redirects an skb back to the same
-> socket (self-redirect with BPF_F_INGRESS), sk_psock_verdict_apply()
-> calls tcp_eat_skb() which advances tcp_sk->copied_seq. However, the
-> skb is then delivered to the socket's psock ingress queue and later
-> read by tcp_bpf_recvmsg_parser(), which also advances copied_seq via
-> the copied_from_self accounting path. This double-counting causes
-> copied_seq to advance by 2x the actual data length, triggering:
+> Allocating a writable scratch page during kernel initialization and
+> reusing it for all size calculations. This improves tracing_multi
+> attachment time.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf,v3] bpf, sockmap: Fix self-redirect copied_seq double-counting
-    https://git.kernel.org/bpf/bpf/c/490a83d6386e
+  - [PATCHv2,bpf-next] bpf, x86: Use global buffer for trampoline size generation
+    https://git.kernel.org/bpf/bpf-next/c/29fcf9ce4bbd
 
 You are awesome, thank you!
 -- 
