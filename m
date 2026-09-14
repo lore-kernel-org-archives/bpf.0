@@ -1,35 +1,65 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07328496D54;
-	Mon, 14 Sep 2026 15:06:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6447A48C40F;
+	Mon, 14 Sep 2026 15:06:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789398384; cv=none; b=tj4j33eorE15v/5Gc8HZfLG9AsjLesla/hLRPWk830+51HHmSmel2cWNPWjuuez6q2rgQsedjOXJ5HcRJnrlHSJ8Ml4a+F+f6vYCjUSsZHbU0Z+Q68OHsEBjEcbW7v1oWqAILaAfmtGgh8TKUXcKrB8tUSK0kngEkIvT6xqgvXQ=
+	t=1789398406; cv=none; b=gH7mFh6uTXHwgam8Mncms7BuYSN3y1B0R1mrQ/nppQ8PPp8Evx3v+93EHUsuqyO0OOtGwYX5f3EiILQUoG0/aFpAsA/Lo2vnOzg8SYIrWJyoD0+VcEsrACN5fcyMQ8bbjnLq+HU6F9tZG5j4RUIkVRPWxrdH94CIQjfhKFwj8Y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789398384; c=relaxed/simple;
-	bh=YkBI9YfuiRUNJqQZzdNQ3yvqq1XQeKFLWKyJwcARZII=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=JPDksaVZ9asZGLE18AcUz6tWQtzEyP9fJEZJjSJJGZzSRRV9awQJ3LWS/Yz2uVQEa2GrGgtcHlLsDM6jSx0S9uHKTybNIaXOgO7NJPEMhXDm5ZTaefvQKzlPezKX27yyQFaGr1W9BUFBGrwYP7Ca61Y+jpIHM9EtyR0N5980gA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XONMabZx; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789398406; c=relaxed/simple;
+	bh=fmenwVUAMa91rvpD7BU7UcpFVBrUKP40ANNId5F0GeA=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SUUupRBo/yPrpunWtjTMLGq8OpKQlwxeGEyen4RihryPVsqjy/v+xBOTVZwmTlBQGjhTudpmwLioj3CLoMKw8X1goXI0ZMTbdJkWtqFKMoGb4Ebl4PGBmRGRAmolCn5pu3V0m6MeeuouGbZKEvwEGMVIgJaSZ2wql4NuA0F29lQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=1CAH18WF; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XONMabZx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F73D1F00893;
-	Mon, 14 Sep 2026 15:05:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789398382;
-	bh=960UTemXLlYbejvF++nDfw4hlZnQCzP1Mhoxnlt8Uqc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=XONMabZx9a2tMH4C2B8NLveFpQiwpsb9v/absrNfv7MTntkbuo8zaX269YxgARiRW
-	 Px/otvDFyxGLFNwGAiVTkFUVvE8SDw8kNQGm+XBLXkJuYHnRNCCMxneuB6eXBil2W1
-	 CcWuu3UAsYQci0UW1VkyyLKK5Mie8vOwgoDrbKDZHI+tMSxDYzimAYyuEpV4/84ad7
-	 vk2Ao2o/VGO5U5fQH+AK2T60rxC/fvRLY9K2gTjsnb75/nU2WpKtiDwUnkvN5TSth/
-	 TY5FQ5xVgK7Hj3X1cfNFd+sL/ccxjs54mQO0NS/b9l5BtrdTD+GlTStU5ozTn7/DkO
-	 Ia9bHhdQfYdlQ==
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Date: Mon, 14 Sep 2026 15:57:35 +0100
-Subject: [PATCH v2 15/40] mm/vma: add vma[_flags]_is_kernel_owned()
- predicates
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="1CAH18WF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1789398403; x=1820934403;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=fmenwVUAMa91rvpD7BU7UcpFVBrUKP40ANNId5F0GeA=;
+  b=1CAH18WF6PaNrZy9sm0vqYbzOMVsHsITxzKTw08MnCML1a/jjmD0QLmp
+   TBRKnX8a+JJ1SVaZ8+nJWLF162hyZjizW/7LRpkK7rSn4WPD1XGlpMt4T
+   gHm/oUNCXTk8ocp2/DoOKkCIs2CYGAdACG2IpmyHWyKQMj6ZuoZtU8Fr4
+   25liAh5RBpu/2NJeDFg6yyTXMyKlqVuMSV8aHuHidlPKa52ccBEHOPJRJ
+   XXZBO4hO5MLtVLZP1CTF0K2FiOj9CKvgsTa/nE9G/fZQdacTL5sQ9XV55
+   o2MNrK7bSElP7U6zBoMENDYZI33IsMYEr85oJrRsdoOG33lrYvede325r
+   g==;
+X-CSE-ConnectionGUID: cPo+wIh8TTWrm/ZWbs2A/g==
+X-CSE-MsgGUID: 7ufFRskPQxKVKA18P6VCeA==
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="62645476"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Sep 2026 08:06:42 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Mon, 14 Sep 2026 08:06:41 -0700
+Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Mon, 14 Sep 2026 08:06:37 -0700
+Date: Mon, 14 Sep 2026 17:06:36 +0200
+From: Daniel Machon <daniel.machon@microchip.com>
+To: <netdev-bot+sashiko@kernel.org>
+CC: <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, <horatiu.vultur@microchip.com>,
+	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
+	<ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
+	<john.fastabend@gmail.com>, <sdf@fomichev.me>, <herve.codina@bootlin.com>,
+	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <mohsin.bashr@gmail.com>,
+	<richardcochran@gmail.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next v6 09/14] net: lan966x: add shutdown callback to
+ stop FDMA on reboot
+Message-ID: <20260914150636.e3zebmyrnkdclgag@DEN-DL-M70577>
+References: <20260909-lan966x-pci-fdma-v6-9-6f48dab9d671@microchip.com>
+ <178904554582.219967.5262957308315602780@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,246 +67,243 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-15-7d9781ed5361@kernel.org>
-References: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org>
-In-Reply-To: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
- David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Jonathan Corbet <corbet@lwn.net>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
- Paul Moore <paul@paul-moore.com>, 
- Stephen Smalley <stephen.smalley.work@gmail.com>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, 
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
- Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
- Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <mkp@kernel.org>, Jaya Kumar <jayalk@intworks.biz>, 
- Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, 
- Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, 
- Peter Xu <peterx@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
- Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
- Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
- Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Janosch Frank <frankja@linux.ibm.com>, 
- Claudio Imbrenda <imbrenda@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Andreas Larsson <andreas@gaisler.com>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, 
- Christian Brauner <brauner@kernel.org>, 
- Matthew Brost <matthew.brost@intel.com>, 
- Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, 
- Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
- Ying Huang <ying.huang@linux.alibaba.com>, 
- Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, 
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
- Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
- Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
- Wei Xu <weixugc@google.com>, Chengming Zhou <chengming.zhou@linux.dev>, 
- Michal Hocko <mhocko@kernel.org>, Miklos Szeredi <miklos@szeredi.hu>, 
- Xu Xin <xu.xin@linux.dev>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-rdma@vger.kernel.org, selinux@vger.kernel.org, 
- linux-sound@vger.kernel.org, bpf@vger.kernel.org, 
- linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
- linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
- kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
- linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
- fuse-devel@lists.linux.dev, "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5411; i=ljs@kernel.org;
- h=from:subject:message-id; bh=YkBI9YfuiRUNJqQZzdNQ3yvqq1XQeKFLWKyJwcARZII=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLJWcG+wsVOSY4w5+8xmjzjHFyWZEPfZ9ns1W+frPlA9N
- 104y+1PRykLgxgXg6yYIsvzL+L7g0TC5nVe8HeDmcPKBDKEgYtTACayUo2R4e6dd/UV352+6G3Y
- EHeyNXL5p2U1Nqf2FW/4ep1xzjyBc3cY/gc48Ng8v6G85LnDN9XwxJST1VaLq0WL5/098tvlC6f
- wVDYA
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <178904554582.219967.5262957308315602780@kernel.org>
 
-Rather than referring to VMA flags with uncertain meaning, add a new
-predicate that explicitly describes what possession of the VMA_PFNMAP_BIT
-or VMA_MIXEDMAP_BIT flags mean, and then refer to that function for
-determining VMA mergeability.
+> Thank you for your contribution! Sashiko AI review found 5 potential
+> issue(s) to consider:
+> 
+> Critical: 0 · High: 0 · Medium: 4 · Low: 1
+> 
+> - [Medium] lan966x_shutdown() leaves the shared NAPI permanently disabled
+>   (napi_disable() with no napi_enable() and no state marker) while the…
+> - [Medium] lan966x_shutdown() quiesces TX only with napi_disable() +
+>   netif_tx_disable() and then manipulates FDMA TX state…
+> - [Medium] lan966x_shutdown() masks the analyzer source with a plain
+>   lan_wr(0, ANA_ANAINTR) while the ANA interrupt is still requested and…
+> - [Medium] The new shutdown path relies on
+>   lan966x_fdma_rx_disable()/lan966x_fdma_tx_disable() to prove the…
+> - [Low] Claim: the `if (!lan966x->fdma) return;` guard in
+>   lan966x_shutdown() skips the ANA_ANAINTR mask, which lan966x_init()…
+> 
+> --
+> 
+> net: lan966x: add shutdown callback to stop FDMA on reboot
+> 
+> Adds a platform shutdown() callback that disables NAPI, stops the netdev
+> TX queues, disables the RX and TX FDMA channels and masks FDMA_INTR_ENA,
+> FDMA_INTR_DB_ENA and ANA_ANAINTR so a card that survives a host reboot
+> does not assert the shared PCIe INTx before re-probe.  FDMA_INTR_ENA is
+> also re-armed in lan966x_fdma_rx_start().
+> 
+> A few questions about the new shutdown path below.
 
-Either flag means the contents of the mapping are owned by the kernel,
-usually a driver, rather than by the core mm: the memory may be MMIO,
-kernel-allocated pages or even ordinary pages the driver maps itself, but
-the core must not populate, reclaim, migrate, copy-on-write or merge the
-range on its own initiative.
+Seems like the shutdown() introduced in this patch is racy because netdevs are
+left registered and FDMA/ATU is kept alive. Let me rework this in v7 to ensure
+the netdevs are unregistered/detached, to avoid races with MTU/XDP etc and tear
+down FDMA/ATU.
 
-We initially also include VMA_IO_BIT here, as by implication, these must be
-kernel-owned. (mlock() also sets VMA_IO_BIT transiently on ordinary VMAs
-while locking them, which is addressed later in this series.)
+> 
+> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > index 2695bc41e52a..5793a83268fc 100644
+> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> 
+> [ ... ]
+> 
+> > @@ -325,6 +329,21 @@ static void lan966x_fdma_stop_netdev(struct lan966x *lan966x)
+> >       }
+> >  }
+> >
+> > +/* Drain in-flight xmit callers and stop all TX queues on every port. */
+> > +void lan966x_fdma_tx_disable_netdev(struct lan966x *lan966x)
+> > +{
+> > +     struct lan966x_port *port;
+> > +     int i;
+> > +
+> > +     for (i = 0; i < lan966x->num_phys_ports; ++i) {
+> > +             port = lan966x->ports[i];
+> > +             if (!port)
+> > +                     continue;
+> > +
+> > +             netif_tx_disable(port->dev);
+> > +     }
+> > +}
+> 
+> [Severity: Medium]
+> 
+> Does netif_tx_disable() really drain every in-flight xmit caller here?
+> lan966x also registers .ndo_xdp_xmit = lan966x_xdp_xmit in
+> lan966x_port_netdev_ops, and that entry point is dispatched from a foreign
+> device's NAPI/softirq (bq_xmit_all()) without the netdev txq locks and
+> without regard for the txq stopped state or lan966x's NAPI state:
+> 
+>   lan966x_xdp_xmit()
+>     lan966x_fdma_xmit_xdpf()
+>       spin_lock(&lan966x->tx_lock);
+>       ...
+>       /* Start the transmission */
+>       lan966x_fdma_tx_start(tx);
+> 
+> lan966x_fdma_tx_start() calls lan966x_fdma_tx_activate() when
+> tx->activated is false, and that re-sets BIT(channel_id) in
+> FDMA_INTR_DB_ENA and writes FDMA_CH_ACTIVATE.  lan966x_fdma_tx_disable()
+> in the new shutdown path sets tx->activated = false, and lan966x_shutdown()
+> touches FDMA_CH_DISABLE, tx->activated and FDMA_INTR_DB_ENA without taking
+> lan966x->tx_lock.
+> 
+> If an XDP program on another interface redirects into a lan966x port in the
+> reboot window, can the TX channel end up re-activated (and the DB enable
+> bit re-set) after shutdown() returns?  The shutdown path deliberately keeps
+> the DCB rings mapped, so a re-activated channel would keep fetching DCBs
+> from and writing DCB status into host memory that the next kernel reuses,
+> which is the state the commit message says it eliminates.
 
-However the intent is to in future remove this, as no mapping should be
-marked as an I/O mapping without also being marked with VMA_PFNMAP_BIT.
+Will unregister netdevs in v7.
 
-This forms the basis of further work intended to improve how we express VMA
-properties such as this.
+> 
+> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> > index 11094a381ec2..d6ce1e3e373f 100644
+> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+> > @@ -1324,9 +1324,35 @@ static void lan966x_remove(struct platform_device *pdev)
+> >       debugfs_remove_recursive(lan966x->debugfs_root);
+> >  }
+> >
+> > +static void lan966x_shutdown(struct platform_device *pdev)
+> > +{
+> > +     struct lan966x *lan966x = platform_get_drvdata(pdev);
+> > +
+> > +     if (!lan966x->fdma)
+> > +             return;
+> > +
+> > +     /* The reload paths disable this NAPI under rtnl; serialize with them. */
+> > +     rtnl_lock();
+> > +
+> > +     if (lan966x->fdma_ndev)
+> > +             napi_disable(&lan966x->napi);
+> 
+> [Severity: Medium]
+> 
+> The NAPI is disabled here and never re-enabled, and no state is recorded to
+> say the device has been shut down.  After rtnl_unlock() the netdevs are
+> still registered and their ndo callbacks are still live.
+> 
+> Can a later MTU change on any port hang?
+> 
+>   lan966x_port_change_mtu()          /* .ndo_change_mtu */
+>     lan966x->ops->fdma_resize()
+>       lan966x_fdma_change_mtu()
+>         __lan966x_fdma_reload()
+>           lan966x_fdma_reload()
+>             napi_synchronize(&lan966x->napi);
+>             napi_disable(&lan966x->napi);
+> 
+> The second napi_disable() lands in napi_disable_locked(), which spins:
+> 
+>         while (val & (NAPIF_STATE_SCHED | NAPIF_STATE_NPSVC)) {
+>                 usleep_range(20, 200);
+>                 val = READ_ONCE(n->state);
+>         }
+> 
+> NAPIF_STATE_SCHED was set by the napi_disable() in lan966x_shutdown() and
+> is only cleared by napi_enable(), which shutdown() never calls.
+> 
+> Wouldn't the netlink task then loop with no timeout and no alternative wake
+> condition, while holding rtnl_mutex, blocking any later rtnl user in the
+> reboot sequence (including a second instance's lan966x_shutdown(), which
+> also takes rtnl_lock())?  device_shutdown() runs from
+> kernel_restart_prepare() with userspace still runnable, and an XDP attach
+> reaches the same napi_disable() through lan966x_xdp_setup() ->
+> lan966x_fdma_reload_page_pool() -> __lan966x_fdma_reload().
+> 
 
-Also update the VMA userland tests to reflect the change.
+Will unregister netdevs in v7.
 
-No functional change intended.
+> > +
+> > +     lan966x_fdma_tx_disable_netdev(lan966x);
+> > +
+> > +     lan966x_fdma_rx_disable(&lan966x->rx);
+> > +     lan966x_fdma_tx_disable(&lan966x->tx);
+> 
+> [Severity: Medium]
+> 
+> The commit message says "fdma_deinit() disables both channels and waits for
+> them to go idle", and shutdown() relies on the same two helpers for that
+> guarantee.  Both of them drop the poll result though:
+> 
+> lan966x_fdma_rx_disable() and lan966x_fdma_tx_disable() {
+>         readx_poll_timeout_atomic(lan966x_fdma_channel_active, lan966x,
+>                                   val, !(val & BIT(fdma->channel_id)),
+>                                   READL_SLEEP_US, READL_TIMEOUT_US);
+> }
+> 
+> Is a timeout on FDMA_CH_ACTIVE distinguishable from a channel that really
+> went idle here?  lan966x_fdma_tx_disable() sets tx->activated = false
+> regardless, and shutdown() then masks FDMA_INTR_ENA/FDMA_INTR_DB_ENA, which
+> hides the error sources that would report the still-active channel, and
+> returns.
+> 
+> Unlike the unbind path, shutdown() keeps the RX pages, the coherent DCB
+> rings and (on the PCIe backend) the outbound ATU window mapped, so a
+> channel that never reached the idle state keeps write access to memory the
+> next kernel will reuse.  Would it make sense to check the poll return and
+> at least report it?
+> 
 
-Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
----
- include/linux/mm.h              | 56 ++++++++++++++++++++++++++++++++++++++++-
- tools/testing/vma/include/dup.h | 29 ++++++++++++++++++++-
- 2 files changed, 83 insertions(+), 2 deletions(-)
+Will rework shutdown in v7.
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 2a92193ac6a5..cab29d6e15c1 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1612,6 +1612,44 @@ static inline bool vma_is_shared_maywrite(const struct vm_area_struct *vma)
- 	return is_shared_maywrite(&vma->flags);
- }
- 
-+/**
-+ * vma_flags_is_kernel_owned() - Do the specified VMA flags indicate that the
-+ * contents of the VMA are owned by the kernel rather than the core mm?
-+ * @flags: The VMA flags to test.
-+ *
-+ * A kernel-owned mapping is one whose contents are established and controlled
-+ * by the kernel, typically a driver, rather than by the core mm's fault and
-+ * rmap machinery.
-+ *
-+ * The mapping may be memory-mapped I/O, kernel-allocated pages or ordinary
-+ * pages the owner has chosen to map itself (shmem via a PFN map, for instance).
-+ *
-+ * In all cases the core mm must not populate, reclaim, migrate, copy-on-write
-+ * or merge it of its own accord.
-+ *
-+ * Pages mapped this way are not necessarily reference counted or map counted.
-+ *
-+ * Returns: true if the flags indicate a kernel-owned mapping.
-+ */
-+static inline bool vma_flags_is_kernel_owned(const vma_flags_t *flags)
-+{
-+	return vma_flags_test_any(flags, VMA_PFNMAP_BIT, VMA_MIXEDMAP_BIT,
-+				  VMA_IO_BIT);
-+}
-+
-+/**
-+ * vma_is_kernel_owned() - Are the contents of @vma owned by the kernel?
-+ * @vma: The VMA to test.
-+ *
-+ * See vma_flags_is_kernel_owned() for a description of this property.
-+ *
-+ * Returns: true if the VMA is kernel-owned.
-+ */
-+static inline bool vma_is_kernel_owned(const struct vm_area_struct *vma)
-+{
-+	return vma_flags_is_kernel_owned(&vma->flags);
-+}
-+
- /**
-  * vma_flags_can_merge() - Do the specified VMA flags permit the VMA to be
-  * merged with another?
-@@ -1620,7 +1658,23 @@ static inline bool vma_is_shared_maywrite(const struct vm_area_struct *vma)
-  */
- static inline bool vma_flags_can_merge(const vma_flags_t *flags)
- {
--	return !vma_flags_test_any_mask(flags, VMA_SPECIAL_FLAGS);
-+	/*
-+	 * VMA merging assumes that a VMA's flags and fields completely describe
-+	 * its state.
-+	 *
-+	 * However, kernel-owned mappings may have established state upon mapping
-+	 * not embodied in any attribute of the VMA.
-+	 *
-+	 * Additionally, private (CoW) PFN maps encode the source PFN of the
-+	 * range in vma->vm_pgoff, which may otherwise cause spurious merges.
-+	 */
-+	if (vma_flags_is_kernel_owned(flags))
-+		return false;
-+	/* VMA explicitly marked as being unmergeable. */
-+	if (vma_flags_test(flags, VMA_DONTEXPAND_BIT))
-+		return false;
-+
-+	return true;
- }
- 
- /**
-diff --git a/tools/testing/vma/include/dup.h b/tools/testing/vma/include/dup.h
-index 1d5f6b3cbd21..9205ebf31ce7 100644
---- a/tools/testing/vma/include/dup.h
-+++ b/tools/testing/vma/include/dup.h
-@@ -1665,7 +1665,34 @@ static inline bool file_is_dev_zero(const struct file *file)
- 	return file && file->f_op == &zero_fops;
- }
- 
-+static inline bool vma_flags_is_kernel_owned(const vma_flags_t *flags)
-+{
-+	return vma_flags_test_any(flags, VMA_PFNMAP_BIT, VMA_MIXEDMAP_BIT,
-+				  VMA_IO_BIT);
-+}
-+
-+static inline bool vma_is_kernel_owned(const struct vm_area_struct *vma)
-+{
-+	return vma_flags_is_kernel_owned(&vma->flags);
-+}
-+
- static inline bool vma_flags_can_merge(const vma_flags_t *flags)
- {
--	return !vma_flags_test_any_mask(flags, VMA_SPECIAL_FLAGS);
-+	/*
-+	 * VMA merging assumes that the properties of a VMA completely describe
-+	 * the properties of that VMA.
-+	 *
-+	 * However, kernel-owned mappings may have established state upon mapping
-+	 * not embodied in any attribute of the VMA.
-+	 *
-+	 * Additionally, PFN maps encode the source PFN of the range in
-+	 * vma->vm_pgoff, which may otherwise cause spurious merges.
-+	 */
-+	if (vma_flags_is_kernel_owned(flags))
-+		return false;
-+	/* VMA explicitly marked as being unmergeable. */
-+	if (vma_flags_test(flags, VMA_DONTEXPAND_BIT))
-+		return false;
-+
-+	return true;
- }
+> > +
+> > +     lan_wr(0, lan966x, FDMA_INTR_ENA);
+> > +     lan_wr(0, lan966x, FDMA_INTR_DB_ENA);
+> > +     lan_wr(0, lan966x, ANA_ANAINTR);
+> 
+> [Severity: Medium]
+> 
+> Can the ANA_ANAINTR mask be undone right after it is written?  The ANA irq
+> is still requested and enabled at this point, and it is a threaded handler
+> (devm_request_threaded_irq() with lan966x_ana_irq_handler and IRQF_ONESHOT
+> in lan966x_probe()), whose tail does an unlocked read-modify-write of the
+> same register:
+> 
+> lan966x_mac_irq_handler() {
+>         ...
+>         lan_rmw(ANA_ANAINTR_INTR_SET(0),
+>                 ANA_ANAINTR_INTR,
+>                 lan966x, ANA_ANAINTR);
+> }
+> 
+> lan_rmw() is readl() -> modify -> writel() and preserves ANA_ANAINTR_INTR_ENA
+> from the value it read.  If the handler thread has already done its readl()
+> (with INTR_ENA still 1) when shutdown() writes 0, wouldn't its write-back
+> restore ANA_ANAINTR_INTR_ENA = 1?
+> 
+> shutdown() holds only rtnl, which the threaded handler never takes, and it
+> neither disable_irq()s nor frees the ANA irq, so the source stays mapped
+> and unmasked.  The switch keeps learning and forwarding after the host
+> reboots, so MAC-table sync events keep arriving.  Would a
+> disable_irq()/synchronize_irq() on lan966x->ana_irq before the mask, or a
+> shared lock with the handler, close that window?
 
--- 
-2.55.0
+Seems legit. Sashiko complained that the ANAINTR could cause the same splats
+that this patch tries to fix. Therefore ANAINTR was masked in v6. Seems correct
+to also disable it, to make sure that the interrupt is not unmasked again.
 
+> 
+> > +
+> > +     rtnl_unlock();
+> > +}
+> > +
+> >  static struct platform_driver lan966x_driver = {
+> >       .probe = lan966x_probe,
+> >       .remove = lan966x_remove,
+> > +     .shutdown = lan966x_shutdown,
+> >       .driver = {
+> >               .name = "lan966x-switch",
+> >               .of_match_table = lan966x_match,
+> 
+> [ ... ]
+> 
+> --
+> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909-lan966x-pci-fdma-v6-0-6f48dab9d671%40microchip.com
