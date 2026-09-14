@@ -1,78 +1,78 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9377549E141
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 20:09:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56ED739EF3F
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 20:14:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789416586; cv=none; b=n/+LhgDlNddsdZh7yPD8vVtyvaLTUrVxZRDNYHq2r1F5MlE/UXzDqcbQppJLJbQfalvN10r9vt8HKx7+QSJikk0AnSMT5fiBzQ95KgajucXgIMVRTr1f0RC1g5cfu+XgNJHGDdKQZNAf3flks04cV+/kcdIavjSsjSmXp3cwEqI=
+	t=1789416841; cv=none; b=kp2Lhv6igvBSq2OFWE2RrZRoFt55zFR5w/57a+XVHP9hAc4FqEKuA0MtaG0myvPW/jjzUVXttV29gv6x5S3QPWTx/2pDaVJQM9pYTbDunRKNC+CR34kS6OYMudHc+10iH6Eir3pfIfrkTKohC9Njit7OSxFuHpqD8yroHeG4of0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789416586; c=relaxed/simple;
-	bh=J9K7XHs6jLH0An39Mb7nhURXxNOJFQd1nAWSoQf4ha0=;
+	s=arc-20240116; t=1789416841; c=relaxed/simple;
+	bh=6bbcFncssDcc1dWubeJNBbjlci8zpQXOfFRKoSdlXPA=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Ye/AubBqN/mh6rT12NxtLSmHFtQdbB67C43kYgbTiIlwjkNkiM4LKpzOimqTpQsYpfcGBC1fQ45BpJlu4+HPmnbgsAHLpEciTSiHV5BI8/y98nZ1XpjuyKcTKBx55uahgt8gJne0tQYVKu7EGKsq98Neq581o4S0HbV2xURA9e4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n75f+zkV; arc=none smtp.client-ip=74.125.227.140
+	 Content-Type:MIME-Version; b=jW+i0cuZzAoPaS5m/6avHQEBhXkeF0LXOmPo3LAQTEuV5qlZr9i6Nxc3GIXSXaF6KWzlphkbsh4FzKUVFWfz2ysc3EEE0ckE4GfXD6vqzC6UcsDQdTVvDuSXrf62QjQaA1j/LfhJ84jjRqg9HmvkbNhqCl5K7t/H41OzqTFW79o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cs/Ab6Ci; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n75f+zkV"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747eb79f7so16695645ad.1
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 13:09:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cs/Ab6Ci"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d91a931f66so13934745ad.0
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 13:14:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789416579; x=1790021379; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789416839; x=1790021639; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=J9K7XHs6jLH0An39Mb7nhURXxNOJFQd1nAWSoQf4ha0=;
-        b=n75f+zkVFhsh2CIB5se0JRJRlkHiNB/S51SNVREy2yxlKWE6GHBK/YyTC2zuwMHslC
-         XjFJcfs646l6r41GC1wVZezqYzSGI44sKzOXtLF7zB2En8WUFi3hgsl1Z0Z6PalauZa6
-         SRYhgMVYjDByRl/h9347IoYFQxhCsN0F7oTj50yHc1hflCvQyI3MIlDMa1AFMOia8g1b
-         g4Mch9gFb5ayPFjMTvj0jHFEz3Tek86XGjX7ZXNFcnlZCSeQ862L1KnP4Ax1Co+WkQKk
-         AF1ZLrFaWJYzJ9kOrq0MPBOyYNaRqvb2M2X4juNOcbsC8hu/LW/dsTOr3WAj5qGzwLJt
-         zsyg==
+        bh=IZa85Daqk9WlH3yEyJ5xW+nE0nV4JL1Bsd6TKEV5U/c=;
+        b=Cs/Ab6Cicq2dBTcCEnTwsoCcxM/rlbapytKqtsZ+Ke5+JxtUem+z++VY3e/bJL7y6w
+         4tWT4VA46GJlqVBs78Bg8AtezQZtuCP1CW9BkVRjTAMc0nns/18hlHjNca0fWHL6xMqd
+         4qBc7cYFS7ebWISHFkT4bc450TspNPQ53JZxjDd7UKtFfEAlCXdH566K7pUnDHbkrSzZ
+         lK2+0fViEng4czADICKlo9eOTr1hFxDw1Jzkf8rS3xMVXS3KHWM7YsP1+XV/ZyuO/1Rx
+         rW4GedAv3qrT7+Irw6xBTn4A6GnoCGj+cbzf8gkCV/nPDjLRglr5RxqXIfJTZydIuRPn
+         vKqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789416579; x=1790021379;
+        d=1e100.net; s=20260707; t=1789416839; x=1790021639;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=J9K7XHs6jLH0An39Mb7nhURXxNOJFQd1nAWSoQf4ha0=;
-        b=q5PSxYrn5jzirJzwKNmXWoFjCl+FJclQDst+bodjkKiLRFkZRmUpdnd9Fg+/fIPKLp
-         OVzxbzCBaPgnQVyNKl0bby3Mdk+maAY+xPmwS0dTTy6fMbGXyO+TCFS6f7njZastpBLx
-         P063pWp2cQ67FHMESqexoqgRLHriIWk0KY3JFCZspdS2zkpGC94ZcA9jXD3Oig31Xlks
-         yv63kQ5K0jMd/YGwBAms9yXBvagQMfTuuWC/SfiDqoRBVQXh5igv//eZqD82b2/qFt9/
-         4ug1rl9AvhMJ8MHWTc/v5NigdTkfC1JAly4p/N1NoZQibqTGZz9DcnI/k9GNoIfEcdb1
-         vYLg==
-X-Forwarded-Encrypted: i=1; AKwUvBzMDql4cA/1+UDNKJKwGLO+avDruMvY45de0Ay+baHwL8IKZ9bjN6i+0ZV9QioRaVw62LQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++nwm8aaMHyRqqJBhPb6G941BTiOy5Rv3myYxGXbOO4RGl3zsgLm
-	EU+O678g0gcXBNJKaNIPyIUJ9TnafS1nFRR0Atkc4KJ0yqoJUaz/h4YB
-X-Gm-Gg: AYBFou3pjrKdNpNv2J8uvGoai+aFoLlbjcEPyZa2HNKJ0yLn8cmvkMDdS2pcWDEi11U
-	YRIp5H203kbt7u1mQalXTscl+yiyVS95F7MvzuU8gqIkBbEFwx2WXwNrCJkKM7Qyil+dyJE8onL
-	xhL1EuvJ2dkgo398n9GcSFW+fiJktAUZjiLiwD8DB+IaAYA0gfNIxzU3aUKWYWkyKll2TGJp89Y
-	QmuPYgtY1BwR6pj8qrJ6YyNfDwzaStXVPrOxmb81a7SZYDmKNOv25JjVT4veOXYCJgtgV2NH7WK
-	+8ib0+Ejn+yhdznA3xanWJots1ldEAKW0hoQKTY62Qs5dcIizjoUVIxtfw23GqiCi3tJVRt6UBg
-	P9V6uZYxUxYFo1hFVMXekCstv/Bs3nvwMYdQj/ilO24BHSwvhekJAvk7dHVR72ovEsu/AiA2bpp
-	1wuDY92yFeKbliwONkNw3rZibNBsIOE643H+d32f7DR0nXFyQ0WoKxRvi8EcMIaou+w1FTEm0f3
-	dWH9TvAx16vqQYfBOOUkvol564=
-X-Received: by 2002:a17:903:1b47:b0:2dd:7549:39d0 with SMTP id d9443c01a7336-2dd75493c43mr37004725ad.18.1789416579012;
-        Mon, 14 Sep 2026 13:09:39 -0700 (PDT)
+        bh=IZa85Daqk9WlH3yEyJ5xW+nE0nV4JL1Bsd6TKEV5U/c=;
+        b=cIK/QekI7skEFY+6Ldl2tOUr2+RSbLUpfmSDVyw7HJ76T5lOxtEJRdxbMVG89E3aqL
+         sfRNPNk+cZdYLZ4iUAexLM3stKWY5km2FASiU+XGMrk6hatEbY91UiKQH1IZwxHUlciM
+         8qzhBOhHOF3o5NaLAd0Uvg0WdIZAIJ24/q+awtCnAbSjFw4EUDG6yGIP3knUnBDdY14C
+         MskL9dIIb22jNNb4rNTCcpvlmVsnySuh+aiR7Q7bcdO3pJMDEVSEqlqfwb2TMmtuWqgZ
+         ZcCGcca1AS+yxwzIu68qnRLjt3ljXDmK0xDezt///nm7YGbGinJwjQWwaJcJNG96/89o
+         i+UQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzbpy+UexilfyLqB7NpLeuOL2Bddz4FT7s1aSbNPYNPRBxNPTFarAMS8HFAnVOyusza+RA=@vger.kernel.org
+X-Gm-Message-State: AFuF++kfiqUIH5EXYI7DFUrtPdEa8mpRPs1/SyMx7UfMaERs56fq5a+j
+	j1ZMuvsNNtpFOmYCQbS/SWfx95Qz8i6nKUXYr8ln8xyJkiFnwV87V9Vr
+X-Gm-Gg: AYBFou2GTndhN+p1/0h6jWNQVMKVbEgqkTjEuX4X4mJwTG+DXYEBcTTc5i4zYuPkCDe
+	dIUS3zD+d5QTJXfVg71l1neAcPphOCSnb9yClaYO+pKTIq8dxsjPogrfLC9DFThQIlNoxHtJXaW
+	Ko9Ei0p4pgXHhN9znf05VL03H3SxhPj9QYLKAJdyN/hV5VcCaQmzX9gDH1LPQ/tXEoGLcdm8LEK
+	Sd4+9GS7BDTbGZQa9W8hjIFCBl/1C2Z1wh+2fvcFAxxkM/2jGXiSex+ZGPwPOy1CdcrzeQUbCj3
+	qDLZycF6v+6mODG7ZpBm5Eaq9hpLupJR98cGIOUi9yeaLDqqVzCs15JGZHRri5Kb51hHCSL8WtU
+	2biCavImvv/KD+914Bhuvxj7WBSos5XCKkImcTY2zR7Irigu83eto20J9Y2vQ/MjjEVveHv+uYY
+	vo6uzbApl59Bfud+pLWRobYMEu4haW1qA2jokxtCthAiQkImBNbzmBWkFPJ7xoZ9hSdgIt3Ksor
+	5JMgpFE+1By/jBbFQe/P8F5AMI=
+X-Received: by 2002:a17:903:19e8:b0:2d9:32ee:7b83 with SMTP id d9443c01a7336-2dd6c5f4ed7mr82850285ad.8.1789416839419;
+        Mon, 14 Sep 2026 13:13:59 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd2cfc4403sm55181415ad.52.2026.09.14.13.09.37
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd76479fa1sm3085795ad.46.2026.09.14.13.13.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 13:09:37 -0700 (PDT)
-Message-ID: <33cf9d2c1925225d19a20c7bdb1f1527a7893953.camel@gmail.com>
+        Mon, 14 Sep 2026 13:13:58 -0700 (PDT)
+Message-ID: <430c4b68e4508f61d8d4651feeb268ef7e3d5afe.camel@gmail.com>
 Subject: Re: [PATCH bpf v3 4/7] bpf: Restrict CO-RE poisoning to relocatable
  instructions
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Nicholas Carlini <npc@anthropic.com>, Alexei Starovoitov
- <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	kkd@meta.com, kernel-team@meta.com
-Date: Mon, 14 Sep 2026 13:09:34 -0700
-In-Reply-To: <20260914131701.2529725-5-memxor@gmail.com>
-References: <20260914131701.2529725-1-memxor@gmail.com>
-	 <20260914131701.2529725-5-memxor@gmail.com>
+To: bot+bpf-ci@kernel.org, memxor@gmail.com, bpf@vger.kernel.org
+Cc: npc@anthropic.com, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, 	emil@etsalapatis.com, kkd@meta.com,
+ kernel-team@meta.com, martin.lau@kernel.org, 	yonghong.song@linux.dev,
+ mason@kernel.org, ihor.solodrai@linux.dev
+Date: Mon, 14 Sep 2026 13:13:55 -0700
+In-Reply-To: <e5f571dcc350b1f28f4058988abe4a0b8d90efc1eeb6e83100f34a21953cbdfa@mail.kernel.org>
+References: <20260914131701.2529725-5-memxor@gmail.com>
+	 <e5f571dcc350b1f28f4058988abe4a0b8d90efc1eeb6e83100f34a21953cbdfa@mail.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10+b1 
@@ -83,36 +83,35 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Mon, 2026-09-14 at 15:16 +0200, Kumar Kartikeya Dwivedi wrote:
-> check_subprogs() verifies that each subprogram ends in an exit or an
-> unconditional jump before in-kernel CO-RE relocations are applied.
-> An unresolved relocation can then replace that terminal instruction with
-> an invalid helper call. The resulting fall-through into another subprogra=
-m
-> breaks the CFG invariant used by postorder and stack liveness analysis,
-> which can write past their per-subprogram arrays.
->=20
-> Handle instruction poisoning after the instruction has passed the same
-> class and operand-form checks used for a resolved relocation. This reject=
-s
-> relocations targeting jumps, calls, exits, register-source arithmetic, or
-> non-immediate loads before they can alter the control flow. Keep poisonin=
-g
-> supported instructions, including both halves of a plain ldimm64, so an
-> unresolved relocation in dead code remains valid.
->=20
-> The shared relocation code applies this restriction to both libbpf and
-> in-kernel CO-RE.
->=20
-> Fixes: efcda22aa541 ("bpf: compute instructions postorder per subprogram"=
-)
-> Reported-by: Nicholas Carlini <npc@anthropic.com>
-> Suggested-by: Nicholas Carlini <npc@anthropic.com>
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
+On Mon, 2026-09-14 at 14:15 +0000, bot+bpf-ci@kernel.org wrote:
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+...
 
-I think this commit is fine.
-The error code is returned and the diagnostics is show if instruction
-cannot be patched.
+> > @@ -1066,6 +1055,8 @@ int bpf_core_patch_insn(const char *prog_name, st=
+ruct bpf_insn *insn,
+> > =C2=A0	case BPF_ALU64:
+> > =C2=A0		if (BPF_SRC(insn->code) !=3D BPF_K)
+> > =C2=A0			return -EINVAL;
+> > +		if (res->poison)
+> > +			goto poison;
+>=20
+> Moving the poison handling after the class/operand-form checks makes the
+> silent return -EINVAL reachable for unresolved relocations. Would adding =
+a
+> pr_warn() on this path help with debugging?
+>=20
+> Before this change, relocations with res->poison set jumped to the poison
+> label at the top of the function and always returned 0 without reaching
+> the BPF_SRC check. Now an unresolved relocation targeting a register-sour=
+ce
+> ALU or ALU64 instruction (BPF_MOV32_REG, BPF_MOV64_REG, or
+> BPF_ALU|BPF_END|BPF_TO_BE which encodes BPF_SRC =3D=3D BPF_X) fails progr=
+am
+> load with -EINVAL and nothing in the verifier or libbpf log explaining wh=
+y.
+
+Ok, this might be a legit nit.
+Add a goto default switch branch instead of `return -EINVAL;`
+in the BPF_ALU64 case?
+
+...
