@@ -1,268 +1,160 @@
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFAD34D382
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 23:02:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.161.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789426959; cv=pass; b=qeqvQDVknkjigsPzgqG5+n4JgsQrOPcdDxGM4mfbWPTtd2Kb32OKK9PQrDNNrM+Eao3dpw/X4+jWSkKzuddlxYS6V7zuhI9JdFBNiM/JurXwme8IcX5vEsFj9b8YSe4MywiwzLn49i+/8thi2jgwUwzrnfbOy9UuF0AqQju396E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789426959; c=relaxed/simple;
-	bh=HnZj22pjlGHIEfM6bhLJdkIF85ojkiFcxZaEA0PyVZk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t6EGNR4y1PZEfl347Lva842mrJ0JCBpO/W/8xYJpTh+FCEDHJ9Xls0htlJCy6KEZobUitMFr/n3cA+/crEtGwzSPjmN/IgeIN84pLK1g2RcIsvrD1hcVVMonQ+GoKshsHAOZR0yzda7IVaBXfA2Nq0B1GMMUWUWZQek+0gRVVRc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=njLUo9f6; arc=pass smtp.client-ip=209.85.161.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B25F2397B1C
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 23:14:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789427698; cv=none; b=YlAUBHLa/Vz+metsl0pV05tkHqd3bE8EH07FQzDKH4aa/tjHwq/b8vtJQe/ETDoshzDHyJiZzinOL7XhQNEBdwUn8QZZbqxnjQ8g4+2MI9GTf21baJKnlL4CQsjAGFXO610ibpclE1jXFDYYPboQ7WyIZB4Fo671RSJENgv4iV4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789427698; c=relaxed/simple;
+	bh=dNWkRDXWp/KrqQmtPXFkZQSHuSRvJ3x+hhcztmuuAnU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Ioeq8sy3SFQ7CISV09YS5069TD/aLXbnCoz3MzpdYsQH4IVxUJZdkPUPJRJ1kKyyib7r2KMfGpAlfPNaOaUk73xvR+1hqOqkO8OME77yFDbdG6f9FDgyxHIwzgSOHkTrGXRIiK1EW/u2kQKGkQ4lnayL3R/eg2/nlv0+Tbxs9W8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UDU67i5I; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="njLUo9f6"
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6b1334a3b16so2724059eaf.1
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 16:02:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789426956; cv=none;
-        d=google.com; s=arc-20260327;
-        b=jr5bVzoPULsfAMCf9quJCswWyOi3rWQ7LvgwgFeD7IrEjIzC0mGHqyZ/eDSEUuKgSl
-         nXcb+SOMFoquobOsumWFzBwVSBC6iabUwFbhJKvhkqLZXJsCAVui1CEuop+Y4/Zg1+/+
-         NYxslLn/6W8jkVBPXncDrbL9Ym1Vuzvm+PW1RGM4elEP8pqEECjQVKUB+MCijdIN10Xx
-         sB+UzuF3djGJGCyjg0MzEDavUxslHV9q90cpXzXRLKXcvMOdjwUQ896SXCBc2sHJFsWH
-         kDW0xw8msssnmyNTTxQW5v4ptfUjM9YmolXbJLdaQmJk6nZTaDOyzzamZSGwPc+XVe+U
-         79CA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=pOUFKWLA82ZDA522DpGzRiQP4xIkyg70D3qyVuxPWKQ=;
-        fh=slIclTQ5apa2Oq5/E1qGbL7JWOP1Tq0UMTQVgttIFok=;
-        b=nIPFT0XFdYR5xV63R3TADsULeh5cZ+gUwXkXZllyzrq4tGcHalcch1Ya+BcAUQ/IEq
-         hNjK3xPOxNJN2phNewcJ5pTv0REvp0nGROSbHMF2mMuKN9XWb4UvsIbbllWp80f20n/M
-         e/CLo0OxLa09uXqvLH3UZOdJxhEksd9LlutuqdN7GCSZ62kH0rqpzjq5ta++yWJFw29p
-         +9vKHVeOt8MTKfS64UI7W5C3dUu+nrz4MdYukP0FO/GX40tlK/VI+gcmpVkUpFr/A3++
-         k4Ju3D7AdHp+cjvtZ9p8PE0SAS7L37gd3XBjO8SwNzzc54yba7PcNOES1oU9QX0Bid3H
-         ISOQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UDU67i5I"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d8fe517774so33727905ad.0
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 16:14:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789426956; x=1790031756; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=pOUFKWLA82ZDA522DpGzRiQP4xIkyg70D3qyVuxPWKQ=;
-        b=njLUo9f613ETcTM0BuZQ/4VcFKGxPrUlgbNcdOnqGn1fpgDzwp1a5Q+vdz6tDUJDrZ
-         McuIdpwa0U1GX97oEpWaoSnjchGBZ7wpohw1URwfNZm95eWAWjrRuVaLSWzierLNoTi0
-         07PqvdfTBb0sG5IDKXJU5B3jrSJ6LT5fF7Otz6TywYI0cAVi9GHmD5F73G7dSpsA0/UK
-         C8Nev/wxrYSqIl1F2SGoL2XAUbw5kndaG/pvZsUAv+fIpulOoU6upAXBL1e4JR1qFzfX
-         fdlzqM4JazG9sFpLcubUSpj+hVWNfnpd7fZf5lthjq/189Fw0GAzdh+dQQXrgjGoldfV
-         9qFQ==
+        d=gmail.com; s=20251104; t=1789427692; x=1790032492; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=wOiiGuIVQJiO4Ein1oM3zAj987RfgZm9JxhYW5Cgzw0=;
+        b=UDU67i5IgSFBVivCCsHFpmtJPq9u51jazUwzwDzZle/fEveDvLUEe2Y8U6SpOHyKF+
+         aq8fIrIn106W2RruQiukhtqbKzCzN9WIuHhRpRZ6RAixNw6ixkfFXyLxE9Jit/bpknZk
+         KszINPu3lPUO2wIQ7D8tmc1qsVD0woel2PhGD3QVOt7pJFkcCk0Eu0cInrgtlfPGW+aD
+         fP6zJjC5zKBO15KqkF4Jrl6bwgWtZi/QE7CelZHGFBHinbtua4/sU8DV2qfaAdXReF7n
+         PjyVnMV4fXA7Mn3F7i6bqryKlN8p2XtLjn+Ntc9UrPQPJcCN4Bg4f9DZDDr3AJBBz5Tx
+         W8SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789426956; x=1790031756;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=pOUFKWLA82ZDA522DpGzRiQP4xIkyg70D3qyVuxPWKQ=;
-        b=Xs8o2VKvl+gFGmBwPVh+bbgr5bcyX1gncHAAcX3U93g+kIVPvVuv7e1/Ne86lwlImN
-         Sj2MCFNCQCYgDraJ8UFC1+hpgf54JYyy50MVTSNUNzal+flGGnmQAbTasqpSYjmlapZK
-         RkJyFDNb5Qx3AzhP8VdpGjvlkUgYZDwkwi0cawSzD514IXD8igG62Es0OVvlBtigGiDb
-         3XBR9ShGmjMFowePYRlddiGHeV1ttnVtZCF+N+NFoUOpdkT3FKOn7LzJCKlyUwod2b1r
-         l7y2ShmNrws61SptKuWyPUrrKF5m/oCvRj71pIOj82/pxyIZK9MJqKNgljYTPignFmNW
-         NASQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwMbROZ8yBiYntLQdvJXuJQ4XMtahWgWYvkLVigLJ2eqqB8xsfLrvTTAgex7K7lqWJwyP8=@vger.kernel.org
-X-Gm-Message-State: AFuF++mVUeTXp4822/KDIiB2fanMmH61QY6qtRDXVOmV3D7GKqRyGnFY
-	eHRUz/ob0VaMXbBzX6MVudsNOE2npyPNPtOtD+QT4rjlwUH9mxo4P00OhBrPqEPxlwyO3SMfcpD
-	cxyvq03HQxYz48zAAeIEYbhNLyB/W4Wc=
-X-Gm-Gg: AYBFou2Xm7sYnMq1EvwzKLJpWsKqmSJ0QbJSmbMfGY1FOXrjAhPotd41BWlbofs/I4v
-	zK6sbdtJO2XmUanRSSteGy3y8vK+dxoSJsBeWrBycGFoZQuMN+ykTVG1NL6ll7GjdZoxsDZnA4C
-	rFV+GmHOkoLaQqCq1RtkqzjhJjUGA6GE2oNR3hMZeXH/ea8KhvaRbzOQ60j6g8QPcJilQIKWsIN
-	fY6gltpZXutG5nkc23wE9KDgSKx4DBE7105/kd95uv0Ltwtvvs1M2HIPQpZg2DnxlvwsviA6hWP
-	56yOX9cqi5DXr9jMUmlWFNed4f3X8kpRz51DmJK/h+UcdOuOMUdJ4mg=
-X-Received: by 2002:a05:6820:2226:b0:6ba:1878:2a6c with SMTP id
- 006d021491bc7-6c540088554mr2619502eaf.4.1789426956040; Mon, 14 Sep 2026
- 16:02:36 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1789427692; x=1790032492;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=wOiiGuIVQJiO4Ein1oM3zAj987RfgZm9JxhYW5Cgzw0=;
+        b=2AbESNVGDtOMgOzLpSn04d/r3ung7UmzjCT5wPv0Wls3mVCk2he8Etdq0UnmrISjT2
+         +Hy9wNS21tD0rMhmTE5CKF4jIZDhyWhFYw3cn7nx8nzywa/6Y4yYkOoL3N2T8atk2wQj
+         CismFv5cFwCmQEa/DnYyaLTMzvtlam0qXmIDJVfklp/trwqAwjR7qmrwDKYUXIElZRM6
+         J0g6KsJpWJ3D6NU3nmKPpGfpe8XOX6tKJpFhLmNOt82mG8xBqQ8RPZF1UqJGlusXg0Ef
+         PcmoP/IDqDhomIqRSeiE/McF/sk+C9G7VTNjHNpK8Qf8AEZKSCGwXTfqSOa7U+Ljq1fw
+         XW8g==
+X-Forwarded-Encrypted: i=1; AKwUvBwsW+FTZn2rYD7Zg64XGPsA1sjVT6yL504jyn6kJTNq9Fru7XjZJGnL4F5kW6lGRa76EWk=@vger.kernel.org
+X-Gm-Message-State: AFuF++meDcQDCMkc89laAQaV4BYg70s9T/o5w/o+h7AwIT2EWdfsKS0Y
+	BQD/uScgaWqqxZtcsArVAlrPMfb/21w3o+dxMSCm1HNzQ6q0rCwcQef7
+X-Gm-Gg: AYBFou0kTPcrMlS9QWER0k7j2PyKTohko4VZkfdX4BvXhZa7KX7odbvN7pFeHVvs1lH
+	+3a10j7nJN1U4Wl72Hk845QPvhh22ERztcerI7l9p8ZPXN+rFupv3YnpztaruH38K0jw3ZSRr6m
+	5yNq1x4OF5X2bJhTg7cEH2hJISfFojueQ9GFt3nETHmugzK+pORaTSRrE7EOCBJ0FzE9uleG+Jl
+	PgkGmttM0eB25DYMA3ZiUJPB1y2MXWUAX4TAY+XizJKoeXXv0JEr3QNu1pEFRDZHGYpj31KnAT3
+	S6AxpurfzVu7gvEAgbwPKltHsZyqHK56BeE+TBNEgGqNRDEmCavc08U/2iK9XGryzfcWZi88CQQ
+	Ou44DYz+GGzvfIU2YklYQLSXECcrtggSxKad79nSdineslgVYtsN3FIEuEW3K4pNTqQsd6bu1aP
+	wYg9yrHpLyC+RNTsrzOugzF9W5tFScZKf+FJrmb2uP/Ktkg/Skszx0rCWaiAypbpZFxRVaW+Wrk
+	RYbmPBiPJalnk7ZZ8hWD2FTjKU=
+X-Received: by 2002:a17:903:94e:b0:2db:117e:cf50 with SMTP id d9443c01a7336-2dd6c5bfe2bmr114170385ad.4.1789427692378;
+        Mon, 14 Sep 2026 16:14:52 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd2cfe80fdsm55214065ad.67.2026.09.14.16.14.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2026 16:14:52 -0700 (PDT)
+Message-ID: <c15e2c91b7f9a6f3dabb7fa75b10e5d235acfa18.camel@gmail.com>
+Subject: Re: [PATCH bpf v2 03/11] bpf: Cache the jump table of a subprogram
+ during CFG discovery
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org
+Cc: memxor@gmail.com, a.s.protopopov@gmail.com, info@starlabs.sg, 
+	bpf@vger.kernel.org
+Date: Mon, 14 Sep 2026 16:14:49 -0700
+In-Reply-To: <20260914170326.249953-4-daniel@iogearbox.net>
+References: <20260914170326.249953-1-daniel@iogearbox.net>
+	 <20260914170326.249953-4-daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10+b1 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260914073356.791518-1-cui.tao@linux.dev> <20260914073356.791518-2-cui.tao@linux.dev>
-In-Reply-To: <20260914073356.791518-2-cui.tao@linux.dev>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Mon, 14 Sep 2026 16:02:24 -0700
-X-Gm-Features: AcwNN1VZkBQqQYfMVd7gQUm6WpRn7TeG3A6jO20_KXpKUTM9cv8b_LakI3YB1JE
-Message-ID: <CAMB2axNkTS-UuH-KctiY+5qh-JZZkKsiyQr_KOnGJt1bPoL3eA@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 1/5] blk-iocost: add BPF struct_ops cost model support
-To: Tao Cui <cui.tao@linux.dev>
-Cc: tj@kernel.org, josef@toxicopanda.com, axboe@kernel.dk, 
-	cgroups@vger.kernel.org, linux-block@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, linux-kselftest@vger.kernel.org, 
-	cuitao@kylinos.cn
-Content-Type: text/plain; charset="UTF-8"
 
-I mostly looked from a struct_ops perspective.
+On Mon, 2026-09-14 at 19:03 +0200, Daniel Borkmann wrote:
 
-> +
-> +static const struct bpf_func_proto *
-> +bpf_iocost_get_func_proto(enum bpf_func_id func_id,
-> +                         const struct bpf_prog *prog)
-> +{
-> +       switch (func_id) {
-> +#ifdef CONFIG_CGROUPS
-> +       case BPF_FUNC_cgrp_storage_get:
-> +               return &bpf_cgrp_storage_get_proto;
+Hi Daniel,
 
-This seems redundant. BPF_FUNC_cgrp_storage_get should already be part
-of bpf_base_func_proto.
+I think this is a good approach.
 
-> +#endif
-> +       default:
-> +               return bpf_base_func_proto(func_id, prog);
-> +       }
-> +}
-> +
-> +static int bpf_iocost_check_member(const struct btf_type *t,
-> +                                  const struct btf_member *member,
-> +                                  const struct bpf_prog *prog)
-> +{
-> +       /* calc_cost() is called with RCU read lock held */
-> +       if (prog->sleepable)
-> +               return -EINVAL;
-> +       return 0;
-> +}
-> +
-> +static int bpf_iocost_init_member(const struct btf_type *t,
-> +                                 const struct btf_member *member,
-> +                                 void *kdata, const void *udata)
-> +{
-> +       struct iocost_model_ops *ops = kdata;
-> +       const struct iocost_model_ops *uops = udata;
-> +       u32 moff = __btf_member_bit_offset(t, member) / 8;
-> +
-> +       switch (moff) {
-> +       case offsetof(struct iocost_model_ops, name):
-> +               if (bpf_obj_name_cpy(ops->name, uops->name,
-> +                                    sizeof(ops->name)) <= 0)
-> +                       return -EINVAL;
-> +               return 1;
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static u64 bpf_iocost_calc_cost_stub(u64 opf, u64 nbytes, u64 sector,
-> +                                    struct blkcg *blkcg, u64 model_flags);
-> +
-> +/*
-> + * kdata is seeded from the CFI stubs, so calc_cost is never NULL; a
-> + * model which did not implement it inherits the stub, which prices
-> + * every IO at 0.  Compare against the stub to reject it.
-> + */
-> +static int bpf_iocost_validate(void *kdata)
-> +{
-> +       struct iocost_model_ops *ops = kdata;
-> +
-> +       if (ops->calc_cost == bpf_iocost_calc_cost_stub)
-> +               return -EINVAL;
+...
 
-This should check !ops->calc_cost. CFI stubs are used to construct
-trampolines; they are not copied into kdata for callbacks omitted by
-userspace. Also, should the reserved name "linear" be rejected here?
+> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
 
-> +       return 0;
-> +}
-> +
-> +static int bpf_iocost_reg(void *kdata, struct bpf_link *link)
-> +{
-> +       struct iocost_model_ops *ops = kdata;
-> +       struct iocost_bpf_model *m;
-> +       int ret = 0;
-> +
-> +       if (!bpf_struct_ops_get(ops))
-> +               return -ENOENT;
+...
 
-struct_ops core should hold a map reference when calling .reg().
-Calling bpf_struct_ops_get() in reg() and bpf_struct_ops_put() in
-unreg() doesn't seem necessary.
+> @@ -383,13 +409,12 @@ static int visit_gotox_insn(int t, struct bpf_verif=
+ier_env *env)
+> =C2=A0	struct bpf_iarray *jt;
+> =C2=A0	int i, w;
+> =C2=A0
+> -	jt =3D env->insn_aux_data[t].jt;
+> -	if (!jt) {
+> -		jt =3D create_jt(t, env);
+> -		if (IS_ERR(jt))
+> -			return PTR_ERR(jt);
+> +	jt =3D subprog_jt(t, env);
+> +	if (IS_ERR(jt))
+> +		return PTR_ERR(jt);
+> =C2=A0
+> -		env->insn_aux_data[t].jt =3D jt;
+> +	if (!(insn_state[t] & BRANCH)) {
+> +		insn_state[t] |=3D BRANCH;
+
+I think it is possible to exit early here if BRANCH is already set.
+
+> =C2=A0
+> =C2=A0		if (check_add_overflow(env->cfg.gotox_edges, jt->cnt,
+> =C2=A0				=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 &env->cfg.gotox_edges) ||
+
+...
+
+> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+
+...
+
+> @@ -264,6 +267,15 @@ bpf_insn_successors(struct bpf_verifier_env *env, u3=
+2 idx)
+> =C2=A0	if (opcode_info->can_jump)
+> =C2=A0		succ->items[succ->cnt++] =3D idx + bpf_jmp_offset(insn) + 1;
+> =C2=A0
+> +	/*
+> +	 * tail_call upon success and ld_{abs,ind} upon load failure return
+> +	 * from the subprogram, which is a hidden edge to its exit.
+> +	 */
+> +	if (unlikely((bpf_helper_call(insn) && insn->imm =3D=3D BPF_FUNC_tail_c=
+all) ||
+> +		=C2=A0=C2=A0=C2=A0=C2=A0 (BPF_CLASS(insn->code) =3D=3D BPF_LD &&
+> +		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (BPF_MODE(insn->code) =3D=3D BPF_ABS ||=
+ BPF_MODE(insn->code) =3D=3D BPF_IND))))
+> +		succ->items[succ->cnt++] =3D bpf_find_containing_subprog(env, idx)->ex=
+it_idx;
+
+It appears that check_subprogs() assigns exit_idx but does not
+guarantee it to be set. Meaning that for the following progam exit_idx
+would remain zero:
+
+  0: r0 =3D 0
+  1: r0 =3D *(u8 *)skb[0]
+  2: goto -2
+
+Hence the above would add a spurious edge.
+I think check_subprogs() should be updated to demand each subprogram
+to have at-least one exit.
 
 > +
-> +       m = kzalloc(sizeof(*m), GFP_KERNEL);
-> +       if (!m) {
-> +               bpf_struct_ops_put(ops);
-> +               return -ENOMEM;
-> +       }
-> +       refcount_set(&m->refs, 1);
-> +
-> +       mutex_lock(&iocost_bpf_reg_lock);
-> +       {
-> +               struct iocost_bpf_model *other;
-> +
-> +               list_for_each_entry(other, &iocost_bpf_models, list) {
-> +                       if (!strcmp(other->ops->name, ops->name)) {
-> +                               ret = -EEXIST;
-> +                               break;
-> +                       }
-> +               }
-> +       }
-> +       if (!ret) {
-> +               m->ops = ops;
-> +               list_add(&m->list, &iocost_bpf_models);
-> +               list_add(&m->lifecycle, &iocost_bpf_lifecycle);
+> =C2=A0	return succ;
+> =C2=A0}
+> =C2=A0
 
-This seems to contradict what the changelog says: "blkcg
-online/offline notifications follow the model binding, not the name
-registry"
-
-> +       }
-> +       mutex_unlock(&iocost_bpf_reg_lock);
-> +
-> +       if (ret) {
-> +               bpf_struct_ops_put(ops);
-> +               kfree(m);
-> +       }
-> +       return ret;
-> +}
-> +
-> +/*
-> + * Unregistering drops the registration reference.  When the last
-> + * reference is gone (no device bound), the node leaves the lifecycle
-> + * list and is freed; otherwise bound devices keep it alive and it
-> + * keeps receiving blkcg online/offline notifications.
-> + */
-> +static void bpf_iocost_unreg(void *kdata, struct bpf_link *link)
-> +{
-> +       struct iocost_model_ops *ops = kdata;
-> +       struct iocost_bpf_model *m;
-> +
-> +       mutex_lock(&iocost_bpf_reg_lock);
-> +       m = iocost_bpf_model_lookup(ops);
-> +       if (m) {
-> +               list_del(&m->list);
-> +               if (refcount_dec_and_test(&m->refs)) {
-> +                       list_del(&m->lifecycle);
-> +                       kfree(m);
-> +               }
-> +       }
-> +       mutex_unlock(&iocost_bpf_reg_lock);
-> +
-> +       bpf_struct_ops_put(ops);
-
-Mentioned above. Doesn't seem to be necessary.
-
-[...]
-
-> +static const struct iocost_model_ops *
-> +ioc_bpf_model_prepare(const char *name)
-> +{
-> +#ifdef CONFIG_BLK_CGROUP_IOCOST_BPF
-> +       const struct iocost_model_ops *new = NULL;
-> +       int ret;
-> +
-> +       if (!name[0])
-> +               return NULL;
-> +       ret = iocost_bpf_model_get(name, &new);
-
-It looks more straightforward if iocost_bpf_model_get() just return
-the ops ptr and ERR_PTR on error.
-
-> +       return ret ? ERR_PTR(ret) : new;
-> +#else
-> +       return name[0] ? ERR_PTR(-ENOENT) : NULL;
-> +#endif
-> +}
+...
