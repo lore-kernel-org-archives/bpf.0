@@ -1,343 +1,200 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCEAC2DF134
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 23:39:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 942893C279B;
+	Mon, 14 Sep 2026 23:43:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789429166; cv=none; b=cnTfzGQeJY7JOJ+KlqXn8WqbDs1tgc5b1yCK9ktwj5pijjTH7fzG0zGLv4RrbTlyeP1go9qcv99DTcpUxc+dFDc7vSrKkkLKUsSTuAHaiS46ubr8i5dqZA8n793zK+11JMvIyAVeETl5ngRb9/+dvB1ltGF6gA7ANRe483YjYLA=
+	t=1789429390; cv=none; b=k7tm91LnkSdEspbU3AS3ytRyo3cNs5SVkbxgosOygGlg+y+rG5KDD5/nQmuPB+/qpUpVU+FV/50IbSXQVxN9qO59yNDjNJyOCZjdgR/BegTVryhoVUhTYuFIuA3eE4pfhCOo/2Qmlb9ctTQy35aXe3R+TT/gKKmacEqZeS/I+/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789429166; c=relaxed/simple;
-	bh=AVej2iqlBEYdtl5+BTl9FWTkVtSCQEcHVZ4EMOf/dbQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=FwLN7FLbu/xfNFJt2ElVfbAZiRqwgEErbdlHPRYMj6zrKEdPX7ZFLZKG+xGs/QmVYFkZ/1mkn2w59F/Xhhh5Qnuk8A3cJR+ayK0ZKTLKxaVPtPeyzP9d2Njp1g/1bYIYg4h9k0U3RRJL5XXVyXWgean+biQq9nRrmdjodCX1H2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=SmGvOA5c; arc=none smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1789429390; c=relaxed/simple;
+	bh=rd9cH6uYqdbcqqWAKE/6dakACodS2cOjW2Bgl+3BLeY=;
+	h=Date:Message-ID:From:To:Cc:Subject; b=kADZXyWkuQpkC9fb5k5TI2H2zH8nfmJ5/ztxgxb7OBqV8XDMvy/tb1TgMB5q2uS9z16XEYAAbjNb0Z+MoH8TIgwS37Jc6fV2KQ7BgzfP60s/XmIah0twZAHJHNtsBdOsukKGdc+jisJQjDRBfmRKvNJnbRAzFpUCIbks6AXGBIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mZanldW2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="SmGvOA5c"
-Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2db1ca069c8so22455255ad.3
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 16:39:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1789429164; x=1790033964; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=RHOj883NdGN/FUoDXIJ1skp4Po4UQoQIExJ8AbqSgLg=;
-        b=SmGvOA5ckQ968BxeHvCJetFCQVwFWWLk2ITZFtJcsaWr7MthyqjgQgkfLlGDYZAMg1
-         YKHfVkTCmVCHWRhkuMT+1z7snDGlbKYnD54KDBV6hxgl7I1sluSd0WoUEFZJLt1jxeFy
-         IAViW3hWjSzV32+Wq1wKpVOfaN9kUcISGkHipxs+mzvnA2SrzTSwpCqcMjtM5lwJFc7U
-         nGvgbi1zIDQTd+asTh6PJ8qrG/TP4vRuOi5CMAduBFdsNTWk9qLu845UuI8G5zzyfA6S
-         KdfccQ2tUnJhX5OvK36bZk1ZKVsPNGaTXnXeAemKiwA1Hx0Yrl1WFZ3n6fKCfd8NZBlY
-         eFiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789429164; x=1790033964;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=RHOj883NdGN/FUoDXIJ1skp4Po4UQoQIExJ8AbqSgLg=;
-        b=CokqUxPJps/0i0NKAODYeInL8iQKPTIDba93SBVQmf+6UgOty6suRnwWeMPOPk2qI/
-         n+15NgotVpEL2bQCgotiDVuEN/8EhxaMctaIba9LaCiXNj+JbIYQRJ4mOGiZu9Iog1g5
-         yiMiefa2EJ6qsGb4jKDJhWanKf3d19mtfaBwRXMisSOErWwK+fV+YuXfQ6vkeg7A7jD4
-         wiLiAtUbTe2QsJi1zSYAnfiAf1GtRNSDOumV2J5wMKy+Y5KR6RpJLuffY/CtTwSzv/zG
-         lg2evoDjfrt2s1wL1+2VS7NWstN9bso1kvVQO0CGaLJgy2e6yNq72s+mavGZ4hCTKh8b
-         fRQQ==
-X-Forwarded-Encrypted: i=1; AKwUvBy6GNMAbFPDaHfGz6iTN98D2t2dtwO7HVQwCPouUWetS55p4CAiCyDCzyBK1tDyNYk0lU4=@vger.kernel.org
-X-Gm-Message-State: AFuF++kaKhvWApf/FpWH7tdq61gRag4mUItQr0i4/OZQhfV2OtlTte+0
-	LVhYsuv4LKjY1y1HIgC+DarcR9oqoPsqwYVVjHyOTxhmaed2jOEvg5lm1M9A1aUUgrg=
-X-Gm-Gg: AYBFou1iWxkWzDsbtDzwQapHk/a1ARByhxbvA5F/GtJ8sClensELTPnejUAgH8n01Ud
-	gwQxmBjzRZUMo8mzztwCZFqkuw9uXnUNGoOq+43Tprw1NF40kYKJdM9XqTZ7vbkDocwA+0mMb2j
-	g0nbIMpBJa9+Yihq+IEddF1+BUnJOGmzcL2lUYr/Xt6k+MkmFjbo9Wr9cGc+8kbl5IMTkRwCDJ5
-	aKp3Fpv+Xe8XlD8LmTU4vYQwi5Znt0koybFDuE+ooMGrL2lXY5kYyiFd6LlMXCGTTNME/yl7wID
-	QdDtmYzOShJAzLCes3Ve9xQSoy+nIlAloT/+0tNwNK0G1mt5PriKsxOwfaKJXscmDic2XxgtDo6
-	Vyj1mzkZB2Sjy4Voz6obU8FNM3AF1KFTArH2wXg7wxffYTIbhFcStdTj0JyDEVBCkFHG9AC+4CX
-	YZx+ljc/hN5gHmxylqlaBq2CjL3e6BI67Bo1o1yFALxGoa4U/XoxS2gajCX5XZCW0ZSJsFh2Tww
-	5aPMkzt37o5hqzgt8h+qjbtKUYo
-X-Received: by 2002:a17:902:e74c:b0:2db:1f50:6515 with SMTP id d9443c01a7336-2dd6c5ba26cmr88114975ad.2.1789429163979;
-        Mon, 14 Sep 2026 16:39:23 -0700 (PDT)
-Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd2cfc4403sm56568345ad.52.2026.09.14.16.39.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Sep 2026 16:39:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mZanldW2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BED31F000FF;
+	Mon, 14 Sep 2026 23:43:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789429384;
+	bh=rG/P63XRfAjkiK3v29BDNXfccJdl4Bv1mJbDPEn8nDY=;
+	h=Date:From:To:Cc:Subject;
+	b=mZanldW2Q1PKl5NiXiDNutUQdo9be+MqVVBHLdBd9rfEXm9Ug/b5R1cqobcT2MkMp
+	 tfz1YMeAFOj4+MuWsRvzRkt2s9uPbNGhrDBIaDMf4fkeq8ue75s0YTHEwVil+lsq5X
+	 T6bviSDOFIVEYcV4S11OrBXC2vfpKW4mzOdit2Dfjdeixav0r1pGBnlXxRBwqN3iot
+	 mY2bD0GXs3imc1+DiljjHladB/oQwEwq3W4RyUsIL9WhCFry+AV6kDTW81u+AU1WFR
+	 c4Y9GBgRDtgSf8N50/de+2GfAwLpiIU571B6Ldu69vkAbsVnRa19W8qYQr6pZ8Seih
+	 Clx2RtKlyjIig==
+Date: Mon, 14 Sep 2026 13:43:03 -1000
+Message-ID: <86d966ec88bbf27d21b2bb4e18c8aa00@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Amery Hung <ameryhung@gmail.com>,
+	bpf@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf] bpf: Keep generic __uninit kfunc arguments live
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 14 Sep 2026 23:39:22 +0000
-Message-Id: <DLFFP4P6CAA6.QLQ38A75G2IZ@etsalapatis.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Replace %pK output with 0
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>,
- <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Shuah Khan" <shuah@kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260911145011.kErTVDkS@linutronix.de>
-In-Reply-To: <20260911145011.kErTVDkS@linutronix.de>
 
-On Fri Sep 11, 2026 at 2:50 PM UTC, Sebastian Andrzej Siewior wrote:
-> Networking used to print the socket pointer with %p as output in the
-> /proc interface. This was later changed to %pK in order not to reveal
-> the actual pointer value. The output format has then been copied to bpf
-> tests which produce the same format including the %pK format modifier.
->
-> Networking recently replaced the socket output with a plain 0 because
-> the socket pointer added no value to the output and the %pK should be
-> removed fom library handling. The format remained otherwise unchanged in
-> order not to break any tools which are parsing this information.
->
-> This change removes the %pK modifier from bpf, following the change in
-> networking.
->
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Stack liveness models a kfunc's __uninit pointer argument as a pure write:
+whatever the buffer holds before the call is dead, and 2cb27158adb3 ("bpf:
+poison dead stack slots") poisons those slots at every checkpoint the path
+visits before the call. Argument validation disagrees. Only dynptr arguments
+honor __uninit. A generic fixed-size buffer goes through check_mem_reg(),
+whose read pass requires every byte readable. The two rules meet at the call
+and the poisoned buffer is rejected with "slot poisoned by dead code
+elimination", even when the program initialized it.
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Every kfunc with a generic __uninit output argument is affected,
+bpf_ksock_create() through err__uninit and sched_ext's scx_bpf_cid_topo()
+through its output struct. The rejection needs the buffer's slots to be
+allocated and dead at a checkpoint, for example on the second iteration of a
+loop around the call. Before e566701b9b0c ("bpf: Check fixed-size mem args
+of helpers and kfuncs the same way") kfunc arguments could read poisoned
+slots, so the call passed, but the slots stayed poisoned and the program's
+next read of the buffer was rejected instead.
 
-The bots are being overly picky bere, the tests pass fine and these are
-selftests anyway.
+Restrict the liveness write-only exception to dynptr arguments, where
+validation accepts uninitialized output. A generic __uninit buffer stays
+live and is never poisoned, and validation keeps requiring it to be
+initialized. Add a selftest with a scalar output buffer and a checkpoint
+between its initialization and the call.
 
-> ---
->
-> The networking change is in net-next as commit 7c0ec6288b497 ("net:
-> Replace %pK output with 0")
->
->  tools/testing/selftests/bpf/README.rst               |  2 +-
->  tools/testing/selftests/bpf/prog_tests/snprintf.c    |  2 +-
->  tools/testing/selftests/bpf/progs/bpf_iter_netlink.c |  4 ++--
->  tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c    | 11 +++++------
->  tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c    | 11 +++++------
->  tools/testing/selftests/bpf/progs/bpf_iter_udp4.c    |  4 ++--
->  tools/testing/selftests/bpf/progs/bpf_iter_udp6.c    |  4 ++--
->  tools/testing/selftests/bpf/progs/bpf_iter_unix.c    |  3 +--
->  tools/testing/selftests/bpf/progs/test_snprintf.c    |  4 ++--
->  9 files changed, 21 insertions(+), 24 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selft=
-ests/bpf/README.rst
-> index 07c834433b388..75ff1142c1857 100644
-> --- a/tools/testing/selftests/bpf/README.rst
-> +++ b/tools/testing/selftests/bpf/README.rst
-> @@ -187,7 +187,7 @@ The symptom for ``bpf_iter/netlink`` looks like
->    ...
->    15: (bf) r2 =3D r7
->    16: (0f) r2 +=3D r1
-> -  ; BPF_SEQ_PRINTF(seq, "%pK %-3d ", s, s->sk_protocol);
-> +  ; BPF_SEQ_PRINTF(seq, "%p %-3d ", s, s->sk_protocol);
->    17: (7b) *(u64 *)(r7 +0) =3D r2
->    only read is supported
-> =20
-> diff --git a/tools/testing/selftests/bpf/prog_tests/snprintf.c b/tools/te=
-sting/selftests/bpf/prog_tests/snprintf.c
-> index 4e4a82d54f799..f2cd442c4683c 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/snprintf.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/snprintf.c
-> @@ -16,7 +16,7 @@
->  #define MIN_SYM_RET  sizeof(EXP_SYM_OUT)
-> =20
->  /* The third specifier, %p, is a hashed pointer which changes on every r=
-eboot */
-> -#define EXP_ADDR_OUT "0000000000000000 ffff00000add4e55 "
-> +#define EXP_ADDR_OUT "ffff00000add4e55 "
->  #define EXP_ADDR_RET sizeof(EXP_ADDR_OUT "unknownhashedptr")
-> =20
->  #define EXP_STR_OUT  "str1         a  b c      d e longstr"
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c b/tools=
-/testing/selftests/bpf/progs/bpf_iter_netlink.c
-> index 00b2ceae81fb0..b9107d3ab6039 100644
-> --- a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
-> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
-> @@ -25,12 +25,12 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
->  		return 0;
-> =20
->  	if (ctx->meta->seq_num =3D=3D 0)
-> -		BPF_SEQ_PRINTF(seq, "sk               Eth Pid        Groups   "
-> +		BPF_SEQ_PRINTF(seq, "sk Eth Pid        Groups   "
->  				    "Rmem     Wmem     Dump  Locks    Drops    "
->  				    "Inode\n");
-> =20
->  	s =3D &nlk->sk;
-> -	BPF_SEQ_PRINTF(seq, "%pK %-3d ", s, s->sk_protocol);
-> +	BPF_SEQ_PRINTF(seq, "0  %-3d ", s->sk_protocol);
-> =20
->  	if (!nlk->groups)  {
->  		group =3D 0;
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c b/tools/te=
-sting/selftests/bpf/progs/bpf_iter_tcp4.c
-> index b1e509b231cd9..d149cf0d07be6 100644
-> --- a/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
-> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
-> @@ -131,8 +131,7 @@ static int dump_tcp_sock(struct seq_file *seq, struct=
- tcp_sock *tp,
->  		       icsk->icsk_probes_out,
->  		       sock_i_ino(sp),
->  		       sp->sk_refcnt.refs.counter);
-> -	BPF_SEQ_PRINTF(seq, "%pK %lu %lu %u %u %d\n",
-> -		       tp,
-> +	BPF_SEQ_PRINTF(seq, "0 %lu %lu %u %u %d\n",
->  		       jiffies_to_clock_t(icsk->icsk_rto),
->  		       jiffies_to_clock_t(icsk->icsk_ack.ato),
->  		       (icsk->icsk_ack.quick << 1) | inet_csk_in_pingpong_mode(icsk),
-> @@ -161,10 +160,10 @@ static int dump_tw_sock(struct seq_file *seq, struc=
-t tcp_timewait_sock *ttw,
->  	BPF_SEQ_PRINTF(seq, "%4d: %08X:%04X %08X:%04X ",
->  		       seq_num, src, srcp, dest, destp);
-> =20
-> -	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n=
-",
-> +	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
->  		       tw->tw_substate, 0, 0,
->  		       3, jiffies_delta_to_clock_t(delta), 0, 0, 0, 0,
-> -		       tw->tw_refcnt.refs.counter, tw);
-> +		       tw->tw_refcnt.refs.counter);
-> =20
->  	return 0;
->  }
-> @@ -185,9 +184,9 @@ static int dump_req_sock(struct seq_file *seq, struct=
- tcp_request_sock *treq,
->  		       seq_num, irsk->ir_loc_addr,
->  		       irsk->ir_num, irsk->ir_rmt_addr,
->  		       bpf_ntohs(irsk->ir_rmt_port));
-> -	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n=
-",
-> +	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
->  		       TCP_SYN_RECV, 0, 0, 1, jiffies_to_clock_t(ttd),
-> -		       req->num_timeout, uid, 0, 0, 0, req);
-> +		       req->num_timeout, uid, 0, 0, 0);
-> =20
->  	return 0;
->  }
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c b/tools/te=
-sting/selftests/bpf/progs/bpf_iter_tcp6.c
-> index dbc7166aee91f..cd65fa81f1219 100644
-> --- a/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c
-> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c
-> @@ -135,8 +135,7 @@ static int dump_tcp6_sock(struct seq_file *seq, struc=
-t tcp6_sock *tp,
->  		       icsk->icsk_probes_out,
->  		       sock_i_ino(sp),
->  		       sp->sk_refcnt.refs.counter);
-> -	BPF_SEQ_PRINTF(seq, "%pK %lu %lu %u %u %d\n",
-> -		       tp,
-> +	BPF_SEQ_PRINTF(seq, "0 %lu %lu %u %u %d\n",
->  		       jiffies_to_clock_t(icsk->icsk_rto),
->  		       jiffies_to_clock_t(icsk->icsk_ack.ato),
->  		       (icsk->icsk_ack.quick << 1) | inet_csk_in_pingpong_mode(icsk),
-> @@ -170,10 +169,10 @@ static int dump_tw_sock(struct seq_file *seq, struc=
-t tcp_timewait_sock *ttw,
->  		       dest->s6_addr32[0], dest->s6_addr32[1],
->  		       dest->s6_addr32[2], dest->s6_addr32[3], destp);
-> =20
-> -	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n=
-",
-> +	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
->  		       tw->tw_substate, 0, 0,
->  		       3, jiffies_delta_to_clock_t(delta), 0, 0, 0, 0,
-> -		       tw->tw_refcnt.refs.counter, tw);
-> +		       tw->tw_refcnt.refs.counter);
-> =20
->  	return 0;
->  }
-> @@ -201,9 +200,9 @@ static int dump_req_sock(struct seq_file *seq, struct=
- tcp_request_sock *treq,
->  		       dest->s6_addr32[0], dest->s6_addr32[1],
->  		       dest->s6_addr32[2], dest->s6_addr32[3],
->  		       bpf_ntohs(irsk->ir_rmt_port));
-> -	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n=
-",
-> +	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
->  		       TCP_SYN_RECV, 0, 0, 1, jiffies_to_clock_t(ttd),
-> -		       req->num_timeout, uid, 0, 0, 0, req);
-> +		       req->num_timeout, uid, 0, 0, 0);
-> =20
->  	return 0;
->  }
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c b/tools/te=
-sting/selftests/bpf/progs/bpf_iter_udp4.c
-> index 23b2aa2604de2..9b789f09f1462 100644
-> --- a/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
-> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
-> @@ -57,13 +57,13 @@ int dump_udp4(struct bpf_iter__udp *ctx)
->  	BPF_SEQ_PRINTF(seq, "%5d: %08X:%04X %08X:%04X ",
->  		       ctx->bucket, src, srcp, dest, destp);
-> =20
-> -	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %pK =
-%u\n",
-> +	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %8d =
-%u\n",
->  		       inet->sk.sk_state,
->  		       inet->sk.sk_wmem_alloc.refs.counter - 1,
->  		       rqueue,
->  		       0, 0L, 0, ctx->uid, 0,
->  		       sock_i_ino(&inet->sk),
-> -		       inet->sk.sk_refcnt.refs.counter, udp_sk,
-> +		       inet->sk.sk_refcnt.refs.counter, 0,
->  		       udp_sk->drop_counters.drops0.counter +
->  		       udp_sk->drop_counters.drops1.counter);
-> =20
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c b/tools/te=
-sting/selftests/bpf/progs/bpf_iter_udp6.c
-> index c48b05aa2a4b2..9766eff7069ff 100644
-> --- a/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
-> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
-> @@ -65,13 +65,13 @@ int dump_udp6(struct bpf_iter__udp *ctx)
->  		       dest->s6_addr32[0], dest->s6_addr32[1],
->  		       dest->s6_addr32[2], dest->s6_addr32[3], destp);
-> =20
-> -	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %pK =
-%u\n",
-> +	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %8d =
-%u\n",
->  		       inet->sk.sk_state,
->  		       inet->sk.sk_wmem_alloc.refs.counter - 1,
->  		       rqueue,
->  		       0, 0L, 0, ctx->uid, 0,
->  		       sock_i_ino(&inet->sk),
-> -		       inet->sk.sk_refcnt.refs.counter, udp_sk,
-> +		       inet->sk.sk_refcnt.refs.counter, 0,
->  		       udp_sk->drop_counters.drops0.counter +
->  		       udp_sk->drop_counters.drops1.counter);
->  	return 0;
-> diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c b/tools/te=
-sting/selftests/bpf/progs/bpf_iter_unix.c
-> index a2652c8c3616f..36690478992f8 100644
-> --- a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
-> +++ b/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
-> @@ -44,8 +44,7 @@ int dump_unix(struct bpf_iter__unix *ctx)
->  	if (seq_num =3D=3D 0)
->  		BPF_SEQ_PRINTF(seq, "Num               RefCount Protocol Flags    Type=
- St    Inode Path\n");
-> =20
-> -	BPF_SEQ_PRINTF(seq, "%pK: %08X %08X %08X %04X %02X %8lu",
-> -		       unix_sk,
-> +	BPF_SEQ_PRINTF(seq, "%08u: %08X %08X %08X %04X %02X %8lu", 0,
->  		       sk->sk_refcnt.refs.counter,
->  		       0,
->  		       sk->sk_state =3D=3D TCP_LISTEN ? __SO_ACCEPTCON : 0,
-> diff --git a/tools/testing/selftests/bpf/progs/test_snprintf.c b/tools/te=
-sting/selftests/bpf/progs/test_snprintf.c
-> index 8fda075440235..48a0025cf2ca8 100644
-> --- a/tools/testing/selftests/bpf/progs/test_snprintf.c
-> +++ b/tools/testing/selftests/bpf/progs/test_snprintf.c
-> @@ -57,8 +57,8 @@ int handler(const void *ctx)
->  	sym_ret  =3D BPF_SNPRINTF(sym_out,  sizeof(sym_out), "%ps %pS %pB",
->  				&schedule, &schedule, &schedule);
->  	/* Kernel pointers */
-> -	addr_ret =3D BPF_SNPRINTF(addr_out, sizeof(addr_out), "%pK %px %p",
-> -				0, 0xFFFF00000ADD4E55, 0xFFFF00000ADD4E55);
-> +	addr_ret =3D BPF_SNPRINTF(addr_out, sizeof(addr_out), "%px %p",
-> +				0xFFFF00000ADD4E55, 0xFFFF00000ADD4E55);
->  	/* Strings and single-byte character embedding */
->  	str_ret  =3D BPF_SNPRINTF(str_out, sizeof(str_out), "%s % 9c %+2c %-3c =
-%04c %0c %+05s",
->  				str1, 'a', 'b', 'c', 'd', 'e', longstr);
+Fixes: 2cb27158adb3 ("bpf: poison dead stack slots")
+Cc: stable@vger.kernel.org # v7.1+
+Signed-off-by: Tejun Heo <tj@kernel.org>
+---
+ kernel/bpf/verifier.c                                      |    3 
+ tools/testing/selftests/bpf/prog_tests/verifier.c          |    2 
+ tools/testing/selftests/bpf/progs/verifier_kfunc_uninit.c  |   45 +++++++++++++
+ tools/testing/selftests/bpf/test_kmods/bpf_testmod.c       |    9 ++
+ tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h |    1 
+ 5 files changed, 59 insertions(+), 1 deletion(-)
 
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -12755,7 +12755,8 @@ out:
+ 	/* KF_ITER_NEW kfuncs initialize the iterator state at arg 0 */
+ 	if (arg == 0 && meta.kfunc_flags & KF_ITER_NEW)
+ 		return -size;
+-	if (is_kfunc_arg_uninit(btf, &args[arg]))
++	/* only dynptr validation accepts an uninitialized __uninit argument */
++	if (is_kfunc_arg_dynptr(btf, &args[arg]) && is_kfunc_arg_uninit(btf, &args[arg]))
+ 		return -size;
+ 	return size;
+ }
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -53,6 +53,7 @@
+ #include "verifier_iterating_callbacks.skel.h"
+ #include "verifier_jeq_infer_not_null.skel.h"
+ #include "verifier_jit_convergence.skel.h"
++#include "verifier_kfunc_uninit.skel.h"
+ #include "verifier_ld_ind.skel.h"
+ #include "verifier_ldsx.skel.h"
+ #include "verifier_leak_ptr.skel.h"
+@@ -214,6 +215,7 @@ void test_verifier_int_ptr(void)
+ void test_verifier_iterating_callbacks(void)  { RUN(verifier_iterating_callbacks); }
+ void test_verifier_jeq_infer_not_null(void)   { RUN(verifier_jeq_infer_not_null); }
+ void test_verifier_jit_convergence(void)      { RUN(verifier_jit_convergence); }
++void test_verifier_kfunc_uninit(void)         { RUN_TESTS(verifier_kfunc_uninit); }
+ void test_verifier_load_acquire(void)         { RUN(verifier_load_acquire); }
+ void test_verifier_ld_ind(void)               { RUN(verifier_ld_ind); }
+ void test_verifier_ldsx(void)                  { RUN(verifier_ldsx); }
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_kfunc_uninit.c
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Tejun Heo <tj@kernel.org> */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++#include "../test_kmods/bpf_testmod_kfunc.h"
++
++char _license[] SEC("license") = "GPL";
++
++/* keep the BTF FUNC record for the inline assembly reference */
++void __kfunc_btf_root(void)
++{
++	bpf_kfunc_call_test_uninit(0);
++}
++
++SEC("tc")
++__success __retval(42)
++__flag(BPF_F_TEST_STATE_FREQ)
++__naked void uninit_scalar_struct(void)
++{
++	/* dead before the call, so poisoned at the checkpoint */
++	asm volatile (
++	"*(u64 *)(r10 - 16) = 0;"
++	"*(u64 *)(r10 - 8) = 0;"
++	"goto +0;"
++	"r1 = r10;"
++	"r1 += -16;"
++	"call %[bpf_kfunc_call_test_uninit];"
++	"r1 = *(u32 *)(r10 - 16);"
++	"if r1 != 1 goto 1f;"
++	"r1 = *(u32 *)(r10 - 12);"
++	"if r1 != 2 goto 1f;"
++	"r1 = *(u32 *)(r10 - 8);"
++	"if r1 != 3 goto 1f;"
++	"r1 = *(u32 *)(r10 - 4);"
++	"if r1 != 4 goto 1f;"
++	"r0 = 42;"
++	"exit;"
++"1:"
++	"r0 = 0;"
++	"exit;"
++	:: __imm(bpf_kfunc_call_test_uninit)
++	: __clobber_all);
++}
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -1087,6 +1087,14 @@ __bpf_kfunc void bpf_kfunc_call_test_pas
+ {
+ }
+ 
++__bpf_kfunc void bpf_kfunc_call_test_uninit(struct prog_test_pass1 *out__uninit)
++{
++	out__uninit->x0 = 1;
++	out__uninit->x1 = 2;
++	out__uninit->x2 = 3;
++	out__uninit->x3 = 4;
++}
++
+ __bpf_kfunc void bpf_kfunc_call_test_fail1(struct prog_test_fail1 *p)
+ {
+ }
+@@ -1493,6 +1501,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_int_me
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass_ctx)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass1)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass2)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_uninit)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_fail1)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_fail2)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_fail3)
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -160,6 +160,7 @@ __u64 bpf_kfunc_call_stack_arg_big(__u64
+ void bpf_kfunc_call_test_pass_ctx(struct __sk_buff *skb) __ksym;
+ void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p) __ksym;
+ void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p) __ksym;
++void bpf_kfunc_call_test_uninit(struct prog_test_pass1 *out__uninit) __ksym;
+ void bpf_kfunc_call_test_mem_len_fail2(__u64 *mem, int len) __ksym;
+ 
+ void bpf_kfunc_call_test_destructive(void) __ksym;
