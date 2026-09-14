@@ -1,162 +1,172 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C723F4841
-	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 20:21:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789417317; cv=pass; b=TvQF9SK91zN+6f0iPcpta5ogNr5peJM11bP8AsiZBIDk7HcIGEnahv/Zaz/ZeKUnk4chfqta9fvr8iTj464YmU233oGxf8vslj7UnrzL14nZuKevBc0qjwdjY18ANqYZEVb46ufGhxD4UsrxunweTs26UfssZozSZ5xgLU9h1Sk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789417317; c=relaxed/simple;
-	bh=Cdzqpc7AKe0kczRTfDfZtBhK/jHqi5wwRmxCKMBaLoQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZgUyBIEkK6B4iKXWKnr9+/6zaL+3a7M68b2MPHkk/EHKHnL+cVNx3RO+QQllxrCOKDGbHi8ZaQF5FDGQmiH4h58mtcCltwVyoIZ48tEYxhPW5KocLnEyr4YynZ5rozPnpJK+ZOTQAl4X62aq9bxm1haBLNcbaVu/UE01ZYI5zrg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DXOPM/PZ; arc=pass smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45F4747CC99
+	for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 20:29:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789417756; cv=none; b=l+x/KtyZfrBWdJpwKLnksbZYavwJVq/jKq6UMPbUtujtqeRLuMBZsD1s/ArSnrnYjEoYH8mmKDWjexnkhhlpcVJFdm1KZHcvkrwsLk5Y+0pGCbJn+jHDy9rq08s3dQ1pK4Eav7E3aoWbVsIUdoNMtegHi+vdIakPuWvH+L6nxDI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789417756; c=relaxed/simple;
+	bh=V8mhYwrBMYJn0Atprf4OLURmdEZN1k4wCeZYck4YItU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bbGoSUoXI4d3s8GeSNxK37TfiQjG/2TugC5GLMygD7GCPU8ZZGpM/FuHTYH3dUhPfJE5kq8CYUaOhjaK0EoBxouqLjthkWWNePoO8DXDqOUelDt59SS9dno+2UNd3971ZrIEo+Iyg+959oYukv+bvTJnNX3M1yZ2TOINN5xPat4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eFH2LnWU; arc=none smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DXOPM/PZ"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-86a25369f16so2940458b3a.3
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 13:21:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789417315; cv=none;
-        d=google.com; s=arc-20260327;
-        b=nySrBHo1lOC9ueiYr1IcTJ3O6vxO3vkGLd2sAXb5igk8y3Fhahhjhp+I5Et7wljbZ4
-         QGRUQbqecima7XEmJaQu8DDL9t5/6VvnoeP8mTiPGrLBXvv1r1dUd8aAGHmOeA5qQ2kR
-         /9mh/QruBY6mpgzzLkT8tYa4kfBcXV2Y+SG+Y15rXcA2kbagbEU8DEUJmKzl5nb7AVxu
-         9Fbjtx8e5mXzuJ8zzJBd/YBu3y4eBPzW//JegsqlVOqYw8Jnu1PvP5DHsL4IePgIxWbo
-         oHDbyBBceUZ6OI9emm2zCoOY5fw+vwhRypLkiQRgILNhviZPKW+H7qaRAhcKhl5GmSe1
-         02aA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=JV62ZslcIvwytI9YcrSBLFLPljM2c3GaRkd/kE34k3U=;
-        fh=n/rXhmC8U59o0vOs1VozahFQopCaPu1wsMQhkRiDUEc=;
-        b=EvbiQzYSYcT79MXI1HxDY0wZVYx5G/MSplXG6YpjYl0lLv7WrNI6NIF/vcYbOJILgW
-         /t3NlifQvs3z4wgpOPqu5qpicxHmy+OFSHaI/sonh0HKO77Gth9jxeEylAn9uwppN7hG
-         0+jWrBetmLTePI9BB+LWHDuk7p92mN0i2A3NmWkx6aHa2MOvR7F0SkwWYgaRxoTPm6zV
-         gtJVAG3w3I1yLJJqGQqRg2Hed1ubYXNSjx2ZRlTAFZZsCCkntERqDved/cIPp3bzLoRT
-         5esKpDlTxJ11nSlcdJ1Ysu9gJD56dS62GR1UydpMkX8MqpSdqe3S9b1dIeIO7/UzlyMe
-         /nFw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eFH2LnWU"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2db425c9050so195835ad.0
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 13:29:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789417315; x=1790022115; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=JV62ZslcIvwytI9YcrSBLFLPljM2c3GaRkd/kE34k3U=;
-        b=DXOPM/PZK++jXvzddZyNB3hV1JEVerWS7tqgalJwdRb9bGUwdgaFiLbqghODiMz3U6
-         Di+Kt2xbwYOyp6GFzsZszC9Q7oR2j89X8zI03AuBZiSZ8cta2jyWS6dq3Kx3Ay7FNoIH
-         tlWx3jA/iq3IXiN9zwWDwskopeCJbm6oLZY+uhtj+YA/lW9x81iEjORBMt3m/X8pROAG
-         CfoA4rOOY9+p+TzOMSKznqahl9dYIaRw3Jf1I9XADDAkuRrEsMrimn8+vQev8uxeH4xw
-         KCjiKz/ioW35L8ken6zMjiCDz4iZiDuGqSAy57D0OnVbj4Hdq7828AbwvlA/uyB1AQEb
-         kyfA==
+        d=google.com; s=20251104; t=1789417754; x=1790022554; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=M1RB04FVKilnMj3CUMQjbhrQYe/qiVYK3aULFxVnZe0=;
+        b=eFH2LnWUDN17cBc6Jt9SLxjlisyLFXIqXmP5FlhdsYeIo4k3/6NF5CewZL3/3X6vTu
+         gkm0wZHS2ZAci77GTi2NjriSQczz2tqrPQ5DWYyjBoFVb2oLLx6SIXoJ9gCE7XKVfNPv
+         KmBMtr06zkjjrW+7YdjOoJNAnFwXCCzCvIdiiaR0QWmerOlfc4IJyObNJVaN2Did40Z0
+         YjliKDeEsRbEFz9I0Mablv3T9jxC/vu1h4dF8aMxRP8E4ZzWCLYWr+qimbaABuAlCvb0
+         O+yhD45MlChNrqH+bXY0L1YaJeJiksL2nTfv0WjffMASuTkNmmN4wk8SuOvfq9pzaokx
+         ySmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789417315; x=1790022115;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=JV62ZslcIvwytI9YcrSBLFLPljM2c3GaRkd/kE34k3U=;
-        b=yXEvo9YKZ9ycC6RUFnorJ/WAwamYjf5Kqupc+syOsMWve2+A+QWk5g7Og4jg0pb/NX
-         mmhYYaZ/s957bjDhGN9KHiGD4Y7vB/0zqZiFeL0nS6TE30bvdNxlwUhSQCSGFA4UvbVf
-         tDPneUB8wT9A5oDioGSNl8ZKwfpy047b0JfTq9q4+8cFCNunMkYZGRmJk8KWPBJansvm
-         KokZ38i3fhnnxP5bvKV+I5EShIDWApjIWmAmwVnc4wX3+tjVMxU+zMoV5TutICrI/7Z8
-         TYjn0oQ+Duq8yQd2eLN5UDSEPAU8gXdtVWxyecvvVVWaeStOl0NVpIKZxi5H5d6gce0G
-         TLbw==
-X-Forwarded-Encrypted: i=1; AKwUvBzBgO0KXytjZI+Oib46cYJwE83ojTAHs92PqV5GeaqtMfr2mklI7kDk1xQoz08bjJGGDCQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++nVUWi395pkt/84fEMs1y16ryTppvbJ3LqCAUqYpa0RTAWZ+9y6
-	6dQb4ZwRmgrdE+unFn7RrkT+OZ8InYa4jqdFg87LsqmNGTAfjXGj99DXLIq0ifooutkLY6YMflQ
-	eTfNPhv+TlgePVQ9hn9lqXfuGNR9Cck4=
-X-Gm-Gg: AYBFou3iDHMxNR+TXw8TstrVJcCVkfKWdxbUq5MkafQ+zi+QPhic15GozG+LXO8duXT
-	4Hom5axhSkdrW0aOjsWPzt9BdjHQJNHNSlVWHgHN1piTmCXKZsr4cVNMtdgc8qw6X9teLrog0RQ
-	ChKXNMeD//EW4Ibf1KkLNO3jO2VLA5q+sAFTyFbLUCKhtxo9gtMDu7yJtq8PJPwkBOGEf1QqlLZ
-	xzzsV2PKMRplWLae4zutPHDcUgDYQCnh9BC1bj/YM66DriQZ2T2VZKrgl8/fjdWKjpBEAEMLmrQ
-	23nxyXsrBkK/VJ2ik9pdal+FWw+a38WdVhCb+fDeJ4yHBNyCWui59nistKvDntStuOKw0gXSN+d
-	rM5DrWio0YZWRKqwZq8+vDIT3Hq2yRRuHtZRtue7sEDGSxt3HVRUhD8MvNNcVx8jWze9GYV5HAw
-	==
-X-Received: by 2002:a05:6a00:f04:b0:857:4dea:e1dd with SMTP id
- d2e1a72fcca58-86f851fe665mr7993128b3a.14.1789417314693; Mon, 14 Sep 2026
- 13:21:54 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1789417754; x=1790022554;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=M1RB04FVKilnMj3CUMQjbhrQYe/qiVYK3aULFxVnZe0=;
+        b=zZCbebm8qMO8yv59lLnhoc6Dsqg/AiFvmAmtWaghjEbd6C/NbNFSrLK3xnWI5QnD0n
+         gB3XVjwJ4A+LRf/F4fDtcSMrue+bwuq5n8L2ckJNMz4I1A6aGemkc/OQcWPbGKH7mhXR
+         pxmgHhG0HRhWZFx0SFM+i2QIW495wrSksoDAND+APkSmwniZVDel4XOf60fl2bkmihHY
+         fT2Tb/ErQgGlP1cUUTZHJBmfScT5/FPlFXo+hOr1ODtyMWtn9Ej1FxiphzuL046PFplB
+         xXzNQE93+AmpDvTmSP7rnpV3zz7nuJNcUrKjcT0juziqucbujpbS/xnY1jJVHFMlVdon
+         boUw==
+X-Forwarded-Encrypted: i=1; AKwUvBy6FM0hJ4J9xO1IZ49ncECDY7mtEDAq2kV648WGYnqnBQBh3SCpeIJ64bYSfv143XhqrpE=@vger.kernel.org
+X-Gm-Message-State: AFuF++lGToQByVcSwUoRBLia4GPoS+HUZGbJf/hpa1yGckeNIyYXBsJU
+	mztCKtfhxZELwooiiEISAJcqeZGEXYJX4JBKEDlVSKe8015e79oVn5jK9ZCFT8vMfw==
+X-Gm-Gg: AYBFou2m1MhyTmX0KslTdYHsDaWK3A2WANz3oczjgaG7BmdBQ4pW/PXeueoJrVnT4rO
+	SdNmL+ygLX/J9L24JMRfTirdSvEIMazFuu6myZE8BC4bfdQrSmvKQghrIUkJTTkg0zSwqPT/2RT
+	4vCOqlixdMqY++NmuFAISCanG/Zvj9ugplVLQ3nQ+VNrubkWbaZQXfElbNl1qgfNXih2KQkQIMG
+	jd3QZ/fyuUpo7tanGXsKtyYlJF94ZIXMUxwk6RAXOF9Cd3vQWKwU5pRNSQ7ccnJrJeGpxgNGL6B
+	7ika5tiSe8OTiLRf0a0PPPUC1ZYc/aYvhmVRjvPxfSFI9iusPQCQ9Rs0Z1dQ+kf9vl+DSh2Zo7W
+	VOVkyCQ4KWcbC2NKkhr+ynIfttPvPd5t1HrrpfNzAZhRnXnkC9O0asVzc+H/MLfZG+HlYbQrM05
+	XUKguuDU2BmD0quFAgZjEHF9Vf74ZlAtKA4ibWvx+xxmG9jd614w5KhZI5qTDJ8Y7PyaiVx5edL
+	m1nQET9KqHK8c/4GVD3+Jy4CJ0u6Btwc+0NqA==
+X-Received: by 2002:a17:903:1b63:b0:2d5:cad1:a2e8 with SMTP id d9443c01a7336-2dd76b014dcmr2269015ad.6.1789417754079;
+        Mon, 14 Sep 2026 13:29:14 -0700 (PDT)
+Received: from google.com ([2a00:79e0:2e51:8:9e:b709:96a2:f1d6])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14365b348cbsm27582654c88.3.2026.09.14.13.29.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2026 13:29:12 -0700 (PDT)
+Date: Mon, 14 Sep 2026 13:29:06 -0700
+From: Isaac Manjarres <isaacmanjarres@google.com>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: =?utf-8?B?6auY57+U?= <gaoxiang17@xiaomi.com>,
+	"David Hildenbrand (Arm)" <david@kernel.org>,
+	Xiang Gao <gxxa03070307@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	=?utf-8?B?5Y2w6Zev?= <yinchuang1@xiaomi.com>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"Lorenzo Stoakes (Arm)" <ljs@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [External Mail]Re: [RFC] bpf: account ring buffer backing pages
+ separately from Lost RAM
+Message-ID: <aqhZEuQTu394hYB6@google.com>
+References: <20260815091819.3651099-1-gaoxiang17@xiaomi.com>
+ <04f3ce2f-67f5-4829-9551-a69b9df29854@kernel.org>
+ <CAEf4BzbwZkoacX-iP1j4+p8YNbWsq0pc3eTermh2uT5ir66zbw@mail.gmail.com>
+ <8d2e20842c24460296e4c83e6dc0dde3@xiaomi.com>
+ <CAEf4BzYQvhSVN=Hggg5FHzFdkRr4UNBD6yXaBsOaAwbsRpXpsw@mail.gmail.com>
+ <aqSNkbhIuaB5D0H0@google.com>
+ <CAEf4BzbAOgwQqsRQnY4yxvubLtioQNL_BBHer4ExvNF7Rvvu4w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260914131701.2529725-1-memxor@gmail.com> <20260914131701.2529725-5-memxor@gmail.com>
- <CAEf4BzZjrWzQxaZ1kXyvXHXuUFDsgZe6NwQHH6seqfoMLpJLZw@mail.gmail.com>
-In-Reply-To: <CAEf4BzZjrWzQxaZ1kXyvXHXuUFDsgZe6NwQHH6seqfoMLpJLZw@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 14 Sep 2026 13:21:43 -0700
-X-Gm-Features: AcwNN1Xbu69yejrrz-K4JXyHVU7mm_BUndmfj2wwI1elOwW_Bm0IATinhlsKq2c
-Message-ID: <CAADnVQ+SOswCXzZbCbjtjXQDd++Zkrxpg4k3gHMsMPsN9BRQEA@mail.gmail.com>
-Subject: Re: [PATCH bpf v3 4/7] bpf: Restrict CO-RE poisoning to relocatable instructions
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Nicholas Carlini <npc@anthropic.com>, Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzbAOgwQqsRQnY4yxvubLtioQNL_BBHer4ExvNF7Rvvu4w@mail.gmail.com>
 
-On Mon, Sep 14, 2026 at 12:54=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Sep 14, 2026 at 6:17=E2=80=AFAM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
+On Fri, Sep 11, 2026 at 05:04:55PM -0700, Andrii Nakryiko wrote:
+> On Fri, Sep 11, 2026 at 4:24 PM Isaac Manjarres
+> <isaacmanjarres@google.com> wrote:
 > >
-> > check_subprogs() verifies that each subprogram ends in an exit or an
-> > unconditional jump before in-kernel CO-RE relocations are applied.
-> > An unresolved relocation can then replace that terminal instruction wit=
-h
-> > an invalid helper call. The resulting fall-through into another subprog=
-ram
-> > breaks the CFG invariant used by postorder and stack liveness analysis,
-> > which can write past their per-subprogram arrays.
+> > On Wed, Aug 19, 2026 at 10:24:28AM -0700, Andrii Nakryiko wrote:
+> > > On Tue, Aug 18, 2026 at 6:46 AM 高翔 <gaoxiang17@xiaomi.com> wrote:
+> > > >
+> > > > Thanks for the pointer. Understood — no new NR_* counter or
+> > > > /proc/meminfo entry.
+> > > >
+> > > >
+> > > > The remaining question is on the consumer side: Android's Lost RAM
+> > > > accounting would need to enumerate all live BPF ringbuf maps
+> > > > (BPF_MAP_GET_NEXT_ID) and read each map's fdinfo memlock to sum them.
+> > > >
+> > >
+> > > For BPF ringbufs specifically, you should be fine just iterating all
+> > > map with BPF_MAP_GET_NEXT_ID, getting its FD with
+> > > BPF_BTF_GET_FD_BY_ID, and then passing that fd to
+> > > BPF_OBJ_GET_INFO_BY_FD to get map's size.
+> > >
+> > Hi Andrii,
 > >
-> > Handle instruction poisoning after the instruction has passed the same
-> > class and operand-form checks used for a resolved relocation. This reje=
-cts
-> > relocations targeting jumps, calls, exits, register-source arithmetic, =
-or
-> > non-immediate loads before they can alter the control flow. Keep poison=
-ing
-> > supported instructions, including both halves of a plain ldimm64, so an
-> > unresolved relocation in dead code remains valid.
+> > Thanks for the suggestion on this! I did want to express a couple of
+> > concerns with this:
 > >
-> > The shared relocation code applies this restriction to both libbpf and
-> > in-kernel CO-RE.
+> > Scalability
 > >
-> > Fixes: efcda22aa541 ("bpf: compute instructions postorder per subprogra=
-m")
-> > Reported-by: Nicholas Carlini <npc@anthropic.com>
-> > Suggested-by: Nicholas Carlini <npc@anthropic.com>
-> > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > ---
-> >  tools/lib/bpf/relo_core.c | 28 +++++++++++++++++-----------
-> >  1 file changed, 17 insertions(+), 11 deletions(-)
+> > I counted the number of maps on one of our devices, and there are 112
+> > maps, meaning that there will be between 224-336 syscalls with this
+> > approach. eBPF is becoming more popular, so I'm concerned about how well
+> > this will scale, if we have to invoke 2-3 syscalls per map.
 > >
->
-> Kumar, can you please see if we can move check_core_relo() to right
-> after bpf_prepare_btf_info() instead of trying to guard against
-> malicious CO-RE relocation? I think what CO-RE logic is doing here
-> with poisoning is correct, it marks instruction as invalid because
-> CO-RE relocation couldn't be resolved/applied/whatever. That's sane
-> generic behavior, IMO.
->
-> The fact that this breaks subprog validation is more of a sign that we
-> do this CO-RE application too late, perhaps?
->
-> Also looking at current bpf_check_btf_info() logic, seems like we'll
-> skip CO-RE relocations altogether if we don't have
-> func_info/line_info, which is... fine, I guess, in modern world. But
-> it certainly is a bit orthogonal. So check_core_relo() seems like a
-> stand-alone step to me, which hopefully can be done very-very early,
-> so that no matter what patching we did will be properly validated by
-> verifier.
+> > I had a test program that implemented your suggestion, and it took about
+> > 2 ms to identify 39/112 ringbufs. As the number of maps in the system
+> > grows, I'm concerned that the latency associated with computing the
+> > memory usage from ringbufs will become even more expensive. This is
+> > something we had an issue with before on Android, where we had to
+> > iterate through various sysfs files to gather wakeupsource metrics [1].
+> >
+> > To improve on this, I was wondering if we could expose the ringbuf
+> > memory usage and potentially other bpf stats through bpffs
+> > (/sys/fs/bpf/stats)? This counter could be a lightweight counter that is
+> > incremented/decremented on ringbuf allocation/freeing so that when it is
+> > read, there aren't any expensive computations.
+> >
+> > For this specific metric, we could just use a counter to track how much
+> > memory is being used by ringbufs and have userspace read that. That also
+> > brings me to my next point.
+> >
+> 
+> I just don't see a good enough reason to single out ringbuf maps
+> specifically. other map types also use memory, why would they be
+> excluded?
 
-Let's do both:
-- move bpf_check_btf_info() right after bpf_prepare_btf_info()
-- check that relo applies to relocatable insns only
-  and hard error if it's not.
+I was looking at ringbuf maps specifically because they allocate memory
+for the ringbuf via alloc_pages() and aren't attributed to any counter
+that is exposed to userspace. The other maps use either the slab
+allocator or vmalloc() to allocate memory, and those entries are visible
+via /proc/meminfo.
+
+> If you are worried about too many syscalls, look into map iterator
+> program types (grep for SEC("iter/bpf_map") in selftests). That will
+> be super fast and way more generic than what you propose. You can ping
+> such program in bpffs and that will be you custom /sys/fs/bpf/stats
+> implementation that you have full control and customizability of
+> 
+
+Thanks for the suggestion; I'll look into this and let you know if I
+have any questions!
+
+--Isaac
