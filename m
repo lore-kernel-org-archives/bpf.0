@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93E03DF01A;
-	Tue, 15 Sep 2026 15:07:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143E73DC84C
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 15:07:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789484873; cv=none; b=g33+q0o8kIyY5tk/qq5Ob2ttZRy6dnfsPEqcgWkLhj8wBeaHR6zTyEf1/m62U6wnIkf/yanfwx1xEcO3RIrK5Y7zNcUv8FnwCUwfTCihKWaccIccP6Q9naYKHowWsml9uOQMjHEgLi2jqgTtwoc4uR88oY8RKwAjJadqjTmvKEU=
+	t=1789484873; cv=none; b=Wc2D2+X0OI8HARoOdZmtTqIzt9FZDxuFGJ8DsvuC9fo4Lo3bUVMvujveo3odI9Dz2RTCZgaAiItIyVfLRePIYfxf+ww0Ri7K6fcEVyUJ6vBcdF1oSc8D/1JbNnSLEP7G4Wa7eva+qfiWiIXivY4KFzA7eOobfXcOMOFxAmZMOy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789484873; c=relaxed/simple;
-	bh=PYhg+lZHLzOdUosWz93zB8+JUnSqXWBu4/OVfDYhwCc=;
+	bh=S20KuxEur0XX7vYsiss+O8QXFB+6uDG65uGpZBwOsck=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CZRSKGWhTWy8CmqkkJXx8Nz33OVSYG4icVwsl1ish4P5HiDctnzaOGqzmD57LuPsVQ5uZUWJBnZjt1NDYo9gb0XtvfSAkb/2fhYjLZ6by2LlKO53LuP9ZPDLAtAEKJeO7juEknGUKw5j92iWwxY7WSinKPoE7aHqmXSe5VfGczE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=lUmtdg00; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=LSDZhVHWSA4JIhAxLW6eaLvT8hiSvii3hDI7cqS9jNHnV95VnPyn9BMWXGg7UYhVdwvfSCdDz0scBKZ49M6sMSiZu7JvbYwBx8TENJ3j5GFz1NaoQfNd+DAuo1D5zqD2F//yXnjaWNMIXmX99jVjBXbxDcm6LmOjU0QP1OHMASc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=f6K+EAgK; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="lUmtdg00"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="f6K+EAgK"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=cIIBMveQ7jKi3fZhD2t+SiOVvv9aeAZjOxjJNUxRtp0=; b=lUmtdg00S30tu+4o34cmydhE3k
-	hv3gR+2RWAhC0sW6Xdj1F6HuyxvW6fG/d87Y3//keDC1uh6QzYtcLJfm5WzUYbsuVN3JJxx+yyTWb
-	gRMkfoa3bJ6bdnDu9Fkn99o7IlwGcPBsbKKivc9ecFJxbJKhXNqDZkvFBt9wmwqhu5pSa0j8CwgfH
-	M/DHk1cs2Vj0bK2ItQkklYS6h1U/9TnyHT8EYSyoIrkfnaf3Qrt8OMEN8CrWCeBNrcnGBpGHD41EJ
-	kr7tYDyqtcqocm6wzy4jZt3+a0JjfTjqfGZvcWIpPHpmVc0uxwD+9NhRGusXBCjlR0yLq7yqULz3o
-	X7zQXG0g==;
+	bh=zKklGPjS9Qxae8bhAF1kHSwGJGdApWDByuSXvA37X2E=; b=f6K+EAgK3aRGSduNjhoiIW5A6M
+	ceeVKSAfZE9UgrgVI9LeSk75uoSDnbMdmcGJBYK+HvYVVqWdWkMa4wNAN3jRGgGUXng1qBGjrRwtF
+	tgDoBLQUzdBpyKkNyffzB0yoU/IoJCPfpIcBjUJTHVc5HMgeyZo665i6R7YNSGtkkz/AwHWuldF5l
+	rJ6RmpBRzX3a0OF21wrt2j6R6hhGu50JcAt74SQmXZ92qwoHvy2YfmAdQGLAjoku8a3zSxtcqZ+eP
+	XoLP2uCBvQxBlFovbPdFa9dRoCtNJz6kiH8YJ/lGQKC3+PBM8ATXwrqRtZ2SXFhLkdsr1mzp7vn4e
+	ATe4rIWg==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1x6Ul3-0007Jt-2r;
-	Tue, 15 Sep 2026 17:07:41 +0200
+	id 1x6Ul8-0007LA-2G;
+	Tue, 15 Sep 2026 17:07:46 +0200
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: alexei.starovoitov@gmail.com
 Cc: brauner@kernel.org,
@@ -41,13 +41,10 @@ Cc: brauner@kernel.org,
 	memxor@gmail.com,
 	kpsingh@kernel.org,
 	matt@bobrowski.net,
-	bpf@vger.kernel.org,
-	Zhan Xusheng <zhanxusheng@xiaomi.com>,
-	Joseph Qi <joseph.qi@linux.alibaba.com>,
-	ocfs2-devel@lists.linux.dev
-Subject: [PATCH bpf-next 1/8] ocfs2: Copy the xattr name in ocfs2_initxattrs
-Date: Tue, 15 Sep 2026 17:07:32 +0200
-Message-ID: <20260915150739.284189-2-daniel@iogearbox.net>
+	bpf@vger.kernel.org
+Subject: [PATCH bpf-next 7/8] selftests/bpf: Add verifier tests for the __ctx_out plumbing
+Date: Tue, 15 Sep 2026 17:07:38 +0200
+Message-ID: <20260915150739.284189-8-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260915150739.284189-1-daniel@iogearbox.net>
 References: <20260915150739.284189-1-daniel@iogearbox.net>
@@ -60,62 +57,350 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/28124/Tue Sep 15 08:27:28 2026)
 
-ocfs2_mknod() and ocfs2_symlink() ask for the security xattr up front
-through a struct ocfs2_security_xattr_info, so that they can size the
-transaction before setting it. ocfs2_initxattrs() duplicates the value
-since the array security_inode_init_security() hands is freed on return,
-but keeps the name pointer as-is, given so far every LSM stored a string
-constant there. bpf_inode_init_xattr() places the name in the same
-allocation as the value, which security_inode_init_security() frees on
-its way out. Copy the name alongside the value and free both together.
-This is the only special case wrt xattrs in the bpf_inode_init_xattr()
-context.
+Add BPF selftests to cover what a BPF program may and may not hand
+to bpf_inode_init_xattr() as the inode_init_security hook's args.
 
+  # LDLIBS=-static PKG_CONFIG='pkg-config --static' ./vmtest.sh -- ./test_progs -t verifier_lsm_init_xattr
+  [...]
+  #649/1   verifier_lsm_init_xattr/reject_count_write:OK
+  #649/2   verifier_lsm_init_xattr/allow_count_read:OK
+  #649/3   verifier_lsm_init_xattr/reject_unchecked_xattrs:OK
+  #649/4   verifier_lsm_init_xattr/reject_unchecked_qstr:OK
+  #649/5   verifier_lsm_init_xattr/allow_spilled_count:OK
+  #649/6   verifier_lsm_init_xattr/reject_forged_count:OK
+  #649/7   verifier_lsm_init_xattr/reject_stack_count:OK
+  #649/8   verifier_lsm_init_xattr/reject_other_ctx_arg:OK
+  #649/9   verifier_lsm_init_xattr/reject_null_count:OK
+  #649/10  verifier_lsm_init_xattr/reject_shifted_count:OK
+  #649/11  verifier_lsm_init_xattr/reject_var_shifted_count:OK
+  #649/12  verifier_lsm_init_xattr/reject_ctx_forged_count:OK
+  #649/13  verifier_lsm_init_xattr/allow_count_via_subprog:OK
+  #649/14  verifier_lsm_init_xattr/reject_shifted_xattrs:OK
+  #649/15  verifier_lsm_init_xattr/reject_sleepable:OK
+  #649/16  verifier_lsm_init_xattr/reject_lsm_cgroup:OK
+  #649/17  verifier_lsm_init_xattr/reject_wrong_hook:OK
+  #649     verifier_lsm_init_xattr:OK
+  Summary: 1/17 PASSED, 0 SKIPPED, 0/0 FAILED
+
+Co-developed-by: David Windsor <dwindsor@gmail.com>
+Signed-off-by: David Windsor <dwindsor@gmail.com>
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Zhan Xusheng <zhanxusheng@xiaomi.com>
-Cc: Joseph Qi <joseph.qi@linux.alibaba.com>
-Cc: ocfs2-devel@lists.linux.dev
 ---
- fs/ocfs2/namei.c | 2 ++
- fs/ocfs2/xattr.c | 5 +++--
- 2 files changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/bpf_kfuncs.h      |  19 +-
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../bpf/progs/verifier_lsm_init_xattr.c       | 245 ++++++++++++++++++
+ 3 files changed, 262 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_lsm_init_xattr.c
 
-diff --git a/fs/ocfs2/namei.c b/fs/ocfs2/namei.c
-index e9c7774ccf91..e24f0e337a56 100644
---- a/fs/ocfs2/namei.c
-+++ b/fs/ocfs2/namei.c
-@@ -480,6 +480,7 @@ static int ocfs2_mknod(struct mnt_idmap *idmap,
- 
- 	brelse(new_fe_bh);
- 	brelse(parent_fe_bh);
-+	kfree(si.name);
- 	kfree(si.value);
- 
- 	ocfs2_acl_init_release(&acl_state);
-@@ -2068,6 +2069,7 @@ static int ocfs2_symlink(struct mnt_idmap *idmap,
- 
- 	brelse(new_fe_bh);
- 	brelse(parent_fe_bh);
-+	kfree(si.name);
- 	kfree(si.value);
- 	ocfs2_free_dir_lookup_result(&lookup);
- 	if (inode_ac)
-diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
-index 35bcbb0ff607..d83840b6bed9 100644
---- a/fs/ocfs2/xattr.c
-+++ b/fs/ocfs2/xattr.c
-@@ -7524,8 +7524,9 @@ static int ocfs2_initxattrs(struct inode *inode, const struct xattr *xattr_array
- 				    GFP_KERNEL);
- 		if (!si->value)
- 			return -ENOMEM;
+diff --git a/tools/testing/selftests/bpf/bpf_kfuncs.h b/tools/testing/selftests/bpf/bpf_kfuncs.h
+index ae71e9b69051..1b408fe9e0fb 100644
+--- a/tools/testing/selftests/bpf/bpf_kfuncs.h
++++ b/tools/testing/selftests/bpf/bpf_kfuncs.h
+@@ -78,18 +78,29 @@ extern void bpf_key_put(struct bpf_key *key) __ksym;
+ extern int bpf_verify_pkcs7_signature(const struct bpf_dynptr *data_ptr,
+ 				      const struct bpf_dynptr *sig_ptr,
+ 				      struct bpf_key *trusted_keyring) __ksym;
 -
--		si->name = xattr_array->name;
-+		si->name = kstrdup(xattr_array->name, GFP_KERNEL);
-+		if (!si->name)
-+			return -ENOMEM;
- 		si->value_len = xattr_array->value_len;
- 		return 0;
- 	}
+-struct dentry;
+-/* Description
++/*
++ * Description
+  *  Returns xattr of a dentry
+  * Returns
+  *  Error code
+  */
++struct dentry;
+ extern int bpf_get_dentry_xattr(struct dentry *dentry, const char *name,
+ 			      struct bpf_dynptr *value_ptr) __ksym __weak;
+-
+ extern int bpf_set_dentry_xattr(struct dentry *dentry, const char *name__str,
+ 				const struct bpf_dynptr *value_p, int flags) __ksym __weak;
+ extern int bpf_remove_dentry_xattr(struct dentry *dentry, const char *name__str) __ksym __weak;
+ 
++/*
++ * Description
++ *  Attach a xattr to an inode that is being created, from a program on the
++ *  inode_init_security LSM hook. *xattrs* and *xattr_count* must be the
++ *  hook's own arguments, passed through unmodified.
++ * Returns
++ *  0 on success, a negative value on error
++ */
++struct xattr;
++extern int bpf_inode_init_xattr(struct xattr *xattrs, int *xattr_count,
++				const char *name__str,
++				const struct bpf_dynptr *value_p) __ksym __weak;
+ #endif
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 7732df9bc870..973bbeda9318 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -130,6 +130,7 @@
+ #include "verifier_bits_iter.skel.h"
+ #include "verifier_set_retval.skel.h"
+ #include "verifier_lsm.skel.h"
++#include "verifier_lsm_init_xattr.skel.h"
+ #include "verifier_jit_inline.skel.h"
+ #include "irq.skel.h"
+ #include "verifier_ctx_ptr_param.skel.h"
+@@ -294,6 +295,7 @@ void test_verifier_xdp_direct_packet_access(void) { RUN(verifier_xdp_direct_pack
+ void test_verifier_bits_iter(void) { RUN(verifier_bits_iter); }
+ void test_verifier_set_retval(void)            { RUN(verifier_set_retval); }
+ void test_verifier_lsm(void)                  { RUN(verifier_lsm); }
++void test_verifier_lsm_init_xattr(void)       { RUN(verifier_lsm_init_xattr); }
+ void test_irq(void)			      { RUN(irq); }
+ void test_verifier_mtu(void)		      { RUN(verifier_mtu); }
+ void test_verifier_jit_inline(void)               { RUN(verifier_jit_inline); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_lsm_init_xattr.c b/tools/testing/selftests/bpf/progs/verifier_lsm_init_xattr.c
+new file mode 100644
+index 000000000000..b706bf17b556
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_lsm_init_xattr.c
+@@ -0,0 +1,245 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include "vmlinux.h"
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_kfuncs.h"
++#include "bpf_misc.h"
++
++char _license[] SEC("license") = "GPL";
++
++const char xattr_zone[] = "security.bpf.zone";
++char value_buf[8] = "z";
++int scratch_count;
++
++SEC("lsm/inode_init_security")
++__failure __msg("cannot write into rdonly_trusted_mem")
++int BPF_PROG(reject_count_write, struct inode *inode, struct inode *dir,
++	     const struct qstr *qstr, struct xattr *xattrs, int *xattr_count)
++{
++	*xattr_count = 0;
++	return 0;
++}
++
++SEC("lsm/inode_init_security")
++__success
++int BPF_PROG(allow_count_read, struct inode *inode, struct inode *dir,
++	     const struct qstr *qstr, struct xattr *xattrs, int *xattr_count)
++{
++	scratch_count = *xattr_count;
++	return 0;
++}
++
++SEC("lsm/inode_init_security")
++__failure __msg("Possibly NULL pointer passed to trusted")
++int BPF_PROG(reject_unchecked_xattrs, struct inode *inode, struct inode *dir,
++	     const struct qstr *qstr, struct xattr *xattrs, int *xattr_count)
++{
++	struct bpf_dynptr value;
++
++	bpf_dynptr_from_mem(value_buf, sizeof(value_buf), 0, &value);
++	bpf_inode_init_xattr(xattrs, xattr_count, xattr_zone, &value);
++	return 0;
++}
++
++SEC("lsm/inode_init_security")
++__failure __msg("invalid mem access 'trusted_ptr_or_null_'")
++int BPF_PROG(reject_unchecked_qstr, struct inode *inode, struct inode *dir,
++	     const struct qstr *qstr, struct xattr *xattrs, int *xattr_count)
++{
++	scratch_count = qstr->len;
++	return 0;
++}
++
++SEC("lsm/inode_init_security")
++__success
++int BPF_PROG(allow_spilled_count, struct inode *inode, struct inode *dir,
++	     const struct qstr *qstr, struct xattr *xattrs, int *xattr_count)
++{
++	struct bpf_dynptr value;
++	int *saved = xattr_count;
++
++	if (!xattrs)
++		return 0;
++
++	bpf_dynptr_from_mem(value_buf, sizeof(value_buf), 0, &value);
++	bpf_inode_init_xattr(xattrs, saved, xattr_zone, &value);
++	return 0;
++}
++
++SEC("lsm/inode_init_security")
++__failure __msg("expected=rdonly_trusted_mem")
++int BPF_PROG(reject_forged_count, struct inode *inode, struct inode *dir,
++	     const struct qstr *qstr, struct xattr *xattrs, int *xattr_count)
++{
++	struct bpf_dynptr value;
++
++	if (!xattrs)
++		return 0;
++
++	bpf_dynptr_from_mem(value_buf, sizeof(value_buf), 0, &value);
++	bpf_inode_init_xattr(xattrs, &scratch_count, xattr_zone, &value);
++	return 0;
++}
++
++SEC("lsm/inode_init_security")
++__failure __msg("expected=rdonly_trusted_mem")
++int BPF_PROG(reject_stack_count, struct inode *inode, struct inode *dir,
++	     const struct qstr *qstr, struct xattr *xattrs, int *xattr_count)
++{
++	struct bpf_dynptr value;
++	int local = 0;
++
++	if (!xattrs)
++		return 0;
++
++	bpf_dynptr_from_mem(value_buf, sizeof(value_buf), 0, &value);
++	bpf_inode_init_xattr(xattrs, &local, xattr_zone, &value);
++	return 0;
++}
++
++SEC("lsm/inode_init_security")
++__failure __msg("expected=rdonly_trusted_mem")
++int BPF_PROG(reject_other_ctx_arg, struct inode *inode, struct inode *dir,
++	     const struct qstr *qstr, struct xattr *xattrs, int *xattr_count)
++{
++	struct bpf_dynptr value;
++
++	if (!xattrs)
++		return 0;
++
++	bpf_dynptr_from_mem(value_buf, sizeof(value_buf), 0, &value);
++	bpf_inode_init_xattr(xattrs, (int *)xattrs, xattr_zone, &value);
++	return 0;
++}
++
++SEC("lsm/inode_init_security")
++__failure __msg("Possibly NULL pointer passed to trusted")
++int BPF_PROG(reject_null_count, struct inode *inode, struct inode *dir,
++	     const struct qstr *qstr, struct xattr *xattrs, int *xattr_count)
++{
++	struct bpf_dynptr value;
++
++	if (!xattrs)
++		return 0;
++
++	bpf_dynptr_from_mem(value_buf, sizeof(value_buf), 0, &value);
++	bpf_inode_init_xattr(xattrs, NULL, xattr_zone, &value);
++	return 0;
++}
++
++SEC("lsm/inode_init_security")
++__failure __msg("dereference of modified rdonly_trusted_mem ptr")
++int BPF_PROG(reject_shifted_count, struct inode *inode, struct inode *dir,
++	     const struct qstr *qstr, struct xattr *xattrs, int *xattr_count)
++{
++	struct bpf_dynptr value;
++
++	if (!xattrs)
++		return 0;
++
++	bpf_dynptr_from_mem(value_buf, sizeof(value_buf), 0, &value);
++	bpf_inode_init_xattr(xattrs, xattr_count + 1, xattr_zone, &value);
++	return 0;
++}
++
++SEC("lsm/inode_init_security")
++__failure __msg("variable rdonly_trusted_mem access var_off=")
++int BPF_PROG(reject_var_shifted_count, struct inode *inode, struct inode *dir,
++	     const struct qstr *qstr, struct xattr *xattrs, int *xattr_count)
++{
++	struct bpf_dynptr value;
++
++	if (!xattrs)
++		return 0;
++
++	bpf_dynptr_from_mem(value_buf, sizeof(value_buf), 0, &value);
++	bpf_inode_init_xattr(xattrs, xattr_count + (scratch_count & 1),
++			     xattr_zone, &value);
++	return 0;
++}
++
++SEC("lsm/inode_init_security")
++__failure __msg("invalid bpf_context access")
++int reject_ctx_forged_count(unsigned long long *ctx)
++{
++	volatile unsigned long long *slot = ctx;
++	struct bpf_dynptr value;
++
++	bpf_dynptr_from_mem(value_buf, sizeof(value_buf), 0, &value);
++	slot[4] = 0;
++	bpf_inode_init_xattr((struct xattr *)(long)slot[3],
++			     (int *)(long)slot[4], xattr_zone, &value);
++	return 0;
++}
++
++static __noinline int claim_via_subprog(struct xattr *xattrs, int *xattr_count,
++					struct bpf_dynptr *value)
++{
++	return bpf_inode_init_xattr(xattrs, xattr_count, xattr_zone, value);
++}
++
++SEC("lsm/inode_init_security")
++__success
++int BPF_PROG(allow_count_via_subprog, struct inode *inode, struct inode *dir,
++	     const struct qstr *qstr, struct xattr *xattrs, int *xattr_count)
++{
++	struct bpf_dynptr value;
++
++	if (!xattrs)
++		return 0;
++
++	bpf_dynptr_from_mem(value_buf, sizeof(value_buf), 0, &value);
++	claim_via_subprog(xattrs, xattr_count, &value);
++	return 0;
++}
++
++SEC("lsm/inode_init_security")
++__failure __msg("access beyond struct xattr at off 24")
++int BPF_PROG(reject_shifted_xattrs, struct inode *inode, struct inode *dir,
++	     const struct qstr *qstr, struct xattr *xattrs, int *xattr_count)
++{
++	struct bpf_dynptr value;
++
++	if (!xattrs)
++		return 0;
++
++	bpf_dynptr_from_mem(value_buf, sizeof(value_buf), 0, &value);
++	bpf_inode_init_xattr(xattrs + 1, xattr_count, xattr_zone, &value);
++	return 0;
++}
++
++SEC("lsm.s/inode_init_security")
++__failure __msg("bpf_lsm_inode_init_security is not sleepable")
++int BPF_PROG(reject_sleepable, struct inode *inode, struct inode *dir,
++	     const struct qstr *qstr, struct xattr *xattrs, int *xattr_count)
++{
++	return 0;
++}
++
++SEC("lsm_cgroup/inode_init_security")
++__failure __msg("calling kernel function bpf_inode_init_xattr is not allowed")
++int BPF_PROG(reject_lsm_cgroup, struct inode *inode, struct inode *dir,
++	     const struct qstr *qstr, struct xattr *xattrs, int *xattr_count)
++{
++	struct bpf_dynptr value;
++
++	if (!xattrs)
++		return 0;
++
++	bpf_dynptr_from_mem(value_buf, sizeof(value_buf), 0, &value);
++	bpf_inode_init_xattr(xattrs, xattr_count, xattr_zone, &value);
++	return 0;
++}
++
++SEC("lsm/inode_setxattr")
++__failure __msg("calling kernel function bpf_inode_init_xattr is not allowed")
++int BPF_PROG(reject_wrong_hook, struct mnt_idmap *idmap, struct dentry *dentry,
++	     const char *name, const void *value, size_t size, int flags)
++{
++	struct bpf_dynptr val;
++
++	bpf_dynptr_from_mem(value_buf, sizeof(value_buf), 0, &val);
++	bpf_inode_init_xattr(NULL, &scratch_count, xattr_zone, &val);
++	return 0;
++}
 -- 
 2.43.0
 
