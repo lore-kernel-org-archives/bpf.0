@@ -1,45 +1,46 @@
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010000.outbound.protection.outlook.com [52.101.84.0])
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013013.outbound.protection.outlook.com [40.107.159.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48CD6476CDE;
-	Tue, 15 Sep 2026 22:27:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2777017BCA;
+	Tue, 15 Sep 2026 22:27:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.13
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789511265; cv=fail; b=knnbctjlApxlqWS1/29ARwGPJuUbYPKH8X++BuMMxsYRaw6NBn8+N6A/MaFELIYAX0z6tkwfS3ldhPPjgOqe+RfKX3+IK7mFLxiSR2hOuCHy6KTkQE7xAUHB8FT8MbbG9k39bNoqq50IfvPy00HSKS14jgVsSw4vNGsQlEGinZY=
+	t=1789511266; cv=fail; b=jST47YmY8yi2dCLA7VOoWy1CjLFd8IDeXsfAboqk/fCH6WEhMQ1P0WXCh/qoerhfCeHzBCyZuJMKdpyvyfiHSd5/o4HywSFVF+KCp+xwUY/e+1e0Z/w12I9qoHBeTFdY1aOkgG1Qx61Wq4cr5X27BlmqnbXqCZbfGmgMNszIzHE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789511265; c=relaxed/simple;
-	bh=w1ni5emANTQO8mBHfo3byyYIA8E5fQhjutroPtaqrh8=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=lM+/iiIq/8pEa3lBgqJkenoa4DFe9kRIA83RTNDNYb+gNHzWKQkq8Hf38cXcayKdlgD89EogeBTUxeP7xzpSOPprw9cptqgljn84b0Rf1p8wNbO07VkDJVLokMtTseFfn53xTa9UdT93HLCC3fYbn6XCSgjpFT4f8rJuMTxM4ik=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=HB3lXvLv; arc=fail smtp.client-ip=52.101.84.0
+	s=arc-20240116; t=1789511266; c=relaxed/simple;
+	bh=WMM08nhvPDdjc2AAx1kX4bCgxzknYFy/ENLA7RUnwWw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Ohm9yKMQswGr7lZxCHPU9ws1wkxJHQnNUTrqH9lVabl/aILKAIA+BliKCrYLXzmZlFk33ISAXi/sUSc/4e6KnTnMCAmsKLsAg3uLKUXv79KQZqYwNZYcBSNs8SAtN/T7UHUOY5NurveWLkcn3cBG7VakkHOxujsAQx1tsJx/TCg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=FiWR9WjT; arc=fail smtp.client-ip=40.107.159.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="HB3lXvLv"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="FiWR9WjT"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=U2M5SCZWFvtmRllO+cjQRF+UnuP5Oz8XTpsUSoDM92hFAmLCiHcfoDTLqL3Ced08uix0ZOrQGfOISvjMez4t5YPjL8i3m11USvqh+K3kHbcFeN/LV79oN1z1JGIsIuIK4ib0h1B3QcMFdYZKOSQ3Z8Hc+PgsLKMFuSqhlSPdWL32akgeqqSpYs2e4qES/V2eWjpfhukXKpgzyZaQFnQXJBLxg21YL7FUDabNJuhUj+kWEIulQzf1TlWmGCyEB1jSBWyf+EV7mNqOFoC7nRj2YxJNKM0m+H7rrrOg/oZuidPQnpvH1cw63ZU+vZ3rFUIUTitNEK+ewHjd/frrxJc+TA==
+ b=YZ3ytW8ImYID9YEgkth1mvPYvaYJamZu9mySP0XkVWo/PRzz1guFKDkArCNrOlp27B+O9kKwDdu8phddnznYHzyqDnd5DSsVdnwYxa97orVpTGr2CtD0vuhiOCH3d1nScB/9AnB3IeBUiX/gGssJ0GCsffT33AfJ0pfS4UfGcoyAbNeK3CDPvCqOVI2mzD3F92Jahla4fXv+iOSypvhGkRgipF4mvrAxxtPSU9FqOmrXsnAgb5Gr8V3uI12DeOUcTb0RIvPiwQGTtfGIQVZZLpv1t1IaICPDavrrRaYQV31KVTMdZOAmwVQos7QLLr8vLKSUYH1E5uuBoudc/JXjHQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ovg/PNuZDUHXOR5La694dQ4Kaxcr28xJHkL4bO+Ys3M=;
- b=psWqwUsWkA9LA+LFSbyL4/90u3etOsNwXhB/jCtGDOEyR3HqkGSJVA2bi9cZTw+BSfBg/1IzHEdRT+ouqlHwweyv8YD9uQQNd9ezPOp520yuMrT8RRhiGFtMiGVDlTt14CmHgtQRv/0kVr0SutAJ4fK3thFlgTok9+qczTaKifYNfT6bwydz5EA7EiZKe5QCbZmMIqjKt/vocYDav7EC0OPEGCQk4+sOwR9Om3Qv2CyN3V46nh+UZanBBGXV2Zv81jZJO3R8wmcxGB6Td8oj+oIby1GIariJg/PXH2OYR/3CSCAdsnDcLiK58CWfnXQEQiWvvmM8tZKJeC4gYq7rbQ==
+ bh=GI/5AZrPfnQJaDGg+WYF+yjAB6hXY/Ppa+EQFxTglkc=;
+ b=R0wUzYTorFOMOrUht4AnwJkmlFpr2TJqKDfsgXPxzxWSIRJf3FMk0HFt1nLQE5D2nIY94Rsvw73+tOuhY8Xs0ztCJt/yDRHlleecmdmqDzMO+D7c7xReefDqNdru+sNnT4jiGesz7vCmeVRJHNmNgo0fdSG+zI77bqabgK5ciPxDcU2otNNMAnt3o0o905aLamwT3byoeEYYm7QiE/glRy0GHW24zWu/1LDtfQhfbVPBF4aOlVuQ3xkymtDbIqdR20vDd4wRpZ9M7CRwrYOEou2Wrg/wjQ74N3PqPtGymcwZnKSAUVs9gEQUWkH+OxidEu48B0/lvtPI3k2zOTHB+g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ovg/PNuZDUHXOR5La694dQ4Kaxcr28xJHkL4bO+Ys3M=;
- b=HB3lXvLvGpqgyk4tAnAdNDN7J4X7eK6zVGtckDQyDGqi5h6AQ6/J1PYG78Y/gzv28g+e4boTrtVdOOQYrhfWZwCc2Do2Aj+ge4qn99Ax0m+bBfdtiY3cpPKDEnX3/ELlBg/EMBWzp+ExpZyJ8LtfG+VL+de7KMYBIsYHJSqVZRJLhIGTAai2ZmTYadBvSTvhqSgxl7rupFlgod3v18T4PEr3qLjtkHVe0n71KOpscCtHMj65RtrD46VWzPgCgqMx+0xzn5VDPzjoj/mN0kk+F3eE3XBVvvzbrdAjvp3Go6SwyY+FMiqXSkMOABpBimNOTWrVxJ8mkfqVc4/vOaKZJw==
+ bh=GI/5AZrPfnQJaDGg+WYF+yjAB6hXY/Ppa+EQFxTglkc=;
+ b=FiWR9WjT+iItl5Be4tvAKviLs1EEZo+HnHcAr8KVj+S331IKvbcQQc2ieltTWJypzG9y0J5vrs/s3em4j1cS87/DOo4nxG4hjNs+hFfrfxgxNbYbcnPFY5gbYwOisvXcLhr2z8aWsmyO+lEe+MjpFu9JOAkoQ/+0DDlVeB40MiAzxznvH9mnYBtTQV2XYF5sXvLpMQqqzAu8qAw7zZwvRY47Gx6RT76NmmWWj8Q2JTqEzebCX/xgOuuUmSlTGiuM/QJY1YUwJJ9acv0Ju+k7kKoLnsQ2T8+vgfORjfV+xVjd5ASkrVoCzo7ykif9kBNtrJDm/gOmu0jePER14g/gyA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM0PR04MB6900.eurprd04.prod.outlook.com (2603:10a6:208:17d::10)
- by DB9PR04MB8448.eurprd04.prod.outlook.com (2603:10a6:10:2bf::15) with
+ by DB9PR04MB9380.eurprd04.prod.outlook.com (2603:10a6:10:368::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.428.9; Tue, 15 Sep
- 2026 22:27:37 +0000
+ 2026 22:27:41 +0000
 Received: from AM0PR04MB6900.eurprd04.prod.outlook.com
  ([fe80::7fda:8431:ca1b:b023]) by AM0PR04MB6900.eurprd04.prod.outlook.com
  ([fe80::7fda:8431:ca1b:b023%4]) with mapi id 15.21.0428.008; Tue, 15 Sep 2026
- 22:27:37 +0000
+ 22:27:41 +0000
 From: vladimir.oltean@nxp.com
 To: netdev@vger.kernel.org
 Cc: Zefir Kurtisi <zefir.kurtisi@westermo.com>,
@@ -63,14 +64,16 @@ Cc: Zefir Kurtisi <zefir.kurtisi@westermo.com>,
 	imx@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH v3 net 0/7] Fix short frame transmission in enetc
-Date: Wed, 16 Sep 2026 01:27:27 +0300
-Message-ID: <20260915222735.1016937-1-vladimir.oltean@nxp.com>
+Subject: [PATCH v3 net 2/7] net: enetc: ensure enetc_xdp_xmit() calls enetc_update_tx_ring_tail()
+Date: Wed, 16 Sep 2026 01:27:29 +0300
+Message-ID: <20260915222735.1016937-3-vladimir.oltean@nxp.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260915222735.1016937-1-vladimir.oltean@nxp.com>
+References: <20260915222735.1016937-1-vladimir.oltean@nxp.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: AS4P251CA0003.EURP251.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d2::9) To AM0PR04MB6900.eurprd04.prod.outlook.com
+X-ClientProxiedBy: AS4P251CA0010.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d2::12) To AM0PR04MB6900.eurprd04.prod.outlook.com
  (2603:10a6:208:17d::10)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -79,102 +82,125 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6900:EE_|DB9PR04MB8448:EE_
-X-MS-Office365-Filtering-Correlation-Id: a4cee219-7bd4-4b25-5292-08df13788bdd
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6900:EE_|DB9PR04MB9380:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8a9d4d45-c5c1-4eae-4df9-08df13788e18
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|1800799024|376014|23010399003|19092799006|366016|6133799003|18002099003|10067099003|11063799006|56012099006|5023799004;
+	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|19092799006|23010399003|6133799003|18002099003|22082099003|10067099003|56012099006|11063799006;
 X-Microsoft-Antispam-Message-Info:
-	GIgXmEiL4lctVRfd+xReQFPMmK1jz0hcb7djNs9UTMODQWswBuvFsu3rZYL1MP8hMD1iPRSocJYFfXff+dytcZWPl5hlCyJkaRHYnKOSejg2GodecUJSq6pw2B7mo0LJhsc6SgA/LYZ1C/TTvF1vC7iO6CLuu7PFfoyS+wFcszuFsLHhu2NSz4rWBnmVaEVluzqcF5ikpGwMx0d5tT11zlIwZtCpt8hHEMUP99+J+TAYOWO1wr18JyUpDcZdnky5fOXoUtp3ItyJnwBLpG9vxYg1Hozzs6mxyufgGPJmn6epiBazrT8Bw4I8Obna1xmz2dqmtLyhdLRzmyj7nQtUt/HQGumzFl+k5hgb0sMc+uns9aFcavKBSM3K6vx4cw6yhs+VoATOCLwyNxv3pkVs3RAW3vhPSS1FGSb5G5FuGi5DyBRqnt+BGYo0g/5vRPNDULRSkSzlsruWzhkv9xPFZCu/uyjadBLa4lXFoKmjBrXW7EmF3BZYpZQguCCfQikoD2wmKNBmHbEpvOc650y67SXj++F3p6b6dLVASOAjvJvK7d+DHib91toOr28dQVQYpJxR5Y7lqg38j73/FVki58GiIp0C8/rnu+SMWTLVSbX9opp3mHbed3YlkyIPlAku/39AuAeD5qJ8SuihhnGmQ6fKbRrbfckqjV4mwncWmmg=
+	nyvJHoeLBS5iOBnWY2B2CaLNV2cMYtpN03zI8e8CxBk0/ERcj6bzHmhojfTzimoq/P+3ixV4wCis4zaDqN5qfe2bE73Q0hnsgIlXLvdmPT8sTi68In7tMW5CdDvRJaEB7aqkxlB/lMJo1hf01erEbnNVpriS99tJy8TF05jCU607u3thtLYAAU94ENTVQDPwebxq7B5N+zyCUfX8HDAIlQGDp3kMtLaNOpBXs5Uppvc4GclYItNlmDftDfKplhT5aY/XcPjKVEri0z2w1KwORiNbwr1GTmULVwMD3+ECLl812cAgPxUI54l/9Pj+507S9OPqDujjrlKr5ohFQiJNiCp/tevrKkAmjh2jzlL2aZtVI8aVssgNBDjrq1DkNgWwwT9ldLkStu5tZ2GGLZYsd2Y4J1Vwu7YlPD0Mx4xegWf3zR90qUssUibF3KnQibAwXlRCVhpNlpAH1YHW3kAmuim2NR/b1I0bmgYWATaH0raoRCnyx3Z3cQOIdFXEw6bviIAKgZCB5Pc4jxqcKzMeQ24hK+B9arTQ2bIhlj6eX9SOEc8Rb9Q8aspW4ralOcDfSPblb1Jfa50vDENkwK+GLVYM6/iD6C9o498DQMWdQcdDLB316W0bDiCzpSK0epLdrUubLu8dm8M6Oy1iwmN5x2VePjoBu6qzeAFK5dsAufo=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6900.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(376014)(23010399003)(19092799006)(366016)(6133799003)(18002099003)(10067099003)(11063799006)(56012099006)(5023799004);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6900.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(19092799006)(23010399003)(6133799003)(18002099003)(22082099003)(10067099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?89MK9o71EP5tuO8h97Q8I397wRciIlCwSGpa/tOj7Ix2DchP5vknsHteFt2t?=
- =?us-ascii?Q?XxWZEHmNFpcLCZ2w0h+9eeNpNBUGoZ0vwrQxYAJ2bQRsnIut8LVVX7nI5GUa?=
- =?us-ascii?Q?kOSZ8IUD9JMpSouhhyuVs+DdXAniz//zfE8tdnUGoYrEE5tlGoyLAx2uz4eR?=
- =?us-ascii?Q?RqQf2tny12cLA9uzRsqcaSy+PGjFfVTcIqbZC0T20KHdzxO1KZ4M9vdURUCt?=
- =?us-ascii?Q?I+Y7Q2qpJ/CKr2zr067KbEB2olMlfGyv7h+Y9/lFQ9Q3cWGB+gRMcg3NvgzV?=
- =?us-ascii?Q?Me4DJuGNk7ybH11tWqSf6jIkjBWM5r/MT2bZDoUEs/fWhOTYOJAwDsCamTEQ?=
- =?us-ascii?Q?GuuFa/LllAa93LAifpMuv9c6PaaIuLpuE/M8vEqYpeKxR2SOG0B927eRuJcV?=
- =?us-ascii?Q?VFtN7ulOV/JobV1XP90Xv+shetXRBzsSFC/YeHdwCESGve2MYuO7PmMT+AIz?=
- =?us-ascii?Q?BOMUExFjQlF7YqajwIxbj+8zfli3UKMNHemkpppZvz7VTcMpGNPKdSfCoy5H?=
- =?us-ascii?Q?h1XwFTEXE11YGKhHi9PRmRxWWH8yQshz8j5vmMCEldyfVeEPfKPesozfOMzj?=
- =?us-ascii?Q?u2xY3w+vVPXyyOvKwmcqRD9+4LV87Ps0A6FDXKIWBymgC6hrLi+hmpl/qmAR?=
- =?us-ascii?Q?Wg32QHCeLpP/SCFTXdtrI0WUYWjVA4c/LLtrE46aRgJRcnV0AlUFOUsUea5v?=
- =?us-ascii?Q?l9J2U8c4f1wUWGCOoV3zbXvVEwJxllE2c3V4GMr3i0z6u3b414N8fIju0nDk?=
- =?us-ascii?Q?r2KkSaYJo6dHqYHcSn0Ns/7w74sT+L6lfKESS95RiD6WR/cHJEQQEPcjY/Nr?=
- =?us-ascii?Q?G76qCqv8+2AUG93XwFgoLz2/5/ZY3ZDat5DThBzY0ZhvNH25X1XE7FxMl7NG?=
- =?us-ascii?Q?R5lrUVVg5+dQMB+e3DF4RS1pxORv0WGqZe0ixA+9uqA9qdsJsvx9H28jSg+g?=
- =?us-ascii?Q?yBNsj2AfXJa2r2iCalMNMTXYmhh2n2vJGL+Oba+X/Swj5iPNxVHAM6fu5d8H?=
- =?us-ascii?Q?xPAlzN5fW3udLtz8dsQzz5Hem5lVo6itoU3EMdQzmMke8fiT5aOHr5UugxcB?=
- =?us-ascii?Q?mn09LKKH3Wwe2gZqd26wU+4kHLycEybT8LNlAeDwIjRt84d6BeZvdVjUKRol?=
- =?us-ascii?Q?z9W7xxvQhFVGYoIoLCZoKsAdwcZ/XvWaSb9VvzyypLBiXvXKUOFGbSy7FGGU?=
- =?us-ascii?Q?EfY0Er3OP548ZY/6wOlvBZ98jNPAJ3OOVT7MLJ/fWyTs0nXCth16cDsj7PEQ?=
- =?us-ascii?Q?1noY/0BwoENUP0Q7GKaQ+7kgRP5u4X/7m4QV4lQDSVOd0Dss69u+pib84dzT?=
- =?us-ascii?Q?jzfmoFPQLpMkDObrmVqMDU9Mtx94bN3Z6fPIzGCeFh7W4Dzx6dOeB/2kBVRj?=
- =?us-ascii?Q?SQTiEsld2W0epKfXsJ6dvhSp77+llO33K+EVwVNSfS1zm4UJOnT6FUVdOE2p?=
- =?us-ascii?Q?yGOzr7f7Xw9gJVSPsjNbBtI+G7sGOSLBL9dSjcaXOpevMjoNRSAEMQmcJ/5e?=
- =?us-ascii?Q?quPnu3NuZvFtHem7dNEx64HyT/HstJOXtDzV/SFiEM7fFdlDF5weAYUTiY4n?=
- =?us-ascii?Q?MAdbJUSgbJgYWJO+csYrAQuTn8ERYUqeuWG1JahrWClthWZTYOApaoQNBmNL?=
- =?us-ascii?Q?7WXtfVXmX5iIrZNEvKUi5k7WgHjmb2sprVioVK3LaN+JoZX9134PAsWKpYXY?=
- =?us-ascii?Q?kJe3ThIbpI9VeZRheEVC9p/RLG5OL8RWMW9cqTnbnQXXkYJFt0QmUG30/AyV?=
- =?us-ascii?Q?QrDucXMHKw=3D=3D?=
+	=?us-ascii?Q?xB6tbt4fn73NmBpcwxQh2XQl7+UypxpU6ZEMmeVQy34JI5MFrRGBRyjtv6qF?=
+ =?us-ascii?Q?TaEDLvbv+Ucd9F3XtoOuzDjdkZ77O1TYcqeOY5iB4RN9z4/qbagmyHjlZIzL?=
+ =?us-ascii?Q?5IKukMtxittfXuRlRRFDUf4yzb8Il+AWieITkFIVXFW+dhZxMBeFCJ1vCTe2?=
+ =?us-ascii?Q?0YzJaGwdf0y7KkX+dbyWHYnA9x+MWzGUjZP2khXD7JNsUIcNkc2mI2aCETkX?=
+ =?us-ascii?Q?lydb0/L5BRN7GNehFsJwbXZ5t0Qy+WtHEhozCgAY4zmjX2xkVAZCrNdVOLRb?=
+ =?us-ascii?Q?I87mfAZXZ41Nm7yL/BdFUCciqOeozsBBFYjfkfUq4mMTmaU5wX+L+eVfPdYi?=
+ =?us-ascii?Q?V7R0tm4p96up+xrol+EoKFN9Ao1OLj9RYtTvxZnMnNZL5PS2tf4ST602Lcib?=
+ =?us-ascii?Q?ToVGVXu3FQZPOMMshc/m6ddJpX/SxyN+ctUF2HgQnuRobSmV2+LKyq4hOYkn?=
+ =?us-ascii?Q?+RBxFlApiLv+16n8Xia9u3/CuhtQ9AudM8MAoOtUUN/2fp457P49mR98Rkxk?=
+ =?us-ascii?Q?XTHaDnkcLnjS3J2C/qW0dntU0QktDuQocU1tWVEApEWjAxYh3CsViDry9S0U?=
+ =?us-ascii?Q?5Nx22feoCbInd6GFmfu+8RAqrYFnLjuDAQjo3yADzXl0DCiNzZ3zqDsXhNdd?=
+ =?us-ascii?Q?mGT7Y+VWXa6iOJM9kv4dAPJLzTpy8aMhKq0LdetjB2WaDeYd9txCYCkj6b1l?=
+ =?us-ascii?Q?fOejO8V8GeNrSD659V9HA7x6rE7FkNJ+PA3tIqYncFQNZ0PSa7erzijGLBXH?=
+ =?us-ascii?Q?V7BJfyscUn28dZN993NjGO+FQAsH+M1fMKzzxjAeZN6Rr8KW1/pzu7du6CyJ?=
+ =?us-ascii?Q?7VnwLPBBbGsix9IkGBnZGmoJj5MUF4Kc71Sv+F23VGbi5OJOt6UbwZkw0mB1?=
+ =?us-ascii?Q?0RfSPH++kDRCqWf7W7tV9bJlWSD1Vo8tquGngTV8QOESdJr/wMLiScqiNaxp?=
+ =?us-ascii?Q?V/9dDq4OhP19x1XhBSexTgrER3D5sWKamovYb8z+GRkaW3xKv5ObD4iTaqCr?=
+ =?us-ascii?Q?wUkgvv7Fj9iL1g7vsuCQ8iyzHhzZQ5OagD6oCSm7+GqU//HfuRCX/9tI7Jpq?=
+ =?us-ascii?Q?ExTs8hhu1exLOAxW0KxONp80Y6Z6QFgmugK6BOaKrtr4yuhd5fpSawYZDMim?=
+ =?us-ascii?Q?cO2kxrgZqE4EBGevkiR6FH2Rh6thQmlm5yoNku729CpTB9Va5eKUN59aew6G?=
+ =?us-ascii?Q?62bCYpYSoZU36TXgPs19EDl/MPGFKsLEhHOt4sBqc7IVImq0oC4+bvA+oGSE?=
+ =?us-ascii?Q?CUuxcJUEaXWxMVgX0bS2Hv+RE75KPyRk0EKwQEtQrvsXPgcWkdL0T8N+E2tW?=
+ =?us-ascii?Q?xEAGPssdlYKOUZ0pqq37UraPHk3Ti9EvWuvTBDKapuuY7b6XTDz0oGKq1qnj?=
+ =?us-ascii?Q?WnzB9FE8n/lg35gCnA8FYIX6+p14WS64SC/KtfMlCQKKt2G4M9gQUsP98eJ+?=
+ =?us-ascii?Q?5XH4ByNRqiJxpQzbAIEb+Gqbe/0WL7WtlcK1uSVtfnjXDVZgzvZwRrUszM5P?=
+ =?us-ascii?Q?c0h9TbJmgEWHxhcwwcl8M1P9F3YS4NXKShX0FV1GuVF+rhia6N2HvZ3rEBfB?=
+ =?us-ascii?Q?ilutPT9iEsW58020bEGliLUhlfdf0A0uC3Y6p6kMt81+MZzcfj4QXS/brA9F?=
+ =?us-ascii?Q?3L1eUt+7v/SPZnr8Kt8CYRP7caRrku6RpDFpTTXPOeJA3UqwV6jDFs9gLhjC?=
+ =?us-ascii?Q?JyvhzmTBM7GVVvKiHwFC2DPrCM2cMHIGs78XsbdXXrGxZ6Gda6sqtsNfzocW?=
+ =?us-ascii?Q?LP6RPACgBg=3D=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a4cee219-7bd4-4b25-5292-08df13788bdd
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a9d4d45-c5c1-4eae-4df9-08df13788e18
 X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6900.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2026 22:27:37.5372
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2026 22:27:41.1963
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: s4dLAgFi+zFR1pcgtLQtYk7wnIPnuiJFCyo3jIVyPzFzb/Dxoz8XIF21SI54d+aI8uBfnL7dVfcYl//uJGXL/g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8448
+X-MS-Exchange-CrossTenant-UserPrincipalName: HW0cWGMKSm4J0vJjhmyyEMWY2YTup4l1JhkeT/qrlt7fhOc4pYZ4Vu5XDbdkLvOweRYcXF9BamOJdTfQxtC/Gg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9380
 
-This is a belated follow-up to Zefir Kurtisi's report:
-https://lore.kernel.org/netdev/20260220132930.2521155-1-zefir.kurtisi@gmail.com/
+enetc_xdp_xmit() keeps track of 3 numbers:
+- num_frames: total length of passed struct xdp_frame **frames array
+- xdp_tx_frm_cnt: number of frames successfully sent
+- k: index of currently sent frame from array
 
-which is that the ENETC misbehaves when transmitting packets smaller
-than 16 octets sans FCS: it sends them but does not update the completed
-index in the transmit BD ring. I did find a sentence in the reference
-manual explicitly stating these short frames are not supported.
+With "k != xdp_tx_frm_cnt", the intention was to detect an early break
+due to an inability to send a frame, and to trigger a TX doorbell
+anyway.
 
-The original series (patches 4, 5) were focused on handling the invalid
-frame geometries. However, review pointed out further issues in annex
-code. The other patches handle those.
+However, that doesn't work because every time when the loop breaks,
+k and xdp_tx_frm_cnt are mathematically equal.
 
-The original patch is 4/7, which Zefir already tested (in a simpler
-form) and confirmed working in the thread from February. The code path
-should be identical for his issue, so I've preserved the tag despite the
-additions.
+The correct condition on which we should ring the doorbell is when at
+least one frame was sent, and either the caller required us to flush, or
+we couldn't enqueue the entire passed array.
 
-I've CCed the BPF/XDP folks for the new xdp_frame_pad() helper in patch
-5/7.
+After updating the enetc_update_tx_ring_tail() calling condition, we can
+delete the 'xdp_tx_frm_cnt' variable, since it is equal to 'k' after the
+loop exits.
 
-v1 at:
-https://lore.kernel.org/netdev/20260401172246.1075883-1-vladimir.oltean@nxp.com/
+Fixes: 9d2b68cc108d ("net: enetc: add support for XDP_REDIRECT")
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+---
+v2->v3: delete redundant xdp_tx_frm_cnt variable
+v1->v2: patch is new
+---
+ drivers/net/ethernet/freescale/enetc/enetc.c | 11 ++++-------
+ 1 file changed, 4 insertions(+), 7 deletions(-)
 
-v2 at:
-https://lore.kernel.org/netdev/20260406204122.167237-1-vladimir.oltean@nxp.com/
-
-Change log in individual patches.
-
-Vladimir Oltean (7):
-  net: enetc: consistenly track dropped frames in enetc_xdp_xmit()
-  net: enetc: ensure enetc_xdp_xmit() calls enetc_update_tx_ring_tail()
-  net: enetc: fix bogus TX ring consumer index after reinitialization
-  net: enetc: pad short frames in software
-  net: enetc: pad short XDP frames coming from devmap
-  net: enetc: linearize PTP event packets with one-step TX timestamping
-  net: enetc: drain and cancel one-step TX tstamp queue when going down
-
- drivers/net/ethernet/freescale/enetc/enetc.c | 50 +++++++++++++++-----
- drivers/net/ethernet/freescale/enetc/enetc.h |  2 +
- include/net/xdp.h                            | 23 +++++++++
- 3 files changed, 64 insertions(+), 11 deletions(-)
-
+diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c b/drivers/net/ethernet/freescale/enetc/enetc.c
+index e7ecdf8ef67c..c9c23e994f6d 100644
+--- a/drivers/net/ethernet/freescale/enetc/enetc.c
++++ b/drivers/net/ethernet/freescale/enetc/enetc.c
+@@ -1813,7 +1813,6 @@ int enetc_xdp_xmit(struct net_device *ndev, int num_frames,
+ 	struct skb_shared_info *shinfo;
+ 	struct enetc_bdr *tx_ring;
+ 	int xdp_tx_bd_cnt, i, k;
+-	int xdp_tx_frm_cnt = 0;
+ 
+ 	if (unlikely(test_bit(ENETC_TX_DOWN, &priv->flags) ||
+ 		     !netif_carrier_ok(ndev)))
+@@ -1845,19 +1844,17 @@ int enetc_xdp_xmit(struct net_device *ndev, int num_frames,
+ 						    &xdp_redirect_arr[i]);
+ 			break;
+ 		}
+-
+-		xdp_tx_frm_cnt++;
+ 	}
+ 
+-	if (unlikely((flags & XDP_XMIT_FLUSH) || k != xdp_tx_frm_cnt))
++	if (unlikely(k && ((flags & XDP_XMIT_FLUSH) || k < num_frames)))
+ 		enetc_update_tx_ring_tail(tx_ring);
+ 
+-	tx_ring->stats.xdp_tx += xdp_tx_frm_cnt;
+-	tx_ring->stats.xdp_tx_drops += num_frames - xdp_tx_frm_cnt;
++	tx_ring->stats.xdp_tx += k;
++	tx_ring->stats.xdp_tx_drops += num_frames - k;
+ 
+ 	enetc_unlock_mdio();
+ 
+-	return xdp_tx_frm_cnt;
++	return k;
+ }
+ EXPORT_SYMBOL_GPL(enetc_xdp_xmit);
+ 
 -- 
 2.43.0
 
