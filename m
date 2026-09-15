@@ -1,203 +1,166 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mta0.migadu.com (out-163.mta0.migadu.com [91.218.175.163])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A3E73F86F3
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 21:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9554E3DA7D4
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 21:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789509042; cv=none; b=aTAC6ibjehbQ8PARfJPdNci2/04/YklXT+P5Qswwq3X/z5MHHs/sLVvujIQA2E7vLQNV9w685nslFKg8Kn8oGW0NP3mtmdjnKmMBn93sTtxHCGhlwQ+Av1I+yR36AtQkNUHPYeIBykb9B6WtXY1iIngZeSigggWaQGis3SmDvxs=
+	t=1789509138; cv=none; b=QaV9rBmnkLcBsXO32blN0zDAx+m+z/yNffkFlhk6DWBCkQdXnhlLgR4XmlMnnxUnHDiTY8h0zXa22xr/DfKk9iiLu9CZbQEnyZ9OA87SYGt7mG8HWFj1h+nwjaZXbA49YCeVNoKk71BvqEinC0n6SI+ny76i7cx2CEPsRlOSJnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789509042; c=relaxed/simple;
-	bh=AsFvnPiEI4hoktzSDE+YxskYQoeQcCquOAQl0eZZ2bU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oGMiHNlFgfbtxFwlRemP7U7FlHP0Q6G6ortss0ZH3j28I5A9MX0rFfx+z7R+wYurL4aQWpviuK9bFAMdANFLz0SOXJAAVNWokEZPssbIMj8bvt5LwcM/Jv5nGBBqSUP17ZYusc/+QVI4q5nN1VL4P3xjPSGWXSX+89dQmkjw7Lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gp6m48Bl; arc=none smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1789509138; c=relaxed/simple;
+	bh=C0L2/gLmKQenT3QxNIj0UgnPGegnPNzAg/I+FzCefrk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fDjEeYZmno4P37YzeNiJGPggA43Zhi8RyXNERL4yVV75OmutIH8qeviNDm7bIQGccvbFsx78t+uqobDXPZpD8kvypqoGNr/YnpM5drKFOwFpws20GQDQTAz55hSb4VaIdOD4QcZ+OqeDfRMXTsYhUhpYaXp8hMx1jozPqYOPzJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qMsfBMaX; arc=none smtp.client-ip=91.218.175.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gp6m48Bl"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2db425c9050so16445ad.0
-        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 14:50:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789509039; x=1790113839; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tI17L7xSTrsApSfRoy8c9Azix9/YhE00k0p3SqEz6us=;
-        b=gp6m48BlmwRjmbSm6Ml85gR0xlMaoJo5RCJdbsJwK1kJlOZDpsXe7/tJoZ4f8Nxn6h
-         hm9ilgTnI7bmSHn2mWCdi5bSyiVzGi5gIjGz2ugS6RlceEhvy5DyL3WniFEyhVpXTuge
-         lzZszXP03BZ49jasqeSZrtgs92Ycv4UybsqVwei48c73CgmVJyVgvLIXz5kcEhJfUeK9
-         AHbAeEzYMAD3LANH7f/wHTOsLc4eov5C7nAX+b0AK1N1axfvagO7ql4oAbUJrxEgUpjI
-         LwX4xBuMZLk2bWYDPFOqodryjhHQzRMA5Oj2rlolqHLeg8JlO/NmZGPLke6J3FOqrMiK
-         eqYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789509039; x=1790113839;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=tI17L7xSTrsApSfRoy8c9Azix9/YhE00k0p3SqEz6us=;
-        b=zPdJrYoggjyUqH4ExbMra9wx3U0lhy6JvY3kp25GMH2V8AyRfhIMc2ww99/Q0eeNbC
-         nGz0lB/S8rt9vlIzo2e34D8a1PCeBupbpOSdrCl48p5IutlHR2OFCBZ5fuWcwKOPrCxz
-         WqTIJa0/BymQy8LBPwzEZ48SCbhWfR5mxoXBf2Z12q63NJwES3VtmXzRq4hop0fix96d
-         eVXyY5AS/uE7deqhElpQ5uAgiDZMVVnurd0MrmBqHZMJtJ217yssRpyV5PjkNkWkIxHm
-         uE6j478fk2Hj9Ap7vrXe7bByFXkyL6jT3S3ZWdULSTPm1qo2gAEIN9JnH6fVDdM0GERA
-         4Avw==
-X-Forwarded-Encrypted: i=1; AKwUvByWZX8AcwoPg+w0CGLPFpEtmYOTS7U1aQ5CVOPDnKtl8I2kxZrChlszX6eCHfwi1dJkF2s=@vger.kernel.org
-X-Gm-Message-State: AFuF++nMr+IV3OoSexk+shrW8pVhFTwv/QvQzVvlZCM2qEVeGqjmsXR7
-	rVBpQRBQ8O+F4yNC8yboWjhCMWlGZcx/kL6xKWaxGo0MYlcsbnmg1dXxOBVoh1R/lw==
-X-Gm-Gg: AYBFou0p9pG0RvuUuBmpEUSsQnwrMH7A8s3TN0DXWdU5hHqbBRVtli0qYYqznhM0mn5
-	S5V/H4D/yts30DmuuyfFBRQ8a3zQ0SwPrF3YgJd9ZqqzqXDZQlep8cSp6hu5xXpjWCiiSVuRfXo
-	bva/2QoMy5mCrMdkVkIbksyGipVzM50pe70KbnEw6hSKkNCFtZkUhN77LeWVL/0hPlB6aggmRO9
-	raC+h4PUtgySxsfLRcCaFRn6zrBuYzROVM8FWlKAvNhsIQRs7RGr9A8eo8YaVViAxC7na5YIf1y
-	WuS2QXfsgtLXn1LXYEOdp7geDX58zcbeueDDIrQnrUq43UNlkI95NXzMNq7H6OG2rTXjb1g8gcr
-	lDkcyBgq3i+MYh6zGD6iG4nrrtu9opePZSocBfjlKuH3ycn/BUmx8nIJtiUj+itjBsbAEpX/msK
-	u5ko1O65HlpTJTkmRd8WUTozR5L3SODchiPRii9UHBKRsZpIN48sykVcvWZesx1IIcvdgRfbh6M
-	H6OaYjmMtA9PKJqoyyMS+tsVash/1w5r8GhI0s3cnDVv5I+wEE=
-X-Received: by 2002:a17:902:f693:b0:2d0:1aaf:daec with SMTP id d9443c01a7336-2dd8be54ab9mr842285ad.9.1789509038186;
-        Tue, 15 Sep 2026 14:50:38 -0700 (PDT)
-Received: from google.com ([2a00:79e0:2e51:8:8352:5e93:3fd9:766d])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33bf5af4f0bsm2082822eec.24.2026.09.15.14.50.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2026 14:50:37 -0700 (PDT)
-Date: Tue, 15 Sep 2026 14:50:31 -0700
-From: Isaac Manjarres <isaacmanjarres@google.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: =?utf-8?B?6auY57+U?= <gaoxiang17@xiaomi.com>,
-	"David Hildenbrand (Arm)" <david@kernel.org>,
-	Xiang Gao <gxxa03070307@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	=?utf-8?B?5Y2w6Zev?= <yinchuang1@xiaomi.com>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"Lorenzo Stoakes (Arm)" <ljs@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [External Mail]Re: [RFC] bpf: account ring buffer backing pages
- separately from Lost RAM
-Message-ID: <aqm9p1uW7ls65_S-@google.com>
-References: <20260815091819.3651099-1-gaoxiang17@xiaomi.com>
- <04f3ce2f-67f5-4829-9551-a69b9df29854@kernel.org>
- <CAEf4BzbwZkoacX-iP1j4+p8YNbWsq0pc3eTermh2uT5ir66zbw@mail.gmail.com>
- <8d2e20842c24460296e4c83e6dc0dde3@xiaomi.com>
- <CAEf4BzYQvhSVN=Hggg5FHzFdkRr4UNBD6yXaBsOaAwbsRpXpsw@mail.gmail.com>
- <aqSNkbhIuaB5D0H0@google.com>
- <CAEf4BzbAOgwQqsRQnY4yxvubLtioQNL_BBHer4ExvNF7Rvvu4w@mail.gmail.com>
- <aqhZEuQTu394hYB6@google.com>
- <aqh17GTlWiDVJ-N1@google.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qMsfBMaX"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=C0L2/gLmKQenT3QxNIj0UgnPGegnPNzAg/I+FzCefrk=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789509134; v=1; x=1790113934;
+ b=qMsfBMaXD0eXxO83V23fN2edUOYTbcZqRZeijp7PLxONHBVGSIz04L83FVpT7AUvepqEPnlN
+ Smy4PD3KGcKIWGvqq+ciFG+lm+9k/52DNGs9jelKlr2qZuHFXpRKLy1ZvAL97dq5SyetyLOXggU
+ CgmU3oUleQaqn5r3ZC+FF8Jw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id d67cf22761cb3baa;
+	Tue, 15 Sep 2026 21:52:04 +0000
+X-Mizu-Trace-ID: d67cf22761cb3baa
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <d2f54ff4-436a-4513-90b7-d1c9e1f76298@linux.dev>
+Date: Tue, 15 Sep 2026 14:52:02 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 05/13] bpf: keep the range across a sign
+ extension that cannot change it
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260910164635.459558-1-vineet.gupta@linux.dev>
+ <20260910164635.459558-6-vineet.gupta@linux.dev>
+ <20260910170830.DFC551F000FF@smtp.kernel.org>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20260910170830.DFC551F000FF@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aqh17GTlWiDVJ-N1@google.com>
 
-On Mon, Sep 14, 2026 at 03:32:12PM -0700, Isaac Manjarres wrote:
-> On Mon, Sep 14, 2026 at 01:29:06PM -0700, Isaac Manjarres wrote:
-> > On Fri, Sep 11, 2026 at 05:04:55PM -0700, Andrii Nakryiko wrote:
-> > > On Fri, Sep 11, 2026 at 4:24 PM Isaac Manjarres
-> > > <isaacmanjarres@google.com> wrote:
-> > > >
-> > > > On Wed, Aug 19, 2026 at 10:24:28AM -0700, Andrii Nakryiko wrote:
-> > > > > On Tue, Aug 18, 2026 at 6:46 AM 高翔 <gaoxiang17@xiaomi.com> wrote:
-> > > > > >
-> > > > > > Thanks for the pointer. Understood — no new NR_* counter or
-> > > > > > /proc/meminfo entry.
-> > > > > >
-> > > > > >
-> > > > > > The remaining question is on the consumer side: Android's Lost RAM
-> > > > > > accounting would need to enumerate all live BPF ringbuf maps
-> > > > > > (BPF_MAP_GET_NEXT_ID) and read each map's fdinfo memlock to sum them.
-> > > > > >
-> > > > >
-> > > > > For BPF ringbufs specifically, you should be fine just iterating all
-> > > > > map with BPF_MAP_GET_NEXT_ID, getting its FD with
-> > > > > BPF_BTF_GET_FD_BY_ID, and then passing that fd to
-> > > > > BPF_OBJ_GET_INFO_BY_FD to get map's size.
-> > > > >
-> > > > Hi Andrii,
-> > > >
-> > > > Thanks for the suggestion on this! I did want to express a couple of
-> > > > concerns with this:
-> > > >
-> > > > Scalability
-> > > >
-> > > > I counted the number of maps on one of our devices, and there are 112
-> > > > maps, meaning that there will be between 224-336 syscalls with this
-> > > > approach. eBPF is becoming more popular, so I'm concerned about how well
-> > > > this will scale, if we have to invoke 2-3 syscalls per map.
-> > > >
-> > > > I had a test program that implemented your suggestion, and it took about
-> > > > 2 ms to identify 39/112 ringbufs. As the number of maps in the system
-> > > > grows, I'm concerned that the latency associated with computing the
-> > > > memory usage from ringbufs will become even more expensive. This is
-> > > > something we had an issue with before on Android, where we had to
-> > > > iterate through various sysfs files to gather wakeupsource metrics [1].
-> > > >
-> > > > To improve on this, I was wondering if we could expose the ringbuf
-> > > > memory usage and potentially other bpf stats through bpffs
-> > > > (/sys/fs/bpf/stats)? This counter could be a lightweight counter that is
-> > > > incremented/decremented on ringbuf allocation/freeing so that when it is
-> > > > read, there aren't any expensive computations.
-> > > >
-> > > > For this specific metric, we could just use a counter to track how much
-> > > > memory is being used by ringbufs and have userspace read that. That also
-> > > > brings me to my next point.
-> > > >
-> > > 
-> > > I just don't see a good enough reason to single out ringbuf maps
-> > > specifically. other map types also use memory, why would they be
-> > > excluded?
-> > 
-> > I was looking at ringbuf maps specifically because they allocate memory
-> > for the ringbuf via alloc_pages() and aren't attributed to any counter
-> > that is exposed to userspace. The other maps use either the slab
-> > allocator or vmalloc() to allocate memory, and those entries are visible
-> > via /proc/meminfo.
-> > 
-> > > If you are worried about too many syscalls, look into map iterator
-> > > program types (grep for SEC("iter/bpf_map") in selftests). That will
-> > > be super fast and way more generic than what you propose. You can ping
-> > > such program in bpffs and that will be you custom /sys/fs/bpf/stats
-> > > implementation that you have full control and customizability of
-> > > 
-> > 
-> > Thanks for the suggestion; I'll look into this and let you know if I
-> > have any questions!
-> > 
-> I looked into this, and this works in reducing the overhead from number
-> of syscalls, but the other part about correctness isn't handled by this.
-> 
-> For ringbuf maps we would have access to max_entries, but that just gives
-> us the amount of memory consumed by the data portion of the ringbuf, but
-> it doesn't include the 3 metadata (kernel structures, consumer idx page,
-> and producer idx page). I don't see how to derive this value--rather
-> than hardcoding it.
-> 
-> I did see that fdinfo for the maps does give the total memory usage
-> via bpf_map_memory_usage(). However, that value includes structures that
-> are allocated through the slab allocator and vmalloc, so using that
-> value would double count the memory usage in the system. Userspace
-> doesn't have the information required to break that value up to extract
-> just the part that is allocated through alloc_pages() directly.
-> 
-> I think it's worthwhile accounting this data correctly, as on our setup
-> there are 39 ringbufs. This can lead to 468 kB -- 1872 kB of unaccounted
-> memory depending on the page size.
-> 
-> --Isaac
+On 9/10/26 10:08 AM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
 >
-Please disregard my previous email. A colleague pointed out that I can
-use bpf_core_type_size() to compute the size of the metadata that I was
-referring to and that worked.
+> New issues:
+> - [Medium] Incomplete fix for bounds precision loss on zero-straddling sign extensions in the verifier.
+>
+> Pre-existing issues:
+> - [High] Out-of-bounds array read in BPF memory cgroup kfuncs due to bypassable enum bounds check.
+> --
+>
+> commit 971a50869c707d4ac0627b912bd2423344987acc
+> Author: Vineet Gupta <vineet.gupta@linux.dev>
+>
+> bpf: keep the range across a sign extension that cannot change it
+>
+> This commit improves the verifier's handling of sign extensions in
+> coerce_reg_to_size_sx() by recognizing when a register's bounds already fit
+> within the target field. This prevents unnecessary precision loss when a value
+> range straddles zero, allowing valid programs to pass verification.
+>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 58e788f53ae58..eb093194e2a36 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+> [ ... ]
+>
+>> @@ -5773,6 +5774,27 @@ static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
+>>   		return;
+>>   	}
+>>   
+>> +	if (size == 1) {
+>> +		field_smin = S8_MIN;
+>> +		field_smax = S8_MAX;
+>> +	} else if (size == 2) {
+>> +		field_smin = S16_MIN;
+>> +		field_smax = S16_MAX;
+>> +	} else {
+>> +		/* size == 4 */
+>> +		field_smin = S32_MIN;
+>> +		field_smax = S32_MAX;
+>> +	}
+>> +
+>> +	/*
+>> +	 * The range already fits the field, so (sN)v == v for every value the
+>> +	 * register can hold and the sign extension changes nothing. The tests
+>> +	 * below cannot reach this case once smin is negative: a negative smin
+>> +	 * and a non-negative smax never share their high bits.
+>> +	 */
+>> +	if (reg_smin(reg) >= field_smin && reg_smax(reg) <= field_smax)
+>> +		return;
+>> +
+>>   	top_smax_value = ((u64)reg_smax(reg) >> num_bits) << num_bits;
+>>   	top_smin_value = ((u64)reg_smin(reg) >> num_bits) << num_bits;
+> [Severity: Medium]
+> Does the 32-bit counterpart function coerce_subreg_to_size_sx() need the same
+> fix?
+>
+> It seems to retain the same precision loss flaw when handling 32-bit sign
+> extensions on ranges that straddle zero (e.g., [-4095, 0]). Valid BPF programs
+> using 32-bit MOVSX on such ranges will needlessly lose bounds precision and
+> might be incorrectly rejected by the verifier.
 
-Thanks for all the help!
---Isaac
+Good catch. Fixed now. It would only need to handle sizes 1 and 2 though.
+
+
+> [Severity: High]
+> This is a pre-existing issue, but I noticed a potential out-of-bounds array
+> read in the BPF memory cgroup kfuncs.
+>
+> Enums are treated as scalars by the verifier and can be negative. The bounds
+> checks in these functions use single-sided signed comparisons, which bypass
+> negative values:
+>
+> mm/bpf_memcontrol.c:bpf_mem_cgroup_memory_events() {
+
+True signature has enum type
+
+   __bpf_kfunc unsigned long bpf_mem_cgroup_memory_events(struct 
+mem_cgroup *memcg,
+                                                          enum 
+memcg_memory_event event)
+
+>      ...
+> 	if (unlikely(event >= MEMCG_NR_MEMORY_EVENTS))
+> 		return (unsigned long)-1;
+>
+> 	return atomic_long_read(&memcg->memory_events[event]);
+> }
+>
+> If a BPF program passes -1, the check evaluates to false, leading to an
+> out-of-bounds read on memcg->memory_events[-1].
+
+Not an issue. enum doesn't have any negative values and with enum tye in 
+signature above it will treated as unsigned int so -1 will come out as 
+large number not -1.
+
+> A similar issue exists in bpf_mem_cgroup_vm_events(), where the bounds check
+> delegates to memcg_vm_event_item_valid():
+>
+> mm/memcontrol.c:memcg_vm_event_item_valid() {
+>      ...
+> 	if (idx >= NR_VM_EVENT_ITEMS)
+> 		return false;
+>      ...
+> }
+>
+> This also performs a single-sided check and fails to catch negative indices.
+> Should these be updated to explicitly check for negative values as well?
+
+Same as above since this enum doesn't have negative entries either.
+
+Thx,
+-Vineet
