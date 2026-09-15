@@ -1,141 +1,241 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AE0A3C3447;
-	Tue, 15 Sep 2026 14:37:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F253B813C
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 14:50:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789483022; cv=none; b=VkiX3q/JWUGY+M5TZhbwhixSN3Itcl04kuezT/ffxoQkdPDkUJe1w/L7Im07TNDB7HRbWq8I6MEbUUCOfh+mEi4Au2iiTIJbKJdE2h/j3zJ4cpHYaLb6qYEmg2kWSAPehciZkHCRumt5wyNbKe95ySdc7xc1SQKGN15Us75htcM=
+	t=1789483860; cv=none; b=Xua5vplN9DcNpjTtuQpx3FkuROEJWujY/pkXClXpVHpc5XZ9v6f5Wq/6rwxVqcH3tUmghYOsVdwa6VmUbeDLvNL92kcHVzC2CjzpMrc2VlriKxAcitNC54BtfJNW2aeZun3KT3QlHf32wPeixkQFa6Ek2pOr1WZ5nVvBuTPkKz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789483022; c=relaxed/simple;
-	bh=GKtncJEVAlzjqdT9kKth5Wp6aMZzue09z6ciU460JJI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ce3INuNjGR2Zpn/S8ScR2Hxg57uU+C2nDnqhLOmqn0cYtSWhuYsunm9HzodqVlApaNB/id5h0nJ1QN84nkNQmV2AjrJOGgwdLGyLG+O3WHPY+L/KMFMs8UM4Epr2SeAvC85G2vzvHH29wpyd/D88owhxR1g4OZ2VfYGiFHJXKtQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B2PsFLAB; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B2PsFLAB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AD011F000FF;
-	Tue, 15 Sep 2026 14:37:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789483020;
-	bh=xKXTyG4jQO0rZtuaKIisgskB/be7QnWcJcg6/xU2smU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=B2PsFLAB5VRSILBuhLmfWAK7BThlwhhwtBvMHMZICzizRg/atF7XozcT5dqt1Bly9
-	 avhGvnk2vDT5cGnuDHYAq/tBsHQiYuLTqFfvT5vZyH2r67ZJmKPMmIQNVmKi1ExvAV
-	 0m6attZ6/1BOP1roa5SexKK9G5Ory4KBAKAFhak58cVLRYnZCGjHVIs4AOmCiE7b56
-	 FUAE0PU3MNXfeLyH1lHBr8RF6SnVZd4ywu/w1qWSGmFAb2+T+eJhhNdsrQv1uGQZe1
-	 LcInnUYZmqbQkpCYZAnY/bsc4r+YPNM9AI8EJjUH6fM5MfRgtf7Iq/ccpsrH9MX1Nw
-	 p/HsmJ9iQdbuw==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org,
-	rcu@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	"Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Martin KaFai Lau" <martin.lau@linux.dev>,
-	"Eduard Zingerman" <eddyz87@gmail.com>,
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-	"Song Liu" <song@kernel.org>,
-	"Yonghong Song" <yonghong.song@linux.dev>,
-	"Harry Yoo (Oracle)" <harry@kernel.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH bpf-next v3 4/4] selftests/bpf: Add a test for bpf_call_rcu_tasks_trace()
-Date: Tue, 15 Sep 2026 07:36:38 -0700
-Message-ID: <20260915143640.36292-5-puranjay@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260915143640.36292-1-puranjay@kernel.org>
-References: <20260915143640.36292-1-puranjay@kernel.org>
+	s=arc-20240116; t=1789483860; c=relaxed/simple;
+	bh=mP63S2kSIDdQdSMZvjLxECnRPXQjALds9wMvo+cDuJ0=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=oGiztGLEDJZCFIcvYu66T2UdhLfCju+qWzhlq0E/4QhOF0DrjEjr45pqfUX2+PBd5cvZmJddPIyDSSFZQwPTd3U85oPgkJStUc6LY59Tvxo92oTKKVgg7ThRdg9mg8pl9TnNi63P6ivmQ5Z4dH38V1teLeh7B14PhM+nVdeFHC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-6c16df7bd53so4596574eaf.0
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 07:50:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789483856; x=1790088656;
+        h=content-type:cc:to:from:subject:message-id:in-reply-to:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=/JjqUbcpC8Uiq3Jgl8nzKIuk3KGjIIRFE3T7zA0MDfE=;
+        b=Qb3XO8pPtadBkQ6YBfPy9sqpYTaDnr7qWsXTwhzRMKE6TyWOMqe6/i0mxKwmwIPTkg
+         uiTRZ65rvEa5TWbHBb8sTAOqCVyVtkYf3JpLe2UV6Zn3tqIYeNZTo1W7+5tvnvAufziF
+         meKBOpm0olfSqjwgUMItink7wCldTojF1wtOwK+52iBUsEs4alS+oEiz4P9pIwBQrPKL
+         weCz4roB53r14a8DsGQrRyaqqFtoulUbgkMfuypS2rZmWxNN+Mj/zqQV1WPhpj/ITJuJ
+         4PFYWXStPoeLiUplfKeRrh3XohGvkr3iH/JMO/viZwdhkCkG0OP1vOTGIAc4tupKRCjo
+         /Nlg==
+X-Forwarded-Encrypted: i=1; AKwUvBySWC61zIqNMMSZRnPcCZIdPlLDf5xh/3s4E+Fx2r1MjyhMgEptsm8w1uHF7ysIWs5El5Y=@vger.kernel.org
+X-Gm-Message-State: AFuF++l5cH9PXUNLnAHNxM1arUf+VK9CKX9Z5B20g4hD0sWVtdlvY5Qw
+	SXP67CvlFtaf73wIQzN7m7EaO5qMIyRk/KFp0UElYqL0wA4Uibv+bvjrAP1Bh81Qm9EMFznr0oh
+	vwUjJEXr6iT2d+VDXnjPAf607JnGnKHzWOi33JaZlWax1CBazQh+G6IkAAXQ=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6820:4d01:b0:6b7:83d6:2935 with SMTP id
+ 006d021491bc7-6c739c763f3mr966337eaf.56.1789483856152; Tue, 15 Sep 2026
+ 07:50:56 -0700 (PDT)
+Date: Tue, 15 Sep 2026 07:50:56 -0700
+In-Reply-To: <20260915081023.7433-1-ahemadkhawar123@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6aa95b50.a211d2ce.1a5198.02ad.GAE@google.com>
+Subject: [syzbot ci] Re: xsk: Fix circular locking dependency between
+ &net->xdp.lock, &xs->mutex, and netdev_lock_ops
+From: syzbot ci <syzbot+ci38b383cd8e5a02dc@syzkaller.appspotmail.com>
+To: ahemadkhawar123@gmail.com, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, edumazet@google.com, hawk@kernel.org, horms@kernel.org, 
+	john.fastabend@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org, 
+	maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, 
+	netdev@vger.kernel.org, pabeni@redhat.com, sdf@fomichev.me, 
+	syzbot@syzkaller.appspotmail.com
+Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Run the same functional test against the tasks trace flavour.
+syzbot ci has tested the following series
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+[v6] xsk: Fix circular locking dependency between &net->xdp.lock, &xs->mutex, and netdev_lock_ops
+https://lore.kernel.org/all/20260915081023.7433-1-ahemadkhawar123@gmail.com
+* [PATCH bpf-next v6] xsk: Fix circular locking dependency between &net->xdp.lock, &xs->mutex, and netdev_lock_ops
+
+and found the following issue:
+possible deadlock in xp_clear_dev
+
+Full report is available here:
+https://ci.syzbot.org/series/fd897794-4f0d-45f4-8e63-bcb526e0b175
+
+***
+
+possible deadlock in xp_clear_dev
+
+tree:      bpf-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
+base:      b0ca562e0d05cf7afedcfa71c9aed180b72bcc97
+arch:      amd64
+compiler:  Debian clang version 22.1.8 (++20260613092233+e80beda6e255-1~exp1~20260613092250.77), Debian LLD 22.1.8
+config:    https://ci.syzbot.org/builds/d5521b86-a0b8-4ffc-ada4-91f534b028bc/config
+syz repro: https://ci.syzbot.org/findings/6aa094b3-5f39-460c-b0f7-709bbf72644c/syz_repro
+
+netlink: 14 bytes leftover after parsing attributes in process `syz.1.18'.
+======================================================
+WARNING: possible circular locking dependency detected
+syzkaller #0 Not tainted
+------------------------------------------------------
+syz.1.18/5842 is trying to acquire lock:
+ffff8881793b4e70 (&dev_instance_lock_key#3){+.+.}-{4:4}, at: netdev_lock include/linux/netdevice.h:2861 [inline]
+ffff8881793b4e70 (&dev_instance_lock_key#3){+.+.}-{4:4}, at: netdev_lock_ops include/net/netdev_lock.h:42 [inline]
+ffff8881793b4e70 (&dev_instance_lock_key#3){+.+.}-{4:4}, at: xp_clear_dev+0x13b/0x340 net/xdp/xsk_buff_pool.c:297
+
+but task is already holding lock:
+ffff8881bd5ca6b8 (&xs->mutex){+.+.}-{4:4}, at: xsk_notifier+0xcd/0x230 net/xdp/xsk.c:2114
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #1 (&xs->mutex){+.+.}-{4:4}:
+       __mutex_lock_common kernel/locking/mutex.c:646 [inline]
+       __mutex_lock+0x19d/0x1550 kernel/locking/mutex.c:821
+       xsk_bind+0x297/0x13f0 net/xdp/xsk.c:1620
+       __sys_bind_socket net/socket.c:1945 [inline]
+       __sys_bind+0x2e3/0x410 net/socket.c:1976
+       __do_sys_bind net/socket.c:1981 [inline]
+       __se_sys_bind net/socket.c:1979 [inline]
+       __x64_sys_bind+0x7a/0x90 net/socket.c:1979
+       do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
+       do_syscall_64+0x166/0x520 arch/x86/entry/syscall_64.c:84
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+-> #0 (&dev_instance_lock_key#3){+.+.}-{4:4}:
+       check_prev_add kernel/locking/lockdep.c:3181 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3300 [inline]
+       validate_chain kernel/locking/lockdep.c:3924 [inline]
+       __lock_acquire+0x1520/0x2cf0 kernel/locking/lockdep.c:5253
+       lock_acquire+0x106/0x350 kernel/locking/lockdep.c:5886
+       __mutex_lock_common kernel/locking/mutex.c:646 [inline]
+       __mutex_lock+0x19d/0x1550 kernel/locking/mutex.c:821
+       netdev_lock include/linux/netdevice.h:2861 [inline]
+       netdev_lock_ops include/net/netdev_lock.h:42 [inline]
+       xp_clear_dev+0x13b/0x340 net/xdp/xsk_buff_pool.c:297
+       xsk_notifier+0x1a1/0x230 net/xdp/xsk.c:2123
+       notifier_call_chain+0x1a5/0x3d0 kernel/notifier.c:85
+       call_netdevice_notifiers_extack net/core/dev.c:2313 [inline]
+       call_netdevice_notifiers net/core/dev.c:2327 [inline]
+       unregister_netdevice_many_notify+0x17f9/0x2140 net/core/dev.c:12518
+       rtnl_delete_link net/core/rtnetlink.c:3652 [inline]
+       rtnl_dellink+0x5be/0x810 net/core/rtnetlink.c:3694
+       rtnetlink_rcv_msg+0x802/0xc00 net/core/rtnetlink.c:7132
+       netlink_rcv_skb+0x226/0x4a0 net/netlink/af_netlink.c:2556
+       netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+       netlink_unicast+0x7bd/0x940 net/netlink/af_netlink.c:1345
+       netlink_sendmsg+0x813/0xb40 net/netlink/af_netlink.c:1900
+       sock_sendmsg_nosec+0x13a/0x180 net/socket.c:800
+       __sock_sendmsg net/socket.c:815 [inline]
+       ____sys_sendmsg+0x54e/0x850 net/socket.c:2713
+       ___sys_sendmsg+0x2a5/0x360 net/socket.c:2767
+       __sys_sendmsg net/socket.c:2799 [inline]
+       __do_sys_sendmsg net/socket.c:2804 [inline]
+       __se_sys_sendmsg net/socket.c:2802 [inline]
+       __x64_sys_sendmsg+0x1b1/0x290 net/socket.c:2802
+       do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
+       do_syscall_64+0x166/0x520 arch/x86/entry/syscall_64.c:84
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+other info that might help us debug this:
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(&xs->mutex);
+                               lock(&dev_instance_lock_key#3);
+                               lock(&xs->mutex);
+  lock(&dev_instance_lock_key#3);
+
+ *** DEADLOCK ***
+
+locks held by syz.1.18/5842: 3, last CPU#0:
+ #0: ffffffff90036ac0 (rtnl_mutex){+.+.}-{4:4}, at: rtnl_lock net/core/rtnetlink.c:80 [inline]
+ #0: ffffffff90036ac0 (rtnl_mutex){+.+.}-{4:4}, at: rtnl_net_lock include/linux/rtnetlink.h:134 [inline]
+ #0: ffffffff90036ac0 (rtnl_mutex){+.+.}-{4:4}, at: rtnl_dellink+0x41b/0x810 net/core/rtnetlink.c:3686
+ #1: ffff88810e3ac750 (&net->xdp.lock){+.+.}-{4:4}, at: xsk_notifier+0x89/0x230 net/xdp/xsk.c:2110
+ #2: ffff8881bd5ca6b8 (&xs->mutex){+.+.}-{4:4}, at: xsk_notifier+0xcd/0x230 net/xdp/xsk.c:2114
+
+stack backtrace:
+CPU: 0 UID: 0 PID: 5842 Comm: syz.1.18 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
+ print_circular_bug+0x2e1/0x300 kernel/locking/lockdep.c:2059
+ check_noncircular+0x12e/0x150 kernel/locking/lockdep.c:2191
+ check_prev_add kernel/locking/lockdep.c:3181 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3300 [inline]
+ validate_chain kernel/locking/lockdep.c:3924 [inline]
+ __lock_acquire+0x1520/0x2cf0 kernel/locking/lockdep.c:5253
+ lock_acquire+0x106/0x350 kernel/locking/lockdep.c:5886
+ __mutex_lock_common kernel/locking/mutex.c:646 [inline]
+ __mutex_lock+0x19d/0x1550 kernel/locking/mutex.c:821
+ netdev_lock include/linux/netdevice.h:2861 [inline]
+ netdev_lock_ops include/net/netdev_lock.h:42 [inline]
+ xp_clear_dev+0x13b/0x340 net/xdp/xsk_buff_pool.c:297
+ xsk_notifier+0x1a1/0x230 net/xdp/xsk.c:2123
+ notifier_call_chain+0x1a5/0x3d0 kernel/notifier.c:85
+ call_netdevice_notifiers_extack net/core/dev.c:2313 [inline]
+ call_netdevice_notifiers net/core/dev.c:2327 [inline]
+ unregister_netdevice_many_notify+0x17f9/0x2140 net/core/dev.c:12518
+ rtnl_delete_link net/core/rtnetlink.c:3652 [inline]
+ rtnl_dellink+0x5be/0x810 net/core/rtnetlink.c:3694
+ rtnetlink_rcv_msg+0x802/0xc00 net/core/rtnetlink.c:7132
+ netlink_rcv_skb+0x226/0x4a0 net/netlink/af_netlink.c:2556
+ netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
+ netlink_unicast+0x7bd/0x940 net/netlink/af_netlink.c:1345
+ netlink_sendmsg+0x813/0xb40 net/netlink/af_netlink.c:1900
+ sock_sendmsg_nosec+0x13a/0x180 net/socket.c:800
+ __sock_sendmsg net/socket.c:815 [inline]
+ ____sys_sendmsg+0x54e/0x850 net/socket.c:2713
+ ___sys_sendmsg+0x2a5/0x360 net/socket.c:2767
+ __sys_sendmsg net/socket.c:2799 [inline]
+ __do_sys_sendmsg net/socket.c:2804 [inline]
+ __se_sys_sendmsg net/socket.c:2802 [inline]
+ __x64_sys_sendmsg+0x1b1/0x290 net/socket.c:2802
+ do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
+ do_syscall_64+0x166/0x520 arch/x86/entry/syscall_64.c:84
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f47db99e159
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f47dc90c028 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f47dbc25fa0 RCX: 00007f47db99e159
+RDX: 0000000004048004 RSI: 00002000000001c0 RDI: 0000000000000005
+RBP: 00007f47dba3503b R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f47dbc26038 R14: 00007f47dbc25fa0 R15: 00007ffc72db97b8
+ </TASK>
+
+
+***
+
+If these findings have caused you to resend the series or submit a
+separate fix, please add the following tag to your commit message:
+  Tested-by: syzbot@syzkaller.appspotmail.com
+
 ---
- .../testing/selftests/bpf/prog_tests/call_rcu.c | 12 ++++++++----
- tools/testing/selftests/bpf/progs/call_rcu.c    | 17 +++++++++++++++++
- 2 files changed, 25 insertions(+), 4 deletions(-)
+This report is generated by a bot. It may contain errors.
+syzbot ci engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/call_rcu.c b/tools/testing/selftests/bpf/prog_tests/call_rcu.c
-index c2d266aee8eac..7c8fde3c4d249 100644
---- a/tools/testing/selftests/bpf/prog_tests/call_rcu.c
-+++ b/tools/testing/selftests/bpf/prog_tests/call_rcu.c
-@@ -28,9 +28,10 @@ static bool wait_for_callbacks(struct call_rcu *skel, int expected)
- 	return ASSERT_GE(got, expected, "callbacks");
- }
- 
--static void test_call_rcu_run(void)
-+static void test_call_rcu_run(bool trace)
- {
- 	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	struct bpf_program *prog;
- 	struct call_rcu *skel;
- 	struct elem elem;
- 	__u32 key = 1;
-@@ -40,7 +41,8 @@ static void test_call_rcu_run(void)
- 	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
- 		return;
- 
--	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.arm), &opts);
-+	prog = trace ? skel->progs.arm_trace : skel->progs.arm;
-+	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
- 	if (!ASSERT_OK(err, "test_run") || !ASSERT_EQ(opts.retval, 0, "retval"))
- 		goto out;
- 
-@@ -59,7 +61,7 @@ static void test_call_rcu_run(void)
- 		ASSERT_EQ(elem.val, 0, "value_cleared");
- 
- 	/* The head is disarmed before the callback runs, so it can be reused. */
--	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.arm), &opts);
-+	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
- 	if (!ASSERT_OK(err, "test_run_again"))
- 		goto out;
- 	ASSERT_EQ(skel->bss->arm_err, 0, "rearm_err");
-@@ -254,7 +256,9 @@ static void test_call_rcu_two_heads(void)
- void test_call_rcu(void)
- {
- 	if (test__start_subtest("run"))
--		test_call_rcu_run();
-+		test_call_rcu_run(false);
-+	if (test__start_subtest("run_tasks_trace"))
-+		test_call_rcu_run(true);
- 	if (test__start_subtest("chain"))
- 		test_call_rcu_chain();
- 	if (test__start_subtest("two_heads"))
-diff --git a/tools/testing/selftests/bpf/progs/call_rcu.c b/tools/testing/selftests/bpf/progs/call_rcu.c
-index aa5d2b0fa36e4..2324d05f3de3a 100644
---- a/tools/testing/selftests/bpf/progs/call_rcu.c
-+++ b/tools/testing/selftests/bpf/progs/call_rcu.c
-@@ -85,6 +85,23 @@ int arm_both(void *ctx)
- 	return 0;
- }
- 
-+SEC("syscall")
-+int arm_trace(void *ctx)
-+{
-+	__u32 key = 1;
-+	struct elem *e;
-+
-+	e = bpf_map_lookup_elem(&arr, &key);
-+	if (!e)
-+		return 1;
-+
-+	e->val = 0xdeadbeef;
-+	/* No lock needed: the enclosing rcu_read_lock_trace() already blocks the grace period. */
-+	arm_err = bpf_call_rcu_tasks_trace(&e->rh, &arr, reclaim);
-+	busy_err = bpf_call_rcu_tasks_trace(&e->rh, &arr, reclaim);
-+	return 0;
-+}
-+
- SEC("iter/bpf_map_elem")
- int dump(struct bpf_iter__bpf_map_elem *ctx)
- {
--- 
-2.53.0-Meta
+To test a fix for this bug, please reply with `#syz test`
+(on a separate line) and attach the patch to the email.
 
+Notes:
+- The patch will be applied on top of the tested series (as an
+  incremental fix).
+- To test a new version of the whole series, please send it directly
+  to syzbot@lists.linux.dev.
+- Arguments like custom git repos and branches are not supported.
