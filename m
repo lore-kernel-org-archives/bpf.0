@@ -1,107 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua2-f12.google.com (mail-ua2-f12.google.com [74.125.226.204])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C33F84078D3
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 15:56:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF6954C4F4D
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 16:02:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.226.204
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789487788; cv=none; b=bLpiqISzOGoIUKlpLMr1Vq4S4hzNuIZLfclOmHs9GoW2J4NvcHNEfSr1Suxmgn5IMygYf3ulBELBlNkds6TBNsiR2MqZ0mBIBgBrc8h91egdPCVti/exAm4zRBUP5/AhatwtiGPx2B7FTmTFnDljB6AQo96/LM11Ykb/EIm2Vrs=
+	t=1789488166; cv=none; b=Qq27vq+2WUr8tphR0xsVqiX637t6A1HZvGZ+NpLEMn9JFGQr/gEIAPrNOpE3MPPg1xlYbq2e251y0cTvDx563uREEIIfsg35zdYpbkRC9XWkGMG7FYjGN787NjxrmRDk6LmdYNZ3PBGE+veV0Jb8xbuzOg4sFSyfIuGw/t44cag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789487788; c=relaxed/simple;
-	bh=oM/GT017hDXHH4AnBxW35OCzmaSr2ed4UtmHkslctvo=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=t/wtptuYQwKmItZcd9vc/WmCaBDewjdg3hTMrzhdZdm2sSMMF00gB2rrEbk8GT/IyfD5O37p5Qh+TZmaVtqiYvfy+vNYPUTmnAGnoDgQjeMDfDn/gO4eoEE3nxGFgbeuC6IOpmLjvSdqjUMTS84W3Aw7UKJOKLnKTwh2OHqoPPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W2BeKfeE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789488166; c=relaxed/simple;
+	bh=3IjIYNZ//EkU7RRxo8bHkfJOqg1GwqJOxlBJJC6w2Og=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Ok3l65Qa+AEEkkO0ataAj8CaW+q2cKRyffVQLxrU55CUIEiE44Li9q4I0OAj/H/9zO974pUOhXLLk7HoY/hcLHPhpQiOkpOIIuxwJyeI7qfYJOYQ10meitHt7Wtr33meh0C57unwYOH445tF9PEvzDl6L6X/DJvX/B5WFXdWn3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=HEXEEeL+; arc=none smtp.client-ip=74.125.226.204
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W2BeKfeE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71FF41F000FF;
-	Tue, 15 Sep 2026 15:56:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789487786;
-	bh=xjzwYkIrgCTpxvS9KgWzLJ7N1+8mBre8HP52PbDf7Kk=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=W2BeKfeE6fO9p/SPZaoMI76Wrob/EJMdKPfI1x0Vw90NvETrjF5BJorJlueInSi9N
-	 DhHjwWDFpT6jHE8iHMaGYhTECJol4RPVwZpXvfqhsJG3D1Hzxf3QE805gg8chf97As
-	 K7DCV8ZHeRmywi63U5ymdOmICIL6n+Qt0NkFqgODCpyNO+9zTp+VBRVkGR460ALs2G
-	 Xmxagy/h4tpsugsdKMCPOP2pLHgUyS1N55d+NsYyMotDO1pkyQS5bFqJaXa1AhEI40
-	 Hc3lFVsRhpVI9Q6QjeMiold4lBmtdgA2/YGpg+yqw71zj5bqw3TtoV1ETCIQyYzJXo
-	 Dm5llKBgNqtZA==
-Content-Type: multipart/mixed; boundary="===============0682516533076523501=="
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="HEXEEeL+"
+Received: by mail-ua2-f12.google.com with SMTP id a1e0cc1a2514c-97ea1a712deso203241241.3
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 09:02:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=toxicpanda.com; s=google; t=1789488162; x=1790092962; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:subject:cc:to:from:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=kXYuW65IGDuV4RbA68/PmJHgU6ttorOq8wX2YILfQtc=;
+        b=HEXEEeL+pryvm1DJszuag9D1YCUvmoJuXJERLAoSGa9/J1eb27fHWoDKsuyilFoHP/
+         fjYS6d2/NGQLYvfFi869rjHgR4x1XQtQsAGFqsAmffFu0jG4PxSr2m8LXJJgEo44mKMK
+         WPZYMI3fMx9T1zFgKyD6Au86+JM7Mdj88Uj2wv7PkZXjYfLTZ1GGf6aVz1VTley2RFUt
+         7k7/rcIVBTgWc/y8yYTjDM7d+nKmq2AtjY/ZH4X9z+uCPOSYpqCEyK+v/QobLVEDy7jN
+         Am7+RbygbtaFKOFj9rRfrndMqHWgJ0ZeUPCjF95xbAnpSjtI2KVALyvVVfgmLrDaqJWS
+         sflg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789488162; x=1790092962;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:subject:cc:to:from:message-id:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=kXYuW65IGDuV4RbA68/PmJHgU6ttorOq8wX2YILfQtc=;
+        b=P34GXG1b2M61bM3L2WaUxN7ko725qoOYtmZ+derIWiHQWs44B2ePCVLlqp5EWarABy
+         A/Zq3rMjWp83gxpteRcLKmTzxCPMpFucBgBXkRbK8ejGV3SiC5+76csJkEGivAzTVbjw
+         nm3otcvwF1g2VHw1iCivKRIDzs0HV7ad6R3U7h+f2YoQtpCqwG4DviytOS+SttklxNYu
+         4ZLJj3HoIbToQio76ONuU+Ehx0KlHXDE2PRTHYT7rab5KsRa7pcdlOC0pXgnzX0iMctb
+         ztAFIW+RZNrG9NpWp0hxqOzU+D0NRbfTgDJ3e9I/WBgdI3Ej910QAVLvmqMRwzzI9dsb
+         Z2Gw==
+X-Forwarded-Encrypted: i=1; AKwUvBybTKiAbtJtoyJ3JArTAWOyugFbcclFTvWqzKXht80ZZijV5uwNlQPDGErlgWwbXC4dQ6Y=@vger.kernel.org
+X-Gm-Message-State: AFuF++lfNxXeL8AAU2ssGQVPQbaTUkngBo6L3HqjLyEsaJu5i9pREPcq
+	rwon016r0i06/2gQTWp0MdS+xMG5g0ObrESl6AH2AUSzhWJzldJAHLgJJuuOtMAvaLM=
+X-Gm-Gg: AYBFou3BWyhYM9RYe4LZPpD7ig3awuMBntrLhEpBaOQY42dL5nAhwoGzoMDc8IqEgt+
+	8QEzEHgaoarMQcn8sRc/XmVhkxZqDyA5HrHJ9MshxmJErdYShcdH4nhm2Qo21fG99Os6UtNJEpz
+	PacbafCDU04qFiY2HjLts9CwkdsbCbNju1dKr0Vt7hWy8IBsDjQBiLaFi39fk4cPgID1g8yFnx+
+	AFO9MUHijJ077rS3MM/VMCAW7B7iGI7YxSWSmkZ+A3uoiMLF+Vhn6fdO8SijcNGDKyukGtRrxVP
+	NLb3zA/nywj/TRVaGxxLHpl8XFQGwNYBDo57aIOO7gaVfBOuegFDt9Tmj52HQrWwSacCS5a2HEQ
+	0rMlK1KHJfGoPb91oevZ8Sm/wjrAyQw2VhW5Ojr9ImTBNtqo55LD2ZfbbCtQUBU3KzeOlQHhNg2
+	lnLXuPwuB7Gh8dHcRVQGy0n9FaH/GtWNPZEaya+x+nzdj4ULhgZ/fmkjFiyIxzu4B2ER3CpUM8i
+	5LspjKwDTTqDshLVF7mkVn9riIyAkNym3CVlp3rltG8wnELXIM4CHGd
+X-Received: by 2002:a05:6102:1609:b0:785:c39b:6a1 with SMTP id ada2fe7eead31-79ed4a36e4fmr2855428137.6.1789488162285;
+        Tue, 15 Sep 2026 09:02:42 -0700 (PDT)
+Received: from toxicpanda.com (ec2-34-228-114-98.compute-1.amazonaws.com. [34.228.114.98])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-9123bd339easm2205466d6.0.2026.09.15.09.02.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2026 09:02:41 -0700 (PDT)
+Date: Tue, 15 Sep 2026 16:02:31 +0000
+Message-ID: <162b7a9a7e12191a9661465090319408.josef@toxicpanda.com>
+From: Josef Bacik <josef@toxicpanda.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH RFC v3 03/13] rcu-tasks: Add a Tasks RCU implementation for reader-marked trampolines
+In-Reply-To: <20260915132919.E868D1F000FF@smtp.kernel.org>
+References: <20260915-b4-rcu-tasks-preempt-qs-v3-0-0ad30c4c5ee7@toxicpanda.com> <20260915-b4-rcu-tasks-preempt-qs-v3-3-0ad30c4c5ee7@toxicpanda.com> <20260915132919.E868D1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <58262a1911ba8265b8745e4a2f9e592ddfa74c814b4359a83fcf449ea32904fd@mail.kernel.org>
-In-Reply-To: <20260915145054.164857-1-madhav.khoslaa@gmail.com>
-References: <20260915145054.164857-1-madhav.khoslaa@gmail.com>
-Subject: Re: [PATCH bpf] selftests/bpf: Fix csum_partial() dropping trailing byte on odd length
-From: bot+bpf-ci@kernel.org
-To: madhav.khoslaa@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: bpf@vger.kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,sdf@fomichev.me,alexis.lothore@bootlin.com,madhav.khoslaa@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 15 Sep 2026 15:56:25 +0000 (UTC)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
---===============0682516533076523501==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
-> index 75133119c04a3..f6d28a2de7888 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.h
-> +++ b/tools/testing/selftests/bpf/network_helpers.h
-> @@ -129,12 +129,22 @@ static __u16 csum_fold(__u32 csum)
+On Tue, 15 Sep 2026 13:29:19 +0000, sashiko-bot@kernel.org wrote:
+> > +	if (!(ct_rcu_watching_cpu(cpu) & CT_RCU_WATCHING))
+> > +		return true;
+> > +	return idle_cpu(cpu);
+> > +}
 >
->  static __wsum csum_partial(const void *buf, int len, __wsum sum)
->  {
-> -	__u16 *p = (__u16 *)buf;
-> +	const __u8 *p = buf;
->  	int num_u16 = len >> 1;
->  	int i;
->
->  	for (i = 0; i < num_u16; i++)
-> -		sum += p[i];
-> +		sum += ((const __u16 *)p)[i];
-> +
-> +	/* RFC 1071: an odd-length buffer's trailing byte is paired with
-> +	 * a zero pad byte to form the final 16-bit word.
-> +	 */
+> [Severity: High]
+> Could the unconditional return of idle_cpu() lead to a use-after-free crash
+> if the idle task was interrupted in trampoline code?
 
-A subsystem pattern flags this as potentially concerning: the BPF
-comment-style guide states that multi-line comments under
-tools/testing/selftests/bpf/ must have the opening '/*' on its own line,
-with the comment text starting on the next line:
+Yes, this one is right. The classic flavor ignores idle tasks too and
+leans on Tasks Rude for that, but the idle_cpu() shortcut here made it
+worse than it needs to be: an idle CPU with an interrupt sitting on top
+of a trampoline the idle loop had called into would be passed
+immediately, and since idle is never preempted from irq exit nothing
+else catches it.
 
-	/*
-	 * RFC 1071: an odd-length buffer's trailing byte is paired with
-	 * a zero pad byte to form the final 16-bit word.
-	 */
+For v4 that line is gone and an idle CPU only counts while RCU is not
+watching it. If it is watching (the interrupt, or the traceable part of
+the idle loop) it gets the resched_cpu() like any other straggler and
+counts once the idle loop itself schedules, which it cannot do from
+inside a trampoline. So idle ends up covered rather than ignored.
 
-The comment text itself is accurate and matches RFC 1071. Is the current
-style acceptable given that the surrounding file has no other inline
-multi-line comments in this format?
+Thanks,
 
-> +	if (len & 1) {
-> +		__u16 tail = 0;
-> +
-> +		__builtin_memcpy(&tail, p + len - 1, 1);
-> +		sum += tail;
-> +	}
->
->  	return sum;
->  }
-
-This isn't a bug, but would keeping a separate '__u16 *' pointer
-alongside the byte pointer let the loop body stay as it was, rather than
-casting inside the subscript? Also, is there a reason for using
-'__builtin_memcpy()' here instead of plain 'memcpy()' like the rest of
-the selftests tree?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34986038731
---===============0682516533076523501==--
+Josef
