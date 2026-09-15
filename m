@@ -1,167 +1,300 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BCCD480DD5;
-	Tue, 15 Sep 2026 16:53:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 339CF403AED
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 17:02:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789491228; cv=none; b=MQ5ekqN/OMUa5WMatBl6tIitrMalZnHK36qJUlRUorPn2Ji9RzxYjOPZNxPMc3Jiil3wcu4RvBSOcN2Xl3GOpuOh9M47jtXK5qL1ZrviIk7zWOs0a2PaclvSjQbYoPXCe+qyKck4msQ6P9AnFif8VhYJKsrOjGXzraNz3t8oark=
+	t=1789491732; cv=none; b=ckYUF113B+UX2Wyz09NPkIFK5XB6pgun74b2ozSKuEHEk114V0GyKFTHFYTwyyeV3ErvhJGjMksupRkdTaVw6y9x0a9vjgJeYuuX8RIMnelD4p2iKPBdoSQ11dShdvC34sEeXgMx6tFShA5m67o+Epgb6UAWmIfLfRSjuqc8og0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789491228; c=relaxed/simple;
-	bh=l3ZvLuYlx/+t7ctdiTcG4avgC+vc0rEh+LzyXNpB4p8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=c5ixQg0Yxgjauxm6FIoHmDeDHnkqdw/FwRAFeIWW3hgDxCTfn1x/7YUzj/CKKG98osKT8dTwYKm55O4gHV96UQLg977aTBRGSmsy73ouaZxoohkVDTERggYQEfc7mklwKpAj03Ujue/uQjp00WVlvjFY1Gjjs/FWJWs80R/ll88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fWVnpwJb; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789491732; c=relaxed/simple;
+	bh=u4UFiko82A9oo6jDjjqR7lvD3n1v6npulk8uWYC3A9o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=don6VngQ9yVxSZvL2vyZAMWVMOARtF2HUTd7Yv4iI4vpgp2LWUZBXJ+8t/s1I1L8vbtZQ28WsnqrfaVB2Pmyc4ntV860XRkJQnEk+Im7E/QrGC881Qzht8dsqdlnXM2vuaiGovwgKuqf6kx9cFABic6qPGGZzMhv1+7+g10XXew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FL6BZ37p; arc=none smtp.client-ip=74.125.227.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fWVnpwJb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FE341F000FF;
-	Tue, 15 Sep 2026 16:53:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789491227;
-	bh=vDad/MI7AmkmvEdvfkDBOgNfs9MAtrTUC2XCTt9mqIA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=fWVnpwJbo7S9YhN+sHSDYsZEDcMG/kA9hlTe36gltxqI3F0fjzYCgQrCawvw8+W4k
-	 +nNLnvg6yDDo/hWi97B6g3pITdMBoIpWRNausiVuN4+1NfkVPwwhZ1LLLRPwTK6EhI
-	 f+IZXVaf52psSgGRUlQ+OyiDToDozOjig3yofqnulmxX9P44zOwoutBlg4gqW7kJWq
-	 /rzhgXm0oruGpKnBXskBXFqje8sCjGwDfAOYtscSs20gszVz2yBfsd7d5Cf2jzSSlw
-	 NwI7rXISnKKUOXSjf/xSHRqn26LZARFbFURzc5rnoEZg8TWdv9TcerEaNnNKPH7O3P
-	 Sd2183WhaS4Eg==
-Content-Type: multipart/mixed; boundary="===============8549227262384245125=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FL6BZ37p"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2dd88a115ebso818555ad.2
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 10:02:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789491730; x=1790096530; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=TCDRZ9weVwG1Wz3S9zGQh/wTKxjjL9VQFaV4nXxX7Mw=;
+        b=FL6BZ37popkupd+qSWbFcW0Y2TIWXGpD56kVYAxD1wYOxUJJPL8NyzQM4aPyKRK0Dt
+         ddxUWztMOWgY8bQvPfJWjza/EVFhfXI2sb1LRLoxq4gpdfg3ylarMKzcv5/1zxKZcgo6
+         xoA7L9pSsl00v2ILn7tdKpcFaQRZIXX6DnqUmxyjpSQJpyhd0wup/S20GA/9IeGYmuc0
+         Xa8HJ3nKGMpgpeVYEfJxLp/VuJqSyijKU6qXHhrVrviP/SDEmB8RQD/JHNs34xv2VhYO
+         vx6w98fO4jexhN0wcQOl9pFjaLZOAQNXOI1wIccSgi7rAhhys9o5/VKLTwClWQVZ9cit
+         6t5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789491730; x=1790096530;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=TCDRZ9weVwG1Wz3S9zGQh/wTKxjjL9VQFaV4nXxX7Mw=;
+        b=UYcASNNeJt4rVSB9QWodoUhOndOEfDTHnvl2Fv0aDRa/LcWijwGoWC3f4MH/jzaxLX
+         OefmzX9mZBDbaw5TAjLEGntbIz+2mOcng0XWJLwnyX3QME/oawZqTeDcapaAc5W9WnbW
+         AfN1QatmS/VLqCtLyxr5/+vCl5ATI/wdiN99juwvvBMUg4lkoIbDOqQKLOtgTjWSofqw
+         OeA4XddZ2KOLKTQmB4xWQBjj7wG25rFF7Lm1nQikjw9vyDy+fXaHy/lB64mHIVqWDMV4
+         LsvjF599VdsX1wEp4EqfJpEZr5EvFQEf8ACALrRjTxZZUJ58qw/2vAu7hYvx14HDysa4
+         7yBA==
+X-Gm-Message-State: AFuF++lTNrvwQhOKa8J32198hbYU9cAtT/tu3k67Y0h4lTi0pOIfGwuB
+	ogfHPeS6+7/hIVlT2LsJY7Q2NxzBLseFpa/Dx32tC0LjD2t0XDi83vGa
+X-Gm-Gg: AYBFou2Rvxlho+Ptde1iuAWwdZcvCmn1iFF9MDbcnOQd7mjeiwfWsxf84KZvzuA0Pru
+	Cef5lpxGURLtZrOpAMlYDhre+aOY+v1m026gjJf4jFJ1YE5pG+Jsta8mCi/BDCl/UGrIQc0eM+j
+	LDE9IiModeV9v923zsyBgccwuLSjfAPxVPuRU/6y96xqwIdaAub77u+GdRtQ/RDw/iy8ly/nSMR
+	qqjjWyfVCOlYPzVVJiPKDWRMq3PWU5VPNc7utH3PdSMtFLOgiWT84KihG2QWOWLTq8z8CmT8+I6
+	qAl2NvuE45C0ZBFzN7fthKxVzgb803rYdMXuWHwILYVrYyFX1FcpztgONxAz9vRYToH7xdtYAiu
+	h1simcEpOhRf5R5BTa/KSutn/HJWB6o+NsNSwYoIISSD1URbweTU7qJEpo8EWg+MZCKiHx7F9jZ
+	z76EQvjcdFNt+wfoAKwiGEXGwRvVtngUK77Og7+U96ubBBewBbVEP7bUGhnFfyk4ba5oWga/knn
+	bal/fhLifXlKfH9YYQ9rsRVm3W4tMQf
+X-Received: by 2002:a17:902:c942:b0:2d8:df44:a5c2 with SMTP id d9443c01a7336-2dd8387cbdbmr33512745ad.20.1789491730384;
+        Tue, 15 Sep 2026 10:02:10 -0700 (PDT)
+Received: from 192.168.50.3 ([198.176.50.208])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd34c7f976sm68439925ad.81.2026.09.15.10.01.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2026 10:02:09 -0700 (PDT)
+From: Weiming Shi <bestswngs@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Peter Oskolkov <posk@google.com>,
+	Xiang Mei <xmei5@asu.edu>,
+	Weiming Shi <bestswngs@gmail.com>
+Subject: [PATCH] bpf: clear stale IPv4 options after LWT encapsulation
+Date: Wed, 16 Sep 2026 01:01:48 +0800
+Message-ID: <20260915170147.3943392-2-bestswngs@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <10b12a0016e965f98f6789b11c4eaa5afbce2d623d6ddd80bd92105830ec2c13@mail.kernel.org>
-In-Reply-To: <20260915161450.96249-1-leon.hwang@linux.dev>
-References: <20260915161450.96249-1-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v3] bpftool: Compute map size of light skeletons at runtime
-From: bot+bpf-ci@kernel.org
-To: leon.hwang@linux.dev,bpf@vger.kernel.org
-Cc: qmo@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,linux-kernel@vger.kernel.org,leon.hwang@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 15 Sep 2026 16:53:46 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============8549227262384245125==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Xiang Mei <xmei5@asu.edu>
 
-> diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-> index a50540ef6521..ee680f7c2116 100644
-> --- a/tools/bpf/bpftool/gen.c
-> +++ b/tools/bpf/bpftool/gen.c
+bpf_lwt_push_ip_encap() rebases the network header after prepending an IP
+header, but leaves IPCB(skb)->opt describing the inner IPv4 header.  An
+ingress LWT route can consequently make an ICMP error interpret an
+inner-header byte as an option length and copy 255 bytes into 40 bytes of
+stack storage.  The trace decoded with scripts/decode_stacktrace.sh is:
 
-[ ... ]
+  BUG: KASAN: stack-out-of-bounds in __ip_options_echo
+  Write of size 255
+  Call Trace:
+   <IRQ>
+   __asan_memcpy (mm/kasan/shadow.c:106)
+   __ip_options_echo (net/ipv4/ip_options.c:96)
+   __icmp_send (net/ipv4/icmp.c:949)
+   ip_forward (net/ipv4/ip_forward.c:176)
+   lwtunnel_input (net/core/lwtunnel.c:465)
+   ip_rcv (net/ipv4/ip_input.c:612)
+   __netif_receive_skb_one_core (net/core/dev.c:6264)
+   process_backlog (net/core/dev.c:6728)
+   __napi_poll (net/core/dev.c:7787)
+   net_rx_action (net/core/dev.c:8007)
+   handle_softirqs (kernel/softirq.c:645)
+   do_softirq.part.0 (kernel/softirq.c:546)
+   </IRQ>
+   <TASK>
+   __local_bh_enable_ip (kernel/softirq.c:473)
+   __dev_queue_xmit (net/core/dev.c:4961)
+   packet_sendmsg (net/packet/af_packet.c:3143)
+   __sys_sendto (net/socket.c:2281)
+   __x64_sys_sendto (net/socket.c:2288)
+   do_syscall_64 (arch/x86/entry/syscall_64.c:84)
+   entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121)
+   </TASK>
 
-> diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
-> index 1f3f332dffbe..9e16b8e8cb7c 100644
-> --- a/tools/lib/bpf/skel_internal.h
-> +++ b/tools/lib/bpf/skel_internal.h
-> @@ -11,6 +11,7 @@
->  #include <linux/bpf.h>
->  #else
->  #include <unistd.h>
-> +#include <sys/param.h>
->  #include <sys/syscall.h>
->  #include <sys/mman.h>
->  #include <linux/keyctl.h>
-> @@ -127,7 +128,7 @@ static inline void skel_free(const void *p)
->   * either bpf_probe_read_kernel() or bpf_copy_from_user() from initial_value
->   * depending on bpf_loader_ctx->flags.
->   */
-> -static inline void skel_free_map_data(void *p, __u64 addr, size_t sz)
-> +static inline void skel_free_map_data(void *p, __u64 addr, size_t val_sz, __u32 max_entries)
->  {
->  	if (addr != ~0ULL)
->  		kvfree(p);
-> @@ -138,18 +139,20 @@ static inline void skel_free_map_data(void *p, __u64 addr, size_t sz)
->  	 */
->  }
->
-> -static inline void *skel_prep_map_data(const void *val, size_t mmap_sz, size_t val_sz)
-> +static inline void *skel_prep_map_data(const void *val, size_t val_sz, __u32 max_entries,
-> +				       size_t data_sz)
->  {
->  	void *addr;
->
-> -	addr = kvmalloc(val_sz, GFP_KERNEL);
-> +	addr = kvmalloc(data_sz, GFP_KERNEL);
->  	if (!addr)
->  		return NULL;
-> -	memcpy(addr, val, val_sz);
-> +	memcpy(addr, val, data_sz);
->  	return addr;
->  }
+A helper-only reset can be restored by bpf_prog_run_save_cb(), while a
+program without ctx->cb[] access can clone-redirect the skb before a
+return-only reset.  Track active LWT runs and their control-block family
+in the BPF network context.  Reset it immediately when the control block
+is not BPF scratch space, and after bpf_prog_run_save_cb() restores it.
+Preserve the state across nested runs and retain the ingress interface and
+L3-slave state when the protocol family changes.
 
-This isn't a bug, but would naming these something like value_sz and
-init_sz make it harder to mix up the map value size and the embedded
-blob length? The two names differ by three characters and describe
-different quantities, and in the __KERNEL__ variant above val_sz is not
-referenced at all while data_sz drives both the kvmalloc() and the
-memcpy(). A future edit that reaches for the wrong one would size an
-allocation or a copy incorrectly.
-
->
-> -static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_sz, int flags, int fd)
-> +static inline void *skel_finalize_map_data(__u64 *init_val, size_t val_sz, __u32 max_entries,
-> +					   int flags, int fd)
-
-[ ... ]
-
-> @@ -193,25 +197,39 @@ static inline void skel_free(void *p)
->  	free(p);
->  }
-
-[ ... ]
-
->
-> -static inline void *skel_prep_map_data(const void *val, size_t mmap_sz, size_t val_sz)
-> +static inline void *skel_prep_map_data(const void *val, size_t val_sz, __u32 max_entries,
-> +				       size_t data_sz)
->  {
-> +	size_t mmap_sz = skel_map_mmap_sz(val_sz, max_entries);
->  	void *addr;
->
->  	addr = mmap(NULL, mmap_sz, PROT_READ | PROT_WRITE,
->  		    MAP_SHARED | MAP_ANONYMOUS, -1, 0);
->  	if (addr == (void *) -1)
->  		return NULL;
-> -	memcpy(addr, val, val_sz);
-> +	memcpy(addr, val, data_sz);
->  	return addr;
->  }
-
-[ ... ]
-
-commit 417792b69014155cfa0ecc10cdffc4c2e54b9e60
-Author: Leon Hwang <leon.hwang@linux.dev>
-
->     bpftool: Compute map size of light skeletons at runtime
->
->     bpftool rounds memory-mapped data map sizes to the host page size when
->     generating a light skeleton. The generated code therefore uses a 64K
->     mapping size when bpftool runs on a 64K-page host, even if the skeleton
->     runs on a 4K-page target. The target rejects the oversized map mmap(),
->     causing failure of loading the light skeleton.
->
->     When try to run 64K-page selftests on 4K-page VM, the error message does
->     not provide the reason about page size.
->
->      test_atomics:PASS:atomics skeleton open 0 nsec
->      test_atomics:FAIL:atomics skeleton load unexpected error: -12 (errno 22)
->      #15      atomics:FAIL
-
-This isn't a bug, but could this sentence be reworded ("When running
-64K-page selftests on a 4K-page VM ...") or dropped, since the patch
-does not change the error message itself? The sentence is missing a
-subject and describes a diagnostics shortcoming that this patch does not
-address.
-
-
+Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
+Reported-by: Weiming Shi <bestswngs@gmail.com>
+Assisted-by: LLM
+Signed-off-by: Xiang Mei <xmei5@asu.edu>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ include/linux/filter.h | 10 ++++++
+ net/core/lwt_bpf.c     | 81 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 91 insertions(+)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34994524877
---===============8549227262384245125==--
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 39decde7fc730..0edd3e6ce563f 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -848,6 +848,15 @@ struct bpf_nh_params {
+ #define BPF_RI_F_CPU_MAP_INIT	BIT(2)
+ #define BPF_RI_F_DEV_MAP_INIT	BIT(3)
+ #define BPF_RI_F_XSK_MAP_INIT	BIT(4)
++#define BPF_RI_F_LWT_IP_ENCAP	BIT(5)
++#define BPF_RI_F_LWT_RUN	BIT(6)
++
++struct bpf_lwt_ip_encap_state {
++	int iif;
++	__be16 cb_proto;
++	bool l3slave;
++	bool cb_access;
++};
+ 
+ struct bpf_redirect_info {
+ 	u64 tgt_index;
+@@ -858,6 +867,7 @@ struct bpf_redirect_info {
+ 	enum bpf_map_type map_type;
+ 	struct bpf_nh_params nh;
+ 	u32 kern_flags;
++	struct bpf_lwt_ip_encap_state lwt_ip_encap;
+ };
+ 
+ struct bpf_net_context {
+diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+index da49364ec63de..762d62c959f9f 100644
+--- a/net/core/lwt_bpf.c
++++ b/net/core/lwt_bpf.c
+@@ -36,19 +36,88 @@ static inline struct bpf_lwt *bpf_lwt_lwtunnel(struct lwtunnel_state *lwt)
+ #define NO_REDIRECT false
+ #define CAN_REDIRECT true
+ 
++static void bpf_lwt_reset_ip_cb(struct sk_buff *skb, __be16 orig_proto,
++				int iif, bool l3slave, bool use_new_proto)
++{
++	__be16 cb_proto = orig_proto;
++
++	if (use_new_proto)
++		cb_proto = skb->protocol;
++
++	if (cb_proto == htons(ETH_P_IP)) {
++		if (orig_proto == htons(ETH_P_IP)) {
++			memset(&IPCB(skb)->opt, 0, sizeof(IPCB(skb)->opt));
++		} else {
++			memset(IPCB(skb), 0, sizeof(*IPCB(skb)));
++			IPCB(skb)->iif = iif;
++			if (l3slave)
++				IPCB(skb)->flags |= IPSKB_L3SLAVE;
++		}
++	} else if (cb_proto == htons(ETH_P_IPV6)) {
++		memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
++		IP6CB(skb)->iif = iif;
++		IP6CB(skb)->nhoff = offsetof(struct ipv6hdr, nexthdr);
++		if (l3slave)
++			IP6CB(skb)->flags |= IP6SKB_L3SLAVE;
++	} else if (orig_proto == htons(ETH_P_IP)) {
++		memset(&IPCB(skb)->opt, 0, sizeof(IPCB(skb)->opt));
++	}
++}
++
+ static int run_lwt_bpf(struct sk_buff *skb, struct bpf_lwt_prog *lwt,
+ 		       struct dst_entry *dst, bool can_redirect)
+ {
+ 	struct bpf_net_context __bpf_net_ctx, *bpf_net_ctx;
++	struct bpf_lwt_ip_encap_state nested_lwt_ip_encap_state;
++	struct bpf_redirect_info *ri;
++	bool lwt_ip_encap, nested_lwt_ip_encap, nested_lwt_run;
++	__be16 orig_proto = skb->protocol;
++	bool l3slave = false;
++	int iif = 0;
+ 	int ret;
+ 
++	if (orig_proto == htons(ETH_P_IP)) {
++		iif = IPCB(skb)->iif;
++		l3slave = ipv4_l3mdev_skb(IPCB(skb)->flags);
++	} else if (orig_proto == htons(ETH_P_IPV6)) {
++		iif = IP6CB(skb)->iif;
++		l3slave = ipv6_l3mdev_skb(IP6CB(skb)->flags);
++	}
++
+ 	/* Disabling BH is needed to protect per-CPU bpf_redirect_info between
+ 	 * BPF prog and skb_do_redirect().
+ 	 */
+ 	local_bh_disable();
+ 	bpf_net_ctx = bpf_net_ctx_set(&__bpf_net_ctx);
++	ri = bpf_net_ctx_get_ri();
++	nested_lwt_run = ri->kern_flags & BPF_RI_F_LWT_RUN;
++	nested_lwt_ip_encap = ri->kern_flags & BPF_RI_F_LWT_IP_ENCAP;
++	if (nested_lwt_run)
++		nested_lwt_ip_encap_state = ri->lwt_ip_encap;
++	ri->kern_flags &= ~BPF_RI_F_LWT_IP_ENCAP;
++	ri->kern_flags |= BPF_RI_F_LWT_RUN;
++	ri->lwt_ip_encap.iif = iif;
++	ri->lwt_ip_encap.cb_proto = orig_proto;
++	ri->lwt_ip_encap.l3slave = l3slave;
++	ri->lwt_ip_encap.cb_access = lwt->prog->cb_access;
+ 	bpf_compute_data_pointers(skb);
+ 	ret = bpf_prog_run_save_cb(lwt->prog, skb);
++	lwt_ip_encap = ri->kern_flags & BPF_RI_F_LWT_IP_ENCAP;
++	ri->kern_flags &= ~BPF_RI_F_LWT_IP_ENCAP;
++
++	if (lwt_ip_encap && ri->lwt_ip_encap.cb_access)
++		bpf_lwt_reset_ip_cb(skb, ri->lwt_ip_encap.cb_proto,
++				    ri->lwt_ip_encap.iif,
++				    ri->lwt_ip_encap.l3slave,
++				    (ret == BPF_LWT_REROUTE &&
++				     lwt->prog->type != BPF_PROG_TYPE_LWT_OUT) ||
++				    (ret == BPF_REDIRECT && can_redirect));
++	if (nested_lwt_run)
++		ri->lwt_ip_encap = nested_lwt_ip_encap_state;
++	else
++		ri->kern_flags &= ~BPF_RI_F_LWT_RUN;
++	if (nested_lwt_ip_encap)
++		ri->kern_flags |= BPF_RI_F_LWT_IP_ENCAP;
+ 
+ 	switch (ret) {
+ 	case BPF_OK:
+@@ -604,6 +673,7 @@ static int handle_gso_encap(struct sk_buff *skb, bool ipv4, int encap_len)
+ 
+ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
+ {
++	struct bpf_redirect_info *ri;
+ 	bool is_udp_tunnel;
+ 	struct iphdr *iph;
+ 	bool ipv4;
+@@ -657,6 +727,7 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
+ 	memcpy(skb_network_header(skb), hdr, len);
+ 	bpf_compute_data_pointers(skb);
+ 	skb_clear_hash(skb);
++	ri = bpf_net_ctx_get_ri();
+ 
+ 	if (ipv4) {
+ 		skb->protocol = htons(ETH_P_IP);
+@@ -669,6 +740,16 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
+ 		skb->protocol = htons(ETH_P_IPV6);
+ 	}
+ 
++	if (ri->kern_flags & BPF_RI_F_LWT_RUN) {
++		ri->kern_flags |= BPF_RI_F_LWT_IP_ENCAP;
++		if (!ri->lwt_ip_encap.cb_access) {
++			bpf_lwt_reset_ip_cb(skb, ri->lwt_ip_encap.cb_proto,
++					    ri->lwt_ip_encap.iif,
++					    ri->lwt_ip_encap.l3slave, true);
++			ri->lwt_ip_encap.cb_proto = skb->protocol;
++		}
++	}
++
+ 	if (skb_is_gso(skb))
+ 		return handle_gso_encap(skb, ipv4, len);
+ 
