@@ -1,196 +1,107 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from va-2-113.ptr.blmpb.com (va-2-113.ptr.blmpb.com [209.127.231.113])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90BD42EC0B0
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 07:15:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5733431ED7C
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 07:18:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.231.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789456547; cv=none; b=vGicR/g586JVOVy7EkpB2hc8t/yaejYgrd3Bw9VTJxCovBg5qJu4HGPf6MJJvnuKUDUCOS+gn4bnnI76gF245xSVYeTYOWBC8zA+epz9/maPh3U8TdSNC7lSKXG54R1PqANDLkTH1acZykcv80K+RAHKEoei7HF7r7ZCqQkr608=
+	t=1789456703; cv=none; b=CNiILqKl0O2LuDKhVbudxF1NsB7rw7nOPdez2RAr/4XdRgnbnAp3UyA+dk4v5zt96UfFJ3z5gbSPQs5TCOtvmhDWMeDq3mXLNZgRhaasHVs6yRlpx9vubbZz4iVfQQiNjpq75CErLu9RfFztuXR2jVDH/1Gyadta7YFyBZ99ZB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789456547; c=relaxed/simple;
-	bh=XUdHHqHkpBDhjFo9exdJCuBeB0efNh+zdzWSlsOayRU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tu58GwrnC4n3DCe9pUep5puLQ3sXWHBE0dS8guAvHWHg24RXu2aHeE1MEFNiwf+xqLlxacXKGFsPeOn/aBJNoC0H9sGqxkE0wZEqmBoeV7j7GClSMbO6yv47rDApenTYmy6abymOuCk2d6t7drW+yN7LVmYf1BSLEXlh1KCjAFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iimwb2lv; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y6w5KjRS; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1789456703; c=relaxed/simple;
+	bh=WPjmzXV0oRUSu6jjE8ItS8IHx7MXiaHsntQbQfUvp0c=;
+	h=Date:Message-Id:Content-Type:From:Subject:To:Cc:Mime-Version; b=dE6Bva5YdkV4fJBb3XQdbzNVwkrF0oz6s7cl1UormYDulJzQjkLkV1CzMf1lS6l3notY5hJ+qJ/y5cuDaQl6nDCxbnk4eOWGFK2cEf/8FW/mPOjNgh8y8Z6iXJ9XPemqU3YuyzYlKTGiTh9eNNxkhcjgkUZSTAizOE4Y3uKlCak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=qp1lAlJ2; arc=none smtp.client-ip=209.127.231.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iimwb2lv";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y6w5KjRS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1789456544;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=XUdHHqHkpBDhjFo9exdJCuBeB0efNh+zdzWSlsOayRU=;
-	b=iimwb2lvzANVgVPG7d53OtAAcQelkF4m8748nUraVOdem9Aul1TVrV6e64ignur6sMwYga
-	Ui8ymaLeGPQg5fhkg8ZUt1SXjYLmbb/nh3YO8upSWltIDG/MdF5vep4cDwphjYE1rXurxm
-	QieJqO2OKZz1VX+0KxWq+Qg6/V1GlQ8=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-547-NfC-mKjWPDiZjPRnJV5xjA-1; Tue, 15 Sep 2026 03:15:43 -0400
-X-MC-Unique: NfC-mKjWPDiZjPRnJV5xjA-1
-X-Mimecast-MFC-AGG-ID: NfC-mKjWPDiZjPRnJV5xjA_1789456542
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-4843e59c32dso2701076f8f.3
-        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 00:15:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1789456542; x=1790061342; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=XUdHHqHkpBDhjFo9exdJCuBeB0efNh+zdzWSlsOayRU=;
-        b=Y6w5KjRS1R4udpXS4aStPIPF6U8eu+HhTOhdTYIJKiwAi3R+RSDd1Ti2OjN2n1pgkC
-         7yftWqJ2ilNYGuSBeEQ+ogFUHaCUcQTx2pIw+y2q0FZej95JeXv5rMVqoxM2D1o8dcG1
-         s7y/EwjnRsgIT+AYC1haFJEq3laIc0fy9+ivo2als0NwQPg0SytcwC4oYL0peGKstpNn
-         eIYbUjGocKOCCUbU6PCFIoSASfLGvLLIexPJ1iUaEWZ6hFYz5Zu1sk8ylStwBCprWMBP
-         YlCtjkhBNCzzSxOMj+S66Bq9bdnWWdG4lr56NuNax6oHdTrTetkhNGXg324PAqGUZnoU
-         U8Ug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789456542; x=1790061342;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=XUdHHqHkpBDhjFo9exdJCuBeB0efNh+zdzWSlsOayRU=;
-        b=xMYAmXx4TTKq9avNLDlEXSSQ5XWjN8b5kkeISK/Mhdnhe2IDDzxrvzitUcnt6tcI1u
-         7r41d/x0X7cIzXgPvrS8FAS1xH7YauYODbAhlrXN0WSmBS3szkjMw/770Y/y+O4vGr9T
-         yCXiimY3oR+RKz97eltRF14MRRP/vcR/yKsUY6avgkIMctqHYtC0vB2VCAPMSHc9rIt9
-         ggfiVD/y3eKhKHgvy37XP71VS7kwv7GnyQ8Jo4IFkXDvdwRSC+zpS01DojN4ss/mT968
-         KkkHgPAObRkOTFLyCEIZ1XcJDkNDgX4F4ZljCEZM1QZI7fv9ELmpOufvylwMS+TCHJRj
-         BtTQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxeILU5ARqiR46IHu+B79zTzg+EqzxnM8BW7f1x03VfA9jMLQaDKMFJyZExxiMTPDRPetE=@vger.kernel.org
-X-Gm-Message-State: AFuF++m+TP1ILRMIzVacBAc0i76WxAWP3h6UPlNqZmV9aVPkN0LZ5KcM
-	Dx7fdkq4GNbyc7vAkgOAxq8MOkRgK2TjeXNwAkTMyJcsY9FzUzJla/2T9aNp1qjgkF61oQtMnZI
-	wKy+kCxfMLYMOWfDLshf5bI6BjLNncN7Ohu5XH9GjT3OLg5HpFazwfQ==
-X-Gm-Gg: AYBFou0bq+scY1wCnKvZII76w0xQKr5dtRrXOUwh/Em2yYH8jht+TJJkkAulT/9RvYj
-	dA2qYWFWbGNfV0tvvg4Vqr/ihOPSwNR3Ja7HmLjnamZi7JgNE2tTrtRsaFG09XFFeSjkYk3RTB2
-	jU060UIJdeh5TR2d2a/0GL1Nv39NA6ZVjekgGEj6tsJAAE38va7lj0REjHFLSL+0Xx3UrU/mxOh
-	geBH8t5p8eDhFzNeOAYrhUZk2XWh1PxPyBEqvoxNXDKQjaczTZTgWKTS+AroN2Ptw48uQLK69xn
-	l1CTKYDkdWl3Cp3PIUTsyvio7mCXzNTE/V3zYcK9yj7p6+towZQMIFL+1Y+rbPrtg1EEb2pPrrw
-	0DcC5w4TgqtPd/4ZDxILKxT/6wwuQXQ==
-X-Received: by 2002:a05:6000:2685:b0:484:4880:449d with SMTP id ffacd0b85a97d-48702aceed7mr9043995f8f.3.1789456541886;
-        Tue, 15 Sep 2026 00:15:41 -0700 (PDT)
-X-Received: by 2002:a05:6000:2685:b0:484:4880:449d with SMTP id ffacd0b85a97d-48702aceed7mr9043948f8f.3.1789456541483;
-        Tue, 15 Sep 2026 00:15:41 -0700 (PDT)
-Received: from gmonaco-thinkpadt14gen3.rmtit.csb ([195.174.135.130])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48707e00133sm2607417f8f.11.2026.09.15.00.15.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2026 00:15:41 -0700 (PDT)
-Message-ID: <1f8caa71b79e70f554245bccaa29b66268452dbe.camel@redhat.com>
-Subject: Re: [RFC PATCH 00/20] rv: Add support for BPF monitors
-From: Gabriele Monaco <gmonaco@redhat.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Steven Rostedt
-	 <rostedt@goodmis.org>
-Cc: Nam Cao <namcao@linutronix.de>, LKML <linux-kernel@vger.kernel.org>, 
- linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, bpf
- <bpf@vger.kernel.org>, Wen Yang <wen.yang@linux.dev>,  Tobias Schaffner
- <tobias.schaffner@siemens.com>, Viktor Malik <vmalik@redhat.com>, Linus
- Torvalds	 <torvalds@linux-foundation.org>
-Date: Tue, 15 Sep 2026 09:15:39 +0200
-In-Reply-To: <DLDSQDSVXFHF.18X2UQUL5Y42D@gmail.com>
-References: <20260831090524.106845-1-gmonaco@redhat.com>
-	 <87se3sakgi.fsf@yellow.woof>
-	 <df6e9168cb06c35e21db7f9d17cfbca6bd87005b.camel@redhat.com>
-	 <DL5B40CU17WD.3KD75URQZ6RRR@gmail.com>
-	 <eb3dd8158942d663ec8ad4c529eacd666c5f96d9.camel@redhat.com>
-	 <20260903090211.50d15220@gandalf.local.home>
-	 <CAADnVQK8e1Qp9rf1zThZxb3vr4Gc_bpo0nqpEO2LdnEwHdKokA@mail.gmail.com>
-	 <20260904074317.01b2c0e1@robin> <DL6O0KLPXLTA.2HJJUXQUVCP5@gmail.com>
-	 <20260904123108.1fa1d815@gandalf.local.home>
-	 <20260904132421.111c0279@gandalf.local.home>
-	 <DL6XBKITK7ZT.3RXK9YGGUYZZE@gmail.com>
-	 <20260904194620.0c7a8363@gandalf.local.home>
-	 <CAADnVQJH1SYR_GN6gewF3w_z_Sex9HFE1T1oXkQe6+v18bDTWA@mail.gmail.com>
-	 <20260904201741.2986efca@gandalf.local.home>
-	 <CAADnVQ+x4iRNXOg69nUmuJ53pB3-JtroePcyoReATy9+V1aRPg@mail.gmail.com>
-	 <228FE969-EBFF-4B60-B0E7-C1E4FD82FB8B@redhat.com>
-	 <DLDSQDSVXFHF.18X2UQUL5Y42D@gmail.com>
-Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
- keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
- 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0BrZXJuZWwub3JnPoiZBBMWCgBBFiEEysoR+AuB3R
- Zwp6j270psSVh4TfIFAmjKX2MCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
- Q70psSVh4TfIQuAD+JulczTN6l7oJjyroySU55Fbjdvo52xiYYlMjPG7dCTsBAMFI7dSL5zg98I+8
- cXY1J7kyNsY6/dcipqBM4RMaxXsOtCRHYWJyaWVsZSBNb25hY28gPGdtb25hY29AcmVkaGF0LmNvb
- T6InAQTFgoARAIbAwUJBaOagAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgBYhBMrKEfgLgd0WcK
- eo9u9KbElYeE3yBQJoymCyAhkBAAoJEO9KbElYeE3yjX4BAJ/ETNnlHn8OjZPT77xGmal9kbT1bC1
- 7DfrYVISWV2Y1AP9HdAMhWNAvtCtN2S1beYjNybuK6IzWYcFfeOV+OBWRDQ==
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="qp1lAlJ2"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=2212171451; d=bytedance.com; t=1789456689; h=from:subject:
+ mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
+ mime-version:in-reply-to:message-id;
+ bh=rpZp6c+c9TilKHtms8cL/6N80wMrjmu+kVr2MiahNVk=;
+ b=qp1lAlJ2yMfphrakgB0MtW2rDtRWT8D3zNZtyrCLesUtRW1mTzwTfnM9noXhOE4zkzJDip
+ j/ubuZ3K7bsMCvYE4uJcuXqd3xwDGYHQ0XoQqLiPkIKHocFy4+NKaEkZOW7qVPSyd51OGP
+ j8JjW/H7W7Q3/HsRKwm3Zec/bbF5ZXUNocsp/liEgUdOSRtcSYIZcibItq/+hL7p1oYOQH
+ z9/IWdrxPpbJXDiM1zgvJKm5QEFyGDuZBaR8AUmykfTWR7zHmhzyRbAFzjQ6lVm9Xow7aD
+ x1u+fFz+NE9IpE4541NqVJrlGCt/ThE17cbwaNJkJq2FW1FK6q7qtVicxYNpvw==
+X-Original-From: Zhao Gongyi <zhaogongyi@bytedance.com>
+Content-Transfer-Encoding: 7bit
+Date: Tue, 15 Sep 2026 15:17:43 +0800
+Message-Id: <20260915071743.29394-1-zhaogongyi@bytedance.com>
+X-Lms-Return-Path: <lba+26aa8f12f+028877+vger.kernel.org+zhaogongyi@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+From: "Zhao Gongyi" <zhaogongyi@bytedance.com>
+Subject: [PATCH bpf] bpf, sockmap: reject max_entries > INT_MAX in sock_map_alloc
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+To: <bpf@vger.kernel.org>
+Cc: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, 
+	<john.fastabend@gmail.com>, <jakub@cloudflare.com>, 
+	<jiayuan.chen@linux.dev>, <edumazet@google.com>, <kuniyu@google.com>, 
+	<pabeni@redhat.com>, <willemb@google.com>, <davem@davemloft.net>, 
+	<kuba@kernel.org>, <horms@kernel.org>, 
+	"Zhao Gongyi" <zhaogongyi@BYTEDANCE.COM>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
 
-On Sat, 2026-09-12 at 18:26 -0700, Alexei Starovoitov wrote:
-> On Fri Sep 4, 2026 at 9:53 PM PDT, Gabriele Monaco wrote:
->=20
-> > Alexei, what I read from your opinion is: if you really want to do this=
- RV
-> > thing, then you should just implement it all in BPF.
->=20
-> yes.
->=20
-> > like the panic() one. Something BPF just shouldn't do, as I get it.
->=20
-> There is a disconnect here.
-> we have one KF_DESTRUCTIVE kfunc already. bpf_panic() can be another one.
-> It will require CAP_SYS_BOOT.
+From: Zhao Gongyi <zhaogongyi@BYTEDANCE.COM>
 
-Great, I have also been pointed to crash_kexec() [1] which seems to be doin=
-g
-already the same thing.
-Anyway this doesn't seem a blocker.
+sock_map_alloc() only rejects max_entries == 0 and never caps the upper
+bound.  sock_map_free() then walks the sks[] array with a signed int
+iterator:
 
-> > I'd rather discuss on what is the best approach /today/. And that's
-> > precisely why I submitted the talk for LPC.
->=20
-> Excellent. We can start this discussion over email and continue at LPC.
-> My understanding of RV is primitive, but from reading kernel/trace/rv/*.c
-> it seems to me that it's a thin glue between tracepoints and monitors,
-> a bit of boiler plate code via tracefs to enable monitors and seq file fo=
-r
-> visibility.
-> What you're proposing is "yet another monitor" that is reusing this glue =
-code,
-> and that's my main objection. I don't see the value in kernel/trace/rv/*.=
-c.
-> (kernel/trace/rv/monitors/* are useful, of course)
+	int i;
+	for (i = 0; i < stab->map.max_entries; i++)
+		struct sock **psk = &stab->sks[i];
 
-I get it, essentially the point of contention here is that, besides loading
-tracing BPF programs (the event handlers), I'm /also/ loading a BPF struct_=
-ops
-program to register the monitor to the existing in-kernel infrastructure.
+When a SOCKMAP is created with max_entries = 0xffffffff (UINT_MAX), the
+allocation of 32 GiB can succeed on large-memory hosts.  During free the
+counter reaches 0x80000000, wraps to INT_MIN, is sign-extended by movslq
+and turned into a ~16 GiB negative offset from stab->sks, pointing far
+below the allocation.  On a KASAN kernel the shadow check for that
+address hits an unmapped shadow page and oopses:
 
-It is indeed not fully necessary to have BPF monitors share the same sysfs =
-API,
-as they still need the userspace component to do useful monitoring.
+  BUG: unable to handle page fault for address: fffff521b59c5a00
+  RIP: 0010:kasan_check_range+0x107/0x190
+  Call Trace:
+   sock_map_free+0x93/0x190
+   map_create+0x68d/0xb30
+   __sys_bpf+0x21e/0x2e70
 
-> What stops you from attaching tracing bpf progs to all tracepoints that y=
-ou
-> need, pinning few "bpf iterator" progs in bpffs that will provide text or
-> binary output via seq files, run a state machine inside the prog,
-> and do whatever "verification" logic inside them ?
-> You don't need the rv/*.c glue. I see no need to introduce new bpf struct=
--ops
-> api just to look-like-a-monitor from RV glue perspective.
-> "runtime verification" as a concept makes sense, so focus on that.
+Vmcore confirmed stab->map.max_entries == 0xffffffff, stab->sks ==
+0xffffc911ace2d000, and the faulting address sks + (s64)INT_MIN * 8
+exactly at 0xffffc90dace2d000.  The same Oops triggers on the normal
+close()/bpf_map_free_deferred() path whenever such a map is destroyed.
 
-I actually started my POC without struct_ops, activation happened by just
-triggering a dummy BPF program from userspace, but I'll look into these bpf
-iterators.
+sock_hash_alloc() already bounds its allocation (buckets_num >
+U32_MAX / sizeof(bucket)).  Reject max_entries > INT_MAX at creation
+time so the signed iterator in sock_map_free() never sees a value that
+would overflow.
 
-Essentially sharing the API simplified how the userspace component handles =
-some
-things and allowed to share reactors.
-But again, that's not necessarily the way.
+Triggered by syzkaller and reproduced on both a 6.6-based KASAN kernel
+and the upstream v7.3-rc2 kernel.
 
-Thanks,
-Gabriele
+Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
+Signed-off-by: Zhao Gongyi <zhaogongyi@BYTEDANCE.COM>
+---
+ net/core/sock_map.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-[1] - https://docs.ebpf.io/linux/kfuncs/crash_kexec
-
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index ca49bc7f8..38df84284 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -41,6 +41,7 @@ static struct bpf_map *sock_map_alloc(union bpf_attr *attr)
+ 	struct bpf_stab *stab;
+ 
+ 	if (attr->max_entries == 0 ||
++	    attr->max_entries > INT_MAX ||
+ 	    attr->key_size    != 4 ||
+ 	    (attr->value_size != sizeof(u32) &&
+ 	     attr->value_size != sizeof(u64)) ||
+-- 
+2.39.5 (Apple Git-154)
