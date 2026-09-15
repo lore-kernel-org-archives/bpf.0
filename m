@@ -1,157 +1,142 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C91593749F4;
-	Tue, 15 Sep 2026 10:38:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD5747A0A6;
+	Tue, 15 Sep 2026 10:40:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789468715; cv=none; b=VQ3x8awMmARHa8Y9bC202aqVhzShVx5cBzOJV90kYQszehcuECbciMAseN5zXGwN9cTMybfEVcW4N00N2hdzM26G6CJw6cAIse4SpzFCOFbtDgbopxg3zMmp/CFLZ+aIP52CGxTSReZGJqOkHOMuYzc2hMPq5G7xQIqmKRBj1VQ=
+	t=1789468844; cv=none; b=UatfIZzT2JWXRZEsrPucrcGEWdEYlf+CNj+GjHoxR3+9s8FW1/XTIbZ2wQ2n05I8LLA7amARJFJnc/XbbzNnihU6iEHMcmn2xok4hmRsY3GoLmRb6ZbA2EMQt2dz+7WdrWiI9GrrJHV895GtpUSp5rNgKISFbEgAh8WdhZBN3YU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789468715; c=relaxed/simple;
-	bh=6Z7LHkwKIg/aizSm5IBUYf9WN5Apkphn9MXg6XOx3UA=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Be1mW4wZ/YMpwbKLlCyAJN7J7zVkVXpg7QMkhYxtvRdOFxqgO3VQVHIfVd4PQUXUkKUT4EpJbwxKXDgUC8RCnRmwbPebDPr+csllNQKJ6fZWL7T5/twskE+bsCfsNGm2y2PwQPrPgE89Z09IBOxwhJMmJNfS52KTDxk76uFxHXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=yLEzdJcc; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1789468844; c=relaxed/simple;
+	bh=A4kgPFQ6UkzFS/sD8VUIM9bIlArc5N4YWEOby/vnMQ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SClGMJ8d01e2hevUFRenpHCPvR16B5+tQFJh1LXImIjFQ93g0B+y/rQa9BBbA1XQYufZkOfGOFiBAylUJ/emC87hMwBGt6yxypK9eWEXemtvE/Wcvn+x4h+pEvkNzcrDqM1x1bzHzXlV7oH1BfYoEhuYgC1/i5ZjW+QmdfG1+cM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=lKsecUK6; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LnZRN66h; arc=none smtp.client-ip=202.12.124.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="yLEzdJcc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1789468713; x=1821004713;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=6Z7LHkwKIg/aizSm5IBUYf9WN5Apkphn9MXg6XOx3UA=;
-  b=yLEzdJccxGHUxTWcVt4qq/PjuSjEABxsFJawfDcqtf2omYyGjubknkIr
-   E41qwKxrGCDnkoK2hXTjBLKtagk83tuI8Ule7b1fTp1PUIFrnoyytFxhm
-   efSUXmbUZ10Qw1Ztxlob1h22KyFHFC/OlPm6pxHPmSnLmJ8EljguWg0oJ
-   dK7jj9p7T5F/WrN6B8g9SP5jZXmwWUWygFfYoNjSbXZNWcE7TI7dcbiGW
-   6zMc+tSQVsqeqUd6t+EuuiiwGqzex7x4Pge8LKgH/sh1dwKUgGgwhCuip
-   4kcLM3laLPpH5G7IzRnFHE6MC9k4upQHliS1BoO/9pRrpFiozXZdQBEkf
-   A==;
-X-CSE-ConnectionGUID: QLRapTREQOWHwcpXAKqUcQ==
-X-CSE-MsgGUID: Ah/Kj6ePR4mQOYNSo0Qy0Q==
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="62696875"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Sep 2026 03:38:32 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Tue, 15 Sep 2026 03:38:32 -0700
-Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Tue, 15 Sep 2026 03:38:28 -0700
-Date: Tue, 15 Sep 2026 12:38:27 +0200
-From: Daniel Machon <daniel.machon@microchip.com>
-To: <netdev-bot+sashiko@kernel.org>
-CC: <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
-	<kuba@kernel.org>, <pabeni@redhat.com>, <horatiu.vultur@microchip.com>,
-	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
-	<ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
-	<john.fastabend@gmail.com>, <sdf@fomichev.me>, <herve.codina@bootlin.com>,
-	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <mohsin.bashr@gmail.com>,
-	<richardcochran@gmail.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH net-next v6 13/14] misc: lan966x-pci: dts: extend cpu reg
- to cover PCIE DBI space
-Message-ID: <20260915103827.mbq6jcqb65og4zzv@DEN-DL-M70577.microsemi.net>
-References: <20260909-lan966x-pci-fdma-v6-13-6f48dab9d671@microchip.com>
- <178904555304.219967.9327319194988391867@kernel.org>
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="lKsecUK6";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LnZRN66h"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailflow.stl.internal (Postfix) with ESMTP id 6AC9F1300501;
+	Tue, 15 Sep 2026 06:40:39 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Tue, 15 Sep 2026 06:40:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1789468839; x=
+	1789476039; bh=GR5i+ZoXZtVmjVFbg/5ljADDJkwxtSAlXIoGrwBZebs=; b=l
+	KsecUK6b0SRJRaq+hc/eB8E8+E+0OS3TOgWMDQbkRUi99Sm6DGJRnpgm8BmabSww
+	94irUqC7athEF5czc5H34GvEV4gCjrkDH9KM/KFN0XAw5nUNvVVq8ZeeSm/NIPw/
+	PUg16rQKCi5d57z4wVR9Yu2ZGdO6Pi0Vhgwli0EWkCkteSF72+SYP3fVidRcnze5
+	pEbe+q4EUL40mUCPAn39M/JQBgEsmy/LAFVXDQyjxIbepLwUH+rvZYaW43SkUwbe
+	FyxzhyuB5/Z9JophI2poul52Ab9s1BBMp64H0JpfyjCaZwvySDR7e5rEtbG3eOD7
+	UoFLCPzfGxpymeQlTS45A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1789468839; x=1789476039; bh=GR5i+ZoXZtVmjVFbg/5ljADDJkwxtSAlXIo
+	GrwBZebs=; b=LnZRN66hWtnwspXOjsG7LYeKMX9nv/hfkWjD/rulqw4ftSSQMIb
+	6Y1xvTgEUtkRJsi2+7XeBVytHuFl9n1BCAdNuR4cf7u+M8fbFeXtoToAU/FrRlKG
+	M5xVcp1J14A1W5A4TAUCW/kqAZbA9oTtFCOsRl+sC0AOdGxZUlHKXa+02PREbtpl
+	q0B3S6azIA90MT3hN1Xhw3mVppbWdJBkGCanFCXWgBd4fSZ1/FVuLBGkPwJsqXa5
+	pQg96MBVgQKXynEQaBjlx2bqLH6yGxnGX0hxMIeXRxAr8ymnzfIMGySzTQXBjbF5
+	Z+31RqMy2PEHzdrEc4FhySNOYxWD6DPzC0Q==
+X-ME-Sender: <xms:piCparUGOh-7OzOBTWJ9bVDSpNpcvcTxlfTEG3iDldDj8AxLeuuxFQ>
+    <xme:piCpakDxqbF2o17pItwMoDiNI7hxLrRQVe9DwAWaaTYA-LJzV41qSF_wbgHG821KO
+    k8J9BC-Y-FIbF2baYXh8fzTQI4xYmhtyQ1n-oE8O6t5O1rd0C9hYo6s>
+X-ME-Received: <xmr:piCpao3Ofeem80nKOe_L-k3lfV1i-3UxZmkarxLkgRSY75RSG5CpoULtF18>
+X-ME-Proxy-Cause: dmFkZTEhemmXWsnAsUPz8NwfFxfaJLXIIfsZPuNrLsudoDyPOrg10URvNaoJjcAhSb4BJ6
+    NGycg3zzbEkaFXLNIYaIayK1e5/D+4SX7QMtqs/19tsC2OTy0fD7MUb/ayjwUbYpRSvsny
+    dWBBTGqUIjlS66WbFOOR0xO4P3cCOQtscZKQqpTDLonV1xgI83aTnwikIox+H2hLH+T6Km
+    Hgh5ZYol3xHjmHDHrcYHJERVc1jNMjSO/LlooMWTYDb7VOTAB0CN7EA0Sskbxhnz6Az/n6
+    ysmT947gDGrbmIdSFz1qxgnaVFaBn+TD6H59jKLDiF5HDUCwv2dSJ9A3WfAg1o/EWxqJoX
+    abUCfAfCQuyjhs1hHxdWdl4efy1FhwNrm7bf3fgzdv8pc9dZNhdHd1rWL0WQkES6aLPrfi
+    +7KysM0c70bc6V7BqYJP+x65hrmyKszDDmY1Ozro56v8Z18cBjhzIFu2zTkzVC8g2+rYaW
+    j3MsQy2Yiq9cBFh31x+Sk45MsPHmV6oWBsxBSfAOr7JKPQ/Im4JL1Au1MSg91IBdqo35qJ
+    uaMgB4SHkBXLNn7s8/qefkzXTZr7CaL+EOmJ2qBJE2v/TJPRaXQ0FpUC1S1mSRgJC5RTcD
+    QNEiW/TiJiUyIKaPsfb3NUIub2mi5cu3cNDEiisw8whWf1yTjs7Kd7pYxY3Q
+X-ME-Proxy: <xmx:piCpamXHynRvRmnQQtsmeNVRFhIOjnlI-4P_hCf6v7bjhgfR7GsGzQ>
+    <xmx:piCpak8QJ1pEaKAxoJXOmqSu7QHC0nQccZmqxIDFeSpNd0H7fd04kw>
+    <xmx:piCpar0mqM4C9apv8P7erX07yB2EwEMo_pV-l94m-zuObpKhC2hb-w>
+    <xmx:piCpavBeIKdVeu0j8h5FkJi7ms2m6pb9RzR7KCnnekk51XsPuvcRbA>
+    <xmx:pyCpaswXJmJy2chSPwK7aUflrlr_ilJw5UxkfOGcWWIEKicpYgcn-w9q>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 15 Sep 2026 06:40:37 -0400 (EDT)
+Date: Tue, 15 Sep 2026 11:40:36 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, akpm@linux-foundation.org, 
+	nico.pache@linux.dev, baolin.wang@linux.alibaba.com, baohua@kernel.org, 
+	dev.jain@arm.com, hughd@google.com, lance.yang@linux.dev, liam@infradead.org, 
+	mhocko@suse.com, rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, 
+	surenb@google.com, usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com, 
+	usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, jannh@google.com, 
+	willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, mhiramat@kernel.org, 
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 00/57] mm/collapse: rebuild collapse on migration
+ primitives
+Message-ID: <aqkQSMX6GuXhow-V@thinkstation>
+References: <20260816224609.308019-1-kirill@shutemov.name>
+ <aoLAly-oL2OAa4n8@lucifer>
+ <aoLkMUtmzRVuv2Hx@thinkstation>
+ <aoQ77EcD3M2kjeya@lucifer>
+ <0153303d-f9d6-45ea-a276-fbf2e5625ef9@kernel.org>
+ <aoXn1B7cPnPq7uxd@thinkstation>
+ <25a39c58-a188-4dda-a832-5deff2c8b8c0@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <178904555304.219967.9327319194988391867@kernel.org>
+In-Reply-To: <25a39c58-a188-4dda-a832-5deff2c8b8c0@kernel.org>
 
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue(s) to consider:
-> 
-> Critical: 0 · High: 0 · Medium: 0 · Low: 1
-> 
-> - [Low] Claimed patch-ordering / bisectability bug: the "cpu" reg window
->   is enlarged from 0x100000 to 0x800000 only in this commit, while the…
-> 
-> --
-> 
-> misc: lan966x-pci: dts: extend cpu reg to cover PCIE DBI space
-> 
-> This grows the "cpu" register window of the switch node in the lan966x PCI
-> device tree overlay from 0x100000 to 0x800000 so that the PCIE DBI and iATU
-> registers at offset 0x400000+ are covered. Those registers are programmed
-> when the FDMA engine sets up the ATU outbound windows.
-> 
-> No Link: tags in the commit header.
-> 
-> > diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci.dtso
-> > index 7b196b0a0eb6..7bb726550caf 100644
-> > --- a/drivers/misc/lan966x_pci.dtso
-> > +++ b/drivers/misc/lan966x_pci.dtso
-> > @@ -135,7 +135,7 @@ lan966x_phy1: ethernet-lan966x_phy@2 {
-> >
-> >                               switch: switch@e0000000 {
-> >                                       compatible = "microchip,lan966x-switch";
-> > -                                     reg = <0xe0000000 0x0100000>,
-> > +                                     reg = <0xe0000000 0x0800000>,
-> >                                             <0xe2000000 0x0800000>;
-> >                                       reg-names = "cpu", "gcb";
-> 
-> [Severity: Low]
-> 
-> This isn't a bug, just a question about the ordering of the series.
-> 
-> The earlier commits "net: lan966x: add PCIe FDMA support", "net: lan966x: add
-> PCIe FDMA MTU change support" and "net: lan966x: add PCIe FDMA XDP support"
-> already derive regs[TARGET_PCIE_DBI] from the "cpu" base plus 0x400000, and
-> fdma_pci_atu_init() writes at DBI + 0x300000 + idx * 0x200:
-> 
-> drivers/net/ethernet/microchip/fdma/fdma_pci.c
-> static void __iomem *fdma_pci_atu_addr_get(void __iomem *addr, int offset, int idx)
-> {
->         return addr + FDMA_PCI_ATU_ADDR + FDMA_PCI_ATU_IDX_SIZE * idx + offset;
-> }
-> 
-> That lands roughly 0x700000 from the "cpu" base, i.e. outside the 0x100000
-> mapping that exists until this commit. Would it be clearer to move this
-> overlay change before the driver commits that compute the DBI offset, so
-> that the mapping is never smaller than the offsets the driver derives from
-> it?
+On Mon, Sep 14, 2026 at 04:54:06PM +0200, David Hildenbrand (Arm) wrote:
+> I saw that you started sending out cleanups, good. :)
 
-Yes, intentional: the window is widened here and only the next commit names the
-"fdma" interrupt that lets anything use it.
+Right. I have few more cleanup ideas in the queue, before substantive
+changes.
 
+> Nobody can really review 39 patches of RFC.
 > 
-> For what it is worth, the intermediate commits do look safe in practice,
-> since the ATU access in lan966x_fdma_pci_init() is gated:
-> 
-> drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
->         if (!lan966x->fdma)
->                 return 0;
->         ...
->         fdma_pci_atu_init(&lan966x->atu, lan966x->regs[TARGET_PCIE_DBI]);
-> 
-> and lan966x->fdma is only set when the node names an "fdma" interrupt in
-> lan966x_probe():
-> 
->         lan966x->fdma_irq = platform_get_irq_byname(pdev, "fdma");
->         if (lan966x->fdma_irq > 0) {
->                 ...
->                 lan966x->fdma = true;
->         }
-> 
-> The overlay here still carries only interrupt-names = "xtr", "ana", and the
-> "fdma" interrupt is added by the following commit, so the enlarged window is
-> in place before the FDMA path can be enabled. Is that ordering intentional?
+> Often it's more helpful to propose an overall design idea, and then discuss if
+> and how to get there.
 
-Yes.
+Fair.
 
+The overall design one-pager is in comment in mm/collapse.c in 07/57.
+
+I can pull it out, expand and post as RFD if it helpful.
+
+> > Do we want to find file collapse candidates by walking the virtual
+> > address space at all?
 > 
-> --
-> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909-lan966x-pci-fdma-v6-0-6f48dab9d671%40microchip.com
+> In guest_memfd, we recently discussed that we actually would want a mechanism to
+> collapse even without walking the VA space .... but maybe guest_memfd is just
+> too special, not sure.
+> 
+> You still need a mmap to identify the candidate file IIRC.
+
+At the moment, yes. But it is not the only option. We can start from
+walking inodes for superblocks that opted in for collapse.
+
+> The churn is always the problem.
+> 
+> Small, controlled increments please.
+
+Ack.
+
+Just to re-iterate what I told Lorenzo: I never intended to push this as
+one big patchset. The purpose of the RFC was to demonstrate the end
+state I pursue. I am flexible on how we get there.
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
