@@ -1,331 +1,126 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36DB3B71AA;
-	Tue, 15 Sep 2026 13:33:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7BD330662
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 13:33:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789479202; cv=none; b=ZogHsNsH6+8uZB/WLCgRCULdKgX2KQOI7N62hBWxlBSSUKwZmJkG4oE8snVSq/kldO0Qd6+QCuCLpmJ8WxkLwJyFTn0dsIqanfCV/bRpJ06xS8lBDAlPZ6GIJ+7NWNijJ3QTf0JsQIj36Cb6hMS9GprSerG64gAPYbofOk6itXA=
+	t=1789479228; cv=none; b=GClW3pH0nT35VgEYppcaE9OxcOX6h/T0R4YT5ROUGK/ruNGmxDvbgxqnY9iOgBi/uncmNRWyh3XJKzRdzHkXDHjU+HEJpXt9q9xsvMVXwv27eVTGq4hkXrDDYdrRe2etaUZt9sbhbYX2C3aADVm9apTee2JUXTkgHq8RObQqnko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789479202; c=relaxed/simple;
-	bh=b0peGYdWEEsh9OK0MX3VmPtU+5Bvci5RSC+YS7jV+f4=;
+	s=arc-20240116; t=1789479228; c=relaxed/simple;
+	bh=8jybUVo50EFQof3PpqeBLAA8N9t/sh9QhIBLDTIHusM=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=s47pPYVtb0Twtx6LXcCbumZzSVhmy67ygXVweq2FvM5N/8Km7U10DRRYgF0ulfWlr0ICusH6pEmLy45qe1934bZui3Pcp5Qfg5/FpWxhPFp07eoqa2SLLyykspgHB1/rcDgokywV+THvTfKLTZTdcwqbfwVYarDpcCUBYKFeR14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HANA76hn; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=oSjAcT2qrwopRMYYYW3MarwLZJXfeaX5uxDTorUuxQhDujWI3+Nyh3DaUamEjILwLKEipj5Ii0k6DjRHue+4OgPI0bVVQFkpvadraTVu3gsWJy8Xt9Ivbfarbn5uP1+UEmBSsuuNmHVqUHMaFmqn464ZnvXB6wrQFBwafDdCFs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iXnUvGxZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HANA76hn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D391F000FF;
-	Tue, 15 Sep 2026 13:33:19 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iXnUvGxZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C97F71F000FF;
+	Tue, 15 Sep 2026 13:33:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789479200;
-	bh=Da33iyX8RrUrhHPC36ssZZP7j4KMf25stiTxEiTRjDU=;
+	s=k20260515; t=1789479227;
+	bh=/h1aGF3NB7QEkWueiTruoa7ge/+xfkpq1orQ6+xBCLo=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=HANA76hn+RCjD4WFujdVFLp+r7nx14r2j+1Nwvbt+QhrcjXcd0R6HRif0YgSlAb0e
-	 FpDWKe0S3k8QV5X6Ycl51OskSSp93MiXwn4jRtFI3wwqmSuyQDTzOp7TDDh5gMq6r0
-	 vDnAMqq7rK1qd9sKu54VGjSOOIJmxrfyNiV0GAV4hMHZLcFVCZA4wXothga+8gupSp
-	 4VUJheuA3sj0cPQJBL+9ZxeSFYNr4M7E5VSIlG3vx4L91yHCkKR/T0qS/LyLRYLMOs
-	 45xhbManJxeliLDDEfVEaRQ1AsO9NeYiAXxC6Ey44kCfaN1X6Y0WrRzS4udvCq8FyD
-	 Mzhf2wHc8m1ZA==
-Content-Type: multipart/mixed; boundary="===============7419760775756817736=="
+	b=iXnUvGxZxHM99Jw5HFh6FBxtFfkZtSRsRwPvXQ4NRkAdVvjVyuB7fCUf1IX11cel5
+	 d2SRuKqnVEqIXaFwHKg+ALqlsLlqYJU2fxUj7lW5JgohAlAxN+Xk+IQXQcaT8QLQXl
+	 5hDQF84Vc+3V4InTbqHwOcFx/Vr7C4tLknh5N2wWfEqmtAQUqv2qEgoYWWCo2W1Qy5
+	 tJfMxUdAf/UQ+pb54IBhH0u/INAW3YEm1fr7D6oYZ708QikD9Bb7kty0yBLipI3j2h
+	 O6739ceHO+BgR+B0EWHNdNGN/77rMeR2TvDV9/J2D1kUNT+4CNyzdl0A7z/HZRZawR
+	 1S/cWVUlEeLGw==
+Content-Type: multipart/mixed; boundary="===============0224972729011567103=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <89f9e7223c18671a3a7025c9b3492c7e92539d00a289c2d83610918f8c53fe0f@mail.kernel.org>
-In-Reply-To: <93289af4317b57caa4e393d73fe6c786b24a4c2a.1789475073.git.zhuhui@kylinos.cn>
-References: <93289af4317b57caa4e393d73fe6c786b24a4c2a.1789475073.git.zhuhui@kylinos.cn>
-Subject: Re: [PATCH bpf-next v11 2/2] selftests/bpf: Add memcg async reclaim test
+Message-Id: <0e82bdc7f21285fb259ec989c8d0a43a2fd8af80c200f67b200ac2421a085477@mail.kernel.org>
+In-Reply-To: <20260915124104.77287-3-zhaofuyu@vivo.com>
+References: <20260915124104.77287-3-zhaofuyu@vivo.com>
+Subject: Re: [PATCH bpf-next v9 2/2] selftests/bpf: add tests for selective module BTF loading
 From: bot+bpf-ci@kernel.org
-To: hui.zhu@linux.dev,roman.gushchin@linux.dev,inwardvessel@gmail.com,shakeel.butt@linux.dev,akpm@linux-foundation.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,baohua@kernel.org,geliang@kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-mm@kvack.org,linux-kselftest@vger.kernel.org
-Cc: zhuhui@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 15 Sep 2026 13:33:19 +0000 (UTC)
+To: zhaofuyu@vivo.com,bpf@vger.kernel.org
+Cc: eddyz87@gmail.com,andrii.nakryiko@gmail.com,alan.maguire@oracle.com,olsajiri@gmail.com,zhaofuyu@vivo.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 15 Sep 2026 13:33:46 +0000 (UTC)
 
---===============7419760775756817736==
+--===============0224972729011567103==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_module_allowlist.c b/tools/testing/selftests/bpf/prog_tests/btf_module_allowlist.c
 > new file mode 100644
-> index 000000000000..7c7d299b3b28
+> index 000000000000..3189133ee58b
 > --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
-> @@ -0,0 +1,779 @@
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf_module_allowlist.c
+> @@ -0,0 +1,162 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <test_progs.h>
+> +#include <bpf/btf.h>
+> +#include "btf_module_allowlist.skel.h"
 
 [ ... ]
 
-> +static int real_test_child_work(const char *cgroup_path, char *data_filename,
-> +				char *time_filename, int read_times)
+> +static void test_invalid_input(const char **list, size_t count,
+> +			       const char *test_name)
 > +{
-> +	struct timespec start, end;
-> +	double elapsed;
-> +	FILE *fp;
+> +	struct btf_module_allowlist *skel;
+> +	char assert_name[64];
+> +	int err;
+> +	LIBBPF_OPTS(bpf_object_open_opts, opts,
+> +		.btf_module_allowlist = list,
+> +		.btf_module_allowlist_cnt = count,
+> +	);
 > +
-> +	if (join_parent_cgroup(cgroup_path))
-> +		return CHILD_EXIT_JOIN_CGROUP;
-> +
-> +	clock_gettime(CLOCK_MONOTONIC, &start);
-> +
-> +	if (write_file(data_filename))
-> +		return CHILD_EXIT_WRITE_FILE;
-> +
-> +	if (read_file(data_filename, read_times))
-> +		return CHILD_EXIT_READ_FILE;
-> +
-> +	clock_gettime(CLOCK_MONOTONIC, &end);
-> +
-> +	if (!time_filename)
-> +		return CHILD_EXIT_OK;
-> +
-> +	elapsed = (end.tv_sec - start.tv_sec) +
-> +		  (end.tv_nsec - start.tv_nsec) / 1000000000.0;
-> +
-> +	fp = fopen(time_filename, "w");
-> +	if (!fp)
-> +		return CHILD_EXIT_TIME_FILE;
-> +	fprintf(fp, "%.6f", elapsed);
-> +	fclose(fp);
-> +
-> +	return CHILD_EXIT_OK;
+> +	snprintf(assert_name, sizeof(assert_name), "%s: open_opts", test_name);
+> +	skel = btf_module_allowlist__open_opts(&opts);
+> +	err = errno;
+> +	if (!ASSERT_NULL(skel, assert_name)) {
+> +		btf_module_allowlist__destroy(skel);
+> +		return;
+> +	}
+> +	snprintf(assert_name, sizeof(assert_name), "%s: open_opts err", test_name);
+> +	ASSERT_EQ(err, EINVAL, assert_name);
 > +}
 > +
-> +static int get_time(char *time_filename, double *time)
+> +static void btf_module_allowlist_invalidinput(void)
 > +{
-> +	int ret = -1;
-> +	FILE *fp;
-> +	char buf[64];
+> +	const char *names[] = { NULL };
+> +	const char *empty_names[] = { "" };
+> +	const char *duplicate_names[] = { "bpf_testmod", "bpf_testmod" };
 > +
-> +	fp = fopen(time_filename, "r");
-> +	if (!ASSERT_OK_PTR(fp, "fopen"))
-> +		goto out;
-> +
-> +	if (!ASSERT_OK_PTR(fgets(buf, sizeof(buf), fp), "fgets"))
-> +		goto cleanup;
+> +	test_invalid_input(NULL, 1, "null_list");
+> +	test_invalid_input(names, 1, "null_name");
+> +	test_invalid_input(empty_names, 1, "empty_name");
+> +	test_invalid_input(duplicate_names, 2, "duplicate_name");
+> +	test_invalid_input(names, (size_t)SSIZE_MAX + 1, "large_count");
+                                                               ^^^^^^^
+Does this test actually verify the count-overflow guard? The "large_count"
+case reuses names[] = { NULL } as the allowlist, but the validation in
+bpf_object_open() (from patch 1, tools/lib/bpf/libbpf.c) has two
+independent paths to -EINVAL for that input:
 
-Is ASSERT_OK_PTR valid for checking fgets() return values? fgets()
-returns NULL at end-of-file without setting errno, so ASSERT_OK_PTR (which
-expands to libbpf_get_error()) would read from the ambient errno rather
-than detecting the EOF. If the timing file is empty, fgets() returns NULL
-with errno still zero from the previous successful fopen(), causing
-ASSERT_OK_PTR to pass silently and execution to fall through to
-sscanf(buf, "%lf", time) with buf uninitialized.
+    if (mod_allow_cnt > SSIZE_MAX || (!mod_allow && mod_allow_cnt > 0))
+            return ERR_PTR(-EINVAL);
 
-The empty-file case is reachable: real_test_child_work() does not check
-the result of fprintf()/fclose() on the timing file, so a child whose
-write failed (ENOSPC on /tmp after writing two 32 MB workload files) still
-exits CHILD_EXIT_OK, and run_high_low_workload() then calls get_time() on
-a zero-length file.
+    for (i = 0; i < mod_allow_cnt; i++) {
+            if (!mod_allow[i] || !mod_allow[i][0])
+                    return ERR_PTR(-EINVAL);
 
-> +
-> +	if (sscanf(buf, "%lf", time) != 1) {
-> +		PRINT_FAIL("sscanf %s", buf);
-> +		goto cleanup;
-> +	}
+If the mod_allow_cnt > SSIZE_MAX guard were dropped, the loop would still
+return -EINVAL on i == 0 because names[0] is NULL, so the assertion passes
+and the count-overflow check goes untested. The overflow guard is the only
+thing keeping obj->btf_module_allowlist_cnt (ssize_t) from being assigned a
+negative value from a size_t count, which is_btf_mod_allowed() interprets
+as "allowlist unspecified, allow everything."
 
-[ ... ]
+The other four cases each pin exactly one check (null_list tests !mod_allow,
+null_name tests !mod_allow[i], empty_name tests !mod_allow[i][0],
+duplicate_name tests the strcmp loop). Would passing a list of valid
+non-empty names like duplicate_names[0] (i.e., { "bpf_testmod" }) with the
+oversized count discriminate the count check from the unrelated precondition
+check?
 
-> +/*
-> + * test_progs hijacks stdout and only prints the captured log when the
-> + * test fails, so benchmark numbers go straight to the real stdout to
-> + * keep them from drowning in ASSERT output.
-> + */
-> +static void bench_printf(const char *fmt, ...)
-> +{
-> +	va_list ap;
-> +
-> +	va_start(ap, fmt);
-> +	vfprintf(env.stdout_saved ?: stdout, fmt, ap);
-> +	va_end(ap);
 > +}
-
-A subsystem pattern flags this as potentially concerning: bench_printf()
-writes benchmark text straight to env.stdout_saved, bypassing the test
-framework's stdout hijacking. Outside test_progs.c itself this is the only
-writer of env.stdout_saved in the whole selftests/bpf tree - every other
-test writes through the hijacked stdout so the framework owns when and
-whether the text appears.
-
-The effect is free-form lines interleaved directly into the stream from
-which runners and CI parse the per-test pass/fail records, on a path
-enabled only by an environment variable, so the same binary produces two
-different output shapes. The benchmark timings emitted are informational
-(not pass/fail verdicts), the path is gated behind
-TEST_MEMCG_ASYNC_RECLAIM_BENCH=1, and prog_tests/ files run under
-test_progs rather than kselftest.h. Would dumping benchmark numbers via
-the framework's normal stdout keep the output under framework control?
-
-[ ... ]
-
-> +void test_memcg_async_reclaim(void)
-> +{
-> +	u64 high_cgroup_id, low_cgroup_id;
-> +	double high_time = 0.0, low_time = 0.0;
-> +	double base_high_time = 0.0, base_low_time = 0.0;
-> +	struct memcg_async_reclaim *skel = NULL;
-> +	int err, bench;
-> +
-> +	bench = !!getenv("TEST_MEMCG_ASYNC_RECLAIM_BENCH");
-> +
-> +	err = setup_high_low_cgroups(&high_cgroup_id, &low_cgroup_id);
-> +	if (!ASSERT_OK(err, "setup_high_low_cgroups reclaim"))
-> +		return;
-> +
-> +	/*
-> +	 * Optional baseline for the benchmark numbers below: run the
-> +	 * same workload once without the BPF program, so the log can
-> +	 * report how much async reclaim improved the pressured cgroup.
-> +	 */
-> +	if (bench) {
-> +		err = run_high_low_workload(&base_high_time, &base_low_time,
-> +					    READ_TIMES);
-> +		if (!ASSERT_OK(err, "run_high_low_workload baseline"))
-> +			goto out;
-> +	}
-> +
-> +	err = setup_bpf(high_cgroup_id, low_cgroup_id, &skel);
-> +	if (!ASSERT_OK(err, "setup_bpf"))
-> +		goto out;
-> +
-> +	err = run_high_low_workload(&high_time, &low_time, READ_TIMES);
-> +	if (!ASSERT_OK(err, "run_high_low_workload reclaim"))
-> +		goto out;
-> +
-> +	/*
-> +	 * The timing comparison below alone cannot distinguish a working
-> +	 * reclaim from a no-op one, so require that the BPF program
-> +	 * actually reclaimed memory from the low cgroup.
-> +	 */
-> +	if (!ASSERT_GT(skel->bss->reclaim_calls, 0, "reclaim_calls"))
-> +		goto out;
-> +	if (!ASSERT_GT(skel->bss->reclaimed_bytes, 0, "reclaimed_bytes"))
-> +		goto out;
-> +
-> +	/*
-> +	 * The timing comparison is a benchmark and too flaky to fail CI
-> +	 * runs, so it only logs the numbers; the counters above already
-> +	 * proved that the BPF program reclaimed memory.
-> +	 */
-> +	if (bench && base_high_time > 0.0) {
-> +		double speedup = base_high_time / high_time;
-> +
-> +		bench_printf("memcg_async_reclaim: baseline high=%f low=%f, "
-> +			     "reclaim high=%f low=%f, speedup=%.2fx\n",
-> +			     base_high_time, base_low_time,
-> +			     high_time, low_time, speedup);
-> +	}
-> +	else if (high_time >= low_time)
-> +		printf("memcg_async_reclaim: high cgroup not improved: high=%f low=%f\n",
-> +		       high_time, low_time);
-
-Can this printf() output ever be read? test_progs redirects stdout and
-stderr to an in-process memstream, and dump_test_log() only prints that
-buffer when the test fails. Both printf() calls added by the patch are
-emitted on paths where the test then passes, so their output is discarded.
-
-The same file documents this behaviour and works around it for the
-benchmark numbers through bench_printf() and env.stdout_saved. Should
-these two informational printf() calls go through bench_printf() as well,
-or be dropped?
-
-[ ... ]
-
-> +void test_memcg_async_reclaim_dying(void)
-> +{
-> +	u64 trigger_cgroup_id, target_cgroup_id;
-> +	u64 calls_before, bytes_before;
-> +	char data_file[PATH_MAX] = "";
-> +	struct reclaim_events_seen seen = {};
-> +	struct memcg_async_reclaim *skel = NULL;
-> +	struct ring_buffer *rb = NULL;
-> +	pid_t reader_pid = -1;
-> +	int err, fd, i;
-> +
-> +	err = setup_dying_cgroups(&trigger_cgroup_id, &target_cgroup_id);
-> +	if (!ASSERT_OK(err, "setup_dying_cgroups"))
-> +		return;
-> +
-> +	err = setup_bpf(trigger_cgroup_id, target_cgroup_id, &skel);
-> +	if (!ASSERT_OK(err, "setup_bpf"))
-> +		goto out;
-> +
-> +	rb = ring_buffer__new(bpf_map__fd(skel->maps.reclaim_events),
-> +			      on_reclaim_event, &seen, NULL);
-> +	if (!ASSERT_OK_PTR(rb, "ring_buffer__new"))
-> +		goto out;
-> +
-> +	snprintf(data_file, sizeof(data_file),
-> +		 "%s/memcg_async_dying_XXXXXX", workload_files_dir());
-> +	fd = mkstemp(data_file);
-> +	if (!ASSERT_GE(fd, 0, "mkstemp"))
-> +		goto out;
-> +	close(fd);
-> +
-> +	reader_pid = spawn_keepalive_reader(data_file);
-> +	if (!ASSERT_GT(reader_pid, 0, "fork keepalive reader"))
-> +		goto out;
-
-Could the keepalive reader child's failure modes be diagnosed?
-spawn_keepalive_reader() reports its failures through distinct exit codes
-(CHILD_EXIT_JOIN_CGROUP, CHILD_EXIT_WRITE_FILE, CHILD_EXIT_READ_FILE),
-but the caller only checks that fork() succeeded. At cleanup the status is
-discarded:
-
-	kill(reader_pid, SIGKILL);
-	(void)waitpid(reader_pid, NULL, 0);
-
-If the child dies immediately - for example join_parent_cgroup() fails, or
-write_file() cannot create the 32 MB file - the parent still spends 50 *
-100ms in the first poll loop and then fails with ASSERT_GT(seen.called, 0,
-"reclaim events"), pointing at the kernel rather than at the child.
-
-The child's own diagnostics do not survive either: test_progs sets stdout
-and stderr to a per-process memstream, so log_err() output from
-join_parent_cgroup() and the fprintf() in read_file() land in the forked
-child's private copy of that buffer and are lost at _exit().
-
-The file already has the machinery to handle this - child_exit_str() and
-the WIFEXITED/WEXITSTATUS handling in run_high_low_workload(). Would a
-waitpid(reader_pid, &status, WNOHANG) probe before or after the poll loop,
-reported through child_exit_str(), make this diagnosable?
-
-> +
-> +	/* Wait for reclaim rounds to reach the live target cgroup. */
-> +	for (i = 0; i < EVENT_POLL_ROUNDS && !seen.called; i++) {
-> +		err = ring_buffer__poll(rb, EVENT_POLL_TIMEOUT_MS);
-> +		if (!ASSERT_GE(err, 0, "ring_buffer__poll"))
-> +			goto out;
-> +	}
-> +	if (!ASSERT_GT(seen.called, 0, "reclaim events"))
-> +		goto out;
-> +
-> +	remove_cgroup(CG_DYING_TARGET_DIR);
-> +
-> +	usleep(DYING_SETTLE_US);
-> +	seen = (struct reclaim_events_seen){};
-> +
-> +	calls_before = skel->bss->reclaim_calls;
-> +	bytes_before = skel->bss->reclaimed_bytes;
-> +
-> +	/* Wait for a reclaim round to report the removed target. */
-> +	for (i = 0; i < EVENT_POLL_ROUNDS &&
-> +		    !seen.skipped_dying && !seen.target_gone; i++) {
-> +		err = ring_buffer__poll(rb, EVENT_POLL_TIMEOUT_MS);
-> +		if (!ASSERT_GE(err, 0, "ring_buffer__poll"))
-> +			goto out;
-> +	}
-> +
-> +	if (!seen.skipped_dying && !seen.target_gone) {
-> +		PRINT_FAIL("no reclaim round hit the removed cgroup within "
-> +			   "the poll window");
-> +		goto out;
-> +	}
-> +
-> +	if (!ASSERT_EQ(skel->bss->reclaim_calls, calls_before, "reclaim_calls"))
-> +		goto out;
-> +	if (!ASSERT_EQ(skel->bss->reclaimed_bytes, bytes_before, "reclaimed_bytes"))
-> +		goto out;
 
 [ ... ]
 
@@ -334,5 +129,5 @@ reported through child_exit_str(), make this diagnosable?
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34970614671
---===============7419760775756817736==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34972296720
+--===============0224972729011567103==--
