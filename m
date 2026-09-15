@@ -1,152 +1,298 @@
-Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com [74.125.228.140])
+Received: from mta0.migadu.com (out-226.mta0.migadu.com [91.218.175.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70EFF414416
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 16:07:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC60A41D637
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 16:15:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789488477; cv=none; b=jr91eT4WNM/uf03fN51tw/yxyjqNxQ0HpVzKz3RtIbzawmqmciRTIY0OeHqY6iPbT0cPxban1dzBkgtE8KAUT0F+KWnNA11vor/V1hKj10OIFhklpJfp4TAu+YjYYSRsfDFycf3EVyDWKPIuA0Ktx8JIxVmWWRgVJX3f9sWZOFU=
+	t=1789488909; cv=none; b=AMhWDlW9L4e8IAkyZBnLVvjh+03LNaOOln1RBFCcoLQtDeYbmDIHNxvqzsY6LsO1ITF50ND17IDKEIMw08e9kYfnfl4GUfcJn1ezcgztC61/Fs8ZbSpVVn3xOy5aVzwIpGCemsQNVhEa4kYi5eE/+UpPjSfFpCFpD0n8N4bKUm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789488477; c=relaxed/simple;
-	bh=TaD3IKHcoZf0PQ+wUUh3mHvOgYZf6uXYuUZRFHNcE+Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kcQXQHwF5WJJ7ZNlao7zB8zI220fgb0sJvE+kCz+VplAYHFFVKSuLdhaiHTKXtMuAdn1XRXT89bBWSpyouH/pRrpX+bUeqpPvqDE/VHT22m0j6c+l+OQZV0NtHYBe2R2pFJ4gXdzOxG4CgWwx6Xwn6EpIVDs6iqETVhPKb48Fa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=agmq+AGs; arc=none smtp.client-ip=74.125.228.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1789488909; c=relaxed/simple;
+	bh=KzneAssyJ6Hnv8qhaceSpKRPnn0woZNbDSSUjQCSuog=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gk1CPWGXSgDyJVplFdImNYdEfjmc+5yv+l0kyFLDFMECocz/zJ1En97aYAo5Ok1qGIFBcYBNvDs31bFt8NsoxSOsM5HflA9NkYdAFCd/3E7HjA/ZqSbr12xqO2qDQCSoWKpFOUBZpG9QbwZL1dZYwFRjO8rBWE1h24/8tyrMqbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RqIcwQi5; arc=none smtp.client-ip=91.218.175.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="agmq+AGs"
-Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c293c683202so503051766b.3
-        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 09:07:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1789488472; x=1790093272; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=cj8iWYGkmy9fr6Sp+MjBMi0cvssqzarl8Tgut8FUMEc=;
-        b=agmq+AGsR9ewjxAqeJxWV21/cUDT6fr+gu6Q34cLYJxN631pWIb+MIN045yqFXjaEf
-         v8D4B42ulM3vTyxukkh03Sj9kSMqPO64XjZ+ooLzGTqQVBZ4rQneuNqw5ICAc7m7UX0r
-         4JC8/HKuho2msW5kYnGgGWgklkxJnQyCmIsdM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789488472; x=1790093272;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=cj8iWYGkmy9fr6Sp+MjBMi0cvssqzarl8Tgut8FUMEc=;
-        b=RRsmvN+PvVsialJ00lh2W1GN9Vm+Wv1eXX6AVLweEF6wLwY2B6oCLWq2TFmynFG/Ov
-         i8BmU4FRSZCOM2Zb0xrcob101KKyt4WRZvfHfsY5NatoJjPIoXwCMoUdilMhdhRrAfVA
-         PPDmtfVl2UBUvWeKxJODm3bxcuZAwVDbCP74dk+9VRY/+OlXb8+gLdYfvEIDEHpmBIf0
-         pODpf63YhXh1LgNd7FHuCSqyRsBYoyx1CIWzh/NXVrawd5kj7WRvOGX2WSLN7PVK7sFk
-         MQpXLMxZ4iEIF3QyA6lmtPCnqE08uRFakWzePVwWmielOwMUFwLRWFGJwrjXg6Lhgg0i
-         K7TQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwgV61gAc/PfFVrhKPW6YJdrawXe9yRurFxXIm1tjZ7hJU6NyZZplI5qx18FvCymvbwCuQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++n8UxAGqPmF8iR6JEW3w7urpI6POzhrxXtYUDmGs0wlZkFDb+of
-	Ojcnuj70P9qvv3xOHA5cEyHt1kdpJpjPJs6HZMTHcGGCxLZPLP3+oLvgU28p3q33Y/XgGC11y6m
-	ah3RBfFE=
-X-Gm-Gg: AYBFou1hQrKWKF+hCfn2Rln1SSPPVvRKXAMsuvp5DM/XHLmkNDOK2KRWMlaf/lwPmLK
-	nK/S7yaO5NUYBgZyW1f+JciJDCyh8JxFOFXV/7jbCu4xONN0qaiwMfODoptIq5wmFSzno7cZOYt
-	q81UWEoxUGL9gKYqiLylgL/gn4hHeJ84VEI04ldqRu2bf0MUPDDIpGtobyYBYAUTSk0AEY2wNRs
-	FvLIB0KHmzTc9pHHfCnUsYXlMTc7loERsTI3vqHxZBgzplpzJhT1ZMygS4DLZ07K+LAPJX6Frkv
-	rQsUxjrfpH6AbMrzg38/dO2kRDFDkxF/TVCa6507KDW6D8Za741WD6GXn7qWmN4Fq8Ne6H1jVP7
-	vx8LRMT9nZfxGUz3cT9/rJlhsU7I2jA5BUz550uUIQd/z9vvQq1rPfhNcGM1xAQlgV0R1jznWla
-	GLN3RldbvwMafHsGo4wnotj/wPe6jkIbZHv7vZCbVpH4I7742YGaNTG7OqYTErraLBUYIXfcGR2
-	AlbZ0CloSH96cedUj7EEQ73gy6QIvc1ihBWDxFwdghIUzOptQ==
-X-Received: by 2002:a17:906:c112:b0:c26:2ff1:cac2 with SMTP id a640c23a62f3a-c29b86f9353mr506769766b.31.1789488472342;
-        Tue, 15 Sep 2026 09:07:52 -0700 (PDT)
-Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com. [74.125.228.140])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c29de63a7c8sm360566b.51.2026.09.15.09.07.51
-        for <bpf@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Sep 2026 09:07:51 -0700 (PDT)
-Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c254fa4c24cso538118066b.2
-        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 09:07:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBwuK0yHw67amQtINopRT1McXMwszUk9GdKWY8/RJdWrDM+Y/DcNsKZGDWFOJmPwJqwqdT8=@vger.kernel.org
-X-Received: by 2002:a17:907:cd0d:b0:c29:439b:d5c1 with SMTP id
- a640c23a62f3a-c29b86141b9mr553591866b.16.1789488168046; Tue, 15 Sep 2026
- 09:02:48 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RqIcwQi5"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=KzneAssyJ6Hnv8qhaceSpKRPnn0woZNbDSSUjQCSuog=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789488903; v=1; x=1790093703;
+ b=RqIcwQi5WKgGlfM/1HOVEdu4f29oslW0pztSza+B81aJE3oW12y23P7DjyXK6DFjRU7dxQOV
+ Kz9gwiQGWqzVVLqfzzNJSuadHmiLtKBZDQRtUfDEwzRLOQqOGqmG1J9kbF7qx53DzmdZlC84ptK
+ pfgv9Jp2wLZHbGyWkgubhwiw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 6173dd8524c751d9;
+	Tue, 15 Sep 2026 16:15:03 +0000
+X-Mizu-Trace-ID: 6173dd8524c751d9
+X-Migadu-Flow: FLOW_OUT
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Quentin Monnet <qmo@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	linux-kernel@vger.kernel.org,
+	Leon Hwang <leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v3] bpftool: Compute map size of light skeletons at runtime
+Date: Wed, 16 Sep 2026 00:14:50 +0800
+Message-ID: <20260915161450.96249-1-leon.hwang@linux.dev>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260915-work-fd-reserve-unify-folded-v1-0-4d5217d6b246@kernel.org>
-In-Reply-To: <20260915-work-fd-reserve-unify-folded-v1-0-4d5217d6b246@kernel.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 15 Sep 2026 09:02:31 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjeamU=_RYT9cR3dZJ2N-Teo-N1+aYh7jwhrB=iWXD0cg@mail.gmail.com>
-X-Gm-Features: AcwNN1WK06t9f9BcKFBIanysXcyUXK4eRICuH4x14s60AdlpF6ijCATIYaYAAvQ
-Message-ID: <CAHk-=wjeamU=_RYT9cR3dZJ2N-Teo-N1+aYh7jwhrB=iWXD0cg@mail.gmail.com>
-Subject: Re: [PATCH RFC POC 00/50] file: handle files on syscall exit
-To: Christian Brauner <brauner@kernel.org>
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jann Horn <jannh@google.com>, Jan Kara <jack@suse.cz>, 
-	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	Oleg Nesterov <oleg@redhat.com>, linux-alpha@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org, Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, 
-	netdev@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, bpf@vger.kernel.org, 
-	David Airlie <airlied@redhat.com>, virtualization@lists.linux.dev, kvm@vger.kernel.org, 
-	kexec@lists.infradead.org, linux-hyperv@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, 15 Sept 2026 at 04:31, Christian Brauner <brauner@kernel.org> wrote:
->
-> TL;DR, this lets arch code handle fd install and cleanup. fd_prepare()
-> allocates a descriptor like get_unused_fd_flags() does and records it in
-> a slot on the task. fd_stage() attaches the file to that slot and
-> returns the number.
+bpftool rounds memory-mapped data map sizes to the host page size when
+generating a light skeleton. The generated code therefore uses a 64K
+mapping size when bpftool runs on a 64K-page host, even if the skeleton
+runs on a 4K-page target. The target rejects the oversized map mmap(),
+causing failure of loading the light skeleton.
 
-Honestly, I am *not* a fan. At all.
+When try to run 64K-page selftests on 4K-page VM, the error message does
+not provide the reason about page size.
 
-I think this adds complexity rather than removing it.
+ test_atomics:PASS:atomics skeleton open 0 nsec
+ test_atomics:FAIL:atomics skeleton load unexpected error: -12 (errno 22)
+ #15      atomics:FAIL
 
-The diffstat tells a story:
+Pass the original map value size and max entries to the generated code and
+round mmap size to the runtime page size in the user-space light
+skeleton helpers. This keeps generated light skeletons independent of the
+build host page size.
 
->  106 files changed, 962 insertions(+), 861 deletions(-)
+Fixes: d510296d331a ("bpftool: Use syscall/loader program in "prog load" and "gen skeleton" command.")
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+v2 -> v3:
+* Hoist 'sysconf(_SC_PAGE_SIZE)' and the inner 'roundup()' in
+  skel_map_mmap_sz(). (bot+bpf-ci)
+* v2: https://lore.kernel.org/bpf/20260914153326.72498-1-leon.hwang@linux.dev/
 
-in how this adds a hundred lines more than it deletes.
+v1 -> v2:
+* Pass max entries alongside value size.
+* Use the computed mmap size for mprotect() in userspace's
+  skel_protect_map_data().
+* Round up the mmap size to page size with keeping the original
+  multiplying max_entries logic. (Andrii)
+* v1: https://lore.kernel.org/bpf/20260911145914.23676-1-leon.hwang@linux.dev/
+---
+ tools/bpf/bpftool/gen.c       | 26 ++++++-------------
+ tools/lib/bpf/skel_internal.h | 48 +++++++++++++++++++++++++----------
+ 2 files changed, 42 insertions(+), 32 deletions(-)
 
-But to make things worse, it adds them in bad places: low-level
-architecture assembly code.
+diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
+index a50540ef6521..ee680f7c2116 100644
+--- a/tools/bpf/bpftool/gen.c
++++ b/tools/bpf/bpftool/gen.c
+@@ -500,16 +500,6 @@ static void print_hex(const char *data, int data_sz)
+ 	}
+ }
+ 
+-static size_t bpf_map_mmap_sz(const struct bpf_map *map)
+-{
+-	long page_sz = sysconf(_SC_PAGE_SIZE);
+-	size_t map_sz;
+-
+-	map_sz = (size_t)roundup(bpf_map__value_size(map), 8) * bpf_map__max_entries(map);
+-	map_sz = roundup(map_sz, page_sz);
+-	return map_sz;
+-}
+-
+ /* Emit type size asserts for all top-level fields in memory-mapped internal maps. */
+ static void codegen_asserts(struct bpf_object *obj, const char *obj_name)
+ {
+@@ -686,8 +676,8 @@ static void codegen_destroy(struct bpf_object *obj, const char *obj_name)
+ 		if (!get_map_ident(map, ident, sizeof(ident)))
+ 			continue;
+ 		if (is_skel_data(map, ident, sizeof(ident)))
+-			printf("\tskel_free_map_data(skel->%1$s, skel->maps.%1$s.initial_value, %2$zu);\n",
+-			       ident, bpf_map_mmap_sz(map));
++			printf("\tskel_free_map_data(skel->%1$s, skel->maps.%1$s.initial_value, %2$u, %3$u);\n",
++			       ident, bpf_map__value_size(map), bpf_map__max_entries(map));
+ 		codegen("\
+ 			\n\
+ 				skel_closenz(skel->maps.%1$s.map_fd);	    \n\
+@@ -771,13 +761,13 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
+ 		\n\
+ 		\";							    \n\
+ 									    \n\
+-				skel->%1$s = (__typeof__(skel->%1$s))skel_prep_map_data((void *)data, %2$zd,\n\
++				skel->%1$s = (__typeof__(skel->%1$s))skel_prep_map_data((void *)data, %2$u, %3$u,\n\
+ 								sizeof(data) - 1);\n\
+ 				if (!skel->%1$s)			    \n\
+ 					goto cleanup;			    \n\
+ 				skel->maps.%1$s.initial_value = (__u64) (long) skel->%1$s;\n\
+ 			}						    \n\
+-			", ident, bpf_map_mmap_sz(map));
++			", ident, bpf_map__value_size(map), bpf_map__max_entries(map));
+ 	}
+ 	codegen("\
+ 		\n\
+@@ -871,14 +861,14 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
+ 		if (bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY) {
+ 			codegen("\
+ 		\n\
+-			err = skel_protect_map_data(skel->%1$s, &skel->maps.%1$s.initial_value, %2$zd);\n\
++			err = skel_protect_map_data(skel->%1$s, &skel->maps.%1$s.initial_value, %2$u, %3$u);\n\
+ 			if (err)					    \n\
+ 				return err;				    \n\
+ 		#ifdef __KERNEL__					    \n\
+ 			skel->%1$s = NULL;				    \n\
+ 		#endif							    \n\
+ 			",
+-			ident, bpf_map_mmap_sz(map));
++			ident, bpf_map__value_size(map), bpf_map__max_entries(map));
+ 			continue;
+ 		}
+ 
+@@ -890,11 +880,11 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
+ 		codegen("\
+ 		\n\
+ 			skel->%1$s = (__typeof__(skel->%1$s))skel_finalize_map_data(&skel->maps.%1$s.initial_value,\n\
+-							%2$zd, %3$s, skel->maps.%1$s.map_fd);\n\
++							%2$u, %3$u, %4$s, skel->maps.%1$s.map_fd);\n\
+ 			if (!skel->%1$s)				    \n\
+ 				return -ENOMEM;				    \n\
+ 			",
+-		       ident, bpf_map_mmap_sz(map), mmap_flags);
++		       ident, bpf_map__value_size(map), bpf_map__max_entries(map), mmap_flags);
+ 	}
+ 	codegen("\
+ 		\n\
+diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
+index 1f3f332dffbe..9e16b8e8cb7c 100644
+--- a/tools/lib/bpf/skel_internal.h
++++ b/tools/lib/bpf/skel_internal.h
+@@ -11,6 +11,7 @@
+ #include <linux/bpf.h>
+ #else
+ #include <unistd.h>
++#include <sys/param.h>
+ #include <sys/syscall.h>
+ #include <sys/mman.h>
+ #include <linux/keyctl.h>
+@@ -127,7 +128,7 @@ static inline void skel_free(const void *p)
+  * either bpf_probe_read_kernel() or bpf_copy_from_user() from initial_value
+  * depending on bpf_loader_ctx->flags.
+  */
+-static inline void skel_free_map_data(void *p, __u64 addr, size_t sz)
++static inline void skel_free_map_data(void *p, __u64 addr, size_t val_sz, __u32 max_entries)
+ {
+ 	if (addr != ~0ULL)
+ 		kvfree(p);
+@@ -138,18 +139,20 @@ static inline void skel_free_map_data(void *p, __u64 addr, size_t sz)
+ 	 */
+ }
+ 
+-static inline void *skel_prep_map_data(const void *val, size_t mmap_sz, size_t val_sz)
++static inline void *skel_prep_map_data(const void *val, size_t val_sz, __u32 max_entries,
++				       size_t data_sz)
+ {
+ 	void *addr;
+ 
+-	addr = kvmalloc(val_sz, GFP_KERNEL);
++	addr = kvmalloc(data_sz, GFP_KERNEL);
+ 	if (!addr)
+ 		return NULL;
+-	memcpy(addr, val, val_sz);
++	memcpy(addr, val, data_sz);
+ 	return addr;
+ }
+ 
+-static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_sz, int flags, int fd)
++static inline void *skel_finalize_map_data(__u64 *init_val, size_t val_sz, __u32 max_entries,
++					   int flags, int fd)
+ {
+ 	struct bpf_map *map;
+ 	void *addr = NULL;
+@@ -172,9 +175,10 @@ static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_sz, int
+ 	return addr;
+ }
+ 
+-static inline int skel_protect_map_data(void *p, __u64 *init_val, size_t sz)
++static inline int skel_protect_map_data(void *p, __u64 *init_val, size_t val_sz, __u32 max_entries)
+ {
+-	(void)sz;
++	(void)val_sz;
++	(void)max_entries;
+ 
+ 	kvfree(p);
+ 	*init_val = ~0ULL;
+@@ -193,25 +197,39 @@ static inline void skel_free(void *p)
+ 	free(p);
+ }
+ 
+-static inline void skel_free_map_data(void *p, __u64 addr, size_t sz)
++static inline size_t skel_map_mmap_sz(size_t val_sz, __u32 max_entries)
+ {
+-	munmap(p, sz);
++	const long page_sz = sysconf(_SC_PAGE_SIZE);
++	size_t mmap_sz;
++
++	mmap_sz = roundup(val_sz, 8) * max_entries;
++	mmap_sz = roundup(mmap_sz, page_sz);
++	return mmap_sz;
+ }
+ 
+-static inline void *skel_prep_map_data(const void *val, size_t mmap_sz, size_t val_sz)
++static inline void skel_free_map_data(void *p, __u64 addr, size_t val_sz, __u32 max_entries)
+ {
++	munmap(p, skel_map_mmap_sz(val_sz, max_entries));
++}
++
++static inline void *skel_prep_map_data(const void *val, size_t val_sz, __u32 max_entries,
++				       size_t data_sz)
++{
++	size_t mmap_sz = skel_map_mmap_sz(val_sz, max_entries);
+ 	void *addr;
+ 
+ 	addr = mmap(NULL, mmap_sz, PROT_READ | PROT_WRITE,
+ 		    MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+ 	if (addr == (void *) -1)
+ 		return NULL;
+-	memcpy(addr, val, val_sz);
++	memcpy(addr, val, data_sz);
+ 	return addr;
+ }
+ 
+-static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_sz, int flags, int fd)
++static inline void *skel_finalize_map_data(__u64 *init_val, size_t val_sz, __u32 max_entries,
++					   int flags, int fd)
+ {
++	size_t mmap_sz = skel_map_mmap_sz(val_sz, max_entries);
+ 	void *addr;
+ 
+ 	addr = mmap((void *) (long) *init_val, mmap_sz, flags, MAP_SHARED | MAP_FIXED, fd, 0);
+@@ -220,11 +238,13 @@ static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_sz, int
+ 	return addr;
+ }
+ 
+-static inline int skel_protect_map_data(void *p, __u64 *init_val, size_t sz)
++static inline int skel_protect_map_data(void *p, __u64 *init_val, size_t val_sz, __u32 max_entries)
+ {
++	size_t mmap_sz = skel_map_mmap_sz(val_sz, max_entries);
++
+ 	(void)init_val;
+ 
+-	if (mprotect(p, sz, PROT_READ))
++	if (mprotect(p, mmap_sz, PROT_READ))
+ 		return -errno;
+ 	return 0;
+ }
+-- 
+2.55.0
 
-Those extra lines are *not* making complicated code simpler. Quite the
-reverse. They are taking fairly straightforward "just deal with errors
-with normal cleanup in the place where it makes sense" and makes the
-*straightforward* case simpler, while making the big picture more
-complicated and subtle, and adding new code to places that are not
-simple and just blindly do somethign that makes no sense in that
-context.
-
-IOW: it's more code, and it's more abstraction, and it DOES NOT HELP.
-
-And yes, most of the well-maintained modern platforms (read: x86 and
-arm64) use the generic infrastructure and they don't show that
-low-level asm effect. So for those cases, it's mainly just  that added
-conceptual complexity and a new odd rule - and makes a *successful*
-system call go through that "extra work" and indirection phase that it
-didn't use to go through.
-
-So it just spreads out the work, and moves it to a less obvious place.
-
-All for the very questionable advantage that you can now randomly add
-a file descriptor without the few lines of fairly straightforward
-rollback.
-
-IOW, I do not see a single real upside to this, and I see immediate
-downsides to it, and a more abstract complicated machinery.
-
-I do *not* see why we woudl want to make this be a "every system call
-exit" kind of thing. If there are places that think it's complicated
-to do, they could have *their* local little stack of fd's pending. Why
-force it onto the low-level system call entry for every system call
-when there are only a small handful of actual real cases (the vfs
-itself, and random ioctl's by odd driver subsystems).
-
-              Linus
