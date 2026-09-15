@@ -1,104 +1,135 @@
-Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D87B3B388C;
-	Tue, 15 Sep 2026 14:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.217.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2DE63C1D65;
+	Tue, 15 Sep 2026 14:36:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789482689; cv=none; b=aa94TC9mAUDK7Q/6F6r0/K+2kMBKTfqm6rPhT3ujuMzB2LJz/yqNQ4bAv53n4dqcHeeBgNRdSIkyY+svjxyqr4V2/UfrgPMhVII0sqzKHC24cNy7lLFysFlACHcSoZ50kEsi/DPo368uTDCpqyj1q6Rjr0q+WuV+KmKdPZo5Vc0=
+	t=1789483007; cv=none; b=Lp/HdRLpVA2nwoyq3v/YYIcUES6yieLBchJaS4wq5+rCousd7ZkLUBq3NxKM1RE1eIcEgqY1EfmtAnDlgtF+E276N4XWKo0KOpakCQ2Of8IHBNFZEK4z4ixucrqdnaBlTyg8qfDbxio/4G1W1LmXWZPVrXxTMaVM8EJ19gtdSKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789482689; c=relaxed/simple;
-	bh=+kBGqe8h4w8eUaxlwskTO/ZRJxZ8AMVDWo2sTnpYJrw=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=AZR4gYieiWNhdMOfxhxEQPY+VW+6Q5y1/hw2w5a+YUT9pzi2es3iHa54MFt0iUXJxXnNocR/KtNRUcDOZSlQn7R/7fBZL5isW9kTzf3GnnlES2O/1dbdG7awjzaPLDgW1aH4Ixs/GkVWjYsw+p9l9r+UcrhBGta3B5ZzPH03Z6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de; spf=pass smtp.mailfrom=tu-dortmund.de; dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b=jqH42mZz; arc=none smtp.client-ip=129.217.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
+	s=arc-20240116; t=1789483007; c=relaxed/simple;
+	bh=bwyJyi6CfYi5E8dzVCKRC/kIx/HUd1x5lOVaz5HbkRw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=A0DzFmu21nt9xko9z8QeQRX8D+3tKNc8X/zqTS5fAQUFAHiV13TbQWG0g59Pr2xAo83LmChP6QV6K2UP1XKrF9BWccDZ152BnUTSHtkdxGRshyvDdd3mQ9N3+sCHW3u0gLjIgj2b8fMn5RPSCUPkEWEDN72jijwa5rZMzGTQ9go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ea3oBm1V; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=tu-dortmund.de header.i=@tu-dortmund.de header.b="jqH42mZz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tu-dortmund.de;
-	s=unimail; t=1789482656;
-	bh=XFtpK+hFHFYONy2lQaPpAqFbvrO8GHLT/QT6zQQRxts=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To;
-	b=jqH42mZzUZ2GTyCt1RYK+47kPBdw5i+w2ryL1sPT9FcPDMxi5AlieHOmql/WQu8Yn
-	 rz7rVm7V1Vr5f38QhLXIbmLYBeU4W4fBHBpIpMsaSf0sDHvJaERoSKh/JrQw8Cxvtm
-	 UWl5vS2Lhpp0kT1H2BvmkWqwxCU324IQQoV7KP+s=
-Received: from [192.168.178.125] (pd9eaaf06.dip0.t-ipconnect.de [217.234.175.6])
-	(authenticated bits=0)
-	by unimail.uni-dortmund.de (8.19.0.2/8.19.0.2) with ESMTPSA id 68FEUtsS023932
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 15 Sep 2026 16:30:55 +0200 (CEST)
-Message-ID: <3a3a99dc-b554-4b5d-a004-67454e66e5e0@tu-dortmund.de>
-Date: Tue, 15 Sep 2026 16:30:54 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ea3oBm1V"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E0121F00893;
+	Tue, 15 Sep 2026 14:36:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789483005;
+	bh=/jA1u2yP/XVG+JRqTDYsiyod65lWx6jO2/SklnCOUMU=;
+	h=From:To:Cc:Subject:Date;
+	b=Ea3oBm1V+tW7HE0FGlpkbByQLTRkYfHZpC9U/DayZwplrDcAeuQHrl5Fhbtlwq+YF
+	 OE41IOz9MjpVYvpT0SNjpvnMZL8wSRlNhgyVK/BEIbzhw+Ooh+vH7N7V2u3XiOx4Gk
+	 PV5TbMKAFe3SCKgSUE7Vbh5VTEaQ898K0EpMhmMNBTV1rvNcmjFthYDuk6/pEByNLK
+	 xgJo8cRcYkOq3zD0PcBk/1NT7s4JpP/1aLt41kJFsTyVtiwLMsOwDTeI6L4b4RL0us
+	 QUDtfc+GijLnCbX2IfbL/EkDbtoaK9bu//Bd3qEdbYrZUFBpuAmTAaeGhSZl1aukg7
+	 OINc3PikxSvOg==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org,
+	rcu@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	"Alexei Starovoitov" <ast@kernel.org>,
+	"Daniel Borkmann" <daniel@iogearbox.net>,
+	"Andrii Nakryiko" <andrii@kernel.org>,
+	"Martin KaFai Lau" <martin.lau@linux.dev>,
+	"Eduard Zingerman" <eddyz87@gmail.com>,
+	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+	"Song Liu" <song@kernel.org>,
+	"Yonghong Song" <yonghong.song@linux.dev>,
+	"Harry Yoo (Oracle)" <harry@kernel.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH bpf-next v3 0/4] bpf: Add bpf_call_rcu() and bpf_call_rcu_tasks_trace()
+Date: Tue, 15 Sep 2026 07:36:34 -0700
+Message-ID: <20260915143640.36292-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v7 0/5] veth: add Byte Queue Limits (BQL) support
-From: Simon Schippers <simon.schippers@tu-dortmund.de>
-To: hawk@kernel.org, netdev@vger.kernel.org,
-        =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>
-Cc: kernel-team@cloudflare.com, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Chris Arges <carges@cloudflare.com>,
-        Mike Freemon <mfreemon@cloudflare.com>,
-        =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Breno Leitao <leitao@debian.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org
-References: <20260612083530.1650245-1-hawk@kernel.org>
- <ed63c31c-0d05-4532-bed6-23b7608ec5e2@tu-dortmund.de>
-Content-Language: en-US
-In-Reply-To: <ed63c31c-0d05-4532-bed6-23b7608ec5e2@tu-dortmund.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/10/26 15:25, Simon Schippers wrote:
-> On 6/12/26 10:35, hawk@kernel.org wrote:
->> From: Jesper Dangaard Brouer <hawk@kernel.org>
->>
->> This series adds BQL (Byte Queue Limits) to the veth driver, reducing
->> latency by dynamically limiting in-flight packets in the ptr_ring and
->> moving buffering into the qdisc where AQM algorithms can act on it.
-> 
-> Hi :)
-> 
-> I worked on my implementation of DQL coalescing that lives in
-> dynamic_queue_limits.{h,c} and wanted to share it so we can consider it
-> for the next cycle. This is because in the next cycle I would
-> like to add BQL support for tun/tap as well, in addition to veth.
-> Is that fine for you?
-> 
-> I think it is in good shape. It uses the same logic as the v7, but
-> every new field fits inside the existing dql struct, and drivers only
-> need to call the usual netdev_tx_sent_queue() and
-> netdev_tx_completed_queue() to use it. Patch 3, 5 and 6 are the same
-> as before, only 1, 2 and 4 are new. Benchmarks looked fine for me.
-> 
-> There should be no regressions for other DQL/BQL users. I paid close
-> attention not to break the dql cache lines or other logic.
-> coal_usecs is now configurable per queue via sysfs and also via ethtool
-> as usual.
-> 
-> While working on this, I found a missing barrier in v7:
-> There was no smp_rmb() pairing the smp_wmb() in __ptr_ring_produce()
-> before dql_completed() reads dql->num_queued. This happens to be safe
-> on x86, but on other platforms the read of dql->num_queued could be
-> reordered before __ptr_ring_consume(), triggering a BUG_ON() in
-> dql_completed(). Fixed by adding the missing smp_rmb() in veth_xdp_rcv()
-> before completing.
-> 
-> Would love to hear your thoughts on the implementation!
-> 
-> Thanks,
-> Simon
+Changelog:
+v2: https://lore.kernel.org/all/20260915114240.3269184-1-puranjay@kernel.org/
+Changes in v3:
+- Move the bpf_call_rcu_tasks_trace() verifier bits from patch 1 to
+  patch 3; patch 1 alone emitted "resolve_btfids: unresolved symbol
+  bpf_call_rcu_tasks_trace" (Sashiko)
+- Poll the callback counter with an acquire load (Sashiko)
+- teardown: v2 only checked that the program was eventually freed, which
+  passes even if nothing was ever armed.  Also assert that the chain ran,
+  and read the -EPERM back through an independent .bss fd
+- Use kern_sync_rcu() instead of open coding the grace-period wait
+- Return -EBADF rather than -ENOENT when the calling program is going
+  away, matching bpf_task_work_schedule()
+- mismatch_map now pins the bpf_rcu_head label the new code emits; it
+  passed with that branch removed.  Add a two_heads test, and wait for
+  each grace period separately in the chain test
+- Commit messages: correct the -EPERM parity claim, explain the inline
+  callback state and the struct size, motivate the tasks trace flavour
+v1: https://lore.kernel.org/all/20260907134552.1772405-1-puranjay@kernel.org/
+Changes in v2:
+- Rebase on bpf-next/master
+- Use rcu_read_lock_dont_migrate() over open coding (Alexei)
+- Improve re-arming selftest to detect failure (Sashiko)
 
-Hi! Any thoughts on this? Do you want to continue this series?
+BPF programs that manage their own objects have no way to run their own
+logic once an RCU grace period has elapsed.  bpf_obj_drop() defers a
+free, but returning an index to an allocator or unpinning a resource
+once readers are done has no equivalent.  sched_ext's BPF library works
+around this today by pushing freed nodes onto a list and having a
+userspace thread call membarrier(MEMBARRIER_CMD_GLOBAL) and then run a
+BPF program to reclaim them; it is the first intended user.
 
-Thanks!
+Add:
+
+	int bpf_call_rcu(struct bpf_rcu_head *rh, void *map,
+			 int (*callback)(struct bpf_map *map, void *key,
+					 void *value));
+
+and bpf_call_rcu_tasks_trace(), same signature, which also waits for
+sleepable programs.
+
+@rh is a struct bpf_rcu_head embedded in a value of @map, so the
+callback runs as callback(map, key, value) for the element it lives in
+and needs no cookie.  The field is only accepted in BPF_MAP_TYPE_ARRAY,
+and arming holds a reference on the calling program until the callback
+has run.  Patch 1 covers the lifetime rules.
+
+This needs
+
+  https://lore.kernel.org/all/20260810122758.183765-1-puranjay@kernel.org/
+
+for call_rcu() and call_srcu() to be safe from the contexts a BPF
+program can be called in.
+
+Puranjay Mohan (4):
+  bpf: Add bpf_call_rcu() kfunc
+  selftests/bpf: Add tests for bpf_call_rcu()
+  bpf: Add bpf_call_rcu_tasks_trace() kfunc
+  selftests/bpf: Add a test for bpf_call_rcu_tasks_trace()
+
+ include/linux/bpf.h                           |  10 +
+ include/uapi/linux/bpf.h                      |   4 +
+ kernel/bpf/btf.c                              |   7 +
+ kernel/bpf/helpers.c                          | 104 ++++++-
+ kernel/bpf/map_in_map.c                       |   4 +
+ kernel/bpf/map_iter.c                         |   6 +
+ kernel/bpf/syscall.c                          |  11 +-
+ kernel/bpf/verifier.c                         |  84 +++++-
+ tools/include/uapi/linux/bpf.h                |   4 +
+ .../selftests/bpf/prog_tests/call_rcu.c       | 275 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/call_rcu.c  | 109 +++++++
+ .../selftests/bpf/progs/call_rcu_fail.c       | 114 ++++++++
+ 12 files changed, 728 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/call_rcu.c
+ create mode 100644 tools/testing/selftests/bpf/progs/call_rcu.c
+ create mode 100644 tools/testing/selftests/bpf/progs/call_rcu_fail.c
+
+
+base-commit: 5ef40d69b38a93bc9951dadb1a15c85c597e1a40
+-- 
+2.53.0-Meta
 
