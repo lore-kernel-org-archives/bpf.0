@@ -1,181 +1,149 @@
-Received: from mail-oo2-f42.google.com (mail-oo2-f42.google.com [74.125.231.170])
+Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6938379EE0
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 22:32:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BEB73A5E6F
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 22:39:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.204
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789511569; cv=pass; b=LQgHpUHvp1NiPx57oDBoBhFkIJrHq7KjLIQwVbO0DucnXp7ZV3gJUUTET4JYQBxv3BGf4g6bg03L2E2xcxchA+qvN3b3iZrZd2DQOkdpoQ2twgNskYtHd5+Z3HtEyWtPnuD7ZqE2oePhBnLsp8uglo2jSmyOjtALiyMZchS8S3A=
+	t=1789511958; cv=pass; b=TRUDQZ3b+vYGbQFS+3Lf5bmUoJLu6NJ+ZMcxI0WpzCBpUaalOhlWNdJ211jtJkEbJ0PA4CtvZzrDvZtESU6P4uCHm+S1WHl2w22z8stHvI/1aWp9AuqWjJqHZIWEeFR2Q3ZSOXPMXW9Nu6iA+pTjjxcH9poxTPvj8r/3pjzN8BA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789511569; c=relaxed/simple;
-	bh=lq1jEWNt/n5Qy/SzVCBrmS2Rd3kPStEZmdmxTeU1Cjo=;
+	s=arc-20240116; t=1789511958; c=relaxed/simple;
+	bh=vJsCws3FamyI5nwIu6NR9CwJlE0an5auOcy5PUi3Br4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sXg2Ci/E6qqleZd+lItOtHBWBsXnEa/sqm+k0N6i00BW1eNzWKIbcG1HgYWwBFEIHqTAi8QhW3wT4Xg8vIPkO1dOLCFqP5Ei25C0OeNgONXFhfXxT/GYvl/xs8i9GgqjXbGTYmK1u34MOKcBiijYajCfNkuuvMiZ397UVOZ1ukM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GROmno6f; arc=pass smtp.client-ip=74.125.231.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=TyL+jH4gSdC/PzQRWKL+KCOTv+4mNGvgL+xdtiROtFeuNJZKnKintXTpoNFicjQnJSvaEsIfcJK88xNviU5JsUNtQIymSc8NwClItDy97ykpB3Pl3NO3oMGgbNNH0tSdFePtx1dUNpRz6D8Q8dhtUFKBdrId26W1waCBTsElSZc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rxyFWca/; arc=pass smtp.client-ip=74.125.230.204
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GROmno6f"
-Received: by mail-oo2-f42.google.com with SMTP id 46e09a7af769-804ef461aedso158866a34.0
-        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 15:32:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789511566; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rxyFWca/"
+Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-53012819c04so48011cf.0
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 15:39:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789511955; cv=none;
         d=google.com; s=arc-20260327;
-        b=s+6ekoboPxF0HRkv/9RhlVXda1TtBOFLC/SkZEzo9n3/Q9IEq1h02VT7i+T/Qk29Q5
-         CJplYcsH5iys3j8ssr/2aef2mYPldXEP15hkOjbnCLnsajVUidRFkMrNG3oa7sttcYrT
-         4tVYr9sUI5N+UaUmPlYTkNkNILycrivNDPlC2Ctp6lU5H308U5LohyeBQsXTgxtens7x
-         M022obg7gAWEqB/4FdVgcN05wmB5ZThQIGL/7JptIGrtCv3JwZa3GPo+Vh+nmAFiI9cq
-         bXXxWim8BLGQayF2/pruiw2g1sp6IIERliFyRgDG+H+EIkVg4I46pTJrnPdcvVtw23KP
-         S4YA==
+        b=aLDfMQW85Q9oO1U4rcIkU5H1Ccx6qIfKT+s7RqkxbNXwhdheqJqFjcpy8pSTT/9Cak
+         E8Mz7RnQwYmhbsRb/XqZcck3hhRY0k8UUEK83sB9W2klCl4h+2qI8H5ceI+Xdip9IFr/
+         vDLCjsUGt0/WXiXTlnJI36iAAXgfShO3hKI4JSD1eVm9Zu/sETcgwB1zRFsMGIB4VlWW
+         v2kqTFddWG9lo+mrucpEDJ52nApyNo7wH88gFfQ57COrk4R2/YbxCpP4GATe4pYgfZqS
+         Buf26Pkf9k+n1fJwJF82xFlHukEy9Wwp9YpHPblNtKc2NpdswQlmdI/0uIZt8Nxc7dW+
+         1dBQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=043e4j6xvnLvXB9EcyfoGhkhem3s0uOnXWL92QwnUpk=;
-        fh=PVF5hOV3lFVkYzH+em3TPzA8DUX1nPTQFNVMrTIZklE=;
-        b=ab7fV8pAtw1EB/fcu/XZxBwROMJbwU1jqlIWfZDdCr3RpbrxOvj7DmbLYirsyafe7R
-         v8eUq6eJlzAgn7Ayd4ob1eC1FvtApVM/k3NysR1I1lojL1ncXTosDuyPEroDRi1XsMpn
-         iY0u9a8bYiX4XFtdBFo39GItCIAfLTOLXpURkzEzDpYg+6lSONKa2Ln4ZOG6VeJSgsrW
-         i+Wlgo7l7ZICLAV2KLBRDVLZvy2Ws+IJzjGv3TbLbMJqfnCATrakpQNZtPCOMCDt+vA+
-         TTfLiUgSxNsDyEUH1mXMaH4N+An1iYDUmAu9opjlzuJYOfaZox7xOPq5zVDy8zbJfZz8
-         D+hQ==;
+        bh=vJsCws3FamyI5nwIu6NR9CwJlE0an5auOcy5PUi3Br4=;
+        fh=C6RYNT034I2D9gRrJqAlp4Syx7vQzwItITeOLZc0+Rk=;
+        b=satESK4jrPRuUmj8qMc4ZQLr+43j06iLlxg8VtQESCavLwHg/nApAyLsg35QlT23tH
+         8YjQdZJK2uNSsrgAZfvhh89PxWmv1/UWguLXb25lqrHlmJ1k1f3qqiDa8rIK6ndXHXLH
+         SWG3+e4DRs0aPNK5jnOCI1659NZG2ZBH7P7ElaN7kF2Ubll+GA0umGuaQlQPxy1RiTK2
+         R2MzxLHOZ9Qnn6T9cGixy6NyA8eRB/zX8SSGjUfSFD4G5Qb2YMnTR3hHbDq10DO6S/g3
+         JlyhC+tl+1Wo48kHwbIHOh6UxKqrc8DspMh8PYA2PtZOFx7PiSjTKVaVH6IVzsS8xnju
+         1xzw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789511566; x=1790116366; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1789511955; x=1790116755; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=043e4j6xvnLvXB9EcyfoGhkhem3s0uOnXWL92QwnUpk=;
-        b=GROmno6fT8o8FylIC1izkPACzlzlUCGmoRiv3tkbjniuV8cSiyfcN1OQJuT1VY9jX/
-         lXzSSQ1BssheV5hz9vRrU8E2oljQsSXzEEVqAJZnzsf51IJX5DbgK9OwuEZRxbFhgeWc
-         w5jDHRIasRwsI6RDmVY9lsrjG3c1xmoOS6W+Imnc+1K7/vvMQbwN6mZ0JxpbrDyKGgIK
-         AK353OTHi1geRaaOxsiy8dVZEXNCMv+EfyfjRP6fcH1vnEKBY58FLI36emgNmvX2Uv51
-         4jzmwJekEGCxXRxRKw2hdY11HviYkwr6Sr9UiBv9Rj5ECzniJKIDtw2uvTbGJSsCwMV4
-         rQdw==
+        bh=vJsCws3FamyI5nwIu6NR9CwJlE0an5auOcy5PUi3Br4=;
+        b=rxyFWca/nEoQjYXMPfAHyf9F1FN3x7rz6dtzEER14eDiw4UDqHIY7juAsfbLvmbPmJ
+         TkDG0O2fJ4T/8b/PM7X2oHanauKcsNZFL+/1C+IBusrmvZP5qtYyTRey1vhqFdIyIzGV
+         4dwM3FCfXXVPiqyqDkz92vVO5b169ErAe+Gf8uKsj7yOvBDnCxCqYnVbW+MzxwzddyhT
+         tH9xI6GNS3A/qwOPzIVt3mWJ/xizDXVAPsbfgAWkEBOjnu90Z0L5ShniO9r/F8wpLbxS
+         E2edOgTa27PKYtmnnDYuMkkuSzbwMlqwza1WkEL4Io3+palVNcRZgYe+WUkx9JeikXu/
+         wGdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789511566; x=1790116366;
+        d=1e100.net; s=20260707; t=1789511955; x=1790116755;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=043e4j6xvnLvXB9EcyfoGhkhem3s0uOnXWL92QwnUpk=;
-        b=qCsORC6gQ/39ndOrWpBPVmpZUvUn4JFwgfqkfgm+Xldnw4e4FerXwPX/KMGlxQHNNC
-         l9HFMsh6yS25qVzJe2y+T1ZrZg7mIyMwapvnR0IxZTk8B5Td1aUCDeJlVL+r8N+b3xmI
-         WHf3wRmKBLC0aqld5oqqI73eSAGeVq0QJGsij9Jn8v188CDRRS4di0WiUhj7TBnH+Djd
-         9mfHykZSYKr4EWO7lj6wB+9Su9H5EM++DkhJisq0zOiVFLRpxYKFP11JjVmpxD/ZgOFC
-         JLTs890OjYFKj6pSxc23KSbKICTdvqyO72iw0v9tlZVwlqvnp65IrikXNldASb2aYwNI
-         2TYQ==
-X-Gm-Message-State: AFuF++kQPe6ccfZzcfWYrkiKuuxUqU31yY3J8Fjb666PfFc7Cg8detC7
-	Z+N6ytAJimT97i29lie7Amakho96ZaIBN0UX5JfbNUhuFH1PDrYPJPc+fIMaQQ5UHgWhF/O2B+u
-	KhRzujKua7Cg/NxBkGe/pUZQytZ7kdCs=
-X-Gm-Gg: AYBFou3BCgnzjewkbw6gh7Wq2oBX0m0wx8K/H1yrJM9yPD6InT1ziCW3+X1jSs3/l77
-	qtgdWjE/yPG8nJky898yjx6d0oyXbsrGW1CmhSt8G2uPCGyVjn+z71yZrKnzErxuXnlRTsRhmFy
-	6o80KsAwL8oL4P36dNsUCXRJkI95mDpdA8FOyFNziqdCrOhjMF2nGi+15WldPJt9B5jDf30gF2b
-	zefCgI4/u9nkpjkjAyb8/fKDfJpRdbySyleuy642amxL+9QcLCgkJnM3YKNgaTwOoSA1/jNhSNg
-	OE+qWP2SCLsZbTD+VDCGrhZi5rajD+g8CAbqnppb63xXhmR0IfFt79zdguDgtcpUazNq5xI=
-X-Received: by 2002:a05:6808:1784:b0:4c5:238e:b163 with SMTP id
- 5614622812f47-4ca4c2933aamr499237b6e.29.1789511566382; Tue, 15 Sep 2026
- 15:32:46 -0700 (PDT)
+        bh=vJsCws3FamyI5nwIu6NR9CwJlE0an5auOcy5PUi3Br4=;
+        b=njNv2QPX0bgT1L07JMQeG6o0+jseOiac9ekAqKQA/lXb2ooGOIOQP5+vrHjnUmw2bg
+         0RjLTwtYdQHLNCjfKnJ1lNIAHeAXN6X12LmS1o4dcaTSM4npYeh8SBKBSLuj81Rdw/HN
+         dxgewwM7DNNtSSqLtpp3nwp3ojb3Aab8FHUrSJoIImHfNE/fMqSeZSs6fSegcFzRRM7C
+         1EzslIYR3DrVvfv/uG0z8Vx5pZIz4DYM/yyxGIQtFOLGtalLcQq0o3/vruRpDwUKFpvw
+         pG+lQ4pVHM/S/wgQUyx/BTHfPYWm7MzzQKEnZoiu5fidtbMc5r8Or9cuOZtP86lVAbIW
+         2vyg==
+X-Forwarded-Encrypted: i=1; AKwUvBzasqtAFtZTdRYkPhEusO250nq+Ft3sDVsu1Y3EshV07H4a/rEtbICpQB0CJTtwttHfv88=@vger.kernel.org
+X-Gm-Message-State: AFuF++mdhIhWoYNERBuXyebbBnKc/yv+7JBtSnHUnkFerbYrTjvCQEOR
+	4ZrjcuhaafrdVt+wZBPvqZHEZIiQmZXzt9GdvjOIOS0LPB+7XixkgHAeFx3pWhW8IuUhG4ezrHx
+	r7E005vH09r4FxCzqElu5ZlFXqQPMri6ylJmSUij9
+X-Gm-Gg: AYBFou1StdykVTbdh/mqtZzM4A7nfyd24v5cSHpMaegsAdpl1j7fL4IKnX8cbuHMQ/d
+	MgOZWj3OAT3A2rqWxepiNTRXREcpaKFrULifFl9kWCSZvYnnHNE5UgaCgwfy3phiwdmZqaWGBVf
+	uB0EsaKraS5tJh4uNRj1k7Anz7kzipwV9htazL6m6aOy6cUT68vMLzOYTMJq8Y1IhK7RC0JQjlQ
+	sqrwiXYk6pFZhwaHsvNjP5ZFjre/gTN7oj1/hZ2x85PW6z2Z9dksAJ3H2xI69wR6ZXux+COT/+2
+	O1Tt+foBprhrvY+WKPsbxQrPOlDw1B0KyDY0Fp2hMZ1f4uucR2zeQVnq31zUfk5G7MN96mxBpUv
+	IyOJJYcniMmr2TIwC+4JP
+X-Received: by 2002:a05:622a:4d8c:b0:531:34b9:2532 with SMTP id
+ d75a77b69052e-5327ed8004emr2058291cf.4.1789511954807; Tue, 15 Sep 2026
+ 15:39:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260911220415.1396439-1-ameryhung@gmail.com> <20260911220415.1396439-20-ameryhung@gmail.com>
- <aqkhifLvyAhw66jg@gmail.com>
-In-Reply-To: <aqkhifLvyAhw66jg@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Tue, 15 Sep 2026 15:32:33 -0700
-X-Gm-Features: AcwNN1X5sjOQAAUCCkPj0z4fuNIDiJi6zwYLTDtESd10KxDMDFfL9fHaG7CFqYo
-Message-ID: <CAMB2axNCx-+HJVuOmS9hXAidXc0yQgv_+zAfzSkNdDXOZtFP5Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 19/23] bpf: Consolidate function call
- pkt_access validation
-To: Mahe Tardy <mahe.tardy@gmail.com>
-Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
-	kernel-team@meta.com
+References: <20260810133540.1947118-1-puranjay@kernel.org> <4f755a7f-0a55-4292-892a-28346ed235a4@huawei.com>
+In-Reply-To: <4f755a7f-0a55-4292-892a-28346ed235a4@huawei.com>
+From: Ian Rogers <irogers@google.com>
+Date: Tue, 15 Sep 2026 15:39:03 -0700
+X-Gm-Features: AcwNN1VJtEici--U7gAI-B9LpTV32UhMFNQSbZNGUEhTbibENqFgMN18MX5xm4g
+Message-ID: <CAP-5=fUepMzyctDcUqYNJMG+xBOK0bdUF_cXPtQ43AxfFVL+Zw@mail.gmail.com>
+Subject: Re: [PATCH v7 0/3] perf/core: sched_task() dispatch and branch entry fixes
+To: wuyifan <wuyifan50@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Ravi Bangoria <ravi.bangoria@amd.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	Usama Arif <usama.arif@linux.dev>, Will Deacon <will@kernel.org>, 
+	Anshuman Khandual <anshuman.khandual@arm.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	"H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 15, 2026 at 3:44=E2=80=AFAM Mahe Tardy <mahe.tardy@gmail.com> w=
-rote:
+On Thu, Sep 3, 2026 at 7:45=E2=80=AFPM wuyifan <wuyifan50@huawei.com> wrote=
+:
 >
-> On Fri, Sep 11, 2026 at 03:04:11PM -0700, Amery Hung wrote:
-> > check_func_arg() checks whether a helper permits packet pointers before
-> > dispatching argument-specific memory validation. check_kfunc_args() has
-> > no equivalent check, even though kfunc memory arguments may be backed b=
-y
-> > packet data.
-> >
-> > Move packet-access validation to check_helper_mem_access(), where the
-> > access direction is known and helper, kfunc, and global-subprogram memo=
-ry
-> > arguments converge. Pass call metadata there so helpers continue to
-> > require bpf_func_proto::pkt_access, while writes through kfunc and glob=
-al
-> > subprogram arguments use the program-type policy and set
-> > env->seen_direct_write.
-> >
-> > Keep call metadata when variable-size memory disables raw mode by
-> > clearing arg_raw_mem.regno instead, and pass it through the map-key pat=
-h
-> > as well.
-> >
-> > This also makes kfunc and global-subprogram packet writes request the
-> > required writable-packet prologue and rejects them for program types
-> > that only support direct packet reads.
+> Hi Puranjay,
 >
-> Hello, sorry I don't have the full context on this patch series but it
-> looks like this commit broke one of our programs on bpf-next, we have a
-> global function with the following signature in a cgroup_skb program:
+> On 8/10/2026 9:35 PM, Puranjay Mohan wrote:
+> > These three fixes were found while adding BRBE support for
+> > bpf_get_branch_snapshot() on arm64 and were carried in that series unti=
+l
+> > v6 [1]. They do not depend on it, so they go on their own; the version
+> > number continues from that series to avoid two numbering schemes for th=
+e
+> > same patches.
+> perf record -C <cpu> -b [<command>] triggers a NULL pointer dereference
+> in armv8pmu_sched_task().
+>
+> Commit fa9d27773873 ("perf: arm_pmu: Kill last use of per-CPU cpu_armpmu
+> pointer") changed armv8pmu_sched_task() from reading the per-CPU
+> cpu_armpmu variable to dereferencing pmu_ctx->pmu via
+> to_arm_pmu(pmu_ctx->pmu). Meanwhile, commit bd2756811766 ("perf:
+> Rewrite core context handling") made __perf_pmu_sched_task() pass
+> cpc->task_epc to pmu->sched_task(). cpc->task_epc is only non-NULL
+> while a task context is scheduled in; CPU-bound events do not schedule a
+> task context, so cpc->task_epc stays NULL. The NULL argument is dereferen=
+ced
+> and crashes.
+>
+> With the patches applied, perf record -C <cpu> -b no longer crashes,
+> and system-wide perf record -b -e <event> -a alongside a task-bound event
+> on a different CPU runs without any WARN_ON.
+>
+> Tested-by: Yifan Wu <wuyifan50@huawei.com>
 
-Sorry for the surprise. Although this was not the patch=E2=80=99s original
-intent, it closes a verifier bug. The verifier does not currently
-track whether a global subprogram=E2=80=99s ARG_PTR_TO_MEM argument is
-read-only, so the callee is verified with a mutable PTR_TO_MEM. The
-call site must therefore require both read and write access. Since
-cgroup_skb packet data is read-only, rejecting this call is correct.
+Hi,
 
-Supporting this use case safely will require an explicit read-only
-argument contract.
+Is there anything that needs doing to land this series? Avoiding a
+perf crash seems worthwhile. I believe Peter and Ingo are best placed
+to review the changes to kernel/events/core.c.
 
->
->         __attribute__((noinline)) int
->         parse_something(struct __sk_buff *skb, __u16 off, char *data_star=
-t, ...)
->
-> that we call with data_start being skb->data + some_offset and now it
-> fails passing the verifier with:
->
->         ; ret =3D parse_something(skb, offset_start, data, ...); @ parser=
-.h:131
->         199: (bf) r2 =3D r8                     ; R2=3Dscalar(id=3D5) R8=
-=3Dscalar(id=3D5)
->         200: (57) r2 &=3D 65535                 ; R2=3Dscalar(smin=3Dsmin=
-32=3D0,smax=3Dumax=3Dsmax32=3Dumax32=3D0xffff,var_off=3D(0x0; 0xffff))
->         201: (79) r1 =3D *(u64 *)(r10 -40)      ; R1=3Dctx() R10=3Dfp0 fp=
--40=3Dctx()
->         202: (bf) r3 =3D r7                     ; R3=3Dpkt(r=3D1247,imm=
-=3D1244) R7=3Dpkt(r=3D1247,imm=3D1244)
->         203: (b7) r4 =3D 0                      ; R4=3D0
->         204: (85) call pc+776
->         function access to the packet is not allowed
->         Caller passes invalid args into func#3 ('parse_something')
->
-> And this is read-only access given it's cgroup_skb prog.
->
-> We can work around this by just passing the integer offset and re-doing
-> the whole skb->data + offset dance in the global function (we've been
-> already doing it in some other spots for function by function
-> verification) but I was wondering if this actually a regression or
-> expected, thanks.
->
-> >
-> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> > ---
-> >  kernel/bpf/verifier.c                         | 24 +++++++++----------
-> >  .../bpf/progs/verifier_helper_packet_access.c |  4 ++--
-> >  2 files changed, 13 insertions(+), 15 deletions(-)
->
-> [...]
->
+Thanks,
+Ian
