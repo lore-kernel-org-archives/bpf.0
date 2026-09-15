@@ -1,73 +1,72 @@
-Received: from mail-ua2-f12.google.com (mail-ua2-f12.google.com [74.125.226.204])
+Received: from mail-qk2-f13.google.com (mail-qk2-f13.google.com [74.125.230.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF6954C4F4D
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 16:02:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.226.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 969814A8FCF
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 16:03:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789488166; cv=none; b=Qq27vq+2WUr8tphR0xsVqiX637t6A1HZvGZ+NpLEMn9JFGQr/gEIAPrNOpE3MPPg1xlYbq2e251y0cTvDx563uREEIIfsg35zdYpbkRC9XWkGMG7FYjGN787NjxrmRDk6LmdYNZ3PBGE+veV0Jb8xbuzOg4sFSyfIuGw/t44cag=
+	t=1789488205; cv=none; b=d20tfr69fmGRVAiTyM+X+VKTdg/rHsGp3kSqioTapV9RUvpBAfIL1X+WUN1w3eaZVRVLHASJAIjhwyaixoWMos24USbWJtRfDiNWXUGLihoy9LU1iOERqozjQeqdwoYLZCOqN2nNpaliPZ17lc4UyaAQkbCPxh13ACF9hATKg9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789488166; c=relaxed/simple;
-	bh=3IjIYNZ//EkU7RRxo8bHkfJOqg1GwqJOxlBJJC6w2Og=;
+	s=arc-20240116; t=1789488205; c=relaxed/simple;
+	bh=D3oau+TXcYzBPkd1gtd2LCOxJTWWah49cdKBmX9WcUI=;
 	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ok3l65Qa+AEEkkO0ataAj8CaW+q2cKRyffVQLxrU55CUIEiE44Li9q4I0OAj/H/9zO974pUOhXLLk7HoY/hcLHPhpQiOkpOIIuxwJyeI7qfYJOYQ10meitHt7Wtr33meh0C57unwYOH445tF9PEvzDl6L6X/DJvX/B5WFXdWn3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=HEXEEeL+; arc=none smtp.client-ip=74.125.226.204
+	 MIME-Version:Content-Type; b=Ll3bL9QHDnTz3Edsu7NeHeDes5rZMZM6TJxcwSScdGyYgZpqxdBpo8oieFm76gx3cu+M9lEDRyYA7VobAc6//1aCuRyNOXtlnlI4XLdjxDlK8EyE95o+eXN6S/taRVCiBfn2wwPL3k/smUmx9mmnlwdHeZFlMq+DnORsG9Pq9wM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=rqdbBmWF; arc=none smtp.client-ip=74.125.230.205
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="HEXEEeL+"
-Received: by mail-ua2-f12.google.com with SMTP id a1e0cc1a2514c-97ea1a712deso203241241.3
-        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 09:02:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="rqdbBmWF"
+Received: by mail-qk2-f13.google.com with SMTP id af79cd13be357-939eb3249c1so409100785a.2
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 09:03:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1789488162; x=1790092962; darn=vger.kernel.org;
+        d=toxicpanda.com; s=google; t=1789488202; x=1790093002; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:subject:cc:to:from:message-id:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=kXYuW65IGDuV4RbA68/PmJHgU6ttorOq8wX2YILfQtc=;
-        b=HEXEEeL+pryvm1DJszuag9D1YCUvmoJuXJERLAoSGa9/J1eb27fHWoDKsuyilFoHP/
-         fjYS6d2/NGQLYvfFi869rjHgR4x1XQtQsAGFqsAmffFu0jG4PxSr2m8LXJJgEo44mKMK
-         WPZYMI3fMx9T1zFgKyD6Au86+JM7Mdj88Uj2wv7PkZXjYfLTZ1GGf6aVz1VTley2RFUt
-         7k7/rcIVBTgWc/y8yYTjDM7d+nKmq2AtjY/ZH4X9z+uCPOSYpqCEyK+v/QobLVEDy7jN
-         Am7+RbygbtaFKOFj9rRfrndMqHWgJ0ZeUPCjF95xbAnpSjtI2KVALyvVVfgmLrDaqJWS
-         sflg==
+        bh=D3oau+TXcYzBPkd1gtd2LCOxJTWWah49cdKBmX9WcUI=;
+        b=rqdbBmWFbiv3znYqhz+mfg1EZrF/eWAdtsytKeL/GV7GgQ3A17ZN1+BbggEBFePUSh
+         zUbhZB7LK9VVdP1Ry30EP8co2aBgvTvFySAGXpHQjiewHWbTFtRQ7RhQPnod5l0+k/es
+         M0Kz6WQcZP35wweYsqh8mUiXuzyA23wrcg6toV7vNnvB0sWmw3JqmDRJDR4yQqwKZ0DW
+         NtsmTPQWMIWuHiWGxmbto+L33VRViKwTMQyQh5mWHWf4ZGaxvQWDJzcAtjNw6Aedcgio
+         uPR/Ze2YgMCrD9KlGDwAWUR1+Wrj2X1oB81uWVnIKetOtiAdoYm9UiJgQqQEJau7kp36
+         WrrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789488162; x=1790092962;
+        d=1e100.net; s=20260707; t=1789488202; x=1790093002;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:subject:cc:to:from:message-id:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=kXYuW65IGDuV4RbA68/PmJHgU6ttorOq8wX2YILfQtc=;
-        b=P34GXG1b2M61bM3L2WaUxN7ko725qoOYtmZ+derIWiHQWs44B2ePCVLlqp5EWarABy
-         A/Zq3rMjWp83gxpteRcLKmTzxCPMpFucBgBXkRbK8ejGV3SiC5+76csJkEGivAzTVbjw
-         nm3otcvwF1g2VHw1iCivKRIDzs0HV7ad6R3U7h+f2YoQtpCqwG4DviytOS+SttklxNYu
-         4ZLJj3HoIbToQio76ONuU+Ehx0KlHXDE2PRTHYT7rab5KsRa7pcdlOC0pXgnzX0iMctb
-         ztAFIW+RZNrG9NpWp0hxqOzU+D0NRbfTgDJ3e9I/WBgdI3Ej910QAVLvmqMRwzzI9dsb
-         Z2Gw==
-X-Forwarded-Encrypted: i=1; AKwUvBybTKiAbtJtoyJ3JArTAWOyugFbcclFTvWqzKXht80ZZijV5uwNlQPDGErlgWwbXC4dQ6Y=@vger.kernel.org
-X-Gm-Message-State: AFuF++lfNxXeL8AAU2ssGQVPQbaTUkngBo6L3HqjLyEsaJu5i9pREPcq
-	rwon016r0i06/2gQTWp0MdS+xMG5g0ObrESl6AH2AUSzhWJzldJAHLgJJuuOtMAvaLM=
-X-Gm-Gg: AYBFou3BWyhYM9RYe4LZPpD7ig3awuMBntrLhEpBaOQY42dL5nAhwoGzoMDc8IqEgt+
-	8QEzEHgaoarMQcn8sRc/XmVhkxZqDyA5HrHJ9MshxmJErdYShcdH4nhm2Qo21fG99Os6UtNJEpz
-	PacbafCDU04qFiY2HjLts9CwkdsbCbNju1dKr0Vt7hWy8IBsDjQBiLaFi39fk4cPgID1g8yFnx+
-	AFO9MUHijJ077rS3MM/VMCAW7B7iGI7YxSWSmkZ+A3uoiMLF+Vhn6fdO8SijcNGDKyukGtRrxVP
-	NLb3zA/nywj/TRVaGxxLHpl8XFQGwNYBDo57aIOO7gaVfBOuegFDt9Tmj52HQrWwSacCS5a2HEQ
-	0rMlK1KHJfGoPb91oevZ8Sm/wjrAyQw2VhW5Ojr9ImTBNtqo55LD2ZfbbCtQUBU3KzeOlQHhNg2
-	lnLXuPwuB7Gh8dHcRVQGy0n9FaH/GtWNPZEaya+x+nzdj4ULhgZ/fmkjFiyIxzu4B2ER3CpUM8i
-	5LspjKwDTTqDshLVF7mkVn9riIyAkNym3CVlp3rltG8wnELXIM4CHGd
-X-Received: by 2002:a05:6102:1609:b0:785:c39b:6a1 with SMTP id ada2fe7eead31-79ed4a36e4fmr2855428137.6.1789488162285;
-        Tue, 15 Sep 2026 09:02:42 -0700 (PDT)
+        bh=D3oau+TXcYzBPkd1gtd2LCOxJTWWah49cdKBmX9WcUI=;
+        b=kQULojAAxL36qR9CdWN47pJj+zpVA0zbmi0e45k/cyibXwnpZh9tYeUjLRGhNFj5b8
+         R7CVkPA8N7V6je7l5YXO9FMwTbOF/gxmhDBfGYOW0xuzpkquqiS+hUPDSwdy4WqX+keI
+         9aUKhyyV9HiGQjo8DvuRZa6bu77Nl/lCHhxqmRCYMj68XKu20F+ux6hEz0yjaHaGiL+k
+         n06FBYXNBGUem5tZZJYDXcKxeJtP8IfZM4UspFClJ9kmVe56vZ+1z0aBJfmNyRi1H+P5
+         IxjnRXtyH4ycugcv9xQz5bsYkhFQubf8lXCAbW72XsBLyBxCrLnn7Qs7WUTzu/2JO9Qq
+         lzRA==
+X-Gm-Message-State: AFuF++kXs11sCP20YdXB+kpWXQFOGldoksdin222kofWFnkDixneUBpJ
+	GruPYvrCOn60ecIDNOJW+qH42JqgDzAN5XlmEe3IEEqRYc4xieIN20f2qoTjVkXZGJ8=
+X-Gm-Gg: AYBFou0whHQEWudp2tt0pz9frLqb6ruMNSOCrbUtuvfrdLgBbLgTxMoJyfFr9TO6M+q
+	9fjqT2VvWZSsrLpwNovfWvLFw9qM3QPjPG5GaWz8WbVtNFqLwZAmVL+YYOOJCRZq3IujOndp17Z
+	8uNN8hupU25iwd+VWZiGQOCUPpKLIDZNflSK2cH0qT2rUwRmx+x8W5Zkv5udP8UAkGQCp8nTqdQ
+	N7eR7Kx2LPB6kFLCHOrWBZm/HgnoQ5BNModaBDodT0kNLT0dIaCoyIOz9OEQfC4Ou5g9Y76d3kP
+	PwQXqMZub1cq5cXzvIvz8rPhF1eZ7YqcICowyUvFSKmoIySJA3QLT7IJfKNSW+dazeFW3M5+ibC
+	aMqVmOHQy4vYbD4kD04wJevJSybkNNTusRnqGTKATRekQyOYPsEu6+AbJcMXLCYNdUdpBQvUQyN
+	PdYZYIWU/ST7BS/k5YZtTGdVQSjnEZkuJZMDC92sG41Ajab0+ELw8DGqC3AN0F1Q4S2P7LMUuQ/
+	CvwIxyYtsL1EQas2vbKiQyT8as7VCb9ZJgB9StB/GbRybO/ETuSovQE
+X-Received: by 2002:a05:620a:90d0:10b0:93a:2d2b:a5ed with SMTP id af79cd13be357-93a2d2bb71dmr992381385a.47.1789488197613;
+        Tue, 15 Sep 2026 09:03:17 -0700 (PDT)
 Received: from toxicpanda.com (ec2-34-228-114-98.compute-1.amazonaws.com. [34.228.114.98])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-9123bd339easm2205466d6.0.2026.09.15.09.02.41
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-939ec337d23sm1222565385a.2.2026.09.15.09.03.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2026 09:02:41 -0700 (PDT)
-Date: Tue, 15 Sep 2026 16:02:31 +0000
-Message-ID: <162b7a9a7e12191a9661465090319408.josef@toxicpanda.com>
+        Tue, 15 Sep 2026 09:03:16 -0700 (PDT)
+Date: Tue, 15 Sep 2026 16:03:12 +0000
+Message-ID: <da00ebd18989a30a9dfccff23be9ba14.josef@toxicpanda.com>
 From: Josef Bacik <josef@toxicpanda.com>
-To: sashiko-reviews@lists.linux.dev
-Cc: linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH RFC v3 03/13] rcu-tasks: Add a Tasks RCU implementation for reader-marked trampolines
-In-Reply-To: <20260915132919.E868D1F000FF@smtp.kernel.org>
-References: <20260915-b4-rcu-tasks-preempt-qs-v3-0-0ad30c4c5ee7@toxicpanda.com> <20260915-b4-rcu-tasks-preempt-qs-v3-3-0ad30c4c5ee7@toxicpanda.com> <20260915132919.E868D1F000FF@smtp.kernel.org>
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, rcu@vger.kernel.org
+Subject: Re: [PATCH RFC v3 05/13] ftrace: Mark modules hosting direct-call trampolines for Tasks RCU
+In-Reply-To: <08596bcdd997ab7122dafdb363cf80caaf038378f32ccb89fbca114c2fd9110a@mail.kernel.org>
+References: <20260915-b4-rcu-tasks-preempt-qs-v3-0-0ad30c4c5ee7@toxicpanda.com> <20260915-b4-rcu-tasks-preempt-qs-v3-5-0ad30c4c5ee7@toxicpanda.com> <08596bcdd997ab7122dafdb363cf80caaf038378f32ccb89fbca114c2fd9110a@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,28 +76,19 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Tue, 15 Sep 2026 13:29:19 +0000, sashiko-bot@kernel.org wrote:
-> > +	if (!(ct_rcu_watching_cpu(cpu) & CT_RCU_WATCHING))
-> > +		return true;
-> > +	return idle_cpu(cpu);
-> > +}
->
-> [Severity: High]
-> Could the unconditional return of idle_cpu() lead to a use-after-free crash
-> if the idle task was interrupted in trampoline code?
+On Tue, 15 Sep 2026 14:17:49 +0000, bot+bpf-ci@kernel.org wrote:
+> This isn't a bug, but could the field and ftrace_direct_mark_module()'s
+> body be gated on CONFIG_TASKS_RCU_TRAMPOLINE_READERS instead?
 
-Yes, this one is right. The classic flavor ignores idle tasks too and
-leans on Tasks Rude for that, but the idle_cpu() shortcut here made it
-worse than it needs to be: an idle CPU with an interrupt sitting on top
-of a trampoline the idle loop had called into would be passed
-immediately, and since idle is never preempted from irq exit nothing
-else catches it.
+Sure, done for v4, along with the other three from this run: the
+rcu_read_unlock_tasks_trace() lockdep ordering in 02, the @regs kerneldoc
+in 01, and the Documentation wording in 13 now mentions the
+rcu_tasks_trampoline_text() / rcu_tasks_wait_irq_preempted() route the
+kprobe optimizer takes. The kerneldoc here no longer points at the sample
+header.
 
-For v4 that line is gone and an idle CPU only counts while RCU is not
-watching it. If it is watching (the interrupt, or the traceable part of
-the idle loop) it gets the resched_cpu() like any other straggler and
-counts once the idle loop itself schedules, which it cannot do from
-inside a trampoline. So idle ends up covered rather than ignored.
+The Fixes: suggestion doesn't apply, 03 and 05 are the same series and
+nothing selects the option until 13.
 
 Thanks,
 
