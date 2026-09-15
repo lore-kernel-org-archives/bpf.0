@@ -1,96 +1,82 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-31.mta0.migadu.com [91.218.175.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6437042AF86
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 16:28:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DEE42AF86
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 16:34:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.31
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789489716; cv=none; b=ViYLF9pjIYQ96b7JdXu9DVS4NXVpSX23fdLp295jywgCST92tNCgnpouyHzzdcYrCz3LYZzymcRqWfF9JX8HIq5BTo/G3bZ0ngTGlWZbs0gfscQtha/aBvGJ0MlErwmWRlr2YmjsbEp823pBhYREk35nEc4/1viSp5w2zUODw9s=
+	t=1789490093; cv=none; b=NLTN/eVZv5UKmbpYV8jAWcCdBkoyxQiBk8XnC+f1nxwI9JIDirEJTzOGKBFhjBHyeOE5EfQtIyNyFI+IAqQ9ehN9KJYP9xOz5kagJr6GvnHLpkqH5bGPLa0bifPxSR9Puv10L0Winkr8G9m8xZS9+BKu4Uqe+eYsLAr6bI16j6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789489716; c=relaxed/simple;
-	bh=Ysx6fI+jAhYSdjF8TjNIhefuyDDkUzXmNvD1IKb3ZPA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=CepRqcgwuNZnfZaXBFzP+KJTFM7QxjH1Gu1lQYETze4uhDKgEs4q7UAFLKj6tQcN/Pvva7vrOP4Vx0GLE7F4T6einz2+WjvLhGw1mY7Dn1KA3t3EzWQ6GS6Fjp/Q79/QtWRN13T+aeZ/TcFl1jgD/gW6/Hjgwr47C0l50yQvay4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dstw3gRc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789490093; c=relaxed/simple;
+	bh=B0tzIgaG6JGKZCjr1ffoCRr52KAPNSy6oO2D1sP8PJ0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AJ0HA0uThPe1zBV8qo+Yjk2reAvm4j9cRp7jqZ8Z6k/Ye0M6bnglR55ZQGk1wywRLCcMjviG4MmLFJwsjlGJBZ6nZ31Wc81M9IZ0DNgBtgegZwDd8YgXsvN/6bkqRFYuoHyIoGkKeMQl2dlAyJYJ/1+Jj5nx3hCNN2//JcZM9UY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vmoHqFJ8; arc=none smtp.client-ip=91.218.175.31
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dstw3gRc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2B751F000FF;
-	Tue, 15 Sep 2026 16:28:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789489715;
-	bh=aosPcYTFnGwj+vozy2BORrvSGqO9tgXoTJZve+R25wg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Dstw3gRcbEwUJuBcVjQWUly5XM1oN827GtCcIWugLcSiO02ifX1TNBczSEYBPX5gp
-	 hvc9R6n6qO9Jkm+qoZjDrjzJ1zYkNh0QdmLCLIDfXz9L2SJpHpOP8Q4Tu23LQjo7ao
-	 EfX2q9SgHgl+7a3nUKxMENjsa7+IpdJdgS5XpsKiqDRrsJeh4BPswAP2JwU0f8uu2A
-	 DOGt9OsrTRk3Smn+pO2QllykwrdIxiY900ZEaCmHScK2ltdlqfKThNHFtqdOcj19KL
-	 T6ZFnze5l1a7W1BA+ZpKNuDMGl7fgjazvBD+DaobS6rQdR7Q5qZd7Jmkr7Y67Ceyyv
-	 FFXebrRQOqgOA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3] bpftool: Compute map size of light
- skeletons at runtime
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Leon Hwang" <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260915161450.96249-1-leon.hwang@linux.dev>
-References: <20260915161450.96249-1-leon.hwang@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 15 Sep 2026 16:28:34 +0000
-Message-Id: <20260915162834.E2B751F000FF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vmoHqFJ8"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=B0tzIgaG6JGKZCjr1ffoCRr52KAPNSy6oO2D1sP8PJ0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789490089; v=1; x=1790094889;
+ b=vmoHqFJ8p3xZuDW5RmkgyPLujGc8Ppw5O4CFq2EyiGgqNj9AjYpl7l1YBoZt5WYhxSKVZ8FT
+ sTeSUP7jLzLni0+PjMsc6Jy0t1DXJgKxSWRGOsbBgxCerj2but0ZZ5V/TmoilC4xDffEjjT++dv
+ R4F3dni6CeYMnuQLOMkcSt+8=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 456883709b6d14ba;
+	Tue, 15 Sep 2026 16:34:49 +0000
+X-Mizu-Trace-ID: 456883709b6d14ba
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <a6f41d17-62f0-4ba6-a8f0-bc18866d2784@linux.dev>
+Date: Tue, 15 Sep 2026 09:34:42 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/5] x86/cpu: Initialize boot CPU cpuinfo defaults
+ early
+To: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>, Ingo Molnar
+ <mingo@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, "H . Peter Anvin"
+ <hpa@zytor.com>, Andrey Konovalov <andreyknvl@gmail.com>,
+ linux-kernel@vger.kernel.org, x86@kernel.org, bpf@vger.kernel.org,
+ kasan-dev@googlegroups.com, linux-mm@kvack.org, kernel-team@meta.com
+References: <20260814235134.3461435-1-ihor.solodrai@linux.dev>
+ <20260814235134.3461435-3-ihor.solodrai@linux.dev>
+ <20260915023115.GFaqit8zcWHGkAdHD5@fat_crate.local>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260915023115.GFaqit8zcWHGkAdHD5@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] bpf: compilation failure in skel_internal.h due to non-standard rou=
-ndup macro
---
+On 9/14/26 7:31 PM, Borislav Petkov wrote:
+> On Fri, Aug 14, 2026 at 04:51:31PM -0700, Ihor Solodrai wrote:
+>> early_identify_cpu() clears the capability array, the CPUID table and
+>> extended_cpuid_level, but the architectural defaults for the rest of
+>> struct cpuinfo_x86 are set only later, in identify_cpu().
+> 
+> And I would've stopped here. I don't think we care too much about a CPU which
+> doesn't enumerate CLFLUSH. Or is there an aspect I am missing.
+> 
+> I mean, you can say something along the lines that now things like
+> ->x86_cache_alignment are more correct but I don't think you need to go that
+> much into detail.
 
-commit cf9410def9715a95832e67f7002ebd4dabf2d7ad
-Author: Leon Hwang <leon.hwang@linux.dev>
+Ok. I don't think you're missing anything.
 
-bpftool: Compute map size of light skeletons at runtime
+Should I respin with fixed up messages?
 
-This commit addresses an issue with generating light skeletons on
-a host with a different page size from the target. It accomplishes
-this by passing the original map dimensions and dynamically computing
-the mmap size at runtime.
 
-> diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
-> index 1f3f332dffbe9..9e16b8e8cb7c9 100644
-> --- a/tools/lib/bpf/skel_internal.h
-> +++ b/tools/lib/bpf/skel_internal.h
-[ ... ]
-> @@ -193,25 +197,39 @@ static inline void skel_free(void *p)
->  	free(p);
->  }
-> =20
-> -static inline void skel_free_map_data(void *p, __u64 addr, size_t sz)
-> +static inline size_t skel_map_mmap_sz(size_t val_sz, __u32 max_entries)
->  {
-> -	munmap(p, sz);
-> +	const long page_sz =3D sysconf(_SC_PAGE_SIZE);
-> +	size_t mmap_sz;
-> +
-> +	mmap_sz =3D roundup(val_sz, 8) * max_entries;
-> +	mmap_sz =3D roundup(mmap_sz, page_sz);
+> 
+>> [...]
+> 
 
-[Severity: Low]
-Does this code rely on the non-standard roundup macro from <sys/param.h>?
-
-When users include the generated light skeleton header in a project compiled
-with strict C standards (e.g., -std=3Dc99 or -std=3Dc11) without _DEFAULT_S=
-OURCE
-or _GNU_SOURCE, the roundup macro might not be defined. This can cause a
-compilation error due to an implicit declaration of function.
-
-> +	return mmap_sz;
->  }
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260915161450.9624=
-9-1-leon.hwang@linux.dev?part=3D1
