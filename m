@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-122.mta0.migadu.com [91.218.175.122])
+Received: from mta0.migadu.com (out-164.mta0.migadu.com [91.218.175.164])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B73481FD6
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 19:13:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18A454AFE25
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 19:14:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.164
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789499606; cv=none; b=Rh4tqM77d0lac6daraf4m7pi3wiyn6g63YOC/WSd2RlS3vSX3eNmpuHvnWy5lVUHvGw0C9u47mZ46l80i4FwC84S9okjJt2B6xsrGPqfCxRQ/8/XcSiT42X40UQ4xJdxJcojIdwmmE2eeWgeDsJjXmbHFMQ9sRQcl11d3FgAIGQ=
+	t=1789499684; cv=none; b=FK2BQS5QqFiQfHTI9RL/PGBySLkEdYhv2WqQ45wRv7reug3+52ImwS1afAqZExFzwchwabUC0XFrYbc7DKGGbF17eFfHgH1lgJ0iie0d/crohcJXQdOCS1/UUJP4zK5NodN7pCtK2axVBI2x3e0tk2CYjwyOi+wLwWQS4xHNJvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789499606; c=relaxed/simple;
-	bh=anFEelSsGeeEC3XPXvpXfQ+smHU+cXmR/GUPT+ANFwA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=j+b5PasmPPKskIEk9FwKN0k5GXlbNfhtKNh3qOC3y/BRynECPvhWDZVr1PaOba90wPwsD5QUr2s6emAPMi81IqzDoK6ohJO1FW8RWnL+iJWJ4+/JnIJr12HInoNgzpNUJE/tmiEKmb7hOFDdU3G2R/tZN4NmFsAIrItEeC1CkAw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Y+BCn3lL; arc=none smtp.client-ip=91.218.175.122
+	s=arc-20240116; t=1789499684; c=relaxed/simple;
+	bh=E35+f7z6t8rP3/jLjyyIlthQLDp26GKl793wDUvTYBQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=I9t8QsC7cPKdxzBgWWdZp1VLxVTlYnFa1yRRmmYE3KXZwAQjcnyGdQLPX6tqR2Nq5t8mluxPW2Lj6F1hhA0BatLc8xPAO1HQ3BUh6geneWWgPdM/kFRdZdHNYN/8gIpjb/Q4PM8skM6SsGxRYrCJPvpftBpKPTQXpWlMKeqcDok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JoM9WhDg; arc=none smtp.client-ip=91.218.175.164
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Y+BCn3lL"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JoM9WhDg"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=anFEelSsGeeEC3XPXvpXfQ+smHU+cXmR/GUPT+ANFwA=;
+DKIM-Signature: a=rsa-sha256; bh=E35+f7z6t8rP3/jLjyyIlthQLDp26GKl793wDUvTYBQ=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789499600; v=1; x=1790104400;
- b=Y+BCn3lL0fq8KlvuQ5f5q500/zONyT678cNRAQZ9/j20QKo2nNhtv7Iijvit/lR+53dF6XMi
- k47fdrvuF2wCR4f32vRwwEe/TSQDOtd+Gob9BtRX9R5Hjkr/sttDQSjKx8H/FeO3pZRCJ4Zrrsm
- 3/T/3JgIsxZkS3nmZu0PmiUA=
+ t=1789499678; v=1; x=1790104478;
+ b=JoM9WhDggoZ5VZ/YPligj39H7nrS42hMTKAu3dKMNJhMBJi8l/GmHM1f+tB/YHYBZaXyXIAR
+ ZfVApS0JAX8FuY/fHAWXNb+IeebZMx2qnSe1YAMbbfHoSOcWOpk7JRQD0MQ0vpJ7INj8VMCUldZ
+ Vt/lvCP/s5w+J5AOwxm5nD3U=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 7210ecafb0eec5e7;
-	Tue, 15 Sep 2026 19:13:20 +0000
-X-Mizu-Trace-ID: 7210ecafb0eec5e7
+Received: by smtp.migadu.com with ESMTPS id b5c3ccab0652c0eb;
+	Tue, 15 Sep 2026 19:14:38 +0000
+X-Mizu-Trace-ID: b5c3ccab0652c0eb
 X-Migadu-Flow: FLOW_OUT
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,8 +37,11 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 15 Sep 2026 19:13:15 +0000
-Message-Id: <DLG4NX9R5VTO.3QXM13LGWVURY@linux.dev>
+Date: Tue, 15 Sep 2026 19:14:37 +0000
+Message-Id: <DLG4OYLUDJ69.23VI84CLNNRRU@linux.dev>
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Detach a trampoline prog
+ while a task sleeps before it
+From: "Florent Revest" <florent.revest@linux.dev>
 To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>, <ast@kernel.org>,
  <daniel@iogearbox.net>, <andrii@kernel.org>
 Cc: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <memxor@gmail.com>,
@@ -51,167 +54,90 @@ Cc: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <memxor@gmail.com>,
  <linux-kernel@vger.kernel.org>, <martin.lau@kernel.org>,
  <eddyz87@gmail.com>, <yonghong.song@linux.dev>, <mason@kernel.org>,
  <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf v2 1/2] bpf: Skip detached progs in trampoline
- images that are still in use
-From: "Florent Revest" <florent.revest@linux.dev>
 X-Mailer: aerc 0.17.0
-References: <20260912095924.866254-2-florent.revest@linux.dev>
- <701db29c4de4f408d9c82041d51586a88ccbd9c19f4dc739253733c4cc5edd7a@mail.kernel.org>
-In-Reply-To: <701db29c4de4f408d9c82041d51586a88ccbd9c19f4dc739253733c4cc5edd7a@mail.kernel.org>
+References: <20260912095924.866254-3-florent.revest@linux.dev>
+ <1846328ba25c25cd5bfe44219f2836f50f90e4c5e243a40042800f67e8d5f372@mail.kernel.org>
+In-Reply-To: <1846328ba25c25cd5bfe44219f2836f50f90e4c5e243a40042800f67e8d5f372@mail.kernel.org>
 
-On Sat Sep 12, 2026 at 11:11 AM UTC,  wrote:
-> > diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.=
-c
-> > index 4da278900938..0e6f1ad36c2d 100644
-> > --- a/arch/loongarch/net/bpf_jit.c
-> > +++ b/arch/loongarch/net/bpf_jit.c
->
-> [ ... ]
->
-> > @@ -2178,7 +2189,7 @@ int arch_bpf_trampoline_size(const struct btf_fun=
-c_model *m, u32 flags,
-> >  {
-> >  	int ret;
-> >  	struct jit_ctx ctx;
-> > -	struct bpf_tramp_image im;
-> > +	struct bpf_tramp_image im =3D {};
-> >
-> >  	ctx.image =3D NULL;
-> >  	ctx.idx =3D 0;
->
-> Does arch_bpf_trampoline_size() need to initialize ctx.ro_image?
-> invoke_bpf_prog() now reads ctx->ro_image unconditionally:
->
-> arch/loongarch/net/bpf_jit.c:invoke_bpf_prog()
->     void *skip =3D ctx->ro_image + ctx->idx;
->
-> but arch_bpf_trampoline_size() only assigns ctx.image and ctx.idx. Before
-> this patch the sizing path read ctx->ro_image only under
-> BPF_TRAMP_F_CALL_ORIG, so fentry-only trampolines never touched it. The
-> result is discarded (bpf_tramp_image_add_skip() returns immediately
-> because im.skips =3D=3D NULL), so there is no functional misbehaviour, bu=
-t it
-> is a read of an uninitialized automatic variable.
->
-> The arm64 side of the same patch already uses a designated initializer:
->
-> arch/arm64/net/bpf_jit_comp.c:arch_bpf_trampoline_size()
->     struct jit_ctx ctx =3D { .image =3D NULL, .idx =3D 0, };
->
-> Making the loongarch declaration 'struct jit_ctx ctx =3D {};' would avoid
-> the issue.
-
-Fair, will address in v3.
-
-> > diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_c=
-omp64.c
-> > index 151031e97a24..21f8ce2ec89a 100644
-> > --- a/arch/riscv/net/bpf_jit_comp64.c
-> > +++ b/arch/riscv/net/bpf_jit_comp64.c
-> > @@ -904,12 +904,18 @@ static void emit_store_stack_imm64(u8 reg, int st=
-ack_off, u64 imm64,
-> >  	emit_sd(RV_REG_FP, stack_off, reg, ctx);
-> >  }
-> >
-> > -static int invoke_bpf_prog(struct bpf_tramp_node *node, int args_off, =
-int retval_off,
-> > -			   int run_ctx_off, bool save_ret, struct rv_jit_context *ctx)
-> > +static int invoke_bpf_prog(struct bpf_tramp_image *im, struct bpf_tram=
-p_node *node,
-> > +			   int args_off, int retval_off, int run_ctx_off, bool save_ret,
-> > +			   struct rv_jit_context *ctx)
-> >  {
-> >  	int ret, branch_off;
-> >  	struct bpf_prog *p =3D node->link->prog;
-> >  	int cookie_off =3D offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
-> > +	void *skip =3D ctx->ro_insns + ctx->ninsns;
+On Sat Sep 12, 2026 at 10:53 AM UTC,  wrote:
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/tramp_prog_detach.c=
+ b/tools/testing/selftests/bpf/prog_tests/tramp_prog_detach.c
+> > new file mode 100644
+> > index 000000000000..9a0e1fc44c74
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/prog_tests/tramp_prog_detach.c
+> > @@ -0,0 +1,191 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +#include <test_progs.h>
+> > +#include <pthread.h>
+> > +#include <poll.h>
+> > +#include <sys/mman.h>
+> > +#include <sys/syscall.h>
+> > +#include <linux/userfaultfd.h>
+> > +#include "tramp_prog_detach.skel.h"
+> > +#include "testing_helpers.h"
 > > +
-> > +	/* 2 nops for auipc+jalr, patched to skip this prog when it is detach=
-ed */
-> > +	emit(rv_nop(), ctx);
-> > +	emit(rv_nop(), ctx);
+> > +/*
+> > + * Detach and free a prog while a task sleeps in the prog that runs be=
+fore it
+> > + * in the same trampoline image, then let that task continue through t=
+he
+> > + * image. It must not call into the freed prog.
+> > + *
+> > + * The task is held in a sleepable fentry prog with userfaultfd, like
+> > + * bpf_mod_race does.
+> > + */
 >
-> This isn't a bug, but should BPF_MAX_TRAMP_LINKS be lowered for riscv64?
+> This isn't a bug, but does "a sleepable fentry prog" still cover both
+> subtests?  serial_test_tramp_prog_detach() runs test_detach(false) and
+> test_detach(true), and the second one holds the task in the prog from
+> SEC("?fexit.s/bpf_fentry_test1").
 >
-> The commit message states "With the extra nops, BPF_MAX_TRAMP_LINKS progs
-> no longer fit in a page on arm64 and loongarch ... so lower the limit
-> there like s390 does." The limits in include/linux/bpf.h were changed:
->
->   arch       added per prog   BPF_MAX_TRAMP_LINKS change
->   arm64      4 bytes            38 -> 37
->   loongarch  20 bytes           38 -> 33
->   powerpc64  4 bytes            38 -> 27
->   s390x      6 bytes            27 (already lowered)
->   riscv64    8 bytes            38 (unchanged)
->   x86_64     5 bytes            38 (unchanged)
->
-> riscv64 gains 8 bytes per prog (two rv_nop()s) but its limit is
-> unchanged. For 38 progs that is 304 extra bytes, which could push
-> trampolines close to the PAGE_SIZE limit over the boundary.
-> bpf_trampoline_update() rejects the update with -E2BIG if size exceeds
-> PAGE_SIZE, so this is a graceful reduction in the maximum attachable
-> progs on riscv64 rather than memory corruption.
+> Would dropping "fentry" here, so it just reads "a sleepable prog", match
+> what the file does now?  The per-subtest comments in
+> serial_test_tramp_prog_detach() already spell out the fentry and fexit
+> cases.
 
-38 progs still fit on riscv64 with the extra nops so that's ok.
+Sure, will say "a sleepable prog" in v3.
 
-> > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> > index 90b70ea0d370..b82d8592319a 100644
-> > --- a/kernel/bpf/trampoline.c
-> > +++ b/kernel/bpf/trampoline.c
+> > +
+> > +static int test_setup_uffd(void *fault_addr)
+> > +{
+> > +	struct uffdio_register uffd_register =3D {};
+> > +	struct uffdio_api uffd_api =3D {};
+> > +	int uffd;
+> > +
+> > +	uffd =3D syscall(__NR_userfaultfd, O_CLOEXEC);
+> > +	if (uffd < 0)
+> > +		return -errno;
+> > +
+> > +	uffd_api.api =3D UFFD_API;
+> > +	uffd_api.features =3D 0;
+> > +	if (ioctl(uffd, UFFDIO_API, &uffd_api)) {
+> > +		close(uffd);
+> > +		return -1;
+> > +	}
+> > +
+> > +	uffd_register.range.start =3D (unsigned long)fault_addr;
+> > +	uffd_register.range.len =3D getpagesize();
+> > +	uffd_register.mode =3D UFFDIO_REGISTER_MODE_MISSING;
+> > +	if (ioctl(uffd, UFFDIO_REGISTER, &uffd_register)) {
+> > +		close(uffd);
+> > +		return -1;
+> > +	}
+> > +	return uffd;
+> > +}
 >
-> [ ... ]
+> This isn't a bug either, but this test_setup_uffd() looks like the
+> same helper that already lives in prog_tests/bpf_mod_race.c: same
+> name, same uffd_register/uffd_api/uffd locals, same UFFDIO_API then
+> UFFDIO_REGISTER order, and the same close()/return -1 handling.  The
+> only difference is that bpf_mod_race.c goes through its local
+> sys_userfaultfd() wrapper instead of calling
+> syscall(__NR_userfaultfd, O_CLOEXEC) directly.
 >
-> > @@ -565,14 +566,21 @@ static void bpf_tramp_image_free(struct bpf_tramp=
-_image *im)
-> >  	arch_free_bpf_trampoline(im->image, im->size);
-> >  	bpf_jit_uncharge_modmem(im->size);
-> >  	percpu_ref_exit(&im->pcref);
-> > +	kfree(im->skips);
-> >  	kfree_rcu(im, rcu);
-> >  }
-> >
-> >  static void __bpf_tramp_image_put_deferred(struct work_struct *work)
-> >  {
-> > +	struct bpf_trampoline *tr;
-> >  	struct bpf_tramp_image *im;
-> >
-> >  	im =3D container_of(work, struct bpf_tramp_image, work);
-> > +	tr =3D im->tr;
-> > +	trampoline_lock(tr);
-> > +	list_del(&im->list);
-> > +	trampoline_unlock(tr);
-> > +	bpf_trampoline_put(tr);
-> >  	bpf_tramp_image_free(im);
-> >  }
->
-> [ ... ]
->
-> This isn't a bug, but the comment at the call site of
-> __bpf_tramp_image_put_deferred() appears stale. bpf_trampoline_update()
-> now does:
->
-> kernel/bpf/trampoline.c:bpf_trampoline_update()
->     /* track the image until it is freed, for bpf_trampoline_skip_prog() =
-*/
->     refcount_inc(&tr->refcnt);
->     im->tr =3D tr;
->     list_add(&im->list, &tr->images);
->
-> so every live bpf_tramp_image holds a reference on the trampoline and
-> tr->refcnt cannot reach 0 while any image is alive. The comment in
-> bpf_trampoline_put() says:
->
-> kernel/bpf/trampoline.c:bpf_trampoline_put()
->     /* This code will be executed even when the last bpf_tramp_image
->      * is alive. All progs are detached from the trampoline and the
->      * trampoline image is patched with jmp into epilogue to skip
->      * fexit progs. The fentry-only trampoline will be freed via
->      * multiple rcu callbacks.
->      */
->     hlist_del(&tr->hlist_key);
->
-> but the guarded block is now reached only after the last image has been
-> unlinked, typically from __bpf_tramp_image_put_deferred() rather than
-> from the detach syscall.
+> There is no shared userfaultfd helper in testing_helpers.h today, so
+> the two copies would have to be kept in sync by hand.  Would it be
+> worth moving it into testing_helpers.c so both tests share one copy?
 
-Ok, will update in v3 if we keep the list.
+Sure why not, I'll try that in v3.
