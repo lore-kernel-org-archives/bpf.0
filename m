@@ -1,167 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D6D35A93C;
-	Tue, 15 Sep 2026 14:07:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6DF3360ECE
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 14:10:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789481230; cv=none; b=IwsS1mCHPS86dbrhX2VSSORXUfVQrJfpSvWT+5lsuSY9xwdy5vAcN1TL69fr1ydJpQe8a/70AMKWcd1a1508QhXiWaDQyQUpsbmV+40VMMxlxkWDt87mKHEnx1MxwZ6ky/bsM/tM7xDHaWbJNzehePZ4OYNUBv0kfQeqUXs6T/o=
+	t=1789481411; cv=none; b=Eu8RB+l9OgEWgrbrseZ/rcb3iuH1BXp4w4GYQezLeHW49WfZ471qsC5P/h4fBVSf/r90d+kPGfKgnJmq30nkm3kkjwQDh65T+22dOLBM8pSSv3lBM0mdyXndQSiPBTtfcfZZdFpJlIX6KLZMf2gD8F5sEYHoiIokVSExB7AjX+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789481230; c=relaxed/simple;
-	bh=I40wY3GFOz1DkySg9G045B+2Ds/eVZ5D5aNVa2uapnM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ThQidw8+RIkDq8/B5XHRgM9d0v+zu8gKSUmu12VGO0VOz5AcCggVELRS3Yj9ldkY/EiFzHtI0mRoWbMsGhB5FGeJtJ5HcUwf+/6/UYwgMzooP6XotS8CjMh0FgnqKoKR/A0wMYw3hTKguFGC6946VkFpCOOqoFu80kFY6VJom8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFbPpyUd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789481411; c=relaxed/simple;
+	bh=SrVuWB/vTq6USm3SpsJiG4BlNQtr4nXLavPzcP4AFWE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VbD28UjQet2RSLVcK1Zuf9634fW29MP0jTZat2bm5Vacb3C3aBNO/WWMmnN/PfQWHotr4F5vnlrgzwzUmv5m+clJfOwpq2UwnlNjQIWI+p39TLVSF81Qg1fnQKxeUT9W9DFwJl8JermPszMClcYVxUdP+mWUpnWUuDiDMTuk6Vs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sf6nmejN; arc=none smtp.client-ip=74.125.225.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFbPpyUd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A57941F000FF;
-	Tue, 15 Sep 2026 14:07:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789481229;
-	bh=kUIpQJBe/rvVMC0HTZygXoU+NTwMte1oixn3by3XUZU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=lFbPpyUdcQhmGTF0C6P0i5iY5PeU+ELUljyxDW14y0XQGql121J6r4k9Y5Jd20elU
-	 J1Eg7aUyMKeh/m1Qw0V1OFLmDmiOWTJBP954cVF7bYZzrRaROf9TaY+wfwOS6fLMjt
-	 o+VzobJfm4TYmQpOQuilz5SzjwpAnqtESvpBgAoLalDPjDAIKw5eFf9wGN+nymkRPw
-	 PfylP/pga28zsFOdyjUeqz05ErMc6DGRST1cmM7D6YQzq0Li9ZqxsgtrpgMN9UhOPw
-	 fX77MqAcagyGwmh+f8lTGJd6UU/7TczJtQ8sz1RDBBYyrHGtINZLMsXuKyCCVGmTgC
-	 ygNUh/fw1rKzg==
-Date: Tue, 15 Sep 2026 16:07:04 +0200
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: markdamirkan@gmail.com
-Cc: Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] HID: bpf: reject oversized device events before copying
-Message-ID: <aqlGkhF3ntBnhEM5@beelink>
-References: <20260913-b4-send-hid-bpf-event-bounds-v1-1-614fb56a0635@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sf6nmejN"
+Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-48436370540so1466485f8f.0
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 07:10:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789481407; x=1790086207; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=PJnfE+yL0Tf1XdYmanO5Q7oYxmb2mZsAYt1Cj4w2NQ0=;
+        b=Sf6nmejN1WE60KM66LPUlUsN/3C4kiTs4lwXRyWuTdeSf0WxxFfO0Qsq5+QgmThxXn
+         fjllZpIFTtiu9jjLKDV+yF6X/3CYrWOYdhGv3cElLCSVfNoT1WFp2XdVkoiCWF3+ZyRu
+         JWrSM0JblQsgMpNfIpa4P5hnltk8J/1if/7ooW/WJ7Adv5FbZweSk4lZImEqqSGNuRln
+         /P1PkZhqNpQn90uzhoPkQU9piY3UhW4dto69a18nOXSFelDI8urKgKArbjovtMrs+VvW
+         eMTMPxr0iqINZ06FBlVQcYoap2pvNeq8RSEMWTteN6ZohbbOfdZYLQkXfGg5+lRFmMz9
+         5ugQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789481407; x=1790086207;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=PJnfE+yL0Tf1XdYmanO5Q7oYxmb2mZsAYt1Cj4w2NQ0=;
+        b=e3xkbQzXnOA0VDZ9SLL3DWEFQ4SZXiuVVOAzj3Ro4GfEpRi0VVvkClhKweYPf+YHlg
+         U6ISotXjMIIDn0Y1xf/sfshpXtek67ngX4R68Q3Grgi0nN4z+A4yjByKkmjTgE6/uhq9
+         AtlMIrFC28GYkgacQVhk2MDRPwx6J27hG7knO1y2/6nEA//Pq415aht9oy0GnOE9Ffpx
+         QUH613Tx8zl+ECEKRALEG/ukxoenFf2uqiMirSWbycuWqzAEzmWC9BvD4fIHwP84j9mG
+         8tZkCGpN6EISwrj1QkngWDCXLboVIFFdsnQDchikIz0Y6sq/Mz+EDnmZz5t2bbeLU46e
+         H/jA==
+X-Gm-Message-State: AFuF++mA1UXmnPYRFmZCKJoEChdIyWcyYFxl3M6unL+H49PbhP8ULbn8
+	ENqeH1j8BxICtaMZ4rcFXpYlfwBvFMgy2TdulUXq3ryR6SRzmjQZBWUWEHvvxzUxmS4=
+X-Gm-Gg: AYBFou0vU97LcLSeQCKP+9rZ5eQm3tOVFK49d7vyCVTjYX6B/G3hExWzT4tqnsZcQ69
+	Ns/J4ntMAGh9X9rYNw/gVX+G8DGPCq9Td8JmNAJvioe2CK4sgAU7Gb7BYA07LKrgJvvETmFGH6g
+	eRYNEIxu0AUPo3pf4vwmeXmhu2YneYCuXUVGEzHH5R3B9a3oOJ5jWui0/TVeSyxjTTbb/N6pHRg
+	mgriDR8p6daJQQfyNi8L5jK4tF9OTDpeTqwPUEMtvJQZJ0sYYbyiB8YbemhADf6meeYjLg+APmK
+	GVRFfbPUXppHP++59XeMbVruETVdQ1gtct5resO+pZJ3sWb4vG+MgZbvjP8IgmHfimzqMVTtB8q
+	IiPHwnLru92Z3ViQWOO8vqb643YhsrSEGt10rvghvkrUl+vmTgzg63gewEC+aWM2Qjc5FbwVuXR
+	MMQkfNCkxhYGDVF4JTFlXaTsLCOj/NSSttow6vL8vvz9H/MG7f9yiTSYNrAYPzmakBZ0+mSQvSL
+	KrgThBcUNqpz5wxd/x1ibUx8pTFd2tcc7+rJmhIPtT8Nt296mD+JCv8DyUZLjvxLebF1e+jyx4B
+	pTy4TyHVXa1tV8t7PmccxqcH9QupV4HVgfmv1mPv5v/Ly02s
+X-Received: by 2002:a05:6000:46d0:b0:485:8c16:5ef3 with SMTP id ffacd0b85a97d-4870a9fd073mr786596f8f.45.1789481406221;
+        Tue, 15 Sep 2026 07:10:06 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4870b3de950sm281483f8f.1.2026.09.15.07.10.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2026 07:10:05 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Tejun Heo <tj@kernel.org>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v1 0/3] Fix generic __uninit kfunc output buffers
+Date: Tue, 15 Sep 2026 16:10:00 +0200
+Message-ID: <20260915141004.1196460-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260913-b4-send-hid-bpf-event-bounds-v1-1-614fb56a0635@gmail.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1285; i=memxor@gmail.com; h=from:subject; bh=SrVuWB/vTq6USm3SpsJiG4BlNQtr4nXLavPzcP4AFWE=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtlYOcZ02uBqbs235PS5HrYfTLXvtfR8smZv3Pntn3N2 BIb/Wx6RykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACbS6cvI8GVVXen9Wstao4dz xR5zFost4NscLa28pOuR3BPOpewbTjL8FX/1T7ZxQ/mRmRc27OPh1RUJrdwUceZUs/CExp0LLbk SuQA=
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
 
-Hi Mark,
+Generic __uninit kfunc arguments are output buffers. Their stack
+liveness already treats them as writes, but argument checking still
+requires readable contents and does not record definite initialization
+after the call.  Check these arguments as write-only and reuse helper
+output-buffer tracking, with one entry per argument slot.
 
-Couple of comments:
+Kumar Kartikeya Dwivedi (3):
+  bpf: Fix generic __uninit kfunc output buffers
+  selftests/bpf: Allow privileged preparation for capability tests
+  selftests/bpf: Cover generic __uninit kfunc output buffers
 
-On Sep 13 2026, Mark Amirkan via B4 Relay wrote:
-> From: Mark Amirkan <markdamirkan@gmail.com>
-> 
-> HID-BPF allocates its device-event buffer from the largest report in the
-> device's parsed report descriptor.  dispatch_hid_bpf_device_event() then
-> copies the transport-provided report into that buffer before checking its
-> size.
-> 
-> An input report larger than the allocated event buffer therefore causes
-> a heap out-of-bounds write when a device-event program is attached.  The
-> later check of the BPF program's return value cannot prevent the initial
-> copy.
-> 
-> Reject reports that exceed either the transport buffer or the persistent
-> HID-BPF event buffer before clearing or copying the data.
-> 
-> With a 64-byte event allocation, a same-file KUnit test produced a
-> one-byte KASAN out-of-bounds write for a 65-byte report in three runs.
-> The 64-byte boundary remained clean.  After this change, both cases were
-> clean in three runs and the oversized report returned -EINVAL.  The test
-> exercised the production dispatch function but not the complete UHID and
-> BPF attachment path.
-
-As mentioned by the bpf bot: if you already have tests, why not upstream
-them? And even better: there are already selftests at
-tools/testing/selftests/hid/hid_bpf.c -> why not add some more here as
-well?
-
-> 
-> Fixes: 658ee5a64fcf ("HID: bpf: allocate data memory for device_event BPF programs")
-> Cc: stable@vger.kernel.org
-> Assisted-by: LLM Symbolic
-> Signed-off-by: Mark Amirkan <markdamirkan@gmail.com>
-> ---
->  drivers/hid/bpf/hid_bpf_dispatch.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-> index 536f6d01fd..06ba833eb9 100644
-> --- a/drivers/hid/bpf/hid_bpf_dispatch.c
-> +++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-> @@ -50,6 +50,9 @@ dispatch_hid_bpf_device_event(struct hid_device *hdev, enum hid_report_type type
->  	if (!hdev->bpf.device_data)
->  		return data;
->  
-> +	if (*size > *buf_size || *size > ctx_kern.ctx.allocated_size)
-
-I had a hard time figuring out why `*size > *buf_size` wasn't there in
-the first place. You can call it overlooked, but:
-- when the call chain of dispatch_hid_bpf_device_event() contains
-	hid_input_report() -> *size == *buf_size
-- when the call chain contains hid_safe_input_report(), the bufsize and
-	size are forwarded from the lower transport drivers.
-
-We only have 3 callers of hid_safe_input_report():
-- uhid.c -> min_t(size_t, ev->u.input.size, UHID_DATA_MAX) is present
-- i2c-hid-core.c -> size can'be greater than bufsize because it either
-	truncate the input report when I2C_HID_QUIRK_BAD_INPUT_SIZE is set or
-	plainly reject too long size
-- usbhid/hid-core.c -> we rely on usb to set the size and the transfer
-	buffer, so it should be OK
-
-Regarding `*size > ctx_kern.ctx.allocated_size`:
-- usbhid/i2c-hid: both are allocating their transfert buffer through the
-	exact same call to hid_report_len() and finding the biggest of all reports
-	-> so they are not affected
-- uhid: here we don't control really what's going on, because size is a
-	user provided parameter.
-
-All in all: the first test is IMO probably redundant. Maybe we can just
-add a comment in hid_safe_input_report() that the caller must ensure
-`size <= bufsize`.
-
-The second one matters only for the uhid case, so technically yes, we
-can demonstrate a malicious OOB with uhid (but you should already be
-root to create/controll a uhid device).
-
-> +		return ERR_PTR(-EINVAL);
-
-The whole point of hid-bpf is to fix bogus devices. So plainly returning
--EINVAL means we don't even let the user the chance to fix the device.
-
-Later, hid_report_raw_event() has a similar check and when size is too
-big, it would also break the processing but at least give a warning in
-the dmesg.
-
-So, how about we conditionally memcpy the size to min(*size,
-allocated_size), and let the bpf change the size later on by itself ?
-This should allow a HID-BPF program to amend the provided size on a
-given device. This works because hid_bpf_get_data() doesn't know about
-.size, but only .allocated_size, so the kernel will prevent a BPF to
-access beyond the allocated_size.
+ Documentation/bpf/kfuncs.rst                  |  27 +-
+ include/linux/bpf_verifier.h                  |  11 +-
+ kernel/bpf/verifier.c                         |  70 ++-
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   9 +-
+ .../bpf/progs/verifier_kfunc_uninit.c         | 399 ++++++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  56 +++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |   9 +
+ tools/testing/selftests/bpf/test_loader.c     |  41 +-
+ 9 files changed, 577 insertions(+), 47 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_kfunc_uninit.c
 
 
-TL;DR: please,
-- make a decision regarding "*size > *buf_size"
-- change memcpy(size) into memcpy(min(size, allocated_size))
-- add tests in selftests
+base-commit: 5ef40d69b38a93bc9951dadb1a15c85c597e1a40
+-- 
+2.53.0
 
-Cheers,
-Benjamin
-
-> +
->  	memset(ctx_kern.data, 0, hdev->bpf.allocated_data);
->  	memcpy(ctx_kern.data, data, *size);
->  
-> 
-> ---
-> base-commit: 9cdc7e6dc7a99ad7311ad5e7c145f2b9ce4e24b0
-> change-id: 20260913-b4-send-hid-bpf-event-bounds-4d0e8170ceb4
-> 
-> Best regards,
-> --  
-> Mark Amirkan <markdamirkan@gmail.com>
-> 
-> 
-> 
