@@ -1,65 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3A403C65FD;
-	Tue, 15 Sep 2026 12:13:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DABC53C10B2;
+	Tue, 15 Sep 2026 12:13:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789474393; cv=none; b=MFPaSUaOUstIdoqpLMOASRd1f4gA7e60mUZ+iJIShvLyeVWiTCs2F5SUEgclmbxjyegBqZGSv2+9emGD4SD7OAurqh23LR/W82jzYPve3t7YN4XwQtyYzyqI2OnmHFXixfTd/S27fSPrVpLln/6Xc8X1+YrTU7BuCT8pmGCVoGM=
+	t=1789474428; cv=none; b=ptCvdF1iQ1TQZS+aroqqquImwErlXeyIV5hRj5xLetBEhsc/dLFf99gDgwWDwgYK7p2Jg0AUNXtSyO9n8Z9Nxucien8gUIAWMFxjR2VbBMKH3zV6xL1JWfnWh2o7I18MHZzM6Xd0VAL61Zy+dm4BZOIqEBleo0x7+sdzbg8dE5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789474393; c=relaxed/simple;
-	bh=rcP1Zt+r+c8i7P9HMLnfG+KSwnTlxlPDfufoMKFt0yM=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=QvUZtmumZ+YiDJScMHMKPG291kcRlEOLAvX3IDyooh1JgopIEicom+ip84wwgd9lY08NQdO4iTQOQMxq8a/VieVrg7/kh4v3PkdMCs56qt19zMOkyY76GB31YwEp8+p/P8E4KDrM/+xQcUluc3K0cgz2n2NUjaNge3+pYNZun5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mxoLtCbZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789474428; c=relaxed/simple;
+	bh=JcKoswAOhyuMNjq+mGSOFMd2o3VTqmC8wPMTfTEo83M=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=sAZ2UnrUyFEx6v0FeIukTfcBjlF//bE2R8MdRXlM8084wrJztT4B/od/hFFenmv+sOa2YSHHnQsQt2Xy71JoGSOpxRPWw71Ys26UGgCXFs8zUo4sFG87E4TTJuRn7UdMWcpRs5WbjzaN4gEbq1cAULN/Mwj97a5INVhI5Iz+9q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cpyHmG7U; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mxoLtCbZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CCF61F000FF;
-	Tue, 15 Sep 2026 12:13:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cpyHmG7U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3A161F000FF;
+	Tue, 15 Sep 2026 12:13:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789474391;
-	bh=rcP1Zt+r+c8i7P9HMLnfG+KSwnTlxlPDfufoMKFt0yM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mxoLtCbZ5g8NJT38V2nXx3kQMXq8zz7wa261boot03y/1mmOb8uEpnb4HgvVzXqbE
-	 Lc+BLr2MEwB+7zjlCcD9Q9qeYqKVACCOsKFW9yMVpHmTXMqtHVkiNOOQlElz6DH2cL
-	 qfBphOZ3delbUDrFqm1dV52+sHB7JppWyVGvQVAhcP+Vcr7mTyrRaVGoKVuRlWxgrA
-	 a0ZQjTcB9Fxaqpd6c2a/Z1vb/mAmnfz0/bCd8zDO3h3sznLEIo6QHFgrENGMHDk9qf
-	 flDXJ4YX6mmlM4kAG/dg8PRmGwgcbH40eS5i4n9wiRd9k9l8mEd5AlXPVBescbcVDo
-	 rqQ5leD9k9+dQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC POC 36/50] nitro_enclaves: install the enclave
- descriptor when the ioctl returns
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Christian Brauner" <brauner@kernel.org>, "Linus Torvalds" <torvalds@linux-foundation.org>
-Cc: linux-hexagon@vger.kernel.org, io-uring@vger.kernel.org, linux-hyperv@vger.kernel.org, dri-devel@lists.freedesktop.org,
- =?utf-8?b?Q2hyaXN0aWFuIEJyYXVuZXIgKEFtdXRhYmxlKQ==?= <brauner@kernel.org>, "Oleg
- Nesterov" <oleg@redhat.com>, linux-fsdevel@vger.kernel.org, linux-openrisc@vger.kernel.org, "Jens
- Axboe" <axboe@kernel.dk>, linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, "David
- Airlie" <airlied@redhat.com>, "Jann Horn" <jannh@google.com>, linux-gpio@vger.kernel.org, sparclinux@vger.kernel.org, "Jan
- Kara" <jack@suse.cz>, "Eugenio Perez" <eperezma@redhat.com>, linux-alpha@vger.kernel.org, "Peter
- Zijlstra" <peterz@infradead.org>, linux-sh@vger.kernel.org, linux-parisc@vger.kernel.org, kexec@lists.infradead.org, linux-mm@kvack.org, "Ingo
- Molnar" <mingo@redhat.com>, linux-um@lists.infradead.org, "Michael S.
- Tsirkin" <mst@redhat.com>, "Alexander Viro" <viro@zeniv.linux.org.uk>, linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, bpf@vger.kernel.org, linux-arm-msm@vger.kernel.org, virtualization@lists.linux.dev, linux-m68k@lists.linux-m68k.org, linux-snps-arc@lists.infradead.org
-In-Reply-To: <20260915-work-fd-reserve-unify-folded-v1-36-4d5217d6b246@kernel.org>
-References: <20260915-work-fd-reserve-unify-folded-v1-0-4d5217d6b246@kernel.org>
- <20260915-work-fd-reserve-unify-folded-v1-36-4d5217d6b246@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 15 Sep 2026 12:13:09 +0000
-Message-Id: <20260915121309.7CCF61F000FF@smtp.kernel.org>
+	s=k20260515; t=1789474426;
+	bh=YzkYuMVzkpLRGXY8MKPQ97VDe6r+TzShk9f5fTc3tIE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=cpyHmG7Uek337dIERN+s/TgP/ItZjRRX27WIafN+eVogPnvDaZ2levjx0+Ekstf9O
+	 aKmmkikGqOS29yGlLv/jMPbQnWSovGv+5ZqP5ITCqBH7IkXD/jYKFw6CJ6+/9okD6W
+	 zOeRvktNMCg4q+b+7YwOHfOExvHI2K82zpul6Qo5wdcpyQN85mi01riFEF0vrY1kVt
+	 YkbBqGJMtRUWN/PD8o3h0zNBi0G+pOIfHJYYTHwLW50aAcUGnyQ4XZSTWr9Wk750D5
+	 wMDD5wcPOzr5n8JPfqGEAX+cQy1x7ok55AUGkaWrL3AXiqXu1BjLYLyD+/jdF7Wtr3
+	 5dih0xkSdft/w==
+Content-Type: multipart/mixed; boundary="===============4719459423094257229=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <650558176bb55367e1b7c7cee7a4a5285aaa6adbadeaf3935337903efd2c6778@mail.kernel.org>
+In-Reply-To: <87e00ef420af81974b590f9057cc08234324d45d.1789469930.git.tanggeliang@kylinos.cn>
+References: <87e00ef420af81974b590f9057cc08234324d45d.1789469930.git.tanggeliang@kylinos.cn>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: drop duplicate check_app_limited in tcp_bpf_push
+From: bot+bpf-ci@kernel.org
+To: geliang@kernel.org,john.fastabend@gmail.com,jakub@cloudflare.com,jiayuan.chen@linux.dev,edumazet@google.com,ncardwell@google.com,kuniyu@google.com,davem@davemloft.net,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,sd@queasysnail.net,dhowells@redhat.com,matttbe@kernel.org,martineau@kernel.org
+Cc: tanggeliang@kylinos.cn,netdev@vger.kernel.org,bpf@vger.kernel.org,mptcp@lists.linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 15 Sep 2026 12:13:45 +0000 (UTC)
 
-> Rely on the fd exit path machinery.
->=20
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+--===============4719459423094257229==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Sashiko has reviewed this patch and found no issues. It looks great!
+> Before commit c5c37af6ecad9 ("tcp: Convert do_tcp_sendpages() to use
+> MSG_SPLICE_PAGES"), do_tcp_sendpages() did not call
+> tcp_rate_check_app_limited() internally, so callers needed an explicit
+> tcp_rate_check_app_limited() to cover it. That commit replaced
+> do_tcp_sendpages() with direct tcp_sendmsg_locked() calls, which always
+> provide the check internally. The outer call became redundant but was
+> left in place.
+>
+> The site changed here, tcp_bpf_push(), is a MSG_SPLICE_PAGES loop that
+> holds the socket lock and only iterates when size > 0; tcp_sendmsg_locked()
+> is invoked on every iteration with state identical to what the outer call
+> sees, so dropping the outer call is safe and behavior-preserving.
+>
+> A potential benefit of this change is that it facilitates future reuse of
+> tcp_bpf_push() for sockmap support in protocols beyond TCP, such as MPTCP.
+> Since tcp_rate_check_app_limited() is TCP-specific while sendmsg_locked()
+> is a generic interface in struct proto_ops, this change allows us to switch
+> to different protocols via sk->sk_socket->ops->sendmsg_locked() without
+> carrying protocol-specific assumptions.
+>
+> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260915-work-fd-re=
-serve-unify-folded-v1-0-4d5217d6b246@kernel.org?part=3D36
+This isn't a bug, but the state-equivalence argument here looks right.
+Would it be worth tightening "which always provide the check internally"
+to something like "which performs the check on every path that queues
+data"?
 
+Looking at tcp_sendmsg_locked(), it reaches tcp_rate_check_app_limited()
+only after the MSG_ZEROCOPY and MSG_FASTOPEN early returns:
+
+net/ipv4/tcp.c:tcp_sendmsg_locked() {
+    ...
+		uarg = msg_zerocopy_realloc(...);
+		if (!uarg) {
+			err = -ENOBUFS;
+			goto out_err;
+		}
+    ...
+	err = tcp_sendmsg_fastopen(sk, msg, &copied_syn, size, uarg);
+	if (err == -EINPROGRESS && copied_syn > 0)
+		goto out;
+	else if (err)
+		goto out_err;
+	}
+
+	timeo = sock_sndtimeo(sk, flags & MSG_DONTWAIT);
+
+	tcp_rate_check_app_limited(sk);  /* is sending application-limited? */
+    ...
+}
+
+Those branches are reachable from tcp_bpf_push(), since tcp_bpf_sendmsg()
+forwards the user's flags almost verbatim and tcp_bpf_push() passes them
+on as `msghdr.msg_flags = flags | MSG_SPLICE_PAGES`, so MSG_ZEROCOPY and
+MSG_FASTOPEN both reach tcp_sendmsg_locked(). On those paths the old code
+updated tp->app_limited and the new code does not. Every one of them
+returns without queueing SPLICE_PAGES data, so there is no functional
+consequence -- but "always" is doing load-bearing work in the
+justification, and a narrower phrasing would match the code.
+
+Also, is the "only iterates when size > 0" clause needed? The internal
+check at net/ipv4/tcp.c:1190 is called unconditionally regardless of
+size, so the size > 0 property is not what makes the removal safe.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34964239423
+--===============4719459423094257229==--
