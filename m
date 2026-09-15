@@ -1,190 +1,167 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ACFF2EC0A4
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 13:49:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.140
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789480154; cv=pass; b=b2/TXDBFGXORvREFZ28ajeCu0whQchs0PAvYPy+hd9aaTVxzKgvLObaOM2YlMciK92UT41jd5cvtu4NJQeiMVy8t5WwL1S8NTneLbkc+RpTQEi6LZ2kfW979Abz6WjUBHeFFroy2DV3i7W8SXfYKGeRMlZdsvVhCP/v/DaDRRuk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789480154; c=relaxed/simple;
-	bh=p/bm6QL+GjFW9OLC8hTQZX5y3ubnpWDY/+48cQOWXNY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WxKmcou3u6LrAbIwSljsljKj847MkVU6m/DEuUSa/iWhB1BBRYlZ6EYvTYsRbSa0rwdJ5VLora5ijBB8ox5u2rCMMtcLKyVZ3CIhtFQLyXmLDHvgth+Su4x0FeYxAMQbmVX2yyWEWC6uqfjJtEXBQupr7RP/vUfQDkbQpzr4hK4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=SQQctn5L; arc=pass smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D6D35A93C;
+	Tue, 15 Sep 2026 14:07:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789481230; cv=none; b=IwsS1mCHPS86dbrhX2VSSORXUfVQrJfpSvWT+5lsuSY9xwdy5vAcN1TL69fr1ydJpQe8a/70AMKWcd1a1508QhXiWaDQyQUpsbmV+40VMMxlxkWDt87mKHEnx1MxwZ6ky/bsM/tM7xDHaWbJNzehePZ4OYNUBv0kfQeqUXs6T/o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789481230; c=relaxed/simple;
+	bh=I40wY3GFOz1DkySg9G045B+2Ds/eVZ5D5aNVa2uapnM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ThQidw8+RIkDq8/B5XHRgM9d0v+zu8gKSUmu12VGO0VOz5AcCggVELRS3Yj9ldkY/EiFzHtI0mRoWbMsGhB5FGeJtJ5HcUwf+/6/UYwgMzooP6XotS8CjMh0FgnqKoKR/A0wMYw3hTKguFGC6946VkFpCOOqoFu80kFY6VJom8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFbPpyUd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="SQQctn5L"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747ed6d6eso25032635ad.2
-        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 06:49:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789480153; cv=none;
-        d=google.com; s=arc-20260327;
-        b=mDb8RTdokWuq2boxlRtFivU7DGuyHL/72VSV8/TvTTnuXwqPzqNTvI0Jmu3Dr91S2J
-         8MbF3gqG3OYVYBPOKyel3Jj/WKxfJ2tUQFZw7oUn48nfkO/UXYPvjFCYuhedOy4PpT75
-         AvEI9apkVmnV8WxT3rbHYVZdmzJFtCz7gOE4nWHLs/IFbE4FYpimx9ntObFWnOSRu7qp
-         kGu0UJ1iBK+9l0JNcpjNNfrR5bh7x5d4mTbzk9YtUOBp98qyy5cDe2COOLKEvIKeKZQD
-         lGTF6n3TgKJAvSqR0fVZj6hfkz0HafPjUmZj4rXFXn4lTwKfxqF9chZ2HZxVqntm+Ruc
-         6muQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=hfjv+aIw8i3wro2/p0OoyFtuhvMOB8Aw+vPjdiNRKoA=;
-        fh=8yA1w9ePkcGv5zufe0913udmArROAx83BwLwG7vkP8A=;
-        b=RexXY6Rr+SLY3GnYykk7RCREzv3go6jFOdvmOFmX7DAcDUv92jWdPAOnD4BvnW71ky
-         caMOQ8WpgBw7yEvMUQ9Tiz2NCeaUNDDHJ2GpMXaP9y4tNUXVAa9Dl7TlWAT+L7DcMGh7
-         2xnU3Ir5wTHJgaC8vGOqVUl/qrOd3zetfK8HbJxwqzm/g5MMTwktMjKHkYo1IaF/oabH
-         Y/Q5GLt6Ol0006Vhk51TI4dMZnuQGld9YITEUDP2ONy7peSX6JhM48SMwuM7u2FjpjxJ
-         VPvGLbQ+tGzKhplozmDnddWtj76Cb8Aliv7nkl2wUHBCLR78APvUouddUX0rWeVrJ6DG
-         IjhA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1789480153; x=1790084953; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=hfjv+aIw8i3wro2/p0OoyFtuhvMOB8Aw+vPjdiNRKoA=;
-        b=SQQctn5L6A1olhxSub+cxIKavtukgkv4AY12XKsknkAkyvYIDtzwhyDrdZEgngfVhv
-         yik3uXCE0roCyH0Apn1fIzgehh5aRTuL4S6MpwmF7z4yZ81klRbUcEYY14dvm9sZCROk
-         p07UV2Cuyp8Fm/E8yHmOFVl2NNfEdLskWCr/q0RdHg7LWfmIrDxRYsPA7L8tIs6oRLpR
-         FUCJ/rowCH6I5IMh3euuLPxOTICihRuW7WvXtc5r/r7Fj3e1chnWM5DyWKT63Y4TRxMs
-         Rhqnmso9F81H2DNZdjB1XT/4m4M5bPRqji/oAKWKp1F4eXxeF8kykhq5qI490et5LrrJ
-         jlVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789480153; x=1790084953;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=hfjv+aIw8i3wro2/p0OoyFtuhvMOB8Aw+vPjdiNRKoA=;
-        b=XJ2yil/oHCUN+7WMMRAi+aOFKi4GL/lpCGqxUKYJsx4p/emm8/6oEtrEpE2jbrFC/c
-         4rIV+9prqtz1mCaLAT77KbcmMoU+iEww1DrRmJ3qeOXKSQA/p3TB0oKMAa6zLInPag0F
-         VvPlsY9uKE+mDJ2x/EQ3Bj/B/tnanFD62FHPSYcN6irsuSsL1p3wVJyoX86tM/Cauz3L
-         QzQqV9zWHa5NZrOF0SL6MPSRO+AnJnJCeRxb8aOenIUu9LZm2GOwPSGVGCRGRYDlwIy+
-         +8EGVJHoDa1w+eW9TLZ7vLvKiVflWu1JYalzVEoy7o6jk3BAAtDBKrs4iX+VNRc2wiOT
-         fgTQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwbseKf6z1N1YPsM6zUuG4aR4M+dXoLQCphiToIJWjkP+EFmNx+TRiHjrGOohu1a8Wit44=@vger.kernel.org
-X-Gm-Message-State: AFuF++nRq0RqY3NP6Rcq7wOzxsiK6FCTx/KDlfHX/CWHY/5iU3uYGLmr
-	fXF7LhKVm1YQZnkWFgAefKhjVoFFKiSQn2aPHM6Mz5kJ9pw9ajPDOkbWrlV/041ghtjMEXHdfr/
-	ihqD7sm7rLqlS4K/9h1Cg/Lt+52KB2RAWt2bygRjF
-X-Gm-Gg: AYBFou1wMiNre2WGHiyQrVszdS0UhXEm8kPDd0WoQRrcfuNQ/8OvP5ShuMtMbSngsNv
-	NIYQEMZk8o1usjrzmYzKuIu0w5iOmdT8VW+o5yTNXV0N0NZIFM0Qmud9GhPlCexKU34xwcIJI4C
-	bEvHci92bvIiopMqSTVfzdalop+t028gyC0eoIytteXNV84sTtYXaRIaW6zvOTMdnBQ3J9LLzGz
-	Wi0Zs0Zb6aQXbD5rQM393YmdOdgXapGMwOniT1Bxtt306Lw4QWneTvW2qRnl37JHKMupbtqyH+U
-	iwtgE1f6/MTlJQoQVN90E0sZQVGSCu0gKHy9mms/ParL1StIbzwo215TzPpoRT29ymTQzUVDti5
-	qRDfsEb+b8gY=
-X-Received: by 2002:a17:902:e544:b0:2db:63cb:1b17 with SMTP id
- d9443c01a7336-2dd6c7a7986mr146446375ad.18.1789480151741; Tue, 15 Sep 2026
- 06:49:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFbPpyUd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A57941F000FF;
+	Tue, 15 Sep 2026 14:07:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789481229;
+	bh=kUIpQJBe/rvVMC0HTZygXoU+NTwMte1oixn3by3XUZU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=lFbPpyUdcQhmGTF0C6P0i5iY5PeU+ELUljyxDW14y0XQGql121J6r4k9Y5Jd20elU
+	 J1Eg7aUyMKeh/m1Qw0V1OFLmDmiOWTJBP954cVF7bYZzrRaROf9TaY+wfwOS6fLMjt
+	 o+VzobJfm4TYmQpOQuilz5SzjwpAnqtESvpBgAoLalDPjDAIKw5eFf9wGN+nymkRPw
+	 PfylP/pga28zsFOdyjUeqz05ErMc6DGRST1cmM7D6YQzq0Li9ZqxsgtrpgMN9UhOPw
+	 fX77MqAcagyGwmh+f8lTGJd6UU/7TczJtQ8sz1RDBBYyrHGtINZLMsXuKyCCVGmTgC
+	 ygNUh/fw1rKzg==
+Date: Tue, 15 Sep 2026 16:07:04 +0200
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: markdamirkan@gmail.com
+Cc: Jiri Kosina <jikos@kernel.org>, linux-input@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] HID: bpf: reject oversized device events before copying
+Message-ID: <aqlGkhF3ntBnhEM5@beelink>
+References: <20260913-b4-send-hid-bpf-event-bounds-v1-1-614fb56a0635@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAHC9VhQHZ+ngFdzKqmnzBh341CGEg-jexu+QYU8=1qXK=u-x-Q@mail.gmail.com>
- <aqHUw6k0Mf83CGFT@zenbox> <CAHC9VhTM7emi9vxs+5Za8Hrc_e9dg7fZx+Z6BGUc4VQ1qhEAUA@mail.gmail.com>
- <DLD0VQ3D8CYC.3V5ZT8HDMY4IH@gmail.com> <aqTZdCz6JaoK16Fp@zenbox>
- <DLDL7KK3FZKU.17ADLLWJVXB5F@gmail.com> <CAHC9VhS0JckwfomqLTUJkZZkDSgeRXYOjMmPQYErgYynQYqMKQ@mail.gmail.com>
- <CAADnVQJCJjy9Eiwn6-88c0iOk4LfgPU6KBv+w0JZdBzmXBMUCw@mail.gmail.com>
- <CAHC9VhTh446SkpPF-hUiLYOHipuurzkgju_nH9LsRGdERSAL1w@mail.gmail.com>
- <CAADnVQLZscKkCxvK5puuOE1aN8nW6PnaS+_dx_zBQjjP2T-DFg@mail.gmail.com> <20260915-laken-ferngeblieben-verflachen-bafe1f296b02@brauner>
-In-Reply-To: <20260915-laken-ferngeblieben-verflachen-bafe1f296b02@brauner>
-From: Paul Moore <paul@paul-moore.com>
-Date: Tue, 15 Sep 2026 09:48:59 -0400
-X-Gm-Features: AcwNN1X1VBqKl5wb2opR2SZklPVGLAG3iamTS5-uRRzujO-KJnfUrMjsThqzpGQ
-Message-ID: <CAHC9VhTC5YvALs5K76qDBP9bDRpZPc_V-U8DPZ8qhNsCsXyLnQ@mail.gmail.com>
-Subject: Re: LSM boundaries. Was: [PATCH bpf-next v3 04/15] lsm: Add the
- bpf_lsm_policy_release kfunc and policy object destructor
-To: Christian Brauner <brauner@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Justin Suess <utilityemal77@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, 
-	Matt Bobrowski <matt@bobrowski.net>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Kees Cook <kees@kernel.org>, 
-	Casey Schaufler <casey@schaufler-ca.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Jan Kara <jack@suse.cz>, Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Eduard <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Tingmao Wang <m@maowtm.org>, bpf <bpf@vger.kernel.org>, 
-	LSM List <linux-security-module@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260913-b4-send-hid-bpf-event-bounds-v1-1-614fb56a0635@gmail.com>
 
-On Tue, Sep 15, 2026 at 9:00=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
-> On Sun, Sep 13, 2026 at 07:24:14PM -0700, Alexei Starovoitov wrote:
-> > On Sun, Sep 13, 2026 at 5:10=E2=80=AFPM Paul Moore <paul@paul-moore.com=
-> wrote:
-> > >
-> > > On Sun, Sep 13, 2026 at 7:25=E2=80=AFPM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > > On Sun, Sep 13, 2026 at 12:41=E2=80=AFPM Paul Moore <paul@paul-moor=
-e.com> wrote:
-> > > > > On Sat, Sep 12, 2026 at 3:33=E2=80=AFPM Alexei Starovoitov
-> > > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > > > On Fri Sep 11, 2026 at 10:26 PM PDT, Justin Suess wrote:
-> > > > > > >
-> > > > > > > If fs/, mm/, drivers/, net/, are permitted to have kfuncs, th=
-en why not
-> > > > > > > security/? kfuncs.rst doesn't seem to forbid this.
-> > > > > >
-> > > > > > because fs, mm, net see the value in bpf. bpf helps these subsy=
-tems
-> > > > > > to focus on their core technologies and moves policy decisions =
-out of
-> > > > > > kernel and into bpf.
-> > > > > > while lsm people treat bpf as arch-enemy.
-> > > > >
-> > > > > It's amusing to read this when just this week we merged a patchse=
-t
-> > > > > into the LSM tree for the benefit of those writing BPF LSMs.  If =
-you
-> > > > > look at the discussion around patch 2/2 you will even see a reaso=
-nable
-> > > > > exchange between Matt Bobrowski, a BPF LSM maintainer, and me abo=
-ut
-> > > > > the patch.  Alexei is obviously welcome to his own opinion, but I
-> > > > > would encourage those reading this thread to look beyond his comm=
-ents.
-> > > > >
-> > > > > https://lore.kernel.org/linux-security-module/20260904-lsm-mount-=
-idmaps-v3-0-920a1963675d@amutable.com/
-> > > >
-> > > > And that's an example of unacceptable land grab by LSM folks
-> > > > that I'm concerned about.
-> > >
-> > > I made sure that patchset was ACK'd or Reviewed-by'd a VFS maintainer=
-,
-> > > a BPF LSM maintainer, and the Smack maintainer before merging (I
-> > > covered the LSM and SELinux parts).  You might want to double check
-> > > your definition of "land grab".
-> >
-> > You're still missing the point.
-> > Christian could have landed it via vfs tree with your ack for security/=
-*.
-> > You have no power over lsm hook changes within vfs.
->
-> Which tbf is generally how I like to handle thing especially since we
-> usually have a lot of changes. But I'm open to shared branches as well.
->
-> So I think we naturally have to modify existing LSM hooks. But it's
-> shared pain. Since we use BPF LSM heavily in systemd we generally have
-> to absorb such growing pains as well.
+Hi Mark,
 
-I have no problem with topic branches that various trees can pull, but
-I do have an issue with the VFS tree merging patchsets that haven't
-been properly ACK'd as well as the VFS tree creating topic branches
-for patchsets that aren't primarily VFS changes.  See below:
+Couple of comments:
 
-https://lore.kernel.org/linux-security-module/CAHC9VhTE82bRRSXSUuMOdrfoMh=
-=3DxOb5hDvqiKWzBKD1urab3hA@mail.gmail.com/
+On Sep 13 2026, Mark Amirkan via B4 Relay wrote:
+> From: Mark Amirkan <markdamirkan@gmail.com>
+> 
+> HID-BPF allocates its device-event buffer from the largest report in the
+> device's parsed report descriptor.  dispatch_hid_bpf_device_event() then
+> copies the transport-provided report into that buffer before checking its
+> size.
+> 
+> An input report larger than the allocated event buffer therefore causes
+> a heap out-of-bounds write when a device-event program is attached.  The
+> later check of the BPF program's return value cannot prevent the initial
+> copy.
+> 
+> Reject reports that exceed either the transport buffer or the persistent
+> HID-BPF event buffer before clearing or copying the data.
+> 
+> With a 64-byte event allocation, a same-file KUnit test produced a
+> one-byte KASAN out-of-bounds write for a 65-byte report in three runs.
+> The 64-byte boundary remained clean.  After this change, both cases were
+> clean in three runs and the oversized report returned -EINVAL.  The test
+> exercised the production dispatch function but not the complete UHID and
+> BPF attachment path.
 
-Christian, if you want us to move forward with topic branches in the
-LSM tree for LSM changes that touch fs/ code I'm happy to do that, but
-I need an acknowledgement from you that the behaviors mentioned above
-will be cleaned up in the future.
+As mentioned by the bpf bot: if you already have tests, why not upstream
+them? And even better: there are already selftests at
+tools/testing/selftests/hid/hid_bpf.c -> why not add some more here as
+well?
 
---=20
-paul-moore.com
+> 
+> Fixes: 658ee5a64fcf ("HID: bpf: allocate data memory for device_event BPF programs")
+> Cc: stable@vger.kernel.org
+> Assisted-by: LLM Symbolic
+> Signed-off-by: Mark Amirkan <markdamirkan@gmail.com>
+> ---
+>  drivers/hid/bpf/hid_bpf_dispatch.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
+> index 536f6d01fd..06ba833eb9 100644
+> --- a/drivers/hid/bpf/hid_bpf_dispatch.c
+> +++ b/drivers/hid/bpf/hid_bpf_dispatch.c
+> @@ -50,6 +50,9 @@ dispatch_hid_bpf_device_event(struct hid_device *hdev, enum hid_report_type type
+>  	if (!hdev->bpf.device_data)
+>  		return data;
+>  
+> +	if (*size > *buf_size || *size > ctx_kern.ctx.allocated_size)
+
+I had a hard time figuring out why `*size > *buf_size` wasn't there in
+the first place. You can call it overlooked, but:
+- when the call chain of dispatch_hid_bpf_device_event() contains
+	hid_input_report() -> *size == *buf_size
+- when the call chain contains hid_safe_input_report(), the bufsize and
+	size are forwarded from the lower transport drivers.
+
+We only have 3 callers of hid_safe_input_report():
+- uhid.c -> min_t(size_t, ev->u.input.size, UHID_DATA_MAX) is present
+- i2c-hid-core.c -> size can'be greater than bufsize because it either
+	truncate the input report when I2C_HID_QUIRK_BAD_INPUT_SIZE is set or
+	plainly reject too long size
+- usbhid/hid-core.c -> we rely on usb to set the size and the transfer
+	buffer, so it should be OK
+
+Regarding `*size > ctx_kern.ctx.allocated_size`:
+- usbhid/i2c-hid: both are allocating their transfert buffer through the
+	exact same call to hid_report_len() and finding the biggest of all reports
+	-> so they are not affected
+- uhid: here we don't control really what's going on, because size is a
+	user provided parameter.
+
+All in all: the first test is IMO probably redundant. Maybe we can just
+add a comment in hid_safe_input_report() that the caller must ensure
+`size <= bufsize`.
+
+The second one matters only for the uhid case, so technically yes, we
+can demonstrate a malicious OOB with uhid (but you should already be
+root to create/controll a uhid device).
+
+> +		return ERR_PTR(-EINVAL);
+
+The whole point of hid-bpf is to fix bogus devices. So plainly returning
+-EINVAL means we don't even let the user the chance to fix the device.
+
+Later, hid_report_raw_event() has a similar check and when size is too
+big, it would also break the processing but at least give a warning in
+the dmesg.
+
+So, how about we conditionally memcpy the size to min(*size,
+allocated_size), and let the bpf change the size later on by itself ?
+This should allow a HID-BPF program to amend the provided size on a
+given device. This works because hid_bpf_get_data() doesn't know about
+.size, but only .allocated_size, so the kernel will prevent a BPF to
+access beyond the allocated_size.
+
+
+TL;DR: please,
+- make a decision regarding "*size > *buf_size"
+- change memcpy(size) into memcpy(min(size, allocated_size))
+- add tests in selftests
+
+Cheers,
+Benjamin
+
+> +
+>  	memset(ctx_kern.data, 0, hdev->bpf.allocated_data);
+>  	memcpy(ctx_kern.data, data, *size);
+>  
+> 
+> ---
+> base-commit: 9cdc7e6dc7a99ad7311ad5e7c145f2b9ce4e24b0
+> change-id: 20260913-b4-send-hid-bpf-event-bounds-4d0e8170ceb4
+> 
+> Best regards,
+> --  
+> Mark Amirkan <markdamirkan@gmail.com>
+> 
+> 
+> 
