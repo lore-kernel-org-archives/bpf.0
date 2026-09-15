@@ -1,127 +1,199 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f43.google.com (mail-pz2-f43.google.com [74.125.228.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF49A359A70
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 08:24:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789460693; cv=none; b=iS0NMaxvmehHkOoiUUqjT4rYiqwOWNmRV6GXNyk+79v8/QZaOVegiXTwrESehWLtTjnrAVWGeRklhdkFA6/ewdJDRgtn1JTMqG+AwV+QasL+qUu5r/eYJh96iqFztH3ukzSQkmHuBLtlDe0L1EFFn/Xj/ROJhB18dA4MA4ZO13c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789460693; c=relaxed/simple;
-	bh=+CKfqHcOLMvL7tIXrRDgssbO0MfguS/1n4uWo0zpNYA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=sbFwY14JFj85/772Ikx95B+kBJ1EI++wm4r9pJY2L9HjFZbEDr43il9bAnCROOS202rBiS+KUNRSAgHG9RQ7CQ6ZFI7ShHnwmjjFZEvfkkolqnaCqV0qewd6+3GGWvH5smBJ83oP7o/3E48FBObE95LeUTV/Eqaca16nLZ9AzrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oBwiM6ij; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90ABA495059
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 08:26:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789460818; cv=pass; b=oIJKk91JRJs14E5JFCmCOTrB0eL2GoDzTlcQrv2prwx2n3biTm96Qzxbg1thbpfNWkAOsGDcMDcXa0pesxfo+kxGUkaBPT18ZpZZB66dQ+bzY/MhBk01HK1ozp3wRxb60bVi7/z639DbQYgTNU3J34oJN0x9dcA1Iu5QIGR4PxY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789460818; c=relaxed/simple;
+	bh=nPB8HKMrWHw3m7s8Z1NEO0K4n5NwCAXwyUr1xW5XU7o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HIOTmgHywz/z4zYF0LwJmKbbzc5qJzxqdj3D+lafUmw9SyHw56GU1gNwkm+fernWpf832rZZBVEsF4PC1Tezx4Dyd1ty3YmyyQVlDy1PghuQ9yknpoJjme54QUD8cZDXaRGYNPBNM3lvEkmEcH6lyUegJowX/cubr1YAqu7wLFY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asu.edu; spf=pass smtp.mailfrom=asu.edu; dkim=pass (2048-bit key) header.d=asu.edu header.i=@asu.edu header.b=LGyD24N5; arc=pass smtp.client-ip=74.125.228.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=asu.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=asu.edu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oBwiM6ij"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 456E61F000FF;
-	Tue, 15 Sep 2026 08:24:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789460691;
-	bh=p8pdSBg/MFKZPWyGxE6Yk7ybXJXco2Bb+iH6aqSzU64=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=oBwiM6ijS5aAQx1Xtja63JXsaymwLtepnBrBDIxPZqM6tJgLaBVt6eZJGXTZoMa9O
-	 OQRnRDQIvhtWgTO08CSmFWGEOucJEpAwdCisY4dsAVTj30AO4mIDpYdxofmdpcUEsp
-	 VYhH/9HWyM4jtbVcBW2g5N0cpBLVijE6UhzCpQt7Bs6ixEuF09Bev+nRP5rELQZMAJ
-	 8Ga/G0TlEzgwtoW7EPdPtN2KjEfkgLZ2DoN2XfijP2GKGph6LdqPGRNYXI4uAA//dH
-	 TbvjhMNdpB07fatcg4yPwSo2R1zgQqItKzpv0UP6FkPUFWzLWGm7RCPIZ1tNjtlDCI
-	 aHirgnSBENF1Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v6] xsk: Fix circular locking dependency
- between &net->xdp.lock, &xs->mutex, and netdev_lock_ops
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Khawar Ahemad" <ahemadkhawar123@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260915081023.7433-1-ahemadkhawar123@gmail.com>
-References: <20260915081023.7433-1-ahemadkhawar123@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 15 Sep 2026 08:24:50 +0000
-Message-Id: <20260915082451.456E61F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=asu.edu header.i=@asu.edu header.b="LGyD24N5"
+Received: by mail-pz2-f43.google.com with SMTP id d2e1a72fcca58-86868f7707dso1149832b3a.2
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 01:26:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789460816; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Zyz4/NcKzptCipwNh/xx+9yq624cmIXqjODgtPDNqtPRJuDD+xbHnchY/vvmu9J3OA
+         xbj4Zl4OdKQXDgLJOwm2UxxiQc64klzSzqW5v0HkNW/mQXwQ8PRc4F8RSyQ4QUfjCnC8
+         U2/vVYvaU1OkTF7mlIlROP3o7iQCfxUus4NNDQSBJr1AD/gDa8Vs0lvi1CK5OQu3DaqN
+         VmmAXpJAG8p2zYtkcXRcihdmsW9WSyJCCEnaiR9vKLmGkOUaV8YGbY2vPKPa6e1Y/KsL
+         lHoUzabN1O8ffdIz3Yk7MtIS1LUHzwlj+O5P6w5R/yU12AGAw97GWo2ji2BTqcsxAmIz
+         rfAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=lnh5CgWNygQ5nJ5BcAug/UGA2XoqYnoWr3xk+1LgwT0=;
+        fh=zPnPTWUxWRtYlif1/HEdridQuN8ddhx84llcgI8E+xk=;
+        b=g3YYyiG4aQgim3VfF7FwoaeQMQ4KLdYlQFKmAF3tn5P+bl6x5SWFYHOH8ROGmvqywl
+         t3zGI8+sK536Vq65h69jlEz21YkYV2H3B4xclfqqXelTWnTP3DfWadQGjRvWAY4NNU/5
+         L2d7foIq624VK/YT1UgylKzDROidaTP1elFJcKNrH0Ml/Fl8UvLdp957d46H3AtpqsLR
+         S4/wLHrEv1sjHWbxJ+VifIo2xlDsHweJ/Q2zPOMocKo/YAiiVn6/kH3B/oGqAX9h1XuF
+         MgIlKZLF5siXEVBDMgrANwHe+8AvIjtGYj5pSOM+vCNphupXE89ByJA7EIxrlpeXVbl8
+         HoGw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=asu.edu; s=google; t=1789460816; x=1790065616; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=lnh5CgWNygQ5nJ5BcAug/UGA2XoqYnoWr3xk+1LgwT0=;
+        b=LGyD24N5l64zOz1F5J3fHUPcg+6M1qW99Yar6dgJRHRQ/M5ve/6QkiNuWBnYTnSdSA
+         x1neQC61BUcK87a1lGXNkl0PTLYYh9toSY5PlqsPORHkjXGAKPA3ku28hqt0jTpp7LUb
+         EWcW9Q3mpH7hWLZEMXYX8w/5JlVa0NfXXPoM1AUj80OaGhPOeDXwKnrnKIAy7YfjECEJ
+         5czUC3+GUo6x6S4bZDYuxTOOv2B4/f1g2bj7URhijvuJBAGHOPFHfE7q9B+E6aASuX5b
+         rTWpO119zUSVLFscBSRvBLPkLz1Yr6zmR1HZEAtsewQbZX+rtkbVtPvUNpx+hb7HGqvu
+         l4Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789460816; x=1790065616;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lnh5CgWNygQ5nJ5BcAug/UGA2XoqYnoWr3xk+1LgwT0=;
+        b=LNJ6vDlq7/l54mDUaJWE77nKKCwRj8lmKQ7j6jB4AOSfDbjmN498FrEyFCF0gzUNjh
+         Jfczs55xJk8EbuJWprarGb7QBO/y+ArUtl+hU/Krb85czQdplQug63RI8tIFF5kPpPrk
+         4q6nYhbIOyabqF6lPOtD3ZvjBpxDkQjrBwYyZCA/JyVo0WiQC+aW5HK9Au5f8sx8rYOc
+         p2LK2elWtvpC3pqF4333WQZevaLk8z3e7koxOzOUsbR+4mUrpSvgU2T5+orZQYBbFv4S
+         tVCcciOuiOn7Wm+z29ZrBHEWMK3FN6zh2jlrzCMkGBtfxyZ7ld+uYtkmyJcECWg0YI0j
+         0ZzQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwTmpu+oVnJ36rDlTok91fowIB0CI6C06qRGLCDzk0bPVNHAwQOw1GngmVoogtJ4vFwLNs=@vger.kernel.org
+X-Gm-Message-State: AFuF++koM3QxOYerDT6yWZVAAciSaFzHJbmWDDGxYKURaJSc8egj6vn2
+	jMfB98O5AdC3HNMH3lrrwKlhLoM8DSRCd55B9r3YSV8uQAwGPwT+oB0XmZMtj5xIJF6I69V9mhU
+	oGHXQwANuDwAbIqJ/BZv1t0xn03l5Yj8CvvWC/xhK
+X-Gm-Gg: AYBFou10NKWUBywRoG2by4DPlpbVZ38/AcO29lwJKTymo6OHvZUWMN0g4ivznyQhPig
+	6qe19UB4/h5HdPjHfx9TtCrNA+RZROcyAwGFwO8YWSQBP1cDr5o9XKSLZj3JVI4bnSqSLZVe3RH
+	cNOuPZW7ws9ZyMoFO1EsWzAD7DxL/RzjoqP9gKNw3OXHYEUn/rWEQ2pP4/Ay6Q/0+FpNwrp9xyO
+	GRWD/fTVg0d4Qu5rLQZRJ722LZzf0IySQWW01iAVW/qeoYczulR/vsfTN9q6PTNHuv0hHsRN0i6
+	PPZOr/AaEuophZtlZyEG1ljg6LQLBDnYwfxNtO8XzE4k5prF5OxjSiqC9qxIq/EaCKfAkzB1Zqx
+	VY11yefWqKsZaTijDsq+j39W4ENKcelUYGjDLY/lIut8yQZzhhHYkHVgy
+X-Received: by 2002:a05:6a00:22d4:b0:857:7337:5db6 with SMTP id
+ d2e1a72fcca58-86f857f03e4mr11800026b3a.20.1789460815852; Tue, 15 Sep 2026
+ 01:26:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260915082426.703892-1-xmei5@asu.edu>
+In-Reply-To: <20260915082426.703892-1-xmei5@asu.edu>
+From: Xiang Mei <xmei5@asu.edu>
+Date: Tue, 15 Sep 2026 01:26:44 -0700
+X-Gm-Features: AcwNN1VHk4qFiOTVVqpCxopv6W4c447U28-fnrK3q7ySLfaNNx1iHuyYYDxzrTc
+Message-ID: <CAPpSM+SviG8h4CYfjYf3FtowDcj8JE11ThBTip=+f690514uBw@mail.gmail.com>
+Subject: Re: [PATCH net] net: bcmgenet: restore the hardware filters on open
+To: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	jakub@cloudflare.com, Nicolai Buchwitz <nb@tipi-net.de>, 
+	Justin Chen <justin.chen@broadcom.com>, Florian Fainelli <florian.fainelli@broadcom.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] xsk: direct AB-BA lock inversion between netdev_lock_ops and xs->m=
-utex
---
+Please ignore this email. It's an email sent by mistake.
 
-commit fb0725dd07b52433e13678029edcd12b678195df
-Author: Khawar Ahemad <ahemadkhawar123@gmail.com>
+I got this patch for testing and wrongly sent it out. Sorry about that.
 
-xsk: Fix circular locking dependency between &net->xdp.lock, &xs->mutex, an=
-d netdev_lock_ops
+Xiang
 
-This commit attempts to break a 4-lock circular dependency at its root in
-xsk_bind(). It reorders the acquisition of netdev_lock_ops() and xs->mutex
-with the goal of fully removing the xs->mutex -> netdev_lock_ops edge.
 
-Closes: https://syzkaller.appspot.com/bug?extid=3Daa48b5fe7bfda62d1682
-
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 33475b180ea6f..b7072092cc51f 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -1636,20 +1636,22 @@ static int xsk_bind(struct socket *sock, struct s=
-ockaddr_unsized *addr, int addr
->  		return -EINVAL;
-> =20
->  	rtnl_lock();
+On Tue, Sep 15, 2026 at 1:24=E2=80=AFAM Xiang Mei <xmei5@asu.edu> wrote:
+>
+> From: Nicolai Buchwitz <nb@tipi-net.de>
+>
+> bcmgenet_hfb_init() runs INIT_LIST_HEAD() on priv->rxnfc_list, which drop=
+s
+> every rule off the list, and bcmgenet_open() calls it on each ifup. Every
+> rule the user configured is silently lost:
+>
+>   # ethtool -N eth0 flow-type ether dst $MAC action 0
+>   Added rule with ID 0
+>   # ethtool -n eth0 | grep -c Filter:
+>   1
+>   # ip link set eth0 down && ip link set eth0 up
+>   # ethtool -n eth0 | grep -c Filter:
+>   0
+>
+> Initialise the lists once at probe and restore the rules on open, as
+> bcmgenet_resume() already does.
+>
+> Fixes: 3e370952287c ("net: bcmgenet: add support for ethtool rxnfc flows"=
+)
+> Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
+> Reviewed-by: Justin Chen <justin.chen@broadcom.com>
+> Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> Link: https://patch.msgid.link/20260913190052.939955-1-nb@tipi-net.de
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+>  .../net/ethernet/broadcom/genet/bcmgenet.c    | 19 +++++++++++++------
+>  1 file changed, 13 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net=
+/ethernet/broadcom/genet/bcmgenet.c
+> index a2305e6428d1..b916080f4ff1 100644
+> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+> @@ -749,8 +749,17 @@ static void bcmgenet_hfb_init(struct bcmgenet_priv *=
+priv)
+>                 INIT_LIST_HEAD(&priv->rxnfc_rules[i].list);
+>                 priv->rxnfc_rules[i].state =3D BCMGENET_RXNFC_STATE_UNUSE=
+D;
+>         }
+> +}
 > +
-> +	dev =3D dev_get_by_index(sock_net(sk), sxdp->sxdp_ifindex);
-> +	if (dev)
-> +		netdev_lock_ops(dev);
+> +static void bcmgenet_hfb_restore(struct bcmgenet_priv *priv)
+> +{
+> +       struct bcmgenet_rxnfc_rule *rule;
+>
+>         bcmgenet_hfb_clear(priv);
 > +
->  	mutex_lock(&xs->mutex);
-
-[Severity: High]
-Does this introduce a direct AB-BA lock inversion between netdev_lock_ops
-and xs->mutex?
-
-By moving the netdev_lock_ops() acquisition before mutex_lock(&xs->mutex)
-in xsk_bind(), we establish a netdev_lock_ops -> xs->mutex dependency.
-
-However, there is an existing, unmodified path in xsk_notifier() that takes
-xs->mutex and then calls xp_clear_dev():
-
-net/xdp/xsk.c:xsk_notifier() {
-    ...
-    mutex_lock(&xs->mutex);
-    if (xs->dev =3D=3D dev) {
-        ...
-        xp_clear_dev(xs->pool);
-    }
-    mutex_unlock(&xs->mutex);
-    ...
-}
-
-And xp_clear_dev() unconditionally acquires netdev_lock_ops():
-
-net/xdp/xsk_buff_pool.c:xp_clear_dev() {
-    ...
-    netdev_lock_ops(netdev);
-    xp_disable_drv_zc(pool);
-    xsk_clear_pool_at_qid(pool->netdev, pool->queue_id);
-    pool->netdev =3D NULL;
-    netdev_unlock_ops(netdev);
-}
-
-This retains an xs->mutex -> netdev_lock_ops dependency during device
-unregistration.
-
-While both paths hold rtnl_lock() (preventing an actual runtime deadlock),
-Lockdep tracks lock dependencies globally by class and will flag this as a
-circular locking dependency. On systems with panic_on_warn enabled, this
-can be triggered by an unprivileged user with CAP_NET_RAW by binding an
-XDP socket and unregistering a network device.
-
-Is there another way to resolve the original 4-lock cycle without inverting
-the lock order here?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260915081023.7433=
--1-ahemadkhawar123@gmail.com?part=3D1
+> +       list_for_each_entry(rule, &priv->rxnfc_list, list)
+> +               if (rule->state !=3D BCMGENET_RXNFC_STATE_UNUSED)
+> +                       bcmgenet_hfb_create_rxnfc_filter(priv, rule);
+>  }
+>
+>  static int bcmgenet_begin(struct net_device *dev)
+> @@ -3376,8 +3385,8 @@ static int bcmgenet_open(struct net_device *dev)
+>
+>         bcmgenet_set_hw_addr(priv, dev->dev_addr);
+>
+> -       /* HFB init */
+> -       bcmgenet_hfb_init(priv);
+> +       /* Restore the filters, the MAC was reset above */
+> +       bcmgenet_hfb_restore(priv);
+>
+>         /* Reinitialize TDMA and RDMA and SW housekeeping */
+>         ret =3D bcmgenet_init_dma(priv, true);
+> @@ -4075,6 +4084,7 @@ static int bcmgenet_probe(struct platform_device *p=
+dev)
+>
+>         /* Mii wait queue */
+>         init_waitqueue_head(&priv->wq);
+> +       bcmgenet_hfb_init(priv);
+>         INIT_WORK(&priv->bcmgenet_irq_work, bcmgenet_irq_task);
+>
+>         priv->clk_wol =3D devm_clk_get_optional(&priv->pdev->dev, "enet-w=
+ol");
+> @@ -4272,10 +4282,7 @@ static int bcmgenet_resume(struct device *d)
+>         bcmgenet_set_hw_addr(priv, dev->dev_addr);
+>
+>         /* Restore hardware filters */
+> -       bcmgenet_hfb_clear(priv);
+> -       list_for_each_entry(rule, &priv->rxnfc_list, list)
+> -               if (rule->state !=3D BCMGENET_RXNFC_STATE_UNUSED)
+> -                       bcmgenet_hfb_create_rxnfc_filter(priv, rule);
+> +       bcmgenet_hfb_restore(priv);
+>
+>         /* Reinitialize TDMA and RDMA and SW housekeeping */
+>         ret =3D bcmgenet_init_dma(priv, false);
+> --
+> 2.43.0
+>
