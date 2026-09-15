@@ -1,147 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5275B3BD635;
-	Tue, 15 Sep 2026 03:12:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FCF4285CB9;
+	Tue, 15 Sep 2026 03:13:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789441964; cv=none; b=X0ayv6h+2g/T3udWeP/xFot47TeYokF6iEtCcnj6SIRNeFQ71oDOG4s0HedP3ENYiVKo+Sl2m2uKIGUIX5ngsfwR1aD/IjM0pMQ2twaLocYjs3+Y1dwZ+IxAfmM+TIEsbHeV4c2fTQ8U8/+AswvFpy2MPyZu8TeKRbifkFa0xTM=
+	t=1789441992; cv=none; b=nCELsmXUANPKk3ucPM/o2OdzYgmtgvDp/z53RB3S1wCAcoIxFUo/4GQ/qZmit+GtluKpvLqe6Q7WMN4FbPtSeXRS8tLmUTyoXcMjFjw8DyeO7puHYc7XRF0cJflWYPzuVIizkXZeVeXPWiqfy5o1Vlw1rUknN6tsYR8gXsOfDDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789441964; c=relaxed/simple;
-	bh=q5QXWd4boEAkOUTWeXX/mOi8bo/fIUiGcY7d/k7+0Ic=;
+	s=arc-20240116; t=1789441992; c=relaxed/simple;
+	bh=9spURXFnhUEOE6ectUrU4Mx+hFIK7BnXqVFjIwIadHw=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=GR8bSOr+nIAtjWxiB4QjrbBklw5hHfIJCJYWb9aTMwnNs3EqKbTwXr5kvuYpNQRGuMY3Y3fr1bdGlWu1SytoFSEu0Y5RlkgP2MK8OilalKAu7MApgXZdZrsviQaAI23Uy9QeYzFe7JMTIhv8vCe74FIRHurcBbCIA1LVKlvq74g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AU3jTeIn; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=Ii+14vV8ZhRJ58G0LMc2DezSQ+WDGq8eSJYih1hbjvsATmVhjNxMkO+fkv0Kp9MbqOSyprcBlYpIbQzIZKdE7HieZro6gwLVXWJHXvGRRuKg1aUeTbB5JFfoPLIrU1dArm4xsFmXiD6nwMd0rAfHnNd+6y6W6iEtYx83jCtGJlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JsMgusAH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AU3jTeIn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA0301F00893;
-	Tue, 15 Sep 2026 03:12:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JsMgusAH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D24B01F000FF;
+	Tue, 15 Sep 2026 03:13:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789441962;
-	bh=+Zl47g2R6o1OVLSTyzoYesvANcsvAS9tSGsX9FLPppU=;
+	s=k20260515; t=1789441990;
+	bh=ViR8JggVtC0w9yFDIbiooQtd0VS8UfWsVm77wUEmMEc=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=AU3jTeInrqdrNYPaeaJpBxGz5rn/B40ECequ2GAivV0sHA9Htj11LDbW/5T+5UAWw
-	 +eFNLC+N6UPDIRTSj7lxAbCZsYIVzUw03k7Ft4HCeyS2cqoCbfP3JOmjbMlyH/2+vh
-	 gPRrhZujUzW3zTjh7M6XXv+vLLMBw9jwh7xbgRJ5SBTwudYthvAKJ2yBpkKvLRefOT
-	 wu7wrprgW5U9SvxuE/pThf1fDWg1PI7nfD+x5z6QykmLtrYhGVPd8DrMcpm0AoAxok
-	 ITHAZRfOMsOXKr0px+YjUh9fFHpiqnDKQ9fZXcFLd4TvbIi7ejr8c5fFIiShKlTkI7
-	 00ejRlWEP/S0A==
-Content-Type: multipart/mixed; boundary="===============5992561744920142260=="
+	b=JsMgusAHOEvg6C2ux+VTY/a7sJAb9fLBvB9I3pP8WvnczISFiy7+SMd0JoY7d+A36
+	 46FkVNzWR9uSBsrQyKXCD/7IcNExqo4c4roCQchC0gGcbzJ7rynqD7H+DgWyFyRV0B
+	 FSnuwhguUspI86R9oPiossrmeBfLVYe6DdPYhahdzMoBV97+D/QOuCfoJia2Z4LsGP
+	 RCnQekEVLJ1UxFrEM37ZolP2U5WLWHKDbEu4+8lIVqwKSCOoKBZKwzBn+P3Bhdv8FO
+	 5R2CBl3IfnAd3/9doQ1lsIBjEqkdUPi6UuYtp4sD+OkDk4aYNkELJ0i3IIc3w+JtBL
+	 JVuL657MHQj6w==
+Content-Type: multipart/mixed; boundary="===============0010365477308784097=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <985634fd50a8b724077daae136d12c432f2f306e59b8bd5e730678aad10eb4f6@mail.kernel.org>
-In-Reply-To: <20260915021338.1520964-2-main.kalliope@gmail.com>
-References: <20260915021338.1520964-2-main.kalliope@gmail.com>
-Subject: Re: [PATCH bpf-next 1/5] bpf, x86: Add support for BPF_MOVSX in the i386 JIT
+Message-Id: <491fb0b335c0814e914b3d041b8cee9fda122c37567bd20e456fd3758fb51568@mail.kernel.org>
+In-Reply-To: <20260915022905.1535566-3-main.kalliope@gmail.com>
+References: <20260915022905.1535566-3-main.kalliope@gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] bpf, parisc: Add support for BPF_SDIV and BPF_SMOD in the parisc32 JIT
 From: bot+bpf-ci@kernel.org
-To: main.kalliope@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,udknight@gmail.com,tglx@kernel.org,mingo@redhat.com,bp@alien8.de,dave.hansen@linux.intel.com,x86@kernel.org
-Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,hpa@zytor.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,visitorckw@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 15 Sep 2026 03:12:41 +0000 (UTC)
+To: main.kalliope@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,James.Bottomley@HansenPartnership.com,deller@gmx.de
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,bpf@vger.kernel.org,linux-parisc@vger.kernel.org,linux-kernel@vger.kernel.org,visitorckw@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 15 Sep 2026 03:13:09 +0000 (UTC)
 
---===============5992561744920142260==
+--===============0010365477308784097==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
->     bpf, x86: Add support for BPF_MOVSX in the i386 JIT
+> commit 78e60eb41cf96a6559947f9582f1a6e1e10551af
+> Author: Nicholas Dudar <main.kalliope@gmail.com>
 >
->     The i386 JIT lowers register BPF_MOVSX as an ordinary move because
->     do_jit() does not inspect insn->off. The generated code therefore copies
->     the source instead of sign-extending the selected low bits. Context-access
->     conversion can also introduce MOVSX while lowering signed loads, so
->     rejecting BPF_MEMSX does not protect those paths.
+>     bpf, parisc: Add support for BPF_SDIV and BPF_SMOD in the parisc32 JIT
 >
->     Stage the source low word in EAX and use the native byte and word
->     sign-extension instructions. Derive the high word from the sign bit for
->     ALU64 and retain verifier-managed zero extension for ALU32.
+>     emit_alu_r32() and emit_alu_r64() call the unsigned millicode
+>     ($$divU/$$remU) and libgcc-style (hppa_div64()/hppa_div64_rem())
+>     divide/remainder helpers for BPF_DIV and BPF_MOD regardless of the
+>     BPF instruction's signedness, so the parisc32 JIT does not implement
+>     signed BPF_SDIV and BPF_SMOD (off == 1). Signed ALU32 and ALU64
+>     div/mod get an unsigned quotient and remainder rather than the
+>     verifier's and the interpreter's signed result for negative operands.
 >
->     Assisted-by: Codex:gpt-6
+>     Thread is_signed = (insn->off == 1) through emit_alu_r32()/
+>     emit_alu_r64(), and on the signed path use the $$divI/$$remI signed
+>     millicode routines (32-bit) or the hppa_sdiv64()/hppa_sdiv64_rem()
+>     helpers added in patch 1 (64-bit) instead of their unsigned
+>     counterparts. $$divI and $$remI are extern-declared and exported next
+>     to $$divU/$$remU in arch/parisc/kernel/parisc_ksyms.c.
+>     bpf_do_misc_fixups() rewrites the zero-divisor and INT_MIN/-1 cases out
+>     of the instruction stream before the JIT runs.
+>
+>     Acked-by: Helge Deller <deller@gmx.de>
+>     Tested-by: Helge Deller <deller@gmx.de>
+>     Assisted-by: Claude:claude-opus-4-8
 >     Signed-off-by: Nicholas Dudar <main.kalliope@gmail.com>
 
-This looks like a bug fix for MOVSX support that was added to x86_64 but
-not i386. Should this include:
+This looks like a bug fix for the parisc32 JIT's handling of signed
+division and modulo operations. Should this include a Fixes: tag?
 
-  Fixes: 8100928c8814 ("bpf: Support new sign-extension mov insns")
+  Fixes: 847b98421362 ("adding ci files")
 
-> diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
-> index 852baf2e4db4d..9cbeabac4f27f 100644
-> --- a/arch/x86/net/bpf_jit_comp32.c
-> +++ b/arch/x86/net/bpf_jit_comp32.c
-> @@ -266,6 +266,51 @@ static inline void emit_ia32_mov_r64(const bool is64, const u8 dst[],
->  		emit_ia32_mov_i(dst_hi, 0, dstk, pprog);
->  }
->
-> +/* dst = sign_extend(src, insn->off) */
-> +static inline void emit_ia32_movsx_r64(const struct bpf_insn *insn, u8 **pprog,
-> +				       const struct bpf_prog_aux *aux)
-> +{
-> +	const u8 *dst = bpf2ia32[insn->dst_reg];
-> +	const u8 *src = bpf2ia32[insn->src_reg];
-> +	bool dstk = insn->dst_reg != BPF_REG_AX;
-> +	bool sstk = insn->src_reg != BPF_REG_AX;
-> +	bool is64 = BPF_CLASS(insn->code) == BPF_ALU64;
+This isn't a bug, but would it be worth naming the sibling commit (or
+saying "the previous patch") instead of "patch 1" here, so the reference
+still makes sense once the series is applied?
 
-This isn't a bug, but would it read more consistently with the
-neighbouring emitters to pass is64/dst/src/dstk/sstk as parameters?
+>     helpers added in patch 1 (64-bit) instead of their unsigned
 
-Looking at the other ALU emitters in this file, they take the
-already-decoded operands directly:
-
-  emit_ia32_mov_r64(is64, dst, src, dstk, sstk, pprog, aux)
-  emit_ia32_alu_r64(...)
-  emit_ia32_mul_r64(...)
-
-The new helper re-derives these five values from insn, even though
-do_jit already has them in scope at the call site (lines 1719-1724).
-The insn->off validation also happens twice: once in the do_jit gate
-and again in the helper's switch.
-
-> +	u8 *prog = *pprog;
-> +	int cnt = 0;
-> +
-> +	if (sstk)
-> +		/* mov eax,dword ptr [ebp+off] */
-> +		EMIT3(0x8B, add_2reg(0x40, IA32_EBP, IA32_EAX),
-> +		      STACK_VAR(src_lo));
-> +	else
-> +		/* mov eax,src_lo */
-> +		EMIT2(0x89, add_2reg(0xC0, IA32_EAX, src_lo));
-> +
-> +	switch (insn->off) {
-> +	case 8:
-> +		/* movsx eax,al */
-> +		EMIT3(0x0F, 0xBE, 0xC0);
-> +		break;
-> +	case 16:
-> +		/* movsx eax,ax */
-> +		EMIT3(0x0F, 0xBF, 0xC0);
-> +		break;
-> +	case 32:
-> +		/* EAX already holds the low word; CDQ supplies the high word. */
-> +		break;
-> +	}
-> +
-> +	emit_ia32_mov_r(dst_lo, IA32_EAX, dstk, false, &prog);
-> +	if (is64) {
-> +		EMIT1(0x99); /* cdq */
-> +		emit_ia32_mov_r(dst_hi, IA32_EDX, dstk, false, &prog);
-> +	} else if (!aux->verifier_zext) {
-> +		emit_ia32_mov_i(dst_hi, 0, dstk, &prog);
-> +	}
-> +
-> +	*pprog = prog;
-> +}
-
-[ ... ]
+The "patch 1" reference is only resolvable while the series is on the
+list. Once the commits land, git history has no "patch 1" for later
+readers or anyone doing archaeology on this code.
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34921540254
---===============5992561744920142260==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34922459599
+--===============0010365477308784097==--
