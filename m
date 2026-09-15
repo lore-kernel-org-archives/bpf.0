@@ -1,111 +1,202 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9631F4634
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 00:20:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3473E171BB;
+	Tue, 15 Sep 2026 00:27:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789431612; cv=none; b=UmlvhIcfKvojY1DC+lrMjt5Dc76DrVyWRz8ClNjlqH9QKSWVu7ZBwspRn1BDXBaXqtreW5s8boUzd4x9liVE9NXmVmgS6I+axIa2vPoqBX4UoJWX9eF1lub5dcxjls6fAx9+lw4u01OMqSjSx2OEGIymWYVWoVvOD9LdSNGgOqQ=
+	t=1789432044; cv=none; b=rodV9lMdZ0aDEo1WLss1XeqlMHhyJyNQSBRmCwM7T/hAAyhUeGfA/6XiGyODf00kecL5i4zgBzKftjpcDUsC+GuoxMt9ZjIzTlFHqwQRPGEpnme8XG4trbQjaX+kgH5dfoiFoz1DwS/OhVzshNuj8nJ4kBnnkQADwU8ud+ZaWhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789431612; c=relaxed/simple;
-	bh=DVyF63iH25gJXwTv9c8auzDZ0kdD6ThnlcIhHaZsTnM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ROV+R5BhWik+ASaCoxI0IbsepNBFePvfi2/PkAiRQSEf5JJfz2fwASJM3F2ILxlUoQx4wmDbvqcgPBUGCgKlEzN6pOgc90pMs7c9rIWIrkQUe7u0t3eP7VPbGHyQ3cxB/5BKBFlKe5UFI88ZHPfVJQYdszh22/7dJl3izWWnoWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cMMu4QKr; arc=none smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789432044; c=relaxed/simple;
+	bh=Q1Wutu4Ew4MPHDQX10tZrKueBZeA7qi090nRYAlP42I=;
+	h=Date:Message-ID:From:To:Cc:Subject; b=bsLrYIba7+d7unzTfHRxckPcgVCNbwn4jQvm28vdStmqT6VAmJe1ceyh0tmDb8hu+URVGU8Hmt0soPIkPygs3YICXG9xgsx3L6Y9JT54JgtfrPWhwJWlQjJA7EngLxzeMXud3WHyk+5A5XsooY5rVl6/X/Xgvmf78foUWZZSibk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OMb8kV2H; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cMMu4QKr"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d91ede8035so30188525ad.3
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 17:20:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789431611; x=1790036411; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=DVyF63iH25gJXwTv9c8auzDZ0kdD6ThnlcIhHaZsTnM=;
-        b=cMMu4QKrOvPdQrxOPlsPGVmKhUjdFJM7SKB+uEzb6eb8HXbDdcOitdcOn3qF2zxUm0
-         +2aZZR4KyFe8OD19ZYsNsFy7W3ZpPFwogLBrreirSY35jVmhEskXJ6poj0AKgHKcrLMm
-         KSozYUaIexvHZ8EMzVFi6MsHc5joGFHe+nH4+pFw8OlY6NABSqNb9V96HN6+fRB42Y1U
-         z3I6KfvSgtWzb9mGRREwO/72htdC1rHYzkmeagLrDKe0/3rHbdEvIoWZS+wzGoJQrvtB
-         s6Qf6BD0lGi3KzrtP+1D8GWafWr6RiD7Y2q38u2CB71G3pKxxPJRuCCSVDMwSSXCH7sY
-         YK0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789431611; x=1790036411;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=DVyF63iH25gJXwTv9c8auzDZ0kdD6ThnlcIhHaZsTnM=;
-        b=mihuRc/lhqQtbtAyROeykc3UenHhnd54Yz3+JqyR/PEKWzTEwLRg7c6RLyER75EOs6
-         1oshH+tdP9QHoxojSxeXJRyYZdYG1zYPf0YVMnbqM2OyCsdcBH6+JvbG6bIcqnCvfyZ4
-         llnotSqyRZAuIaqe7aWqwWJ7ugtOhg1ox/+Qm/AAx6BtzlnHia2foh6Xp3YiB0KQbdBT
-         Qxx4diVGda6LYJ6I8zp2xn59uOq53alrhCoPvzStTaQ+KKh5QqWghjPCHLElJoB6FRVG
-         cSOjqU/wVsMIdQSaPmKa2r5Mj6Tu2Y0T7ldTAWg0uGTUqRfFthZLNkqf/8lL+QDSi/hm
-         MLBw==
-X-Forwarded-Encrypted: i=1; AKwUvBwwqUVvSMbeHo0NYQzX/AuSF3QH75/w+EcLJeq3Pv/27ncS4PluW7RrImdI/cTQOnjxceQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++kwpXo+30NuXvahaGZHCOvT/EpNOU8YvzDJZgNb4zzQZ9IVEuhz
-	ojwNoa2LW9LNPSi7RcxKB96w0bNULA/OasDXHpdWzUpRqi25Fhr9maDAclhyaWOm
-X-Gm-Gg: AYBFou2276yzK6/AYZSOXj2B8AEphy6vv7jC0Ev1976aUzrYpVGtFBT1jQonW1X1wVU
-	623XRm4WOiShdVuOA8Y+tfpt/GUVIef30dqAiOICOxURdDi+GKfZkuVBzK4cAV9zQWyiWnrC81V
-	UgFOaIvlwkMpDYFAMHKCfa4NKHOEdOMA8oxxAPLGSgTbKFeD2dNUD441zfbYYle+3UuLGeCJi8l
-	DA9ueIyyIno3HcsXtDSHDwxBvkAeGqTApZ9j9lwsRQ0s8gV4ZLfJeg2zyxW0pxv+ZHvZUV6zfnT
-	uj5O8r4RjYT35xTCzL0yANGm/JaSld1xLLnsqO1rP89tlAjK0UBZkCPds5kkenIcNCA/x9oLv5M
-	bxy5GJLpAke7+8tGecWAwhJpcYB1Kj75guqQjR5EustFUFYSReHJEAxMP135BQyd3XJNE7hSKvQ
-	8tmFnU0WTTNZum0o/B3KR3g8inZs1nmMgOqOmBMSe16CF8zdaPGRMfX65aMiZxML5QF4BN0Q74/
-	M8qB0hnstAGwifOsemmsVImIl4xgoRpmkn3mg==
-X-Received: by 2002:a17:903:98f:b0:2d8:d4ce:7e40 with SMTP id d9443c01a7336-2dd6c7622e4mr102586575ad.21.1789431610593;
-        Mon, 14 Sep 2026 17:20:10 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd4bab2981sm39948235ad.49.2026.09.14.17.20.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 17:20:10 -0700 (PDT)
-Message-ID: <5ecadaeac7399c0a0c19cd5e3d6a16589b4ff9c9.camel@gmail.com>
-Subject: Re: [PATCH bpf v2 06/11] bpf: Clear insn array jitted pointers on
- map reuse
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org
-Cc: memxor@gmail.com, a.s.protopopov@gmail.com, info@starlabs.sg, 
-	bpf@vger.kernel.org, Sandipan Roy <saroy@redhat.com>, James Burton
-	 <jamesburton@meta.com>
-Date: Mon, 14 Sep 2026 17:20:06 -0700
-In-Reply-To: <20260914170326.249953-7-daniel@iogearbox.net>
-References: <20260914170326.249953-1-daniel@iogearbox.net>
-	 <20260914170326.249953-7-daniel@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10+b1 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OMb8kV2H"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A50621F000FF;
+	Tue, 15 Sep 2026 00:27:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789432042;
+	bh=pwYgUCXJf8xlvu1XIeBSk2ZZyG/XDh6v89+ykv9td8s=;
+	h=Date:From:To:Cc:Subject;
+	b=OMb8kV2HTyp9/TOB7QpMmYn4GrWbJlx2Drlxk+4Ba6zAPjcV3NcRUt1kvWcv3zAV7
+	 VlEoXCqW3dljRQ4kzA6Q2jOzhRjstZmY3H8bz31ORGGHRiGrnWAaesvkWEZqbpUjDe
+	 TCSjTB7H9Dj/OsLF5npSS7gxzZJpQNORNlM4uRfcVRQUHM3AXYhomSJSabCL6Dh8a4
+	 r5OjBvvKLs2Eses8GRmfwyezctJvBLsNtQ5h9WaMHnyXLqKLQ1RZOE7t2zQaj9IbCQ
+	 klPRcl+DMgfATBPWcboePvJOzUrKTfj9RyXATf/L0wZhDkQwtnJH9v/q8yLaqfEWlU
+	 6auGOLcfxh3uQ==
+Date: Mon, 14 Sep 2026 14:27:21 -1000
+Message-ID: <b6782cd33f9ccc6265b0b2140cf1f68d@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Amery Hung <ameryhung@gmail.com>,
+	bpf@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf v2] bpf: Keep generic __uninit kfunc arguments live
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Mon, 2026-09-14 at 19:03 +0200, Daniel Borkmann wrote:
-> An insn array records, per entry, the xlated offset, the jitted offset an=
-d
-> a jitted target pointer in ips[]. bpf_insn_array_init() runs when the map
-> is bound to a program and resets only xlated_off; the jitted offset and t=
-he
-> ips[] pointer are left as the previous owner set them. A program can be
-> verified and JITed and only then fail to load (e.g. bpf_check_tail_call()=
-).
-> By that point bpf_prog_update_insn_ptrs() has already filled ips[] with
-> pointers into that program's JIT image. Thus, the map is handed back for
-> reuse with the stale pointers intact. If the next program reuses the map,
-> the stale pointer survived the now active program's jump table, pointing
-> into the previous, freed image. Fix by resetting the jitted offset and th=
-e
-> ips[] pointer alongside the xlated offset.
->=20
-> Fixes: b4ce5923e780 ("bpf, x86: add new map type: instructions array")
-> Reported-by: Sandipan Roy <saroy@redhat.com>
-> Reported-by: James Burton <jamesburton@meta.com>
-> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-> Acked-by: Anton Protopopov <a.s.protopopov@gmail.com>
-> ---
+Stack liveness models a kfunc's __uninit pointer argument as a pure write:
+whatever the buffer holds before the call is dead, and 2cb27158adb3 ("bpf:
+poison dead stack slots") poisons those slots at every checkpoint the path
+visits before the call. Argument validation disagrees. Only dynptr arguments
+honor __uninit. A generic fixed-size buffer goes through check_mem_reg(),
+whose read pass requires every byte readable. The two rules meet at the call
+and the poisoned buffer is rejected with "slot poisoned by dead code
+elimination", even when the program initialized it.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Every kfunc with a generic __uninit output argument is affected,
+bpf_ksock_create() through err__uninit and sched_ext's scx_bpf_cid_topo()
+through its output struct. The rejection needs the buffer's slots to be
+allocated and dead at a checkpoint, for example on the second iteration of a
+loop around the call. Before e566701b9b0c ("bpf: Check fixed-size mem args
+of helpers and kfuncs the same way") kfunc arguments could read poisoned
+slots, so the call passed, but the slots stayed poisoned and the program's
+next read of the buffer was rejected instead.
 
-...
+Restrict the liveness write-only exception to dynptr arguments, where
+validation accepts uninitialized output. A generic __uninit buffer stays
+live and is never poisoned, and validation keeps requiring it to be
+initialized. Add a selftest with a scalar output buffer and a checkpoint
+between its initialization and the call.
+
+v2: Rebased on bpf/master.
+
+Fixes: 2cb27158adb3 ("bpf: poison dead stack slots")
+Cc: stable@vger.kernel.org # v7.1+
+Signed-off-by: Tejun Heo <tj@kernel.org>
+---
+ kernel/bpf/verifier.c                                      |    3 
+ tools/testing/selftests/bpf/prog_tests/verifier.c          |    2 
+ tools/testing/selftests/bpf/progs/verifier_kfunc_uninit.c  |   45 +++++++++++++
+ tools/testing/selftests/bpf/test_kmods/bpf_testmod.c       |    9 ++
+ tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h |    1 
+ 5 files changed, 59 insertions(+), 1 deletion(-)
+
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -13588,7 +13588,8 @@ out:
+ 	/* KF_ITER_NEW kfuncs initialize the iterator state at arg 0 */
+ 	if (arg == 0 && meta.kfunc_flags & KF_ITER_NEW)
+ 		return -size;
+-	if (is_kfunc_arg_uninit(btf, &args[arg]))
++	/* only dynptr validation accepts an uninitialized __uninit argument */
++	if (is_kfunc_arg_dynptr(btf, &args[arg]) && is_kfunc_arg_uninit(btf, &args[arg]))
+ 		return -size;
+ 	return size;
+ }
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -55,6 +55,7 @@
+ #include "verifier_jeq_infer_not_null.skel.h"
+ #include "verifier_jit_convergence.skel.h"
+ #include "verifier_kfunc_perfmon.skel.h"
++#include "verifier_kfunc_uninit.skel.h"
+ #include "verifier_ld_ind.skel.h"
+ #include "verifier_ldsx.skel.h"
+ #include "verifier_leak_ptr.skel.h"
+@@ -220,6 +221,7 @@ void test_verifier_iterating_callbacks(v
+ void test_verifier_jeq_infer_not_null(void)   { RUN(verifier_jeq_infer_not_null); }
+ void test_verifier_jit_convergence(void)      { RUN(verifier_jit_convergence); }
+ void test_verifier_kfunc_perfmon(void)        { RUN(verifier_kfunc_perfmon); }
++void test_verifier_kfunc_uninit(void)         { RUN_TESTS(verifier_kfunc_uninit); }
+ void test_verifier_load_acquire(void)         { RUN(verifier_load_acquire); }
+ void test_verifier_ld_ind(void)               { RUN(verifier_ld_ind); }
+ void test_verifier_ldsx(void)                  { RUN(verifier_ldsx); }
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_kfunc_uninit.c
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Tejun Heo <tj@kernel.org> */
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++#include "../test_kmods/bpf_testmod_kfunc.h"
++
++char _license[] SEC("license") = "GPL";
++
++/* keep the BTF FUNC record for the inline assembly reference */
++void __kfunc_btf_root(void)
++{
++	bpf_kfunc_call_test_uninit(0);
++}
++
++SEC("tc")
++__success __retval(42)
++__flag(BPF_F_TEST_STATE_FREQ)
++__naked void uninit_scalar_struct(void)
++{
++	/* dead before the call, so poisoned at the checkpoint */
++	asm volatile (
++	"*(u64 *)(r10 - 16) = 0;"
++	"*(u64 *)(r10 - 8) = 0;"
++	"goto +0;"
++	"r1 = r10;"
++	"r1 += -16;"
++	"call %[bpf_kfunc_call_test_uninit];"
++	"r1 = *(u32 *)(r10 - 16);"
++	"if r1 != 1 goto 1f;"
++	"r1 = *(u32 *)(r10 - 12);"
++	"if r1 != 2 goto 1f;"
++	"r1 = *(u32 *)(r10 - 8);"
++	"if r1 != 3 goto 1f;"
++	"r1 = *(u32 *)(r10 - 4);"
++	"if r1 != 4 goto 1f;"
++	"r0 = 42;"
++	"exit;"
++"1:"
++	"r0 = 0;"
++	"exit;"
++	:: __imm(bpf_kfunc_call_test_uninit)
++	: __clobber_all);
++}
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -1102,6 +1102,14 @@ __bpf_kfunc void bpf_kfunc_call_test_pas
+ {
+ }
+ 
++__bpf_kfunc void bpf_kfunc_call_test_uninit(struct prog_test_pass1 *out__uninit)
++{
++	out__uninit->x0 = 1;
++	out__uninit->x1 = 2;
++	out__uninit->x2 = 3;
++	out__uninit->x3 = 4;
++}
++
+ __bpf_kfunc void bpf_kfunc_call_test_fail1(struct prog_test_fail1 *p)
+ {
+ }
+@@ -1508,6 +1516,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_int_me
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass_ctx)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass1)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass2)
++BTF_ID_FLAGS(func, bpf_kfunc_call_test_uninit)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_fail1)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_fail2)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_fail3)
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -161,6 +161,7 @@ __u64 bpf_kfunc_call_stack_arg_big(__u64
+ void bpf_kfunc_call_test_pass_ctx(struct __sk_buff *skb) __ksym;
+ void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p) __ksym;
+ void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p) __ksym;
++void bpf_kfunc_call_test_uninit(struct prog_test_pass1 *out__uninit) __ksym;
+ void bpf_kfunc_call_test_mem_len_fail2(__u64 *mem, int len) __ksym;
+ 
+ void bpf_kfunc_call_test_destructive(void) __ksym;
