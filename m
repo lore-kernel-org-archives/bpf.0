@@ -1,139 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-110.mta0.migadu.com [91.218.175.110])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CDA23909C;
-	Tue, 15 Sep 2026 01:08:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1743D322B87
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 01:11:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.110
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789434498; cv=none; b=eAeXtVci/shNTXsJXqUOSi2SH8Re4gVFXeQd7Rmm3Gc7A1/m/QMbzE46bcO28hcVA2Ye/BZZpv/Wz7zVqjU63MMHs7ArCobcKQ4YgjEsl1dvDTHbZ9bkY3pa498g7+UvAc3tRB2xET9UNh0/VGlyDPgVc/0mmOsvtJy4npGKorA=
+	t=1789434705; cv=none; b=ZdYUYc/t17XVED2RRM9KWxwvmMFxP67UbQUAfUSPihJEzk0YbIGTTKUz+YQFFAF1v9XwHq6WAzzDmi/rUAFd5rO9MTpyKdSLCVreoXuUgh8uFWelWV5A3rS26nVqSj2ga5av5uka1A+uXDddFXPFPExf4j1z0n8oSk2OgGexsvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789434498; c=relaxed/simple;
-	bh=mUsymsCuQS3SvFkPbdMe4P0yrNvNhFRlUiTaViL3wpk=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=B+Hb5mZVOoyryXHDedn9vFejF6KS/VIgSsh5bFueoD3v3vHA0BWkO0DfTUdusxYSterbKN4JMClimR8dVXE8vM1fVZIvKomCfGyUaTFYscoYGQkDKraZCm3BNSwFN+55joc3xBQI8Upi0lX/SCDYjw+zKb2HU7qIFjgaO6DQVpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=JlZVB02S; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789434705; c=relaxed/simple;
+	bh=LxUS3t19mBa39JuY24c5F4sFKay/V6WJQxPVSj+OE9A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sEXuiQJbwUea1ZQNrl7IOy/lewukq0kWvNsT72sMpPl54n/1CRmhTi26yfcoggPVWJXEioNb4w8/tso4Mbzp5yhx7+LEMoUZqO1dUB4ruWJZcC8u34m7HxOwmFj5p0l1+LABqOBwf6L8IISQYt04GIdmGuCx+Ig71UR+8o/+iG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SAF5vEf1; arc=none smtp.client-ip=91.218.175.110
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="JlZVB02S"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 648761F000FF;
-	Tue, 15 Sep 2026 01:08:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1789434496;
-	bh=1++7fS8iWKOMzhlKxfG6KZTpRByEnFekp/pb13YE7fg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=JlZVB02SRB8SlrjnhgKRH7erLp6/lF0bjE2LaEmvv4g/ygzNEN9Df4GzyzKOq1GRm
-	 MXZBeGQXDG+eEGW474o2elhJDXFweuH5LsbgShtKZ8tWHgw7BwYQ9PSDiWCSrWxS8a
-	 XDSL8c0/AB3jDnSpmNCqPc3psNggeGWzB7Ii5XXU=
-Date: Mon, 14 Sep 2026 18:08:11 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka
- <vbabka@kernel.org>, Jann Horn <jannh@google.com>, Pedro Falcato
- <pfalcato@suse.de>, David Hildenbrand <david@kernel.org>, Mike Rapoport
- <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
- <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Dennis Dalessandro
- <dennis.dalessandro@cornelisnetworks.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>,
- Stephen Smalley <stephen.smalley.work@gmail.com>, Jaroslav Kysela
- <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya
- Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, Ryan
- Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song
- <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, Usama Arif
- <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert
- <dgilbert@interlog.com>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, "Martin K. Petersen"
- <mkp@kernel.org>, Jaya Kumar <jayalk@intworks.biz>, Simona Vetter
- <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, Sebastian Reichel
- <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, Peter Xu
- <peterx@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov
- <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner
- <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
- <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Rik van Riel
- <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Juri Lelli
- <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
- <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
- <airlied@gmail.com>, Will Deacon <will@kernel.org>, "Aneesh Kumar K.V"
- <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Arnd Bergmann
- <arnd@arndb.de>, Muchun Song <muchun.song@linux.dev>, Oscar Salvador
- <osalvador@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan
- Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, Oliver Upton
- <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Madhavan
- Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul
- Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Christian Borntraeger <borntraeger@linux.ibm.com>,
- Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda
- <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>,
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens
- <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller"
- <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, Alexander
- Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
- Matthew Brost <matthew.brost@intel.com>, Joshua Hahn
- <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park
- <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, Ying Huang
- <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, Chris
- Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, Kemeng Shi
- <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He
- <baoquan.he@linux.dev>, Youngjun Park <youngjun.park@lge.com>, Johannes
- Weiner <hannes@cmpxchg.org>, Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt
- <shakeel.butt@linux.dev>, Axel Rasmussen <axelrasmussen@google.com>,
- Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, Chengming
- Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, Miklos
- Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-rdma@vger.kernel.org,
- selinux@vger.kernel.org, linux-sound@vger.kernel.org, bpf@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
- fuse-devel@lists.linux.dev, Takashi Iwai <tiwai@suse.de>
-Subject: Re: [PATCH v2 00/40] mm: make VMA flag semantics explicit,
- eliminate VM_SPECIAL
-Message-Id: <20260914180811.057cba8fcc48d6e0b53a2683@linux-foundation.org>
-In-Reply-To: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org>
-References: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SAF5vEf1"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=LxUS3t19mBa39JuY24c5F4sFKay/V6WJQxPVSj+OE9A=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789434700; v=1; x=1790039500;
+ b=SAF5vEf1vhTc0DBWY3OnxQBygmIYilvMurkcHFBNIjChKD1AtudtAcfk+9/cuWFQuerFKyeK
+ y6V462fjIUh+ZPhmxi+A7Vfk4c9M2t6Jn1IjlsIcvlj9Uq3SNZz3Q+rOHbiJipxd6HqR6yLRMFz
+ UZUoN70fWySuYTXimwKIjMRw=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 2bee87929205f1ee;
+	Tue, 15 Sep 2026 01:11:40 +0000
+X-Mizu-Trace-ID: 2bee87929205f1ee
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <f7337efd-c721-4d32-bcda-c8473e1fffc2@linux.dev>
+Date: Mon, 14 Sep 2026 18:11:32 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 02/13] bpf: compare linked-scalar kinds in
+ regs_exact()
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260910164635.459558-1-vineet.gupta@linux.dev>
+ <20260910164635.459558-3-vineet.gupta@linux.dev>
+ <DLDKBR3Q9Z7A.23CDO8IOAPZYX@gmail.com>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <DLDKBR3Q9Z7A.23CDO8IOAPZYX@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Mon, 14 Sep 2026 15:57:20 +0100 "Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
 
-> The VM_SPECIAL / VMA_SPECIAL_FLAGS mask conflates several unrelated
-> properties:
-> 
-> ...
-> 
-> It's all rather a mess.
-> 
-> This series brings some order to things by both limiting what drivers can
-> do with VMA flags and switching to using predicates that describe
-> behaviour, not arbitrary flags.
 
-That's a lot of patches.
+On 9/12/26 11:51 AM, Alexei Starovoitov wrote:
+> On Thu Sep 10, 2026 at 9:46 AM PDT, Vineet Gupta wrote:
+>> regs_exact() memcmp()s up to offsetof(id), so it does not see ->add_const,
+>> which sits past ->frameno. Compare it explicitly.
+>>
+>> Two cases go from accepted to rejected:
+>>
+>>    old {r1.id=A, r2.id=A+delta}  vs cur {r1.id=B, r2.id=B}
+>>    old {r2.id=A+delta32}         vs cur {r2.id=B+delta64}
+>>
+>> The first was rejected before this series -- the kind lived in ->id, so
+>> A+delta was a distinct idmap key -- and the previous patch lost that. The
+>> second was accepted before the series too, which is wrong: alu32 and alu64
+>> deltas differ in sync_linked_regs(), so the states are not
+>> interchangeable.
+>>
+>> ->delta is inside the memcmp() window and is cleared together with the
+>> kind, so either case needs a kind with delta 0, e.g. "r6 = r5; r6 += 0".
+>>
+>> Only states_equal(..., EXACT) and env->explore_alu_limits reach
+>> regs_exact() for a scalar; regsafe() compares kinds itself on the ordinary
+>> path. Neither is easy to drive from a test program, so no selftest.
+>>
+>> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+>> ---
+>> v2: new. Splits out the comparison RFC 3/6 lost when the kind left
+>> ->id, which was raised on that patch.
+>>
+>>   kernel/bpf/states.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+>> index d974baad37ee..5505d7aaeed0 100644
+>> --- a/kernel/bpf/states.c
+>> +++ b/kernel/bpf/states.c
+>> @@ -475,6 +475,7 @@ static bool regs_exact(const struct bpf_reg_state *rold,
+>>   		       struct bpf_idmap *idmap)
+>>   {
+>>   	return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
+>> +	       rold->add_const == rcur->add_const &&
+> This change should be in the patch 1 otherwise patch 1 is not correct?
 
-Review is thin and I expect this won't improve a lot.  Lots of "no
-functional changes" changes.
+Will do - it was one of the open questions in v2.
 
-Perhaps it would be helpful if you were to identify those patches which
-you'd like to see reviewers focus on?
-
->  1153 insertions(+), 582 deletions(-)
-
-It's funny how often cleanup patches do this.
-
-All queued up, thanks.
+Thx,
+-Vineet
