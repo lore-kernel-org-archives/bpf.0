@@ -1,137 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B5864B66D1
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 15:52:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C33F84078D3
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 15:56:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789487537; cv=none; b=n3c4YNSbJ4ounzohI+ni0Aefks5Si/rZnvuaixzBGXADVSrCWxPMHvgZwjzwGBZLRQ+rmH0qAL8h/GA8dFcLWP3B1uEWsoyEJ7Vu2BctmmTO/lich2R7qdMF5wRjwud0M7nm/Cf41qYQJbikhEPSezjlxh49+eN4JeOHrOaZ3Bs=
+	t=1789487788; cv=none; b=bLpiqISzOGoIUKlpLMr1Vq4S4hzNuIZLfclOmHs9GoW2J4NvcHNEfSr1Suxmgn5IMygYf3ulBELBlNkds6TBNsiR2MqZ0mBIBgBrc8h91egdPCVti/exAm4zRBUP5/AhatwtiGPx2B7FTmTFnDljB6AQo96/LM11Ykb/EIm2Vrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789487537; c=relaxed/simple;
-	bh=vSdoU0ZWVnXFxso1lzATrr2sVnbH1aAW6yrQLSuVwu8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=S6FaMVd8PkwvJQEGKlW2MJ/fZHyoLtLZ+14EMDvsxUjxQmy+goDfYkaqlUB2Bvkntqp3ny2htqh9mxed5tuhsyIWljrr6d6MaUqZBnyaArmAvpK8Ywv7F0UriO8mUv4XX3e1+ZJeiewrzmtpOcRBmVJWfFZSRBgD2LNESIygTqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D5XhU8kV; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789487788; c=relaxed/simple;
+	bh=oM/GT017hDXHH4AnBxW35OCzmaSr2ed4UtmHkslctvo=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=t/wtptuYQwKmItZcd9vc/WmCaBDewjdg3hTMrzhdZdm2sSMMF00gB2rrEbk8GT/IyfD5O37p5Qh+TZmaVtqiYvfy+vNYPUTmnAGnoDgQjeMDfDn/gO4eoEE3nxGFgbeuC6IOpmLjvSdqjUMTS84W3Aw7UKJOKLnKTwh2OHqoPPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W2BeKfeE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D5XhU8kV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B88F51F000FF;
-	Tue, 15 Sep 2026 15:52:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W2BeKfeE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71FF41F000FF;
+	Tue, 15 Sep 2026 15:56:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789487535;
-	bh=plET7GX3SsjilHN1sDitFHiGq6LSD7EAeZzAD/csE4g=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=D5XhU8kV3OufeQgNkihmjMeb6XDE2/MATBRhotRS4d+5sV5mqF3oL08qlHLbZ0QAX
-	 0FQ/7/IE38Y9DN9PPUFWwCiXxow/aiUlQ55Xkdw9f5lpiWvaf4ulRKHkQqgjD8kv9G
-	 kOpyWb8eZg6esbwfWiDPUUtgoG80sSm+e4Nl0iovWb3h24453+qgzLwAwRoekMsfcz
-	 2NIzzwvktSJz/H0YyJKsUCaRpq2yvMiq1qn+RWZDYVpMNdf1v7tIZ73w+GcOiUYZ6E
-	 7Aq8iI1lz3ObGezyF3iawaxnMDkg6nhQll9wVY5P24vrTjXW5/Kp8F/u+Eb2m98Rst
-	 UPaKsWVUmPxZA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 2/4] selftests/bpf: Add tests for
- bpf_call_rcu()
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Puranjay Mohan" <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260915154248.3612028-3-puranjay@kernel.org>
-References: <20260915154248.3612028-1-puranjay@kernel.org>
- <20260915154248.3612028-3-puranjay@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 15 Sep 2026 15:52:15 +0000
-Message-Id: <20260915155215.B88F51F000FF@smtp.kernel.org>
+	s=k20260515; t=1789487786;
+	bh=xjzwYkIrgCTpxvS9KgWzLJ7N1+8mBre8HP52PbDf7Kk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=W2BeKfeE6fO9p/SPZaoMI76Wrob/EJMdKPfI1x0Vw90NvETrjF5BJorJlueInSi9N
+	 DhHjwWDFpT6jHE8iHMaGYhTECJol4RPVwZpXvfqhsJG3D1Hzxf3QE805gg8chf97As
+	 K7DCV8ZHeRmywi63U5ymdOmICIL6n+Qt0NkFqgODCpyNO+9zTp+VBRVkGR460ALs2G
+	 Xmxagy/h4tpsugsdKMCPOP2pLHgUyS1N55d+NsYyMotDO1pkyQS5bFqJaXa1AhEI40
+	 Hc3lFVsRhpVI9Q6QjeMiold4lBmtdgA2/YGpg+yqw71zj5bqw3TtoV1ETCIQyYzJXo
+	 Dm5llKBgNqtZA==
+Content-Type: multipart/mixed; boundary="===============0682516533076523501=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <58262a1911ba8265b8745e4a2f9e592ddfa74c814b4359a83fcf449ea32904fd@mail.kernel.org>
+In-Reply-To: <20260915145054.164857-1-madhav.khoslaa@gmail.com>
+References: <20260915145054.164857-1-madhav.khoslaa@gmail.com>
+Subject: Re: [PATCH bpf] selftests/bpf: Fix csum_partial() dropping trailing byte on odd length
+From: bot+bpf-ci@kernel.org
+To: madhav.khoslaa@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
+Cc: bpf@vger.kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,sdf@fomichev.me,alexis.lothore@bootlin.com,madhav.khoslaa@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 15 Sep 2026 15:56:25 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] bpf: data race in test_call_rcu_chain between callbacks increment a=
-nd chain_err
---
+--===============0682516533076523501==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 4178e68b1467222b91e572aaee89ee9d04f051af
-Author: Puranjay Mohan <puranjay@kernel.org>
-
-selftests/bpf: Add tests for bpf_call_rcu()
-
-This commit adds tests for bpf_call_rcu() to cover callback execution
-after a grace period, testing error handling on double arming, reuse of=20
-the head, and verifying proper verifier rejections for invalid usages.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/call_rcu.c b/tools/te=
-sting/selftests/bpf/prog_tests/call_rcu.c
-> new file mode 100644
-> index 0000000000000..c2d266aee8eac
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/call_rcu.c
-
-[ ... ]
-
-> +static void test_call_rcu_chain(void)
-> +{
-> +	LIBBPF_OPTS(bpf_test_run_opts, opts);
-> +	struct call_rcu *skel;
+> diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+> index 75133119c04a3..f6d28a2de7888 100644
+> --- a/tools/testing/selftests/bpf/network_helpers.h
+> +++ b/tools/testing/selftests/bpf/network_helpers.h
+> @@ -129,12 +129,22 @@ static __u16 csum_fold(__u32 csum)
+>
+>  static __wsum csum_partial(const void *buf, int len, __wsum sum)
+>  {
+> -	__u16 *p = (__u16 *)buf;
+> +	const __u8 *p = buf;
+>  	int num_u16 = len >> 1;
+>  	int i;
+>
+>  	for (i = 0; i < num_u16; i++)
+> -		sum += p[i];
+> +		sum += ((const __u16 *)p)[i];
 > +
-> +	skel =3D call_rcu__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-> +		return;
-> +
-> +	skel->bss->chain =3D 1;
-> +	if (!ASSERT_OK(bpf_prog_test_run_opts(bpf_program__fd(skel->progs.arm),=
- &opts), "test_run"))
-> +		goto out;
-> +
-> +	if (!wait_for_callbacks(skel, 1))
-> +		goto out;
-> +	ASSERT_EQ(skel->bss->chain_err, 0, "chain_err");
+> +	/* RFC 1071: an odd-length buffer's trailing byte is paired with
+> +	 * a zero pad byte to form the final 16-bit word.
+> +	 */
 
-[ ... ]
+A subsystem pattern flags this as potentially concerning: the BPF
+comment-style guide states that multi-line comments under
+tools/testing/selftests/bpf/ must have the opening '/*' on its own line,
+with the comment text starting on the next line:
 
-> diff --git a/tools/testing/selftests/bpf/progs/call_rcu.c b/tools/testing=
-/selftests/bpf/progs/call_rcu.c
-> new file mode 100644
-> index 0000000000000..aa5d2b0fa36e4
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/call_rcu.c
+	/*
+	 * RFC 1071: an odd-length buffer's trailing byte is paired with
+	 * a zero pad byte to form the final 16-bit word.
+	 */
 
-[ ... ]
+The comment text itself is accurate and matches RFC 1071. Is the current
+style acceptable given that the surrounding file has no other inline
+multi-line comments in this format?
 
-> +static int reclaim(struct bpf_map *map, void *key, void *value)
-> +{
-> +	struct elem *e =3D value;
+> +	if (len & 1) {
+> +		__u16 tail = 0;
 > +
-> +	cb_key =3D *(__u32 *)key;
-> +	__sync_fetch_and_or(&cb_keys, 1ULL << cb_key);
-> +	cb_val =3D e->val;
-> +	cb_max_entries =3D map->max_entries;
-> +	e->val =3D 0;
-> +	__sync_fetch_and_add(&callbacks, 1);
-> +
-> +	if (chain > 0) {
-> +		chain--;
-> +		chain_err =3D bpf_call_rcu(&e->rh, &arr, reclaim);
+> +		__builtin_memcpy(&tail, p + len - 1, 1);
+> +		sum += tail;
 > +	}
-> +	return 0;
-> +}
+>
+>  	return sum;
+>  }
 
-[Severity: Low]
-Could there be a data race here between the callback execution and userspac=
-e?
+This isn't a bug, but would keeping a separate '__u16 *' pointer
+alongside the byte pointer let the loop body stay as it was, rather than
+casting inside the subscript? Also, is there a reason for using
+'__builtin_memcpy()' here instead of plain 'memcpy()' like the rest of
+the selftests tree?
 
-In test_call_rcu_chain(), userspace calls wait_for_callbacks(skel, 1), which
-returns as soon as it observes the callbacks counter reach 1. It then
-immediately asserts that chain_err =3D=3D 0.
 
-Since __sync_fetch_and_add(&callbacks, 1) happens before chain_err is updat=
-ed
-in reclaim(), userspace could potentially read a stale chain_err value (0)
-before bpf_call_rcu() is actually invoked and writes its return value.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Would it be safer to increment the callbacks counter after updating chain_e=
-rr?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260915154248.3612=
-028-1-puranjay@kernel.org?part=3D2
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34986038731
+--===============0682516533076523501==--
