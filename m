@@ -1,122 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtp-42af.mail.infomaniak.ch (smtp-42af.mail.infomaniak.ch [84.16.66.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE8746A5E1;
-	Tue, 15 Sep 2026 09:01:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2370E39E17E
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 09:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789462912; cv=none; b=sPxwk2nIa2lvhiL0ARyGAN1pIPVGUz6cXvPcwpy2hPbYOGG4CkeDKCnPvS2jd7rlUc2dLUbKuz8vqDGP+oW24U1S4V0ngvWjTrwlAJqVd9qDmomJgjUplmQ9Hnu4ZPGQv6ql+/lsDfvbr6lGgft83jQER+iGFO49PTbBuHBTQHI=
+	t=1789464331; cv=none; b=W6IKU2wpReRnO2PAMeQo0dVv2VAvuFaFbXzeJMb8VpMyvJqK7E56dG4fXS5CN8OhLMe5fawVpmhq2fHi5VPxmdL7E9yJuRZOZlRnO2FbUVOD+Al2WJDpRu/Ifk/r3VGGK8POkuDlLbxEi4uefg8M+eK6Nq67dqvFvAIidTKntyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789462912; c=relaxed/simple;
-	bh=aRyUL2XU+gxp4Mn1Uiq547yTXErqRLkcmDZ746FHE1E=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=eKa3Svwbvoa+c4xohqOeiI5hqVMgQQUoqfxJhqnaOT9v+tvAzyZVjSXLAXiP3DAAq6d9BFE4k3ZIDOQiP9xn4IWFc37Ec4jBFkx/jfSTrrFSkXY4v91VA64JR4TVU9zfDzIcRb2bu8cADCMRs4xDIn7N3ZLrwoSv6T76i9PDcRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nHs+4okT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789464331; c=relaxed/simple;
+	bh=q0QRyuG6lsn9T5U8tQ9dxS2+j4W8IxB+8Ooa+vPxrnI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jGXWDMm9pPZ3nEJWZjixjaMDEGsWTuz5vztexu4WVsILUxDz4O3iXxzPNveANADgvFwmWAk9iixvlX/gC5nAKMh5v2+WyM24y+ofn1ZKbDkPmchGf+b2KwCnxTXwvzhm/+RGndW0IhDEZkwhiDRhDlhuY809A4jF6g2rNLXook8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=M+/qnbD1; arc=none smtp.client-ip=84.16.66.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nHs+4okT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B9451F000FF;
-	Tue, 15 Sep 2026 09:01:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789462910;
-	bh=exObQpVPCz+CYWwPcxHV0eYvHDRpab6T8xfQK+9Wolc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=nHs+4okTqlsr/veDUcsDRkgqzRvHrYeS7z7WOEYv6LKZ95EUEM94YPMgS1m0ollGq
-	 L/MVyePpk1zV7RUrhyprB6BD9MRmWIwwveGibN/SRM7NkrTwB0Gj6vvi9K9gUlSiVl
-	 01HSYpmuNTkOfc59KnL7VLMY+yhdyVAnZY3z1eVVXDx53cwmVrcSQa8lQIbf5AjXpC
-	 uJdCXMtrzGomyFTX+XBpQep2ViZ6+S7zEY22ToVOT7sY8CKYD6C1t2N9wSvzGCQXv5
-	 /eMOFnLzyYNGhbu7davJym+Gen/NsgU3MhX12j+u2d9BZ+dFbIHTzqIqbJ6sS9OB2S
-	 cRPp1mOD8tCkQ==
-Content-Type: multipart/mixed; boundary="===============3167789660122054062=="
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="M+/qnbD1"
+Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
+	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4hkc7N0l7Qz9hD;
+	Tue, 15 Sep 2026 11:25:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1789464319;
+	bh=c8Ki4Jk4LY6BAwvzS532/rmaZ862RgTRgNqJYa0lkfU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=M+/qnbD1xr3WjdMrykCEJysicA4Kupv9S9JxSiIW4BwifH2sjjBxvQ4Pw8P19VSy9
+	 ggsKbcvR6agrKaseNy/yMWq6OcIXCo8HDkBWv2t7AZW6+pHlrHvWe7Am5ASY3Dtuuw
+	 /GA5sNgVdDvzgESDpLX+mqBqTrVljDDqO1JK9Ezw=
+Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4hkc7L09wXzY2p;
+	Tue, 15 Sep 2026 11:25:17 +0200 (CEST)
+Date: Tue, 15 Sep 2026 11:25:13 +0200
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Justin Suess <utilityemal77@gmail.com>, 
+	Paul Moore <paul@paul-moore.com>, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	kpsingh@kernel.org, matt@bobrowski.net, viro@zeniv.linux.org.uk, brauner@kernel.org, 
+	kees@kernel.org, casey@schaufler-ca.com, gnoack@google.com, jack@suse.cz, 
+	song@kernel.org, yonghong.song@linux.dev, martin.lau@linux.dev, eddyz87@gmail.com, 
+	memxor@gmail.com, jolsa@kernel.org, m@maowtm.org, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 04/15] lsm: Add the bpf_lsm_policy_release
+ kfunc and policy object destructor
+Message-ID: <20260915.ok8eig8Eishi@digikod.net>
+References: <20260909193719.518517-1-utilityemal77@gmail.com>
+ <20260909193719.518517-5-utilityemal77@gmail.com>
+ <CAHC9VhQHZ+ngFdzKqmnzBh341CGEg-jexu+QYU8=1qXK=u-x-Q@mail.gmail.com>
+ <aqHUw6k0Mf83CGFT@zenbox>
+ <CAHC9VhTM7emi9vxs+5Za8Hrc_e9dg7fZx+Z6BGUc4VQ1qhEAUA@mail.gmail.com>
+ <DLD0VQ3D8CYC.3V5ZT8HDMY4IH@gmail.com>
+ <aqTZdCz6JaoK16Fp@zenbox>
+ <DLDL7KK3FZKU.17ADLLWJVXB5F@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <9e4c6c05feaa894234b5941f694c04db8da58169ab1165ff1a6579ce63dff8f2@mail.kernel.org>
-In-Reply-To: <20260915080255.48929-6-tasos.papagiannnis@gmail.com>
-References: <20260915080255.48929-6-tasos.papagiannnis@gmail.com>
-Subject: Re: [PATCH bpf-next v7 5/5] selftests/bpf: Test mm_struct user memory kfuncs with linux_binprm
-From: bot+bpf-ci@kernel.org
-To: tasos.papagiannnis@gmail.com,bpf@vger.kernel.org
-Cc: linux-fsdevel@vger.kernel.org,linux-kernel@vger.kernel.org,linux-mm@kvack.org,david@kernel.org,akpm@linux-foundation.org,andrii@kernel.org,ast@kernel.org,brauner@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kpsingh@kernel.org,ljs@kernel.org,matt@bobrowski.net,memxor@gmail.com,song@kernel.org,sun.jian.kdev@gmail.com,utilityemal77@gmail.com,viro@zeniv.linux.org.uk,tasos.papagiannnis@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 15 Sep 2026 09:01:49 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <DLDL7KK3FZKU.17ADLLWJVXB5F@gmail.com>
+X-Infomaniak-Routing: alpha
 
---===============3167789660122054062==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi,
 
-> diff --git a/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c b/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c
-> new file mode 100644
-> index 0000000000000..07ca96d9db45f
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c
-> @@ -0,0 +1,122 @@
+On Sat, Sep 12, 2026 at 12:33:13PM -0700, Alexei Starovoitov wrote:
+> On Fri Sep 11, 2026 at 10:26 PM PDT, Justin Suess wrote:
 
-[ ... ]
+[...]
 
-> +static const char expected_arg0[] = "first";
-> +static const char expected_arg1[] = "second-argument";
-> +static const char expected_env0[] = "SOME_ENV=a";
-> +static const char expected_env1[] = "OTHER_ENV=something";
+> landlock was designed for unprivileged users. bpf needs CAP_BPF.
 
-[ ... ]
+Yep, and this series would kind of bridge these two worlds. ;)
 
-> +	char arg0[32] = {};
-> +	char arg1[32] = {};
-> +	char env0[32] = {};
-> +	char env1[32] = {};
-> +	u64 offset = 0;
+> There is a fundamental disconnect. If you can tolerate CAP_BPF then
+> just use bpf-lsm and implement whatever policy you need there.
+> If bpf-lsm is missing a feature we can fix that.
 
-[ ... ]
+The question is not if BPF LSM can or cannot do what Landlock does.
+Landlock provides a way for userspace to sandbox processes, and that
+comes with a well-defined semantic, logs, and an user space ABI, which
+are specific and dedicated to Landlock.  Some user space depend on that.
 
-> +	/* arg0 is at bprm->p */
-> +	str_arg0_ret = bpf_copy_from_user_mm_str(arg0, sizeof(arg0),
-> +						 (void *)(bprm->p + offset),
-> +						 mm, BPF_F_PAD_ZEROS);
-> +	if (str_arg0_ret != sizeof(expected_arg0))
-> +		return 0;
-> +	offset += str_arg0_ret;
-> +
-> +	/* arg1 is at bprm->p + sizeof(arg0) */
-> +	str_arg1_ret = bpf_copy_from_user_mm_str(arg1, sizeof(arg1),
-> +						 (void *)(bprm->p + offset),
-> +						 mm, BPF_F_PAD_ZEROS);
+The goal of this patch series is to improve BPF LSM to enable it to
+(also) enforce a Landlock security policy defined by user space thanks
+to the Landlock syscalls.  The security policy still has the properties
+that makes it possible to safely compose different ones (e.g.
+monotonicity/stacking enforcement, inheritance, separation of duty, no
+cover channel, safe privilege reduction without confused deputy issues).
 
-Do the offset comments describe the right quantities? Looking at the
-buffer declarations, arg0 is a 32-byte array (char arg0[32]) while
-expected_arg0 is a 6-byte string ("first"). The comment says arg1 is at
-bprm->p + sizeof(arg0), which would be +32, but the code advances offset
-by str_arg0_ret, which is sizeof(expected_arg0) = 6:
-
-  offset += str_arg0_ret;  /* str_arg0_ret is 6, not 32 */
-
-The same pattern continues for the env0 and env1 comments - they name the
-destination buffers (32 bytes each) rather than the expected strings (11
-and 20 bytes). Should these reference the expected_* arrays instead?
-
-> +	if (str_arg1_ret != sizeof(expected_arg1))
-> +		return 0;
-> +	offset += str_arg1_ret;
-> +
-> +	/* env0 is at bprm->p + sizeof(arg0) + sizeof(arg1) */
-> +	str_env0_ret = bpf_copy_from_user_mm_str(env0, sizeof(env0),
-> +						 (void *)(bprm->p + offset),
-> +						 mm, BPF_F_PAD_ZEROS);
-> +	if (str_env0_ret != sizeof(expected_env0))
-> +		return 0;
-> +	offset += str_env0_ret;
-> +
-> +	/* env1 is at bprm->p + sizeof(arg0) + sizeof(arg1) + sizeof(env0) */
-> +	str_env1_ret = bpf_copy_from_user_mm_str(env1, sizeof(env1),
-> +						 (void *)(bprm->p + offset),
-> +						 mm, BPF_F_PAD_ZEROS);
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34946192265
---===============3167789660122054062==--
+A process can currently define such security policy, get a file
+descriptor referring to it, and pass this FD to another process that
+would enforce it.  This helps design secure architectures by splitting
+ownership, trust, and privileges (e.g. CAP_BPF).  Being able to use BPF
+programs instead of user space programs to enforce (e.g. an already
+defined) security policy would make this enforcement more powerful
+thanks to the context BPF have access to.  Of course, BPF LSM can (and
+should) also enforce other kind of complementary restrictions.
