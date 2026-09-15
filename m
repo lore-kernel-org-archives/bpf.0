@@ -1,124 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5A82430CE3
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 17:19:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789492758; cv=none; b=CC/L4z4OD1w3aDIp1xkkkXOnyQXcZPNQz/Vn0HOtD5rUsgunICXGIcbmjmcDOoJqquYBiw7PBGHJ4TdLqkIEVeZNNQvQCp5s3iPDfU9201Tic/IgEu/wwDn8910xoZIhLY0Ud7Wd77FvKPlolTjJ6f4gKTE26oIRDpTiPmxx9WA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789492758; c=relaxed/simple;
-	bh=qfvSp4m9II/+j9uuZPxAlVZkkqj5lLQn4/iWmZBrtnI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=liNT4wRmh41lOtOwxcX080WzCpdGmCBM5PNKitPZqCIc+7OvWtKDxb/j8cNIUD1bAVE+mwEJ6kFy/WUwVae2RU2DqF3omVqkkyP9c1TueWikrWmFfqS4bmy7Dt8cJ0XKogQAqK46/Se/u6vcGYt4XQfIq+OMGKh1PkauKX1D51k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M9AJ581z; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054D94A2A42
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 17:21:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.76
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789492872; cv=pass; b=WPupp/eYbESDj+p9HxBjttGJQrDdTcmBNBaM4dMLI7uCniANq94OA2Dk8OucUIQ0YLFezuo+HxVjN/SglVPbGOMLFKzzaDWqLwWVIP9jpGP2rd4ghHvrUSKqT2A/GGb9swrgg11IbIoHXq0NxlvYCq+bt5MZFros3pXpbpm9GfQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789492872; c=relaxed/simple;
+	bh=ANRdyzkiW2n46BZXS7RzLN4gyuuHv08frlEVtMqj+vw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dqWqHjhzNoR/3vDBo6rlcbvA9amOY2n+UZxdd4oFoRZOsGnt8VpHOJg2kJESt3r5hR1A2a3w7yzTnJxORcWl3EIMdV75sxss+1Di069gJKYS6gZ+QPwRnWDeoyqfbyWsIJ4OTR4G6Pa54I/vLKIjwq9PgfDx3g9Gt9zCcannpdM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c6yTSnNx; arc=pass smtp.client-ip=74.125.228.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M9AJ581z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BBB11F000FF;
-	Tue, 15 Sep 2026 17:19:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789492756;
-	bh=WYiHqNxDHD1q0zJIhg0QW3yTfYOO17Aoiukh5TjTOAs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=M9AJ581zFzetxPRTI7kBT5omFnJkdAKRw49hS5zyTt+3tUUPDk0EXa+epcISVPpKA
-	 ajprWgSVPt8FF6VtamwsCRCzGCCroxJ9GadW+ybwM2AydJIVMb2pZwqiBLW4OaEsz5
-	 BBpIMSXy72b8Dx6aZC4W8OUctaU+G+Lr2eT3SnP24ViL1kFC9zOl0qDW43AnUgqOX3
-	 pGsii0hynrFjWr7HfXJPqRY9Hm1uayMO3fw62fjRFHSwmAsQmoaF1t9r7RCFjB13Sh
-	 HPKDMx5s1ifWnuxCHFCEyINGAmm8raeRT+qx7cAqkhRfMqEs29lP+i7fsidyr2UEgC
-	 NULHQK5Wj5IQg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] bpf: clear stale IPv4 options after LWT encapsulation
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Weiming Shi" <bestswngs@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260915170147.3943392-2-bestswngs@gmail.com>
-References: <20260915170147.3943392-2-bestswngs@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 15 Sep 2026 17:19:15 +0000
-Message-Id: <20260915171916.5BBB11F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c6yTSnNx"
+Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a60590a85bso77471a12.3
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 10:21:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789492869; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Z60k8DdvgYWlda2RSIAsMoLHUVj7dh44NGCtON0zYvI+YHRY32E1MGi6ssc/bwCwNK
+         EfD+uVKDXcP7OdObbrTmcJOZgPEr+TpR1t2nouEEchL3U+XpkvV23aGxS3eoiMLTF+x4
+         9qbdMAsfehsBIcVDfUXEfVN/k+uKaoIX26hvYKyzn9Xgf7eAsqUVditX5bDqdxZZVJiX
+         RCYkQScHEeqIbBIRlkUbsMcjs97BsdUZe/TU+dBGHiyMBT+LeB/fL2wid6dtqfVXcQ3I
+         Ff+1iQdw95PTqdZUv5JSQN8Vo1mka6qSgTVZhvaEJdzQRrhmydkFMUA3YNWKNoqMC3sq
+         aSpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=GfANrDKyQQJG0cfj6OqPz60w32Xge59VKyIhU4wGT5k=;
+        fh=7K2qWJ3mUiPSelnihIFryY3l1DriTibHaNVcRL5iMOk=;
+        b=mYNrUvflY3avRv4heO3YJzR1tQabnSHO+d6snmtzSQU7MzruwG3K9Ljdt6mnnZ4ZTb
+         rai4RjqbCO0D4tYsHNuLgIU2casL2f7u7U2EmXnG0QmZp8LkqqmROxZlp8bhWcW85Stf
+         qVuFOYyG74eqHpyr05hRSCaJm5jXymWxrZQO7SYkVvSxkhXIBYULldgPYihopM0KjMkX
+         1o1h5I15Y9p5Bf/X9ve1iBxj75A+wR4FDsMEzHg7/RMdeX3GXuNriJZgdSIUNfTsOzNO
+         AlKV4TJ7hMXT7QaD0DqSDe0oLfTeFIYUwQow+JZkK3aDHCy1DZz1zgtn49sWnsbfTqIO
+         w1yw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789492869; x=1790097669; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=GfANrDKyQQJG0cfj6OqPz60w32Xge59VKyIhU4wGT5k=;
+        b=c6yTSnNx92TKiEQNUXjTyYy0UrMReZLxPdXxr4Bq7TDFwLSZCwjNiFNCAQuu0RX9iA
+         LLUcO7LSYwm/eHm5E87FSuwVuMrj0kQAQWhLza8gRMKkVLiU8LSqMtnM9kAgNWQSAUmO
+         fMpf2aGA2G/ZBJW7lT3nQMWe5Igkk//n669MF9edA6m+I0ctZaHZ8UbQa34Aqh/5My9Z
+         3YHdMQ39GmwDBfmsP8kX4GofzXKjPKaeV89dLuoE2a4tcptIYY6rONokfPHQAtB5Ad2S
+         8q1VXiOCiT1OtZVgG0JJB/g+mO4Wbb5eIoDP8Q28X2YFaZg+SuVhF2HSUIYZOCHp901z
+         BcKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789492869; x=1790097669;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=GfANrDKyQQJG0cfj6OqPz60w32Xge59VKyIhU4wGT5k=;
+        b=JqYrtgp0zE4b8QcxQAd+5YYP6Zlp5avrXkQXRF0l2HcHs9Pb8EY5vW+Nck36OcEmO4
+         I7lE/JvVdTAKMLnVYOslmU0gvJk7fCfrfQpaul89ZdgNd634vPODl7F93LN4c32B0Tx8
+         C3jTrbv7oGXPHkbVoYl52dDmpZkgGT+ouhJ+XWG945V9Fwj11wuM3jzwvhhDj0dNWsv6
+         2yr0Bg/KbbQNGpBGdg0vVp0lyg7GjuPyaT8xCxlQEkjTQcl0MkxvOd8DkvPavdbfVqJk
+         A4SPkaTGCfB4DILls0/sSDPvEP4jSxK9yUAb1OWMnf3apqtRAqNn8BqKXa7A8YK2mHDj
+         3i3g==
+X-Gm-Message-State: AFuF++neqf2RIfoqpIDDRkhU1d3o8hm6LbcPoI/CjquOaojpVEKcrTc5
+	BZRfXh+/SE7XM0ObQ4YknvyuY1BTGNZOT75zAoK0VaECnDxXCxAepfz2g/0TIcQ5w+I2b2YSzZj
+	6Fx5fMRIe7tq0pX9XCAe9uoBlF61rrco=
+X-Gm-Gg: AYBFou1oq7T15bwfIGK6VFeA/PqIaodUL4sQLwig8gJFQnt5YHjZBFwibZpNj+8bYp9
+	fPB6DXPg3wWOqhApK55ByL3uwbevrO8p4uNtJE46qeYN2cCK4UOtX60gH3DRNT+vSryQK9wbUZN
+	wj8wyTgpdJqmKi4jQf15/ZwiXvsn4X+KMXPGsDvqaEaC3uS+uufnncOrv3+r1FeNOkCgKuRdg9H
+	C1B/LcgVKfQpd1WdYHlv9Bg8ah6y3DNeEKPgo68ClfMdNpB5hFwtquUC3Yfa8DzODHPsqICGLEo
+	j6HnBNEzGsIQua6N+LPqQ7PEWRXZZZ96I2YbKlcy4AkWEDhWamjg3YtqwAQHBINLcYk=
+X-Received: by 2002:a17:907:724b:b0:c29:8c9:6fd with SMTP id
+ a640c23a62f3a-c29d7792e17mr167097366b.11.1789492868911; Tue, 15 Sep 2026
+ 10:21:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260915141004.1196460-1-memxor@gmail.com> <20260915141004.1196460-2-memxor@gmail.com>
+In-Reply-To: <20260915141004.1196460-2-memxor@gmail.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Tue, 15 Sep 2026 10:20:52 -0700
+X-Gm-Features: AcwNN1VK3c-zNOb1LRSYuEBC2KMEwk2pwWwMDYDxNz7RcFCDEF9FFnda1e8AOhI
+Message-ID: <CAMB2axM2_fMUyPdS7ySuQiKAGW11hhCwTSX=PSxFZ1o2mZu6FQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 1/3] bpf: Fix generic __uninit kfunc output buffers
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, Tejun Heo <tj@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: incorrect SKB CB state when cb_access is false
---
+[...]
 
-commit 81b40ecbc1d9468e9497a57756458b9bd7e91f03
-Author: Xiang Mei <xmei5@asu.edu>
+> @@ -9232,7 +9237,8 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg, u32 slot, u32 p
+>
+>                 access_type = fn->arg_type[arg - 1] & MEM_WRITE ? BPF_WRITE : BPF_READ;
+>                 if (meta->btf)
+> -                       access_type = BPF_READ | BPF_WRITE;
+> +                       access_type = fn->arg_type[arg - 1] & MEM_UNINIT ?
+> +                                     BPF_WRITE : BPF_READ | BPF_WRITE;
 
-bpf: clear stale IPv4 options after LWT encapsulation
+This looks a bit convoluted. Consider doing this when generating the
+kfunc proto or at least something like below?
 
-This commit addresses an out-of-bounds stack write caused by a stale IPv4
-header length being interpreted as an option length. It tracks active LWT
-runs and resets the control block state to preserve consistency across
-nested runs and protocol family changes.
+  if (arg_type & MEM_UNINIT)
+        access_type = BPF_WRITE;
+  else if (meta->btf)
+        access_type = BPF_READ | BPF_WRITE;
+  else
+        access_type = arg_type & MEM_WRITE ? BPF_WRITE : BPF_READ;
 
-> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-> --- a/net/core/lwt_bpf.c
-> +++ b/net/core/lwt_bpf.c
-> @@ -80,6 +80,31 @@ static int run_lwt_bpf(struct sk_buff *skb, struct bpf=
-_lwt_prog *lwt,
-[ ... ]
->  	bpf_compute_data_pointers(skb);
->  	ret =3D bpf_prog_run_save_cb(lwt->prog, skb);
-> +	lwt_ip_encap =3D ri->kern_flags & BPF_RI_F_LWT_IP_ENCAP;
-> +	ri->kern_flags &=3D ~BPF_RI_F_LWT_IP_ENCAP;
+>
+>                 zero_size_allowed = meta->btf || base_type(arg_type) == ARG_MEM_SIZE_OR_ZERO;
+>
+> @@ -9550,6 +9556,33 @@ static int check_func_args(struct bpf_verifier_env *env, struct bpf_call_arg_met
+>         return 0;
+>  }
+>
+> +static int mark_raw_stack(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
+> +                         int insn_idx)
+> +{
+> +       struct bpf_func_state *caller = cur_func(env);
+> +       u32 slot;
+> +       int i, err;
 > +
-> +	if (lwt_ip_encap && ri->lwt_ip_encap.cb_access)
-> +		bpf_lwt_reset_ip_cb(skb, ri->lwt_ip_encap.cb_proto,
-> +				    ri->lwt_ip_encap.iif,
-> +				    ri->lwt_ip_encap.l3slave,
-> +				    (ret =3D=3D BPF_LWT_REROUTE &&
-> +				     lwt->prog->type !=3D BPF_PROG_TYPE_LWT_OUT) ||
-> +				    (ret =3D=3D BPF_REDIRECT && can_redirect));
+> +       /*
+> +        * Validate every argument before initializing outputs: an input argument
+> +        * may alias an output buffer. Use the normal stack-write checks to discard
+> +        * stale spills and preserve the rules for special stack objects.
+> +        */
+> +       for (slot = 0; slot < MAX_BPF_FUNC_ARGS; slot++) {
+> +               struct bpf_reg_state *reg = get_func_arg_reg(caller, cur_regs(env), slot);
 
-[Severity: High]
-Does skipping the control block reset when cb_access is false cause issues =
-if
-the packet is returned to the old protocol handler?
+The bot has pointed out the need to skip inactive slots, but the rest
+of the patch looks good to me,
 
-If a BPF program with cb_access set to false changes the IP encapsulation
-family via bpf_lwt_push_ip_encap() and then returns BPF_OK, it seems the
-original protocol stack could end up reading a control block formatted for =
-the
-wrong protocol family. Could this result in corrupted packet delivery state,
-such as lost routing flags like IPSKB_L3SLAVE or reading a zeroed nhoff in
-IPv6?
-
-[ ... ]
-> @@ -669,6 +740,16 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void =
-*hdr, u32 len, bool ingress)
-[ ... ]
->  		skb->protocol =3D htons(ETH_P_IPV6);
->  	}
-> =20
-> +	if (ri->kern_flags & BPF_RI_F_LWT_RUN) {
-> +		ri->kern_flags |=3D BPF_RI_F_LWT_IP_ENCAP;
-> +		if (!ri->lwt_ip_encap.cb_access) {
-> +			bpf_lwt_reset_ip_cb(skb, ri->lwt_ip_encap.cb_proto,
-> +					    ri->lwt_ip_encap.iif,
-> +					    ri->lwt_ip_encap.l3slave, true);
-> +			ri->lwt_ip_encap.cb_proto =3D skb->protocol;
-> +		}
-> +	}
-
-[Severity: High]
-Is it safe to eagerly convert the control block to the new protocol here wh=
-en
-cb_access is false?
-
-This appears to assume the packet will always be subsequently processed as =
-the
-new protocol. Since the restoration logic in run_lwt_bpf() is completely
-bypassed when cb_access is false, this might leave the control block in an
-inconsistent layout when the packet is handled by the original protocol han=
-dler.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260915170147.3943=
-392-2-bestswngs@gmail.com?part=3D1
+> +               argno_t argno = argno_from_arg(slot + 1);
+> +
+> +               for (i = 0; i < meta->arg_raw_mem.size[slot]; i++) {
+> +                       err = check_mem_access(env, insn_idx, reg, argno, i, BPF_B,
+> +                                              BPF_WRITE, -1, false, false);
+> +                       if (err)
+> +                               return err;
+> +               }
+> +       }
+> +
+> +       return 0;
+> +}
+> +
