@@ -1,123 +1,105 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8ADF23D281;
-	Tue, 15 Sep 2026 02:31:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9891B221F39
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 02:36:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789439511; cv=none; b=Cpnq+Ljhrl8dgzvSA2weDYM3riH40oEwVo2h9eC7s07RNDCS2GlXZCq5cvhrs5bB2YgOXvWf0QUegtLOX8mU6CNrI2MY6UqBFxt9XtvyYE2wq+Uef1T54TI0GOOK6eIoS52KgyvvrmGsJuRqGyA9ZUASeHOXrF6PGaLwsa4yVtY=
+	t=1789439784; cv=none; b=o0HjMXhh29U/zPJDrg88zclqJRO9SSHq+WtKLmWeZdCzJzcgVWrQxy7Qo974nmJ9KnRJZaFSnAvvsv1+OsTOEwW3t2dJyB/y660TxueIWwoBcYB03FaS4HsP0rSBy+eQEDIBpEg1hS8t+t/+YklBz2LeiRfPdvw+5KERxl1t/SQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789439511; c=relaxed/simple;
-	bh=fxHbn1hkr/4pkELmaShAa43uMVU5BI2+e8Kwu6VpryE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WsK+twJhsfxaig5ZUUwyLBvjRXleGImYtrnL3aXcKfDI0R47KcvQFyq6lfI0nSWLX29V/Ad1dzct3l3SEQMBbe6nfXmjQb7ftLrzjvzeFF8vlqHCK0KrISo8DbNW9MNOTSpwrbSjitPKS3f0NInPoHoPqKj/rvnid7PoIvTpLq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=epZV88N2; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1789439784; c=relaxed/simple;
+	bh=dR12M53iqXwgU/9QZ19+TCsBIvW+wlfibPwsPSBE30Q=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=eRaEavIQi8L0JRMJ7AjbnAPuzIM8wa6NbO/qKbHdiHWx6mTfCe1WEZnzRTC3p/nTxbG3cKLxTTl8RCZrJIQDPTdLBbpKPVyqFWfikSO4pEiY50osUfJF+ntirt6eY1zTK9oS4YabggCwZil2xWPE6QB6aaRF3769SRChvjnQGkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WkjTkno+; arc=none smtp.client-ip=74.125.228.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="epZV88N2"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id E5CF340E022C;
-	Tue, 15 Sep 2026 02:31:46 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id qjc-Nwnlwtg8; Tue, 15 Sep 2026 02:31:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1789439496; bh=qSXFbfpOKnuvaEbNiDn4HfVO50MtuTzZ+yYBsK0eDiI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=epZV88N2/8zazLMcKvlccwrylVOewX/+KHOEExwCUJZyMLMKCWdHEWrFddkaGlHo3
-	 /rAkqnMLs7Mv1O7gPyalgGsZ8dOdjbczGw2Njwgpys5PAhwuem40BaZo3s+hypRWNe
-	 q3Yrxy7XscBDptePVIXSiMXYuxfykS2Z8RkkK1BHI8HqMxrizOpyGEhWKfjzxcSc8t
-	 AlUFtRN0q4KjqtEBIWkERV0jvgmC51eiighIb0vTjfehho381YFscFIAy1RTLqTAud
-	 jiRLdMRFT5dsNWff0ULOIflPBioo4eIvsF3rjqNyDWcVBh2MQMUVAXh0pQkOmtSAkE
-	 Xlj2tcMorNeP2JtXhKWRASpEKkHgW/cCRzWx7nALLiycLmx3p0uLLbKyvzoOqSaNhB
-	 HxuqcOgpdoUFJf7m/J8McpSUHbnvjPeFvK/yXJ02YAbBLy15DXsInlAEYdtJd7y8Iw
-	 LxlhhpBXDHHLv8DHlM88rBAECYVlLxDxM1Sb6UoGNDSGMtV/3NWk8tYbkrno69CIsN
-	 /p9kOKTWjTJ/CyOgiYlvFJtsnEKGLVy/ICnxoO20cuYkqnZS2yRFL+EVLcrJ48TfsP
-	 NZVIP2MgDtk66smtyDcdMOALcHCtAPdqOOkJHC6aj1MRsKb0t7dZebPa9zjc3vwGh1
-	 LrMYUBg8VAsjRJKk75Dgf9Mc=
-Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::e])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6408F40E00B9;
-	Tue, 15 Sep 2026 02:31:19 +0000 (UTC)
-Date: Mon, 14 Sep 2026 19:31:15 -0700
-From: Borislav Petkov <bp@alien8.de>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>,
-	Ingo Molnar <mingo@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	linux-kernel@vger.kernel.org, x86@kernel.org, bpf@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-mm@kvack.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH v2 2/5] x86/cpu: Initialize boot CPU cpuinfo defaults
- early
-Message-ID: <20260915023115.GFaqit8zcWHGkAdHD5@fat_crate.local>
-References: <20260814235134.3461435-1-ihor.solodrai@linux.dev>
- <20260814235134.3461435-3-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WkjTkno+"
+Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85469e25400so2137683b3a.0
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 19:36:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789439783; x=1790044583; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=dR12M53iqXwgU/9QZ19+TCsBIvW+wlfibPwsPSBE30Q=;
+        b=WkjTkno+H4JXWYf17EzlJnZeOwA+mGDV7sIMrF/XwmLFUkT2FhiOgswVRmrYTEFhKo
+         TKKZ9UndZ03dbq0vGMNZ0A7sc5S0/nFx7JzCWV/ym6yZCFVoU/qK77cE4yn7qoNdmkhA
+         rwl1Lo6LvB6RbYxVStpGYejECBpEc87pC7x0DDCq4YLyyRtLLn8+faKc1VWudaXdLf3u
+         SMmn4eGSq6N1RuTUXv9etXzqLv2+8mFTpCdkuBHeldN2vKM9WJsJqtcpQXI762qFods0
+         +quv4h0W1autnrA9CgMhlbgNEsdpFOJK6HxG+E63Dpf0RVvfnzJjkLWUsyE3Gn9ladY5
+         N1xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789439783; x=1790044583;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=dR12M53iqXwgU/9QZ19+TCsBIvW+wlfibPwsPSBE30Q=;
+        b=Pf3sc5MmLWt6tnDQu71ey13mBC/AnFtL8SZBjlXdqosy4DI8pR3E4jyjZEs2QgXGzr
+         vRwKYqUWrbblYEgqkjhgk6TOuVkcG/2COnPj7MmkzkhnA5GvkEHDE6LFxwJNNcKHz5Qv
+         sahPhd7o0ilDSDt/x1EDZFumKDMla9GyLL+xuLTwWcB2Oa70KJ7olQtCLBczYZ8skmDq
+         /XXYyeFA55dtVt/Mk+r2VHqnVyl0pqECreU+muWyetzmvA25qpuP5KGifFzb/ZtkNq+v
+         h8tyT8VNPMNFq6e+JFMavOYCZWFjKJXs/sjMQkP+YV0zKZI1vFXojFTcjKmn8RPMx46k
+         dTsQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzJYrmE+CtYygvVtpNIL2N9gBkz7rMmcHsQzAuAPxifenZZq9lqEV7nxvhJJRxMdWqJHj0=@vger.kernel.org
+X-Gm-Message-State: AFuF++mXbNY03BWyHwbiO/XEa36xdKPK06wWFSECO01pViGmF4epHaeX
+	pXj0LYkFjoEOfdW+GP8Hqd+s8w9JuVs30ugyS4TXstYMesfx1TxVEusA
+X-Gm-Gg: AYBFou2vJImoVLyL2GzegUOiu7/6rMccCbyR5qmkfij6lsrkQcp9deMKEtOgcrNgRXG
+	PdVkprjuON99TN1nvEAKoJ3enNLEIIftCKSDsr4t2UcsLJ41NTjURz6BkxTryrZtUBLVT4Bh3gD
+	aBDZ+tE4QMIMPuZjrFsZmBUGHpb3B3j+kybb6ebEOC0UVnzl9250X3cEjJIF0kKwfrgGOHEJ3Hi
+	Ov+7uOl5ugC7/3yTFKtchEsbJn2yyNDYlMJElQ0TlZ+yYutG2sB8yNbCCQv/Ngxb4BtAzaC+5uj
+	wltxklpRy9KTVL4tS9neHZE8NStlgfcEGTjxBOXHSSbaFX3sBnSsAO0GQ1GATrp1zweyJYyvoLp
+	W4XBA992tcOCascfApzCOcFuVXjOYP5oTWUnM7y+v45hMj00oYF99veF/DOyKpX07zF6DKTLTIH
+	k9DrafOxxq/yzX4mIiQAGeoReMf2a/6q4IDxcoeiu7CqID2d7h6R4KwzwSx0PW2lWnsyDUg+T0c
+	kq+tMRbhvA9vTLbP8sjFeiWlvs=
+X-Received: by 2002:a05:6a00:a115:b0:847:83bc:d2a4 with SMTP id d2e1a72fcca58-86f83152fd9mr11627889b3a.2.1789439782834;
+        Mon, 14 Sep 2026 19:36:22 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-86b290cb1efsm5319637b3a.29.2026.09.14.19.36.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Sep 2026 19:36:22 -0700 (PDT)
+Message-ID: <8addaeedd955cde6942bf2375347e1f7480a1da5.camel@gmail.com>
+Subject: Re: [PATCH bpf v2 10/11] selftests/bpf: Add tests for gotox nop
+ targets and insn array reuse
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org
+Cc: memxor@gmail.com, a.s.protopopov@gmail.com, info@starlabs.sg, 
+	bpf@vger.kernel.org
+Date: Mon, 14 Sep 2026 19:36:18 -0700
+In-Reply-To: <20260914170326.249953-11-daniel@iogearbox.net>
+References: <20260914170326.249953-1-daniel@iogearbox.net>
+	 <20260914170326.249953-11-daniel@iogearbox.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10+b1 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260814235134.3461435-3-ihor.solodrai@linux.dev>
 
-On Fri, Aug 14, 2026 at 04:51:31PM -0700, Ihor Solodrai wrote:
-> early_identify_cpu() clears the capability array, the CPUID table and
-> extended_cpuid_level, but the architectural defaults for the rest of
-> struct cpuinfo_x86 are set only later, in identify_cpu().
-
-And I would've stopped here. I don't think we care too much about a CPU which
-doesn't enumerate CLFLUSH. Or is there an aspect I am missing.
-
-I mean, you can say something along the lines that now things like
-->x86_cache_alignment are more correct but I don't think you need to go that
-much into detail.
-
-> On x86_64 x86_clflush_size defaults to 64. Until that default is
-> applied it reads as zero, which get_cpu_address_sizes() interprets as
-> "not enumerated" and replaces with 32. So on a CPU which does not
-> enumerate CLFLUSH the boot CPU runs with an x86_clflush_size and an
-> x86_cache_alignment of 32 until identify_cpu() resets them to 64.
-> 
-> Use the same defaults from the start, so that the boot CPU does not
-> depend on a later reset to end up with the right ones.
-> 
-> The values the boot CPU ends up with do not change. Early users of
-> cache_line_size() on a CPU which does not enumerate CLFLUSH now see the
-> architectural 64 instead of the 32 fallback, which is what they should
-> have been seeing all along.
-> 
-> This change comes before the last patch because that one removes the
-> reset: without the defaults established here the boot CPU would be
-> left at 32 instead of 64 on an x86_64 CPU which does not enumerate
-> CLFLUSH.
-
-This paragraph goes...
-
-> 
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+On Mon, 2026-09-14 at 19:03 +0200, Daniel Borkmann wrote:
+> Add two tests to the bpf_insn_array suite which excercise gotox target
+> which is a ja +0, and the insn array reuse which initially fails the
+> post-JIT stage.
+>=20
+> =C2=A0 # LDLIBS=3D-static PKG_CONFIG=3D'pkg-config --static' ./vmtest.sh =
+-- ./test_progs -t bpf_insn_array
+> =C2=A0 [...]
+> =C2=A0 #24/21=C2=A0=C2=A0 bpf_insn_array/gotox-target-nop:OK
+> =C2=A0 #24/22=C2=A0=C2=A0 bpf_insn_array/insn-array-stale-reuse:OK
+> =C2=A0 #24=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bpf_insn_array:OK
+> =C2=A0 Summary: 1/22 PASSED, 0 SKIPPED, 0/0 FAILED
+>=20
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> Acked-by: Anton Protopopov <a.s.protopopov@gmail.com>
 > ---
 
-... here, after the "---" delimiter as it doesn't really belong in the commit
-message.
+Tbh, having a full stale ips issure repro seem to be an overkill.
+I'd move the first test to inline assembly with __xlated or __jited
+matcher and drop the insn-array-stale-reuse. =C2=AF\_(=E3=83=84)_/=C2=AF
 
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+...
