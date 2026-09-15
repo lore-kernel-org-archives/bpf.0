@@ -1,221 +1,181 @@
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013013.outbound.protection.outlook.com [40.107.159.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo2-f42.google.com (mail-oo2-f42.google.com [74.125.231.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C59F4BD79B;
-	Tue, 15 Sep 2026 22:27:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6938379EE0
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 22:32:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.170
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789511281; cv=fail; b=FD4Qvp2Knd7e1sJvbTwT++uLRqfvpxe+sf9r0ynbzA4lPVpp0An5mGIZqfOv9JYVZdIAErD+ph0kyH/XUyYgtBedgSSprWoc+GjRyR9UNoYMSguu0zQvQZT1LQAPqWccgW+1pumG8lOi1u0yCJFjIZ8NL0AsHk+w+f/bBuVxbgU=
+	t=1789511569; cv=pass; b=LQgHpUHvp1NiPx57oDBoBhFkIJrHq7KjLIQwVbO0DucnXp7ZV3gJUUTET4JYQBxv3BGf4g6bg03L2E2xcxchA+qvN3b3iZrZd2DQOkdpoQ2twgNskYtHd5+Z3HtEyWtPnuD7ZqE2oePhBnLsp8uglo2jSmyOjtALiyMZchS8S3A=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789511281; c=relaxed/simple;
-	bh=+A6+qn8lFqpEXTIC0vRs6hYvfxyc87CqMpqJ48xYKiM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NauaK15kHHapQtm/m4x5c6mP4MGw6Je6j2Y/lpeQq7Q7j49H65plpYxO9AIrxPlQEMpuDQY02bNyOWUovCNND0jHtBAc7qzdA0ZQEhGIFv/ev+ubU+x4MZ6rAJb9IQE11okyATlhdW3B0nzZgs6Vw4aS6SoQ9ERj1xqoiL8UvcE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=VeSRO4Nl; arc=fail smtp.client-ip=40.107.159.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1789511569; c=relaxed/simple;
+	bh=lq1jEWNt/n5Qy/SzVCBrmS2Rd3kPStEZmdmxTeU1Cjo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sXg2Ci/E6qqleZd+lItOtHBWBsXnEa/sqm+k0N6i00BW1eNzWKIbcG1HgYWwBFEIHqTAi8QhW3wT4Xg8vIPkO1dOLCFqP5Ei25C0OeNgONXFhfXxT/GYvl/xs8i9GgqjXbGTYmK1u34MOKcBiijYajCfNkuuvMiZ397UVOZ1ukM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GROmno6f; arc=pass smtp.client-ip=74.125.231.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="VeSRO4Nl"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SiNiNd4z92bjxTdyTWCSVN/Lu6BipXnfLjWINdZQfPs7VVwk9mgX4C4RSAC3WpxPcrSFy8iIA9mk9aVOYrF6Hb7b6AV3ujRmbpDfaLgIU8+TDguiw5e46mDJP1Kjj/h8/UUFUKs62K8biV9uFhtxkU4vvn8LIoM6OhQxCjqjhbDFNtsvctCPaEzwz0FElVGK39pNJIM6+1w2YxW/+V3j+U/IyP1pWvwFAbejGJW5INej6DqUyXhMkFSmxB5ujkqLuQydzfdYbgpru8MH+4qA8H6AWn7CjcOmnrf60hMcxSbwLBE4NZmwPyUR0coOAiGcCMeu1YuRuoDKpKx9jf8TDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HqEr2OuKigcHCvTxoki228jJPC0WZty4KscNXq5bJTI=;
- b=FE0JutKwL9RpaVAytkYgKNYYcwRg4GBqb1EG7dennCYsdFyZYQPSlRc7vKX/2qfwreziuTQDWgJj0yqLq4KsTZyX7HYt43csthzFzF/AeE9DwMPHDsFN+k8tBgbBpei0yhIC8fkketXzVF4s8l+2RGxwGdhaQZQ4bbRl4I4TyASuI6qjnFzKIuYFCqI+e6cFaFqMWyuj7pxrLhXe93hw9oPSAuvsvJbQlQIRD15Q8K/3CpazMWGYW5eVjYNAjxzT0ZuN/p6j5Fbl9XinsdpTI4S1ae3KpoI+6outVOH3zZ29Vr4yvdiT7LCtD8LExudbC7W2KZqcb+qnQL4OBDBrWw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HqEr2OuKigcHCvTxoki228jJPC0WZty4KscNXq5bJTI=;
- b=VeSRO4NlYTJSfXknQWn7VGHgRy/7NAg/77hwrYbBxWc1myzPkUy4JgGd9DLD6kBs5J9lFRCVDw+pivSDTO32ZlkI8MdC3zC/2EH37D/P3UuGrM1/PNGd5UHk8SX21QvF2PYSG3mn/rNTe5YY3b7VcfNE3kJDDT8YHV7+AwzXAKAJYORBxhErezfLbpvxSYYxIde+ZLQFQCd2jUrOsLqRtQGs9wC4MDwKOcak7jlAdq+HIOFIMxgDIykZVcCNFtE2dhkZXFoIR+ZR2PG7PrT+Uvg0M1kPw2ADriSYzf1wCFANejj1SPdCE3NPsTZ1jl8THGypSp04PuPeKEgEWdhdtQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB6900.eurprd04.prod.outlook.com (2603:10a6:208:17d::10)
- by DB9PR04MB9380.eurprd04.prod.outlook.com (2603:10a6:10:368::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.428.9; Tue, 15 Sep
- 2026 22:27:50 +0000
-Received: from AM0PR04MB6900.eurprd04.prod.outlook.com
- ([fe80::7fda:8431:ca1b:b023]) by AM0PR04MB6900.eurprd04.prod.outlook.com
- ([fe80::7fda:8431:ca1b:b023%4]) with mapi id 15.21.0428.008; Tue, 15 Sep 2026
- 22:27:49 +0000
-From: vladimir.oltean@nxp.com
-To: netdev@vger.kernel.org
-Cc: Zefir Kurtisi <zefir.kurtisi@westermo.com>,
-	Claudiu Manoil <claudiu.manoil@nxp.com>,
-	Wei Fang <wei.fang@nxp.com>,
-	Clark Wang <xiaoning.wang@nxp.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Simon Horman <horms@kernel.org>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Yangbo Lu <yangbo.lu@nxp.com>,
-	Ioana Ciornei <ioana.ciornei@nxp.com>,
-	imx@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH v3 net 7/7] net: enetc: drain and cancel one-step TX tstamp queue when going down
-Date: Wed, 16 Sep 2026 01:27:34 +0300
-Message-ID: <20260915222735.1016937-8-vladimir.oltean@nxp.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260915222735.1016937-1-vladimir.oltean@nxp.com>
-References: <20260915222735.1016937-1-vladimir.oltean@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: AS4P189CA0018.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:5db::19) To AM0PR04MB6900.eurprd04.prod.outlook.com
- (2603:10a6:208:17d::10)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GROmno6f"
+Received: by mail-oo2-f42.google.com with SMTP id 46e09a7af769-804ef461aedso158866a34.0
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 15:32:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789511566; cv=none;
+        d=google.com; s=arc-20260327;
+        b=s+6ekoboPxF0HRkv/9RhlVXda1TtBOFLC/SkZEzo9n3/Q9IEq1h02VT7i+T/Qk29Q5
+         CJplYcsH5iys3j8ssr/2aef2mYPldXEP15hkOjbnCLnsajVUidRFkMrNG3oa7sttcYrT
+         4tVYr9sUI5N+UaUmPlYTkNkNILycrivNDPlC2Ctp6lU5H308U5LohyeBQsXTgxtens7x
+         M022obg7gAWEqB/4FdVgcN05wmB5ZThQIGL/7JptIGrtCv3JwZa3GPo+Vh+nmAFiI9cq
+         bXXxWim8BLGQayF2/pruiw2g1sp6IIERliFyRgDG+H+EIkVg4I46pTJrnPdcvVtw23KP
+         S4YA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=043e4j6xvnLvXB9EcyfoGhkhem3s0uOnXWL92QwnUpk=;
+        fh=PVF5hOV3lFVkYzH+em3TPzA8DUX1nPTQFNVMrTIZklE=;
+        b=ab7fV8pAtw1EB/fcu/XZxBwROMJbwU1jqlIWfZDdCr3RpbrxOvj7DmbLYirsyafe7R
+         v8eUq6eJlzAgn7Ayd4ob1eC1FvtApVM/k3NysR1I1lojL1ncXTosDuyPEroDRi1XsMpn
+         iY0u9a8bYiX4XFtdBFo39GItCIAfLTOLXpURkzEzDpYg+6lSONKa2Ln4ZOG6VeJSgsrW
+         i+Wlgo7l7ZICLAV2KLBRDVLZvy2Ws+IJzjGv3TbLbMJqfnCATrakpQNZtPCOMCDt+vA+
+         TTfLiUgSxNsDyEUH1mXMaH4N+An1iYDUmAu9opjlzuJYOfaZox7xOPq5zVDy8zbJfZz8
+         D+hQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789511566; x=1790116366; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=043e4j6xvnLvXB9EcyfoGhkhem3s0uOnXWL92QwnUpk=;
+        b=GROmno6fT8o8FylIC1izkPACzlzlUCGmoRiv3tkbjniuV8cSiyfcN1OQJuT1VY9jX/
+         lXzSSQ1BssheV5hz9vRrU8E2oljQsSXzEEVqAJZnzsf51IJX5DbgK9OwuEZRxbFhgeWc
+         w5jDHRIasRwsI6RDmVY9lsrjG3c1xmoOS6W+Imnc+1K7/vvMQbwN6mZ0JxpbrDyKGgIK
+         AK353OTHi1geRaaOxsiy8dVZEXNCMv+EfyfjRP6fcH1vnEKBY58FLI36emgNmvX2Uv51
+         4jzmwJekEGCxXRxRKw2hdY11HviYkwr6Sr9UiBv9Rj5ECzniJKIDtw2uvTbGJSsCwMV4
+         rQdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789511566; x=1790116366;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=043e4j6xvnLvXB9EcyfoGhkhem3s0uOnXWL92QwnUpk=;
+        b=qCsORC6gQ/39ndOrWpBPVmpZUvUn4JFwgfqkfgm+Xldnw4e4FerXwPX/KMGlxQHNNC
+         l9HFMsh6yS25qVzJe2y+T1ZrZg7mIyMwapvnR0IxZTk8B5Td1aUCDeJlVL+r8N+b3xmI
+         WHf3wRmKBLC0aqld5oqqI73eSAGeVq0QJGsij9Jn8v188CDRRS4di0WiUhj7TBnH+Djd
+         9mfHykZSYKr4EWO7lj6wB+9Su9H5EM++DkhJisq0zOiVFLRpxYKFP11JjVmpxD/ZgOFC
+         JLTs890OjYFKj6pSxc23KSbKICTdvqyO72iw0v9tlZVwlqvnp65IrikXNldASb2aYwNI
+         2TYQ==
+X-Gm-Message-State: AFuF++kQPe6ccfZzcfWYrkiKuuxUqU31yY3J8Fjb666PfFc7Cg8detC7
+	Z+N6ytAJimT97i29lie7Amakho96ZaIBN0UX5JfbNUhuFH1PDrYPJPc+fIMaQQ5UHgWhF/O2B+u
+	KhRzujKua7Cg/NxBkGe/pUZQytZ7kdCs=
+X-Gm-Gg: AYBFou3BCgnzjewkbw6gh7Wq2oBX0m0wx8K/H1yrJM9yPD6InT1ziCW3+X1jSs3/l77
+	qtgdWjE/yPG8nJky898yjx6d0oyXbsrGW1CmhSt8G2uPCGyVjn+z71yZrKnzErxuXnlRTsRhmFy
+	6o80KsAwL8oL4P36dNsUCXRJkI95mDpdA8FOyFNziqdCrOhjMF2nGi+15WldPJt9B5jDf30gF2b
+	zefCgI4/u9nkpjkjAyb8/fKDfJpRdbySyleuy642amxL+9QcLCgkJnM3YKNgaTwOoSA1/jNhSNg
+	OE+qWP2SCLsZbTD+VDCGrhZi5rajD+g8CAbqnppb63xXhmR0IfFt79zdguDgtcpUazNq5xI=
+X-Received: by 2002:a05:6808:1784:b0:4c5:238e:b163 with SMTP id
+ 5614622812f47-4ca4c2933aamr499237b6e.29.1789511566382; Tue, 15 Sep 2026
+ 15:32:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6900:EE_|DB9PR04MB9380:EE_
-X-MS-Office365-Filtering-Correlation-Id: e26e8598-e198-4863-49c1-08df1378933b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|19092799006|23010399003|6133799003|18002099003|22082099003|10067099003|5023799004|56012099006|11063799006;
-X-Microsoft-Antispam-Message-Info:
-	VkHUlRwVRPAKsoBsjeZ3nfaPezizMstXjJWs4mpBdEvDls2SGLojEcbTdLmOG19rNo6945luTh6CIy5gmmEekA9m9fFDLO1IEVD1atE7LeKaegCArxEyk+/H3cecx6lAEIzT7LGIq5fkGrzHTMywru85W/E7AUipNKIkydIpWbTuToD98dUw7R8dwanUiNKzlg8+Q/agWf8zg+4J9ReOcLpNGv3Q13XQPlfp4tqMXI/5MU9ozrJs4k5Fxi6B0ZtZGQRCrz3ntEcG5yPNFEfZcm0157mDPpzoR6oOlkyjJC5noMwNo+nw24TOZJszAzSw/Z3aCo/pLKRMUQG/VSTgx+kxcQ1QVk7wYHMSo1RLfXrl5evd1TydZCHFOAekohVcoIvUE+27tR41IYwWhI6bFP6Wy4Ez9AV02MaYfQE22aBBkO5Kswvqy5sE5iukuyruAIyIaEEfLgW9LTgbHspGlFWqXsqLCOQYNLiQ8mOgLF1SA/bW59iE/UiVYBALKbABKWzIXQA0Ub8chhH/cArf7G6nkd4kM3VJeNzYyTHf7Gmqy/dldkOezLRsBF3DZ4ElsE5foHqVYaCPWvvAiEn5U97gE0PpaEvwrK6kgeyUWIimMnkG6RRviezgoXGPeplKfAZO6PMOdPybhHmpuvRU96TY3iIDRWxlrPBdV7infxE=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6900.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(19092799006)(23010399003)(6133799003)(18002099003)(22082099003)(10067099003)(5023799004)(56012099006)(11063799006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?toaOoJVJE3W9YYQIGxKwJIdNAB24oM/fC3HcAc8Og/UgvBIkLYTWbWtBz1YA?=
- =?us-ascii?Q?PLSE6gDvAqdt6qB9tlRg/ggrSmddJaiv4T0ko3X0/Acec15kgUOB1OIMvwf1?=
- =?us-ascii?Q?yxJUMaIunBNIpmI4tfnko4T6ifUxBXuE4dUcBkl+tH9DGGwqUpy4pL0cXqzN?=
- =?us-ascii?Q?Pa46nGK/qfMlV/xbJro+3dxCybSviyCnv6Tg97lS/CBufF5vDlcNMLQCPnIY?=
- =?us-ascii?Q?VC+e75zQJkKCkKidODvPwJydr8D4Dry/X1wvwYcNz++z2BBqh5YDbGorfIMi?=
- =?us-ascii?Q?J7FWnobprjyJFHyfcD3hz6WK3QRrhZ9Er/NCrbICXjSMnLgL7+LHO0Lz+K9H?=
- =?us-ascii?Q?kAoOj+R/I+hzMLE2kWjiHb8BntKQRuIkFxqPE9++Ih397sqBj07hWj4ltfSX?=
- =?us-ascii?Q?Y+nWtxgKW+MZgiklK1bzBz6YOISVlEbrrvHpVxHomWqV1ev245fli7Fe24LI?=
- =?us-ascii?Q?N/oiOa+4Hryod2HJtIg2HeapFhWzHJdQVN3zpN5n9HJYp2qHsUtWPItI7brq?=
- =?us-ascii?Q?Hx4Ctvak/cF+X+2rKns4orbpAh+/eJ9FTk1nw5vRxvv+uqPdLtkFWM1c4BSY?=
- =?us-ascii?Q?EtddVMATlMD7r35XDqg9qCwrPIjOmPr1PFmFXSs4FzaMMT/mddNhV23AeciD?=
- =?us-ascii?Q?nvPbk+Tfy1PrVj3Q4w/hnA3rquZjyBapuXaV3UnlxyjL6O7YLPqjituFJx8Q?=
- =?us-ascii?Q?NKMCCi93usXcf1jy4CJnKTe397wWKXNF90uoT37V6xw/3WjH1tt3g1Jwc6Ea?=
- =?us-ascii?Q?ZHnJcSa8h7wRpxt5z6hJzByQRPRxfUz9+bGK+cwLE0CwVi5nkzFK7ZVt5Zuy?=
- =?us-ascii?Q?CE6Sf5fluolPyniwkUxR7h3KVsGWJK42q7iorQfgwqPMnMwKzP1mPFSl9sfl?=
- =?us-ascii?Q?ZcwhsCrpniEflCesQmDMxrm/rM7fI/qXvN9CIYyGiS9FNYYRGMWlbtH6cGAs?=
- =?us-ascii?Q?mvi0mspRphYvF2vF8fcNtHas9O3OBHMAHJksOq34OTRi6taMYm8Y1G6rT1cC?=
- =?us-ascii?Q?TrxAk8qGgYXdswuuKa1SJLH7SOcYXcEwyJ3o1lurKptzjkJL7ipDJ4g/duO2?=
- =?us-ascii?Q?tjpjnxdl92X2NFtw+5Pa3iLJ4aa4mbcZoH/tOGIUSahbiIPbVf7uuPu7g2Yx?=
- =?us-ascii?Q?yf2kXASPOhr2X0ApFvycMO1ir9mDQ94l5bhadeUc0uS2q6viuOuJUrBvKimb?=
- =?us-ascii?Q?QzSuO5tiRUJiNl9WHQ7xWnhiKMYBN95EdcqJeDrpc3X+cn20kpKKCgJwBedU?=
- =?us-ascii?Q?XHcHgZcdOy6xgav7jZuJSGSo66ObGmf38hgvbNuqqJOUV4o2FksHZUpZZcAy?=
- =?us-ascii?Q?ZoEnXZyrc/tKxJ8VLse4oXtsnwhJzzRCkdfqK8aBL5rtJHIjWGMHPDMK/USr?=
- =?us-ascii?Q?x2QC9GgntvhSXrcXPHEZnNSnGx3fTKeupVXXoiExkSiLvTBvAaHFcDnNfBD2?=
- =?us-ascii?Q?nf5G+WwH/DDl7azf+XxWGTvxEsC5lm5M3rmO056ZzEg6d9sL0RRCWzLrKuXN?=
- =?us-ascii?Q?AK2e9y0+lhKXjLYnVvpGdoBKykDOI5pyeDIJN3f+NDPiYjk1/polgy1HuDSB?=
- =?us-ascii?Q?oiRcKBRjmQ4pWZ3nFMBck/nLGNiQA8UkP7M9dATed3jdPBTN/EBgoBCPIG0/?=
- =?us-ascii?Q?9tfbdqc53AQ8Lgn7Jm6IyCH9LP+6hXpftjrbbd3CFUTZz31ZIthwTOjJqNcU?=
- =?us-ascii?Q?WfgW7bFVDo1mclSeA7q5PMLrV3LKxaoWrcBeQXiVuBoQqfZXKFqGcjIKSilW?=
- =?us-ascii?Q?8TUGTX6bCw=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e26e8598-e198-4863-49c1-08df1378933b
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6900.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2026 22:27:49.8475
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rt9zMySilmP/bFFIbQlNloWu98PUiM0YWs3jsioTb5GLXdCGFowGAKFau+LkzQEfHw+lqItN/EKKs0yB+TcG5g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9380
+References: <20260911220415.1396439-1-ameryhung@gmail.com> <20260911220415.1396439-20-ameryhung@gmail.com>
+ <aqkhifLvyAhw66jg@gmail.com>
+In-Reply-To: <aqkhifLvyAhw66jg@gmail.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Tue, 15 Sep 2026 15:32:33 -0700
+X-Gm-Features: AcwNN1X5sjOQAAUCCkPj0z4fuNIDiJi6zwYLTDtESd10KxDMDFfL9fHaG7CFqYo
+Message-ID: <CAMB2axNCx-+HJVuOmS9hXAidXc0yQgv_+zAfzSkNdDXOZtFP5Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 19/23] bpf: Consolidate function call
+ pkt_access validation
+To: Mahe Tardy <mahe.tardy@gmail.com>
+Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The driver uses a work item on the system workqueue
-(priv->tx_onestep_tstamp) for deferred transmission of packets with
-one-step TX timestamping requests. The reason is that the MAC supports
-a single such packet in flight, but we cannot block the rate at which
-user space enqueues them.
+On Tue, Sep 15, 2026 at 3:44=E2=80=AFAM Mahe Tardy <mahe.tardy@gmail.com> w=
+rote:
+>
+> On Fri, Sep 11, 2026 at 03:04:11PM -0700, Amery Hung wrote:
+> > check_func_arg() checks whether a helper permits packet pointers before
+> > dispatching argument-specific memory validation. check_kfunc_args() has
+> > no equivalent check, even though kfunc memory arguments may be backed b=
+y
+> > packet data.
+> >
+> > Move packet-access validation to check_helper_mem_access(), where the
+> > access direction is known and helper, kfunc, and global-subprogram memo=
+ry
+> > arguments converge. Pass call metadata there so helpers continue to
+> > require bpf_func_proto::pkt_access, while writes through kfunc and glob=
+al
+> > subprogram arguments use the program-type policy and set
+> > env->seen_direct_write.
+> >
+> > Keep call metadata when variable-size memory disables raw mode by
+> > clearing arg_raw_mem.regno instead, and pass it through the map-key pat=
+h
+> > as well.
+> >
+> > This also makes kfunc and global-subprogram packet writes request the
+> > required writable-packet prologue and rejects them for program types
+> > that only support direct packet reads.
+>
+> Hello, sorry I don't have the full context on this patch series but it
+> looks like this commit broke one of our programs on bpf-next, we have a
+> global function with the following signature in a cgroup_skb program:
 
-The problem is that the skb queue is never explicitly drained, and it
-can hold packets even after the interface goes down or (worse) the
-driver is unbound from the device. Especially the last point is
-critical, because the work item will attempt to use freed data
-structures of the netdev.
+Sorry for the surprise. Although this was not the patch=E2=80=99s original
+intent, it closes a verifier bug. The verifier does not currently
+track whether a global subprogram=E2=80=99s ARG_PTR_TO_MEM argument is
+read-only, so the callee is verified with a mutable PTR_TO_MEM. The
+call site must therefore require both read and write access. Since
+cgroup_skb packet data is read-only, rejecting this call is correct.
 
-The priv->tx_onestep_tstamp work item (enetc_tx_onestep_tstamp)
-processes one item from the priv->tx_skbs queue at a time, and gets
-rescheduled on each one-step PTP packet TX completion.
+Supporting this use case safely will require an explicit read-only
+argument contract.
 
-If we cancelled the work item while NAPI was still enabled, there would
-be no guarantee that NAPI would not reenable it. So the cancellation
-needs to be after napi_disable().
-
-Cancelling the work item waits for enetc_tx_onestep_tstamp() to finish
-sending the current packet if already scheduled. The packet will be put
-in the disabled TX BD ring, where nothing will happen with it until
-enetc_free_rxtx_rings() later reclaims its memory (*).
-
-However, priv->tx_skbs may contain more packets than just this one, and
-because NAPI is disabled, enetc_clean_tx_ring() is unable to take care
-of the rest. So we still have to clean up the remainder from the queue
-and reset the ENETC_TX_ONESTEP_TSTAMP_IN_PROGRESS flag back for use.
-
-On driver unbind, the problem should be solved by virtue of the fact
-that unregister_netdev() calls netif_close_many() and that triggers this
-same code path.
-
-(*) Even if we add a check for ENETC_TX_DOWN in enetc_tx_onestep_tstamp(),
-it is unavoidable that racing one-step PTP packets will be enqueued in a
-disabled TX ring. This is because the work item runs asynchronously and
-can miss that flag getting set. Think below:
-
-CPU A                                CPU B
-enetc_tx_onestep_tstamp()
--> test_bit(ENETC_TX_DOWN)
-   // says not down
-                                     enetc_stop()
-                                     -> set_bit(ENETC_TX_DOWN)
-                                     -> enetc_wait_bdrs()
-                                        // waits for the BDs in the
-                                        // ring to be transmitted,
-                                        // but the PTP frame is
-                                        // still queued in software
-                                     -> enetc_disable_tx_bdrs()
--> enetc_start_xmit()
-
-So I don't see any point in adding an ENETC_TX_DOWN test in the work
-item.
-
-Fixes: 7294380c5211 ("enetc: support PTP Sync packet one-step timestamping")
-Reported-by: Wei Fang <wei.fang@nxp.com>
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
-v2->v3: patch is new
----
- drivers/net/ethernet/freescale/enetc/enetc.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c b/drivers/net/ethernet/freescale/enetc/enetc.c
-index 62cdcaab3f3f..892490ff1ebe 100644
---- a/drivers/net/ethernet/freescale/enetc/enetc.c
-+++ b/drivers/net/ethernet/freescale/enetc/enetc.c
-@@ -3110,6 +3110,10 @@ void enetc_stop(struct net_device *ndev)
- 		napi_disable(&priv->int_vector[i]->napi);
- 	}
- 
-+	cancel_work_sync(&priv->tx_onestep_tstamp);
-+	skb_queue_purge(&priv->tx_skbs);
-+	clear_bit_unlock(ENETC_TX_ONESTEP_TSTAMP_IN_PROGRESS, &priv->flags);
-+
- 	enetc_clear_interrupts(priv);
- }
- EXPORT_SYMBOL_GPL(enetc_stop);
--- 
-2.43.0
-
+>
+>         __attribute__((noinline)) int
+>         parse_something(struct __sk_buff *skb, __u16 off, char *data_star=
+t, ...)
+>
+> that we call with data_start being skb->data + some_offset and now it
+> fails passing the verifier with:
+>
+>         ; ret =3D parse_something(skb, offset_start, data, ...); @ parser=
+.h:131
+>         199: (bf) r2 =3D r8                     ; R2=3Dscalar(id=3D5) R8=
+=3Dscalar(id=3D5)
+>         200: (57) r2 &=3D 65535                 ; R2=3Dscalar(smin=3Dsmin=
+32=3D0,smax=3Dumax=3Dsmax32=3Dumax32=3D0xffff,var_off=3D(0x0; 0xffff))
+>         201: (79) r1 =3D *(u64 *)(r10 -40)      ; R1=3Dctx() R10=3Dfp0 fp=
+-40=3Dctx()
+>         202: (bf) r3 =3D r7                     ; R3=3Dpkt(r=3D1247,imm=
+=3D1244) R7=3Dpkt(r=3D1247,imm=3D1244)
+>         203: (b7) r4 =3D 0                      ; R4=3D0
+>         204: (85) call pc+776
+>         function access to the packet is not allowed
+>         Caller passes invalid args into func#3 ('parse_something')
+>
+> And this is read-only access given it's cgroup_skb prog.
+>
+> We can work around this by just passing the integer offset and re-doing
+> the whole skb->data + offset dance in the global function (we've been
+> already doing it in some other spots for function by function
+> verification) but I was wondering if this actually a regression or
+> expected, thanks.
+>
+> >
+> > Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> > ---
+> >  kernel/bpf/verifier.c                         | 24 +++++++++----------
+> >  .../bpf/progs/verifier_helper_packet_access.c |  4 ++--
+> >  2 files changed, 13 insertions(+), 15 deletions(-)
+>
+> [...]
+>
