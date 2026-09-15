@@ -1,113 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com [74.125.228.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2D40409280
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 16:07:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70EFF414416
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 16:07:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789488437; cv=none; b=A6ZW72U+/xyDOpL9Ay7x6GDmwbxbdMp59G8OXpOlJG4JNtEK7/D8b5GPBR+RhLtxiP3yeFhjQ5CoVvtzL8SUAneKVAUSsFCAzzRf6v++Vd1/nUtL8G6n5rAowgWTrwcSxnpInWyYMALjLVX/lFhXgFPAIAkc7qEFhwEQt5Yxn24=
+	t=1789488477; cv=none; b=jr91eT4WNM/uf03fN51tw/yxyjqNxQ0HpVzKz3RtIbzawmqmciRTIY0OeHqY6iPbT0cPxban1dzBkgtE8KAUT0F+KWnNA11vor/V1hKj10OIFhklpJfp4TAu+YjYYSRsfDFycf3EVyDWKPIuA0Ktx8JIxVmWWRgVJX3f9sWZOFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789488437; c=relaxed/simple;
-	bh=+CwFx4/bfG7AkbNnAlK9gj5kGFMcAy38ywIvzWAUG0U=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=pr/pByna6TavQjLofPweUn7gjuo3DVRH1poPfczK9RQ/ZH+FYACJMnQT6wsYJD+g3ZnQqPO4OEo70rNAu3B/IpDrKWnDQ1+Cn9Ovi7wpGS7VcWC3w8Pi2RVQoiCQg5bCeTKChrNuO7XMDvRkTaD28CwxRfkcerY5IEfW3Kit5hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ESbkJQsp; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789488477; c=relaxed/simple;
+	bh=TaD3IKHcoZf0PQ+wUUh3mHvOgYZf6uXYuUZRFHNcE+Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kcQXQHwF5WJJ7ZNlao7zB8zI220fgb0sJvE+kCz+VplAYHFFVKSuLdhaiHTKXtMuAdn1XRXT89bBWSpyouH/pRrpX+bUeqpPvqDE/VHT22m0j6c+l+OQZV0NtHYBe2R2pFJ4gXdzOxG4CgWwx6Xwn6EpIVDs6iqETVhPKb48Fa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=agmq+AGs; arc=none smtp.client-ip=74.125.228.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ESbkJQsp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 420FA1F00893;
-	Tue, 15 Sep 2026 16:07:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789488435;
-	bh=mj8tEZ8d79xlIWSklPZsKWyfRVkDEENguR1rYPNgor4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ESbkJQspWYqSWG45zVJjKpAEDbBEMhEpwL6zWRl5VN3j5rnEAxGsiR89MZi5FIfx8
-	 5+cas+2ofRDB4EwtGG67bDWpdPC4TeUGlB48JEZipnqqk6uSDZ/3xygqixQ7uH5d4F
-	 e1dE+S4vvpm65aV2XJvBI3NLxCxrqZIxbUd1woXJQj7oPU5vBRj+oHZPrNcK9a12We
-	 jp9V41SDbVoM/QQDbMirnfgSra++lPMD61AgJipv09/0UC8GEb2/3k5SiMpwKV/9eK
-	 eIsY8a9R52tQt28Je2KHzMOhE3g9Y4NDjgyhVymXOqNK/vInpm9K2S7ZCm4hrxjUCt
-	 GVrYEymsvgJWQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 3/4] bpf: Add bpf_call_rcu_tasks_trace()
- kfunc
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Puranjay Mohan" <puranjay@kernel.org>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260915154248.3612028-4-puranjay@kernel.org>
-References: <20260915154248.3612028-1-puranjay@kernel.org>
- <20260915154248.3612028-4-puranjay@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 15 Sep 2026 16:07:14 +0000
-Message-Id: <20260915160715.420FA1F00893@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="agmq+AGs"
+Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c293c683202so503051766b.3
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 09:07:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1789488472; x=1790093272; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=cj8iWYGkmy9fr6Sp+MjBMi0cvssqzarl8Tgut8FUMEc=;
+        b=agmq+AGsR9ewjxAqeJxWV21/cUDT6fr+gu6Q34cLYJxN631pWIb+MIN045yqFXjaEf
+         v8D4B42ulM3vTyxukkh03Sj9kSMqPO64XjZ+ooLzGTqQVBZ4rQneuNqw5ICAc7m7UX0r
+         4JC8/HKuho2msW5kYnGgGWgklkxJnQyCmIsdM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789488472; x=1790093272;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=cj8iWYGkmy9fr6Sp+MjBMi0cvssqzarl8Tgut8FUMEc=;
+        b=RRsmvN+PvVsialJ00lh2W1GN9Vm+Wv1eXX6AVLweEF6wLwY2B6oCLWq2TFmynFG/Ov
+         i8BmU4FRSZCOM2Zb0xrcob101KKyt4WRZvfHfsY5NatoJjPIoXwCMoUdilMhdhRrAfVA
+         PPDmtfVl2UBUvWeKxJODm3bxcuZAwVDbCP74dk+9VRY/+OlXb8+gLdYfvEIDEHpmBIf0
+         pODpf63YhXh1LgNd7FHuCSqyRsBYoyx1CIWzh/NXVrawd5kj7WRvOGX2WSLN7PVK7sFk
+         MQpXLMxZ4iEIF3QyA6lmtPCnqE08uRFakWzePVwWmielOwMUFwLRWFGJwrjXg6Lhgg0i
+         K7TQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwgV61gAc/PfFVrhKPW6YJdrawXe9yRurFxXIm1tjZ7hJU6NyZZplI5qx18FvCymvbwCuQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++n8UxAGqPmF8iR6JEW3w7urpI6POzhrxXtYUDmGs0wlZkFDb+of
+	Ojcnuj70P9qvv3xOHA5cEyHt1kdpJpjPJs6HZMTHcGGCxLZPLP3+oLvgU28p3q33Y/XgGC11y6m
+	ah3RBfFE=
+X-Gm-Gg: AYBFou1hQrKWKF+hCfn2Rln1SSPPVvRKXAMsuvp5DM/XHLmkNDOK2KRWMlaf/lwPmLK
+	nK/S7yaO5NUYBgZyW1f+JciJDCyh8JxFOFXV/7jbCu4xONN0qaiwMfODoptIq5wmFSzno7cZOYt
+	q81UWEoxUGL9gKYqiLylgL/gn4hHeJ84VEI04ldqRu2bf0MUPDDIpGtobyYBYAUTSk0AEY2wNRs
+	FvLIB0KHmzTc9pHHfCnUsYXlMTc7loERsTI3vqHxZBgzplpzJhT1ZMygS4DLZ07K+LAPJX6Frkv
+	rQsUxjrfpH6AbMrzg38/dO2kRDFDkxF/TVCa6507KDW6D8Za741WD6GXn7qWmN4Fq8Ne6H1jVP7
+	vx8LRMT9nZfxGUz3cT9/rJlhsU7I2jA5BUz550uUIQd/z9vvQq1rPfhNcGM1xAQlgV0R1jznWla
+	GLN3RldbvwMafHsGo4wnotj/wPe6jkIbZHv7vZCbVpH4I7742YGaNTG7OqYTErraLBUYIXfcGR2
+	AlbZ0CloSH96cedUj7EEQ73gy6QIvc1ihBWDxFwdghIUzOptQ==
+X-Received: by 2002:a17:906:c112:b0:c26:2ff1:cac2 with SMTP id a640c23a62f3a-c29b86f9353mr506769766b.31.1789488472342;
+        Tue, 15 Sep 2026 09:07:52 -0700 (PDT)
+Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com. [74.125.228.140])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c29de63a7c8sm360566b.51.2026.09.15.09.07.51
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Sep 2026 09:07:51 -0700 (PDT)
+Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c254fa4c24cso538118066b.2
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 09:07:51 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBwuK0yHw67amQtINopRT1McXMwszUk9GdKWY8/RJdWrDM+Y/DcNsKZGDWFOJmPwJqwqdT8=@vger.kernel.org
+X-Received: by 2002:a17:907:cd0d:b0:c29:439b:d5c1 with SMTP id
+ a640c23a62f3a-c29b86141b9mr553591866b.16.1789488168046; Tue, 15 Sep 2026
+ 09:02:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260915-work-fd-reserve-unify-folded-v1-0-4d5217d6b246@kernel.org>
+In-Reply-To: <20260915-work-fd-reserve-unify-folded-v1-0-4d5217d6b246@kernel.org>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 15 Sep 2026 09:02:31 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjeamU=_RYT9cR3dZJ2N-Teo-N1+aYh7jwhrB=iWXD0cg@mail.gmail.com>
+X-Gm-Features: AcwNN1WK06t9f9BcKFBIanysXcyUXK4eRICuH4x14s60AdlpF6ijCATIYaYAAvQ
+Message-ID: <CAHk-=wjeamU=_RYT9cR3dZJ2N-Teo-N1+aYh7jwhrB=iWXD0cg@mail.gmail.com>
+Subject: Re: [PATCH RFC POC 00/50] file: handle files on syscall exit
+To: Christian Brauner <brauner@kernel.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jann Horn <jannh@google.com>, Jan Kara <jack@suse.cz>, 
+	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	Oleg Nesterov <oleg@redhat.com>, linux-alpha@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-um@lists.infradead.org, Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org, 
+	netdev@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, bpf@vger.kernel.org, 
+	David Airlie <airlied@redhat.com>, virtualization@lists.linux.dev, kvm@vger.kernel.org, 
+	kexec@lists.infradead.org, linux-hyperv@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: NMI deadlock via call_srcu() in bpf_call_rcu_tasks_trace()
---
+On Tue, 15 Sept 2026 at 04:31, Christian Brauner <brauner@kernel.org> wrote:
+>
+> TL;DR, this lets arch code handle fd install and cleanup. fd_prepare()
+> allocates a descriptor like get_unused_fd_flags() does and records it in
+> a slot on the task. fd_stage() attaches the file to that slot and
+> returns the number.
 
-commit 04163bb602a2cdfd9c0dc0db4f4484868a98025b
-Author: Puranjay Mohan <puranjay@kernel.org>
+Honestly, I am *not* a fan. At all.
 
-bpf: Add bpf_call_rcu_tasks_trace() kfunc
+I think this adds complexity rather than removing it.
 
-This commit introduces bpf_call_rcu_tasks_trace(), a new kfunc that defers
-reclaim until after a tasks trace grace period. It builds on the existing
-bpf_call_rcu() machinery, but routes the queuing through
-call_rcu_tasks_trace() to wait for sleepable BPF programs.
+The diffstat tells a story:
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-[ ... ]
-> @@ -4744,13 +4733,50 @@ __bpf_kfunc int bpf_call_rcu(struct bpf_rcu_head =
-*rh, void *map__const_map,
->  		return -EBADF;
->  	}
-> =20
-> -	rhk->callback_fn =3D (bpf_callback_t)(void *)callback;
-> +	rhk->callback_fn =3D (bpf_callback_t)callback;
->  	rhk->map =3D map;
->  	rhk->prog =3D prog;
-> -	call_rcu(&rhk->rcu, bpf_rcu_run_callback);
-> +	if (trace)
-> +		call_rcu_tasks_trace(&rhk->rcu, bpf_rcu_run_callback);
+>  106 files changed, 962 insertions(+), 861 deletions(-)
 
-[Severity: High]
-Does this code risk an NMI deadlock?
+in how this adds a hundred lines more than it deletes.
 
-call_rcu_tasks_trace() is a wrapper for call_srcu(), which acquires the
-per-CPU sdp->lock. If this kfunc is called from an NMI context (such as a
-BPF tracing program attached to perf_event) while the interrupted context
-already holds the sdp->lock on the same CPU, wouldn't this cause a deadlock?
+But to make things worse, it adds them in bad places: low-level
+architecture assembly code.
 
-> +	else
-> +		call_rcu(&rhk->rcu, bpf_rcu_run_callback);
->  	return 0;
->  }
-[ ... ]
-> @@ -5045,6 +5071,7 @@ BTF_ID_FLAGS(func, bpf_stream_print_stack, KF_IMPLI=
-CIT_ARGS | KF_SPINLOCK_SAFE)
->  BTF_ID_FLAGS(func, bpf_task_work_schedule_signal, KF_IMPLICIT_ARGS)
->  BTF_ID_FLAGS(func, bpf_task_work_schedule_resume, KF_IMPLICIT_ARGS)
->  BTF_ID_FLAGS(func, bpf_call_rcu, KF_IMPLICIT_ARGS)
-> +BTF_ID_FLAGS(func, bpf_call_rcu_tasks_trace, KF_IMPLICIT_ARGS)
+Those extra lines are *not* making complicated code simpler. Quite the
+reverse. They are taking fairly straightforward "just deal with errors
+with normal cleanup in the place where it makes sense" and makes the
+*straightforward* case simpler, while making the big picture more
+complicated and subtle, and adding new code to places that are not
+simple and just blindly do somethign that makes no sense in that
+context.
 
-[Severity: High]
-Could we restrict the execution context of this kfunc?
+IOW: it's more code, and it's more abstraction, and it DOES NOT HELP.
 
-Since bpf_call_rcu_tasks_trace() is registered here without any context
-restrictions, it permits use in NMI-context tracing programs, which exposes
-the potential deadlock with call_srcu() mentioned above.
+And yes, most of the well-maintained modern platforms (read: x86 and
+arm64) use the generic infrastructure and they don't show that
+low-level asm effect. So for those cases, it's mainly just  that added
+conceptual complexity and a new odd rule - and makes a *successful*
+system call go through that "extra work" and indirection phase that it
+didn't use to go through.
 
->  BTF_ID_FLAGS(func, bpf_dynptr_from_file)
->  BTF_ID_FLAGS(func, bpf_dynptr_file_discard, KF_RELEASE)
->  BTF_ID_FLAGS(func, bpf_timer_cancel_async)
+So it just spreads out the work, and moves it to a less obvious place.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260915154248.3612=
-028-1-puranjay@kernel.org?part=3D3
+All for the very questionable advantage that you can now randomly add
+a file descriptor without the few lines of fairly straightforward
+rollback.
+
+IOW, I do not see a single real upside to this, and I see immediate
+downsides to it, and a more abstract complicated machinery.
+
+I do *not* see why we woudl want to make this be a "every system call
+exit" kind of thing. If there are places that think it's complicated
+to do, they could have *their* local little stack of fd's pending. Why
+force it onto the low-level system call entry for every system call
+when there are only a small handful of actual real cases (the vfs
+itself, and random ioctl's by odd driver subsystems).
+
+              Linus
