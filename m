@@ -1,168 +1,156 @@
-Received: from mta0.migadu.com (out-191.mta0.migadu.com [91.218.175.191])
+Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19DC743B6EB
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 17:59:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 921F04BC01A
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 18:14:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789495190; cv=none; b=ZUNZpFsQguEnhu6O+oeJCQTc/uf6dzS4Jd9eaRCwGXOczSlNeirneXAw0duepXRR+CgDzh/PpbtUYxmax10oQevynzy6EEceUinkAkqH8CHk5KM184k0uWgKGfAaHDI7OayJHLRJSA6vBXFyCa+aUxg8vMDqnkgsCAXpQBgiHSI=
+	t=1789496046; cv=none; b=BUKr79/7rCRVAXk6f03qY+wDQkRdTJYNyTyov0bJAxBYzcZdqvewtdeAjs6Bs47zkRIq45i8GIBklSzEWQGsJsuYCD3waUE+i48LWLASQRcf4NLIFDuVCbU0XGdZBnxomNnYzkgfxNiKOrNaaJoBL7mmCzFMizbwWOMzgtsuA10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789495190; c=relaxed/simple;
-	bh=9p/X4aoRUra8MraWL6s4pj6WsjoEJdwlooOV4k5QPdA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=ueybQxEBMJ+wiOXPPxx6kscqg0mr2R4W0Q3aqAN2v0hUqzAsDiZLrZLa4VKyg28uIgL4ZfCn0g4fs3M7DmlBfYK6xWxpPrUqSsHqeyu/Y8QXtGNJrsVC5kcDcNwbEE5IsPsHFC01qSChNYnU1PZ590gDHlkifnXeE8SBx/eB6HA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h8qM+l7U; arc=none smtp.client-ip=91.218.175.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789496046; c=relaxed/simple;
+	bh=I7yEINnQlm9hteCHMUsZRclkkr+946xBHGFUUUIuwa8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=bpTusUicmsAFjSumnambJNp4whgW2OMS/KiC4cVvraj8iAvVt/nm8VZ9YK+BwkbqhLzi1J4jmCwd/tkMLYf5kpm8E5tXlr40l1jgJlehKSYc06aQjnY6J0GdPciugLvgvItqW+scT0DNC5/VN7Pb78jb6U4mGAH0MvLSSYrwy/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bu16XGRQ; arc=none smtp.client-ip=74.125.227.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h8qM+l7U"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=9p/X4aoRUra8MraWL6s4pj6WsjoEJdwlooOV4k5QPdA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789495185; v=1; x=1790099985;
- b=h8qM+l7UmjdfsCJBp9SaOLcqqF78DzFT8Tz57BwVtxZSVpG5vpUtCHTwVdkouH5sinIddH6P
- yyiqPEWFiQ8l8vrw2kKVfBy7fMvNzNN9/UT/xI+iqY8tRivSn138gPtjgc16cD/owCnPbRJNjes
- 8SKu5oP87OYXRQGFxcPtF7Vg=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id e8ba2cc259a500bd;
-	Tue, 15 Sep 2026 17:59:35 +0000
-X-Mizu-Trace-ID: e8ba2cc259a500bd
-X-Migadu-Flow: FLOW_OUT
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bu16XGRQ"
+Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-396ccb1a98fso38129a91.1
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 11:14:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789496045; x=1790100845; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=c3OYYI0Ioeun4ZyGc0ibO0E01INXFyKIB2S0MWGQA2U=;
+        b=Bu16XGRQC/KBLDx+VkXAajXmIhNIE6IPidz+93BSF0tLhn/cLHnFuPAEowt/2l8/+k
+         G49q46fZ+ubQeZPdQRks/GIk7rGOfF3azZGiSUngIUoa04MNrT8iJCjP+n9EzjtFlNS4
+         z4KrIDJmdEeLadNvE3nG1YR5Unu5abDY8KaAG83J8dVUJC1DgBzQzKUtk2OP8A5SHgYM
+         pCWpuc+57j3A3cQYiPqiYj1Qs7CFxFu9ZwCJJ2vkX9uwpcn7RPnYCVReVf+Yhjl4c3ex
+         ndsQPgqvzP4qBHVggERK6qiCk5RjW0Cub0qV0kqJU66+z7jgBT1YuKAQpwgRqhQDbYV/
+         JmBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789496045; x=1790100845;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=c3OYYI0Ioeun4ZyGc0ibO0E01INXFyKIB2S0MWGQA2U=;
+        b=W4PDkH3WEm2DYXCrsFT2tKO4OcJOK5+RPPBbZ6rCdvew/pkszHGD4o33Cq+frylCjS
+         K0J8w7v/jQhCiFUyrWhg2iA0SgOynxzeo55FrtAM7CIrM3smOH2ka6qksNIydLp+U0fj
+         rPrzMFuJIUNR/uPKyLpENV+mzWYhUhzDjvULyJlz4e+8W85M3dUODdwxBVycn1YhVeM/
+         +n7OZEUaIr60WPZf2N4u7baLI2WRNif208Emp2l76qksUAj7KLp+UK05u6PSgLKqIhh6
+         pj3POMZi++1sr9Gm4kdLrlBfzaoUvA8Fqf/B4yVmP3y2/wAL4vr0PnFCg7msy3jTdg0R
+         RQ6g==
+X-Forwarded-Encrypted: i=1; AKwUvBwQhyU7UMfXLNE15unbnrtkqw7xOVffiZiJl/+xnP3IBlOrgM8TC57i7bE3cYDmFSiRXPY=@vger.kernel.org
+X-Gm-Message-State: AFuF++lkqXAPGcIBIDf4nBYhJnXCZ9XBz21FMleMlET/sBSyM5etZ5n+
+	wOzBQXBkYXExPsc9lbCknQ75cT+Iig+55WWJO5uxh4Z2caDW45ToeHBg
+X-Gm-Gg: AYBFou1ZZbc4gawGRceuaZjE/zoXrNHj/XdM4636PxlxAvs6FJ/djCgt/BXQRcJSJqz
+	uy8ZjDOrrhtFQgttyV4SsutTIaP7ppxV1AsaC/LaF+o4UD8ncCwmMfHvoo/yErzFUNQiFDEGQcC
+	Eb2bHlkd/Sik+7PUigIND32gHZPlkXtKOs3rX4kMGywsH53pehJ/+2DanJ7MGht+9900h9quzQy
+	b/QvTDNl5/rLarkDEEYRbZqgwrn+UnVWWj7/e6m8sHrUUMKM7r3JWW7mS0ghXhXtY2N2cfKovu9
+	V54KU9DnokQrfwlMJwcWqD4hPhZsot3++rkLqEB3SonnsaE1uqfPUnJZv8XdoxytYb/8zbeeB3k
+	EA2dJ6HCDsmXv5/5sDKnY5qGLEhytFZ4G+0GWcVKIk7tGmlxYf+gS8wm+OrAd5RGivEcvmBP/gn
+	QCAbE0uwjRbdfbWUzNdCfJVddplxqL6VAEDXvLoOChTd6KX3sSMmAEKiFdQnFgKTM2kG3/L9GD/
+	pj/
+X-Received: by 2002:a17:90b:554e:b0:39d:f823:ecff with SMTP id 98e67ed59e1d1-39df823ed94mr13397486a91.11.1789496044736;
+        Tue, 15 Sep 2026 11:14:04 -0700 (PDT)
+Received: from [127.0.1.1] ([186.235.217.201])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33bf5a6a166sm716073eec.10.2026.09.15.11.14.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2026 11:14:04 -0700 (PDT)
+From: Luis Vieira <luisflavieira@gmail.com>
+Date: Tue, 15 Sep 2026 15:13:35 -0300
+Subject: [PATCH bpf-next v2] libbpf: Fix program log buffer size validation
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 15 Sep 2026 17:59:31 +0000
-Message-Id: <DLG33GLTJ1P7.3EVXOHZPN8XLU@linux.dev>
-Cc: <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song
- Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
- Olsa" <jolsa@kernel.org>, "KP Singh" <kpsingh@kernel.org>, "John Fastabend"
- <john.fastabend@gmail.com>, "Leon Hwang" <leon.hwang@linux.dev>, "Sechang
- Lim" <rhkrqnwk98@gmail.com>, "Puranjay Mohan" <puranjay@kernel.org>, "Xu
- Kuohai" <xukuohai@huaweicloud.com>, "Ilya Leoshkevich" <iii@linux.ibm.com>,
- "Hari Bathini" <hbathini@linux.ibm.com>, "Christophe Leroy"
- <chleroy@kernel.org>, "Naveen N Rao" <naveen@kernel.org>,
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, "Pu Lehui"
- <pulehui@huawei.com>, "Tiezhu Yang" <yangtiezhu@loongson.cn>, "Hengqi Chen"
- <hengqi.chen@gmail.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf v2 1/2] bpf: Skip detached progs in trampoline
- images that are still in use
-From: "Florent Revest" <florent.revest@linux.dev>
-To: "Junseo Lim" <zirajs7@gmail.com>
-X-Mailer: aerc 0.17.0
-References: <20260912095924.866254-1-florent.revest@linux.dev>
- <20260912095924.866254-2-florent.revest@linux.dev>
- <aqdrwVpanH3WGurX@omen-arch>
-In-Reply-To: <aqdrwVpanH3WGurX@omen-arch>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260915-libbpf-log-buf-fix-v2-1-2feca3fa4842@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAM6KqWoC/22NTQ6CMBCFr0Jm7RhaQMWV9zAsSunAJEBJiwRDe
+ ndr49Ll+/veAd44Nh7u2QHObOzZzlHIUwZ6UHNvkLuoQebykteiwJHbdiEcbY/ti5B4x7KmKi9
+ uWqmqgzhcnIl2gj7hW57NvkITk4H9at07vW0i5T9w+Q+8CRRIVS21ItL6Kh79pHg8aztBE0L4A
+ Hehh/e+AAAA
+X-Change-ID: 20260913-libbpf-log-buf-fix-49f5038caa5d
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Luis Vieira <luisflavieira@gmail.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1789496040; l=2198;
+ i=luisflavieira@gmail.com; s=20260913; h=from:subject:message-id;
+ bh=I7yEINnQlm9hteCHMUsZRclkkr+946xBHGFUUUIuwa8=;
+ b=DZbEYo5ANBcLM8/O1rfc7whiDbVTKuWqFmhwD4+XnfQBeE6x3gpsz26Z1+W1XFptHNtf8icl6
+ dHSfvpZaE6bCRj0KQ7+NGC3udWPo6JZzTcvd13czXOyAzzL54ZGs3fG
+X-Developer-Key: i=luisflavieira@gmail.com; a=ed25519;
+ pk=98MeC/NdrC6ah7zYpPnkWiQIoyj62iUP/rNuV3esCW4=
 
-On Mon Sep 14, 2026 at 4:13 AM UTC, Junseo Lim wrote:
-> I think there's still a correctness gap here.
->
-> > > diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_c=
-omp.c
-> > > index c18e005a41dbe..9c166bdfbc6a6 100644
-> > > --- a/arch/arm64/net/bpf_jit_comp.c
-> > > +++ b/arch/arm64/net/bpf_jit_comp.c
-> > > @@ -2429,6 +2430,10 @@ static void invoke_bpf_prog(struct jit_ctx *ct=
-x, struct bpf_tramp_node *node,
-> > >  	enter_prog =3D (u64)bpf_trampoline_enter(p);
-> > >  	exit_prog =3D (u64)bpf_trampoline_exit(p);
-> > > =20
-> > > +	/* nop, patched to skip this prog when it is detached */
-> > > +	skip =3D ctx->ro_image + ctx->idx;
-> > > +	emit(A64_NOP, ctx);
-> > > +
-> > >  	if (node->cookie =3D=3D 0) {
-> > >  		/* if cookie is zero, one instruction is enough to store it */
-> > >  		emit(A64_STR64I(A64_ZR, A64_SP, run_ctx_off + cookie_off), ctx);
-> >=20
-> > [Severity: High]
-> > This is a pre-existing issue, but does this still leave a use-after-fre=
-e
-> > window between the newly added skip NOP and the __bpf_prog_enter() call=
- in
-> > invoke_bpf_prog()?=20
-> >=20
-> > If a task on a preemptible kernel executes this NOP but is involuntaril=
-y
-> > preempted before calling __bpf_prog_enter() (where rcu_read_lock or=20
-> > rcu_read_lock_trace would be acquired), it hasn't blocked the RCU grace=
-=20
-> > periods yet.=20
-> >=20
-> > If another CPU detaches the program, patches the NOP, and drops the pro=
-gram=20
-> > reference during this preemption, the program could be freed. When the
-> > preempted task resumes, could it load the now-freed program pointer and=
- call
-> > __bpf_prog_enter(p) on freed memory?
->
-> I reproduced the scenario Sashiko pointed out in our environment:
->
->      =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->      BUG: KASAN: vmalloc-out-of-bounds in __bpf_prog_enter_recur+0x3a5/0x=
-3f0
->      Read of size 8 at addr ffffc90000055040 by task candidate/110
->
->      CPU: 1 UID: 0 PID: 110 Comm: candidate Not tainted 7.3.0-rc2-00014-g=
-15071f2a1263-dirty #2 PREEMPT(full)
->      Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS Arch Lin=
-ux 1.17.0-2-2 04/01/2014
->      Call Trace:
->       <TASK>
->       dump_stack_lvl+0xb0/0x110
->       print_report+0x14b/0x4a4
->       kasan_report+0x108/0x130
->       ? __bpf_prog_enter_recur+0x3a5/0x3f0
->       ? __bpf_prog_enter_recur+0x3a5/0x3f0
->       __bpf_prog_enter_recur+0x3a5/0x3f0
->       bpf_trampoline_6442509193+0x37/0xf1
->       __x64_sys_futex+0x9/0x410
->       do_syscall_64+0xb0/0x530
->       ? srso_alias_return_thunk+0x5/0xfbef5
->       entry_SYSCALL_64_after_hwframe+0x76/0x7e
->      RIP: 0033:0x42a21d
->      Code: d5 48 8d 3c 0a eb 91 66 0f 1f 44 00 00 f3 0f 1e fa 48 89 f8 48=
- 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 =
-f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
->      RSP: 002b:00007f1befda9128 EFLAGS: 00000246 ORIG_RAX: 00000000000000=
-ca
->      RAX: ffffffffffffffda RBX: 00007f1befda9ce4 RCX: 000000000042a21d
->      RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
->      RBP: 00007f1befda92b0 R08: 0000000000000000 R09: 0000000000000000
->      R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000021
->      R13: 00007ffd400508a0 R14: 0000000000000010 R15: 00007ffd40050997
->       </TASK>
->
->      The buggy address belongs to a vmalloc virtual mapping
->      Memory state around the buggy address:
->       ffffc90000054f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->       ffffc90000054f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->      >ffffc90000055000: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->                                                 ^
->       ffffc90000055080: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->       ffffc90000055100: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->      =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> I used SCHED_DEADLINE to increase the likelihood of preemption.
-> This seems consistent with the preemption window described above.
+bpf_program__set_log_buf() checks the existing prog->log_size instead
+of the incoming log_size argument when enforcing the UINT_MAX limit.
+As a result, an oversized value can be accepted.
 
-Thanks for reproducing! :)
+The setter also accepts a non-NULL log_buf with a zero log_size, while
+bpf_prog_load() rejects mismatched log buffer and size values.
 
-I could make v3 also wait for an RCU tasks grace period before freeing prog=
-s.
-IIUC, this would wait for those preempted tasks without waiting for sleepin=
-g
-tasks so this would avoid the issue Alexei saw in v1.
+Validate the log buffer and size pair consistently with bpf_prog_load(),
+and check the supplied log_size against UINT_MAX.
+
+Signed-off-by: Luis Vieira <luisflavieira@gmail.com>
+---
+Changes in v2:
+- Target bpf-next instead of bpf and drop the Fixes tag.
+- Drop the regression selftest.
+- Validate log_buf and log_size consistently with bpf_prog_load().
+- Link to v1: https://patch.msgid.link/20260914-libbpf-log-buf-fix-v1-1-f592caffcc71@gmail.com
+
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ tools/lib/bpf/libbpf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 613afae26519..f7a0517d8fa8 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -9966,9 +9966,9 @@ const char *bpf_program__log_buf(const struct bpf_program *prog, size_t *log_siz
+ 
+ int bpf_program__set_log_buf(struct bpf_program *prog, char *log_buf, size_t log_size)
+ {
+-	if (log_size && !log_buf)
++	if (!!log_buf != !!log_size)
+ 		return libbpf_err(-EINVAL);
+-	if (prog->log_size > UINT_MAX)
++	if (log_size > UINT_MAX)
+ 		return libbpf_err(-EINVAL);
+ 	if (prog->obj->state >= OBJ_LOADED)
+ 		return libbpf_err(-EBUSY);
+
+---
+base-commit: 5ef40d69b38a93bc9951dadb1a15c85c597e1a40
+change-id: 20260913-libbpf-log-buf-fix-49f5038caa5d
+
+Best regards,
+--  
+Luis Vieira <luisflavieira@gmail.com>
+
