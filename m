@@ -1,154 +1,84 @@
-Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
+Received: from mta0.migadu.com (out-222.mta0.migadu.com [91.218.175.222])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054D94A2A42
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 17:21:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.76
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789492872; cv=pass; b=WPupp/eYbESDj+p9HxBjttGJQrDdTcmBNBaM4dMLI7uCniANq94OA2Dk8OucUIQ0YLFezuo+HxVjN/SglVPbGOMLFKzzaDWqLwWVIP9jpGP2rd4ghHvrUSKqT2A/GGb9swrgg11IbIoHXq0NxlvYCq+bt5MZFros3pXpbpm9GfQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789492872; c=relaxed/simple;
-	bh=ANRdyzkiW2n46BZXS7RzLN4gyuuHv08frlEVtMqj+vw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dqWqHjhzNoR/3vDBo6rlcbvA9amOY2n+UZxdd4oFoRZOsGnt8VpHOJg2kJESt3r5hR1A2a3w7yzTnJxORcWl3EIMdV75sxss+1Di069gJKYS6gZ+QPwRnWDeoyqfbyWsIJ4OTR4G6Pa54I/vLKIjwq9PgfDx3g9Gt9zCcannpdM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c6yTSnNx; arc=pass smtp.client-ip=74.125.228.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA98F4AFE3D
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 17:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.222
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789493198; cv=none; b=ogCHsSdatTsONfvPcStgM9m9A1nIGzrFiA7juunwn8wfNbSK/51JkFIFoD6gvfJ5eJ7hcLumCugJW8WUto0ouvMjkzgQ34NTP+DRucodrsnUFhqg/eOE43u1qYcEqXhGR1Uvuf1V/iOIuKiLapjh4bR7Z3AWewFJ3C8E9dyI7Qc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789493198; c=relaxed/simple;
+	bh=z3VROCEjHUXLMEwm7jbMKvcs86CUi8SjcyFIWtgFK6k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L/YgExo4UIxtJmfh2PZz73nb3xwdEN1FhDuPMA+3xRrvgEuJb6Au6JsqOKjllu3mO8INW+ofcD14EbfpY3HhnUXttjYfV35/t+nVBkMjL4OQJ7J3KhaOqSx6iRXrD4XWThnX3hQAb8iNQphO47fKNu2b5hR5GWvh1OfmZDdKNSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JW0QND0X; arc=none smtp.client-ip=91.218.175.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c6yTSnNx"
-Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a60590a85bso77471a12.3
-        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 10:21:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789492869; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Z60k8DdvgYWlda2RSIAsMoLHUVj7dh44NGCtON0zYvI+YHRY32E1MGi6ssc/bwCwNK
-         EfD+uVKDXcP7OdObbrTmcJOZgPEr+TpR1t2nouEEchL3U+XpkvV23aGxS3eoiMLTF+x4
-         9qbdMAsfehsBIcVDfUXEfVN/k+uKaoIX26hvYKyzn9Xgf7eAsqUVditX5bDqdxZZVJiX
-         RCYkQScHEeqIbBIRlkUbsMcjs97BsdUZe/TU+dBGHiyMBT+LeB/fL2wid6dtqfVXcQ3I
-         Ff+1iQdw95PTqdZUv5JSQN8Vo1mka6qSgTVZhvaEJdzQRrhmydkFMUA3YNWKNoqMC3sq
-         aSpw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=GfANrDKyQQJG0cfj6OqPz60w32Xge59VKyIhU4wGT5k=;
-        fh=7K2qWJ3mUiPSelnihIFryY3l1DriTibHaNVcRL5iMOk=;
-        b=mYNrUvflY3avRv4heO3YJzR1tQabnSHO+d6snmtzSQU7MzruwG3K9Ljdt6mnnZ4ZTb
-         rai4RjqbCO0D4tYsHNuLgIU2casL2f7u7U2EmXnG0QmZp8LkqqmROxZlp8bhWcW85Stf
-         qVuFOYyG74eqHpyr05hRSCaJm5jXymWxrZQO7SYkVvSxkhXIBYULldgPYihopM0KjMkX
-         1o1h5I15Y9p5Bf/X9ve1iBxj75A+wR4FDsMEzHg7/RMdeX3GXuNriJZgdSIUNfTsOzNO
-         AlKV4TJ7hMXT7QaD0DqSDe0oLfTeFIYUwQow+JZkK3aDHCy1DZz1zgtn49sWnsbfTqIO
-         w1yw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789492869; x=1790097669; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GfANrDKyQQJG0cfj6OqPz60w32Xge59VKyIhU4wGT5k=;
-        b=c6yTSnNx92TKiEQNUXjTyYy0UrMReZLxPdXxr4Bq7TDFwLSZCwjNiFNCAQuu0RX9iA
-         LLUcO7LSYwm/eHm5E87FSuwVuMrj0kQAQWhLza8gRMKkVLiU8LSqMtnM9kAgNWQSAUmO
-         fMpf2aGA2G/ZBJW7lT3nQMWe5Igkk//n669MF9edA6m+I0ctZaHZ8UbQa34Aqh/5My9Z
-         3YHdMQ39GmwDBfmsP8kX4GofzXKjPKaeV89dLuoE2a4tcptIYY6rONokfPHQAtB5Ad2S
-         8q1VXiOCiT1OtZVgG0JJB/g+mO4Wbb5eIoDP8Q28X2YFaZg+SuVhF2HSUIYZOCHp901z
-         BcKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789492869; x=1790097669;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=GfANrDKyQQJG0cfj6OqPz60w32Xge59VKyIhU4wGT5k=;
-        b=JqYrtgp0zE4b8QcxQAd+5YYP6Zlp5avrXkQXRF0l2HcHs9Pb8EY5vW+Nck36OcEmO4
-         I7lE/JvVdTAKMLnVYOslmU0gvJk7fCfrfQpaul89ZdgNd634vPODl7F93LN4c32B0Tx8
-         C3jTrbv7oGXPHkbVoYl52dDmpZkgGT+ouhJ+XWG945V9Fwj11wuM3jzwvhhDj0dNWsv6
-         2yr0Bg/KbbQNGpBGdg0vVp0lyg7GjuPyaT8xCxlQEkjTQcl0MkxvOd8DkvPavdbfVqJk
-         A4SPkaTGCfB4DILls0/sSDPvEP4jSxK9yUAb1OWMnf3apqtRAqNn8BqKXa7A8YK2mHDj
-         3i3g==
-X-Gm-Message-State: AFuF++neqf2RIfoqpIDDRkhU1d3o8hm6LbcPoI/CjquOaojpVEKcrTc5
-	BZRfXh+/SE7XM0ObQ4YknvyuY1BTGNZOT75zAoK0VaECnDxXCxAepfz2g/0TIcQ5w+I2b2YSzZj
-	6Fx5fMRIe7tq0pX9XCAe9uoBlF61rrco=
-X-Gm-Gg: AYBFou1oq7T15bwfIGK6VFeA/PqIaodUL4sQLwig8gJFQnt5YHjZBFwibZpNj+8bYp9
-	fPB6DXPg3wWOqhApK55ByL3uwbevrO8p4uNtJE46qeYN2cCK4UOtX60gH3DRNT+vSryQK9wbUZN
-	wj8wyTgpdJqmKi4jQf15/ZwiXvsn4X+KMXPGsDvqaEaC3uS+uufnncOrv3+r1FeNOkCgKuRdg9H
-	C1B/LcgVKfQpd1WdYHlv9Bg8ah6y3DNeEKPgo68ClfMdNpB5hFwtquUC3Yfa8DzODHPsqICGLEo
-	j6HnBNEzGsIQua6N+LPqQ7PEWRXZZZ96I2YbKlcy4AkWEDhWamjg3YtqwAQHBINLcYk=
-X-Received: by 2002:a17:907:724b:b0:c29:8c9:6fd with SMTP id
- a640c23a62f3a-c29d7792e17mr167097366b.11.1789492868911; Tue, 15 Sep 2026
- 10:21:08 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JW0QND0X"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=z3VROCEjHUXLMEwm7jbMKvcs86CUi8SjcyFIWtgFK6k=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789493194; v=1; x=1790097994;
+ b=JW0QND0XDZORdiqlrs8XDHgqK3SNSsfQgDc9QrcVkSbMVtzB/a39wX4Cyl/3tiXmYvH0L0DL
+ 3nsKmvYMQ3k1pbNW7RxXJI8l2PoOZ7fTkSLqnSbDdjQxX2Vhc0CysTT0qchn5H+6KoNn6ACFX6p
+ zR54Gt90d9miP64b6wOdxWSo=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id ad139adac85be7d6;
+	Tue, 15 Sep 2026 17:26:33 +0000
+X-Mizu-Trace-ID: ad139adac85be7d6
+X-Migadu-Flow: FLOW_OUT
+Date: Tue, 15 Sep 2026 10:26:28 -0700
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Hui Zhu <hui.zhu@linux.dev>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>, 
+	JP Kobryn <inwardvessel@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, Barry Song <baohua@kernel.org>, 
+	Geliang Tang <geliang@kernel.org>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, Hui Zhu <zhuhui@kylinos.cn>
+Subject: Re: [PATCH bpf-next v11 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
+Message-ID: <aql_rkQMtlLmMstC@linux.dev>
+References: <cover.1789475073.git.zhuhui@kylinos.cn>
+ <ee6bcf945910babab2200f05040975492aed21b3.1789475073.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260915141004.1196460-1-memxor@gmail.com> <20260915141004.1196460-2-memxor@gmail.com>
-In-Reply-To: <20260915141004.1196460-2-memxor@gmail.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Tue, 15 Sep 2026 10:20:52 -0700
-X-Gm-Features: AcwNN1VK3c-zNOb1LRSYuEBC2KMEwk2pwWwMDYDxNz7RcFCDEF9FFnda1e8AOhI
-Message-ID: <CAMB2axM2_fMUyPdS7ySuQiKAGW11hhCwTSX=PSxFZ1o2mZu6FQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 1/3] bpf: Fix generic __uninit kfunc output buffers
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, Tejun Heo <tj@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ee6bcf945910babab2200f05040975492aed21b3.1789475073.git.zhuhui@kylinos.cn>
 
-[...]
+On Tue, Sep 15, 2026 at 08:29:35PM +0800, Hui Zhu wrote:
+> From: Hui Zhu <zhuhui@kylinos.cn>
+> 
+> BPF programs can observe memory pressure on a cgroup, e.g. refault
+> stats via bpf_mem_cgroup_page_state(), but cannot act on it:
+> triggering reclaim requires writing to memory.reclaim, which BPF
+> cannot do.
+> 
+> Add bpf_proactive_reclaim(), a sleepable kfunc performing one
+> proactive reclaim pass on a memcg, like a write to memory.reclaim
+> but without retrying until the target is reached, so that when and
+> how hard to reclaim is BPF policy rather than hard-coded thresholds.
+> The reclaim target of a single call is capped at MEMCG_CHARGE_BATCH,
+> as high_work_func() does for memory.high; reclaiming more is left to
+> the program, which can call the kfunc once per bpf_wq callback and
+> stop at any point. It is limited to BPF_PROG_TYPE_SYSCALL, because
+> other sleepable programs may run with filesystem locks held, on
+> which the reclaim path could deadlock via filesystem shrinkers.
+> 
+> Convert MIN_SWAPPINESS, MAX_SWAPPINESS and SWAPPINESS_ANON_ONLY from
+> macros to an enum so that they are emitted into BTF and usable from
+> BPF programs via vmlinux.h.
+> 
+> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
 
-> @@ -9232,7 +9237,8 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg, u32 slot, u32 p
->
->                 access_type = fn->arg_type[arg - 1] & MEM_WRITE ? BPF_WRITE : BPF_READ;
->                 if (meta->btf)
-> -                       access_type = BPF_READ | BPF_WRITE;
-> +                       access_type = fn->arg_type[arg - 1] & MEM_UNINIT ?
-> +                                     BPF_WRITE : BPF_READ | BPF_WRITE;
-
-This looks a bit convoluted. Consider doing this when generating the
-kfunc proto or at least something like below?
-
-  if (arg_type & MEM_UNINIT)
-        access_type = BPF_WRITE;
-  else if (meta->btf)
-        access_type = BPF_READ | BPF_WRITE;
-  else
-        access_type = arg_type & MEM_WRITE ? BPF_WRITE : BPF_READ;
-
->
->                 zero_size_allowed = meta->btf || base_type(arg_type) == ARG_MEM_SIZE_OR_ZERO;
->
-> @@ -9550,6 +9556,33 @@ static int check_func_args(struct bpf_verifier_env *env, struct bpf_call_arg_met
->         return 0;
->  }
->
-> +static int mark_raw_stack(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
-> +                         int insn_idx)
-> +{
-> +       struct bpf_func_state *caller = cur_func(env);
-> +       u32 slot;
-> +       int i, err;
-> +
-> +       /*
-> +        * Validate every argument before initializing outputs: an input argument
-> +        * may alias an output buffer. Use the normal stack-write checks to discard
-> +        * stale spills and preserve the rules for special stack objects.
-> +        */
-> +       for (slot = 0; slot < MAX_BPF_FUNC_ARGS; slot++) {
-> +               struct bpf_reg_state *reg = get_func_arg_reg(caller, cur_regs(env), slot);
-
-The bot has pointed out the need to skip inactive slots, but the rest
-of the patch looks good to me,
-
-> +               argno_t argno = argno_from_arg(slot + 1);
-> +
-> +               for (i = 0; i < meta->arg_raw_mem.size[slot]; i++) {
-> +                       err = check_mem_access(env, insn_idx, reg, argno, i, BPF_B,
-> +                                              BPF_WRITE, -1, false, false);
-> +                       if (err)
-> +                               return err;
-> +               }
-> +       }
-> +
-> +       return 0;
-> +}
-> +
+Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
