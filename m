@@ -1,174 +1,157 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9D83876A4
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 08:13:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF98A3A1683;
+	Tue, 15 Sep 2026 08:13:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789460022; cv=none; b=Mniz9/Nw312P4zOv0ZAFyr+ThjhJrSXcpL7C4oSt4ZV0YA6EHLonfOIXAaTwdgIyxhEYq9J1wKpuIAB105P4bQcYMWDSuNd0ZndAsQrfciDt6+gnqmqkJYtxIYddjs4NFoXfTG7QslV1R3K/z76oktHqM0Ma1BcbnyPjfrLccV8=
+	t=1789460031; cv=none; b=RwAvY0RndouUh1Ny1fETIYVBwUVg5eNJYNrqsaT7eXggUGDGxGdZNiTqguIU9FS6GpXtCnQ56w85FTgCcialf/+rAsJ7pPp9ZFo+U7lzr4qtKtWcDZ/oveAAsIvh0x/+wjZLlMWWelLXBRu49Y5WX8+FoTsB4bHJT7oPIRCrq7E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789460022; c=relaxed/simple;
-	bh=Qy1WQPyESiOhAWnLFCEN0YIk1kYz5dOKPx/yzCSBwsk=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lj0cvlyF01Is7gLCg6fxyLra06nyyGJ1Y64xcYABQY4iJ63TyCsuh5Hl0xzYtq0+mcNoUqOlwgpo8fnV1gTHnpv1gcYb+WzGMW+vJs+mL/5tgKfEVlsmw3TY4dlV9zu4ZzlUo50qGWX4SiCcbQoyEZl3DrpOeD05y58JyP+doyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LE/3z16y; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789460031; c=relaxed/simple;
+	bh=CQd5havz4xxgycr++VxXFcEsCtdQlKxCbdFKfwHX0ww=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=If7azE63YzevUe5RJMZwrEywgEQArY0wjJAC/NF9pU7KsmZ41Zfj1jzgxueme6XV4CY/TcmjoaZbRrhBtarW7cwOAMl4+XWFPhiGXGH/myDmOb8nyEaI3a+h9GFspq9MlhZxMxe7iUYNCtYHz84/ong+eWxqp2GOn5pgox+fM9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VcDfKGKg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LE/3z16y"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912d391aso161335e9.2
-        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 01:13:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789460019; x=1790064819; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:date
-         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1aXv/QuntaY+V4oyEEzb+gi6VoNLvN7s/jnHI0pKvxg=;
-        b=LE/3z16ye4bb6qEaIvxhAzM0BujCI01M4DOZEKUEReuWLWAOAr+AsS+flIpSZBeqpJ
-         raKNYRptOv91hphQIoBpG3b5PkVAi3JuX12VR27YZJQf2IXkR/r1N83s9+nAnBaRibJ7
-         yfoQ5B4v1eGIvpyF1LIdrM5RPQ9mhFKvjPICxMZvHLa5aOuyfRG5/SHm+1eM99ePUR2l
-         yAObOo5dnUXF6F8n2Vw8FsCYKXSVunzanCHbk68sU3EoVa7/Ih35uTCDtxwrnKOqaWyz
-         pwDcd6jDNh5+rGMdIXUH4HZDTmEWpXmHpN9vS/x+1Y7XNxuWyJXBxph9h2NlaF22RMir
-         OVHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789460019; x=1790064819;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:date
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=1aXv/QuntaY+V4oyEEzb+gi6VoNLvN7s/jnHI0pKvxg=;
-        b=tlJE4kByFzBKlm2DOJMqm2WuFwJHNTHinqdJT9mWecnM7DrYSX9sMEtX4uEq2ihdyI
-         D6AiQapiNQxtIejwXwzPIvKSCqW7mUtZzzBlLxPS4KNavp+fMMFYE6r74L3wiIkgxOzo
-         ckJKoRCE9oEtEbgdaK7rPmt9dfbmq6VdDXwbeDXJS7hJIxXfV/CyXECWHGAjeDdRT2nX
-         NBIMBzx3bFYp99ES9lsnKDhZqPwkCmLyGVqmriLeHGqdLCT4kSQJwROxBOKVqzfBXneI
-         incIK0JaCbcw5EPGMKXJ6Eg5cvKGAhwYeZIdRV6+om9N/O3vZ70SlBdSOlNXeA++DXDh
-         tedA==
-X-Forwarded-Encrypted: i=1; AKwUvBxcLMF8GS1QkO9pUrpP758kwD742tjTc1AbcVtnhdZW2fV1Xnhyj66csy/gP204hjh53MY=@vger.kernel.org
-X-Gm-Message-State: AFuF++m85lPihECuE5eV8JZUDtQIWgceFQkiq3SweJsgrXGLP3n2IK3f
-	MXwIg6ifUxkcoNGQtVxdLygOzS/Qc39pGgYgUNGSADIoqzlzo7ywb5fy
-X-Gm-Gg: AYBFou3oeUamlWQUXc6IK2UlLTNgTxIjrKas4HWMtZdJm796s3XMmbc/giQ21ZdsLBC
-	No4v+wOa4WpTn54FGI/vIGdzlokSyG9BWgJY2Z4w9IzITPe+ccWx5f2W0a9+YVHVyPD+CN0erv1
-	AQyDhN+0rIqFkcPR9kmK3pnkrzJrBGwWZ1/k75LQ6oaf4BnxW3qGA2HYU85iQsfdVlUXmPctsTb
-	Nm9V9EoKTkaphEklM/uYLLpoCSbS8gS6TDgw+IZv8nPjXo4XrqxQEM+Y3zyO+1mo4eiCcg20Gf2
-	okPblcrLtc9wATj4Kbx1Fdyhbiy15A+9874UH/urGzGdWK7B6EU2StfchqFd5CLNdUukG9ZMCs1
-	3ZygkxfPwvck/hv8PW/QbfFlVruUkDCihU5xxjOs7FfiA/KFdJy2xpPraL9ScppO93RPlvP3lTc
-	DZf7TIqwxYuaR8zLc+oK4JceBVhHst81evrROG9IkzhuhT
-X-Received: by 2002:a05:600c:c173:b0:49e:799a:8951 with SMTP id 5b1f17b1804b1-49e82214b48mr1820155e9.11.1789460018923;
-        Tue, 15 Sep 2026 01:13:38 -0700 (PDT)
-Received: from krava ([2a02:8308:a00c:e200::25dc])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e7d6a8d5asm47662215e9.9.2026.09.15.01.13.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2026 01:13:38 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 15 Sep 2026 10:13:36 +0200
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, ast@kernel.org, andrii@kernel.org,
-	daniel@iogearbox.net, eddyz87@gmail.com, ihor.solodrai@linux.dev,
-	yonghong.song@linux.dev, song@kernel.org, qmo@kernel.org,
-	martin.lau@linux.dev, memxor@gmail.com, emil@etsalapatis.com,
-	mcgrof@kernel.org, petr.pavlu@suse.com, tj@kernel.org,
-	kees@kernel.org, bpf@vger.kernel.org, nathan@kernel.org,
-	nsc@kernel.org, arnd@arndb.de, puranjay@kernel.org,
-	yatsenko@meta.com, atenart@kernel.org, ojeda@kernel.org,
-	linux-modules@vger.kernel.org
-Subject: Re: [PATCH v2 bpf-next 01/18] btf: Extend UAPI to support BTF
- location (inline site) info
-Message-ID: <aqj-MIrooVpronCx@krava>
-References: <20260901165757.801449-1-alan.maguire@oracle.com>
- <20260901165757.801449-2-alan.maguire@oracle.com>
- <aqRVysZxIpP5lSOT@krava>
- <eb560e37-0eb1-4f11-a9c8-866562b178ed@oracle.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VcDfKGKg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D0581F000FF;
+	Tue, 15 Sep 2026 08:13:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789460029;
+	bh=ahHVIQUKCj3UqsamTwkNl7ydXLXTp+2VEfV/2bZTM+w=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=VcDfKGKgszCsvqVQiNtS6t4Jr3wJLK1aovcQLTgjzjYw/N4/ZaZbQoDBxf5oy6C0U
+	 rHlIlc4OopLYai6IlOCSQxU/yL7wo48Rt31Hi4Q+iyFQUzMpgWaheutxjfPiuM3Y7U
+	 kn6qDEglR+Rq6VSQCk1laEb3xg8D4xuiqzSjTsKN/gw7qWIdqcBgaT7R7sxqCgYakP
+	 B72KawQtbOLpTlCuOAWPrbvtmMvJZe94vNzdawZ+sWg2S4XjlW6dKl3jYv5p6TQpkc
+	 T2XO/BK1C3W0jBc6Z5mjMDGQ7kp0dxYSPAt69Ano1ndd+Nzev4E4jcsggi2P0aIfOf
+	 qsZKLKIIQlfOw==
+Content-Type: multipart/mixed; boundary="===============0798735520997638461=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <eb560e37-0eb1-4f11-a9c8-866562b178ed@oracle.com>
+Message-Id: <dc4bd7fb4d98a0066958a4e1582b6a7a407079fd9a284318848909f9594a9295@mail.kernel.org>
+In-Reply-To: <20260915071743.29394-1-zhaogongyi@bytedance.com>
+References: <20260915071743.29394-1-zhaogongyi@bytedance.com>
+Subject: Re: [PATCH bpf] bpf, sockmap: reject max_entries > INT_MAX in sock_map_alloc
+From: bot+bpf-ci@kernel.org
+To: zhaogongyi@bytedance.com,bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,linux-kernel@vger.kernel.org,john.fastabend@gmail.com,jakub@cloudflare.com,jiayuan.chen@linux.dev,edumazet@google.com,kuniyu@google.com,pabeni@redhat.com,willemb@google.com,davem@davemloft.net,kuba@kernel.org,horms@kernel.org,zhaogongyi@BYTEDANCE.COM,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 15 Sep 2026 08:13:48 +0000 (UTC)
 
-On Mon, Sep 14, 2026 at 03:29:21PM +0100, Alan Maguire wrote:
-> On 11/09/2026 20:26, Jiri Olsa wrote:
-> > On Tue, Sep 01, 2026 at 05: 57: 40PM +0100, Alan Maguire wrote: SNIP > + > +/* > + * BTF_KIND_LOC_PROTO specifies location prototypes; i. e. how locations relate > + * to parameters; a struct btf_type of BTF_KIND_LOC_PROTO is followed
-> > 
-> > 
-> > On Tue, Sep 01, 2026 at 05:57:40PM +0100, Alan Maguire wrote:
-> > 
-> > SNIP
-> > 
-> >> +
-> >> +/*
-> >> + * BTF_KIND_LOC_PROTO specifies location prototypes; i.e. how locations relate
-> >> + * to parameters; a struct btf_type of BTF_KIND_LOC_PROTO is followed by a
-> >> + * a vlen-specified number of __u32 BTF type ids which specify the associated
-> >> + * BTF_KIND_LOC_PARAM for each function parameter associated with the
-> >> + * location.  The type should either be 0 (no location info) or point at
-> >> + * a BTF_KIND_LOC_PARAM.
-> >> + */
-> >> +
-> >> +/*
-> >> + * BTF_KIND_LOCSEC consists of vlen-specified number of "struct btf_loc"
-> >> + * containing location site-specific information;
-> >> + *
-> >> + * - function (func)
-> >> + * - location prototype type id (loc_proto)
-> >> + * - address offset (offset) relative to kernel base address
-> >> + */
-> >> +
-> >> +struct btf_loc {
-> >> +	__u32 func;
-> >> +	__u32 loc_proto;
-> >> +	__u32 offset;
-> >> +};
-> > 
-> > would it be possible to include btf id of the immediate parent function?
-> > we have use cases for tracing just inlined function called from particular
-> > parent
-> > 
-> > I thought we could use the location offset for that, but because inline
-> > functions could be nested, this seems like hard search.. also we do not
-> > know the size of the inlined code, so not sure how reliable it'd be
-> > 
-> > I checked the dwarves code and I wonder we could instead store parent
-> > function (struct inline_expansion) during dwarf decoding and use that
-> > later to get parent function FUNC_ID and have:
-> > 
-> > 	struct btf_loc {
-> > 	     __u32 func;
-> > 	     __u32 parent;
-> > 	     __u32 loc_proto;
-> > 	     __u32 offset;
-> > 	};
-> > 
-> > wdyt? thanks,
-> 
-> hi Jiri,
-> 
-> So in the case of encoding the immediate parent it is quite expensive -
-> my concern is that adding it as an extra field is another 4 bytes per BTF
-> location, and because there are a lot of inline sites that would mean
-> somewhere in the region of 4 * 500000 = 2Mb extra. This is the tricky part
-> with this stuff; even small per-site tweaks really add up.
+--===============0798735520997638461==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-ugh right..
+> sock_map_alloc() only rejects max_entries == 0 and never caps the upper
+> bound.  sock_map_free() then walks the sks[] array with a signed int
+> iterator:
+>
+> 	int i;
+> 	for (i = 0; i < stab->map.max_entries; i++)
+> 		struct sock **psk = &stab->sks[i];
+>
+> When a SOCKMAP is created with max_entries = 0xffffffff (UINT_MAX), the
+> allocation of 32 GiB can succeed on large-memory hosts.  During free the
+> counter reaches 0x80000000, wraps to INT_MIN, is sign-extended by movslq
+> and turned into a ~16 GiB negative offset from stab->sks, pointing far
+> below the allocation.  On a KASAN kernel the shadow check for that
+> address hits an unmapped shadow page and oopses:
 
-> 
-> Is the immediacy of the parent-child relationship a dealbreaker for your
-> use-case? As you say the offset can tell us the function B was inlined
+This description is technically accurate but narrower than the real bug.
+Is the KASAN-unmapped-shadow scenario the primary failure mode?
 
-it's one of the use cases, but it's still useful without this
+The faulting access is an xchg() write in sock_map_free(), so on a
+non-KASAN kernel the same iteration either faults on an unmapped vmalloc
+page or, if that vmalloc address happens to be populated by an unrelated
+allocation, silently writes NULL into someone else's memory. The
+unmapped shadow page also requires CONFIG_KASAN_VMALLOC=y - with
+KASAN_VMALLOC=n, x86 kasan_init() populates the whole vmalloc shadow
+with the mapped kasan_early_shadow_page, so kasan_check_range() would
+not fault.
 
-> within the bounds of uninlined function A, but it won't tell us if it was
-> via function C. The other thing that complicates this is that an inlining
-> doesn't always have a size; it can be inlined in a non-contiguous manner.
-> So in some ways maybe the best we can do anyway is to be able to say a
-> function was inlined in a particular uninlined function?
+Could the description mention it is an out-of-bounds write reachable
+without KASAN, not just a KASAN-only oops?
 
-I guess we could get that info from dwarf, it'd just be simpler 
-having that in BTF
+>   BUG: unable to handle page fault for address: fffff521b59c5a00
+>   RIP: 0010:kasan_check_range+0x107/0x190
+>   Call Trace:
+>    sock_map_free+0x93/0x190
+>    map_create+0x68d/0xb30
+>    __sys_bpf+0x21e/0x2e70
+>
+> Vmcore confirmed stab->map.max_entries == 0xffffffff, stab->sks ==
+> 0xffffc911ace2d000, and the faulting address sks + (s64)INT_MIN * 8
+> exactly at 0xffffc90dace2d000.  The same Oops triggers on the normal
+> close()/bpf_map_free_deferred() path whenever such a map is destroyed.
+>
+> sock_hash_alloc() already bounds its allocation (buckets_num >
+> U32_MAX / sizeof(bucket)).  Reject max_entries > INT_MAX at creation
+> time so the signed iterator in sock_map_free() never sees a value that
+> would overflow.
+>
+> Triggered by syzkaller and reproduced on both a 6.6-based KASAN kernel
+> and the upstream v7.3-rc2 kernel.
+>
+> Fixes: 604326b41a6f ("bpf, sockmap: convert to generic sk_msg interface")
 
-thanks,
-jirka
+Is 604326b41a6f the commit that introduced this bug?
+
+Looking at that commit, the version of sock_map_alloc() it created did
+cap max_entries:
+
+    /* Make sure page count doesn't overflow. */
+    cost = (u64) stab->map.max_entries * sizeof(struct sock *);
+    if (cost >= U32_MAX - PAGE_SIZE) {
+            err = -EINVAL;
+            goto free_stab;
+    }
+
+This bound limits max_entries to below (U32_MAX - PAGE_SIZE) / 8, about
+536,870,400 entries, which is far under INT_MAX. With that bound the
+signed iterator in sock_map_free() could not overflow.
+
+The check later moved into bpf_map_charge_init() with the same limit.
+The upper bound was actually removed by 0d2c4f964050 ("bpf: Eliminate
+rlimit-based memory accounting for sockmap and sockhash maps", v5.11),
+which deleted the bpf_map_charge_init() call without replacing the size
+check.
+
+Should the Fixes tag be:
+
+    Fixes: 0d2c4f964050 ("bpf: Eliminate rlimit-based memory accounting for sockmap and sockhash maps")
+
+With the current tag, automated stable backport tooling will target
+kernels from v4.20 onward, but 5.4.y and 5.10.y are not affected since
+sock_map_alloc() still had the bound there. The wrong tag also hides
+that the regression came from the rlimit-to-memcg accounting
+conversion.
+
+> diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+> index ca49bc7f8687c..38df842843289 100644
+> --- a/net/core/sock_map.c
+> +++ b/net/core/sock_map.c
+> @@ -41,6 +41,7 @@ static struct bpf_map *sock_map_alloc(union bpf_attr *attr)
+>  	struct bpf_stab *stab;
+>
+>  	if (attr->max_entries == 0 ||
+> +	    attr->max_entries > INT_MAX ||
+>  	    attr->key_size    != 4 ||
+>  	    (attr->value_size != sizeof(u32) &&
+>  	     attr->value_size != sizeof(u64)) ||
+
+The code change itself looks correct. With max_entries bounded to
+INT_MAX, the signed iterator reaches at most i = INT_MAX at the final
+test, which is representable in int, so no signed overflow remains.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34941876090
+--===============0798735520997638461==--
