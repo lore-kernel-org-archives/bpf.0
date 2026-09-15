@@ -1,53 +1,71 @@
-Received: from mta0.migadu.com (out-226.mta0.migadu.com [91.218.175.226])
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC60A41D637
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 16:15:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB1DA3546EA
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 16:22:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789488909; cv=none; b=AMhWDlW9L4e8IAkyZBnLVvjh+03LNaOOln1RBFCcoLQtDeYbmDIHNxvqzsY6LsO1ITF50ND17IDKEIMw08e9kYfnfl4GUfcJn1ezcgztC61/Fs8ZbSpVVn3xOy5aVzwIpGCemsQNVhEa4kYi5eE/+UpPjSfFpCFpD0n8N4bKUm8=
+	t=1789489380; cv=none; b=sxGwUBTa57EXvWz/RpZRvvP8SqrWzlQWEtsA1LiBr+pA7ut3hN0bb8zo3vLizcAmQrI8kommGC7v0p8rbm3ArV0iOrlLXv2Nsef7up/NZJMit0Y4tSRLGz+QCJezsSlCPGYHXGvNgdqS2VP1hq3Ky4djph9WSqjdXA6iQewJvCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789488909; c=relaxed/simple;
-	bh=KzneAssyJ6Hnv8qhaceSpKRPnn0woZNbDSSUjQCSuog=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gk1CPWGXSgDyJVplFdImNYdEfjmc+5yv+l0kyFLDFMECocz/zJ1En97aYAo5Ok1qGIFBcYBNvDs31bFt8NsoxSOsM5HflA9NkYdAFCd/3E7HjA/ZqSbr12xqO2qDQCSoWKpFOUBZpG9QbwZL1dZYwFRjO8rBWE1h24/8tyrMqbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RqIcwQi5; arc=none smtp.client-ip=91.218.175.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789489380; c=relaxed/simple;
+	bh=9E0SiGlVikNF/sbHMuRjxCSmaye0mmTJ+XlqH9sA3OA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X5mCXKhprvv3yIcuatbKPYf8JUqQ34BoNjnXR108ZldJ6c44XllV6tdHmbZj8MJ/6R7BnG4/4EaS2slGP00o+3GwM/UeNXDiggr7lEYBnn/d/GH5YxCaXPUgOJsri/UwKtOZ21VMZyoz96fOxI6nbrK0uXgJz3+7G/uRJ9vLefw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X54Lj6C8; arc=none smtp.client-ip=74.125.228.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RqIcwQi5"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=KzneAssyJ6Hnv8qhaceSpKRPnn0woZNbDSSUjQCSuog=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789488903; v=1; x=1790093703;
- b=RqIcwQi5WKgGlfM/1HOVEdu4f29oslW0pztSza+B81aJE3oW12y23P7DjyXK6DFjRU7dxQOV
- Kz9gwiQGWqzVVLqfzzNJSuadHmiLtKBZDQRtUfDEwzRLOQqOGqmG1J9kbF7qx53DzmdZlC84ptK
- pfgv9Jp2wLZHbGyWkgubhwiw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6173dd8524c751d9;
-	Tue, 15 Sep 2026 16:15:03 +0000
-X-Mizu-Trace-ID: 6173dd8524c751d9
-X-Migadu-Flow: FLOW_OUT
-From: Leon Hwang <leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X54Lj6C8"
+Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85469f20513so410309b3a.0
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 09:22:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789489378; x=1790094178; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=OwsT7SF4ncp6wr7FoSisa/vmmlDt4ArJiNE+SOE9NhQ=;
+        b=X54Lj6C8f88FQoJ0AMamXn/28uzdFi316Szmom0FMxdhs4hFoK3ti04QOJGXebRbsU
+         MMwasEVpGFDgtvJfeg/2NVSeaRoK8yfhwfliVaiOpMubv7QA12zigkPyNR1DbgFXvxNa
+         T9OOeohN/69YLlcP4yodEOn93IGUSJfh/MaGoMp9X1ddfBcNIAQ/4w4TNJGsQLCF5BXH
+         WNKS8Dega8xr9+5NhEz6mFBr9VkVdc2dKUMXvtYWNJrIgxvw99Vvd6AOpmyHLRko2rUL
+         fwlZwutCCwGQiAb8Cnd3CFPgmKIFBqyv1bywZF0nhETMYYRUxIanl99O5QDC3ZnARPzg
+         UsvQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789489378; x=1790094178;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=OwsT7SF4ncp6wr7FoSisa/vmmlDt4ArJiNE+SOE9NhQ=;
+        b=LluWiROOtUVD0sas640ID48BbqWNbF7nRvjv7ATUplvrArskelHmU3kOcLW3n6jhW0
+         fCWzRuI0jQtIWUvhw+IzZQXBgI8rGr5KOgH0Nxy2bskQKybpItaETQYYW+klS0xZqaPs
+         7BJv+BDea/UGMgRENansf2f3OGu3Pv3oAH/vMmpLkKmunUJ2j8291mHUikSybZgvGxES
+         N0CUhB4NohV+/6d66ePuH2Rn/n8F1YYy9WiMVXRo0dsHpZH4YikBgOvMr/k8yScowJFo
+         afSJ1bs2nX5bUHmEmoAstPT2CZ973Z5E4jRvky7i+XbQdz63uEhj4BEYZfTaOvHfSvGX
+         NKpA==
+X-Gm-Message-State: AFuF++kYOEmXAq3C2NyrFZi1Z6WkqxjotJp99UTlCm7Tk7dnKv0gAJx6
+	gLQp/S00maXWkmhhk5uuoCeIOaL8ahkgW2JPW9bFmPuS7YjaKinhEBVYMaswFt6y
+X-Gm-Gg: AYBFou2b0Zr6rLseR4OSZ27j69ZBoJCXrWrRuwwNhsRGELBFVqfiGfhkpPHBUSTM13b
+	EZggR8+azAmDcKeA5Vggss9RruIaw9mttZ+MjaT15klRW+i96VKoWF5+0CLTHr6btnzWsoVcAKa
+	KYAhd7RD7g6L3HqXWgO70S8JoCLIJdWb1UGF0ubVnv/Llkm6xJFC1nYNmH/7a0x4sJQ7xptrG/a
+	H8zDgwbdQiXcDBv1lPShViBZiQgWz5t/x28NsB+6QeWCNuHu4Rp8JDs/RF7sbMYPs1rPFC+M71T
+	m5gc26Z9eLTxX41WFvk22PcwvxmNQhSX+9W9F9ypN3Van5NyvDpYcegd5ZFEmDURutM+1sITUsL
+	mdpscvq7Zck5YZGxG/sacCh8Cr9FUrsIdssPK+bWG4Jv8uPyYILxictMDGZ1slfW7BKDY2HNDpZ
+	JCrfsiJ1V2hbeKTJhu/LH1ijdVhPpBoiEEQw1wMdsdZ/UQfdS8j3ZHBLto+cKja0MoHTbMLgfPi
+	Lmz9h/veYmUv3YpVfg0w5ec7Zk1TW13SQdy+ck5BXyMTXwLleko/So=
+X-Received: by 2002:a05:6a21:400d:b0:3da:5b4d:a89f with SMTP id adf61e73a8af0-3dd5295fbe5mr3739603637.27.1789489377877;
+        Tue, 15 Sep 2026 09:22:57 -0700 (PDT)
+Received: from ubuntu2204.comp.polyu.edu.hk ([158.132.255.104])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc50aa988e2sm208232a12.1.2026.09.15.09.22.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2026 09:22:57 -0700 (PDT)
+From: Mingpei CAO <caomingpei@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Quentin Monnet <qmo@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	Leon Hwang <leon.hwang@linux.dev>
-Subject: [PATCH bpf-next v3] bpftool: Compute map size of light skeletons at runtime
-Date: Wed, 16 Sep 2026 00:14:50 +0800
-Message-ID: <20260915161450.96249-1-leon.hwang@linux.dev>
-X-Mailer: git-send-email 2.55.0
+Cc: Mingpei CAO <caomingpei@gmail.com>,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ameryhung@gmail.com
+Subject: [PATCH bpf v3 0/2] libbpf: Reject local struct_ops bitfields before data access
+Date: Tue, 15 Sep 2026 16:22:35 +0000
+Message-ID: <20260915162252.473044-1-caomingpei@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,243 +74,38 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpftool rounds memory-mapped data map sizes to the host page size when
-generating a light skeleton. The generated code therefore uses a 64K
-mapping size when bpftool runs on a 64K-page host, even if the skeleton
-runs on a 4K-page target. The target rejects the oversized map mmap(),
-causing failure of loading the light skeleton.
+A local struct_ops type can contain a bitfield absent from the
+corresponding kernel BTF type. libbpf calculated the member data pointer
+from the encoded BTF member offset before rejecting the bitfield. The
+absent member zero check could then read outside the local struct_ops data
+and crash libbpf.
 
-When try to run 64K-page selftests on 4K-page VM, the error message does
-not provide the reason about page size.
+Patch 1 rejects local bitfields before calculating the member data pointer.
+Patch 2 adds a negative test for a local bitfield absent from the kernel
+BTF type.
 
- test_atomics:PASS:atomics skeleton open 0 nsec
- test_atomics:FAIL:atomics skeleton load unexpected error: -12 (errno 22)
- #15      atomics:FAIL
+AI assistance was used to prepare the messages. I independently reviewed the code and test results.
 
-Pass the original map value size and max entries to the generated code and
-round mmap size to the runtime page size in the user-space light
-skeleton helpers. This keeps generated light skeletons independent of the
-build host page size.
+Changes since v2:
+- Restore the local bitfield check from v1.
+- Drop general offset validation and the bpftool changes, which covered
+  malformed BTF outside.
+- Describe the local struct_ops type and absent kernel member.
+- Keep the negative test and check the load result before the diagnostic.
 
-Fixes: d510296d331a ("bpftool: Use syscall/loader program in "prog load" and "gen skeleton" command.")
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
-v2 -> v3:
-* Hoist 'sysconf(_SC_PAGE_SIZE)' and the inner 'roundup()' in
-  skel_map_mmap_sz(). (bot+bpf-ci)
-* v2: https://lore.kernel.org/bpf/20260914153326.72498-1-leon.hwang@linux.dev/
+v2: https://lore.kernel.org/bpf/20260913145233.1446643-1-caomingpei@gmail.com/
+v1: https://lore.kernel.org/bpf/20260910172340.1467764-1-caomingpei@gmail.com/
 
-v1 -> v2:
-* Pass max entries alongside value size.
-* Use the computed mmap size for mprotect() in userspace's
-  skel_protect_map_data().
-* Round up the mmap size to page size with keeping the original
-  multiplying max_entries logic. (Andrii)
-* v1: https://lore.kernel.org/bpf/20260911145914.23676-1-leon.hwang@linux.dev/
----
- tools/bpf/bpftool/gen.c       | 26 ++++++-------------
- tools/lib/bpf/skel_internal.h | 48 +++++++++++++++++++++++++----------
- 2 files changed, 42 insertions(+), 32 deletions(-)
+Mingpei CAO (2):
+  libbpf: Reject local struct_ops bitfields before data access
+  selftests/bpf: Test local struct_ops bitfield rejection
 
-diff --git a/tools/bpf/bpftool/gen.c b/tools/bpf/bpftool/gen.c
-index a50540ef6521..ee680f7c2116 100644
---- a/tools/bpf/bpftool/gen.c
-+++ b/tools/bpf/bpftool/gen.c
-@@ -500,16 +500,6 @@ static void print_hex(const char *data, int data_sz)
- 	}
- }
- 
--static size_t bpf_map_mmap_sz(const struct bpf_map *map)
--{
--	long page_sz = sysconf(_SC_PAGE_SIZE);
--	size_t map_sz;
--
--	map_sz = (size_t)roundup(bpf_map__value_size(map), 8) * bpf_map__max_entries(map);
--	map_sz = roundup(map_sz, page_sz);
--	return map_sz;
--}
--
- /* Emit type size asserts for all top-level fields in memory-mapped internal maps. */
- static void codegen_asserts(struct bpf_object *obj, const char *obj_name)
- {
-@@ -686,8 +676,8 @@ static void codegen_destroy(struct bpf_object *obj, const char *obj_name)
- 		if (!get_map_ident(map, ident, sizeof(ident)))
- 			continue;
- 		if (is_skel_data(map, ident, sizeof(ident)))
--			printf("\tskel_free_map_data(skel->%1$s, skel->maps.%1$s.initial_value, %2$zu);\n",
--			       ident, bpf_map_mmap_sz(map));
-+			printf("\tskel_free_map_data(skel->%1$s, skel->maps.%1$s.initial_value, %2$u, %3$u);\n",
-+			       ident, bpf_map__value_size(map), bpf_map__max_entries(map));
- 		codegen("\
- 			\n\
- 				skel_closenz(skel->maps.%1$s.map_fd);	    \n\
-@@ -771,13 +761,13 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
- 		\n\
- 		\";							    \n\
- 									    \n\
--				skel->%1$s = (__typeof__(skel->%1$s))skel_prep_map_data((void *)data, %2$zd,\n\
-+				skel->%1$s = (__typeof__(skel->%1$s))skel_prep_map_data((void *)data, %2$u, %3$u,\n\
- 								sizeof(data) - 1);\n\
- 				if (!skel->%1$s)			    \n\
- 					goto cleanup;			    \n\
- 				skel->maps.%1$s.initial_value = (__u64) (long) skel->%1$s;\n\
- 			}						    \n\
--			", ident, bpf_map_mmap_sz(map));
-+			", ident, bpf_map__value_size(map), bpf_map__max_entries(map));
- 	}
- 	codegen("\
- 		\n\
-@@ -871,14 +861,14 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
- 		if (bpf_map__type(map) == BPF_MAP_TYPE_PERCPU_ARRAY) {
- 			codegen("\
- 		\n\
--			err = skel_protect_map_data(skel->%1$s, &skel->maps.%1$s.initial_value, %2$zd);\n\
-+			err = skel_protect_map_data(skel->%1$s, &skel->maps.%1$s.initial_value, %2$u, %3$u);\n\
- 			if (err)					    \n\
- 				return err;				    \n\
- 		#ifdef __KERNEL__					    \n\
- 			skel->%1$s = NULL;				    \n\
- 		#endif							    \n\
- 			",
--			ident, bpf_map_mmap_sz(map));
-+			ident, bpf_map__value_size(map), bpf_map__max_entries(map));
- 			continue;
- 		}
- 
-@@ -890,11 +880,11 @@ static int gen_trace(struct bpf_object *obj, const char *obj_name, const char *h
- 		codegen("\
- 		\n\
- 			skel->%1$s = (__typeof__(skel->%1$s))skel_finalize_map_data(&skel->maps.%1$s.initial_value,\n\
--							%2$zd, %3$s, skel->maps.%1$s.map_fd);\n\
-+							%2$u, %3$u, %4$s, skel->maps.%1$s.map_fd);\n\
- 			if (!skel->%1$s)				    \n\
- 				return -ENOMEM;				    \n\
- 			",
--		       ident, bpf_map_mmap_sz(map), mmap_flags);
-+		       ident, bpf_map__value_size(map), bpf_map__max_entries(map), mmap_flags);
- 	}
- 	codegen("\
- 		\n\
-diff --git a/tools/lib/bpf/skel_internal.h b/tools/lib/bpf/skel_internal.h
-index 1f3f332dffbe..9e16b8e8cb7c 100644
---- a/tools/lib/bpf/skel_internal.h
-+++ b/tools/lib/bpf/skel_internal.h
-@@ -11,6 +11,7 @@
- #include <linux/bpf.h>
- #else
- #include <unistd.h>
-+#include <sys/param.h>
- #include <sys/syscall.h>
- #include <sys/mman.h>
- #include <linux/keyctl.h>
-@@ -127,7 +128,7 @@ static inline void skel_free(const void *p)
-  * either bpf_probe_read_kernel() or bpf_copy_from_user() from initial_value
-  * depending on bpf_loader_ctx->flags.
-  */
--static inline void skel_free_map_data(void *p, __u64 addr, size_t sz)
-+static inline void skel_free_map_data(void *p, __u64 addr, size_t val_sz, __u32 max_entries)
- {
- 	if (addr != ~0ULL)
- 		kvfree(p);
-@@ -138,18 +139,20 @@ static inline void skel_free_map_data(void *p, __u64 addr, size_t sz)
- 	 */
- }
- 
--static inline void *skel_prep_map_data(const void *val, size_t mmap_sz, size_t val_sz)
-+static inline void *skel_prep_map_data(const void *val, size_t val_sz, __u32 max_entries,
-+				       size_t data_sz)
- {
- 	void *addr;
- 
--	addr = kvmalloc(val_sz, GFP_KERNEL);
-+	addr = kvmalloc(data_sz, GFP_KERNEL);
- 	if (!addr)
- 		return NULL;
--	memcpy(addr, val, val_sz);
-+	memcpy(addr, val, data_sz);
- 	return addr;
- }
- 
--static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_sz, int flags, int fd)
-+static inline void *skel_finalize_map_data(__u64 *init_val, size_t val_sz, __u32 max_entries,
-+					   int flags, int fd)
- {
- 	struct bpf_map *map;
- 	void *addr = NULL;
-@@ -172,9 +175,10 @@ static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_sz, int
- 	return addr;
- }
- 
--static inline int skel_protect_map_data(void *p, __u64 *init_val, size_t sz)
-+static inline int skel_protect_map_data(void *p, __u64 *init_val, size_t val_sz, __u32 max_entries)
- {
--	(void)sz;
-+	(void)val_sz;
-+	(void)max_entries;
- 
- 	kvfree(p);
- 	*init_val = ~0ULL;
-@@ -193,25 +197,39 @@ static inline void skel_free(void *p)
- 	free(p);
- }
- 
--static inline void skel_free_map_data(void *p, __u64 addr, size_t sz)
-+static inline size_t skel_map_mmap_sz(size_t val_sz, __u32 max_entries)
- {
--	munmap(p, sz);
-+	const long page_sz = sysconf(_SC_PAGE_SIZE);
-+	size_t mmap_sz;
-+
-+	mmap_sz = roundup(val_sz, 8) * max_entries;
-+	mmap_sz = roundup(mmap_sz, page_sz);
-+	return mmap_sz;
- }
- 
--static inline void *skel_prep_map_data(const void *val, size_t mmap_sz, size_t val_sz)
-+static inline void skel_free_map_data(void *p, __u64 addr, size_t val_sz, __u32 max_entries)
- {
-+	munmap(p, skel_map_mmap_sz(val_sz, max_entries));
-+}
-+
-+static inline void *skel_prep_map_data(const void *val, size_t val_sz, __u32 max_entries,
-+				       size_t data_sz)
-+{
-+	size_t mmap_sz = skel_map_mmap_sz(val_sz, max_entries);
- 	void *addr;
- 
- 	addr = mmap(NULL, mmap_sz, PROT_READ | PROT_WRITE,
- 		    MAP_SHARED | MAP_ANONYMOUS, -1, 0);
- 	if (addr == (void *) -1)
- 		return NULL;
--	memcpy(addr, val, val_sz);
-+	memcpy(addr, val, data_sz);
- 	return addr;
- }
- 
--static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_sz, int flags, int fd)
-+static inline void *skel_finalize_map_data(__u64 *init_val, size_t val_sz, __u32 max_entries,
-+					   int flags, int fd)
- {
-+	size_t mmap_sz = skel_map_mmap_sz(val_sz, max_entries);
- 	void *addr;
- 
- 	addr = mmap((void *) (long) *init_val, mmap_sz, flags, MAP_SHARED | MAP_FIXED, fd, 0);
-@@ -220,11 +238,13 @@ static inline void *skel_finalize_map_data(__u64 *init_val, size_t mmap_sz, int
- 	return addr;
- }
- 
--static inline int skel_protect_map_data(void *p, __u64 *init_val, size_t sz)
-+static inline int skel_protect_map_data(void *p, __u64 *init_val, size_t val_sz, __u32 max_entries)
- {
-+	size_t mmap_sz = skel_map_mmap_sz(val_sz, max_entries);
-+
- 	(void)init_val;
- 
--	if (mprotect(p, sz, PROT_READ))
-+	if (mprotect(p, mmap_sz, PROT_READ))
- 		return -errno;
- 	return 0;
- }
+ tools/lib/bpf/libbpf.c                        |  9 ++++--
+ .../bpf/prog_tests/test_struct_ops_module.c   | 32 +++++++++++++++++++
+ .../selftests/bpf/progs/struct_ops_module.c   |  7 ++++
+ 3 files changed, 46 insertions(+), 2 deletions(-)
+
+
+base-commit: ee363e055895364039bf28348ff13c615afad4ba
 -- 
-2.55.0
-
+2.43.0
