@@ -1,241 +1,140 @@
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67F253B813C
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 14:50:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BBDA4A4F03
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 14:51:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789483860; cv=none; b=Xua5vplN9DcNpjTtuQpx3FkuROEJWujY/pkXClXpVHpc5XZ9v6f5Wq/6rwxVqcH3tUmghYOsVdwa6VmUbeDLvNL92kcHVzC2CjzpMrc2VlriKxAcitNC54BtfJNW2aeZun3KT3QlHf32wPeixkQFa6Ek2pOr1WZ5nVvBuTPkKz8=
+	t=1789483875; cv=none; b=YxA+W07NgF8q98+1BeVajImolKBYAR9pSg9Q2JUs1JG6Kvm4mwuYNF26koDslvaqY8YS4i0ggLmZl4pRbaQniS62zkrDW22ZHWhU7j8ye55ZFVSs+/u0vqgrts25c0jK5t19sYXrOq7u79b28kVpg9UMfYJFCPWEY6UrXuvnCXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789483860; c=relaxed/simple;
-	bh=mP63S2kSIDdQdSMZvjLxECnRPXQjALds9wMvo+cDuJ0=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=oGiztGLEDJZCFIcvYu66T2UdhLfCju+qWzhlq0E/4QhOF0DrjEjr45pqfUX2+PBd5cvZmJddPIyDSSFZQwPTd3U85oPgkJStUc6LY59Tvxo92oTKKVgg7ThRdg9mg8pl9TnNi63P6ivmQ5Z4dH38V1teLeh7B14PhM+nVdeFHC0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-6c16df7bd53so4596574eaf.0
-        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 07:50:57 -0700 (PDT)
+	s=arc-20240116; t=1789483875; c=relaxed/simple;
+	bh=4IT2KwzWfVxMfSYhvcaBFKufcenX1VP1rnwXymLuxH4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CN3U2lpNWU7nalrShmRpGpoDMoyb/TjrEBls4z4W20YjNeo2PIMg+9XQp2G/G9sNvfkb0qOSvnQ/oEG3PEqADX0vXX4Ii2tNjs923aJGVU67mav4mrogEa4vc03SFoJqHWjxXF7fqR9r/0scwiDdGJtBFBPoXNrDZC+7qAvWCYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TOiqbsAY; arc=none smtp.client-ip=74.125.227.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TOiqbsAY"
+Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-39b2ad83dc6so3408941a91.0
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 07:51:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789483873; x=1790088673; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Wb3TKdq703tEhxs33o9glfZ3DKYR7T0XiEHb3yGj0U8=;
+        b=TOiqbsAYHXSQxTYmYfkfH3Xy0iVSxlJcXDQHnLNl0CSoXg5+eVNmNWB8RYjuS9aLbO
+         PksJy0r8Ub4vONQxA9lm8EqZLt9A8rET/Zrw6klgFm9UbC+f0wwsaHD4sVR/P7x9a/JB
+         +xK+Oq3g6Tw6Bo2vamgPrS8XiQ4PvfpygCggKdZlmFeFEejiQtytIERx/3xbWoFOxREh
+         dHFP0xLPJm8ZWwLW8BbH/bIslqrfXJHYE/w/UvwOtETPrssdvOnjN0cW0uxm9jAIuJ4Q
+         zi+ZabPoQQxsH/RM7KSNXKEFTMXgSG9AgBSBQ/eCzlXrxN4cO+oQlj11IySHlU4apdXo
+         mBtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789483856; x=1790088656;
-        h=content-type:cc:to:from:subject:message-id:in-reply-to:date
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=/JjqUbcpC8Uiq3Jgl8nzKIuk3KGjIIRFE3T7zA0MDfE=;
-        b=Qb3XO8pPtadBkQ6YBfPy9sqpYTaDnr7qWsXTwhzRMKE6TyWOMqe6/i0mxKwmwIPTkg
-         uiTRZ65rvEa5TWbHBb8sTAOqCVyVtkYf3JpLe2UV6Zn3tqIYeNZTo1W7+5tvnvAufziF
-         meKBOpm0olfSqjwgUMItink7wCldTojF1wtOwK+52iBUsEs4alS+oEiz4P9pIwBQrPKL
-         weCz4roB53r14a8DsGQrRyaqqFtoulUbgkMfuypS2rZmWxNN+Mj/zqQV1WPhpj/ITJuJ
-         4PFYWXStPoeLiUplfKeRrh3XohGvkr3iH/JMO/viZwdhkCkG0OP1vOTGIAc4tupKRCjo
-         /Nlg==
-X-Forwarded-Encrypted: i=1; AKwUvBySWC61zIqNMMSZRnPcCZIdPlLDf5xh/3s4E+Fx2r1MjyhMgEptsm8w1uHF7ysIWs5El5Y=@vger.kernel.org
-X-Gm-Message-State: AFuF++l5cH9PXUNLnAHNxM1arUf+VK9CKX9Z5B20g4hD0sWVtdlvY5Qw
-	SXP67CvlFtaf73wIQzN7m7EaO5qMIyRk/KFp0UElYqL0wA4Uibv+bvjrAP1Bh81Qm9EMFznr0oh
-	vwUjJEXr6iT2d+VDXnjPAf607JnGnKHzWOi33JaZlWax1CBazQh+G6IkAAXQ=
+        d=1e100.net; s=20260707; t=1789483873; x=1790088673;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Wb3TKdq703tEhxs33o9glfZ3DKYR7T0XiEHb3yGj0U8=;
+        b=xZ3Co0cHdbAgH63QQtx60sHgmoMdZrVGRL0LErBZECEyygfQu0t0v5BscD9ulimyRm
+         fONKofuo9H3OhDmKWiEcQJuyQeaMZwhPgFAzXasFo79JHBmgD9l6tatPc6hZfPmIydoP
+         zuRIMaAX1+KczFeJQgJ4wxH8q5IVohoZsEByvMt/reVQFEs0xMd1gDIOZaHZ9lVbpqpc
+         udZc/luWBl5+1ahNhaIHwaVraQt2UuTSwmGJd3pD/JSS1QFdCIjFvmU70+d2fGp0QKVo
+         6qY0eJa8kwz5D79m9gBFBSyH4GP+YaAhYlB/nAlZczNqs7k9fr2wkONivw7gQZ1WqYSt
+         MdxQ==
+X-Gm-Message-State: AFuF++lR2Hui41spFg+J66uGD88upU0Jc+v+E46XGCaxeAK0Kds25X4A
+	zHdWI/L9FNTDpD/R3a+B+M8U4mPb0Qk55j/9YuPT4VymUcCjVAdm8iy0
+X-Gm-Gg: AYBFou3N8g7fX266tEpc6ocsNBJYFFwTIu3aChS6n6m3PaNDhnuwgJbr5m/YvXEWcAV
+	ZnMFeeDWkkIofwNNISrX2ZiZJhyrV7rYecg0sbAGYtDFoUc1V4ZQ6VHWbGCn274HqiMvhuUwOcf
+	pbC/4X6e/cjcIdxAFMNYqh45hSLjI7fkoxJF0R1dS3UQoekAMQCQgqwxPikwJenThZYKYCBBkuY
+	5S/GermtZ6Trc6EyWdXDc156Pfn2IfUgH76VLib+lEBYLvQC22v/UN90tt958BvSKZ2BFFM2pAN
+	xS/WzJqGtmrba5UZCYPdrkhZ5LFs10ORolJnKzom1wSU1RJj0ARs3+G7W1s0sI3MP4C338fkqpz
+	Ijnh2l/ABHFGvlC16nsTuU8subtv9c3U5W+iDWvwGRfqm8Pj4tAuCnXyZD2A6HibbNp9TdGrRh9
+	XteNzlIrAV/wVXtwZQhRzUXLJr6tBp9LrFdu01SX6Tt3mB2Ivo2OMMoCznqYpcwWUuxPLbL/vFD
+	c/l/u0eZLdosFlqs7pKAopCRTpRSyqwTvKIIBZmoU+cuR4lpmmL0oS1Hw60j+lYNiCUnBycx7Ei
+	hlULpBcoKX1q4sgWeHtb0J0x
+X-Received: by 2002:a17:90b:1641:b0:39d:e54c:8643 with SMTP id 98e67ed59e1d1-39debfc9d8fmr14421860a91.11.1789483872685;
+        Tue, 15 Sep 2026 07:51:12 -0700 (PDT)
+Received: from archlinux ([2401:4900:8839:cf63:4168:b902:b940:3120])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39dfdcb6a7fsm5960026a91.3.2026.09.15.07.51.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2026 07:51:12 -0700 (PDT)
+From: Madhav Khosla <madhav.khoslaa@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	=?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+	Madhav Khosla <madhav.khoslaa@gmail.com>
+Subject: [PATCH bpf] selftests/bpf: Fix csum_partial() dropping trailing byte on odd length
+Date: Tue, 15 Sep 2026 20:20:54 +0530
+Message-ID: <20260915145054.164857-1-madhav.khoslaa@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:4d01:b0:6b7:83d6:2935 with SMTP id
- 006d021491bc7-6c739c763f3mr966337eaf.56.1789483856152; Tue, 15 Sep 2026
- 07:50:56 -0700 (PDT)
-Date: Tue, 15 Sep 2026 07:50:56 -0700
-In-Reply-To: <20260915081023.7433-1-ahemadkhawar123@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6aa95b50.a211d2ce.1a5198.02ad.GAE@google.com>
-Subject: [syzbot ci] Re: xsk: Fix circular locking dependency between
- &net->xdp.lock, &xs->mutex, and netdev_lock_ops
-From: syzbot ci <syzbot+ci38b383cd8e5a02dc@syzkaller.appspotmail.com>
-To: ahemadkhawar123@gmail.com, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, edumazet@google.com, hawk@kernel.org, horms@kernel.org, 
-	john.fastabend@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org, 
-	maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, 
-	netdev@vger.kernel.org, pabeni@redhat.com, sdf@fomichev.me, 
-	syzbot@syzkaller.appspotmail.com
-Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-syzbot ci has tested the following series
+csum_partial() computes num_u16 = len >> 1 and only sums that many
+16-bit words, so the last byte of an odd-length buffer never gets
+added to the checksum. RFC 1071 says it should be padded with a zero
+byte and summed as one more word, not dropped.
 
-[v6] xsk: Fix circular locking dependency between &net->xdp.lock, &xs->mutex, and netdev_lock_ops
-https://lore.kernel.org/all/20260915081023.7433-1-ahemadkhawar123@gmail.com
-* [PATCH bpf-next v6] xsk: Fix circular locking dependency between &net->xdp.lock, &xs->mutex, and netdev_lock_ops
+This backs build_ip_csum(), build_udp_v4_csum() and
+build_udp_v6_csum(), used by flow_dissector_classification.c and
+xdp_metadata.c to hand-build packets. No current caller builds an
+odd-length payload, so nothing fails today, but a future one would
+get a silently wrong checksum.
 
-and found the following issue:
-possible deadlock in xp_clear_dev
+Verified against a reference implementation for even/odd/boundary
+lengths, and ran flow_dissector_classification and xdp_metadata under
+vmtest.sh; both pass.
 
-Full report is available here:
-https://ci.syzbot.org/series/fd897794-4f0d-45f4-8e63-bcb526e0b175
-
-***
-
-possible deadlock in xp_clear_dev
-
-tree:      bpf-next
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
-base:      b0ca562e0d05cf7afedcfa71c9aed180b72bcc97
-arch:      amd64
-compiler:  Debian clang version 22.1.8 (++20260613092233+e80beda6e255-1~exp1~20260613092250.77), Debian LLD 22.1.8
-config:    https://ci.syzbot.org/builds/d5521b86-a0b8-4ffc-ada4-91f534b028bc/config
-syz repro: https://ci.syzbot.org/findings/6aa094b3-5f39-460c-b0f7-709bbf72644c/syz_repro
-
-netlink: 14 bytes leftover after parsing attributes in process `syz.1.18'.
-======================================================
-WARNING: possible circular locking dependency detected
-syzkaller #0 Not tainted
-------------------------------------------------------
-syz.1.18/5842 is trying to acquire lock:
-ffff8881793b4e70 (&dev_instance_lock_key#3){+.+.}-{4:4}, at: netdev_lock include/linux/netdevice.h:2861 [inline]
-ffff8881793b4e70 (&dev_instance_lock_key#3){+.+.}-{4:4}, at: netdev_lock_ops include/net/netdev_lock.h:42 [inline]
-ffff8881793b4e70 (&dev_instance_lock_key#3){+.+.}-{4:4}, at: xp_clear_dev+0x13b/0x340 net/xdp/xsk_buff_pool.c:297
-
-but task is already holding lock:
-ffff8881bd5ca6b8 (&xs->mutex){+.+.}-{4:4}, at: xsk_notifier+0xcd/0x230 net/xdp/xsk.c:2114
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (&xs->mutex){+.+.}-{4:4}:
-       __mutex_lock_common kernel/locking/mutex.c:646 [inline]
-       __mutex_lock+0x19d/0x1550 kernel/locking/mutex.c:821
-       xsk_bind+0x297/0x13f0 net/xdp/xsk.c:1620
-       __sys_bind_socket net/socket.c:1945 [inline]
-       __sys_bind+0x2e3/0x410 net/socket.c:1976
-       __do_sys_bind net/socket.c:1981 [inline]
-       __se_sys_bind net/socket.c:1979 [inline]
-       __x64_sys_bind+0x7a/0x90 net/socket.c:1979
-       do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
-       do_syscall_64+0x166/0x520 arch/x86/entry/syscall_64.c:84
-       entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
--> #0 (&dev_instance_lock_key#3){+.+.}-{4:4}:
-       check_prev_add kernel/locking/lockdep.c:3181 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3300 [inline]
-       validate_chain kernel/locking/lockdep.c:3924 [inline]
-       __lock_acquire+0x1520/0x2cf0 kernel/locking/lockdep.c:5253
-       lock_acquire+0x106/0x350 kernel/locking/lockdep.c:5886
-       __mutex_lock_common kernel/locking/mutex.c:646 [inline]
-       __mutex_lock+0x19d/0x1550 kernel/locking/mutex.c:821
-       netdev_lock include/linux/netdevice.h:2861 [inline]
-       netdev_lock_ops include/net/netdev_lock.h:42 [inline]
-       xp_clear_dev+0x13b/0x340 net/xdp/xsk_buff_pool.c:297
-       xsk_notifier+0x1a1/0x230 net/xdp/xsk.c:2123
-       notifier_call_chain+0x1a5/0x3d0 kernel/notifier.c:85
-       call_netdevice_notifiers_extack net/core/dev.c:2313 [inline]
-       call_netdevice_notifiers net/core/dev.c:2327 [inline]
-       unregister_netdevice_many_notify+0x17f9/0x2140 net/core/dev.c:12518
-       rtnl_delete_link net/core/rtnetlink.c:3652 [inline]
-       rtnl_dellink+0x5be/0x810 net/core/rtnetlink.c:3694
-       rtnetlink_rcv_msg+0x802/0xc00 net/core/rtnetlink.c:7132
-       netlink_rcv_skb+0x226/0x4a0 net/netlink/af_netlink.c:2556
-       netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
-       netlink_unicast+0x7bd/0x940 net/netlink/af_netlink.c:1345
-       netlink_sendmsg+0x813/0xb40 net/netlink/af_netlink.c:1900
-       sock_sendmsg_nosec+0x13a/0x180 net/socket.c:800
-       __sock_sendmsg net/socket.c:815 [inline]
-       ____sys_sendmsg+0x54e/0x850 net/socket.c:2713
-       ___sys_sendmsg+0x2a5/0x360 net/socket.c:2767
-       __sys_sendmsg net/socket.c:2799 [inline]
-       __do_sys_sendmsg net/socket.c:2804 [inline]
-       __se_sys_sendmsg net/socket.c:2802 [inline]
-       __x64_sys_sendmsg+0x1b1/0x290 net/socket.c:2802
-       do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
-       do_syscall_64+0x166/0x520 arch/x86/entry/syscall_64.c:84
-       entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(&xs->mutex);
-                               lock(&dev_instance_lock_key#3);
-                               lock(&xs->mutex);
-  lock(&dev_instance_lock_key#3);
-
- *** DEADLOCK ***
-
-locks held by syz.1.18/5842: 3, last CPU#0:
- #0: ffffffff90036ac0 (rtnl_mutex){+.+.}-{4:4}, at: rtnl_lock net/core/rtnetlink.c:80 [inline]
- #0: ffffffff90036ac0 (rtnl_mutex){+.+.}-{4:4}, at: rtnl_net_lock include/linux/rtnetlink.h:134 [inline]
- #0: ffffffff90036ac0 (rtnl_mutex){+.+.}-{4:4}, at: rtnl_dellink+0x41b/0x810 net/core/rtnetlink.c:3686
- #1: ffff88810e3ac750 (&net->xdp.lock){+.+.}-{4:4}, at: xsk_notifier+0x89/0x230 net/xdp/xsk.c:2110
- #2: ffff8881bd5ca6b8 (&xs->mutex){+.+.}-{4:4}, at: xsk_notifier+0xcd/0x230 net/xdp/xsk.c:2114
-
-stack backtrace:
-CPU: 0 UID: 0 PID: 5842 Comm: syz.1.18 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-Call Trace:
- <TASK>
- dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
- print_circular_bug+0x2e1/0x300 kernel/locking/lockdep.c:2059
- check_noncircular+0x12e/0x150 kernel/locking/lockdep.c:2191
- check_prev_add kernel/locking/lockdep.c:3181 [inline]
- check_prevs_add kernel/locking/lockdep.c:3300 [inline]
- validate_chain kernel/locking/lockdep.c:3924 [inline]
- __lock_acquire+0x1520/0x2cf0 kernel/locking/lockdep.c:5253
- lock_acquire+0x106/0x350 kernel/locking/lockdep.c:5886
- __mutex_lock_common kernel/locking/mutex.c:646 [inline]
- __mutex_lock+0x19d/0x1550 kernel/locking/mutex.c:821
- netdev_lock include/linux/netdevice.h:2861 [inline]
- netdev_lock_ops include/net/netdev_lock.h:42 [inline]
- xp_clear_dev+0x13b/0x340 net/xdp/xsk_buff_pool.c:297
- xsk_notifier+0x1a1/0x230 net/xdp/xsk.c:2123
- notifier_call_chain+0x1a5/0x3d0 kernel/notifier.c:85
- call_netdevice_notifiers_extack net/core/dev.c:2313 [inline]
- call_netdevice_notifiers net/core/dev.c:2327 [inline]
- unregister_netdevice_many_notify+0x17f9/0x2140 net/core/dev.c:12518
- rtnl_delete_link net/core/rtnetlink.c:3652 [inline]
- rtnl_dellink+0x5be/0x810 net/core/rtnetlink.c:3694
- rtnetlink_rcv_msg+0x802/0xc00 net/core/rtnetlink.c:7132
- netlink_rcv_skb+0x226/0x4a0 net/netlink/af_netlink.c:2556
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x7bd/0x940 net/netlink/af_netlink.c:1345
- netlink_sendmsg+0x813/0xb40 net/netlink/af_netlink.c:1900
- sock_sendmsg_nosec+0x13a/0x180 net/socket.c:800
- __sock_sendmsg net/socket.c:815 [inline]
- ____sys_sendmsg+0x54e/0x850 net/socket.c:2713
- ___sys_sendmsg+0x2a5/0x360 net/socket.c:2767
- __sys_sendmsg net/socket.c:2799 [inline]
- __do_sys_sendmsg net/socket.c:2804 [inline]
- __se_sys_sendmsg net/socket.c:2802 [inline]
- __x64_sys_sendmsg+0x1b1/0x290 net/socket.c:2802
- do_syscall_x64 arch/x86/entry/syscall_64.c:61 [inline]
- do_syscall_64+0x166/0x520 arch/x86/entry/syscall_64.c:84
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f47db99e159
-Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f47dc90c028 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007f47dbc25fa0 RCX: 00007f47db99e159
-RDX: 0000000004048004 RSI: 00002000000001c0 RDI: 0000000000000005
-RBP: 00007f47dba3503b R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007f47dbc26038 R14: 00007f47dbc25fa0 R15: 00007ffc72db97b8
- </TASK>
-
-
-***
-
-If these findings have caused you to resend the series or submit a
-separate fix, please add the following tag to your commit message:
-  Tested-by: syzbot@syzkaller.appspotmail.com
-
+Fixes: f4504af68575 ("selftests/bpf: move ip checksum helper to network helpers")
+Signed-off-by: Madhav Khosla <madhav.khoslaa@gmail.com>
 ---
-This report is generated by a bot. It may contain errors.
-syzbot ci engineers can be reached at syzkaller@googlegroups.com.
+ tools/testing/selftests/bpf/network_helpers.h | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
-To test a fix for this bug, please reply with `#syz test`
-(on a separate line) and attach the patch to the email.
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index 75133119c04a..f6d28a2de788 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -129,12 +129,22 @@ static __u16 csum_fold(__u32 csum)
+ 
+ static __wsum csum_partial(const void *buf, int len, __wsum sum)
+ {
+-	__u16 *p = (__u16 *)buf;
++	const __u8 *p = buf;
+ 	int num_u16 = len >> 1;
+ 	int i;
+ 
+ 	for (i = 0; i < num_u16; i++)
+-		sum += p[i];
++		sum += ((const __u16 *)p)[i];
++
++	/* RFC 1071: an odd-length buffer's trailing byte is paired with
++	 * a zero pad byte to form the final 16-bit word.
++	 */
++	if (len & 1) {
++		__u16 tail = 0;
++
++		__builtin_memcpy(&tail, p + len - 1, 1);
++		sum += tail;
++	}
+ 
+ 	return sum;
+ }
+-- 
+2.55.0
 
-Notes:
-- The patch will be applied on top of the tested series (as an
-  incremental fix).
-- To test a new version of the whole series, please send it directly
-  to syzbot@lists.linux.dev.
-- Arguments like custom git repos and branches are not supported.
