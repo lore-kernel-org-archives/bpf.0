@@ -1,128 +1,176 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA7BD330662
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 13:33:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DEC43BD63B
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 13:33:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789479228; cv=none; b=GClW3pH0nT35VgEYppcaE9OxcOX6h/T0R4YT5ROUGK/ruNGmxDvbgxqnY9iOgBi/uncmNRWyh3XJKzRdzHkXDHjU+HEJpXt9q9xsvMVXwv27eVTGq4hkXrDDYdrRe2etaUZt9sbhbYX2C3aADVm9apTee2JUXTkgHq8RObQqnko=
+	t=1789479230; cv=none; b=bDTqudXu6HmweMlOQgzRXPv7mj8xTCCtHmukRMaaeDjesKrQYGpanTk9RjIIp6hjiInsFbCC7V1GjaJOpD+/uSOORppxgo+DPkF71EgZEfuLSLUxms7kCdw0mx5PEOaTC1SZpcXAk8QM95MzuwW/mRAWkRkHzAxHywmjVG2fVMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789479228; c=relaxed/simple;
-	bh=8jybUVo50EFQof3PpqeBLAA8N9t/sh9QhIBLDTIHusM=;
+	s=arc-20240116; t=1789479230; c=relaxed/simple;
+	bh=HZGmmDf0hwKPF6vc1Yoa7g0dVX4Kigh2Son7Dazb4WA=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=oSjAcT2qrwopRMYYYW3MarwLZJXfeaX5uxDTorUuxQhDujWI3+Nyh3DaUamEjILwLKEipj5Ii0k6DjRHue+4OgPI0bVVQFkpvadraTVu3gsWJy8Xt9Ivbfarbn5uP1+UEmBSsuuNmHVqUHMaFmqn464ZnvXB6wrQFBwafDdCFs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iXnUvGxZ; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=jFh7SY0eL1NgLNUYHME75znsORDBkj9jOq26tOypUhCJpPRftd+j5XWIbB7P2mJ+PRVlgydyuHBDyoWbgQvcil6diy8eP4iWZk4QgPmRvtKHO3PrsyCL8l9eM2fd30rzeoJJ6BwPpvJgqckH/chhudYvr2OUCINhfbDT+t7Gr9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gu/HFAL0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iXnUvGxZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C97F71F000FF;
-	Tue, 15 Sep 2026 13:33:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gu/HFAL0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8BDE1F00893;
+	Tue, 15 Sep 2026 13:33:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789479227;
-	bh=/h1aGF3NB7QEkWueiTruoa7ge/+xfkpq1orQ6+xBCLo=;
+	s=k20260515; t=1789479229;
+	bh=jRuMx/eNVLBuNoCwxR8Evlo3ullrqv35DCQBAHzp2Mk=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=iXnUvGxZxHM99Jw5HFh6FBxtFfkZtSRsRwPvXQ4NRkAdVvjVyuB7fCUf1IX11cel5
-	 d2SRuKqnVEqIXaFwHKg+ALqlsLlqYJU2fxUj7lW5JgohAlAxN+Xk+IQXQcaT8QLQXl
-	 5hDQF84Vc+3V4InTbqHwOcFx/Vr7C4tLknh5N2wWfEqmtAQUqv2qEgoYWWCo2W1Qy5
-	 tJfMxUdAf/UQ+pb54IBhH0u/INAW3YEm1fr7D6oYZ708QikD9Bb7kty0yBLipI3j2h
-	 O6739ceHO+BgR+B0EWHNdNGN/77rMeR2TvDV9/J2D1kUNT+4CNyzdl0A7z/HZRZawR
-	 1S/cWVUlEeLGw==
-Content-Type: multipart/mixed; boundary="===============0224972729011567103=="
+	b=gu/HFAL0kJInOZqFcMGC8nNMytwNVLK65MeZt0Rg+EpFUCKnvgBhMfvuhi3QTWSlJ
+	 hCDg/b2HVE3XtlTYwskvDuFTplbyxKZ5DEUnG9DPHdU3738JzxObz4moDFTWg0sNYN
+	 jI8MTnbZ2Oa3hojZIJ8u0ULYBpq5ACVs/6whqIqj6ZV5viVAJEBSvs9cNAQaSrdSnd
+	 Qax4wB1i8K7tYKcvJ9dYcz0mU4IaS+bYHfkSnMr9iVV5MEzn2mNOD+VKM6WNxLHDyZ
+	 lASPLw83vJZY4kApqsqqw9EeGyz5wqjV9eF5pL1jwRIFtwXN6cwp/uwayOMfqWwaUp
+	 rt5aqH3K+Hv4w==
+Content-Type: multipart/mixed; boundary="===============0593099552983870878=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0e82bdc7f21285fb259ec989c8d0a43a2fd8af80c200f67b200ac2421a085477@mail.kernel.org>
-In-Reply-To: <20260915124104.77287-3-zhaofuyu@vivo.com>
-References: <20260915124104.77287-3-zhaofuyu@vivo.com>
-Subject: Re: [PATCH bpf-next v9 2/2] selftests/bpf: add tests for selective module BTF loading
+Message-Id: <f8c574661d83a77fecbcb19d996d08ff15de281cc585b7a7e76c8e7476c6c8ef@mail.kernel.org>
+In-Reply-To: <20260915124104.77287-2-zhaofuyu@vivo.com>
+References: <20260915124104.77287-2-zhaofuyu@vivo.com>
+Subject: Re: [PATCH bpf-next v9 1/2] libbpf: support selective kernel module BTF loading via bpf_object_open_opts
 From: bot+bpf-ci@kernel.org
 To: zhaofuyu@vivo.com,bpf@vger.kernel.org
-Cc: eddyz87@gmail.com,andrii.nakryiko@gmail.com,alan.maguire@oracle.com,olsajiri@gmail.com,zhaofuyu@vivo.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 15 Sep 2026 13:33:46 +0000 (UTC)
+Cc: eddyz87@gmail.com,andrii.nakryiko@gmail.com,alan.maguire@oracle.com,olsajiri@gmail.com,zhaofuyu@vivo.com,andrii@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 15 Sep 2026 13:33:48 +0000 (UTC)
 
---===============0224972729011567103==
+--===============0593099552983870878==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_module_allowlist.c b/tools/testing/selftests/bpf/prog_tests/btf_module_allowlist.c
-> new file mode 100644
-> index 000000000000..3189133ee58b
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_module_allowlist.c
-> @@ -0,0 +1,162 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include <bpf/btf.h>
-> +#include "btf_module_allowlist.skel.h"
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 613afae26519..d6f297bd5dfb 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
 
 [ ... ]
 
-> +static void test_invalid_input(const char **list, size_t count,
-> +			       const char *test_name)
+> @@ -5838,6 +5840,21 @@ int bpf_core_add_cands(struct bpf_core_cand *local_cand,
+>  	return 0;
+>  }
+>
+> +static bool is_btf_mod_allowed(const struct bpf_object *obj, const char *name)
 > +{
-> +	struct btf_module_allowlist *skel;
-> +	char assert_name[64];
-> +	int err;
-> +	LIBBPF_OPTS(bpf_object_open_opts, opts,
-> +		.btf_module_allowlist = list,
-> +		.btf_module_allowlist_cnt = count,
-> +	);
+> +	ssize_t i;
 > +
-> +	snprintf(assert_name, sizeof(assert_name), "%s: open_opts", test_name);
-> +	skel = btf_module_allowlist__open_opts(&opts);
-> +	err = errno;
-> +	if (!ASSERT_NULL(skel, assert_name)) {
-> +		btf_module_allowlist__destroy(skel);
-> +		return;
+> +	if (obj->btf_module_allowlist_cnt < 0)
+> +		return true;
+> +
+> +	for (i = 0; i < obj->btf_module_allowlist_cnt; i++) {
+> +		if (strcmp(obj->btf_module_allowlist[i], name) == 0)
+> +			return true;
 > +	}
-> +	snprintf(assert_name, sizeof(assert_name), "%s: open_opts err", test_name);
-> +	ASSERT_EQ(err, EINVAL, assert_name);
+> +
+> +	return false;
 > +}
 > +
-> +static void btf_module_allowlist_invalidinput(void)
-> +{
-> +	const char *names[] = { NULL };
-> +	const char *empty_names[] = { "" };
-> +	const char *duplicate_names[] = { "bpf_testmod", "bpf_testmod" };
+>  static int load_module_btfs(struct bpf_object *obj)
+>  {
+>  	struct bpf_btf_info info;
+> @@ -5860,6 +5877,9 @@ static int load_module_btfs(struct bpf_object *obj)
+>  	if (!kernel_supports(obj, FEAT_MODULE_BTF))
+>  		return 0;
+>
+> +	if (obj->btf_module_allowlist_cnt == 0)
+> +		return 0;
 > +
-> +	test_invalid_input(NULL, 1, "null_list");
-> +	test_invalid_input(names, 1, "null_name");
-> +	test_invalid_input(empty_names, 1, "empty_name");
-> +	test_invalid_input(duplicate_names, 2, "duplicate_name");
-> +	test_invalid_input(names, (size_t)SSIZE_MAX + 1, "large_count");
-                                                               ^^^^^^^
-Does this test actually verify the count-overflow guard? The "large_count"
-case reuses names[] = { NULL } as the allowlist, but the validation in
-bpf_object_open() (from patch 1, tools/lib/bpf/libbpf.c) has two
-independent paths to -EINVAL for that input:
-
-    if (mod_allow_cnt > SSIZE_MAX || (!mod_allow && mod_allow_cnt > 0))
-            return ERR_PTR(-EINVAL);
-
-    for (i = 0; i < mod_allow_cnt; i++) {
-            if (!mod_allow[i] || !mod_allow[i][0])
-                    return ERR_PTR(-EINVAL);
-
-If the mod_allow_cnt > SSIZE_MAX guard were dropped, the loop would still
-return -EINVAL on i == 0 because names[0] is NULL, so the assertion passes
-and the count-overflow check goes untested. The overflow guard is the only
-thing keeping obj->btf_module_allowlist_cnt (ssize_t) from being assigned a
-negative value from a size_t count, which is_btf_mod_allowed() interprets
-as "allowlist unspecified, allow everything."
-
-The other four cases each pin exactly one check (null_list tests !mod_allow,
-null_name tests !mod_allow[i], empty_name tests !mod_allow[i][0],
-duplicate_name tests the strcmp loop). Would passing a list of valid
-non-empty names like duplicate_names[0] (i.e., { "bpf_testmod" }) with the
-oversized count discriminate the count check from the unrelated precondition
-check?
-
-> +}
+>  	while (true) {
+>  		err = bpf_btf_get_next_id(id, &id);
+>  		if (err && errno == ENOENT)
+> @@ -5902,6 +5922,11 @@ static int load_module_btfs(struct bpf_object *obj)
+>  			continue;
+>  		}
+>
+> +		if (!is_btf_mod_allowed(obj, name)) {
+> +			close(fd);
+> +			continue;
+> +		}
+> +
+>  		btf = btf_get_from_fd(fd, obj->btf_vmlinux);
 
 [ ... ]
+
+> @@ -5926,6 +5951,9 @@ static int load_module_btfs(struct bpf_object *obj)
+>  			break;
+>  		}
+>  		obj->btf_module_cnt++;
+> +
+> +		if (obj->btf_module_allowlist_cnt == obj->btf_module_cnt)
+> +			break;
+>  	}
+
+In an earlier review thread for v6, Alan Maguire suggested adding optional
+flexibility to distinguish between modules that must exist versus modules
+that are optional. He proposed a required_module_cnt parameter to handle
+scenarios where a module might be built-in ('y') on one kernel and a
+module ('m') on another:
+
+  "it might be good to retain the non-existent module tolerance optionally
+  somehow (a required_module_cnt perhaps?) since it's often the case that
+  a module is built-in on one kernel and a module on another. If a module
+  is builtin ("y" instead of "m"), having a way to say "load this if it
+  is a module but don't fail if it is not present" would be handy, since
+  the needed BTF would then be in vmlinux BTF rather than module BTF."
+  https://lore.kernel.org/bpf/b2602c85-c5ad-42d9-9f64-1bb7e1100a85@oracle.com/
+
+While you initially agreed to add module count verification, was the
+follow-up enhancement suggestion for optional required_module_cnt
+deliberately deferred, or should it be considered for this version?
+
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index 48266e752223..d3415a0671a8 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -224,10 +224,24 @@ struct bpf_object_open_opts {
+>  	 * point (/sys/fs/bpf), in case this default behavior is undesirable.
+>  	 */
+>  	const char *bpf_token_path;
+> +	/*
+> +	 * Optional allowlist of kernel module names whose BTFs libbpf is
+> +	 * allowed to load. The allowlist limits which kernel module BTFs libbpf
+> +	 * will consult wherever module BTF might be needed.
+> +	 *
+> +	 * When the option is not specified, the existing behavior remains
+> +	 * unchanged. An explicitly specified empty list prevents libbpf from
+> +	 * consulting any kernel module BTFs.
+> +	 *
+> +	 * The list must contain valid, non-empty module names and must not
+> +	 * contain duplicate entries; otherwise -EINVAL is returned.
+> +	 */
+> +	const char **btf_module_allowlist;
+> +	size_t btf_module_allowlist_cnt;
+
+Does the documentation accurately describe how the empty list case works?
+The implementation distinguishes three states purely by the pointer, not
+the count:
+
+    obj->btf_module_allowlist_cnt = mod_allow ? mod_allow_cnt : -1;
+
+so btf_module_allowlist == NULL yields -1, which is_btf_mod_allowed()
+treats as 'allow everything'. The only way to reach the documented
+empty-list state is to set btf_module_allowlist to some non-NULL pointer
+while leaving btf_module_allowlist_cnt at 0, but C has no zero-length
+array literal to point it at. Should the comment explain this explicitly?
+
+Also, does the error handling match what the comment describes? The
+comment says "otherwise -EINVAL is returned" but bpf_object__open_file()
+and bpf_object__open_mem() return NULL with errno == EINVAL rather than
+-EINVAL directly:
+
+    return libbpf_ptr(bpf_object_open(...));
+
+Only bpf_object__open_skeleton() actually returns -EINVAL. Should the
+documentation clarify that the *_open*() functions set errno rather than
+returning a negative value?
 
 
 ---
@@ -130,4 +178,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34972296720
---===============0224972729011567103==--
+--===============0593099552983870878==--
