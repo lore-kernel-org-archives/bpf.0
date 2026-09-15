@@ -1,198 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-36.mta0.migadu.com [91.218.175.36])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAAA63C2B80;
-	Tue, 15 Sep 2026 21:11:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD8B450917
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 21:19:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.36
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789506700; cv=none; b=drAIzUtdHOkOOKyEi9At6oS8gB/HN12tPQzDo5AFfLEHPB9S47siioYV1GFTtLEKyw1kE59KmglzKSw/32IZGGpL0YgbAoGK/SjSr/cZapSltE+2eXJ9fCGUksUgngFxkjVA1J/wzGqTZYjkwObiiVA+L/zGx0NisRq+2RjlrJY=
+	t=1789507156; cv=none; b=JqEb9lsfN+DStTmExQvlZihoEEjo8NyYuD7vi/5iEUEVAH0hfa4i34XDg1FnVzto12V4atR4O0hyqishw45e+m4QXoBJjeBdTW/HIyUbXFwEpmSbK4ujNv0yWXbRFpiolvUhBKxrZVtfu0NgMOco6xKVTpx3HdJV7XHkIIMkrbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789506700; c=relaxed/simple;
-	bh=AoCsTzTXHNFuc1Q3z61KajNZO1vb0aiiUflGwAKK9as=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=GfT1FgkMD/kRspSmU1qMG6IkNVl0Ow1jK2yX7qnjFvPdJLLKRoTQLuIbWJheNbr6DjZmo3oR3vYbVm2lCIDl3yqbFh9MrTNOn6UlwFe4woOoaMREAc6PdPbrc0MZ9X+B/8ECPVBJM97bBuNPeChfvwxMiM7PX81vmlAGHJgahrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SIEZ9YIX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789507156; c=relaxed/simple;
+	bh=ql4sab1w7TKwOgBM/Ql7wMbRLphrnVowff5ABO0qUKo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Lz2dH5Oiyry+5oryGZGKDWQWHSIXbTV+OPZmoP6KrFxOn+fLKDjrfZmi/D2h9zld86O9Lq9IHh6THUHxI4ur0JdfY055gK8Y/u7/QsUnFjBOeYL8LSZbc2v4HESBTb3k/EUq5CPzfjlofYIlCSyhH4g449iIwld75Ji20q3uu9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Gm0H8Fgb; arc=none smtp.client-ip=91.218.175.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SIEZ9YIX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 901E71F000FF;
-	Tue, 15 Sep 2026 21:11:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789506698;
-	bh=+pGd8JfDOqITlxuT8mGbAoIqAGn1R9IUwsi4Nnx1v8A=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=SIEZ9YIXnJSKYliDIq0pkMpKkt5XBWybSSL5ndE8Ce8Z4N4CpYIhkn0bdLCD0cDgL
-	 S7U41qJG8WEvp25guKpcMFmRFnT5yh9e4msDj89j2LHbqeMEaK44+D+bG3Go/9AxdZ
-	 aedHkjCQw9TwD9eNY6J6u3kw0kKafeOFUePmoh1XCOtJ8gZSVPampUfAEAx0mEr3sP
-	 +CnPljEoImnCAXZ4x84fTksdHG2ZFpAdeENACnliu7EwdUmUc5GN8BexBOBxyg6EYc
-	 pnqFD88Bo1DLAVZZ1Cyb5sPnLk3uC+ZJ8Q9iIF5L/jIIwYN6NUkCJ+xx1+QupCkN6Z
-	 N1EJl7E30Mbqg==
-Content-Type: multipart/mixed; boundary="===============4666062696086601469=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Gm0H8Fgb"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=ql4sab1w7TKwOgBM/Ql7wMbRLphrnVowff5ABO0qUKo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789507151; v=1; x=1790111951;
+ b=Gm0H8FgbdU85gAElkhAXF0ajvFpBHozVEoFQ1VzQqBxdHzrEB8WU8/WPCbrHOMqzT4b3Z8X2
+ sOFk2MxyVR1jEG27iIru9gxpy94LhRFbvkV1c/KBAbGNStUS8Uhk5pfV+JDTIVKfkZrCOflLAIG
+ J91080cEB4u/VNM0bOl9Asqc=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 190437f01fc1c6cc;
+	Tue, 15 Sep 2026 21:19:01 +0000
+X-Mizu-Trace-ID: 190437f01fc1c6cc
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <e1d1fc67-1035-433e-97a9-7bbf2628ccf5@linux.dev>
+Date: Tue, 15 Sep 2026 14:18:55 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <640ebe4456fcfd59b05e5fdf3c7870a2514c76bbcb2fe4a111243911ac38a100@mail.kernel.org>
-In-Reply-To: <20260915202220.3535321-1-arnd@kernel.org>
-References: <20260915202220.3535321-1-arnd@kernel.org>
-Subject: Re: [PATCH] bpf: add printf attributes
-From: bot+bpf-ci@kernel.org
-To: arnd@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: arnd@arndb.de,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,ameryhung@gmail.com,kees+treewide@kernel.org,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 15 Sep 2026 21:11:37 +0000 (UTC)
-
---===============4666062696086601469==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 05/13] bpf: keep the range across a sign
+ extension that cannot change it
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260910164635.459558-1-vineet.gupta@linux.dev>
+ <20260910164635.459558-6-vineet.gupta@linux.dev>
+ <DLDKK1NH3BO1.SZN02MHQTX00@gmail.com>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <DLDKK1NH3BO1.SZN02MHQTX00@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-> commit 5d37f3f1dd68e8bbee421b3d0871994907f9e35d
-> Author: Arnd Bergmann <arnd@arndb.de>
-> Date:   Tue Sep 15 22:21:55 2026 +0200
->
->     bpf: add printf attributes
->
->     Building with extra warnings enabled shows some missing printf attributes:
->
->     kernel/bpf/diagnostics.c: In function 'bpf_diag_source':
->     kernel/bpf/diagnostics.c:828:9: error: function 'bpf_diag_source' might be a candidate for 'gnu_printf' format attribute [-Werror=suggest-attribute=format]
->       828 |         msg = bpf_diag_vfmt(env, fmt, args);
->
->     Add these to shut up the warning and allow the compiler to check the
->     format strings.
->
->     Fixes: a8f427835394 ("bpf: Report Program Structure CFG errors")
->     Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On 9/12/26 12:02 PM, Alexei Starovoitov wrote:
+> On Thu Sep 10, 2026 at 9:46 AM PDT, Vineet Gupta wrote:
+>> coerce_reg_to_size_sx() decides whether a sign extension is lossless by
+>> comparing the bits above the field in smin and smax:
+>>
+>> 	top_smax_value = ((u64)reg_smax(reg) >> num_bits) << num_bits;
+>> 	top_smin_value = ((u64)reg_smin(reg) >> num_bits) << num_bits;
+>> 	if (top_smax_value != top_smin_value)
+>> 		goto out;
+>>
+>> Equal high bits do imply the truncation is lossless, but the converse does
+>> not hold. Whenever the range straddles zero the high bits necessarily
+>> differ -- smin sign-extends to all ones, smax to all zeroes -- even when
+>> every value in the range fits the field and (sN)v == v throughout. The
+>> second gate, "both of s64_max/s64_min positive or negative", rejects the
+>> same shape again for the same reason.
+>>
+>> So a register holding an errno-or-zero value, [-4095, 0], comes out of r0
+>> = (s32)r0 as the full [S32_MIN, S32_MAX] even though the instruction is a
+>> no-op on it. The no_sext test at the call site does not help: it is an
+>> unsigned check, so it only covers non-negative values that fit.
+>>
+>> Test the range against the field directly and return early when it fits.
+>> Sign extension is then the identity, so nothing needs updating -- which
+>> also preserves var_off, where the existing path would have replaced known
+>> bits with a coarse tnum_range().
+>>
+>> This only tightens: the early return fires exactly where the value is
+>> provably unchanged, and the cases the current tests do accept still take
+>> the same path and produce the same bounds.
+>>
+>> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+>> ---
+>> v2: new. coerce_reg_to_size_sx() is fixed rather than special-cased,
+>> which is what was asked on RFC 5/6; it removes the RFC's
+>> call-then-overwrite at the mov site.
+>>
+>>   kernel/bpf/verifier.c | 22 ++++++++++++++++++++++
+>>   1 file changed, 22 insertions(+)
+>>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 58e788f53ae5..eb093194e2a3 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -5754,6 +5754,7 @@ static void set_sext64_default_val(struct bpf_reg_state *reg, int size)
+>>   static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
+>>   {
+>>   	s64 init_s64_max, init_s64_min, s64_max, s64_min, u64_cval;
+>> +	s64 field_smin, field_smax;
+>>   	u64 top_smax_value, top_smin_value;
+>>   	u64 num_bits = size * 8;
+>>   
+>> @@ -5773,6 +5774,27 @@ static void coerce_reg_to_size_sx(struct bpf_reg_state *reg, int size)
+>>   		return;
+>>   	}
+>>   
+>> +	if (size == 1) {
+>> +		field_smin = S8_MIN;
+>> +		field_smax = S8_MAX;
+>> +	} else if (size == 2) {
+>> +		field_smin = S16_MIN;
+>> +		field_smax = S16_MAX;
+>> +	} else {
+>> +		/* size == 4 */
+>> +		field_smin = S32_MIN;
+>> +		field_smax = S32_MAX;
+>> +	}
+>> +
+>> +	/*
+>> +	 * The range already fits the field, so (sN)v == v for every value the
+>> +	 * register can hold and the sign extension changes nothing. The tests
+>> +	 * below cannot reach this case once smin is negative: a negative smin
+>> +	 * and a non-negative smax never share their high bits.
+>> +	 */
+>> +	if (reg_smin(reg) >= field_smin && reg_smax(reg) <= field_smax)
+>> +		return;
+>> +
+> This patch can be a patch 1, since it looks unrelated to the rest?
+> Would be good to test it individually. veristat run before/after.
 
-Does the Fixes tag reference the commit that introduced the warning?
-Looking at the compiler warning, bpf_diag_source() triggers the warning
-because it calls va_start(args, fmt) and passes those to bpf_diag_vfmt(),
-which already carries __printf(2, 0) in kernel/bpf/diagnostics.h:50.
+OK, and the corresponding patch moves too.
 
-Both halves of that trigger existed before commit a8f427835394. The
-parent commit a8f427835394~1 already had:
-
-kernel/bpf/diagnostics.c:795
-    static void bpf_diag_source(struct bpf_verifier_env *env, u32 insn_idx, const char *label,
-                                const char *fmt, ...)
-
-with va_start(args, fmt) and msg = bpf_diag_vfmt(env, fmt, args) in the
-body, and kernel/bpf/diagnostics.h:50 already had __printf(2, 0) on
-bpf_diag_vfmt.
-
-Commit a8f427835394 changed only kernel/bpf/diagnostics.c by 19
-insertions, adding bpf_diag_program_structure() without touching
-bpf_diag_source() or any format attribute, so the warning already
-existed before that commit.
-
-Should the Fixes tag instead name the commit that introduced
-bpf_diag_source() together with the __printf(2, 0) annotation on
-bpf_diag_vfmt?
-
-> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-> index a2cac59c6639..b069fe73d3dc 100644
-> --- a/kernel/bpf/diagnostics.c
-> +++ b/kernel/bpf/diagnostics.c
-> @@ -291,7 +291,7 @@ char *bpf_diag_fmt_buf(struct bpf_verifier_env *env, size_t size)
->  	return buf;
->  }
->
-> -const char *bpf_diag_vfmt(struct bpf_verifier_env *env, const char *fmt, va_list args)
-> +__printf(2, 0) const char *bpf_diag_vfmt(struct bpf_verifier_env *env, const char *fmt, va_list args)
->  {
->  	va_list copy;
->  	char *buf;
-
-Is this attribute needed here? bpf_diag_vfmt() already carries
-__printf(2, 0) on its prototype in kernel/bpf/diagnostics.h:49-50:
-
-    const char *bpf_diag_vfmt(struct bpf_verifier_env *env, const char *fmt, va_list args)
-            __printf(2, 0);
-
-kernel/bpf/diagnostics.c includes that header at line 17, so the
-compiler was already applying the format attribute before this patch.
-The attribute was present in the parent of the Fixes-referenced commit
-(a8f427835394~1:kernel/bpf/diagnostics.h:50), and the compiler output
-in the changelog reports exactly one warning, for bpf_diag_source()
-only.
-
-This hunk silences no warning and enables no new format checking, but it
-pushes the line from 86 to 101 columns, exceeding the kernel's
-100-column limit, so checkpatch will now emit "WARNING: line length of
-101 exceeds 100 columns" on a line that was previously clean.
-
-> @@ -309,7 +309,7 @@ const char *bpf_diag_vfmt(struct bpf_verifier_env *env, const char *fmt, va_list
->  	return buf ?: "";
->  }
->
-> -const char *bpf_diag_fmt(struct bpf_verifier_env *env, const char *fmt, ...)
-> +__printf(2, 3) const char *bpf_diag_fmt(struct bpf_verifier_env *env, const char *fmt, ...)
->  {
->  	const char *buf;
->  	va_list args;
-
-Same redundancy here. bpf_diag_fmt() already carries __printf(2, 3) on
-its prototype in kernel/bpf/diagnostics.h:51:
-
-    const char *bpf_diag_fmt(struct bpf_verifier_env *env, const char *fmt, ...) __printf(2, 3);
-
-Both translation units that call it include that header
-(kernel/bpf/diagnostics.c:17, kernel/bpf/verifier.c:38), so all call
-sites were already format-checked. The attribute is present in the
-parent of the Fixes-referenced commit (a8f427835394~1), so this hunk
-adds no checking and silences no warning.
-
-The changelog says "shows some missing printf attributes" and "Add these
-to shut up the warning", but the quoted compiler output reports a single
-warning and only bpf_diag_source() was actually missing an attribute.
-
-Could the patch be reduced to the bpf_diag_source() change alone?
-
-> @@ -794,7 +794,7 @@ static void diag_print_insn_context(struct bpf_verifier_env *env, u32 insn_idx,
->  	}
->  }
->
-> -static void bpf_diag_source(struct bpf_verifier_env *env, u32 insn_idx, const char *label,
-> +__printf(4, 5) static void bpf_diag_source(struct bpf_verifier_env *env, u32 insn_idx, const char *label,
->  			    const char *fmt, ...)
->  {
->  	struct bpf_diag_scratch *scratch;
-
-This is the hunk that is actually needed, but was the prefix inserted
-without re-wrapping the declaration?
-
-Adding the 15-character __printf(4, 5) prefix causes two formatting
-issues:
-
-1. Line 797 grows from 90 to 105 columns, exceeding the kernel's
-100-column limit, so checkpatch will emit "WARNING: line length of 105
-exceeds 100 columns".
-
-2. The continuation line 798 is no longer aligned with the open
-parenthesis. Before the patch, the first argument sat at column 29 and
-line 798 (3 tabs + 4 spaces) also started at column 29, matching
-exactly. Adding the prefix moves the open parenthesis so the first
-argument now sits at column 44, while line 798 still starts at column 29
--> checkpatch "CHECK: Alignment should match open parenthesis".
-
-The five nearest in-tree uses of this exact __printf(N, M) static form
-all avoid both problems by re-wrapping the parameter list:
-
-    kernel/bpf/btf.c:1536-1537   len=75, continuation at col 47
-    kernel/bpf/btf.c:1560-1561   len=80, continuation at col 52
-    kernel/bpf/btf.c:8334-8335   len=79, continuation at col 41
-    kernel/bpf/verifier.c:7656-7657  len=92, continuation at col 50
-    kernel/bpf/verifier.c:8457-8458  len=92, continuation at col 50
-
-Should the parameters be split across the two lines (or move label down)
-to bring line 797 under 100 columns and re-indent line 798 to the new
-parenthesis column?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35020865259
---===============4666062696086601469==--
+Thx,
+-Vineet
