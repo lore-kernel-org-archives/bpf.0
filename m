@@ -1,64 +1,47 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A170732B137;
-	Tue, 15 Sep 2026 08:54:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1A647A887;
+	Tue, 15 Sep 2026 08:55:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789462493; cv=none; b=CahxOF2gOtCdWcdORpkLRHgL1EddQ+liohPl0hk91oT0SkxuY+iHB1N8t3f5IZKS5guSWg1Zy9K5OCRnvyiGEwRo+TVWOZKK74+DgvN9405imZ77M+duZE7ZF6P8Ys1Uyt7FUErsfl3lLmXFRDNc9PW55PxfasJ7fUlrE0Jx8Hw=
+	t=1789462528; cv=none; b=PmpQB1tuM0S0zUpLGtCepls4cWcDlkNZEsUvQYMB+yK2saEs78pSrTOxP0EXbhhLuSwesiuXJeTIRg9hwYgcglLFUCfipYIMsOlKEJnoUWRq158I398XNetGehHw5wrDdZBX+ddaOXUm6KJobqG1vXYM33UWr8tdEkMTvxz17AU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789462493; c=relaxed/simple;
-	bh=g/XQZFRhvArqwyhYQQsYV1oxzReIaJfAkZh939ydge0=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sEsKnPdyPGAYTNshOkUkTDU4PipudXr+9hBMQ6ZOmKTVnRP2PoiTiRVOM8J0e2eS56p8r2+rKlEAHjAU0xjqhpWKsGv6vpOcJ/emJdt2eSmaKE3rcuR2mn2cD5fRNgDk8JKHJGTux8zK4YmhhkF2nM1WNOkkhz9wPhM+4h9ux4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=ozfiu/qA; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1789462528; c=relaxed/simple;
+	bh=jR0H34vdiv7W/SJ2FsE8rZ6PylOArSBFOR8UWIe5QP4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=So1pyV6mEjD7O1klaFdRcBnG3PSAjO3LXQv1F6rh+vqekjvZmzjhY4YntrEQu/ZZ65Ord1n4ASmztq2Ii8YHUOooH5CT0ValW3qUSCx0hstnwosSdDh12TjuxJ5orakxRWmMLbtY3fpT6FNdlCIWzg+WF5hjWpHpqX1sTqEPBY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=eQxa4rTG; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=xEfU9KKd; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="ozfiu/qA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1789462492; x=1820998492;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=g/XQZFRhvArqwyhYQQsYV1oxzReIaJfAkZh939ydge0=;
-  b=ozfiu/qA9i+bUT2LT1IbFprxUsdEcL/AKUXj3vv/DJ5y5lQAQ+ZNLiUB
-   VzLk4nh3V/fbLJ/5VPN+zH7e+vGIdj4VAOd4zQVCwIwj76MVbuZFPKMB0
-   4VLWiGUu7ddQW4uNRSXU5UGMWc4DOvXQ7YqLBJfZdC1z0Qt6MmwkllRvJ
-   /+qwU8V/ChNNuPvfn1S1zAdoCN/8Yg33tYBOBSWe5lwCcn2ED78JiDzJn
-   oU/IZF8sU1erwt3Xk/YGaHZmqpLOT3kEtaGaZKlwKef+JNve/00JUPX/7
-   ych/VfXWc5kVtgQGDJnD9G1SoKyUkUM1Sj0JF6wc8mbadJzzDdLtRROqq
-   g==;
-X-CSE-ConnectionGUID: BntAm97SSBGPRL8iNTiP5w==
-X-CSE-MsgGUID: 3Byspm3MRBS9EZyigKLLFA==
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="63612037"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2026 01:54:51 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.87.71) by
- chn-vm-ex2.mchp-main.com (10.10.87.31) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.45; Tue, 15 Sep 2026 01:54:49 -0700
-Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Tue, 15 Sep 2026 01:54:46 -0700
-Date: Tue, 15 Sep 2026 10:54:45 +0200
-From: Daniel Machon <daniel.machon@microchip.com>
-To: <netdev-bot+sashiko@kernel.org>
-CC: <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
-	<kuba@kernel.org>, <pabeni@redhat.com>, <horatiu.vultur@microchip.com>,
-	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
-	<ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
-	<john.fastabend@gmail.com>, <sdf@fomichev.me>, <herve.codina@bootlin.com>,
-	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <mohsin.bashr@gmail.com>,
-	<richardcochran@gmail.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH net-next v6 10/14] net: lan966x: add PCIe FDMA support
-Message-ID: <20260915085445.sajcj75jexgkkrvj@DEN-DL-M70577.microsemi.net>
-References: <20260909-lan966x-pci-fdma-v6-10-6f48dab9d671@microchip.com>
- <178904554750.219967.2010862453597890441@kernel.org>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="eQxa4rTG";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="xEfU9KKd"
+From: Kurt Kanzenbach <kurt@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1789462525;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hMJ3kAH2H7v1EwMfvPitDPV9QPEVx96053JJoMhRZJs=;
+	b=eQxa4rTGWLcefuQCDvytS+cTBpXko4P99kaxBvTKuykFGBaJJ9CJYlLTBvu2wQi0lT/0bD
+	ri5Urk8/SD3FfrH1EsHvgwLVbz5qBY3M2Oc+21II3alrKg3XIDNpEib4nVGod0ShSms6oZ
+	Fea1aXKOM5V0vPiPafql09JaOGK1a0W6lZrFtSX1ccS8kqN6uitVkpLRBt9aonwK3Uq0tW
+	cg1XnXApr0vcgp5y1RkzYMbw6ZJLpwkltXwBeE6kPtpZHXAymEFhO1+1lylH0bBDQ8Xkeh
+	E9H3P1YjRDPYDRwfR92zTuq/7ASHQ2vw/o0f/2yXgeAHZwB90QwWiErcSc3b/g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1789462525;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hMJ3kAH2H7v1EwMfvPitDPV9QPEVx96053JJoMhRZJs=;
+	b=xEfU9KKd6yg1EZ6ZmZjqz1H/aDxa/KnzJuJ1gBEOLClsH394695bMxx/lyEbjSahU3FISL
+	gsU7p7hAGRsvagCQ==
+Date: Tue, 15 Sep 2026 10:55:05 +0200
+Subject: [PATCH RFC net 1/2] net: stmmac: Disable NAPI before stopping Tx
+ queues in stmmac_xdp_release()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,126 +49,107 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <178904554750.219967.2010862453597890441@kernel.org>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260915-stmmac_xsk_crashes-v1-1-e14553fcf553@linutronix.de>
+References: <20260915-stmmac_xsk_crashes-v1-0-e14553fcf553@linutronix.de>
+In-Reply-To: <20260915-stmmac_xsk_crashes-v1-0-e14553fcf553@linutronix.de>
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>
+Cc: Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, 
+ Song Yoong Siang <yoong.siang.song@intel.com>, 
+ Noor Azura Ahmad Tarmizi <noor.azura.ahmad.tarmizi@intel.com>, 
+ Mohd Faizal Abdul Rahim <faizal.abdul.rahim@intel.com>, 
+ Ong Boon Leong <boon.leong.ong@intel.com>, 
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>, netdev@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, 
+ linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
+ Kurt Kanzenbach <kurt@linutronix.de>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2343; i=kurt@linutronix.de;
+ h=from:subject:message-id; bh=jR0H34vdiv7W/SJ2FsE8rZ6PylOArSBFOR8UWIe5QP4=;
+ b=owEBbQKS/ZANAwAKAcGT0fKqRnOCAcsmYgBqqQf7VRjiE33xEjX5HXdvVzeunnvJsx+68sJZ8
+ CyIsgNhPymJAjMEAAEKAB0WIQS8ub+yyMN909/bWZLBk9HyqkZzggUCaqkH+wAKCRDBk9HyqkZz
+ glBiD/92mTGGrKpOeUztqwXY2V5plO6OoGyiU+j5cgP1leoX/hJ5NOef0QMobjCueVorAy5t7lM
+ B5E5ZnNqv7G3fT/MKvIUAOGeGwU3WsDztSxWbD57kIHBZLZyqo8iLoSW/MHUbmRdWVpNBS5eGPe
+ hz0wXI8eO8pKXPu/udFlGGHfIMzzm1F5cYKZO0vf1kIgxSNrChuBRXTYVqtlgulkFTAR/TRFcsc
+ Fdq7KN2NiUhOxhbj7cQxj1vEFRD6Pf3Q9SdJn4CqT2p2zjy9smZFAtv0n1nwDsIQz3W/Q5PurrC
+ Yq1yK5ny3qgwNCZCDTa3b4xOqVCsvfzc+2H2Cl2u4Qy1KtUoBH9PAFKc8FiMfyjZ80nGQt4Pkrh
+ yJ74cWJNFtnJCcQHgWtwFIg2cQ9wJEFoddjCZEF2UM/L0GwivF8CahL1FiG0U+wqPLSH+Ld/MwU
+ 9qQutwhsevpetjYVKPJYV5+xvBKyNdKYbe/qBW++6tVKRRPlHyuU8xg1TAbwj9a7N3J6Sv/AbGI
+ u5K7BBXk81qrnpILF3Z7maLOeegTZ7TybjvDLjVTeqA39kssBqeSoSjVYOQqZGXDc5Wkog/MBLI
+ bbIMQj67o35mKQnKZBCcJ2MN16G/Ya6xgFG26FJYRNoVae0otVMDJYIpjVGrZ2wjzx06eTf0AQj
+ 8fHP5dMYKPbeYjQ==
+X-Developer-Key: i=kurt@linutronix.de; a=openpgp;
+ fpr=BCB9BFB2C8C37DD3DFDB5992C193D1F2AA467382
 
-> Thank you for your contribution! Sashiko AI review found 4 potential
-> issue(s) to consider:
-> 
-> Critical: 0 · High: 0 (1) · Medium: 1 (1) · Low: 3
-> 
-> - [Medium] DISCARDED — fixed later in the series.
-> - [Low] DISCARDED — fixed later in the series.
-> - [Low] DISCARDED — fixed later in the series.
-> - [Low] DISCARDED — fixed later in the series.
-> 
-> Pre-existing issues:
-> - [High] Use-after-free in the new PCIe receive path:
->   `lan966x_fdma_pci_rx_get_frame()`…
-> - [Medium] DISCARDED — pre-existing shared-library ordering weakness.
-> 
-> --
-> 
-> net: lan966x: add PCIe FDMA support
-> 
-> Adds a second FDMA backend for lan966x used when the switch is reached over
-> PCIe, using contiguous ATU-mapped DMA buffers and memcpy-based frame
-> transfer instead of per-page mappings. XDP and PTP are not advertised or
-> allowed on this path.
-> 
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> > new file mode 100644
-> > index 000000000000..f1f3c789d3a6
-> > --- /dev/null
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> > @@ -0,0 +1,404 @@
-> 
-> [ ... ]
-> 
-> > +/* Return true if blockl is a valid RX frame size. */
-> > +static bool lan966x_fdma_pci_rx_size_fits(struct fdma *fdma, u32 blockl)
-> > +{
-> > +     return blockl >= IFH_LEN_BYTES + ETH_HLEN + ETH_FCS_LEN &&
-> > +            blockl <= fdma->db_size - XDP_PACKET_HEADROOM;
-> > +}
-> 
-> [ ... ]
-> 
-> > +     skb->protocol = eth_type_trans(skb, skb->dev);
-> > +
-> > +     if (lan966x->bridge_mask & BIT(src_port)) {
-> > +             skb->offload_fwd_mark = 1;
-> > +
-> > +             skb_reset_network_header(skb);
-> > +             if (!lan966x_hw_offload(lan966x, src_port, skb))
-> > +                     skb->offload_fwd_mark = 0;
-> > +     }
-> > +
-> > +     skb->dev->stats.rx_bytes += skb->len;
-> > +     skb->dev->stats.rx_packets++;
-> > +
-> > +     return skb;
-> > +}
-> 
-> [Severity: High]
-> This isn't a bug introduced by this patch - lan966x_fdma_rx_get_frame() in
-> lan966x_fdma.c has the same caller pattern - but can lan966x_fdma_pci_rx_get_frame()
-> touch skb after lan966x_hw_offload() has already freed it?
+Attaching an XDP program while Tx traffic is running results in kernel
+crashes in stmmac_xmit() -> dwmac4_set_addr().
 
-Yes, but pre-existing. I think this deserves a proper fix through net and
-updates for all callers.
+Loading an XDP program tears down and reallocates all DMA resources via
+stmmac_xdp_release() and stmmac_xdp_open(). stmmac_xdp_release() stops
+the Tx queues before disabling NAPI:
 
-> 
-> lan966x_hw_offload() replaces the buffer and reports only a boolean:
-> 
-> drivers/net/ethernet/microchip/lan966x/lan966x_main.c:lan966x_hw_offload() {
->         ...
->         if (eth_type_vlan(skb->protocol)) {
->                 skb = skb_vlan_untag(skb);
->                 if (unlikely(!skb))
->                         return false;
->         }
->         ...
-> }
-> 
-> and skb_vlan_untag() frees the caller's skb on failure:
-> 
-> net/core/skbuff.c:skb_vlan_untag() {
->         ...
->         if (unlikely(!pskb_may_pull(skb, VLAN_HLEN + sizeof(unsigned short))))
->                 goto err_free;
->         ...
-> err_free:
->         kfree_skb(skb);
->         return NULL;
-> }
-> 
-> So on the false return the caller's pointer is dangling, and
-> lan966x_fdma_pci_rx_get_frame() then does:
-> 
->         skb->offload_fwd_mark = 0;
->         skb->dev->stats.rx_bytes += skb->len;
->         skb->dev->stats.rx_packets++;
->         return skb;
-> 
-> with the returned skb going to napi_gro_receive() in
-> lan966x_fdma_pci_napi_poll().
-> 
-> Is the new lower bound in lan966x_fdma_pci_rx_size_fits() wide enough to let
-> this happen? IFH_LEN_BYTES + ETH_HLEN + ETH_FCS_LEN is 46, so a BLOCKL of
-> 46..51 is accepted, and after skb_pull(IFH_LEN_BYTES),
-> skb_trim(skb->len - ETH_FCS_LEN) and eth_type_trans() there are only 0..5
-> bytes left. For a frame with h_proto 0x8100 on a bridged port that has IGMP
-> or MLD redirection enabled, the pskb_may_pull(VLAN_HLEN + 2) inside
-> skb_vlan_untag() then fails and the buffer is freed.
-> 
-> Would it make sense to have lan966x_hw_offload() take a struct sk_buff **,
-> or to have the caller stop using skb once it returns false?
-> 
-> >  static int lan966x_fdma_pci_xmit(struct sk_buff *skb, __be32 *ifh,
-> 
-> [ ... ]
-> 
-> --
-> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909-lan966x-pci-fdma-v6-0-6f48dab9d671%40microchip.com
+ stmmac_xdp_release:
+   netif_tx_disable
+   stmmac_disable_all_queues
+   ...
+   free_dma_desc_resources
+
+A Tx NAPI poll may still be in flight at that point. stmmac_tx_clean()
+takes the Tx queue lock, reaps completed descriptors and wakes the queue
+again when it observes it stopped with enough descriptors available.
+Nothing stops the queue afterwards, so the Tx path resumes while
+free_dma_desc_resources() releases the descriptor rings underneath it.
+
+On non-coherent platforms dma_free_coherent() tears down the vmalloc
+mapping of the descriptors, so the subsequent stmmac_xmit() faults on an
+unmapped address instead of corrupting memory silently.
+
+Disable NAPI first and stop the Tx queues afterwards, which is the order
+already used by __stmmac_release().
+
+The issue can be easily reproduced by:
+
+ 1. Run iperf
+ 2. Run application which opens an AF_XDP/ZC socket
+
+Assisted-by: Claude:claude-opus-5
+Fixes: 77711683a504 ("net: stmmac: ensure tx function is not running in stmmac_xdp_release()")
+Signed-off-by: Kurt Kanzenbach <kurt@linutronix.de>
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index 62c3441911e7..928aa05aa87d 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -7118,15 +7118,15 @@ void stmmac_xdp_release(struct net_device *dev)
+ 	struct stmmac_priv *priv = netdev_priv(dev);
+ 	u8 chan;
+ 
+-	/* Ensure tx function is not running */
+-	netif_tx_disable(dev);
+-
+ 	/* Disable NAPI process */
+ 	stmmac_disable_all_queues(priv);
+ 
+ 	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
+ 		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
+ 
++	/* Ensure tx function is not running */
++	netif_tx_disable(dev);
++
+ 	/* Free the IRQ lines */
+ 	stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
+ 
+
+-- 
+2.47.3
+
