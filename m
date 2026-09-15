@@ -1,77 +1,77 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A80363BB4A
-	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 00:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9631F4634
+	for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 00:20:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789431284; cv=none; b=e2hwCrKeT3zOk8kVch/XPYgck3IyUjIWKhM3O1QbsRm2Wf9VXGfL2/wL/x7u66668uHtCmxy3Si45/aC9za0kn5bwLfe8+x5hmR6dREraWyZU/4CaahYZPXVw2Q5S06jMnFTslqGEPXiOvUGWMxedMySRiu0G3YpSPx4ApqtkFs=
+	t=1789431612; cv=none; b=UmlvhIcfKvojY1DC+lrMjt5Dc76DrVyWRz8ClNjlqH9QKSWVu7ZBwspRn1BDXBaXqtreW5s8boUzd4x9liVE9NXmVmgS6I+axIa2vPoqBX4UoJWX9eF1lub5dcxjls6fAx9+lw4u01OMqSjSx2OEGIymWYVWoVvOD9LdSNGgOqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789431284; c=relaxed/simple;
-	bh=ALZhFssWV/Q2TLE/6QhuCoVqQRYEkkrxBl8CwM9EUtI=;
+	s=arc-20240116; t=1789431612; c=relaxed/simple;
+	bh=DVyF63iH25gJXwTv9c8auzDZ0kdD6ThnlcIhHaZsTnM=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Yy36WpJpiGa6xU6RC7m5yq9LVzhDHAWRESuuMT4iuMZDLgIygPbWTo3t7SdV2FzY2x4S0bJXhITo+oQGTuZWrDZrNMPN20fGuzIYb2pvOdTlflMSMmZu0sQ+PE72sUS6vtQ52W7xStAUxBPB/uuCdaS2B/4muf0D3tmMFf4lcTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QJdETjG7; arc=none smtp.client-ip=209.85.214.176
+	 Content-Type:MIME-Version; b=ROV+R5BhWik+ASaCoxI0IbsepNBFePvfi2/PkAiRQSEf5JJfz2fwASJM3F2ILxlUoQx4wmDbvqcgPBUGCgKlEzN6pOgc90pMs7c9rIWIrkQUe7u0t3eP7VPbGHyQ3cxB/5BKBFlKe5UFI88ZHPfVJQYdszh22/7dJl3izWWnoWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cMMu4QKr; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QJdETjG7"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2dd664da0f5so14893865ad.0
-        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 17:14:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cMMu4QKr"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d91ede8035so30188525ad.3
+        for <bpf@vger.kernel.org>; Mon, 14 Sep 2026 17:20:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789431283; x=1790036083; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789431611; x=1790036411; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=ALZhFssWV/Q2TLE/6QhuCoVqQRYEkkrxBl8CwM9EUtI=;
-        b=QJdETjG7EVbrsUzHbYfxzpFimOqA690B7+CuqQsQUEj9qshoROZ+9AxTF0ViBL66wc
-         8CjdR4EVKSHTcuMIex1pE8Ac7/o7p3Y6k0RKp5/Wsg/q7zy5ooXDrkE66fCN9ThHc0d1
-         cCIsOMaEqm6q58Ui4qxxAsAKdpqJM+n/wVS0/YEMajWgVpP/Uh5hwHZ70raReG+U6egi
-         Pjl9tlGyZjWJIv9LYts9LR3cGxC8pa3riKX+K+6Fq3ubhVLu/d/ltsplIYM7tAH8Fhw9
-         bwczfFumGA1trVcLz3I3HWodCh6gt5cJgrK7IdM/yQMnkvqlKPlNsiGbR1zh/WWCNrVq
-         aojg==
+        bh=DVyF63iH25gJXwTv9c8auzDZ0kdD6ThnlcIhHaZsTnM=;
+        b=cMMu4QKrOvPdQrxOPlsPGVmKhUjdFJM7SKB+uEzb6eb8HXbDdcOitdcOn3qF2zxUm0
+         +2aZZR4KyFe8OD19ZYsNsFy7W3ZpPFwogLBrreirSY35jVmhEskXJ6poj0AKgHKcrLMm
+         KSozYUaIexvHZ8EMzVFi6MsHc5joGFHe+nH4+pFw8OlY6NABSqNb9V96HN6+fRB42Y1U
+         z3I6KfvSgtWzb9mGRREwO/72htdC1rHYzkmeagLrDKe0/3rHbdEvIoWZS+wzGoJQrvtB
+         s6Qf6BD0lGi3KzrtP+1D8GWafWr6RiD7Y2q38u2CB71G3pKxxPJRuCCSVDMwSSXCH7sY
+         YK0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789431283; x=1790036083;
+        d=1e100.net; s=20260707; t=1789431611; x=1790036411;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ALZhFssWV/Q2TLE/6QhuCoVqQRYEkkrxBl8CwM9EUtI=;
-        b=DYz5P1EBIZoXuhYGNXaqiD7AA/J40J3/hll0B/bCl3YbPod/A8QbIAWQpPMgSDJznV
-         wijbC8DWtF8EP/2fZ8vjHZAQszH6qAqxBDSgrud2Ub0xDVoW6jgVs9D7BPY8YY0eAGkR
-         KOnlv/UP0/PKLkYk7hcp4c3Q8g3WhTHGQZnkaT9Tz3XEnT+R4ocQADVqL1cRtPgB/hNW
-         vvcf1rGyarjrltFGq7Gl2xNObqiY4EoPPImhlHfcGbCzI+BLwUzODsqycumXrK2+vtdN
-         /7WS6HnPmQR79xN7FCOfRN9U2iTLc06sJYLHn7QDnLGakNpIw3uH/FpeE9COtCSTgvSi
-         X8dg==
-X-Forwarded-Encrypted: i=1; AKwUvBwa6auRxyWr35UvvWyayWESrON6Fa1/a1E2luvYeSoFtKZT2FwfgNul0rjhmgqNU5nPbSk=@vger.kernel.org
-X-Gm-Message-State: AFuF++l2EYkZiHZ6FFbcH8c6I/pfTH14PCnzXgfhcPSlyKrp45GetqDn
-	mSYznWKdmyABEQocYHPeZtlZsjZufA+9JQ+++GUtxk1Qk+niG8Kf/rT1
-X-Gm-Gg: AYBFou01ArNpe2QOtrLribg5FIXcW2+TFMQnpSYKgL2irc7opDu7gedyCDS+y5nYBsd
-	zNGi+vCGrMEINFFAucs3nn7o14Z9GlHvFQLZWVz3PzEvAj9BcqnsO4pC2BY3i8fDUM006rJKdQJ
-	qRGlmu5Dg+aRd8v5qV2IUhofaOzwYy2UwTnP9uDNeYMei9bNeqsX6dD0QUeSDARdGCNXkQD1TIh
-	BTVzxpQxB7M2nOjE7MpmQUGBTopgKhGOi/FHPBe5Uqupf1nYMWYya7e5j++4LAEEHqG80PCLno0
-	EM0Sr8ZnzDNS4wG1qmgT9mGmmdQA7URl0G5KE1I3h9hOF+BhqLFpt/io/35G/xH/WguSEbhcEJq
-	VCOjPZfW7ZzaEyeoFOXBvTcCqzzlgR7j/aNVU2RREhb3xjuB+A1+K0Nn5/wBmKdXTaGzWlOfEb6
-	RKlO4N+uSla6kxrJy6ikX28N6O0fDLVzhWdPgRIJe/22PsZz2RKjluUVytFH3pQLJ1ld1AmlrIl
-	4C8kEkvJ0ry26ovpBJNCIv0EEw=
-X-Received: by 2002:a17:90b:3850:b0:39d:fcee:8d10 with SMTP id 98e67ed59e1d1-39dfcee8d72mr3406262a91.16.1789431282806;
-        Mon, 14 Sep 2026 17:14:42 -0700 (PDT)
+        bh=DVyF63iH25gJXwTv9c8auzDZ0kdD6ThnlcIhHaZsTnM=;
+        b=mihuRc/lhqQtbtAyROeykc3UenHhnd54Yz3+JqyR/PEKWzTEwLRg7c6RLyER75EOs6
+         1oshH+tdP9QHoxojSxeXJRyYZdYG1zYPf0YVMnbqM2OyCsdcBH6+JvbG6bIcqnCvfyZ4
+         llnotSqyRZAuIaqe7aWqwWJ7ugtOhg1ox/+Qm/AAx6BtzlnHia2foh6Xp3YiB0KQbdBT
+         Qxx4diVGda6LYJ6I8zp2xn59uOq53alrhCoPvzStTaQ+KKh5QqWghjPCHLElJoB6FRVG
+         cSOjqU/wVsMIdQSaPmKa2r5Mj6Tu2Y0T7ldTAWg0uGTUqRfFthZLNkqf/8lL+QDSi/hm
+         MLBw==
+X-Forwarded-Encrypted: i=1; AKwUvBwwqUVvSMbeHo0NYQzX/AuSF3QH75/w+EcLJeq3Pv/27ncS4PluW7RrImdI/cTQOnjxceQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++kwpXo+30NuXvahaGZHCOvT/EpNOU8YvzDJZgNb4zzQZ9IVEuhz
+	ojwNoa2LW9LNPSi7RcxKB96w0bNULA/OasDXHpdWzUpRqi25Fhr9maDAclhyaWOm
+X-Gm-Gg: AYBFou2276yzK6/AYZSOXj2B8AEphy6vv7jC0Ev1976aUzrYpVGtFBT1jQonW1X1wVU
+	623XRm4WOiShdVuOA8Y+tfpt/GUVIef30dqAiOICOxURdDi+GKfZkuVBzK4cAV9zQWyiWnrC81V
+	UgFOaIvlwkMpDYFAMHKCfa4NKHOEdOMA8oxxAPLGSgTbKFeD2dNUD441zfbYYle+3UuLGeCJi8l
+	DA9ueIyyIno3HcsXtDSHDwxBvkAeGqTApZ9j9lwsRQ0s8gV4ZLfJeg2zyxW0pxv+ZHvZUV6zfnT
+	uj5O8r4RjYT35xTCzL0yANGm/JaSld1xLLnsqO1rP89tlAjK0UBZkCPds5kkenIcNCA/x9oLv5M
+	bxy5GJLpAke7+8tGecWAwhJpcYB1Kj75guqQjR5EustFUFYSReHJEAxMP135BQyd3XJNE7hSKvQ
+	8tmFnU0WTTNZum0o/B3KR3g8inZs1nmMgOqOmBMSe16CF8zdaPGRMfX65aMiZxML5QF4BN0Q74/
+	M8qB0hnstAGwifOsemmsVImIl4xgoRpmkn3mg==
+X-Received: by 2002:a17:903:98f:b0:2d8:d4ce:7e40 with SMTP id d9443c01a7336-2dd6c7622e4mr102586575ad.21.1789431610593;
+        Mon, 14 Sep 2026 17:20:10 -0700 (PDT)
 Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39dfdd0baaasm1647896a91.9.2026.09.14.17.14.42
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd4bab2981sm39948235ad.49.2026.09.14.17.20.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Sep 2026 17:14:42 -0700 (PDT)
-Message-ID: <588069c84c51c05461252c76824d0c6c19e83493.camel@gmail.com>
-Subject: Re: [PATCH bpf v2 05/11] bpf: Don't remove indirect jump targets in
- the nop removal pass
+        Mon, 14 Sep 2026 17:20:10 -0700 (PDT)
+Message-ID: <5ecadaeac7399c0a0c19cd5e3d6a16589b4ff9c9.camel@gmail.com>
+Subject: Re: [PATCH bpf v2 06/11] bpf: Clear insn array jitted pointers on
+ map reuse
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Daniel Borkmann <daniel@iogearbox.net>, ast@kernel.org
 Cc: memxor@gmail.com, a.s.protopopov@gmail.com, info@starlabs.sg, 
 	bpf@vger.kernel.org, Sandipan Roy <saroy@redhat.com>, James Burton
 	 <jamesburton@meta.com>
-Date: Mon, 14 Sep 2026 17:14:39 -0700
-In-Reply-To: <20260914170326.249953-6-daniel@iogearbox.net>
+Date: Mon, 14 Sep 2026 17:20:06 -0700
+In-Reply-To: <20260914170326.249953-7-daniel@iogearbox.net>
 References: <20260914170326.249953-1-daniel@iogearbox.net>
-	 <20260914170326.249953-6-daniel@iogearbox.net>
+	 <20260914170326.249953-7-daniel@iogearbox.net>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.2-10+b1 
@@ -83,17 +83,23 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Mon, 2026-09-14 at 19:03 +0200, Daniel Borkmann wrote:
-> bpf_opt_remove_nops() drops every ja +0 and may_goto +0 unconditionally.
-> A gotox target may itself be such a transparent nop: it is a verified
-> entry of an insn array jump table that is reachable at run time through
-> the indirect jump. bpf_insn_array_adjust_after_remove() marks it as
-> INSN_DELETED instead, and bpf_insn_array_ready() skips INSN_DELETED
-> entries, so the program loads with a hole in its jump table. The x86
-> JIT, for example, lowers gotox to a raw indirect jump, so executing
-> that index jumps to the zeroed ips[] slot, that is, to address 0.
-> Fix by keeping an indirect jump target in place.
+> An insn array records, per entry, the xlated offset, the jitted offset an=
+d
+> a jitted target pointer in ips[]. bpf_insn_array_init() runs when the map
+> is bound to a program and resets only xlated_off; the jitted offset and t=
+he
+> ips[] pointer are left as the previous owner set them. A program can be
+> verified and JITed and only then fail to load (e.g. bpf_check_tail_call()=
+).
+> By that point bpf_prog_update_insn_ptrs() has already filled ips[] with
+> pointers into that program's JIT image. Thus, the map is handed back for
+> reuse with the stale pointers intact. If the next program reuses the map,
+> the stale pointer survived the now active program's jump table, pointing
+> into the previous, freed image. Fix by resetting the jitted offset and th=
+e
+> ips[] pointer alongside the xlated offset.
 >=20
-> Fixes: 493d9e0d6083 ("bpf, x86: add support for indirect jumps")
+> Fixes: b4ce5923e780 ("bpf, x86: add new map type: instructions array")
 > Reported-by: Sandipan Roy <saroy@redhat.com>
 > Reported-by: James Burton <jamesburton@meta.com>
 > Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
