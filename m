@@ -1,171 +1,191 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F7AE47DD43;
-	Tue, 15 Sep 2026 08:46:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A170732B137;
+	Tue, 15 Sep 2026 08:54:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789462001; cv=none; b=qMdoRTFJu/js0q5PrnSi7qwwTd8FKo5ADk99/UzoGm9wR3JrP4gEUoFjnpHO+givUn4n1ePY42Dbh5cAcFVc2wEF3Nx+4+OvoO1v3YKakAJOHTowQ+RVndW8mbRwXy1FU1BJCWR0RFvsi+2xMHt+YJcDMgZ0NAcsZaFJGcY2uYI=
+	t=1789462493; cv=none; b=CahxOF2gOtCdWcdORpkLRHgL1EddQ+liohPl0hk91oT0SkxuY+iHB1N8t3f5IZKS5guSWg1Zy9K5OCRnvyiGEwRo+TVWOZKK74+DgvN9405imZ77M+duZE7ZF6P8Ys1Uyt7FUErsfl3lLmXFRDNc9PW55PxfasJ7fUlrE0Jx8Hw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789462001; c=relaxed/simple;
-	bh=U2krMe59EsC15c6J/59hPpXJY0KadgNNGmoRNlckwVI=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Tl2Og3PtUa5SmYpEOGTkntnLXNNslJpzgpsisiz2E5bGY+17fyW04clcUOXmSBwNQn5w+RWDR4olWZMQZJaCVIhMX5WUXBCg9Pn3YTQiDyvFGbqZ+w7lvMj7E0XsgdZy28YhINCnmW+W3UZh/BcNtoT9OnODUlW2qMixsm5BFOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OpHLHK+p; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789462493; c=relaxed/simple;
+	bh=g/XQZFRhvArqwyhYQQsYV1oxzReIaJfAkZh939ydge0=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sEsKnPdyPGAYTNshOkUkTDU4PipudXr+9hBMQ6ZOmKTVnRP2PoiTiRVOM8J0e2eS56p8r2+rKlEAHjAU0xjqhpWKsGv6vpOcJ/emJdt2eSmaKE3rcuR2mn2cD5fRNgDk8JKHJGTux8zK4YmhhkF2nM1WNOkkhz9wPhM+4h9ux4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=ozfiu/qA; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OpHLHK+p"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B5481F000FF;
-	Tue, 15 Sep 2026 08:46:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789462000;
-	bh=TytNrS46T1t0R7A5C9IYc5jnBPcfnQfdjIySCgQwjss=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=OpHLHK+pixnWMy/MApW0jUL237P9+RB9PGBsup9LcCZl/g87iBbIpv7bqsbL0Nthv
-	 bREtzBwQ1A3deQnzHgTK90RZb7o+MKXjp3jAlS3NCz5/FCboq6f9H9gGleTQVYhmGa
-	 mp3U+ZIQ3SlPKzBQ9qLIfZR3UuW4+ZpUvVe8MxNm6XpeMFD3AAVHa7B5859MfN9f0m
-	 tyi2BDo7pJnXPembrGs75eZNCKolf6RojKBslWA4O5FThUMToq/YIOX/hW95+1Z8K9
-	 AlU+IosOQdbGJaS0igYIo79FJ8+DEqEmmPqqDxy/RE1f5F3DSR9TocCL79Escrfdsh
-	 bIKm/2m7zFj1Q==
-Content-Type: multipart/mixed; boundary="===============0633404650045652649=="
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="ozfiu/qA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1789462492; x=1820998492;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=g/XQZFRhvArqwyhYQQsYV1oxzReIaJfAkZh939ydge0=;
+  b=ozfiu/qA9i+bUT2LT1IbFprxUsdEcL/AKUXj3vv/DJ5y5lQAQ+ZNLiUB
+   VzLk4nh3V/fbLJ/5VPN+zH7e+vGIdj4VAOd4zQVCwIwj76MVbuZFPKMB0
+   4VLWiGUu7ddQW4uNRSXU5UGMWc4DOvXQ7YqLBJfZdC1z0Qt6MmwkllRvJ
+   /+qwU8V/ChNNuPvfn1S1zAdoCN/8Yg33tYBOBSWe5lwCcn2ED78JiDzJn
+   oU/IZF8sU1erwt3Xk/YGaHZmqpLOT3kEtaGaZKlwKef+JNve/00JUPX/7
+   ych/VfXWc5kVtgQGDJnD9G1SoKyUkUM1Sj0JF6wc8mbadJzzDdLtRROqq
+   g==;
+X-CSE-ConnectionGUID: BntAm97SSBGPRL8iNTiP5w==
+X-CSE-MsgGUID: 3Byspm3MRBS9EZyigKLLFA==
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="63612037"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2026 01:54:51 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.87.71) by
+ chn-vm-ex2.mchp-main.com (10.10.87.31) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.45; Tue, 15 Sep 2026 01:54:49 -0700
+Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Tue, 15 Sep 2026 01:54:46 -0700
+Date: Tue, 15 Sep 2026 10:54:45 +0200
+From: Daniel Machon <daniel.machon@microchip.com>
+To: <netdev-bot+sashiko@kernel.org>
+CC: <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, <horatiu.vultur@microchip.com>,
+	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
+	<ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
+	<john.fastabend@gmail.com>, <sdf@fomichev.me>, <herve.codina@bootlin.com>,
+	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <mohsin.bashr@gmail.com>,
+	<richardcochran@gmail.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next v6 10/14] net: lan966x: add PCIe FDMA support
+Message-ID: <20260915085445.sajcj75jexgkkrvj@DEN-DL-M70577.microsemi.net>
+References: <20260909-lan966x-pci-fdma-v6-10-6f48dab9d671@microchip.com>
+ <178904554750.219967.2010862453597890441@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d10e522c569e205e0bf60b3b7bc9ef27fd7ed88a9cef88f6932d85ead26d7224@mail.kernel.org>
-In-Reply-To: <20260915081023.7433-1-ahemadkhawar123@gmail.com>
-References: <20260915081023.7433-1-ahemadkhawar123@gmail.com>
-Subject: Re: [PATCH bpf-next v6] xsk: Fix circular locking dependency between &net->xdp.lock, &xs->mutex, and netdev_lock_ops
-From: bot+bpf-ci@kernel.org
-To: ahemadkhawar123@gmail.com,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,magnus.karlsson@intel.com,maciej.fijalkowski@intel.com,sdf@fomichev.me,ast@kernel.org,daniel@iogearbox.net,hawk@kernel.org,john.fastabend@gmail.com,kuba@kernel.org,pabeni@redhat.com,edumazet@google.com,horms@kernel.org,syzbot+aa48b5fe7bfda62d1682@syzkaller.appspotmail.com
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 15 Sep 2026 08:46:39 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <178904554750.219967.2010862453597890441@kernel.org>
 
---===============0633404650045652649==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+> Thank you for your contribution! Sashiko AI review found 4 potential
+> issue(s) to consider:
+> 
+> Critical: 0 · High: 0 (1) · Medium: 1 (1) · Low: 3
+> 
+> - [Medium] DISCARDED — fixed later in the series.
+> - [Low] DISCARDED — fixed later in the series.
+> - [Low] DISCARDED — fixed later in the series.
+> - [Low] DISCARDED — fixed later in the series.
+> 
+> Pre-existing issues:
+> - [High] Use-after-free in the new PCIe receive path:
+>   `lan966x_fdma_pci_rx_get_frame()`…
+> - [Medium] DISCARDED — pre-existing shared-library ordering weakness.
+> 
+> --
+> 
+> net: lan966x: add PCIe FDMA support
+> 
+> Adds a second FDMA backend for lan966x used when the switch is reached over
+> PCIe, using contiguous ATU-mapped DMA buffers and memcpy-based frame
+> transfer instead of per-page mappings. XDP and PTP are not advertised or
+> allowed on this path.
+> 
+> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
+> > new file mode 100644
+> > index 000000000000..f1f3c789d3a6
+> > --- /dev/null
+> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
+> > @@ -0,0 +1,404 @@
+> 
+> [ ... ]
+> 
+> > +/* Return true if blockl is a valid RX frame size. */
+> > +static bool lan966x_fdma_pci_rx_size_fits(struct fdma *fdma, u32 blockl)
+> > +{
+> > +     return blockl >= IFH_LEN_BYTES + ETH_HLEN + ETH_FCS_LEN &&
+> > +            blockl <= fdma->db_size - XDP_PACKET_HEADROOM;
+> > +}
+> 
+> [ ... ]
+> 
+> > +     skb->protocol = eth_type_trans(skb, skb->dev);
+> > +
+> > +     if (lan966x->bridge_mask & BIT(src_port)) {
+> > +             skb->offload_fwd_mark = 1;
+> > +
+> > +             skb_reset_network_header(skb);
+> > +             if (!lan966x_hw_offload(lan966x, src_port, skb))
+> > +                     skb->offload_fwd_mark = 0;
+> > +     }
+> > +
+> > +     skb->dev->stats.rx_bytes += skb->len;
+> > +     skb->dev->stats.rx_packets++;
+> > +
+> > +     return skb;
+> > +}
+> 
+> [Severity: High]
+> This isn't a bug introduced by this patch - lan966x_fdma_rx_get_frame() in
+> lan966x_fdma.c has the same caller pattern - but can lan966x_fdma_pci_rx_get_frame()
+> touch skb after lan966x_hw_offload() has already freed it?
 
-> syzbot reported a circular locking dependency involving &net->xdp.lock,
-> &port->pnodes_lock, netdev_lock_ops(), and &xs->mutex:
->
-> -> #3 (&net->xdp.lock):
->        xsk_notifier+0x3d/0x2c0 net/xdp/xsk.c:2106
->        ipvlan_device_event+0x310/0x4e0 drivers/net/ipvlan/ipvlan_main.c:834
->        unregister_netdevice_many_notify+0x808/0x18b0 net/core/dev.c:12518
->
-> -> #2 (&port->pnodes_lock):
->        ipvlan_device_event+0x85/0x4e0 drivers/net/ipvlan/ipvlan_main.c:795
->        notifier_call_chain+0xb5/0x410 kernel/notifier.c:85
+Yes, but pre-existing. I think this deserves a proper fix through net and
+updates for all callers.
 
-Does the commit message accurately describe the #2 lock acquisition?
-
-The syzbot report shows the #2 acquisition of pnodes_lock comes from the
-bonding/features path (NETDEV_FEAT_CHANGE event triggering
-netdev_compute_master_upper_features), not from device unregistration.
-The #3 stack shows unregister calling into ipvlan_device_event, but
-that's a different event path.
-
-> The cycle exists through the following dependency chain:
-> 1. xsk_bind() acquired netdev_lock_ops() while holding &xs->mutex (#1).
-> 2. Device unregistration in ipvlan_device_event() acquired
->    &port->pnodes_lock (#2) and called xsk_notifier(), which acquired
->    &net->xdp.lock (#3).
-> 3. Both xsk_diag_dump() and xsk_notifier() acquire &xs->mutex while
->    holding &net->xdp.lock (#0).
-
-How does this enumeration form a cycle?
-
-The enumerated items describe edges:
-  #0 -> #1: xs->mutex -> netdev_lock
-  #2 -> #3: pnodes_lock -> xdp.lock
-  #3 -> #0: xdp.lock -> xs->mutex
-
-To close the cycle, we need the netdev_lock -> pnodes_lock edge (#1 -> #2),
-but this edge is never mentioned in the enumeration. Without that fourth
-edge, the description doesn't actually describe a complete cycle. The syzbot
-report does contain this edge (via the bonding/features path in frame #2),
-but the commit message omits it from the enumeration.
-
-Could the commit message be clarified to explicitly state all four edges
-that form the cycle?
-
-[ ... ]
-
-> Reported-by: syzbot+aa48b5fe7bfda62d1682@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=aa48b5fe7bfda62d1682
-
-Is it appropriate to use the Closes tag here?
-
-The syzbot dashboard shows this bug was already fixed by commit a8455260b2e9
-("ipvlan: unregister upper devices outside pnodes_lock"), which removed the
-pnodes_lock -> net->xdp.lock edge on the ipvlan side. That commit is present
-in this tree at drivers/net/ipvlan/ipvlan_main.c:899-902.
-
-Using the Closes tag on a redundant patch may cause syzbot and patchwork to
-misattribute the fix to this commit instead of the actual fix.
-
-Additionally, Maciej Fijalkowski informed you in v5 that they had already
-fixed the issue on the ipvlan side:
-
-  https://lore.kernel.org/bpf/DM4PR11MB6117332DE5BD8408848E453D82B72@DM4PR11MB6117.namprd11.prod.outlook.com/
-
-  "We went with fixing ipvlan side instead:
-   https://lore.kernel.org/netdev/20260828164918.451364-1-maciej.fijalkowski@intel.com/
-
-   Forgot to CC you, sorry about that."
-
-Does this XSK patch still serve a purpose given the ipvlan fix has already
-resolved the reported issue?
-
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index 33475b180ea6..b7072092cc51 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -1636,20 +1636,22 @@ static int xsk_bind(struct socket *sock, struct sockaddr_unsized *addr, int addr
->  		return -EINVAL;
->
->  	rtnl_lock();
-> +
-> +	dev = dev_get_by_index(sock_net(sk), sxdp->sxdp_ifindex);
-> +	if (dev)
-> +		netdev_lock_ops(dev);
-> +
->  	mutex_lock(&xs->mutex);
-
-[ ... ]
-
-> @@ -1786,18 +1788,20 @@ static int xsk_bind(struct socket *sock, struct sockaddr_unsized *addr, int addr
->  	}
->
->  out_unlock:
-> -	if (err) {
-> -		dev_put(dev);
-> -	} else {
-> +	if (!err) {
->  		/* Matches smp_rmb() in bind() for shared umem
->  		 * sockets, and xsk_is_bound().
->  		 */
->  		smp_wmb();
->  		WRITE_ONCE(xs->state, XSK_BOUND);
->  	}
-> -	netdev_unlock_ops(dev);
->  out_release:
->  	mutex_unlock(&xs->mutex);
-> +	if (dev) {
-> +		netdev_unlock_ops(dev);
-> +		if (err)
-> +			dev_put(dev);
-> +	}
->  	rtnl_unlock();
->  	return err;
->  }
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/34946645726
---===============0633404650045652649==--
+> 
+> lan966x_hw_offload() replaces the buffer and reports only a boolean:
+> 
+> drivers/net/ethernet/microchip/lan966x/lan966x_main.c:lan966x_hw_offload() {
+>         ...
+>         if (eth_type_vlan(skb->protocol)) {
+>                 skb = skb_vlan_untag(skb);
+>                 if (unlikely(!skb))
+>                         return false;
+>         }
+>         ...
+> }
+> 
+> and skb_vlan_untag() frees the caller's skb on failure:
+> 
+> net/core/skbuff.c:skb_vlan_untag() {
+>         ...
+>         if (unlikely(!pskb_may_pull(skb, VLAN_HLEN + sizeof(unsigned short))))
+>                 goto err_free;
+>         ...
+> err_free:
+>         kfree_skb(skb);
+>         return NULL;
+> }
+> 
+> So on the false return the caller's pointer is dangling, and
+> lan966x_fdma_pci_rx_get_frame() then does:
+> 
+>         skb->offload_fwd_mark = 0;
+>         skb->dev->stats.rx_bytes += skb->len;
+>         skb->dev->stats.rx_packets++;
+>         return skb;
+> 
+> with the returned skb going to napi_gro_receive() in
+> lan966x_fdma_pci_napi_poll().
+> 
+> Is the new lower bound in lan966x_fdma_pci_rx_size_fits() wide enough to let
+> this happen? IFH_LEN_BYTES + ETH_HLEN + ETH_FCS_LEN is 46, so a BLOCKL of
+> 46..51 is accepted, and after skb_pull(IFH_LEN_BYTES),
+> skb_trim(skb->len - ETH_FCS_LEN) and eth_type_trans() there are only 0..5
+> bytes left. For a frame with h_proto 0x8100 on a bridged port that has IGMP
+> or MLD redirection enabled, the pskb_may_pull(VLAN_HLEN + 2) inside
+> skb_vlan_untag() then fails and the buffer is freed.
+> 
+> Would it make sense to have lan966x_hw_offload() take a struct sk_buff **,
+> or to have the caller stop using skb once it returns false?
+> 
+> >  static int lan966x_fdma_pci_xmit(struct sk_buff *skb, __be32 *ifh,
+> 
+> [ ... ]
+> 
+> --
+> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260909-lan966x-pci-fdma-v6-0-6f48dab9d671%40microchip.com
