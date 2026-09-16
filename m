@@ -1,56 +1,56 @@
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D176C4B95CA
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 16:55:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EADD7390CAA
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 16:55:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789577764; cv=none; b=Cb0FCxcYo3df2mwRpsARplyVfzYNugJAT5iPwKZjzNzRngc5dhNk+7IPrSjI09DTLUhULEgE8DtGlQT5uI+JqjF1tDOFfS0cgOUl9ov7XxcTV62YLsFZO+FXQCXFW3qnJev1CyzVdW5MmRTGPQSQZoXOx3hhWYYGsi68u4OyOBQ=
+	t=1789577766; cv=none; b=eRMCZvoNVjL3l0wZ7HJQz7tbm3UoDHWMAKwjMFZXAyrMk2c2dHCQAn82wDYmfSkZ/rIoRViXavKHoxWP6ITGeDpe5SMFhwP1rT0QtSBMFxn9UQ0u/wKJivH3DscJ6mwPfbHE+H0XZxWdMiSQViYeFKiouLfaPiFC+wM0s3N7Q7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789577764; c=relaxed/simple;
-	bh=3uGMboz1Pgmplc2RlL278rpVmCt0CANAGD0bcA+7Pik=;
+	s=arc-20240116; t=1789577766; c=relaxed/simple;
+	bh=Ydw7ZaA/WV3riMeBIIVnaidrU5iwmZoDa1UzoTW/8Qw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=EFbuil/OmQ7twJavZDxt5TAR126ekYFDoOtQnCF5FN4hbDdAMf2F/qjfjmjF6TY2OTFzeJXeJT7OI8BJF9OjV5PgKwXk9QhpD3+Y7nZzK83PdQC7Q8h6xi0NdHrrEVVBpW5n3l45t6AB/fx5Y+KFMq3K3WT0l5T2DaEs0kkrfqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qRb4j1C9; arc=none smtp.client-ip=209.85.210.198
+	 To:Cc:Content-Type; b=mdtDVRUe5PEkag+4OQ/hHZmtWQSA1HpwPZ8ZfeW7/TMW4zQYqnDwmiFsFny/HcfTql+nC9tiOYZqmOxkePW5HFZzVi3W2ujdVgKo9uf8bDZLE1RZZCgL195QtTgB+9C4HK2KsTyPtenvZK51POP9xWfjbEgYeOsDuBHfQNenNmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=an9zikE4; arc=none smtp.client-ip=209.85.215.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qRb4j1C9"
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-8663802b58fso6384200b3a.2
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 09:55:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="an9zikE4"
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cc1b6f65dacso5178619a12.1
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 09:55:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789577742; x=1790182542; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1789577750; x=1790182550; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=/SS4ZfmpbBCRoFnRHTqV7Zo/CVi0PZexsbDnOi1Rx0E=;
-        b=qRb4j1C9OR0zvqO0xGu551J6+F/FcI1ASXPbcaz78nkKgYU3xSL4OoCSxaIh0rize4
-         jRI4sjzK5Fdima0aR/lwKgRCUY5yH0dnZjfvPM+nnho8mdn1ns72hVGgTNhMy3+kx7X5
-         n9d9nKO8McIZLah6c5WBfZIM2W/jItXLcCYhG5kV8HPZteN9WVnXJtQUZwtRIgZGu+wb
-         NcLBc9rwGm4asZLKVQdy/rolCh6oi/DFlJ7IGYYyyO4NicTAWT4jWpPfsv3zCvLH7Ayn
-         AZxhSi3w0uXo6yqtc2+M2XiyBg7DIEPwzlvGBrofz1/f4t+Y+Jmi10+0PHRXoinnqCRK
-         wgMA==
+        bh=YQUhzpPMROiHGHaDEXlmeSXFoSLSS7wE418I/pFWYyE=;
+        b=an9zikE4V+8VRFlgYM7goxIN7qOgvOMDd5WL8ei6N8kODjRXEKD0dpxMCFSSJYitos
+         4fSb/hQoerHmnbZjYrUloIZIrrAQerbxYZJP/ExwlsJO2w87t30CKO3IsTcN8tLHGHkT
+         tv83QIpjV8QgGl8WLwxcEgNRTBlvoCiM5xTH20LPOcYRLxMDoKfDOo+U0YwoRoNtox4k
+         jKk+N4U8faaySdBlZCrg5o4Zy1XVoLnzShqDJi4dOAAUziXzwdkK91z7XFa6AJr9WE23
+         4vuZaPuJGc0u3QA1+u+EOpgYhvLedzqRw9I7omT0ziTqD50YCf9ejJYaGEEVWNt1fxwd
+         VOYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789577742; x=1790182542;
+        d=1e100.net; s=20260707; t=1789577750; x=1790182550;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=/SS4ZfmpbBCRoFnRHTqV7Zo/CVi0PZexsbDnOi1Rx0E=;
-        b=QWtypQhcXUAWx5PQzWjSKzo/Dbfbnp14tL9iL1/MnKmgoge2iw7FA0bpZxOELkQtWN
-         JYrJxUySkZA4zuelJnTgxATajGgelsIl3KN0JETNaohy+K94VrrG5WLAOQIwvESIunV/
-         AUTxD3aZB9AgyX/529BK5OmRhzcAX5DVdDqQYw8YeLjNAfJ+NPbKGUQDEkqkTDr4Dvxi
-         59a8BjIt9G4TcbTKtLy22Z8s8xJyYEb+Bj4jmlrnijattkFoPvL0jT+KuKkdB4qtHnze
-         Gg+MnF+00AUZB1pxl0RGa7sCv89rJnwEsdDW7DbyrD3gF7YwuVZ8CLl2FoZeNCpKiwH2
-         CHow==
-X-Forwarded-Encrypted: i=1; AKwUvBw/+wbg4qOQCGt2BxBPsqtPb0ZKrwXERn/9kh6gE6xEVFK/0YGeI080G5Tx7Safm8/XGpU=@vger.kernel.org
-X-Gm-Message-State: AFuF++naULJw6FqJO9dMwunbK35W/wfpKkmyfWfvIBCQ+H32BwODPsES
-	bdNVm5fEUDJSonRDmcPwZNBVXGF3NoA9Gym98ZYrgjRnWdS+8cDbrd2fmrBfwOltKM9g5upgGwM
-	4HY1tiTBhuviK0nUsRwJM1H0YtQ==
-X-Received: from pfbjf14.prod.google.com ([2002:a05:6a00:6e4e:b0:84a:3ba8:3bf2])
+        bh=YQUhzpPMROiHGHaDEXlmeSXFoSLSS7wE418I/pFWYyE=;
+        b=Be6+1uu5TXLZxKYKm6iE7ZPUyrCoygpVfeLVn7glIDK3rtohxtOk2JkSfgQ5H3E7f2
+         e1Lwj3T8UhmKzjwREg9RBO374JpBnBeTZ8OU5kjE3xUsRdFv4w0XkyryCOKscpAowA/y
+         HAsxFdBz6U6I8sGWKQ2LKBhuqTkg9Zf2WfVjSkeLS1HqAUonXzELKxJRJMiNBa7fEvX7
+         EcCemZA7Xr2Sxv2wFM2mOivowOm75lQoIJBnNGyFVFo0blNZkgiFE1UWPZwH3+JgiP+k
+         ilKR4oTCf0R8HjHIpSFr5igeSmMu5+NeI5mTuMilDM3J1/fah4LwaTjcdPCpz3QgfHtG
+         No7g==
+X-Forwarded-Encrypted: i=1; AKwUvBw5pm15hWrvaVa0EBE8+0mZwoJTb1rjR2W0mMyX+tY6TLpsxEEETHLSKztAse5nA+gYPd8=@vger.kernel.org
+X-Gm-Message-State: AFuF++nHPrrODpFFL0Exv9M262cbwa41cyR+lHHy4Setc+CEYrWTvgMP
+	jjnbf802Qqj/PptNO0f+i+JWZ9rdDMRmWRxsq1OvyftFd0uN+Z0+P1qeCN6+aLtBN0ezY4O3lNY
+	ZiyZUpFnu/U3ZUuj4VpMKQYra9w==
+X-Received: from pgbm11-n2.prod.google.com ([2002:a05:6a02:618b:20b0:cc4:329b:591a])
  (user=hramamurthy job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:1a8b:b0:871:b921:6f44 with SMTP id d2e1a72fcca58-8723878b9ecmr6632206b3a.12.1789577741795;
- Wed, 16 Sep 2026 09:55:41 -0700 (PDT)
-Date: Wed, 16 Sep 2026 16:55:25 +0000
+ 2002:a05:6a20:4307:b0:3dd:5844:c95e with SMTP id adf61e73a8af0-3dd5f7b07ebmr7872445637.27.1789577749298;
+ Wed, 16 Sep 2026 09:55:49 -0700 (PDT)
+Date: Wed, 16 Sep 2026 16:55:33 +0000
 In-Reply-To: <20260916165533.2187434-1-hramamurthy@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -60,8 +60,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260916165533.2187434-1-hramamurthy@google.com>
 X-Mailer: git-send-email 2.55.0.1082.g2b9226bbc0-goog
-Message-ID: <20260916165533.2187434-5-hramamurthy@google.com>
-Subject: [PATCH net-next v7 04/12] gve: introduce gve_adminq_get_device_properties()
+Message-ID: <20260916165533.2187434-13-hramamurthy@google.com>
+Subject: [PATCH net-next v7 12/12] gve: add link status/speed ctrl ops
 From: Harshitha Ramamurthy <hramamurthy@google.com>
 To: netdev@vger.kernel.org
 Cc: joshwash@google.com, hramamurthy@google.com, andrew+netdev@lunn.ch, 
@@ -74,221 +74,197 @@ Cc: joshwash@google.com, hramamurthy@google.com, andrew+netdev@lunn.ch,
 	przemyslaw.kitszel@intel.com
 Content-Type: text/plain; charset="UTF-8"
 
-Introduce gve_adminq_get_device_properties() which executes the first
-two Adminq commands: VERIFY_DRIVER_COMPATIBILITY and DESCRIBE_DEVICE
-so that this can be called during initialization.
+From: Joshua Washington <joshwash@google.com>
 
-Move these to Adminq specific files. This is just code movement, no
-functional change.
+Refactor link status check to use a control plane op. Introduce
+new op for retrieving the link status in AQ mode. This op reads
+the link status from the device status register and stores the
+value in priv.
+
+Also add an op for retrieving link speed in AQ mode which calls into
+gve_adminq_report_link_speed.
 
 Reviewed-by: Willem de Bruijn <willemb@google.com>
 Reviewed-by: Jordan Rhee <jordanrhee@google.com>
 Reviewed-by: Przemek Kitszel <przemyslaw.kitszel@intel.com>
+Signed-off-by: Joshua Washington <joshwash@google.com>
 Signed-off-by: Harshitha Ramamurthy <hramamurthy@google.com>
 ---
-v5:
-- Place the utsname.h and version.h header files only where needed
-- drop uneccessary __maybe_unused (Sashiko)
-
 v3:
-- move patch down so that the function is introduced just before usage
-- mark function as maybe_unused
-- update commit message
+  - Fix kdoc typo ("set link status" -> "set link speed")
+  - Copy link status into local variable instead of reading twice to
+    prevent TOCTOU issue
 
- drivers/net/ethernet/google/gve/gve_adminq.c | 68 ++++++++++++++++++--
- drivers/net/ethernet/google/gve/gve_adminq.h |  5 +-
- drivers/net/ethernet/google/gve/gve_main.c   | 47 +-------------
- 3 files changed, 65 insertions(+), 55 deletions(-)
+ drivers/net/ethernet/google/gve/gve.h         |  5 ++++
+ drivers/net/ethernet/google/gve/gve_adminq.c  | 10 +++++++
+ drivers/net/ethernet/google/gve/gve_adminq.h  |  1 +
+ drivers/net/ethernet/google/gve/gve_ethtool.c |  3 +--
+ drivers/net/ethernet/google/gve/gve_main.c    | 26 ++++++++++++-------
+ 5 files changed, 33 insertions(+), 12 deletions(-)
 
+diff --git a/drivers/net/ethernet/google/gve/gve.h b/drivers/net/ethernet/google/gve/gve.h
+index 00966b6a730f..b7ce6e8632db 100644
+--- a/drivers/net/ethernet/google/gve/gve.h
++++ b/drivers/net/ethernet/google/gve/gve.h
+@@ -845,6 +845,8 @@ struct gve_device_info {
+  * @reset_flow_rules: Flush all flow rules from device
+  * @create_queues: Sends commands to the device to create TX/RX queues.
+  * @destroy_queues: Sends commands to the device to destroy TX/RX queues.
++ * @report_link_status: Set link status into @priv->link_up
++ * @report_link_speed: Set link speed into @priv->link_speed
+  */
+ struct gve_ctrl_ops {
+ 	int (*map_db_bar)(struct gve_priv *priv);
+@@ -865,6 +867,8 @@ struct gve_ctrl_ops {
+ 	int (*reset_flow_rules)(struct gve_priv *priv);
+ 	int (*create_queues)(struct gve_priv *priv);
+ 	int (*destroy_queues)(struct gve_priv *priv);
++	int (*report_link_status)(struct gve_priv *priv);
++	int (*report_link_speed)(struct gve_priv *priv);
+ };
+ 
+ struct gve_priv {
+@@ -966,6 +970,7 @@ struct gve_priv {
+ 
+ 	/* Gvnic device link speed from hypervisor. */
+ 	u64 link_speed;
++	bool link_up;
+ 	bool up_before_suspend; /* True if dev was up before suspend */
+ 
+ 	bool mgmt_irq_requested;
 diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
-index 046155ae7d66..f420a8e1dd3d 100644
+index 450341b70968..0e45d885e4ea 100644
 --- a/drivers/net/ethernet/google/gve/gve_adminq.c
 +++ b/drivers/net/ethernet/google/gve/gve_adminq.c
-@@ -6,6 +6,8 @@
+@@ -1841,3 +1841,13 @@ int gve_adminq_create_queues(struct gve_priv *priv)
  
- #include <linux/etherdevice.h>
- #include <linux/pci.h>
-+#include <linux/utsname.h>
-+#include <linux/version.h>
- #include "gve.h"
- #include "gve_adminq.h"
- #include "gve_register.h"
-@@ -1143,6 +1145,27 @@ int gve_adminq_describe_device(struct gve_priv *priv)
  	return err;
  }
- 
-+int gve_adminq_get_device_properties(struct gve_priv *priv)
++
++int gve_adminq_report_link_status(struct gve_priv *priv)
 +{
-+	int err;
++	u32 status;
 +
-+	err = gve_adminq_verify_driver_compatibility(priv);
-+	if (err) {
-+		dev_err(&priv->pdev->dev,
-+			"Could not verify driver compatibility: err=%d\n", err);
-+		return err;
-+	}
-+
-+	/* Get the initial information we need from the device */
-+	err = gve_adminq_describe_device(priv);
-+	if (err) {
-+		dev_err(&priv->pdev->dev,
-+			"Could not get device information: err=%d\n", err);
-+		return err;
-+	}
++	status = ioread32be(&priv->reg_bar0->device_status);
++	WRITE_ONCE(priv->link_up,
++		   !!(GVE_DEVICE_STATUS_LINK_STATUS_MASK & status));
 +	return 0;
 +}
-+
- int gve_adminq_register_page_list(struct gve_priv *priv,
- 				  struct gve_queue_page_list *qpl)
- {
-@@ -1205,20 +1228,53 @@ int gve_adminq_report_stats(struct gve_priv *priv, u64 stats_report_len,
- 	return gve_adminq_execute_cmd(priv, &cmd);
- }
- 
--int gve_adminq_verify_driver_compatibility(struct gve_priv *priv,
--					   u64 driver_info_len,
--					   dma_addr_t driver_info_addr)
-+int gve_adminq_verify_driver_compatibility(struct gve_priv *priv)
- {
-+	struct gve_driver_info *driver_info;
- 	union gve_adminq_command cmd;
-+	dma_addr_t driver_info_bus;
-+	int err;
-+
-+	driver_info = dma_alloc_coherent(&priv->pdev->dev,
-+					 sizeof(struct gve_driver_info),
-+					 &driver_info_bus, GFP_KERNEL);
-+	if (!driver_info)
-+		return -ENOMEM;
-+
-+	*driver_info = (struct gve_driver_info) {
-+		.os_type = 1, /* Linux */
-+		.os_version_major = cpu_to_be32(LINUX_VERSION_MAJOR),
-+		.os_version_minor = cpu_to_be32(LINUX_VERSION_SUBLEVEL),
-+		.os_version_sub = cpu_to_be32(LINUX_VERSION_PATCHLEVEL),
-+		.driver_capability_flags = {
-+			cpu_to_be64(GVE_DRIVER_CAPABILITY_FLAGS1),
-+			cpu_to_be64(GVE_DRIVER_CAPABILITY_FLAGS2),
-+			cpu_to_be64(GVE_DRIVER_CAPABILITY_FLAGS3),
-+			cpu_to_be64(GVE_DRIVER_CAPABILITY_FLAGS4),
-+		},
-+	};
-+	strscpy(driver_info->os_version_str1, utsname()->release,
-+		sizeof(driver_info->os_version_str1));
-+	strscpy(driver_info->os_version_str2, utsname()->version,
-+		sizeof(driver_info->os_version_str2));
- 
- 	memset(&cmd, 0, sizeof(cmd));
- 	cmd.opcode = cpu_to_be32(GVE_ADMINQ_VERIFY_DRIVER_COMPATIBILITY);
- 	cmd.verify_driver_compatibility = (struct gve_adminq_verify_driver_compatibility) {
--		.driver_info_len = cpu_to_be64(driver_info_len),
--		.driver_info_addr = cpu_to_be64(driver_info_addr),
-+		.driver_info_len = cpu_to_be64(sizeof(struct gve_driver_info)),
-+		.driver_info_addr = cpu_to_be64(driver_info_bus),
- 	};
- 
--	return gve_adminq_execute_cmd(priv, &cmd);
-+	err = gve_adminq_execute_cmd(priv, &cmd);
-+
-+	/* It's ok if the device doesn't support this */
-+	if (err == -EOPNOTSUPP)
-+		err = 0;
-+
-+	dma_free_coherent(&priv->pdev->dev,
-+			  sizeof(struct gve_driver_info),
-+			  driver_info, driver_info_bus);
-+	return err;
- }
- 
- int gve_adminq_report_link_speed(struct gve_priv *priv)
 diff --git a/drivers/net/ethernet/google/gve/gve_adminq.h b/drivers/net/ethernet/google/gve/gve_adminq.h
-index ed3504853908..2ab68c822e22 100644
+index d696e4932a8b..8daac5fd685a 100644
 --- a/drivers/net/ethernet/google/gve/gve_adminq.h
 +++ b/drivers/net/ethernet/google/gve/gve_adminq.h
-@@ -640,9 +640,8 @@ int gve_adminq_register_page_list(struct gve_priv *priv,
- int gve_adminq_unregister_page_list(struct gve_priv *priv, u32 page_list_id);
- int gve_adminq_report_stats(struct gve_priv *priv, u64 stats_report_len,
+@@ -643,6 +643,7 @@ int gve_adminq_report_stats(struct gve_priv *priv, u64 stats_report_len,
  			    dma_addr_t stats_report_addr, u64 interval);
--int gve_adminq_verify_driver_compatibility(struct gve_priv *priv,
--					   u64 driver_info_len,
--					   dma_addr_t driver_info_addr);
-+int gve_adminq_verify_driver_compatibility(struct gve_priv *priv);
-+int gve_adminq_get_device_properties(struct gve_priv *priv);
+ int gve_adminq_verify_driver_compatibility(struct gve_priv *priv);
+ int gve_adminq_get_device_properties(struct gve_priv *priv);
++int gve_adminq_report_link_status(struct gve_priv *priv);
  int gve_adminq_report_link_speed(struct gve_priv *priv);
  int gve_adminq_add_flow_rule(struct gve_priv *priv, struct gve_adminq_flow_rule *rule, u32 loc);
  int gve_adminq_del_flow_rule(struct gve_priv *priv, u32 loc);
+diff --git a/drivers/net/ethernet/google/gve/gve_ethtool.c b/drivers/net/ethernet/google/gve/gve_ethtool.c
+index dd1c44fedc77..a3220c651438 100644
+--- a/drivers/net/ethernet/google/gve/gve_ethtool.c
++++ b/drivers/net/ethernet/google/gve/gve_ethtool.c
+@@ -749,12 +749,11 @@ static int gve_get_link_ksettings(struct net_device *netdev,
+ 	int err = 0;
+ 
+ 	if (priv->link_speed == 0)
+-		err = gve_adminq_report_link_speed(priv);
++		err = priv->ctrl_ops->report_link_speed(priv);
+ 
+ 	cmd->base.speed = priv->link_speed;
+ 
+ 	cmd->base.duplex = DUPLEX_FULL;
+-
+ 	return err;
+ }
+ 
 diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-index da53c1fb6afb..addfd8dc1a1a 100644
+index 33af1437b3c0..f950c5731555 100644
 --- a/drivers/net/ethernet/google/gve/gve_main.c
 +++ b/drivers/net/ethernet/google/gve/gve_main.c
-@@ -17,8 +17,6 @@
- #include <linux/sched.h>
- #include <linux/timer.h>
- #include <linux/workqueue.h>
--#include <linux/utsname.h>
--#include <linux/version.h>
- #include <net/netdev_queues.h>
- #include <net/sch_generic.h>
- #include <net/xdp_sock_drv.h>
-@@ -41,49 +39,6 @@ char gve_driver_name[] = "gve";
- const char gve_version_str[] = GVE_VERSION;
- static const char gve_version_prefix[] = GVE_VERSION_PREFIX;
+@@ -1513,15 +1513,18 @@ static int gve_close(struct net_device *dev)
+ 	return err;
+ }
  
--static int gve_verify_driver_compatibility(struct gve_priv *priv)
--{
--	int err;
--	struct gve_driver_info *driver_info;
--	dma_addr_t driver_info_bus;
--
--	driver_info = dma_alloc_coherent(&priv->pdev->dev,
--					 sizeof(struct gve_driver_info),
--					 &driver_info_bus, GFP_KERNEL);
--	if (!driver_info)
--		return -ENOMEM;
--
--	*driver_info = (struct gve_driver_info) {
--		.os_type = 1, /* Linux */
--		.os_version_major = cpu_to_be32(LINUX_VERSION_MAJOR),
--		.os_version_minor = cpu_to_be32(LINUX_VERSION_SUBLEVEL),
--		.os_version_sub = cpu_to_be32(LINUX_VERSION_PATCHLEVEL),
--		.driver_capability_flags = {
--			cpu_to_be64(GVE_DRIVER_CAPABILITY_FLAGS1),
--			cpu_to_be64(GVE_DRIVER_CAPABILITY_FLAGS2),
--			cpu_to_be64(GVE_DRIVER_CAPABILITY_FLAGS3),
--			cpu_to_be64(GVE_DRIVER_CAPABILITY_FLAGS4),
--		},
--	};
--	strscpy(driver_info->os_version_str1, utsname()->release,
--		sizeof(driver_info->os_version_str1));
--	strscpy(driver_info->os_version_str2, utsname()->version,
--		sizeof(driver_info->os_version_str2));
--
--	err = gve_adminq_verify_driver_compatibility(priv,
--						     sizeof(struct gve_driver_info),
--						     driver_info_bus);
--
--	/* It's ok if the device doesn't support this */
--	if (err == -EOPNOTSUPP)
--		err = 0;
--
--	dma_free_coherent(&priv->pdev->dev,
--			  sizeof(struct gve_driver_info),
--			  driver_info, driver_info_bus);
--	return err;
--}
--
- static netdev_features_t gve_features_check(struct sk_buff *skb,
- 					    struct net_device *dev,
- 					    netdev_features_t features)
-@@ -2480,7 +2435,7 @@ static int gve_init_priv(struct gve_priv *priv, bool skip_describe_device)
- 		return err;
- 	}
+-static void gve_handle_link_status(struct gve_priv *priv, bool link_status)
++static void gve_handle_link_status(struct gve_priv *priv)
+ {
++	bool link_up;
++
+ 	if (!gve_get_napi_enabled(priv))
+ 		return;
  
--	err = gve_verify_driver_compatibility(priv);
-+	err = gve_adminq_verify_driver_compatibility(priv);
- 	if (err) {
- 		dev_err(&priv->pdev->dev,
- 			"Could not verify driver compatibility: err=%d\n", err);
+-	if (link_status == netif_carrier_ok(priv->dev))
++	link_up = READ_ONCE(priv->link_up);
++	if (link_up == netif_carrier_ok(priv->dev))
+ 		return;
+ 
+-	if (link_status) {
++	if (link_up) {
+ 		netdev_info(priv->dev, "Device link is up.\n");
+ 		netif_carrier_on(priv->dev);
+ 	} else {
+@@ -1548,7 +1551,6 @@ static int gve_set_xdp(struct gve_priv *priv, struct bpf_prog *prog,
+ {
+ 	struct bpf_prog *old_prog;
+ 	int err = 0;
+-	u32 status;
+ 
+ 	old_prog = READ_ONCE(priv->xdp_prog);
+ 	if (!netif_running(priv->dev)) {
+@@ -1575,8 +1577,8 @@ static int gve_set_xdp(struct gve_priv *priv, struct bpf_prog *prog,
+ 		bpf_prog_put(old_prog);
+ 
+ out:
+-	status = ioread32be(&priv->reg_bar0->device_status);
+-	gve_handle_link_status(priv, GVE_DEVICE_STATUS_LINK_STATUS_MASK & status);
++	priv->ctrl_ops->report_link_status(priv);
++	gve_handle_link_status(priv);
+ 	return err;
+ }
+ 
+@@ -2009,11 +2011,11 @@ static void gve_turnup(struct gve_priv *priv)
+ 
+ static void gve_turnup_and_check_status(struct gve_priv *priv)
+ {
+-	u32 status;
++	const struct gve_ctrl_ops *ops = priv->ctrl_ops;
+ 
+ 	gve_turnup(priv);
+-	status = ioread32be(&priv->reg_bar0->device_status);
+-	gve_handle_link_status(priv, GVE_DEVICE_STATUS_LINK_STATUS_MASK & status);
++	ops->report_link_status(priv);
++	gve_handle_link_status(priv);
+ }
+ 
+ static struct gve_notify_block *gve_get_tx_notify_block(struct gve_priv *priv,
+@@ -2337,12 +2339,14 @@ static void gve_service_task(struct work_struct *work)
+ {
+ 	struct gve_priv *priv = container_of(work, struct gve_priv,
+ 					     service_task);
++	const struct gve_ctrl_ops *ops = priv->ctrl_ops;
+ 	u32 status = ioread32be(&priv->reg_bar0->device_status);
+ 
+ 	gve_handle_status(priv, status);
+ 
+ 	gve_handle_reset(priv);
+-	gve_handle_link_status(priv, GVE_DEVICE_STATUS_LINK_STATUS_MASK & status);
++	ops->report_link_status(priv);
++	gve_handle_link_status(priv);
+ }
+ 
+ static void gve_set_netdev_xdp_features(struct gve_priv *priv)
+@@ -2469,6 +2473,8 @@ static const struct gve_ctrl_ops gve_adminq_ops = {
+ 	.teardown_mgmt_irq	= gve_adminq_teardown_mgmt_irq,
+ 	.create_queues		= gve_adminq_create_queues,
+ 	.destroy_queues		= gve_adminq_destroy_queues,
++	.report_link_status	= gve_adminq_report_link_status,
++	.report_link_speed	= gve_adminq_report_link_speed,
+ };
+ 
+ static int gve_init_priv(struct gve_priv *priv)
 -- 
 2.55.0.1032.g73a4cd73de-goog
 
