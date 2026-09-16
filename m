@@ -1,179 +1,154 @@
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011001.outbound.protection.outlook.com [52.101.70.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com [74.125.228.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F508287E;
-	Wed, 16 Sep 2026 02:20:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.1
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789525227; cv=fail; b=DDwUg7XVlWHcqs93lSbUDUXP1xcz+Hui3LTwpga7OYPkgTTtzd7bxZVa/DH9gpQbW2fImmdNODkZHfdYtPQvEr+zz0HNYVux8i7ZO+V3GAFzPIrnHvlhfN1sxoVSxJb0RVHBA10vFJNSgrk04sa5JZYpr53z8X8S7osHXkkm4LQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789525227; c=relaxed/simple;
-	bh=WhoRMoofxvxhLVrueoSmubrRi44WGvqnkTBlgJjs9jM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=gdTuqqaZ3TBGDScMKdgGwFmbCICOzmVmlV8BHSGm9EMvwsJI/QfQj6Od0dqgBD+qwbHFYDNzy38LT75PUqRJU27G+tL3b2gVmajEHm3wsMuWsRkEuEplNJ+lqFb8EK5HeQ0BXkKZIF+I0SHEx9BJ73GiSlJvTfxXyXU0bJDPAM8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=nV/gi5xm; arc=fail smtp.client-ip=52.101.70.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3636E2DC76A
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 02:47:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.140
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789526871; cv=none; b=unOUwRy/wx87CX4ozyKwj/zJLt8RinRZBWFVAoh788MS3W1MiJQrfPzgh5eWqIqc82h1vAM7o7ok7uaobggCmeR4IkcaSZIgQFPoTLg1AeVNEf2xf4ozjzp7StGYBhXE9lvsjldRikI4qRTMJxvw/+vk8KXvv978wrnL+pC9ts4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789526871; c=relaxed/simple;
+	bh=wtd/03GFBPFtGkGnsixWJf5NJHyKunU5GA2TDNHK0mc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DB+yrcSZn83lOAMzhkN6hRZDkvOVJzWwrNTYPwHfcAiMDw8OKeHrAM1r4JQrzOB7sMVNvDZnVNtbS75WHNLcB/8UOhXWRGammhE0HKFVRs+YD30iR8AxTtW3xCWRV5Gvvcn78SoLBsDtObvHGo5xtDY6pJJF8QwKp9ql0HPAor0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RGu+ljKB; arc=none smtp.client-ip=74.125.228.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="nV/gi5xm"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=w4cxudBLvWgWsYj1ZshKOu9tgl8iYqGAXOi0isfQe2TOzcxRIArhk7Zl2fQLJWfvbumPbKyYTLXROUR9EKHynHql9FmqwBLuWY3wZm+nqafzBRx3eHLqPIa54yK5/BtZr4/wWaB7XPxdX6nqi3NZdgL0SdmmA6owGN/j3gJ1Qjc6m4rak0XQsxjnqiBiPsBZD1RzGjwabXg1TIJIv72CcxaaABjGikT37TG4YJPAzy8oTBAtpeYslYNwTWkjbwl/FgrGuWvG875STS3atm5XDCWmae+7E9FscHy9UuTmfQ93eK/aX1LeKzGRO59oOaMsIg3tGu+2ONTIs4AEsADsgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U478V79N5VPfcMq0bCi6tB6r7wZHyfgjSGgfT4jgwOA=;
- b=YAyTrvfjko/5NiuFggMon+5so9+aQijzg9jsDrN56LKsrnZnCU4l/yKly7rZJEt7Ot7LuNt+X0+xybsBerJGbJYQXo1J3KIQWqQaPuhOC1jlgracvHRPrNcSMepEDgOBvSuR2EEj8Apyo70yzoYxyPSmTvOWQ4u5edGY7B/6H7FgU8oCaDfRszghUEHY72xCB8CwNgwRMhKiIM4/KraHUczo6JwiX7hc1oNwrxgC8jSpJVKg1Vhw9OWiru0Q/nA6d/yN91s9vBsUcZq3WGRsUi8ZtWH7Nxj+kr6a5GYkOB6CUe4HcWaqfQ3yrjMuxUAoc3RPU9Wk/EXcvtBgAXrn4Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U478V79N5VPfcMq0bCi6tB6r7wZHyfgjSGgfT4jgwOA=;
- b=nV/gi5xmQJME45O5pSTmfFGeYhQ2on4LeENjyl2bT2RJ3v+hkLMXTzHBVtJ9Pfr94EG98XlmBdamvr/1YXxa/bRWXwBUb/ytxrdxjD6V+lNmdwdwuyT7wW5PuO5MCuzpjBCJ8cZP9vx+jNv13vif655NerlGVrSBJeFbG523+aklkuABg9EjDuvW5RgVUHwGibu2UYwMibz0NsylqCbDynH59MdXoEJePsBoDaaNj9Gzjz9HapkYnDivZBS6icCJOrR3L2W9ScrwVBDdle0taTGNVQbr+wWUmBva5qdxzqjc8uJmETajw7cZ9yNyG+e02NklzDdWQCREr+wxI6NwNQ==
-Received: from GV2PR04MB11739.eurprd04.prod.outlook.com
- (2603:10a6:150:2fc::18) by AS8PR04MB8451.eurprd04.prod.outlook.com
- (2603:10a6:20b:347::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.428.11; Wed, 16 Sep
- 2026 02:20:21 +0000
-Received: from GV2PR04MB11739.eurprd04.prod.outlook.com
- ([fe80::71c2:937b:d466:174a]) by GV2PR04MB11739.eurprd04.prod.outlook.com
- ([fe80::71c2:937b:d466:174a%5]) with mapi id 15.21.0406.007; Wed, 16 Sep 2026
- 02:20:21 +0000
-From: Wei Fang <wei.fang@nxp.com>
-To: Vladimir Oltean <vladimir.oltean@nxp.com>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>
-CC: Zefir Kurtisi <zefir.kurtisi@westermo.com>, Claudiu Manoil
-	<claudiu.manoil@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>, Andrew Lunn
-	<andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
-	Simon Horman <horms@kernel.org>, Richard Cochran <richardcochran@gmail.com>,
-	"Y.B. Lu" <yangbo.lu@nxp.com>, Ioana Ciornei <ioana.ciornei@nxp.com>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: RE: [PATCH v3 net 2/7] net: enetc: ensure enetc_xdp_xmit() calls
- enetc_update_tx_ring_tail()
-Thread-Topic: [PATCH v3 net 2/7] net: enetc: ensure enetc_xdp_xmit() calls
- enetc_update_tx_ring_tail()
-Thread-Index: AQHdRWFs5icfT0mSEk6HhNc4f+7o1rbQeO3A
-Date: Wed, 16 Sep 2026 02:20:21 +0000
-Message-ID:
- <GV2PR04MB11739136B93D0455F1907E10D88B92@GV2PR04MB11739.eurprd04.prod.outlook.com>
-References: <20260915222735.1016937-1-vladimir.oltean@nxp.com>
- <20260915222735.1016937-3-vladimir.oltean@nxp.com>
-In-Reply-To: <20260915222735.1016937-3-vladimir.oltean@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: GV2PR04MB11739:EE_|AS8PR04MB8451:EE_
-x-ms-office365-filtering-correlation-id: 2a44b9ad-221d-417f-ad32-08df13990f04
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|19092799006|376014|7416014|366016|23010399003|1800799024|38070700021|10067099003|4143699003|56012099006|11063799006|22082099003|18002099003;
-x-microsoft-antispam-message-info:
- t6Ovpxh2l5397xQivlBHNigFOiEY40FlgJ1Jzuc+jKX6EEyPRTrvrBPsj7dIeO2ox8e9c+kiAvDkSNwoxyFr0DiwWtgwcPYJy1rX5/9vMK/9O8gUShY4htH8LN0woXHcrfUIb8YVWSNkZ9KDl8r84AaHI27//pB71ZrRqgA6TzK5y7JYEeaIib/QW8eMNxeX+/8fx6k+jNtPi6FVlDnyLVwj9v1IMVrQM8qwi1F97JWwSWoRnXEEeBikl2ur11ahQtMWrw5OII2cvvbBLTpcATccgmEEzVJcNPj7OduHEUu1v9IfliM1jZFcZPrqwDbccK4Z08Dv78P/g7X/ioEE4ZuUm2OYvgw9GWeWuHgwxQZN+7GodIe/kWZKmEzCcrgnBLe+in/fTLxkGQxTPLecZ15GnqaHeutDvDOBtmCAxkwkH2mjiTbND2Hev43WK0PZU5Ua3bgrCyO1DOg/hUOTtmbTnVHdctgHROcSdkX+3Pdr2b4HHavbJ13FVho9CZJbzGGz3NM1M1eJnSivUqAqW9AZaZBrusevYRxw2Re2/fibwPLsTNcARqjGkXGfl7WT7GhTipotE3TuPOWIw8IJqZnf4AAvgNsmyj3+tH1RLuD4/fh+GVcJDEjKTXPlEmXu+iKQdQTkVzQXJFC0iznAT++l1FVXAFqXrUG4L0ljUgScY75MQTlZvdASnDUi27s4RSPGdsE8m4l3TnT9LD2O9rpvxUna4mlB1LVA5P+aWwg=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV2PR04MB11739.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(376014)(7416014)(366016)(23010399003)(1800799024)(38070700021)(10067099003)(4143699003)(56012099006)(11063799006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?Dw4V+Jd0CrzdM96Rnnwl3Ik0jf7/1CFpam35ybCE/3OZt+OATonLE3BVChqS?=
- =?us-ascii?Q?plWX3AfmernIahnIjYQ23d9CRr+mq+5C49fFnXyD7uu8yowUtvqQTvQMskNt?=
- =?us-ascii?Q?fIAatx4gQSgqzOcBu/D50tNCFLQ1VZ9gSwqlSw6vVQ6daY8rfW5hAnFkXFAd?=
- =?us-ascii?Q?Uhr77f4UJDnJcimK26hQz4a/XLThenTsonAnu68oNeVxcsme98ttfH6vw2TQ?=
- =?us-ascii?Q?Kv1C1y3/Fypq628CtEePmC34Ew1D60E9XoWiqkapc+fGQ0PSHck1l8wZq58q?=
- =?us-ascii?Q?pn5PAALHWv+Xp/dIE5x4w9RTHzOFFlN6un/kM/ZSUcmrkk0FAoz309FPYAbj?=
- =?us-ascii?Q?l7xuwuXwArMwOe/Bel/HQkPPPBJrUkAEFBILjfFY+3VD9DuoeswxWl6ybUa3?=
- =?us-ascii?Q?nz4tDCT6FHuGxLV2uz/hCWhE7HMOQmmDv3CQm6lYRYqBMZtxhuGtpCh0X2LR?=
- =?us-ascii?Q?2y47OqALHZKDKpX8rhnjwnAK1UapJZEXf3ztKX6Rh3UvKv8Wt6SVWget+HCc?=
- =?us-ascii?Q?r7YatODZMxc0A3jRkl1Tbdy88dw424KWyzfih0mlX9ClqnYIsEQmmIflvqN4?=
- =?us-ascii?Q?fFcnMciGQYeAneP8oXp7zSim0S5RftbBwodTcB8BmIHVLzddZ7Pe/qB3Snuo?=
- =?us-ascii?Q?8wlzllvm4fmslVsG9y6BqxW+HhPPZxn+N6rbRlky7z2IRLY+QXnwpDzIxsvQ?=
- =?us-ascii?Q?KNTU+Gp16YuqY7aF72pjDttokNw0i8GD/uWev7Qhy/Gc4oyUUpO5D+vivq7G?=
- =?us-ascii?Q?f0Elae3uNIBZrv2cQKu2sQsLcyBsIIFpmDCC16xD0Tt+I0mIBvkPeDszPLk8?=
- =?us-ascii?Q?0TvejQr54vUzOHjsTPhHTskgGinY9TNUSVO9EGqGnx36v1t4mi/YTSwLALTE?=
- =?us-ascii?Q?ZjFiXjd8texJniJP064PXKagruIbh78bN98j1cHqT4F6iqU2watEsa8UdlAS?=
- =?us-ascii?Q?FberR3/SZy2MdCrMote9I7V1nsQLlw1o/cobdXrGD5fB8WYpaBd8KyuBMjyQ?=
- =?us-ascii?Q?G/bfwzOhR86QNVyyKo3y2vcgKz1FLCkkuCHU2aL2ehThfrfiSxro79xwiuD9?=
- =?us-ascii?Q?7j907A5z7RIlnOZaSVzZsg/pXH97Ne4ZfyNWJ1kswKjy2vfTBXdSuIN2hL+w?=
- =?us-ascii?Q?tJO0f0klBMr27KPnGLsVVh/TNrXP2JyBvay8WioYkoKctO93qyqV2rdkn+uq?=
- =?us-ascii?Q?bNgp7Oz61rKesSAW4/XC9O8NYsOsbK/hqtF44rH9K4g5+mZ0JSVA5yG4zupv?=
- =?us-ascii?Q?1Nu602Y0qJ2pL7pX1ZaKn44plcMTm3ehJFB8AYFIe76Qto/DLwjnFxLVauxv?=
- =?us-ascii?Q?hfYN3hTUSz7qd38Qcs539GEQ+VegRl3TF7c5z0AvYEugnapB2iYmcwxkGE7r?=
- =?us-ascii?Q?vN1N5+PtCxhNAP3qjSzL6GDZJnOBWi7Qj5ZAqb2Brw8tlDXFGMuNaHkpiPzt?=
- =?us-ascii?Q?jX5KFu6Ie8iyLIzS1gSYVS1KoA+VLm6wMeTV4LtJOYn3iCRHtm3ZBgGm4umG?=
- =?us-ascii?Q?9+BFB/yXmt8LC2YjLPogqDxTyOW/wdJ498XIOUWeAKn4Ga6CXHahvgYX+MOK?=
- =?us-ascii?Q?D7yu0t34g2YeqP3IxLuSmOSf+KLjDSMVmyvNCgsOeHpSNG4rBvY8towALJ1K?=
- =?us-ascii?Q?Bss2W2QB+a+r+i+h9tS2joqw2S7+/rpQH2yl0YyNUJF0xEFdirblutyaxSqC?=
- =?us-ascii?Q?CoXlNBDYOM8GHAheufvz77AfgiNG9d0NrfhYMLSY8d1zAjDW?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RGu+ljKB"
+Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c2507a618e1so7848466b.0
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 19:47:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1789526868; x=1790131668; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=mbykP5/XyMLit0cz7WlaiYBiK+Q7B+6nW+jCiDoN2jo=;
+        b=RGu+ljKBP9wNG3OcqNpozO6PC5+kywiVNgKNjvEyQiE49UT9HpgXcc95WzG8Tyiu8a
+         w3dzAuehRb/Q+hGTF8Q/zlwIkFgwh3+EzAfisDwVVwQfdqWIlPvxp2sl5G8pO+fQrysU
+         E0YL6ka8QN6PVR9miZ5h960ExhRhIMUcKG8bbrlHU+T2WoIpXT02DQ7aqY4IujbIHKVq
+         o8Enajtze0H5VSF2k5J/oBJJx3GxqQIhDIEJQg36FZhpssHVKJWqbNoJ666r82V/BzoF
+         IIKaa3AaMooqR/Gwdp5s2z0Zc/Y9zuvZMuaw14ggmIIH1MVBRiQ+3oQk+LGg4H8OeYqk
+         hHXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789526868; x=1790131668;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mbykP5/XyMLit0cz7WlaiYBiK+Q7B+6nW+jCiDoN2jo=;
+        b=SjLTcNxOijJ2ac6xpwazIta0r+7NngnCh/DjoxDeQ3mp9osOCcUvjIJz+JUHlLIBcN
+         TCDTbEM738qdcvjWf4TCB0YqH3EfCT1iNI+boAlxxLyWtWgQhigKGKXiFPKb9pNXEy27
+         75Xzo5fFfkld+PyEG2BCUgzExI6WyownWbbGvJrNYcURni2FREJPNTye4uuvbgwSWli6
+         rNLiOa2MK/1I8rE7EGnunowVU2gSgYqj7wvxtch8vjJMTReF5gSslrZjkdMTFP39D8Qn
+         XrCeN/ObVsOrRLNVgLszAfnRXupN0pNoEEKUraQA4s/DZjOiDmSlkoot5hsd6pypVbT+
+         +r9g==
+X-Forwarded-Encrypted: i=1; AKwUvBxVDvIi1hUF5P4y76gIDhfPG5jDsqFmuIfoFIHeLMxjPEDjBmivg4kpYHmLkQQub39CZSM=@vger.kernel.org
+X-Gm-Message-State: AFuF++kO8TR/cKWv+xjxxZ/0h3JInk+cV4jLievDthVM3tVL40+grhJR
+	P6xNXJ9qg1T2n+2mLhQfwYYerFb36nSJ6bUG0iU3+3vHciJnrKd5oIbGclaTEUD+GAU=
+X-Gm-Gg: AYBFou1LAVOFQiGPT0iszmwxUY9eMQcOlKVKdOVzlSoir/kX5dQGVs2uoT0BCUeGByI
+	rM/NWpTfSyPQfjoepYCM384EpFGWpd7hUVLoYbJO2YJ23/hjE/ZAZrS6QC8bFmFs3IIlQeGdvV5
+	0M0mVJs65cQwZeLGWqTgsy9+y40KXAEn6q/uzcs0jQv8FHcUwuri57LnO9rkeF2eiOOcmFT7YJj
+	Lbym8wcDqAa+fwNZsLRNIcHPdCJCmpMXz9AqVJ0Xs9xRXzTe8M8jbIV+BRHOsl/B5S/Lx6J6AiI
+	PdRXkOKObOzDniJiPoo9i7wt88z/VSe+VxPqeLa36M4jFmAiDODukDiL2jorZxBrOZoogLoLTPp
+	qaVzGOFbDMb7LDgkTL4A7x8uzlaxxk+KEoxGi1rL/78AfeTt1iljKiSkbNSV+Qs//KBs3huNsuP
+	AM6TIkfpXgXNeG2vuBn/n26xAoaap26MAo2lBkDiKNDeix5Of+Cbrsv/DW0JoxfOg2xV+FFA==
+X-Received: by 2002:a17:907:3f99:b0:c29:cfce:1933 with SMTP id a640c23a62f3a-c29e530d7c9mr41736766b.2.1789526868385;
+        Tue, 15 Sep 2026 19:47:48 -0700 (PDT)
+Received: from localhost ([202.127.77.110])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd89d8fd37sm3839675ad.3.2026.09.15.19.47.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2026 19:47:47 -0700 (PDT)
+Date: Wed, 16 Sep 2026 10:47:43 +0800
+From: Heming Zhao <heming.zhao@suse.com>
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: alexei.starovoitov@gmail.com, brauner@kernel.org, dwindsor@gmail.com, 
+	john.fastabend@gmail.com, memxor@gmail.com, kpsingh@kernel.org, matt@bobrowski.net, 
+	bpf@vger.kernel.org, Zhan Xusheng <zhanxusheng@xiaomi.com>, 
+	Joseph Qi <joseph.qi@linux.alibaba.com>, ocfs2-devel@lists.linux.dev
+Subject: Re: [PATCH bpf-next 1/8] ocfs2: Copy the xattr name in
+ ocfs2_initxattrs
+Message-ID: <aqoCVQ78KOo2GZ8S@p15>
+References: <20260915150739.284189-1-daniel@iogearbox.net>
+ <20260915150739.284189-2-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: GV2PR04MB11739.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a44b9ad-221d-417f-ad32-08df13990f04
-X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Sep 2026 02:20:21.2207
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: sL76Vf1KyYuEGw+L0yV80YuJ1+r6G29NxPt0Exp7FvUZRN6x/oFLdeukRj3V8WoHjRQGCyOdKhjuoIFwFDN7Jg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8451
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260915150739.284189-2-daniel@iogearbox.net>
 
-> diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c
-> b/drivers/net/ethernet/freescale/enetc/enetc.c
-> index e7ecdf8ef67c..c9c23e994f6d 100644
-> --- a/drivers/net/ethernet/freescale/enetc/enetc.c
-> +++ b/drivers/net/ethernet/freescale/enetc/enetc.c
-> @@ -1813,7 +1813,6 @@ int enetc_xdp_xmit(struct net_device *ndev, int
-> num_frames,
->  	struct skb_shared_info *shinfo;
->  	struct enetc_bdr *tx_ring;
->  	int xdp_tx_bd_cnt, i, k;
-> -	int xdp_tx_frm_cnt =3D 0;
->=20
->  	if (unlikely(test_bit(ENETC_TX_DOWN, &priv->flags) ||
->  		     !netif_carrier_ok(ndev)))
-> @@ -1845,19 +1844,17 @@ int enetc_xdp_xmit(struct net_device *ndev, int
-> num_frames,
->  						    &xdp_redirect_arr[i]);
->  			break;
->  		}
+On Tue, Sep 15, 2026 at 05:07:32PM +0200, Daniel Borkmann wrote:
+> ocfs2_mknod() and ocfs2_symlink() ask for the security xattr up front
+> through a struct ocfs2_security_xattr_info, so that they can size the
+> transaction before setting it. ocfs2_initxattrs() duplicates the value
+> since the array security_inode_init_security() hands is freed on return,
+> but keeps the name pointer as-is, given so far every LSM stored a string
+> constant there. bpf_inode_init_xattr() places the name in the same
+
+Typo? I am not familiar with BPF, but I only found inode_init_security in
+include/linux/lsm_hook_defs.h.
+
+> allocation as the value, which security_inode_init_security() frees on
+> its way out. Copy the name alongside the value and free both together.
+> This is the only special case wrt xattrs in the bpf_inode_init_xattr()
+> context.
+> 
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: Zhan Xusheng <zhanxusheng@xiaomi.com>
+> Cc: Joseph Qi <joseph.qi@linux.alibaba.com>
+> Cc: ocfs2-devel@lists.linux.dev
+> ---
+>  fs/ocfs2/namei.c | 2 ++
+>  fs/ocfs2/xattr.c | 5 +++--
+>  2 files changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/ocfs2/namei.c b/fs/ocfs2/namei.c
+> index e9c7774ccf91..e24f0e337a56 100644
+> --- a/fs/ocfs2/namei.c
+> +++ b/fs/ocfs2/namei.c
+> @@ -480,6 +480,7 @@ static int ocfs2_mknod(struct mnt_idmap *idmap,
+>  
+>  	brelse(new_fe_bh);
+>  	brelse(parent_fe_bh);
+> +	kfree(si.name);
+>  	kfree(si.value);
+>  
+>  	ocfs2_acl_init_release(&acl_state);
+> @@ -2068,6 +2069,7 @@ static int ocfs2_symlink(struct mnt_idmap *idmap,
+>  
+>  	brelse(new_fe_bh);
+>  	brelse(parent_fe_bh);
+> +	kfree(si.name);
+>  	kfree(si.value);
+>  	ocfs2_free_dir_lookup_result(&lookup);
+>  	if (inode_ac)
+> diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
+> index 35bcbb0ff607..d83840b6bed9 100644
+> --- a/fs/ocfs2/xattr.c
+> +++ b/fs/ocfs2/xattr.c
+> @@ -7524,8 +7524,9 @@ static int ocfs2_initxattrs(struct inode *inode, const struct xattr *xattr_array
+>  				    GFP_KERNEL);
+>  		if (!si->value)
+>  			return -ENOMEM;
 > -
-> -		xdp_tx_frm_cnt++;
+> -		si->name = xattr_array->name;
+> +		si->name = kstrdup(xattr_array->name, GFP_KERNEL);
+> +		if (!si->name)
+> +			return -ENOMEM;
+
+The ->name is a constant string (i.e., XATTR_NAME_SELINUX). We can refer to
+ext4_initxattrs() => ext4_xattr_set_handle(), which also uses '=' to assign ->name.
+
+Thanks,
+Heming
+>  		si->value_len = xattr_array->value_len;
+>  		return 0;
 >  	}
->=20
-> -	if (unlikely((flags & XDP_XMIT_FLUSH) || k !=3D xdp_tx_frm_cnt))
-> +	if (unlikely(k && ((flags & XDP_XMIT_FLUSH) || k < num_frames)))
->  		enetc_update_tx_ring_tail(tx_ring);
->=20
-> -	tx_ring->stats.xdp_tx +=3D xdp_tx_frm_cnt;
-> -	tx_ring->stats.xdp_tx_drops +=3D num_frames - xdp_tx_frm_cnt;
-> +	tx_ring->stats.xdp_tx +=3D k;
-> +	tx_ring->stats.xdp_tx_drops +=3D num_frames - k;
->=20
->  	enetc_unlock_mdio();
->=20
-> -	return xdp_tx_frm_cnt;
-> +	return k;
->  }
->  EXPORT_SYMBOL_GPL(enetc_xdp_xmit);
->=20
-> --
+> -- 
 > 2.43.0
-
-Reviewed-by: Wei Fang <wei.fang@nxp.com>
-
+> 
+> 
