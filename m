@@ -1,164 +1,105 @@
-Received: from smtp-8fae.mail.infomaniak.ch (smtp-8fae.mail.infomaniak.ch [83.166.143.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F109441611D
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 20:58:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAAFA4E1C7B
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 21:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789592349; cv=none; b=SvCjDtIFYYgPS8PWwutV8/VQCC7+OMVE9LNuFRD0QxBVJUPLiu8y55hk0E3pt3LF0KnNpIL4ClEPGgT5y8otVF6c7eyp9pUG/NFbmzxt+OKTS6Zja/x1Ekr6hCaPi26moj6cU6bh4zR1AJ7fkLH6Lu2Mr9OEO3X2hmylzY2StQg=
+	t=1789592582; cv=none; b=U/pCnCrOBAoVO+w2vtoSGsoiSiEBDoyJDy2kKYfZvh1ESYeEsMayqYPL2m1lljEuAflsT+B2Zv/nNhlcidI9tSVQFoxcVrLjDPAYz99h84BhAPii+qD+3Sdo047SxC+81QIXqGRBZW5Bl0s3h0saXCxKMpE96qKyyjGl07qga7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789592349; c=relaxed/simple;
-	bh=tpyrtVP1jfuQ8WMgb3T5IO33cz0Jvp88D3McFEAZlzk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XTv9lXMG5h5xh5yX4gyudrOtwrgbXPj9zNaqZp/QxzaV9qqRVZr6+dmxOenWBaN3JDv+s/AWK6Ds5B9H5ILS2/bqaKJUrcdzNFu+CehqJYg8xqfr/u/h7J+R+FxUDErqkOyRy1G0CFMi4YNriC6Ku84Z74zxr7sscfcv5Cpwq38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=DkqQcBAe; arc=none smtp.client-ip=83.166.143.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+	s=arc-20240116; t=1789592582; c=relaxed/simple;
+	bh=t6Ey1Skts6LhNlHmrxVnF5Fj2sFH7x2b3BqTdVz2dII=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=d13XAalwp2pzBx5t7PqqiJWiCu1EGswwiXeVWXlrpJnOQtAM6xzM+dzfqSD21WHgR+dMc8lNN2mlhmq+8OYNuZEbXiq+qWzqFWA+g/y1sx8vN71FcDmgXb32UKbvXV8mJx3ZEMahh2el/F2cUBHwC8/UQYKx/REnbKPVt+/HNgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WmhXPK2+; arc=none smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="DkqQcBAe"
-Received: from smtp-3-0001.mail.infomaniak.ch (smtp-3-0001.mail.infomaniak.ch [10.4.36.108])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4hlWT43VkTzFpk;
-	Wed, 16 Sep 2026 22:58:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1789592328;
-	bh=eeNZDeKo3kAwa8gSqWkTV+x3phqJReGg6WugrdjFUoI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DkqQcBAeujRMB2NU6LazQ51sJi6DFw7ZlKHeEHY0w5ERT7lFThr5T1KD+widZy1UT
-	 21tOpzoGS7VprNtnV7VwBTDc8HJ9ehkMIjQEsWH7QMD27LWVdOeDSBQx1EWLP1nZu2
-	 MAATFllRY1pL9c+7WXJzJRRCzlrfjqA3WRYCxJIA=
-Received: from unknown by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4hlWT23Fytznr;
-	Wed, 16 Sep 2026 22:58:46 +0200 (CEST)
-Date: Wed, 16 Sep 2026 22:58:40 +0200
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: "Dr. Greg" <greg@enjellic.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	Justin Suess <utilityemal77@gmail.com>, Paul Moore <paul@paul-moore.com>, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, kpsingh@kernel.org, matt@bobrowski.net, 
-	viro@zeniv.linux.org.uk, brauner@kernel.org, kees@kernel.org, casey@schaufler-ca.com, 
-	gnoack@google.com, jack@suse.cz, song@kernel.org, yonghong.song@linux.dev, 
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, jolsa@kernel.org, 
-	m@maowtm.org, bpf@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 04/15] lsm: Add the bpf_lsm_policy_release
- kfunc and policy object destructor
-Message-ID: <20260916.aiPhaw6einoh@digikod.net>
-References: <20260909193719.518517-1-utilityemal77@gmail.com>
- <20260909193719.518517-5-utilityemal77@gmail.com>
- <CAHC9VhQHZ+ngFdzKqmnzBh341CGEg-jexu+QYU8=1qXK=u-x-Q@mail.gmail.com>
- <aqHUw6k0Mf83CGFT@zenbox>
- <CAHC9VhTM7emi9vxs+5Za8Hrc_e9dg7fZx+Z6BGUc4VQ1qhEAUA@mail.gmail.com>
- <DLD0VQ3D8CYC.3V5ZT8HDMY4IH@gmail.com>
- <aqTZdCz6JaoK16Fp@zenbox>
- <DLDL7KK3FZKU.17ADLLWJVXB5F@gmail.com>
- <20260915.ok8eig8Eishi@digikod.net>
- <aqrLsbnzbbX4HPr-@wind.enjellic.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WmhXPK2+"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-39dacf053eeso87228a91.2
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 14:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789592573; x=1790197373; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=v0PiPkE53/kByahLJHuGHd4DXMGbPCcWOf05KFD1zLw=;
+        b=WmhXPK2+YfmrBfZDX1bHDCsWxW/ON5iq+qY75gxkJIUWuV1g7Tap/+bJJMQec/cDCa
+         wXZ/McLcYp/n3vlNjKf8iIYggO6sj5ypGzUONZL3EE/hcj9TyIYX94Na3AUkIOK+7KY/
+         CjBKs5ipq7/i38aQct2wESba9bR0wfSeNZCJCkT5JqKcPB4nDA3lkrMtBoHIvtHiwlXJ
+         10xH0SO+fxgod70K4VjbstOd2PFsDDWvX2BxiESLlOcrLzgrpgQzlLQciel4ZepqPBRJ
+         zCsxxrymL4yLkrGP/9LYZIbxvXHM/e8LzlTtZL/5X3ZOZKMuAeE86Mwt1EVtV5nPm3AQ
+         GSow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789592573; x=1790197373;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=v0PiPkE53/kByahLJHuGHd4DXMGbPCcWOf05KFD1zLw=;
+        b=qF7TrVdh067GFixn3oI23oS9SkDaqwxSJFqhYmUFUI7YSXYv+LyP98ajZIrp5W+Ida
+         WMCRC8b9bpH/koWLnnIBJncCQTJm7grxr56lbDcAkoQWjkJgUuYbpGKg8ashwXr01/U1
+         6EGabLT9MnyB4PYwFucNcC+ZeSTe3FswHmqPl+N8MX36WC3/YdBTRzzDHnXd4b0lLbEP
+         kqC/r+1JPGzKn0I6SOHRFYk4wVZKem1jryRc83hsoDEY0PQbdvkCXaOmX1Rny5KZc5tZ
+         jHAj9ZrZcE+wElXp64kkviotuzYFVoON0IwzeTNDoQAy8TZ1cbNoUFvoPx5rv1VXhStR
+         xAMg==
+X-Forwarded-Encrypted: i=1; AKwUvBwTvD+sq6lXzyxDthEwxq/qU4WQFVjixFg5eJDVb+TVpE1YL7rDEfopqfVY4coM56qWXWg=@vger.kernel.org
+X-Gm-Message-State: AFuF++mXatisQCbSr1ZGkhHO/pJouejvbSuQ5UU5XNzmNgy5C8I6VPiz
+	KQBrB+vZLECjE/oVT5U3jlXeoZ7Pd4s4m4Ydzp2svTERF1vljY6CNFwl
+X-Gm-Gg: AYBFou34FCIxVZrQicuI7hV3/Wi2CKEuV1Uu9q6WtgMbQNVGKKGQ8Cy+nxkorFncPzu
+	VmeaePNpV5+zKRbOD08btB8BVwSyG4lsHjXntkEtZ5x9qMbBOnbsVDNOaiAyqSjs2PE7tE1A8Jh
+	ry9DxcdI/7wFiyN3n5PBYAm3QUULNvmlqbZNBbzsDrNu18m+MIopaVdACm707pLTe6hjBSBhiOb
+	KJejNIoiRrObwquHGAe4ux3+RNlGFgGsx5FSQGJdssdwgQAT96cmHyv5L05Z/fgc6VGaft/wg8h
+	25m/D1TE5I1sFhJ0dtMv29NtITL5sIblUBW5nCxCX3feM0xh86wCiFyGfxGWm/sJpz0BO61M2Z6
+	fAxKIIWSWH7dBzMAyv/sFtoPj/CGAEb7qa/C1xfsq/iixsx38jV/BDjD1Rcl2Ky7XeOXWNz2BBt
+	QxSHqvRL56oot0KuP5zIFdrL6ZJTz20FWpiIpw0A6OjBC5yJMFfL2FdhjN6r6a4sAIt7oRtMPjm
+	rsjG0XUZjoiJMpm3FzbY9oI8xHUGWZWvs8S+x6v2C2j+5obVGp1HJGCwK3tgZRmaaUGzPiUAo8m
+	EAP6h+QFhHU2k/COdYKd1e68CCkOXpOHJhmgV9g+K++xIdRiPjtg9iMU
+X-Received: by 2002:a17:90b:4c88:b0:39d:f024:c7ee with SMTP id 98e67ed59e1d1-39e1e56637bmr8836686a91.25.1789592573141;
+        Wed, 16 Sep 2026 14:02:53 -0700 (PDT)
+Received: from localhost (ec2-35-83-186-167.us-west-2.compute.amazonaws.com. [35.83.186.167])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e35e732d6sm1163831a91.11.2026.09.16.14.02.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Sep 2026 14:02:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aqrLsbnzbbX4HPr-@wind.enjellic.com>
-X-Infomaniak-Routing: alpha
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 16 Sep 2026 21:02:52 +0000
+Message-Id: <DLH1MDZPU5G0.228555JR34D3N@gmail.com>
+Cc: <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
+ <jolsa@kernel.org>, <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>,
+ <john.fastabend@gmail.com>, <shuah@kernel.org>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 01/13] bpf: move linked-scalar flags out of
+ bpf_reg_state->id [NFC]
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Vineet Gupta" <vineet.gupta@linux.dev>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>
+X-Mailer: aerc 0.17.0
+References: <20260910164635.459558-1-vineet.gupta@linux.dev>
+ <20260910164635.459558-2-vineet.gupta@linux.dev>
+ <DLDKB6BTHVXE.PFK87O3QY1J5@gmail.com>
+ <f575fe19-a5a0-4f43-b1bd-cdec2c6e9830@linux.dev>
+In-Reply-To: <f575fe19-a5a0-4f43-b1bd-cdec2c6e9830@linux.dev>
 
-On Wed, Sep 16, 2026 at 12:02:41PM -0500, Dr. Greg wrote:
-> On Tue, Sep 15, 2026 at 11:25:13AM +0200, Micka??l Sala??n wrote:
-> 
-> > Hi,
-> 
-> Hezzie says hi too.
-> 
-> > On Sat, Sep 12, 2026 at 12:33:13PM -0700, Alexei Starovoitov wrote:
-> > > On Fri Sep 11, 2026 at 10:26 PM PDT, Justin Suess wrote:
-> > 
-> > [...]
-> > 
-> > > landlock was designed for unprivileged users. bpf needs CAP_BPF.
-> 
-> > Yep, and this series would kind of bridge these two worlds. ;)
-> 
-> See my comments to Justin about this 'Mixing of the Blood'... ;-)
+On Tue Sep 15, 2026 at 1:17 AM UTC, Vineet Gupta wrote:
+> Back when I started, keeping it NFC made more sense. But with all the=20
+> nuances discovered in the process, I'm inclined to drop the NFC stance=20
 
-I'm pragmatic and there are different use cases, different constraints,
-and different trust models...  Landlock has some good properties which
-makes it fit for being used by unprivileged/untrusted processes, and who
-can do more can do less.
+What is NFC ?
 
-> 
-> > > There is a fundamental disconnect. If you can tolerate CAP_BPF then
-> > > just use bpf-lsm and implement whatever policy you need there.
-> > > If bpf-lsm is missing a feature we can fix that.
-> 
+> and make functional changes - there's at least one which is the=20
+> following accepted pre-series and now rejected.
+>
+>  =C2=A0 =C2=A0 =C2=A0 old {r2.id=3DA+delta32}=C2=A0 =C2=A0 =C2=A0 =C2=A0 =
+=C2=A0vs cur {r2.id=3DB+delta64}
 
-Please keep this in mind:
-> > The question is not if BPF LSM can or cannot do what Landlock does.
-
-> > Landlock provides a way for userspace to sandbox processes, and that
-> > comes with a well-defined semantic, logs, and an user space ABI, which
-> > are specific and dedicated to Landlock.  Some user space depend on that.
-> > 
-> > The goal of this patch series is to improve BPF LSM to enable it to
-> > (also) enforce a Landlock security policy defined by user space thanks
-> > to the Landlock syscalls.  The security policy still has the properties
-> > that makes it possible to safely compose different ones (e.g.
-> > monotonicity/stacking enforcement, inheritance, separation of duty, no
-> > cover channel, safe privilege reduction without confused deputy issues).
-> > 
-> > A process can currently define such security policy, get a file
-> > descriptor referring to it, and pass this FD to another process that
-> > would enforce it.  This helps design secure architectures by splitting
-> > ownership, trust, and privileges (e.g. CAP_BPF).  Being able to use BPF
-> > programs instead of user space programs to enforce (e.g. an already
-> > defined) security policy would make this enforcement more powerful
-> > thanks to the context BPF have access to.  Of course, BPF LSM can (and
-> > should) also enforce other kind of complementary restrictions.
-> 
-> This may be the answer to the question that I was asking Justin, lets
-> see if we can unpack it a bit for those of us that are dense.
-> 
-> Big picture, as Justin so elegantly pointed out, there are a bunch of
-> things that eBPF cannot do now, and may never be able to do in the
-> future, particularily when it comes to 'raceless free' path based
-> security controls, ie. TOCTOU avoidance.
-
-That's a different problem/challenge, but BPF is gradually being
-improved, and I'm sure your contributions would be welcome.
-
-> 
-> So, the objective is to have a program, systemd for example, compose a
-> set of different security policies, that it then hands out to various
-> process heirarchies, which then uses eBPF to call LandLock kernel
-> internals to do the heavy security lifting with kernel level
-> privileges and capabilities, particularily when it comes to path based
-> controls.
-> 
-> Is that close?
-
-That's kind of the opposite: systemd, as a privileged process, is in
-charge of loading BPF programs, but this is not a good example here.
-That would make more sense with e.g., a dedicated process that manages a
-set of security policies (which might be owned by different teams), pass
-these (Landlock) policies to the a privileged process that enrich them
-with context, and load the related BPF programs to the kernel.  That's
-only one simple example, but it should give a good idea of what is
-possible.
-
-> 
-> If so, the question remains, why take on this amount of drama?
-> 
-> Something like systemd does at least 10,000 other things, composing
-> and handing out multiple variants of file descriptor based process
-> hierarchy security policies would seem like chump change to it.
-> 
-> I'm assuming the answer is that the eBPF programs involved are going
-> to be implementing other, perhaps proprietary, security controls that
-> extend beyond the path based controls that eBPF can't do.
-
-Yes, that's a possibility, but a simpler approach would be to just map a
-runtime context to a set of security policies (e.g. sandbox all
-instances of /usr/bin/foo with a custom profile).
-
-> 
-> We will be interested in your reflections.
+that's a red flag, no? The refactoring patch shouldn't have
+any changes to selftest and veristat numbers?
+Unless I'm missing it again.
