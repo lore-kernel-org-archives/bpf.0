@@ -1,166 +1,128 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E894247D458;
-	Wed, 16 Sep 2026 08:52:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B0A440641
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 09:03:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789548776; cv=none; b=vCerRg53YMKDG225qwoLaYKcSA3HIpxkZbYm8q3JxyaPVOxLuvT2050VPpOP1mKQLVnM/OMAOMwhPxvnPDsaakhrRddrrO4v/3icNSvo7UaGBBj2x/L+FHdHIjO+RoBqg/4A2tliDlYMSKFqWyO3CjBcP6pyAlJ/DtO4Vzy0F0o=
+	t=1789549409; cv=none; b=mWG3/Gy+tvFOcd+o+BVOcUee3mceJwmugWuNdsQTUk+KP+/pqH39Gs916SZJWZEpOD07ycGIH8rXk1YgxFi9iSya9aixDi8NaCP7eJsG6EY+wlm8VpLxJufvpKEd0Xkv9GumZW+3gw/KD2NeznO6AiYXCTQptI+kBMkvm+yE178=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789548776; c=relaxed/simple;
-	bh=JHIu/IIu019ufS1F2SrHv7YcbaMFSYGubiQvlHrYP7M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qu0JS51QCSq03LJjSrXWun0mF+gkHhQFLBWFxWssn21cNAKfuurKm7EkNfuppJQfiflleybpuAhfzBrB6nAfctAxWRUAZpQ5Dcr+XgRwO9ucc34ElbGePUS5YvllpqtaUMEIEFVYPPd/i1gKDvrsKVmZgws1O7QThi8ckwO3ASU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=hrtDGEL6; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1789549409; c=relaxed/simple;
+	bh=4KmEHZynPwjsy0K3hxSBV+5bXJemzSzRx4B9631B+gQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=J8oatjoEnAiWqF1NqV+yAhtRsBVH97Vd/foqSZKaqYXXDdsY7jK2F08CjhzW31e01PA2TflXE/9OND2G7mDroCOlDSHzW2THabKynXAkQajJcyW2kDQDnWqxoTMXhxIK6NXSg8Tie5c75QDaTk0og0nPpDPJG7NT58VM/OB2nhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T6zILBtq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="hrtDGEL6"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68FLVecc1951631;
-	Wed, 16 Sep 2026 08:52:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=ccl6Ab
-	lDRT7F5uiHrNKEDS27CmbJ4zJOrBrcGlJisuA=; b=hrtDGEL6o+VR+XRfhhHqYX
-	gYVJTc3CqnwXqmh6NJ8+K3a4YBekGId0bEbW2N1FyP9e0yxFR7yzSHQPqxSHM0IR
-	mOdWcMsg9HlfWV+/nkVEcGn3fDMDK5vhdas294u2ufBdji4vcTx4Sb8EZzBDM3Xz
-	CAKgIqfgh9ttGrrtgP6AtDMsFxlZXLdpS75pp0Nmayz4TS9mXWEE03idzo6kb9WD
-	W/1AOZYXVwWYkpmFP+2eTHzlTq+XB4TJFPQYcQ2Cjbfylp3zej8lWUANV0JvU2CE
-	G7mpEh3ZsHXCFyeQCVP8Ruq3wV/5f8oxkGDFzUEvp5t8AFKxk8aFoNTi0x979Y7g
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gmx83um9w-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Wed, 16 Sep 2026 08:52:25 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 68G7e46M389300;
-	Wed, 16 Sep 2026 08:52:24 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4gpyxsdhbx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 16 Sep 2026 08:52:23 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 68G8qKS549742272
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 16 Sep 2026 08:52:20 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1503520043;
-	Wed, 16 Sep 2026 08:52:20 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E51512004F;
-	Wed, 16 Sep 2026 08:52:16 +0000 (GMT)
-Received: from [9.124.211.8] (unknown [9.124.211.8])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 16 Sep 2026 08:52:16 +0000 (GMT)
-Message-ID: <46508541-55ab-4340-8871-924514ee8d5b@linux.ibm.com>
-Date: Wed, 16 Sep 2026 14:22:15 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T6zILBtq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD3411F000FF;
+	Wed, 16 Sep 2026 09:03:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789549396;
+	bh=7vkxNxFT5U6EtkNZarS4fgANjmeJnpUy5I9jHOIon4Q=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=T6zILBtqhlS30wo6ovnAARqJEW8cuCkxRAs1tDMmcuFsTRRbU2Ku5NO5xZnDvBZo/
+	 UzQtd7GtxsTP+T/HeB4fQ0BwLZPwa1m/UlT/OZCSjUjtW6ov99mwTV2DtjAKqt3w/2
+	 V34x6sh3JpFtEsqg9VyZ9VMHwuQkzG7NC9NOil/6NSBMmr0f8MlDHdYjJwbfc33LyQ
+	 K4zYMmrKGYdPK2iZQMSkwSD8ZeXPnatyMALRavSsxvmnSbY/IBohjbYthTjYsC4eRo
+	 xtFKhCzARzkL2lNObeJMG9v147k2MC90AtRwkEtdC/FGcGH11QVKz5R6S+BKljKq5L
+	 zxDFYrNJavkcw==
+Content-Type: multipart/mixed; boundary="===============0276429710653294798=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] powerpc/bpf: Kernel stack corruption in avc_has_perm()
- during BPF kselftests (test_progs)
-To: Venkat Rao Bagalkote <venkat88@linux.ibm.com>,
-        Hari Bathini <hbathini@linux.ibm.com>,
-        Saket Kumar Bhaskar <skb99@linux.ibm.com>, bpf <bpf@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Eduard Zingerman
- <eddyz87@gmail.com>, yonghong.song@linux.dev,
-        Alexei Starovoitov <ast@kernel.org>, andrii@kernel.org,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Ritesh Harjani <riteshh@linux.ibm.com>
-Cc: LKML <linux-kernel@vger.kernel.org>
-References: <56d51dc6-f597-4cfa-b61c-b6b95d61ab86@linux.ibm.com>
-Content-Language: en-US
-From: Shrikanth Hegde <sshegde@linux.ibm.com>
-In-Reply-To: <56d51dc6-f597-4cfa-b61c-b6b95d61ab86@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE2MDExMCBTYWx0ZWRfX85SvrvPSfOMd
- +01q75rsafsdLmXw9Cuv5vcS5oUeflNU37aA2PsJ6iKPDeuHyVWE2+W9aY8M2TUP1N16K/SM23F
- hPi4xWMDaeYXbLgI58AFJoKFQGVUyc7kDKflTKcjZTGdXk1c+JcmeWWUuLMPTRhd499LdjOwMdg
- m1zQwFrqE+c7OG/k/QlzdVSRcO5L15JTmoBr28RzfRZ1DKDxDGNd33Sk16nHB59qpMXPXD1l+hj
- xdnM0tKxzynbU6pN5uZoX7pYLec62PoCbPVuvMPMRHGI47BnJns/fhVWaaEDTukzwA2JdP+aqqy
- TputCIxDFXeswtnmQ5pAK+M1GyFu7VnQqZAeow3gc+DreQrcfXgMuQM3LoZChK2BnkF8A1AQf9O
- XAtB0DZXXybV5pwVDUSlkzgbyz96gw0MuaeEFwR7jPUPolUP/bdzbARLdgCUXZAzyhEcii40yFs
- CE36Z5E1WS6S/cdwQ5w==
-X-Proofpoint-ORIG-GUID: aHG0o8l-4_Y4D9r7LWH8I8O8n9cPJ_vt
-X-Proofpoint-GUID: fyzoQu-Kdur9Wn_W0C6nqJrwiazL0iUC
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE2MDExMCBTYWx0ZWRfXwr8pipsY7Kvj
- WN72Hr5zgO7JiFb1TvGJYSdG/MyIpDDtqeb37/KJsI2n6mQ7R2oXEVmfEfsz3Pr+LgPBPz90cBo
- Me1rf6sdVYq+qA9mxlyoaIYx8URQ1Wg=
-X-Authority-Analysis: v=2.4 cv=cY9HPXDM c=1 sm=1 tr=0 ts=6aaa58c9 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=Oc1KoJq9fdCeQZ6uml4A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-15_05,2026-09-15_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 spamscore=0 bulkscore=0 clxscore=1011 suspectscore=0
- impostorscore=0 malwarescore=0 phishscore=0 adultscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609160110
+Message-Id: <9ebf69156810d89f0e1b7d48b3cf58bebe72e5a9dd06b40375a79d2d4b37ef22@mail.kernel.org>
+In-Reply-To: <20260916074118.1007116-11-alan.maguire@oracle.com>
+References: <20260916074118.1007116-11-alan.maguire@oracle.com>
+Subject: Re: [PATCH v3 bpf-next 10/11] selftests/bpf: Test bpftool dump of BTF location info
+From: bot+bpf-ci@kernel.org
+To: alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,jolsa@kernel.org
+Cc: daniel@iogearbox.net,ihor.solodrai@linux.dev,yonghong.song@linux.dev,song@kernel.org,qmo@kernel.org,martin.lau@linux.dev,memxor@gmail.com,emil@etsalapatis.com,bpf@vger.kernel.org,nsc@kernel.org,puranjay@kernel.org,yatsenko@meta.com,alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 16 Sep 2026 09:03:15 +0000 (UTC)
 
-Hi Venkat.
+--===============0276429710653294798==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Thanks for reporting.
-
-On 9/16/26 2:11 PM, Venkat Rao Bagalkote wrote:
-> Hello All!!!
-> 
-> 
-> IBM CI has reported a kernel panic on PowerPC (ppc64le, POWER9 pSeries guest) while running BPF kselftests (test_progs).
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c b/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
+> index d5b25302b0c89..f8ea9dfd0780b 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_btf_dump.c
+> @@ -57,6 +57,35 @@ static struct btf *mk_btf(void)
+>  	return btf;
+>  }
 >
+> +static struct btf *mk_loc_btf(void)
+> +{
+> +	struct btf *btf;
+> +
+> +	btf = btf__new_empty();
+> +	if (!ASSERT_OK_PTR(btf, "new_empty"))
+> +		return NULL;
+> +
+> +	btf__add_int(btf, "int", 4, BTF_INT_SIGNED);
+> +	btf__add_func_proto(btf, 1);
+> +	btf__add_func_param(btf, "arg1", 1);
+> +	btf__add_func_param(btf, "arg2", 1);
+> +	btf__add_func(btf, "foo", BTF_FUNC_STATIC, 2);
+> +
+> +	btf__add_loc_param(btf, 4, BTF_LOC_PARAM_REG);
+> +	btf__add_loc_param_value(btf, 1);
+> +	btf__add_loc_param(btf, 8, BTF_LOC_PARAM_REG |
+> +			    BTF_LOC_PARAM_DEREF | BTF_LOC_PARAM_OFFSET);
+> +	btf__add_loc_param_value(btf, 2);
+> +	btf__add_loc_param_value(btf, 0x10);
+> +	btf__add_loc_proto(btf);
+> +	btf__add_loc_proto_param(btf, 4);
+> +	btf__add_loc_proto_param(btf, 5);
+> +	btf__add_locsec(btf, "inline.text");
+> +	btf__add_locsec_loc(btf, 3, 6, 64);
+> +
+> +	return btf;
+> +}
 
-What has changed in CI that it is hitting now?
-  
-> Environment:
-> 
+This isn't a bug, but mk_btf() ends with a VALIDATE_RAW_BTF() sanity
+check -- would it be worth adding one to mk_loc_btf() too (or capturing
+the btf__add_*() return ids), so a construction failure shows up as
+itself rather than as a dump diff?
 
-It is very likely same as
-https://lore.kernel.org/all/ba9759d0-b1f2-4b33-aff5-769cf89bd584@linux.ibm.com/
+> @@ -105,6 +134,26 @@ static char *dump_c(const char *btf_path, bool sorted)
+>  	return buf;
+>  }
+>
+> +static char *dump_raw(const char *btf_path)
+> +{
+> +	char args[MAX_BPFTOOL_CMD_LEN];
+> +	char *buf;
+> +	int err;
+> +
+> +	buf = malloc(DUMP_BUF_SZ);
+> +	if (!ASSERT_OK_PTR(buf, "alloc_dump"))
+> +		return NULL;
+> +
+> +	snprintf(args, sizeof(args), "btf dump file %s", btf_path);
+> +	err = get_bpftool_command_output(args, buf, DUMP_BUF_SZ);
+> +	if (!ASSERT_OK(err, "btf_dump_raw")) {
+> +		free(buf);
+> +		return NULL;
+> +	}
+> +
+> +	return buf;
+> +}
 
-> 
-> Kernel version: 7.3.0-rc3-gf6e7b42bf05b (PREEMPT)
-> Architecture: ppc64le (POWER9 - IBM,8375-42A pSeries / phyp)
-> Test Suite: Avocado FVT / kselftests (tools/testing/selftests/bpf/test_progs)
-> 
-> 
-> Traces:
-> 
-> [ 1359.516833] Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: avc_has_perm+0x23c/0x240
-> [ 1359.516856] CPU: 0 UID: 0 PID: 49806 Comm: test_progs Tainted: G      OE K     7.3.0-rc3-gf6e7b42bf05b #1 PREEMPT
-> [ 1359.516866] Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE, [K]=LIVEPATCH
-> [ 1359.516870] Hardware name: IBM,8375-42A POWER9 (architected) 0x4e0202 0xf000005 of:IBM,FW950.80 (VL950_131) hv:phyp pSeries
-> [ 1359.516876] Call Trace:
-> [ 1359.516880] [c00000011bc67b10] [c0000000014627c0] dump_stack_lvl+0x84/0xc0 (unreliable)
-> [ 1359.516890] [c00000011bc67b40] [c000000000234840] vpanic+0x1b4/0x47c
-> [ 1359.516897] [c00000011bc67be0] [c000000000234b44] do_panic_on_target_cpu+0x0/0x2c
-> [ 1359.516906] [c00000011bc67c00] [c0000000014f8ce8] __stack_chk_fail+0x48/0x60
-> [ 1359.516913] [c00000011bc67c70] [c00000000092f0bc] avc_has_perm+0x23c/0x240
-> [ 1359.516920] [c00000011bc67d40] [c000000000936fc0] selinux_task_getpgid+0x80/0xa0
-> [ 1359.516927] [c00000011bc67d80] [c000000000920190] security_task_getpgid+0x70/0x1c0
-> [ 1359.516934] [c00000011bc67db0] [c000000000259488] do_getpgid+0xa8/0xf0
-> [ 1359.516941] [c00000011bc67de0] [c0000000002594f0] sys_getpgid+0x20/0x30
-> [ 1359.516948] [c00000011bc67e00] [c000000000034670] system_call_exception+0x160/0x480
-> [ 1359.516957] [c00000011bc67e50] [c00000000000d05c] system_call_vectored_common+0x15c/0x2ec
-> 
-> 
-> Please let us know if any further debugging or testing with specific BPF JIT options is needed.
-> 
-> 
-> Regards,
-> 
-> Venkat.
-> 
+This isn't a bug, but dump_raw() looks like dump_c() with a different
+args string and tag -- would a shared helper that takes the extra
+bpftool arguments and an assert tag cover both?
 
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35072175008
+--===============0276429710653294798==--
