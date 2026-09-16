@@ -1,127 +1,148 @@
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EDC73C8C68
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 05:17:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF7D3D16EF
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 05:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789535871; cv=none; b=rWBu1TQxzgueR2fdSaaZxwHvuK3Mszxh2hDAkmkih0meU5zI17273yJiLdlJWtirMRkS/DY5gZpK2wmk732lzv+KTIyvgodCWIkc6M6HNHhiPpKCenO+1V9RY61TnuTxNCtd3toVwBj/Pj/N6ICW0xrggqI7Yo/jwGuM3MIAGpc=
+	t=1789535880; cv=none; b=nuQsakZaYsfiP+QjXnTTe9GqBqAcA/KAkOoEOjQY0UgULRF2sK/lNxjtt8Z1o4oXfDjsSYGEkRDiGoKyuy4nPj9xwKaXdcsxJrCwCbUNFNrAeTyVUZo39GbWtsnEDoR03MGUtpGeW7K/FNCGDaJuy618rEkBTvqRytD2BIQtFKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789535871; c=relaxed/simple;
-	bh=csuFMHNoSfXJUiEKRnyDG776nZLFpC8JOlXrzTUfBh8=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
-	 Content-Type:References; b=AURuaKdTy6dubN04z90IHUhCUDdiOsxSpfUxZhqi76QgXQlf/p+mm5GW2rzJE4UXGMcShcjnhEiTN9ahBNDxQtEQigHH1ghNUEHOQFHQsu4v7Rm7/0SUW1hAOjvlddKfLUnjRK8iOROEGxcHjitl4uZeYRglprSJ3i5iuagwiaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=jHblaReI; arc=none smtp.client-ip=203.254.224.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1789535880; c=relaxed/simple;
+	bh=mj2L1163t+xcemBtRm04iY/98uCjxldV6m8VrEk73FY=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=I8AlM3tz6uXM4MINkWKtCXmiXFeO0pQrzZLU7M3J6SzNt076AupxMSoj3JN6jsf5FCzzG5MMwv2NZf1U6E3hbO0sXr7/yrjiP90cTz1dt2UmnOAlZVOauiMzJv7JpWHADc+2oMj7IqQvmJsGGIZPqvQVTPoS22ksgwfKutvCJKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=grtJbKIM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="jHblaReI"
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20260916051743epoutp02850bda16a842c8a05c8bb87ffd8ac90a~VtWMDsFA20115001150epoutp02q
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 05:17:43 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20260916051743epoutp02850bda16a842c8a05c8bb87ffd8ac90a~VtWMDsFA20115001150epoutp02q
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1789535863;
-	bh=gKhZKzIlrc1a14bnjDxz+HDub4sbghbE452clME9/Og=;
-	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
-	b=jHblaReIb6KFmt2rUgPAuvo/nhlZaxyHzH7NvaRfdi2PvdIaJ1AkRwFwH/dAZJdJG
-	 Sx0d6Q/MJAL5S2PBvK84MS+jnhmlPIUSwO77Az5RpL2Cbht0nzCyzjkmwhG9QN5cF8
-	 A7AWIFFLvTAPyOuvo+4lNhh1x7lp0qSDO5afDkyE=
-Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
-	20260916051743epcas5p43ba39ba30628791762e72cdcbb3da84e~VtWLX9s860537105371epcas5p4i;
-	Wed, 16 Sep 2026 05:17:43 +0000 (GMT)
-Received: from epcas5p3.samsung.com (unknown [182.195.38.88]) by
-	epsnrtp01.localdomain (Postfix) with ESMTP id 4hl6bB2FhSz6B9mK; Wed, 16 Sep
-	2026 05:17:42 +0000 (GMT)
-Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-	20260916051741epcas5p4bfb1ebbc28556f987d535a280b2c8c83~VtWKO5PKF1868918689epcas5p4z;
-	Wed, 16 Sep 2026 05:17:41 +0000 (GMT)
-Received: from SRIB8EG28RUQ1R (unknown [107.108.208.92]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20260916051738epsmtip295f8f4f370b9bbd7a2150a95daed677f~VtWHYrnh-0788707887epsmtip27;
-	Wed, 16 Sep 2026 05:17:38 +0000 (GMT)
-From: "SandeepI" <irlanki.s@samsung.com>
-To: "'Jakub Kicinski'" <kuba@kernel.org>
-Cc: <netdev@vger.kernel.org>, <bpf@vger.kernel.org>, <davem@davemloft.net>,
-	<edumazet@google.com>, <pabeni@redhat.com>, <ncardwell@google.com>,
-	<ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-	<corbet@lwn.net>, <linux-kernel@vger.kernel.org>, <lorenzo@google.com>,
-	<maze@google.com>, <sporeba@google.com>, <motomuman@google.com>,
-	<srihari.k@samsung.com>, <g.pokhra@samsung.com>, <r.kumawat@samsung.com>,
-	<raj.kumars@samsung.com>, <ts413.lee@samsung.com>, "'Daeil	Hwang'"
-	<daeil2.hwang@samsung.com>, <ramyashree.s@samsung.com>
-In-Reply-To: <20260915165805.359302fe@kernel.org>
-Subject: RE: [PATCH net-next v3] tcp: add TCP_ECN and TCP_ECN_OPTION socket
- options
-Date: Wed, 16 Sep 2026 10:47:37 +0530
-Message-ID: <09fd01dd459a$b2b5ec50$1821c4f0$@samsung.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="grtJbKIM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C0DC1F000FF;
+	Wed, 16 Sep 2026 05:17:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789535877;
+	bh=jJ0tlRWM7ar5eTVnviOF+otemKU4d+uCR/ypTDODZyc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=grtJbKIMAsXj6Md+CcIi2thFRwHLer8hwrxLKpIQ3TawDMQyXM8n1gCWfHTzltubh
+	 guojbQMl6enNZK0YBlphuBBZRogEs8VQZsYQkNjWyHorJMq/bEO9YCVKwfMjSq6oR5
+	 mNp7yJmKbVYmJloNi4tEE/9Ea1beLUpb1JHjXyUCY8+eEW+c1O++voTjq4hGTcBO+T
+	 xoK7tlRMktIu894H4+KfpfGlnP0QqwTlq/eqF33q41ZbXkcRh90zgxSFbqEGmRum4+
+	 Byqa5roHmCvz/Ls+Gv6nJP4S1RVDj8ShbxFEi0PJd4dAki5A4TBqny3R9Tr76cKTR+
+	 4J2YYfkL1QPTg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf 08/11] selftests/bpf: Test for mixed arena/nonarena
+ code paths
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Emil Tsalapatis" <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260916050830.8774-9-emil@etsalapatis.com>
+References: <20260916050830.8774-1-emil@etsalapatis.com>
+ <20260916050830.8774-9-emil@etsalapatis.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 16 Sep 2026 05:17:56 +0000
+Message-Id: <20260916051757.0C0DC1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQF4AsWRY+oGaIDuY7VKoCgi8Z06jgGdcOe2AS3TtgG3hNQBAA==
-Content-Language: en-in
-X-CMS-MailID: 20260916051741epcas5p4bfb1ebbc28556f987d535a280b2c8c83
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-cpgsPolicy: CPGSC10-065,Y
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20260911091026epcas5p35873551b66ec0a50e20ada6e26d2b056
-References: <CGME20260911091026epcas5p35873551b66ec0a50e20ada6e26d2b056@epcas5p3.samsung.com>
-	<20260911091148.456834-1-irlanki.s@samsung.com>
-	<20260915165805.359302fe@kernel.org>
 
-> -----Original Message-----
-> From: Jakub Kicinski <kuba@kernel.org>
-> Sent: 16 September 2026 05:28
-> To: Irlanki Sandeep <irlanki.s@samsung.com>
-> Cc: netdev@vger.kernel.org; bpf@vger.kernel.org; davem@davemloft.net;
-> edumazet@google.com; pabeni@redhat.com; ncardwell@google.com;
-> ast@kernel.org; daniel@iogearbox.net; andrii@kernel.org; corbet@lwn.net;
-> linux-kernel@vger.kernel.org; lorenzo@google.com; maze@google.com;
-> sporeba@google.com; motomuman@google.com; srihari.k@samsung.com;
-> g.pokhra@samsung.com; r.kumawat@samsung.com;
-> raj.kumars@samsung.com; ts413.lee@samsung.com
-> Subject: Re: [PATCH net-next v3] tcp: add TCP_ECN and TCP_ECN_OPTION
-> socket options
-> 
-> On Fri, 11 Sep 2026 14:41:48 +0530 Irlanki Sandeep wrote:
-> > Currently, ECN and Accurate ECN (AccECN) configurations in the Linux
-> > kernel are controlled globally via the net.ipv4.tcp_ecn and
-> > net.ipv4.tcp_ecn_option sysctl variables. This global approach lacks
-> > the granularity required for modern multi-application runtimes.
-> 
-> CI (bpf-ci) reports a failure to build tools/testing/selftests/bpf on all
-tested
-> toolchains/architectures (x86-64 gcc-15, x86-64 llvm-21, s390x gcc-15,
-aarch64
-> gcc-15) after this series. The build breaks in
-> progs/setget_sockopt.c:
-> 
->     progs/setget_sockopt.c:67:11: error: use of undeclared identifier
-> 'TCP_ECN'
->             { .opt = TCP_ECN, .new = 3, .expected = 3, .restore = 255, },
->     progs/setget_sockopt.c:68:11: error: use of undeclared identifier
-> 'TCP_ECN_OPTION'
->             { .opt = TCP_ECN_OPTION, .new = 2, .expected = 2, .restore =
-255, },
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: verifier tests for mixed-type CFG paths are vulnerable to c=
+ompiler optimizations
+--
 
-Thanks for the report.
+commit 2865d7b4af7e52310b9ec10118abb32164639af3
+Author: Emil Tsalapatis <emil@etsalapatis.com>
 
-TCP_ECN and TCP_ECN_OPTION have been defined in
-tools/testing/selftests/bpf/progs/bpf_tracing_net.h to resolve the
-compilation failure in progs/setget_sockopt.c.
+selftests/bpf: Test for mixed arena/nonarena code paths
 
-This has been addressed in v4:
-https://lore.kernel.org/all/20260916050255.1379192-1-irlanki.s@samsung.com/
+Add a selftest to confirm the verifier rejects ALU operations
+that return arena or non-arena results depending on code path.
 
-Thanks,
-Sandeep.
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/t=
+esting/selftests/bpf/progs/verifier_arena.c
+> index 332322c9b54cf..1ce9c4b784816 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+> @@ -561,6 +561,55 @@ int arena_ptr_add_arena_ptr(void *ctx)
+>  	return 0;
+>  }
+> =20
+> +SEC("syscall")
+> +__failure __msg("same insn cannot be used with and without arena pointer=
+")
+> +int mixed_arena_scalar_alu64_scalar_first(void *ctx)
+> +{
+> +	volatile register __u64 reg asm("r3");
+> +	__u32 pick_arena =3D bpf_get_prandom_u32();
+> +
+> +	reg =3D 1ULL << 32;
+> +
+> +	if (pick_arena) {
+> +		asm volatile (
+> +			"r9 =3D %[arena] ll;"
+> +			"%[reg] =3D 0;"
+> +			"%[reg] =3D addr_space_cast(%[reg], 0x0, 0x1);"
+> +			: [reg] "=3Dr"(reg)
+> +			: __imm_addr(arena)
+> +			: "r9"
+> +		);
+> +	}
+> +
+> +	reg +=3D 1;
+> +
+> +	return 0;
 
+[Severity: Medium]
+Are these tests vulnerable to compiler optimizations?
+
+Since these tests rely on the control flow converging to evaluate a single
+instruction with mixed types (SCALAR_VALUE and PTR_TO_ARENA), could compiler
+optimizations like Clang's tail duplication duplicate the reg +=3D 1; retur=
+n 0;
+block into both branches?
+
+If the tail block is duplicated, the verifier would evaluate two separate
+addition instructions, each with a uniform type, bypassing the mixed-type
+check entirely and causing the test to fail to produce the expected
+__failure __msg(...).
+
+Should these functions be written using __naked and explicit assembly (like
+mixed_arena_stack_atomic) to guarantee the exact instruction sharing
+required for this test?
+
+> +}
+> +
+> +SEC("syscall")
+> +__failure __msg("same insn cannot be used with and without arena pointer=
+")
+> +int mixed_arena_scalar_alu64_arena_first(void *ctx)
+> +{
+> +	volatile register __u64 reg asm("r3");
+> +	__u32 pick_scalar =3D bpf_get_prandom_u32();
+> +
+> +	asm volatile (
+> +		"r9 =3D %[arena] ll;"
+> +		"%[reg] =3D 0;"
+> +		"%[reg] =3D addr_space_cast(%[reg], 0x0, 0x1);"
+> +		: [reg] "=3Dr"(reg)
+> +		: __imm_addr(arena)
+> +		: "r9"
+> +	);
+> +
+> +	if (pick_scalar)
+> +		reg =3D 1ULL << 32;
+> +
+> +	reg +=3D 1;
+> +
+> +	return 0;
+
+[Severity: Medium]
+Similarly, could the tail addition here be duplicated into both execution
+paths by the compiler, invalidating the test's mixed-type validation logic?
+
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260916050830.8774=
+-1-emil@etsalapatis.com?part=3D8
