@@ -1,65 +1,67 @@
-Received: from mail-oa2-f29.google.com (mail-oa2-f29.google.com [74.125.231.93])
+Received: from mail-oo2-f39.google.com (mail-oo2-f39.google.com [74.125.231.167])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C97341A55D
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 19:26:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDCE0411FB3
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 19:27:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789586827; cv=none; b=NZMqBu7no3LejRICwUcPEyiVTDV6OJRET4zt57XZXM/nE3/2gpiLt2H+t5K/DzS9em0El1nl6McifAnKVyUkPYy225Pm1LDqnH8Cq/In2tP+au9zqfF9UEOeSJgruCbiqj6gje+ucUkpjQ6lnC+HsCruSoDNRXUBgfjKRCUS29o=
+	t=1789586825; cv=none; b=o7Si2vU4Dtczk3vL96mSBp52aHOtXCWBE1E34xi8pRugll4N/hLZ2PV9JakMwpk5cwS32mEQ/sQn4ZvVa7XL+524sJ8uIQ8A4IfKLVJMhYpQTqGJixaNHoimmH2vfhJ+ff1QYVE8Sq1VjLMeZ5psfd72QoEoqWbfNEl565avWXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789586827; c=relaxed/simple;
-	bh=uHxoCue9yEjP+CuVjjBHAhEX25AFdNQf4CaDmpZCBSo=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bC1dVksvYowNQp/y3O50HgAE+a3TT3hv2yyofsq3w8aqKWBcNUBL9sobWFXAEvN+ay8XoBhyhv1mY6QZnRNpHXfpaDnxQ48P/aUA/cnbA2PBRxF6FQBN7VJvsX+yNUTs1I1B0qSZ2akEezId9s8WgtPWs+2Kek4VqIk40lZ5TEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d6gCxMLx; arc=none smtp.client-ip=74.125.231.93
+	s=arc-20240116; t=1789586825; c=relaxed/simple;
+	bh=nFE6J1CKKnwOE+mVYybKj5/u4IX7kDiTGlQ6XsjxYHs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=jIfn0vYjw3FYD9DbSgBQWDJPPYfqAeHBWDPNuqkGtkBqifhy+1VnB1E1UgQH3Yrf4N7xLJJn6YOWHZd5mt5PEGE8ei8LIzi8+1dnsqK+l9xsbCqdblnEemIlMbfPOkCa2jIU8SO520dvLMMMdQoZcKK4M7hebk8ohUTbBjqu20I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NE2voqFb; arc=none smtp.client-ip=74.125.231.167
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d6gCxMLx"
-Received: by mail-oa2-f29.google.com with SMTP id 586e51a60fabf-466cc9b4b63so125468fac.1
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 12:26:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NE2voqFb"
+Received: by mail-oo2-f39.google.com with SMTP id 006d021491bc7-6bc475ffcbfso677eaf.2
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 12:26:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789586813; x=1790191613; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=nTKcbixeYZXxuqI3d8/9YP3Pagv0RfMTxMxDvyP9+m4=;
-        b=d6gCxMLxWaZNw8uyT/153opXFG8dxn+UjM2YV6cuDsqX8RVvp9WlbZo+r3GjFsl89v
-         qykH+IyXLWrMwRoCdcpdSimtWJKCGrbmgwGcvMxp0uGVt+ldxDw+Zr33NJUoe+/Wp5dw
-         GpEY7+P7Xf82ovD423+0SM/5atWcWqlz93uGnGyynmR0lVlM/+quq86vpTL9p/QVgJP+
-         s0mdyaQSq/Lo5Z+zlCZ4ru1smcTZva1TwCEk0Z4jhn74IF8xG+nhb8Sxh1feXU9GbjGJ
-         GPKWj8EQeKyPS7Pm10ispUfzunD6U7meoFcnJXW46nYkuJFXyG0t0JFsmlh0NVCDmEOO
-         6AoA==
+        d=gmail.com; s=20251104; t=1789586815; x=1790191615; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=M9tmVIvr7xPfv0seaBbrxDE9G49dlPW4Mh9RJl2qJQc=;
+        b=NE2voqFbTZG39X1N+1qZUZP5bha+Q26BG42Suz1FYdsXDapdwY1bzJJOE60F4dQ1uV
+         9ItVXxtdR9yzti1qamLKq0e//56viJjQUjG/YlkYuNFxMN573vuiVYhFSO0uDVB4iXy2
+         ysmzxK+aA+0NxV6KB5izIFoXyyjFTAZ9qu4JqiCfUW/t+0C5kZnCjPJe3vfp9OKMB1Wd
+         TXGunq2pTebJDkk0Dl16qV/lfhaRmGg9AdZiLZqe+adsp3frmaDZqIg8KyV++ovN3k9Z
+         6jG/HcWmV9TjDKqVJ0Pk5k9xK3dURLR5U0Cvm6p4vczmHX3LDk0YxLg7QQb8Ayb17L5H
+         xjHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789586813; x=1790191613;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=nTKcbixeYZXxuqI3d8/9YP3Pagv0RfMTxMxDvyP9+m4=;
-        b=F2/T14J+gt3khg1NeMLkuFqn43QGezNiqzteLvyyZ5CoWLPA2trDQtnClbOylKrLPZ
-         vxIQ3NBJR6v76kgwyAKqbCvowsEeEFwLFdBB4B5/BrIbAJomOBCjX/xIhZbo8hoSLdwM
-         4iRxvfDFGy/rBbEhkr0blHs76ZNIq3IkCNwHgld3HjYAD3udEEtoh+pwNMT7mV/Yuc0b
-         6+mjiIn2jY31Rbt6DwHgzWtVxe8gxdyARuYlTMk+ngQULhUUGv4tHYPHkV8dt8BthtzJ
-         i708milWUxhGaU9ZbJJv04UN54EpXMaCROOrItjUbyAdP6Ral5nLEtJMrb6ZMITQolo0
-         l/ug==
-X-Gm-Message-State: AFuF++kIbBGN8w6obWgy371X3TommpAit73mbx9DpMi83x8R+RGwyjjK
-	ytmFP/Yx9WAM7qHR8cX/kDZo+D06a+Q9h925BMpQRe7Z9jA8YNWEE57F
-X-Gm-Gg: AYBFou3KRg+Ajbmq8woNVSEThidKi0jsahUKGcyyFwZmAKzxfo9VmKB79lCKn8ZNqx3
-	3fhpWoac7sQhQVbw4rYLYAa16NZtlUiAB6mo6wTSd3MpBkpyWj94XPvuQAwsnP6aP8eE7tYmyF3
-	0IJ6p84SsqdHFyEtO8lq4POvnxMT1Jr+R7nnEsSEkq4g8vFybgQOi74d6KQe23di9qohI8yvvR4
-	+lks0ur+RY+w0nwb5xvnhk5RZhCIoa/tz8dtY2GUpOhXF3xZlfIGDTJ8c+bBRnps4OE8Hk1kwN1
-	BixkRA1jyq/87al1pvDbKmT1ZuPPeQl2AF8wHMQqFnnSBFisnBudOlooQKtwqt36KjTwmzLUWqX
-	JxKpllcJ9APwF8uY/OCtTVoUbadN7GArWhuMXH0vxl/v2CQoAqQU7h5oaXcVOCrV6jII9yI9fkZ
-	TZ9IZ/WGyzvFR6xwNcr9o5oYoDHtxTNHYizyR8AFqY+E4SkTHNV/VOO2Kbl5t3
-X-Received: by 2002:a05:6820:618:b0:6c2:f818:332b with SMTP id 006d021491bc7-6c8fc1c070fmr521598eaf.4.1789586812696;
-        Wed, 16 Sep 2026 12:26:52 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:1::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6c8f727fe99sm670000eaf.12.2026.09.16.12.26.52
+        d=1e100.net; s=20260707; t=1789586815; x=1790191615;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=M9tmVIvr7xPfv0seaBbrxDE9G49dlPW4Mh9RJl2qJQc=;
+        b=A7ABfHgHcZ3eYmFpCzLGHNDKh4J0AcpBvgdLkHW5R37IGuf5SwU6246KF8mps3SlIq
+         oeyM4Xg/pxlI8L7BtMon6gCx1GZS0Ie6MBgC2pO5u1AGsOR5oYntIsN8qzjKmmKwQ5u2
+         kHGkS4QbTcmJDlLEkjN5pf5D+TVN5ENChs/50VNGf++E5bavStry4XJBiXz7jK5CTtug
+         0ehLAB+uEZ1zLDM5OZfp9b3ysiUOgCqne0QZY6x5M5ThJy8aIeT94sS0YoOW5j6DjsRY
+         jQciIbuFFOr9yy5jgeHc4cAYJzh8EYiPpmQVLPUeUjmy6+nOskoaLpJQxVQG8HN/lgxw
+         WnFQ==
+X-Gm-Message-State: AFuF++mSQJpaAoqVlhnuVMB/unaKja2HkE4Z+eNdGIg1wYwJjy0CmM1j
+	qgYIEujwMJyHLQ8vBfLnIESKgjJlWsEpzT/iWl6FAQfA2s04pnF9PdMF
+X-Gm-Gg: AYBFou0v4ZlXtGUP6DL9Ft9G46aYg6PhP6UKaD3zqyuUDZ6hhT5APwNhR93T3kKRJrT
+	k61jaYgdfBYBt0pFQiOqj38i1UtWG5gO3ZoUPOO8389RfkCOcobwtk3DnCjaWUu2D7oX+MYJYPK
+	FoEYTsqCbfzTcofza8D0/2yPiLCSAKjT9l5Z+tSwz/+aDdW3lio/+BNQofcbxqKB/nm3UTDqpIA
+	Q4yz0c+srKSnzFos7/x+1oKkgIoaa0w+25R9CCrK0BkQMLeNoHFY5ohi5f6n7mABPUyNaULi+gj
+	Q31wf0oaX7jMh+krK0QEp9FqwlRWvs/M5l1MZ9UYShHltybytjs1c8bsBBUOXMaWlb3IQuDnpdQ
+	wrK21Nm7v0B+mrz9Nqh2za1Gde4IkusMQU1eB0Sp+xfVxTOkX+qg9bSl32LIac3vCqqk8yy3mw6
+	yg6DdEhYKQlKFfeM3arKFsoUG/R3sXk57i4jA0yUYNru4naNG05QLNi/Illi6E8w==
+X-Received: by 2002:a05:6820:208a:b0:6b7:46e9:9703 with SMTP id 006d021491bc7-6c7d45e21b8mr3913901eaf.51.1789586815067;
+        Wed, 16 Sep 2026 12:26:55 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:75::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-80c410c804asm845829a34.0.2026.09.16.12.26.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2026 12:26:52 -0700 (PDT)
+        Wed, 16 Sep 2026 12:26:54 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Subject: [PATCH bpf-next v4 0/3] bpftool: Improve perf counter reporting
-Date: Wed, 16 Sep 2026 12:26:39 -0700
-Message-Id: <20260916-bpftool_cyles_per_run-v4-0-f2de02c480d5@meta.com>
+Date: Wed, 16 Sep 2026 12:26:40 -0700
+Subject: [PATCH bpf-next v4 1/3] bpftool: Accept zero perf counter
+ snapshots
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,62 +70,84 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAG/tqmoC/4XOzYqDMBSG4VsJZ+0p+amJuup9lEHM8WQaaI0kj
- rQU733AzZRCmfUHz/c+oXCOXKATT8i8xhLTBJ04VgLoMkzfjHGEToCW2spGO/RzWFK69vS4cul
- nzn3+mbA1yraBvJHeQSVgzhzifXfP4OeAE98X+KoEXGJZUn7sh6va93/sVaFC50bnAxmStj7de
- BkOlG47uOo/pJX6E6JRoad6VMdhlMTtG2JekeYTYlCildzYYHRN5rVk27Zf5uJ7qk0BAAA=
-X-Change-ID: 20260827-bpftool_cyles_per_run-93169fcb30b7
+Message-Id: <20260916-bpftool_cyles_per_run-v4-1-f2de02c480d5@meta.com>
+References: <20260916-bpftool_cyles_per_run-v4-0-f2de02c480d5@meta.com>
+In-Reply-To: <20260916-bpftool_cyles_per_run-v4-0-f2de02c480d5@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
  daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com, 
  memxor@gmail.com
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1789586810; l=1652;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1789586810; l=2039;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=uHxoCue9yEjP+CuVjjBHAhEX25AFdNQf4CaDmpZCBSo=;
- b=NCAbkH/jly24KK0c5hbGjHTikwXwgRGNO2eVA478O/umxgo3h7Ql+bkDt9XyOf7M8jpftGItK
- O382+xDrbV+BqAaNatPthJMb4FrPE2mc/mNA371tkmJfTfRfJd0fddj
+ bh=N6cBiuyCtJEvTX4BNTZ2xv2mUw7flba3vtF6Gw7gIhw=;
+ b=VAKU+dx0xX+tIIS5h3g6TV46e9NMcOGb5e2SoLny26GKhYf2xUhvqK2jdfv4jAAcit5jYdphM
+ u0YkJLLVQUyCi3BTn7QCLCMq+OY6Y8/IvtkOc2678JZqnuMSxkZLe+1
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
-Accept valid perf snapshots whose counter is zero. Group selected metrics
-per CPU so derived ratios cover the same scheduling intervals. Scale each
-per-CPU counter before aggregation and report cycles per program run.
+From: Mykyta Yatsenko <yatsenko@meta.com>
+
+A perf counter can be zero at fentry when PMU multiplexing has
+not scheduled the event. Do not reject that sample.
+
+Use enabled time to distinguish a successful snapshot. Read
+directly into the per-CPU map value.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
-Changes in v4:
-- Use enabled time to recognize valid zero-counter snapshots.
-- Build and enable each CPU's complete perf event group in one pass.
-- Keep run_cnt as the total count, drop run_cnt_valid.
-- Link to v3: https://patch.msgid.link/20260908-bpftool_cyles_per_run-v3-0-60e86f325c35@meta.com
+ tools/bpf/bpftool/skeleton/profiler.bpf.c | 21 +++++++--------------
+ 1 file changed, 7 insertions(+), 14 deletions(-)
 
-Changes in v3:
-- Keep the JSON value field raw. Add value_scaled and run_cnt_valid.
-- Use the same CPU set for all metrics.
-- Move snapshot state tracking to a separate patch.
-- Link to v2: https://patch.msgid.link/20260902-bpftool_cyles_per_run-v2-1-bc5d14ad0ce9@meta.com
+diff --git a/tools/bpf/bpftool/skeleton/profiler.bpf.c b/tools/bpf/bpftool/skeleton/profiler.bpf.c
+index f48c783cb9f7..6685e7252fb5 100644
+--- a/tools/bpf/bpftool/skeleton/profiler.bpf.c
++++ b/tools/bpf/bpftool/skeleton/profiler.bpf.c
+@@ -45,28 +45,21 @@ const volatile __u32 num_metric = 1;
+ SEC("fentry/XXX")
+ int BPF_PROG(fentry_XXX)
+ {
+-	struct bpf_perf_event_value___local *ptrs[MAX_NUM_METRICS];
+ 	u32 key = bpf_get_smp_processor_id();
+ 	u32 i;
+ 
+-	/* look up before reading, to reduce error */
+ 	for (i = 0; i < num_metric && i < MAX_NUM_METRICS; i++) {
++		struct bpf_perf_event_value___local *reading;
+ 		u32 flag = i;
+-
+-		ptrs[i] = bpf_map_lookup_elem(&fentry_readings, &flag);
+-		if (!ptrs[i])
+-			return 0;
+-	}
+-
+-	for (i = 0; i < num_metric && i < MAX_NUM_METRICS; i++) {
+-		struct bpf_perf_event_value___local reading;
+ 		int err;
+ 
+-		err = bpf_perf_event_read_value(&events, key, (void *)&reading,
+-						sizeof(reading));
++		reading = bpf_map_lookup_elem(&fentry_readings, &flag);
++		if (!reading)
++			return 0;
++		err = bpf_perf_event_read_value(&events, key, (void *)reading,
++						sizeof(*reading));
+ 		if (err)
+ 			return 0;
+-		*(ptrs[i]) = reading;
+ 		key += num_cpu;
+ 	}
+ 
+@@ -80,7 +73,7 @@ fexit_update_maps(u32 id, struct bpf_perf_event_value___local *after)
+ 
+ 	before = bpf_map_lookup_elem(&fentry_readings, &id);
+ 	/* only account samples with a valid fentry_reading */
+-	if (before && before->counter) {
++	if (before && before->enabled) {
+ 		struct bpf_perf_event_value___local *accum;
+ 
+ 		diff.counter = after->counter - before->counter;
 
-Changes in v2:
-- Scale all counters.
-- Use an enum for metric indexes.
-- Link to v1: https://patch.msgid.link/20260827-bpftool_cyles_per_run-v1-1-77d7bfc3c065@meta.com
-
----
-Mykyta Yatsenko (3):
-      bpftool: Accept zero perf counter snapshots
-      bpftool: Group profile events by CPU
-      bpftool: Scale counters and report cycles per run
-
- tools/bpf/bpftool/Documentation/bpftool-prog.rst |  11 +-
- tools/bpf/bpftool/prog.c                         | 209 ++++++++++++++---------
- tools/bpf/bpftool/skeleton/profiler.bpf.c        |  21 +--
- 3 files changed, 148 insertions(+), 93 deletions(-)
----
-base-commit: 847b984213626bee356d550dc1a8df12e683e50f
-change-id: 20260827-bpftool_cyles_per_run-93169fcb30b7
-
-Best regards,
---  
-Mykyta Yatsenko <yatsenko@meta.com>
+-- 
+2.53.0-Meta
 
