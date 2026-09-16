@@ -1,248 +1,161 @@
-Received: from mail-oi2-f12.google.com (mail-oi2-f12.google.com [74.125.231.204])
+Received: from mail-wm2-f5.google.com (mail-wm2-f5.google.com [74.125.225.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7546407CD3
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 19:27:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBB2F41BA77
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 19:28:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789586830; cv=none; b=OkbuvVQUBnXFp2jXxI2X3yXEG1x2HaRgpN6KZ8/Z/Y7m5YxbWqxpeBANAxwAbnQJGKPx4+1piDqc33vorSZuH/u9wpjgppuIjHzLnOj6PNkL/nqoL0/CYcjb0YjXQRnaafhb8NBpvZVfCRZiKnSlGzm7sR1m4LZeoK8ZvRr/AMk=
+	t=1789586904; cv=none; b=rx4c1kU5POqmEWxAWiyTDLgAlz989c/vsuhYKCttm3a1uPnRjBUaNbGk2hbvCV95yn+KD0BbRHzU96Y9YesBYf3OqPLJoTajJbvIhCZ50kuX54/I2Jd70CZ6mCZy8U0+PoyPxvHwWtUzLAVZ2D+PeuMFf2IusLahIJwESQv2sOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789586830; c=relaxed/simple;
-	bh=jDhA0970Yy89/0wrmcLFQ358tDm07icJS9C7Sj0kGhQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=u64E7WEu6HfYNgUK9zdOC0Ekx64IlfbaTje+K0j+vjwIOLDtkqvu8YkBh9zZyVZu3vR7o4fpA00x1z6+f4il3z/fPvTGvolDxDfuq2kO5JP6WQ7dXiRyoBTS9kV+wNpV1VIj1EnPw0gZ/2+UVvW+AMcNc4M/xW52Z3YF8LcP8CY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ObSDt+AN; arc=none smtp.client-ip=74.125.231.204
+	s=arc-20240116; t=1789586904; c=relaxed/simple;
+	bh=BOeWiQQo7rn2ww5C+xRZU5cR2MAoGfEc6OFhq9l2tyc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KkfLx2koxlYwQT07bDk6irPYKe4a/mVEH8ek/5xY8h4Jo3gJDVh83MkWyoPdV5ZV0wmqnO8it/cNRAwuKbhL+bhkHGA/rQug8Mvz1JSJHqVql/Y81otHsq7eR6u8oueJ2mv4aTh69SNM0npXpnKuh0BIHA6RRFN7iWYnZimcV+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jnR6BEj0; arc=none smtp.client-ip=74.125.225.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ObSDt+AN"
-Received: by mail-oi2-f12.google.com with SMTP id 5614622812f47-4b37a2ffee6so33477b6e.2
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 12:26:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jnR6BEj0"
+Received: by mail-wm2-f5.google.com with SMTP id 5b1f17b1804b1-49e66652cc3so324235e9.1
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 12:28:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789586817; x=1790191617; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=GwB8jYYkFlpmrcBzZzY3+o2wnkHwG/8nMgSXGP2y9Zc=;
-        b=ObSDt+ANEsZNY9SOoN+RaSt+Kr2dTQwVT1Rk6y2HqOEOm++QPyw2rp3kZNmCEiLRW0
-         bdlaxRcAznwwzBpB6gAcAQTCJH6BHnkK+RMbcrpI3KJEtJlniCIhz07It1JlGEXgAzZM
-         9OpKBWXnXY/ezcAFs2u+hBG2f3pzlzU5ixnYvVuxVfC3wKsFxanOXo0sWPutr13sTCdu
-         GIaebOWfrYHF1JdIxI7GLm/+Jd2KjEHe9fxcIc2OYYN0JrWVOpIiVSgg5eUYW3PAE7Q9
-         Mt2BjNBkRNHqrQFM2LBvDl1oaANcNocEGOkWpep1mARaJunDlgqUIu5Keu0r2RMxLcqC
-         NjjQ==
+        d=gmail.com; s=20251104; t=1789586887; x=1790191687; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=9TX7pgdmLOAKwNe8/P78kFbS4ZlY3JeaLeolYT0CN4M=;
+        b=jnR6BEj0kPk61RXpAHU9NA0+AtYxe0yV78V0iI7DYZZPPJwPQejAHM8ZVHSZmC/GAR
+         EnB7G5Q8J2Nt6x6woMN4L/i/0kngu5q/9VZ/ZAU0oivt6Tuff988UjJ7BmyRoremBXou
+         W+TMkh4Cw+1yJ0xc/O0gxJVW4hoSF/vIAxRz+YrgLmlf5ScPAc9lRZdoaCUkwPOUMxjb
+         W12g2fcJ0o/5qYsoq5oH5Lf6gUjYJBvuYmOkWGbzPRgKVlZZDPOH2OTfIFoDPmbA3uOL
+         svIzDfCdxSFzQr7BU2u+BZJuJFF+9H6FI5UCcOeoKGXszBkC9Pusne6mxyMgOPl2Nbzu
+         n8BQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789586817; x=1790191617;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GwB8jYYkFlpmrcBzZzY3+o2wnkHwG/8nMgSXGP2y9Zc=;
-        b=uXZS8eq78q6i59hZvgKBt1EYhEWSEovcewQIGpWMNSrxPrSDLPJr38B0FKpofWIk6e
-         W8FLcmGsu//8pyvhGB8lRUB1Hy5UDE2+lOMR33nDx09wqu4FuYpRvIUqtLLVSuiO5ACV
-         +ycrBUjlmS4f6sdUj/2/HTOBVYv5fyYOj6cz+5L4JrAxk0n89iK/ZWNWGfxxWHTyNgBb
-         QrprziclWaTHrw3Id1LHwlqDQEHD6hwHvAshYasKkdFf8n+ZoYXysY65wgyLcgEVpqg5
-         qbLjO82rKqlTts5wUHCaYcPSNaf4fkghkIyRK8IPABkLGsnheSNSbRuwMfVzRUMw5ioX
-         hZ1w==
-X-Gm-Message-State: AFuF++l0THYTwKQHlkl9uSun5cQFVU+oIh0iC5d/Iex7GuQWpixdc5g7
-	SVkCO6YDDJXF7CBU8v0UN2aCRrTkwCOzcfq+Av2ZlHmoTslT9ti/xf1b
-X-Gm-Gg: AYBFou3FoYk4bzHIHP77TOje7keDcyXHZoGrs2ZRVFtww/DJFbtibyKO6CtyjU+AH+1
-	3A7n4BtH/1J0bnkv0c5VetPp+ZC6SNCCo53rUZigxuvR2lOSfEVFblPXmzQ57FpzbikGn60zFSt
-	MpfFfJbPHW5ZmoBWNersuQeoUtKifR+Yd7n/wcwiqkudt9VRIQeb2buDkg4rBdH3KJ0b3m/O2F5
-	8AeyHEwBpD5eGllNFjZYx0lUYI8IqhnqyiaZTuFz7RG9Xd8cNTqj/GbWuzjr55NBJuvBGjkacD8
-	ILwnlbccfMrRczDRzbAEl0ICsP+CoPGTH67O1SvorCRcifONfV/4myn/zcNglmBkL/6C6I5vcWJ
-	0Bfll8gUOGaF3Jhd/YOXrINtwyqzURPlwHbG6U9sO93JNJsLou8aGvfh7QvcBVKp8/fQntI2Kw1
-	Cm14HZ8lLBr5fgb6fyHUtU+3NBfAsaoTOL9tZL0psWz9IfGJ/Jf4YsyniZo1MH9g==
-X-Received: by 2002:a05:6808:5088:b0:4c3:d087:4446 with SMTP id 5614622812f47-4ca4d0fb1bemr4295043b6e.42.1789586817431;
-        Wed, 16 Sep 2026 12:26:57 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:75::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4cb676cb8b8sm751511b6e.0.2026.09.16.12.26.56
+        d=1e100.net; s=20260707; t=1789586887; x=1790191687;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9TX7pgdmLOAKwNe8/P78kFbS4ZlY3JeaLeolYT0CN4M=;
+        b=nzpKtRnRErT7cB6KRrGWE7nOnb6VSNGsS6rOWxLxNflnxaDY4GwHxyLwzzBCOKbI7R
+         4d0f7mCLVbj49b2LZRl31/EjTadV1hBjr0xSOj5hERAb5piWf3L87BXzXF8kqUB8mk/h
+         aTMGzNPeoXey1T2gYwh6MiS72NRjwlvVOeM9BRiX9gjlJOgVAE+vItEEPtDCtkWuhNkB
+         vGG/T1F6/4iX4r6AAur5bv0aLhRVdKnYDBu1Z+8ChlyPNZTnXsNmofGs9gA8RXcBndum
+         cR2d1uQJEbHb+ayvWztAlD2czQnlB4KpvaBf7qUNJCNXPiZpujcVJuAPEBsrW19f+FXe
+         ibwA==
+X-Gm-Message-State: AFuF++lw+a6ymslwvGBbJrYx2jU77LA+Daxo5g8u0VxOnwonNcU2FK8g
+	eYRZeH13O/+XTNCacvGsXOM1Z6R40WQ0Xl58t2y6JQZLTweBqlFYVbLLtDMUUhrZ
+X-Gm-Gg: AYBFou37nuBKxN7TaTvUDmP+Ha4AQU7ksTWta2AmEAgydcgb4z2lLgRaYFLXA2kjvBX
+	t+WzVl4c0voQaKsgt74dwG1d5khS9gRS/9LJLEb2N6tMb/u0mNjr95081mu21yCjq88GY3rx0Y9
+	sWkZqwKqOpg5Olk2SrmxxV3LeM8rky+3FkMlZi9kjqFEhaRrnWICoXbz/46lJOTwJv4Ry4FEZ4M
+	1otZi1BydXXnGJpG5pL4LDz9UxmuzL7LLW2M+rzGC5GIZxQpDD+HsCaN5T16uwircFD3hV5qpa9
+	lOKU2loF7uOa7Yxc9f3pSxCroUVdoX+x8RXB9fAW9N8lpJkp+luPOIk42eckesehJNJQqcwDnZd
+	vfF0NBht50GD9+YvS5LmiSK1v19VT08SgMZ4jsmb2EVvRgVBdIu7WW67v/rdYs+cgBgsr5qnkpT
+	2LSet+3X1NPNUiB6eqGOQWLG+IvoWpGIl0bH3uDU2u7mvNaKlhHO1G3/mQFKf+rk1lHfB/+o4mv
+	1DlWjMU8V6WujpyVkZRVjvd2zDL78W+k/HANWCiAuP3Bi+PS4OOKoOYBZHlmzNHMmdboDZZtwzj
+	+88X7YRwQOsDQg5SEikzHE0B7ajhgY1Pxt45udUA663ox6U7
+X-Received: by 2002:a05:600c:4e91:b0:49d:1a02:4797 with SMTP id 5b1f17b1804b1-49eb7346fbamr43849035e9.17.1789586887078;
+        Wed, 16 Sep 2026 12:28:07 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fbd967f1csm1251325e9.3.2026.09.16.12.28.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2026 12:26:57 -0700 (PDT)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Wed, 16 Sep 2026 12:26:41 -0700
-Subject: [PATCH bpf-next v4 2/3] bpftool: Group profile events by CPU
+        Wed, 16 Sep 2026 12:28:06 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Tejun Heo <tj@kernel.org>,
+	Amery Hung <ameryhung@gmail.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v3 0/5] Fix generic __uninit kfunc output buffers
+Date: Wed, 16 Sep 2026 21:27:57 +0200
+Message-ID: <20260916192805.3991983-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260916-bpftool_cyles_per_run-v4-2-f2de02c480d5@meta.com>
-References: <20260916-bpftool_cyles_per_run-v4-0-f2de02c480d5@meta.com>
-In-Reply-To: <20260916-bpftool_cyles_per_run-v4-0-f2de02c480d5@meta.com>
-To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
- daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com, 
- memxor@gmail.com
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1789586810; l=4707;
- i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=xRYRhm7NkNQb63U3CUu4LNXYEpiDFKuBY0X1e/IQGog=;
- b=4Qii+vI6s/5eoqP6w8yZy7AljCMTs/16w+R+93eLQIxQTfUcGHV0ewW6/TNB9KLDByxDwEe7X
- J9SMJMDR8VVBuQGqDPumQ+NJ+XPe/7+Qw6d/Um/88Qfg9j0GWQKeowz
-X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
- pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3834; i=memxor@gmail.com; h=from:subject; bh=BOeWiQQo7rn2ww5C+xRZU5cR2MAoGfEc6OFhq9l2tyc=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvV29rGfbdTl6Upv1DdEKi5S2zTW5kXFd31R6uWXeS4p dImt1+3o5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABNZG8XI8PLws5idMZKHr938 XX6z+cdDgW18WQdMv2Xc05xd+fTx+npGhkkPOCcePvBsyYq4xM515Vt7th7Yo9P67l1eleD7T7m zdzEAAA==
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
 
-From: Mykyta Yatsenko <yatsenko@meta.com>
+Generic __uninit kfunc arguments are output buffers. Stack liveness treats
+them as writes, but argument checking still requires readable contents and
+does not record definite initialization after the call. Check these
+arguments as write-only and record their initialization after validating all
+inputs, including inputs that alias an output.
 
-Independently scheduled perf events can cover different intervals,
-making derived ratios inconsistent.
+Keep the single-output fix and its immediate regression tests separate from
+the extension for multiple outputs. The first three patches provide the
+capability-test prerequisite, the backportable kernel fix, and its tests.
+The kernel fix itself has no dependency on the test fixture. The final two
+patches add per-argument output tracking and its focused tests. This
+extension is optional; there is no current production consumer for multiple
+outputs.
 
-Open one event group per CPU and enable it only after all selected
-metrics have joined.
+The opt-in __prepare_priv annotation uses libbpf's prepare/load boundary to
+resolve module BTF before dropping CAP_SYS_ADMIN and CAP_PERFMON. Program
+loading then runs with the capabilities selected by __caps_unpriv. Ordinary
+unprivileged tests keep their existing preparation path, and disabled or
+undetectable CPU mitigations still cause the relevant tests to be skipped.
 
-Fail the profile setup when a selected event cannot join its group.
+Changelog:
+----------
+v2 -> v3
+v2: https://lore.kernel.org/bpf/20260916160821.3157543-1-memxor@gmail.com
 
-Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
----
- tools/bpf/bpftool/prog.c | 87 +++++++++++++++++++++++++++++-------------------
- 1 file changed, 52 insertions(+), 35 deletions(-)
+ * Reuse check_raw_mode_ok() after kfunc prototype generation, including
+   struct outputs resolved to generic memory later. (Amery)
+ * Remove the now-redundant kfunc output-count check in the multiple-output
+   extension and simplify the helper validator.
+ * Leave the stack-passed output uninitialized so the reduced-capability
+   test detects missing __uninit handling. (Sashiko)
 
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index 6ab911e82155..a14a1a9601bd 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -2350,7 +2350,7 @@ static char *profile_tgt_name;
- static int *profile_perf_events;
- static int profile_perf_event_cnt;
- 
--static void profile_close_perf_events(struct profiler_bpf *obj)
-+static void profile_close_perf_events(void)
- {
- 	int i;
- 
-@@ -2361,61 +2361,78 @@ static void profile_close_perf_events(struct profiler_bpf *obj)
- 	profile_perf_event_cnt = 0;
- }
- 
--static int profile_open_perf_event(int mid, int cpu, int map_fd)
-+static int profile_open_perf_event(int mid, int cpu,
-+				   int map_fd, int group_fd, __u32 map_key)
- {
-+	struct perf_event_attr attr = metrics[mid].attr;
-+	bool group_leader = group_fd < 0;
- 	int pmu_fd;
-+	int err;
- 
--	pmu_fd = syscall(__NR_perf_event_open, &metrics[mid].attr,
--			 -1 /*pid*/, cpu, -1 /*group_fd*/, 0);
-+	attr.disabled = group_leader;
-+	pmu_fd = syscall(__NR_perf_event_open, &attr, -1 /* pid */, cpu,
-+			 group_fd, 0);
- 	if (pmu_fd < 0) {
--		if (errno == ENODEV) {
--			p_info("cpu %d may be offline, skip %s profiling.",
--				cpu, metrics[mid].name);
--			profile_perf_event_cnt++;
--			return 0;
--		}
--		return -1;
-+		err = -errno;
-+		if (errno == ENODEV && group_leader)
-+			p_info("cpu %d may be offline, skip profiling.", cpu);
-+		return err;
- 	}
- 
--	if (bpf_map_update_elem(map_fd,
--				&profile_perf_event_cnt,
--				&pmu_fd, BPF_ANY) ||
--	    ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0)) {
-+	if (bpf_map_update_elem(map_fd, &map_key, &pmu_fd, BPF_ANY)) {
-+		err = -errno;
- 		close(pmu_fd);
--		return -1;
-+		return err;
- 	}
- 
- 	profile_perf_events[profile_perf_event_cnt++] = pmu_fd;
--	return 0;
-+	return pmu_fd;
- }
- 
- static int profile_open_perf_events(struct profiler_bpf *obj)
- {
-+	__u32 num_cpu = obj->rodata->num_cpu;
-+	__u32 map_key;
- 	unsigned int cpu, m;
--	int map_fd;
-+	int group_fd, map_fd, pmu_fd;
-+	int err;
- 
--	profile_perf_events = calloc(
--		obj->rodata->num_cpu * obj->rodata->num_metric, sizeof(int));
-+	profile_perf_events = calloc(num_cpu * obj->rodata->num_metric,
-+				     sizeof(*profile_perf_events));
- 	if (!profile_perf_events) {
- 		p_err("failed to allocate memory for perf_event array: %s",
- 		      strerror(errno));
--		return -1;
-+		return -ENOMEM;
- 	}
-+
- 	map_fd = bpf_map__fd(obj->maps.events);
--	if (map_fd < 0) {
--		p_err("failed to get fd for events map");
--		return -1;
--	}
-+	for (cpu = 0; cpu < num_cpu; cpu++) {
-+		group_fd = -1;
-+		map_key = cpu;
-+		for (m = 0; m < ARRAY_SIZE(metrics); m++) {
-+			if (!metrics[m].selected)
-+				continue;
- 
--	for (m = 0; m < ARRAY_SIZE(metrics); m++) {
--		if (!metrics[m].selected)
--			continue;
--		for (cpu = 0; cpu < obj->rodata->num_cpu; cpu++) {
--			if (profile_open_perf_event(m, cpu, map_fd)) {
--				p_err("failed to create event %s on cpu %u",
--				      metrics[m].name, cpu);
--				return -1;
-+			pmu_fd = profile_open_perf_event(m, cpu, map_fd, group_fd,
-+						     map_key);
-+			if (pmu_fd == -ENODEV && group_fd < 0)
-+				break;
-+			if (pmu_fd < 0) {
-+				p_err("failed to add event %s to group on CPU %u: %s",
-+				      metrics[m].name, cpu, strerror(-pmu_fd));
-+				return pmu_fd;
- 			}
-+			if (group_fd < 0)
-+				group_fd = pmu_fd;
-+			map_key += num_cpu;
-+		}
-+		if (group_fd < 0)
-+			continue;
-+		if (ioctl(group_fd, PERF_EVENT_IOC_ENABLE, PERF_IOC_FLAG_GROUP)) {
-+			err = -errno;
-+			p_err("failed to enable perf event group on CPU %u: %s",
-+			      cpu, strerror(-err));
-+			return err;
- 		}
- 	}
- 	return 0;
-@@ -2423,7 +2440,7 @@ static int profile_open_perf_events(struct profiler_bpf *obj)
- 
- static void profile_print_and_cleanup(void)
- {
--	profile_close_perf_events(profile_obj);
-+	profile_close_perf_events();
- 	profile_read_values(profile_obj);
- 	profile_print_readings();
- 	profiler_bpf__destroy(profile_obj);
-@@ -2529,7 +2546,7 @@ static int do_profile(int argc, char **argv)
- 	return 0;
- 
- out:
--	profile_close_perf_events(profile_obj);
-+	profile_close_perf_events();
- 	if (profile_obj)
- 		profiler_bpf__destroy(profile_obj);
- 	close(profile_tgt_fd);
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260915141004.1196460-1-memxor@gmail.com
 
+ * Separate the single-output fix and tests from multiple-output support
+   and its tests; reduce coverage to focused cases. (Eduard)
+ * Skip inactive output slots before looking up argument register state.
+   (Sashiko, Amery)
+ * Separate sysctl restrictions from mitigation-related test skips.
+   (BPF CI)
+ * Use an int-width initialization store in the alias test for big-endian
+   targets. (BPF CI)
+ * Centralize conversion from argument numbers to slots. (Eduard)
+ * Share clear access-mode selection between fixed-size and sized arguments.
+   (Amery)
+ * Clarify the opt-in prepare/load capability boundary and retain the
+   reduced-capability alias rejection test. (Eduard)
+
+Kumar Kartikeya Dwivedi (5):
+  selftests/bpf: Allow privileged preparation for capability tests
+  bpf: Fix generic __uninit kfunc output buffers
+  selftests/bpf: Cover generic __uninit output initialization
+  bpf: Support multiple __uninit kfunc output arguments
+  selftests/bpf: Cover __uninit kfunc output argument slots
+
+ Documentation/bpf/kfuncs.rst                  |  27 +++--
+ include/linux/bpf_verifier.h                  |  11 +-
+ kernel/bpf/verifier.c                         |  93 ++++++++++----
+ .../selftests/bpf/prog_tests/verifier.c       |   4 +
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   9 +-
+ .../bpf/progs/verifier_kfunc_uninit.c         | 100 ++++++++++++++++
+ .../bpf/progs/verifier_kfunc_uninit_multi.c   | 113 ++++++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  44 +++++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |   7 ++
+ tools/testing/selftests/bpf/test_loader.c     |  48 +++++---
+ tools/testing/selftests/bpf/unpriv_helpers.c  |  16 ++-
+ tools/testing/selftests/bpf/unpriv_helpers.h  |   2 +
+ 12 files changed, 418 insertions(+), 56 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_kfunc_uninit.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_kfunc_uninit_multi.c
+
+
+base-commit: 5ef40d69b38a93bc9951dadb1a15c85c597e1a40
 -- 
-2.53.0-Meta
+2.53.0
 
