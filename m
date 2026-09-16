@@ -1,115 +1,121 @@
-Received: from mail-pj2-f5.google.com (mail-pj2-f5.google.com [74.125.227.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B5963E6DC9
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 06:14:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1222389E07;
+	Wed, 16 Sep 2026 06:45:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789539301; cv=none; b=nqz9wObyiGsGIvkIUBHtP6H6tK1zi4RDGr1/2hvhwHukXtFktFFWSuI6jUmOly1JnKzDp5RtPGQOOu0q2yAd7V8qjduEnpNgCPKI177fxS3VEiB+eNhpJL8LIAy0mKJww4rcHSqlO3CEf0ISY6D7VQO7jkoHJYIZftWCwSj98yo=
+	t=1789541131; cv=none; b=uwdAKWG2G2AtTOUfH1kJ19ogzP+Hp6lgl/hvoZIsrW5dRcrzavrh6QtGXYKfRNX3GcJixVk/infXKbf8hyKABHhHVD13KZnQ/uKsNo3fZmctrtOqr58Cy5vdKaQ6pyKqqeyHdC8lsLCDh5bK2dtxSvdLaSWGu7XnarOTODSK6NU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789539301; c=relaxed/simple;
-	bh=bEa4qO88nA8/qLPLqhXgHOJCKLupOkNX4kfesKgt13o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mrlpFQPb3lGVs86pPnSNuFZxxn33Hina5ECYC4101+4zpndHIrRhV53gnpV2Oxth7wLJMgtoiIpXJag+x9pgpHxqF3bTOoYcTzd0ygtPYW1o8wF3Sm87+pI61So5pglhjsOfRyjzjyl7myCIKjtYJkjvDs3iQyG4s9vteNq2G/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UILgjirf; arc=none smtp.client-ip=74.125.227.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789541131; c=relaxed/simple;
+	bh=q1IsMRmPA7Ces1FEWyRaFCf4gETSf0lnjlirzRbWkr8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tJd1PntMMe6YGfEel2GLVLw65xxMA6WiOzRYJ1tvrrxFwel8hyA/9jbzuGgm3qwnk4ZexP6PpDxFzGjDdJqqmJ8qU9UFE3tRivym2sTKYk2LknxRO2GWXFFqxuxzxwMa19IkdMgsavfLS+FVOWZ4lL5EXLGVKOWKROgPCwZ+mfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a24crPNB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UILgjirf"
-Received: by mail-pj2-f5.google.com with SMTP id d9443c01a7336-2d942de6574so34112775ad.0
-        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 23:14:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789539299; x=1790144099; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=7QCKIBAsyBgRflIM3No1FQ8OuKChtBTQtGCZAZUwjvQ=;
-        b=UILgjirfjSwn9ntmp71gm5atUqt5MU2HG5oOI4wXYLTgdNOwdXpqP30XdSuCQQSj/9
-         QG0PVk6i6vFblrkAChtt0rk6CQ1VqgHdVSRBiEtBCftAflxuh2yjfBIEy+4/JPNed7eQ
-         73T3XEfaswPMnYdJbCXBvhtHujEO0wRH26WcKYdNUoGlKG3GiJbOu6DcYTswBPYfmrCI
-         iFtXxA0gmQeR3PoHF1VhYEsTJ/E7qlxIvyQKKq78sLY/7QOFV7kdzWS8OcmDAl59cPoQ
-         KBWxwOpIwjL/oAHy7cMdHE5xPHY9jT6TsCOXkGK7HUZ+ICoUuAREi/4moVu0wCsRPwC8
-         pBQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789539299; x=1790144099;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7QCKIBAsyBgRflIM3No1FQ8OuKChtBTQtGCZAZUwjvQ=;
-        b=RuED4V694DZ/EU1LdfYg4V6sW1pyZaPaBvZdn5lR7crFmxNuiGaeuAbPPMr9e87Ju7
-         EqhNjLSNSkcrc4bvKVLuUOQUzacCeiI7XcdksMFwCzdlOqv0lJBMeKe4UZrQ3NrUmWvz
-         XyZaPkpDLElj2YoQSuYnkU69VstkK6chjJnl3IwXHFXHQPDdmus6ktC9EYcDeE2vO+vF
-         j/M67KjtkWhjmn3NUjd3/0wQcIh3tTeBo9EIqRD0hltjUQFJN9alemOiZ7i2xwEzdIje
-         ZYr8ri7WXw8ibD6gwakY31S2ujT+5emQfJgfiGe8SyvgjBxlej0h8Dir2XEjvQ19mI40
-         ekoA==
-X-Gm-Message-State: AFuF++msP59P6gPHqnP6AfnEn/qpvacHHhgm+nmOAylCXacRTLhCXA4f
-	5Y6GxBjkLubhWsCm8mS+Wdc581kGTukS1ET8NklFyyu9W2y3m+AX2Ac5OwShEIkG7RefUPZI+Tk
-	=
-X-Gm-Gg: AYBFou2MGdHzs1I9b7clz1UOCeP2v0iRqFwkkZYwpaUM6/8aoacb4q8rurMYj2HA1rn
-	RcYccnIQU9iW8ABPodicAcLSu+DO/KnyzEA0U+AQ/zy0SI2e9CkMf/yH8ZzLUQvoeLCdySsPbLG
-	yUHLZ6uOK5wcjsq9f41wmFkC0QFe4AsJLAjeFAAyuiye3jtCX/wRgMI1TampQQUhvHFlLvrDxTh
-	QxxfOqafu/mQHY5R0XhebcRnhoySg7zOrivwlLCBiwUQ9m/67y91nez5HDWKjMi6T1CrE3/ndkL
-	oSTG9TVTE/pMgx1cHgytOm1a8KIAu5U5tsN+9ZLTc3G4UyNDfZTb9Mn2IbJ6XNvSX5jRxUv3u2q
-	cvUqopJhC5HnKPJNV07NGrxtN8Dy6HAoYAWGbWKkjC+k45S+Gn6AwBkku13MpvY8kEynfcnIJw/
-	uB/f+kYAnrMqvUT/6t6Qi15k5ODSlS20dfBZWCTH0mlSc7xw+kE4XdpR+0vFyQzalFtKQ=
-X-Received: by 2002:a05:6a20:9d93:b0:3da:9f19:bf2 with SMTP id adf61e73a8af0-3dd5f5c7a3dmr3647336637.18.1789539298788;
-        Tue, 15 Sep 2026 23:14:58 -0700 (PDT)
-Received: from MS-A2.. ([38.103.200.64])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc50ab50d67sm975157a12.6.2026.09.15.23.14.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2026 23:14:58 -0700 (PDT)
-From: Li Ruijian <li.richking@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>
-Subject: [PATCH v2] bpf: add missing __printf attribute to bpf_diag_source
-Date: Wed, 16 Sep 2026 14:14:44 +0800
-Message-ID: <20260916061445.356935-1-li.richking@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260916061201.353630-1-li.richking@gmail.com>
-References: <20260916061201.353630-1-li.richking@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a24crPNB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86A1F1F000FF;
+	Wed, 16 Sep 2026 06:45:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789541130;
+	bh=7kOVTiaKYllY3V4jp//C0OkA7X2Eu1Ktbsk1TPaoM6s=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=a24crPNBYsEfOEPT/HpbL+mpioy8f3iQuz4Nz1u26GkugTTzG14UBioK8Uk7W6gSg
+	 YvUD8Ud5FPp1UScI9ycz3EejphPLRe6/6LJet1tgutFl18vtzbPq9118b48PibSXZz
+	 ZT83Bx4zlie3HdLIAI4PbrybL1+gvc2a4lKe0s2Nk+5gk+2dlTnMTd25RIn8/leSyy
+	 1SlL/G3o3gPAnkY38dk6niz30hOJwSlShJrMou7kUns/yb2+iDF4XQ7CErnn/062ad
+	 xNCy4/ra59OyG/FU2tE65R86Yqm0TVVR29AJXeMBbhjRsVTySB84cc450YqcvG6/Tl
+	 4ojbSxqK6sIgw==
+Message-ID: <a184d9c0-aa3a-4d00-9a0e-e7a1d9d344b0@kernel.org>
+Date: Wed, 16 Sep 2026 08:45:24 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v7 0/5] veth: add Byte Queue Limits (BQL) support
+To: Simon Schippers <simon.schippers@tu-dortmund.de>, netdev@vger.kernel.org,
+ =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>
+Cc: kernel-team@cloudflare.com, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Chris Arges <carges@cloudflare.com>, Mike Freemon <mfreemon@cloudflare.com>,
+ =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+ Breno Leitao <leitao@debian.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org,
+ kernel-team <kernel-team@cloudflare.com>
+References: <20260612083530.1650245-1-hawk@kernel.org>
+ <ed63c31c-0d05-4532-bed6-23b7608ec5e2@tu-dortmund.de>
+ <3a3a99dc-b554-4b5d-a004-67454e66e5e0@tu-dortmund.de>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <3a3a99dc-b554-4b5d-a004-67454e66e5e0@tu-dortmund.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-W=1 builds fail on kernel/bpf/diagnostics.o with
--Werror=suggest-attribute=format. bpf_diag_source() passes a
-printf-style format string to bpf_diag_vfmt(); mark it __printf(4, 5)
-like the other diagnostic helpers.
 
-Signed-off-by: Li Ruijian <li.richking@gmail.com>
----
- kernel/bpf/diagnostics.c | 1 +
- 1 file changed, 1 insertion(+)
 
-v2:
-- drop accidental Co-authored-by trailer from v1
+On 9/15/26 16:30, Simon Schippers wrote:
+> On 8/10/26 15:25, Simon Schippers wrote:
+>> On 6/12/26 10:35, hawk@kernel.org wrote:
+>>> From: Jesper Dangaard Brouer <hawk@kernel.org>
+>>>
+>>> This series adds BQL (Byte Queue Limits) to the veth driver, reducing
+>>> latency by dynamically limiting in-flight packets in the ptr_ring and
+>>> moving buffering into the qdisc where AQM algorithms can act on it.
+>>
+>> Hi :)
+>>
+>> I worked on my implementation of DQL coalescing that lives in
+>> dynamic_queue_limits.{h,c} and wanted to share it so we can consider it
+>> for the next cycle. This is because in the next cycle I would
+>> like to add BQL support for tun/tap as well, in addition to veth.
+>> Is that fine for you?
+>>
+>> I think it is in good shape. It uses the same logic as the v7, but
+>> every new field fits inside the existing dql struct, and drivers only
+>> need to call the usual netdev_tx_sent_queue() and
+>> netdev_tx_completed_queue() to use it. Patch 3, 5 and 6 are the same
+>> as before, only 1, 2 and 4 are new. Benchmarks looked fine for me.
+>>
+>> There should be no regressions for other DQL/BQL users. I paid close
+>> attention not to break the dql cache lines or other logic.
+>> coal_usecs is now configurable per queue via sysfs and also via ethtool
+>> as usual.
+>>
+>> While working on this, I found a missing barrier in v7:
+>> There was no smp_rmb() pairing the smp_wmb() in __ptr_ring_produce()
+>> before dql_completed() reads dql->num_queued. This happens to be safe
+>> on x86, but on other platforms the read of dql->num_queued could be
+>> reordered before __ptr_ring_consume(), triggering a BUG_ON() in
+>> dql_completed(). Fixed by adding the missing smp_rmb() in veth_xdp_rcv()
+>> before completing.
+>>
+>> Would love to hear your thoughts on the implementation!
+>>
+>> Thanks,
+>> Simon
+> 
+> Hi! Any thoughts on this? Do you want to continue this series?
 
-diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index 0abbbe177e31..2421f52eec14 100644
---- a/kernel/bpf/diagnostics.c
-+++ b/kernel/bpf/diagnostics.c
-@@ -794,6 +794,7 @@ static void diag_print_insn_context(struct bpf_verifier_env *env, u32 insn_idx,
- 	}
- }
- 
-+__printf(4, 5)
- static void bpf_diag_source(struct bpf_verifier_env *env, u32 insn_idx, const char *label,
- 			    const char *fmt, ...)
- {
--- 
-2.43.0
+Appreciate getting poked :-)
+
+I will not have time to work on this until after October 5th.
+
+If you Simon have time, feel free to submit a V8 patchset with the
+barrier fix mentioned above.  I should have cycles to review and ACK
+(except between 26 sep to Oct 4).
+
+We are still interested in getting this merged. Notice the bug fix from
+Jonas 60db47f02bfa ("veth: fix queue index used to wake the peer txq in
+veth_poll").  We are running XDP on our veth production interfaces, so
+we didn't notice this.  Still, we are currently waiting for this fix to
+get fully rolled out, before proceeding with the BQL variant.
+
+--Jesper
+
 
