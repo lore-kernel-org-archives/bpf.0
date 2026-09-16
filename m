@@ -1,159 +1,113 @@
-Received: from mta0.migadu.com (out-187.mta0.migadu.com [91.218.175.187])
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1901466AF4
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 18:10:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2774BD346
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 18:22:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789582230; cv=none; b=sf5DIKsbT0FmYG6G4TV655byOmW/vPqVFVIoi5DitVfsoMUW//Hu9w1TChSe0T+v4aV37Dra6x5S/nsXxgeg8KTkOc7ulCEmmAMdEQli2GFTSRj2rAqcImdRk/Rl1l822XG77wfkCyDGoVon7g5I9dSMkHkn5botFE5G3pYnQ2U=
+	t=1789582965; cv=none; b=tJicEIvKXmL5azHaVs0erOLFqG5CBGEyDNNLFEQP20Hcce4R9R/P//Lm80o4BU5ZnPwGYWqrYj7N8G3aNIvDW9bjp0efLvPvaFQaeCnxkO1MYeqTOYmwqiL+E4GRcwIFRZSn1mDprb/4L1n9eXWRh3LdE++N7wHtI3YT04cxXD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789582230; c=relaxed/simple;
-	bh=zW2RwnLfumjVy/sP+HREg7Msc98rbIvzGm+54oemM6E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cSBSrFo+h8hnLmBq9W64KsQ4W+P4QoBFBGXS5LsMwOt6dgrXr8HlDf3ssjVBMlelfQjCaZ1CCDn64ESjoiX2HysMhz6bFjhLtqC5F2kTY4PUZCbO2G5KBgR7eHRiFphXq/0E/vizZGg/2W8BCGlmNTBuPdjcCJH3uwwVvJtDR8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Qe0a2jWb; arc=none smtp.client-ip=91.218.175.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789582965; c=relaxed/simple;
+	bh=ioQuxj1ib8blpos2M1AjclaxSh8ESwBZNT82NmHNObs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=o21gLOlD3SYCF8CzKTTs7MCaT8v1N7fCv919yTzZSVpCGa7F68dG6L8VjNMsaDwokyEtSiSZVB47Dv8TcSfTls3NFgcLmNkg2HfcIRvyU+dRgdiTFarQsvQjj6K/XkgzTG9ekctskoWmaC+WH8cwmPI4OvWB14vbiOlY9qGDyas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QJ2X7lEj; arc=none smtp.client-ip=74.125.228.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Qe0a2jWb"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=zW2RwnLfumjVy/sP+HREg7Msc98rbIvzGm+54oemM6E=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789582220; v=1; x=1790187020;
- b=Qe0a2jWbcbo+kUV3i8kcFwehPBfPMiv2SuKp6R979re2Vz59AHWp/tngZmplXZlP8/FwJkQu
- sW1cafUFlvgGmZkSIkuc/Fq1T7lMQiHZuo04ud5lBk1dSh+3BDM1vMr716hqbAPjyWjayuUEIgI
- ePJyRKZkHr2onFvE1nYQn5hM=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta12.migadu.com with ESMTPS id c987281efb541743;
-	Wed, 16 Sep 2026 18:10:09 +0000
-X-Mizu-Trace-ID: c987281efb541743
-X-Migadu-Flow: FLOW_OUT
-From: Usama Arif <usama.arif@linux.dev>
-To: ast@kernel.org,
-	andrii@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	jolsa@kernel.org,
-	justinstitt@google.com,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	martin.lau@linux.dev,
-	memxor@gmail.com,
-	morbo@google.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	yatsenko@meta.com,
-	kernel-team@meta.com
-Cc: Usama Arif <usama.arif@linux.dev>
-Subject: [PATCH] bpf: local_storage: avoid redundant IRQ save on bucket locks
-Date: Wed, 16 Sep 2026 11:10:01 -0700
-Message-ID: <20260916181001.201787-1-usama.arif@linux.dev>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QJ2X7lEj"
+Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc1cebad4adso1065222a12.1
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 11:22:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789582953; x=1790187753; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=ioQuxj1ib8blpos2M1AjclaxSh8ESwBZNT82NmHNObs=;
+        b=QJ2X7lEj8+32+QyItAnuELo6qhtt8Qs3WfeXAE/sSWx5+rnnw2NzDiXLN3prxawwa1
+         c01cUrLb5mx2Q9EXErm16bvP5KxclBTDdaOIT1WDqaCtKt5Gx7MYZ10ngFYEFr19svjk
+         MhSnfw85o8M7TQH5uP1HKXosHz8ILqLBO8f7FqXAgIHvrjusb5bn8F58oqTbVQRgEHJ/
+         wF8La5unH0Vdbt2QgE+6FfOv/uDCLYEfuNf3lew9AMbi93tV0RSjBzm4IbmdfQXV3omh
+         XCB7JMJMjfkwSZQRJj4liMWKslQHZWrpXNfjNH7ZrKKWBbV49luFhrNrro64ClIglauc
+         xzyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789582953; x=1790187753;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ioQuxj1ib8blpos2M1AjclaxSh8ESwBZNT82NmHNObs=;
+        b=j1LCerP4Np2REze39ALKQQOr8H5VeRZMhfGPydPRC5u5kGM2pF9k2Rx3cTgVdKFLa4
+         TXxickRnNpaYP/w5JbRZOnR5SOAQGKOZN77+UW8Dcu6FckgMfqskFZvWlhtDXbwCarmc
+         ar3a6LdPUiRYmYPNLPdhPnNVtppSJTuDd2O+I7GTT0mANqPCobHZUcNJq4fhopTyVRzx
+         u2AlNZ+EWz5yU546hdHl8fx9cgPli2qaOiyQhTypwlP8JD5KRJPLpDtZCXA4mBnwcT1E
+         IUEJrSszgZa4jXZV0OfQrkVVUwI9uQOyukMStcmKAzaLbb4J8Z4zo+LTy74TVdS+IMst
+         yzCw==
+X-Forwarded-Encrypted: i=1; AKwUvBxwiB4P2Sl+gHqINgKXP0LUD2iRGQW96rXWWatES56XIbzE7r8YRXeNjXnAJCkOko+Y5R0=@vger.kernel.org
+X-Gm-Message-State: AFuF++kr+3dR8XtIiUUcdW3Ap9ai7Orlsh4Di0Jhhb35r59ZmScG9Cs2
+	eFPsYDK2Y3H7omn8jcZzCclWvJFC7zwDJAurcyIvTbzhu/p+CaasRdcrWCvF0TmY
+X-Gm-Gg: AYBFou0ylScrtkRbE064Y9iKNDXlK+C7FGhrOSx80ojq+LDYCrvwbn5mh0oig4eaKqz
+	4blbMxCqzpH2nDCBMA1d6Jccs3awn4cO5LTKe/3BufoqMPNtvGH/07L8RFu9SrzkYej6nVitLEg
+	KRFwqylbelLDfXIAJOpKd/YMVPHNSOl9U3Qy/7UlmiI3PIDE0K8NkyH4yC1FLoCi499schwhcKk
+	AXvvBaLW2ikFedF0tmdaRgKd3bfOMOSq086dYN7IKIncymFeRh3cLGenXxghFyqldGx3KVdxoPX
+	gKpo5CIHecdsbNFCVDfQqyfpfzd8Q6S1EVLw2GNqfgfoXmJJh1ZwwTi4URTHIySl3QzuRFvVTCg
+	ON27ek/Xaw1exN/DFXYmU0HgOSJxL9lHcR/pqOKhV9xbTmt7qdF4FFlcBJApO8x75LWZne8ylYj
+	RqFFf6CRLemvt8HfpXn4IfmlIOFWfs3b1rD5Vy3vkEEfIoclU6Qg8Ymo7VcuR+pxF1YzoNmXEz0
+	bjafD3LR/aMbjFKrisPtu7QiP5pCshqNtMmqg==
+X-Received: by 2002:a17:90b:510a:b0:39e:423:bb8f with SMTP id 98e67ed59e1d1-39e1e24fa7amr10509214a91.1.1789582953074;
+        Wed, 16 Sep 2026 11:22:33 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e36096735sm713646a91.12.2026.09.16.11.22.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Sep 2026 11:22:32 -0700 (PDT)
+Message-ID: <0605b7b2539b2530ebf10c36551c6e10d98d1924.camel@gmail.com>
+Subject: Re: [PATCH bpf v4 04/11] bpf: Apply CO-RE relocations before
+ subprogram validation
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil Tsalapatis
+ <emil@etsalapatis.com>, Nicholas Carlini <npc@anthropic.com>, 
+	kkd@meta.com, kernel-team@meta.com
+Date: Wed, 16 Sep 2026 11:22:30 -0700
+In-Reply-To: <20260914222514.1635018-5-memxor@gmail.com>
+References: <20260914222514.1635018-1-memxor@gmail.com>
+	 <20260914222514.1635018-5-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10+b1 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-bpf_local_storage_update() takes the map bucket lock while holding
-local_storage->lock. bpf_selem_unlink_map() does the same; its only
-caller holds local_storage->lock. The outer lock is acquired with
-raw_res_spin_lock_irqsave(), so interrupts are already disabled at both
-sites.
+On Tue, 2026-09-15 at 00:25 +0200, Kumar Kartikeya Dwivedi wrote:
+> check_subprogs() verifies that each subprogram ends in an exit or an
+> unconditional jump before in-kernel CO-RE relocations are applied. An
+> unresolved relocation can then replace that terminal instruction with an
+> invalid helper call. The resulting fall-through into another subprogram
+> breaks the CFG invariant used by postorder and stack liveness analysis,
+> which can write past their per-subprogram arrays.
+>=20
+> Apply CO-RE relocations immediately after preparing the program BTF, befo=
+re
+> subprogram discovery and validation. Keep func_info and line_info validat=
+ion
+> after subprogram discovery because those records depend on the complete
+> subprogram layout.
+>=20
+> Include core_relo_cnt when deciding whether to prepare program BTF. A loa=
+d
+> that supplied only CO-RE relocation metadata previously skipped both BTF
+> setup and relocation processing.
+>=20
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Suggested-by: Alexei Starovoitov <ast@kernel.org>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
 
-Using raw_res_spin_lock_irqsave() for the nested lock saves the already
-disabled IRQ state and issues another IRQ disable. The matching unlock
-tests that saved state before leaving interrupts disabled. On x86-64,
-this adds a pushfq/popq/cli sequence and a test/branch around an
-unreachable sti to each acquisition.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-Use raw_res_spin_lock() and raw_res_spin_unlock() instead. They retain
-preemption nesting, memory ordering and resilient-lock bookkeeping. The
-outer unlock remains responsible for restoring the caller's IRQ state.
-
-In the tested clang x86-64 build, this removes five executed instructions
-from each uncontended nested acquisition. It also shrinks
-bpf_local_storage_update() from 1732 to 1702 bytes and bpf_selem_unlink()
-from 1030 to 992 bytes. The affected paths are updates that add or replace
-an element in existing owner storage and successful unlinks.
-
-Document the owner-lock requirement of bpf_selem_unlink_map() and assert
-that interrupts are disabled.
-
-Signed-off-by: Usama Arif <usama.arif@linux.dev>
----
- kernel/bpf/bpf_local_storage.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index 6fc6a4b672b55..4642da062f0f8 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -240,24 +240,26 @@ void bpf_selem_link_storage_nolock(struct bpf_local_storage *local_storage,
- 	hlist_add_head_rcu(&selem->snode, &local_storage->list);
- }
- 
-+/* Must be called with the owning local_storage->lock held. */
- static int bpf_selem_unlink_map(struct bpf_local_storage_elem *selem)
- {
- 	struct bpf_local_storage *local_storage;
- 	struct bpf_local_storage_map *smap;
- 	struct bpf_local_storage_map_bucket *b;
--	unsigned long flags;
- 	int err;
- 
-+	lockdep_assert_irqs_disabled();
-+
- 	local_storage = rcu_dereference_check(selem->local_storage,
- 					      bpf_rcu_lock_held());
- 	smap = rcu_dereference_check(SDATA(selem)->smap, bpf_rcu_lock_held());
- 	b = select_bucket(smap, local_storage);
--	err = raw_res_spin_lock_irqsave(&b->lock, flags);
-+	err = raw_res_spin_lock(&b->lock);
- 	if (err)
- 		return err;
- 
- 	hlist_del_init_rcu(&selem->map_node);
--	raw_res_spin_unlock_irqrestore(&b->lock, flags);
-+	raw_res_spin_unlock(&b->lock);
- 
- 	return 0;
- }
-@@ -552,7 +554,7 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
- 	struct bpf_local_storage *local_storage;
- 	struct bpf_local_storage_map_bucket *b;
- 	HLIST_HEAD(old_selem_free_list);
--	unsigned long flags, b_flags;
-+	unsigned long flags;
- 	int err;
- 
- 	/* BPF_EXIST and BPF_NOEXIST cannot be both set */
-@@ -637,7 +639,8 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
- 
- 	b = select_bucket(smap, local_storage);
- 
--	err = raw_res_spin_lock_irqsave(&b->lock, b_flags);
-+	/* local_storage->lock is held, so IRQs are already disabled. */
-+	err = raw_res_spin_lock(&b->lock);
- 	if (err)
- 		goto unlock;
- 
-@@ -655,7 +658,7 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
- 						&old_selem_free_list);
- 	}
- 
--	raw_res_spin_unlock_irqrestore(&b->lock, b_flags);
-+	raw_res_spin_unlock(&b->lock);
- unlock:
- 	raw_res_spin_unlock_irqrestore(&local_storage->lock, flags);
- free_selem:
--- 
-2.53.0-Meta
-
+...
