@@ -1,141 +1,131 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA29044E659
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 07:34:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15AF3449B35;
+	Wed, 16 Sep 2026 07:37:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789544101; cv=none; b=iJ17acsvuGa2Z2eP1zO5zVSq2yCuwLZ3m1fhVejf+D3cXQik8mDaxQksoLLZL/Htg4WRGJfyZNvYlSdRungpyqVbBATw743cwkEzEHQ8FCrW+22PXxyxrQf75KtJe2Xnvqmhvu6kwfaUvLNfXk82caOhjGW+uZC0cywWzaH0w/Y=
+	t=1789544281; cv=none; b=n66ELUQzjB0kk6WVm7v7BHVCif5jd0dTqAnCNjYePWv5tZT7OkzcFhWPA+FKpGf7JHhKoCxC4q8uNrTAMMQ5sG/1JLF4HFM56XZcklQmJLuCB0MQmbMFoAfNiVS/q7CEcqwPfBgaNPUq6vCqG9EJRgWyRdnVNeJqw6JG1NC6kaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789544101; c=relaxed/simple;
-	bh=z/xdbBoX67RLjM8cebkAkzKS4tdXauax2CNSwj+j3sU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=sPSVaz0NoXWYuyfE/3X5rJ0ysEUAtUer1BZ0aSc4ictL3SSUgDA6BMQwx6qjpuKRU+9272lN3EDhr6xNmcCd8i5cNHKoIjkWgOFnH1/boNhz6wCbm4/LoeWuIJPU/G9UU06MRCGXoFUaDg5Dn0vLwhP19joElU7A5K04fM4Jij4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KJ97kIPV; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789544281; c=relaxed/simple;
+	bh=N9hwje67TQqasblnT4Bhs+AMQkQIaepRwce6Q+7bnI8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QDDJ1iT/7QxiNaVZWJrgBAqCxRpDbvdeiy3q+OF0RPHE6aiUo6q3r/Gy2ERvY/8RvZ5HQBWW3kX66kvMxgvhKTp37M5ivrLS1CI0CfTVxuESZYYosjNc5gXQkskcyoTPJg5/ksIqm+UPIB478iQFo1bzk7Zsjmu0cjMj5b8t4YA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=ceEfWTq0; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KJ97kIPV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CED51F000FF;
-	Wed, 16 Sep 2026 07:34:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789544094;
-	bh=UYE1RaP5umdZQfku6GR8xh/8uboQNE0UB568eIoEpaY=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=KJ97kIPVDpaBDRvWA3kybqFy8xYRiu2lkVgK+5ms5Liyx4PWSiAKTePkOYpqq4mkZ
-	 WXjRzuADfCJOA8HB2YKqe5Rt4kqCghVDUFENM3IFKTzHg5kf4JIVpTbso2z1EGHDwA
-	 jRcuhjJxvKAP06yImRkcY+YIs+j/7w9iH8yrjkgcgW/uDkncZk44kVzBrSt754xpd0
-	 BJugUxEQbYqPoez+M9jFEdAZq3gbX4Rjiz1nUsaqHBcJ2dc8wZbEg6/+RATHwFUlop
-	 2LKMqlV53pZMeIP7/NOKn2n2avmbN26yMr9NWyg4ydjFvDlmAACqOer1EpqM8/E9Ql
-	 sMgBo6oAUxZQg==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH v4 2/5] selftests/bpf: add iocost cost model test
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tao Cui" <cui.tao@linux.dev>
-Cc: hannes@cmpxchg.org, mkoutny@suse.com, tj@kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260916072302.1068871-3-cui.tao@linux.dev>
-References: <20260916072302.1068871-1-cui.tao@linux.dev>
- <20260916072302.1068871-3-cui.tao@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 16 Sep 2026 07:34:54 +0000
-Message-Id: <20260916073454.9CED51F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="ceEfWTq0"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=F4zb2xQKOFvZK3jra5xVGEiJ8ixK/CtI/VneMCtmJFs=; b=ceEfWTq0rhCZri+Z3d4nDjdkT+
+	Yzu19EwZX0l4DZIPv7uXHTyJVdw389LMbaBwHypEQrSdMrU6mlzA8c+/qzhEm+Q17obFYu7cT807j
+	UcXwJKiHBk3jfilWuoypXejap41HNrmCMaUk0DRldn0j4T/qClSt/GqcmEpQH/24QB/83bMSl+CLT
+	MjTI+EUHbJWcjVyYAtyfdwRvrwj4NFXYZp8lTv/6tUD3mMHqXVdqeYgaheyIc2nsI6IFtZ+WRBcFJ
+	g3+rWHK0iE//DBkjEUXUniqV8R5jv74J96WUXyKr3ZnaQ8fUzvR/PHiZeiN7l4aYXL+YFUJ3T3sPh
+	s18sdIsA==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1x6kDE-000FEU-0H;
+	Wed, 16 Sep 2026 09:37:48 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy03.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1x6kDD-000PI1-36;
+	Wed, 16 Sep 2026 09:37:47 +0200
+Message-ID: <814e1ffd-fc08-40f6-b3ac-b002d2ac08cc@iogearbox.net>
+Date: Wed, 16 Sep 2026 09:37:46 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/8] ocfs2: Copy the xattr name in
+ ocfs2_initxattrs
+To: Joseph Qi <joseph.qi@linux.alibaba.com>, alexei.starovoitov@gmail.com
+Cc: brauner@kernel.org, dwindsor@gmail.com, john.fastabend@gmail.com,
+ memxor@gmail.com, kpsingh@kernel.org, matt@bobrowski.net,
+ bpf@vger.kernel.org, Zhan Xusheng <zhanxusheng@xiaomi.com>,
+ ocfs2-devel@lists.linux.dev
+References: <20260915150739.284189-1-daniel@iogearbox.net>
+ <20260915150739.284189-2-daniel@iogearbox.net>
+ <4eba77a2-a66f-438d-a769-40398564304f@linux.alibaba.com>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ xsFNBGNAkI0BEADiPFmKwpD3+vG5nsOznvJgrxUPJhFE46hARXWYbCxLxpbf2nehmtgnYpAN
+ 2HY+OJmdspBntWzGX8lnXF6eFUYLOoQpugoJHbehn9c0Dcictj8tc28MGMzxh4aK02H99KA8
+ VaRBIDhmR7NJxLWAg9PgneTFzl2lRnycv8vSzj35L+W6XT7wDKoV4KtMr3Szu3g68OBbp1TV
+ HbJH8qe2rl2QKOkysTFRXgpu/haWGs1BPpzKH/ua59+lVQt3ZupePpmzBEkevJK3iwR95TYF
+ 06Ltpw9ArW/g3KF0kFUQkGXYXe/icyzHrH1Yxqar/hsJhYImqoGRSKs1VLA5WkRI6KebfpJ+
+ RK7Jxrt02AxZkivjAdIifFvarPPu0ydxxDAmgCq5mYJ5I/+BY0DdCAaZezKQvKw+RUEvXmbL
+ 94IfAwTFA1RAAuZw3Rz5SNVz7p4FzD54G4pWr3mUv7l6dV7W5DnnuohG1x6qCp+/3O619R26
+ 1a7Zh2HlrcNZfUmUUcpaRPP7sPkBBLhJfqjUzc2oHRNpK/1mQ/+mD9CjVFNz9OAGD0xFzNUo
+ yOFu/N8EQfYD9lwntxM0dl+QPjYsH81H6zw6ofq+jVKcEMI/JAgFMU0EnxrtQKH7WXxhO4hx
+ 3DFM7Ui90hbExlFrXELyl/ahlll8gfrXY2cevtQsoJDvQLbv7QARAQABzSZEYW5pZWwgQm9y
+ a21hbm4gPGRhbmllbEBpb2dlYXJib3gubmV0PsLBkQQTAQoAOxYhBCrUdtCTcZyapV2h+93z
+ cY/jfzlXBQJjQJCNAhsDBQkHhM4ACAsJCAcNDAsKBRUKCQgLAh4BAheAAAoJEN3zcY/jfzlX
+ dkUQAIFayRgjML1jnwKs7kvfbRxf11VI57EAG8a0IvxDlNKDcz74mH66HMyhMhPqCPBqphB5
+ ZUjN4N5I7iMYB/oWUeohbuudH4+v6ebzzmgx/EO+jWksP3gBPmBeeaPv7xOvN/pPDSe/0Ywp
+ dHpl3Np2dS6uVOMnyIsvmUGyclqWpJgPoVaXrVGgyuer5RpE/a3HJWlCBvFUnk19pwDMMZ8t
+ 0fk9O47HmGh9Ts3O8pGibfdREcPYeGGqRKRbaXvcRO1g5n5x8cmTm0sQYr2xhB01RJqWrgcj
+ ve1TxcBG/eVMmBJefgCCkSs1suriihfjjLmJDCp9XI/FpXGiVoDS54TTQiKQinqtzP0jv+TH
+ 1Ku+6x7EjLoLH24ISGyHRmtXJrR/1Ou22t0qhCbtcT1gKmDbTj5TcqbnNMGWhRRTxgOCYvG0
+ 0P2U6+wNj3HFZ7DePRNQ08bM38t8MUpQw4Z2SkM+jdqrPC4f/5S8JzodCu4x80YHfcYSt+Jj
+ ipu1Ve5/ftGlrSECvy80ZTKinwxj6lC3tei1bkI8RgWZClRnr06pirlvimJ4R0IghnvifGQb
+ M1HwVbht8oyUEkOtUR0i0DMjk3M2NoZ0A3tTWAlAH8Y3y2H8yzRrKOsIuiyKye9pWZQbCDu4
+ ZDKELR2+8LUh+ja1RVLMvtFxfh07w9Ha46LmRhpCzsFNBGNAkI0BEADJh65bNBGNPLM7cFVS
+ nYG8tqT+hIxtR4Z8HQEGseAbqNDjCpKA8wsxQIp0dpaLyvrx4TAb/vWIlLCxNu8Wv4W1JOST
+ wI+PIUCbO/UFxRy3hTNlb3zzmeKpd0detH49bP/Ag6F7iHTwQQRwEOECKKaOH52tiJeNvvyJ
+ pPKSKRhmUuFKMhyRVK57ryUDgowlG/SPgxK9/Jto1SHS1VfQYKhzMn4pWFu0ILEQ5x8a0RoX
+ k9p9XkwmXRYcENhC1P3nW4q1xHHlCkiqvrjmWSbSVFYRHHkbeUbh6GYuCuhqLe6SEJtqJW2l
+ EVhf5AOp7eguba23h82M8PC4cYFl5moLAaNcPHsdBaQZznZ6NndTtmUENPiQc2EHjHrrZI5l
+ kRx9hvDcV3Xnk7ie0eAZDmDEbMLvI13AvjqoabONZxra5YcPqxV2Biv0OYp+OiqavBwmk48Z
+ P63kTxLddd7qSWbAArBoOd0wxZGZ6mV8Ci/ob8tV4rLSR/UOUi+9QnkxnJor14OfYkJKxot5
+ hWdJ3MYXjmcHjImBWplOyRiB81JbVf567MQlanforHd1r0ITzMHYONmRghrQvzlaMQrs0V0H
+ 5/sIufaiDh7rLeZSimeVyoFvwvQPx5sXhjViaHa+zHZExP9jhS/WWfFE881fNK9qqV8pi+li
+ 2uov8g5yD6hh+EPH6wARAQABwsF8BBgBCgAmFiEEKtR20JNxnJqlXaH73fNxj+N/OVcFAmNA
+ kI0CGwwFCQeEzgAACgkQ3fNxj+N/OVfFMhAA2zXBUzMLWgTm6iHKAPfz3xEmjtwCF2Qv/TT3
+ KqNUfU3/0VN2HjMABNZR+q3apm+jq76y0iWroTun8Lxo7g89/VDPLSCT0Nb7+VSuVR/nXfk8
+ R+OoXQgXFRimYMqtP+LmyYM5V0VsuSsJTSnLbJTyCJVu8lvk3T9B0BywVmSFddumv3/pLZGn
+ 17EoKEWg4lraXjPXnV/zaaLdV5c3Olmnj8vh+14HnU5Cnw/dLS8/e8DHozkhcEftOf+puCIl
+ Awo8txxtLq3H7KtA0c9kbSDpS+z/oT2S+WtRfucI+WN9XhvKmHkDV6+zNSH1FrZbP9FbLtoE
+ T8qBdyk//d0GrGnOrPA3Yyka8epd/bXA0js9EuNknyNsHwaFrW4jpGAaIl62iYgb0jCtmoK/
+ rCsv2dqS6Hi8w0s23IGjz51cdhdHzkFwuc8/WxI1ewacNNtfGnorXMh6N0g7E/r21pPeMDFs
+ rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
+ DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
+ owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
+In-Reply-To: <4eba77a2-a66f-438d-a769-40398564304f@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28125/Wed Sep 16 08:24:23 2026)
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] bpf: iocost_2x model misses cursor updates during merges
-- [Low] bpf: invalid multi-line comment style in bind_model
---
+Hi Joseph,
 
-commit 0857836334950bc87bf809661e8e366dfa84c06a
-Author: Tao Cui <cuitao@kylinos.cn>
+On 9/16/26 9:28 AM, Joseph Qi wrote:
+> Hi,
+> I have reworked security xattrs in local, which addresses a review
+> comments from sashiko.
+> 
+> The fix will allocate an array in ocfs2_initxattrs(), copy the names
+> and values, account for all of them in the credit calculations, and
+> write each one in ocfs2_init_security_set().
+> 
+> It seems if with it, your patch is no longer needed. I'll send out
+> later.
 
-selftests/bpf: add iocost cost model test
+Ah perfect! I guess this means you'd be routing this rework via your
+tree, we'll just drop this fix on our side, and eventually both sides
+would meet at Linus' tree? If so, that sounds fine to me and would avoid
+a merge conflict.
 
-This commit adds an example cost model implementing the full builtin linear=
- HDD
-formula at double cost. It registers it as a struct_ops and binds it to a d=
-evice
-to verify readback and write operations.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/iocost_model.c b/tool=
-s/testing/selftests/bpf/prog_tests/iocost_model.c
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
-[ ... ]
-> +static int bind_model(const char *dev, const char *name)
-> +{
-> +	char buf[300], got[64];
-> +	int err;
-> +
-> +	snprintf(buf, sizeof(buf), "%s model=3D%s\n", dev, name);
-> +	err =3D write_cost_model(buf);
-> +	if (err)
-> +		return err > 0 ? -err : -EIO;
-> +	err =3D readback_model(dev, got, sizeof(got));
-> +	if (!err && !strcmp(got, name)) {
-> +		/*
-> +		 * restore the builtin linear model on every path so
-> +		 * the device is not left bound to a model the caller
-> +		 * may unregister right after; the write is checked too
-> +		 */
-> +		snprintf(buf, sizeof(buf), "%s model=3Dlinear\n", dev);
-> +		err =3D write_cost_model(buf);
-> +		return err > 0 ? -err : (err ? -EIO : 0);
-> +	}
-> +
-> +	/* bind failed or does not read back: still restore, but report
-> +	 * the original failure rather than the restore result
-> +	 */
-
-[Severity: Low]
-This isn't a bug, but does this multi-line comment violate the BPF subsyste=
-m's
-strict comment style?
-
-The opening `/*` must be on its own line, but here the text starts on the s=
-ame
-line.
-
-> diff --git a/tools/testing/selftests/bpf/progs/iocost_model.c b/tools/tes=
-ting/selftests/bpf/progs/iocost_model.c
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/iocost_model.c
-[ ... ]
-> +SEC("struct_ops")
-> +u64 BPF_PROG(iocost_2x_calc_cost, u64 opf, u64 nbytes, u64 sector,
-> +	     struct blkcg *blkcg, u64 model_flags)
-> +{
-[ ... ]
-> +		cur =3D *cursor;
-> +		if (cur && priced) {
-> +			seek_pages =3D sector > cur ? sector - cur
-> +						   : cur - sector;
-> +			seek_pages >>=3D IOC_SECT_TO_PAGE_SHIFT;
-> +			if (seek_pages > LCOEF_RANDIO_PAGES)
-> +				base =3D randio;
-> +		}
-> +		if (priced && nbytes &&
-> +		    !(model_flags & IOCOST_COST_F_MERGE))
-> +			*cursor =3D sector + RU(nbytes, 512);
-
-[Severity: Medium]
-Does skipping the cursor update when IOCOST_COST_F_MERGE is set permanently
-lose track of the end of merged requests?
-
-If a sequence of backmerged bio submissions triggers calc_cost with
-IOCOST_COST_F_MERGE set, it seems this branch will skip advancing the curso=
-r,
-leaving it pinned at the end of the first bio in the merged sequence.
-
-If a stream builds up more than 16MB of data through merges, would subseque=
-nt
-contiguous IOs calculate a seek distance > 16MB and falsely incur massive
-random IO charges?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260916072302.1068=
-871-1-cui.tao@linux.dev?part=3D2
+Thanks,
+Daniel
