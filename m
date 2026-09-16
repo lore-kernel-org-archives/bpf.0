@@ -1,119 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5727B4CEE70
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 16:28:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789576090; cv=none; b=CAX3mbdK1v3GJIuXW+e+7P+L+cHQupJMNa2xUx7cRX4MzDzyQMOnVKr8ry/DIwQm7WAo5aGi/7+a4O9X/rOhKtlUAKcOHYJxfDYskxz+MtLTEoDhBqRH7tnCTa0d9SCn67ZgdJ28wSI3E41b3qd9F4d05hCqny2+ThJdaKiM7Js=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789576090; c=relaxed/simple;
-	bh=YlRTMhB8DqX9j8za+hEfuYCza5A2MOS4HS9Svup534w=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=cHXUNyiyGy8nfShPAcW99u0Zk/WZOuaATOqZF4HLdbC/Ut25r+ZRP/kxjfyQjOxdRQZeH6bScMuAbXNQBKWeq5slQ/JQ/QqM366pouzqBQYuAaefjARwD99xhpltbvxnQ66NYQTcf74r7cMZLyrbs9daMf+ywd5qaqM5iIxtCZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gkWGkMjY; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE8F48FF60
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 16:38:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.205
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789576727; cv=pass; b=Rv9Y/S9aNUxrrRyIIrcUC1giX8pXaAG/ZP42iEXXKa132yPdkxQI/FBlWQf04ccHveRymML/w2OfXrqSxkzHYWu3VboU0MDgkXPQYbDcJb53Qu2Kcug8oZMPGLjcQm2b5dLrlyCLv2bNl9P0IoTes/b2eHI2Fbzq6dKd2YTOPuk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789576727; c=relaxed/simple;
+	bh=hBtR0lYoj3yuAHUJjn0EsU3G6wA/3HkdbSGpeReLLVA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OY1OUN49aFfZmScmkVPsDOzdempeya5aWcv8+HvPvOHyJcErMF9p0gWAyEhaDGww/2vQumaiLbpg8KI/NrLh0v5G+dZOSa1R/DFmjFfuJFgxdXocrdPK0vVZ9qIEJDSYiQ8IxSjdsMKLoe4rrzikWqoYt0bmos5VUNTRAoXw4TI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kiwh0mFS; arc=pass smtp.client-ip=74.125.231.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gkWGkMjY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99F3E1F000FF;
-	Wed, 16 Sep 2026 16:28:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789576083;
-	bh=2fm2f55xjG4/tAblsqB94vNdw1EmNWzxJzA3ED3M9X4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gkWGkMjYl/xHKfPCU6Oqg7FCKvT8ytLTWrM6nYijln4BXds3C48lRx80S7JB/AIlx
-	 +9WfE0w2VIdSxjaw6OR5OpCEb0/BExUoDOgzHlIChrHGhl9cky/P2FGdl3O/kLrY8Q
-	 p3qMNBU2+6Hp4FDMJijsULwWDKyDgqcw0ABViwx8Vh9Xffu3YHoAJRbDw8LfiXegWc
-	 Nkgg9tA5FQRlw1Ge91VbU6Vn1E5wOAsaRq7EIk4xoITDrt/ogckn6RVzbVSoJHA4Sa
-	 8FJ5ilXINf0jgDOgBo4A2NalGS/Kz1HSnHc4ERBUpuVAYWZLBvFK8z93XoUi80KADU
-	 gOipq3eku1XsQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 5/5] selftests/bpf: Cover __uninit kfunc
- output argument slots
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260916160821.3157543-6-memxor@gmail.com>
-References: <20260916160821.3157543-1-memxor@gmail.com>
- <20260916160821.3157543-6-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 16 Sep 2026 16:28:03 +0000
-Message-Id: <20260916162803.99F3E1F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kiwh0mFS"
+Received: by mail-oi2-f13.google.com with SMTP id 5614622812f47-4c4923c9429so762433b6e.1
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 09:38:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789576725; cv=none;
+        d=google.com; s=arc-20260327;
+        b=f3ZRJhqTmwQyL+zI2ntL0zUV5oFKWA06P5dgaxahRjxjcSAmKlr+Xn6/iErNtRjOOt
+         lVLXyOGfV9gWIUdS2aZP+DYf0XruD7P09ZUnt0q8VtHBzjKe8eM0GCsepo0Fr5J0pxGw
+         +FhRf9UUr3mppflQQWvhTtscZ5L/TZuUPS6b9U0qlYBS1ffEQbRkNxtTJ9pMaT7/iUl9
+         zpUdkzJ+9k3eC94nVt+cq79nL0f7uRdZ//WG7fnPOQO6WPuNZawksFsnhnslwIx3aiaF
+         J3B8cgw7SWcs86KX45w11mIp+Xl0CZ0bhfTd81aiCXHLKA3J8Vzibw3rHbBhqwXtsSKB
+         rTKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=Vz7/JRlsWulHLIc80A/EIodPWcmPZNwKjzejFySWTlw=;
+        fh=7K2qWJ3mUiPSelnihIFryY3l1DriTibHaNVcRL5iMOk=;
+        b=NGbvQkXpzsSsaze/jwEnRTyVxMLzpvTMeqdc7oVSDHKooH9NoZ3hrrbSv4sDz6t0Az
+         Q4E65te9vPysSDeraIBPRSnUrTtHt8w5YpIV8sfTwt5r7oiaG+MvGFW5IwUKqHJPdLzo
+         iqWrGqqPhu4W5WHAPlVcsk/l1/Vmo440wFatWfEfyHLUEYRpWjq8zAl+m3+H/IeIFwFy
+         c+p+3ovaBVLn+H/2ddX11hs3EnrM16ZxwAYWHccsnW/Le5lBOA+sOo70FW45/LcmHaX1
+         71gbVIrGikMvsBGTY2odICJ8tZT258UIusea0Qjo95vElDDgW1bqedr90ZY4wdI2tWiB
+         TXIA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789576725; x=1790181525; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Vz7/JRlsWulHLIc80A/EIodPWcmPZNwKjzejFySWTlw=;
+        b=kiwh0mFS5XASJSrrxmCFoQ/bIpL6emD2VGYVEUGJwWl4o4bYLe16xNdISczUqGjD1W
+         kU4dhT4fERHM520YRGv7FndEg0UtltqG7lrYxZ507VbL/yPgyCb7Iuipi1Fc37xLmPeX
+         1W8vXu8M/vQbtCSZl84K5qgl8+kddC/QwhpJ6Q24QNsodhxSfeHX5XeqRG2uNEhYdzHv
+         /I2m8ipNVwlmLU0WtovEQIoWhqxNWYydoh20mSJJpRL61qEXtRUeG+chLinWJBmjNoQQ
+         sxasfL3+CeGQsYhxPRlNJPBB28ZZhMUCC63pCarIbA1P2/J7H19cbVi5HJVZvrNTkNXa
+         NGQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789576725; x=1790181525;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Vz7/JRlsWulHLIc80A/EIodPWcmPZNwKjzejFySWTlw=;
+        b=rJUMTBS+y19kA4CsNSouw8ZCh3OZaKJ6VsdjEpkF4k/h1kLOunTBx1f3KE56GB4URy
+         doxvbhJ554sfdIsDM+GAMS7SUgQo6MS04asbBo+2osSZBjcQosG4K7NeF6p8nU8FCf75
+         DzPrbzI8Yc3EmgPBiKDaegs3+0yNoyN/sfYoRcKoNwFKkXMp3Yd4qT01nMzuQp502/4+
+         c58F2Zp7ekuiJv2ZKmmRAwxP3gTpPeQjYp5Wdhp16PZUSAN6mNYJDvRTsw3dA5pB7Wsw
+         K5vlFp16kZFuK5mzwM/TGZZqsNNvNMrl4hHhETpNSFG1KtDR4tufCfS/mLhsOHy7SEAd
+         1gMg==
+X-Gm-Message-State: AFuF++lgtodoUsmVv8XvjF3ucVRfHR/RxVKvMEIjdcnvM+nhKGNoTV3H
+	OPa4FyKDkTZWUxV5q6TY5yUzoQQ/YuBWoS4HbFTQOo/8ltxY2y9p8wVpsWU0Zi+gfkw7kRgNRmh
+	M96vXYi69H67s8zaXuQ8rac4hvknMvos=
+X-Gm-Gg: AYBFou3PBwf0N+SoR9GFNSQj+s3KoBm21zuXDYOWbdWAIIymB8Tp7BCGsGSRK1McuBK
+	lScADxiqdUUUs38VC6LvG7MhwyQplf0u2JctgFRprSaSM1EXPLT6npxIYv0dBL4nrLLzDvPlmeI
+	bUMX/5TQjRJK13AaHPVULBkSDi0MmE2RBWeu+Q9ev5TULR6WjcHXlDV5f87FKI1hDORXR62/Hy1
+	l4DYrLH74Qo/jzktLBsdX8NV9KPcgx5fXLakhuuP91i5xveoL4jUwKbqnHcLubcHHJrdKRcV6/U
+	OUxLsoIlYJs3n9hVQP6PfPDYEMmzYMVTtnWKizykeSkOwK2kkclkvfE=
+X-Received: by 2002:a05:6808:c2ac:b0:4b9:e65b:8c2c with SMTP id
+ 5614622812f47-4ca4c285f7amr4114624b6e.26.1789576724904; Wed, 16 Sep 2026
+ 09:38:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260916160821.3157543-1-memxor@gmail.com> <20260916160821.3157543-3-memxor@gmail.com>
+In-Reply-To: <20260916160821.3157543-3-memxor@gmail.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Wed, 16 Sep 2026 09:38:33 -0700
+X-Gm-Features: AcwNN1Vm-fwD_68MYnPv6JpbRwPOufLZRq8rnNDxOuCJnRF0mxBi1vuDE5WTm5k
+Message-ID: <CAMB2axOE3uhK=_bfkGr3QT76AiJzLaupnSk47M_BHB=mAqxWGQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/5] bpf: Fix generic __uninit kfunc output buffers
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, Tejun Heo <tj@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com, 
+	kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf: ineffective test output_passed_on_stack for __uninit tracki=
-ng
---
+>  static int check_func_arg(struct bpf_verifier_env *env, u32 arg, u32 slot, u32 prev_slot,
+>                           struct bpf_call_arg_meta *meta,
+>                           int insn_idx)
+> @@ -9176,15 +9187,21 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg, u32 slot, u32 p
+>                 enum bpf_access_type access_type;
+>                 bool known_memory;
+>
+> +               if (meta->btf && (arg_type & MEM_UNINIT)) {
+> +                       if (meta->arg_raw_mem.regno) {
+> +                               verbose(env, "multiple __uninit buffers are not supported\n");
+> +                               return -EINVAL;
+> +                       }
+> +                       meta->arg_raw_mem.regno = slot + 1;
+> +               }
+> +
 
-commit 70a455597d07423eca32cc332d11faa394e65772
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Lets resue helper proto validation for arg_raw_mem,
+check_raw_mode_ok(). For kfunc, the validation should happen after we
+finish generating the proto, i.e., at the end of
+gen_kfunc_arg_proto(). There is already one example:
+check_arg_prog_aux().
 
-selftests/bpf: Cover __uninit kfunc output argument slots
-
-This commit adds regression tests for the verifier's tracking of __uninit
-kfunc output argument slots. It covers cases involving multiple outputs,
-outputs following by-value parameters, and output pointers passed on the
-stack.
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_kfunc_uninit_mult=
-i.c b/tools/testing/selftests/bpf/progs/verifier_kfunc_uninit_multi.c
-> new file mode 100644
-> index 0000000000000..b944346b35e34
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_kfunc_uninit_multi.c
-
-[ ... ]
-
-> +#if defined(__BPF_FEATURE_STACK_ARGUMENT)
-> +SEC("tc")
-> +__arch_x86_64 __arch_arm64 __arch_riscv64
-> +__success __retval(15)
-> +__flag(BPF_F_TEST_STATE_FREQ)
-> +__caps_unpriv(CAP_BPF | CAP_NET_ADMIN)
-> +__prepare_priv
-> +__success_unpriv
-> +__naked void output_passed_on_stack(void)
-> +{
-> +	asm volatile (
-> +		"*(u64 *)(r10 - 8) =3D 0;"
-> +		"goto +0;"
-
-[Severity: Medium]
-Does pre-initializing the output stack slot here prevent the test from
-actually catching __uninit tracking regressions?
-
-If the verifier fails to recognize the __uninit annotation, it treats the
-argument as a normal pointer. Because the slot is initialized and kept alive
-across the goto +0 checkpoint, the memory is tracked as STACK_ZERO. This
-satisfies the BPF_READ requirement in unprivileged mode, allowing the
-BPF_WRITE check to clobber the slot to STACK_MISC and verify successfully.
-
-Should this test omit the initialization (similar to how it is done in
-output_after_by_value_argument) so that a broken verifier evaluates a
-BPF_READ on STACK_INVALID, forcing an expected verification failure in
-unprivileged mode?
-
-> +		"r1 =3D 1;"
-> +		"r2 =3D 2;"
-> +		"r3 =3D 3;"
-> +		"r4 =3D 4;"
-> +		"r5 =3D 5;"
-> +		"r6 =3D r10;"
-> +		"r6 +=3D -8;"
-> +		"*(u64 *)(r11 - 8) =3D r6;"
-> +		"call %[bpf_kfunc_test_uninit_stack];"
-> +		"r0 =3D *(u32 *)(r10 - 8);"
-> +		"exit;"
-> +		: : __imm(bpf_kfunc_test_uninit_stack) : __clobber_all);
-> +}
-> +#endif
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260916160821.3157=
-543-1-memxor@gmail.com?part=3D5
+>                 /* The access to this pointer is only checked when we hit the
+>                  * next is_mem_size argument below.
+>                  */
+>                 if (!(arg_type & MEM_FIXED_SIZE))
+>                         break;
