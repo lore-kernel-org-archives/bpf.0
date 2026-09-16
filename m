@@ -1,173 +1,196 @@
 Received: from mail-oi2-f12.google.com (mail-oi2-f12.google.com [74.125.231.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B0F41D217
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 19:29:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22F2E43E068
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 19:48:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.204
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789586975; cv=pass; b=EbmVn3UtCR0XhHny3u1VB1vCjp5uM4r3pgMFoCurUfrIEXOLQZHA5sG1zueMk5YtaX54Bz01k3wI2JOslLPTGXcU9eF7fjAguzHxOk1w3LzkzQIgqmxjB+LwOGUL23ZhrTrYBVrDO86pxqv0H7Mw4QQKXHCzE3w/6BE66wF138M=
+	t=1789588110; cv=pass; b=C3/HLaKCtj+Cujv7Ltt4UoidAb1rBLoixgrlaHU5xqcvvJahbjBjJKKW+tQdAOj5L++4bKTEToxoUETefT6e8PnC9n6vByHxe5FwHmj1u6Jedg/Dh7daIUo3+xiVR7K6XwHIWpBWNOpsiSp4szWk1ItDfixRizzBMhOAtVqIU3k=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789586975; c=relaxed/simple;
-	bh=X0bKO65h4md/AUwTLuBudve8hzWfGFXRoDF7mDTv/C4=;
+	s=arc-20240116; t=1789588110; c=relaxed/simple;
+	bh=7jrRIBYIeo9ZWvJBvUPUjmtGD45XWSUIw9N8VD7dBfA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R1rNXfisc+zWY/c75JQjkMoJ5YIGrA2dY/WwGN5EFVl5DY5ZgzrZfVi65n6lob8EQYIIGfZLIPI4n/O7mpAX0DAdddmNsZbSxWJL0W7pHi1oSINMMafUzLuBHeAGVLq0J3k2N4DQwQI/sbhuecpjCQYKNWKM9Y5NJsiQEm4H1Bw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f9MBEFwM; arc=pass smtp.client-ip=74.125.231.204
+	 To:Cc:Content-Type; b=Mq9Tl7txYPHDwQsBW4w6rcO0w8vfqTvVBhzoJfum7LYPiYhUxszxZN4TD8rA86MwfOcRJ1zFP3e0GJ3YhXdNdXD9e4VLM/UiIlIictZDGhrRXNu8n6pi5T9JvmSfJRqoOljaUpO1sHMHXNoA8m+Af9YIgvkT7IqHwo4Rie1CA/E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PPJ+Dnyr; arc=pass smtp.client-ip=74.125.231.204
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f9MBEFwM"
-Received: by mail-oi2-f12.google.com with SMTP id 5614622812f47-4b37a30eb3bso52713b6e.1
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 12:29:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789586958; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PPJ+Dnyr"
+Received: by mail-oi2-f12.google.com with SMTP id 5614622812f47-4b37a3688a2so100553b6e.0
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 12:48:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789588092; cv=none;
         d=google.com; s=arc-20260327;
-        b=OVsYE+TtD3iel6boQHe0+xeNQcyy3g8y73KLAqFdl1p/55jxaLkl5O+QGTfrDFBgqC
-         MOBW9QcjKtEfKPb/p30ajDXzNXjzOdA6/2nfm/r/XO4CR++eADYuXOGKwbkCfAcRlo93
-         WyqOVBEteHW9gD+P4Up0Ub3jtP0KNPwCBO4NKkYKcr9uucMnXCqDY1eZyWZ5y217CWO+
-         3vEWjWI2aFFKdSF4yRpjsVAZMyrJ3lIyxEZDAEUhiLW0J5daJbhANB8fPqaBLNaHroVw
-         krEH/hL4Y7KB49agCowNbheYn5QKoMaBREq/X+UGWg6RGif4/h3hTSh8fjTlHCbmhz3z
-         qtCA==
+        b=ae+dCuWdRFTyuSV0rF2blVb9D7FbEhN3i2W/MwnmAxnIxL8gbd1g5ACIs641pOvGvj
+         rfxi/CvUNb+QkvwhU/FuZGjSzaGoLCmxDHTCE6X9Q73DB7pEn/q2Q+1P1Ldg6G62UaFU
+         Y2WXCwNWnsQZ/ky+UjIgrEyakwMsEX4DlKVyhMC+UhIbTM+zU/R9GhpAkvlsQiEzzh6i
+         4sFluXeAcWS5ns56024I/09qKgIDM7Z8Jo2DpPPz+uzXUnrSOZlOjluQUO9y8MzY7wUI
+         r8Xewh+h6pzPt1Bvpm78QH9z0FVSkA1F5KtKUrjNPYY97WyZTrQGb5T9eLkUqezTxNtV
+         2T9w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=X0bKO65h4md/AUwTLuBudve8hzWfGFXRoDF7mDTv/C4=;
-        fh=thuQ6G5/Lo/OMHSRWlQ/e44tGcNnNWJuGRtiGuZLL+A=;
-        b=ixCM1Dil6sd45ckTrCQFoD9VpkZUNXLSA45f7oRZ2Y8qiT9d6uIcUooHL4BtRYwh+Y
-         qjguodn46upHJ7SvIowHdBr7dMkvdSSMOYTK/65QBw9xstbbHEfIjbe8SU9jlLSRlVz6
-         NxKriBx4jpzoW2FjhCZYJlpl+lcD0HaDAXWQgNKMX9DtOCdRu1H6uvazcFffi1k4M7jG
-         yn+fFLn+0hDzpwDrcuKd9Ovwq7k6Kw5TndptIaIkgQQ2CG6lrtVtm2ExJP28FweC5tjR
-         PwEaw/xVEM8O/Dbg7kSsuXZqwXg6P5IgGCyfR2V7QgTWTlcDDPx/lD8f/3Dqu6c32Guu
-         BTDg==;
+        bh=PEwtLGtWjJW9VQKWAOKEgcq9DgQP3mGFczkkaHSyhA0=;
+        fh=PVF5hOV3lFVkYzH+em3TPzA8DUX1nPTQFNVMrTIZklE=;
+        b=X/4SsmLeGdAN2vD6/Zr9eXUO4AVOpNk2uG7Qa1FSChNndEXIaHxf5eNl0JVLeNK1E6
+         QTtbia2hSfSksPmeC1O1i5EbLFQ4VCeg2vt1hnGO/CfRUP1yjuI3EJB9YYFF1099EWAn
+         QEwwkYJEYPROn3Q4nb1yrWhYGVH5KTHgpm2AgRGI2iFCZ/CnAc9Ljh+N3YCO5BUHSVmm
+         DRXTnBY/nx9adTVUenv7gtvomWMAajUcxF2m2lgiEqQZcyklABViDNraH2ezr8vgg4uU
+         NeOpS4SMdIXft3OEsWdUBcK1VbIATB1bYe5rtocBEBYHqas0HIN50IlBuqbRH9VW1mYM
+         26pg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789586958; x=1790191758; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789588092; x=1790192892; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=X0bKO65h4md/AUwTLuBudve8hzWfGFXRoDF7mDTv/C4=;
-        b=f9MBEFwMyWboE7MBO69ThvN6CztqeYbP0BaguSPv3FQ1chKFY1+htzMjEDoOpr57Mz
-         dV/bOHQmG8pxMi3+VFFggV5BjtspKkR3hw9JCnpLRIg6rixR+e9X2MiqtRkGveDrWlVN
-         46LCUVYjXSg85Z97AskJsXeNr2z+RBuNpDiKoNRFZwRiVGcTCp011B2P7fVRb87hzqYn
-         nOa2pIrm0WArV29f5P6A4KpVeYXKamcUbt4urDmAVfL1xNTEwOaKVUSesDrqL+PXzg/q
-         vJlR2bX6WY11exQDIu4lpRvWIDitOWGDVE2MboEaYeQV+5Au4eBviljpjciVlOtO2QI3
-         Ajrw==
+        bh=PEwtLGtWjJW9VQKWAOKEgcq9DgQP3mGFczkkaHSyhA0=;
+        b=PPJ+Dnyr5xnETA1VHNDNEyQo0tLeZw6jt9SlptBy6hzjNt+Y3qK2tSDsBJ0Pw1xLIE
+         JS/L2By/vsDTiiVrAMnrmthGxWUEcTBKNhbeUUr31Tj4c70vBcSXAqfiYpCs8DdM9KfZ
+         70IUVBzDdsjrYVaOTP5v7/tgK4/NyMR493uf1xy3P8G6lOE+5DFRF21QHTG6cXKTwlFi
+         AJfSi8Pe4vX+9Gn1cn4mg/NlLhGUdZ7JXRu4kwwxob0W9Jo6i0cwochs0tjR5jG0CWVU
+         L+zPJxqQ8BdzzxKU9aK0QAgPW01flftpwFYfjJXXUZVaWtaz/FSIwBvFX8siRaTuJWi0
+         7KqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789586958; x=1790191758;
+        d=1e100.net; s=20260707; t=1789588092; x=1790192892;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=X0bKO65h4md/AUwTLuBudve8hzWfGFXRoDF7mDTv/C4=;
-        b=v0zWs2MDoFgsbrulRc3Tx0EN3VlkXeHBEtZQ2cGQng8/6F9mCtXHYCkW+AMDp4RFi0
-         ZEof9gWJuflMCgo+eyJTelj0Hh4xUbQ4G9hzf5pIXh2pIu7JK2+aKrYh/HFRG3muz9KL
-         C1Ht3Im02jhDsgvV/RMVeIm1QsC++54BAY1ukJN2zMSdXVreC8iG97JTu6MQC9SREDaO
-         zHJrUAqu5wy0DBtYKyQTAzXDp3tsewRsk5yVVcA29C9C23OhchGy2Hee2uYVunI3hYBs
-         ocGJ8F6lpHZfEda6dFVt8AA0Cq/hBx6/XBxiU9h1ISUBLR6R0qAGzFjV0iW48xYrekxR
-         Pxvg==
-X-Forwarded-Encrypted: i=1; AKwUvBz8UG8C17M3vxyGPfXG5yYQCfKQ3TyOs8tdIZr7u4M06F2NsIuzVC7sxO27V8c1T/k/IZY=@vger.kernel.org
-X-Gm-Message-State: AFuF++kcpkoNgPqsQUU28gxAyDhQzJ5arXpOZ3doBcWT6TSj0/yETV1e
-	FBP7rJhVTwe1IvAClY47TX8pRgJ8LX9GsBl9W3zvcPuYyQC6gxIjlpWfXTWkylEwPcJpSt0BLom
-	F0EMseYoC22PbuzHN2UvDbp54f8mSxTw=
-X-Gm-Gg: AYBFou3fOOF1CiiOZFVa4Rn4Vvf31UoK1gAEMHa+GGFgeu0vsg6QSYe44BSSEIlh6w1
-	tfqTcu12LbD3tcikT0X+iZT8sWn1pAIQ7fHeqVV+WzIzwC3qxATf0wZxgjXmqkTzD48SY954RsK
-	XUZjsGw9d/1hOwirj4XRAK9Br+KvHFxW0x8Efz7UFrP6ON2ldINBnp60uORiycxPuiKPVfoavFJ
-	/s4Ctksp1mfRHdLV0myVatB3cZtcl8B6saVGlsnv7heA9n7ul0KXBMS3eAdJ4ToJDmgXX3s38tw
-	oaNeuq77rPTX4Lt1e0aNzs2aQC9N1zzod0DrGUPFDF3E3al+Q0ucgKA=
-X-Received: by 2002:a05:6808:c412:b0:4b2:8d9e:de11 with SMTP id
- 5614622812f47-4ca4dc219f6mr5873685b6e.19.1789586958406; Wed, 16 Sep 2026
- 12:29:18 -0700 (PDT)
+        bh=PEwtLGtWjJW9VQKWAOKEgcq9DgQP3mGFczkkaHSyhA0=;
+        b=tkEFSETxm6ad0Vej6O2gupLchVFvjNJIPqIKQEfQi9d9e306gSMvAOv3utUHDSJNJr
+         sj8IOWb4oLe/pqh/54Ra2lXmCnXDW/gVszy5aHoP9FNyWSuOhllldaBoXF/FpXNDdZsr
+         xH21c8fYFbeitHc9ogjP5whaKDw/W1jNk2oWpWuXH/pjIVyzqQw5Hk8FzoxCDcn+roVn
+         NBULdWkbf/aaNe00T2igJB0prjSj2a778UqKUVEeYSY1wGuL5j93xqcwninK/wJaVdRY
+         Ju+YUB2QBu6R88d2gWmiM+1emmaPniSI48d8BAvW/qcVECBgFFieLIJommLHHc8XLbjX
+         716w==
+X-Gm-Message-State: AFuF++l3RJB0sNA/ZR3aybEhN9uIgq8nmxxucnlFsJBzMrzJAuSRqJw2
+	ub/UGYSybaGbIJGYpk6vJanTziLMmyCwv4qCBgA0Gfv8CA2z4B8RBrg9uC/sFR/kGgkzsyQortl
+	2Z4qovIwwYW80asMxZNlUxJUNgj6yG0A=
+X-Gm-Gg: AYBFou0D7rMKndB40DG1AjLcQS2B3w2ip7F8T9FkM3bc4C+iV8nONRCEKg3EyZEGwct
+	YApKzM9YOkQwLIJuLG38g8S6IDdAb1YUtRvAQ/0OTzs57Crvmt//aP3jNxPTfEvkLKD3sX2Mg1A
+	I7SjFsVjx49jPC5lAvFZFC2j7aMZNWfgr4SFffNIh5ltO6FK8owMOv9TCa+q0TEEXNwwfAjDaXT
+	cLeZLvhpUiO3cVtCLWv8zTWIPScfsJsYR5mTi1gKKcvZJ1ElXCTmRh7cn6OK0qtKNvDZDf4TMJJ
+	PbeSKYlFJeUIwPMEBSaAgORzE6u16DTCTupHwet9N9nVoaaFtyBIg04=
+X-Received: by 2002:a05:6808:87d1:b0:4b9:a8ac:47f with SMTP id
+ 5614622812f47-4ca4c6b9aa3mr5551498b6e.29.1789588092261; Wed, 16 Sep 2026
+ 12:48:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260916181001.201787-1-usama.arif@linux.dev> <DLGY7IFP8MOG.YFISSWRDGKR3@gmail.com>
- <874fc50f-4764-433f-8a87-595bc70c4559@linux.dev>
-In-Reply-To: <874fc50f-4764-433f-8a87-595bc70c4559@linux.dev>
+References: <20260911220415.1396439-1-ameryhung@gmail.com> <20260911220415.1396439-20-ameryhung@gmail.com>
+ <aqkhifLvyAhw66jg@gmail.com> <CAMB2axNCx-+HJVuOmS9hXAidXc0yQgv_+zAfzSkNdDXOZtFP5Q@mail.gmail.com>
+In-Reply-To: <CAMB2axNCx-+HJVuOmS9hXAidXc0yQgv_+zAfzSkNdDXOZtFP5Q@mail.gmail.com>
 From: Amery Hung <ameryhung@gmail.com>
-Date: Wed, 16 Sep 2026 12:29:07 -0700
-X-Gm-Features: AcwNN1WDst1cmT6BJveQWlz_V4KXaqctpiRs6Ar3jIL3hsk1lUSOIapHrHv5P-0
-Message-ID: <CAMB2axNZVQr=bEQXGErSEOFrMfjn11K_ZvYErLwXQ3tUW9qPiA@mail.gmail.com>
-Subject: Re: [PATCH] bpf: local_storage: avoid redundant IRQ save on bucket locks
-To: Usama Arif <usama.arif@linux.dev>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, ast@kernel.org, andrii@kernel.org, 
-	bpf@vger.kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, 
-	emil@etsalapatis.com, ihor.solodrai@linux.dev, jolsa@kernel.org, 
-	justinstitt@google.com, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	martin.lau@linux.dev, morbo@google.com, nathan@kernel.org, 
-	ndesaulniers@google.com, song@kernel.org, yonghong.song@linux.dev, 
-	yatsenko@meta.com, kernel-team@meta.com
+Date: Wed, 16 Sep 2026 12:48:01 -0700
+X-Gm-Features: AcwNN1WpBgL-9SPHf5pu7SHselWT6W66evW2Ha3ZB4mijaTgLyVAO-DWmovvkvE
+Message-ID: <CAMB2axPL9c+XAVP0M5ED5UNgt9CDyi2POXkUPHvikt7fPWmovA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 19/23] bpf: Consolidate function call
+ pkt_access validation
+To: Mahe Tardy <mahe.tardy@gmail.com>
+Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com, 
+	kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 16, 2026 at 12:22=E2=80=AFPM Usama Arif <usama.arif@linux.dev> =
-wrote:
->
->
->
-> On 16/09/2026 19:22, Kumar Kartikeya Dwivedi wrote:
-> > +Cc Amery
-> >
-> > On Wed Sep 16, 2026 at 8:10 PM CEST, Usama Arif wrote:
-> >> bpf_local_storage_update() takes the map bucket lock while holding
-> >> local_storage->lock. bpf_selem_unlink_map() does the same; its only
-> >> caller holds local_storage->lock. The outer lock is acquired with
-> >> raw_res_spin_lock_irqsave(), so interrupts are already disabled at bot=
-h
-> >> sites.
-> >>
-> >> Using raw_res_spin_lock_irqsave() for the nested lock saves the alread=
-y
-> >> disabled IRQ state and issues another IRQ disable. The matching unlock
-> >> tests that saved state before leaving interrupts disabled. On x86-64,
-> >> this adds a pushfq/popq/cli sequence and a test/branch around an
-> >> unreachable sti to each acquisition.
-> >>
-> >> Use raw_res_spin_lock() and raw_res_spin_unlock() instead. They retain
-> >> preemption nesting, memory ordering and resilient-lock bookkeeping. Th=
-e
-> >> outer unlock remains responsible for restoring the caller's IRQ state.
-> >>
-> >> In the tested clang x86-64 build, this removes five executed instructi=
-ons
-> >> from each uncontended nested acquisition. It also shrinks
-> >> bpf_local_storage_update() from 1732 to 1702 bytes and bpf_selem_unlin=
-k()
-> >> from 1030 to 992 bytes. The affected paths are updates that add or rep=
-lace
-> >> an element in existing owner storage and successful unlinks.
-> >>
-> >> Document the owner-lock requirement of bpf_selem_unlink_map() and asse=
-rt
-> >> that interrupts are disabled.
-> >>
-> >> Signed-off-by: Usama Arif <usama.arif@linux.dev>
-> >> ---
-> >
-> > Makes sense. But did you observe any measurable improvement with this c=
-hange?
->
-> Meta fleet wide profile shows bpf_local_storage_update() as one of the mo=
-re expensive
-> bpf functions in the fleet. I saw it in production when profiling a hhvm =
-workload as
-> well.
->
-> The main argument for the patch was reduced number of instructions execut=
-ed in
-> this expensive path that I see in disassembly (which is mentioned in the =
-2nd paragraph)
-> and better code hygiene as it doesnt make sense to to save irq again. I w=
-ould imagine
-> this patch alone wont move the needle in application metrics, but would m=
-ake this function
-> cheaper (hopefully :)) fleetwide.
->
+Hi, one question I have: Even before my patch, the verifier only
+allowed one byte of access based on arg btf (char *data_start here).
+What do you do with that single byte of packet data?
 
-Reviewed-by: Amery Hung <ameryhung@gmail.com>
+        __attribute__((noinline)) int
+        parse_something(struct __sk_buff *skb, __u16 off, char *data_start,=
+ ...)
 
+On Tue, Sep 15, 2026 at 3:32=E2=80=AFPM Amery Hung <ameryhung@gmail.com> wr=
+ote:
+>
+> On Tue, Sep 15, 2026 at 3:44=E2=80=AFAM Mahe Tardy <mahe.tardy@gmail.com>=
+ wrote:
+> >
+> > On Fri, Sep 11, 2026 at 03:04:11PM -0700, Amery Hung wrote:
+> > > check_func_arg() checks whether a helper permits packet pointers befo=
+re
+> > > dispatching argument-specific memory validation. check_kfunc_args() h=
+as
+> > > no equivalent check, even though kfunc memory arguments may be backed=
+ by
+> > > packet data.
+> > >
+> > > Move packet-access validation to check_helper_mem_access(), where the
+> > > access direction is known and helper, kfunc, and global-subprogram me=
+mory
+> > > arguments converge. Pass call metadata there so helpers continue to
+> > > require bpf_func_proto::pkt_access, while writes through kfunc and gl=
+obal
+> > > subprogram arguments use the program-type policy and set
+> > > env->seen_direct_write.
+> > >
+> > > Keep call metadata when variable-size memory disables raw mode by
+> > > clearing arg_raw_mem.regno instead, and pass it through the map-key p=
+ath
+> > > as well.
+> > >
+> > > This also makes kfunc and global-subprogram packet writes request the
+> > > required writable-packet prologue and rejects them for program types
+> > > that only support direct packet reads.
+> >
+> > Hello, sorry I don't have the full context on this patch series but it
+> > looks like this commit broke one of our programs on bpf-next, we have a
+> > global function with the following signature in a cgroup_skb program:
+>
+> Sorry for the surprise. Although this was not the patch=E2=80=99s origina=
+l
+> intent, it closes a verifier bug. The verifier does not currently
+> track whether a global subprogram=E2=80=99s ARG_PTR_TO_MEM argument is
+> read-only, so the callee is verified with a mutable PTR_TO_MEM. The
+> call site must therefore require both read and write access. Since
+> cgroup_skb packet data is read-only, rejecting this call is correct.
+>
+> Supporting this use case safely will require an explicit read-only
+> argument contract.
 >
 > >
-> >> [...]
->
+> >         __attribute__((noinline)) int
+> >         parse_something(struct __sk_buff *skb, __u16 off, char *data_st=
+art, ...)
+> >
+> > that we call with data_start being skb->data + some_offset and now it
+> > fails passing the verifier with:
+> >
+> >         ; ret =3D parse_something(skb, offset_start, data, ...); @ pars=
+er.h:131
+> >         199: (bf) r2 =3D r8                     ; R2=3Dscalar(id=3D5) R=
+8=3Dscalar(id=3D5)
+> >         200: (57) r2 &=3D 65535                 ; R2=3Dscalar(smin=3Dsm=
+in32=3D0,smax=3Dumax=3Dsmax32=3Dumax32=3D0xffff,var_off=3D(0x0; 0xffff))
+> >         201: (79) r1 =3D *(u64 *)(r10 -40)      ; R1=3Dctx() R10=3Dfp0 =
+fp-40=3Dctx()
+> >         202: (bf) r3 =3D r7                     ; R3=3Dpkt(r=3D1247,imm=
+=3D1244) R7=3Dpkt(r=3D1247,imm=3D1244)
+> >         203: (b7) r4 =3D 0                      ; R4=3D0
+> >         204: (85) call pc+776
+> >         function access to the packet is not allowed
+> >         Caller passes invalid args into func#3 ('parse_something')
+> >
+> > And this is read-only access given it's cgroup_skb prog.
+> >
+> > We can work around this by just passing the integer offset and re-doing
+> > the whole skb->data + offset dance in the global function (we've been
+> > already doing it in some other spots for function by function
+> > verification) but I was wondering if this actually a regression or
+> > expected, thanks.
+> >
+> > >
+> > > Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> > > ---
+> > >  kernel/bpf/verifier.c                         | 24 +++++++++--------=
+--
+> > >  .../bpf/progs/verifier_helper_packet_access.c |  4 ++--
+> > >  2 files changed, 13 insertions(+), 15 deletions(-)
+> >
+> > [...]
+> >
