@@ -1,149 +1,105 @@
 Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36504E50C0
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 18:41:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5847F2571B8
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 18:43:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789584119; cv=none; b=AzNu5v6YNePN/Edyr5ayCLKFvIpgEEk6gEFjsYPTuencKq+HdMs3V8FWokwb3OBL/n4lWfySUcuJD4OblCwLYg0YOTO3VPOek7351Lg3BaxRNj/LHv6UXJOZZHezW4TIfYAujqwJU+/qKlyWpNYs+zPVDH9EMOjCsXmRpXvCcAE=
+	t=1789584245; cv=none; b=gitqP//Wmj6nX0Lz3Hp//VJ3vobGflDJjfTmy84C1PrwliC7zBtxV9JQGibuYc8DaiKKQM5lZ/ykjiPaLjJT6/IMe4bt1N7ch6QQKLF9F1RqcFQ2W3vTQ9mqRN1viC0Yryl6yVMgtGtZdd85DkOv+zPYcZZcuGglPoXpCSGG39Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789584119; c=relaxed/simple;
-	bh=3fViUkPJ5R4pqZ4tsyhRvt8PHfD5g5yJFO+soEWsKIs=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=k3RYjNgTF2gwbbQaraOlOUWXL+d73SYJ0o9c1en5n/hk8Zr0FjUaCU3De7PfxtZLRDcmqf+/bsX8ugrLIZQSH0OJXmn2AH79JuBqwVagUdG+i/6IZ6m76ldOMa8kjDrIONFQDNnZTbx2/qdPISDHh07GAzBArTmAqDh+kUNx5vk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Z1IXNTSg; arc=none smtp.client-ip=74.125.228.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1789584245; c=relaxed/simple;
+	bh=RKyl6aCUxQpVsXl5v1PjhpVMTuhFBBUDm9f2ucBBhdw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZLa13k2sJ4OlvRFgy0rsz8waYjHh3wIpaV9U50TGZnJ2AGfge+QjqO9w0BhoT585pqRA1n23AGi0hZkoqI4BFY9TmaLND3lsDMpGO2og6/3VmKG25cnSsL+wWpDxlHSj5MsmTuqS5rJSO5+oFTyZTCnPANbq5qWSMnodmRSIRWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g3ymI8BY; arc=none smtp.client-ip=74.125.228.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Z1IXNTSg"
-Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-8693af0d7c4so1463413b3a.3
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 11:41:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g3ymI8BY"
+Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-8692a8568e9so767b3a.3
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 11:43:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1789584098; x=1790188898; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=a1HEw2KiY0p3aEPTqA+U7w///uMWZ5JDbZz23TPVtOE=;
-        b=Z1IXNTSgvpmi14myJGQ5yl34mVcGrjzKZAwg+6QpSbUNbksgi9kIfzs4IbXD7QX3lD
-         n5e4rjIZ5xXcGUrfLUNlQVl+wFuuoHH13Xg7sWXeqJhL6Z57cTDU9QBHchclQg1gaTN7
-         x7BWQYH8uS+lJWYvM1+rRdW6EslYQEFFStpc3xocFXvHKiqd+M7oVylre2PNL12r4SSp
-         EoHcGjQSfj+v4689U8lsFBIEnAXt8USW8SN26xGTo6kJNqPCTb7JTg/ac8I1E0PG7Y2j
-         c1h58QJd7eersMvekBpak21HAJgtLOCtDSFy5VgY6+gUSQ9joSnRd3n575NqJv0bcm6i
-         lMxw==
+        d=gmail.com; s=20251104; t=1789584236; x=1790189036; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=RKyl6aCUxQpVsXl5v1PjhpVMTuhFBBUDm9f2ucBBhdw=;
+        b=g3ymI8BY6P9FYPFtIN+Q6DobmGihuLI8iHqAvkzRAgH9KZkBveZRwUdtrioPh76pWp
+         NiGGNtn9U8J8UJvmQ3v/OWpfsu91RIrbuuMV+3vimcRxBZ9n+XMl1NDaLYkV8dt0whtg
+         Ct9HQ3IH6SV0sdKKi3IFG6e19v+01n4lBOcL5q3ekWowMu7Y81f7VSDYQb39OBOg8QKJ
+         WJzSfY4+CMY4ambrcgzhUhC58NtOM1Dl4X8Gj9ccKxBJJjlf0YL8X8H5rDEVsKFjMWGS
+         7HIu1lWkDM9vRVQllO2xV6cN7R8hJj/llazzAbbdsDDREKQSROieOJFh64ug6gNZsKjE
+         oPsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789584098; x=1790188898;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1789584236; x=1790189036;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=a1HEw2KiY0p3aEPTqA+U7w///uMWZ5JDbZz23TPVtOE=;
-        b=CDyyzYwE3NhMQExoA2SWPLcEn0lOqYpb44QRTy/a6wi4ga+OoBLhbNBmFvYaxiA8o3
-         WJoINo9T5RjQR7pZIkmqJIsx3LYspUvvAe0dtJgqpcCVCugzt7Hn4YNDVawfFiMebGuz
-         aZcybxjlLE4UOFE1NyLDBsZXXKxlRkqZGei8XehEo5vwObAB+ETz0T28uCTvHHpCyond
-         S/X3Z16zWUHLNeiheo2Hd3i6UGqIPunmiEGGzs04GWYKeWbV/Ft91YI81/kr6CcKM8Yp
-         Humfvjpd9sRjqcFpOaLaedVs2UrcP7KD83uu/H40tWvkQeLuz3p1+bv/Ejg4+2Bnp7qk
-         iW1A==
-X-Gm-Message-State: AFuF++m+1SqmyzusSdLrBXzZRHzmGINLVe5ysjvT/fGr1HOV2Lp8alts
-	rakzrRupyhuIVfFO2CGvWxK94ZYyU4n9GA+yLfKOf/LeqDNi4Coi2guuOXoVmfP8Wf8=
-X-Gm-Gg: AYBFou3pGej33/Pf6tzFpFYUkp6uUj+Ul55BMV+zd9ERG18SWXkhMvRR1qrKWZQMy9c
-	EJKEscUOCnz648wSWpM14cwvl/K4+7wnvz4W8YXfCkrm3wM5GOVA116unb9+aImGN5EYEZejIeo
-	qxd/jYXDkBtme0ql8ixLGpOjePEGu4YC0VrRzb5uPcFHOndPADQX9BntYobuyKTOQ8meau27BwA
-	D+jmXw9TuqvW4fdT5+/NDkldZCLbn2f3q4dzhhR5+E9SB0qh4cFBaluLRhVY42jRZNfhqG2nHGq
-	UdWUpiYa78XBxQ3I9LRg9Q2qpTfh9xuqFg4hHZPJFJy59DcGfU8l+DBJV5SwcPlU16BxqHqsX5s
-	CyW6ok6HPPdl6P4aHXdu/3actArvsNTzMZhTrehrH/HjWjNLKZtzIJ5WSbBHQVAr/yZEUp3rIzj
-	X+aIgC7EdQ8n/GzfnXdpTJ432JfqzsKxzzT8ChLZZG7dS+i1AzjGJKB5S70d1RK7NL5Q8XftaQK
-	kRB4UQlB4hFUQeYQK+6C9zJAprI
-X-Received: by 2002:a05:6a21:6b05:b0:3d0:8abe:9e08 with SMTP id adf61e73a8af0-3dd5f4066e7mr10329013637.3.1789584098119;
-        Wed, 16 Sep 2026 11:41:38 -0700 (PDT)
-Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc50abb30a3sm2029801a12.28.2026.09.16.11.41.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Sep 2026 11:41:37 -0700 (PDT)
+        bh=RKyl6aCUxQpVsXl5v1PjhpVMTuhFBBUDm9f2ucBBhdw=;
+        b=z3H0ClxJZE3WyMnSw6VIOal1ABqyifh4b+SSQ9vvnH+PUGDgHoS3/6yk4eU4yz1Pbe
+         3gJZE2/iFpabFFK+URvrqavinf0/M4K+2USIMRTS4lVLFEDOurPVZmx2d5AIOJ626oq0
+         1JZ90jhSa3ogrZOopFVSDLdxATMAfvrwPSzHo7LM3lQcV7l+nTe4FUSrC67yxMMx93Iw
+         287Nptq2Z1p3nd4YFT2T/+sHIH3aJXPaUSnocdyklyOyIAjk0tUwhELqskQF9Tzu8e5U
+         g845DlAYx3sBsQvr5tX4RK91muF1P3wT7XJHE/wHMR7IyC2YjKVg8UvbxCylbGWyjJ9r
+         ly8g==
+X-Forwarded-Encrypted: i=1; AKwUvBxWS6f5yomaYOt8MJMOzCESsRORbB2eDVm3O6dh7NhfkXyM//TIJ/ZihMubpt+vbsqGQcw=@vger.kernel.org
+X-Gm-Message-State: AFuF++kR9nADUN/XyXcu1DiOFxggAcNTYDMcvGG7FFd+lOYvfbh71UU/
+	ojApB3ohknZkGZ3nxVh/st0GVPtUkcvFUx45wsscAdqXpeh5WRVnw+HR
+X-Gm-Gg: AYBFou3nQAQwXThGIc/Vb1wCgirTRsnwGQLv8NO+TuCBboFfLwI8SGWj3TQ4b3ckdb7
+	7NGMqh2OPQ8oIl/NK+AkWU0SH2ZvwT3aRg8wLo4h3CAQXNT5ejXSOhR82szh+Ni2iExbVb5Af/p
+	mgYEVCIKIEeV5TGORKyggrtJsHSYpnWzg270MM9fmzipO2g1/sab8pCa7FMAk3B65RwDX5TW8kb
+	t4UMUzI48w/mKAdJCTHixLStEZ04cdzKI5Pe3oHqIzC5EHNgEB5UhoboIJLHxHOuacVKQ65SaHe
+	vBGh1/i8qQv7D3fxFp52wT17l5wtN1ADOHb2FpHUyLzLZbB78whxVoamdg+9GroKivrlgprJ+XB
+	ZM3Z/aFR+c9ESucib24MqbnX8Y9WySEe6xcWBFWqGCiGOlDnbkXYQUKEtibEQgPbOXrwCtHSezC
+	bNjtCxbI8TlBZ9z2xd6N+t2mqvD7we3PfTFddvCiRjU3Ey1qo7g8JrhOIkskkseA6RN3wrQtn+6
+	Rs+q61PoiADWY5SzaQillW0VgE=
+X-Received: by 2002:a05:6a00:2e98:b0:871:b941:10f9 with SMTP id d2e1a72fcca58-8723abadb8fmr7337887b3a.19.1789584236096;
+        Wed, 16 Sep 2026 11:43:56 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8720172b126sm1740756b3a.38.2026.09.16.11.43.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Sep 2026 11:43:55 -0700 (PDT)
+Message-ID: <b8b26cfa2ce3b93e364b3b1d5544c07062d8aeb7.camel@gmail.com>
+Subject: Re: [PATCH bpf v4 11/11] selftests/bpf: Add truncated CO-RE ldimm64
+ test
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis <emil@etsalapatis.com>, Nicholas Carlini <npc@anthropic.com>, 
+	kkd@meta.com, kernel-team@meta.com
+Date: Wed, 16 Sep 2026 11:43:53 -0700
+In-Reply-To: <20260914222514.1635018-12-memxor@gmail.com>
+References: <20260914222514.1635018-1-memxor@gmail.com>
+	 <20260914222514.1635018-12-memxor@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10+b1 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 16 Sep 2026 18:41:36 +0000
-Message-Id: <DLGYM8KB90NB.1X7S5GYGB1MWJ@etsalapatis.com>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf 09/11] bpf: Track whether dynptr type is known
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: <sashiko-reviews@lists.linux.dev>, "Emil Tsalapatis"
- <emil@etsalapatis.com>
-X-Mailer: aerc 0.21.0
-References: <20260916050830.8774-1-emil@etsalapatis.com>
- <20260916050830.8774-10-emil@etsalapatis.com>
- <20260916052228.CFE9F1F000FF@smtp.kernel.org>
-In-Reply-To: <20260916052228.CFE9F1F000FF@smtp.kernel.org>
+MIME-Version: 1.0
 
-On Wed Sep 16, 2026 at 5:22 AM UTC, sashiko-bot wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [High] bpf: missing type_unknown check in stacksafe() allows unsafe pru=
-ning
-> --
->
-> commit 8f00e7cb51fcf9e4513f3c3e9be943021ba739cf
-> Author: Emil Tsalapatis <emil@etsalapatis.com>
->
-> bpf: Track whether dynptr type is known
->
-> This commit adds a type_unknown field to struct bpf_reg_state's dynptr
-> state to distinguish locally created dynptrs from global subprog argument=
-s.
-> It updates the verifier to set this flag, preparing for proper invalidati=
-on
-> of unknown dynptrs in subsequent commits.
->
->> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->> index d5b4ab0bacd35..76aa724de1bcb 100644
->> --- a/include/linux/bpf_verifier.h
->> +++ b/include/linux/bpf_verifier.h
->> @@ -71,6 +71,7 @@ struct bpf_reg_state {
->>  		/* For dynptr stack slots */
->>  		struct {
->>  			enum bpf_dynptr_type type;
->> +			bool type_unknown;
->
-> [Severity: High]
-> Does this new field also need to be checked in stacksafe() when comparing
-> states?
->
-> Looking at stacksafe() in kernel/bpf/states.c, the STACK_DYNPTR case comp=
-ares
-> type, first_slot, id, and parent_id, but it omits the new type_unknown fi=
-eld:
->
-> kernel/bpf/states.c:stacksafe() {
->     ...
-> 		case STACK_DYNPTR:
-> 			old_reg =3D &old->stack[spi].spilled_ptr;
-> 			cur_reg =3D &cur->stack[spi].spilled_ptr;
-> 			if (old_reg->dynptr.type !=3D cur_reg->dynptr.type ||
-> 			    old_reg->dynptr.first_slot !=3D cur_reg->dynptr.first_slot ||
-> 			    !check_ids(old_reg->id, cur_reg->id, idmap) ||
-> 			    !check_ids(old_reg->parent_id, cur_reg->parent_id, idmap))
-> 				return false;
-> 			break;
->     ...
-> }
->
-> If a BPF program conditionally spills a locally created dynptr
-> (type_unknown=3Dfalse) or an unknown argument dynptr (type_unknown=3Dtrue=
-) to
-> the same stack slot, could the verifier incorrectly treat the states as
-> equivalent and prune the unknown dynptr path? This might allow bypassing
-> the packet pointer invalidation logic when writing to unknown dynptrs,
-> potentially leading to a use-after-free of packet pointers.
+On Tue, 2026-09-15 at 00:25 +0200, Kumar Kartikeya Dwivedi wrote:
+> Exercise CO-RE relocation of an ldimm64 instruction whose second slot is
+> missing. Build a valid BPF object with a compiler-emitted relocation, the=
+n
+> truncate the program symbol to retain only the first instruction slot.
+>=20
+> Without bounds validation, libbpf reads or writes beyond the exact-sized
+> instruction allocation, depending on whether the relocation resolves.
+> Exercise both paths and require bpf_object__prepare() to reject the
+> malformed object with a precise diagnostic.
+>=20
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
 
-Bot is right, will update accordingly.
+Tbh, assuming we are going for simple ldimm64 check at the start of
+the program verification sequence, I'd just add one bogus test case for
+test_verifier runner under tools/testing/selftests/bpf/verifier/*.c.
+That would be something like 5 lines of code.
 
->
->>  			/* A dynptr is 16 bytes so it takes up 2 stack slots.
->>  			 * We need to track which slot is the first slot
->>  			 * to protect against cases where the user may try to
-
+...
