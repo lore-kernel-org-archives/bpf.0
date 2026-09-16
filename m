@@ -1,127 +1,116 @@
-Received: from mta0.migadu.com (out-212.mta0.migadu.com [91.218.175.212])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B8F744B69C
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 07:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.212
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9875466AE1
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 07:54:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789545160; cv=none; b=mVnsnvyhsKR19LH5XskLmRE495gCOl7RLeQAn1sU4r9hgRi8WPEpLBRTDuOEk6z8sV5cPDYdOidNZILKcF8Fl4jz5mYKm/XG3TxNkwSxVdLTwmweiMG2o/Us/CsBovwEMsP1pw9RPw2dqWcov2qPVX29oAL4g0UYpXaynW3ZBNE=
+	t=1789545293; cv=none; b=C/DqO+MYSRfGO+/Ji6Z1oD3EsQYeMHx2Oh0tu3Q1Myc41oynOohzEpSRRhvD/d4mKlmZ+zYWQuLoI+b1SHeJGQe1Aew9NBWQ8Lkh6d7hHTKP4I0xCrV3lr5/AkVD3glPEVKVaAe0rA4rDaYwTEKyYQ3gLAQxRCQ4Yb3ns+ML4FM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789545160; c=relaxed/simple;
-	bh=AGXORyCsk913kO+VsFSEHaTAWEdeNo95eaqf+tbuC7g=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=SJppreV2cNhAk3pSe/Q/RF0pEmaABhSdA1Ptu71t/+Rlf2jHhmH6njxjE+f25Bfal9iqdOeXR+FBeciQ3Wj8sBFTb+FuqT3ascJ5yQBYc3/YUFA0C1JN7ZOgOnQDng8Ik+wh/wESJPsmFlqsQqMyBIaX4VCqYBFog9DYDWNM6Q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cWyFe70O; arc=none smtp.client-ip=91.218.175.212
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789545293; c=relaxed/simple;
+	bh=ajCBlbHLvQlXRJQ6A/bhxjXTGsDlkdAUs6t9mPvItQg=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=qo3JeiHiVOgUiRF3daF1+TboY40OoyMrpFt+PFPevlAhhXnPKsiQAM7pQmsbZSLb7Nz2GhYwkridQ2VZVvzYUcsHoyX4GNGj6sBB/eiyAcIR3VRbmMk7QOo1GOdHuPew8RPr8xt2CDj1NCl3zeClJw8FpFWn8TQS32N+6qNJQr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ek6GyEAQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cWyFe70O"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=AGXORyCsk913kO+VsFSEHaTAWEdeNo95eaqf+tbuC7g=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789545151; v=1; x=1790149951;
- b=cWyFe70OeV2xQGvwFQjwL6/lsjhK3XyqtfJ8LfMHNln2rd+f6l5w4FHSIDbsmB5i2lngP09W
- ALzjCoJo3EM51fC8+cFPdkmfmOhhMzXPDdbfViihDU0d8knX24RPjC8Ydsd8cE1XA98mhCa2dMg
- w1dNFVdBOTErBCpvmfbOeAzs=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 4d980cb76d01b755;
-	Wed, 16 Sep 2026 07:52:31 +0000
-X-Mizu-Trace-ID: 4d980cb76d01b755
-X-Migadu-Flow: FLOW_OUT
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ek6GyEAQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B2D1F000FF;
+	Wed, 16 Sep 2026 07:54:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789545277;
+	bh=9sa+/o01YXmGDPAutm0JyX/MHDla49pbmQEL4BNJvyM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Ek6GyEAQ8ujQN8zzzd5loPW+7ZJB0u9WkJh73XGRvRRZyMA1vvPbKJQlDf3VUzha4
+	 tWNuSWly0q6m22uRxCNqDek5y6I71G3EbdZuM0RR5Ppf+kXeFm9weGeWw5nYr6xSLK
+	 EBSq6X0t7ttSr/5eEUcXymxqXCAWriXxS/k3/Ils1+GIaQpdnnKEWU0b56DNHeQZPl
+	 6DOtNJAMvZhWTXxnb4wC7k86DGIEj3cd9CD2lf2pxsnS59ArVSOnD3jK7LP2JpXtj7
+	 RPmga7gA8xSTjeL8o/gVAb32OsvlGGc/9HwrUu8PwkDlF0X9C5j/CZj8drF3ZzvIIi
+	 MwX+y65xbadtw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH v3 bpf-next 07/11] bpftool: Handle multi-split BTF by
+ supporting multiple base BTFs
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Alan Maguire" <alan.maguire@oracle.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260916074118.1007116-8-alan.maguire@oracle.com>
+References: <20260916074118.1007116-1-alan.maguire@oracle.com>
+ <20260916074118.1007116-8-alan.maguire@oracle.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 16 Sep 2026 07:54:36 +0000
+Message-Id: <20260916075437.09B2D1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 16 Sep 2026 07:52:26 +0000
-Message-Id: <DLGKT6Z7ULBJ.3SKG7CYVTUAJF@linux.dev>
-From: "Florent Revest" <florent.revest@linux.dev>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc: "bpf" <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "KP Singh"
- <kpsingh@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>, "Leon
- Hwang" <leon.hwang@linux.dev>, "Junseo Lim" <zirajs7@gmail.com>, "Sechang
- Lim" <rhkrqnwk98@gmail.com>, "Puranjay Mohan" <puranjay@kernel.org>, "Xu
- Kuohai" <xukuohai@huaweicloud.com>, "Ilya Leoshkevich" <iii@linux.ibm.com>,
- "Hari Bathini" <hbathini@linux.ibm.com>, "Christophe Leroy"
- <chleroy@kernel.org>, "Naveen N Rao" <naveen@kernel.org>,
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, "Pu Lehui"
- <pulehui@huawei.com>, "Tiezhu Yang" <yangtiezhu@loongson.cn>, "Hengqi Chen"
- <hengqi.chen@gmail.com>, "LKML" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf v2 1/2] bpf: Skip detached progs in trampoline
- images that are still in use
-X-Mailer: aerc 0.17.0
-References: <20260912095924.866254-1-florent.revest@linux.dev>
- <20260912095924.866254-2-florent.revest@linux.dev>
- <DLDHKKLCOAVR.3PHQ832S121Q2@gmail.com>
- <DLG3Y32QQ9JU.3LNSYXLJIGH17@linux.dev>
- <CAADnVQL=sW1-UOUbP_j98G2eY4MPzQd=HbP-7q5-sjqFQya=Rw@mail.gmail.com>
-In-Reply-To: <CAADnVQL=sW1-UOUbP_j98G2eY4MPzQd=HbP-7q5-sjqFQya=Rw@mail.gmail.com>
 
-On Wed Sep 16, 2026 at 5:29 AM UTC, Alexei Starovoitov wrote:
-> On Tue, Sep 15, 2026 at 11:39=E2=80=AFAM Florent Revest
-> <florent.revest@linux.dev> wrote:
-> >
-> >
-> > Ah yeah, I tried to address that in the cover letter. Basically, if we =
-patch
-> > all the nops, tasks running in the old image could skip some progs that=
- are
-> > still attached. For fexit, that's already what happens with ip_after_ca=
-ll but
-> > for fmod_ret it would be new and this would cause for example an LSM pr=
-og's
-> > verdict to get skipped when another prog gets attached to the same hook=
-. That's
-> > why I thought that patching only the detached prog's nop would be bette=
-r and
-> > needed these extra pointers. But it's a bit of an edge case and I don't=
- have a
-> > strong opinion on it.
->
-> Hmm. Not sure I agree with your reasoning.
-> fmod_ret progs are called _before_ orig_call.
-> So fentry+fmod_ret are in the same category.
-> Adding/removing a prog to the trampoline causes regeneration
-> of the trampoline.
-> So cpus may execute different numbers of progs already.
-> The race is inevitable.
-> With 'patch all nops in old tramp' approach the only
-> additional race is some of the fentry/fmod_ret progs
-> will get skipped in old tramp.
->
-> If the concern of a tiny window where old tramp is started
-> to be destroyed, then fentry prog is called and we patched
-> another fentry, but tramp will continue and execute orig_call,
-> then, yes, I see the issue, but it's a lot more subtle.
-> If I understood the concern correctly then let's add
-> another 'jump over the call' nop in addition to
-> 'patch nops in front of all progs' and
-> let's patch 'jump over the call' _first_.
-> This way fentry/fmod_ret progs can never miss
-> execution of orig_call. They can be invoked "unncessarily".
-> They may execute though orig_call will not fire.
-> but that's an acceptable race. Better than not executing
-> fmod_ret while letting orig_call to go through.
->
-> This is still simpler implementation than link-list all all extra book ke=
-eping.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Low] bpf: evaluation of freed pointer in bpftool cleanup
+- [Low] bpf: unbalanced braces in bpftool btf help string
+--
 
-My concern wasn't orig_call running but rather progs that are still attache=
-d
-getting skipped. Say, fentry progs A and B are attached to a function and a
-task is sleeping in A. Someone attaches C, the old image gets all its nops
-patched, the task wakes up and skips B even though B was never detached.
+commit 43f26ee1c8d2e52438682ffa46a3b61f16ff7512
+Author: Alan Maguire <alan.maguire@oracle.com>
 
-But it's a narrow window and it needs an attach/detach on that function to =
-race
-with, so if you're OK with that behavior I'll respin v3 with your simpler
-version.
+bpftool: Handle multi-split BTF by supporting multiple base BTFs
+
+This commit updates bpftool to support multi-split BTF by allowing multiple
+base BTF files to be specified via the -B argument. It updates the help text
+and handles loading and freeing multiple nested BTF bases.
+
+> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+> index bca0a3982f09b..bbe8f9ea144fa 100644
+> --- a/tools/bpf/bpftool/btf.c
+> +++ b/tools/bpf/bpftool/btf.c
+> @@ -1545,7 +1545,7 @@ static int do_help(int argc, char **argv)
+>  		"       " HELP_SPEC_MAP "\n"
+>  		"       " HELP_SPEC_PROGRAM "\n"
+>  		"       " HELP_SPEC_OPTIONS " |\n"
+> -		"                    {-B|--base-btf} }\n"
+> +		"                    {[{-B|--base-btf} FILE]... }\n"
+
+[Severity: Low]
+Does this leave the opening brace from the HELP_SPEC_OPTIONS block unclosed?
+
+The HELP_SPEC_OPTIONS macro starts a brace-enclosed block, but replacing the
+single closing brace with a balanced group {[...]} might leave the overarch=
+ing
+list unclosed when the help output is printed.
+
+> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+> index 5ababd8f7d0a0..cff76be7d2e86 100644
+> --- a/tools/bpf/bpftool/main.c
+> +++ b/tools/bpf/bpftool/main.c
+
+[ ... ]
+
+> @@ -567,7 +572,18 @@ int main(int argc, char **argv)
+>  	if (json_output)
+>  		jsonw_destroy(&json_wtr);
+> =20
+> -	btf__free(base_btf);
+> +	while (base_btf) {
+> +		new_base_btf =3D (struct btf *)btf__base_btf(base_btf);
+> +		btf__free(base_btf);
+> +		/*
+> +		 * Do not free base BTF that is an owned .BTF.base ; leads
+> +		 * to a double-free, so only free as far as the root base
+> +		 * we explicitly read with -B above.
+> +		 */
+> +		if (base_btf =3D=3D root_base_btf)
+> +			break;
+
+[Severity: Low]
+Are we evaluating a freed pointer in this break condition?
+
+Since btf__free(base_btf) is called just before this check, evaluating
+base_btf against root_base_btf could invoke undefined behavior by reading t=
+he
+dangling pointer, even if it is just an address comparison in a teardown pa=
+th.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260916074118.1007=
+116-1-alan.maguire@oracle.com?part=3D7
