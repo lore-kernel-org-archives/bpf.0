@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523C7511228;
-	Wed, 16 Sep 2026 23:35:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBD851FCB0;
+	Wed, 16 Sep 2026 23:36:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789601760; cv=none; b=M/SW/J0zGaOjaDfCqragQ0uBp2He5Z+EM5AzJTErNhQK+R2oBKMcR8viIAitMdYE7WjxE/IHuABi/YJ7lhLUhySeUCpN6IwzeoJI4YihpbO+R1hzKgmNaA7RLWvHzhCfJguvnjyVvhBHHoqCcfU+9Ioyj4PDTGC0CoCDQiE2fd8=
+	t=1789601762; cv=none; b=SlIdr0djygciZ5M0i+TpNM2pmhnzlAeIqtlhcKs6u1mg97ANxfLyLIJB+4FIOPTn5sa9kUw0gkpd1+7DDJBoALh0HRDpoavJTbcvE6DFCWAgpbsJP/f4naARnpW6n+v5kuoSou0Kwib1S7UN/IZ8UGlvSc3rr9xzOa8zqH2hx/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789601760; c=relaxed/simple;
-	bh=M3PJ491Ihicf0ZYf92D7Y0h/acg4vUnnMTGTYF+IPSo=;
+	s=arc-20240116; t=1789601762; c=relaxed/simple;
+	bh=UC6M/GEz2+eoJdqcXM/aaW1hRRaiUfLPoS/3oYDGLoo=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YbtkpDnFDEywk6faQ3+IvUoFP703Id9WdFOCkfKJGM9AhdL9B1TFPE/wlHH6hcEO5aGSjo29OpHZiisK4iXRENTJgcdx5LpWTbzcvnwE7fpOsu5ryUQsg0jCd0zUfYHdL9aJguYO3WmGS3btLqjBwAoqGvZawmB+Zox8ZIpsgvE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B9wWamPR; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=jLFXtTDMS4YcH2Z/uZ/BjNcqfIMq6mF5BZUXb/+vYJsCPuTbQ+g/FQQQNdp9FKs9AbZh5W21TnF4mmAajpH22vOLO9UdYVb8GJf6zuSqOhPyNx7jeB4EeLJ457S29iqcSGeARQornkmm+WUXa1kxDCbpsdlW/7A6FMNW5UXjEwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aYO0q92s; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B9wWamPR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C67821F00893;
-	Wed, 16 Sep 2026 23:35:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aYO0q92s"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8384B1F000FF;
+	Wed, 16 Sep 2026 23:35:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789601758;
-	bh=J1Yo+mRpBnh/dAo8vukmcIu6MyI2FYZHVhq7UHZsBwA=;
+	s=k20260515; t=1789601760;
+	bh=PVoQFgUZBqQLCmcKfUWQh7apP0vLMdnb/4fqKzIs35o=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=B9wWamPR9GISRswEH5Nc9akYR3WP3l12m+mzl+BkTKPZjERvnSitDASoE83JWqdNR
-	 /y63y5ZIofh+yot0wl+lNC0J9Zq+QeC1tPStrzcrWb2+zyW/HL4kf4ABAcuiNoVVno
-	 n0nbmJIBsT1vkdWUv2zWU3UrhvMUxquY9UXnNj0ZFsNgFtlRSNPoq3/6/cIvaIohAJ
-	 WBS31jQ9eMnhrJthQVgjrQQnWz1UIGJF2NAbaGoApeUpB2/9FS7bKRCy2MjmpFOhFH
-	 TRc0REVp/w/SR55GFAWHErUc+pg9ykbcEwBI/UqwP4cOoCWRzdnZFPN0ulHhs8TNYS
-	 A5o5YH/GyKYZQ==
-Subject:
- Re: [PATCH v3 net 5/7] net: enetc: pad short XDP frames coming from devmap
+	b=aYO0q92sRvjsxsA/VvFiZj6AaGfz3oGiEntLrplttSNvqw6oabLiY8HB0zSmTeR4H
+	 6A2YORRxngWf9mHpghaVsWkBmlAioMLvf6cRGi2nvm1vTlPi6H26HSx331fqlFBw8L
+	 lkv3IuA4k8Rfj6wsVndZvw0EhAOd/NqfV9Ic8K84q0OIUYIvaHfVTQVuYAPxTnI1pa
+	 ooGivuAvERXm5XxMhE6ymamO6t9PxjcoSY7vALMLdul+V4h7o62Bw1q4zgKfY8PdvP
+	 S0yRoZgLOC8OwyGwon33RajuxLd+iOc/zgE8fEPDdAJTWEa8mPZxgeWbpUvD+/7J6w
+	 EE4d2eiDNTApw==
+Subject: Re: [PATCH v3 net 6/7] net: enetc: linearize PTP event packets with
+ one-step TX timestamping
 From: netdev-bot+sashiko@kernel.org
 To: vladimir.oltean@nxp.com
 Cc: netdev@vger.kernel.org, zefir.kurtisi@westermo.com, claudiu.manoil@nxp.com,
@@ -37,11 +37,11 @@ Cc: netdev@vger.kernel.org, zefir.kurtisi@westermo.com, claudiu.manoil@nxp.com,
  john.fastabend@gmail.com, sdf@fomichev.me, horms@kernel.org,
  richardcochran@gmail.com, yangbo.lu@nxp.com, ioana.ciornei@nxp.com,
  imx@lists.linux.dev, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Date: Wed, 16 Sep 2026 23:35:57 +0000
-Message-ID: <178960175738.22033.7342785947465842406@kernel.org>
-In-Reply-To: <20260915222735.1016937-6-vladimir.oltean@nxp.com>
-References: <20260915222735.1016937-6-vladimir.oltean@nxp.com>
-X-sashiko-severity: Medium
+Date: Wed, 16 Sep 2026 23:35:59 +0000
+Message-ID: <178960175909.22033.583659760655482183@kernel.org>
+In-Reply-To: <20260915222735.1016937-7-vladimir.oltean@nxp.com>
+References: <20260915222735.1016937-7-vladimir.oltean@nxp.com>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -54,86 +54,137 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Critical: 0 · High: 1 · Medium: 0 (1) · Low: 0
 
-- [Medium] In enetc_xdp_xmit()
-  (drivers/net/ethernet/freescale/enetc/enetc.c), the newly added short-…
+- [High] Incomplete fix / commit-message mismatch in enetc_xmit(): the
+  patch adds plain skb_linearize() where skb_linearize_cow() is required.
+
+Pre-existing issues:
+- [Medium] Speculative / discarded as a pre-existing Medium: the 10-byte
+  originTimestamp write in enetc_update_ptp_sync_msg() (enetc.c:336-338,…
 
 --
 
-net: enetc: pad short XDP frames coming from devmap
+net: enetc: linearize PTP event packets with one-step TX timestamping
 
-This adds a generic best-effort xdp_frame_pad() helper and calls it from
-enetc_xdp_xmit(), together with a direct check of the head buffer length
-against ENETC_MIN_BUFF_SIZE, so that short XDP frames redirected into
-ENETC are padded or dropped instead of being transmitted.
+The patch adds a linearization step in enetc_xmit() before
+enetc_ptp_parse() is called for packets requesting one-step Sync TX
+timestamping, so that ptp_parse_header() sees a linear header and so that
+the later in-place write of originTimestamp operates on a buffer the
+driver owns.
+
+Link: https://sashiko.dev/#/patchset/20260401172246.1075883-1-vladimir.oltean%40nxp.com
 
 > diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c b/drivers/net/ethernet/freescale/enetc/enetc.c
-> index bbad942041f5a..8a9ba168eab1e 100644
+> index 8a9ba168eab1e..62cdcaab3f3fb 100644
 > --- a/drivers/net/ethernet/freescale/enetc/enetc.c
 > +++ b/drivers/net/ethernet/freescale/enetc/enetc.c
-> @@ -1838,15 +1838,23 @@ int enetc_xdp_xmit(struct net_device *ndev, int num_frames,
->  	prefetchw(ENETC_TXBD(*tx_ring, tx_ring->next_to_use));
+> @@ -1099,6 +1099,11 @@ netdev_tx_t enetc_xmit(struct sk_buff *skb, struct net_device *ndev)
 >  
->  	for (k = 0; k < num_frames; k++) {
-> -		if (xdp_frame_has_frags(frames[k])) {
-> -			shinfo = xdp_get_shared_info_from_frame(frames[k]);
-> +		struct xdp_frame *xdpf = frames[k];
-> +
-> +		if (xdp_frame_has_frags(xdpf)) {
-> +			shinfo = xdp_get_shared_info_from_frame(xdpf);
->  			if (unlikely((shinfo->nr_frags + 1) > ENETC_MAX_SKB_FRAGS))
->  				break;
->  		}
->  
-> +		if (unlikely(xdp_frame_pad(xdpf) ||
-> +			     xdpf->len < ENETC_MIN_BUFF_SIZE)) {
-> +			tx_ring->stats.xdp_tx_drops++;
-> +			break;
+>  	/* Fall back to two-step timestamp if not one-step Sync packet */
+>  	if (enetc_cb->flag & ENETC_F_TX_ONESTEP_SYNC_TSTAMP) {
+> +		if (unlikely(skb_linearize(skb))) {
+> +			dev_kfree_skb_any(skb);
+> +			return NETDEV_TX_OK;
 > +		}
+> +
+
+[Severity: High]
+The commit message says:
+
+    Actually skb_linearize_cow() kills both birds with one stone, as it
+    ensures the skb is linear and writable.
+
+and the v2->v3 changelog says "replace skb_linearize() with
+skb_linearize_cow()", but the code added here calls skb_linearize().
+Was the intended helper missed in this respin?
+
+The two helpers differ exactly in the clone test:
+
+include/linux/skbuff.h
+    static inline int skb_linearize(struct sk_buff *skb)
+    {
+        return skb_is_nonlinear(skb) ? __skb_linearize(skb) : 0;
+    }
+
+    static inline int skb_linearize_cow(struct sk_buff *skb)
+    {
+        return skb_is_nonlinear(skb) || skb_cloned(skb) ?
+               __skb_linearize(skb) : 0;
+    }
+
+So for an skb that is already linear but cloned, skb_linearize() returns 0
+without doing anything, ENETC_F_TX_ONESTEP_SYNC_TSTAMP stays set, and the
+packet reaches the write path:
+
+enetc_start_xmit() -> enetc_map_tx_buffs() -> enetc_update_ptp_sync_msg()
+
+where enetc_update_ptp_sync_msg() stores into the shared head buffer:
+
+    *(__be16 *)(data + tstamp_off) = new_sec_h;
+    *(__be32 *)(data + tstamp_off + 2) = new_sec_l;
+    *(__be32 *)(data + tstamp_off + 6) = new_nsec;
+
+and, in the UDP path without checksum offload, also rewrites
+udp_hdr(skb)->check via inet_proto_csum_replace*().
+
+Linear clones of a TX skb are ordinary: dev_queue_xmit_nit() does
+skb_clone() for every AF_PACKET tap (tcpdump) before ndo_start_xmit(), and
+tc mirred, bonding and team clone as well. With a tap running on the enetc
+port, can these stores corrupt the frame bytes seen by the other holder of
+the same data area, given that Documentation/networking/driver.rst states
+"An ndo_start_xmit method must not modify the shared parts of a cloned
+SKB"?
+
+If skb_linearize_cow() is used instead, the clone case takes
+__skb_linearize() and the write-side half of the problem described in the
+commit message is covered too.
+
+>  		if (enetc_ptp_parse(skb, &udp, &msgtype, &twostep,
+>  				    &offset1, &offset2) ||
+>  		    msgtype != PTP_MSGTYPE_SYNC || twostep != 0) {
 
 [Severity: Medium]
-Does this count the rejected frame twice in tx_ring->stats.xdp_tx_drops?
+This is a pre-existing issue and not something this patch introduces, but
+while looking at this acceptance test: is the length of the Sync message
+body checked anywhere before the 10-byte originTimestamp write?
 
-The new branch increments the counter and then breaks with k still pointing
-at the frame that was just rejected, and the epilogue of enetc_xdp_xmit()
-charges everything from k onwards again:
+enetc_ptp_parse() computes the body offset as the byte just past the common
+header:
 
-	tx_ring->stats.xdp_tx += k;
-	tx_ring->stats.xdp_tx_drops += num_frames - k;
+    *body_offset = (u8 *)hdr + sizeof(struct ptp_header) - base;
 
-so the counter grows by 1 + (num_frames - k) rather than num_frames - k.
+and ptp_parse_header() only validates the common header:
 
-The other three break sites in this loop (the shinfo->nr_frags overflow
-check, the enetc_xdp_frame_to_xdp_tx_swbd() failure and the enetc_xdp_tx()
-failure) rely only on the remainder-based accounting added earlier in this
-series by "net: enetc: consistenly track dropped frames in
-enetc_xdp_xmit()", whose message states that the counter should be
-incremented "by the remainder, not just by 1".
+net/core/ptp_classifier.c:ptp_parse_header() {
+    ...
+	/* Ensure that the entire header is present in this packet. */
+	if (ptr + sizeof(struct ptp_header) > skb->data + skb->len)
+		return NULL;
+    ...
+}
 
-Would dropping the explicit increment here keep this site consistent with
-the other break paths?
+A UDP-encapsulated frame that ends exactly at the end of the PTP header
+(14 + 20 + 8 + 34 = 76 bytes for IPv4, so above ETH_ZLEN and not padded by
+eth_skb_pad()) passes ptp_classify_raw() and ptp_parse_header(), has
+msgtype == PTP_MSGTYPE_SYNC and twostep == 0, and then
+enetc_update_ptp_sync_msg() reads and writes bytes at
+data + origin_tstamp_off .. + 9, past skb->len.
 
-The branch is reachable when xdp_frame_pad() returns -EOPNOTSUPP (frame
-shorter than ETH_ZLEN and fragmented) or -ENOMEM (no tailroom before the
-shared info), and also when the frame total is at least ETH_ZLEN but the
-head buffer is shorter than ENETC_MIN_BUFF_SIZE, which is the
-XDP_REDIRECT-from-veth case described in the commit message.
+Note this appears to land in the skb's own unused tailroom for frames in
+that 76..85 byte range, since __alloc_skb() rounds the allocation up, and
+dma_map_single() uses skb_headlen(), so no case where the write crosses
+skb->end into skb_shared_info was constructed; the visible effect is a
+bogus UDP checksum on an already malformed frame. A body length check in
+enetc_ptp_parse() before accepting the packet for one-step processing would
+make this explicit.
 
-Since xdp_tx_drops is exported to userspace by enetc_get_ethtool_stats()
-via ethtool -S, can the reported drop count end up larger than the number
-of frames the core passed to ndo_xdp_xmit()?
+>  			enetc_cb->flag = ENETC_F_TX_TSTAMP;
+>  		} else {
 
-> +
->  		xdp_tx_bd_cnt = enetc_xdp_frame_to_xdp_tx_swbd(tx_ring,
->  							       xdp_redirect_arr,
-> -							       frames[k]);
-> +							       xdpf);
->  		if (unlikely(xdp_tx_bd_cnt < 0))
->  			break;
->  
-
-[ ... ]
+Checked that no later commit in this series changes the added call; the
+only other enetc change is the cancel_work_sync()/skb_queue_purge() hunk in
+enetc_stop().
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260915222735.1016937-1-vladimir.oltean%40nxp.com
