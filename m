@@ -1,158 +1,197 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+Received: from mail-pz2-f43.google.com (mail-pz2-f43.google.com [74.125.228.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85CB03BBFCF
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 05:29:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789536558; cv=pass; b=BWd+DrQ5LXB+PDVnPYfxeKkJX2LjNqpwJZGu/1NoZtI5T7fBc80BlOqQn/Ews+w7rcrB/KYsW9iGdBq8eBHfVcA9fZIej2H3I3Wu7pESsh1MqAlJKoqls+DGLfS2NzpMegxp5+cJHlVtid9Xb7m84DuLhu50kRXGLefXV4Kjpgs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789536558; c=relaxed/simple;
-	bh=CXv4XcVzsFki/2eiawzhWx6Ex2lOhlOoQIZQNxAZHec=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HzpPkfpVgYxsKMppgB8NUfJhtriefOj6lxL1ucs9SABEul3n4sIA9jyv9UvmO+0f5PmAXEzhKTJwcGnZFn5Qb6WDJt2bKjshTUnxozDKk4zgbwLYWE1FGRFmNgZ4YgIlDlAm0+xdJdhuwrQkXCSvOMvyjuEeek/s3c1OQjbKlMk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MyN5NhzI; arc=pass smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC87A2253FC
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 05:56:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789538169; cv=none; b=ec58G2BYFpWD+yWF/Fz68ovxQ2ZUkzTR2FzoSiB/hU2m3XGCps2+1QW2FTLOfo+KORYauBNHsxH4BYAXsdV67tM28QHeaTvlAusEroBj9iXZwnTu3lyBaC8FtGI+83DdwW03Vz+1I1SoXskKR3u0djnJW65Ezl4+FEbu4QgGRyE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789538169; c=relaxed/simple;
+	bh=JN9Wo9Nm+A505/B5A8UegDIzE6n1kXxbD4fQzt9sr9U=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=XUgUV6dts8BVADOXfeyIN7DX/tOpfQWQj2DfuBbak/rqNeagHWTn+LkYB5ga9sc9jO5aoWJE0ilmL5OfYymFlpzyIuNH4nqn3bBDjcQ8Xu2l2xEQTqlHrLYhw48nB3T1NjvQZZbmAmDuQBlLJiSJg3jYRsd6tA1bgjXPHIc3SA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TSAQo0lG; arc=none smtp.client-ip=74.125.228.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MyN5NhzI"
-Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc1cebad4afso493037a12.0
-        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 22:29:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789536557; cv=none;
-        d=google.com; s=arc-20260327;
-        b=RpuPlkqkajP6uNWpy0s2fU3Y3qGxyROG8uQhHIPwurDwzynlwRJTyJBwXiVrgkfKfN
-         D0/dPLq+RstrB8wLCRrGn6dbSyGMq4K/IOREe1xMw79S081C15+FB/0a7gmuXzzUGKYS
-         iNjHXisF85CMnMobUJBk/yiMTHGnpgJYF0ucoND7ijSOEjuybVNne0ip2ReGeRtC/hg5
-         Ky/no6cRbUtatzF+GTz92shRkvxYjEVSpB9dpon000REb2TYiLzbizl6LO8gILECJcLP
-         2zVJC+E5LTUqyms4Yi9+k3gGYO6kJ1CjBapsBFOHCXa0RRI83GA7kpWzltO0dKy4Hvrw
-         9TDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=CXv4XcVzsFki/2eiawzhWx6Ex2lOhlOoQIZQNxAZHec=;
-        fh=R7m9NwWR6+Ds1Pnpi2xApk4HzRxmU9ezeAgGOFvEaQ0=;
-        b=hpSBO+tK5WqgoIFE30psYhjmotTq0+ADeSZC7KwTUKZ5HPhFvWXlR5fwkuMWR5LM+v
-         lW69TGt3IXBMfpJxh7MAGN8GLgDG21PGRMA+GfG9QxwbMBl28qICYS9ZyU0+gpoZXonG
-         iROhA4jxvPJdTEwyYLNc616nvhnPahqRDuIifVuIdzcsmuFdKv3IwcKvT45MPsgO6chb
-         f5KPZT3VZ+G5sGhRkmAFW6bhuhQzY31UmFJOfF1r/KbhN+m/RwjQYnaZz/f7CE6U1Vgy
-         ZZOAtkyRYYPQnRFmqA3B2r9bRD9XkQ8nI1MaS6LB523CLPqeJtf9VlFgI1tDCB0PfNAz
-         zdDw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TSAQo0lG"
+Received: by mail-pz2-f43.google.com with SMTP id d2e1a72fcca58-8631d0023daso332258b3a.2
+        for <bpf@vger.kernel.org>; Tue, 15 Sep 2026 22:56:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789536557; x=1790141357; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=CXv4XcVzsFki/2eiawzhWx6Ex2lOhlOoQIZQNxAZHec=;
-        b=MyN5NhzITYCavQ1T64wVj6Hn4LpAWgTdVfgT0VkjwGx/hMhzPvVUaJ7/1fMyz4bkyS
-         zNn+GhCv9F+TVFgUMDI4V1nb2nd4zkwEiMztVH9xTEBTTohCp/cdkbo8t/ANyIVO/w9y
-         tDA8hRBf1spX3qbJf2dXvyLAReb0/KAIE8LX2ok2MCcUAft+USJn65aUkrFM4RPJlZR8
-         Q0R2l11zH8ZEn1UwygfgsfUSrkn87CaiT7YemsRRZxUprAHty4YrPuDff+iCINr9+Otz
-         VUJkifXIPao82fh1avU5D4RLCKV+O1gpD6NOUoaVJmylDtgSyE+UaboBKD10mM1QDAUC
-         vmbQ==
+        d=gmail.com; s=20251104; t=1789538167; x=1790142967; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=JN9Wo9Nm+A505/B5A8UegDIzE6n1kXxbD4fQzt9sr9U=;
+        b=TSAQo0lG14qlzSQ8nTzArg6aEVsrMKtNncYdiuI8oQ79RLMeF7QJyEujTZ6eB3omCE
+         h10xBbS5pXFD2h5k2+genWZKBzMLlP6UPSJwRnbZGvH10HnNpxbFSQaUhPI6TdMRHFUu
+         aCv5aW1UMteHulTLnyYN4tqeKmJ2fjgU4HsHc9ayXr9W7YULCJ4cT+EYYiDXlkKzeLoZ
+         dImpOVYswwXdGafXlzAZa/eHY73NXhc75+RtuJPdRopcNmN/l74Z05GejHM/C6s2rSZi
+         E6z+XbaDJd/H4+w/zTMzrtOj15x07wEIyt1BD5VizRmWB62NuhbJvozQgTJR9hiVPkTf
+         aTxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789536557; x=1790141357;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1789538167; x=1790142967;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=CXv4XcVzsFki/2eiawzhWx6Ex2lOhlOoQIZQNxAZHec=;
-        b=U7FXiQoKM7YxMN5uW508zSfFpopa978anTZ2qsNW3ZMBhe+Ed+79T7RLBc6YS1gi9+
-         kLKEAJKVqFhtdOvewfto4INsJdl28EqUENquLkiLeLsIonQLbd0ZeAgEv41D1nUTUi9c
-         AGUfEF7p9lCwazD2QjYRgy91ifdc6Oi1dq4qzelSWh9CiLizR+qTb245zkW1ugT0SHLZ
-         7ufIFdSi27tM6U/NWlfRy/3LucK4hcVBgOvGA1fIDEKcGT7rKSFujszfSNsPpDvlb+hT
-         ZbFuobmgifuMPxj0A+eBPOMDGdiL9+y3ClxF9eM4YE7Gv7BB/YgD23n+3vAGQq2uSj6E
-         zL6g==
-X-Gm-Message-State: AFuF++mva27T+Zd5B+3EqQX8jYV0LdY2hLghw1dfQUdx8Y95/N4t5/0P
-	9BrMoaYfwhv/KEnlElaMHuW+Y2etUr4v/NUlcs7qwOuQvfN+MbLQM/606TURKrvCX6G7JecxQYc
-	4So/uSivrM9RkBOYGxupMsGKbfqdhzCU=
-X-Gm-Gg: AYBFou335eWQtszBdHgIlVIEZr4FrNI1vilssOkp/Rftnf3CZ5KNRdz2UualPI6TgUk
-	K1reZnNIOlhHUWsUo1JUIZ/sTjpWC9IBxYxLKHyILZTZiv8T0+JCiokXsfidUY6DW5Ib3VQqomm
-	jq3yaj+aTfrOGeEAmfxD1Txlb9VVWbVKpROwXaMqXhRkiP+JRC0Cwen7miD48lWldv7kXEmybmG
-	nyr8CwDmVfD7+z4i2awuE1QXdqv8MOvBvWAUxfd/jahgTCMyyQZSWF+kCjzpHE7Odmsy0F5xTTG
-	x3aBwY2zKkbfD92XbcV6ImT5DMQaCLquB/UEbDS5IDVvAIMOV27KJEYHSAUofTJHl3tYLBz45cO
-	+l99uWBBK6GeCkY8+5aVCpaoTJsq9qDaMR/KERFo=
-X-Received: by 2002:a05:6a20:7d9d:b0:3d3:adad:f172 with SMTP id
- adf61e73a8af0-3dd5f72bc69mr3018415637.20.1789536556549; Tue, 15 Sep 2026
- 22:29:16 -0700 (PDT)
+        bh=JN9Wo9Nm+A505/B5A8UegDIzE6n1kXxbD4fQzt9sr9U=;
+        b=YZiq183/6GkDIgG7IR/cedwErlY+D13yb1OgD45wynoSKOBs6Mqdqx1rXnVhwgWY1t
+         BFVkCdvazoEPws3mOxaVhS5Vm7EPc81umxPMPyGHw8zXMxdai94NDlf0NazzK37znhaY
+         d0qFgyZxJjS4gE1kP5jIHgO9HQKmw9j/zsx1+k+cvF1UZYlGi9vx4Yqw1dIH2kPyDFym
+         xEQxExQ9OkM+3dUaBMeSf2hQZ8FEtNJluuGlzJ9gpIUnK5o0aLRiY4xXd4urdrXfgXA+
+         zzQJVFRu8lTcVuhKcIGwuodDm2FbW47ntzUguYBgeGvyKDPfzGVPEnf6ggJLI+HSL1/P
+         vO0A==
+X-Forwarded-Encrypted: i=1; AKwUvBxKyNhVib5WFyWjXVBXAq/E9Y5SKiOBjb+O+5wzjKNx114ZgIZgXldogSyB7VIBhKfG4TE=@vger.kernel.org
+X-Gm-Message-State: AFuF++kebjLQRK80cTYMhf8cJ1afDd5gXWS5D9VQKtPDmt576suGsDp+
+	A5AeQK0KXXK/0y4p3Tutqr0UUdcDoZ6orIqyLQPzHb4sLqiwiMIWfut3
+X-Gm-Gg: AYBFou34hsQJJl9mhc3fIq1P1lgnATi33yhcRW4YrXeCwLDA/1ynqbV40I3f6AA7JtC
+	tOC64IACInG/cbpxatenMTJkx/3/PnnccCm9JH7YZvNRMVtOkRSg6GO/UzhEgkZ9j/g2Pan6pEg
+	13z9v/gHS7L3dEI8a9fkvUZRS9VViWW/j8yHLjXQwLbEAPY0zrDmhKW9EkOTokojn9g15k6we8R
+	qgB90ozeBPwcSxbc3E6nAWR8ycamzyb6DSI+YdrlAl4rp9vsWos9MRmVrToHYdKy2VYfzyqTVwc
+	wHUyFItf65uOJniSSrZzeYe2mOMkiB6BmVnx5nviZaQ750aJD3TXaISc9Mn1EdoDoK8FuRIYao9
+	Vw/vD1Boe6NgR+qqxFmRZcpjgbbm5yJnG3FhJg84eV+LCDPmBH/pSn4FTl2QkgUDQFrEE1xhzNS
+	ncwdWFTdFKE/xpDmtp2p6CFN1Wz7LUkSmz16z3UJMI4picEZhmu09y0gwfqw5jItRYSZWAAcBA8
+	DmKLiNAefr649rBKGjL54WjXYPUpWpcvny/1LQ8QnDDr9jqqM6djJ6iU8+ZdvlmwdqTan5PQ+J6
+	WcAt+y/SzMJ0PqL+moDMzBqvRxEwzAvC7zAT59/a8rJkDduc5ttOibk/
+X-Received: by 2002:a05:6a00:6088:b0:857:73e2:9106 with SMTP id d2e1a72fcca58-87239aa08b2mr2729686b3a.22.1789538166849;
+        Tue, 15 Sep 2026 22:56:06 -0700 (PDT)
+Received: from localhost (ec2-16-145-69-213.us-west-2.compute.amazonaws.com. [16.145.69.213])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87201f07a19sm619968b3a.53.2026.09.15.22.56.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Sep 2026 22:56:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260912095924.866254-1-florent.revest@linux.dev>
- <20260912095924.866254-2-florent.revest@linux.dev> <DLDHKKLCOAVR.3PHQ832S121Q2@gmail.com>
- <DLG3Y32QQ9JU.3LNSYXLJIGH17@linux.dev>
-In-Reply-To: <DLG3Y32QQ9JU.3LNSYXLJIGH17@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 15 Sep 2026 22:29:05 -0700
-X-Gm-Features: AcwNN1VApFqHfiZtUBpFi7XpRtICUs_9AuNRI0X7lGIQvOJrfcWs4IpoTgHfoXA
-Message-ID: <CAADnVQL=sW1-UOUbP_j98G2eY4MPzQd=HbP-7q5-sjqFQya=Rw@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 1/2] bpf: Skip detached progs in trampoline images
- that are still in use
-To: Florent Revest <florent.revest@linux.dev>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	KP Singh <kpsingh@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Leon Hwang <leon.hwang@linux.dev>, Junseo Lim <zirajs7@gmail.com>, 
-	Sechang Lim <rhkrqnwk98@gmail.com>, Puranjay Mohan <puranjay@kernel.org>, 
-	Xu Kuohai <xukuohai@huaweicloud.com>, Ilya Leoshkevich <iii@linux.ibm.com>, 
-	Hari Bathini <hbathini@linux.ibm.com>, Christophe Leroy <chleroy@kernel.org>, 
-	Naveen N Rao <naveen@kernel.org>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Pu Lehui <pulehui@huawei.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
-	Hengqi Chen <hengqi.chen@gmail.com>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 16 Sep 2026 05:56:05 +0000
+Message-Id: <DLGIC44OPLOE.XHJ1NP8XKPIQ@gmail.com>
+To: "Yazhou Tang" <tangyazhou@zju.edu.cn>, <bpf@vger.kernel.org>,
+ <ast@kernel.org>, <eddyz87@gmail.com>
+Cc: <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
+ <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
+ <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
+ <jolsa@kernel.org>, <tangyazhou518@outlook.com>,
+ <shenghaoyuan0928@163.com>, <ziye@zju.edu.cn>
+Subject: Re: [RFC PATCH bpf-next 1/6] bpf: Add UHMUL and SHMUL instructions
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+X-Mailer: aerc 0.17.0
+References: <20260902070534.2141812-1-tangyazhou@zju.edu.cn>
+ <20260902070534.2141812-2-tangyazhou@zju.edu.cn>
+ <DL9CGP0NFZ37.25Y31VZH6PKPQ@gmail.com>
+ <94eba3a8-6bca-432b-859b-d14e608d34f2@zju.edu.cn>
+ <DLD0Y0CFA97S.3RC5RTORRYY9N@gmail.com>
+ <4147c261-7518-4700-9ca5-12c020256aca@zju.edu.cn>
+ <59e754a2-6158-485c-93b9-6f60d9f57528@zju.edu.cn>
+In-Reply-To: <59e754a2-6158-485c-93b9-6f60d9f57528@zju.edu.cn>
 
-On Tue, Sep 15, 2026 at 11:39=E2=80=AFAM Florent Revest
-<florent.revest@linux.dev> wrote:
+On Tue Sep 15, 2026 at 11:48 AM UTC, Yazhou Tang wrote:
 >
 >
-> Ah yeah, I tried to address that in the cover letter. Basically, if we pa=
-tch
-> all the nops, tasks running in the old image could skip some progs that a=
-re
-> still attached. For fexit, that's already what happens with ip_after_call=
- but
-> for fmod_ret it would be new and this would cause for example an LSM prog=
-'s
-> verdict to get skipped when another prog gets attached to the same hook. =
-That's
-> why I thought that patching only the detached prog's nop would be better =
-and
-> needed these extra pointers. But it's a bit of an edge case and I don't h=
-ave a
-> strong opinion on it.
+> On 9/14/26 16:36, Yazhou Tang wrote:
+> >=20
+> >=20
+> > On 9/12/26 11:40 AM, Alexei Starovoitov wrote:
+> >> On Tue Sep 8, 2026 at 1:30 AM PDT, Yazhou Tang wrote:
+> >>>
+> >>>
+> >>> On 9/8/26 3:51 AM, Alexei Starovoitov wrote:
+> >>>> On Wed Sep 2, 2026 at 12:05 AM PDT, Yazhou Tang wrote:
+> >>>>> From: Tianci Cao <ziye@zju.edu.cn>
+> >>>>>
+> >>>>> Define UHMUL and SHMUL as BPF_ALU64 BPF_MUL variants selected by in=
+sn->off.
+> >>>>> UHMUL returns the high 64 bits of an unsigned 64-by-64-bit product,=
+ while
+> >>>>> SHMUL returns the high 64 bits of a signed product. Keep off =3D=3D=
+ 0 as the
+> >>>>> existing low-half multiplication, and assign off =3D=3D 1 and off =
+=3D=3D 2 to
+> >>>>> UHMUL and SHMUL, respectively.
+> >>>>>
+> >>>>> These operations are inspired by the UHMUL and SHMUL instructions
+> >>>>> introduced as part of the PQR instruction class in Solana sBPF[1].
+> >>>>>
+> >>>>> The encoding and immediate semantics differ from current sBPF.
+> >>>>>
+> >>>>> 1. Solana sBPF assigns these operations dedicated opcodes in the BP=
+F_PQR
+> >>>>> =C2=A0=C2=A0=C2=A0=C2=A0 class, whereas this implementation selects=
+ them through the offset
+> >>>>> =C2=A0=C2=A0=C2=A0=C2=A0 field of BPF_MUL.
+> >>>>>
+> >>>>> 2. Solana sBPF initially sign-extended the immediate operand of UHM=
+UL,
+> >>>>> =C2=A0=C2=A0=C2=A0=C2=A0 but later changed unsigned PQR immediates,=
+ including UHMUL, to be
+> >>>>> =C2=A0=C2=A0=C2=A0=C2=A0 zero-extended[2].
+> >>>>
+> >>>> Why did you switch to zero-extend ?
+> >>>> Sounds odd to do zero extend just for these ops.
+> >>>
+> >>> Sorry, I wasn't clear. This patch does not zero-extend the UHMUL imme=
+diate.
+> >>>
+> >>> Both UHMUL and SHMUL follow the existing BPF_ALU64 convention and
+> >>> sign-extend the 32-bit immediate to 64 bits first. The zero-extension
+> >>> I mentioned refers only to current Solana sBPF behavior. I'll clarify
+> >>> this in the respin.
+> >>
+> >> My question was "why in Solana you switched to zero-extend?"
+> >=20
+> > I wasn't involved in that Solana change.
+> >=20
+> > https://github.com/solana-labs/rbpf/pull/642
+> >=20
+> > In Solana BPF, PQR is a separate instruction class for product, quotien=
+t,
+> > and remainder operations. PR #642 mentioned above changed the treatment=
+ of
+> > 32-bit immediates for all three 64-bit unsigned PQR operations (UHMUL,
+> > UDIV, and UREM) from sign-extension to zero-extension. This appears to
+> > have been a broader convention change for unsigned PQR operations, rath=
+er
+> > than something specific to UHMUL.
+> >=20
+> > I couldn't find the design reason documented in the PR, though. I'll tr=
+y
+> > to ask the author about it.
+>
+> I asked Alexander Mei=C3=9Fner, the author of the Solana BPF change. He c=
+onfirmed
+> that zero-extension was an intentional ISA design choice rather than a fi=
+x
+> for a particular compatibility issue.
+>
+> He gave two main reasons.
+>
+> 1. First, for explicitly unsigned instructions such as UHMUL/UDIV/UREM,
+> treating the 32-bit immediate as an unsigned value was considered more
+> intuitive. For example, with an encoded immediate of 0xffffffff, zero-
+> extension gives 0x00000000ffffffff (2^32 - 1), while sign-extension gives
+> 0xffffffffffffffff (2^64 - 1). Similarly, 0x80000000 becomes 2^31 with
+> zero-extension, rather than 2^64 - 2^31 with sign-extension.
+>
+> 2. Second, zero-extension gives the continuous unsigned range [0, 2^32 - =
+1].
+> With sign-extension, the upper half of the immediate encoding instead
+> represents values in [2^64 - 2^31, 2^64 - 1], while values in [2^31, 2^32=
+ - 1]
+> cannot be represented directly. The Solana BPF design considered the rang=
+e
+> provided by zero-extension more useful for unsigned operations.
+>
+> For Linux, given that the existing ALU64 UDIV/UMOD instructions with
+> immediate operands sign-extend the 32-bit immediate to 64 bits and then
+> use the resulting value as an unsigned operand, I'm inclined to do the
+> same for UHMUL for consistency.
 
-Hmm. Not sure I agree with your reasoning.
-fmod_ret progs are called _before_ orig_call.
-So fentry+fmod_ret are in the same category.
-Adding/removing a prog to the trampoline causes regeneration
-of the trampoline.
-So cpus may execute different numbers of progs already.
-The race is inevitable.
-With 'patch all nops in old tramp' approach the only
-additional race is some of the fentry/fmod_ret progs
-will get skipped in old tramp.
+Agree. I think it's better to be consistent, since inconsistency in
+imm32 encoding will cause quite a bit of headache to compilers to special
+case these instructions.
 
-If the concern of a tiny window where old tramp is started
-to be destroyed, then fentry prog is called and we patched
-another fentry, but tramp will continue and execute orig_call,
-then, yes, I see the issue, but it's a lot more subtle.
-If I understood the concern correctly then let's add
-another 'jump over the call' nop in addition to
-'patch nops in front of all progs' and
-let's patch 'jump over the call' _first_.
-This way fentry/fmod_ret progs can never miss
-execution of orig_call. They can be invoked "unncessarily".
-They may execute though orig_call will not fire.
-but that's an acceptable race. Better than not executing
-fmod_ret while letting orig_call to go through.
-
-This is still simpler implementation than link-list all all extra book keep=
-ing.
