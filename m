@@ -1,273 +1,206 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f43.google.com (mail-pz2-f43.google.com [74.125.228.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F38852D2C0;
-	Wed, 16 Sep 2026 23:36:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5FB4E431C
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 23:51:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789601764; cv=none; b=WHb3z0nmH5TXRFjMePQY0H8xHAYK5nhwS/rHtNSQWnDhw6RR93UOaq1lrddcCuoKT01MpuQ3Utod+A5bDnh/UGGcxzOogZcrd+dvOEOvI71c+wLr1iAILbMzmROUrRRbmapAMp+XAKgwIkR2N+NA6SPCK2c9ZSkwVqDBUJvN+/8=
+	t=1789602706; cv=none; b=WOpcbs/1wbysXUoh3LPn1HnfGI1to9L67DuuZW53z0ZyrqX3JkLAnXPGT8X2te21jQfFD5XZ+Q9KRQsO9x3uilmO49kou9HP2jjXtSz5/G/MUDA8Nogl1R2s7hXdyd8fRqi+MbwIBjBlcn5bYNjSFr9QtRuD3+L5vw43756HhxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789601764; c=relaxed/simple;
-	bh=DmAmUwXQCZH/5zjY1OpTFiVr8099K87UzumzCeLR1go=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=O6V3gQhA79zgxopP7a89/LixJpmX5zk4hyeWfwzD7sYno0wobuKsS9eAhin7JUXh/BAaxvHFZ3OO2xS3QxBgGqJ0qxDz9BgQRjG5K4wOo67Ny1AWfV76Ja0gjKt1r70PaacvAbd/0Rr3XPAwVmUri1XNz3eOMx96/Y3vZcxU//I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hZHe5zmL; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789602706; c=relaxed/simple;
+	bh=tw4Yf+S8V1C9PXL0XZIDuI6sx2gh/c6t8tJcq2zDUSA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=jUOBMjmypT2VqEtX+exyjAJ8c/VtwYM1eIHoO4pN13Dvx4xDPQoBzj/i/s733JHUOiFC1iwzE5zL8A0OOym68M+dMHlzgGw19MMft+lI5ibb6wksyuCVrRECwUWxBx1sRR9Zdz/2PSVqjs4WSo4rKYPYlmY5REpw5sXE0+3RE74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=ynKcmiA0; arc=none smtp.client-ip=74.125.228.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hZHe5zmL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 923501F00893;
-	Wed, 16 Sep 2026 23:36:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789601762;
-	bh=eCuzUlCpBSagSCXgVWeEMtoVnAGgoZr+advm+yEOsQE=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=hZHe5zmLby3E/q1c3f3d3RMuJ8QSDR7iWaW86jQbagSqaqVbxXKYgKFz3xbBC2BNS
-	 vsVwpAKl0SMh2mb6dN0wo8LeLnEwRamVJQrZeB8L4VTf8JsRL5IrkFRXHJY/E+UXI3
-	 EqE8Q9cp5EdkNsFH/VaZK9e4N5u0VdCRbvUIQT46Etq0mzIc1om2TrS/nkpYURGR0I
-	 Cy/lssPHiaMyJBNHaexA41RJdtCLytKsIEN9j5/lcOKJ67rK1xR0o9E/m5hEujiie2
-	 RSnoElsJ+068fnhi8o9yaNTFNG0isa4LYWpI8HEt5/ZidUdCjgJoYPTs6tq2/6AZ1n
-	 BunwZdSnek8cw==
-Subject: Re: [PATCH v3 net 7/7] net: enetc: drain and cancel one-step TX
- tstamp queue when going down
-From: netdev-bot+sashiko@kernel.org
-To: vladimir.oltean@nxp.com
-Cc: netdev@vger.kernel.org, zefir.kurtisi@westermo.com, claudiu.manoil@nxp.com,
- wei.fang@nxp.com, xiaoning.wang@nxp.com, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, horms@kernel.org,
- richardcochran@gmail.com, yangbo.lu@nxp.com, ioana.ciornei@nxp.com,
- imx@lists.linux.dev, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Date: Wed, 16 Sep 2026 23:36:01 +0000
-Message-ID: <178960176110.22033.17058557096563845963@kernel.org>
-In-Reply-To: <20260915222735.1016937-8-vladimir.oltean@nxp.com>
-References: <20260915222735.1016937-8-vladimir.oltean@nxp.com>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="ynKcmiA0"
+Received: by mail-pz2-f43.google.com with SMTP id d2e1a72fcca58-85469f204f6so146887b3a.2
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 16:51:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1789602704; x=1790207504; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=ygw1vx1YMoCKI9p6AoG1FePEm3NEfgLrfeWdiOdKnAE=;
+        b=ynKcmiA0t7kMWXCxeG3+rwk9yalfvCTVvAYP7Omj7jjVvsEQBoEcMCRu56a/D+HOPu
+         HeWI0ove7+ks/ZA6UnnctNLLz8StCfCjMhyn6lJKrXPC7+bCuU7o/yJurxFZh0+LtYre
+         Zk73ZP1NSRlcKf4/J+8rvSfwLRLkib8lI0tebcRkuVYpkFFcDcO1guJrfI5vijhjaxOv
+         ofFKZ1Gt1ornVnMjcSnw4HqKVfZF2JejfJSZOAPgR/gagtXC4W1LSD/53pb6gkJ3bUoW
+         TGlY2JIKw57wMv2EHQjghon9So+wvVa9aUpxmQy8goacV4xluny7nxLUz2+s8GyBAGAA
+         r2/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789602704; x=1790207504;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ygw1vx1YMoCKI9p6AoG1FePEm3NEfgLrfeWdiOdKnAE=;
+        b=pMk+8Z4CxGAtMoI9y8lEsudl7NAJXHug+pqsRMtySjpWge5e4HnmeZ4BK0D5fkXo7X
+         cwRZcBTspO9GZb6t5Eq42qfFsvgRT5AgZI3sAl8NtMHY+ex2xqMQKEkJwziPaSxIVSMc
+         HqEhSzF3Hc0GfckVt87XIiE4WpDO0ZcPeMvNFYXlzpv3sCLtUJMpDlsEMAb0ApD1lNMp
+         ACsTVzO86N+OarKz7lE+kmcKBF626AVsI8TSM5s/7K4V5XMBVuGK31NglUaJLTKSGGpE
+         uipPMtHukWIXttjAsqnSxEofJIOfmccSC0ca6JS4T7ejprq/o6CCRzqJB92zAo72Db6F
+         QC7g==
+X-Forwarded-Encrypted: i=1; AKwUvBxX7BvIB2vFM7eH34bsZT9E8zEXC2qtDL9txnr0zpMjVLC+3kuyhGpF3ajTjAI/Eq+GOCE=@vger.kernel.org
+X-Gm-Message-State: AFuF++mlfqy/lYcZKfRYN9vVXLHe5UVdcGf999aqR7j6Xfe6PUJOsuhS
+	3tPC+xW4eeUCWlxpP7HpddK8MXd2Z1WJMWz9ozug37Sbym2m+diMSuAwjXFcr/CQZns=
+X-Gm-Gg: AYBFou0C93q18I1z5gd+UGhJGV7Njip94BjhOzMCA/JyXQMf0DEJYPN92LOKUfCoweG
+	m5wqdsZKEjH/AqmS6ih1ov8O369GVnq2bDUIuY1mo0NhMCS2Y9NsZ6H1niLwzmXWZxysMkTAuJZ
+	KhgWC/zf63hUeUnSCN6+SBvtbWKx8r8S9itZK+A3qpganLCi3eNGZ5n6t93yWHrcqRTZFheIs1t
+	9K6MDezUDp/trDxE5Y5OgFph/7cnCZ/5V/cuLXUlM0+PeHLbCJN1+Yk/iTPiESqgkQ7v+DucxsU
+	h5q+1QVMfCCO841EluzfRn8Zp+BE2U1xJJhomBJ/n6oHI3ksBTzuGdQDN8jbXp9mUHaMbaoY96O
+	/NllORCHwKLDeZ11+iP57OEHmtTITBUg5jitRzrM01/NOZOgWjYPitJrgFrj31aLEbza24Rw31p
+	GhsiHucB0n90RsBGTWVgQxSBATiWxRpBYm14v9fUokrqOf+FlMw0AEzJlfWx5OVGajkGvHzss9p
+	d5Y7fNTcMYpofyP7Y+x54oY+N4q
+X-Received: by 2002:a05:6a00:ac2:b0:871:13f7:9c41 with SMTP id d2e1a72fcca58-87238f94fdcmr9462876b3a.14.1789602703850;
+        Wed, 16 Sep 2026 16:51:43 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87200c581fcsm1952912b3a.12.2026.09.16.16.51.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Sep 2026 16:51:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 16 Sep 2026 23:51:41 +0000
+Message-Id: <DLH57NI97844.2XBZUZV378XNE@etsalapatis.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Wait for links to come up in
+ lwt_ip_encap
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
+ <bpf@vger.kernel.org>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <bastien.curutchet@bootlin.com>, "Alexei Starovoitov" <ast@kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20260916232407.764886-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20260916232407.764886-1-alexei.starovoitov@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 4 potential
-issue(s) to consider:
+On Wed Sep 16, 2026 at 11:24 PM UTC, Alexei Starovoitov wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+>
+> lwt_ip_encap creates three fresh netns with veth pairs across them and
+> then immediately pings over IPv6. The peer ends of the first veth pair
+> end up with the same ifindex in their respective netns, so linkwatch
+> does not treat the carrier-on as urgent and may deliver NETDEV_CHANGE up
+> to one second later. Until that happens addrconf considers the link not
+> ready: no ff00::/8 multicast route and no link-local address are
+> installed, and the neighbour solicitation for the next hop is dropped
+> as a no-route packet. The NS retransmit a second later succeeds, but
+> ping -W1 has already given up:
+>
+>   check_ping_ok:FAIL:ip netns exec ns-lwt-ip-encap-1-... ping -6 -c 1 -W1=
+ -I veth1 fb04::1 > /dev/null unexpected error: 256 (errno 2)
+>   lwt_ip_encap:FAIL:ping OK unexpected error: -1 (errno 2)
+>   #226/1   lwt_ip_encap_ipv4/egress:FAIL
+>
+> This reproduces reliably when the test is run standalone on an idle
+> system where setup completes well within a second. The original shell
+> script had a "sleep 1 # reduce flakiness" after setup which was lost in
+> the conversion to test_progs.
+>
+> Instead of sleeping, poll SIOCGIFFLAGS for IFF_RUNNING on all veths at
+> the end of setup_network() so traffic is only sent once every link is
+> operationally up.
+>
+> Fixes: f5e288943e2c ("selftests/bpf: Move test_lwt_ip_encap to test_progs=
+")
+> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 
-Critical: 0 · High: 0 (1) · Medium: 4 · Low: 0
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-- [Medium] The drain/cancel/flag-reset is added to enetc_stop(), which is
-  not only the "going down" path but also the generic "pause traffic"…
-- [Medium] The new cancel_work_sync() + skb_queue_purge(&priv->tx_skbs) +
-  clear_bit_unlock(ENETC_TX_ONESTEP_TSTAMP_IN_PROGRESS) sequence in…
-- [Medium] The patch's justification footnote accepts that
-  enetc_tx_onestep_tstamp() can call enetc_start_xmit() after…
-- [Medium] The new unconditional
-  clear_bit_unlock(ENETC_TX_ONESTEP_TSTAMP_IN_PROGRESS) in enetc_stop()…
-
-Pre-existing issues:
-- [High] enetc_tx_onestep_tstamp() (enetc.c:2996-2998) dequeues an skb
-  from priv->tx_skbs and calls enetc_start_xmit() while discarding the…
-
---
-
-net: enetc: drain and cancel one-step TX tstamp queue when going down
-
-The patch cancels the priv->tx_onestep_tstamp work item, purges the
-priv->tx_skbs queue and resets ENETC_TX_ONESTEP_TSTAMP_IN_PROGRESS in
-enetc_stop(), after napi_disable(), so that no deferred one-step PTP Sync
-packet survives ifdown or driver unbind.
-
-> diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c b/drivers/net/ethernet/freescale/enetc/enetc.c
-> index 62cdcaab3f3fb..892490ff1ebee 100644
-> --- a/drivers/net/ethernet/freescale/enetc/enetc.c
-> +++ b/drivers/net/ethernet/freescale/enetc/enetc.c
-> @@ -3110,6 +3110,10 @@ void enetc_stop(struct net_device *ndev)
->  		napi_disable(&priv->int_vector[i]->napi);
->  	}
->  
-> +	cancel_work_sync(&priv->tx_onestep_tstamp);
-
-[Severity: Medium]
-The commit message says the late frame submitted by the work item "will be
-put in the disabled TX BD ring, where nothing will happen with it until
-enetc_free_rxtx_rings() later reclaims its memory".  Does that cover the
-hardware producer index as well?
-
-enetc_map_tx_buffs() ends in enetc_update_tx_ring_tail():
-
-	/* includes wmb() */
-	enetc_wr_reg_hot(tx_ring->tpir, tx_ring->next_to_use);
-
-so a submission that lands after enetc_disable_tx_bdrs() advances
-ENETC_TBPIR and tx_ring->next_to_use.  Neither enetc_stop(),
-enetc_free_tx_ring() nor enetc_assign_tx_resource() rolls those back, and
-enetc_setup_txbdr() adopts the register values instead of clearing them on
-ENETC v1:
-
-	/* For ENETC v1, clearing PI/CI registers for Tx not supported,
-	 * adjust sw indexes
-	 */
-	tx_ring->next_to_use = enetc_txbdr_rd(hw, idx, ENETC_TBPIR);
-	tx_ring->next_to_clean = enetc_txbdr_rd(hw, idx, ENETC_TBCIR) &
-				 ENETC_TBCIR_IDX_MASK;
-
-	if (tx_ring->next_to_use != tx_ring->next_to_clean &&
-	    !is_enetc_rev1(si)) {
-
-After enetc_reconfigure() (enetc_stop(); enetc_free_rxtx_rings(); new
-resources; enetc_setup_bdrs(); enetc_start();) an ENETC v1 part would come
-back up with TBPIR != TBCIR on a freshly allocated, zero-filled BD ring, and
-the driver's next_to_clean would point at a scrubbed swbd whose skb and DMA
-mapping were already released by enetc_free_tx_frame().  Should the stop or
-teardown path reconcile TBPIR with next_to_use, or keep the one-step frame
-out of the disabled ring in the first place?
-
-> +	skb_queue_purge(&priv->tx_skbs);
-
-[Severity: Medium]
-enetc_stop() is also the generic "pause traffic" helper, not only the going
-down path.  It has three callers: enetc_close(), enetc_reconfigure() and
-enetc_set_coalesce().  In the last two the interface stays administratively
-up, so is the unconditional purge here dropping one-step Sync packets for
-which the driver already returned NETDEV_TX_OK in enetc_start_xmit()?
-
-	if (enetc_cb->flag & ENETC_F_TX_ONESTEP_SYNC_TSTAMP) {
-		if (test_and_set_bit_lock(ENETC_TX_ONESTEP_TSTAMP_IN_PROGRESS,
-					  &priv->flags)) {
-			skb_queue_tail(&priv->tx_skbs, skb);
-			return NETDEV_TX_OK;
-		}
-	}
-
-That would make ethtool -C, XDP program attach/detach and hwtstamp
-reconfiguration silently discard accepted PTP Sync frames.
-
-Related to the same call sites, the footnote's reclaim argument does not seem
-to hold for enetc_set_coalesce(), which is just:
-
-	if (netif_running(ndev) && changed) {
-		/* reconfigure the operation mode of h/w interrupts,
-		 * traffic needs to be paused in the process
-		 */
-		enetc_stop(ndev);
-		enetc_start(ndev);
-	}
-
-There is no enetc_free_rxtx_rings() in between, so a descriptor left in the
-ring by the flushed work item is not reclaimed but transmitted once the ring
-is re-enabled.  Should the drain live in enetc_close() instead, or be
-conditional on the interface actually going down?
-
-[Severity: High]
-This isn't a bug introduced by this patch, but it limits what the new purge
-can reclaim.  enetc_tx_onestep_tstamp() discards the return value of
-enetc_start_xmit():
-
-	skb = skb_dequeue(&priv->tx_skbs);
-	if (skb)
-		enetc_start_xmit(skb, priv->ndev);
-
-enetc_start_xmit() has NETDEV_TX_BUSY exits (the LSO and TSO paths, plus the
-linear one):
-
-		if (enetc_bd_unused(tx_ring) < ENETC_TXBDS_NEEDED(count)) {
-			netif_stop_subqueue(ndev, tx_ring->index);
-			return NETDEV_TX_BUSY;
-		}
-
-which neither transmit nor free the skb, because only a qdisc caller can
-requeue it.  Does the work item leak that skb, given the dequeued reference
-is the only one left?
-
-The one-step branch has already run test_and_set_bit_lock() before those
-returns, so does ENETC_TX_ONESTEP_TSTAMP_IN_PROGRESS also stay set with no
-packet in flight?  The work item is only rescheduled from
-enetc_clean_tx_ring() on a one-step TX completion, and that schedule_work()
-happens inside the cleanup loop while tx_ring->next_to_clean is published
-only after the loop, so the worker can observe a stale, nearly-full ring:
-
-enetc_poll() -> enetc_clean_tx_ring()
-	schedule_work(&priv->tx_onestep_tstamp);   /* inside the loop */
-	...
-	tx_ring->next_to_clean = i;                /* after the loop */
-
-Such an abandoned skb is neither on priv->tx_skbs for the new
-skb_queue_purge() nor in a TX ring for enetc_free_rxtx_rings(), so it would
-survive ifdown and unbind too.
-
-> +	clear_bit_unlock(ENETC_TX_ONESTEP_TSTAMP_IN_PROGRESS, &priv->flags);
-
-[Severity: Medium]
-The peer consumer touches exactly this state under the TX lock:
-
-enetc_tx_onestep_tstamp()
-	netif_tx_lock_bh(priv->ndev);
-	clear_bit_unlock(ENETC_TX_ONESTEP_TSTAMP_IN_PROGRESS, &priv->flags);
-	skb = skb_dequeue(&priv->tx_skbs);
-
-Should the new drain and flag reset take netif_tx_lock_bh() as well?
-netif_tx_stop_all_queues() only sets QUEUE_STATE_DRV_XOFF, it is not
-netif_tx_disable() and takes no per-queue TX lock, so an ndo_start_xmit that
-already passed the netif_xmit_frozen_or_stopped() check inside
-HARD_TX_LOCK can still be running enetc_start_xmit() concurrently, and
-enetc_start_xmit() has no ENETC_TX_DOWN test.
-
-For the ndo_stop path this looks harmless, since __dev_close_many() calls
-dev_deactivate_many(head, true) and waits for some_qdisc_is_busy() before
-ndo_stop.  But enetc_set_coalesce() and enetc_reconfigure() call enetc_stop()
-on a live interface with no qdisc deactivation, so:
-
-CPU A                                  CPU B
-enetc_start_xmit()                     enetc_stop()
-                                       -> skb_queue_purge(&priv->tx_skbs)
-                                       -> clear_bit_unlock(IN_PROGRESS)
--> test_and_set_bit_lock(IN_PROGRESS)
--> skb_queue_tail(&priv->tx_skbs, skb)
-
-In the enetc_reconfigure() case the racing frame is released by
-enetc_free_rxtx_rings() -> enetc_free_tx_frame(), which produces no TX
-completion, so nothing calls schedule_work(&priv->tx_onestep_tstamp) again.
-enetc_start() clears only ENETC_TX_DOWN and enetc_tx_onestep_tstamp_init() is
-just INIT_WORK plus skb_queue_head_init:
-
-	INIT_WORK(&priv->tx_onestep_tstamp, enetc_tx_onestep_tstamp);
-	skb_queue_head_init(&priv->tx_skbs);
-
-so can the IN_PROGRESS bit stay set for the rest of the up cycle, with every
-subsequent one-step Sync appended to priv->tx_skbs and never sent?
-
-[Severity: Medium]
-This clear also releases the gate that enforces the MAC's "one single-step
-frame in flight" rule, and the commit message accepts that cancel_work_sync()
-may join the work item only after it pushed its frame into the disabled ring.
-
-enetc_set_coalesce() then re-enables the same ring without reinitializing it,
-via enetc_start() -> enetc_enable_txbdr():
-
-	tbmr = enetc_txbdr_rd(hw, idx, ENETC_TBMR);
-	tbmr |= ENETC_TBMR_EN;
-	enetc_txbdr_wr(hw, idx, ENETC_TBMR, tbmr);
-
-so the stale one-step descriptor is fetched and transmitted at a point where
-the gate is already clear.  A new one-step Sync accepted right after
-enetc_start() reprograms the single global single-step register:
-
-	val |= ENETC_SET_SINGLE_STEP_OFFSET(offset);
-	if (udp)
-		val |= ENETC_PM0_SINGLE_STEP_CH;
-	enetc_port_mac_wr(si, ENETC_PM0_SINGLE_STEP, val);
-
-Can the correction field offset and the UDP checksum selector then be applied
-to the wrong frame?  And when the stale frame finally completes, its
-schedule_work() makes enetc_tx_onestep_tstamp() clear a gate that now belongs
-to the newer frame, so does the one-in-flight invariant stay broken for
-subsequent frames as well?
-
-> +
->  	enetc_clear_interrupts(priv);
+> ---
+>  .../selftests/bpf/prog_tests/lwt_ip_encap.c   | 53 +++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c b/tool=
+s/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
+> index 39e8a3b8b6af..5c5560d45c5b 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/lwt_ip_encap.c
+> @@ -1,5 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+> +#include <net/if.h>
+>  #include <netinet/in.h>
+> +#include <sys/ioctl.h>
+> =20
+>  #include "network_helpers.h"
+>  #include "test_progs.h"
+> @@ -141,6 +143,54 @@ static int set_bottom_addr(const char *ns1, const ch=
+ar *ns2, const char *ns3)
+>  	return 1;
 >  }
->  EXPORT_SYMBOL_GPL(enetc_stop);
+> =20
+> +/*
+> + * A veth whose peer sits in another netns with the same ifindex gets it=
+s
+> + * carrier-on handled as a non-urgent linkwatch event, i.e. up to 1s lat=
+e.
+> + * Until then IPv6 considers the link not ready (no ff00::/8 route, no
+> + * link-local address) and silently drops neighbour solicitations, so wa=
+it
+> + * for all links to be operationally up (IFF_RUNNING) before sending tra=
+ffic.
+> + */
+> +static int wait_for_oper_up(const char *ns, const char *dev)
+> +{
+> +	struct nstoken *nstoken;
+> +	struct ifreq ifr =3D {};
+> +	int i, fd, ret =3D -1;
+> +
+> +	nstoken =3D open_netns(ns);
+> +	if (!ASSERT_OK_PTR(nstoken, "open ns"))
+> +		return -1;
+> +
+> +	fd =3D socket(AF_INET, SOCK_DGRAM, 0);
+> +	if (!ASSERT_OK_FD(fd, "socket"))
+> +		goto out;
+> +
+> +	strncpy(ifr.ifr_name, dev, IFNAMSIZ - 1);
+> +	for (i =3D 0; i < 50; i++) {
+> +		if (!ASSERT_OK(ioctl(fd, SIOCGIFFLAGS, &ifr), "SIOCGIFFLAGS"))
+> +			break;
+> +		if (ifr.ifr_flags & IFF_RUNNING) {
+> +			ret =3D 0;
+> +			break;
+> +		}
+> +		usleep(100000);
+> +	}
+> +	close(fd);
+> +out:
+> +	ASSERT_OK(ret, dev);
+> +	close_netns(nstoken);
+> +	return ret;
+> +}
+> +
+> +static int wait_for_links(const char *ns1, const char *ns2, const char *=
+ns3)
+> +{
+> +	if (wait_for_oper_up(ns1, "veth1") || wait_for_oper_up(ns1, "veth5") ||
+> +	    wait_for_oper_up(ns2, "veth2") || wait_for_oper_up(ns2, "veth3") ||
+> +	    wait_for_oper_up(ns2, "veth6") || wait_for_oper_up(ns2, "veth7") ||
+> +	    wait_for_oper_up(ns3, "veth4") || wait_for_oper_up(ns3, "veth8"))
+> +		return -1;
+> +	return 0;
+> +}
+> +
+>  static int configure_vrf(const char *ns1, const char *ns2)
+>  {
+>  	if (!ns1 || !ns2)
+> @@ -304,6 +354,9 @@ static int setup_network(char *ns1, char *ns2, char *=
+ns3, const char *vrf)
+>  	if (!ASSERT_OK(configure_ns3(ns3), "configure ns3 routes"))
+>  		goto fail;
+> =20
+> +	if (!ASSERT_OK(wait_for_links(ns1, ns2, ns3), "wait for links"))
+> +		goto fail;
+> +
+>  	/* Link bottom route to the GRE tunnels */
+>  	SYS(fail, "ip -n %s route add %s/32 dev veth5 via %s %s",
+>  	    ns1, IP4_ADDR_GRE, IP4_ADDR_6, vrf);
 
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260915222735.1016937-1-vladimir.oltean%40nxp.com
