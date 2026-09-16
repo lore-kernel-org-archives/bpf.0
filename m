@@ -1,102 +1,137 @@
-Received: from mta0.migadu.com (out-34.mta0.migadu.com [91.218.175.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2756849364B
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 12:21:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1332144236C;
+	Wed, 16 Sep 2026 12:40:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789561321; cv=none; b=QziOpmI+gUZDUkgZ8uMk3x7oD0ZuIOSodoJk8f+JeB0z2ej511FPBUTyklyuAEduULY0hAbEHVTHtElp4Dbd0TATFEjp1/GOK6PBjzIIVOzdKv+N5kh7zTVWomd9EogWX8/YO14D2DcIw93qgMZ05igNGsW3Lh2fbfPDlrdfjWs=
+	t=1789562425; cv=none; b=TL8zMZDoIxDrBXXP/7ZbjR5ijc70CnXePpNCRLvyxZeYjhQKXXVzgLE6j8kCYO/IkzR2w0Duk7BSaIoarFRpQMrxNbANhAGTMHijtjDc+t/tgJPHsAi5vDuNngnDZEm/FhNPCAtADGW+v74zC0KzinPNyOH2nnThm7xrbsmAJ00=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789561321; c=relaxed/simple;
-	bh=NCVqjRr1k2CsOhHZ7+Az6mApzNV5ArQ7RRzIOhNW5kg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LxnWBNhpTNyqVGGVLQxQdPzXjQ4Sv+JPnX+zrKJllnNuFtekpgGK3z2/lToMQ1SQeHvDREzR3fMFc0XuTUjUCAQBtDDV+CCCwwRwSPSYKmklWVBSIKqAggUB+7xA2be+GWl8UBusV6jVLmum5o8Xc8bMUDAGW4pODu53ApjwF4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GBW1Xq1a; arc=none smtp.client-ip=91.218.175.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789562425; c=relaxed/simple;
+	bh=a4JUtXJqVikB5UyDmPfb5Qk9gUdAc1p/iBRI/NMdXDU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q3Fi1ghyOEnOeagHITTCfptN8MqYPNuJheMH0qrPlk1N+0z+CougUgPOcSBsRB6v/iPO7keK3/Ml8Ke8UmjjpfT7ebbv3kbuI2FUa4ots+yIqN3xpczuq0bq0rFA7m/Ea16SoUcgqZQCXbVT1umYQamMmMb9JtWxBG2t5RtUkOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WIJFRT40; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GBW1Xq1a"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=NCVqjRr1k2CsOhHZ7+Az6mApzNV5ArQ7RRzIOhNW5kg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789561317; v=1; x=1790166117;
- b=GBW1Xq1aZm7NG/JY6i++lgRem95d54p4Z9Uv3dlNoZepi4QB2u1Cihb/k3GFqVj3jAqR0Lqw
- qPn0IZaXTLZxoaFGV0snLsMv4c7Ja5f00l6hxxbSSo3AOJVgrNRNTZAgvanoDqCQUymPHmyjOQM
- u9vP3fj7dCOwmKgzv26GAu00=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 7de8a246f47e0e91;
-	Wed, 16 Sep 2026 12:21:57 +0000
-X-Mizu-Trace-ID: 7de8a246f47e0e91
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <2794e401-22a0-4d4d-9d89-16633fc7c609@linux.dev>
-Date: Wed, 16 Sep 2026 20:21:50 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WIJFRT40"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 897C31F000FF;
+	Wed, 16 Sep 2026 12:40:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789562423;
+	bh=7AU/8ACJEmdfMEzWFUoLouoFn9hVgqhFaXoJr5gmXy0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=WIJFRT40PNWCKpJEGdeyOHWQs2coLd0zbqmAGheVUz0XzbaIhFkUQ1tuVTMRTz0IE
+	 9MKQlzG6J1v0UfcJygkPvKJozwlsQrnUjaMakzWadv4L6dGulYSUqvENefsZ2cIURx
+	 e3g6QyEiLDyESMbbYUSKrphJEieWL+uqCprVnN7n61v1eo3Qg6lnoP5k+NPMgemXUJ
+	 y9/V4fTq+wWUnUogN5WSpt3wM0wK5axcpILVbmVA1++yV815rVyxfVEneI0GYu8Ze5
+	 ase2yrBBtCFqdkglLPiLLuC5iqEDJ6i++91EG0Qfy6A1twPB1cUhwrqml2KebAgEMk
+	 TQAOGzSqc0DtQ==
+Date: Wed, 16 Sep 2026 14:40:20 +0200
+From: Frederic Weisbecker <frederic@kernel.org>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Josef Bacik <josef@toxicpanda.com>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Boqun Feng <boqun@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, x86@kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>, Juergen Gross <jgross@suse.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	xen-devel@lists.xenproject.org
+Subject: Re: [PATCH RFC v3 03/13] rcu-tasks: Add a Tasks RCU implementation
+ for reader-marked trampolines
+Message-ID: <aqqONH8flTIpOUqT@localhost.localdomain>
+References: <20260915-b4-rcu-tasks-preempt-qs-v3-0-0ad30c4c5ee7@toxicpanda.com>
+ <20260915-b4-rcu-tasks-preempt-qs-v3-3-0ad30c4c5ee7@toxicpanda.com>
+ <aqlgxKGk_AEKls_1@localhost.localdomain>
+ <edc7cca2-a5c5-455c-8969-ea05dbdb08f7@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 03/11] bpf: Fix bpf_sock context code generation
-To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- daniel@iogearbox.net, netdev@vger.kernel.org,
- Nicholas Carlini <nicholas@carlini.com>
-References: <20260916050830.8774-1-emil@etsalapatis.com>
- <20260916050830.8774-4-emil@etsalapatis.com>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <20260916050830.8774-4-emil@etsalapatis.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <edc7cca2-a5c5-455c-8969-ea05dbdb08f7@paulmck-laptop>
 
+Le Tue, Sep 15, 2026 at 04:56:41PM -0700, Paul E. McKenney a écrit :
+> > Alternatively the approach could be generalized to vanilla RCU, it could be
+> > possible to define a .text.rcu_no_qs section within which code running is
+> > considered as an RCU reader (with a pause while on the explicit RCU tasks
+> > section). It would be forbidden to voluntary sleep inside
+> > and to put explicit preemption points (CONFIG_PROVE_RCU could report misuses).
+> > 
+> > Based on IP, RCU could consider those interrupted section as readers. This would
+> > require PREEMPT_RCU though.
+> > 
+> > And then synchronize_rcu() would do the 1, 2, 4 jobs.
+> 
+> If I am following correctly (ha!), sleepable BPF programs rule out use
+> of RCU in this manner.
+> 
+> But your point is nevertheless valid, in that SRCU could be used.
+> And because rcu_read_lock_trace() is a thin wrapper around SRCU-fast, we
+> *might* be able to instead use rcu_read_lock_tasks_trace(), which would
+> skip the task-struct increment and decrement, saving a few instructions.
+> Then, instead of waiting for each task's counter to go to zero, instead
+> just invoke synchronize_rcu_tasks_trace().
+> 
+> Which is pretty close to what Josef is proposing, just with the new RCU
+> Tasks Trace read-side primitives.  I think.  ;-)
+> 
+> This assumes that we do not need to flatten partially overlapping RCU
+> Tasks Trace readers into one big reader.
+> 
+> Or am I missing something here?
 
-On 9/16/26 1:08 PM, Emil Tsalapatis wrote:
-> Currently, the ctx access code reads the rx_queue_mapping
-> field with either a 4-byte or 2-byte load. The rest of the bits
-> in the register are marked known zero by the verifier. However,
-> the emitted ctx access code places in the register on certain
-> the special value (-1) using BPF_MOV_IMM64, which gets sign-extended
-> to turn on all the bits in the register. By shifting this value right,
-> the program ends up with a value at runtime above what the verifier
-> assumes is possible.
->
-> Fix this by ensuring the read value is as wide as the assumed size.
-> Use MOV32 instructions instead of MOV64 instructions to keep
-> the upper bits zero as assumed by the verifier. Also properly report
-> the size of the destination variable (the bpf_sock field, 4 bytes) instead
-> of the source (the socket field, 2 bytes).
->
-> Fixes: c3c16f2ea6d2 ("bpf: Add rx_queue_mapping to bpf_sock")
-> Reported-by: Nicholas Carlini <nicholas@carlini.com>
-> Suggested-by: Nicholas Carlini <nicholas@carlini.com>
-> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+Yes I think that's what Josef does in this patchset. The problem is about
+handling the few instructions:
 
+1) between the begining of the trampoline and the call to rcu_read_lock_trace()
 
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+2) between the call to rcu_read_unlock_trace() and the end of the trampoline
 
+So what I'm proposing is to make those two parts implicit RCU read lock sections.
 
-> ---
->   net/core/filter.c | 7 ++++---
->   1 file changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 61940e753..5d1705508 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -10565,11 +10565,12 @@ u32 bpf_sock_convert_ctx_access(enum bpf_access_type type,
->   				       target_size));
->   		*insn++ = BPF_JMP_IMM(BPF_JNE, si->dst_reg, NO_QUEUE_MAPPING,
->   				      1);
-> -		*insn++ = BPF_MOV64_IMM(si->dst_reg, -1);
-> +		*insn++ = BPF_MOV32_IMM(si->dst_reg, -1);
->   #else
-> -		*insn++ = BPF_MOV64_IMM(si->dst_reg, -1);
-> -		*target_size = 2;
-> +		*insn++ = BPF_MOV32_IMM(si->dst_reg, -1);
->   #endif
-> +		*target_size = sizeof_field(struct bpf_sock, rx_queue_mapping);
-> +
->   		break;
->   	}
->   
+So the whole trampoline would be .text.rcu_no_qs:
+
+.text.rcu_no_qs trampoline:
+  __________________________________________________________________________________________
+ |Few instructions 1 | rcu_read_lock_trace() .... rcu_read_unlock_trace | Few instructions 2|
+ ___________________________________________________________________________________________
+
+Then when a tick fires, rcu_flavor_sched_clock_irq() discards the interrupted
+code as QS if the IP was within .text.rcu_no_qs _unless_ it is in the
+rcu_read_lock_trace. Both are easy and quick to verify.
+
+Also preempt_schedule_irq() would make sure to verify the same condition and
+enqueue the task as a GP blocker if preempting inside "Few instructions 1"
+or "Few instructions 2".
+
+And since RCU tasks already does a synchronize RCU before and after the scan,
+that's all we would have to do.
+
+Thanks.
+
+-- 
+Frederic Weisbecker
+SUSE Labs
