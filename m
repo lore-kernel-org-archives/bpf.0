@@ -1,131 +1,334 @@
-Received: from wind.enjellic.com (wind.enjellic.com [67.230.224.160])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 012364C9DEC;
-	Wed, 16 Sep 2026 17:04:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.230.224.160
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B58124C33EF
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 17:05:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789578265; cv=none; b=oF9ac/dgYwvhx3YqQkLLHcUX62nA8KEznt8p8nZS3npniCmlQ1xP3QVKfdWyR/Wi/P37tndQ+pPms+PxXefF6MXA18E5AhcULXSoHEYDUIm7hQ7KeCJEnGVCTsHMI3WRBbp1YojwSTgRPP9TtVn1lFkQTBXZq2oI+IjRDiyLUWA=
+	t=1789578360; cv=none; b=ik5kRjhNqMz7WsSP5z37vbrIizZZpaRnQGh6i8yH5lvpZLpNBeuue5DzPQ888wfGNS5w7MdF+KaNRs7n80uyhZ4HYD4p07qL6Ss0aMvIi7tsizvs5sIGZtWBIp7VmZy8zG3rS+4km6doQXtAlY0yzUsDIooDohl8R2ZfoG5dL7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789578265; c=relaxed/simple;
-	bh=Lqx96ZCiyALkeCFGSyJXviXMdYefOb4bpTZRt+mnaKU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KqERKwkUxYaOFCWwCJSBT2UxQ47bbPPQ5gDH/lYmVnjQznNbG9fWFtt37NSJc1myKradu1alcTE//WHIve9uYuoPmrs6hhvtSBQj/PuGbOL+u6UjDG1ZYPg1sZWp8008QCWTgznVU0UZ6UjKuBFzdTpq+Y0ADrZ4Yzq13C4gCxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com; spf=pass smtp.mailfrom=wind.enjellic.com; arc=none smtp.client-ip=67.230.224.160
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=enjellic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wind.enjellic.com
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-	by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 68GH2gE1029431;
-	Wed, 16 Sep 2026 12:02:42 -0500
-Received: (from greg@localhost)
-	by wind.enjellic.com (8.15.2/8.15.2/Submit) id 68GH2fW5029430;
-	Wed, 16 Sep 2026 12:02:41 -0500
-Date: Wed, 16 Sep 2026 12:02:41 -0500
-From: "Dr. Greg" <greg@enjellic.com>
-To: Micka??l Sala??n <mic@digikod.net>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Justin Suess <utilityemal77@gmail.com>,
-        Paul Moore <paul@paul-moore.com>, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, kpsingh@kernel.org, matt@bobrowski.net,
-        viro@zeniv.linux.org.uk, brauner@kernel.org, kees@kernel.org,
-        casey@schaufler-ca.com, gnoack@google.com, jack@suse.cz,
-        song@kernel.org, yonghong.song@linux.dev, martin.lau@linux.dev,
-        eddyz87@gmail.com, memxor@gmail.com, jolsa@kernel.org, m@maowtm.org,
-        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 04/15] lsm: Add the bpf_lsm_policy_release
- kfunc and policy object destructor
-Message-ID: <aqrLsbnzbbX4HPr-@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <20260909193719.518517-1-utilityemal77@gmail.com>
- <20260909193719.518517-5-utilityemal77@gmail.com>
- <CAHC9VhQHZ+ngFdzKqmnzBh341CGEg-jexu+QYU8=1qXK=u-x-Q@mail.gmail.com>
- <aqHUw6k0Mf83CGFT@zenbox>
- <CAHC9VhTM7emi9vxs+5Za8Hrc_e9dg7fZx+Z6BGUc4VQ1qhEAUA@mail.gmail.com>
- <DLD0VQ3D8CYC.3V5ZT8HDMY4IH@gmail.com>
- <aqTZdCz6JaoK16Fp@zenbox>
- <DLDL7KK3FZKU.17ADLLWJVXB5F@gmail.com>
- <20260915.ok8eig8Eishi@digikod.net>
+	s=arc-20240116; t=1789578360; c=relaxed/simple;
+	bh=smJ+btUvyMLpW0nuhiUI/rkR6uCBK8iVhTfHqjujkSo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h91gltcsK0FaWe6GS4X/+JyhpFy1qT1+2yAVMgVd/XI/IGcdkEe9S3iPq86leqCp+gB9nDFOfHbYKL4ja4jPZ/MRNNlAkPh+t9OhRdDpVMCt/9AFgNm6tD9Gd43l9tmH0/11FSgL91LUYswvdncKWkz6sO/NhbyNHq1UOnA8odc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZrCFgB6K; arc=none smtp.client-ip=74.125.228.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZrCFgB6K"
+Received: by mail-pz2-f42.google.com with SMTP id d2e1a72fcca58-86efece610cso960297b3a.0
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 10:05:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789578346; x=1790183146; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ta4GSV/f1iLNEWqw1UGps6Q7e0Yo7MBD3Lwe9oPDxDU=;
+        b=ZrCFgB6KEmBBpSp9MsFkOlHWODtu47M9B3167cFSXhXdoB8fp2QoJaww1nTouIayPT
+         H3ePAACLnA0yBA1dQSEQdXjKBLLpIzeZYlJ7tet0bsf7AaO1/ezUVZ7UfrXhoqCMKQ/t
+         nBw+pzeCv6XD4lZhO15aB2uqO0wd6zr4Bhz9KcvEXOiOihzJZDOGW9CYzuOR+KowoRLk
+         IflIMJ6LGX8e8Kq+IrfcMjM8Gr/ifAgWMQVAog+JYytBC7O43hWdmesueZOoJBXoIupF
+         QxeEzNKTUyRykzzoChjPjVHM882V1jLtQz3wTmCwzIeoJffO5XlkYCYLqydilwl+f3PN
+         YWOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789578346; x=1790183146;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ta4GSV/f1iLNEWqw1UGps6Q7e0Yo7MBD3Lwe9oPDxDU=;
+        b=rzudIOse4gAZNFzaafO/GPvnGDpjgJI0jUxb60IgTV4n2ppQWeY2yg282pMq8G6s5A
+         hgurt4qmb2Hj1BinIXoFXyNJ8bGOup5eWofqga7Pm7rvBSFJp0BDXk07xToX2i5LO19p
+         TrzsI9NXKIy+y1yexgmQ6afKo2dJzTyo8aVqSAYIq0jItHmlMWJ+OsWSpQTJMzA+rJxF
+         GLaIyQBNanWben3h3ieCfsRztAo6aw1Wm0OFvDGQzIVO9lOX/b4vN1SsmgqQRzf8JA2a
+         T9eIezh6At+Gakd4yeFtY29N3691D4ogjDM85rmidsayF3QLKsqfpDKp3r75d1zgZTwg
+         SJkw==
+X-Gm-Message-State: AFuF++kVAk+yFHsbxC17IouhMsnhMWdliUL0LntQBqsCLqcAX2eD8Wpf
+	sk01Vn8/dwu9LzHFRzkl9S7wJ2ji49WjrdQd04mi4w0cTX/xYxCg3ZCa
+X-Gm-Gg: AYBFou1tJS7lvuVZKNMaMrxrun2W6p9XPjILKDyHc+QeKvhgQxPWpvlzxcr4LxhgdDF
+	x4GNAFRFFTRBXBU/eLmbDggjb+Yg/yRiKaQEY1/XaVUWiFxiADYIm8AHJJ9Y6/OhMsAETWSWw1L
+	fUlQknY35pA/Xhgi2Q9s/bq4YINMT7HCOBUdD8Cd3MnP5LV1IJ01gndQ3/Mh29grtlmLrUHHkCP
+	ErXGuD6Pq7RJgiA19qlLK5ls1ZkCUXQMcS9HtJiA2JvvZKvJ2QvAlZoD9JfiQ039UPo0ntGEWOo
+	Ydil3IAurjaIrJ9T40Q9ikSMN//8xwbAt2TPYvpZROci+WkWgYi4IzJ/EG5qrKKHcwJrA16gqGn
+	UPba6HZI6X6KsQKoUdLWkqj4996f1TWtjvshyZDIkRgIk24FvrKmD1WiiLdi4hOoEa+sHbzqFYi
+	Noty4UC8UqpF5Fm+jazXgqr3J/ZmFD5uTuKvJLWzOd7Wk5802auUWjy/PTAKxlGeAdJWMMPY/hH
+	wxGNZe6M6UFFb6gI1yvAzyfrbOt7YJy65e2hf3RRvw=
+X-Received: by 2002:a05:6a00:ad84:b0:869:c368:3675 with SMTP id d2e1a72fcca58-87238f94fb7mr7145850b3a.17.1789578346003;
+        Wed, 16 Sep 2026 10:05:46 -0700 (PDT)
+Received: from 192.168.50.3 ([198.176.50.208])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8720172b0d9sm1608450b3a.35.2026.09.16.10.05.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Sep 2026 10:05:45 -0700 (PDT)
+From: Weiming Shi <bestswngs@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Peter Oskolkov <posk@google.com>,
+	Xiang Mei <xmei5@asu.edu>,
+	Weiming Shi <bestswngs@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH v2] bpf: clear stale IPv4 options after LWT encapsulation
+Date: Thu, 17 Sep 2026 01:04:07 +0800
+Message-ID: <20260916170406.1280954-2-bestswngs@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260915.ok8eig8Eishi@digikod.net>
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Wed, 16 Sep 2026 12:02:42 -0500 (CDT)
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 15, 2026 at 11:25:13AM +0200, Micka??l Sala??n wrote:
+bpf_lwt_push_ip_encap() rebases the network header after prepending an IP
+header, but leaves IPCB(skb)->opt describing the inner IPv4 header.  An
+ingress LWT route can consequently make an ICMP error interpret an
+inner-header byte as an option length and copy 255 bytes into 40 bytes of
+stack storage.  The trace decoded with scripts/decode_stacktrace.sh is:
 
-> Hi,
+  BUG: KASAN: stack-out-of-bounds in __ip_options_echo
+  Write of size 255
+  Call Trace:
+   <IRQ>
+   __asan_memcpy (mm/kasan/shadow.c:106)
+   __ip_options_echo (net/ipv4/ip_options.c:96)
+   __icmp_send (net/ipv4/icmp.c:949)
+   ip_forward (net/ipv4/ip_forward.c:176)
+   lwtunnel_input (net/core/lwtunnel.c:465)
+   ip_rcv (net/ipv4/ip_input.c:612)
+   __netif_receive_skb_one_core (net/core/dev.c:6264)
+   process_backlog (net/core/dev.c:6728)
+   __napi_poll (net/core/dev.c:7787)
+   net_rx_action (net/core/dev.c:8007)
+   handle_softirqs (kernel/softirq.c:645)
+   do_softirq.part.0 (kernel/softirq.c:546)
+   </IRQ>
+   <TASK>
+   __local_bh_enable_ip (kernel/softirq.c:473)
+   __dev_queue_xmit (net/core/dev.c:4961)
+   packet_sendmsg (net/packet/af_packet.c:3143)
+   __sys_sendto (net/socket.c:2281)
+   __x64_sys_sendto (net/socket.c:2288)
+   do_syscall_64 (arch/x86/entry/syscall_64.c:84)
+   entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121)
+   </TASK>
 
-Hezzie says hi too.
+A helper-only reset can be restored by bpf_prog_run_save_cb(), while a
+program without ctx->cb[] access can clone-redirect the skb before a
+return-only reset.  Track active LWT runs and their control-block family
+in the BPF network context.  When the control block is not BPF scratch
+space, save its original contents and reset it immediately so clones see
+the new-family layout.  After the program returns, restore that snapshot
+when the verdict continues through the original protocol callback, then
+invalidate the stale header metadata.  Verdicts that reroute or redirect
+keep the new-family layout.
 
-> On Sat, Sep 12, 2026 at 12:33:13PM -0700, Alexei Starovoitov wrote:
-> > On Fri Sep 11, 2026 at 10:26 PM PDT, Justin Suess wrote:
-> 
-> [...]
-> 
-> > landlock was designed for unprivileged users. bpf needs CAP_BPF.
+Preserve the state across nested runs and retain the ingress interface and
+L3-slave state when the protocol family changes.
 
-> Yep, and this series would kind of bridge these two worlds. ;)
+Cc: stable@vger.kernel.org
+Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
+Reported-by: Xiang Mei <xmei5@asu.edu>
+Assisted-by: LLM
+Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+---
+v2:
+- Save the incoming protocol control block for programs without ctx->cb[]
+  access.
+- Restore that snapshot before a verdict continues through the original
+  protocol callback, then invalidate the rebased header metadata.
+- Keep the eager new-family reset for clones and final reroute/redirect
+  consumers.
+- Add Cc: stable@vger.kernel.org.
+- Correct the patch author and reporter attribution.
+v1:
+- https://lore.kernel.org/bpf/20260915170147.3943392-2-bestswngs@gmail.com/
 
-See my comments to Justin about this 'Mixing of the Blood'... ;-)
+ include/linux/filter.h | 10 +++++
+ net/core/lwt_bpf.c     | 96 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 106 insertions(+)
 
-> > There is a fundamental disconnect. If you can tolerate CAP_BPF then
-> > just use bpf-lsm and implement whatever policy you need there.
-> > If bpf-lsm is missing a feature we can fix that.
-
-> The question is not if BPF LSM can or cannot do what Landlock does.
-> Landlock provides a way for userspace to sandbox processes, and that
-> comes with a well-defined semantic, logs, and an user space ABI, which
-> are specific and dedicated to Landlock.  Some user space depend on that.
-> 
-> The goal of this patch series is to improve BPF LSM to enable it to
-> (also) enforce a Landlock security policy defined by user space thanks
-> to the Landlock syscalls.  The security policy still has the properties
-> that makes it possible to safely compose different ones (e.g.
-> monotonicity/stacking enforcement, inheritance, separation of duty, no
-> cover channel, safe privilege reduction without confused deputy issues).
-> 
-> A process can currently define such security policy, get a file
-> descriptor referring to it, and pass this FD to another process that
-> would enforce it.  This helps design secure architectures by splitting
-> ownership, trust, and privileges (e.g. CAP_BPF).  Being able to use BPF
-> programs instead of user space programs to enforce (e.g. an already
-> defined) security policy would make this enforcement more powerful
-> thanks to the context BPF have access to.  Of course, BPF LSM can (and
-> should) also enforce other kind of complementary restrictions.
-
-This may be the answer to the question that I was asking Justin, lets
-see if we can unpack it a bit for those of us that are dense.
-
-Big picture, as Justin so elegantly pointed out, there are a bunch of
-things that eBPF cannot do now, and may never be able to do in the
-future, particularily when it comes to 'raceless free' path based
-security controls, ie. TOCTOU avoidance.
-
-So, the objective is to have a program, systemd for example, compose a
-set of different security policies, that it then hands out to various
-process heirarchies, which then uses eBPF to call LandLock kernel
-internals to do the heavy security lifting with kernel level
-privileges and capabilities, particularily when it comes to path based
-controls.
-
-Is that close?
-
-If so, the question remains, why take on this amount of drama?
-
-Something like systemd does at least 10,000 other things, composing
-and handing out multiple variants of file descriptor based process
-hierarchy security policies would seem like chump change to it.
-
-I'm assuming the answer is that the eBPF programs involved are going
-to be implementing other, perhaps proprietary, security controls that
-extend beyond the path based controls that eBPF can't do.
-
-We will be interested in your reflections.
-
-Greg
-
-My opinions and those of my Golden Retriever Hezzie only.
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 39decde7fc730..0edd3e6ce563f 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -848,6 +848,15 @@ struct bpf_nh_params {
+ #define BPF_RI_F_CPU_MAP_INIT	BIT(2)
+ #define BPF_RI_F_DEV_MAP_INIT	BIT(3)
+ #define BPF_RI_F_XSK_MAP_INIT	BIT(4)
++#define BPF_RI_F_LWT_IP_ENCAP	BIT(5)
++#define BPF_RI_F_LWT_RUN	BIT(6)
++
++struct bpf_lwt_ip_encap_state {
++	int iif;
++	__be16 cb_proto;
++	bool l3slave;
++	bool cb_access;
++};
+ 
+ struct bpf_redirect_info {
+ 	u64 tgt_index;
+@@ -858,6 +867,7 @@ struct bpf_redirect_info {
+ 	enum bpf_map_type map_type;
+ 	struct bpf_nh_params nh;
+ 	u32 kern_flags;
++	struct bpf_lwt_ip_encap_state lwt_ip_encap;
+ };
+ 
+ struct bpf_net_context {
+diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+index da49364ec63de..4c0461b4dccf7 100644
+--- a/net/core/lwt_bpf.c
++++ b/net/core/lwt_bpf.c
+@@ -36,19 +36,103 @@ static inline struct bpf_lwt *bpf_lwt_lwtunnel(struct lwtunnel_state *lwt)
+ #define NO_REDIRECT false
+ #define CAN_REDIRECT true
+ 
++static void bpf_lwt_reset_ip_cb(struct sk_buff *skb, __be16 orig_proto,
++				int iif, bool l3slave, bool use_new_proto)
++{
++	__be16 cb_proto = orig_proto;
++
++	if (use_new_proto)
++		cb_proto = skb->protocol;
++
++	if (cb_proto == htons(ETH_P_IP)) {
++		if (orig_proto == htons(ETH_P_IP)) {
++			memset(&IPCB(skb)->opt, 0, sizeof(IPCB(skb)->opt));
++		} else {
++			memset(IPCB(skb), 0, sizeof(*IPCB(skb)));
++			IPCB(skb)->iif = iif;
++			if (l3slave)
++				IPCB(skb)->flags |= IPSKB_L3SLAVE;
++		}
++	} else if (cb_proto == htons(ETH_P_IPV6)) {
++		memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
++		IP6CB(skb)->iif = iif;
++		IP6CB(skb)->nhoff = offsetof(struct ipv6hdr, nexthdr);
++		if (l3slave)
++			IP6CB(skb)->flags |= IP6SKB_L3SLAVE;
++	} else if (orig_proto == htons(ETH_P_IP)) {
++		memset(&IPCB(skb)->opt, 0, sizeof(IPCB(skb)->opt));
++	}
++}
++
+ static int run_lwt_bpf(struct sk_buff *skb, struct bpf_lwt_prog *lwt,
+ 		       struct dst_entry *dst, bool can_redirect)
+ {
+ 	struct bpf_net_context __bpf_net_ctx, *bpf_net_ctx;
++	struct bpf_lwt_ip_encap_state nested_lwt_ip_encap_state;
++	struct bpf_redirect_info *ri;
++	union {
++		struct inet_skb_parm ip4;
++		struct inet6_skb_parm ip6;
++	} saved_cb;
++	bool lwt_ip_encap, nested_lwt_ip_encap, nested_lwt_run;
++	__be16 orig_proto = skb->protocol;
++	bool use_new_proto;
++	bool l3slave = false;
++	int iif = 0;
+ 	int ret;
+ 
++	if (orig_proto == htons(ETH_P_IP)) {
++		iif = IPCB(skb)->iif;
++		l3slave = ipv4_l3mdev_skb(IPCB(skb)->flags);
++	} else if (orig_proto == htons(ETH_P_IPV6)) {
++		iif = IP6CB(skb)->iif;
++		l3slave = ipv6_l3mdev_skb(IP6CB(skb)->flags);
++	}
++
+ 	/* Disabling BH is needed to protect per-CPU bpf_redirect_info between
+ 	 * BPF prog and skb_do_redirect().
+ 	 */
+ 	local_bh_disable();
+ 	bpf_net_ctx = bpf_net_ctx_set(&__bpf_net_ctx);
++	ri = bpf_net_ctx_get_ri();
++	nested_lwt_run = ri->kern_flags & BPF_RI_F_LWT_RUN;
++	nested_lwt_ip_encap = ri->kern_flags & BPF_RI_F_LWT_IP_ENCAP;
++	if (nested_lwt_run)
++		nested_lwt_ip_encap_state = ri->lwt_ip_encap;
++	ri->kern_flags &= ~BPF_RI_F_LWT_IP_ENCAP;
++	ri->kern_flags |= BPF_RI_F_LWT_RUN;
++	ri->lwt_ip_encap.iif = iif;
++	ri->lwt_ip_encap.cb_proto = orig_proto;
++	ri->lwt_ip_encap.l3slave = l3slave;
++	ri->lwt_ip_encap.cb_access = lwt->prog->cb_access;
++	if (!ri->lwt_ip_encap.cb_access)
++		memcpy(&saved_cb, skb->cb, sizeof(saved_cb));
+ 	bpf_compute_data_pointers(skb);
+ 	ret = bpf_prog_run_save_cb(lwt->prog, skb);
++	lwt_ip_encap = ri->kern_flags & BPF_RI_F_LWT_IP_ENCAP;
++	ri->kern_flags &= ~BPF_RI_F_LWT_IP_ENCAP;
++
++	use_new_proto = (ret == BPF_LWT_REROUTE &&
++			 lwt->prog->type != BPF_PROG_TYPE_LWT_OUT) ||
++			(ret == BPF_REDIRECT && can_redirect);
++	if (lwt_ip_encap) {
++		__be16 cb_proto = orig_proto;
++
++		if (!ri->lwt_ip_encap.cb_access) {
++			if (use_new_proto)
++				cb_proto = ri->lwt_ip_encap.cb_proto;
++			else
++				memcpy(skb->cb, &saved_cb, sizeof(saved_cb));
++		}
++		bpf_lwt_reset_ip_cb(skb, cb_proto, iif, l3slave,
++				    use_new_proto);
++	}
++	if (nested_lwt_run)
++		ri->lwt_ip_encap = nested_lwt_ip_encap_state;
++	else
++		ri->kern_flags &= ~BPF_RI_F_LWT_RUN;
++	if (nested_lwt_ip_encap)
++		ri->kern_flags |= BPF_RI_F_LWT_IP_ENCAP;
+ 
+ 	switch (ret) {
+ 	case BPF_OK:
+@@ -604,6 +688,7 @@ static int handle_gso_encap(struct sk_buff *skb, bool ipv4, int encap_len)
+ 
+ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
+ {
++	struct bpf_redirect_info *ri;
+ 	bool is_udp_tunnel;
+ 	struct iphdr *iph;
+ 	bool ipv4;
+@@ -657,6 +742,7 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
+ 	memcpy(skb_network_header(skb), hdr, len);
+ 	bpf_compute_data_pointers(skb);
+ 	skb_clear_hash(skb);
++	ri = bpf_net_ctx_get_ri();
+ 
+ 	if (ipv4) {
+ 		skb->protocol = htons(ETH_P_IP);
+@@ -669,6 +755,16 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
+ 		skb->protocol = htons(ETH_P_IPV6);
+ 	}
+ 
++	if (ri->kern_flags & BPF_RI_F_LWT_RUN) {
++		ri->kern_flags |= BPF_RI_F_LWT_IP_ENCAP;
++		if (!ri->lwt_ip_encap.cb_access) {
++			bpf_lwt_reset_ip_cb(skb, ri->lwt_ip_encap.cb_proto,
++					    ri->lwt_ip_encap.iif,
++					    ri->lwt_ip_encap.l3slave, true);
++			ri->lwt_ip_encap.cb_proto = skb->protocol;
++		}
++	}
++
+ 	if (skb_is_gso(skb))
+ 		return handle_gso_encap(skb, ipv4, len);
+ 
+-- 
+2.55.0
