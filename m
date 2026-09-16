@@ -1,82 +1,88 @@
-Received: from mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D646B443AB7
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 21:24:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9B5A4854F7
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 21:47:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789593909; cv=none; b=egxxuqeemnpsiOAGLCCkyyIFPqdmSryZlVO4DVlUPsVGQkFs+a5WpKVHlUuW6wDqDy6StXS/twMKhXfRqH3tNTCKPP5yJ1X0MjKuVGczNECScnFJQJ5h2UqrAFtcAv9OtXWu3WN8qX70yahRZkhm+qH9MQXF03CFljUUQ1Qp0i4=
+	t=1789595248; cv=none; b=cyE+3KopzfxbCO3tifTXo7La8GyKG7Nsh7Z5D/7hJFLJxoQ5NGtcoZ10gky0iMmJMNwKpmx5osIBnSxo8DC9on6YZpS6nLu6LYidcz7vzEGtZlAZHpwVKpBMQin/wdKODv88F5P7XEplV6dNM8IwBC+mpTeZx9533X6D02JjGec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789593909; c=relaxed/simple;
-	bh=kEPDtvI9KB51gSQNB80wVjTqoX84Q7Z02NSxHCitI+w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Uo7MmTILsAJM/wTmJ4F65UExbVqfmNpdDqAW8QoO8wUTP7TSCWksDn0N+QbusaoR9r7Ih++rmdpyQG2ISpqWd0CHl8TG9Ow80782HUmOR3n9NlLjlE2dYAK43qpcJel3oepmyTKJU7hbUJoZPaSR9iYgX760wvwpk4U9PBXt2AQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vA9iaYSh; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789595248; c=relaxed/simple;
+	bh=V8ZbCGo3t3R0JpWi3Ir4JSR29RrX8tyMEPqFfTcJaiY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LKQCgJ7OSAqo+4RTM+kwiqlRlkXztMUR40/BNiqPa3WvLROT0Lk7FA4EbwgJoUNRFNi0WCEwqiV7tMhOVmgEFSa4l/9yCa6s/fe8TL09gCb+vMXPHv6SZ8X7ast67Q8UB4r/paumDfkPa9DXZqv1k+21T+LIZTGQuuWv0gBYCTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i7K1cXJA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vA9iaYSh"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=kEPDtvI9KB51gSQNB80wVjTqoX84Q7Z02NSxHCitI+w=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789593890; v=1; x=1790198690;
- b=vA9iaYSh2erpQerQZUVLiyE/Ql4J3xa7BJ5259vis2ActsVMZx9KdfJXHtkQuMqpHStSZA4k
- 2Vuo8S7PJjb9EZlrAsfaILamd8SsYy1xOkLBX0uzXTjjLo0p4Gk6bkLmnCKHPVJYlSku4llOZnp
- BALZPrLMFwsSgVHWs00V9xlw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 3f3f538203a15285;
-	Wed, 16 Sep 2026 21:24:50 +0000
-X-Mizu-Trace-ID: 3f3f538203a15285
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <76ca0a2e-dd9a-41c9-90e4-5fd3c9171172@linux.dev>
-Date: Wed, 16 Sep 2026 14:24:45 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i7K1cXJA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B4061F00899
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 21:47:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789595236;
+	bh=BKgCCFGN6jBwDhfi6TCpAdpQqIHyfoSi+GJbRxa4SOw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=i7K1cXJAiZ42c3Y67CoPxg3ZTvOcNb1Ho/Q0n9wc76vc42OnAbKKl0BYyoOFkQIub
+	 tB9wfV5LOiJ/WCbQSDLU36bUjw1Fq7cK3sVbsi+mkCCl/B24e+XoqQYtVlHlcAPLfm
+	 /0JVJ2HgO5ZjtBpDPTKS06H27OhOTmyjaQZ0IcKb7YDwZCWr27DsAHT1oreBUYxeWK
+	 Ym27jQwg3P2+dGSTb/3hsVVTWhZfQjv9xXVtnLiFRPXdlGP69RHp5Dn1wWHOOD541X
+	 QkLARJrJ5roWoLwUv5E94qQsZNI+Ej5efe9XjMJ0+IK5LBzk9Z+khff+kBHfg+LxHv
+	 G5dbOO4YBiXhg==
+Received: by mail-qk2-f43.google.com with SMTP id af79cd13be357-939109f067fso14308685a.2
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 14:47:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBzGBjnEIsiFdwTVY0CIuBmhS0mk8I5J2CAO7TVN0SY50RyD3tr6PwBZBcV7QV+7a6eOQvE=@vger.kernel.org
+X-Gm-Message-State: AFuF++nZ3pkQZfgq2inVA3IAxQGOdtN5J8RV9vdWy3z89t70WQy5dJvp
+	ZMxS0HEbxY6X6LBfDAS96uUn9r1rwkselGb6f21mpm6qO/cAqUM53qA0w8GjyQoD967AsdgHFTB
+	gG+Uro9N2JypxqbAAK9K4YpfDHmBWRrc=
+X-Received: by 2002:a05:620a:2312:10b0:93b:c07d:a6bb with SMTP id
+ af79cd13be357-93bc07db157mr388003585a.16.1789595235708; Wed, 16 Sep 2026
+ 14:47:15 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 01/13] bpf: move linked-scalar flags out of
- bpf_reg_state->id [NFC]
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260910164635.459558-1-vineet.gupta@linux.dev>
- <20260910164635.459558-2-vineet.gupta@linux.dev>
- <DLDKB6BTHVXE.PFK87O3QY1J5@gmail.com>
- <f575fe19-a5a0-4f43-b1bd-cdec2c6e9830@linux.dev>
- <DLH1MDZPU5G0.228555JR34D3N@gmail.com>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <DLH1MDZPU5G0.228555JR34D3N@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <cover.1789475073.git.zhuhui@kylinos.cn> <ee6bcf945910babab2200f05040975492aed21b3.1789475073.git.zhuhui@kylinos.cn>
+In-Reply-To: <ee6bcf945910babab2200f05040975492aed21b3.1789475073.git.zhuhui@kylinos.cn>
+From: Barry Song <baohua@kernel.org>
+Date: Thu, 17 Sep 2026 05:47:04 +0800
+X-Gmail-Original-Message-ID: <CAGsJ_4wggMLKcxwtDhzPS-P2sF_NyqL8tsKKnP1jdk04aCECAg@mail.gmail.com>
+X-Gm-Features: AcwNN1X8tj6qrT264I7u0puPG663sCANci7__uZPqHwmsLy7UyUcS1gzMfRwgL0
+Message-ID: <CAGsJ_4wggMLKcxwtDhzPS-P2sF_NyqL8tsKKnP1jdk04aCECAg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v11 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
+To: Hui Zhu <hui.zhu@linux.dev>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn <inwardvessel@gmail.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+	Geliang Tang <geliang@kernel.org>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	Hui Zhu <zhuhui@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/16/26 2:02 PM, Alexei Starovoitov wrote:
-> On Tue Sep 15, 2026 at 1:17 AM UTC, Vineet Gupta wrote:
->> Back when I started, keeping it NFC made more sense. But with all the
->> nuances discovered in the process, I'm inclined to drop the NFC stance
-> What is NFC ?
+On Tue, Sep 15, 2026 at 8:30=E2=80=AFPM Hui Zhu <hui.zhu@linux.dev> wrote:
+[...]
+>  /**
+> @@ -159,6 +161,47 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct m=
+em_cgroup *memcg)
+>         mem_cgroup_flush_stats(memcg);
+>  }
+>
+> +/**
+> + * bpf_proactive_reclaim - proactively reclaim memory from a memory cgro=
+up
+> + * @memcg: the target memory cgroup to reclaim from
+> + * @size: the amount of memory to reclaim, in bytes, clamped to
+> + *        MEMCG_CHARGE_BATCH
+> + * @swappiness: the reclaim swappiness, in the range [MIN_SWAPPINESS,
+> + *              SWAPPINESS_ANON_ONLY], or -1 to use the memcg's own
 
-non functional change aka refactoring.
-Like I said when I started I wanted to keep the id / flag breakout 
-purely non functional. But given that splitting it does change one thing 
-(mentioned below) - I'm dropping NFC attribution.
+I assume you missed the word "swappiness" here: "use the memcg's own
+swappiness".
 
->> and make functional changes - there's at least one which is the
->> following accepted pre-series and now rejected.
->>
->>         old {r2.id=A+delta32}         vs cur {r2.id=B+delta64}
-> that's a red flag, no? The refactoring patch shouldn't have
-> any changes to selftest and veristat numbers?
-> Unless I'm missing it again.
-
-Yes understood except that it is no longer refactoring.
-
-Thx
--Vineet
+Best Regards
+Barry
