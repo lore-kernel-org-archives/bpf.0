@@ -1,126 +1,177 @@
-Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
+Received: from mail-pj2-f18.google.com (mail-pj2-f18.google.com [74.125.227.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856FA5111AD
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 18:37:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746734D599E
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 18:41:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789583840; cv=none; b=g30NWU8chwVgmPueVaTZiVonoJfWL0Bew6hQ1Ej3IemjNbhi4JM/TAD8BvmcHaI7TBa2JvQ7CKS606un70h59AxXPBJX5zir075NsAJizsQunys5DBXUECLgGgFRubx0gsT61z+2ujB6GBv7BHoSTExmnZq3FWn+1OCuLkvPPkM=
+	t=1789584075; cv=none; b=rfg4Gk9LCxsDrbGzHIzZ0rrA9ecO+2ZESV7xPZq+Z/iy/GOpxLkOWaegT48jLThJhf0VfccT7kDiezBPoF+SnAtnKWCQv17CMJpDUim29mpbJUAE7kJVDhbof+8gUOT93SxXlGCn2hTnD0c8592eVd3dQ9nH6fyHe9kNiz+FpS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789583840; c=relaxed/simple;
-	bh=RG4q6UJbEnonfve6J6esUiSuGUanU36xFxZwcOGnxCk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JFVxK1CsVHwdrP3tBnhflPfCdrHeoPo5hHLRRrky1+aAqWGBNSHxlntPg9NEr5BrXYfqdwyXDJEDu68lR4bKtickvvcKaFlR5xvuABUBC3iM9VQVPynzmQDyWyGlLyCD9osMQ2rXM2AurkqYvxg7paZfSGYr3aT20IEhyoGeFnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iY1YkxRl; arc=none smtp.client-ip=74.125.228.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789584075; c=relaxed/simple;
+	bh=nD19l9ui3ugj09Kn2ntUmpgOIMZuNqGRrXANeBNeDt0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=JtjhKXYRC20UxLxQgwoKioQjChA+HaUmh8eZQRoJzAOoeOiQ8/lR/S4Uj7gug4g0LWT1D51oDiZPk0hl3JmcmKrCPFFH9RMJq+MHLXICGTlXFWViwR57iAp9OlV3x8kBr+BRpe/EE+Xo5h45N8Fv94IDRkhAObpA/Z1E1il6+8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=ISs63udk; arc=none smtp.client-ip=74.125.227.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iY1YkxRl"
-Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-8633a38df87so801094b3a.2
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 11:37:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="ISs63udk"
+Received: by mail-pj2-f18.google.com with SMTP id d9443c01a7336-2db22383fe8so149695ad.2
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 11:41:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789583833; x=1790188633; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=A790NJ7tkPjvQRecbFNnEvUKBKLrMg73DaUpVz2+c/A=;
-        b=iY1YkxRlZd3uB4TRVZsKsh7Ldhn2LfZtR6jreTOHw/2/m/urK2G8Aoub2OT0pn+87a
-         SANl459Rd/xS5IzANayq8qjTWINtbHKPF+ZDVCXrmsWphv0fuJDGkRYmYcxgjgPUy0gY
-         uw5eVX66lG44H9M8tSG/J2iWl/A0Vi8DFis/IKZdOGjE37bmIv9e5OjblvXWzjxqpN6q
-         alOBCZTffdzhXyuKSQzc+tdXQlojBYOhUtvF13PVRk2OZVup1KI0ivPCppHy7RGymRMe
-         gFnUNl//dqArN9WMDlshjvyt4syqD+YVZydPYdNPARSDtUY7gQQvVTKcgVhnwp1Os9JD
-         X5Vg==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1789584065; x=1790188865; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=9ySn/+Nvc9slP/rzUIJxTWg/38szPYmoWWFQbtHmYKY=;
+        b=ISs63udk4CcgV/o+C1iZFqcn0kDJBnvV8CD78ft7fmnafFytePsTnbjeyRqvEJIi9A
+         ZSM1mfhpFYtXEwfE61h/6TL72NLFTYCo9vM8p6GC2zbYemjqXLUhCft2mjlV75DUREN5
+         FD/ZP+X8e4UVbpEPPERs0w5jY4vj2GegWCCRA5cs3ms08bV8S7pgdO1qAL71Y8qZP/9h
+         zHEsCo9uNGh6EnXc7x3fBQFNG8RZHf0PH7Y9hbY7cLmDlqMzqhRswe5+BxZwZwYZERTO
+         iF0e+xqT5jXCxCI6FCKQmp1hK7pT6zGejC+5eSOdr+XgvZ81kWcdjlLDZM+PZC+WsSvW
+         /dsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789583833; x=1790188633;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20260707; t=1789584065; x=1790188865;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=A790NJ7tkPjvQRecbFNnEvUKBKLrMg73DaUpVz2+c/A=;
-        b=jhmLNIEgBIJyJncnqA+EEGxa3J7+F/G7gPpgmVZyhp7OVbrDSV05Lb6x6M2ExOjGzv
-         VwgDKxxfy6tZnE3bAud5wQBN5aKO/eym2Gxbnq96fxcjUEc+DFotYPAFYPG+YOC5LTem
-         Jij6eaHN2MWW8tvMNfyK4oOXVvSgEhf5dO3aggZec6QYyM6t0qowsihmW7la+I+nfho2
-         5eH7p/yF2QXH8NyxXFtu/aY3Zh3VieBJnZYIt79ZfeSpZCPkdzOqnFEuRqHWNymSlaVr
-         UPRH+nxm18rUOUc5wjsturRUorT7+lkAghDgVBPI837rJ5Nn/XqbVjuYdzIOBuBGft6g
-         Ugzg==
-X-Forwarded-Encrypted: i=1; AKwUvBypy6uPeoKFtvAhjRM8cvAFRYZWNCa2ilEacz2RqHrdWrkfDNczV0U7Qt7haGfeWYnUuLQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++kGmI2B6AvxnpHwKlSi4/UiFwHhHD3+3C5KNhiRLnKfgr/VoZwK
-	oS5u533R6pcftPHJhQSCGRHWoPM2j2NroGDWmGYO6Oaf0Rwxt1uYYEBJ
-X-Gm-Gg: AYBFou1itspqACuc9lJupf1xQdz/lyBEzpnUMWJn1XG1tzfAmlejPaMwlnzvCxu6MXC
-	cojbYgLb9dWCNMLDgeGbXXezHbGFJiO4hTVsHbdgp1mrSG42QP0sfdFgguGji0LfqUwYef6WwZE
-	qBe5XZM+yLl7pYY6EiCxkNc+IQUw+srcy7+C8uKjBUV2mE9iHpFOAYZyJpoa35MwT/ikU72sUeX
-	gIN6ljzeVvnM9A4nSahHtmhEzTBwrlEw5FoOn8i+Stv8rbJctLaJWbEUHv7ATJVaMWlvD3XskyC
-	PlCCZ7QrHdSS1jM9UqOlWiXBGfIAhqseJ1IHIcPH/RM4Jh5Xq/9WzSPwNxfI4Acb/mnrZkr9txr
-	CHLzyVSu6OPJosIysik38bsiv36zeU7kwxRFNs+ahIZBMOhjP3SOTKuEdp3mGDPI65zYKwitxIV
-	f8rV3H5nv7hYQkdZ2kB4IaXbI7TZcQumn7GYdeBG6Eb5IagJqUd59oSGEbJ6LKDTQI1PCgHul79
-	LmvsZROHsPf3YKJdZG6/MqUz5g=
-X-Received: by 2002:a05:6a21:b82:b0:3bf:7e2a:e874 with SMTP id adf61e73a8af0-3dd5f3d9417mr9124162637.1.1789583832955;
-        Wed, 16 Sep 2026 11:37:12 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc50aa986a5sm2120507a12.4.2026.09.16.11.37.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2026 11:37:12 -0700 (PDT)
-Message-ID: <60814dea22492f927f6d16eb31f470e2d894fd74.camel@gmail.com>
-Subject: Re: [PATCH bpf v4 10/11] libbpf: Reject truncated ldimm64 CO-RE
- relocations
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
-Cc: Sashiko <sashiko-bot@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Emil Tsalapatis <emil@etsalapatis.com>,  Nicholas
- Carlini	 <npc@anthropic.com>, kkd@meta.com, kernel-team@meta.com
-Date: Wed, 16 Sep 2026 11:37:09 -0700
-In-Reply-To: <20260914222514.1635018-11-memxor@gmail.com>
-References: <20260914222514.1635018-1-memxor@gmail.com>
-	 <20260914222514.1635018-11-memxor@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10+b1 
+        bh=9ySn/+Nvc9slP/rzUIJxTWg/38szPYmoWWFQbtHmYKY=;
+        b=1cOlkuGYwP62nD8yCCvt4jNaNXdfvNKCLZ8RIdlFAp5thHPYKMy5Zy3vN7P5VkZTmD
+         Dwe3BceIU55ATRxcv/TvmpuvPB9srffQSeT8Jm+YBvzPz6fstq2bKlDGLIrSOLBCklQR
+         Q14tOuabfhuf2Bkhl+HqslEfGJGCz0jVDhD8NVKsy/xffrJpP6ZFkNoJ+MgDtzDukdYd
+         P+iRaeEujTM5D0Wmz8v9EwSizSUdM8k1bTkDYy86/RyhJm40bfDCzC0natObCYUpIRLx
+         wMD3UhqgoL698/Xk9HgjkzLUKybcDXXMZFGLSdr9hrdyH6XNRybc8rn8cPS0R+aihuZE
+         4yLA==
+X-Gm-Message-State: AFuF++netwmAYxynDLYfhVgmaMCAFmMlUGj6aHX7ivE0bSlgbe3oLbW2
+	uYhqqRhJK6/82qENNQK25hyaBGtBqt48fOKguUPY+bveUQbMuK3WNEJ+MTm7ySDKm6o=
+X-Gm-Gg: AYBFou1igsJTNFO4IwtoCWt3t45qssB9GkASpHu1ZH3mO/XfvKf0JxIu/4HhjEeqsMq
+	3yyIC/tG8CbzAtvs50f1CdqrG3O7oqQijDxvX74Z4WxmWxryEqp6XpP1T/P+tu4T4ZOnH4REE+S
+	5A3Y8ow+Rml24UREkga/003uNc60mY1mqJ5h4w/2ggrlr0ZrAhKcUyXaNUxPUvwC2ZwV40PousB
+	wyli/+FufwAWfyIhnNyf2E8EXV9nra9nxtiWnhOR8umIHr0lXaNJskEUJE2qlnvq+e0yrrh6AW9
+	PSVCGO2Psoqtz5AS197fByYoByORD8QhWGpvD3h2Kiz/WyGboamjOiA62MIDfR5pQo7bl3z8fTn
+	4ZYxAPCb5IMNb3PfFm29VazQzQnYlPht49Ai9kcubV+LQpV5+IPznQpJjy4IXT9guH7v5p3X3Y/
+	b9xQ1zK+jIBvMyF0KMWbi8L8nskNZcy2cuqkLEpJK/wYidnYIJ1KZaqEtRJNDxo5kYGAcKflwE6
+	zsPzKarhpmZBBQ/XB1OrCfxvXIE
+X-Received: by 2002:a17:903:1847:b0:2dd:792b:302 with SMTP id d9443c01a7336-2dd8e404f57mr94153475ad.11.1789584064792;
+        Wed, 16 Sep 2026 11:41:04 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd89e92f07sm16378015ad.28.2026.09.16.11.41.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Sep 2026 11:41:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 16 Sep 2026 18:41:03 +0000
+Message-Id: <DLGYLT5UIFDA.38RG9UBZNYI58@etsalapatis.com>
+Cc: <bpf@vger.kernel.org>, <ast@kernel.org>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <memxor@gmail.com>, <daniel@iogearbox.net>,
+ <netdev@vger.kernel.org>, "Nicholas Carlini" <nicholas@carlini.com>, "Mahe
+ Tardy" <mahe.tardy@gmail.com>
+Subject: Re: [PATCH bpf 05/11] bpf: Reject pkt arguments in mutating
+ subprogs
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Amery Hung" <ameryhung@gmail.com>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>
+X-Mailer: aerc 0.21.0
+References: <20260916050830.8774-1-emil@etsalapatis.com>
+ <20260916050830.8774-6-emil@etsalapatis.com>
+ <CAMB2axOAut_9utesiV9mG40bskrDscu+Gu9FUMNRKZC+hbd8UQ@mail.gmail.com>
+In-Reply-To: <CAMB2axOAut_9utesiV9mG40bskrDscu+Gu9FUMNRKZC+hbd8UQ@mail.gmail.com>
 
-On Tue, 2026-09-15 at 00:25 +0200, Kumar Kartikeya Dwivedi wrote:
-> CO-RE relocation of an ldimm64 instruction operates on two instruction
-> slots. The original ldimm64 support checked that the second slot existed
-> only on the resolved relocation path, leaving unresolved relocation
-> poisoning able to write past the instruction allocation. When CO-RE logic
-> was moved to the shared relocation implementation, even the resolved-path
-> check was lost because bpf_core_patch_insn() no longer received the
-> program length.
->=20
-> A malformed BPF ELF can therefore end a function after the first ldimm64
-> slot and attach a CO-RE relocation to it. libbpf allocates the instructio=
-n
-> array according to the function symbol size. bpf_core_patch_insn() then
-> reads the absent second slot while validating a resolved relocation or
-> writes a poison instruction past the allocation for an unresolved one.
->=20
-> Pass the total instruction count to the shared patch helper and reject a
-> terminal ldimm64 before either relocation result is handled. Thread the
-> count through the in-kernel caller as well, since it compiles the same
-> shared relocation implementation.
->=20
-> Fixes: eacaaed784e2 ("libbpf: Implement enum value-based CO-RE relocation=
-s")
-> Reported-by: Sashiko <sashiko-bot@kernel.org>
-> Link: https://lore.kernel.org/20260914140852.03DA21F0089B@smtp.kernel.org
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
+On Wed Sep 16, 2026 at 5:57 AM UTC, Amery Hung wrote:
+> On Tue, Sep 15, 2026 at 10:10=E2=80=AFPM Emil Tsalapatis <emil@etsalapati=
+s.com> wrote:
+>>
+>> The verifier tracks changes in how PTR_TO_PACKET registers'
+>> bounds are modified across subprog boundaries. PTR_TO_PACKET
+>> registers are actually passed as PTR_TO_MEM, which is assumed
+>> valid for the entire call. This is not the case with packet memory,
+>> where a pskb_* call may invalidate its memory region.
+>>
+>> Reject BPF code that passes PTR_TO_PACKET pointers to subprogs that
+>> may mutate a packet. We cannot pass the pointer as a true PTR_TO_PACKET
+>> because we would also need to somehow pass the PTR_TO_PACKET_META
+>> or PTR_TO_PACKET_END to the subprog. Since we cannot avoid representing
+>> the pointer in the subprog as PTR_TO_MEM, only permit it if the
+>> subprog is guaranteed not to mutate the packet.
+>
+> CC Mahe.
+>
+> Hi Emil,
+>
+> There is a related but separate issue [1] addressed by 8fe994c80af2
+> (=E2=80=9Cbpf: Consolidate function call pkt_access validation=E2=80=9D).=
+ I think a
+> long-term solution could be supporting ARG_PTR_TO_PACKET for global
+> subprograms. For example:
+>
+> int parse_something(struct __sk_buff *skb, __u16 off,
+>                     char *data_start __arg_packet, ...);
+>
+> The verifier could require a real PTR_TO_PACKET at the call site and
+> verify the global subprogram with a real PTR_TO_PACKET, rather than
+> converting it to PTR_TO_MEM. This would preserve packet access rules,
+> allow reads from cgroup_skb programs while rejecting writes in the
+> callee, and automatically invalidate the argument after calls such as
+> bpf_skb_pull_data().
+>
 
-It's a bit ugly to thread insn_cnt so deep only for this check.
-When talking about verifier fix, the change could be as simple as:
+Hi Amery,
 
-  if (prog->insnsi[prog->len - 1].code =3D=3D (BPF_LD | BPF_IMM | BPF_DW)) =
-{
-	verbose(env, "invalid bpf_ld_imm64 insn\n");
-	return -EINVAL;
-  }
+    that makes sense to me, especially since this is a feature expected
+by existing programs. The main issue I see is that since we want to be able
+to pass it with subprogs we need to find a way to annotate its current size
+(maybe passing it as a __sz that is checked by the verifier to be <=3D the
+range - off of the pointer in the caller?)
 
-Somewhere at the beginning of bpf_check().
-Wdyt?
+> [1] https://lore.kernel.org/bpf/aqkhifLvyAhw66jg@gmail.com/#t
+>
+>>
+>> Fixes: 80f281664f5a ("bpf: Support pointers in global func args")
+>> Reported-by: Nicholas Carlini <nicholas@carlini.com>
+>> Suggested-by: Nicholas Carlini <nicholas@carlini.com>
+>> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+>> ---
+>>  kernel/bpf/verifier.c | 10 ++++++++++
+>>  1 file changed, 10 insertions(+)
+>>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 6c6b8d852..507bc14b4 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -10375,6 +10375,16 @@ static int btf_check_func_arg_match(struct bpf_=
+verifier_env *env, int subprog,
+>>                         if (check_mem_reg(env, reg, argno, arg->mem_size=
+, BPF_READ | BPF_WRITE, NULL,
+>>                                           NULL))
+>>                                 return -EINVAL;
+>> +                       /*
+>> +                        * PTR_TO_PACKET get passed as PTR_TO_MEM, preve=
+nting
+>> +                        * us from adjusting bounds tracking info.
+>> +                        */
+>> +                       if ((reg_is_pkt_pointer_any(reg) || reg_is_dynpt=
+r_slice_pkt(reg)) &&
+>> +                           sub->changes_pkt_data) {
+>> +                               bpf_log(log, "%s is a packet pointer, bu=
+t func#%d may change packet data\n",
+>> +                                               reg_arg_name(env, argno)=
+, subprog);
+>> +                               return -EINVAL;
+>> +                       }
+>>                         if (!(arg->arg_type & PTR_MAYBE_NULL) &&
+>>                             (type_may_be_null(reg->type) || bpf_register=
+_is_null(reg))) {
+>>                                 bpf_log(log, "%s is expected to be non-N=
+ULL\n",
+>> --
+>> 2.54.0
+>>
+>>
 
-...
