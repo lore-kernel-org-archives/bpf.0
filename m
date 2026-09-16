@@ -1,33 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2764E431D;
-	Wed, 16 Sep 2026 23:35:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3627501F4C;
+	Wed, 16 Sep 2026 23:35:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789601756; cv=none; b=M1rfCNl1L1z2fc96T7CxPJ4pLlgUy41h446SshaMdS0ssPF3MC6szxtplPdV2qhLoe+JMXZJE48CJORMLf1YRtBZz9cH+K7qY8f3V1V83vxEW4+ugI/0i2V/WV0NTfJWiPUsjq9xvw3XJk9dYWLb+90CMSw4E7myMm19azYCSi0=
+	t=1789601758; cv=none; b=VfX6QlW3vf6M8O63k7jLp+/hYId+a9ybcoocLpnS6ptEEoHPBKOJi2YG4TQO3OxN0m8yOnvIBOzpLALQBLrLZSDRkWrcJSCeirf3r4fBeLm1W0bdz7++7Jh4ZqEg0KNWQ9mOzwXFNjhofFt/Lr4BLg2kl0QfVsJRjejaiymNWio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789601756; c=relaxed/simple;
-	bh=+1Y1U2A1X0DLtKFoVOEFN+i8aBNeNqmRvHkkotyM5bo=;
+	s=arc-20240116; t=1789601758; c=relaxed/simple;
+	bh=waA6Lph0lqXdrjxRNRmRj0+kTBpy90YvL8nCToEGt7A=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XYYNPxIgkCMyLFjcyYHhtj/AeiCCcinLGQef64rpyWibW36ytoVasxA1CXzDalYC52hQDEtOwuKW2TFt4hb54a7ICkAVDzdHsk7LLql+cWzYq11u1qoM6l7/xHq5TKV1lZ8BpcegPl1UnhVtpLLSuLyJdS4kRdIZuFgpPEGCiic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R7LfBTkD; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=kTxxDJGtd1gC2LTlfE7RUNZLYVkVK825Md0hAKeQkwlfP3VSVLkcC4Qd+rIc1ul4ApKLLQWgpu9DdZ0PU9tfZKWN4gFrwF/SUdZCL0aHfZ81465xtS1LnnUuV70Hr2+4AU6v/j4bbQTL/A4XTsA93McJ76F+Plmr9saall0Fsf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NrlRer7p; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R7LfBTkD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08BC11F00893;
-	Wed, 16 Sep 2026 23:35:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NrlRer7p"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECB321F000FF;
+	Wed, 16 Sep 2026 23:35:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789601755;
-	bh=61S/09OrrYyBQjZx5ziNbSb8zxVSQhl4L+nVYNxvb20=;
+	s=k20260515; t=1789601757;
+	bh=q2wTc0RNzc1mK+ms4Qo5GzhVrckM5yR9LNTGQMT3HdQ=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=R7LfBTkD7wNs24z0KV6do14KfujSmJmImcoR0I3ghDBJNbABeCNgWL98Gj1kxqdBt
-	 MmjDCykoAuLr8Z+oniKlLnH1Z5nE3Z0xbOQiodlpq6Hx7XoUPalVE9loaRN/1FPnj3
-	 S1hJj65ZxpS0Ub/4F0ajoTufDepgOlsF0Hgi/vdOzrufCINDgsYX5ROgQ2jLdg3ydi
-	 GdbRlch+LcQu2wthmgCQxRbSynwubacfMfr478O96rv8BDPPRq+L4lnq8umU6jims4
-	 V+rv1B5rfU+vzAtyDVlR9v3L0IyIjOyG6KZgRNXnqmbizfm1BWj+vrcyP5Uxfv2C+4
-	 EVIoOdtnfCb+w==
-Subject: Re: [PATCH v3 net 2/7] net: enetc: ensure enetc_xdp_xmit() calls
- enetc_update_tx_ring_tail()
+	b=NrlRer7pmwLgVXmXOkqTA3O1Qqh1R+wn67FjEhfJajGo70y2zI8o/Osxen79f8+hi
+	 cX51dpfnYBo5yPQP+TZ9ElRuDx2fuBfiSHQneBn9gi+lbup36eOmjibUc9FRnjRENr
+	 CBz6fdsMkjEPI8BahfcaJplAzNmALaUPSa7NhXhaEdj0MFseNCR5nlZs9SqJzY7Y/c
+	 ZxakesoDug62hb+YRaQ7H0B2OFweod8sCgTE5qV1Y5OvIf14g468Oix8SH7aw0njhe
+	 PuPsapCcyjtbfmEu/oPwhLJRJlDpXCtncWYMtToO8oRdhNle4ZP6JObpHoV0EmJMJT
+	 PYaz3iWZhF/Pg==
+Subject: Re: [PATCH v3 net 4/7] net: enetc: pad short frames in software
 From: netdev-bot+sashiko@kernel.org
 To: vladimir.oltean@nxp.com
 Cc: netdev@vger.kernel.org, zefir.kurtisi@westermo.com, claudiu.manoil@nxp.com,
@@ -37,10 +36,10 @@ Cc: netdev@vger.kernel.org, zefir.kurtisi@westermo.com, claudiu.manoil@nxp.com,
  john.fastabend@gmail.com, sdf@fomichev.me, horms@kernel.org,
  richardcochran@gmail.com, yangbo.lu@nxp.com, ioana.ciornei@nxp.com,
  imx@lists.linux.dev, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Date: Wed, 16 Sep 2026 23:35:53 +0000
-Message-ID: <178960175356.22033.16334133797759581630@kernel.org>
-In-Reply-To: <20260915222735.1016937-3-vladimir.oltean@nxp.com>
-References: <20260915222735.1016937-3-vladimir.oltean@nxp.com>
+Date: Wed, 16 Sep 2026 23:35:55 +0000
+Message-ID: <178960175550.22033.10648880872141935672@kernel.org>
+In-Reply-To: <20260915222735.1016937-5-vladimir.oltean@nxp.com>
+References: <20260915222735.1016937-5-vladimir.oltean@nxp.com>
 X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -51,210 +50,143 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 1 potential
 issue(s) to consider:
 
-Critical: 0 · High: 1 (1) · Medium: 0 · Low: 1
+Critical: 0 · High: 1 · Medium: 0 · Low: 0 (1)
 
-- [High] drivers/net/ethernet/freescale/enetc/enetc.c, enetc_xdp_xmit():
-  the new doorbell condition `if (unlikely(k && ((flags &…
-- [Low] The commit message of "net: enetc: ensure enetc_xdp_xmit() calls
-  enetc_update_tx_ring_tail()" carries a Fixes: 9d2b68cc108d tag (making…
+- [High] enetc_xmit() (drivers/net/ethernet/freescale/enetc/enetc.c:1090)
+  calls eth_skb_pad(skb) unconditionally, i.e. also for GSO skbs.
 
 Pre-existing issues:
-- [High] This problem wasn't introduced by this patch, but the function
-  it modifies contains an unsynchronised shared-TX-ring race.
+- [Low] Incomplete enforcement of the 16-byte TX BD minimum: at this
+  commit the new ENETC_MIN_BUFF_SIZE check exists only in enetc_xmit()…
 
 --
 
-net: enetc: ensure enetc_xdp_xmit() calls enetc_update_tx_ring_tail()
+net: enetc: pad short frames in software
 
-This changes the condition under which enetc_xdp_xmit() rings the TX
-doorbell, since the old "k != xdp_tx_frm_cnt" test could never be true,
-and removes the now redundant xdp_tx_frm_cnt variable in favour of the
-loop index k.
+ENETC hardware rejects TX buffer descriptors whose FRM_LEN or first
+BUFF_LEN is below 16 bytes, which leaves the TX ring consumer index
+stuck and amplifies into an MSI-X interrupt storm. The patch linearizes
+skbs with a short head and pads anything shorter than ETH_ZLEN in
+enetc_xmit().
 
-A couple of questions below.
-
-> The correct condition on which we should ring the doorbell is when at
-> least one frame was sent, and either the caller required us to flush, or
-> we couldn't enqueue the entire passed array.
-
-[Severity: Low]
-The patch carries a Fixes: tag but does not describe any user-visible
-symptom of the old code.  Was one observed?
-
-Looking at bq_enqueue() in kernel/bpf/devmap.c, the current frame is always
-stored right after the bulk transmit:
-
-	if (unlikely(bq->count == DEV_MAP_BULK_SIZE))
-		bq_xmit_all(bq, 0);
-	...
-	bq->q[bq->count++] = xdpf;
-
-so bq->count >= 1 whenever __dev_flush() runs, and bq_xmit_all() does not
-take its "if (unlikely(!cnt)) return;" early exit.  The pre-patch code then
-rang the doorbell unconditionally on that XDP_XMIT_FLUSH call in the same
-NAPI poll, which would make the dead "k != xdp_tx_frm_cnt" condition a
-latency issue rather than a lost-frame issue.
-
-Could the commit message say what the practical effect was, so that stable
-backporters can judge the risk?
+Closes: https://lore.kernel.org/netdev/b3d9136c-2803-4203-b1ea-1f9e62de80a1@gmail.com/
 
 > diff --git a/drivers/net/ethernet/freescale/enetc/enetc.c b/drivers/net/ethernet/freescale/enetc/enetc.c
-> index e7ecdf8ef67c8..c9c23e994f6d1 100644
+> index 0216f7d08e197..bbad942041f5a 100644
 > --- a/drivers/net/ethernet/freescale/enetc/enetc.c
 > +++ b/drivers/net/ethernet/freescale/enetc/enetc.c
-
-[ ... ]
-
-> @@ -1845,19 +1844,17 @@ int enetc_xdp_xmit(struct net_device *ndev, int num_frames,
->  						    &xdp_redirect_arr[i]);
->  			break;
->  		}
-> -
-> -		xdp_tx_frm_cnt++;
->  	}
+> @@ -1077,6 +1077,19 @@ netdev_tx_t enetc_xmit(struct sk_buff *skb, struct net_device *ndev)
+>  	u8 udp, msgtype, twostep;
+>  	u16 offset1, offset2;
 >  
-> -	if (unlikely((flags & XDP_XMIT_FLUSH) || k != xdp_tx_frm_cnt))
-> +	if (unlikely(k && ((flags & XDP_XMIT_FLUSH) || k < num_frames)))
->  		enetc_update_tx_ring_tail(tx_ring);
+> +	/* Hardware does not support transmit buffer descriptors with a total
+> +	 * length of less than 16 bytes, or a first buffer size of less than
+> +	 * 16 bytes.
+> +	 */
+> +	if (unlikely(skb_headlen(skb) < ENETC_MIN_BUFF_SIZE &&
+> +		     skb_linearize(skb))) {
+> +		dev_kfree_skb_any(skb);
+> +		return NETDEV_TX_OK;
+> +	}
+> +
+> +	if (eth_skb_pad(skb))
+> +		return NETDEV_TX_OK;
 
 [Severity: High]
-Can the new "k &&" term drop a doorbell that the caller explicitly asked
-for with XDP_XMIT_FLUSH?
+Should the pad be skipped for GSO skbs?
 
-enetc_xdp_tx() only writes the BDs and advances tx_ring->next_to_use.  The
-hardware producer index is written only here:
+enetc advertises NETIF_F_GSO_UDP_L4 in enetc_pf_common.c and enetc_vf.c,
+so a UDP segmentation skb reaches ndo_start_xmit still unsegmented, and
+such an skb can have skb->len < ETH_ZLEN. udp_send_skb() marks the skb
+SKB_GSO_UDP_L4 whenever datalen > cork->gso_size, and UDP_SEGMENT accepts
+any value in 0..USHRT_MAX:
 
-static void enetc_update_tx_ring_tail(struct enetc_bdr *tx_ring)
-{
-	/* includes wmb() */
-	enetc_wr_reg_hot(tx_ring->tpir, tx_ring->next_to_use);
+net/ipv4/udp.c:udp_send_skb() {
+    ...
+	if (datalen > cork->gso_size) {
+		skb_shinfo(skb)->gso_size = cork->gso_size;
+		skb_shinfo(skb)->gso_type = SKB_GSO_UDP_L4;
+    ...
 }
 
-Now consider the devmap bulk path in kernel/bpf/devmap.c:
+With UDP_SEGMENT=1 and a 2-byte sendmsg(), skb->len is 14 + 20 + 8 + 2 =
+44 with gso_size 1 and gso_segs 2. eth_skb_pad() -> skb_put_padto(skb,
+ETH_ZLEN) then appends 16 zero bytes and sets skb->len to 60, but leaves
+gso_size and gso_segs alone.
 
-bq_enqueue()
-	if (unlikely(bq->count == DEV_MAP_BULK_SIZE))
-		bq_xmit_all(bq, 0);		/* flags == 0, no doorbell */
+The skb is still GSO, so enetc_start_xmit() takes the skb_is_gso() branch,
+and both segmentation back-ends derive the payload length from skb->len:
 
-__dev_flush()
-	bq_xmit_all(bq, XDP_XMIT_FLUSH);	/* the only flush */
-	bq->dev_rx = NULL;
-	__list_del_clearprev(&bq->flush_node);
+drivers/net/ethernet/freescale/enetc/enetc.c:enetc_lso_start() {
+	lso->lso_seg_size = skb_shinfo(skb)->gso_size;
+    ...
+	lso->total_len = skb->len - lso->hdr_len;
+}
 
-The flags == 0 call enqueues all its frames (k == num_frames) and
-legitimately defers the doorbell.  If the following XDP_XMIT_FLUSH call
-breaks at the very first frame, k == 0 and enetc_update_tx_ring_tail() is
-now skipped, so the BDs written by the earlier call are never announced to
-hardware.  The bq and its flush-list entry are cleared right afterwards, so
-there is no retry.
+drivers/net/ethernet/freescale/enetc/enetc.c:enetc_map_tx_tso_buffs() {
+	hdr_len = tso_start(skb, &tso);
+	total_len = skb->len - hdr_len;
+    ...
+		data_len = min_t(int, skb_shinfo(skb)->gso_size, total_len);
+}
 
-k == 0 on that flush call looks reachable through any of the loop's early
-breaks:
+Does that make the hardware LSO engine and the software TSO loop segment
+18 bytes instead of 2, putting 18 one-byte UDP datagrams on the wire, 16
+of them made up of pad zeros? tso_build_hdr() rewrites IP tot_len and UDP
+len per segment, so the extra datagrams would look well formed to the
+receiver, and nothing is reported back to the sender.
 
-	if (unlikely((shinfo->nr_frags + 1) > ENETC_MAX_SKB_FRAGS))
-		break;
-	...
-	if (unlikely(xdp_tx_bd_cnt < 0))		/* DMA map error */
-		break;
-	...
-	if (unlikely(!enetc_xdp_tx(tx_ring, xdp_redirect_arr,
-				   xdp_tx_bd_cnt))) {		/* ring full */
+The software TSO path always emits header and data BDs of at least
+hdr_len bytes, so the 16-byte first-BD and frame-length limits do not seem
+to apply to GSO skbs. Would guarding the pad with !skb_is_gso(skb) work
+here? This is still present at the end of the series (381447d90b1f), where
+the pad in enetc_xmit() remains unconditional.
 
-The ring-full variant looks self-perpetuating: the un-announced BDs keep
-enetc_bd_unused() low, every later call fails at frame 0, and the doorbell
-is skipped again.  enetc_clean_tx_ring() cannot release those xdp_frames or
-their DMA mappings because hardware never completes descriptors it was not
-told about, and the dedicated per-CPU XDP TX ring is outside
-real_num_tx_queues so the TX watchdog does not cover it.  The XDP_TX path
-has the same shape:
+[Severity: Low]
+This isn't a bug introduced by this patch, but the 16-byte minimum is
+only enforced on the skb path here, while the XDP descriptor producers
+still program the BD length verbatim:
 
-enetc_clean_rx_ring_xdp()
-	if (xdp_tx_frm_cnt)
-		enetc_update_tx_ring_tail(tx_ring);
+enetc_xdp_xmit() -> enetc_xdp_frame_to_xdp_tx_swbd() {
+	int len = xdp_frame->len;
+    ...
+	xdp_tx_swbd->len = len;
+}
 
-so it does not re-synchronise TPIR either.
+enetc_xdp_map_tx_buff() {
+	txbd->buf_len = cpu_to_le16(tx_swbd->len);
+	txbd->frm_len = cpu_to_le16(frm_len);
+}
 
-Since writing TPIR with an unchanged next_to_use is idempotent, is there
-anything gained by the "k &&" term?  Would keeping the flush branch
-unconditional be preferable, e.g.
+Can an XDP_REDIRECT of a 14 or 15-byte frame into ndo_xdp_xmit still
+program an illegal first BD and reproduce the stuck TBaCIR / TBaSR[BUSY]
+condition and the MSI-X re-arm storm described in the commit message?
+bpf_xdp_adjust_tail() only enforces an ETH_HLEN floor.
 
-	if (unlikely((flags & XDP_XMIT_FLUSH) || (k && k < num_frames)))
+The XDP_TX case does not look affected, since
+enetc_rx_swbd_to_xdp_tx_swbd() copies rx_swbd->len, i.e. the length
+recorded at reception.
 
-The condition is unchanged at the end of the series (381447d90b1f).
+This gap is closed by the next patch in the same series, "net: enetc: pad
+short XDP frames coming from devmap", which adds the check in
+enetc_xdp_xmit():
 
->  
-> -	tx_ring->stats.xdp_tx += xdp_tx_frm_cnt;
-> -	tx_ring->stats.xdp_tx_drops += num_frames - xdp_tx_frm_cnt;
-> +	tx_ring->stats.xdp_tx += k;
-> +	tx_ring->stats.xdp_tx_drops += num_frames - k;
->  
->  	enetc_unlock_mdio();
+		if (unlikely(xdp_frame_pad(xdpf) ||
+			     xdpf->len < ENETC_MIN_BUFF_SIZE)) {
+			tx_ring->stats.xdp_tx_drops++;
+			break;
+		}
 
-[Severity: High]
-This isn't a bug introduced by this patch, but while touching
-enetc_xdp_xmit() it may be worth looking at what serialises this ring
-against the stack TX path.
+so nothing remains at the end of the series (381447d90b1f); the
+underlying XDP exposure predates this patch (the follow-up carries Fixes:
+9d2b68cc108d, "net: enetc: add support for XDP_REDIRECT"). Would it be
+worth ordering the XDP patch first so the bisect window does not contain a
+tree where only half of the constraint is enforced?
 
-enetc_xdp_xmit() picks the ring per-CPU and holds no TX queue lock:
-
-	tx_ring = priv->xdp_tx_ring[smp_processor_id()];
-
-The only lock taken is enetc_lock_mdio(), which in enetc_hw.h is
-
-	if (static_branch_unlikely(&enetc_has_err050089))
-		read_lock(&enetc_mdio_lock);
-
-i.e. a reader lock for an unrelated MDIO erratum, so it gives no mutual
-exclusion between two producers.
-
-The XDP rings are a slice of the same array the stack uses:
-
-enetc_alloc_msix()
-	first_xdp_tx_ring = priv->num_tx_rings - num_possible_cpus();
-	priv->xdp_tx_ring = &priv->tx_ring[first_xdp_tx_ring];
-
-and they are only hidden from the stack when a program is attached:
-
-enetc_num_stack_tx_queues()
-	if (priv->xdp_prog)
-		return num_tx_rings - num_possible_cpus();
-
-	return num_tx_rings;
-
-enetc_pf_netdev_setup() advertises NETDEV_XDP_ACT_NDO_XMIT unconditionally,
-and devmap only tests that flag, so ndo_xdp_xmit() can be called into this
-device with priv->xdp_prog == NULL.  In that case every ring, including the
-xdp_tx_ring range, is also reachable from
-
-enetc_start_xmit()
-	tx_ring = priv->tx_ring[skb->queue_mapping];
-
-under only that queue's __netif_tx_lock.  Can the two producers then race on
-the same next_to_use and tx_swbd slot, overwriting bookkeeping (leaking the
-previous skb and its DMA mapping) and leaving enetc_clean_tx_ring() freeing
-entries that do not match what hardware consumed?
-
-The overlap looks unavoidable when num_tx_rings == num_possible_cpus():
-first_xdp_tx_ring becomes 0, and enetc_setup_xdp_prog()'s check
-
-	if (priv->min_num_stack_tx_queues + num_xdp_tx_queues >
-	    priv->num_tx_rings) {
-
-prevents attaching a program at all, yet ndo_xdp_xmit() still targets rings
-0..nr_cpus-1, which are pure stack queues.
-
-i40e and ice return -ENXIO from ndo_xdp_xmit when XDP TX rings are not
-reserved.  Would a similar check fit here?
-
->  
-> -	return xdp_tx_frm_cnt;
-> +	return k;
->  }
->  EXPORT_SYMBOL_GPL(enetc_xdp_xmit);
->
+[ ... ]
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260915222735.1016937-1-vladimir.oltean%40nxp.com
