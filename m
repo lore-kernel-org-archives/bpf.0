@@ -1,77 +1,77 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76643488213
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 21:21:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F744418347
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 21:21:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789593692; cv=none; b=kmYMpFc8TtHnG///KY3hZI6WhFlo9D0b/1e+9EY+w6Qdt5oFvWzdU8gGEp39ekiFaFx43Nwdwe2ImAN9NEmUK9sfWQq5icLeRKcN4PmIovSO8th/78Zi3w0i3ftcs4bQQgqXDcYc9nJFKhe/cyhXcvv0Cz4Pni8WGHhV1qN2o7U=
+	t=1789593697; cv=none; b=QHUhkTqLbKl/WnWXmYLLf0OBBGaNdT0XvXsDLaoyWv1Dr5/E+UNbJaQtVw0ULiP6MaW9pdrunC3oyxJISGERNdy8Jq4239XoWQjf6m5dBx6ja97VTnCq8ouN1dgkFTLjfgcPEF9T/1nfZalrWgpMnr74wSmrYB3cEosXEr5ZYfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789593692; c=relaxed/simple;
-	bh=EZ2KQNFt3MIQocc/C2AENiz3+DuBF60LG8VnvN6AbOQ=;
+	s=arc-20240116; t=1789593697; c=relaxed/simple;
+	bh=2dYc4G2hLeBzJuyKFgPPXaLjHLg/ViMJmgypQVUNZvk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uhVx5/qRyn5t8uyY6ntIAx0bUJ0+d9YMqgdk5ftOCJGepilII2oYT0qgUPMujaSInO6+x5YQmSNg8A7NDncLVG9Tb1Ikq5YFacPIwNG6QAwflnBnx+TqbklvhILodiWynpOkzrzFj6VstG+A5kg9z0aNrJs50eCvzgv58CFt8Gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kGxTY7En; arc=none smtp.client-ip=74.125.225.137
+	 MIME-Version; b=DKfvkvN2vttSUufuYF69F/XG7d7OOUpOy9/FOE2XYlZtEp4cIl8c8AMTAgIiF0ZwLt1X4fKWaptPW4wefU65HjAfns4QFP6n4X3qF/Cogrk8oI69GaedKIXGd7EOEZ0I+cXm7+Li9AmpodwodDYLnyGsTMK7xdjp0rWQ4MW/Eqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F5QPa+7H; arc=none smtp.client-ip=74.125.225.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kGxTY7En"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49e6bd65693so699985e9.0
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 14:21:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F5QPa+7H"
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-49b92ccb8e0so433085e9.1
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 14:21:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789593671; x=1790198471; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789593674; x=1790198474; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=/w7WRSqa2VcLYmjVEt6DtySdOTf6Xd2WsLOvO4e8qJU=;
-        b=kGxTY7EnEDbfztavJwNgbtNPOVGhFf/lEDgXb5cjs+4US8W7M/I0nbtCjt3CIASa1l
-         WNP1nlDa5CiVc3m2Mv+ZX813dOZhXjhZZk9CO1iLFMuOqzVrDsG130AV9zFbXWAUu/HI
-         G+XCQLqGMQpbdqILvoWwfdRKq9AcpAte7pXM/GBTJeh/FSZKws/3ejbiUKBVo151MGFd
-         7iJ7DA5LgwoW5opB0PuGozt1XEyhFx8KVDYyehi8mSJxUYUvvwCgyfviZqnvwsLu8VSh
-         TN5+JwooCcXcAlsPdAacjRaN2vXG4eIcS3S4HARtuhtpxOzxSaS7geSuCdUdW1kJ/a8n
-         gNGw==
+        bh=YtO8FclDiABWId9+FsrsL0wPH5FRoKRhVJi3ogGlc40=;
+        b=F5QPa+7HFhjIP+99ArdU3OcGcw+VSQGXnqKDjSvw8yY/OjSILIxqTgRCsTL7WcHUHg
+         /hkBVUzyy3bRy5Y63k+WeCzbf1uQapAWaykMRbBj3iGn/jH4MaRi8x7wEbPJI4z5M3qM
+         6OX895Bj8c0pvMD/FXNRiwMt2/UfktqtqPbvQzYgSVUwFnNMQlu+j86sYPxH9o11LI2O
+         du29x6e/EfEK5HkmqyRLglJ1fM7h0t3xkQajdRD2Vc+M0Oh2+ZRJaaTuvpYMJ0Sphoyp
+         PfPDL/RriBGBCFty9qx5dwba8941nNTGXGqdXkjbf0N7HHHUipFtJtlt50Jo85RCwTZb
+         bvkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789593671; x=1790198471;
+        d=1e100.net; s=20260707; t=1789593674; x=1790198474;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=/w7WRSqa2VcLYmjVEt6DtySdOTf6Xd2WsLOvO4e8qJU=;
-        b=OzTNm4T6OpPbSiWpbuAPDsGqieGJE4KPR61L0W35+JHi8MKCNvpTf0sKNclO1SYbL5
-         w6EYQLwE52avNsIBl4CfUM0XdrPbKQ1IuxFFuEmeMoNaC9UppEDnYLjuX0uTNPvaX+yu
-         5p04vbF5o5af3vt3al+EWPhH8tnKs4V6rS6w89sCCD7KFKmeNKW3hivg9xCdqFqQ729I
-         vAGF5c00fGS3r8kQmJrNwWsh80O3dorfU5hnWQlgqVswXEYtypUOxaeuYRdLKyfwOGOq
-         q385Oj5SaHDpzgQXAw9I+FAC51osK6T+tc9rPehrTkPhKLcGoaIc5VwifPAwythsYwr4
-         gKiw==
-X-Gm-Message-State: AFuF++mRaw8FVADpVXdva1/4/ijQVYn5HE9NpxVmqfmAh3166klKTheb
-	ZlJnScwJ3pO589I5YeBb82niTFZbwGIcY+MyC83xHUesL6JxBZrBt5bwbkldquGj
-X-Gm-Gg: AYBFou2T4PRnw1bBiIL6dP0Sim7OtwaN8pre0+k4kczI3RCJV3xBAT+rOEul/EH1t4T
-	fLlJXVdrjHSytcPcj2yCSPhGf46GDPFWUIZ7RL7Ccnw4EG6m9WVhXOknA20M7N0CVuf2qQWasLz
-	7NpbeL545nahgc+YdsS6liaqjRWXKIIrCoHUiSu2hF/TzxCbK76VKrkNBpJ1Cy1XhRM9+TjAmPJ
-	sbHPS3D8FD5wWY+2XMpiBCtiswZrmpQFtow2IQqQYQQUmY9O5tZt7w3rU/2AsxB2syYmJZiUAaL
-	odLVKB/b4s3xAaSPUfKD6q3808vZ37TmaUi7RBxgU7EK4BOwpUJpRfLqQ1xeK3KgQS99qCEuvpr
-	porW/sM2r2DkCJMQKvLe5Mm5HrIIjVKfI1SHuCYc8wglgqNMoLLKymRJhmHMpE68cnMlScD0dYZ
-	3TeGR62XkXO5bHFkVsqVup3spgkZwhpcIfKJXLOVgpiUu04v099nNKZMQFaqMQcTH9Q0wG6Hgtv
-	zDMLQowSw4ASoTV7lrcHxMC7NAaEidbv+T6ZQLdOdnYkY/qV3hjRvSvNk6u219ZQZTW4sVQspFD
-	11bKld4d7YaXQ5cOcauEfJwWTtjcva6wjGjxHu/7dmoYwGa2
-X-Received: by 2002:a05:600d:8498:10b0:49e:6ac4:b76e with SMTP id 5b1f17b1804b1-49ec0543cf1mr37620295e9.30.1789593670811;
-        Wed, 16 Sep 2026 14:21:10 -0700 (PDT)
+        bh=YtO8FclDiABWId9+FsrsL0wPH5FRoKRhVJi3ogGlc40=;
+        b=lGVIZR8qDDSbCxtI/Nqy8l2wDcyPLVxze+2tQIW4OnuZU0kE2UGMAg0+Vo+uWd0baC
+         pQE6yaKj92S3yViIpV/AQnue+/dIPzi6CzU7+3NnKLD0moyeuiRnbAo3n1FCsnGrqCPy
+         y/80yAXvILwu0f0uodP2L6iPvFri21RmItN3Wg7KuceGWxhZCWbrCRzwKvB/EF+2EpfE
+         xCRr/hTrILw9iW4cQf/lQ7at4jiqgKgcCTe4cUDIqA/I5v39gdwmEeq9DC/QgCvMj0tS
+         1rCOlU7sh2A5dirz0n3emWqUVXeX0RBIRyUpXbDjSwkkGtJs3zROkkLDwaAhWY5K8RkL
+         Hn8Q==
+X-Gm-Message-State: AFuF++k0MXGZgRH6unDUHezfuCEr/BSAgL7XqNDzH95KWpI1/0NAsRsc
+	7r2kMIrlwGDSUFMRPxPwORCNj77EygGw9Q/H+1foRIQV7PepD69fI7FSWKoKqu/r
+X-Gm-Gg: AYBFou16f+x3iTsRMR8muVxz5Wp4PkOrAtt4GRxpaxXkoIDGumDeuA12DRquRJbbbgG
+	jFIhDOCzuJRc++7AwHvuQYBMf8gOXpkZN1lvFI0TOR6hJrW/orcNDmY/djhpSKFLpYx0mQ0cPGu
+	+4casLFFrMNqYpGQwvhgJoHFOb9z7lNY2DaZXTjW8dOdVa53Ox0MoCGWMKV9PRMyDPyO3qr6ocW
+	D+/+FL8Hc9fPZQMLGdc23Ja9NHmR8iyrDX1X89/5Z1EHfe8makAFf+ShRxpQopFagk1KYTt2DJA
+	cxG75AE4EjUNq708pncOOloGI4vvDT5lUTGJtzvnCtD0G3ywAa6B3D1UvInq+BMSIn7zJdBZhP3
+	VV3F0cN+kFgr7Z724dcnvqitZyY2WYD7t4T7EY71h78xiE7YlOHTbHEE1qqScaQxSbbTFWvySJQ
+	GMZnZVcpWChxNUi+w3I7pPUYUOj9AU57cbOyrFzlE6TRcfjgMBdwebWxBb4bHcCaBkgDhB0eLyo
+	AcGDnIKfXJZOU18spLFuR8oZv431JCAgkN7vhZk0xpywrM58sgXHbb1e7dW6+r1mcJVdZLVJS1G
+	jOh+SEMAOa3FA+8gKtFL2pYrGXSQ6HAoNzmWqi4=
+X-Received: by 2002:a05:600c:1909:b0:49e:8418:389d with SMTP id 5b1f17b1804b1-49eb72f35bfmr47572055e9.9.1789593674111;
+        Wed, 16 Sep 2026 14:21:14 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e847f176asm68923325e9.3.2026.09.16.14.21.10
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fbd24774esm32936615e9.10.2026.09.16.14.21.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2026 14:21:10 -0700 (PDT)
+        Wed, 16 Sep 2026 14:21:13 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Nicholas Carlini <npc@anthropic.com>,
 	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Nicholas Carlini <npc@anthropic.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v5 04/10] bpf: Apply CO-RE relocations before subprogram validation
-Date: Wed, 16 Sep 2026 23:20:51 +0200
-Message-ID: <20260916212102.597335-5-memxor@gmail.com>
+Subject: [PATCH bpf-next v5 06/10] bpf: Restrict CO-RE poisoning to relocatable instructions
+Date: Wed, 16 Sep 2026 23:20:53 +0200
+Message-ID: <20260916212102.597335-7-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260916212102.597335-1-memxor@gmail.com>
 References: <20260916212102.597335-1-memxor@gmail.com>
@@ -81,128 +81,170 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4827; i=memxor@gmail.com; h=from:subject; bh=EZ2KQNFt3MIQocc/C2AENiz3+DuBF60LG8VnvN6AbOQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWs1h9yNyy4+e37OfJB0cb11lGJvWY/DlMNa7Rf76hOWT 9UqZRTtKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwETOJjAy7JcQyTAV4tjG8j7R 7sIc9rvFTYUvnnye9GzKwytP5M6IHGD4wyG4gPFfy9Rt/ybUxHcX/t/m+5PzwL+JUnkJb/38V17 q4QQA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6825; i=memxor@gmail.com; h=from:subject; bh=2dYc4G2hLeBzJuyKFgPPXaLjHLg/ViMJmgypQVUNZvk=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWs1h9xUJ558jkq+6SwRxjEqk7S3PVXiXjbnvazn/zRBx Yq8lb4dpSwMYlwMsmKKLCX/9zEZn6j8HWi7jBtmDisTyBAGLk4BmMiJfEaGM9NU39e9VXt4TuZK XSn/mcK3Ph5s9gJPF4paMy/e4H21kOG/H+PnD0IJywo5Zi56ufav6onuicLFLAHuJoxfFwvuDuH gAgA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-check_subprogs() verifies that each subprogram ends in an exit or an
-unconditional jump before in-kernel CO-RE relocations are applied. An
-unresolved relocation can then replace that terminal instruction with an
-invalid helper call. The resulting fall-through into another subprogram
-breaks the CFG invariant used by postorder and stack liveness analysis,
-which can write past their per-subprogram arrays.
+CO-RE relocation records can name any instruction offset. When a
+relocation cannot be resolved, bpf_core_patch_insn() currently poisons its
+target before checking whether that instruction is a valid relocation
+target. Malformed metadata can therefore replace jumps, calls, exits,
+register-source arithmetic, or non-immediate loads instead of failing at
+the relocation step.
 
-Apply CO-RE relocations immediately after preparing the program BTF, before
-subprogram discovery and validation. Keep func_info and line_info validation
-after subprogram discovery because those records depend on the complete
-subprogram layout.
+Handle poisoning only after the instruction has passed the same class and
+operand-form checks used for a resolved relocation. Route invalid forms
+through the existing diagnostic and return a hard error. Keep poisoning
+supported instructions, including both halves of a plain ldimm64, so an
+unresolved relocation in dead code remains valid.
 
-Reject an ldimm64 first slot at the end of the instruction stream before
-CO-RE can inspect its missing second slot. The regular instruction validation
-already rejects this form, but now runs after relocation processing.
+Extend bpf_core_poison_insn() to poison both halves of ldimm64, and return
+its status directly from each validated instruction case. This avoids
+routing the success path through a common label and leaves the helper free
+to report errors.
 
-Include core_relo_cnt when deciding whether to prepare program BTF. A load
-that supplied only CO-RE relocation metadata previously skipped both BTF
-setup and relocation processing.
+The shared relocation code applies this restriction to both libbpf and
+in-kernel CO-RE. Update the early in-kernel regression to expect the
+relocation step to reject its invalid exit target.
 
-Fixes: fbd94c7afcf9 ("bpf: Pass a set of bpf_core_relo-s to prog_load command.")
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+Fixes: d7a252708dbc ("libbpf: Improve handling of failed CO-RE relocations")
+Reported-by: Nicholas Carlini <npc@anthropic.com>
+Suggested-by: Nicholas Carlini <npc@anthropic.com>
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf_verifier.h |  2 ++
- kernel/bpf/check_btf.c       | 12 ++++--------
- kernel/bpf/verifier.c        | 12 +++++++++++-
- 3 files changed, 17 insertions(+), 9 deletions(-)
+ tools/lib/bpf/relo_core.c                     | 58 ++++++++++---------
+ .../selftests/bpf/prog_tests/core_reloc_raw.c |  3 +-
+ 2 files changed, 33 insertions(+), 28 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 36b65797877d..bba5a727c651 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1197,6 +1197,8 @@ static inline void bpf_trampoline_unpack_key(u64 key, u32 *obj_id, u32 *btf_id)
- 
- int bpf_prepare_btf_info(struct bpf_verifier_env *env,
- 			 const union bpf_attr *attr, bpfptr_t uattr);
-+int bpf_check_core_relo(struct bpf_verifier_env *env,
-+			const union bpf_attr *attr, bpfptr_t uattr);
- int bpf_check_btf_info(struct bpf_verifier_env *env,
- 		       const union bpf_attr *attr, bpfptr_t uattr);
- 
-diff --git a/kernel/bpf/check_btf.c b/kernel/bpf/check_btf.c
-index 0e8b3ccc7a5b..4c1ed842f661 100644
---- a/kernel/bpf/check_btf.c
-+++ b/kernel/bpf/check_btf.c
-@@ -338,9 +338,9 @@ static int check_btf_line(struct bpf_verifier_env *env,
- #define MIN_CORE_RELO_SIZE	sizeof(struct bpf_core_relo)
- #define MAX_CORE_RELO_SIZE	MAX_FUNCINFO_REC_SIZE
- 
--static int check_core_relo(struct bpf_verifier_env *env,
--			   const union bpf_attr *attr,
--			   bpfptr_t uattr)
-+int bpf_check_core_relo(struct bpf_verifier_env *env,
-+			const union bpf_attr *attr,
-+			bpfptr_t uattr)
- {
- 	u32 i, nr_core_relo, ncopy, expected_size, rec_size;
- 	struct bpf_core_relo core_relo = {};
-@@ -414,7 +414,7 @@ int bpf_prepare_btf_info(struct bpf_verifier_env *env,
- 	struct btf *btf;
- 	int err;
- 
--	if (!attr->func_info_cnt && !attr->line_info_cnt) {
-+	if (!attr->func_info_cnt && !attr->line_info_cnt && !attr->core_relo_cnt) {
- 		if (check_abnormal_return(env))
- 			return -EINVAL;
- 		return 0;
-@@ -455,9 +455,5 @@ int bpf_check_btf_info(struct bpf_verifier_env *env,
- 	if (err)
- 		return err;
- 
--	err = check_core_relo(env, attr, uattr);
--	if (err)
--		return err;
--
- 	return 0;
+diff --git a/tools/lib/bpf/relo_core.c b/tools/lib/bpf/relo_core.c
+index 8ad2715721cf..2672623a4198 100644
+--- a/tools/lib/bpf/relo_core.c
++++ b/tools/lib/bpf/relo_core.c
+@@ -980,23 +980,30 @@ static int bpf_core_calc_relo(const char *prog_name,
  }
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ddba53eaa333..2005a145e403 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -21196,6 +21196,11 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	ret = bpf_diag_init(env);
- 	if (ret)
- 		goto err_prep;
-+	if (env->prog->insnsi[env->prog->len - 1].code == (BPF_LD | BPF_IMM | BPF_DW)) {
-+		verbose(env, "invalid bpf_ld_imm64 insn\n");
-+		ret = -EINVAL;
-+		goto err_prep;
-+	}
- 	if (env->signature) {
- 		ret = bpf_prog_calc_tag(env->prog);
- 		if (ret < 0)
-@@ -21271,6 +21276,11 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	if (ret < 0)
- 		goto skip_full_check;
  
-+	/* Apply CO-RE before validating the program's instruction layout. */
-+	ret = bpf_check_core_relo(env, attr, uattr);
-+	if (ret < 0)
-+		goto skip_full_check;
+ /*
+- * Turn instruction for which CO_RE relocation failed into invalid one with
++ * Turn instruction for which CO-RE relocation failed into invalid one with
+  * distinct signature.
+  */
+-static void bpf_core_poison_insn(const char *prog_name, int relo_idx,
+-				 int insn_idx, struct bpf_insn *insn)
++static int bpf_core_poison_insn(const char *prog_name, int relo_idx,
++				struct bpf_insn *insn, int insn_idx)
+ {
+-	pr_debug("prog '%s': relo #%d: substituting insn #%d w/ invalid insn\n",
+-		 prog_name, relo_idx, insn_idx);
+-	insn->code = BPF_JMP | BPF_CALL;
+-	insn->dst_reg = 0;
+-	insn->src_reg = 0;
+-	insn->off = 0;
+-	/* if this instruction is reachable (not a dead code),
+-	 * verifier will complain with the following message:
+-	 * invalid func unknown#195896080
+-	 */
+-	insn->imm = 195896080; /* => 0xbad2310 => "bad relo" */
++	int insn_cnt = is_ldimm64_insn(insn) ? 2 : 1;
++	int i;
 +
- 	/* Discover all subprograms before validating their layout and BTF. */
- 	ret = add_subprogs(env);
- 	if (ret < 0)
-@@ -21280,7 +21290,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
- 	if (ret < 0)
- 		goto skip_full_check;
++	for (i = 0; i < insn_cnt; i++) {
++		pr_debug("prog '%s': relo #%d: substituting insn #%d w/ invalid insn\n",
++			 prog_name, relo_idx, insn_idx + i);
++		insn[i].code = BPF_JMP | BPF_CALL;
++		insn[i].dst_reg = 0;
++		insn[i].src_reg = 0;
++		insn[i].off = 0;
++		/*
++		 * If this instruction is reachable (not dead code), the verifier
++		 * will complain with "invalid func unknown#195896080".
++		 */
++		insn[i].imm = 195896080; /* => 0xbad2310 => "bad relo" */
++	}
++
++	return 0;
+ }
  
--	/* Validate BTF against the complete subprogram layout and apply CO-RE. */
-+	/* Validate BTF against the complete subprogram layout. */
- 	ret = bpf_check_btf_info(env, attr, uattr);
- 	if (ret < 0)
- 		goto skip_full_check;
+ static int insn_bpf_size_to_bytes(struct bpf_insn *insn)
+@@ -1047,17 +1054,6 @@ int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
+ 
+ 	class = BPF_CLASS(insn->code);
+ 
+-	if (res->poison) {
+-poison:
+-		/* poison second part of ldimm64 to avoid confusing error from
+-		 * verifier about "unknown opcode 00"
+-		 */
+-		if (is_ldimm64_insn(insn))
+-			bpf_core_poison_insn(prog_name, relo_idx, insn_idx + 1, insn + 1);
+-		bpf_core_poison_insn(prog_name, relo_idx, insn_idx, insn);
+-		return 0;
+-	}
+-
+ 	orig_val = res->orig_val;
+ 	new_val = res->new_val;
+ 
+@@ -1065,7 +1061,9 @@ int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
+ 	case BPF_ALU:
+ 	case BPF_ALU64:
+ 		if (BPF_SRC(insn->code) != BPF_K)
+-			return -EINVAL;
++			goto bad_insn;
++		if (res->poison)
++			return bpf_core_poison_insn(prog_name, relo_idx, insn, insn_idx);
+ 		if (res->validate && insn->imm != orig_val) {
+ 			pr_warn("prog '%s': relo #%d: unexpected insn #%d (ALU/ALU64) value: got %d, exp %llu -> %llu\n",
+ 				prog_name, relo_idx,
+@@ -1082,6 +1080,8 @@ int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
+ 	case BPF_LDX:
+ 	case BPF_ST:
+ 	case BPF_STX:
++		if (res->poison)
++			return bpf_core_poison_insn(prog_name, relo_idx, insn, insn_idx);
+ 		if (res->validate && insn->off != orig_val) {
+ 			pr_warn("prog '%s': relo #%d: unexpected insn #%d (LDX/ST/STX) value: got %d, exp %llu -> %llu\n",
+ 				prog_name, relo_idx, insn_idx, insn->off, (unsigned long long)orig_val,
+@@ -1097,7 +1097,7 @@ int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
+ 			pr_warn("prog '%s': relo #%d: insn #%d (LDX/ST/STX) accesses field incorrectly. "
+ 				"Make sure you are accessing pointers, unsigned integers, or fields of matching type and size.\n",
+ 				prog_name, relo_idx, insn_idx);
+-			goto poison;
++			return bpf_core_poison_insn(prog_name, relo_idx, insn, insn_idx);
+ 		}
+ 
+ 		orig_val = insn->off;
+@@ -1140,6 +1140,9 @@ int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
+ 			return -EINVAL;
+ 		}
+ 
++		if (res->poison)
++			return bpf_core_poison_insn(prog_name, relo_idx, insn, insn_idx);
++
+ 		imm = (__u32)insn[0].imm | ((__u64)insn[1].imm << 32);
+ 		if (res->validate && imm != orig_val) {
+ 			pr_warn("prog '%s': relo #%d: unexpected insn #%d (LDIMM64) value: got %llu, exp %llu -> %llu\n",
+@@ -1157,6 +1160,7 @@ int bpf_core_patch_insn(const char *prog_name, struct bpf_insn *insn,
+ 		break;
+ 	}
+ 	default:
++bad_insn:
+ 		pr_warn("prog '%s': relo #%d: trying to relocate unrecognized insn #%d, code:0x%x, src:0x%x, dst:0x%x, off:0x%x, imm:0x%x\n",
+ 			prog_name, relo_idx, insn_idx, insn->code,
+ 			(unsigned)insn->src_reg, (unsigned)insn->dst_reg, (unsigned)insn->off, (unsigned)insn->imm);
+diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c b/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c
+index ee267289fd88..10bda3ff80eb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c
++++ b/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c
+@@ -124,7 +124,8 @@ static void test_early_core_relo(void)
+ 					       enum_id, access_str_off, 2, true);
+ 		if (!ASSERT_LT(prog_fd, 0, "poisoned_load"))
+ 			goto cleanup;
+-		ASSERT_HAS_SUBSTR(log, "last insn is not an exit or jmp", "poisoned_load_log");
++		ASSERT_HAS_SUBSTR(log, "trying to relocate unrecognized insn #2",
++				  "poisoned_load_log");
+ 	}
+ 
+ cleanup:
 -- 
 2.53.0
 
