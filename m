@@ -1,33 +1,32 @@
-Received: from mta0.migadu.com (out-150.mta0.migadu.com [91.218.175.150])
+Received: from mta0.migadu.com (out-129.mta0.migadu.com [91.218.175.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C0E446BF5
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 19:52:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819BE3F23BE
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 19:52:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789588362; cv=none; b=XGaM1IGWa2B778+GZMUoeueub1v+GtRdKQc/EJ2BffPicTY/NV/ptxDSpDhcPH8MT9wkbdfE/whCvgIRoZKFalVugCnPthZnMZwsQyA65gI9nm9dBPGNxr0OwHmqSHW6QaSpu2fI1YTlLZL74Zp0XtkAyMinHSoAw0kl1GWgOMQ=
+	t=1789588363; cv=none; b=e/pW8/utpbdhX3rqU1b4JlLkZbcJvdh6gjYJ2yTl3BK9crAWh5qO00GzcR0489LOXAB23/HkAtUAtk9UPcuUK5wr2y2VCADVDnB0nvhpvHnzjp33b3jWcyg1gzT2k1zksbk1P672JDUq29bCR3mLSTERn6QHfzWdyylHIWI+f6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789588362; c=relaxed/simple;
-	bh=uezm5MFaGZMNvW+locU7R+duzoa5ZNNuKXadO7AJik4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=czxAyJPOC9GP/SurPWKcxEX2ro52M1IaUEvPfg6txLIXrA3/k4Rx48G/8qZgM7/2VJALb84Tp3pmdKBnXqFfbWRvCRCzr1t9dhWmagJY2+G6237OI7n8cossTX5lHYGsRjhr4Srh5jCYF0ht74RKwuXmQN2i1MOmAKUA+3LzO7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PxPEBXuP; arc=none smtp.client-ip=91.218.175.150
+	s=arc-20240116; t=1789588363; c=relaxed/simple;
+	bh=Cv6+EnHKlYEyrsTw5T5FznzsOfb6ghBGEkt+na9dBSs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Lpcf312HGuKm4hZbinLB6Sbfy+rub88ua7ZK91abZlOKIFLuv3AKxWlAO46wwmk+O+3sQvOg1K/HawEiKVXMOgO1eK4ZYi0HqGDg63JVQFWdBgXOJ9wr3aueOuD52bfVagVo2BWHSYXxMw+i1Z8N5xFuuPAO2GA1Jv4fkiDSlKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XMppVooG; arc=none smtp.client-ip=91.218.175.129
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PxPEBXuP"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XMppVooG"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=uezm5MFaGZMNvW+locU7R+duzoa5ZNNuKXadO7AJik4=;
+DKIM-Signature: a=rsa-sha256; bh=Cv6+EnHKlYEyrsTw5T5FznzsOfb6ghBGEkt+na9dBSs=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789588354; v=1; x=1790193154;
- b=PxPEBXuP1a0yKQW86JkSiyLOtwOD5WqldVHkYt76++OiT/AprvVmI+8fZ4gXHz704tn2ipjr
- ZvQYjWiQoiXq8J4+ez3qZMy9gKyKl3YM67sNSqPTPXsZQAmdZMLAjcz+TnsYMer3iaB5pBg62rO
- S4Uwl0ZYK0n+ThOSse1/W0L4=
+ t=1789588338; v=1; x=1790193138;
+ b=XMppVooGzETU8jB9YgblebsaikTyq9/mfrvN1CpRFTHD/1I4m7ceHY5qDGIRkRlGrgIuA1OI
+ YfSORek/3tA26COB9UmrBfsW7XU8Qq5jOyy+KqHtLjoqOT16ndtjzUv7yfFN1Xzrf8sX7WHCKWI
+ mFq48q1kCyoKsGvkTDM4nQKQ=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id d4694686d251f010;
-	Wed, 16 Sep 2026 19:52:34 +0000
-X-Mizu-Trace-ID: d4694686d251f010
+Received: by mta11.migadu.com with ESMTPS id a27f0a83e7a07625;
+	Wed, 16 Sep 2026 19:52:18 +0000
+X-Mizu-Trace-ID: a27f0a83e7a07625
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Borislav Petkov <bp@alien8.de>,
@@ -46,12 +45,10 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	kasan-dev@googlegroups.com,
 	linux-mm@kvack.org,
 	kernel-team@meta.com
-Subject: [PATCH v3 2/5] x86/cpu: Initialize boot CPU cpuinfo defaults early
-Date: Wed, 16 Sep 2026 12:52:00 -0700
-Message-ID: <20260916195203.1099646-3-ihor.solodrai@linux.dev>
+Subject: [PATCH v3 0/5] x86/cpu: Refactor identify_cpu()
+Date: Wed, 16 Sep 2026 12:51:58 -0700
+Message-ID: <20260916195203.1099646-1-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260916195203.1099646-1-ihor.solodrai@linux.dev>
-References: <20260916195203.1099646-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -60,49 +57,47 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-early_identify_cpu() clears the capability array, the CPUID table and
-extended_cpuid_level, but the architectural defaults for the rest of
-struct cpuinfo_x86 are set only later, in identify_cpu().
+Refactor identify_cpu() machinery on x86 and then implement a fix for
+a bug when cpu capabilities are temporarily cleared within an
+interruptable window. For more details and discussion see the relevant
+bug report [1] and patch #5 ("x86/cpu: Don't transiently clear the
+boot CPU's capabilities").
 
-Use the same defaults from the start, so that the boot CPU does not
-depend on a later reset to end up with the right ones.
-
+Suggested-by: Borislav Petkov <bp@alien8.de>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
+[1] https://lore.kernel.org/bpf/20260610175651.647515-1-ihor.solodrai@linux.dev/
+
 ---
 
-This change comes before the last patch because that one removes the
-reset: without the defaults established here the boot CPU would be
-left at 32 instead of 64 on an x86_64 CPU which does not enumerate
-CLFLUSH.
----
- arch/x86/kernel/cpu/common.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+v2->v3:
+  * Commit message edits on patches #1, #2, #5
 
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index c3dce89ba590..66695addbdf3 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1812,16 +1812,15 @@ static void init_cpu_info(struct cpuinfo_x86 *c)
-  * Do minimum CPU detection early.
-  * Fields really needed: vendor, cpuid_level, family, model, mask,
-  * cache alignment.
-- * The others are not touched to avoid unwanted side effects.
-+ * The others are reset to their defaults here and only filled in later,
-+ * by identify_cpu().
-  *
-  * WARNING: this function is only called on the boot CPU.  Don't add code
-  * here that is supposed to run on all CPUs.
-  */
- static void __init early_identify_cpu(struct cpuinfo_x86 *c)
- {
--	memset(&c->x86_capability, 0, sizeof(c->x86_capability));
--	memset(&c->cpuid, 0, sizeof(c->cpuid));
--	c->extended_cpuid_level = 0;
-+	init_cpu_info(c);
- 
- 	if (!cpuid_feature())
- 		identify_cpu_without_cpuid(c);
+v2: https://lore.kernel.org/bpf/20260814235134.3461435-1-ihor.solodrai@linux.dev/
+
+v1->v2:
+  * Rewrite commit messages to fit more conventional structure (Boris)
+  * Drop identify_cpu_32() helper, it's unnecessary (Boris)
+  * New patch (#2): now early_identify_cpu() resets boot_cpu_data
+    through init_cpu_info() as well
+  * The boot CPU reset is now skipped on 32-bit too (sashiko)
+
+v1: https://lore.kernel.org/bpf/20260704002046.3859585-1-ihor.solodrai@linux.dev/
+
+---
+
+Ihor Solodrai (5):
+  x86/cpu: Factor init_cpu_info() out of identify_cpu()
+  x86/cpu: Initialize boot CPU cpuinfo defaults early
+  x86/cpu: Inline generic_identify() into identify_cpu()
+  x86/cpu: Move 32-bit SEP setup into identify_cpu()
+  x86/cpu: Don't transiently clear the boot CPU's capabilities
+
+ arch/x86/kernel/cpu/common.c | 92 +++++++++++++++++-------------------
+ 1 file changed, 44 insertions(+), 48 deletions(-)
+
+
+base-commit: fd73f4a6659897191fa0d40695fe370925dd3780
 -- 
 2.55.0
 
