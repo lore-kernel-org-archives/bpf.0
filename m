@@ -1,67 +1,66 @@
-Received: from mail-oo2-f39.google.com (mail-oo2-f39.google.com [74.125.231.167])
+Received: from mail-oi2-f12.google.com (mail-oi2-f12.google.com [74.125.231.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDCE0411FB3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7546407CD3
 	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 19:27:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.167
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.204
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789586825; cv=none; b=o7Si2vU4Dtczk3vL96mSBp52aHOtXCWBE1E34xi8pRugll4N/hLZ2PV9JakMwpk5cwS32mEQ/sQn4ZvVa7XL+524sJ8uIQ8A4IfKLVJMhYpQTqGJixaNHoimmH2vfhJ+ff1QYVE8Sq1VjLMeZ5psfd72QoEoqWbfNEl565avWXU=
+	t=1789586830; cv=none; b=OkbuvVQUBnXFp2jXxI2X3yXEG1x2HaRgpN6KZ8/Z/Y7m5YxbWqxpeBANAxwAbnQJGKPx4+1piDqc33vorSZuH/u9wpjgppuIjHzLnOj6PNkL/nqoL0/CYcjb0YjXQRnaafhb8NBpvZVfCRZiKnSlGzm7sR1m4LZeoK8ZvRr/AMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789586825; c=relaxed/simple;
-	bh=nFE6J1CKKnwOE+mVYybKj5/u4IX7kDiTGlQ6XsjxYHs=;
+	s=arc-20240116; t=1789586830; c=relaxed/simple;
+	bh=jDhA0970Yy89/0wrmcLFQ358tDm07icJS9C7Sj0kGhQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jIfn0vYjw3FYD9DbSgBQWDJPPYfqAeHBWDPNuqkGtkBqifhy+1VnB1E1UgQH3Yrf4N7xLJJn6YOWHZd5mt5PEGE8ei8LIzi8+1dnsqK+l9xsbCqdblnEemIlMbfPOkCa2jIU8SO520dvLMMMdQoZcKK4M7hebk8ohUTbBjqu20I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NE2voqFb; arc=none smtp.client-ip=74.125.231.167
+	 In-Reply-To:To:Cc; b=u64E7WEu6HfYNgUK9zdOC0Ekx64IlfbaTje+K0j+vjwIOLDtkqvu8YkBh9zZyVZu3vR7o4fpA00x1z6+f4il3z/fPvTGvolDxDfuq2kO5JP6WQ7dXiRyoBTS9kV+wNpV1VIj1EnPw0gZ/2+UVvW+AMcNc4M/xW52Z3YF8LcP8CY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ObSDt+AN; arc=none smtp.client-ip=74.125.231.204
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NE2voqFb"
-Received: by mail-oo2-f39.google.com with SMTP id 006d021491bc7-6bc475ffcbfso677eaf.2
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 12:26:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ObSDt+AN"
+Received: by mail-oi2-f12.google.com with SMTP id 5614622812f47-4b37a2ffee6so33477b6e.2
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 12:26:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789586815; x=1790191615; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789586817; x=1790191617; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=M9tmVIvr7xPfv0seaBbrxDE9G49dlPW4Mh9RJl2qJQc=;
-        b=NE2voqFbTZG39X1N+1qZUZP5bha+Q26BG42Suz1FYdsXDapdwY1bzJJOE60F4dQ1uV
-         9ItVXxtdR9yzti1qamLKq0e//56viJjQUjG/YlkYuNFxMN573vuiVYhFSO0uDVB4iXy2
-         ysmzxK+aA+0NxV6KB5izIFoXyyjFTAZ9qu4JqiCfUW/t+0C5kZnCjPJe3vfp9OKMB1Wd
-         TXGunq2pTebJDkk0Dl16qV/lfhaRmGg9AdZiLZqe+adsp3frmaDZqIg8KyV++ovN3k9Z
-         6jG/HcWmV9TjDKqVJ0Pk5k9xK3dURLR5U0Cvm6p4vczmHX3LDk0YxLg7QQb8Ayb17L5H
-         xjHg==
+        bh=GwB8jYYkFlpmrcBzZzY3+o2wnkHwG/8nMgSXGP2y9Zc=;
+        b=ObSDt+ANEsZNY9SOoN+RaSt+Kr2dTQwVT1Rk6y2HqOEOm++QPyw2rp3kZNmCEiLRW0
+         bdlaxRcAznwwzBpB6gAcAQTCJH6BHnkK+RMbcrpI3KJEtJlniCIhz07It1JlGEXgAzZM
+         9OpKBWXnXY/ezcAFs2u+hBG2f3pzlzU5ixnYvVuxVfC3wKsFxanOXo0sWPutr13sTCdu
+         GIaebOWfrYHF1JdIxI7GLm/+Jd2KjEHe9fxcIc2OYYN0JrWVOpIiVSgg5eUYW3PAE7Q9
+         Mt2BjNBkRNHqrQFM2LBvDl1oaANcNocEGOkWpep1mARaJunDlgqUIu5Keu0r2RMxLcqC
+         NjjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789586815; x=1790191615;
+        d=1e100.net; s=20260707; t=1789586817; x=1790191617;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=M9tmVIvr7xPfv0seaBbrxDE9G49dlPW4Mh9RJl2qJQc=;
-        b=A7ABfHgHcZ3eYmFpCzLGHNDKh4J0AcpBvgdLkHW5R37IGuf5SwU6246KF8mps3SlIq
-         oeyM4Xg/pxlI8L7BtMon6gCx1GZS0Ie6MBgC2pO5u1AGsOR5oYntIsN8qzjKmmKwQ5u2
-         kHGkS4QbTcmJDlLEkjN5pf5D+TVN5ENChs/50VNGf++E5bavStry4XJBiXz7jK5CTtug
-         0ehLAB+uEZ1zLDM5OZfp9b3ysiUOgCqne0QZY6x5M5ThJy8aIeT94sS0YoOW5j6DjsRY
-         jQciIbuFFOr9yy5jgeHc4cAYJzh8EYiPpmQVLPUeUjmy6+nOskoaLpJQxVQG8HN/lgxw
-         WnFQ==
-X-Gm-Message-State: AFuF++mSQJpaAoqVlhnuVMB/unaKja2HkE4Z+eNdGIg1wYwJjy0CmM1j
-	qgYIEujwMJyHLQ8vBfLnIESKgjJlWsEpzT/iWl6FAQfA2s04pnF9PdMF
-X-Gm-Gg: AYBFou0v4ZlXtGUP6DL9Ft9G46aYg6PhP6UKaD3zqyuUDZ6hhT5APwNhR93T3kKRJrT
-	k61jaYgdfBYBt0pFQiOqj38i1UtWG5gO3ZoUPOO8389RfkCOcobwtk3DnCjaWUu2D7oX+MYJYPK
-	FoEYTsqCbfzTcofza8D0/2yPiLCSAKjT9l5Z+tSwz/+aDdW3lio/+BNQofcbxqKB/nm3UTDqpIA
-	Q4yz0c+srKSnzFos7/x+1oKkgIoaa0w+25R9CCrK0BkQMLeNoHFY5ohi5f6n7mABPUyNaULi+gj
-	Q31wf0oaX7jMh+krK0QEp9FqwlRWvs/M5l1MZ9UYShHltybytjs1c8bsBBUOXMaWlb3IQuDnpdQ
-	wrK21Nm7v0B+mrz9Nqh2za1Gde4IkusMQU1eB0Sp+xfVxTOkX+qg9bSl32LIac3vCqqk8yy3mw6
-	yg6DdEhYKQlKFfeM3arKFsoUG/R3sXk57i4jA0yUYNru4naNG05QLNi/Illi6E8w==
-X-Received: by 2002:a05:6820:208a:b0:6b7:46e9:9703 with SMTP id 006d021491bc7-6c7d45e21b8mr3913901eaf.51.1789586815067;
-        Wed, 16 Sep 2026 12:26:55 -0700 (PDT)
+        bh=GwB8jYYkFlpmrcBzZzY3+o2wnkHwG/8nMgSXGP2y9Zc=;
+        b=uXZS8eq78q6i59hZvgKBt1EYhEWSEovcewQIGpWMNSrxPrSDLPJr38B0FKpofWIk6e
+         W8FLcmGsu//8pyvhGB8lRUB1Hy5UDE2+lOMR33nDx09wqu4FuYpRvIUqtLLVSuiO5ACV
+         +ycrBUjlmS4f6sdUj/2/HTOBVYv5fyYOj6cz+5L4JrAxk0n89iK/ZWNWGfxxWHTyNgBb
+         QrprziclWaTHrw3Id1LHwlqDQEHD6hwHvAshYasKkdFf8n+ZoYXysY65wgyLcgEVpqg5
+         qbLjO82rKqlTts5wUHCaYcPSNaf4fkghkIyRK8IPABkLGsnheSNSbRuwMfVzRUMw5ioX
+         hZ1w==
+X-Gm-Message-State: AFuF++l0THYTwKQHlkl9uSun5cQFVU+oIh0iC5d/Iex7GuQWpixdc5g7
+	SVkCO6YDDJXF7CBU8v0UN2aCRrTkwCOzcfq+Av2ZlHmoTslT9ti/xf1b
+X-Gm-Gg: AYBFou3FoYk4bzHIHP77TOje7keDcyXHZoGrs2ZRVFtww/DJFbtibyKO6CtyjU+AH+1
+	3A7n4BtH/1J0bnkv0c5VetPp+ZC6SNCCo53rUZigxuvR2lOSfEVFblPXmzQ57FpzbikGn60zFSt
+	MpfFfJbPHW5ZmoBWNersuQeoUtKifR+Yd7n/wcwiqkudt9VRIQeb2buDkg4rBdH3KJ0b3m/O2F5
+	8AeyHEwBpD5eGllNFjZYx0lUYI8IqhnqyiaZTuFz7RG9Xd8cNTqj/GbWuzjr55NBJuvBGjkacD8
+	ILwnlbccfMrRczDRzbAEl0ICsP+CoPGTH67O1SvorCRcifONfV/4myn/zcNglmBkL/6C6I5vcWJ
+	0Bfll8gUOGaF3Jhd/YOXrINtwyqzURPlwHbG6U9sO93JNJsLou8aGvfh7QvcBVKp8/fQntI2Kw1
+	Cm14HZ8lLBr5fgb6fyHUtU+3NBfAsaoTOL9tZL0psWz9IfGJ/Jf4YsyniZo1MH9g==
+X-Received: by 2002:a05:6808:5088:b0:4c3:d087:4446 with SMTP id 5614622812f47-4ca4d0fb1bemr4295043b6e.42.1789586817431;
+        Wed, 16 Sep 2026 12:26:57 -0700 (PDT)
 Received: from localhost ([2a03:2880:30ff:75::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-80c410c804asm845829a34.0.2026.09.16.12.26.54
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4cb676cb8b8sm751511b6e.0.2026.09.16.12.26.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2026 12:26:54 -0700 (PDT)
+        Wed, 16 Sep 2026 12:26:57 -0700 (PDT)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Wed, 16 Sep 2026 12:26:40 -0700
-Subject: [PATCH bpf-next v4 1/3] bpftool: Accept zero perf counter
- snapshots
+Date: Wed, 16 Sep 2026 12:26:41 -0700
+Subject: [PATCH bpf-next v4 2/3] bpftool: Group profile events by CPU
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,7 +69,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260916-bpftool_cyles_per_run-v4-1-f2de02c480d5@meta.com>
+Message-Id: <20260916-bpftool_cyles_per_run-v4-2-f2de02c480d5@meta.com>
 References: <20260916-bpftool_cyles_per_run-v4-0-f2de02c480d5@meta.com>
 In-Reply-To: <20260916-bpftool_cyles_per_run-v4-0-f2de02c480d5@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
@@ -78,75 +77,171 @@ To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  memxor@gmail.com
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1789586810; l=2039;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1789586810; l=4707;
  i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
- bh=N6cBiuyCtJEvTX4BNTZ2xv2mUw7flba3vtF6Gw7gIhw=;
- b=VAKU+dx0xX+tIIS5h3g6TV46e9NMcOGb5e2SoLny26GKhYf2xUhvqK2jdfv4jAAcit5jYdphM
- u0YkJLLVQUyCi3BTn7QCLCMq+OY6Y8/IvtkOc2678JZqnuMSxkZLe+1
+ bh=xRYRhm7NkNQb63U3CUu4LNXYEpiDFKuBY0X1e/IQGog=;
+ b=4Qii+vI6s/5eoqP6w8yZy7AljCMTs/16w+R+93eLQIxQTfUcGHV0ewW6/TNB9KLDByxDwEe7X
+ J9SMJMDR8VVBuQGqDPumQ+NJ+XPe/7+Qw6d/Um/88Qfg9j0GWQKeowz
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-A perf counter can be zero at fentry when PMU multiplexing has
-not scheduled the event. Do not reject that sample.
+Independently scheduled perf events can cover different intervals,
+making derived ratios inconsistent.
 
-Use enabled time to distinguish a successful snapshot. Read
-directly into the per-CPU map value.
+Open one event group per CPU and enable it only after all selected
+metrics have joined.
+
+Fail the profile setup when a selected event cannot join its group.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- tools/bpf/bpftool/skeleton/profiler.bpf.c | 21 +++++++--------------
- 1 file changed, 7 insertions(+), 14 deletions(-)
+ tools/bpf/bpftool/prog.c | 87 +++++++++++++++++++++++++++++-------------------
+ 1 file changed, 52 insertions(+), 35 deletions(-)
 
-diff --git a/tools/bpf/bpftool/skeleton/profiler.bpf.c b/tools/bpf/bpftool/skeleton/profiler.bpf.c
-index f48c783cb9f7..6685e7252fb5 100644
---- a/tools/bpf/bpftool/skeleton/profiler.bpf.c
-+++ b/tools/bpf/bpftool/skeleton/profiler.bpf.c
-@@ -45,28 +45,21 @@ const volatile __u32 num_metric = 1;
- SEC("fentry/XXX")
- int BPF_PROG(fentry_XXX)
+diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+index 6ab911e82155..a14a1a9601bd 100644
+--- a/tools/bpf/bpftool/prog.c
++++ b/tools/bpf/bpftool/prog.c
+@@ -2350,7 +2350,7 @@ static char *profile_tgt_name;
+ static int *profile_perf_events;
+ static int profile_perf_event_cnt;
+ 
+-static void profile_close_perf_events(struct profiler_bpf *obj)
++static void profile_close_perf_events(void)
  {
--	struct bpf_perf_event_value___local *ptrs[MAX_NUM_METRICS];
- 	u32 key = bpf_get_smp_processor_id();
- 	u32 i;
+ 	int i;
  
--	/* look up before reading, to reduce error */
- 	for (i = 0; i < num_metric && i < MAX_NUM_METRICS; i++) {
-+		struct bpf_perf_event_value___local *reading;
- 		u32 flag = i;
--
--		ptrs[i] = bpf_map_lookup_elem(&fentry_readings, &flag);
--		if (!ptrs[i])
+@@ -2361,61 +2361,78 @@ static void profile_close_perf_events(struct profiler_bpf *obj)
+ 	profile_perf_event_cnt = 0;
+ }
+ 
+-static int profile_open_perf_event(int mid, int cpu, int map_fd)
++static int profile_open_perf_event(int mid, int cpu,
++				   int map_fd, int group_fd, __u32 map_key)
+ {
++	struct perf_event_attr attr = metrics[mid].attr;
++	bool group_leader = group_fd < 0;
+ 	int pmu_fd;
++	int err;
+ 
+-	pmu_fd = syscall(__NR_perf_event_open, &metrics[mid].attr,
+-			 -1 /*pid*/, cpu, -1 /*group_fd*/, 0);
++	attr.disabled = group_leader;
++	pmu_fd = syscall(__NR_perf_event_open, &attr, -1 /* pid */, cpu,
++			 group_fd, 0);
+ 	if (pmu_fd < 0) {
+-		if (errno == ENODEV) {
+-			p_info("cpu %d may be offline, skip %s profiling.",
+-				cpu, metrics[mid].name);
+-			profile_perf_event_cnt++;
 -			return 0;
--	}
--
--	for (i = 0; i < num_metric && i < MAX_NUM_METRICS; i++) {
--		struct bpf_perf_event_value___local reading;
- 		int err;
- 
--		err = bpf_perf_event_read_value(&events, key, (void *)&reading,
--						sizeof(reading));
-+		reading = bpf_map_lookup_elem(&fentry_readings, &flag);
-+		if (!reading)
-+			return 0;
-+		err = bpf_perf_event_read_value(&events, key, (void *)reading,
-+						sizeof(*reading));
- 		if (err)
- 			return 0;
--		*(ptrs[i]) = reading;
- 		key += num_cpu;
+-		}
+-		return -1;
++		err = -errno;
++		if (errno == ENODEV && group_leader)
++			p_info("cpu %d may be offline, skip profiling.", cpu);
++		return err;
  	}
  
-@@ -80,7 +73,7 @@ fexit_update_maps(u32 id, struct bpf_perf_event_value___local *after)
+-	if (bpf_map_update_elem(map_fd,
+-				&profile_perf_event_cnt,
+-				&pmu_fd, BPF_ANY) ||
+-	    ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0)) {
++	if (bpf_map_update_elem(map_fd, &map_key, &pmu_fd, BPF_ANY)) {
++		err = -errno;
+ 		close(pmu_fd);
+-		return -1;
++		return err;
+ 	}
  
- 	before = bpf_map_lookup_elem(&fentry_readings, &id);
- 	/* only account samples with a valid fentry_reading */
--	if (before && before->counter) {
-+	if (before && before->enabled) {
- 		struct bpf_perf_event_value___local *accum;
+ 	profile_perf_events[profile_perf_event_cnt++] = pmu_fd;
+-	return 0;
++	return pmu_fd;
+ }
  
- 		diff.counter = after->counter - before->counter;
+ static int profile_open_perf_events(struct profiler_bpf *obj)
+ {
++	__u32 num_cpu = obj->rodata->num_cpu;
++	__u32 map_key;
+ 	unsigned int cpu, m;
+-	int map_fd;
++	int group_fd, map_fd, pmu_fd;
++	int err;
+ 
+-	profile_perf_events = calloc(
+-		obj->rodata->num_cpu * obj->rodata->num_metric, sizeof(int));
++	profile_perf_events = calloc(num_cpu * obj->rodata->num_metric,
++				     sizeof(*profile_perf_events));
+ 	if (!profile_perf_events) {
+ 		p_err("failed to allocate memory for perf_event array: %s",
+ 		      strerror(errno));
+-		return -1;
++		return -ENOMEM;
+ 	}
++
+ 	map_fd = bpf_map__fd(obj->maps.events);
+-	if (map_fd < 0) {
+-		p_err("failed to get fd for events map");
+-		return -1;
+-	}
++	for (cpu = 0; cpu < num_cpu; cpu++) {
++		group_fd = -1;
++		map_key = cpu;
++		for (m = 0; m < ARRAY_SIZE(metrics); m++) {
++			if (!metrics[m].selected)
++				continue;
+ 
+-	for (m = 0; m < ARRAY_SIZE(metrics); m++) {
+-		if (!metrics[m].selected)
+-			continue;
+-		for (cpu = 0; cpu < obj->rodata->num_cpu; cpu++) {
+-			if (profile_open_perf_event(m, cpu, map_fd)) {
+-				p_err("failed to create event %s on cpu %u",
+-				      metrics[m].name, cpu);
+-				return -1;
++			pmu_fd = profile_open_perf_event(m, cpu, map_fd, group_fd,
++						     map_key);
++			if (pmu_fd == -ENODEV && group_fd < 0)
++				break;
++			if (pmu_fd < 0) {
++				p_err("failed to add event %s to group on CPU %u: %s",
++				      metrics[m].name, cpu, strerror(-pmu_fd));
++				return pmu_fd;
+ 			}
++			if (group_fd < 0)
++				group_fd = pmu_fd;
++			map_key += num_cpu;
++		}
++		if (group_fd < 0)
++			continue;
++		if (ioctl(group_fd, PERF_EVENT_IOC_ENABLE, PERF_IOC_FLAG_GROUP)) {
++			err = -errno;
++			p_err("failed to enable perf event group on CPU %u: %s",
++			      cpu, strerror(-err));
++			return err;
+ 		}
+ 	}
+ 	return 0;
+@@ -2423,7 +2440,7 @@ static int profile_open_perf_events(struct profiler_bpf *obj)
+ 
+ static void profile_print_and_cleanup(void)
+ {
+-	profile_close_perf_events(profile_obj);
++	profile_close_perf_events();
+ 	profile_read_values(profile_obj);
+ 	profile_print_readings();
+ 	profiler_bpf__destroy(profile_obj);
+@@ -2529,7 +2546,7 @@ static int do_profile(int argc, char **argv)
+ 	return 0;
+ 
+ out:
+-	profile_close_perf_events(profile_obj);
++	profile_close_perf_events();
+ 	if (profile_obj)
+ 		profiler_bpf__destroy(profile_obj);
+ 	close(profile_tgt_fd);
 
 -- 
 2.53.0-Meta
