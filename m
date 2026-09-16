@@ -1,141 +1,142 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D39477E4B
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 08:44:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AF3F44CF5E;
+	Wed, 16 Sep 2026 08:48:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789548266; cv=none; b=r4v2hnP847yzBE2ABYXLLBPS4UiWb/s/63LT8neTlXdQpGeUQ6IfiO7I3rKFIrHeSvTZZpM/WSFAxJ6IoB/g7ksnf6Cjv3geYZUo87s+YvEiZeLwnDWKhxGO+fzMV0UOd6cyRI4FZ92BZtmvOnzy4S8VquzW12VNf4Mt10V2cEQ=
+	t=1789548519; cv=none; b=U7xEDpKvEVyKdCEg+LyRkXSwyyhJd0p7a02RHGbcgd2PiOQK+EvKCqU0zbL17h2AdAyz7QmJmBbEHEpcuC7qVYz3Ie5snDF+Vr0qm7amIM8UhrX5T8kndI3zOAOTM4x03k+xzyTesqS9756+wkXzTDNlKV98uUzpLzRbVsgnNk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789548266; c=relaxed/simple;
-	bh=PST2vwk69tSVYrBKQN00HO+f7mz93E0lgzcu0DNrbas=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=fas+UPrCL0w3QMXzKb/cjUqPaQxBNPpPgN6rnW4chpCErDfVmvvpxIIsD/4a6EHPvHs/DOnK9V7Rl08d3owNj19ob5wTdv+gWmkzSc7lDk949WpYAHtMmq27TmEhYVY8ffd4aRU+Lc/ELVc6Qmtc/UGgiFXX0VngTmHygjyZo5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZpGg4UsP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789548519; c=relaxed/simple;
+	bh=7viyZhT1PsGNuLATssRlBR2Wj5D393HVKb1HwpS+D+o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B8L5TLbIVxxFus426sLt2qG6/czjgzcLzU7T7ZnFlz3YVeCUhXOyf+70LP6sug54sMkP+6xvJrYOv+J2vMO6HKGetZ7Kq+3n2nEhAGvDi+wjyCip/FW3GrgLMbjOB+R3car6x1uA3z2OtxZg7nPkXq4PRtl5iwmmg2KRjuayzi8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cLkSQ1PS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZpGg4UsP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73A401F000FF;
-	Wed, 16 Sep 2026 08:44:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cLkSQ1PS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8DA81F0089F;
+	Wed, 16 Sep 2026 08:48:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789548261;
-	bh=Vfi8dD8juoqCJ8DzlEAYy6/NWaRdj00oHmYZ7gwdC6c=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ZpGg4UsPGE9vwdkYC4zxqVDKsgdoACwvt52jTQDPjI2249aRAuWcwOx02iA2xKo7S
-	 y/pc23gDzH/11k0pbZYcQTMMh/1ee4x5b68iqDLQqVSbPj5Q32A8Aa35KBPLzlOUTs
-	 2VODaTXAPLP2fGDTZGvykyhQbUGm6/Rn041MT6GjXWQz5ib6OH/mpevhY0XxLZsaZk
-	 vIvXhlr+7GQOdL91ikHmP3b1/x8rEyvGA2IVdfAik4nAZdqs7I3FSq6y1KSMilND00
-	 QQK59CGpdoNUIRh/kW7I3bzYOVCUi1aBE2U56XZj4f08Kqjk2jDUdtfTWaiBbEaE29
-	 /b8uCgK4oRAHQ==
-Content-Type: multipart/mixed; boundary="===============0357294195670245447=="
+	s=k20260515; t=1789548516;
+	bh=pJ4OWSMhlh2wgWK/560jVTv+uUvo5j+lZriJy4kTfhQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=cLkSQ1PSS6+7dfaFC8Ge5U6yFBDN3CZ3aJiyDQhW1Y0WYeZEdzZ/mTXyJznYS/dC1
+	 YLb/l1MxblCyeeeOHlzTAHPGl/mMgKhK1MrMF6ORjMTOfIcAidq+GIT6TQs7hQrqwG
+	 8w13M7Tx0f3+G+a1M9R3miCEjNmMfSDGfv3Xk0OwyYOIS8mOoGJaTLjearCV+5UIhJ
+	 fpflFAF43rJTBecX4Kh/1Z9OIirhVANpR6E2ndm2yxC5Z1odRf2piNG4o5JVqbkU+J
+	 3DONzQsFqec1jXf1e8p8aR2Ul2+DTwsILkwm77to6+4fjV3NU+3WMW74iKezl0rCRa
+	 GryjcKIlKbNuQ==
+Date: Wed, 16 Sep 2026 10:48:27 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Paul Moore <paul@paul-moore.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Justin Suess <utilityemal77@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <matt@bobrowski.net>, 
+	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Kees Cook <kees@kernel.org>, Casey Schaufler <casey@schaufler-ca.com>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Jan Kara <jack@suse.cz>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Eduard <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Jiri Olsa <jolsa@kernel.org>, Tingmao Wang <m@maowtm.org>, 
+	bpf <bpf@vger.kernel.org>, LSM List <linux-security-module@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: LSM boundaries. Was: [PATCH bpf-next v3 04/15] lsm: Add the
+ bpf_lsm_policy_release kfunc and policy object destructor
+Message-ID: <20260916-vollrausch-tango-bagger-420300d403c7@brauner>
+References: <CAHC9VhTM7emi9vxs+5Za8Hrc_e9dg7fZx+Z6BGUc4VQ1qhEAUA@mail.gmail.com>
+ <DLD0VQ3D8CYC.3V5ZT8HDMY4IH@gmail.com>
+ <aqTZdCz6JaoK16Fp@zenbox>
+ <DLDL7KK3FZKU.17ADLLWJVXB5F@gmail.com>
+ <CAHC9VhS0JckwfomqLTUJkZZkDSgeRXYOjMmPQYErgYynQYqMKQ@mail.gmail.com>
+ <CAADnVQJCJjy9Eiwn6-88c0iOk4LfgPU6KBv+w0JZdBzmXBMUCw@mail.gmail.com>
+ <CAHC9VhTh446SkpPF-hUiLYOHipuurzkgju_nH9LsRGdERSAL1w@mail.gmail.com>
+ <CAADnVQLZscKkCxvK5puuOE1aN8nW6PnaS+_dx_zBQjjP2T-DFg@mail.gmail.com>
+ <20260915-laken-ferngeblieben-verflachen-bafe1f296b02@brauner>
+ <CAHC9VhTC5YvALs5K76qDBP9bDRpZPc_V-U8DPZ8qhNsCsXyLnQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2938122783a51a2e22a0abf9f4e61087a79500a6b3e07a872dd18cd0fc729cc6@mail.kernel.org>
-In-Reply-To: <20260916074118.1007116-4-alan.maguire@oracle.com>
-References: <20260916074118.1007116-4-alan.maguire@oracle.com>
-Subject: Re: [PATCH v3 bpf-next 03/11] selftests/bpf: Test helper support for BTF_KIND_LOC[_PARAM|_PROTO|SEC]
-From: bot+bpf-ci@kernel.org
-To: alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,jolsa@kernel.org
-Cc: daniel@iogearbox.net,ihor.solodrai@linux.dev,yonghong.song@linux.dev,song@kernel.org,qmo@kernel.org,martin.lau@linux.dev,memxor@gmail.com,emil@etsalapatis.com,bpf@vger.kernel.org,nsc@kernel.org,puranjay@kernel.org,yatsenko@meta.com,alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 16 Sep 2026 08:44:20 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHC9VhTC5YvALs5K76qDBP9bDRpZPc_V-U8DPZ8qhNsCsXyLnQ@mail.gmail.com>
 
---===============0357294195670245447==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue, Sep 15, 2026 at 09:48:59AM -0400, Paul Moore wrote:
+> On Tue, Sep 15, 2026 at 9:00 AM Christian Brauner <brauner@kernel.org> wrote:
+> > On Sun, Sep 13, 2026 at 07:24:14PM -0700, Alexei Starovoitov wrote:
+> > > On Sun, Sep 13, 2026 at 5:10 PM Paul Moore <paul@paul-moore.com> wrote:
+> > > >
+> > > > On Sun, Sep 13, 2026 at 7:25 PM Alexei Starovoitov
+> > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > > On Sun, Sep 13, 2026 at 12:41 PM Paul Moore <paul@paul-moore.com> wrote:
+> > > > > > On Sat, Sep 12, 2026 at 3:33 PM Alexei Starovoitov
+> > > > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > > > > On Fri Sep 11, 2026 at 10:26 PM PDT, Justin Suess wrote:
+> > > > > > > >
+> > > > > > > > If fs/, mm/, drivers/, net/, are permitted to have kfuncs, then why not
+> > > > > > > > security/? kfuncs.rst doesn't seem to forbid this.
+> > > > > > >
+> > > > > > > because fs, mm, net see the value in bpf. bpf helps these subsytems
+> > > > > > > to focus on their core technologies and moves policy decisions out of
+> > > > > > > kernel and into bpf.
+> > > > > > > while lsm people treat bpf as arch-enemy.
+> > > > > >
+> > > > > > It's amusing to read this when just this week we merged a patchset
+> > > > > > into the LSM tree for the benefit of those writing BPF LSMs.  If you
+> > > > > > look at the discussion around patch 2/2 you will even see a reasonable
+> > > > > > exchange between Matt Bobrowski, a BPF LSM maintainer, and me about
+> > > > > > the patch.  Alexei is obviously welcome to his own opinion, but I
+> > > > > > would encourage those reading this thread to look beyond his comments.
+> > > > > >
+> > > > > > https://lore.kernel.org/linux-security-module/20260904-lsm-mount-idmaps-v3-0-920a1963675d@amutable.com/
+> > > > >
+> > > > > And that's an example of unacceptable land grab by LSM folks
+> > > > > that I'm concerned about.
+> > > >
+> > > > I made sure that patchset was ACK'd or Reviewed-by'd a VFS maintainer,
+> > > > a BPF LSM maintainer, and the Smack maintainer before merging (I
+> > > > covered the LSM and SELinux parts).  You might want to double check
+> > > > your definition of "land grab".
+> > >
+> > > You're still missing the point.
+> > > Christian could have landed it via vfs tree with your ack for security/*.
+> > > You have no power over lsm hook changes within vfs.
+> >
+> > Which tbf is generally how I like to handle thing especially since we
+> > usually have a lot of changes. But I'm open to shared branches as well.
+> >
+> > So I think we naturally have to modify existing LSM hooks. But it's
+> > shared pain. Since we use BPF LSM heavily in systemd we generally have
+> > to absorb such growing pains as well.
+> 
+> I have no problem with topic branches that various trees can pull, but
+> I do have an issue with the VFS tree merging patchsets that haven't
+> been properly ACK'd as well as the VFS tree creating topic branches
+> for patchsets that aren't primarily VFS changes.  See below:
+> 
+> https://lore.kernel.org/linux-security-module/CAHC9VhTE82bRRSXSUuMOdrfoMh=xOb5hDvqiKWzBKD1urab3hA@mail.gmail.com/
+> 
+> Christian, if you want us to move forward with topic branches in the
+> LSM tree for LSM changes that touch fs/ code I'm happy to do that, but
+> I need an acknowledgement from you that the behaviors mentioned above
+> will be cleaned up in the future.
 
-> diff --git a/tools/testing/selftests/bpf/btf_helpers.c b/tools/testing/selftests/bpf/btf_helpers.c
-> index 1c1c2c26690a7..972403f6a7438 100644
-> --- a/tools/testing/selftests/bpf/btf_helpers.c
-> +++ b/tools/testing/selftests/bpf/btf_helpers.c
+This is another instance where one of your mails around how to organize
+process ends up reading like you're lecturing your peers. This is not
+just my impression btw. That impression is shared by other subsystem
+maintainers - including in your own.
 
-[ ... ]
+This is a simple case where something got picked up that you didn't want
+to have picked up yet. Plus, I haven't gotten around to reading this
+yet. VFS isn't exactly a dormant subsystem.
 
-> @@ -203,6 +206,37 @@ int fprintf_btf_type_raw(FILE *out, const struct btf *btf, __u32 id)
->  		fprintf(out, " type_id=%u component_idx=%d",
->  			t->type, btf_decl_tag(t)->component_idx);
->  		break;
-> +	case BTF_KIND_LOC_PARAM: {
-> +		struct btf_loc_param *p = btf_loc_param(t);
-> +		__u32 *v = (__u32 *)(p + 1);
-> +
-> +		fprintf(out, " size=%u flags=0x%x vlen=%u", t->size, p->flags, vlen);
-> +		for (i = 0; i < vlen; i++, v++) {
-> +			if (p->flags & BTF_LOC_PARAM_SIGNED)
-> +				fprintf(out, "\n\tvalue=%d", (__s32)*v);
-> +			else
-> +				fprintf(out, "\n\tvalue=%u", *v);
-> +		}
-> +		break;
-> +	}
+The easy way is to just say "Hey, I don't think this is ready yet. Could
+you please drop it. I also would like to quickly sync on how we want to
+merge this.".
 
-This isn't a bug, but could this use p->values directly rather than casting
-past the struct?
-
-struct btf_loc_param already has a flexible array member (__u32 values[]),
-and the kernel side of the series prints them as p->values[i] in
-btf_loc_param_log(). The neighbouring ARRAY, STRUCT, ENUM, ENUM64,
-FUNC_PROTO, DATASEC and the two new LOC_PROTO/LOCSEC cases all declare
-'const struct ... *' for their record pointers.
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/test_btf.h b/tools/testing/selftests/bpf/test_btf.h
-> index e7bc781083745..b99c04b4d26bb 100644
-> --- a/tools/testing/selftests/bpf/test_btf.h
-> +++ b/tools/testing/selftests/bpf/test_btf.h
-
-[ ... ]
-
-> @@ -84,4 +84,20 @@
->  #define BTF_TYPE_TAG_ENC(value, type)	\
->  	BTF_TYPE_ENC(value, BTF_INFO_ENC(BTF_KIND_TYPE_TAG, 0, 0), type)
->
-> +#define BTF_LOC_PARAM_ENC(nvals, sz, flags) \
-> +	BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_LOC_PARAM, 0, nvals), sz), (flags)
-> +
-> +#define BTF_LOC_PARAM_VAL_ENCODE(val)	(val)
-> +
-> +#define BTF_LOC_PROTO_ENC(nargs) \
-> +	BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_LOC_PROTO, 0, nargs), 0)
-> +
-> +#define BTF_LOC_PROTO_PARAM_ENCODE(param) (param)
-> +
-> +#define BTF_LOCSEC_ENC(name, nlocs) \
-> +	BTF_TYPE_ENC(name, BTF_INFO_ENC(BTF_KIND_LOCSEC, 0, nlocs), 0)
-> +
-> +#define BTF_LOCSEC_LOC_ENCODE(func, loc_proto, offset) \
-> +	(func), (loc_proto), (offset)
-> +
->  #endif /* _TEST_BTF_H */
-
-This isn't a bug, but are these macros used by a raw-BTF test somewhere, or
-could they wait until the patch that needs them?
-
-A git grep for BTF_LOC_PARAM_ENC, BTF_LOC_PARAM_VAL_ENCODE,
-BTF_LOC_PROTO_ENC, BTF_LOC_PROTO_PARAM_ENCODE, BTF_LOCSEC_ENC and
-BTF_LOCSEC_LOC_ENCODE across the tree at the last commit of the series
-matches only test_btf.h itself. The later selftests that exercise the new
-kinds (btf_field_iter.c, btf_dedup_split.c, btf_distill.c) all build their
-BTF through the btf__add_loc_*() APIs instead.
-
-This isn't a bug, but would BTF_LOC_PARAM_VAL_ENC /
-BTF_LOC_PROTO_PARAM_ENC / BTF_LOCSEC_LOC_ENC line up better with the _ENC
-naming used by the rest of this header?
-
-The other three macros added by the same hunk (BTF_LOC_PARAM_ENC,
-BTF_LOC_PROTO_ENC, BTF_LOCSEC_ENC) follow the _ENC suffix, and every other
-macro in test_btf.h that fills the same role uses _ENC: BTF_MEMBER_ENC,
-BTF_ENUM_ENC, BTF_ENUM64_ENC, BTF_ARRAY_ENC, BTF_VAR_SECINFO_ENC,
-BTF_FUNC_PROTO_ARG_ENC.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35072175008
---===============0357294195670245447==--
+If another subsystems hooks into the vfs layer or filesystems that the
+vfs trees maintain then the default will always be that the vfs layer
+provides the shared tree to pull.
