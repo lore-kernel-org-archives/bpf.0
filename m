@@ -1,116 +1,95 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9875466AE1
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 07:54:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1A5466B70
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 07:55:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789545293; cv=none; b=C/DqO+MYSRfGO+/Ji6Z1oD3EsQYeMHx2Oh0tu3Q1Myc41oynOohzEpSRRhvD/d4mKlmZ+zYWQuLoI+b1SHeJGQe1Aew9NBWQ8Lkh6d7hHTKP4I0xCrV3lr5/AkVD3glPEVKVaAe0rA4rDaYwTEKyYQ3gLAQxRCQ4Yb3ns+ML4FM=
+	t=1789545337; cv=none; b=uUFzgtMejisH1oJUNn2qiLi/X38WVjj6j5kOS+eHP7Y/3VKO3p8vSn13ji6An94Q3Qnxi7OVR/nEhCfcuPJKwTOT5pXECiDaoneFmphF9doYoUDmoUex3bY6vEhKX5UVqAX6P9ShT4CujDg7pTEPiKYCXekrhQB3qHonJKyNOBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789545293; c=relaxed/simple;
-	bh=ajCBlbHLvQlXRJQ6A/bhxjXTGsDlkdAUs6t9mPvItQg=;
+	s=arc-20240116; t=1789545337; c=relaxed/simple;
+	bh=b+4qutoyUWadAIe9O2B1AaBOCBDTcf8gVSh/kTjP44s=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=qo3JeiHiVOgUiRF3daF1+TboY40OoyMrpFt+PFPevlAhhXnPKsiQAM7pQmsbZSLb7Nz2GhYwkridQ2VZVvzYUcsHoyX4GNGj6sBB/eiyAcIR3VRbmMk7QOo1GOdHuPew8RPr8xt2CDj1NCl3zeClJw8FpFWn8TQS32N+6qNJQr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ek6GyEAQ; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ePxVYHHmZfWyqJBVnfF6BfD/AKKmpWI+IG8KAA2NDiY7UGLN4IBlNCruoIzD9em+ZpppxZ6u+kvgovj/eccid8m+ce9av/NrvrieM7Hxu29SNpKX9uHK5Ai+rna1BtK9B/btaEv0Q+izX0+iJ/1Lvlz+lwwf2XlMIPbpVLfQwuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b3reVa4e; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ek6GyEAQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B2D1F000FF;
-	Wed, 16 Sep 2026 07:54:36 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b3reVa4e"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0FCF1F00898;
+	Wed, 16 Sep 2026 07:55:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789545277;
-	bh=9sa+/o01YXmGDPAutm0JyX/MHDla49pbmQEL4BNJvyM=;
+	s=k20260515; t=1789545312;
+	bh=f+m2A4XgzjfHmKNsW0ZiA4bZj81O2V+JFMejabEbgiY=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Ek6GyEAQ8ujQN8zzzd5loPW+7ZJB0u9WkJh73XGRvRRZyMA1vvPbKJQlDf3VUzha4
-	 tWNuSWly0q6m22uRxCNqDek5y6I71G3EbdZuM0RR5Ppf+kXeFm9weGeWw5nYr6xSLK
-	 EBSq6X0t7ttSr/5eEUcXymxqXCAWriXxS/k3/Ils1+GIaQpdnnKEWU0b56DNHeQZPl
-	 6DOtNJAMvZhWTXxnb4wC7k86DGIEj3cd9CD2lf2pxsnS59ArVSOnD3jK7LP2JpXtj7
-	 RPmga7gA8xSTjeL8o/gVAb32OsvlGGc/9HwrUu8PwkDlF0X9C5j/CZj8drF3ZzvIIi
-	 MwX+y65xbadtw==
+	b=b3reVa4eyoAKNXkuN2NBFTT5Hr6UAJ7eLSu+TgXl36znXsRkbBJtwuG8hf0AJJ+Hv
+	 U1hVWFbq308FmO+i4DYpn5TIk/DGVM5rRBYP1boT5Go8tt8/iARWGNZu8l2/uUTlPu
+	 SVByLhhUoeM9OJUaH2VwXDYXwQCulTrMU6VPJqTSiY9cDpD4NalPL3xxP9Ba7C5EEx
+	 QByrSNK8/bG+QCLZPA5YR2uzRvU3/6anW8bhgndsL3GixgR0TiyRkawIrX7FVXN1V6
+	 2mFYNuwsStfvVMe+Wpu1B3NGE+sxEEVN+l3HHG2rNBQUO9hDTew2g9vlt+tWxQAxEC
+	 yFT5D6+EIe/4Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 bpf-next 07/11] bpftool: Handle multi-split BTF by
- supporting multiple base BTFs
+Subject: Re: [PATCH v3 bpf-next 02/11] libbpf: Add support for BTF kinds
+ LOC[_PARAM|_PROTO|SEC]
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alan Maguire" <alan.maguire@oracle.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260916074118.1007116-8-alan.maguire@oracle.com>
+In-Reply-To: <20260916074118.1007116-3-alan.maguire@oracle.com>
 References: <20260916074118.1007116-1-alan.maguire@oracle.com>
- <20260916074118.1007116-8-alan.maguire@oracle.com>
+ <20260916074118.1007116-3-alan.maguire@oracle.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 16 Sep 2026 07:54:36 +0000
-Message-Id: <20260916075437.09B2D1F000FF@smtp.kernel.org>
+Date: Wed, 16 Sep 2026 07:55:12 +0000
+Message-Id: <20260916075512.C0FCF1F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] bpf: evaluation of freed pointer in bpftool cleanup
-- [Low] bpf: unbalanced braces in bpftool btf help string
+- [Low] bpf: Missing string representations for new BTF kinds
 --
 
-commit 43f26ee1c8d2e52438682ffa46a3b61f16ff7512
+commit 98be00a89bec3663ddafbd1e828f7723cfe159cc
 Author: Alan Maguire <alan.maguire@oracle.com>
 
-bpftool: Handle multi-split BTF by supporting multiple base BTFs
+libbpf: Add support for BTF kinds LOC[_PARAM|_PROTO|SEC]
 
-This commit updates bpftool to support multi-split BTF by allowing multiple
-base BTF files to be specified via the -B argument. It updates the help text
-and handles loading and freeing multiple nested BTF bases.
+This commit adds libbpf support for the new BTF_KIND_LOC_PARAM,
+BTF_KIND_LOC_PROTO, and BTF_KIND_LOCSEC kinds. It implements data
+accessors, validation checks, and handles their deduplication during
+the primary and reference dedup phases.
 
-> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-> index bca0a3982f09b..bbe8f9ea144fa 100644
-> --- a/tools/bpf/bpftool/btf.c
-> +++ b/tools/bpf/bpftool/btf.c
-> @@ -1545,7 +1545,7 @@ static int do_help(int argc, char **argv)
->  		"       " HELP_SPEC_MAP "\n"
->  		"       " HELP_SPEC_PROGRAM "\n"
->  		"       " HELP_SPEC_OPTIONS " |\n"
-> -		"                    {-B|--base-btf} }\n"
-> +		"                    {[{-B|--base-btf} FILE]... }\n"
-
-[Severity: Low]
-Does this leave the opening brace from the HELP_SPEC_OPTIONS block unclosed?
-
-The HELP_SPEC_OPTIONS macro starts a brace-enclosed block, but replacing the
-single closing brace with a balanced group {[...]} might leave the overarch=
-ing
-list unclosed when the help output is printed.
-
-> diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
-> index 5ababd8f7d0a0..cff76be7d2e86 100644
-> --- a/tools/bpf/bpftool/main.c
-> +++ b/tools/bpf/bpftool/main.c
-
+> diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+> index 587172c0de089..57f12630c5d15 100644
+> --- a/tools/lib/bpf/btf.h
+> +++ b/tools/lib/bpf/btf.h
 [ ... ]
-
-> @@ -567,7 +572,18 @@ int main(int argc, char **argv)
->  	if (json_output)
->  		jsonw_destroy(&json_wtr);
-> =20
-> -	btf__free(base_btf);
-> +	while (base_btf) {
-> +		new_base_btf =3D (struct btf *)btf__base_btf(base_btf);
-> +		btf__free(base_btf);
-> +		/*
-> +		 * Do not free base BTF that is an owned .BTF.base ; leads
-> +		 * to a double-free, so only free as far as the root base
-> +		 * we explicitly read with -B above.
-> +		 */
-> +		if (base_btf =3D=3D root_base_btf)
-> +			break;
+> @@ -431,6 +445,12 @@ btf_dump__dump_type_data(struct btf_dump *d, __u32 i=
+d,
+>  #define BTF_KIND_DECL_TAG	17	/* Decl Tag */
+>  #define BTF_KIND_TYPE_TAG	18	/* Type Tag */
+>  #define BTF_KIND_ENUM64		19	/* Enum for up-to 64bit values */
+> +#define BTF_KIND_LOC_PARAM	20	/* Parameter at location */
+> +#define BTF_KIND_LOC_PROTO	21	/* Parameter set at location */
+> +#define BTF_KIND_LOCSEC		22	/* Section containing location info */
+> +
+> +struct btf_loc_param;
+> +struct btf_loc;
 
 [Severity: Low]
-Are we evaluating a freed pointer in this break condition?
+Should these new BTF kinds also be added to the __btf_kind_str() string
+mapping function in tools/lib/bpf/libbpf.c?
 
-Since btf__free(base_btf) is called just before this check, evaluating
-base_btf against root_base_btf could invoke undefined behavior by reading t=
-he
-dangling pointer, even if it is just an address comparison in a teardown pa=
-th.
+When libbpf encounters errors or needs to log information about these new
+types, it relies on __btf_kind_str(). Because they are missing from the
+switch statement in that function, any debug or error logs formatting these
+types will print "unknown" instead of their actual string names.
+
+> =20
+>  static inline __u16 btf_kind(const struct btf_type *t)
+>  {
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260916074118.1007=
-116-1-alan.maguire@oracle.com?part=3D7
+116-1-alan.maguire@oracle.com?part=3D2
