@@ -1,33 +1,46 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1222389E07;
-	Wed, 16 Sep 2026 06:45:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C32D36493A;
+	Wed, 16 Sep 2026 07:07:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789541131; cv=none; b=uwdAKWG2G2AtTOUfH1kJ19ogzP+Hp6lgl/hvoZIsrW5dRcrzavrh6QtGXYKfRNX3GcJixVk/infXKbf8hyKABHhHVD13KZnQ/uKsNo3fZmctrtOqr58Cy5vdKaQ6pyKqqeyHdC8lsLCDh5bK2dtxSvdLaSWGu7XnarOTODSK6NU=
+	t=1789542441; cv=none; b=MfJqjOSEgkFnkKF2p4gPDOrPkm8OSUeGU8+iik7R8fwFD6OImIE9sYVIM18cgju+F3CcQyZjEtx6UGkKluPKm/H/2uV7zfUAnJ4QbfZroKBRQt8vDGSj71p7ze6BfggwB+KnCV3T9q1O/ifKFAXuuauXwRJNm/EHbmF/PzsZ/1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789541131; c=relaxed/simple;
-	bh=q1IsMRmPA7Ces1FEWyRaFCf4gETSf0lnjlirzRbWkr8=;
+	s=arc-20240116; t=1789542441; c=relaxed/simple;
+	bh=xynsPymiv3WU3HsFIsBHIUBsQZdWEctP+XRoHYb2kao=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tJd1PntMMe6YGfEel2GLVLw65xxMA6WiOzRYJ1tvrrxFwel8hyA/9jbzuGgm3qwnk4ZexP6PpDxFzGjDdJqqmJ8qU9UFE3tRivym2sTKYk2LknxRO2GWXFFqxuxzxwMa19IkdMgsavfLS+FVOWZ4lL5EXLGVKOWKROgPCwZ+mfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a24crPNB; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=P/tEd8oaPieqaNXYyhr/eUBiHicg5Ei1GIs8cPDpCB0nN+ZuDs6eD4gK8yM6aEPd8ROZA55Q6W5kRFP7I7yeHm/3Mifkln08LFq9MDS0o2rZbAKgEdPEZJn4XvljX5NcbaN/HU1bHpw4qaSeP5Uidzx2l4ID5sQUAQEf0lkrcQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=SbpC8Ijc; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a24crPNB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86A1F1F000FF;
-	Wed, 16 Sep 2026 06:45:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789541130;
-	bh=7kOVTiaKYllY3V4jp//C0OkA7X2Eu1Ktbsk1TPaoM6s=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=a24crPNBYsEfOEPT/HpbL+mpioy8f3iQuz4Nz1u26GkugTTzG14UBioK8Uk7W6gSg
-	 YvUD8Ud5FPp1UScI9ycz3EejphPLRe6/6LJet1tgutFl18vtzbPq9118b48PibSXZz
-	 ZT83Bx4zlie3HdLIAI4PbrybL1+gvc2a4lKe0s2Nk+5gk+2dlTnMTd25RIn8/leSyy
-	 1SlL/G3o3gPAnkY38dk6niz30hOJwSlShJrMou7kUns/yb2+iDF4XQ7CErnn/062ad
-	 xNCy4/ra59OyG/FU2tE65R86Yqm0TVVR29AJXeMBbhjRsVTySB84cc450YqcvG6/Tl
-	 4ojbSxqK6sIgw==
-Message-ID: <a184d9c0-aa3a-4d00-9a0e-e7a1d9d344b0@kernel.org>
-Date: Wed, 16 Sep 2026 08:45:24 +0200
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="SbpC8Ijc"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=nHqWJxcWJL8kaea7bzuqdKjH1s9OouRzNKirRX9RM7E=; b=SbpC8IjcIunLNEglvGXoVo0RmW
+	Bn4luGJAA/r5McFjqr9pXff/PgwpK4BJQtkE3D9OXrVwuJKRGkAfIMP/yyIHV1BGCWMPUeqJ+gzTR
+	MusoWIRdftauZMD4IA6xxDutMEUNQ01dEP4SPzyIBdx1HFHA08zKRCW8CIr47MKpuR01O30z1vH5T
+	fsjtIZ9z6IJFcSfyjOUS711ASv98SvHy66pd1NdO2sBhWSeHR2ORoFfBo4fYxFPryFRnYmKIR4R3U
+	2DpK21UIJpCkboyuoIRQ7a21VBTrBsBm+CnWJ2WdFqwXp+QfBGjBLuzo0EelXcwhdAp5au87NJPlA
+	6jtCVUNw==;
+Received: from sslproxy08.your-server.de ([78.47.166.52])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1x6jjf-0007rR-0H;
+	Wed, 16 Sep 2026 09:07:15 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1x6jj7-000DiW-1W;
+	Wed, 16 Sep 2026 09:06:41 +0200
+Message-ID: <f05cc7fb-9766-4b2d-9422-45ea1822578a@iogearbox.net>
+Date: Wed, 16 Sep 2026 09:07:13 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,87 +48,137 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v7 0/5] veth: add Byte Queue Limits (BQL) support
-To: Simon Schippers <simon.schippers@tu-dortmund.de>, netdev@vger.kernel.org,
- =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>
-Cc: kernel-team@cloudflare.com, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Chris Arges <carges@cloudflare.com>, Mike Freemon <mfreemon@cloudflare.com>,
- =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
- Breno Leitao <leitao@debian.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org,
- kernel-team <kernel-team@cloudflare.com>
-References: <20260612083530.1650245-1-hawk@kernel.org>
- <ed63c31c-0d05-4532-bed6-23b7608ec5e2@tu-dortmund.de>
- <3a3a99dc-b554-4b5d-a004-67454e66e5e0@tu-dortmund.de>
+Subject: Re: [PATCH bpf-next 1/8] ocfs2: Copy the xattr name in
+ ocfs2_initxattrs
+To: Heming Zhao <heming.zhao@suse.com>
+Cc: alexei.starovoitov@gmail.com, brauner@kernel.org, dwindsor@gmail.com,
+ john.fastabend@gmail.com, memxor@gmail.com, kpsingh@kernel.org,
+ matt@bobrowski.net, bpf@vger.kernel.org,
+ Zhan Xusheng <zhanxusheng@xiaomi.com>,
+ Joseph Qi <joseph.qi@linux.alibaba.com>, ocfs2-devel@lists.linux.dev
+References: <20260915150739.284189-1-daniel@iogearbox.net>
+ <20260915150739.284189-2-daniel@iogearbox.net> <aqoCVQ78KOo2GZ8S@p15>
 Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <3a3a99dc-b554-4b5d-a004-67454e66e5e0@tu-dortmund.de>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <aqoCVQ78KOo2GZ8S@p15>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28124/Tue Sep 15 08:27:28 2026)
 
-
-
-On 9/15/26 16:30, Simon Schippers wrote:
-> On 8/10/26 15:25, Simon Schippers wrote:
->> On 6/12/26 10:35, hawk@kernel.org wrote:
->>> From: Jesper Dangaard Brouer <hawk@kernel.org>
->>>
->>> This series adds BQL (Byte Queue Limits) to the veth driver, reducing
->>> latency by dynamically limiting in-flight packets in the ptr_ring and
->>> moving buffering into the qdisc where AQM algorithms can act on it.
->>
->> Hi :)
->>
->> I worked on my implementation of DQL coalescing that lives in
->> dynamic_queue_limits.{h,c} and wanted to share it so we can consider it
->> for the next cycle. This is because in the next cycle I would
->> like to add BQL support for tun/tap as well, in addition to veth.
->> Is that fine for you?
->>
->> I think it is in good shape. It uses the same logic as the v7, but
->> every new field fits inside the existing dql struct, and drivers only
->> need to call the usual netdev_tx_sent_queue() and
->> netdev_tx_completed_queue() to use it. Patch 3, 5 and 6 are the same
->> as before, only 1, 2 and 4 are new. Benchmarks looked fine for me.
->>
->> There should be no regressions for other DQL/BQL users. I paid close
->> attention not to break the dql cache lines or other logic.
->> coal_usecs is now configurable per queue via sysfs and also via ethtool
->> as usual.
->>
->> While working on this, I found a missing barrier in v7:
->> There was no smp_rmb() pairing the smp_wmb() in __ptr_ring_produce()
->> before dql_completed() reads dql->num_queued. This happens to be safe
->> on x86, but on other platforms the read of dql->num_queued could be
->> reordered before __ptr_ring_consume(), triggering a BUG_ON() in
->> dql_completed(). Fixed by adding the missing smp_rmb() in veth_xdp_rcv()
->> before completing.
->>
->> Would love to hear your thoughts on the implementation!
->>
->> Thanks,
->> Simon
+On 9/16/26 4:47 AM, Heming Zhao wrote:
+> On Tue, Sep 15, 2026 at 05:07:32PM +0200, Daniel Borkmann wrote:
+>> ocfs2_mknod() and ocfs2_symlink() ask for the security xattr up front
+>> through a struct ocfs2_security_xattr_info, so that they can size the
+>> transaction before setting it. ocfs2_initxattrs() duplicates the value
+>> since the array security_inode_init_security() hands is freed on return,
+>> but keeps the name pointer as-is, given so far every LSM stored a string
+>> constant there. bpf_inode_init_xattr() places the name in the same
 > 
-> Hi! Any thoughts on this? Do you want to continue this series?
+> Typo? I am not familiar with BPF, but I only found inode_init_security in
+> include/linux/lsm_hook_defs.h.
 
-Appreciate getting poked :-)
+Its part of the series here; should have added "upcoming" in front:
 
-I will not have time to work on this until after October 5th.
+   https://lore.kernel.org/bpf/20260915150739.284189-1-daniel@iogearbox.net/
 
-If you Simon have time, feel free to submit a V8 patchset with the
-barrier fix mentioned above.  I should have cycles to review and ACK
-(except between 26 sep to Oct 4).
+>> allocation as the value, which security_inode_init_security() frees on
+>> its way out. Copy the name alongside the value and free both together.
+>> This is the only special case wrt xattrs in the bpf_inode_init_xattr()
+>> context.
+>>
+>> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+>> Cc: Zhan Xusheng <zhanxusheng@xiaomi.com>
+>> Cc: Joseph Qi <joseph.qi@linux.alibaba.com>
+>> Cc: ocfs2-devel@lists.linux.dev
+>> ---
+>>   fs/ocfs2/namei.c | 2 ++
+>>   fs/ocfs2/xattr.c | 5 +++--
+>>   2 files changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/fs/ocfs2/namei.c b/fs/ocfs2/namei.c
+>> index e9c7774ccf91..e24f0e337a56 100644
+>> --- a/fs/ocfs2/namei.c
+>> +++ b/fs/ocfs2/namei.c
+>> @@ -480,6 +480,7 @@ static int ocfs2_mknod(struct mnt_idmap *idmap,
+>>   
+>>   	brelse(new_fe_bh);
+>>   	brelse(parent_fe_bh);
+>> +	kfree(si.name);
+>>   	kfree(si.value);
+>>   
+>>   	ocfs2_acl_init_release(&acl_state);
+>> @@ -2068,6 +2069,7 @@ static int ocfs2_symlink(struct mnt_idmap *idmap,
+>>   
+>>   	brelse(new_fe_bh);
+>>   	brelse(parent_fe_bh);
+>> +	kfree(si.name);
+>>   	kfree(si.value);
+>>   	ocfs2_free_dir_lookup_result(&lookup);
+>>   	if (inode_ac)
+>> diff --git a/fs/ocfs2/xattr.c b/fs/ocfs2/xattr.c
+>> index 35bcbb0ff607..d83840b6bed9 100644
+>> --- a/fs/ocfs2/xattr.c
+>> +++ b/fs/ocfs2/xattr.c
+>> @@ -7524,8 +7524,9 @@ static int ocfs2_initxattrs(struct inode *inode, const struct xattr *xattr_array
+>>   				    GFP_KERNEL);
+>>   		if (!si->value)
+>>   			return -ENOMEM;
+>> -
+>> -		si->name = xattr_array->name;
+>> +		si->name = kstrdup(xattr_array->name, GFP_KERNEL);
+>> +		if (!si->name)
+>> +			return -ENOMEM;
+> 
+> The ->name is a constant string (i.e., XATTR_NAME_SELINUX). We can refer to
+> ext4_initxattrs() => ext4_xattr_set_handle(), which also uses '=' to assign ->name.
+ext4 is not affected since nothing is used outside security_inode_init_security
+callback. ocfs2 is the only case in the tree affected, see this sashiko report
+which this small patch is addressing:
 
-We are still interested in getting this merged. Notice the bug fix from
-Jonas 60db47f02bfa ("veth: fix queue index used to wake the peer txq in
-veth_poll").  We are running XDP on our veth production interfaces, so
-we didn't notice this.  Still, we are currently waiting for this fix to
-get fully rolled out, before proceeding with the BQL variant.
+   https://lore.kernel.org/bpf/CAEXv5_gTJcP5BkSysZujLxiUcjbbBNi_NNbAnOJsQQVLyO9HoQ@mail.gmail.com/
 
---Jesper
-
-
+Thanks,
+Daniel
