@@ -1,57 +1,35 @@
-Received: from mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5A044C646
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 19:52:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E47F6440A19;
+	Wed, 16 Sep 2026 20:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789588391; cv=none; b=lJBtkQbUR9uispxNJ/EVaQXk9mSR5mAA+o8y70IlTqEx2DBdNZUT/7hARcYOnSe6TJw9gOv8vM1aToZ0fDXjVJm4kQ1zy8Tp11obiiH9cWILdqylpEtHGCuUd+sjjIay5P7Eaa91UlD90UYI/DSKsYHrZ5d5FgXPu1El4UQjjOs=
+	t=1789588885; cv=none; b=NPyVsq9EjtQqXAmAWGCff8HHpLrqTZc7XHcdUXK4SDzo+VUf7AB4PTNt/aAWbx7PgxR36nW0MCQw201bGPs45TFk0KcOx5wexU6rkIWsPpRpB/1tCGBrEunxSjS/sc7ciDmpQxK5Pjw/REro+0n0HNWtmISYwo3bC2Sl1vU5qT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789588391; c=relaxed/simple;
-	bh=NALIzAyd257Q9XRdPDmwZcj4GGaZ5ZdrW+pWs0t+wH0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Cvp9F0hyO+bdBwBCjLBwIzvUm9WxS5hybl31KptA/EqKrDH0cVRENQLZzlFFMpBkFvL0VXoDko+YWH0a47KojHIyWCGG5z4Jo0pPwqhyNgxBHPn17TSTGhbHsi5WwC95pM/72QRLL7o5yWb9/KaEkpjL5qnbHka3TtyJPAPzlpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Nj75s8lu; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789588885; c=relaxed/simple;
+	bh=eRDNX+GkCPlzdU4g6GHkRfBzNx9ZK4vjgFu0E32gSpM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=lp2+HM58ecAMZxNFV7QhjWz6r5F8hO16uiazSLmbrCbL1WIUqwiQkn7arbfBkgAmdhm0u19l0YM6OeV23MNLyZOIHeMy1kvCLcYVowiy6u/UhwF1NvED0mWI8xoifDcti+uekQxEifOdeeOZkqnrbrPjIKAr9WaMMkt/LmTL9v0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S04kCdKf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Nj75s8lu"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=NALIzAyd257Q9XRdPDmwZcj4GGaZ5ZdrW+pWs0t+wH0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789588373; v=1; x=1790193173;
- b=Nj75s8luQiePcDHUhOJVN9Qwz62YCYi2E1I9K+KT/omQ4z98CsRkHNkTZITIjTz8aEWqlFs+
- O7O62kfXqKOJ+1l8wMFWKaMGf3I5My20sua/6UBq41dTfUMoSeOQ09E8MB6bcrHh+tWvVuX+XRs
- +tjKKOyvgVnl9DlRU8gJSyBE=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id a2265ddc4010ca96;
-	Wed, 16 Sep 2026 19:52:53 +0000
-X-Mizu-Trace-ID: a2265ddc4010ca96
-X-Migadu-Flow: FLOW_OUT
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Thomas Gleixner <tglx@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	x86@kernel.org,
-	bpf@vger.kernel.org,
-	kasan-dev@googlegroups.com,
-	linux-mm@kvack.org,
-	kernel-team@meta.com
-Subject: [PATCH v3 5/5] x86/cpu: Don't transiently clear the boot CPU's capabilities
-Date: Wed, 16 Sep 2026 12:52:03 -0700
-Message-ID: <20260916195203.1099646-6-ihor.solodrai@linux.dev>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260916195203.1099646-1-ihor.solodrai@linux.dev>
-References: <20260916195203.1099646-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S04kCdKf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D411E1F000FF;
+	Wed, 16 Sep 2026 20:01:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789588870;
+	bh=AuxZsOonWzq9OMyyHb09Y0eJmpch+14zfap6ZyP4F8Y=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=S04kCdKfAn9L8s5A1i2Xn8Tf3ZepWliZfgdcQTot4fTGbFdr5jyjj4LCSnAoUDkWu
+	 f1DiH6cRvpa9u1lOdacGhd4l2QZNimLOKhqyA1yr1RRWU8yLJ4VZvAvqKM3/6kKWqR
+	 x8EvC2XHE8eopcTxmeZu+Vw5h6lOVOIc+775REC+VhjQWCIyZSOx9H4FKQw194BLW6
+	 9ALBJCHgKbUoHgGgboACtit/4NiDSfFolM0rTwN4lTGfVvQNjuHPe7IyXuCkk91NWh
+	 AjrvZGpXCeS1zSYmeEdG1h5JYZDdkKRW0EjTSmB9q0BzTV8IRsMDlplK6fwdDPfA74
+	 BqPN1XY6bLihA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 19A4239E8A5C;
+	Wed, 16 Sep 2026 20:00:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -59,55 +37,50 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] bpf: local_storage: avoid redundant IRQ save on bucket
+ locks
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178958880489.3266611.6236994598638968517.git-patchwork-notify@kernel.org>
+Date: Wed, 16 Sep 2026 20:00:04 +0000
+References: <20260916181001.201787-1-usama.arif@linux.dev>
+In-Reply-To: <20260916181001.201787-1-usama.arif@linux.dev>
+To: Usama Arif <usama.arif@linux.dev>
+Cc: ast@kernel.org, andrii@kernel.org, bpf@vger.kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, jolsa@kernel.org, justinstitt@google.com,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, martin.lau@linux.dev,
+ memxor@gmail.com, morbo@google.com, nathan@kernel.org,
+ ndesaulniers@google.com, song@kernel.org, yonghong.song@linux.dev,
+ yatsenko@meta.com, kernel-team@meta.com
 
-On the boot CPU identify_cpu() runs from arch_cpu_finalize_init(),
-with interrupts enabled and before alternatives are patched. So
-cpu_feature_enabled() still evaluates against boot_cpu_data.
+Hello:
 
-identify_cpu() rebuilds c->x86_capability from scratch: the reset
-zeroes the array and the CPUID rescan fills it in again. An interrupt
-delivered in that window finds X86_FEATURE_LA57 clear in
-boot_cpu_data, so pgtable_l5_enabled() is false and KASAN checks a
-5-level address against the 4-level addressability limit. The result
-is a bogus "wild-memory-access" report, and under kasan_multi_shot a
-report storm that wedges the boot.
+This patch was applied to bpf/bpf-next.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
 
-The boot CPU has already been scanned by early_identify_cpu(), with
-interrupts disabled, and its capabilities cannot have changed
-since. Reset only the CPUs which have not been scanned yet.
+On Wed, 16 Sep 2026 11:10:01 -0700 you wrote:
+> bpf_local_storage_update() takes the map bucket lock while holding
+> local_storage->lock. bpf_selem_unlink_map() does the same; its only
+> caller holds local_storage->lock. The outer lock is acquired with
+> raw_res_spin_lock_irqsave(), so interrupts are already disabled at both
+> sites.
+> 
+> Using raw_res_spin_lock_irqsave() for the nested lock saves the already
+> disabled IRQ state and issues another IRQ disable. The matching unlock
+> tests that saved state before leaving interrupts disabled. On x86-64,
+> this adds a pushfq/popq/cli sequence and a test/branch around an
+> unreachable sti to each acquisition.
+> 
+> [...]
 
-The window is as old as identify_cpu() rebuilding the capabilities.
-Commit 39b9552281ab ("x86/mm: Optimize boot-time paging mode switching
-cost") merely let KASAN notice it by making pgtable_l5_enabled() read
-the feature bit. So no Fixes: tag.
+Here is the summary with links:
+  - bpf: local_storage: avoid redundant IRQ save on bucket locks
+    https://git.kernel.org/bpf/bpf-next/c/10c4f610b215
 
-Closes: https://lore.kernel.org/bpf/20260610175651.647515-1-ihor.solodrai@linux.dev/
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
----
- arch/x86/kernel/cpu/common.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 83d613d07997..496ffe429496 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1998,8 +1998,6 @@ static void identify_cpu(struct cpuinfo_x86 *c)
- 
- 	c->loops_per_jiffy = loops_per_jiffy;
- 
--	init_cpu_info(c);
--
- 	if (!cpuid_feature())
- 		identify_cpu_without_cpuid(c);
- 
-@@ -2184,6 +2182,7 @@ void identify_secondary_cpu(unsigned int cpu)
- 		*c = boot_cpu_data;
- 	c->cpu_index = cpu;
- 
-+	init_cpu_info(c);
- 	identify_cpu(c);
- 	x86_spec_ctrl_setup_ap();
- 	update_srbds_msr();
+You are awesome, thank you!
 -- 
-2.55.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
