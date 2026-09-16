@@ -1,277 +1,177 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5543E4A0F10
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 09:03:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70F9C49550B
+	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 09:03:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789549420; cv=none; b=dX/qtMN1k/dUjOLF0vlvjgvx7T7cZMAEi3N0deU//pqDoJg+ck1uSdjKB8cL+elNaWOLTIH4R2TreI8TmX6lsYiY3DlhhDv5wVtX9o/cHznLvPZikKntguwaS+fe67/lnScs/Qw07L6rDzuENxEMYiwffsRENh5B4EmRLJwLVK8=
+	t=1789549418; cv=none; b=gQZFUC9DTGv31UkbffGeMUFJpZrjYcwle7n7pkUkiFzAUlRB8eNulWhmBe0Ib7Wl7KdjvpmeYz0YGoQxxgj+SS1q4/ZsYRZwvqX2EhHyxYz1uNdh/GggKBBdM16r15CPKvJbyGJtdyokRst5sGbPqxuF78AglC4ZhmGq4GvQUKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789549420; c=relaxed/simple;
-	bh=LwBZD7QQ3jwX+WMVcC+BMQ8FWX62dV9145yX4Uoenmk=;
+	s=arc-20240116; t=1789549418; c=relaxed/simple;
+	bh=kGdIfPRgubGcaEAx3Q3dqZ5ZHMUUAv7LedldbnYi6nE=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=P9kJlGe/+J8FT+WQbBNz5iocFBM6l3WSl94UUABOqnCy+B07UvGEk1mwZz+snmC1tf1OVTSlGH+F5x3YhmH8Utq6CvGUZZAhv8OJOYF6yNPuII5ZLrIRHl5cY/ATdPX8+1LoQawlzJ8YV/MRy8wgl5BytFDbF25kCkCXfLcyxfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mGW0O4Wt; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=E+ngSkKjv9ob/enhR8cIkUHOWQIfwtZBTzezwYrIO0ZaGjpOwBPbXpdhkFZztuxa69zKS08mI1lOqqrNzhi3cAhu0+HUaPfMmhFaHho8ziPpCQkKHzcEBtICdIr5ilbwSV8H1zBrRxjRGCEyPE2Za0ArxXeqlntKJ/I4G84Wzls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eCgEvkQu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mGW0O4Wt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 433431F0089A;
-	Wed, 16 Sep 2026 09:03:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eCgEvkQu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3F251F0089B;
+	Wed, 16 Sep 2026 09:03:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789549406;
-	bh=DAPChJgjXfsVkg9O68xcl5zdUZH8QJIj8koa05VeAcU=;
+	s=k20260515; t=1789549408;
+	bh=Ce6gZoPzJiBTEvEWr2SfZSd2ZIBxUHnNZq1FJommxZs=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=mGW0O4WtGJ3633nKCBAcimvEGIXOxjMvX+8qL7uMWPsQZG+N1p9hH4DhzCyY6B77R
-	 umdE14BNeiIp/LtnRVLEUiCniuMbD0XQbcIIgLe4dH6yzRZfrmi469uk8ycBC5gvbp
-	 vgtjLbNp41QiimII1ftXx8ldW26l4BfJYUcyp7yo3BqVyzwT8aklVSmT7+K6yVEXhT
-	 LF4ZvyhtEH7cU47nCtWWF95zGmJxuZC2UtznbO84vHqnjhrKEguuf5v188nvodonA+
-	 oLbE2euI0tfB7rahTxxjwA8pbBjwzBED0iW9FCyEC4zryq8rbVCabKTi5Ck1l3N1TA
-	 r6i0cqlvVvtNQ==
-Content-Type: multipart/mixed; boundary="===============6359189533444094136=="
+	b=eCgEvkQuBkBqNDGcIppxT+A16nzvYPghpYjpoT3n0C++4iRGecF9HQDLqat6HPSP1
+	 ojnZ/PNgQT4+7xt8pQni+hre4FyJV/PMD+pl+nPwlD10LR9vmXDqZ8UtpgVAKa1j5I
+	 9I0Nb5l2zA5wAWNUOCWkDd8ZSCwZYJOLZJqGcKZY4+Fv6/Ek/hvYIv/3i/r2otxxf0
+	 c0Sw+yC2HV1GzWbP+cpfPyQiGl1BTTE4UGByZcHu3CaUjh2kyd9GOxivMe43W7f0ZW
+	 I65Ihv74MZmBkrismkne4PJjLLRjU97rzc4EDoCBG0Keh6UjWz9v/D+IpeiOfA0af9
+	 mAEc2UKeZmFxw==
+Content-Type: multipart/mixed; boundary="===============3830223876571384478=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <e81968f62d0231178e551de838a0674d8ceeaa7e9a2dbc64c24e03ec88ea92c2@mail.kernel.org>
-In-Reply-To: <20260916074118.1007116-3-alan.maguire@oracle.com>
-References: <20260916074118.1007116-3-alan.maguire@oracle.com>
-Subject: Re: [PATCH v3 bpf-next 02/11] libbpf: Add support for BTF kinds LOC[_PARAM|_PROTO|SEC]
+Message-Id: <4f5e95167cdd0da82fb57b82890176275663e53f904e4987e4a6439eb681d2ad@mail.kernel.org>
+In-Reply-To: <20260916074118.1007116-2-alan.maguire@oracle.com>
+References: <20260916074118.1007116-2-alan.maguire@oracle.com>
+Subject: Re: [PATCH v3 bpf-next 01/11] btf: Extend UAPI to support BTF location (inline site) info
 From: bot+bpf-ci@kernel.org
 To: alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,jolsa@kernel.org
 Cc: daniel@iogearbox.net,ihor.solodrai@linux.dev,yonghong.song@linux.dev,song@kernel.org,qmo@kernel.org,martin.lau@linux.dev,memxor@gmail.com,emil@etsalapatis.com,bpf@vger.kernel.org,nsc@kernel.org,puranjay@kernel.org,yatsenko@meta.com,alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 16 Sep 2026 09:03:25 +0000 (UTC)
+Date: Wed, 16 Sep 2026 09:03:27 +0000 (UTC)
 
---===============6359189533444094136==
+--===============3830223876571384478==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index 908bd344229d5..332a8388fcc41 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
+> diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
+> index 618167cab4e61..a85d293f4127f 100644
+> --- a/include/uapi/linux/btf.h
+> +++ b/include/uapi/linux/btf.h
+> @@ -92,7 +92,9 @@ enum {
+>  	BTF_KIND_DECL_TAG	= 17,	/* Decl Tag */
+>  	BTF_KIND_TYPE_TAG	= 18,	/* Type Tag */
+>  	BTF_KIND_ENUM64		= 19,	/* Enumeration up to 64-bit values */
+> -
+> +	BTF_KIND_LOC_PARAM	= 20,	/* Location parameter information */
+> +	BTF_KIND_LOC_PROTO	= 21,	/* Location prototype for site */
+> +	BTF_KIND_LOCSEC		= 22,	/* Location section */
+>  	NR_BTF_KINDS,
+>  	BTF_KIND_MAX		= NR_BTF_KINDS - 1,
+>  };
 
 [ ... ]
 
-> @@ -3344,6 +3400,208 @@ int btf__add_decl_attr(struct btf *btf, const char *value, int ref_type_id,
->  	return btf_add_decl_tag(btf, value, ref_type_id, component_idx, 1);
->  }
+> @@ -212,4 +214,65 @@ struct btf_enum64 {
+>  	__u32	val_hi32;
+>  };
 >
 > +/*
-> + * Append new BTF_KIND_LOC_PARAM with specified size and flags.  Values are
-> + * added via btf__add_loc_param_value().
-> + *
-> + * Returns:
-> + *   -  >0, type ID of newly added BTF type;
-> + *   - <0, on error.
+> + * BTF_KIND_LOC_PARAM is followed by a single "struct btf_loc_param"
+> + * that contains flags specifying the contents of the vlen-specified
+> + * number of 4-byte values that follow.
 > + */
-> +int btf__add_loc_param(struct btf *btf, __u32 size, __u32 flags)
-> +{
-> +	struct btf_loc_param *p;
-> +	struct btf_type *t;
-> +	int sz, err;
-> +
-> +	err = btf_ensure_modifiable(btf);
-> +	if (err)
-> +		return libbpf_err(err);
-> +
-> +	sz = sizeof(struct btf_type) + sizeof(*p);
-> +	t = btf_add_type_mem(btf, sz);
-> +	if (!t)
-> +		return libbpf_err(-ENOMEM);
-> +
-> +	t->name_off = 0;
-> +	t->info = btf_type_info(BTF_KIND_LOC_PARAM, 0, 0);
-> +	t->size = size;
-> +
-> +	p = btf_loc_param(t);
-> +	p->flags = flags;
-> +
-> +	return btf_commit_type(btf, sz);
-> +}
-
-Does this API validate the size and flags arguments?
-
-The kernel's btf_loc_param_check_meta() in kernel/bpf/btf.c requires size to
-be a power of 2, between 1 and 16:
-
-kernel/bpf/btf.c:btf_loc_param_check_meta() {
-    size = t->size;
-    if (size > 16 || !is_power_of_2(size)) {
-            btf_verifier_log_type(env, t, "Unexpected size");
-            return -EINVAL;
-    }
-
-The equivalent API btf__add_int() validates these constraints up front:
-
-tools/lib/bpf/btf.c:btf__add_int() {
-    /* byte_sz must be power of 2 */
-    if (!byte_sz || (byte_sz & (byte_sz - 1)) || byte_sz > 16)
-            return libbpf_err(-EINVAL);
-    if (encoding & ~(BTF_INT_SIGNED | BTF_INT_CHAR | BTF_INT_BOOL))
-            return libbpf_err(-EINVAL);
-
-Without validation, btf__add_loc_param(btf, 0, ...) or
-btf__add_loc_param(btf, 24, ...) succeed but only fail later at BTF_LOAD time.
-
-Similarly, flags is unchecked against the enum btf_loc_param_flags mask
-(0x3f). Undefined high bits would collide with future flag definitions.
-
-> +
-> +int btf__add_loc_param_value(struct btf *btf, __u32 value)
-> +{
-> +	struct btf_type *t;
-> +	int sz, err;
-> +	__u32 *v;
-> +
-> +	/* last type should be BTF_KIND_LOC_PARAM */
-> +	if (btf->nr_types == 0)
-> +		return libbpf_err(-EINVAL);
-> +	t = btf_last_type(btf);
-> +	if (!btf_is_loc_param(t))
-> +		return libbpf_err(-EINVAL);
-> +
-> +	/* decompose and invalidate raw data */
-> +	err = btf_ensure_modifiable(btf);
-> +	if (err)
-> +		return libbpf_err(err);
-> +
-> +	sz = sizeof(value);
-> +	v = btf_add_type_mem(btf, sz);
-> +	if (!v)
-> +		return libbpf_err(-ENOMEM);
-> +	*v = value;
-> +
-> +	/* update parent type's vlen */
-> +	t = btf_last_type(btf);
-> +	err = btf_type_inc_vlen(t);
-> +	if (err)
-> +		return libbpf_err(err);
-> +
-> +	btf_hdr_update_type_len(btf, btf->hdr.type_len + sz);
-> +	return 0;
-> +}
+> +struct btf_loc_param {
+> +	__u32 flags;
+> +	__u32 values[];
+> +};
 > +
 > +/*
-> + * Append new BTF_KIND_LOC_PROTO
+> + * The combination of size, vlen and flags gives us the means to interpret
+> + * the following vlen-specified set of 4-byte values:
 > + *
-> + * The prototype is then populated with 0 or more BTF_KIND_LOC_PARAMs via
-> + * btf__add_loc_proto_param(); similar to how btf__add_func_param() adds
-> + * parameters to a FUNC_PROTO.
-> + *
-> + * Returns:
-> + *   -  >0, type ID of newly added BTF type;
-> + *   - <0, on error.
+> + * - a BTF_LOC_PARAM_CONST is a constant value; combination
+> + *   of size, vlen and _SIGNED flag determines it. If the value requires
+> + *   64 bits it is stored in {lo,hi} order.
+> + * - a BTF_LOC_PARAM_ADDR|BTF_LOC_PARAM_CONST is an address that should be
+> + *   normalized with respect to kernel/module base address.
+> + * - a BTF_LOC_PARAM_REG with vlen 1 is a simple register number;
+> + *   with vlen 2 it is a multi-register parameter.
+> + * - a _REG | OFFSET describes an address without dereferencing it.
+> + * - a _REG | DEREF with vlen 1 dereferences the value in the register
+> + *   number specified.
+> + * - a REG | DEREF | OFFSET with vlen specifies the register value in
+> + *   the first 4-byte value and the offset in the remainder.
+
+The REG | DEREF | OFFSET bullet is missing the vlen count after "with
+vlen". Looking at the other bullets in this list, each states the exact
+count ("with vlen 1", "with vlen 2").
+
+Would it help to specify the count here? Since the description mentions
+"the first 4-byte value and the offset in the remainder", it appears the
+intended count is 2.
+
 > + */
-> +int btf__add_loc_proto(struct btf *btf)
-> +{
-> +	struct btf_type *t;
-> +	int err;
-> +
-> +	err = btf_ensure_modifiable(btf);
-> +	if (err)
-> +		return libbpf_err(err);
-> +
-> +	t = btf_add_type_mem(btf, sizeof(struct btf_type));
-> +	if (!t)
-> +		return libbpf_err(-ENOMEM);
-> +
-> +	t->name_off = 0;
-> +	t->info = btf_type_info(BTF_KIND_LOC_PROTO, 0, 0);
-> +	t->size = 0;
-> +
-> +	return btf_commit_type(btf, sizeof(struct btf_type));
-> +}
-> +
-> +int btf__add_loc_proto_param(struct btf *btf, __u32 id)
-> +{
-> +	struct btf_type *t;
-> +	int sz, err;
-> +	__u32 *p;
-> +
-> +	if (validate_type_id(id))
-> +		return libbpf_err(-EINVAL);
-> +
-> +	/* last type should be BTF_KIND_LOC_PROTO */
-> +	if (btf->nr_types == 0)
-> +		return libbpf_err(-EINVAL);
-> +	t = btf_last_type(btf);
-> +	if (!btf_is_loc_proto(t))
-> +		return libbpf_err(-EINVAL);
-> +
-> +	/* decompose and invalidate raw data */
-> +	err = btf_ensure_modifiable(btf);
-> +	if (err)
-> +		return libbpf_err(err);
-> +
-> +	sz = sizeof(__u32);
-> +	p = btf_add_type_mem(btf, sz);
-> +	if (!p)
-> +		return libbpf_err(-ENOMEM);
-> +	*p = id;
-> +
-> +	/* update parent type's vlen */
-> +	t = btf_last_type(btf);
-> +	err = btf_type_inc_vlen(t);
-> +	if (err)
-> +		return libbpf_err(err);
-> +
-> +	btf_hdr_update_type_len(btf, btf->hdr.type_len + sz);
-> +	return 0;
-> +}
-> +
-> +int btf__add_locsec(struct btf *btf, const char *name)
-> +{
-> +	struct btf_type *t;
-> +	int name_off = 0;
-> +	int err;
-> +
-> +	err = btf_ensure_modifiable(btf);
-> +	if (err)
-> +		return libbpf_err(err);
-> +
-> +	t = btf_add_type_mem(btf, sizeof(struct btf_type));
-> +	if (!t)
-> +		return libbpf_err(-ENOMEM);
-> +
-> +	if (!str_is_empty(name)) {
-> +		name_off = btf__add_str(btf, name);
-> +		if (name_off < 0)
-> +			return libbpf_err(name_off);
-> +	}
-> +	t->name_off = name_off;
-> +	t->info = btf_type_info(BTF_KIND_LOCSEC, 0, 0);
-> +	t->size = 0;
-> +
-> +	return btf_commit_type(btf, sizeof(struct btf_type));
-> +}
+> +enum btf_loc_param_flags {
+> +	BTF_LOC_PARAM_SIGNED		=	0x1,
+> +	BTF_LOC_PARAM_CONST		=	0x2,
+> +	BTF_LOC_PARAM_ADDR		=	0x4,
+> +	BTF_LOC_PARAM_REG		=	0x8,
+> +	BTF_LOC_PARAM_DEREF		=	0x10,
+> +	BTF_LOC_PARAM_OFFSET		=	0x20,
+> +};
 
-Can btf__add_locsec() succeed with a NULL or empty name?
+[ ... ]
 
-The kernel unconditionally rejects a LOCSEC with name_off == 0:
+Looking at the unchanged struct btf_type definition in include/uapi/linux/btf.h
+around line 57:
 
-kernel/bpf/btf.c:btf_locsec_check_meta() {
-    if (!t->name_off ||
-        !btf_name_valid_section(env->btf, t->name_off)) {
-            btf_verifier_log_type(env, t, "Invalid name");
-            return -EINVAL;
-    }
+	__u32 info;
+	/* "size" is used by INT, ENUM, STRUCT, UNION, DATASEC and ENUM64.
+	 * "size" tells the size of the type it is describing.
+	 *
+	 * "type" is used by PTR, TYPEDEF, VOLATILE, CONST, RESTRICT,
+	 * FUNC, FUNC_PROTO, VAR, DECL_TAG and TYPE_TAG.
+	 * "type" is a type_id referring to another type.
+	 */
+	union {
+		__u32 size;
+		__u32 type;
+	};
 
-btf__add_locsec(btf, NULL) succeeds and returns a valid type ID, but the BTF
-blob becomes unloadable with BTF_LOAD -EINVAL only later when the caller
-tries to load it.
+Does the comment need updating for the new kinds? Looking at the
+implementation in kernel/bpf/btf.c, btf_loc_param_check_meta() reads
+t->size and validates it ("size = t->size; if (size > 16 ||
+!is_power_of_2(size))"), so LOC_PARAM uses the size member.
 
-The analogous API btf__add_datasec() validates this up front:
+For LOC_PROTO and LOCSEC, both btf_loc_proto_resolve() and
+btf_locsec_resolve() require t->type == 0 ("if (t->type)... Invalid
+loc_proto/locsec type").
 
-tools/lib/bpf/btf.c:btf__add_datasec() {
-    /* non-empty name */
-    if (str_is_empty(name))
-            return libbpf_err(-EINVAL);
-    name_off = btf__add_str(btf, name);
+Should the comment document which arm these new kinds use, the way it
+already does for ENUM64, DECL_TAG, and TYPE_TAG?
 
-LOCSEC is validated by the same kernel helper, btf_name_valid_section(), and
-there is no kind of LOCSEC the kernel will accept without a name.
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 7daf4c286c9b2..af5f161b5bddc 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+
+[ ... ]
+
+> @@ -796,7 +815,9 @@ static bool btf_type_needs_resolve(const struct btf_type *t)
+>  	       btf_type_is_var(t) ||
+>  	       btf_type_is_func(t) ||
+>  	       btf_type_is_decl_tag(t) ||
+> -	       btf_type_is_datasec(t);
+> +	       btf_type_is_datasec(t) ||
+> +	       btf_type_is_loc_proto(t) ||
+> +	       btf_type_is_locsec(t);
+>  }
+
+LOC_PROTO and LOCSEC are added to btf_type_needs_resolve() and
+btf_type_nosize(), but I don't see them added to
+btf_type_is_resolve_source_only() (kernel/bpf/btf.c:786-791).
+
+DATASEC appears in both btf_type_needs_resolve and
+btf_type_is_resolve_source_only. The two new section-like kinds follow
+the same pattern as DATASEC (both are containers referencing other
+types), so should they also be in btf_type_is_resolve_source_only?
+
+Without this, a typedef or pointer to LOC_PROTO/LOCSEC would be handled
+differently than a typedef or pointer to DATASEC.
 
 [ ... ]
 
@@ -281,4 +181,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35072175008
---===============6359189533444094136==--
+--===============3830223876571384478==--
