@@ -1,140 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from unimail.uni-dortmund.de (mx1.hrz.uni-dortmund.de [129.217.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ACCE477E2E
-	for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 08:01:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE0B3D6662;
+	Wed, 16 Sep 2026 08:14:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=129.217.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789545677; cv=none; b=SjvAm1jODcClTyE7FThe5zhVWDKJohLIcwW+6MW/Klf7vN/KT9famg48XFrNB+PkXsSsV8r4VDrTrZx72+qIFs+z4LlqjVcWJogGKdbTY4j7s0aWSuDM7wkHxrMNEBWIZZNoThek5RJsYqldDTvsQarZpOx0BFs5+Ch3qyspoN4=
+	t=1789546509; cv=none; b=jGZBQrLVvU8CONUFrNao84B77PuBGsZtc3JiDXPal48f0Axlcm2rJdGQ+WzwY/lYLfEa40ZSjIWqnFd/rQNrUPKGe7L3noypkWsq09w8PdNDKZzcrv0woTa+8G3IHtx6wGkBAMiQJu3yJ2d1MceIVc+CN2sJggAVwD7mEKPnhkY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789545677; c=relaxed/simple;
-	bh=3q+KGIoRBI6laXGdJr0+HUNByVC7QYBswAMCdzCdrVE=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Lp+WGfK6qFS9f6jKCHaHeb/M5+Q/75SFVr7eFHevltS9E+n8vBZDX3/6b3+FJbkPeh8x2SyT9daQdHkvRgpam9Wo1uPDE5ePR1xIeBQwuKXiV+f0kz3/JNwGn5sZZJqdavV8Pqkj+YmUdlKCpfO46/xnbVQIfzvs9T0V5XM3Byw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G6UuPWYf; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G6UuPWYf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C87BE1F00899;
-	Wed, 16 Sep 2026 08:01:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789545671;
-	bh=KxopHBr1wiOK3CpEJ9KyBcFzTgF3PR7koqDcrhq9O7o=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=G6UuPWYfrE3V6exTFWgiPpJN6twcL5wk1WcVuSiRrd657Km72HhoPPk1+sfkG06un
-	 SOYIVIH1aDVfVKmciYUmxJoL0xkWpRCjczWpSO1UFbqHN6+EcCSg/jZ28khGY3KKaB
-	 qYT2J3Y2yJM59yDpOJbZGSptpv03o/7NXsHSweEDmdNS9YXYY0NBpX6m75p4hdF5MA
-	 eW/vytpASFkdB2dHxSKd4M8Kg41PPicuhJ5CWPbfOkR/Awq6xyNQiMIliFTm+fTAxb
-	 n+dMC/HIhpTJ4cmRwgzVJzAug2dK6iDJgikR1xnO5Q+Wo2k3vlrjpJlHim9yrGfbgl
-	 A3NLEaWsk6S2w==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 bpf-next 11/11] Documentation/bpf: Describe new
- location-related BTF kinds
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Alan Maguire" <alan.maguire@oracle.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260916074118.1007116-12-alan.maguire@oracle.com>
-References: <20260916074118.1007116-1-alan.maguire@oracle.com>
- <20260916074118.1007116-12-alan.maguire@oracle.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 16 Sep 2026 08:01:10 +0000
-Message-Id: <20260916080110.C87BE1F00899@smtp.kernel.org>
+	s=arc-20240116; t=1789546509; c=relaxed/simple;
+	bh=nyL5IWzpydVjpCH/OgbKHsn40UXHbYHTISGJwQxLKLw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ddeMv+OknOPCUI/vwwAbPeW76qEE4VUAlYqQ8dPnUJmQLsODfsPDJObojHxh1nr2+yoYWxPBzzvzMEuxBlTw/XF3tEu9yYIeOjOL5fURPIWKUl7qMClMSPSy9pkoAI+BH36TCQWLxRS9fvBB6XVadl7tFXk4W94w2KoYoJY/G7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de; spf=pass smtp.mailfrom=tu-dortmund.de; arc=none smtp.client-ip=129.217.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tu-dortmund.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tu-dortmund.de
+Received: from [129.217.186.100] ([129.217.186.100])
+	(authenticated bits=0)
+	by unimail.uni-dortmund.de (8.19.0.2/8.19.0.2) with ESMTPSA id 68G8ECk4026897
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Wed, 16 Sep 2026 10:14:12 +0200 (CEST)
+Message-ID: <f4509145-1148-4ec1-b1aa-9bf944de7263@tu-dortmund.de>
+Date: Wed, 16 Sep 2026 10:14:12 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v7 0/5] veth: add Byte Queue Limits (BQL) support
+To: Jesper Dangaard Brouer <hawk@kernel.org>, netdev@vger.kernel.org,
+        =?UTF-8?Q?Jonas_K=C3=B6ppeler?= <j.koeppeler@tu-berlin.de>
+Cc: kernel-team@cloudflare.com, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+        Chris Arges <carges@cloudflare.com>,
+        Mike Freemon <mfreemon@cloudflare.com>,
+        =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        Breno Leitao <leitao@debian.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>, bpf@vger.kernel.org
+References: <20260612083530.1650245-1-hawk@kernel.org>
+ <ed63c31c-0d05-4532-bed6-23b7608ec5e2@tu-dortmund.de>
+ <3a3a99dc-b554-4b5d-a004-67454e66e5e0@tu-dortmund.de>
+ <a184d9c0-aa3a-4d00-9a0e-e7a1d9d344b0@kernel.org>
+Content-Language: en-US
+From: Simon Schippers <simon.schippers@tu-dortmund.de>
+In-Reply-To: <a184d9c0-aa3a-4d00-9a0e-e7a1d9d344b0@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] bpf: BTF_KIND_LOCSEC offset definition is broken for kernel modu=
-les
-- [Medium] bpf: BTF_KIND_LOC_PARAM size restricts representing larger funct=
-ion parameters
---
+On 9/16/26 08:45, Jesper Dangaard Brouer wrote:
+> 
+> 
+> On 9/15/26 16:30, Simon Schippers wrote:
+>> On 8/10/26 15:25, Simon Schippers wrote:
+>>> On 6/12/26 10:35, hawk@kernel.org wrote:
+>>>> From: Jesper Dangaard Brouer <hawk@kernel.org>
+>>>>
+>>>> This series adds BQL (Byte Queue Limits) to the veth driver, reducing
+>>>> latency by dynamically limiting in-flight packets in the ptr_ring and
+>>>> moving buffering into the qdisc where AQM algorithms can act on it.
+>>>
+>>> Hi :)
+>>>
+>>> I worked on my implementation of DQL coalescing that lives in
+>>> dynamic_queue_limits.{h,c} and wanted to share it so we can consider it
+>>> for the next cycle. This is because in the next cycle I would
+>>> like to add BQL support for tun/tap as well, in addition to veth.
+>>> Is that fine for you?
+>>>
+>>> I think it is in good shape. It uses the same logic as the v7, but
+>>> every new field fits inside the existing dql struct, and drivers only
+>>> need to call the usual netdev_tx_sent_queue() and
+>>> netdev_tx_completed_queue() to use it. Patch 3, 5 and 6 are the same
+>>> as before, only 1, 2 and 4 are new. Benchmarks looked fine for me.
+>>>
+>>> There should be no regressions for other DQL/BQL users. I paid close
+>>> attention not to break the dql cache lines or other logic.
+>>> coal_usecs is now configurable per queue via sysfs and also via ethtool
+>>> as usual.
+>>>
+>>> While working on this, I found a missing barrier in v7:
+>>> There was no smp_rmb() pairing the smp_wmb() in __ptr_ring_produce()
+>>> before dql_completed() reads dql->num_queued. This happens to be safe
+>>> on x86, but on other platforms the read of dql->num_queued could be
+>>> reordered before __ptr_ring_consume(), triggering a BUG_ON() in
+>>> dql_completed(). Fixed by adding the missing smp_rmb() in veth_xdp_rcv()
+>>> before completing.
+>>>
+>>> Would love to hear your thoughts on the implementation!
+>>>
+>>> Thanks,
+>>> Simon
+>>
+>> Hi! Any thoughts on this? Do you want to continue this series?
+> 
+> Appreciate getting poked :-)
+> 
+> I will not have time to work on this until after October 5th.
 
-commit 2c604400821fbb8c84a44304f76a074c263fd25e
-Author: Alan Maguire <alan.maguire@oracle.com>
+Noted, no problem.
 
-Documentation/bpf: Describe new location-related BTF kinds
+> 
+> If you Simon have time, feel free to submit a V8 patchset with the
+> barrier fix mentioned above.  I should have cycles to review and ACK
+> (except between 26 sep to Oct 4).
 
-Update BTF specification to describe encoding schemes for
-BTF_KIND_LOC_PARAM, BTF_KIND_LOC_PROTO and BTF_KIND_LOCSEC.
+I would then also move the coalescing logic to
+dynamic_queue_limits.{h,c}, ok?
 
-> diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-> index 004aa1058d857..70ab6ad608ae5 100644
-> --- a/Documentation/bpf/btf.rst
-> +++ b/Documentation/bpf/btf.rst
+I am convinced that it is the right decision, because it:
+- saves us the new struct veth_bql_state, everything fits nicely into
+  the dql struct in the existing cachelines
+- allows other software interfaces like tun/tap to use the same logic,
+  which is my goal :-) others could be e.g. wireguard and ifb
+- allows to change coal_usecs per queue
 
-[ ... ]
+> 
+> We are still interested in getting this merged. Notice the bug fix from
+> Jonas 60db47f02bfa ("veth: fix queue index used to wake the peer txq in
+> veth_poll").  We are running XDP on our veth production interfaces, so
+> we didn't notice this.  Still, we are currently waiting for this fix to
+> get fully rolled out, before proceeding with the BQL variant.
 
-> @@ -563,6 +568,77 @@ The ``btf_enum64`` encoding:
->  If the original enum value is signed and the size is less than 8,
->  that value will be sign extended into 8 bytes.
-> =20
-> +2.2.20 BTF_KIND_LOC_PARAM
-> +~~~~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +``struct btf_type`` encoding requirement:
-> +  * ``name_off``: 0
-> +  * ``info.kind_flag``: 0
-> +  * ``info.kind``: BTF_KIND_LOC_PARAM
-> +  * ``info.vlen``: number of 32-bit location value words
-> +  * ``size``: size in bytes of the represented parameter: 1, 2, 4, 8 or =
-16
+Yes, I saw that. Probably did not happen to me because I was always
+using single queue..
 
-[Severity: Medium]
-Does this limitation restrict representing parameters larger than 16 bytes?
+Thanks.
 
-If the UAPI restricts the size to a maximum of 16 bytes, it prevents BPF fr=
-om
-accurately describing functions with large by-value parameters. For example,
-structures passed by value on the stack, or ARM64 Homogeneous Floating-point
-Aggregates that can be up to 64 bytes.
-
-[ ... ]
-
-> +2.2.22 BTF_KIND_LOCSEC
-> +~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +``struct btf_type`` encoding requirement:
-> +  * ``name_off``: offset to a valid ELF section name
-> +  * ``info.kind_flag``: 0
-> +  * ``info.kind``: BTF_KIND_LOCSEC
-> +  * ``info.vlen``: number of inline sites in the section
-> +  * ``type``: 0
-> +
-> +``btf_type`` is followed by ``info.vlen`` number of ``struct btf_loc``.::
-> +
-> +    struct btf_loc {
-> +        __u32 func;
-> +        __u32 loc_proto;
-> +        __u32 offset;
-> +    };
-> +
-> +The ``func`` field is the non-zero type ID of the ``BTF_KIND_FUNC`` being
-> +described. ``loc_proto`` is the non-zero type ID of the associated
-> +``BTF_KIND_LOC_PROTO``. ``offset`` is the location address offset relati=
-ve to
-> +the kernel or module base address. A LOCSEC named ``inline.text``, for e=
-xample,
-> +contains inline-site records for the ``.text`` section.
-
-[Severity: Medium]
-Is this definition of the offset field correct for kernel modules?
-
-Modern kernel module loading splits executable sections (e.g., .text,
-.init.text) into independently allocated memory regions. An offset relative
-to a single module base address cannot reliably resolve to the correct memo=
-ry
-address.
-
-Should this be defined as an in-section offset instead? Tools relying on th=
-is
-documentation will calculate incorrect absolute addresses for inline sites =
-in
-loadable modules.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260916074118.1007=
-116-1-alan.maguire@oracle.com?part=3D11
