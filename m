@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9220E3264FD
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 22:31:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2DCD3DAAC8;
+	Thu, 17 Sep 2026 22:31:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789684273; cv=none; b=C6Y++U6ndqgFW4+BbtADQ0XGXzTLpgP+X/UorulexJMruXe61gAblfs/eaiu5DcMP2ocQWKaH8JL8imvPZ/CXc4O2wTtasep6pQBVm8whkbdoQgrbWhE++PGDhVbw0ccz+vSUuSa32E8dmHqtyuyjfy/EzzLJ0xXg/31X6oUgQg=
+	t=1789684275; cv=none; b=oAczZy+DF24g9/L8j/GAitzp6f7NZv+FRWDKwP98c4UC5ofaQqHO3lVWircK50/hP6CxjTYT1bODHaauf9JS16lUnk/OKD6aowVTODWRlGULjS9qMcDaijHL+EHCv2kEfxFS5araxYReikrgozKaiFtVEY+ngHzHeM2JoSmfHTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789684273; c=relaxed/simple;
-	bh=5XPW37OOz6EckWaM/SoeEGRz4E4X+nadp7t6QOo8pd4=;
+	s=arc-20240116; t=1789684275; c=relaxed/simple;
+	bh=2XweQ+rDJ+fZAy7DSwx1gobAciV1lGVDkjAKKkZGB7Q=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=C+tIay15Bap+1N0qo6JrV66HA3mlJ/0MiWuWNfcnVLKeVGbLu+6eP+3Gp+/phXXYHIL30mNG1VixppWwnvOpEXo5oxXvUP9y0h3Vb0n4bCDX0WbA/E/hCC9IkwkczN0eduSa+p/kHI3El9njXfyp4B67qeu8AiPt5iPUi+WznAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RVH7PeTY; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=TK3/2Ci4y2fC+hlNnkOtpFXpwuvbYnwXeoThjrWWqn6THkZ+EnU+7eMQ2RlxxxW2UbJOZC6ApbBsmwWMOGRZEwblOh2VNssITYFpt2Aj4jJCen+P5AKXWEKlsZ2Hn6DSYD7IyyngTRs+RD+Zy74f7mEyGq0LQmsjC5qy4gFhYV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ky8711Sj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RVH7PeTY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2FEB1F000FF;
-	Thu, 17 Sep 2026 22:31:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ky8711Sj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 678C01F00893;
+	Thu, 17 Sep 2026 22:31:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789684271;
-	bh=uoLvq32wFs3HRCgMTyThaxfKRFHqKTFCKDgqFgbMOpg=;
+	s=k20260515; t=1789684273;
+	bh=PlAtmKj/yRuyyKVdtIKk9Y8dlYAygrMY9Sp1HMi8Awc=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=RVH7PeTY8Ks1CgsWTqu6N5i342OpfnW8kk65tKLmbIjl/B71Un4t3UYIecpJWH5zG
-	 aTP3c2uE5qUcTYgOY8eJna1DW44LyFeD1GFb1uMTBIwexrlzkYlQ6KVzsz2quDL9/5
-	 Hgf413bEN+oWMeLsnhpPP1mL/JZTuqtrSlMslS9sMXqiohwR857xJZEMG4gaqFzzjr
-	 eVPg1JVglzZJqQ657OIVUCJjd9XnnSXNxrao/yJkkVEBxLodqWac/kd8s//raNS+vX
-	 QoCwt+gf64iBjWo11bJ4cxde65h0rZSyAX8aQeKckfY5NO4ljEy+9Lqvyq5QtO8iLg
-	 qy1LzXtHoVnFg==
+	b=ky8711SjEoEHDMlko0oXpy5onyqd+GbHgfF5LfBeqkaErZrdU1UDptbvutC50AXhv
+	 1XY0ApD0e8q8VK4CVjBBppuLNLhDyhga29HgHhIwkgsTmRd1Q0RtYzuoWayYEL1+xb
+	 3EIf8n6lk0CuH84KhI6Sc3Q+cZlMEjwuPRhlIFO+0mdJHsIHoL8qsnY9ZOqiWXYRvw
+	 RMTGB2JQiyRo4KfYBRxtFixppORKfEZ/iaced8QF1qgVZ+RGSV2xVjO2EevauUsgwT
+	 apvA0ITM9a1oU37bXLq5KiVUW+CmzsYm/okP7UTeA/3suYQOchVDWNn3YQkVKJfyB8
+	 KAI3krRgIKTdw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93B993811974;
-	Thu, 17 Sep 2026 22:30:06 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 197DA3811974;
+	Thu, 17 Sep 2026 22:30:08 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,45 +37,39 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/3] bpftool: Improve perf counter reporting
+Subject: Re: [PATCH bpf-next v2] libbpf: Fix program log buffer size
+ validation
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <178968420538.152767.17236037984981874138.git-patchwork-notify@kernel.org>
-Date: Thu, 17 Sep 2026 22:30:05 +0000
-References: <20260916-bpftool_cyles_per_run-v4-0-f2de02c480d5@meta.com>
-In-Reply-To: <20260916-bpftool_cyles_per_run-v4-0-f2de02c480d5@meta.com>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com,
- memxor@gmail.com, yatsenko@meta.com
+ <178968420663.152767.3344352465407469671.git-patchwork-notify@kernel.org>
+Date: Thu, 17 Sep 2026 22:30:06 +0000
+References: <20260915-libbpf-log-buf-fix-v2-1-2feca3fa4842@gmail.com>
+In-Reply-To: <20260915-libbpf-log-buf-fix-v2-1-2feca3fa4842@gmail.com>
+To: Luis Vieira <luisflavieira@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, mykyta.yatsenko5@gmail.com, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Wed, 16 Sep 2026 12:26:39 -0700 you wrote:
-> Accept valid perf snapshots whose counter is zero. Group selected metrics
-> per CPU so derived ratios cover the same scheduling intervals. Scale each
-> per-CPU counter before aggregation and report cycles per program run.
+On Tue, 15 Sep 2026 15:13:35 -0300 you wrote:
+> bpf_program__set_log_buf() checks the existing prog->log_size instead
+> of the incoming log_size argument when enforcing the UINT_MAX limit.
+> As a result, an oversized value can be accepted.
 > 
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> ---
-> Changes in v4:
-> - Use enabled time to recognize valid zero-counter snapshots.
-> - Build and enable each CPU's complete perf event group in one pass.
-> - Keep run_cnt as the total count, drop run_cnt_valid.
-> - Link to v3: https://patch.msgid.link/20260908-bpftool_cyles_per_run-v3-0-60e86f325c35@meta.com
+> The setter also accepts a non-NULL log_buf with a zero log_size, while
+> bpf_prog_load() rejects mismatched log buffer and size values.
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v4,1/3] bpftool: Accept zero perf counter snapshots
-    https://git.kernel.org/bpf/bpf-next/c/b2cf39f53478
-  - [bpf-next,v4,2/3] bpftool: Group profile events by CPU
-    https://git.kernel.org/bpf/bpf-next/c/6b5fe4b6d5ae
-  - [bpf-next,v4,3/3] bpftool: Scale counters and report cycles per run
-    https://git.kernel.org/bpf/bpf-next/c/c2c8bd265627
+  - [bpf-next,v2] libbpf: Fix program log buffer size validation
+    https://git.kernel.org/bpf/bpf-next/c/8cca9a6bb681
 
 You are awesome, thank you!
 -- 
