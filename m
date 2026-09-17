@@ -1,110 +1,88 @@
-Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E3C33F8B4
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 14:48:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A56315AA67D;
+	Thu, 17 Sep 2026 15:03:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789656498; cv=none; b=p7yqZZ4pjpiw2SWCjFrZknZ//HTj1mpNV1Qk5lpgoZaqbKOTySyHoufC1ELeqoiF4q0i6NTgz49PcnHOnS+efqOXC14nmre2lC74bjdNo6hvqLiqDdwIZsIseajONQsdC923e8ttkkJWEfpx80weZquz9uI4nyeRRhnLcC+IXcw=
+	t=1789657435; cv=none; b=lVPzlwn0mGNGd3xbrQ/M7tdjRmilqcZYv/CRsEs1M8HmyRowLOE/G2qvqWY15tYUdpjpZCgHNbPFnJNKLJXFvSeyLK+Wye+4628m6mtbGR1Effncdy8WDslTiPlOS7Y/VurRhPdyzHkoc0VsgoiyIDInnLUdliyPR4CgM+/F6Vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789656498; c=relaxed/simple;
-	bh=TlDhzyajRA5f0zub5bwxnjG10gWnL8OjabF1BPRCS5o=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=YBagrkYXiCavBCkWBtzFfbA8DAp0wqxE3mOJSiAfOmpmnT+YuA4IBnbYGAYEVSNRPM2JGUl/qs6bVGohf4a0q4B6ue+K6O2M/XJHbsO4htIkV7VWLAVBJYWHqpJv36lGiSkWXTauE7aVMBU29ZBmoTF5sdRf/PJrDRhEvlrBIBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZQCd+MGF; arc=none smtp.client-ip=74.125.228.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789657435; c=relaxed/simple;
+	bh=Uc5weSts25nZNlldM7KpaVaUrcWLaJtcP6qB/u8woO0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lLngoxwz4Fn2qIJdG38gShMzuyePfLd9gZ1hNWPv6RRsTBzBm9BjVUoXSSxjpyUbh2V7x+lf+gOgveKx+hehk1C1GUJ1ifSP/RM8uQjB90ZIBjapeKA9mQOnPrzl/cfbs1TqD78WexQiXsAo40WEz4pFokfjEgrd1yaUQdtDNLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hti4jig/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZQCd+MGF"
-Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a8038a9f10so1380827a12.1
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 07:48:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789656487; x=1790261287; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=wn5NsxyOXQcOb7sV/UCodhNpDSo8VYH5Qa/WX4wiN4Q=;
-        b=ZQCd+MGFecTWR21nqgMaVSI8cjprbLsukfI5YmU99Akz/PAH3jJj3LsnGUcLZsyZt2
-         9BK0Yj5TyA4HiDBM3W61iRofDa8CiHcV7sMQWCdsadtWzZHV7FIAkIpy8C2WOmWJU3Pa
-         PsQFWICGK9+zvTijy5ZZ5waXWoCb57cy2PBy73vfjU9uUyLgOE8Ryn5hKayEDA1q4Ts4
-         vMcFXLBhhjxkVHXAOQz8+OjCGnTdb6MeDUJ8QylT+JqSMoSEol09h+FxmNiQlbuk1+YF
-         G5A0CoVZxjvR/G+vc9HItFRBon2CMpxiro3CILw2lIunV5vm947bSE4+TX4v7t3Ma0F5
-         CUzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789656487; x=1790261287;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wn5NsxyOXQcOb7sV/UCodhNpDSo8VYH5Qa/WX4wiN4Q=;
-        b=Gc+moZ6TbvKlU2J89sfiJa7D3zc6hdfdtVSoRQYGHacA/5lo6AdkTVopHKodNCVqlB
-         MbYkHUNzj1pUhezjgRuewkuTvRE0EH3dc2JJIc8K9BKfO5hltyCZwiDFJiAviCnHdEH2
-         AWYUXM7gEiAhEXGKPoRgxLG98+f1qCYBeOhP9SQOGHBmSTwsutO9WlFW8byqE28q6NaK
-         3vz3oioenixkCMQA+qsN3ZUYxSmVp0MmAEwHnotNTQIh9IP079216Ybw92CMxJFzK1At
-         HXzCgF3V0B7MUfWNWjMwr+spTr7+17LdISgxErc1x1DwJGv2RsVCjAyT/j3WYssHOt7D
-         3LkQ==
-X-Forwarded-Encrypted: i=1; AKwUvBz1Ak22OqYNE57ObpLv8fnVdsB7Z8kQld4RicREvnY6t542OsdEPTqF8j7j6aJc6Zl74Kc=@vger.kernel.org
-X-Gm-Message-State: AFuF++moqs4apKfcfSF2m4RME9J0kRU4CvTA9gKxSRMobC8AeED2gcFR
-	UlP3CUwfH9rFUVEUb1F7ks6QnIxcbwzYpQN1tdllJ+ZsVy8bjm94nCPh
-X-Gm-Gg: AYBFou00c4b5n+bpm3M9zbKn9ES3uEv0R34exBZq6IyON1hK4tOVBa8uucdaS5UY/CR
-	79swziy7nReG3HcmYd65cbB/uAYx4LJSJnHIufb0PJnlN8sOVUbmJeetiE7AyaSc4BZPPji/oqh
-	ptAaXsoyx/HHVfTYJoWYFUgy9BLDmHhAtrTB2SDHRymZ6GgKteekrYXb2i70L5xgaL3bq9RjVbA
-	GHHiZlfnGqbVCmbBFWWbI0l7kWkcWtFiRM8n0kvaf7pvetdv7Quu+CG6D+aQ/+JaDaQ9GeNw5GX
-	5TrcN+WwVhoRM3idWgsuTXIScYggoqRmweBglocqV+p61SjoYA+CA6QhpABcP2xzgu57NA/9Rz3
-	KRttb5rBRCKfTPCT8J406IBuq9ZxwyvPPFk30XLipj/V0JiuAuBbSbTj51w6X3lmzlhbHHfQLAp
-	dhPlSGxwI4VodL1YY8R/BCLb+CqmNnyTAyeTPv7V4eOhMvbaYr4bdEJ617QxL1ydQwYCwiwscmA
-	AL5k8GscD1+PKsNNE1IHaB7PbzU5+aYi/n/CE6ng2oiozuusY1rbyIOtaGtcHpxt4Ir9JjFbj4W
-	QGMg
-X-Received: by 2002:a05:6402:455a:b0:6aa:4b1:8a99 with SMTP id 4fb4d7f45d1cf-6aa22453dd2mr4655355a12.41.1789656487041;
-        Thu, 17 Sep 2026 07:48:07 -0700 (PDT)
-Received: from localhost ([153.61.198.247])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6aa1d228bccsm3886836a12.7.2026.09.17.07.48.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Sep 2026 07:48:06 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 17 Sep 2026 14:48:02 +0000
-Message-Id: <DLHO9Y7TLIK7.HLZOCWK5B3I8@gmail.com>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <ameryhung@gmail.com>, <sashiko-bot@kernel.org>
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: Destroy callee-local dynptrs on
- subprog return
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Xu Yunxiang" <xyx2021@mail.ustc.edu.cn>, <bpf@vger.kernel.org>
-In-Reply-To: <20260917052000.1589643-2-xyx2021@mail.ustc.edu.cn>
-References: <20260917052000.1589643-1-xyx2021@mail.ustc.edu.cn> <20260917052000.1589643-2-xyx2021@mail.ustc.edu.cn>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hti4jig/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D1A71F000FF;
+	Thu, 17 Sep 2026 15:03:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789657420;
+	bh=Uc5weSts25nZNlldM7KpaVaUrcWLaJtcP6qB/u8woO0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=hti4jig/GfSMiiM5Hzk+SBZFZJ9qSsa3bdtQfEwTccZLUh4zx0pPulx2cHqfC1s6X
+	 0N8vtJ1IVS3LsdEJjarF9fg+Tl59zIJzb7eIcqiHqmkdYRkyOBDlbSmO8w30CP0KSu
+	 wp+7bynbmiwuoZNyjKtxD6xrrb7WUobs3txe3ncBaMa7bGc07kzgUst3884ffUvXoc
+	 r0mzrSWIhsLUGsp8FjvXYIEKGsR1obmd4IZqaNuYPsVb5RVfXCfqVkrxJJgLcgRUgu
+	 3sRG78G1h8QWuVUNqHk8IO67cxprIFvqp+9kx3zhSQPuemP04sAzLdu/z1pnCFEljq
+	 MKhea3bxzpF7Q==
+Date: Thu, 17 Sep 2026 16:03:36 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+	Networking <netdev@vger.kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>, linux-kernel@vger.kernel.org,
+	linux-next@vger.kernel.org
+Subject: Re: Missing signoff in the bpf tree
+Message-ID: <9d668d7c-8f85-49ad-bdb9-5cb81fb6f60d@sirena.org.uk>
+References: <aqvBPVcN__UX8P85@sirena.org.uk>
+ <DLHJEZ0K0FV1.SCQLJJQNS1ES@gmail.com>
+ <66d3f5cd-12df-4000-8459-360ba57cea12@sirena.org.uk>
+ <DLHJUSTDSQ05.28VUGOV7YPS6V@gmail.com>
+ <ec2acd16-40e3-46b7-b120-ce9eec70e942@sirena.org.uk>
+ <DLHK013DCY3J.19Y8X3Z0RTWCI@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="GY2RYStuRZFknsXy"
+Content-Disposition: inline
+In-Reply-To: <DLHK013DCY3J.19Y8X3Z0RTWCI@gmail.com>
+X-Cookie: Whip it, whip it good!
 
-On Thu, Sep 17, 2026 at 01:19 PM Xu Yunxiang <xyx2021@mail.ustc.edu.cn> wrote:
 
->  static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
-> -				        struct bpf_func_state *state, int spi)
-> +					struct bpf_func_state *state, int spi,
-> +					bool on_func_exit)
->  {
->  	int err = 0;
->
-> @@ -867,6 +894,15 @@ static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
->  	 */
->  	if (dynptr_type_referenced(state->stack[spi].spilled_ptr.dynptr.type) &&
->  	    dynptr_ref_cnt(env, state->stack[spi].spilled_ptr.parent_id) <= 1) {
-> +		if (on_func_exit) {
-> +			verbose(env, "cannot return with referenced dynptr in callee stack\n");
-> +			bpf_diag_res(env, env->insn_idx,
-> +				     "referenced dynptr on function return",
-> +				     "The departing stack frame contains the last dynptr that can release a referenced resource.",
-> +				     "Release the referenced resource before returning from this function.");
-> +			return -EINVAL;
-> +		}
+--GY2RYStuRZFknsXy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Pls
- don't add a bool to destroy_if_dynptr_stack_slot() and touch all of
-its callers just to print a different message.
+On Thu, Sep 17, 2026 at 01:27:01PM +0200, Kumar Kartikeya Dwivedi wrote:
+> On Thu Sep 17, 2026 at 1:23 PM CEST, Mark Brown wrote:
 
-pw-bot: cr
+> > Do you have a full list of the current committers, I guess there's been
+> > more bitrot than just this?
+
+> It's me and Eduard, apart from Alexei, Daniel, and Andrii.
+
+I've added you and Eduard.
+
+--GY2RYStuRZFknsXy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqsAUcACgkQJNaLcl1U
+h9AtEAf+Onfe6gqwWMdwGPXS9W/qmMlQ1qDQKmuYCcDu5RvFasCkyZd2NFxMRHoM
+pljbsN/XQNcgvqTAqz8uukxJ4s7snSqyPuS8G3Yx7GzMM7gkTkpsws4gXQt6Cp0p
+MXRQuBOAonYRDZms3YpNPfaIMOOQPxEIam1oZPbfkt/VeLiHAYG7JPtv9sF7eKG+
+vec1aqjAepZEMqZKEUVUXNQHJi4q4qSIUoP+xm81xkztRDNDH3khJNzWG/JHxbra
+l4jfPXbuMtm4k6hUUcfKvIOTaqUIewSr7PIFfRa4qlNKRKW1a5BYGFxtABNPd31u
+JOj+tfTLcZ+dm96sEOeJFsG0NQ8vJg==
+=ltKS
+-----END PGP SIGNATURE-----
+
+--GY2RYStuRZFknsXy--
