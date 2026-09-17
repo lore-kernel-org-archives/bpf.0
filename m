@@ -1,195 +1,167 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EB7F4FECD5
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 13:01:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7D352D2A1
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 13:22:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789650117; cv=none; b=mI2vrvD2ZkCOQMcSLURQeM1EUmKLcq3oM+P7dSyrUJGMIMGNLyf+6l/4TLYKkPDLNH0IktOGAANWKg1K3RmS39jcg8k/BOeoimvZOZlTX+yVV7sN++FKTemzdTPTy1ZRa4xIbIc/B4yXerdXp2zkndeNxnenCY2ZLBczofrGc7M=
+	t=1789651370; cv=none; b=fuOOgo/0NMW58idTPUBuKjtKhmpGuRHMZmyPCb96sv7/m1jLY/2jjAsa6kdlfNmewrOWE8Rq4x5Mqk4BldZ4LWdWj1hT1WvY8tOEsHa9W0aW+KUynZ0fXLLxWc1mG/aOLN6NB1Oav0wNfkB4PvgXMl9ueRGzaDcZj/4E1UKXUd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789650117; c=relaxed/simple;
-	bh=dMuu7QTSBuGOYP65DRJTKTWRO5GxSZyHmGPkyhV50K4=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=C3hTxXw//w81ZMBsHCLeWF5NfqAw/UguJ4CCa64dNEc5E4kK7nnCA8RZJS8peAxfLBy2/0iVScy3WKGEigXNwRC/1C3Xng/yrhWa4T1e6f+KQm8hcc9fHlM38388WoyJ0AsPQJ8TIskwZ3mCgyLI7ElVTBvviYDJU1rgT29km0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=faopFsgs; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1789651370; c=relaxed/simple;
+	bh=eUFZj7HdiNssWy2NTZ7R6ChYmtk7obu+WhbPxWvm/oE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=sMubAt4TIaKjbPP9ArjhYIpU6Uo2fQi4A/KmsahzbFQNRBdnHsTNRIe7jPMxevSUo497BV87LOEiYlfBeoZDRVEF3Uq2Vz7uyWhBS+3+uoEcXsxpbSusZxLvXc2bfXf2qrJC5a8fFnxcgxEcAsEdakt1pfjtW/HEhwbTIeVKEGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=L/Feg6bt; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=U6oj7n+e; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="faopFsgs"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68HA1mKc2233185;
-	Thu, 17 Sep 2026 13:01:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pp1; bh=AQRHdCj16TrrSWnTpDkc5vju0kVO
-	TBDHRDpVkj/3P68=; b=faopFsgssE2R4TjJZGlgfZ9Eo5zejWBuU77fTXX6Y4VG
-	SoeIFOze/vQXWRFDviMgy20w90pqpnpfK0iDhRT4+z319N3jMJnvE9MxgNw4KO7g
-	P+euljUmx50zWZTpO7Ui8Nf4TLKqh0VgCFGP9A1CcmxJyqFaAiavZfWvPuD6Vn/O
-	xO+aknNRBAahpjibVmlT9iNPvJrXZvhz/VBYbYdpKABBCFY/D4g/iGt1xTwER281
-	DdFP9YSqZ8u6QODosjx9uL2pQJlyJIynb7xAvc4AOWRCX0HG+DdISVlfMOlA+HkV
-	h15xSXxJLU4fB36oIl+3mYIsjatmsStrnI97+Ik3Ww==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gmxcv9xuv-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Thu, 17 Sep 2026 13:01:14 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 68H9aQTe2917878;
-	Thu, 17 Sep 2026 13:01:13 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4gr5xa2c88-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Sep 2026 13:01:13 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 68HD1C8f26804966
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 17 Sep 2026 13:01:12 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C786C5804B;
-	Thu, 17 Sep 2026 13:01:12 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CF53958055;
-	Thu, 17 Sep 2026 13:01:07 +0000 (GMT)
-Received: from [9.61.254.151] (unknown [9.61.254.151])
-	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 17 Sep 2026 13:01:06 +0000 (GMT)
-Message-ID: <ff563467-0bab-43ec-a46c-a4167bc12473@linux.ibm.com>
-Date: Thu, 17 Sep 2026 18:31:05 +0530
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="L/Feg6bt";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="U6oj7n+e"
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68H9ZXO7576867
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 13:22:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=CflkOAT9fCKQ7PMjFcNJ2k
+	iw8Vw7bCScxaeZQVMpyoI=; b=L/Feg6btTKnpBE/i54fr0iB++Wii5prBd4wavK
+	v0hHE1w+YXFsJGJQ1LGTrWFImyruaOyg3i3/XJSGWJrzDtPxdM/weFsTF9wnDMS5
+	GnF08wEQA6AWs/IeuMFc26b9VU5E/DM8oCEb3VdtVD07jORrIVSmTlWYQNVoYqvB
+	fvrDb0R5g5rylkV880t6BIjBFKjKVXYqQzrB1gyfzHwFeG2q9LNrRM3ga//nvhVi
+	8sKh9ULVAd3DnqIsFDhjR+wogdfQVMQWeAkv95FHLCpBo8hLscWMezqns034noNG
+	WfwO0u35pVXo1sDTGXRNv7EFSsHzmFrBxMHvD4YnFOvS7Hkw==
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4gr8uw27d7-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 13:22:47 +0000 (GMT)
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-91051512080so13699186d6.3
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 06:22:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1789651367; x=1790256167; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=CflkOAT9fCKQ7PMjFcNJ2kiw8Vw7bCScxaeZQVMpyoI=;
+        b=U6oj7n+erQOFa1W7wBVj3TheBPlmFpdzTP7mrRcgZtXio9cYftNq6AKfPAdNT3P4SC
+         jaEb0jT5MCT02J0zD7L8BpQUm2AaFh7W4mPOBePqwvapJXmb1Y6rzv3oCVZWxK7hA+j0
+         SJGMoPrIqclaJKcpIC5dHpQfHdCNHuh4QurNLTkP2AS0R/BU6XftAorjfVQRSGl1WZvT
+         iZQX6URQUjY0ILkcCK+S4JSls15YRI5IyEb+3TCwhEGP+A55myCQv0WlgVnwRXNt4uRx
+         3hmn/V2E1jzpcunTWMx5eAlK9xYrurMCf4Du8gpj7jAM0GAprfbLSpd2aqtMeETjx0HJ
+         6JHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789651367; x=1790256167;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=CflkOAT9fCKQ7PMjFcNJ2kiw8Vw7bCScxaeZQVMpyoI=;
+        b=aszOYb18S07kMCSTUciV2KpetY9r/P52BLl6iSpuHlB0HjPzUe1ceDtq/OXmOsknRX
+         PzZEJ21hQIlNxMCcd3mYWKVfE3FVCgx1aEOTgt2aTRwvSBqYvEcDASvSHcvSXVgVU2+D
+         OOUuDJWR9o7wxyuIGV9wKmHcEajihJd7SsnJSbFNrpjaRqtAIfTUlYV9LAC6dhyU7QYz
+         9WYtDE5to19us1DC5xcAd9WNGwhkX7ENbGpzOrhY0zbc07GNQTzIbN1QuAnebFrbGQbX
+         QqX2hroWS3//w9mRqgESK0jE0JqMiO88gSar1olecMD4blMO9I4cyq87zynS3y5wqUMp
+         ocYw==
+X-Forwarded-Encrypted: i=1; AKwUvBzDdsIiWKCqxej6j4dr4aBdQ7FBXnXjWIl+cGAtNgLazgPmmFkxNwttEvo2EwdDqxmlwLo=@vger.kernel.org
+X-Gm-Message-State: AFuF++nVt/RrMW1FxR/Z9K85CEc91i4kR9Rry1haBnmTUphD7hh0BD4/
+	06sn01jrHVx1dV2JTWWWYMTFJEALRANzDPhmYfaGbuF37j6tOzDt7t0gq5MJewU9BG76zFkqe+1
+	28f+RFYHzSMrYPhv5KGO+U151CZqWHOOCT+ME2yzKbCYMSDbysh2IzrDycu6E0Tw=
+X-Gm-Gg: AYBFou1XwW4Ai6qcs+Yv+z/nk437CFeZSyJzu9ox5Uc/sQGgBgIJiiN3nSKg2df95aB
+	//5Ztj+JB+S/DIyAyRXMcDofhiavbbRkplBq5/VeL8z+wexeYgKziM2LdSm3fYswsd2v2i+Zv5p
+	GhYqJMRInrL97i61aUVwuU490xmz7rPYkZAzu7oYLi35Tj1jlE1dkCH3WiO09Lu8cq2OHo9m8y3
+	GTz5v5K4OzM5KODF2T0irxQ3Lob3GNZC8c+BQ3dauAKmJoBWzzEZodck1Vkd7nJtbuDiQ+xt3/f
+	tvtuvYE/1GfqCMYi2yzbb/sCmmJLl2Fv69dwIKClbRtfxieQHKJXwmHDjUHIJ7ulIX9S7vxRMZo
+	S7RyM7iexoS3ekw==
+X-Received: by 2002:a05:620a:7087:b0:93b:d7a0:d9ea with SMTP id af79cd13be357-93bd7a0f070mr53259485a.68.1789651366479;
+        Thu, 17 Sep 2026 06:22:46 -0700 (PDT)
+X-Received: by 2002:a05:620a:7087:b0:93b:d7a0:d9ea with SMTP id af79cd13be357-93bd7a0f070mr53253985a.68.1789651365901;
+        Thu, 17 Sep 2026 06:22:45 -0700 (PDT)
+Received: from localhost ([188.216.77.92])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fbd23f4e6sm91451705e9.8.2026.09.17.06.22.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2026 06:22:45 -0700 (PDT)
+From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+Date: Thu, 17 Sep 2026 15:22:29 +0200
+Subject: [PATCH net-next] net: mvneta: rely on napi_build_skb() in
+ mvneta_swbm_build_skb()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-GB
-From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
-Subject: [BUG] audit/powerpc: WARNING at kernel/auditsc.c:1995
- (__audit_syscall_entry) during BPF kselftests (test_progs)
-To: bpf <bpf@vger.kernel.org>, linux-audit@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Shrikanth Hegde <sshegde@linux.ibm.com>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        Hari Bathini
- <hbathini@linux.ibm.com>,
-        Saket Kumar Bhaskar <skb99@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>, Alexei Starovoitov <ast@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Daniel Borkmann <daniel@iogearbox.net>, andrii@kernel.org,
-        Eduard Zingerman <eddyz87@gmail.com>, yonghong.song@linux.dev
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE3MDE4MyBTYWx0ZWRfX0QIezHWiHvC+
- BY7RobCZ1EYyaQaMvJnDTCvJbgJIpEjEhahYLqCSptQ4CMHmURBpGUluC+EFXAW826jz7lYJ7zO
- 72l4G9XBwMZHcZMlHwl+gVDM0glM9nA=
-X-Proofpoint-ORIG-GUID: dDb9bDCqeeVpholIL9CyhPLpVpNXttAg
-X-Proofpoint-GUID: H9eSEgusvn-ggINNNpd_KqmaZkHQXlgH
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE3MDE4MyBTYWx0ZWRfX1rw5eKB02r71
- geZY9W/oRl1wDmhSu4ktB3/Y4IfxMUN9SNtLAShjTQRoR5EnqXbXiOR/105S/CDaNYOuMCoy45o
- RmWn1GczyXKphoDDcysNJEIiiCEWipbNYZFizSRGxSGREib5q2DO5z15YuymIIBrlRsg7LomCEh
- Pm5ICmuFJ0Ik773tJ6PjJ9+A8Mxi9Jy654TeEl9+8HzeF/wrJbbfee+1ax08BUZFIW6usQ0P89G
- 52QVGZHrw4KCWpIOvXuMJrbT83D7R3dIA8XD/WzhEGuSgZAgalATmmBcgIsjEHKOnagCcHj/U5N
- WVk/EcTP15re6DK59hpTWbjUdsQQoz13j9hREFwIFzt4/ga1NuYBiBRZz/kMpBckT2j8bzB12Ro
- qzzooZONrl8naiWaIJZ0SuKYQi8JTWYX626V9j0uwbD31LzHtxoK3eRtXe9v+mEaZH8L3hgW/Kn
- onKVxLLRY8xn/kg//GQ==
-X-Authority-Analysis: v=2.4 cv=F+7C5ahN c=1 sm=1 tr=0 ts=6aabe49a cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=CKLhZi6Pc96QUMOnJ7kA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260917-mvneta-napi-poll-v1-1-fb57604932d3@oss.qualcomm.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MwQ5AMBAFf0X2bJNyQP2KOBQPm7CaVkQi/l3jO
+ MnMPBQRBJHa7KGAS6IcmqDIMxpXpwtYpsRUmrIytqh5vxSnY3Ve2B/bxraphwbWYTaglPmAWe5
+ /2VFyWXGf1L/vBy4pxyJsAAAA
+X-Change-ID: 20260917-mvneta-napi-poll-987b8e9aef0e
+To: Marcin Wojtas <marcin.s.wojtas@gmail.com>,
+        Andrew Lunn <andrew+netdev@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Proofpoint-ORIG-GUID: YOrC22WOX7cO-02On4JtQ9cjs5hwHG3D
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE3MDE4NyBTYWx0ZWRfX+kji6wBklieI
+ 3d6AvfX5kDxvtsKLvH63elFucLhsim0tTpQGMq7/AqgJelaKVevUegdT3NSIZ6TXTUW6Kf/LGYw
+ OAB4QXO7tOqpNUs/SpcnCRxY2MS7/tKUIn30r5qapgLcL/at04JS8zBtBSpZoVR2WarA8Xm0XJ6
+ yCGue2NaghharoTer7kzIguIC0z8kfS8zZL2iag3wTh+guwCEDRgrvL8Jb3GfMh7ROBfrE42W8F
+ rd4AUpSCvqWfA//BH+WDLi2q1H3uvm7CWx0t6sUnew8Emb+y6cKL8yJIhtRJopKIt1vNOlSFS60
+ xZ6R5ZuSSP4DgFTsKCpMiIRDNgbn0bqbLriBoeiCV78U3BrRGOkSLXmMxolmlf37Fma0WBvWj1u
+ gBaE+ptsLQToODsaTTtZPPggpIQ8VesVGp2/8BR9S3AW67COyZ144rMhe/bT7hGTg6t0sE6go54
+ SKDHjNL/W56QTe/WkXg==
+X-Proofpoint-GUID: YOrC22WOX7cO-02On4JtQ9cjs5hwHG3D
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE3MDE4NyBTYWx0ZWRfX3jV7EpEtSUFA
+ zwVkqSA6Z6s08/X/3ZosVKiQDDVkNBW9U/wJX4YO/yK7ZroRLvJCnpTBWReA/L4o2bQ99ZbScFX
+ Uotq0YyNf+ompyzdBD8uD+65OCdEslo=
+X-Authority-Analysis: v=2.4 cv=dMUzC+Zb c=1 sm=1 tr=0 ts=6aabe9a7 cx=c_pps
+ a=wEM5vcRIz55oU/E2lInRtA==:117 a=WpTaRW6qxYHRGzLzQsVYzg==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=YMgV9FUhrdKAYTUUvYB2:22
+ a=EUspDBNiAAAA:8 a=wB1r_q1jRA9oiTqnZLwA:9 a=QEXdDO2ut3YA:10
+ a=OIgjcC2v60KrkQgK7BGD:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-09-17_02,2026-09-16_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 phishscore=0 clxscore=1011 malwarescore=0
- lowpriorityscore=0 bulkscore=0 spamscore=0 impostorscore=0 adultscore=0
+ priorityscore=1501 malwarescore=0 bulkscore=0 impostorscore=0 suspectscore=0
+ spamscore=0 phishscore=0 adultscore=0 clxscore=1015 lowpriorityscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609170183
+ reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609170187
 
-Hi all,
+mvneta_swbm_build_skb() is only invoked from mvneta_poll(), the NAPI
+poll routine, so it always runs in NAPI context. Use napi_build_skb()
+instead of build_skb() to source the skb head from the per-CPU NAPI
+cache, avoiding a per-packet kmem_cache_alloc() of the skb head.
 
-IBM CI has reported a kernel warning triggered in 
-__audit_syscall_entry() on a PowerPC 64 (ppc64le, POWER9 pSeries guest) 
-system while running the BPF kselftest suite (test_progs).
+Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+---
+ drivers/net/ethernet/marvell/mvneta.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Environment:
+diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
+index 543e566425c1..c2b1098d8d1d 100644
+--- a/drivers/net/ethernet/marvell/mvneta.c
++++ b/drivers/net/ethernet/marvell/mvneta.c
+@@ -2403,7 +2403,7 @@ mvneta_swbm_build_skb(struct mvneta_port *pp, struct page_pool *pool,
+ 	if (unlikely(xdp_buff_has_frags(xdp)))
+ 		num_frags = sinfo->nr_frags;
+ 
+-	skb = build_skb(xdp->data_hard_start, PAGE_SIZE);
++	skb = napi_build_skb(xdp->data_hard_start, PAGE_SIZE);
+ 	if (!skb)
+ 		return ERR_PTR(-ENOMEM);
+ 
 
+---
+base-commit: 859e40055c19ceb8b8215f3269e57075023b72b4
+change-id: 20260917-mvneta-napi-poll-987b8e9aef0e
 
-Kernel version: 7.3.0-rc3-g238650ef6c7c (PREEMPT)
-Architecture: ppc64le (POWER9 - IBM,8375-42A pSeries / phyp)
-Workload: BPF selftests (tools/testing/selftests/bpf/test_progs)
-
-
-Problem Description:
-
-
-During syscall entry processing (system_call_exception -> 
-syscall_enter_audit -> __audit_syscall_entry), the kernel hit 
-WARN_ON(context->context != AUDIT_CTX_UNUSED) at kernel/auditsc.c:1995, 
-indicating that the task's audit context was not reset to 
-AUDIT_CTX_UNUSED prior to entering the new syscall.
-
-Trace:
-
-
-[ 1371.387510] ------------[ cut here ]------------
-[ 1371.387528] WARNING: kernel/auditsc.c:1995 at 
-__audit_syscall_entry+0x50/0x1b0, CPU#17: test_progs/49616
-[ 1371.387539] Modules linked in: dm_verity(E) dm_bufio(E) 
-reed_solomon(E) livepatch_sample(EK) tun(E) vrf(E) 8021q(E) garp(E) 
-mrp(E) stp(E) llc(E) veth(E) bonding(E) tls(E) rfkill(E) nft_fib_inet(E) 
-nft_fib_ipv4(E) nft_fib_ipv6(E) nft_fib(E) nft_reject_inet(E) 
-nf_reject_ipv4(E) nf_reject_ipv6(E) nft_reject(E) nft_ct(E) 
-nft_chain_nat(E) hvcs(E) hvcserver(E) pseries_rng(E) vmx_crypto(E) sg(E) 
-drm(E) fuse(E) drm_panel_orientation_quirks(E) xfs(E) sr_mod(E) 
-nvme_tcp(E) sd_mod(E) cdrom(E) nvme_fabrics(E) nvme_core(E) ibmvscsi(E) 
-ibmveth(E) scsi_transport_srp(E) dm_mirror(E) dm_region_hash(E) 
-dm_log(E) dm_mod(E) [last unloaded: bpf_test_modorder_x(OE)]
-[ 1371.387607] CPU: 17 UID: 0 PID: 49616 Comm: test_progs Tainted: G    
-        OE K     7.3.0-rc3-g238650ef6c7c #1 PREEMPT
-[ 1371.387616] Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE, [K]=LIVEPATCH
-[ 1371.387620] Hardware name: IBM,8375-42A POWER9 (architected) 0x4e0202 
-0xf000005 of:IBM,FW950.80 (VL950_131) hv:phyp pSeries
-[ 1371.387626] NIP:  c0000000003e70d0 LR: c000000000352080 CTR: 
-c00000000000cf00
-[ 1371.387631] REGS: c00000000beafaa0 TRAP: 0700   Tainted: G      OE K  
-     (7.3.0-rc3-g238650ef6c7c)
-[ 1371.387637] MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: 
-48002824  XER: 20040084
-[ 1371.387650] CFAR: c00000000035207c IRQMASK: 0
-                GPR00: c000000000034958 c00000000beafd40 
-c0000000020eb200 c0000000345f4800
-                GPR04: 00007fffe2a31184 0000000000000081 
-000000007fffffff 0000000000000000
-                GPR08: 0000000000000000 0000000000000001 
-0000000000000001 00000000000000dd
-                GPR12: 0000000000000000 c00000002e99b300 
-0000000000000000 0000000000000000
-                GPR16: 0000000000000000 0000000000000000 
-0000000000000000 0000000000000000
-                GPR20: 0000000000000000 0000000000000000 
-0000000000000000 0000000000000000
-                GPR24: 0000000000000000 0000000000000000 
-0000000000000000 c0000000345f4800
-                GPR28: 0000000000000000 00000000000000dd 
-00000000000000dd c000000138e0c000
-[ 1371.387710] NIP [c0000000003e70d0] __audit_syscall_entry+0x50/0x1b0
-[ 1371.387715] LR [c000000000352080] syscall_enter_audit+0x90/0xd0
-[ 1371.387722] Call Trace:
-[ 1371.387725] [c00000000beafd40] [c000000000937050] 
-selinux_task_getpgid+0x80/0xa0 (unreliable)
-[ 1371.387735] [c00000000beafda0] [c00000000beafde0] 0xc00000000beafde0
-[ 1371.387741] [c00000000beafe00] [c000000000034958] 
-system_call_exception+0x448/0x480
-[ 1371.387749] [c00000000beafe50] [c00000000000d05c] 
-system_call_vectored_common+0x15c/0x2ec
-[ 1371.387757] ---- interrupt: 3000 at 0x7fffab74cbf0
-
-
-Please let me know if additional logs, config, or repro details are needed.
-
-Regards,
-
-Venkat.
+Best regards,
+-- 
+Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 
