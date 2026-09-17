@@ -1,257 +1,178 @@
-Received: from mta0.migadu.com (out-187.mta0.migadu.com [91.218.175.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6AB321767D
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 00:08:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.187
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789603709; cv=none; b=aAZ8FWGVqsJWw9xWvbYGK1KIa1zXbqamaRN2hHWm8MoEj4ogCF03FAMeWGJO2KpdOOCdnBKEE9NdHY0P+rmVbDnufYUt9hqnxtSHbK4vVJ7QKJUBpseybqioP8+eJOS/B7RlOodNiBStbpH06o6xKlRuTk/mkk5ljCrrIC4eETI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789603709; c=relaxed/simple;
-	bh=stXunbVkIdx4k59uImIa4pDdXbqX+msrN9yjZYDiyb0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J8tVm/x9ahmYZGFC8zDeOGpoZYNWsselszRsoUzD602Fcgy0NEC4QtzeZo9ZuTd6B7mDDNbwAYwxIZmhiUCSxtcghJxN2bKRA5+D/jZimIDVevKTn2ss3mtqeFS8NjKFXDDgRs25JIKxo6QuRcG9/NF+3Sgnb8F4KIerF/L/5Z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=N+I3Reme; arc=none smtp.client-ip=91.218.175.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655B42E7387
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 00:16:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.148.77
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789604173; cv=pass; b=WGZIxHf2LiDysRZ2RRgffYKG0TNMpMv+2R+wkxN+WKDOfAcvNZDwZciEKwlU9DPJKlUWMhn/9oeexWmNdrlJ5G1pdJGiVQ+2BBe9JUuK3PYEpfmoAEHchsAjkVLT70ppRqX9pADzR8ovEXdFsQZLUGdzcJtVy6mzzj94hsOHcSQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789604173; c=relaxed/simple;
+	bh=cgCjXx3K3RP7szH6oXHAzOuTHiiOc3rY/zqo1ag03oc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=C2NzQTQfNp+wXnCLtEiAEDeWtcNYDfwdFgMsH4kKggcxs7GyxMJ5Milz7q8y+RyrqLfhGRyp8uOFVc4CXo/I6HN/TU3MlR42dBMOdnYAwncdmbXRAlQIKEdJ9rh5CfQrfdkNCsZUTEd8510Rz7G962x2R3M3RnbQiG7NxVSH8QM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=nhTKBTM4; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=BCTWSVIN; arc=pass smtp.client-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="N+I3Reme"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=stXunbVkIdx4k59uImIa4pDdXbqX+msrN9yjZYDiyb0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789603704; v=1; x=1790208504;
- b=N+I3Reme10cccECT0mBJre6ky0ZzzL1KUu0OENGJyYFiLPDb5EcHML/GJu6Odmbhmdus2lLq
- qm7qh4Cgmgj9Kip/7lgKDi8NKtPzfeN2MWKM/N/nEyOznOGXUCBrYE1er17fKsvCaBFVR7gdvlA
- XqQY5O0Iw6mjNKDTey7xto6A=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 35f6557e0c1272c7;
-	Thu, 17 Sep 2026 00:08:24 +0000
-X-Mizu-Trace-ID: 35f6557e0c1272c7
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <202c45e2-58ba-4ad5-a234-c90703031f91@linux.dev>
-Date: Wed, 16 Sep 2026 17:08:16 -0700
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="nhTKBTM4";
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="BCTWSVIN"
+Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68GN3WXj1494321
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 00:03:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=RaIbdgMlB19B5adpmedXkJqWtUrLLVbpjxw11VnXayg=; b=nhTK
+	BTM44+ALU1tuKXlKTFERSisa9n6k7dReMIWIu4JoFiVq/0W1nCQCWHzj2zjtNItb
+	QVFBoKFrBjyYoxCBgEglFVevAWRf/ZyhO8xVGzaFnE5wKa+LICMa2dDA0W5dJjln
+	z2DqlxiFT4dvWlNhXJsGCH+1OZNG4A1iZPqXjqiSZ4vA7wE7md66i0vYFo88RnEo
+	jhOtQSOOmkGzGBS6E1o59cajQSc8zm7sdNZM/XFS3Z/vcZQTqom4ItzbCHYPaf0t
+	yEw28cEy2LOHoE0sjkcWaZF0O6QtbCpkJskN/EjZFOVySAtxpJoFaJdwS1iFFgSx
+	YvvJaBuGmzW6uhpuAw==
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com [209.85.128.199])
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4gqyme1jcy-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 00:03:31 +0000 (GMT)
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-893845c4924so1323217b3.3
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 17:03:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789603411; cv=none;
+        d=google.com; s=arc-20260327;
+        b=IgnBUwA97r6b4uuElYD7yNVA143TkcSxw5UjZWJBH29Cgk/KpOKx7xgb8q28wAv7zH
+         lX25oQu3qLfcICAsRQ06HZSEmelKG1spY1JwWjwp1QWtYwzWIzEooRf60Tl7uBUt87Vj
+         AurRHWajMtYSAbuwZgQFxGXmqv5jW28MexyreGvwm7BKqoU/Q+bC11dzApEsnKAA8SnW
+         h4KSWTsdgF7dN3RvTV5mN799cK7irfE8MezDm1qxkhCJWlQKBB2zc/WrxERDIT3y5vRY
+         D7YTSPMjB0SSdeFClWDZ+k2ad41wKiZMKSaoSBIXWsDl8PbgC0qhSZ38Qxzeyq8Im7IE
+         WGHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=RaIbdgMlB19B5adpmedXkJqWtUrLLVbpjxw11VnXayg=;
+        fh=qt29tRmMv9RTRwthwC9TubzTxuwxPM3tixKceu/18cU=;
+        b=RsG85gVhl6KjDabfdJWWuc4mxPwfxhTfWr7gJxN31a+ESvUdgdZb5ceSTMta/JNWLM
+         W6zpxMXSdH5j0GhrWWTB1frriNuSL0T4FNRSNpmQHvwaeIOK4l9trfLEeho2RQ5aowVF
+         Vm/iY8zeuUhuywG5BIJtzBu1p2dpj17nsvMs6oWWUIu3qzkr0Ey/HPhfS0ksbKOKoP7L
+         aDP9m4Xk1L2I1T70qora02gOMVCz1DJJR7Qe2xmiCNVn7aN8i203+btgg7ERNZE27io/
+         2K6qkyVGLNgb6H9Tb/nPnKVSUKpwn/aLj6bPSTd2BySIAsMzC5PoVWc/tZ1Ig7EA4T+/
+         rVBw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=crowdstrike.com; s=google; t=1789603411; x=1790208211; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=RaIbdgMlB19B5adpmedXkJqWtUrLLVbpjxw11VnXayg=;
+        b=BCTWSVIN6OstryM6ePdxkhnS2cHR44/x3A37tMctkvB7qfgYq1FHt1EwDuohvp/Su2
+         1ANYxu1sg2akv0Jfe7tGjkt5J0DBND6Jf7QkSA505Nxl+8MIXWRxoyJzgSHS203voTvV
+         3MIgYutqfLEyGSKWqTOuBzd7lD8kFXbRd1GeQwsPd2QwPm4U3eIZPbqv/mjK11NlWeCX
+         lttPssLSsr7RoFfNLAAa/a1Xwp3gHUPRB/QUa3afkd33QjPoey6xQSyuErID9kgUStTb
+         TdUKUTnWESCo4NZjvNjfpvqsAohX7zx6DoLS69+17pOIUpwUZpa7I89hI15gs8VrexNB
+         Lwiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789603411; x=1790208211;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=RaIbdgMlB19B5adpmedXkJqWtUrLLVbpjxw11VnXayg=;
+        b=MLBajViMq8uPTJihJslzThVvGBjMJ8LKxwPWl09zhHSgm2jqnxUXGe7SrAwARj3XJe
+         lLRRyJab6jNS8DIcxsa9UhwpG+DVU2e5CWgpZ4s/FFhBf/QgBl9c5FfAoi3Ga1VSUcnS
+         xORehhK5XH+zbUOYm9PZbW4ITAVppkLGvkThGzzG66jEiAMfcUgguWy+SQPgRYjPzQvG
+         xOGRyiyjuSjEv1ktKHFW7VEKo1t1nA5spzWEb4ccYcWx/jE2+vHRoESS/hfubd8lIBtg
+         5ubtGtlbfzDn2P+B3wiaH/vWrL8FkVDy5PKiAifEqLJScLQj3sJLOh9asTswzUzH+3Tc
+         Dfzg==
+X-Gm-Message-State: AFuF++mNRbcmo0NAyuhp/+uIm+IQ3ogv4+/6cIxYnd6kvw1LFNTBasI+
+	CKzH2KY2KKNi/RoQlJwU9oXBfyap7DF0jwnuYqlb1zWFxx/hhGEZmTAOjzzwtVFQoa2euNzfrTN
+	3ou4ToHuE8kC60kz9T0NeSG8wIRC//MrK02oByeTnQrTRFzqUl+CRQC8L2kZqHJzIyBNMDzdIyP
+	obTTG2+rYUi/D6otZN3K9ceSpp8clx
+X-Gm-Gg: AYBFou1pSl4FP95fgr9smD30r37fs1IGQkjJoy3hO429kNjYfzPj4qhh1Gz1YZs/oKc
+	nKvpV7F5Z6Z6uhvTbjnZij6///hsMmU0kR62wflOkXNuCdEfIvVzeHOml4HT9DG9JkveAQWCOqB
+	xfcm3hY0vaJmwVLOb08PKlKQ83vo0zKnXOgOOmUrMUhi8WVi+2Vluf8BuXhg==
+X-Received: by 2002:a05:690c:6d82:b0:81e:45a6:bd5a with SMTP id 00721157ae682-8921abea9famr14218817b3.0.1789603411114;
+        Wed, 16 Sep 2026 17:03:31 -0700 (PDT)
+X-Received: by 2002:a05:690c:6d82:b0:81e:45a6:bd5a with SMTP id
+ 00721157ae682-8921abea9famr14218737b3.0.1789603410553; Wed, 16 Sep 2026
+ 17:03:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
- across zero-extending movs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>,
- bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <20260910164635.459558-1-vineet.gupta@linux.dev>
- <20260910164635.459558-4-vineet.gupta@linux.dev>
- <DLDKI0ZXYI7H.1XQZZE2RCU7IF@gmail.com>
- <4ab75099-0e95-4fee-81da-6f4198e3e6a0@linux.dev>
- <CAADnVQ+N9tzBJ0Bbvp8_8QvR+QcCP4ej5CgV_kRHt=iw4BANSQ@mail.gmail.com>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <CAADnVQ+N9tzBJ0Bbvp8_8QvR+QcCP4ej5CgV_kRHt=iw4BANSQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20260826181825.1826541-1-andrey.grodzovsky@crowdstrike.com>
+ <20260826181825.1826541-4-andrey.grodzovsky@crowdstrike.com> <CAEf4BzY4WrknceDP2=ZU19RkPgWcS5siFVEoGqDtJN0+XBSgSg@mail.gmail.com>
+In-Reply-To: <CAEf4BzY4WrknceDP2=ZU19RkPgWcS5siFVEoGqDtJN0+XBSgSg@mail.gmail.com>
+From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Date: Wed, 16 Sep 2026 20:03:19 -0400
+X-Gm-Features: AcwNN1WZJBZpIqc1n-oUc8ozyek4qWEGgIztWxIE2o0z6NqzWs3ElEVvEmXs0Cw
+Message-ID: <CAOu3gNjgDOA6AOrA-LNPE=hVL3Ob0a7G8fKZJD6SLitTpEe1bA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/5] libbpf: Convert bpf_program__set_autoload()
+ to load-type enum
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, martin.kelly@crowdstrike.com,
+        slava.imameev@crowdstrike.com, linux-open-source@crowdstrike.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-GUID: W3VeDYfuZAv4Gdw_rwWbs-wp0vTo4zUl
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE2MDMzOCBTYWx0ZWRfXyrGeQ6w2PS0R
+ qUc23GV5uNeRlAow0LghcNnnXk9Mi7S4lpidPXBRxutyHNTGhzUM4y3kAhCk3wEJPv/NFzmwuAW
+ YrnMg35hA7mrYu2Ikk7i23JIzAuQa++53m2lqcvRgLmLqRFsY7JB
+X-Authority-Analysis: v=2.4 cv=R9aWitRX c=1 sm=1 tr=0 ts=6aab2e54 cx=c_pps
+ a=72HoHk1woDtn7btP4rdmlg==:117 a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10
+ a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
+ a=b3B37AjAgz0HnGB3MuNd:22 a=pGLkceISAAAA:8 a=pl6vuDidAAAA:8 a=VwQbUJbxAAAA:8
+ a=lstlNKMIewn5IdpEohIA:9 a=QEXdDO2ut3YA:10 a=kA6IBgd4cpdPkAWqgNAz:22
+X-Proofpoint-ORIG-GUID: W3VeDYfuZAv4Gdw_rwWbs-wp0vTo4zUl
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE2MDMzOCBTYWx0ZWRfX/iKK/h4P6PG0
+ 05tCqCusMY5DOiKK/LisMirwcclBew/UK6V4mjGjVc1Iu7SlIhoh/YbKJhauoJy/+OfQqJm13OF
+ xj0ptY8RZcj9uEc6yWhkmAwmroBifKp6uCd+C9arXtusrBYavi4yXklEC69dVtRAPpDWYiZLjaJ
+ jC9BUT5UD330QcI5fHrkcBhd+Z+JiaQRAYBLknY4ZrdYuUXvR6/fMxg8jI7rEGJ3EU5XqkK8zMC
+ F8FCV+cUS67UsbBWc8Pb7sQh01FT4UTlirQ8Os2zwqAcMQ3Jzv0taXffGFFo6abW7w4TxnfUCpk
+ Oh5MX/Pqyf+lZDzTsUv9VaAw4JJtxtKUIQ2VHrmDeBTGdL4yseTPTbMlSSaU3DAVg/dEjBTpnuh
+ 9K0TcTL2qWqZZM4/rZONwdX6vVlz2hYXYeHks5+aspV0BhJ8wK0ZdClVsIH5IRNeI3mesBYXuPb
+ 9NR3cfSRJkz8Y7m0GNw==
+X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11907
+ signatures=596817
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 adultscore=0 bulkscore=0 impostorscore=0 malwarescore=0
+ clxscore=1015 suspectscore=0 spamscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2609040000
+ definitions=main-2609160338
 
-On 9/15/26 9:23 PM, Alexei Starovoitov wrote:
-> On Tue, Sep 15, 2026 at 1:31 PM Vineet Gupta <vineet.gupta@linux.dev> wrote:
->> On 9/12/26 11:59 AM, Alexei Starovoitov wrote:
->>> On Thu Sep 10, 2026 at 9:46 AM PDT, Vineet Gupta wrote:
->>>> Linked-scalar equality is full-64-bit only. A 32-bit mov from a source
->>>> with unknown high bits therefore has to drop the relationship, and a later
->>>> narrowing of the source never reaches the destination:
->>>>
->>>>     r6 = ...              /* full 64-bit unknown */
->>>>     w7 = w6               /* 32-bit zero-extending mov */
->>>>     if w6 != 0 goto ...   /* not taken: r6's low 32 bits are 0 */
->>>>     if w7 == 0 goto ...   /* not deduced today */
->>>>
->>>> Record a low-32-only link instead: dst shares src's low 32 bits and its
->>>> high half is zero. On a later narrowing, sync_linked_regs() rebuilds such
->>>> a register from the base rather than copying it, by re-applying the same
->>>> zext_32_to_64() the mov used. The reverse direction is skipped: a ->subreg
->>>> base knows nothing about a full register's high half.
->>> at the first glance SUBREG_ZEXT is exactly the same as ADD_CONST32 delta == 0.
->>> no?
->>> Both are unidirectional:
->>> w6->id == 1
->>> w7->id == 1, add_const == 32, delta == 0
->>>
->>> will zero extend w7.
->>>
->>> This new SUBREG_ZEXT will do the same.
->>> What am I missing?
->> The 2 examples below both imply ADD_CONST32 + delta=0, with different
->> semantics and need special casing.
->>
->> w3 = w2; w3 += 0
->> w7 = w6; (r6 was wide)
->>
->> With code hacks it could in fact me made to work, but its less cleaner.
->>
->>
->> Current approach we have something like below in sync_linked_regs()
->>
->>                 /*
->>                  * A ->subreg register shares only the base's low 32
->> bits, so it
->>                  * is rebuilt rather than copied. Not modelled together
->> with a
->>                  * delta, so skip if either side has one (sound, less
->> precise).
->>                  */
->>                 if (reg->subreg) {
->>                         if (reg->add_const || known_reg->add_const)
->>                                 continue;
->>                         if (reg->subreg == SUBREG_ZEXT)
->>                                 reconstruct_zext32(reg, known_reg);
->>                         else
->>                                 reconstruct_sext32(reg, known_reg);
->>                         if (e->is_reg)
->>                                 mark_reg_scratched(env, e->regno);
->>                         else
->>                                 mark_stack_slot_scratched(env, e->spi);
->>                         continue;
->>                 }
->>                 /*
->>                  * The reverse: known_reg knows only its low 32 bits,
->> which say
->>                  * nothing about reg's high half.
->>                  */
->>                 if (known_reg->subreg)
->>                         continue;
->>
->>
->> With the suggested approach it looks something like below.
->> ADD_CONST_32, delta == 0 has to be disambiguated from a real += 0 by
->> inspecting another register's bounds.
->>
->>                 /*
->>                  * A low-32 link shares only the base's low 32 bits, so it is
->>                  * rebuilt rather than copied.
->>                  *
->>                  * SIGN_EXTEND_32 says so outright. ADD_CONST_32 with
->> delta == 0
->>                  * does not: it is also what "w3 = w2; w3 += 0" records,
->> which is
->>                  * a plain equality. The two are separable only by the base's
->>                  * width
->>                  */
->>                 if (reg->add_const == SIGN_EXTEND_32 &&
->> !known_reg->add_const) {
->>                         reconstruct_sext32(reg, known_reg);
->>                         goto scratched;
->>                 }
->>                 if (reg->add_const == ADD_CONST_32 && reg->delta == 0 &&
->>                     !known_reg->add_const) {
->>                         reconstruct_zext32(reg, known_reg);
->>                         goto ...;
->>                 }
-> I think that's a problem with reconstruct_zext32().
-> It shouldn't be necessary.
-> The existing code that adds a constant should
-> already handle it.
-> If not, we have a bug in add_const_32.
+On Fri, Sep 11, 2026 at 7:44=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Wed, Aug 26, 2026 at 11:18=E2=80=AFAM Andrey Grodzovsky
+> <andrey.grodzovsky@crowdstrike.com> wrote:
+> >
+> > Convert bpf_program__set_autoload() from bool to enum bpf_prog_load_typ=
+e,
+> > to unify the API with the new tri-state load type. Reject
+> > BPF_PROG_LOAD_TYPE_DYNAMIC to preserve the original autoload on/off
+> > meaning; only BPF_PROG_LOAD_TYPE_DYNAMIC is dynamic-load-only. Also
+> > restore autoattach when leaving BPF_PROG_LOAD_TYPE_DYNAMIC via
+> > set_load_type(), fixing a bug where a program left dynamic load and
+> > became autoload-eligible but never re-attached.
+> >
+> > Assisted-by: Claude:claude-sonnet-5
+> > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+> > ---
+> >  tools/lib/bpf/libbpf.c   | 29 ++++++++++++++++++-----------
+> >  tools/lib/bpf/libbpf.h   | 39 +++++++++++++++++++++++++--------------
+> >  tools/lib/bpf/libbpf.map |  6 +++---
+> >  3 files changed, 46 insertions(+), 28 deletions(-)
+> >
+>
+> if we go with bpf_program__set_load_type() (or whatever the name), I
+> don't think we need to change the existing API, let's just leave it
+> be.
 
-Not really a bug, but a deliberate design choice in the past.
+Makes sense, will update.
 
-if (alu32 && (dst_umax > U32_MAX))
-       goto clear_id;
+Andrey
 
-So the core change is ADD_CONST_32 needs to be allowed on wider regs.
-So treating it as
-     reg = (u32)(base + delta)
-
-which simplifies to zero-extend for delta==0 and base can be either wide 
-or narrow.
-
-> Instead of losing link at wx=wy time
-> we can keep it with delta == 0
-> and sync_linked_regs() shouldn't need any new code.
-
-I toyed with a prototype which essentially lifts the restriction above 
-(and ensuing adjustments)
-FWIW it *does* require a reverse guard in sync_linked_regs() - so some 
-additional code there (at least in my version).
-
-It ended up with full testsuite run parity - after 4 incremental patches.
-But the pattern of all those patches was adding some predicate / 
-special-casing to reg->add_const
-
-hunk 1
-
--       if (src_reg->add_const)
-+       if (src_reg->add_const && src_reg->delta)
-
-
-hunk 2
-
--               if (dst_reg->add_const) {
-+               if (dst_reg->add_const && !dst_reg->delta &&
-+                   dst_reg->add_const == (alu32 ? ADD_CONST_32 : ADD_CONST_64)) {
-+                       dst_reg->delta = off;
-+               } else if (dst_reg->add_const) {
-
-
-hunk 3
-
--                               if (subreg_link && reg->id)
--                                       state->regs[dst_regno].subreg =  is_ldsx ? SUBREG_SEXT : SUBREG_ZEXT;
-+                               if (subreg_link && reg->id) {
-+                                       if (is_ldsx) {
-+                                               state->regs[dst_regno].subreg_sext = true;
-+                                       } else {
-+                                               state->regs[dst_regno].add_const = ADD_CONST_32;
-+                                               state->regs[dst_regno].delta = 0;
-+                                       }
-+                               }
-
-
-hunk 4
-
--               if (known_reg->subreg)
-+               if (known_reg->subreg_sext)
-+                       continue;
-+               /*
-+                * Same for a zero-extending link, now spelled ADD_CONST_32:
-+                * reg == (u32)(base + delta) does not invert once the base is
-+                * wider than 32 bits.
-+                */
-+               if (known_reg->add_const == ADD_CONST_32 &&
-+                   get_reg_width(reg) > 32)
-                         continue;
-
-
-Yes it does allow removal of reconstruct_zext32()
-
--               if (reg->subreg) {
-+               if (reg->subreg_sext) {
-                         if (reg->add_const || known_reg->add_const)
-                                 continue;
--                       if (reg->subreg == SUBREG_ZEXT)
--                               reconstruct_zext32(reg, known_reg);
--                       else
--                               reconstruct_sext32(reg, known_reg);
-+                       reconstruct_sext32(reg, known_reg);
-
-
-but personally speaking reading the code feels a bit more harder now.
-
-I can send over the full patch which converts the v2 SUBREG_ZEXT into 
-ADD_CONST32+delta=0 to give a feel for all the special casings, were it 
-to be subsumed into the orig zext support work, but I think you 
-understand what I'm getting at ;-)
-
-Happy to pursue whatever your maintainer hat tells you.
-
-Thx,
--Vineet
+>
+> [...]
