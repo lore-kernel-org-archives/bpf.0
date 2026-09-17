@@ -1,230 +1,110 @@
-Received: from mta0.migadu.com (out-51.mta0.migadu.com [91.218.175.51])
+Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com [74.125.228.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAFF64FECE9
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 14:17:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB7BB58FD2D
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 14:39:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789654681; cv=none; b=L1QCztazGx1XbUGiT/obTyG3W42E9pCjeqbQLvjiVRIvABIxTToq0TTWGVhyEdKMhKLkdSAxHfhO/ywSV2Npf2fYJMm63Gk+EHkSjZJdoTMPgocoUmfAHFxYbfngsEx9KSSz/122cw+giOLGoO4qutwH/s9kldXu9c63N0rZdGo=
+	t=1789655990; cv=none; b=Q0KlXeb4gjlrJ+fLKex8x/NFxDo7oMQl4IrF9jjicqV5Io3QlDpCYH+Zc7eFfPCU3fDWbSSDnMbTJVjOr+s8d9ojnimqeh4kUkrFIWjmITjBRr3D01kNFk+ZVLypd/ZrTcQ1fxm7ZcXkWMebAn/XTHJvsvb1fKgVPOegsRc+FMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789654681; c=relaxed/simple;
-	bh=Y7q9OjEWdLyW4swQI9zv1NaTB7ur07omzpdRDpsjgx0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QHZ1yJwlwT5hLeYEjJaK2e5cvx1v1Kbb+pOoN5TTiZ0rbwdfMM3E7IVU6wrjXb1euAF8xph6MPPtU2hGlUt6MLdtXfmr0ZtMthLl92dz9ix08KNlAH9G0E2lR+g2x2EKkyQwa7PCRLBmJ4tC3ho5bI5F/Rf5Fq7TWvjxZuWrN30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qJQu+fHj; arc=none smtp.client-ip=91.218.175.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789655990; c=relaxed/simple;
+	bh=ypS+0W1JTkbNyjduQvRz5CNjg+2J9njr9YBCbuNjZKM=;
+	h=Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
+	 References:MIME-Version; b=dR2p9jo3Kcq4NMN0AIovf7FSIexLKHLW9IxEaibDRd6tvoabqe0IPXclwykW+lhoFvt7D2WrW/Nr70bAFXD6dBEUYlmUKfk3z3pYCjTuqllZLHnPJ9DwzXWiI/Db11BKFVmXtwnK03Av9+7Hav6MICjuJOvljK+37I/aVNBdPQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NNjTvLJB; arc=none smtp.client-ip=74.125.228.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qJQu+fHj"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Y7q9OjEWdLyW4swQI9zv1NaTB7ur07omzpdRDpsjgx0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789654675; v=1; x=1790259475;
- b=qJQu+fHjWBGntZOXRAKeInot6e0BVWEbFL4zZbF81sAi3pGfc36tWKueRfCcAjxdsWfl76+V
- M0mCqvbRqT23TTjTRUDaXYJ/6pFyPFhv6sgko++6xMf8sBPnxZeYWVP3EDCi/cGhZS5QDjzwpTK
- yfZ0c2/3jlC1cnygwRROkcKg=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id eab9bfea70461117;
-	Thu, 17 Sep 2026 14:17:55 +0000
-X-Mizu-Trace-ID: eab9bfea70461117
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <06377343-9d4b-4d0c-b4ec-7ffb3cd5d6a6@linux.dev>
-Date: Thu, 17 Sep 2026 07:17:52 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NNjTvLJB"
+Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c29703cb796so143348566b.2
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 07:39:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789655977; x=1790260777; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ypS+0W1JTkbNyjduQvRz5CNjg+2J9njr9YBCbuNjZKM=;
+        b=NNjTvLJBMBhPIfXYKjyssqB0qPFs8d7YYTqVQtZcRnyhOL4jqg0IkM/zt3VVubhFGl
+         x5eptrqYQhDblFRKdxpoFGXgAsJ4pYtNrt5VFRHc6C0ZZ9Wq0fbdHAxi2+2ifmodM0eq
+         zlMFlIrP/d5TX6wUbAhEZ7xg9H9DxYMEe/zzOKjQfdS6C3wURZ5RtMGllGoIx/2fh5Uk
+         Sq8Z7tkncPnWXbiWYF09odhjL2wyENXuEsJLgbWX9tDhxiF3PS84Mhh15ugq2CgqTnXO
+         Faagn+0Y7wXn6nxTa4hRp7h8zmmWN/RuGmmrLEjhhfz0OF4J/gQoJw/0fk8IVYoAQ8PS
+         OO2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789655977; x=1790260777;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ypS+0W1JTkbNyjduQvRz5CNjg+2J9njr9YBCbuNjZKM=;
+        b=gyKDEfILrkdqwKYCDg5pP87JBnOY6E3zYVvzHkzD+86w5Ut1UV4kwypmwfluEqql4k
+         VzMDYBt4jvIr8ymwxwrWCkzcKh9x+oF8FgYw+5gcIF7RwAEKWwB6cH9jH8p6cAMBLDlE
+         dnKO2veENvhumYQ0uMlDnWBfuc73X1SIv9GId9/qOB/IHlpxPEvsRGnm5K38+ii1/bK8
+         wJ5UftA2cz9g8caAYP4ueohpsuvxQSqrCNEZ4hOoxs/Dq0YW7Y0kfZuc0K47NuANMS12
+         ZCXFa6pv+6VJENO6mnqKOZT1cbRTdQKU0cTwBAxZhhgPwM+g7T/5rvNranRUnR1xNULA
+         X1Pg==
+X-Gm-Message-State: AFuF++kusVekLp8Yy18Rc40sd93m7R5pXWSxmUMnxzKJwl8Zy9EDUtdN
+	xZS87agGXzvY+yValETCmmRwhSZT9bMN2klF0KUbKviUELuPAiFpFlKR
+X-Gm-Gg: AYBFou0EvxZjlwAIYQ6bMA4NAlp6MStDGZeID6+45a9YxK12OOz/l6vYHxfTMBV0tr1
+	eGxaVjzKDbkR9rO8ad+AuDARO2JOCyA38Mew5PC2/EUFTgFWb+HyRijhcaeR/1u/iqzyeYPplsD
+	dZrm+jkT34ssT4TShmkUxGlVmvbd966Kxb/6gPtsfifJWo+MBYW2WCBmH/HsQbgOQ3zjhH6NNld
+	CHbamhE5ee0oRVy2O/LA/+WlV0HjqEim4ziy02QpZ78ZwW48idO0ixI5ffB6/WVQ1t+J+VtEsPb
+	0hno8n9KjS4/UWsRwX2qZKcqN3uS8UZJ91Iq29cB9HvIVMPao8IOhJ+knJy3X+zCLfUSD7fP14z
+	d7joOB68tk/m4jW8EmWnznLNWoffLFQI76IZvSnSHXiUWqXTkibT6X9wOPFu2bD/0UotwZcgN13
+	UytLSC4z76fiZ7jN6zDu10EEUZyTB/DAIw8dQO0ibXXQyJtitisAJoJ8orWbk+cJtVlRHdjgWmx
+	+Qf+64RVfW+F/Hxc1BAHRCa3E5rBTtEaTTWz86vIrIlVRwDR4SQSCaaEWxnIcbBHGD7sMCp9jZm
+	Dl2E
+X-Received: by 2002:a17:907:9720:b0:c29:5215:b2d2 with SMTP id a640c23a62f3a-c29e52cddedmr517557966b.23.1789655977192;
+        Thu, 17 Sep 2026 07:39:37 -0700 (PDT)
+Received: from localhost ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c29de0898bdsm306916866b.5.2026.09.17.07.39.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Sep 2026 07:39:36 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 17 Sep 2026 14:39:31 +0000
+Message-Id: <DLHO3FH8LYMR.33VPRQKV0T0TU@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Yun Lu" <luyun_611@163.com>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <ihor.solodrai@linux.dev>, <daniel@iogearbox.net>, <memxor@gmail.com>,
+ <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
+ <jolsa@kernel.org>, <emil@etsalapatis.com>, <shuah@kernel.org>
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf 1/2] selftests/bpf: Fix timing-dependent assertions
+ in task work stress test
+In-Reply-To: <20260917080839.462038-2-luyun_611@163.com>
+References: <20260917080839.462038-1-luyun_611@163.com> <20260917080839.462038-2-luyun_611@163.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH dwarves 1/2] dwarf_loader: Skip the argument register the
- arm64 ABI leaves as a hole
-To: Alan Maguire <alan.maguire@oracle.com>,
- Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, kernel-team@fb.com
-References: <20260911040955.339939-1-yonghong.song@linux.dev>
- <49774454-15bb-4076-81ab-1da4414e0548@oracle.com>
-Content-Language: en-GB
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <49774454-15bb-4076-81ab-1da4414e0548@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
+On Thu, Sep 17, 2026 at 04:08 PM Yun Lu <luyun_611@163.com> wrote:
+> From: Yun Lu <luyun@kylinos.cn>
+>
+> task_work_run() assumes every stress run observes both scheduler
+> contention and, when the delete thread is enabled, cancellation of at
+> least one pending callback.
+>
+> Neither outcome is guaranteed. Contention is observed only when another
+> scheduler selects the same one of 128 map values while its task work is
+> outstanding. A valid run can therefore have no scheduling errors. This
+> was reproduced with a single scheduler: more than one million callbacks
+> were scheduled and completed while schedule_error remained zero.
 
+So it was "reproduced" by changing nthreads from 16 to 1 ?
+That's not a fix. With 16 threads hammering 128 entries for a second
+schedule_error > 0 and callback_success < callback_scheduled are the
+point of the test. They check that the -EBUSY path in
+bpf_task_work_acquire_ctx() and the cancel path in
+bpf_task_work_cancel_and_free() were actual
+ly exercised. Without them
+the stress test only checks that nothing crashed.
+If the unmodified test fails somewhere, show the log.
 
-On 9/15/26 4:40 AM, Alan Maguire wrote:
-> On 11/09/2026 05:09, Yonghong Song wrote:
->> arm64 requires an argument whose alignment is twice the register size to
->> start on an even-numbered argument register, so such an argument arriving
->> when the next free register is an odd one leaves that register unused:
->>
->>    u64 f_odd(u64 a, __int128 v, u64 b);
->>
->> passes a in x0, v in x2:x3 -- skipping x1 -- and b in x4.  The x86-64 ABI
->> has no such rule and packs v into rsi:rdx instead.
->>
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->> ---
->>   dwarf_loader.c | 53 +++++++++++++++++++++++++++++++++++++++++++++++---
->>   dwarves.h      |  1 +
->>   2 files changed, 51 insertions(+), 3 deletions(-)
->>
->> diff --git a/dwarf_loader.c b/dwarf_loader.c
->> index 61ef52f..81c2076 100644
->> --- a/dwarf_loader.c
->> +++ b/dwarf_loader.c
->> @@ -1501,6 +1501,23 @@ static bool arch__agg_use_two_regs(const GElf_Ehdr *ehdr)
->>   	}
->>   }
->>   
->> +/*
->> + * Some ABIs require an argument whose alignment is twice the register size to
->> + * start on an even-numbered argument register, leaving a hole when the next
->> + * free register is an odd one. For example, on arm64,
->> + *	u64 f(u64 a, __int128 v, u64 b)
->> + * passes a in x0, v in x2:x3 -- skipping x1 -- and b in x4.
->> + */
->> +static bool arch__arg_align_two_regs(const GElf_Ehdr *ehdr)
->> +{
->> +	switch (ehdr->e_machine) {
->> +	case EM_AARCH64:
->> +		return true;
->> +	default:
->> +		return false;
->> +	}
->> +}
->> +
->>   static struct template_type_param *template_type_param__new(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
->>   {
->>   	struct template_type_param *ttparm = tag__alloc(cu, sizeof(*ttparm));
->> @@ -3634,6 +3651,28 @@ static int parameter__abi_slots(const struct parameter *parm, const struct cu *c
->>   	return slots > 0 ? slots : 1;
->>   }
->>   
->> +static int parameter__abi_reg_align(const struct parameter *parm, const struct cu *cu)
->> +{
->> +	struct tag *type;
->> +
->> +	if (!cu->arg_align_two_regs || parm->type_byte_size <= cu->addr_size)
->> +		return 1;
->> +
->> +	type = tag__strip_typedefs_and_modifiers(&parm->tag, cu);
->> +	if (type == NULL)
->> +		return 1;
->> +
->> +	return tag__natural_alignment(type, cu) > cu->addr_size ? 2 : 1;
->> +}
->
-> There is a problem here (identified by AI) which, while not impacting on kernel
-> signatures would I think be worth fixing. It stems from the fact that we can
-> have non general-purpose registers > pointer size in a function signatures,
-> and if they are present they do not advance the general purpose register number by 2
-> in the way that dedicating 2 general-purpose registers would.
->
-> Example signature:
->
-> u64 f_fp(u64 a, long double v, u64 b);
->
-> To catch this, have a test in parameter__abi_reg_align()
->
-> 	if (!parameter__uses_gpr_bank(parm, cu))
->    		return 1;
->
->
-> static bool parameter__uses_gpr_bank(const struct parameter *parm, const struct cu *cu)
-> {
-> 	struct tag *type = tag__strip_typedefs_and_modifiers(&parm->tag, cu);
->
-> 	if (!type)
-> 		return false;
->
-> 	/* Scalars represented by FP/SIMD registers have their own allocation bank. */
-> 	if (tag__is_base_type(type) && base_type__is_float(tag__base_type(type)))
-> 		return false;
->
-> 	/* Also exclude vector/SIMD types if dwarves represents them distinctly. */	
-> 	if (tag__is_vector(type))
->    		return false;
->
->    	return true;
-> }
->
-> So given that the fix is small, I think this would be worth doing.
+Patch 2 is fine on its own. Send it alone against bpf-next.
 
-Okay, thanks for the suggestion. I will add these in the next revision.
-BTW, AI found another couple of places where parameter__uses_gpr_bank()
-should be used. I will fold them too.
-
->
->> +
->> +static int parameter__align_reg_idx(const struct parameter *parm, int reg_idx,
->> +				    const struct cu *cu)
->> +{
->> +	int align = parameter__abi_reg_align(parm, cu);
->> +
->> +	return (reg_idx + align - 1) & ~(align - 1);
->> +}
->> +
->>   static bool parameter__has_piece_info(const struct parameter *parm)
->>   {
->>   	return parm->first_reg_fields || parm->second_reg_fields;
->> @@ -3653,7 +3692,7 @@ static bool ftype__next_parameter_preserves_slots(struct ftype *ftype, struct pa
->>   	if (!next || next->loc_reg == PARAMETER_UNKNOWN_REG)
->>   		return false;
->>   
->> -	next_reg_idx = reg_idx + slots;
->> +	next_reg_idx = parameter__align_reg_idx(next, reg_idx + slots, cu);
->>   	return next_reg_idx < cu->nr_register_params &&
->>   	       next->loc_reg == cu->register_params[next_reg_idx];
->>   }
->> @@ -3702,6 +3741,7 @@ static void function__match_clang_parameter_locations(struct ftype *ftype, struc
->>   		if (pos->passed_in_memory)
->>   			continue;
->>   
->> +		reg_idx = parameter__align_reg_idx(pos, reg_idx, cu);
->>   		if (reg_idx >= cu->nr_register_params)
->>   			break;
->>   
->> @@ -3732,11 +3772,17 @@ static void function__analyze_parameter_locations(struct function *fn, struct cu
->>   
->>   	ftype__for_each_parameter(ftype, pos) {
->>   		bool consumes_register = true;
->> -		bool regs_available = reg_idx < cu->nr_register_params;
->> +		bool regs_available;
->>   		int slots = parameter__abi_slots(pos, cu);
->> -		int expected_reg = regs_available ? cu->register_params[reg_idx] : -1;
->> +		int expected_reg;
->>   		int reg_slots = pos->passed_in_memory ? 1 : slots;
->>   
->> +		if (!pos->passed_in_memory)
->> +			reg_idx = parameter__align_reg_idx(pos, reg_idx, cu);
->> +
->> +		regs_available = reg_idx < cu->nr_register_params;
->> +		expected_reg = regs_available ? cu->register_params[reg_idx] : -1;
->> +
->>   		if (pos->has_loc) {
->>   			if (true_sig_enabled && pos->loc_const_value) {
->>   				pos->optimized = 1;
->> @@ -4467,6 +4513,7 @@ static int cu__set_common(struct cu *cu, struct conf_load *conf,
->>   	cu->little_endian = ehdr.e_ident[EI_DATA] == ELFDATA2LSB;
->>   	cu->nr_register_params = arch__nr_register_params(&ehdr);
->>   	cu->agg_use_two_regs = arch__agg_use_two_regs(&ehdr);
->> +	cu->arg_align_two_regs = arch__arg_align_two_regs(&ehdr);
->>   	arch__set_register_params(&ehdr, cu);
->>   	return 0;
->>   }
->> diff --git a/dwarves.h b/dwarves.h
->> index df77f1e..70adbbf 100644
->> --- a/dwarves.h
->> +++ b/dwarves.h
->> @@ -304,6 +304,7 @@ struct cu {
->>   	uint8_t		 little_endian:1;
->>   	uint8_t		 producer_clang:1;
->>   	uint8_t		 agg_use_two_regs:1;	/* An aggregate like {long a; long b;} */
->> +	uint8_t		 arg_align_two_regs:1;	/* An over-aligned arg starts on an even register */
->>   	uint8_t		 nr_register_params;
->>   	int		 register_params[ARCH_MAX_REGISTER_PARAMS];
->>   	int		 functions_saved;
-
+pw-bot: cr
