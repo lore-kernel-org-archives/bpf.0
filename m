@@ -1,23 +1,23 @@
 Received: from zg8tndyumtaxlji0oc4xnzya.icoremail.net (zg8tndyumtaxlji0oc4xnzya.icoremail.net [46.101.248.176])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10CFD36E477
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 04:17:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC7C3BFAE8
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 04:17:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.101.248.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789618670; cv=none; b=nZ9LgXNfosKjuTIye6cnSSdkAPsBGN87ctglrrIKWfhhosXj3XUmfb8nMeHB2RySAHqw7KVpoGbmzgw/xbo66VMs8iAdZqJTBxgEbrR/9R5kepNtSP8YBtkBBk3+kstCX0MwnfvmuMQeCqkbq6OAJ0NyOcDpda1RUtBfSxj3d8M=
+	t=1789618668; cv=none; b=OJ55hzv29Z/Zw2WBMGWfw6zEovSJMrrgCKyzqWIdJx662zyWaLnQ8JNU3NnGIEZFqBAStolQDHYN25mGPieYeV0U2lI4KJkNL7ry+trAjX4l4kEQhOEoVmlaNSOGpcQiuWHGJKmKqAQD0YMzUfI0k15CPR0HU4se0me6HfHs27Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789618670; c=relaxed/simple;
-	bh=Cl9wGjFn/yHxtMu5o7DxBDzpfUWq00fAEjB6oLe3zm0=;
+	s=arc-20240116; t=1789618668; c=relaxed/simple;
+	bh=sKQ4lYLaM+WArpN+AR0915ZkN8vB7GBQ2RejMuzOhCE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=t61C36Ep7S5YdEJ47yod7w1q773D22O3m+yNLBONQRiUQM2/sZIWaZv4WTHHgApp1VE6p1RtCmEyEaKwbAH3zs9h+RYch4wDRO6Sec8PR5baEizi8WXlM3RWzCBg5YGbqkE9kehwy7MGgoqFMdxHTI1IAaezzAalZkZ+YpSLFG0=
+	 MIME-Version; b=R6kvZoyt3c5UnqZOc/w6CXg05IwirP2tRvdJ49VOvJY82LurRLPUi2YjCXFi5wdVRGJELmEb+IbbPyJL2Q7vSac+OY6gnUTaPs7bNOMSfBmjSk+GTk9m9GEvrb52a1Mh69kPIT9vHAhwbzYjfbOo7ZZZfJpV1B3MFBWfqqV2ts0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=46.101.248.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
 Received: from zju.edu.cn (unknown [10.162.163.215])
-	by mtasvr (Coremail) with SMTP id _____wDn0H7YaatqnhMdAQ--.3640S3;
-	Thu, 17 Sep 2026 12:17:28 +0800 (CST)
+	by mtasvr (Coremail) with SMTP id _____wB3jnzUaatqkBMdAQ--.3604S3;
+	Thu, 17 Sep 2026 12:17:24 +0800 (CST)
 Received: from lutetium.tail477849.ts.net (unknown [10.162.163.215])
-	by mail-app1 (Coremail) with SMTP id yy_KCgDX2aPYaatqKOuJBA--.2307S2;
-	Thu, 17 Sep 2026 12:17:28 +0800 (CST)
+	by mail-app1 (Coremail) with SMTP id yy_KCgDnoZnUaatqFuuJBA--.2486S2;
+	Thu, 17 Sep 2026 12:17:24 +0800 (CST)
 From: Yazhou Tang <tangyazhou@zju.edu.cn>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -34,10 +34,11 @@ Cc: daniel@iogearbox.net,
 	jolsa@kernel.org,
 	tangyazhou518@outlook.com,
 	shenghaoyuan0928@163.com,
-	ziye@zju.edu.cn
-Subject: [PATCH bpf-next 5/8] bpf: Reject UHMUL/SHMUL in unsupported backends
-Date: Thu, 17 Sep 2026 12:17:09 +0800
-Message-ID: <20260917041712.1860722-6-tangyazhou@zju.edu.cn>
+	ziye@zju.edu.cn,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 1/8] bpf: Add UHMUL and SHMUL instructions
+Date: Thu, 17 Sep 2026 12:17:05 +0800
+Message-ID: <20260917041712.1860722-2-tangyazhou@zju.edu.cn>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260917041712.1860722-1-tangyazhou@zju.edu.cn>
 References: <20260917041712.1860722-1-tangyazhou@zju.edu.cn>
@@ -48,275 +49,328 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:yy_KCgDX2aPYaatqKOuJBA--.2307S2
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgMRCmqq8RoVWgAAs6
-X-CM-DELIVERINFO: =?B?LC2G7gXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9NuO7bmcOm6inyHA68dGwwQnKHZUoGSKuGCA8Ctt+nZvBjgXm31t0AuXg4CwwPteWhoy
-	vl4j65WLoVVATWO5NI3ULI+NUQUPeJAKlkGhxE7JESoat+kOjrgbTOOJMQ5HEw==
-X-Coremail-Antispam: 1Uk129KBj93XoW3Xw1xtF4rZw1fWFWDAw47Awc_yoWfur43pF
-	4kArn3Cr4vgw48XF1kJa97Xr1UtF40gw47CFyj9ayxAanFq3sxXF4fKw15ZrZ8ArWUX3WF
-	qFWY9r1qk34kXacCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+X-CM-TRANSID:yy_KCgDnoZnUaatqFuuJBA--.2486S2
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAgERCmqq8RoVXQABs6
+X-CM-DELIVERINFO: =?B?JvuLEAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9BMXZiQifGBAu8ehqrOKaOqJhpj6DqDI0HqAXeHgbSERElsnvplEpUpqlcJ9Ddr3UUWe
+	IHm4NJphLXJgD4RqNQdetmQKa+jk7JB8sxEsjPcDpHLt7QJFWqXpm1Iai9HS4w==
+X-Coremail-Antispam: 1Uk129KBj93XoW3Zw4kZFW5tw17Cw18Zw13trc_yoWDCrW8pF
+	4vyryrJFZ2grWkur97G397CF15Ga10gr4UGry7W3yUAFZrtasYqF40qr1SgFW3JrW8WayY
+	qr9I9ry8u3yUZwcCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
 	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
+	0xBIdaVrnRJUUU9Eb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
 	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
 	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
 	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
 	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAF
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAF
 	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
 	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC2
 	0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
 	0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
-	14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2
-	IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_
-	Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jUTmhUUUUU=
+	14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20x
+	vaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8
+	JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1Hq2tUUUUU==
 
-From: Yazhou Tang <tangyazhou518@outlook.com>
+From: Tianci Cao <ziye@zju.edu.cn>
 
-CPU JIT backends without explicit UHMUL/SHMUL support currently lower
-BPF_MUL based on the opcode without examining insn->off. Once the verifier
-accepts UHMUL and SHMUL, a backend without explicit support would therefore
-lower either variant as the existing low-half multiplication and silently
-produce the wrong result.
+Define UHMUL and SHMUL as BPF_ALU64 BPF_MUL variants selected by insn->off.
+UHMUL returns the high 64 bits of an unsigned 64-by-64-bit product, while
+SHMUL returns the high 64 bits of a signed product. Keep off == 0 as the
+existing low-half multiplication, and assign off == 1 and off == 2 to
+UHMUL and SHMUL, respectively.
 
-Reject UHMUL and SHMUL in each affected CPU JIT without native support,
-using its existing unsupported-instruction path. This makes JIT compilation
-fail cleanly instead of emitting an incorrect low-half multiply, and allows
-the normal interpreter fallback when available.
+These operations are inspired by the UHMUL and SHMUL instructions introduced
+as part of the PQR instruction class in sBPF sBPF (Solana's BPF variant)[1].
 
-The NFP hardware offload compiler has the same opcode-only dispatch:
-BPF_ALU64 MUL instructions are routed to mul_reg64() or mul_imm64()
-without considering insn->off. Reject UHMUL and SHMUL in the NFP offload
-verifier as well, before they can reach the ordinary multiplication lowering.
+The encoding and immediate semantics differ from current sBPF.
 
-Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
-Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
+1. sBPF assigns these operations dedicated opcodes in the BPF_PQR class,
+   whereas this implementation selects them through the offset field of BPF_MUL.
+
+2. sBPF initially sign-extended the immediate operand of UHMUL, but later
+   changed unsigned PQR immediates, including UHMUL, to be zero-extended[2].
+   This was an ISA design choice to treat immediates of explicitly unsigned
+   operations as unsigned 32-bit values[3].
+
+   Linux instead follows the existing BPF_ALU64 immediate convention.
+   Both immediate forms first sign-extend the 32-bit immediate to 64 bits.
+   UHMUL then interprets the resulting bit pattern as unsigned, while
+   SHMUL interprets it as signed.
+
+Add portable helpers for both operations, using mul_u64_u64_shr() and a
+signed correction instead of relying on a compiler-provided 128-bit
+integer type. Wire the variants into the interpreter and disassembler,
+and document the encoding in the UAPI and BPF instruction set. Keep
+BPF_ALU multiplication restricted to the existing low-half variant.
+
+[1] https://github.com/solana-labs/rbpf/pull/498
+[2] https://github.com/solana-labs/rbpf/pull/642
+[3] https://lore.kernel.org/bpf/59e754a2-6158-485c-93b9-6f60d9f57528@zju.edu.cn/
+
+Link: https://lore.kernel.org/bpf/CAADnVQ+2O2zgdy11+vxE6dOp+3Br4zZBysHF-Hne7cP+eeucnQ@mail.gmail.com/
+Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
+Co-developed-by: Yazhou Tang <tangyazhou518@outlook.com>
+Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
 Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
 Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
 ---
- arch/arc/net/bpf_jit_core.c                       | 3 +++
- arch/arm/net/bpf_jit_32.c                         | 3 +++
- arch/loongarch/net/bpf_jit.c                      | 3 +++
- arch/mips/net/bpf_jit_comp32.c                    | 3 +++
- arch/mips/net/bpf_jit_comp64.c                    | 3 +++
- arch/parisc/net/bpf_jit_comp32.c                  | 3 +++
- arch/parisc/net/bpf_jit_comp64.c                  | 3 +++
- arch/powerpc/net/bpf_jit_comp32.c                 | 3 +++
- arch/powerpc/net/bpf_jit_comp64.c                 | 3 +++
- arch/riscv/net/bpf_jit_comp32.c                   | 3 +++
- arch/s390/net/bpf_jit_comp.c                      | 3 +++
- arch/sparc/net/bpf_jit_comp_64.c                  | 3 +++
- arch/x86/net/bpf_jit_comp32.c                     | 3 +++
- drivers/net/ethernet/netronome/nfp/bpf/verifier.c | 6 ++++++
- 14 files changed, 45 insertions(+)
+ .../bpf/standardization/instruction-set.rst   | 26 ++++++++++-
+ include/linux/filter.h                        | 39 ++++++++++++++++
+ include/uapi/linux/bpf.h                      | 10 +++++
+ kernel/bpf/core.c                             | 45 ++++++++++++++++++-
+ kernel/bpf/disasm.c                           | 18 ++++++++
+ tools/include/uapi/linux/bpf.h                | 10 +++++
+ 6 files changed, 145 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arc/net/bpf_jit_core.c b/arch/arc/net/bpf_jit_core.c
-index 639a2736f029..78b1819cee5a 100644
---- a/arch/arc/net/bpf_jit_core.c
-+++ b/arch/arc/net/bpf_jit_core.c
-@@ -734,6 +734,9 @@ static int handle_insn(struct jit_context *ctx, u32 idx)
- 	u8  len = 0;
- 	int ret = 0;
+diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
+index 39c74611752b..3c2cde11fa23 100644
+--- a/Documentation/bpf/standardization/instruction-set.rst
++++ b/Documentation/bpf/standardization/instruction-set.rst
+@@ -330,6 +330,8 @@ register.
+   ADD    0x0    0        dst += src
+   SUB    0x1    0        dst -= src
+   MUL    0x2    0        dst \*= src
++  UHMUL  0x2    1        unsigned high-half multiplication (``ALU64`` only)
++  SHMUL  0x2    2        signed high-half multiplication (``ALU64`` only)
+   DIV    0x3    0        dst = (src != 0) ? (dst / src) : 0
+   SDIV   0x3    1        dst = (src == 0) ? 0 : ((src == -1 && dst == LLONG_MIN) ? LLONG_MIN : (dst s/ src))
+   OR     0x4    0        dst \|= src
+@@ -379,13 +381,33 @@ where '(u32)' indicates that the upper 32 bits are zeroed.
  
-+	if (bpf_insn_is_hmul(insn))
-+		return -EOPNOTSUPP;
+   dst = dst ^ imm
+ 
+-Note that most arithmetic instructions have 'offset' set to 0. Only three instructions
+-(``SDIV``, ``SMOD``, ``MOVSX``) have a non-zero 'offset'.
++Note that most arithmetic instructions have 'offset' set to 0. The following
++instructions may have a non-zero 'offset':
 +
- 	switch (code) {
- 	/* dst += src (32-bit) */
- 	case BPF_ALU | BPF_ADD | BPF_X:
-diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-index 9ede81afbc50..aa466fc79d96 100644
---- a/arch/arm/net/bpf_jit_32.c
-+++ b/arch/arm/net/bpf_jit_32.c
-@@ -1611,6 +1611,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- } while (0)
- #define check_imm24(imm) check_imm(24, imm)
++* ``SDIV`` and ``SMOD``: ``offset == 1`` selects the signed variant.
++* ``MOVSX``: ``offset`` selects the source operand width.
++* ``MUL``: ``offset`` selects the multiplication variant (see below).
  
-+	if (bpf_insn_is_hmul(insn))
-+		goto notyet;
+ Division, multiplication, and modulo operations for ``ALU`` are part
+ of the "divmul32" conformance group, and division, multiplication, and
+ modulo operations for ``ALU64`` are part of the "divmul64" conformance
+ group.
 +
- 	switch (code) {
- 	/* ALU operations */
- 
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index 4da278900938..7bb3813fda8e 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -709,6 +709,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx, bool ext
- 	const s32 imm = insn->imm;
- 	const bool is32 = BPF_CLASS(insn->code) == BPF_ALU || BPF_CLASS(insn->code) == BPF_JMP32;
- 
-+	if (bpf_insn_is_hmul(insn))
-+		return -EOPNOTSUPP;
++For ``ALU64`` multiplication, ``offset == 1`` selects unsigned
++high-half multiplication (``UHMUL``), and ``offset == 2`` selects
++signed high-half multiplication (``SHMUL``).
 +
- 	switch (code) {
- 	/* dst = src */
- 	case BPF_ALU | BPF_MOV | BPF_X:
-diff --git a/arch/mips/net/bpf_jit_comp32.c b/arch/mips/net/bpf_jit_comp32.c
-index 40a878b672f5..1afe15162af2 100644
---- a/arch/mips/net/bpf_jit_comp32.c
-+++ b/arch/mips/net/bpf_jit_comp32.c
-@@ -1472,6 +1472,9 @@ int build_insn(const struct bpf_insn *insn, struct jit_context *ctx)
- 	s32 val, rel;
- 	u8 alu, jmp;
- 
-+	if (bpf_insn_is_hmul(insn))
-+		goto notyet;
++For ``X`` mode, ``src64`` is the 64-bit value in ``src_reg``. For
++``K`` mode, ``src64`` is ``imm`` sign-extended from 32 to 64 bits.
++The operations are::
 +
- 	switch (code) {
- 	/* ALU operations */
- 	/* dst = imm */
-diff --git a/arch/mips/net/bpf_jit_comp64.c b/arch/mips/net/bpf_jit_comp64.c
-index fa7e9aa37f49..a9765ea25282 100644
---- a/arch/mips/net/bpf_jit_comp64.c
-+++ b/arch/mips/net/bpf_jit_comp64.c
-@@ -643,6 +643,9 @@ int build_insn(const struct bpf_insn *insn, struct jit_context *ctx)
- 	s32 val, rel;
- 	u8 alu, jmp;
- 
-+	if (bpf_insn_is_hmul(insn))
-+		goto notyet;
++  UHMUL: dst = (u64)(((u128)dst * (u128)(u64)src64) >> 64)
++  SHMUL: dst = (u64)(((s128)(s64)dst * (s128)(s64)src64) >> 64)
 +
- 	switch (code) {
- 	/* ALU operations */
- 	/* dst = imm */
-diff --git a/arch/parisc/net/bpf_jit_comp32.c b/arch/parisc/net/bpf_jit_comp32.c
-index 5ff0cf925fe9..6bf72d04855b 100644
---- a/arch/parisc/net/bpf_jit_comp32.c
-+++ b/arch/parisc/net/bpf_jit_comp32.c
-@@ -1133,6 +1133,9 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct hppa_jit_context *ctx,
- 		BPF_CLASS(code), code, (code & BPF_ALU64) ? 1:0, BPF_SIZE(code),
- 		BPF_OP(code), insn->src_reg, insn->dst_reg);
- 
-+	if (bpf_insn_is_hmul(insn))
-+		return -EOPNOTSUPP;
++For ``ALU`` multiplication, only ``offset == 0`` is valid. For
++``ALU64`` multiplication, offset values other than 0, 1, and 2 are
++reserved.
 +
- 	switch (code) {
- 	/* dst = src */
- 	case BPF_ALU64 | BPF_MOV | BPF_X:
-diff --git a/arch/parisc/net/bpf_jit_comp64.c b/arch/parisc/net/bpf_jit_comp64.c
-index 54b0d5e25e02..36b6078a146f 100644
---- a/arch/parisc/net/bpf_jit_comp64.c
-+++ b/arch/parisc/net/bpf_jit_comp64.c
-@@ -603,6 +603,9 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct hppa_jit_context *ctx,
+ The division and modulo operations support both unsigned and signed flavors.
  
- 	init_regs(&rd, &rs, insn, ctx);
+ For unsigned operations (``DIV`` and ``MOD``), for ``ALU``,
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index b17222db2efc..b6dc4b968a9c 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -23,6 +23,7 @@
+ #include <linux/sockptr.h>
+ #include <linux/static_call.h>
+ #include <linux/u64_stats_sync.h>
++#include <linux/math64.h>
  
-+	if (bpf_insn_is_hmul(insn))
-+		return -EOPNOTSUPP;
+ #include <net/sch_generic.h>
+ 
+@@ -147,6 +148,44 @@ struct ctl_table_header;
+ #define BPF_ALU32_IMM(OP, DST, IMM)				\
+ 	BPF_ALU32_IMM_OFF(OP, DST, IMM, 0)
+ 
++static inline u64 bpf_uhmul64(u64 a, u64 b)
++{
++	return mul_u64_u64_shr(a, b, 64);
++}
 +
- 	switch (code) {
- 	/* dst = src */
- 	case BPF_ALU | BPF_MOV | BPF_X:
-diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
-index bfdc50740da8..6bfc97a029d7 100644
---- a/arch/powerpc/net/bpf_jit_comp32.c
-+++ b/arch/powerpc/net/bpf_jit_comp32.c
-@@ -349,6 +349,9 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
- 		u32 true_cond;
- 		u32 tmp_idx;
- 
-+		if (bpf_insn_is_hmul(&insn[i]))
-+			return -EOPNOTSUPP;
++static inline u64 bpf_shmul64(s64 a, s64 b)
++{
++	u64 ua = a, ub = b;
++	u64 hi = bpf_uhmul64(ua, ub);
 +
- 		if (i && (BPF_CLASS(code) == BPF_ALU64 || BPF_CLASS(code) == BPF_ALU) &&
- 		    (BPF_CLASS(prevcode) == BPF_ALU64 || BPF_CLASS(prevcode) == BPF_ALU) &&
- 		    BPF_OP(prevcode) == BPF_MOV && BPF_SRC(prevcode) == BPF_X &&
-diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-index fc9db691e820..192c96e0ed34 100644
---- a/arch/powerpc/net/bpf_jit_comp64.c
-+++ b/arch/powerpc/net/bpf_jit_comp64.c
-@@ -992,6 +992,9 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
- 		u32 tmp_idx;
- 		u32 jmp_off;
- 
-+		if (bpf_insn_is_hmul(&insn[i]))
-+			return -EOPNOTSUPP;
++	/*
++	 * Let M = 2^64, sa = (a < 0), and sb = (b < 0). Then:
++	 *
++	 * a * b = (ua - sa * M) * (ub - sb * M)
++	 *       = ua * ub - sa * M * ub - sb * M * ua + sa * sb * M^2
++	 *
++	 * Therefore, signed_hi = unsigned_hi - sa * ub - sb * ua (mod M).
++	 */
++	if (a < 0)
++		hi -= ub;
++	if (b < 0)
++		hi -= ua;
++	return hi;
++}
 +
- 		/*
- 		 * addrs[] maps a BPF bytecode address into a real offset from
- 		 * the start of the body code.
-diff --git a/arch/riscv/net/bpf_jit_comp32.c b/arch/riscv/net/bpf_jit_comp32.c
-index a9e0bd5cc81d..64bc6779d25c 100644
---- a/arch/riscv/net/bpf_jit_comp32.c
-+++ b/arch/riscv/net/bpf_jit_comp32.c
-@@ -1014,6 +1014,9 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	const s8 *tmp1 = bpf2rv32[TMP_REG_1];
- 	const s8 *tmp2 = bpf2rv32[TMP_REG_2];
- 
-+	if (bpf_insn_is_hmul(insn))
-+		goto notsupported;
++static inline bool bpf_is_hmul_variant(s16 off)
++{
++	return off == BPF_MUL_VARIANT_UHMUL ||
++	       off == BPF_MUL_VARIANT_SHMUL;
++}
 +
- 	switch (code) {
- 	case BPF_ALU64 | BPF_MOV | BPF_X:
- 		if (insn->off != 0) {
-diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index c4b47070bb59..9e5c865d5ea8 100644
---- a/arch/s390/net/bpf_jit_comp.c
-+++ b/arch/s390/net/bpf_jit_comp.c
-@@ -985,6 +985,9 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
- 
- 	bpf_jit_probe_init(&probe);
- 
-+	if (bpf_insn_is_hmul(insn))
-+		return -EOPNOTSUPP;
++static inline bool bpf_insn_is_hmul(const struct bpf_insn *insn)
++{
++	return BPF_CLASS(insn->code) == BPF_ALU64 &&
++	       BPF_OP(insn->code) == BPF_MUL &&
++	       bpf_is_hmul_variant(insn->off);
++}
 +
- 	switch (insn->code) {
- 	/*
- 	 * BPF_MOV
-diff --git a/arch/sparc/net/bpf_jit_comp_64.c b/arch/sparc/net/bpf_jit_comp_64.c
-index 2fa0e9375127..1154ddc515b0 100644
---- a/arch/sparc/net/bpf_jit_comp_64.c
-+++ b/arch/sparc/net/bpf_jit_comp_64.c
-@@ -901,6 +901,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	const s16 off = insn->off;
- 	const s32 imm = insn->imm;
+ /* Endianess conversion, cpu_to_{l,b}e(), {l,b}e_to_cpu() */
  
-+	if (bpf_insn_is_hmul(insn))
-+		return -EOPNOTSUPP;
+ #define BPF_ENDIAN(TYPE, DST, LEN)				\
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 732b35cc08d1..845eee536198 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -34,6 +34,16 @@
+ #define BPF_FROM_LE	BPF_TO_LE
+ #define BPF_FROM_BE	BPF_TO_BE
+ 
++/*
++ * BPF_MUL variants selected by the off field.
++ * UHMUL and SHMUL are only valid for BPF_ALU64.
++ */
++enum bpf_mul_variant {
++	BPF_MUL_VARIANT_LO    = 0,
++	BPF_MUL_VARIANT_UHMUL = 1,
++	BPF_MUL_VARIANT_SHMUL = 2,
++};
 +
- 	if (insn->src_reg == BPF_REG_FP)
- 		ctx->saw_frame_pointer = true;
+ /* jmp encodings */
+ #define BPF_JNE		0x50	/* jump != */
+ #define BPF_JLT		0xa0	/* LT is unsigned, '<' */
+diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+index 4e208cc94752..4f746973481b 100644
+--- a/kernel/bpf/core.c
++++ b/kernel/bpf/core.c
+@@ -1931,7 +1931,50 @@ static u64 ___bpf_prog_run(u64 *regs, const struct bpf_insn *insn)
+ 	ALU(AND,  &)
+ 	ALU(OR,   |)
+ 	ALU(XOR,  ^)
+-	ALU(MUL,  *)
++	/*
++	 * MUL needs explicit handlers because ALU64 insn->off selects
++	 * low-half, unsigned high-half, or signed high-half multiplication.
++	 */
++	ALU64_MUL_X:
++		switch (OFF) {
++		case BPF_MUL_VARIANT_LO:
++			DST = DST * SRC;
++			break;
++		case BPF_MUL_VARIANT_UHMUL:
++			DST = bpf_uhmul64(DST, SRC);
++			break;
++		case BPF_MUL_VARIANT_SHMUL:
++			DST = bpf_shmul64((s64)DST, (s64)SRC);
++			break;
++		default:
++			goto default_label;
++		}
++		CONT;
++	ALU_MUL_X:
++		if (OFF != BPF_MUL_VARIANT_LO)
++			goto default_label;
++		DST = (u32) DST * (u32) SRC;
++		CONT;
++	ALU64_MUL_K:
++		switch (OFF) {
++		case BPF_MUL_VARIANT_LO:
++			DST = DST * IMM;
++			break;
++		case BPF_MUL_VARIANT_UHMUL:
++			DST = bpf_uhmul64(DST, (u64)IMM);
++			break;
++		case BPF_MUL_VARIANT_SHMUL:
++			DST = bpf_shmul64((s64)DST, (s32)IMM);
++			break;
++		default:
++			goto default_label;
++		}
++		CONT;
++	ALU_MUL_K:
++		if (OFF != BPF_MUL_VARIANT_LO)
++			goto default_label;
++		DST = (u32) DST * (u32) IMM;
++		CONT;
+ 	SHT(LSH, <<)
+ 	SHT(RSH, >>)
+ #undef SHT
+diff --git a/kernel/bpf/disasm.c b/kernel/bpf/disasm.c
+index 3ce8d74b0e40..03f22845e169 100644
+--- a/kernel/bpf/disasm.c
++++ b/kernel/bpf/disasm.c
+@@ -163,6 +163,22 @@ static bool is_sdiv_smod(const struct bpf_insn *insn)
+ 	       insn->off == 1;
+ }
  
-diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.c
-index 852baf2e4db4..11ed65130d1e 100644
---- a/arch/x86/net/bpf_jit_comp32.c
-+++ b/arch/x86/net/bpf_jit_comp32.c
-@@ -1683,6 +1683,9 @@ static int do_jit(struct bpf_prog *bpf_prog, int *addrs, u8 *image,
- 		int ilen;
- 		u8 *func;
- 
-+		if (bpf_insn_is_hmul(insn))
-+			goto notyet;
-+
- 		switch (code) {
- 		/* ALU operations */
- 		/* dst = src */
-diff --git a/drivers/net/ethernet/netronome/nfp/bpf/verifier.c b/drivers/net/ethernet/netronome/nfp/bpf/verifier.c
-index 1caa87da72b5..effce27f3b88 100644
---- a/drivers/net/ethernet/netronome/nfp/bpf/verifier.c
-+++ b/drivers/net/ethernet/netronome/nfp/bpf/verifier.c
-@@ -3,6 +3,7 @@
- 
- #include <linux/bpf.h>
- #include <linux/bpf_verifier.h>
-+#include <linux/filter.h>
- #include <linux/kernel.h>
- #include <linux/netdevice.h>
- #include <linux/pkt_cls.h>
-@@ -561,6 +562,11 @@ nfp_bpf_check_alu(struct nfp_prog *nfp_prog, struct nfp_insn_meta *meta,
- 	const struct bpf_reg_state *dreg =
- 		cur_regs(env) + meta->insn.dst_reg;
- 
-+	if (bpf_insn_is_hmul(&meta->insn)) {
-+		pr_vlog(env, "UHMUL/SHMUL are not supported\n");
-+		return -EOPNOTSUPP;
++/* Return the UHMUL or SHMUL operator string, or NULL for all other encodings. */
++static const char *hmul_op_string(const struct bpf_insn *insn)
++{
++	if (BPF_CLASS(insn->code) != BPF_ALU64 ||
++	    BPF_OP(insn->code) != BPF_MUL)
++		return NULL;
++	switch (insn->off) {
++	case BPF_MUL_VARIANT_UHMUL:
++		return "uh*=";
++	case BPF_MUL_VARIANT_SHMUL:
++		return "sh*=";
++	default:
++		return NULL;
 +	}
++}
 +
- 	meta->umin_src = min(meta->umin_src, reg_umin(sreg));
- 	meta->umax_src = max(meta->umax_src, reg_umax(sreg));
- 	meta->umin_dst = min(meta->umin_dst, reg_umin(dreg));
+ static bool is_movsx(const struct bpf_insn *insn)
+ {
+ 	return BPF_OP(insn->code) == BPF_MOV &&
+@@ -215,6 +231,7 @@ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
+ 			verbose(cbs->private_data, "(%02x) %c%d %s %s%c%d",
+ 				insn->code, class == BPF_ALU ? 'w' : 'r',
+ 				insn->dst_reg,
++				hmul_op_string(insn) ?:
+ 				is_sdiv_smod(insn) ? bpf_alu_sign_string[BPF_OP(insn->code) >> 4]
+ 						   : bpf_alu_string[BPF_OP(insn->code) >> 4],
+ 				is_movsx(insn) ? bpf_movsx_string[(insn->off >> 3) - 1] : "",
+@@ -224,6 +241,7 @@ void print_bpf_insn(const struct bpf_insn_cbs *cbs,
+ 			verbose(cbs->private_data, "(%02x) %c%d %s %d",
+ 				insn->code, class == BPF_ALU ? 'w' : 'r',
+ 				insn->dst_reg,
++				hmul_op_string(insn) ?:
+ 				is_sdiv_smod(insn) ? bpf_alu_sign_string[BPF_OP(insn->code) >> 4]
+ 						   : bpf_alu_string[BPF_OP(insn->code) >> 4],
+ 				insn->imm);
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 732b35cc08d1..845eee536198 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -34,6 +34,16 @@
+ #define BPF_FROM_LE	BPF_TO_LE
+ #define BPF_FROM_BE	BPF_TO_BE
+ 
++/*
++ * BPF_MUL variants selected by the off field.
++ * UHMUL and SHMUL are only valid for BPF_ALU64.
++ */
++enum bpf_mul_variant {
++	BPF_MUL_VARIANT_LO    = 0,
++	BPF_MUL_VARIANT_UHMUL = 1,
++	BPF_MUL_VARIANT_SHMUL = 2,
++};
++
+ /* jmp encodings */
+ #define BPF_JNE		0x50	/* jump != */
+ #define BPF_JLT		0xa0	/* LT is unsigned, '<' */
 -- 
 2.55.0
 
