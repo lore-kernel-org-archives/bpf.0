@@ -1,167 +1,185 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C136E53D9FD;
-	Thu, 17 Sep 2026 16:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EE64519DE3
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 16:40:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789663250; cv=none; b=KjnObt+WeQUkml2nTwzV310gmrVXXqXm4mZpl+wqUfdlq5fUDn+P+I/tIQF34J1HyE/9gvbD5gJdJ5OvGADKLCOLdlDu632G4xeyGB6Y0eDlWxxFAoqq8fpsiMsaaBgngzpWmerf51FGW1No1JP/bIftZULkx3gE+6gZH7byF9s=
+	t=1789663254; cv=none; b=sdnB6idTPBfZ/yPh2kTE681GpJgqTly4XlZmH+P9vWyA3kitOcAXm8xb2hWF6oqwOnGRWpghFQbJnNVN6irOjoU4yTmXIn4cL4XgGjg3H6cU5lbYRPhw9aZ1TGgxANKlJjD5sAlXvCzvq6GOPDX4WYmXouVhDPZx4puIYJ5D3x8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789663250; c=relaxed/simple;
-	bh=DL5e220u7y3LwD4Eiaa74zWyGi+IuXsLh7IOYBtbckQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=okO5qdfypyg/+iKO1jsikB8lSbI/EsqPumRi5oiSACErJo85x58gnOz06+3SaIvvC93uadF6YzZ3ck7imf7VHSj97PeI96o/0U7v4NNk/jPelpaEV8XC0IvAvxshK5TnszanMXhIt8o5W1AHVm2dRSPZBQyDzUIlWNLHF31dkPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gspn9qQ7; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gspn9qQ7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 213F61F000FF;
-	Thu, 17 Sep 2026 16:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789663248;
-	bh=1QRQ9WYzmW2nABpmD05iYHWtoRPkYuNGcAfZon3VB64=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=Gspn9qQ7Co3hTNTbvqHEG4UcsqEuAaXs4WpY+IWArwLJpD+5im1F/7UjZBYzBxEFP
-	 r6kNzzWv/ygP9N4CBTIF6SK4Me1N+TZ7kg6quLRtughmHxBkfXwla981QkTLotSK4V
-	 PNjnrxnE7nvQlWvnL9nNWOrPkCRYAY+FZPJilWJSHjfUPF9+dMlR6D9G7cKVnY5zew
-	 CY9et4FnP9P/JyfZel2Guas6YNCbujBjaIbwC7sV5R2ANs6rbBZryLjyMGMzIfInyM
-	 67LHWbWvbSV5TTZ0+n/kZZXO1u8Gous31lF+kG/dEXbhUdNWe84ivAYvKYlYgwsB+w
-	 kA8OssQfVfUsg==
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Date: Thu, 17 Sep 2026 17:22:44 +0100
-Subject: [PATCH v3 35/40] mm: eliminate VMA_SPECIAL_FLAGS check in
- lru_gen_look_around()
+	s=arc-20240116; t=1789663254; c=relaxed/simple;
+	bh=8OdVyEiEpqfcHPHMr01UY010bwuHudvQme8bbid58K4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=kbfqAbNOSA+f238FYrUey5d6KrUhSn53Dv/IWhGyzcDDVAjN+litomoM5NERde4cOzAmBbnNiPwyow2JoctgX5fXYN7Zen0dTP9yNppyXKld2FZEGvg/VfbkzSzQ30E1wmVolNcZCfU+8oz4obFd7W7YkYUGbYI2CsahK/2Cm2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 971CB2B60A07EE; Thu, 17 Sep 2026 09:40:43 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: Alan Maguire <alan.maguire@oracle.com>,
+	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+	dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	bpf@vger.kernel.org,
+	kernel-team@fb.com
+Subject: [PATCH 1/3] dwarf_loader: Skip the argument register the arm64 ABI leaves as a hole
+Date: Thu, 17 Sep 2026 09:40:43 -0700
+Message-ID: <20260917164043.1577508-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260917164038.1576763-1-yonghong.song@linux.dev>
+References: <20260917164038.1576763-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-35-4583d8a23bca@kernel.org>
-References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
-In-Reply-To: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
- David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- Jonathan Corbet <corbet@lwn.net>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
- Paul Moore <paul@paul-moore.com>, 
- Stephen Smalley <stephen.smalley.work@gmail.com>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, 
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
- Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
- Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <mkp@kernel.org>, Jaya Kumar <jayalk@intworks.biz>, 
- Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, 
- Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, 
- Peter Xu <peterx@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
- Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
- Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
- Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
- Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Janosch Frank <frankja@linux.ibm.com>, 
- Claudio Imbrenda <imbrenda@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- "David S. Miller" <davem@davemloft.net>, 
- Andreas Larsson <andreas@gaisler.com>, 
- Alexander Viro <viro@zeniv.linux.org.uk>, 
- Christian Brauner <brauner@kernel.org>, 
- Matthew Brost <matthew.brost@intel.com>, 
- Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, 
- Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
- Ying Huang <ying.huang@linux.alibaba.com>, 
- Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, 
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
- Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
- Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
- Wei Xu <weixugc@google.com>, Chengming Zhou <chengming.zhou@linux.dev>, 
- Michal Hocko <mhocko@kernel.org>, Miklos Szeredi <miklos@szeredi.hu>, 
- Xu Xin <xu.xin@linux.dev>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
- linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-rdma@vger.kernel.org, selinux@vger.kernel.org, 
- linux-sound@vger.kernel.org, bpf@vger.kernel.org, 
- linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
- linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
- kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
- linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
- fuse-devel@lists.linux.dev, "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1176; i=ljs@kernel.org;
- h=from:subject:message-id; bh=DL5e220u7y3LwD4Eiaa74zWyGi+IuXsLh7IOYBtbckQ=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLLWCB9hLL35ff77dPnnyjWxyxtOXnb5+35nmharbKxQy
- 6vMp54JHaUsDGJcDLJiiizPv4jvDxIJm9d5wd8NZg4rE8gQBi5OAZiIqy/Db9aa5weOsMxRtPrs
- HCqQHviv6mfnxF/xdR/y2ZT0lC4lMTL8M7Jx8PFZKXNRYHPiW8EVFv+upxuICcwLWyu1R4MnxHw
- zCwA=
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
+Content-Transfer-Encoding: quoted-printable
 
-A kernel-owned or fixed mapping is one which sets VMA_PFNMAP_BIT,
-VMA_MIXEDMAP_BIT or VMA_DONTEXPAND_BIT, which is precisely what
-VMA_SPECIAL_FLAGS tests for other than VMA_IO_BIT, which is safe to drop as
-only kernel-owned mappings may set it.
+arm64 requires an argument whose alignment is twice the register size to
+start on an even-numbered argument register, so such an argument arriving
+when the next free register is an odd one leaves that register unused:
 
-Using these predicates rather than VMA_SPECIAL_FLAGS makes the check
-self-documenting and helps eliminate the confusion around 'special' flags.
+  u64 f_odd(u64 a, __int128 v, u64 b);
 
-No functional change intended.
+passes a in x0, v in x2:x3 -- skipping x1 -- and b in x4.  The x86-64 ABI
+has no such rule and packs v into rsi:rdx instead.
 
-Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- mm/vmscan.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ dwarf_loader.c | 53 +++++++++++++++++++++++++++++++++++++++++++++++---
+ dwarves.h      |  1 +
+ 2 files changed, 51 insertions(+), 3 deletions(-)
 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 09ff20c3df5b..001f8b760266 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -4418,8 +4418,8 @@ bool lru_gen_look_around(struct page_vma_mapped_walk *pvmw, unsigned int nr)
- 	if (spin_is_contended(pvmw->ptl))
- 		return true;
- 
--	/* exclude special VMAs containing anon pages from COW */
--	if (vma->vm_flags & VM_SPECIAL)
-+	/* exclude kernel-owned and fixed VMAs containing anon pages from COW */
-+	if (vma_is_kernel_owned(vma) || vma_is_fixed_mapping(vma))
- 		return true;
- 
- 	/* avoid taking the LRU lock under the PTL when possible */
-
--- 
-2.55.0
+diff --git a/dwarf_loader.c b/dwarf_loader.c
+index 61ef52f..81c2076 100644
+--- a/dwarf_loader.c
++++ b/dwarf_loader.c
+@@ -1501,6 +1501,23 @@ static bool arch__agg_use_two_regs(const GElf_Ehdr=
+ *ehdr)
+ 	}
+ }
+=20
++/*
++ * Some ABIs require an argument whose alignment is twice the register s=
+ize to
++ * start on an even-numbered argument register, leaving a hole when the =
+next
++ * free register is an odd one. For example, on arm64,
++ *	u64 f(u64 a, __int128 v, u64 b)
++ * passes a in x0, v in x2:x3 -- skipping x1 -- and b in x4.
++ */
++static bool arch__arg_align_two_regs(const GElf_Ehdr *ehdr)
++{
++	switch (ehdr->e_machine) {
++	case EM_AARCH64:
++		return true;
++	default:
++		return false;
++	}
++}
++
+ static struct template_type_param *template_type_param__new(Dwarf_Die *d=
+ie, struct cu *cu, struct conf_load *conf)
+ {
+ 	struct template_type_param *ttparm =3D tag__alloc(cu, sizeof(*ttparm));
+@@ -3634,6 +3651,28 @@ static int parameter__abi_slots(const struct param=
+eter *parm, const struct cu *c
+ 	return slots > 0 ? slots : 1;
+ }
+=20
++static int parameter__abi_reg_align(const struct parameter *parm, const =
+struct cu *cu)
++{
++	struct tag *type;
++
++	if (!cu->arg_align_two_regs || parm->type_byte_size <=3D cu->addr_size)
++		return 1;
++
++	type =3D tag__strip_typedefs_and_modifiers(&parm->tag, cu);
++	if (type =3D=3D NULL)
++		return 1;
++
++	return tag__natural_alignment(type, cu) > cu->addr_size ? 2 : 1;
++}
++
++static int parameter__align_reg_idx(const struct parameter *parm, int re=
+g_idx,
++				    const struct cu *cu)
++{
++	int align =3D parameter__abi_reg_align(parm, cu);
++
++	return (reg_idx + align - 1) & ~(align - 1);
++}
++
+ static bool parameter__has_piece_info(const struct parameter *parm)
+ {
+ 	return parm->first_reg_fields || parm->second_reg_fields;
+@@ -3653,7 +3692,7 @@ static bool ftype__next_parameter_preserves_slots(s=
+truct ftype *ftype, struct pa
+ 	if (!next || next->loc_reg =3D=3D PARAMETER_UNKNOWN_REG)
+ 		return false;
+=20
+-	next_reg_idx =3D reg_idx + slots;
++	next_reg_idx =3D parameter__align_reg_idx(next, reg_idx + slots, cu);
+ 	return next_reg_idx < cu->nr_register_params &&
+ 	       next->loc_reg =3D=3D cu->register_params[next_reg_idx];
+ }
+@@ -3702,6 +3741,7 @@ static void function__match_clang_parameter_locatio=
+ns(struct ftype *ftype, struc
+ 		if (pos->passed_in_memory)
+ 			continue;
+=20
++		reg_idx =3D parameter__align_reg_idx(pos, reg_idx, cu);
+ 		if (reg_idx >=3D cu->nr_register_params)
+ 			break;
+=20
+@@ -3732,11 +3772,17 @@ static void function__analyze_parameter_locations=
+(struct function *fn, struct cu
+=20
+ 	ftype__for_each_parameter(ftype, pos) {
+ 		bool consumes_register =3D true;
+-		bool regs_available =3D reg_idx < cu->nr_register_params;
++		bool regs_available;
+ 		int slots =3D parameter__abi_slots(pos, cu);
+-		int expected_reg =3D regs_available ? cu->register_params[reg_idx] : -=
+1;
++		int expected_reg;
+ 		int reg_slots =3D pos->passed_in_memory ? 1 : slots;
+=20
++		if (!pos->passed_in_memory)
++			reg_idx =3D parameter__align_reg_idx(pos, reg_idx, cu);
++
++		regs_available =3D reg_idx < cu->nr_register_params;
++		expected_reg =3D regs_available ? cu->register_params[reg_idx] : -1;
++
+ 		if (pos->has_loc) {
+ 			if (true_sig_enabled && pos->loc_const_value) {
+ 				pos->optimized =3D 1;
+@@ -4467,6 +4513,7 @@ static int cu__set_common(struct cu *cu, struct con=
+f_load *conf,
+ 	cu->little_endian =3D ehdr.e_ident[EI_DATA] =3D=3D ELFDATA2LSB;
+ 	cu->nr_register_params =3D arch__nr_register_params(&ehdr);
+ 	cu->agg_use_two_regs =3D arch__agg_use_two_regs(&ehdr);
++	cu->arg_align_two_regs =3D arch__arg_align_two_regs(&ehdr);
+ 	arch__set_register_params(&ehdr, cu);
+ 	return 0;
+ }
+diff --git a/dwarves.h b/dwarves.h
+index df77f1e..70adbbf 100644
+--- a/dwarves.h
++++ b/dwarves.h
+@@ -304,6 +304,7 @@ struct cu {
+ 	uint8_t		 little_endian:1;
+ 	uint8_t		 producer_clang:1;
+ 	uint8_t		 agg_use_two_regs:1;	/* An aggregate like {long a; long b;} */
++	uint8_t		 arg_align_two_regs:1;	/* An over-aligned arg starts on an eve=
+n register */
+ 	uint8_t		 nr_register_params;
+ 	int		 register_params[ARCH_MAX_REGISTER_PARAMS];
+ 	int		 functions_saved;
+--=20
+2.53.0-Meta
 
