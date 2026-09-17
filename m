@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-94.mta0.migadu.com [91.218.175.94])
+Received: from mta0.migadu.com (out-105.mta0.migadu.com [91.218.175.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22AB637F31A
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 01:58:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.94
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3879937EFFD
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 01:58:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789610295; cv=none; b=W+K0rbnsCFRFr/BAZzzWbQS0n9Y8ew+iFJ1zupBxk1bD9+avhToGCza9QebOSr/cSljT1x0dXSisbpRJRO/NdMs3bW4XCTxyJj0bIUREX65WD3O5Wgwh8vBiMztBM00H47l4GRD1d2G48ZobHZI4p/IP+PTDBdwDdCscPjEZZuQ=
+	t=1789610316; cv=none; b=ny9uzLyF07RUjcHQx7AuatjNlCstG/e67ATe2g8cRGmUyA+13IPx4Bri6KijllQ4OdELUq/pMBfBXytRKVOumvxEoHw5GoH1gaw93ThZCtMM+LG8Ct1u9oDaamTmzpub0y+KTt0mP4iZBod+nhFK5T1d5+TNnOV1OgBIZvoMq/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789610295; c=relaxed/simple;
-	bh=lFhknABgenS+z/tzUP8wpTS7XQqo/SdpXJ697my6FEg=;
+	s=arc-20240116; t=1789610316; c=relaxed/simple;
+	bh=4ZMgtbSq1fLEo9A153G8EUdhTbvG1BhTa+Q06muy2Bc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Mmcb1dBvHlYJVb1lSK5tVzqrBCQgd0P6QPTaFzxZCVwLo3a/dmG/Kl1SYDEjCpfl2E+s2ATf11P5Fa11htfKlrOR/fI1zX1ZlhsHLvtL5EjnpoJYZBpGXT7BSJg6GHBlJw8qbGfxA4AWdP0XkWM5Re9t3BcPCqbosfUmryrRcuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kuL7rKpP; arc=none smtp.client-ip=91.218.175.94
+	 MIME-Version; b=pExQD1VpCasAWkXgqtI+3joCytIfOK+Q1yJf6UBgjCvSeeJo32Nj1kniThhNZzhD2z+TCnJHz11jIOMMJZU7Oe3X5DPeeKe5pGUxaaVE6ZtWgfszj/ptt4jhIY7hYE4Xn80tdOCHs6mNcCsdg6l44BJ09q6FMXji/JG21VXiaBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=l2qgsECq; arc=none smtp.client-ip=91.218.175.105
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kuL7rKpP"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="l2qgsECq"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=lFhknABgenS+z/tzUP8wpTS7XQqo/SdpXJ697my6FEg=;
+DKIM-Signature: a=rsa-sha256; bh=4ZMgtbSq1fLEo9A153G8EUdhTbvG1BhTa+Q06muy2Bc=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789610292; v=1; x=1790215092;
- b=kuL7rKpPJy2TkJtjbepsf0YmNO3nxobgj94l13073QUtHu95LM69N02i5QmAIXM5fE+Lkg22
- fZLKXc5R/2n8Ab5DN4JbuZpYhzZUsycOPH1DfE9zylqNn3njXFAeFXzU+L8L4joqxdcQcxK5m9y
- nqlp+2Vd4i4mIwBWbpV++/6M=
+ t=1789610313; v=1; x=1790215113;
+ b=l2qgsECqFrOo0u3TiExFYEr+DKwJrBqW355TDqqYKJwnBojT0N9B9Y/PX7pRG6BTP1BZ1PpC
+ KEuMOtJ5d8HzCumJmCgq8FLbhESjlVg5y2iZw3zTuIYImL2nVZu5QdeZul/WO5QP117r4ohfzdX
+ Z8dL3zUmNGD9ZUVKC9hav6ow=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 76551194b3541af1;
-	Thu, 17 Sep 2026 01:58:11 +0000
-X-Mizu-Trace-ID: 76551194b3541af1
+Received: by smtp.migadu.com with ESMTPS id dae35dd62947e3d2;
+	Thu, 17 Sep 2026 01:58:33 +0000
+X-Mizu-Trace-ID: dae35dd62947e3d2
 X-Migadu-Flow: FLOW_OUT
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
@@ -47,9 +47,9 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Shuah Khan <shuah@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v7 2/4] bpf: arena: allocate the fault-in page outside the lock
-Date: Thu, 17 Sep 2026 09:55:07 +0800
-Message-ID: <20260917015618.7488-3-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf-next v7 3/4] selftests/bpf: Add read_cgroup_file() to cgroup_helpers
+Date: Thu, 17 Sep 2026 09:55:08 +0800
+Message-ID: <20260917015618.7488-4-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260917015618.7488-1-jiayuan.chen@linux.dev>
 References: <20260917015618.7488-1-jiayuan.chen@linux.dev>
@@ -61,184 +61,112 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-arena_vm_fault() allocated the page while holding arena->spinlock, so it
-could only use the non-blocking allocator, which never reclaims. Once the
-memcg is at memory.max that allocation just fails, the fault turns into
-VM_FAULT_SIGSEGV, and the process gets a SIGSEGV on a perfectly valid
-arena address. Hitting memory.max is routine (e.g. page cache from
-reading a big file), so this kills innocent processes over memory that
-reclaim could have freed.
-
-Rework the fault handler:
-
-- Preallocate the page before taking the lock, like do_anonymous_page()
-  does, so it can sleep and reclaim, instead of turning a routine
-  memory.max into a fake segfault. The allocation never invokes the OOM
-  killer, see bpf_map_alloc_page_sleepable().
-
-- On allocation failure fall through to the locked recheck rather than
-  failing right away: a page a concurrent allocator installed meanwhile
-  is used, otherwise the non-blocking fallback fails and we return
-  VM_FAULT_SIGBUS. Not VM_FAULT_OOM: nothing ran the OOM killer, and the
-  fault path would just retry it forever.
-
-- A lockless probe skips that preallocation when a page is already mapped
-  (e.g. allocated by the bpf program), so the common case wastes no
-  allocation. The rare race where such a page is freed before we take the
-  lock falls back to the non-blocking allocator under the lock.
-
-- Return VM_FAULT_SIGBUS for the other non-recoverable errors (lock
-  failure, range-tree and page-table failures) instead of
-  VM_FAULT_SIGSEGV; only BPF_F_SEGV_ON_FAULT, and a scratch-page hole
-  under that flag, is a real user addressing error and keeps
-  VM_FAULT_SIGSEGV.
-
-- Tidy up the error labels.
+cgroup_helpers has write_cgroup_file()/write_cgroup_file_parent() but no
+read counterpart. Add read_cgroup_file() and read_cgroup_file_parent() so
+a forked child can read a cgroup file (e.g. memory.current) from the work
+dir owned by the parent that set the environment up, without hand-building
+the /mnt/... path.
 
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- kernel/bpf/arena.c | 86 +++++++++++++++++++++++++++++++++++-----------
- 1 file changed, 66 insertions(+), 20 deletions(-)
+ tools/testing/selftests/bpf/cgroup_helpers.c | 67 ++++++++++++++++++++
+ tools/testing/selftests/bpf/cgroup_helpers.h |  4 ++
+ 2 files changed, 71 insertions(+)
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 7b6847200b431..e3c8b6086bbee 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -481,7 +481,8 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 	struct bpf_map *map = vmf->vma->vm_file->private_data;
- 	struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
- 	struct mem_cgroup *new_memcg, *old_memcg;
--	struct page *page;
-+	struct page *page, *new_page = NULL;
-+	vm_fault_t fault_ret;
- 	long kbase, kaddr;
- 	unsigned long flags;
- 	int ret;
-@@ -489,59 +490,104 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 	kbase = bpf_arena_get_kern_vm_start(arena);
- 	kaddr = kbase + (u32)(vmf->address);
- 
--	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
-+	page = vmalloc_to_page((void *)kaddr);
-+	if (!page && !(arena->map.map_flags & BPF_F_SEGV_ON_FAULT)) {
-+		/*
-+		 * Preallocate outside the lock with a sleepable allocator so it
-+		 * can reclaim, which the non-blocking allocator under
-+		 * arena->spinlock cannot; it never invokes the OOM killer, see
-+		 * bpf_map_alloc_page_sleepable(). On failure fall through
-+		 * anyway: the locked recheck below picks up a page a concurrent
-+		 * allocator may have installed meanwhile, and otherwise the
-+		 * non-blocking fallback fails and we return VM_FAULT_SIGBUS.
-+		 * Not VM_FAULT_OOM: nothing ran the OOM killer, and the fault
-+		 * path would just retry it forever.
-+		 */
-+		bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
-+		new_page = bpf_map_alloc_page_sleepable(map);
-+		bpf_map_memcg_exit(old_memcg, new_memcg);
-+	}
-+
-+	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
- 		/*
- 		 * A failed lock means a possible deadlock was detected. Don't
- 		 * return VM_FAULT_RETRY: this handler never took mmap_lock, but
- 		 * the fault path would re-take it on retry and deadlock. Fail.
- 		 */
-+		if (new_page)
-+			free_pages_nolock(new_page, 0);
- 		return VM_FAULT_SIGBUS;
-+	}
- 
- 	page = vmalloc_to_page((void *)kaddr);
- 	if (page) {
--		if (page == arena->scratch_page)
-+		if (page == arena->scratch_page) {
- 			/* BPF triggered scratch here; don't lazy-alloc over it */
--			goto out_sigsegv;
-+			fault_ret = (arena->map.map_flags & BPF_F_SEGV_ON_FAULT) ?
-+				    VM_FAULT_SIGSEGV : VM_FAULT_SIGBUS;
-+			goto out_err_locked;
-+		}
- 		/* already have a page vmap-ed */
- 		goto out;
- 	}
- 
-+	if (arena->map.map_flags & BPF_F_SEGV_ON_FAULT) {
-+		/* User space requested to segfault when page is not allocated by bpf prog */
-+		fault_ret = VM_FAULT_SIGSEGV;
-+		goto out_err_locked;
-+	}
-+
- 	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
- 
--	if (arena->map.map_flags & BPF_F_SEGV_ON_FAULT)
--		/* User space requested to segfault when page is not allocated by bpf prog */
--		goto out_sigsegv_memcg;
-+	if (!new_page) {
-+		/*
-+		 * No page in hand: either the lockless probe saw a page (a bpf
-+		 * program page or the scratch page) so we skipped preallocation
-+		 * but a concurrent bpf_arena_free_pages() cleared it before we
-+		 * took the lock, or the sleepable preallocation failed. We need
-+		 * one now and cannot sleep here, so try the non-blocking
-+		 * allocator and give up if it fails.
-+		 */
-+		ret = bpf_map_alloc_pages(map, map->numa_node, 1, &new_page);
-+		if (ret) {
-+			fault_ret = VM_FAULT_SIGBUS;
-+			goto out_err_locked_memcg;
-+		}
-+	}
- 
- 	ret = range_tree_clear(&arena->rt, vmf->pgoff, 1);
--	if (ret)
--		goto out_sigsegv_memcg;
--
--	struct apply_range_data data = { .arena = arena, .pages = &page, .i = 0 };
--	/* Account into memcg of the process that created bpf_arena */
--	ret = bpf_map_alloc_pages(map, NUMA_NO_NODE, 1, &page);
- 	if (ret) {
--		range_tree_set(&arena->rt, vmf->pgoff, 1);
--		goto out_sigsegv_memcg;
-+		fault_ret = VM_FAULT_SIGBUS;
-+		goto out_err_locked_memcg;
- 	}
-+	struct apply_range_data data = { .arena = arena, .pages = &new_page, .i = 0 };
- 
- 	ret = apply_to_page_range(&init_mm, kaddr, PAGE_SIZE, apply_range_set_cb, &data);
- 	if (ret) {
- 		range_tree_set(&arena->rt, vmf->pgoff, 1);
--		free_pages_nolock(page, 0);
--		goto out_sigsegv_memcg;
-+		fault_ret = VM_FAULT_SIGBUS;
-+		goto out_err_locked_memcg;
- 	}
- 	flush_vmap_cache(kaddr, PAGE_SIZE);
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
-+	/* new_page was consumed */
-+	page = new_page;
-+	new_page = NULL;
- out:
- 	page_ref_add(page, 1);
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+	if (new_page)
-+		free_pages_nolock(new_page, 0);
- 	vmf->page = page;
- 	return 0;
--out_sigsegv_memcg:
-+
-+out_err_locked_memcg:
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
--out_sigsegv:
-+out_err_locked:
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
--	return VM_FAULT_SIGSEGV;
-+	if (new_page)
-+		free_pages_nolock(new_page, 0);
-+	return fault_ret;
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index 45cd0b479fe35..4183ff6150c28 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -188,6 +188,73 @@ int write_cgroup_file_parent(const char *relative_path, const char *file,
+ 	return __write_cgroup_file(cgroup_path, file, buf);
  }
  
- static const struct vm_operations_struct arena_vm_ops = {
++static int __read_cgroup_file(const char *cgroup_path, const char *file,
++			      char *buf, size_t len)
++{
++	char file_path[PATH_MAX + 1];
++	ssize_t got;
++	int fd;
++
++	snprintf(file_path, sizeof(file_path), "%s/%s", cgroup_path, file);
++	fd = open(file_path, O_RDONLY);
++	if (fd < 0) {
++		log_err("Opening %s", file_path);
++		return 1;
++	}
++
++	got = read(fd, buf, len - 1);
++	if (got < 0) {
++		log_err("Reading %s", file_path);
++		close(fd);
++		return 1;
++	}
++	buf[got] = '\0';
++	close(fd);
++	return 0;
++}
++
++/**
++ * read_cgroup_file() - Read from a cgroup file
++ * @relative_path: The cgroup path, relative to the workdir
++ * @file: The name of the file in cgroupfs to read from
++ * @buf: Buffer to read into, NUL-terminated on success
++ * @len: Size of @buf
++ *
++ * Read from a file in the given cgroup's directory.
++ *
++ * If successful, 0 is returned.
++ */
++int read_cgroup_file(const char *relative_path, const char *file,
++		     char *buf, size_t len)
++{
++	char cgroup_path[PATH_MAX - 24];
++
++	format_cgroup_path(cgroup_path, relative_path);
++	return __read_cgroup_file(cgroup_path, file, buf, len);
++}
++
++/**
++ * read_cgroup_file_parent() - Read from a cgroup file in the parent process
++ *                             workdir
++ * @relative_path: The cgroup path, relative to the parent process workdir
++ * @file: The name of the file in cgroupfs to read from
++ * @buf: Buffer to read into, NUL-terminated on success
++ * @len: Size of @buf
++ *
++ * Read from a file in the given cgroup's directory under the parent process
++ * workdir.
++ *
++ * If successful, 0 is returned.
++ */
++int read_cgroup_file_parent(const char *relative_path, const char *file,
++			    char *buf, size_t len)
++{
++	char cgroup_path[PATH_MAX - 24];
++
++	format_parent_cgroup_path(cgroup_path, relative_path);
++	return __read_cgroup_file(cgroup_path, file, buf, len);
++}
++
+ /**
+  * setup_cgroup_environment() - Setup the cgroup environment
+  *
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.h b/tools/testing/selftests/bpf/cgroup_helpers.h
+index 3857304be8741..d42d2e13044e5 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.h
++++ b/tools/testing/selftests/bpf/cgroup_helpers.h
+@@ -15,6 +15,10 @@ int write_cgroup_file(const char *relative_path, const char *file,
+ 		      const char *buf);
+ int write_cgroup_file_parent(const char *relative_path, const char *file,
+ 			     const char *buf);
++int read_cgroup_file(const char *relative_path, const char *file,
++		     char *buf, size_t len);
++int read_cgroup_file_parent(const char *relative_path, const char *file,
++			    char *buf, size_t len);
+ int cgroup_setup_and_join(const char *relative_path);
+ int get_root_cgroup(void);
+ int create_and_get_cgroup(const char *relative_path);
 -- 
 2.43.0
 
