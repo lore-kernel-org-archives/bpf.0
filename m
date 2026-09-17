@@ -1,104 +1,234 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F453CD8BF;
-	Thu, 17 Sep 2026 18:45:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC993DD85E;
+	Thu, 17 Sep 2026 18:54:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789670741; cv=none; b=Cz39GdhoVmCu//xZybCoknhIko7vE77ICjS6lvEPQn8tejKiaL4O7jiwQK4BvaLMmRx48kfcD471iWDOO5MVWiVCAm0pBpsYyMHdWRxjR80QSK67aCzexXV59WNDd/gIEXzenGoad+uB/Hyv/WMxUfggratY3mUvQQ4jcBfjWl4=
+	t=1789671281; cv=none; b=FPTrk3P/uX/0F9UXXecdaT6E3KlVYUpPToW5EzfIY9WNrIcqYij8DvMCcCvFDSU7Q0L0E/ApUv5YxMK+O6uqd9QH/wi0Ghp2+c+VX9/CmdjQ/cZRduQaTb/q3KnneI4l6SQ/nnKBa6ZiX8MMsqKV70QtRwzczsOxEScgxeZvFQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789670741; c=relaxed/simple;
-	bh=dGPj631yJf05MB7oAsxBuAZXm3ahp193vFT2rP7+F8Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tdEo1M41tIse2zOGq2z8PK9Xp24WbO9eTiK8+QzOoTxF8gUPyNS4JwQHCh/vBPSJVfljMBmO2VXdELJNgAi88c+QhvW0Ex+frHZiMX9kktwQDY3tjlo4iYmT8+meowiv4GUMAqNTqQc1VyYLt8INDiDH+vAzMYA7P9jUOhJSh7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h33H9Gdu; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789671281; c=relaxed/simple;
+	bh=OP1o+RrmeyvU+HSJQ8IRj1SJPj8axc+6JLEBsxG9pOI=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=d6eqN87N5e1FkcFr5KuZPXlDvlJSp2uPklGwtHZY9HzPwuIhS2ep9/xZTNvh4XzAai33RqMxUeETZzYizndFj2gj6lt+0n+e36WlnWMtUGc1ngOTMttTYrkFRDDu9QsGL+ekS/6JBIGnov/dBGpWtJMZLmXs4/ANvcVAKayxApk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=VqYt8mPw; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h33H9Gdu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43C4C1F00893;
-	Thu, 17 Sep 2026 18:45:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789670740;
-	bh=VUqmoZ9tkjprNUAzv5MpNYkWxkSqU7Rla2JQs5OrKPE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=h33H9GduZ2Nbb//sSFkLLwqVDqBIdeknn/eumej5e7rnzoQFxi4MlgOnM2Gt6j7GB
-	 iE3tvUHRv+ixjLq+DWgWPyT7DoF/CYAC3R4euNtsJ2N4LHOUWTuAenMrDCqNT8k0zG
-	 U59UbDrs8tfw88NjPBWxAmzoXD7fWC5AStfO6GkpqIyMxP60IaZf1VURFo7L1a2N31
-	 CZ97fG48sVdVZAt67BzNGDjQ2uyRlnAdjFzsJJASWRSNkAFHDnymfoO1wKmIi3sYQ/
-	 uiC5mOc8yyM/Z/8oOa/Nnm/1UaEfhLKvQNS2zEGERuhrZ7oxaz7OX2ScghU6oH5ZC+
-	 c1PYnG1LmvA9g==
-Date: Thu, 17 Sep 2026 20:45:36 +0200
-From: Frederic Weisbecker <frederic@kernel.org>
-To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Josef Bacik <josef@toxicpanda.com>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Boqun Feng <boqun@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, x86@kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>, Juergen Gross <jgross@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	xen-devel@lists.xenproject.org
-Subject: Re: [PATCH RFC v3 03/13] rcu-tasks: Add a Tasks RCU implementation
- for reader-marked trampolines
-Message-ID: <aqw1UNGO3cQxvCco@pavilion.home>
-References: <edc7cca2-a5c5-455c-8969-ea05dbdb08f7@paulmck-laptop>
- <aqqONH8flTIpOUqT@localhost.localdomain>
- <91687748-0781-4133-baed-43cf82f35ff5@paulmck-laptop>
- <aqqpRoTfywUuTgoC@localhost.localdomain>
- <aqqsAUVV8a1yrQzX@localhost.localdomain>
- <6afb0afe-e7b8-46b4-9fea-2c7cf4791044@paulmck-laptop>
- <aqq0cwvRDsorGwgc@localhost.localdomain>
- <8b73e1b3-0580-4ba9-b2e0-6363e429808d@paulmck-laptop>
- <aqvZwfUVsiEI7q7y@localhost.localdomain>
- <8fea176a-0ca0-4a70-8cf9-8240a22359e4@paulmck-laptop>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="VqYt8mPw"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=zAd9mOo2epPXqMF6KJpulztJE0NFhCZeoEFYB3U8NWo=; b=VqYt8mPw/GsN5Du//YN3WrhHBr
+	9PGQ4s+hy22N9tR329Nt8SsFB+Ixc+QprV5pTrowtHyBG861m5/lUmsERpKMRCVuoPLXm+uVhN55D
+	kv7TCbCJQOJEmSklSgZ2O51Cg0LA5gcA7W22eRoZ4QqQC5FUMvNp14ZkZPQawxz7JnXFTIhdukRoB
+	YdE4uIalucxB7+RYKPzvOodkaZ8/UXfi0TZ++9js3os35H3BUjWtFowpW36pJK7sEOiBE0dIaoQ/+
+	Hd4kduKYwpyWtIwChYuUmDfeMbkLvrBiH0tNkL81ouFic+4mNY45MIWju4tixkrK7YlCxgft1AK6j
+	MifDisjA==;
+Received: from sslproxy07.your-server.de ([78.47.199.104])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1x7HFi-0009rh-0x;
+	Thu, 17 Sep 2026 20:54:34 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1x7HFh-000HX2-03;
+	Thu, 17 Sep 2026 20:54:33 +0200
+Message-ID: <97695bef-507a-403a-84ae-c2e222b3dc65@iogearbox.net>
+Date: Thu, 17 Sep 2026 20:54:32 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] bpf: clear stale IPv4 options after LWT encapsulation
+From: Daniel Borkmann <daniel@iogearbox.net>
+To: Weiming Shi <bestswngs@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, Peter Oskolkov <posk@google.com>,
+ Xiang Mei <xmei5@asu.edu>, stable@vger.kernel.org
+References: <20260916170406.1280954-2-bestswngs@gmail.com>
+ <48990076-414c-4196-99b9-86fce41b8054@iogearbox.net>
+Content-Language: en-US
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <48990076-414c-4196-99b9-86fce41b8054@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <8fea176a-0ca0-4a70-8cf9-8240a22359e4@paulmck-laptop>
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28126/Thu Sep 17 08:24:16 2026)
 
-Le Thu, Sep 17, 2026 at 08:40:10AM -0700, Paul E. McKenney a �crit :
-> > > Trampolines that transfer control to tracing code could supply the needed
-> > > cleanup call.  But last I checked, there were trampolines that transferred
-> > > directly back to the original code, with no opportunity for cleaning up.
-> > > 
-> > > Or am I still missing a trick here?
-> > 
-> > You're right. So we'll indeed need to reuse the deferred qs points here.
+On 9/17/26 8:24 PM, Daniel Borkmann wrote:
+> On 9/16/26 7:04 PM, Weiming Shi wrote:
+>> bpf_lwt_push_ip_encap() rebases the network header after prepending an IP
+>> header, but leaves IPCB(skb)->opt describing the inner IPv4 header.  An
+>> ingress LWT route can consequently make an ICMP error interpret an
+>> inner-header byte as an option length and copy 255 bytes into 40 bytes of
+>> stack storage.  The trace decoded with scripts/decode_stacktrace.sh is:
+>>
+>>    BUG: KASAN: stack-out-of-bounds in __ip_options_echo
+>>    Write of size 255
+>>    Call Trace:
+>>     <IRQ>
+>>     __asan_memcpy (mm/kasan/shadow.c:106)
+>>     __ip_options_echo (net/ipv4/ip_options.c:96)
+>>     __icmp_send (net/ipv4/icmp.c:949)
+>>     ip_forward (net/ipv4/ip_forward.c:176)
+>>     lwtunnel_input (net/core/lwtunnel.c:465)
+>>     ip_rcv (net/ipv4/ip_input.c:612)
+>>     __netif_receive_skb_one_core (net/core/dev.c:6264)
+>>     process_backlog (net/core/dev.c:6728)
+>>     __napi_poll (net/core/dev.c:7787)
+>>     net_rx_action (net/core/dev.c:8007)
+>>     handle_softirqs (kernel/softirq.c:645)
+>>     do_softirq.part.0 (kernel/softirq.c:546)
+>>     </IRQ>
+>>     <TASK>
+>>     __local_bh_enable_ip (kernel/softirq.c:473)
+>>     __dev_queue_xmit (net/core/dev.c:4961)
+>>     packet_sendmsg (net/packet/af_packet.c:3143)
+>>     __sys_sendto (net/socket.c:2281)
+>>     __x64_sys_sendto (net/socket.c:2288)
+>>     do_syscall_64 (arch/x86/entry/syscall_64.c:84)
+>>     entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121)
+>>     </TASK>
+>>
+>> A helper-only reset can be restored by bpf_prog_run_save_cb(), while a
+>> program without ctx->cb[] access can clone-redirect the skb before a
+>> return-only reset.  Track active LWT runs and their control-block family
+>> in the BPF network context.  When the control block is not BPF scratch
+>> space, save its original contents and reset it immediately so clones see
+>> the new-family layout.  After the program returns, restore that snapshot
+>> when the verdict continues through the original protocol callback, then
+>> invalidate the stale header metadata.  Verdicts that reroute or redirect
+>> keep the new-family layout.
+>>
+>> Preserve the state across nested runs and retain the ingress interface and
+>> L3-slave state when the protocol family changes.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
+>> Reported-by: Xiang Mei <xmei5@asu.edu>
+>> Assisted-by: LLM
+>> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+>> ---
+>> v2:
+>> - Save the incoming protocol control block for programs without ctx->cb[]
+>>    access.
+>> - Restore that snapshot before a verdict continues through the original
+>>    protocol callback, then invalidate the rebased header metadata.
+>> - Keep the eager new-family reset for clones and final reroute/redirect
+>>    consumers.
+>> - Add Cc: stable@vger.kernel.org.
+>> - Correct the patch author and reporter attribution.
+>> v1:
+>> - https://lore.kernel.org/bpf/20260915170147.3943392-2-bestswngs@gmail.com/
 > 
-> Except this is getting a bit involved.
+> Hm, this is way too much fragile churn for a feature which I'm not sure is much
+> used (?). Can't we just save/restore the skb->cb when the BPF prog runs? Roughly
+> sth along these lines (untested) :
 > 
-> Don't get me wrong, if Josef is happy to take this on, far be it from me
-> to stand in his way.  But if not, we should be willing to treat this
-> optimization as a follow-on effort, whether by Josef or someone else.
+> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
+> index da49364ec63d..9cf04b44ecc1 100644
+> --- a/net/core/lwt_bpf.c
+> +++ b/net/core/lwt_bpf.c
+> @@ -36,10 +36,24 @@ static inline struct bpf_lwt *bpf_lwt_lwtunnel(struct lwtunnel_state *lwt)
+>   #define NO_REDIRECT false
+>   #define CAN_REDIRECT true
+> 
+> +static void bpf_lwt_reset_cb(struct sk_buff *skb)
+> +{
+> +    if (skb->protocol == htons(ETH_P_IP)) {
+> +        memset(IPCB(skb), 0, sizeof(*IPCB(skb)));
+> +        IPCB(skb)->iif = skb->skb_iif;
+> +    } else if (skb->protocol == htons(ETH_P_IPV6)) {
+> +        memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
+> +        IP6CB(skb)->iif = skb->skb_iif;
+> +        IP6CB(skb)->nhoff = offsetof(struct ipv6hdr, nexthdr);
+> +    }
+> +}
+> +
+>   static int run_lwt_bpf(struct sk_buff *skb, struct bpf_lwt_prog *lwt,
+>                  struct dst_entry *dst, bool can_redirect)
+>   {
+>       struct bpf_net_context __bpf_net_ctx, *bpf_net_ctx;
+> +    bool encap = skb->encapsulation;
+> +    u8 cb_saved[BPF_SKB_CB_LEN];
+>       int ret;
+> 
+>       /* Disabling BH is needed to protect per-CPU bpf_redirect_info between
+> @@ -48,7 +62,12 @@ static int run_lwt_bpf(struct sk_buff *skb, struct bpf_lwt_prog *lwt,
+>       local_bh_disable();
+>       bpf_net_ctx = bpf_net_ctx_set(&__bpf_net_ctx);
+>       bpf_compute_data_pointers(skb);
+> +
+> +    memcpy(cb_saved, bpf_skb_cb(skb), sizeof(cb_saved));
+>       ret = bpf_prog_run_save_cb(lwt->prog, skb);
+> +    memcpy(bpf_skb_cb(skb), cb_saved, sizeof(cb_saved));
 
-Sure, I guess I can try the follow-on, especially if it leads to removing
-all this RCU tasks black magic.
+... also needs BPF selftests obviously; dropping the memcpy and a closer look wrt
+freplace, whether we should reuse & propagate ->cb_access=1 also from there.
 
-Thanks.
+> +    if (!encap && skb->encapsulation)
+> +        bpf_lwt_reset_cb(skb);
+> 
+>       switch (ret) {
+>       case BPF_OK:
 
--- 
-Frederic Weisbecker
-SUSE Labs
