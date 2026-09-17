@@ -1,46 +1,36 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-51.mta0.migadu.com [91.218.175.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36A0558122A
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 14:04:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAFF64FECE9
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 14:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789653859; cv=none; b=S2KjaPKvNACKYCpDvghPjSI36mmMZXn6T1pFX/trZnATKL62iVM7Fs3bKsQDyn1YZEqR8PUDaUCl4gNkh7iD9+bs7XsNaVcZ9MdWx/FO9ZxSxb7TY/b2rHFsPUZC5zl1zkH/TBfpUzFaZWqyw0Io2R1DPowZG2UCB3PYlyznf7I=
+	t=1789654681; cv=none; b=L1QCztazGx1XbUGiT/obTyG3W42E9pCjeqbQLvjiVRIvABIxTToq0TTWGVhyEdKMhKLkdSAxHfhO/ywSV2Npf2fYJMm63Gk+EHkSjZJdoTMPgocoUmfAHFxYbfngsEx9KSSz/122cw+giOLGoO4qutwH/s9kldXu9c63N0rZdGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789653859; c=relaxed/simple;
-	bh=8TV8ZdylJTtQfwzY5Idf+86RXjxCUBa2JpjMks+YfsI=;
+	s=arc-20240116; t=1789654681; c=relaxed/simple;
+	bh=Y7q9OjEWdLyW4swQI9zv1NaTB7ur07omzpdRDpsjgx0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tL0tOA99EqqbiVA4/M7LVvMk5hjgntnJOFx99hdJD0rRFEby4cvUN8nkmCo+dzZc+sF4SAcJIlFUCnmu7+QjGQ42RwKUppePNfUumsZW5kwBTXVA8iMgeIYek4BzkUjs26jukKM3twTkeuwz/wSU5KOVwptYgVvc7VVEDUgpVOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=e7H8tqML; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	 In-Reply-To:Content-Type; b=QHZ1yJwlwT5hLeYEjJaK2e5cvx1v1Kbb+pOoN5TTiZ0rbwdfMM3E7IVU6wrjXb1euAF8xph6MPPtU2hGlUt6MLdtXfmr0ZtMthLl92dz9ix08KNlAH9G0E2lR+g2x2EKkyQwa7PCRLBmJ4tC3ho5bI5F/Rf5Fq7TWvjxZuWrN30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qJQu+fHj; arc=none smtp.client-ip=91.218.175.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="e7H8tqML"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=UPwTOvFl1CpeOQIPZjQ5syX2TgH3pKHZm+Fy4Zqxb5A=; b=e7H8tqML48cZr2bz33jaFvWPda
-	MwCHa1RbFAi4N3+VoS/IGjLzAzgQPxd8qX9JzZvAsOHetGOtGLFqjP+Lsm3ZzJyMu26uNGFQN2psR
-	yFFd8j4twMHcC0SluCuygqFejlO1dFAAAUhdyaI0LTMNTfAkTm/hBaoqlBcTWN+kvG7QS7rLNXpIK
-	/mPEdofpvLpNj6slrPeDpoWxH1iejlSTZCIK6DsVVE6X25bT4Dvk9/tekubKCAby9t/mFXcrOkZwf
-	HV/ug/BO/fkfAEfyY81EnyCOx8hl4ow54A6tzLRKJoKxb1svcu+gAcc901m3QGd4YaXWk5m7HK1GJ
-	0aKImrlg==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1x7CiR-0008RH-1D;
-	Thu, 17 Sep 2026 16:03:55 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1x7CiQ-000HY2-03;
-	Thu, 17 Sep 2026 16:03:54 +0200
-Message-ID: <73701ffd-213e-4842-8b40-f719c1eeaed4@iogearbox.net>
-Date: Thu, 17 Sep 2026 16:03:53 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qJQu+fHj"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Y7q9OjEWdLyW4swQI9zv1NaTB7ur07omzpdRDpsjgx0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789654675; v=1; x=1790259475;
+ b=qJQu+fHjWBGntZOXRAKeInot6e0BVWEbFL4zZbF81sAi3pGfc36tWKueRfCcAjxdsWfl76+V
+ M0mCqvbRqT23TTjTRUDaXYJ/6pFyPFhv6sgko++6xMf8sBPnxZeYWVP3EDCi/cGhZS5QDjzwpTK
+ yfZ0c2/3jlC1cnygwRROkcKg=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id eab9bfea70461117;
+	Thu, 17 Sep 2026 14:17:55 +0000
+X-Mizu-Trace-ID: eab9bfea70461117
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <06377343-9d4b-4d0c-b4ec-7ffb3cd5d6a6@linux.dev>
+Date: Thu, 17 Sep 2026 07:17:52 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,125 +38,193 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [BUG] audit/powerpc: WARNING at kernel/auditsc.c:1995
- (__audit_syscall_entry) during BPF kselftests (test_progs)
-To: Venkat Rao Bagalkote <venkat88@linux.ibm.com>, bpf <bpf@vger.kernel.org>,
- linux-audit@vger.kernel.org, linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
- Shrikanth Hegde <sshegde@linux.ibm.com>,
- Ritesh Harjani <riteshh@linux.ibm.com>, Hari Bathini
- <hbathini@linux.ibm.com>, Saket Kumar Bhaskar <skb99@linux.ibm.com>,
- Paul Moore <paul@paul-moore.com>, Alexei Starovoitov <ast@kernel.org>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, andrii@kernel.org,
- Eduard Zingerman <eddyz87@gmail.com>, yonghong.song@linux.dev
-References: <ff563467-0bab-43ec-a46c-a4167bc12473@linux.ibm.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <ff563467-0bab-43ec-a46c-a4167bc12473@linux.ibm.com>
+Subject: Re: [PATCH dwarves 1/2] dwarf_loader: Skip the argument register the
+ arm64 ABI leaves as a hole
+To: Alan Maguire <alan.maguire@oracle.com>,
+ Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>, dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ bpf@vger.kernel.org, kernel-team@fb.com
+References: <20260911040955.339939-1-yonghong.song@linux.dev>
+ <49774454-15bb-4076-81ab-1da4414e0548@oracle.com>
+Content-Language: en-GB
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <49774454-15bb-4076-81ab-1da4414e0548@oracle.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28126/Thu Sep 17 08:24:16 2026)
+Content-Transfer-Encoding: 7bit
 
-Hi Venkat,
 
-On 9/17/26 3:01 PM, Venkat Rao Bagalkote wrote:
-> Hi all,
-> 
-> IBM CI has reported a kernel warning triggered in __audit_syscall_entry() on a PowerPC 64 (ppc64le, POWER9 pSeries guest) system while running the BPF kselftest suite (test_progs).
-> 
-> Environment:
-> 
-> 
-> Kernel version: 7.3.0-rc3-g238650ef6c7c (PREEMPT)
-> Architecture: ppc64le (POWER9 - IBM,8375-42A pSeries / phyp)
-> Workload: BPF selftests (tools/testing/selftests/bpf/test_progs)
-> 
-> 
-> Problem Description:
-> 
-> 
-> During syscall entry processing (system_call_exception -> syscall_enter_audit -> __audit_syscall_entry), the kernel hit WARN_ON(context->context != AUDIT_CTX_UNUSED) at kernel/auditsc.c:1995, indicating that the task's audit context was not reset to AUDIT_CTX_UNUSED prior to entering the new syscall.
 
-Hm, based on the trace feels somewhat unrelated to bpf, but were you able to bisect in
-case it can be reliably reproduced? Which tree is this, linux-next or bpf/bpf-next?
+On 9/15/26 4:40 AM, Alan Maguire wrote:
+> On 11/09/2026 05:09, Yonghong Song wrote:
+>> arm64 requires an argument whose alignment is twice the register size to
+>> start on an even-numbered argument register, so such an argument arriving
+>> when the next free register is an odd one leaves that register unused:
+>>
+>>    u64 f_odd(u64 a, __int128 v, u64 b);
+>>
+>> passes a in x0, v in x2:x3 -- skipping x1 -- and b in x4.  The x86-64 ABI
+>> has no such rule and packs v into rsi:rdx instead.
+>>
+>> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+>> ---
+>>   dwarf_loader.c | 53 +++++++++++++++++++++++++++++++++++++++++++++++---
+>>   dwarves.h      |  1 +
+>>   2 files changed, 51 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/dwarf_loader.c b/dwarf_loader.c
+>> index 61ef52f..81c2076 100644
+>> --- a/dwarf_loader.c
+>> +++ b/dwarf_loader.c
+>> @@ -1501,6 +1501,23 @@ static bool arch__agg_use_two_regs(const GElf_Ehdr *ehdr)
+>>   	}
+>>   }
+>>   
+>> +/*
+>> + * Some ABIs require an argument whose alignment is twice the register size to
+>> + * start on an even-numbered argument register, leaving a hole when the next
+>> + * free register is an odd one. For example, on arm64,
+>> + *	u64 f(u64 a, __int128 v, u64 b)
+>> + * passes a in x0, v in x2:x3 -- skipping x1 -- and b in x4.
+>> + */
+>> +static bool arch__arg_align_two_regs(const GElf_Ehdr *ehdr)
+>> +{
+>> +	switch (ehdr->e_machine) {
+>> +	case EM_AARCH64:
+>> +		return true;
+>> +	default:
+>> +		return false;
+>> +	}
+>> +}
+>> +
+>>   static struct template_type_param *template_type_param__new(Dwarf_Die *die, struct cu *cu, struct conf_load *conf)
+>>   {
+>>   	struct template_type_param *ttparm = tag__alloc(cu, sizeof(*ttparm));
+>> @@ -3634,6 +3651,28 @@ static int parameter__abi_slots(const struct parameter *parm, const struct cu *c
+>>   	return slots > 0 ? slots : 1;
+>>   }
+>>   
+>> +static int parameter__abi_reg_align(const struct parameter *parm, const struct cu *cu)
+>> +{
+>> +	struct tag *type;
+>> +
+>> +	if (!cu->arg_align_two_regs || parm->type_byte_size <= cu->addr_size)
+>> +		return 1;
+>> +
+>> +	type = tag__strip_typedefs_and_modifiers(&parm->tag, cu);
+>> +	if (type == NULL)
+>> +		return 1;
+>> +
+>> +	return tag__natural_alignment(type, cu) > cu->addr_size ? 2 : 1;
+>> +}
+>
+> There is a problem here (identified by AI) which, while not impacting on kernel
+> signatures would I think be worth fixing. It stems from the fact that we can
+> have non general-purpose registers > pointer size in a function signatures,
+> and if they are present they do not advance the general purpose register number by 2
+> in the way that dedicating 2 general-purpose registers would.
+>
+> Example signature:
+>
+> u64 f_fp(u64 a, long double v, u64 b);
+>
+> To catch this, have a test in parameter__abi_reg_align()
+>
+> 	if (!parameter__uses_gpr_bank(parm, cu))
+>    		return 1;
+>
+>
+> static bool parameter__uses_gpr_bank(const struct parameter *parm, const struct cu *cu)
+> {
+> 	struct tag *type = tag__strip_typedefs_and_modifiers(&parm->tag, cu);
+>
+> 	if (!type)
+> 		return false;
+>
+> 	/* Scalars represented by FP/SIMD registers have their own allocation bank. */
+> 	if (tag__is_base_type(type) && base_type__is_float(tag__base_type(type)))
+> 		return false;
+>
+> 	/* Also exclude vector/SIMD types if dwarves represents them distinctly. */	
+> 	if (tag__is_vector(type))
+>    		return false;
+>
+>    	return true;
+> }
+>
+> So given that the fix is small, I think this would be worth doing.
 
-> Trace:
-> 
-> 
-> [ 1371.387510] ------------[ cut here ]------------
-> [ 1371.387528] WARNING: kernel/auditsc.c:1995 at __audit_syscall_entry+0x50/0x1b0, CPU#17: test_progs/49616
-> [ 1371.387539] Modules linked in: dm_verity(E) dm_bufio(E) reed_solomon(E) livepatch_sample(EK) tun(E) vrf(E) 8021q(E) garp(E) mrp(E) stp(E) llc(E) veth(E) bonding(E) tls(E) rfkill(E) nft_fib_inet(E) nft_fib_ipv4(E) nft_fib_ipv6(E) nft_fib(E) nft_reject_inet(E) nf_reject_ipv4(E) nf_reject_ipv6(E) nft_reject(E) nft_ct(E) nft_chain_nat(E) hvcs(E) hvcserver(E) pseries_rng(E) vmx_crypto(E) sg(E) drm(E) fuse(E) drm_panel_orientation_quirks(E) xfs(E) sr_mod(E) nvme_tcp(E) sd_mod(E) cdrom(E) nvme_fabrics(E) nvme_core(E) ibmvscsi(E) ibmveth(E) scsi_transport_srp(E) dm_mirror(E) dm_region_hash(E) dm_log(E) dm_mod(E) [last unloaded: bpf_test_modorder_x(OE)]
-> [ 1371.387607] CPU: 17 UID: 0 PID: 49616 Comm: test_progs Tainted: G        OE K     7.3.0-rc3-g238650ef6c7c #1 PREEMPT
-> [ 1371.387616] Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE, [K]=LIVEPATCH
-> [ 1371.387620] Hardware name: IBM,8375-42A POWER9 (architected) 0x4e0202 0xf000005 of:IBM,FW950.80 (VL950_131) hv:phyp pSeries
-> [ 1371.387626] NIP:  c0000000003e70d0 LR: c000000000352080 CTR: c00000000000cf00
-> [ 1371.387631] REGS: c00000000beafaa0 TRAP: 0700   Tainted: G      OE K     (7.3.0-rc3-g238650ef6c7c)
-> [ 1371.387637] MSR:  8000000000029033 <SF,EE,ME,IR,DR,RI,LE>  CR: 48002824  XER: 20040084
-> [ 1371.387650] CFAR: c00000000035207c IRQMASK: 0
->                 GPR00: c000000000034958 c00000000beafd40 c0000000020eb200 c0000000345f4800
->                 GPR04: 00007fffe2a31184 0000000000000081 000000007fffffff 0000000000000000
->                 GPR08: 0000000000000000 0000000000000001 0000000000000001 00000000000000dd
->                 GPR12: 0000000000000000 c00000002e99b300 0000000000000000 0000000000000000
->                 GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
->                 GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
->                 GPR24: 0000000000000000 0000000000000000 0000000000000000 c0000000345f4800
->                 GPR28: 0000000000000000 00000000000000dd 00000000000000dd c000000138e0c000
-> [ 1371.387710] NIP [c0000000003e70d0] __audit_syscall_entry+0x50/0x1b0
-> [ 1371.387715] LR [c000000000352080] syscall_enter_audit+0x90/0xd0
-> [ 1371.387722] Call Trace:
-> [ 1371.387725] [c00000000beafd40] [c000000000937050] selinux_task_getpgid+0x80/0xa0 (unreliable)
-> [ 1371.387735] [c00000000beafda0] [c00000000beafde0] 0xc00000000beafde0
-> [ 1371.387741] [c00000000beafe00] [c000000000034958] system_call_exception+0x448/0x480
-> [ 1371.387749] [c00000000beafe50] [c00000000000d05c] system_call_vectored_common+0x15c/0x2ec
-> [ 1371.387757] ---- interrupt: 3000 at 0x7fffab74cbf0
-> 
-> 
-> Please let me know if additional logs, config, or repro details are needed.
-> 
-> Regards,
-> 
-> Venkat.
+Okay, thanks for the suggestion. I will add these in the next revision.
+BTW, AI found another couple of places where parameter__uses_gpr_bank()
+should be used. I will fold them too.
+
+>
+>> +
+>> +static int parameter__align_reg_idx(const struct parameter *parm, int reg_idx,
+>> +				    const struct cu *cu)
+>> +{
+>> +	int align = parameter__abi_reg_align(parm, cu);
+>> +
+>> +	return (reg_idx + align - 1) & ~(align - 1);
+>> +}
+>> +
+>>   static bool parameter__has_piece_info(const struct parameter *parm)
+>>   {
+>>   	return parm->first_reg_fields || parm->second_reg_fields;
+>> @@ -3653,7 +3692,7 @@ static bool ftype__next_parameter_preserves_slots(struct ftype *ftype, struct pa
+>>   	if (!next || next->loc_reg == PARAMETER_UNKNOWN_REG)
+>>   		return false;
+>>   
+>> -	next_reg_idx = reg_idx + slots;
+>> +	next_reg_idx = parameter__align_reg_idx(next, reg_idx + slots, cu);
+>>   	return next_reg_idx < cu->nr_register_params &&
+>>   	       next->loc_reg == cu->register_params[next_reg_idx];
+>>   }
+>> @@ -3702,6 +3741,7 @@ static void function__match_clang_parameter_locations(struct ftype *ftype, struc
+>>   		if (pos->passed_in_memory)
+>>   			continue;
+>>   
+>> +		reg_idx = parameter__align_reg_idx(pos, reg_idx, cu);
+>>   		if (reg_idx >= cu->nr_register_params)
+>>   			break;
+>>   
+>> @@ -3732,11 +3772,17 @@ static void function__analyze_parameter_locations(struct function *fn, struct cu
+>>   
+>>   	ftype__for_each_parameter(ftype, pos) {
+>>   		bool consumes_register = true;
+>> -		bool regs_available = reg_idx < cu->nr_register_params;
+>> +		bool regs_available;
+>>   		int slots = parameter__abi_slots(pos, cu);
+>> -		int expected_reg = regs_available ? cu->register_params[reg_idx] : -1;
+>> +		int expected_reg;
+>>   		int reg_slots = pos->passed_in_memory ? 1 : slots;
+>>   
+>> +		if (!pos->passed_in_memory)
+>> +			reg_idx = parameter__align_reg_idx(pos, reg_idx, cu);
+>> +
+>> +		regs_available = reg_idx < cu->nr_register_params;
+>> +		expected_reg = regs_available ? cu->register_params[reg_idx] : -1;
+>> +
+>>   		if (pos->has_loc) {
+>>   			if (true_sig_enabled && pos->loc_const_value) {
+>>   				pos->optimized = 1;
+>> @@ -4467,6 +4513,7 @@ static int cu__set_common(struct cu *cu, struct conf_load *conf,
+>>   	cu->little_endian = ehdr.e_ident[EI_DATA] == ELFDATA2LSB;
+>>   	cu->nr_register_params = arch__nr_register_params(&ehdr);
+>>   	cu->agg_use_two_regs = arch__agg_use_two_regs(&ehdr);
+>> +	cu->arg_align_two_regs = arch__arg_align_two_regs(&ehdr);
+>>   	arch__set_register_params(&ehdr, cu);
+>>   	return 0;
+>>   }
+>> diff --git a/dwarves.h b/dwarves.h
+>> index df77f1e..70adbbf 100644
+>> --- a/dwarves.h
+>> +++ b/dwarves.h
+>> @@ -304,6 +304,7 @@ struct cu {
+>>   	uint8_t		 little_endian:1;
+>>   	uint8_t		 producer_clang:1;
+>>   	uint8_t		 agg_use_two_regs:1;	/* An aggregate like {long a; long b;} */
+>> +	uint8_t		 arg_align_two_regs:1;	/* An over-aligned arg starts on an even register */
+>>   	uint8_t		 nr_register_params;
+>>   	int		 register_params[ARCH_MAX_REGISTER_PARAMS];
+>>   	int		 functions_saved;
 
