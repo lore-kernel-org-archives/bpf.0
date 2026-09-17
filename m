@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D79347BDC
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 06:16:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F37B347BDC
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 06:16:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789625783; cv=none; b=DbB83caX28nEhDOrUOVoFhMyKYlVZKJuw5NsJtRZXk2qZdz2/jVWbth7+DoT+iUqv2tieY8Kn0rbC4Yi3cMH9ln9okRaK3liRA+118ShooGuLEDaupyQdRThM3ba8Ys26x3nkiNfjh6gK1sKQRbkOMypD8aBsPM6rR+FlL3t4wk=
+	t=1789625799; cv=none; b=mWseM75nBVg5THZucrkMlj9w7K2vRdT3rvM7s9QEBn57jp+u08LPQBA/00jCbc6Do2LyZNpT2cSXgisGyVS95K6Njfh/0jWRIzolADqI6BuehX8iRArb4LVnTXDDlMYBDF2+8RQJHh0rxjiuJ1IubeWTUk6RFYbVrZw5CgJQh3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789625783; c=relaxed/simple;
-	bh=9AXSD3v37Xj2DgbX8V7nhth08mwPilLiRATPcmYWccA=;
+	s=arc-20240116; t=1789625799; c=relaxed/simple;
+	bh=GpMNDZk3ZU1Oc0BZcei0O2B53Oh1BX2yanEVZJKIJgc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=SnP/+14eprvnErhKAFIE2fvzNYJ7f/LuD13P2bS5ZCqpc3ihCdXOB8FtLiNXbSKzWFfGx3yKh6gSZXHNAaRpiaajUNt8oDHVpo25e515vR6ldFm34tVu24DIe1u71FR4xip0MQCezaoG/ahmzh9kKUUS4AERDy99lBWsRDxoZj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YQ3PeDL7; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=h7SX8LzAtBkBvKq/WF7MluRCS9V7frBU3DxgN8mHDQLJIIuAOfQjpJPGyT4O+jP6jGqtWDKRHqb7Cyx14MKJv/J6wbUNOFXRRy8eEYSoMGCXFlLiTvvt3eXeDowDcLIGUKhHMmweD7B+4Bb8PXOFKygHWhYT91EB78NJFk6piJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gmSz33+m; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YQ3PeDL7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DFAA1F000FF;
-	Thu, 17 Sep 2026 06:16:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gmSz33+m"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF3A91F000FF;
+	Thu, 17 Sep 2026 06:16:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789625781;
-	bh=/pK0Lx5z3Z07D1obKvFu7qh3+hdrhIiquOTDmJeMgHw=;
+	s=k20260515; t=1789625798;
+	bh=/rN+uUYee3UYb161DnLt4923EVdnpNnaQqVuk8BbPFQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YQ3PeDL7KKimFz3yK2w3JBIgGEeswLY9MLy2EH3uVlZ3iXM5rEeplq33NgsREzKPB
-	 Mbdj1ek5rOCKOoFYEUnX939i18Cs6qou438BbPuw7uvSQmAQlk/xvoLAscd7Y8Eqqd
-	 tpYpAR0u7WhRVqOijygo2jQxOZDy6q0xvEe/3y7pl0iiYGmN5a0vcN8osX3rM96q42
-	 Vz0B1uDwqAj7isrDLQCiQPYFhCTvSzkD1KM69eRaCoSRecF5+IBXemng6dZWC3m6mJ
-	 F0s1tVkXQBRURsIQ1E0fIwIMgLExsijpJk5kZoPEmH4xh5TXJeaFJqHKpMJE1MDZbd
-	 jJMsBnwyl/w0A==
+	b=gmSz33+mF7EHiWAq0wfrvMhYE5cZ70cOCsAi0iJdZl6g3/rNp3sDkZ3eENtotLNZ+
+	 w+8qLApNeI/V3hngJM9QfIvt+HyWVogBFbSSHokhFfMeb4ahjAmIj9RYrYp28mn3LU
+	 EaMFfYdP6YuiWpzr8Btx57sfm2Y9c01Rk4aBqwUk3QA4ZeiSoODFtu9JNkqZ2Ok8HV
+	 KZqarmLXgcxdV1IBBw4jQxNXmUmHAq2mI6CfcLfOH4bDYih+6YY2MJqT1pOGKL4Gyx
+	 qxNh950PGOE8y4r03jAzdbjLwGaDQSnX+n5yMCN6B57+UDwqJklboOSoE1S2KBz/qa
+	 4+HZdaKn4vxjg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 19/20] selftests/bpf: Cover the exception
- cleanup shapes the chain does not reach
+Subject: Re: [PATCH bpf-next 17/20] libbpf: Let the static linker carry
+ .bpf_cleanup relocations
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260917055823.3935111-1-yonghong.song@linux.dev>
+In-Reply-To: <20260917055812.3934611-1-yonghong.song@linux.dev>
 References: <20260917055645.3926444-1-yonghong.song@linux.dev>
- <20260917055823.3935111-1-yonghong.song@linux.dev>
+ <20260917055812.3934611-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 17 Sep 2026 06:16:20 +0000
-Message-Id: <20260917061621.6DFAA1F000FF@smtp.kernel.org>
+Date: Thu, 17 Sep 2026 06:16:37 +0000
+Message-Id: <20260917061637.CF3A91F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,94 +47,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] bpf: multi-line comments violate BPF subsystem style
+- [Medium] libbpf: unaligned memory access in linker for 32-bit relocations
 --
 
-commit 621c13df81280f1c0c32e09255ce8c64860bd768
+commit 408d36d153c1766697801912b5eb3e8087995ef9
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-selftests/bpf: Cover the exception cleanup shapes the chain does not reach
-   =20
-The end-to-end test walks one call chain with a pad in most of its frames.
-This adds the shapes that chain does not reach: a callee called from both a
-covered and an uncovered site, a pad that reads its frame's callee-saved
-registers, a tail-call-reachable callee, a tail call that is taken, an
-extension standing in for a covered call, a pad in the main program's own
-frame, a record covering bpf_throw() itself, a record covering only a
-nounwind call, a throwing subprogram named by a BPF_PSEUDO_FUNC, a region
-ending on a 16-byte instruction, a pad that reloads from and writes to its
-own frame, a pad two frames up, a pad that calls a subprogram which tail
-calls, an extension carrying a table of its own, and a pad terminated by
-_Unwind_Resume rather than bpf_unwind_resume.
+libbpf: Let the static linker carry .bpf_cleanup relocations
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c =
-b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
-> index d1e45b765af26..ffc0b95191681 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
-> @@ -212,6 +212,9 @@ static void test_shapes(void)
-> =20
-[ ... ]
-> +	/* The same call site either way: the subprogram's throw unwinds into
-> +	 * this frame and runs its pad, an extension's stops at its own boundar=
-y.
-> +	 */
+This commit allows the BPF static linker to process 32-bit relocations
+against non-executable sections by handling R_BPF_64_NODYLD32 and
+R_BPF_64_ABS32 relocation types. It updates the 32-bit values directly in
+the raw data of the relocated section.
 
-[Severity: Low]
-Does this multi-line comment in test_shapes() violate the BPF subsystem sty=
-le?
-
-The style guidelines prefer the opening /* on its own line:
-
-	/*
-	 * The same call site either way: the subprogram's throw unwinds into
-	 * this frame and runs its pad, an extension's stops at its own boundary.
-	 */
+> diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
+> index 78f92c39290af..e5c06023cb5b1 100644
+> --- a/tools/lib/bpf/linker.c
+> +++ b/tools/lib/bpf/linker.c
 
 [ ... ]
 
-> +	/* A tail call that is taken: the walk ends at the target, so the cookie
-> +	 * comes back from there and this frame's pad does not run.
-> +	 */
+> @@ -2274,6 +2275,22 @@ static int linker_append_elf_relos(struct bpf_link=
+er *linker, struct src_obj *ob
+>  						insn->imm +=3D sec->dst_off / sizeof(struct bpf_insn);
+>  					else
+>  						insn->imm +=3D sec->dst_off;
+> +				} else if (sym_type =3D=3D R_BPF_64_NODYLD32 ||
+> +					   sym_type =3D=3D R_BPF_64_ABS32) {
+> +					__u32 *val;
+> +
+> +					/* Two spellings of the one thing: LLVM
+> +					 * emits NODYLD32 for a .long against a
+> +					 * section symbol, GNU as emits ABS32
+> +					 * (bpf_reloc_type_lookup() maps
+> +					 * BFD_RELOC_32 to it), and the value
+> +					 * they describe is the same.
+> +					 */
+> +					val =3D dst_linked_sec->raw_data + dst_rel->r_offset;
+> +					if (linker->swapped_endian)
+> +						*val =3D bswap_32(bswap_32(*val) + sec->dst_off);
+> +					else
+> +						*val +=3D sec->dst_off;
 
-[Severity: Low]
-Could this multi-line comment in test_shapes() also be updated to start the=
- text
-on the line following the opening /* to match the preferred BPF style?
+[Severity: Medium]
+Can this lead to an unaligned memory access crash?
 
-> diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup_shapes.=
-c b/tools/testing/selftests/bpf/progs/exceptions_cleanup_shapes.c
-> new file mode 100644
-> index 0000000000000..f5eb2ff15c896
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup_shapes.c
-> @@ -214,6 +214,9 @@ static __used __noinline __u64 tc_thrower(void *ctx)
->  {
-> +	/* Never taken; its presence is what makes this frame, whose spill the
-> +	 * walker reads, tail-call-reachable.
-> +	 */
+The static linker processes these 32-bit relocations against non-executable
+sections by casting the relocated offset to a 32-bit integer pointer and
+directly dereferencing it.
 
-[Severity: Low]
-Is this multi-line comment in tc_thrower() formatted correctly?
+If a user supplies a malformed BPF object file with an unaligned relocation
+offset, this could result in undefined behavior and a crash (SIGBUS) on
+host architectures with strict alignment requirements.
 
-The BPF subsystem style requires the opening /* on its own line for multi-l=
-ine
-comments.
+Should linker_sanity_check_elf_relos() be updated to ensure the relocation
+offset is a multiple of 4 for non-executable sections, similar to how it
+checks alignment for SHF_EXECINSTR sections?
 
-[ ... ]
-
-> @@ -311,6 +311,9 @@ static __used __noinline __u64 tc_taken_callee(void *=
-ctx, __u64 x)
->  {
-> +	/* Never true at run time; the verifier cannot know that, and its
-> +	 * unwind out of here is what keeps the caller's pad alive.
-> +	 */
-
-[Severity: Low]
-Should this multi-line comment in tc_taken_callee() also be adjusted so the=
- text
-starts on the next line after the opening /* marker?
+tools/lib/bpf/linker.c:linker_sanity_check_elf_relos() {
+		if (link_sec->shdr->sh_flags & SHF_EXECINSTR) {
+			if (relo->r_offset % sizeof(struct bpf_insn) !=3D 0) {
+				pr_warn("ELF relo #%d in section #%zu points to missing symbol #%zu in =
+%s\n",
+					i, sec->sec_idx, sym_idx, obj->filename);
+				return -EINVAL;
+			}
+		}
+}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260917055645.3926=
-444-1-yonghong.song@linux.dev?part=3D19
+444-1-yonghong.song@linux.dev?part=3D17
