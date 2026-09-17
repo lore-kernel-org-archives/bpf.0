@@ -1,159 +1,188 @@
-Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E92755C310
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 15:40:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 738B2331A66
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 16:06:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789659626; cv=none; b=JkwSdfJiCNJvsX2fvNG5R3RJh/Bt6x7Y/LSlTOApqH8d5WKYVMpgxq+B2u/QBT/+XENdeSDe73/MvaYXS1wV7PIyREpjEwxNaqA88IMO9va3hr/cckDku99ISKvgM4IZ3iEJFWq5I3OoPlO7RwtafkwvZNLi1KzqO6pO+FwtIhU=
+	t=1789661167; cv=none; b=mV8JbvdW1OvFjXmxbqCgj63scRDug6ohnHG1tEOcWJ0i8H8+826xKlwY/xfrA0iY4QD8It+Dhxp8C5o6H5r+UpqZOmpJn5rKXhI2IBfpxBhirHPJ3wChX0K0qlN61qzaXfmSlBw+BbDrEUP3yaYEI3iLmeSF+cPYHiFe2mI+1hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789659626; c=relaxed/simple;
-	bh=KzbsMfT9mDqqgshLhXJ1nuoPk1e2OxZC2YnocBIcZew=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ozy/wMUZY2hBb1TLwmsk7Ut927ConVCR3KeeAHdJ3lNQA2UVQnt1x2BNwqwv2BT6f8Nm9vw4cbte6tzaY9Xf7Yk7JFHAGJTh7K2AMN4vWiTf23HjNhSaJEi1oc0wRGcxz+EkTjCCSNwXRdeXgF7gPtODoOYfc21XPG6tKyNXL6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AhKLrtlN; arc=none smtp.client-ip=74.125.228.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789661167; c=relaxed/simple;
+	bh=92MVM8FuUR8dgF4FinXUIpDBtOBI/xZhxZA5lwihY24=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YBQdhO/f0y0zmOD5gdrBN8cdfh4lRyteeGa8yz7hUpG1sDtRZw40IxgtMctokVzav4sx4X9y9jk8gO3X+EfAnDakwbzzmxuYc9OtKPPJdH6csCmgbk3bpFEI6s8bA68uxKTz/peJF5ZZHyXH+Qora59SURpSltY+i9i0CqU2Prw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vi6WGKmx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AhKLrtlN"
-Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-85469e211a3so840639b3a.2
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 08:40:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789659609; x=1790264409; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=/BLueBpn8GLWCUZRyZrIy9LgmAKje6FNvcB8D0aXHBE=;
-        b=AhKLrtlNwMOA/EVggQliESgZgQjHYLZZmJ7I8znC6UW8X8vdLAfJY5lRF54W22ieAh
-         oEIJcbODiSTF060rx2ZLVIP+D34SByHxD0/nWyOH7qZrvq67fflbbVshzIsNGkuFC3a5
-         Xuo2npM8sdAwMGQrqiPCkRLRDjdVU1yzqrR2oOiP4HcwXCuZgUbGzi4eNyWELsMrjEp1
-         k0J4PbpNoCx/YuU4/VW+KCwXCUlFVfOrg5dqCtGHJT53QXPF2oq6EYBBpRmpqw6u5jBN
-         vgWag+tmHW3/Mgoc+5cBUAVW2Jaf6cUCTqem8dXKz8WZGF1s8mqxSZ5js9JX5x11Z18d
-         9ofA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789659609; x=1790264409;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=/BLueBpn8GLWCUZRyZrIy9LgmAKje6FNvcB8D0aXHBE=;
-        b=C4rXT7HR0uT7Cq0PEVET5+6OlgZc/XttOA82cT+6tgqT4aMdjRACWH6xK1SNRrD04O
-         fkJJsyvDl1x2LJEGGdcp0iDeMPDcmX0ntaUQhASDCD1ANu/o8/MX0WLHqONTLRVPGi65
-         Ody4u9u3aeuxFGtZTukSa7fL0PrENDU4kCbuZG8ik3aqQ6MHRf8Nbs/liiwp/hnqoTGy
-         H3KH7xb/gY2VWLt9bD99H6GiOpfYIrfUUl2OZMSmUozNOwd7hTqDbGh0R2PVtQ6o264T
-         R9BTKUn/sDcYFJFQdQG8nYOiRzIT9Di0rTW0xJonurPmO36+9BG7netAOjwEygwoXa2j
-         yb+g==
-X-Forwarded-Encrypted: i=1; AKwUvByLhCrTaqeb/b5o3VLkTT8fNZW+nKW5Pr6j2POnW2baZRMkarG8+EOAz/DXKf+qAU3d5Do=@vger.kernel.org
-X-Gm-Message-State: AFuF++kc1yGLRjXS1mWBAQBa2vwZhXruVSdqETRYF7d7Lj5eA7s2ttLw
-	sRD/771SCIQxOMREc2EZJ+tUh4fVxKV2bPxm1sEjjFfDac3ePVDbgssq
-X-Gm-Gg: AYBFou2S0ICfga4rSyswKHMCSLZ2ZSE3EyYScmtnteVoaaJoaGyVV8HsQSdgbafwsMy
-	OWfGd2KKP7I/2Q3DgRVU2eI0sAY/2bxY8NE7d6NJ9Wmx20pvjWfVZA8g7++WUMWglkk4hYwItyH
-	jRF1J7RlLJ5VAzHbniFXGZ6CejyNxXNx8GUVjQK8ays4FT6rekmX8dVNvCWMwyJsf6ONcDqaRL2
-	OFGeI9oQg6OzV1odIC5Fb17sElHBZjdxRFxm4ItidqvJuemG/BWHvkZVzSTFa/Psd7trPUKsMbM
-	84Tlt1S8Rua5Aq3aup6h/DsshUay0sclxUsRZO+EpDt0snc193a8aHICC/Oe7E/9ZJFr3BwQMiQ
-	/uo353uQJyQBjwu29u+DwxN3K5yn1Fali0y595PM0g0sKjYcsPAkMhZkEwpZ91GW3DJBSaOJv4l
-	T/xMfW1PIfYdB9LeTSo1L6JO8jdMzxtIRYaBkcod/O29ZI+D+jWgPt8sIM4vQ+jCi5vNx1gahaf
-	jaG2sTN6JCRc2IxGLUgd2UIzz6K3yG3
-X-Received: by 2002:a05:6a00:1892:b0:869:4d90:a0cd with SMTP id d2e1a72fcca58-8723a5a7c3dmr15557312b3a.16.1789659608898;
-        Thu, 17 Sep 2026 08:40:08 -0700 (PDT)
-Received: from 192.168.50.3 ([198.176.50.208])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc50abb1776sm3467697a12.27.2026.09.17.08.39.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 08:40:08 -0700 (PDT)
-From: Weiming Shi <bestswngs@gmail.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	co+65e5c76b187f08b2@bugs.sh,
-	Xiang Mei <xmei5@asu.edu>,
-	Weiming Shi <bestswngs@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH net] veth: manage XDP program pointers during channel resize
-Date: Thu, 17 Sep 2026 23:39:25 +0800
-Message-ID: <20260917153923.904124-3-bestswngs@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vi6WGKmx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8F6B1F000FF;
+	Thu, 17 Sep 2026 16:06:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789661166;
+	bh=hewmPPin7Hu0jdJYSML0lPrT36s44Cey1VAj733pW4Q=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Vi6WGKmxfixcscNtJu4tZ8nrLmbKO3B5iDCFbE1bAbFlacqzlwrITmP4fgmt4wPmP
+	 bzjM+W2cmItRhGlcrUWmHoE30SFKBNvqZCJpT3MKFLtkgoTGTeGnTz07OBMAIJE+iZ
+	 xWFTVP6rg2TmxaKARdnDfdPmID8NZkJUWHTFNeO3QKqDf1m50DeBqU3WUii4WMAxC/
+	 t6tdMaiNmCCv/+65LOLW4t7BQlapzCmklIQ1Z5vh8bROEQ8By/g9z8b55HNm+QDMVi
+	 zrQWrP683Cj7QrbfqtbbB1eR+1tEIQY5L/2yunZGcTRtK/SPDlEvSxHQc9VWIVnJz3
+	 R0WV/XD0Ffv0A==
+Message-ID: <89767d7c-c622-42dc-a820-ead87ed3e2cf@kernel.org>
+Date: Thu, 17 Sep 2026 17:06:02 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 bpf-next 09/11] bpftool: Add ability to dump LOC_PARAM,
+ LOC_PROTO and LOCSEC
+To: Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
+ andrii@kernel.org, eddyz87@gmail.com, jolsa@kernel.org
+Cc: daniel@iogearbox.net, ihor.solodrai@linux.dev, yonghong.song@linux.dev,
+ song@kernel.org, martin.lau@linux.dev, memxor@gmail.com,
+ emil@etsalapatis.com, bpf@vger.kernel.org, nsc@kernel.org,
+ puranjay@kernel.org, yatsenko@meta.com
+References: <20260916074118.1007116-1-alan.maguire@oracle.com>
+ <20260916074118.1007116-10-alan.maguire@oracle.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20260916074118.1007116-10-alan.maguire@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-veth_set_channels() tears down XDP resources for removed RX queues
-without clearing rq->xdp_prog.  If the program is then detached or
-replaced, those queues keep the old pointer after bpf_prog_put().  A
-later channel increase can re-enable NAPI and run the freed program.
+2026-09-16 08:41 UTC+0100 ~ Alan Maguire <alan.maguire@oracle.com>
+> In raw mode ensure we can dump new BTF kinds in normal/json format.
+> BTF_KIND_LOC_PARAMs are rendered as strings, for example a
+> const value of 0x2a and a dereference of r10 + 0x20:
+> 
+>   [12] LOC_PARAM '(anon)' size=4 flags=0x2 vlen=1 values='0x2a'
+>   [13] LOC_PARAM '(anon)' size=8 flags=0x38 vlen=2 values='*(r10 + 0x20)'
+> 
+> LOC_PROTOs render the associated values of each of their
+> LOC_PARAMs for easier readability:
+> 
+>   [14] LOC_PROTO '(anon)' vlen=2
+>   	type_id=12 value='r1'
+>   	type_id=13 value='*(r2 + 0x10)'
+> 
+> and LOCSEC shows function name associated with site:
+> 
+>   [15] LOCSEC 'inline.text' vlen=1
+>   	name=foo func_type_id=5 loc_proto_type_id=14 offset=64
+> 
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
+>  tools/bpf/bpftool/btf.c | 169 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 169 insertions(+)
+> 
+> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+> index bbe8f9ea144f..5e0cb5862811 100644
+> --- a/tools/bpf/bpftool/btf.c
+> +++ b/tools/bpf/bpftool/btf.c
+> @@ -51,6 +51,9 @@ static const char * const btf_kind_str[NR_BTF_KINDS] = {
+>  	[BTF_KIND_DECL_TAG]	= "DECL_TAG",
+>  	[BTF_KIND_TYPE_TAG]	= "TYPE_TAG",
+>  	[BTF_KIND_ENUM64]	= "ENUM64",
+> +	[BTF_KIND_LOC_PARAM]	= "LOC_PARAM",
+> +	[BTF_KIND_LOC_PROTO]	= "LOC_PROTO",
+> +	[BTF_KIND_LOCSEC]	= "LOCSEC",
+>  };
+>  
+>  struct sort_datum {
+> @@ -117,6 +120,83 @@ static int btf_kind_safe(int kind)
+>  	return kind <= BTF_KIND_MAX ? kind : BTF_KIND_UNKN;
+>  }
+>  
+> +static void btf_loc_param_str(const struct btf_type *t, char *str, size_t sz)
+> +{
+> +	const struct btf_loc_param *p;
+> +	__u32 i = 0, vlen;
+> +	__u64 value;
+> +	bool negative = false;
+> +	char regs[32] = {};
+> +	char num[32] = {};
+> +	const char *op = "";
+> +
+> +	if (!t || !btf_is_loc_param(t)) {
+> +		snprintf(str, sz, "<invalid>");
+> +		return;
+> +	}
+> +
+> +	p = btf_loc_param(t);
+> +	vlen = btf_vlen(t);
+> +
+> +	if (p->flags & BTF_LOC_PARAM_REG) {
+> +		__u32 nregs = (p->flags == BTF_LOC_PARAM_REG) ? vlen : 1;
+> +
+> +		if (nregs > vlen) {
+> +			snprintf(str, sz, "?");
+> +			return;
+> +		}
+> +
+> +		switch (nregs) {
+> +		case 2:
+> +			snprintf(regs, sizeof(regs), "r%u, r%u",
+> +				 p->values[0], p->values[1]);
+> +			break;
+> +		case 1:
+> +			snprintf(regs, sizeof(regs), "r%u", p->values[0]);
+> +			break;
+> +		default:
+> +			snprintf(regs, sizeof(regs), "?");
+> +			break;
+> +		}
+> +		i += nregs;
+> +	}
+> +	if (p->flags & (BTF_LOC_PARAM_CONST|BTF_LOC_PARAM_OFFSET)) {
+> +		switch (vlen - i) {
+> +		case 1:
+> +			value = p->values[i];
+> +			break;
+> +		case 2:
+> +			value = ((__u64)p->values[i + 1] << 32) | p->values[i];
+> +			break;
+> +		default:
+> +			snprintf(num, sizeof(num), "?");
+> +			goto done;
+> +		}
+> +		if ((p->flags & BTF_LOC_PARAM_SIGNED) && t->size &&
+> +		    t->size <= sizeof(value)) {
+> +			__u32 bits = t->size * 8;
 
-Clear the program pointer after taking an RX queue offline, and publish
-the current program only after bringing the queue back online succeeds.
 
-  BUG: unable to handle page fault for address: ffffc90000256048
-  Oops: Oops: 0000 [#1] SMP KASAN NOPTI
-  RIP: veth_xdp_rcv_skb (include/linux/filter.h:779
-                         include/net/xdp.h:696 drivers/net/veth.c:820)
-  Call Trace:
-   veth_xdp_rcv (drivers/net/veth.c:941)
-   veth_poll (drivers/net/veth.c:986)
-   __napi_poll (net/core/dev.c:7787)
-   net_rx_action (net/core/dev.c:7850 net/core/dev.c:8007)
-   handle_softirqs (kernel/softirq.c:645)
-  Kernel panic - not syncing: Fatal exception in interrupt
+Hi Alan, thanks!
 
-Cc: stable@vger.kernel.org
-Fixes: 4752eeb3d891 ("veth: implement support for set_channel ethtool op")
-Reported-by: <co+65e5c76b187f08b2@bugs.sh>
-Assisted-by: LLM
-Signed-off-by: Weiming Shi <bestswngs@gmail.com>
----
- drivers/net/veth.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+In the case of BTF_LOC_PARAM_OFFSET, what do we need "negative" for
+exactly, is this supposed to be the sign for the parameter or for the
+associated offset? My understanding is that "t->size" refers to the
+parameter itself, not the offset, so we would pick the wrong bit if
+trying to find the sign for the offset? But I'm not sure I read it
+correctly.
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 6ed3ee81153fb..ef7624bc2c0ec 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -1247,12 +1247,15 @@ static int veth_napi_enable(struct net_device *dev)
- static void veth_disable_range_safe(struct net_device *dev, int start, int end)
- {
- 	struct veth_priv *priv = netdev_priv(dev);
-+	int i;
- 
- 	if (start >= end)
- 		return;
- 
- 	if (priv->_xdp_prog) {
- 		veth_napi_del_range(dev, start, end);
-+		for (i = start; i < end; i++)
-+			rcu_assign_pointer(priv->rq[i].xdp_prog, NULL);
- 		veth_disable_xdp_range(dev, start, end, false);
- 	} else if (veth_gro_requested(dev)) {
- 		veth_napi_del_range(dev, start, end);
-@@ -1262,7 +1265,7 @@ static void veth_disable_range_safe(struct net_device *dev, int start, int end)
- static int veth_enable_range_safe(struct net_device *dev, int start, int end)
- {
- 	struct veth_priv *priv = netdev_priv(dev);
--	int err;
-+	int err, i;
- 
- 	if (start >= end)
- 		return 0;
-@@ -1281,6 +1284,9 @@ static int veth_enable_range_safe(struct net_device *dev, int start, int end)
- 			veth_disable_xdp_range(dev, start, end, true);
- 			return err;
- 		}
-+		for (i = start; i < end; i++)
-+			rcu_assign_pointer(priv->rq[i].xdp_prog,
-+					   priv->_xdp_prog);
- 	} else if (veth_gro_requested(dev)) {
- 		return veth_napi_enable_range(dev, start, end);
- 	}
--- 
-2.55.0
+
+> +
+> +			if (t->size < sizeof(value))
+> +				value &= (1ULL << bits) - 1;
+> +			negative = value & (1ULL << (bits - 1));
+> +			if (negative)
+> +				value = t->size == sizeof(value) ? -value :
+> +					(1ULL << bits) - value;
+> +		}
+> +		snprintf(num, sizeof(num), "0x%llx", (unsigned long long)value);
+
+
+Looking at the different existing flags and their docs, I see:
+
+"a BTF_LOC_PARAM_ADDR|BTF_LOC_PARAM_CONST is an address that should be
+normalized with respect to kernel/module base address."
+
+But I don't see the output accounting for BTF_LOC_PARAM_ADDR, is this
+expected or is that an omission?
+
+[...]
+
+Please also look at Sashiko and bpf-ci's reviews for patch 7.
+
+Thanks,
+Quentin
