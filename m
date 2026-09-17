@@ -1,28 +1,29 @@
 Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6DD23FC5AE
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 05:20:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A6493C1966
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 05:20:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.38.64.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789622414; cv=none; b=Namm23+rZ6QeEdMdrPBHvAcFlXeJ5kzArmRYj4hcMKGdEmVSd0Jv5UFk3MNT4oAdGk30iEGCQWeLQ+Tq2Q904Ch1bBATWv1GzCM7zQY1viz+0TCEJRSRHVMOGNbdWJAkCDIk6To+Wj5lW9mDY8DHkK+3OjL2yK2NPETN2N7+Ie8=
+	t=1789622414; cv=none; b=P+/G5TIvJLoySgIeErinDGAcuXlGmAV+GD+djRGcb46SCJctj7V6P7oHpsVhXCSkvwkBGbWnnEUqSKDbuqyo8Q2XZoNZBhG/prKXQfnPa9JP0edpJm1zJs9XeLlhdcjCvkZTqPnC4+lj11HqQHj9iFlLnVuESetCczPzKc6QFqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789622414; c=relaxed/simple;
-	bh=jByJFP6oLV8TMOR6IXh50+DxwX4WRWZfEoNwd+eQ9jA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DTWi8qSik10JPvXFdByrkkqS9xWwk+/pok9sLcGmB5XbI+Giutx4vuALwXlJDdqMhb2qtSGZXfhiHUsnacqOyRRl5Nzp4FugG4ivNr/x68U1ipzYUEi9vXSEAWieOf3x33QjsZA9jph1RL7XOkBAB+M3YKzgMjDyjC+hXdYXNio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn; spf=pass smtp.mailfrom=mail.ustc.edu.cn; dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b=d/7N+sTD; arc=none smtp.client-ip=202.38.64.46
+	bh=pR0YwYBCq0LvBDGQ1bHpmQsE2+wDT1nZwvB3pW2LJEQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=oB71ZDVMj8nfv0izgm/pgDX8cAtHFJYUX2FQxmXfE0pnXWhBme7otllOhkiDLXNmB7dUBb1PA+dCN5KBMFRpMg3/y6eoC2bgclDsKicQOhKxqAmh07YkFnm08Z7ocdx6oucfxCwfdn9oRSxQWla2alFU+uNZ1ws7W8D12gbgrqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn; spf=pass smtp.mailfrom=mail.ustc.edu.cn; dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b=ohIdozPI; arc=none smtp.client-ip=202.38.64.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b="d/7N+sTD"
+	dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b="ohIdozPI"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-	Message-ID:MIME-Version:Content-Transfer-Encoding; bh=MFfcEWomsx
-	1ngAoux/pMTZWLvI62gke6tja2CwWWKWM=; b=d/7N+sTDMW9nwnSmju32a0VInU
-	i3w/bICXPmrR0e+8LRaX71WXXcPFe7t7I+yvA57zsfcAXnXvF4S/7/G9lZRenjIt
-	J66qYDUCP2PygwfZUXUI5+6zAwkJITvm+GjWgO2NROzpc6pBwmyXs7W/BQLjJoXC
-	EPQM4UxmPN5GlCYqk=
+	Message-ID:In-Reply-To:References:MIME-Version:
+	Content-Transfer-Encoding; bh=5bPOyERYKjLocsbNZqpORDrD3tBc76pWkL
+	cz6SoBTyM=; b=ohIdozPIolRfx4ulJlY5Z1fg4Tc1JBAALsvG+P5yBUUNlPesKG
+	GUrpGZs3mI4EKilP0bDv/koWg1dA2AMsV2UecfFH+ShjyoCVVk9E6a1eESJrPhio
+	T8LLBcpHG34IfdP+VTe91dCc/O+06Kh7yx+9+5HSLObgIuqMxx1W2RDGI=
 Received: from localhost (unknown [222.195.81.43])
-	by mailimap2024 (Coremail) with SMTP id 3pYKCgBHNBt3eKtq0aYqAQ--.538S2;
-	Thu, 17 Sep 2026 13:19:51 +0800 (CST)
+	by mailimap2024 (Coremail) with SMTP id 3pYKCgCHcRiCeKtqFacqAQ--.500S2;
+	Thu, 17 Sep 2026 13:20:03 +0800 (CST)
 From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -31,12 +32,13 @@ Cc: ast@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	ameryhung@gmail.com,
-	yonghong.song@linux.dev,
-	puranjay@kernel.org
-Subject: [PATCH bpf-next v4 0/2] bpf: Track iterator-owned BTF pointer lifetimes
-Date: Thu, 17 Sep 2026 13:19:46 +0800
-Message-ID: <20260917051948.1588826-1-xyx2021@mail.ustc.edu.cn>
+	sashiko-bot@kernel.org
+Subject: [PATCH bpf-next v4 1/2] bpf: Destroy callee-local dynptrs on subprog return
+Date: Thu, 17 Sep 2026 13:19:59 +0800
+Message-ID: <20260917052000.1589643-2-xyx2021@mail.ustc.edu.cn>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260917052000.1589643-1-xyx2021@mail.ustc.edu.cn>
+References: <20260917052000.1589643-1-xyx2021@mail.ustc.edu.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,76 +46,188 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:3pYKCgBHNBt3eKtq0aYqAQ--.538S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXFyxZrWfCw4kuFWUGFyrXrb_yoW5Jw4DpF
-	WxuFW5trn7A3ZrKwsrAw17Wa4F9ryfWa15ua4rtw1Svr4UJFy8Ar4fK3WY9asxCFZ2kr12
-	qw1Yv3ZxGrZrA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9Ib7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+X-CM-TRANSID:3pYKCgCHcRiCeKtqFacqAQ--.500S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3XryrWFy5GF45Gry5KFy8Krg_yoWxur48pF
+	s5C3sFqr48Xr47KanrAr4kZFWYkF4Fqay3GrWY9a4fZF15tryDZF40gryrXwn0krWFyw47
+	Za1avFs8XayUAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9Sb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
 	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
 	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I
-	8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x2
-	0xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15Mc
-	Ij6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41l
-	c7CjxVAaw2AFwI0_Jw0_GFylc2xSY4AK67AK6r4rMxAIw28IcxkI7VAKI48JMxC20s026x
-	CaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_
-	JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r
-	1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_
-	Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8Jb
-	IYCTnIWIevJa73UjIFyTuYvjxUqJGODUUUU
+	jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
+	C2z280aVCY1x0267AKxVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x0
+	82IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtw
+	Av7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48J
+	MxkF7I0En4kS14v26r126r1DMxkIecxEwVAFwVW8WwCF04k20xvY0x0EwIxGrwCFx2IqxV
+	CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+	6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+	WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG
+	6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
+	1UYxBIdaVFxhVjvjDU0xZFpf9x07bOxRgUUUUU=
 X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
 
-Associate non-RCU iterator BTF results and their trusted fields with the
-lifetime that protects them. Check child-resource cleanup and invalidate
-previous results before modeling the next iterator result.
+A data slice is valid only while the specific dynptr that produced it
+remains valid. prepare_func_exit() copies a subprogram return value into
+the caller and then frees the callee state without applying the normal
+destruction semantics to dynptrs in the callee stack.
 
-Use the source register lifetime in the common dynptr constructor path,
-while preserving clone relationships and explicit-release ownership.
+A callee can therefore derive a slice from a local dynptr, return or spill
+the slice into its caller, and then let the dynptr disappear with the
+callee frame. The slice retains the id of a dynptr that is no longer in the
+verifier state, so the verifier continues to accept accesses through it.
 
-Changes in v4:
-  - Rebase onto bpf-next as requested by Amery Hung.
-  - Keep update_ref_obj() and reg_is_referenced() unchanged; introduce
-    reg_lifetime_id() for owned and borrowed source lifetimes.
-  - Use the common constructor path instead of a FILE-only special case.
-  - Capture the source lifetime before marking a BTF field destination.
-  - Move next-time invalidation into process_iter_arg().
-  - Share the child-reference leak check with release_reference(), while
-    removing only the initially released ID from acquired references.
-  - Retain the existing lifetime selftests on the new base.
+Before the object relationship refactor, bpf_dynptr_data() slices from
+referenced dynptrs also carried the shared reference id, allowing a later
+release to catch some of these escaped slices. The refactor made those
+slices precise children of their source dynptr and exposed the missing
+teardown as an accepted stale access even after the shared resource is
+released.
 
-Previous posting:
-https://lore.kernel.org/r/20260911084254.3481508-1-xyx2021@mail.ustc.edu.cn
+Before freeing a callee, scan the first slot of every dynptr in its stack
+and call destroy_if_dynptr_stack_slot(). The existing teardown rejects
+losing the last dynptr for a referenced resource and invalidates the dynptr
+and all of its descendants, including slices held in the caller. Propagate
+any teardown error through prepare_func_exit().
 
-Review that prompted this revision:
-https://lore.kernel.org/r/CAMB2axMX07j49sZRmGFm2s==FMgKFzvKPWxc8hDvU=b3Lp=VOg@mail.gmail.com
+Tell destroy_if_dynptr_stack_slot() when it is running for a departing
+frame so the last-reference diagnostic describes a function return and
+recommends releasing the resource before returning. Update the affected
+callback test expectation in this change so this commit remains test-clean.
 
-This local v4 refresh is based on bpf-next 10c4f610b215.
-The code and tests are unchanged by the rebase. The Fixes tag is scoped
-to the task_vma snapshot implementation and its file reference.
+Fixes: 308c7a0ae885 ("bpf: Refactor object relationship tracking and fix dynptr UAF bug")
+Reported-by: Sashiko <sashiko-bot@kernel.org>
+Closes: https://lore.kernel.org/r/20260829040712.B1B511F000E9@smtp.kernel.org
+Suggested-by: Amery Hung <ameryhung@gmail.com>
+Link: https://lore.kernel.org/r/CAMB2axOmdHwSrHihSRskDywkCmEGQOX+6dZPN_A9u-HhxY3UDA@mail.gmail.com
+Assisted-by: LLM
+Signed-off-by: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
+---
+ kernel/bpf/verifier.c                         | 51 ++++++++++++++++---
+ .../testing/selftests/bpf/progs/dynptr_fail.c |  4 +-
+ 2 files changed, 47 insertions(+), 8 deletions(-)
 
-Validation on this exact candidate, with a matching bpf_testmod:
-  - W=1 verifier object and complete kernel/modules builds passed.
-  - test_progs -t iters: 109 subtests passed, no skips or failures.
-  - test_progs -t dynptr: 132 subtests passed, no skips or failures.
-  - test_progs -t file_reader: 8 subtests passed, no skips or failures.
-
-The first iters run aborted because the guest lacked libgcc_s.so.1 for
-pthread_exit. After adding it, only iters was rerun, with the kernel,
-runner and module unchanged. No kernel WARN, Oops or panic was found.
-The full unfiltered BPF suite and sanitizer configurations were not run.
-The new iterator cases assert verifier load outcomes and diagnostics;
-they do not assert program execution return values.
-
-Xu Yunxiang (2):
-  bpf: Track iterator-owned BTF pointer lifetimes
-  selftests/bpf: Test iterator BTF pointer lifetimes
-
- kernel/bpf/verifier.c                         |  88 ++++-
- .../selftests/bpf/progs/iters_testmod.c       | 332 ++++++++++++++++++
- 2 files changed, 405 insertions(+), 15 deletions(-)
-
-
-base-commit: 10c4f610b215bf961235141161992f010cf7e451
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 6c6b8d8520cdf..4beca102c11d1 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -709,7 +709,8 @@ static void mark_dynptr_cb_reg(struct bpf_verifier_env *env,
+ }
+ 
+ static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
+-				        struct bpf_func_state *state, int spi);
++					struct bpf_func_state *state, int spi,
++					bool on_func_exit);
+ 
+ static int mark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+ 				   enum bpf_arg_type arg_type, int insn_idx,
+@@ -732,10 +733,10 @@ static int mark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_reg_
+ 	 * case they do belong to same dynptr, second call won't see slot_type
+ 	 * as STACK_DYNPTR and will simply skip destruction.
+ 	 */
+-	err = destroy_if_dynptr_stack_slot(env, state, spi);
++	err = destroy_if_dynptr_stack_slot(env, state, spi, false);
+ 	if (err)
+ 		return err;
+-	err = destroy_if_dynptr_stack_slot(env, state, spi - 1);
++	err = destroy_if_dynptr_stack_slot(env, state, spi - 1, false);
+ 	if (err)
+ 		return err;
+ 
+@@ -843,8 +844,34 @@ static int dynptr_ref_cnt(struct bpf_verifier_env *env, int v_parent_id)
+ 	return ref_cnt;
+ }
+ 
++static int destroy_dynptrs_on_func_exit(struct bpf_verifier_env *env,
++					struct bpf_func_state *callee)
++{
++	int i, err;
++
++	for (i = 0; i < callee->allocated_stack / BPF_REG_SIZE; i++) {
++		struct bpf_stack_state *slot = &callee->stack[i];
++
++		if (slot->slot_type[0] != STACK_DYNPTR ||
++		    !slot->spilled_ptr.dynptr.first_slot)
++			continue;
++
++		/*
++		 * A callee-local dynptr is destroyed when its stack frame goes
++		 * away. Apply the normal stack-slot teardown so references cannot
++		 * be lost and slices derived from that dynptr are invalidated.
++		 */
++		err = destroy_if_dynptr_stack_slot(env, callee, i, true);
++		if (err)
++			return err;
++	}
++
++	return 0;
++}
++
+ static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
+-				        struct bpf_func_state *state, int spi)
++					struct bpf_func_state *state, int spi,
++					bool on_func_exit)
+ {
+ 	int err = 0;
+ 
+@@ -867,6 +894,15 @@ static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
+ 	 */
+ 	if (dynptr_type_referenced(state->stack[spi].spilled_ptr.dynptr.type) &&
+ 	    dynptr_ref_cnt(env, state->stack[spi].spilled_ptr.parent_id) <= 1) {
++		if (on_func_exit) {
++			verbose(env, "cannot return with referenced dynptr in callee stack\n");
++			bpf_diag_res(env, env->insn_idx,
++				     "referenced dynptr on function return",
++				     "The departing stack frame contains the last dynptr that can release a referenced resource.",
++				     "Release the referenced resource before returning from this function.");
++			return -EINVAL;
++		}
++
+ 		verbose(env, "cannot overwrite referenced dynptr\n");
+ 		bpf_diag_res(
+ 			env, env->insn_idx, "referenced dynptr overwrite",
+@@ -3630,7 +3666,7 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 			env->insn_aux_data[insn_idx].nospec_result = true;
+ 	}
+ 
+-	err = destroy_if_dynptr_stack_slot(env, state, spi);
++	err = destroy_if_dynptr_stack_slot(env, state, spi, false);
+ 	if (err)
+ 		return err;
+ 
+@@ -3750,7 +3786,7 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
+ 		int spi;
+ 
+ 		spi = bpf_get_spi(i);
+-		err = destroy_if_dynptr_stack_slot(env, state, spi);
++		err = destroy_if_dynptr_stack_slot(env, state, spi, false);
+ 		if (err)
+ 			return err;
+ 	}
+@@ -11043,6 +11079,9 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+ 			bpf_diag_mod_end(env);
+ 		}
+ 	}
++	err = destroy_dynptrs_on_func_exit(env, callee);
++	if (err)
++		return err;
+ 
+ 	/* for callbacks like bpf_loop or bpf_for_each_map_elem go back to callsite,
+ 	 * there function call logic would reschedule callback visit. If iteration
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+index 1cd61d72c166f..24122addad327 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+@@ -125,9 +125,9 @@ static int missing_release_callback_fn(__u32 index, void *data)
+ 	return 0;
+ }
+ 
+-/* Any dynptr initialized within a callback must have bpf_dynptr_put called */
++/* A callback cannot return with the last dynptr for a referenced resource. */
+ SEC("?raw_tp")
+-__failure __msg("Unreleased reference id")
++__failure __msg("cannot return with referenced dynptr")
+ int ringbuf_missing_release_callback(void *ctx)
+ {
+ 	bpf_loop(10, missing_release_callback_fn, NULL, 0);
 -- 
 2.43.0
 
