@@ -1,21 +1,21 @@
 Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98A0C3812F6
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B1840B102
 	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 05:57:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789624650; cv=none; b=QH3x5BF5scM+hRi+SMApog/uoApfS6vpiDM6IJAtLcNiJ9EvdZqvtmBOJz468AYcdVJ7QnAhC2DpF07jS1voXybGs78J9F0i7TvY3xRNJ4wfRLhV6nmWnOpmakIOKctgRL9wYfJjDfKS8QsQuX3UP4HNXEICUdAchowEyyz5TCg=
+	t=1789624651; cv=none; b=TEAVazG0H59UvMV74cNgbbIB0ULeTqaeEFCHre9bIgqqmdWeKtscMbtsaRraLJKXYfEFptN+5HnGZ/o3cMtp7xDXz3Mlf+ZCMQ/jn9/zwE3eUM6m42bF9VPc8kYglRrUu02kUc/qHoCLvM5dvEAKB0MRZcESmapCo5bqA6pG1HU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789624650; c=relaxed/simple;
-	bh=6nPNlsLdtBNSyT87hED93X49EaU9Uz0eqnV/JNnsQbg=;
+	s=arc-20240116; t=1789624651; c=relaxed/simple;
+	bh=UahBVSFAodyaPVw0DoBpnxfmYy24nNo4RAgw1PH8VW0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OY9snAz88agAUGUZA4NyImVDaM2l7FDdQNEk0amkMPR4Qtvvxq7l0W0IMqf++SeWY2EKNsZtUKaCwi/1NMrOC2G0b8aeYKTQuSixRa1PcFDfpii3+iwMCznASzJLUDPWYzpBZbBkGDS1e//X7io0mXK3HOm1KmQ2qKuPzQ4jc28=
+	 MIME-Version; b=ETzUBQzdVq9fZ5WoiGn7jAbBafcjR9vU2YLwHRpp2g5TZepZIOG9TmNx6UYE5M4NBlVjWHab3L3SYU4RUH1ENhX9tB+Gm6d+njj3Gsg8Lmd1kZYJYWFRtHBq9dsgVTWJcJw2+AKtsn4PynQxUv4Ekdv4HYPQWl8ShC+Vgr5aFQM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 181B92B4873381; Wed, 16 Sep 2026 22:57:16 -0700 (PDT)
+	id D3DCB2B487D43B; Wed, 16 Sep 2026 22:57:26 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next 06/20] bpf: Explore the landing pads no call site reaches
-Date: Wed, 16 Sep 2026 22:57:16 -0700
-Message-ID: <20260917055716.3929570-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 08/20] bpf: Walk the exception unwind in the verifier
+Date: Wed, 16 Sep 2026 22:57:26 -0700
+Message-ID: <20260917055726.3930930-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260917055645.3926444-1-yonghong.song@linux.dev>
 References: <20260917055645.3926444-1-yonghong.song@linux.dev>
@@ -37,78 +37,281 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-A cleanup record need not cover a call an exception can unwind out of: a
-frontend is free to emit a region around a helper or an ordinary kfunc,
-both nounwind here. Nothing marks a call site then, and that record's
-landing pad is reached by nothing at all -- leaving bpf_check_cfg() to
-refuse the program over code its own frontend had no way not to emit:
+bpf_throw() is about to stop discarding the frames it unwinds and start
+running their landing pads instead. Have the verifier walk the same thing=
+,
+step for step:
 
-   0: call bpf_preempt_disable
-   1: call bpf_preempt_enable      record =3D { begin =3D 1, end =3D 2, p=
-ad =3D 4 }
-   2: r0 =3D 0
-   3: exit
-   4: r1 =3D pads_ran ll             landing pad
-   6: r2 =3D *(u64 *)(r1 + 0)
-   7: r2 |=3D RAN_NOUNWIND_REC
-   8: *(u64 *)(r1 + 0) =3D r2
-   9: call bpf_unwind_resume
-  10: exit
+	at a throw, with the frame chain in env->cur_state->frame[]
+	  if a record covers the call control is at
+	      run that record's landing pad in this frame
+	      on reaching its resume, pop the frame and carry on
+	  else
+	      pop the frame and carry on
+	at the boundary, deliver
 
-The range [1,2) holds one call, and it is a kfunc, so an exception cannot
-come out of it. cleanup_mark_call_sites() marks nothing, nothing pushes a=
-n
-edge to 4, and 4 through 10 are reachable from nothing: "unreachable insn
-4". The pad is dead, which is correct -- no exception can ever arrive at =
-it
--- but the program is fine and has to load.
-
-Walk every pad the table names that the edges did not reach, the way the
-walk is already re-seeded at an exception callback. From there the pad is
-code like any other: do_check() never enters it, because no call site
-dispatches to it, so the dead code sweep removes it along with everything
-else that was not reached.
+Doing it this way is what keeps the resource rules unchanged. Whatever a
+pad releases is released in the verifier state too, so by the time the wa=
+lk
+reaches the boundary the state says exactly what the program will really
+hold there -- and check_resource_leak(), which used to fire the moment a
+throw was seen, simply moves to the end of the walk. A frame that no reco=
+rd
+covers contributes nothing, so anything it held is still held when the wa=
+lk
+ends, and that is what gets reported.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- kernel/bpf/cfg.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ include/linux/bpf_cleanup_abi.h |  16 +++++
+ include/linux/bpf_verifier.h    |   1 +
+ kernel/bpf/states.c             |   3 +
+ kernel/bpf/verifier.c           | 102 +++++++++++++++++++++++++-------
+ 4 files changed, 99 insertions(+), 23 deletions(-)
+ create mode 100644 include/linux/bpf_cleanup_abi.h
 
-diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-index 9f8b8b54d5ea..5a2b48b6a9e1 100644
---- a/kernel/bpf/cfg.c
-+++ b/kernel/bpf/cfg.c
-@@ -633,6 +633,7 @@ int bpf_check_cfg(struct bpf_verifier_env *env)
- 	int insn_cnt =3D env->prog->len;
- 	int *insn_stack, *insn_state;
- 	int ex_insn_beg, i, ret =3D 0;
-+	u32 pad_idx =3D 0;
-=20
- 	insn_state =3D env->cfg.insn_state =3D kvzalloc_objs(int, insn_cnt,
- 							 GFP_KERNEL_ACCOUNT);
-@@ -688,6 +689,22 @@ int bpf_check_cfg(struct bpf_verifier_env *env)
- 		goto walk_cfg;
- 	}
-=20
-+	/*
-+	 * A landing pad no call site was marked with -- a record whose range
-+	 * holds no call an exception can unwind out of -- is reached by
-+	 * nothing. Walk it from here, and let the dead code sweep remove it.
-+	 */
-+	while (pad_idx < env->cleanup_info_cnt) {
-+		u32 pad =3D env->cleanup_info[pad_idx++].landing_pad_off;
+diff --git a/include/linux/bpf_cleanup_abi.h b/include/linux/bpf_cleanup_=
+abi.h
+new file mode 100644
+index 000000000000..b6c1d589abda
+--- /dev/null
++++ b/include/linux/bpf_cleanup_abi.h
+@@ -0,0 +1,16 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#ifndef _LINUX_BPF_CLEANUP_ABI_H
++#define _LINUX_BPF_CLEANUP_ABI_H
 +
-+		if (insn_state[pad] !=3D EXPLORED) {
-+			insn_state[pad] =3D DISCOVERED;
-+			insn_stack[0] =3D pad;
-+			env->cfg.cur_stack =3D 1;
-+			goto walk_cfg;
++/*
++ * Value arch_bpf_run_cleanup_pad() leaves in r0 on the way into a landi=
+ng pad.
++ * It has to be a constant the verifier knows: LLVM names r0 as both the
++ * exception pointer and the exception selector register, so every pad r=
+eads it
++ * before anything else and is free to store what it read. Kept on its o=
+wn
++ * because the verifier and the arch dispatchers, which are assembly, ha=
+ve to
++ * agree on it.
++ */
++#define BPF_PAD_ENTRY_R0	1
++
++#endif /* _LINUX_BPF_CLEANUP_ABI_H */
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index fe8b26351a15..09fb89fda40a 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -509,6 +509,7 @@ struct bpf_verifier_state {
+=20
+ 	bool speculative;
+ 	bool in_sleepable;
++	bool unwinding;
+=20
+ 	/* first and last insn idx of this verifier state */
+ 	u32 first_insn_idx;
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index 66fb11b6c6a7..be0f529f7ecc 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -996,6 +996,9 @@ static bool states_equal(struct bpf_verifier_env *env=
+,
+ 	if (old->in_sleepable !=3D cur->in_sleepable)
+ 		return false;
+=20
++	if (old->unwinding !=3D cur->unwinding)
++		return false;
++
+ 	if (!refsafe(old, cur, &env->idmap_scratch))
+ 		return false;
+=20
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 9cbdb8339701..a3b34ded1392 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -10,6 +10,7 @@
+ #include <linux/slab.h>
+ #include <linux/bpf.h>
+ #include <linux/btf.h>
++#include <linux/bpf_cleanup_abi.h>
+ #include <linux/bpf_verifier.h>
+ #include <linux/filter.h>
+ #include <net/netlink.h>
+@@ -1715,6 +1716,7 @@ int bpf_copy_verifier_state(struct bpf_verifier_sta=
+te *dst_state,
+ 		return err;
+ 	dst_state->speculative =3D src->speculative;
+ 	dst_state->in_sleepable =3D src->in_sleepable;
++	dst_state->unwinding =3D src->unwinding;
+ 	dst_state->curframe =3D src->curframe;
+ 	dst_state->branches =3D src->branches;
+ 	dst_state->parent =3D src->parent;
+@@ -10540,8 +10542,8 @@ static int push_callback_call(struct bpf_verifier=
+_env *env, struct bpf_insn *ins
+ 	return 0;
+ }
+=20
+-static int process_bpf_exit_full(struct bpf_verifier_env *env,
+-				 bool *do_print_state, bool exception_exit);
++static int process_bpf_exit_full(struct bpf_verifier_env *env, bool *do_=
+print_state);
++static int unwind_step(struct bpf_verifier_env *env, u32 callsite, int *=
+insn_idx);
+=20
+ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn=
+ *insn,
+ 			   int *insn_idx)
+@@ -10631,7 +10633,7 @@ static int check_func_call(struct bpf_verifier_en=
+v *env, struct bpf_insn *insn,
+ 				verbose(env, "failed to push state for global subprog exception path=
+\n");
+ 				return PTR_ERR(branch);
+ 			}
+-			return process_bpf_exit_full(env, NULL, true);
++			return unwind_step(env, *insn_idx, insn_idx);
+ 		}
+=20
+ 		/* continue with next insn after call */
+@@ -14511,7 +14513,7 @@ static int check_kfunc_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn,
+ 		env->prog->call_session_cookie =3D true;
+=20
+ 	if (bpf_is_throw_kfunc(insn))
+-		return process_bpf_exit_full(env, NULL, true);
++		return unwind_step(env, insn_idx, &env->insn_idx);
+=20
+ 	return 0;
+ }
+@@ -18436,9 +18438,75 @@ enum {
+ 	INSN_IDX_UPDATED =3D 2,
+ };
+=20
+-static int process_bpf_exit_full(struct bpf_verifier_env *env,
+-				 bool *do_print_state,
+-				 bool exception_exit)
++static u32 unwind_pop_frame(struct bpf_verifier_env *env)
++{
++	struct bpf_verifier_state *state =3D env->cur_state;
++	struct bpf_func_state *callee =3D state->frame[state->curframe];
++	u32 callsite =3D callee->callsite;
++	struct bpf_func_state *caller;
++
++	caller =3D state->frame[state->curframe - 1];
++	account_processed_insns(env, callee, caller);
++	free_func_state(callee);
++	state->frame[state->curframe--] =3D NULL;
++	invalidate_outgoing_stack_args(env, caller);
++	return callsite;
++}
++
++static void unwind_enter_pad(struct bpf_verifier_env *env)
++{
++	struct bpf_func_state *frame =3D cur_func(env);
++
++	clear_caller_saved_regs(env, frame->regs);
++	mark_reg_unknown(env, frame->regs, BPF_REG_0);
++	__mark_reg_known(&frame->regs[BPF_REG_0], BPF_PAD_ENTRY_R0);
++}
++
++static int unwind_finish(struct bpf_verifier_env *env)
++{
++	int err =3D check_resource_leak(env, true, true, "bpf_throw");
++
++	if (err)
++		return err;
++	return PROCESS_BPF_EXIT;
++}
++
++static int unwind_step(struct bpf_verifier_env *env, u32 callsite, int *=
+insn_idx)
++{
++	struct bpf_verifier_state *state =3D env->cur_state;
++
++	state->unwinding =3D true;
++	for (;;) {
++		int pad =3D bpf_cleanup_pad_of_call(env, callsite);
++
++		if (pad >=3D 0) {
++			unwind_enter_pad(env);
++			*insn_idx =3D pad;
++			return INSN_IDX_UPDATED;
 +		}
++		if (!state->curframe)
++			return unwind_finish(env);
++		callsite =3D unwind_pop_frame(env);
 +	}
++}
 +
- 	for (i =3D 0; i < insn_cnt; i++) {
- 		struct bpf_insn *insn =3D &env->prog->insnsi[i];
++static int process_cleanup_resume(struct bpf_verifier_env *env, int *ins=
+n_idx)
++{
++	struct bpf_verifier_state *state =3D env->cur_state;
++
++	/* A pad entered by ordinary control flow. */
++	if (!state->unwinding) {
++		verbose(env,
++			"bpf_unwind_resume() at insn %d reached without an exception in fligh=
+t\n",
++			*insn_idx);
++		return -EINVAL;
++	}
++	if (!state->curframe)
++		return unwind_finish(env);
++	return unwind_step(env, unwind_pop_frame(env), insn_idx);
++}
++
++static int process_bpf_exit_full(struct bpf_verifier_env *env, bool *do_=
+print_state)
+ {
+ 	struct bpf_func_state *cur_frame =3D cur_func(env);
 =20
+@@ -18448,25 +18516,11 @@ static int process_bpf_exit_full(struct bpf_ver=
+ifier_env *env,
+ 	 * for which reference_state must match caller reference
+ 	 * state when it exits.
+ 	 */
+-	int err =3D check_resource_leak(env, exception_exit,
+-				      exception_exit || !env->cur_state->curframe,
+-				      exception_exit ? "bpf_throw" :
++	int err =3D check_resource_leak(env, false, !env->cur_state->curframe,
+ 				      "BPF_EXIT instruction in main prog");
+ 	if (err)
+ 		return err;
+=20
+-	/* The side effect of the prepare_func_exit which is
+-	 * being skipped is that it frees bpf_func_state.
+-	 * Typically, process_bpf_exit will only be hit with
+-	 * outermost exit. copy_verifier_state in pop_stack will
+-	 * handle freeing of any extra bpf_func_state left over
+-	 * from not processing all nested function exits. We
+-	 * also skip return code checks as they are not needed
+-	 * for exceptional exits.
+-	 */
+-	if (exception_exit)
+-		return PROCESS_BPF_EXIT;
+-
+ 	if (env->cur_state->curframe) {
+ 		/* exit from nested function */
+ 		err =3D prepare_func_exit(env, &env->insn_idx);
+@@ -18640,6 +18694,8 @@ static int do_check_insn(struct bpf_verifier_env =
+*env, bool *do_print_state)
+=20
+ 		env->jmps_processed++;
+ 		if (opcode =3D=3D BPF_CALL) {
++			if (bpf_is_unwind_resume_kfunc(insn))
++				return process_cleanup_resume(env, &env->insn_idx);
+ 			if (env->cur_state->active_locks) {
+ 				if ((insn->src_reg =3D=3D BPF_REG_0 &&
+ 				     insn->imm !=3D BPF_FUNC_spin_unlock &&
+@@ -18673,7 +18729,7 @@ static int do_check_insn(struct bpf_verifier_env =
+*env, bool *do_print_state)
+ 				env->insn_idx +=3D insn->imm + 1;
+ 			return INSN_IDX_UPDATED;
+ 		} else if (opcode =3D=3D BPF_EXIT) {
+-			return process_bpf_exit_full(env, do_print_state, false);
++			return process_bpf_exit_full(env, do_print_state);
+ 		}
+ 		return check_cond_jmp_op(env, insn, &env->insn_idx);
+ 	}
 --=20
 2.53.0-Meta
 
