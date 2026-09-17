@@ -1,86 +1,83 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2260437F73A
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 02:13:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8557537F8CA
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 02:17:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789611208; cv=none; b=oIJKDvp/SpPekcTiN7nnrM1MMkcpJUY7oRjMqln3CBULQk1y/9Qj9jdSexOnt+ohn/VkCZIU227K+34MCcILtShx+3C4vO98BMW+FwBbCtwIgoMrtgiwMP2ELvr8i8oYORHHiiMgqlTwLJNc/CHcc9BZigue7DjNTOC22KDjckE=
+	t=1789611477; cv=none; b=p+5+gH0qhM2XU3/yD2HDErOlct/eIzeabT+SDjBXaK+Zg6esDs+uzuj6W3/i931Mx1nI/VE9gWsSzsYcZwq7WNiqHwD13ZAmqZPtxs7DW3ZPJUezkpV6LbH7EituZJsYVoClbnVd5AYnq5fusq0vadmKjZjz5DaM+plgyO82t2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789611208; c=relaxed/simple;
-	bh=27JvdaM8KVg5NMgGg5WqEucr2iQAjqA1fdc+FK2gsvI=;
+	s=arc-20240116; t=1789611477; c=relaxed/simple;
+	bh=iNBfcS6MDvr00DcTaevT0gyCh2J7vLAarU2nyk/qJjQ=;
 	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=rYB/oZHmxgAfdzfIunT5NmZ/0yMb2SP5ZGQAYGmNtdygwAqzC3P9RO/6GffFXWvLiWcpNQDkF4YqQOUpS0TvzasRV3nJAm7usIqq7Q4Xl6xrqR8qjIM+Kx8aV/Q7+w2c3gSOJOrYQUwvxSLrQ2AiNIYXNPZ9gTzNgk7NTf9dT5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=miw4STgR; arc=none smtp.client-ip=74.125.227.140
+	 References:MIME-Version; b=JCwhAzX2Qy5bZlykTY27Xq1bFLmrUEShAKgKSAfP+TJtxGTwBBtYbqYG4PxGhcyZC0lCKiOb4WRNHGeL1q4Zw+WU4Gniq5S75QV6AwWbkVOc82z07DzMb5eryrzoVM261ND4uUykw5BQnibZGFjm5/Y05DTqDgI+abCZNOGDT8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n8+FBuIJ; arc=none smtp.client-ip=74.125.228.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="miw4STgR"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-39b910bdf2eso198992a91.2
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 19:13:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n8+FBuIJ"
+Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-85469e25187so192315b3a.2
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 19:17:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789611206; x=1790216006; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789611476; x=1790216276; darn=vger.kernel.org;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:cc:message-id:date:content-type:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Q8ZIqDfKScffiOQ6mnRDy/JSG8BKfdrJqzxEUV+If2k=;
-        b=miw4STgRACi5f2486fFJnz9uvGRtxQAKFT1Sg7BYyqomu0slKk96eAzy3KcY0T1+ns
-         srb30WAuBEfOqY1bCBhhMPrB7CrFtLirf5a6Xg24y3QQdgUJcAjOH1cCffcg7xP3tRh+
-         hOGS0jaZRqNNyzoEdI9gCd5+PfxdoFkw4MzZIMNLekK/goeouElWFK6HdYo6fut/QMSV
-         WsusLMsFEX9VRvP77wBuJq0Y9aR7MqWzY0/s+2pr7IJHvjsEb2z5qGZ4P8FigiXMfGmA
-         bhDmRg4IuhtfnOvGTzEt5l+A8LRDhQQvZTOY/7q7ZutdTj+9iroNgEkjHquYp/jhFS16
-         +xAw==
+        bh=15AYesmDPyE/Pkb7voFatC1kEWMKzHw4E6qOfih9IzY=;
+        b=n8+FBuIJuDho1iO04wTcUOendOlL52ic7mHoFSFIjpk0GBHhB8hUEfJ9c3ksDzE+L4
+         JHe8V4tQtqhhlqGxSrIi2LK2uvsQl5YlFIz9xPPhpohxeRltZvxCnW6JV5jLuXNhLj3v
+         OtnH+nJthqoi9b2FWYLOP+60rzZ8vQHHfbA1XGzWNSXzC/d+nXjblV8bRR0jj+9GkAur
+         b87Cdif8DMCVHL2muWCOk7pU6SNXmycKeZJlIMCStg9d4stDfgXbccQJN5b1jukq6Vaj
+         PgHFDGZzPpUn302WaIjJTuKHDqI2umQTLJguyLcBzIwn1EVmGXqK2D7EWNZG7HO9Tvlg
+         pLXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789611206; x=1790216006;
+        d=1e100.net; s=20260707; t=1789611476; x=1790216276;
         h=mime-version:content-transfer-encoding:references:in-reply-to:to
          :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Q8ZIqDfKScffiOQ6mnRDy/JSG8BKfdrJqzxEUV+If2k=;
-        b=YCWijBqMDukDVuCjiqUjdRLzsQ5a61j3fiw9seJ700rMkXJe6464cRVJK0E5p7PLgv
-         zOiL/HVp0Q/6ZhxBoFaXZcSzgY0cZOtUQ5P0saSxI7Oipsz8KuYuPIV8YtRybCMVscwW
-         8ziLC272kUU1xd7We9ymjlbkrWWsDu+BZ3IYQxMjc96zaJebKstKlniCRTLrjOvtBIuA
-         ZxK7zuk3BTERhk9X4cHn+KStsJ+1UOXZnbpfDLxOLGT1r09GcuDMicI1sdAsncqwv4v+
-         y9g2L9sfnhvwXp9m1B7JqqMQMrNJYPAQJYKvyWpohAMtUvxqeK3ZZwzMJK6DrV3P86pq
-         9jgQ==
-X-Forwarded-Encrypted: i=1; AKwUvByL/rqB1fZwpE7R/+eb0p0KXSfSw6I307t2MFz2Rz22ummD0QcX21Ogsn+AcwrabmeMoek=@vger.kernel.org
-X-Gm-Message-State: AFuF++lMkfauF2jQtObMYhiwc8rjTVlGI7AYMVoAh+rs1LTOWfZssLwk
-	wMpYCrYH78qjcc5JYiJUfRi7RFQAcMAcHD6LbTHjR82ilv4UVYpZWJwU
-X-Gm-Gg: AYBFou1mqFgKEVjtZreUWhR3Y+8mNljjHpGOfvXvDsVFf85i70DQ+jt/fKLaXIC+4sq
-	weG8C8o/wgeFJ+eHtK2I6pS5QilWYQRXbSiLzzhBpm+98yh6xeje/0do8xMqAG48XNcsw0EGps8
-	oCCik6xUnEdnMCKswd716ZSBcrp6wMOk3Bm1cbpv9N8geav/W4MittpSMJYT/Qc6BXRUT3dGjZ+
-	S5mXRG4GX/KY0Co62FkDR6iYtjx+mnOHm3fqXAvYQPM/pYIB3YrpBpn/14xjh2LvMdg9j1gYp0Y
-	SPLpDI1S5Xexf4MuT3vWhiBhReGQPVDXbjNMv1KFg3+fdfilVUUoxa46rKdisJxvxQ2xyciyjvF
-	7VxPYb8m8o9CBr6d8ApxdgPdkwO3jGGU8XJXYSRNXax7zKnOyaUu58Qjj4r/OeMviBN8loQs6Ve
-	DyYllmgyTC4sAtD2RGnmQkZvFSkSd+eyYkd8RF6tb+dRtOVqKdE3Spiq6daMm8qkCK60uyyUHPG
-	GV4DHyVeWKEaoeCmQ9VohAKM0sgl4SjLD2WyWf7bc7QFloSjw1+vXNwW5lvik3hXBmmTKFMj5tG
-	te5N
-X-Received: by 2002:a17:90b:4ac6:b0:39e:135e:130e with SMTP id 98e67ed59e1d1-39e1e26599bmr10747977a91.3.1789611206357;
-        Wed, 16 Sep 2026 19:13:26 -0700 (PDT)
-Received: from localhost ([153.61.198.248])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e35e4e0c6sm2319034a91.8.2026.09.16.19.13.25
+        bh=15AYesmDPyE/Pkb7voFatC1kEWMKzHw4E6qOfih9IzY=;
+        b=NrybtutcF56EX6xJnJfdcd0WGJjwDCwBPGtoerTwYmKvxjSHyylhU/KzwuRx/QJL+y
+         HlJ4yBO8Fo7F9pJfA8WJexuUHfA+lG/XYhCNcTcpbnkPMapBJ+hTOV/JzvmvVs1hKXho
+         zkN1WWnvCkBtvNEyTmu88p+XbxTSvwhhku8Snc/2gML0c+UBXmEFdvXwLf/8LwSMkPTk
+         KVCe15isczSt72Y2H4eFgN5M7ucOhPgekXmRAWknUVnzd4lG3MlG2X1cHgOQ+GR2zCiU
+         rukEkF6xhITVhdGkrPzfUrutx0m7QZK5l2y/uzbpRvgN9ZTvhRlsqgNUhIIN1P/4mBcM
+         OEcQ==
+X-Forwarded-Encrypted: i=1; AKwUvBz3OL8uiw44I8iEp3FItYpU1sakPrOeNLTAtUFavCK77Iu1VemK4brEwHXNOdPDLrOGt4A=@vger.kernel.org
+X-Gm-Message-State: AFuF++k1Va5QY2LbfQACTF8/o2e38re3GnFZTjdF99Q30uPUQ2yS6Isj
+	n747qrZecRS73fTkFrP/01+EPLoiFkHJnnTUHuYLJFr8PuQERTGyvX4i
+X-Gm-Gg: AYBFou3c8/NR4eu91GzUieMqXOIn1lvcTLD3xnA9HRUDa3BYC1JfJ1vF/ZtY7d6Hlsw
+	+pZPb4MJrmH0RK0y1LjyOsNzVASinVeMXklMHxcnvlaPXqDL89kTJaCIsMHTE2NXKJnB/Q0OqPj
+	o4CL/hVJ0pmCXo4opjT1dqpMkXW5WDAFuJHQHVDFnUDE/vNGv0+V45+kxy/HG2zCPT10fh36ahW
+	uRFJeTFzapnRwUO8GfZ0FejAJU1Ye0leVJrWzXy75NqjTGTOZ4Z07gvDBtGUkrgX77o/Opz8v4R
+	S8n4q/MheDCjIxhSXYDysLumz+AN6pviyxWcuwlu96HyKpek1wqxT9JiUqEkmb9usqc+2iuXyNI
+	6t5o9bLQzIqCa+xRqKFHbtsK7Ta8VR/Z4AAjUQ2xQxAQyqzw92GUfozILZJ9s00lY8nCbH9l7+Y
+	esl6xXVo8AJ4FQIPUEkOFPJkzMoe/FoWas742bd2+riYpp68CbyBCLDUEuKAAay4ISeePfIbHTB
+	s15HltyqyYIljZF4qF5Q6d3c798T8pjD1oV3G1d862DvROpavNFWRbNE/NO7hevdVVWTimD0ZGt
+	lhy2
+X-Received: by 2002:a05:6a20:4308:b0:3da:6bdd:2c74 with SMTP id adf61e73a8af0-3dd5f466f35mr11180754637.10.1789611475781;
+        Wed, 16 Sep 2026 19:17:55 -0700 (PDT)
+Received: from localhost ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc50ab8ae01sm2452008a12.18.2026.09.16.19.17.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Sep 2026 19:13:25 -0700 (PDT)
+        Wed, 16 Sep 2026 19:17:54 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 17 Sep 2026 02:13:25 +0000
-Message-Id: <DLH885YMOP9K.3AH1G96TD81UL@gmail.com>
-Cc: <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
- <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 1/2] selftests: bpf: run test_xdp_features in its own
- netns
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Eva Kurchatova" <eva.kurchatova@virtuozzo.com>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, "Jakub
- Kicinski" <kuba@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>,
- "John Fastabend" <john.fastabend@gmail.com>, "Stanislav Fomichev"
- <sdf@fomichev.me>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+Date: Thu, 17 Sep 2026 02:17:53 +0000
+Message-Id: <DLH8BLA0ZCFY.3U2Q1BS1DBTYU@gmail.com>
+Cc: "Emil Tsalapatis" <emil@etsalapatis.com>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
  Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
  <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
  <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "Shuah Khan" <shuah@kernel.org>
-In-Reply-To: <20260917015605.2464043-1-eva.kurchatova@virtuozzo.com>
-References: <20260917015605.2464043-1-eva.kurchatova@virtuozzo.com>
+ <jolsa@kernel.org>, "Ihor Solodrai" <ihor.solodrai@linux.dev>, "John
+ Fastabend" <john.fastabend@gmail.com>, "Shuah Khan" <shuah@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v7 1/4] bpf: Add a sleepable page allocator for
+ map memory
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
+In-Reply-To: <20260917015618.7488-2-jiayuan.chen@linux.dev>
+References: <20260917015618.7488-1-jiayuan.chen@linux.dev> <20260917015618.7488-2-jiayuan.chen@linux.dev>
 X-Mailer: mkdraft (claude review draft; edit before sending)
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -90,51 +87,60 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Thu, Sep 17, 2026 at 04:55 AM Eva Kurchatova <eva.kurchatova@virtuozzo.com> wrote:
-> The test creates its devices in the namespace it is started in and binds
-> an IPv6 socket to talk between the two ends. Both are unnecessary
-> demands on the host it runs on.
+On Thu, Sep 17, 2026 at 09:55 AM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index e80963971f680..345fe4c2e6422 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -2786,6 +2786,7 @@ struct bpf_prog *bpf_prog_get_curr_or_next(u32 *id);
 >
-> The device name is fixed, v1, so a host that already has a device by
-> that name cannot run the test at all. The IPv6 control socket depends on
-> the host's firewall rules, and where those reject ICMPv6 or the port the
-> test picks, the two ends never meet:
+>  int bpf_map_alloc_pages(const struct bpf_map *map, int nid,
+>  			unsigned long nr_pages, struct page **page_array);
+> +struct page *bpf_map_alloc_page_sleepable(const struct bpf_map *map);
+
+[...]
+
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index c7bc9ba9b331f..abd0f67c68d97 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+
+[...]
+
+> @@ -636,6 +635,27 @@ int bpf_map_alloc_pages(const struct bpf_map *map, int nid,
+>  	return ret;
+>  }
 >
->   Failed connecting to the Device Under Test control socket
->
-> Cleanup is trapped for signals only, not for a normal exit, so a run
-> that fails leaves both the device and the namespace behind. Every later
-> run then stops in setup, before it prints anything.
+> +/*
+> + * Allocate a page for map memory with the blocking allocator so it can
+> + * reclaim. __GFP_RETRY_MAYFAIL keeps it from invoking the OOM killer: the
+> + * page is charged to
+ the map's memcg, which need not be the caller's, so
+> + * an OOM there could kill unrelated tasks in the map's cgroup while a
+> + * foreign caller could never be its victim.
+> + *
+> + * bpf_map_alloc_pages() serves arbitrary BPF program context and stays
+> + * reentrancy-safe by falling back to the non-blocking allocator. This
+> + * helper always blocks, so a sleepable context alone is not enough: the
+> + * caller must guarantee it is not already inside the page allocator or
+> + * reclaim, where blocking here would reenter mm and deadlock. The only
+> + * user is arena_vm_fault(), a userspace page fault in task context.
+> + */
+> +struct page *bpf_map_alloc_page_sleepable(const struct bpf_map *map)
+> +{
+> +	might_sleep();
+> +	return alloc_pages_node(map->numa_node,
+> +				BPF_PAGE_GFP | __GFP_RETRY_MAYFAIL, 0);
+> +}
 
-This script is not run by BPF CI and it's in the middle of being
-reworked and moved to tools/testing/selftests/drivers/net/hw/ via
-net-next, see Bochao's "Track test_xdp_features DUT processe
-s" and
-Daniel's replies there:
-https://lore.kernel.org/bpf/20260904-xdp-dut-process-lifecycle-gmail-v3-1-5b7eee4f7009@gmail.com/
-https://lore.kernel.org/bpf/10886894-081b-499f-abce-fca62b120615@iogearbox.net/
-That patch already switches to trap cleanup EXIT and tracks the DUT
-pid, and this one conflicts with it. Pls sync with Bochao and netdev
-folks and, if the netns part is still wanted, send it against net-next
-on top of that work.
+Don't see the point in #define BPF_PAGE_GFP
 
-Also patch 2 has nothing to do with this one. Don't send unrelated
-patches as a series, and use a proper subject prefix
-(see Documentation/bpf/bpf_devel_QA.rst).
+Just call
+  alloc_pages_node(map->numa_node, GFP_KERNEL | __GFP_ZERO |
+		   __GFP_ACCOUNT | __GFP_NOWARN 
+| __GFP_RETRY_MAYFAIL, 0);
 
-> Re-exec in a new network namespace, where the device name is free and no
-> rule of the host applies, and everything the test made goes away with
-> the namespace when it exits.
-
-That last part isn't true in the failure case you describe. unshare -n
-doesn't give a new mount namespace, so 'ip netns add ${NS}' in setup()
-still creates /var/run/netns/${NS} on the host and nothing
- deletes it.
-And when the tester fails to connect, set -e exits the script while
-the background './xdp_features ... v1 &' is still blocked in accept()
-in dut_run(). That orphan keeps the unshared netns alive, so v1, v0,
-${NS} and a stray xdp_features process are all left behind on every
-failed run. They just don't collide with the next run anymore.
-trap cleanup EXIT is what fixes the leftovers, with or without unshare.
+with a one line comment why RETRY_MAYFAIL, 
+drop this patch and fold mayfail+comment into patch 2.
 
 pw-bot: cr
