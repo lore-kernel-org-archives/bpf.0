@@ -1,87 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212C73E9F9E;
-	Thu, 17 Sep 2026 11:24:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12F549AA55;
+	Thu, 17 Sep 2026 11:24:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789644247; cv=none; b=QChYp56OPcPIAnvxV43Za7U7WtDB1FKt+Hb4PDa/yvFlZGlGi5IzvzOWTHdPgNvH1C5TJBkJspqPhV7b/vqqcoX0lI1/dFiS9pu0QT4Ks+ihD3CKk1TndlnSNERSrU7ioxfwck0PeP6+VDhp5i83IZ13t+kv4WnR868eu4whU0Y=
+	t=1789644269; cv=none; b=TEoeIXLICGfG7FcNJcPLw7IXLBN24oNh2cxGie0bk/b0w3EDdfa4Y9W2/SAkmfLOUaTvWrFAiU6BTT2zOK9In2XtGBYvicYqdyxoXby7eAY5TQ3abm39E2+GhGieE1D2KpOeWzhNg2PPLCWB3l47W49PMnLD9Gbh9KOX1ENhWAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789644247; c=relaxed/simple;
-	bh=gNzm+LAaqYnVv1UeRYDG3ak5Awq1pSqBXi67yI8FMsE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=trnTlej8dwZhsx0TAJyQsvCyFVNprGVFeJc4wUPCYGiRsknYNgCvOsT+k/pNsvYjrsFFd8avIfL8k1WqcLSqH1XB8Xxg5ho9xdEjcyuKdoQzwRi9p9LGkmsYoe8HbTYw0aXP/A6+u4wrP58eKkMcLwRGxm1tEimWk48Egew6k/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ilvuNkBF; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789644269; c=relaxed/simple;
+	bh=YN6QEaGVg6Hw72gxDdgupplCUHH2A75FcUR5OYswHoA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YOoRGCsniPOdq4Nt9CXmQo8+okG9KYBXUyXsZUY0yQSXJARD2xLohDJ+MNUAFYSHXiD3Aj/qH+ufQ9ApSDztbXG3mOQ5Z9aADiBohzRLk8teQ9RWm18t1Fw8kG7zZmzv1wMefqOjWYthibse0fSihlKFm6GcuazLMJiCEqKYLk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aWbCdhoI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ilvuNkBF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14EE41F000FF;
-	Thu, 17 Sep 2026 11:24:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aWbCdhoI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 305DB1F000FF;
+	Thu, 17 Sep 2026 11:24:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789644246;
-	bh=gNzm+LAaqYnVv1UeRYDG3ak5Awq1pSqBXi67yI8FMsE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ilvuNkBFMhXN/jR7x2ViwqKLc6YWTf9LsRBHCmGSvMHXiKBDyByLV/uodUs0LOxB4
-	 d8gBhPtav22ADopLhlSb7uZ2bqQCkPh2L7SELz3pnrMnjWGEMBD+88AqaCsRhkghrU
-	 hiLqKURCei3GL+wK8b/2i1BW7FpiChAH7vE/Hf9FYpg9rDjGe1OC73fkDxwM8nvQBk
-	 NLu6t9tT69UciHOLVxDmVwS4nbBiOT3mEIsuQ0AR35fq4ZrQ5pSAvPGQMexKQY9NCQ
-	 B98uDEs5Mc9BWtwlpQ+RDFmKlsuQOmVjpk9JsMzQy/L/FgNrdpMXNOzpMs1cpmPkd3
-	 DlJJKZ2h3xe8w==
-Date: Thu, 17 Sep 2026 12:23:59 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Networking <netdev@vger.kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-next@vger.kernel.org
-Subject: Re: Missing signoff in the bpf tree
-Message-ID: <ec2acd16-40e3-46b7-b120-ce9eec70e942@sirena.org.uk>
-References: <aqvBPVcN__UX8P85@sirena.org.uk>
- <DLHJEZ0K0FV1.SCQLJJQNS1ES@gmail.com>
- <66d3f5cd-12df-4000-8459-360ba57cea12@sirena.org.uk>
- <DLHJUSTDSQ05.28VUGOV7YPS6V@gmail.com>
+	s=k20260515; t=1789644268;
+	bh=DGeat/iGnBxBnDqVj8Z9zNa44l9jAW8b1Jwg+5H107Q=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=aWbCdhoIILyIH+iLoz5+dNRRk/vQq+4JUWUx3Sp7FaEPciCPjuOOLw2kW6RR3UlQn
+	 D3epkf31Vn4aC3vXJi1ALRhMuUFMBI+xR3GEt/7SZxUlrp4kLfJpaP7aYuu44dsjHx
+	 fvElwTMLMoqV6G4u36pldoEM60C7ZnJSgyO/KvKqs8Au2H6/Rc1TcIV4CrGGFq9xYF
+	 vB7aBAwJI6o+LSzfO3D+Lstx9hDbeyRzWcMT2qwjTfqOLxJ9cRG3i4cJ/+QGh7JR7I
+	 GWObAeFjfIWDMaVI0Q4kvaB9sFt7vyvI9fNaJUqIwghZkJVp8Ec26Ic0iNQkAj7GRM
+	 upgD9SyoFUsaA==
+Message-ID: <b2757705-2056-4024-826e-e2731820978d@kernel.org>
+Date: Thu, 17 Sep 2026 12:24:24 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="mvjAN2tVGNxSLZN2"
-Content-Disposition: inline
-In-Reply-To: <DLHJUSTDSQ05.28VUGOV7YPS6V@gmail.com>
-X-Cookie: Whip it, whip it good!
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3] bpftool: Compute map size of light skeletons
+ at runtime
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, linux-kernel@vger.kernel.org
+References: <20260915161450.96249-1-leon.hwang@linux.dev>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20260915161450.96249-1-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+2026-09-16 00:14 UTC+0800 ~ Leon Hwang <leon.hwang@linux.dev>
+> bpftool rounds memory-mapped data map sizes to the host page size when
+> generating a light skeleton. The generated code therefore uses a 64K
+> mapping size when bpftool runs on a 64K-page host, even if the skeleton
+> runs on a 4K-page target. The target rejects the oversized map mmap(),
+> causing failure of loading the light skeleton.
+> 
+> When try to run 64K-page selftests on 4K-page VM, the error message does
+> not provide the reason about page size.
+> 
+>  test_atomics:PASS:atomics skeleton open 0 nsec
+>  test_atomics:FAIL:atomics skeleton load unexpected error: -12 (errno 22)
+>  #15      atomics:FAIL
+> 
+> Pass the original map value size and max entries to the generated code and
+> round mmap size to the runtime page size in the user-space light
+> skeleton helpers. This keeps generated light skeletons independent of the
+> build host page size.
+> 
+> Fixes: d510296d331a ("bpftool: Use syscall/loader program in "prog load" and "gen skeleton" command.")
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 
 
---mvjAN2tVGNxSLZN2
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Looks good as far as I can tell, thank you!
 
-On Thu, Sep 17, 2026 at 01:20:11PM +0200, Kumar Kartikeya Dwivedi wrote:
-> On Thu Sep 17, 2026 at 1:09 PM CEST, Mark Brown wrote:
-
-> > Does the contacts list for the BPF trees need to be updated?
-
-> Well, he's the committer, so makes sense to put him in the recipients as well :).
-> Once he gets to this he can probably force push to correct it, I guess.
-
-Do you have a full list of the current committers, I guess there's been
-more bitrot than just this?
-
---mvjAN2tVGNxSLZN2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqrzc8ACgkQJNaLcl1U
-h9Dczwf+OxyaIcr5oPsOvDHEb2RaIGYPDQUdFJwWfMHBaYi4ILiLhacStQvnqKdR
-K3FruEIlHZuIBHtzKrMqPsp0/Hpz4Couw/fCX6GzUzK6htCD2YaGcbUsSgh2yCMd
-n5z+c+B9z28xo6/SnI8Xd33Zlkubq49G4To6Fun0V+uQw3LWs1wOQR8ZR57ruVNh
-zrJkCBaiLRbBSkbtuvBEvW+TA6uLpTmgN8hlAon2LoCRe3D1sjjbFUnmukDb3aLR
-3PNKVHKhcxYN8bIf1WGzNx8zg26diQXOsb91+JqlicgZ+GiuDQmB3nOSv09PjYsF
-vgRkeE/BtMEkgaJhGq+er7nPut6i7w==
-=MUEE
------END PGP SIGNATURE-----
-
---mvjAN2tVGNxSLZN2--
+Acked-by: Quentin Monnet <qmo@kernel.org>
