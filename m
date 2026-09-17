@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90259223DEA
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 20:40:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61B634EDCD6
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 20:41:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789677603; cv=none; b=R0RkSXsPndskLBZXp+qWS2xRGPKccIcjwoiE1FPL0SJMrmqHJI471H1gJThij2u363W3pM4PLGVpWPzt8s6tf0tGQ14tY+a4bIXBUAM/foudJPZ+jvNx4XZQJtTahvJRRvUJf+M39GIxKlTvhQo+jBs93yFcx6yeOJqQOxfdh7w=
+	t=1789677703; cv=none; b=JcCwJq2hRP1ktaRHK5WA6FOiMDB8uzR8j00NYPXwSn0KfOcwZ6RkIkDENPcxa0l74K7yZcsw+tPdh1zY0oAOcxkMzxAwB/UizqSfqp0myJz7WPJK0Xj45cdkPcw8Lpl9gC1byGtmrzmt+iBpoQxztppqAju7Kn4Rxy24DNae48k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789677603; c=relaxed/simple;
-	bh=W95tfLlunkmYS2UQhXjsMo9/T3pVPgpU1oBeiTC0bJc=;
+	s=arc-20240116; t=1789677703; c=relaxed/simple;
+	bh=tDvXgdjh8DLeSygJdKEPDGnXo6CURmoqj58WaXeuv24=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hrL9iJxnNowoq6PveoniZCISwFksInR6aJDxWCBPzb6Hw1ci7L4uxCMs4TphhW9hePgTd2+pazbG4RWQGYu7XnGd6kQfDe2XDS4UYJRpIApOPc6eFy3lHPZ8c8ySjQ2RcK2kde+Cewu2oEaDf61Vw2z20pChMhPe+K2CCrMdlLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QrvDwVn8; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ojwQkTsOsgsRuMDKthud8KTnThrNRFS5Jlp/Ly5Vcu2OIN2TQmnYus+0NxHxUFKuOiqVseXv2xetI5kBUXead3u0t8b09xTnnpFE8mwesHHscMqLssUYv7Mv9Ja/mspqztQp1t6waxGkSftuv0aoSMe5SNahlL9pdXbGz1+xE2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=avX8W0UQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QrvDwVn8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 024771F000FF;
-	Thu, 17 Sep 2026 20:40:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="avX8W0UQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF7EF1F000FF;
+	Thu, 17 Sep 2026 20:41:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789677601;
-	bh=uIGfICdSdFqic0B6d+uuiOEQJVNZ5Z9FOFYE3msrIgA=;
+	s=k20260515; t=1789677702;
+	bh=FhTFhp1dKfrUV7EY46jRmd3mzlCAAYLIlVeYvErksHQ=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=QrvDwVn8lcl0HlspOtf5kxlqLaGZcy0d9S9yWolxCisXKeZm7zSDJh8O5lExx+UW0
-	 gk9bMFab1mn+NhuUBuwIgmXUMJw/mk0xjcR+eF6uaWH06GO1yBwF1YwvNoS8SRCCg+
-	 md4xZP6APL1B7wQ6fJml7z74Mck8L05ihBm3Yj+B9pGql+deJ5PVKfL4eBiR1aBSIt
-	 p7Jazx9kSyYTebNL4E34zCXCz3oKnABVSqxPpXn7lN5RHJwlJQbogUdYBFsiytxxeL
-	 globajDmUmi3AYdRqW1fHaUg8yAeJRbjVdW707I8rak85TbngpmZFv3pF3Y8xBy6aa
-	 NTqlAj+ID5H9g==
+	b=avX8W0UQsMbP0yPuN2J8JT4eDhXxw1Kf0gzm9QdCB56PuFMDY47P7HfznmJaq9jou
+	 teiGvBLVyoui4MNgDDubj4L7zlzEilluegCth/YJl8ONEiU+ntBzS8etabcFMoyQuI
+	 Cme3D663YbrGqDagkY5T8nwbdjfE1MeR2V/a3oM+9GTgl32xOeDVXPlmAihKvyj0fz
+	 zYsJMfluy3qf2ezHoOlpH+OsVaYK7doTOqDPMGOS+wnQjOjXVf68iYQaS2VktieE5K
+	 jpQ4QVM5HgUDw54I5Rg7epYVbW4edBB9QcD5emq5f3Hda7ZgxkcWTjAxI59+/0KEMv
+	 MCc5tYtx4pdBw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 6/6] selftests/bpf: Cover BPF program manual
- loading
+Subject: Re: [PATCH bpf-next v3 2/6] libbpf: BPF programs manual loading and
+ attaching
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260917203040.3150212-7-andrey.grodzovsky@crowdstrike.com>
+In-Reply-To: <20260917203040.3150212-3-andrey.grodzovsky@crowdstrike.com>
 References: <20260917203040.3150212-1-andrey.grodzovsky@crowdstrike.com>
- <20260917203040.3150212-7-andrey.grodzovsky@crowdstrike.com>
+ <20260917203040.3150212-3-andrey.grodzovsky@crowdstrike.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 17 Sep 2026 20:40:00 +0000
-Message-Id: <20260917204001.024771F000FF@smtp.kernel.org>
+Date: Thu, 17 Sep 2026 20:41:41 +0000
+Message-Id: <20260917204141.BF7EF1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,172 +47,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] selftests/bpf: bpf_link leak on assertion error paths in dynamic=
-load
+- [Low] bpf: raw error code logged instead of error string
 --
 
-commit 0fd345ea8ecacebc3bb75a7415c7f51a2637fd25
-Author: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+commit 41645c9f0ca68e1802db1c78d41589ed30fa75e4
+Author: Slava Imameev <slava.imameev@crowdstrike.com>
 
-selftests/bpf: Cover BPF program manual loading
+libbpf: BPF programs manual loading and attaching
 
-Add dynamicload test covering the manual load/attach/detach/reload
-cycle, declarative MANUAL via SEC("!...") and its imperative
-override, bpf_object__prepare() alone being sufficient for manual
-load, and a deferred load of a module BTF attach target.
+This commit introduces a manual load strategy for BPF programs. It permits
+programs to be loaded and attached independently after the initial bpf_obje=
+ct
+loading, which skips the auto-load pass to improve performance for utilities
+with hundreds of programs.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/dynamicload.c b/tools=
-/testing/selftests/bpf/prog_tests/dynamicload.c
-> new file mode 100644
-> index 0000000000000..979bdc14f4ffd
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/dynamicload.c
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index bd510a4e4941c..acb8caffa442e 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
 
 [ ... ]
 
-> +static void dynamicload_verify_prepare_only(void)
+> @@ -15247,3 +15310,49 @@ enum bpf_prog_load_strategy bpf_program__load_st=
+rategy(const struct bpf_program
+>  {
+>  	return prog->load_strategy;
+>  }
+> +
+> +/*
+> + * This function must be called after bpf_object__prepare (or
+> + * bpf_object__load, which calls bpf_object__prepare internally).
+> + * Manually-loaded program data is initialized on object prepare.
+> + * Post-prepare initialization is not supported.
+> + */
+> +int
+> +bpf_program__load_manually(struct bpf_program *prog)
 > +{
-> +	struct test_dynamicload *skel;
-> +	struct bpf_link *link;
 > +	int err;
+> +	struct bpf_object *obj =3D prog->obj;
+> +
+> +	if (obj->state < OBJ_PREPARED)
+> +		return libbpf_err(-EINVAL);
+> +
+> +	if (prog_is_subprog(obj, prog) || prog->load_strategy !=3D BPF_PROG_LOA=
+D_STRATEGY_MANUAL)
+> +		return libbpf_err(-EINVAL);
+> +
+> +	if (prog->fd >=3D 0)
+> +		return libbpf_err(-EBUSY);
+> +
+> +	err =3D bpf_object_load_prog(obj, prog, prog->insns, prog->insns_cnt,
+> +				   obj->license, obj->kern_version, &prog->fd);
+> +	if (err) {
+> +		pr_warn("prog '%s': failed to load manually: %d\n", prog->name, err);
 
-[ ... ]
+[Severity: Low]
+Does this code log the raw integer error code instead of a descriptive erro=
+r=20
+string? When bpf_program__load_manually is called and bpf_object_load_prog=
+=20
+returns an error, this will print the %d format specifier. Other libbpf=20
+load functions typically use %s with errstr(err) to improve debuggability.
 
-> +	link =3D bpf_program__attach(skel->progs.prog4);
-> +	if (!ASSERT_OK_PTR(link, "attach_after_prepare"))
-> +		goto cleanup;
+> +		return libbpf_err(err);
+> +	}
 > +
-> +	usleep(1);
-> +
-> +	if (!ASSERT_TRUE(skel->bss->prog4_called, "prog4_called_after_prepare"))
-> +		goto cleanup;
-
-[Severity: Medium]
-If this assertion fails, we jump to cleanup which calls
-test_dynamicload__destroy(skel). Because test_dynamicload__destroy()
-doesn't detach manually loaded programs, does this leak the bpf_link
-and its file descriptor by bypassing bpf_link__destroy(link)?
-
-> +
-> +	err =3D bpf_link__destroy(link);
-> +	if (!ASSERT_OK(err, "link_destroy_after_prepare"))
-> +		goto cleanup;
-> +
-> +	err =3D bpf_program__unload_manually(skel->progs.prog4);
-> +	ASSERT_OK(err, "unload_manually_after_prepare");
-> +
-> +cleanup:
-> +	test_dynamicload__destroy(skel);
-> +}
-
-[ ... ]
-
-> +void test_dynamicload(void)
-> +{
-> +	struct bpf_link *link;
-> +	struct test_dynamicload *skel;
-> +	int err;
-
-[ ... ]
-
-> +	/* load prog3 */
-> +	err =3D bpf_program__load_manually(skel->progs.prog3);
-> +	if (!ASSERT_OK(err, "load_manually"))
-> +		goto cleanup;
-> +
-> +	/* attach prog3 */
-> +	link =3D bpf_program__attach(skel->progs.prog3);
-> +	if (!ASSERT_OK_PTR(link, "attach"))
-> +		goto cleanup;
-> +
-> +	usleep(1);
-> +
-> +	if (!ASSERT_TRUE(skel->bss->prog3_called, "prog3_called"))
-> +		goto cleanup;
-
-[Severity: Medium]
-Similar to the issue above, if this assertion fails, we jump directly to
-cleanup and bypass bpf_link__destroy(link). Could this leak the link resour=
-ce
-for prog3?
-
-> +
-> +	/* detach prog3 as test_dynamicload__destroy doesn't detach manually lo=
-aded programs */
-> +	err =3D bpf_link__destroy(link);
-> +	if (!ASSERT_OK(err, "link_destroy"))
-> +		goto cleanup;
-
-[ ... ]
-
-> +	/* reattach prog3 */
-> +	link =3D bpf_program__attach(skel->progs.prog3);
-> +	if (!ASSERT_OK_PTR(link, "reattach"))
-> +		goto cleanup;
-> +
-> +	usleep(1);
-> +
-> +	if (!ASSERT_TRUE(skel->bss->prog3_called, "prog3_called_reattach"))
-> +		goto cleanup;
-
-[Severity: Medium]
-Does this error path also leak the reattached bpf_link when jumping
-to cleanup?
-
-> +
-> +	/* detach prog3 as test_dynamicload__destroy doesn't detach manually lo=
-aded programs */
-> +	err =3D bpf_link__destroy(link);
-> +	if (!ASSERT_OK(err, "link_destroy_reattach"))
-> +		goto cleanup;
-
-[ ... ]
-
-> +	/*
-> +	 * run prog4 (declaratively marked) through the same manual
-> +	 * load/attach/trigger/detach/unload cycle as prog3
-> +	 */
-> +	err =3D bpf_program__load_manually(skel->progs.prog4);
-> +	if (!ASSERT_OK(err, "prog4_load_manually"))
-> +		goto cleanup;
-> +
-> +	link =3D bpf_program__attach(skel->progs.prog4);
-> +	if (!ASSERT_OK_PTR(link, "prog4_attach"))
-> +		goto cleanup;
-> +
-> +	usleep(1);
-> +
-> +	if (!ASSERT_TRUE(skel->bss->prog4_called, "prog4_called"))
-> +		goto cleanup;
-
-[Severity: Medium]
-Can jumping to cleanup here leave the prog4 bpf_link leaked as well?
-
-> +
-> +	err =3D bpf_link__destroy(link);
-> +	if (!ASSERT_OK(err, "prog4_link_destroy"))
-> +		goto cleanup;
-> +
-> +	err =3D bpf_program__unload_manually(skel->progs.prog4);
-> +	ASSERT_OK(err, "prog4_unload_manually");
-> +
-> +	test_dynamicload__destroy(skel);
-> +
-> +	/* separate scenario: imperative override of the declarative marker */
-> +	dynamicload_verify_override();
-> +
-> +	/* separate scenario: prepare()-only is sufficient for manual load */
-> +	dynamicload_verify_prepare_only();
-> +
-> +	/* separate scenario: deferred manual load with a module BTF attach tar=
-get */
-> +	dynamicload_verify_module_btf();
-> +	return;
-> +
-> +cleanup:
-> +	test_dynamicload__destroy(skel);
+> +	return 0;
 > +}
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260917203040.3150=
-212-1-andrey.grodzovsky@crowdstrike.com?part=3D6
+212-1-andrey.grodzovsky@crowdstrike.com?part=3D2
