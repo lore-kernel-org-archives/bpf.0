@@ -1,62 +1,62 @@
-Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
+Received: from mail-oi2-f43.google.com (mail-oi2-f43.google.com [74.125.231.235])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 793974EB855
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 20:06:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A4A4E9C22
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 20:06:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789675581; cv=none; b=moRg1h0yayeSqgYJsQItyMdsqfnuUcIHp5WJaJrSJDOsg54o+Y/tBD3ICbW/jWQMEWb7iUMKf46gisA+eivygudlNENxJuG4nXCc2OxgKllw1w92GToEKHaPezRfmajVenYLu8hXR1GmiBXYY8bt0KqEjhjzekcxJMiup/BqDpU=
+	t=1789675579; cv=none; b=KI8XH0in/l3ZZRJTP/XRnrb4+RpD/DhKaKb6SttFHb1mjKC1JUNz0eoRvW3BKqKtlpTY8r7VHazO91lf+Ry10Ts0ggeVqqdKh5MB7v8zNI14n2MJ/eZ9r6bh9cPXfxKgROlnugsZbLoStbfJaLJAs4aqgY35LrwknzxmhaF8s5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789675581; c=relaxed/simple;
-	bh=RC2+tW4VR4DAhhKfFjUFIbMmCAIhkkge84EG8Fe5/X0=;
+	s=arc-20240116; t=1789675579; c=relaxed/simple;
+	bh=U/NQAfkqerjI53XStRSHTxmiB/PLe1TMSjx2cbmNOdw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WZGQV0/U18JTGI+mtDxS7ExNQuejLB84aNfCrr7NL3KFVkEOle7M6G7hnmYYASaaUqDqcftWfS34eHQMx1C+rRrMxyEVa1iV5S0ej//POThoxRIJ7K38LOiKoaMI/vPqZrfLBeykpMBlTIAsR/E+nNaog42InTdTUKGa1uyTrVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dHzJKrPF; arc=none smtp.client-ip=74.125.231.205
+	 MIME-Version; b=V6lwLxIRTlxGGIoGSdcuYgX+Q62aKeHq26xHJsrG/wlHAuHOdtkPMmcQb/fRlUDNrQmPCRTYK72ptm+jt0rBBgIjGEFr8zNszBrvtxn0NM3ewwh7OMEuaZGV0yt04Smh+MrNiOHabRxHT7Hp1XtLHuRaor4jAYcaaTsM4KBPWEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WgPnUSzS; arc=none smtp.client-ip=74.125.231.235
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dHzJKrPF"
-Received: by mail-oi2-f13.google.com with SMTP id 5614622812f47-4c66ba0b762so14073b6e.1
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 13:06:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WgPnUSzS"
+Received: by mail-oi2-f43.google.com with SMTP id 46e09a7af769-804e42309a5so501041a34.2
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 13:06:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789675572; x=1790280372; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789675569; x=1790280369; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=vL9wP24mFmHeGwvfZtLCTzrcqEIhTjmWJiDIIo2LIVs=;
-        b=dHzJKrPF4/dtFSy5u9+VM5HIkHb51pvV+1LIIueWpw6dcIVIyM7S/6XIQcKcW7YX6T
-         uJum6DJ0opSqitBESPJYDA3loh6Bjs8zc9rD4VKk8+tV3QxBGrEhnFlx05tTM88mvpM0
-         l5cXI5jfVxdjeMXQid//H8xPAVTGEMHgg9aVX4ju2Lt1G9bBTDNKZJRsc39DGHsk+/9s
-         5tTAavJDMmlhR2MwcZR3mG93LfM0uZ/PVgrqEqDSSX/p99r+SX+dKQu9+FWvQvz8oHz/
-         BlGFToUF5RNPfURLHvonaY/O8iVmKMlvX/a+EagT+Hl882AdHw8Do2Pfryk+nLqcrDkY
-         GuuA==
+        bh=lDTQQrFDUimxhiafJzPIRrhDZ/feVP73wkL9s8juuQo=;
+        b=WgPnUSzS6ffjw+UcYM8QGs5dxzxa9jQWmeUvPxBMANe5aJhcmYxjWizQdYIW9WMBm2
+         DEkITNV8KJ+yXJPZardHuc7/5in2brG3Quumj5UR97ERO+rWL7NtVMIidNoJdTPMBIgN
+         XrlOGnqKVNjYvDRB9gQcahb4gC5bqizSpWfMH8ShYQVmIw3JzdpCUhyXy5jXUS2fN0B+
+         V/UBSwUNhH2Okr+n1iDkEo3UbGJzC9NliiTDvV0Q5a7ZcqDDyhHfth0xsQgy4uvKHTvO
+         bs4T0+Q81y5k/0z1r6FKgAg4jhVNvqdH+88CG/BrAf/GD5BCDzh+hsyG9Q0EvYJcu68U
+         lnlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789675572; x=1790280372;
+        d=1e100.net; s=20260707; t=1789675569; x=1790280369;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vL9wP24mFmHeGwvfZtLCTzrcqEIhTjmWJiDIIo2LIVs=;
-        b=xoXKRKNFhrmXkr4VZoX/e6txRxHv9BJCFZRqsHESamVjDjtf5CgWMb1JCp8GVQW/FE
-         WJYjKCh5dmypV0unRTjiDHsJVi+oRzPlE+E60U+pzQpAdkVWngApl0/YhMBQcIJeK9Qh
-         qA1lfIqWYEXnOi9MXTobupRwx6DqNM+o91mtu5WzggT7q2j4E+unjAHBUIYGor3Mi0XS
-         q4HFFVY4WfNJMsaBeJqc00mpASCD0boeKabquMXsXcaZtFPlGzm5Z94WHCmlbaGWTFH8
-         65czqzBvHEZgO0naQnRPPu7K/uTTgNF6EZD3hkZI+nY08IKSvnohsagkF+r4evC3hD7i
-         lrXA==
-X-Gm-Message-State: AFuF++l32Gbory1dKTwqeGy8TD28hMysM0jDvbfdTHI8DBwv9ifkTlIU
-	Rx1+D4i4L1ro/GQ7xTDgO7rr1QkA+FOfiSNmc5nPJvRQSV9DYhGto8bM0wkylg==
-X-Gm-Gg: AYBFou2Oahn1eVioLoEVlVcIpYA/Ssg+1ikCnJU2QeJLbpIcoQQD9o3lvm5CZuzp1Br
-	Tvl9cZ7WnmETyLR/dOYatKdjX+rXVFJzMrTZMfNmq4Ze4LqC02H558PyDCEqGo0ffdWSQcnUP/I
-	nVKs85Qt3N34VJdbAW+mVjk6Q+D+Xr3hF+oRjjZTfdPiuQvLVpT5Gp80BamBzIoLuLj3cY60UIW
-	+q5MJ1OMBKxDTOm6maT5vSx1xudrztm9VN3HhUwGXOFHQf8vqULpTkpcoCWhLMza3TOYCEyxoOq
-	umVZoE1LiGuwGOMdzEiGW6ZuZ8evyyp4GW065QvRK0bGXCd4lv6X3XVC9vhy5R69/F8p5dPT1C4
-	v4K5qCa1bBFN9uhD/ZPJDz+xQeiN4IAbFsP0oE44YsnVGb9iZ2nungbgwjsErBSekj/NQ6zQN4Y
-	ibgJ8DeFrlXkqftWBS4dZZwmrI3iPTQ7jCz27dJEcC6hjGyt/iJYBJ4LIDmrgxag==
-X-Received: by 2002:a05:6820:4c0e:b0:6bd:b927:672f with SMTP id 006d021491bc7-6ca90d95792mr202275eaf.9.1789675572080;
-        Thu, 17 Sep 2026 13:06:12 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:52::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6c8f641b56bsm4156757eaf.7.2026.09.17.13.06.11
+        bh=lDTQQrFDUimxhiafJzPIRrhDZ/feVP73wkL9s8juuQo=;
+        b=kqVxhim0Sz3iO60bJONpUKPbxvWHo4DxDEPAinwoRpd9YBou/li+Id5+d8e8gZQwkZ
+         b2+wU4DzJWD/RT9116NcbOPj2L5ei9afU4hTjRE/eD5/KX+bue73FJNdcseHyxrdU4wC
+         Y5Rgqf73v082YH8iwfXnwVyXTcsbqe8chrw/fRE+Ecbpxb3K5gHBdlRrEu2dODmS8hye
+         qVNYkqEC4riWOgUXbRk+93PG07x969xDyBgIGrliTqwv6IeL5CpqTuRhjL5bW9C1ew0R
+         giBkSaNHHnD+5Ar0UNACWc2NM24Kv5o4Lu7LC+sur/nvfGqQIOzxClujHj+FeuC0iPk7
+         8d3A==
+X-Gm-Message-State: AFuF++nY1My7tyHmbeQde5FLhJFqCOMDGjqI5ZsQ4i764K5kQS9JAcXA
+	zyKYbl+AO+G2Kwn/5KorZsPMeLieF7dB8r/IO2RFfurGajvopL8z68gojVTgnw==
+X-Gm-Gg: AYBFou0zff0vK7cn6IX2ME9WOxxcPnRv4oxoSgF77NzJRKNoRfOxNRSbJlKnWVfW6P2
+	lhKdLdXDaK//WwPi58xu2I/aOR/iGZ00KhxrrJmxikV70C68GTIPZkCjmSl2tEbs8GvuAVmNKYh
+	c0S7wI5nB6SszQHlqkdXA486c1918o3G7kpNdIWcT5Yysn6U/hpR5mM29VWcbd7GZbpL12/+TdL
+	0JSRaCdKdPfQ1VZUc1XctbStN8UzmqK78wGmpsPqCofq4vAo0fm04IFyOD9v23K2dSLa9tufOcg
+	toX5SnqC7RNWk9kWznjpPUcdJ3q6cedDBZCY23Zk3dUKzyQw2P0iSp08UsWcvKI+HT50JaCfCEb
+	0fXJdxdcmE8AX8rsF7as+RjlyHnbJeLf1o6J3env9d8y5nW1qhpQ7PNrybAWF4dsLeft4fZswXM
+	6bcfMmSpRtiTROITphdHxbfq5gYgnpGVAv6/8745jxl81LlaU6a2NNHmXzrHco35k=
+X-Received: by 2002:a05:6830:83ab:b0:7e9:eb13:d042 with SMTP id 46e09a7af769-80de04566d6mr290245a34.8.1789675569218;
+        Thu, 17 Sep 2026 13:06:09 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:56::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-80c410c804asm3901334a34.0.2026.09.17.13.06.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 13:06:11 -0700 (PDT)
+        Thu, 17 Sep 2026 13:06:08 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -72,9 +72,9 @@ Cc: netdev@vger.kernel.org,
 	kerneljasonxing@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 13/15] libbpf: Support attaching struct_ops to a cgroup
-Date: Thu, 17 Sep 2026 13:05:39 -0700
-Message-ID: <20260917200542.3689605-14-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v4 11/15] bpf: tcp: Support selected sock_ops callbacks as struct_ops
+Date: Thu, 17 Sep 2026 13:05:37 -0700
+Message-ID: <20260917200542.3689605-12-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260917200542.3689605-1-ameryhung@gmail.com>
 References: <20260917200542.3689605-1-ameryhung@gmail.com>
@@ -86,163 +86,510 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Martin KaFai Lau <martin.lau@kernel.org>
+In LSFMMBPF 2025, I have talked about moving the BPF_PROG_TYPE_SOCK_OPS
+to a struct_ops interface [1].
 
-Add bpf_map__attach_cgroup_opts() to attach a struct_ops map to a cgroup
-through a BPF link.
+The BPF_SOCK_OPS_*_CB enum interface has grown over time as new TCP
+callback points were added. A BPF_PROG_TYPE_SOCK_OPS program now
+commonly needs a large switch on sock_ops->op, and the shared
+bpf_sock_ops_kern context has become harder to extend because different
+callbacks have different locking, argument, skb, and helper
+requirements. The existing 'union { u32 args[4]; u32 replylong[4]; }' is
+also not reliable in passing args to bpf prog when there are multiple
+progs attached to a cgroup.
 
-Also extend struct bpf_prog_query_opts with a type_id field so a
-BPF_STRUCT_OPS query on a cgroup can select the struct_ops type to
-enumerate.
+The above has already been solved in struct_ops. Add a TCP-specific
+struct_ops type, bpf_tcp_ops, and support attaching it to cgroups.
+This allows each callback have its own func signature and allows
+the verifier to select kfuncs/helpers based on the specific
+struct_ops member being implemented.
+
+This patch wires up the following existing sock_ops callbacks:
+- BPF_SOCK_OPS_TIMEOUT_INIT
+- BPF_SOCK_OPS_RWND_INIT
+- BPF_SOCK_OPS_RTT_CB
+- BPF_SOCK_OPS_STATE_CB
+- BPF_SOCK_OPS_RETRANS_CB
+- BPF_SOCK_OPS_TCP_CONNECT_CB
+- BPF_SOCK_OPS_TCP_LISTEN_CB
+- BPF_SOCK_OPS_RTO_CB
+- BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB
+- BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB
+
+BASE_RTT is ignored as it is not particularly useful. NEEDS_ECN should
+be done in bpf-tcp-cc instead. The tstamp ones should be a separate
+struct_ops (e.g. "bpf_sock_ops") that can work in both TCP and UDP.
+
+timeout_init and rwnd_init could have a request_sock pointer. This patch
+tries a different API and directly passes the request_sock pointer as
+an arg.
+
+Two other approaches were considered before settling on having
+bpf_get_retval() read the dispatcher's run_ctx via saved_run_ctx. The
+first was to inherit the retval in the trampoline itself: add a helper
+in the four __bpf_prog_enter*() paths that, for struct_ops programs,
+copies the chained value from the caller's run_ctx (now saved_run_ctx)
+into the program's own run_ctx. It works but puts a per-enter
+program-type check on the generic trampoline fast path, taxing all
+fentry/fexit/lsm callers for a cgroup-struct_ops-only feature. The
+second was to do that same inherit only for the int-returning members
+via a gen_prologue that emits a hidden kfunc at the start of
+timeout_init/rwnd_init; this keeps the cost off the generic path and
+scoped to bpf_tcp_ops, but needs a kfunc + BTF_ID + prologue-emission
+machinery. The chosen approach avoids both: it touches neither the
+trampoline nor the program, since saved_run_ctx already points at the
+dispatcher's run_ctx that carries the value.
+
+[1], page 13: https://drive.google.com/file/d/1wjKZth6T0llLJ_ONPAL_6Q_jbxbAjByp/view?usp=sharing
 
 Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- tools/lib/bpf/bpf.c      |  2 ++
- tools/lib/bpf/bpf.h      |  3 +-
- tools/lib/bpf/libbpf.c   | 64 ++++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.h   |  3 ++
- tools/lib/bpf/libbpf.map |  1 +
- 5 files changed, 72 insertions(+), 1 deletion(-)
+ include/linux/bpf.h    |   1 +
+ include/net/tcp.h      | 113 ++++++++++++++++++++++++-
+ net/ipv4/Makefile      |   1 +
+ net/ipv4/af_inet.c     |   1 +
+ net/ipv4/bpf_tcp_ops.c | 188 +++++++++++++++++++++++++++++++++++++++++
+ net/ipv4/tcp.c         |   1 +
+ net/ipv4/tcp_input.c   |   4 +
+ net/ipv4/tcp_output.c  |   2 +
+ net/ipv4/tcp_timer.c   |   1 +
+ 9 files changed, 310 insertions(+), 2 deletions(-)
+ create mode 100644 net/ipv4/bpf_tcp_ops.c
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 96819c082c77..a9de7f107cf7 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -934,6 +934,7 @@ int bpf_link_create(int prog_fd, int target_fd,
- 	case BPF_CGROUP_GETSOCKOPT:
- 	case BPF_CGROUP_SETSOCKOPT:
- 	case BPF_LSM_CGROUP:
-+	case BPF_STRUCT_OPS:
- 		relative_fd = OPTS_GET(opts, cgroup.relative_fd, 0);
- 		relative_id = OPTS_GET(opts, cgroup.relative_id, 0);
- 		if (relative_fd && relative_id)
-@@ -1056,6 +1057,7 @@ int bpf_prog_query_opts(int target, enum bpf_attach_type type,
- 	attr.query.attach_type		= type;
- 	attr.query.query_flags		= OPTS_GET(opts, query_flags, 0);
- 	attr.query.count		= OPTS_GET(opts, count, 0);
-+	attr.query.type_id		= OPTS_GET(opts, type_id, 0);
- 	attr.query.prog_ids		= ptr_to_u64(OPTS_GET(opts, prog_ids, NULL));
- 	attr.query.link_ids		= ptr_to_u64(OPTS_GET(opts, link_ids, NULL));
- 	attr.query.prog_attach_flags	= ptr_to_u64(OPTS_GET(opts, prog_attach_flags, NULL));
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 7534a593edae..490e8cb4ba53 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -637,9 +637,10 @@ struct bpf_prog_query_opts {
- 	__u32 *link_ids;
- 	__u32 *link_attach_flags;
- 	__u64 revision;
-+	__u32 type_id;
- 	size_t :0;
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index f34b410f903e..3abde9a2a375 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2634,6 +2634,7 @@ struct bpf_trace_run_ctx {
+ struct bpf_tramp_run_ctx {
+ 	struct bpf_run_ctx run_ctx;
+ 	u64 bpf_cookie;
++	int retval;
+ 	struct bpf_run_ctx *saved_run_ctx;
  };
--#define bpf_prog_query_opts__last_field revision
-+#define bpf_prog_query_opts__last_field type_id
  
- /**
-  * @brief **bpf_prog_query_opts()** queries the BPF programs and BPF links
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 613afae26519..247ee90d151a 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -14169,6 +14169,70 @@ struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
- 	return &link->link;
+diff --git a/include/net/tcp.h b/include/net/tcp.h
+index 436495ff2271..af3747043778 100644
+--- a/include/net/tcp.h
++++ b/include/net/tcp.h
+@@ -2959,12 +2959,120 @@ static inline void tcp_clear_sock_ops_cb_flags(struct sock *sk)
+ 
+ #endif
+ 
++#if defined(CONFIG_BPF_JIT) && defined(CONFIG_CGROUP_BPF)
++
++struct bpf_tcp_ops {
++	/* Should return the initial SYN (active open) or SYN-ACK (passive open)
++	 * retransmission timeout. Return the timeout in jiffies, or <= 0 for
++	 * the kernel default.
++	 *
++	 * @req: request_sock on the passive (synack) path; NULL otherwise.
++	 */
++	int (*timeout_init)(struct sock *sk, struct request_sock *req);
++
++	/* Should return the initial advertised receive window, in packets,
++	 * or < 0 for the kernel default. @req as in timeout_init().
++	 */
++	int (*rwnd_init)(struct sock *sk, struct request_sock *req);
++
++	/* Called when an active connection becomes established.
++	 * @skb is the SYNACK that completed the 3WHS, or NULL for a
++	 * TCP_REPAIR socket (tcp_finish_connect() with no skb).
++	 */
++	void (*active_established)(struct sock *sk, struct sk_buff *skb__nullable);
++
++	/* Called when a passive connection becomes established.
++	 * @skb is the ACK that completed the 3WHS.
++	 */
++	void (*passive_established)(struct sock *sk, struct sk_buff *skb);
++
++	/* Called when the retransmission timer fires. */
++	void (*rto)(struct sock *sk);
++
++	/* Called on every RTT sample.
++	 * @mrtt: the measured RTT, in microseconds.
++	 * @srtt: the updated smoothed RTT.
++	 */
++	void (*rtt)(struct sock *sk, long mrtt, u32 srtt);
++
++	/* Called when the connection changes TCP state.
++	 * @state: the new state (one of the TCP_* states).
++	 */
++	void (*set_state)(struct sock *sk, int state);
++
++	/* Called when an skb is retransmitted.
++	 * @skb: the retransmitted skb.
++	 * @err: tcp_transmit_skb() return value (0 on success).
++	 */
++	void (*retrans)(struct sock *sk, struct sk_buff *skb, int err);
++
++	/* Called right before an active connection is initialized. */
++	void (*connect)(struct sock *sk);
++
++	/* Called on listen(2), right after the socket enters TCP_LISTEN. */
++	void (*listen)(struct sock *sk);
++};
++
++#define bpf_tcp_ops_call(op, sk, ...)					\
++do {									\
++	if (cgroup_bpf_enabled(CGROUP_TCP_SOCK_OPS)) {			\
++		const struct bpf_prog_array_item *item;			\
++		const struct bpf_tcp_ops *tcp_ops;			\
++		struct cgroup *cgrp;					\
++									\
++		cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);		\
++		rcu_read_lock_dont_migrate();				\
++		bpf_cgroup_struct_ops_foreach(tcp_ops, item, cgrp,	\
++					      CGROUP_TCP_SOCK_OPS) {	\
++			if (tcp_ops->op)				\
++				tcp_ops->op(sk, ##__VA_ARGS__);		\
++		}							\
++		rcu_read_unlock_migrate();				\
++	}								\
++} while (0)
++
++#define bpf_tcp_ops_call_int(op, init_retval, sk, ...)			\
++({									\
++	int __retval = (init_retval);					\
++	if (cgroup_bpf_enabled(CGROUP_TCP_SOCK_OPS)) {			\
++		const struct bpf_prog_array_item *item;			\
++		const struct bpf_tcp_ops *tcp_ops;			\
++		struct bpf_tramp_run_ctx run_ctx;			\
++		struct bpf_run_ctx *old_run_ctx;			\
++		struct sock *__sk = sk_to_full_sk(sk);                  \
++		struct request_sock *req = NULL;			\
++		struct cgroup *cgrp;					\
++									\
++		if (__sk) {						\
++			run_ctx.retval = (init_retval);			\
++			cgrp = sock_cgroup_ptr(&__sk->sk_cgrp_data);	\
++			if (!sk_fullsock(sk))				\
++				req = (struct request_sock *)sk;	\
++			rcu_read_lock_dont_migrate();			\
++			old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);\
++			bpf_cgroup_struct_ops_foreach(tcp_ops, item, cgrp, \
++						      CGROUP_TCP_SOCK_OPS) { \
++				if (tcp_ops->op)			\
++					run_ctx.retval = tcp_ops->op(__sk, req, ##__VA_ARGS__); \
++			}						\
++			bpf_reset_run_ctx(old_run_ctx);			\
++			rcu_read_unlock_migrate();			\
++			__retval = run_ctx.retval;			\
++		}							\
++	}								\
++	__retval;							\
++})
++#else
++#define bpf_tcp_ops_call(op, sk, ...)		do { } while (0)
++#define bpf_tcp_ops_call_int(op, init_retval, sk, ...)	(init_retval)
++#endif
++
+ static inline u32 tcp_timeout_init(struct sock *sk)
+ {
+ 	int timeout;
+ 
+ 	timeout = tcp_call_bpf(sk, BPF_SOCK_OPS_TIMEOUT_INIT, 0, NULL);
+-
++	timeout = bpf_tcp_ops_call_int(timeout_init, timeout, sk);
+ 	if (timeout <= 0)
+ 		timeout = TCP_TIMEOUT_INIT;
+ 	return min_t(int, timeout, TCP_RTO_MAX);
+@@ -2975,7 +3083,7 @@ static inline u32 tcp_rwnd_init_bpf(struct sock *sk)
+ 	int rwnd;
+ 
+ 	rwnd = tcp_call_bpf(sk, BPF_SOCK_OPS_RWND_INIT, 0, NULL);
+-
++	rwnd = bpf_tcp_ops_call_int(rwnd_init, rwnd, sk);
+ 	if (rwnd < 0)
+ 		rwnd = 0;
+ 	return rwnd;
+@@ -2990,6 +3098,7 @@ static inline void tcp_bpf_rtt(struct sock *sk, long mrtt, u32 srtt)
+ {
+ 	if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_RTT_CB_FLAG))
+ 		tcp_call_bpf_2arg(sk, BPF_SOCK_OPS_RTT_CB, mrtt, srtt);
++	bpf_tcp_ops_call(rtt, sk, mrtt, srtt);
  }
  
-+struct bpf_link *bpf_map__attach_cgroup_opts(const struct bpf_map *map, int cgroup_fd,
-+					     const struct bpf_cgroup_opts *opts)
+ #if IS_ENABLED(CONFIG_SMC)
+diff --git a/net/ipv4/Makefile b/net/ipv4/Makefile
+index 06e21c26b76f..afbac63d1cb4 100644
+--- a/net/ipv4/Makefile
++++ b/net/ipv4/Makefile
+@@ -70,6 +70,7 @@ obj-$(CONFIG_TCP_AO) += tcp_ao.o
+ 
+ ifeq ($(CONFIG_BPF_JIT),y)
+ obj-$(CONFIG_BPF_SYSCALL) += bpf_tcp_ca.o
++obj-$(CONFIG_CGROUP_BPF) += bpf_tcp_ops.o
+ endif
+ 
+ ifdef CONFIG_GCOV_PROFILE_NETFILTER
+diff --git a/net/ipv4/af_inet.c b/net/ipv4/af_inet.c
+index 32d006c1a8ee..ac8431da67f4 100644
+--- a/net/ipv4/af_inet.c
++++ b/net/ipv4/af_inet.c
+@@ -227,6 +227,7 @@ int __inet_listen_sk(struct sock *sk, int backlog)
+ 			return err;
+ 
+ 		tcp_call_bpf(sk, BPF_SOCK_OPS_TCP_LISTEN_CB, 0, NULL);
++		bpf_tcp_ops_call(listen, sk);
+ 	}
+ 	return 0;
+ }
+diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
+new file mode 100644
+index 000000000000..3febbc8dd1a0
+--- /dev/null
++++ b/net/ipv4/bpf_tcp_ops.c
+@@ -0,0 +1,188 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include <linux/bpf.h>
++#include <linux/btf_ids.h>
++#include <linux/bpf_verifier.h>
++#include <net/bpf_sk_storage.h>
++#include <net/tcp.h>
++
++static int timeout_init_stub(struct sock *sk, struct request_sock *req__nullable)
 +{
-+	LIBBPF_OPTS(bpf_link_create_opts, link_create_opts);
-+	struct bpf_link_struct_ops *link;
-+	__u32 relative_id, zero = 0;
-+	int err, fd, relative_fd;
++	struct bpf_tramp_run_ctx *ctx =
++		container_of(current->bpf_ctx, struct bpf_tramp_run_ctx, run_ctx);
 +
-+	if (!OPTS_VALID(opts, bpf_cgroup_opts))
-+		return libbpf_err_ptr(-EINVAL);
-+
-+	if (!bpf_map__is_struct_ops(map)) {
-+		pr_warn("map '%s': can't attach non-struct_ops map\n", map->name);
-+		return libbpf_err_ptr(-EINVAL);
-+	}
-+
-+	if (map->fd < 0) {
-+		pr_warn("map '%s': can't attach BPF map without FD (was it created?)\n", map->name);
-+		return libbpf_err_ptr(-EINVAL);
-+	}
-+
-+	if (!(map->def.map_flags & BPF_F_LINK)) {
-+		pr_warn("map '%s': can't attach to cgroup without BPF_F_LINK\n", map->name);
-+		return libbpf_err_ptr(-EINVAL);
-+	}
-+
-+	relative_id = OPTS_GET(opts, relative_id, 0);
-+	relative_fd = OPTS_GET(opts, relative_fd, 0);
-+
-+	if (relative_fd && relative_id) {
-+		pr_warn("map '%s': relative_fd and relative_id cannot be set at the same time\n",
-+			map->name);
-+		return libbpf_err_ptr(-EINVAL);
-+	}
-+
-+	link_create_opts.cgroup.expected_revision = OPTS_GET(opts, expected_revision, 0);
-+	link_create_opts.cgroup.relative_fd = relative_fd;
-+	link_create_opts.cgroup.relative_id = relative_id;
-+	link_create_opts.flags = OPTS_GET(opts, flags, 0);
-+
-+	link = calloc(1, sizeof(*link));
-+	if (!link)
-+		return libbpf_err_ptr(-ENOMEM);
-+
-+	err = bpf_map_update_elem(map->fd, &zero, map->st_ops->kern_vdata, 0);
-+	if (err && err != -EBUSY) {
-+		free(link);
-+		return libbpf_err_ptr(err);
-+	}
-+
-+	link->link.detach = bpf_link__detach_struct_ops;
-+
-+	fd = bpf_link_create(map->fd, cgroup_fd, BPF_STRUCT_OPS, &link_create_opts);
-+	if (fd < 0) {
-+		free(link);
-+		return libbpf_err_ptr(fd);
-+	}
-+
-+	link->link.fd = fd;
-+	link->map_fd = map->fd;
-+
-+	return &link->link;
++	return ctx->retval;
 +}
 +
- /*
-  * Swap the back struct_ops of a link with a new struct_ops map.
-  */
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 48266e752223..026932f20962 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -960,6 +960,9 @@ bpf_program__attach_cgroup_opts(const struct bpf_program *prog, int cgroup_fd,
- struct bpf_map;
++static int rwnd_init_stub(struct sock *sk, struct request_sock *req__nullable)
++{
++	struct bpf_tramp_run_ctx *ctx =
++		container_of(current->bpf_ctx, struct bpf_tramp_run_ctx, run_ctx);
++
++	return ctx->retval;
++}
++
++static void active_established_stub(struct sock *sk, struct sk_buff *skb__nullable)
++{
++}
++
++static void passive_established_stub(struct sock *sk, struct sk_buff *skb)
++{
++}
++
++static void rto_stub(struct sock *sk)
++{
++}
++
++static void rtt_stub(struct sock *sk, long mrtt, u32 srtt)
++{
++}
++
++static void set_state_stub(struct sock *sk, int state)
++{
++}
++
++static void retrans_stub(struct sock *sk, struct sk_buff *skb, int err)
++{
++}
++
++static void connect_stub(struct sock *sk)
++{
++}
++
++static void listen_stub(struct sock *sk)
++{
++}
++
++static struct bpf_tcp_ops __bpf_tcp_ops = {
++	.timeout_init = timeout_init_stub,
++	.rwnd_init = rwnd_init_stub,
++	.active_established = active_established_stub,
++	.passive_established = passive_established_stub,
++	.rto = rto_stub,
++	.rtt = rtt_stub,
++	.set_state = set_state_stub,
++	.retrans = retrans_stub,
++	.connect = connect_stub,
++	.listen = listen_stub,
++};
++
++BPF_CALL_0(bpf_tcp_ops_get_retval)
++{
++	struct bpf_tramp_run_ctx *ctx =
++		container_of(current->bpf_ctx, struct bpf_tramp_run_ctx, run_ctx);
++
++	/* bpf_get_retval() is only exposed to timeout_init/rwnd_init, which
++	 * always run via bpf_tcp_ops_call_int(). Its run_ctx carries the int
++	 * return value chained across the bpf_tcp_ops attached to the cgroup
++	 * and is this program's saved_run_ctx.
++	 */
++	if (WARN_ON_ONCE(!ctx->saved_run_ctx))
++		return 0;
++
++	return container_of(ctx->saved_run_ctx, struct bpf_tramp_run_ctx,
++			    run_ctx)->retval;
++}
++
++const struct bpf_func_proto bpf_tcp_ops_get_retval_proto = {
++	.func		= bpf_tcp_ops_get_retval,
++	.gpl_only	= false,
++	.ret_type	= RET_INTEGER,
++};
++
++static const struct bpf_func_proto *
++get_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
++{
++	u32 moff = prog->aux->attach_st_ops_member_off;
++
++	switch (func_id) {
++	case BPF_FUNC_sk_storage_get:
++		return &bpf_sk_storage_get_proto;
++	case BPF_FUNC_sk_storage_delete:
++		return &bpf_sk_storage_delete_proto;
++	case BPF_FUNC_setsockopt:
++		/* The listener is not locked. */
++		if (moff == offsetof(struct bpf_tcp_ops, rwnd_init) ||
++		    moff == offsetof(struct bpf_tcp_ops, timeout_init))
++			return NULL;
++		return &bpf_sk_setsockopt_proto;
++	case BPF_FUNC_getsockopt:
++		if (moff == offsetof(struct bpf_tcp_ops, rwnd_init) ||
++		    moff == offsetof(struct bpf_tcp_ops, timeout_init))
++			return NULL;
++		return &bpf_sk_getsockopt_proto;
++	case BPF_FUNC_get_retval:
++		if (moff == offsetof(struct bpf_tcp_ops, timeout_init) ||
++		    moff == offsetof(struct bpf_tcp_ops, rwnd_init))
++			return &bpf_tcp_ops_get_retval_proto;
++		return NULL;
++	default:
++		return bpf_base_func_proto(func_id, prog);
++	}
++}
++
++static bool is_valid_access(int off, int size, enum bpf_access_type type,
++			    const struct bpf_prog *prog, struct bpf_insn_access_aux *info)
++{
++	if (!bpf_tracing_btf_ctx_access(off, size, type, prog, info))
++		return false;
++
++	if (base_type(info->reg_type) == PTR_TO_BTF_ID &&
++	    !bpf_type_has_unsafe_modifiers(info->reg_type) &&
++	    info->btf_id == btf_sock_ids[BTF_SOCK_TYPE_SOCK])
++		/* promote it to tcp_sock */
++		info->btf_id = btf_sock_ids[BTF_SOCK_TYPE_TCP];
++
++	return true;
++}
++
++static int bpf_tcp_ops_init_member(const struct btf_type *t,
++				   const struct btf_member *member,
++				   void *kdata, const void *udata)
++{
++	return 0;
++}
++
++static int bpf_tcp_ops_check_member(const struct btf_type *t,
++				    const struct btf_member *member,
++				    const struct bpf_prog *prog)
++{
++	if (prog->sleepable)
++		return -EINVAL;
++
++	return 0;
++}
++
++static int bpf_tcp_ops_init(struct btf *btf)
++{
++	return 0;
++}
++
++static int bpf_tcp_ops_validate(void *kdata)
++{
++	return 0;
++}
++
++static const struct bpf_verifier_ops bpf_tcp_ops_verifier = {
++	.get_func_proto		= get_func_proto,
++	.is_valid_access	= is_valid_access,
++};
++
++static struct bpf_struct_ops bpf_tcp_ops = {
++	.verifier_ops = &bpf_tcp_ops_verifier,
++	.init_member = bpf_tcp_ops_init_member,
++	.check_member = bpf_tcp_ops_check_member,
++	.init = bpf_tcp_ops_init,
++	.validate = bpf_tcp_ops_validate,
++	.name = "bpf_tcp_ops",
++	.cgroup_atype = CGROUP_TCP_SOCK_OPS,
++	.cfi_stubs = &__bpf_tcp_ops,
++	.owner = THIS_MODULE,
++};
++
++static int __init __bpf_tcp_ops_init(void)
++{
++	return register_bpf_struct_ops(&bpf_tcp_ops, bpf_tcp_ops);
++}
++late_initcall(__bpf_tcp_ops_init);
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index 1c867a302444..a4456b419412 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -2997,6 +2997,7 @@ void tcp_set_state(struct sock *sk, int state)
  
- LIBBPF_API struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map);
-+LIBBPF_API struct bpf_link *bpf_map__attach_cgroup_opts(const struct bpf_map *map,
-+							int cgroup_fd,
-+							const struct bpf_cgroup_opts *opts);
- LIBBPF_API int bpf_link__update_map(struct bpf_link *link, const struct bpf_map *map);
+ 	if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_STATE_CB_FLAG))
+ 		tcp_call_bpf_2arg(sk, BPF_SOCK_OPS_STATE_CB, oldstate, state);
++	bpf_tcp_ops_call(set_state, sk, state);
  
- struct bpf_iter_attach_opts {
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index a811a1b3a085..7a84dd00ce95 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -458,6 +458,7 @@ LIBBPF_1.7.0 {
+ 	switch (state) {
+ 	case TCP_ESTABLISHED:
+diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
+index 0f60a1dbf927..69e6f3925073 100644
+--- a/net/ipv4/tcp_input.c
++++ b/net/ipv4/tcp_input.c
+@@ -6724,6 +6724,10 @@ void tcp_init_transfer(struct sock *sk, int bpf_op, struct sk_buff *skb)
+ 	tp->snd_cwnd_stamp = tcp_jiffies32;
  
- LIBBPF_1.8.0 {
- 	global:
-+		bpf_map__attach_cgroup_opts;
- 		bpf_program__add_flags;
- 		bpf_program__attach_tracing_multi;
- 		bpf_program__clear_flags;
+ 	bpf_skops_established(sk, bpf_op, skb);
++	if (bpf_op == BPF_SOCK_OPS_ACTIVE_ESTABLISHED_CB)
++		bpf_tcp_ops_call(active_established, sk, skb);
++	else
++		bpf_tcp_ops_call(passive_established, sk, skb);
+ 	/* Initialize congestion control unless BPF initialized it already: */
+ 	if (!icsk->icsk_ca_initialized)
+ 		tcp_init_congestion_control(sk);
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index d960e3de7d50..f75a5a01d621 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -3678,6 +3678,7 @@ int __tcp_retransmit_skb(struct sock *sk, struct sk_buff *skb, int segs)
+ 	if (BPF_SOCK_OPS_TEST_FLAG(tp, BPF_SOCK_OPS_RETRANS_CB_FLAG))
+ 		tcp_call_bpf_3arg(sk, BPF_SOCK_OPS_RETRANS_CB,
+ 				  TCP_SKB_CB(skb)->seq, segs, err);
++	bpf_tcp_ops_call(retrans, sk, skb, err);
+ 
+ 	if (unlikely(err) && err != -EBUSY)
+ 		NET_ADD_STATS(sock_net(sk), LINUX_MIB_TCPRETRANSFAIL, segs);
+@@ -4302,6 +4303,7 @@ int tcp_connect(struct sock *sk)
+ 	int err;
+ 
+ 	tcp_call_bpf(sk, BPF_SOCK_OPS_TCP_CONNECT_CB, 0, NULL);
++	bpf_tcp_ops_call(connect, sk);
+ 
+ #if defined(CONFIG_TCP_MD5SIG) && defined(CONFIG_TCP_AO)
+ 	/* Has to be checked late, after setting daddr/saddr/ops.
+diff --git a/net/ipv4/tcp_timer.c b/net/ipv4/tcp_timer.c
+index e56eae4bc341..3d49adc51766 100644
+--- a/net/ipv4/tcp_timer.c
++++ b/net/ipv4/tcp_timer.c
+@@ -290,6 +290,7 @@ static int tcp_write_timeout(struct sock *sk)
+ 		tcp_call_bpf_3arg(sk, BPF_SOCK_OPS_RTO_CB,
+ 				  icsk->icsk_retransmits,
+ 				  icsk->icsk_rto, (int)expired);
++	bpf_tcp_ops_call(rto, sk);
+ 
+ 	if (expired) {
+ 		/* Has it gone just too far? */
 -- 
 2.52.0
 
