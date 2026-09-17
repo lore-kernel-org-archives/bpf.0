@@ -1,82 +1,82 @@
 Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD64233B961
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 00:30:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E223403EF
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 00:36:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.12
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789605031; cv=pass; b=Hf63IeXqbE9J/CrP5ZgNYsBFcZY2I6yiABqQi4/+5VSjdMy4UfMznwF4tE/uFeCFOVzcKuKfVVnTyxKeE3Fh1YJixVh6jQZfSoIMtGMLOiFb5ZRjn8txkLESSBOgRJCdzradot9dUfVZZ0bDa2HNHz9BDRLxXITH/Bk+1BNPZGI=
+	t=1789605403; cv=pass; b=l75AJ5mGtNw0aiJeUoWjNt2y5Qbx1FaC8J1kDFRDhw6NWwc/ULa8AoMtLXbESh4z8hbu4EZNsL8LPFpYTGRH7N8Pa0Wuecm82rdhaeucfgBcfWooyUau5gBLOY0DrD7QCXZfQPNKPY/fTGkocpi9Dk07JoCNC1l5ev73jBuT4X0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789605031; c=relaxed/simple;
-	bh=tlmyzNUENvNb4Oylh+WHiAZUPw2m3n5RaX0zH+LuxaU=;
+	s=arc-20240116; t=1789605403; c=relaxed/simple;
+	bh=ePVneiu8f7HOysaEQkzPf7UPOZIwpLI2NG8wQeL1rIo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TjmwY2WYpYUT2GhLDtQi4z7+AFXjPGRvKbJ8syqF2eAaibSEq6OHmF0aFIcecOsiApwkY/UQcOEUGWRjYssNBNFMm5XkpTRmVY2GG4XpPePiwRIS8iPUnmlCohawX/Q+2b2xjNKYTnUPPYCuEzkgtQbs+6GBxvLgA1lR1KaR3QY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dwNRNE+f; arc=pass smtp.client-ip=74.125.228.12
+	 To:Cc:Content-Type; b=aVFwHKs4IIquz73A4AZE3EV577PG2j5qZ9p/E/ICZiKmiwCVOAkWYDyNaeLsaqd9EIYQKW3N5hMugQFFQor6hu/bXgX+DG05oBawX2YRc/eZ01ylJZwW3hAjOLMzoFuHTiUNtLvTLpj35mt7BYU32if1JcISGjOBa5CEhu9ur94=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TsogayB/; arc=pass smtp.client-ip=74.125.228.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dwNRNE+f"
-Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc1cea50db3so140372a12.1
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 17:30:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789605028; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TsogayB/"
+Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-86b90133ae8so185828b3a.1
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 17:36:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789605396; cv=none;
         d=google.com; s=arc-20260327;
-        b=MyVn0F0USrvkGzEf5h4Vc2ev6J2izuTf0s+rE5iy7dbcDMX/pWvXU6OYeNk+AVgpuE
-         QRfx/bdqiA388MYy7O/rcdnALAlzO6WTby0+pOf7p3GIBkEN4BwtEiJNV1uJv9zSqyFL
-         /SV/DCepom/6Mk2bakThcbQT81IFJGKfpEAFyj6bNyDpk41IxD92Km2mNfR2/AbdB+Os
-         smkEe3JkAk0YH67x/K7L+atAHpUmLg7XeRFucjGSjHA9xO/Qok3yOq5p9OiTioOSQdn8
-         rU1U1T7g0Ze2p/21936DL1o/VWgUHyPiSw8o5LgbOujjro9ATX/EvTTa+bBTFb2XHL5d
-         xQWA==
+        b=kLYVY45txWMJruxHqZ+KYNkBIEcKaCBe3+XNkCXwr5SUMkhwAydf1SlNh9pd/qDpOY
+         TsKAg6XgUUzuJmi/rofwt8m8l13b0ZO7SxmRHodIPVt5alVyZ+cd2ResAkWTXEWmSvls
+         yuCH2m8wVHokCzUs9m/SnNXQDuLXEjLUzLvVTxXcBSRSFiUye69cUvVmP817u0m89cT6
+         8K9xDdK0T8ZXmmN3B2B8gi2vuRVbWTBF44GhaMwVcCSIYvkr/5PGBh3JPFWVco7288fo
+         eSge0WuO0daxfrVsYDAZAe9m26u/JgLcsNvEXn6ybQqKNYgUsD4hmj+kFi0ZKlzUqElZ
+         CWJA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=nH+1D62/vONjE3NQ4kwcRmw4ufbdwDd91huhFb0U00k=;
-        fh=aodU7cGRFuovoHwg2EUkhM33ix6umCudA7I9EEUsIlI=;
-        b=GfiKW6bq/inIdi7er0jS48GhkiSrxxR6u1bfXBZtVo078aeOx08HNg5CsxmDLvHVhv
-         z1xv/eUTohJl3HSgN55o2rkNM75Y993jnGLYUtVw+fCtP5lQJi2AMa8e0RrMAxkH58Ls
-         zNTwrKkeHTCwvuDrriWUy3ppyKLruUqrMu6H1RxE6Y/XLT+Ja7Fdmq/N2G1MSwlNlNT7
-         oU/Bu9/35+sR1iFpcOoXoIukpfG8ES1fG5Y0c3V3q7LQWqQ90QStXVQDDzzSgChvLaBg
-         kCJuKpNCw1ooGE+kgfKA76uUWwOq+OqjM0Vn1IDGlzGoq2MAJpRIpVSHH7+obrURNEIq
-         +G4Q==;
+        bh=z3t40gbdtLCD1G2xLbWdqCI7O6nv21XGGKYIiPoR+Ps=;
+        fh=4K7XBoVwp10gqLS28+jRFVfvuR7keL/IDc14NVDggmo=;
+        b=kBGCULNsgaueBecQJE2zVkRjYcxpZXlH86NN5Gj7f7eF1CrUVvAenlGBCfK4skpVTi
+         fG1uro1RLfN9LxLrQZQh/CulL9XJfyLjzzUDS69uY/4nSszMA0X3d+YPwId3a82a+3bc
+         7B2vAR97pMnH2JDe+ndooWIK8TFrqodT9voaZhf2NNl0V/scLAQjeMm+eQhBHfjmrQec
+         Ao704Hejv0HYJXkLLWg1s975PFYu6soF4SIcv7LZCa7oGrAi94wxzTVNS2CJOdLnBVu+
+         y1Git5VzGgAYcJyb79FRtH5H6cUxntV0byyKZwM3OGAqtW9ZT44fZFm5mdk/DUnB90Ya
+         qhWQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789605028; x=1790209828; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789605396; x=1790210196; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=nH+1D62/vONjE3NQ4kwcRmw4ufbdwDd91huhFb0U00k=;
-        b=dwNRNE+fXffgvGxa4RqXa4lLlnsOyFtKkGuNZN7SK5BWz/gxdFJtu/bWmcKESOzV/X
-         BYDbDiqxh5nzYYUUCYcwzpicQrH/wGnXmFDnc/K1xfXdZudmru+juKLpZqi1ZtxIwOj6
-         dYoshePDwaaUcNMnslK+VbXfvSVp9+NJ7iarRj7V4Oq1vZWYd3yKbLzKSnZqYe8vmT6C
-         lGBnE3bNgEe/nPzgAFcxteSPLHw4STStdxgu6oFrRQPQ02jhIjO8rYMPDv4LSkWsY/SU
-         cRPVW6ZgQCh657YuDvvw1LqR5fPCH2YrYU5/zif2vlamY9K2SQDLt+WNANFpmeRGbgmh
-         gPjA==
+        bh=z3t40gbdtLCD1G2xLbWdqCI7O6nv21XGGKYIiPoR+Ps=;
+        b=TsogayB/+IpRHhnz2DwNm62FAk2EHgYbawS3Z6sx3RD2VGhurlv6sJhlNn+T+9zbx0
+         COknBFb2b681fvXkln/uR1k0d36lT9jeKImG72cHiS+fGf2sre496ZD+A95YwID5vWjN
+         RFt4NQKI2IPOMUPnjYDaM6zGfbWAB/yD9Bx42V7nM2lyjiW8wHEQTr7yqfkviGfzn9S6
+         uQfO8chLF2isgWfqPI9t5sar7KMbSUzPNa4u/3wdGXbFAJADOoGYJBfkqYcVUeTazVTb
+         KQLI3TKayjbQa1QSzRxEJkfcB94tk1o4CbnrGk/Tk4C2SZBN/LIHxEJ3CbyY18jZE9Om
+         tT6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789605028; x=1790209828;
+        d=1e100.net; s=20260707; t=1789605396; x=1790210196;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=nH+1D62/vONjE3NQ4kwcRmw4ufbdwDd91huhFb0U00k=;
-        b=Z4lfm72s5ZEP//jA3lDI21/KnQaLlMrcCXmOovodcMMFhWlvSOfj6qGDJI2NUGR7VX
-         a+ZNdcGjWkD50OYE7755msjexWd8EIazN+TfU4mDQuvOUHfzCgqUryxvV5cfrhKfrfeh
-         dC1WPBZ9Rfrox0yJavaGI9b4qRxqY34lEvYJnvj3sDFnSojm4s4IErUQfG5aiqeC3Jc9
-         a3qi8YbyrOIZ2130K8JxcKOZly8+MQRLWDnjFRhm3aTM5ez8r1aqZYbJS8/amVmBzoBO
-         Vopu418XjaaeDganLjCKhST/2hOPnfruOkkYVJ2uItG8kShfS1ve6GSwHCB1B8XIDfFO
-         jhgg==
-X-Forwarded-Encrypted: i=1; AKwUvBzsgJCyNWvk5mQk3tJnKxxA+UFv1QFWZcBI1Smyt18+gq54lw8nCsbDAiDtmhIJoLF4qgI=@vger.kernel.org
-X-Gm-Message-State: AFuF++nA5QcZD4mRVt6BeLS3hduuwSHY6xLQbqwb0YuktPPBTAtWwh8p
-	tdMvbY6/CXOclX+Y0kGG6udsUrOmmB1BFC4QsulUqQXI+mJh6QKocepFhVEoHh06IGeKaxOXCjc
-	ly5U0ImMxOLhJs12ikr5pKez6nYZ9YL4=
-X-Gm-Gg: AYBFou0Mz9Cb/0ciVVsNx7GaQOYv3c7ngt3d/F/xn9egX9pCnrVW3jrfp6kyJUIKNp8
-	q+gLMoWQq9yP9NNFDDWd1li/Y7EkF/Crp0tX+DUuRyT2dPd7DHMA/q0/IdCmdL5DgI5rSNGYwh9
-	Mezs8CjULCccOqJtRSAd2W9zBnBtkb0Mf5S7TnEB6sJky3CLgr4S5/Fvg7+qZSC7oF5+4ch6u0b
-	wTIuUhUQgQCIb5xLOtzZ9g9dfJdKcojbYnoqmmEGpBr6F6JNKwtlY//4cSLgOa4oUVD7SCL84RR
-	e9MlKH+Azc7khIXdapTzwBMhUcjc6+msVvTAMypZpJUqiscqDnZIejZQOFiphoovoXItTNsseky
-	b9TWrdIrlAZpu3K4Fgd3o2oo/EIKOon5TsYPwnT4Mcg==
-X-Received: by 2002:a05:6a21:3315:b0:3d0:9590:7148 with SMTP id
- adf61e73a8af0-3dd5f5d86a1mr12651151637.17.1789605027369; Wed, 16 Sep 2026
- 17:30:27 -0700 (PDT)
+        bh=z3t40gbdtLCD1G2xLbWdqCI7O6nv21XGGKYIiPoR+Ps=;
+        b=i/0Lt8DKlJC67+HA+CQioB22NRj570Sq8jj07xBY5MYJ7Dx+YIKlom3Ixo1GotI4ua
+         GShoZd9vx3Lwt1SBSLioCONnZhfJTjvPH7gOlO2OJtcJQyeNwSuldFcGH66B7LX3iXW1
+         OeBsuMNAOBzVa3L7oRmJqlPbHtDb6gjx65t5ZyUSzBAeoNy6uhgyzthWAWyKRcQHkHkR
+         FM/mW+FcrNl48ji9dHL2rlIGjuWfgkaHKZj8/W9h8TPBiGr8DLwIAlMJM+pV6XFQwTFz
+         fCVfEcYheFO5C8pS4F4J4kuNuTXlGAkODLiv/cgG2fezSqQtHuoThCd93g0YWxwGJqih
+         +OMA==
+X-Forwarded-Encrypted: i=1; AKwUvBx76RJWk9Oeyij8ap5a1DkKqBuzDiL88g39OjXZBr/EQOVAMiaj1ehVHTbUkxV01VnQAuM=@vger.kernel.org
+X-Gm-Message-State: AFuF++kypsvdVRnCZD2dkSDnsx6wnm5RD1Xco4jE6uoXk1h5OqfqBWsR
+	PSDsVHHS32mD/dC8Qsocrb/uRlgtgURE+1qhiDA4HRIdS8e9vmYlqFZSahu/WnUFk5wrneHFaZZ
+	jmyre+CiU/m9ytLFZGtIfAWRqpGQg5xY=
+X-Gm-Gg: AYBFou0/Z4hyxItCS1Xsvo3aOHtgBFdPKV//W8NItgSus0jEBuHB6A+JK0uMrW3hB+S
+	rZy0lD2rLjAqsQB4x/k81+8HgmYLeLQTtSFXJqLi6Ulxeu7frXMXlpllLomNOYVvZ+HBsMmZBpK
+	fn+0GgZ85HQOFISZjUFbgN999sXjXQZWZ2CiYx10q8iMh8W9rgMMqVsXahr9wmy2b9B59cnbD4t
+	J5l3wUPjbUwlLF2xMp1G4WqrscDmTJrvE+9Re0JZorjdzTpwf5ndP9YTbp09WeOquDs4dSHjJvo
+	4EVNsdI76DmSvUFMxZFySTjL1XZtJpmpshkD8+PfKaSF7yrJtc43pBQXo24n1x1LupokSAAD9gr
+	AAciUEoySOhqAO8X2rCZ76ofKDK10BdBIitsYfweZLvIekZry7VT8
+X-Received: by 2002:a05:6a20:548d:b0:3d2:df:1854 with SMTP id
+ adf61e73a8af0-3dd5f403cd9mr11548203637.6.1789605395452; Wed, 16 Sep 2026
+ 17:36:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -84,16 +84,16 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260910164635.459558-1-vineet.gupta@linux.dev>
- <20260910164635.459558-4-vineet.gupta@linux.dev> <DLDKI0ZXYI7H.1XQZZE2RCU7IF@gmail.com>
- <4ab75099-0e95-4fee-81da-6f4198e3e6a0@linux.dev> <CAADnVQ+N9tzBJ0Bbvp8_8QvR+QcCP4ej5CgV_kRHt=iw4BANSQ@mail.gmail.com>
- <202c45e2-58ba-4ad5-a234-c90703031f91@linux.dev>
-In-Reply-To: <202c45e2-58ba-4ad5-a234-c90703031f91@linux.dev>
+ <20260910164635.459558-2-vineet.gupta@linux.dev> <DLDKB6BTHVXE.PFK87O3QY1J5@gmail.com>
+ <f575fe19-a5a0-4f43-b1bd-cdec2c6e9830@linux.dev> <DLH1MDZPU5G0.228555JR34D3N@gmail.com>
+ <76ca0a2e-dd9a-41c9-90e4-5fd3c9171172@linux.dev>
+In-Reply-To: <76ca0a2e-dd9a-41c9-90e4-5fd3c9171172@linux.dev>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 16 Sep 2026 17:30:16 -0700
-X-Gm-Features: AcwNN1XLUhSaujLVZNDBYUznBk2B1PEMW-Z99HXDCfKhyI83tPo-EfJkONx0oj4
-Message-ID: <CAADnVQ+Si9Au8J_j2nt+ZzFq6WPaz8hpmh0n=_dFysZmSOeipA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
- across zero-extending movs
+Date: Wed, 16 Sep 2026 17:36:24 -0700
+X-Gm-Features: AcwNN1XO4HwAR37E3WIkB8E7DX_-wst1NccGMR8T31Mz-rEIep-eXEJg6HLexr8
+Message-ID: <CAADnVQKKWBV+pFMAStB_-POKveeO83RiXU+VKeua3odSu-Xrmg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 01/13] bpf: move linked-scalar flags out of
+ bpf_reg_state->id [NFC]
 To: Vineet Gupta <vineet.gupta@linux.dev>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
@@ -106,21 +106,32 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 16, 2026 at 5:08=E2=80=AFPM Vineet Gupta <vineet.gupta@linux.de=
+On Wed, Sep 16, 2026 at 2:24=E2=80=AFPM Vineet Gupta <vineet.gupta@linux.de=
 v> wrote:
 >
-> It ended up with full testsuite run parity - after 4 incremental patches.
-> But the pattern of all those patches was adding some predicate /
-> special-casing to reg->add_const
+> On 9/16/26 2:02 PM, Alexei Starovoitov wrote:
+> > On Tue Sep 15, 2026 at 1:17 AM UTC, Vineet Gupta wrote:
+> >> Back when I started, keeping it NFC made more sense. But with all the
+> >> nuances discovered in the process, I'm inclined to drop the NFC stance
+> > What is NFC ?
 >
-> hunk 1
+> non functional change aka refactoring.
+> Like I said when I started I wanted to keep the id / flag breakout
+> purely non functional. But given that splitting it does change one thing
+> (mentioned below) - I'm dropping NFC attribution.
 >
-> -       if (src_reg->add_const)
-> +       if (src_reg->add_const && src_reg->delta)
+> >> and make functional changes - there's at least one which is the
+> >> following accepted pre-series and now rejected.
+> >>
+> >>         old {r2.id=3DA+delta32}         vs cur {r2.id=3DB+delta64}
+> > that's a red flag, no? The refactoring patch shouldn't have
+> > any changes to selftest and veristat numbers?
+> > Unless I'm missing it again.
+>
+> Yes understood except that it is no longer refactoring.
 
-why? It should not.
-My point is that zero is not special.
-It should be handled within the current framework.
-All these extra hunks are not correct.
-ADD_CONST_32 logic should work for delta =3D=3D 0 just like
-it works for delta =3D=3D 1.
+NFC is gcc probably lingvo? In kernel people just put in the commit
+log "No functional changes", so it's easier for humans and for AI
+to review patches.
+So pls skip such unusual tags in the future,
+but keep the first patch as "No functional change".
