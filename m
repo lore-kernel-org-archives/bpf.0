@@ -1,138 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DDCD4B4029;
-	Thu, 17 Sep 2026 09:39:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C9F44B4058
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 09:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789637973; cv=none; b=O758mkVDX8eBPDBxlECCjO5uLCj7Ow8hVuDjtFhGZkl1JhxJ9ixOBP58Bz4Zl+Z+3oSyYjAAlCU6bOXwZ7JmsdPSk4eUP6Al23tHTwI4On6jm8mmmpgTt4yCpeJh0hJ6i7T0erE54g0gMesKa5fzJdHKP6zWX+PZYwcBkpwzQFo=
+	t=1789638026; cv=none; b=NFODpt9lLmjPY6MdSaA4eZfLLTYbaiX0S1F3okE7MCjybhC/rtGxxpMQPsyfBJ00nLPbRh+kMD0C+Kk06cHVAH06E+/bj2rB1xbzl/lvCfSUwTAcTd8XT05/9rBx3PGGpuU1Jo2ICJuoM3/eBeGaXeGfDGVCKv+6usLSoqScYR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789637973; c=relaxed/simple;
-	bh=qs0Qs9f1CAXZV4pvkENkuuQzTf9nmkq8FUqeSbStJxU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aHSg7EfH26qsL0M01WE3P46BnYUAqbQ/ycd9Sfk8N7gf9TUXD/oX0UT85du7I3gWt5StWqFg4mvaJQUV1YXzUIesH9XwPfuS+g5mXTmWRU8gbfXy1ziQV8espmFWWl9ndF9aSBJWeMMhZzElS+5x54/jUTQOPL7II5ihhDQjPNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l34x4uKC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789638026; c=relaxed/simple;
+	bh=FyxOkEcHDQYoJLHkGJj9pLX7m8LSzsmIBN5qWqVag30=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Vs+Xe3VY/74fsGDwIhFHI89mIxiizm6mUCA75rwt+VhPMkkNmZyF+IjyfCFoDErT3d5GDIX+/5+RcocWxWWJfH3tF8vymZMUbAxxCNngO9vdlSRZ3RCmEk+LgPriodcwMFfAEliK3SSymfes0tCZmXuUJQ0SirNTbEO1u6ECSts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KtNJgVyh; arc=none smtp.client-ip=74.125.228.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l34x4uKC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26F841F00893;
-	Thu, 17 Sep 2026 09:39:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789637964;
-	bh=AGmPfvqR+AEX+fQIJ9rO8q0L0Nj7UzcGqGjgB3p8pdY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=l34x4uKCwuwF6ULQg8SXUMHbRJdJmkD+FI+xs0F0foTS5b1L8XLQIINvNcLiueDU/
-	 GrcCDKcvc8uOmvcbR+IwkUhWyrWprJ7ZoMBSSMw6t2M+w5bpxzpjL/1BkRoInh+IEe
-	 VarSgKLwEz2m+dxx3pXdrRezqOHBj7EwZdL+JhHR72TSPHi8JmLmswhj7AOPsFS2/F
-	 fIhzdQG/kMEHCKX9IA6v4gxY/GJ185Fs8276H7gWaOI7/ef9mM6NcrnhxTg27AuK/n
-	 O2TY5/51aK7XnygJ8nx7JJuXSZIecCcqtMyKk6QFcC8jBBv3Y3qryBjd5Jusnejwja
-	 kM4eMWsPfHvyg==
-Message-ID: <18f86b06-7477-4750-b57e-094df4310e4a@kernel.org>
-Date: Thu, 17 Sep 2026 11:39:13 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KtNJgVyh"
+Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc4d04d740cso406541a12.0
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 02:40:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789638003; x=1790242803; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=drIUXJRcmosJe6dH4/Y3AT2c+DRvKWStOih464x6FUs=;
+        b=KtNJgVyhk5JXkEg+DOun3GNTMLus8ZIV71zBB7Fur2ebDMq7yhS9m8h6xXi3Us2w/3
+         mDYcLLIcqz5PBpR26S7ZSS/hYjjkZby8LA/vQxvows3DBs3Vra1vONLgKDRU0Gshw4jF
+         yekO4sfYbFcpT7ComHMy7264t4bQWPm30jR/tIow9FRJkptWd8IeTUOpC+NkJpBi8AeB
+         t9lBdxA2VFcZGPOhbb7k3Hb0LZW7m/YDd+t1E9NeT8AglSzRkPh61O6sUCrEoEAMPcBn
+         5EPoEn2ljjIIv+/QOG/59h/6h2Hpa3RiVyxTj56HpPS7V0/1lRgfC/wrewedVDvu1Afd
+         tIRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789638003; x=1790242803;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=drIUXJRcmosJe6dH4/Y3AT2c+DRvKWStOih464x6FUs=;
+        b=ow/fljZvATm4KHg16l6vm/1efAjqoX/xzq0D6sgmbrtJ+OEwW7OqB84Ej+hNmskKHJ
+         KQqFtv9N4R9PVvUrkrRb/PJF8iAhuOkFBe9ZOe4S9MMzBfqLqyCm022eURxm5Xjz+sCw
+         D+xxtoZ5ZVZthaUestqXY01qMI7m3xUF4gTYWasMz17+jSFXJqBfjWqFL9A4YiaEaql1
+         vC/0ciHfsEG01lPcEjPEuN2mG4aFhaMNE6pkffckg/yidCLyHDGGtsqKZm+Gb9ZBNesK
+         7jD3WTjeWxKfAolAx4VNMa5WdVBWpNj1HTbJqC/A5vi5tfwN2XZY5yTIY2H0gvef5Gex
+         gM5w==
+X-Gm-Message-State: AFuF++nvbGSnGg3Nu8pQ69F9MxEbYctLlT2oPilI8CZpzgvl8Lp8ViXr
+	a5E5tPe7wlgpO1Y43Iw/mNIhDQ4+VGQZ+0uCFBCwP7FxY+i00dMFNgBAY++XnBbhtdg=
+X-Gm-Gg: AYBFou24O3HFIiSFaM1o1tyhtuZ+Xwb+05xh/pSOhc6kDTgxvoBs3g8IUErvlddIfDn
+	03hitXH07AUYW6ZRbIlJLyjdykZL+yXi7os/W0m+LK1D/ZWbZ2yImxia2WAL1z71IX247iVVd5Q
+	+1otukq0kXwqj/KctG+KEPxPrYvjy88N48TBWZ76OreGtjofo4W0JaFOOcF7AV3DWhqzC+Anqil
+	id7n0xMvkpKr03BGHxFlu4qvrQeNmn2Gi9kLvSlbYYE5we+9rBdl+FoU/e9SZECI9jiDAzI8jD/
+	GcnDX76y5f9cpDiI0V2uIcKSDkiCK2X0VSJMHAGEX4AgRKePqfg23zhIttXKhPYHbJX70Se346y
+	OQKVInlocOSiqNz9xN8L3hquflBaZN0HsDfePRxwgD0az6og67AsvcSx9W41HV89A7CbK/ObnjO
+	y7AJM+ehlJGwEmJNJmxVaN1jKjLZRygVZWKn6e+07eoAQlJX6vAV08X0z0lkwxS//xxtMjx3siy
+	5EKvnBgxA==
+X-Received: by 2002:a17:90b:46:b0:39e:35a0:9c0f with SMTP id 98e67ed59e1d1-39e35a0a211mr7280643a91.14.1789638003386;
+        Thu, 17 Sep 2026 02:40:03 -0700 (PDT)
+Received: from c79ofce.localdomain ([103.165.85.242])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e362e9402sm4192389a91.15.2026.09.17.02.40.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2026 02:40:02 -0700 (PDT)
+From: Zhixing Chen <running910@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Zhixing Chen <running910@gmail.com>
+Subject: [PATCH bpf-next] selftests/bpf: Guard link cleanup in fexit_bpf2bpf
+Date: Thu, 17 Sep 2026 17:39:28 +0800
+Message-Id: <20260917093928.48495-1-running910@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH bpf v1 1/2] mptcp, bpf: reject bpf_sk_release() on msk
-Content-Language: fr
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org,
- mptcp@lists.linux.dev
-Cc: VEGA <vega@nebusec.ai>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- Matt Bobrowski <mattbobrowski@google.com>, Tejun Heo <tj@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org, Kalpan Jani <kalpan.jani@mpiricsoftware.com>,
- Paolo Abeni <pabeni@redhat.com>
-References: <20260917081209.361367-1-jiayuan.chen@linux.dev>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260917081209.361367-1-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Jiayuan,
+test_fexit_bpf2bpf_common() can jump to the common cleanup path before
+the link array is allocated, for example if bpf_prog_get_info_by_fd()
+fails. The cleanup loop still indexes link[i] unconditionally, which can
+dereference a NULL pointer and hide the original failure.
 
-+Cc Kalpan, Paolo.
+Guard the loop so the test reports the original failure instead.
 
-On 17/09/2026 10:11, Jiayuan Chen wrote:
-> A bpf prog can do this today:
-> 
-> 	subflow = bpf_skc_lookup_tcp(...);
-> 	msk = bpf_skc_to_mptcp_sock(subflow);
-> 	bpf_sk_release(msk);
-> 
-> bpf_skc_to_mptcp_sock() returns subflow->conn without taking any
-> reference, so bpf_sk_release() drops a refcount nobody took on the msk,
-> and the subflow reference is leaked:
-Thank you for looking at this!
+Signed-off-by: Zhixing Chen <running910@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Note that Kalpan was looking at this [1], and Paolo suggested removing
-the helper [2] (but we failed to review the last version so far, sorry
-about that...)
+diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+index 6262c81cdaa9..d2f2dcc0f2e1 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
++++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
+@@ -164,8 +164,10 @@ static void test_fexit_bpf2bpf_common(const char *obj_file,
+ 		goto close_prog;
+ 
+ close_prog:
+-	for (i = 0; i < prog_cnt; i++)
+-		bpf_link__destroy(link[i]);
++	if (link) {
++		for (i = 0; i < prog_cnt; i++)
++			bpf_link__destroy(link[i]);
++	}
+ 	bpf_object__close(obj);
+ 	bpf_object__close(tgt_obj);
+ 	free(link);
 
-I don't know if there are progs already using it. If yes, I guess your
-approach is better (but I'm not comfortable reviewing verifier's code).
-
-@Kalpan, WDYT?
-
-[1] https://lore.kernel.org/20260818120437.3949686-1-kalpan.jani@mpiricsoftware.com
-[2] https://lore.kernel.org/e039e866-fe7e-41ef-ad41-92a76a123713@redhat.com
-
-Cheers,
-Matt
+base-commit: 71b75648d1a21c0a6379741d00f41086ec95f14a
 -- 
-Sponsored by the NGI0 Core fund.
+2.34.1
 
