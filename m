@@ -1,114 +1,130 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A5F233BBC5
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 01:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93DA2380FC3;
+	Thu, 17 Sep 2026 01:56:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789610172; cv=none; b=ODaMotkKZJXC5xeJa3JNeGRAn9UInZxsktuft+aAQTPCTX451e/Y4SO5G3wIsupwrIgWh5U0FWMFsAT2Kq9xSjnVOo/sNLRQxQ2I7y5elsYJcyVhnezok8BTrpZZ3RwXz/ft8DqtBLiympUdK0BB83apb2PWXj5yuv/dJZzkdU0=
+	t=1789610178; cv=none; b=HD1BUnBJ7q5eC2DBCJ3sFSXWflqa9lOW2ful9+R28abk6bLKzbI5MOxamuPl7dczFChprtaS2l3gaCyZiCVTn/b0CXbKtUSCNYRZdUrCz6a5X3WEwaP9G78rmy6PPKsoMWBBH8gonH96olmK+uFOo0ttRNTGIEpv9vvqHj/+wns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789610172; c=relaxed/simple;
-	bh=JhlR2Z9hLGie4ycveHEZlcET4EHYzNNuAFgR0tLVmRY=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=pTAOya8UY3qkLso2fH+MuwEjtH08q+LFj780jiV4ZRiFAbhvDjCbxY+r+/mo/FeVYIanOZ35/Z0L4cc3404ZfiELIih2sgU18AcnwnoGLhjKK02IeLzua99DRMY6+nLA5fx3vNzPQFKRVgGrI83WM+RoZLR35tCyWIFWR/PpwKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CsNk4cUx; arc=none smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789610178; c=relaxed/simple;
+	bh=5s5S18z4A1sNaj6fri7ON6LiM5xkiNn7dalDg7H++XM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=hDySZOQ9HzK+jPOXlL/sVL/46Pd0XJ1j9X7+qNzsS0n4rF9MVaSWLcc+hvmStLQgIrSOy0xOhQoiHUoqu+T+Cc+tE9/aGmbE3ky+Jxb+xsPRPym5agmngUfv9iPSGpsjyCTjYcrNpnaDmqZOFv2im2iJFuAiXeCt9qggSfGZJpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=PTx694vY; arc=none smtp.client-ip=130.117.225.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CsNk4cUx"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d8fe517774so3980255ad.0
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 18:56:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789610171; x=1790214971; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=y6mHUY7GH1xqP69TULjoYeDvGxc3p4dOZNNxR4X6kDY=;
-        b=CsNk4cUxoqozPRUcv9DHLNTMt7IX4BDeN09A6P1DxP6vnOCGTIE3WX8x3PZkh28oEM
-         SFbw7CTt9CiXEfGfaJQpeKVM3KtpuIymEMI8pVK1MhhFmB6QSPoE19feBb8xKdAcxEXK
-         XzY5P3aaGDYGfR2VEQ063K8SyvSqg470/peKrxlvspUK/dpgXNk3n4hgDXbJxCE1oy0d
-         BWH6bO0C085xZqBm00GOXE8g64rI8WePtGp6uqu+qB/I7nvmtBl8Mit+q9CmJ2f7CuyY
-         PDvAHCWMwj63oLHukFAXRMMBtNPv3KwMFjy/C85aLVpZ4p1eXXcjcT7pnbHkpWofKwQO
-         pr+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789610171; x=1790214971;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=y6mHUY7GH1xqP69TULjoYeDvGxc3p4dOZNNxR4X6kDY=;
-        b=osnfWQCoqceYY7bZkbpXH+06KaMv6Sd7FyQKo1TpPN1+dL02pZzq53RNcmlo5Nd5bA
-         ZfAQxdvETIK3orNFWGdsiqDClX0HKZPEwqYR661kHHI1q4shwI73BCjVX7isoKanlZer
-         nmQBGkTJMPo8pNUatXB20PAFBltEHkthD7hZZU0XKd6T1aWvx8k3AGe9AIHHzg+YypE1
-         B8oT6l1kZ+UiLLkPq1r8UFnBgxFOuZPDXKNiYVOJJRFHBinBw/U3Kq5T2FA5mV3Gr9fr
-         kc7eU7YsN2HX2UTAlygnVCBFOVKg29e6FahjEDJpnWClRvKQbKCMOGRg9lfKAto/HsNq
-         nBWw==
-X-Forwarded-Encrypted: i=1; AKwUvBxQOO1vCdC5h/zvR89vweQP08nC1tiHQKMRshsWKVyaSnXf5vKyY01HUcBlL51K4+Ba05c=@vger.kernel.org
-X-Gm-Message-State: AFuF++mbUhhYSiP2gC5ocNo1RNsicCenzeIT4jNS3sTa6LFjC2IZ3vPm
-	By/A4up8Sz3Eaqezsn34D8+5eIB2Jha1dwPjSmQ8VpjyZgbxNSXCSJc8
-X-Gm-Gg: AYBFou1pbUUtCimFnGh4phbb4pQLfZNOXkhiMvfBgEyJu6nPcKrUP5SsKlUiCG1hLr4
-	ZgZ0zKCueRXTEQWnDv8z43LHkC79KDjpdQSklm8r6I/fYFa7Tuiw02HRvrK96vLdnrwmekaRmyS
-	tAVuNmPetX3oFRTsnTbCU1weMkOmxLOOscVuL5gG5GM7Hys33KSg2hVU05ELtJYhjo4nhi4c9Qy
-	K3BjWlAVP2PGXI0+SuZc7M4+HOpfGpWF+T6RtWzCWQGjVtAfnfE0MTMNM8YEhQ93/jE2dVhB3i1
-	bVukzXLaGAKiPZrnTLlNzyGyJMIvlPpK7goaJL4zFKnrGPNEIj37oE9wFGN45c1/fHnCpa8Wygj
-	Ji0+HvKkmpXZOku7sTJlrH5mSE2Hga6WL3quOKAQOIWmI5ZfoaoqrKNIFeqdVkdXSEYnFFF34h4
-	qmhK+fEl9IBgYd6v5o1hgIjtSAR1ewDKeyx6mbAoC52hdeIUaLtI8pV4/qpDzXVroiVrmWLNtiY
-	9jIkjMDz8oWunMc2SulrMWmiiWPmqYsEDPEVPIyHx7A2cw88YgJGfwDl+ONHEsxvorK+tihWGM/
-	5B6l
-X-Received: by 2002:a17:90b:2c88:b0:39e:26a7:7aca with SMTP id 98e67ed59e1d1-39e26a77cefmr12456976a91.23.1789610170800;
-        Wed, 16 Sep 2026 18:56:10 -0700 (PDT)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e390c2984sm387496a91.0.2026.09.16.18.56.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Sep 2026 18:56:10 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 17 Sep 2026 01:56:09 +0000
-Message-Id: <DLH7UY9PDSQP.2AXEGNH838JS0@gmail.com>
-Cc: <yonghong.song@linux.dev>, <catalin.marinas@arm.com>, <will@kernel.org>,
- <x86@kernel.org>, <dave.hansen@linux.intel.com>,
- <linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <abuehaze@amazon.com>, <doebel@amazon.de>,
- <jay.wang.upstream@gmail.com>
-Subject: Re: [PATCH bpf-next 1/1] bpf: btf: add btf=off boot parameter to
- disable and free vmlinux BTF
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Jay Wang" <wanjay@amazon.com>, <bpf@vger.kernel.org>,
- <daniel@iogearbox.net>, <andrii@kernel.org>
-In-Reply-To: <20260917000201.25581-2-wanjay@amazon.com>
-References: <20260917000201.25581-1-wanjay@amazon.com> <20260917000201.25581-2-wanjay@amazon.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="PTx694vY"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
+	Content-Type; bh=fnBgR565PA6VuCVVHUTKJbrew5TWmOVzzld1yXKSBzU=; b=PTx694vYGRfe
+	SBgwIqeQx3g9CdCAEk9gK6sbSY6P6RzEwVN2l3VHvDhiYkvjvO694881wu5b44Pw46FvZF7/+u3/X
+	UwovwcoWWuHFTPHj0Selx8JmYmx3TCtNL3KXkgsA3ms581RzQi7PQ0lE2B8yw/Z4pdN21gvNB3bAL
+	Saxh1RIocHtJvctWfie2gPp4MKMMKe74w+RsQ3R+TQNe9GGroRwRA/k3ESBvdhx9PZytvrhZhyC96
+	1BDOWoWRJwoN4x3xLupoGYj4eiGD/EOXjzq5+8WHj2LOBX3AKrpQW24zuJadetCpZiDrPfhqjMmI7
+	5Xj3R6NTA25+7DOxuRYdqw==;
+Received: from ch-vpn.virtuozzo.com ([130.117.225.6] helo=LekKit-T14)
+	by relay.virtuozzo.com with esmtp (Exim 4.96)
+	(envelope-from <eva.kurchatova@virtuozzo.com>)
+	id 1x71JO-00132Z-1r;
+	Thu, 17 Sep 2026 03:56:08 +0200
+From: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Willem de Bruijn <willemb@google.com>
+Cc: linux-kernel@vger.kernel.org,
+	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 2/2] selftests: bpf: size the map in test_lru_sanity3 to whole refills
+Date: Thu, 17 Sep 2026 04:55:57 +0300
+Message-ID: <20260917015605.2464043-2-eva.kurchatova@virtuozzo.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260917015605.2464043-1-eva.kurchatova@virtuozzo.com>
+References: <20260917015605.2464043-1-eva.kurchatova@virtuozzo.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 17, 2026 at 12:02 AM Jay Wang <wanjay@amazon.com> wrote:
->
-> Add a "btf=off" early boot parameter, similar to the existing "selinux=0"
-> parameter, so users who do not want BTF can turn it off at boot; the
-> section is then freed to save memory.
+test_lru_sanity3 fills a map of tgt_free * 2 elements and then reads
+back all but the last few, which fails on a machine with six CPUs:
 
-tbh I'm not excited about btf=off. BTF is not debug info anymore.
-sched_ext, bpf-lsm (systemd uses it), hid-bpf, most of bcc/bpftrace
-quietly stop working, and we'll be the ones triaging "libbpf: failed
-to find valid kernel BTF" reports from people who copy-pasted a
-"save 5MB" tuning guide.
-This needs more thought.
+  test_lru_sanity3 (map_type:9 map_flags:0x0): test_lru_map.c:463:
+  test_lru_sanity3: Assertion `!bpf_map_lookup_elem_with_ref_bit(
+  lru_map_fd, key, value)' failed.
 
->  .../admin-guide/kernel-parameters.txt         |  14 +++
->  arch/arm64/mm/mmu.c                           | 108 +++++++++++++++++-
->  arch/x86/mm/init_64.c                         |  30 +++++
->  arch/x86/mm/pat/set_memory.c                  |  28 ++++-
->  include/linux/btf.h                           |   9 ++
->  kernel/bpf/btf.c                              |  51 ++++++++-
->  kernel/bpf/sysfs_btf.c 
-                       |   7 ++
->  kernel/bpf/verifier.c                         |   2 +-
+Elements are handed to a CPU in refills of lru->target_free, which
+bpf_lru_populate() derives from the map size as clamp((nr_elems /
+num_possible_cpus()) / 2, 1, LOCAL_FREE_TARGET), so 21 for a 256 element
+map and six CPUs. A refill that the global free list cannot satisfy in
+full does not stop there: bpf_lru_list_pop_free_to_local() calls
+__bpf_lru_list_shrink() for the remainder, which evicts elements that
+are still in the map. 256 is not a multiple of 21, so filling the map
+ends on a partial refill that drops 17 of the elements the test goes on
+to reference, and the lookup fails on the first of them.
 
-This doesn't apply to bpf-next.
-Consider using Alan's approach and support CONFIG_DEBUG_INFO_BTF=m
+Whether the size divides evenly depends on the CPU count alone, which is
+why this passes on two and on sixty four CPUs and fails on six.
 
-pw-bot: cr
+batch_size is already __tgt_size(tgt_free), the refill size of a map of
+__map_size(batch_size) elements, so size the map that way and filling it
+consumes whole refills and evicts nothing. Start the keys of the last
+insert at map_size + 1, they were placed just past the old size.
+
+Fixes: 5e9388f7984a ("selftests/bpf: adapt one more case in test_lru_map to the new target_free")
+Signed-off-by: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
+---
+ tools/testing/selftests/bpf/test_lru_map.c | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/test_lru_map.c b/tools/testing/selftests/bpf/test_lru_map.c
+index 0921939532c6..fc67a337d3c1 100644
+--- a/tools/testing/selftests/bpf/test_lru_map.c
++++ b/tools/testing/selftests/bpf/test_lru_map.c
+@@ -441,8 +441,18 @@ static void test_lru_sanity3(int map_type, int map_flags, unsigned int tgt_free)
+ 	assert(sched_next_online(0, &next_cpu) != -1);
+ 
+ 	batch_size = __tgt_size(tgt_free);
++	if (!batch_size)
++		batch_size = 1;
++
++	/* The local free list is refilled lru->target_free elements at a
++	 * time, and a refill the global free list cannot satisfy in full
++	 * shrinks the LRU list, which evicts elements that are still live.
++	 * Size the map so that target_free divides it, otherwise filling it
++	 * ends on a partial refill and evicts the elements referenced below.
++	 */
++	map_size = __map_size(batch_size);
++	assert(__tgt_size(map_size) == batch_size);
+ 
+-	map_size = tgt_free * 2;
+ 	lru_map_fd = create_map(map_type, map_flags, map_size);
+ 	assert(lru_map_fd != -1);
+ 
+@@ -466,7 +476,7 @@ static void test_lru_sanity3(int map_type, int map_flags, unsigned int tgt_free)
+ 	}
+ 
+ 	/* Insert new batch_size: replaces the non-referenced elements */
+-	key = 2 * tgt_free + 1;
++	key = 1 + map_size;
+ 	end_key = key + batch_size;
+ 	for (; key < end_key; key++) {
+ 		assert(!bpf_map_update_elem(lru_map_fd, &key, value,
+-- 
+2.55.0
+
