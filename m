@@ -1,119 +1,93 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF8D03F58D6;
-	Thu, 17 Sep 2026 08:36:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7697B3F44FC;
+	Thu, 17 Sep 2026 09:00:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789634228; cv=none; b=qXSNKnwUwBiCkpiWZ0E/Y+EB2qT6EcEkS0BCmwgrRH+I0IClcQE0xTaYteqAtN5k21ZCeQWE2BomXiZiaHWV5CqKSWovIbUBLeL1W8LGhgzJstl7SLg+iXJ3MYr9OZ8//G0RbMNWiRoSCbL0uWkOuZoIvnJA2066UO+kq0H5VGY=
+	t=1789635628; cv=none; b=NakrexF0V1oVqBs6f3j6rjfGnCFpb1PFTt4ZcMxFprU9RU8Rr64iLFN0Mrm6pY7bH0VlgZBt4e+y2KOZ4+pIr0UdeVWOnp5LW+ZNFr/iF003GKkuiaKV6pEd7N3E1VWZGUmnXBKuBfThPWDYQXc8s/FcKsCzLJVfHk/v6Jo6NQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789634228; c=relaxed/simple;
-	bh=a0XqQSuOzyPiY7WD8pDbuEQNCSz5eRDn+K1vrAq/1pQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=e+T6HEPT/UFEqfedJ7cCJjYdVzHOLCcKdXFgumtQGf8UD9qpOLk9NdU1ZLBYF6gR3gju0PCy2FNVq2hb83sBBWDb0k5sxw536lOqJkBLov6eFXuxTiJ0csLORrLtFKgsyc1kOSDy/uIIPWGsHRGOEFanfPIg1YvfkInBl3eJFwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VFgWYzmM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789635628; c=relaxed/simple;
+	bh=Y5bSJVysvr9ddQz4rfopfu0hHQ1wIqTnyODV0L3nxM0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=RpkVyKmJn13aUq7pxBpgvtRVpVgdvuzFCzZ92jBIBc4iMjrC17Vn6XQNdTqE2mX2B/6MxN2ZgoL4XI5paW2wcxEGADzNJ2I9vKMPKbDH6EobkNcOYpXPw/6U7DPjrkWpy1YfHx3LEHQYq6TVsxcq7sj7Udvai8TI2t8CP6jAf3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xg1bdiFO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VFgWYzmM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B6851F00893;
-	Thu, 17 Sep 2026 08:36:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xg1bdiFO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AB3C1F000FF;
+	Thu, 17 Sep 2026 09:00:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789634211;
-	bh=3C/KkJjlnOTJY+/ASrRnUTTi2gKf++MlSeKRIkkXDZ4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VFgWYzmMVChaHrOzhsJhAMN3XeWBu/4pW6M6V3QJt3Rf2o04YmnCbQv6nSf3IHdSw
-	 6NXN6j596sI8FXD+dVIESObOiaQClje5KCL7FKCixSxl2TJIahIsPaAYDtVKhtmoXI
-	 1jnBAEtfLmRZ+DyfCX1VZlsZR4jcC98LHURUSxcp2eoteMP2AdrQId1i3KePd9qFGd
-	 BdPeLDUcfnbjOTSu3Ea0Rezrlm52052yb1ItZuPXsO/3ud3HaQ0rD4mRkU7+JmRDDS
-	 +W1D1fEN1WfEBjOXLJf7Mq/RIyRQGA42UOvjWg/jTFwmc/VFE2nnPJbIwdC/cyTuDY
-	 Kw0tiw+V+L3kg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v1 1/2] mptcp, bpf: reject bpf_sk_release() on msk
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Cc: mptcp@lists.linux.dev, bpf@vger.kernel.org
-In-Reply-To: <20260917081209.361367-1-jiayuan.chen@linux.dev>
-References: <20260917081209.361367-1-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 17 Sep 2026 08:36:50 +0000
-Message-Id: <20260917083651.4B6851F00893@smtp.kernel.org>
+	s=k20260515; t=1789635627;
+	bh=G3cWCrQW8tliOjWvk/U88u+h7FNtLXaFA7KtU9Vk1E0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Xg1bdiFO3MxUqftaFIxMcl2cc5az3in6IBLWAl2tn1XvzSZa3qZN59HJAB45B1ZRW
+	 xU6UOENwYGWC2SRiyFk1+q0fxSaYbgT2D3T+5rYmiKPK7bTuLcFEAvKgRQj8v8lkvf
+	 njOQA2IrD2zjkiyoboWOe/mGJqt+Kbm6ternkZ/oEJ5KDLb03kK/hAcjVvpanZ8UjN
+	 JrtXSILtFMeMu5Oe2IurTA0JY5vJNR6l2fzwlsgfmAKaAg4dcqbIr/92fVyLVZ8eMn
+	 AEup1d+Ofbjsu26cK3TzxhVB8PAZB/UdPRWpS7JrGhS9ZylO4dgGF6mm8HDBtJ5B7p
+	 bYXHVjkOapazg==
+Content-Type: multipart/mixed; boundary="===============2675516372883015014=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <80c4a1ad857e4007c54a10110ff85897791545942a2cb3be4d9f5e69cd17de82@mail.kernel.org>
+In-Reply-To: <20260917080839.462038-2-luyun_611@163.com>
+References: <20260917080839.462038-2-luyun_611@163.com>
+Subject: Re: [PATCH bpf 1/2] selftests/bpf: Fix timing-dependent assertions in task work stress test
+From: bot+bpf-ci@kernel.org
+To: luyun_611@163.com,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
+Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 17 Sep 2026 09:00:26 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: verifier use-after-free via derived socket pointer fields
---
+--===============2675516372883015014==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 4a3543a3768c369da5d09b5be8da85c1dbd33f90
-Author: Jiayuan Chen <jiayuan.chen@linux.dev>
+> task_work_run() assumes every stress run observes both scheduler
+> contention and, when the delete thread is enabled, cancellation of at
+> least one pending callback.
+>
+> Neither outcome is guaranteed. Contention is observed only when another
+> scheduler selects the same one of 128 map values while its task work is
+> outstanding. A valid run can therefore have no scheduling errors. This
+> was reproduced with a single scheduler: more than one million callbacks
+> were scheduled and completed while schedule_error remained zero.
 
-mptcp, bpf: reject bpf_sk_release() on msk
+This isn't a bug, but would it read more clearly to say something like 'the
+task_work_stress test helper' (or name the file) instead of the bare
+task_work_run() in the opening sentence?  There are three functions with
+that name in the tree: kernel/task_work.c, prog_tests/test_task_work.c, and
+the static helper being changed here in prog_tests/task_work_stress.c, so
+the bare name could be mistaken for the kernel function on first reading.
 
-This commit fixes a reference leak by changing bpf_skc_to_mptcp_sock() to
-derive its return value from the subflow using parent_id, preventing
-bpf_sk_release() from dropping a refcount that was never taken.
+This isn't a bug, but was nthreads reduced locally to get the
+single-scheduler run quoted here? The test hardcodes 'int nthreads = 16;'
+(prog_tests/task_work_stress.c:50) and the only environment knob is
+BPF_TASK_WORK_TEST_TIME for the duration. A reader trying to reproduce the
+quoted numbers has no way to get there without editing the file. It might
+help to say so explicitly, or give the 16-thread numbers, since the test
+has no knob for the thread count.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 5d7080c260d84..8271d9214da52 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+> Likewise, a successful map deletion may remove a value after its
+> callback has completed. delete_success can therefore be nonzero without
+> callback_success being smaller than callback_scheduled.
+>
+> Drop the assertion that schedule_error is nonzero. Keep requiring exact
+> callback accounting when deletion is disabled. With deletion enabled,
+> allow equal counts but still reject callback_success greater than
+> callback_scheduled.
+>
+> Fixes: c6ae18e0af5e ("selftests/bpf: add bpf task work stress tests")
+> Signed-off-by: Yun Lu <luyun@kylinos.cn>
 
-[ ... ]
 
-> @@ -11263,6 +11273,14 @@ static int check_helper_call(struct bpf_verifier=
-_env *env, struct bpf_insn *insn
->  		bpf_diag_mod_begin(env, &regs[BPF_REG_0], NULL, BPF_DIAG_MOD_WRITE);
->  		regs[BPF_REG_0].type &=3D ~PTR_MAYBE_NULL;
->  		regs[BPF_REG_0].id =3D meta.ref_obj.id;
-> +	} else if (is_ptr_derive_function(func_id) &&
-> +		   find_reference_state(env->cur_state, meta.ref_obj.id)) {
-> +		err =3D validate_ref_obj(env, &meta.ref_obj);
-> +		if (err)
-> +			return err;
-> +
-> +		/* Ensures we don't access the object after a release_reference() */
-> +		regs[BPF_REG_0].parent_id =3D meta.ref_obj.id;
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-[Severity: High]
-Does assigning parent_id without setting a reference ID or PTR_TRUSTED leave
-the returned msk pointer untrusted in the verifier?
-
-Because msk is untrusted, if a program accesses its pointer fields
-(e.g., sk =3D msk->first), it appears the access falls through to the depre=
-cated
-verifier compatibility block in check_ptr_to_btf_access():
-
-kernel/bpf/verifier.c:check_ptr_to_btf_access() {
-    ...
-    } else {
-        /* Old compat. Deprecated */
-        clear_trusted_flags(&flag);
-    }
-    ...
-}
-
-This yields a plain PTR_TO_BTF_ID without the PTR_UNTRUSTED flag. Since
-pointer field accesses do not propagate parent_id, sk->parent_id would be 0.
-
-When bpf_sk_release(subflow) is called, the verifier invalidates registers
-tied to subflow (including msk via parent_id).
-
-Could sk escape this invalidation cascade since its parent_id is 0?
-
-If so, would the program be able to pass this valid, plain PTR_TO_BTF_ID to
-kernel helpers like bpf_skc_to_tcp_sock(sk)?
-
-At runtime, the helper would dereference the pointer without PROBE_MEM
-protection after it has been freed, potentially resulting in a use-after-fr=
-ee.
-
->  	} else if (is_acquire_function(func_id, meta.map.ptr)) {
->  		int id =3D acquire_reference(env, insn_idx, 0);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260917081209.3613=
-67-1-jiayuan.chen@linux.dev?part=3D1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35199472874
+--===============2675516372883015014==--
