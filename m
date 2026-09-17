@@ -1,339 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from va-1-115.ptr.blmpb.com (va-1-115.ptr.blmpb.com [209.127.230.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B83B24B1295
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 12:07:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72D5E4BD34E
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 12:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.230.115
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789646853; cv=none; b=FqjLfv+VESaZzX0o3zrtBKADi1hToYbXuLYspujyYj8ERsEkPkb86MKlAt3uEW6HaTPjJhaHPlzsev+Ff8vOTYCoVT0aDpo4w87mEscL9kdHrMoD2c/94yjonqaEZCrsKe6Rxy0NwIZMAEy6oFq5BMF2mNCfiW5xwN5+09gqmXY=
+	t=1789647061; cv=none; b=WzyT/iGXBMjRQVlZvEJoAoBMuhNw+EXhwETqVtl6VFuiqeBqv+ssPdF6ZEZOZzK1ZJbCEyNVrfCfXV56lAEXWdv+m8ut/GJtlZ31h3a2MSLIjbKzFR4XJJ8dRrxlSJDDKlkdhkMxxPB0Div49Fb9kFN6+AHiE38kzLy1CXZfZNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789646853; c=relaxed/simple;
-	bh=LRM5/f99QF2mHRC0TmKcikMWSRegXsGsvCrJXGEuQ3U=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=aGWCfKakLNcWZ+G+1hTr42ckH2YkOyrL32k/SWbZ67vGAmztZza18z8tUXkTQasnA0qNXXmU/OGZ7XoyL+3uNyR59lRxmkj/xoBXBFHojJvgw3cXCkd/2gr7D+ziCQITkIHfMgUKQc8RJPw1PNyhkRhOKVTbzBABn8JxxtXZTbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DIdc1/ge; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789647061; c=relaxed/simple;
+	bh=R/LUprRLLIwHn62Aa6X+Qeen23stIshNt80hL1nPc3A=;
+	h=To:Cc:Message-Id:References:Date:Mime-Version:Content-Type:From:
+	 Subject:In-Reply-To; b=AuhCaN4dEl4290DnTLsDcCGzT7isLCcitJqVi9+1OdQAAfvMqYn3PKVYOOr6zjzno9Om/tPR0SftdBB+P22s7NZJ+cTs/AZD7Knc54Mm7HRo2cYEH2LPQGDc4kO3FxD+HVinTWCzrc+NQN5hlcMbmVKYWJllsBjLl50r0eJX9Ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=eiYvEvni; arc=none smtp.client-ip=209.127.230.115
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DIdc1/ge"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BEC31F000FF;
-	Thu, 17 Sep 2026 12:07:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789646835;
-	bh=r9RJAFcT4R7NSAoIt75F8zlS0N+6XdVsKFVyHvXB+48=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=DIdc1/ge4PPHs730tIDtCN9ZGHrGgxM5i4+eDFA0YjqZEmTjJ++cZASTc+4e/x3q5
-	 aN3egIFI9HjUNTJ0MmPLcHPbwpV9Aek2jzqD5BP2lOSJblxpHbaEd3QrevGbQ/AwU0
-	 cPsIZ2CARd1e1zld6r268FE04i4Xgn1oflEq6DZPus1y5n9qfz44ahKIydUHvu/Xno
-	 rlRjRw2pnOoijB2vEI2DquicZeX7gUD7qF1TbyWZUWcrlovvZgVHub+M45bGmz9Cq1
-	 vLAaO07IHRXt8byY4ZbrmJK09Jk7wGeYyUG5gEqKayaXHdBaW/AGDEWRIlttEp89KF
-	 Xl1J1UNlTnZSw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCHv6 net-next] tcp: Add TCP ROCCET congestion control
- module.
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Tim Fuechsel" <t.fuechsel@gmx.de>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <aqqGU0XfcfsI-OGy@volt-roccet-vm>
-References: <aqqGU0XfcfsI-OGy@volt-roccet-vm>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 17 Sep 2026 12:07:15 +0000
-Message-Id: <20260917120715.7BEC31F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="eiYvEvni"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=2212171451; d=bytedance.com; t=1789647046; h=from:subject:
+ mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
+ mime-version:in-reply-to:message-id;
+ bh=/M6XW7TajI5wGVtKhZBxGWB0mPjI/XpBYPgZ/W1nlaQ=;
+ b=eiYvEvniDk/QnafpoHOXZg2e8cRAS7+or5s6fQLVpUw52Drmwxw+4BDEWuejbElHLkFggy
+ LPjCXo8AQ34r3KqsAYHppkX/kEebXDzFvKSr/TWCzxIYrdZyRNos6oRqLUUANzTFOPmk1X
+ aHi2D1EXcY9IeXTQN/y6T4JRWhUIlzkNh8DTHN5zFjfuzsoSxultY3rQuN3RR1QxKO6ba6
+ Onx/Ecmb+y5LxWlB6La+TpLB6EOVojFauEL5XJ6UGVmcG0t61zDIUgebTCiCDKb6bw4s/X
+ di30M59xD036NKOwoBxBJkg9LKXfc4vBLqU00gYgSIEtQkAXJdx+hhPGZdOG3A==
+To: <bpf@vger.kernel.org>
+Cc: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, 
+	<john.fastabend@gmail.com>, <jakub@cloudflare.com>, 
+	<jiayuan.chen@linux.dev>, <edumazet@google.com>, <kuniyu@google.com>, 
+	<pabeni@redhat.com>, <willemb@google.com>, <davem@davemloft.net>, 
+	<kuba@kernel.org>, <horms@kernel.org>, <daniel@iogearbox.net>, 
+	"Zhao Gongyi" <zhaogongyi@BYTEDANCE.COM>
+Message-Id: <20260917121016.48171-1-zhaogongyi@bytedance.com>
+References: <20260915071743.29394-1-zhaogongyi@bytedance.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+Date: Thu, 17 Sep 2026 20:10:16 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+X-Lms-Return-Path: <lba+26aabd8c4+6b47c4+vger.kernel.org+zhaogongyi@bytedance.com>
+Content-Transfer-Encoding: 7bit
+X-Original-From: Zhao Gongyi <zhaogongyi@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+From: "Zhao Gongyi" <zhaogongyi@bytedance.com>
+Subject: [PATCH bpf v2] bpf, sockmap: reject max_entries > INT_MAX in sock_map_alloc
+In-Reply-To: <20260915071743.29394-1-zhaogongyi@bytedance.com>
 
-Thank you for your contribution! Sashiko AI review found 11 potential issue=
-(s) to consider:
-- [High] tcp_roccet: ignores packet loss during LAUNCH slow-start phase
-- [High] tcp_roccet: timer wraparound to exactly 0 causes permanent DRAIN s=
-tate lockup
-- [High] tcp_roccet: double cwnd reduction and last_max_cwnd corruption dur=
-ing TCP_CA_CWR
-- [High] tcp_roccet: ACK rate metric 16-bit saturation falsely aborts slow =
-start
-- [High] tcp_roccet: forces TCP_INIT_CWND on RTO, injecting severe bursts
-- [Medium] tcp_roccet: ack_carry_over from slow start exit is lost to tcp_c=
-ong_avoid_ai
-- [Medium] tcp_roccet: 32-bit usecs timestamp wraps after 35 minutes, freez=
-ing idle connections
-- [Medium] tcp_roccet: zero-microsecond RTT samples are discarded
-- [Medium] tcp_roccet: 32-bit sequence tracking wraps in 5 RTT measurement =
-window
-- [Medium] tcp_roccet: writable sysfs parameters lack runtime bounds valida=
-tion
-- [Low] tcp_roccet: struct roccettcp exceeds ICSK_CA_PRIV_SIZE limit
---
+From: Zhao Gongyi <zhaogongyi@BYTEDANCE.COM>
 
-commit e3cfdf8398561ab8f09dd45039b191e26c9801e8
-Author: Tim Fuechsel <t.fuechsel@gmx.de>
-Subject: tcp: Add TCP ROCCET congestion control module.
+sock_map_alloc() only rejects max_entries == 0 and otherwise allows any
+u32 value.  sock_map_free() then walks the sks[] array with a signed int
+iterator:
 
-TCP ROCCET is a new congestion control algorithm based on TCP CUBIC that
-improves performance in cellular networks by mitigating bufferbloat. It
-adds a modified slow start and monitors RTT and acknowledgment arrival
-rates to adjust the send rate.
+	int i;
+	for (i = 0; i < stab->map.max_entries; i++)
+		struct sock **psk = &stab->sks[i];
 
-Link: https://doi.org/10.1109/VTC2023-Fall60731.2023.10333357
-Link: https://doi.org/10.1109/WMNC.2016.7543932
-Link: https://doi.org/10.23919/WONS68803.2026.11501781
-Link: http://go.lu-h.de/roccet-2026-07-21
+When a SOCKMAP is created with max_entries = 0xffffffff (UINT_MAX), the
+allocation of 32 GiB can succeed on large-memory hosts.  During free the
+counter reaches 0x80000000, wraps to INT_MIN, is sign-extended by movslq
+and turned into a ~16 GiB negative offset from stab->sks, pointing far
+below the allocation.
 
-> diff --git a/net/ipv4/tcp_roccet.c b/net/ipv4/tcp_roccet.c
-> new file mode 100644
-> index 0000000000000..10ad4748d994d
-> --- /dev/null
-> +++ b/net/ipv4/tcp_roccet.c
-[ ... ]
-> +struct roccettcp {
-> +	u32 cnt;	/* increase cwnd by 1 after ACKs */
-[ ... ]
-> +	u16 ack_rate_cnt;	/* Used for counting acks */
-> +
-> +	enum roccet_state state : 3; /* Current operating state of roccet */
+The faulting access is an xchg() write in sock_map_free().  Without
+KASAN, the same out-of-bounds write can fault on an unmapped vmalloc page
+or corrupt an unrelated allocation if that vmalloc address is populated.
+On a KASAN kernel with CONFIG_KASAN_VMALLOC=y, the shadow check for that
+address hits an unmapped shadow page and oopses first:
 
-[Severity: Low]
-Does the transition from u16 to an enum bitfield force a 4-byte alignment
-here?
+  BUG: unable to handle page fault for address: fffff521b59c5a00
+  RIP: 0010:kasan_check_range+0x107/0x190
+  Call Trace:
+   sock_map_free+0x93/0x190
+   map_create+0x68d/0xb30
+   __sys_bpf+0x21e/0x2e70
 
-It appears this introduces 2 bytes of padding, expanding the struct beyond
-104 bytes and causing the BUILD_BUG_ON(sizeof(struct roccettcp) >
-ICSK_CA_PRIV_SIZE) assertion in roccet_register() to fail at compile time.
+Vmcore confirmed stab->map.max_entries == 0xffffffff, stab->sks ==
+0xffffc911ace2d000, and the faulting address sks + (s64)INT_MIN * 8
+exactly at 0xffffc90dace2d000.  The same buggy path is reached on the
+normal close()/bpf_map_free_deferred() path whenever such a map is
+destroyed.
 
-[ ... ]
-> +static int beta __read_mostly =3D 717; /* =3D 717/1024 (BICTCP_BETA_SCAL=
-E) */
-[ ... ]
-> +module_param(beta, int, 0644);
+sock_map_alloc() used to bound its allocation size through
+bpf_map_charge_init(), but the bound was dropped when rlimit-based memory
+accounting was removed.  Reject max_entries > INT_MAX at creation time so
+the signed iterator in sock_map_free() never sees a value that would
+overflow.
 
-[Severity: Medium]
-Since beta is writable by root at runtime (0644), shouldn't there be a
-runtime bounds validation check?
+Triggered by syzkaller and reproduced on both a 6.6-based KASAN kernel
+and the upstream v7.3-rc2 kernel.
 
-The current param_check() is only executed during initialization. If beta
-is written to a negative value at runtime, it could cause an unsigned
-integer overflow in roccet_congestion_event() during congestion window
-scaling calculations.
+Fixes: 0d2c4f964050 ("bpf: Eliminate rlimit-based memory accounting for sockmap and sockhash maps")
+Signed-off-by: Zhao Gongyi <zhaogongyi@BYTEDANCE.COM>
+---
+v2:
+- Correct the Fixes tag to the commit that removed the allocation-size
+  bound.
+- Clarify that the bug is an out-of-bounds write reachable without KASAN.
+- Add Daniel Borkmann to Cc.
 
-[ ... ]
-> +static void update_ack_rate(struct roccettcp *ca, u32 acked, u32 now)
-> +{
-[ ... ]
-> +		} else {
-> +			/* start counting for the new interval */
-> +			ca->ack_rate_last_rate_time =3D now;
-> +			ca->ack_rate_last_rate =3D ca->ack_rate_curr_rate;
-> +			ca->ack_rate_curr_rate =3D ca->ack_rate_cnt;
-> +			ca->ack_rate_cnt =3D min_t(u32, acked, U16_MAX);
-> +		}
-> +
-> +		ca->was_idle =3D false;
-> +	} else {
-> +		/* Cap the ack count to avoid overflow */
-> +		ca->ack_rate_cnt =3D min_t(u32, ca->ack_rate_cnt + acked,
-> +					 U16_MAX);
+ net/core/sock_map.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-[Severity: High]
-Does artificially capping this measurement to U16_MAX flatten the tracked
-rate on high-speed networks?
-
-On networks exceeding ~7.8 Gbps, the connection will receive more than
-65535 ACKs per 100ms interval. This saturation would constantly yield a
-rate difference of 0, falsely signaling that throughput has plateaued and
-causing roccet_launch_update() to prematurely abort slow start.
-
-[ ... ]
-> +static void roccet_congestion_event(struct sock *sk, u32 now)
-> +{
-[ ... ]
-> +	ca->epoch_start =3D 0;
-> +	ca->roccet_last_event_time_us =3D now;
-
-[Severity: High]
-Can this assign a wrapping microsecond timestamp to a field that later
-treats 0 as a special uninitialized sentinel?
-
-The 32-bit microsecond timestamp generated in roccet_control() will wrap
-to exactly 0 every ~6.2 days. If a congestion event occurs at that precise
-millisecond, roccet_last_event_time_us becomes 0.
-
-This would cause roccet_drain_update() to bypass its interval check
-permanently, trapping the connection in the DRAIN state.
-
-[ ... ]
-> +static void roccet_min_rtt_probe(struct sock *sk, u32 now)
-> +{
-[ ... ]
-> +	if (ca->probe_min_rtt_until =3D=3D 0)
-> +		pr_warn_once("ROCCET: Probing time should be set");
-> +	else if (time_before32(now, ca->probe_min_rtt_until))
-
-[Severity: High]
-Could this sentinel check falsely trigger if the calculated deadline wrapped
-to exactly 0?
-
-Similar to the issue above, because it treats 0 as uninitialized, a probe
-duration that naturally lands on 0 during wraparound will mysteriously
-abort the min RTT probing phase.
-
-[ ... ]
-> +static void roccet_launch_update(struct sock *sk, u32 acked)
-> +{
-[ ... ]
-> +	/* If cwnd hits ssthresh, go to ORBITER and if any ACKs are
-> +	 * leftover save them for ORBITER.
-> +	 * Check via tcp_in_slow_start() in case no ACKs are left.
-> +	 */
-> +	if (!tcp_in_slow_start(tp)) {
-> +		ca->state =3D ORBITER;
-> +		ca->epoch_start =3D 0;
-> +		ca->ack_carry_over =3D acked;
-> +	}
-> +}
-
-[Severity: Medium]
-When leftover ACKs are saved in ack_carry_over, are they ever applied to
-the actual congestion window growth?
-
-Looking at roccet_orbiter_update(), it calls bictcp_update() which adds
-the carryover to ack_cnt, but that is only used for TCP friendliness
-fallback calculations. The subsequent call to tcp_cong_avoid_ai() only
-takes the current round's acked value, meaning the carried-over ACKs are
-permanently discarded.
-
-[ ... ]
-> +static void roccet_orbiter_update(struct sock *sk, u32 acked)
-> +{
-[ ... ]
-> +	/* Calculate if more bytes were sent than received
-> +	 * in the time interval.
-> +	 *
-> +	 * Handle wrap arounds by relying on unsigned subtraction.
-> +	 * e.g. if snd_nxt wraps to 10 and seq_start is U32_MAX - 10,
-> +	 * the subtraction will result in the value of 21.
-> +	 */
-> +	sent =3D tp->snd_nxt - ca->interval_snd_seq_start;
-> +	received =3D tp->snd_una - ca->interval_una_seq_start;
-
-[Severity: Medium]
-Will this calculation be subject to catastrophic 32-bit sequence wrap-around
-on networks operating at 100+ Gbps?
-
-Since this measures bytes transferred over a 5 RTT measurement window,
-transferring more than 4 Gigabytes in that time will wrap the 32-bit
-sequence subtraction and break the sent_more_than_acked evaluation.
-
-[ ... ]
-> +static u32 roccet_recalc_ssthresh(struct sock *sk)
-> +{
-[ ... ]
-> +	/* In LAUNCH, we want no reduction on loss/ECN.
-> +	 * On ECN this is set later on in roccet_state()
-> +	 */
-> +	if (ca->state =3D=3D LAUNCH)
-> +		return cwnd;
-
-[Severity: High]
-Does forcing ssthresh to remain at the full congestion window size despite
-an active congestion event bypass standard congestion control safeguards?
-
-Ignoring packet loss during the LAUNCH slow-start phase entirely prevents
-the sender from backing off during severe congestion, which can lead to
-persistent buffer overflow.
-
-[ ... ]
-> +static u32 roccet_handle_recovery(struct sock *sk)
-> +{
-[ ... ]
-> +	/* On loss in LAUNCH, enter ORBITER without a cwnd reduction. */
-> +	if (ca->state =3D=3D LAUNCH) {
-> +		ca->state =3D ORBITER;
-> +		return cwnd;
-> +	}
-
-[Severity: High]
-Does returning the unreduced cwnd intentionally circumvent standard cwnd
-reduction upon Fast Recovery during the initial growth phase?
-
-As above, this completely ignores network congestion signals and violates
-TCP congestion control safety invariants.
-
-[ ... ]
-> +static void roccet_state(struct sock *sk, u8 new_state)
-> +{
-[ ... ]
-> +	if (new_state =3D=3D TCP_CA_Loss) {
-> +		roccet_reset(sk, ca);
-> +		tcp_snd_cwnd_set(tp, TCP_INIT_CWND);
-
-[Severity: High]
-Does explicitly overriding the TCP core's safe cwnd reduction of 1 with
-TCP_INIT_CWND cause severe congestion bursts?
-
-Injecting up to 10 packets immediately following a full Retransmission
-Timeout violently floods an already deeply congested network.
-
-> +	} else if (new_state =3D=3D TCP_CA_CWR) {
-> +		/* Handle CWR as ROCCET congestion event,
-> +		 * however afterwards always set Wmax to the current cwnd.
-> +		 */
-> +		cwnd =3D tcp_snd_cwnd(tp);
-> +		roccet_congestion_event(sk, now);
-> +		ca->last_max_cwnd =3D cwnd;
-> +	} else if (new_state =3D=3D TCP_CA_Recovery) {
-
-[Severity: High]
-Is the congestion window getting penalized twice for TCP_CA_CWR?
-
-The TCP core already halves cwnd prior to calling this state callback.
-Passing the already-halved cwnd into roccet_congestion_event() triggers a
-redundant congestion event.
-
-Additionally, blindly assigning this doubly-penalized value to
-last_max_cwnd permanently corrupts CUBIC's target growth metric.
-
-[ ... ]
-> +static void roccet_acked(struct sock *sk, const struct ack_sample *sampl=
-e)
-> +{
-[ ... ]
-> +	/* Get valid sample for roccet */
-> +	if (sample->rtt_us > 0) {
-> +		ca->last_rtt =3D ca->curr_rtt;
-> +		ca->curr_rtt =3D sample->rtt_us;
-> +	}
-> +}
-
-[Severity: Medium]
-Does discarding valid 0-microsecond RTT samples completely disable ROCCET
-on ultra-low latency links?
-
-On loopback or ultra-low latency interfaces, sub-microsecond RTTs are
-rounded down to 0. By ignoring them entirely instead of treating them as
-1us, curr_rtt is prevented from ever initializing past U32_MAX, permanently
-breaking the congestion avoidance logic.
-
-[ ... ]
-> +static void roccet_drain_update(struct sock *sk, u32 now)
-> +{
-> +	struct tcp_sock *tp =3D tcp_sk(sk);
-> +	struct roccettcp *ca =3D inet_csk_ca(sk);
-> +
-> +	if (ca->roccet_last_event_time_us &&
-> +	    time_after32(now, ca->roccet_last_event_time_us +
-> +			 100 * USEC_PER_MSEC)) {
-
-[Severity: Medium]
-Can this condition incorrectly fail if the connection idles for more than
-35.7 minutes?
-
-Because now is a 32-bit microsecond timestamp, the subtraction in
-time_after32() will exceed its signed boundary if the time elapsed is
-greater than 2^31 microseconds. If an application idles and then resumes,
-it could be incorrectly trapped in the DRAIN state, freezing window growth
-until the timer wraps again.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/aqqGU0XfcfsI-OGy@vo=
-lt-roccet-vm?part=3D1
+diff --git a/net/core/sock_map.c b/net/core/sock_map.c
+index ca49bc7f8..38df84284 100644
+--- a/net/core/sock_map.c
++++ b/net/core/sock_map.c
+@@ -41,6 +41,7 @@ static struct bpf_map *sock_map_alloc(union bpf_attr *attr)
+ 	struct bpf_stab *stab;
+ 
+ 	if (attr->max_entries == 0 ||
++	    attr->max_entries > INT_MAX ||
+ 	    attr->key_size    != 4 ||
+ 	    (attr->value_size != sizeof(u32) &&
+ 	     attr->value_size != sizeof(u64)) ||
+-- 
+2.39.5 (Apple Git-154)
