@@ -1,62 +1,62 @@
-Received: from mail-oi2-f43.google.com (mail-oi2-f43.google.com [74.125.231.235])
+Received: from mail-oi2-f12.google.com (mail-oi2-f12.google.com [74.125.231.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09F5C39937C
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 20:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.235
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8AB02F83B5
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 20:05:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.204
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789675557; cv=none; b=qhMLUaUSQkw7zHli6JMUYYta/f19l1bnbzMRD558glaev3IB8db11tCx2DH/bJ73jSW8FkWJuywtaHRYiV9MMi8xfJleSzL042cbQVqMtkQJ69zpXlXHpC4QFnCO3EeufyPtSbOAkD57JCdgu0i1gTm4C6db8v+rin7Q0ANxQ4E=
+	t=1789675559; cv=none; b=S/XA2x3PJZkYCeJyaiQPrnv9T+pRI1U3AygUc7QOaMI4eOi/nQyZqJ3jRea38cIIxTpXBA9wZZb7WHKlr0SZ4Ow5KJiNEmRIQZURkc6+IH5mrbM9UTL/0iswM/aRJqQiLm5ObwOais7dhd/kQXUW9nfVrx0zhtt1gKqY8utiYew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789675557; c=relaxed/simple;
-	bh=s/MbIsksUaSydMaHe/a+eMcwLYCQMs9zjlIkw5+6eJw=;
+	s=arc-20240116; t=1789675559; c=relaxed/simple;
+	bh=aeKRILbP5X4aweEX5ge1txahPtTcZkjKLoTF/0jhg7Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n5LtC92B8fNFQSTJqvnBwfAL2z8+VrXmMWv6dS5IDzP9L1xtHT36jnLEM8qCkH97dDs8jpekEc7HMwiG/YrkBnR07MHSlER/pHOSlrXkXY0oP8b3HDMFvo1hUQrfAT8nJx/B4bFW6CodZJq523Yj4oTmKQEVervG5zn0rmN4SKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vlq9lwaQ; arc=none smtp.client-ip=74.125.231.235
+	 MIME-Version; b=YEVzxcvVZGuZXolfT36yoR97/7g71OGB+neW1Wux0vW2vo93HF0EIwdxtj6cG0bXEvdRwpI1HvgzrYMm+ZVNrt0RMmS9c/1k4xJHEyI3fPfHrptzqPe/Hkm3ZDd123rqL8Z0o3Wu5M++LHWYeVNt4XRqMcnKNodE38e/iUSUc4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=esicJhN1; arc=none smtp.client-ip=74.125.231.204
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vlq9lwaQ"
-Received: by mail-oi2-f43.google.com with SMTP id 46e09a7af769-80199394f52so836538a34.3
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 13:05:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="esicJhN1"
+Received: by mail-oi2-f12.google.com with SMTP id 46e09a7af769-801a8bf8112so523982a34.1
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 13:05:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789675553; x=1790280353; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789675555; x=1790280355; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=nALUV/wXNg0DuRucdSBT6s0xt5qlSmOqGtlhZvrNcM0=;
-        b=Vlq9lwaQ+weFJqPD+jdXk8Y8u7p1R+2kMeMho1khKa2c1H9N9QIKI0kFoa3t4fN8lw
-         xbfAVscpnNa/CfELvaimQrSRg7Ssym4m4KFtBX4tcv0Xiflr7XX4oQWbhA/n3DR5UEvu
-         gdMDs8f+QcXyAg+BUh0bux6XU1QrlLml33rEGkzKF1z7iE2nksxa9PrmXMubd9+GTOln
-         CHWnvDi69FwH9kex0hiK7/9LuwVLBXPlwKJAUUbkyRqaoyJgsIS3kpoHPrQoAEJ2p/XF
-         XdT2pYmEjr883IZERVYTrXjGZRILuVnv9qHJo50ZaXJqknsr9KN0kZiODmGOpHI8ebop
-         JDBA==
+        bh=wxz9DnrMz0dzYUlJHI01PCp5M3Gsxuw+kPCL3fHdkcc=;
+        b=esicJhN1nGvJjbPQTNGMeRilKUWUsBl7tHgLvzy2jJA32aqOUADvB+6Vxwdoh7sDLI
+         sMqSG4k0gYpdk7mQ/cA1QtRKJ66ceaYWeOKTnvlQGLkyjHUSm6f4MtukXF3JoPuQ1+SV
+         P3sNvXlhDY2Pf4lvxhl+AeYNBf9S7FqUmH+vCDE9KT82ZOmLpPEls05NnT9/4Cv3aiMi
+         27YDjISNgT5xi77I+pwr1kTQFOhxkvCpM0fGSSFh7dIO5AQdvYMLfpj6lrz/yKvTba8B
+         7tkYwjGAior217/rYTWLPygGnXBvYlzlPD11R6PLo2JUJziHKdnhZpatHjpo4NJIOix9
+         FdZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789675553; x=1790280353;
+        d=1e100.net; s=20260707; t=1789675555; x=1790280355;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=nALUV/wXNg0DuRucdSBT6s0xt5qlSmOqGtlhZvrNcM0=;
-        b=FTNfSPLWmGgxqnn90r0HepN+nNS6zntaCptmApw+Zaz0OoqvXRQeBDVMFrYwZt755r
-         w5FRmfEp2OSr5l902fOgz/KJpVsGR5hxKQtnsMv9rDGHvZEAfiYbT3QfUHaRuETFD+tQ
-         3Wd9FlQ3ot/7gQWYyOWKbZmtbokSPRH/CSRpZeVdiT4ZK0Ux/UgIqmZNkMijvmcBLONV
-         j+PfDmTiZdak5TvC4MxUrVDnLjHJ6OjNRC6rPTzzMtzVldybRRBBFqDnElkVi7dRoy7T
-         AGcaJsh1SNJfyGeEuohe0d28nNH8Wo+/PpOhpsDMKeIhK7NIh8k7Bxt1+fAz5fzRtEPU
-         TkMw==
-X-Gm-Message-State: AFuF++mFqlPsc32QmfF9LIID3RLtHLKNjIShIGocUg3vNwXuF8ukYHC0
-	X4hvuzrMI2a/hj4yUHITGfCr4A/ySESCoMMlRCptP71u1XZwI4jpxFit36rPTA==
-X-Gm-Gg: AYBFou1Ldcm+YIBwbRtTsd2G4HJt0ayxFY7TijLMbouDCBYzBSK2bgHMcL7rWjbuDzn
-	YdXazBKDoj4DV7T37E4VFpyFmbMfzm6Zqgc1jd6A6+S0kBM5ljpjlDEJd7alv/DP9DD8hzAV48t
-	YYUR/kpAbJ0lfTwQ9o5qAC0g6k8EGZVaOjpAg0bNPz9tRKMSBcHzevziFws8GsTnrIz/1Xer3XW
-	qbdO8vspjh3QykC6EKDajdarlPP+bwr8sPcmE9iKgYUFQVUBLKTyZatzY0MXKoIl8ifhtMkl2pW
-	A3oJs/mIOCr4JeFZHB10EW9ymHEvzd8RQTowpLTrYTtQMglxA2EoHDE5W7NFTzhbcZE35/EKSGQ
-	U/WmQf68fzX/7Dy+LtLp6yP1e8SUzBZEdWxk5yymfiT5XmcQul683maeHNpQ8AYJ1P34N5cbW9/
-	QkhF8aC3s8wfe7GxdtaI50y2X9qQmGd4+oU9OGum0R4auxYwnNRSuaYrkonOyQnw==
-X-Received: by 2002:a05:6830:449f:b0:806:3ff7:a6e3 with SMTP id 46e09a7af769-80de2ee50eemr238904a34.20.1789675553372;
-        Thu, 17 Sep 2026 13:05:53 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:73::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-80c476ca2b7sm4369174a34.26.2026.09.17.13.05.52
+        bh=wxz9DnrMz0dzYUlJHI01PCp5M3Gsxuw+kPCL3fHdkcc=;
+        b=CmGmnQOqMFNSbE/uXHz8vQbjjGCGVCJDuJZfDZ/VvlW56T0f9cZ1JUIeJLJKVCiDb5
+         texT09dh2SE/jxx8dAl5G+sYOlZMj8rP+nkxWKUBtk3bARX/RK2vkGsa8iISU1tpn0iv
+         u/fKaju+ZGc3rWfbWP36R70yhArHx9ZNvpRD4kYWC99Dcj4NOx+wq0SWuPULtrof1KDF
+         3gA2iXKKPMr+0V57nEWI7Xx21d6cliUpglb7X7IuaDtSwfUw2ZNLs4acXYVOLE3l3Nkm
+         Bgk/Lr5oRuJMkYhtO6JrgEFVltgqgD7NDK7yOf4yXCw5gauXrwrtBlvTgGEwBeIlM/SX
+         52CA==
+X-Gm-Message-State: AFuF++nPuuQ4Q8cl7QwnQWH26w35GkZe7+Gfj0SbTzVmnjYBQdzKU4J9
+	Fx5oyKrlkcsiWnJkOb0ddNlhiwu8i7m/KCZzp15F69jQSPDJmBbMq3Ib1EFU2A==
+X-Gm-Gg: AYBFou32pcoHWsE1GCDOKY8JWCUjORr2uLFVAFlLPH7p/kEtUOIHUCuQV7vVpv9l/SH
+	j+M3y3zOsKyGwRaKRDIcTBTkJ3BQrzCmurCUMMirXhXHwadWnD8qP6HzakdF+zVZPprZt3CKcxM
+	5po7VV5x1KRc0ogyJ149+doZYbBwUkfhp7PxIeODgblLs4Y1FfiGxa3mWmMi06XuRTO//W+WA2Y
+	53DnG8t3RKmZ3Ycl0a19Z+2TfrYWovPIO3Z5qGLvEdrVC5f0rfwnBr0IhdEePc/hexMNB8Ly++b
+	dxbJitwy/PZefOqoMUej91/vBN2l2YoIY23xb/eLaISzcsEBKyIwF9HV/hufdSiL41YoRSSC7us
+	4iE+UoNImChdQ7bYtUHMAW6CREWbyiAfSBTFqzmOT+I3aRTqW4j7vShPY5SaucK/gpA3eIvcf84
+	gGWJUYQpetylZ7bXmtoSKCtQc3igchRsOc1H7uNlrpMsYXBJArizmH7cPUCeTvGw==
+X-Received: by 2002:a05:6830:4407:b0:7fa:ab72:9dfd with SMTP id 46e09a7af769-80de38ecb66mr232904a34.21.1789675555065;
+        Thu, 17 Sep 2026 13:05:55 -0700 (PDT)
+Received: from localhost ([2a03:2880:ff:4e::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-80c46dbacc7sm3822607a34.17.2026.09.17.13.05.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 13:05:52 -0700 (PDT)
+        Thu, 17 Sep 2026 13:05:54 -0700 (PDT)
 From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
 Cc: netdev@vger.kernel.org,
@@ -72,9 +72,9 @@ Cc: netdev@vger.kernel.org,
 	kerneljasonxing@gmail.com,
 	ameryhung@gmail.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 04/15] bpf: Remove unnecessary prog_list_prog() check
-Date: Thu, 17 Sep 2026 13:05:30 -0700
-Message-ID: <20260917200542.3689605-5-ameryhung@gmail.com>
+Subject: [PATCH bpf-next v4 05/15] bpf: Replace prog_list_prog() check with direct pl->prog and pl->link check
+Date: Thu, 17 Sep 2026 13:05:31 -0700
+Message-ID: <20260917200542.3689605-6-ameryhung@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260917200542.3689605-1-ameryhung@gmail.com>
 References: <20260917200542.3689605-1-ameryhung@gmail.com>
@@ -88,52 +88,49 @@ Content-Transfer-Encoding: 8bit
 
 From: Martin KaFai Lau <martin.lau@kernel.org>
 
-effective_prog_pos(), called from replace_effective_prog() and
-purge_effective_progs(), tests "!prog_list_prog(pl)" to skip a
-'detaching' pl.
+prog_list_length() and compute_effective_progs() use !prog_list_prog(pl)
+to skip a 'detaching' pl.
 
-When detaching a pl, pl->prog and pl->link are set to NULL in case
-the update_effective_progs() failed.
+When pl->link is not NULL, prog_list_prog(pl) returns
+the pl->link->link.prog. This does not work for the upcoming struct_ops
+patch where pl->link is not NULL but pl->link->link.prog is NULL,
+because a struct_ops map is attached to the cgroup instead of a BPF prog.
 
-However, replace_effective_prog() is not detaching a pl,
-so the case "!prog_list_prog()" will not happen.
+To prepare for the upcoming struct_ops patch, this patch
+replaces the prog_list_prog() test with the
+"!pl->prog && !pl->link". In __cgroup_bpf_detach(),
+both pl->prog and pl->link are set to NULL, so testing
+"!pl->prog && !pl->link" is the same test to tell
+if a pl is being detached. This change should be a no-op.
 
-In purge_effective_prog(), the pl->prog and pl->link are restored
-before calling purge_effective_progs(), so the case "!prog_list_prog()"
-will not happen either.
-
-This patch removes them as a prep work for the upcoming work
-in attaching struct_ops to cgroup. When attaching a struct_ops
-to cgroup, there is a link->map case and the prog_list_prog()
-will not consider the link->map. The replace_effective_prog()
-and purge_effective_progs() will then incorrectly skip a pl
-with struct_ops map attached to it.
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
 Signed-off-by: Amery Hung <ameryhung@gmail.com>
 ---
- kernel/bpf/cgroup.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ kernel/bpf/cgroup.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 149672c76c49..2fee0cbe5dfd 100644
+index 2fee0cbe5dfd..6d865e765d58 100644
 --- a/kernel/bpf/cgroup.c
 +++ b/kernel/bpf/cgroup.c
-@@ -973,9 +973,10 @@ static int effective_prog_pos(struct cgroup *cgrp,
+@@ -408,7 +408,7 @@ static u32 prog_list_length(struct hlist_head *head, int *preorder_cnt)
+ 	u32 cnt = 0;
+ 
+ 	hlist_for_each_entry(pl, head, node) {
+-		if (!prog_list_prog(pl))
++		if (!pl->prog && !pl->link)
+ 			continue;
+ 		if (preorder_cnt && (pl->flags & BPF_F_PREORDER))
+ 			(*preorder_cnt)++;
+@@ -482,7 +482,7 @@ static int compute_effective_progs(struct cgroup *cgrp,
  
  		init_bstart = bstart;
  		hlist_for_each_entry(pl, &p->bpf.progs[atype], node) {
 -			if (!prog_list_prog(pl))
--				continue;
--
-+			/*
-+			 * No detaching pl (NULL prog and link) is visible to the callers,
-+			 * so skip the check compute_effective_progs() needs.
-+			 */
++			if (!pl->prog && !pl->link)
+ 				continue;
+ 
  			if (pl->flags & BPF_F_PREORDER) {
- 				if (pl == target_pl)
- 					pos = bstart;
 -- 
 2.52.0
 
