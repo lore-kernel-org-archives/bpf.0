@@ -1,130 +1,95 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0BEE26F2A0
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 10:58:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ECBA4D37C5
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 10:59:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789642710; cv=none; b=tIhqxf7K9rhbr1hhceZySrgdYUlF8pdZb0jD2hg7IHQ2o5RfAShDt9bTScg8k8IPJiZ/YrCVlVL6uiMRukhtG/5PeojHWr+6BHg4Lej2m8O0Nf43Ydvz75jaVyfgaI83nIGMLkCWKB449JSDyfSMjRclQttuvUtn2xEFgCqGp/Q=
+	t=1789642788; cv=none; b=iATepyR/i97C1aeinje/koi/ZFsGPNcZ5NlKSrkqt6QR0qXBOKSWuxbFuLtPlCOri3c3tbPh8L1ci9u3xjaQT9TYN7yx+iAKazp5aegUERqiveUrHfHcG+iZk3H9gF2Wee3apHoUOiUzTdzoGKHM+RqwGk0otafgTFq6am+r3qo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789642710; c=relaxed/simple;
-	bh=2iDIhQcNBAoLdpFjPD/OayQvsulTsQ9Zbhs6SqtUABQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tTm8uzaxqMB3RyGlj3geFkNwSaVP520yXRviknQPJExS2rKQKCgJJlLcaSoqTq/FwtFxzGNDMJfWYF6bCBTfWP6euPB7cUrGnGYvLotBSXoRqE+OF5N9cl6kO19TWVuMyfsw8gWyv3/YMIcs4MXem7FDCoJb8AMJjsW6FJcaHP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aUoX26wM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789642788; c=relaxed/simple;
+	bh=8e8Ah+7WlZHbhtXBLLlQRSAvSloayfN47Xg8BoeWzkI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=ei49rvWY8Qq5HVntEMgGeNg0y01AWBa+grtJhvbgwD3V3w4PGVZr08hOC40j6RiwmhEYsO13hyMewroQT0qT9AEn0/Ce65wIprlZ6iNQMsZKCRz4A3kYzlW4i2tsyswtahAXOqcpdocSQHoG6x2ufPk/Yy0MzU3PjWQ66++V4Dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d/6iZZCo; arc=none smtp.client-ip=74.125.225.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aUoX26wM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 765B61F00893;
-	Thu, 17 Sep 2026 10:58:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789642692;
-	bh=zq+Tm8SEtDyeDZjvWdW6VYO21uuaQfkidg5o0q4UZEw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=aUoX26wMJ+rCRE5xbFtTfuIhhMoCmho28Sa99QBRbkTlHQjqT2DOoQuXCNb9t3+wu
-	 T2nPOfy8wsV+uoL9mgcjtF/LODkrFfWvb1YkP6eYKA32udcJO//QWGIlmviOnI6OkN
-	 AMVq5QmaTo8kiAiEnd0aT97LN2Y4bNilJrGh0e1TLoWDuiK3pO8lpH131fQct2Q/Z3
-	 AQkMD7bmx2VKE+ueiX4b0bAywEgb2VjP1s/5Q4c4RgImUR8vchUUO+LUszyWBVrWvN
-	 tdFUb1Mvi/aof03FbIcovth8CqTb4HMvCY25iD86lWe3Qe6J3HgAawYGGdUg/ALL1j
-	 /Cegroir5Nybg==
-Message-ID: <f4b9f9e0-7d32-41cd-bc66-f33863b0534e@kernel.org>
-Date: Thu, 17 Sep 2026 11:58:10 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d/6iZZCo"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49e6eb11e9cso2572545e9.1
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 03:59:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789642772; x=1790247572; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=h0M7opCWPOuxBFEuwAzPAI3fMW+G/LVbMC9tyOg7hDc=;
+        b=d/6iZZCoppIIVZl9QpIgklFXZXZoKkLRQJryB2oLdVbShfOhnrYe7qEzJKAGHg9Fhs
+         9HaGUP3r3/vT4HfOI0wARNf9i3EP9pCxoUekepUKAPKHN4ZUo/fDlMBbPZFk4NuMEtpZ
+         jEscfmibdxyykCl82IEkOU5qwoCXV9jQaErqKObXxE6udizhFIcWIRq+bO7BgB++Pixf
+         //EcCX2xtTEmJksO8NE9/8ozoG8X1ZxHLDh+UTwkgVZLA+06A1Rrmdab6x9Shl7mnLuD
+         bEdRFB7oiOeClRwahH7eXIsFmpiJL+daucAfypDOcx7MdGLbpe6CdPnEBNCwYZ47Nzxk
+         jqxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789642772; x=1790247572;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=h0M7opCWPOuxBFEuwAzPAI3fMW+G/LVbMC9tyOg7hDc=;
+        b=s9L3qJz1JC6QmFJit6HhvO2XXib/bjepgtppTYU9NbkNNYH+MI59vI1yt1mPTnf7Pd
+         oEybaOvRlcyvamDKH3k0M7e/V2u1y6n2VaVL9mXlyWFrm30CjaG3LTr+bIL5T8LCOre4
+         DSWipKwjvmxoO1zG2yrBeVDe+GazVxMTh8ylGCiX2+EGAlItLCWaTRztmNFaZi9zLGEf
+         gVXeDiF79rLSUXud8lOqe3zJBLjG1TUWaw2ud06De/pty/xZdvWi7lOKoe4COPts4XvB
+         HWMWOR19E+pzcQd84V6ZnyGjKtH8DNKFjnczLKUz5sZdld/fFUbPJP4j5+cp025aSL0K
+         943A==
+X-Forwarded-Encrypted: i=1; AKwUvBwcmQVf7/8/MBDQ7GMiu+AxJFEX0auUSG6ZoZVLmyq2Hu1QdSTtVTkC2ue+8mh8kMmilfs=@vger.kernel.org
+X-Gm-Message-State: AFuF++m+8zVcRSekPYqBa3HXrGaEOmAfnurU6M2b/Yjt3dfJa0SVDK6d
+	1vuX5gVuOcFyniPJP7S72Clq/nnVU8uc1LwHrV+/QzYewv8b5gzt24dM
+X-Gm-Gg: AYBFou1NnaNOHicbpvNeUlr253TO+j4H3ZeA05DJz/267aFmJJ7ma6T8JThJZ6fGqgM
+	YNDeH5TqIiD7WmvxirONRVdzlnbtqz1o6W0EbR4U8QKebwIxAcWBQyxDhVYJyL+YA4aCR24Bt/X
+	kLcMMCGxd0Yh0bAShI+UO/O/4xh+/Th+lyLIercOwot369UTF4Yv9+ILY3NIRnfbsiXq8jlPLb2
+	tnkrEuOHLB/ppFnsBTfR/+kAZx5eNyH8us0TzFV6aSbAEPpohZNGxNNZJl11tUFt0nAQxo2sK8u
+	uWWXMVp88QfbTZaAbAN3/vJwmKCUFMfDN4+syg63M+haBbPCS1Lp/Lf0f4U8Eo+6lJBIqCNCrIz
+	KhSta+nVV1nQS3GBP1CqTgq3FP89pGuQ81TtQSHCoRagFHjUhOKapKpxwH3m6kjRV1eZS5BSn9I
+	wgvNryhxfpgp08J9Utd1j80x18YraQxFoe7oqOgN/R7+NSd+LFrwhDxVFbYJw6bvT5bUYqY7MBn
+	qFGwPVsk6PPm+dY8XMIJXSBo2socmLoKG7ex2gzdau7qy9Nsc8E3Q185WHahs/M1d3t7fSopbbo
+	ZQy8+EHUoB8DKhie80OnS2i8DRmHTv9Urx0jJr4=
+X-Received: by 2002:a05:600c:4e0a:b0:49e:8238:6feb with SMTP id 5b1f17b1804b1-49eb73088c2mr72472075e9.14.1789642771777;
+        Thu, 17 Sep 2026 03:59:31 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4870bf1fa70sm14454462f8f.9.2026.09.17.03.59.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Sep 2026 03:59:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 2/2] bpftool: Fix sparse CPU IDs in prog profile
-To: Hui Su <sh_def@163.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com
-References: <20260907155735.2929529-1-sh_def@163.com>
- <20260907155735.2929529-3-sh_def@163.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260907155735.2929529-3-sh_def@163.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Thu, 17 Sep 2026 12:59:30 +0200
+Message-Id: <DLHJEZ0K0FV1.SCQLJJQNS1ES@gmail.com>
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Mark Brown" <broonie@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Alexei Starovoitov" <ast@kernel.org>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "bpf" <bpf@vger.kernel.org>, "Networking"
+ <netdev@vger.kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>
+Cc: <linux-kernel@vger.kernel.org>, <linux-next@vger.kernel.org>
+Subject: Re: Missing signoff in the bpf tree
+X-Mailer: aerc 0.21.0
+References: <aqvBPVcN__UX8P85@sirena.org.uk>
+In-Reply-To: <aqvBPVcN__UX8P85@sirena.org.uk>
 
-On 07/09/2026 16:57, Hui Su wrote:
-> bpftool prog profile currently treats the number of possible CPUs as
-> both the logical CPU ID range and the stride of the perf event array.
-> That misses valid logical CPUs when the possible CPU mask is sparse, such
-> as 0,2-3, and can use incorrect PERF_EVENT_ARRAY keys.
-> 
-> Keep the compact possible CPU count for per-CPU result buffers, while
-> using the actual logical CPU IDs for perf events and the maximum logical
-> CPU ID plus one as the metric stride in the PERF_EVENT_ARRAY. Keep the
-> userspace perf file descriptor index separate from the BPF map key. Do
-> not advance profile_perf_event_cnt for CPUs that return ENODEV, since it
-> tracks opened userspace perf file descriptors rather than event-array
-> slots.
-> 
-> Tested:
-> - Built tools/bpf/bpftool successfully on the host.
-> - Booted an arm64 QEMU guest with a patched virt device tree reporting
->   possible=0,2-3, present=0,2-3, and online=0,2-3.
-> - Ran both pre-fix and fixed bpftool with cycles and instructions against
->   a BTF-enabled fentry target. The pre-fix binary faulted in
->   perf_event_alloc(), while the fixed binary reached perf-event setup and
->   reported failure to create the instructions event on CPU 0. QEMU did
->   not provide a usable hardware PMU runtime result, so no profile counts
->   are claimed.
-> 
-> Fixes: 47c09d6a9f67 ("bpftool: Introduce "prog profile" command")
-> Signed-off-by: Hui Su <sh_def@163.com>
-> Link: https://lore.kernel.org/bpf/20260813160858.1042834-3-sh_def@163.com/
-> ---
++To Eduard
 
-[...]
-
-> diff --git a/tools/bpf/bpftool/skeleton/profiler.bpf.c b/tools/bpf/bpftool/skeleton/profiler.bpf.c
-> index f48c783cb9f7..9486498f7605 100644
-> --- a/tools/bpf/bpftool/skeleton/profiler.bpf.c
-> +++ b/tools/bpf/bpftool/skeleton/profiler.bpf.c
-> @@ -10,7 +10,7 @@ struct bpf_perf_event_value___local {
->  	__u64 running;
->  } __attribute__((preserve_access_index));
->  
-> -/* map of perf event fds, num_cpu * num_metric entries */
-> +/* map of perf event fds, cpu_id_span * num_metric entries */
->  struct {
->  	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
->  	__uint(key_size, sizeof(u32));
-> @@ -40,6 +40,7 @@ struct {
->  
->  const volatile __u32 num_cpu = 1;
-
-
-It looks like num_cpu is now unused in the file, can you remove it, please?
-
-pw-bot: cr
-
-Looks good to me otherwise.
-
-
->  const volatile __u32 num_metric = 1;
-> +const volatile __u32 cpu_id_span = 1;
->  #define MAX_NUM_METRICS 4
->  
->  SEC("fentry/XXX")
-> @@ -67,7 +68,7 @@ int BPF_PROG(fentry_XXX)
->  		if (err)
->  			return 0;
->  		*(ptrs[i]) = reading;
-> -		key += num_cpu;
-> +		key += cpu_id_span;
->  	}
->  
->  	return 0;
-> @@ -107,7 +108,7 @@ int BPF_PROG(fexit_XXX)
->  
->  	/* read all events before updating the maps, to reduce error */
->  	for (i = 0; i < num_metric && i < MAX_NUM_METRICS; i++) {
-> -		err = bpf_perf_event_read_value(&events, cpu + i * num_cpu,
-> +		err = bpf_perf_event_read_value(&events, cpu + i * cpu_id_span,
->  						(void *)(readings + i),
->  						sizeof(*readings));
->  		if (err)
+On Thu Sep 17, 2026 at 12:30 PM CEST, Mark Brown wrote:
+> Commits
+>
+>   4499609f99fd5 ("selftests/bpf: Test global subprog callback contexts")
+>   3506b9a2f1085 ("bpf: Verify global subprogs in each sleepability contex=
+t")
+>
+> are missing a Signed-off-by from their committers
 
