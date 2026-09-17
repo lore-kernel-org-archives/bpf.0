@@ -1,131 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67BE64E50AF
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 06:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E69CD426419
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 06:36:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789626156; cv=none; b=mlbJLGmBJZaYnxQ3wgNvHbaZR58OtRrSR22ciIcGhAdguJogLUi7WdlMV2kGGqB4Izw2l6/I5SLOyIhW4spIMgqUY6VYraqPeUBWcNEiZVAjSNgTwobnOqS/QAKDkhL9WjtE3fkaTAccwNpbrVlBn16oi2JV0lu1tgLhD3qoV/4=
+	t=1789626972; cv=none; b=ibaC+bkpA6UPDdODMKLZ2jzgVAmNOp1j8eK6/V/nAZRf6snuB5CYQwZwGUXPt8fiBonG3fkaMfcKwOEuK4+rseAJHkjtIgcFvoCBp3zJr7cmRnB7Ml0mlbxPu6xIPD5m+/kwpqJPdI5j/5USssMNIdNgZHfjegGXRTvq9BpMbw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789626156; c=relaxed/simple;
-	bh=Yd1i1T7tLyBm0a3fb3bopzqmRdHd4XkFE3D0yQ6/G5M=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=buyP7n0ePhlAlqpvS0ulO+Dr/FX8TVGSMjbskUOAD7BNKy5Aok7PiTdVe/TzboKJohGydm9HMI3xjxEWIHp4zFeA3aKSxqmYqxyxSPHtJ37sK8rijLDVFFqyIreCdtomGOpn2lJEh+/0YXwCP3Ud3IQd9IPjFqhydOTVjnlHkB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gFr6uu7v; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789626972; c=relaxed/simple;
+	bh=+TEUw+9bfsRkWHwf61os0Q82n+DPpaf+QTn7DrG2OyE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=B7DtyYAP/dRo+ToB5tEdhA8qVWvXV3qyQBPbQRB7ZsdiNyMO0R4P5C27Buf8u+JzMWQYMhxS1RXzhao7/f+88WHZlEoUPGca3a6DLFyEe/L4Oley3pouzElZPqb8VHcaTn6vUK0z5UO3eZQCV3NVrOLP2W5eyw2Xfe5SyMbU8HA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vyawrA3F; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gFr6uu7v"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD78D1F000FF;
-	Thu, 17 Sep 2026 06:22:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789626155;
-	bh=4P2Oin0bbaVrJTiZpbKfPX1hB2Hs6fWDN340WxLghGo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gFr6uu7vgX4ljBaFasuM8ssg7EcmBsVxUJ6wnpc7olhfW9OyhPdzMwklZyM82tIb/
-	 onW6kNGlqAIpa0YEQ/xDzegEqTh3ZqNEU/qVvhIaOSHBv8BfvVQDFoZ0H3JXIsdGx1
-	 X52s7OvlmZPZHRDBZ4BGucAZMjsWXj+s/ONfJjJ2JuRBSjCVog6HnfgbCVwrCNTvjU
-	 Z0RApHqzyJ+ltEoi/5hRNFioGgG09KAws+F5n2lHuT819OzNziOgRtAa3bXHNItMdh
-	 GDhXVi1ULuAUd2eZkv2nMWxMwQ6TFb9kVNlkQqLSJigcHgClXglIJr4w4XktbaNS1Q
-	 F9kiBJEkBTIOQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 05/20] bpf: Make exception landing pads
- reachable in the CFG
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260917055710.3929202-1-yonghong.song@linux.dev>
-References: <20260917055645.3926444-1-yonghong.song@linux.dev>
- <20260917055710.3929202-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 17 Sep 2026 06:22:34 +0000
-Message-Id: <20260917062234.CD78D1F000FF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vyawrA3F"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=+TEUw+9bfsRkWHwf61os0Q82n+DPpaf+QTn7DrG2OyE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789626967; v=1; x=1790231767;
+ b=vyawrA3Fpmfmy9CjRrpDLI7Tq92hFGpnom0UsijC23fTIQKtkg0iEKGFfuO6asQJPdS1eLUT
+ N/9RsgLagcWDpu75XcYoRJ99pOYSyq/+NPeGIwhLc7CRN9gGPSzUwtONxU/BOLMbsNpbcnCuLHv
+ wJUvFqjsZi7fai5OQCFGzOV4=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id d725fe4ac47aab61;
+	Thu, 17 Sep 2026 06:36:07 +0000
+X-Mizu-Trace-ID: d725fe4ac47aab61
+X-Migadu-Flow: FLOW_OUT
+From: Hangbin Liu <hangbin.liu@linux.dev>
+Date: Thu, 17 Sep 2026 14:35:33 +0800
+Subject: [PATCH net-next 1/6] net: lwtunnel: change encap fill order
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260917-ynl_rt_encap-v1-1-fbbe6e680571@kylinos.cn>
+References: <20260917-ynl_rt_encap-v1-0-fbbe6e680571@kylinos.cn>
+In-Reply-To: <20260917-ynl_rt_encap-v1-0-fbbe6e680571@kylinos.cn>
+To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Donald Hunter <donald.hunter@gmail.com>
+Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ Hangbin Liu <liuhangbin@kylinos.cn>
+X-Mailer: b4 0.14.3
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: bpf_unwind_resume() retains fallthrough edge in CFG walk
---
+From: Hangbin Liu <liuhangbin@kylinos.cn>
 
-commit 663c539069f6d8aab713a59c4d2aa7c90391da34
-Author: Yonghong Song <yonghong.song@linux.dev>
+When decoding sub‑messages, YNL tries to fetch the "selector" (encap‑type)
+first. However, lwtunnel fills encap‑payload data first, which causes YNL
+to fail decoding the lwtunnel encap message.
 
-bpf: Make exception landing pads reachable in the CFG
+Fixing this inside YNL would be complex, so change the order in the kernel
+and emit encap_type first.
 
-This commit updates the verifier's CFG walk and liveness analysis to account
-for exception landing pads. It adds edges from calls within a cleanup recor=
-d's
-range to that record's landing pad. The commit message also states that
-bpf_unwind_resume() reaches nothing after it and should have no successors.
+Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+---
+ net/core/lwtunnel.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-> index 842c7d1eabccc..9f8b8b54d5ea7 100644
-> --- a/kernel/bpf/cfg.c
-> +++ b/kernel/bpf/cfg.c
-[ ... ]
-> @@ -158,17 +159,57 @@ static int push_insn(int t, int w, int e, struct bp=
-f_verifier_env *env)
-[ ... ]
->  static int visit_func_call_insn(int t, struct bpf_insn *insns,
->  				struct bpf_verifier_env *env,
->  				bool visit_callee)
->  {
-> -	int ret, insn_sz;
-> +	int ret, insn_sz, pad_ret;
->  	int w;
-> =20
-> +	pad_ret =3D visit_cleanup_pad_edge(t, env);
-> +	if (pad_ret < 0)
-> +		return pad_ret;
-> +
->  	insn_sz =3D bpf_is_ldimm64(&insns[t]) ? 2 : 1;
->  	ret =3D push_insn(t, t + insn_sz, FALLTHROUGH, env);
+diff --git a/net/core/lwtunnel.c b/net/core/lwtunnel.c
+index b01a395d9a96..f13dfa02e026 100644
+--- a/net/core/lwtunnel.c
++++ b/net/core/lwtunnel.c
+@@ -240,6 +240,10 @@ int lwtunnel_fill_encap(struct sk_buff *skb, struct lwtunnel_state *lwtstate,
+ 	    lwtstate->type > LWTUNNEL_ENCAP_MAX)
+ 		return 0;
+ 
++	ret = nla_put_u16(skb, encap_type_attr, lwtstate->type);
++	if (ret)
++		return ret;
++
+ 	nest = nla_nest_start_noflag(skb, encap_attr);
+ 	if (!nest)
+ 		return -EMSGSIZE;
+@@ -254,9 +258,6 @@ int lwtunnel_fill_encap(struct sk_buff *skb, struct lwtunnel_state *lwtstate,
+ 	if (ret)
+ 		goto nla_put_failure;
+ 	nla_nest_end(skb, nest);
+-	ret = nla_put_u16(skb, encap_type_attr, lwtstate->type);
+-	if (ret)
+-		goto nla_put_failure;
+ 
+ 	return 0;
+ 
 
-[Severity: High]
-Does this unconditionally push a fallthrough edge for all call instructions,
-failing to account for non-returning kfuncs like bpf_unwind_resume()?
+-- 
+2.55.0
 
-If the compiler places a bpf_unwind_resume() call at the very end of the
-program (the end of the .text section) without any trailing instructions, w=
-ill
-the CFG walk attempt to push a fallthrough edge out of bounds and incorrect=
-ly
-reject valid BPF programs with a 'jump out of range' error?
-
->  	if (ret)
-> -		return ret;
-> +		return merge_visit_ret(pad_ret, ret);
-> =20
->  	mark_prune_point(env, t + insn_sz);
-[ ... ]
-> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> index 44ecdc5b4ec2d..9cfd05f970bc9 100644
-> --- a/kernel/bpf/liveness.c
-> +++ b/kernel/bpf/liveness.c
-[ ... ]
-> @@ -256,6 +258,9 @@ bpf_insn_successors(struct bpf_verifier_env *env, u32=
- idx)
->  	succ =3D env->succ;
->  	succ->cnt =3D 0;
-> =20
-> +	if (unlikely(bpf_is_unwind_resume_kfunc(insn)))
-> +		return succ;
-> +
-
-[Severity: High]
-This correctly applies the logic mentioned in the commit message (that
-bpf_unwind_resume() reaches nothing after it and has no successors) to the
-liveness algorithm. Should visit_func_call_insn() in kernel/bpf/cfg.c be
-updated with similar logic to avoid pushing a fallthrough edge?
-
->  	opcode_info =3D &opcode_info_tbl[BPF_CLASS(insn->code) | BPF_OP(insn->c=
-ode)];
->  	insn_sz =3D bpf_is_ldimm64(insn) ? 2 : 1;
->  	if (opcode_info->can_fallthrough)
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260917055645.3926=
-444-1-yonghong.song@linux.dev?part=3D5
