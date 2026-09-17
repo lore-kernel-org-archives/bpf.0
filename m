@@ -1,93 +1,104 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7697B3F44FC;
-	Thu, 17 Sep 2026 09:00:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABFEB49AA22;
+	Thu, 17 Sep 2026 09:09:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789635628; cv=none; b=NakrexF0V1oVqBs6f3j6rjfGnCFpb1PFTt4ZcMxFprU9RU8Rr64iLFN0Mrm6pY7bH0VlgZBt4e+y2KOZ4+pIr0UdeVWOnp5LW+ZNFr/iF003GKkuiaKV6pEd7N3E1VWZGUmnXBKuBfThPWDYQXc8s/FcKsCzLJVfHk/v6Jo6NQQ=
+	t=1789636193; cv=none; b=PasuKJFrnHoyDxX78XyVrYj2lzy6L0cBEBA3RGQ7Wn6u+xbdG19ge1YEHdVniK42LjaqoaIyQNpqcedw2ATFPFkHX7TUfWd4IwSnT6h280Drs3waUVBGeZqaZ/8VmquWdloN+n+Kg/qiaJefkoLX9ukmlIyQtmcGIXMj1oFoBr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789635628; c=relaxed/simple;
-	bh=Y5bSJVysvr9ddQz4rfopfu0hHQ1wIqTnyODV0L3nxM0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=RpkVyKmJn13aUq7pxBpgvtRVpVgdvuzFCzZ92jBIBc4iMjrC17Vn6XQNdTqE2mX2B/6MxN2ZgoL4XI5paW2wcxEGADzNJ2I9vKMPKbDH6EobkNcOYpXPw/6U7DPjrkWpy1YfHx3LEHQYq6TVsxcq7sj7Udvai8TI2t8CP6jAf3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xg1bdiFO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789636193; c=relaxed/simple;
+	bh=a/nFbwjEIOju3X1MIW/sqlGlbwK5FvdVNYvXKi7Xlgo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=GYhsb3+lA5n0+16BoowBuR5up2VZNdBa4lZGnREh/FIzTSRQrWX82Kq6rrjaNRT3ZIwbyVzXkgimRLGTyNgttSv9SVQuAeQ50Xe70x6KOfTC3IxXsIO/Lwps78HDyi+6kvcGiuVZ+dJW1z7KobJQoymAUYXLMfrpJdAHX8RG50o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ru9GCvTo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xg1bdiFO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AB3C1F000FF;
-	Thu, 17 Sep 2026 09:00:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ru9GCvTo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 105E01F000FF;
+	Thu, 17 Sep 2026 09:09:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789635627;
-	bh=G3cWCrQW8tliOjWvk/U88u+h7FNtLXaFA7KtU9Vk1E0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Xg1bdiFO3MxUqftaFIxMcl2cc5az3in6IBLWAl2tn1XvzSZa3qZN59HJAB45B1ZRW
-	 xU6UOENwYGWC2SRiyFk1+q0fxSaYbgT2D3T+5rYmiKPK7bTuLcFEAvKgRQj8v8lkvf
-	 njOQA2IrD2zjkiyoboWOe/mGJqt+Kbm6ternkZ/oEJ5KDLb03kK/hAcjVvpanZ8UjN
-	 JrtXSILtFMeMu5Oe2IurTA0JY5vJNR6l2fzwlsgfmAKaAg4dcqbIr/92fVyLVZ8eMn
-	 AEup1d+Ofbjsu26cK3TzxhVB8PAZB/UdPRWpS7JrGhS9ZylO4dgGF6mm8HDBtJ5B7p
-	 bYXHVjkOapazg==
-Content-Type: multipart/mixed; boundary="===============2675516372883015014=="
+	s=k20260515; t=1789636192;
+	bh=5vMJLxb2WgC5tIFea55buznoCzbmE9D2zqOOZHr4b34=;
+	h=From:Subject:Date:To:Cc;
+	b=Ru9GCvTohAXBBstl0Oex+tcL4dV1TFEds9pYcha8vwp3uXnuo6Bi4iRCjcMaYUc+X
+	 FRaoT2J2ypp7jwP9fPqAlO/8jTWjT4ksZdMcaLNFBxXAspLv+oGpF0LfPNTAi4FeRt
+	 4Q2/SIm6LLegLzIYwqwWdk/okWRmseIE3TDOfXCE5QKsTkdlIxWMOJJ4MgoXgzagyR
+	 D3G+JLehh1359FDR5O9sk1BkGQKTU/1oPN6qAJf25VfXR3/OX8XHyxlc7t7ueaI1N/
+	 lP61+MRN4zBiGK9O42ALPFdK1N7Cr5jEb6wskgo1qJAnOwL3dMe2iSuNiJ2MtPEWxZ
+	 rwbNFtO1doZmA==
+From: Christian Brauner <brauner@kernel.org>
+Subject: [PATCH 0/4] file: simplify and harden cleanup handling
+Date: Thu, 17 Sep 2026 11:09:41 +0200
+Message-Id: <20260917-work-file-fd_prepare-v1-0-b87534ca49f3@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <80c4a1ad857e4007c54a10110ff85897791545942a2cb3be4d9f5e69cd17de82@mail.kernel.org>
-In-Reply-To: <20260917080839.462038-2-luyun_611@163.com>
-References: <20260917080839.462038-2-luyun_611@163.com>
-Subject: Re: [PATCH bpf 1/2] selftests/bpf: Fix timing-dependent assertions in task work stress test
-From: bot+bpf-ci@kernel.org
-To: luyun_611@163.com,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
-Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 17 Sep 2026 09:00:26 +0000 (UTC)
-
---===============2675516372883015014==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/0WMywrCMBBFf6XM2oS20Gj8FRGZJBM7KmmZ+ILSf
+ zfRhctzuPcskEmYMuybBYSenHlKBbpNA37EdCbFoTD0bW9a223Va5KrinwjFcNpFppRSBEO1ph
+ gdmgHKNfiI7+/2cPxx/nhLuTvtVUXDjMpJ5j8WFWt6lrV/6quG1jXDxZPwXekAAAA
+X-Change-ID: 20260917-work-file-fd_prepare-ea5966d68a95
+To: linux-fsdevel@vger.kernel.org
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+ linuxppc-dev@lists.ozlabs.org, linux-gpio@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ freedreno@lists.freedesktop.org, linux-media@vger.kernel.org, 
+ wine-devel@list.winehq.org, linux-xfs@vger.kernel.org, 
+ io-uring@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org, 
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ "Christian Brauner (Amutable)" <brauner@kernel.org>
+X-Mailer: b4 0.17-dev-db0b7
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2102; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=a/nFbwjEIOju3X1MIW/sqlGlbwK5FvdVNYvXKi7Xlgo=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWStXhfJMm/N0WLv17efbFU+rraYVfylV+3zo4W9JoeUt
+ rC+/ezh0lHKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAnCRSYwMi+JkYraZzsnZOaXx
+ 0UUrBavd6ybar69ZsHjTIzYDdp1D3xgZrrx7/l/ZyezGU4H7pU9+Tpr0xWLmd7ErnyWOROy5EXb
+ vHB8A
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-> task_work_run() assumes every stress run observes both scheduler
-> contention and, when the delete thread is enabled, cancellation of at
-> least one pending callback.
->
-> Neither outcome is guaranteed. Contention is observed only when another
-> scheduler selects the same one of 128 map values while its task work is
-> outstanding. A valid run can therefore have no scheduling errors. This
-> was reproduced with a single scheduler: more than one million callbacks
-> were scheduled and completed while schedule_error remained zero.
+The cleanup guards rely on unnecessary infrastructure and make the code
+more complicated to follow than it needs to be. Clean it up. Also shrink
+the struct a bit and get rid of the unnecessary error variable. We can
+just make this more ergonomic by using fdf->fd directly. Also expose the
+struct itself as const and hide the actual underlying local variable
+behind a UNIQUE_ID() named variable so we avoid risking shadow variables
+and polluting callsites. Code generation wise the outcome is exactly the
+same but simpler.
 
-This isn't a bug, but would it read more clearly to say something like 'the
-task_work_stress test helper' (or name the file) instead of the bare
-task_work_run() in the opening sentence?  There are three functions with
-that name in the tree: kernel/task_work.c, prog_tests/test_task_work.c, and
-the static helper being changed here in prog_tests/task_work_stress.c, so
-the bare name could be mistaken for the kernel function on first reading.
-
-This isn't a bug, but was nthreads reduced locally to get the
-single-scheduler run quoted here? The test hardcodes 'int nthreads = 16;'
-(prog_tests/task_work_stress.c:50) and the only environment knob is
-BPF_TASK_WORK_TEST_TIME for the duration. A reader trying to reproduce the
-quoted numbers has no way to get there without editing the file. It might
-help to say so explicitly, or give the 16-thread numbers, since the test
-has no knob for the thread count.
-
-> Likewise, a successful map deletion may remove a value after its
-> callback has completed. delete_success can therefore be nonzero without
-> callback_success being smaller than callback_scheduled.
->
-> Drop the assertion that schedule_error is nonzero. Keep requiring exact
-> callback accounting when deletion is disabled. With deletion enabled,
-> allow equal counts but still reject callback_success greater than
-> callback_scheduled.
->
-> Fixes: c6ae18e0af5e ("selftests/bpf: add bpf task work stress tests")
-> Signed-off-by: Yun Lu <luyun@kylinos.cn>
-
-
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Christian Brauner (4):
+      file: simplify FD_PREPARE()
+      file: declare the FD_PREPARE() variable with __cleanup() directly
+      cleanup: remove CLASS_INIT()
+      file: make struct fd_prepare const and kill its err field
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35199472874
---===============2675516372883015014==--
+ arch/powerpc/platforms/cell/spufs/inode.c |  12 +--
+ drivers/gpio/gpiolib-cdev.c               |  18 ++---
+ drivers/gpu/drm/msm/msm_perfcntr.c        |   4 +-
+ drivers/media/mc/mc-request.c             |   8 +-
+ drivers/misc/ntsync.c                     |   6 +-
+ fs/eventfd.c                              |   4 +-
+ fs/eventpoll.c                            |   6 +-
+ fs/file.c                                 |   8 +-
+ fs/namespace.c                            |  12 +--
+ fs/nsfs.c                                 |   4 +-
+ fs/xfs/xfs_handle.c                       |   6 +-
+ include/linux/cleanup.h                   |   7 --
+ include/linux/file.h                      | 130 +++++++++++-------------------
+ io_uring/mock_file.c                      |   8 +-
+ kernel/bpf/bpf_iter.c                     |   6 +-
+ kernel/bpf/token.c                        |   6 +-
+ mm/userfaultfd.c                          |   6 +-
+ net/core/scm.c                            |   8 +-
+ net/handshake/netlink.c                   |   8 +-
+ net/kcm/kcmsock.c                         |   6 +-
+ 20 files changed, 117 insertions(+), 156 deletions(-)
+---
+base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
+change-id: 20260917-work-file-fd_prepare-ea5966d68a95
+
