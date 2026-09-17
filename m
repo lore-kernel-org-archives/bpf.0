@@ -1,134 +1,125 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4398F3812ED
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 02:24:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88533384CD6
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 02:38:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.204
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789611867; cv=none; b=dvuwn1e87WkvnT51ZaFXqYkUAbKVMFzk7ecH28RF5oXEFkIqAByXSJcJ6ktNt1VnXgdl2e7+GBXsQQklA1rsqi79mG68YzIjsZ62xSYK+zd4KN6f/5nQzalY9oWUHt35cOOOSJLyw1wcmxHqMhkJGox/mv6fx0yYf2fT4fWJnqw=
+	t=1789612724; cv=none; b=D5Ls7d0ujl18Kctxiw96japmckULPwPAlCFySTnnUEGNbbAkFJaJTa7qC4DmQYV4kLjfWfp4zX/5Y33nUernNXYQq2XB99EK2ZvrlGXALPknmIbVGEC4R8x334H9ZH0BLQUrD8fCNxCymyhTa9tQN3pSvO+ahJCmSQ89xby8a2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789611867; c=relaxed/simple;
-	bh=E+msnkVkMuv7EW3/XyJSZb0DiTqaEOW4e8lxU2bUdDk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=WHtlHNkGHPbNUhMXtVI0BBEnKP8ObdBpjXBXeiYhwATyu0orihaKiUyqtCFSAVJrsxFEkESwawtAWWiLfIlEbZbNoZAK4hSskQEQkzyDcXZ81REZwe1dp9Ge7W+cYfFTrTLtpRPeAsIqTFKtKxsh3iWnuqx6jIhJN83UavYgrKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DfozeCmU; arc=none smtp.client-ip=74.125.227.140
+	s=arc-20240116; t=1789612724; c=relaxed/simple;
+	bh=s3YisyCcI/hq+2XDqJ6T+ddttVQATSC40ix/6ulTrS4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FmVbP4cLMJRFgcHYTxsP7xPeZHp+0YlpP11925IV5B3slvolOuNp9qbmJlDHOX59PUEeNO48n9jTBLP/Wi7efxO6B/bInZWjLOFlQl1tMvXSbzdVX0KoMmuSlIu3ersUul/lWYs7YsEQ8u3pfmU5Zr/JXi9WNSkhVdzxs2apTl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=obFutiou; arc=none smtp.client-ip=74.125.230.204
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DfozeCmU"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d8fbef5018so3501345ad.0
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 19:24:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="obFutiou"
+Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-530e28a62abso4057711cf.1
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 19:38:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789611865; x=1790216665; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=6EKmqByiGxzJPh+0Mll6vjXYdVK/vy8pIRVPNPfe0KQ=;
-        b=DfozeCmU42c3ZQt6zeu2eLYJawKiY6mKFmktJGlatz7kS0KtK38o/GFcK0d5SnwSzg
-         Mjdec2QO6eboPe2Jz4IkKLjF/iIv0aBkjdGl8vvrUkCEtctay+UHUKqR9DVS+y+KVpob
-         tncm79dXTOTPcDu9g9fjUDBbfMrrWN2AQ9kgDGSwv2d3BckJdz4kWNueJQrwT2QE+PI7
-         EH8vqv5Tjnq6dBxaNOQhZeBpEqZcgXhQglEoY7nbKJDPfzEdiS0Zrafzhhq6OdQYBxWH
-         dbUC21FZJB4V4N6W5UsLx6JZ1N41Q/dd4w4rYK3UVq+xlao0i/8nLQZPfdyxgebsGQDe
-         YxSA==
+        d=gmail.com; s=20251104; t=1789612719; x=1790217519; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=R8rU0RaqqC+TTKzMwgYz73pV9RD2QyAiNe10IeS7OZ4=;
+        b=obFutiou1/dMnMGl/im9cmqeFvlVYs7N/Qv8DO7XuZ/1o8MLq7z/EspK89ocXg3F1W
+         N7IbIkf+GRqSLFg8LAw7U1biQ+ElAILfFmNzq84q3RHq16oe4gUq1PhCB791LTU44HWZ
+         apZHdT+GPKhG7rTv2KyrzmT18PtiKcEUi6A21qn+b9egemRGPzyUI1U6JG612xxJ7+D5
+         S0a/Q2lGt4IjuRiA2iK881JqJWJ8yaiDwqHxp/2ukwcwO9DnbWctkPuWnlhM3FBV95zm
+         s6lia+664Wk2/SJzk3odCEwZpAnBZFJjdntQuCj+TAu1TF5sGh5oaZmD7xZlFZ7Zybx1
+         z8tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789611865; x=1790216665;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6EKmqByiGxzJPh+0Mll6vjXYdVK/vy8pIRVPNPfe0KQ=;
-        b=A9rUqCyjaje4HzMFvfuDPy+gNyC0H039c/OYY9zqPmhbeLceLRxCr1vYInAM3HU0v2
-         oXM6Z7RblWsKfkgbuI1bbTWh6Gwp07BpTXyZ8pR/m7uWd629BmdFYZVdZ4xI+Rx0Kp4l
-         n9iK7objFxpub1n518AkX8CW9DSI4CwrAuMZZmXbBGwErMC6Edf/PTS5yLm0RavIaCuZ
-         FrL0vzMDrfB9ro7yfwkciEPjOYJFexSE7MVW32/EA2HTyPLRWzuM9rDrzb75tmkpEaCS
-         dC4Us7RiwpnxKCkjYOXYzUBNaahliEoZIuXQhFbkx94osJK9CfWU3TtckasaTrZGcIJS
-         e7KQ==
-X-Forwarded-Encrypted: i=1; AKwUvBw5CFiQ/+CwbzYuyihg1U43M04ucEq+QyjT5CxUIBgtPudrjN0yBJ8rIeoy18G1E+tOk0M=@vger.kernel.org
-X-Gm-Message-State: AFuF++mkYi1MDkKe1MN19DarZz4RrOBBKzIreRTG0NhUahnl83/s4nM4
-	LVFt+CZmXo4dtfybLcMHPQmdzZie9bDmW3HALR6ZoSfksQRa0R1rkIOx
-X-Gm-Gg: AYBFou3oN+Gl5a+XECme0ylrD8POMfPq1tFA9gY2nlCZCvKaIbhwLwMGSCp9+Bq7L2o
-	fFs403g3rSrqJYF2/ebm46KmBE+yC4x8GlYsxzHjn9QU4QVfk2ACUA3cLzHKoZoc2cG9iLRfRyw
-	8ofQoiNIfV/ChuhgmKtJkP0/Wm1jwLfKC2qw7bgurow7l42bl8sIWErqd7CZGuIMoZv8X22dFBh
-	YC04dE7ReQ4CGzTG4hFz2I6koKk+cYI5kDOIpomASbWE9kkGB+5tLkgSTiU8Ct1OkDovyMdy2r+
-	X01kdjq5nT+MefoWL3enxOUA3Kihe6ixOaRqieJt5ZsD+FaE89wMgNwIF7+Fknt1Aqfl1nqmnV7
-	4peVKnZjlCzVhl6DArTTfnavXtx2yDMXNSsdwhAqW2bzgqKY3jCs2uvYba8ebO2W5lpN9A0Sk+t
-	sCOsKfkOdSaLXcq8L634TYEkRDGct08qeCywvuRsTJhb+UPaTfWJHybFjWN7c4Z64eBKMVVzLpN
-	lqBHn2V10R/AGwuj/brajXWNWYpyNJO68jCyaVi6HzxVOLnRPgQYmv6Qsv7FLCS4Q8sCioUleIA
-	Lp6m
-X-Received: by 2002:a17:903:1ac7:b0:2dd:60d:8b7c with SMTP id d9443c01a7336-2dd8e3f57f8mr114351815ad.13.1789611865419;
-        Wed, 16 Sep 2026 19:24:25 -0700 (PDT)
-Received: from localhost ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd89ee3557sm18694235ad.52.2026.09.16.19.24.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Sep 2026 19:24:24 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1789612719; x=1790217519;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=R8rU0RaqqC+TTKzMwgYz73pV9RD2QyAiNe10IeS7OZ4=;
+        b=kc0YoVx0miApae1nKJLTnDB3TnStLKJMCSy0fPJAG9v9TCV8NrHC8GVIeIplFNbnkd
+         ToyiDF42GfCxltDCLwgH6bYBO6MngLiybaCP+uJfdnWSFG+1nIS4DBePUMXhZuNjTCKs
+         I9njArjbcj1HDsr9FZbaXH2dtnE2/bSGqt/506Xs3z0E139Bxgo+V2Mxeb+nrI3zvmgt
+         2z06wogjfBG5+bCt+xu1ocfH1kaEKhVgMBxPGai2vzPFjamERS91EZR6zZ7LswaR0lBb
+         dmRGh2XhU8IcuZuTkhQcrRHGKb7eT+7d3RNlBAdzx+59TPPYFmYDb6/64zBHhN1N9Qbq
+         GdIA==
+X-Forwarded-Encrypted: i=1; AKwUvBwu7KUIb6hWZo8jsDbuYpnSdKijOkdp84ASAtbEa8Ttprut+eJhr4N/iWcoJqW9N8JA07U=@vger.kernel.org
+X-Gm-Message-State: AFuF++leC0xCnm9jUMUFvURmQEXJHMp70Qv7j9Obx+bZD3wD15vUwv9F
+	t2iFXNc2MVE6+4JgQuBiqhyfPO6TAkIzWxDiVjSAgGkWdXgT4EOzHFsfxfsYbw==
+X-Gm-Gg: AYBFou24QvOICV0CwFPDW+zEvUqIieGsApsAJCyWBqSvG4uretCXB3P2ACPBQg8X0x1
+	OVsnpO5ApwaY7pLPmT5D3PBgZW0zbpT6cYcfnZR0OiZXE2hHvsB8fW3n7Rs+y9l9ZSwbtaj+fdX
+	0wg/iauh7kFU6jYf6ENEmCeuuWmBE2aS1mg7gunMfzx/m+g3xJftxgG7ehqR5zFL1HFasQvgbEb
+	k6ydqAnS98L3v0zOymTQ1yM7NmBYyCdPPTVF6Ww6SRK2OoWF83lqboa/gbHONtZHVMDvbtswC2d
+	kJ+L7SkU5mdsWhgd7xqgMj3LJCd97ty8b17lT9hdu00wtb9IXlffrqWThMIwYbYzCfIE0JFp0WM
+	tMW1HN6H4aoUxncj1CG3IaiEMnalAB0ZELwKWNtTEjj+l7WuODG0nauDtv8XY9wZ4aCNHqJuyva
+	kI8GGu48a24IDA6NCdmzU8uNoKLpdzaa4O5aWQ2wMvHm6w91DihnGjCc55m9YXzX9aJyqecKY/0
+	ns=
+X-Received: by 2002:ac8:58cf:0:b0:530:703c:d846 with SMTP id d75a77b69052e-5327ebfbd68mr89015881cf.0.1789612719251;
+        Wed, 16 Sep 2026 19:38:39 -0700 (PDT)
+Received: from Turin ([187.15.143.6])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5326204af13sm37680131cf.17.2026.09.16.19.38.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Sep 2026 19:38:38 -0700 (PDT)
+From: Nicholas Dudar <main.kalliope@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	akpm@linux-foundation.org
+Cc: martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	davem@davemloft.net,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	deller@gmx.de
+Subject: [PATCH bpf] bpf: Fix page double free in test_bpf skb setup
+Date: Wed, 16 Sep 2026 22:38:34 -0400
+Message-ID: <20260917023834.2760055-1-main.kalliope@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 17 Sep 2026 02:24:24 +0000
-Message-Id: <DLH8GKM4B06Y.3HTSEM5YGFR5D@gmail.com>
-To: "Josef Bacik" <josef@toxicpanda.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>, "Frederic Weisbecker"
- <frederic@kernel.org>, "Neeraj Upadhyay" <neeraj.upadhyay@kernel.org>,
- "Joel Fernandes" <joelagnelf@nvidia.com>, "Boqun Feng" <boqun@kernel.org>,
- "Thomas Gleixner" <tglx@kernel.org>, "Peter Zijlstra"
- <peterz@infradead.org>, "Steven Rostedt" <rostedt@goodmis.org>, "Masami
- Hiramatsu" <mhiramat@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>,
- "Jiri Olsa" <jolsa@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, <x86@kernel.org>, "Catalin Marinas"
- <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>, "Puranjay
- Mohan" <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huaweicloud.com>, "Andy
- Lutomirski" <luto@kernel.org>, "Josh Triplett" <josh@joshtriplett.org>,
- "Uladzislau Rezki" <urezki@gmail.com>, "Mathieu Desnoyers"
- <mathieu.desnoyers@efficios.com>, "Lai Jiangshan" <jiangshanlai@gmail.com>,
- "Zqiang" <qiang.zhang@linux.dev>, "Juergen Gross" <jgross@suse.com>, "Luis
- Chamberlain" <mcgrof@kernel.org>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, <linux-kernel@vger.kernel.org>,
- <rcu@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
- <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <xen-devel@lists.xenproject.org>
-Subject: Re: [PATCH RFC v3 06/13] bpf: Take a Tasks Trace reader in the
- trampoline glue
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc 0.17.0
-References: <20260915-b4-rcu-tasks-preempt-qs-v3-0-0ad30c4c5ee7@toxicpanda.com> <20260915-b4-rcu-tasks-preempt-qs-v3-6-0ad30c4c5ee7@toxicpanda.com> <DLGFJY2ZSY5M.11K7HK2CLM6I9@gmail.com> <a51c15af0d61414aa780e7646b8e74cd.josef@toxicpanda.com>
-In-Reply-To: <a51c15af0d61414aa780e7646b8e74cd.josef@toxicpanda.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu Sep 17, 2026 at 1:16 AM UTC, Josef Bacik wrote:
-> On Wed, 16 Sep 2026 03:45:16 +0000, Alexei Starovoitov wrote:
-> > On Tue Sep 15, 2026 at 1:17 PM UTC, Josef Bacik wrote:
-> > >  	__acquires(RCU)
-> > >  {
-> > > +	bpf_tramp_read_lock_trace();
-> > >  	rcu_read_lock_dont_migrate();
-> >
-> > This is double increment. rcu_read_lock_dont_migrate() includes
-> > rcu_read_lock_trace().
->
-> Unless I'm looking at the wrong tree it doesn't, on Linus' master and on
-> bpf-next it is
->
-> 	static __always_inline void rcu_read_lock_dont_migrate(void)
-> 	{
-> 		if (IS_ENABLED(CONFIG_PREEMPT_RCU))
-> 			migrate_disable();
-> 		rcu_read_lock();
-> 	}
->
-> so plain RCU plus migrate_disable(), no Tasks Trace reader. That is why
-> the non-sleepable glue needs one added here: on these architectures the
-> trampoline image the glue returns into is only kept alive by Tasks RCU
-> while the task is a rcu_read_lock_trace() reader, and rcu_read_lock()
-> does not give us that.
+build_test_skb() transfers page ownership to an skb with
+skb_add_rx_frag(). If either allocation in the second loop iteration fails,
+kfree_skb() releases page[0], but the error path then falls through and
+frees page[0] again.
 
-Right. I got confused. Since rcu_read_lock_trace() CS will cover
-both sleepable and non-sleepable prog types let's do it once
-per fentry+fmod_ret region and 2nd time for fexit region.
+Return after freeing skb[0], since page[0] is already owned by the skb at
+that point; the raw page cleanup is only correct for the first iteration.
 
-We probably don't want to hold it for the whole trampoline,
-since orig_call will delay freeing of progs.
+Fixes: 76db8087c4c9 ("net: bpf: add a test for skb_segment in test_bpf module")
+Assisted-by: Codex:gpt-6-astra
+Signed-off-by: Nicholas Dudar <main.kalliope@gmail.com>
+---
+Please queue this fix for stable. The double-free has been present since
+v4.17 and is reachable when the test_bpf skb test encounters an allocation
+failure.
+
+A separate bpf-next patch allowing TEST_BPF=y depends on this fix and will
+be posted after this patch.
+
+---
+ lib/test_bpf.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/test_bpf.c b/lib/test_bpf.c
+index af6f3340c034..6104b97764bb 100644
+--- a/lib/test_bpf.c
++++ b/lib/test_bpf.c
+@@ -15214,6 +15214,7 @@ err_skb1:
+ 	__free_page(page[1]);
+ err_page1:
+ 	kfree_skb(skb[0]);
++	return NULL;
+ err_skb0:
+ 	__free_page(page[0]);
+ err_page0:
+
+base-commit: c0b95a11b38b47ed4b88fa2cebd86bfc4b244c5d
