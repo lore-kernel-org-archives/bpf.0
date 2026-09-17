@@ -1,20 +1,21 @@
-Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F70F519DF9
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 16:40:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB6AF53F6A3
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 16:40:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789663255; cv=none; b=aJsZfSThpJ/YmZ5+TN013t9LnBW5OSYZHdTm49PBa/QXCIhbWjKvjgvx7FxEQaBRZNEzmks+0tYJwuGwa5XE0X8MtKtJ+LvxnnoyzU2bVAGrM4aXTZwuXNBvKjPpEWV8nyUNqzldQKmscsy3W0CC76SPLHgxp25zVwIKVMmK5Xo=
+	t=1789663257; cv=none; b=n/xYKR4RZ9WxlP3jhi8rBE3iL6mop2KMQL5psvcQLBHXweddKEH2W8VOqXNdb4FgF2UwVYvyO4/kERyo2K+xQ83FmMJLKsS+WOPc85OloIKyc3S5mKz1wi6tb5UMjFjG2LEhXat4n9sRC51GPj6JSQIBnuZ1XsTDLVZQdNyCluY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789663255; c=relaxed/simple;
-	bh=1t+0EQDr/ovaisZixl4OHlAjmFYEcptzAEPYGZg9pjo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OOcXu6r9nQOl+De0KaMYo3txBUkCuKT1XBaGG19wYTrz5ztNjwgONNAiG0/DhryPTcaBlDMNsIQM4QUZ1kOR6nywhVhmDvSpZrOt4XCtSQ67eRZjVdnBqnixBpnXoXYqjlHFW6H8zf8YFYf3DlexzMAC00vl9tEMWkuocrX/HnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+	s=arc-20240116; t=1789663257; c=relaxed/simple;
+	bh=97a7RdYdiN707NQHEf1vAgoKhgDkIk+l/W4WLUeCG/o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=fM8Qy+drxb5p14c5LDkSlkKejSoTlYleKy7Kfkmowloqr+oQoDyaRJSD5SNYbrbY03bht1ASwDfVgJ32VFKRFSZ4Nl5c5xgM+5kHrcQqCGUVFVb/ZVO4TSIUfSYeYi+HliHLBpMGuiOs4Nh1DX007lTtMUb+HgfCkXCHSfmKX/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 7A44B2B6094804; Thu, 17 Sep 2026 09:40:38 -0700 (PDT)
+	id DAA422B60AF9A0; Thu, 17 Sep 2026 09:40:53 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: Alan Maguire <alan.maguire@oracle.com>,
 	Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
@@ -23,10 +24,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	bpf@vger.kernel.org,
 	kernel-team@fb.com
-Subject: [PATCH dwarves v2 0/3] pahole: Fix arm64 argument register allocation
-Date: Thu, 17 Sep 2026 09:40:38 -0700
-Message-ID: <20260917164038.1576763-1-yonghong.song@linux.dev>
+Subject: [PATCH 3/3] tests: tests: Add test for 16-byte aligned arguments on arm64
+Date: Thu, 17 Sep 2026 09:40:53 -0700
+Message-ID: <20260917164053.1578608-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260917164038.1576763-1-yonghong.song@linux.dev>
+References: <20260917164038.1576763-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,52 +38,136 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-The arm64 ABI starts an argument twice the register size on an even-numbe=
-red
-argument register, leaving a hole when the next free register is an odd o=
-ne:
+Cover the arm64 even-register rule for 16-byte aligned arguments:
+f_even() and f_stack() where the rule does not bite, f_odd() and
+f_odd_tail() where it leaves a register hole, and f_box() where the
+alignment comes from a struct member rather than from the parameter
+type itself.
 
-  u64 f(u64 a, __int128 v, u64 b);
+The test results on arm64:
+  $ VERBOSE=3D1 ./clang_parm_align16.sh
+  Validation of BTF encoding of over-aligned arguments.
+     BTF: u64 f_even(u64 a, u64 b, __int128 v);
+     BTF: u64 f_odd(u64 a, __int128 v, u64 b);
+     BTF: u64 f_odd_tail(u64 a, __int128 v, u64 b, u64 c, u64 d);
+     BTF: u64 f_stack(u64 a, u64 b, u64 c, u64 d, u64 e, u64 f, u64 g, __=
+int128 v);
+     BTF: u64 f_box(u64 a, struct box s, u64 b);
+  Test ./clang_parm_align16.sh passed
 
-passes a in x0, v in x2:x3 -- skipping x1 -- and b in x4.  pahole did not
-model the hole, so b looked like it was in an unexpected register and the
-whole function was dropped from BTF.  Patch 1 skips the register the ABI
-leaves behind, patch 3 adds a test for it.  Only arm64 has this rule; the
-other architectures are unaffected.
-
-Patch 2 is a small follow-up.  Floating point and vector arguments are
-allocated from a register bank of their own -- v0-v7 on arm64, xmm0-xmm7 =
-on
-x86-64 -- so a wide one never occupies a general purpose register pair an=
-d
-must not trigger the even-register rule either.  It does not change the B=
-TF
-emitted today, because such an argument still advances the general purpos=
-e
-register index by its own size, so it comes with no test of its own; it
-keeps the alignment rule scoped to the bank it applies to.
-
-Changelog:
-  v1 -> v2:
-    - v1: https://lore.kernel.org/bpf/20260911040955.339939-1-yonghong.so=
-ng@linux.dev/
-    - add commit "Do not align the argument register index for FP argumen=
-ts".
-
-Yonghong Song (3):
-  dwarf_loader: Skip the argument register the arm64 ABI leaves as a
-    hole
-  dwarf_loader: Do not align the argument register index for FP
-    arguments
-  tests: tests: Add test for 16-byte aligned arguments on arm64
-
- dwarf_loader.c              | 72 ++++++++++++++++++++++++++++++++--
- dwarves.h                   | 11 ++++++
+Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
+---
  tests/clang_parm_align16.sh | 77 +++++++++++++++++++++++++++++++++++++
  tests/test_lib.sh           |  3 +-
- 4 files changed, 158 insertions(+), 5 deletions(-)
+ 2 files changed, 78 insertions(+), 2 deletions(-)
  create mode 100755 tests/clang_parm_align16.sh
 
+diff --git a/tests/clang_parm_align16.sh b/tests/clang_parm_align16.sh
+new file mode 100755
+index 0000000..484aeb6
+--- /dev/null
++++ b/tests/clang_parm_align16.sh
+@@ -0,0 +1,77 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-only
++
++source test_lib.sh
++
++outdir=3D$(make_tmpdir)
++
++# Comment this out to save test data.
++trap cleanup EXIT
++
++title_log "Validation of BTF encoding of over-aligned arguments."
++
++align16=3D"${outdir}/align16"
++CC=3D$(which clang 2>/dev/null)
++
++if [[ -z "$CC" ]]; then
++	info_log "skip: clang not available"
++	test_skip
++fi
++
++arch=3D$(uname -m)
++if [[ "$arch" !=3D "aarch64" ]]; then
++	info_log "skip: test is arm64 only, running on $arch"
++	test_skip
++fi
++
++# arm64 makes an argument whose alignment is 16 start on an even-numbere=
+d
++# argument register, so f_odd() passes a in x0, v in x2:x3 -- leaving x1=
+ as a
++# hole -- and b in x4.  pahole has to account for that hole, otherwise e=
+very
++# parameter after v looks like it is in an unexpected register and the w=
+hole
++# function is dropped from BTF.
++cat > ${align16}.c << EOF
++typedef unsigned long long u64;
++struct box { __int128 v; };
++
++__attribute__((noinline)) u64 f_even(u64 a, u64 b, __int128 v)
++{ return a + b + (u64)v; }
++
++__attribute__((noinline)) u64 f_odd(u64 a, __int128 v, u64 b)
++{ return a + b + (u64)v; }
++
++__attribute__((noinline)) u64 f_odd_tail(u64 a, __int128 v, u64 b, u64 c=
+, u64 d)
++{ return a + b + c + d + (u64)v; }
++
++__attribute__((noinline)) u64 f_stack(u64 a, u64 b, u64 c, u64 d, u64 e,=
+ u64 f,
++				      u64 g, __int128 v)
++{ return a + b + c + d + e + f + g + (u64)v; }
++
++__attribute__((noinline)) u64 f_box(u64 a, struct box s, u64 b)
++{ return a + b + (u64)s.v; }
++
++u64 (*keep[])() =3D { (u64(*)())f_even, (u64(*)())f_odd, (u64(*)())f_odd=
+_tail,
++		    (u64(*)())f_stack, (u64(*)())f_box };
++EOF
++
++${CC} -g -O2 -c -o ${align16}.o ${align16}.c 2>/dev/null
++if [[ $? -ne 0 ]]; then
++	info_log "skip: clang could not compile ${align16}.c"
++	test_skip
++fi
++
++LLVM_OBJCOPY=3Dobjcopy pahole -J --btf_features=3Dconsistent_func ${alig=
+n16}.o
++if [[ $? -ne 0 ]]; then
++	error_log "Could not encode BTF for ${align16}.o"
++	test_fail
++fi
++
++for fn in f_even f_odd f_odd_tail f_stack f_box; do
++	encoded=3D$(pfunct --all --format_path=3Dbtf ${align16}.o | grep " ${fn=
+}(")
++	verbose_log "BTF: $encoded"
++	if [[ -z "$encoded" ]]; then
++		error_log "${fn}() is missing from BTF"
++		test_fail
++	fi
++done
++
++test_pass
+diff --git a/tests/test_lib.sh b/tests/test_lib.sh
+index e2a7218..e2d0b0c 100755
+--- a/tests/test_lib.sh
++++ b/tests/test_lib.sh
+@@ -661,8 +661,7 @@ check_bpftool_btf_support()
+ cleanup()
+ {
+ 	if [ -n "$outdir" ] && [ -d "$outdir" ]; then
+-		rm ${outdir}/*
+-		rmdir $outdir
++		rm -rf "$outdir"
+ 	fi
+ 	return 0
+ }
 --=20
 2.53.0-Meta
 
