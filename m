@@ -1,107 +1,118 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E693A9018
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 20:47:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C70B400DE8;
+	Thu, 17 Sep 2026 21:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789678026; cv=none; b=MZtNk5BkTZKrhb3c+J2RQw52TgQMQhd2iac2GiIt2quyLIZaTmL7bLgGoMw9gAs+qd91hR2k5NSETt3epj1e3EIUzlKgLPzXEDETQAfK9o7I+OZWftG+dzdwIRb0LHQxE24absIkpU3exuKQQfGfQJe3oFN1pkaskGydd+uYfuo=
+	t=1789679775; cv=none; b=dk/wanf5OHvhA35+lgGIGoLQcNrxz8eChIUenAR6zjKlzaJXmVJP4trlc3/WkP0COIFV+H+yEjOU2kU3sCpWXLn84yHxFzWV2xNuhGIR4SgLc90CN3lz+gT8D5Vv35Bcc1Zh5y2Aar9ST0kZMvxt4OEoz78hLmREwTyfn1cYQLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789678026; c=relaxed/simple;
-	bh=nIVOkYYFqQJ0yVigMP8u4kUJIqRX2qfKDMZ1LhH9o/s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HIMbRmkl4jiHtU0fLWpbVi7meVWvnToz3zqE/ajpgP5JKjJo/31qen2m8gcaI9r9/KF+3AIIJi5KvhT8lqIJe/qaYkNrZs2VSjcEziZVxrY39YCnfiaZLCqLkvWmKSZVrFqEYPAAeO2Wo9D5FO30/3Ucm0dT3pBzvBYTphHzjvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KyfN7cY7; arc=none smtp.client-ip=74.125.228.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789679775; c=relaxed/simple;
+	bh=hpFcFaJzqru2JXdgMfr1/g1V1NYDhtgHkXHKQpXWWm8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=YAif2Z0FDNrdf7u5HUpe/Eg3q549l2Qe4D7tQRLTTuqjmjyqPXUt42neSbEyX4dUgGWg8yGk8fdK1JRGDVUpT6NlXf7XqzWcks4XCGPGc8b3WRHhDpG5nAeoMk7CFs4xecMsP97m5O24I2UZ8YIfTSoy7XT2fMTF1aWOCpnLeho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TiD+1OtQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KyfN7cY7"
-Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc1cea4bfd1so970492a12.0
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 13:47:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789678023; x=1790282823; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2gunvEfcyXymrnukDaYw8Fai9UY+V2Nlpd2w2MiKQn8=;
-        b=KyfN7cY7cp3EewmBcfgrZpEPz83D0+LU62/Y0cZauw2jnCJ4duwF5SEd+Ucx5+VCGz
-         0CLIsGFYIfBrQGMIq+szUMryjtGqZ+/fTYdsjTpyU+WKXwpjRsN8Qs9vAtCJtaORfsJB
-         oAfS5hg9sZTZV97C+P834jK6LSl+s+cHtRAO7pLLenkqOczPvFHUgpKkS+CXW8CvKLJW
-         FSW+t5pPZy7DrN0OUEcJsZjq+ANbBBzsdZcEnM/sT7gYjLWZ8Woix33q3YnXZSpif9ga
-         oJGiKWCToHLpaoxPYpdSoZ9f5a3bvAyHwIPR5fJDsP981EQlV8zvphTvCHyLFZIokaYj
-         8zLQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789678023; x=1790282823;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=2gunvEfcyXymrnukDaYw8Fai9UY+V2Nlpd2w2MiKQn8=;
-        b=Fx5NRudDwGZfWJAbf19OcTYb3rd6GEwRLCE8XxRSos+hcsbnur27HgRXeTbe00fSLv
-         J3QJnHqM/dJ6G9i0D8moojbyL+Rr4st28eGK8JV5znYqCXqEX+jbUS25B1J/5Jwp2VBV
-         DPUEiEz5ordhUhh7LHgehKF6dC9tpqMIzEldU6IylAowW+CExm5QV0AJKDSL1xt6dpPS
-         ZoJFFMfr4byWpSlvVz8WcjcUD20xhtV5bVLwD8KYlj76vQX+CVM5L1TdY4pFap9MpfSp
-         xE4nIEquxMeGoQw+pBfdigunPeNy3cHH6bQBFtF0nBh4Pv8Dav5Q3yDwerR9OSSd+3eZ
-         FrhA==
-X-Forwarded-Encrypted: i=1; AKwUvBzdKc4jynkIjgxMfV5EY0mBU1wjMTnFsE+tYjgGdvBVlRRYPXPc4azfhWe+PYPyaZaYfcc=@vger.kernel.org
-X-Gm-Message-State: AFuF++l5gpQvaB3Jjbal0qulaVrh8X1grqOVYqCTjAQVRjYToGCwSfeo
-	gb3CZDNWb6ehfL6O809Dv8pOiEZNP2gl3T9uuP4DQVTvwjdyWVeWfFr25x4kCNwL
-X-Gm-Gg: AYBFou3hfgaEvfcgVlhXgqcJTJ9Bh4EGwWob9rel3G0LnvV+Mv69oshOJTKB/iBd19D
-	kLOlKq+GuxtEeIwqhoWceu1sOTeT8Ra1u7KEi8pME/73OOYnI6BFDYzGySATcwBGBN73CAYptE9
-	OPUNthxgiMa6beUt/XcbQ70J/CBHURbgOoqDpIdUIN/7vqeaxr4Tb/5BiA8HoOBUjkug/jG3usL
-	NK59kD0TtzGZhf2xTFlbe4nzBLrfZBFbuEOlUuX/W77T6IPkGX+M0mNivzcYC0iDT9YYh4qHDYh
-	QXl4vmxXRuYUvRMaVtXsfYAUuxD0KaKAcvDbHuU5iFFf37hKr/ZPWT/7hS8ecL/sdaKlkQlJmy3
-	IloT7BKUcn46NtDihzBTlrrxllbOiBoMPexxbYic7NnVfaNEIFqLtdHWLNT+D403o/ug//rK6k/
-	4wAHOzeTR4cZIKUGVUD4tV421wxX6fu16if1X+gFkWpMEePH/lFdf8o2kKhd18VeJ0NcoEVps=
-X-Received: by 2002:a05:6a20:3946:b0:3dd:85a8:cace with SMTP id adf61e73a8af0-3dd8c4ab5d2mr286409637.37.1789678022967;
-        Thu, 17 Sep 2026 13:47:02 -0700 (PDT)
-Received: from G15-5520 ([103.246.195.8])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14395d3a31asm14274126c88.9.2026.09.17.13.46.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 13:47:02 -0700 (PDT)
-From: Lalit Shankar Chowdhury <lalitshankarch@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)),
-	linux-kernel@vger.kernel.org (open list)
-Cc: Lalit Shankar Chowdhury <lalitshankarch@gmail.com>
-Subject: [PATCH] bpf: use str_plural() in diag_print_history()
-Date: Thu, 17 Sep 2026 20:46:48 +0000
-Message-ID: <20260917204648.9110-1-lalitshankarch@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TiD+1OtQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A4F1F000FF;
+	Thu, 17 Sep 2026 21:16:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789679772;
+	bh=WC+7rsLj4fYl82XgvSqRMlxe1PP22x0bb+mbKZXjHWU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=TiD+1OtQwYm+pRvtFLKAZDZ2XqmG+V8V+/VhGroahRs79TPotpVSnqcIKZDcEQswC
+	 U3UPR59XD7P4PKcrc59c3XUnASe4hx8pxBhsI6aqVut2ZWOIK8KPzIGIfxOF0CMJD4
+	 thd+ovNN70h41IDRUf9RklmkHjcMbPj5N+lrXLvhh0Qy8OWW+RD0TB216DrAvy/E15
+	 WjCfmBvPuOdo+oIsS096zB/X+RePaSffCYWL15m/8vXB8erDTUXCvP0cy0CRztjkGL
+	 CxQCrGZFrITUTMsT/BsbV98pPOTk+zpEVyUDwOVZMvLgi8Irdn9Lj3NpN5Wkp0rdxG
+	 XLHGnsiuGE6kA==
+Content-Type: multipart/mixed; boundary="===============3478063305945732436=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <86dea9c47b45beb40c970a6365549f6013993d7b4b4b26c92ee7c4ecedf21dbc@mail.kernel.org>
+In-Reply-To: <20260917200542.3689605-4-ameryhung@gmail.com>
+References: <20260917200542.3689605-4-ameryhung@gmail.com>
+Subject: Re: [PATCH bpf-next v4 03/15] bpf: Add bpf_struct_ops accessor helpers
+From: bot+bpf-ci@kernel.org
+To: ameryhung@gmail.com,bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,martin.lau@kernel.org,shakeel.butt@linux.dev,roman.gushchin@linux.dev,kuniyu@google.com,kerneljasonxing@gmail.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 17 Sep 2026 21:16:11 +0000 (UTC)
 
-Use the string choice helper function to simplify the code.
+--===============3478063305945732436==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Lalit Shankar Chowdhury <lalitshankarch@gmail.com>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 1198404885c86..90ab467d25a27 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -2290,6 +2290,11 @@ u32 bpf_struct_ops_id(const void *kdata);
+>  int bpf_struct_ops_for_each_prog(const void *kdata,
+>  				 int (*cb)(struct bpf_prog *prog, void *data),
+>  				 void *data);
+> +void *bpf_struct_ops_map_kdata(struct bpf_map *map);
+> +void *bpf_struct_ops_map_cfi_stubs(struct bpf_map *map);
+> +bool bpf_struct_ops_valid_to_reg(struct bpf_map *map);
+> +int bpf_struct_ops_link_update_check(struct bpf_map *new_map, struct bpf_map *old_map,
+> +				     struct bpf_map *expected_old_map);
+>
+>  #ifdef CONFIG_NET
+>  /* Define it here to avoid the use of forward declaration */
+> @@ -2354,6 +2359,28 @@ static inline void bpf_map_struct_ops_info_fill(struct bpf_map_info *info, struc
+>  static inline void bpf_struct_ops_desc_release(struct bpf_struct_ops_desc *st_ops_desc)
+>  {
+>  }
+> +static inline u32 bpf_struct_ops_id(void *kdata)
+                                          ^^^^
+
+Does this stub match the real prototype? The declaration at line 2290 above
+has:
+
+  u32 bpf_struct_ops_id(const void *kdata);
+
+and the definition in kernel/bpf/bpf_struct_ops.c also carries the const
+qualifier. The four other stubs added in this hunk (bpf_struct_ops_map_kdata,
+bpf_struct_ops_map_cfi_stubs, bpf_struct_ops_valid_to_reg,
+bpf_struct_ops_link_update_check) match their prototypes exactly.
+
+When CONFIG_BPF_JIT is disabled, a caller passing const void * would see a
+-Wdiscarded-qualifiers warning (an error under CONFIG_WERROR).
+
+> +{
+> +	return 0;
+> +}
+> +static inline void *bpf_struct_ops_map_kdata(struct bpf_map *map)
+> +{
+> +	return NULL;
+> +}
+> +static inline void *bpf_struct_ops_map_cfi_stubs(struct bpf_map *map)
+> +{
+> +	return NULL;
+> +}
+> +static inline bool bpf_struct_ops_valid_to_reg(struct bpf_map *map)
+> +{
+> +	return false;
+> +}
+> +static inline int bpf_struct_ops_link_update_check(struct bpf_map *new_map,
+> +						   struct bpf_map *old_map,
+> +						   struct bpf_map *expected_old_map)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+>
+>  #endif
+
+[ ... ]
+
+
 ---
- kernel/bpf/diagnostics.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-index 0abbbe177e31..ff139777ac64 100644
---- a/kernel/bpf/diagnostics.c
-+++ b/kernel/bpf/diagnostics.c
-@@ -2354,6 +2354,6 @@ static void diag_print_history(struct bpf_verifier_env *env,
- 	if (log->first_seq)
- 		diag_write(env, "  %llu older causal-history event%s not retained because diagnostic "
- 			   "event storage reached capacity\n",
--			   log->first_seq, log->first_seq == 1 ? "" : "s");
-+			   log->first_seq, str_plural(log->first_seq));
- 	diag_fmt_restore(env, mark);
- }
--- 
-2.53.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35271288839
+--===============3478063305945732436==--
