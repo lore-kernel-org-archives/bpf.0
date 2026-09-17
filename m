@@ -1,23 +1,23 @@
 Received: from zju.edu.cn (gw.zju.edu.cn [210.32.2.4])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 875253BE638
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 875C13BED23
 	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 04:19:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.32.2.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789618781; cv=none; b=Puab88q9U4CdUMCnwssDmqQhNCWwt4OK0O7KoKLYhIBT8ylxGR9VDxj2g42H96vZVOo1mPxOp7NgSMK1yUENTtpIZP4/1xcPxnQzBNz9+IlegA5Mmjh9VQ/v5Vm4IrMyn43OxmuW/hyfO+bJMJXJ+TUrAh2ZjfJM/NrnVzDzUic=
+	t=1789618781; cv=none; b=eX2iwITn8sISAS9lPMVPqBu9aTwLGDuNZ48NFMBHy/gUqaKQFG5PxfES717DmRJmKhMYxsPwH1ZDVRc29KdT6ofu42S2Xg4/JrCkjQ96SqTJMWxGOhueYzMTlMLivAa87jiZOytGGTXtU9XXrNv2I5z0bMO0xb3cHbc7M2IkF6s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789618781; c=relaxed/simple;
-	bh=NIyK4mLjUosxG4TwQDJY1eGmPYHabwv/g9eFyY40jB0=;
+	bh=dFDdPU9IBPl0P3saPerTLdSXEBGOBR7Uyh5jhRXS6/o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CE/rFUCD25M44odTOoOxXDisQ1Iky+YHHh+X615S0gTMO5bKheyacH4k6M+ghOEJFpe+YUzpBB+bKUFOM63JySpCJzUceJ7h9SNDJvK9bN1Rf8uDL3pjkH8aASb6U4jeK/NaMmHp6Y46UXsXmgAamrdD/5wctNsk4Wg1SNV1olM=
+	 MIME-Version; b=gELFBbJLYysV29TgCoZTTfrv1t47+e/0iDcE3MROcjpVlHi9bdWyoGVBPQWsi9EC155au2Qc1WVKlshfTR8PvskZYqYlvJLtJvSFPYLyBj3kB57plEU7nOKmd3XHflNVHb5vTPKeI4GjSfD/MiMOxA94e//oLdXD1Rw1VDwbZd4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=210.32.2.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
 Received: from zju.edu.cn (unknown [10.162.163.215])
-	by mtasvr (Coremail) with SMTP id _____wBXUH_aaatqpBMdAQ--.3643S3;
-	Thu, 17 Sep 2026 12:17:30 +0800 (CST)
+	by mtasvr (Coremail) with SMTP id _____wCnr3_baatqqBMdAQ--.3639S3;
+	Thu, 17 Sep 2026 12:17:31 +0800 (CST)
 Received: from lutetium.tail477849.ts.net (unknown [10.162.163.215])
-	by mail-app1 (Coremail) with SMTP id yy_KCgAHC6XZaatqLeuJBA--.2484S2;
-	Thu, 17 Sep 2026 12:17:29 +0800 (CST)
+	by mail-app1 (Coremail) with SMTP id yy_KCgDnNZ7aaatqMOuJBA--.2471S2;
+	Thu, 17 Sep 2026 12:17:30 +0800 (CST)
 From: Yazhou Tang <tangyazhou@zju.edu.cn>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -34,11 +34,10 @@ Cc: daniel@iogearbox.net,
 	jolsa@kernel.org,
 	tangyazhou518@outlook.com,
 	shenghaoyuan0928@163.com,
-	ziye@zju.edu.cn,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: [PATCH bpf-next 7/8] bpf: Add verifier support for UHMUL and SHMUL
-Date: Thu, 17 Sep 2026 12:17:11 +0800
-Message-ID: <20260917041712.1860722-8-tangyazhou@zju.edu.cn>
+	ziye@zju.edu.cn
+Subject: [PATCH bpf-next 8/8] selftests/bpf: Add bytecode tests for UHMUL and SHMUL
+Date: Thu, 17 Sep 2026 12:17:12 +0800
+Message-ID: <20260917041712.1860722-9-tangyazhou@zju.edu.cn>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260917041712.1860722-1-tangyazhou@zju.edu.cn>
 References: <20260917041712.1860722-1-tangyazhou@zju.edu.cn>
@@ -49,134 +48,409 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:yy_KCgAHC6XZaatqLeuJBA--.2484S2
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgMRCmqq8RoVWgACs4
-X-CM-DELIVERINFO: =?B?7CUEXgXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9NuO7bmcOm6inyHA68dGwwSDjwOQj2pya3udbY5OQbVGtQTceyTRXOqRd+9npnNIMuzx
-	tYW6ygMMAODLRUSlwhJpgK6yGINPMCS0UMu5Krzc7nMXHM/QSxr4ZaI2KSj+CQ==
-X-Coremail-Antispam: 1Uk129KBj93XoWxWF1rZrykKF13ZFy3Gw1ktFc_yoWrAFy8pr
-	4DXr95JrWkCay7ua9rZa97Ar90qF18Kw48ur9rA34xXFyUJF98tF42gFy7Z34ayrWvga4x
-	tF4Yv34qga4UAFgCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUBYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
-	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC2
-	0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
-	0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
-	14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI
-	8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU80tC7UUUUU==
+X-CM-TRANSID:yy_KCgDnNZ7aaatqMOuJBA--.2471S2
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAhARCmqq8RoVYwAAsU
+X-CM-DELIVERINFO: =?B?LwXM6AXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9IM9FLVg81ZTWd+DT36CLxXi/ioJprkDrAwKUew90oS5BeFAAQQB6aPIDRulkMa2wCoF
+	tLTWbgyQtKrfKrYlnCY3NCygyy0DcDqL8oFc71ucgwcI61zhOrzFs5A0wFcIJQ==
+X-Coremail-Antispam: 1Uk129KBj9fXoW3tr1DJr45ur17AryrGw18tFc_yoW8Jr15Xo
+	W7ua17tr45KF1Y9aySkFsayFW7ur4IkayrJrWkG3WUXF97Ar1Yy340kw4xtr4q9r1q9as5
+	Xa47Z3Wava15JF1kl-sFpf9Il3svdjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8wcxFpf
+	9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
+	UjIYCTnIWjp_UUUYX7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI
+	8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
+	Y2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14
+	v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAF
+	wI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
+	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE
+	14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjcxG0xvY0x
+	0EwIxGrVCF72vEw4AK0wACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCF
+	x2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14
+	v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY
+	67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4
+	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07jjpBfUUUUU=
 
-From: Tianci Cao <ziye@zju.edu.cn>
+From: Yazhou Tang <tangyazhou518@outlook.com>
 
-Extend ALU variant validation to accept off == 1 and off == 2 as UHMUL and
-SHMUL, respectively, for BPF_ALU64 MUL instructions. Both offsets remain
-reserved for BPF_ALU MUL, since the high-half variants are only defined
-for 64-bit operations. All other MUL offsets remain invalid.
+Add test_progs coverage for UHMUL and SHMUL with the following changes:
 
-For scalar tracking, compute the exact high-half result when both operands
-are constants. Mark the destination unknown when either operand is variable
-until range analysis for these variants is added. Keep the existing scalar
-analysis for ordinary low-half MUL unchanged.
+1. Add arithmetic execution tests in verifier_hmul.c and register the new
+   test suite with the verifier test runner:
+   - Gate the execution cases on x86, arm64, and RV64, matching the JIT support
+     added in this series, and provide a dummy program for other targets.
+   - Inject only UHMUL and SHMUL as raw .8byte values built with
+     BPF_RAW_INSN(), while keeping the surrounding instructions in the
+     existing assembly syntax. This avoids requiring assembler support
+     for the new mnemonics.
+   - Exercise register and immediate sources, signed and unsigned boundary
+     values, negative immediate sign extension, and R0, R1, and R3
+     destinations. The R3 case covers the x86 JIT path where BPF R3 aliases
+     the implicit RDX result register. Run these cases in both privileged
+     and unprivileged modes.
+   - BPF_PROG_TEST_RUN exposes only the low 32 bits of R0 as its return
+     value, so a direct __retval() check cannot validate the upper 32 bits.
+     Build a 64-bit mismatch mask as actual ^ expected, then fold it to
+     32 bits as (u32)mismatch | (u32)(mismatch >> 32) and return the folded
+     value through R0. The return value is zero if and only if the complete
+     64-bit result matches the expected value.
 
-Reject UHMUL and SHMUL when either operand is PTR_TO_ARENA. Arena
-arithmetic can be rewritten from BPF_ALU64 to BPF_ALU to enforce its 32-bit
-pointer representation, but such a rewrite cannot preserve the semantics of
-variants that are only defined for BPF_ALU64.
+2. Add arena pointer rejection tests in verifier_hmul.c. Use an arena
+   pointer as the destination of UHMUL and as the source of SHMUL, and
+   verify that the verifier rejects both programs.
 
-Link: https://lore.kernel.org/bpf/CAADnVQ+2O2zgdy11+vxE6dOp+3Br4zZBysHF-Hne7cP+eeucnQ@mail.gmail.com/
-Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
-Co-developed-by: Yazhou Tang <tangyazhou518@outlook.com>
+3. Extend the illegal instruction encoding tests in verifier_value_illegal_alu.c.
+   Check reserved MUL offsets and UHMUL and SHMUL encodings in the BPF_ALU
+   class, reusing the existing DEFINE_BAD_OFFSET_TEST() macro.
+
 Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
+Co-developed-by: Tianci Cao <ziye@zju.edu.cn>
+Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
 Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
 Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
 ---
- kernel/bpf/verifier.c | 45 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../selftests/bpf/progs/verifier_hmul.c       | 284 ++++++++++++++++++
+ .../bpf/progs/verifier_value_illegal_alu.c    |   9 +-
+ 3 files changed, 294 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_hmul.c
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index ed8742bf504f..92603a6a030b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -15238,6 +15238,24 @@ static void scalar_min_max_mul(struct bpf_reg_state *dst_reg,
- 					cnum64_from_srange(smin, smax));
- }
- 
-+static void scalar_min_max_uhmul(struct bpf_reg_state *dst_reg,
-+				 struct bpf_reg_state *src_reg)
-+{
-+	u64 dst = reg_const_value(dst_reg, false);
-+	u64 src = reg_const_value(src_reg, false);
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 7732df9bc870..bf5d9b140c45 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -51,6 +51,7 @@
+ #include "verifier_helper_packet_access.skel.h"
+ #include "verifier_helper_restricted.skel.h"
+ #include "verifier_helper_value_access.skel.h"
++#include "verifier_hmul.skel.h"
+ #include "verifier_int_ptr.skel.h"
+ #include "verifier_iterating_callbacks.skel.h"
+ #include "verifier_jeq_infer_not_null.skel.h"
+@@ -217,6 +218,7 @@ void test_verifier_helper_access_var_len(void) { RUN(verifier_helper_access_var_
+ void test_verifier_helper_packet_access(void) { RUN(verifier_helper_packet_access); }
+ void test_verifier_helper_restricted(void)    { RUN(verifier_helper_restricted); }
+ void test_verifier_helper_value_access(void)  { RUN(verifier_helper_value_access); }
++void test_verifier_hmul(void)                 { RUN(verifier_hmul); }
+ void test_verifier_int_ptr(void)              { RUN(verifier_int_ptr); }
+ void test_verifier_iterating_callbacks(void)  { RUN(verifier_iterating_callbacks); }
+ void test_verifier_jeq_infer_not_null(void)   { RUN(verifier_jeq_infer_not_null); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_hmul.c b/tools/testing/selftests/bpf/progs/verifier_hmul.c
+new file mode 100644
+index 000000000000..197ceac3b798
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_hmul.c
+@@ -0,0 +1,284 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+	___mark_reg_known(dst_reg, bpf_uhmul64(dst, src));
++#include <linux/bpf.h>
++#include <limits.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++#include "../../../include/linux/filter.h"
++
++#define BPF_UHMUL64_REG(DST, SRC) \
++	BPF_RAW_INSN(BPF_ALU64 | BPF_MUL | BPF_X, DST, SRC, \
++		     BPF_MUL_VARIANT_UHMUL, 0)
++
++#define BPF_UHMUL64_IMM(DST, IMM) \
++	BPF_RAW_INSN(BPF_ALU64 | BPF_MUL | BPF_K, DST, 0, \
++		     BPF_MUL_VARIANT_UHMUL, IMM)
++
++#define BPF_SHMUL64_REG(DST, SRC) \
++	BPF_RAW_INSN(BPF_ALU64 | BPF_MUL | BPF_X, DST, SRC, \
++		     BPF_MUL_VARIANT_SHMUL, 0)
++
++#define BPF_SHMUL64_IMM(DST, IMM) \
++	BPF_RAW_INSN(BPF_ALU64 | BPF_MUL | BPF_K, DST, 0, \
++		     BPF_MUL_VARIANT_SHMUL, IMM)
++
++/*
++ * Inject UHMUL/SHMUL as raw instructions so these tests do not require
++ * assembler support for the new mnemonics. All surrounding instructions use
++ * existing BPF assembly syntax supported by the baseline selftests toolchain.
++ */
++
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST)
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(max_entries, 1);
++} arena SEC(".maps");
++
++SEC("syscall")
++__description("UHMUL64 with arena pointer dst")
++__failure __msg("UHMUL/SHMUL with arena pointers are not supported")
++__naked void uhmul64_arena_ptr(void)
++{
++	asm volatile (
++	"r1 = %[arena] ll;"
++	"r0 = 1;"
++	"r0 = addr_space_cast(r0, 0x0, 0x1);"
++	".8byte %[hmul];"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_insn(hmul, BPF_UHMUL64_IMM(BPF_REG_0, 2))
++	: __clobber_all);
 +}
 +
-+static void scalar_min_max_shmul(struct bpf_reg_state *dst_reg,
-+				 struct bpf_reg_state *src_reg)
++SEC("syscall")
++__description("SHMUL64 with arena pointer src")
++__failure __msg("UHMUL/SHMUL with arena pointers are not supported")
++__naked void shmul64_arena_ptr(void)
 +{
-+	s64 dst = reg_const_value(dst_reg, false);
-+	s64 src = reg_const_value(src_reg, false);
-+
-+	___mark_reg_known(dst_reg, bpf_shmul64(dst, src));
++	asm volatile (
++	"r1 = %[arena] ll;"
++	"r1 = 1;"
++	"r1 = addr_space_cast(r1, 0x0, 0x1);"
++	"r0 = 2;"
++	".8byte %[hmul];"
++	"exit;"
++	:
++	: __imm_addr(arena),
++	  __imm_insn(hmul, BPF_SHMUL64_REG(BPF_REG_0, BPF_REG_1))
++	: __clobber_all);
 +}
 +
- static void scalar32_min_max_udiv(struct bpf_reg_state *dst_reg,
- 				  struct bpf_reg_state *src_reg)
- {
-@@ -15934,6 +15952,25 @@ static int adjust_scalar_min_max_vals(struct bpf_verifier_env *env,
- 		dst_reg->var_off = tnum_neg(env->fake_reg[0].var_off);
- 		break;
- 	case BPF_MUL:
-+		/*
-+		 * Range analysis for UHMUL/SHMUL is not implemented yet.
-+		 * Compute an exact result only when both operands are constants.
-+		 * Ordinary low-half MUL continues to use the analysis below.
-+		 */
-+		if (bpf_insn_is_hmul(insn) &&
-+		    (!is_reg_const(dst_reg, false) ||
-+		     !is_reg_const(&src_reg, false))) {
-+			__mark_reg_unknown(env, dst_reg);
-+			break;
-+		}
-+		if (!alu32 && insn->off == BPF_MUL_VARIANT_UHMUL) {
-+			scalar_min_max_uhmul(dst_reg, &src_reg);
-+			break;
-+		}
-+		if (!alu32 && insn->off == BPF_MUL_VARIANT_SHMUL) {
-+			scalar_min_max_shmul(dst_reg, &src_reg);
-+			break;
-+		}
- 		dst_reg->var_off = tnum_mul(dst_reg->var_off, src_reg.var_off);
- 		scalar32_min_max_mul(dst_reg, &src_reg);
- 		scalar_min_max_mul(dst_reg, &src_reg);
-@@ -16059,6 +16096,11 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
- 	if (dst_reg->type == PTR_TO_ARENA || (src_reg && src_reg->type == PTR_TO_ARENA)) {
- 		struct bpf_insn_aux_data *aux = cur_aux(env);
- 
-+		if (bpf_insn_is_hmul(insn)) {
-+			verbose(env, "UHMUL/SHMUL with arena pointers are not supported\n");
-+			return -EOPNOTSUPP;
-+		}
++#endif
 +
- 		if (dst_reg->type != PTR_TO_ARENA)
- 			*dst_reg = *src_reg;
++#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
++	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)
++
++/*
++ * BPF_PROG_TEST_RUN reports a 32-bit retval. Fold both halves of
++ * (actual ^ expected) into w0 so retval == 0 checks the full 64-bit result.
++ */
++
++SEC("socket")
++__description("UHMUL64, U64_MAX * U64_MAX, register source")
++__success __success_unpriv __retval(0)
++__naked void uhmul64_max_reg(void)
++{
++	asm volatile (
++	"r0 = -1;"
++	"r1 = -1;"
++	".8byte %[hmul];"
++	"r2 = -2;"
++	"r0 ^= r2;"
++	"r2 = r0;"
++	"r2 >>= 32;"
++	"w0 |= w2;"
++	"exit;"
++	:
++	: __imm_insn(hmul, BPF_UHMUL64_REG(BPF_REG_0, BPF_REG_1))
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("UHMUL64, (1ULL << 63) * 2, register source")
++__success __success_unpriv __retval(0)
++__naked void uhmul64_pow2_reg(void)
++{
++	asm volatile (
++	"r0 = 2;"
++	"r1 = %[llong_min] ll;"
++	".8byte %[hmul];"
++	"r0 = r1;"
++	"r2 = 1;"
++	"r0 ^= r2;"
++	"r2 = r0;"
++	"r2 >>= 32;"
++	"w0 |= w2;"
++	"exit;"
++	:
++	: __imm_const(llong_min, LLONG_MIN),
++	  __imm_insn(hmul, BPF_UHMUL64_REG(BPF_REG_1, BPF_REG_0))
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("UHMUL64, (1ULL << 63) * 2, R3 destination")
++__success __success_unpriv __retval(0)
++__naked void uhmul64_r3_dst(void)
++{
++	asm volatile (
++	"r3 = %[llong_min] ll;"
++	"r0 = 2;"
++	".8byte %[hmul];"
++	"r2 = 1;"
++	"r3 ^= r2;"
++	"r2 = r3;"
++	"r2 >>= 32;"
++	"w3 |= w2;"
++	"r0 = r3;"
++	"exit;"
++	:
++	: __imm_const(llong_min, LLONG_MIN),
++	  __imm_insn(hmul, BPF_UHMUL64_REG(BPF_REG_3, BPF_REG_0))
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("UHMUL64, (1ULL << 63) * 2, immediate source")
++__success __success_unpriv __retval(0)
++__naked void uhmul64_pow2_imm(void)
++{
++	asm volatile (
++	"r0 = %[llong_min] ll;"
++	".8byte %[hmul];"
++	"r2 = 1;"
++	"r0 ^= r2;"
++	"r2 = r0;"
++	"r2 >>= 32;"
++	"w0 |= w2;"
++	"exit;"
++	:
++	: __imm_const(llong_min, LLONG_MIN),
++	  __imm_insn(hmul, BPF_UHMUL64_IMM(BPF_REG_0, 2))
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("UHMUL64, (1ULL << 63) * -2, immediate source")
++__success __success_unpriv __retval(0)
++__naked void uhmul64_neg_imm(void)
++{
++	asm volatile (
++	"r0 = %[llong_min] ll;"
++	".8byte %[hmul];"
++	"r2 = %[llong_max] ll;"
++	"r0 ^= r2;"
++	"r2 = r0;"
++	"r2 >>= 32;"
++	"w0 |= w2;"
++	"exit;"
++	:
++	: __imm_const(llong_min, LLONG_MIN),
++	  __imm_const(llong_max, LLONG_MAX),
++	  __imm_insn(hmul, BPF_UHMUL64_IMM(BPF_REG_0, -2))
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("SHMUL64, INT64_MAX * INT64_MAX, register source")
++__success __success_unpriv __retval(0)
++__naked void shmul64_max_reg(void)
++{
++	asm volatile (
++	"r0 = %[llong_max] ll;"
++	"r1 = %[llong_max] ll;"
++	".8byte %[hmul];"
++	"r2 = %[expected] ll;"
++	"r0 ^= r2;"
++	"r2 = r0;"
++	"r2 >>= 32;"
++	"w0 |= w2;"
++	"exit;"
++	:
++	: __imm_const(expected, 0x3fffffffffffffffULL),
++	  __imm_const(llong_max, LLONG_MAX),
++	  __imm_insn(hmul, BPF_SHMUL64_REG(BPF_REG_0, BPF_REG_1))
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("SHMUL64, INT64_MIN * -2, register source")
++__success __success_unpriv __retval(0)
++__naked void shmul64_min_neg2_reg(void)
++{
++	asm volatile (
++	"r0 = %[llong_min] ll;"
++	"r1 = -2;"
++	".8byte %[hmul];"
++	"r2 = 1;"
++	"r0 ^= r2;"
++	"r2 = r0;"
++	"r2 >>= 32;"
++	"w0 |= w2;"
++	"exit;"
++	:
++	: __imm_const(llong_min, LLONG_MIN),
++	  __imm_insn(hmul, BPF_SHMUL64_REG(BPF_REG_0, BPF_REG_1))
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("SHMUL64, 1 * -2, immediate source")
++__success __success_unpriv __retval(0)
++__naked void shmul64_neg_imm(void)
++{
++	asm volatile (
++	"r0 = 1;"
++	".8byte %[hmul];"
++	"r2 = -1;"
++	"r0 ^= r2;"
++	"r2 = r0;"
++	"r2 >>= 32;"
++	"w0 |= w2;"
++	"exit;"
++	:
++	: __imm_insn(hmul, BPF_SHMUL64_IMM(BPF_REG_0, -2))
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("SHMUL64, INT64_MIN * 2, immediate source")
++__success __success_unpriv __retval(0)
++__naked void shmul64_min_imm(void)
++{
++	asm volatile (
++	"r0 = %[llong_min] ll;"
++	".8byte %[hmul];"
++	"r2 = -1;"
++	"r0 ^= r2;"
++	"r2 = r0;"
++	"r2 >>= 32;"
++	"w0 |= w2;"
++	"exit;"
++	:
++	: __imm_const(llong_min, LLONG_MIN),
++	  __imm_insn(hmul, BPF_SHMUL64_IMM(BPF_REG_0, 2))
++	: __clobber_all);
++}
++
++#else
++
++SEC("socket")
++__description("UHMUL/SHMUL are not supported by this JIT, use a dummy test")
++__skip("UHMUL/SHMUL are not supported by this jit")
++__success
++int dummy_test(void)
++{
++	return 0;
++}
++
++#endif
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
+index 4d8273c258d5..d7fb6b71b206 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
++++ b/tools/testing/selftests/bpf/progs/verifier_value_illegal_alu.c
+@@ -202,7 +202,8 @@ __naked void flow_keys_illegal_variable_offset_alu(void)
  
-@@ -19341,6 +19383,9 @@ static int fd_array_get_map_idx(struct bpf_verifier_env *env, u32 idx)
- static bool is_valid_alu_variant(const struct bpf_insn *insn)
- {
- 	switch (BPF_OP(insn->code)) {
-+	case BPF_MUL:
-+		return insn->off == BPF_MUL_VARIANT_LO ||
-+		       bpf_insn_is_hmul(insn);
- 	case BPF_DIV:
- 	case BPF_MOD:
- 		/* off == 1 selects SDIV/SMOD. */
+ /*
+  * Offset fields of 0 and 1 are legal for BPF_{DIV,MOD} instructions.
+- * Offset fields of 0 are legal for the rest of ALU instructions.
++ * Offset fields of 0, 1 and 2 are legal for BPF_ALU64 | BPF_MUL.
++ * Only offset 0 is legal for BPF_ALU | BPF_MUL.
+  * Test that error is reported for illegal offsets, assuming that tests
+  * for legal offsets exist.
+  */
+@@ -212,5 +213,11 @@ DEFINE_BAD_OFFSET_TEST(bad_offset_addx, BPF_ALU64 | BPF_ADD | BPF_X, -1, 0)
+ DEFINE_BAD_OFFSET_TEST(bad_offset_divx2, BPF_ALU64 | BPF_DIV | BPF_X, 2, 0)
+ DEFINE_BAD_OFFSET_TEST(bad_offset_modk2, BPF_ALU64 | BPF_MOD | BPF_K, 2, 1)
+ DEFINE_BAD_OFFSET_TEST(bad_offset_addx2, BPF_ALU64 | BPF_ADD | BPF_X, 1, 0)
++DEFINE_BAD_OFFSET_TEST(bad_offset_mulx, BPF_ALU64 | BPF_MUL | BPF_X, -1, 0)
++DEFINE_BAD_OFFSET_TEST(bad_offset_mulk, BPF_ALU64 | BPF_MUL | BPF_K, 3, 0)
++DEFINE_BAD_OFFSET_TEST(bad_uhmul32_x, BPF_ALU | BPF_MUL | BPF_X,
++		       BPF_MUL_VARIANT_UHMUL, 0)
++DEFINE_BAD_OFFSET_TEST(bad_shmul32_k, BPF_ALU | BPF_MUL | BPF_K,
++		       BPF_MUL_VARIANT_SHMUL, 0)
+ 
+ char _license[] SEC("license") = "GPL";
 -- 
 2.55.0
 
