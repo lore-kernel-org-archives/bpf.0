@@ -1,144 +1,100 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B884E4310
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 12:22:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 847C44D796D
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 12:29:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789647775; cv=none; b=JApHB2DhYiW/Cd9vfe0rPRjItx/jsf7wJwJdxOvq360L4NkOMtIxtGSoe/MBNIXZM5Wly4KxpQXZzAMaKY0xCFuXec6Qf6sS/TQbCccW413GxFEpjfQVTpN2qJ23tQVzJfxarmrxVMDPjEhXRmHAlX24eMumh24cCkVbW3XrH5o=
+	t=1789648179; cv=none; b=qJ23hj5A024lJ/Ej0VosUeUhtvAQY5uHrS2mlkpIAhlzuMkGN+lzfNHMSeFyYb/tOgPLGUEoba8M5YNUPJdO+lsch3dQzjdUXufYltK9qm3uSUnrS59hRW0EA6cjurIXufi86F2OxFFf70cecpjRnbYyXqsz7m5VginQ+oqG1rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789647775; c=relaxed/simple;
-	bh=OJmskDiFOgBotmQnXQAOWrnTyjAq3r/ZPkOzXCktDOc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qrNiSLHyK8LXTwf0T0t9ZKI/RvnySbVe+AHSkbSTVgpAsFEM7ai5P7u0Psi/71bni5yHdxFE3LZ0NL8QBgAFOSYdobAc13ZvLFUaMtHHh8prs0GtovSFX3llKbLfZhl25yM/soCnUGNPw2yMGYVUICHnsHcFxmzX3ho8tvn8Sqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W8MWUiGW; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789648179; c=relaxed/simple;
+	bh=Bw59oOc5MxBKZIjVbBVVPs3ksR2jQGo8oejPUkF/qGc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=FCkFZLX0HJML8E6ATrDh3grW9fSYR/Oa7ltmNM84kyU+/cnI51oZTz5xBVvhH0f+pfuj3wbX9/7mQhfYJrTa8VixX4XjrCtx842pleYEAzfxxNh35J7CK82dFM/LBbzjJOErCszBZS6dDJgPe+NMTJEYyV4vA1LNSZfKFxjQXVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ntgdq1ue; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W8MWUiGW"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49ccfd61ecaso7274975e9.3
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 05:22:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789647757; x=1790252557; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=p0zmU2W+3BnffNO8O4v0JPRgPOvlhktXL05mpLnU1xo=;
-        b=W8MWUiGWkLnPE3LZwZMs+M6hjewk3bifMXlRxyzDreqvti1vU2oOe8kuHIJilh+a4j
-         avmi0gE2ouNHVuMutBqsR46ibWdW2hMSUIg+O7ewEblQDSqXn5oywiAzmcEOAAbnHJh9
-         CowIX7j0Z9oM0FI7AJhmCimPMAgxALlDijVAFCnLuHoqmAoi4nozpd09gBGC/BiDrVMP
-         v8CWYPOQj7wYPLWd3xvspz5rrIP7ZmsQlXq/fr57voEYreoEfZ0jpBHODcwFTuLtahTp
-         5Ork4vvRYVxbjDbbXem88rlm5er/r+K8QtAMln4o0OqF8zBcjtvMGd0fo9MP/8kOij+L
-         7TVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789647757; x=1790252557;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=p0zmU2W+3BnffNO8O4v0JPRgPOvlhktXL05mpLnU1xo=;
-        b=s7mPCEYzNkFC495dCQnxMlfXMxJsno7FhYoaURXhv/9G9yf7DXb6lwTdlBY+5q628E
-         bJBMloR9MKe2/DLCpYR34yaaoAxr1D9T/RrGAmcmTNKAngWqvwThzY6CGVY1ttLnuH3Q
-         qz2wkZMBnEQZ2Y7QqEWkFLYn4PsVYydx0UZcFIFTmzjeVCRq7yIiTzCnqM1Sjs6zpNIo
-         gUmrMgVO54KZB79l3AIx9IWfukh9Yeb8vJI7AJCIvwShW09KkZKp5bzb6u8HPmHoZYA3
-         PFNTEzsL1BSeV2Stis/2S7ErejyUFSUavoRV3JMbZaGflw0gOpjBFz9z9SVxDBIX1EhM
-         lRkA==
-X-Forwarded-Encrypted: i=1; AKwUvBypDroCJ0YtayGkZX083AV92My6B7TS+kpvbGVIx//jTe0Ig5hUvbYcscZ3ELUUwBFqOfE=@vger.kernel.org
-X-Gm-Message-State: AFuF++mHv1XnBIdPVeJweP8cmtABm4f6lkgVacGXgiGp39VRJcFr+El3
-	RsPN4jfERcfUtuyPrn+T3wkIE1UDuaMzAnu5l5FV+a28aidZAa0r1orj
-X-Gm-Gg: AYBFou3VtpIRqWgwB6JzwMxqkz5sgi2Tz9ixl8n9A3BCaBo2PYhZ0oju4I6sxuPjiIq
-	daoz+mMg/GZ995NR3Hf1iAMSIj88uHAZYJ1EqHJburINBZRR5pBmgPeVtOYYQLyXiqZWf9Au8YR
-	5AfyHy5QYyu9t/aL5bvvTBrhlr/1cCMNQ/foCE1BxbDVXxNH0fDBbxLDO5GYWs2Gh9Mb2Euvb8v
-	wRSmao0wlHm1oDT8MujMZ6diSS1ekqw+ZSc4WDQUKul1LXEYWO4klS9r7Av9fblwRxwJVcABchU
-	j21XONDUIJb5FKJgRkTLY+O4+1YckhwXAF8hVDodQ9nG3KX3z5EQxxTYK/ptZNsNXrRJvI7M9mQ
-	TmBgtMNeMsG2M+Pddo58cqj6dre70dMOs0BBxdbGBhjm5nFI5nP70OJijImYPJzNrYucH+gKX7Q
-	qjcD64ildONKVA/Zcj719eD17EUO6twxqbeMHOr7KbwYv7nJnMORnLYMnwWe5YzIb4tAOtbH+CS
-	mCezy6+YuE9ZSoG3MwU5aoPzqVImw0IZxC6
-X-Received: by 2002:a05:600c:4ed4:b0:49c:de80:b833 with SMTP id 5b1f17b1804b1-49eac462571mr73688225e9.2.1789647756735;
-        Thu, 17 Sep 2026 05:22:36 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4870bef7678sm15969081f8f.2.2026.09.17.05.22.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 05:22:36 -0700 (PDT)
-Date: Thu, 17 Sep 2026 13:22:31 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
- Jan Kara <jack@suse.cz>, linuxppc-dev@lists.ozlabs.org,
- linux-gpio@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
- linux-media@vger.kernel.org, wine-devel@list.winehq.org,
- linux-xfs@vger.kernel.org, io-uring@vger.kernel.org, bpf@vger.kernel.org,
- linux-mm@kvack.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] file: declare the FD_PREPARE() variable with
- __cleanup() directly
-Message-ID: <20260917132231.26314015@pumpkin>
-In-Reply-To: <20260917-work-file-fd_prepare-v1-2-b87534ca49f3@kernel.org>
-References: <20260917-work-file-fd_prepare-v1-0-b87534ca49f3@kernel.org>
-	<20260917-work-file-fd_prepare-v1-2-b87534ca49f3@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ntgdq1ue"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0BAD1F000FF;
+	Thu, 17 Sep 2026 12:29:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789648167;
+	bh=sFTM71o1KENFRh9zUiGqaH8RbQ32i3z+xwKEjiy50CA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Ntgdq1ueE/+LZuUAYZ5gMgH6hdt1nK8emCk/erdyq4LCOvQTKwJCKWKEiQ+33PwXM
+	 tYy+BTo097WRp102FzWQDWDphKJsrqOf+GvW4XHEjbBaBzIu01VkRV42txsCYC1bnE
+	 1v83UtLRbqScdydOIOYwpIJO/aoK9g8kdjvcd+oIAcLz2GYqECw/VY2C+7zYHrj1zT
+	 +JdZJA8pYBjOd4ugcH6WC9T9sod0xMULazAG7eAAXt/xTr3ETREuo8z6MSTlJxiZEJ
+	 KwiP7Tmm5VNRSoU+NpGAxZLaTEZP2oaVQLW4KE3sxm1LMqHOrj0CLr/nwKgcsKNzrF
+	 /5rlFDjcZ0Dtg==
+Content-Type: multipart/mixed; boundary="===============8727977847784917176=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Message-Id: <a89192d1071a217efc2aefb6a1bc8625cf9aa241918f7486a111c9b1f12cfcf7@mail.kernel.org>
+In-Reply-To: <20260917111127.3780880-7-memxor@gmail.com>
+References: <20260917111127.3780880-7-memxor@gmail.com>
+Subject: Re: [PATCH bpf v6 06/10] bpf: Restrict CO-RE poisoning to relocatable instructions
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: npc@anthropic.com,eddyz87@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,emil@etsalapatis.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 17 Sep 2026 12:29:26 +0000 (UTC)
+
+--===============8727977847784917176==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On Thu, 17 Sep 2026 11:09:43 +0200
-Christian Brauner <brauner@kernel.org> wrote:
+> diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c b/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c
+> index ee267289fd88e..10bda3ff80eb3 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c
+> @@ -124,7 +124,8 @@ static void test_early_core_relo(void)
+>  					       enum_id, access_str_off, 2, true);
+>  		if (!ASSERT_LT(prog_fd, 0, "poisoned_load"))
+>  			goto cleanup;
+> -		ASSERT_HAS_SUBSTR(log, "last insn is not an exit or jmp", "poisoned_load_log");
+> +		ASSERT_HAS_SUBSTR(log, "trying to relocate unrecognized insn #2",
+> +				  "poisoned_load_log");
 
-> The whole CLASS_INIT() detour isn't needed. Use __cleanup() directly and
-> give the destructor a private name.
+Does this change lose regression coverage for the CO-RE ordering fix from
+dd4db8b6b10cf?
 
-It also makes the code enormously easier to read.
+The 'poisoned_subprog_terminator' subtest was added in 0c2f670921a11 to verify
+that in-kernel CO-RE runs before check_subprogs(). The old assertion on "last
+insn is not an exit or jmp" could only be produced by check_subprogs() running
+after CO-RE poisoning, so it failed on a kernel with the old ordering.
 
-David
+After this patch, the relocation on the subprog's terminal BPF_EXIT_INSN()
+is rejected inside bpf_check_core_relo() at the new 'bad_insn' label before
+add_subprogs()/check_subprogs() ever run:
 
-> 
-> No functional changes.
-> 
-> Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
-> ---
->  include/linux/file.h | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
-> 
-> diff --git a/include/linux/file.h b/include/linux/file.h
-> index 2b864f457211..926cc58d0b7f 100644
-> --- a/include/linux/file.h
-> +++ b/include/linux/file.h
-> @@ -146,9 +146,6 @@ struct fd_prepare {
->  	struct file *__file; /* do not access directly */
->  };
->  
-> -/* Typedef for fd_prepare cleanup guards. */
-> -typedef struct fd_prepare class_fd_prepare_t;
-> -
->  /*
->   * Accessors for fd_prepare class members.
->   * _Generic() is used for zero-cost type safety.
-> @@ -160,7 +157,7 @@ typedef struct fd_prepare class_fd_prepare_t;
->  	(_Generic((_fdf), struct fd_prepare: (_fdf).__file))
->  
->  /* Do not use directly. */
-> -static __always_inline void class_fd_prepare_destructor(const struct fd_prepare *fdf)
-> +static __always_inline void __fd_prepare_cleanup(const struct fd_prepare *fdf)
->  {
->  	if (unlikely(fdf->__fd >= 0)) {
->  		put_unused_fd(fdf->__fd);
-> @@ -199,10 +196,10 @@ static __always_inline struct fd_prepare __fd_prepare(int fd, struct file *file)
->   * @_file_owned: struct file to take ownership of (can be expression)
->   */
->  #define FD_PREPARE(_fdf, _fd_flags, _file_owned)			\
-> -	CLASS_INIT(fd_prepare, _fdf, ({					\
-> +	struct fd_prepare _fdf __cleanup(__fd_prepare_cleanup) = ({	\
->  		int __fd = get_unused_fd_flags(_fd_flags);		\
->  		__fd_prepare(__fd, __fd < 0 ? NULL : (_file_owned));	\
-> -	}))
-> +	})
->  
->  /* Do not use directly. */
->  static __always_inline int __fd_publish(struct fd_prepare *fdf)
-> 
+  default:
+  bad_insn:
+    pr_warn("prog '%s': relo #%d: trying to relocate unrecognized insn #%d, ...");
+    return -EINVAL;
 
+The new "trying to relocate unrecognized insn #2" message appears regardless of
+where the relocation step sits relative to check_subprogs(). With dd4db8b
+reverted, func_info_cnt = 2 still makes bpf_prepare_btf_info() run,
+add_subprogs()/check_subprogs() pass on the unpoisoned stream, and
+check_core_relo() then emits the identical message.
+
+The subtest therefore passes on a kernel with or without the ordering fix, so
+the per-subprogram array overrun that dd4db8b prevents is left with no
+regression test in the series.
+
+Should the subtest be renamed/repurposed to describe what it now checks
+(relocation rejects an exit target reached via func_info), or would it be worth
+exercising a still-poisonable form whose rejection depends on CO-RE running
+before subprogram validation?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35216153389
+--===============8727977847784917176==--
