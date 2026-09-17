@@ -1,76 +1,76 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC58A44E67F
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 23:18:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907734AA1FE
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 23:22:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789687100; cv=none; b=owxk9w4ftA+Gdp36C/5yZ8MIBmLTVEBghahRaGvagPcalW+djbo4OlxgNGN8BQ+Mu5FAg0LsrOBdCZM5IMzB08ypw4fowL51rNU9KADqQId+qV6MhPMc5yM8JswEJfEqcR3OlMLvycWUiiKnKwZgWZwkgO9pr7tv8TRNs+sq32I=
+	t=1789687323; cv=none; b=WCUTucCk1FtfVWWRQYHci5rBVegRCyQuJ+lNbEhwryt3shYNduhZTaBAPGn2CKkypFxGyRENXu2Ver66qsihbAccpdWbtyCqCBFTVIP5CtoloohzhZORjF6IXfgTJSufZDY4f9ldA8BeP8ZjCuGpVn4+JSeQh9o6UvX0adh6O+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789687100; c=relaxed/simple;
-	bh=zkfoNZXC2zGfMZBZkeGRwmVRJrkTZ0sW0g7/ZuTtulw=;
+	s=arc-20240116; t=1789687323; c=relaxed/simple;
+	bh=BqM9oEDI8dYhlysc/LH5t7hKqrTydeuZJy1Hn5g6Mak=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cSyqUxb2EyejI/zkaPrHYHQd1gAJ+tSZVHVDizbJoQ+maUGJVNErIe6SBh3PUO+BSJkPH0M7JQtc4tXq64yK7eh0dK/nipY3y8q9ddLx5oe6+K9oc2zIQS8s4PgByvyJ9T+GmZJRbOFBHNlDeKzQBrExHQgDm9+Tu5D0LbzYIJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hZ19hHW3; arc=none smtp.client-ip=74.125.227.141
+	 Content-Type:MIME-Version; b=NKMasQyb0B+y3Laf0FlPLd8gZKAtaR4/B52fbj+Cjxfeh6becww6TUcAElGHjfhkUuUiOeSzuRDqb3Kj5mUo8mg/qo958EzXmpkxsgPGOheCZE58qMBn/RVPWuzEa67epmmd7UbTT30A3iD2KkSSMsQ9KuSYfagatato40DR+sM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JaiAgDbw; arc=none smtp.client-ip=74.125.228.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hZ19hHW3"
-Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccafb751so122331a91.2
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 16:18:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JaiAgDbw"
+Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc1cea50dc1so35629a12.0
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 16:22:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789687094; x=1790291894; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789687320; x=1790292120; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=EoO0OkN/jslXUgxYTgXk/0EbzapqFPuSyFnW9vyXGbU=;
-        b=hZ19hHW3i1FRqSgub8OVqbI1SLU+zsoP+Jjwk3mFI/782BK2J7A5nFnByW9iz8bvL+
-         3opfj7PM1F9n4LZQZbWfxGXKlvuv7YfnDBGvDyN6IEzRDwMDGfdIE7r2ESqWV+XvlG4P
-         Kv2SPQiKqp0tUEQ/3RYDj6aTPe0VUp7ul+ru7rzZ2vDWBOCU2/Orx2Fko3wA5Lq693DI
-         BznVGghSuck9ZMfRrIrtEBZEaiEG4KcMvo2H5UWAr7sAhCVUSWGv63BjRzBMLc/0qr2Y
-         dqCzPPV30kg4OnT0NTw9MUfqWlzRoGyZXi28yyBCalq0SL7UKH3c7al2r56QjjfAGhbg
-         UuaQ==
+        bh=G8JUCHNEpOIsKU1CQQkIgX2zKEAjfF+OlEr7Lyh0p+w=;
+        b=JaiAgDbwpsFCV7HK2YNWZoZBpX2WTggeM7hODk6S7R83QThpXRYcSvxTi+DpVD7kXf
+         38r0rVYDj+/SmH7C67tJkHIGJMz8nKZhSaFBkhRs8I309CxuSolcbHmYiTgX8PND/eOH
+         gupLglXLyqicrniQkRDjEyEjeDxE9d2H+uEYZP9iv+2Oqu/aG3nTyyzRO47WDl4Eilvp
+         qjmgpJ//8lI8rjcDNoazT+nWfkyZntBtMrNrWxMxNjnyPeUQS0955Wk6m+zcX2hHtj8G
+         0IJh4KrrIXtT713hrPm2fWwDYRqO+pEtjlJjTuP1SZzf/ygzjxsPrcV5GGSWp40mFoAX
+         YomA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789687094; x=1790291894;
+        d=1e100.net; s=20260707; t=1789687320; x=1790292120;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=EoO0OkN/jslXUgxYTgXk/0EbzapqFPuSyFnW9vyXGbU=;
-        b=iuKdBiAjeLO0AorjVTT+kpVv0iwnFEPjl3XxFGlM7WMxEzQIVxhj+CGTvAFGVoCCSO
-         OkZj6P8+A/axokG2Jvaj4zhC7u3CP522wUsZJvWOFjyr2EbzF3TPJ+0XN/ggSGs6ou/l
-         DTWjM7eziGYxWYst25E9+EWs9yMJ00FfYNPAGD6gi/YMaWf2X+upZ6UzK1Y3se7dGyyr
-         bovL3pK69nSP6C7F6W6uxnPf6N21FPoyITCbgwmbno7pPho9OGlXZLJPYOnO9INlnmqx
-         lsULZoNrRJAu6UTQNm7UPupcf//qm/ZTToILT16C/wKA6WfzZWTj50/EjhUfuEPxlw/O
-         z0zg==
-X-Gm-Message-State: AFuF++m/xOC/893MIKVFGXaxeoGjKHrTyTRlUOHuLS+BaiKio3Vzeb5j
-	t0cVFhxUf5HV3svlQgRkKhXmzSufkcF7kx5wQt2LyRAI7RbBQeeuAw9O
-X-Gm-Gg: AYBFou1cv3QYUAHeNqnqATvrv3SlFABPeIMcJ2pbiDvCKBBao0Ea7dwvx+D09cQKwla
-	0VNDdqqeiKOuS8RFD0Kz9wmlPFUx9nwQ0v6x2K33w1Hr0nIs391p9C5Nf4FXsBHc1A2J/Md3APQ
-	pOm9cBF1/gEGKJZK7nV8upKpWfVhrS7UZ3CBLx7mtu1TupcDyHNJAPJlBzvlysBEhu+wotdQCKs
-	fSsz9HXB2HdxTX4lu8/cbtz2ISdZIaU0gpr2llbPOAvYD2DtWQ4REREv+TXSO4XUPWIdcdhuMq3
-	fDdAIHycX4672r64UMTlREQU1BaTTBDKDABM0Qk/zmHO0TIPaKqHDAbV58BRdg3UdW1P2QLORh9
-	25SH03hWirxL+Pq2tU7IOP2pCIlyx/vezgiggldS4q9q7k8tx+nlr0REcqMCXlQUPuHQnl+mEJR
-	8tPUJYrCozPnSB4lfCLiCX6bhOCvYWF1HfVVZicIEKiCLvRUgG5lhjKY98Wufgn0tNa4Uo6bzgw
-	WcFTIhNFNrc3IUS8uYy1JVfFhEy3n4bSoihLq3oVYkDuxWT/teRahh1NQ==
-X-Received: by 2002:a17:90b:2f06:b0:39d:f18c:1ad1 with SMTP id 98e67ed59e1d1-39e54d388e5mr2380826a91.3.1789687093616;
-        Thu, 17 Sep 2026 16:18:13 -0700 (PDT)
+        bh=G8JUCHNEpOIsKU1CQQkIgX2zKEAjfF+OlEr7Lyh0p+w=;
+        b=jFD+vyS1Gx6zZh/8R3JzTZk2IkZ1GDFK1J/WQzWEsVyUpm3MXXsrchKGc6sk3SotKu
+         SCp5/eL5WjpYSDlLgPoyyYrNI2Sw6GhRnfhAt19M+dZoHQ8fki1WU7tLA1x2eN+UwG3l
+         T0wAX1rihhASMO0a6Oz4BzMrKG2JiJ6Gb+R54i/obfpqaypZsGbaFC72U7lHmT6HLT4S
+         hFFuro9jrGIkW06+jiilqitA2xKkxTeVryxtT+G/uep3kSZ8XEsOY6XX0dCQNtpNGSvZ
+         Hl+AUvSHlz/X64387u599qFAhR/dSU5TikrWCVVAjnjq7RHPVzI7XhnRQLQNri01RLBn
+         54EQ==
+X-Gm-Message-State: AFuF++l5Zw44Wodf/anHKEComw9YP8mKxEcVN0OElDcjpX6RIeJyujmD
+	IS5t3BYArG1EG+A19G+l3CXYlGyG2bclJMHSVi0Rn5GHrJJ0gbbETRMy
+X-Gm-Gg: AYBFou2Lm79r7YFeKvsnwHbDKfxXt828R4VX/JVWK+n9BhlhDZavqbE4zrZwG8hAcyF
+	7hjvWP8VwYqVE2A2Kh6IjMdPBoiAdKNAPzA9qA7zHIm3CDnnksQNrF78lVasUIg0QyXR1fbo+Po
+	saCopfXkWOiN0WQ4kStqNcx9Wl2n507qTE/xR1uJU/EA9f7OHjY60ko+HEtDHr+J9jH3Iz3xAk3
+	1eYA+GzoMic0ATjeXS0zBXCVG2ejJ5OgoHsLXwB3nPyryzlL+iPAEf/oot7Ff8O4sgClPCCcUQI
+	GQBaer3c7RJPDLGcfxUAA7/S4TBBKM/me5rydTRshLPN6zj1MUQlL6dzKSBY93j3zs20FTKnCry
+	Ls7opmF910dW+6JTX+DcyODIoYKWoeJkbU/8FUuKUzofLPkrnoqemkkSaTYxo4momZ00A7wJvj+
+	U4p0UVZ16IsetDSTwHbMMrwvS7VgF56Yora/gnLB/O1d9Yolscq6rwpYUBpv8H5qjB7JgZ5k6+8
+	pw/4w9kT+YlpN6CG1Paq1MAoxiWBUsO1mWJSP+Ei9aJYvTElA8/CjPVeMjVB3ck0TMT
+X-Received: by 2002:a05:6a21:6083:b0:3cd:9f99:3381 with SMTP id adf61e73a8af0-3dd8c1eeb19mr1037132637.0.1789687320329;
+        Thu, 17 Sep 2026 16:22:00 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:c47a:decd:950f:5c9d? ([2620:10d:c090:500::7:463c])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33bf5af4f0bsm21283025eec.24.2026.09.17.16.18.12
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33bf5b030aesm18837125eec.26.2026.09.17.16.21.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 16:18:13 -0700 (PDT)
-Message-ID: <f52fa67478afad8ead28ff3be59dcd1c2590616a.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v1 3/4] selftests/bpf: Test btf_dump rendering
- of decl_tags
+        Thu, 17 Sep 2026 16:22:00 -0700 (PDT)
+Message-ID: <3b08609cd246f7c23728f4c8df94352b086ee56b.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 4/4] selftests/bpf: Show the tag kflag in
+ the raw BTF dump helper
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
  <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
  <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>
 Cc: bpf@vger.kernel.org
-Date: Thu, 17 Sep 2026 16:18:11 -0700
-In-Reply-To: <20260917012037.1396254-4-ihor.solodrai@linux.dev>
+Date: Thu, 17 Sep 2026 16:21:58 -0700
+In-Reply-To: <20260917012037.1396254-5-ihor.solodrai@linux.dev>
 References: <20260917012037.1396254-1-ihor.solodrai@linux.dev>
-	 <20260917012037.1396254-4-ihor.solodrai@linux.dev>
+	 <20260917012037.1396254-5-ihor.solodrai@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
@@ -82,79 +82,47 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Wed, 2026-09-16 at 18:20 -0700, Ihor Solodrai wrote:
-> Cover the decl tag rendering the previous patch added. One subtest
-> builds a BTF with every shape that renders, plus two that must not:
+> A kflag on BTF_KIND_DECL_TAG or BTF_KIND_TYPE_TAG means the tag string
+> is an __attribute__ list rather than a btf_decl_tag()/btf_type_tag()
+> argument. fprintf_btf_type_raw() did not print it, so a tag added with
+> btf__add_decl_tag() and an attribute added with btf__add_decl_attr()
+> dumped identically apart from their type IDs.
 >=20
->  - a named record with both forms of tag
->  - a typedef'd anonymous record, whose attribute precedes the declarator
->  - a union
->  - a record that also carries the derived packed attribute
->  - an anonymous record inlined at a member
->  - two records whose tags are added in reverse target order, which is
->    what pins the sort: without it the earlier record loses its attribute
->  - attributes on a var and on a func, which btf_dump never declares
+> Print " kflag=3D1" for those two kinds, only when the flag is set, so no
+> existing expected string changes.
 >=20
-> A second subtest appends types and attributes to a dumper that has
-> already run. Its last phase adds an attribute for a record emitted two
-> dumps earlier and checks nothing is rendered for it: an attribute is
-> part of the type, and btf_dump emits each definition once.
->=20
-> A third covers members. A member attribute and a record one share a key
-> in the index, so it checks they do not leak into each other's position,
-> over a function pointer, an array and a bit-field - declarators the
-> attribute has to follow rather than precede.
->=20
-> A fourth covers typedefs, including a typedef of an anonymous record
-> carrying three groups at once, binding to the member, the record and
-> the typedef.
->=20
-> Switch test_ctx__dump_and_compare() to compare_text_to_expected()
-> while we are here.
+> Add a btf_write subtest for btf__add_decl_attr() and
+> btf__add_type_attr().
 >=20
 > Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 > ---
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
->  .../selftests/bpf/prog_tests/btf_dump.c       | 343 +++++++++++++++++-
->  1 file changed, 342 insertions(+), 1 deletion(-)
->=20
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_dump.c b/tools/te=
-sting/selftests/bpf/prog_tests/btf_dump.c
-> index fe04a955d46c..6c031e83dad3 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_dump.c
-> @@ -224,7 +224,12 @@ static void test_ctx__dump_and_compare(struct test_c=
-tx *t,
->  	fflush(t->dump_buf_file);
->  	t->dump_buf[t->dump_buf_sz] =3D 0; /* some libc implementations don't d=
-o this */
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_write.c b/tools/t=
+esting/selftests/bpf/prog_tests/btf_write.c
+> index 5c84723cf254..7ddda9348e4f 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/btf_write.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf_write.c
+> @@ -606,6 +606,64 @@ static void test_btf_add_btf_split()
+>  	btf__free(base);
+>  }
 > =20
-> -	ASSERT_STREQ(t->dump_buf, expected_output, message);
-> +	/*
-> +	 * The mismatch has already been reported, so this only has to
-> +	 * register the failure. ASSERT_OK() would append a stale errno to it.
-> +	 */
-> +	err =3D compare_text_to_expected(t->dump_buf, expected_output);
-> +	ASSERT_EQ(err, 0, message);
+> +static void test_btf_attrs(void)
+> +{
+> +	const struct btf_type *t;
+> +	struct btf *btf;
+> +	int id;
+> +
+> +	btf =3D btf__new_empty();
+> +	if (!ASSERT_OK_PTR(btf, "new_empty"))
+> +		return;
+> +
+> +	id =3D btf__add_int(btf, "int", 4, BTF_INT_SIGNED);
+> +	ASSERT_EQ(id, 1, "int_id");
 
-Nit: Every caller of the compare_text_to_expected does such ASSERT,
-     let's embed the assert in the function and avoid the above comment.
-
-...
-
-> +/*
-> + * btf_dump indexes decl attributes incrementally, only walking types ap=
-pended
-> + * since the last dump. Check that attributes on types added to an exist=
-ing
-> + * dumper are picked up, and that one added for a record that has alread=
-y been
-> + * emitted is not - btf_dump emits each definition once.
-> + */
-> +static void test_btf_dump_decl_tags_incremental(void)
-
-Nit: I'd drop this test or made it a part of an existing one (w/o the s3 pa=
-rt).
+Note: we have a set of utility macro BTF_*_ENC macros in test_btf.h,
+      these are more convenient to use in some contexts.
+      (At-least there is no need to assert every time).
 
 ...
