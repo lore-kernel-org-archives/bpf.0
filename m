@@ -1,82 +1,82 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E323B518154
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 16:59:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB275304A5
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 17:01:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789664398; cv=none; b=eVbPVbSNQ29kuSUNAAVCQrN5FSAQOqm4EWzYzpXjN0J/ZRIVNdRxnbfB6y9hB/bqDCElPxaTDbZa5lz2v1y0p153mw8hDvML3qLCISLmrAbuiA2d92qR3aV6YXZ5u5q2TlWKyTejqLrWd+fmZ+sMAgDWWvNezpSd7corAAehHIg=
+	t=1789664470; cv=none; b=JC/EAPLmr6R3oXHCF1cda2XoSxCgCQMwafmZN30oaVDQeNbHCQC9tZt8j7oSjg45154SGz45CHsCLnEb/23eY0IV3weS2WUfwb6SU7eb/LmER3p9FLRe8qcEoaknGjCAENmuMQlCL45moWEdpG7MOZ6iMVs/rFhp4wIz0CPaYW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789664398; c=relaxed/simple;
-	bh=o6UqOTY41tuRkO5AHdjDRDEciBrken1pog5VHjo2Pt8=;
-	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
-	 References:MIME-Version; b=HFy7FSB9Hen0Yt99xjo8GPFD8OR2KhGg81GRNjgztcpgDKYJbjEwJhBIpt5mKs9okrQh6rEhEV+PviVUjVgRV6J/jaHxXv0J1aYsr2GKkmP7X7ypBF8cXy9+pOpcdnxN+pXW2hbYBVhYPFuvYkTvv/M8q7SKUkeZ9gfp2X9acBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UUNNdsM2; arc=none smtp.client-ip=74.125.227.141
+	s=arc-20240116; t=1789664470; c=relaxed/simple;
+	bh=B2DIEOfiu6m2jYhcfQxwPgrR40S7t8sjAFAF5ReukeA=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=TkQcXCdYJ9qEyDdILSyyREHI9NbNMg0DhiMp/LMU4WmwyAdSV9OnxQBO+Al20hqijvtZaV0twvUMgFZR58gtiFlfb/hDD4n4OVrAK9IOqb38VSS4u8JGgBQ1lmTK/UPRzkwECEqE8RG1XroZNFrc8JioRWbGza+CaeJQ9KiUPW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oP2U1C6v; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UUNNdsM2"
-Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2db18fe433fso9620955ad.2
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 09:59:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oP2U1C6v"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-398c066106cso909673a91.1
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 10:01:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789664396; x=1790269196; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=CU2rNOkPTWonMJ/LHusUbLASqrBVu1PgH/m6EZ16kLk=;
-        b=UUNNdsM2rI/9aR3nQbwgFzURukDKRivhAOaPQpfmkcwWcKHJFToXA4gfaI9t/76+sh
-         40UmK4s2vN7/wHygqTM1GAEEAwnOolto6T3DVYVJlsvZn0CbHk4Do6moY9caSy64ndVr
-         MJDfJPnBzJKqE/92dkIUWgNx9qV4EEpXehm1lG3I91IAF7pi09A7EwutiUkDydMjVItJ
-         TcLymoginJcxEjDs19qykRWCztgTZrWMJBjb/oTGd7zulTYAHZu2CHRt+Mqa66kg+pI1
-         ifSKnjtO4iBeGFjEMkdOuDPQM58JR3FAp6w9eIdHK7tNctnz7UB43LmYXh7yPOIhw4Ay
-         zI3Q==
+        d=gmail.com; s=20251104; t=1789664468; x=1790269268; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=9r+Nmb9u1of9YV/2d3L5W7crVXgzglxIBbWntwiFrig=;
+        b=oP2U1C6v6NEuEi16j4ISIERfcbQXIWC/tguAFAl/1xgyF+3FT/wu/+znaqKJj/iBDa
+         ssMEyKWbUgRszefgZ3s5T1TCbePIyN/opF66r6MEpBq+oEbD+Xh/7yn7rtfOHjVtIf3/
+         9Ze4VZR4l6LAETtv3bWgq9m/1Xsmr+KeWC8vKpzd2AQl9qbmIRC2Gbb7qnFA4jgoxT23
+         +3ThUvp1elhnGCbnVuubwU/GgkUyrIqoBaXTkgAVzP2aNqAQQlf0JjOcY1CkHUKsSp9T
+         +DLucLuiJYE1y2E5/vwnXRMKcMzsBG0UuRDNpMVIx44zZC6y+yje7HTw4kiB2N4s/dkQ
+         6rgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789664396; x=1790269196;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1789664468; x=1790269268;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=CU2rNOkPTWonMJ/LHusUbLASqrBVu1PgH/m6EZ16kLk=;
-        b=jbnFhQg+Lh4IWrrfD2bmyhhxdwsy2XMcvaHhgXEWGrRnfX5RnwbFjjuKVO2aqlm9Fd
-         mlRSCtFvzPYL1/sPvqHwP9TZgGN9J8bDe1TsVxOnpisc8/oQ/iryVbLueTRXz+8+XBT0
-         dyHBk0KlK8sR2HkVvfhUto/1H9/OvyaqknlR83BbGNYLk9D5j5r5b89hyFWCZ9rOixoI
-         bHXYqdwCek1XHW/WwjXYeJx6N9HtcvTfvef0sPbEQH+cl5/HFn/qK1hJ9K3jJzkDnVXh
-         CFw6TmHAkXpMn3YykekakXP2i2qrdJxIl/bAr9KLHWTiylZ+j5fpqpLm4v5pprM/m9KG
-         ym/A==
-X-Forwarded-Encrypted: i=1; AKwUvBwwROUN0CDJgV7CJD+LssF7mjZtoYEOEJNI8Yi1MAvd94GoUYVy8JM7LUNRyc9PmNCO9uI=@vger.kernel.org
-X-Gm-Message-State: AFuF++njoQSW55l8T8FrQx/rvDrufTm9OWDulOu7KACZPuFMRsJq7mVK
-	r6ThJi9WVqU98ek5f6WqLsAXmBeyYNxnZcPYO04kbh9sk0dJ7RwcmcAv
-X-Gm-Gg: AYBFou3bQZMqNGs7WjAUOxWRo3MXPomRBIfTbWT/Cj7FBM5XIZMTLEBqjLkvaLjJ9yH
-	gBIZERVt8wdpa89Hj6B4C3nnsvX30a7CLMwlCmJ91hXm77XYRPpVH54tOwnzZdW4FBgJ3C/0fDv
-	9g19LO3e7N8sYmVjOh6EkyXoMYrqPjAAeur2IhQl4uf10zjuKgaRpSszurlZvwIAZOqQsULeSKU
-	qMPfZgujS1SFF/zdULXjKGc04+WyP2O/pE85+1ZTOOA/6BY7Bj0O8PMI9F031d5NkymeEahOE7j
-	BuAJDBQULXhApu6NR619cVk+HcDJFYEcgEo3rElZypxWbKmiaVbYiUiQxunPF0atIpqtA71pkAo
-	lbnCr2xbztLorHVxCjBSDSL0OMunSoYFJPujEhK6ljrbmYfYKwQJl7BJZ4RGrXLLuhrlDfj19NO
-	mz4Ch6Y/rmSSQS75kTtg9L4nIDY24jwQs+E7pLcqaYIP4+AZ5owfEbhUQzvxhCr0K9dzydoUWyP
-	8dztXeIcXiR93uEqPBLNoO5P95fUllWaAxefv4OX7uUmhtU1hXFiMUBiqdOHM9qeJPUgcknNzZm
-	QPj9
-X-Received: by 2002:a17:903:2302:b0:2db:39dc:48af with SMTP id d9443c01a7336-2dd8e752ec5mr159169715ad.17.1789664396054;
-        Thu, 17 Sep 2026 09:59:56 -0700 (PDT)
+        bh=9r+Nmb9u1of9YV/2d3L5W7crVXgzglxIBbWntwiFrig=;
+        b=oj5v6MUM/nuyg/SvODkvPAApdOfKV0l9hek2ALcH2lwvw1bEaS5iELwTDJVVNpJylP
+         ni85yp1f/XTeJ3lDNR1T7VcRp6MZajOu3NroTcCJETHq9//yvcgoDX/AMjmvV5QZmv73
+         VxAGkyuyiuN+U17zhGIS84+7b0rEpSzkil97AtKDN3RI9L9FKW0rudPDkHBviVrXNeDB
+         PBCA0ShgF0HU7y0E/3X0flQopzv/45N9H+Vqsr4M3XppFi0sGG0zieEvpgi3+nnuo1t1
+         BRn4Uz5ftlyZmCaPo/v01aSiarKKAdeotx/LVtLqyaCMNE4xqWFZjhmx5zzJy1lfOjlb
+         cJlA==
+X-Forwarded-Encrypted: i=1; AKwUvBy73Dx1WcAW4d0uXL2ZX/uFPBAe2r5+q40EZo9pXvO93bzh5sRfanaAWjo5EeDyx8y6YSU=@vger.kernel.org
+X-Gm-Message-State: AFuF++mugeDY9JVVCYvXVu0CsqsdnsicabNrxjiKrThnv+yQ7o7BgZ8V
+	Z1qrVv/XHQpgCX+X9RbrhI9tew4KUIv6WRvIxVpBFQJ3hsxy0w9JsFjP
+X-Gm-Gg: AYBFou1ww6CCbKRk86HMclXERCcGLQb/32fgjr8n+zFBQyKDh20ejgHUApByJhALhvX
+	990R18ln4odA9Knl2rt5HyORK7RDMCXyK7GqMPzIrWYrnW9tNNbyhYxrcQSP6QsbdMuFxF6z+ZC
+	k39cLA+Ib0BsH1QTdVSfl/pB0JAA6O6NZx9XOGySLanJwQXQoKiByXF6ZMXGKbzwshQoPJJ+vou
+	j4ILy0OSzG1H0ONbpgIl0gWgytLY+B+LJGgrVdE3tB9x05cC+rNWb8r3McuwmMuCDXPWG65/1ie
+	iAW9mqICjIqDF902aEFkK/cd+gDfzLyg9cgfSH0WZz6ZJIxi7cCu4USjGjzVOzBvBLkPXadztvK
+	FLgTYo8u6qOgrDgFE/XFC0rH9+tq1kHh3TvbjD1w5LJfBFOASoSDt8mjwGzYrfgrPcoNDgmG2aV
+	zLwsavrLrn26wkQO3TdssEixokUWFsmO/5v+MUyRLFP2Uln0IiZQECIPYFqQCaMRpa+gPWX9pbB
+	FUwrAkcOCSQBdab4L0pgWzo8hSsfdlvosyACm6BI50XYu/xeZXwoKHkQntNXTmntKXyXXbMBpt4
+	f0sA
+X-Received: by 2002:a17:90b:544b:b0:39e:359f:8539 with SMTP id 98e67ed59e1d1-39e359f8573mr16938434a91.15.1789664467801;
+        Thu, 17 Sep 2026 10:01:07 -0700 (PDT)
 Received: from localhost ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd89f244bdsm30194175ad.77.2026.09.17.09.59.55
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e36170735sm5918501a91.8.2026.09.17.10.01.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Sep 2026 09:59:55 -0700 (PDT)
+        Thu, 17 Sep 2026 10:01:07 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 17 Sep 2026 16:59:55 +0000
-Message-Id: <DLHR2X1P3BTT.HK3TEMB89P28@gmail.com>
-To: "Ren Wei" <weir@nebusec.ai>, <bpf@vger.kernel.org>,
- <netdev@vger.kernel.org>
-Cc: <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <sdf@fomichev.me>,
- <martin.lau@linux.dev>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
+Date: Thu, 17 Sep 2026 17:01:06 +0000
+Message-Id: <DLHR3TXGGQQA.35NANUU0VNBB2@gmail.com>
+Cc: <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
  <jolsa@kernel.org>, <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>,
- <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
- <pabeni@redhat.com>, <horms@kernel.org>, <m.xhonneux@gmail.com>,
- <dlebrun@google.com>, <vega@nebusec.ai>, <rakukuip@gmail.com>
-Subject: Re: [PATCH 1/1] bpf: fix TOCTOU in IPv6 SRH encapsulation
+ <davem@davemloft.net>, <kuba@kernel.org>, <hawk@kernel.org>,
+ <john.fastabend@gmail.com>, <sdf@fomichev.me>, <xmei5@asu.edu>,
+ <stable@vger.kernel.org>, <co+ac0a8c41de69121d@bugs.sh>
+Subject: Re: [PATCH bpf] bpf: reject dev-bound-only programs on other
+ devices
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <20260917163408.252431-1-weir@nebusec.ai>
-References: <cover.1789646866.git.rakukuip@gmail.com> <20260917163408.252431-1-weir@nebusec.ai>
+To: <bestswngs@gmail.com>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <memxor@gmail.com>, <bpf@vger.kernel.org>,
+ <netdev@vger.kernel.org>
+In-Reply-To: <20260917161335.1020405-2-bestswngs@gmail.com>
+References: <20260917161335.1020405-2-bestswngs@gmail.com>
 X-Mailer: mkdraft (claude review draft; edit before sending)
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -86,25 +86,26 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Fri, Sep 18, 2026 at 12:33 AM Ren Wei <weir@nebusec.ai> wrote:
-> @@ -6706,16 +6706,22 @@ static const struct bpf_func_proto bpf_xdp_check_mtu_proto = {
->  #if IS_ENABLED(CONFIG_IPV6_SEG6_BPF)
->  static int bpf_push_seg6_encap(struct sk_buff *skb, u32 type, void *hdr, u32 len)
->  {
-> -	int err;
-> -	struct ipv6_sr_hdr *srh = (struct ipv6_sr_hdr *)hdr;
-> +	struct ipv6_sr_hdr *srh;
-> +	int err = -EINVAL;
-> +
-> +	srh = kmemdup(hdr, len, GFP_ATOMIC);
-> +	if (!srh)
-> +		return -ENOMEM;
+On Fri, Sep 18, 2026 at 12:13 AM bestswngs@gmail.com <bestswngs@gmail.com> wrote:
+> @@ -698,11 +698,14 @@ static bool __bpf_offload_dev_match(struct bpf_prog *prog,
+>  		return false;
+>  	if (offload->netdev == netdev)
+>  		return true;
+> +	if (!bpf_prog_is_offloaded(prog->aux))
+> +		return false;
 >
->  	if (!seg6_validate_srh(srh, len, false))
-> -		return -EINVAL;
-> +		goto out;
+>  	ondev1 = bpf_offload_find_netdev(offload->netdev);
+>  	ondev2 = bpf_offload_find_netdev(netdev);
+>
+> -	return ondev1 && ondev2 && ondev1->offdev == ondev2->offdev;
+> +	return ondev1 && ondev2 && ondev1->offdev &&
+> +	       ondev1->offdev == ondev2->offdev;
 
-Sorry. This TOCTOU issue applies to everything.
-Patching it in one spot doesn't help.
+With the !bpf_prog_is_offloaded() check above only offloaded progs get
+here, and __bpf_prog_dev_bound_init() already rejects those unless
+ondev->offdev is set. ondev1->offdev cannot be NULL. Drop this hunk.
+
+Also drop the "attacker" wording from the commit log.
+It's CAP_BPF + CAP_NET_ADMIN.
 
 pw-bot: cr
