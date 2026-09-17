@@ -1,343 +1,94 @@
-Received: from mta0.migadu.com (out-116.mta0.migadu.com [91.218.175.116])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FEAE3612EC
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 01:58:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 039C963CB
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 02:01:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789610339; cv=none; b=iWPovlRUx0LOoU3YFACiNJX+iIfOr5mO3Dvy5BUaxWcii5+EgaQ32Nhva96UVehY5h9hBrVH5OIj9rlGwExrBl6oS3xs+0YHIT0T84HsUKss0jIPr+37fgUP6OB6l9lSvLFP1MjqpTP84NO4nTnOvmeGjFZeGEAgBomQjkWrnyA=
+	t=1789610494; cv=none; b=rhjzX3LroWkO6+dXJlARXF9/+TMN6AFAddDZhMfu7u21DlvXSsmTYSr1l5neFsJYYyj5/AJWLPSpazzQPRZuqI3dFniNpB5bqwvAavArlKknrp8dsGDb64F7CjHwEUdj+yc60Dmw9UKt5e06NBuiS9MtnxrjCY2jp3IeK81n3r4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789610339; c=relaxed/simple;
-	bh=COPF3YEMiQ3Yab0KaIhKYX8PYpi8LggU23AZSVaYTms=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dpAA8J9OPe7FFzvdjAJyGLh4tSXGp4dSxFWPtrNQe3k3YlpW6OYCYyiAeV1r02S+rV75lejN1sF4WeCzdBXT7hWJEUUUTjuKOOjmuxx5sxDfGfEu6w7qqxRpz3s1E5mojpqoEiipd+xtXDktoJT5GMDmWC+XJTE94AGyGXxr4UM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FfJDNnpa; arc=none smtp.client-ip=91.218.175.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789610494; c=relaxed/simple;
+	bh=UTLQVDa4q8wnYvcLFJ2c2Lc2bBdurrIEWtd29R2fPbk=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ZOSJv+Ps0YigMVhBSNBRL8mLjoe4Ly9VUWSaygUrrrKc85JNNfcFy0F5MLa1N64Xbo51ZsUZrZ/RFhmzrZ2dwtxZrsd1drByxcfuX0fg0aaHEHFr94fp963TcjIMmqyvIN+vr+dzXbhLKYeK7aLaLE1MB+6tRryWd3O8NXp8x1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I3cqJln6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FfJDNnpa"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=COPF3YEMiQ3Yab0KaIhKYX8PYpi8LggU23AZSVaYTms=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789610335; v=1; x=1790215135;
- b=FfJDNnpa7b7fu9rvwqMgIOlZtwaEqx/C4UyEoYZhDnviEUkIw1yh3YsIQ1KzlR59Mg+3j1Wx
- /4uCZTq/YsZzXgqWoKME/30Ow0pZaxCLteEyjHnNyC1cdNFyh2FwFG6JQscGaJJ77/gR5qM7hLO
- bjo3kewFKi3WnIy30g9DIP6k=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6a091610fe011f4e;
-	Thu, 17 Sep 2026 01:58:55 +0000
-X-Mizu-Trace-ID: 6a091610fe011f4e
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v7 4/4] selftests/bpf: Add a test for arena fault-in under memory.max
-Date: Thu, 17 Sep 2026 09:55:09 +0800
-Message-ID: <20260917015618.7488-5-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260917015618.7488-1-jiayuan.chen@linux.dev>
-References: <20260917015618.7488-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I3cqJln6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68D951F000FF;
+	Thu, 17 Sep 2026 02:01:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789610492;
+	bh=QkWtvziCxrllvs+hRiUyPZZ9FmmLVdbAP8OXwszhrgM=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=I3cqJln6F60HKbIvsv2tHcDLUhax32CeDh/QXlKrkc7+WhVzWVtKzs06DQmcxxjoK
+	 mWWyG+W/St4bivkZyXTF4pfh+IEzWGv0OoMdt587lDPV96LopDZJ1fFcF18xmU0ycw
+	 w4l2LFZxq/Em3/sQDoB4R+CJjAzf6LkdPqEvK3Wk4/nrzoX2d6rzopkX/grHG7eAS5
+	 rXxmJ527Q80OVHjRrQ4mU3jmf/Fqj9PdEiYvPy2HFO2tadx7hswLGA7HxNf0wzYb10
+	 P/vTseE4RflBZciAj0AMh2C28lDAcCqgl1biDGzBkf4PZJjZ3DKb15CusgLfvlMGf5
+	 q4EkM+0AI+anw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH 2/2] selftests: bpf: size the map in test_lru_sanity3 to
+ whole refills
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Eva Kurchatova" <eva.kurchatova@virtuozzo.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260917015605.2464043-2-eva.kurchatova@virtuozzo.com>
+References: <20260917015605.2464043-1-eva.kurchatova@virtuozzo.com>
+ <20260917015605.2464043-2-eva.kurchatova@virtuozzo.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 17 Sep 2026 02:01:31 +0000
+Message-Id: <20260917020132.68D951F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-A child joins a memcg, fills it with 128M of clean page cache by reading
-a sparse temp file (the way the cgroup selftests do), caps memory.max 8M
-above its usage and then faults 64M of arena in, which only fits by
-reclaiming that cache.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] bpf: multi-line comment opening '/*' is not on its own line
+--
 
-With the fix the arena fault-in reclaims, every fault succeeds and the
-child exits 0. Without it the allocation cannot reclaim, fails once the
-headroom is used up, and the child dies with SIGSEGV on a valid arena
-address, so the test fails.
+commit 8ef3f0915a719ad39da5bb2d44612274f4d4d332
+Author: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
 
-  # test_progs -v -t arena_memcg
-  serial_test_arena_memcg:PASS:child faulted the arena in
-  #8       arena_memcg:OK
+selftests: bpf: size the map in test_lru_sanity3 to whole refills
 
-  # without the fix
-  child killed by signal 11
-  serial_test_arena_memcg:FAIL:child faulted the arena in
+This commit fixes a test failure in test_lru_sanity3 that occurs on certain
+CPU configurations, like six CPUs. It adjusts the map size so that target_f=
+ree
+divides evenly, preventing partial refills that prematurely evict elements.
 
-The page cache must be reclaimable, so the temp file has to live on a
-disk-backed filesystem, not tmpfs - the same assumption the cgroup
-selftests make.
+> diff --git a/tools/testing/selftests/bpf/test_lru_map.c b/tools/testing/s=
+elftests/bpf/test_lru_map.c
+> index 0921939532c6c..fc67a337d3c1b 100644
+> --- a/tools/testing/selftests/bpf/test_lru_map.c
+> +++ b/tools/testing/selftests/bpf/test_lru_map.c
+> @@ -441,8 +441,18 @@ static void test_lru_sanity3(int map_type, int map_f=
+lags, unsigned int tgt_free)
+>  	assert(sched_next_online(0, &next_cpu) !=3D -1);
+> =20
+>  	batch_size =3D __tgt_size(tgt_free);
+> +	if (!batch_size)
+> +		batch_size =3D 1;
+> +
+> +	/* The local free list is refilled lru->target_free elements at a
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
-To sashiko:
-- The non-arm64 1<<44 map_extra is copied from the existing arena tests.
-- waitpid() without an EINTR retry is copied from the existing tests.
-- fork() then work without exec follows the existing tests (the
-  SIGEV_THREAD watchdog is test_progs-wide).
-- Not skipping on EOPNOTSUPP (unsupported arena JIT) follows most of the
-  existing arena tests; only arena_direct_value/arena_spin_lock skip.
-- cgroup.memory=nobpf would charge the arena pages to the root memcg, so
-  the limit would not bind and the test would pass either way; CI does
-  not configure it.
-- The test SKIPs when the working directory cannot host the reserve: it
-  detects tmpfs (shmem pages are not reclaimable without swap) and a
-  filesystem without O_TMPFILE support. The cgroup selftests make the
-  same assumption about the working directory.
----
- .../selftests/bpf/prog_tests/arena_memcg.c    | 196 ++++++++++++++++++
- .../testing/selftests/bpf/progs/arena_memcg.c |  23 ++
- 2 files changed, 219 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_memcg.c
- create mode 100644 tools/testing/selftests/bpf/progs/arena_memcg.c
+[Severity: Low]
+Does this newly added comment block in test_lru_sanity3 follow the BPF
+subsystem's multi-line comment style?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_memcg.c b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
-new file mode 100644
-index 0000000000000..c76a7eb2f01d9
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
-@@ -0,0 +1,196 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <test_progs.h>
-+#include <fcntl.h>
-+#include <linux/magic.h>
-+#include <sys/vfs.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+#include <sys/user.h>
-+#ifndef PAGE_SIZE /* on some archs it comes in sys/user.h */
-+#define PAGE_SIZE getpagesize()
-+#endif
-+
-+#include "cgroup_helpers.h"
-+#include "arena_memcg.skel.h"
-+
-+#define CG_PATH		"/arena_memcg"
-+
-+/* Reclaimable page cache the child builds up before it gets capped. */
-+#define RECLAIMABLE	(128 * 1024 * 1024)
-+/* Headroom left under memory.max, far less than the arena we fault in. */
-+#define HEADROOM	(8 * 1024 * 1024)
-+/* Arena to fault in; it only fits by reclaiming the page cache. */
-+#define ARENA_FAULT	(64 * 1024 * 1024)
-+/* Child exit code for "this environment cannot host the test". */
-+#define CHILD_UNSUPPORTED	9
-+
-+static void dump_memcg(void)
-+{
-+	char buf[512];
-+
-+	if (!read_cgroup_file(CG_PATH, "memory.max", buf, sizeof(buf)))
-+		fprintf(stderr, "memory.max: %s", buf);
-+	if (!read_cgroup_file(CG_PATH, "memory.peak", buf, sizeof(buf)))
-+		fprintf(stderr, "memory.peak: %s", buf);
-+	if (!read_cgroup_file(CG_PATH, "memory.events", buf, sizeof(buf)))
-+		fprintf(stderr, "memory.events:\n%s", buf);
-+}
-+
-+/*
-+ * Fill the page cache with @size bytes of clean, reclaimable pages by
-+ * reading a sparse temp file, the way the cgroup selftests do. Returns the
-+ * fd, which must stay open: closing it drops the cache. Returns -EOPNOTSUPP
-+ * if the working directory cannot back such a file, -1 on error.
-+ */
-+static int alloc_pagecache(size_t size)
-+{
-+	struct statfs stfs;
-+	char buf[4096];
-+	size_t off;
-+	int fd;
-+
-+	fd = open(".", O_TMPFILE | O_RDWR | O_EXCL, 0600);
-+	if (fd < 0)
-+		return errno == EOPNOTSUPP ? -EOPNOTSUPP : -1;
-+	/* tmpfs hands out shmem pages, which are not reclaimable without swap */
-+	if (fstatfs(fd, &stfs) || stfs.f_type == TMPFS_MAGIC) {
-+		close(fd);
-+		return -EOPNOTSUPP;
-+	}
-+	if (ftruncate(fd, size))
-+		goto err;
-+	for (off = 0; off < size; off += sizeof(buf))
-+		if (read(fd, buf, sizeof(buf)) < 0)
-+			goto err;
-+	return fd;
-+err:
-+	close(fd);
-+	return -1;
-+}
-+
-+void serial_test_arena_memcg(void)
-+{
-+	int cgroup_fd = -1, status, err;
-+	const long ps = PAGE_SIZE;
-+	char buf[64];
-+	pid_t pid;
-+
-+	err = setup_cgroup_environment();
-+	if (!ASSERT_OK(err, "setup_cgroup_environment"))
-+		goto out;
-+
-+	cgroup_fd = create_and_get_cgroup(CG_PATH);
-+	if (!ASSERT_OK_FD(cgroup_fd, "create_and_get_cgroup"))
-+		goto out;
-+
-+	/* No memory controller -> nothing to test. */
-+	if (read_cgroup_file(CG_PATH, "memory.current", buf, sizeof(buf))) {
-+		fprintf(stderr, "%s:SKIP:no memory controller or other env error\n",
-+			__func__);
-+		test__skip();
-+		goto out;
-+	}
-+
-+	pid = fork();
-+	if (!ASSERT_GE(pid, 0, "fork"))
-+		goto out;
-+	if (pid == 0) {
-+		struct arena_memcg *cskel;
-+		__u32 i, npages;
-+		char *base;
-+		size_t sz;
-+		long cur;
-+		int fd;
-+
-+		/*
-+		 * Everything runs in the child: the arena vma is VM_DONTCOPY so
-+		 * it does not survive fork(), and only the child should be under
-+		 * the limit. The work dir belongs to the parent, so use the
-+		 * _parent() helpers; errors come back as an exit code, ASSERT_*
-+		 * does not reach the parent from here.
-+		 */
-+
-+		/* Step 1: join the memcg, so what follows is charged to it. */
-+		snprintf(buf, sizeof(buf), "%d", getpid());
-+		if (write_cgroup_file_parent(CG_PATH, "cgroup.procs", buf))
-+			_exit(2);
-+
-+		/*
-+		 * Step 2: load the arena. A map is charged to whoever creates
-+		 * it, hence joining first.
-+		 */
-+		cskel = arena_memcg__open_and_load();
-+		if (!cskel)
-+			_exit(3);
-+		base = bpf_map__initial_value(cskel->maps.arena, &sz);
-+		if (!base)
-+			_exit(4);
-+		npages = ARENA_FAULT / ps;
-+		if (npages > bpf_map__max_entries(cskel->maps.arena))
-+			_exit(5);
-+
-+		/* Step 3: make RECLAIMABLE bytes of clean page cache. */
-+		fd = alloc_pagecache(RECLAIMABLE);
-+		if (fd == -EOPNOTSUPP)
-+			_exit(CHILD_UNSUPPORTED);
-+		if (fd < 0)
-+			_exit(6);
-+
-+		/*
-+		 * Step 4: set memory.max to what we use now plus HEADROOM. The
-+		 * page cache is already inside the limit, so only HEADROOM is
-+		 * left.
-+		 */
-+		if (read_cgroup_file_parent(CG_PATH, "memory.current", buf, sizeof(buf)))
-+			_exit(7);
-+		cur = strtol(buf, NULL, 10);
-+		snprintf(buf, sizeof(buf), "%ld", cur + HEADROOM);
-+		if (write_cgroup_file_parent(CG_PATH, "memory.max", buf))
-+			_exit(8);
-+
-+		/*
-+		 * Step 5: fault ARENA_FAULT of arena in, much more than
-+		 * HEADROOM. Once it hits memory.max every further page has to
-+		 * come from reclaiming the page cache. With the fix the
-+		 * fault-in reclaims and all of it succeeds; without it the
-+		 * allocation cannot reclaim and we die on a valid address.
-+		 */
-+		for (i = 0; i < npages; i++)
-+			base[(size_t)i * ps] = 1;
-+		_exit(0); /* fd deliberately kept open until here */
-+	}
-+
-+	if (!ASSERT_EQ(waitpid(pid, &status, 0), pid, "waitpid"))
-+		goto out;
-+
-+	/* The working directory cannot hold a reclaimable page cache. */
-+	if (WIFEXITED(status) && WEXITSTATUS(status) == CHILD_UNSUPPORTED) {
-+		fprintf(stderr, "%s:SKIP:no disk-backed O_TMPFILE in cwd\n", __func__);
-+		test__skip();
-+		goto out;
-+	}
-+
-+	/* A non-zero exit means the child failed to set up; the code says where. */
-+	if (WIFEXITED(status) && WEXITSTATUS(status)) {
-+		ASSERT_OK(WEXITSTATUS(status), "child setup");
-+		goto out;
-+	}
-+
-+	/*
-+	 * With the fix the arena fault-in reclaims the page cache and every
-+	 * fault succeeds, so the child exits 0. Without it the allocation
-+	 * cannot reclaim, fails once the headroom is used up, and the child
-+	 * dies with SIGSEGV on a valid arena address.
-+	 */
-+	if (!ASSERT_TRUE(WIFEXITED(status) && !WEXITSTATUS(status),
-+			 "child faulted the arena in")) {
-+		if (WIFSIGNALED(status))
-+			fprintf(stderr, "child killed by signal %d\n", WTERMSIG(status));
-+		dump_memcg();
-+	}
-+out:
-+	if (cgroup_fd >= 0)
-+		close(cgroup_fd);
-+	cleanup_cgroup_environment();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/arena_memcg.c b/tools/testing/selftests/bpf/progs/arena_memcg.c
-new file mode 100644
-index 0000000000000..aff73757e7941
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/arena_memcg.c
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_arena_common.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	/*
-+	 * Number of pages. Must cover ARENA_FAULT on the smallest page size
-+	 * (64M/4K = 16384) yet stay under the 4G arena limit on 64K pages
-+	 * (50000*64K = 3.2G).
-+	 */
-+	__uint(max_entries, 50000);
-+#ifdef __TARGET_ARCH_arm64
-+	__ulong(map_extra, 0x1ull << 32); /* start of mmap() region */
-+#else
-+	__ulong(map_extra, 0x1ull << 44); /* start of mmap() region */
-+#endif
-+} arena SEC(".maps");
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+The BPF subsystem guidelines prefer the opening '/*' to be placed on its
+own line, rather than sharing the first line with the comment text.
 
+> +	 * time, and a refill the global free list cannot satisfy in full
+> +	 * shrinks the LRU list, which evicts elements that are still live.
+> +	 * Size the map so that target_free divides it, otherwise filling it
+> +	 * ends on a partial refill and evicts the elements referenced below.
+> +	 */
+> +	map_size =3D __map_size(batch_size);
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260917015605.2464=
+043-1-eva.kurchatova@virtuozzo.com?part=3D2
