@@ -1,133 +1,155 @@
-Received: from mail-wm2-f4.google.com (mail-wm2-f4.google.com [74.125.225.132])
+Received: from mail-qk2-f13.google.com (mail-qk2-f13.google.com [74.125.230.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8174E30DECC
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 01:06:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.132
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789607170; cv=none; b=GQFqcSH0kSohU4qXPVjoGTBkWIMn4DVBkP5Q6ohDSjd1qTul0qAegG88nbHdcM3uggZAfA7HaFex3kwHEH/5IigV/LKw6xrcFr+rv/dNBdRZA5+yTkO+ZFZrWqck6dXC5dFGRVbbxSauIW44ivVBJ/dmXlP9EyKqI3SPX40wyBY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789607170; c=relaxed/simple;
-	bh=nEDeg8RQOkm2Gaqk/WuwGAfuC1yRAKD18FQaLBZLh70=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=ccjZc98eGWp/b8bAfPx+/f/lwxbrC1HYxlC7z7M/OFagER2UmsoxOovfhTZZU8eyM3/ZjTwq0FJ8aaxMcr6ufW8aEnPJnbJ/As0KfNGuuyBcCfKdShEyDhd3EG6wV7d1XF+qVFqsVDkiJ2n5ooQI3QCZq3D5faTxeQnmOZh1KIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sO9Dq2S5; arc=none smtp.client-ip=74.125.225.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F030A2F6918
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 01:06:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.205
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789607209; cv=pass; b=kwRs/G1IIuMUIoA15pZq4QM6lDIvyvBV8ONBZgVKT0sIF6UIj43gOH4VgXHQDAOlb/i7uYrVpITJ6fYxhoajvtbudgOUKT7jvffRjRWw/6aEmzu3unOn+ePx9EpBajVH10hdg38Cf/J2InN89/AoFwYwYMcOioZ91EBLa0PQp9o=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789607209; c=relaxed/simple;
+	bh=UfmsZp708Ijy54fCK/57bC1uRgIZdRWU2UrdakwbYmo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EESe3pdMfHnRPK5t7rPaPY7CbLQ5m4rOPRAPtaMjXncsMHJc7J/WkedwaFWpDDYVHgymw6dHvgQowmMwuXDu48AErfc7UL2OS6oXzxLDncIpRtRykiYSsVUioObpuN145ysO7+16Cr2KDy63A9kMy6WUMPxCQ8+7c3+aFIOZY1c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i9Ja+iYr; arc=pass smtp.client-ip=74.125.230.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sO9Dq2S5"
-Received: by mail-wm2-f4.google.com with SMTP id 5b1f17b1804b1-49cd71f9909so365015e9.1
-        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 18:06:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i9Ja+iYr"
+Received: by mail-qk2-f13.google.com with SMTP id d75a77b69052e-530d5fc2cd8so92431cf.1
+        for <bpf@vger.kernel.org>; Wed, 16 Sep 2026 18:06:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789607206; cv=none;
+        d=google.com; s=arc-20260327;
+        b=l6xwMB5ZOGxrJm3KspEGz8GXChvrzsy4um6MxP6sLhMoLE14ZCrW6HFqmrdkTD0j0Y
+         ahogI5PxUtZzSG1oifAm+pmXJhFA38zhCoIHOV2BCBGjrSN7FyA/+duzWJ/g3NO9dacO
+         ejFhokbpxteSqh9NhDfFkENG3XgXNiuLJYD79hgNDtP9zqd5Ced4Rs4p8eSbuSfFR7Na
+         ke7TbCEtCvlHXTimclbmYGQ2ZXpCR3EdafRo/Cr1XtxlOA36FLARIRHd8+enBmW2aVdn
+         ULn3em6XYiBZqEHUfPYFZM9Y5nCMqlayVZfODMBwFlv9Z/kCm3bhxQ4/rG8cp67GEWMf
+         AeZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=eVqnTRvwlJyUC6eESGjXw1fA+M9qex3i/sfxeqTQDo8=;
+        fh=XnYMtGByDPltuUvkw7rL9pd7w23RVAdI0vgPJEbt/6Q=;
+        b=DlzVS/vvCt6IGmxCd/NNtmfBQa9AsIFzdMVQw7p27xlty0Q7gWXEn3kLQGRKg5kYIe
+         zJrPDPMG9yEXuwUgWlPtkbNNuWLEBvN1ST8rgyFB795QhRHE6J7dDzjwxQjHAG4BGCu9
+         SuUxzedx3rtpzYrkjJg7CrlbqXoYGA+M7ziyK/L27H109KBacMEeSai9bb5yynlB4PXg
+         mCu9VFsWiN6vitFBkw0vQtBWg8x4cOI0F+AYABBFF+3FvVJd2n9WH5er9mwL7jk2Wu7l
+         U5omXJ1BSeXdXNbX/5YLTNJvpC+Q6LT4Y1o7vtQa//dOYVga/StrRaMqUGhwwr7KNw15
+         Nxug==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789607167; x=1790211967; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=cHLQj9XhR1dDka08qYnD5LGPdHB/UWEa9ar7XHmyFEQ=;
-        b=sO9Dq2S5p37bna0drncct28GW3pO470ya/Bzynpmo0j3XETnXoMt7Rkg2BVNJ0EgKP
-         RFJTE245yXP74NKb7tiKKpVyMYIbhifGBCLgZ0xAuY7P9sTBtG9O0Yg4BoRrkMfJ5PPG
-         CjlgzwCAtiKm0YjXnckgeAgtlGCGGmpAvEC38ZvLoxv0PO4cH0NXn7140TGG+4Sby225
-         UYlm3uiBOPGStR4cSY6VEW9LbKMYkX1JvZ+swqFbD/GpNZeupRXAkHMNk8YU6s8Nrhvq
-         mf7R8QUCTM4hQiHHuVGhPYYe6vmYKjeMN2GrqbNKFahh3SMelpw6qkGQ8HqlxvNeZND9
-         qUlw==
+        d=google.com; s=20251104; t=1789607206; x=1790212006; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=eVqnTRvwlJyUC6eESGjXw1fA+M9qex3i/sfxeqTQDo8=;
+        b=i9Ja+iYrTGq5fF4BO36dSNnLpRptWxPGLH6SXtT7gj+Cw5YBVAlrObueq2Bt18qX2/
+         9XQHZ1nQ7pWh9tvDWO8OhlDb13n2yZ7NIBqOJ/JC6/62WMsCRYPXJhUr1jBEkm6cMRAh
+         6uloYJIwr8CJe+FdYE1ADVB2eOnY34mx6LPXcrj0DbK+hggtBMydfwKXvmQJwyHRj0fX
+         Ud6UFw0+aP7pEp8vRYK8qvaC4snzE+wXA7X07QqrwAqZkGdIYECW9/qoE9PkACD4LKsd
+         RSSj8bydQIEUE9qworxEVBDOMpCmqhckOTbsou8+v+/exJQH71VoMW6+QhY/e6DePVgQ
+         nVOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789607167; x=1790211967;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1789607206; x=1790212006;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=cHLQj9XhR1dDka08qYnD5LGPdHB/UWEa9ar7XHmyFEQ=;
-        b=zxgBJVIA9TQm0iyK5YxiKbwh0DYuCgkNRruc/IZHXTEz3Tq8Xh42IETY7ktIXbdBu7
-         kqPyBsonleYoPiF9SDrDpd++lM+4pvDZHycAUF25UDCB98s/OzfdPwp+IhJs9bKpEemq
-         i4EfN/vEkWeJPZXGK2MXW4cpgIgEf4xJ4+37lxrPys1XFH+gl2U9//w4kTTP1kp0LZe6
-         DWFLnn6QhlHL5cLbWjBXGlIki1itVkDQhZdugFWmwvvhoVo7a/b2e8BihdoFDyaMIsdV
-         XuXxh2aMrRplPGMKdNJZj8LF1Ma8YT/7hJ5CFIZDaLm3/2Rm6ELNSPNahbvve+xPZYDA
-         hjSg==
-X-Forwarded-Encrypted: i=1; AKwUvBw6hy6oDlRdf3yZ/xK3SEm+7rbKaJj3YASEtxtkQiaAelwyhzeAd/47L3Gtne1znmX9SbE=@vger.kernel.org
-X-Gm-Message-State: AFuF++nYjo3Po66nJOb3bqXkyVYkWKXnr2XL0xLIF0P0oBiwWW48+exT
-	0YH1TM/78IzjkzOjFW3phV/F/RSgd1jDBsCSQkV0tBYIdkbcf5HDI04t
-X-Gm-Gg: AYBFou1hT0eTOZQLYvdV8b9w8nvvc2k1BFV8EsPfZJ4Jw4JhK1qH2cqEZXUjN8mLmJK
-	XapdmqBI3fyba6L1vsIuj2k8rqx3EQUPw9LJQtJfkPlEnM718bn1FmXYiOBmCm8Evn4i0e1PqyG
-	OF81xxSevC/L3/7d+3eI7zAeG2nv7lXgM9IN3jyL5dkDAhAsrC6A3045M9NR2hBzjCa+jmqgVAu
-	972Y3tBj46+dnwpPSvUhK87CNFI/ugv+z/dGGoo0/xqRSBtKIPZPRFSO5V4P8l4DtYJ41AUUhoA
-	eJLapiSCCwsG4ZiPScMUO6d2gCL4ChFOmRIBa5Kib2AqnWXp7u2Ks2VKHW5r84myQpVnh3ZGjgs
-	Zo4ZLpWLHX/ZV3ESGPlgHo+s5rmhTEYOMYQ34v9TD+Y+/12jpp1YUky3iNOhk0GYk1Y42doKzDD
-	N4gp7sVwln7fwr4agTJII4sNrZP6Cfftxxhgu+FOqrEmHc/QCno911Ej2UGHn1YhAKVnJf3CvAM
-	O9c/7ELjy4UIo7aB9/DPcOPRvnbSciiDnCLed+PahaTe546F6kA7VFjR3pjLjt20NPRNZe7yHKO
-	QZ5zE1U/N6tWXXWBvRR+3VHtikvRu/I9aIIU1A==
-X-Received: by 2002:a05:600c:3b0c:b0:49f:bc28:e8b1 with SMTP id 5b1f17b1804b1-49fbc28e978mr63418035e9.14.1789607166433;
-        Wed, 16 Sep 2026 18:06:06 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fbd227141sm37169175e9.2.2026.09.16.18.06.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Sep 2026 18:06:05 -0700 (PDT)
+        bh=eVqnTRvwlJyUC6eESGjXw1fA+M9qex3i/sfxeqTQDo8=;
+        b=tuLWThEsoQki8y07czpfoP3augRbCvZ0WXf4+HSyEzcYBNsQxApGgcqm72c2YffHNR
+         7YmFWcFrnUW+TURL3yUnkUqy2/K/BPq2sXCS9smTdnf9rJDo5EkDEg1CBQmArDN8g8sC
+         U3Sjlul71TaTiGts10+2QQIow9T82/NWHB5TMbzvZPGjXGzCtgAJYIJjOvjUh4zsYBgP
+         U7bbDMmhTHR2fIg9rxGDVngFaFYMLIAFIvEPuvlQIIj8FJbizye9qPIZukn7MwXb1fD7
+         fuaToCnmQzw6rzkVywmfN/AalmQGyS0P3RjPo09c361AhMFQJZtUzl2jo4/68ueD7xsf
+         PEUA==
+X-Forwarded-Encrypted: i=1; AKwUvByPHmbVUB6Xcz5em2J21ZZabdT1aUKEqLTdFgLcoGx431nYEZOXIN6T/Kt6jx+BK4ibTWc=@vger.kernel.org
+X-Gm-Message-State: AFuF++kGpGPSXHT1U5wkZpiFdYhgXBSpd+TTYlpq7O+Se5UhFW4nu5C3
+	CTai8gIDSLSDNIRqym7Yeqa1sH3ZBgfZYgmZxuU5tz3ZQI3KQo9NfRAP8b3dyBziKTwh/Xi34eX
+	5hzwMEXpvEEYaRfkFpx43wUOyTDzr2ae3Il1p149n
+X-Gm-Gg: AYBFou1/9UhniYFvpOQDmjLH6sImTSZWODOEgyorSsNTf1uXmQgAa1rpDBd1Bwx+5si
+	jxc0AiihMh/gSJRxI3FV8uxl9C5ZyF2lqsT3xt2eNsS0S1fWohV7ND8PuECotjBWtKTOyRNH4YS
+	zSAwlfJPBcR0CXnaqj04tMtahJ3Wru0R76btlcU3kf/0GqeMOgqSmDzf0LAxv9Eh3usFvBUBx2B
+	lMKjlURPNFieSDm/H+oep2buoGJXfcMqFE0eWilQks8slwRJcPQ3rYODxcGXm2OpjdIGzTedbHd
+	TCJJI6zcob8gB5sLNmDfZWDHG/YNLsksCNm3k0b4Z9SxsRqHOHmqIiWtIZGzPH9RM+6yrTLAWHT
+	XHN6FML5+F4vEoNZ+sXSTygjYGhqelSy4gAQIy/Q=
+X-Received: by 2002:a05:622a:997:b0:531:2284:4b09 with SMTP id
+ d75a77b69052e-5328f60023bmr5751171cf.11.1789607205250; Wed, 16 Sep 2026
+ 18:06:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260909042433.1775591-1-tweek@google.com> <20260909042433.1775591-3-tweek@google.com>
+ <424ef244-f0e0-46e7-bc27-fffee80f348d@linux.dev>
+In-Reply-To: <424ef244-f0e0-46e7-bc27-fffee80f348d@linux.dev>
+From: =?UTF-8?Q?Thi=C3=A9baud_Weksteen?= <tweek@google.com>
+Date: Thu, 17 Sep 2026 11:06:27 +1000
+X-Gm-Features: AcwNN1UtZ3hvthqV8zrZe_2I0a-BHp5mZjUvG6bkreK5qsDS51UGzgeJ9gYHVWk
+Message-ID: <CA+zpnLeRmo3RTAxmMUHepm+kmpG4nw+z_vhR_kNubqEEEAVxbA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 3/3] selftests/bpf: Verify program FD after
+ non-autoload programs in lskel
+To: Leon Hwang <leon.hwang@linux.dev>, Quentin Monnet <qmo@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>, KP Singh <kpsingh@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 17 Sep 2026 03:06:05 +0200
-Message-Id: <DLH6SM4M6XL2.1OB88H6MWSRR0@gmail.com>
-Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Nicholas Carlini" <npc@anthropic.com>,
- <kkd@meta.com>, <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next v5 09/10] selftests/bpf: Check callback map
- value lock identity
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
- <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260916212102.597335-1-memxor@gmail.com>
- <20260916212102.597335-10-memxor@gmail.com>
- <DLH6GI0M7GQH.3MTAVNEGD97AV@gmail.com>
-In-Reply-To: <DLH6GI0M7GQH.3MTAVNEGD97AV@gmail.com>
 
-On Thu Sep 17, 2026 at 2:50 AM CEST, Alexei Starovoitov wrote:
-> On Wed, Sep 16, 2026 at 11:20 PM Kumar Kartikeya Dwivedi <memxor@gmail.co=
-m> wrote:
->> diff --git a/tools/testing/selftests/bpf/prog_tests/cb_refs.c b/tools/te=
-sting/selftests/bpf/prog_tests/cb_refs.c
->> index 78566b817fd7..490e15e7126d 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/cb_refs.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/cb_refs.c
->> @@ -13,7 +13,7 @@ struct {
->>  } cb_refs_tests[] =3D {
->>  	{ "underflow_prog", "release kfunc bpf_kfunc_call_test_release expects=
- referenced PTR_TO_BTF_ID passed to R1" },
->>  	{ "leak_prog", "Possibly NULL pointer passed to helper R2" },
->> -	{ "nested_cb", "Unreleased reference id=3D4 alloc_insn=3D2" }, /* allo=
-c_insn=3D2{4,5} */
->> +	{ "nested_cb", "Unreleased reference id=3D5 alloc_insn=3D2" }, /* allo=
-c_insn=3D2{4,5} */
->>  	{ "non_cb_transfer_ref", "Unreleased reference id=3D4 alloc_insn=3D1" =
-}, /* alloc_insn=3D1{1,2} */
->>  };
+On Thu, Sep 10, 2026 at 3:49=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
 >
-> \robot voice
+> On 9/9/26 12:24, Thi=C3=A9baud Weksteen wrote:
+> > In test_global_percpu_data.c, dump_percpu_data is defined after two
+> > non-autoload SEC("?kprobe") programs (verifier_strncmp and
+> > verifier_snprintf). Verify in test_global_percpu_data_lskel() that
+> > lskel->progs.dump_percpu_data.prog_fd is properly populated (> 0) when
+> > loaded via the light skeleton.
+> >
+> > Signed-off-by: Thi=C3=A9baud Weksteen <tweek@google.com>
+> > ---
+> > No changes since v1.
 >
-> This is the hunk that doesn't apply. The two context lines above are
-> not what bpf-next has, and on b
-> pf-next leak_prog still expects
-> "Unreleased reference id=3D4 alloc_insn=3D3" for an acquire done inside a
-> for_each callback, so it will need the same +1 after patch 8 hands out
-> an id to R3 at callback push time.
+> The Fixes tags of v1 are dropped.
 >
-> Chasing verifier-internal id numbers in expected strings is fragile.
-> While rebasing, either drop the id from these patterns (match on
-> "Unreleased reference" and alloc_insn) or at least fold the expectation
-> update into patch 8, so test_progs is green at every step of the
-> series.
+> >
+> >  tools/testing/selftests/bpf/prog_tests/global_data_init.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c =
+b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> > index 7c539cbcf3a1..ebda60200b71 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> > @@ -214,6 +214,8 @@ static void test_global_percpu_data_lskel(void)
+> >       lskel =3D test_global_percpu_data_lskel__open_and_load();
+> >       if (!ASSERT_OK_PTR(lskel, "test_global_percpu_data_lskel__open_an=
+d_load"))
+> >               goto out;
+> > +     if (!ASSERT_GT(lskel->progs.dump_percpu_data.prog_fd, 0, "dump_pe=
+rcpu_data.prog_fd"))
+> > +             goto out;
 >
-> pw-bot: cr
+> When the light skeleton does not skip the non-autoload progs,
+> lskel->progs.dump_percpu_data.prog_fd is 0, actually.
+>
+> But, theoretically, this ASSERT_GT() is not good enough to prove the FD
+> is the correct FD of dump_percpu_data prog.
+>
+> How about running the iter subtest against the lskel? Factor out
+> test_global_percpu_data_iter_fd() helper first. Then, add an iter
+> subtest using lskel.
+> When factoring out test_global_percpu_data_iter_fd() helper, pls change
+> 'do { } while (0);' to '{ /* no-op */ }' btw.
+>
 
-It got mistagged by me, should have been targeting bpf tree. I did a CI run=
- in
-https://github.com/kernel-patches/bpf/pull/13872, which is green for bpf tr=
-ee,
-so if there are no other objections it can be applied there. Otherwise, I w=
-ill
-respin tomorrow.
+Thanks for the review Leon. That sounds good, I can implement these
+changes. I am just waiting for Quentin's feedback on the first patch
+in this series before spinning up a new patch set.
