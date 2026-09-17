@@ -1,77 +1,77 @@
-Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 345D54D6C34
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 11:11:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 375664BCADD
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 11:11:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789643520; cv=none; b=KchXwkYN5aL3NfrPTmBTQGJHScuYQRIIpUMw1AsyBqKEUYcS32Qbo4FUKFI28gw7EiWFRuQVhEYUplKEHYEV1DGO6NPYXJyDv6sNEvOrd3hxUW9OK8B8gxvYAlGODcTYAXbgcgU7wpsYEnyAOrVdp5jEmVLua+FhpLXVuRsmrBg=
+	t=1789643522; cv=none; b=NVkyA+txyZG1wurjN7YfZ8+MkKGdig3Qv4ZBhGHSuOR3pQXcw20VsKkusPHMj/qaGBJTmaFuvgzKC2xY29K9j0M1R9Q95FED+WjoOURm+w3S3X2sj/BGXOEF0IBg6nZs6ivatyx/Q+2BkV2rh0EuTo0ozfjztXZaFwut+9sT3JA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789643520; c=relaxed/simple;
-	bh=5Gge4/kf3wuXooPZ47g+N8cibmEKDXxenitkizO/foE=;
+	s=arc-20240116; t=1789643522; c=relaxed/simple;
+	bh=CVvBwQ6lBFpXUIViOPlSjh6YvjLdL28clTzxDTwNpCE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dXfHemgQmUfW8xDEW30V6s4STEwgNUQ/Tr29kpdvqRVt4phLhENygUub8KUoHYSZ+nHYxYTi1MOz9+jJb6PUutN0Kh3F6VXtDkpj8MbOl5CchC6287CzOC1/hCWLKtZlcJNO250jMG3GrP2bXK7XkaCgTfN+6N/SIU8GRtZg56U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B2SwSM8n; arc=none smtp.client-ip=74.125.225.139
+	 MIME-Version; b=GzervdOpVN6cor5sDTu4QdijQSgPX1Z8jztCcoX+g1clIYW6Uva8VkE9XouJu//Qz9DReQ0Aj9zn2TTeMka+wYWqRRcSzyl7JtFbAbaoGdMAzmJwf4voWTut7ZcOf18rksEYun0T2eKMmpuw9Encgmdj3RbMDga9IIMZIhkTrBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AdFQAKAe; arc=none smtp.client-ip=74.125.225.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B2SwSM8n"
-Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-49cfcf2548aso2665205e9.0
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 04:11:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AdFQAKAe"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49e6eb11e9cso2607795e9.1
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 04:11:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789643501; x=1790248301; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789643504; x=1790248304; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Zw6FxUREID0PCniCeTsRHMTD/jZ1i6ijXt3jNF/PRHc=;
-        b=B2SwSM8nhyfVqHzM7McgGfjfG+bDDl4SqqBoj99t0tt9DQixQMQ1e4p3fk3EE14rpZ
-         2WBxpred3LTiR556S5IDIHik5y50tBkVasLHqoxihqyD9dAM+swo+UlqOxCJo39ppbTK
-         rr3z4gEzuU8PuoIdeNN1NWeLpK4v+F5NqM/HkK5TwYrfZNt8Sjw64EJyJTlA/8T8e1kY
-         dju0BxRuNa80YylprdxQmy61kPz5UQk7pWgK2jINC8gTse72p4PfJwCw0ZE/Lnsc3yz8
-         aMqYZiXHBuqq9jBJ/9qP+zz9WZVR/PYlQaJKAMHK/tOLhCnI1BJ2aLTeXE8iUXUYNEIj
-         /ZZg==
+        bh=rOK0pbhs8LqYyqOZ8qS4jhEzO9kJE2NNBpncYu3M/ko=;
+        b=AdFQAKAePtJ+4dquIoLdfzAczZ+vsR5NuxWZcFpvbk43ev3h1zM8z+8Vwp2VBV2Kyw
+         oae9n6hSQhN92ApUhvY6NxRSvOiV9bVVEceIwvsJN5XcdtZahmFavtKnDQHeuquW1IK+
+         G7eDkXTLPeXI2z8/oa1ly8UakqaSW6SkEHwsMkhPsPb/ObpuxY/f+OQTLq/3tVlLFHfg
+         nULwB5fNt68AGqu2AFULhcUpWjDY/OxwoSnshtxTN7CfksloC/oBWFAo/A0ClQJzr2ua
+         dH4c5mMgUY71gjIlcOqggnXDzoD6L0R7Q4N0jsDlb3ue1wSAyaoEck/8c1TpPCs1OtoH
+         aAiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789643501; x=1790248301;
+        d=1e100.net; s=20260707; t=1789643504; x=1790248304;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Zw6FxUREID0PCniCeTsRHMTD/jZ1i6ijXt3jNF/PRHc=;
-        b=EidfAMccgB2KaLkoHBuoILpuZPaVsK4c5GIB11l8LnKHabQAWaI36TL5Zqn/GGmVC9
-         m+hVD3hdeeKQsTtNzButDO1GhWoQrjVJO2Hl98nmnr64RNttj54dQbY/WlRcXVj8VQoS
-         elsUdS89q2Nnb5LZtxk5X4QLluCkPZSoNrQ0Oua/AxJCHYgiVsLd5Nmx0K6Z3OAKlBVc
-         ihJ0udp3zVpK4OWOFL/JITe53LEvgNpmd6enBXrGN+RIRBD9fjrbVe5dJ7WZKnlfz+e9
-         Ov4CWo3iJPWVU0H0sCCEIK8G0nzSJJySfZZ8kGZh4CZ1EOlqourIJU7Sj5Yku3nI4sNE
-         3nfA==
-X-Gm-Message-State: AFuF++mY6PcyMclHL682e1KlYnP2ortrRzm0/wYe3KRXdaq7Ma0jYDnp
-	X8NGGMeo588AjxkZMYU4mYzBvcEM6ZbzJviqtYt/m/K9y0YR+hGdiptSZzRc6MLB
-X-Gm-Gg: AYBFou0WWAKi2Q+MHjODY14AqOhayyWo9s9mfE8IKz9SGv2lSUX+uVoD25naAD55zD2
-	7q/hK9nvnJnO8/xi7+xHp1A0tRzjdAfZQUKDJItvK2Ww2GvvBMfgrOjOatbF6m6iGhagmqOw0sm
-	gDviAjnhvYVXA8lcnNtqmDamlTU0OGziPsIrBBgaBWC715lZ5Xh3PttATN+TQtQ1PBaurtQmUB6
-	+YwnzWvCTaCA1BQOVB+AVqBX3FBuLxlpohhv0Tcr/+68r/vNPmOQGTfkjTE0K17dEMxj1/xYlwM
-	98DYDAeFo5oCRx4MHdyplRJ7jY5BbQmdMRc3ZWlLKVpd+a83Q4c3zr1M+J2uxFe7+Al+OwkBnk/
-	L8grDMnKu8H181eQWyJRKiK3lKL4CTXIBOrlPzgMWnWMRlC5WN/PEh2XPcGwpbsA6CyQiBDr8iK
-	1cN71EaWnsVWhoCIiDLfOefAhToDJ3ibT4vduls8naH+aIUnfTei+91d+x6q4Ot9nLWP/ue4GvQ
-	xmyxsSpAudEwMWJFGYrbYd2HFg3D4/7OJX7uKeBZczJ2OlrqTLzC+ZKxiTx0NLxIpmeBLFB/27l
-	HALCnMpMEhrdOTQPMRhql3pkIGVfD195hA4Zgg==
-X-Received: by 2002:a05:600c:8b86:b0:49c:fff9:f684 with SMTP id 5b1f17b1804b1-49eb7320be4mr72638235e9.21.1789643500653;
-        Thu, 17 Sep 2026 04:11:40 -0700 (PDT)
+        bh=rOK0pbhs8LqYyqOZ8qS4jhEzO9kJE2NNBpncYu3M/ko=;
+        b=n+xZNYWpk9Yc0PK+4h6+4Gh6Sdp2xhi+thubMPE2KpSyVrx/sYiXCUDTgFUBbHGC9d
+         39wRV/5QJJHI3S5WQaJ7Rw1UwrTVXyKEpdJt7d4OPOiGXSpAnnfL++7ZyiGuHpQ7DDug
+         UuXBqg213rC+RaM4045ZW4/bnK2d1NAnFhHzWk/QVhy5k6p+fRuKHUgacfXxUB46UoCU
+         Zx5DX4z4WPUV0C0x5yIjfpq5b+9vmMSEa0h62pivnUrXt52L6Mb31dcBMZMAMVtTUsCq
+         /b6TzMhahOM4/VwJN0Km1QojTo2at4VQgJZsRlJ/FYCcYdygFGBFR1OPJ+ktedmGCOgB
+         Rw8Q==
+X-Gm-Message-State: AFuF++mv/WmURey6TwLAU2meW2VU2ywAEK0VSxYl0nDLLLSaSgsrnfev
+	UT3JedMP75Qwdj9SnthN+tk2RMCO4fgxhlgXWQENSnKKgX2wWAWzirzQDLcz9gLg
+X-Gm-Gg: AYBFou09rBwZAJocltXIBjjWRhK630oylrpTNIBv66XfzF/hgDV8zqFVoubbACXo8wZ
+	X2iX4b2/S3Wr2xVQGI2qlQ8rKdS38DTUr7UxWoXVgNh8i6a4TK+SfbOCIZAEvb5dkNHndt+MqTN
+	2qAGlEf0Wv/pgKxtZY3cOB1baKLxlCj0Il78ZWiGiG25U08/7f6NuI7VWU+HR8cuvJHuVTDvb2R
+	zz1PmiD6scq309zlMgw0S6cy5BA0UcD41h5m3ZisTDtgUPLF1DKj9/BdvQvWelIfUDXAIKDbFim
+	v27Nyl0ENkisxubkrO/MT+V3I2D0ZwSevbnyX3KufQ8CXb5NItPh+DTxNVlwCHORuuGBy9NMPoF
+	sm/xVeBC6XBd/XurUDOvu4RtYmi+9pQkONs6bvY0wLv2lSOV4JA9ta9Q5yuVJICygqDewEgTauL
+	yq2bvd9okHrprCsav5qs/2FTCbdvTa8HYJEVw2VS6t9X0ag40qLfT2DSfw9mTUdx+tRGBTXs5T7
+	Zp3cthpbv6z7Idip3LRhWlZpCbXl9isZKRb+grqFHvYPthlI94zKNZvQpe6XkUonI6L0/Tz/1l1
+	eZ39nL36yPvAf2+S/0VJjlqTmBrCAbFcj86dVA==
+X-Received: by 2002:a05:600c:4ed2:b0:49e:8184:f617 with SMTP id 5b1f17b1804b1-49eb732e21emr75535065e9.22.1789643504323;
+        Thu, 17 Sep 2026 04:11:44 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4870bf27198sm14679278f8f.15.2026.09.17.04.11.39
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4870bf1f6cfsm14884091f8f.13.2026.09.17.04.11.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 04:11:39 -0700 (PDT)
+        Thu, 17 Sep 2026 04:11:43 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Nicholas Carlini <npc@anthropic.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v6 07/10] selftests/bpf: Test CO-RE instruction poisoning restrictions
-Date: Thu, 17 Sep 2026 13:11:19 +0200
-Message-ID: <20260917111127.3780880-8-memxor@gmail.com>
+Subject: [PATCH bpf v6 09/10] selftests/bpf: Check callback map value lock identity
+Date: Thu, 17 Sep 2026 13:11:21 +0200
+Message-ID: <20260917111127.3780880-10-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260917111127.3780880-1-memxor@gmail.com>
 References: <20260917111127.3780880-1-memxor@gmail.com>
@@ -81,115 +81,149 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4517; i=memxor@gmail.com; h=from:subject; bh=5Gge4/kf3wuXooPZ47g+N8cibmEKDXxenitkizO/foE=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv1qeSPO786lDM+ubN+3oSzu17P7u+1sy6QW/1we9eGt VLTXjiqdpSyMIhxMciKKbKU/N/HZHyi8neg7TJumDmsTCBDGLg4BWAiq70YGXbb77j59/qJkz4O nHu+spY+PreYx/HXHGetsLipjnoV4h8ZGR7r7DN4u/Z0g1rZi6CpLzY9yjy6vHuV+csn7NGs5/Y v5+cHAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5234; i=memxor@gmail.com; h=from:subject; bh=CVvBwQ6lBFpXUIViOPlSjh6YvjLdL28clTzxDTwNpCE=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWv1qZQHAhMfFd6v0z3MyKp9duvND0oap1+6vDJvaWlrL H0ctuFVRykLgxgXg6yYIkvJ/31MxicqfwfaLuOGmcPKBDKEgYtTACZSbMnwz3zKn/Wnlsl9rNrw QeJn0r6lfm7H/D+eO/3EP5fjmEirQBsjwynT+1ekzA46xFlFf1SxZtBfa/rx9Naklpn746T+Wmw v5gAA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Add raw CO-RE relocations that fail to resolve their target enum value.
-Place each supported and unsupported instruction form in dead code.
-Unsupported targets must fail relocation with a diagnostic even when they
-are unreachable. Supported ALU immediates, memory accesses, and ldimm64
-instructions must still be poisoned and removed as dead code, allowing the
-program to load. Check that both halves of ldimm64 are poisoned.
+Add a verifier test which retains a map value from an outer callback and
+then acquires a lock through an inner callback value before attempting to
+release the outer callback value. Both values can denote different elements,
+so the verifier must reject the mismatched unlock.
 
-Load every instruction stream without relocations first to ensure that
-rejection is caused by the relocation rather than the original program.
+Also exercise callbacks reached through two inner-map lookups. The lookup
+results share inner_map_meta but may refer to different one-element arrays,
+so their callback values must retain distinct lock identities.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Extend the existing spin_lock failure table and reuse its array and
+inner-map fixtures to keep these cases alongside the other lock identity
+tests. Update the nested callback reference-leak expectation for the extra
+callback value ID.
+
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../selftests/bpf/prog_tests/core_reloc_raw.c | 64 ++++++++++++++++++-
- 1 file changed, 61 insertions(+), 3 deletions(-)
+ .../selftests/bpf/prog_tests/cb_refs.c        |  2 +-
+ .../selftests/bpf/prog_tests/spin_lock.c      |  2 +
+ .../selftests/bpf/progs/test_spin_lock_fail.c | 67 ++++++++++++++++++-
+ 3 files changed, 68 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c b/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c
-index 10bda3ff80eb..95c1414df413 100644
---- a/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c
-+++ b/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c
-@@ -50,6 +50,28 @@ static int load_core_relo_insns(int btf_fd, struct bpf_insn *insns, int insn_cnt
+diff --git a/tools/testing/selftests/bpf/prog_tests/cb_refs.c b/tools/testing/selftests/bpf/prog_tests/cb_refs.c
+index 78566b817fd7..490e15e7126d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/cb_refs.c
++++ b/tools/testing/selftests/bpf/prog_tests/cb_refs.c
+@@ -13,7 +13,7 @@ struct {
+ } cb_refs_tests[] = {
+ 	{ "underflow_prog", "release kfunc bpf_kfunc_call_test_release expects referenced PTR_TO_BTF_ID passed to R1" },
+ 	{ "leak_prog", "Possibly NULL pointer passed to helper R2" },
+-	{ "nested_cb", "Unreleased reference id=4 alloc_insn=2" }, /* alloc_insn=2{4,5} */
++	{ "nested_cb", "Unreleased reference id=5 alloc_insn=2" }, /* alloc_insn=2{4,5} */
+ 	{ "non_cb_transfer_ref", "Unreleased reference id=4 alloc_insn=1" }, /* alloc_insn=1{1,2} */
+ };
  
- static void test_early_core_relo(void)
- {
-+	static const char unrecognized[] = "trying to relocate unrecognized insn #2";
-+	static const struct {
-+		const char *name;
-+		struct bpf_insn insns[2];
-+		const char *err_msg;
-+	} tests[] = {
-+		{ "poison_exit", { BPF_EXIT_INSN() }, unrecognized },
-+		{ "poison_ja", { BPF_JMP_A(1) }, unrecognized },
-+		{ "poison_jmp", { BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1) }, unrecognized },
-+		{ "poison_jmp32", { BPF_JMP32_IMM(BPF_JEQ, BPF_REG_0, 0, 1) }, unrecognized },
-+		{ "poison_call", { BPF_EMIT_CALL(BPF_FUNC_get_prandom_u32) }, unrecognized },
-+		{ "poison_alu_reg", { BPF_MOV32_REG(BPF_REG_0, BPF_REG_1) }, unrecognized },
-+		{ "poison_alu64_reg", { BPF_MOV64_REG(BPF_REG_0, BPF_REG_1) }, unrecognized },
-+		{ "poison_ld_abs", { BPF_LD_ABS(BPF_W, 0) },
-+		  "insn #2 (LDIMM64) has unexpected form" },
-+		{ "poison_alu_imm", { BPF_MOV32_IMM(BPF_REG_0, 0) } },
-+		{ "poison_alu64_imm", { BPF_MOV64_IMM(BPF_REG_0, 0) } },
-+		{ "poison_ldx", { BPF_LDX_MEM(BPF_W, BPF_REG_0, BPF_REG_1, 0) } },
-+		{ "poison_st", { BPF_ST_MEM(BPF_W, BPF_REG_10, -4, 0) } },
-+		{ "poison_stx", { BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_0, -4) } },
-+		{ "poison_ldimm64", { BPF_LD_IMM64(BPF_REG_0, 0) } },
-+	};
- 	struct test_btf {
- 		struct btf_header hdr;
- 		__u32 types[18];
-@@ -93,7 +115,7 @@ static void test_early_core_relo(void)
- 		BPF_EXIT_INSN(),
- 	};
- 	int access_str_off = 51, enum_id = 5;
--	int btf_fd, prog_fd = -1;
-+	int btf_fd, prog_fd = -1, i;
+diff --git a/tools/testing/selftests/bpf/prog_tests/spin_lock.c b/tools/testing/selftests/bpf/prog_tests/spin_lock.c
+index 5c3579438427..e368370262c8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/spin_lock.c
++++ b/tools/testing/selftests/bpf/prog_tests/spin_lock.c
+@@ -54,6 +54,8 @@ static struct {
+ 	{ "lock_global_sleepable_helper_subprog", "global function calls are not allowed while holding a lock" },
+ 	{ "lock_global_sleepable_kfunc_subprog", "global function calls are not allowed while holding a lock" },
+ 	{ "lock_global_sleepable_subprog_indirect", "global function calls are not allowed while holding a lock" },
++	{ "callback_value_lock_identity", "bpf_spin_unlock of different lock" },
++	{ "callback_inner_map_value_lock_identity", "bpf_spin_unlock of different lock" },
+ };
  
- 	btf_fd = bpf_btf_load(&raw_btf, sizeof(raw_btf), NULL);
- 	if (!ASSERT_GE(btf_fd, 0, "btf_load"))
-@@ -124,8 +146,44 @@ static void test_early_core_relo(void)
- 					       enum_id, access_str_off, 2, true);
- 		if (!ASSERT_LT(prog_fd, 0, "poisoned_load"))
- 			goto cleanup;
--		ASSERT_HAS_SUBSTR(log, "trying to relocate unrecognized insn #2",
--				  "poisoned_load_log");
-+		ASSERT_HAS_SUBSTR(log, unrecognized, "poisoned_load_log");
-+	}
+ static int match_regex(const char *pattern, const char *string)
+diff --git a/tools/testing/selftests/bpf/progs/test_spin_lock_fail.c b/tools/testing/selftests/bpf/progs/test_spin_lock_fail.c
+index f678ee6bd7ea..55282f20fa32 100644
+--- a/tools/testing/selftests/bpf/progs/test_spin_lock_fail.c
++++ b/tools/testing/selftests/bpf/progs/test_spin_lock_fail.c
+@@ -14,17 +14,18 @@ struct array_map {
+ 	__type(key, int);
+ 	__type(value, struct foo);
+ 	__uint(max_entries, 1);
+-} array_map SEC(".maps");
++} array_map SEC(".maps"), array_map_b SEC(".maps");
+ 
+ struct {
+ 	__uint(type, BPF_MAP_TYPE_ARRAY_OF_MAPS);
+-	__uint(max_entries, 1);
++	__uint(max_entries, 2);
+ 	__type(key, int);
+ 	__type(value, int);
+ 	__array(values, struct array_map);
+ } map_of_maps SEC(".maps") = {
+ 	.values = {
+ 		[0] = &array_map,
++		[1] = &array_map_b,
+ 	},
+ };
+ 
+@@ -314,4 +315,66 @@ int lock_global_sleepable_subprog_indirect(struct __sk_buff *ctx)
+ 	return ret;
+ }
+ 
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 2);
++	__type(key, int);
++	__type(value, struct foo);
++} callback_array_map SEC(".maps");
 +
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		struct bpf_insn insns[] = {
-+			BPF_MOV64_IMM(BPF_REG_0, 0),
-+			BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 1),
-+			tests[i].insns[0],
-+			BPF_MOV64_IMM(BPF_REG_0, 0),
-+			BPF_EXIT_INSN(),
-+		};
-+		bool is_ldimm64 = insns[2].code == (BPF_LD | BPF_DW | BPF_IMM);
++struct callback_ctx {
++	struct foo *value;
++};
 +
-+		if (!test__start_subtest(tests[i].name))
-+			continue;
-+		if (is_ldimm64) {
-+			insns[1].off = 2;
-+			insns[3] = tests[i].insns[1];
-+		}
-+		prog_fd = load_core_relo_insns(btf_fd, insns, ARRAY_SIZE(insns), funcs, 1,
-+					       enum_id, access_str_off, 2, false);
-+		if (!ASSERT_GE(prog_fd, 0, "control_load"))
-+			goto cleanup;
-+		close(prog_fd);
-+		prog_fd = load_core_relo_insns(btf_fd, insns, ARRAY_SIZE(insns), funcs, 1,
-+					       enum_id, access_str_off, 2, true);
-+		if (!tests[i].err_msg) {
-+			ASSERT_GE(prog_fd, 0, "dead_poison_load");
-+			ASSERT_HAS_SUBSTR(log, "substituting insn #2", "poison_log");
-+			if (is_ldimm64)
-+				ASSERT_HAS_SUBSTR(log, "substituting insn #3", "poison_ldimm64_log");
-+		} else {
-+			ASSERT_LT(prog_fd, 0, "invalid_poison_load");
-+			ASSERT_HAS_SUBSTR(log, tests[i].err_msg, "invalid_poison_log");
-+			ASSERT_NULL(strstr(log, "substituting insn"), "invalid_poison_substitution");
-+		}
-+		close(prog_fd);
-+		prog_fd = -1;
- 	}
- 
- cleanup:
++static long lock_different_value(struct bpf_map *map, int *key,
++				 struct foo *value, struct callback_ctx *ctx)
++{
++	bpf_spin_lock(&value->lock);
++	bpf_spin_unlock(&ctx->value->lock);
++	return 0;
++}
++
++static long nest_lock_different_value(struct bpf_map *map, int *key,
++				      struct foo *value, void *data)
++{
++	struct callback_ctx ctx = { .value = value };
++
++	bpf_for_each_map_elem(&callback_array_map, lock_different_value, &ctx, 0);
++	return 0;
++}
++
++SEC("?tc")
++int callback_value_lock_identity(void *ctx)
++{
++	bpf_for_each_map_elem(&callback_array_map, nest_lock_different_value, NULL, 0);
++	return 0;
++}
++
++static long nest_lock_different_inner_value(struct bpf_map *map, int *key,
++					    struct foo *value, void *data)
++{
++	struct callback_ctx ctx = { .value = value };
++	int inner_key = 1;
++	void *inner_map;
++
++	inner_map = bpf_map_lookup_elem(&map_of_maps, &inner_key);
++	if (!inner_map)
++		return 0;
++	bpf_for_each_map_elem(inner_map, lock_different_value, &ctx, 0);
++	return 0;
++}
++
++SEC("?tc")
++int callback_inner_map_value_lock_identity(void *ctx)
++{
++	int inner_key = 0;
++	void *inner_map;
++
++	inner_map = bpf_map_lookup_elem(&map_of_maps, &inner_key);
++	if (!inner_map)
++		return 0;
++	bpf_for_each_map_elem(inner_map, nest_lock_different_inner_value, NULL, 0);
++	return 0;
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.53.0
 
