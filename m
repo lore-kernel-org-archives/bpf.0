@@ -1,111 +1,117 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0D74E73B0;
-	Thu, 17 Sep 2026 20:31:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49B94CDDFC
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 20:39:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789677106; cv=none; b=s37v/MrYjc29FeUT4m+sUS3cXBBeeIfT5T+BrazsvN2g7HXV1yDwFExXeroNESB+iLfWvk+NCWB17TuLrHqii3vGK7HfqfACTgctJIIuwOZ+rPkOBQwo0/e/70/xFumo1fSVLttp641tUJ1OPj1WRtPP8+see/HfQW1HihYluPA=
+	t=1789677561; cv=none; b=JnIwPLmdfrtVIcvGnxFVpdYISSGnPvlqRxwAXFxgvxwFO2BBiSRnAQrXpDovtkkeKe7r5upQuQGu2WvjqD2wW/fHAKt8Z7zKbi6kTfsUP2upguBExCog4nTORFttgKIhWKiIfSvRgTU10J6T+A/zNr24mhdw+zlLL/HkD/NX7z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789677106; c=relaxed/simple;
-	bh=vcpJ74ZsKVFhAmNXcqmoG9+n/y5nCZi+8o+QaYEnJuM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QTpxX9iT+/F6XUVIJR5XJ4px9ei1xCy807iiK+r5EcT4AL/Cef1JqTR2tEgaHFRwZbv32A27B03vN6wZzFgIcsMDdMEPKwYTabQNaBYUfp7VaoCgBmbjD0u5953vyWQGGryj7Dtd022nBoek0mUBwB5+6joBSdjPGYVRTL81kUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ts3RaYNr; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789677561; c=relaxed/simple;
+	bh=nErkDrtV5/AjATaOqE6IcKTQrfOQKC9QUwkcHfWUbo0=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=BjrqD9BN6gd66p5Ni/A5ASUCv4IzVssUuVUpXJwkK7ZzsolAOnB8oqioaKgjrhaQUbbJlZ6SLqwWU6wszq8ylbUR+QNecV77BlKLXiOOsCNHJ4LRjmnVDF5o35B9Y+poxVRVVdRVvO7+kWsmxFo0Npo1d2S8A15O+mZ8dLooJyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gwkgt7gv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ts3RaYNr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F115D1F000FF;
-	Thu, 17 Sep 2026 20:31:44 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gwkgt7gv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 433F51F000FF;
+	Thu, 17 Sep 2026 20:39:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789677105;
-	bh=1DNCW5bB+cAYVy5PyJp5VUEN9k9DZzvAe3lm+iP5ciY=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=Ts3RaYNrEkFulPAP4OS7uNGnQMm/6SzgIVeMh8NGZAkrMhOzleLAdfRvTZ6hDjBpn
-	 sK3Xe4dOcnOhN9iirOMs0CB2GL2Z6qOI3aMMVN9pozJjUFCtPX2GsXChdiXAMvHv/H
-	 A9ja+yO6aO4CuwpA4BPDb/njnc8+lhp17d7MAKl8dciFXjoqTpMKiBiwhuhirN0XzO
-	 D1azThDi/j3Cf7bGLueAkZ9BywzCDXdnK4GG5oCv2G8CqZplWKkn8lYBpNwE7UR8ay
-	 wI53qK8FbjQmzeKpADME9erclbbWiZVtKHS3EtpdnGGngJcrveU/fvURFyEGsddimA
-	 W8zBwB4+X35YA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id AF6E2CE1771; Thu, 17 Sep 2026 13:31:44 -0700 (PDT)
-Date: Thu, 17 Sep 2026 13:31:44 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: Josef Bacik <josef@toxicpanda.com>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Boqun Feng <boqun@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, x86@kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>, Juergen Gross <jgross@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	xen-devel@lists.xenproject.org
-Subject: Re: [PATCH RFC v3 03/13] rcu-tasks: Add a Tasks RCU implementation
- for reader-marked trampolines
-Message-ID: <ef2cf89b-4cc6-4778-af91-6bb67fb10188@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <91687748-0781-4133-baed-43cf82f35ff5@paulmck-laptop>
- <aqqpRoTfywUuTgoC@localhost.localdomain>
- <aqqsAUVV8a1yrQzX@localhost.localdomain>
- <6afb0afe-e7b8-46b4-9fea-2c7cf4791044@paulmck-laptop>
- <aqq0cwvRDsorGwgc@localhost.localdomain>
- <8b73e1b3-0580-4ba9-b2e0-6363e429808d@paulmck-laptop>
- <aqvZwfUVsiEI7q7y@localhost.localdomain>
- <8fea176a-0ca0-4a70-8cf9-8240a22359e4@paulmck-laptop>
- <aqw1UNGO3cQxvCco@pavilion.home>
- <33b8e33a-3fad-4b33-9ae7-3948f0e6d3aa@paulmck-laptop>
+	s=k20260515; t=1789677560;
+	bh=31SjR9YfSgo+/X/fnvQjy51ltGJdhxC1bHPrZmH1l0U=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Gwkgt7gvYz7/XLqpCWQqxZHM45t1CFmhcQZEA+PWxyA1u74AyW5IYmIYLUt0WyvHO
+	 2a0PjUebARa+AQPiQXlt4BS32USOwC0YEeprjneYvSIn+pJDGxQGHtw6ZlK/V92o1v
+	 +QO75IhwJdHrWSc+R/pWjWiN48H63y43WhGkYxzciJw3PV3BfkAKUrnKqjbOmLcJX6
+	 haVIDCsOuk79njl6mTDoQ6Tv5ouMh/ZzpbwaWn+Chs/G0rxlsHhf3AamHFkb+kG/36
+	 ikVNE4hWS3bxB1lGfLE4WC3dZUWIr/FHdtYfXf/jxhH/JQTLTGFEBAoVRwlipNXTy8
+	 orl1Q9WwKSzxA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 5/6] selftests/bpf: Cover BPF program load
+ strategy transitions
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260917203040.3150212-6-andrey.grodzovsky@crowdstrike.com>
+References: <20260917203040.3150212-1-andrey.grodzovsky@crowdstrike.com>
+ <20260917203040.3150212-6-andrey.grodzovsky@crowdstrike.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 17 Sep 2026 20:39:19 +0000
+Message-Id: <20260917203920.433F51F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <33b8e33a-3fad-4b33-9ae7-3948f0e6d3aa@paulmck-laptop>
 
-On Thu, Sep 17, 2026 at 12:25:40PM -0700, Paul E. McKenney wrote:
-> On Thu, Sep 17, 2026 at 08:45:36PM +0200, Frederic Weisbecker wrote:
-> > Le Thu, Sep 17, 2026 at 08:40:10AM -0700, Paul E. McKenney a écrit :
-> > > > > Trampolines that transfer control to tracing code could supply the needed
-> > > > > cleanup call.  But last I checked, there were trampolines that transferred
-> > > > > directly back to the original code, with no opportunity for cleaning up.
-> > > > > 
-> > > > > Or am I still missing a trick here?
-> > > > 
-> > > > You're right. So we'll indeed need to reuse the deferred qs points here.
-> > > 
-> > > Except this is getting a bit involved.
-> > > 
-> > > Don't get me wrong, if Josef is happy to take this on, far be it from me
-> > > to stand in his way.  But if not, we should be willing to treat this
-> > > optimization as a follow-on effort, whether by Josef or someone else.
-> > 
-> > Sure, I guess I can try the follow-on, especially if it leads to removing
-> > all this RCU tasks black magic.
-> 
-> That sounds most excellent, thank you!
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: bpf_link leaked on selftest error path
+--
 
-Ah, and in case anyone (especially Josef) is wondering, one big advantage
-of the more elaborate approach is that it allowed the real-time guys to
-avoid yet another source of IPIs messing with their latencies.
+commit 82f598b63abc74f2a315872de7cd207f7e441280
+Author: Slava Imameev <slava.imameev@crowdstrike.com>
 
-							Thanx, Paul
+selftests/bpf: Cover BPF program load strategy transitions
+
+This commit adds a load_type test to cover BPF program load strategy
+transitions. It verifies transitions between DISABLED, AUTO, and MANUAL
+strategies, as well as the behavior of autoattach.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/load_type.c b/tools/t=
+esting/selftests/bpf/prog_tests/load_type.c
+> new file mode 100644
+> index 0000000000000..55ca53685863c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/load_type.c
+> @@ -0,0 +1,157 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <test_progs.h>
+> +#include <time.h>
+> +#include "test_load_type.skel.h"
+> +
+> +void test_load_type(void)
+> +{
+> +	struct bpf_link *link;
+> +	struct test_load_type *skel;
+
+[ ... ]
+
+> +	/* attach prog3 */
+> +	link =3D bpf_program__attach(skel->progs.prog3);
+> +	if (!ASSERT_OK_PTR(link, "attach"))
+> +		goto cleanup;
+> +
+> +	usleep(1);
+> +
+> +	if (!ASSERT_TRUE(skel->bss->prog3_called, "prog3_called_again"))
+> +		goto cleanup;
+
+[Severity: Medium]
+Will this leak the bpf_link if the assertion fails?
+
+When the test assertion fails, it jumps to the cleanup block in
+test_load_type(), skipping the explicit bpf_link__destroy() call. Because
+test_load_type__destroy() doesn't clean up manually attached programs,
+the link will be leaked.
+
+Also, if you choose to fix this by adding bpf_link__destroy() in the
+cleanup block, it looks like the link variable is uninitialized at declarat=
+ion,
+so it might be necessary to initialize it to NULL as well.
+
+> +
+> +	/* detach prog3 as test_load_type__destroy doesn't detach manually load=
+ed programs */
+> +	err =3D bpf_link__destroy(link);
+> +	ASSERT_OK(err, "link_destroy");
+> +
+> +cleanup:
+> +	test_load_type__destroy(skel);
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260917203040.3150=
+212-1-andrey.grodzovsky@crowdstrike.com?part=3D5
