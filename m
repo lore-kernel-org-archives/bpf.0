@@ -1,124 +1,150 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F68E44AB6E
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 06:48:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDBA844A730
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 07:00:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789627733; cv=none; b=FeYtY0jVfbP1Zjq3JzrV+dtaFVN7WXTu3xCmqT7iqtLeUNVNPq+TUsG1HKYjsgDKPz6AHzhJwFlJQNvoRxVm+ODHu8klRIJ+H21MGorzGiHMgsc7v+C5m8fkN7F7Tt6Eyfivm1kGfHHCkKofbvX7G7pjror9ip/p7snXwmUBEHA=
+	t=1789628430; cv=none; b=XtxvDzVCUxnGKPARVwssj/VHQp8z2taax1KSxI3tdr/paS34A7KcsLC2IuGuFOjfmLIr86+XWvqrgmHyM0T8gIrrzGyplEW4ArlUgV9tMQi6fhLt4RBGzWJOJEaMUMaHJpwdJvvunfYdWcvtLGUl8GKzmUG65bBH6NkycsjUtI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789627733; c=relaxed/simple;
-	bh=aAv46u/4EWQDq9kQi22X7s3/atkLMhKMxTR7Bb1FZms=;
+	s=arc-20240116; t=1789628430; c=relaxed/simple;
+	bh=iwWpOiqYQTBXfgHoUvIsOnxJPYwFi7VPRrP9LmEPMOc=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=tX4QXkc8ENL32pyhRk4Dxvh+2taLJBxGXaEXUGI2GKxlBAuIAXsEVFwDSyAlKHIGD54nlilcHox1DqPsKXSuAHKclYS38n+4GCsHHNIfSgwlJwuFPMIT4qTRavp3dZ9K9kdKk/auvcsZgHRYtBMUB5/DNUmdF01jgaAzAuRAQs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ahZD5WXn; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=o2NMLCMAlcIOhgXNIZSD6N+HgdJLimunP8rBPgx/5n65BJxLO0puK0jcYvOIsSK93jgltnrOKZCfwY5dI5Mf6rVktffQNKWJE2ZhRUHyVDzNa5NMVBfQmJy/z4+CkgZAjR56atlCimOVimqm2d+VgVp96eg9ZdFf8w8Pxg+3ybI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y4w0ummA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ahZD5WXn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38DF81F00893;
-	Thu, 17 Sep 2026 06:48:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y4w0ummA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91B171F00893;
+	Thu, 17 Sep 2026 07:00:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789627732;
-	bh=yB92nxoMF+++vzh85303tzING09o4yFjEiiO+rbnx1M=;
+	s=k20260515; t=1789628419;
+	bh=+xElMieRBI5z1+cmMf9SmLoMWjo7SY6w4p+kQJgr9DY=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=ahZD5WXnxQ5bJmnV4JJLpmI4Rd1TT0kduPDkvmWv/k8LjqmF64hmHN1GFAgRk3eqs
-	 ZsuuBGv9OL6SeQ94v+OllQAbW2wimfHJv2dztFuAFjgSHU9cSeT1Mre1ivpUF9fTTo
-	 cMLA/R2BhB372DWSfwYL1a8u1hBlZZtBMMn/0Nx8ko1n6Z4eiZ9+FTcwrysgNpJA9n
-	 GC8IaCFSZNlCe10aApo0lF8g6CawjrMHgOOOa9G98vDTPZQbsAVrPofxnv+O+lwi6n
-	 oqCXAr1+4TpvegbjvnuP85p76FWROy5etsr9jPule8hsJ5kGngiIBrnK/jWWID0rST
-	 8qlONhE9AdLmw==
-Content-Type: multipart/mixed; boundary="===============0538707630271738666=="
+	b=Y4w0ummAIZ0QoyYz+Cw8SJFUyORaQcUEM4emI2ue4NovxZVCcVUkctKSUPeXB8iY4
+	 4NC3Bm8l2dEnDeNwj39aO2W90/Pj12E/cAsCFet0IgZHyBik+RVlW5memdYDZF/WUT
+	 Z6V9yDFEEDU8jwY9gx5aadII+TS8lSVYhPk+wZXAIt80fWUAYMZsTIlt/Z07sILQQW
+	 siGdm6b4RrG5+KP0oVBojbuAU6o7l/KzPnir4C6haoC3bZbJYWosM8+pyKydrezi9O
+	 dPrvYEroxHogaI8qsG+Aj0j0qR6uP5aI7dgEyXSD9ekvSBmeExfeewr93JadUjg/AK
+	 sKIkBnxvnkUlQ==
+Content-Type: multipart/mixed; boundary="===============0751584282405106952=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <596e9f402b0cd56f1897d2be75feb51ac53f6e2694619d594720057d2777aa09@mail.kernel.org>
-In-Reply-To: <20260917051948.1588826-2-xyx2021@mail.ustc.edu.cn>
-References: <20260917051948.1588826-2-xyx2021@mail.ustc.edu.cn>
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: Track iterator-owned BTF pointer lifetimes
+Message-Id: <19251f166b31c6b7bc6212d2d9008f3f5b06ff7726b1d3c08c7f54467bb0dbc4@mail.kernel.org>
+In-Reply-To: <20260917055752.3932718-1-yonghong.song@linux.dev>
+References: <20260917055752.3932718-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next 13/20] libbpf: Resolve the compiler's _Unwind_Resume to the kernel's kfunc
 From: bot+bpf-ci@kernel.org
-To: xyx2021@mail.ustc.edu.cn,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ameryhung@gmail.com,yonghong.song@linux.dev,puranjay@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 17 Sep 2026 06:48:51 +0000 (UTC)
+To: yonghong.song@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 17 Sep 2026 07:00:18 +0000 (UTC)
 
---===============0538707630271738666==
+--===============0751584282405106952==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> Non-RCU struct iterator results borrow their lifetime from the iterator's
-> current element. Associate these PTR_TO_BTF_ID results with the iterator
-> reference and invalidate the previous result when processing the next
-> iterator argument. This applies before modeling either next outcome;
-> destroy continues to invalidate the result through reference release.
+> diff --git tools/lib/bpf/libbpf.c tools/lib/bpf/libbpf.c
+> index 613afae265199..ea1c09fa37939 100644
+> --- tools/lib/bpf/libbpf.c
+> +++ tools/lib/bpf/libbpf.c
+> @@ -8346,6 +8346,15 @@ static void fixup_verifier_log(struct bpf_program *prog, char *buf, size_t buf_s
+>  	}
+>  }
 >
-> Preserve that lifetime when loading a fully trusted BTF field. Capture the
-> source lifetime before marking the destination, as the registers can
-> alias. Keep RCU, user and percpu field results under their existing rules.
+> +/* LLVM terminates a cleanup landing pad with a call to _Unwind_Resume, the
+> + * base unwind ABI's entry point for carrying an unwind on once a frame's
+> + * cleanups have run. The kernel knows it as bpf_unwind_resume.
+> + */
+> +static const char *kern_extern_name(const char *name)
+> +{
+> +	return strcmp(name, "_Unwind_Resume") ? name : "bpf_unwind_resume";
+> +}
+> +
+>  static int bpf_program_record_relos(struct bpf_program *prog)
+>  {
+>  	struct bpf_object *obj = prog->obj;
+
+Is the kern_extern_name() mapping applied on the light skeleton load
+path?
+
+Looking at bpf_program_record_relos() below kern_extern_name(), the
+RELO_EXTERN_CALL case records ext->name directly without calling
+kern_extern_name():
+
+static int bpf_program_record_relos(struct bpf_program *prog)
+{
+    ...
+    case RELO_EXTERN_CALL:
+        bpf_gen__record_extern(obj->gen_loader, ext->name,
+                               ext->is_weak, false, false, BTF_KIND_FUNC,
+                               relo->insn_idx);
+        break;
+    ...
+}
+
+This means the generated loader program would ask the kernel for
+BTF_KIND_FUNC '_Unwind_Resume', which doesn't exist in vmlinux BTF. The
+kernel only knows bpf_unwind_resume per BTF_ID_FLAGS(func,
+bpf_unwind_resume) in kernel/bpf/helpers.c.
+
+For comparison, the direct BPF_PROG_LOAD path does use the mapping:
+
+bpf_object__resolve_ksym_func_btf_id() calls kern_extern_name() at
+libbpf.c:8824, but that resolution is deliberately skipped when
+obj->gen_loader is set:
+
+bpf_object__resolve_ksyms_btf_id() {
+    ...
+    if (obj->gen_loader) {
+        ext->is_set = true;
+        ext->ksym.kernel_btf_obj_fd = 0;
+        ext->ksym.kernel_btf_id = 0;
+        continue;
+    }
+    ...
+}
+
+On the light skeleton path, bpf_btf_find_by_name_kind() would return
+-ESRCH for '_Unwind_Resume', causing emit_check_err() to jump to cleanup
+and fail the load. If the extern were weak, insn->imm/off would be
+stored as 0, which the verifier would reject as an invalid kfunc call.
+
+The test added later in the series
+(selftests/bpf/progs/exceptions_cleanup_light.c) writes 'call
+bpf_unwind_resume' directly in inline asm, so it uses the kernel name
+and never exercises the mapping.
+
+> @@ -8807,17 +8816,19 @@ static int bpf_object__resolve_ksym_func_btf_id(struct bpf_object *obj,
+>  	struct module_btf *mod_btf = NULL;
+>  	const struct btf_type *kern_func;
+>  	struct btf *kern_btf = NULL;
+> +	const char *kern_name;
+>  	int ret;
 >
-> A borrowed field can also back a dynptr. For example, a FILE dynptr owns
-> reader state but borrows its file. Record the backing register's lifetime
-> in the common dynptr constructor path, using the acquired ID for an owned
-> reference and parent_id for a borrowed pointer. Keep clone handling and
-> the ownership meaning of reg_is_referenced() unchanged.
+>  	local_func_proto_id = ext->ksym.type_id;
 >
-> Reuse the existing child-reference leak check before advancing an iterator
-> and propagate destroy errors. Outstanding child resources must be
-> explicitly released before their backing lifetime ends. Preserve the
-> existing rule that only the initial ID is removed from acquired references
-> when release_reference() invalidates descendants.
-
-This isn't a bug, but could the changelog open with the unsafe program
-pattern and note that trusted-field loads from any released reference are
-now rejected, rather than walking the hunks in order?
-
-The patch tightens acceptance outside iterators too. After 'file =
-bpf_get_task_exe_file(task)', loading 'inode = file->f_inode' now
-inherits the file's reference id, so release_reference() on bpf_put_file()
-invalidates 'inode' and a previously-accepted program using it afterwards
-is now rejected. That user-visible consequence isn't mentioned.
-
-> Fixes: 4cbee026db54 ("bpf: return VMA snapshot from task_vma iterator")
-> Suggested-by: Amery Hung <ameryhung@gmail.com>
-> Assisted-by: LLM
-> Signed-off-by: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 6c6b8d8520cdf..3d47487233b75 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[ ... ]
-
-> @@ -753,8 +756,8 @@ static int mark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_reg_
->  		if (err)
->  			return err;
->
-> -		/* Track parent's id if the parent is a referenced object */
-> -		parent_id = ref_obj->id;
-> +		/* All non-clone constructors take their backing object in R1. */
-> +		parent_id = reg_lifetime_id(env, &cur_regs(env)[BPF_REG_1]);
-
-This isn't a bug, but would it help to anchor this invariant somewhere
-checkable?
-
-The removed comment described the local operation, but the new one asserts
-a whole-tree invariant about every dynptr constructor's argument order.
-The invariant does hold - bpf_dynptr_from_mem, bpf_ringbuf_reserve_dynptr,
-bpf_dynptr_from_file, and the skb/xdp variants all take the backing object
-in R1 - but nothing in the code enforces it, so a reader has to
-re-enumerate every 'ARG_PTR_TO_DYNPTR | MEM_UNINIT' proto to confirm.
-
-Could you note which protos it covers, or key the lookup off the argument
-the verifier already identified rather than a fixed R1?
-
-[ ... ]
+> -	kfunc_id = find_ksym_btf_id(obj, ext->essent_name ?: ext->name, BTF_KIND_FUNC, &kern_btf,
+> -				    &mod_btf);
+> +	kern_name = kern_extern_name(ext->essent_name ?: ext->name);
+> +
+> +	kfunc_id = find_ksym_btf_id(obj, kern_name, BTF_KIND_FUNC, &kern_btf, &mod_btf);
+>  	if (kfunc_id < 0) {
+>  		if (kfunc_id == -ESRCH && ext->is_weak)
+>  			return 0;
+>  		pr_warn("extern (func ksym) '%s': not found in kernel or module BTFs\n",
+> -			ext->name);
+> +			strcmp(kern_name, "bpf_unwind_resume") ? ext->name : kern_name);
+>  		return kfunc_id;
+>  	}
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35186779269
---===============0538707630271738666==--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35188619605
+--===============0751584282405106952==--
