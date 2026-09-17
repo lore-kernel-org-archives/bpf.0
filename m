@@ -1,160 +1,243 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-155-178.mail-mxout.facebook.com (66-220-155-178.mail-mxout.facebook.com [66.220.155.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 118D679CD
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 05:44:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94F1F2EEE8C
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 05:56:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789623873; cv=none; b=YbLcdPmGTwyTcRcSeIJCgs0HBbqMIaU0P+aDbfqEvqXe/G+XBpy7+8nb4livbUrKe4hJDPozr99YS1K0u7WQlzyswoo8FZMKKWFew1yQQylVafWYvlXN4q7tF/eahuPtXtixiRg+k5U1OLTN6otFrZLfPgY13x50RrkEo8/EfuU=
+	t=1789624620; cv=none; b=bfZlkT2m2HPHj/HMENzv34Eoz3Av4J5J30asOSKkXInBdAYlqhTigri3lu+BWheyUoQ8ydJ7RvNGBpqcR1cqMRatL2YQUCTUqjdcHBscSKKCiYPCFfOu3TYbUJmpDDxpufH7lj6myv0dms39FEiORwcKBaJ0BlDUvimTtICsnJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789623873; c=relaxed/simple;
-	bh=3lY4ZWywpz8YtbdGoqwfFI9zKIYqnCHQkbBuFtMTzuA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=LcJsn9gn1g9LkmQKi/l5EK5DjyvRvBR0BZcnCcH5bSrNRUW0CE8VOpj6AGXAc71xwcSZejJ3EiEz6rzhJGm40+UGzU7NWKMJ6tPXj4bD3cYcSuvI+hIeTqpJIJ+lSw3g7fxEr8P19xi/kiygcR73cQxkYyJOxW+YAMtpAeDbxf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Awyc8YU2; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Awyc8YU2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 787511F000FF;
-	Thu, 17 Sep 2026 05:44:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789623871;
-	bh=kcYkOmY2ciEJINUL84CO9SqJliI9sWjjTJFfEp0WxN0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Awyc8YU27GwB6xip0AKodIoi19hTkIty6njuv7TO/9HQ9UBjeycCHYKytwdjn80om
-	 GZDHwrQDw24dWIbcFsYYuqe1NDin5+xNz0IO8hCr0uhc6n4488TDksmUHSt/xDNM4t
-	 adQ2wTx4ghedfhoSXiWyzmq6QM0/OyYqFA55PZNhU5E9EqB85rWpDFaIeILKbI2KxT
-	 +tPigGFl3rwNldOSMiO9SSJyeIP5yckSkSIMg8X4pTpAGL9QwrXHANv81//xDuV+tj
-	 i3oBSHwDY1eh+1Gtfui49UB6LYMJ+JIas8XvH0bZvrFDxAfMpd1E2PTdiDd/EUf1Aq
-	 Ixh4CNfRQv64Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: Track iterator-owned BTF pointer
- lifetimes
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Xu Yunxiang" <xyx2021@mail.ustc.edu.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260917051948.1588826-2-xyx2021@mail.ustc.edu.cn>
-References: <20260917051948.1588826-1-xyx2021@mail.ustc.edu.cn>
- <20260917051948.1588826-2-xyx2021@mail.ustc.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 17 Sep 2026 05:44:31 +0000
-Message-Id: <20260917054431.787511F000FF@smtp.kernel.org>
+	s=arc-20240116; t=1789624620; c=relaxed/simple;
+	bh=kLx7ZY0ZgAlJz/RdJJUQMh7p0QK8EXrxxQXkB9X+1EE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Y+mIV1wfeRMhCDLjkhiL6LIfVJMx+ggkzklBxdtHYIfDNv+vmmE6b9af8zyR/+YlQK6W5i/sneIDzUG7vcKmPNB11qfrjOUEuWPt7aHWsChygKkTKAAZnIrzmFBRSCP1NkT39dXHUbFtuk4A9NjKICwQ+9hZpOeaRBj/gw45BaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 4B6292B486E821; Wed, 16 Sep 2026 22:56:45 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	kernel-team@fb.com
+Subject: [PATCH bpf-next 00/20] bpf: Run exception cleanup landing pads when bpf_throw() unwinds
+Date: Wed, 16 Sep 2026 22:56:45 -0700
+Message-ID: <20260917055645.3926444-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] bpf: bpf_iter_next() fails to invalidate dynptrs and PTR_TO_MEM sl=
-ices
-- [High] bpf: PTR_TO_MEM slices returned by kfuncs escape iterator lifetime=
- tracking
---
+bpf_throw() walks the BPF call stack to the exception boundary and
+discards every frame in between. A frame that owns something -- an RCU
+read lock, a preemption-disabled section, a referenced kptr -- never gets
+to give it back, so the verifier refuses to let such a frame throw at
+all. That is the whole reason a Rust program cannot use bpf_throw() as
+its panic path today: Rust's Drop glue *is* that give-back, and there is
+nowhere to run it.
 
-commit 78eae9a9dcb52a34bea55102674e78d19a5f54b8
-Author: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
+LLVM 23 added the compiler half ([1]). A Rust function that owns a value
+across a call that can unwind
 
-bpf: Track iterator-owned BTF pointer lifetimes
+    fn foo() {
+        let _guard =3D RcuReadGuard::new();  /* bpf_rcu_read_lock()   */
+        may_throw();                       /* extern "C-unwind"     */
+    }                                      /* Drop: rcu_read_unlock */
 
-This commit introduces lifetime tracking for non-RCU struct iterator
-results by associating PTR_TO_BTF_ID results with the iterator reference.
-It invalidates the previous result when processing the next iterator
-argument and propagates the backing register's lifetime for dynptrs.
+lowers to an invoke with a cleanup landing pad holding the Drop call, and
+the BPF backend writes one record per invoke region into a .bpf_cleanup
+section: a flat table of 12-byte (begin, end, landing_pad) triples, each
+field a byte offset into the code section. The rule is "if a frame unwind=
+s
+with its return address in [begin, end), run landing_pad before discardin=
+g
+it". A pad ends with a call to _Unwind_Resume(), which the kernel provide=
+s
+as the bpf_unwind_resume() kfunc.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 6c6b8d8520cdf..3d47487233b75 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+This series is the kernel half: take that table at BPF_PROG_LOAD, teach
+the verifier that a covered call can also go to its landing pad, and have
+bpf_throw() run the pads as it walks.
 
-[ ... ]
+C has no unwinding, so the selftests spell out by hand what a frontend
+emits -- a call site bracketed by two labels, a landing pad, and a record
+tying them together. The frame above, written that way:
 
-> @@ -7817,6 +7834,27 @@ static bool is_kfunc_arg_iter(struct bpf_call_arg_=
-meta *meta, int arg_idx,
->  	return btf_param_match_suffix(meta->btf, arg, "__iter");
->  }
-> =20
-> +static int invalidate_iter_owned_btf_ptrs(struct bpf_verifier_env *env, =
-u32 parent_id)
-> +{
-> +	struct bpf_func_state *unused;
-> +	struct bpf_reg_state *reg;
-> +	int err;
-> +
-> +	err =3D check_reference_children_leak(env, parent_id);
-> +	if (err)
-> +		return err;
-> +
-> +	/* Struct iterators can release their previous element on next. */
-> +	bpf_for_each_reg_in_vstate(env->cur_state, unused, reg, ({
-> +		if (base_type(reg->type) !=3D PTR_TO_BTF_ID || reg->parent_id !=3D par=
-ent_id)
-> +			continue;
-> +		bpf_diag_record_scrub(env, reg, BPF_DIAG_MOD_REF_RELEASE);
-> +		mark_reg_invalid(env, reg);
-> +	}));
-> +
-> +	return 0;
-> +}
+        "call bpf_rcu_read_lock;"
+    "1:"    "call foo3;"                /* cleanup region */
+    "2:"
+        ... normal path, ends in bpf_rcu_read_unlock ...
+    "6:"                                /* landing pad */
+        "call bpf_rcu_read_unlock;"
+        "call bpf_unwind_resume;"
+        CLEANUP_REC("1b", "2b", "6b")
 
-[Severity: High]
-Does this code fail to invalidate dynptrs and PTR_TO_MEM slices derived
-from the iterator element?
+Today that program does not load: the throw inside foo3 is reported as
+"bpf_throw cannot be used inside bpf_rcu_read_lock-ed region", because as
+far as the verifier is concerned nothing will ever unlock. With the serie=
+s
+the verifier walks the unwind the same way the run time will -- into the
+pad, which unlocks, then on to the next frame -- and the program both
+loads and releases the lock when it throws.
 
-The bpf_for_each_reg_in_vstate() macro only iterates over spilled registers
-using the 1 << STACK_SPILL mask, which completely skips STACK_DYNPTR slots.
-Furthermore, the loop explicitly filters out anything that is not a
-PTR_TO_BTF_ID.
+Design
+=3D=3D=3D=3D=3D=3D
 
-If a BPF program constructs an unreferenced dynptr (e.g., via
-bpf_dynptr_from_skb) or a PTR_TO_MEM slice from the iterator element, these
-derived objects inherit the iterator's parent_id. Because they are skipped
-by this logic, they will survive the bpf_iter_next() call and remain
-accessible after the underlying memory is freed, potentially leading to a
-use-after-free.
+A pad is run, not lowered. bpf_throw() already walks the frames with
+arch_bpf_stack_walk(); it now looks each frame's return address up in
+that (sub)program's table and calls the pad as a subroutine of the walker=
+,
+with the unwinding frame's frame pointer and its callee-saved registers
+restored from the spill its callee's prologue left. The pad therefore see=
+s
+its own frame but runs on the walker's stack, far below it, so nothing it
+calls can disturb the frame it is cleaning up after. The JIT turns its
+bpf_unwind_resume() into the way back to the walker.
 
-[ ... ]
+The verifier walks the same thing, step for step, so the resource rules
+are unchanged: whatever a pad releases is released in the verifier state
+too, and check_resource_leak() simply moves from "a throw was seen" to th=
+e
+end of the walk.
 
-> @@ -14446,6 +14502,8 @@ static int check_kfunc_call(struct bpf_verifier_e=
-nv *env, struct bpf_insn *insn,
->  			regs[BPF_REG_0].btf =3D desc_btf;
->  			regs[BPF_REG_0].type =3D type;
->  			regs[BPF_REG_0].btf_id =3D ptr_type_id;
-> +			if (bpf_is_iter_next_kfunc(&meta) && !(type & MEM_RCU))
-> +				regs[BPF_REG_0].parent_id =3D meta.ref_obj.id;
->  		}
+  1-2    uapi: cleanup_info in BPF_PROG_LOAD, struct bpf_cleanup_info,
+         and the bpf_unwind_resume() kfunc
+  3-9    verifier: mark the covered call sites, give them an edge to the
+         pad, walk the unwind, and refuse the shapes that cannot be
+         dispatched
+  10     bpf_throw(): dispatch pads while walking
+  11-12  x86-64 and arm64 JITs
+  13-17  libbpf: collect .bpf_cleanup, pass it to the kernel, resolve
+         _Unwind_Resume, carry it through the light skeleton and the
+         static linker
+  18-20  selftests
 
-[Severity: High]
-Can PTR_TO_MEM slices returned by kfuncs escape iterator lifetime tracking
-entirely?
+Limitations
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
-When an iterator element is passed to a kfunc, the verifier attempts to
-propagate lifetime tracking by populating meta->ref_obj in
-check_func_arg() using this check:
+  - Cleanup pads only. A catch pad -- one that ends in a plain exit rathe=
+r
+    than a resume, which is what Rust's catch_unwind would need -- is
+    refused: the walker calls a pad as a subroutine and cannot hand a fra=
+me
+    back its own execution. LLVM refuses type-specific catches and filter=
+s
+    on its side as well.
+  - A JIT that can dispatch pads is required: x86-64 (with
+    CONFIG_UNWINDER_ORC, which bpf_throw() already needs there) and arm64=
+.
+    Anywhere else the load fails with -EOPNOTSUPP rather than silently
+    doing nothing.
+  - No offloaded programs, no private stack, and no combining a table wit=
+h
+    an exception callback.
+  - In a pad body: no tail call, no indirect jump, and no on-stack call
+    arguments -- all of them read or write a stack the pad does not own.
+  - The Rust toolchain does not properly support BPF exception handling
+    yet. The tables the selftests use are hand-written inline asm, which
+    the assembler turns into the same relocations the BPF AsmPrinter emit=
+s,
+    so libbpf and the kernel see an object indistinguishable from a
+    compiler-generated one.
 
-	if (reg_is_referenced(env, reg))
-		update_ref_obj(&meta->ref_obj, reg);
+  [1] https://github.com/llvm/llvm-project/pull/192164
+      llvm commit 9d51c891b719 ("[BPF] Add exception handling support
+      with .bpf_cleanup section")
 
-However, since non-RCU iterator elements track their lifetime purely via
-parent_id and have id =3D=3D 0, reg_is_referenced() evaluates to false. This
-leaves meta->ref_obj.id as 0.
+Yonghong Song (20):
+  bpf: Accept the compiler's exception cleanup table at program load
+  bpf: Add the bpf_unwind_resume() kfunc
+  bpf: Add lookups for exception cleanup resumes and landing pads
+  bpf: Mark the call sites an exception cleanup table covers
+  bpf: Make exception landing pads reachable in the CFG
+  bpf: Explore the landing pads no call site reaches
+  bpf: Refuse exception cleanup shapes bpf_throw() cannot dispatch
+  bpf: Walk the exception unwind in the verifier
+  bpf: Refuse a private stack for a program with an exception cleanup
+    table
+  bpf: Dispatch exception cleanup pads from bpf_throw()
+  bpf, x86: Dispatch exception cleanup pads at run time
+  bpf, arm64: Dispatch exception cleanup pads at run time
+  libbpf: Resolve the compiler's _Unwind_Resume to the kernel's kfunc
+  libbpf: Add cleanup_info to bpf_prog_load_opts
+  libbpf: Collect .bpf_cleanup records and pass them to the kernel
+  libbpf: Carry the exception cleanup table through the light skeleton
+  libbpf: Let the static linker carry .bpf_cleanup relocations
+  selftests/bpf: Add an end-to-end .bpf_cleanup exception test
+  selftests/bpf: Cover the exception cleanup shapes the chain does not
+    reach
+  selftests/bpf: Load an exception cleanup program from a light skeleton
 
-When check_kfunc_call() processes a returned PTR_TO_MEM slice, it only
-assigns parent_id if meta.ref_obj.id is non-zero:
-
-			/* Ensures we don't access the memory after a release_reference() */
-			if (meta.ref_obj.id) {
-				err =3D validate_ref_obj(env, &meta.ref_obj);
-				if (err)
-					return err;
-				regs[BPF_REG_0].parent_id =3D meta.ref_obj.id;
-			}
-
-Because meta.ref_obj.id is 0, the returned PTR_TO_MEM slice receives no
-parent_id. Does this allow the slice to escape the iterator's lifetime
-tracking and outlive the iterator element, causing a use-after-free?
+ arch/arm64/net/Makefile                       |   2 +-
+ arch/arm64/net/bpf_cleanup_pad.S              |  95 ++
+ arch/arm64/net/bpf_jit_comp.c                 |  97 +-
+ arch/x86/net/Makefile                         |   2 +-
+ arch/x86/net/bpf_cleanup_pad.S                |  74 ++
+ arch/x86/net/bpf_jit_comp.c                   |  78 +-
+ include/linux/bpf.h                           |  75 ++
+ include/linux/bpf_cleanup_abi.h               |  16 +
+ include/linux/bpf_verifier.h                  |  11 +
+ include/linux/filter.h                        |   2 +
+ include/uapi/linux/bpf.h                      |   9 +
+ kernel/bpf/Makefile                           |   2 +-
+ kernel/bpf/cfg.c                              |  64 +-
+ kernel/bpf/check_btf.c                        | 147 +++
+ kernel/bpf/core.c                             |  35 +-
+ kernel/bpf/exception.c                        | 654 +++++++++++++
+ kernel/bpf/exception.h                        |  22 +
+ kernel/bpf/fixups.c                           | 143 +++
+ kernel/bpf/helpers.c                          |  46 +
+ kernel/bpf/liveness.c                         |  20 +
+ kernel/bpf/states.c                           |   3 +
+ kernel/bpf/syscall.c                          |   2 +-
+ kernel/bpf/verifier.c                         | 125 ++-
+ tools/include/uapi/linux/bpf.h                |   9 +
+ tools/lib/bpf/bpf.c                           |   6 +-
+ tools/lib/bpf/bpf.h                           |   7 +-
+ tools/lib/bpf/gen_loader.c                    |  27 +-
+ tools/lib/bpf/libbpf.c                        | 305 ++++++-
+ tools/lib/bpf/libbpf_internal.h               |  10 +
+ tools/lib/bpf/linker.c                        |  19 +-
+ tools/testing/selftests/bpf/Makefile          |   2 +-
+ .../selftests/bpf/exceptions_cleanup.h        |  52 ++
+ .../bpf/prog_tests/exceptions_cleanup.c       | 421 +++++++++
+ .../selftests/bpf/progs/exceptions_cleanup.c  | 152 +++
+ .../bpf/progs/exceptions_cleanup_ext_table.c  |  48 +
+ .../bpf/progs/exceptions_cleanup_fail.c       | 600 ++++++++++++
+ .../bpf/progs/exceptions_cleanup_freplace.c   |  17 +
+ .../bpf/progs/exceptions_cleanup_light.c      |  39 +
+ .../progs/exceptions_cleanup_pad_freplace.c   |  17 +
+ .../bpf/progs/exceptions_cleanup_shapes.c     | 863 ++++++++++++++++++
+ 40 files changed, 4254 insertions(+), 64 deletions(-)
+ create mode 100644 arch/arm64/net/bpf_cleanup_pad.S
+ create mode 100644 arch/x86/net/bpf_cleanup_pad.S
+ create mode 100644 include/linux/bpf_cleanup_abi.h
+ create mode 100644 kernel/bpf/exception.c
+ create mode 100644 kernel/bpf/exception.h
+ create mode 100644 tools/testing/selftests/bpf/exceptions_cleanup.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/exceptions_cle=
+anup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup.=
+c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+ext_table.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+freplace.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+light.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+pad_freplace.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+shapes.c
 
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260917051948.1588=
-826-1-xyx2021@mail.ustc.edu.cn?part=3D1
+2.53.0-Meta
+
