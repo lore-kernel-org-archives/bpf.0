@@ -1,131 +1,160 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AADEA3BBFB4
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 05:22:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 118D679CD
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 05:44:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789622575; cv=none; b=ft516pejs4Xcz6l2Tfm8mkssAoOpehJQQOz/xhcaMkdP+n6bUDB/Us11qk5zf7gaV43FF+nhWwNjsbKH9nsKlY8wWwTkXrfsT3xdGuNNb42J/98zOUwdkxBCBD11ZjKn29LW+NZ2UsMQq97Sg2o2vxwhSbD9PaDEwE3Jz3YPqCQ=
+	t=1789623873; cv=none; b=YbLcdPmGTwyTcRcSeIJCgs0HBbqMIaU0P+aDbfqEvqXe/G+XBpy7+8nb4livbUrKe4hJDPozr99YS1K0u7WQlzyswoo8FZMKKWFew1yQQylVafWYvlXN4q7tF/eahuPtXtixiRg+k5U1OLTN6otFrZLfPgY13x50RrkEo8/EfuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789622575; c=relaxed/simple;
-	bh=moLm0EqipBbW/Kccooxf2Odn7bFKD9Y+EZ4YvbRC8WU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=gbZ3M3reV6heaFWtUq2rTDjHLSguwoJfedFNk1c5gBi5TwSbxJLtLWSK9rvBDD3yrIhcidP7KdzH/vMBCm3tTtKn2FxXe855qrWKXzLiKpPcLwVWnHcIXvO76zk5ADN1+aoHlpgW7AP0LUDrvoB72s2xcV71lMCfHL9mrfEgR/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mv4VUmWE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789623873; c=relaxed/simple;
+	bh=3lY4ZWywpz8YtbdGoqwfFI9zKIYqnCHQkbBuFtMTzuA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=LcJsn9gn1g9LkmQKi/l5EK5DjyvRvBR0BZcnCcH5bSrNRUW0CE8VOpj6AGXAc71xwcSZejJ3EiEz6rzhJGm40+UGzU7NWKMJ6tPXj4bD3cYcSuvI+hIeTqpJIJ+lSw3g7fxEr8P19xi/kiygcR73cQxkYyJOxW+YAMtpAeDbxf4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Awyc8YU2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mv4VUmWE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 487CD1F000FF;
-	Thu, 17 Sep 2026 05:22:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Awyc8YU2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 787511F000FF;
+	Thu, 17 Sep 2026 05:44:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789622574;
-	bh=13TfV17yBYNe6CYYdbztB+huE0mYoKjC9Dk50OhyhZw=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=mv4VUmWEZK9vf1WxWU8jK+Cpt7bJP/Jp6/VCrybv+CcKKVjNaqOVeJdFHaUm3QpWY
-	 7ZulJyNU9hdW6IuUddjTZClHtxDbfLt48flIx4GFRil0fG7D25EAYZ7jbauKFPGkFV
-	 1D5yICC1l8tmuTsSZX7RgZ706jy0oQaPF7Mftqmct6phTw9XYYvsAhCG5p601Zte47
-	 fJN9FFxnwvDc2De6yAym7srZMvx962oIZ93QMbnRMmSZMpRFHhvjeAc/9BoO+GaKmh
-	 Iz3a3oRbE+F/gy61W3asFRturPzxWy5alEW1iRkR76/V+7B51gI61TNc0Qp4BT3Dqu
-	 vTD2FDbD0ORFw==
-Content-Type: multipart/mixed; boundary="===============5532677064711485521=="
+	s=k20260515; t=1789623871;
+	bh=kcYkOmY2ciEJINUL84CO9SqJliI9sWjjTJFfEp0WxN0=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Awyc8YU27GwB6xip0AKodIoi19hTkIty6njuv7TO/9HQ9UBjeycCHYKytwdjn80om
+	 GZDHwrQDw24dWIbcFsYYuqe1NDin5+xNz0IO8hCr0uhc6n4488TDksmUHSt/xDNM4t
+	 adQ2wTx4ghedfhoSXiWyzmq6QM0/OyYqFA55PZNhU5E9EqB85rWpDFaIeILKbI2KxT
+	 +tPigGFl3rwNldOSMiO9SSJyeIP5yckSkSIMg8X4pTpAGL9QwrXHANv81//xDuV+tj
+	 i3oBSHwDY1eh+1Gtfui49UB6LYMJ+JIas8XvH0bZvrFDxAfMpd1E2PTdiDd/EUf1Aq
+	 Ixh4CNfRQv64Q==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: Track iterator-owned BTF pointer
+ lifetimes
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Xu Yunxiang" <xyx2021@mail.ustc.edu.cn>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260917051948.1588826-2-xyx2021@mail.ustc.edu.cn>
+References: <20260917051948.1588826-1-xyx2021@mail.ustc.edu.cn>
+ <20260917051948.1588826-2-xyx2021@mail.ustc.edu.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 17 Sep 2026 05:44:31 +0000
+Message-Id: <20260917054431.787511F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <e6055fb14ceaf6cb1578d60e528708850341b4962410a9fb6dc5f5be9313241f@mail.kernel.org>
-In-Reply-To: <20260917041712.1860722-2-tangyazhou@zju.edu.cn>
-References: <20260917041712.1860722-2-tangyazhou@zju.edu.cn>
-Subject: Re: [PATCH bpf-next 1/8] bpf: Add UHMUL and SHMUL instructions
-From: bot+bpf-ci@kernel.org
-To: tangyazhou@zju.edu.cn,bpf@vger.kernel.org,ast@kernel.org,eddyz87@gmail.com
-Cc: daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,tangyazhou518@outlook.com,shenghaoyuan0928@163.com,ziye@zju.edu.cn,alexei.starovoitov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 17 Sep 2026 05:22:53 +0000 (UTC)
 
---===============5532677064711485521==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] bpf: bpf_iter_next() fails to invalidate dynptrs and PTR_TO_MEM sl=
+ices
+- [High] bpf: PTR_TO_MEM slices returned by kfuncs escape iterator lifetime=
+ tracking
+--
 
-> These operations are inspired by the UHMUL and SHMUL instructions introduced
-> as part of the PQR instruction class in sBPF sBPF (Solana's BPF variant)[1].
+commit 78eae9a9dcb52a34bea55102674e78d19a5f54b8
+Author: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 
-Could you drop the duplicated "sBPF" here? It reads as "... in sBPF sBPF
-(Solana's BPF variant)" which appears to be a copy-paste error.
+bpf: Track iterator-owned BTF pointer lifetimes
 
-> diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
-> index 39c74611752b6..3c2cde11fa234 100644
-> --- a/Documentation/bpf/standardization/instruction-set.rst
-> +++ b/Documentation/bpf/standardization/instruction-set.rst
-> @@ -330,6 +330,8 @@ register.
->    ADD    0x0    0        dst += src
->    SUB    0x1    0        dst -= src
->    MUL    0x2    0        dst \*= src
-> +  UHMUL  0x2    1        unsigned high-half multiplication (``ALU64`` only)
-> +  SHMUL  0x2    2        signed high-half multiplication (``ALU64`` only)
->    DIV    0x3    0        dst = (src != 0) ? (dst / src) : 0
+This commit introduces lifetime tracking for non-RCU struct iterator
+results by associating PTR_TO_BTF_ID results with the iterator reference.
+It invalidates the previous result when processing the next iterator
+argument and propagates the backing register's lifetime for dynptrs.
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 6c6b8d8520cdf..3d47487233b75 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> @@ -379,13 +381,33 @@ where '(u32)' indicates that the upper 32 bits are zeroed.
->
->    dst = dst ^ imm
->
-> -Note that most arithmetic instructions have 'offset' set to 0. Only three instructions
-> -(``SDIV``, ``SMOD``, ``MOVSX``) have a non-zero 'offset'.
-> +Note that most arithmetic instructions have 'offset' set to 0. The following
-> +instructions may have a non-zero 'offset':
+> @@ -7817,6 +7834,27 @@ static bool is_kfunc_arg_iter(struct bpf_call_arg_=
+meta *meta, int arg_idx,
+>  	return btf_param_match_suffix(meta->btf, arg, "__iter");
+>  }
+> =20
+> +static int invalidate_iter_owned_btf_ptrs(struct bpf_verifier_env *env, =
+u32 parent_id)
+> +{
+> +	struct bpf_func_state *unused;
+> +	struct bpf_reg_state *reg;
+> +	int err;
 > +
-> +* ``SDIV`` and ``SMOD``: ``offset == 1`` selects the signed variant.
-> +* ``MOVSX``: ``offset`` selects the source operand width.
-> +* ``MUL``: ``offset`` selects the multiplication variant (see below).
->
->  Division, multiplication, and modulo operations for ``ALU`` are part
->  of the "divmul32" conformance group, and division, multiplication, and
->  modulo operations for ``ALU64`` are part of the "divmul64" conformance
->  group.
+> +	err =3D check_reference_children_leak(env, parent_id);
+> +	if (err)
+> +		return err;
 > +
-> +For ``ALU64`` multiplication, ``offset == 1`` selects unsigned
-> +high-half multiplication (``UHMUL``), and ``offset == 2`` selects
-> +signed high-half multiplication (``SHMUL``).
+> +	/* Struct iterators can release their previous element on next. */
+> +	bpf_for_each_reg_in_vstate(env->cur_state, unused, reg, ({
+> +		if (base_type(reg->type) !=3D PTR_TO_BTF_ID || reg->parent_id !=3D par=
+ent_id)
+> +			continue;
+> +		bpf_diag_record_scrub(env, reg, BPF_DIAG_MOD_REF_RELEASE);
+> +		mark_reg_invalid(env, reg);
+> +	}));
+> +
+> +	return 0;
+> +}
 
-Does this addition silently make UHMUL and SHMUL mandatory members of the
-existing divmul64 conformance group? The document's own rules at lines
-123-125 state that "supporting a conformance group means it MUST support
-all instructions in that conformance group", and the unchanged sentence
-above says "division, multiplication, and modulo operations for ALU64 are
-part of the divmul64 conformance group."
+[Severity: High]
+Does this code fail to invalidate dynptrs and PTR_TO_MEM slices derived
+from the iterator element?
 
-UHMUL and SHMUL are ALU64 multiplication operations, so by that classifying
-sentence they become members of divmul64. Because group membership is
-defined as MUST-support, every runtime that currently advertises divmul64
-conformance (rbpf, uBPF, the Windows eBPF runtime, and any other
-implementation tracking RFC 9669) would become non-conformant the moment
-this text lands, even though their code has not changed.
+The bpf_for_each_reg_in_vstate() macro only iterates over spilled registers
+using the 1 << STACK_SPILL mask, which completely skips STACK_DYNPTR slots.
+Furthermore, the loop explicitly filters out anything that is not a
+PTR_TO_BTF_ID.
 
-The classification is also internally ambiguous. The document states at
-line 320 that "ALU64 instructions belong to the base64 conformance group
-unless noted otherwise", at line 136 that "base32 includes all instructions
-defined in this specification unless otherwise noted", yet the two new rows
-carry no group note at all - only a parenthetical "(ALU64 only)". A reader
-can arrive at base32, base64, or divmul64 for the same two instructions.
+If a BPF program constructs an unreferenced dynptr (e.g., via
+bpf_dynptr_from_skb) or a PTR_TO_MEM slice from the iterator element, these
+derived objects inherit the iterator's parent_id. Because they are skipped
+by this logic, they will survive the bpf_iter_next() call and remain
+accessible after the underlying memory is freed, potentially leading to a
+use-after-free.
 
-The expected pattern for new optional instructions in this document is a
-new group with its own label (compare "atomic32"/"atomic64" and
-"divmul32"/"divmul64", each introduced as its own bullet at lines 141-147).
-The patch adds neither a new bullet nor a note on the new rows, and the
-changelog does not mention conformance groups at all.
+[ ... ]
 
-Shouldn't UHMUL and SHMUL either be assigned to a new conformance group
-(for example, "hmul64"), or carry an explicit note that they are not part
-of divmul64? The existing conformance framework was designed for capability
-discovery between runtimes and tool chains - growing an existing group
-without notice breaks exactly that contract.
+> @@ -14446,6 +14502,8 @@ static int check_kfunc_call(struct bpf_verifier_e=
+nv *env, struct bpf_insn *insn,
+>  			regs[BPF_REG_0].btf =3D desc_btf;
+>  			regs[BPF_REG_0].type =3D type;
+>  			regs[BPF_REG_0].btf_id =3D ptr_type_id;
+> +			if (bpf_is_iter_next_kfunc(&meta) && !(type & MEM_RCU))
+> +				regs[BPF_REG_0].parent_id =3D meta.ref_obj.id;
+>  		}
 
+[Severity: High]
+Can PTR_TO_MEM slices returned by kfuncs escape iterator lifetime tracking
+entirely?
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+When an iterator element is passed to a kfunc, the verifier attempts to
+propagate lifetime tracking by populating meta->ref_obj in
+check_func_arg() using this check:
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35182532243
---===============5532677064711485521==--
+	if (reg_is_referenced(env, reg))
+		update_ref_obj(&meta->ref_obj, reg);
+
+However, since non-RCU iterator elements track their lifetime purely via
+parent_id and have id =3D=3D 0, reg_is_referenced() evaluates to false. This
+leaves meta->ref_obj.id as 0.
+
+When check_kfunc_call() processes a returned PTR_TO_MEM slice, it only
+assigns parent_id if meta.ref_obj.id is non-zero:
+
+			/* Ensures we don't access the memory after a release_reference() */
+			if (meta.ref_obj.id) {
+				err =3D validate_ref_obj(env, &meta.ref_obj);
+				if (err)
+					return err;
+				regs[BPF_REG_0].parent_id =3D meta.ref_obj.id;
+			}
+
+Because meta.ref_obj.id is 0, the returned PTR_TO_MEM slice receives no
+parent_id. Does this allow the slice to escape the iterator's lifetime
+tracking and outlive the iterator element, causing a use-after-free?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260917051948.1588=
+826-1-xyx2021@mail.ustc.edu.cn?part=3D1
