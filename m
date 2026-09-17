@@ -1,124 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78EDA4D4878;
-	Thu, 17 Sep 2026 16:54:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC064EDCAC;
+	Thu, 17 Sep 2026 16:55:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789664049; cv=none; b=nCC3SBUDWBCGto1sTU7yyHkFuumkEex2HNIpxDPwgWlhAOvJ8RHKva9ljTbKcQoDzuAbJf/YnT9mMArV0dNVboi1IRzBbERnMNvKWHk5HAtfhP2rRb7sLCYXJ36aISRzMP5nGwjxbA0UXWoMkXjuALqgfQCAMQtv1v+xX6bs4go=
+	t=1789664146; cv=none; b=sKGfc1VQ7Hqpjja4M9c7kNlgIJM6arlC07C0SGw+94sbXTr7eR8Q7SaC6PS/QwJbuAWkqrjAYqQqy1YgWIWcHDz5aC5B96Wgv5F6zXgpIS9cnkDm1ecklYbaB9FMYYoohW/k2o4jc4gJLIQBSgMR5P2n30S5VdVFhV6kB52dMhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789664049; c=relaxed/simple;
-	bh=Vp/jIn0og786bFdu9pn8hWmYXlY09SYJ6iWsUNZBipA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=cbFRCGew7Sh43oZfI7Wez0rIFQB2LbxTjm31L6pP+BJtnBhs4/cWFCCU3lZ7EvFm7m7gsEnIL1WF3cV7t5fyS2L0KjFDM2ozH3AM2dd0q0sJl5finweQL4Geu2llSSAO0Ehzewcqj/vowlJjWqDtoJ3J83iJlmy3BhYvszoMtwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eyLCjGmd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789664146; c=relaxed/simple;
+	bh=aWceE8YCDQTZLXjvs2oWn+fK7kFnCIQzMI9JUWzQi5I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cxDCNVQJe+PmVwABEKwx1l5IKgVcNCVfOVHYu+eIkc6Sist52g5LtHdy6paL9THPFzQR0bj+Vx3B5jekgSyPMIb4kLXp2oFYXjpqTJKWyFcDk6WKLsjoDFnJSJfUo7RxbcgmclyE5qQGfo7Tt0U6iu/YXXR4qKplJDJVKiOP/Lw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T9OE8qLz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eyLCjGmd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF3671F00893;
-	Thu, 17 Sep 2026 16:54:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T9OE8qLz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45EB21F00893;
+	Thu, 17 Sep 2026 16:55:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789664048;
-	bh=soTBV+PjMnLk3CJqDep3SeaGxjjzvxEjiNUk8qBpmsU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=eyLCjGmdrDwctVmdHC7BJ3p9PF7o5gpRumDdAuDAaNy8Ld2HpjE2vuKO9qOrrRHPW
-	 BIVGQKAcpQ8Tj0OpdswMByR6ajR3Dr82AtiefkpkLRgfILf0If9zPj9JfsJLEwzHko
-	 lZ+oKPguQan3LQuuXUKVNSNNMX5mooVKrg6a07th26o4uULzeIlVKJQilArdmXeR1I
-	 hEXdXdBvG98j1Uhq6/S7vugxw7MRbvx2aNsyq2olk+tmmGC5oeXOUXad9+03EQgA/r
-	 PRR7KJN5XzZUPvjgUyDNjVHsKlxnZtkUnez9B+V0y/tkfkcJzV+ScJO0Z4Cj1IA/FQ
-	 1fth1ZkQIXKUQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 01/40] mm/vma: fix mmap_prepare file handling, remove
- file_doesnt_need_get
-Reply-To: sashiko-reviews@lists.linux.dev
-To: =?utf-8?b?TG9yZW56byBTdG9ha2VzIChBUk0p?= <ljs@kernel.org>
-Cc: kvm@vger.kernel.org, selinux@vger.kernel.org, linux-scsi@vger.kernel.org, "Alexander
- Gordeev" <agordeev@linux.ibm.com>, "Heiko Carstens" <hca@linux.ibm.com>, "Christian
- Borntraeger" <borntraeger@linux.ibm.com>, "Oliver Upton" <oupton@kernel.org>, "Marc
- Zyngier" <maz@kernel.org>, linux-s390@vger.kernel.org, "Vasily Gorbik" <gor@linux.ibm.com>, linux-rdma@vger.kernel.org, kvmarm@lists.linux.dev, linux-trace-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-1-4583d8a23bca@kernel.org>
-References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
- <20260917-b4-mmap-prepare-vma-flag-sanify-v3-1-4583d8a23bca@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 17 Sep 2026 16:54:06 +0000
-Message-Id: <20260917165406.DF3671F00893@smtp.kernel.org>
+	s=k20260515; t=1789664145;
+	bh=kimfGEK+WeQrCTnIb5ePzNtWXHK0EcqiD+euMxaQ0do=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=T9OE8qLzP1qfh6XFbx+1FEoAjXMXA5nopSdvlfyoaHtqeRG7yuIX6hvGsZ2fZDZHC
+	 LlZHivU+VHSNOyLlTJD9LcDm74HSY0oBYS6V98tfaqWPsGPg0x3pT212aZxB1cTj2h
+	 H5i+iwmISzuUJTFqG0ROiZDclaI7Dsm5HDgAJBJ1MUlStbHa5H1eEUO5Q0pdnLLmRn
+	 bfDIUKXG/xV9fr8ZZBBKeo2cOSk+IR2Blsw1i4L2ofdwxlH5VeRL80zT4LC59Fh7Zv
+	 2QJ/t3AdkTEG0yssMOFKDF+buK2RR78k+s/SfH4SFxaON89u5sImLoK7VX3+tMuq4b
+	 4hANaNhRy05TA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id 0461BCE1716; Thu, 17 Sep 2026 09:55:45 -0700 (PDT)
+Date: Thu, 17 Sep 2026 09:55:44 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Josef Bacik <josef@toxicpanda.com>
+Cc: Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Boqun Feng <boqun@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, x86@kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>, Juergen Gross <jgross@suse.com>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	xen-devel@lists.xenproject.org
+Subject: Re: [PATCH RFC v3 03/13] rcu-tasks: Add a Tasks RCU implementation
+ for reader-marked trampolines
+Message-ID: <5734196a-22ab-428e-9565-d7ba787d3eb1@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <aqqONH8flTIpOUqT@localhost.localdomain>
+ <91687748-0781-4133-baed-43cf82f35ff5@paulmck-laptop>
+ <aqqpRoTfywUuTgoC@localhost.localdomain>
+ <aqqsAUVV8a1yrQzX@localhost.localdomain>
+ <6afb0afe-e7b8-46b4-9fea-2c7cf4791044@paulmck-laptop>
+ <aqq0cwvRDsorGwgc@localhost.localdomain>
+ <8b73e1b3-0580-4ba9-b2e0-6363e429808d@paulmck-laptop>
+ <aqvZwfUVsiEI7q7y@localhost.localdomain>
+ <8fea176a-0ca0-4a70-8cf9-8240a22359e4@paulmck-laptop>
+ <c51591e0e96c837bcd762c207e5e1869.josef@toxicpanda.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c51591e0e96c837bcd762c207e5e1869.josef@toxicpanda.com>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] mm: NULL pointer dereference in compat_vma_mmap() error and succes=
-s paths
---
+On Thu, Sep 17, 2026 at 04:35:19PM +0000, Josef Bacik wrote:
+> On Thu, 17 Sep 2026 08:40:10 -0700, Paul E. McKenney wrote:
+> > On Thu, Sep 17, 2026 at 02:14:57PM +0200, Frederic Weisbecker wrote:
+> > > You're right. So we'll indeed need to reuse the deferred qs points here.
+> >
+> > Except this is getting a bit involved.
+> >
+> > Don't get me wrong, if Josef is happy to take this on, far be it from me
+> > to stand in his way.  But if not, we should be willing to treat this
+> > optimization as a follow-on effort, whether by Josef or someone else.
+> 
+> Follow-on works for me. For what it's worth 03/13 is already fairly
+> close to what Frederic describes, just outside the core flavor: no
+> task-list scan (the GP waits per CPU for a pass through __schedule() or
+> an EQS), the irq-exit preemption path checks the interrupted IP and
+> queues the task as a holdout before the switch, and the holdout is keyed
+> on where the task was interrupted so nothing is needed from the
+> trampoline tail. Moving that IP check into the tick / rcu_exp_handler() /
+> deferred-QS paths and reusing the blocked-tasks list is something I'm
+> happy to look at once this has settled.
+> 
+> v4 will pick up Alexei's ask (reader emitted by the BPF JIT around the
+> fentry and fexit regions rather than in the glue) and the idle-CPU hole
+> Sashiko found.
 
-commit ed2cb69a22a3cc12d20a6c5599880de22d11566c
-Author: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+Even better!  ;-)
 
-mm/vma: fix mmap_prepare file handling, remove file_doesnt_need_get
-   =20
-The map->file_doesnt_need_get flag is confusing and the existing
-implementation has holes.
-
-[ ... ]
-
-> diff --git a/mm/util.c b/mm/util.c
-> index bf0513d1d3d08..016932780925e 100644
-> --- a/mm/util.c
-> +++ b/mm/util.c
-> @@ -1228,8 +1228,11 @@ int __compat_vma_mmap(struct vm_area_desc *desc,
-> =20
->  	/* Perform any preparatory tasks for mmap action. */
->  	err =3D mmap_action_prepare(desc);
-> -	if (err)
-> +	if (err) {
-> +		if (desc->vm_file !=3D vma->vm_file)
-> +			fput(desc->vm_file);
-
-[Severity: High]
-Is it possible for desc->vm_file to be NULL here? If a stacked driver's
-mmap_prepare() hook changes the mapping to anonymous (clearing desc->vm_file
-to NULL) and mmap_action_prepare() fails, this error path would call
-fput(desc->vm_file) passing NULL. Because fput() does not tolerate NULL
-pointers, would this lead to a NULL pointer dereference?
-
->  		return err;
-> +	}
->  	/* Update the VMA from the descriptor. */
->  	compat_set_vma_from_desc(vma, desc);
->  	/* Complete any specified mmap actions. */
-
-[ ... ]
-
-> diff --git a/mm/vma.h b/mm/vma.h
-> index e97bd2dfa786d..f15faa83f3d63 100644
-> --- a/mm/vma.h
-> +++ b/mm/vma.h
-> @@ -394,8 +394,10 @@ static inline void compat_set_vma_from_desc(struct v=
-m_area_struct *vma,
-> =20
->  	/* Mutable fields. Populated with initial state. */
->  	vma_set_pgoff(vma, desc->pgoff);
-> -	if (desc->vm_file !=3D vma->vm_file)
-> -		vma_set_file(vma, desc->vm_file);
-> +	if (desc->vm_file !=3D vma->vm_file) {
-> +		fput(vma->vm_file);
-
-[Severity: High]
-Similarly, could vma->vm_file be NULL here? If __compat_vma_mmap() is invok=
-ed
-on an initially anonymous VMA (where vma->vm_file is NULL) and the driver
-provides a backing file, this success path calls fput(vma->vm_file) passing
-NULL.
-
-> +		vma->vm_file =3D desc->vm_file;
-> +	}
->  	vma->flags =3D desc->vma_flags;
->  	vma->vm_page_prot =3D desc->page_prot;
->
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260917-b4-mmap-pr=
-epare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org?part=3D1
+							Thanx, Paul
