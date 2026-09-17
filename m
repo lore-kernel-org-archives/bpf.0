@@ -1,111 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC064EDCAC;
-	Thu, 17 Sep 2026 16:55:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E323B518154
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 16:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789664146; cv=none; b=sKGfc1VQ7Hqpjja4M9c7kNlgIJM6arlC07C0SGw+94sbXTr7eR8Q7SaC6PS/QwJbuAWkqrjAYqQqy1YgWIWcHDz5aC5B96Wgv5F6zXgpIS9cnkDm1ecklYbaB9FMYYoohW/k2o4jc4gJLIQBSgMR5P2n30S5VdVFhV6kB52dMhc=
+	t=1789664398; cv=none; b=eVbPVbSNQ29kuSUNAAVCQrN5FSAQOqm4EWzYzpXjN0J/ZRIVNdRxnbfB6y9hB/bqDCElPxaTDbZa5lz2v1y0p153mw8hDvML3qLCISLmrAbuiA2d92qR3aV6YXZ5u5q2TlWKyTejqLrWd+fmZ+sMAgDWWvNezpSd7corAAehHIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789664146; c=relaxed/simple;
-	bh=aWceE8YCDQTZLXjvs2oWn+fK7kFnCIQzMI9JUWzQi5I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cxDCNVQJe+PmVwABEKwx1l5IKgVcNCVfOVHYu+eIkc6Sist52g5LtHdy6paL9THPFzQR0bj+Vx3B5jekgSyPMIb4kLXp2oFYXjpqTJKWyFcDk6WKLsjoDFnJSJfUo7RxbcgmclyE5qQGfo7Tt0U6iu/YXXR4qKplJDJVKiOP/Lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T9OE8qLz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789664398; c=relaxed/simple;
+	bh=o6UqOTY41tuRkO5AHdjDRDEciBrken1pog5VHjo2Pt8=;
+	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
+	 References:MIME-Version; b=HFy7FSB9Hen0Yt99xjo8GPFD8OR2KhGg81GRNjgztcpgDKYJbjEwJhBIpt5mKs9okrQh6rEhEV+PviVUjVgRV6J/jaHxXv0J1aYsr2GKkmP7X7ypBF8cXy9+pOpcdnxN+pXW2hbYBVhYPFuvYkTvv/M8q7SKUkeZ9gfp2X9acBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UUNNdsM2; arc=none smtp.client-ip=74.125.227.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T9OE8qLz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45EB21F00893;
-	Thu, 17 Sep 2026 16:55:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789664145;
-	bh=kimfGEK+WeQrCTnIb5ePzNtWXHK0EcqiD+euMxaQ0do=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=T9OE8qLzP1qfh6XFbx+1FEoAjXMXA5nopSdvlfyoaHtqeRG7yuIX6hvGsZ2fZDZHC
-	 LlZHivU+VHSNOyLlTJD9LcDm74HSY0oBYS6V98tfaqWPsGPg0x3pT212aZxB1cTj2h
-	 H5i+iwmISzuUJTFqG0ROiZDclaI7Dsm5HDgAJBJ1MUlStbHa5H1eEUO5Q0pdnLLmRn
-	 bfDIUKXG/xV9fr8ZZBBKeo2cOSk+IR2Blsw1i4L2ofdwxlH5VeRL80zT4LC59Fh7Zv
-	 2QJ/t3AdkTEG0yssMOFKDF+buK2RR78k+s/SfH4SFxaON89u5sImLoK7VX3+tMuq4b
-	 4hANaNhRy05TA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 0461BCE1716; Thu, 17 Sep 2026 09:55:45 -0700 (PDT)
-Date: Thu, 17 Sep 2026 09:55:44 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Josef Bacik <josef@toxicpanda.com>
-Cc: Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Boqun Feng <boqun@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, x86@kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>, Juergen Gross <jgross@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	xen-devel@lists.xenproject.org
-Subject: Re: [PATCH RFC v3 03/13] rcu-tasks: Add a Tasks RCU implementation
- for reader-marked trampolines
-Message-ID: <5734196a-22ab-428e-9565-d7ba787d3eb1@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <aqqONH8flTIpOUqT@localhost.localdomain>
- <91687748-0781-4133-baed-43cf82f35ff5@paulmck-laptop>
- <aqqpRoTfywUuTgoC@localhost.localdomain>
- <aqqsAUVV8a1yrQzX@localhost.localdomain>
- <6afb0afe-e7b8-46b4-9fea-2c7cf4791044@paulmck-laptop>
- <aqq0cwvRDsorGwgc@localhost.localdomain>
- <8b73e1b3-0580-4ba9-b2e0-6363e429808d@paulmck-laptop>
- <aqvZwfUVsiEI7q7y@localhost.localdomain>
- <8fea176a-0ca0-4a70-8cf9-8240a22359e4@paulmck-laptop>
- <c51591e0e96c837bcd762c207e5e1869.josef@toxicpanda.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UUNNdsM2"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2db18fe433fso9620955ad.2
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 09:59:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789664396; x=1790269196; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=CU2rNOkPTWonMJ/LHusUbLASqrBVu1PgH/m6EZ16kLk=;
+        b=UUNNdsM2rI/9aR3nQbwgFzURukDKRivhAOaPQpfmkcwWcKHJFToXA4gfaI9t/76+sh
+         40UmK4s2vN7/wHygqTM1GAEEAwnOolto6T3DVYVJlsvZn0CbHk4Do6moY9caSy64ndVr
+         MJDfJPnBzJKqE/92dkIUWgNx9qV4EEpXehm1lG3I91IAF7pi09A7EwutiUkDydMjVItJ
+         TcLymoginJcxEjDs19qykRWCztgTZrWMJBjb/oTGd7zulTYAHZu2CHRt+Mqa66kg+pI1
+         ifSKnjtO4iBeGFjEMkdOuDPQM58JR3FAp6w9eIdHK7tNctnz7UB43LmYXh7yPOIhw4Ay
+         zI3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789664396; x=1790269196;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=CU2rNOkPTWonMJ/LHusUbLASqrBVu1PgH/m6EZ16kLk=;
+        b=jbnFhQg+Lh4IWrrfD2bmyhhxdwsy2XMcvaHhgXEWGrRnfX5RnwbFjjuKVO2aqlm9Fd
+         mlRSCtFvzPYL1/sPvqHwP9TZgGN9J8bDe1TsVxOnpisc8/oQ/iryVbLueTRXz+8+XBT0
+         dyHBk0KlK8sR2HkVvfhUto/1H9/OvyaqknlR83BbGNYLk9D5j5r5b89hyFWCZ9rOixoI
+         bHXYqdwCek1XHW/WwjXYeJx6N9HtcvTfvef0sPbEQH+cl5/HFn/qK1hJ9K3jJzkDnVXh
+         CFw6TmHAkXpMn3YykekakXP2i2qrdJxIl/bAr9KLHWTiylZ+j5fpqpLm4v5pprM/m9KG
+         ym/A==
+X-Forwarded-Encrypted: i=1; AKwUvBwwROUN0CDJgV7CJD+LssF7mjZtoYEOEJNI8Yi1MAvd94GoUYVy8JM7LUNRyc9PmNCO9uI=@vger.kernel.org
+X-Gm-Message-State: AFuF++njoQSW55l8T8FrQx/rvDrufTm9OWDulOu7KACZPuFMRsJq7mVK
+	r6ThJi9WVqU98ek5f6WqLsAXmBeyYNxnZcPYO04kbh9sk0dJ7RwcmcAv
+X-Gm-Gg: AYBFou3bQZMqNGs7WjAUOxWRo3MXPomRBIfTbWT/Cj7FBM5XIZMTLEBqjLkvaLjJ9yH
+	gBIZERVt8wdpa89Hj6B4C3nnsvX30a7CLMwlCmJ91hXm77XYRPpVH54tOwnzZdW4FBgJ3C/0fDv
+	9g19LO3e7N8sYmVjOh6EkyXoMYrqPjAAeur2IhQl4uf10zjuKgaRpSszurlZvwIAZOqQsULeSKU
+	qMPfZgujS1SFF/zdULXjKGc04+WyP2O/pE85+1ZTOOA/6BY7Bj0O8PMI9F031d5NkymeEahOE7j
+	BuAJDBQULXhApu6NR619cVk+HcDJFYEcgEo3rElZypxWbKmiaVbYiUiQxunPF0atIpqtA71pkAo
+	lbnCr2xbztLorHVxCjBSDSL0OMunSoYFJPujEhK6ljrbmYfYKwQJl7BJZ4RGrXLLuhrlDfj19NO
+	mz4Ch6Y/rmSSQS75kTtg9L4nIDY24jwQs+E7pLcqaYIP4+AZ5owfEbhUQzvxhCr0K9dzydoUWyP
+	8dztXeIcXiR93uEqPBLNoO5P95fUllWaAxefv4OX7uUmhtU1hXFiMUBiqdOHM9qeJPUgcknNzZm
+	QPj9
+X-Received: by 2002:a17:903:2302:b0:2db:39dc:48af with SMTP id d9443c01a7336-2dd8e752ec5mr159169715ad.17.1789664396054;
+        Thu, 17 Sep 2026 09:59:56 -0700 (PDT)
+Received: from localhost ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd89f244bdsm30194175ad.77.2026.09.17.09.59.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Sep 2026 09:59:55 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 17 Sep 2026 16:59:55 +0000
+Message-Id: <DLHR2X1P3BTT.HK3TEMB89P28@gmail.com>
+To: "Ren Wei" <weir@nebusec.ai>, <bpf@vger.kernel.org>,
+ <netdev@vger.kernel.org>
+Cc: <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <sdf@fomichev.me>,
+ <martin.lau@linux.dev>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
+ <jolsa@kernel.org>, <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>,
+ <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+ <pabeni@redhat.com>, <horms@kernel.org>, <m.xhonneux@gmail.com>,
+ <dlebrun@google.com>, <vega@nebusec.ai>, <rakukuip@gmail.com>
+Subject: Re: [PATCH 1/1] bpf: fix TOCTOU in IPv6 SRH encapsulation
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+In-Reply-To: <20260917163408.252431-1-weir@nebusec.ai>
+References: <cover.1789646866.git.rakukuip@gmail.com> <20260917163408.252431-1-weir@nebusec.ai>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c51591e0e96c837bcd762c207e5e1869.josef@toxicpanda.com>
 
-On Thu, Sep 17, 2026 at 04:35:19PM +0000, Josef Bacik wrote:
-> On Thu, 17 Sep 2026 08:40:10 -0700, Paul E. McKenney wrote:
-> > On Thu, Sep 17, 2026 at 02:14:57PM +0200, Frederic Weisbecker wrote:
-> > > You're right. So we'll indeed need to reuse the deferred qs points here.
-> >
-> > Except this is getting a bit involved.
-> >
-> > Don't get me wrong, if Josef is happy to take this on, far be it from me
-> > to stand in his way.  But if not, we should be willing to treat this
-> > optimization as a follow-on effort, whether by Josef or someone else.
-> 
-> Follow-on works for me. For what it's worth 03/13 is already fairly
-> close to what Frederic describes, just outside the core flavor: no
-> task-list scan (the GP waits per CPU for a pass through __schedule() or
-> an EQS), the irq-exit preemption path checks the interrupted IP and
-> queues the task as a holdout before the switch, and the holdout is keyed
-> on where the task was interrupted so nothing is needed from the
-> trampoline tail. Moving that IP check into the tick / rcu_exp_handler() /
-> deferred-QS paths and reusing the blocked-tasks list is something I'm
-> happy to look at once this has settled.
-> 
-> v4 will pick up Alexei's ask (reader emitted by the BPF JIT around the
-> fentry and fexit regions rather than in the glue) and the idle-CPU hole
-> Sashiko found.
+On Fri, Sep 18, 2026 at 12:33 AM Ren Wei <weir@nebusec.ai> wrote:
+> @@ -6706,16 +6706,22 @@ static const struct bpf_func_proto bpf_xdp_check_mtu_proto = {
+>  #if IS_ENABLED(CONFIG_IPV6_SEG6_BPF)
+>  static int bpf_push_seg6_encap(struct sk_buff *skb, u32 type, void *hdr, u32 len)
+>  {
+> -	int err;
+> -	struct ipv6_sr_hdr *srh = (struct ipv6_sr_hdr *)hdr;
+> +	struct ipv6_sr_hdr *srh;
+> +	int err = -EINVAL;
+> +
+> +	srh = kmemdup(hdr, len, GFP_ATOMIC);
+> +	if (!srh)
+> +		return -ENOMEM;
+>
+>  	if (!seg6_validate_srh(srh, len, false))
+> -		return -EINVAL;
+> +		goto out;
 
-Even better!  ;-)
+Sorry. This TOCTOU issue applies to everything.
+Patching it in one spot doesn't help.
 
-							Thanx, Paul
+pw-bot: cr
