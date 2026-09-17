@@ -1,104 +1,69 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2F04B1467
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 23:46:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DFE149D584;
+	Thu, 17 Sep 2026 23:49:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789688769; cv=none; b=WFTwaN4dyVWZhUSVj7/Ucm8xhijT4mwa1rlITd2qRsuPJnEmBxgMxqk9lvRwam7+cGbdZU/hTitnFkhr56YnZcPV8KxkTgkdi6RgOVj6Gi+7mslvPucyNddPanDMoekEP9iyLHI4CJmU9NEx4JQHJBG3ZAYDlasTo3wobomdDg0=
+	t=1789688986; cv=none; b=UMzaa+X0vbpnvpM1nWNtaizprgMmIz+r1P3tpfZax7o7sr2VdtZaj83bCqRWlcdjbeNphJBCSmbJI0EP0LciaAiKJX+N0n1uwkzJ3/7b1ZFLzQK3JUZWirTzdWYuhi4P2b4WoIl5oZ2sZI7625TMvGB/DOeGshN7Yg1PvAy0jgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789688769; c=relaxed/simple;
-	bh=V9pE7CghYu2+j2iYbTTWAQ86Mnbd++pLZSK2qp6st68=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=qrRs3JIXTIOGabEUUxv7itnhTSN5JS0dT5eC18HIcNMlgYgSkSnfuFOlNPG/ZIp3IPVNzkXazbT/1BX2Gy7o+BUav173YLSCUqhWKpAhHK72fBFXcyxhmNE+Z/MXy0kQn0clJ2s9xWAtHhqDid6c7t/4GNLASirSmxvmiidpE9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f6wwLvNE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789688986; c=relaxed/simple;
+	bh=r+s0LiPHCI9anNwog1q1wCmxZuy74xNwMr5QmaPk9ZM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=jwrgxoKkkE9z2VSV62YDe4Szfq8bIQA9E0iNtPth0Kr/R25l40UZ047j51YbUuML3KX5OHFKfOToW3CN3qrDsdvKGwDSZkC9iWQ3+0BFdawli+22UuZVMr+jZSzsqC+tX7ilob6pj0m8fgzCkmPVsn2GJLxyB7sf8xUhFtcQb7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TfsMhic9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f6wwLvNE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B81761F000FF;
-	Thu, 17 Sep 2026 23:46:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TfsMhic9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E0781F000FF;
+	Thu, 17 Sep 2026 23:49:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789688766;
-	bh=fQYnPzt6+uuWThFuL5QneZff7Cl0iDiAQlmjl8PSioU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=f6wwLvNEb55j44TR06JATbXz++csyRJrUa1QWAMtCaQqjZ2n5GQ09EHpMogwG03a7
-	 UGr+2cSPQ2oENRGPcbuOTyUAfb7+WUsYCYiUX76WVAQst7qzzflubrPh9MjU4BC855
-	 URh5RH6IM7CF/FwrL7NntXwWee/nuPaoTGz3627p4/HKPXidGZduurOHInWk4xQSD1
-	 UBd3CfUgjTx0VPjruNVNJWEVwcsu20PliOYRsskK7q3SMjobptLfG3g9GZ7EIibZDF
-	 Q2Xicrqf7vWNw2DY7K3tZV/EHZAe2TrajBRl275Iyg9S+M19xrT0525phZge4RhytP
-	 khCH/0TKHo+4Q==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf v7 09/10] selftests/bpf: Check callback map value
- lock identity
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260917233222.2542500-10-memxor@gmail.com>
-References: <20260917233222.2542500-1-memxor@gmail.com>
- <20260917233222.2542500-10-memxor@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Thu, 17 Sep 2026 23:46:06 +0000
-Message-Id: <20260917234606.B81761F000FF@smtp.kernel.org>
+	s=k20260515; t=1789688984;
+	bh=r+s0LiPHCI9anNwog1q1wCmxZuy74xNwMr5QmaPk9ZM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=TfsMhic9doUbsB42YOZng4qb/OEY8ycWIK+/HxMLPdrnnK/XcZvCH8XBTVwHMHnwD
+	 b1K/ES113ArKc6RJFl/7qc0khZYsrIW/DmKux9tzrAGYnH2UzxT4CiKelFtWLhb6gR
+	 1ZGKtQjyoyghPjecZA3S7ZuQshkjtU3PAFTGoIJodlHw1xFt+aHcMZ7OsOC0SZgWcH
+	 G4IhDihfBsiMYy+28qqVoFDCM/TzrbRrQVKwqCJYowbQTsdzlIyGXEBkLKFgl1o3Qa
+	 +KPbQTAeaIqGx/8LkctLSd9Vh4P62c3EC3IE+sFOOiaK0ab73ANUAn7G66MF+Y7eQq
+	 EHQDF4f4UsXBA==
+Content-Type: multipart/mixed; boundary="===============0095006719181285834=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <fc85d83ac07c116cd243a2bbfff0a994abcea9e9588048e80f9a1234d772b757@mail.kernel.org>
+In-Reply-To: <20260916195203.1099646-4-ihor.solodrai@linux.dev>
+References: <20260916195203.1099646-4-ihor.solodrai@linux.dev>
+Subject: Re: [PATCH v3 3/5] x86/cpu: Inline generic_identify() into identify_cpu()
+From: bot+bpf-ci@kernel.org
+To: ihor.solodrai@linux.dev,bp@alien8.de,dave.hansen@linux.intel.com,mingo@redhat.com,tglx@kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,ryabinin.a.a@gmail.com,akpm@linux-foundation.org,hpa@zytor.com,andreyknvl@gmail.com,linux-kernel@vger.kernel.org,x86@kernel.org,bpf@vger.kernel.org,kasan-dev@googlegroups.com,linux-mm@kvack.org,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 17 Sep 2026 23:49:43 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf: bisectability breakage in cb_refs test
---
+--===============0095006719181285834==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 03ec1406cdaeb656afadd3849c93ff403c3610cb
-Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> generic_identify() has exactly one call site: at the top of
+> identify_cpu(). Fold it into identify_cpu() so that a single function
+> does the job for both the boot CPU and the secondary CPUs.
+>
+> While at it, fix up both copies of the Cyrix comment.
+>
+> No functional changes.
 
-selftests/bpf: Check callback map value lock identity
+This isn't a bug, but since identify_cpu() already covered both the
+boot and secondary CPUs before this patch, could the changelog instead
+say what the fold enables for the following patches (e.g. making the
+init_cpu_info() placement explicit)?
 
-This commit adds a verifier test to ensure callback map value lock identiti=
-es
-are correctly verified, even across nested inner-map lookups. It also exten=
-ds
-the spin_lock failure tests and updates an existing cb_refs test expectatio=
-n.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cb_refs.c b/tools/tes=
-ting/selftests/bpf/prog_tests/cb_refs.c
-> index 78566b817fd70..490e15e7126d9 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/cb_refs.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/cb_refs.c
-> @@ -13,7 +13,7 @@ struct {
->  } cb_refs_tests[] =3D {
->  	{ "underflow_prog", "release kfunc bpf_kfunc_call_test_release expects =
-referenced PTR_TO_BTF_ID passed to R1" },
->  	{ "leak_prog", "Possibly NULL pointer passed to helper R2" },
-> -	{ "nested_cb", "Unreleased reference id=3D4 alloc_insn=3D2" }, /* alloc=
-_insn=3D2{4,5} */
-> +	{ "nested_cb", "Unreleased reference id=3D5 alloc_insn=3D2" }, /* alloc=
-_insn=3D2{4,5} */
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-[Severity: Medium]
-Does this change introduce a bisectability breakage?
-
-The test expectation for the nested_cb program is updated here to expect
-id=3D5 instead of id=3D4. This appears to fix a test failure caused by the
-previous commit in the series, which added the ID increment for callback
-map values in the verifier.
-
-If this test update is delayed to this subsequent commit, the cb_refs
-selftests will fail when testing the tree at the intermediate state,
-violating the rule that patches should be self-contained and not introduce
-regressions.=20
-
-Should this hunk be squashed into the prior commit that actually changed
-the ID generation behavior to preserve git bisectability?
-
->  	{ "non_cb_transfer_ref", "Unreleased reference id=3D4 alloc_insn=3D1" }=
-, /* alloc_insn=3D1{1,2} */
->  };
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260917233222.2542=
-500-1-memxor@gmail.com?part=3D9
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35285131592
+--===============0095006719181285834==--
