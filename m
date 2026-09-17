@@ -1,77 +1,77 @@
-Received: from mail-wr2-f8.google.com (mail-wr2-f8.google.com [74.125.225.72])
+Received: from mail-wm2-f2.google.com (mail-wm2-f2.google.com [74.125.225.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDCAD4A64E6
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 23:32:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB954B0E26
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 23:32:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789687952; cv=none; b=lNcrMbzdObQ6e8hlDVtgT7xNb070TW9cQu0yXnyogUkX4x2lGrsqB+w2+S0pZdItn0Au/w8I9+iN/yfVVBf9LX+PEAAraXyobk/ZmwO2vvbQBlSHA6xOURJerOLra/b5oHXL/QgMQpB7LCwmJmWsqVl/arOB/eZfOUOMiIqoZrQ=
+	t=1789687954; cv=none; b=Hoz6OJdyMOprgsv8eSCahM5s1cWYUQO7Dg8TF+fsXWhYCUEidSof+r/EORseMPItZjmPAji7nPrcTlfa+eE1jPZIysRDA5LWretfSnUI3Biq0Mhi4R3YCKepkyTDguhNpHNc54G4mr7tHo6gEIAz92ioqAWidcB+sySZT+vXd3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789687952; c=relaxed/simple;
-	bh=kG2YHuvL1ypg8xg7R/3LfcxZgNoQJmzBHCRWeoYJ/cU=;
+	s=arc-20240116; t=1789687954; c=relaxed/simple;
+	bh=bRYlCnr1arR+ACx2/DjlcrPKZzHIgwCnLZdS+GCDpz8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gLatrsSjxRbChlF9r2vhX/PtUiDOnYpDJslig0AxpdGThlZzTBek0O7X6sbqCofqFLjBeJ6pyeZuC58m0zfSsgUT74CGXeWEbK0KcCWMUSAQ+cTTJvuKtvcRFoOWAaWIu05mhHK5ApSH2WU7FXAci9N9+Vi6jMOQKs5WkAhCoYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VjXJ66F4; arc=none smtp.client-ip=74.125.225.72
+	 MIME-Version; b=ny4aqiDA+4LkJbp6+hotXTo9zd+AHj88s/x1KmVknYZ74SO4OFrhQJ623mEKzd6z88cCnruy0y6zjsOK4bxu9xTWJh+3lwqAgUqkj90rqjPJDUlCfvXATmcYDRjx9CYbyAqUVAMu8gnxuuivLiDEK0M2taf6Veb0LjDo6PJ6dek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EFBq3oV9; arc=none smtp.client-ip=74.125.225.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VjXJ66F4"
-Received: by mail-wr2-f8.google.com with SMTP id ffacd0b85a97d-485ac0c75b9so45360f8f.0
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 16:32:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EFBq3oV9"
+Received: by mail-wm2-f2.google.com with SMTP id 5b1f17b1804b1-4926d058720so450795e9.0
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 16:32:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789687949; x=1790292749; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789687951; x=1790292751; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=hdI12Yv6cwOBUJEO+GMsgFnFVy6yrvKHWA9/INV7Nok=;
-        b=VjXJ66F4scAMp6JMOCYzaj10Uw4vmBVKXOTcAfEe+rQZgSIJFR3qPZW2VC0bHlfyoH
-         7APxRS3dioDQhqf96Ftz2anLfwYjsxHdIcm7YdLrx2R+Kpm4ChfVmUekK/VxEWZUrJMm
-         e3wPcnabO1UjFM5Hxllt8M3Z10VBHSWyNj/V0E2fAqXoAq/4cyo9bm1zGKaLnEU//4nc
-         lHgLQ0TCl9PKtFyz0w1x6qgUCpYU15pn26DJe3j7pqNAhNmySzaDCAlvp/7N33D8wXkF
-         +0+lWM6k3XODqT8PQ8JXTCPWQdtcLVVqOmMk3M/h3Revja87c+okSe5qxlVA7XIgpXfN
-         gXgQ==
+        bh=pLK2QRpWqeMoPFpVdI3uPI0cYs+CHfQkd+4FX5xCgSw=;
+        b=EFBq3oV96sPKQQawn/SiBmTlplpo0zNo325EF8VzoQdygrmehNsKI3iAFijOqk9N1K
+         +2REaMvBsQkCKLGv9Gq4cdiAVbxBECCFmv6ZwkbwlYy/lWIXWicv4ZuwipbkYUZF0YJc
+         s90SxJUDDXJneYSOqbE2FRrv97vjvWfUp4Q372OOp12ZHPCUJkvrJKSvMmKOPzA562gj
+         IuITTqVc691FvSzRpWOk6Oc83HBiqUhiqDpvo9hZS1TYq/Rrb1JF4r7b8hIYiNEMSS5h
+         ViJy3pZfzrxQ6c+c9cs8PRlXJNQekg/+oYe51gvgSQpqnrszR1OXAUDdtgnf0RMW5Ixg
+         8m+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789687949; x=1790292749;
+        d=1e100.net; s=20260707; t=1789687951; x=1790292751;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=hdI12Yv6cwOBUJEO+GMsgFnFVy6yrvKHWA9/INV7Nok=;
-        b=1CmYmpKdXaGItCCTwXssgcxA6yAK70QZEWxAMozPmB/aXIZAyyMwi8BRXt4BnPIVtg
-         xyUmUwA6ywbb+aePGTOJDeQ+0lXcmq5A6AInE8eHTWoa+HajXjraS7jRdkLf/9k9jyqG
-         H/VrlSly8i5npMc03sD5YW2/EKySREEuE6nBnpmHTjiXQk0GnhoqI80X3Z87dDaAnN1Q
-         hzFgjv10VTbllc6nrUvSK1yjsAIvxtFqxsNSh/TLU7WS5qSkwbZebl81OZqNr3Fh50kv
-         /ko9zzHKj9AwxhXOeVTOUs5NF0Q/yHtkrddP2qtHZi+iGZ1e5Q7BEPRaIsjJNq7SWleT
-         s8FQ==
-X-Gm-Message-State: AFuF++kWWNJJjmErdtBiCjCZJKPUYMN3tXD7haKj89Kyh2ssZv6jGsb/
-	PD8eT6y/2KrvaRZFdjW+qRcYAdO7OQIWNXdkG2n8SGtkO9OtZZ0uWZjTelCsrnFK
-X-Gm-Gg: AYBFou0li5ijNSMN1uE/j0xMP5s4zAERgXIWuOlis0bAxspqv89i55OyycV5q7OIKjA
-	yLkIUwACHxnLYAZQ80c7eD++Bu83pd+JTx6BpI+WcoV8zy+CCh5VtB3ERS9VNkzZgCuuvML6fCE
-	E3h88meOUO22HWn+eFJMd0Ktd6vf6p8IrKiTTqts1MJiUcdT9rzz70yHGoVtFH61YKS5x37NxCL
-	aQk/dfN4TwKBuF5PlIHztjvHkasVGYtqALRZtSqh2+GwRt4Q4bUEoItz/Dp5QkoQght1QaIDqvp
-	i0c+ZZqGqdD7DAIzXHir3/aVtq7KzGczPsVVox/SUSSDhEAvbmURrN+4NtXIKqwNTpRDmF5D/y4
-	rQ98xJoZCzTMfXPVBJzbOHw3/oha80k5sx5OaSyv7lxF57zh6cNjLEw1QVC46tGTAwYYV8bgiKO
-	7OqoJxtK6IcU3y//7S7KjoshZjEYD99S1N76zp+jZtQXCPJR612mE9peXJWW+SDmYcMAvFpnEvs
-	KVpmqybSaoY2Js4c3zp+McEO8p1k0a0dzIxyIj5lpoImRe45GR2AIEJVDEAl6RLWYPt0jmWmx7v
-	ubmaoBkRmAZKRzU3hM88abWByCN+6QuFRHGrrYcMHk8/opDF
-X-Received: by 2002:a05:6000:26c2:b0:487:b32:9d6f with SMTP id ffacd0b85a97d-4871e21beabmr621681f8f.22.1789687948738;
-        Thu, 17 Sep 2026 16:32:28 -0700 (PDT)
+        bh=pLK2QRpWqeMoPFpVdI3uPI0cYs+CHfQkd+4FX5xCgSw=;
+        b=h0Yszyp4TxvJF18zxx1Cd1lTo7Dvp4fX+2KD5gEZHR5aB5Nt5M/7fzmJ0Zr+np4/2p
+         xCeHayJenxO3074jfs92hu1UOmPZ66uP8Z2v0RK22pT/aFrsG9FunrCsSSQoLvYjMTnV
+         LyU9FzdSpYI7lwRGJXWFeSYWfVHZJX4igKmgjdCzpAd5IGEyg220QO4BcpaMhtacZHye
+         8BH3313VrHyx7DlVLot42XyP397B6MzsHZXnmj3iJVhzXwHmVL2j6QZ/3fGfPLyXCWmt
+         V1Ehdru0Scy2ZKqm1ELv19qnO8rWKg4wT5aA5+7/9sLrpn0cpyQo9HfVnInUoDfOWgZi
+         RqHg==
+X-Gm-Message-State: AFuF++kt1XdMr7JYa29CLfpE39QnAu4Y7DHVB9I19tnLzw0NOVbCLO6T
+	PxLY9YfU9sYwFibYWB0JzjR25n2dDaTiI90DWUFQa45Ma2YI4Xzuoc6AOVgWTe4S
+X-Gm-Gg: AYBFou1CYyYT6iEkk95vGwD189TOp0loXlbepsOjy7Oqol3UDgLTASmJhOH+KPTNpX2
+	ebQYY/qXe3jGMU98NJpeeLT2p7VhVtUG5PlU9pTZZDIKAzmDc2vgjma7KllZ6bmjDolldMNcCSE
+	z/xclLzg60DQzl7qAlA7zdTmuUfXmPSjOVbHARMJDl+/4/qsRru638HrghfRPxxjlppaSByCpfK
+	WydqS4gd/NjFvGPJKhdorOPysqeqUQD9MUNaM8Zw4roDFZ8C5EYhoHljZW7SKu9IIPF8HdUj3Pe
+	HNHl2ZFDRMCvIfJxJI8GwOsZZRqqB5F8GKVH9YdqJOof7G3c6vPV2XM6s0+cMqwBJB4ea+S2+bF
+	wkBWm6HRLQRqrugkhZ/BE9XiMbRi2kFDzTV/YPbjVGySoUydQFoF19QZZdldTD3P7pEVBip7vry
+	K6Fu2B8yAm/p2apwWICSYfWhWGIKn8qwSsdfaabY/ZEIwItwxNNntt57nGN510Q+T7jyP8Ao1tf
+	ESlutR6WIFyhMzRTJVmg+bPqie+Lf/Sy+Ghbu1J5lqMZ7+rfIvNJhhp01j+a7qW4BaXfFWDM3NF
+	o6ctXUNi18ffp99iEdKi4SezR37QNUHmLLKWqz4=
+X-Received: by 2002:a05:600c:3550:b0:49c:fc89:59cb with SMTP id 5b1f17b1804b1-49fc56db95cmr5203415e9.5.1789687950657;
+        Thu, 17 Sep 2026 16:32:30 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4870bf27ce2sm19117292f8f.20.2026.09.17.16.32.28
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fc7ceb92asm1274305e9.6.2026.09.17.16.32.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 16:32:28 -0700 (PDT)
+        Thu, 17 Sep 2026 16:32:29 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
+	Daniel Borkmann <daniel@iogearbox.net>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Nicholas Carlini <npc@anthropic.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v7 03/10] selftests/bpf: Test packet pointer class displacement pruning
-Date: Fri, 18 Sep 2026 01:32:11 +0200
-Message-ID: <20260917233222.2542500-4-memxor@gmail.com>
+Subject: [PATCH bpf v7 04/10] bpf: Apply CO-RE relocations before subprogram validation
+Date: Fri, 18 Sep 2026 01:32:12 +0200
+Message-ID: <20260917233222.2542500-5-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260917233222.2542500-1-memxor@gmail.com>
 References: <20260917233222.2542500-1-memxor@gmail.com>
@@ -81,72 +81,131 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2497; i=memxor@gmail.com; h=from:subject; bh=kG2YHuvL1ypg8xg7R/3LfcxZgNoQJmzBHCRWeoYJ/cU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtNRUbbzTc/WBMrP/Xec3AtTS4x4C/hVmEKP+muJ8Off CRsb2FHKQuDGBeDrJgiS8n/fUzGJyp/B9ou44aZw8oEMoSBi1MAJrKpkOF/bauQas/WU5df9N/T T27wW/5tBYt0kfJVtT7T9Fv5Ah6xDP8zF2XpzGv5fmNX6NXd/1+wztm/+WTsf8b2U1x1pdpvfr9 jAwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4982; i=memxor@gmail.com; h=from:subject; bh=bRYlCnr1arR+ACx2/DjlcrPKZzHIgwCnLZdS+GCDpz8=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtNRUZ3+OnlEs2zujbpztny4+Y9P5Hsh9v2fbt2QSTGb N7F4B3/O0pZGMS4GGTFFFlK/u9jMj5R+TvQdhk3zBxWJpAhDFycAjARlYmMDBOEk9UnuNyMWya9 Tktlv/NcviTPpff3mnfnbJrNk2kq94SR4WH5rl1xM6Mc6rctT+nxuzEzxdw+5/qbtTIla1bYL+F /zQcA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Add two paths whose packet pointer ranges are individually compatible at
-a join but whose members have different relative displacements. The first
-path proves an eight-byte access through one member. On the second path,
-the same guard only proves that the access starts before data_end.
+check_subprogs() verifies that each subprogram ends in an exit or an
+unconditional jump before in-kernel CO-RE relocations are applied. An
+unresolved relocation can then replace that terminal instruction with an
+invalid helper call. The resulting fall-through into another subprogram
+breaks the CFG invariant used by postorder and stack liveness analysis,
+which can write past their per-subprogram arrays.
 
-An affected verifier prunes the second path and accepts the program. With
-packet pointer class displacement preserved, it explores that path and
-rejects the out-of-bounds access.
+Apply CO-RE relocations immediately after preparing the program BTF, before
+subprogram discovery and validation. Keep func_info and line_info validation
+after subprogram discovery because those records depend on the complete
+subprogram layout.
 
-Read the unknown offset and branch selector directly from XDP context
-fields, and force state checkpoints so the pruning attempt does not
-depend on the verifier checkpoint heuristics.
+Reject an ldimm64 first slot at the end of the instruction stream before
+CO-RE can inspect its missing second slot. check_subprogs() previously
+rejected this form before relocation processing because it is not a valid
+subprogram terminator. Moving CO-RE ahead of check_subprogs() removes that
+implicit protection, so perform an explicit check before applying
+relocations.
 
+Include core_relo_cnt when deciding whether to prepare program BTF. A load
+that supplied only CO-RE relocation metadata previously skipped both BTF
+setup and relocation processing.
+
+Fixes: fbd94c7afcf9 ("bpf: Pass a set of bpf_core_relo-s to prog_load command.")
+Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../progs/verifier_xdp_direct_packet_access.c | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ include/linux/bpf_verifier.h |  2 ++
+ kernel/bpf/check_btf.c       | 12 ++++--------
+ kernel/bpf/verifier.c        | 12 +++++++++++-
+ 3 files changed, 17 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_xdp_direct_packet_access.c b/tools/testing/selftests/bpf/progs/verifier_xdp_direct_packet_access.c
-index 0b86d95a4133..9866bc154194 100644
---- a/tools/testing/selftests/bpf/progs/verifier_xdp_direct_packet_access.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_xdp_direct_packet_access.c
-@@ -1719,4 +1719,39 @@ l0_%=:	r0 = 0;						\
- 	: __clobber_all);
- }
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 36b65797877d..bba5a727c651 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -1197,6 +1197,8 @@ static inline void bpf_trampoline_unpack_key(u64 key, u32 *obj_id, u32 *btf_id)
  
-+SEC("xdp")
-+__description("XDP pkt regsafe preserves packet pointer class displacement")
-+__failure __msg("R2 min value is outside of the allowed memory range")
-+__flag(BPF_F_ANY_ALIGNMENT) __flag(BPF_F_TEST_STATE_FREQ)
-+__naked void pkt_regsafe_class_displacement(void)
-+{
-+	asm volatile ("					\
-+	r8 = *(u32 *)(r1 + %[xdp_md_data_end]);		\
-+	r9 = *(u32 *)(r1 + %[xdp_md_data]);		\
-+	r4 = *(u32 *)(r1 + %[xdp_md_rx_queue_index]);	\
-+	r4 &= 15;					\
-+	r0 = *(u32 *)(r1 + %[xdp_md_ingress_ifindex]);	\
-+	if r0 != 0 goto l0_%=;				\
-+	r2 = r9;					\
-+	r2 += r4;					\
-+	r3 = r2;					\
-+	r3 += 8;					\
-+	goto l1_%=;					\
-+l0_%=:	r4 &= 3;					\
-+	r4 += 8;					\
-+	r2 = r9;					\
-+	r2 += r4;					\
-+	r3 = r2;					\
-+l1_%=:	if r3 > r8 goto l2_%=;				\
-+	r0 = *(u64 *)(r2 + 0);				\
-+l2_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm_const(xdp_md_data, offsetof(struct xdp_md, data)),
-+	  __imm_const(xdp_md_data_end, offsetof(struct xdp_md, data_end)),
-+	  __imm_const(xdp_md_rx_queue_index, offsetof(struct xdp_md, rx_queue_index)),
-+	  __imm_const(xdp_md_ingress_ifindex, offsetof(struct xdp_md, ingress_ifindex))
-+	: __clobber_all);
-+}
+ int bpf_prepare_btf_info(struct bpf_verifier_env *env,
+ 			 const union bpf_attr *attr, bpfptr_t uattr);
++int bpf_check_core_relo(struct bpf_verifier_env *env,
++			const union bpf_attr *attr, bpfptr_t uattr);
+ int bpf_check_btf_info(struct bpf_verifier_env *env,
+ 		       const union bpf_attr *attr, bpfptr_t uattr);
+ 
+diff --git a/kernel/bpf/check_btf.c b/kernel/bpf/check_btf.c
+index 0e8b3ccc7a5b..4c1ed842f661 100644
+--- a/kernel/bpf/check_btf.c
++++ b/kernel/bpf/check_btf.c
+@@ -338,9 +338,9 @@ static int check_btf_line(struct bpf_verifier_env *env,
+ #define MIN_CORE_RELO_SIZE	sizeof(struct bpf_core_relo)
+ #define MAX_CORE_RELO_SIZE	MAX_FUNCINFO_REC_SIZE
+ 
+-static int check_core_relo(struct bpf_verifier_env *env,
+-			   const union bpf_attr *attr,
+-			   bpfptr_t uattr)
++int bpf_check_core_relo(struct bpf_verifier_env *env,
++			const union bpf_attr *attr,
++			bpfptr_t uattr)
+ {
+ 	u32 i, nr_core_relo, ncopy, expected_size, rec_size;
+ 	struct bpf_core_relo core_relo = {};
+@@ -414,7 +414,7 @@ int bpf_prepare_btf_info(struct bpf_verifier_env *env,
+ 	struct btf *btf;
+ 	int err;
+ 
+-	if (!attr->func_info_cnt && !attr->line_info_cnt) {
++	if (!attr->func_info_cnt && !attr->line_info_cnt && !attr->core_relo_cnt) {
+ 		if (check_abnormal_return(env))
+ 			return -EINVAL;
+ 		return 0;
+@@ -455,9 +455,5 @@ int bpf_check_btf_info(struct bpf_verifier_env *env,
+ 	if (err)
+ 		return err;
+ 
+-	err = check_core_relo(env, attr, uattr);
+-	if (err)
+-		return err;
+-
+ 	return 0;
+ }
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 5d7080c260d8..33161dc64568 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -21199,6 +21199,11 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	ret = bpf_diag_init(env);
+ 	if (ret)
+ 		goto err_prep;
++	if (env->prog->insnsi[env->prog->len - 1].code == (BPF_LD | BPF_IMM | BPF_DW)) {
++		verbose(env, "invalid bpf_ld_imm64 insn\n");
++		ret = -EINVAL;
++		goto err_prep;
++	}
+ 	if (env->signature) {
+ 		ret = bpf_prog_calc_tag(env->prog);
+ 		if (ret < 0)
+@@ -21274,6 +21279,11 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	if (ret < 0)
+ 		goto skip_full_check;
+ 
++	/* Apply CO-RE before validating the program's instruction layout. */
++	ret = bpf_check_core_relo(env, attr, uattr);
++	if (ret < 0)
++		goto skip_full_check;
 +
- char _license[] SEC("license") = "GPL";
+ 	/* Discover all subprograms before validating their layout and BTF. */
+ 	ret = add_subprogs(env);
+ 	if (ret < 0)
+@@ -21283,7 +21293,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	if (ret < 0)
+ 		goto skip_full_check;
+ 
+-	/* Validate BTF against the complete subprogram layout and apply CO-RE. */
++	/* Validate BTF against the complete subprogram layout. */
+ 	ret = bpf_check_btf_info(env, attr, uattr);
+ 	if (ret < 0)
+ 		goto skip_full_check;
 -- 
 2.53.0
 
