@@ -1,81 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C12F549AA55;
-	Thu, 17 Sep 2026 11:24:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B844D5977
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 11:27:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789644269; cv=none; b=TEoeIXLICGfG7FcNJcPLw7IXLBN24oNh2cxGie0bk/b0w3EDdfa4Y9W2/SAkmfLOUaTvWrFAiU6BTT2zOK9In2XtGBYvicYqdyxoXby7eAY5TQ3abm39E2+GhGieE1D2KpOeWzhNg2PPLCWB3l47W49PMnLD9Gbh9KOX1ENhWAw=
+	t=1789644425; cv=none; b=NpcBBVD044JNKamSnrZitsnmECR+aX3bAhIL+K5kbDY/XszLZCsaafKL0JCwpfu19nLtNTqGATN6JdUd+2qwFwvZL37bPMc0n9PJJlgMbapiV9Qtt92AjTgjR03GWsyPfbZeo/Ab+UOxqd14XdFqGYjmytKMndkuAgUNKIxgjps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789644269; c=relaxed/simple;
-	bh=YN6QEaGVg6Hw72gxDdgupplCUHH2A75FcUR5OYswHoA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YOoRGCsniPOdq4Nt9CXmQo8+okG9KYBXUyXsZUY0yQSXJARD2xLohDJ+MNUAFYSHXiD3Aj/qH+ufQ9ApSDztbXG3mOQ5Z9aADiBohzRLk8teQ9RWm18t1Fw8kG7zZmzv1wMefqOjWYthibse0fSihlKFm6GcuazLMJiCEqKYLk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aWbCdhoI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789644425; c=relaxed/simple;
+	bh=j1yYjfdvtN71lnQb1RuDzx0cffgVcRVRBV6mc2dIWJE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=L+qUvGv+syDcyrFUeZIPGaEHM07mwsv6laL432DLgeNv/2utrYXGjbKouJQ/LpVRDr+cQCMfc+dymD868Z+1LoMawB+7z8ZUUr8y/fATcCmHGPSaInSPU7GAj/6d48tVnAUoZwXBtdXLpq6koRTMIt1L4Ow1OJ92VmuMetz+O5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=p4a1R3/a; arc=none smtp.client-ip=74.125.225.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aWbCdhoI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 305DB1F000FF;
-	Thu, 17 Sep 2026 11:24:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789644268;
-	bh=DGeat/iGnBxBnDqVj8Z9zNa44l9jAW8b1Jwg+5H107Q=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=aWbCdhoIILyIH+iLoz5+dNRRk/vQq+4JUWUx3Sp7FaEPciCPjuOOLw2kW6RR3UlQn
-	 D3epkf31Vn4aC3vXJi1ALRhMuUFMBI+xR3GEt/7SZxUlrp4kLfJpaP7aYuu44dsjHx
-	 fvElwTMLMoqV6G4u36pldoEM60C7ZnJSgyO/KvKqs8Au2H6/Rc1TcIV4CrGGFq9xYF
-	 vB7aBAwJI6o+LSzfO3D+Lstx9hDbeyRzWcMT2qwjTfqOLxJ9cRG3i4cJ/+QGh7JR7I
-	 GWObAeFjfIWDMaVI0Q4kvaB9sFt7vyvI9fNaJUqIwghZkJVp8Ec26Ic0iNQkAj7GRM
-	 upgD9SyoFUsaA==
-Message-ID: <b2757705-2056-4024-826e-e2731820978d@kernel.org>
-Date: Thu, 17 Sep 2026 12:24:24 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p4a1R3/a"
+Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-48433107499so332006f8f.0
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 04:27:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789644422; x=1790249222; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=j1yYjfdvtN71lnQb1RuDzx0cffgVcRVRBV6mc2dIWJE=;
+        b=p4a1R3/a44085P/wLAXM889aehNxu6Q6YHRFlbV82l3cEMA0Rrcz1bsHcDAGQPhyxl
+         ol99zdBsbGdghXYBnsjW1jQrVFhB8UX53Ai0qcfvO2iW8C4vVWE+20Fcx567hMT9DVVJ
+         RfSD9oHjJvKlSznmkMKIGllovBfWEbEWQpwW7rp2NwWqpMNpCa4sv6wiaVBFi+z+9tCu
+         DaJCJVWljQlAEcE1R3vzB1pLI07qD4pNtMyrC1ZYslHsRiVCuIZ9oWL8WTKsujCO1MRw
+         uJcC1btV3ekp1KWbHMMNmhHrKNxIQ41PT9COLXpF1nllk/VAXbIF6qi5pZiUhf2dI9+n
+         oZVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789644422; x=1790249222;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=j1yYjfdvtN71lnQb1RuDzx0cffgVcRVRBV6mc2dIWJE=;
+        b=OnxR9OUD07LXXqkkDC5/+geQugBPvjMZQpYQZKX6NHsLtNILX62C2zzaEgYtCPyTr+
+         Me3waAMNYyd0gTxgy1YPKCBnrr5M0k8jwQALYeaZa0ehsSBhpLM9t4lIWPX8kSZLqzKa
+         4ixlt+72Cy66m1cAjm+TXQ1YqfDFbXyNcZBhjUaHB1LyxaqtC3miP/Psusvu29S5lXt/
+         rlcOYXl6MuI1z46j/qZMsQqWdJY0P8UrOggdU9nNydcmkqt2mNrnUkjYWX++9LYhrerI
+         xo/gnHww2slAoeeuW76GtrI1dRWWBAryYwWoT7I4PJyBpeSoZtCP8XjZsqTNcKQvXyVy
+         lsqQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzacIxWzeXWIQ5wRsIlddI3sQeiHviAnextwEIsyV3998v0xDONMf8wYIoIsyhECoBTvo8=@vger.kernel.org
+X-Gm-Message-State: AFuF++nUTvlB0oxYbqtf74VxOCLZDWtBqTl+INmvNGIJh8Qp/94EvOlb
+	IFhRCDNXRuwyL+atG+COGyjZp5jt25nvWcbqgr+TTOcrGrZ4APqgW40n
+X-Gm-Gg: AYBFou1J6XLU84PY4eXgJYrcN8+RS6tRqdq0M8W6HPZZ4X5egQ3TjaOL3b4Q1i0FNe7
+	86tmOZHeIP5AsH0MyO/D0Nk7dyp3O4j4qm/6RS4CywK9LiY/8D6gFC4VlLBRigo4OhU/WNUfDSZ
+	2O8sigGLPLcEe6yT37Zb3SxYKWUn0iWpyDHUozGqcuQPV+9tDXosM/TJuPlhuW/N03kuvpbVJEZ
+	bozgbknLMA4CzUo+fXNIxO0GiARPclTv15pt3F4lKTKd8gEqnhMD90MTIEV/c9DT6YIeMrxeWV0
+	DpV+0ia0MWck3EB3NguPouiV+6La6j8HMK6wZFA6uDddwM5q8K8/h0tGMMl6n/Gm2SEBBQsEPVl
+	+OzzCOchQvpRB4zQ9qcmy+223bd75iBUxahY7JRrVEccFWXQucikfNO/QehAxzWSZlJfMenNHlF
+	Da/MfmpgovCQu9x17D7kQeorEjg46+4BQoPiLUzKSiwWYEUsRJ1Cy9wD6uyCZvH6WAzWu14ldqh
+	9uuBppTZCriQd+ZaGhs5Vu9XbwVdphZDYtezB632PuyeccrO3rY2AUVB9Vy+Zk9SbZUwJEG5zyD
+	7vAIj/iMla7IN96I7y0yKqJPvf8iPOhXR4qUEw==
+X-Received: by 2002:a05:6000:27cd:b0:487:d8f:27a0 with SMTP id ffacd0b85a97d-4870d8f282amr5317777f8f.32.1789644421948;
+        Thu, 17 Sep 2026 04:27:01 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4870bf1fe7esm15118417f8f.6.2026.09.17.04.27.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Sep 2026 04:27:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3] bpftool: Compute map size of light skeletons
- at runtime
-To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, linux-kernel@vger.kernel.org
-References: <20260915161450.96249-1-leon.hwang@linux.dev>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260915161450.96249-1-leon.hwang@linux.dev>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Thu, 17 Sep 2026 13:27:01 +0200
+Message-Id: <DLHK013DCY3J.19Y8X3Z0RTWCI@gmail.com>
+Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "bpf"
+ <bpf@vger.kernel.org>, "Networking" <netdev@vger.kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, <linux-kernel@vger.kernel.org>,
+ <linux-next@vger.kernel.org>
+Subject: Re: Missing signoff in the bpf tree
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Mark Brown" <broonie@kernel.org>
+X-Mailer: aerc 0.21.0
+References: <aqvBPVcN__UX8P85@sirena.org.uk>
+ <DLHJEZ0K0FV1.SCQLJJQNS1ES@gmail.com>
+ <66d3f5cd-12df-4000-8459-360ba57cea12@sirena.org.uk>
+ <DLHJUSTDSQ05.28VUGOV7YPS6V@gmail.com>
+ <ec2acd16-40e3-46b7-b120-ce9eec70e942@sirena.org.uk>
+In-Reply-To: <ec2acd16-40e3-46b7-b120-ce9eec70e942@sirena.org.uk>
 
-2026-09-16 00:14 UTC+0800 ~ Leon Hwang <leon.hwang@linux.dev>
-> bpftool rounds memory-mapped data map sizes to the host page size when
-> generating a light skeleton. The generated code therefore uses a 64K
-> mapping size when bpftool runs on a 64K-page host, even if the skeleton
-> runs on a 4K-page target. The target rejects the oversized map mmap(),
-> causing failure of loading the light skeleton.
-> 
-> When try to run 64K-page selftests on 4K-page VM, the error message does
-> not provide the reason about page size.
-> 
->  test_atomics:PASS:atomics skeleton open 0 nsec
->  test_atomics:FAIL:atomics skeleton load unexpected error: -12 (errno 22)
->  #15      atomics:FAIL
-> 
-> Pass the original map value size and max entries to the generated code and
-> round mmap size to the runtime page size in the user-space light
-> skeleton helpers. This keeps generated light skeletons independent of the
-> build host page size.
-> 
-> Fixes: d510296d331a ("bpftool: Use syscall/loader program in "prog load" and "gen skeleton" command.")
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+On Thu Sep 17, 2026 at 1:23 PM CEST, Mark Brown wrote:
+> On Thu, Sep 17, 2026 at 01:20:11PM +0200, Kumar Kartikeya Dwivedi wrote:
+>> On Thu Sep 17, 2026 at 1:09 PM CEST, Mark Brown wrote:
+>
+>> > Does the contacts list for the BPF trees need to be updated?
+>
+>> Well, he's the committer, so makes sense to put him in the recipients as=
+ well :).
+>> Once he gets to this he can probably force push to correct it, I guess.
+>
+> Do you have a full list of the current committers, I guess there's been
+> more bitrot than just this?
 
-
-Looks good as far as I can tell, thank you!
-
-Acked-by: Quentin Monnet <qmo@kernel.org>
+It's me and Eduard, apart from Alexei, Daniel, and Andrii.
