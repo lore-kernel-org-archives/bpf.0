@@ -1,145 +1,159 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6E7A5908CE;
-	Thu, 17 Sep 2026 15:40:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E92755C310
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 15:40:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789659625; cv=none; b=m+meCERKc+9splJRpebEqp9yBcTFrWzD7cQLoC9WfrlgKxKdjtkwzXf9uQGIXk56vCfblRZDxwDGkRh/BD8/KDRnehGdFmwZ/jozcKnZ6IzAicpdLfeeEvgVwKPAGXuVw0OxpdRxgtHwvQOVKa4l8u6wRwJdSCUIkhnXqA3T9B4=
+	t=1789659626; cv=none; b=JkwSdfJiCNJvsX2fvNG5R3RJh/Bt6x7Y/LSlTOApqH8d5WKYVMpgxq+B2u/QBT/+XENdeSDe73/MvaYXS1wV7PIyREpjEwxNaqA88IMO9va3hr/cckDku99ISKvgM4IZ3iEJFWq5I3OoPlO7RwtafkwvZNLi1KzqO6pO+FwtIhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789659625; c=relaxed/simple;
-	bh=yG93SaxQPAtILzC42r55J23MpfKncvfbuRA0rmsSoHM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mQ2Gc+/eaqRLTRQSuAZMZ2OAnZYVgWxU5P4XABgjZf5M551lgXo7iTfFO1/15Bs+mNDRNaLJoYiil83GpYQ4MopDfXQR8nPzrfzFCzXEoOBMu4LJhf667WoiVnVmFgA96LHmN4c+ecen2bUJDTdVwWMtVS6m0J8GXVsZw01Cyw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hcvQWlll; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789659626; c=relaxed/simple;
+	bh=KzbsMfT9mDqqgshLhXJ1nuoPk1e2OxZC2YnocBIcZew=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ozy/wMUZY2hBb1TLwmsk7Ut927ConVCR3KeeAHdJ3lNQA2UVQnt1x2BNwqwv2BT6f8Nm9vw4cbte6tzaY9Xf7Yk7JFHAGJTh7K2AMN4vWiTf23HjNhSaJEi1oc0wRGcxz+EkTjCCSNwXRdeXgF7gPtODoOYfc21XPG6tKyNXL6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AhKLrtlN; arc=none smtp.client-ip=74.125.228.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hcvQWlll"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D81BB1F000FF;
-	Thu, 17 Sep 2026 15:40:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789659610;
-	bh=OnYr6zMfa+cOfnhiHI6/0JGoc6S5Gsj1WeIOONeYOVs=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=hcvQWlllk84UctC7FJV5+Iain7lAuduBRO6z+yL3t53gBs3K5x933ujpp6K9IYYo7
-	 eCUvlyIqRf/1fHAeUjXgmhAl8T5UIu8zVkdDz7M+8odIRYwbhn2mMScpw6NJ6vKuvo
-	 S+HQwwO+z7y/+TIgLsPfDLmkVZcLsd7gORLkKcupTeH6WyCLgszAqZrcH25OiH6w5p
-	 hh8beW5jD1BC0KZ5dRJA/WDQ21iYAyRHR0fDNE1CI3UfmJmcxqHhe85nw44QJyfg7E
-	 p9qBPzqxanQ07NR44YW6yh/VAu/KEDUuMkUys+s8jvEqk3idTYzwPbBE0vGR+TPz/Q
-	 fZmzmQykfpn4g==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 98EA8CE1716; Thu, 17 Sep 2026 08:40:10 -0700 (PDT)
-Date: Thu, 17 Sep 2026 08:40:10 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: Josef Bacik <josef@toxicpanda.com>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Boqun Feng <boqun@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>, Jiri Olsa <jolsa@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AhKLrtlN"
+Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-85469e211a3so840639b3a.2
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 08:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789659609; x=1790264409; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=/BLueBpn8GLWCUZRyZrIy9LgmAKje6FNvcB8D0aXHBE=;
+        b=AhKLrtlNwMOA/EVggQliESgZgQjHYLZZmJ7I8znC6UW8X8vdLAfJY5lRF54W22ieAh
+         oEIJcbODiSTF060rx2ZLVIP+D34SByHxD0/nWyOH7qZrvq67fflbbVshzIsNGkuFC3a5
+         Xuo2npM8sdAwMGQrqiPCkRLRDjdVU1yzqrR2oOiP4HcwXCuZgUbGzi4eNyWELsMrjEp1
+         k0J4PbpNoCx/YuU4/VW+KCwXCUlFVfOrg5dqCtGHJT53QXPF2oq6EYBBpRmpqw6u5jBN
+         vgWag+tmHW3/Mgoc+5cBUAVW2Jaf6cUCTqem8dXKz8WZGF1s8mqxSZ5js9JX5x11Z18d
+         9ofA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789659609; x=1790264409;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/BLueBpn8GLWCUZRyZrIy9LgmAKje6FNvcB8D0aXHBE=;
+        b=C4rXT7HR0uT7Cq0PEVET5+6OlgZc/XttOA82cT+6tgqT4aMdjRACWH6xK1SNRrD04O
+         fkJJsyvDl1x2LJEGGdcp0iDeMPDcmX0ntaUQhASDCD1ANu/o8/MX0WLHqONTLRVPGi65
+         Ody4u9u3aeuxFGtZTukSa7fL0PrENDU4kCbuZG8ik3aqQ6MHRf8Nbs/liiwp/hnqoTGy
+         H3KH7xb/gY2VWLt9bD99H6GiOpfYIrfUUl2OZMSmUozNOwd7hTqDbGh0R2PVtQ6o264T
+         R9BTKUn/sDcYFJFQdQG8nYOiRzIT9Di0rTW0xJonurPmO36+9BG7netAOjwEygwoXa2j
+         yb+g==
+X-Forwarded-Encrypted: i=1; AKwUvByLhCrTaqeb/b5o3VLkTT8fNZW+nKW5Pr6j2POnW2baZRMkarG8+EOAz/DXKf+qAU3d5Do=@vger.kernel.org
+X-Gm-Message-State: AFuF++kc1yGLRjXS1mWBAQBa2vwZhXruVSdqETRYF7d7Lj5eA7s2ttLw
+	sRD/771SCIQxOMREc2EZJ+tUh4fVxKV2bPxm1sEjjFfDac3ePVDbgssq
+X-Gm-Gg: AYBFou2S0ICfga4rSyswKHMCSLZ2ZSE3EyYScmtnteVoaaJoaGyVV8HsQSdgbafwsMy
+	OWfGd2KKP7I/2Q3DgRVU2eI0sAY/2bxY8NE7d6NJ9Wmx20pvjWfVZA8g7++WUMWglkk4hYwItyH
+	jRF1J7RlLJ5VAzHbniFXGZ6CejyNxXNx8GUVjQK8ays4FT6rekmX8dVNvCWMwyJsf6ONcDqaRL2
+	OFGeI9oQg6OzV1odIC5Fb17sElHBZjdxRFxm4ItidqvJuemG/BWHvkZVzSTFa/Psd7trPUKsMbM
+	84Tlt1S8Rua5Aq3aup6h/DsshUay0sclxUsRZO+EpDt0snc193a8aHICC/Oe7E/9ZJFr3BwQMiQ
+	/uo353uQJyQBjwu29u+DwxN3K5yn1Fali0y595PM0g0sKjYcsPAkMhZkEwpZ91GW3DJBSaOJv4l
+	T/xMfW1PIfYdB9LeTSo1L6JO8jdMzxtIRYaBkcod/O29ZI+D+jWgPt8sIM4vQ+jCi5vNx1gahaf
+	jaG2sTN6JCRc2IxGLUgd2UIzz6K3yG3
+X-Received: by 2002:a05:6a00:1892:b0:869:4d90:a0cd with SMTP id d2e1a72fcca58-8723a5a7c3dmr15557312b3a.16.1789659608898;
+        Thu, 17 Sep 2026 08:40:08 -0700 (PDT)
+Received: from 192.168.50.3 ([198.176.50.208])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc50abb1776sm3467697a12.27.2026.09.17.08.39.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2026 08:40:08 -0700 (PDT)
+From: Weiming Shi <bestswngs@gmail.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, x86@kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>, Juergen Gross <jgross@suse.com>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	xen-devel@lists.xenproject.org
-Subject: Re: [PATCH RFC v3 03/13] rcu-tasks: Add a Tasks RCU implementation
- for reader-marked trampolines
-Message-ID: <8fea176a-0ca0-4a70-8cf9-8240a22359e4@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <aqlgxKGk_AEKls_1@localhost.localdomain>
- <edc7cca2-a5c5-455c-8969-ea05dbdb08f7@paulmck-laptop>
- <aqqONH8flTIpOUqT@localhost.localdomain>
- <91687748-0781-4133-baed-43cf82f35ff5@paulmck-laptop>
- <aqqpRoTfywUuTgoC@localhost.localdomain>
- <aqqsAUVV8a1yrQzX@localhost.localdomain>
- <6afb0afe-e7b8-46b4-9fea-2c7cf4791044@paulmck-laptop>
- <aqq0cwvRDsorGwgc@localhost.localdomain>
- <8b73e1b3-0580-4ba9-b2e0-6363e429808d@paulmck-laptop>
- <aqvZwfUVsiEI7q7y@localhost.localdomain>
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	co+65e5c76b187f08b2@bugs.sh,
+	Xiang Mei <xmei5@asu.edu>,
+	Weiming Shi <bestswngs@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH net] veth: manage XDP program pointers during channel resize
+Date: Thu, 17 Sep 2026 23:39:25 +0800
+Message-ID: <20260917153923.904124-3-bestswngs@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aqvZwfUVsiEI7q7y@localhost.localdomain>
 
-On Thu, Sep 17, 2026 at 02:14:57PM +0200, Frederic Weisbecker wrote:
-> Le Wed, Sep 16, 2026 at 08:41:36AM -0700, Paul E. McKenney a écrit :
-> > On Wed, Sep 16, 2026 at 05:23:31PM +0200, Frederic Weisbecker wrote:
-> > > Le Wed, Sep 16, 2026 at 07:55:02AM -0700, Paul E. McKenney a écrit :
-> > > > Perhaps in rcu_core() in kernels booted with use_softirq?  I am thinking
-> > > > specifically of the checks for deferred quiescent states.  I don't (yet)
-> > > > see a need to modify rcu_check_quiescent_state().
-> > > > 
-> > > > Maybe other places as well.  ;-)
-> > > 
-> > > Hmm this tracking would have to happen on preempt_schedule() just like we
-> > > do for PREEMPT_RCU. Or am I missing something? And then we would need a
-> > > list scan of those tasks.
-> > 
-> > I am thinking of the case where a trampoline is interrupted before entering
-> > (or after leaving) its RCU Tasks Trace read-side critical section.  Then
-> > there is a softirq handler on the back of that interrupt handler, and
-> > RCU_SOFTIRQ is invoked, calling rcu_core().  Specifically:
-> > 
-> > 	/* Report any deferred quiescent states if preemption enabled. */
-> > 	if (IS_ENABLED(CONFIG_PREEMPT_COUNT) && (!(preempt_count() & PREEMPT_MASK))) {
-> > 		rcu_preempt_deferred_qs(current);
-> > 	} else if (rcu_preempt_need_deferred_qs(current)) {
-> > 		guard(irqsave)();
-> > 		set_need_resched_current();
-> > 	}
-> > 
-> > Preemption is enabled, but we should not report a quiescent state because
-> > we have interrupted a trampoline.  Correct?
-> 
-> Right!
->  
-> > > Or we can build the blocked task list handling, that we already have for PREEMPT_RCU,
-> > > when CONFIG_RCU_TASKS && !CONFIG_PREEMPT_RCU. We would just only add tasks when
-> > > preempted in .text.rcu_no_qs since rcu_read_lock() would still disable
-> > > preemption on normal explicit readers. So I wouldn't expect more overhead due to
-> > > that blocked list tracking built since it would rarely track tasks.
-> > 
-> > Yes, we could avoid the list of tasks by treating the preemption within
-> > the trampoline the same as preemption within an RCU read-side critical
-> > section, but there might not be an rcu_read_unlock() to clean up.
-> > Which could be a problem.
-> 
-> Ah yes, good point.
-> 
-> > 
-> > Trampolines that transfer control to tracing code could supply the needed
-> > cleanup call.  But last I checked, there were trampolines that transferred
-> > directly back to the original code, with no opportunity for cleaning up.
-> > 
-> > Or am I still missing a trick here?
-> 
-> You're right. So we'll indeed need to reuse the deferred qs points here.
+veth_set_channels() tears down XDP resources for removed RX queues
+without clearing rq->xdp_prog.  If the program is then detached or
+replaced, those queues keep the old pointer after bpf_prog_put().  A
+later channel increase can re-enable NAPI and run the freed program.
 
-Except this is getting a bit involved.
+Clear the program pointer after taking an RX queue offline, and publish
+the current program only after bringing the queue back online succeeds.
 
-Don't get me wrong, if Josef is happy to take this on, far be it from me
-to stand in his way.  But if not, we should be willing to treat this
-optimization as a follow-on effort, whether by Josef or someone else.
+  BUG: unable to handle page fault for address: ffffc90000256048
+  Oops: Oops: 0000 [#1] SMP KASAN NOPTI
+  RIP: veth_xdp_rcv_skb (include/linux/filter.h:779
+                         include/net/xdp.h:696 drivers/net/veth.c:820)
+  Call Trace:
+   veth_xdp_rcv (drivers/net/veth.c:941)
+   veth_poll (drivers/net/veth.c:986)
+   __napi_poll (net/core/dev.c:7787)
+   net_rx_action (net/core/dev.c:7850 net/core/dev.c:8007)
+   handle_softirqs (kernel/softirq.c:645)
+  Kernel panic - not syncing: Fatal exception in interrupt
 
-							Thanx, Paul
+Cc: stable@vger.kernel.org
+Fixes: 4752eeb3d891 ("veth: implement support for set_channel ethtool op")
+Reported-by: <co+65e5c76b187f08b2@bugs.sh>
+Assisted-by: LLM
+Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+---
+ drivers/net/veth.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 6ed3ee81153fb..ef7624bc2c0ec 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -1247,12 +1247,15 @@ static int veth_napi_enable(struct net_device *dev)
+ static void veth_disable_range_safe(struct net_device *dev, int start, int end)
+ {
+ 	struct veth_priv *priv = netdev_priv(dev);
++	int i;
+ 
+ 	if (start >= end)
+ 		return;
+ 
+ 	if (priv->_xdp_prog) {
+ 		veth_napi_del_range(dev, start, end);
++		for (i = start; i < end; i++)
++			rcu_assign_pointer(priv->rq[i].xdp_prog, NULL);
+ 		veth_disable_xdp_range(dev, start, end, false);
+ 	} else if (veth_gro_requested(dev)) {
+ 		veth_napi_del_range(dev, start, end);
+@@ -1262,7 +1265,7 @@ static void veth_disable_range_safe(struct net_device *dev, int start, int end)
+ static int veth_enable_range_safe(struct net_device *dev, int start, int end)
+ {
+ 	struct veth_priv *priv = netdev_priv(dev);
+-	int err;
++	int err, i;
+ 
+ 	if (start >= end)
+ 		return 0;
+@@ -1281,6 +1284,9 @@ static int veth_enable_range_safe(struct net_device *dev, int start, int end)
+ 			veth_disable_xdp_range(dev, start, end, true);
+ 			return err;
+ 		}
++		for (i = start; i < end; i++)
++			rcu_assign_pointer(priv->rq[i].xdp_prog,
++					   priv->_xdp_prog);
+ 	} else if (veth_gro_requested(dev)) {
+ 		return veth_napi_enable_range(dev, start, end);
+ 	}
+-- 
+2.55.0
