@@ -1,300 +1,131 @@
-Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6BD63F1AAD
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 05:20:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.38.64.46
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AADEA3BBFB4
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 05:22:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789622416; cv=none; b=uzem/mhWDVek/nC28n+AmLcJNG85va3NgzukWPsfGGaih/VZqORs+prtBa+/G96WyWZ4ShOLv0SgL4ITWwGpE3OgqOpGMDm2NOIq3ZvgKd4oq+RvriIag285gJczrS3bZoI+51IssvZbZKQ4ZowGmw4GojjVAQHZKUEsxwvDrg4=
+	t=1789622575; cv=none; b=ft516pejs4Xcz6l2Tfm8mkssAoOpehJQQOz/xhcaMkdP+n6bUDB/Us11qk5zf7gaV43FF+nhWwNjsbKH9nsKlY8wWwTkXrfsT3xdGuNNb42J/98zOUwdkxBCBD11ZjKn29LW+NZ2UsMQq97Sg2o2vxwhSbD9PaDEwE3Jz3YPqCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789622416; c=relaxed/simple;
-	bh=QOWysPTN5vtcwqtd0YFGjaJxMUIpR9pjtHF0pVj/6kM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fMRH+JWYjteTR6bJ0ReHUJbrFt35KTFdT1eZYSV/SbHWnucioBI8XSj5VWBO+69cqrHrJMHfbJm0JceOkEindAOIWz8gV8xerexgmylYstRLRyUzA8jyY6QTjtZq9dv6rXfePqGjVy6AoQEJU+i+f7Mcx/ftwoelJKjOpS3nMVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn; spf=pass smtp.mailfrom=mail.ustc.edu.cn; dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b=q9FfMQqO; arc=none smtp.client-ip=202.38.64.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
+	s=arc-20240116; t=1789622575; c=relaxed/simple;
+	bh=moLm0EqipBbW/Kccooxf2Odn7bFKD9Y+EZ4YvbRC8WU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=gbZ3M3reV6heaFWtUq2rTDjHLSguwoJfedFNk1c5gBi5TwSbxJLtLWSK9rvBDD3yrIhcidP7KdzH/vMBCm3tTtKn2FxXe855qrWKXzLiKpPcLwVWnHcIXvO76zk5ADN1+aoHlpgW7AP0LUDrvoB72s2xcV71lMCfHL9mrfEgR/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mv4VUmWE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b="q9FfMQqO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-	Message-ID:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=wJwhl3CjBRWzOa4WoTaUDE4o4p1nkMkKS7
-	o4I3sysao=; b=q9FfMQqOkmghbNX+LZ9qC8+bARXpi8JKtRUZWJN7UVoeTzG31W
-	njWuHlp9n4wIMSwRXKlgOt/NPrzlRXX3wpRHwzSMu58nEFXttlTut0JHkA0lfjj8
-	biVNPuNRIJeGD/hobq6Uu2uCL09Po5SQUArvkTjcReIVXfCJ7yggc/xV0=
-Received: from localhost (unknown [222.195.81.43])
-	by mailimap2024 (Coremail) with SMTP id 3pYKCgDHfTSEeKtqHqcqAQ--.2808S2;
-	Thu, 17 Sep 2026 13:20:04 +0800 (CST)
-From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	ameryhung@gmail.com,
-	sashiko-bot@kernel.org
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Test dynptr teardown on subprog return
-Date: Thu, 17 Sep 2026 13:20:00 +0800
-Message-ID: <20260917052000.1589643-3-xyx2021@mail.ustc.edu.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260917052000.1589643-1-xyx2021@mail.ustc.edu.cn>
-References: <20260917052000.1589643-1-xyx2021@mail.ustc.edu.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mv4VUmWE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 487CD1F000FF;
+	Thu, 17 Sep 2026 05:22:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789622574;
+	bh=13TfV17yBYNe6CYYdbztB+huE0mYoKjC9Dk50OhyhZw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=mv4VUmWEZK9vf1WxWU8jK+Cpt7bJP/Jp6/VCrybv+CcKKVjNaqOVeJdFHaUm3QpWY
+	 7ZulJyNU9hdW6IuUddjTZClHtxDbfLt48flIx4GFRil0fG7D25EAYZ7jbauKFPGkFV
+	 1D5yICC1l8tmuTsSZX7RgZ706jy0oQaPF7Mftqmct6phTw9XYYvsAhCG5p601Zte47
+	 fJN9FFxnwvDc2De6yAym7srZMvx962oIZ93QMbnRMmSZMpRFHhvjeAc/9BoO+GaKmh
+	 Iz3a3oRbE+F/gy61W3asFRturPzxWy5alEW1iRkR76/V+7B51gI61TNc0Qp4BT3Dqu
+	 vTD2FDbD0ORFw==
+Content-Type: multipart/mixed; boundary="===============5532677064711485521=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:3pYKCgDHfTSEeKtqHqcqAQ--.2808S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Wry5XrW3JF4kZF18Cr4DJwb_yoWxKF4xpF
-	W8CryYvFyxJF42gry7Xr4xZa1F9Fsxur17Gr9xK345Aw1UJr98ZF1xKayUWr98Kr45u3y5
-	Za9Fgay3uF18GFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9qb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwV
-	C2z280aVCY1x0267AKxVW0oVCq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x0
-	82IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtw
-	Av7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48J
-	MxkF7I0En4kS14v26r126r1DMxkIecxEwVAFwVW8WwCF04k20xvY0x0EwIxGrwCFx2IqxV
-	CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
-	6r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
-	WUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0
-	rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
-	4UJbIYCTnIWIevJa73UjIFyTuYvjxU4ZXoDUUUU
-X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
+Message-Id: <e6055fb14ceaf6cb1578d60e528708850341b4962410a9fb6dc5f5be9313241f@mail.kernel.org>
+In-Reply-To: <20260917041712.1860722-2-tangyazhou@zju.edu.cn>
+References: <20260917041712.1860722-2-tangyazhou@zju.edu.cn>
+Subject: Re: [PATCH bpf-next 1/8] bpf: Add UHMUL and SHMUL instructions
+From: bot+bpf-ci@kernel.org
+To: tangyazhou@zju.edu.cn,bpf@vger.kernel.org,ast@kernel.org,eddyz87@gmail.com
+Cc: daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,tangyazhou518@outlook.com,shenghaoyuan0928@163.com,ziye@zju.edu.cn,alexei.starovoitov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 17 Sep 2026 05:22:53 +0000 (UTC)
 
-Add failure tests for slices that escape a subprogram from a dynptr in the
-callee stack. Cover immediate use of a ring buffer clone slice,
-release-time invalidation of a caller dynptr slice after it crosses a
-subprogram return, and immediate use of an skb dynptr slice in a qdisc
-program.
+--===============5532677064711485521==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Cover the error path where a subprogram would otherwise lose the last
-dynptr capable of releasing a referenced resource.
+> These operations are inspired by the UHMUL and SHMUL instructions introduced
+> as part of the PQR instruction class in sBPF sBPF (Solana's BPF variant)[1].
 
-Also add a success control which derives a slice from a caller-owned dynptr
-and creates a separate clone in the callee. Destroying that local clone on
-return must not invalidate the caller dynptr's slice.
+Could you drop the duplicated "sBPF" here? It reads as "... in sBPF sBPF
+(Solana's BPF variant)" which appears to be a copy-paste error.
 
-Assisted-by: LLM
-Signed-off-by: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
+> diff --git a/Documentation/bpf/standardization/instruction-set.rst b/Documentation/bpf/standardization/instruction-set.rst
+> index 39c74611752b6..3c2cde11fa234 100644
+> --- a/Documentation/bpf/standardization/instruction-set.rst
+> +++ b/Documentation/bpf/standardization/instruction-set.rst
+> @@ -330,6 +330,8 @@ register.
+>    ADD    0x0    0        dst += src
+>    SUB    0x1    0        dst -= src
+>    MUL    0x2    0        dst \*= src
+> +  UHMUL  0x2    1        unsigned high-half multiplication (``ALU64`` only)
+> +  SHMUL  0x2    2        signed high-half multiplication (``ALU64`` only)
+>    DIV    0x3    0        dst = (src != 0) ? (dst / src) : 0
+
+[ ... ]
+
+> @@ -379,13 +381,33 @@ where '(u32)' indicates that the upper 32 bits are zeroed.
+>
+>    dst = dst ^ imm
+>
+> -Note that most arithmetic instructions have 'offset' set to 0. Only three instructions
+> -(``SDIV``, ``SMOD``, ``MOVSX``) have a non-zero 'offset'.
+> +Note that most arithmetic instructions have 'offset' set to 0. The following
+> +instructions may have a non-zero 'offset':
+> +
+> +* ``SDIV`` and ``SMOD``: ``offset == 1`` selects the signed variant.
+> +* ``MOVSX``: ``offset`` selects the source operand width.
+> +* ``MUL``: ``offset`` selects the multiplication variant (see below).
+>
+>  Division, multiplication, and modulo operations for ``ALU`` are part
+>  of the "divmul32" conformance group, and division, multiplication, and
+>  modulo operations for ``ALU64`` are part of the "divmul64" conformance
+>  group.
+> +
+> +For ``ALU64`` multiplication, ``offset == 1`` selects unsigned
+> +high-half multiplication (``UHMUL``), and ``offset == 2`` selects
+> +signed high-half multiplication (``SHMUL``).
+
+Does this addition silently make UHMUL and SHMUL mandatory members of the
+existing divmul64 conformance group? The document's own rules at lines
+123-125 state that "supporting a conformance group means it MUST support
+all instructions in that conformance group", and the unchanged sentence
+above says "division, multiplication, and modulo operations for ALU64 are
+part of the divmul64 conformance group."
+
+UHMUL and SHMUL are ALU64 multiplication operations, so by that classifying
+sentence they become members of divmul64. Because group membership is
+defined as MUST-support, every runtime that currently advertises divmul64
+conformance (rbpf, uBPF, the Windows eBPF runtime, and any other
+implementation tracking RFC 9669) would become non-conformant the moment
+this text lands, even though their code has not changed.
+
+The classification is also internally ambiguous. The document states at
+line 320 that "ALU64 instructions belong to the base64 conformance group
+unless noted otherwise", at line 136 that "base32 includes all instructions
+defined in this specification unless otherwise noted", yet the two new rows
+carry no group note at all - only a parenthetical "(ALU64 only)". A reader
+can arrive at base32, base64, or divmul64 for the same two instructions.
+
+The expected pattern for new optional instructions in this document is a
+new group with its own label (compare "atomic32"/"atomic64" and
+"divmul32"/"divmul64", each introduced as its own bullet at lines 141-147).
+The patch adds neither a new bullet nor a note on the new rows, and the
+changelog does not mention conformance groups at all.
+
+Shouldn't UHMUL and SHMUL either be assigned to a new conformance group
+(for example, "hmul64"), or carry an explicit note that they are not part
+of divmul64? The existing conformance framework was designed for capability
+discovery between runtimes and tool chains - growing an existing group
+without notice breaks exactly that contract.
+
+
 ---
- .../selftests/bpf/prog_tests/bpf_qdisc.c      |  2 +
- ...disc_fail__invalid_dynptr_returned_slice.c | 76 +++++++++++++++
- .../testing/selftests/bpf/progs/dynptr_fail.c | 95 +++++++++++++++++++
- 3 files changed, 173 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_returned_slice.c
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c b/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
-index 6dbd1487343c0..122ecb7e98e2a 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
-@@ -11,6 +11,7 @@
- #include "bpf_qdisc_fail__invalid_dynptr.skel.h"
- #include "bpf_qdisc_fail__invalid_dynptr_slice.skel.h"
- #include "bpf_qdisc_fail__invalid_dynptr_cross_frame.skel.h"
-+#include "bpf_qdisc_fail__invalid_dynptr_returned_slice.skel.h"
- #include "bpf_qdisc_fail__untrusted_write.skel.h"
- #include "bpf_qdisc_dynptr_use_after_invalidate_clone.skel.h"
- 
-@@ -230,6 +231,7 @@ void test_ns_bpf_qdisc(void)
- 		test_incompl_ops();
- 	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr);
- 	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr_cross_frame);
-+	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr_returned_slice);
- 	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr_slice);
- 	RUN_TESTS(bpf_qdisc_fail__untrusted_write);
- 	RUN_TESTS(bpf_qdisc_dynptr_use_after_invalidate_clone);
-diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_returned_slice.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_returned_slice.c
-new file mode 100644
-index 0000000000000..8217f4c4c00c4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_returned_slice.c
-@@ -0,0 +1,76 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include "bpf_experimental.h"
-+#include "bpf_qdisc_common.h"
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int proto;
-+
-+static __noinline struct ethhdr *slice_in_subprog(struct sk_buff *skb)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_skb((struct __sk_buff *)skb, 0, &ptr);
-+	return bpf_dynptr_slice(&ptr, 0, NULL, sizeof(struct ethhdr));
-+}
-+
-+SEC("struct_ops")
-+__failure __msg("invalid mem access 'scalar'")
-+int BPF_PROG(invalid_dynptr_returned_slice, struct sk_buff *skb,
-+	     struct Qdisc *sch, struct bpf_sk_buff_ptr *to_free)
-+{
-+	struct ethhdr *hdr;
-+
-+	hdr = slice_in_subprog(skb);
-+	if (!hdr) {
-+		bpf_qdisc_skb_drop(skb, to_free);
-+		return NET_XMIT_DROP;
-+	}
-+
-+	/* this should fail */
-+	proto = hdr->h_proto;
-+
-+	bpf_qdisc_skb_drop(skb, to_free);
-+
-+	return NET_XMIT_DROP;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+struct sk_buff *BPF_PROG(bpf_qdisc_test_dequeue, struct Qdisc *sch)
-+{
-+	return NULL;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+int BPF_PROG(bpf_qdisc_test_init, struct Qdisc *sch, struct nlattr *opt,
-+	     struct netlink_ext_ack *extack)
-+{
-+	return 0;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+void BPF_PROG(bpf_qdisc_test_reset, struct Qdisc *sch)
-+{
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+void BPF_PROG(bpf_qdisc_test_destroy, struct Qdisc *sch)
-+{
-+}
-+
-+SEC(".struct_ops")
-+struct Qdisc_ops test = {
-+	.enqueue   = (void *)invalid_dynptr_returned_slice,
-+	.dequeue   = (void *)bpf_qdisc_test_dequeue,
-+	.init      = (void *)bpf_qdisc_test_init,
-+	.reset     = (void *)bpf_qdisc_test_reset,
-+	.destroy   = (void *)bpf_qdisc_test_destroy,
-+	.id        = "bpf_qdisc_test",
-+};
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-index 24122addad327..aed18403ae3c0 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -1892,6 +1892,101 @@ int clone_invalidate4(void *ctx)
- 	return 0;
- }
- 
-+static __noinline void clone_slice_in_subprog(struct bpf_dynptr *ptr, int **data)
-+{
-+	struct bpf_dynptr clone;
-+
-+	bpf_dynptr_clone(ptr, &clone);
-+	*data = bpf_dynptr_data(&clone, 0, sizeof(val));
-+}
-+
-+static __noinline void caller_slice_in_subprog(struct bpf_dynptr *ptr, int **data)
-+{
-+	struct bpf_dynptr clone;
-+
-+	*data = bpf_dynptr_data(ptr, 0, sizeof(val));
-+	bpf_dynptr_clone(ptr, &clone);
-+}
-+
-+static __noinline void reserve_dynptr_in_subprog(void)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
-+}
-+
-+/* A subprogram cannot lose the last dynptr that can release a resource. */
-+SEC("?raw_tp")
-+__failure __msg("cannot return with referenced dynptr")
-+int referenced_dynptr_lost_on_subprog_return(void *ctx)
-+{
-+	reserve_dynptr_in_subprog();
-+
-+	return 0;
-+}
-+
-+/*
-+ * Destroying a local clone on return must not invalidate a slice whose
-+ * source dynptr belongs to the caller.
-+ */
-+SEC("?raw_tp")
-+__success
-+int caller_dynptr_slice_across_subprog_valid(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	int *data = NULL;
-+
-+	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
-+	caller_slice_in_subprog(&ptr, &data);
-+	if (data)
-+		*data = 123;
-+	bpf_ringbuf_submit_dynptr(&ptr, 0);
-+
-+	return 0;
-+}
-+
-+/*
-+ * A slice that escapes a clone's call frame is invalid once the local
-+ * clone is destroyed on return.
-+ */
-+SEC("?raw_tp")
-+__failure __msg("invalid mem access 'scalar'")
-+int clone_slice_returned_frame_invalid(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	int *data = NULL;
-+
-+	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
-+	clone_slice_in_subprog(&ptr, &data);
-+	if (data)
-+		/* this should fail */
-+		*data = 123;
-+	bpf_ringbuf_submit_dynptr(&ptr, 0);
-+
-+	return 0;
-+}
-+
-+/*
-+ * A slice from a caller-owned dynptr survives the subprogram return, but
-+ * releasing the shared reservation must invalidate it.
-+ */
-+SEC("?raw_tp")
-+__failure __msg("invalid mem access 'scalar'")
-+int caller_dynptr_slice_release_after_subprog_invalid(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	int *data = NULL;
-+
-+	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
-+	caller_slice_in_subprog(&ptr, &data);
-+	bpf_ringbuf_submit_dynptr(&ptr, 0);
-+	if (data)
-+		/* this should fail */
-+		*data = 123;
-+
-+	return 0;
-+}
-+
- /* Invalidating a dynptr should invalidate any data slices
-  * of its parent
-  */
--- 
-2.43.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35182532243
+--===============5532677064711485521==--
