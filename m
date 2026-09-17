@@ -1,285 +1,93 @@
-Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B59544EF14A
-	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 20:06:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05AB84D17B3
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 20:18:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789675585; cv=none; b=YzR/ylYA3x+sQIQwuSe7BPB98CMI86OwayhcQRltWMLcc9N9MTzrmq907DtYE2zIM5BHzArg4ePJbdruDsmyGEqRFKWdy0gEq9SNtNHez2yP1PPB2X1wrVjBCgm1kR25fwddPXhwVdZ8utLBfi+V84td/g0wplMuo3p/OaN0WnE=
+	t=1789676307; cv=none; b=Z6g5Ytb4uSNHa4IpGt5YVAR/EhV4cZT7hzsOOH6ommOqbWVyJHMib6bBIeUa3LHm6WLhGU7ZkIinmHgST9tqyPMobrjPrhoUxOhOlcq0R8XLI1sFplvflxjqGvHnOOul9RcMCupf4DAHUwtvEYw0TYljNHIe1RNTJ4WcDHR+amc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789675585; c=relaxed/simple;
-	bh=76lTc6/1AUcd00JGKfRFCOnzlD9sA9NjhrMzYbrVqEs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PfYnsn2iVg/lalDzqsF/q39jBD3l6B4n7FGjHAIus2C6pD1SkbAeKjoMuxICAt2eLMj17q0rk1N2/uGMRIvTNkn+30FwaPeXi57z3Y6y9KlfJRpNXIIq9EgC4eGyL4fqJCjmwUcVHXOgoNR5DoNf9M9COsTmoxhgyzMyQbfQeY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LTAgWCcn; arc=none smtp.client-ip=74.125.231.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789676307; c=relaxed/simple;
+	bh=S/TfmDEwWXgYRTxttGFKNIBuFQrhbKIHhXiT92KdjgE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=trwtIF7vO9KeBJv16TBT3Bpk/o3N6/t/SvxhBncACbSeXGjXmTg3RwdNgWmBNJN3ePhIVI/2CQju/IT5KPT/3tGyO+ADpJpP5m+JF8oHtB9Zl89CFUih2vGSbrBBXB02gNUJzS9UpnMeGEu26Bzqj5oRhm5sbrMhJZSRNT+tQNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yyqqw2Pv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LTAgWCcn"
-Received: by mail-oi2-f13.google.com with SMTP id 46e09a7af769-80a71781323so649276a34.1
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 13:06:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789675575; x=1790280375; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=KpNpdEfA7UsrMGBIwqXLxqF0cGG5Hs5AkYJwtGhjYEo=;
-        b=LTAgWCcnOa152RC79+cvt9NOK5BLqPROWrK9Y2sJz0TjPAGCpIB1i1M81TG3uA1Hs+
-         C6A338ETuvdg1MC7VZ+1eW9lEnpXU6DRlSwN+lXMjr4oJSo617ZF9arcvUBQQWhF3etZ
-         5BKuNjeR0l7g9AzM46kzf0WnZHjb+qxMpqOY/RTjQtdYAREXD5lUV4DzUZqJUmntcE2c
-         qI83H+R4Ax47EBERHm6oqkyvDNXBiR3S6XPesSgQ0DGR7UMd/PkYPAaUXskLO6x8pjBd
-         ygeSkJwIRMRYKzYNZ2/czsXjQqNC9sSRhfCzItRPa2mhujshZmM8VH6I8NgmWuyaiQ/a
-         +noA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789675575; x=1790280375;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KpNpdEfA7UsrMGBIwqXLxqF0cGG5Hs5AkYJwtGhjYEo=;
-        b=hyOwObHPvaqAqa6jt81FQnA5ZIltM4WX1S9nqzVJKX3QcW6SoSsp0R85S15aL49N9P
-         3oGGnq9OSFyfg7k1ryeYAAxbNhDd7TJrnjLVwad2JfoSYfQZQbWTTI1FFMRcnlc9oTcB
-         QeLjFEiLSs8o4y5xvmjcq6pEQYiajeueTImSWRsxGcOdMnPoRRXfLefPpycaZDlevNvc
-         33m3cDXH0Ty3oXlUqY+okrzmyIaFD0/Pl4CUXPyCdRnNcpYo3ugffqgTChWvO1CR1qO9
-         dnHSHY6ZnLrAV4AgmIp5iX9NahFGQI497r1847XIJDo7+q2surJ9cMLHh7DnjWVdq3US
-         oRNg==
-X-Gm-Message-State: AFuF++lFs9kZAolHBLN3DfwAVON3NLQoo39fs221aDJ3dAIVPEkYBDuj
-	3O0TK+1PK1lfOqIGeqdzWRCFzKTsP93inLLrXJbbha/m3qoyM4Tj+K2dWVtVcQ==
-X-Gm-Gg: AYBFou1iIZyyscP+ZquafnNaPgoE/s4Nt9Qzc2+beR64k0YvjJqDaaAhgZD9jxaE58x
-	INkaNXvwAt55qTLzEtGVgxMIV7KU9BwHB6Ja5a05W1pTzEUOOUYBXv8vv83wiVFMHQTEX46CCBE
-	V/eawT/IKKWZQVVeauOxLM9ePtXJ7TRYvNKQux7oz8Shz3hbsW2Y9VcRTGVgWAXGASe2IJMxERK
-	3+7Q2kr7jZRwSGMVdAoH669xV6UIBLF11dhb9HFrJA3SzV56idOWjdv72qxG5YfgXFD0edWlmal
-	evPWwQxdfavbXX9Q2/SvXARWJG7HwPTODK+Gsnk3yay74HR+mmtlyx6PTWVcs8rMnDChCEFJcwn
-	EflpkHRdR1fR5gfeX99PPvA8fiZHOyaiby6A97ak7mh7vvKmjndljUqV8U6tRryznDwuy1WERsr
-	wnyNih02Miaa7z9ZciFvlQt0HkPV+K4XlMVs5n9J5a4IQO1PzX6YSZqynoCY5O7oH89f1hU46K
-X-Received: by 2002:a05:6830:3110:b0:809:5916:fcc3 with SMTP id 46e09a7af769-80de21c84c3mr299559a34.17.1789675575099;
-        Thu, 17 Sep 2026 13:06:15 -0700 (PDT)
-Received: from localhost ([2a03:2880:ff:51::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-80c476c1f61sm3753838a34.25.2026.09.17.13.06.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 13:06:14 -0700 (PDT)
-From: Amery Hung <ameryhung@gmail.com>
-To: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@kernel.org,
-	shakeel.butt@linux.dev,
-	roman.gushchin@linux.dev,
-	kuniyu@google.com,
-	kerneljasonxing@gmail.com,
-	ameryhung@gmail.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 15/15] selftests/bpf: Add test for bpf_tcp_ops header option hooks
-Date: Thu, 17 Sep 2026 13:05:41 -0700
-Message-ID: <20260917200542.3689605-16-ameryhung@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260917200542.3689605-1-ameryhung@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yyqqw2Pv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0E251F000FF;
+	Thu, 17 Sep 2026 20:18:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789676301;
+	bh=RkZSZf/L/z7gLoab5aIVFQarS1LHtXM5n3u/r9WuA+8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Yyqqw2PvlX30yzk7k9rDTci/ptifaJUt8uAl47GaUVoy5sYKLVWyclZZancaP2h8L
+	 3h/KMcl4QetBt0fUFqXy383LdWzk0KCzLAL+B6Tsgqm3qOQcXWRGM8rop5IN49WRuC
+	 PCAiRxu/tV3+5swhYSLx9Yt+9w8YDNGtYZdykffOBE8joFNE5+WhcwAbRoVF5vZOCf
+	 D+FdeoVW7zbYYOQXOYEA/jsrZ+cJFG4kD5A3N9Etk27d90OF9Zo89kC3q3cIRlok7u
+	 /473WF0TbUEHnkRZq0h1X9hljpWlzPqLHSPYytS/9sFAD6FeGuqk0NsWzRUhx4zH17
+	 pFvTpKw2tMj2w==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4 03/15] bpf: Add bpf_struct_ops accessor
+ helpers
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Amery Hung" <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260917200542.3689605-4-ameryhung@gmail.com>
 References: <20260917200542.3689605-1-ameryhung@gmail.com>
+ <20260917200542.3689605-4-ameryhung@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 17 Sep 2026 20:18:21 +0000
+Message-Id: <20260917201821.C0E251F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add a test exercising the bpf_tcp_ops parse_hdr, hdr_opt_len and
-write_hdr_opt members together with the header option helpers.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] bpf: bpf_struct_ops_id() fallback stub misses const qualifier
+--
 
-The struct_ops program (progs/bpf_tcp_ops_hdr.c) reserves space in
-hdr_opt_len via bpf_reserve_hdr_opt(), writes an experimental option in
-write_hdr_opt via bpf_store_hdr_opt(), and recovers it in parse_hdr via
-bpf_load_hdr_opt() on the incoming skb. Each hook bumps a counter and the
-parse hook records the option payload, so the three callbacks and all
-three overloaded helpers are covered.
+commit 4cb7f791fab01ff62552075c9ebcbd1da5be37a5
+Author: Martin KaFai Lau <martin.lau@kernel.org>
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Signed-off-by: Amery Hung <ameryhung@gmail.com>
----
- .../bpf/prog_tests/bpf_tcp_ops_hdr.c          | 77 +++++++++++++++++
- .../selftests/bpf/progs/bpf_tcp_ops_hdr.c     | 86 +++++++++++++++++++
- 2 files changed, 163 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops_hdr.c
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_tcp_ops_hdr.c
+bpf: Add bpf_struct_ops accessor helpers
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops_hdr.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops_hdr.c
-new file mode 100644
-index 000000000000..244605e69e40
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops_hdr.c
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+#include "cgroup_helpers.h"
-+#include "bpf_tcp_ops_hdr.skel.h"
-+
-+#define CGROUP_PATH	"/bpf_tcp_ops_hdr"
-+#define TEST_NETNS	"bpf_tcp_ops_hdr"
-+
-+#define TEST_OPT_D0	0xAB
-+#define TEST_OPT_D1	0xCD
-+
-+static void run_hdr_opt(void)
-+{
-+	struct bpf_tcp_ops_hdr *skel = NULL;
-+	struct bpf_link *link = NULL;
-+	struct netns_obj *ns = NULL;
-+	int cgroup_fd, lfd = -1, fd = -1;
-+
-+	cgroup_fd = test__join_cgroup(CGROUP_PATH);
-+	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
-+		return;
-+
-+	ns = netns_new(TEST_NETNS, true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
-+		goto done;
-+
-+	skel = bpf_tcp_ops_hdr__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		goto done;
-+
-+	link = bpf_map__attach_cgroup_opts(skel->maps.test_hdr_ops, cgroup_fd, NULL);
-+	if (!ASSERT_OK_PTR(link, "attach_cgroup"))
-+		goto done;
-+
-+	/*
-+	 * One direction of data is enough to exercise all hooks: both peers
-+	 * share the cgroup struct_ops, so the sender runs hdr_opt_len/write
-+	 * and the receiver runs parse.
-+	 */
-+	lfd = start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
-+	if (!ASSERT_GE(lfd, 0, "start_server"))
-+		goto done;
-+
-+	fd = connect_to_fd(lfd, 0);
-+	if (!ASSERT_OK_FD(fd, "connect_to_fd"))
-+		goto done;
-+
-+	if (!ASSERT_OK(send_recv_data(lfd, fd, 64), "send_recv_data"))
-+		goto done;
-+
-+	/* Reserve + write hooks ran while sending. */
-+	ASSERT_GT(skel->bss->hdr_opt_len_cnt, 0, "hdr_opt_len_cnt");
-+	ASSERT_GT(skel->bss->write_cnt, 0, "write_cnt");
-+	/* Parse hook ran and recovered our option on the receive side. */
-+	ASSERT_GT(skel->bss->parse_cnt, 0, "parse_cnt");
-+	ASSERT_GT(skel->bss->found_cnt, 0, "found_cnt");
-+	ASSERT_EQ(skel->bss->found_d0, TEST_OPT_D0, "found_d0");
-+	ASSERT_EQ(skel->bss->found_d1, TEST_OPT_D1, "found_d1");
-+
-+done:
-+	if (fd >= 0)
-+		close(fd);
-+	if (lfd >= 0)
-+		close(lfd);
-+	bpf_link__destroy(link);
-+	bpf_tcp_ops_hdr__destroy(skel);
-+	netns_free(ns);
-+	close(cgroup_fd);
-+}
-+
-+void test_bpf_tcp_ops_hdr(void)
-+{
-+	run_hdr_opt();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/bpf_tcp_ops_hdr.c b/tools/testing/selftests/bpf/progs/bpf_tcp_ops_hdr.c
-new file mode 100644
-index 000000000000..f3e3dff13784
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_tcp_ops_hdr.c
-@@ -0,0 +1,86 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+/* Experimental option kind and payload written/parsed by this test. */
-+#define TEST_OPT_KIND	0xFD
-+#define TEST_OPT_LEN	4
-+#define TEST_OPT_D0	0xAB
-+#define TEST_OPT_D1	0xCD
-+
-+int hdr_opt_len_cnt;
-+int write_cnt;
-+int parse_cnt;
-+int found_cnt;
-+__u8 found_d0;
-+__u8 found_d1;
-+
-+SEC("struct_ops")
-+void BPF_PROG(test_hdr_opt_len, struct sock *sk, struct sk_buff *skb,
-+	      struct request_sock *req, struct sk_buff *syn_skb,
-+	      enum tcp_synack_type synack_type, unsigned int *remaining)
-+{
-+	hdr_opt_len_cnt++;
-+
-+	/*
-+	 * Reserve TEST_OPT_LEN bytes; the helper decrements *remaining. Stacks
-+	 * with other progs in the cgroup hierarchy.
-+	 */
-+	bpf_reserve_hdr_opt(ctx, TEST_OPT_LEN, 0);
-+}
-+
-+SEC("struct_ops")
-+void BPF_PROG(test_write_hdr_opt, struct sock *sk, struct sk_buff *skb,
-+	      struct request_sock *req, struct sk_buff *syn_skb,
-+	      enum tcp_synack_type synack_type, __u32 opt_off)
-+{
-+	__u8 opt[TEST_OPT_LEN] = {
-+		TEST_OPT_KIND, TEST_OPT_LEN, TEST_OPT_D0, TEST_OPT_D1,
-+	};
-+
-+	/*
-+	 * bpf_store_hdr_opt() takes the program ctx (the kernel reads the
-+	 * outgoing skb from it); it appends after any options already written
-+	 * in the reserved window, rejects duplicates, and confines the write to
-+	 * the header option scratch. Stacks across progs in the cgroup hierarchy.
-+	 */
-+	if (bpf_store_hdr_opt(ctx, opt, sizeof(opt), 0))
-+		return;
-+
-+	write_cnt++;
-+}
-+
-+SEC("struct_ops")
-+void BPF_PROG(test_parse_hdr, struct sock *sk, struct sk_buff *skb)
-+{
-+	__u8 opt[TEST_OPT_LEN] = {
-+		TEST_OPT_KIND, TEST_OPT_LEN, TEST_OPT_D0, TEST_OPT_D1,
-+	};
-+
-+	parse_cnt++;
-+
-+	/*
-+	 * Look up the experimental option written by test_write_hdr_opt() in
-+	 * the incoming skb. For an experimental kind the search matches on the
-+	 * 2-byte magic in opt[2..3]; on a match the found option is copied back
-+	 * into opt[].
-+	 */
-+	if (bpf_load_hdr_opt(ctx, opt, sizeof(opt), 0) < 0)
-+		return;
-+
-+	found_d0 = opt[2];
-+	found_d1 = opt[3];
-+	found_cnt++;
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_tcp_ops test_hdr_ops = {
-+	.hdr_opt_len	= (void *)test_hdr_opt_len,
-+	.write_hdr_opt	= (void *)test_write_hdr_opt,
-+	.parse_hdr	= (void *)test_parse_hdr,
-+};
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.52.0
+This commit adds helper functions bpf_struct_ops_map_kdata() and
+bpf_struct_ops_map_cfi_stubs(), and exposes bpf_struct_ops_valid_to_reg().
+It also refactors link update validation into a new function
+bpf_struct_ops_link_update_check() to be reused in cgroup.c.
 
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 1198404885c86..90ab467d25a27 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+
+[ ... ]
+
+> @@ -2354,6 +2359,28 @@ static inline void bpf_map_struct_ops_info_fill(st=
+ruct bpf_map_info *info, struc
+>  static inline void bpf_struct_ops_desc_release(struct bpf_struct_ops_des=
+c *st_ops_desc)
+>  {
+>  }
+> +static inline u32 bpf_struct_ops_id(void *kdata)
+> +{
+> +	return 0;
+> +}
+
+[Severity: Low]
+Does this fallback stub miss the const qualifier?
+
+The primary declaration for bpf_struct_ops_id() in include/linux/bpf.h uses
+const void *kdata. Passing a const void * to this API will compile cleanly =
+on
+enabled configurations but fail with a -Wdiscarded-qualifiers error on disa=
+bled
+configurations where this fallback stub is used.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260917200542.3689=
+605-1-ameryhung@gmail.com?part=3D3
