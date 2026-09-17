@@ -1,344 +1,209 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A07AE372EE4;
-	Thu, 17 Sep 2026 21:23:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C197B49B444;
+	Thu, 17 Sep 2026 21:34:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789680216; cv=none; b=g2bgpnAi/Vv5ixUWGSG0TYXrtqSobRkAou/zvGOIOf77JoZPMxRxAySaehDpgk/7M+OCOq7xFFpXobOZBgrOyj+j6S/nL/P+IHI6rx022qm2r7mTTzuan0Dxmhc5hEES8awYujd0+hzxA1iKvn1N7lqt7AOSJqZ3C5wTATAAd8w=
+	t=1789680849; cv=none; b=HuWI2ScwiMDhfMX4wnvwK1s3x/N6xNHOQ24rT/BIFO25wQFUJMj8Gzs6azeGRkBmxmwjn4WSRWpprgLzqYwT5GXuR10ffCRmhXBmCG7f7yfQ2Vam8iYe3kvmHVHyqbuonSXiTr79R1XeDIgG9fWNKSMBEfOFSsLbfzz4xT4qNN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789680216; c=relaxed/simple;
-	bh=A7lL4KAfhIJBbzpbVryrOoEGdPkviEAu9tdoSX0n4Ds=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=N40tQlDZP0IAp0gSzyUzDVp4y7zAOsnximH2X5/zqZunIP/f4p48s+2mp9LtyMP5xxoe5IOZOmRmsFVw6bjyda3UParxu5zf9KQ0MGPmGgWrFGy0saesl/w26ge+OU+eieRdAZoTEa76Y4tQXwqEvoEaAxacJqfxGhvXcJQzIJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=VUF866Xg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789680849; c=relaxed/simple;
+	bh=09m/Toc11vyxs5ALnjAgEKWFZiJzS6gA0G+8blTB4ZQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=eimRbpRMtOV9C6JEYrbsKVTEE84vtClfvf6OoE1mJdWb5zEtppwQHBMA5XPwr9iGGUu29KtiHFVFuw4zcBYCCm8uFcoJ367WbWH9Ll3Fgw6v5o1YfhdxSo4U2XsqnhZQajVBVCvTwMF/xwdA3N9et1lfdU8fy6qhHZh0hvQec9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gvQfSa/F; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="VUF866Xg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5062D1F000FF;
-	Thu, 17 Sep 2026 21:23:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1789680214;
-	bh=NUNrBmtamoGTZdnjr2/yL2y2w6DcpJMvTMICnOHXcqc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=VUF866Xg25rkEYuIAeRh8+Jby3Nsgi0QqQgf+tcoe0C7lFWZo2kW07wobdbQTXONa
-	 IrDTi0vtFdOje+nXofZ7qVIuq8UFrLKFeRBPgY0JvevdHLKjcg92+cAb0Z4/yQgheh
-	 XekOEPMPEkzPT/6xM5Mwlpf+y3YNL1+GloA5Mf1w=
-Date: Thu, 17 Sep 2026 14:23:29 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka
- <vbabka@kernel.org>, Jann Horn <jannh@google.com>, Pedro Falcato
- <pfalcato@suse.de>, David Hildenbrand <david@kernel.org>, Mike Rapoport
- <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
- <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Dennis Dalessandro
- <dennis.dalessandro@cornelisnetworks.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>,
- Stephen Smalley <stephen.smalley.work@gmail.com>, Jaroslav Kysela
- <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya
- Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, Ryan
- Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song
- <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, Usama Arif
- <usama.arif@linux.dev>, Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert
- <dgilbert@interlog.com>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, "Martin K. Petersen"
- <mkp@kernel.org>, Jaya Kumar <jayalk@intworks.biz>, Simona Vetter
- <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, Sebastian Reichel
- <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, Peter Xu
- <peterx@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov
- <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner
- <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
- <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Rik van Riel
- <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Juri Lelli
- <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard
- <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, David Airlie
- <airlied@gmail.com>, Will Deacon <will@kernel.org>, "Aneesh Kumar K.V"
- <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Arnd Bergmann
- <arnd@arndb.de>, Muchun Song <muchun.song@linux.dev>, Oscar Salvador
- <osalvador@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan
- Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, Oliver Upton
- <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Madhavan
- Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul
- Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Christian Borntraeger <borntraeger@linux.ibm.com>,
- Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda
- <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>,
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens
- <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller"
- <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, Alexander
- Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>,
- Matthew Brost <matthew.brost@intel.com>, Joshua Hahn
- <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park
- <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, Ying Huang
- <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, Chris
- Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, Kemeng Shi
- <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He
- <baoquan.he@linux.dev>, Youngjun Park <youngjun.park@lge.com>, Johannes
- Weiner <hannes@cmpxchg.org>, Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt
- <shakeel.butt@linux.dev>, Axel Rasmussen <axelrasmussen@google.com>,
- Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, Chengming
- Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, Miklos
- Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-rdma@vger.kernel.org,
- selinux@vger.kernel.org, linux-sound@vger.kernel.org, bpf@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
- fuse-devel@lists.linux.dev, Takashi Iwai <tiwai@suse.de>, Emil Tsalapatis
- <emil@etsalapatis.com>
-Subject: Re: [PATCH v3 00/40] mm: make VMA flag semantics explicit,
- eliminate VM_SPECIAL
-Message-Id: <20260917142329.369cd6539261d590600ce7ec@linux-foundation.org>
-In-Reply-To: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
-References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gvQfSa/F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 620361F00893;
+	Thu, 17 Sep 2026 21:34:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789680847;
+	bh=/TMhPsNLOvVI9vJg103ng/uNUTbD4sOwpp2WwQIxmRI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=gvQfSa/FMFJW8TarLqdz64uN0k6EIf7tOglAW26QeGlGrKN4auNXskeOTrEyse9wL
+	 8HGBUkMICjA134kKq2Fz6LHU2YKrG+0CVW3+pIFRnwRMAEECrVzqDBhDqvS4Fzz/gX
+	 QMcSR68AhnLsmvem8CF8MJSj76IpySJm03nXHo+TCiNqo67chuHuyzGXwI47FQBikE
+	 LG2rF6NG0buAEF1Lf3Dc2CkFC7WxOb7eG2A1bNa5lqKik4FG3krox6cPecVssnamxT
+	 EB+wcegsQYp8ikJZ16eLs2B6Bxg8fWUwL4VyVm5AkRBVLf1tuqXSn2eww0sQxb3s5Z
+	 3pCDfi9EydNVg==
+Content-Type: multipart/mixed; boundary="===============5066564868234564915=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+Message-Id: <95083a4ec369ed66a93091c93309a8289ce03e581edeef02cc10f8c1f0c27346@mail.kernel.org>
+In-Reply-To: <20260917200542.3689605-15-ameryhung@gmail.com>
+References: <20260917200542.3689605-15-ameryhung@gmail.com>
+Subject: Re: [PATCH bpf-next v4 14/15] selftests/bpf: Test attaching struct_ops to a cgroup
+From: bot+bpf-ci@kernel.org
+To: ameryhung@gmail.com,bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,martin.lau@kernel.org,shakeel.butt@linux.dev,roman.gushchin@linux.dev,kuniyu@google.com,kerneljasonxing@gmail.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 17 Sep 2026 21:34:06 +0000 (UTC)
+
+--===============5066564868234564915==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On Thu, 17 Sep 2026 17:22:09 +0100 "Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops.c b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops.c
+> new file mode 100644
+> index 0000000000000..6435ed1c2cf6d
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_tcp_ops.c
 
-> The VM_SPECIAL / VMA_SPECIAL_FLAGS mask conflates several unrelated
-> properties:
-> 
-> * Is this kernel-owned, whether MMIO, kernel-allocated pages, or ordinary
->   pages a driver maps itself?
-> * Can it be expanded or merged?
-> * Is this a 'weird' case like mlock where migration might race and we
->   'have' to set invalid flags to notify?
-> * Is it another 'weird' case where we just want to stop GUP from touching
->   it?
-> 
-> ...
-> 
-> This series brings some order to things by both limiting what drivers can
-> do with VMA flags and switching to using predicates that describe
-> behaviour, not arbitrary flags.
+[ ... ]
 
-Thanks, I've updated mm.git's mm-unstable branch to this version.
+> +/* Must match progs/bpf_tcp_ops.c */
+> +#define OPS_RETVAL1	11
+> +#define OPS_RETVAL2	22
+> +
+> +/*
+> + * Attach three struct_ops implementing timeout_init to the same cgroup; they
+> + * run in attach order [retval1, retval2, retval3]. timeout_init's return value
+> + * is chained: the first prog reads the kernel seed via bpf_get_retval() (0,
+> + * since no legacy sockops prog is attached) and returns OPS_RETVAL1; each
+> + * subsequent prog must then observe the previous prog's return value. This
+> + * proves the trampoline inherits the retval across an array of struct_ops.
+> + */
+> +static void test_retval(int cgroup_fd, struct bpf_tcp_ops *skel)
+> +{
+> +	struct bpf_link *link1 = NULL, *link2 = NULL, *link3 = NULL;
+> +
+> +	skel->bss->retval_saw1 = -1;
+> +	skel->bss->retval_saw2 = -1;
+> +	skel->bss->retval_saw3 = -1;
+> +
+> +	link1 = bpf_map__attach_cgroup_opts(skel->maps.tcp_ops_retval1, cgroup_fd, NULL);
+> +	if (!ASSERT_OK_PTR(link1, "attach_retval1"))
+> +		goto done;
+> +
+> +	link2 = bpf_map__attach_cgroup_opts(skel->maps.tcp_ops_retval2, cgroup_fd, NULL);
+> +	if (!ASSERT_OK_PTR(link2, "attach_retval2"))
+> +		goto done;
+> +
+> +	link3 = bpf_map__attach_cgroup_opts(skel->maps.tcp_ops_retval3, cgroup_fd, NULL);
+> +	if (!ASSERT_OK_PTR(link3, "attach_retval3"))
+> +		goto done;
+> +
+> +	do_listen_connect(AF_INET6);
+> +
+> +	/* First prog inherits the kernel seed (no legacy sockops -> 0). */
+> +	ASSERT_EQ(skel->bss->retval_saw1, 0, "retval_saw1");
+> +	/* Each subsequent prog inherits the previous prog's return value. */
+> +	ASSERT_EQ(skel->bss->retval_saw2, OPS_RETVAL1, "retval_saw2");
+> +	ASSERT_EQ(skel->bss->retval_saw3, OPS_RETVAL2, "retval_saw3");
 
-> v3:
-> * Fixed up bug in patch 1 as reported by Mike - have to delay setting
->   map->vma_flags until after action prepare, though map->vm_file needs to
->   be set before for correct reference count management.
-> * Updated 4/40 to add a symmetric vm_end check as well as vm_start in case
->   of a dangerously insane driver, as per Sashiko.
-> * Updated 8/40 to check if a driver did something REALLY stupid like having
->   a NULL discontig_kernel_page_ops ptr, as per Sashiko.
-> * Updated 15/40 to trivially synchronise userland test comments.
-> * Updated 17/40 to correctly duplicate code to the userland VMA tests as
->   per Sashiko.
+The test expects retval_saw2 to be 11 and retval_saw3 to be 22, both
+outside the range the verifier believes bpf_get_retval() can return.
 
-Here's how v3 altered mm.git:
+> diff --git a/tools/testing/selftests/bpf/progs/bpf_tcp_ops.c b/tools/testing/selftests/bpf/progs/bpf_tcp_ops.c
+> new file mode 100644
+> index 0000000000000..94a7f52573d51
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/bpf_tcp_ops.c
+
+[ ... ]
+
+> +#define OPS_RETVAL1	11
+> +#define OPS_RETVAL2	22
+> +#define OPS_RETVAL3	33
+> +
+> +int retval_saw1;
+> +int retval_saw2;
+> +int retval_saw3;
+> +
+> +SEC("struct_ops")
+> +int BPF_PROG(tcp_ops_retval1_timeout_init, struct sock *sk, struct request_sock *req)
+> +{
+> +	retval_saw1 = bpf_get_retval();
+> +	return OPS_RETVAL1;
+> +}
+> +
+> +SEC(".struct_ops.link")
+> +struct bpf_tcp_ops tcp_ops_retval1 = {
+> +	.timeout_init = (void *)tcp_ops_retval1_timeout_init,
+> +};
+> +
+> +SEC("struct_ops")
+> +int BPF_PROG(tcp_ops_retval2_timeout_init, struct sock *sk, struct request_sock *req)
+> +{
+> +	retval_saw2 = bpf_get_retval();
+> +	return OPS_RETVAL2;
+> +}
+> +
+> +SEC(".struct_ops.link")
+> +struct bpf_tcp_ops tcp_ops_retval2 = {
+> +	.timeout_init = (void *)tcp_ops_retval2_timeout_init,
+> +};
+> +
+> +SEC("struct_ops")
+> +int BPF_PROG(tcp_ops_retval3_timeout_init, struct sock *sk, struct request_sock *req)
+> +{
+> +	retval_saw3 = bpf_get_retval();
+> +	return OPS_RETVAL3;
+> +}
+
+Does bpf_get_retval() have the correct verifier range for struct_ops
+programs?
+
+This test is the first user of bpf_get_retval() from a struct_ops
+program. The verifier refines the helper's return value in
+do_refine_retval_range() (kernel/bpf/verifier.c):
+
+  case BPF_FUNC_get_retval:
+      if (prog_type == BPF_PROG_TYPE_CGROUP_SOCKOPT && ...) break;
+      if (prog_type == BPF_PROG_TYPE_LSM && ...) { ... } else {
+          range.minval = -MAX_ERRNO;
+          range.maxval = 0;
+      }
+      reg_set_srange64(ret_reg, range.minval, range.maxval);
+
+BPF_PROG_TYPE_STRUCT_OPS takes the else branch, so after calling
+bpf_get_retval() the verifier believes the value is in [-MAX_ERRNO, 0].
+reg_set_srange64() unconditionally assigns that range rather than
+intersecting with the actual possible values.
+
+But that claim does not hold for bpf_tcp_ops. bpf_tcp_ops_get_retval()
+(net/ipv4/bpf_tcp_ops.c) returns the chained value from the previous
+struct_ops program's return, which is unconstrained: check_return_code()
+bails out early for struct_ops members whose return type is not a
+pointer, and .timeout_init returns plain int with no range check.
+
+The test's own assertions prove the divergence: the code above expects
+retval_saw2 == 11 and retval_saw3 == 22, both outside [-MAX_ERRNO, 0].
+
+The test itself is harmless because it only stores the value to a .bss
+int. But the incorrect range could allow unsafe code elsewhere:
+
+  int v = bpf_get_retval();   /* verifier: [-4095, 0] */
+  arr[-v] = 1;                /* verifier: index in [0, 4095], accepts */
+
+A preceding bpf_tcp_ops in the same cgroup could return an arbitrary int
+(say -1000000), producing an out-of-bounds access the verifier accepted.
+The incorrect range also lets the verifier prune 'if (bpf_get_retval() >
+0)' as dead code, so a program could silently behave differently from
+what it says.
+
+This gap was introduced in commit 5c9c5dca9cbb1 ("bpf: tcp: Support
+selected sock_ops callbacks as struct_ops"), which added
+bpf_tcp_ops_get_retval_proto with .ret_type = RET_INTEGER without
+teaching do_refine_retval_range() that struct_ops/bpf_tcp_ops has no
+-MAX_ERRNO..0 restriction. A forward search over the provided range
+bf0fde93fa8f6..d499152306e78 found only one later commit
+d499152306e78, which does not address this; the gap is unfixed at the
+end of the series.
+
+Either do_refine_retval_range() needs a struct_ops case that leaves the
+range unrefined (as CGROUP_GETSOCKOPT does), or the chained struct_ops
+return value has to be clamped to [-MAX_ERRNO, 0] where
+bpf_tcp_ops_call_int() stores it.
 
 
- mm/internal.h                   |    4 ++-
- mm/memory.c                     |    2 -
- mm/vma.c                        |   34 +++++++++++++++++-------------
- mm/vma.h                        |    3 +-
- tools/testing/vma/include/dup.h |   24 ++++++++++++++++-----
- 5 files changed, 45 insertions(+), 22 deletions(-)
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
---- a/mm/internal.h~b
-+++ a/mm/internal.h
-@@ -244,6 +244,7 @@ static inline void vma_close(struct vm_a
- static inline int mmap_file(struct file *file, struct vm_area_struct *vma)
- {
- 	const unsigned long prev_start = vma->vm_start;
-+	const unsigned long prev_end = vma->vm_end;
- 	const vma_flags_t prev_flags = vma->flags;
- 	int err;
- 
-@@ -263,9 +264,10 @@ static inline int mmap_file(struct file
- 	if (unlikely(err))
- 		return err;
- 
--	err = mmap_hook_validate(prev_start, &prev_flags, vma);
-+	err = mmap_hook_validate(prev_start, prev_end, &prev_flags, vma);
- 	if (unlikely(err)) {
- 		vma->vm_start = prev_start;
-+		vma->vm_end = prev_end;
- 		vma_close(vma);
- 	}
- 
---- a/mm/memory.c~b
-+++ a/mm/memory.c
-@@ -2653,7 +2653,7 @@ int map_discontig_kernel_pages_prepare(s
- 		action->map_kernel_discontig.ops;
- 
- 	/* At minimum need to be able to get pages. */
--	if (WARN_ON_ONCE(!ops->get))
-+	if (WARN_ON_ONCE(!ops || !ops->get))
- 		return -EINVAL;
- 
- 	__map_kernel_pages_prepare(desc);
---- a/mm/vma.c~b
-+++ a/mm/vma.c
-@@ -2797,15 +2797,15 @@ static int mmap_validate_vma_flags(const
- }
- 
- /* Check to ensure a driver hasn't done something crazy. */
--static int mmap_validate(unsigned long prev_start,
--			 unsigned long curr_start,
-+static int mmap_validate(unsigned long prev_start, unsigned long prev_end,
-+			 unsigned long curr_start, unsigned long curr_end,
- 			 const vma_flags_t *prev_flags,
- 			 const vma_flags_t *curr_flags)
- {
- 	bool was_maywrite, is_maywrite;
- 
--	/* Drivers cannot alter the address of the VMA. */
--	if (WARN_ON_ONCE(prev_start != curr_start))
-+	/* Drivers cannot alter the range of the VMA. */
-+	if (WARN_ON_ONCE(prev_start != curr_start || prev_end != curr_end))
- 		return -EINVAL;
- 
- 	was_maywrite = vma_flags_test(prev_flags, VMA_MAYWRITE_BIT);
-@@ -2843,7 +2843,8 @@ int mmap_prepare_validate(const struct v
- 	    WARN_ON_ONCE(desc->action.type != MMAP_NOTHING))
- 		return -EINVAL;
- 
--	return mmap_validate(prev_desc->start, desc->start,
-+	return mmap_validate(prev_desc->start, prev_desc->end,
-+			     desc->start, desc->end,
- 			     &prev_desc->vma_flags, &desc->vma_flags);
- }
- 
-@@ -2851,19 +2852,22 @@ int mmap_prepare_validate(const struct v
-  * mmap_hook_validate() - Ensure the driver hasn't violated invariants in
-  * its f_op->mmap hook.
-  * @prev_start: The start of the mapping prior to the mmap hook.
-+ * @prev_end: The end of the mapping prior to the mmap hook.
-  * @prev_flags: The VMA flags set for the VMA prior to the mmap hook.
-  * @vma: The VMA after the hook has been applied.
-  *
-  * Returns: 0 on success, otherwise an error.
-  */
--int mmap_hook_validate(unsigned long prev_start,
-+int mmap_hook_validate(unsigned long prev_start, unsigned long prev_end,
- 		       const vma_flags_t *prev_flags,
- 		       const struct vm_area_struct *vma)
- {
- 	const unsigned long start = vma->vm_start;
-+	const unsigned long end = vma->vm_end;
- 	const vma_flags_t *flags = &vma->flags;
- 
--	return mmap_validate(prev_start, start, prev_flags, flags);
-+	return mmap_validate(prev_start, prev_end, start, end, prev_flags,
-+			     flags);
- }
- 
- static int call_action_prepare(struct mmap_state *map,
-@@ -2900,15 +2904,9 @@ static int call_mmap_prepare(struct mmap
- 	if (err)
- 		return err;
- 
--	/* Update fields permitted to be changed. */
--	map->pgoff = desc->pgoff;
-+	/* Update first so file refcount tracked correctly. */
- 	if (desc->vm_file != map->vm_file)
- 		map->vm_file = desc->vm_file;
--	map->vma_flags = desc->vma_flags;
--	map->page_prot = desc->page_prot;
--	/* User-defined fields. */
--	map->vm_ops = desc->vm_ops;
--	map->vm_private_data = desc->private_data;
- 
- 	/* It's invalid for mmap_prepare hooks to clear vm_ops. */
- 	if (!desc->vm_ops)
-@@ -2923,6 +2921,14 @@ static int call_mmap_prepare(struct mmap
- 	if (err)
- 		return err;
- 
-+	/* Update fields permitted to be changed. */
-+	map->pgoff = desc->pgoff;
-+	map->vma_flags = desc->vma_flags;
-+	map->page_prot = desc->page_prot;
-+	/* User-defined fields. */
-+	map->vm_ops = desc->vm_ops;
-+	map->vm_private_data = desc->private_data;
-+
- 	/*
- 	 * MAP_PRIVATE-/dev/zero mappings are an ancient way of getting
- 	 * anonymous mappings. Rather than allowing these mappings to be odd
---- a/mm/vma.h~b
-+++ a/mm/vma.h
-@@ -786,7 +786,7 @@ void vm_area_free(struct vm_area_struct
- int mmap_prepare_validate(const struct vm_area_desc *prev_desc,
- 			  const struct vm_area_desc *desc);
- 
--int mmap_hook_validate(unsigned long prev_start,
-+int mmap_hook_validate(unsigned long prev_start, unsigned long prev_end,
- 		       const vma_flags_t *prev_flags,
- 		       const struct vm_area_struct *vma);
- 
-@@ -851,6 +851,7 @@ static inline int mmap_prepare_validate(
- }
- 
- static inline int mmap_hook_validate(unsigned long prev_start,
-+				     unsigned long prev_end,
- 				     const vma_flags_t *prev_flags,
- 				     const struct vm_area_struct *vma)
- {
---- a/tools/testing/vma/include/dup.h~b
-+++ a/tools/testing/vma/include/dup.h
-@@ -1667,22 +1667,36 @@ static inline bool vma_is_kernel_owned(c
- 	return vma_flags_is_kernel_owned(&vma->flags);
- }
- 
-+static inline bool vma_flags_is_fixed_mapping(const vma_flags_t *flags)
-+{
-+	/*
-+	 * VMA_PFNMAP_BIT should imply VMA_DONTEXPAND_BIT, but some callers set
-+	 * only the former.
-+	 */
-+	return vma_flags_test_any(flags, VMA_PFNMAP_BIT, VMA_DONTEXPAND_BIT);
-+}
-+
-+static inline bool vma_is_fixed_mapping(const struct vm_area_struct *vma)
-+{
-+	return vma_flags_is_fixed_mapping(&vma->flags);
-+}
-+
- static inline bool vma_flags_can_merge(const vma_flags_t *flags)
- {
- 	/*
--	 * VMA merging assumes that the properties of a VMA completely describe
--	 * the properties of that VMA.
-+	 * VMA merging assumes that a VMA's flags and fields completely describe
-+	 * its state.
- 	 *
- 	 * However, kernel-owned mappings may have established state upon mapping
- 	 * not embodied in any attribute of the VMA.
- 	 *
--	 * Additionally, PFN maps encode the source PFN of the range in
--	 * vma->vm_pgoff, which may otherwise cause spurious merges.
-+	 * Additionally, private (CoW) PFN maps encode the source PFN of the
-+	 * range in vma->vm_pgoff, which may otherwise cause spurious merges.
- 	 */
- 	if (vma_flags_is_kernel_owned(flags))
- 		return false;
- 	/* VMA explicitly marked as being unmergeable. */
--	if (vma_flags_test(flags, VMA_DONTEXPAND_BIT))
-+	if (vma_flags_is_fixed_mapping(flags))
- 		return false;
- 
- 	return true;
-_
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35271288839
+--===============5066564868234564915==--
