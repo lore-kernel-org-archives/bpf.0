@@ -1,41 +1,39 @@
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-70.mta0.migadu.com [91.218.175.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC33937F00D;
-	Thu, 17 Sep 2026 01:56:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB6D380FC8
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 01:57:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789610182; cv=none; b=ERMfYSIVP5AJVNsQTMe2FOUfMz9wQ8lmYdzyRyeMZugiPKSJfEg0ErKctM644qtW8YIMshy2HABR3THbmcVf2dJUBKdqg6VYE+ZlncoGJLzKqkrHqUW6VM0VgIgY17IKrE/F4ZZuuEVbeUUGdhQ4ctuSHUbnywc7frC4wDdY4K8=
+	t=1789610253; cv=none; b=uAlt9eYqLvfVScQewrt9y11EyPZ/BTGr1a5rcpQXD58HynIzFcc1lZ5cdGLiAj6MNuRwiJYONJySITdg9sc7indcPVb7E5Q8M2qbgkXdkvZMouzz2MQt9133e9zyySvxuIw9FMnQ4Bfd3MC+wy+Er3ZrIzznGStsNy6tzMc+9ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789610182; c=relaxed/simple;
-	bh=6aLvv26gzfe7p4DZyMFH38kkHLGlcFACYahQlzHunJc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j+Uq0lbaODWnfrUHOdhWeQB1n4skKa5Lvy2Wt2dLjfU3S1SUDBId2tWyTpp72K5JsMA4tLeFlvxeSeYcNmCjEnFOVoK3+HCAgDCWuatOkPynGOe970YI9IYqV0AVZZ8yzhWM1j3w+ELFcSA+RA5eO+wTSBU1aE8TwbLY/DlMN2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=BaYtfOlA; arc=none smtp.client-ip=130.117.225.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
+	s=arc-20240116; t=1789610253; c=relaxed/simple;
+	bh=VrWoURvvl56BkD3Ktx89+dTULUYId6JOYbgJrG5Pidg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jSXnEPKpQNUFDTJEUUO0gNsA6Wzf45MNONQ/OYMmX0bK0YebYCBhwNVD58qy5hAlnYnd2ItjYNUIlKytXW9ryCnWpDIwBI4Aca8YY5Rw237ShxVpaCAUMfH4c9HqSkUZEh7HkjKxaofhj8wHK3FRv1NkYomHhjlw8srqjzBI+FM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ne/SoDm7; arc=none smtp.client-ip=91.218.175.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="BaYtfOlA"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
-	Content-Type; bh=6q44N/SKdwH/k3pKemR1sT2b8ZYcaux/puC2YbKuY7o=; b=BaYtfOlAm39h
-	sz4v1iuM6ti+7bEIjqPZkicwkZNX6bNO28WfXzyELaODXb6cdYkd6+WpDQZUQV2DbFRQMvDtPMYYe
-	Ob9C1Aq4QfzGmtwgfu+zIzkOJ2rnn8XrrjgMieHP+XA/fzdMWDt9hMqgAHCpmh4FkNsx1pjK1rnkw
-	HLkbYAIDDQoamwQ/45AsVUjheunHi/Pn2Rw0sBi/8VsEXP9fV//AXkLPPujjGcLTzh8zZH95u0GZi
-	ocz22IwKRJXZi6ivbnT5pcxRwciAoEE+hBn/dxAxInAXgJfcMZUnPIl1mAK/Vu7b+kSXl2KOeV0Ba
-	54D1VAF6sU1egHrlTwo/tw==;
-Received: from ch-vpn.virtuozzo.com ([130.117.225.6] helo=LekKit-T14)
-	by relay.virtuozzo.com with esmtp (Exim 4.96)
-	(envelope-from <eva.kurchatova@virtuozzo.com>)
-	id 1x71JN-00132Z-0u;
-	Thu, 17 Sep 2026 03:56:07 +0200
-From: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
-To: Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ne/SoDm7"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=VrWoURvvl56BkD3Ktx89+dTULUYId6JOYbgJrG5Pidg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789610246; v=1; x=1790215046;
+ b=Ne/SoDm7SZu+OKGxTLswRRM04+ogs+9fT4LETvcWqGm1cDrmB/UqtTS+DzZR2/wo+O9yn7aM
+ bBXf48+6aACpzAE94cKCCiaMGfzeVAPHfcxEMhYmvivMpHEN2LnqUodun+q2ew7PvMeVCtbvS1L
+ kfgxhaGA1Uxn/C2Rfm2ir/hA=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 1e691b0d3b488a22;
+	Thu, 17 Sep 2026 01:57:25 +0000
+X-Mizu-Trace-ID: 1e691b0d3b488a22
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
@@ -45,16 +43,13 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 1/2] selftests: bpf: run test_xdp_features in its own netns
-Date: Thu, 17 Sep 2026 04:55:56 +0300
-Message-ID: <20260917015605.2464043-1-eva.kurchatova@virtuozzo.com>
-X-Mailer: git-send-email 2.55.0
+Subject: [PATCH bpf-next v7 0/4] bpf: arena: handle memory.max on fault-in with reclaim/OOM
+Date: Thu, 17 Sep 2026 09:55:05 +0800
+Message-ID: <20260917015618.7488-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -63,54 +58,83 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The test creates its devices in the namespace it is started in and binds
-an IPv6 socket to talk between the two ends. Both are unnecessary
-demands on the host it runs on.
+Since commit e66fe1bc6d25 ("bpf: arena: Reintroduce memcg accounting"),
+arena pages are charged to the memcg of the process that created the arena.
+That exposes a problem in the arena user page fault path: the fault-in
+allocation runs under arena->spinlock, so it can only use the non-blocking
+allocator, which never reclaims. Once memory.current is at memory.max the
+allocation simply fails, even when the memcg is full of page cache that
+could be dropped right away. Reaching memory.max is completely normal for a
+healthy application - e.g. reading a large file fills memory.current with
+page cache - and the process then gets SIGSEGV on a perfectly valid arena
+address.
 
-The device name is fixed, v1, so a host that already has a device by
-that name cannot run the test at all. The IPv6 control socket depends on
-the host's firewall rules, and where those reject ICMPv6 or the port the
-test picks, the two ends never meet:
+Preallocate the page outside the lock (patch 2), the way do_anonymous_page()
+does, so the allocation can sleep and reclaim. It never invokes the OOM
+killer: the page is charged to the map's memcg, which need not be the
+faulting task's, so an OOM there could kill unrelated tasks in the map's
+cgroup. On a genuine failure the fault returns VM_FAULT_SIGBUS. This needs a
+sleepable allocator (patch 1), because bpf_map_alloc_pages() can use the
+non-blocking allocator, which never reclaims. patch 3&4 adds a selftest that
+fills a memcg with reclaimable page cache and faults an arena in under
+memory.max: without the fix the child gets SIGSEGV on a valid address, with
+it the fault-in reclaims and succeeds.
 
-  Failed connecting to the Device Under Test control socket
 
-Cleanup is trapped for signals only, not for a normal exit, so a run
-that fails leaves both the device and the namespace behind. Every later
-run then stops in setup, before it prints anything.
+v4 -> v7:
+   - Simplify the implementation: do not aim for OOM anymore. An arena is
+     shared between processes and can be shared across cgroups, so the OOM
+     killer is the wrong tool here - it would act on the map's memcg, which
+     need not be the faulting task's. Only try to reclaim now, via
+     __GFP_RETRY_MAYFAIL. Everything else is kept as before.
+   - selftest: changed accordingly - fill the memcg with reclaimable page
+     cache and check that the arena fault-in succeeds by reclaiming it,
+     instead of relying on an OOM kill.
 
-Re-exec in a new network namespace, where the device name is free and no
-rule of the host applies, and everything the test made goes away with
-the namespace when it exits.
+v3 -> v4:
+   - rebase bpf-next and fix conflict
+   - add Reviewed-by tag from Emil Tsalapatis
 
-Signed-off-by: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
----
- tools/testing/selftests/bpf/test_xdp_features.sh | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+v2 -> v3:
+   - selftest: check the memcg OOM via memory.events "oom_kill" instead of
+     the exit signal; it only aims to pass on the fixed kernel, since the
+     unfixed SIGSEGV is racy.
 
-diff --git a/tools/testing/selftests/bpf/test_xdp_features.sh b/tools/testing/selftests/bpf/test_xdp_features.sh
-index 0aa71c4455c0..1f6be4af6718 100755
---- a/tools/testing/selftests/bpf/test_xdp_features.sh
-+++ b/tools/testing/selftests/bpf/test_xdp_features.sh
-@@ -1,6 +1,19 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
-+# The device under test listens on the veth address of the namespace this
-+# script runs in and the tester connects to it, so a firewall on the
-+# machine can refuse the control connection:
-+#   Failed connecting to the Device Under Test control socket
-+# That side of the pair is also always called v1, and cleanup only runs
-+# on a signal, so a failed run leaves the device behind and every later
-+# run stops in setup.  A namespace of our own has no such rules, and
-+# takes the leftovers with it when the test ends.
-+if [ -z "${XDP_FEATURES_NETNS:-}" ]; then
-+	XDP_FEATURES_NETNS=1 export XDP_FEATURES_NETNS
-+	exec unshare -n sh -c 'ip link set lo up; exec "$0" "$@"' "$0" "$@"
-+fi
-+
- readonly NS="ns1-$(mktemp -u XXXXXX)"
- readonly V0_IP4=10.10.0.11
- readonly V1_IP4=10.10.0.1
+v1 -> v2:
+   - Rebase on the separate deadlock fix (found by the Sashiko AI review),
+     now applied to bpf-next.
+   - Honor the map's NUMA node on fault-in.
+   - Return VM_FAULT_SIGBUS for the non-recoverable faults (lock, range-tree
+     and page-table failures); a scratch-page hole stays VM_FAULT_SIGSEGV
+     only under BPF_F_SEGV_ON_FAULT. (Kumar Kartikeya Dwivedi)
+   - Add read_cgroup_file() to cgroup_helpers instead of open-coding the
+     /mnt/... path in the test. (Emil Tsalapatis)
+   - Dump the cgroup memory stats on test failure to ease debugging.
+
+v4:
+https://lore.kernel.org/bpf/20260821050250.35112-1-jiayuan.chen@linux.dev/T/#t
+v2:
+https://lore.kernel.org/bpf/20260805091720.139924-1-jiayuan.chen@linux.dev/
+v1:
+https://lore.kernel.org/bpf/20260727062521.376231-1-jiayuan.chen@linux.dev/
+
+Jiayuan Chen (4):
+  bpf: Add a sleepable page allocator for map memory
+  bpf: arena: allocate the fault-in page outside the lock
+  selftests/bpf: Add read_cgroup_file() to cgroup_helpers
+  selftests/bpf: Add a test for arena fault-in under memory.max
+
+ include/linux/bpf.h                           |   1 +
+ kernel/bpf/arena.c                            |  86 ++++++--
+ kernel/bpf/syscall.c                          |  28 ++-
+ tools/testing/selftests/bpf/cgroup_helpers.c  |  67 ++++++
+ tools/testing/selftests/bpf/cgroup_helpers.h  |   4 +
+ .../selftests/bpf/prog_tests/arena_memcg.c    | 196 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/arena_memcg.c |  23 ++
+ 7 files changed, 381 insertions(+), 24 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_memcg.c
+
 -- 
-2.55.0
+2.43.0
 
