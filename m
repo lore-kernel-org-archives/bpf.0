@@ -1,101 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lr2-f35.google.com (mail-lr2-f35.google.com [74.125.230.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD93377AB9;
-	Thu, 17 Sep 2026 09:10:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789636207; cv=none; b=a8xDfzzojgjS7K25W7Ep7hYjHKlDm5gFdgeMhnrBMbcipS0kHkEiB9HCAK3e9YVNBOGY5qR2ojIEIbE1CG0mhZRueJzREv4BNNOjae+16UJdq3anEQ/7WWhhYhECU4AcvXvPHkH4UvuyMBEFoaFqsxhaXIcvmQvSTrIupmH6UdY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE6814A99DD
+	for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 09:10:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.99
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789636207; cv=pass; b=lvJliw0DSU0jC+Xe9CM3AUCVdSNLsRjyQcph3CGgkPFnTUxo4HDcPyt0kTDtpoAL/muSo6u3jeLIFMU/UMgRwShajVrHGjBojKIA8pKgNpwPC2af1dTXKPWGKz4OpUXEZQfruIIiJ/DHh9G6112GdgSF8jiWP1aKGjGdy+53pRk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789636207; c=relaxed/simple;
-	bh=gePQjgNJP3rZLgjxZMbNcyCVB0rhSfWKtw7rWIMHsCU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HoVV4ABPkNQIVIjDUbECBSJlB+YCy4ltEKaJaxN8a/SH1XIFBa2votgLRjUF4hc8VmU93F0LrSS8zLxu66QesX/LTQaoSFOtBCMIo/0OpYb8tKaETZzYDoxji4xcnQqIDiwjQeSu4NgXUC3ciURgbzveH6odWPj3Ydf847Igcy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gB/wFH2C; arc=none smtp.client-ip=100.103.45.18
+	bh=udW6TvHFa4OCP2Q24JS5DX140/XFneLVvF+vPzrl6f0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EJKB50oEb/7kSnAhYvehZxQntAbF8AHW8Y0jx6YCZEoeDbcIYUqmDuOI8M9H9mK26m14sQxvjLgOEYBfYC2mnkbQ06Gfx+APCRyWyDHv5f5N1iDHF7zxqyUUu6Sp0Wtln1WESIVVfAv5Tpk25vcdpApWoE5qSSLyFw5KF6GqZUw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d6Ifo7Jw; arc=pass smtp.client-ip=74.125.230.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gB/wFH2C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0D271F00893;
-	Thu, 17 Sep 2026 09:10:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789636205;
-	bh=6dWahTpadJ8SVAXJFFy0YTTM47N8xZaWr7TRB490RZI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=gB/wFH2CZNIyTyzKz6rMZb09+PgNTjUmU9H+6Eu6QBXgv+KymxIPpgYbmkzflAQrU
-	 333+7mJ3A2kMGLT23ZySfOlzw7hqX2G8T9dO6f/Qu32WgqkH066+pbE6q3csCBOJhn
-	 hVwJvSqenhZsWVto4JK5LUDNWiDFgSRr4SPiFoiBdYSNOulqmHCvK17qzpVrUB9knh
-	 DwxjmfSuTDS9Rvyi1IKr+fRBTuThlHhHi2c3yTEEnl8wU779+BxDljLnOBC063luH/
-	 Qeu0whojY0FqyPpX+sBJ7x4WXtUCJ8RhJj4+xD+LK3aPYwpIvuZYf2EKHwPsuXaN/1
-	 6baEMzbhlX7jA==
-From: Christian Brauner <brauner@kernel.org>
-Date: Thu, 17 Sep 2026 11:09:44 +0200
-Subject: [PATCH 3/4] cleanup: remove CLASS_INIT()
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d6Ifo7Jw"
+Received: by mail-lr2-f35.google.com with SMTP id 38308e7fff4ca-3a5e548cd7dso5028021fa.3
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 02:10:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789636203; cv=none;
+        d=google.com; s=arc-20260327;
+        b=msaAqXSpejkrqbOTBeGeeIgPaTsRPfShr+PyZ+nbE89J8P3BI+/1YW149vVGgYflwS
+         qbFlJS/ahxXTIGehS35VWXE54VkXcb9zuI2z6iJ4GnCoAOsMKbKBHoLmXbribMIKolit
+         CEUoklx70qdq+1JiWrxuIqezeFjKXBqAUonz/CurbkUFNKZ3xzr3ZM8b5ebzDzqOx6Hs
+         svydktx8Kc8W1HhK/DP/5jLMqU8IJRdJH+hfrYnUd+7ueiGgjN5AtKMf8uJr3vo7TKh6
+         3CEqGeVbBavjS9QicLPbS68iVuz8d/UFrb+auZUa31lxs3LXqDjGU3pCZzfDBKvNS9dS
+         +AVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=udW6TvHFa4OCP2Q24JS5DX140/XFneLVvF+vPzrl6f0=;
+        fh=zFeq+iAYGeiKNU+y2IvVs97QQaPpIcvcdmxRoWkv7sg=;
+        b=DE+lIdFOO5Gsq0opPvB+YVpu7ehgHTzp0CaLOA29UhzSXbENkjAx3HOID59Eox7emN
+         uAgpPilF2e8ZLlYxctU22lahwunSElXFENZ7yAmaEeGHgktxuasftGrkfxsdUgU0j7wl
+         nJbIQEjAuWfz+J8cokDz1++NrHFvV//zabvbE2JdoV2PbHB9bg5KUK9rQqh12izmTD0y
+         HX5jCWqxVhAN5oOcQNkeg7o+fs4SL5GKaLiz52y8+deqjGAEhjnQreHyH10RZFaDSzO4
+         me5WCTduC+DknsH8muFEUDpCeiJtUVjTrISQ7pTwYhODohZTRJ/LHPn0giicyKlDhbH+
+         eBZw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789636203; x=1790241003; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=udW6TvHFa4OCP2Q24JS5DX140/XFneLVvF+vPzrl6f0=;
+        b=d6Ifo7Jwc2mDnX064vN3jwGMqKHmX6Ak2vanxFtOvYK4Gz14acxdekb9IoWD1DrJRB
+         OA4zxp8XuiTWiHuKOcNC/8GBDaXewWNf3YOfwv4vqVaKVGknqr0f9HTFoWm6m+LZnyuG
+         BUysljPeXCM7vHL64dzc/dI9IWph476W1pz8LUjyKlpOvD+WGOnO+j1mQpuB2Y4Y/csv
+         Totco+Ppa/2T1hcUwP/DrcEF78SiZ2hYYQD63Hlc9FOVaiWShl4bSb25EZ21RPM/Hv6R
+         vVr/gczTOfjb+EwYmMA44QDbOYGhWufYNKc5KqBpoQLEhc3t/iegJPumHvTBHVdi1wUR
+         oOQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789636203; x=1790241003;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=udW6TvHFa4OCP2Q24JS5DX140/XFneLVvF+vPzrl6f0=;
+        b=HXVKYCRhuQl9Rx3iOrzC9Y82yQregpBZ26FFjcnBMBi1V9ZFJ4ylLr28g823FxAF8K
+         nDkxKxP1srfAQkAmGdWKxY/PRfQj6w7T9H2Vc3Y3y6YkVO3sZQZbJ9TZvbik+J1VsZKY
+         fEQGwhKl2CCWQ9ozZZ2XzdYYzAIEGO93cmimOOU4acFRBZx8B50V0wJrt/7Mrs0ducV7
+         edJ3Ha453COHtkvH2pUAB6nLhOJoE+sZgAvQfA8Rzl0otx1F7cRVr1u3NVgwlk9O9kfD
+         fdWfbaqPecRp3jif71yy+ifBxrtHTZPqSJ8lkP482gbGpuGiEzyBiKI3eyrqfS2enoFy
+         OgPw==
+X-Forwarded-Encrypted: i=1; AKwUvBx05ORn6tBL9GQSUMCnZ9FB0eB+RStgMRjzYWe8dE26JKc96mxf68L5NmWOEZW6FUQHmkg=@vger.kernel.org
+X-Gm-Message-State: AFuF++mx2qXqqPg1W7htp9M3e1p7u9H1IECWpR0/j9au/sHh5jNe+ysB
+	m7QEq89VncHN+CH9d6ddFpZddui0yKWSi6seQb0v/L/Txq2eK+FBm4U+pyxwAMHXoXZ7H08SYRr
+	NMmJmLi1D3I2pmOash2CnObVqRSHEpG0=
+X-Gm-Gg: AYBFou2fpyI2atoypMPJnveI8Ht5xMBMD+OEcBy/kZ2xGJPrDDB86+qa7pImaS48Ua+
+	kCbxpowok5bYkvWVS+4AA2k3J1phgyw9lprQKfXNX4GCYvIeNiaeCG3pLCOp02o97ajAjwy5VTH
+	vYtFEdmYnsF1krVyQJLIXNiBQHb3HjOIKeirnsmH3a8S4CdIeWNzORA5hMsGaxuslquGP5gkXdy
+	PFhTinVybs1wY4gcA3BxUwhHgiV+FmcSAY/2HjKr267l504lBUncWr1mDZ//b5n30EJtlqffJeQ
+	YymHYB1hiV8Q+T3f/0b+zoVAZ9RmqHbqFAkbNXE9opliXNS6O2jeXMdYtt9ZGBcjZi5y7KgBMPV
+	Mf8wRxnbKCwkcteKFiybDMdfI7StFwuufHOGcpJ0ZqDlNYmfRoIWgTz1zvOJ3YRZre3DF9g==
+X-Received: by 2002:a2e:be86:0:b0:3a5:b6af:2973 with SMTP id
+ 38308e7fff4ca-3a5dc9a775emr21702761fa.5.1789636203298; Thu, 17 Sep 2026
+ 02:10:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260917-work-file-fd_prepare-v1-3-b87534ca49f3@kernel.org>
-References: <20260917-work-file-fd_prepare-v1-0-b87534ca49f3@kernel.org>
-In-Reply-To: <20260917-work-file-fd_prepare-v1-0-b87534ca49f3@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
- linuxppc-dev@lists.ozlabs.org, linux-gpio@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- freedreno@lists.freedesktop.org, linux-media@vger.kernel.org, 
- wine-devel@list.winehq.org, linux-xfs@vger.kernel.org, 
- io-uring@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org, 
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- "Christian Brauner (Amutable)" <brauner@kernel.org>
-X-Mailer: b4 0.17-dev-db0b7
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1527; i=brauner@kernel.org;
- h=from:subject:message-id; bh=gePQjgNJP3rZLgjxZMbNcyCVB0rhSfWKtw7rWIMHsCU=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWStXhcptiHRLFxir8hFQ7cX4T8XKIlF/9FhyhR+65ynl
- qu6Wcqno5SFQYyLQVZMkcWh3SRcbjlPxWajTA2YOaxMIEMYuDgFYCJzVzD8lWq5Gco9c839ZU7p
- jdrmawS83i4NPfWqOvxHVrbIx6usagz/LFur6m/9XDa34GfizllL3I9kJfeIcS3yyg6IPH70c+Z
- CfgA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+References: <aqPxxX9MeGmAqGy6@boxer>
+In-Reply-To: <aqPxxX9MeGmAqGy6@boxer>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Thu, 17 Sep 2026 17:09:23 +0800
+X-Gm-Features: AcwNN1XR4DoliEuKB5ZbfjMKqsAIYGrJKJjFNjGTy5tmlhsxxcCabhbtEPXZn8M
+Message-ID: <CAL+tcoBBHQpK5GruVbLJviTFBm8repE=kHt-D+PHWJ9mCwQbYQ@mail.gmail.com>
+Subject: Re: [ANN] AF_XDP office hours
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, magnus.karlsson@intel.com, 
+	bjorn@kernel.org, sdf@fomichev.me
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-CLASS_INIT() was added for FD_PREPARE() in commit 011703a9acd7 ("file:
-add FD_{ADD,PREPARE}()") and never got another user. FD_PREPARE() now
-declares its variable with __cleanup() directly. Remove CLASS_INIT().
+On Fri, Sep 11, 2026 at 8:21=E2=80=AFPM Maciej Fijalkowski
+<maciej.fijalkowski@intel.com> wrote:
+>
+> Hi!
+>
+> We feel that there are efforts on various sides related to AF_XDP
+> development so we thought it would be nice to have a mechanism to have
+> cross-company syncs or discussions.
+>
+> Therefore, let us introduce AF_XDP office hours. Plan is to have a meetin=
+g
+> every Wednesday 9am pacific time. Similar to what BPF did, we're gonna
+> have a public spreadsheet where people can put topics for discussions:
+>
+> https://docs.google.com/spreadsheets/d/16GL6AbdjDyT81cJ3-qUnYvFxqO-RlhtYT=
+S68bfQQDbw/
+>
+> At this point we are planning to meet even though agenda is empty for
+> given week, this might change in a future.
 
-No functional changes.
+Hi Maciej, Bjorn
 
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
----
- include/linux/cleanup.h | 7 -------
- 1 file changed, 7 deletions(-)
+Big sorry for not attending the meeting. I miscalculated the time
+difference. I thought it is today!
 
-diff --git a/include/linux/cleanup.h b/include/linux/cleanup.h
-index b1b5698cbf1b..1fb8058b897d 100644
---- a/include/linux/cleanup.h
-+++ b/include/linux/cleanup.h
-@@ -261,10 +261,6 @@ const volatile void * __must_check_fn(const volatile void *val)
-  * CLASS(name, var)(args...):
-  *	declare the variable @var as an instance of the named class
-  *
-- * CLASS_INIT(name, var, init_expr):
-- *	declare the variable @var as an instance of the named class with
-- *	custom initialization expression.
-- *
-  * Ex.
-  *
-  * DEFINE_CLASS(fdget, struct fd, fdput(_T), fdget(fd), int fd)
-@@ -302,9 +298,6 @@ static __always_inline class_##_name##_t class_##_name##ext##_constructor(_init_
- 	class_##_name##_t var __cleanup(class_##_name##_destructor) =	\
- 		class_##_name##_constructor
- 
--#define CLASS_INIT(_name, _var, _init_expr)                             \
--        class_##_name##_t _var __cleanup(class_##_name##_destructor) = (_init_expr)
--
- #define __scoped_class(_name, var, _label, args...)        \
- 	for (CLASS(_name, var)(args); ; ({ goto _label; })) \
- 		if (0) {                                   \
+Can any meeting notes be shared here so I can catch up with you guys?
+I'd appreciate it :)
 
--- 
-2.53.0
+And I'm wondering how we are going to deal with the fixes (about the
+header) I mentioned previously?
 
+Thanks,
+Jason
+
+>
+>
+> Thanks,
+> Maciej
+>
