@@ -1,76 +1,78 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028AF3E49EE
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 17:47:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE569335067
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 17:50:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789753629; cv=none; b=PQzXtZ+Yz7QpO1wgIq5EuKQ6V9pVMd+LCeDfrux5XlVB0ncjcvrpQC8/CWPv37Th4I1X502h677q16Y2zL6DZh2cQ3YVtbPY3+qjdhkon2A1roJTWBesci9Ma0Kgl7dxjT/B0Z+ysqUCwkwc0L+p/JAL4bNOntNA9+VXvuiT3d8=
+	t=1789753811; cv=none; b=MLF3w24BzAxwlT3FmqYiENstJ5pRMUtr8O5tBlvl3BXqpQok2He2dHG5hVqirqj5CdU8LdpS4+MBsHKWWWM41C9KEZ1S+MjUkT9c95o/aOVEcJZ9RpAJ9NpJKqZfmZe9j3O0fUjtj1BgsZmqfALmu/QUB5SMwxFu3H3j3Qip5+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789753629; c=relaxed/simple;
-	bh=f42dMciCrW1J0Mcy+QEp7Bb81fgEDJ3RV9ZJ2fzxP40=;
+	s=arc-20240116; t=1789753811; c=relaxed/simple;
+	bh=7GOUddWnwknp4gXk9w3eytdpEaLQ5CEzjDSjkOMazjg=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=f/fp+sC18abl2GAIhYoDfSbPBUyOhWIrQIyDYCdBXfNgilvIaf0TCW2bdGAJIfk4zxNUr4d8ncjw8/jA+5XrG9+bQQVNH1oVxtnM/U7Oy7R0M8uUPD6XoJnxutASh+QJ8yOAHbz/HaICyo1SgnMa2/wOufBq28R95uu1Wwka1eY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sk5xGLn3; arc=none smtp.client-ip=74.125.227.140
+	 Content-Type:MIME-Version; b=Mup8YCGyktXEh4xxg9xZEjB29ZVipTv6tfCeeLON3VPfsqYzZk0BhZwiZoHPlxdCtTUq3TKXdu6U0jMtMNmyTzhHqFEffPnb8V/DrphLtM6NTB/x55HL+ACv6xTZX7k2HD8mHgUfxFirjSIzBULC6efuNQzUveSZgPxYZZkYcmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ARtOQ2h9; arc=none smtp.client-ip=74.125.227.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sk5xGLn3"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747ed1368so13975135ad.1
-        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 10:47:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ARtOQ2h9"
+Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-39b910bdf2eso770064a91.2
+        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 10:50:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789753620; x=1790358420; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789753807; x=1790358607; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=GZvh9frVpT1nHhEQKPyuEwEyEjCXAqjHGVMbR0ccXvE=;
-        b=Sk5xGLn3PoB4C7c0tFUyJXeeYerz8/EgGUrK/qPlyfbFvEPDteK/UMerP4GjUyzkdO
-         3fHXG8Z3fHAkUay5gP8hDSDhKl41eLu87XBb7HgDcFFs/lp27DENUFPDLA12n0SGV3QO
-         wI9hswjshBnUqBr3A8RlIympaHOSet8vi3Ml4BZQ/A98nyXLM/B1v/qgcs5P1pBe4Y0B
-         P/7+Np5YjEOLFFWGjuGVwjG4F+g5o2d7C1ukSJ0zFpOXPu7f3ppJzYLOmSa8h0ft5RbK
-         yWaIUXfTFOSI0EKpq5rd/9SXeHbrj/Su89X3KsnMtIyG6hA/BDdgY9CT1W5ki9Z3SG/r
-         fhPA==
+        bh=7GOUddWnwknp4gXk9w3eytdpEaLQ5CEzjDSjkOMazjg=;
+        b=ARtOQ2h92T/ucKxkkAbEqfKyjvhga3nmdLFV9HaBmZ+iD8HcsApQFhT1H7Ixf5RgwM
+         vqSzR899vpdVecy8CBe9oBZ7b17mAGhqI2uZK5CEqPKdUgi6SR3Qmi3wke/tIj71nGes
+         XXQ09xtyZp+mqfSVq6AMagjfpYT9z8ZAgw1t+o1Wp7FS4gjm57te0t9uIeXceqkZvn1+
+         gvUP5dn8LUTqP8A0+Y3RnEGWFI/SOFYbv+z71I3rCFyOnPZkSYRmLQpRhYaT/wqCDoqa
+         +MZImIbquni23USR5J9tUkpcJq3kkE0CAODWMqNK8d7GCdaIwS7xN4fhNv7ESqEBwhDO
+         43vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789753620; x=1790358420;
+        d=1e100.net; s=20260707; t=1789753807; x=1790358607;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GZvh9frVpT1nHhEQKPyuEwEyEjCXAqjHGVMbR0ccXvE=;
-        b=yQjZGuzFEAWWJ3iq1Jz7/ybW7wi67H040XZiTKEHWWc4Yf8MLCSZ2HhRNVf0vJlLmy
-         swp8cjUvpWasjMwY8+HffpFbbQ6TwVpFrNe7bTSyOTOt23knCSm5Vw708mSH7ge0EZb8
-         yLoYdO1fGSWLfXFN/1asflENAAugsXGm1c1tGYBdnYwl8EeXulw8jqWxBKI6jEotRRMW
-         NjHyGfNaHee/UTU8um1m8dfq3pWq7uXaldQoyScE77D3py7fbcmNWYT1D3GvSLMwY5Xv
-         UA8Gy4i5IHh+GGS9VrPDPI8VjK8LSTMUatpz3aKUW9MHftFVpe40np2d7dh52q/3K7NV
-         ftWQ==
-X-Gm-Message-State: AFuF++kB+sNAA+1VQvA4YWoWta5qJUQtv9ClEeY/6xuaKlzpBZq/cbyt
-	xffVTyCMwmQWZprN7fKYjaamdgejrnBW3vkOFZ7yM6kGH6Cm7XZJ1oKVfkP5rcOA
-X-Gm-Gg: AYBFou2CJcuEepoiJmZ3KCLXJ9tHdWpzfVJ9OzhIEXJpGImuOZookjuCATkLA9dygt9
-	ZcZ2W7mvcQkierxhu/+1h4r4UvZrUtPn5QIcJ3FFyiI5iheNrEptll4R9ao5uhrfIAHtEfLLA2L
-	UmyxCAUjXKi4dY7HbGwW7ycLNddUEnzy20COdvsp6/BSv8yNkpY9A6h+vVfk3J6RkJWjc/ZT7Cz
-	ZWaH4EcNtUFldtHxPIY1zLcWvWfGmS82LWzfet7UyLIF47L6rrVoQ3VAPo1pFYI8qne6MTIhoPn
-	2qqoVHWCaWBJ/274JgF5NrR470A8hKKeQEjqTMAtuTI1aSKQA+f4WvPVVUSSrrrbRZZ8Ujpe3cv
-	RZjgk26mByU7vipegshCKH43RMsYM38N/PQGC0yxi6x/uUeOtkw2DuL+TJODO+odpIKOdTGVCYB
-	wNpTf4JT27V9GALkbYNTng06NjStqTCLQCvL7zKalfB8ogFYSbt3TbpfST1npGXTO9OOysQpaAg
-	QR0s0hDMkrVZQCMhbIfmaAf5VeYYXGkVRsyJdBFu1S4TPuwWMhUQnZK2w==
-X-Received: by 2002:a17:902:c948:b0:2c8:248a:5dbb with SMTP id d9443c01a7336-2ddb1add3cbmr62250255ad.7.1789753620314;
-        Fri, 18 Sep 2026 10:47:00 -0700 (PDT)
+        bh=7GOUddWnwknp4gXk9w3eytdpEaLQ5CEzjDSjkOMazjg=;
+        b=f5pNyAupGLXlfCGv/xUhdTAq5DIPWypzcgOfTz0GDUpbNiFrm4FQsscQWBFSuA/bec
+         zpq4MCzxBJDTBlqfxsZ6iUbfuWuqhD46dcWuByKnt6eB2CdRd5Y1rf0/czIT9DsKvLzb
+         HYwNQXrUGfivtA8IYug54DCwWnTCe2XgHhrOJMsxXh/yVB3hG25Ob7TVz6XG8zprAtpP
+         uENswSY5EAPiAgknsdzFCgqvvP5ENl3uHnxRpWI3Bnnr2JIB//VW12x5OCq4MllNtbTM
+         PCmkghnuWBYCBQqpb/Mbe8b9eiu6m1OIqoFdk/NT+YOCTOKx937w0JcwGxtumbnOit/h
+         XVAQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzzPKnPu/tvdSFLVAsx82R157QVS1T3BZUS3hbq+kYOIAHgApAx/ZLhnma8h5WbzFVhd9w=@vger.kernel.org
+X-Gm-Message-State: AFuF++kFazgTV/mTEFB9pUiuBn1crnF39GZl2umupB4mGhCObq5zABmm
+	HnZ5w1c1+ebmDkKtyEH4xjXAHy992Ti6fxqlBKC9RJe1lGgL7yPyZD3NvSGaUbLX
+X-Gm-Gg: AYBFou2q/fvGi8r0OXnHuViPDRqKd2k6RyGpTMA03u6BmhAOONEgg6zoCbdrBc+wHCx
+	Y02w86tsD9vEt+Q6XOn4489N92hPMoxBhOWywa5ZLDNzGA1tfhTCurD0O0BjV+OtU0EBCY02GvE
+	Prjakp2FrorLaGj9hGwncF4mViklSFnrSo5t8h9c85L0G/bpn62QSFy8hiOydyl7e6azR/zAGq3
+	dFzhpYnoYoUYpM35SEYSPqi6EZH0SwvOQRhA7FKKsAzTYR2wEcbTAE4YR7TZNJVryIqLeC6W6V5
+	DFhfs6UcOgfCsHlGCgaBU88riPv9taFeGZo6YNGAEFmokK+8VtkBhy3VAWBL99S/W1M29SxSuWj
+	yCE7u8flTIyWLbkfQ6O0btqUNJ9VQWiFETWZ+yG9uLybBsdlwot3MIlNNSIsIUoDvJFQnmPXVkp
+	rnMcA88GHcI3DNDqVTVuj/JYEm2V34thNdRFurzleRu2r56csdndvDK4HhUFUfYAgjnitsjU2y2
+	Xkf3BbyaFsn5FXSMgslvvpox27dXI+d3UtHkSEnIpg03VCE2UmxHgz7HQ==
+X-Received: by 2002:a17:90b:39ab:b0:39e:34d6:7eb5 with SMTP id 98e67ed59e1d1-39e54b85746mr6840889a91.9.1789753807324;
+        Fri, 18 Sep 2026 10:50:07 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:e136:8952:772a:93a4? ([2620:10d:c090:500::4:e681])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ddc17e17e0sm364765ad.70.2026.09.18.10.46.59
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e563e3e3dsm1692377a91.3.2026.09.18.10.50.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 10:47:00 -0700 (PDT)
-Message-ID: <962a73fd049d797d27f8e51e8a14dc011d21415c.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 3/8] bpf: Check read access for initialized
- writable memory arguments
+        Fri, 18 Sep 2026 10:50:06 -0700 (PDT)
+Message-ID: <0382b5c8e673d44797136a4043cf02d28b6720a1.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v4 5/8] bpf: Fix generic __uninit kfunc output
+ buffers
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: sashiko-reviews@lists.linux.dev, Kumar Kartikeya Dwivedi
- <memxor@gmail.com>
-Cc: bpf@vger.kernel.org
-Date: Fri, 18 Sep 2026 10:46:58 -0700
-In-Reply-To: <20260918055038.1D4AE1F000FF@smtp.kernel.org>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: Tejun Heo <tj@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Andrii
+ Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Emil
+ Tsalapatis	 <emil@etsalapatis.com>, Amery Hung <ameryhung@gmail.com>,
+ kkd@meta.com, 	kernel-team@meta.com
+Date: Fri, 18 Sep 2026 10:50:04 -0700
+In-Reply-To: <20260918052906.12226-6-memxor@gmail.com>
 References: <20260918052906.12226-1-memxor@gmail.com>
-	 <20260918052906.12226-4-memxor@gmail.com>
-	 <20260918055038.1D4AE1F000FF@smtp.kernel.org>
+	 <20260918052906.12226-6-memxor@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
@@ -81,88 +83,30 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Fri, 2026-09-18 at 05:50 +0000, sashiko-bot@kernel.org wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [Critical] bpf: MEM_WRITE without MEM_UNINIT enforces BPF_READ breaking=
- output helpers
-> --
+On Fri, 2026-09-18 at 07:28 +0200, Kumar Kartikeya Dwivedi wrote:
+> Stack liveness treats __uninit kfunc arguments as writes. Even with
+> write-only access checks, ordinary clobber handling leaves poisoned stack
+> bytes poisoned after the call, so the output cannot be read.
 >=20
-> commit aebadfb01a3b32540321fe2b60bcb6fb1c8673be
-> Author: Eduard Zingerman <eddyz87@gmail.com>
+> Reuse the helper output descriptor for generic kfunc buffers. Record the
+> output after resolving its memory type, and initialize its stack bytes
+> only after all arguments have been checked. This prevents an output from
+> making an aliased, uninitialized input appear valid.
 >=20
-> bpf: Check read access for initialized writable memory arguments
+> Track the output by its ABI argument slot, since a kfunc pointer may be
+> passed on the stack or follow a multi-slot by-value argument. Keep the
+> single-output restriction in prototype validation; multiple-output
+> tracking is a separate extension.
 >=20
-> This commit updates the BPF verifier to derive memory access types based =
-on
-> argument flags, correctly enforcing read access for writable memory argum=
-ents
-> that are already initialized. The change addresses an issue where helper
-> argument checking previously omitted read permission checks on map values=
-. It
-> adds a generic func_arg_access_type() helper to replace the kfunc-specifi=
-c
-> access overrides.
+> Document that output buffers must be fully initialized on every return
+> path, including error returns and padding.
 >=20
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 1d5e4ee64fc00..21eb806b1351c 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
-> > @@ -8886,6 +8886,15 @@ static int process_map_ptr_arg(struct bpf_verifi=
-er_env *env, struct bpf_reg_stat
-> >  	return 0;
-> >  }
-> > =20
-> > +static enum bpf_access_type func_arg_access_type(enum bpf_arg_type arg=
-_type)
-> > +{
-> > +	if (!(arg_type & MEM_WRITE))
-> > +		return BPF_READ;
-> > +	if (arg_type & MEM_UNINIT)
-> > +		return BPF_WRITE;
-> > +	return BPF_READ | BPF_WRITE;
-> > +}
->=20
-> [Severity: Critical]
-> Does this regression break pure output helpers that lack the MEM_UNINIT f=
-lag?
->=20
-> For example, bpf_snprintf() is defined as an output helper:
->=20
-> kernel/bpf/helpers.c:
-> const struct bpf_func_proto bpf_snprintf_proto =3D {
->     ...
->     .arg1_type  =3D ARG_PTR_TO_MEM_OR_NULL | MEM_WRITE,
->     ...
-> };
->=20
-> Because bpf_snprintf() does not guarantee full buffer initialization, it
-> cannot be safely marked with MEM_UNINIT. However, with this change, the l=
-ack
-> of MEM_UNINIT means func_arg_access_type() will return BPF_READ | BPF_WRI=
-TE
-> instead of just BPF_WRITE.
->=20
-> Will this inadvertently force check_helper_mem_access() to reject valid
-> write-only maps (BPF_F_WRONLY_PROG) when passed to such output helpers, c=
-ausing
-> valid BPF programs to fail verification?
+> Fixes: 2cb27158adb3 ("bpf: poison dead stack slots")
+> Reported-by: Tejun Heo <tj@kernel.org>
+> Link: https://lore.kernel.org/bpf/86d966ec88bbf27d21b2bb4e18c8aa00@kernel=
+.org
+> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> ---
 
-I think it should be safe to relax MEM_UNINIT interpretation for priv
-and not to require full buffer initialization. That would be only a
-documentation change, as far as I understand. Then it would be fine to
-put MEM_UNINIT for snprintf. For unpriv and MEM_UNINIT buffer we can
-scratch the buffer as a combination of BPF_MISC (for previously filled part=
-s) /
-BPF_INVALID (for previously invalid parts) instead of requiring full initia=
-lization.
-Kartikeya, could you please take a look if this requires any code changes?
-
-> Additionally, for unprivileged programs lacking CAP_PERFMON, won't this
-> erroneously enforce stack buffer pre-initialization by enforcing a read c=
-heck
-> requiring stack initialization in check_stack_range_initialized()?
-
-But that's not an error. If the helper reads the memory, there is no
-MEM_UNINIT annotation and we pass a pointer to uninitiated memory
-buffer to the program, then such a program should be rejected.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
