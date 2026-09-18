@@ -1,199 +1,235 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B034397945;
-	Fri, 18 Sep 2026 01:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B09BA3093B2;
+	Fri, 18 Sep 2026 01:39:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789695096; cv=none; b=h5GEieJ3FsiTCajimMVxqzc4qwQP3i/vqWFhjemennhdF1b04CaoA7kpGms8sws5qlMnQMSMQNuK9OV9F8gyuLwQRrCdp7WCMdbQ5UqVIdNQ1WsxJZUP4NOYOhiXi2iDJFmh+OwxISIWK4hZgfY9iXC6D1PCKhZHsalmeerEs2s=
+	t=1789695596; cv=none; b=kLSTDSQ+pUXoho4ZP07D+mh5kZJPslflGBFD/W74SDJgmRD08GHyXMJ9vC4Nawwz5MvS3dgcvcjwyN63o3gAGneValNvu7o2dnscyM+RWWKTpMcmLjOCFNZ3GjfcZEjJeXZo+9RFJMUBQDFYFi44GeZoaqKeILZdihq2p2BlqLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789695096; c=relaxed/simple;
-	bh=KcvIEKDbuHaSZeVIuvf/LZGzwrzfBHO5EJbBtNbuUBs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q05p7gWu+F+7Gq6orwHelBhLdqc5JZsj/n5Cq/iafJjQjSelFuBWakeEKWBJT2A4ZvXjs8rdEXvfu8AXy22W+n+xfRsU6qSwef3CqXAt6hWayxMx/pGKqsQuQYevQv5ZIUCi4l8zsOL1jZrTxQvo6T5HLeeb3emb1jA7Zc0V5pw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n9w5twsB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789695596; c=relaxed/simple;
+	bh=UvW58gsM+QnjmrmwsxUFL2LWG/os7ZcV4Ywp8YYB8yI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n35B6n1YotWa6Fvqy5TBQv+BhpkAYaZpuMUalQfvKQ5V/L2yZ3gCn5mIcvDl+h71g+30Rup6EVBcroUuWJCTiyTel7ldcjVC6fRO5lbH0smi8qtQ3owMPu4hnE5V5Z7MjFmQQ+tzn/0oTQ4fsexqcNgSLOoJqXTsl7J9HJV/gYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZWYezoUF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n9w5twsB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FA281F000FF;
-	Fri, 18 Sep 2026 01:31:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZWYezoUF"
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id 068EA1F000FF;
+	Fri, 18 Sep 2026 01:39:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789695094;
-	bh=QS9nIJ3FvUZ63E7dpFZbqyaI/csq1+1IMiM7Bt7yE8s=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=n9w5twsBM6EzMXlxvcWG4u/vYk2lqGpSEyjvZ+w/lx+KsrBL9AsgAfnTj9YcM/VvQ
-	 KhwpJ+VBMdAqTDp0K2Mit49WC4iVAWXyHGpH+C9A/JFAimcxytx6ykFU7oMxehEbHH
-	 5nQerTdmRBLFhhZXdXZ06ni5GUavO9XvfvwZ7isK3JFGdxqDV2ByviJK0Z8di8ewc+
-	 PFVKXlrFUG6sLDA8FGGEPSc3gBzQi7R/Dm8LBAGSueQtwIdntC7EeJQLhc5Ot7dKr3
-	 jlvy0KyKep/mYA5llKFugdPAMuQhR62IEBEeRiWKCjgRyV4zbh23d+woIf0XJirnNR
-	 1qqt0iSpHt7+w==
-From: Jakub Kicinski <kuba@kernel.org>
-To: jiayuan.chen@linux.dev
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	bpf@vger.kernel.org,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	horms@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	shuah@kernel.org,
-	kuniyu@google.com,
-	liuhangbin@gmail.com,
-	mkarsten@uwaterloo.ca,
-	toke@redhat.com,
-	lorenzo.bianconi@oss.qualcomm.com,
-	echaudro@redhat.com,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf v3 1/2] bpf, veth: xdp: fix page_pool page leak on skb-backed XDP
-Date: Thu, 17 Sep 2026 18:31:28 -0700
-Message-ID: <20260918013128.3451350-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260911135711.109338-2-jiayuan.chen@linux.dev>
-References: <20260911135711.109338-2-jiayuan.chen@linux.dev>
+	s=k20260515; t=1789695588;
+	bh=gM8lZsg0mYS3qU0HtdBPg1nfieBe3LIWvGiRY7u4Bo0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ZWYezoUFV/4x4XEIe9A39CVjJODM0cLud40YE5OFNK+mmMlZ4PfLGqy+QmmVsAm+8
+	 AP6TpIy4T2zSDf5S6gEXwIr0zhLuCK1W6V8vzzzzWcNmfItVnhHDBIBAVA/IN2tR20
+	 Sk4eBt6UAIrT/D7jdUPVFWZpIgvjyUvRutgKrh7Y2r3fTfmU8t8Q8W+E61cvGXSblM
+	 sEVIOKDsx29kdt8IsHKx8x0//VncBQB1Ytx+Gai1c93IykNPBMU5yEGFCO/PeP22pv
+	 OvxmA/mC7yo+ZR+EzHLmnuY8vsR0mIBT1iuEJcj0D3WA4X0btACdXlah4W+EvJB7u0
+	 ef/Wcws7MtXoQ==
+Date: Fri, 18 Sep 2026 04:39:44 +0300
+From: Jarkko Sakkinen <jarkko@kernel.org>
+To: Jann Horn <jannh@google.com>
+Cc: David Howells <dhowells@redhat.com>, keyrings@vger.kernel.org,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	linux-crypto@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+	io-uring <io-uring@vger.kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>, bpf <bpf@vger.kernel.org>
+Subject: Re: [BUG] lookup_user_key() calls commit_creds() (hitting BUG_ON()
+ when called from io_uring through AF_ALG setsockopt; BPF probably also
+ affected)
+Message-ID: <aqyWYIoh-JONhsjN@kernel.org>
+References: <CAG48ez0XjVSR=M--UBauTm8sJuc+ZbhKzaPa3a6wrSVHyoKevw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG48ez0XjVSR=M--UBauTm8sJuc+ZbhKzaPa3a6wrSVHyoKevw@mail.gmail.com>
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
----
-bpf, veth: xdp: fix page_pool page leak on skb-backed XDP
+On Fri, Sep 11, 2026 at 07:42:50PM +0200, Jann Horn wrote:
+> When lookup_user_key() is called on a special keyring ID
+> (KEY_SPEC_*_KEYRING), it can end up calling commit_creds() on several
+> codepaths:
+> 
+> lookup_user_key
+>   install_thread_keyring [KEY_SPEC_THREAD_KEYRING + KEY_LOOKUP_CREATE]
+>     commit_creds
+>   install_process_keyring [KEY_SPEC_PROCESS_KEYRING + KEY_LOOKUP_CREATE]
+>     commit_creds
+>   join_session_keyring [KEY_SPEC_SESSION_KEYRING + KEY_LOOKUP_CREATE]
+>     commit_creds
+>   install_session_keyring [KEY_SPEC_SESSION_KEYRING]
+>     commit_creds
+> 
+> commit_creds() is only allowed when the process does not have
+> overridden credentials. commit_creds() also requires that no
+> non-refcounted pointers obtained from current_cred() are live in any
+> callers.
+> 
+> lookup_user_key() is used by lots of keyctl operations, where it can
+> make sense to refer to special keyring IDs; but it is also used by
+> other subsystems (such as AF_ALG, nvdimm, fscrypt, BPF, ...) to look
+> up user-specified key IDs. In that case, special keyring IDs don't
+> make sense (because they refer to keyrings, not individual
+> cryptographic keys), and calling commit_creds() is unsafe.
+> 
+> It would be nice if we could ensure that commit_creds() can only be
+> called when KEY_LOOKUP_CREATE is set (which is only used for special
+> key IDs); maybe we could replace the
+> install_session_keyring(user_session) call with something that just
+> grabs a reference to the session keyring and returns it?
+> 
+> I made a reproducer for the lookup_user_key() call in AF_ALG, but I
+> think several other callers of lookup_user_key() are probably also
+> affected, like bpf_lookup_user_key() and nvdimm_lookup_user_key().
+> 
+> bpf_lookup_user_key() will probably require separate fixing; it seems
+> to be intentionally designed to be able to look up and create special
+> key IDs, but is part of the generic_kfunc_set kfunc set, which can
+> probably run in some contexts with overridden creds, like in arbitrary
+> LSM hooks. That seems inherently broken.
+> 
+> Reproducer
+> ==========
+> As an example, when I use io_uring with ->personality to indirectly
+> call setsockopt(af_alg_sock, SOL_ALG, ALG_SET_KEY_BY_KEY_SERIAL,
+> &KEY_SPEC_SESSION_KEYRING, sizeof(int)), the kernel will go down the
+> following call graph.
+> 
+> sys_io_uring_enter
+>   io_submit_sqes
+>     io_submit_sqe
+>       io_init_req
+>         [set REQ_F_CREDS if sqe->personality is set]
+>       io_queue_sqe
+>         io_issue_sqe
+>           __io_issue_sqe
+>             override_creds [if REQ_F_CREDS is set and creds differ]
+>             io_uring_cmd
+>               io_uring_cmd_sock
+>                 io_uring_cmd_setsockopt
+>                   do_sock_setsockopt
+>                     alg_setsockopt
+>                       alg_setkey_by_key_serial
+>                         lookup_key
+>                           lookup_user_key
+>                             install_session_keyring
+>                               commit_creds
+>                                 BUG_ON(task->cred != old)
+>             revert_creds
+> 
+> Running this reproducer:
+> 
+> #define _GNU_SOURCE
+> #include <err.h>
+> #include <stdio.h>
+> #include <unistd.h>
+> #include <sys/mman.h>
+> #include <sys/socket.h>
+> #include <sys/syscall.h>
+> #include <linux/if_alg.h>
+> #include <linux/io_uring.h>
+> #include <linux/keyctl.h>
+> 
+> #define SYSCHK(x) ({          \
+>   typeof(x) __res = (x);      \
+>   if (__res == (typeof(x))-1) \
+>     err(1, "SYSCHK(" #x ")"); \
+>   __res;                      \
+> })
+> 
+> int main(void) {
+>   int alg_sock = SYSCHK(socket(AF_ALG, SOCK_SEQPACKET, 0));
+>   struct sockaddr_alg addr = {
+>     .salg_family = AF_ALG,
+>     .salg_type = "hash",
+>     .salg_name = "sha1"
+>   };
+>   SYSCHK(bind(alg_sock, (struct sockaddr *)&addr, sizeof(addr)));
+> 
+>   struct io_uring_params params = { .flags = IORING_SETUP_NO_SQARRAY };
+>   int uring_fd = SYSCHK(syscall(__NR_io_uring_setup, /*entries=*/4, &params));
+> 
+>   // let io_uring grab a reference to the current creds
+>   int personality = SYSCHK(syscall(__NR_io_uring_register, uring_fd,
+> IORING_REGISTER_PERSONALITY, NULL, 0));
+>   // change our creds so that the io_uring personality is different
+> from current creds
+>   SYSCHK(syscall(__NR_keyctl, KEYCTL_GET_KEYRING_ID,
+> KEY_SPEC_SESSION_KEYRING, 0, 0, 0));
+> 
+>   char *ring_region = SYSCHK(mmap(NULL, 0x1000, PROT_READ|PROT_WRITE,
+> MAP_SHARED, uring_fd, IORING_OFF_CQ_RING));
+>   struct io_uring_sqe *sqes = SYSCHK(mmap(NULL, 0x1000,
+> PROT_READ|PROT_WRITE, MAP_SHARED, uring_fd, IORING_OFF_SQES));
+> 
+>   int key_serial = KEY_SPEC_SESSION_KEYRING;
+>   sqes[0] = (struct io_uring_sqe) {
+>     .opcode = IORING_OP_URING_CMD,
+>     .fd = alg_sock,
+>     .personality = personality,
+> 
+>     /* specific to uring_cmd */
+>     .cmd_op = SOCKET_URING_OP_SETSOCKOPT,
+>     .optname = ALG_SET_KEY_BY_KEY_SERIAL,
+>     .optval = (unsigned long)&key_serial,
+>     .optlen = sizeof(key_serial),
+>     .level = SOL_ALG,
+>   };
+>   (*(unsigned int *)(ring_region + params.sq_off.tail))++;
+> 
+>   int submitted = SYSCHK(syscall(__NR_io_uring_enter, uring_fd,
+>                                    /*to_submit=*/1, /*min_complete=*/1,
+>                                    /*flags=*/0, /*sig=*/NULL, /*sigsz=*/0));
+>   printf("submitted %d and completed\n", submitted);
+> }
+> 
+> 
+> I get this splat:
+> 
+> [  543.190354][  T111] kernel BUG at kernel/cred.c:376!
+> [...]
+> [  543.196705][  T111] Call Trace:
+> [...]
+> [  543.197319][  T111]  lookup_user_key+0x261/0xbe0
+> [...]
+> [  543.197869][  T111]  alg_setkey_by_key_serial+0xbc/0x300
+> [  543.198153][  T111]  alg_setsockopt+0x1a2/0x2a0
+> [...]
+> [  543.198610][  T111]  do_sock_setsockopt+0x103/0x130
+> [  543.198863][  T111]  io_uring_cmd_sock+0x257/0x8b0
+> [...]
+> [  543.199608][  T111]  io_uring_cmd+0x1f3/0x2a0
+> [...]
+> [  543.200103][  T111]  __io_issue_sqe+0xd8/0x2a0
+> [  543.200335][  T111]  io_issue_sqe+0xde/0x8c0
+> [...]
+> [  543.201100][  T111]  io_submit_sqes+0x7a6/0x1060
+> [  543.201380][  T111]  __se_sys_io_uring_enter+0x218/0xf40
+> [...]
+> [  543.202158][  T111]  __x64_sys_io_uring_enter+0x82/0xa0
+> [...]
+> [  543.202780][  T111]  x64_sys_call+0x175f/0x2600
+> [  543.203086][  T111]  do_syscall_64+0xbe/0x360
+> [  543.203348][  T111]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
 
-This adds an XDP_FLAGS_FRAGS_PAGE_POOL xdp_buff flag that the two skb-cow
-sites (generic XDP and veth) set, so bpf_xdp_shrink_data() frees a released
-frag to the page_pool instead of using xdp->rxq->mem.type. The flag is
-stripped on buff -> frame conversion and re-derived from frame->mem_type on
-frame -> buff conversion.
+Just got this while going through inbox.
 
-Closes: https://syzkaller.appspot.com/bug?extid=237bbeed8dfe0699b7f5
+I'll run the reproducer with a test environment and respond properly
+later.
 
-> diff --git a/include/net/xdp.h b/include/net/xdp.h
-> index aa742f413c358..8fd4139e9cbd3 100644
-> --- a/include/net/xdp.h
-> +++ b/include/net/xdp.h
-
-[ ... ]
-
-> @@ -394,6 +412,15 @@ void xdp_convert_frame_to_buff(const struct xdp_frame *frame,
->  	xdp->data_meta = frame->data - frame->metasize;
->  	xdp->frame_sz = frame->frame_sz;
->  	xdp->flags = frame->flags;
-> +	/*
-> +	 * frame->flags never carries XDP_FLAGS_FRAGS_PAGE_POOL (it is stripped
-> +	 * in xdp_update_frame_from_buff()); re-derive it from the frame's own
-> +	 * memory type. veth and devmap rebuild a buff here and run a program
-> +	 * whose rxq says MEM_TYPE_PAGE_SHARED, so without this a shrink would
-> +	 * free a page_pool frag through page_frag_free().
-> +	 */
-> +	if (frame->mem_type == MEM_TYPE_PAGE_POOL)
-> +		xdp_buff_set_frag_pp(xdp);
->  }
-
-[ ... ]
-
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 532405988fd98..861c878d0a6d6 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -4377,6 +4377,13 @@ static bool bpf_xdp_shrink_data(struct xdp_buff *xdp, skb_frag_t *frag,
->  	if (mem_type == MEM_TYPE_XSK_BUFF_POOL) {
->  		netmem = 0;
->  		zc_frag = bpf_xdp_shrink_data_zc(xdp, shrink, tail, release);
-> +	} else if (xdp_buff_is_frag_pp(xdp)) {
-> +		/*
-> +		 * Skb-backed XDP (generic XDP, veth) cow's the frags into a
-> +		 * page_pool while the rxq stays MEM_TYPE_PAGE_SHARED, so free
-> +		 * the frag to the pool, not via page_frag_free().
-> +		 */
-> +		mem_type = MEM_TYPE_PAGE_POOL;
->  	}
->  
->  	if (release) {
-
-[Severity: High]
-The new flag only overrides mem_type in one direction (towards
-MEM_TYPE_PAGE_POOL), while mem_type is still initialized from the shared
-xdp->rxq->mem.type:
-
-net/core/filter.c:bpf_xdp_shrink_data() {
-	enum xdp_mem_type mem_type = xdp->rxq->mem.type;
-	...
-}
-
-The commit message says veth's rq->xdp_rxq.mem "is shared per-queue state"
-that "can be clobbered under a packet still in flight". veth also writes a
-frame's memory type into it and never restores it:
-
-drivers/net/veth.c:veth_xdp_rcv_one() {
-	case XDP_TX:
-		orig_frame = *frame;
-		xdp->rxq->mem.type = frame->mem_type;
-	...
-	case XDP_REDIRECT:
-		orig_frame = *frame;
-		xdp->rxq->mem.type = frame->mem_type;
-}
-
-Only veth_disable_xdp_range() puts rq->xdp_rxq.mem back to rq->xdp_mem.
-
-So can the opposite direction still go wrong on a veth queue?
-
-1) A multi-buff frame with frame->mem_type == MEM_TYPE_PAGE_POOL (e.g.
-   redirected in from a page_pool NIC) takes XDP_TX or XDP_REDIRECT, and
-   rq->xdp_rxq.mem.type stays MEM_TYPE_PAGE_POOL for every later packet on
-   that queue.
-
-2) A later multi-buff frame whose frame->mem_type is MEM_TYPE_PAGE_SHARED
-   (the peer's veth_xdp_rcv_skb() XDP_TX/XDP_REDIRECT path stamps
-   xdp->rxq->mem = rq->xdp_mem into the frame) or MEM_TYPE_PAGE_ORDER0
-   arrives. xdp_convert_frame_to_buff() does not set
-   XDP_FLAGS_FRAGS_PAGE_POOL for it, and it does not clear the flag either,
-   so bpf_xdp_shrink_data() picks up the stale MEM_TYPE_PAGE_POOL from the
-   rxq.
-
-3) If the program then calls bpf_xdp_adjust_tail() with a negative offset
-   that consumes a whole frag, the release path ends in:
-
-net/core/xdp.c:__xdp_return() {
-	case MEM_TYPE_PAGE_POOL:
-		netmem = netmem_compound_head(netmem);
-		...
-		/* No need to check netmem_is_pp() as mem->type knows this a
-		 * page_pool page
-		 */
-		page_pool_put_full_netmem(netmem_get_pp(netmem), netmem,
-					  napi_direct);
-}
-
-There is no netmem_is_pp() validation here, so netmem_get_pp() on a plain
-page returns whatever occupies the overlaid field, and NULL for a page that
-veth already released from its pool. Can that dereference a garbage or NULL
-struct page_pool *, or hand a foreign page to an unrelated pool's cache?
-
-Would it be more robust for bpf_xdp_shrink_data() to derive the frag memory
-type entirely from the buff (i.e. also express "not page_pool" instead of
-falling back to rxq->mem.type), so the shared and clobberable veth rxq type
-is not consulted at all?
-
-Note this residual path is not addressed later in the series: the diff of
-net/, drivers/net/veth.c and include/net/xdp.h between this commit and
-6c9c432f is empty, the following patch only adds a selftest.
+BR, Jarkko
