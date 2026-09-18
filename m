@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C14304F85B5;
-	Fri, 18 Sep 2026 21:25:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422C252E06C;
+	Fri, 18 Sep 2026 21:25:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789766710; cv=none; b=XlpcoNr4wq8bM1xKMszvWOl/7heEXVHI52KWBXoJhJtALnSAbFwHa+26h5EErXGu7RyQyTZDBXysmBhhZNBsOlmem+CBk9J+z36ZgM7RJphiNQsArlZa2YqhKJ/i+BP6XmwB5uss4W+dp4aXsAg3hw+7wCvNABpvUZDPMqVc7Pc=
+	t=1789766710; cv=none; b=F6SrznoCZNhA8QtrBEdH96ffvR/4dO6SUwzbdOa7vZswHb2TE22tXbv92wNzETZA4cSwFfcWYW182GPcdtnO13XF8fOWxPNVw5tj8j+8xLSw07Vj8n5mGQtojb9cYH0EPhQR0djdrc5ELmtguFrFzoLKUfD71FyrIJvxl/rH8R4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789766710; c=relaxed/simple;
-	bh=BGccWyARoa8qGNbdbcxMGNVArncT0J8YuPq8spMP5po=;
+	bh=Ct/eWCgCBmIc1+qcyQqmAa14L/+fEJEdyHiFaKcfEe0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ef4DjywG9iajTeDZCE7pV36SwwQsjkwaVku0//4YDBqOwLcReCygdgP+7roN5xwFCUPTEYx2dIwyOHSuAhs8J4ZoSOBfvQ2NhKPYF6We+JZwM7zPMuGk9GT+PoiegODrer2OYz2WFuyW21235m8Rfwfbxue9SniM9xFtHLlxnvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B9z9MMS7; arc=none smtp.client-ip=192.198.163.18
+	 MIME-Version; b=qm9ipn51OKJqglz1iL5AXJJVho0ulBGae9TY4B/0HSWVvFLEToLIyNNJAKGzm8DMDHsgBNWmOJNxDyzxy9kPXhWKGCuxlXeHndHB3OO2umLek9C4UFw6+/3C5tumLeAQBzix4BwnZ2KPUUq7SZSO/6Co9qAqiQCe99wegHac6bM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jOvcTTuS; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B9z9MMS7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jOvcTTuS"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789766708; x=1821302708;
+  t=1789766709; x=1821302709;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=BGccWyARoa8qGNbdbcxMGNVArncT0J8YuPq8spMP5po=;
-  b=B9z9MMS7SWcTLwEtuLgGzvvcmacEts5PdPpjtgWZkEO17zzJiRn3ET+k
-   hWDzgch4jZCGYNYTbXucVRgibvdl6hAN15C3Tqzy2miz8w5GnTRYNQSj+
-   zzDj93pEhxHTNMsxcd3b5Va6QEQGn4Veh1szGKjo8thp3R1oeidKNTxW7
-   jPsBuGK44kdUg4ao1qVXqB8oB7hpbOzUksH+7iLvj3k5PxSXyrrE9O70x
-   0l0C8bL4Om/9ICx7Q+IG32MLgj/VlSCoYAN5QhGfJL9auv1lw/eKBCCKw
-   kLFTq5tgva+qbx/Yw64zxw+6WoTAb6O5QdGEheifn5vrcaB3mnPJ8xVTk
-   A==;
-X-CSE-ConnectionGUID: T412KQJAQP+VOQGc8JM5SQ==
-X-CSE-MsgGUID: qKD1/30MTe+hZwUHNAA3tQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11909"; a="89436240"
+  bh=Ct/eWCgCBmIc1+qcyQqmAa14L/+fEJEdyHiFaKcfEe0=;
+  b=jOvcTTuS6bgMVzAytb3FAWfU05tQM1p5fuHW8s0/GM8tn1l1U9g+OusG
+   Gh1/8eAIebfYY00EDu5ZeBjH0t35yYKXCHjEQSv+kBVhn8ArrpODNd2A+
+   0BGszEhUeBHdg38JEXRsh00ykV8T/3LeOcJWQnr9/bZfNxjfNc0cf/jiA
+   3T9axTnm91dGI6GhR0MCnkLuU2tTvp8HSUxWoxxnYKeMFk72dD+cPhShS
+   NyuJf1Rr7eKKtUo43R/lXQp0+K48Bv6cCHuoS7umoTQvMHezEVRYHC2QQ
+   6QoGHOPkpMOia/ONh0f33O7U4IR8GIiwhpaFTBQftfG5luukGPbBziDit
+   w==;
+X-CSE-ConnectionGUID: P95fbD8BS2CmLMmpA1ehjQ==
+X-CSE-MsgGUID: GFQmTU72TZi68i7Jeeo8qg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11909"; a="89436260"
 X-IronPort-AV: E=Sophos;i="6.27,109,1787036400"; 
-   d="scan'208";a="89436240"
+   d="scan'208";a="89436260"
 Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2026 14:25:06 -0700
-X-CSE-ConnectionGUID: q5ki98q+RqizjYr6eFbbOQ==
-X-CSE-MsgGUID: b8oG14ncTkef3G85kRMCtQ==
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2026 14:25:07 -0700
+X-CSE-ConnectionGUID: AKKGXFLKR6Gd5MrvD+W3NQ==
+X-CSE-MsgGUID: 0eWW/AMrRWWCdR7Czmb7dw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,109,1787036400"; 
-   d="scan'208";a="271251393"
+   d="scan'208";a="271251409"
 Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by fmviesa007.fm.intel.com with ESMTP; 18 Sep 2026 14:25:05 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 18 Sep 2026 14:25:06 -0700
 From: Tony Nguyen <anthony.l.nguyen@intel.com>
 To: davem@davemloft.net,
 	kuba@kernel.org,
@@ -65,11 +65,11 @@ Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
 	john.fastabend@gmail.com,
 	sdf@fomichev.me,
 	bpf@vger.kernel.org,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
-	Sunitha Mekala <sunithax.d.mekala@intel.com>
-Subject: [PATCH net 3/8] i40e: make ring pointers unreachable before freeing via rcu
-Date: Fri, 18 Sep 2026 14:24:50 -0700
-Message-ID: <20260918212458.550425-4-anthony.l.nguyen@intel.com>
+	Sunitha Mekala <sunithax.d.mekala@intel.com>,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+Subject: [PATCH net 5/8] i40e: fix potential UAF in i40e_vsi_setup()'s error path
+Date: Fri, 18 Sep 2026 14:24:52 -0700
+Message-ID: <20260918212458.550425-6-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20260918212458.550425-1-anthony.l.nguyen@intel.com>
 References: <20260918212458.550425-1-anthony.l.nguyen@intel.com>
@@ -83,64 +83,58 @@ Content-Transfer-Encoding: 8bit
 
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-Sashiko reports:
-***
->  err_config:
-> +	i40e_vsi_free_q_vectors(vsi);
-> +err_qvec:
->  	i40e_vsi_clear_rings(vsi);
-This is a pre-existing issue, but can the sequence in i40e_vsi_clear_rings()
-lead to an RCU ordering violation?
-In i40e_vsi_clear_rings(), the rings are freed before the array pointers are
-nullified:
-	kfree_rcu(vsi->tx_rings[i], rcu);
-	WRITE_ONCE(vsi->tx_rings[i], NULL);
-Under RCU rules, a pointer must be made unreachable to new readers before it
-is handed off to kfree_rcu(). Could a new RCU reader (like
-i40e_get_netdev_stats_struct_tx()) fetch the pointer after kfree_rcu() is
-invoked, and access freed memory if the grace period expires while the
-reader is still active?
-***
+Sashiko pointed out an issue where error path in i40e_vsi_reinit_setup()
+released ring memory but then when freeing q_vectors, the rings mapped
+to q_vectors where touched which implies a regular use-after-free bug.
 
-Save the Tx ring pointer before clearing the published ring array slots
-and pass the saved pointer to kfree_rcu(). This preserves the intended
-RCU ordering, where new readers can no longer discover the ring through
-vsi->tx_rings/rx_rings/xdp_rings before the object is queued for
-deferred freeing, while avoiding a NULL kfree_rcu() argument after the
-slot has already been cleared. Since the Tx pointer is the base of the
-per-queue-pair allocation block, re-reading vsi->tx_rings[i] after
-WRITE_ONCE(..., NULL) would otherwise turn the free into a no-op and
-leak the whole ring block.
+Apparently i40e_vsi_setup() has the same problem, so swap the allocation
+and freeing order and fix the 13 year old bug.
 
-Fixes: 9f65e15b4f98 ("i40e: Move rings from pointer to array to array of pointers")
-Reported-by: Sashiko AI Review <sashiko-bot@kernel.org>
+Fixes: 41c445ff0f48 ("i40e: main driver core")
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
 Tested-by: Sunitha Mekala <sunithax.d.mekala@intel.com> (A Contingent worker at Intel)
+Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/intel/i40e/i40e_main.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-index de4c0737f72e..65aa50330aac 100644
+index 5ea8731ece08..2b4b061302db 100644
 --- a/drivers/net/ethernet/intel/i40e/i40e_main.c
 +++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -11693,11 +11693,13 @@ static void i40e_vsi_clear_rings(struct i40e_vsi *vsi)
+@@ -14461,14 +14461,14 @@ struct i40e_vsi *i40e_vsi_setup(struct i40e_pf *pf, u8 type,
+ 		fallthrough;
+ 	case I40E_VSI_FDIR:
+ 		/* set up vectors and rings if needed */
+-		ret = i40e_vsi_setup_vectors(vsi);
+-		if (ret)
+-			goto err_msix;
+-
+ 		ret = i40e_alloc_rings(vsi);
+ 		if (ret)
+ 			goto err_rings;
  
- 	if (vsi->tx_rings && vsi->tx_rings[0]) {
- 		for (i = 0; i < vsi->alloc_queue_pairs; i++) {
--			kfree_rcu(vsi->tx_rings[i], rcu);
-+			struct i40e_ring *tx_ring = vsi->tx_rings[i];
++		ret = i40e_vsi_setup_vectors(vsi);
++		if (ret)
++			goto err_qvec;
 +
- 			WRITE_ONCE(vsi->tx_rings[i], NULL);
- 			WRITE_ONCE(vsi->rx_rings[i], NULL);
- 			if (vsi->xdp_rings)
- 				WRITE_ONCE(vsi->xdp_rings[i], NULL);
-+			kfree_rcu(tx_ring, rcu);
- 		}
- 	}
- }
+ 		/* map all of the rings to the q_vectors */
+ 		i40e_vsi_map_rings_to_vectors(vsi);
+ 
+@@ -14488,10 +14488,10 @@ struct i40e_vsi *i40e_vsi_setup(struct i40e_pf *pf, u8 type,
+ 	return vsi;
+ 
+ err_config:
++	i40e_vsi_free_q_vectors(vsi);
++err_qvec:
+ 	i40e_vsi_clear_rings(vsi);
+ err_rings:
+-	i40e_vsi_free_q_vectors(vsi);
+-err_msix:
+ 	if (vsi->netdev_registered) {
+ 		vsi->netdev_registered = false;
+ 		unregister_netdev(vsi->netdev);
 -- 
 2.47.1
 
