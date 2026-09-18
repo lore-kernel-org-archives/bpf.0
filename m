@@ -1,84 +1,53 @@
-Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
+Received: from mta0.migadu.com (out-73.mta0.migadu.com [91.218.175.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3F15218B0
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 19:59:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F7F451E443
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 20:15:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789761591; cv=none; b=jKWIYlCQoolG6FWdZoFRX91rO9FgUEEdYTUNVrh7eknLJGs6QM/z4pmGUXI9mHu6aEhR+rUg9Ogj01bcJsf5Z/7QVQRZNWS4jwRjNTSvAndBme5GHR+yqDS4P3IefFyOpchf2C8fUK4XcejGl96cZ1+uVOV7pkQLvyIi59mmI7Y=
+	t=1789762552; cv=none; b=Qd1qegcradpftYwroHJnhuH3f9I0fuefv5VGgnYXGQDiJ8ZNsgdxi+vqpqN7HBhnc4Zby/u5cY90X6Ybq7LLMkoRgaP4h2lCXgbWyjrvarcPYSNSqqp6eqnTXZqiTkXT+OS5yEk/nl/R+Dt67D98Kr2H5w2e+XmYbUbo1wxvmVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789761591; c=relaxed/simple;
-	bh=Jv9PmI2tuRQ6a0mGkf94vkgPMQlOdZGeXzjl16O8i00=;
+	s=arc-20240116; t=1789762552; c=relaxed/simple;
+	bh=iouTRwcP6p6sORyaAyVd4nF2CdJPsrPN00jaStu4b50=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uLEfyGeFdnm7JySBzuTXvRE63tQV9hoKtkseaWzXJQfb6Mn4hDQAKZ56ad46qlfnV1caQ4LqLr4j4cPBsMFO1PYjntWJk/s6/rbeHsS8+N7fVXi27CDobaWxjByOP0JwCgrJ6ZA8cE7ipE+eHwrbGIwqyU9TZdzZT36jdUrSc/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com; spf=pass smtp.mailfrom=amutable.com; dkim=pass (2048-bit key) header.d=amutable-com.20251104.gappssmtp.com header.i=@amutable-com.20251104.gappssmtp.com header.b=ch2e604T; arc=none smtp.client-ip=74.125.224.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sfo9XmWP8fkTU/tMzvLrEdwQuEtEBlesnNzUiev98V2hOFhZoqZf6/RB6XAKorhhfPrJZpGDRbn8vhBxWvugD0SZg2Es99DwhANu6jd7qugTmvoAysPjIQuGaffHTL69952BIoOSxSWNb150xywDVZr6MCe7y8X0SjvirNqKcms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EKgnW5eN; arc=none smtp.client-ip=91.218.175.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amutable-com.20251104.gappssmtp.com header.i=@amutable-com.20251104.gappssmtp.com header.b="ch2e604T"
-Received: by mail-yx2-f12.google.com with SMTP id 956f58d0204a3-66e4ab1ef11so1098583d50.0
-        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 12:59:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amutable-com.20251104.gappssmtp.com; s=20251104; t=1789761587; x=1790366387; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=jFiXSu2V4pZ+QeomBn1c5HcWy5gtnzTo7Z55CduAixo=;
-        b=ch2e604TIxvi8hLh6mLXV0Kd6bTBiZI6iola+whhEHBQ/gRtNMLO9+O8h75SUTlcSD
-         ct4Fq4vTT/VWzsVFSc3o1K507n3fGuVDlzN1p1N7Lkdt1Oewd4iWhDCX9oexGV0yw1Uf
-         x2xfQyWszMMyEtpwNcapqacbwvHOBZrrOHwghHYVKP+FpxGbDBAq6+cwPnqMOmdXT/Wp
-         RmREmPUaX2sGnpVAZP5EJ1ONwPxNa2rNIQ/a9maVbyLwwsluXGxl9TM9z9D6C+ZEnGU5
-         8BEMTctHx5RvzLgo9Lu01MauixY+qjScYIhLTGc4EVl9uKr4tRuCeerFP6EutvGdfkxX
-         Sdmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789761587; x=1790366387;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jFiXSu2V4pZ+QeomBn1c5HcWy5gtnzTo7Z55CduAixo=;
-        b=LjxEju0SIElaB50yRPzkBfNLkUVxGLGXJoFZ3yAPk7wMCJ33hxOZBNYFS4Rb8kIQUK
-         iIqy5utuaJhn9WgGKzYWs5QOGDeH5y+pMi3C6lSAPbUs5SNfYyA/zb9HxPD3DSVpdEJa
-         ZJy9BnyUKMYCt+g1tXsn2U0H71eRExlvl19Zo+LYPDBRjWPuF9btCF4Add2eYNIdgRRT
-         mY86+x848zDBCztPSTGmHnV0WVkAq5IZZ9pnhb2ILL32QOvoDYAKjV1p/JsA5fWObG0x
-         oRSsByeuYlSKODXFe8fUN0DLaYtmhzNpz5QdZrqW+ks+cwcAHnARB2dNXFok3I9UbOjE
-         1hgQ==
-X-Forwarded-Encrypted: i=1; AKwUvByV6i7DD6UuZGBFyLkQ59+aBOZQSj/jbF+UsZHwl3M2mY/xQqIgkmbGbZ/IHypmqn8mvUw=@vger.kernel.org
-X-Gm-Message-State: AFuF++krGmzvrvp0rLNtCT+9+E8DGBgvJ0/UitUnFepCiTX8nWTtehgV
-	GW7LGz5R+CgJ+9xf7u9BWeKOfV6vaAga18KVc5y058ts+/CQ65kHG1fvbliSvtuHC0dH
-X-Gm-Gg: AYBFou3StEUEoEFARD1Uv6JnfcgcRhjcjbxTUGEcOlpK6ctJ3OGYbNZl0C2XCUepLHg
-	OgCqJFdW9AUHcpEN7racXADdgwBhFjF1Lc4bhjHKNg+e0il4574IZtE09WUtwo7LMQHbunTbbOF
-	F0ffqe8nKCXuE8VZxVTATuR1c5QuDgq2YoO1AmMb9vQKgIGVjW3YIOPAGLn18heHbkgNmrcPDp5
-	1cD20SfOngrzGh7aa+ZRlVRrD7Zl8NF7p3wsqtG3gfXVxdxICdeSWfDgvwB9/8MjQ+5SFg2coBl
-	PLOabQ9yaEa1JXjJ4vQ5XRrYDwMtfMl8+FLCzZ5O4Nnd8RuaMEzl2KjXOC9AaPUhDagKTy+t57G
-	wchweYmZyuM7vlNwv5eS6PAUqE2rNJFLIlfjdo/a1bIXr5HHuqhINlvqp4s1smETR6VHFif0KK1
-	CknKO7iwcFN9Ww8lZdatHtb3tw8BWs1kczgIG7bpN8n6FyUar05C/FHmamIxX8XWSbkln//QHgo
-	Amgs6a7/kRQvVqyzj4+sK0oMegqMje5/SsikFX+wsIXjU0019Hvpg==
-X-Received: by 2002:a05:690e:e89:b0:671:4d46:8d5a with SMTP id 956f58d0204a3-6717fcee54emr1347891d50.41.1789761587246;
-        Fri, 18 Sep 2026 12:59:47 -0700 (PDT)
-Received: from toolbx (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-672990ab5desm406523d50.8.2026.09.18.12.59.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 12:59:46 -0700 (PDT)
-Date: Fri, 18 Sep 2026 14:59:49 -0500
-From: Andrew Halaney <andrew@amutable.com>
-To: David Howells <dhowells@redhat.com>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>, Alasdair Kergon <agk@redhat.com>, 
-	Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, 
-	Benjamin Marzinski <bmarzins@redhat.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Eric Biggers <ebiggers@kernel.org>, "Theodore Y. Ts'o" <tytso@mit.edu>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Randy Dunlap <rdunlap@infradead.org>, dm-devel@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
-	fsverity@lists.linux.dev, linux-doc@vger.kernel.org, 
-	"Christian Brauner (Amutable)" <brauner@kernel.org>
-Subject: Re: [PATCH 1/3] keys: add KEY_SPEC_DM_VERITY_KEYRING
-Message-ID: <aq2VxlttdlTNlHo6@toolbx>
-References: <aqyiCavj3xeNqyAo@kernel.org>
- <20260914-ajhalaney-dmverity-key-identifier-v1-0-01922dc1366a@amutable.com>
- <20260914-ajhalaney-dmverity-key-identifier-v1-1-01922dc1366a@amutable.com>
- <715249.1789718726@warthog.procyon.org.uk>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EKgnW5eN"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=iouTRwcP6p6sORyaAyVd4nF2CdJPsrPN00jaStu4b50=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789762545; v=1; x=1790367345;
+ b=EKgnW5eNwYUSMYi5mLGwEpSgf1iuBPjL2JNsjN9V8Z4AWUyhTuyHTlqbrnI3o2JQb1SpB/ga
+ voRD2QcxnU3iRxaoU298g2+1Rla74UTd64Py1s1csV2goaMYeprRBXa/r73SR9I4GwRda318+qT
+ KEbVBbKAycznOlIdshhkj4S4=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 67fa36d92599c8ae;
+	Fri, 18 Sep 2026 20:15:36 +0000
+X-Mizu-Trace-ID: 67fa36d92599c8ae
+X-Migadu-Flow: FLOW_OUT
+Date: Fri, 18 Sep 2026 13:15:35 -0700
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: JP Kobryn <inwardvessel@gmail.com>
+Cc: Hui Zhu <hui.zhu@linux.dev>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Shuah Khan <shuah@kernel.org>, David Hildenbrand <david@kernel.org>, 
+	Barry Song <baohua@kernel.org>, Geliang Tang <geliang@kernel.org>, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	Hui Zhu <zhuhui@kylinos.cn>
+Subject: Re: [PATCH bpf-next v12 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
+Message-ID: <aq2bo5Q-YUj7lkxn@linux.dev>
+References: <cover.1789714023.git.zhuhui@kylinos.cn>
+ <02f0a8dc45a840d7801ec17e0c1168f7dacf9b73.1789714023.git.zhuhui@kylinos.cn>
+ <b115ece2-33a1-412e-ac25-38f339a13599@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -87,65 +56,99 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <715249.1789718726@warthog.procyon.org.uk>
+In-Reply-To: <b115ece2-33a1-412e-ac25-38f339a13599@gmail.com>
 
-On Fri, Sep 18, 2026 at 09:05:26AM +0100, David Howells wrote:
-> Jarkko Sakkinen <jarkko@kernel.org> wrote:
+On Fri, Sep 18, 2026 at 12:45:01PM -0700, JP Kobryn wrote:
+> On 9/17/26 11:58 PM, Hui Zhu wrote:
+> > From: Hui Zhu <zhuhui@kylinos.cn>
+> > 
+> > BPF programs can observe memory pressure on a cgroup, e.g. refault
+> > stats via bpf_mem_cgroup_page_state(), but cannot act on it:
+> > triggering reclaim requires writing to memory.reclaim, which BPF
+> > cannot do.
+> > 
+> > Add bpf_proactive_reclaim(), a sleepable kfunc performing one
+> > proactive reclaim pass on a memcg, like a write to memory.reclaim
+> > but without retrying until the target is reached, so that when and
+> > how hard to reclaim is BPF policy rather than hard-coded thresholds.
+> > The reclaim target of a single call is capped at MEMCG_CHARGE_BATCH,
+> > as high_work_func() does for memory.high; reclaiming more is left to
+> > the program, which can call the kfunc once per bpf_wq callback and
+> > stop at any point. It is limited to BPF_PROG_TYPE_SYSCALL, because
+> > other sleepable programs may run with filesystem locks held, on
+> > which the reclaim path could deadlock via filesystem shrinkers.
+> > 
+> > Convert MIN_SWAPPINESS, MAX_SWAPPINESS and SWAPPINESS_ANON_ONLY from
+> > macros to an enum so that they are emitted into BTF and usable from
+> > BPF programs via vmlinux.h.
+> > 
+> > Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+> > Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
+> > ---
+> >   mm/bpf_memcontrol.c | 62 ++++++++++++++++++++++++++++++++++++++++++++-
+> >   mm/internal.h       | 10 +++++---
+> >   2 files changed, 67 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+> > index 716df49d7647..c5d7f29ade85 100644
+> > --- a/mm/bpf_memcontrol.c
+> > +++ b/mm/bpf_memcontrol.c
+> > @@ -8,6 +8,8 @@
+> >   #include <linux/memcontrol.h>
+> >   #include <linux/bpf.h>
+> > +#include "internal.h"
+> > +
+> >   __bpf_kfunc_start_defs();
+> >   /**
+> > @@ -159,6 +161,48 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
+> >   	mem_cgroup_flush_stats(memcg);
+> >   }
+> > +/**
+> > + * bpf_proactive_reclaim - proactively reclaim memory from a memory cgroup
+> > + * @memcg: the target memory cgroup to reclaim from.
+> > + * @size: the amount of memory to reclaim, in bytes, clamped to
+> > + *        MEMCG_CHARGE_BATCH.
+> > + * @swappiness: the reclaim swappiness, in the range [MIN_SWAPPINESS,
+> > + *              SWAPPINESS_ANON_ONLY], or -1 to use the memcg's own
+> > + *              swappiness.
 > 
-> > This is great for discussion but what we want for the commit message
-> > is just motivation and resolution.
+> The ANON_ONLY enumerator shouldn't be included as part of the range. I
+> would change this to [MIN_SWAPPINESS, MAX_SWAPPINESS] and then specify
+> that ANON_ONLY is a special mode like -1 is.
 > 
-> Actually, I think it's useful that Andrew wrote up the issues in the commit
-> message - and I think it shows part of the motivation.  The 'writing a fake
-> /proc/keys line in the description' is something I hadn't considered.
+> > + *
+> > + * Performs one proactive reclaim pass on @memcg, like a write to
+> > + * memory.reclaim but without retrying until @size is reached. Call it
+> > + * repeatedly to reclaim more than one batch.
+> > + *
+> > + * Only available to BPF_PROG_TYPE_SYSCALL, because other sleepable programs
+> > + * may run with filesystem locks held, which the reclaim path can deadlock
+> > + * on via filesystem shrinkers.
+> > + *
+> > + * Return: The amount of memory reclaimed, in bytes, or a negative error.
+> > + */
+> > +__bpf_kfunc long bpf_proactive_reclaim(struct mem_cgroup *memcg,
+> > +				       unsigned long size,
+> > +				       int swappiness)
+> > +{
+> > +	unsigned long nr_reclaimed;
+> > +	unsigned long nr_pages;
+> > +
+> > +	if (swappiness < -1 || swappiness > SWAPPINESS_ANON_ONLY)
+> > +		return -EINVAL;
+> 
+> Related to the previous comment, you treat the special values as part of
+> the range. It works currently, but creates a layout dependency on the
+> enum. I think it would be more future-proof if you did:
+> 
+> if (swappiness != -1 && swappiness != SWAPPINESS_ANON_ONLY) {
+> 	if (swappiness < MIN_SWAPPINESS || swappiness > MAX_SWAPPINESS)
+> 		return -EINVAL;
+> }
+> 
+> The previous comments I brought up are now resolved, so assuming you'll
+> make the changes above you can include:
+> 
+> Reviewed-by: JP Kobryn <jp.kobryn@linux.dev>
 
-I'll defer to what you all want in the message here, I found it valuable
-but I trend on the side of overly verbose admittedly!
-
-> 
-> > I don't think we need all this just to say that /proc/keys in a racy
-> > query mechanism for production, which is an issue for dm-verity, given
-> > that nothing else is available.
-> 
-> I think at some point, we will need a system call to search all for all
-> accessible keys matching certain criteria by actually walking the key
-> database.  The problem there is that there may be multiple hits, so we may
-> need something like:
-> 
-> 	int count = find_key(key_serial_t start_id,
-> 			     const char *type, const char *desc_prefix,
-> 			     key_serial_t *results, size_t results_size,
-> 			     unsigned int flags);
-> 
-> Allowing you to do:
-> 
-> 	key_serial_t dm_key;
-> 	int n = find_key(0, "keyring", ".dm_verity", &dm_key, 1,
-> 			 FIND_KEY_EXACT_DESC);
-> 
-> This wouldn't be as fast as a direct lookup since it would have to walk the
-> key tree, doing name comparisons and perm checks on each key of the type.
-> 
-> > And secondly special keys are meant for implicit keyrings so isn't
-> > that all there's to it?
-> 
-> I have no particular objection to setting aside a block of negative key IDs
-> for special keyrings that need to be accessed a lot - though I would make
-> common reg/unreg functions that take the ID to be registered and, say, set the
-> block at -257..-512.  Moving the BFP keyring to -257 and DM to -258.
-
-To be clear are you suggesting I do that for v2 here? Happy to make the
-change and add some reuse to the registration functions, etc. I'm
-guessing its fine to change the bpf id since its still only in -next?
-
-The only awkward bit with making that more generic is that dm-verity
-isn't __ro_after_init since its coming from a module possibly, and
-because of the module usage I also protected it with a spinlock in case
-someone's accessing it while you unload the module. Could just use one
-spinlock for the whole generic array, and drop the __ro_after_init I
-suppose.
-
-Let me know if I'm not following properly!
-
-Thanks,
-Andrew
+Hui, please make these changes and just send this patch in next version.
