@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C325833B6F4
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 04:57:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35FD33EB102
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 04:59:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789707442; cv=none; b=IzQnrWs4Y6OaYW/nLY0hbBUTxbqyXB5WaJ8RYpXU2tgd1CHex3vYxs/U3FoBCDv6q/cRDSantcjhnV95YRDpLWmV4GtPyt87rWUxlG6DJG8x2PHCq3GuAkVzPkPMRAOyQBXFgZNSfoGbQdZpKDsSDY5kXEF/aq46/ZM6VPV125c=
+	t=1789707555; cv=none; b=b09rmoLksvmemIdNfiMunSY4gEeCS2ew1VqCjb1y8T7jEHNZpl7daWOn/nPUxgxjgePKNWCiAL7wyUTgNDqUN9LhQSPqYUyCs1gzEOUp/MgyO6ku3Cn87MIYzqxHCOmwngaqgcB34xhVU6lzU87KGUsuciDvJol4jJG7Q4aW5Ug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789707442; c=relaxed/simple;
-	bh=qsiZobY26Yh7hx67lo+zEDKEnuqRRMOIttp4lN2P0fk=;
+	s=arc-20240116; t=1789707555; c=relaxed/simple;
+	bh=Q//EaUB8Ickt4ie+ZEJ8B8mbUiWEqDNcT1u1Y/MzYs4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=jDpipImEgBxBHvzExPFE16j9JjL4CbG8QJGAi26ONJmBclu7l8NXG3MZ09vgXf17EvKHlo54JhjzXPFqUcEa369+6S2IiDQm9EMYbKuaRQWxyc34YWzEpZ4+4J/sfAkcFS6BJ4JW9sQCUdr7twQRjdZeB6mcB6+GmBv2K9iyjHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VNItaVjW; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Gl99KPtMdoDTOth0k4wm/10xTOb5q2gqv4XNzUQ5+RtIzM8lVZH0TUaR6TMqG3tLoHDpz7Yj1X1X+6sOJuz/iKfHimQ2cE5yZ8jsR+9AXLC8mq6z9ttsNthNyj3gH6iwoO3LDv1L5iI2JDw/Zw+68y0EkxuhOq9a5Wq/P2ohu5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uk6A8KQ2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VNItaVjW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DFA01F000FF;
-	Fri, 18 Sep 2026 04:57:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uk6A8KQ2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6BB71F000FF;
+	Fri, 18 Sep 2026 04:59:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789707441;
-	bh=/BFYyj3Eh2sYdG+cX3EzK4U/1VJRv568INNJFNAszh4=;
+	s=k20260515; t=1789707552;
+	bh=gLKODk4VuqGzm80H6ts02OrYWhsATIoy3K07f4uFIJ8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VNItaVjW8BHEQK+Gj52FwUKw9JlZkGbEKJpE3oKNCgaDpQIRe3PlARGLwmFQy8g9i
-	 t8CWMCGu/L2qXKpmWefJXsbx/xO8ZVCZj3wOzQnyBlS4MuuKvgPYtzu+l+4l3WSmhq
-	 yaPSgPtgW1QfxmG84txjunvIMH2kUfCIpfnYHvd0VNgz5HmK05QihsL4ti/vEDA8L7
-	 6VvI3sXiSQWFzlG+y4Fo/u0BlhNjlNK32pdTSBLdiUH24x/9m5EDZkMwKr5X+Mt8Ac
-	 uW0dEfbZl7AWbNtBgXa2deU9z5zue0WJ9RiXgGW9F7Kl0pr4s0cd2dddmW+lJ0k429
-	 O/7tkSvIouPqg==
+	b=Uk6A8KQ2AsgiQF1oU2Y/mU7YjHA7zd1Regx+s5aAsZ187rcaiUmQlu5qKV6DTXvP4
+	 5Ri6pDgxrd0bIILTP43kbMrcrLfQiQqH2jinu3qoQZVQbueg14u8jTk2yUlVzX1Mbk
+	 VxK3SAAaTC1Ab+4THy5LK93tcs1CA3zhtufFVi6TKG2dSJfz1NsC7OXha+23pSd9Ae
+	 eAQgVXmjfB0iiKvbruWm5VkwuatmnLBsF+r6STeKiVJII4deZUEkeMxnsCCxlhecTx
+	 YQwWqNprLOPFXty3wuPC+189xZqEabhb5hTUMKFz6JTtJkWJa7PvRJZG20cW9wFV9z
+	 LR215Oai63RsA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 14/20] libbpf: Add cleanup_info to
- bpf_prog_load_opts
+Subject: Re: [PATCH bpf-next v2 18/20] selftests/bpf: Add an end-to-end
+ .bpf_cleanup exception test
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260918044311.3291504-1-yonghong.song@linux.dev>
+In-Reply-To: <20260918044332.3293447-1-yonghong.song@linux.dev>
 References: <20260918044156.3283973-1-yonghong.song@linux.dev>
- <20260918044311.3291504-1-yonghong.song@linux.dev>
+ <20260918044332.3293447-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 18 Sep 2026 04:57:20 +0000
-Message-Id: <20260918045721.2DFA01F000FF@smtp.kernel.org>
+Date: Fri, 18 Sep 2026 04:59:12 +0000
+Message-Id: <20260918045912.C6BB71F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,57 +47,116 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] libbpf: missing E2BIG fallback for cleanup_info breaks forward c=
-ompatibility
+- [Low] bpf: multi-line comments do not follow modern BPF style
 --
 
-commit d67b69538e39a329708fcc9fa943f0ad05afaa05
+commit 8ad5e7ea23b9dcb55029206d5cb36453b231f9c8
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-libbpf: Add cleanup_info to bpf_prog_load_opts
+selftests/bpf: Add an end-to-end .bpf_cleanup exception test
 
-Let a caller hand the kernel an exception cleanup table. Extend struct
-bpf_prog_load_opts with cleanup_info, cleanup_info_cnt and
-cleanup_info_rec_size, pass them through to BPF_PROG_LOAD, and grow the
-attr size bpf_prog_load() computes to cover the new fields.
+This commit adds an end-to-end test for .bpf_cleanup exception handling. It
+uses inline assembly to construct precise call-site brackets, landing pads,
+and cleanup records that mirror compiler output. It also tests shapes that
+the kernel should refuse, ensuring the JIT correctly handles or rejects
+different landing pad configurations.
 
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 96819c082c772..bcf490570961c 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c =
+b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
+> new file mode 100644
+> index 0000000000000..d1e45b765af26
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
 [ ... ]
-> @@ -370,6 +370,10 @@ int bpf_prog_load(enum bpf_prog_type prog_type,
->  	attr.fd_array =3D ptr_to_u64(OPTS_GET(opts, fd_array, NULL));
->  	attr.fd_array_cnt =3D OPTS_GET(opts, fd_array_cnt, 0);
-> =20
-> +	attr.cleanup_info =3D ptr_to_u64(OPTS_GET(opts, cleanup_info, NULL));
-> +	attr.cleanup_info_cnt =3D OPTS_GET(opts, cleanup_info_cnt, 0);
-> +	attr.cleanup_info_rec_size =3D OPTS_GET(opts, cleanup_info_rec_size, 0);
-
-[Severity: Medium]
-Will this break forward compatibility for bpf_prog_load() if cleanup_info
-triggers an -E2BIG error?
-
-Later in bpf_prog_load(), there is a retry loop to handle -E2BIG when the
-userspace-provided record size is larger than what the kernel supports:
-
-	while (errno =3D=3D E2BIG && (!finfo || !linfo)) {
-		if (!finfo && attr.func_info_cnt &&
-		    attr.func_info_rec_size < func_info_rec_size) {
-            /* try with corrected func info records */
-            ...
-
-The loop condition and body don't seem to include checks for cleanup_info.
-
-If the kernel returns -E2BIG because of a larger cleanup_info_rec_size,
-won't this hit the else { break; } block or skip the loop entirely, causing
-the load to fail instead of retrying with truncated records?
-
+> @@ -0,0 +1,79 @@
+[ ... ]
+> +	/* foo3 throws; every pad runs and the cookie is delivered at entry. */
+> +	if (test__start_subtest("throw_from_foo3"))
+> +		run(skel, 101, THROW_COOKIE, PADS_FOO3_THREW);
 > +
->  	if (log_level) {
->  		attr.log_buf =3D ptr_to_u64(log_buf);
->  		attr.log_size =3D log_size;
+> +	/* foo3 returns 2 ^ 1 =3D=3D 3, so foo2 throws from its own second regi=
+on;
+> +	 * foo3's frame is long gone, so its pad must not run.
+> +	 */
+
+[Severity: Low]
+Does this comment block follow the proper multi-line comment formatting
+for the BPF subsystem?
+
+The BPF subsystem strict guidelines require multi-line comments to have
+the opening /* on its own line:
+
+/*
+ * foo3 returns 2 ^ 1 =3D=3D 3, so foo2 throws from its own second region;
+ * foo3's frame is long gone, so its pad must not run.
+ */
+
+> +	if (test__start_subtest("throw_from_foo2"))
+> +		run(skel, 2, THROW_COOKIE, PADS_FOO2_THREW);
+> +
+> +	exceptions_cleanup__destroy(skel);
+> +
+> +	RUN_TESTS(exceptions_cleanup_fail);
+> +}
+
+> diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup_fail.c =
+b/tools/testing/selftests/bpf/progs/exceptions_cleanup_fail.c
+> new file mode 100644
+> index 0000000000000..ce2dac306a84c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup_fail.c
+[ ... ]
+> @@ -0,0 +1,600 @@
+[ ... ]
+> +SEC("socket")
+> +__failure __msg("reaches an indirect jump")
+> +__naked void gotox_in_pad(void)
+> +{
+> +	asm volatile (
+> +	".pushsection .jumptables,\"\",@progbits;"
+> +"jt0_%=3D:"
+> +	".quad l0_%=3D - socket;"
+> +	".quad l1_%=3D - socket;"
+> +	".size jt0_%=3D, 16;"
+> +	".global jt0_%=3D;"
+> +	".popsection;"
+> +
+> +"1:"	"call gotox_thrower;"		/* cleanup region */
+> +"2:"
+> +	"r0 =3D 0;"
+> +	"exit;"
+> +"3:"					/* landing pad */
+> +	"r1 =3D jt0_%=3D ll;"
+> +	"r1 +=3D 8;"
+> +	"r2 =3D *(u64 *)(r1 + 0);"
+> +	/* gotox r2. Spelled as a raw insn on purpose: the "gotox" mnemonic
+> +	 * only reached the LLVM assembler in llvm 22, and BPF_RAW_INSN()
+> +	 * needs <linux/bpf.h>, which this file cannot have -- vmlinux.h
+> +	 * already defines the uapi enums.
+> +	 */
+
+[Severity: Low]
+Does this multi-line comment format conform to the BPF style guide?
+
+As with the previous comment in exceptions_cleanup.c, the BPF subsystem
+mandates that the opening /* resides on its own line for multi-line
+comments.
+
+> +	".8byte 0x20d;"
+> +"l0_%=3D:"
+> +	"call bpf_unwind_resume;"
+> +	"exit;"
+> +"l1_%=3D:"
+> +	"call bpf_unwind_resume;"
+> +	"exit;"
+> +	CLEANUP_REC("1b", "2b", "3b")
+> +	::: __clobber_all);
+> +}
+> +
+> +#endif /* x86 || arm64 */
+> +
+> +char _license[] SEC("license") =3D "GPL";
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260918044156.3283=
-973-1-yonghong.song@linux.dev?part=3D14
+973-1-yonghong.song@linux.dev?part=3D18
