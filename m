@@ -1,78 +1,78 @@
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E68126C3BD
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 05:29:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55C23C109B
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 05:29:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789709360; cv=none; b=fACkulCugJFyV5i4GQsVrzYpAVKDVWxoZw+Z095hSRwh9cgy+p2X3cB6THzWZiy0d9sBFK/FCXU49Ufn7ETP+cW0aS2zSBHIaIjCQ39dHr4XrIuZTqOexckm9lhIyqUl4CKTChxDLZ8nCVNbivfn3RqLaN66Zwl191I7wTBmpeU=
+	t=1789709361; cv=none; b=EHE55nVn9p+Abua/rUrBD6zj0Nt7cV7XfYn4xFmcRc2HxZziA0tUrgVvuncVNQoRufOvqfgMyzcNDrf2iWupt2FmwGz3dKdgdNAUyKeAyPF8YdS/JRpf5fqPSZYyfnbXXybx/m6cfzZ/w3h83C7y/EP9KruDgz5o+bQcRSb0GiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789709360; c=relaxed/simple;
-	bh=3pgjN1ChBK0r7kCQPS+/lojAsp9LdQDLRYH+Sz9yvcQ=;
+	s=arc-20240116; t=1789709361; c=relaxed/simple;
+	bh=CgOhfN9sZFAJQmFU8dIMEXGMhqSdLD+BmEV243RMuWc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YmYBDTJJVPIzmVXf8+tCA7LR+lKjqTCdVZB1h2gxfK/AdqjcoFx9hZPsq38c8wyVyQKOQjLMLzAl0nopWFbH8XOErd07OzjzfHZpYhdzc7BdENb1JXLVSz3v7EWyQ8QOC/xNOme63cEyBbDNsUTRoH1RyjN+Gpy9n5/36jp0/Ow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dwhBkjV2; arc=none smtp.client-ip=74.125.225.75
+	 MIME-Version; b=hY2R6aVRBtIUxYkUlBzcMOrhmDizL1ucW0YQtEzoJwT/L91jnwTHvGaPqCiQrkgDuR8bOTPvGy+dDZYrofs5pPIiV6u7S5y0Zfc/SqYXjaHng5HEjdjiVLdACdEXylBN32i/+uV1RHhA7XNSBVf+fgbeiiSWP3RvAXRqmnym1r8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mjn8hw6q; arc=none smtp.client-ip=74.125.225.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dwhBkjV2"
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-482e61db882so64758f8f.0
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 22:29:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mjn8hw6q"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49e6bd65693so1802065e9.0
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 22:29:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789709356; x=1790314156; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789709358; x=1790314158; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=p6dnksB+TiTn97DHO11g0Eulh/EuaXryIvrLL3UQPww=;
-        b=dwhBkjV2/yE5YFUT2kvn/0kpMdd+a07mogSSpUvy50voHE3Emjqbr2GwXgV42zrB4r
-         +Orc5yjQtwg0cf3oLdV51x7v+RvWHD1Ovpt9YKXdfepzJvJm0018Qnl+GBZ1HfaJS2W2
-         3haEq6Q0Dh4WKZsKmD85JWVAecc5ReMGNNZI6iDlTtcSa8CPylIahzisEVZ0TKRoQwhe
-         e8ch1ViK5jR7uFqY/eSFU1MD68Dtv/5C8D4xHe2QHJvhbr8SBuC0vkyJAEYXxVZzKwZv
-         lqWKh31W+O5L5vvWpRvRWEJfv0OhtcP3st4bOBpgd8WUMntEVa7UH/JxEutMXy0mHyBK
-         ix2A==
+        bh=z0FKKLWTQvwgvHe37lbFrLTWsVqGeATeGFMPJqYRW/o=;
+        b=mjn8hw6qZ7ID4kP/o1JJEvrvZt/G87XCRYjvJB/YGSIg4yiZsjNd2Y3IGaSYSf/Z4h
+         ydbBzQ5TSnsSvU3Hc+nD/NIImu3qotqO8PUWbkFCPCwIkOcvVc2Z/i6eKKFVrsB9SLJb
+         poe7Vtsd5JENWaxGfo56KUvFf84HOvcWf38XRivkwEOlU2D2GMyv5Z7hUAYl+owJ3XpG
+         BH1LNClX4gKRUFRJTEWy4lj+MKEmvO8OO8oAI0mfI7m5UV6Paulh6oHWk1qZRIpjGLUR
+         hV4YDOBGD+KjB+MM8qmjFzQEXGyD1HDqAcwgF4wMkTekjmAr18Zo/roloHgbbMN+vCKI
+         x1fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789709356; x=1790314156;
+        d=1e100.net; s=20260707; t=1789709358; x=1790314158;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=p6dnksB+TiTn97DHO11g0Eulh/EuaXryIvrLL3UQPww=;
-        b=WUfiDIGKkqtmv+oK7T/XlBcPlV60y+YZw7SiXwlEuaxmkzVgFbR6B8jiOKKQHF025h
-         aAcg4LQaC7Fyo6AbWl1dd3VcAllYgWAQm5KEwx9bOoMyNvwgkg3Jllf+B+08UgC6s9c5
-         sgXUb4F2tH7I+4SkC2Nmh5NoOSANY8Y/wdnPlBDKJ5+KiHCsCv1f0U/D9SESILoqYQHi
-         PIRylzQ3nlfy+UQ+jLl9FqShPNS3TwrbkNG81QLHLV42WjUIn2LaLQiBEb1K+XoI9gxB
-         XqZyp8/nK77qodA5AHW91UmoBo1Pz0a85S0FOFlEPxmMc1mpnUzth2lZLCZtDGhCUKr0
-         pFWA==
-X-Gm-Message-State: AFuF++lFPER186iHVfoLC2Gn/Vi5C1X7vfmEKlvIrXmMPOe2Fvuy3TNq
-	wAoqftS1H6tGQGb25n5ltez6RJbhGmCuL3SZ8fBymWSzQPiGgVJmqjw4WMQkjrkl
-X-Gm-Gg: AYBFou2UhQRCXHFng+CpHl+u0J2hDoEK2LmQNKEX6JM/pAspv4Dy+3W2NgYUmALPd3D
-	whMx0SUGfje5dVJBZl47B+MAEH+X7HYlGl5tkrDC7bM/QuxM9leeQZktci2KHHnH23yGfBpUknP
-	H8EQRpQ0X3QIof2gZw8cEX5OINQQHbhtwNRaCIZGzvBLhbZD3+tTin2s/2aJIDc7ijWXnOAbZYj
-	EyNgW8Qq3YOK19k8gbxIj7Q0SyUvZAhvmMbod7akOLI8AKlYxhH/lPkyUavtRPaZc5LRRRZNqOA
-	MfRPJi8WS1VIQo8c3680FGv59LGlIU5t/OEjHXBwjO5h3cwo2btwgpsH4xI9YdxmpY+6+dDW+1m
-	qPTsoANe9/j6CEAXx6Fy3k9v7nrIBD9LpvVLXXRBdYBpnCL4ysFa2N79t5G5rY15/89X8CVxx/6
-	MniYk4ISwk87reRzOtMPUCOvIB7d8IFRrQHcQteXXqJ6kRfrwFIy5i6li0ptRJTQYZIJhzIvLxs
-	8vQQmTDiLtUD3ukC8rtuxRrQeUgo+PBTXy7FRFyNIqMagi7uTEgRhppj0pu3u6GCbyZ9kXmsWE8
-	OJbat3fa99BLvZxkcjL1Du76RSE8wQv4sfAn/pWRvWHuYSXO
-X-Received: by 2002:a5d:5f41:0:b0:47f:e377:8d61 with SMTP id ffacd0b85a97d-4871e215994mr1717393f8f.11.1789709356024;
-        Thu, 17 Sep 2026 22:29:16 -0700 (PDT)
+        bh=z0FKKLWTQvwgvHe37lbFrLTWsVqGeATeGFMPJqYRW/o=;
+        b=h/qwGvy11jwVvpkSQxzBr2n0Z9RDsbtHqm13wOZ9b8E7KCMPEbOjext7nEHpiN1PkN
+         YABGw2YITmvcHIe5r7XdUN1IRfs1C7MHv8CPK5WBvQpTy+/r6T1vlFQWOCxZCSkCDfAd
+         D0YALiehJiUI4Q/oYcj5aflGeC6s3zEcCBCxoveNKQcQwRodGNGyKA1Spw1TViD+fR/y
+         D53fMge1sPfdBnjCUnbjArSCT2N5ma4KmDyNtYwXr51RPDJ7CkxKtki6wMxQFWohY3Rf
+         RmYxb4D0APk2sdtGzpn2FKnj2d51WNZH76mk+IKOdESGAOPwzuCU2Tfn9cimQHok9uJ7
+         4cgw==
+X-Gm-Message-State: AFuF++mijEc+k38qXX3SJKQBQ5kbH0fZvdnpQEfuaIhUVQvJoOx1nluY
+	evX8NpJdiRxyMmNnwnL1ZDPA5TX3XcFIQ4qOGaBpswSTtltPLp6/LjvXvxR5qg04
+X-Gm-Gg: AYBFou1NPFw9dOTzaKW/g2Zf2pNEISNFMMOldp/u2C3abTDP+rux0OkOUu63bSpuMCK
+	TXtIw05RKxjIX0dev5/fsVbtZGAExnEE4JetaKbWpYSn/YNU/5352+XTZmYje9fCfSFdjw6sS/R
+	PrkCXPQsMbKzyp0bL8u1ukgd/MF73/fg+p02/QuLVxH6Plnwna50Zy8ALQEuHcz09rkAVKoa1BW
+	ctNNhTyg5oCmVN8O2YPOX+UyTTPAFrKDLciTPE2PTKbzPyVn91D3kSU5ATp14SAP4AFgLPCeHWz
+	FPBOs+Cuva/OndYR55A4w0zVlv5pr83nYCE7FwrGfhEJL3dudKavgEisrjTupqb67ibpX2cvNDR
+	HARpvG1qntQFGf1YgnI3gzXA/27bVO1DwSAdrmdgcCViiKzFFNTie9MkO7Z+HBPrYfzsPAhor7T
+	QJervA/RWJJGFq03Kfr+V44MCwL0U1ppe234FsuS/yOJnN8m1KIeR//7BU/qnn5++a5W15cNrT3
+	WFre/tGE28ar40a4ly0PZHiiWx8nfqyeCUk1hD0VyYsFWwCJ3E0oz2DyRmamoC1ndOnSQZrdShZ
+	jJOcWglnMyUdD5Mqu6WivlT45AokBYb2tltLOd3MvUTh9agW
+X-Received: by 2002:a05:600c:3ba0:b0:49e:73d3:78ab with SMTP id 5b1f17b1804b1-49fc55adc12mr15300055e9.0.1789709357613;
+        Thu, 17 Sep 2026 22:29:17 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4872008f34dsm1190520f8f.36.2026.09.17.22.29.15
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-487203f077fsm835561f8f.26.2026.09.17.22.29.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 22:29:15 -0700 (PDT)
+        Thu, 17 Sep 2026 22:29:17 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Tejun Heo <tj@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
+Cc: Amery Hung <ameryhung@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Amery Hung <ameryhung@gmail.com>,
+	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 5/8] bpf: Fix generic __uninit kfunc output buffers
-Date: Fri, 18 Sep 2026 07:28:59 +0200
-Message-ID: <20260918052906.12226-6-memxor@gmail.com>
+Subject: [PATCH bpf-next v4 6/8] selftests/bpf: Cover generic __uninit output initialization
+Date: Fri, 18 Sep 2026 07:29:00 +0200
+Message-ID: <20260918052906.12226-7-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260918052906.12226-1-memxor@gmail.com>
 References: <20260918052906.12226-1-memxor@gmail.com>
@@ -82,265 +82,223 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10014; i=memxor@gmail.com; h=from:subject; bh=3pgjN1ChBK0r7kCQPS+/lojAsp9LdQDLRYH+Sz9yvcQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvN6ddHn2+Z1hx72tjHf4uv348pkzZq/HKfL3HNbN9jU Xaxh34zOkpZGMS4GGTFFFlK/u9jMj5R+TvQdhk3zBxWJpAhDFycAjCRHmVGhh77FsUP37Yknr2c /TD9nL3p+YO8uswXJQv2nWVftvZtXB3DH64ahWTpVKZ5qY++bo82Ylxy/1PY90sBtx+17Ge+u/C KDQcA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7824; i=memxor@gmail.com; h=from:subject; bh=CgOhfN9sZFAJQmFU8dIMEXGMhqSdLD+BmEV243RMuWc=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvN6ddtEoZ8PgW2PxLmB6XqOVq/fXM899aV7/HsnjHT4 zQYf9t2lLIwiHExyIopspT838dkfKLyd6DtMm6YOaxMIEMYuDgFYCLnTzIyTFtX8X1yyfajTLtP vZG2naPxiycsufDIg2W2bGc7ON87rmVkmBJntKRFy2amSrgyW63b1PfHm3PPXBFulpy9TjFI+DQ TGwA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Stack liveness treats __uninit kfunc arguments as writes. Even with
-write-only access checks, ordinary clobber handling leaves poisoned stack
-bytes poisoned after the call, so the output cannot be read.
+Exercise the struct and sized-buffer cases where stack liveness poisons an
+output before a kfunc call. Check that the verifier accepts these outputs
+and that the kfunc initializes the memory read after the call.
 
-Reuse the helper output descriptor for generic kfunc buffers. Record the
-output after resolving its memory type, and initialize its stack bytes
-only after all arguments have been checked. This prevents an output from
-making an aliased, uninitialized input appear valid.
+Verify that an uninitialized input aliasing an output is still rejected
+without CAP_PERFMON or CAP_SYS_ADMIN. Include an initialized alias as a
+positive control, using an int-width store so its value is independent of
+endianness.
 
-Track the output by its ABI argument slot, since a kfunc pointer may be
-passed on the stack or follow a multi-slot by-value argument. Keep the
-single-output restriction in prototype validation; multiple-output
-tracking is a separate extension.
+Use __prepare_priv to resolve the test module's BTF before dropping to
+CAP_BPF and CAP_NET_ADMIN for program loading. Keep multiple-output and
+argument-slot coverage separate from these immediate regression tests.
 
-Document that output buffers must be fully initialized on every return
-path, including error returns and padding.
-
-Fixes: 2cb27158adb3 ("bpf: poison dead stack slots")
-Reported-by: Tejun Heo <tj@kernel.org>
-Link: https://lore.kernel.org/bpf/86d966ec88bbf27d21b2bb4e18c8aa00@kernel.org
-Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+Reviewed-by: Amery Hung <ameryhung@gmail.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- Documentation/bpf/kfuncs.rst | 27 ++++++++++----
- include/linux/bpf_verifier.h |  7 ++--
- kernel/bpf/verifier.c        | 71 +++++++++++++++++++++++++++---------
- 3 files changed, 78 insertions(+), 27 deletions(-)
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../bpf/progs/verifier_kfunc_uninit.c         | 100 ++++++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  25 +++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |   3 +
+ 4 files changed, 130 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_kfunc_uninit.c
 
-diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index 6c2c048dccef..71fb0ca72d69 100644
---- a/Documentation/bpf/kfuncs.rst
-+++ b/Documentation/bpf/kfuncs.rst
-@@ -164,19 +164,32 @@ suffix should be used.
- 2.3.3 __uninit Annotation
- -------------------------
- 
--This annotation is used to indicate that the argument will be treated as
--uninitialized.
-+Use ``__uninit`` on a pointer parameter for an output that the kfunc
-+initializes without reading its incoming contents.
- 
--An example is given below::
-+For generic memory buffers, the kfunc must initialize every byte in the
-+declared range on every return path, including error returns and struct
-+padding. The range is determined by the pointed-to type or the associated
-+``__sz`` or ``__szk`` size argument.
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 7732df9bc870..d1e50a952a13 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -56,6 +56,7 @@
+ #include "verifier_jeq_infer_not_null.skel.h"
+ #include "verifier_jit_convergence.skel.h"
+ #include "verifier_kfunc_packet_access.skel.h"
++#include "verifier_kfunc_uninit.skel.h"
+ #include "verifier_ld_ind.skel.h"
+ #include "verifier_ldsx.skel.h"
+ #include "verifier_leak_ptr.skel.h"
+@@ -222,6 +223,7 @@ void test_verifier_iterating_callbacks(void)  { RUN(verifier_iterating_callbacks
+ void test_verifier_jeq_infer_not_null(void)   { RUN(verifier_jeq_infer_not_null); }
+ void test_verifier_jit_convergence(void)      { RUN(verifier_jit_convergence); }
+ void test_verifier_kfunc_packet_access(void)  { RUN_TESTS(verifier_kfunc_packet_access); }
++void test_verifier_kfunc_uninit(void)         { RUN_TESTS(verifier_kfunc_uninit); }
+ void test_verifier_load_acquire(void)         { RUN(verifier_load_acquire); }
+ void test_verifier_ld_ind(void)               { RUN(verifier_ld_ind); }
+ void test_verifier_ldsx(void)                  { RUN(verifier_ldsx); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_kfunc_uninit.c b/tools/testing/selftests/bpf/progs/verifier_kfunc_uninit.c
+new file mode 100644
+index 000000000000..f7818303e703
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_kfunc_uninit.c
+@@ -0,0 +1,100 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 +
-+The annotation does not change the accepted pointer types. A stack-backed
-+struct passed as a generic memory buffer must still be scalar-only.
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++#include "../test_kmods/bpf_testmod_kfunc.h"
 +
-+A stack buffer with a verifier-known constant offset and size may be
-+uninitialized before the call and is considered initialized afterwards.
-+For variable offsets or sizes, callers with neither ``CAP_PERFMON`` nor
-+``CAP_SYS_ADMIN`` must initialize the potentially accessed stack range before
-+the call.
-+
-+For dynptr parameters, ``__uninit`` indicates that the kfunc constructs a
-+dynptr in the supplied storage. For example::
- 
--        __bpf_kfunc int bpf_dynptr_from_skb(..., struct bpf_dynptr_kern *ptr__uninit)
-+        __bpf_kfunc int bpf_dynptr_from_skb(..., struct bpf_dynptr *ptr__uninit)
-         {
-         ...
-         }
- 
--Here, the dynptr will be treated as an uninitialized dynptr. Without this
--annotation, the verifier will reject the program if the dynptr passed in is
--not initialized.
-+Without this annotation, a dynptr argument must already be initialized.
- 
- 2.3.4 __nullable Annotation
- ---------------------------
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index cf85141ea167..6ff1c227d298 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -1548,10 +1548,11 @@ struct ref_obj_desc {
- 
- /*
-  * A memory argument a call fills in. The verifier allows the stack to be uninitialized if
-- * the range is a known constant. Stack slots are marked as STACK_MISC by check_mem_access().
-+ * the range is a known constant. Stack slots are marked as STACK_MISC by check_mem_access()
-+ * after all arguments have been checked.
-  */
- struct arg_raw_mem_desc {
--	u8 regno;
-+	u8 argno; /* One-based ABI argument slot; zero means no output. */
- 	int size;
- };
- 
-@@ -1579,6 +1580,7 @@ struct bpf_call_arg_meta {
- 	struct bpf_dynptr_desc dynptr;
- 	struct ref_obj_desc ref_obj;
- 	struct ret_mem_desc ret_mem;
-+	struct arg_raw_mem_desc arg_raw_mem;
- 
- 	/* Only set by kfunc */
- 	bool r0_rdonly;
-@@ -1617,7 +1619,6 @@ struct bpf_call_arg_meta {
- 	s64 const_map_key;
- 	struct btf *ret_btf;
- 	struct btf_field *kptr_field;
--	struct arg_raw_mem_desc arg_raw_mem;
- };
- 
- int bpf_get_helper_proto(struct bpf_verifier_env *env, int func_id,
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 21eb806b1351..d327b5356d53 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -302,6 +302,12 @@ static int arg_idx_from_argno(argno_t a)
- 	return arg_from_argno(a) - 1;
- }
- 
-+/* Normalize helper register numbers and kfunc argument numbers to ABI slots. */
-+static u32 arg_slot_from_argno(argno_t a)
++/* Keep the kfunc BTF records used by the inline assembly. */
++void __kfunc_btf_root(void)
 +{
-+	return abs(a.argno) - 1;
++	asm volatile ("" :
++		: "r"(&bpf_kfunc_test_uninit_struct),
++		  "r"(&bpf_kfunc_test_uninit_mem),
++		  "r"(&bpf_kfunc_test_uninit_alias));
 +}
 +
- static const char *btf_type_name(const struct btf *btf, u32 id)
- {
- 	return btf_name_by_offset(btf, btf_type_by_id(btf, id)->name_off);
-@@ -6981,7 +6987,7 @@ static int check_stack_range_initialized(
- 	 */
- 	bool allow_poison = access_size < 0 || clobber;
- 	/* The call will initialize the memory; uninitialized stack allowed */
--	bool raw_mode = meta && meta->arg_raw_mem.regno == reg_from_argno(argno);
-+	bool raw_mode = meta && meta->arg_raw_mem.argno == arg_slot_from_argno(argno) + 1;
- 
- 	access_size = abs(access_size);
- 
-@@ -7216,8 +7222,8 @@ static int check_mem_size_reg(struct bpf_verifier_env *env,
- 	 * the memory that the helper could just partially fill up.
- 	 */
- 	if (!tnum_is_const(size_reg->var_off) &&
--	    meta->arg_raw_mem.regno == reg_from_argno(mem_argno))
--		meta->arg_raw_mem.regno = 0;
-+	    meta->arg_raw_mem.argno == arg_slot_from_argno(mem_argno) + 1)
-+		meta->arg_raw_mem.argno = 0;
- 
- 	if (reg_smin(size_reg) < 0) {
- 		verbose(env, "%s min value is negative, either use unsigned or 'var &= const'\n",
-@@ -8158,9 +8164,12 @@ static bool arg_type_is_raw_mem(enum bpf_arg_type type)
- 	 * A map value output buffer (e.g. bpf_map_pop_elem) is also a raw
- 	 * (uninitialized) memory argument, and like ARG_PTR_TO_MEM it may be
- 	 * passed as a PTR_TO_STACK that reaches check_stack_range_initialized().
-+	 * A kfunc's struct pointer remains ARG_PTR_TO_BTF_ID until call argument
-+	 * checking resolves it to generic memory, so include it in proto validation.
- 	 */
- 	return (base_type(type) == ARG_PTR_TO_MEM ||
--		base_type(type) == ARG_PTR_TO_MAP_VALUE) &&
-+		base_type(type) == ARG_PTR_TO_MAP_VALUE ||
-+		base_type(type) == ARG_PTR_TO_BTF_ID) &&
- 	       type & MEM_UNINIT;
- }
- 
-@@ -8939,10 +8948,10 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg, u32 slot, u32 p
- 	if (err)
- 		return err;
- 
--	if (!meta->btf && (arg_type & MEM_UNINIT) &&
-+	if ((arg_type & MEM_UNINIT) &&
- 	    (base_type(arg_type) == ARG_PTR_TO_MEM ||
- 	     base_type(arg_type) == ARG_PTR_TO_MAP_VALUE))
--		meta->arg_raw_mem.regno = slot + 1;
-+		meta->arg_raw_mem.argno = slot + 1;
- 
- 	if (bpf_register_is_null(reg) && type_may_be_null(arg_type)) {
- 		err = mark_arg_precision(env, argno);
-@@ -9553,6 +9562,33 @@ static int check_func_args(struct bpf_verifier_env *env, struct bpf_call_arg_met
- 	return 0;
- }
- 
-+static int mark_raw_stack(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
-+			  int insn_idx)
++SEC("tc")
++__success __retval(10)
++__flag(BPF_F_TEST_STATE_FREQ)
++__caps_unpriv(CAP_BPF | CAP_NET_ADMIN)
++__prepare_priv
++__success_unpriv
++__naked void struct_poisoned_at_checkpoint(void)
 +{
-+	struct bpf_func_state *caller = cur_func(env);
-+	struct bpf_reg_state *reg;
-+	u32 slot = meta->arg_raw_mem.argno - 1;
-+	int i, err;
-+
-+	if (!meta->arg_raw_mem.size)
-+		return 0;
-+	reg = get_func_arg_reg(caller, cur_regs(env), slot);
-+
-+	/*
-+	 * Validate every argument before initializing outputs: an input argument
-+	 * may alias an output buffer. Use the normal stack-write checks to discard
-+	 * stale spills and preserve the rules for special stack objects.
-+	 */
-+	for (i = 0; i < meta->arg_raw_mem.size; i++) {
-+		err = check_mem_access(env, insn_idx, reg, argno_from_arg(slot + 1), i, BPF_B,
-+				       BPF_WRITE, -1, false, false);
-+		if (err)
-+			return err;
-+	}
-+
-+	return 0;
++	asm volatile (
++		"*(u64 *)(r10 - 16) = 0;"
++		"*(u64 *)(r10 - 8) = 0;"
++		"goto +0;"
++		"r1 = r10;"
++		"r1 += -16;"
++		"call %[bpf_kfunc_test_uninit_struct];"
++		"r0 = *(u32 *)(r10 - 16);"
++		"r1 = *(u32 *)(r10 - 12);"
++		"r0 += r1;"
++		"r1 = *(u32 *)(r10 - 8);"
++		"r0 += r1;"
++		"r1 = *(u32 *)(r10 - 4);"
++		"r0 += r1;"
++		"exit;"
++		: : __imm(bpf_kfunc_test_uninit_struct) : __clobber_all);
 +}
 +
- static bool may_update_sockmap(struct bpf_verifier_env *env, int func_id)
- {
- 	enum bpf_attach_type eatype = env->prog->expected_attach_type;
-@@ -11576,16 +11612,9 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 
- 	regs = cur_regs(env);
- 
--	/* Mark slots with STACK_MISC in case of raw mode, stack offset
--	 * is inferred from register state.
--	 */
--	for (i = 0; i < meta.arg_raw_mem.size; i++) {
--		err = check_mem_access(env, insn_idx, regs + meta.arg_raw_mem.regno,
--				       argno_from_reg(meta.arg_raw_mem.regno), i, BPF_B,
--				       BPF_WRITE, -1, false, false);
--		if (err)
--			return err;
--	}
-+	err = mark_raw_stack(env, &meta, insn_idx);
-+	if (err)
-+		return err;
- 
- 	if (meta.release_regno) {
- 		struct bpf_reg_state *reg = &regs[meta.release_regno];
-@@ -12442,7 +12471,7 @@ static int resolve_func_arg_type(struct bpf_verifier_env *env,
- 		return -EINVAL;
- 	}
- 	*arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE |
--		    (*arg_type & PTR_MAYBE_NULL);
-+		    (*arg_type & (PTR_MAYBE_NULL | MEM_UNINIT));
- 
- 	return 0;
- }
-@@ -13068,6 +13097,10 @@ static int gen_kfunc_arg_proto(struct bpf_verifier_env *env, struct bpf_call_arg
- 		return -ENOTSUPP;
- 	}
- 
-+	if (!check_raw_mode_ok(proto)) {
-+		verbose(env, "multiple __uninit buffers are not supported\n");
-+		return -EINVAL;
-+	}
- 	return check_arg_prog_aux(env, proto) ? 0 : -EINVAL;
- }
- 
-@@ -14145,6 +14178,10 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	if (err < 0)
- 		return err;
- 
-+	err = mark_raw_stack(env, &meta, insn_idx);
-+	if (err)
-+		return err;
++SEC("tc")
++__success __retval(0x2a2a2a2a)
++__flag(BPF_F_TEST_STATE_FREQ)
++__caps_unpriv(CAP_BPF | CAP_NET_ADMIN)
++__prepare_priv
++__success_unpriv
++__naked void sized_buffer_poisoned_at_checkpoint(void)
++{
++	asm volatile (
++		"*(u64 *)(r10 - 8) = 0;"
++		"goto +0;"
++		"r1 = r10;"
++		"r1 += -8;"
++		"r2 = 8;"
++		"call %[bpf_kfunc_test_uninit_mem];"
++		"r0 = *(u32 *)(r10 - 8);"
++		"r1 = *(u32 *)(r10 - 4);"
++		"if r0 == r1 goto +1;"
++		"r0 = 0;"
++		"exit;"
++		: : __imm(bpf_kfunc_test_uninit_mem) : __clobber_all);
++}
 +
- 	if ((is_bpf_obj_drop_kfunc(meta.func_id) ||
- 	     is_bpf_percpu_obj_drop_kfunc(meta.func_id)) && (is_tracing_prog_type(prog_type) ||
- 	     /* is_tracing_prog_type() for now doesn't cover non-iterator tracing progs. */
++SEC("tc")
++__success __retval(7)
++__caps_unpriv(CAP_BPF | CAP_NET_ADMIN)
++__prepare_priv
++__success_unpriv
++__naked void initialized_input_alias(void)
++{
++	asm volatile (
++		"*(u32 *)(r10 - 8) = 7;"
++		"r1 = r10;"
++		"r1 += -8;"
++		"r2 = r1;"
++		"call %[bpf_kfunc_test_uninit_alias];"
++		"exit;"
++		: : __imm(bpf_kfunc_test_uninit_alias) : __clobber_all);
++}
++
++SEC("tc")
++__success
++__caps_unpriv(CAP_BPF | CAP_NET_ADMIN)
++__prepare_priv
++__failure_unpriv __msg_unpriv("invalid read from stack")
++__naked void uninitialized_input_alias(void)
++{
++	asm volatile (
++		"r1 = r10;"
++		"r1 += -8;"
++		"r2 = r1;"
++		"call %[bpf_kfunc_test_uninit_alias];"
++		"exit;"
++		: : __imm(bpf_kfunc_test_uninit_alias) : __clobber_all);
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index fd2c0cdc91b1..542edeb28b27 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -17,6 +17,7 @@
+ #include <linux/in.h>
+ #include <linux/in6.h>
+ #include <linux/un.h>
++#include <linux/unaligned.h>
+ #include <linux/filter.h>
+ #include <linux/rcupdate_trace.h>
+ #include <net/sock.h>
+@@ -1316,6 +1317,27 @@ __bpf_kfunc void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p)
+ {
+ }
+ 
++__bpf_kfunc void bpf_kfunc_test_uninit_struct(struct prog_test_pass1 *out__uninit)
++{
++	out__uninit->x0 = 1;
++	out__uninit->x1 = 2;
++	out__uninit->x2 = 3;
++	out__uninit->x3 = 4;
++}
++
++__bpf_kfunc void bpf_kfunc_test_uninit_mem(void *out__uninit, u32 out__sz)
++{
++	memset(out__uninit, 0x2a, out__sz);
++}
++
++__bpf_kfunc int bpf_kfunc_test_uninit_alias(int *out__uninit, const int *in)
++{
++	int value = get_unaligned(in);
++
++	put_unaligned(42, out__uninit);
++	return value;
++}
++
+ __bpf_kfunc void bpf_kfunc_call_test_fail1(struct prog_test_fail1 *p)
+ {
+ }
+@@ -1747,6 +1769,9 @@ BTF_ID_FLAGS(func, bpf_kfunc_call_int_mem_release, KF_RELEASE)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass_ctx)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass1)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_pass2)
++BTF_ID_FLAGS(func, bpf_kfunc_test_uninit_struct)
++BTF_ID_FLAGS(func, bpf_kfunc_test_uninit_mem)
++BTF_ID_FLAGS(func, bpf_kfunc_test_uninit_alias)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_fail1)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_fail2)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test_fail3)
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+index d3696d5254c9..91b64e783123 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -289,6 +289,9 @@ __u64 bpf_kfunc_call_stack_arg_big(__u64 a, __u64 b, __u64 c, __u64 d, __u64 e,
+ void bpf_kfunc_call_test_pass_ctx(struct __sk_buff *skb) __ksym;
+ void bpf_kfunc_call_test_pass1(struct prog_test_pass1 *p) __ksym;
+ void bpf_kfunc_call_test_pass2(struct prog_test_pass2 *p) __ksym;
++void bpf_kfunc_test_uninit_struct(struct prog_test_pass1 *out__uninit) __ksym;
++void bpf_kfunc_test_uninit_mem(void *out__uninit, __u32 out__sz) __ksym;
++int bpf_kfunc_test_uninit_alias(int *out__uninit, const int *in) __ksym;
+ void bpf_kfunc_call_test_mem_len_fail2(__u64 *mem, int len) __ksym;
+ 
+ void bpf_kfunc_call_test_destructive(void) __ksym;
 -- 
 2.53.0
 
