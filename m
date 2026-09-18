@@ -1,30 +1,29 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE4D49D583
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 08:01:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D4B8331A48
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 08:01:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789718466; cv=none; b=ElngtissIDkx7Z8rbmETNpajIiQ9AD0WiQMxlW0/MQvA7DedBg4HKJlsyQwYf6MD2Z2CwoN01TPm8UIFT8n2jLej+sXf47fRbcit3DWST74WLAyFflQzxp6Bn8aJfRsJ3EQlyphofpNYB1ECwzcxDbcc1Nme3ePdVpTPbmUCw24=
+	t=1789718472; cv=none; b=sZ9T8GYbj83rXPh49K82FxyrhdicikKrWF/DWAvaj4dGt6wyFOzM63KBho1s+PsGJBePBMFDM3bJDajeheV57ngyWMp1UP5SW5YpQBELZK8nglvMq186WXJwnpAQSdJWuJ9KdReirYnxIANekAKKznDlYA4P1XAYuZWtF5tKb0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789718466; c=relaxed/simple;
-	bh=SmMvWlACXYCFUN3FwE7N0ZbtwI1xaCEMmNHRl1jEgzw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=agsYfr0bZ28qBGBYWFrwNtmv8/kC5aI8+hh8ivZhT9H5lgVXyW4ZuRGCZeLbPrLl0LgpNTBR2IkBFuI0OQ4VmdYP1YULaIhnPVWIDixby4VdrXe69g41385uG8dMF1U93TYFlGIgFV+zwZ7T/zB4tPB/e1kcpMKGygsbi5O3+m4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=g4nuvfXL; arc=none smtp.client-ip=220.197.31.2
+	s=arc-20240116; t=1789718472; c=relaxed/simple;
+	bh=rZio4/+JlvYuoF2Eq+kNM9hzLgmHxIS79E4/y56eqkE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=owqod8UT+tg5rBP0pJoPbdV/Z/FmNwSvO+4VnKZcjkQLkOibwxOMSPpIHUXasU5JtBWqthrhFGbIGWLFE5IR50VWslKtfCqYSjI1M1BwAoE2ldig0KlzEeQWkKmUt1sr6Ytp/+3WKQ9T6CFnW2Afy/SxcCIm8XPKv7lmudmHAXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=W2OBS1Bq; arc=none smtp.client-ip=117.135.210.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="g4nuvfXL"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="W2OBS1Bq"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=wu
-	JB8Y87T3g/ovLoQk5aiQmQ84GuUUXk2GWTjiAEQ1Q=; b=g4nuvfXLFiCyqgYSCf
-	iHesgIdRUHbZOe//yg8uUdvKBap0ya61OLh7WTcpBhTvlTLxE2c6d/o8stdpBvB0
-	APJALiMK9wWs6V4/FAPknodUUOal/h9LXB/tnIR60fmjYDg+mvXGS44/whNBoyKD
-	/ip7+cF2dl5NzMVgON3kXZRyc=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Pj
+	bcav3Li4rcolvj0bTF5ARiJUQx3H3ZzNCLsIgJQKA=; b=W2OBS1BqHyJg97U+RQ
+	ns+qi45McSyVIn7/d6oN7fGJZjZVwVT8Tt5w0A3bEj9Mh3NbVbTk7FGOO/cMwTAC
+	Y6ZYC1EgdHLY+mAfX59e4UFp6xBDEbJz2ryal1lRT2FOD7gVAaiUktrit4YzI2Y2
+	VjF0FD83Xyq/KmKySH/eSXOsA=
 Received: from kylin-ERAZER-H610M.. (unknown [])
-	by gzsmtp4 (Coremail) with SMTP id PygvCgCHCk2O76xqG1U9AA--.7036S4;
-	Fri, 18 Sep 2026 16:00:18 +0800 (CST)
+	by gzsmtp4 (Coremail) with SMTP id PygvCgCHCk2O76xqG1U9AA--.7036S2;
+	Fri, 18 Sep 2026 16:00:16 +0800 (CST)
 From: Yun Lu <luyun_611@163.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -38,12 +37,10 @@ To: ast@kernel.org,
 	emil@etsalapatis.com,
 	ihor.solodrai@linux.dev
 Cc: bpf@vger.kernel.org
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add task work round ownership race test
-Date: Fri, 18 Sep 2026 16:00:14 +0800
-Message-ID: <20260918080014.54012-3-luyun_611@163.com>
+Subject: [PATCH bpf-next 0/2] bpf: Fix task work round ownership race
+Date: Fri, 18 Sep 2026 16:00:12 +0800
+Message-ID: <20260918080014.54012-1-luyun_611@163.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260918080014.54012-1-luyun_611@163.com>
-References: <20260918080014.54012-1-luyun_611@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -51,472 +48,66 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PygvCgCHCk2O76xqG1U9AA--.7036S4
-X-Coremail-Antispam: 1Uf129KBjvAXoW3Zw4DuF48ZFW8AFykGr1kuFg_yoW8JryUAo
-	Z3ua15tw18Gr97Awn7Xa4ktr1FgwsrKas5Zw40grW5CF1fZrWYvF1kCw4xJw1xZF4rXa4f
-	ZFn7Zw1ruw48AFyrn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUx0PfUUUUU
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbCwxPltGqs75NUfgAA3R
+X-CM-TRANSID:PygvCgCHCk2O76xqG1U9AA--.7036S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZF4UJr4xKF1ktFy5Gw45ZFb_yoW5Wr4DpF
+	ZIgwsxtrs8JF1xtw4avw4UX34FgFs3Ja15Gr1xKr9rAwn5JFn2v3W2qF1jqF4UArWkZF1j
+	vr4jqw4xuF1j9aDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jbzV8UUUUU=
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC6xDltGqs75DkUgAA3l
 
 From: Yun Lu <luyun@kylinos.cn>
 
-Exercise task-work scheduling, callback completion and map-value deletion
-on separate execution contexts.  Rotate through ctx reuse, deletion
-after the callback body, and deletion immediately before the scheduling
-kfunc.  The latter two variants stress both the original
-SCHEDULING/SCHEDULED cancellation window and the final-user/delete race.
+This series fixes a race in the bpf_task_work scheduling kfuncs and
+adds a regression test for it.
 
-Use READY and DONE sequence handshakes so deletion cannot race map-value
-setup and scheduling errors cannot be missed.  Give every callback a
-unique generation and wait for that exact generation, preventing a late
-callback from an early-delete round from satisfying a later assertion.
-Retry transient -EBUSY results while a previous callback wrapper is
-finishing.
+A task_work callback scheduled for a task running on another CPU can
+complete before bpf_task_work_irq() regains control after
+task_work_add().  The callback's cleanup releases ctx->task, so a
+concurrent map value deletion that publishes the FREED state makes the
+resumed irq_work handler call task_work_cancel(NULL, &ctx->work),
+dereferencing task_struct::task_works through a NULL task (RIP at
+task_work_cancel+0xd, RDI == 0, CR2 at the task_works offset).  The
+same cancellation is reached when the deletion wins before the
+callback runs and the callback's bailout path drops the last ctx
+refcount, clearing ctx->task.
 
-Select two CPUs from the process affinity mask and use atomic
-thread-start/stop handshakes, so the cross-CPU prerequisite is either
-established or the test is skipped.
+Patch 1 gives each scheduling round an ownership count: the irq_work
+scheduler, the published callback and an asynchronous canceller hold a
+reference while using this round's task/prog/work, and only the last
+user releases them, before the ctx can be reused from STANDBY.  The
+count is zero based with the STANDBY -> PENDING transition acting as
+the zero-to-one gate, so a finished round cannot be revived: a
+canceller either pins a still-active round (ctx->task guaranteed
+valid) or declines to cancel.  Separate irq_work objects for
+scheduling, cancellation and deferred destruction avoid reinitializing
+an irq_work that may still be queued or running.  FREED remains
+terminal and the scheduling path stays atomic-only, preserving NMI
+safety.
 
-Signed-off-by: Yun Lu <luyun@kylinos.cn>
----
- .../selftests/bpf/prog_tests/test_task_work.c | 283 ++++++++++++++++++
- .../selftests/bpf/progs/task_work_race.c      | 125 ++++++++
- 2 files changed, 408 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/task_work_race.c
+The race window between task_work_add() and the SCHEDULING ->
+SCHEDULED cmpxchg is only a few instructions wide, so the fix was
+verified with a deterministic reproduction that widens exactly this
+window with a debug delay, while scheduling cross-CPU and deleting the
+map value concurrently: without the fix the kernel panics reliably;
+with it, all interleavings complete.  A 900-round stress test rotating
+through ctx reuse, deletion after the callback and deletion right
+after scheduling also runs clean, with no leaks reported by kmemleak.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_task_work.c b/tools/testing/selftests/bpf/prog_tests/test_task_work.c
-index 774b31a5f6ca..6d5e1e97aa3a 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_task_work.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_task_work.c
-@@ -5,10 +5,14 @@
- #include <stdio.h>
- #include "task_work.skel.h"
- #include "task_work_fail.skel.h"
-+#include "task_work_race.skel.h"
- #include <linux/bpf.h>
- #include <linux/perf_event.h>
- #include <sys/syscall.h>
- #include <time.h>
-+#include <pthread.h>
-+#include <sched.h>
-+#include <unistd.h>
- 
- static int perf_event_open(__u32 type, __u64 config, int pid)
- {
-@@ -155,3 +159,282 @@ void test_task_work(void)
- 
- 	RUN_TESTS(task_work_fail);
- }
-+
-+#define TASK_WORK_RACE_ROUNDS	1500
-+
-+/* Must match progs/task_work_race.c. */
-+enum task_work_race_status {
-+	RACE_ARM_SEQ,
-+	RACE_READY_SEQ,
-+	RACE_DONE_SEQ,
-+	RACE_SCHED_ERR,
-+};
-+
-+struct task_work_race_value {
-+	__u32 seq;
-+	char data[60];
-+	struct bpf_task_work tw;
-+};
-+
-+struct task_work_race_ctx {
-+	int stop;
-+	int setup_err;
-+	int trigger_tid;
-+	int target_tid;
-+	int trigger_cpu;
-+	int target_cpu;
-+};
-+
-+static int task_work_race_pin_cpu(int cpu)
-+{
-+	cpu_set_t set;
-+
-+	CPU_ZERO(&set);
-+	CPU_SET(cpu, &set);
-+	return pthread_setaffinity_np(pthread_self(), sizeof(set), &set);
-+}
-+
-+static void *task_work_race_trigger(void *arg)
-+{
-+	struct task_work_race_ctx *ctx = arg;
-+	int err;
-+
-+	err = task_work_race_pin_cpu(ctx->trigger_cpu);
-+	if (err)
-+		__atomic_store_n(&ctx->setup_err, err, __ATOMIC_RELEASE);
-+	__atomic_store_n(&ctx->trigger_tid, syscall(__NR_gettid),
-+			 __ATOMIC_RELEASE);
-+	while (!__atomic_load_n(&ctx->stop, __ATOMIC_ACQUIRE))
-+		getppid();
-+	return NULL;
-+}
-+
-+static void *task_work_race_target(void *arg)
-+{
-+	struct task_work_race_ctx *ctx = arg;
-+	int err;
-+
-+	err = task_work_race_pin_cpu(ctx->target_cpu);
-+	if (err)
-+		__atomic_store_n(&ctx->setup_err, err, __ATOMIC_RELEASE);
-+	__atomic_store_n(&ctx->target_tid, syscall(__NR_gettid),
-+			 __ATOMIC_RELEASE);
-+	while (!__atomic_load_n(&ctx->stop, __ATOMIC_ACQUIRE))
-+		getppid();
-+	return NULL;
-+}
-+
-+static int task_work_race_status(struct task_work_race *skel, int idx,
-+				 __s64 *value)
-+{
-+	return bpf_map_lookup_elem(bpf_map__fd(skel->maps.status), &idx,
-+				   value);
-+}
-+
-+static int task_work_race_set_status(struct task_work_race *skel, int idx,
-+				     __s64 value)
-+{
-+	return bpf_map_update_elem(bpf_map__fd(skel->maps.status), &idx,
-+				   &value, BPF_ANY);
-+}
-+
-+static int task_work_race_wait_seq(struct task_work_race *skel, int idx,
-+				   __u32 seq, int timeout_us)
-+{
-+	int i;
-+
-+	for (i = 0; i < timeout_us / 100; i++) {
-+		__s64 value = 0;
-+
-+		if (!task_work_race_status(skel, idx, &value) && value == seq)
-+			return 0;
-+		usleep(100);
-+	}
-+	return -ETIMEDOUT;
-+}
-+
-+static int task_work_race_wait_ready(struct task_work_race *skel, __u32 seq)
-+{
-+	int i;
-+
-+	for (i = 0; i < 2000000 / 100; i++) {
-+		__s64 value = 0;
-+
-+		if (!task_work_race_status(skel, RACE_READY_SEQ, &value) &&
-+		    value == seq)
-+			return 0;
-+		if (!task_work_race_status(skel, RACE_DONE_SEQ, &value) &&
-+		    value == seq)
-+			return -EIO;
-+		usleep(100);
-+	}
-+	return -ETIMEDOUT;
-+}
-+
-+static int task_work_race_prepare_elem(struct task_work_race *skel)
-+{
-+	struct task_work_race_value value = {};
-+	int key = 0;
-+
-+	if (!bpf_map_lookup_elem(bpf_map__fd(skel->maps.hmap), &key, &value))
-+		return 0;
-+	if (errno != ENOENT)
-+		return -errno;
-+	if (bpf_map_update_elem(bpf_map__fd(skel->maps.hmap), &key, &value,
-+				BPF_NOEXIST))
-+		return -errno;
-+	return 0;
-+}
-+
-+static int task_work_race_arm(struct task_work_race *skel, __u32 seq)
-+{
-+	__u64 completed = 0;
-+	int key = seq;
-+
-+	if (bpf_map_update_elem(bpf_map__fd(skel->maps.completed), &key,
-+				&completed, BPF_ANY))
-+		return -errno;
-+	if (task_work_race_set_status(skel, RACE_SCHED_ERR, 0) ||
-+	    task_work_race_set_status(skel, RACE_ARM_SEQ, seq))
-+		return -errno;
-+	return task_work_race_wait_ready(skel, seq);
-+}
-+
-+static int task_work_race_check_done(struct task_work_race *skel, __u32 seq)
-+{
-+	__s64 err = 0;
-+	int ret;
-+
-+	ret = task_work_race_wait_seq(skel, RACE_DONE_SEQ, seq, 2000000);
-+	if (ret)
-+		return ret;
-+	if (task_work_race_status(skel, RACE_SCHED_ERR, &err))
-+		return -errno;
-+	return err;
-+}
-+
-+static int task_work_race_wait_callback(struct task_work_race *skel,
-+					__u32 seq)
-+{
-+	int i, key = seq;
-+
-+	for (i = 0; i < 2000000 / 100; i++) {
-+		__u64 completed = 0;
-+
-+		if (!bpf_map_lookup_elem(bpf_map__fd(skel->maps.completed),
-+					 &key, &completed) && completed)
-+			return 0;
-+		usleep(100);
-+	}
-+	return -ETIMEDOUT;
-+}
-+
-+void serial_test_task_work_race(void)
-+{
-+	struct task_work_race_ctx ctx = {};
-+	struct task_work_race *skel;
-+	pthread_t trigger, target;
-+	cpu_set_t allowed;
-+	int cpu, cpu_count = 0;
-+	bool target_started = false, trigger_started = false;
-+	int err, i, key = 0;
-+
-+	if (sched_getaffinity(0, sizeof(allowed), &allowed)) {
-+		ASSERT_OK(-errno, "sched_getaffinity");
-+		return;
-+	}
-+	for (cpu = 0; cpu < CPU_SETSIZE && cpu_count < 2; cpu++) {
-+		if (!CPU_ISSET(cpu, &allowed))
-+			continue;
-+		if (!cpu_count)
-+			ctx.trigger_cpu = cpu;
-+		else
-+			ctx.target_cpu = cpu;
-+		cpu_count++;
-+	}
-+	if (cpu_count < 2) {
-+		printf("%s:SKIP:need two CPUs in the process affinity mask\n",
-+		       __func__);
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = task_work_race__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+	if (!ASSERT_OK(task_work_race__attach(skel), "attach"))
-+		goto cleanup;
-+
-+	err = pthread_create(&target, NULL, task_work_race_target, &ctx);
-+	if (!ASSERT_OK(err, "pthread_create target"))
-+		goto cleanup;
-+	target_started = true;
-+	err = pthread_create(&trigger, NULL, task_work_race_trigger, &ctx);
-+	if (!ASSERT_OK(err, "pthread_create trigger"))
-+		goto stop;
-+	trigger_started = true;
-+
-+	while (!__atomic_load_n(&ctx.trigger_tid, __ATOMIC_ACQUIRE) ||
-+	       !__atomic_load_n(&ctx.target_tid, __ATOMIC_ACQUIRE))
-+		usleep(100);
-+	if (!ASSERT_OK(__atomic_load_n(&ctx.setup_err, __ATOMIC_ACQUIRE),
-+		       "thread affinity"))
-+		goto stop;
-+
-+	skel->bss->trigger_tid = __atomic_load_n(&ctx.trigger_tid, __ATOMIC_ACQUIRE);
-+	skel->bss->target_tid = __atomic_load_n(&ctx.target_tid, __ATOMIC_ACQUIRE);
-+
-+	for (i = 0; i < TASK_WORK_RACE_ROUNDS; i++) {
-+		__u32 seq = i + 1;
-+		int variant = i % 3;
-+
-+		if (!ASSERT_OK(task_work_race_prepare_elem(skel), "prepare elem") ||
-+		    !ASSERT_OK(task_work_race_arm(skel, seq), "round ready"))
-+			goto stop;
-+
-+		if (variant == 2 &&
-+		    !ASSERT_OK(bpf_map_delete_elem(bpf_map__fd(skel->maps.hmap),
-+						   &key), "early delete"))
-+			goto stop;
-+
-+		err = task_work_race_check_done(skel, seq);
-+		if (!ASSERT_OK(err, "schedule")) {
-+			printf("round %d schedule failed: %d\n", i, err);
-+			goto stop;
-+		}
-+
-+		if (variant != 2 &&
-+		    !ASSERT_OK(task_work_race_wait_callback(skel, seq),
-+			       "callback"))
-+			goto stop;
-+
-+		if (variant == 1 &&
-+		    !ASSERT_OK(bpf_map_delete_elem(bpf_map__fd(skel->maps.hmap),
-+						   &key), "late delete"))
-+			goto stop;
-+	}
-+
-+	/* A distinct completion generation prevents an old callback satisfying this. */
-+	if (!ASSERT_OK(task_work_race_prepare_elem(skel), "final prepare") ||
-+	    !ASSERT_OK(task_work_race_arm(skel, TASK_WORK_RACE_ROUNDS + 1),
-+		       "final ready") ||
-+	    !ASSERT_OK(task_work_race_check_done(skel,
-+					TASK_WORK_RACE_ROUNDS + 1),
-+		       "final schedule") ||
-+	    !ASSERT_OK(task_work_race_wait_callback(skel,
-+					     TASK_WORK_RACE_ROUNDS + 1),
-+		       "final callback"))
-+		goto stop;
-+
-+	printf("%s: %d race rounds completed\n", __func__,
-+	       TASK_WORK_RACE_ROUNDS);
-+
-+stop:
-+	__atomic_store_n(&ctx.stop, 1, __ATOMIC_RELEASE);
-+	if (trigger_started)
-+		pthread_join(trigger, NULL);
-+	if (target_started)
-+		pthread_join(target, NULL);
-+cleanup:
-+	task_work_race__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/task_work_race.c b/tools/testing/selftests/bpf/progs/task_work_race.c
-new file mode 100644
-index 000000000000..8d3f31fb075f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/task_work_race.c
-@@ -0,0 +1,125 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 KylinSoft Corporation. */
-+#include <vmlinux.h>
-+#include <stdbool.h>
-+#include <errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+#define TASK_WORK_RACE_MAX_SEQ	2048
-+
-+enum task_work_race_status {
-+	RACE_ARM_SEQ,
-+	RACE_READY_SEQ,
-+	RACE_DONE_SEQ,
-+	RACE_SCHED_ERR,
-+	RACE_STATUS_MAX,
-+};
-+
-+int trigger_tid;
-+int target_tid;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, RACE_STATUS_MAX);
-+	__type(key, int);
-+	__type(value, __s64);
-+} status SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, TASK_WORK_RACE_MAX_SEQ);
-+	__type(key, int);
-+	__type(value, __u64);
-+} completed SEC(".maps");
-+
-+struct task_work_race_value {
-+	__u32 seq;
-+	char data[60];
-+	struct bpf_task_work tw;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__uint(max_entries, 4);
-+	__type(key, int);
-+	__type(value, struct task_work_race_value);
-+} hmap SEC(".maps");
-+
-+static __always_inline void set_status(int key, __s64 value)
-+{
-+	__s64 *slot;
-+
-+	slot = bpf_map_lookup_elem(&status, &key);
-+	if (slot)
-+		*slot = value;
-+}
-+
-+static int process_work(struct bpf_map *map, void *key, void *value)
-+{
-+	struct task_work_race_value *work = value;
-+	__u64 *done;
-+	int seq = work->seq;
-+
-+	if (seq <= 0 || seq >= TASK_WORK_RACE_MAX_SEQ)
-+		return 0;
-+	done = bpf_map_lookup_elem(&completed, &seq);
-+	if (done)
-+		*done = 1;
-+	return 0;
-+}
-+
-+SEC("tracepoint/syscalls/sys_enter_getppid")
-+int race_sched_work(void *ctx)
-+{
-+	struct task_work_race_value *work;
-+	struct task_struct *task;
-+	__s64 *arm, *done;
-+	__u32 tid = (__u32)bpf_get_current_pid_tgid();
-+	int key = 0, err;
-+	__u32 seq;
-+
-+	if (tid != trigger_tid)
-+		return 0;
-+
-+	key = RACE_ARM_SEQ;
-+	arm = bpf_map_lookup_elem(&status, &key);
-+	key = RACE_DONE_SEQ;
-+	done = bpf_map_lookup_elem(&status, &key);
-+	if (!arm || !done || *arm <= 0 || *done == *arm)
-+		return 0;
-+	seq = *arm;
-+
-+	task = bpf_task_from_pid(target_tid);
-+	if (!task) {
-+		err = -ESRCH;
-+		goto out_done;
-+	}
-+
-+	key = 0;
-+	work = bpf_map_lookup_elem(&hmap, &key);
-+	if (!work) {
-+		err = -ENOENT;
-+		goto out_task;
-+	}
-+
-+	work->seq = seq;
-+	set_status(RACE_READY_SEQ, seq);
-+	err = bpf_task_work_schedule_signal(task, &work->tw, &hmap,
-+					    process_work);
-+	if (err == -EBUSY) {
-+		bpf_task_release(task);
-+		return 0;
-+	}
-+
-+out_task:
-+	bpf_task_release(task);
-+out_done:
-+	set_status(RACE_SCHED_ERR, err);
-+	set_status(RACE_DONE_SEQ, seq);
-+	return 0;
-+}
+Patch 2 adds a selftest that keeps steady pressure on the
+interleaving: it schedules cross-CPU, deletes the map value at
+different points of a round, uses READY/DONE handshakes so scheduling
+errors cannot be missed, and tags every callback with a generation so
+a late callback cannot satisfy a later round's assertions.
+
+Yun Lu (2):
+  bpf: Fix task work round ownership during cancellation
+  selftests/bpf: Add task work round ownership race test
+
+ kernel/bpf/helpers.c                                  | 123 ++++++++++--
+ .../selftests/bpf/prog_tests/test_task_work.c         | 283 +++++++++++++++++++++
+ .../selftests/bpf/progs/task_work_race.c              | 125 ++++++++
+ 3 files changed, 503 insertions(+), 28 deletions(-)
+
 -- 
 2.43.0
 
