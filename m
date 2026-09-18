@@ -1,165 +1,116 @@
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f40.google.com (mail-pz2-f40.google.com [74.125.228.40])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38FEF388E63;
-	Fri, 18 Sep 2026 01:20:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D0F2652B2
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 01:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.40
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789694423; cv=none; b=hQr9q48OVGdr7X4Sky50ZBBkKjhSu1JWffD6ND07BkJbFp8ORQ5BDqMXkeDvYIs8IiedX6WARmQzp6hXmvhsOGkBsgVpCmQR6QIRlO4D2toXzzo8yv1gkDxYhfFiY8pc+dTjDgZzyhkmN05u+J9JTcXskzvxU0uDbQ84cpn2GVw=
+	t=1789694999; cv=none; b=fI9feF3X75lWZMBYqJu2ajLnlgvtGs0Csj6dOoEy2ENOJF1jwBJmpcVrM6AIRlgav9YnMv+K/xWDThHUQWfGk3Qa9OU5kifwJApDZDPreyoCcoom/ytaJKLEwT3ua63F7nswR99TrdilZs6a8xTkEGxswLLkxPTaDRqmpFUzsos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789694423; c=relaxed/simple;
-	bh=vxM8j7eYcA1BWqfsM4Qk+N9UreBRtuXHS6deoiMRuM8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=RUeYM43UfoUhFRjRnoCtqmQuePGUgBT4MoU3lOJKQ4PZYmbK1AdNCVl8k7gdFpWZI7KtgDEr0G0oA+BZ+Iz4FdXBtO+zC4aumYSHSWDgmLv3tELJxY/beWYTFE9t3gGDQYspsQbdk+MS3EztxQDfjCSsJW3Eug6tK2emKkKsyXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=vEz/9fxh; arc=none smtp.client-ip=113.46.200.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1789694999; c=relaxed/simple;
+	bh=iI0zBzfG1hsDHz6i6vCemlZH6syFW4P/KDHxX9QZmH0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:
+	 References:In-Reply-To; b=Oi8XrdS/UhyNJ3Gb+UdMBYy/IiX+29Jq9BVF0ssIWkCE7kvBl/ASEDuzhGlyysx37f7LKtruIDVcUOdWS12IHm7/7kCtXEglRV15Ve5Sk6ThNI7nk4G6q+EMWaI/byMtH0jwPYbS0H+3ifhN/0urXwKWPlbdV8udZkA7FhG8bXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZDWb7+RZ; arc=none smtp.client-ip=74.125.228.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="vEz/9fxh"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=hNVRr0M80noRKxyWstwDdP10shu7MYTQxvymByKOzhw=;
-	b=vEz/9fxhFxK7TmUgnStNTZng0XNGGickUIHsjQzIWdJQ6lq70+BdUIahbmUx5KGMByz3QEUY4
-	pnJBlEPCcb0qWZRJT0VHauQC9arBG97jVYvXZ5Y74i4oR3w/4tOO/EAZzjvcFvQ2ZB24XQrsVx5
-	LA1Tg4Huzo6RmpNclavdNhs=
-Received: from mail.maildlp.com (unknown [172.19.163.163])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4hmDzW1nKYzLlSh;
-	Fri, 18 Sep 2026 09:09:11 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id EC6A64057A;
-	Fri, 18 Sep 2026 09:20:10 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Fri, 18 Sep
- 2026 09:20:10 +0800
-Message-ID: <c28917c2-4715-4c70-a2d3-582ca641e1d6@huawei.com>
-Date: Fri, 18 Sep 2026 09:20:09 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZDWb7+RZ"
+Received: by mail-pz2-f40.google.com with SMTP id 41be03b00d2f7-cc5121bcf1aso110252a12.1
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 18:29:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789694997; x=1790299797; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:message-id:date:content-type
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=vbHRw9e+J0REPOf8TNkwmKIHKyLdrdPDh38QRnbIRiU=;
+        b=ZDWb7+RZz6kDNMTMVo45vxMMmT4lWY8ib4Psim9IR/7F1UrRdLLvZU41bjagMzVUge
+         isFKXUbZ0BjxvBg4hdWHm+h3RVaCIJscz/JazMhxGsV5JAv9QAWDbKNTldZZyjY8JYtw
+         2e+j7lUiRsAGeM9oYCsi+OlMEvTvnhGl3ZDgW6Gkfy0WFEohVN23djw1rgwxHfJZoHNq
+         031kCx3EAR0hsWDpsWt+DXbNOzGXB0ch5un5zWjuLBwjotojhddFrI3rqzN6IHMRP+cu
+         rSrsbz6cy1gp6bqcNoqJHNhLta/VRRMW03AIBtefJxqFBwjRYlCcpE8GDFKrKGbteD3H
+         ZONQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789694997; x=1790299797;
+        h=in-reply-to:references:to:from:subject:message-id:date:content-type
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=vbHRw9e+J0REPOf8TNkwmKIHKyLdrdPDh38QRnbIRiU=;
+        b=NOGxMb/rWlMVJHfyk9cywZpgnv0S7SMmwabeQrYLpa8U8K9tw+MQ84qhWMgqNGvbf8
+         VZHyaohhffPhFL5PqqICuo0w8ybwHWRpwZJRR4bMPte0eqttIrTgQMM2v0hDEaOvtG8s
+         kc+JGxSY84ZT/3QEFND7c0sdjV4tJYRxGx6zPQXzfxz6q6N1aYrvd4zEWk6FIkIpyACH
+         Tzi81mctLn3j2yVUNuoHgPGwG9qdDhrfzxhYJ8dUhdvlToTQNN+i8bcEy14rd++oK6oT
+         P2WciMF2UfzFzVwsP6kqyiRu97L1S5G4UA7o1z0Eg+wtYXvsZvn5hi3WqbXDOMpv2HFm
+         sU7Q==
+X-Forwarded-Encrypted: i=1; AKwUvBy5F+ebrcjARRW0lkCkG9vbeqGpP+OflyyHJxqSB4zOOhSG1abIxKsRMBkZrk+4ou5OVnM=@vger.kernel.org
+X-Gm-Message-State: AFuF++kwyftICkLK+gKhGTTC5AyJK0yghHKRSge6ZuTYVFFwyIsCI81A
+	fxKcxCkn0sPH++dgJC1bCXYd0X+88fqgI2ILuW8MjVTUt732FPIvOtkg
+X-Gm-Gg: AYBFou3akjlkV9iRxT50m6AoZG7WrVQaPM8N0eBX6XIzNo/v27ZiZh2ADYARqIWZBF1
+	2jWf1LQpqgZ86C30OQ8kMq9wxCoMtSOtpAu2OnHnJZZxYS9CAiN1I/eK8A/b5qsq2LezOK+MBzl
+	Y0krNhv39toSbTCx9xDamd/isouPazaacnUYxVRS0HSbduS0dkcEJkKYoP0USf+g90QXp3geF7/
+	riyT7fUKzzpU85fnur9jXukWWhQCsvKfub9UG0z11K5/u95hKeNOfsDW7HbUL/n2p7kS03MBh7k
+	U6vh7w/4pJd7n/nrf8vcVcftjVev6wOsZNQ6m4inv1Z3YX+W4ZZYEzVdQmtWLMi+PlBC62geYYI
+	ekaU91BEDjtC28uJKcishccBiXn6Zder3GwWDm1R9FwpaU6JOUZMIMcbrkJoGrmmA9Wvy7SMh97
+	rTnuIm0C3YemZyRsQ4WXeJMGVkd+p9YPix0ZZRQeE+qQaT0cliD+7RZVvm1i7FL/t2s1oRk1ETZ
+	hPCNZAt9RlgU7eTmDoyyz2jtwmC1yn8jURkAxw9S51hZVS27Hr04J5E3a0dhozrEjuwjbsoLL1w
+	Qw6q
+X-Received: by 2002:a17:90b:3f84:b0:39e:4c7e:f042 with SMTP id 98e67ed59e1d1-39e54f91d4amr1930776a91.31.1789694997537;
+        Thu, 17 Sep 2026 18:29:57 -0700 (PDT)
+Received: from localhost ([153.61.198.246])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e36115cc8sm7493789a91.3.2026.09.17.18.29.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Sep 2026 18:29:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] riscv: patch: fix handling of bpf-jit execmem addresses
-To: Wei-Jie Hung <imbigking12@gmail.com>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>
-CC: Alexandre Ghiti <alex@ghiti.fr>, Mike Rapoport <rppt@kernel.org>, Xiaofeng
- Yuan <xiaofengmian@163.com>, Klara Modin <klara@kasm.eu>,
-	<linux-riscv@lists.infradead.org>, <bpf@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-References: <20260914115607.350097-1-imbigking12@gmail.com>
-Content-Language: en-US
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <20260914115607.350097-1-imbigking12@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems500001.china.huawei.com (7.221.188.70) To
- kwepemf100007.china.huawei.com (7.202.181.221)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 18 Sep 2026 01:29:56 +0000
+Message-Id: <DLI1XF72KLXJ.3JTQWV4WFT55P@gmail.com>
+Subject: Re: [PATCH] bpf: use str_plural() in diag_print_history()
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Lalit Shankar Chowdhury" <lalitshankarch@gmail.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
+ Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "open list:BPF [GENERAL] (Safe Dynamic Programs
+ and Tools)" <bpf@vger.kernel.org>, "open list"
+ <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.17.0
+References: <20260917204648.9110-1-lalitshankarch@gmail.com>
+In-Reply-To: <20260917204648.9110-1-lalitshankarch@gmail.com>
 
-
-On 2026/9/14 19:56, Wei-Jie Hung wrote:
-> Commit 8718e5a3090b ("riscv: patch: skip fixmap mapping when kernel text
-> is already writable") gated the core_kernel_text() branch of patch_map()
-> on CONFIG_STRICT_KERNEL_RWX, and explicitly left the vmalloc branch
-> unchanged. That branch has a separate problem.
-> 
-> That branch only creates a temporary writable fixmap alias when
-> CONFIG_STRICT_MODULE_RWX is enabled, and otherwise assumes the target is
-> directly writable and returns the address unchanged. That assumption no
-> longer holds: bpf_prog_pack_alloc calls set_memory_rox() on every pack
-> unconditionally in alloc_new_pack(), independently of any
-> CONFIG_STRICT_*_RWX option, so BPF text in the vmalloc area is read-only
-> regardless of what CONFIG_STRICT_MODULE_RWX says.
-> 
-> With CONFIG_STRICT_MODULE_RWX=n, patch_map() returns the read-only
-> address directly, the subsequent copy_to_kernel_nofault() takes a
-> page fault and returns -EFAULT. bpf_arch_text_copy() turns that into
-> -EINVAL, which propagates through bpf_jit_binary_pack_finalize() to the
-> WARN_ON() in bpf_int_jit_compile() and leaves the program un-JITed.
-> 
-> Note that BPF cannot be fixed the way kprobes was in
-> commit bdc46e507b59 ("riscv: mm: make EXECMEM_KPROBES writable without
-> CONFIG_STRICT_MODULE_RWX"). EXECMEM_BPF is already PAGE_KERNEL, i.e.
-> writable at allocation time; the read-only mapping is established
-> afterwards by generic code in alloc_new_pack(), which arch code cannot
-> influence. The only place this can be handled is patch_map().
-> 
-> This is the same problem that was fixed on arm64 by commit b1480ed230ac
-> ("arm64: patching: fix handling of execmem addresses"), and the fix is
-> the same: CONFIG_EXECMEM is what actually tracks whether the vmalloc
-> area can hold executable memory that needs a temporary alias to be
-> written. CONFIG_BPF_JIT, CONFIG_KPROBES and CONFIG_MODULES all select
-> it.
-> 
-> Note that this is not limited to CONFIG_MODULES=n. Unlike arm64, riscv
-> selects CONFIG_ARCH_OPTIONAL_KERNEL_RWX, so CONFIG_STRICT_MODULE_RWX can
-> be disabled with CONFIG_MODULES=y as well, and the bug is reachable in
-> that configuration too.
-> 
-> The !CONFIG_MMU build is unaffected: it has its own __patch_insn_set()
-> and __patch_insn_write() implementations and never calls patch_map().
-> 
-> Fixes: 2c9e5d4a0082 ("bpf: remove CONFIG_BPF_JIT dependency on CONFIG_MODULES of")
-> Signed-off-by: Wei-Jie Hung <imbigking12@gmail.com>
+On Thu Sep 17, 2026 at 8:46 PM UTC, Lalit Shankar Chowdhury wrote:
+> Use the string choice helper function to simplify the code.
+>
+> Signed-off-by: Lalit Shankar Chowdhury <lalitshankarch@gmail.com>
 > ---
-> Based on riscv/fixes (b94cec5761d2).
-> 
-> Reproduced on qemu-system-riscv64 -M virt with CONFIG_BPF_JIT=y,
-> CONFIG_BPF_JIT_ALWAYS_ON=y and CONFIG_STRICT_MODULE_RWX=n.
-> ptp_classifier_init() builds a cBPF filter from sock_init(),
-> so the failure happens during boot without any userspace involved:
-> 
->    WARNING: arch/riscv/net/bpf_jit_core.c:156 at bpf_int_jit_compile+0x3dc/0x43e
->    Call Trace:
->     bpf_int_jit_compile+0x3dc/0x43e
->     __bpf_prog_select_runtime+0xec/0x186
->     bpf_prog_select_runtime+0x12/0x1a
->     bpf_prepare_filter+0x368/0x46a
->     bpf_prog_create+0x66/0x90
->     ptp_classifier_init+0x3e/0x60
->     sock_init+0xc4/0xe6
->     do_one_initcall+0x78/0x14a
-> 
->    kernel BUG at net/core/ptp_classifier.c:227!
->    Kernel panic - not syncing: Fatal exception in interrupt
-> 
-> The BUG_ON() is reached because CONFIG_BPF_JIT_ALWAYS_ON=y turns the
-> silent interpreter fallback into -ENOTSUPP. With
-> CONFIG_BPF_JIT_ALWAYS_ON=n the failure is silent: writing 1 to
-> /proc/sys/net/core/bpf_jit_enable and loading any program reproduces the
-> same warning, but the program simply falls back to the interpreter and
-> the kernel keeps running.
-> 
-> Tested with CONFIG_BPF_JIT=y:
->    - CONFIG_MODULES=n, CONFIG_BPF_JIT_ALWAYS_ON=y:
->      panics before this patch, boots after
->    - CONFIG_MODULES=y, CONFIG_STRICT_MODULE_RWX=n,
->      CONFIG_BPF_JIT_ALWAYS_ON=y: same panic before this patch, boots after
->    - CONFIG_BPF_JIT_ALWAYS_ON=n: the warning above is emitted when a
->      program is loaded from userspace before this patch, and gone after
->    - riscv defconfig (CONFIG_STRICT_MODULE_RWX=y): unaffected, boots
->      before and after
->    - kprobes (kretprobe on __riscv_sys_openat via kprobe_events):
->      works before and after this patch
-> 
->   arch/riscv/kernel/patch.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/kernel/patch.c b/arch/riscv/kernel/patch.c
-> index 2239c28981bc..2b5adf01c550 100644
-> --- a/arch/riscv/kernel/patch.c
-> +++ b/arch/riscv/kernel/patch.c
-> @@ -48,7 +48,7 @@ static __always_inline void *patch_map(void *addr, const unsigned int fixmap)
->   		if (!IS_ENABLED(CONFIG_STRICT_KERNEL_RWX))
->   			return addr;
->   		phys = __pa_symbol(addr);
-> -	} else if (IS_ENABLED(CONFIG_STRICT_MODULE_RWX)) {
-> +	} else if (IS_ENABLED(CONFIG_EXECMEM)) {
->   		struct page *page = vmalloc_to_page(addr);
->   
->   		BUG_ON(!page);
+>  kernel/bpf/diagnostics.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+> index 0abbbe177e31..ff139777ac64 100644
+> --- a/kernel/bpf/diagnostics.c
+> +++ b/kernel/bpf/diagnostics.c
+> @@ -2354,6 +2354,6 @@ static void diag_print_history(struct bpf_verifier_=
+env *env,
+>  	if (log->first_seq)
+>  		diag_write(env, "  %llu older causal-history event%s not retained beca=
+use diagnostic "
+>  			   "event storage reached capacity\n",
+> -			   log->first_seq, log->first_seq =3D=3D 1 ? "" : "s");
+> +			   log->first_seq, str_plural(log->first_seq));
 
-Reviewed-by: Pu Lehui <pulehui@huawei.com>
-Tested-by: Pu Lehui <pulehui@huawei.com>
+Nack.
+
+Instead propose a revert of commit 9ca5facd0400f I will be fully
+supporitve to delete this obfuscation garbage.
+
+pw-bot: cr
+
