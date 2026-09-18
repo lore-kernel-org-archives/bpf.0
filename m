@@ -1,128 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF5561FFC59
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 05:44:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14B928C840
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 05:44:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789710270; cv=none; b=YkTpTPIR8P2GCyYELxdIEY8YEBxohqEIl0KT+UwuxeRZMT9t6szs35oxEvJ62sEHX/bcDfZZ964NF8guUe5CXBFsq0pFUHSvdduO1JCTRz1IA1JXX2bCTH4yTZhvuPSVX7zWV4AGQMWS2ACHJzWMhBHufgvB1AEPtxZOrQYZS8M=
+	t=1789710272; cv=none; b=aUR5KJgtIUpEVgLDKrkvicLro7Dnr5IK2VMgjN9jmLfW76NSbvKbpa56YCwhQefvd6p+jNz9bZLEZmSQDQthe+OvNd4zXfpN7kl+jho4sYIzJ041+jqMsDxeZgwE0+Mat2qWuyUM+gdtt2cWUZ5OSVf1BgHyOZqCwa42hfhjDZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789710270; c=relaxed/simple;
-	bh=l2VWhP5EljH96sz3KkXbETviXewJRhmjDUP2xG6yU4c=;
+	s=arc-20240116; t=1789710272; c=relaxed/simple;
+	bh=wnnKFJcCraSLdRTqdSMS5++hwp1tCiqDk6l8c5iv6k8=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=QkNLWzenVHg+R37c7LjMCVL8H6JXVd4r68SBPkPyIj2nw7k0VNhIjYcqCCnjelH1ayt777ofE6Z/cP6ZqFx/Dng/ggwYg/jHpGyY2tK8KaMhkxhbfKN2bpn/4/5o2j/74qaQkJmRAnmdjMz2hLUvT8N6Ufjb7VXrKV0SLpkZfBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OXwiTmln; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=aDi4rZKzojVbwHpOvPvdcvM4AbogHGBXpslXLwx1qL/Q1JGHmRbQBB+XcKThHMWWPKhaac7IqTq0E2/e83cRuoeUIGysbm1fEUbB/XOXt3FsQRcUdmqyfUQwtrIbyaKwXPS1hKmyG+F/AKI6InREJTuuniCblhSifkwjlgeXm/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tun85uBp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OXwiTmln"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E768B1F000FF;
-	Fri, 18 Sep 2026 05:44:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tun85uBp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C396E1F00893;
+	Fri, 18 Sep 2026 05:44:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789710268;
-	bh=MOhj7zS7dy4krCGlOa+rShDBN3ZGe3sEDSska5oA6ds=;
+	s=k20260515; t=1789710270;
+	bh=9ELzDtH0CwyLOPRWO7cQkwu5T8RPnfsje4rrN1RaYuo=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=OXwiTmlnS+DiJoYixjOfvWhQyRINZJwxKEa4IF1RrHze+yugIzbD6cutWRDpnwXVQ
-	 gtkuGYukRiqdTrUAHQUka3nwEpBJKC8Gil40gW4eIydqeVjQlzbYpIMLi++tjjetDo
-	 pokS0cDBN5OV/KaRFOkM0AgO+oDug+hybtSZaEZ9x4TeQX5elJcp1pfgml8GKOXGP8
-	 loC85XeMrSej5MIq3ZbT/8svkHvS+YjUB3hCihQsA7ymQnRj86N0Z2ycBZl3wF4mud
-	 c/0ZApZ/nNfUVsecIbUDyOb1q509HN/nA9jR0PTUwdxaVFA8Is1rrCVOAZ+YPSDznm
-	 yWdfa4RlfPx5w==
-Content-Type: multipart/mixed; boundary="===============5413451299901404159=="
+	b=Tun85uBpKOZ3sVoOXIUKYA0hAXjxdeNwDYcCPlJr2m3zUr/mfAeyGJl/jpEsEiqvA
+	 l1OyN1ZAE8GaoaJLZhuLoDphxnhSNshKgnkYynB4Af7Qdk/cVxSJVasSqqR5O5P/xY
+	 BVhroJVT9XT5Mh24MUDj/vq1SWkDn+FQ4So+YMno7zD9wWwemGp/TrzvitvYfclc3d
+	 2L1OLx5FvNSILBQva59snZfTI7+5bqQBo9s2/BQZr41hwdtA8c3AyEBnY2F3orI1uX
+	 gXKskjnU4omtSzrxX+PWRDp5gbTC0H2/oIkKovOWTlfK+rzwiLMBihzuHYQP1gO0s2
+	 xvpN7Y5jw3QQA==
+Content-Type: multipart/mixed; boundary="===============7192484442512092886=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f6f9de46294b24824fb67c5246d73bc720391d52e5dd4cf36af398a215fbb414@mail.kernel.org>
-In-Reply-To: <20260918044221.3287431-1-yonghong.song@linux.dev>
-References: <20260918044221.3287431-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v2 05/20] bpf: Make exception landing pads reachable in the CFG
+Message-Id: <6d68bdd97e85a2c8b74ab62769fd7846a3f9c83f825697eb9fd35a6723842a73@mail.kernel.org>
+In-Reply-To: <20260918044243.3288865-1-yonghong.song@linux.dev>
+References: <20260918044243.3288865-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v2 09/20] bpf: Refuse a private stack for a program with an exception cleanup table
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 18 Sep 2026 05:44:27 +0000 (UTC)
+Date: Fri, 18 Sep 2026 05:44:29 +0000 (UTC)
 
---===============5413451299901404159==
+--===============7192484442512092886==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> index 44ecdc5b4ec2d..9cfd05f970bc9 100644
-> --- a/kernel/bpf/liveness.c
-> +++ b/kernel/bpf/liveness.c
-> @@ -8,6 +8,8 @@
->  #include <linux/slab.h>
->  #include <linux/sort.h>
->
-> +#include "exception.h"
-> +
->  #define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##args)
->
->  struct per_frame_masks {
-> @@ -256,6 +258,9 @@ bpf_insn_successors(struct bpf_verifier_env *env, u32 idx)
->  	succ = env->succ;
->  	succ->cnt = 0;
->
-> +	if (unlikely(bpf_is_unwind_resume_kfunc(insn)))
-> +		return succ;
-> +
+> A landing pad is about to start running outside its own frame, on the
+> bpf_throw() walker's stack, with that frame's registers put back from a
+> spill area whose contents arch_bpf_run_cleanup_pad() knows how to read. The
+> x86-64 JIT addresses a private-stack program's frame through a scratch
+> register that it recomputes after each call rather than through rbp, and no
+> spill area holds that register, so a pad there would address its frame
+> through whatever the kernel left behind.
 
-Should this early return be gated on env->cleanup_info_cnt?
+The description says the x86-64 JIT 'recomputes after each call'. Does the
+JIT actually recompute it?
 
-bpf_unwind_resume() is an unconditionally registered generic kfunc with no
-KF_ flag restricting it to programs that carry a cleanup table. Its body
-is empty, so at run time the call simply returns and execution continues
-at the next instruction.
+Looking at the x86 JIT, emit_priv_frame_ptr() (arch/x86/net/bpf_jit_comp.c)
+is emitted once in the prologue, and the value in X86_REG_R9 is carried
+across calls by push_r9()/pop_r9() around each call site; BPF_REG_FP
+accesses are rewritten to X86_REG_R9.
 
-visit_insn() in cfg.c still gives the call a fallthrough edge, and at this
-commit nothing in do_check() rejects a bpf_unwind_resume() call that is not
-the tail of a cleanup landing pad. So any CAP_BPF program with no cleanup
-table can call bpf_unwind_resume() and keep executing after it.
+The load-bearing half of the argument is still correct -
+arch_bpf_run_cleanup_pad() (added later in the series,
+arch/x86/net/bpf_cleanup_pad.S) restores only r15/r14/r13/rbx/r12 and rbp
+from the spill area and never restores r9, so a pad in a private-stack
+program would address its frame through a stale register.
 
-For such a program, bpf_insn_successors() reports zero successors, so
-bpf_compute_live_registers() treats everything after the call as dead. The
-register-cleaning side fails closed (a poisoned slot is rejected), but the
-32-bit zero-extension side fails open:
+Only the described mechanism (recompute vs save/restore around calls) is
+wrong, which makes the justification harder to check against the JIT.
 
-insn_aux[i].zext_dst for an insn preceding the call is only set when the
-hi half of the defined register is live-after, so it stays false, and
-bpf_opt_subreg_zext_lo32_rnd_hi32() (kernel/bpf/fixups.c:706) then does
-'if (!aux[adj_idx].zext_dst) { if (!rnd_hi32) continue; ... }' and emits
-no BPF_ZEXT_REG.
+> Everywhere rather than arch-conditionally: arm64 keeps its private
+> stack pointer in x27, which is in the prologue spill and so survives, but a
+> rule that holds on one arch and not the other is not worth the second code
+> path when nothing is lost but an optimization.
 
-On architectures where bpf_jit_needs_zext() is true and kfunc calls are
-supported (s390, riscv64, powerpc64, parisc, x86-32), the upper 32 bits of
-a register the verifier proved to be 32-bit bounded are left with stale
-JIT-defined contents, which defeats the range checks the verifier derived
-for it.
+Does 'nothing is lost but an optimization' understate the effect?
 
-Compare with the pad lookup ten lines below:
+The private-stack mode also changes the verifier's stack-depth accounting,
+not just JIT codegen. In check_max_stack_depth_subprog() a
+PRIV_STACK_ADAPTIVE subprog is checked against MAX_BPF_STACK on its own ('if
+(subprog_depth > MAX_BPF_STACK)'), while a NO_PRIV_STACK subprog accumulates
+into 'depth' and the whole bpf2bpf chain must fit in MAX_BPF_STACK
+('combined stack size of %d calls is %d. Too large').
 
->  	opcode_info = &opcode_info_tbl[BPF_CLASS(insn->code) | BPF_OP(insn->code)];
->  	insn_sz = bpf_is_ldimm64(insn) ? 2 : 1;
->  	if (opcode_info->can_fallthrough)
-> @@ -264,6 +269,13 @@ bpf_insn_successors(struct bpf_verifier_env *env, u32 idx)
->  	if (opcode_info->can_jump)
->  		succ->items[succ->cnt++] = idx + bpf_jmp_offset(insn) + 1;
->
-> +	if (unlikely(env->cleanup_info_cnt)) {
-> +		int pad = bpf_cleanup_pad_of_call(env, idx);
-> +
-> +		if (pad >= 0)
-> +			succ->items[succ->cnt++] = pad;
-> +	}
+So for the prog types bpf_enable_priv_stack() would have returned
+PRIV_STACK_ADAPTIVE for (kprobe/tracepoint/perf_event/raw_tp, and
+tracing/lsm/struct_ops with a recursion or an explicit request), a program
+carrying a cleanup table whose nested subprog depths sum above 512 bytes now
+fails to load rather than losing performance.
 
-which gates the pad lookup on cleanup_info_cnt, and with
-visit_cleanup_pad_edge() in kernel/bpf/cfg.c which returns DONE_EXPLORING
-when !env->cleanup_info_cnt.
+Worth stating in the changelog, since it is a load-time visible restriction
+on the new feature rather than an optimization.
 
-Would gating the early return on env->cleanup_info_cnt fix this?  That
-would be sound because a program that carries a cleanup table is
-additionally constrained (bpf_jit_supports_cleanup_pads() plus, from commit
-fa6890df61539 onward, the requirement that a resume sit at the end of a
-landing pad), whereas a program with cleanup_info_cnt == 0 must keep the
-ordinary fallthrough successor of the call.
+Related: kernel/sched/ext/ext.c sets prog->aux->priv_stack_requested for
+sched_ext dispatch/sub_caps_updated, and verifier.c rejects such a request
+when the JIT cannot honour it; here the request is silently ignored instead.
+
+This looks like a bug fix for private stack support. Should this include:
+
+  Fixes: a76ab5731e32d ("bpf: Find eligible subprogs for private stack support")
 
 
 ---
@@ -130,4 +109,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35308528711
---===============5413451299901404159==--
+--===============7192484442512092886==--
