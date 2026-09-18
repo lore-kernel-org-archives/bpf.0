@@ -1,125 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A495351C17
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 09:30:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFC9C38DC56
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 09:37:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789723819; cv=none; b=J7TmrI1HNc86tsohPbQrsvL3piv52jN+y8KV+ozm/0Ss1yrDdUwwzCry9FBjyjRn9DNmhnvXBs5UmbXW8EmIRx3gP8umXPZGizItKTBSe7FKKi4qpAPEhbuEm67c/n7ACg4EBVAetqFr/KICN57aMMNvZEdaCFmWZYIgDaA13Ys=
+	t=1789724271; cv=none; b=YTNoOdISDcc7BCeGEBMD+DoTM8lyqsoM75hJiSS5O4m6asBrRdzfCHaB0I+vaiQSbQeV7RWRaMvDNokQgMEQLwdSRpE38nUAjvRiQi0wrj/iqpc4RxP+fBXFwjhy6NjdI0nMQXXJTplfUkHjD8P/v3xl3ByDbj/kjNVTwqmmWKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789723819; c=relaxed/simple;
-	bh=7U0k1RMm/xHDbf7wC0qHRHTt3kPQyAUaAqXWjg1Z38Q=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=TFQJBUW6PEoKh9/5jA5Or527CPBl/C1XBK5elS1I2t56CJamfuB7BHBdoBibBS0S4qvDNRa6owSnVY2zhpaXvvvOTHDg4TwwGd3H8KuqTMICTL6HymA66cQ53WzicECPxVRcpZatVLql+LnvrBkXQEGtZBZExc2OqQ3pOsojQ5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C+LctNFT; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C+LctNFT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFF821F00893;
-	Fri, 18 Sep 2026 09:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789723817;
-	bh=eDpOCznABDD5IHodk+irrAU2DTvWziaom606cNC5qgI=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=C+LctNFTu3FfHICdIEXKp/rmfK08OWvXXq/uxDkpLDbSGMHvpyATY2jCtCtXY6s7X
-	 sUaMOBkyOvm/sNsa4Dq7SDGT3DR5Wpg/vBooRVFWzc4Lgaui7Q+MDLyF3FIi9SEOz8
-	 34FvPvDHUyIk91koLb0AEnNLyTK8Zem2JgJOtiAZc6bjYigURH3ayxL9xuvQsTH1O8
-	 S0H1tYqU/ak65LPkD5CWAr3P9XrUNU3rjkqxfJJldDbkgdVMqn5wtXOLKBcMeC/B+w
-	 cjb0RHZBX6DVrV1XhRCaHHnErd4pmcnFGi8v8cEm995cOV0TSmAmKX5pDJEOX7Bk+U
-	 9QUFso5R93Ekw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v8 3/5] bpf: Add user memory access kfuncs for
- mm_struct
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Anastasios Papagiannis" <tasos.papagiannnis@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260918091058.297740-4-tasos.papagiannnis@gmail.com>
-References: <20260918091058.297740-1-tasos.papagiannnis@gmail.com>
- <20260918091058.297740-4-tasos.papagiannnis@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 18 Sep 2026 09:30:17 +0000
-Message-Id: <20260918093017.AFF821F00893@smtp.kernel.org>
+	s=arc-20240116; t=1789724271; c=relaxed/simple;
+	bh=WydNLni8HoKtKLfphcI8NZ1uZMwj4Wx+5ZDx3C8BA0U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kJ0Z0Sbi/jwr3HK6TFkFEJtJqOkcqffYMm7NQE3+KgKIDxlf+P9TfyBBYn1zlRu69IxOjz5s5kO0Xv6wvNnB3amlueMdGa2iCNZ0c7h/OTnTDCZiaYhy8TM95i+JlxuGF9vuesdqpF/lcTiLkzi4+D6m5avgzldi4ERmKtyhKdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=162.243.164.118
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [10.183.162.106])
+	by mtasvr (Coremail) with SMTP id _____wDnoj1PBq1qa5whAQ--.13728S3;
+	Fri, 18 Sep 2026 17:37:20 +0800 (CST)
+Received: from [10.183.162.106] (unknown [10.183.162.106])
+	by mail-app1 (Coremail) with SMTP id yy_KCgCHRJxPBq1qYeaOBA--.7169S3;
+	Fri, 18 Sep 2026 17:37:19 +0800 (CST)
+Message-ID: <811e59e4-df78-4cce-a504-6c089b68e29c@zju.edu.cn>
+Date: Fri, 18 Sep 2026 17:37:18 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 0/8] bpf: Add UHMUL and SHMUL instructions
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
+ eddyz87@gmail.com
+Cc: daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ tangyazhou518@outlook.com, shenghaoyuan0928@163.com, ziye@zju.edu.cn
+References: <20260917041712.1860722-1-tangyazhou@zju.edu.cn>
+ <DLHSD07GRG0W.16CFRV44ZE1DD@gmail.com>
+Content-Language: en-US
+From: Yazhou Tang <tangyazhou@zju.edu.cn>
+In-Reply-To: <DLHSD07GRG0W.16CFRV44ZE1DD@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:yy_KCgCHRJxPBq1qYeaOBA--.7169S3
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgQSCmqsQposUgAAs6
+X-CM-DELIVERINFO: =?B?LdSUZAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9Ne4ztDGUKJpDiizdoftpEvq4yyAXyQRPEAOHM6yl9jOlsmYk6Af2oobIgdNboutwo41
+	W0pfb0Rc1EKSUPbUAjcE6yoL907Svs67svpDWc8bSL5KKFMoY371lOym77Dj1Q==
+X-Coremail-Antispam: 1Uk129KBj93XoW7Cw47Xr4UCr1kWr4DGr47WrX_yoW8CF4fpr
+	45CF9akw4vgry8Zry0qa1xWF1Yvr48Way3CF1DWrWft3ZIqryxZr4Sg34ruFy3Zr40gay0
+	qFWY9rnYk3s5ZagCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAF
+	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8c
+	xan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
+	rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXw
+	CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
+	67AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbPE
+	f5UUUUU==
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [High] bpf: UAF in bpf_copy_from_user_mm due to unreferenced mm_struct
---
 
-commit cbb90d2c797aaefaca575d8d6f41d087c38c6414
-Author: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
 
-bpf: Add user memory access kfuncs for mm_struct
+On 9/18/26 02:00, Alexei Starovoitov wrote:
+> On Thu, Sep 17, 2026 at 12:17 PM Yazhou Tang <tangyazhou@zju.edu.cn> wrote:
+>> Patch 8/8 uses raw bytecode for UHMUL and SHMUL because LLVM support has
+>> not been merged yet. Once it is available, the raw encodings can be
+>> replaced with the uh*= and sh*= mnemonics. A draft LLVM implementation
+>> is available at:
+>>
+>>    https://github.com/ADSWT518/llvm-project/tree/bpf-hmul-insn
+>>
+>> We plan to finalize and submit it as an LLVM pull request after the
+>> kernel-side ISA changes are merged.
+> 
+> Pls send the LLVM PR now. It needs to be reviewed together
+> with kernel side.
+> 
+> I think it enables ISD::MULHU/MULHS legal under -mcpu=v4.
+> Does it mean that existing programs might generate new instructions
+> and stop loading on current kernels?
+> If so, we'd have to introduce -mcpu=v5 for that
+> and extra flag like we did for other insns.
 
-This commit adds new bpf_copy_from_user_mm() and bpf_copy_from_user_mm_str()
-kfuncs that allow BPF programs to access an address space directly using an
-mm_struct pointer. It refactors task-based helpers to share their internal
-implementations with the new mm-based kfuncs.
+Thanks for pointing this out. Enabling HMUL under -mcpu=v4
+would change code generation for existing programs and
+could make them fail to load on older kernels.
 
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index 051b6654e57c6..f6b3eee6098a0 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-[ ... ]
-> @@ -3659,6 +3697,68 @@ __bpf_kfunc int bpf_copy_from_user_str(void *dst, =
-u32 dst__sz, const void __user
-[ ... ]
-> +__bpf_kfunc int bpf_copy_from_user_mm(void *dst, u32 dst__sz,
-> +				      const void __user *unsafe_ptr__ign,
-> +				      struct mm_struct *mm, u64 flags)
-> +{
-> +	if (unlikely(flags))
-> +		return -EINVAL;
-> +
-> +	if (unlikely(!dst__sz))
-> +		return 0;
-> +
-> +	return __bpf_copy_from_user_mm(dst, dst__sz, unsafe_ptr__ign, mm);
+I'll move HMUL to -mcpu=v5, keep a separate disable flag,
+and send the LLVM PR for joint review with the kernel series.
 
-[Severity: High]
-Can this result in a Use-After-Free during concurrent task exit?
+> 
+>>   arch/arm64/include/asm/insn.h                 |   4 +
+>>   arch/arm64/lib/insn.c                         |   6 +
+>>   arch/arm64/net/bpf_jit.h
+>           |   6 +
+>>   arch/arm64/net/bpf_jit_comp.c                 |  15 +-
+>>   arch/loongarch/net/bpf_jit.c                  |   3 +
+>>   arch/mips/net/bpf_jit_comp32.c                |   3 +
+>>   arch/mips/net/bpf_jit_comp64.c                |   3 +
+>>   arch/parisc/net/bpf_jit_comp32.c              |   3 +
+>>   arch/parisc/net/bpf_jit_comp64.c              |   3 +
+>>   arch/powerpc/net/bpf_jit_comp32.c             |   3 +
+>>   arch/powerpc/net/bpf_jit_comp64.c             |   3 +
+>>   arch/riscv/net/bpf_jit.h                      |   5 +
+>>   arch/riscv/net/bpf_jit_comp32.c               |   3 +
+>>   arch/riscv/net/bpf_jit_comp64.c               |  18 +-
+> 
+> Pls cc arm64, riscv or other arch JIT maintainers on respin.
+> We need acks from them.
 
-When a task exits, mmput() drops mm_users to 0 and calls __mmput(), which
-invokes exit_mmap(). exit_mmap() releases the mmap_write_lock and then calls
-free_pgtables() without holding any locks.
+Ok, I'll cc them on respin.
 
-If a BPF program passes a trusted mm_struct like task->mm to this kfunc, it
-eventually calls access_remote_vm(mm) without validating or incrementing
-mm_users (for example, by using mmget_not_zero()).
-
-Since access_remote_vm() acquires mmap_read_lock(), if this occurs after
-exit_mmap() has dropped the write lock but before it destroys the VMA tree,
-vma_lookup() will succeed. This means __get_user_pages() will walk page
-tables that are being concurrently freed locklessly by free_pgtables(),
-resulting in a Use-After-Free.
-
-Does this need to acquire a reference to mm_users before proceeding?
-
-> +}
-[ ... ]
-> +__bpf_kfunc int bpf_copy_from_user_mm_str(void *dst, u32 dst__sz,
-> +					  const void __user *unsafe_ptr__ign,
-> +					  struct mm_struct *mm, u64 flags)
-> +{
-> +	if (unlikely(flags & ~BPF_F_PAD_ZEROS))
-> +		return -EINVAL;
-> +
-> +	if (unlikely(dst__sz =3D=3D 0))
-> +		return 0;
-> +
-> +	return __bpf_copy_from_user_mm_str(dst, dst__sz, unsafe_ptr__ign,
-> +					   mm, flags);
-
-[Severity: High]
-Similarly, does this also suffer from the same unreferenced mm_struct
-lifetime issue described above?
-
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260918091058.2977=
-40-1-tasos.papagiannnis@gmail.com?part=3D3
