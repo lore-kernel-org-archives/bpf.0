@@ -1,122 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F131D39B4A5
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 09:24:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from fraori-sdnproxy-3.icoremail.net (fraori-sdnproxy-3.icoremail.net [132.226.202.154])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00D3A1AA1D5
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 09:26:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=132.226.202.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789723474; cv=none; b=srVJTr+gTzx3rKDfPo4D8x7+I3QYAOhv+A/irlgYuwvILVs/QGdX8AXZSGHIbZulBAMXBCNvN0PFLen3HJIv7qixhnZ5tguadd8EM9ZJOB+TvH8GrGnWkViaBkBy9/scjpqU48ElBVxXxx4h5m5PmJqx4Qn94IpoE5cn5/fkAgk=
+	t=1789723597; cv=none; b=r8Rtb+vVidnrFJ+Q6m4Y7I3eKulJJVTMdYckp797ozxGG061qrSxcKWg4isvUV8aRM5sI4x0cbTBQ7jk7Yv9o5bNgBpmvZAWJa/JFmnYEwX9glbEpYUrQnltvjqCCplG249JdhGYsMW11YLApVjTveK8C5INw9NRzsR2GVJJ7cI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789723474; c=relaxed/simple;
-	bh=zW18JH5PVGmnlflhrk4B9/yiEUSuC9qPpp6P840c6Po=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=VxLwTB6wORDykAWA00gbvu3Ms/1Ma9IursO71Ux0k7a1LiHQN1R1dXydbGQZ3jkKRB2JwNgqTiVpdpjmeA8E9+9gK6V4rcbtWjxr/2BV3TDDgLQOKozUEHlkEXaJNEI+Ex+2Nonemif+jg6Wkb2Kxn9Ctpk8zHcRbzET3nh6XwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M/E+D/LU; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M/E+D/LU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5872C1F000FF;
-	Fri, 18 Sep 2026 09:24:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789723472;
-	bh=J8YihC9B+5OocyJWgpt747622dR9P9kzf6Lq4ZBru5k=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=M/E+D/LUYHtwewNA6eznqjBKA4xX9QKOvsF4HFHVP+Q4DZ5uL2REwJ802XWTtE+IB
-	 Jp2dYT9jGR8JBCS2fnkHI2c/XDaEt8m4JJUcaFiSEAihG2e3lrhJt/VvZjSJQJ2fHx
-	 FutcnsRzD2U1adTkYdC9l7K4gatOEthuNI5UDhgE+JqwebqZJNljV7U+zVnNOjKAdc
-	 DYUbsVs4RnwHr0tlzQHixZOtUaW7Al/7pY3vCj4x4zBxrcNln//tK6MN0JS8XctI6g
-	 VRk/eAI62YngWijF3gGOM+3NZHH3Zeq/vZtx9IqFcpqaByJYNj1T9JKoh8VkZaRDs/
-	 JZt7OU8SsO6sA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v8 4/5] bpf: Mark linux_binprm->mm as
- trusted-or-null
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Anastasios Papagiannis" <tasos.papagiannnis@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260918091058.297740-5-tasos.papagiannnis@gmail.com>
-References: <20260918091058.297740-1-tasos.papagiannnis@gmail.com>
- <20260918091058.297740-5-tasos.papagiannnis@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 18 Sep 2026 09:24:31 +0000
-Message-Id: <20260918092432.5872C1F000FF@smtp.kernel.org>
+	s=arc-20240116; t=1789723597; c=relaxed/simple;
+	bh=NYQizzJl165HDc67fY5hjFoOL9FO8vxSoDA9qDGQ7Fk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JXsBKYqz7fuk9kRKp5RtQcwkdauem9MeJr9ndMHR7a8jy9AP8XCSenVSCcRyXStNhz3IreA4psTR34zqkgoewjXZ5sVGMQ0EAXB2ikds2rhqAQvaEUL2ShUcerxaR2SYoNjqpFOrqjx225ZzRcOo/cqb0d/zT4ss9WLXqnH+deo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=132.226.202.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [10.183.162.106])
+	by mtasvr (Coremail) with SMTP id _____wBnfnywA61qmJQhAQ--.13990S3;
+	Fri, 18 Sep 2026 17:26:09 +0800 (CST)
+Received: from [10.183.162.106] (unknown [10.183.162.106])
+	by mail-app3 (Coremail) with SMTP id zS_KCgBHMnewA61qdeY9BQ--.35454S3;
+	Fri, 18 Sep 2026 17:26:08 +0800 (CST)
+Message-ID: <4b6ddff3-a4f5-4360-88e9-78ec174dc82c@zju.edu.cn>
+Date: Fri, 18 Sep 2026 17:26:08 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 1/8] bpf: Add UHMUL and SHMUL instructions
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
+ eddyz87@gmail.com
+Cc: daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ tangyazhou518@outlook.com, shenghaoyuan0928@163.com, ziye@zju.edu.cn
+References: <20260917041712.1860722-1-tangyazhou@zju.edu.cn>
+ <20260917041712.1860722-2-tangyazhou@zju.edu.cn>
+ <DLHR6BTEODXE.2J7T8ZSDTAVNF@gmail.com>
+Content-Language: en-US
+From: Yazhou Tang <tangyazhou@zju.edu.cn>
+In-Reply-To: <DLHR6BTEODXE.2J7T8ZSDTAVNF@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:zS_KCgBHMnewA61qdeY9BQ--.35454S3
+X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiAhMSCmqsQporrgAAsS
+X-CM-DELIVERINFO: =?B?DtzGwAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
+	9q9H/lUEOj5amTx6WMIgWPJ8u5FF/w0/cXFiebfTkOZoViz8493yPxhi/1Q3WZS4lexrMi
+	69qXaJ5uUlkLRTzjrftDXTvWfct72IvMEq/SY/1krVxmj/ok/H+dT2M4lazyPQ==
+X-Coremail-Antispam: 1Uk129KBj93XoW7tF45WFWftF4DGw1xZw4xuFX_yoW8Gr1Dpr
+	n5JFWxGFWDKFWUu3s7t397AF15tw42kF1UCas5Gw1qva4aq34kWrykXryfKFWftrs5ta4F
+	q3sFvryF93yqqrXCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAF
+	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8c
+	xan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
+	rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXw
+	CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
+	67AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
+	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1zu
+	WJUUUUU==
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Critical] bpf: ABI breakage by marking linux_binprm->mm as PTR_MAYBE_NULL
---
 
-commit df643731c6bb225a7d4269f98487ad63ccaf91fc
-Author: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
 
-bpf: Mark linux_binprm->mm as trusted-or-null
+On 9/18/26 01:04, Alexei Starovoitov wrote:
+> On Thu, Sep 17, 2026 at 12:17 PM Yazhou Tang <tangyazhou@zju.edu.cn> wrote:
+>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+>> index 732b35cc08d1..845eee536198 100644
+>> --- a/include/uapi/linux/bpf.h
+>> +++ b/include/uapi/linux/bpf.h
+>> @@ -34,6 +34,16 @@
+>>   #define BPF_FROM_LE	BPF_TO_LE
+>>   #define BPF_FROM_BE	BPF_TO_BE
+>>
+>> +/*
+>> + * BPF_MUL variants selected by the off field.
+>> + * UHMUL and SHMUL are only valid for BPF_ALU64.
+>> + */
+>> +enum bpf_mul_variant {
+>> +	BPF_MUL_VARIANT_LO    = 0,
+>> +	BPF_MUL_VARIANT_UHMUL = 1,
+>> +	BPF_MUL_VARIANT_SHMUL = 2,
+>> +};
+> 
+> Slept on it and imo it's too verbose for uapi.
+> Maybe just BPF_UHMUL = 1, BPF_SHMUL = 2 ?
+> No need to name zero, sdiv doesn't.
+> 
+>> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+>> index 4e208cc94752..4f746973481b 100644
+>> --- a/kernel/bpf/core.c
+>> +++ b/kernel/bpf/core.c
+> 
+> [...]
+> 
+>> +	ALU_MUL_X:
+>> +		if (OFF != BPF_MUL_VARIANT_LO)
+>> +			goto default_label;
+>> +		DST = (u32) DST * (u32)
+>   SRC;
+>> +		CONT;
+> 
+> The verifier already rejected these. Interpreter doesn't
+> need to re-validate.
+> 
+> pw-bot: cr
 
-This commit marks the linux_binprm->mm field as a trusted-or-null nested
-pointer so it can be passed to kfuncs after a NULL check. It updates the
-existing LSM selftest to reflect this new verifier requirement.
+Thanks, agreed on all three points. I'll simplify the UAPI
+definitions, fix the SRC typo, and drop the redundant
+interpreter check in the next revision.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 6c6b8d8520cdf..3539a768b9211 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -5997,6 +5997,10 @@ BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct dentry) {
->  	struct inode *d_inode;
->  };
-> =20
-> +BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct linux_binprm) {
-> +	struct mm_struct *mm;
-> +};
-> +
-
-[Severity: Critical]
-Will this cause an ABI regression for existing BPF programs?=20
-
-Before this patch, the bprm->mm field was treated as an untrusted pointer
-(PTR_TO_BTF_ID | PTR_UNTRUSTED). The verifier permits dereferencing untrust=
-ed
-pointers without a NULL check by safely rewriting these accesses to use
-BPF_PROBE_MEM exception tables.
-
-By explicitly adding it to the BTF_TYPE_SAFE_TRUSTED_OR_NULL list, the
-verifier now tags it with PTR_MAYBE_NULL. The verifier strictly forbids any
-direct dereference on a PTR_MAYBE_NULL pointer before an explicit NULL chec=
-k.
-
-Does this change mean that previously valid, safe BPF programs will now be
-rejected at load time, violating the kernel's UAPI backward compatibility
-guarantee?
-
-To avoid this breakage while still allowing kfunc usage, could a kfunc
-accessor be exposed (such as bpf_bprm_get_mm()) instead of modifying the BTF
-property of the struct field?
-
-> diff --git a/tools/testing/selftests/bpf/progs/lsm.c b/tools/testing/self=
-tests/bpf/progs/lsm.c
-> index 7de173daf27b6..7441d66c080c9 100644
-> --- a/tools/testing/selftests/bpf/progs/lsm.c
-> +++ b/tools/testing/selftests/bpf/progs/lsm.c
-[ ... ]
-> @@ -121,7 +122,9 @@ int BPF_PROG(test_void_hook, struct linux_binprm *bpr=
-m)
->  		bprm_count++;
-> =20
->  	bpf_copy_from_user(args, sizeof(args), (void *)bprm->vma->vm_mm->arg_st=
-art);
-> -	bpf_copy_from_user(args, sizeof(args), (void *)bprm->mm->arg_start);
-> +	mm =3D bprm->mm;
-> +	if (mm)
-> +		bpf_copy_from_user(args, sizeof(args), (void *)mm->arg_start);
-
-[Severity: Critical]
-This selftest modification appears to demonstrate the regression in=20
-test_void_hook. Doesn't this prove that existing BPF programs in the wild
-that access bprm->mm without a NULL check are no longer accepted by the
-verifier?
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260918091058.2977=
-40-1-tasos.papagiannnis@gmail.com?part=3D4
