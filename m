@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-116.mta0.migadu.com [91.218.175.116])
+Received: from mta0.migadu.com (out-10.mta0.migadu.com [91.218.175.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BDE3B6C14
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 03:44:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1003921F0
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 03:52:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789703088; cv=none; b=QK0BXh1D1NTfOW9rTyQFmfcaycpa0lapQvSFGX16dGUQ+TxuwS0GD/KMGKgjs1cjbNXwLCXvAPuhQulugCWRl1twuCQsyUUmjNkto+YsN5GUs3OSfQJsjSsXiQ/oAOndjo4CUTtkDB7mTeQuJMS2IS2yCMVAMefA3CTH5jTlSSU=
+	t=1789703544; cv=none; b=KB0eks3l/9UuU8JrttF0eRTDb6DvomZ/1d2bPgjWIK5iczlHljEN6eGhHq+VKvGeBym9samkq2ScUUvq3x00wbfbKbfyRJxvu7aTkjaQ/I764QRg0rqJZpasXtQed2JpgzGK9BgwBem2fUUvuo5PNRLWxJJR4zR5+LJdxerg73E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789703088; c=relaxed/simple;
-	bh=u1KEEBYeREVhDig1yhAtZPlOw+T+5A7kLX530zHmelg=;
+	s=arc-20240116; t=1789703544; c=relaxed/simple;
+	bh=9x20TkljJNHxKIK/zjkcIgc/yoPrg9CuF6v5uG6qAko=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MLvvVmYPTb2obzqoYJRTVSeiUakJE/TQWMBmt1e+iZOQ+4zgTGTyjkHRxvm/4YghIyMIyNi8ywm3ZB8Uka1BTdthMRN0PZz1rvI77beJwmnLCk4kz+YfopnQsV5lRY0uSKZvfO2VDZcK/y1swS9Eca6wR4G1hSSNaTTBxkq0mdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vvQ0wa3l; arc=none smtp.client-ip=91.218.175.116
+	 In-Reply-To:Content-Type; b=Amgx9MpYh147fefOzZDrmojKccf9KWVqVk+1/dmzNtezn2vWFnP9sbA/0xqkNMsGBmT07o6PD2wkmISlPp50UzDCKF63DD0Vn8LPEV/RY6pK97Y192iv6g/jVQUWAhnHA57Tl6Qb46pASR6gRhBJkB2FoJw1eZc+HTAzvnyA3Jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZXe1v65Y; arc=none smtp.client-ip=91.218.175.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vvQ0wa3l"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZXe1v65Y"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=u1KEEBYeREVhDig1yhAtZPlOw+T+5A7kLX530zHmelg=;
+DKIM-Signature: a=rsa-sha256; bh=9x20TkljJNHxKIK/zjkcIgc/yoPrg9CuF6v5uG6qAko=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789703082; v=1; x=1790307882;
- b=vvQ0wa3lqSf1rLdfQZk3PJ9tcvEx0ko9dFjd+kpaFKxyOr2ZPOtPRwVIQ2ZLBFucrsNccqZx
- eA22HmOkh8NSWBqFXM8h0QNZ8sXiAMHB1VILRO2gJ/ZEzSV/JDu3Y7n8z9GM3o3MEHyUs5dix1k
- 0CYOF2XG1Ruve9Mg7O638awI=
+ t=1789703540; v=1; x=1790308340;
+ b=ZXe1v65YUWUVMc6WuSv0vNZ1tQQiv3frykVERcplnRMlODaKRhIQrVOYZACgHciSiO4CeTrm
+ /AfFsP8bkEBERsJU94scPP74BtM3/T+1eeW5WPaNIL5VuEZznhrAMi+bJHxlce7gl4gmBgA3Eur
+ A/WjevV0VC0eu5kE+5oFbquo=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id a9894047c007adea;
-	Fri, 18 Sep 2026 03:44:41 +0000
-X-Mizu-Trace-ID: a9894047c007adea
+Received: by smtp.migadu.com with ESMTPS id ab91e2d44faea716;
+	Fri, 18 Sep 2026 03:52:20 +0000
+X-Mizu-Trace-ID: ab91e2d44faea716
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <48fd0275-b710-40de-890b-df81882e1b2e@linux.dev>
-Date: Thu, 17 Sep 2026 20:44:39 -0700
+Message-ID: <0c14df3b-bb30-45ea-9c58-47ef68ad39d7@linux.dev>
+Date: Thu, 17 Sep 2026 20:52:13 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,124 +38,111 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 15/20] libbpf: Collect .bpf_cleanup records and
- pass them to the kernel
+Subject: Re: [PATCH bpf-next 16/20] libbpf: Carry the exception cleanup table
+ through the light skeleton
 Content-Language: en-GB
 To: sashiko-reviews@lists.linux.dev
 Cc: bpf@vger.kernel.org
 References: <20260917055645.3926444-1-yonghong.song@linux.dev>
- <20260917055802.3933672-1-yonghong.song@linux.dev>
- <20260917061212.515111F000FF@smtp.kernel.org>
+ <20260917055807.3934205-1-yonghong.song@linux.dev>
+ <20260917061838.F013C1F000FF@smtp.kernel.org>
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260917061212.515111F000FF@smtp.kernel.org>
+In-Reply-To: <20260917061838.F013C1F000FF@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 9/16/26 11:12 PM, sashiko-bot@kernel.org wrote:
+On 9/16/26 11:18 PM, sashiko-bot@kernel.org wrote:
 > Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
-> - [Medium] bpf: undefined behavior when calling qsort with a NULL pointer
-> - [Low] bpf: array bounds violation via type-punned pointer arithmetic
+> - [High] libbpf: unconditional cleanup_info emission breaks backward compatibility on older kernels
+> - [Medium] libbpf: integer overflow in cleanup_info size calculation leads to OOB read/write
 > --
 >
-> commit 1e591245d7ec663b872eae44c8fa7f02cfd956a4
+> commit 076a2794e54df3a939c1a2aebf4467a8a0af5e41
 > Author: Yonghong Song <yonghong.song@linux.dev>
 >
-> libbpf: Collect .bpf_cleanup records and pass them to the kernel
+> libbpf: Carry the exception cleanup table through the light skeleton
 >
-> This commit parses the compiler-emitted .bpf_cleanup section and hands
-> the resulting table to BPF_PROG_LOAD so the kernel can resolve exceptions.
+> This commit adds support for carrying the exception cleanup table through
+> the light skeleton during BPF program loads. It expands the bpf_attr union
+> to include cleanup_info fields and handles endianness byte-swapping for the
+> records.
 >
->> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->> index ea1c09fa37939..d7cb93a70f58d 100644
->> --- a/tools/lib/bpf/libbpf.c
->> +++ b/tools/lib/bpf/libbpf.c
+>> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+>> index af3a04f161ac1..e9bb282a557a3 100644
+>> --- a/tools/lib/bpf/gen_loader.c
+>> +++ b/tools/lib/bpf/gen_loader.c
 > [ ... ]
->
->> @@ -4847,6 +4885,214 @@ static struct bpf_program *find_prog_by_sec_insn(const struct bpf_object *obj,
-> [ ... ]
->
->> +static int bpf_prog_collect_cleanup_info(struct bpf_object *obj,
->> +					 struct bpf_program *prog)
->> +{
->> +	size_t i;
->> +	int j;
->> +
->> +	for (i = 0; i < obj->cleanup_rec_cnt; i++) {
->> +		struct cleanup_raw_rec *raw = &obj->cleanup_recs[i];
->> +		struct bpf_program *owner = NULL;
->> +		struct bpf_cleanup_info ci = {};
->> +		__u32 *fields = (__u32 *)&ci;
->> +		void *tmp;
->> +
->> +		for (j = 0; j < CLEANUP_REC_FIELDS; j++) {
->> +			size_t idx = raw->insn_idx[j], final;
->> +			struct bpf_program *p;
-> [ ... ]
->
->> +			if (owner == prog) {
->> +				final = raw->insn_idx[j] - prog->sec_insn_off;
->> +			} else if (prog_is_subprog(obj, owner) && owner->sub_insn_off) {
->> +				/* sub_insn_off is where this subprogram was
->> +				 * appended to the main program being relocated;
->> +				 * zero means it is not part of it.
->> +				 */
->> +				final = owner->sub_insn_off +
->> +					raw->insn_idx[j] - owner->sec_insn_off;
->> +			} else {
->> +				owner = NULL;
->> +				break;
->> +			}
->> +			fields[j] = final;
-> [Severity: Low]
-> Is it safe to cast a pointer to a struct field into an array pointer and access
-> subsequent members via pointer arithmetic in this loop?
->
-> The struct bpf_cleanup_info fields are populated by casting a pointer to the
-> struct to a __u32 * array and indexing into it in a loop.
->
-> According to C11 6.5.6, pointer arithmetic on a pointer to a scalar (the first
-> struct field) only allows accessing up to one element past it, making fields[1]
-> and fields[2] undefined behavior.
->
-> This can trigger compiler warnings (-Warray-bounds) and potentially cause
-> aggressive optimizers to generate incorrect code.
-
-Yes, the code is correct but it is awkward and my trigger compiler warnings with
-additional compiler flag. Will make it explicit with bpf_cleanup_info fields.
-
->
->> +		}
->> +		if (!owner)
->> +			continue;
->> +
->> +		tmp = libbpf_reallocarray(prog->cleanup_info, prog->cleanup_info_cnt + 1,
->> +					  sizeof(*prog->cleanup_info));
->> +		if (!tmp)
->> +			return -ENOMEM;
->> +		prog->cleanup_info = tmp;
->> +		prog->cleanup_info_rec_size = sizeof(struct bpf_cleanup_info);
->> +		prog->cleanup_info[prog->cleanup_info_cnt++] = ci;
->> +
->> +		pr_debug("prog '%s': cleanup region [%u,%u) -> landing pad %u\n",
->> +			 prog->name, ci.begin_off, ci.end_off, ci.landing_pad_off);
->> +	}
->> +
->> +	qsort(prog->cleanup_info, prog->cleanup_info_cnt,
->> +	      sizeof(*prog->cleanup_info), cmp_cleanup_info);
+>> @@ -1011,8 +1016,11 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
+>>   			       load_attr->line_info_rec_size;
+>>   	int core_relo_tot_sz = gen->core_relo_cnt *
+>>   			       sizeof(struct bpf_core_relo);
+>> +	int cleanup_info_tot_sz = load_attr->cleanup_info_cnt *
+>> +				  load_attr->cleanup_info_rec_size;
 > [Severity: Medium]
-> Can this unconditionally call qsort() with a NULL base pointer?
+> Is there a risk of integer overflow here when parsing untrusted ELF files?
+>
+> If load_attr->cleanup_info_cnt is large enough, the multiplication with
+> load_attr->cleanup_info_rec_size could overflow the 32-bit signed integer
+> cleanup_info_tot_sz, resulting in a truncated heap allocation.
 
-You are right. It is possible prog->cleanup_info_cnt is 0 and in such cases,
-cleanup_info will be NULL. Will add a condition like 'prog->cleanup_info_cnt > 0'.
+We should be okay here. In add_data, we will see:
+
+static int add_data(struct bpf_gen *gen, const void *data, __u32 size)
+{
+         __u64 zero = 0;
+         __u32 size8;
+         void *prev;
+
+         if (size > INT32_MAX) {
+                 gen->error = -ERANGE;
+                 return 0;
+         }
+         size8 = roundup(size, 8);
+	...
+}
+
+So size guarding above prevents integer overflow. add_data() also
+applies to func_info_tot_sz, line_info_tot_sz, core_relo_tot_sz and
+here cleanup_info_tot_sz.
 
 >
-> If obj->cleanup_rec_cnt is 0, or if none of the records match the program,
-> prog->cleanup_info_cnt remains 0 and prog->cleanup_info will be NULL.
+> Later in info_blob_bswap(), the loop executes load_attr->cleanup_info_cnt
+> times:
 >
-> Calling qsort() with a NULL pointer invokes undefined behavior under C11 7.1.4,
-> even if the element count is 0. This triggers UBSAN errors (nonnull attribute
-> violation in libc headers) and can fail runtime checks.
+> info_blob_bswap() {
+>      ...
+>      for (i = 0; i < load_attr->cleanup_info_cnt; i++)
+>          bpf_cleanup_info_bswap(ci++);
+> }
+>
+> Could this lead to an out-of-bounds memory read and write over the
+> truncated buffer, potentially causing memory corruption in userspace
+> tooling like bpftool?
+>
+> [ ... ]
+>> @@ -1085,6 +1101,9 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
+>>   	/* populate union bpf_attr with a pointer to core_relos */
+>>   	emit_rel_store(gen, attr_field(prog_load_attr, core_relos), core_relos);
+>>   
+>> +	/* populate union bpf_attr with a pointer to cleanup_info */
+>> +	emit_rel_store(gen, attr_field(prog_load_attr, cleanup_info), cleanup_info);
+> [Severity: High]
+> Will this unconditional emission cause light skeletons to fail to load on
+> older kernels?
+
+You are right. We cannot unconditional emit. We can only do emit
+if cleanup_info_cnt > 0.
+
+>
+> By unconditionally writing a non-zero pointer (the offset in the data blob)
+> into the tail of the BPF attribute structure, older target kernels that do
+> not support the cleanup_info field might reject the BPF_PROG_LOAD syscall.
+>
+> Because sys_bpf verifies that all fields beyond its known sizeof(union
+> bpf_attr) are zero using bpf_check_uarg_tail_zero(), it seems this could
+> fail with -E2BIG. Does this break backward compatibility for all light
+> skeletons running on older kernels, even those that do not use exceptions?
 >
 
