@@ -1,110 +1,168 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27372347533
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 04:59:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F63B364EB2
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 05:00:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789707580; cv=none; b=frOZHo3lm1CBrZH6B42HWi5pMm4dtqSDgZ3acLbMtAoms7eIusRmJD/Rox0Oo5hJ2/LkTbpMn5NIp2wKX6qjJwUdVm7AapeHm9+sUGkJ8/ORAwBzn5GVSPm3V6R4vUF17NB1iynxZs5znLpvwWSSuHVPJQ12jRrp8gPIFyTzpb8=
+	t=1789707656; cv=none; b=uVG4Uw1aMJaWRt8avDOoYXjUERMyC38BKJkQEOZBnJ38tk7y9XsGYgBOzaRSKsYcMsDllIHTI5grvSZE8HLuBl/QSW081s7W7iMCF3UB4qHC6EjC7UorQ0DVc3ytoIdypnKaW2SW+BPLWG9vwjUJnj+NdsYS7ACfJPRENrqwcI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789707580; c=relaxed/simple;
-	bh=Hs3UDn2brMaHQhTqia0pSEM21Ku/o3apGuWfBRRhMrY=;
+	s=arc-20240116; t=1789707656; c=relaxed/simple;
+	bh=nO+QVaxnEIIjpUG5QU+gSZDypwpQBt6ivW57GPfv5EY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=WP5jf9v3uzygQxce+J/rD6zqdUHxTjLX4CcREdChN9o+hqpnOYmXXIJnVL/I13W7lYJBRm9TReykUBCFXtlV/aot/BlMBLhV4uleke/WXnxl0dG5evurmcK2iPLMPqzSUQMw9rBktWkkonTyQnPJO8fBkB7PQKAgICZwXkKGIsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XQp+AV2z; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=EDhJzCKqnmaksQz60iSFNqhxghVAvQS9x05CFE7B1s/S86k9Ol2IglONswlYpfTyIVwUrXWPvatcMunu3pOiytys1sE+JOsRrmbxeiDV9W5EzDa5wntCveZkRxwSUmdmmVpfYhGEME2eiOhTUYfoqNNZZ9/1gbIqkNJyuQ2dddE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TKg52Hd0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XQp+AV2z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD2F31F000FF;
-	Fri, 18 Sep 2026 04:59:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TKg52Hd0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAFFB1F000FF;
+	Fri, 18 Sep 2026 05:00:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789707578;
-	bh=VgrNGblQYiLcHYjY0i05T0CENURR12zYlCC8knzwAT0=;
+	s=k20260515; t=1789707654;
+	bh=3vw4rTZTc51w24QIjM2OcVLCOPmv9luQlIA8EE7bY8g=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=XQp+AV2zlDGTHYtInzb8bZ3yqJozfsOrmQvyt5N/HYIgkUggwoUTjk3ddsr0BH5zO
-	 iG/InVAS3vGgmnLDHz8n2NxcKt/uUkdhjRJ1Ko8UOTTWYm19Gnb8udfy3fvdNhcdOM
-	 24AfyhIB50nnqQ8fHXyyEeejjbRcBgorTNNNXfPJTxJMhO5kxDNaeCWfyoj3UiWVZF
-	 hXdqY96dBSpD+rMSlJaduofRpgoR4ks4nPDabvi9bPpFO2V2TtdHtT4oYVN0vwi0DP
-	 CzhWl2gASUq8QBCbDzB6XixT+83mMtgOkhTSoR/8bh3caMHKOPZGeBaiyTKLYve/98
-	 bZqBrffVrjwww==
+	b=TKg52Hd08UEE65R2rbXNcOuhjtGAIeBzKUgHAEDvxNKvyWS+2mFvIddB1oUi/nRqu
+	 45POMkivWKOvKpPq5kpnO4fdKtUNSo1ycbjqrVbhZv3KZsU5dI2QEX7CGBCRuerAqF
+	 pppO0Od5YOimcvmuQOTVQzLiZ5wDl9/TM25Y4C8lswVUln3J+eM1F1+rRdshzkaYK5
+	 s5u7sUGIZqm+SVcgymnJJXxYsXzQhu2V8ytbwnqJv7xdoSR8xZ9P14bgRPdzNdlUTO
+	 MU3NZCqgvH4vLwErZL9PX5kntr/XFOeuzx9cqx4PdWJjvakdC3TTi58ZlxqaV90d1D
+	 4rFCzUM1WyqFA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 05/20] bpf: Make exception landing pads
- reachable in the CFG
+Subject: Re: [PATCH bpf-next v2 15/20] libbpf: Collect .bpf_cleanup records
+ and pass them to the kernel
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260918044221.3287431-1-yonghong.song@linux.dev>
+In-Reply-To: <20260918044317.3291712-1-yonghong.song@linux.dev>
 References: <20260918044156.3283973-1-yonghong.song@linux.dev>
- <20260918044221.3287431-1-yonghong.song@linux.dev>
+ <20260918044317.3291712-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 18 Sep 2026 04:59:38 +0000
-Message-Id: <20260918045938.AD2F31F000FF@smtp.kernel.org>
+Date: Fri, 18 Sep 2026 05:00:54 +0000
+Message-Id: <20260918050054.BAFFB1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] bpf: missing prune point at exception landing pad target
+- [Medium] bpf: empty cleanup range check in bpf_prog_collect_cleanup_info(=
+) only catches offset 0
+- [Medium] bpf: bpf_object__init_cleanup_info() rejects valid objects with =
+0-sized .bpf_cleanup sections
 --
 
-commit 4fbd0e36862ba7e3ee8480e535068a6821d5cad0
+commit a645d3bd249aceee4909edcc78e5fe4247fd3432
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-bpf: Make exception landing pads reachable in the CFG
+libbpf: Collect .bpf_cleanup records and pass them to the kernel
 
-This commit updates the verifier's control flow graph and liveness analysis
-to properly handle exception landing pads. It ensures that exception throwi=
-ng
-calls can reach cleanup records, and prevents outer frame stack slots from
-being read incorrectly when control is transferred to landing pads.
+Parse the compiler-emitted .bpf_cleanup section and hand the resulting
+table to BPF_PROG_LOAD.
 
-> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-> index 842c7d1eabccc..9f8b8b54d5ea7 100644
-> --- a/kernel/bpf/cfg.c
-> +++ b/kernel/bpf/cfg.c
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 27f2eec13f76f..1b8b978e7b7b9 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
 
 [ ... ]
 
-> @@ -158,17 +159,57 @@ static int push_insn(int t, int w, int e, struct bp=
-f_verifier_env *env)
->  	return DONE_EXPLORING;
+> @@ -4852,6 +4890,221 @@ static struct bpf_program *find_prog_by_sec_insn(=
+const struct bpf_object *obj,
+>  	return NULL;
 >  }
 > =20
-> +static int visit_cleanup_pad_edge(int t, struct bpf_verifier_env *env)
+> +static int bpf_object__init_cleanup_info(struct bpf_object *obj)
 > +{
-> +	int *insn_stack =3D env->cfg.insn_stack;
-> +	int *insn_state =3D env->cfg.insn_state;
-> +	int w;
+> +	Elf_Data *data =3D obj->efile.cleanup_data;
+> +	Elf_Data *relo =3D NULL;
+> +	size_t i, nrels, nslots, nrecs;
+> +	struct cleanup_raw_rec *recs;
+> +	int *slot_sec, ret =3D 0;
+> +	size_t *slot_val;
+> +	const __u32 *vals;
+> +	bool native;
 > +
-> +	if (!env->cleanup_info_cnt)
-> +		return DONE_EXPLORING;
-> +	w =3D bpf_cleanup_pad_of_call(env, t);
-> +	if (w < 0)
-> +		return DONE_EXPLORING;
+> +	if (!data || obj->efile.cleanup_shndx < 0)
+> +		return 0;
 > +
-> +	mark_prune_point(env, t);
-> +	mark_jmp_point(env, w);
-> +	mark_jump_target(env, w);
+> +	native =3D is_native_endianness(obj);
+> +
+> +	for (i =3D 0; i < obj->efile.sec_cnt; i++) {
+> +		struct elf_sec_desc *sd =3D &obj->efile.secs[i];
+> +
+> +		if (sd->sec_type =3D=3D SEC_RELO && sd->shdr &&
+> +		    sd->shdr->sh_info =3D=3D (Elf64_Word)obj->efile.cleanup_shndx) {
+> +			relo =3D sd->data;
+> +			break;
+> +		}
+> +	}
+> +	if (!relo) {
+> +		pr_warn("%s present without relocations\n", CLEANUP_SEC);
+> +		return -LIBBPF_ERRNO__FORMAT;
+> +	}
 
-[Severity: High]
-Should mark_prune_point() be applied to the landing pad target w instead of
-the call site t?
+[Severity: Medium]
+Could this reject valid objects if the compiler emits an empty 0-byte
+.bpf_cleanup section?
 
-Because w is a branch target where control flow merges, it needs to be mark=
-ed
-as a prune point so the verifier knows to check for state convergence. By
-marking t instead of w, the verifier will evaluate the landing pad and all
-subsequent cleanup instructions independently for every exception-throwing
-call that branches to w.
+If the section is empty (e.g., exceptions were optimized out), no relocatio=
+ns
+are emitted and there is no corresponding .rel.bpf_cleanup section. However,
+bpf_object__init_cleanup_info() requires the relocation section to exist if
+.bpf_cleanup is present.
 
-Can this lead to combinatorial path explosion and result in the verifier
-rejecting the program with -E2BIG?
+Would it be better to return early if data->d_size is 0 before checking for
+relocations?
 
 [ ... ]
+
+> +static int bpf_prog_collect_cleanup_info(struct bpf_object *obj,
+> +					 struct bpf_program *prog)
+> +{
+> +	size_t i;
+> +	int j;
+> +
+> +	for (i =3D 0; i < obj->cleanup_rec_cnt; i++) {
+> +		struct cleanup_raw_rec *raw =3D &obj->cleanup_recs[i];
+> +		struct bpf_program *owner =3D NULL;
+> +		struct bpf_cleanup_info ci =3D {};
+> +		__u32 fields[CLEANUP_REC_FIELDS];
+> +		void *tmp;
+> +
+> +		for (j =3D 0; j < CLEANUP_REC_FIELDS; j++) {
+> +			size_t idx =3D raw->insn_idx[j], final;
+> +			struct bpf_program *p;
+> +
+> +			/* The end of a range is exclusive, so it may name the
+> +			 * instruction just past the last one of a function,
+> +			 * which belongs to the next function or to nothing at
+> +			 * all. Ask about the last instruction the range covers,
+> +			 * the way the kernel does.
+> +			 */
+> +			if (j =3D=3D CLEANUP_REC_END) {
+> +				if (!idx) {
+> +					pr_warn("%s: record %zu is an empty range\n",
+> +						CLEANUP_SEC, i);
+> +					return -LIBBPF_ERRNO__FORMAT;
+> +				}
+> +				idx--;
+> +			}
+
+[Severity: Medium]
+Will this check catch empty ranges emitted by the compiler at non-zero
+offsets?
+
+If the compiler emits a .bpf_cleanup record where begin and end are both 5,
+the check for !idx evaluates to false. The code will then decrement idx to 4
+and look up the program for the previous instruction.
+
+If this empty range is located at the start of a function, looking up the
+previous instruction will fall into the preceding function, potentially
+triggering a spurious "spans functions" error or silently accepting invalid
+records.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260918044156.3283=
-973-1-yonghong.song@linux.dev?part=3D5
+973-1-yonghong.song@linux.dev?part=3D15
