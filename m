@@ -1,136 +1,251 @@
-Received: from mail-wr2-f32.google.com (mail-wr2-f32.google.com [74.125.225.96])
+Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF2A448D1B
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 13:01:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.96
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A518337107
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 13:18:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789736511; cv=none; b=XKOUyeVluI0NUeGaMtDt0Bh6jKx5GSB72w0I3NjmueadGwt24YZxiFqGBxRH53QIG1XrQEEchQuFMtUDdUqlczH9I6Mb4q7I5C39swua0RD+fajhLe6Cdp7De0wlq496gERcmu0jBCA1Kul7m3amc792rgL94Ddu6FxspUVxh9Y=
+	t=1789737503; cv=none; b=ddUikaHmlYvR4JpQTVur2ZZ+qTQPigUcABxMjBm4IwNZQN2o3TX082Q7QNllyxnwfxxuoMnjVN6qB6uPrxI4z1QySw/JXZR106vZX9d0RLtuc+KDsODBB2WUQxAzWY8rcc4ZOJ1Rz4Fr3LR3jYMEgN/dw8Wb9N5H4lQbHLJMHyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789736511; c=relaxed/simple;
-	bh=vk33DT6oYdr27H0ABDy0zm5SoeyGoMiovn3c0pfC03g=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BBm7gAi4saCR2PIW691sP4xbJywRtuzMS6C4WHesSgGjS6FJHT4L20CFg/Y3U02NbLSl5GRoud5DjlhIATF5oC+Q24enp3qg/MknVBZiAq+ya/xZAETY5LEA3zn9g0nk/xFCy6Rz2Z44/SUFH1o44xt21ekTLmkzEPZTTGWUvds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=az2wvMD3; arc=none smtp.client-ip=74.125.225.96
+	s=arc-20240116; t=1789737503; c=relaxed/simple;
+	bh=8nZtWWT6AcVY+EUtw6nwTwMpmoT9269pOv7eqZMKt/o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rbKVfA4EoaFiulhYcTm4xpEWNlfOORhtGdLqhT4iPKtmSiogUtA06jLd69KAZYw5PyCnua9JSyPnGf1jry7SS2N0OSbuZGvBrI91EvqjDBsyE5GhlXlnsOjKm5vOePNhamT/QznvBguK56c81J+Ihx4LB7/iHKdbJkwq8jwXfgs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mlE4u93D; arc=none smtp.client-ip=74.125.225.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="az2wvMD3"
-Received: by mail-wr2-f32.google.com with SMTP id ffacd0b85a97d-482f6350f91so416993f8f.1
-        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 06:01:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mlE4u93D"
+Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-4843c2790ccso436617f8f.1
+        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 06:18:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789736508; x=1790341308; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=fB3uyJdCO5kUP787PFgsM/g9CZeqrdvpQ1pOAfbY7C0=;
-        b=az2wvMD31YOn4Q+4O4txCAHa+8NBLseHzIFYdWHIdQRJowGuBYVir7urOPP+BpgHYA
-         kVcHcdMNs5ALMSCEBhSNTNTg73SY4iACnxOFfezzPQwP660JRqyw3fv8vX958GqosIj3
-         YCDjYJ7JvnGHO14U+KlIbiE1nFXmpqXSpeyqGHL8s6ogCOshM4QZ9F2dfq1q5ffeVnnp
-         BXo+aC8MDy6y3DFC0oHvBIPoE5XZT0RBcWz+nwX8CfNMXj3S0l9osF5lF0jL/J1OP7Ln
-         sPamIxV8u41Ce+01Nciq3j+uRhk+JJLO3GdGAcftkWI/ViSuGybiC9LFzPZIMYjNlhUY
-         BfSQ==
+        d=gmail.com; s=20251104; t=1789737498; x=1790342298; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ASNDhQj6stB9jN8HLd03JQLyI4Y3skTrr0meT4GXR2c=;
+        b=mlE4u93DJjDSK0ICKjUf8+UwVakqKEReMtBmyM34cM/RDHSc0njesph/URz0SJy82l
+         0k8BBWzmPzUHmu/Im2ueHsjgD4YOXmzAKCsiU9GHDYVN8H34bnM1gMkxD8WBryjY37l+
+         AScpW60+frbsq27c6j/mNj9YbxYQNqe3porkuVwsoK3hczcf+sNnDHeRNDp2iUggtJ/9
+         qI7cKcGvFFIqaSYkrDhI63sroiTcn4q77uiHu7YOD3BfVMawaKjiavURHIdjZVIbRkYK
+         wAnnVkh4UmY/V3BJ9dtTTNWw+OOziGRBtdfv5WyFp7UfOZxtA6LQQ0zDBLoIjMLmFhEg
+         Ht0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789736508; x=1790341308;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fB3uyJdCO5kUP787PFgsM/g9CZeqrdvpQ1pOAfbY7C0=;
-        b=gtSOFxldWe8fHAvw3AVviAn4Zk+ucmFJLD9w9z/aKOS/Qs4LkGjWHXatxiTLkbgUFO
-         jFpQOYMB/4rQVdT3w2Vi0PpGMp5lvOXDTHfkUArRX1F05re74cgzh8HWwglthFf7EnBE
-         qL7ivNuIJ+hoqHAuQPJpP5YVQ6Deos4OhaVgv/Ln4qGSKlG3rQNXrjnLDbgoGJ83TdqH
-         maFCkwPnvlbAJ6luemLrTkoZL9T45yt9BH/dg1+8Y9a18FxhEDcfmM32WDIT5PFOSYWr
-         Tz+wALO4kkwYfkFv/lv0t5EJHeL4pejYmEyAn5+Ve/+WOBjtmEXQN0YTN5z08TRr2fT4
-         tnkw==
-X-Forwarded-Encrypted: i=1; AKwUvBxCNDu7OHkVNKS5XFvtQiML4it9nPaqehtYKctWx0450wShF1s7fUSVuXd8upEYftnb/kE=@vger.kernel.org
-X-Gm-Message-State: AFuF++n6RyCik5ryc/Ci16/mVhCe52jh+HoXsJoIaatcl30jACc/BxPc
-	6bC2LMEpZPvNET91oV4HjjXRxC9qJBhIr47l1iIszUT0QjRvTKcbP/ek
-X-Gm-Gg: AYBFou3t9gntsP4aK8nFr1IV0YEqz9bM77hAMrlrxiRRNr9f7U9UKdtYdtNiwzctNIE
-	KQSdsnCHzTwvU+24zqhpDp23zVBMqX7MNDtcQ/7Bg+j2zNThWahk1A5m+4noQKb7fhloz3IILDe
-	FdY+Vt0Xto1A4cHkoZgiPDHMrQyrOwtwAyqSPmU6H7/rDZnf3JQPVNWCvWzn+xrSJuu4hjtlMKb
-	VAU3zaHGzCDOoALIezuQshdknwkZnK3+Z1aAoj8sf3JSOXCzECoIccco4xeTtEvBD2PopUxJMZc
-	icaduaK9I0BONKeeqF43KXZDbxpfpdI25k0+E4OJoH4Rml3IBSPbfpP/UzGwWak6VyjBPylqv8/
-	8kc4VmdJ/EbZYxbDX+rlyBayuQhIqSY4CVvIn0BAcXqihB4sWuSHWyLn/kf7uNhivlLKNe0tGRa
-	yLknGxo+oII+bps+reyV9DCu//IDPb5oY6dERJKwSg6T+9sc0tc+kP8ySh4Q==
-X-Received: by 2002:a05:6000:25f5:b0:487:7fe:e96e with SMTP id ffacd0b85a97d-4871e216e86mr3311289f8f.21.1789736508346;
-        Fri, 18 Sep 2026 06:01:48 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4871ff3a928sm4292118f8f.13.2026.09.18.06.01.46
+        d=1e100.net; s=20260707; t=1789737498; x=1790342298;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ASNDhQj6stB9jN8HLd03JQLyI4Y3skTrr0meT4GXR2c=;
+        b=VnPA1vLKfxXlhGP5w5js65e545MEuCN58y6WxUhV9c1QgKo1VyscBDSgz1Ryiay9B2
+         b+ARViK0zmONAXZrcYr4URqKzQ7ZOJFcBWnX/ZxHPrGqr8h134C/DAQARAdCoIAl1tdl
+         1h5iaB8xl5QLdkAbnoJ23YKAnHpU0tVUd69V6zgI9i/QmV2059OcjMa9uda7dhmYKRKJ
+         3nOTaZfApSGHCNAePXfYCLUGdA53ul4z5vs/jjYhseM2IrXi0i2TklYy5nkQ0p/epm0Q
+         ySBQi9gtS3BagKrA3X4+fMQG67yc0VxtTp7400XGCRkCQRkosSCLDADurV4m86CW6sYY
+         F/jg==
+X-Gm-Message-State: AFuF++m0zVp0zTHBqj2Q3NPk/2F27vdTyyz+OOltfBuLxC5siOFEpKHe
+	h58oDQNDoG23vu3Iw47wlZWDRKG03KSXv1eifcGbc0E3A8hPoiOlBzRgnFwFG+SU
+X-Gm-Gg: AYBFou2RBy7wpyt2VPeD4YfE6AxXR7eP67EGlVrbJEspzEN9sqDvGoNOYN4GNG08D/f
+	NDcTatg5v4LoSX0+vYUmWsd8YG8+wz5LwhGR54/eHlnzcNAE3jene49wSSMqyt1bI90xsEI4sbq
+	IbH0QYZEJ6+JCobRENsqUcQBbJc/Btz+TX5kZ+I9SJF4xI5IEwi0O5Z4WMHwU/CDQHAjGPHS0yx
+	lKYrGRT7JUSw6FF07jeV0tfiFcBAmL37wPuhACaBjfiymNaKaAmb5P63x5o+js8MdEvJmqkr643
+	TpyFPpfXV4I5kszI/+c/+C1TKI1oRIkfuksID9yqmdjGgnA0E9jmB9nW4AQuFSZ9DmD8AtJZZvA
+	8gSl8Ax2fkkKsoMyhpjTUo4nXtEF4Ji2K0gATvRhJak02icDW03Cm7txKW4qQ/HuZSGC3oYbRuk
+	E5JwM3kuleB4ewHmW7tA8c52rIhLFFn6tYIAKOztuoQJsN2eVP9iVKfwYAzSVCPTFbyNjEK7sDM
+	LfbfMYLVG8XGRA=
+X-Received: by 2002:a05:6000:41f5:b0:487:13f1:47ec with SMTP id ffacd0b85a97d-4871e26e2e1mr7725773f8f.21.1789737497812;
+        Fri, 18 Sep 2026 06:18:17 -0700 (PDT)
+Received: from dell-desktop ([2a02:587:4b4e:8500:290c:210b:1c76:5710])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4871feb5de3sm4424549f8f.1.2026.09.18.06.18.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 06:01:47 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 18 Sep 2026 15:01:45 +0200
-To: Alan Maguire <alan.maguire@oracle.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, ast@kernel.org, andrii@kernel.org,
-	eddyz87@gmail.com, daniel@iogearbox.net, ihor.solodrai@linux.dev,
-	yonghong.song@linux.dev, song@kernel.org, qmo@kernel.org,
-	martin.lau@linux.dev, memxor@gmail.com, emil@etsalapatis.com,
-	bpf@vger.kernel.org, nsc@kernel.org, puranjay@kernel.org,
-	yatsenko@meta.com
-Subject: Re: [PATCH v3 bpf-next 09/11] bpftool: Add ability to dump
- LOC_PARAM, LOC_PROTO and LOCSEC
-Message-ID: <aq02OQvU2GhTwHWD@krava>
-References: <20260916074118.1007116-1-alan.maguire@oracle.com>
- <20260916074118.1007116-10-alan.maguire@oracle.com>
- <aqsTCF4uGmN5SlZD@krava>
- <0db440b3-f39c-41ee-bc77-4e3d2ef2b95a@oracle.com>
- <aqxi4p_xlBTSOtTf@krava>
- <f5167878-54e5-4b89-8ffa-bc48a96fc651@oracle.com>
+        Fri, 18 Sep 2026 06:18:16 -0700 (PDT)
+From: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+To: bpf@vger.kernel.org
+Cc: linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	david@kernel.org,
+	akpm@linux-foundation.org,
+	andrii@kernel.org,
+	ast@kernel.org,
+	brauner@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	kpsingh@kernel.org,
+	ljs@kernel.org,
+	matt@bobrowski.net,
+	memxor@gmail.com,
+	song@kernel.org,
+	sun.jian.kdev@gmail.com,
+	utilityemal77@gmail.com,
+	viro@zeniv.linux.org.uk,
+	tasos.papagiannnis@gmail.com
+Subject: [PATCH bpf-next v9 0/5] bpf: Add user memory access kfuncs for mm_struct
+Date: Fri, 18 Sep 2026 16:17:52 +0300
+Message-ID: <20260918131757.42802-1-tasos.papagiannnis@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f5167878-54e5-4b89-8ffa-bc48a96fc651@oracle.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 18, 2026 at 10:19:33AM +0100, Alan Maguire wrote:
-> On 17/09/2026 23:00, Jiri Olsa wrote:
-> > On Thu, Sep 17, 2026 at 09:27:42AM +0100, Alan Maguire wrote:
-> >> 
-> >> 
-> >> On 16/09/2026 23:07, Jiri Olsa wrote:
-> >> > 
-> >> > On Wed, Sep 16, 2026 at 08:41:16AM +0100, Alan Maguire wrote:
-> >> >> In raw mode ensure we can dump new BTF kinds in normal/json format.
-> >> >> BTF_KIND_LOC_PARAMs are rendered as strings, for example a
-> >> >> const value of 0x2a and a dereference of r10 + 0x20:
-> >> >> 
-> >> >>   [12] LOC_PARAM '(anon)' size=4 flags=0x2 vlen=1 values='0x2a'
-> >> >>   [13] LOC_PARAM '(anon)' size=8 flags=0x38 vlen=2 values='*(r10 + 0x20)'
-> >> >> 
-> >> >> LOC_PROTOs render the associated values of each of their
-> >> >> LOC_PARAMs for easier readability:
-> >> >> 
-> >> >>   [14] LOC_PROTO '(anon)' vlen=2
-> >> >>   	type_id=12 value='r1'
-> >> >>   	type_id=13 value='*(r2 + 0x10)'
-> >> > 
-> >> > nit, AFAICT these are dwarf's registers numbers? could we output arch's register names?
-> >> >
-> >> 
-> >> thanks for taking a look Jiri! You're right they are DWARF register numbers alright;
-> >> the problem is to render them as arch register names we'd need to maintain per-arch
-> >> tables in bpftool, which seems like the wrong place to host those. I'd suggest instead
-> > 
-> > is it that bad? I guess it's just simple fixed table
-> > 
-> > not sure how useful that output is with dwarf registers, you'll need to convert
-> > it to arch regs anyway to make some sense of it.. we could save some tokens ;-)
-> >
-> 
-> Well it is a raw dump; to draw the analogy with functions, we don't we print a C
-> function prototype for a BTF_KIND_FUNC_PROTO; instead we print a set of BTF ids
-> that comprise the parameters. The problem with converting it is it then becomes
-> hard to relate the raw dump output back to what the BTF actually was, which is 
-> often what you want to know when you're doing a raw dump. Now that pfunct supports
-> split BTF I can roll support for printing per-site info including registers etc into
-> it as part of the pahole changes respin.
+On MMU systems, during exec, argument and environment strings are copied
+into the new address space held by struct linux_binprm before that address
+space is installed on the task_struct. Existing BPF user memory helpers
+operate on the current address space or one associated with a task_struct.
+Because no task_struct refers to the new address space at this point,
+programs cannot access these strings from the bprm_check_security LSM
+hook.
 
-ok, sounds good, thanks
+This series adds two sleepable BPF kfuncs for copying bytes or
+NUL-terminated strings from a trusted struct mm_struct. It also marks
+linux_binprm->mm as trusted-or-null, allowing BPF LSM programs to pass it
+to the kfuncs after a NULL check and inspect exec arguments before
+allowing the exec to continue.
 
-jirka
+To make the trusted-or-null annotation safe, the exec paths are hardened
+to clear bprm->mm before dropping the reference it owns.
+
+On NOMMU systems, exec argument and environment strings remain in
+bprm->page[] until they are transferred to the new process stack. They
+cannot be accessed through bprm->mm at the bprm_check_security hook.
+The new kfuncs remain available on NOMMU for address ranges represented
+by a supplied struct mm_struct.
+
+The series adds selftests covering both kfuncs while reading argument and
+environment strings from linux_binprm during exec.
+
+Changes in v9:
+- Acquire a reference to mm_struct in bpf_copy_from_user_mm() and
+  bpf_copy_from_user_mm_str() to protect against concurrent free 
+  operations and prevent a potential Use-After-Free in future use-cases.
+- Fix indentation in the remaining mm patches.
+
+Changes in v8:
+- Removed CONFIG_BPF_SYSCALL #ifdefs from mm/memory.c and mm/nommu.c.
+- Reformatted the selftest to use 120-character lines.
+- Removed the CONFIG_MMU check from the selftests.
+- Removed the extern declarations from the selftests, as they already 
+  exist in vmlinux.h.
+- Moved the checks to user space in the selftests.
+
+Changes in v7:
+- Use execvpe() instead of a hardcoded /bin/true path in the
+  copy_from_user_bprm selftest while retaining the controlled environment.
+- Remove the unused bpf_misc.h include.
+- Rewrap the invalid-flags kfunc call to stay within 80 columns.
+- Fix indent in mm patches.
+
+Changes in v6:
+- Drop redundant extern keywords and CONFIG_BPF_SYSCALL guards from the
+  remote memory copy declarations.
+- Drop the explicit bpf_copy_from_user_mm() prototype and share copy 
+  logic through inlineable static internal helpers instead of calling 
+  between kfunc/helper entry points.
+- Validate flags and zero-length requests before acquiring the task's
+  mm, preserving existing behavior and ensuring internal helpers are 
+  called only with a live mm.
+- Drop the verifier relaxation for unchecked reads through trusted-or-null
+  pointers and its tests.
+- Fix the existing LSM selftest to explicitly NULL-check bprm->mm after
+  marking the field trusted-or-null.
+
+Changes in v5:
+- Move the shared wrappers to mm/util.c and handle zero-length requests
+  at the entry points.
+
+Changes in v4:
+- Add negative verifier tests for atomic RMW and load-acquire accesses
+  through trusted-or-null BTF pointers.
+- Preserve explicit nullability-marking coverage for tracepoint
+  arguments, dentry->d_inode, and sched_ext .dispatch.
+- Use the already-nullable mmap_file argument for the negative store
+  test, avoiding dependency on the later linux_binprm->mm marking.
+- Clarify the bprm->mm lifetime invariant and move its lifetime fix
+  before the mm_struct kfunc patch.
+- Reword the trusted-or-null read change in imperative mood and remove
+  its redundant before-and-after summary.
+- Document that the existing task-based user-memory interfaces delegate
+  to the new mm-based implementations, reorder the string-copy kfuncs to
+  remove an unnecessary declaration, and annotate the remaining
+  declaration with __bpf_kfunc.
+
+Changes in v3:
+- Replace the linux_binprm-specific kfuncs with generic struct mm_struct
+  kfuncs, as suggested by Andrii Nakryiko.
+- Move the kfuncs next to the existing user memory helpers and make the
+  task-based variants delegate to the new mm-based implementations, as
+  suggested by Andrii Nakryiko.
+- Clear bprm->mm before dropping its reference on exec error paths.
+- Mark linux_binprm->mm as trusted-or-null.
+- Allow fault-protected reads through trusted-or-null BTF pointers to
+  preserve compatibility with existing BPF programs, as suggested by
+  Andrii Nakryiko.
+- Add verifier and runtime selftests for trusted-or-null BTF pointer
+  reads.
+- Rename __copy_remote_vm_str() to __copy_remote_mm_str(), as suggested
+  by Andrii Nakryiko.
+- Clarify that reading exec strings through bprm->mm is limited to MMU
+  systems, while the generic mm-based kfuncs remain available on NOMMU.
+
+Changes in v2:
+- Register the kfuncs on NOMMU systems and return -EOPNOTSUPP when called,
+  as suggested by Justin Suess.
+- Add selftest coverage for reading environment strings, as suggested by
+  Justin Suess.
+- Clarify that copy_remote_mm_str() leaves the destination untouched when
+  called with a zero-length buffer.
+- Use sizeof() instead of hardcoded argument lengths in the selftests.
+- Use ~0ULL for invalid-flags checks in the selftests.
+
+v8:
+https://lore.kernel.org/bpf/20260918091058.297740-1-tasos.papagiannnis@gmail.com/
+
+v7:
+https://lore.kernel.org/bpf/20260915080255.48929-1-tasos.papagiannnis@gmail.com/
+
+v6:
+https://lore.kernel.org/all/20260908135302.74963-1-tasos.papagiannnis@gmail.com/
+
+v5:
+https://lore.kernel.org/bpf/20260907165220.52431-1-tasos.papagiannnis@gmail.com/
+
+v4:
+https://lore.kernel.org/bpf/20260904145340.40212-1-tasos.papagiannnis@gmail.com/
+
+v3:
+https://lore.kernel.org/bpf/20260831092305.42062-1-tasos.papagiannnis@gmail.com/
+
+v2:
+https://lore.kernel.org/bpf/20260820131801.68759-1-tasos.papagiannnis@gmail.com/
+
+v1:
+https://lore.kernel.org/bpf/20260812111140.7762-1-tasos.papagiannnis@gmail.com/
+
+Anastasios Papagiannis (5):
+  mm: Add copy_remote_mm_str()
+  exec: Clear bprm->mm before dropping its reference
+  bpf: Add user memory access kfuncs for mm_struct
+  bpf: Mark linux_binprm->mm as trusted-or-null
+  selftests/bpf: Test mm_struct user memory kfuncs with linux_binprm
+
+ fs/exec.c                                     |   7 +-
+ include/linux/mm.h                            |   8 +-
+ kernel/bpf/helpers.c                          | 154 ++++++++++++++++--
+ kernel/bpf/verifier.c                         |   5 +
+ mm/internal.h                                 |   3 +
+ mm/memory.c                                   |  43 +----
+ mm/nommu.c                                    |  43 +----
+ mm/util.c                                     |  60 +++++++
+ .../bpf/prog_tests/copy_from_user_bprm.c      |  65 ++++++++
+ .../selftests/bpf/progs/copy_from_user_bprm.c |  69 ++++++++
+ tools/testing/selftests/bpf/progs/lsm.c       |   5 +-
+ 11 files changed, 361 insertions(+), 101 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c
+ create mode 100644 tools/testing/selftests/bpf/progs/copy_from_user_bprm.c
+
+
+base-commit: 961b8946acb482b6d7a39c266d623e5f9c4e873f
+-- 
+2.55.0
+
