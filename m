@@ -1,301 +1,320 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17CFB4DB540;
-	Fri, 18 Sep 2026 10:22:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAA0D4B2034;
+	Fri, 18 Sep 2026 10:26:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789726924; cv=none; b=PB6HEvjZzlEp2e8w1hk1dlGuPgQEJfYpG4oD/VVAmayg75GI9HXZZHU+9R42asrfQ93wGrZ8fgkc/EEaA5cc5b0N8MFYnHA62RFq411yzGWQezsv9AKojqXcYFl/Sv9QycZqwvVuY7f1VJKC+A2/G8nEvcj0UiPeuDqi7kqUSeA=
+	t=1789727175; cv=none; b=FTNktXZAPp5i8f9jEnAWIsYb8804G7bs4+DYTij/ujlx40VoGSG0QgIDupu9Costiliv7RE7tnujJP989xyGyQ+toFrtgA8jgtP7Twr3ddt2w03aBHgwPYzE5YefZD9wcCXcbN5D+SYJVFtjMbLVZ3RsdryZXDGqeHf9A5kLM5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789726924; c=relaxed/simple;
-	bh=IpmTmJPbWCCXzMxRFjlr3hZ39oPe1qTH63DD57wZHbs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ioX9G7W7W4gduSa1AxnsRdGNaf0oA998kX7kMa36KSo2tijGsI+8ZSXnKGRaFKAovkoR3Cks8vAVaVh9VWNanhZ3YYCtVNUndL0J6A4iO0fVEZzniKXksKuqXzRBwR9LZ75G0QiUzn8VR/Tw1KxEmR8lBuhTDNjMWW+RVX2C6Ck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=FUo00DHF; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1789727175; c=relaxed/simple;
+	bh=loL0NiLAjp5iTAH9HPWhC5LPpDbWZJVSjszbtqpz5gE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=uiu4N3m66HVT1xt3w8GdPz0hCOMRIoixHvlNRyHZ8pdk8iDOYeT3BNy1SfV3BAxN0fSJe6HR4CQk08OEUJ/YEsDBHp+jXtChB0/66QA9vMKU75UU+Vebhf0n+0jQed/KVp71t8OfAVAE/eGh28k43uNc+rY3AKBJKWc2UxXa/VA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FYZ7Cejy; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=8r+vX8Dl; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="FUo00DHF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=sM
-	d6B8rglyGSl5JeaOK6WajqLgMQS2WNO6Tr+IYzHCg=; b=FUo00DHFsWV1nOZAJf
-	EH6Qm5WrLGnH0JWoeGOzFEEJZIDzd2AEUFpJFAQO+q0+/4Hwa4bHW+X/+fKhXb9K
-	oXtjdlcNgbaejGD4+Lawe1Su6gHxAUMusxb+nxogwi4IiE42CeGGZy58m3rnbnn0
-	eUF7luVMpWH6v1CqWDHl3C4Ts=
-Received: from localhost (unknown [])
-	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wD3BxCTEK1qCxUrBg--.58514S2;
-	Fri, 18 Sep 2026 18:21:08 +0800 (CST)
-From: Hui Su <sh_def@163.com>
-To: qmo@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	horms@kernel.org,
-	Hui Su <sh_def@163.com>
-Subject: [PATCH bpf v2 2/2] bpftool: Fix sparse CPU IDs in prog profile
-Date: Fri, 18 Sep 2026 19:20:52 +0900
-Message-ID: <20260918102052.1247819-3-sh_def@163.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260918102052.1247819-1-sh_def@163.com>
-References: <20260918102052.1247819-1-sh_def@163.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FYZ7Cejy";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="8r+vX8Dl"
+Date: Fri, 18 Sep 2026 12:26:10 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1789727171;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+F6KanK2dKkgBQkaStorjsVXPxHRSnOFUadn46f10vk=;
+	b=FYZ7Cejy/zsiX0SVh/rv8cE+fYoJbjKdiV5vKePcCgI7EjStAYSIHQaZoTOgBnAkzemK9Z
+	KY2zfq6iiXEv4wDvDz7uCq/NQu6LpK55dk0jTX41AL74lU5jo6jka9PDeM6Ix1lHmKZGnF
+	ZUz08BDe78Y+QRhjDp+2oy9+0PPNOjn7Wv7k58QgLboI4s9hrY5NnNep8JzoAP3BqcDZKN
+	+HQkXmYwGAJD/m7UOFUqQRJvsCVwBFXCUczYHK0AGfdzVtiaLuwzCVN7ZATg8j/u8HLLYV
+	qEZ6eLUfAdY8aNq5wqssMEmAo0GMXj5JXBN2Nrbb60wfp6hYGGugSNzFIBc8uA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1789727171;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+F6KanK2dKkgBQkaStorjsVXPxHRSnOFUadn46f10vk=;
+	b=8r+vX8Dlqn7qsQOQB75tW5s7tzoz1xhwS0H0nxSeKz26tPx6v1hvvHxZDM8vGivzjTVZb6
+	mNcHfI3D/ob++uDw==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>
+Subject: [PATCH v2 bpf-next] selftests/bpf: Use %p for pointer formatting
+Message-ID: <20260918102610.gxA3km8_@linutronix.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3BxCTEK1qCxUrBg--.58514S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxKw48Zw1xWw18ZF4UXrW7twb_yoW3Zryfpa
-	n5GF9xKF1kJF9rKw15Ca1DGF43GryxXr4kZ34vg3yrZFWUXr97JF48WFWrKF1FgrWkZFy7
-	J3WjkrWxAFWUXFUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi5l1kUUUUU=
-X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbC6hQvjmqtEJT8LQAA3N
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-bpftool prog profile currently treats the number of possible CPUs as
-both the logical CPU ID range and the stride of the perf event array.
-That misses valid logical CPUs when the possible CPU mask is sparse, such
-as 0,2-3, and can use incorrect PERF_EVENT_ARRAY keys.
+Networking used to print the socket pointer with %p as output in the
+/proc interface. This was later changed to %pK in order not to reveal
+the actual pointer value. The output format has then been copied to bpf
+tests which produce the same format including the %pK format modifier.
 
-Keep the compact possible CPU count for per-CPU result buffers, while
-using the actual logical CPU IDs for perf events and the maximum logical
-CPU ID plus one as the metric stride in the PERF_EVENT_ARRAY. Keep the
-userspace perf file descriptor index separate from the BPF map key. Do
-not advance profile_perf_event_cnt for CPUs that return ENODEV, since it
-tracks opened userspace perf file descriptors rather than event-array
-slots.
+Networking recently replaced the socket output with a plain 0 because
+the socket pointer added no value to the output and the %pK should be
+removed from library handling. The format remained otherwise unchanged in
+order not to break any tools which parsing this information.
 
-Tested:
-- Built tools/bpf/bpftool successfully on the host.
-- Booted an arm64 QEMU guest with a patched virt device tree reporting
-  possible=0,2-3, present=0,2-3, and online=0,2-3.
-- Ran both pre-fix and fixed bpftool with cycles and instructions against
-  a BTF-enabled fentry target. The pre-fix binary faulted in
-  perf_event_alloc(), while the fixed binary reached perf-event setup and
-  reported failure to create the instructions event on CPU 0. QEMU did
-  not provide a usable hardware PMU runtime result, so no profile counts
-  are claimed.
+This change removes the %pK modifier from bpf, following the change in
+networking.
 
-Fixes: 47c09d6a9f67 ("bpftool: Introduce "prog profile" command")
-Link: https://lore.kernel.org/bpf/20260813160858.1042834-3-sh_def@163.com/
-Signed-off-by: Hui Su <sh_def@163.com>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- tools/bpf/bpftool/prog.c                  | 51 +++++++++++++++--------
- tools/bpf/bpftool/skeleton/profiler.bpf.c |  8 ++--
- 2 files changed, 38 insertions(+), 21 deletions(-)
+v1=E2=80=A6v2: https://lore.kernel.org/all/20260911145011.kErTVDkS@linutron=
+ix.de/
+  - sync dump_udp4(), dump_udp6() with net (0, spacing). The columns are
+    (were) not aligned.
+  - Update comment in snprintf.c
 
-diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-index a9f730d407a9..bb969ffce453 100644
---- a/tools/bpf/bpftool/prog.c
-+++ b/tools/bpf/bpftool/prog.c
-@@ -2148,6 +2148,7 @@ struct profile_metric {
- };
- 
- static __u64 profile_total_count;
-+static int profile_cpu_cnt;
- 
- #define MAX_NUM_PROFILE_METRICS 4
- 
-@@ -2184,7 +2185,7 @@ static int profile_parse_metrics(int argc, char **argv)
- 
- static void profile_read_values(struct profiler_bpf *obj)
- {
--	__u32 m, cpu, num_cpu = obj->rodata->num_cpu;
-+	__u32 m, cpu, num_cpu = profile_cpu_cnt;
- 	int reading_map_fd, count_map_fd;
- 	__u64 counts[num_cpu];
- 	__u32 key = 0;
-@@ -2349,6 +2350,8 @@ static int profile_tgt_fd = -1;
- static char *profile_tgt_name;
- static int *profile_perf_events;
- static int profile_perf_event_cnt;
-+static int *profile_cpu_ids;
-+static int profile_cpu_id_span;
- 
- static void profile_close_perf_events(struct profiler_bpf *obj)
- {
-@@ -2358,10 +2361,11 @@ static void profile_close_perf_events(struct profiler_bpf *obj)
- 		close(profile_perf_events[i]);
- 
- 	free(profile_perf_events);
-+	profile_perf_events = NULL;
- 	profile_perf_event_cnt = 0;
- }
- 
--static int profile_open_perf_event(int mid, int cpu, int map_fd)
-+static int profile_open_perf_event(int mid, int cpu, int map_key, int map_fd)
- {
- 	int pmu_fd;
- 
-@@ -2371,15 +2375,12 @@ static int profile_open_perf_event(int mid, int cpu, int map_fd)
- 		if (errno == ENODEV) {
- 			p_info("cpu %d may be offline, skip %s profiling.",
- 				cpu, metrics[mid].name);
--			profile_perf_event_cnt++;
- 			return 0;
- 		}
- 		return -1;
- 	}
- 
--	if (bpf_map_update_elem(map_fd,
--				&profile_perf_event_cnt,
--				&pmu_fd, BPF_ANY) ||
-+	if (bpf_map_update_elem(map_fd, &map_key, &pmu_fd, BPF_ANY) ||
- 	    ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0)) {
- 		close(pmu_fd);
- 		return -1;
-@@ -2391,11 +2392,11 @@ static int profile_open_perf_event(int mid, int cpu, int map_fd)
- 
- static int profile_open_perf_events(struct profiler_bpf *obj)
- {
--	unsigned int cpu, m;
-+	unsigned int cpu, m, metric_idx = 0;
- 	int map_fd;
- 
- 	profile_perf_events = calloc(
--		obj->rodata->num_cpu * obj->rodata->num_metric, sizeof(int));
-+		profile_cpu_cnt * obj->rodata->num_metric, sizeof(int));
- 	if (!profile_perf_events) {
- 		p_err("failed to allocate memory for perf_event array: %s",
- 		      strerror(errno));
-@@ -2410,13 +2411,17 @@ static int profile_open_perf_events(struct profiler_bpf *obj)
- 	for (m = 0; m < ARRAY_SIZE(metrics); m++) {
- 		if (!metrics[m].selected)
- 			continue;
--		for (cpu = 0; cpu < obj->rodata->num_cpu; cpu++) {
--			if (profile_open_perf_event(m, cpu, map_fd)) {
--				p_err("failed to create event %s on cpu %u",
--				      metrics[m].name, cpu);
-+		for (cpu = 0; cpu < (unsigned int)profile_cpu_cnt; cpu++) {
-+			int cpu_id = profile_cpu_ids[cpu];
-+			int map_key = cpu_id + metric_idx * profile_cpu_id_span;
-+
-+			if (profile_open_perf_event(m, cpu_id, map_key, map_fd)) {
-+				p_err("failed to create event %s on cpu %d",
-+				      metrics[m].name, cpu_id);
- 				return -1;
- 			}
- 		}
-+		metric_idx++;
- 	}
+ tools/testing/selftests/bpf/README.rst               |  2 +-
+ tools/testing/selftests/bpf/prog_tests/snprintf.c    |  4 ++--
+ tools/testing/selftests/bpf/progs/bpf_iter_netlink.c |  4 ++--
+ tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c    | 11 +++++------
+ tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c    | 11 +++++------
+ tools/testing/selftests/bpf/progs/bpf_iter_udp4.c    |  4 ++--
+ tools/testing/selftests/bpf/progs/bpf_iter_udp6.c    |  4 ++--
+ tools/testing/selftests/bpf/progs/bpf_iter_unix.c    |  5 ++---
+ tools/testing/selftests/bpf/progs/test_snprintf.c    |  4 ++--
+ 9 files changed, 23 insertions(+), 26 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftes=
+ts/bpf/README.rst
+index 07c834433b388..75ff1142c1857 100644
+--- a/tools/testing/selftests/bpf/README.rst
++++ b/tools/testing/selftests/bpf/README.rst
+@@ -187,7 +187,7 @@ The symptom for ``bpf_iter/netlink`` looks like
+   ...
+   15: (bf) r2 =3D r7
+   16: (0f) r2 +=3D r1
+-  ; BPF_SEQ_PRINTF(seq, "%pK %-3d ", s, s->sk_protocol);
++  ; BPF_SEQ_PRINTF(seq, "%p %-3d ", s, s->sk_protocol);
+   17: (7b) *(u64 *)(r7 +0) =3D r2
+   only read is supported
+=20
+diff --git a/tools/testing/selftests/bpf/prog_tests/snprintf.c b/tools/test=
+ing/selftests/bpf/prog_tests/snprintf.c
+index 4e4a82d54f799..ccfb02bd4e7cd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/snprintf.c
++++ b/tools/testing/selftests/bpf/prog_tests/snprintf.c
+@@ -15,8 +15,8 @@
+ #define EXP_SYM_OUT  "schedule schedule+0x0/"
+ #define MIN_SYM_RET  sizeof(EXP_SYM_OUT)
+=20
+-/* The third specifier, %p, is a hashed pointer which changes on every reb=
+oot */
+-#define EXP_ADDR_OUT "0000000000000000 ffff00000add4e55 "
++/* The second specifier, %p, is a hashed pointer which changes on every re=
+boot */
++#define EXP_ADDR_OUT "ffff00000add4e55 "
+ #define EXP_ADDR_RET sizeof(EXP_ADDR_OUT "unknownhashedptr")
+=20
+ #define EXP_STR_OUT  "str1         a  b c      d e longstr"
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c b/tools/t=
+esting/selftests/bpf/progs/bpf_iter_netlink.c
+index 00b2ceae81fb0..b9107d3ab6039 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
+@@ -25,12 +25,12 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
+ 		return 0;
+=20
+ 	if (ctx->meta->seq_num =3D=3D 0)
+-		BPF_SEQ_PRINTF(seq, "sk               Eth Pid        Groups   "
++		BPF_SEQ_PRINTF(seq, "sk Eth Pid        Groups   "
+ 				    "Rmem     Wmem     Dump  Locks    Drops    "
+ 				    "Inode\n");
+=20
+ 	s =3D &nlk->sk;
+-	BPF_SEQ_PRINTF(seq, "%pK %-3d ", s, s->sk_protocol);
++	BPF_SEQ_PRINTF(seq, "0  %-3d ", s->sk_protocol);
+=20
+ 	if (!nlk->groups)  {
+ 		group =3D 0;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c b/tools/test=
+ing/selftests/bpf/progs/bpf_iter_tcp4.c
+index b1e509b231cd9..d149cf0d07be6 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
+@@ -131,8 +131,7 @@ static int dump_tcp_sock(struct seq_file *seq, struct t=
+cp_sock *tp,
+ 		       icsk->icsk_probes_out,
+ 		       sock_i_ino(sp),
+ 		       sp->sk_refcnt.refs.counter);
+-	BPF_SEQ_PRINTF(seq, "%pK %lu %lu %u %u %d\n",
+-		       tp,
++	BPF_SEQ_PRINTF(seq, "0 %lu %lu %u %u %d\n",
+ 		       jiffies_to_clock_t(icsk->icsk_rto),
+ 		       jiffies_to_clock_t(icsk->icsk_ack.ato),
+ 		       (icsk->icsk_ack.quick << 1) | inet_csk_in_pingpong_mode(icsk),
+@@ -161,10 +160,10 @@ static int dump_tw_sock(struct seq_file *seq, struct =
+tcp_timewait_sock *ttw,
+ 	BPF_SEQ_PRINTF(seq, "%4d: %08X:%04X %08X:%04X ",
+ 		       seq_num, src, srcp, dest, destp);
+=20
+-	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n",
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
+ 		       tw->tw_substate, 0, 0,
+ 		       3, jiffies_delta_to_clock_t(delta), 0, 0, 0, 0,
+-		       tw->tw_refcnt.refs.counter, tw);
++		       tw->tw_refcnt.refs.counter);
+=20
  	return 0;
  }
-@@ -2430,6 +2435,10 @@ static void profile_print_and_cleanup(void)
- 
- 	close(profile_tgt_fd);
- 	free(profile_tgt_name);
-+	free(profile_cpu_ids);
-+	profile_cpu_ids = NULL;
-+	profile_cpu_cnt = 0;
-+	profile_cpu_id_span = 0;
- }
- 
- static void int_exit(int signo)
-@@ -2440,7 +2449,8 @@ static void int_exit(int signo)
- 
- static int do_profile(int argc, char **argv)
- {
--	int num_metric, num_cpu, err = -1;
-+	int num_metric, err = -1;
-+	int *cpu_ids = NULL;
- 	struct bpf_program *prog;
- 	unsigned long duration;
- 	char *endptr;
-@@ -2471,11 +2481,13 @@ static int do_profile(int argc, char **argv)
- 	if (num_metric <= 0)
- 		goto out;
- 
--	num_cpu = libbpf_num_possible_cpus();
--	if (num_cpu <= 0) {
-+	profile_cpu_cnt = get_possible_cpu_ids(&cpu_ids);
-+	if (profile_cpu_cnt <= 0) {
- 		p_err("failed to identify number of CPUs");
- 		goto out;
- 	}
-+	profile_cpu_ids = cpu_ids;
-+	profile_cpu_id_span = cpu_ids[profile_cpu_cnt - 1] + 1;
- 
- 	profile_obj = profiler_bpf__open();
- 	if (!profile_obj) {
-@@ -2483,11 +2495,12 @@ static int do_profile(int argc, char **argv)
- 		goto out;
- 	}
- 
--	profile_obj->rodata->num_cpu = num_cpu;
- 	profile_obj->rodata->num_metric = num_metric;
-+	profile_obj->rodata->cpu_id_span = profile_cpu_id_span;
- 
- 	/* adjust map sizes */
--	bpf_map__set_max_entries(profile_obj->maps.events, num_metric * num_cpu);
-+	bpf_map__set_max_entries(profile_obj->maps.events,
-+				 num_metric * profile_cpu_id_span);
- 	bpf_map__set_max_entries(profile_obj->maps.fentry_readings, num_metric);
- 	bpf_map__set_max_entries(profile_obj->maps.accum_readings, num_metric);
- 	bpf_map__set_max_entries(profile_obj->maps.counts, 1);
-@@ -2534,6 +2547,10 @@ static int do_profile(int argc, char **argv)
- 		profiler_bpf__destroy(profile_obj);
- 	close(profile_tgt_fd);
- 	free(profile_tgt_name);
-+	free(profile_cpu_ids);
-+	profile_cpu_ids = NULL;
-+	profile_cpu_cnt = 0;
-+	profile_cpu_id_span = 0;
- 	return err;
- }
- 
-diff --git a/tools/bpf/bpftool/skeleton/profiler.bpf.c b/tools/bpf/bpftool/skeleton/profiler.bpf.c
-index f48c783cb9f7..2504c3a65bb9 100644
---- a/tools/bpf/bpftool/skeleton/profiler.bpf.c
-+++ b/tools/bpf/bpftool/skeleton/profiler.bpf.c
-@@ -10,7 +10,7 @@ struct bpf_perf_event_value___local {
- 	__u64 running;
- } __attribute__((preserve_access_index));
- 
--/* map of perf event fds, num_cpu * num_metric entries */
-+/* map of perf event fds, cpu_id_span * num_metric entries */
- struct {
- 	__uint(type, BPF_MAP_TYPE_PERF_EVENT_ARRAY);
- 	__uint(key_size, sizeof(u32));
-@@ -38,8 +38,8 @@ struct {
- 	__uint(value_size, sizeof(u64));
- } counts SEC(".maps");
- 
--const volatile __u32 num_cpu = 1;
- const volatile __u32 num_metric = 1;
-+const volatile __u32 cpu_id_span = 1;
- #define MAX_NUM_METRICS 4
- 
- SEC("fentry/XXX")
-@@ -67,7 +67,7 @@ int BPF_PROG(fentry_XXX)
- 		if (err)
- 			return 0;
- 		*(ptrs[i]) = reading;
--		key += num_cpu;
-+		key += cpu_id_span;
- 	}
- 
+@@ -185,9 +184,9 @@ static int dump_req_sock(struct seq_file *seq, struct t=
+cp_request_sock *treq,
+ 		       seq_num, irsk->ir_loc_addr,
+ 		       irsk->ir_num, irsk->ir_rmt_addr,
+ 		       bpf_ntohs(irsk->ir_rmt_port));
+-	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n",
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
+ 		       TCP_SYN_RECV, 0, 0, 1, jiffies_to_clock_t(ttd),
+-		       req->num_timeout, uid, 0, 0, 0, req);
++		       req->num_timeout, uid, 0, 0, 0);
+=20
  	return 0;
-@@ -107,7 +107,7 @@ int BPF_PROG(fexit_XXX)
- 
- 	/* read all events before updating the maps, to reduce error */
- 	for (i = 0; i < num_metric && i < MAX_NUM_METRICS; i++) {
--		err = bpf_perf_event_read_value(&events, cpu + i * num_cpu,
-+		err = bpf_perf_event_read_value(&events, cpu + i * cpu_id_span,
- 						(void *)(readings + i),
- 						sizeof(*readings));
- 		if (err)
--- 
+ }
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c b/tools/test=
+ing/selftests/bpf/progs/bpf_iter_tcp6.c
+index dbc7166aee91f..cd65fa81f1219 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c
+@@ -135,8 +135,7 @@ static int dump_tcp6_sock(struct seq_file *seq, struct =
+tcp6_sock *tp,
+ 		       icsk->icsk_probes_out,
+ 		       sock_i_ino(sp),
+ 		       sp->sk_refcnt.refs.counter);
+-	BPF_SEQ_PRINTF(seq, "%pK %lu %lu %u %u %d\n",
+-		       tp,
++	BPF_SEQ_PRINTF(seq, "0 %lu %lu %u %u %d\n",
+ 		       jiffies_to_clock_t(icsk->icsk_rto),
+ 		       jiffies_to_clock_t(icsk->icsk_ack.ato),
+ 		       (icsk->icsk_ack.quick << 1) | inet_csk_in_pingpong_mode(icsk),
+@@ -170,10 +169,10 @@ static int dump_tw_sock(struct seq_file *seq, struct =
+tcp_timewait_sock *ttw,
+ 		       dest->s6_addr32[0], dest->s6_addr32[1],
+ 		       dest->s6_addr32[2], dest->s6_addr32[3], destp);
+=20
+-	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n",
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
+ 		       tw->tw_substate, 0, 0,
+ 		       3, jiffies_delta_to_clock_t(delta), 0, 0, 0, 0,
+-		       tw->tw_refcnt.refs.counter, tw);
++		       tw->tw_refcnt.refs.counter);
+=20
+ 	return 0;
+ }
+@@ -201,9 +200,9 @@ static int dump_req_sock(struct seq_file *seq, struct t=
+cp_request_sock *treq,
+ 		       dest->s6_addr32[0], dest->s6_addr32[1],
+ 		       dest->s6_addr32[2], dest->s6_addr32[3],
+ 		       bpf_ntohs(irsk->ir_rmt_port));
+-	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n",
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
+ 		       TCP_SYN_RECV, 0, 0, 1, jiffies_to_clock_t(ttd),
+-		       req->num_timeout, uid, 0, 0, 0, req);
++		       req->num_timeout, uid, 0, 0, 0);
+=20
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c b/tools/test=
+ing/selftests/bpf/progs/bpf_iter_udp4.c
+index 23b2aa2604de2..d4079a619da66 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
+@@ -57,13 +57,13 @@ int dump_udp4(struct bpf_iter__udp *ctx)
+ 	BPF_SEQ_PRINTF(seq, "%5d: %08X:%04X %08X:%04X ",
+ 		       ctx->bucket, src, srcp, dest, destp);
+=20
+-	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %pK %u=
+\n",
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d 0 %u\n=
+",
+ 		       inet->sk.sk_state,
+ 		       inet->sk.sk_wmem_alloc.refs.counter - 1,
+ 		       rqueue,
+ 		       0, 0L, 0, ctx->uid, 0,
+ 		       sock_i_ino(&inet->sk),
+-		       inet->sk.sk_refcnt.refs.counter, udp_sk,
++		       inet->sk.sk_refcnt.refs.counter,
+ 		       udp_sk->drop_counters.drops0.counter +
+ 		       udp_sk->drop_counters.drops1.counter);
+=20
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c b/tools/test=
+ing/selftests/bpf/progs/bpf_iter_udp6.c
+index c48b05aa2a4b2..dadc5f73ff098 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
+@@ -65,13 +65,13 @@ int dump_udp6(struct bpf_iter__udp *ctx)
+ 		       dest->s6_addr32[0], dest->s6_addr32[1],
+ 		       dest->s6_addr32[2], dest->s6_addr32[3], destp);
+=20
+-	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %pK %u=
+\n",
++	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d 0 %u\n=
+",
+ 		       inet->sk.sk_state,
+ 		       inet->sk.sk_wmem_alloc.refs.counter - 1,
+ 		       rqueue,
+ 		       0, 0L, 0, ctx->uid, 0,
+ 		       sock_i_ino(&inet->sk),
+-		       inet->sk.sk_refcnt.refs.counter, udp_sk,
++		       inet->sk.sk_refcnt.refs.counter,
+ 		       udp_sk->drop_counters.drops0.counter +
+ 		       udp_sk->drop_counters.drops1.counter);
+ 	return 0;
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c b/tools/test=
+ing/selftests/bpf/progs/bpf_iter_unix.c
+index a2652c8c3616f..df3d971b21e8a 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
+@@ -42,10 +42,9 @@ int dump_unix(struct bpf_iter__unix *ctx)
+ 	seq =3D ctx->meta->seq;
+ 	seq_num =3D ctx->meta->seq_num;
+ 	if (seq_num =3D=3D 0)
+-		BPF_SEQ_PRINTF(seq, "Num               RefCount Protocol Flags    Type S=
+t    Inode Path\n");
++		BPF_SEQ_PRINTF(seq, "Num       RefCount Protocol Flags    Type St    Ino=
+de Path\n");
+=20
+-	BPF_SEQ_PRINTF(seq, "%pK: %08X %08X %08X %04X %02X %8lu",
+-		       unix_sk,
++	BPF_SEQ_PRINTF(seq, "%08u: %08X %08X %08X %04X %02X %8lu", 0,
+ 		       sk->sk_refcnt.refs.counter,
+ 		       0,
+ 		       sk->sk_state =3D=3D TCP_LISTEN ? __SO_ACCEPTCON : 0,
+diff --git a/tools/testing/selftests/bpf/progs/test_snprintf.c b/tools/test=
+ing/selftests/bpf/progs/test_snprintf.c
+index 8fda075440235..48a0025cf2ca8 100644
+--- a/tools/testing/selftests/bpf/progs/test_snprintf.c
++++ b/tools/testing/selftests/bpf/progs/test_snprintf.c
+@@ -57,8 +57,8 @@ int handler(const void *ctx)
+ 	sym_ret  =3D BPF_SNPRINTF(sym_out,  sizeof(sym_out), "%ps %pS %pB",
+ 				&schedule, &schedule, &schedule);
+ 	/* Kernel pointers */
+-	addr_ret =3D BPF_SNPRINTF(addr_out, sizeof(addr_out), "%pK %px %p",
+-				0, 0xFFFF00000ADD4E55, 0xFFFF00000ADD4E55);
++	addr_ret =3D BPF_SNPRINTF(addr_out, sizeof(addr_out), "%px %p",
++				0xFFFF00000ADD4E55, 0xFFFF00000ADD4E55);
+ 	/* Strings and single-byte character embedding */
+ 	str_ret  =3D BPF_SNPRINTF(str_out, sizeof(str_out), "%s % 9c %+2c %-3c %0=
+4c %0c %+05s",
+ 				str1, 'a', 'b', 'c', 'd', 'e', longstr);
+--=20
 2.55.0
 
