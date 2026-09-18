@@ -1,180 +1,522 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 123BC4A99DC;
-	Fri, 18 Sep 2026 07:57:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CE4D49D583
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 08:01:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789718280; cv=none; b=OKgC73H6Kirf4tPBBL9aIlYQCzAp5paEG9cNslLKh+aoDTUIoCPFNygw0gAS8QuLu0Yfz3MG5WxbcRljpwcR1hoGkvNMmocmWOgzFeUi91BRNSx6jWVVVHuIZuuxQHBTdNHOMC4sCwEhqATHG4cx2dkRDcZz9Pm417QG9N0sgfA=
+	t=1789718466; cv=none; b=ElngtissIDkx7Z8rbmETNpajIiQ9AD0WiQMxlW0/MQvA7DedBg4HKJlsyQwYf6MD2Z2CwoN01TPm8UIFT8n2jLej+sXf47fRbcit3DWST74WLAyFflQzxp6Bn8aJfRsJ3EQlyphofpNYB1ECwzcxDbcc1Nme3ePdVpTPbmUCw24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789718280; c=relaxed/simple;
-	bh=MZYhPsKYpV4K0X/ymrBFg4ipu+xwD4qvhRSNcagNgx4=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CuR0wWXjWVr0DZ6Kq5R0zN46eaQjkxk9HZERnfGDzASaHhJU++XHgJf8pvBi8rCXjzYdCEQ6VMxg13f0GyH9ylo5GV7UkyumzayVR387VO6z5PQ8KkZvZFW6ufNup14HVgp+l//c+gQ/U6b4JpicXhT4c3+ni1a6rfxLXl+lq8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jgyBjHn2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789718466; c=relaxed/simple;
+	bh=SmMvWlACXYCFUN3FwE7N0ZbtwI1xaCEMmNHRl1jEgzw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=agsYfr0bZ28qBGBYWFrwNtmv8/kC5aI8+hh8ivZhT9H5lgVXyW4ZuRGCZeLbPrLl0LgpNTBR2IkBFuI0OQ4VmdYP1YULaIhnPVWIDixby4VdrXe69g41385uG8dMF1U93TYFlGIgFV+zwZ7T/zB4tPB/e1kcpMKGygsbi5O3+m4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=g4nuvfXL; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jgyBjHn2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CAF81F0089A;
-	Fri, 18 Sep 2026 07:57:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789718273;
-	bh=YX7RZjOK1uJv49KoaMsDYRHurBp1N1bh4T7i7LsoRj4=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=jgyBjHn2K/3kE2lnbTVG+QMnRoDN0BsCXyVQoQDqsdr2iOMnYf2Imbfu7PvxCCtsB
-	 dRGxOFxsWUPITt2WcUqK68aH3wqVSRuqthn+3TMT3b+7JvDQ24Rm13/0J3Zi2czJDT
-	 opDQHN4OObp+GamPK5XAbBojFPpdXt6RJ+J1CDHnttwCWP6pkPmPAi0xZ/Poshj/8V
-	 SZacsQKPG1r7W5ImgxuH7VT2EkaP6P4ZJ4zzx3aVQrbd53ThRy/Qr4P2POOf0rywqb
-	 bcm78qx++dStxVxOj6VTmQPWgo0omgFVJhs1v+Uvy7LX2mkSGwCX4i2RObMcNmNMp9
-	 IBG8kzUltVdmQ==
-Subject: Re: [PATCH net-next v7 11/12] gve: add ctrl ops for queue operations
-From: netdev-bot+sashiko@kernel.org
-To: hramamurthy@google.com
-Cc: netdev@vger.kernel.org, joshwash@google.com, andrew+netdev@lunn.ch,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, jordanrhee@google.com,
- willemb@google.com, nktgrg@google.com, maolson@google.com, thostet@google.com,
- jacob.e.keller@intel.com, debarghyak@google.com, kees@kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- przemyslaw.kitszel@intel.com
-Date: Fri, 18 Sep 2026 07:57:52 +0000
-Message-ID: <178971827222.22033.18083740945510647866@kernel.org>
-In-Reply-To: <20260916165533.2187434-12-hramamurthy@google.com>
-References: <20260916165533.2187434-12-hramamurthy@google.com>
-X-sashiko-severity: Low
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="g4nuvfXL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=wu
+	JB8Y87T3g/ovLoQk5aiQmQ84GuUUXk2GWTjiAEQ1Q=; b=g4nuvfXLFiCyqgYSCf
+	iHesgIdRUHbZOe//yg8uUdvKBap0ya61OLh7WTcpBhTvlTLxE2c6d/o8stdpBvB0
+	APJALiMK9wWs6V4/FAPknodUUOal/h9LXB/tnIR60fmjYDg+mvXGS44/whNBoyKD
+	/ip7+cF2dl5NzMVgON3kXZRyc=
+Received: from kylin-ERAZER-H610M.. (unknown [])
+	by gzsmtp4 (Coremail) with SMTP id PygvCgCHCk2O76xqG1U9AA--.7036S4;
+	Fri, 18 Sep 2026 16:00:18 +0800 (CST)
+From: Yun Lu <luyun_611@163.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev
+Cc: bpf@vger.kernel.org
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Add task work round ownership race test
+Date: Fri, 18 Sep 2026 16:00:14 +0800
+Message-ID: <20260918080014.54012-3-luyun_611@163.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260918080014.54012-1-luyun_611@163.com>
+References: <20260918080014.54012-1-luyun_611@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PygvCgCHCk2O76xqG1U9AA--.7036S4
+X-Coremail-Antispam: 1Uf129KBjvAXoW3Zw4DuF48ZFW8AFykGr1kuFg_yoW8JryUAo
+	Z3ua15tw18Gr97Awn7Xa4ktr1FgwsrKas5Zw40grW5CF1fZrWYvF1kCw4xJw1xZF4rXa4f
+	ZFn7Zw1ruw48AFyrn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUx0PfUUUUU
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbCwxPltGqs75NUfgAA3R
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider:
+From: Yun Lu <luyun@kylinos.cn>
 
-Critical: 0 · High: 0 · Medium: 0 · Low: 1
+Exercise task-work scheduling, callback completion and map-value deletion
+on separate execution contexts.  Rotate through ctx reuse, deletion
+after the callback body, and deletion immediately before the scheduling
+kfunc.  The latter two variants stress both the original
+SCHEDULING/SCHEDULED cancellation window and the final-user/delete race.
 
-- [Low] After this patch converts gve_create_rings()/gve_destroy_rings()
-  in drivers/net/ethernet/google/gve/gve_main.c to call…
+Use READY and DONE sequence handshakes so deletion cannot race map-value
+setup and scheduling errors cannot be missed.  Give every callback a
+unique generation and wait for that exact generation, preventing a late
+callback from an early-delete round from satisfying a later assertion.
+Retry transient -EBUSY results while a previous callback wrapper is
+finishing.
 
---
+Select two CPUs from the process affinity mask and use atomic
+thread-start/stop handshakes, so the cross-CPU prerequisite is either
+established or the test is skipped.
 
-gve: add ctrl ops for queue operations
+Signed-off-by: Yun Lu <luyun@kylinos.cn>
+---
+ .../selftests/bpf/prog_tests/test_task_work.c | 283 ++++++++++++++++++
+ .../selftests/bpf/progs/task_work_race.c      | 125 ++++++++
+ 2 files changed, 408 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/task_work_race.c
 
-This adds create_queues and destroy_queues to struct gve_ctrl_ops, moves the
-bulk queue create/destroy sequences from gve_create_rings()/gve_destroy_rings()
-in gve_main.c into gve_adminq_create_queues()/gve_adminq_destroy_queues(), and
-wires them up in gve_adminq_ops. Described as code movement with no functional
-change.
-
-> diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
-> index f0218d78bc5d1..450341b70968d 100644
-> --- a/drivers/net/ethernet/google/gve/gve_adminq.c
-> +++ b/drivers/net/ethernet/google/gve/gve_adminq.c
-> @@ -943,6 +943,30 @@ static void gve_set_default_rss_sizes(struct gve_priv *priv)
->  	}
->  }
->  
-> +int gve_adminq_destroy_queues(struct gve_priv *priv)
-> +{
-> +	int num_tx_queues = gve_num_tx_queues(priv);
-> +	int err;
-> +
-> +	err = gve_adminq_destroy_tx_queues(priv, 0, num_tx_queues);
-
-[ ... ]
-
-> +	err = gve_adminq_destroy_rx_queues(priv, priv->rx_cfg.num_queues);
-
-[ ... ]
-
-> @@ -1791,3 +1815,29 @@ void gve_adminq_teardown_mgmt_irq(struct gve_priv *priv)
->  		priv->mgmt_irq_requested = false;
->  	}
->  }
-> +
-> +int gve_adminq_create_queues(struct gve_priv *priv)
-> +{
-> +	int num_tx_queues = gve_num_tx_queues(priv);
-> +	int err;
-> +
-> +	err = gve_adminq_create_tx_queues(priv, 0, num_tx_queues);
-
-[ ... ]
-
-> +	err = gve_adminq_create_rx_queues(priv, priv->rx_cfg.num_queues);
-
-[ ... ]
-
-> diff --git a/drivers/net/ethernet/google/gve/gve_adminq.h b/drivers/net/ethernet/google/gve/gve_adminq.h
-> index 0b48e9f2a82ae..d696e4932a8b9 100644
-> --- a/drivers/net/ethernet/google/gve/gve_adminq.h
-> +++ b/drivers/net/ethernet/google/gve/gve_adminq.h
-> @@ -628,6 +628,8 @@ int gve_adminq_configure_device_resources(struct gve_priv *priv,
->  					  dma_addr_t db_array_bus_addr,
->  					  u32 num_ntfy_blks);
->  int gve_adminq_deconfigure_device_resources(struct gve_priv *priv);
-> +int gve_adminq_create_queues(struct gve_priv *priv);
-> +int gve_adminq_destroy_queues(struct gve_priv *priv);
->  int gve_adminq_create_tx_queues(struct gve_priv *priv, u32 start_id, u32 num_queues);
->  int gve_adminq_destroy_tx_queues(struct gve_priv *priv, u32 start_id, u32 num_queues);
-      ^^^^
-
-[Severity: Low]
-This isn't a bug, but after this patch is it still necessary to export the
-four bulk helpers from gve_adminq.h?
-
-With gve_create_rings() and gve_destroy_rings() converted to
-priv->ctrl_ops->create_queues() / priv->ctrl_ops->destroy_queues(), the only
-remaining references to gve_adminq_create_tx_queues(),
-gve_adminq_create_rx_queues(), gve_adminq_destroy_tx_queues() and
-gve_adminq_destroy_rx_queues() are their definitions in gve_adminq.c and the
-calls from the two new wrappers in the same file:
-
-  gve_adminq_create_queues()
-      gve_adminq_create_tx_queues()
-      gve_adminq_create_rx_queues()
-
-  gve_adminq_destroy_queues()
-      gve_adminq_destroy_tx_queues()
-      gve_adminq_destroy_rx_queues()
-
-All four definitions precede those call sites, so could they be made static
-and their declarations dropped from the header, leaving only the
-ctrl_ops-backed gve_adminq_create_queues()/gve_adminq_destroy_queues() in the
-shared header? Keeping the AdminQ-specific helpers visible module-wide leaves
-an entry point that bypasses the ops indirection this series is introducing.
-
-> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-> index 44669b2f25d7d..33af1437b3c04 100644
-> --- a/drivers/net/ethernet/google/gve/gve_main.c
-> +++ b/drivers/net/ethernet/google/gve/gve_main.c
-> @@ -886,33 +886,16 @@ static int gve_unregister_qpls(struct gve_priv *priv)
->  
->  static int gve_create_rings(struct gve_priv *priv)
->  {
-> -	int num_tx_queues = gve_num_tx_queues(priv);
->  	int err;
->  	int i;
->  
-> -	err = gve_adminq_create_tx_queues(priv, 0, num_tx_queues);
-> +	err = priv->ctrl_ops->create_queues(priv);
-
-[ ... ]
-
-> @@ -1067,26 +1050,12 @@ static int gve_queues_mem_alloc(struct gve_priv *priv,
->  
->  static int gve_destroy_rings(struct gve_priv *priv)
->  {
-> -	int num_tx_queues = gve_num_tx_queues(priv);
->  	int err;
->  
-> -	err = gve_adminq_destroy_tx_queues(priv, 0, num_tx_queues);
-> +	err = priv->ctrl_ops->destroy_queues(priv);
-
-[ ... ]
-
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_task_work.c b/tools/testing/selftests/bpf/prog_tests/test_task_work.c
+index 774b31a5f6ca..6d5e1e97aa3a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_task_work.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_task_work.c
+@@ -5,10 +5,14 @@
+ #include <stdio.h>
+ #include "task_work.skel.h"
+ #include "task_work_fail.skel.h"
++#include "task_work_race.skel.h"
+ #include <linux/bpf.h>
+ #include <linux/perf_event.h>
+ #include <sys/syscall.h>
+ #include <time.h>
++#include <pthread.h>
++#include <sched.h>
++#include <unistd.h>
+ 
+ static int perf_event_open(__u32 type, __u64 config, int pid)
+ {
+@@ -155,3 +159,282 @@ void test_task_work(void)
+ 
+ 	RUN_TESTS(task_work_fail);
+ }
++
++#define TASK_WORK_RACE_ROUNDS	1500
++
++/* Must match progs/task_work_race.c. */
++enum task_work_race_status {
++	RACE_ARM_SEQ,
++	RACE_READY_SEQ,
++	RACE_DONE_SEQ,
++	RACE_SCHED_ERR,
++};
++
++struct task_work_race_value {
++	__u32 seq;
++	char data[60];
++	struct bpf_task_work tw;
++};
++
++struct task_work_race_ctx {
++	int stop;
++	int setup_err;
++	int trigger_tid;
++	int target_tid;
++	int trigger_cpu;
++	int target_cpu;
++};
++
++static int task_work_race_pin_cpu(int cpu)
++{
++	cpu_set_t set;
++
++	CPU_ZERO(&set);
++	CPU_SET(cpu, &set);
++	return pthread_setaffinity_np(pthread_self(), sizeof(set), &set);
++}
++
++static void *task_work_race_trigger(void *arg)
++{
++	struct task_work_race_ctx *ctx = arg;
++	int err;
++
++	err = task_work_race_pin_cpu(ctx->trigger_cpu);
++	if (err)
++		__atomic_store_n(&ctx->setup_err, err, __ATOMIC_RELEASE);
++	__atomic_store_n(&ctx->trigger_tid, syscall(__NR_gettid),
++			 __ATOMIC_RELEASE);
++	while (!__atomic_load_n(&ctx->stop, __ATOMIC_ACQUIRE))
++		getppid();
++	return NULL;
++}
++
++static void *task_work_race_target(void *arg)
++{
++	struct task_work_race_ctx *ctx = arg;
++	int err;
++
++	err = task_work_race_pin_cpu(ctx->target_cpu);
++	if (err)
++		__atomic_store_n(&ctx->setup_err, err, __ATOMIC_RELEASE);
++	__atomic_store_n(&ctx->target_tid, syscall(__NR_gettid),
++			 __ATOMIC_RELEASE);
++	while (!__atomic_load_n(&ctx->stop, __ATOMIC_ACQUIRE))
++		getppid();
++	return NULL;
++}
++
++static int task_work_race_status(struct task_work_race *skel, int idx,
++				 __s64 *value)
++{
++	return bpf_map_lookup_elem(bpf_map__fd(skel->maps.status), &idx,
++				   value);
++}
++
++static int task_work_race_set_status(struct task_work_race *skel, int idx,
++				     __s64 value)
++{
++	return bpf_map_update_elem(bpf_map__fd(skel->maps.status), &idx,
++				   &value, BPF_ANY);
++}
++
++static int task_work_race_wait_seq(struct task_work_race *skel, int idx,
++				   __u32 seq, int timeout_us)
++{
++	int i;
++
++	for (i = 0; i < timeout_us / 100; i++) {
++		__s64 value = 0;
++
++		if (!task_work_race_status(skel, idx, &value) && value == seq)
++			return 0;
++		usleep(100);
++	}
++	return -ETIMEDOUT;
++}
++
++static int task_work_race_wait_ready(struct task_work_race *skel, __u32 seq)
++{
++	int i;
++
++	for (i = 0; i < 2000000 / 100; i++) {
++		__s64 value = 0;
++
++		if (!task_work_race_status(skel, RACE_READY_SEQ, &value) &&
++		    value == seq)
++			return 0;
++		if (!task_work_race_status(skel, RACE_DONE_SEQ, &value) &&
++		    value == seq)
++			return -EIO;
++		usleep(100);
++	}
++	return -ETIMEDOUT;
++}
++
++static int task_work_race_prepare_elem(struct task_work_race *skel)
++{
++	struct task_work_race_value value = {};
++	int key = 0;
++
++	if (!bpf_map_lookup_elem(bpf_map__fd(skel->maps.hmap), &key, &value))
++		return 0;
++	if (errno != ENOENT)
++		return -errno;
++	if (bpf_map_update_elem(bpf_map__fd(skel->maps.hmap), &key, &value,
++				BPF_NOEXIST))
++		return -errno;
++	return 0;
++}
++
++static int task_work_race_arm(struct task_work_race *skel, __u32 seq)
++{
++	__u64 completed = 0;
++	int key = seq;
++
++	if (bpf_map_update_elem(bpf_map__fd(skel->maps.completed), &key,
++				&completed, BPF_ANY))
++		return -errno;
++	if (task_work_race_set_status(skel, RACE_SCHED_ERR, 0) ||
++	    task_work_race_set_status(skel, RACE_ARM_SEQ, seq))
++		return -errno;
++	return task_work_race_wait_ready(skel, seq);
++}
++
++static int task_work_race_check_done(struct task_work_race *skel, __u32 seq)
++{
++	__s64 err = 0;
++	int ret;
++
++	ret = task_work_race_wait_seq(skel, RACE_DONE_SEQ, seq, 2000000);
++	if (ret)
++		return ret;
++	if (task_work_race_status(skel, RACE_SCHED_ERR, &err))
++		return -errno;
++	return err;
++}
++
++static int task_work_race_wait_callback(struct task_work_race *skel,
++					__u32 seq)
++{
++	int i, key = seq;
++
++	for (i = 0; i < 2000000 / 100; i++) {
++		__u64 completed = 0;
++
++		if (!bpf_map_lookup_elem(bpf_map__fd(skel->maps.completed),
++					 &key, &completed) && completed)
++			return 0;
++		usleep(100);
++	}
++	return -ETIMEDOUT;
++}
++
++void serial_test_task_work_race(void)
++{
++	struct task_work_race_ctx ctx = {};
++	struct task_work_race *skel;
++	pthread_t trigger, target;
++	cpu_set_t allowed;
++	int cpu, cpu_count = 0;
++	bool target_started = false, trigger_started = false;
++	int err, i, key = 0;
++
++	if (sched_getaffinity(0, sizeof(allowed), &allowed)) {
++		ASSERT_OK(-errno, "sched_getaffinity");
++		return;
++	}
++	for (cpu = 0; cpu < CPU_SETSIZE && cpu_count < 2; cpu++) {
++		if (!CPU_ISSET(cpu, &allowed))
++			continue;
++		if (!cpu_count)
++			ctx.trigger_cpu = cpu;
++		else
++			ctx.target_cpu = cpu;
++		cpu_count++;
++	}
++	if (cpu_count < 2) {
++		printf("%s:SKIP:need two CPUs in the process affinity mask\n",
++		       __func__);
++		test__skip();
++		return;
++	}
++
++	skel = task_work_race__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++	if (!ASSERT_OK(task_work_race__attach(skel), "attach"))
++		goto cleanup;
++
++	err = pthread_create(&target, NULL, task_work_race_target, &ctx);
++	if (!ASSERT_OK(err, "pthread_create target"))
++		goto cleanup;
++	target_started = true;
++	err = pthread_create(&trigger, NULL, task_work_race_trigger, &ctx);
++	if (!ASSERT_OK(err, "pthread_create trigger"))
++		goto stop;
++	trigger_started = true;
++
++	while (!__atomic_load_n(&ctx.trigger_tid, __ATOMIC_ACQUIRE) ||
++	       !__atomic_load_n(&ctx.target_tid, __ATOMIC_ACQUIRE))
++		usleep(100);
++	if (!ASSERT_OK(__atomic_load_n(&ctx.setup_err, __ATOMIC_ACQUIRE),
++		       "thread affinity"))
++		goto stop;
++
++	skel->bss->trigger_tid = __atomic_load_n(&ctx.trigger_tid, __ATOMIC_ACQUIRE);
++	skel->bss->target_tid = __atomic_load_n(&ctx.target_tid, __ATOMIC_ACQUIRE);
++
++	for (i = 0; i < TASK_WORK_RACE_ROUNDS; i++) {
++		__u32 seq = i + 1;
++		int variant = i % 3;
++
++		if (!ASSERT_OK(task_work_race_prepare_elem(skel), "prepare elem") ||
++		    !ASSERT_OK(task_work_race_arm(skel, seq), "round ready"))
++			goto stop;
++
++		if (variant == 2 &&
++		    !ASSERT_OK(bpf_map_delete_elem(bpf_map__fd(skel->maps.hmap),
++						   &key), "early delete"))
++			goto stop;
++
++		err = task_work_race_check_done(skel, seq);
++		if (!ASSERT_OK(err, "schedule")) {
++			printf("round %d schedule failed: %d\n", i, err);
++			goto stop;
++		}
++
++		if (variant != 2 &&
++		    !ASSERT_OK(task_work_race_wait_callback(skel, seq),
++			       "callback"))
++			goto stop;
++
++		if (variant == 1 &&
++		    !ASSERT_OK(bpf_map_delete_elem(bpf_map__fd(skel->maps.hmap),
++						   &key), "late delete"))
++			goto stop;
++	}
++
++	/* A distinct completion generation prevents an old callback satisfying this. */
++	if (!ASSERT_OK(task_work_race_prepare_elem(skel), "final prepare") ||
++	    !ASSERT_OK(task_work_race_arm(skel, TASK_WORK_RACE_ROUNDS + 1),
++		       "final ready") ||
++	    !ASSERT_OK(task_work_race_check_done(skel,
++					TASK_WORK_RACE_ROUNDS + 1),
++		       "final schedule") ||
++	    !ASSERT_OK(task_work_race_wait_callback(skel,
++					     TASK_WORK_RACE_ROUNDS + 1),
++		       "final callback"))
++		goto stop;
++
++	printf("%s: %d race rounds completed\n", __func__,
++	       TASK_WORK_RACE_ROUNDS);
++
++stop:
++	__atomic_store_n(&ctx.stop, 1, __ATOMIC_RELEASE);
++	if (trigger_started)
++		pthread_join(trigger, NULL);
++	if (target_started)
++		pthread_join(target, NULL);
++cleanup:
++	task_work_race__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/task_work_race.c b/tools/testing/selftests/bpf/progs/task_work_race.c
+new file mode 100644
+index 000000000000..8d3f31fb075f
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/task_work_race.c
+@@ -0,0 +1,125 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 KylinSoft Corporation. */
++#include <vmlinux.h>
++#include <stdbool.h>
++#include <errno.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_misc.h"
++
++char _license[] SEC("license") = "GPL";
++
++#define TASK_WORK_RACE_MAX_SEQ	2048
++
++enum task_work_race_status {
++	RACE_ARM_SEQ,
++	RACE_READY_SEQ,
++	RACE_DONE_SEQ,
++	RACE_SCHED_ERR,
++	RACE_STATUS_MAX,
++};
++
++int trigger_tid;
++int target_tid;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, RACE_STATUS_MAX);
++	__type(key, int);
++	__type(value, __s64);
++} status SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, TASK_WORK_RACE_MAX_SEQ);
++	__type(key, int);
++	__type(value, __u64);
++} completed SEC(".maps");
++
++struct task_work_race_value {
++	__u32 seq;
++	char data[60];
++	struct bpf_task_work tw;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__uint(max_entries, 4);
++	__type(key, int);
++	__type(value, struct task_work_race_value);
++} hmap SEC(".maps");
++
++static __always_inline void set_status(int key, __s64 value)
++{
++	__s64 *slot;
++
++	slot = bpf_map_lookup_elem(&status, &key);
++	if (slot)
++		*slot = value;
++}
++
++static int process_work(struct bpf_map *map, void *key, void *value)
++{
++	struct task_work_race_value *work = value;
++	__u64 *done;
++	int seq = work->seq;
++
++	if (seq <= 0 || seq >= TASK_WORK_RACE_MAX_SEQ)
++		return 0;
++	done = bpf_map_lookup_elem(&completed, &seq);
++	if (done)
++		*done = 1;
++	return 0;
++}
++
++SEC("tracepoint/syscalls/sys_enter_getppid")
++int race_sched_work(void *ctx)
++{
++	struct task_work_race_value *work;
++	struct task_struct *task;
++	__s64 *arm, *done;
++	__u32 tid = (__u32)bpf_get_current_pid_tgid();
++	int key = 0, err;
++	__u32 seq;
++
++	if (tid != trigger_tid)
++		return 0;
++
++	key = RACE_ARM_SEQ;
++	arm = bpf_map_lookup_elem(&status, &key);
++	key = RACE_DONE_SEQ;
++	done = bpf_map_lookup_elem(&status, &key);
++	if (!arm || !done || *arm <= 0 || *done == *arm)
++		return 0;
++	seq = *arm;
++
++	task = bpf_task_from_pid(target_tid);
++	if (!task) {
++		err = -ESRCH;
++		goto out_done;
++	}
++
++	key = 0;
++	work = bpf_map_lookup_elem(&hmap, &key);
++	if (!work) {
++		err = -ENOENT;
++		goto out_task;
++	}
++
++	work->seq = seq;
++	set_status(RACE_READY_SEQ, seq);
++	err = bpf_task_work_schedule_signal(task, &work->tw, &hmap,
++					    process_work);
++	if (err == -EBUSY) {
++		bpf_task_release(task);
++		return 0;
++	}
++
++out_task:
++	bpf_task_release(task);
++out_done:
++	set_status(RACE_SCHED_ERR, err);
++	set_status(RACE_DONE_SEQ, seq);
++	return 0;
++}
 -- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260916165533.2187434-1-hramamurthy%40google.com
+2.43.0
+
