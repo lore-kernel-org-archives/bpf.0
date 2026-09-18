@@ -1,105 +1,117 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 765BC4F392E;
-	Fri, 18 Sep 2026 11:35:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FB6C44CF44;
+	Fri, 18 Sep 2026 11:38:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789731310; cv=none; b=QVMcCS5yV2G+laaliS90QbmNVnSsTFe0pyf4MZwGoxqgDVq/2nWu/wN1IcGQ6f+eQVxL0Z+QVRTk/bTWb5eiDRKE9T8vLPMxGXb/WIk3dv0L8lXGA32HznnmF0u4CKIwp+fpxdQIujcaiXXTQrbeG7HlHCMNwzAR9EU1N+Qdc8E=
+	t=1789731500; cv=none; b=uh7bTFiCFKos9sc+yoxArrhcHIKb8FcKcccFOqYaU/camoP79ULvIAkwajOIpRz3u2a/svCLFFak7e7z3FZ57WVoUr6OGckfOo6M8Va3Vp4EoQTzWFrmde5L3ay26trNVHOf0yHuB2nF825zNSIBmEYthHBLV+vyKQi57g/LSTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789731310; c=relaxed/simple;
-	bh=wGxs+F/+5Vrhuyz2y5uEWLeuFrAw1YPbFSMnjR0PIic=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=RGOy6xoFs/2OwyBp6RPe+4GKGmba2HJ5p+SGJc4oDsXTX+wAIk5Kc7lzOPZmYMezeNJ+SZ7xsKAYr3vdlRbqbwa+k2b9KpAoHY+5+p+3UohCKlYqgPQv+78zAKz1grq/nEPPp/nRmOKIj56NR5ipw+zC6LjHeG9onnNWMjaFk1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=UfiHvClL; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1789731500; c=relaxed/simple;
+	bh=QIEQuR8/hNlKk4K8pKZwy0pyo6dcrALLRVIsZOfOLW0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=JhEptSTnFQ3XRk7/CyUBqDafo4oU4me5HzwZMz2bBEzxbNSrU3CvHuIB8ZychKWbas9tRd86mdpciG0IU+PzLdKydQk1xcopJkjr4C1ZLAqO9imCE3F/3lAkSRGjeIQd7H5QaYQ9ruH/EFAvqBhe5Mh6s8iwE2NK2iUH8rxbpCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Et9cxV1X; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="UfiHvClL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1789731308; x=1821267308;
-  h=from:date:subject:mime-version:content-transfer-encoding:
-   message-id:references:in-reply-to:to:cc;
-  bh=wGxs+F/+5Vrhuyz2y5uEWLeuFrAw1YPbFSMnjR0PIic=;
-  b=UfiHvClLrqONT81au3QmtN1De0oPKobZOw5buAAToyvnbfqiwAlKcP11
-   q6kVtYr/rvYG5yM3PhFnfGAgg65dHYRRpjZzLV/547/l9V4BuRtoCWTcz
-   3In3Nuyq+GN9T5+kjmJap+xih2zBdBI6VuyVQEZE2O0Z/hkEfODOEHAP5
-   XcLJk6u1OUtHqSA7VVwkt5iwSp08+TmeGi5gSTLkJX4MJasC352k9Ze20
-   HtqFqnpQN2GDRNGW3BdQTwqLIb/8n4CO44TfiUwfzxKwUvS/CGN4TtoSd
-   30W7IyGwbqcIXRcehh4sEYlHh1Lt9GEQx1wiwXQcaaj4RTOOvvfKEf64e
-   w==;
-X-CSE-ConnectionGUID: sCLJV7FZS8mM3CChFuNh7w==
-X-CSE-MsgGUID: WSOfmcd1RBWFuEl/bh22iA==
-X-IronPort-AV: E=Sophos;i="6.27,108,1787036400"; 
-   d="scan'208";a="73885846"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2026 04:35:07 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.87.151) by
- chn-vm-ex3.mchp-main.com (10.10.87.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.49; Fri, 18 Sep 2026 04:35:07 -0700
-Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Fri, 18 Sep 2026 04:35:03 -0700
-From: Daniel Machon <daniel.machon@microchip.com>
-Date: Fri, 18 Sep 2026 13:34:06 +0200
-Subject: [PATCH net-next v7 14/14] misc: lan966x-pci: dts: add fdma
- interrupt to overlay
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Et9cxV1X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0B9A1F000FF;
+	Fri, 18 Sep 2026 11:38:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789731499;
+	bh=DNtgAMAs7Lp05W7XXAy40ftDRTlYa8cH98i770yONm4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Et9cxV1X6MYHN0LJwaMBRdNAMBciV+/RInJFrqAeurRmiOMU3yr8m74s07Er6/FZU
+	 exjQ/9tXXBGLTGq83UKFHBYmfRZ9OURDiI8dl9+hHEPUihhy5tJoBJ3pfWYZ7a4qDy
+	 cnqZGUBJ/Q1kmQkSgBeX+8MGnzFckPvuesZs3gCUrtDXpLy+AAKu2UJsEDwuQFEDqY
+	 Znw3tgAlngUHd6y2pIZTTeTPHlWerPMVcmmE1WuMGCkGZ4BUNAo18wuoeARjy5eCxM
+	 EZy85mJpAo5F9tb1ghvAMF7AL870xQroUQhJ6QaBbFMPzENw+Vp03zvZD823mG5BRE
+	 9ObigMsw3jywA==
+Content-Type: multipart/mixed; boundary="===============7340898989967843946=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Message-Id: <bb560a0b6748ccfdf1f1f5ba5927b63c57133e5246bcaa61cc35ff2f6b92f480@mail.kernel.org>
+In-Reply-To: <20260918102052.1247819-3-sh_def@163.com>
+References: <20260918102052.1247819-3-sh_def@163.com>
+Subject: Re: [PATCH bpf v2 2/2] bpftool: Fix sparse CPU IDs in prog profile
+From: bot+bpf-ci@kernel.org
+To: sh_def@163.com,qmo@kernel.org
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,davem@davemloft.net,kuba@kernel.org,horms@kernel.org,sh_def@163.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Fri, 18 Sep 2026 11:38:17 +0000 (UTC)
+
+--===============7340898989967843946==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Message-ID: <20260918-lan966x-pci-fdma-v7-14-0ecc179c8a2c@microchip.com>
-References: <20260918-lan966x-pci-fdma-v7-0-0ecc179c8a2c@microchip.com>
-In-Reply-To: <20260918-lan966x-pci-fdma-v7-0-0ecc179c8a2c@microchip.com>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
-	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
-	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
-	<horatiu.vultur@microchip.com>, Steen Hegelund
-	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
- Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
-	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
-	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Herve
- Codina <herve.codina@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Mohsin Bashir
-	<mohsin.bashr@gmail.com>
-CC: Richard Cochran <richardcochran@gmail.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>
-X-Mailer: b4 0.14.3
 
-Add the fdma interrupt (OIC interrupt 14) to the lan966x PCI device
-tree overlay, enabling FDMA-based frame injection/extraction when
-the switch is connected over PCIe.
+>     Tested:
+>     - Built tools/bpf/bpftool successfully on the host.
+>     - Booted an arm64 QEMU guest with a patched virt device tree reporting
+>       possible=0,2-3, present=0,2-3, and online=0,2-3.
+>     - Ran both pre-fix and fixed bpftool with cycles and instructions against
+>       a BTF-enabled fentry target. The pre-fix binary faulted in
+>       perf_event_alloc(), while the fixed binary reached perf-event setup and
+>       reported failure to create the instructions event on CPU 0. QEMU did
+>       not provide a usable hardware PMU runtime result, so no profile counts
+>       are claimed.
 
-Tested-by: Herve Codina <herve.codina@bootlin.com>
-Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
+This isn't a bug, but would it read better to move the Tested: block
+below the --- line, or fold it into a shorter sentence, so the changelog
+itself stays focused on the sparse-mask problem and the new stride? The
+block is the longest section of the message while reporting that the run
+did not produce a usable result ("reported failure to create the
+instructions event on CPU 0", "QEMU did not provide a usable hardware
+PMU runtime result, so no profile counts are claimed").
+
+> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> index a9f730d407a92..bb969ffce453d 100644
+> --- a/tools/bpf/bpftool/prog.c
+> +++ b/tools/bpf/bpftool/prog.c
+
+[ ... ]
+
+> @@ -2440,7 +2449,8 @@ static void int_exit(int signo)
+>
+>  static int do_profile(int argc, char **argv)
+>  {
+> -	int num_metric, num_cpu, err = -1;
+> +	int num_metric, err = -1;
+> +	int *cpu_ids = NULL;
+>  	struct bpf_program *prog;
+>  	unsigned long duration;
+>  	char *endptr;
+
+[ ... ]
+
+> @@ -2471,11 +2481,13 @@ static int do_profile(int argc, char **argv)
+>  	if (num_metric <= 0)
+>  		goto out;
+>
+> -	num_cpu = libbpf_num_possible_cpus();
+> -	if (num_cpu <= 0) {
+> +	profile_cpu_cnt = get_possible_cpu_ids(&cpu_ids);
+> +	if (profile_cpu_cnt <= 0) {
+>  		p_err("failed to identify number of CPUs");
+>  		goto out;
+>  	}
+> +	profile_cpu_ids = cpu_ids;
+> +	profile_cpu_id_span = cpu_ids[profile_cpu_cnt - 1] + 1;
+
+This isn't a bug, but could this pass &profile_cpu_ids straight into
+get_possible_cpu_ids() and drop the local plus its initializer, since
+the helper already clears the output pointer on entry? The local cpu_ids
+exists only to be copied into the profile_cpu_ids static on the next
+line, and its = NULL initializer is never observed because
+get_possible_cpu_ids() unconditionally does *cpu_ids = NULL as its first
+statement.
+
+
 ---
- drivers/misc/lan966x_pci.dtso | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci.dtso
-index 7bb726550caf..5bb12dbc0843 100644
---- a/drivers/misc/lan966x_pci.dtso
-+++ b/drivers/misc/lan966x_pci.dtso
-@@ -141,8 +141,9 @@ switch: switch@e0000000 {
- 
- 					interrupt-parent = <&oic>;
- 					interrupts = <12 IRQ_TYPE_LEVEL_HIGH>,
-+						     <14 IRQ_TYPE_LEVEL_HIGH>,
- 						     <9 IRQ_TYPE_LEVEL_HIGH>;
--					interrupt-names = "xtr", "ana";
-+					interrupt-names = "xtr", "fdma", "ana";
- 
- 					resets = <&reset 0>;
- 					reset-names = "switch";
-
--- 
-2.34.1
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35336124623
+--===============7340898989967843946==--
