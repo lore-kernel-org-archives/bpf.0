@@ -1,170 +1,149 @@
-Received: from mail-pj2-f2.google.com (mail-pj2-f2.google.com [74.125.227.130])
+Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD33630CD9E
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 04:11:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1AA352029
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 04:35:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789704716; cv=none; b=J8GjpxSejZw+Nu+sJyft8J8/DJ3zHCOlLmHpVFlSt/pBGfJ1gqFDpadNVogp8pLJBVLH9/fYcXyoKKEo6z398YDw2YC3EnHOnaaFwFh38BhCYWl5oWRvk6ublMRV0LQt7GxcJaRyOgP9c1fqkHtCVvwuJMqu0tVe3gzDP8KldxU=
+	t=1789706142; cv=none; b=E+Di4zCW0BJ4tYFP50OktVe7MTQ9d6/2tprE1aLB3wGJWW2rAP/NSF7UUm6MjCATejB90ZG8wn47L66VsVIIBjiAw+0ws4/onG+uKMoSRO7K3r7AR/efmqytXNz3TUUNHvgdHO6WrHQcwpuNNBeqH6cL0+HL+he6+HqEeu/UUPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789704716; c=relaxed/simple;
-	bh=UEUGvWnLmOamu0pTBgkEFgMYD4FBYYk7egJy0kl7eaA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=H6LE80F3uKXwSV1BGxxwkfRsborWfhXMwmeIUCcMt7rfbWnmnNI7PliHa8Ei1NQOTSdGqZqfThaPhNRAlW0wrsioczLlhTab3/blfIzVBq1m3UAzG+zBJhpmYsVk3j8my6JObeYLxAVLZjcYngV6TYL8jhKv1GCXig5/Sv8KMf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=p9d7womG; arc=none smtp.client-ip=74.125.227.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789706142; c=relaxed/simple;
+	bh=bGRLaDmE0tGe3dzGXjqwaS0i7oukhbkfyXv4P/hl9lU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Sz3EUWoqQnrBB9EF9zC9icn8qLjJjuD+xtyheZY9jrzDVYIkeMjWtxDlkB8N34+pxOVBQR3d5M3aTDJvdwHfMnPI9IWr3t0GGTdoCvL/1og6aT3KB6UGp4ZTPeIt9YSGUGiTbv96Ujo/QpZvxSpgO5d7X6lpxItqltAJOCEFyjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b=OE9en6ex; arc=none smtp.client-ip=74.125.227.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="p9d7womG"
-Received: by mail-pj2-f2.google.com with SMTP id 98e67ed59e1d1-39b2ad83680so147311a91.1
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 21:11:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b="OE9en6ex"
+Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-396ccb652d7so304442a91.0
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 21:35:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789704714; x=1790309514; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=k+XdyMw/cwUfbmJ3KUmFebC21zCmtXiVZ3PCKhns0RU=;
-        b=p9d7womGPrpa1YbmZrfRaoHEQ6zQ1kyqmOHdc+LI5RhjAhSEigs07bTNzH6uWb/6zw
-         X9Km5hCUc/pwGKj8qIPVOOmCokneXk3MA5AUyoNZwjJyZt3jKq2+egoiFUDx5hKsmcin
-         TH9j119cg/3XF0yJmCvh5c8YJxr7mPleI5IVPfurPZl0+ehRdkIAOVN2mLxRu+2XEyq1
-         gfZdalEZ76st897KWqTbUJM7riQtynzgjitppSK15VzlEEX06A734ZDm0tF/+Q0Si1rd
-         baxCkpU/ix9KlxKiYel6HrBdE7MELDkzjDMWDIeM8c8aaFmPWQjgsLf78Za/xcEf1/Ox
-         qP+w==
+        d=davidwei-uk.20251104.gappssmtp.com; s=20251104; t=1789706141; x=1790310941; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=QuXWbq9lF2IllK6DYKHV1u9ljCegelyzeKlijMgJK7Q=;
+        b=OE9en6exVfIqAQIUWihZcZQRdDdMKoCMYfbXftp92HXnlJasiU/E14eF6gRwBjZ+8Q
+         N+Tia09SOTpd5VgLUXqnyMkRNxpZNppPtCUi7BgmKPHbRQD3Bp9Ql3/nQvcfzwTqwXzY
+         bbU7x9/qSUNcJm8LPLvPxQvwD+IWZl32MU9NTq9eQuQrqrMjancrwCRLHAMq7EMnGC05
+         2B/D2RE1GiRXg0wj4nUjbRKVfBldRgx0mHWmwN7p3H4fGjwkVk5+8FicpZ5JZFa3ZoFX
+         qKCRipLJIw+RHE7xidHVV51PFO0Jh3PinARK90eHLn1prTj1I4opnJlL8emWybWNQwm2
+         XVdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789704714; x=1790309514;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20260707; t=1789706141; x=1790310941;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=k+XdyMw/cwUfbmJ3KUmFebC21zCmtXiVZ3PCKhns0RU=;
-        b=Cjx9sBD2l98/XQEo1MKExN3xneyj965C4w7Q2S6SMdGG9VuC/dqFO+MrUU+/hVECJh
-         avDrAD7R89Bw3+b4dSPAfBFiazP1/hbrpnYFtAyO9SguBmyC44KK7TjNRiOr16sXRaSd
-         UOS2V0ERoCsoodLYSakUcc2TVN1nOmv3x5yvdNkGY+xJ3liZ5Akde8qDkiXhAVDgvErT
-         coCKCKtOUdjiWDXsGNS1sJV1TSsHn4sAaSg1+GH+rCAyG/tRc2Lz6sUGYKsOJtejlt6H
-         PvRsZA4Y+QEfAJsRv8nCOg5sPjdzMfFpvjmKCCAC/05n/UIeFRugxNaUn5HYSAGGhnXq
-         q6aQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzqjJj6mkt9phu0az85YSi3bPCAhpDdYP9v6iYTCI8B5bUbrVjuVDJZyBrIVL7ZKyNaouk=@vger.kernel.org
-X-Gm-Message-State: AFuF++m6sgz8v00CzbEQMqeSsUnXjyw45Hu9OUQ/e/VyWWlP7TcpEwKB
-	jyc2T7Kkj4/xE355lJDU0RAD5eLDHkn3qKmhpaiXp8Rvnj/YJ10J5NAY
-X-Gm-Gg: AYBFou2r8sBsIoqSRQycZMStyhF61vmsS4YU20YKQDSp9egrZUpFeskFP4Yuyw9rGvj
-	XSsxaK8766NgPRX0FNeqac06y4mBPvOjMywy41/dCjDzmdpT+TDnF2S9xRmPm8DRFpC7P1+45Ge
-	XvIHzSkyGwQHNIQsMwdt7I9w1INnj5HvN9ZgIXmDxe1Dth3VrwOHBlRASziiWqhHeKj5KnY1lZ0
-	yX7LgwZ0+EO/QfEJoos3m5noEpky05x+UmjyCSC+7U1T8dIFx7rPSdRD+skOE4f3PZ73KitIH4n
-	xYzvtwu2rpOIFg+HbjWv+jZbL8K83CJ1cI6uDjhjxSdHaJRhPlVe0Aj8x9Jr657uuysO4Wm7h+R
-	wKx9Vew4XG9KsiwQqGULWHC45HC9K+0VmgJNmK+4I4Zi3+K4X9RDkZx09ua/ct1WobcyG9LLYEV
-	dBGeRIr0aQ/1kqpQBVKI2igmi4HnmMJp+pRlKKvEzogOkoqfNn3+2gezHyVZvJsTsezJWPsr9X2
-	yjnVGPU6B5A9QclqsTfjowc7gzA8CjF0EUdM8PX99X4dlpme30kcbzIfqutzO1JxGKhX4E8KBMx
-	ylB065wVzjuUxMbMJ1r63ei/8SHcBeZaskanmkoyelc14uXFoFX3jGXMaPxGtDt5Yg==
-X-Received: by 2002:a17:90b:2b8e:b0:39d:efa9:cd25 with SMTP id 98e67ed59e1d1-39e54c59c74mr5120122a91.2.1789704713961;
-        Thu, 17 Sep 2026 21:11:53 -0700 (PDT)
-Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-144ce046d96sm1126081c88.11.2026.09.17.21.11.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 21:11:53 -0700 (PDT)
-From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] samples/bpf: remove unused hash_func01.h header
-Date: Thu, 17 Sep 2026 21:11:45 -0700
-Message-ID: <20260918041148.602323-1-enelsonmoore@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        bh=QuXWbq9lF2IllK6DYKHV1u9ljCegelyzeKlijMgJK7Q=;
+        b=rQxBQRpTSdAWjCGuGxRUocTE+ANSxQ8rsPUDFoZmUfhS7RmenZnVirqqgu4OpikA0w
+         EEKPgPnle0i57AE98Y8YVUTxC8cTZONtqlJWcJ5iaq2PxlfbEsmvQgDibTCo7PpkIyhA
+         lSD3Z1wuSlzCUiCveLqTiMdlN0kMLnTLRF5TWtrScMeXfFqtCNMiCeredhXaTmnRga7z
+         52QZjqougwgt/BI0nuCBRiQV6tWqjzK4lCb7iJJ/PsbVJWXT0IZ8ElYhkeRsC1KVg3qC
+         bbXIHuUH96uWtBeOV0blrvpvTgWKsfF3OPRGgeYUU9O5NRgfYVt2a4WsyX02GR1C6DbL
+         RRCQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzPwcQWMqfb/MSEKpX7Vyr0zCTKmEUuhGemq4tcvj0wzXN7zBYZiQdMp9MpfdYfrcYUjiU=@vger.kernel.org
+X-Gm-Message-State: AFuF++nw1qJ/ALqRS9LEWXqFIufwii37AyGdBVotxTpxvW3amHJVTyj1
+	D2ECafPTFdS2knd/6vX/BBqT4CiHmUP4s/tCNHS8wESjH3GSRFuvO5VYJ/XEBm/c+Eg=
+X-Gm-Gg: AYBFou3WAJ5FQr5dgLnOMoO7Jk6aMH7JVSbYAfwgY+zvGUh9ILr0zEDdW3/Yd2kC7SP
+	GcaqCwlBl3s9lhaI89YbCmjxQTlW900EH3j3RtWKhmc9w7zuRf8iCRlaAXHTOdtVBCCcV02wvCt
+	MMDmVdGfVS+E/ooAVvchTcEIQbLiac2g0AQCn+OE47ww48MEIRB48Em/VR0jQVOFJDwAh0eYJ8Z
+	MESRD0NLdAsU5zm2DNJivmlghLABVmJLNQQDCn1ykR5DFRXMoEVSOh7i8MmOZgA4l1G07PZHt4m
+	Mme+XHcrqpjGbmMYE2eZ8zK/YuIpvbKmoqjeMisfkXOiBKh7/s1KDq9WYPrkTdlCRC3FuRGx+38
+	ApNzYJojM0xrj8l9nq2i3DYfrWM2PXvYN59+Dh7UJV/+SyARrjEK9zMQmd+1dDLwohmrdM+AJ+M
+	MK9OdNe8OusDY5F1/Pf47wH6RIn+jhTgVWBwCLrrWBqbAaGSA98bk6ZE5ZXZLx0b42rbBajTSHx
+	wxrj1E2Jv0iXyHgofw2xRXqCwj/OxsaK826SrMvW3Q=
+X-Received: by 2002:a17:90b:2b43:b0:39e:1ff0:331b with SMTP id 98e67ed59e1d1-39e54d37ad0mr3147621a91.2.1789706140902;
+        Thu, 17 Sep 2026 21:35:40 -0700 (PDT)
+Received: from [192.168.86.26] ([136.27.45.11])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e5333829asm770181a91.0.2026.09.17.21.35.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Sep 2026 21:35:40 -0700 (PDT)
+Message-ID: <7986f36c-e95a-4083-9bdf-67c59e951b95@davidwei.uk>
+Date: Thu, 17 Sep 2026 21:35:39 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v2] tcp: prevent stale tx timestamp keys on rtx
+ fallback
+To: Jason Xing <kerneljasonxing@gmail.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Neal Cardwell <ncardwell@google.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Willem de Bruijn <willemb@google.com>,
+ Hangbin Liu <liuhangbin@gmail.com>, Martin Karsten <mkarsten@uwaterloo.ca>,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Jiayuan Chen <jiayuan.chen@linux.dev>
+References: <20260917172050.2191062-1-dw@davidwei.uk>
+ <CAL+tcoBpFM6MvZGPDJAH1j6aX8UaRcJLhtGbS_kRX_bQ=J5oMA@mail.gmail.com>
+Content-Language: en-US
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <CAL+tcoBpFM6MvZGPDJAH1j6aX8UaRcJLhtGbS_kRX_bQ=J5oMA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-samples/bpf/hash_func01.h has been unused since commit 91dda69b08de
-("samples/bpf: Remove the xdp_redirect* utilities"). Remove it.
+On 2026-09-17 18:59, Jason Xing wrote:
+> On Fri, Sep 18, 2026 at 1:20 AM David Wei <dw@davidwei.uk> wrote:
+>>
+>> tcp_tx_timestamp() can select skbs from the rtx queue when all the
+>> copied data has been sent in tcp_sendmsg_locked(). These skbs may be
+>> already cloned, sharing the same shinfo, and handed off into the lower
+>> tx layers.
+>>
+>> tcp_tx_timestamp() sets tx_flags before setting skb tskey, racing with
+>> any reader of both. It is possible to observe a valid tx_flag, but an
+>> uninitialized tskey, which produces a large underflow after subtracting
+>> the socket tskey.
+>>
+>> Reorder the writes in tcp_tx_timestamp() and
+>> bpf_sock_ops_enable_tx_tstamp() to write the tskey first, followed by
+>> publishing tx_flags via store-release.
+>>
+>> Readers perform a symmetric load-acquire on the tx_flags, followed by a
+>> relaxed read of tskey.
+>>
+>> Fixes: 838eb9687691 ("tcp: tcp_tx_timestamp() must look at the rtx queue")
+>> Assisted-by: LLM
+>> Signed-off-by: David Wei <dw@davidwei.uk>
+> 
+> Thanks for the work.
+> 
+> Yesterday I remarked on your V1 at
+> https://lore.kernel.org/all/CAL+tcoDMR87sxJftp7T0JX-+NUz8VkXU67M3oNZy8Tk88sDPOA@mail.gmail.com/
+> 
+> I'm still doubtful if we really need to introduce this much code churn
+> just to fix the problem of this best-effort behavior. Even if the
+> patch is fixed thoroughly, it's still a best-effort attempt since
+> there are a few report points where it misses generating timestamps.
+> It has nothing to do with the patch itself, but rather the design of
+> net timestamping.
 
-Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
----
- samples/bpf/hash_func01.h | 55 ---------------------------------------
- 1 file changed, 55 deletions(-)
- delete mode 100644 samples/bpf/hash_func01.h
+Hi Jason, I saw your response yesterday but it seemed like you were
+discussing with Eric and not me. I had this code ready anyway before you
+responded, so I sent it should Eric decide to keep 838eb9687691 and
+review this approach.
 
-diff --git a/samples/bpf/hash_func01.h b/samples/bpf/hash_func01.h
-deleted file mode 100644
-index 38255812e376..000000000000
---- a/samples/bpf/hash_func01.h
-+++ /dev/null
-@@ -1,55 +0,0 @@
--/* SPDX-License-Identifier: LGPL-2.1
-- *
-- * Based on Paul Hsieh's (LGPG 2.1) hash function
-- * From: http://www.azillionmonkeys.com/qed/hash.html
-- */
--
--#define get16bits(d) (*((const __u16 *) (d)))
--
--static __always_inline
--__u32 SuperFastHash (const char *data, int len, __u32 initval) {
--	__u32 hash = initval;
--	__u32 tmp;
--	int rem;
--
--	if (len <= 0 || data == NULL) return 0;
--
--	rem = len & 3;
--	len >>= 2;
--
--	/* Main loop */
--#pragma clang loop unroll(full)
--	for (;len > 0; len--) {
--		hash  += get16bits (data);
--		tmp    = (get16bits (data+2) << 11) ^ hash;
--		hash   = (hash << 16) ^ tmp;
--		data  += 2*sizeof (__u16);
--		hash  += hash >> 11;
--	}
--
--	/* Handle end cases */
--	switch (rem) {
--        case 3: hash += get16bits (data);
--                hash ^= hash << 16;
--                hash ^= ((signed char)data[sizeof (__u16)]) << 18;
--                hash += hash >> 11;
--                break;
--        case 2: hash += get16bits (data);
--                hash ^= hash << 11;
--                hash += hash >> 17;
--                break;
--        case 1: hash += (signed char)*data;
--                hash ^= hash << 10;
--                hash += hash >> 1;
--	}
--
--	/* Force "avalanching" of final 127 bits */
--	hash ^= hash << 3;
--	hash += hash >> 5;
--	hash ^= hash << 4;
--	hash += hash >> 17;
--	hash ^= hash << 25;
--	hash += hash >> 6;
--
--	return hash;
--}
--- 
-2.43.0
+If you decide to revert 838eb9687691, that is fine too and I can abandon
+this patch. The main thing for me is to prevent userspace from seeing
+underflows, but missing timestamps are okay.
 
+> 
+> Thanks,
+> Jason
+> 
