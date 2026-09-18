@@ -1,172 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-105.mta0.migadu.com [91.218.175.105])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3966D547052
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 08:13:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56C8B3DE44C
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 08:41:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789719194; cv=none; b=Of0Z3X5kCx3IWJeIcfkxAZdmAoshN051OK2mvKCbUMO8N/d3762DsHXYgw1/0g7nRRRZT2i9ZG//3prKiObYCDbCENmDi71AacXzqWa7kXdiFUpfQm7GfMoeOOpmLwGav8ELll7Iv74Dgqz5bNbYwrorgCO3dn9RGhRhLngiavI=
+	t=1789720902; cv=none; b=m9DBM/JqpfYycV6kmKW5aHD8HlKHv9POOWz7eBLNIrt5YUesjWIqX40sOMgAMsEjwumAB17Jv4PJBj9h+KznaJp/i+YIMIFPfP3HXpu0VUjbHAWVR7zgAuUhpDd8SX9LdfCAxY8IW81DfCw5CletSimyXkXGLaMPPoJdywvqHp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789719194; c=relaxed/simple;
-	bh=ZAVjnp5cn2mNeSg8XAzvSxJ6gR2P/N8Y42tWR37hjNA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=nMXt7vHfi7M85soHfTpeksWTV6hohjDFTijJvmzYbAasih9qLvADvKvKjO8COmntqfU5Yhy7/Br+NJ3O4KROTavCq8epzuhm3IprIUF0k0TEoeSzhUgnU9Dxh5IS63Sp5VtCf5BXn6eyI4kGOFNSw8Q4+v4/5zVJedAH1lDx4gY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c8mCKyJ4; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789720902; c=relaxed/simple;
+	bh=JElqU/CfjtnbJ5NPjx4WXkCgDHopsxoLIGs4TX2nu4s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pUL2riSo5cyCYmJHgPXvZcdwygNq9e5T6+u0t/rmPcM5N1oGZkIhfOSui9tsCM6W2zTniNaNHlKS222curshUZmYErQdLuqaXxU3pzkIGQW3ZnOjw4+6tD/FctcowFsmgj+z8NtwtInrbEzkvLV1AlKpKnHdk3X/H0eXVZi4e3E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=USfhicqd; arc=none smtp.client-ip=91.218.175.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c8mCKyJ4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A91F11F000FF;
-	Fri, 18 Sep 2026 08:13:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789719192;
-	bh=vvXxmbyiHcCbGPsgm5yJCWb5aR5dDl3EaokkRFgo5nQ=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=c8mCKyJ4o8nHt1tlIMRrpskvyOZq4u93h9JpUFm6iK0H/F1OiY/wf9KLsRvxI6HUC
-	 CcJjQRN5HGhm+aLR4M2N2Vi69ooudUTev4pTW7pSKFA8xenbanZqcFI6P8Y84CfzjW
-	 A5hAfMiWfibPh5X7Y5sD0z3ozxtY//uVSh0R81+WXFjHSTQsHBRlm9BeQRvqoHJiiG
-	 v/ZkNx70KhKRmp2LsD/d2eryvnBIphbYBnqMKf0xcBglBfSW4a3V+xA4VzUI9TbiPI
-	 o6S5EUynEbmDEseOSi3SQawwUtMHIGDg1KO4Uv9uqmOvOtRVTDPtCAKX5fqVenWqSf
-	 avTMmf/ZrJhYA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add task work round
- ownership race test
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yun Lu" <luyun_611@163.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260918080014.54012-3-luyun_611@163.com>
-References: <20260918080014.54012-1-luyun_611@163.com>
- <20260918080014.54012-3-luyun_611@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 18 Sep 2026 08:13:12 +0000
-Message-Id: <20260918081312.A91F11F000FF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="USfhicqd"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=JElqU/CfjtnbJ5NPjx4WXkCgDHopsxoLIGs4TX2nu4s=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789720897; v=1; x=1790325697;
+ b=USfhicqdE2pEL0yae1C7m5Z1cUOFh27Y8v3DVzWPvJU7vho78uNlFNPaXiWrJ9dSZ9tHPeKX
+ 6FHeNSlNaXJuKvIEDSCilAdusUJw35cZLWhQnAhCiWtueO5pI3Ti0vg737wwvSwJl1C/QRlVNcP
+ KWGFpIqvoMKiaMqTSl27MV/A=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id f1a32158248d01e8;
+	Fri, 18 Sep 2026 08:41:37 +0000
+X-Mizu-Trace-ID: f1a32158248d01e8
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v8 0/3] bpf: arena: handle memory.max on fault-in with reclaim
+Date: Fri, 18 Sep 2026 16:40:24 +0800
+Message-ID: <20260918084123.39477-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Medium] bpf: spurious -ENOENT test failure due to unhandled early delete=
- race
-- [Medium] bpf: missing memory barriers cause stale error state reads in ra=
-ce test
-- [Medium] bpf: TOCTOU race in task_work_race_wait_ready() causes false tes=
-t failures
---
+Since commit e66fe1bc6d25 ("bpf: arena: Reintroduce memcg accounting"),
+arena pages are charged to the memcg of the process that created the arena.
+That exposes a problem in the arena user page fault path: the fault-in
+allocation runs under arena->spinlock, so it can only use the non-blocking
+allocator, which never reclaims. Once memory.current is at memory.max the
+allocation simply fails, even when the memcg is full of page cache that
+could be dropped right away. Reaching memory.max is completely normal for a
+healthy application - e.g. reading a large file fills memory.current with
+page cache - and the process then gets SIGSEGV on a perfectly valid arena
+address.
 
-commit 6a4b075b19b6a65e88e8c41b961bca6ee7533e52
-Author: Yun Lu <luyun@kylinos.cn>
+Preallocate the page outside the lock (patch 1), the way do_anonymous_page()
+does, so the allocation can sleep and reclaim. It never invokes the OOM
+killer: the page is charged to the map's memcg, which need not be the
+faulting task's, so an OOM there could kill unrelated tasks in the map's
+cgroup. On a genuine failure the fault returns VM_FAULT_SIGBUS. patch 2&3
+adds a selftest that fills a memcg with reclaimable page cache and faults an
+arena in under memory.max: without the fix the child gets SIGSEGV on a valid
+address, with it the fault-in reclaims and succeeds.
 
-selftests/bpf: Add task work round ownership race test
 
-Exercise task-work scheduling, callback completion and map-value deletion
-on separate execution contexts.  Rotate through ctx reuse, deletion
-after the callback body, and deletion immediately before the scheduling
-kfunc.
+v7 -> v8:
+   - Merge patch 1 into patch 2. (Alexei Starovoitov)
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_task_work.c b/to=
-ols/testing/selftests/bpf/prog_tests/test_task_work.c
-> index 774b31a5f6ca1..6d5e1e97aa3af 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_task_work.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_task_work.c
-[ ... ]
-> +static int task_work_race_wait_ready(struct task_work_race *skel, __u32 =
-seq)
-> +{
-> +	int i;
-> +
-> +	for (i =3D 0; i < 2000000 / 100; i++) {
-> +		__s64 value =3D 0;
-> +
-> +		if (!task_work_race_status(skel, RACE_READY_SEQ, &value) &&
-> +		    value =3D=3D seq)
-> +			return 0;
-> +		if (!task_work_race_status(skel, RACE_DONE_SEQ, &value) &&
-> +		    value =3D=3D seq)
-> +			return -EIO;
+v4 -> v7:
+   - Simplify the implementation: do not aim for OOM anymore. An arena is
+     shared between processes and can be shared across cgroups, so the OOM
+     killer is the wrong tool here - it would act on the map's memcg, which
+     need not be the faulting task's. Only try to reclaim now, via
+     __GFP_RETRY_MAYFAIL. Everything else is kept as before.
+   - selftest: changed accordingly - fill the memcg with reclaimable page
+     cache and check that the arena fault-in succeeds by reclaiming it,
+     instead of relying on an OOM kill.
 
-[Severity: Medium]
-Could this sequential checking lead to a false negative?
+v3 -> v4:
+   - rebase bpf-next and fix conflict
+   - add Reviewed-by tag from Emil Tsalapatis
 
-If the concurrent BPF program finishes execution exactly between these two
-syscalls, the thread will see RACE_READY_SEQ as false from the first read
-and RACE_DONE_SEQ as true from the second read, returning -EIO.=20
+v2 -> v3:
+   - selftest: check the memcg OOM via memory.events "oom_kill" instead of
+     the exit signal; it only aims to pass on the fixed kernel, since the
+     unfixed SIGSEGV is racy.
 
-If the BPF program had finished before the first check, it would have read
-RACE_READY_SEQ =3D=3D seq and correctly returned 0. Can this time-of-check =
-to
-time-of-use interleaving incorrectly penalize a fast BPF execution as an
-error?
+v1 -> v2:
+   - Rebase on the separate deadlock fix (found by the Sashiko AI review),
+     now applied to bpf-next.
+   - Honor the map's NUMA node on fault-in.
+   - Return VM_FAULT_SIGBUS for the non-recoverable faults (lock, range-tree
+     and page-table failures); a scratch-page hole stays VM_FAULT_SIGSEGV
+     only under BPF_F_SEGV_ON_FAULT. (Kumar Kartikeya Dwivedi)
+   - Add read_cgroup_file() to cgroup_helpers instead of open-coding the
+     /mnt/... path in the test. (Emil Tsalapatis)
+   - Dump the cgroup memory stats on test failure to ease debugging.
 
-> +		usleep(100);
-> +	}
-> +	return -ETIMEDOUT;
-> +}
-[ ... ]
-> diff --git a/tools/testing/selftests/bpf/progs/task_work_race.c b/tools/t=
-esting/selftests/bpf/progs/task_work_race.c
-> new file mode 100644
-> index 0000000000000..8d3f31fb075f8
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/task_work_race.c
-[ ... ]
-> +SEC("tracepoint/syscalls/sys_enter_getppid")
-> +int race_sched_work(void *ctx)
-> +{
-[ ... ]
-> +	key =3D 0;
-> +	work =3D bpf_map_lookup_elem(&hmap, &key);
-> +	if (!work) {
-> +		err =3D -ENOENT;
-> +		goto out_task;
-> +	}
-> +
-> +	work->seq =3D seq;
-> +	set_status(RACE_READY_SEQ, seq);
-> +	err =3D bpf_task_work_schedule_signal(task, &work->tw, &hmap,
-> +					    process_work);
-> +	if (err =3D=3D -EBUSY) {
-> +		bpf_task_release(task);
-> +		return 0;
-> +	}
+v7:
+https://lore.kernel.org/bpf/20260917015618.7488-1-jiayuan.chen@linux.dev/#r
+v4:
+https://lore.kernel.org/bpf/20260821050250.35112-1-jiayuan.chen@linux.dev/T/#t
+v2:
+https://lore.kernel.org/bpf/20260805091720.139924-1-jiayuan.chen@linux.dev/
+v1:
+https://lore.kernel.org/bpf/20260727062521.376231-1-jiayuan.chen@linux.dev/
 
-[Severity: Medium]
-When variant 2 is tested, userspace deliberately races to delete the map
-element early. If this early delete wins the race against the scheduling
-kfunc above, bpf_task_work_schedule_signal() returns -EBUSY.=20
+Jiayuan Chen (3):
+  bpf: arena: allocate the fault-in page outside the lock
+  selftests/bpf: Add read_cgroup_file() to cgroup_helpers
+  selftests/bpf: Add a test for arena fault-in under memory.max
 
-This causes the BPF program to return 0, triggering a retry. On the next
-tracepoint invocation, looking up the now-deleted element fails with -ENOEN=
-T.=20
+ kernel/bpf/arena.c                            |  90 ++++++--
+ tools/testing/selftests/bpf/cgroup_helpers.c  |  67 ++++++
+ tools/testing/selftests/bpf/cgroup_helpers.h  |   4 +
+ .../selftests/bpf/prog_tests/arena_memcg.c    | 196 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/arena_memcg.c |  23 ++
+ 5 files changed, 360 insertions(+), 20 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_memcg.c
 
-Because userspace expects a successful schedule (err =3D=3D 0) in
-task_work_race_check_done(), the test will fail when it observes -ENOENT.
-Should the test be updated to handle this expected -ENOENT outcome, or
-should the BPF program avoid retrying when the element is permanently
-deleted?
+-- 
+2.43.0
 
-> +
-> +out_task:
-> +	bpf_task_release(task);
-> +out_done:
-> +	set_status(RACE_SCHED_ERR, err);
-> +	set_status(RACE_DONE_SEQ, seq);
-
-[Severity: Medium]
-Does this code sequence need a write memory barrier?
-
-On weakly-ordered architectures like ARM64, the CPU can reorder these
-independent stores because the BPF JIT does not emit barrier instructions
-for array map stores.
-
-If userspace polls RACE_DONE_SEQ and observes the update before
-RACE_SCHED_ERR is globally visible, it might read a stale error code=20
-(e.g., 0 instead of the actual error) and potentially mask failures.
-
-> +	return 0;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260918080014.5401=
-2-1-luyun_611@163.com?part=3D2
