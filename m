@@ -1,227 +1,151 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA64951DDEA
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 19:59:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3F15218B0
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 19:59:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789761549; cv=none; b=H6v96I+65CAcvIC4TvP11jV2bk3Sxw8W9vRP2Vbxel1Wo9iD/OurCn/Phnsejk75q0pFZ0FEq6jbuxD/wcD//pWdMgHU0UsSOg1DKgA4HZD+nfWrC0jAlPfOL4p58aPvcLkfOiUr1OSv7q32OUf7VsGAW6xjRtxPeyVogCHJEyI=
+	t=1789761591; cv=none; b=jKWIYlCQoolG6FWdZoFRX91rO9FgUEEdYTUNVrh7eknLJGs6QM/z4pmGUXI9mHu6aEhR+rUg9Ogj01bcJsf5Z/7QVQRZNWS4jwRjNTSvAndBme5GHR+yqDS4P3IefFyOpchf2C8fUK4XcejGl96cZ1+uVOV7pkQLvyIi59mmI7Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789761549; c=relaxed/simple;
-	bh=Hh8kBKTJavRfG7N4/6Jk5gLFI7aM6VtW/cLN5AJI24c=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GMg1WnzJ6sHUVkZbZsCKdYDLI4KKRqB/5Gk1mAkEtLvYNFOnmvxZ63IFXtVgIwW+TrETea+YzOXTKHvnt1Oead/M6MGdMhthXTfNIDSufOZ1U79E3YcLdVtWL1YQciWzJYviTt+UgbYQJ6ly9eONa0+dA3o9yVO44yRtyEyhC34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VkG1vbJ8; arc=none smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789761591; c=relaxed/simple;
+	bh=Jv9PmI2tuRQ6a0mGkf94vkgPMQlOdZGeXzjl16O8i00=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uLEfyGeFdnm7JySBzuTXvRE63tQV9hoKtkseaWzXJQfb6Mn4hDQAKZ56ad46qlfnV1caQ4LqLr4j4cPBsMFO1PYjntWJk/s6/rbeHsS8+N7fVXi27CDobaWxjByOP0JwCgrJ6ZA8cE7ipE+eHwrbGIwqyU9TZdzZT36jdUrSc/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com; spf=pass smtp.mailfrom=amutable.com; dkim=pass (2048-bit key) header.d=amutable-com.20251104.gappssmtp.com header.i=@amutable-com.20251104.gappssmtp.com header.b=ch2e604T; arc=none smtp.client-ip=74.125.224.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=amutable.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amutable.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VkG1vbJ8"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccc09d65so1155352a91.3
-        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 12:59:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=amutable-com.20251104.gappssmtp.com header.i=@amutable-com.20251104.gappssmtp.com header.b="ch2e604T"
+Received: by mail-yx2-f12.google.com with SMTP id 956f58d0204a3-66e4ab1ef11so1098583d50.0
+        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 12:59:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789761547; x=1790366347; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=ureKglK7E8z9UopMgU7sx+29AzDdNEEhiEwvgmYlJN4=;
-        b=VkG1vbJ8y0x3SYJ7msPrhQxpUtRgOSM9RiMFSj4Fz1pASHZg/iU3GmEY4ajV9d5WGn
-         If6mSh7FNdvIs/Foycw+E3JubZ2EF037/4IJuPZTkV+ZFk8APJnvOu3UplbiqhsqElgn
-         aWTlc96dVPXBlsg2G55Dx570MfxL13l7c4c6FEIe5wLmMshNYYU9U/M81hUKY1yC7Y07
-         THVL7TA8+aa/hxiHb/A4K8HBmwmqXg0zh+uNUtsVwtQlxKxeqFPw/fKPfQrNXJ3X9Ox0
-         Sf0Fia7EhE5mBY12k5d7snICa4qktHlmXhH1S0rfKOXwtmNzIF76W2Q61/oZudAsOgkP
-         SQ/g==
+        d=amutable-com.20251104.gappssmtp.com; s=20251104; t=1789761587; x=1790366387; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=jFiXSu2V4pZ+QeomBn1c5HcWy5gtnzTo7Z55CduAixo=;
+        b=ch2e604TIxvi8hLh6mLXV0Kd6bTBiZI6iola+whhEHBQ/gRtNMLO9+O8h75SUTlcSD
+         ct4Fq4vTT/VWzsVFSc3o1K507n3fGuVDlzN1p1N7Lkdt1Oewd4iWhDCX9oexGV0yw1Uf
+         x2xfQyWszMMyEtpwNcapqacbwvHOBZrrOHwghHYVKP+FpxGbDBAq6+cwPnqMOmdXT/Wp
+         RmREmPUaX2sGnpVAZP5EJ1ONwPxNa2rNIQ/a9maVbyLwwsluXGxl9TM9z9D6C+ZEnGU5
+         8BEMTctHx5RvzLgo9Lu01MauixY+qjScYIhLTGc4EVl9uKr4tRuCeerFP6EutvGdfkxX
+         Sdmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789761547; x=1790366347;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20260707; t=1789761587; x=1790366387;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ureKglK7E8z9UopMgU7sx+29AzDdNEEhiEwvgmYlJN4=;
-        b=BmlR46UoTo3LMzr+lMum70Fq2DVcdW9wd5FA0+Z0PcUr5Ix0ZQjUWsjkYWuOVUya5u
-         jvDvI4MrlV7Otid2FAlm4wbcYIwHHwIItfNA3C2MZthEfYgsVZcH9QvaF6ARQa7Jgwun
-         n/U+aAlGE02XGSx05EFo+obBnj5YZjOMNAiwXpUZP5tYiZciuYqtvuJwq81Ie2+1NgBd
-         R/uCe5Q/+KdmmtPBL5e29Vg28TX6slWVzsu/2RHINQM601kXrmpkZ87Z/P16JifKecE9
-         7OUF5XKd6yfjpG0/ba1V+ybgmyKLbeJ/1nC5LpPnAFGnR89g0r0Lu2gLFdndLaB1Ph8R
-         8H8g==
-X-Forwarded-Encrypted: i=1; AKwUvBzB0BXinmNtovT00R4/cbHt8uGnG+MmWY3G/rWcZOvDOfQAoasb3YGIA/GRclCteS3If2Y=@vger.kernel.org
-X-Gm-Message-State: AFuF++lGlwHHHZpGuGLCSFQQsJowVSb9Ezox1cwf6ihS0EoHntT7L03H
-	gcdfmp9WZ448Xo0hDH3DAz6mHELBYt4OkRgMG9ZY8KTZayX0EvS90U0C
-X-Gm-Gg: AYBFou1Jy9b/4l0u6HNw275bIHr51pi5bcB/eHnqO2qV5elCBYKDXaheef7ovs/jmBs
-	/JkPWq1nACv2OEZ9mGq9nyFe5gY7QAqjbP+TO8Y8vYqmFqtReEZfPjkOTE1LjNw3JADVx0tdkNk
-	RUEo2dbjEIfjwtogOTkWDCpL+U1Mu+LAS0h9JO53xUbMLiePO2LXsc1yxbwDrm6qfaAW8QBoszC
-	3b36mATXjQx3JHgJm1N1Ahrpv3u2WSOwxs6yToefFeiyL/yVr/94AauMQ2eXWqNaCj0ovT2+M6A
-	hU+KAq8Xn8byZ6lYroJnNVAHmiE59Fc09tuVrxM0wWU77K7XtcQpypvStQ5ykcpsdlyG/yf866q
-	uIH/Q1cVUKOd4BO1b6EjVmSs7kwKYvW5l/VVUXYYZzWeLncWWjlym3zn5Ilee6z6QdskSirfxAi
-	3vVnXmJlby8wZGSE6HRxAsC7KVY+wBvC6gjx3OH7J6hC2x83bGmITCdT1EmUm+r8O/87Wf87szy
-	j7I8dWRg0jRJ4xcUtvWps1fGjy+8fTCTKaaWDE62LzhIhdJRvSVX/K0Zw==
-X-Received: by 2002:a17:90b:3f84:b0:39e:4c7e:f042 with SMTP id 98e67ed59e1d1-39e54f91d4amr7393686a91.31.1789761547050;
-        Fri, 18 Sep 2026 12:59:07 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:e136:8952:772a:93a4? ([2620:10d:c090:500::4:e681])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-144d55e71a4sm682092c88.13.2026.09.18.12.59.05
+        bh=jFiXSu2V4pZ+QeomBn1c5HcWy5gtnzTo7Z55CduAixo=;
+        b=LjxEju0SIElaB50yRPzkBfNLkUVxGLGXJoFZ3yAPk7wMCJ33hxOZBNYFS4Rb8kIQUK
+         iIqy5utuaJhn9WgGKzYWs5QOGDeH5y+pMi3C6lSAPbUs5SNfYyA/zb9HxPD3DSVpdEJa
+         ZJy9BnyUKMYCt+g1tXsn2U0H71eRExlvl19Zo+LYPDBRjWPuF9btCF4Add2eYNIdgRRT
+         mY86+x848zDBCztPSTGmHnV0WVkAq5IZZ9pnhb2ILL32QOvoDYAKjV1p/JsA5fWObG0x
+         oRSsByeuYlSKODXFe8fUN0DLaYtmhzNpz5QdZrqW+ks+cwcAHnARB2dNXFok3I9UbOjE
+         1hgQ==
+X-Forwarded-Encrypted: i=1; AKwUvByV6i7DD6UuZGBFyLkQ59+aBOZQSj/jbF+UsZHwl3M2mY/xQqIgkmbGbZ/IHypmqn8mvUw=@vger.kernel.org
+X-Gm-Message-State: AFuF++krGmzvrvp0rLNtCT+9+E8DGBgvJ0/UitUnFepCiTX8nWTtehgV
+	GW7LGz5R+CgJ+9xf7u9BWeKOfV6vaAga18KVc5y058ts+/CQ65kHG1fvbliSvtuHC0dH
+X-Gm-Gg: AYBFou3StEUEoEFARD1Uv6JnfcgcRhjcjbxTUGEcOlpK6ctJ3OGYbNZl0C2XCUepLHg
+	OgCqJFdW9AUHcpEN7racXADdgwBhFjF1Lc4bhjHKNg+e0il4574IZtE09WUtwo7LMQHbunTbbOF
+	F0ffqe8nKCXuE8VZxVTATuR1c5QuDgq2YoO1AmMb9vQKgIGVjW3YIOPAGLn18heHbkgNmrcPDp5
+	1cD20SfOngrzGh7aa+ZRlVRrD7Zl8NF7p3wsqtG3gfXVxdxICdeSWfDgvwB9/8MjQ+5SFg2coBl
+	PLOabQ9yaEa1JXjJ4vQ5XRrYDwMtfMl8+FLCzZ5O4Nnd8RuaMEzl2KjXOC9AaPUhDagKTy+t57G
+	wchweYmZyuM7vlNwv5eS6PAUqE2rNJFLIlfjdo/a1bIXr5HHuqhINlvqp4s1smETR6VHFif0KK1
+	CknKO7iwcFN9Ww8lZdatHtb3tw8BWs1kczgIG7bpN8n6FyUar05C/FHmamIxX8XWSbkln//QHgo
+	Amgs6a7/kRQvVqyzj4+sK0oMegqMje5/SsikFX+wsIXjU0019Hvpg==
+X-Received: by 2002:a05:690e:e89:b0:671:4d46:8d5a with SMTP id 956f58d0204a3-6717fcee54emr1347891d50.41.1789761587246;
+        Fri, 18 Sep 2026 12:59:47 -0700 (PDT)
+Received: from toolbx (104-53-165-62.lightspeed.stlsmo.sbcglobal.net. [104.53.165.62])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-672990ab5desm406523d50.8.2026.09.18.12.59.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 12:59:06 -0700 (PDT)
-Message-ID: <fc7dd9b68e50a07af40f6ac571fb7adb6ba512d3.camel@gmail.com>
-Subject: Re: [PATCH v3 bpf-next 06/11] selftests/bpf: BTF distill tests to
- ensure LOC[_PARAM|_PROTO] add to split BTF
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
- andrii@kernel.org, 	jolsa@kernel.org
-Cc: daniel@iogearbox.net, ihor.solodrai@linux.dev, yonghong.song@linux.dev, 
-	song@kernel.org, qmo@kernel.org, martin.lau@linux.dev, memxor@gmail.com, 
-	emil@etsalapatis.com, bpf@vger.kernel.org, nsc@kernel.org,
- puranjay@kernel.org, 	yatsenko@meta.com
-Date: Fri, 18 Sep 2026 12:59:04 -0700
-In-Reply-To: <20260916074118.1007116-7-alan.maguire@oracle.com>
-References: <20260916074118.1007116-1-alan.maguire@oracle.com>
-	 <20260916074118.1007116-7-alan.maguire@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+        Fri, 18 Sep 2026 12:59:46 -0700 (PDT)
+Date: Fri, 18 Sep 2026 14:59:49 -0500
+From: Andrew Halaney <andrew@amutable.com>
+To: David Howells <dhowells@redhat.com>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>, Alasdair Kergon <agk@redhat.com>, 
+	Mike Snitzer <snitzer@kernel.org>, Mikulas Patocka <mpatocka@redhat.com>, 
+	Benjamin Marzinski <bmarzins@redhat.com>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Eric Biggers <ebiggers@kernel.org>, "Theodore Y. Ts'o" <tytso@mit.edu>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Randy Dunlap <rdunlap@infradead.org>, dm-devel@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
+	fsverity@lists.linux.dev, linux-doc@vger.kernel.org, 
+	"Christian Brauner (Amutable)" <brauner@kernel.org>
+Subject: Re: [PATCH 1/3] keys: add KEY_SPEC_DM_VERITY_KEYRING
+Message-ID: <aq2VxlttdlTNlHo6@toolbx>
+References: <aqyiCavj3xeNqyAo@kernel.org>
+ <20260914-ajhalaney-dmverity-key-identifier-v1-0-01922dc1366a@amutable.com>
+ <20260914-ajhalaney-dmverity-key-identifier-v1-1-01922dc1366a@amutable.com>
+ <715249.1789718726@warthog.procyon.org.uk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <715249.1789718726@warthog.procyon.org.uk>
 
-On Wed, 2026-09-16 at 08:41 +0100, Alan Maguire wrote:
-> When creating distilled BTF, BTF_KIND_FUNC, _LOC_PARAM and _LOC_PROTO
-> should be added to split BTF.  This means potentially some duplication
-> of location information, but only for out-of-tree modules that use
-> distilled base/split BTF.
->=20
-> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> ---
->  .../selftests/bpf/prog_tests/btf_distill.c    | 101 ++++++++++++++++++
->  1 file changed, 101 insertions(+)
->=20
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_distill.c b/tools=
-/testing/selftests/bpf/prog_tests/btf_distill.c
-> index fb67ae195a73..141a4cb1f405 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/btf_distill.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_distill.c
-> @@ -671,6 +671,105 @@ static void test_distilled_base_embedded_err(void)
->  	btf__free(btf1);
->  }
-> =20
-> +/* LOC_PARAM, LOC_PROTO should be added to split BTF. */
-> +static void test_distilled_loc(void)
-> +{
-> +	struct btf *btf1 =3D NULL, *btf2 =3D NULL, *btf3 =3D NULL;
-> +	struct btf *btf4 =3D NULL, *btf5 =3D NULL;
-> +
-> +	btf1 =3D btf__new_empty();
-> +	if (!ASSERT_OK_PTR(btf1, "empty_main_btf"))
-> +		return;
-> +
-> +	btf__add_int(btf1, "int", 4, BTF_INT_SIGNED);	/* [1] int */
-> +	btf__add_func_proto(btf1, 1);                   /* [2] int (*)(int); */
-> +	btf__add_func_param(btf1, "p1", 1);
-> +	btf__add_func(btf1, "foo", BTF_FUNC_STATIC, 2);	/* [3] int foo(int); */
-> +	btf__add_loc_param(btf1, 4, BTF_LOC_PARAM_SIGNED | BTF_LOC_PARAM_CONST)=
-;
-> +	btf__add_loc_param_value(btf1, -1);		/* [4] loc value */
-> +	btf__add_loc_proto(btf1);			/* [5] loc proto */
-> +	btf__add_loc_proto_param(btf1, 4);		/*  param value */
-> +
-> +	VALIDATE_RAW_BTF(
-> +		btf1,
-> +		"[1] INT 'int' size=3D4 bits_offset=3D0 nr_bits=3D32 encoding=3DSIGNED=
-",
-> +		"[2] FUNC_PROTO '(anon)' ret_type_id=3D1 vlen=3D1\n"
-> +		"\t'p1' type_id=3D1",
-> +		"[3] FUNC 'foo' type_id=3D2 linkage=3Dstatic",
-> +		"[4] LOC_PARAM '(anon)' size=3D4 flags=3D0x3 vlen=3D1\n"
-> +		"\tvalue=3D-1",
-> +		"[5] LOC_PROTO '(anon)' vlen=3D1\n"
-> +		"\ttype_id=3D4");
+On Fri, Sep 18, 2026 at 09:05:26AM +0100, David Howells wrote:
+> Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> 
+> > This is great for discussion but what we want for the commit message
+> > is just motivation and resolution.
+> 
+> Actually, I think it's useful that Andrew wrote up the issues in the commit
+> message - and I think it shows part of the motivation.  The 'writing a fake
+> /proc/keys line in the description' is something I hadn't considered.
 
-Maybe also add an unrelated type to the base, such that effects of the
-distill are visible?
+I'll defer to what you all want in the message here, I found it valuable
+but I trend on the side of overly verbose admittedly!
 
-> +	btf2 =3D btf__new_empty_split(btf1);
-> +	if (!ASSERT_OK_PTR(btf2, "empty_split_btf"))
-> +		goto cleanup;
-> +
-> +	btf__add_locsec(btf2, "inline.text");		/* [6] locsec */
-> +	btf__add_locsec_loc(btf2, 3, 5, 256);		/* "foo" offset 256 */
-> +	VALIDATE_RAW_BTF(
-> +		btf2,
-> +		"[1] INT 'int' size=3D4 bits_offset=3D0 nr_bits=3D32 encoding=3DSIGNED=
-",
-> +		"[2] FUNC_PROTO '(anon)' ret_type_id=3D1 vlen=3D1\n"
-> +		"\t'p1' type_id=3D1",
-> +		"[3] FUNC 'foo' type_id=3D2 linkage=3Dstatic",
-> +		"[4] LOC_PARAM '(anon)' size=3D4 flags=3D0x3 vlen=3D1\n"
-> +		"\tvalue=3D-1",
-> +		"[5] LOC_PROTO '(anon)' vlen=3D1\n"
-> +		"\ttype_id=3D4",
-> +		"[6] LOCSEC 'inline.text' vlen=3D1\n"
-> +		"\tfunc_type_id=3D3 loc_proto_type_id=3D5 offset=3D256");
-> +
-> +	if (!ASSERT_EQ(0, btf__distill_base(btf2, &btf3, &btf4),
-> +		       "distilled_base") ||
-> +	    !ASSERT_OK_PTR(btf3, "distilled_base") ||
-> +	    !ASSERT_OK_PTR(btf4, "distilled_split") ||
-> +	    !ASSERT_EQ(2, btf__type_cnt(btf3), "distilled_base_type_cnt"))
-> +		goto cleanup;
-> +
-> +	VALIDATE_RAW_BTF(
-> +		btf4,
-> +		"[1] INT 'int' size=3D4 bits_offset=3D0 nr_bits=3D32 encoding=3DSIGNED=
-",
-> +		/* remainder is split BTF */
-> +		"[2] LOCSEC 'inline.text' vlen=3D1\n"
-> +		"\tfunc_type_id=3D4 loc_proto_type_id=3D6 offset=3D256",
-> +		"[3] FUNC_PROTO '(anon)' ret_type_id=3D1 vlen=3D1\n"
-> +		"\t'p1' type_id=3D1",
-> +		"[4] FUNC 'foo' type_id=3D3 linkage=3Dstatic",
-> +		"[5] LOC_PARAM '(anon)' size=3D4 flags=3D0x3 vlen=3D1\n"
-> +		"\tvalue=3D-1",
-> +		"[6] LOC_PROTO '(anon)' vlen=3D1\n"
-> +		"\ttype_id=3D5");
-> +
-> +	btf5 =3D btf__new_empty();
-> +	if (!ASSERT_OK_PTR(btf5, "empty_reloc_btf"))
-> +		goto cleanup;
+> 
+> > I don't think we need all this just to say that /proc/keys in a racy
+> > query mechanism for production, which is an issue for dm-verity, given
+> > that nothing else is available.
+> 
+> I think at some point, we will need a system call to search all for all
+> accessible keys matching certain criteria by actually walking the key
+> database.  The problem there is that there may be multiple hits, so we may
+> need something like:
+> 
+> 	int count = find_key(key_serial_t start_id,
+> 			     const char *type, const char *desc_prefix,
+> 			     key_serial_t *results, size_t results_size,
+> 			     unsigned int flags);
+> 
+> Allowing you to do:
+> 
+> 	key_serial_t dm_key;
+> 	int n = find_key(0, "keyring", ".dm_verity", &dm_key, 1,
+> 			 FIND_KEY_EXACT_DESC);
+> 
+> This wouldn't be as fast as a direct lookup since it would have to walk the
+> key tree, doing name comparisons and perm checks on each key of the type.
+> 
+> > And secondly special keys are meant for implicit keyrings so isn't
+> > that all there's to it?
+> 
+> I have no particular objection to setting aside a block of negative key IDs
+> for special keyrings that need to be accessed a lot - though I would make
+> common reg/unreg functions that take the ID to be registered and, say, set the
+> block at -257..-512.  Moving the BFP keyring to -257 and DM to -258.
 
-I'd add another btf__add_<something> here to shift the ides and make
-sure that relocate actually did something.
+To be clear are you suggesting I do that for v2 here? Happy to make the
+change and add some reuse to the registration functions, etc. I'm
+guessing its fine to change the bpf id since its still only in -next?
 
-> +	btf__add_int(btf5, "int", 4, BTF_INT_SIGNED);	/* [1] int */
-> +
-> +	if (!ASSERT_EQ(btf__relocate(btf4, btf5), 0, "relocate_split"))
-> +		goto cleanup;
-> +	VALIDATE_RAW_BTF(
-> +		btf4,
-> +		"[1] INT 'int' size=3D4 bits_offset=3D0 nr_bits=3D32 encoding=3DSIGNED=
-",
-> +		/* remainder is split BTF */
-> +		"[2] LOCSEC 'inline.text' vlen=3D1\n"
-> +		"\tfunc_type_id=3D4 loc_proto_type_id=3D6 offset=3D256",
-> +		"[3] FUNC_PROTO '(anon)' ret_type_id=3D1 vlen=3D1\n"
-> +		"\t'p1' type_id=3D1",
-> +		"[4] FUNC 'foo' type_id=3D3 linkage=3Dstatic",
-> +		"[5] LOC_PARAM '(anon)' size=3D4 flags=3D0x3 vlen=3D1\n"
-> +		"\tvalue=3D-1",
-> +		"[6] LOC_PROTO '(anon)' vlen=3D1\n"
-> +		"\ttype_id=3D5");
-> +
-> +cleanup:
-> +	btf__free(btf5);
-> +	btf__free(btf4);
-> +	btf__free(btf3);
-> +	btf__free(btf2);
-> +	btf__free(btf1);
-> +}
-> +
->  void test_btf_distill(void)
->  {
->  	if (test__start_subtest("distilled_base"))
-> @@ -689,4 +788,6 @@ void test_btf_distill(void)
->  		test_distilled_base_vmlinux();
->  	if (test__start_subtest("distilled_endianness"))
->  		test_distilled_endianness();
-> +	if (test__start_subtest("distilled_loc"))
-> +		test_distilled_loc();
->  }
+The only awkward bit with making that more generic is that dm-verity
+isn't __ro_after_init since its coming from a module possibly, and
+because of the module usage I also protected it with a spinlock in case
+someone's accessing it while you unload the module. Could just use one
+spinlock for the whole generic array, and drop the __ro_after_init I
+suppose.
+
+Let me know if I'm not following properly!
+
+Thanks,
+Andrew
