@@ -1,101 +1,113 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+Received: from mta0.migadu.com (out-153.mta0.migadu.com [91.218.175.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FAE44AEBE4
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 13:28:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC7550277F
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 13:36:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789738101; cv=none; b=Cxfp9uaKfrnK3RxiJ6mBqPFmBt+XqeobHmRlqUYRRrV/LsmHH9wlJdUxrROsZeUtuc5QvfEZ7yMfsto9FfjmcTzy1kYtCMPC+JDrwS5UCzWkAW9Hxp767qHzwNk1JakjMAlFIZMGwA6kO72f14mlWGLJP2FhyW4R9VfRwd9sN/o=
+	t=1789738608; cv=none; b=Xxb+h5QAAQ6ElU8mCKnBuwWY7he2rWWbLNqSdU0CasdSBVqU60m+ToL+AJymAfXiDKpwLHcklPKBtsfdn+HAuunyCGGoRhWtL8GGWTdCIkaBe76vV/uQGbZqx2ywoSp3Xl3JSMhPwwGo9xn0/1brZQUGyKGuK/83tTWzYolUOy0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789738101; c=relaxed/simple;
-	bh=zIvzoRp4EqaaXbBaAXZ0LdKRD2UHE9DJZN9NC6iw0vU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=du1XHTENfF+e63aB4HOSkN66OZRGEVTz3jvqV5vVMVESx78c0J7fmivlR/ZgkiGqH/nultFZwQ4CVb+oc9jjJgk8/1lm3vQ5Ol53rASKk0/A6Y+mL5HuXgBLtveLAdba4Ni+RGaoB53iqlonBZL40VgES/7I76IvBvAAitH0qy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TqJ0oyXR; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789738608; c=relaxed/simple;
+	bh=/RJxtpnY3VFIjvsJUYAM2o2Owc7T+CeSxdmnbQ2prls=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=clb0VTgOa+UhZ3FqZ4pS5D+SXBKCPveTnsyL1oyLwsu8PUAK8xqAs3B/U7dS+W6cw8ZD45xA0kzP5xCHU62o4AJuTjy6UMCVLIYmPpL+xxPH5qfoPeXr5OjAJSibOGeMCNEkky8yjlHjYgY/2j1q971vHQG/O3vr1g9D72KdSRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xt1SxfDO; arc=none smtp.client-ip=91.218.175.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TqJ0oyXR"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912d3920so5303205e9.1
-        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 06:28:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789738097; x=1790342897; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=zIvzoRp4EqaaXbBaAXZ0LdKRD2UHE9DJZN9NC6iw0vU=;
-        b=TqJ0oyXRUy20MTaZ+YvOAQUaxjdNILraHK3DTeOufBtn76cKYMi59CdP6W8vdn+Z2V
-         XgQT9nteXpQHtFkZ+WckR7lzG/YUIRbGhZSNX0A1UXajBI+is2ojFDhbFB5RjQSyPUHG
-         3Uv5cMh9LyTApSYDCIm6F6HxRovmznwzRPkY+FkrwuF7XojJ58FvWTxPsUaZ5gNEo75E
-         ZlgSNItm7LCShMHKGfDWTcxE/Ka77bamoERvpg0z6nuOrBcfV441AingHuyNEgfLktLF
-         KJrrXZ2+LgqllrspnxH2pU0B2lHmmaM9656UL2qJbJ9jzU+u2SkhODjcXy7WwpoctNZQ
-         wmgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789738098; x=1790342898;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=zIvzoRp4EqaaXbBaAXZ0LdKRD2UHE9DJZN9NC6iw0vU=;
-        b=NFm3ZeMP+oQlXkuURfuUr23hY4ZvuaypzcrzKQBKZlRoyFAno170sx1RELWj2Tjvi6
-         5oOpLAo5sUAAkMAoi+lCFWlmnkSgiksZQ44+/qVC0ysd7J7Rh0t3v3GLmkgBFftlMXe1
-         vZCkzn4u6fCXHpmYZ20V1kc4/6qAcnWQlb81sKxYexuBnYCgZqhXnFoGYwlHNPztNdJy
-         Hx9DQT2oMg8EEjhHIfwmtLaYGHIKEt++OGvNphbIrsKyiPavwLxGkaeI8pcxxWhqSG/Y
-         I6vGGbaXsBu/oyYWD8ai28KyqzJX9F3UjR0cpX5p6MXIbGyWdiwtudHYTsrFXbYaEQxx
-         PivA==
-X-Forwarded-Encrypted: i=1; AKwUvBxddoJy+IgZjFkGCoTTRnBKM0MQzwU6+9Bfsd9W1Nf3OhE1wPSUKo5Tql1nvJNRsdKWCRA=@vger.kernel.org
-X-Gm-Message-State: AFuF++nceJLH4/Dfjb9iexRHA+bdaBOVlKMs8/ogtPSZJ/8B4SZ1ux6l
-	1skZfTv1oKgY+me6/qgt0Q7I6f/W0IlL9/zO9GNTF0iUKmephT/l469L
-X-Gm-Gg: AYBFou0Ht6DWWko9JLzTml3az/g6Akekm1zNoMDrMFhKPiAi4TawJ9bz5NKcORcb2Kf
-	LelOxvjGy3NnlpWGMAFRFjcN0ZMZg5y4231IJyP+o0mJoduBQwDjnPiICQo2lfbl9UxaMDMQAZf
-	0leWoLsc1CPNMZuqc5Pz8Xam8E3ZUGYwwU17m2iNHA3Z9hoC2VPFR+yvkkDIIf0AZQDCkvBp0mp
-	4AJ+E/4Zt+cONRFHvYRJlPbGnZIfUY/qfNQYvOA2tOjx9zvWIdc3at+3IrJLYn9LnGXNw84hjq6
-	pBWYS6yj6rvz6R07bz93qygJUaopeDWxbYPLlAw6+KuilvvlDjC+ySBKMrQh2gNE+6v1VMvid7l
-	Ai/TDLkHC2qG+NBbhdmQhmFkT/w/U/U6i8aW0YiLHYgGOwVFNgCJZzU5bzF3lrGMozHEqSqtofx
-	Q+859ZfoEEi6TAT99xp/bc9P8HNJ6tYvB1yp8BR9yqJOHQPWrw0hrOKmEX8yTp8SG9MAjmvZLT2
-	lio1znHmVhQ7m00lcRv78spbw==
-X-Received: by 2002:a05:600c:1f8f:b0:49e:8354:26fb with SMTP id 5b1f17b1804b1-49fc574c729mr35408655e9.32.1789738097326;
-        Fri, 18 Sep 2026 06:28:17 -0700 (PDT)
-Received: from dell-desktop ([2a02:587:4b4e:8500:290c:210b:1c76:5710])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fc58a1176sm40807795e9.2.2026.09.18.06.28.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 06:28:16 -0700 (PDT)
-From: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-To: david@kernel.org
-Cc: akpm@linux-foundation.org,
-	andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	brauner@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	kpsingh@kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	ljs@kernel.org,
-	matt@bobrowski.net,
-	memxor@gmail.com,
-	song@kernel.org,
-	sun.jian.kdev@gmail.com,
-	tasos.papagiannnis@gmail.com,
-	utilityemal77@gmail.com,
-	viro@zeniv.linux.org.uk
-Subject: Re: [PATCH bpf-next v8 1/5] mm: Add copy_remote_mm_str()
-Date: Fri, 18 Sep 2026 16:27:54 +0300
-Message-ID: <20260918132754.43435-1-tasos.papagiannnis@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <0b276f0a-39b7-46ae-b72f-6ba92f65380f@kernel.org>
-References: <0b276f0a-39b7-46ae-b72f-6ba92f65380f@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xt1SxfDO"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=/RJxtpnY3VFIjvsJUYAM2o2Owc7T+CeSxdmnbQ2prls=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789738604; v=1; x=1790343404;
+ b=xt1SxfDOYrRyXZL3fDSqb/F3T7SjaagMgXBuuO2vIuhBTaP+fl6tLL9ZOsmdaS+PlMhMm5CV
+ IRURWDKn4kW9StxNaHLg5bCCJU33/FMk3qrbJmSxjINPmIjKnVb20vkPpFruNNcYZDotQnOgzlH
+ W0OcTUhx/e8G/F/Z1QtlLIYM=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id bdf97a7d395ac53b;
+	Fri, 18 Sep 2026 13:36:44 +0000
+X-Mizu-Trace-ID: bdf97a7d395ac53b
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <908dd7ec-1d03-4d2f-814b-9e1c67f337b2@linux.dev>
+Date: Fri, 18 Sep 2026 21:36:37 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: Add iter subtest using
+ lskel in global_data_init
+To: bot+bpf-ci@kernel.org, tweek@google.com, qmo@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, shuah@kernel.org, kpsingh@kernel.org, emil@etsalapatis.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, ihor.solodrai@linux.dev, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@kernel.org, mason@kernel.org
+References: <20260918040919.3402577-3-tweek@google.com>
+ <b1a854da66d611f079d8ff186b9bf73845ee18b73fac2481ef468a86fc777990@mail.kernel.org>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <b1a854da66d611f079d8ff186b9bf73845ee18b73fac2481ef468a86fc777990@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-> Two tabs please. (I thought I commented on that already)
+On 2026/9/18 13:05, bot+bpf-ci@kernel.org wrote:
+>> In test_global_percpu_data.c, dump_percpu_data is defined after two
+>> non-autoload SEC("?kprobe") programs (verifier_strncmp and
+>> verifier_snprintf). If bpftool does not skip non-autoload programs when
+>> generating light skeletons, dump_percpu_data.prog_fd is left invalid or
+>> unpopulated.
+>>
+>> Factor out a test_global_percpu_data_iter_fd() helper that operates
+>> directly on prog/map file descriptors, and add an iter_lskel subtest to
+>> verify that dump_percpu_data is properly loaded and executes correctly
+>> when using the light skeleton.
+>>
+>> Fixes: 4c9241bd731a ("selftests/bpf: Add tests to verify global percpu data")
+>> Fixes: 1ed2294b31fc ("selftests/bpf: Test verifier log for global percpu data")
+>> Signed-off-by: Thiébaud Weksteen <tweek@google.com>
+> 
+> Are the Fixes: tags appropriate for this commit? This patch only adds new
+> test coverage (a new iter_lskel subtest) and refactors existing test code
+> (factoring out test_global_percpu_data_iter_fd() with no behavioral change
+> to the existing "iter" subtest). It doesn't fix anything that
+> 4c9241bd731a or 1ed2294b31fc got wrong.
+> 
+> The bug being tested is in bpftool, introduced by d510296d331a
+> ("bpftool: Use syscall/loader program in "prog load" and "gen skeleton"
+> command.") and actually fixed by the two preceding patches in this series
+> (202ee90dee368 and 843762e6f4665), both of which already carry the correct
+> Fixes: d510296d331a tag.
 
-Sorry, I have missed some cases. It shoud be good now in v9 [1].
+Agreed.
 
-[1] https://lore.kernel.org/bpf/20260918131757.42802-1-tasos.papagiannnis@gmail.com/
+The Fixes: tags of this patch can be dropped.
+
+Others lgtm:
+
+Acked-by: Leon Hwang <leon.hwang@linux.dev>
+
+> 
+> There's also a backport concern. The Fixes: tags make this patch a
+> candidate for AUTOSEL/stable pickup independently of 202ee90dee368 and
+> 843762e6f4665. Since this is the last patch of the series, backporting it
+> alone would land the new iter_lskel subtest in a tree with the unfixed
+> bpftool, where skel->progs.dump_percpu_data.prog_fd is left at 0 and
+> bpf_link_create(0, 0, BPF_TRACE_ITER, &opts) fails. The subtest would fail
+> by construction.
+> 
+> Should the Fixes: tags be removed, or if they're intended to be kept,
+> should the dependency on the two bpftool patches be stated via
+> Cc: <stable@vger.kernel.org> prerequisite lines?
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35306404663
+
