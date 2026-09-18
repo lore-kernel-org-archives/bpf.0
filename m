@@ -1,32 +1,33 @@
-Received: from mta0.migadu.com (out-121.mta0.migadu.com [91.218.175.121])
+Received: from mta0.migadu.com (out-145.mta0.migadu.com [91.218.175.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 284D3231A23
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 06:59:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.121
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F0A381E83
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 06:59:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789714759; cv=none; b=BDijuv+sXypcvDPlpIoyPYGSrPSLYs9jPhsFkBkTZerP2rCXmTMYS4MRXOL3JW8uRYxIqSa9qMv3FlbiyZIRRJm9UjlNg37atrFeDQ2bSE2FnJMOD3mwxdte1JSA1Qc5ThAf2UYsrNFjUaKb97VyJH2arSTurwRETBjLuuK8/UU=
+	t=1789714769; cv=none; b=thn7QNQ+ojtoxkTX3RAiutzxKEZzW0Kk5AhVSVOmgr/ebf+MT8H2Oq58j8df7rNb19PBK+WwxtB3gCNWnOQVGJQ1hyEVaGe17kfn91+29NHb0RpKBMtQUWLJSAHvWzBAzwfRcjnsbBghdavYgXFEDvyCie9OT8KnJ2C7aOMbQo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789714759; c=relaxed/simple;
-	bh=u1IH4r+aCqyNvijH53MjoE8PjJY5Tc0reOM1hN6q8Mk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UJ3wOEiJJCNhEqYXXD+Tnk/cknFB33le3zCxPpQcjK2RwFX0N/06kbisI8YBt1kKV6mOackOOIuWN4d81O5vXJd2SvkVKp7a2dU/0jW513APcVSg/OEZMbEY9n98LJx+bDdCBriKZfhMrhI3RepVTk2YOnm4tFI04574FqazK7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uRwO2IXc; arc=none smtp.client-ip=91.218.175.121
+	s=arc-20240116; t=1789714769; c=relaxed/simple;
+	bh=W0yWpOmoDzib5Rm1x8YliOd+9RxKMkDx4q1dFk81TOc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=YBUTZ+NSFPQ7UqMLaGq/Pio+sU5ErOxnmngIz3vNi+IwoAelRwxZGL5l3wAZm1lwj4wlXDGODy//ZxYjxhm/blEcZESYk8Wnh4dV/m065ow5x8XTXr6z1VRLak2/3PNzQzIqa55i4FUlK2sguiki2Gq8smjuS6oXK0B7Wu9iWSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YdFtWTw2; arc=none smtp.client-ip=91.218.175.145
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uRwO2IXc"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YdFtWTw2"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=u1IH4r+aCqyNvijH53MjoE8PjJY5Tc0reOM1hN6q8Mk=;
+DKIM-Signature: a=rsa-sha256; bh=W0yWpOmoDzib5Rm1x8YliOd+9RxKMkDx4q1dFk81TOc=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789714753; v=1; x=1790319553;
- b=uRwO2IXcuSW7ibNUBrUz4NkMG4g5en1HjU7zsuTPhv7FJ80v679HbmL+Lw0FVVf6C3pLE2pK
- bjepdE0bL/w5NR5guWh5n30JWXK2wPHAAdbyr3x8RKNTZZSAKmjMmu4NaNZ0winicMhsUkkPxwb
- UiptNOjbzCToVFiGFpTAI3u0=
+ t=1789714765; v=1; x=1790319565;
+ b=YdFtWTw2KSolwL7n3FG0tP8R1bXskkQ90ZjBrqY2J9FpC/AxdhZphSFGlqPeUdEL5QNRQimU
+ 1CJH2kItItgFJ45CSSN5s21NYLksERMhH3C982Onk45FE9EcDv3E5OyJudeUPwdKEHdu/QSm3Ti
+ 3HyGJu5k/U9I8XKz3ZwnO/c0=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id fe34583bbf42bfe1;
-	Fri, 18 Sep 2026 06:59:13 +0000
-X-Mizu-Trace-ID: fe34583bbf42bfe1
+Received: by mta10.migadu.com with ESMTPS id 06b45d8891529b42;
+	Fri, 18 Sep 2026 06:59:25 +0000
+X-Mizu-Trace-ID: 06b45d8891529b42
 X-Migadu-Flow: FLOW_OUT
 From: Hui Zhu <hui.zhu@linux.dev>
 To: Roman Gushchin <roman.gushchin@linux.dev>,
@@ -53,10 +54,12 @@ To: Roman Gushchin <roman.gushchin@linux.dev>,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org
 Cc: Hui Zhu <zhuhui@kylinos.cn>
-Subject: [PATCH bpf-next v12 0/2] bpf: BPF-driven proactive memcg reclaim
-Date: Fri, 18 Sep 2026 14:58:52 +0800
-Message-ID: <cover.1789714023.git.zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next v12 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
+Date: Fri, 18 Sep 2026 14:58:53 +0800
+Message-ID: <02f0a8dc45a840d7801ec17e0c1168f7dacf9b73.1789714023.git.zhuhui@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1789714023.git.zhuhui@kylinos.cn>
+References: <cover.1789714023.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,175 +70,154 @@ Content-Transfer-Encoding: 8bit
 
 From: Hui Zhu <zhuhui@kylinos.cn>
 
-BPF programs can observe memory pressure on a cgroup (e.g. refault
-stats via bpf_mem_cgroup_page_state()), but cannot act on it:
-triggering reclaim on a chosen cgroup requires writing to
-memory.reclaim, which BPF cannot do. This series adds
-bpf_proactive_reclaim(), a sleepable kfunc performing one proactive
-reclaim pass on a target memcg, so when and how hard to reclaim is
-BPF policy rather than hard-coded thresholds.
+BPF programs can observe memory pressure on a cgroup, e.g. refault
+stats via bpf_mem_cgroup_page_state(), but cannot act on it:
+triggering reclaim requires writing to memory.reclaim, which BPF
+cannot do.
 
-The kfunc is restricted to BPF_PROG_TYPE_SYSCALL so that reclaim
-always runs in a clean process context: generic sleepable programs
-may execute with filesystem locks held or in NOFS/NOIO contexts,
-where the reclaim path could deadlock in filesystem shrinkers. The
-bpf_wq and task_work callbacks of a SYSCALL program keep its program
-type and run in process context, so reclaim work can still be queued
-asynchronously through them, as the selftest does with bpf_wq.
+Add bpf_proactive_reclaim(), a sleepable kfunc performing one
+proactive reclaim pass on a memcg, like a write to memory.reclaim
+but without retrying until the target is reached, so that when and
+how hard to reclaim is BPF policy rather than hard-coded thresholds.
+The reclaim target of a single call is capped at MEMCG_CHARGE_BATCH,
+as high_work_func() does for memory.high; reclaiming more is left to
+the program, which can call the kfunc once per bpf_wq callback and
+stop at any point. It is limited to BPF_PROG_TYPE_SYSCALL, because
+other sleepable programs may run with filesystem locks held, on
+which the reclaim path could deadlock via filesystem shrinkers.
 
-The use case we are looking at is protecting high-priority workloads:
-a BPF program monitors the state of a high-priority cgroup and, when
-it degrades (e.g. PSI rises or refaults increase, as in the
-selftest), asynchronously reclaims memory from low-priority cgroups
-via bpf_wq and bpf_proactive_reclaim(), giving the pressured cgroup
-more free pages.
+Convert MIN_SWAPPINESS, MAX_SWAPPINESS and SWAPPINESS_ANON_ONLY from
+macros to an enum so that they are emitted into BTF and usable from
+BPF programs via vmlinux.h.
 
-Another use case: several vendor-maintained kernels carry private
-implementations that trigger asynchronous reclaim when a memcg enters
-a certain state. These exist for historical and partly psychological
-reasons, but the underlying demand is real. We expect BPF-driven
-proactive reclaim, combined with the BPF hooks for the memory
-controller currently under discussion and development, to serve these
-needs in mainline, reducing kernel fragmentation and improving kernel
-maintainability.
+Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
+---
+ mm/bpf_memcontrol.c | 62 ++++++++++++++++++++++++++++++++++++++++++++-
+ mm/internal.h       | 10 +++++---
+ 2 files changed, 67 insertions(+), 5 deletions(-)
 
-Benchmark numbers from the selftest (TEST_MEMCG_ASYNC_RECLAIM_BENCH=1
-runs the workload once without the BPF program and once with it; QEMU
-VM with 8 GiB RAM and 10 vCPUs, 10 runs): the pressured workload
-finishes in a median of 2.0s with BPF-driven async reclaim versus
-15.3s without, a 62%-94% improvement per run. The harvested workload
-shares the parent's memory.max with it and finishes in a median of
-7.5s versus 12.2s, as it has the limit to itself once the pressured
-workload finishes early.
-
-Raw benchmark output of the 10 runs (one line per run, all passed):
-memcg_async_reclaim: baseline high=15.331030 low=10.662426, reclaim high=2.311867 low=4.912402, high speedup=84.9%
-memcg_async_reclaim: baseline high=10.788771 low=15.127507, reclaim high=3.061484 low=4.518388, high speedup=71.6%
-memcg_async_reclaim: baseline high=16.553653 low=12.281844, reclaim high=2.586470 low=9.890286, high speedup=84.4%
-memcg_async_reclaim: baseline high=18.032006 low=14.058724, reclaim high=1.713115 low=3.967476, high speedup=90.5%
-memcg_async_reclaim: baseline high=15.253594 low=12.101572, reclaim high=1.880957 low=4.478044, high speedup=87.7%
-memcg_async_reclaim: baseline high=5.454157 low=9.781724, reclaim high=2.035418 low=10.322757, high speedup=62.7%
-memcg_async_reclaim: baseline high=10.010656 low=3.029734, reclaim high=1.947231 low=10.162948, high speedup=80.5%
-memcg_async_reclaim: baseline high=18.201170 low=15.182740, reclaim high=1.510723 low=9.390685, high speedup=91.7%
-memcg_async_reclaim: baseline high=10.772079 low=5.418259, reclaim high=2.325059 low=13.225425, high speedup=78.4%
-memcg_async_reclaim: baseline high=16.360502 low=14.506304, reclaim high=0.864310 low=5.624312, high speedup=94.7%
-
-Changelog:
-v12:
-Redo performance tests and update performance data.
-According to the comments of Barry, fix comments issue.
-Based on the AI review and my re-examination of selftests, updated the
-contents below.
-Express RECLAIM_SIZE in bytes so it is right on non-4K page kernels.
-Drop the local PAGE_SIZE macro, RECLAIM_SIZE is now a byte count.
-Remove the unused bpf_helpers.h, bpf_tracing.h and bpf_core_read.h.
-Rename CLOCK_MONOTONIC_ID to CLOCK_MONOTONIC to match the kernel.
-Drop the CSS_DYING test, it is never set on a cgroup's own css.
-Document that the lookup fails inside rmdir(), not at last put.
-Count bpf_timer_start() failures so a stalled loop is visible.
-Record the kfunc errno so failure is not read as an idle cgroup.
-Note that an idle tick discards the refault delta.
-Reject tmpfs for /tmp and the working dir, else the workload OOMs.
-Pass the mkstemp() fds to the children so no stale path is reopened.
-Read the timing file with lseek() and read() on the shared fd.
-Write the timing with snprintf() and write(), checking truncation.
-Close the data and time fds on every cleanup path.
-Remove fcntl.h, nothing calls open() any more.
-Factor disable_swap() out of the two cgroup setups.
-Recreate the cgroups between bench runs so both start cold.
-Guard the speedup calculation against a zero baseline.
-Drop the non-bench timing printf, it was noise on passing runs.
-Assert only TARGET_GONE, the outcome rmdir() actually guarantees.
-End the wait loop only on target_gone so later events are seen.
-Compare reclaimed_bytes against 0, a check that can now fail.
-Poll the keepalive reader with WNOHANG and report its exit code.
-Clear reader_pid after reaping so cleanup cannot kill a new PID.
-Rename the ring_buffer__poll() result to n, it counts events.
-Print timer_failures and last_reclaim_err when an assert fails.
-Explain why bench_printf() needs the stdout fallback and no # prefix.
-v11:
-According to the comments of Kumar, fix reclaim_cgroup() to not treat
-a negative bpf_proactive_reclaim() return as reclaimed bytes.
-According to the comments of Shakeel, shorten the commit message.
-v10:
-According to the comments of JP, drop redundant swap.h include, turn
-swappiness macros into a BTF-visible enum, and clarify the -1 swappiness
-semantics in docs and code in code patch.
-report each reclaim outcome via ringbuf and wait for events with timeout
-instead of sleep-polling, log workload timings instead of failing on
-them, drop a debug printf, and add a TEST_MEMCG_ASYNC_RECLAIM_BENCH
-baseline-comparison mode in the selftests patch.
-Include the benchmark numbers in the cover letter.
-v9:
-According to the comments of JP, copy the motivation from the cover
-letter to the commit message, restructure the kfunc documentation
-to separate the direct and asynchronous calling contexts, fold the
-fs-lock warning into the SYSCALL-only rationale, soften the "bounded
-unit of work" wording (only the reclaim target is capped), and drop
-the redundant comment above the reclaim kfunc set registration.
-v8:
-According to the comments of Andrew, Kumar and Shakeel, drop the
-bpf_in_reclaim_context() check because the SYSCALL-only restriction
-already rules out reentrancy.
-According to the comments of Kumar, Add the swappiness argument to
-bpf_proactive_reclaim().
-v7:
-According to the comments of JP, clamp the reclaim target of one
-bpf_proactive_reclaim() call to MEMCG_CHARGE_BATCH so each call is
-a bounded unit of work, and document the batching policy in the kfunc.
-selftest: check the target cgroup for dying state before reclaiming
-from it, and add the memcg_async_reclaim_dying test covering target
-removal while reclaim is running.
-v6:
-According to the comments of Kumar and Shakeel, Restrict
-bpf_proactive_reclaim() to BPF_PROG_TYPE_SYSCALL by moving it
-to a dedicated kfunc set registered for that program type only, and
-document the clean-process-context requirement in its kerneldoc.
-v5:
-According to the comments of Andrii, Kumar and Shakeel, remove
-bpf_proactive_reclaim_swappiness.
-v4:
-According to the comments of bot+bpf-ci and sashiko, also check
-current->reclaim_state to close the fentry-on-trace-iter recursion
-window in bpf_in_reclaim_context.
-Return bytes instead of pages ( nr * PAGE_SIZE ) in
-bpf_proactive_reclaim_pages and bpf_proactive_reclaim_swappiness.
-Return (unsigned long)-1 on out-of-range swappiness (was 0).
-Kdoc of both kfuncs: updated Return descriptions; added FS-lock deadlock
-warning to bpf_proactive_reclaim.
-Fix potential child process leak in selftests.
-Use _exit() instead of exit() in forked children in selftests.
-Rename reclaimed_pages to reclaimed_bytes in selftests.
-Fix comments issues in selftests.
-v3:
-According to the comments of bot+bpf-ci, add a shared helper
-bpf_proactive_reclaim_pages() that is called by bpf_proactive_reclaim
-and bpf_proactive_reclaim_swappiness.
-According to the comments of sashiko and bot+bpf-ci, fix the issues of
-selftests.
-v2:
-According to the comments of Shakeel Butt, replace
-bpf_try_to_free_mem_cgroup_pages() with
-bpf_proactive_reclaim(memcg, size) and
-bpf_proactive_reclaim_swappiness(memcg, size, swappiness).
-According to the comments of Kumar Kartikeya Dwivedi, drop patch 2
-and patch 3.
-Remove bpf_thread_wq code in patch 4.
-According to the comments of sashiko-bot, fix the issues of selftests.
-
-Hui Zhu (2):
-  mm/bpf: Add bpf_proactive_reclaim kfunc
-  selftests/bpf: Add memcg async reclaim test
-
- mm/bpf_memcontrol.c                           |  62 +-
- mm/internal.h                                 |  10 +-
- tools/testing/selftests/bpf/config            |   1 +
- .../bpf/prog_tests/memcg_async_reclaim.c      | 890 ++++++++++++++++++
- .../selftests/bpf/progs/memcg_async_reclaim.c | 327 +++++++
- 5 files changed, 1285 insertions(+), 5 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
- create mode 100644 tools/testing/selftests/bpf/progs/memcg_async_reclaim.c
-
+diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+index 716df49d7647..c5d7f29ade85 100644
+--- a/mm/bpf_memcontrol.c
++++ b/mm/bpf_memcontrol.c
+@@ -8,6 +8,8 @@
+ #include <linux/memcontrol.h>
+ #include <linux/bpf.h>
+ 
++#include "internal.h"
++
+ __bpf_kfunc_start_defs();
+ 
+ /**
+@@ -159,6 +161,48 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
+ 	mem_cgroup_flush_stats(memcg);
+ }
+ 
++/**
++ * bpf_proactive_reclaim - proactively reclaim memory from a memory cgroup
++ * @memcg: the target memory cgroup to reclaim from.
++ * @size: the amount of memory to reclaim, in bytes, clamped to
++ *        MEMCG_CHARGE_BATCH.
++ * @swappiness: the reclaim swappiness, in the range [MIN_SWAPPINESS,
++ *              SWAPPINESS_ANON_ONLY], or -1 to use the memcg's own
++ *              swappiness.
++ *
++ * Performs one proactive reclaim pass on @memcg, like a write to
++ * memory.reclaim but without retrying until @size is reached. Call it
++ * repeatedly to reclaim more than one batch.
++ *
++ * Only available to BPF_PROG_TYPE_SYSCALL, because other sleepable programs
++ * may run with filesystem locks held, which the reclaim path can deadlock
++ * on via filesystem shrinkers.
++ *
++ * Return: The amount of memory reclaimed, in bytes, or a negative error.
++ */
++__bpf_kfunc long bpf_proactive_reclaim(struct mem_cgroup *memcg,
++				       unsigned long size,
++				       int swappiness)
++{
++	unsigned long nr_reclaimed;
++	unsigned long nr_pages;
++
++	if (swappiness < -1 || swappiness > SWAPPINESS_ANON_ONLY)
++		return -EINVAL;
++
++	if (size < PAGE_SIZE)
++		return -EINVAL;
++
++	nr_pages = min(size / PAGE_SIZE, (unsigned long)MEMCG_CHARGE_BATCH);
++
++	nr_reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages, GFP_KERNEL,
++						    MEMCG_RECLAIM_MAY_SWAP |
++						    MEMCG_RECLAIM_PROACTIVE,
++						    swappiness == -1 ? NULL : &swappiness);
++
++	return nr_reclaimed * PAGE_SIZE;
++}
++
+ __bpf_kfunc_end_defs();
+ 
+ BTF_KFUNCS_START(bpf_memcontrol_kfuncs)
+@@ -174,19 +218,35 @@ BTF_ID_FLAGS(func, bpf_mem_cgroup_flush_stats, KF_SLEEPABLE)
+ 
+ BTF_KFUNCS_END(bpf_memcontrol_kfuncs)
+ 
++BTF_KFUNCS_START(bpf_memcontrol_reclaim_kfuncs)
++BTF_ID_FLAGS(func, bpf_proactive_reclaim, KF_SLEEPABLE)
++BTF_KFUNCS_END(bpf_memcontrol_reclaim_kfuncs)
++
+ static const struct btf_kfunc_id_set bpf_memcontrol_kfunc_set = {
+ 	.owner          = THIS_MODULE,
+ 	.set            = &bpf_memcontrol_kfuncs,
+ };
+ 
++static const struct btf_kfunc_id_set bpf_memcontrol_reclaim_kfunc_set = {
++	.owner          = THIS_MODULE,
++	.set            = &bpf_memcontrol_reclaim_kfuncs,
++};
++
+ static int __init bpf_memcontrol_init(void)
+ {
+ 	int err;
+ 
+ 	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
+ 					&bpf_memcontrol_kfunc_set);
+-	if (err)
++	if (err) {
+ 		pr_warn("error while registering bpf memcontrol kfuncs: %d", err);
++		return err;
++	}
++
++	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
++					&bpf_memcontrol_reclaim_kfunc_set);
++	if (err)
++		pr_warn("error registering bpf reclaim kfuncs: %d\n", err);
+ 
+ 	return err;
+ }
+diff --git a/mm/internal.h b/mm/internal.h
+index 38b1165212c9..44e95e87e3cd 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -74,11 +74,13 @@ unsigned long lruvec_lru_size(struct lruvec *lruvec, enum lru_list lru,
+ 
+ #define MEMCG_RECLAIM_MAY_SWAP (1 << 1)
+ #define MEMCG_RECLAIM_PROACTIVE (1 << 2)
+-#define MIN_SWAPPINESS 0
+-#define MAX_SWAPPINESS 200
++enum {
++	MIN_SWAPPINESS = 0,
++	MAX_SWAPPINESS = 200,
+ 
+-/* Just reclaim from anon folios in proactive memory reclaim */
+-#define SWAPPINESS_ANON_ONLY (MAX_SWAPPINESS + 1)
++	/* Just reclaim from anon folios in proactive memory reclaim */
++	SWAPPINESS_ANON_ONLY = MAX_SWAPPINESS + 1,
++};
+ 
+ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+ 					   unsigned long nr_pages,
 -- 
 2.43.0
 
