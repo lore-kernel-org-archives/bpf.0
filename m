@@ -1,189 +1,110 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9ED4AB3C0;
-	Fri, 18 Sep 2026 12:18:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8A2F347BA7
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 12:45:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789733922; cv=none; b=LfRGm994YrFB5O3boDkzUMo/PNwr72Mwp4JYQl/du0RxYpvSox79CG+QkZARkzG74JwwLJt8U0oOSbdb1f6T6DhFf6EDsq8omvyl69qvgzG44+CrZk5N/EuztsYesrtIaVlyXb54g+IqxiNBG465FhRKQC+8LNEsS9Y1Eo+080I=
+	t=1789735517; cv=none; b=UPZ5X8jRViy2zkSU2IMK1nQ/F9+Bbg7BLnuS5EZ/IwXnXAJGn4FauT9AzQTpVZFR86pM94FpPS28Y1z5tzDxDpqvqs39JsrzKZAhPsCAIThinI5rFRItv1Au1Y5TqVOO92DR/jn86ANQLsOuKZ0TXBoWffCIqn05dB5KBmtrkEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789733922; c=relaxed/simple;
-	bh=W30kLLrcOgwsVvtEnHgzJIoxD686qATyr73s4hc2OCc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DiQU6JD5zNsyKfkRtw8u+tmndAYVVJ2DLJBJokKUvS3yVd8UT3rOntfG45soyVFJeo6LYsGBBv9/EF4rJvqnsucMvjmRplZ9tzMWa1ZuVzZL4WJyD84nzjeCNtN1a0UQQjvIJkEDv0HlFvcDBG9by0M+7bCwtCXZkvg2Nugqdxo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mws1UsRB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789735517; c=relaxed/simple;
+	bh=yl6pFmV/xEg1vNv9xDvMEwbWpUcLiqdUahh2XN+OByI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Bu0mL5fXqLzTbGriTx1WOL6kaRl9tVgtomH2d4OQ/5fgNCpxeutVvlf/53WjJ9X6ppTg9cW5S2G26jZuwcCwqotVlvfgXXI5ecn3yszdrKw0HOJZtUh1PkmQV3KT3tpGFTZDAGusM7xyTQ8UXq/5CWWK2RF0VGgABqNoF7Hr60A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JRqtCLNd; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mws1UsRB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C03D11F000FF;
-	Fri, 18 Sep 2026 12:18:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789733920;
-	bh=1TYvlIfCtLdqHpeJoQsXsU42SLAAUvbsKO95maH9PDY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=mws1UsRBTP1Dx9MUaCMx7CciHF+x8bsh6VQal9UxLrLB+bJ/C01mAIno+zKKrOcbM
-	 6r92UejHJgIYuRD5xxtmdyiccvuFmzgYtA6y0SgVbN+kOFAAaInYK7PIPhtGNzuFeS
-	 wo5P0ir1dFYlpLycvD00qzkUvEThUHPkwmhlmAPrInngwcSxDBsKvGWovoNm4UWwe4
-	 wknqsQCmG7EXWpjRWce03zvAGjVz9hjsEpLBhB7Ywm7zFatE5BbkJ0kmIUCR9TGgoY
-	 PgW6dmrkbo1HL70lEA8I0B+vWw/22hvDVNBaGJryCOfX147XNrUMl7EvIrF8LCDYwT
-	 I9ExzcVWzp1WQ==
-Message-ID: <5bded51f-d0f9-41ae-92ad-e1ce008a101e@kernel.org>
-Date: Fri, 18 Sep 2026 13:18:39 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JRqtCLNd"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49cd38e0f79so4553685e9.3
+        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 05:45:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789735512; x=1790340312; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=yl6pFmV/xEg1vNv9xDvMEwbWpUcLiqdUahh2XN+OByI=;
+        b=JRqtCLNdKKfwEu/qGs0CTJRD2J7MDGcriunQWQxeiOircXzvT7sc5PWHdfg7f0+U8X
+         jBjx8sfSBVVzUH3W8MOxQlBdzSc+NsKbOy63x4WcxlifRFZlyPa/opFgPaBTfL9dUqCq
+         kQkUL0+xullZrta1m3SJNS7g7cmw5YrMOqUVqNSlz+Ah/NzIrJpU+2Sm+KmGCw2TdKZp
+         kfu8Oph8gYbvp0orJ41Kfv6P6XweVVI0tmJX/gfFkkT4YjEJSZ9rFvSUmaWZrHSXE2Lh
+         eQSRke/5VXqZWRmSXpzwdUdj5webejbAHk8I6xwbTdhhN6PquSXccb9lpBT5hJ4u8VIc
+         1Adg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789735512; x=1790340312;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=yl6pFmV/xEg1vNv9xDvMEwbWpUcLiqdUahh2XN+OByI=;
+        b=L6cXbNaeBwF2+zEX+wRbdtjkFtJNGfRQ8Gb5BRzkISx11Wf8sgh9tAkjNVwJZDODA0
+         QFcBk5iplK0aTwEgtTveY/9LE7DSsfpAhPhdniHHcpFuUJlbJJOB9qWhfJN6AedDo26g
+         rk094sHuEQKRvbCgGdrTomYgRz+ymB7hyYldzav48thMTFbyq8qxSIHYUmpW8Wk2OaEu
+         zhDUr/xYnJBzFRqaue2fpBZ3NzM1puN8REn+6bCkBHVEaUHbd0FSuXztM1h6DcBL4+F8
+         G01XScxUxWRtihvaZVWPUCP3lJScuqEI88fKEy5Bw2fOknro98lC9m6ezuk4y/7ainTh
+         py3g==
+X-Gm-Message-State: AFuF++k/19PbWeKXI8QtrRDDJazmgiXFgnRY+j77YyHLPzV6EI1aylT0
+	Bf/iBttu9QoTNURHerUjq6V6Je1NjtX8OpFvTGw8BoiJspEy+iIMGEeZ
+X-Gm-Gg: AYBFou2D1rWHXAwC6KKVMqwxEBapZrgy5Q1iJ2qwJPxUnJFktWzilTjkEn22qvAbajc
+	sEZBeThB6iWpicKlgcIP+i2XZAXlEbmnW8ooppEgOQ96Gt4qy6oTvt2gLrT2j+huR2HOQowP0PH
+	exY6/Jz31dBGM2ssim9Z3K2PYPHruFIdXvyY5WKWUq/GdXhxLCAjuzKqN9Zn4DTHLCeohYruG1l
+	7GH6ym8vNEfQDfVAymOEefGNweXeoHCa075gyP44ffYCZwGLv1Xb4OLUFb3OFJDaE89TRL8iNum
+	2YFsoi6hgdKEasDEi3txvzdun93w7Eb1Qf8Ngd9OAr7+8lT9mCrrkdojjIoHHQUiat76rDaGU2o
+	pJKNyqymI8K5J7y2tWtEAXtEdDjf7EGGcVrIDJfGzuIMYgaZd/PLLGG3ZY057ux3I32EiOxGvxc
+	HAsL0QtSkx9rhVQyhgv+bhm4mrgqHUqiz79YLKDVxnwlIPVbNsuA4mduu1djBWSlqqEsLGM3nqm
+	A4EYjAd9vn0X08=
+X-Received: by 2002:a05:600c:34c7:b0:49c:ff8d:b548 with SMTP id 5b1f17b1804b1-49fc5726cfcmr73044225e9.11.1789735512203;
+        Fri, 18 Sep 2026 05:45:12 -0700 (PDT)
+Received: from dell-desktop ([2a02:587:4b4e:8500:290c:210b:1c76:5710])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fc7d8cee0sm48825095e9.15.2026.09.18.05.45.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Sep 2026 05:45:11 -0700 (PDT)
+From: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+To: sashiko-bot@kernel.org
+Cc: bpf@vger.kernel.org,
+	sashiko-reviews@lists.linux.dev,
+	tasos.papagiannnis@gmail.com
+Subject: Re: [PATCH bpf-next v8 3/5] bpf: Add user memory access kfuncs for mm_struct
+Date: Fri, 18 Sep 2026 15:44:46 +0300
+Message-ID: <20260918124446.462781-1-tasos.papagiannnis@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260918093017.AFF821F00893@smtp.kernel.org>
+References: <20260918093017.AFF821F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Cover bpftool ring buffer
- event_pipe
-To: Tianyi Chen <diannaaav@gmail.com>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- linux-kselftest@vger.kernel.org
-References: <20260911025114.190899-1-diannaaav@gmail.com>
- <20260911025114.190899-3-diannaaav@gmail.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260911025114.190899-3-diannaaav@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-2026-09-11 10:51 UTC+0800 ~ Tianyi Chen <diannaaav@gmail.com>
-> From: Tianyi Chen <hi@tychen.cc>
-> 
-> Produce known ring buffer records and check complete plain, JSON and
-> pretty JSON output. Exercise ID and pinned map selection, SIGINT and
-> SIGTERM shutdown, empty streams and invalid map types or selectors.
-> 
-> Also produce a perf event sample and check its existing header and raw
-> payload output. Use a payload whose size plus the raw sample length
-> field is aligned to eight bytes so the expected bytes exclude implicit
-> perf padding.
-> 
-> Assisted-by: LLM
-> Signed-off-by: Tianyi Chen <hi@tychen.cc>
-> ---
->  .../bpf/prog_tests/bpftool_ringbuf.c          | 425 ++++++++++++++++++
->  .../selftests/bpf/progs/bpftool_ringbuf.c     |  47 ++
->  2 files changed, 472 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
->  create mode 100644 tools/testing/selftests/bpf/progs/bpftool_ringbuf.c
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c b/tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
-> new file mode 100644
-> index 000000000000..1a4ae88c05a0
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
-> @@ -0,0 +1,425 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <ctype.h>
-> +#include <fcntl.h>
-> +#include <poll.h>
-> +#include <signal.h>
-> +#include <sys/mman.h>
-> +#include <sys/wait.h>
-> +#include <test_progs.h>
-> +#include "bpftool_ringbuf.skel.h"
-> +
-> +#define WAIT_STEPS 500
-> +#define WAIT_US 10000
-> +
-> +struct consumer {
-> +	pid_t pid;
-> +	int fd;
-> +};
-> +
-> +static const char *bpftool_path(void)
-> +{
-> +	const char *path = getenv("BPFTOOL");
-> +
-> +	if (path)
-> +		return access(path, X_OK) ? NULL : path;
-> +	if (!access("./tools/sbin/bpftool", X_OK))
-> +		return "./tools/sbin/bpftool";
-> +	if (!access("../tools/sbin/bpftool", X_OK))
-> +		return "../tools/sbin/bpftool";
-> +	return NULL;
-> +}
+> [Severity: High]
+> Can this result in a Use-After-Free during concurrent task exit?
 
+> When a task exits, mmput() drops mm_users to 0 and calls __mmput(), which
+> invokes exit_mmap(). exit_mmap() releases the mmap_write_lock and then calls
+> free_pgtables() without holding any locks.
 
-As bpf-ci's review says, please look into reusing the existing helpers
-if possible.
+> If a BPF program passes a trusted mm_struct like task->mm to this kfunc, it
+> eventually calls access_remote_vm(mm) without validating or incrementing
+> mm_users (for example, by using mmget_not_zero()).
 
+> Since access_remote_vm() acquires mmap_read_lock(), if this occurs after
+> exit_mmap() has dropped the write lock but before it destroys the VMA tree,
+> vma_lookup() will succeed. This means __get_user_pages() will walk page
+> tables that are being concurrently freed locklessly by free_pgtables(),
+> resulting in a Use-After-Free.
 
-> +
-> +static void consumer_cleanup(struct consumer *child)
-> +{
-> +	if (child->pid > 0) {
-> +		kill(child->pid, SIGKILL);
-> +		while (waitpid(child->pid, NULL, 0) < 0 && errno == EINTR)
-> +			;
-> +		child->pid = -1;
-> +	}
-> +	if (child->fd >= 0) {
-> +		close(child->fd);
-> +		child->fd = -1;
-> +	}
-> +}
-> +
-> +static bool consumer_start(struct consumer *child, int map_fd, const char *format,
-> +			   const char *pin_path, const char *option,
-> +			   bool pair, bool capture_errors)
-> +{
-> +	struct bpf_map_info info = {};
-> +	__u32 len = sizeof(info);
-> +	const char *path = bpftool_path();
-> +	char *argv[12], id[16];
-> +	int out[2], ready[2], n = 0, err, err_fd;
-> +	struct pollfd pfd;
-> +
-> +	if (!ASSERT_OK_PTR(path, "bpftool path (set BPFTOOL to override)") ||
-> +	    !ASSERT_OK(bpf_map_get_info_by_fd(map_fd, &info, &len), "map info"))
-> +		return false;
-> +	snprintf(id, sizeof(id), "%u", info.id);
-> +	argv[n++] = (char *)path;
-> +	if (format)
-> +		argv[n++] = (char *)format;
-> +	argv[n++] = "map";
-> +	argv[n++] = "event_pipe";
-> +	argv[n++] = pin_path ? "pinned" : "id";
-> +	argv[n++] = pin_path ? (char *)pin_path : id;
-> +	if (option) {
-> +		argv[n++] = (char *)option;
-> +		argv[n++] = "0";
-> +		if (pair) {
-> +			argv[n++] = "index";
-> +			argv[n++] = "0";
-> +		}
-> +	}
-> +	argv[n] = NULL;
-> +	if (!ASSERT_OK(pipe2(out, O_CLOEXEC), "output pipe"))
-> +		return false;
-> +	if (!ASSERT_OK(pipe2(ready, O_CLOEXEC), "exec pipe")) {
-> +		close(out[0]);
-> +		close(out[1]);
-> +		return false;
-> +	}
-> +	child->pid = fork();
-> +	if (!child->pid) {
-> +		close(out[0]);
-> +		close(ready[0]);
-> +		err_fd = capture_errors ? out[1] : open("/dev/null", O_WRONLY);
-> +		if (dup2(out[1], STDOUT_FILENO) < 0 ||
-> +		    dup2(err_fd, STDERR_FILENO) < 0)
-> +			goto exec_fail;
-> +		if (!capture_errors)
-> +			close(err_fd);
-> +		close(out[1]);
-> +		execv(path, argv);
-> +exec_fail:
-> +		err = errno;
-> +		write(ready[1], &err, sizeof(err));
+> Does this need to acquire a reference to mm_users before proceeding?
 
+I don't believe that this can happen in the case of lsm.s/bprm_check_security,
+where bprm owns the mm throughout the lifetime of that hook.
 
-I think that ignoring the return value from write() can produce a
-compiler warning (-Wunused-result).
+I also cannot find a case where we can have a trusted pointer to mm_struct
+where mm_users can be 0. A candidate could be security_vm_enough_memory_mm(),
+but this is not in sleepable_lsm_hooks.
 
-[...]
+On the other hand, this can change in the future if anyone marks a relevant
+pointer as trusted-or-null, similarly to what I did in this series.
 
-Looks OK otherwise, thank you
+I will update both kfuncs to use mmget_not_zero()/mmput() just to be on the
+safe side for future uses of these kfuncs.
