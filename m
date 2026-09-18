@@ -1,322 +1,307 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo2-f43.google.com (mail-oo2-f43.google.com [74.125.231.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0104327AC57
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 00:49:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.152.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789692575; cv=pass; b=p8OUCPKqrvFa8P8ZGQ+0xU0EcMzZTxpRaZdfJ4MSqq4nLbX3L1KDEgEBbxoxi8j0azTSSXGzIKeboj8xCZ1kcLrU6QVoJuG0Jvyz5tuVfxIrc7F1l8yClu/Fu2fX5YG4cLrlpSoe0BFPOKbgbdtSNvEb4gNBe4OWYe2F92CxbJc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789692575; c=relaxed/simple;
-	bh=uabo6aboTS2IHRfMBkbstDPslMh+pSkVjmfAlELN1O8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nJSe0BsT6Jzta5bMvsbunA08EGr3MF9fB64RhzWJZJlhpHtDNn7FXHPwE8PsygqMmFpXGGs4myuQ7jRFyBG/XFw3ewkwDrViSvP+dhhdnQdoL/sbtQjXIqDKd7gij4cjCUoYh7D3aPyLfkOLOHZKmKcH5bAUs5VE20U49WREWzQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=nAm2VKkM; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=ATecxBb9; arc=pass smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA0237BE6F
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 01:05:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789693520; cv=none; b=ckMS0mg/zIp+/tHfPQdBHWGR+74U9NPvkVUhL38G2jZswt5dhy+VUcOpNSxOKTfva8j9Z6I74UDu+yJjxx16Hxj9mRJch/N09ERMtKsdxjXCI3OAjIWP8lMqvThEY2C+93oDZZ5wR5bYj5TM07JPTaCuiDPV+EBy7SCKhO5hPYA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789693520; c=relaxed/simple;
+	bh=j2rehNhGzbbVg012X8emIbS0OZcDIEKmHWgB+ZLmCRQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tUJVKiVVaijFSaIzm87fpdgjvlMRlHStur1zme55aQrpLNci17BgFj77+W+x2ZmTE77PScKtVmnxnECAPqX8ePIZ2P06Xz6fAjXaR5s/EfR/COh7DU730SrA9Kv3bLaY2SDOizy3EhXfg1yT/rgJDgC0HTuFSpwwCvM6kvRz26E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bobrowski.net; spf=pass smtp.mailfrom=bobrowski.net; dkim=pass (2048-bit key) header.d=bobrowski.net header.i=@bobrowski.net header.b=YDkmzPjY; arc=none smtp.client-ip=74.125.231.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bobrowski.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bobrowski.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="nAm2VKkM";
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="ATecxBb9"
-Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68HII6P63369870
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 00:49:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=JrTA2HwGMKIp7t4pWKHEf1FBnA9XzoQUlR6nw/XdevE=; b=nAm2
-	VKkMyW2bhU4dTw3v+X97ZY/W6M1TN5X6gsN0OM0LBT3F9yVF2CV33sZTIQtzlQey
-	m8ZV5W60SsTtUl8DzFzkYeg2PqY0gRJVkWBETuVRmyG86C7yLpkZlL7EolJCgGb/
-	StH3wGZ5LBTiGjYIOfyNyNFVgKjehTMUX7hPAwZQA1IBoCMDys94bou7F0u7jmgY
-	DnNcx7qsBD5aWWGHk3AX33yderZYk7tXvDQy2j5NvNfwJh0tu0ZOAk8Mav9e5MxW
-	GVDBweaCwsVY1YgTmco4yTM9YLSbVsruSi7jjubSV9TyIMIuGL/eG+MmOE7LERHI
-	jyCCA1TqMKx3fpPiVg==
-Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com [209.85.128.200])
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4gr3dpn4f0-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 00:49:26 +0000 (GMT)
-Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-8914aeaa16aso2423547b3.1
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 17:49:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789692566; cv=none;
-        d=google.com; s=arc-20260327;
-        b=DL/NZli9gMtPOZBjIPnPxKOHHXqCAK8Sj0CRFcGGXThRQf4d76Uea93RgwTzUtnu/G
-         nuJOpS1NlrVPDUgNqYA8A+x/Xrm+ldYgcEDo83xNeNbj8cz4pZ/QXS1vIZ+O2IE4s/GC
-         WtDtLnFyKZGXXN25jI89ge4ilOrzMtYdf3HsoxTZinBg4ZbrJOpKSQKCPuUtknKREByV
-         QZTUyIt1clH9zikd93UYUqya9dJYpGLj6hsfznTSS4widPP2rAG8Yl0i5z04ssrW3tVN
-         PK77YCLWAMy/dgTrD2RUysgCJSeAAp34edT1weDmR77DzoFVQahQyzBQM2D8YUCJciLQ
-         ZUxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=JrTA2HwGMKIp7t4pWKHEf1FBnA9XzoQUlR6nw/XdevE=;
-        fh=yEwDLFEpR7vZPZHgjppIeIj4fICB1i8cqKOclAVC8Rs=;
-        b=D/zWnloj4gXyzLn3F3LVwxgAJwl0luh7bY85zeGc6OW17ocroFo0aoc1bs0vr1+6j0
-         ZbLM+jdtQO5Flbgsut/wUXwNQ3fvMT/vEblYW7ogurjYAUvSl3UGfg6kT8Hg52j/4n/n
-         hrLk5fE2g2NTt14AwXWe1+Rpof14bqUCK17aUoS92ELCHYtzJZ+o12kNmHuyWMHO/fVc
-         VTZrP9gg/hGbqBGzr5kt2Ve4V+BN0QPGDOj3VaM/At4pYiP3GiGSGKEFNI/zDZfFv/La
-         s52v4mm3U3E/puAUpRQKUKOJATYxJSDoeB6eGnV98CIrVRCGHOGBybplNNrCQUs/Z37D
-         UsXQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=bobrowski.net header.i=@bobrowski.net header.b="YDkmzPjY"
+Received: by mail-oo2-f43.google.com with SMTP id 006d021491bc7-6b1ae6b200fso123133eaf.1
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 18:05:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=crowdstrike.com; s=google; t=1789692566; x=1790297366; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=bobrowski.net; s=google; t=1789693506; x=1790298306; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=JrTA2HwGMKIp7t4pWKHEf1FBnA9XzoQUlR6nw/XdevE=;
-        b=ATecxBb9OkYmnoeQ/tfsJ615Fle8DuvsoHchcmrKG/l9OEUQC9qTncPCl9m0cC3yoh
-         8f2/SF3io768yfIR5si17L8BiMVaDK/4NdXp61debBVbL92pCtjB8IZxVDhLi86qhsjZ
-         MqAhps73e5LqDs426YpvF372kTHsUmygh8SIinsntvLkQqqb2Jj2QM5C2jaYi7vINW/Y
-         ewbMf5ELjXck31rEWFpTyrFJsoCVhCzNP3aWwuWLqNeLvOYQFAmfDBQDtWEQjI2ggPxT
-         6hygOBKYS/9OPvcLX61wwaGmbUGKpJ614WtEOANYDGMYx3mdzSWTD1oc/4gZiOS8EMLU
-         gVIw==
+        bh=luKWt0kKmWjdQ8jTRpB2Q7txnP5JpBdLjM73GX2ZxbI=;
+        b=YDkmzPjYCBQL8f70e3DsLAYmJKZTsdk9HXOk/JelhYR8ZIxiP11s437PnfLqXn1X1Y
+         M4fi9v4ORtfyxA4pjgSkDL4ZJVgve8gceWTf0sgqiaojA8Bhp75vtyAemlP3PCt+v15d
+         P1Gg8W9eBAKXx7ZNXsyGHSSzttDW+9MKyXTXBpJPfhTWada2sc5mXhM7Cx67unYJC3nA
+         0FlgTC9xkIVvPYQ6K/tw6JXOVMZCx8WJLetEhunPIVvy/Evl48A+XWA+aDmnt8/ItX05
+         /hKl+4JYUuY0XJHYjH3XnqQ9cVvMvDr1zjGjq3OHtcgIu+eBIrEG9Ig6Ys5H0Fh7DuM7
+         2+Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789692566; x=1790297366;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1789693506; x=1790298306;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=JrTA2HwGMKIp7t4pWKHEf1FBnA9XzoQUlR6nw/XdevE=;
-        b=jLvbFMeey52Z3Dbpcb/1cn4ALFSERqUaSdZSOzHR5ZMXtBJ/lxZuomrwqJCNHLPKG/
-         v2hWdvC6VWJiWOxdPyE1AjuJ+NNnQGmVHhOh9wLRiQ1Mhx5qEGTiHYKIiw/aqp8b1iBv
-         nDE8O9G4Oc8vbxnmgrC3vuajTtTpZJUkzw3+yIoKx8sSHTzj6B+JjYuTCX+UKx7xVkTs
-         bxJIYYk0YJFNubiNO3SqIh6qDB0080aaD2qOtFsjyN4gyqwFPrRpvVriXtddXTrRBqhQ
-         64qblBWNOzzTqVaS6nDjRAhsgPPbra55gzLQfUlJHM/YLEJH4zFrLUZl67KO5Rc6IaXv
-         oaew==
-X-Forwarded-Encrypted: i=1; AKwUvBxkddDq0UNQPXDj59x+39EoORGCt5qw0YEylY2AfUuynOHXpb8yMPqVzJObxqVlxp1f/5k=@vger.kernel.org
-X-Gm-Message-State: AFuF++nyp2g0PIRm5XTldngEPN6sN+7TPA45z7FU8uevxR2v4gScaQPi
-	/FhfzYCGIqwgFSLYt7FZ3gWMYvv2uYQhSuVJzvqwLd6CegZyGNTtv+H2dlMs1Azh6WQJ8K7OA1z
-	gIFkaDkseUomxPesoDO0ejjlY4HcgydMEqUPZ/pb0Raznc2+e2JmUc6FqmuBLfNkR/HxZeG8VAd
-	aaWfyW0N1WDoRTOOdE/0ma/1RyO3jt
-X-Gm-Gg: AYBFou2iv9QwJvbu0gRi3RVue8kNuwZt17LbZ5IK/HXnlkXTEoeMjKyg5VgjspxsdBt
-	L3VRbVDjs5fTk9zm00fhYuyM8ByoV/ImE8p2lZxwW7TUp9xvXykM+pfKFz4u6J1i+4q+XyymP2e
-	ZYHshqIB+/CcbVXHcHNXHYTjI1XmN+26pJR86/V7MVvGm2SK0Nw8HZvJ0Deg==
-X-Received: by 2002:a05:690c:4026:b0:88f:73b0:fa87 with SMTP id 00721157ae682-897311d541cmr2406317b3.11.1789692566553;
-        Thu, 17 Sep 2026 17:49:26 -0700 (PDT)
-X-Received: by 2002:a05:690c:4026:b0:88f:73b0:fa87 with SMTP id
- 00721157ae682-897311d541cmr2406197b3.11.1789692565954; Thu, 17 Sep 2026
- 17:49:25 -0700 (PDT)
+        bh=luKWt0kKmWjdQ8jTRpB2Q7txnP5JpBdLjM73GX2ZxbI=;
+        b=Q3JpWuHB5vzC/H04ToXR215M646Nht0oSCiwmi/Es0B05vh0s82oDSf0kZ4+l7sByg
+         oXpagu3dBvFALTuXtpkEglqTxXECwucSpEeHHh+7R5rQeycfWGiKTiWeZgvajKLJT1lC
+         1nAnrFlk0b0bYvi39P5fot21+al5juvSlIkyA2Zdblu6Z0ZRsX+gL5jqEGo/oD+FM+7O
+         pFsPUk6Fh+sW/J1PZx3HrPY3u3pXRrrYNHLyMs5Umx1HYgmXCxAAzQJ/ixBy/j5fnEfL
+         DZ2JOh2SNmOZvUwS+bsUUFRz7NY8MDweiIkDcqq/GwPM+WkmxLmmLDJkDOYi13TKxWjm
+         /XGg==
+X-Gm-Message-State: AFuF++lV9w2ewfE4hgwq8TOHPJIKu9aD/gEUqB2iiVk4MwpGq0WUgITc
+	WcDZnBwYnSZKisoqfa4CCbsR0zmnLs392dTTEL2mBQolGVENMHHUFAAHAMbX5ORhPrBz
+X-Gm-Gg: AYBFou1sd2AmlIhd+oxC/eG0fSZoYtlg4f7OkAu+Eq21WTjstebXNiaHzcwKr4xgFmS
+	XuXjBIm3DK3QJyeNVxPvQL829W4dUQB4D0invDbFVbgkLxw3KL44H1onACBtF9lhsqDbO8XXdCx
+	/JC20KCs4CTSIrywN0x7GskBghkOt6O7xzxnacGTho9P2H9SU8IuKpNOjh/pRW1v31PtsTYsB/g
+	zYlTnOtZee1rSuHGr9fEVOm7d3Sx2zGdZ5vFUubN7gP4qoIAau8amfdaQOa5PKL/ckHHP4FbCnT
+	7uDXNtEiANYcOMTGUQTufbkbkJaGXAIqU6IzVWNyHaCmTBym+mQkZUj8vzqchr8ZBi1UMxiL2oX
+	NqYxTxcnB5Rqz7nB94InmLsmEsKDMinAYcfKSo0zvFo3pAt99NWFtoS+IJ4RUf5XI4f3RU9yJ3q
+	UqTKG6xWhUeSewvpQ07iGnEHtkLgfOI+c2I1A3f6r4tKI=
+X-Received: by 2002:a05:6820:2019:b0:6bd:5506:aae0 with SMTP id 006d021491bc7-6ca9a748585mr824155eaf.22.1789693505875;
+        Thu, 17 Sep 2026 18:05:05 -0700 (PDT)
+Received: from lima-development ([75.104.94.190])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4870b53dfdasm343751fac.11.2026.09.17.18.04.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2026 18:05:05 -0700 (PDT)
+Date: Thu, 17 Sep 2026 21:04:37 -0400
+From: Matt Bobrowski <matt@bobrowski.net>
+To: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+Cc: bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, david@kernel.org,
+	akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
+	brauner@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com,
+	kpsingh@kernel.org, ljs@kernel.org, memxor@gmail.com,
+	song@kernel.org, sun.jian.kdev@gmail.com, utilityemal77@gmail.com,
+	viro@zeniv.linux.org.uk
+Subject: Re: [PATCH bpf-next v7 3/5] bpf: Add user memory access kfuncs for
+ mm_struct
+Message-ID: <aqyOJVeiJrglQ7Up@lima-development>
+References: <20260915080255.48929-1-tasos.papagiannnis@gmail.com>
+ <20260915080255.48929-4-tasos.papagiannnis@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260826181825.1826541-1-andrey.grodzovsky@crowdstrike.com>
- <CAEf4Bzaf9AMBUWQeUj1Uor8F7A-tOPpVMa-CjRB0MNH4zRHEeQ@mail.gmail.com> <CAOu3gNhjPamqZgcxBj7Sgmr+B76qPC+O1hdWg7dY3uNuat+UMA@mail.gmail.com>
-In-Reply-To: <CAOu3gNhjPamqZgcxBj7Sgmr+B76qPC+O1hdWg7dY3uNuat+UMA@mail.gmail.com>
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Date: Thu, 17 Sep 2026 20:49:13 -0400
-X-Gm-Features: AcwNN1XENE7b2PhilXUV9R3tnI_4VG0H2DTo0CTeGlbU3eQ7adQBrAzjEPZozgU
-Message-ID: <CAOu3gNhbz0m7=cPAAD-NWPix-TCL7B3iFFTHn1JzaaukAXP3oQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/5] libbpf: BPF program dynamic loading
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org,
-        andrii@kernel.org, martin.kelly@crowdstrike.com,
-        slava.imameev@crowdstrike.com, linux-open-source@crowdstrike.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-ORIG-GUID: VE-cHydN9XhP-faoGDJdsX2tQLNiHUyh
-X-Proofpoint-GUID: VE-cHydN9XhP-faoGDJdsX2tQLNiHUyh
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE4MDAwNyBTYWx0ZWRfX3LH8GDQuUgC1
- MMPym0dEWeD98wbEzZHS9sSJ+5/M0JrtdtTMY4Yybz6es+YvQzB5pHD1XnkWFzw511duM/rmWyR
- VtALK6zVDSAjEOz0H5uwfpQ4tPVJwmJy9PRWgw4knbBq0phQ8JcZ
-X-Authority-Analysis: v=2.4 cv=UerE26SN c=1 sm=1 tr=0 ts=6aac8a97 cx=c_pps
- a=NMvoxGxYzVyQPkMeJjVPKg==:117 a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10
- a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
- a=GCXdLZfFv8EKBZhKOxZ5:22 a=VwQbUJbxAAAA:8 a=pl6vuDidAAAA:8 a=pGLkceISAAAA:8
- a=Pgacwa0oAAAA:8 a=rlCgVymONP-Ov0OCyKcA:9 a=QEXdDO2ut3YA:10
- a=kLokIza1BN8a-hAJ3hfR:22 a=xnLNWz09G3ZUmE6K9NTY:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE4MDAwNyBTYWx0ZWRfX1XQDloBDmXma
- s+CV9+hUAmxDqSvVFXfNbQmaNzzPvS1YphXUl+OzgwvZ511+qhySjBf0IjNJ7gAa0vkPfoHYD1M
- kqImdulPIkVB3ETaVX2Vr7FynJ8Mx2xlbe4zb1lZx2EWwMaqVacVu/bgSlm4bTG2vOo4vC/LlmS
- 9K6RJDsHgtJgCwY3jjlgGEo5ziqyEcu2PrOrIGuOjoRWmX43DA9mWIsAIUtvcdb9FcFUt/PzhWE
- varyDZ7jKrmOu+0m4+hea4E70p5+gLPYvCEORxV7NYtKyiCJ9q4NLdCdujI0h+vr/yzhpgRiX0W
- hkiVp3JAyur9+Mf5HljH6G918vAnp6ROuvnAz5TofgMQZbD5fFesr6dNpOJxtNf3V2sZTDB/JTY
- 8f+RGR8xu4foodoO345B2L/ZDdcAwhniG/tmCbrf0zSvkAdBpkRRmbtkMwUv4P77BdQFmxOraBl
- P3tSTU6Hw1LAFxXX3Yw==
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11908
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 suspectscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015
- phishscore=0 spamscore=0 bulkscore=0 malwarescore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609180007
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260915080255.48929-4-tasos.papagiannnis@gmail.com>
 
-On Wed, Sep 16, 2026 at 8:45=E2=80=AFPM Andrey Grodzovsky
-<andrey.grodzovsky@crowdstrike.com> wrote:
->
-> On Fri, Sep 11, 2026 at 7:47=E2=80=AFPM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Wed, Aug 26, 2026 at 11:18=E2=80=AFAM Andrey Grodzovsky
-> > <andrey.grodzovsky@crowdstrike.com> wrote:
-> > >
-> > > This series was originally posted in January 2025 [1] as
-> > > a two-patch RFC introducing a per-program tri-state load type
-> > > (disabled/auto/dynamic) to let large BPF applications load a subset o=
-f
-> > > their programs lazily, after the initial bpf_object load.
-> > >
-> > > We looked at the object-wide opt-in flag Andrii suggested as a
-> > > lighter-weight alternative to a per-program enum ("all programs may l=
-oad
-> > > later, opt in via bpf_object_open_opts"). Problem was that it collaps=
-es two
-> > > states that need to stay distinguishable at the level of a single pro=
-gram:[2]
-> > >
-> > >   - a program that is not currently loaded but is *expected* to load
-> > >     later, gated on runtime configuration; and
-> > >   - a program that is *permanently* not going to load on this kernel
-> > >     (e.g. it targets a symbol or struct field that doesn't exist on t=
-he
-> > >     running kernel, or it lost out to an alternative implementation a=
-nd
-> > >     will never be used on this object instance).
-> > >
-> > > A per-program enum keeps that distinction where it belongs: disabled
-> > > stays fully excluded from relocation/map-creation with isolated failu=
-re
-> > > handling, auto is unchanged, and the new dynamic state is the only on=
-e
-> > > that opts a given program into later loading -- without implicitly
-> > > promoting every other disabled program in the object along with it.
-> > >
-> > > This v2 keeps the same programs and tests we originally proposed, and
-> > > addresses two additional requests from Andrii [3]:
-> > >
-> > > 1. bpf_program__set_autoload() is converted from bool to the new
-> > >    enum bpf_prog_load_type, so it remains source- and ABI-compatible
-> > >    with the ~200 existing bool callers (false->0, true->1 already mat=
-ch
-> > >    the enum's DISABLED/AUTO numbering), while becoming a thin forward=
-er
-> > >    to bpf_program__set_load_type(). It intentionally continues to rej=
-ect
-> > >    BPF_PROG_LOAD_TYPE_DYNAMIC, to preserve its original on/off meanin=
-g --
-> > >    dynamic load is only reachable through set_load_type().
-> > >
-> > > 2. A declarative way to mark a program dynamic-load-eligible from its
-> > >    source, as an alternative to an imperative set_load_type() call, u=
-sing
-> > >    a new BTF decl_tag.
-> > >
-> > > Motivation:
-> > >
-> > > Security tools built on top of libbpf commonly ship as a single large
-> > > BPF object containing many programs, only a subset of which are neede=
-d
-> > > on any given system -- the rest are gated on optional features or on
-> > > kernel/runtime capabilities that vary across deployments. For this cl=
-ass
-> > > of application, per-program dynamic loading helps in two ways:
-> > >
-> > >   - it shortens the initial load, since only the programs actually
-> > >     needed for the running configuration are loaded and attached up
-> > >     front instead of the whole object; and
-> > >   - it lets a single failing program be unloaded and possibly
-> > >     reloaded (or a feature toggled at runtime) without tearing down
-> > >     and reloading the entire bpf_object.
-> > >
-> > > Both reduce the time window during which the tool is partially loaded=
- or
-> > > inactive -- for a security tool specifically, that is also the time
-> > > window during which the system it protects is unprotected.
-> > >
-> > > We have been running this with our internal fork of libbpf in product=
-ion
-> > > for about a year. Depending on kernel and configuration support, arou=
-nd
-> > > 250 of our programs are potentially loadable on any given system; wit=
-h
-> > > dynamic loading, only around 90 of those are actually loaded by defau=
-lt,
-> > > growing to the full 250 only when every optional feature is enabled.
-> > > Cutting the default set of loaded programs from 250 down to 90 measur=
-ably
-> > > reduces load time (we observed ~60% reduction in our own measurements=
-),
-> > > and since unload time scales with the number of loaded programs, it
-> > > correspondingly shortens unload time as well -- which matters, since
-> > > slow unload can delay system shutdown. We believe this functionality
-> > > would benefit other libbpf consumers with similarly large, modular BP=
-F
-> > > applications.
-> > >
-> >
-> > we should try to use this functionality in veristat, see if it can
-> > more cleanly replace clone-based solution we have currently.
->
-> I will look into this, in my next patchset iteration, I moved (by your
-> suggestion)  the gating for manual loading from OBJ_LOADED ->
-> OBJ_PREPARED, this at least according to code review should allow
-> this. I will dig deeper into it.
->
-> Andrey
+On Tue, Sep 15, 2026 at 11:02:53AM +0300, Anastasios Papagiannis wrote:
+> On CONFIG_MMU kernels, when security_bprm_check() runs, the argument and
+> environment strings for the exec have been copied into bprm->mm. The new
+> address space is not associated with a task_struct until exec_mmap(), so
+> existing BPF user memory helpers cannot access it.
+> 
+> Add bpf_copy_from_user_mm() and bpf_copy_from_user_mm_str() kfuncs. Both
+> take a struct mm_struct pointer directly, allowing callers to access
+> trusted address spaces that are not associated with a task_struct.
+> 
+> bpf_copy_from_user_mm() has similar semantics to
+> bpf_copy_from_user_task(). bpf_copy_from_user_mm_str() copies one
+> NUL-terminated string and returns its size including the NUL terminator.
+> It accepts BPF_F_PAD_ZEROS to clear unused destination bytes on success.
+> 
+> Refactor the task-based helpers and the new mm-based kfuncs to share
+> static internal implementations. The task-based interfaces validate their
+> arguments before acquiring and holding a reference to the task's mm for
+> the copy. No behavior change is intended for the existing task-based
+> interfaces.
+> 
+> Register both new kfuncs and mark them KF_SLEEPABLE because accessing a
+> remote address space can fault.
 
-Following on this - I  swapped bpf_program__clone() for
-set_load_strategy(MANUAL) + load_manually()/unload_manually() in
-veristat's process_obj()/process_prog(). Builds clean, test_progs -t
-veristat passes.
+Thank you for employing my suggestions. I think this looks much better to me
+now. Feel free to add:
 
-One isue spotted : load_manually() calls bpf_prog_bind_map() for
-RODATA maps on every load (via bpf_object_load_prog()), which clone()
-deliberately skips to avoid mutating object state and Mykyta even has
-explicit comment about wanting to avoid this. Since veristat loads
-each program individually, shared RODATA maps now get bound on every
-load. But they also get unbounded once we unload the program (drop its
-FD).
+Reviewed-by: Matt Bobrowski <matt@bobrowski.net> 
 
-Andrey
-
->
-> >
-> > >
-> > > [1] https://urldefense.com/v3/__https://lore.kernel.org/bpf/202501222=
-15206.59859-1-slava.imameev@crowdstrike.com/__;!!BmdzS3_lV9HdKG8!1zjO5-1CVI=
-Chpj-ePa0a0tLxU67BvclwUXzHIWVFj9j9rj9WraXxTZW7Bumk_isDyjBPDLExnfctIUG_V2ATb=
-p4Ecz6a8j3WfggToQ$
-> > > [2] https://urldefense.com/v3/__https://lore.kernel.org/bpf/CAOu3gNjg=
-5vQ=3Dt0C5UmStNpK8zutFC7kcYTrKt9aiR8Gia*rdNw@mail.gmail.com/__;Kw!!BmdzS3_l=
-V9HdKG8!1zjO5-1CVIChpj-ePa0a0tLxU67BvclwUXzHIWVFj9j9rj9WraXxTZW7Bumk_isDyjB=
-PDLExnfctIUG_V2ATbp4Ecz6a8j29k6Njrg$
-> > > [3] https://urldefense.com/v3/__https://lore.kernel.org/bpf/CAEf4BzZK=
-y5Wv_TxtEqsbzW*v-tO28kgY=3D9RhXrnbPhOZcVbOSA@mail.gmail.com/__;Kw!!BmdzS3_l=
-V9HdKG8!1zjO5-1CVIChpj-ePa0a0tLxU67BvclwUXzHIWVFj9j9rj9WraXxTZW7Bumk_isDyjB=
-PDLExnfctIUG_V2ATbp4Ecz6a8j2Xo62azw$
-> > >
-> > > Andrey Grodzovsky (2):
-> > >   libbpf: Convert bpf_program__set_autoload() to load-type enum
-> > >   libbpf: Support declarative dynamic load via BTF decl_tag
-> > >
-> > > Slava Imameev (3):
-> > >   libbpf: BPF program load type enum
-> > >   libbpf: BPF programs dynamic loading and attaching
-> > >   selftests/bpf: Cover BPF program dynamic loading
-> > >
-> > >  tools/lib/bpf/bpf_helpers.h                   |   5 +
-> > >  tools/lib/bpf/libbpf.c                        | 273 ++++++++++++++++=
---
-> > >  tools/lib/bpf/libbpf.h                        |  32 +-
-> > >  tools/lib/bpf/https://urldefense.com/v3/__http://libbpf.map__;!!Bmdz=
-S3_lV9HdKG8!1zjO5-1CVIChpj-ePa0a0tLxU67BvclwUXzHIWVFj9j9rj9WraXxTZW7Bumk_is=
-DyjBPDLExnfctIUG_V2ATbp4Ecz6a8j2Lf3q1jA$                       |   4 +
-> > >  .../selftests/bpf/prog_tests/dynamicload.c    | 222 ++++++++++++++
-> > >  .../selftests/bpf/prog_tests/load_type.c      | 167 +++++++++++
-> > >  .../selftests/bpf/progs/test_dynamicload.c    |  40 +++
-> > >  .../selftests/bpf/progs/test_load_type.c      |  31 ++
-> > >  8 files changed, 741 insertions(+), 33 deletions(-)
-> > >  create mode 100644 tools/testing/selftests/bpf/prog_tests/dynamicloa=
-d.c
-> > >  create mode 100644 tools/testing/selftests/bpf/prog_tests/load_type.=
-c
-> > >  create mode 100644 tools/testing/selftests/bpf/progs/test_dynamicloa=
-d.c
-> > >  create mode 100644 tools/testing/selftests/bpf/progs/test_load_type.=
-c
-> > >
-> > > --
-> > > 2.34.1
-> > >
-> >
+> Signed-off-by: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+> ---
+>  kernel/bpf/helpers.c | 130 +++++++++++++++++++++++++++++++++++++++----
+>  1 file changed, 118 insertions(+), 12 deletions(-)
+> 
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 051b6654e57c..f6b3eee6098a 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -679,9 +679,44 @@ const struct bpf_func_proto bpf_copy_from_user_proto = {
+>  	.arg3_type	= ARG_ANYTHING,
+>  };
+>  
+> +static int __bpf_copy_from_user_mm(void *dst, u32 size,
+> +				   const void __user *user_ptr,
+> +				   struct mm_struct *mm)
+> +{
+> +	int ret;
+> +
+> +	ret = access_remote_vm(mm, (unsigned long)user_ptr, dst, size, 0);
+> +	if (ret == size)
+> +		return 0;
+> +
+> +	memset(dst, 0, size);
+> +	/* Return -EFAULT for partial read */
+> +	return ret < 0 ? ret : -EFAULT;
+> +}
+> +
+> +static int __bpf_copy_from_user_mm_str(void *dst, u32 size,
+> +				       const void __user *user_ptr,
+> +				       struct mm_struct *mm, u64 flags)
+> +{
+> +	int ret;
+> +
+> +	ret = copy_remote_mm_str(mm, (unsigned long)user_ptr, dst, size, 0);
+> +	if (ret < 0) {
+> +		if (flags & BPF_F_PAD_ZEROS)
+> +			memset(dst, 0, size);
+> +		return ret;
+> +	}
+> +
+> +	if (flags & BPF_F_PAD_ZEROS)
+> +		memset(dst + ret, 0, size - ret);
+> +
+> +	return ret + 1;
+> +}
+> +
+>  BPF_CALL_5(bpf_copy_from_user_task, void *, dst, u32, size,
+>  	   const void __user *, user_ptr, struct task_struct *, tsk, u64, flags)
+>  {
+> +	struct mm_struct *mm;
+>  	int ret;
+>  
+>  	/* flags is not used yet */
+> @@ -691,13 +726,16 @@ BPF_CALL_5(bpf_copy_from_user_task, void *, dst, u32, size,
+>  	if (unlikely(!size))
+>  		return 0;
+>  
+> -	ret = access_process_vm(tsk, (unsigned long)user_ptr, dst, size, 0);
+> -	if (ret == size)
+> -		return 0;
+> +	mm = get_task_mm(tsk);
+> +	if (!mm) {
+> +		memset(dst, 0, size);
+> +		return -EFAULT;
+> +	}
+>  
+> -	memset(dst, 0, size);
+> -	/* Return -EFAULT for partial read */
+> -	return ret < 0 ? ret : -EFAULT;
+> +	ret = __bpf_copy_from_user_mm(dst, size, user_ptr, mm);
+> +	mmput(mm);
+> +
+> +	return ret;
+>  }
+>  
+>  const struct bpf_func_proto bpf_copy_from_user_task_proto = {
+> @@ -3659,6 +3697,68 @@ __bpf_kfunc int bpf_copy_from_user_str(void *dst, u32 dst__sz, const void __user
+>  	return ret + 1;
+>  }
+>  
+> +/**
+> + * bpf_copy_from_user_mm() - Copy data from an address space
+> + * @dst:             Destination address, in kernel space
+> + * @dst__sz:         Number of bytes to copy
+> + * @unsafe_ptr__ign: Source address in the address space
+> + * @mm:              Address space to copy from
+> + * @flags:           Reserved for future use; must be zero
+> + *
+> + * Copies data from the user address space associated with @mm. The destination
+> + * is zeroed if an attempted copy cannot be completed in full. Unsupported
+> + * flags return -EINVAL without modifying @dst.
+> + *
+> + * Return: 0 on success, -EINVAL if @flags is non-zero, or -EFAULT if the copy
+> + * fails or is partial.
+> + */
+> +__bpf_kfunc int bpf_copy_from_user_mm(void *dst, u32 dst__sz,
+> +				      const void __user *unsafe_ptr__ign,
+> +				      struct mm_struct *mm, u64 flags)
+> +{
+> +	if (unlikely(flags))
+> +		return -EINVAL;
+> +
+> +	if (unlikely(!dst__sz))
+> +		return 0;
+> +
+> +	return __bpf_copy_from_user_mm(dst, dst__sz, unsafe_ptr__ign, mm);
+> +}
+> +
+> +/**
+> + * bpf_copy_from_user_mm_str() - Copy a string from an address space
+> + * @dst:             Destination address, in kernel space. This buffer must be
+> + *                   at least @dst__sz bytes long
+> + * @dst__sz:         Maximum number of bytes to copy, including the trailing NUL
+> + * @unsafe_ptr__ign: Source address in the address space
+> + * @mm:              Address space to copy from
+> + * @flags:           The only supported flag is BPF_F_PAD_ZEROS
+> + *
+> + * Copies a NUL-terminated string from the user address space associated with
+> + * @mm. If the string is too long, @dst is still NUL-terminated unless @dst__sz
+> + * is zero.
+> + *
+> + * If the flags are valid and BPF_F_PAD_ZEROS is set, the unused portion of
+> + * @dst is cleared on success and all of @dst is cleared on a copy failure.
+> + * Unsupported flags return -EINVAL without modifying @dst.
+> + *
+> + * Return: The number of copied bytes including the NUL terminator on success,
+> + * or a negative error code on failure.
+> + */
+> +__bpf_kfunc int bpf_copy_from_user_mm_str(void *dst, u32 dst__sz,
+> +					  const void __user *unsafe_ptr__ign,
+> +					  struct mm_struct *mm, u64 flags)
+> +{
+> +	if (unlikely(flags & ~BPF_F_PAD_ZEROS))
+> +		return -EINVAL;
+> +
+> +	if (unlikely(dst__sz == 0))
+> +		return 0;
+> +
+> +	return __bpf_copy_from_user_mm_str(dst, dst__sz, unsafe_ptr__ign,
+> +					   mm, flags);
+> +}
+> +
+>  /**
+>   * bpf_copy_from_user_task_str() - Copy a string from an task's address space
+>   * @dst:             Destination address, in kernel space.  This buffer must be
+> @@ -3682,6 +3782,7 @@ __bpf_kfunc int bpf_copy_from_user_task_str(void *dst, u32 dst__sz,
+>  					    const void __user *unsafe_ptr__ign,
+>  					    struct task_struct *tsk, u64 flags)
+>  {
+> +	struct mm_struct *mm;
+>  	int ret;
+>  
+>  	if (unlikely(flags & ~BPF_F_PAD_ZEROS))
+> @@ -3690,17 +3791,20 @@ __bpf_kfunc int bpf_copy_from_user_task_str(void *dst, u32 dst__sz,
+>  	if (unlikely(dst__sz == 0))
+>  		return 0;
+>  
+> -	ret = copy_remote_vm_str(tsk, (unsigned long)unsafe_ptr__ign, dst, dst__sz, 0);
+> -	if (ret < 0) {
+> +	mm = get_task_mm(tsk);
+> +	if (!mm) {
+>  		if (flags & BPF_F_PAD_ZEROS)
+>  			memset(dst, 0, dst__sz);
+> -		return ret;
+> +		else
+> +			*(char *)dst = '\0';
+> +		return -EFAULT;
+>  	}
+>  
+> -	if (flags & BPF_F_PAD_ZEROS)
+> -		memset(dst + ret, 0, dst__sz - ret);
+> +	ret = __bpf_copy_from_user_mm_str(dst, dst__sz, unsafe_ptr__ign,
+> +					  mm, flags);
+> +	mmput(mm);
+>  
+> -	return ret + 1;
+> +	return ret;
+>  }
+>  
+>  /* Keep unsigned long in prototype so that kfunc is usable when emitted to
+> @@ -4925,6 +5029,8 @@ BTF_ID_FLAGS(func, bpf_iter_bits_new, KF_ITER_NEW)
+>  BTF_ID_FLAGS(func, bpf_iter_bits_next, KF_ITER_NEXT | KF_RET_NULL)
+>  BTF_ID_FLAGS(func, bpf_iter_bits_destroy, KF_ITER_DESTROY)
+>  BTF_ID_FLAGS(func, bpf_copy_from_user_str, KF_SLEEPABLE)
+> +BTF_ID_FLAGS(func, bpf_copy_from_user_mm, KF_SLEEPABLE)
+> +BTF_ID_FLAGS(func, bpf_copy_from_user_mm_str, KF_SLEEPABLE)
+>  BTF_ID_FLAGS(func, bpf_copy_from_user_task_str, KF_SLEEPABLE)
+>  BTF_ID_FLAGS(func, bpf_get_kmem_cache)
+>  BTF_ID_FLAGS(func, bpf_iter_kmem_cache_new, KF_ITER_NEW | KF_SLEEPABLE)
+> -- 
+> 2.55.0
+> 
