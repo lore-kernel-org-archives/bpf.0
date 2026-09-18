@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-49.mta0.migadu.com [91.218.175.49])
+Received: from mta0.migadu.com (out-116.mta0.migadu.com [91.218.175.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53AA439A04B
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 03:40:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BDE3B6C14
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 03:44:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789702853; cv=none; b=fzonBIOCLaZKTeyZqZtk5nfWSLIRZb46Ms8xqRCtf33VuhWcP/RCDEyTC3uIUn7EShoFs8RjFL/J1AMmiIN76S9o1Uw/fJS1kVT6fnylkEeAlf9G5tkfe9NSFSoFPXPtfeG2lcBAkAE2KiTElKZLoMXha6BMTGc9AfI39DryJkI=
+	t=1789703088; cv=none; b=QK0BXh1D1NTfOW9rTyQFmfcaycpa0lapQvSFGX16dGUQ+TxuwS0GD/KMGKgjs1cjbNXwLCXvAPuhQulugCWRl1twuCQsyUUmjNkto+YsN5GUs3OSfQJsjSsXiQ/oAOndjo4CUTtkDB7mTeQuJMS2IS2yCMVAMefA3CTH5jTlSSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789702853; c=relaxed/simple;
-	bh=Uv5zEHjMd+w1DdPtOHXhmJP+uV90Dqm5zdgq8vhBFeg=;
+	s=arc-20240116; t=1789703088; c=relaxed/simple;
+	bh=u1KEEBYeREVhDig1yhAtZPlOw+T+5A7kLX530zHmelg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EG5xgJSmr+kOdlgWOmPwzUtLD4jC0UJhn7kXYvuP1BAuV3oP4oXpqFHDBwvvHnkFKi3HDNspqICl/3RyTxHgTBw7yciDPLpQB8bC0HG6NpDSsMr1C+lKmwse9utkJzXxmNMbfcsEds6BPKxi45I7SbCIwfwJB7mNmWc9A7tma3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=s06KT261; arc=none smtp.client-ip=91.218.175.49
+	 In-Reply-To:Content-Type; b=MLvvVmYPTb2obzqoYJRTVSeiUakJE/TQWMBmt1e+iZOQ+4zgTGTyjkHRxvm/4YghIyMIyNi8ywm3ZB8Uka1BTdthMRN0PZz1rvI77beJwmnLCk4kz+YfopnQsV5lRY0uSKZvfO2VDZcK/y1swS9Eca6wR4G1hSSNaTTBxkq0mdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vvQ0wa3l; arc=none smtp.client-ip=91.218.175.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="s06KT261"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vvQ0wa3l"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Uv5zEHjMd+w1DdPtOHXhmJP+uV90Dqm5zdgq8vhBFeg=;
+DKIM-Signature: a=rsa-sha256; bh=u1KEEBYeREVhDig1yhAtZPlOw+T+5A7kLX530zHmelg=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789702850; v=1; x=1790307650;
- b=s06KT261f1MZi/WzwJXikEW7R11WGZwOQSiFZIETpMtG1RmzcDXLDn+kIDqZGKDNeSGGyXyh
- bHZb476KDdJgNSHcWaZrNqQfRKz9qw0HKneJnsGIUrp5lU9Zx6tHAhwoCnAvN9iZITIRrtWMQL6
- Lrv3mIKd2UN/MgONLhVhTYTg=
+ t=1789703082; v=1; x=1790307882;
+ b=vvQ0wa3lqSf1rLdfQZk3PJ9tcvEx0ko9dFjd+kpaFKxyOr2ZPOtPRwVIQ2ZLBFucrsNccqZx
+ eA22HmOkh8NSWBqFXM8h0QNZ8sXiAMHB1VILRO2gJ/ZEzSV/JDu3Y7n8z9GM3o3MEHyUs5dix1k
+ 0CYOF2XG1Ruve9Mg7O638awI=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id adf1b5659ffe700a;
-	Fri, 18 Sep 2026 03:40:50 +0000
-X-Mizu-Trace-ID: adf1b5659ffe700a
+Received: by smtp.migadu.com with ESMTPS id a9894047c007adea;
+	Fri, 18 Sep 2026 03:44:41 +0000
+X-Mizu-Trace-ID: a9894047c007adea
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <c2bed9c0-bd41-4045-ae25-2e3c9a8dbd8e@linux.dev>
-Date: Thu, 17 Sep 2026 20:40:46 -0700
+Message-ID: <48fd0275-b710-40de-890b-df81882e1b2e@linux.dev>
+Date: Thu, 17 Sep 2026 20:44:39 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,126 +38,124 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 13/20] libbpf: Resolve the compiler's
- _Unwind_Resume to the kernel's kfunc
+Subject: Re: [PATCH bpf-next 15/20] libbpf: Collect .bpf_cleanup records and
+ pass them to the kernel
 Content-Language: en-GB
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
- mason@kernel.org, ihor.solodrai@linux.dev
-References: <20260917055752.3932718-1-yonghong.song@linux.dev>
- <19251f166b31c6b7bc6212d2d9008f3f5b06ff7726b1d3c08c7f54467bb0dbc4@mail.kernel.org>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+References: <20260917055645.3926444-1-yonghong.song@linux.dev>
+ <20260917055802.3933672-1-yonghong.song@linux.dev>
+ <20260917061212.515111F000FF@smtp.kernel.org>
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <19251f166b31c6b7bc6212d2d9008f3f5b06ff7726b1d3c08c7f54467bb0dbc4@mail.kernel.org>
+In-Reply-To: <20260917061212.515111F000FF@smtp.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
 
 
-On 9/17/26 12:00 AM, bot+bpf-ci@kernel.org wrote:
->> diff --git tools/lib/bpf/libbpf.c tools/lib/bpf/libbpf.c
->> index 613afae265199..ea1c09fa37939 100644
->> --- tools/lib/bpf/libbpf.c
->> +++ tools/lib/bpf/libbpf.c
->> @@ -8346,6 +8346,15 @@ static void fixup_verifier_log(struct bpf_program *prog, char *buf, size_t buf_s
->>   	}
->>   }
->>
->> +/* LLVM terminates a cleanup landing pad with a call to _Unwind_Resume, the
->> + * base unwind ABI's entry point for carrying an unwind on once a frame's
->> + * cleanups have run. The kernel knows it as bpf_unwind_resume.
->> + */
->> +static const char *kern_extern_name(const char *name)
+On 9/16/26 11:12 PM, sashiko-bot@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 2 potential issue(s) to consider:
+> - [Medium] bpf: undefined behavior when calling qsort with a NULL pointer
+> - [Low] bpf: array bounds violation via type-punned pointer arithmetic
+> --
+>
+> commit 1e591245d7ec663b872eae44c8fa7f02cfd956a4
+> Author: Yonghong Song <yonghong.song@linux.dev>
+>
+> libbpf: Collect .bpf_cleanup records and pass them to the kernel
+>
+> This commit parses the compiler-emitted .bpf_cleanup section and hands
+> the resulting table to BPF_PROG_LOAD so the kernel can resolve exceptions.
+>
+>> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+>> index ea1c09fa37939..d7cb93a70f58d 100644
+>> --- a/tools/lib/bpf/libbpf.c
+>> +++ b/tools/lib/bpf/libbpf.c
+> [ ... ]
+>
+>> @@ -4847,6 +4885,214 @@ static struct bpf_program *find_prog_by_sec_insn(const struct bpf_object *obj,
+> [ ... ]
+>
+>> +static int bpf_prog_collect_cleanup_info(struct bpf_object *obj,
+>> +					 struct bpf_program *prog)
 >> +{
->> +	return strcmp(name, "_Unwind_Resume") ? name : "bpf_unwind_resume";
->> +}
+>> +	size_t i;
+>> +	int j;
 >> +
->>   static int bpf_program_record_relos(struct bpf_program *prog)
->>   {
->>   	struct bpf_object *obj = prog->obj;
-> Is the kern_extern_name() mapping applied on the light skeleton load
-> path?
+>> +	for (i = 0; i < obj->cleanup_rec_cnt; i++) {
+>> +		struct cleanup_raw_rec *raw = &obj->cleanup_recs[i];
+>> +		struct bpf_program *owner = NULL;
+>> +		struct bpf_cleanup_info ci = {};
+>> +		__u32 *fields = (__u32 *)&ci;
+>> +		void *tmp;
+>> +
+>> +		for (j = 0; j < CLEANUP_REC_FIELDS; j++) {
+>> +			size_t idx = raw->insn_idx[j], final;
+>> +			struct bpf_program *p;
+> [ ... ]
 >
-> Looking at bpf_program_record_relos() below kern_extern_name(), the
-> RELO_EXTERN_CALL case records ext->name directly without calling
-> kern_extern_name():
+>> +			if (owner == prog) {
+>> +				final = raw->insn_idx[j] - prog->sec_insn_off;
+>> +			} else if (prog_is_subprog(obj, owner) && owner->sub_insn_off) {
+>> +				/* sub_insn_off is where this subprogram was
+>> +				 * appended to the main program being relocated;
+>> +				 * zero means it is not part of it.
+>> +				 */
+>> +				final = owner->sub_insn_off +
+>> +					raw->insn_idx[j] - owner->sec_insn_off;
+>> +			} else {
+>> +				owner = NULL;
+>> +				break;
+>> +			}
+>> +			fields[j] = final;
+> [Severity: Low]
+> Is it safe to cast a pointer to a struct field into an array pointer and access
+> subsequent members via pointer arithmetic in this loop?
 >
-> static int bpf_program_record_relos(struct bpf_program *prog)
-> {
->      ...
->      case RELO_EXTERN_CALL:
->          bpf_gen__record_extern(obj->gen_loader, ext->name,
->                                 ext->is_weak, false, false, BTF_KIND_FUNC,
->                                 relo->insn_idx);
->          break;
->      ...
-> }
+> The struct bpf_cleanup_info fields are populated by casting a pointer to the
+> struct to a __u32 * array and indexing into it in a loop.
 >
-> This means the generated loader program would ask the kernel for
-> BTF_KIND_FUNC '_Unwind_Resume', which doesn't exist in vmlinux BTF. The
-> kernel only knows bpf_unwind_resume per BTF_ID_FLAGS(func,
-> bpf_unwind_resume) in kernel/bpf/helpers.c.
+> According to C11 6.5.6, pointer arithmetic on a pointer to a scalar (the first
+> struct field) only allows accessing up to one element past it, making fields[1]
+> and fields[2] undefined behavior.
 >
-> For comparison, the direct BPF_PROG_LOAD path does use the mapping:
->
-> bpf_object__resolve_ksym_func_btf_id() calls kern_extern_name() at
-> libbpf.c:8824, but that resolution is deliberately skipped when
-> obj->gen_loader is set:
->
-> bpf_object__resolve_ksyms_btf_id() {
->      ...
->      if (obj->gen_loader) {
->          ext->is_set = true;
->          ext->ksym.kernel_btf_obj_fd = 0;
->          ext->ksym.kernel_btf_id = 0;
->          continue;
->      }
->      ...
-> }
->
-> On the light skeleton path, bpf_btf_find_by_name_kind() would return
-> -ESRCH for '_Unwind_Resume', causing emit_check_err() to jump to cleanup
-> and fail the load. If the extern were weak, insn->imm/off would be
-> stored as 0, which the verifier would reject as an invalid kfunc call.
->
-> The test added later in the series
-> (selftests/bpf/progs/exceptions_cleanup_light.c) writes 'call
-> bpf_unwind_resume' directly in inline asm, so it uses the kernel name
-> and never exercises the mapping.
+> This can trigger compiler warnings (-Warray-bounds) and potentially cause
+> aggressive optimizers to generate incorrect code.
 
-Indeed, later patch in selftests/bpf/progs/exceptions_cleanup_light.c
-fixed the issue with bpf_undiwn_resume properly. So this is not really
-a bug. But we can do better than this. We can change from ext->name to
-bpf_unwind_resume in file selftests/bpf/progs/exceptions_cleanup_light.c
-for this patch. This will make things easier to understand.
+Yes, the code is correct but it is awkward and my trigger compiler warnings with
+additional compiler flag. Will make it explicit with bpf_cleanup_info fields.
 
 >
->> @@ -8807,17 +8816,19 @@ static int bpf_object__resolve_ksym_func_btf_id(struct bpf_object *obj,
->>   	struct module_btf *mod_btf = NULL;
->>   	const struct btf_type *kern_func;
->>   	struct btf *kern_btf = NULL;
->> +	const char *kern_name;
->>   	int ret;
->>
->>   	local_func_proto_id = ext->ksym.type_id;
->>
->> -	kfunc_id = find_ksym_btf_id(obj, ext->essent_name ?: ext->name, BTF_KIND_FUNC, &kern_btf,
->> -				    &mod_btf);
->> +	kern_name = kern_extern_name(ext->essent_name ?: ext->name);
+>> +		}
+>> +		if (!owner)
+>> +			continue;
 >> +
->> +	kfunc_id = find_ksym_btf_id(obj, kern_name, BTF_KIND_FUNC, &kern_btf, &mod_btf);
->>   	if (kfunc_id < 0) {
->>   		if (kfunc_id == -ESRCH && ext->is_weak)
->>   			return 0;
->>   		pr_warn("extern (func ksym) '%s': not found in kernel or module BTFs\n",
->> -			ext->name);
->> +			strcmp(kern_name, "bpf_unwind_resume") ? ext->name : kern_name);
->>   		return kfunc_id;
->>   	}
+>> +		tmp = libbpf_reallocarray(prog->cleanup_info, prog->cleanup_info_cnt + 1,
+>> +					  sizeof(*prog->cleanup_info));
+>> +		if (!tmp)
+>> +			return -ENOMEM;
+>> +		prog->cleanup_info = tmp;
+>> +		prog->cleanup_info_rec_size = sizeof(struct bpf_cleanup_info);
+>> +		prog->cleanup_info[prog->cleanup_info_cnt++] = ci;
+>> +
+>> +		pr_debug("prog '%s': cleanup region [%u,%u) -> landing pad %u\n",
+>> +			 prog->name, ci.begin_off, ci.end_off, ci.landing_pad_off);
+>> +	}
+>> +
+>> +	qsort(prog->cleanup_info, prog->cleanup_info_cnt,
+>> +	      sizeof(*prog->cleanup_info), cmp_cleanup_info);
+> [Severity: Medium]
+> Can this unconditionally call qsort() with a NULL base pointer?
+
+You are right. It is possible prog->cleanup_info_cnt is 0 and in such cases,
+cleanup_info will be NULL. Will add a condition like 'prog->cleanup_info_cnt > 0'.
+
 >
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> If obj->cleanup_rec_cnt is 0, or if none of the records match the program,
+> prog->cleanup_info_cnt remains 0 and prog->cleanup_info will be NULL.
 >
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35188619605
+> Calling qsort() with a NULL pointer invokes undefined behavior under C11 7.1.4,
+> even if the element count is 0. This triggers UBSAN errors (nonnull attribute
+> violation in libc headers) and can fail runtime checks.
+>
 
