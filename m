@@ -1,33 +1,33 @@
-Received: from smtp-42ab.mail.infomaniak.ch (smtp-42ab.mail.infomaniak.ch [84.16.66.171])
+Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [83.166.143.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CB85208CE;
-	Fri, 18 Sep 2026 18:50:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.66.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DBFA52188E
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 18:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.166.143.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789757474; cv=none; b=agld7MIG6IAQAkjWa187voOK+nZoKp9h5oC6z5mRpLl9pAqCv3hkZ7yJYIfalWRHYmXcOUaAnUxyLVcBNXqP3HPiG+6BtH7jueGHYULYMESgnla0aVZv12lOIfNiTVuXRstOvP8GCqjS2CTj1/xcfKIUzAAxWAiGJhcYAW04s8g=
+	t=1789757474; cv=none; b=JxgpfyzPPQKTpvcfrfvi39FSzgSHgP+yfMKbRm+rOOhhkA2HZZX+gKjFgsCbcte9/a7ltBM7lrN1+UFObWqKMbj1cJd6JtGqES6u5RBEYhSO7YdXElcEabFmnY/h5krpcR6QNUM5Ls0OIB2S4vkpr1Zqf8Pq/UYYZWVVL8SQxDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789757474; c=relaxed/simple;
-	bh=XmDaDJlShePYPMqCmhyqNBKwhCJfntXYv+pQ06Me/Nk=;
+	bh=hAQZLUsKIfZsGalxaPurvYjjpFUyAajajLJXmJFVqbE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EvW1zkSVPZhmlfjTVbW7/msv3DSs0Qd3c/StH/slMvT0wokgwT6YkqCgTMCpuDtBALLj5pb3w4VEePaIvV3sr6NFwua6IuQ3R9Mi8h62VlspBzKzApCdOo1JsdRmzoEzpOFO51g+hS2LvcncN0YEToiyZZkChQMBR4qXi0eiUO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=EJzzCO5S; arc=none smtp.client-ip=84.16.66.171
+	 MIME-Version:Content-Type; b=kgqUhP6Qllu/1u1FzkyMDd4borUPB+mXoc0jo47Fp5MuYsv3lMAFMKfhdtj9AwJ2j7bn5pM4DiDGG/Q3g8o6dm8kpMIFbNYF3H79bxN6BvZNx9wvOLeZNB8GF1YRuHq3w4mwaB95t1MHe9W7RahlGd7okf3LCXiQloUq1+ryDdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net; spf=pass smtp.mailfrom=digikod.net; dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b=kEDyiIb6; arc=none smtp.client-ip=83.166.143.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="EJzzCO5S"
-Received: from smtp-3-0000.mail.infomaniak.ch (smtp-3-0000.mail.infomaniak.ch [10.4.36.107])
-	by smtp-4-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4hmhXT3t2Szlwd;
-	Fri, 18 Sep 2026 20:50:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
-	s=20191114; t=1789757449;
-	bh=L6gjfcLPux2h5AmwazFNXuE1tXgNc/lxln1WmyhL4KU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=EJzzCO5SvWRRGVmfyBsE4q3q22c1lRATgYaFAxDAk0v1cCmmcPHOxcwyLzI9CsYhu
-	 qkfrT7bSF6GkhBVoqo1SJ9wxQn1T2bYmoLguiwwiI6pUOG+vFu9oE/vaD2kgwEaDoG
-	 i9Wp66KdggYIcPgrbpzD1pRnz2pFI3uWFssb7EMc=
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4hmhXS62lczJqN;
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="kEDyiIb6"
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [IPv6:2001:1600:4:17::246b])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4hmhXS30RYz8lg;
 	Fri, 18 Sep 2026 20:50:48 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=digikod.net;
+	s=20191114; t=1789757448;
+	bh=3cJxPPU50XyUCSzBJ4MiffTmc4qMqXHnMDICULfhRVM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=kEDyiIb6J9b0QzjeTX4wU9V719lssOiFKoehwNZ1rNcr3L61IgKN8t108+BKGp2Ot
+	 C1Q5KNYzGbcsVS/ymTRqTnUtsV4Z3v8L7Pv7eT0Ggi1JNN+rXI/Ccku8ryEtXTAhHW
+	 DjWSc+N1Iwb/uspN9TNNGz7fid9LENwheawhw0oc=
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4hmhXR3CL9zKnn;
+	Fri, 18 Sep 2026 20:50:47 +0200 (CEST)
 From: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>
 To: =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>
 Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
@@ -39,9 +39,9 @@ Cc: =?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
 	kernel-team@cloudflare.com,
 	linux-security-module@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org
-Subject: [PATCH v1 4/9] landlock: Fix network denial trace context
-Date: Fri, 18 Sep 2026 20:50:27 +0200
-Message-ID: <20260918185036.608651-5-mic@digikod.net>
+Subject: [PATCH v1 3/9] landlock: Fix rule tracepoint context
+Date: Fri, 18 Sep 2026 20:50:26 +0200
+Message-ID: <20260918185036.608651-4-mic@digikod.net>
 In-Reply-To: <20260918185036.608651-1-mic@digikod.net>
 References: <20260918185036.608651-1-mic@digikod.net>
 Precedence: bulk
@@ -54,440 +54,816 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
 
-Network denial events report source and destination ports reconstructed
-from audit data. Their zero values are ambiguous, and neither identifies
-the complete endpoint that Landlock checked.
+Name each event after the identity it reports. Add-rule events describe
+UAPI rule insertion, so rename them after LANDLOCK_RULE_PATH_BENEATH and
+LANDLOCK_RULE_NET_PORT. Check-rule events describe matches in internal
+rule trees, so rename them after LANDLOCK_KEY_INODE and
+LANDLOCK_KEY_NET_PORT. This remains accurate if multiple UAPI rule types
+share one lookup and stored rule. Keep denial event names based on
+filesystem and network families because they describe final access
+decisions.
 
-Carry the checked sockaddr and its signed length in a private trace-only
-context. For an enabled event, validate the length and copy only the
-initialized prefix into zeroed local storage. This prevents a typed BPF
-program from reading uninitialized bytes while exposing the socket
-family, socket, address, and length.
+Use u64 for growable access masks passed by value to add-rule and
+check-rule typed BTF callbacks. CO-RE can relocate pointer-reached
+fields, but it cannot widen a scalar callback slot declared by a BPF
+program. Keep native access_mask_t for internal state and trace records.
 
-Replace the source and destination trace-record fields with one signed
-port derived from the checked address. A value of -1 means that no port
-was checked, zero is a valid port, and positive values use host
-endianness. Bind blockers select the bind address; connect and send
-blockers select the destination.
+For add-rule callbacks, report the normalized per-call contribution
+passed to landlock_insert_rule() and expose the complete validated flags
+value. Put the ruleset and flags first as a common invocation prefix.
+This distinguishes duplicate and effective-zero additions without
+recovering arguments from saved syscall registers.
 
 Cc: Günther Noack <gnoack@google.com>
 Cc: Steven Rostedt <rostedt@goodmis.org>
-Fixes: 01ce260f5ccf ("landlock: Add landlock_deny_access_fs and landlock_deny_access_net")
+Fixes: 63747c94774d ("landlock: Add landlock_add_rule_fs and landlock_add_rule_net tracepoints")
+Fixes: 3f1f106e4c14 ("landlock: Add tracepoints for rule checking")
 Signed-off-by: Mickaël Salaün <mic@digikod.net>
 ---
- include/trace/events/landlock.h             | 73 +++++++++++++--------
- security/landlock/log.h                     | 32 +++++++--
- security/landlock/net.c                     | 37 ++++++++---
- security/landlock/trace.c                   | 20 +++++-
- tools/testing/selftests/landlock/net_test.c | 49 +++++---------
- tools/testing/selftests/landlock/trace.h    |  3 +-
- 6 files changed, 135 insertions(+), 79 deletions(-)
+ Documentation/trace/events-landlock.rst       | 22 +++----
+ include/trace/events/landlock.h               | 62 +++++++++++--------
+ security/landlock/fs.c                        | 10 +--
+ security/landlock/net.c                       |  5 +-
+ tools/testing/selftests/landlock/fs_test.c    | 28 ++++-----
+ tools/testing/selftests/landlock/net_test.c   | 11 ++--
+ tools/testing/selftests/landlock/trace.h      | 56 ++++++++---------
+ .../selftests/landlock/trace_fs_test.c        | 54 +++++++++-------
+ tools/testing/selftests/landlock/trace_test.c | 51 ++++++++-------
+ 9 files changed, 162 insertions(+), 137 deletions(-)
 
+diff --git a/Documentation/trace/events-landlock.rst b/Documentation/trace/events-landlock.rst
+index af9267cca47d..9bb81a5c676e 100644
+--- a/Documentation/trace/events-landlock.rst
++++ b/Documentation/trace/events-landlock.rst
+@@ -6,7 +6,7 @@ Landlock Trace Events
+ =====================
+ 
+ :Author: Mickaël Salaün
+-:Date: August 2026
++:Date: September 2026
+ 
+ Landlock emits trace events for sandbox lifecycle operations and access
+ denials.  These events can be consumed by ftrace (for human-readable
+@@ -31,8 +31,8 @@ Landlock trace events are organized in four categories:
+ **Syscall events** are emitted during Landlock system calls:
+ 
+ - ``landlock_create_ruleset``: a new ruleset is created
+-- ``landlock_add_rule_fs``: a filesystem rule is added to a ruleset
+-- ``landlock_add_rule_net``: a network port rule is added to a ruleset
++- ``landlock_add_rule_path_beneath``: a filesystem rule is added to a ruleset
++- ``landlock_add_rule_net_port``: a network port rule is added to a ruleset
+ - ``landlock_create_domain``: a new domain is created from a ruleset
+ - ``landlock_enforce_domain``: a domain is enforced on a thread
+ 
+@@ -47,8 +47,8 @@ Landlock trace events are organized in four categories:
+ 
+ **Rule evaluation events** are emitted during rule matching:
+ 
+-- ``landlock_check_rule_fs``: a filesystem rule is evaluated
+-- ``landlock_check_rule_net``: a network port rule is evaluated
++- ``landlock_check_rule_inode``: an inode-keyed rule is evaluated
++- ``landlock_check_rule_net_port``: a network-port-keyed rule is evaluated
+ 
+ **Lifecycle events**:
+ 
+@@ -189,7 +189,7 @@ rather than the caller's, so correlate those to the syscall by domain ID.
+ Interpreting check_rule events
+ ==============================
+ 
+-The ``check_rule_fs`` and ``check_rule_net`` events expose the per-layer
++The ``check_rule_inode`` and ``check_rule_net_port`` events expose the per-layer
+ rule evaluation, which is useful for understanding *why* a specific
+ access is allowed or denied.
+ 
+@@ -244,22 +244,22 @@ check.
+ 
+ For example, a program sandboxed with read and execute access to the
+ whole filesystem reads ``/etc/passwd``; both the ``execve()`` and the
+-read match the rule covering ``/`` (inode 2), so ``check_rule_fs`` fires
++read match the rule covering ``/`` (inode 2), so ``check_rule_inode`` fires
+ with the requested rights intersected against what that rule grants.
+ The ``access_request=`` mask includes ``truncate`` because the file-open hook
+ evaluates that optional right alongside the required access, but the
+ rule does not grant it, so ``truncate`` never appears in ``grants=``::
+ 
+-  cat-127 [...] landlock_check_rule_fs: domain=1e40cb56f access_request=execute|read_file|truncate dev=0:17 ino=2 grants={execute|read_file}
+-  cat-127 [...] landlock_check_rule_fs: domain=1e40cb56f access_request=read_file|truncate dev=0:17 ino=2 grants={read_file}
++  cat-127 [...] landlock_check_rule_inode: domain=1e40cb56f access_request=execute|read_file|truncate dev=0:17 ino=2 grants={execute|read_file}
++  cat-127 [...] landlock_check_rule_inode: domain=1e40cb56f access_request=read_file|truncate dev=0:17 ino=2 grants={read_file}
+ 
+ The ``[...]`` replaces the ftrace CPU, flags, and timestamp columns.  A
+ single ``grants=`` group means the enforcing domain has one layer.  With
+ two nested sandboxes that each grant the same rights, the rule spans both
+ layers, so ``grants=`` has one group per layer::
+ 
+-  cat-128 [...] landlock_check_rule_fs: domain=184788b52 access_request=execute|read_file|truncate dev=0:17 ino=2 grants={execute|read_file,execute|read_file}
+-  cat-128 [...] landlock_check_rule_fs: domain=184788b52 access_request=read_file|truncate dev=0:17 ino=2 grants={read_file,read_file}
++  cat-128 [...] landlock_check_rule_inode: domain=184788b52 access_request=execute|read_file|truncate dev=0:17 ino=2 grants={execute|read_file,execute|read_file}
++  cat-128 [...] landlock_check_rule_inode: domain=184788b52 access_request=read_file|truncate dev=0:17 ino=2 grants={read_file,read_file}
+ 
+ eBPF access
+ ===========
 diff --git a/include/trace/events/landlock.h b/include/trace/events/landlock.h
-index b7e6a6638822..a982a7cfa881 100644
+index 4e304cab1dab..b7e6a6638822 100644
 --- a/include/trace/events/landlock.h
 +++ b/include/trace/events/landlock.h
-@@ -10,7 +10,10 @@
- #if !defined(_TRACE_LANDLOCK_H) || defined(TRACE_HEADER_MULTI_READ)
- #define _TRACE_LANDLOCK_H
+@@ -28,6 +28,8 @@ struct path;
+ struct sock;
+ struct task_struct;
  
-+#include <linux/in.h>
-+#include <linux/in6.h>
- #include <linux/landlock.h>
-+#include <linux/socket.h>
- #include <linux/string.h>
- #include <linux/string_helpers.h>
- #include <linux/tracepoint.h>
-@@ -790,6 +793,11 @@ TRACE_EVENT(landlock_deny_access_fs,
- 					    __get_dynamic_array_len(pathname) - 1))
++static_assert(sizeof(access_mask_t) <= sizeof(u64));
++
+ TRACE_DEFINE_ENUM(LANDLOCK_REQUEST_FS_CHANGE_TOPOLOGY);
+ TRACE_DEFINE_ENUM(LANDLOCK_REQUEST_FS_ACCESS);
+ TRACE_DEFINE_ENUM(LANDLOCK_REQUEST_NET_ACCESS);
+@@ -114,7 +116,7 @@ __trace_print_untrusted_str(struct trace_seq *p, const char *src, size_t len)
+  * Fills the dense per-domain-layer array layers (one access mask per layer,
+  * indexed by level - 1) from rule's sparse layer stack, keeping only the
+  * requested rights (access_request).  Layers with no matching rule entry get
+- * a zero mask.  Shared by the check_rule_fs and check_rule_net events.
++ * a zero mask.  Shared by the check_rule_inode and check_rule_net_port events.
+  *
+  * rule->layers is sorted by ascending level, with levels in the domain's
+  * [1, num_layers] range (see landlock_merge_ruleset()), so every entry maps
+@@ -389,12 +391,14 @@ TRACE_EVENT(landlock_free_ruleset,
  );
  
-+static_assert(offsetof(struct sockaddr_in, sin_port) ==
-+	      offsetof(struct sockaddr_in6, sin6_port));
-+static_assert(sizeof_field(struct sockaddr_in, sin_port) ==
-+	      sizeof_field(struct sockaddr_in6, sin6_port));
-+
  /**
-  * landlock_deny_access_net - Network access denied
+- * landlock_add_rule_fs - Filesystem rule added to a ruleset
++ * landlock_add_rule_path_beneath - Path-beneath rule added to a ruleset
   *
-@@ -798,30 +806,31 @@ TRACE_EVENT(landlock_deny_access_fs,
-  * @same_exec: Whether the current task entered the denying domain itself.
-  * @logged: The domain's audit-logging decision for this denial.
-  * @blockers: Request type and final missing access subset (never NULL).
-- * @sk: Socket object (never NULL), read without a socket lock, so its
-- *      fields are a best-effort snapshot.  The denied endpoint is not
-- *      available: the hook runs before :manpage:`bind(2)` /
-- *      :manpage:`connect(2)` sets the socket addresses.
-- * @sport: Source port in host endianness, set for bind denials (zero for
-- *         an autobind/ephemeral port); zero for connect and send denials.
-- * @dport: Destination port in host endianness, set for connect and send
-- *         denials; zero for bind denials, and also zero for a UDP send to
-- *         an AF_UNSPEC address on an IPv6 socket (indistinguishable from a
-- *         real destination port 0).  The bind-vs-connect direction is
-- *         given by @blockers, not by which port is set.
-- *
-- * Emitted when a Landlock domain denies a network operation.
-+ * @sk: Socket object (never NULL), read without a socket lock, so its fields
-+ *      are a best-effort snapshot.
-+ * @socket_family: Socket-family snapshot used by the verdict.
-+ * @address: Authoritative address checked by the verdict (never NULL).
-+ *           The producer copies @addrlen bytes from the checked address and
-+ *           zeroes the remaining storage before emission.  The
-+ *           &sockaddr_in.sin_port or &sockaddr_in6.sin6_port member, when
-+ *           present, remains in network endianness.
-+ * @addrlen: Validated signed length of @address.
-  *
-- * The port fields are converted from the socket's network byte order to
-- * host endianness before emitting.
-+ * Emitted when a Landlock domain denies a network operation.  The blocker
-+ * identifies whether the address is a bind or connect/send policy object.
-+ * The flattened port field is converted from the checked address to host
-+ * endianness, or is -1 when no port was checked.  Zero is a valid checked
-+ * port.
+  * @ruleset: Source ruleset (never NULL).
+- * @access_rights: Effective access mask stored in the rule, not the raw
+- *                 sys_landlock_add_rule() argument (unhandled rights
+- *                 added).
++ * @flags: Complete validated landlock_add_rule_flags value supplied by this
++ *         successful call, not the rule's accumulated quiet state.
++ * @access_rights: Canonical per-call access mask passed to
++ *                 landlock_insert_rule() after normalization, not the raw
++ *                 sys_landlock_add_rule() argument or accumulated rule.
+  * @path: Filesystem path for the rule (never NULL).
+  * @pathname: Resolved absolute path string (never NULL; error placeholder
+  *            on resolution failure).
+@@ -403,13 +407,13 @@ TRACE_EVENT(landlock_free_ruleset,
+  * the reported ruleset is a stable snapshot that no concurrent writer can
+  * change.
   */
- TRACE_EVENT(landlock_deny_access_net,
+-TRACE_EVENT(landlock_add_rule_fs,
++TRACE_EVENT(landlock_add_rule_path_beneath,
  
- 	TP_PROTO(const struct landlock_hierarchy *hierarchy, bool same_exec,
- 		 bool logged, const struct landlock_blockers *blockers,
--		 const struct sock *sk, u64 sport, u64 dport),
-+		 const struct sock *sk, u16 socket_family,
-+		 const struct sockaddr_storage *address, int addrlen),
+-	TP_PROTO(const struct landlock_ruleset *ruleset,
+-		 access_mask_t access_rights, const struct path *path,
++	TP_PROTO(const struct landlock_ruleset *ruleset, u32 flags,
++		 u64 access_rights, const struct path *path,
+ 		 const char *pathname),
  
--	TP_ARGS(hierarchy, same_exec, logged, blockers, sk, sport, dport),
-+	TP_ARGS(hierarchy, same_exec, logged, blockers, sk, socket_family,
-+		address, addrlen),
+-	TP_ARGS(ruleset, access_rights, path, pathname),
++	TP_ARGS(ruleset, flags, access_rights, path, pathname),
  
  	TP_STRUCT__entry(
- 		__field(	u64,		domain_id	)
-@@ -829,26 +838,36 @@ TRACE_EVENT(landlock_deny_access_net,
- 		__field(	bool,		logged		)
- 		__field(	enum landlock_request_type, blockers_type	)
- 		__field(	access_mask_t,	blockers_access	)
--		__field(	u64,		sport		)
--		__field(	u64,		dport		)
-+		__field(	s64,		port		)
- 	),
- 
- 	TP_fast_assign(
-+		const struct sockaddr *const addr =
-+			(const struct sockaddr *)address;
-+		const bool has_port =
-+			addrlen >= (int)offsetofend(struct sockaddr_in, sin_port) &&
-+			(addr->sa_family == AF_INET ||
-+			 addr->sa_family == AF_INET6 ||
-+			 (addr->sa_family == AF_UNSPEC &&
-+			  socket_family == AF_INET));
-+
- 		__entry->domain_id	= hierarchy->id;
- 		__entry->same_exec	= same_exec;
- 		__entry->logged		= logged;
- 		__entry->blockers_type	= blockers->type;
- 		__entry->blockers_access = blockers->access;
--		__entry->sport		= sport;
--		__entry->dport		= dport;
-+		__entry->port		=
-+			has_port ?
-+				ntohs(((const struct sockaddr_in *)addr)->sin_port) :
-+				-1;
- 	),
- 
--	TP_printk("domain=%llx same_exec=%d logged=%d blockers=%s sport=%llu dport=%llu",
--		__entry->domain_id, __entry->same_exec, __entry->logged,
--		__entry->blockers_type == LANDLOCK_REQUEST_NET_ACCESS ?
--			__print_flags(__entry->blockers_access, "|", _LANDLOCK_ACCESS_NET_NAMES) :
--			"unknown",
--		__entry->sport, __entry->dport)
-+	TP_printk("domain=%llx same_exec=%d logged=%d blockers=%s port=%lld",
-+		  __entry->domain_id, __entry->same_exec, __entry->logged,
-+		  __entry->blockers_type == LANDLOCK_REQUEST_NET_ACCESS ?
-+			  __print_flags(__entry->blockers_access, "|", _LANDLOCK_ACCESS_NET_NAMES) :
-+			  "unknown",
-+		  __entry->port)
+ 		__field(	u64,		ruleset_id	)
+@@ -443,25 +447,27 @@ TRACE_EVENT(landlock_add_rule_fs,
  );
  
  /**
-diff --git a/security/landlock/log.h b/security/landlock/log.h
-index 04f3e241e765..4587c2b1566d 100644
---- a/security/landlock/log.h
-+++ b/security/landlock/log.h
-@@ -15,6 +15,7 @@
+- * landlock_add_rule_net - Network port rule added to a ruleset
++ * landlock_add_rule_net_port - Network-port rule added to a ruleset
+  *
+  * @ruleset: Source ruleset (never NULL).
+- * @access_rights: Effective access mask stored in the rule, not the raw
+- *                 sys_landlock_add_rule() argument (unhandled rights
+- *                 added).
+- * @port: Network port, the landlock_net_port_attr.port UAPI value
+- *        forwarded directly.
++ * @flags: Complete validated landlock_add_rule_flags value supplied by this
++ *         successful call, not the rule's accumulated quiet state.
++ * @access_rights: Canonical per-call access mask passed to
++ *                 landlock_insert_rule() after normalization, not the raw
++ *                 sys_landlock_add_rule() argument or accumulated rule.
++ * @port: Network port in host endianness, forwarded directly from
++ *        &landlock_net_port_attr.port.
+  *
+  * Emitted by sys_landlock_add_rule() under the modified ruleset's lock, so
+  * the reported ruleset is a stable snapshot that no concurrent writer can
+  * change.
+  */
+-TRACE_EVENT(landlock_add_rule_net,
++TRACE_EVENT(landlock_add_rule_net_port,
  
- struct landlock_cred_security;
- struct landlock_hierarchy;
-+struct sockaddr;
+-	TP_PROTO(const struct landlock_ruleset *ruleset,
+-		 access_mask_t access_rights, u64 port),
++	TP_PROTO(const struct landlock_ruleset *ruleset, u32 flags,
++		 u64 access_rights, u64 port),
  
- enum landlock_request_type {
- 	LANDLOCK_REQUEST_PTRACE = 1,
-@@ -30,6 +31,16 @@ struct landlock_blockers {
- 	enum landlock_request_type type;
- };
+-	TP_ARGS(ruleset, access_rights, port),
++	TP_ARGS(ruleset, flags, access_rights, port),
  
-+#ifdef CONFIG_TRACEPOINTS
-+
-+struct landlock_net_trace {
-+	const struct sockaddr *address;
-+	int addrlen;
-+	u16 socket_family;
-+};
-+
-+#endif /* CONFIG_TRACEPOINTS */
-+
- /*
-  * We should be careful to only use a variable of this type for
-  * landlock_log_denial().  This way, the compiler can remove it entirely if
-@@ -57,13 +68,20 @@ struct landlock_request {
- 	deny_masks_t deny_masks;
- 	optional_access_t quiet_optional_accesses;
+ 	TP_STRUCT__entry(
+ 		__field(	u64,		ruleset_id	)
+@@ -625,7 +631,7 @@ TRACE_EVENT(landlock_free_domain,
+ );
  
--	/*
--	 * Other-party domain ID for a relational (scope/ptrace) denial, or 0 if
--	 * that party is unsandboxed.  An ID, not a pointer: the other task can
--	 * replace its credential and free the domain it referenced.  Trace path
--	 * only; audit ignores it.
--	 */
--	u64 other_domain_id;
-+	union {
-+		/*
-+		 * Other-party domain ID for a relational (scope/ptrace) denial,
-+		 * or 0 if that party is unsandboxed.  Store an ID, not a
-+		 * pointer: the other task can replace its credential and free
-+		 * the domain it referenced.  Trace-only; audit ignores it.
-+		 */
-+		u64 other_domain_id;
-+
-+#ifdef CONFIG_TRACEPOINTS
-+		/* Synchronous context for a network denial. */
-+		const struct landlock_net_trace *trace_net;
-+#endif /* CONFIG_TRACEPOINTS */
-+	};
- };
+ /**
+- * landlock_check_rule_fs - Filesystem rule evaluated during access check
++ * landlock_check_rule_inode - Inode rule evaluated during access check
+  *
+  * @domain: Enforcing domain (never NULL).
+  * @rule: Matching rule with per-layer access masks (never NULL).
+@@ -638,11 +644,11 @@ TRACE_EVENT(landlock_free_domain,
+  * domain layer.  See Documentation/trace/events-landlock.rst for how to
+  * interpret it.
+  */
+-TRACE_EVENT(landlock_check_rule_fs,
++TRACE_EVENT(landlock_check_rule_inode,
  
- #ifdef CONFIG_SECURITY_LANDLOCK_LOG
+ 	TP_PROTO(const struct landlock_domain *domain,
+ 		 const struct landlock_rule *rule,
+-		 access_mask_t access_request, const struct dentry *dentry),
++		 u64 access_request, const struct dentry *dentry),
+ 
+ 	TP_ARGS(domain, rule, access_request, dentry),
+ 
+@@ -664,7 +670,8 @@ TRACE_EVENT(landlock_check_rule_fs,
+ 		__trace_landlock_fill_layers(__get_dynamic_array(grants),
+ 					     __get_dynamic_array_len(grants) /
+ 						     sizeof(access_mask_t),
+-					     rule, access_request);
++					     rule,
++					     (access_mask_t)access_request);
+ 	),
+ 
+ 	TP_printk("domain=%llx access_request=%s dev=%u:%u ino=%lu grants=%s",
+@@ -675,7 +682,7 @@ TRACE_EVENT(landlock_check_rule_fs,
+ );
+ 
+ /**
+- * landlock_check_rule_net - Network port rule evaluated during access check
++ * landlock_check_rule_net_port - Network port rule evaluated
+  *
+  * @domain: Enforcing domain (never NULL).
+  * @rule: Matching rule with per-layer access masks (never NULL).
+@@ -687,11 +694,11 @@ TRACE_EVENT(landlock_check_rule_fs,
+  * layer.  See Documentation/trace/events-landlock.rst for how to
+  * interpret it.
+  */
+-TRACE_EVENT(landlock_check_rule_net,
++TRACE_EVENT(landlock_check_rule_net_port,
+ 
+ 	TP_PROTO(const struct landlock_domain *domain,
+ 		 const struct landlock_rule *rule,
+-		 access_mask_t access_request, u64 port),
++		 u64 access_request, u64 port),
+ 
+ 	TP_ARGS(domain, rule, access_request, port),
+ 
+@@ -711,7 +718,8 @@ TRACE_EVENT(landlock_check_rule_net,
+ 		__trace_landlock_fill_layers(__get_dynamic_array(grants),
+ 					     __get_dynamic_array_len(grants) /
+ 						     sizeof(access_mask_t),
+-					     rule, access_request);
++					     rule,
++					     (access_mask_t)access_request);
+ 	),
+ 
+ 	TP_printk("domain=%llx access_request=%s port=%llu grants=%s",
+diff --git a/security/landlock/fs.c b/security/landlock/fs.c
+index 330a1871bf94..cab43892ec2f 100644
+--- a/security/landlock/fs.c
++++ b/security/landlock/fs.c
+@@ -356,14 +356,14 @@ int landlock_append_fs_rule(struct landlock_ruleset *const ruleset,
+ 	 * held for BTF consistency (enforced by lockdep_assert_held in
+ 	 * TP_fast_assign).
+ 	 */
+-	if (!err && trace_landlock_add_rule_fs_enabled()) {
++	if (!err && trace_landlock_add_rule_path_beneath_enabled()) {
+ 		char *buffer __free(__putname) = __getname();
+ 		const char *pathname =
+ 			buffer ? resolve_path_for_trace(path, buffer) :
+ 				 "<no_mem>";
+ 
+-		trace_landlock_add_rule_fs(ruleset, access_rights, path,
+-					   pathname);
++		trace_landlock_add_rule_path_beneath(
++			ruleset, flags, access_rights, path, pathname);
+ 	}
+ 	mutex_unlock(&ruleset->lock);
+ 
+@@ -423,8 +423,8 @@ static bool unmask_layers_fs(const struct landlock_domain *const domain,
+ 
+ 	ret = landlock_unmask_layers(domain, id, masks, &rule);
+ 	if (rule)
+-		trace_landlock_check_rule_fs(domain, rule, access_request,
+-					     dentry);
++		trace_landlock_check_rule_inode(domain, rule, access_request,
++						dentry);
+ 	return ret;
+ }
+ 
 diff --git a/security/landlock/net.c b/security/landlock/net.c
-index 5552c60388f8..6fe0dbde3b78 100644
+index 8f2aaac54b33..5552c60388f8 100644
 --- a/security/landlock/net.c
 +++ b/security/landlock/net.c
-@@ -93,7 +93,7 @@ static int current_check_access_socket(struct socket *const sock,
- 		return 0;
+@@ -47,7 +47,8 @@ int landlock_append_net_rule(struct landlock_ruleset *const ruleset,
+ 	 * TP_fast_assign).
+ 	 */
+ 	if (!err)
+-		trace_landlock_add_rule_net(ruleset, access_rights, port);
++		trace_landlock_add_rule_net_port(ruleset, flags, access_rights,
++						 port);
+ 	mutex_unlock(&ruleset->lock);
  
- 	/* Checks for minimal header length to safely read sa_family. */
--	if (addrlen < offsetofend(typeof(*address), sa_family))
-+	if (addrlen < (int)offsetofend(typeof(*address), sa_family))
- 		return -EINVAL;
+ 	return err;
+@@ -63,7 +64,7 @@ static bool unmask_layers_net(const struct landlock_domain *const domain,
+ 
+ 	ret = landlock_unmask_layers(domain, id, masks, &rule);
+ 	if (rule)
+-		trace_landlock_check_rule_net(
++		trace_landlock_check_rule_net_port(
+ 			domain, rule, access_request,
+ 			ntohs((__force __be16)id.key.data));
+ 	return ret;
+diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
+index 18dbdb99aeba..6e979cef884d 100644
+--- a/tools/testing/selftests/landlock/fs_test.c
++++ b/tools/testing/selftests/landlock/fs_test.c
+@@ -10493,9 +10493,9 @@ FIXTURE_TEARDOWN_PARENT(trace_layout1)
+ }
+ 
+ /*
+- * Verifies that check_rule_fs events include correct field values: domain, dev,
+- * ino, access_request, and grants.  All values are verified against stat() of
+- * the rule path on a deterministic tmpfs layout.
++ * Verifies that check_rule_inode events include correct field values: domain,
++ * dev, ino, access_request, and grants.  All values are verified against stat()
++ * of the rule path on a deterministic tmpfs layout.
+  */
+ TEST_F(trace_layout1, check_rule_fs_fields)
+ {
+@@ -10529,7 +10529,7 @@ TEST_F(trace_layout1, check_rule_fs_fields)
+ 	EXPECT_EQ(1,
+ 		  tracefs_count_matches(buf, REGEX_CHECK_RULE_FS(TRACE_TASK)))
+ 	{
+-		TH_LOG("Expected 1 check_rule_fs event\n%s", buf);
++		TH_LOG("Expected 1 check_rule_inode event\n%s", buf);
+ 	}
+ 
+ 	ASSERT_EQ(0, tracefs_extract_field(buf, REGEX_CHECK_RULE_FS(TRACE_TASK),
+@@ -10570,8 +10570,8 @@ TEST_F(trace_layout1, check_rule_fs_fields)
+ }
+ 
+ /*
+- * Verifies check_rule_fs behavior with multiple rules.  With rules at s1d1 and
+- * s1d2 (a child of s1d1), accessing s1d2 produces only 1 event because the
++ * Verifies check_rule_inode behavior with multiple rules.  With rules at s1d1
++ * and s1d2 (a child of s1d1), accessing s1d2 produces only 1 event because the
+  * pathwalk short-circuits after the first rule fully unmasks the single layer.
+  */
+ TEST_F(trace_layout1, check_rule_fs_multiple_rules)
+@@ -10643,14 +10643,14 @@ TEST_F(trace_layout1, check_rule_fs_multiple_rules)
+ 	ASSERT_NE(NULL, buf);
  
  	/*
-@@ -145,6 +145,17 @@ static int current_check_access_socket(struct socket *const sock,
- 						.audit.u.net = &audit_net,
- 						.access = access_request,
- 						.layer_masks = &layer_masks,
-+#ifdef CONFIG_TRACEPOINTS
-+						.trace_net =
-+							&(struct landlock_net_trace){
-+								.address =
-+									address,
-+								.addrlen =
-+									addrlen,
-+								.socket_family =
-+									sock_family,
-+							},
-+#endif /* CONFIG_TRACEPOINTS */
- 					});
- 				return -EACCES;
- 			}
-@@ -276,14 +287,22 @@ static int current_check_access_socket(struct socket *const sock,
+-	 * Only 1 check_rule_fs event: the rule on dir_s1d2 fully unmasked the
+-	 * single layer, so the pathwalk short-circuits before reaching the
++	 * Only one check_rule_inode event: the rule on dir_s1d2 fully unmasks
++	 * the single layer, so the pathwalk short-circuits before reaching the
+ 	 * dir_s1d1 rule.
+ 	 */
+ 	count = tracefs_count_matches(buf, REGEX_CHECK_RULE_FS(TRACE_TASK));
+ 	EXPECT_EQ(1, count)
+ 	{
+-		TH_LOG("Expected 1 check_rule_fs event, got %d\n%s", count,
++		TH_LOG("Expected 1 check_rule_inode event, got %d\n%s", count,
+ 		       buf);
+ 	}
  
- 	audit_net.family = address->sa_family;
- 	audit_net.sk = sock->sk;
--	landlock_log_denial(subject,
--			    &(struct landlock_request){
--				    .type = LANDLOCK_REQUEST_NET_ACCESS,
--				    .audit.type = LSM_AUDIT_DATA_NET,
--				    .audit.u.net = &audit_net,
--				    .access = access_request,
--				    .layer_masks = &layer_masks,
--			    });
-+	landlock_log_denial(
-+		subject, &(struct landlock_request){
-+				 .type = LANDLOCK_REQUEST_NET_ACCESS,
-+				 .audit.type = LSM_AUDIT_DATA_NET,
-+				 .audit.u.net = &audit_net,
-+				 .access = access_request,
-+				 .layer_masks = &layer_masks,
-+#ifdef CONFIG_TRACEPOINTS
-+				 .trace_net =
-+					 &(struct landlock_net_trace){
-+						 .address = address,
-+						 .addrlen = addrlen,
-+						 .socket_family = sock_family,
-+					 },
-+#endif /* CONFIG_TRACEPOINTS */
-+			 });
- 	return -EACCES;
+@@ -10777,7 +10777,7 @@ TEST_F(trace_layout1, check_rule_fs_optional_access)
+ 	count = tracefs_count_matches(buf, REGEX_CHECK_RULE_FS(TRACE_TASK));
+ 	EXPECT_EQ(1, count)
+ 	{
+-		TH_LOG("Expected 1 check_rule_fs event, got %d\n%s", count,
++		TH_LOG("Expected 1 check_rule_inode event, got %d\n%s", count,
+ 		       buf);
+ 	}
+ 
+@@ -10796,7 +10796,7 @@ TEST_F(trace_layout1, check_rule_fs_optional_access)
  }
  
-diff --git a/security/landlock/trace.c b/security/landlock/trace.c
-index 58276cc32d3f..9be86638f905 100644
---- a/security/landlock/trace.c
-+++ b/security/landlock/trace.c
-@@ -12,6 +12,7 @@
- #include <linux/err.h>
- #include <linux/fs.h>
- #include <linux/lsm_audit.h>
-+#include <linux/socket.h>
- #include <net/sock.h>
+ /*
+- * Verifies that check_rule_fs fires for a rule that matches the inode even when
++ * Verifies that check_rule_inode fires for a rule matching the inode even when
+  * it grants none of the requested rights, so the grants set is empty.  Landlock
+  * cannot know a rule ignores the request before reading it, so the event is
+  * still emitted (grants={}), which lets a tracer see that the rule matched.
+@@ -10884,7 +10884,7 @@ TEST_F(trace_layout1, check_rule_fs_empty_grant)
+ 	count = tracefs_count_matches(buf, REGEX_CHECK_RULE_FS(TRACE_TASK));
+ 	EXPECT_EQ(2, count)
+ 	{
+-		TH_LOG("Expected 2 check_rule_fs events, got %d\n%s", count,
++		TH_LOG("Expected 2 check_rule_inode events, got %d\n%s", count,
+ 		       buf);
+ 	}
  
- #include "access.h"
-@@ -157,16 +158,31 @@ void landlock_trace_denial(
- 		break;
- 	case LANDLOCK_REQUEST_NET_ACCESS:
- 		if (trace_landlock_deny_access_net_enabled()) {
-+			const struct landlock_net_trace *const trace_net =
-+				request->trace_net;
- 			const struct landlock_blockers blockers = {
- 				.access = missing,
- 				.type = request->type,
- 			};
-+			struct sockaddr_storage address = {};
- 
-+			if (WARN_ON_ONCE(!trace_net || !trace_net->address))
-+				return;
-+
-+			if (WARN_ON_ONCE(
-+				    trace_net->addrlen <
-+					    (int)offsetofend(struct sockaddr,
-+							     sa_family) ||
-+				    trace_net->addrlen > (int)sizeof(address)))
-+				return;
-+
-+			memcpy(&address, trace_net->address,
-+			       trace_net->addrlen);
- 			trace_landlock_deny_access_net(
- 				youngest_denied, same_exec, logged, &blockers,
- 				request->audit.u.net->sk,
--				ntohs(request->audit.u.net->sport),
--				ntohs(request->audit.u.net->dport));
-+				trace_net->socket_family, &address,
-+				trace_net->addrlen);
- 		}
- 		break;
- 	case LANDLOCK_REQUEST_PTRACE:
+@@ -10894,7 +10894,7 @@ TEST_F(trace_layout1, check_rule_fs_empty_grant)
+ 		tracefs_count_matches(
+ 			buf,
+ 			TRACE_PREFIX(
+-				TRACE_TASK) "landlock_check_rule_fs: domain=[0-9a-f]\\+ "
++				TRACE_TASK) "landlock_check_rule_inode: domain=[0-9a-f]\\+ "
+ 					    "access_request=read_dir "
+ 					    "dev=[0-9]\\+:[0-9]\\+ ino=[0-9]\\+ "
+ 					    "grants={}$"))
+@@ -10908,7 +10908,7 @@ TEST_F(trace_layout1, check_rule_fs_empty_grant)
+ 		tracefs_count_matches(
+ 			buf,
+ 			TRACE_PREFIX(
+-				TRACE_TASK) "landlock_check_rule_fs: domain=[0-9a-f]\\+ "
++				TRACE_TASK) "landlock_check_rule_inode: domain=[0-9a-f]\\+ "
+ 					    "access_request=read_dir "
+ 					    "dev=[0-9]\\+:[0-9]\\+ ino=[0-9]\\+ "
+ 					    "grants={read_dir}$"))
 diff --git a/tools/testing/selftests/landlock/net_test.c b/tools/testing/selftests/landlock/net_test.c
-index 4fb705e1596d..28942438e154 100644
+index a18761e0fd82..4fb705e1596d 100644
 --- a/tools/testing/selftests/landlock/net_test.c
 +++ b/tools/testing/selftests/landlock/net_test.c
-@@ -3482,8 +3482,8 @@ TEST_F(trace_net, deny_access_net_bind)
+@@ -3712,7 +3712,7 @@ TEST_F(trace_net_connect, deny_access_net)
+ 	free(buf);
+ }
  
- /*
-  * Anchors the denial fields shared by every deny_access_net event so a field
-- * test proves more than sport/dport: the denying domain, the same-exec bit, the
-- * audit-logging verdict, and the blocked access all stay populated.
-+ * test proves more than the checked endpoint: the denying domain, the same-exec
-+ * bit, the audit-logging verdict, and the blocked access all stay populated.
-  */
- static void
- expect_net_deny_common_fields(struct __test_metadata *const _metadata,
-@@ -3569,38 +3569,38 @@ FIXTURE_VARIANT(trace_net_connect) {
- 	bool deny_connect;
- };
+-/* Field verification for the check_rule_net event on an allowed access. */
++/* Field verification for the check_rule_net_port event on an allowed access. */
  
-+/* Denied connect() to the next IPv4 port. */
  /* clang-format off */
--
--/* Denied connect(): sport=0, dport=<denied port>. */
- FIXTURE_VARIANT_ADD(trace_net_connect, connect_denied) {
-+	/* clang-format on */
- 	.handled = LANDLOCK_ACCESS_NET_CONNECT_TCP,
- 	.bind_base_first = false,
- 	.deny_connect = true,
- };
+ FIXTURE(trace_net_check_rule) {
+@@ -3757,10 +3757,11 @@ FIXTURE_TEARDOWN(trace_net_check_rule)
  
--/* Denied bind(): sport=<denied port>, dport=0. */
-+/* Denied bind() to the next IPv4 port. */
-+/* clang-format off */
- FIXTURE_VARIANT_ADD(trace_net_connect, bind_fields) {
-+	/* clang-format on */
- 	.handled = LANDLOCK_ACCESS_NET_BIND_TCP,
- 	.bind_base_first = false,
- 	.deny_connect = false,
- };
- 
--/* Denied connect() after an allowed bind(): the connect fields (sport=0). */
-+/* Denied connect() after an allowed bind() uses the checked destination. */
-+/* clang-format off */
- FIXTURE_VARIANT_ADD(trace_net_connect, connect_after_bind) {
--	.handled = LANDLOCK_ACCESS_NET_BIND_TCP | LANDLOCK_ACCESS_NET_CONNECT_TCP,
-+	/* clang-format on */
-+	.handled = LANDLOCK_ACCESS_NET_BIND_TCP |
-+		   LANDLOCK_ACCESS_NET_CONNECT_TCP,
- 	.bind_base_first = true,
- 	.deny_connect = true,
- };
- 
--/* clang-format on */
--
  /*
-- * A denied TCP bind(2) or connect(2) emits one deny_access_net event.  The port
-- * is reported in the field matching the denied operation, in host endianness
-- * (the UAPI landlock_net_port_attr.port convention): a connect denial reports
-- * sport=0 dport=<port>, a bind denial reports sport=<port> dport=0, so a
-- * byte-order or field-swap bug is caught.  A prior allowed bind
-- * (connect_after_bind) does not change the connect denial's fields.
-+ * A denied TCP bind(2) or connect(2) emits one deny_access_net event with the
-+ * checked IPv4 port in host endianness (the UAPI landlock_net_port_attr.port
-+ * convention).  A prior allowed bind does not change a connect denial's port.
+  * Verifies that an allowed bind matching a net-port rule emits exactly one
+- * landlock_check_rule_net event with the enforcing domain, the requested
++ * landlock_check_rule_net_port event with the enforcing domain, the requested
+  * access, the checked port (host endianness), and the per-layer grants.  The
+- * whole event is anchored to exact values so a revert of the check_rule_net
+- * emit (or a byte-order or field-plumbing regression) fails the test.
++ * whole event is anchored to exact values so removing the check_rule_net_port
++ * emission or introducing a byte-order or field-plumbing regression fails the
++ * test.
   */
- TEST_F(trace_net_connect, deny_access_net)
+ TEST_F(trace_net_check_rule, check_rule_net_fields)
  {
-@@ -3693,21 +3693,13 @@ TEST_F(trace_net_connect, deny_access_net)
- 
- 	expect_net_deny_common_fields(_metadata, buf);
- 
--	/*
--	 * The denied operation's port field carries the port; the other is 0.
--	 */
- 	snprintf(expected, sizeof(expected), "%llu",
- 		 (unsigned long long)(sock_port_start + 1));
+@@ -3832,7 +3833,7 @@ TEST_F(trace_net_check_rule, check_rule_net_fields)
+ 	EXPECT_EQ(1,
+ 		  tracefs_count_matches(buf, REGEX_CHECK_RULE_NET(TRACE_TASK)))
+ 	{
+-		TH_LOG("Expected 1 check_rule_net event\n%s", buf);
++		TH_LOG("Expected 1 check_rule_net_port event\n%s", buf);
+ 	}
  
  	ASSERT_EQ(0,
- 		  tracefs_extract_field(buf, REGEX_DENY_ACCESS_NET(TRACE_TASK),
--					"sport", field, sizeof(field)));
--	EXPECT_STREQ(variant->deny_connect ? "0" : expected, field);
--
--	ASSERT_EQ(0,
--		  tracefs_extract_field(buf, REGEX_DENY_ACCESS_NET(TRACE_TASK),
--					"dport", field, sizeof(field)));
--	EXPECT_STREQ(variant->deny_connect ? expected : "0", field);
-+					"port", field, sizeof(field)));
-+	EXPECT_STREQ(expected, field);
- 
- 	free(buf);
- }
-@@ -3867,11 +3859,4 @@ TEST_F(trace_net_check_rule, check_rule_net_fields)
- 	free(buf);
- }
- 
--/*
-- * IPv6 network trace tests are intentionally elided.  IPv6 hook dispatch uses
-- * the same current_check_access_socket() code path as IPv4, validated by the
-- * audit tests in this file.  The trace events use the same blockers/sport/dport
-- * fields regardless of address family.
-- */
--
- TEST_HARNESS_MAIN
 diff --git a/tools/testing/selftests/landlock/trace.h b/tools/testing/selftests/landlock/trace.h
-index e6873853376c..2ec863362173 100644
+index ba0c5e92001f..e6873853376c 100644
 --- a/tools/testing/selftests/landlock/trace.h
 +++ b/tools/testing/selftests/landlock/trace.h
-@@ -145,8 +145,7 @@
- 	"same_exec=[01] "            \
- 	"logged=[01] "               \
- 	"blockers=[a-z_|]* "         \
--	"sport=[0-9]\\+ "            \
--	"dport=[0-9]\\+$"
-+	"port=-\\?[0-9]\\+$"
+@@ -27,14 +27,14 @@
+ 	TRACEFS_LANDLOCK_DIR "/landlock_create_domain/enable"
+ #define TRACEFS_ENFORCE_DOMAIN_ENABLE \
+ 	TRACEFS_LANDLOCK_DIR "/landlock_enforce_domain/enable"
+-#define TRACEFS_ADD_RULE_FS_ENABLE \
+-	TRACEFS_LANDLOCK_DIR "/landlock_add_rule_fs/enable"
+-#define TRACEFS_ADD_RULE_NET_ENABLE \
+-	TRACEFS_LANDLOCK_DIR "/landlock_add_rule_net/enable"
++#define TRACEFS_ADD_RULE_PATH_BENEATH_ENABLE \
++	TRACEFS_LANDLOCK_DIR "/landlock_add_rule_path_beneath/enable"
++#define TRACEFS_ADD_RULE_NET_PORT_ENABLE \
++	TRACEFS_LANDLOCK_DIR "/landlock_add_rule_net_port/enable"
+ #define TRACEFS_CHECK_RULE_FS_ENABLE \
+-	TRACEFS_LANDLOCK_DIR "/landlock_check_rule_fs/enable"
++	TRACEFS_LANDLOCK_DIR "/landlock_check_rule_inode/enable"
+ #define TRACEFS_CHECK_RULE_NET_ENABLE \
+-	TRACEFS_LANDLOCK_DIR "/landlock_check_rule_net/enable"
++	TRACEFS_LANDLOCK_DIR "/landlock_check_rule_net_port/enable"
+ #define TRACEFS_DENY_ACCESS_FS_ENABLE \
+ 	TRACEFS_LANDLOCK_DIR "/landlock_deny_access_fs/enable"
+ #define TRACEFS_DENY_ACCESS_NET_ENABLE \
+@@ -79,18 +79,18 @@
+  */
+ #define KWORKER_TASK "kworker/[0-9]\\+:[0-9]\\+"
  
- #define REGEX_DENY_PTRACE(task)      \
- 	TRACE_PREFIX(task)           \
+-#define REGEX_ADD_RULE_FS(task)           \
+-	TRACE_PREFIX(task)                \
+-	"landlock_add_rule_fs: "          \
+-	"ruleset=[0-9a-f]\\+\\.[0-9]\\+ " \
+-	"access_rights=[a-z_|]* "         \
+-	"dev=[0-9]\\+:[0-9]\\+ "          \
+-	"ino=[0-9]\\+ "                   \
++#define REGEX_ADD_RULE_PATH_BENEATH(task)  \
++	TRACE_PREFIX(task)                 \
++	"landlock_add_rule_path_beneath: " \
++	"ruleset=[0-9a-f]\\+\\.[0-9]\\+ "  \
++	"access_rights=[a-z_|]* "          \
++	"dev=[0-9]\\+:[0-9]\\+ "           \
++	"ino=[0-9]\\+ "                    \
+ 	"path=[^ ]\\+$"
+ 
+-#define REGEX_ADD_RULE_NET(task)          \
++#define REGEX_ADD_RULE_NET_PORT(task)     \
+ 	TRACE_PREFIX(task)                \
+-	"landlock_add_rule_net: "         \
++	"landlock_add_rule_net_port: "    \
+ 	"ruleset=[0-9a-f]\\+\\.[0-9]\\+ " \
+ 	"access_rights=[a-z_|]* "         \
+ 	"port=[0-9]\\+$"
+@@ -110,21 +110,21 @@
+ 	"parent=[0-9a-f]\\+ "      \
+ 	"ruleset=[0-9a-f]\\+\\.[0-9]\\+$"
+ 
+-#define REGEX_CHECK_RULE_FS(task)  \
+-	TRACE_PREFIX(task)         \
+-	"landlock_check_rule_fs: " \
+-	"domain=[0-9a-f]\\+ "      \
+-	"access_request=[a-z_|]* " \
+-	"dev=[0-9]\\+:[0-9]\\+ "   \
+-	"ino=[0-9]\\+ "            \
++#define REGEX_CHECK_RULE_FS(task)     \
++	TRACE_PREFIX(task)            \
++	"landlock_check_rule_inode: " \
++	"domain=[0-9a-f]\\+ "         \
++	"access_request=[a-z_|]* "    \
++	"dev=[0-9]\\+:[0-9]\\+ "      \
++	"ino=[0-9]\\+ "               \
+ 	"grants={[a-z_|,]*}$"
+ 
+-#define REGEX_CHECK_RULE_NET(task)  \
+-	TRACE_PREFIX(task)          \
+-	"landlock_check_rule_net: " \
+-	"domain=[0-9a-f]\\+ "       \
+-	"access_request=[a-z_|]* "  \
+-	"port=[0-9]\\+ "            \
++#define REGEX_CHECK_RULE_NET(task)       \
++	TRACE_PREFIX(task)               \
++	"landlock_check_rule_net_port: " \
++	"domain=[0-9a-f]\\+ "            \
++	"access_request=[a-z_|]* "       \
++	"port=[0-9]\\+ "                 \
+ 	"grants={[a-z_|,]*}$"
+ 
+ #define REGEX_DENY_ACCESS_FS(task)  \
+diff --git a/tools/testing/selftests/landlock/trace_fs_test.c b/tools/testing/selftests/landlock/trace_fs_test.c
+index 4543a25c1f55..6666d4746cb1 100644
+--- a/tools/testing/selftests/landlock/trace_fs_test.c
++++ b/tools/testing/selftests/landlock/trace_fs_test.c
+@@ -121,7 +121,8 @@ FIXTURE_SETUP(trace_fs)
+ 	}
+ 	self->tracefs_ok = 1;
+ 
+-	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_ADD_RULE_FS_ENABLE, true));
++	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_ADD_RULE_PATH_BENEATH_ENABLE,
++					  true));
+ 	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_CHECK_RULE_FS_ENABLE, true));
+ 	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_DENY_ACCESS_FS_ENABLE, true));
+ 	ASSERT_EQ(0, tracefs_clear());
+@@ -134,7 +135,7 @@ FIXTURE_TEARDOWN(trace_fs)
+ 		return;
+ 
+ 	set_cap(_metadata, CAP_SYS_ADMIN);
+-	tracefs_enable_event(TRACEFS_ADD_RULE_FS_ENABLE, false);
++	tracefs_enable_event(TRACEFS_ADD_RULE_PATH_BENEATH_ENABLE, false);
+ 	tracefs_enable_event(TRACEFS_CHECK_RULE_FS_ENABLE, false);
+ 	tracefs_enable_event(TRACEFS_DENY_ACCESS_FS_ENABLE, false);
+ 	tracefs_fixture_teardown();
+@@ -183,11 +184,11 @@ TEST_F(trace_fs, unsandboxed)
+ }
+ 
+ /*
+- * Verifies that adding a filesystem rule emits a landlock_add_rule_fs trace
+- * event with the expected path and field values: ruleset ID is non-zero,
+- * access_rights is non-zero, and path matches.
++ * Verifies that adding a filesystem rule emits a landlock_add_rule_path_beneath
++ * event with the expected path and field values: the ruleset ID and
++ * access_rights are non-zero, and the path matches.
+  */
+-TEST_F(trace_fs, add_rule_fs)
++TEST_F(trace_fs, add_rule_path_beneath)
+ {
+ 	struct landlock_ruleset_attr ruleset_attr = {
+ 		.handled_access_fs = LANDLOCK_ACCESS_FS_READ_FILE |
+@@ -215,28 +216,30 @@ TEST_F(trace_fs, add_rule_fs)
+ 	buf = tracefs_read_buf();
+ 	ASSERT_NE(NULL, buf);
+ 
+-	count = tracefs_count_matches(buf, REGEX_ADD_RULE_FS(TRACE_TASK));
++	count = tracefs_count_matches(buf,
++				      REGEX_ADD_RULE_PATH_BENEATH(TRACE_TASK));
+ 	EXPECT_EQ(1, count)
+ 	{
+-		TH_LOG("Expected 1 add_rule_fs event, got %d\n%s", count, buf);
++		TH_LOG("Expected 1 add_rule_path_beneath event, got %d\n%s",
++		       count, buf);
+ 	}
+ 
+ 	/* Ruleset ID should be non-zero. */
+-	ASSERT_EQ(0, tracefs_extract_field(buf, REGEX_ADD_RULE_FS(TRACE_TASK),
+-					   "ruleset", field_buf,
+-					   sizeof(field_buf)));
++	ASSERT_EQ(0, tracefs_extract_field(
++			     buf, REGEX_ADD_RULE_PATH_BENEATH(TRACE_TASK),
++			     "ruleset", field_buf, sizeof(field_buf)));
+ 	EXPECT_STRNE("0", field_buf);
+ 
+ 	/* Access rights should be non-zero. */
+-	ASSERT_EQ(0, tracefs_extract_field(buf, REGEX_ADD_RULE_FS(TRACE_TASK),
+-					   "access_rights", field_buf,
+-					   sizeof(field_buf)));
++	ASSERT_EQ(0, tracefs_extract_field(
++			     buf, REGEX_ADD_RULE_PATH_BENEATH(TRACE_TASK),
++			     "access_rights", field_buf, sizeof(field_buf)));
+ 	EXPECT_STRNE("", field_buf);
+ 
+ 	/* Path should be /usr. */
+-	ASSERT_EQ(0,
+-		  tracefs_extract_field(buf, REGEX_ADD_RULE_FS(TRACE_TASK),
+-					"path", field_buf, sizeof(field_buf)));
++	ASSERT_EQ(0, tracefs_extract_field(
++			     buf, REGEX_ADD_RULE_PATH_BENEATH(TRACE_TASK),
++			     "path", field_buf, sizeof(field_buf)));
+ 	EXPECT_STREQ("/usr", field_buf);
+ 
+ 	free(buf);
+@@ -246,7 +249,7 @@ TEST_F(trace_fs, add_rule_fs)
+  * Verifies that a path whose escaping exceeds the trace scratch sequence does
+  * not corrupt a sibling symbolic field.
+  */
+-TEST_F(trace_fs, add_rule_fs_escaped_path_overflow)
++TEST_F(trace_fs, add_rule_path_beneath_escaped_path_overflow)
+ {
+ 	static const char access_prefix[] = "execute|write_file|read_file|";
+ 	static const char access_suffix[] = "|ioctl_dev|resolve_unix";
+@@ -277,10 +280,12 @@ TEST_F(trace_fs, add_rule_fs_escaped_path_overflow)
+ 	buf = tracefs_read_buf();
+ 	ASSERT_NE(NULL, buf);
+ 
+-	count = tracefs_count_matches(buf, REGEX_ADD_RULE_FS(TRACE_TASK));
++	count = tracefs_count_matches(buf,
++				      REGEX_ADD_RULE_PATH_BENEATH(TRACE_TASK));
+ 	EXPECT_EQ(1, count)
+ 	{
+-		TH_LOG("Expected 1 add_rule_fs event, got %d\n%s", count, buf);
++		TH_LOG("Expected 1 add_rule_path_beneath event, got %d\n%s",
++		       count, buf);
+ 	}
+ 
+ 	/*
+@@ -288,9 +293,9 @@ TEST_F(trace_fs, add_rule_fs_escaped_path_overflow)
+ 	 * field also catches scratch-sequence poisoning when the compiler
+ 	 * evaluates the overflowing path first, as GCC currently does.
+ 	 */
+-	ASSERT_EQ(0, tracefs_extract_field(buf, REGEX_ADD_RULE_FS(TRACE_TASK),
+-					   "access_rights", field_buf,
+-					   sizeof(field_buf)));
++	ASSERT_EQ(0, tracefs_extract_field(
++			     buf, REGEX_ADD_RULE_PATH_BENEATH(TRACE_TASK),
++			     "access_rights", field_buf, sizeof(field_buf)));
+ 	EXPECT_EQ(0,
+ 		  strncmp(field_buf, access_prefix, sizeof(access_prefix) - 1));
+ 	EXPECT_EQ(NULL, strstr(field_buf, "|refer|"));
+@@ -298,7 +303,8 @@ TEST_F(trace_fs, add_rule_fs_escaped_path_overflow)
+ 	ASSERT_LE(sizeof(access_suffix) - 1, field_len);
+ 	EXPECT_STREQ(access_suffix,
+ 		     field_buf + field_len - (sizeof(access_suffix) - 1));
+-	expect_truncated_path(_metadata, buf, REGEX_ADD_RULE_FS(TRACE_TASK));
++	expect_truncated_path(_metadata, buf,
++			      REGEX_ADD_RULE_PATH_BENEATH(TRACE_TASK));
+ 
+ 	free(buf);
+ }
+diff --git a/tools/testing/selftests/landlock/trace_test.c b/tools/testing/selftests/landlock/trace_test.c
+index afdaf8511b3a..f9b293a9dd56 100644
+--- a/tools/testing/selftests/landlock/trace_test.c
++++ b/tools/testing/selftests/landlock/trace_test.c
+@@ -49,8 +49,10 @@ FIXTURE_SETUP(trace)
+ 	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_CREATE_RULESET_ENABLE, true));
+ 	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_CREATE_DOMAIN_ENABLE, true));
+ 	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_ENFORCE_DOMAIN_ENABLE, true));
+-	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_ADD_RULE_FS_ENABLE, true));
+-	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_ADD_RULE_NET_ENABLE, true));
++	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_ADD_RULE_PATH_BENEATH_ENABLE,
++					  true));
++	ASSERT_EQ(0,
++		  tracefs_enable_event(TRACEFS_ADD_RULE_NET_PORT_ENABLE, true));
+ 	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_CHECK_RULE_FS_ENABLE, true));
+ 	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_CHECK_RULE_NET_ENABLE, true));
+ 	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_DENY_ACCESS_FS_ENABLE, true));
+@@ -72,8 +74,8 @@ FIXTURE_TEARDOWN(trace)
+ 	tracefs_enable_event(TRACEFS_CREATE_RULESET_ENABLE, false);
+ 	tracefs_enable_event(TRACEFS_CREATE_DOMAIN_ENABLE, false);
+ 	tracefs_enable_event(TRACEFS_ENFORCE_DOMAIN_ENABLE, false);
+-	tracefs_enable_event(TRACEFS_ADD_RULE_FS_ENABLE, false);
+-	tracefs_enable_event(TRACEFS_ADD_RULE_NET_ENABLE, false);
++	tracefs_enable_event(TRACEFS_ADD_RULE_PATH_BENEATH_ENABLE, false);
++	tracefs_enable_event(TRACEFS_ADD_RULE_NET_PORT_ENABLE, false);
+ 	tracefs_enable_event(TRACEFS_CHECK_RULE_FS_ENABLE, false);
+ 	tracefs_enable_event(TRACEFS_CHECK_RULE_NET_ENABLE, false);
+ 	tracefs_enable_event(TRACEFS_DENY_ACCESS_FS_ENABLE, false);
+@@ -103,8 +105,10 @@ TEST_F(trace, no_trace_when_disabled)
+ 	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_CREATE_DOMAIN_ENABLE, false));
+ 	ASSERT_EQ(0,
+ 		  tracefs_enable_event(TRACEFS_ENFORCE_DOMAIN_ENABLE, false));
+-	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_ADD_RULE_FS_ENABLE, false));
+-	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_ADD_RULE_NET_ENABLE, false));
++	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_ADD_RULE_PATH_BENEATH_ENABLE,
++					  false));
++	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_ADD_RULE_NET_PORT_ENABLE,
++					  false));
+ 	ASSERT_EQ(0, tracefs_enable_event(TRACEFS_CHECK_RULE_FS_ENABLE, false));
+ 	ASSERT_EQ(0,
+ 		  tracefs_enable_event(TRACEFS_CHECK_RULE_NET_ENABLE, false));
+@@ -265,10 +269,11 @@ TEST_F(trace, ruleset_version)
+ 	ASSERT_NE(0, !!dot);
+ 	EXPECT_STREQ("0", dot + 1);
+ 
+-	/* Verify 2 add_rule_fs events were emitted. */
+-	EXPECT_EQ(2, tracefs_count_matches(buf, REGEX_ADD_RULE_FS(TRACE_TASK)))
++	/* Verify two add_rule_path_beneath events were emitted. */
++	EXPECT_EQ(2, tracefs_count_matches(
++			     buf, REGEX_ADD_RULE_PATH_BENEATH(TRACE_TASK)))
+ 	{
+-		TH_LOG("Expected 2 add_rule_fs events\n%s", buf);
++		TH_LOG("Expected 2 add_rule_path_beneath events\n%s", buf);
+ 	}
+ 
+ 	/*
+@@ -373,7 +378,7 @@ TEST_F(trace, create_domain)
+ 		tracefs_count_matches(buf, REGEX_CHECK_RULE_FS(TRACE_TASK));
+ 	ASSERT_LE(1, check_count)
+ 	{
+-		TH_LOG("Expected check_rule_fs events\n%s", buf);
++		TH_LOG("Expected check_rule_inode events\n%s", buf);
+ 	}
+ 
+ 	EXPECT_EQ(0, tracefs_extract_field(buf, REGEX_CHECK_RULE_FS(TRACE_TASK),
+@@ -508,9 +513,11 @@ TEST_F(trace, add_rule_invalid_fd)
+ 	buf = tracefs_read_buf();
+ 	ASSERT_NE(NULL, buf);
+ 
+-	EXPECT_EQ(0, tracefs_count_matches(buf, REGEX_ADD_RULE_FS(TRACE_TASK)))
++	EXPECT_EQ(0, tracefs_count_matches(
++			     buf, REGEX_ADD_RULE_PATH_BENEATH(TRACE_TASK)))
+ 	{
+-		TH_LOG("No add_rule_fs event expected on invalid fd\n%s", buf);
++		TH_LOG("No add_rule_path_beneath event expected on invalid fd\n%s",
++		       buf);
+ 	}
+ 
+ 	free(buf);
+@@ -902,10 +909,10 @@ TEST_F(trace, non_audit_visible_denial_counting)
+ }
+ 
+ /*
+- * Verifies that landlock_add_rule_net emits a trace event with the correct port
+- * and allowed access mask fields.
++ * Verifies that landlock_add_rule_net_port emits a trace event with the correct
++ * port and allowed access mask fields.
+  */
+-TEST_F(trace, add_rule_net_fields)
++TEST_F(trace, add_rule_net_port_fields)
+ {
+ 	struct landlock_ruleset_attr ruleset_attr = {
+ 		.handled_access_net = LANDLOCK_ACCESS_NET_BIND_TCP,
+@@ -931,9 +938,10 @@ TEST_F(trace, add_rule_net_fields)
+ 	buf = tracefs_read_buf();
+ 	ASSERT_NE(NULL, buf);
+ 
+-	EXPECT_EQ(1, tracefs_count_matches(buf, REGEX_ADD_RULE_NET(TRACE_TASK)))
++	EXPECT_EQ(1, tracefs_count_matches(buf,
++					   REGEX_ADD_RULE_NET_PORT(TRACE_TASK)))
+ 	{
+-		TH_LOG("Expected 1 add_rule_net event\n%s", buf);
++		TH_LOG("Expected 1 add_rule_net_port event\n%s", buf);
+ 	}
+ 
+ 	/*
+@@ -941,7 +949,8 @@ TEST_F(trace, add_rule_net_fields)
+ 	 * (landlock_net_port_attr.port).  On little-endian, htons(8080) is
+ 	 * 36895, so this comparison catches byte-order bugs.
+ 	 */
+-	EXPECT_EQ(0, tracefs_extract_field(buf, REGEX_ADD_RULE_NET(TRACE_TASK),
++	EXPECT_EQ(0, tracefs_extract_field(buf,
++					   REGEX_ADD_RULE_NET_PORT(TRACE_TASK),
+ 					   "port", field, sizeof(field)));
+ 	EXPECT_STREQ("8080", field);
+ 	/*
+@@ -950,9 +959,9 @@ TEST_F(trace, add_rule_net_fields)
+ 	 * net access bits are unhandled because the ruleset only handles
+ 	 * BIND_TCP).
+ 	 */
+-	EXPECT_EQ(0,
+-		  tracefs_extract_field(buf, REGEX_ADD_RULE_NET(TRACE_TASK),
+-					"access_rights", field, sizeof(field)));
++	EXPECT_EQ(0, tracefs_extract_field(
++			     buf, REGEX_ADD_RULE_NET_PORT(TRACE_TASK),
++			     "access_rights", field, sizeof(field)));
+ 	EXPECT_STREQ("bind_tcp|connect_tcp|bind_udp|connect_send_udp", field);
+ 
+ 	free(buf);
 -- 
 2.55.0
 
