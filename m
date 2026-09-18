@@ -1,113 +1,122 @@
-Received: from mta0.migadu.com (out-153.mta0.migadu.com [91.218.175.153])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DC7550277F
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 13:36:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DBE64F797F
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 14:03:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789738608; cv=none; b=Xxb+h5QAAQ6ElU8mCKnBuwWY7he2rWWbLNqSdU0CasdSBVqU60m+ToL+AJymAfXiDKpwLHcklPKBtsfdn+HAuunyCGGoRhWtL8GGWTdCIkaBe76vV/uQGbZqx2ywoSp3Xl3JSMhPwwGo9xn0/1brZQUGyKGuK/83tTWzYolUOy0=
+	t=1789740187; cv=none; b=aEx0fDme/oP9eYb5r+7RkJbjr/exFuUqmloWM8vXM+4Ij/HV/umICYLf2uT795GxlAerq6lfGR55iZZVd5q+oAuLLoGhZWhSASnC1jIvNJkgyF8cHKOPBK5GnzBx5xSy9u93yQMAG/UOoqMozjNOvmj70CO494UZDa9r5l8rE/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789738608; c=relaxed/simple;
-	bh=/RJxtpnY3VFIjvsJUYAM2o2Owc7T+CeSxdmnbQ2prls=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=clb0VTgOa+UhZ3FqZ4pS5D+SXBKCPveTnsyL1oyLwsu8PUAK8xqAs3B/U7dS+W6cw8ZD45xA0kzP5xCHU62o4AJuTjy6UMCVLIYmPpL+xxPH5qfoPeXr5OjAJSibOGeMCNEkky8yjlHjYgY/2j1q971vHQG/O3vr1g9D72KdSRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xt1SxfDO; arc=none smtp.client-ip=91.218.175.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789740187; c=relaxed/simple;
+	bh=IOObpe2OSU3tGru0j+4FUCrorkv2Lgm99SdambyIJc8=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=dO8J4hoSG0q6/E3o2ot8ZMnsKFz0NvHw5t9SSCOS10LWtfQY9/ieqXSXKxTv7+E6hILPwmrXXS/gTEO0eh3xd31sUDMae1Gfw8Qu2fqCeb27e3eyNSYOZb9adM/Uz8ao64yOVkH3s0yKQtPuAoBmWMM9e6Cg0oXqRc9fahpjopU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nS6k4wp1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xt1SxfDO"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=/RJxtpnY3VFIjvsJUYAM2o2Owc7T+CeSxdmnbQ2prls=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789738604; v=1; x=1790343404;
- b=xt1SxfDOYrRyXZL3fDSqb/F3T7SjaagMgXBuuO2vIuhBTaP+fl6tLL9ZOsmdaS+PlMhMm5CV
- IRURWDKn4kW9StxNaHLg5bCCJU33/FMk3qrbJmSxjINPmIjKnVb20vkPpFruNNcYZDotQnOgzlH
- W0OcTUhx/e8G/F/Z1QtlLIYM=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id bdf97a7d395ac53b;
-	Fri, 18 Sep 2026 13:36:44 +0000
-X-Mizu-Trace-ID: bdf97a7d395ac53b
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <908dd7ec-1d03-4d2f-814b-9e1c67f337b2@linux.dev>
-Date: Fri, 18 Sep 2026 21:36:37 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nS6k4wp1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C88251F000FF;
+	Fri, 18 Sep 2026 14:03:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789740186;
+	bh=AQj4VD/WXy4m3KR9kalUmlXRQxwYTO/V1/tTqp/nm40=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=nS6k4wp18KyWmj27+kIbxe1Uv/QzfJvgX1ASWQXnaYgffy+iomb24FLRrIMPXt0SJ
+	 jf/vSexNR+RI7+2P3WHH+5KsSt9Z88JBH6InUVCeNcEgLfBkXMvDaYAWLFrBhRed7H
+	 Hu3F7+WIxDDMi2sI1l511sKhANVEc1Y+1it2CcHjWGWvBwF0mpb2Tww2XWajipm/CS
+	 ok4l4NYcdwCZpvMzoEhlVmHgpbKKQE0h1X8Tg1lYOzKHzupCbI4emLrEM9UfHNSoYE
+	 Q2I+wWI1P7cuQl8gSAz2mX0ckE8r7T4KFM/uGOk5kTOkVdTTyCNsuV0iitvgrj+yAB
+	 if90WszzbmYIg==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v9 4/5] bpf: Mark linux_binprm->mm as
+ trusted-or-null
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Anastasios Papagiannis" <tasos.papagiannnis@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260918131757.42802-5-tasos.papagiannnis@gmail.com>
+References: <20260918131757.42802-1-tasos.papagiannnis@gmail.com>
+ <20260918131757.42802-5-tasos.papagiannnis@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 18 Sep 2026 14:03:05 +0000
+Message-Id: <20260918140305.C88251F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: Add iter subtest using
- lskel in global_data_init
-To: bot+bpf-ci@kernel.org, tweek@google.com, qmo@kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, shuah@kernel.org, kpsingh@kernel.org, emil@etsalapatis.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, ihor.solodrai@linux.dev, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20260918040919.3402577-3-tweek@google.com>
- <b1a854da66d611f079d8ff186b9bf73845ee18b73fac2481ef468a86fc777990@mail.kernel.org>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <b1a854da66d611f079d8ff186b9bf73845ee18b73fac2481ef468a86fc777990@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On 2026/9/18 13:05, bot+bpf-ci@kernel.org wrote:
->> In test_global_percpu_data.c, dump_percpu_data is defined after two
->> non-autoload SEC("?kprobe") programs (verifier_strncmp and
->> verifier_snprintf). If bpftool does not skip non-autoload programs when
->> generating light skeletons, dump_percpu_data.prog_fd is left invalid or
->> unpopulated.
->>
->> Factor out a test_global_percpu_data_iter_fd() helper that operates
->> directly on prog/map file descriptors, and add an iter_lskel subtest to
->> verify that dump_percpu_data is properly loaded and executes correctly
->> when using the light skeleton.
->>
->> Fixes: 4c9241bd731a ("selftests/bpf: Add tests to verify global percpu data")
->> Fixes: 1ed2294b31fc ("selftests/bpf: Test verifier log for global percpu data")
->> Signed-off-by: Thiébaud Weksteen <tweek@google.com>
-> 
-> Are the Fixes: tags appropriate for this commit? This patch only adds new
-> test coverage (a new iter_lskel subtest) and refactors existing test code
-> (factoring out test_global_percpu_data_iter_fd() with no behavioral change
-> to the existing "iter" subtest). It doesn't fix anything that
-> 4c9241bd731a or 1ed2294b31fc got wrong.
-> 
-> The bug being tested is in bpftool, introduced by d510296d331a
-> ("bpftool: Use syscall/loader program in "prog load" and "gen skeleton"
-> command.") and actually fixed by the two preceding patches in this series
-> (202ee90dee368 and 843762e6f4665), both of which already carry the correct
-> Fixes: d510296d331a tag.
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Critical] bpf: kernel panic via missing PROBE_MEM on fexit of free_bprm
+- [High] bpf: ABI breakage on bprm->mm dereference due to TRUSTED_OR_NULL u=
+pgrade
+--
 
-Agreed.
+commit 128aa90c601cd807f8be00c84b4237b6611809e3
+Author: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
 
-The Fixes: tags of this patch can be dropped.
+bpf: Mark linux_binprm->mm as trusted-or-null
 
-Others lgtm:
+This commit marks linux_binprm->mm as a trusted-or-null nested pointer in t=
+he
+BPF verifier, allowing BPF programs to pass it to kfuncs after a NULL check.
+It also updates an LSM selftest to perform this NULL check before usage.
 
-Acked-by: Leon Hwang <leon.hwang@linux.dev>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 6c6b8d8520cdf..3539a768b9211 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -6051,6 +6055,7 @@ static bool type_is_trusted_or_null(struct bpf_veri=
+fier_env *env,
+>  {
+>  	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct socket));
+>  	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct dentry));
+> +	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct linux_binprm));
 
-> 
-> There's also a backport concern. The Fixes: tags make this patch a
-> candidate for AUTOSEL/stable pickup independently of 202ee90dee368 and
-> 843762e6f4665. Since this is the last patch of the series, backporting it
-> alone would land the new iter_lskel subtest in a tree with the unfixed
-> bpftool, where skel->progs.dump_percpu_data.prog_fd is left at 0 and
-> bpf_link_create(0, 0, BPF_TRACE_ITER, &opts) fails. The subtest would fail
-> by construction.
-> 
-> Should the Fixes: tags be removed, or if they're intended to be kept,
-> should the dependency on the two bpftool patches be stated via
-> Cc: <stable@vger.kernel.org> prerequisite lines?
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35306404663
+[Severity: Critical]
+Can this upgrade to a trusted pointer cause a kernel panic if a user loads
+an fexit program attached to free_bprm()?
 
+Because free_bprm() frees the bprm object before the fexit hook executes,
+reading bprm->mm yields a garbage pointer. Before this patch, the verifier
+automatically inserted a BPF_PROBE_MEM exception table entry to protect the
+dereference of the untrusted pointer.
+
+By upgrading bprm->mm to a PTR_TRUSTED nested pointer, the verifier bypasses
+this BPF_PROBE_MEM safety net. If the fexit program checks for NULL and then
+dereferences it, could it trigger an unhandled page fault and crash the
+system?
+
+>  	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct vm_area_struct));
+> =20
+>  	return btf_nested_type_is_trusted(&env->log, reg, field_name, btf_id,
+> diff --git a/tools/testing/selftests/bpf/progs/lsm.c b/tools/testing/self=
+tests/bpf/progs/lsm.c
+> index 7de173daf27b6..7441d66c080c9 100644
+> --- a/tools/testing/selftests/bpf/progs/lsm.c
+> +++ b/tools/testing/selftests/bpf/progs/lsm.c
+> @@ -121,7 +122,9 @@ int BPF_PROG(test_void_hook, struct linux_binprm *bpr=
+m)
+>  		bprm_count++;
+> =20
+>  	bpf_copy_from_user(args, sizeof(args), (void *)bprm->vma->vm_mm->arg_st=
+art);
+> -	bpf_copy_from_user(args, sizeof(args), (void *)bprm->mm->arg_start);
+> +	mm =3D bprm->mm;
+> +	if (mm)
+> +		bpf_copy_from_user(args, sizeof(args), (void *)mm->arg_start);
+
+[Severity: High]
+Will this change break ABI compatibility for existing BPF programs?
+
+As this selftest modification demonstrates, existing BPF tracing or LSM
+programs that access bprm->mm without a NULL check will now be strictly
+rejected at load time by the verifier.
+
+Previously, the pointer was treated as untrusted and the verifier
+automatically shielded the dereference with a BPF_PROBE_MEM load, gracefully
+handling NULLs at runtime.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260918131757.4280=
+2-1-tasos.papagiannnis@gmail.com?part=3D4
