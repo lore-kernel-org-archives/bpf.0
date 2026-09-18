@@ -1,180 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 450433A7F4B
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 09:12:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF8A31328E
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 09:14:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789722724; cv=none; b=gOP3ZXLhW8IfjrLtkJ4AZcN5WQieoiy3YPF3Gq/g6hRUvvs1oBAXBwe3EgPgkX+xVxLy7AuCCAWg4uTTuGleg+K2ce4RuS+/AEGSRcEOdmE21mDimBp1yKv61rRXBzNyUR6kvrp0JBPQET3rk6hJrPoTDsIqZgLDQLY9swKB8vw=
+	t=1789722864; cv=none; b=F7AkRYv97uSTvm48ZbOAO7RnATEbxYY4MfzOpEqb6XVg88KOB74xHJ36gFuoXp0OJWiD6j0jByRRAqJdsH6u/n+DdLjs7Lq/haxrr6hxFo2uqZY67bURVwmJtG0MzB8H1+3TlSPH+120HWR9Tx9zrWock+Ml2L4l4tR/bvR4Fy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789722724; c=relaxed/simple;
-	bh=W5HRxWBoFwrHJISika+Tp4fa+vMLuHYx1UcPZNutiaw=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=j4EhIU+8A2JUwkUBMDqYs/JlPFEpIRjlxTIhkRT/xbC2uxIxJBaPLVUoLlyvH415g+dDgHWMPXS7QQSVlYji1HlpjIHFguBqWAC2M9sFacPVFXKd0e+aOX5DgVIL/a3ivDkVE9NpPFF466tmf/c2Z9DbTUMNBGu8NWmcFzaZHg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K3SmGQm+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789722864; c=relaxed/simple;
+	bh=SfKpB6hUtfeLMQ4pzuFq7L7CWOsyj3Ko5MJ4c1BBJiY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TsTwpXcjWVvYkHTcTlC7Agx1bnq0o13x/75HVvPCDNrSxxMU48M5P2Xi3CfJTtnZYOonAe4T8IvzarKeghOtYzkOtIny91AIGtJHDPI8vbFcJKuIB5d6uVn8NyoMh+FQtwlVnxypso5ihECc89pX6Cdnc3hFXrNOhXXhUWys1YI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lQRbrWk1; arc=none smtp.client-ip=74.125.225.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K3SmGQm+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B48071F000FF;
-	Fri, 18 Sep 2026 09:12:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789722722;
-	bh=cRi6NLu4kPzta0aaOwz3SabprnwzXOmevwZK3l9EWOk=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=K3SmGQm+XYdDfknl97oWZ/0NAMESQwZYMWX04nMDN+8byP36SdRDUq6qbnGAEG32i
-	 A6Xv2UImSGHM3PtH5DS6EPNFz8ekYtzpHnrynADjB5kAf3iv1RjtORdTzCOyzOPo6i
-	 ligP++QtEhIiMm+ilNrcUemxoXsVK/1eiuXignUTjuXV/HJQhsuuii3RFfpH2yCPmT
-	 LT3PRfNfwdse8awLqp9Y5J1bzLNnqFKGvMhoddjsPLsLVeRI9RKwiLpNJ4Yt1wRzaG
-	 lY9AbzuMj3H/uEfO1OlUn6b2DWiIW/5ExhZsbivTWcM/fb0jpynr/ODXOesCmBQXSd
-	 RLzJAyhhLHRaw==
-Content-Type: multipart/mixed; boundary="===============8958580032944694090=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lQRbrWk1"
+Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-485933b2522so330388f8f.0
+        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 02:14:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789722861; x=1790327661; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=SfKpB6hUtfeLMQ4pzuFq7L7CWOsyj3Ko5MJ4c1BBJiY=;
+        b=lQRbrWk1HQNYPPZ+lqpF4Wz1VTXAsfIqb6Y2YxSOjWBogaDFKULZQgp+KSABYe22oB
+         itdF/x1Vn5yNn/TAQoREKNqbEGG4clHsUAUshdb3FIDimMzHaEKDUhzJFGZRRQ7HgRom
+         RFZjTU/gATGGJdxfWwiuMrPxCwAFFmF2cRz2ySc0f9sdT923BChNE/dSWQoX6cbkT91B
+         nBGppaiEOFksiC8BEiWOBTrUnoNieT5A6Vh2qkmRgzQthzqL6MNS5Ur0TESQe8rR2XkD
+         +02v25UdqFnXPwOTZwg+ckuj/5iFlHRLnGjkuHlgDhsRXV09rVi5Qjuzs3nxCfjUmtK7
+         RSjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789722861; x=1790327661;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=SfKpB6hUtfeLMQ4pzuFq7L7CWOsyj3Ko5MJ4c1BBJiY=;
+        b=evfVEdaTz7+kgKubrTmG9wD2Pk1NWSmLURp42NFzJoN2CMI7jUTRJddowyq+MgXTmq
+         2d25WEQokBTWYgA286fyZwdyuqV23tcqR4cr67hIMMvrGfUiIPfWeJCHV4qyWMubFd0J
+         SE/wrcIJUUNZZBqD/T6ocJh/Kjk6OhmsUy7bRhlhMhT+yJqMV+2npOUTKtt/GVUwP6Bg
+         Qxe/mY62Cgm39kUw0Rc8kAM0X6F4fAbosULoQ0WfhTkJesFn3geGC0uHBKfZvG7HFVHD
+         TkJgeXpP8FLSZZU32olMIVvLgaRETHVdNEpV9+PungiXJrY8SodH220TvfTdrQTvYxpM
+         RfEQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzwfI4z72TToI8+Rsr9PjrBpoalxWa64h/j/d5uDd2QNc9Sl+AieluDWH7qshxgbDo4FRI=@vger.kernel.org
+X-Gm-Message-State: AFuF++nmx7mwn0gQiyqG2jnqVBVptE0hspQPBTaLXcGKEqQM//HegCQA
+	5086G0QHIwRBHqg8gwfOMuyB15CvS6dYhCdXSpCwVjK+/fn/W7U4b/+I
+X-Gm-Gg: AYBFou0+i+uwuaXRzdapOJ7NVofnE6kL2gXyEvgp+y8mT/3fKdN9xRuV6ZJISY+FXFF
+	jQUZpeoRP0DvxsGpIGMULy6moD8S67rQ7kSybF3OofiTqPo3z8mYMwGutUgohWYDEzQFgKyXQlQ
+	HkEbX6iTeI2QSZKsXCMclQ/cud06L+nyVwS04WHIzDBMFH2BpO5FyOOxfdOIGWZhP2TP2v8qXjR
+	iocfA1e0xdB7snLsm5jOyOqXxkmiC02MMTxEEG6Wnq4yNS1f4l8uBsKJNLyffrHkLU4QLNGRL0+
+	0RhZvVJdvVIi0RIZFpBYNh5DgAKX+30oNphXp6HLl1rv8szbpqJM3CZZUwae87wGaUDyzFK3Ttj
+	Eh0qFYS+uhBvrKusCCYmRBlC6p04iZENa+kmvXJ3dC+U7+tfs8PuNCq7bApBbUfRpoWqHTevh+O
+	XGrFpCHyqGoEaVIWcSaXFh/d4JmtwKUCk44vrS1QHm4Ug5AHZU+vZgVFrIV2i1+xPVDwSzCCJU/
+	UP9oDNEceixSgjiCk184Abo0A==
+X-Received: by 2002:a05:6000:990:b0:485:ad55:208d with SMTP id ffacd0b85a97d-4871e263f69mr5184001f8f.18.1789722860820;
+        Fri, 18 Sep 2026 02:14:20 -0700 (PDT)
+Received: from dell-desktop ([2a02:587:4b4e:8500:290c:210b:1c76:5710])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4872008fe3csm2583357f8f.37.2026.09.18.02.14.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Sep 2026 02:14:20 -0700 (PDT)
+From: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
+To: andrii.nakryiko@gmail.com,
+	david@kernel.org,
+	ljs@kernel.org
+Cc: akpm@linux-foundation.org,
+	andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	brauner@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	kpsingh@kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	matt@bobrowski.net,
+	memxor@gmail.com,
+	song@kernel.org,
+	sun.jian.kdev@gmail.com,
+	tasos.papagiannnis@gmail.com,
+	utilityemal77@gmail.com,
+	viro@zeniv.linux.org.uk
+Subject: Re: [PATCH bpf-next v7 1/5] mm: Add copy_remote_mm_str()
+Date: Fri, 18 Sep 2026 12:13:59 +0300
+Message-ID: <20260918091359.297923-1-tasos.papagiannnis@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <CAEf4BzaH=PJh7QUhh7szGL+gCieYLOSbhriFWaZG92xFWDeGig@mail.gmail.com>
+References: <CAEf4BzaH=PJh7QUhh7szGL+gCieYLOSbhriFWaZG92xFWDeGig@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <5c090f8061c49e646acc2f1e65800b8a15813fecc5dd0d36b0f3913be0c6d47a@mail.kernel.org>
-In-Reply-To: <20260918080014.54012-3-luyun_611@163.com>
-References: <20260918080014.54012-3-luyun_611@163.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add task work round ownership race test
-From: bot+bpf-ci@kernel.org
-To: luyun_611@163.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev
-Cc: bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 18 Sep 2026 09:12:01 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============8958580032944694090==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+> AI has a point, declarations in mm.h are not guarded by #ifdef
+> CONFIG_BPF_SYSCALL, no? These look generic, I'd remove BPF_SYSCALL
+> guard
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_task_work.c b/tools/testing/selftests/bpf/prog_tests/test_task_work.c
-> index 774b31a5f6ca1..6d5e1e97aa3af 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_task_work.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_task_work.c
+Yes, this sounds reasonable. I have removed the #ifdefs in v8 [1].
 
-[ ... ]
+CC David, who proposed removing the #ifdefs from the header file in [2],
+and Lorenzo, who has already acked the patch.
 
-> +static int task_work_race_wait_ready(struct task_work_race *skel, __u32 seq)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < 2000000 / 100; i++) {
-> +		__s64 value = 0;
-> +
-> +		if (!task_work_race_status(skel, RACE_READY_SEQ, &value) &&
-> +		    value == seq)
-> +			return 0;
-> +		if (!task_work_race_status(skel, RACE_DONE_SEQ, &value) &&
-> +		    value == seq)
-> +			return -EIO;
-> +		usleep(100);
-> +	}
-> +	return -ETIMEDOUT;
-> +}
-
-[ ... ]
-
-> +void serial_test_task_work_race(void)
-> +{
-> +	struct task_work_race_ctx ctx = {};
-> +	struct task_work_race *skel;
-> +	pthread_t trigger, target;
-> +	cpu_set_t allowed;
-> +	int cpu, cpu_count = 0;
-> +	bool target_started = false, trigger_started = false;
-> +	int err, i, key = 0;
-> +
-> +	if (sched_getaffinity(0, sizeof(allowed), &allowed)) {
-> +		ASSERT_OK(-errno, "sched_getaffinity");
-> +		return;
-> +	}
-> +	for (cpu = 0; cpu < CPU_SETSIZE && cpu_count < 2; cpu++) {
-> +		if (!CPU_ISSET(cpu, &allowed))
-> +			continue;
-> +		if (!cpu_count)
-> +			ctx.trigger_cpu = cpu;
-> +		else
-> +			ctx.target_cpu = cpu;
-> +		cpu_count++;
-> +	}
-> +	if (cpu_count < 2) {
-> +		printf("%s:SKIP:need two CPUs in the process affinity mask\n",
-> +		       __func__);
-> +		test__skip();
-> +		return;
-> +	}
-> +
-> +	skel = task_work_race__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-> +		return;
-> +	if (!ASSERT_OK(task_work_race__attach(skel), "attach"))
-> +		goto cleanup;
-> +
-> +	err = pthread_create(&target, NULL, task_work_race_target, &ctx);
-> +	if (!ASSERT_OK(err, "pthread_create target"))
-> +		goto cleanup;
-> +	target_started = true;
-> +	err = pthread_create(&trigger, NULL, task_work_race_trigger, &ctx);
-> +	if (!ASSERT_OK(err, "pthread_create trigger"))
-> +		goto stop;
-> +	trigger_started = true;
-> +
-> +	while (!__atomic_load_n(&ctx.trigger_tid, __ATOMIC_ACQUIRE) ||
-> +	       !__atomic_load_n(&ctx.target_tid, __ATOMIC_ACQUIRE))
-> +		usleep(100);
-
-If neither thread publishes its tid, does this poll terminate?  The
-cpu_count < 2 case skips with test__skip(), but if pthread_create()
-succeeds yet the thread fails to run or to reach its __atomic_store_n(),
-this loop has no iteration cap or timeout so the test would hang rather
-than report a failure.
-
-> +	if (!ASSERT_OK(__atomic_load_n(&ctx.setup_err, __ATOMIC_ACQUIRE),
-> +		       "thread affinity"))
-> +		goto stop;
-> +
-> +	skel->bss->trigger_tid = __atomic_load_n(&ctx.trigger_tid, __ATOMIC_ACQUIRE);
-> +	skel->bss->target_tid = __atomic_load_n(&ctx.target_tid, __ATOMIC_ACQUIRE);
-
-[ ... ]
-
-> +
-> +	printf("%s: %d race rounds completed\n", __func__,
-> +	       TASK_WORK_RACE_ROUNDS);
-
-This isn't a bug, but could the printf() on the success path and the
-'round %d schedule failed: %d' diagnostic on the failure path be removed?
-The ASSERT_* calls already record pass/fail state, and the failure
-diagnostic writes to stdout while the neighbouring task_work_run()
-diagnostics use fprintf(stderr, ...).
-
-> +
-> +stop:
-> +	__atomic_store_n(&ctx.stop, 1, __ATOMIC_RELEASE);
-
-[ ... ]
-
-
-The commit message says:
-
->     Select two CPUs from the process affinity mask and use atomic
->     thread-start/stop handshakes, so the cross-CPU prerequisite is either
->     established or the test is skipped.
-
-Is this description accurate?  When cpu_count < 2 the test does skip with
-test__skip() and a reason string.  But when pthread_setaffinity_np() or
-pthread_create() fails the test reports a hard FAILURE via ASSERT_OK()
-rather than skipping - the affinity-setup prerequisite is not being met,
-yet the test is not skipped.
-
-Could either the commit message drop the 'or the test is skipped' claim,
-or the affinity/thread-creation failures route to test__skip() with a
-reason string like the CPU-count check does?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35323947746
---===============8958580032944694090==--
+[1] https://lore.kernel.org/bpf/20260918091058.297740-1-tasos.papagiannnis@gmail.com/
+[2] https://lore.kernel.org/bpf/daeab5a8-44b8-4933-80c5-e4145b01a0a1@kernel.org/
