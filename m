@@ -1,113 +1,114 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8887D4D90D4;
-	Fri, 18 Sep 2026 11:38:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F3964B44B9;
+	Fri, 18 Sep 2026 12:04:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789731516; cv=none; b=sQAnOOz/8bDHlfmAOqAzm8tTlgCUPJVryAFJ3C0ZWdviPYmvwDSmO4YJzfppKMFxhzQ6BkIhSAdpsAKGoWCpla8cmf03T2cQfcYXu0tnLXr3H5sI0AngM65c1inYhCwqi3Pds0G/a/f3600RuFBJYqOdKu5TJRMw+4FJh/GFGUg=
+	t=1789733073; cv=none; b=qxIztTIl3xO7U8m+r277DbtZycZwwiozXMRKWG0xTk8Ju44PR/Guv5bHnL3uRjYSsNtVXd86VSSgmNlqqd/zJlWxjeZUK1QeMdK/VfsyJRUr+K5nFwNbY7WTOOJrOhIBft9WDadCVtBQlHhCz2zMUFwEf2XF+STshBsxCKfbCRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789731516; c=relaxed/simple;
-	bh=3FIurDf4ew+UmNKOaulZUP0fzuB4sQ6WqS5t+tYmlPA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=bttr6Gn9GktZtM/GOd1DBhlj08zqzC/WhUJQHNo1K8D+Aq/ebYWbdngeLTD2O8pbhYxvR0iChpxbHLlWb/00ywmS3gh+L57cMJ0ias5+hqj9R3CeMx3QxT2lSHAvY3kyjZsnq+o0a0P9JUXwxzDnIF6mt1ym22VrS1L3H1+qLr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JLGdoYjG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789733073; c=relaxed/simple;
+	bh=REeRW8ImNjKxDQ7NTGvHx9ytsKTTv4jcl392qyr4xJQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BNRJklaoxRLBOjS92yQnAZJZTAjmPdcvUYhvTFmAuInAoKINYwEzXwE48Vc156D9VXiMQ9Mgw8L+2E8CVsMqtx82jMoxsmRLQN7yJe2wl2lK7PYbyVwx/o0HzUaNbOrM1mLQrpX+LcSr3p/a5KSyZn9DJrTU+VcSvJWIxyHivoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HTbPGGwe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JLGdoYjG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A56B1F000FF;
-	Fri, 18 Sep 2026 11:38:34 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HTbPGGwe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 077FC1F00893;
+	Fri, 18 Sep 2026 12:04:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789731515;
-	bh=1Wf7nUY4OvwVga8yXR0/S8oe1wqhMNKSdVwo0smTlFg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=JLGdoYjG+kBeQPwpu4ZKGyMAjId/VTaBq0cHrBlJMAC9N4j0urkfvhR6Nuu6KOvqm
-	 Derb0hZKtigi5LGzl4cDWC0mqWd7NZthXuwGlCcEvheYgUMs9BvDtUilgNt6UGMGmZ
-	 lF8FJQ66YpSERYv2O3zDB4lu6OWD8s/nxNE1dDhLnIMStyUwl3BJukMmKQN51ipx01
-	 bhbprbQbAEM5OuMiLQ2nE77GZgZEoLCkyMtjzNJYLARfqz8zmWJb8ZZiyT58u1cY3+
-	 o5Ms73GBdYGH6PEx0eL/n8dHITZex83b5q2zSAAIP930cBMqN9gzf5nBrWmPOWAPKU
-	 8dVlt+i+ZJGjw==
-Content-Type: multipart/mixed; boundary="===============0981821882642161934=="
+	s=k20260515; t=1789733071;
+	bh=FBog0tEIxtunDlmJCDqYkdnZ6FAZrrX2ZayQiJl9Uzg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=HTbPGGwelMhMsEqlgkhCIeYpAKWYO1pWQSabgJE6oYkB6oCr6m55UmbuXQiqXOvpY
+	 FqjSJ4BY060C/DJEoM1KyyDLyRhcaj08m6pCJDVF6HcYnAvMsgCgcQRtceqsJj+8hx
+	 ABzj4ttpLlFP6zD6t1zperT6GtrKJD31K0VZ6chJIX9pxNnZW/IBksh18FxQIFVlkB
+	 Rn0rAX3CbZQS+ymsFg9IX3ynUPFJVqM+wGooQRbCzGs71nRNBE6H1VELBoQFgy4tfK
+	 g4iPIZMVSP8PenNrOa4rGc311wG1z1suhG4MEcVqTwKzu7eoAM41InyyJMcI8x2shP
+	 /qCuVR3QyOYbA==
+Message-ID: <44d70b77-8ef0-4eb1-9f6a-11c244086761@kernel.org>
+Date: Fri, 18 Sep 2026 14:04:15 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <aec6c555995eb1efb36bafec4c49e2235fc6899cb74beb6dcb3ce058ada6d814@mail.kernel.org>
-In-Reply-To: <20260918102610.gxA3km8_@linutronix.de>
-References: <20260918102610.gxA3km8_@linutronix.de>
-Subject: Re: [PATCH v2 bpf-next] selftests/bpf: Use %p for pointer formatting
-From: bot+bpf-ci@kernel.org
-To: bigeasy@linutronix.de,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org
-Cc: andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 18 Sep 2026 11:38:34 +0000 (UTC)
-
---===============0981821882642161934==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v7 1/5] mm: Add copy_remote_mm_str()
+To: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>,
+ andrii.nakryiko@gmail.com, ljs@kernel.org
+Cc: akpm@linux-foundation.org, andrii@kernel.org, ast@kernel.org,
+ bpf@vger.kernel.org, brauner@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, kpsingh@kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, matt@bobrowski.net,
+ memxor@gmail.com, song@kernel.org, sun.jian.kdev@gmail.com,
+ utilityemal77@gmail.com, viro@zeniv.linux.org.uk
+References: <CAEf4BzaH=PJh7QUhh7szGL+gCieYLOSbhriFWaZG92xFWDeGig@mail.gmail.com>
+ <20260918091359.297923-1-tasos.papagiannnis@gmail.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260918091359.297923-1-tasos.papagiannnis@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-> selftests/bpf: Use %p for pointer formatting
->
-> Networking used to print the socket pointer with %p as output in the
-> /proc interface. This was later changed to %pK in order not to reveal
-> the actual pointer value. The output format has then been copied to bpf
-> tests which produce the same format including the %pK format modifier.
->
-> Networking recently replaced the socket output with a plain 0 because
-> the socket pointer added no value to the output and the %pK should be
-> removed from library handling. The format remained otherwise unchanged in
-> order not to break any tools which parsing this information.
->
-> This change removes the %pK modifier from bpf, following the change in
-> networking.
+On 9/18/26 11:13, Anastasios Papagiannis wrote:
+>> AI has a point, declarations in mm.h are not guarded by #ifdef
+>> CONFIG_BPF_SYSCALL, no? These look generic, I'd remove BPF_SYSCALL
+>> guard
+> 
+> Yes, this sounds reasonable. I have removed the #ifdefs in v8 [1].
+> 
+> CC David, who proposed removing the #ifdefs from the header file in [2],
+> and Lorenzo, who has already acked the patch.
 
-Does this subject line accurately describe what the patch does?
+No string opinion, fine with me.
 
-Looking at the actual changes, no %p format specifier is introduced
-anywhere in the test code:
+-- 
+Cheers,
 
-- bpf_iter_netlink.c gets a literal "0  " string
-- bpf_iter_tcp4.c / bpf_iter_tcp6.c / bpf_iter_udp4.c / bpf_iter_udp6.c
-  get a literal "0" string
-- bpf_iter_unix.c gets "%08u" with a constant 0 argument
-- test_snprintf.c simply drops the %pK specifier (its remaining %p was
-  already present before this patch)
-
-The only place where %p appears in the patch is in README.rst, in a
-historical verifier log excerpt.
-
-The body text says "This change removes the %pK modifier from bpf",
-which matches the v1 subject "selftests/bpf: Replace %pK output with 0"
-rather than this v2 subject.
-
-A few additional points:
-
-The changelog is unchanged from v1 and doesn't mention the
-header/column-width edits this version adds:
-- bpf_iter_netlink.c "sk" column changed from 17 to 3 chars
-- bpf_iter_unix.c "Num" column changed from 18 to 10 chars
-
-This seems relevant since the body asserts "The format remained
-otherwise unchanged in order not to break any tools".
-
-The referenced networking commit isn't named in the message. Looking at
-the v1 discussion, commit 7c0ec6288b497 ("net: Replace %pK output with
-0") was cited below the --- separator, so it's absent from the committed
-message. That commit doesn't appear to be in this tree yet (checking
-net/netlink/af_netlink.c, net/unix/af_unix.c, net/ipv4/udp.c and the
-tcp_ipv[46].c files still use %pK), which would make a Link: or commit
-reference useful for readers.
-
-> order not to break any tools which parsing this information.
-
-This isn't a bug, but there's a grammar error here ("which parsing"
-should be "which are parsing").
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35336391118
---===============0981821882642161934==--
+David
