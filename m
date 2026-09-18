@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B781C52CCF6;
-	Fri, 18 Sep 2026 21:25:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5B152CCFC;
+	Fri, 18 Sep 2026 21:25:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789766707; cv=none; b=l9g29itImjxz87FbV65wyyMiq7RhHUpmdOj0nEv65NIUtUswJJeA9tJrXpgKgWzn7KJSmkDH4aFkZtRcyR0SLHo1nDLtONmD9UCu3hsFm1SgM2DpX0ruX2f0ObOawwEIivAwAzxZahN+E+DVUCTWf1FgDBF8BIVDckAkUGLuQ6E=
+	t=1789766709; cv=none; b=Xlvg497KeOLs6Fnl2wZzVr0pFDJKu1MVdxswvaaUirhtCR8KbRfuzxqKlYdv+tZEkOkKmYokfQFX06H4SxpJksEZYiXkC/3oOo/C1HL0f3UW9nhKh498kolh8WKI/jjiXwMQvdva0RirEYHrwqfXPWOY7gV8zKsj0aDgwSEL2ik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789766707; c=relaxed/simple;
-	bh=Niqyt9NpDuogLUYnI5x2PuTve3M2I3GE/vPvtLi/reA=;
+	s=arc-20240116; t=1789766709; c=relaxed/simple;
+	bh=FFcwJNLPuS1s/owpJ9SQohe27SVOxg9CQqEA3CsBAzw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ifpS5+LF+JHEv+lgHEB1YO0yPe8n1JnoxJU+LQzBKN2FR2CZ6V3nAyfJGxucY+RraI+m9K/QBbpzUqBXutNbDtcwNB7MgrEx1DEjf8g5VEDKkb0UM9fUZje0PSUqXlpQ7AIJWAJDxj+uRsRj+6IxOSogbOoTvgeF88zsnPuuIQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HqXaMJlv; arc=none smtp.client-ip=192.198.163.18
+	 MIME-Version; b=RYaXZQaORLq1fmicEbqkLhRUcLNSXeFVtZT4lYWMsM4Xlh55e3FeIwx6czktsLDf09ur4KWi/ayZWEYbjf54g9arGmaqCeRokA7Z8ia1P8n4YE01gJVGVSMMsmApq1DJwusIuflzRzND5nm024bO5cgXln1MidC+iFHzgPE4MDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eWKeOu5W; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HqXaMJlv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eWKeOu5W"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789766706; x=1821302706;
+  t=1789766707; x=1821302707;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Niqyt9NpDuogLUYnI5x2PuTve3M2I3GE/vPvtLi/reA=;
-  b=HqXaMJlvBJBAeQTIVnquNybY2oVr3tSA8yfdKdoyGxIXn+mhMhEVy/RY
-   4EgRVkF1ikJsEevD2xmfYcGhgg+Hz5CCSZC22uBazwqOz8EIjBDtrAU6K
-   cbZdfIZKxfPgrA6K79cuYNPDz7G/Fob33cqGv8oQyZBe86MeBrLdAu7f6
-   n4cWm1LGa0nRBDaL5W9HD5wcej0utkmDTEeTd3YVyBUMIJDM/Qb11LKyE
-   MGz6VCQKu05SdluxfB+ajJ39uE3wlagiGBDZ4q1WaeKgIf5vZg++DN2dA
-   ey8HLFH/5xXFxR54THuQKbmtW5Em9rUSomkjgWYa/qHMbV9AC6Gp6KAUV
+  bh=FFcwJNLPuS1s/owpJ9SQohe27SVOxg9CQqEA3CsBAzw=;
+  b=eWKeOu5WqsxZGtRDSTHn9xFgD/pwWp2nl8reCp/McC1IctbPiW29WEXg
+   wstar/euqLDPrmvex9porGFgsZGcig7CFDV0KN3aYiaN4JR2QcmGXtXfK
+   A7d46uU8boVqlfkC6PND1SjAF+R/lxzhTsnm3+53u7RzBktRWbRMRtQkJ
+   G+hLMUiUpfL6Ovt2r0KSsyXautiUm2UCWj/u2kJN43KKXQDsSLGxa5Syq
+   Exoit0GfJQpFG6rLU4pDtROwBDLFx6Lw+6WguIsiqEJb2cfFeRCgJrZRa
+   EEeF1Fmpp5gBoMbfzpqjZXwLyqUP6o27J/FR1njjM7JYXr1f5QEncygEO
    g==;
-X-CSE-ConnectionGUID: vVG4JvrmT+evFrEvv/1/Ow==
-X-CSE-MsgGUID: XbN1Cm6FSBOrmcrXx24DKA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11909"; a="89436218"
+X-CSE-ConnectionGUID: njS24EOAQ3+UOYBYhmKpGw==
+X-CSE-MsgGUID: rEmIAxZeRviaUalj5lInsg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11909"; a="89436229"
 X-IronPort-AV: E=Sophos;i="6.27,109,1787036400"; 
-   d="scan'208";a="89436218"
+   d="scan'208";a="89436229"
 Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2026 14:25:04 -0700
-X-CSE-ConnectionGUID: gdli3f+GTzS9NLacW31c9w==
-X-CSE-MsgGUID: JYQIoZb7RuqblrvGbZ+7hw==
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2026 14:25:05 -0700
+X-CSE-ConnectionGUID: aFu1DdKnRhODSzS6bfnK3g==
+X-CSE-MsgGUID: iREDh5ttQ2m1md59zUfXpQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,109,1787036400"; 
-   d="scan'208";a="271251354"
+   d="scan'208";a="271251370"
 Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by fmviesa007.fm.intel.com with ESMTP; 18 Sep 2026 14:25:03 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 18 Sep 2026 14:25:04 -0700
 From: Tony Nguyen <anthony.l.nguyen@intel.com>
 To: davem@davemloft.net,
 	kuba@kernel.org,
@@ -67,9 +67,9 @@ Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
 	bpf@vger.kernel.org,
 	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
 	Sunitha Mekala <sunithax.d.mekala@intel.com>
-Subject: [PATCH net 1/8] i40e: unregister netdev before clearing VSI on reinit failure
-Date: Fri, 18 Sep 2026 14:24:48 -0700
-Message-ID: <20260918212458.550425-2-anthony.l.nguyen@intel.com>
+Subject: [PATCH net 2/8] i40e: avoid null ptr dereference in i40e_ptp_stop()
+Date: Fri, 18 Sep 2026 14:24:49 -0700
+Message-ID: <20260918212458.550425-3-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20260918212458.550425-1-anthony.l.nguyen@intel.com>
 References: <20260918212458.550425-1-anthony.l.nguyen@intel.com>
@@ -83,65 +83,55 @@ Content-Transfer-Encoding: 8bit
 
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-i40e_vsi_reinit_setup() tears down the existing VSI queue/ring backing
-state before allocating replacement arrays and queue tracking. If one of
-these early allocations fails, the function jumps directly to err_vsi
-and calls i40e_vsi_clear().
+Sashiko reports:
+***
+If an allocation fails here during i40e_rebuild(), i40e_vsi_clear()
+frees the
+main VSI and sets pf->vsi[vsi->idx] = NULL, and the rebuild will abort
+without
+stopping the PTP clock.
+Later, if the device is removed or unbound, i40e_remove()
+unconditionally
+calls i40e_ptp_stop(), which does:
+drivers/net/ethernet/intel/i40e/i40e_ptp.c:i40e_ptp_stop() {
+    ...
+	struct i40e_vsi *main_vsi = i40e_pf_get_main_vsi(pf);
+    ...
+	dev_info(&pf->pdev->dev, "%s: removed PHC on %s\n", __func__,
+		 main_vsi->netdev->name);
+    ...
+}
+Would this cause a NULL pointer dereference since main_vsi is now NULL?
+***
 
-For a registered netdev, this frees the VSI while
-netdev_priv(netdev)->vsi can still point at it, leaving the registered
-netdev with dangling private driver state.
+Check if main_vsi is not null before calling dev_info().
 
-Split the error path so failures after destructive reinit teardown first
-unregister and free the netdev before clearing the VSI.
-
-Fixes: d2a69fefd756 ("i40e: Fix changing previously set num_queue_pairs for PFs")
+Fixes: beb0dff1251d ("i40e: enable PTP")
+Reported-by: Sashiko AI Review <sashiko-bot@kernel.org>
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
 Tested-by: Sunitha Mekala <sunithax.d.mekala@intel.com> (A Contingent worker at Intel)
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/intel/i40e/i40e_ptp.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-index 0cd0e5597c90..de4c0737f72e 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -14268,7 +14268,7 @@ static struct i40e_vsi *i40e_vsi_reinit_setup(struct i40e_vsi *vsi)
- 	i40e_set_num_rings_in_vsi(vsi);
- 	ret = i40e_vsi_alloc_arrays(vsi, false);
- 	if (ret)
--		goto err_vsi;
-+		goto err_netdev;
- 
- 	alloc_queue_pairs = vsi->alloc_queue_pairs *
- 			    (i40e_enabled_xdp_vsi(vsi) ? 2 : 1);
-@@ -14278,7 +14278,7 @@ static struct i40e_vsi *i40e_vsi_reinit_setup(struct i40e_vsi *vsi)
- 		dev_info(&pf->pdev->dev,
- 			 "failed to get tracking for %d queues for VSI %d err %d\n",
- 			 alloc_queue_pairs, vsi->seid, ret);
--		goto err_vsi;
-+		goto err_netdev;
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_ptp.c b/drivers/net/ethernet/intel/i40e/i40e_ptp.c
+index ff62b5f2c815..ca93df4d6785 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_ptp.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_ptp.c
+@@ -1556,8 +1556,9 @@ void i40e_ptp_stop(struct i40e_pf *pf)
+ 	if (pf->ptp_clock) {
+ 		ptp_clock_unregister(pf->ptp_clock);
+ 		pf->ptp_clock = NULL;
+-		dev_info(&pf->pdev->dev, "%s: removed PHC on %s\n", __func__,
+-			 main_vsi->netdev->name);
++		if (main_vsi)
++			dev_info(&pf->pdev->dev, "%s: removed PHC on %s\n", __func__,
++				 main_vsi->netdev->name);
  	}
- 	vsi->base_queue = ret;
  
-@@ -14303,6 +14303,7 @@ static struct i40e_vsi *i40e_vsi_reinit_setup(struct i40e_vsi *vsi)
- 
- err_rings:
- 	i40e_vsi_free_q_vectors(vsi);
-+err_netdev:
- 	if (vsi->netdev_registered) {
- 		vsi->netdev_registered = false;
- 		unregister_netdev(vsi->netdev);
-@@ -14312,7 +14313,6 @@ static struct i40e_vsi *i40e_vsi_reinit_setup(struct i40e_vsi *vsi)
- 	if (vsi->type == I40E_VSI_MAIN)
- 		i40e_devlink_destroy_port(pf);
- 	i40e_aq_delete_element(&pf->hw, vsi->seid, NULL);
--err_vsi:
- 	i40e_vsi_clear(vsi);
- 	return NULL;
- }
+ 	if (i40e_is_ptp_pin_dev(&pf->hw)) {
 -- 
 2.47.1
 
