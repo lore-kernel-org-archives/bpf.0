@@ -1,171 +1,173 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF2B2798F8
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 05:06:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.141
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789707970; cv=pass; b=uoUCmUs43ax2Ta+5JW3OlY9bWA/ZO1qxvP4bcTmZEBONlUGSd1fOkQ1n85JI1wbKTAMGdSUwHMMku+/q1p03Grnn3fHIZNFWLY52JfFV0yw6wSQA/QRYlkgtcmOw99K1eYlQWC+Sn23ByoHEP27mwtbyGZAxRo8FqmJhxoQk93Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789707970; c=relaxed/simple;
-	bh=/Cp2A5Mzbqc8PsSDqLRTy4Axs/Bppu4NdGuANgWvMQs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HgzLeAfxGvdy7JYjb6pcp/x01teyABZYMPSMSUnB9y3cVoc6yfzf9EeDFRIwIkCGrkzQdj0LD5ykMZ3EDnrjPN/BXEu3fcJXzAHRzBs/xma7BbrbyT2rPOFwhijnwdJ9Ief9WxjKDl0C0M5fQkIovVDCGtzo5R4T+s4ms3L7YcE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iA+rGtot; arc=pass smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0544A3659FB
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 05:29:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.139
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789709351; cv=none; b=sKV84VKYVknd6zej8EX5npRDvN4ql4DkFKgUqJFiz01GJcRV3j9Ybir9xooTRwFR9exFdfLLlaOmvEgDH5jQDiFVCjaxLoCKGSJlIN3shzJqFWMvA5TjJ4/SylMxLorZROesN+RsA9cY41rPysz3+IS/a6fBo3YS0PDeLY/ZB6s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789709351; c=relaxed/simple;
+	bh=QcOkoichEUyt8GpFj5o5ws3oRuu6AdHUZ4SfZP31ffw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CNMv9AbnLEUVCVkDzIT2feaADlLmkZZqMekuMaR/2S5Ym9JqmDS4c8RL0MkjtcctSFV3M06qYdEQpsWHw7BiGq2o6sdCisSFant+NSmcTT5lmwT1feGRnnrLYkQeuKlH6QM/lXm4orAGYfV3MVfjdw9mwy96e1acL+NtS41nYLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jOEh1/0e; arc=none smtp.client-ip=74.125.225.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iA+rGtot"
-Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-39b5b07ec78so234651a91.3
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 22:06:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789707968; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Umb2X6s5cK+yNKcu9Zi/ertGmC3jPM6JkiGZtcrG92Sj3Na7n0RXQPMlQv/T2qqOpS
-         sqcM94YMDidWlzo6dbPhISN5CwwUgkxYVA0VUPCHaHbQdG0RCYaGXJnHXddSTricQqie
-         hLSZ57f3NCSL79T0Ao2mT5cOl03l1gwzxTXEdsKUTYqiCfKOeqlZpBsKV13JsMp5ocA2
-         zcD2p75lXP9XEH1ll9SIpZVdiMkICCubCABH4+mmUNM9JD3XkQSvGxh2PTfrKKMJBlSt
-         xs3pjWGTLJhIAUE19wnNQMw4BWrk5yXP3ytVussoIZKARDmOFiOeA8/n7hw/w4iJSo4t
-         V8RQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=/Cp2A5Mzbqc8PsSDqLRTy4Axs/Bppu4NdGuANgWvMQs=;
-        fh=HXl0MPZxOEILpwgSdRiEFDu0MMQFHPAXk/Lt4NHt+pE=;
-        b=IgYivpdY237gb0f9IILY/uHJuBXx5t9RA0PSRLEnCvpiTmnduo5gfHCy75K3CZF4oQ
-         pvsCQv8Wbeu6UsQu2pwLt8qhLd2LSDlfQqhd1yAqmc36Ik8CJUtaABHKZzL6IDQcmlDG
-         Yp2gV1kUbOaZjFklb+tdZK+LaBrWzlu3SB64K12hl3tqfdu8Gz/lizCn0NqMHAeWsnoR
-         jkgWDZOe5s1iv5wd90wgxpATmGnfJgvF1rVplE0XLohgFeYmuPtz5Cr2rSKmfbB4sbLv
-         /rdG4cZq38fKPMRHTwiEfc4e0dCCVKzIszhFiGFcshBNneU5Kk6IfvxMDSt/JIq0sf0v
-         Gy5w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jOEh1/0e"
+Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-49cfcf2548aso1187305e9.0
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 22:29:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789707968; x=1790312768; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=/Cp2A5Mzbqc8PsSDqLRTy4Axs/Bppu4NdGuANgWvMQs=;
-        b=iA+rGtotl8d9GcVlStAxuC7Fltg6SYUFpialEJOOub+AfL3XplM6/99T+RFoWPpTnV
-         UkYIzZ7tdhGR4nNPKf/0ty4aJISsOZq3/QzVN8tqgh0JnyioTgPOR5pljqMy0jwWeb0Y
-         2+1+FymD7jPKa1Oh5xPhNDVATwnph6U5tBQQY35yNsclAEACK2KakUN+2nIAYeEp2jon
-         2O19VE0Z2MNI/uNtS5xC7i8es2Ftkm1Xk4g62V2pO9FM5ubsE61b7TotFNGeRJExVo8c
-         1pXYRj7BbPH8v67e//uxidfAH8vqjpmM+hqUqCdSaK/E7H55+xrI5d9t+riTyXH36xC9
-         +c7w==
+        d=gmail.com; s=20251104; t=1789709348; x=1790314148; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=RJMbIXEIWKwkurL1zAGItYnKgVzWb/d1ZxUtzI6d3rw=;
+        b=jOEh1/0eRLqAlTNKn2cgrUWCHph7GtpOOvEjJiUV4cR9SKS/9b60qd+HD9asmjbOOw
+         qJoBxc6fYqLABULZ9sEKxN9zeTLtMJRFZUnGfwTncoiQ/t92CGPbZ/TR8jnRFCv+rXeo
+         JltSOT0ND7uIDSpPoKB1xBS4NhvpNEpVtXvClM8pfqvNj3Qop9VZJBlVOVwQPQrQyCcR
+         DD5ZNDQZeDn/BC76P3VXUOZADTZEHPRgNo7EL3OF0dL07r8DVI+r5SHfLAld1yF50Wuh
+         sBZnjrqnlkN/w0aSZSX1wC+CxBvt8c9zvHYmj4/Daw/MObPmNQZtXOS2dmKnTB+Exyhb
+         jYIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789707968; x=1790312768;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=/Cp2A5Mzbqc8PsSDqLRTy4Axs/Bppu4NdGuANgWvMQs=;
-        b=YTQasqFCHBDOHlkR//cRfbQwuvnMCMumjn7Weae3O6lV9RD6Vxd578yIm5jzPig8ay
-         qp8ydkJPgr3eltF26UAWGO6AjbVaDocOIyjm3I3fIhS6h69tKHE2MIj6Uqr5KFAjGak8
-         gqT6fPpPatU/PS8rUjtbvMPdfsM8NiZVWXRvjpdspU4KVDnGhUJ58KUTbELHHGkqFiF3
-         07YgoSB6Zj+b+W7IMyZUF8v8vlrNaumhduCEwZhzqv1yD5P9Mx0CiigoX2POaem5BMWN
-         g4lF+L3MzPniUy+59Rb3/wO6ol4sokIG7f7oV8ebiGfpyLGwndLp74QDrkpqT1bZ5l4T
-         od4Q==
-X-Forwarded-Encrypted: i=1; AKwUvBz9BSXGFvKSczDh31YFsaTwU9UbnKrRBlowwNE+X/tttqFDuaYeDvK3TcDZvaB12T3oUJY=@vger.kernel.org
-X-Gm-Message-State: AFuF++k15t66X2EU8HLdsAkNUXvOtITrL16r5zWiYypnzJVhxAlJW11J
-	AJ6xPZrPAvoXsPXSU6vUFqzFhcyK6Zb0kMvtm8JnX3erExBGRA+ikjAw2MefF5FOISuqiKkCVZB
-	UGEi5deqAgUGYfTMB8y7FOkXd/EGqwK0=
-X-Gm-Gg: AYBFou2+NuFOfJQIjDSCZ8ukaKy8ACHugiDs7LBxSdWRAmzhw6wFloFxOiC9RoOcCAS
-	P9s91DustXyVrjlliVdcr+int5X+UI/jNXAHqAOm3IObDzwgrHrn45lWXPNEWXUtlLOKT3IPrct
-	XDLdSBdWYf44IOxUQ/mB20bZ4PqZj9ejRv0kBy2XIpbrsUd1E02ibDahw2S4JZquSB/cCWiB2A+
-	Kzx+iEKdx8FTRFpuV1YMMwgWuwaRKsyrMPC8LOkJRXdtFqFA3vJcogJZiAVkKlifbFlWyh/4h5G
-	cSPOlohMPTB1v0dlnqloXzvbxfcoExrf2nFpK8SJFZCE7hOW/UAiB4bLtSNyL7+WFamNnyk9MXW
-	ggs6jcbUQafm8LVk+EfdNrxeo195yHl4pl/CrVOOmN1+zrHgyAXM68kUF5ZYQpa4dEnUgEg==
-X-Received: by 2002:a17:90a:e7c9:b0:39d:f615:725e with SMTP id
- 98e67ed59e1d1-39e54bc3a8emr3012402a91.13.1789707967915; Thu, 17 Sep 2026
- 22:06:07 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1789709348; x=1790314148;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=RJMbIXEIWKwkurL1zAGItYnKgVzWb/d1ZxUtzI6d3rw=;
+        b=o+Ori5kE3ctOTtIU40fma8FSI4DJQf1LqqA9iPhJmvCMdR2t0XlH0qvm0DLe8ZxhYk
+         jDSsYEDl6kKjrXwrj1K3HQ/norli1qsZSNS7Ys4H/+kBo5pK2xbsIJNC1i7rFOWPbTvp
+         uaAjEQO+1j2wnzK3zzW6QyKWtdaexfCtkFZdVzeL9lvcPP0zkJpWFHsk03DqpWRbTZJ5
+         C8BQlmxR8BI19wmuIiJBukCrMzoL+ooVCVZAy/tnHbWKt9Iyd0nVTaCkzXGzZF9HEQ72
+         fnSQQSIvkjS4bZwgomM9J95S1NmkQOOqd7Ea9Y6TFgy4LFUCXxRba+MhS8pRT4W1A4SN
+         iw3A==
+X-Gm-Message-State: AFuF++n3M4i4lq/56lJ/gzhDt8hlvOezulDPToRAXzMICvbiSZYyU7z1
+	oe0jwoqISH/AzymiaQpPUIKquINZE24/9AKAZmFj3WjVq0YteeT0jnfo0n+/h5Sj
+X-Gm-Gg: AYBFou3pDB4+ohYaae+5lUhFc12hw2jKrWBmSrG6D6EOFbfEZreZNb+44U/1Nr4GOd1
+	NW/k6nEILMVRP3O5LmUbaYKhWAgVygCrw10zFO+RWRQRDAzmAykYRTsaY+y+8G6McL23RiqIM2/
+	R+cea0gTZ+3EKJWRgzYjib8XJYL5Qs4ukogypBUkPHfhUnYPJsKizdKmWllrIebQQGJ5TrcaxDb
+	86z/sP3sqknLv6+pfamoBbbV9XIKuRuJ6sAc7n3z4Lz7SPUTEWXtAmOtUxLFjtxUXnAowkjcoSq
+	Zq1C1MqiPiyvnWTsKDJm1c26XEJynBVi7h6cuqNzgznKu+NDK9B2yXQqeLv6iAAvYF8gpqzVqdS
+	fteVG6JHGvfkJ5UG5s1Np1hl+XXqMYzhqQWYfhwugGzsZBhIfoGusBYmBJihzJa+2wLK6ylg9hW
+	f8L4wSkx48SQ15IPKrDQA4g3IQndBTv/p+Gdc4CSDfDFChT5YK/gfsO43+hub7khBXrbCQjw7v6
+	yB6LsaIMxlvlWEEAF20vegielYjEH2EASgCEvihIhTKJy5kpaW+XcY3T+U6hAd4SKMArKIicdCB
+	puv2hbKGbB1B1WgpgllkyAMoKCYnWUyv/BaTRQ==
+X-Received: by 2002:a05:600c:8b35:b0:49c:eb17:cf3b with SMTP id 5b1f17b1804b1-49fc56adbc1mr12041255e9.8.1789709348059;
+        Thu, 17 Sep 2026 22:29:08 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fc7cebae2sm20373925e9.8.2026.09.17.22.29.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2026 22:29:07 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Tejun Heo <tj@kernel.org>,
+	Amery Hung <ameryhung@gmail.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v4 0/8] Fix generic __uninit kfunc output buffers
+Date: Fri, 18 Sep 2026 07:28:54 +0200
+Message-ID: <20260918052906.12226-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260917172050.2191062-1-dw@davidwei.uk> <CAL+tcoBpFM6MvZGPDJAH1j6aX8UaRcJLhtGbS_kRX_bQ=J5oMA@mail.gmail.com>
- <7986f36c-e95a-4083-9bdf-67c59e951b95@davidwei.uk>
-In-Reply-To: <7986f36c-e95a-4083-9bdf-67c59e951b95@davidwei.uk>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Fri, 18 Sep 2026 13:05:25 +0800
-X-Gm-Features: AcwNN1Wc6Z0D8hhG9hmwYuJW6QWRMRc5zx0l_MSfw-B2WCrY5Mn3LRM1nstDtxw
-Message-ID: <CAL+tcoC--Hn3sL+YBKWdpJPSnJscc3qZHqfA26WRu6qUEQxOnw@mail.gmail.com>
-Subject: Re: [PATCH net v2] tcp: prevent stale tx timestamp keys on rtx fallback
-To: David Wei <dw@davidwei.uk>, Willem de Bruijn <willemb@google.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Hangbin Liu <liuhangbin@gmail.com>, Martin Karsten <mkarsten@uwaterloo.ca>, 
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, 
-	Jakub Sitnicki <jakub@cloudflare.com>, Jiayuan Chen <jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4375; i=memxor@gmail.com; h=from:subject; bh=QcOkoichEUyt8GpFj5o5ws3oRuu6AdHUZ4SfZP31ffw=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvN6Zdb50hc2Tf53PuWUyeUtm+a4T/LrjEk/JnjUVmvJ VrJSn9MOkpZGMS4GGTFFFlK/u9jMj5R+TvQdhk3zBxWJpAhDFycAjCRHjtGhilfJ5iZvd1qHvRf Y2Xyep5nm7dO2ty0zuJTrKDSp3S7FYoMfzic7gQunnU37XOlu2ixx7qoLy6hJUUiwRPYH1poRIS rcQAA
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 18, 2026 at 12:35=E2=80=AFPM David Wei <dw@davidwei.uk> wrote:
->
-> On 2026-09-17 18:59, Jason Xing wrote:
-> > On Fri, Sep 18, 2026 at 1:20=E2=80=AFAM David Wei <dw@davidwei.uk> wrot=
-e:
-> >>
-> >> tcp_tx_timestamp() can select skbs from the rtx queue when all the
-> >> copied data has been sent in tcp_sendmsg_locked(). These skbs may be
-> >> already cloned, sharing the same shinfo, and handed off into the lower
-> >> tx layers.
-> >>
-> >> tcp_tx_timestamp() sets tx_flags before setting skb tskey, racing with
-> >> any reader of both. It is possible to observe a valid tx_flag, but an
-> >> uninitialized tskey, which produces a large underflow after subtractin=
-g
-> >> the socket tskey.
-> >>
-> >> Reorder the writes in tcp_tx_timestamp() and
-> >> bpf_sock_ops_enable_tx_tstamp() to write the tskey first, followed by
-> >> publishing tx_flags via store-release.
-> >>
-> >> Readers perform a symmetric load-acquire on the tx_flags, followed by =
-a
-> >> relaxed read of tskey.
-> >>
-> >> Fixes: 838eb9687691 ("tcp: tcp_tx_timestamp() must look at the rtx que=
-ue")
-> >> Assisted-by: LLM
-> >> Signed-off-by: David Wei <dw@davidwei.uk>
-> >
-> > Thanks for the work.
-> >
-> > Yesterday I remarked on your V1 at
-> > https://lore.kernel.org/all/CAL+tcoDMR87sxJftp7T0JX-+NUz8VkXU67M3oNZy8T=
-k88sDPOA@mail.gmail.com/
-> >
-> > I'm still doubtful if we really need to introduce this much code churn
-> > just to fix the problem of this best-effort behavior. Even if the
-> > patch is fixed thoroughly, it's still a best-effort attempt since
-> > there are a few report points where it misses generating timestamps.
-> > It has nothing to do with the patch itself, but rather the design of
-> > net timestamping.
->
-> Hi Jason, I saw your response yesterday but it seemed like you were
-> discussing with Eric and not me. I had this code ready anyway before you
+Generic __uninit kfunc arguments are output buffers. Stack liveness treats
+them as writes, but argument checking still requires readable contents and
+does not record definite initialization after the call. Check these
+arguments as write-only and record their initialization after validating all
+inputs, including inputs that alias an output.
 
-+ Willem
+Following Eduard's rework, helpers and kfuncs now record generic outputs in
+the same argument-checking path after type resolution. Their memory access
+checks also use the same argument flags. This includes a separate helper
+fix: MEM_WRITE without MEM_UNINIT requires read as well as write permission.
+The helper fix and its permission tests remain separate from the original
+kfunc fix and its immediate tests.
 
-Oh, well, my true intention is to discuss this with all of you :)
+Changelog:
+----------
+v3 -> v4
+v3: https://lore.kernel.org/bpf/20260916192805.3991983-1-memxor@gmail.com
 
-> responded, so I sent it should Eric decide to keep 838eb9687691 and
-> review this approach.
->
-> If you decide to revert 838eb9687691, that is fine too and I can abandon
-> this patch. The main thing for me is to prevent userspace from seeing
-> underflows, but missing timestamps are okay.
+ * Record helper and kfunc outputs after type resolution. (Eduard, Amery)
+ * Derive generic memory access from flags for helpers and kfuncs. (Eduard)
+ * Fix MEM_WRITE read checks separately and add permission tests. (Eduard)
+ * Remove the output-count validator in the multiple-output extension.
+   (Amery)
+ * Clarify argument-slot naming and move its accessor into the fix. (BPF CI)
+ * Add the unaligned header and order the new test registrations. (BPF CI)
+ * Shorten the kfunc fix description while retaining its rationale. (BPF CI)
 
-I see. I'm still struggling, to be honest...
+v2 -> v3
+v2: https://lore.kernel.org/bpf/20260916160821.3157543-1-memxor@gmail.com
 
-Thanks,
-Jason
+ * Reuse check_raw_mode_ok() after kfunc prototype generation, including
+   struct outputs resolved to generic memory later. (Amery)
+ * Remove the now-redundant kfunc output-count check in the multiple-output
+   extension and simplify the helper validator.
+ * Leave the stack-passed output uninitialized so the reduced-capability
+   test detects missing __uninit handling. (Sashiko)
+
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260915141004.1196460-1-memxor@gmail.com
+
+ * Separate the single-output fix and tests from multiple-output support
+   and its tests; reduce coverage to focused cases. (Eduard)
+ * Skip inactive output slots before looking up argument register state.
+   (Sashiko, Amery)
+ * Separate sysctl restrictions from mitigation-related test skips.
+   (BPF CI)
+ * Use an int-width initialization store in the alias test for big-endian
+   targets. (BPF CI)
+ * Centralize conversion from argument numbers to slots. (Eduard)
+ * Share clear access-mode selection between fixed-size and sized arguments.
+   (Amery)
+ * Clarify the opt-in prepare/load capability boundary and retain the
+   reduced-capability alias rejection test. (Eduard)
+
+Eduard Zingerman (3):
+  bpf: Record raw memory arguments during argument checking
+  bpf: Check read access for initialized writable memory arguments
+  selftests/bpf: Cover helper memory access permissions
+
+Kumar Kartikeya Dwivedi (5):
+  selftests/bpf: Allow privileged preparation for capability tests
+  bpf: Fix generic __uninit kfunc output buffers
+  selftests/bpf: Cover generic __uninit output initialization
+  bpf: Support multiple __uninit kfunc output arguments
+  selftests/bpf: Cover __uninit kfunc output argument slots
+
+ Documentation/bpf/kfuncs.rst                  |  27 +++-
+ include/linux/bpf_verifier.h                  |  11 +-
+ kernel/bpf/verifier.c                         | 131 ++++++++++--------
+ .../selftests/bpf/prog_tests/verifier.c       |   4 +
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   9 +-
+ .../progs/verifier_helper_access_var_len.c    |  41 ++++++
+ .../bpf/progs/verifier_kfunc_uninit.c         | 100 +++++++++++++
+ .../bpf/progs/verifier_kfunc_uninit_multi.c   | 113 +++++++++++++++
+ .../selftests/bpf/progs/verifier_mtu.c        |  75 ++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    |  45 ++++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |   7 +
+ tools/testing/selftests/bpf/test_loader.c     |  48 +++++--
+ tools/testing/selftests/bpf/unpriv_helpers.c  |  16 ++-
+ tools/testing/selftests/bpf/unpriv_helpers.h  |   2 +
+ 14 files changed, 536 insertions(+), 93 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_kfunc_uninit.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_kfunc_uninit_multi.c
+
+
+base-commit: 961b8946acb482b6d7a39c266d623e5f9c4e873f
+-- 
+2.53.0
+
