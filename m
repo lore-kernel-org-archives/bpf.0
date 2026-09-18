@@ -1,168 +1,135 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F63B364EB2
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 05:00:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C734A370AE0
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 05:01:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789707656; cv=none; b=uVG4Uw1aMJaWRt8avDOoYXjUERMyC38BKJkQEOZBnJ38tk7y9XsGYgBOzaRSKsYcMsDllIHTI5grvSZE8HLuBl/QSW081s7W7iMCF3UB4qHC6EjC7UorQ0DVc3ytoIdypnKaW2SW+BPLWG9vwjUJnj+NdsYS7ACfJPRENrqwcI8=
+	t=1789707663; cv=none; b=pCQA2Oltr2kg7JxLg9JyUI2NoDIfWf7bF9ggKMA4RRtqLPocI85hQu7Ofr2HtNufoHCtY5bQjMASakwYDmZDw/xLC+vnq87QwDy/+uZsyVPexIN5R5CKVGPL+/hvyZYcJN0d0+D+S9TChBt0+JpE+pJL0gvslvYKhOeoTZ/gulk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789707656; c=relaxed/simple;
-	bh=nO+QVaxnEIIjpUG5QU+gSZDypwpQBt6ivW57GPfv5EY=;
+	s=arc-20240116; t=1789707663; c=relaxed/simple;
+	bh=PsYmFIlcc3p8t7bTmJ32wRcPQyvtw4GPeT9Sw47hJZ8=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=EDhJzCKqnmaksQz60iSFNqhxghVAvQS9x05CFE7B1s/S86k9Ol2IglONswlYpfTyIVwUrXWPvatcMunu3pOiytys1sE+JOsRrmbxeiDV9W5EzDa5wntCveZkRxwSUmdmmVpfYhGEME2eiOhTUYfoqNNZZ9/1gbIqkNJyuQ2dddE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TKg52Hd0; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=iFmxWIUVQVTmXMe/WyPf6H1sje31VYjdW6NKghnSSLY25XwlGXrvkb8G1XhFb9eF36pHnkvZRUqfTK09fpweYwaLxqE8v7V7mI3H1bp3Om8roFyZSmRbXYfcoUNOf1cMI1dgtTf1EKKk0BhKPUj0kCgvS8dQoBCz94Q3VpxqeGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gbzEiB6l; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TKg52Hd0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAFFB1F000FF;
-	Fri, 18 Sep 2026 05:00:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gbzEiB6l"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67A9F1F000FF;
+	Fri, 18 Sep 2026 05:01:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789707654;
-	bh=3vw4rTZTc51w24QIjM2OcVLCOPmv9luQlIA8EE7bY8g=;
+	s=k20260515; t=1789707660;
+	bh=HmVhWTsU8jNQ99++c45vuelIqwe628nyi+QcNYPFpo8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=TKg52Hd08UEE65R2rbXNcOuhjtGAIeBzKUgHAEDvxNKvyWS+2mFvIddB1oUi/nRqu
-	 45POMkivWKOvKpPq5kpnO4fdKtUNSo1ycbjqrVbhZv3KZsU5dI2QEX7CGBCRuerAqF
-	 pppO0Od5YOimcvmuQOTVQzLiZ5wDl9/TM25Y4C8lswVUln3J+eM1F1+rRdshzkaYK5
-	 s5u7sUGIZqm+SVcgymnJJXxYsXzQhu2V8ytbwnqJv7xdoSR8xZ9P14bgRPdzNdlUTO
-	 MU3NZCqgvH4vLwErZL9PX5kntr/XFOeuzx9cqx4PdWJjvakdC3TTi58ZlxqaV90d1D
-	 4rFCzUM1WyqFA==
+	b=gbzEiB6l5E7cwDcqDfbbdF7LFL4A/tmguuUvk1bcc1ZnimnTRvKZJ4MNy81jThsWh
+	 B4JBl5l+Or89SJ5SUC/LCVQgErqIh4SytkD0ROp3tBIuAbURVZMmZMV5xsTlF0eglF
+	 3z6zybsCrvEr+lX//Sr9XlN0XycvqIbxQw7z3ZI8c3JqymSZ59IiBYQlmysm+bvs2N
+	 My20fEDROg0CArzmGS8xpzEpP3DVYKptOgaKwvCEcuebOH6i61SBcBfszd+xEhlom+
+	 +5N3VG2jMjXYk9vCO5WUhCBU97M1UaHUuhE1NqR0tKjtgjL44LUtxN4llYtr7+kB4i
+	 Q6Ro5LvYqQFvQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v2 15/20] libbpf: Collect .bpf_cleanup records
- and pass them to the kernel
+Subject: Re: [PATCH bpf-next v2 19/20] selftests/bpf: Cover the exception
+ cleanup shapes the chain does not reach
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260918044317.3291712-1-yonghong.song@linux.dev>
+In-Reply-To: <20260918044337.3293731-1-yonghong.song@linux.dev>
 References: <20260918044156.3283973-1-yonghong.song@linux.dev>
- <20260918044317.3291712-1-yonghong.song@linux.dev>
+ <20260918044337.3293731-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Fri, 18 Sep 2026 05:00:54 +0000
-Message-Id: <20260918050054.BAFFB1F000FF@smtp.kernel.org>
+Date: Fri, 18 Sep 2026 05:01:00 +0000
+Message-Id: <20260918050100.67A9F1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] bpf: empty cleanup range check in bpf_prog_collect_cleanup_info(=
-) only catches offset 0
-- [Medium] bpf: bpf_object__init_cleanup_info() rejects valid objects with =
-0-sized .bpf_cleanup sections
+- [Low] bpf: multi-line comment style violation
 --
 
-commit a645d3bd249aceee4909edcc78e5fe4247fd3432
+commit 59a07b8ba8f5c3976a5da9bea3b5d6359874813a
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-libbpf: Collect .bpf_cleanup records and pass them to the kernel
+selftests/bpf: Cover the exception cleanup shapes the chain does not reach
 
-Parse the compiler-emitted .bpf_cleanup section and hand the resulting
-table to BPF_PROG_LOAD.
+This commit adds end-to-end exception cleanup tests for various edge cases
+and shapes that the primary call chain does not reach. It tests things like
+tail calls, nounwind calls, subprogram pads, and landing pads that interact
+with the stack.
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 27f2eec13f76f..1b8b978e7b7b9 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-
-[ ... ]
-
-> @@ -4852,6 +4890,221 @@ static struct bpf_program *find_prog_by_sec_insn(=
-const struct bpf_object *obj,
->  	return NULL;
->  }
-> =20
-> +static int bpf_object__init_cleanup_info(struct bpf_object *obj)
-> +{
-> +	Elf_Data *data =3D obj->efile.cleanup_data;
-> +	Elf_Data *relo =3D NULL;
-> +	size_t i, nrels, nslots, nrecs;
-> +	struct cleanup_raw_rec *recs;
-> +	int *slot_sec, ret =3D 0;
-> +	size_t *slot_val;
-> +	const __u32 *vals;
-> +	bool native;
-> +
-> +	if (!data || obj->efile.cleanup_shndx < 0)
-> +		return 0;
-> +
-> +	native =3D is_native_endianness(obj);
-> +
-> +	for (i =3D 0; i < obj->efile.sec_cnt; i++) {
-> +		struct elf_sec_desc *sd =3D &obj->efile.secs[i];
-> +
-> +		if (sd->sec_type =3D=3D SEC_RELO && sd->shdr &&
-> +		    sd->shdr->sh_info =3D=3D (Elf64_Word)obj->efile.cleanup_shndx) {
-> +			relo =3D sd->data;
-> +			break;
-> +		}
-> +	}
-> +	if (!relo) {
-> +		pr_warn("%s present without relocations\n", CLEANUP_SEC);
-> +		return -LIBBPF_ERRNO__FORMAT;
-> +	}
-
-[Severity: Medium]
-Could this reject valid objects if the compiler emits an empty 0-byte
-.bpf_cleanup section?
-
-If the section is empty (e.g., exceptions were optimized out), no relocatio=
-ns
-are emitted and there is no corresponding .rel.bpf_cleanup section. However,
-bpf_object__init_cleanup_info() requires the relocation section to exist if
-.bpf_cleanup is present.
-
-Would it be better to return early if data->d_size is 0 before checking for
-relocations?
+> diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c =
+b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
+> index d1e45b765af26..ffc0b95191681 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
 
 [ ... ]
 
-> +static int bpf_prog_collect_cleanup_info(struct bpf_object *obj,
-> +					 struct bpf_program *prog)
+> @@ -35,6 +39,314 @@ static void run(struct exceptions_cleanup *skel, __u6=
+4 input, __u32 retval,
+> +static void test_shapes(void)
 > +{
-> +	size_t i;
-> +	int j;
-> +
-> +	for (i =3D 0; i < obj->cleanup_rec_cnt; i++) {
-> +		struct cleanup_raw_rec *raw =3D &obj->cleanup_recs[i];
-> +		struct bpf_program *owner =3D NULL;
-> +		struct bpf_cleanup_info ci =3D {};
-> +		__u32 fields[CLEANUP_REC_FIELDS];
-> +		void *tmp;
-> +
-> +		for (j =3D 0; j < CLEANUP_REC_FIELDS; j++) {
-> +			size_t idx =3D raw->insn_idx[j], final;
-> +			struct bpf_program *p;
-> +
-> +			/* The end of a range is exclusive, so it may name the
-> +			 * instruction just past the last one of a function,
-> +			 * which belongs to the next function or to nothing at
-> +			 * all. Ask about the last instruction the range covers,
-> +			 * the way the kernel does.
-> +			 */
-> +			if (j =3D=3D CLEANUP_REC_END) {
-> +				if (!idx) {
-> +					pr_warn("%s: record %zu is an empty range\n",
-> +						CLEANUP_SEC, i);
-> +					return -LIBBPF_ERRNO__FORMAT;
-> +				}
-> +				idx--;
-> +			}
 
-[Severity: Medium]
-Will this check catch empty ranges emitted by the compiler at non-zero
-offsets?
+[ ... ]
 
-If the compiler emits a .bpf_cleanup record where begin and end are both 5,
-the check for !idx evaluates to false. The code will then decrement idx to 4
-and look up the program for the previous instruction.
+> +	/* The same call site either way: the subprogram's throw unwinds into
+> +	 * this frame and runs its pad, an extension's stops at its own boundar=
+y.
+> +	 */
 
-If this empty range is located at the start of a function, looking up the
-previous instruction will fall into the preceding function, potentially
-triggering a spurious "spans functions" error or silently accepting invalid
-records.
+[Severity: Low]
+This isn't a bug, but does this comment follow the BPF subsystem coding sty=
+le?
+Multi-line comments should have their opening /* on its own line before the
+text begins.
+
+> +	if (test__start_subtest("freplace_subprog_throws"))
+> +		run_shape(skel, skel->progs.entry_freplace, 7, THROW_COOKIE,
+> +			  RAN_FREPLACE);
+> +	if (test__start_subtest("freplace_extension_throws"))
+> +		test_freplace(skel);
+> +
+> +	/* A tail call that is taken: the walk ends at the target, so the cookie
+> +	 * comes back from there and this frame's pad does not run.
+> +	 */
+
+[Severity: Low]
+This isn't a bug, but is this the preferred multi-line comment format? The =
+BPF
+subsystem coding style mandates that the opening /* should be on its own li=
+ne.
+
+> +	if (test__start_subtest("tail_call_taken")) {
+> +		int key =3D 0, prog_fd =3D bpf_program__fd(skel->progs.tc_target);
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup_shapes.=
+c b/tools/testing/selftests/bpf/progs/exceptions_cleanup_shapes.c
+> new file mode 100644
+> index 0000000000000..f5eb2ff15c896
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup_shapes.c
+
+[ ... ]
+
+> @@ -0,0 +1,863 @@
+> +static __used __noinline __u64 tc_thrower(void *ctx)
+> +{
+> +	/* Never taken; its presence is what makes this frame, whose spill the
+> +	 * walker reads, tail-call-reachable.
+> +	 */
+
+[Severity: Low]
+This isn't a bug, but could this comment formatting be adjusted? Multi-line
+comments in the BPF subsystem should place their opening /* on a separate l=
+ine.
+
+> +	bpf_tail_call_static(ctx, &jmp_table, 0);
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260918044156.3283=
-973-1-yonghong.song@linux.dev?part=3D15
+973-1-yonghong.song@linux.dev?part=3D19
