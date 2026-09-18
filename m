@@ -1,148 +1,110 @@
-Received: from mail-pj2-f42.google.com (mail-pj2-f42.google.com [74.125.227.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94620293B75
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 20:51:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA81F52CCF8;
+	Fri, 18 Sep 2026 21:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789764709; cv=none; b=RFrH983iydQ1B0OvYj3t6bYDvq8Xf7NNa62wOJKz0xW5W8Cs5NTj6yaK48n9zNZUC7QYadChO5FZVpkYqRfPpPkFoV5skIAnZHXQN/LWIj2iJWhY8O6rzYiLGI0NIqnDug/DyuVtNUoCdfcUPnIbV7MH78b+Cj9YEKrQhZwlR8o=
+	t=1789766707; cv=none; b=Qp6f12GhHrwbVuabV98YORq18WZxfdfxKs9Ifw6RlxS8cLoAgYBepnOfe5k11qCVc2AG9kWTqg89ILRLOKFhXu89VunuUuwHvyV5Fcq/9TPhDJ2VFhFiJaGAXilrSmXmvF8ryGZtGws8nKIkY8BiGFFiDyDK1WmBejMRffruD1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789764709; c=relaxed/simple;
-	bh=wbZQhcIGoq0h8i7KnrViZ2kPef4WkeFevZuXMt2Aqfw=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DGdxzHefnQv8F0fKLKo1yi6tSB9JpAN0Xgpe73SypPH79icA+eVX4Wtq5FPau69PsIpdi0rqKo3E2H0fXBSxj1TGMQLaWT2jMv4URl2bluKkm8DWHjbn+Nz6JMvgMuKgXBGUuW29856TCoD7jFyMoXtQXrx0bFVwY+UpTPYmrl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PHFFRPLr; arc=none smtp.client-ip=74.125.227.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789766707; c=relaxed/simple;
+	bh=lniSNryGmy8lAfxF+rBnxTLORla1OPlxzxjOaa0fnkk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Huqfji6JD8xYnO/mMyykl2yUzlHvMFov9S5WlfGNn9NpOiKo3drkfI4xRH0jk5eDmmdi8mH1ZCu3sq/eJPbJPGzk2ZLgXchzX8ITDvxhaYXJPKeCnErRlUYomU+ggZzX7iBtHJVYcHteqH+CXyVVGadeqFZNA7gWIBQIbQYHrx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VKA8prvX; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PHFFRPLr"
-Received: by mail-pj2-f42.google.com with SMTP id 98e67ed59e1d1-396ccb65437so1020124a91.3
-        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 13:51:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789764708; x=1790369508; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=gko2vylYqR00Csv8Fc2JzTwZ9rPFN1mTwkGy+0pSt1k=;
-        b=PHFFRPLr/58/5w0cyD8SkP3Uc9zy8Wj+qbCbVlvlc1LG0LzCGnPCckLRQ3GsBf2ZJ1
-         odi2jyjHSyplJ/lWczBdMkT+mnBTrRya6Sm3umodMmO1fIA7R2yIJcKh6z2YCOORcVDo
-         DBPvFEF1Epg1RWSYWNH95B7p8oDUPap2rMlJjBexI4IFi1R2QNr91Mi6fxT23r+A1jDP
-         83YpQmgryjUmB4x3IeI5nPiUo91XEcKZnL31yBa0aglF8m5MeaOi2flvDZW6SQ8oRdDE
-         RiD2Ro00ArtXYz1gfwXyba2tlTdkRTze+spZQV1X+GeFbRFNjGBXakyhUDw4CCOYSaIa
-         Dv5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789764708; x=1790369508;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gko2vylYqR00Csv8Fc2JzTwZ9rPFN1mTwkGy+0pSt1k=;
-        b=1N6IS18MTr9aMeHH/F91yuPlfa2jXsHkXZelJnwl6J0cBFqqwo42RicupVBczusupF
-         wauvAT3GVmpcQ7bBuVfFrn2Zvuy4cO8Z+6l3lGj2MZK+uN5mDqLb7QpFuy+NBf1ok1i7
-         e93o65jBr8oESdxb5mjHUFmXH84uIkNXKKNUb4Uc9s6Je1J8+GwYXqz0KWwMjVXqt3Dk
-         YV4NridQ55DOUzQf6i/rUuyHxn0JdCMzkikZ1TYPcrYDavGa871H3VoFqtLQ8RiMXzcK
-         G4MU78eVs41yUQHC5jSwwFJK+29wilgHmEDkPqrsZ8pudQi17obqyQuzlD6QKAK4oOft
-         CKyQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxGwJ35jRjZb7FZVNvplBU3dAdMQtLxnA0qMTwdaoty10poz232ceW0EXXzwECjoaVCd/0=@vger.kernel.org
-X-Gm-Message-State: AFuF++l072yKy7JR84xN2ENGBhaJU24Mv+1iVZUbn7OKuMRcUdtR1bWM
-	Ra/MHPaQpifaEJX8oq60Q+Ww61ZAuQkGYQWpdKKoK26UFQfJte4vTvah
-X-Gm-Gg: AYBFou11Zv+zAXp/bPdggL9kHdKxxCT9B6Ilf0tHqBcVw4Q6uZWypItM+BlMrEkr7Sg
-	Ewtk0dLdy0j15MkqtwLfFxjUfRTPTvXTZzjbmr+KzUfUBReE7EM9Mrfxt5RmPE9D9PZPhIVPcsI
-	I91Wc9A9JHqbbCZ1oX2wzeBw+kKi67KkkwStX6ARDh2dkOuJ11Vfujl4DCfaiyzBKmqdk+eCuLs
-	ayJMxK9O0QBhHbCPLdOMPVoGowlMsnQ9ZxGDFv8Yf5ZJGZc8NjZeuRLAzcgHMOti1WW7lWbMXYB
-	9Aezivu2XUXmFhJ+QlFxDnZN6rik8eP+2ymL9gixXdsHNJVZD4dvxfREu8FlqAWyIaqCHk0SPg+
-	agZoSNRfiwipt/eJOWa/U1m7zgsFOitteKSN+OBxEwTwD8lDIsFXIsjj88dZlfeBFS4Ml5/Oihm
-	DmWUe0bkfOicqizE7vPhhvmHBjwJxT5WJ7czVIOTvlnM5emFA1tBjav+xgGgOFjn35NPcw3HhjQ
-	KK5hAv/oxFkNso+KO84U3AVyrGevicw1DF2gRMoahz+He7/UuG9NuqyYg==
-X-Received: by 2002:a17:90b:1cc4:b0:39d:f351:8f0c with SMTP id 98e67ed59e1d1-39e54dcb193mr7567505a91.13.1789764707859;
-        Fri, 18 Sep 2026 13:51:47 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:e136:8952:772a:93a4? ([2620:10d:c090:500::4:e681])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-144d55bfec0sm1309886c88.7.2026.09.18.13.51.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 13:51:47 -0700 (PDT)
-Message-ID: <a53eaf9758d1110ad7a2211b55533ffd470e083f.camel@gmail.com>
-Subject: Re: [PATCH v3 bpf-next 09/11] bpftool: Add ability to dump
- LOC_PARAM, LOC_PROTO and LOCSEC
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
- andrii@kernel.org, 	jolsa@kernel.org
-Cc: daniel@iogearbox.net, ihor.solodrai@linux.dev, yonghong.song@linux.dev, 
-	song@kernel.org, qmo@kernel.org, martin.lau@linux.dev, memxor@gmail.com, 
-	emil@etsalapatis.com, bpf@vger.kernel.org, nsc@kernel.org,
- puranjay@kernel.org, 	yatsenko@meta.com
-Date: Fri, 18 Sep 2026 13:51:45 -0700
-In-Reply-To: <20260916074118.1007116-10-alan.maguire@oracle.com>
-References: <20260916074118.1007116-1-alan.maguire@oracle.com>
-	 <20260916074118.1007116-10-alan.maguire@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VKA8prvX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789766705; x=1821302705;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lniSNryGmy8lAfxF+rBnxTLORla1OPlxzxjOaa0fnkk=;
+  b=VKA8prvXmu4Tbo00ssjk+aOSZnoz9ppmOjaT0GdWroJPa8rN9H29g1aj
+   rvD3lJL47P7sZ+j9Q+56FbjvjYzgVJkP7ApfRnLwbqgFZGlY3PMmwPZmI
+   Ix2rZlnBoZQjyTkFY7pbk09Fc16XAhkInhFEgkGzsCAf//5Q+uKOQFV94
+   PC0o0w+HRTC18loMIUNIQgtWoaDCLmf47+6aq2g7Ht43kZfgs61RDbq4B
+   bBzNx4Qk5AL7ek3YTxYk41nf9rpgDznEPolY9q6dlWZhH+sdyyOHlcCtl
+   lmGST4R/18DcXA20UdrlwlWXxOlxLdUaeS152VIe533IoIAPy09WTotEJ
+   g==;
+X-CSE-ConnectionGUID: J6z27n1qQVOvdwimiIYYVw==
+X-CSE-MsgGUID: 6IQ7c/cgTNKNBDdNaRrasA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11909"; a="89436204"
+X-IronPort-AV: E=Sophos;i="6.27,109,1787036400"; 
+   d="scan'208";a="89436204"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2026 14:25:04 -0700
+X-CSE-ConnectionGUID: SdWSZjlxRf+YyclxZoP+Ug==
+X-CSE-MsgGUID: fW6QyodTR22EMLWpkmCKtg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,109,1787036400"; 
+   d="scan'208";a="271251346"
+Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
+  by fmviesa007.fm.intel.com with ESMTP; 18 Sep 2026 14:25:03 -0700
+From: Tony Nguyen <anthony.l.nguyen@intel.com>
+To: davem@davemloft.net,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	andrew+netdev@lunn.ch,
+	netdev@vger.kernel.org
+Cc: Tony Nguyen <anthony.l.nguyen@intel.com>,
+	maciej.fijalkowski@intel.com,
+	zhaochenguang@kylinos.cn,
+	magnus.karlsson@intel.com,
+	jacob.e.keller@intel.com,
+	przemyslaw.kitszel@intel.com,
+	jbrandeb@kernel.org,
+	horms@kernel.org,
+	kerneljasonxing@gmail.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	bpf@vger.kernel.org
+Subject: [PATCH net 0/8][pull request] Intel Wired LAN Driver Updates 2026-09-18 (i40e)
+Date: Fri, 18 Sep 2026 14:24:47 -0700
+Message-ID: <20260918212458.550425-1-anthony.l.nguyen@intel.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, 2026-09-16 at 08:41 +0100, Alan Maguire wrote:
+Maciej fixes various issues with VSI setup, cleanup, and rebuild paths.
+Notably, keeping q_vector allocation synchronized with channel-count
+changes to prevent threaded NAPI reconfiguration failures.
 
-...
+Chenguang Zhao fixes AF_XDP multi-buffer handling by correctly copying
+and attaching fragments and cleaning up on allocation failure.
 
-> +static void btf_loc_param_str(const struct btf_type *t, char *str, size_=
-t sz)
-> +{
-> +	const struct btf_loc_param *p;
-> +	__u32 i =3D 0, vlen;
-> +	__u64 value;
-> +	bool negative =3D false;
-> +	char regs[32] =3D {};
-> +	char num[32] =3D {};
-> +	const char *op =3D "";
-> +
-> +	if (!t || !btf_is_loc_param(t)) {
-> +		snprintf(str, sz, "<invalid>");
-> +		return;
-> +	}
-> +
-> +	p =3D btf_loc_param(t);
-> +	vlen =3D btf_vlen(t);
-> +
-> +	if (p->flags & BTF_LOC_PARAM_REG) {
-> +		__u32 nregs =3D (p->flags =3D=3D BTF_LOC_PARAM_REG) ? vlen : 1;
-> +
-> +		if (nregs > vlen) {
-> +			snprintf(str, sz, "?");
-> +			return;
-> +		}
-> +
-> +		switch (nregs) {
-> +		case 2:
-> +			snprintf(regs, sizeof(regs), "r%u, r%u",
-> +				 p->values[0], p->values[1]);
+The following are changes since commit 46bc52d13594848023e681860df8700c8db14354:
+  ipv4: fib: fix data-race and stale genid check around nh->nh_saddr
+and are available in the git repository at:
+  git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue 40GbE
 
-I agree with Jiri regarding the register names. It's not a huge table,
-e.g. [1], 20 lines for x86 ~> 100-200 lines that would not really
-change to handle all architectures that have BPF jits.
-And it would be very convenient for those using the tool.
+Chenguang Zhao (1):
+  i40e: xsk: fix multi-buffer XDP_PASS skb construction
 
-Also, it appears that simply enumerating all possible flag
-combinations in a switch would make this function easier to audit for
-not-handled expressions (like ADDR), or plainly reporting that the
-flags are unknown for this version of the tool.
+Maciej Fijalkowski (7):
+  i40e: unregister netdev before clearing VSI on reinit failure
+  i40e: avoid null ptr dereference in i40e_ptp_stop()
+  i40e: make ring pointers unreachable before freeing via rcu
+  i40e: avoid deadlock when calling unregister_netdev()
+  i40e: fix potential UAF in i40e_vsi_setup()'s error path
+  i40e: do not expose netdev too early
+  i40e: keep q_vectors array in sync with channel count changes
 
-[1] https://github.com/eddyz87/inline-address-printer/blob/master/main.c#L1=
-07
+ drivers/net/ethernet/intel/i40e/i40e_main.c | 129 ++++++++++++--------
+ drivers/net/ethernet/intel/i40e/i40e_ptp.c  |   5 +-
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c  |  13 +-
+ 3 files changed, 88 insertions(+), 59 deletions(-)
 
-> +			break;
-> +		case 1:
-> +			snprintf(regs, sizeof(regs), "r%u", p->values[0]);
-> +			break;
-> +		default:
-> +			snprintf(regs, sizeof(regs), "?");
-> +			break;
-> +		}
-> +		i +=3D nregs;
-> +	}
-> +	if (p->flags & (BTF_LOC_PARAM_CONST|BTF_LOC_PARAM_OFFSET)) {
+-- 
+2.47.1
 
-...
