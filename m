@@ -1,108 +1,73 @@
-Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF8A31328E
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 09:14:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BF143A3822;
+	Fri, 18 Sep 2026 09:20:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789722864; cv=none; b=F7AkRYv97uSTvm48ZbOAO7RnATEbxYY4MfzOpEqb6XVg88KOB74xHJ36gFuoXp0OJWiD6j0jByRRAqJdsH6u/n+DdLjs7Lq/haxrr6hxFo2uqZY67bURVwmJtG0MzB8H1+3TlSPH+120HWR9Tx9zrWock+Ml2L4l4tR/bvR4Fy8=
+	t=1789723212; cv=none; b=UoiCzCMVzYqgBLZ832CtpPDSR0gPqFF3UA2y9bITBxKmHD94iRoVk49zs/RoTOLPgDET3j+hKSzY/+k/KWfsMn5IUAdQsU5V+BbKOwIwF24sJVsG5JcDhkclq8je1tWwrs939El0zsUsV1FUxW3d5QahyT1KPueoypbp83tBDXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789722864; c=relaxed/simple;
-	bh=SfKpB6hUtfeLMQ4pzuFq7L7CWOsyj3Ko5MJ4c1BBJiY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TsTwpXcjWVvYkHTcTlC7Agx1bnq0o13x/75HVvPCDNrSxxMU48M5P2Xi3CfJTtnZYOonAe4T8IvzarKeghOtYzkOtIny91AIGtJHDPI8vbFcJKuIB5d6uVn8NyoMh+FQtwlVnxypso5ihECc89pX6Cdnc3hFXrNOhXXhUWys1YI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lQRbrWk1; arc=none smtp.client-ip=74.125.225.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789723212; c=relaxed/simple;
+	bh=IupCRxNYnQ07rFqb9hyW1BDV5Tr4HCbcp/WYfHOr65o=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=E3e0CuxRlr/wbdsq1ZIXOAtZNwUagQGU74rMR9VUdwdumSPXUyLT3TCrt5Xzrui0F5FX5PzR793Qtn7b0dqbrNGsrTPqa2c61/zGeJiScdw9S6APGd+W/8ba0k0IezAxc+KG4vwr8MRwLaSq3fPYI26MKXcgjdxaJuZ7LvV47TM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HQJ/ZmZk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lQRbrWk1"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-485933b2522so330388f8f.0
-        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 02:14:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789722861; x=1790327661; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=SfKpB6hUtfeLMQ4pzuFq7L7CWOsyj3Ko5MJ4c1BBJiY=;
-        b=lQRbrWk1HQNYPPZ+lqpF4Wz1VTXAsfIqb6Y2YxSOjWBogaDFKULZQgp+KSABYe22oB
-         itdF/x1Vn5yNn/TAQoREKNqbEGG4clHsUAUshdb3FIDimMzHaEKDUhzJFGZRRQ7HgRom
-         RFZjTU/gATGGJdxfWwiuMrPxCwAFFmF2cRz2ySc0f9sdT923BChNE/dSWQoX6cbkT91B
-         nBGppaiEOFksiC8BEiWOBTrUnoNieT5A6Vh2qkmRgzQthzqL6MNS5Ur0TESQe8rR2XkD
-         +02v25UdqFnXPwOTZwg+ckuj/5iFlHRLnGjkuHlgDhsRXV09rVi5Qjuzs3nxCfjUmtK7
-         RSjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789722861; x=1790327661;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SfKpB6hUtfeLMQ4pzuFq7L7CWOsyj3Ko5MJ4c1BBJiY=;
-        b=evfVEdaTz7+kgKubrTmG9wD2Pk1NWSmLURp42NFzJoN2CMI7jUTRJddowyq+MgXTmq
-         2d25WEQokBTWYgA286fyZwdyuqV23tcqR4cr67hIMMvrGfUiIPfWeJCHV4qyWMubFd0J
-         SE/wrcIJUUNZZBqD/T6ocJh/Kjk6OhmsUy7bRhlhMhT+yJqMV+2npOUTKtt/GVUwP6Bg
-         Qxe/mY62Cgm39kUw0Rc8kAM0X6F4fAbosULoQ0WfhTkJesFn3geGC0uHBKfZvG7HFVHD
-         TkJgeXpP8FLSZZU32olMIVvLgaRETHVdNEpV9+PungiXJrY8SodH220TvfTdrQTvYxpM
-         RfEQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzwfI4z72TToI8+Rsr9PjrBpoalxWa64h/j/d5uDd2QNc9Sl+AieluDWH7qshxgbDo4FRI=@vger.kernel.org
-X-Gm-Message-State: AFuF++nmx7mwn0gQiyqG2jnqVBVptE0hspQPBTaLXcGKEqQM//HegCQA
-	5086G0QHIwRBHqg8gwfOMuyB15CvS6dYhCdXSpCwVjK+/fn/W7U4b/+I
-X-Gm-Gg: AYBFou0+i+uwuaXRzdapOJ7NVofnE6kL2gXyEvgp+y8mT/3fKdN9xRuV6ZJISY+FXFF
-	jQUZpeoRP0DvxsGpIGMULy6moD8S67rQ7kSybF3OofiTqPo3z8mYMwGutUgohWYDEzQFgKyXQlQ
-	HkEbX6iTeI2QSZKsXCMclQ/cud06L+nyVwS04WHIzDBMFH2BpO5FyOOxfdOIGWZhP2TP2v8qXjR
-	iocfA1e0xdB7snLsm5jOyOqXxkmiC02MMTxEEG6Wnq4yNS1f4l8uBsKJNLyffrHkLU4QLNGRL0+
-	0RhZvVJdvVIi0RIZFpBYNh5DgAKX+30oNphXp6HLl1rv8szbpqJM3CZZUwae87wGaUDyzFK3Ttj
-	Eh0qFYS+uhBvrKusCCYmRBlC6p04iZENa+kmvXJ3dC+U7+tfs8PuNCq7bApBbUfRpoWqHTevh+O
-	XGrFpCHyqGoEaVIWcSaXFh/d4JmtwKUCk44vrS1QHm4Ug5AHZU+vZgVFrIV2i1+xPVDwSzCCJU/
-	UP9oDNEceixSgjiCk184Abo0A==
-X-Received: by 2002:a05:6000:990:b0:485:ad55:208d with SMTP id ffacd0b85a97d-4871e263f69mr5184001f8f.18.1789722860820;
-        Fri, 18 Sep 2026 02:14:20 -0700 (PDT)
-Received: from dell-desktop ([2a02:587:4b4e:8500:290c:210b:1c76:5710])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4872008fe3csm2583357f8f.37.2026.09.18.02.14.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 02:14:20 -0700 (PDT)
-From: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-To: andrii.nakryiko@gmail.com,
-	david@kernel.org,
-	ljs@kernel.org
-Cc: akpm@linux-foundation.org,
-	andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	brauner@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	kpsingh@kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	matt@bobrowski.net,
-	memxor@gmail.com,
-	song@kernel.org,
-	sun.jian.kdev@gmail.com,
-	tasos.papagiannnis@gmail.com,
-	utilityemal77@gmail.com,
-	viro@zeniv.linux.org.uk
-Subject: Re: [PATCH bpf-next v7 1/5] mm: Add copy_remote_mm_str()
-Date: Fri, 18 Sep 2026 12:13:59 +0300
-Message-ID: <20260918091359.297923-1-tasos.papagiannnis@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <CAEf4BzaH=PJh7QUhh7szGL+gCieYLOSbhriFWaZG92xFWDeGig@mail.gmail.com>
-References: <CAEf4BzaH=PJh7QUhh7szGL+gCieYLOSbhriFWaZG92xFWDeGig@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HQJ/ZmZk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F8801F000FF;
+	Fri, 18 Sep 2026 09:20:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789723210;
+	bh=qcjMRQxp+/sMO1VfRzkV7AtKn8HnHm257Vdf/wTuJpc=;
+	h=From:Subject:Date:To:Cc;
+	b=HQJ/ZmZk5Y7hsLMb5Aa2CErWCujQt969MoiusSghROOLQ26sFezd/Eo99+mzRgIxw
+	 WdHJEfikNfs4FtRecqgX/bDcs7QsxoIApH9mTIKHoFC8OnKpR/UJiooqU0slNgJQVj
+	 bwpWf+Zv44YHM0Qp9lZRtF2ivsPrSLMXkg9Nl0njJOWbRKF7O1mVi0DNXEC9EUU6FD
+	 elApxctaET3HUEk9p9pV726SKDgpv6+A7YOMo/uZbmxbLaDDLEESNHh1lkEYaocnd0
+	 vmYxgQP9ceExIsDJku4sfIMB2b9wU1yRzpThLtmPsmkk6N000lfgXsD7xuHsflddku
+	 5sf5X8/xd7+tQ==
+From: Christian Brauner <brauner@kernel.org>
+Subject: [PATCH 0/2] binfmt: fixes for kres reports
+Date: Fri, 18 Sep 2026 11:19:58 +0200
+Message-Id: <20260918-work-binfmt_misc-fixes-v1-0-647b24bc1c46@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/02M3Q6CMAxGX4X02i6wGARfxRizn06qYZgVfxLCu
+ 7vhjZen/c5ZQCgxCRyrBRK9WHiKGZpdBW4w8UrIPjPoWrd133T4ntIdLccwzpeRxWHgDwn2nds
+ Har3VBw9ZfiTaHtk9nX8sT3sjN5daWVgjhDaZ6IZyKl3111WbrsoK1vULvNoxiKgAAAA=
+X-Change-ID: 20260918-work-binfmt_misc-fixes-98c4fe6db27d
+To: Chris Mason <mason@kernel.org>, linux-fsdevel@vger.kernel.org
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ "Christian Brauner (Amutable)" <brauner@kernel.org>
+X-Mailer: b4 0.17-dev-db0b7
+X-Developer-Signature: v=1; a=openpgp-sha256; l=622; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=IupCRxNYnQ07rFqb9hyW1BDV5Tr4HCbcp/WYfHOr65o=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWStZXKL/u1g9otpw5ml70tfqb7OffbuRWeo17fzR4+de
+ zd1xr85Zh2lLAxiXAyyYoosDu0m4XLLeSo2G2VqwMxhZQIZwsDFKQATWbOLkeHxpuUbTwkd69hy
+ lnNHHtPpVxeZF7EdEi5+9/jWdBau3Uv3M/wVKV9/jW3XzxZrlbt366ZJ8J9+v82iuURL2vjs6aT
+ +PzUcAA==
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-> AI has a point, declarations in mm.h are not guarded by #ifdef
-> CONFIG_BPF_SYSCALL, no? These look generic, I'd remove BPF_SYSCALL
-> guard
+I asked Chris to run his kres tooling on the binfmt with bpf changes
+merged for this cycle. It found two issues that are fixed in this
+series. I reproduced both of them.
 
-Yes, this sounds reasonable. I have removed the #ifdefs in v8 [1].
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
+---
+Chris Mason (2):
+      binfmt_misc: fix OOB read in bpf_binprm_select_interp()
+      binfmt_misc: fix racy checks in bpf set_interp kfuncs
 
-CC David, who proposed removing the #ifdefs from the header file in [2],
-and Lorenzo, who has already acked the patch.
+ fs/binfmt_misc_bpf.c | 35 ++++++++++++++++++++++++++++++++---
+ 1 file changed, 32 insertions(+), 3 deletions(-)
+---
+base-commit: 5179241521401ef364294128bb43cdbce7252457
+change-id: 20260918-work-binfmt_misc-fixes-98c4fe6db27d
 
-[1] https://lore.kernel.org/bpf/20260918091058.297740-1-tasos.papagiannnis@gmail.com/
-[2] https://lore.kernel.org/bpf/daeab5a8-44b8-4933-80c5-e4145b01a0a1@kernel.org/
