@@ -1,257 +1,125 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C643951EDE9
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 18:29:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.152.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789756203; cv=pass; b=i42XEpIaVxGvcKyy/RoIzs6gpb5eWbvFVNmZKJyApyZu3ewSmG/3YRpvpX8mvzR5mtb1s97CzOiPQSoetALWutWBM/C9ycGPzATDLev+RJegQCozpr+55Rq6A7wjwSed73sFIboFx65RHmHnD/gPys9HnMhf3xI7QxqGtizwhv4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789756203; c=relaxed/simple;
-	bh=J7W15XqZ6ORC6qnahFGeKRPVxedy9/rMMuWN4qni3zo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oZy+/zpUAQV6/klx+8B5wEFKtffXoICdx3+N1eVIV+Or9X+l5CQfkCGX/xoGJjw4zycDp/UNGlakN0gobRkMp+9DyKFje0CVA7DyFu0ynRXj0o+HoOpjqzetQ6GuSsY2FxJEt9gvZvQS7zVC4svzqJkHEqmGAfKxRjkB1w/jcng=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=Y2pPmB6C; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=QzLlNzOY; arc=pass smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E905C518155
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 18:35:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789756508; cv=none; b=CracqZrYbIBA1i50eWb67AdT+xYSyg2EFh/AbD/PqBo48m0MesMxj0plYcRPXs/H4ucOH4Hutqy9CCv4tkQevZHp3Ui+i28dEo1TRRpxiMQF56R14uNrae0rp+dWXOk+PMCfLDU1Jw2jRg26mDEFPSJKXGRbcHpWRIQ64zIq4Q8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789756508; c=relaxed/simple;
+	bh=IZQkC7q4WlqaqawfmTdELQgW8PLPnhmHUz6qXWUo32E=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=WWbGo7BrEO82QlkCqfmV/kzMTYsQj+cPi48H40GLFeQKvU0gSGIwEL7clM/T3Bjt7phqFNKxXAJy0ym5MPF6LyK6d6C6t8YHU1jVp+pqF578unSzfltEwawPWTDhVcZYlgkjiIHAoeUf0H34TpaRoqKVnMKE7tFX8H5lqnG4ZR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jP0IllLG; arc=none smtp.client-ip=74.125.227.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="Y2pPmB6C";
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="QzLlNzOY"
-Received: from pps.filterd (m0354655.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68IECscq2605194
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 18:29:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=70/Npkkhe33l7la9+iCrfYQoK1XRC0Wq25ySvCwwjyw=; b=Y2pP
-	mB6Ci40QhcBZ66oz89Ps1uLZK0OUnjKqq+n9TI0qHaPvGNg1U1/8g+wr/hWxgR7d
-	RITY6z2hrfrWFGhyehTcIM69NxngsmPS03sMcBrNuU6DemkHgCr37c8KBxSOy4t5
-	9q9fhJpfVYuUKTmrQIBvavD46fIZ64iyjB61lsMuyZAr5BCshJo+0gksrQOr1uPz
-	dH3eUrHm47ze2NuBiV1CIvq/2bVoZcQQ79UXMsF2qq6CJS9QmocVPEHpzw357es0
-	41WUE6gB9s+3JlXxiQxb7CNOp3BlpQbN0q/HDECP62I/8ql5/wy9qwo4mwCpAp6y
-	2H48yWJkGhSZBlVC9Q==
-Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com [209.85.128.198])
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4gru0w30pf-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 18:29:55 +0000 (GMT)
-Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-892af0d1bcbso13507727b3.3
-        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 11:29:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789756195; cv=none;
-        d=google.com; s=arc-20260327;
-        b=AJBSZ5gYFV4aMhGrk+TwmI5tl+3A4VZkfwe1d5QKmzpfaqQUuewYY2ZbNO45eEfJ8E
-         iZ3nQ7Z5yySgq6Rt9P6uqH6cS2ncd2clCNaeok/Wn6MgAIFGVKVwrs+ubr65a0Af4p1N
-         iSqwiO3/2eYjPxmE6A38WNK5yRQ6lA+IVbVzlU/uNWlgoSpM25LOSBo3pVfd3JdZohF+
-         de7HQI2K+mTzT5vZ7Ye1e2MFQ0LJH4SEi4PVl0J+FbCCCscEKZ0dsOi1xN9IcokEJRyi
-         pfyJgcjE5EYSBNH6wCXVMzUwjPzIk2Dyv952wYrU61ZXLcnv+LFUiml0z39HPI8/gTro
-         O1FQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=70/Npkkhe33l7la9+iCrfYQoK1XRC0Wq25ySvCwwjyw=;
-        fh=qt29tRmMv9RTRwthwC9TubzTxuwxPM3tixKceu/18cU=;
-        b=hJpk5CkynKrvDQKTEbOKl1FvSU/RlQqARrF8YyRfhLMSCM/2xrdifBrj7yb+ja1/5E
-         v5Adnvd9ysdSY0NAZ7aVYeQvTF9QLYdGFKGYfnQZ87FGHm3eUCLKzMFIoXFJk2QNMWY8
-         deevIVlbaGrnEYQiXIPMasSEcDW/I9XUl0KucaEIxOpCu5rnhLRXyDMJ+pS1L9zcsOgX
-         Gxof3aOcY3WVF5lbobAYG6t2YGb3Tp1fcfJ/4AO7WRNaI2ydSpOiHi70XLzluOECOx4v
-         bCdOBfO4LMT067+h0+hbtwIS6dUv3R91KBEp4A4dYZt5Nx+IY1kPA7x6rHROPocUw/tY
-         zAMg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jP0IllLG"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d747eb79f7so7917265ad.1
+        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 11:35:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=crowdstrike.com; s=google; t=1789756195; x=1790360995; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=70/Npkkhe33l7la9+iCrfYQoK1XRC0Wq25ySvCwwjyw=;
-        b=QzLlNzOY9uh3cDNhPDCYCNhQiGLJ9pXiesTDCDtRVxXmjDMotS0XBUu+DjJdogd4rD
-         uk9wq70vY93c0dgM0nqYUro7RdrY1yWA6Cx8BObe6tzcRkuij4cJmgIKU1suErv6Llq0
-         aXujgpyuw603V5+RtNwyGb+o9xaVu/vtMZ9GPN5C4Vc6l8ihCMc22ccDAzDdE62sIViC
-         2c95JQwv3R32YjesmpifqJ5p6fpmdQ23qFajiGV2hpzIfndGLAwrAKaE5aBhio8v2dfL
-         jKVn+/74WMs3f92jJUQFJw4u9ToiDtD6eTnAqvk6OBQhDbZUkecS0JHqpeRtHKSRIPsn
-         5/dQ==
+        d=gmail.com; s=20251104; t=1789756501; x=1790361301; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=nVqw5PJZe1oyV/mC4YrYdyGHr2QxufjLUBCKW5hMzdQ=;
+        b=jP0IllLGUGQfv7xJSkzDO6Hx4PshOmH7dt1rUDrYqrOd7sSp4dqqfNmcvJdksTYBQ/
+         q1L+IYFb8vqEW3CYEF4ZzdCoafR1BpHzVJuQRCC4r59k8YS9TGLKosrgMPUyTfMAAkEq
+         RgXwcHG3B/fK/BFEuKiCLgfpFrKzHg4Q/ZnOrVymgdu+63x6fX2lPLpYET7K1B8wsBHx
+         69qr0UMRwn2AoFQpuZ+Cl2x9O8LVfyoki9IoqLQ4mnSOSA8GmedDDV6iOAJt74x3Mqy9
+         W4zkNiNSrBHqBVv4J/Lpg6C7Fvx+nXBjkQS8+basTjF0c/Yxak42gXKfqgvmEK0D+7/O
+         FUsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789756195; x=1790360995;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1789756501; x=1790361301;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=70/Npkkhe33l7la9+iCrfYQoK1XRC0Wq25ySvCwwjyw=;
-        b=cibm2rUodruZKw28qfgf7QUchi4x8rIF3IHpw8Mkn0RGiR60DcrFTuxE5OxTGOD2Ks
-         KKiWbefH2zgFB/fRwutbk/g1Qcp9zIyfV0ZtwRE+NHzH9mKcGz7fNeCI9OXwElySW7ha
-         010wA/gx/C0Cc3Un02j4S5NIPQ3SzP1l4Iy2GA7h3C01XWZ0BYkuDl3kTWsSJoNjWPPY
-         FDMRr18PiaSNpBudbDINwADsmjSfjtskn6NoDSSFYrKicauTUPqEODF81qB8kKFBl7yg
-         G8UtE/PM4wQ+VNi2SXuREULx2EEz6vg8iBzIoCgVLpm1jL28sc3m9nNQ7fRYA1wJfPuX
-         /3YQ==
-X-Gm-Message-State: AFuF++k0pwqJYN4dJnZ0v3JUAMog5fVpeN8PfoHZlMR9KbjN5CJ4AE7J
-	iKBD8L8Edo/LEyIrPcK+S7q5OMYY3FHeTuy3ucjAWoGNKqJ1m/71ti79zckXroPBP7sACKChA1A
-	4Q+JEf8fnQd2vJ6vhtBmJQ4r36D+5MKdVd20Xubg4a7yZUSIOieNqIWDl1c0D0lfOqHRhDkTlei
-	eJmJl4biTq51fa2Y74ZXaE6+GJIXEg
-X-Gm-Gg: AYBFou26Sw3j16abfwFLdRq/ccwGcoQGM5hkSG1BG1LnVMmgIQrYbADrBqmhlOC2Uye
-	qPOzy3FZwKcsFyy/lm6bWuUT7HNp5KTkjYtrxeH6bEd4ZCvtplgAIJ73G6R/1EJScwmC4FuNr5i
-	cgFvq5ZGaM0Qb6V762z/x1GXv67MU072F6cOPgjMbqXWIh1IgrRDBRGc7dlg==
-X-Received: by 2002:a05:690c:4ac7:b0:87f:e953:f6fe with SMTP id 00721157ae682-89733c1f4damr9492817b3.27.1789756195152;
-        Fri, 18 Sep 2026 11:29:55 -0700 (PDT)
-X-Received: by 2002:a05:690c:4ac7:b0:87f:e953:f6fe with SMTP id
- 00721157ae682-89733c1f4damr9492717b3.27.1789756194425; Fri, 18 Sep 2026
- 11:29:54 -0700 (PDT)
+        bh=nVqw5PJZe1oyV/mC4YrYdyGHr2QxufjLUBCKW5hMzdQ=;
+        b=YD0Hs9K8/VG+qwseD/viLpCAhDR5s0CpPvHcJodok8o5+urc2JQAiCCJ4TazzTOHCC
+         7Z2BenRXO0Pf4S6Dnq6aP4eQjMojreDXogbJDmwlJdujJRsrcAX3mwuCqYBL8cmVfcuy
+         8LotVNUAQBbSyfEaqz9LI75utu8gReltHEOv06AWLi6oJY+Iq3Z0nrK+DUod6tU5lJRk
+         ZgXDtuzdXndUn2H1AaqAhvsFGj7Ef3I39jU8/UMHaJcvVTiT3Lz+nYxF9Kb5Exgy3jUx
+         gmIqU/nBLqmaw9v0XkdD1iHISGuo81UdgymVeT6La6ck5vGJtIae7usvF+Tsi1gYdLDp
+         PQ2g==
+X-Forwarded-Encrypted: i=1; AKwUvBzI7l5ATz+bOQ2UEubYT6SyyFV/XGOsNfFQNnduJDCIDbtX6GUTcsiCYBliZx+nv+vquMU=@vger.kernel.org
+X-Gm-Message-State: AFuF++kfnMRajs/RAkcSNfqHEY3bE9bOMsfm+Dner4ZdDPWSanOuYp2u
+	1d1wde4keSMAs636SnyYgDEFqVrg1UVPkGjY6hF6NiZj3JIofGbqXRZa
+X-Gm-Gg: AYBFou3ZS+ok6AgREyENlB6HaRlEVCzqXZ1Q4PGHlAP+pifOXAeHipXC+tqYONuYe/u
+	oY8QCILucSDvbRRKUqUc0b69CHnn93KBTtZl+szivlmbB1/7e5CkCq/tF7KRpZ73cogZaqQiDUj
+	D7SCEVnfRl4Pcluo5hmi7fhasRuTJs4k/ajjhxt5xq7/oLV2jNZDHPGISWEz/ZKskNrDze3AvFT
+	IgBlRwpFZm04nLzHyhpDvCpRvuUemPH79/Hqzs9kAqmvoN1u0KLSB1PJn8puzDbAQgPw6nuVihI
+	Ef8bf+NuHmou4BqA2YTxTxIy12zpTR10+jXebMm3rGawFy5yoOCVd582a2OO1+5+eAXQf9CSztn
+	IYspsxzNZovRCVgEiDrOKJESQb+9sNlx9tCR7d4x1sgEx/+wBSxMG+1eu+mroQOfhM/R6FJ6b5v
+	lecgKCsQ33LIsWKhiC0o4V16RFwStdqxSs2Joj+NlgW1JQEvPBsw2fxPHQuedIlHTBW+e+dLhdx
+	oR1impqBx58a8nvS+owdEhDuECq5mhIwV0S84iWJ4AdtP9vYKFULH4Mhg==
+X-Received: by 2002:a17:903:3c43:b0:2db:5f8c:b81c with SMTP id d9443c01a7336-2ddb1b86d9cmr69719445ad.19.1789756501022;
+        Fri, 18 Sep 2026 11:35:01 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:e136:8952:772a:93a4? ([2620:10d:c090:500::4:e681])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33c32da4960sm621183eec.0.2026.09.18.11.34.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Sep 2026 11:35:00 -0700 (PDT)
+Message-ID: <156233341a2694196f96f0dad569f8dcc5eff1fe.camel@gmail.com>
+Subject: Re: [PATCH v3 bpf-next 03/11] selftests/bpf: Test helper support
+ for BTF_KIND_LOC[_PARAM|_PROTO|SEC]
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
+ andrii@kernel.org, 	jolsa@kernel.org
+Cc: daniel@iogearbox.net, ihor.solodrai@linux.dev, yonghong.song@linux.dev, 
+	song@kernel.org, qmo@kernel.org, martin.lau@linux.dev, memxor@gmail.com, 
+	emil@etsalapatis.com, bpf@vger.kernel.org, nsc@kernel.org,
+ puranjay@kernel.org, 	yatsenko@meta.com
+Date: Fri, 18 Sep 2026 11:34:58 -0700
+In-Reply-To: <20260916074118.1007116-4-alan.maguire@oracle.com>
+References: <20260916074118.1007116-1-alan.maguire@oracle.com>
+	 <20260916074118.1007116-4-alan.maguire@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260826181825.1826541-1-andrey.grodzovsky@crowdstrike.com>
- <20260826181825.1826541-3-andrey.grodzovsky@crowdstrike.com>
- <CAEf4BzY8LLT6_=sOyof7mE+GenAwtVNhzEP_Emy_U07WFjU+Eg@mail.gmail.com>
- <CAOu3gNgoopD0=8_0_OmVrt1bWdffRy3GmbBBC2Qe_9MaYjvEdg@mail.gmail.com> <CAEf4Bza-2N4JnnhCyFgCEHJqhFgiAsBECXpF0mrzfWZHwPysNw@mail.gmail.com>
-In-Reply-To: <CAEf4Bza-2N4JnnhCyFgCEHJqhFgiAsBECXpF0mrzfWZHwPysNw@mail.gmail.com>
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Date: Fri, 18 Sep 2026 14:29:43 -0400
-X-Gm-Features: AcwNN1X-UjexpL4SD8Ez7xsxPF9nqTiOzAer3F-zDA9CBBQDn1B2HLkbucQyrAA
-Message-ID: <CAOu3gNgmp8+D4n=oTnZsuNG5DUqc-6dzs974m6w8D0G3NvGWyw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/5] libbpf: BPF programs dynamic loading and attaching
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, martin.kelly@crowdstrike.com,
-        slava.imameev@crowdstrike.com, linux-open-source@crowdstrike.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Authority-Analysis: v=2.4 cv=NIZAaE6g c=1 sm=1 tr=0 ts=6aad8323 cx=c_pps
- a=g1v0Z557R90hA0UpD/5Yag==:117 a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10
- a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
- a=vDKVRhTs-M86Ea50iKLw:22 a=pGLkceISAAAA:8 a=pl6vuDidAAAA:8
- a=E-nmC9J94Jvr7a075H8A:9 a=QEXdDO2ut3YA:10 a=MFSWADHSvvjO3QEy5MdX:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE4MDI2NiBTYWx0ZWRfXw0wnORtFDzYR
- bfmhNXKY/Io72cO1u1MT9hmf1cTWh6rndOsu5zKcI2x3NQzwAWgqjYaZutYqgwaHOhC3AtBjxwa
- G63d8Z7rZcLWV3NuDFlS11HujXdEGnqfIn7u+0kSwzYQGy0EvDFi4jAGJGl+7tI48DQXswDrk9S
- nHXWTkjnUftEOn33Fq5Y/kPI45JvFIseNnuezNssafuOD9qFb46gicuRcd72wdrimufQsiZMcip
- 6XuyhIDQnn5C9UFuP0/k2FOCaeRGUAmXncNipfrv+fNcZ0utVlNEiQMqe5B+/JFIqF6V+gWsmXm
- LTc9M2i9Mnz2jPZym2VuKFPrd3QIuoXjEtGyH4k12Iit1MRKFiRiiNHgdaBw9c/E9TADxbreolO
- IYf65qu0ArC3w0mFUqBA1GYLj+1riycA+sU0vbTE1yfDuexGHw3b9ahu3553SE5152EsTwaMffa
- q/OhHEQfX9TzSN9buKA==
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE4MDI2NiBTYWx0ZWRfXxFT7oNdgjMnS
- 1F7pz4zT9Ucza/r80tvmePJzTtAzEir+e8VkQsbl5agDhd30CU0PtUGWM85LwTMVfNP3UeVPVfH
- QNztP/EfORHsiZOuuZh2r4TiXC3klmCINPdpB0Et+NEY6VP2ZtTd
-X-Proofpoint-ORIG-GUID: s4KRFyYrq-_mcmrH6uolI2MbEsrtR3Xy
-X-Proofpoint-GUID: s4KRFyYrq-_mcmrH6uolI2MbEsrtR3Xy
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11909
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 malwarescore=0 clxscore=1015 lowpriorityscore=0 adultscore=0
- impostorscore=0 suspectscore=0 bulkscore=0 phishscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609180266
 
-On Thu, Sep 17, 2026 at 5:52=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Wed, Sep 16, 2026 at 5:39=E2=80=AFPM Andrey Grodzovsky
-> <andrey.grodzovsky@crowdstrike.com> wrote:
-> >
-> > On Fri, Sep 11, 2026 at 7:44=E2=80=AFPM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Wed, Aug 26, 2026 at 11:18=E2=80=AFAM Andrey Grodzovsky
-> > > <andrey.grodzovsky@crowdstrike.com> wrote:
-> > > >
-> > > > From: Slava Imameev <slava.imameev@crowdstrike.com>
-> > > >
-> > > > BPF programs designated as dynamically loaded can be loaded and
-> > > > attached independently after the initial bpf_object loading and
-> > > > attaching.
-> > > >
-> > > > These programs can also be reloaded and reattached multiple times,
-> > > > enabling more flexible management of a resident BPF program set.
-> > > >
-> > > > A key motivation for this feature is to reduce load times for
-> > > > utilities that include hundreds of BPF programs. When the selection
-> > > > of a resident BPF program set cannot be determined at the time of
-> > > > bpf_object loading and attaching, all BPF programs would otherwise
-> > > > need to be marked as autoload, leading to unnecessary overhead.
-> > > > This patch addresses that inefficiency.
-> > > >
-> > > > Signed-off-by: Slava Imameev <slava.imameev@crowdstrike.com>
-> > > > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com=
->
-> > > > ---
-> > > >  tools/lib/bpf/libbpf.c   | 144 +++++++++++++++++++++++++++++++++++=
-+---
-> > > >  tools/lib/bpf/libbpf.h   |   4 ++
-> > > >  tools/lib/bpf/libbpf.map |   2 +
-> > > >  3 files changed, 141 insertions(+), 9 deletions(-)
-> > > >
->
-> [...]
->
-> > > >  static void bpf_object_post_load_cleanup(struct bpf_object *obj)
-> > > >  {
-> > > > -       /* clean up fd_array */
-> > > > -       zfree(&obj->fd_array);
-> > > > +       /* The fd array is needed for dynamically loaded programs,
-> > > > +        * so defer freeing it in that case to the end of the objec=
-t lifetime.
-> > > > +        */
-> > > > +       if (!obj->has_dynload_progs || !obj->fd_array_cnt)
-> > >
-> > > why the added fd_array_cnt condition?
-> > >
-> >
-> > To avoid keeping the array  in case no program ever referenced module k=
-funcs
-> >
->
-> my confusion stems from the fact that we unconditionally zfree'd it
-> before. sure, you now added has_dynload_progs to postpone this, but
-> fd_array_cnt is new and seemingly unrelated, so I'm still a bit
-> confused...
+On Wed, 2026-09-16 at 08:41 +0100, Alan Maguire wrote:
+> Add support to dump, encode and validate new location-related kinds.
+>=20
+> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+> ---
 
-Yea, I checked again, it's moot, the array is not allocated anyway if
-fd_array_cnt =3D=3D 0 so this check is unnecessery.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
->
-> > > > +               zfree(&obj->fd_array);
-> > > >
-> > > >         /* clean up BTF */
-> > > >         bpf_object_cleanup_btf(obj);
->
-> [...]
->
-> > > > + * Dynamically-loaded program data is initialized on object load.
-> > > > + * Post-load initialization is not supported.
-> > > > + */
-> > > > +int
-> > > > +bpf_program__load_dynamically(struct bpf_program *prog, int extra_=
-log_level)
-> > >
-> > > just call it bpf_program__load()
-> >
-> > Problem with this is we already the legacy bpf_program__unload (full
-> > unload, irrevarsable) and we have our lightweighet
-> > bpf_program__unload_manually which just closes the prog FD but retains
-> > the data so it's reversible. So this renaming creates the wrong
-> > conceptual pairing. I am open to other ideas on how to proceed.
->
-> just make bpf_program__unload() not free anything for programs that
-> opted into MANUAL mode? I don't think anyone really is using
-> bpf_program__unload(), I actually don't know why we left this API in
-> libbpf v1.0+ at all, tbh...
+...
 
-bpf_program__exit and bpf_object_unload use them so just adding the
-check to opt out from full release for MANUAL mode will cause mem
-leaks for MANUAL progs in those cases. But I can convert
-bpf_program__unload into internal helper and then just also call it
-from the 'new' bpf_program__unload skipping it for MANUAL mode.
+> diff --git a/tools/testing/selftests/bpf/btf_helpers.c b/tools/testing/se=
+lftests/bpf/btf_helpers.c
 
-Andrey
+...
 
->
-> >
-> > >
-> > > > +{
-> > > > +       int err;
-> > > > +       struct bpf_object *obj;
-> > > > +
-> > > > +       obj =3D prog->obj;
-> > > > +       if (!obj || obj->state < OBJ_LOADED)
-> > >
->
-> [...]
+> @@ -203,6 +206,37 @@ int fprintf_btf_type_raw(FILE *out, const struct btf=
+ *btf, __u32 id)
+>  		fprintf(out, " type_id=3D%u component_idx=3D%d",
+>  			t->type, btf_decl_tag(t)->component_idx);
+>  		break;
+> +	case BTF_KIND_LOC_PARAM: {
+> +		struct btf_loc_param *p =3D btf_loc_param(t);
+> +		__u32 *v =3D (__u32 *)(p + 1);
+
+Nit: use ->values[i] field here?
+
+> +
+> +		fprintf(out, " size=3D%u flags=3D0x%x vlen=3D%u", t->size, p->flags, v=
+len);
+> +		for (i =3D 0; i < vlen; i++, v++) {
+> +			if (p->flags & BTF_LOC_PARAM_SIGNED)
+> +				fprintf(out, "\n\tvalue=3D%d", (__s32)*v);
+> +			else
+> +				fprintf(out, "\n\tvalue=3D%u", *v);
+> +		}
+> +		break;
+> +	}
+
+...
