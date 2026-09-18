@@ -1,218 +1,172 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43B613368BD;
-	Fri, 18 Sep 2026 08:07:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3966D547052
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 08:13:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789718840; cv=none; b=EBm6Eyos8CxWsVrn1M859wBQJeLugZrkbpvOCxfZc6Ow4QUDosDn+uCuANb8sydHd3WquHwvyW6uVVedDOkK03fm1lL3q1xzh78cmK7xdrwQFgK0rIN/7XuZd86fRASd8JeL7DGCKaBS/sT4PR6ndId1WNb885MFZiaSp+25P5w=
+	t=1789719194; cv=none; b=Of0Z3X5kCx3IWJeIcfkxAZdmAoshN051OK2mvKCbUMO8N/d3762DsHXYgw1/0g7nRRRZT2i9ZG//3prKiObYCDbCENmDi71AacXzqWa7kXdiFUpfQm7GfMoeOOpmLwGav8ELll7Iv74Dgqz5bNbYwrorgCO3dn9RGhRhLngiavI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789718840; c=relaxed/simple;
-	bh=o7tPmMLnWOySzuuH11+7UgSh8Zn51tGFq5NyRcH52AA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=FsUUvEL45DBkksb5SQ/ndy5wJZeOHySC1/+2qKe9bomBrrkfBt16Uz8Lzmj7RFq+LdqhqeDTpszQfCCOP96b2Gn9tLLlnchz+Wkt8jBFKPZcNtiVE/topmOItnFEN/JBjeAUstph9OO+2t6TS6SyIUf604/rmZlp6LFIWQ5pVno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EzLAjqFr; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789719194; c=relaxed/simple;
+	bh=ZAVjnp5cn2mNeSg8XAzvSxJ6gR2P/N8Y42tWR37hjNA=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=nMXt7vHfi7M85soHfTpeksWTV6hohjDFTijJvmzYbAasih9qLvADvKvKjO8COmntqfU5Yhy7/Br+NJ3O4KROTavCq8epzuhm3IprIUF0k0TEoeSzhUgnU9Dxh5IS63Sp5VtCf5BXn6eyI4kGOFNSw8Q4+v4/5zVJedAH1lDx4gY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c8mCKyJ4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EzLAjqFr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88C4A1F000FF;
-	Fri, 18 Sep 2026 08:07:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c8mCKyJ4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A91F11F000FF;
+	Fri, 18 Sep 2026 08:13:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789718838;
-	bh=CN62GKBYW4Gh6bEa4wTsqXz2IMYSV3OeaKs617jAh5o=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=EzLAjqFrG/HO3b+fLf1D9Lt53vKdK0OdUUVjk5YI3Lwzhadh+82qXHwYpuhwmQUCg
-	 eOXEM2M6FedgnfOSuonmYdMRy/5J7ClJ9gSZ2Lp+u74Me/uicrhxCgdBsWv9BwPwxu
-	 +YUYFNW3gjP3X5DMztp0Vuw3IIcTjj+viPvQKZz/HI1g2XQffgnEtZ08EbcVYBroRM
-	 uTDk0CsvRTpR+4zqn1AayHLHNSCjYPp3t9HH0kLoFBC578e7ZNcTnxZ/O8qqJxv3wT
-	 dTW1t1os0gil5fq9pnx5Q7gHqKbtNbp1WhYcclPslLeedj6HMicDWAf2A2p7UXOG57
-	 PMonpcJTaZ/Uw==
-Content-Type: multipart/mixed; boundary="===============2924590592151832210=="
+	s=k20260515; t=1789719192;
+	bh=vvXxmbyiHcCbGPsgm5yJCWb5aR5dDl3EaokkRFgo5nQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=c8mCKyJ4o8nHt1tlIMRrpskvyOZq4u93h9JpUFm6iK0H/F1OiY/wf9KLsRvxI6HUC
+	 CcJjQRN5HGhm+aLR4M2N2Vi69ooudUTev4pTW7pSKFA8xenbanZqcFI6P8Y84CfzjW
+	 A5hAfMiWfibPh5X7Y5sD0z3ozxtY//uVSh0R81+WXFjHSTQsHBRlm9BeQRvqoHJiiG
+	 v/ZkNx70KhKRmp2LsD/d2eryvnBIphbYBnqMKf0xcBglBfSW4a3V+xA4VzUI9TbiPI
+	 o6S5EUynEbmDEseOSi3SQawwUtMHIGDg1KO4Uv9uqmOvOtRVTDPtCAKX5fqVenWqSf
+	 avTMmf/ZrJhYA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add task work round
+ ownership race test
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yun Lu" <luyun_611@163.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260918080014.54012-3-luyun_611@163.com>
+References: <20260918080014.54012-1-luyun_611@163.com>
+ <20260918080014.54012-3-luyun_611@163.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 18 Sep 2026 08:13:12 +0000
+Message-Id: <20260918081312.A91F11F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <a96829b3ce33af67ccab9e1307714102daf95118dea89d95796ed440562acd12@mail.kernel.org>
-In-Reply-To: <44f7fcfafd5f33072dd2b9abc31aa9bf5eacd9bb.1789714023.git.zhuhui@kylinos.cn>
-References: <44f7fcfafd5f33072dd2b9abc31aa9bf5eacd9bb.1789714023.git.zhuhui@kylinos.cn>
-Subject: Re: [PATCH bpf-next v12 2/2] selftests/bpf: Add memcg async reclaim test
-From: bot+bpf-ci@kernel.org
-To: hui.zhu@linux.dev,roman.gushchin@linux.dev,inwardvessel@gmail.com,shakeel.butt@linux.dev,akpm@linux-foundation.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,david@kernel.org,baohua@kernel.org,geliang@kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-mm@kvack.org,linux-kselftest@vger.kernel.org
-Cc: zhuhui@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Fri, 18 Sep 2026 08:07:17 +0000 (UTC)
 
---===============2924590592151832210==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [Medium] bpf: spurious -ENOENT test failure due to unhandled early delete=
+ race
+- [Medium] bpf: missing memory barriers cause stale error state reads in ra=
+ce test
+- [Medium] bpf: TOCTOU race in task_work_race_wait_ready() causes false tes=
+t failures
+--
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
+commit 6a4b075b19b6a65e88e8c41b961bca6ee7533e52
+Author: Yun Lu <luyun@kylinos.cn>
+
+selftests/bpf: Add task work round ownership race test
+
+Exercise task-work scheduling, callback completion and map-value deletion
+on separate execution contexts.  Rotate through ctx reuse, deletion
+after the callback body, and deletion immediately before the scheduling
+kfunc.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/test_task_work.c b/to=
+ols/testing/selftests/bpf/prog_tests/test_task_work.c
+> index 774b31a5f6ca1..6d5e1e97aa3af 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/test_task_work.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/test_task_work.c
+[ ... ]
+> +static int task_work_race_wait_ready(struct task_work_race *skel, __u32 =
+seq)
+> +{
+> +	int i;
+> +
+> +	for (i =3D 0; i < 2000000 / 100; i++) {
+> +		__s64 value =3D 0;
+> +
+> +		if (!task_work_race_status(skel, RACE_READY_SEQ, &value) &&
+> +		    value =3D=3D seq)
+> +			return 0;
+> +		if (!task_work_race_status(skel, RACE_DONE_SEQ, &value) &&
+> +		    value =3D=3D seq)
+> +			return -EIO;
+
+[Severity: Medium]
+Could this sequential checking lead to a false negative?
+
+If the concurrent BPF program finishes execution exactly between these two
+syscalls, the thread will see RACE_READY_SEQ as false from the first read
+and RACE_DONE_SEQ as true from the second read, returning -EIO.=20
+
+If the BPF program had finished before the first check, it would have read
+RACE_READY_SEQ =3D=3D seq and correctly returned 0. Can this time-of-check =
+to
+time-of-use interleaving incorrectly penalize a fast BPF execution as an
+error?
+
+> +		usleep(100);
+> +	}
+> +	return -ETIMEDOUT;
+> +}
+[ ... ]
+> diff --git a/tools/testing/selftests/bpf/progs/task_work_race.c b/tools/t=
+esting/selftests/bpf/progs/task_work_race.c
 > new file mode 100644
-> index 0000000000000..179b64fb6de84
+> index 0000000000000..8d3f31fb075f8
 > --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
-
+> +++ b/tools/testing/selftests/bpf/progs/task_work_race.c
 [ ... ]
-
-> +	/*
-> +	 * Optional baseline for the benchmark numbers below: run the
-> +	 * same workload once without the BPF program, so the log can
-> +	 * report how much async reclaim improved the pressured cgroup.
-> +	 */
-> +	if (bench) {
-> +		err = run_high_low_workload(dir, &base_high_time,
-> +					    &base_low_time, READ_TIMES);
-> +		if (!ASSERT_OK(err, "run_high_low_workload baseline"))
-> +			goto out;
-> +
-> +		/*
-> +		 * The baseline left up to CG_LIMIT of page cache charged to the
-> +		 * high and low cgroups, and memcg charges outlive the workload
-> +		 * processes. Recreate the cgroups so that the instrumented run
-> +		 * below starts from the same cold state the baseline did;
-> +		 * otherwise the reported speedup compares a cold run against a
-> +		 * warm one.
-> +		 */
-> +		cleanup_cgroup_environment();
-
-Does this comment accurately describe why the cgroups are recreated?
-
-Looking at run_high_low_workload(), its cleanup block closes all four file
-descriptors and then unlinks all four temp files after both children have
-been reaped. With link count zero and no remaining open descriptors or
-mappings, the inodes are evicted, their page cache is truncated, and the
-memcg charges are released - so memory.current for the high and low
-cgroups is already back to near zero when control returns here.
-
-What actually survives the baseline is memory.stat, particularly the
-WORKINGSET_REFAULT_FILE counter that the BPF program samples via
-should_reclaim_cgroup(). Without recreating the cgroups, wq_prog_init()
-would start elem->prev_event at 0 while the counter is already large from
-the baseline, so the very first timer tick would see a huge delta and kick
-off a reclaim round unconditionally. Recreating the cgroups zeroes those
-counters.
-
-Could the comment be updated to describe that the recreation clears the
-WORKINGSET_REFAULT_FILE counters in memory.stat rather than page cache
-charges, which are already released when the files are unlinked?
-
+> +SEC("tracepoint/syscalls/sys_enter_getppid")
+> +int race_sched_work(void *ctx)
+> +{
 [ ... ]
-
-> +	reader_pid = spawn_keepalive_reader(data_fd);
-> +	if (!ASSERT_GT(reader_pid, 0, "fork keepalive reader"))
-> +		goto out;
-> +
-> +	/* Wait for reclaim rounds to reach the live target cgroup. */
-> +	for (i = 0; i < EVENT_POLL_ROUNDS && !seen.called; i++) {
-> +		n = ring_buffer__poll(rb, EVENT_POLL_TIMEOUT_MS);
-> +		if (!ASSERT_GE(n, 0, "ring_buffer__poll"))
-> +			goto out;
-> +
-> +		/*
-> +		 * The reader loops until killed, so finding it already gone
-> +		 * means the refaults the BPF program waits for never started.
-> +		 * Report its exit code rather than letting the assert below
-> +		 * blame the kernel for the full poll window.
-> +		 */
-> +		if (waitpid(reader_pid, &status, WNOHANG) == reader_pid) {
-> +			/* Reaped, so cleanup must not signal a reused PID. */
-> +			reader_pid = -1;
-> +			if (WIFEXITED(status))
-> +				PRINT_FAIL("keepalive reader exited early: %s",
-> +					   child_exit_str(WEXITSTATUS(status)));
-> +			else
-> +				PRINT_FAIL("keepalive reader died, status 0x%x",
-> +					   status);
-> +			goto out;
-> +		}
-> +	}
-> +	if (!ASSERT_GT(seen.called, 0, "reclaim events")) {
-> +		report_timer_failures(skel);
-> +		goto out;
+> +	key =3D 0;
+> +	work =3D bpf_map_lookup_elem(&hmap, &key);
+> +	if (!work) {
+> +		err =3D -ENOENT;
+> +		goto out_task;
 > +	}
 > +
-> +	remove_cgroup(CG_DYING_TARGET_DIR);
-> +
-> +	/* Let reclaim passes that were already in flight drain. */
-> +	usleep(DYING_SETTLE_US);
-> +
-> +	calls_before = skel->bss->reclaim_calls;
-> +
-> +	/*
-> +	 * Wait for a reclaim round to hit the removed cgroup. Only TARGET_GONE
-> +	 * ends the wait: an attempt that lands inside the rmdir window reports
-> +	 * SKIPPED_DYING first, and stopping there would miss the events that
-> +	 * follow it.
-> +	 */
-> +	for (i = 0; i < EVENT_POLL_ROUNDS && !seen.target_gone; i++) {
-> +		n = ring_buffer__poll(rb, EVENT_POLL_TIMEOUT_MS);
-> +		if (!ASSERT_GE(n, 0, "ring_buffer__poll"))
-> +			goto out;
+> +	work->seq =3D seq;
+> +	set_status(RACE_READY_SEQ, seq);
+> +	err =3D bpf_task_work_schedule_signal(task, &work->tw, &hmap,
+> +					    process_work);
+> +	if (err =3D=3D -EBUSY) {
+> +		bpf_task_release(task);
+> +		return 0;
 > +	}
 
-The second poll loop here drops the keepalive-reader liveness check that
-the first loop performs, although both loops depend on the reader equally.
+[Severity: Medium]
+When variant 2 is tested, userspace deliberately races to delete the map
+element early. If this early delete wins the race against the scheduling
+kfunc above, bpf_task_work_schedule_signal() returns -EBUSY.=20
 
-TARGET_GONE is only emitted when a reclaim round actually starts, and a
-round only starts when should_reclaim_cgroup() sees a fresh
-WORKINGSET_REFAULT_FILE delta - which only happens while the reader keeps
-refaulting. If the reader dies during this second window, refaults stop, no
-TARGET_GONE ever arrives, and the test reports "no reclaim round hit the
-removed cgroup (gone=0, dying=0)", blaming the kernel for a dead child.
+This causes the BPF program to return 0, triggering a retry. On the next
+tracepoint invocation, looking up the now-deleted element fails with -ENOEN=
+T.=20
 
-That is exactly the misattribution the first loop added a waitpid(WNOHANG)
-check to avoid. The reader's exit code is still available here, since a
-reader that dies during the second loop is left unreaped until the out:
-label. Should the second loop include the same liveness check to avoid
-misattributing a dead reader as a kernel issue?
+Because userspace expects a successful schedule (err =3D=3D 0) in
+task_work_race_check_done(), the test will fail when it observes -ENOENT.
+Should the test be updated to handle this expected -ENOENT outcome, or
+should the BPF program avoid retrying when the element is permanently
+deleted?
 
-> +	/*
-> +	 * TARGET_GONE is what the test can rely on: by the time rmdir has
-> +	 * returned, bpf_cgroup_from_id() has stopped resolving the target.
-> +	 * SKIPPED_DYING only happens if an attempt lands inside the rmdir
-> +	 * window, so it is reported here rather than asserted.
-> +	 */
-> +	if (!seen.target_gone) {
-> +		report_timer_failures(skel);
-> +		PRINT_FAIL("no reclaim round hit the removed cgroup (gone=%d, dying=%d)",
-> +			   seen.target_gone, seen.skipped_dying);
-> +		goto out;
-> +	}
 > +
-> +	/*
-> +	 * Reclaim must have stopped with the target. Both counters stay put for
-> +	 * the same reason: once rmdir has returned, bpf_cgroup_from_id() fails,
-> +	 * so every attempt takes the TARGET_GONE path before it can reach
-> +	 * reclaim_calls++. This therefore checks that reclaim really stops, not
-> +	 * that cgroup_is_dying() works -- see that function in the BPF program
-> +	 * for why the dying window cannot be hit reliably from userspace.
-> +	 *
-> +	 * reclaimed_bytes is compared against 0 rather than against its
-> +	 * pre-removal value: the target is empty for the whole test, so
-> +	 * bpf_proactive_reclaim() has nothing to reclaim and must have returned
-> +	 * 0 on every call, before and after the removal alike. An "unchanged"
-> +	 * comparison would be 0 == 0 and could never fail.
-> +	 */
+> +out_task:
+> +	bpf_task_release(task);
+> +out_done:
+> +	set_status(RACE_SCHED_ERR, err);
+> +	set_status(RACE_DONE_SEQ, seq);
 
-Does the reclaimed_bytes explanation make sense? The comment argues that
-comparing reclaimed_bytes against a pre-removal snapshot "would be 0 == 0
-and could never fail", but by its own premise that snapshot is 0, so the
-snapshot comparison is literally the assertion that was written:
-ASSERT_EQ(skel->bss->reclaimed_bytes, 0ULL). Both forms read
-reclaimed_bytes after the removal window and both fail exactly when a
-post-removal reclaim adds bytes; neither is vacuous and neither is stronger
-than the other.
+[Severity: Medium]
+Does this code sequence need a write memory barrier?
 
-As written the comment tells a reader that one of two identical checks
-cannot fail, which is misleading. Could it just state that
-bpf_proactive_reclaim() returns 0 on the empty target throughout the test,
-without the comparison that makes them sound different?
+On weakly-ordered architectures like ARM64, the CPU can reorder these
+independent stores because the BPF JIT does not emit barrier instructions
+for array map stores.
 
+If userspace polls RACE_DONE_SEQ and observes the update before
+RACE_SCHED_ERR is globally visible, it might read a stale error code=20
+(e.g., 0 instead of the actual error) and potentially mask failures.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> +	return 0;
+> +}
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35318390791
---===============2924590592151832210==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260918080014.5401=
+2-1-luyun_611@163.com?part=3D2
