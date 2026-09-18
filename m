@@ -1,225 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715C33BFAEB;
-	Fri, 18 Sep 2026 02:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5102FD1B3;
+	Fri, 18 Sep 2026 02:37:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789698585; cv=none; b=VS6oDG5emjTTizhcSowoU7yTTLss1lm6CYqqU+KaFVzGQs4TeeUJNm+V1ckvpLZAhMsHpSvWYwH0AR52W/qMrslsdl/EoxOTCKuOpSGbMah1aIjuB13xMsvau8zBdzyfNhmwoeZuWZFYM4SdFCkBnsvpEU1fuiOE//H+5dv3OEw=
+	t=1789699051; cv=none; b=JtOXTAuuNBD6p/R1t7xHJE+xFdMUcus2rEy6uSHpdFTmIoUOwtO2eibu9JwRn/nQMYt2VYEoRv+KqTP/x055ZoYfVbCxNzEsiAOzEcEQz4RG/rTiRQMpteBkM6xsdc/W/MWwEik0/VnjVWqqst0SEYhAtJgtyHNeYpiMVaqAHSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789698585; c=relaxed/simple;
-	bh=zr6RZjqy8zkfck/Pdh/SCIhM1e3d18vR1boWvALaMiA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ALesK0gG8O1NK9BtxfC4gme2ctV6XKet6bbZz17U53CPwfHelV3jowQoLgNLimNDyuccrNghTJ12y8yIwBMxj60AsJLU3D2Y6Q/bcEPWEp2pRzSOwzeswMZ4f8vi83Npdafyy5dfbKeFFcQ3BlltX8LQ66uoKPZzcca9JdZoxeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ITubRvvc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789699051; c=relaxed/simple;
+	bh=26ofpiSnpoFPS7g88SGTCGreP7uD/SDa/M8h1GybdHg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KhfC7p12et+sX3CDZpaDELwiEgziV3pifjP1nBRKvxZPBsIz9CPOBEtEUQalHFOvTiRDYsIfa1We+JRQ7OrXUvl/DIS2SJpWCCTK1XvwC4J5+s2QTULwWNvfMxhRRIrjKTE1JKgRgmem+W6pAclovF6yWvOlVLCi7KPivUSqNWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=lEGI8FWF; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ITubRvvc"
-Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id A94C41F000FF;
-	Fri, 18 Sep 2026 02:29:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789698573;
-	bh=g9YcUG3szeoayvwUqM/cv8sctvahn3Ihcoi9jbjGOnk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ITubRvvc3F/vvkNNV3easTtv4kW2t5sTGcQTrFimYGHRTwrI36hleEBj04p+G4rD+
-	 NamNYIZiDAoFX0JrbXdOJ6jo1MW4JQvtJnZely7Mw/DeVKHz4e/H85J6KnkgRoEc5I
-	 cLgsJVPAcMhvkwd6xKrLPl8G7InF+UXtNbbg8ngK7txU/xCUsC+I9gO05MwuE3doN2
-	 /gdrMcCm4IwXBvGjSc4UnL+t92rx9lkE502wmrjLTerz13U0wjK5mG4QN8XgBagAGv
-	 EMbNmlXejAvA43Xb6vzKXOfltB7g1Z9/tWbDe2iu9Z8WZCKSMHvXSmuAd1wqPLTC/4
-	 Z4KrVoDpwIZWQ==
-Date: Fri, 18 Sep 2026 05:29:29 +0300
-From: Jarkko Sakkinen <jarkko@kernel.org>
-To: Andrew Halaney <andrew@amutable.com>
-Cc: Alasdair Kergon <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	David Howells <dhowells@redhat.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>, dm-devel@lists.linux.dev,
-	linux-kernel@vger.kernel.org, keyrings@vger.kernel.org,
-	linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
-	fsverity@lists.linux.dev, linux-doc@vger.kernel.org,
-	"Christian Brauner (Amutable)" <brauner@kernel.org>
-Subject: Re: [PATCH 1/3] keys: add KEY_SPEC_DM_VERITY_KEYRING
-Message-ID: <aqyiCavj3xeNqyAo@kernel.org>
-References: <20260914-ajhalaney-dmverity-key-identifier-v1-0-01922dc1366a@amutable.com>
- <20260914-ajhalaney-dmverity-key-identifier-v1-1-01922dc1366a@amutable.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="lEGI8FWF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Message-ID:Date:MIME-Version:Subject:To:From:
+	Content-Type; bh=26ofpiSnpoFPS7g88SGTCGreP7uD/SDa/M8h1GybdHg=;
+	b=lEGI8FWFiAsVrntGzGKSFM1edV/P28f/Rp5N+mjEz70N7sfgkjqR3wK08/d+ZL
+	j1XgxN/TqUIgarlL/W69TPQeyvf7+SoVzKCFrX5SHohA/lTX+XMZLKkMlIkUxxlJ
+	DydL/poqlcuwCr3HVEz89aD8WZWvSjmE9euqBnN8W6o6k=
+Message-ID: <3efb7a74-7b12-4269-9166-50835e130bdc@163.com>
+Date: Fri, 18 Sep 2026 10:36:23 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260914-ajhalaney-dmverity-key-identifier-v1-1-01922dc1366a@amutable.com>
-
-On Mon, Sep 14, 2026 at 11:41:42AM -0500, Andrew Halaney wrote:
-> The .dm-verity keyring is not linked into any process keyring, so
-> request_key() and KEYCTL_SEARCH cannot find it. Userspace has to scrape
-> /proc/keys for the serial to use.
-> 
-> That's not great, one could put in a bogus description containing
-> a newline to confuse userspace further. For example, thanks to AI
-> models, which I run as root but you could show off as any old user:
-> 
->     # DESC=$'.dm-verity: 1\n0badf00d I--Q---     1 perm 082f0000     0     0 keyring   .dm-verity'
->     # k=$(echo -n "1234567" | keyctl padd user "$DESC" @s)
->     # keyctl setperm "$k" 0x3f010001
-> 
->     # cat /proc/keys | grep dm-verity
->     10402023 I------     2 perm 082f0000     0     0 keyring   .dm-verity: empty
->     12e0bee6 I--Q---     1 perm 3f010001     0     0 user      .dm-verity: 1
->     0badf00d I--Q---     1 perm 082f0000     0     0 keyring   .dm-verity: 7
-> 
-> 0x0badf00d is not a keyring, it is the text inside our user's key
-> description. Telling the two apart needs a KEYCTL_DESCRIBE per row
-> which is annoying to do. i.e.:
-> 
->     # keyctl rdescribe 0x10402023
->     keyring;0;0;082f0000;.dm-verity
->     # keyctl rdescribe 0x0badf00d
->     keyctl_describe: Required key not available
-> 
-> Let's just give it a well known identifier, i.e.:
-> 
->     # keyctl rdescribe -10
->     keyring;0;0;082f0000;.dm-verity
-> 
-> This is exactly what
-> commit 264d8fd2794f ("bpf, keys: Add a bpf keyring for program signature validation")
-> did, and was the inspiration for this commit minus the spinlock bits
-> required due to dm-verity being a module.
-
-This is great for discussion but what we want for the commit message
-is just motivation and resolution.
-
-I don't think we need all this just to say that /proc/keys in a racy
-query mechanism for production, which is an issue for dm-verity, given
-that nothing else is available.
-
-And secondly special keys are meant for implicit keyrings so isn't
-that all there's to it?
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf 1/2] selftests/bpf: Fix timing-dependent assertions in
+ task work stress test
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, andrii@kernel.org,
+ eddyz87@gmail.com, ihor.solodrai@linux.dev, daniel@iogearbox.net,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ shuah@kernel.org
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260917080839.462038-1-luyun_611@163.com>
+ <20260917080839.462038-2-luyun_611@163.com>
+ <DLHO3FH8LYMR.33VPRQKV0T0TU@gmail.com>
+Content-Language: en-US
+From: luyun <luyun_611@163.com>
+In-Reply-To: <DLHO3FH8LYMR.33VPRQKV0T0TU@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wCn8Quoo6xqBX16BQ--.8162S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tr17Wr1UtFW5CFy5Xw43Wrg_yoW8CrWxpF
+	Z0qay7tw4UGa42yr1qv3WrXa45uw4fta1UKrZ8KFy3A3s8CFsFkrWYya4F9rZ8Aw1rXw4S
+	9w4Yqw17C3yDKaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U5sqAUUUUU=
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbCwwnYp2qso6mjSwAA3R
 
 
-> 
-> Suggested-by: Christian Brauner (Amutable) <brauner@kernel.org>
-> Signed-off-by: Andrew Halaney <andrew@amutable.com>
-> ---
->  drivers/md/dm-verity-verify-sig.c |  3 +++
->  include/linux/key.h               |  1 +
->  include/uapi/linux/keyctl.h       |  1 +
->  security/keys/process_keys.c      | 33 +++++++++++++++++++++++++++++++++
->  4 files changed, 38 insertions(+)
-> 
-> diff --git a/drivers/md/dm-verity-verify-sig.c b/drivers/md/dm-verity-verify-sig.c
-> index b2b55c41e2cb..da509dcdd7e5 100644
-> --- a/drivers/md/dm-verity-verify-sig.c
-> +++ b/drivers/md/dm-verity-verify-sig.c
-> @@ -189,11 +189,14 @@ int __init dm_verity_verify_sig_init(void)
->  	    keyring_restrict(make_key_ref(dm_verity_keyring, true), NULL, NULL))
->  		panic("dm-verity can't seal keyring\n");
->  
-> +	key_register_dm_verity_keyring(dm_verity_keyring);
-> +
->  	return 0;
->  }
->  
->  void dm_verity_verify_sig_exit(void)
->  {
-> +	key_register_dm_verity_keyring(NULL);
->  	key_revoke(dm_verity_keyring);
->  	key_put(dm_verity_keyring);
->  }
-> diff --git a/include/linux/key.h b/include/linux/key.h
-> index bd10fe45819d..ae8d3314fd93 100644
-> --- a/include/linux/key.h
-> +++ b/include/linux/key.h
-> @@ -441,6 +441,7 @@ extern int keyring_restrict(key_ref_t keyring, const char *type,
->  			    const char *restriction);
->  
->  extern void key_register_bpf_keyring(struct key *keyring);
-> +extern void key_register_dm_verity_keyring(struct key *keyring);
->  
->  extern struct key *key_lookup(key_serial_t id);
->  
-> diff --git a/include/uapi/linux/keyctl.h b/include/uapi/linux/keyctl.h
-> index fa85b9760391..75923941f1b3 100644
-> --- a/include/uapi/linux/keyctl.h
-> +++ b/include/uapi/linux/keyctl.h
-> @@ -25,6 +25,7 @@
->  #define KEY_SPEC_REQKEY_AUTH_KEY	-7	/* - key ID for assumed request_key auth key */
->  #define KEY_SPEC_REQUESTOR_KEYRING	-8	/* - key ID for request_key() dest keyring */
->  #define KEY_SPEC_BPF_KEYRING		-9	/* - key ID for the BPF-specific keyring */
-> +#define KEY_SPEC_DM_VERITY_KEYRING	-10	/* - key ID for the .dm-verity keyring */
->  
->  /* request-key default keyrings */
->  #define KEY_REQKEY_DEFL_NO_CHANGE		-1
-> diff --git a/security/keys/process_keys.c b/security/keys/process_keys.c
-> index 44358388e395..dba3df41638b 100644
-> --- a/security/keys/process_keys.c
-> +++ b/security/keys/process_keys.c
-> @@ -25,6 +25,10 @@ static DEFINE_MUTEX(key_session_mutex);
->  /* BPF keyring reachable through KEY_SPEC_BPF_KEYRING */
->  static struct key *bpf_keyring __ro_after_init;
->  
-> +/* dm-verity keyring reachable through KEY_SPEC_DM_VERITY_KEYRING */
-> +static struct key *dm_verity_keyring;
-> +static DEFINE_SPINLOCK(dm_verity_keyring_lock);
-> +
->  /* The root user's tracking struct */
->  struct key_user root_key_user = {
->  	.usage		= REFCOUNT_INIT(3),
-> @@ -607,6 +611,24 @@ void key_register_bpf_keyring(struct key *keyring)
->  	bpf_keyring = keyring;
->  }
->  
-> +/**
-> + * key_register_dm_verity_keyring - Publish the keyring for KEY_SPEC_DM_VERITY_KEYRING
-> + * @keyring: The keyring to publish, or NULL to withdraw it
-> + *
-> + * Make @keyring reachable by userspace through the KEY_SPEC_DM_VERITY_KEYRING
-> + * special key ID, so that provisioning it does not require scraping its
-> + * serial out of /proc/keys first. dm-verity can be unloaded as a module
-> + * and the keyring deregistered, as such serialize access with
-> + * dm_verity_keyring_lock.
-> + */
-> +void key_register_dm_verity_keyring(struct key *keyring)
-> +{
-> +	spin_lock(&dm_verity_keyring_lock);
-> +	dm_verity_keyring = keyring;
-> +	spin_unlock(&dm_verity_keyring_lock);
-> +}
-> +EXPORT_SYMBOL_GPL(key_register_dm_verity_keyring);
-> +
->  /*
->   * Look up a key ID given us by userspace with a given permissions mask to get
->   * the key it refers to.
-> @@ -766,6 +788,17 @@ key_ref_t lookup_user_key(key_serial_t id, unsigned long lflags,
->  		key_ref = make_key_ref(key, 0);
->  		break;
->  
-> +	case KEY_SPEC_DM_VERITY_KEYRING:
-> +		spin_lock(&dm_verity_keyring_lock);
-> +		key = dm_verity_keyring;
-> +		if (key)
-> +			__key_get(key);
-> +		spin_unlock(&dm_verity_keyring_lock);
-> +		if (!key)
-> +			goto error;
-> +		key_ref = make_key_ref(key, 0);
-> +		break;
-> +
->  	default:
->  		key_ref = ERR_PTR(-EINVAL);
->  		if (id < 1)
-> 
-> -- 
-> 2.55.0
-> 
+在 2026/9/17 22:39, Alexei Starovoitov 写道:
+> On Thu, Sep 17, 2026 at 04:08 PM Yun Lu <luyun_611@163.com> wrote:
+>> From: Yun Lu <luyun@kylinos.cn>
+>>
+>> task_work_run() assumes every stress run observes both scheduler
+>> contention and, when the delete thread is enabled, cancellation of at
+>> least one pending callback.
+>>
+>> Neither outcome is guaranteed. Contention is observed only when another
+>> scheduler selects the same one of 128 map values while its task work is
+>> outstanding. A valid run can therefore have no scheduling errors. This
+>> was reproduced with a single scheduler: more than one million callbacks
+>> were scheduled and completed while schedule_error remained zero.
+> So it was "reproduced" by changing nthreads from 16 to 1 ?
+> That's not a fix. With 16 threads hammering 128 entries for a second
+> schedule_error > 0 and callback_success < callback_scheduled are the
+> point of the test. They check that the -EBUSY path in
+> bpf_task_work_acquire_ctx() and the cancel path in
+> bpf_task_work_cancel_and_free() were actual
+> ly exercised. Without them
+> the stress test only checks that nothing crashed.
+> If the unmodified test fails somewhere, show the log.
 
-BR, Jarkko
+Hi, Alexei
+
+
+Thanks for the clarification. You are right that the zero-contention
+result was obtained only after locally changing nthreads from 16 to 1,
+so it does not reproduce a failure of the unmodified stress test.
+
+I reran the unmodified test with nthreads = 16 for 100 iterations in
+the default environment, 100 iterations with all threads restricted to
+one CPU, and 100 iterations in a single-vCPU QEMU guest. All runs
+passed, so I do not have a failure log for the upstream test
+configuration.
+
+
+>
+> Patch 2 is fine on its own. Send it alone against bpf-next.
+
+
+OK, I will drop patch 1 and resend patch 2 alone against bpf-next.
+
+
+Thanks,
+
+Yun Lu
+
+
+>
+> pw-bot: cr
+
