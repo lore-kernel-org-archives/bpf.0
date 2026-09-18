@@ -1,118 +1,107 @@
-Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFC9C38DC56
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 09:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.164.118
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF943F660F
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 09:42:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789724271; cv=none; b=YTNoOdISDcc7BCeGEBMD+DoTM8lyqsoM75hJiSS5O4m6asBrRdzfCHaB0I+vaiQSbQeV7RWRaMvDNokQgMEQLwdSRpE38nUAjvRiQi0wrj/iqpc4RxP+fBXFwjhy6NjdI0nMQXXJTplfUkHjD8P/v3xl3ByDbj/kjNVTwqmmWKM=
+	t=1789724539; cv=none; b=niqP11Fpno8dHtc0hGDe/NjwI15Ge82BwvW8oFEKMLMuwgCdPrq6mxQPA077xA6kYH6lRN4TZSMMnduPtJrE0iSLd5C/e4PMmjBPSiOFGoe4eyIGat507D9Bn4A6mvk6U40/QwfYcWMACq5fdISU6Lgx79d/ppOK8LccLo7UXWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789724271; c=relaxed/simple;
-	bh=WydNLni8HoKtKLfphcI8NZ1uZMwj4Wx+5ZDx3C8BA0U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kJ0Z0Sbi/jwr3HK6TFkFEJtJqOkcqffYMm7NQE3+KgKIDxlf+P9TfyBBYn1zlRu69IxOjz5s5kO0Xv6wvNnB3amlueMdGa2iCNZ0c7h/OTnTDCZiaYhy8TM95i+JlxuGF9vuesdqpF/lcTiLkzi4+D6m5avgzldi4ERmKtyhKdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=pass smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=162.243.164.118
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [10.183.162.106])
-	by mtasvr (Coremail) with SMTP id _____wDnoj1PBq1qa5whAQ--.13728S3;
-	Fri, 18 Sep 2026 17:37:20 +0800 (CST)
-Received: from [10.183.162.106] (unknown [10.183.162.106])
-	by mail-app1 (Coremail) with SMTP id yy_KCgCHRJxPBq1qYeaOBA--.7169S3;
-	Fri, 18 Sep 2026 17:37:19 +0800 (CST)
-Message-ID: <811e59e4-df78-4cce-a504-6c089b68e29c@zju.edu.cn>
-Date: Fri, 18 Sep 2026 17:37:18 +0800
+	s=arc-20240116; t=1789724539; c=relaxed/simple;
+	bh=6FvgzDHZpkH+wHBQ6M+9btxDzY1Bu97pwScmuQYkvX0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NbYsr8Eh+ysPTAg4YSjdI+XDlLqoj1/0mvx5xfUJ27XCjZHxBNYjXKZTL3Vw8muoWM8+A/NXfytV/gnU354ePSTLtAYq3Dj0+eMUb0Yjjg87j6oGCLNcN9T1HkmE8K4rJ3/Md2H1NeIqz+fZqSYZ28CPMjpFa2vjXyifjcuBKM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m7MGTXu5; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m7MGTXu5"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912e4ad9so3264845e9.2
+        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 02:42:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789724536; x=1790329336; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=wMNR5Izxj2LfNTpQ3gSEkUZSgr2NTSecsT1VokLfdOY=;
+        b=m7MGTXu5rtbm/0kz2hA6ufJWEmMtZwME9aOCAc4cjnlW/DS9ItPqwVoLC3206DtKWT
+         IFhO/rJG4n1m6M04E0BrBKaWgN0saQaoqQ6YxiBynYjtEhsXkEllxmwk+fYiTpqxSmVq
+         T5eGF5gU+wdiTG2E+M53zisY3xKsbLyYFIlBBM8rc6lZl38AU7r3Dm3f2leZSomfA1YW
+         gMD/Df5GYcSQDNyKDKaTcnGA6IasrEyrRvwdYT6ZgLCvygvs/ZmMKedQVUalfMy77pGp
+         D5zRbBMP91jwKrDk0iK/vqkDWzpHU+h8EPZ3MF96BVclq8OPs65rgl/U+Bw4HIVexzoo
+         G+wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789724536; x=1790329336;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=wMNR5Izxj2LfNTpQ3gSEkUZSgr2NTSecsT1VokLfdOY=;
+        b=Xe9HuNLTTU4DplwhyN0HSqOU6cKf2zzAvqQ/J/AV+eWM3bOcF53qUm/tZaDWOX6bpn
+         1RvMGrw2K3zDrznjNCPkT/DI5/VmlxStbXBsWaB1xbQVphuUP/SoSq0dc5S9J26IIqxQ
+         LwrhyKF5I1UKRDlL70GDryUrs8+O81MOr9fu29HWtXU7Mgbmek9cKbX+B8yLzlacP+7y
+         Tbt9oUJFijkwAMtR3FH2RLG5liiOv3Sy7QHz27bBLuiTAIxOYgaPBcm0YyR04fs3YLGN
+         /seC4EXVoR/s6D1x4w+5qVKgwpuDk1NNTt/ko4wfMtPj3BDnbNdmhERXShvxSB1e5wDr
+         HJ8A==
+X-Gm-Message-State: AFuF++nE6P0ZICW8o5XqWxVoHzhW/wdSmZDWUxgvyPVlUHvJA0bCaVSe
+	wq49Ai55/CJNPeueD9MGSFiDGsPVerztEBE4g3MZd4HM2RHQGs8copUt
+X-Gm-Gg: AYBFou1jVCd3mwr69jt+bjJkoKY7KW9dYRNQB1qKzAJc0WbPF8pSSM1YB3FtB4k+79Z
+	pC5e56J1YoB+qJw3JCLPo95cQ5yr04iStTOo1hRjvw26gcOaFUluoj07Iv3IBWIzE9/2kXo/6kE
+	GHH+xlqnFM3O5gh/4qM2ckcc704jo6j7vzllumwknZTo6orzp8xjuCX955u2Mq7h+FIAH47+3c1
+	G9vTiCbTu/GdAdampl4V0trJU2zvo6a2T8RujdLGFkgCxFkubGw0MHuvaXXPrFrApjaTBVRV7CQ
+	vC0+Tv6O1/lpUC4b7FdBVg+EJubrSce1t39u0c5uoCoT7o5YUhwbDgCuFaAkeBbbOiuPp//fBFm
+	djoQO21WOIn/We2AprpDoIkNLW5PVjaDYWXhsnbcFG876kUwXM4c8qbbJBoAcW9kcJGZQYwVScn
+	ERX3BnNMS/ny8+tr+F8RfHyAirRVP04KQ9UwykS6+V4kNFYHvbYvZV1jK5kUHoG4DkJDpDE3ebT
+	ZP6L9sU2VfXYU4WowF0JfVXqPLDjfITR4K6
+X-Received: by 2002:a05:600c:1e24:b0:49c:fc6e:a3d2 with SMTP id 5b1f17b1804b1-49fc574f74bmr22304835e9.17.1789724536597;
+        Fri, 18 Sep 2026 02:42:16 -0700 (PDT)
+Received: from gmail.com (deskosmtp.auranext.com. [195.134.167.217])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fcab7e333sm19179515e9.7.2026.09.18.02.42.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Sep 2026 02:42:16 -0700 (PDT)
+Date: Fri, 18 Sep 2026 11:42:13 +0200
+From: Mahe Tardy <mahe.tardy@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
+	daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
+	kernel-team@meta.com
+Subject: Re: [PATCH bpf-next v2 19/23] bpf: Consolidate function call
+ pkt_access validation
+Message-ID: <aq0Hdd0M_6sq2dEC@gmail.com>
+References: <20260911220415.1396439-1-ameryhung@gmail.com>
+ <20260911220415.1396439-20-ameryhung@gmail.com>
+ <aqkhifLvyAhw66jg@gmail.com>
+ <CAMB2axNCx-+HJVuOmS9hXAidXc0yQgv_+zAfzSkNdDXOZtFP5Q@mail.gmail.com>
+ <CAMB2axPL9c+XAVP0M5ED5UNgt9CDyi2POXkUPHvikt7fPWmovA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 0/8] bpf: Add UHMUL and SHMUL instructions
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org,
- eddyz87@gmail.com
-Cc: daniel@iogearbox.net, john.fastabend@gmail.com, andrii@kernel.org,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- tangyazhou518@outlook.com, shenghaoyuan0928@163.com, ziye@zju.edu.cn
-References: <20260917041712.1860722-1-tangyazhou@zju.edu.cn>
- <DLHSD07GRG0W.16CFRV44ZE1DD@gmail.com>
-Content-Language: en-US
-From: Yazhou Tang <tangyazhou@zju.edu.cn>
-In-Reply-To: <DLHSD07GRG0W.16CFRV44ZE1DD@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:yy_KCgCHRJxPBq1qYeaOBA--.7169S3
-X-CM-SenderInfo: qssvjiasrsq6lmxovvfxof0/1tbiBgQSCmqsQposUgAAs6
-X-CM-DELIVERINFO: =?B?LdSUZAXKKxbFmtjJiESix3B1w3vD7IpoGYuur0o+r46DyAi5OfOO+T4vrW4FyUBIyu
-	9q9Ne4ztDGUKJpDiizdoftpEvq4yyAXyQRPEAOHM6yl9jOlsmYk6Af2oobIgdNboutwo41
-	W0pfb0Rc1EKSUPbUAjcE6yoL907Svs67svpDWc8bSL5KKFMoY371lOym77Dj1Q==
-X-Coremail-Antispam: 1Uk129KBj93XoW7Cw47Xr4UCr1kWr4DGr47WrX_yoW8CF4fpr
-	45CF9akw4vgry8Zry0qa1xWF1Yvr48Way3CF1DWrWft3ZIqryxZr4Sg34ruFy3Zr40gay0
-	qFWY9rnYk3s5ZagCm3ZEXasCq-sJn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8c
-	xan2IY04v7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8C
-	rVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXw
-	CIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x02
-	67AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr
-	0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IUbPE
-	f5UUUUU==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMB2axPL9c+XAVP0M5ED5UNgt9CDyi2POXkUPHvikt7fPWmovA@mail.gmail.com>
 
+On Wed, Sep 16, 2026 at 12:48:01PM -0700, Amery Hung wrote:
+> Hi, one question I have: Even before my patch, the verifier only
+> allowed one byte of access based on arg btf (char *data_start here).
+> What do you do with that single byte of packet data?
 
+Hey, we were just using it to compute offsets and sizes within that
+parsing function. That's why it was not a big change for us to fix this
+anyway.
 
-On 9/18/26 02:00, Alexei Starovoitov wrote:
-> On Thu, Sep 17, 2026 at 12:17 PM Yazhou Tang <tangyazhou@zju.edu.cn> wrote:
->> Patch 8/8 uses raw bytecode for UHMUL and SHMUL because LLVM support has
->> not been merged yet. Once it is available, the raw encodings can be
->> replaced with the uh*= and sh*= mnemonics. A draft LLVM implementation
->> is available at:
->>
->>    https://github.com/ADSWT518/llvm-project/tree/bpf-hmul-insn
->>
->> We plan to finalize and submit it as an LLVM pull request after the
->> kernel-side ISA changes are merged.
-> 
-> Pls send the LLVM PR now. It needs to be reviewed together
-> with kernel side.
-> 
-> I think it enables ISD::MULHU/MULHS legal under -mcpu=v4.
-> Does it mean that existing programs might generate new instructions
-> and stop loading on current kernels?
-> If so, we'd have to introduce -mcpu=v5 for that
-> and extra flag like we did for other insns.
-
-Thanks for pointing this out. Enabling HMUL under -mcpu=v4
-would change code generation for existing programs and
-could make them fail to load on older kernels.
-
-I'll move HMUL to -mcpu=v5, keep a separate disable flag,
-and send the LLVM PR for joint review with the kernel series.
+Thanks for the responses on this btw!
 
 > 
->>   arch/arm64/include/asm/insn.h                 |   4 +
->>   arch/arm64/lib/insn.c                         |   6 +
->>   arch/arm64/net/bpf_jit.h
->           |   6 +
->>   arch/arm64/net/bpf_jit_comp.c                 |  15 +-
->>   arch/loongarch/net/bpf_jit.c                  |   3 +
->>   arch/mips/net/bpf_jit_comp32.c                |   3 +
->>   arch/mips/net/bpf_jit_comp64.c                |   3 +
->>   arch/parisc/net/bpf_jit_comp32.c              |   3 +
->>   arch/parisc/net/bpf_jit_comp64.c              |   3 +
->>   arch/powerpc/net/bpf_jit_comp32.c             |   3 +
->>   arch/powerpc/net/bpf_jit_comp64.c             |   3 +
->>   arch/riscv/net/bpf_jit.h                      |   5 +
->>   arch/riscv/net/bpf_jit_comp32.c               |   3 +
->>   arch/riscv/net/bpf_jit_comp64.c               |  18 +-
+>         __attribute__((noinline)) int
+>         parse_something(struct __sk_buff *skb, __u16 off, char *data_start, ...)
 > 
-> Pls cc arm64, riscv or other arch JIT maintainers on respin.
-> We need acks from them.
+> On Tue, Sep 15, 2026 at 3:32 PM Amery Hung <ameryhung@gmail.com> wrote:
+> >
+> > On Tue, Sep 15, 2026 at 3:44 AM Mahe Tardy <mahe.tardy@gmail.com> wrote:
+> > >
 
-Ok, I'll cc them on respin.
-
+[...]
