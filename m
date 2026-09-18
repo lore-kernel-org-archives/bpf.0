@@ -1,33 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F473B1022;
-	Fri, 18 Sep 2026 07:57:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013134A1E1B;
+	Fri, 18 Sep 2026 07:57:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789718270; cv=none; b=FJpHOvWjs3m+fx003Ejgr/eccjlRUK4XXpBib9NOgsaPX0xbvk8404Ai4h9prb2UTrSbnDQzaTIcoprYOdsi+lVZVlNmEbKKPFiVjRGCP/MiHr0+pVQLBwR30sodyKGrG0taC5XWSO158arEy+5OOqKH7h5Ng0YRXfktLKCfptY=
+	t=1789718274; cv=none; b=SlEfXrkOVGseipLQJLhTVJGvvijHl+t5KNrr+TiSMp1BPXAgbGnEmo/MLxKiK7CztUwF1WxTNbIDu2APYEyk4gFxIsdfQ9V9K2sDahHPnmGeJZ1029i72rHm6cbvaTLBNSqC4CPLbpxEHuqbZWCB3plw/vIePjuPdkmSt0Iub0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789718270; c=relaxed/simple;
-	bh=MMR69YaO+zXaquHTr37sbAjRaYia7zGEOXc1PyzZ+wo=;
+	s=arc-20240116; t=1789718274; c=relaxed/simple;
+	bh=PV88ity/1n7Vxg7eiSuNXK7/f2saivIiOn4rDXBOALc=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=S8J98f4k/Sv2wSTHtVDQW54YyJy+q5m7KXYjdXiCCNmYobfSRD2yvBPz5PO18YeTbHx7M2PsPZ15UiFt2mMwA+TFJ75egjKA8h2Prv3OxvLC9gG0vik7Ob+xo+4sD9Sde7mWR+xhzrgy5M29vbADuHQd5nAIsumCjKodNtw1DH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=asjycebj; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=AhEKBZeKcOqT3viIKl/nC8rU8WiHC3O4rbJKZIcqr3lPNGU8Y+hOHi4L+VtQm2LVzcjVct1VYOGRiidsEV7vocEct+uBwr/m6z4Zwu1OjHRt6/Ohf4tCl2NMjlBENUe7ngu1QrnokBfh9YEk9Sm1zZGu2X9nSaKndnzhRhA+w4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MX8j097C; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="asjycebj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 265921F00893;
-	Fri, 18 Sep 2026 07:57:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MX8j097C"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA1341F000FF;
+	Fri, 18 Sep 2026 07:57:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789718264;
-	bh=uRYFR7VhMJSe1YZXN1ukco9BvC0N+S2oQBVZKcntiJ0=;
+	s=k20260515; t=1789718268;
+	bh=CTV5bKK2QoBsVLHWhh1OkjDqqs6Ks2Xgx8l98FIbbg0=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=asjycebjct0RJOshiCdehBzz/sfwdYFhMy0uO2Joc/ZmXvxcM2Sj6ida4k0e5/q0y
-	 hCZy2FzpM+Q4yBmq9hU3QAx6ZBliYHCm/jOHjpV5Uld1SCyhkvL3zs9+cM7lFYmBMw
-	 OouUNAfHuhTAzLx1jGqyE5Qv/9bacpvFydO5j9cRFOjAAoIiCA30/ERI2pDPWWnyxn
-	 su4VkGHrIKjXFMad5LawaZJl7O/bw6zwJIAffxrfTgVEnJe6/nWWsmT2mWF/FSr1u9
-	 AimBpJLqgZivVJCeDK/bbK+4PcxUh9Ohc66qsJxlU2Zn+HaXEP3YzRYFwd/RhTil27
-	 D9KFDoPXwscuw==
-Subject: Re: [PATCH net-next v7 01/12] gve: add struct gve_device_info to hold
- device properties
+	b=MX8j097C7EmEn414NaLXVLa+0hpMiVI+Zm6yorsRg/NJAGWPnfz1p/gidMiABeGK5
+	 8BS0wMwIJsBnKfzMp2VZlQM3nm/zOm+85BfFNgTWdqrd4Ti1q+fTnVuWAdImBA/kVm
+	 zuTyoCF0L2fE+8QnD//jNM1qNvp1052VRnqgRAeffn/8fp+LfRfyDkJA3EoCrHS0i3
+	 t85l/r5lgvMMVHDy+pCJUFjugmu0jzuHhdftwTpvRk6mYwg05rVgFfHHVmoeg0UZTI
+	 o9aJr/OtQUCWdtzxHg6R1xpSTak2t7F6lzDbtPUWE0L9f0MgedcuUuPSme7KBZ93fV
+	 WXhTVRPmCvYZA==
+Subject: Re: [PATCH net-next v7 06/12] gve: simplify reset logic
 From: netdev-bot+sashiko@kernel.org
 To: hramamurthy@google.com
 Cc: netdev@vger.kernel.org, joshwash@google.com, andrew+netdev@lunn.ch,
@@ -38,11 +37,11 @@ Cc: netdev@vger.kernel.org, joshwash@google.com, andrew+netdev@lunn.ch,
  jacob.e.keller@intel.com, debarghyak@google.com, kees@kernel.org,
  bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
  przemyslaw.kitszel@intel.com
-Date: Fri, 18 Sep 2026 07:57:42 +0000
-Message-ID: <178971826267.22033.6974245749239964332@kernel.org>
-In-Reply-To: <20260916165533.2187434-2-hramamurthy@google.com>
-References: <20260916165533.2187434-2-hramamurthy@google.com>
-X-sashiko-severity: Low
+Date: Fri, 18 Sep 2026 07:57:46 +0000
+Message-ID: <178971826647.22033.15667934166032456970@kernel.org>
+In-Reply-To: <20260916165533.2187434-7-hramamurthy@google.com>
+References: <20260916165533.2187434-7-hramamurthy@google.com>
+X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -52,255 +51,478 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
+Thank you for your contribution! Sashiko AI review found 7 potential
 issue(s) to consider:
 
-Critical: 0 · High: 0 (2) · Medium: 0 · Low: 2
+Critical: 0 · High: 1 · Medium: 4 (2) · Low: 2
 
-- [Low] The new `struct gve_device_info` introduces `max_tx_queues` /
-  `max_rx_queues` members that no code in the tree ever writes or reads,…
-- [Low] `gve_set_buf_sizes()`
-  (drivers/net/ethernet/google/gve/gve_main.c) turns the baseline's…
+- [High] gve_recover()'s new failure path calls gve_teardown_device()
+  (e.g. when gve_open() fails on queue-memory allocation), freeing all…
+- [Medium] The -ETIME (admin-queue timeout) reset trigger was removed
+  from the shared helper gve_adminq_configure_flow_rule() and re-added…
+- [Medium] gve_mgmnt_intr() now silently discards the management
+  interrupt whenever DEVICE_RESOURCES_OK is clear.
+- [Medium] gve_queues_start()'s `reset:` path returns gve_reset()'s
+  status instead of the original error, so a successful reset converts a…
+- [Medium] Queue-creation failure during reset recovery frees device-
+  owned ring memory before the hardware reset.
+- [Low] The patch removes a synchronous gve_reset() on admin-queue
+  timeout from the shared flow-rule helper, which fixes a genuine…
+- [Low] The commit message uses a `deconfigure_device_resources` failure
+  as its example of a path that 'preempts its reset with another reset…
 
 Pre-existing issues:
-- [High] The device-descriptor option parser trusts device-controlled
-  length metadata and can read far outside the 4096-byte DMA buffer.
-- [High] Unbounded device-provided RSS sizes plus a u16 truncation let
-  the RSS query read past the 4096-byte response buffer and hand the…
+- [Medium] Failed queue setup during reset recovery omits
+  gve_unreg_xdp_info(), leaking the XDP memory-model reference on DQO…
+- [Medium] A service task that already observed GVE_PRIV_FLAGS_DO_RESET
+  can block on RTNL while a concurrent direct gve_reset() (ethtool/flow-…
 
 --
 
-gve: add struct gve_device_info to hold device properties
+gve: simplify reset logic
 
-This adds struct gve_device_info as the single place holding the
-properties negotiated with the device, redirects the AdminQ describe
-path to fill it, and moves the code that applies those properties to
-struct gve_priv into gve_init_priv().
+This reworks the gve reset path: recursive resets and resets during
+teardown are removed, allocation is split from device setup, and the
+hardware reset is now performed before shared resources are freed.
 
-No Link: tags in the commit header.
-
-A few questions below.
-
-> diff --git a/drivers/net/ethernet/google/gve/gve.h b/drivers/net/ethernet/google/gve/gve.h
-> index c280ff35ee771..021adb9108dff 100644
-> --- a/drivers/net/ethernet/google/gve/gve.h
-> +++ b/drivers/net/ethernet/google/gve/gve.h
-> @@ -797,6 +797,34 @@ struct gve_ptp {
->  	struct gve_priv *priv;
->  };
->  
-> +struct gve_device_info {
-> +	enum gve_queue_format queue_format;
-> +	u16 default_tx_queues;
-> +	u16 default_rx_queues;
-> +	u16 max_tx_queues;
-> +	u16 max_rx_queues;
-                      ^^^^^^^^^^^^^
+> gve: simplify reset logic
+>
+> [ ... ]
+>
+> 2) Removing resets during teardown. This is partly covered by removing
+>    recursive resets, but the primary goal in this case is to ensure that
+>    the driver is capable of actually executing a hardware reset if
+>    something goes wrong with a control plane operation. As it stands, if
+>    `deconfigure_device_resources` fails, for example, GVE will preempt
+>    its reset with another reset without actually invoking a hardware
+>    reset, which could actually help with recovery.
 
 [Severity: Low]
-Is anything writing or reading max_tx_queues and max_rx_queues?
+Is the deconfigure_device_resources example accurate?  In the baseline that
+branch calls gve_trigger_reset(), which is just a wrapper for
+gve_adminq_release():
 
-gve_fill_device_info() fills mac, mtu, counters, the default and the
-min/max ring sizes and the default tx/rx queue counts, but leaves these two
-at zero, and the only consumer of the queue counts, gve_set_num_queues(),
-still takes the maximums from priv:
+gve_teardown_device_resources()
+	err = gve_adminq_deconfigure_device_resources(priv);
+	if (err) {
+		dev_err(...);
+		gve_trigger_reset(priv);
+	}
 
-	priv->tx_cfg.max_queues =
-		min_t(int, priv->tx_cfg.max_queues, priv->num_ntfy_blks / 2);
-	...
-	if (device_info->default_tx_queues > 0)
-		priv->tx_cfg.num_queues = min_t(int,
-						device_info->default_tx_queues,
-						priv->tx_cfg.num_queues);
+and gve_adminq_release() does perform the hardware reset and waits for the
+device to acknowledge it:
 
-In the other direction, this patch removes the last writers of
-priv->default_num_queues and priv->default_min_ring_size in struct gve_priv,
-but both declarations stay with no readers left.  priv->default_min_ring_size
-now also shadows the identically named and typed field in gve_device_info
-that gve_parse_device_option() writes.
+	iowrite32be(GVE_DRIVER_STATUS_RESET_MASK, &priv->reg_bar0->driver_status);
+	while (!(ioread32be(&priv->reg_bar0->device_status)
+			& GVE_DEVICE_STATUS_DEVICE_IS_RESET))
 
-Would it be cleaner to drop those two now unused gve_priv fields, and either
-fill max_tx_queues/max_rx_queues here or add them when MailboxQ starts using
-them?  Following the rest of the series (up to 70ee8341a456) the state is
-unchanged: still no writer or reader for either field.
-
-> +	u16 default_tx_ring_size;
-> +	u16 default_rx_ring_size;
-> +	u16 max_tx_ring_size;
-> +	u16 max_rx_ring_size;
-> +	u16 min_tx_ring_size;
-> +	u16 min_rx_ring_size;
-> +	u16 max_mtu;
-> +	u8 mac[ETH_ALEN];
-> +	u16 max_rx_buffer_size;
-> +	u16 header_buf_size;
-> +	u32 max_flow_rules;
-> +	u16 rss_key_size;
-> +	u16 rss_lut_size;
-> +	u16 tx_pages_per_qpl;
-> +	u16 num_event_counters;
-> +	u64 max_registered_pages;
-> +	bool default_min_ring_size;
-> +	bool nic_timestamp_supported;
-> +	bool modify_ring_size_enabled;
-> +	bool cache_rss_config;
-> +};
-> +
-
-[ ... ]
+The path that really recursed is the flow-rule -ETIME case, where
+gve_adminq_configure_flow_rule() called gve_reset() from inside teardown.
+Could the changelog name that case instead?
 
 > diff --git a/drivers/net/ethernet/google/gve/gve_adminq.c b/drivers/net/ethernet/google/gve/gve_adminq.c
-> index f05f4895f4c74..512349c5517f4 100644
+> index a62cb7a921d07..901673d2e2648 100644
 > --- a/drivers/net/ethernet/google/gve/gve_adminq.c
 > +++ b/drivers/net/ethernet/google/gve/gve_adminq.c
 
 [ ... ]
 
-> @@ -190,7 +190,7 @@ void gve_parse_device_option(struct gve_priv *priv,
+> @@ -1377,12 +1376,8 @@ gve_adminq_configure_flow_rule(struct gve_priv *priv,
+>  			sizeof(struct gve_adminq_configure_flow_rule),
+>  			flow_rule_cmd);
 >  
->  		/* device has not provided min ring size */
->  		if (option_length == GVE_DEVICE_OPTION_NO_MIN_RING_SIZE)
-> -			priv->default_min_ring_size = true;
-> +			priv->device_info.default_min_ring_size = true;
->  		break;
+> -	if (err == -ETIME) {
+> -		dev_err(&priv->pdev->dev, "Timeout to configure the flow rule, trigger reset");
+> -		gve_reset(priv, true);
+> -	} else if (!err) {
+> +	if (!err)
+>  		priv->flow_rules_cache.rules_cache_synced = false;
+> -	}
+>  
+>  	return err;
+>  }
 
-[Severity: High]
-This isn't a bug introduced by this patch, but since the option parser is
-being restructured here: can this parser read outside the 4096-byte DMA
-buffer?
+[Severity: Medium]
+This helper has three callers, but the -ETIME handling is re-added below only
+for the add and delete cases.  Does the third caller lose reset on timeout?
 
-gve_adminq_describe_device() allocates the descriptor from priv->adminq_pool,
-which is created with GVE_ADMINQ_BUFFER_SIZE (4096), and tells the device
-available_length = GVE_ADMINQ_BUFFER_SIZE.  Nothing validates
-descriptor->total_length, a __be16 that can be up to 65535:
+gve_set_features()          /* ethtool -K <dev> ntuple off */
+  gve_flow_rules_reset()
+    ops->reset_flow_rules() == gve_adminq_reset_flow_rules()
+      gve_adminq_configure_flow_rule()
 
-gve_adminq.c:gve_get_next_option() {
-	option_end = (void *)(option + 1) + be16_to_cpu(option->option_length);
-	descriptor_end = (void *)descriptor + be16_to_cpu(descriptor->total_length);
+gve_adminq_reset_flow_rules() just forwards the return value:
 
-	return option_end > descriptor_end ? NULL : (struct gve_device_option *)option_end;
-}
+	return gve_adminq_configure_flow_rule(priv, &flow_rule_cmd);
 
-With total_length set to 65535 and num_device_options >= 2, does the loop in
-gve_process_device_options() advance dev_opt up to roughly 61 KB past the end
-of the allocation?
+and gve_set_features() does:
 
-gve_parse_device_option() then dereferences option->option_id,
-option->option_length and option->required_features_mask at that address, and
-stores (void *)(option + 1) into the dev_op_* pointers that
-gve_enable_supported_features() dereferences afterwards to set queue format,
-MTU, RSS sizes and ring size ranges.
+	err = gve_flow_rules_reset(priv);
+	if (err)
+		goto revert_features;
 
-gve_get_next_option() also reads option->option_length before it is
-established that a complete 8-byte option header lies inside the buffer.
-
-Would clamping total_length to GVE_ADMINQ_BUFFER_SIZE and bounds checking
-each option header before dereferencing it be appropriate here?
-
-[ ... ]
-
-> @@ -946,77 +949,105 @@ static void gve_enable_supported_features(struct gve_priv *priv,
-
-[ ... ]
-
->  	if (dev_op_rss_config &&
->  	    (supported_features_mask & GVE_SUP_RSS_CONFIG_MASK)) {
-> -		priv->rss_key_size =
-> +		info->rss_key_size =
->  			be16_to_cpu(dev_op_rss_config->hash_key_size);
-> -		priv->rss_lut_size =
-> +		info->rss_lut_size =
->  			be16_to_cpu(dev_op_rss_config->hash_lut_size);
-> -		priv->cache_rss_config = false;
-> +		info->cache_rss_config = false;
-
-[Severity: High]
-This is a pre-existing issue as well, not introduced by this patch, but the
-sizes recorded here are taken from the device with no maximum and no check
-that key plus LUT bytes fit in a response buffer.  They reach
-priv->rss_key_size / priv->rss_lut_size through gve_init_priv().
-
-gve_adminq_query_rss_config() allocates one 4096-byte adminq_pool object and
-passes available_length = GVE_ADMINQ_BUFFER_SIZE, then:
-
-gve_adminq.c:gve_adminq_process_rss_query() {
-	u16 hash_lut_length;
-	...
-	hash_lut_length = priv->rss_lut_size * sizeof(*rxfh->indir);
-
-	if (sizeof(*descriptor) + priv->rss_key_size + hash_lut_length != total_memory_length) {
-		...
-		return -EINVAL;
-	}
-	...
-		for (i = 0; i < priv->rss_lut_size; i++)
-			rxfh->indir[i] = be32_to_cpu(lut[i]);
-}
-
-With rss_lut_size = 16384, 16384 * 4 == 65536 wraps to 0 in the u16
-hash_lut_length, so the check reduces to 8 + rss_key_size ==
-total_memory_length.  Does the loop then read 65536 bytes out of the
-4096-byte descriptor?
-
-Since the RSS device option also sets cache_rss_config = false,
-gve_get_rxfh() uses this device query path, and gve_get_rxfh_indir_size()
-returns priv->rss_lut_size, so the ethtool core copies the whole indir array
-back to userspace.  Even without the wrap, any key plus LUT size totalling
-more than 4096 passes as long as the device supplies a matching total_length.
-
-Should rss_key_size and rss_lut_size be clamped where they are recorded, and
-the computed length be validated against GVE_ADMINQ_BUFFER_SIZE rather than
-only against the device supplied total_length?
-
-[ ... ]
-
-> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-> index 9cc343a162712..d3882de584e36 100644
-> --- a/drivers/net/ethernet/google/gve/gve_main.c
-> +++ b/drivers/net/ethernet/google/gve/gve_main.c
-> @@ -2398,57 +2398,71 @@ static const struct xdp_metadata_ops gve_xdp_metadata_ops = {
-
-[ ... ]
-
-> +static void gve_set_buf_sizes(struct gve_priv *priv)
-> +{
-> +	struct gve_device_info *device_info = &priv->device_info;
-> +
-> +	if (device_info->max_rx_buffer_size)
-> +		priv->max_rx_buffer_size = device_info->max_rx_buffer_size;
-> +
-> +	if (gve_is_dqo(priv) &&
-> +	    priv->max_rx_buffer_size > GVE_DEFAULT_RX_BUFFER_SIZE)
-> +		priv->rx_cfg.packet_buffer_size = priv->max_rx_buffer_size;
-> +
-> +	if (device_info->header_buf_size)
-> +		priv->header_buf_size = device_info->header_buf_size;
-> +}
+so an admin-queue timeout there no longer starts recovery, while before this
+patch it called gve_reset(priv, true).  The v3 changelog says "only reset when
+failing to program flow rules as ethtool op", and gve_set_features() is such
+an ethtool op, so was this call site simply missed?
 
 [Severity: Low]
-The commit message says:
+Removing this gve_reset() also fixes a real recursion: teardown calls
+gve_flow_rules_reset(), so an adminq timeout during gve_reset(),
+gve_remove() or gve_suspend() re-entered gve_reset() from inside teardown.
+Should the patch carry a Fixes: tag for 6f3bc487565d ("gve: Add flow steering
+ethtool support")?  The trailers currently only have Reviewed-by and
+Signed-off-by lines.
 
-    Most of these changes are refactors only, except for one:
-    with the introduction of the central struct gve_device_info,
-    in AdminQ mode, gve_set_mtu() now also validates the device
-    provided mtu value from jumbo frames device option.
+> diff --git a/drivers/net/ethernet/google/gve/gve_flow_rule.c b/drivers/net/ethernet/google/gve/gve_flow_rule.c
+> index 2c80cda28ef30..fae552f4ad6fb 100644
+> --- a/drivers/net/ethernet/google/gve/gve_flow_rule.c
+> +++ b/drivers/net/ethernet/google/gve/gve_flow_rule.c
+> @@ -278,6 +278,11 @@ int gve_add_flow_rule(struct gve_priv *priv, struct ethtool_rxnfc *cmd)
+>  		goto out;
+>  
+>  	err = gve_adminq_add_flow_rule(priv, rule, fsp->location);
+> +	if (err == -ETIME) {
+> +		dev_err(&priv->pdev->dev,
+> +			"Timeout to add flow rule, trigger reset.");
+> +		gve_reset(priv, false);
+> +	}
+>  
+>  out:
+>  	kvfree(rule);
+> @@ -290,9 +295,17 @@ int gve_add_flow_rule(struct gve_priv *priv, struct ethtool_rxnfc *cmd)
+>  int gve_del_flow_rule(struct gve_priv *priv, struct ethtool_rxnfc *cmd)
+>  {
+>  	struct ethtool_rx_flow_spec *fsp = (struct ethtool_rx_flow_spec *)&cmd->fs;
+> +	int err;
+>  
+>  	if (!priv->max_flow_rules)
+>  		return -EOPNOTSUPP;
+>  
+> -	return gve_adminq_del_flow_rule(priv, fsp->location);
+> +	err = gve_adminq_del_flow_rule(priv, fsp->location);
+> +	if (err == -ETIME) {
+> +		dev_err(&priv->pdev->dev,
+> +			"Timeout to delete flow rule, trigger reset.");
+> +		gve_reset(priv, false);
+> +	}
+> +
+> +	return err;
+>  }
+> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
+> index 2fe280cf7e680..82bf2c5fed3f2 100644
+> --- a/drivers/net/ethernet/google/gve/gve_main.c
+> +++ b/drivers/net/ethernet/google/gve/gve_main.c
 
-Is the buffer size handling a second behaviour change?  Before this patch
-gve_enable_supported_features() wrote both fields unconditionally:
+[ ... ]
 
-		priv->max_rx_buffer_size =
-			be16_to_cpu(dev_op_buffer_sizes->packet_buffer_size);
-		priv->header_buf_size =
-			be16_to_cpu(dev_op_buffer_sizes->header_buffer_size);
+> @@ -270,6 +271,10 @@ static irqreturn_t gve_mgmnt_intr(int irq, void *arg)
+>  {
+>  	struct gve_priv *priv = arg;
+>  
+> +	/* Device resources are not okay; consider the interrupt spurious. */
+> +	if (!gve_get_device_resources_ok(priv))
+> +		return IRQ_HANDLED;
+> +
+>  	queue_work(priv->gve_wq, &priv->service_task);
+>  	return IRQ_HANDLED;
+>  }
 
-so a device advertising the buffer sizes option with packet_buffer_size == 0
-ended up with priv->max_rx_buffer_size == 0, overwriting the
-GVE_DEFAULT_RX_BUFFER_SIZE value that gve_probe() installed.  With the new
-guards in gve_set_buf_sizes() the probe-time default is kept instead.
+[Severity: Medium]
+Can this drop a device-requested reset?
 
-The v5 changelog entry "honor device provided rx buffer size correctly"
-describes this, but it sits below the --- line and does not end up in git
-history.  Could the commit message call out this change too?
+The mgmt vector is requested in gve_alloc_notify_blocks() during the
+allocation phase, while gve_set_device_resources_ok() only runs at the very
+end of gve_setup_control_plane_resources(), after several blocking adminq
+round trips.  Any event arriving in that window, including
+GVE_DEVICE_STATUS_RESET_MASK, is acked as handled and thrown away.
+
+The only consumer of that bit is gve_service_task():
+
+	u32 status = ioread32be(&priv->reg_bar0->device_status);
+
+	gve_handle_status(priv, status);
+
+and it only runs when the service task is queued.  On the paths that call
+gve_recover() with setup_queues == false (gve_reset(priv, true) from
+gve_close(), and gve_resume() when up_before_suspend is false) there is no
+queue_work() from gve_queues_start(), so nothing re-samples device_status
+after the flag is set again.
+
+Since disable_work()/enable_work() already stop the service task across
+reset, and gve_reset() returns early on reset_in_progress, would simply
+queueing the work (a no-op while disabled) or re-reading device_status after
+gve_set_device_resources_ok() avoid the lost-event window?
+
+[ ... ]
+
+> @@ -1416,10 +1465,11 @@ static int gve_queues_start(struct gve_priv *priv,
+>  reset:
+>  	if (gve_get_reset_in_progress(priv))
+>  		goto stop_and_free_rings;
+> -	gve_reset_and_teardown(priv, true);
+> -	/* if this fails there is nothing we can do so just ignore the return */
+> -	gve_reset_recovery(priv, false);
+> -	/* return the original error */
+> +
+> +	/* Attempt to reset. If reset is successful, gve_queues_start was
+> +	 * successful.
+> +	 */
+> +	err = gve_reset(priv, false);
+>  	return err;
+>  stop_and_free_rings:
+>  	gve_tx_stop_rings(priv, gve_num_tx_queues(priv));
+
+[Severity: Medium]
+Returning gve_reset()'s status here reports success for a queue start that
+failed.  Can that silently discard a requested configuration?
+
+In gve_queues_start() these two assignments happen only after
+gve_register_qpls() succeeds:
+
+	priv->header_split_enabled = rx_alloc_cfg->enable_header_split;
+	priv->rx_cfg.packet_buffer_size = rx_alloc_cfg->packet_buffer_size;
+
+The earlier priv->rx_cfg = *rx_alloc_cfg->qcfg_rx does not carry them,
+because gve_rx_get_curr_alloc_cfg() sets cfg->qcfg_rx = &priv->rx_cfg, so an
+ethtool rx-buf-len or tcp-data-split change lives only in the temporary
+alloc cfg.
+
+If gve_init_rss_config() or gve_register_qpls() fails, we jump to reset, and
+gve_reset() -> gve_recover() -> gve_open() -> gve_get_curr_alloc_cfgs()
+rebuilds the rings from the stale priv values, while gve_open(),
+gve_adjust_config() and gve_set_ringparam() all see 0.  Would committing the
+requested configuration before entering reset recovery, or propagating the
+original error, be preferable?
+
+[Severity: Medium]
+The commit message says "shared resources between the device and driver are
+not freed until after the hardware reset has completed".  Does the
+stop_and_free_rings path below meet that guarantee during reset recovery?
+
+gve_create_rings() returns on partial success without cleaning up, for
+example TX queues created and RX creation failing:
+
+	err = gve_adminq_create_rx_queues(priv, priv->rx_cfg.num_queues);
+	if (err) {
+		/* This failure will trigger a reset - no need to clean
+		 * up
+		 */
+		return err;
+	}
+
+With reset_in_progress set by the enclosing gve_reset(), we then take
+stop_and_free_rings and call gve_queues_mem_remove(), which dma_free_coherent()s
+the ring memory and releases the QPL pages while those queues are still
+registered with the device.  The hardware reset only happens afterwards in
+gve_recover() -> gve_teardown_device() -> gve_reset_device(), whose teardown
+adminq commands can block before the reset register write.  Could the device
+still write into that freed memory?
+
+[Severity: Medium]
+This isn't a bug introduced by this patch, but the same stop_and_free_rings
+path never calls gve_unreg_xdp_info(), so the XDP memory-model reference on
+DQO page pools looks leaked.
+
+gve_reg_xdp_info() registers the pool:
+
+	xdp_rxq_info_reg_mem_model(&rx->xdp_rxq, MEM_TYPE_PAGE_POOL,
+				   rx->dqo.page_pool);
+
+and __xdp_reg_mem_model() takes an extra reference:
+
+	if (type == MEM_TYPE_PAGE_POOL)
+		page_pool_use_xdp_mem(allocator, mem_allocator_disconnect, mem);
+
+while gve_rx_free_ring_dqo() only does one page_pool_destroy().  Since
+xdp_rxq_info_unreg() is reached only from gve_unreg_xdp_info(), does the pool
+and mem-model id stay around after a failed queue start with XDP enabled on
+DQO?
+
+[ ... ]
+
+> @@ -2514,30 +2554,7 @@ static int gve_init_priv(struct gve_priv *priv)
+>  	return 0;
+>  }
+>  
+> -static void gve_teardown_priv_resources(struct gve_priv *priv)
+> -{
+> -	gve_teardown_device_resources(priv);
+> -	gve_adminq_free(priv);
+> -	bitmap_free(priv->xsk_pools);
+> -	priv->xsk_pools = NULL;
+> -}
+> -
+> -static void gve_trigger_reset(struct gve_priv *priv)
+> -{
+> -	/* Reset the device by releasing the AQ */
+> -	gve_adminq_release(priv);
+> -}
+> -
+> -static void gve_reset_and_teardown(struct gve_priv *priv, bool was_up)
+> -{
+> -	gve_trigger_reset(priv);
+> -	/* With the reset having already happened, close cannot fail */
+> -	if (was_up)
+> -		gve_close(priv->dev);
+> -	gve_teardown_priv_resources(priv);
+> -}
+> -
+> -static int gve_reset_recovery(struct gve_priv *priv, bool was_up)
+> +static int gve_recover(struct gve_priv *priv, bool setup_queues)
+>  {
+>  	int err;
+>  
+> @@ -2545,62 +2562,67 @@ static int gve_reset_recovery(struct gve_priv *priv, bool was_up)
+>  	if (err) {
+>  		dev_err(&priv->pdev->dev,
+>  			"Failed to alloc admin queue: err=%d\n", err);
+> -		goto err;
+> +		goto teardown_device;
+>  	}
+>  
+>  	err = gve_adminq_verify_driver_compatibility(priv);
+>  	if (err) {
+>  		dev_err(&priv->pdev->dev,
+>  			"Could not verify driver compatibility: err=%d\n", err);
+> -		goto err_free_adminq;
+> +		goto teardown_device;
+>  	}
+>  
+>  	err = gve_setup_device(priv);
+>  	if (err)
+> -		goto err_free_adminq;
+> -	if (was_up) {
+> +		goto teardown_device;
+> +
+> +	if (setup_queues) {
+>  		err = gve_open(priv->dev);
+>  		if (err)
+> -			return err;
+> +			goto teardown_device;
+>  	}
+> +
+>  	return 0;
+>  
+> -err_free_adminq:
+> -	gve_adminq_free(priv);
+> -err:
+> -	dev_err(&priv->pdev->dev, "Reset failed! !!! DISABLING ALL QUEUES !!!\n");
+> -	gve_turndown(priv);
+> +teardown_device:
+> +	dev_err(&priv->pdev->dev, "Recover failed! !!! DISABLING ALL QUEUES !!!\n");
+> +	gve_teardown_device(priv);
+>  	return err;
+>  }
+
+[Severity: High]
+Routing a gve_open() failure into gve_teardown_device() frees the whole
+control plane while the netdev stays registered and administratively
+running.  Can that be dereferenced afterwards?
+
+gve_teardown_device() -> gve_free_control_plane_resources() calls
+gve_free_rss_config_cache():
+
+	kfree(rss_config->hash_key);
+	kfree(rss_config->hash_lut);
+
+	memset(rss_config, 0, sizeof(*rss_config));
+
+and gve_free_notify_blocks(), which leaves priv->ntfy_blocks NULL, while
+priv->cache_rss_config, priv->rss_key_size and priv->rss_lut_size (set in
+gve_init_priv()) are untouched and nothing closes the interface.
+
+Only gve_open() got the new resources_ok gate, so ETHTOOL_GRSSH still
+reaches gve_get_rxfh() -> gve_get_rss_config_cache():
+
+	memcpy(rxfh->key, rss_config->hash_key, priv->rss_key_size);
+
+with hash_key == NULL, and ETHTOOL_GRSSH is one of the commands that skips
+the ns_capable(net->user_ns, CAP_NET_ADMIN) check in net/ethtool/ioctl.c.
+
+An ethtool channel change is a second route: gve_adjust_queues() still sees
+netif_running(priv->dev) true, so gve_adjust_config() -> gve_queues_start()
+-> gve_tx_start_rings() -> gve_tx_add_to_block() runs:
+
+	struct gve_notify_block *block = &priv->ntfy_blocks[ntfy_idx];
+	struct gve_tx_ring *tx = &priv->tx[queue_idx];
+
+	block->tx = tx;
+
+on a NULL array.  Should these entry points also be rejected (or the netdev
+detached) while control-plane resources are gone?
+
+>  
+> -int gve_reset(struct gve_priv *priv, bool attempt_teardown)
+> +int gve_reset(struct gve_priv *priv, bool skip_queue_setup)
+>  {
+>  	bool was_up = netif_running(priv->dev);
+>  	int err;
+>  
+> +	if (gve_get_reset_in_progress(priv))
+> +		return 0;
+> +
+>  	dev_info(&priv->pdev->dev, "Performing reset\n");
+>  	gve_clear_do_reset(priv);
+>  	gve_set_reset_in_progress(priv);
+
+[Severity: Medium]
+This is a pre-existing issue, but the new early return only covers
+overlapping resets, not a stale pending request.  gve_handle_reset() samples
+the bit before taking the locks and never rechecks it:
+
+	if (gve_get_do_reset(priv)) {
+		rtnl_lock();
+		netdev_lock(priv->dev);
+		gve_reset(priv, false);
+
+If a direct gve_reset() from the ethtool or flow-rule path completes while
+the worker is blocked on RTNL, it clears both do_reset and
+reset_in_progress (and disable_work() does not wait for an already running
+worker), so the worker performs a second full reset once it gets the locks.
+Would rechecking do_reset after acquiring the locks be reasonable?
+
+>  
+> -	/* If we aren't attempting to teardown normally, just go turndown and
+> -	 * reset right away.
+> -	 */
+> -	if (!attempt_teardown) {
+> +	if (was_up) {
+>  		gve_turndown(priv);
+> -		gve_reset_and_teardown(priv, was_up);
+> -	} else {
+> -		/* Otherwise attempt to close normally */
+> -		if (was_up) {
+> -			err = gve_close(priv->dev);
+> -			/* If that fails reset as we did above */
+> -			if (err)
+> -				gve_reset_and_teardown(priv, was_up);
+> +		if (gve_get_device_rings_ok(priv)) {
+> +			gve_clear_device_rings_ok(priv);
+> +			gve_destroy_rings(priv);
+> +			gve_unregister_qpls(priv);
+>  		}
+> -		/* Clean up any remaining resources */
+> -		gve_teardown_priv_resources(priv);
+>  	}
+>  
+> -	/* Set it all back up */
+> -	err = gve_reset_recovery(priv, was_up);
+> +	disable_work(&priv->service_task);
+> +	gve_reset_device(priv);
+> +	gve_queues_stop(priv);
+> +	gve_queues_mem_remove(priv);
+> +	gve_free_control_plane_resources(priv);
+> +
+> +	enable_work(&priv->service_task);
+> +	err = gve_recover(priv, was_up && !skip_queue_setup);
+> +	if (err)
+> +		dev_info(&priv->pdev->dev,
+> +			 "Failed to recover in reset: %d\n", err);
+> +
+>  	gve_clear_reset_in_progress(priv);
+>  	priv->reset_cnt++;
+>  	priv->interface_up_cnt = 0;
 
 [ ... ]
 
