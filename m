@@ -1,21 +1,21 @@
 Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B9693921F0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 614E3347533
 	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 04:43:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789706615; cv=none; b=jrzYsD5akUNAVUIq3y3MLqTAHJTjEWCLw/COwM33X+BqBmU1F7V6L5VH2Ph/h1npsbfyHUUJD88kLuHl0AKot03/aTUtFVk+WlFbGTya9tZDD835uT6/Rc9qzPSKC8hS+hN8ysoydHMOwrTJBNlRaRwjZ81SUkD4QKb16wvwiAc=
+	t=1789706616; cv=none; b=PAKx1dAOWJKFoTfBhoBgkC2jj0z1x6xzOHTb1IHkUvPcwsxwPdgNcxDw60GXH0FwgSZUiwpBztyU/6SRvLFk89Ym7X3+g3hh4W8nMVfYgSWiPyGMGCI3NDFAPBCixtrGVz/b0GeAvpbZGgmXrrXxEapcjv1KCHihoR8SKMl3y94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789706615; c=relaxed/simple;
-	bh=j5pYB6M/P7a/uMVicFL964aN+qedL2lRFhW3IHpawVw=;
+	s=arc-20240116; t=1789706616; c=relaxed/simple;
+	bh=JWLjsvgmBYPsGRwQxCtTi1RqXu9bhQwRfisLcbtQGyY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bda1LoPvB1Xr9Gdk/6wMQXat0yrHrn9j3om34y/jARWbJUL698aFE3tuCWx69mQ7qy2VqDwLvKklSBTx83gMrzEcpR778SszcwzLhPLsK66jXEtMmMP1jczxfpM2l2rHpGs0lJLdmhxCIKVkPYD4gSPKcIeYKck2u77e2H1TQD8=
+	 MIME-Version; b=Hpby0KBmG6NzwxMQbqeUCJcV6SRoVBI1t1UiFu/zlxv2/JUcjL7kWBj/QKpF0VI2FuMzF3UJcBIlz61gkPPgSynnZUtGpWoaopiaIm4cUpGKH8c3Q8wKwe3jkcOcYOOvPI7TUe57RhMvoBfY+UkRHxyKRqlyjrPkYXuwo6EIWKg=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 272722B7C8BB61; Thu, 17 Sep 2026 21:43:22 -0700 (PDT)
+	id 41BA12B7C8BB85; Thu, 17 Sep 2026 21:43:27 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v2 16/20] libbpf: Carry the exception cleanup table through the light skeleton
-Date: Thu, 17 Sep 2026 21:43:22 -0700
-Message-ID: <20260918044322.3292575-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v2 17/20] libbpf: Let the static linker carry .bpf_cleanup relocations
+Date: Thu, 17 Sep 2026 21:43:27 -0700
+Message-ID: <20260918044327.3292986-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260918044156.3283973-1-yonghong.song@linux.dev>
 References: <20260918044156.3283973-1-yonghong.song@linux.dev>
@@ -37,147 +37,71 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-A light skeleton does not call bpf_prog_load(). bpf_gen__prog_load() buil=
-ds
-its own union bpf_attr field by field, and the loader program it emits is
-what issues BPF_PROG_LOAD when the skeleton runs -- so a program loaded
-this way reached the kernel without the table the previous patch collecte=
-d
-for it. The load then fails, because the landing pads are code nothing
-reaches and the verifier says so. It says "unreachable insn", which names
-neither the skeleton nor the table.
+An object that carries a compiler-emitted exception cleanup table cannot =
+be
+linked today. The table's fields are byte offsets into a code section,
+materialised by a 32-bit relocation against that section's symbol with th=
+e
+offset itself as the implicit addend, and the linker rejects both halves =
+of
+that: the relocation type is not in the list it accepts, and a relocation
+against an STT_SECTION symbol from a non-executable section is an outrigh=
+t
+error.
 
-Carry it the way func_info and line_info are carried: the records go into
-the loader's blob of bytes, the count and record size into the attr, and =
-a
-relocation stores the blob's address into attr.cleanup_info once that
-address is known. The attr grows to its new last field, cleanup_info_cnt.
-Records are 4-byte fields like the other info blobs, so a cross-endian
-build has to swap them too.
-
-Growing the attr is what makes the relocation conditional. Every other
-attr in this file stops at the last field it sets, and this one now runs
-to the end of the union: a kernel that predates cleanup_info accepts an
-attr longer than its own only while the tail it does not know reads as
-zero. The count and the record size are already zero for a program with n=
-o
-table, but the relocation stores a blob address, which never is, so a
-program that has no landing pads only keeps loading on such a kernel if
-the relocation is left out.
+Both spellings of that relocation have to be taken. LLVM emits
+R_BPF_64_NODYLD32 for a .long against a section symbol; GNU as emits
+R_BPF_64_ABS32, which is what bpf_reloc_type_lookup() maps BFD_RELOC_32 t=
+o.
+They describe the same value, and the selftests are built with both
+compilers.
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tools/lib/bpf/gen_loader.c      | 29 +++++++++++++++++++++++++----
- tools/lib/bpf/libbpf_internal.h |  7 +++++++
- 2 files changed, 32 insertions(+), 4 deletions(-)
+ tools/lib/bpf/linker.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-index af3a04f161ac..2345fbdd46f5 100644
---- a/tools/lib/bpf/gen_loader.c
-+++ b/tools/lib/bpf/gen_loader.c
-@@ -981,13 +981,15 @@ static void cleanup_relos(struct bpf_gen *gen, int =
-insns)
- 	cleanup_core_relo(gen);
- }
+diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
+index 78f92c39290a..e5c06023cb5b 100644
+--- a/tools/lib/bpf/linker.c
++++ b/tools/lib/bpf/linker.c
+@@ -1036,7 +1036,8 @@ static int linker_sanity_check_elf_relos(struct src=
+_obj *obj, struct src_sec *se
+ 		size_t sym_type =3D ELF64_R_TYPE(relo->r_info);
 =20
--/* Convert func, line, and core relo info blobs to target endianness */
-+/* Convert func, line, core relo and cleanup info blobs to target endian=
-ness */
- static void info_blob_bswap(struct bpf_gen *gen, int func_info, int line=
-_info,
--			    int core_relos, struct bpf_prog_load_opts *load_attr)
-+			    int core_relos, int cleanup_info,
-+			    struct bpf_prog_load_opts *load_attr)
- {
- 	struct bpf_func_info *fi =3D gen->data_start + func_info;
- 	struct bpf_line_info *li =3D gen->data_start + line_info;
- 	struct bpf_core_relo *cr =3D gen->data_start + core_relos;
-+	struct bpf_cleanup_info *ci =3D gen->data_start + cleanup_info;
- 	int i;
-=20
- 	for (i =3D 0; i < load_attr->func_info_cnt; i++)
-@@ -998,6 +1000,9 @@ static void info_blob_bswap(struct bpf_gen *gen, int=
- func_info, int line_info,
-=20
- 	for (i =3D 0; i < gen->core_relo_cnt; i++)
- 		bpf_core_relo_bswap(cr++);
+ 		if (sym_type !=3D R_BPF_64_64 && sym_type !=3D R_BPF_64_32 &&
+-		    sym_type !=3D R_BPF_64_ABS64 && sym_type !=3D R_BPF_64_ABS32) {
++		    sym_type !=3D R_BPF_64_ABS64 && sym_type !=3D R_BPF_64_ABS32 &&
++		    sym_type !=3D R_BPF_64_NODYLD32) {
+ 			pr_warn("ELF relo #%d in section #%zu has unexpected type %zu in %s\n=
+",
+ 				i, sec->sec_idx, sym_type, obj->filename);
+ 			return -EINVAL;
+@@ -2274,6 +2275,22 @@ static int linker_append_elf_relos(struct bpf_link=
+er *linker, struct src_obj *ob
+ 						insn->imm +=3D sec->dst_off / sizeof(struct bpf_insn);
+ 					else
+ 						insn->imm +=3D sec->dst_off;
++				} else if (sym_type =3D=3D R_BPF_64_NODYLD32 ||
++					   sym_type =3D=3D R_BPF_64_ABS32) {
++					__u32 *val;
 +
-+	for (i =3D 0; i < load_attr->cleanup_info_cnt; i++)
-+		bpf_cleanup_info_bswap(ci++);
- }
-=20
- void bpf_gen__prog_load(struct bpf_gen *gen,
-@@ -1011,8 +1016,11 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
- 			       load_attr->line_info_rec_size;
- 	int core_relo_tot_sz =3D gen->core_relo_cnt *
- 			       sizeof(struct bpf_core_relo);
-+	int cleanup_info_tot_sz =3D load_attr->cleanup_info_cnt *
-+				  load_attr->cleanup_info_rec_size;
- 	int prog_load_attr, license_off, insns_off, func_info, line_info, core_=
-relos;
--	int attr_size =3D offsetofend(union bpf_attr, core_relo_rec_size);
-+	int attr_size =3D offsetofend(union bpf_attr, cleanup_info_cnt);
-+	int cleanup_info;
- 	union bpf_attr attr;
-=20
- 	memset(&attr, 0, attr_size);
-@@ -1061,9 +1069,17 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
- 		 core_relos, gen->core_relo_cnt,
- 		 sizeof(struct bpf_core_relo));
-=20
-+	attr.cleanup_info_rec_size =3D tgt_endian(load_attr->cleanup_info_rec_s=
-ize);
-+	attr.cleanup_info_cnt =3D tgt_endian(load_attr->cleanup_info_cnt);
-+	cleanup_info =3D add_data(gen, load_attr->cleanup_info, cleanup_info_to=
-t_sz);
-+	pr_debug("gen: prog_load: cleanup_info: off %d cnt %u rec size %u\n",
-+		 cleanup_info, load_attr->cleanup_info_cnt,
-+		 load_attr->cleanup_info_rec_size);
-+
- 	/* convert all info blobs to target endianness */
- 	if (gen->swapped_endian && !gen->error)
--		info_blob_bswap(gen, func_info, line_info, core_relos, load_attr);
-+		info_blob_bswap(gen, func_info, line_info, core_relos, cleanup_info,
-+				load_attr);
-=20
- 	libbpf_strlcpy(attr.prog_name, prog_name, sizeof(attr.prog_name));
- 	prog_load_attr =3D add_data(gen, &attr, attr_size);
-@@ -1085,6 +1101,11 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
- 	/* populate union bpf_attr with a pointer to core_relos */
- 	emit_rel_store(gen, attr_field(prog_load_attr, core_relos), core_relos)=
-;
-=20
-+	/* populate union bpf_attr with a pointer to cleanup_info, if there is =
-one */
-+	if (load_attr->cleanup_info_cnt)
-+		emit_rel_store(gen, attr_field(prog_load_attr, cleanup_info),
-+			       cleanup_info);
-+
- 	/* populate union bpf_attr fd_array with a pointer to data where map_fd=
-s are saved */
- 	emit_rel_store(gen, attr_field(prog_load_attr, fd_array), gen->fd_array=
-);
-=20
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
-nal.h
-index 3ba6d9090368..78519f24fb40 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -572,6 +572,13 @@ static inline void bpf_core_relo_bswap(struct bpf_co=
-re_relo *i)
- 	i->kind =3D bswap_32(i->kind);
- }
-=20
-+static inline void bpf_cleanup_info_bswap(struct bpf_cleanup_info *i)
-+{
-+	i->begin_off =3D bswap_32(i->begin_off);
-+	i->end_off =3D bswap_32(i->end_off);
-+	i->landing_pad_off =3D bswap_32(i->landing_pad_off);
-+}
-+
- enum btf_field_iter_kind {
- 	BTF_FIELD_ITER_IDS,
- 	BTF_FIELD_ITER_STRS,
++					/* Two spellings of the one thing: LLVM
++					 * emits NODYLD32 for a .long against a
++					 * section symbol, GNU as emits ABS32
++					 * (bpf_reloc_type_lookup() maps
++					 * BFD_RELOC_32 to it), and the value
++					 * they describe is the same.
++					 */
++					val =3D dst_linked_sec->raw_data + dst_rel->r_offset;
++					if (linker->swapped_endian)
++						*val =3D bswap_32(bswap_32(*val) + sec->dst_off);
++					else
++						*val +=3D sec->dst_off;
+ 				} else {
+ 					pr_warn("relocation against STT_SECTION in non-exec section is not =
+supported!\n");
+ 					return -EINVAL;
 --=20
 2.53.0-Meta
 
