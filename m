@@ -1,64 +1,64 @@
-Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
+Received: from mail-wr2-f9.google.com (mail-wr2-f9.google.com [74.125.225.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9DAB3CC313
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 05:29:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6753D7D9F
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 05:29:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789709356; cv=none; b=KyZeOKHrQsPCrj3OVJplv4AVdk3nQC006KAG17WL3wlHyhVJFnb76B7B8DNk+hexY5C5IaZyJdP/rlZamKAvuqeN6ElU7lwOkCSDjWIXSa45Nhl9vZxzS+yWxwKziOFDJVl50FaOYiNpCXF++ybRKn7rAVIPp345fBrX9ZiSW4o=
+	t=1789709358; cv=none; b=qoqeb0wi9Z6lrWbVToGKY5LAghuBTDQOHOcLPe038pEbp3mTY+7fgJoqn+Yb+8UKkJLq0Tf9MruHO3iZ+ZorRdKNzoBOSau29hqecAZ0Whoq1C8E6qqa0m7uCeeydGjl0OSZeX1inydNCvrv9mA6Mqd7RtXHY9z9U27MZqGZO4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789709356; c=relaxed/simple;
-	bh=X08kWp8jmhMiEQVbjvhfh5vLI15KXvtgbw09urQ43+A=;
+	s=arc-20240116; t=1789709358; c=relaxed/simple;
+	bh=7WjhMLhW5LCnvhaoAOO0PBcCy4lMpB9yoQQzoz3Glf0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nhsEYD5kPnotieJt8/p1iTDQMykxkKdCtfWoKE7KWKU9bszJiqDVrRnWlLG6hY/t4TosclqjO99BYbBqt5EQTALtfgXcJqkG6B4lIVCq9rMgAcqLJ8za1+5B5BtUrFN7GeT2Q7ugjY3gA56ADc1CrgJpiQIXmQtzWszBveqsKL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tr2J2vFG; arc=none smtp.client-ip=74.125.225.74
+	 MIME-Version; b=FanynTsxxOHcFJfUFF4oN3RVFqOlpnqeYCoNUQy70tHfK3a58AGITSRTi924Z0ebHcjVocLQX3ZUVfgj6Ssl5ds6yhouR7rBqlo4vZ7q7C4KGgmBEJ2+A1FhK+zlbNJhVRGdfiwABXXBsuUYaFHiMv89/1P5yuNhq11gxo0zV5U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Znj/Apy0; arc=none smtp.client-ip=74.125.225.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tr2J2vFG"
-Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-48433107499so172543f8f.0
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 22:29:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Znj/Apy0"
+Received: by mail-wr2-f9.google.com with SMTP id ffacd0b85a97d-4858866f7ffso65434f8f.0
+        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 22:29:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789709353; x=1790314153; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789709354; x=1790314154; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=sgezfLhyLKmvB/l7AUCFMgxBolD3JzSsHKTErSFZewg=;
-        b=Tr2J2vFGtUpAXyApKSZ5sN+ltPYznMnvhQ+lKTcVfWaUgvX8sQh74iTMeu7cVkmBSA
-         XFNnrQoYU6DLzto0dhHmEBsP7TrrJ7sHs01mn7Lna1wUmI4hv+rDZFSSMHfekhCTMf1D
-         gi7zqJbkXsq4gqyTho/g8017bVuKr/HDd4ZVbtbR4SDnNQI55Or9zd73js+X6Y2VnB63
-         DTUi2muqkJBv/BElSFeEe3x5M6JD6WsVP+91NwkFU+ezZEy66q85INwSuc6hLVg75cJU
-         wm+MdkETlhzStW6NPb729svU8Bv4xRzrTVi+PLAYnSaIRFyCmsIWsHOqJ5rEzX8ZU+rm
-         D5iw==
+        bh=yEEv7ukouBCQheXMGFNV8cgbVig3HJqFjui1JA7es2U=;
+        b=Znj/Apy0oLj55Pe7lww2LaZ+4avAUuo90r2q/q+wkG9eauOZcFWJP91kjunj1j2QyN
+         cLI0RmhrmN8is4WhbU9nJmipDSBA6oTYNRetIhTNzpLBqgGhIZk9eGKCbkB+/V95Atgw
+         IWwQsiBG76e1B5+Yi0O2PC0SQKmKzlZUw3Rjgk17K6acukv2Ko81alcB+Me8HyHv2kCW
+         2oCzkjYUktFqAuoQYmQnslj+FKzOiH1OSApeWtLe+n4rieAjF48DMWdFNnPVoS+IJNz+
+         4KrzzMLgZ/3pmCWRbeqyuPCnt3I2uVIxwcbWlvq2AKGxhc7gdJc9kVsDb2jpWDDI4PYh
+         DWgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789709353; x=1790314153;
+        d=1e100.net; s=20260707; t=1789709354; x=1790314154;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=sgezfLhyLKmvB/l7AUCFMgxBolD3JzSsHKTErSFZewg=;
-        b=RZWOuJTQgSi/9JmGiX7d2eK30TxcpWa/JrjhGNJ5qpeW6A277xD3fAnleDWbflmhYH
-         NBbYS5TJ836hAS4Zq+Q6RacR93hfw5nLVA+0xct8UN+kxMOS/6on7zapiS0RUPkD6lTF
-         p1YMSCaqU4DywQJi1U8MmnF+aoLh3nU/B/vNUJhU1PyGCo8FTXpkaf+rFxAbjeNb46cM
-         uzScdX0EVbugbtw9OU3SXYxxAyA4EC5dOksKBq+kS2bcPrVSbvHN6YNy4P0RcQ83LVcN
-         bR1QnyHodEDJrlr6/1T5JOu8ksloMrKbrMC1qAyZU/iuBJGVDvvzhgCbjRsyHy9K37Ij
-         nSyQ==
-X-Gm-Message-State: AFuF++mollA00ENe9pR+JHI7y7zczX4k75HlIgpbTUH7XxiFxccW0o4t
-	nSGBkxD/lFwgxniCBnZi1INgMa50hVD1ogrwt2WDhXWoIxdOr+TBv/mUkcoflQO1
-X-Gm-Gg: AYBFou3T0k5cxN6dTCkygIA3CMXc9p7UdS5idKNez1hgopbe2PTBxbuskGVEEARD86w
-	dDe9b74cDNUpi+v0VlkgGPbPgoZucvKgpR7PHhLU/aMrZ93Vgp+CbMP/INHFPkub+1bCZpcs4A6
-	WYO9QtrQoNgXAJ3gn4Hs8kv2fCOU9ErbyhRYvQTo/ssRcmoo6wtkgWaYVSOZfZKqNt/L/vhzm/D
-	V3+9QNdiIi6dXmCB2JElYyaqNy6Kzv/rXfFFzESo/3b60DsbywzNiWdu7l12jYdnWS/XvcyYA6K
-	U167MVms9+6SXQOQYiU3Vq4spEBiUkmUK8LVYAxevIUM6HJ2ct9e7oam0II43hL3SJd6+nX8CcA
-	Uxu2LNVeUav5fZno5aVonqXia3o90hFLvPPGMsK78RsLY581QD8gnjGkyk14qN0xaqcDIj3nGJI
-	nw5k1TWGRgjWg06mF6xihqkLkBLIuFTloZA1foGdAwoqKzdaRHnDnYcL9LtTXKbvJ/0x8lL9b7p
-	byhWiCziMqiwTL7SZXZwvBOZiizCHo9y2WABS2kYCCKzLbFSs5YGwZwCn9DKiBC1QaPvpR7qcf3
-	KMZrIAoqNsd8zSQtr9oZsfateKUaNtwyIdn/CQ==
-X-Received: by 2002:a5d:64c8:0:b0:487:1084:10fb with SMTP id ffacd0b85a97d-4871e395fcemr1596298f8f.36.1789709352839;
-        Thu, 17 Sep 2026 22:29:12 -0700 (PDT)
+        bh=yEEv7ukouBCQheXMGFNV8cgbVig3HJqFjui1JA7es2U=;
+        b=sXOAzYeFlg6mnglw7osgs8EUqlcbVRM05ohaapkkurtEQUhyB2yaDfaGxNUFf5Vlu9
+         TfUqOwpQwqvzB/75KSwCT13oVMCAPk4AlF4XGHGtl6sq3Kk+BWxhHvhFOmQY96O/ukhC
+         fvWPGy3P5A1l3TRV0fi4hdlk4973I7Sb6sgrDri7+fYNeXvmiUidi/cq4proUh+azdpg
+         /ikRNtl0CI1OQXr1E6XuLpnEDTnQXEJveywuNeMGN0zvQ+/8uIC2u57r4i0rWI2Sbt0V
+         1TynmODEaJ6aK+fE/QJH1H8BDxCUUxEVQg/4TQAgITT16ghL3b3rNqPiMX4F0CLUCOL+
+         Psww==
+X-Gm-Message-State: AFuF++mdICOV59K1v/HP0Q3qLuFspAAE0Ygof+4XuRrkF3uUUMyVTG35
+	LKW569VQUKSWV0sRixvN4tDEAJg5ttstRsKW5YWDI123I2AqNcF1bH81V0k6aMVK
+X-Gm-Gg: AYBFou1pZ1z5YTIAFeikxiNJS38jKpjCgkkyNFZ9R6Ou2GHKywwQnFBzACXqN2nulCY
+	H6BN5ZEVDzLPQP4qX2VM/by7V2zhJ3Wia+/QxGJwUzlwRc2ttq+AYJd28fiRvNs/IIF+24RDV+X
+	xLuZrklASpgea0mYXwcRIcqwUTijvHRz/CJzIY3wwR6CJmYeOOkXOCvaji8qGbcTIv23jPKZfYZ
+	OyWUELeHFWH/DVm2ttSifiEfhDpgV4sK5f32xT8FHrrsd00CDC9/aI42ZiV3c4EP00jPbaOdx3R
+	+BS0lUL7l9GjWZ5rSR93qYncwTEiVZj4RnY2MkeFid0eLj4FzUwDMY1zMPdFhqEYBk/1QnZmXqK
+	rQJlXvo5DXEOtzuZvsyzSIsBXKsi6VEEZFecSr+1+byFTo7AYqU2yHEFugSAojPL3MkF5NuNyvN
+	GzOYgX00j1D6VS7cD/iztKcaM5cqsAHAv/5ADxrQHScX6HIprC7Jymvye1ZKo5D8cB6vye8TaLI
+	sFdv1GFHKSnVUScjv6m2M0WchBwF/Y6bm8j1vOfh2qqlZp0FFAwIgRmCH6ysw0lFjF+PXYHpTbP
+	9yIjrjGhZoKxlNriJRe2GDwB9tEtZfBEshoY6A==
+X-Received: by 2002:a05:6000:4b0f:b0:487:452:dbd3 with SMTP id ffacd0b85a97d-4871e363b31mr1355635f8f.47.1789709354444;
+        Thu, 17 Sep 2026 22:29:14 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4871ff56411sm1253929f8f.21.2026.09.17.22.29.12
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4871feb5645sm1098126f8f.4.2026.09.17.22.29.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Sep 2026 22:29:12 -0700 (PDT)
+        Thu, 17 Sep 2026 22:29:14 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Eduard Zingerman <eddyz87@gmail.com>,
@@ -70,9 +70,9 @@ Cc: Eduard Zingerman <eddyz87@gmail.com>,
 	Amery Hung <ameryhung@gmail.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 3/8] bpf: Check read access for initialized writable memory arguments
-Date: Fri, 18 Sep 2026 07:28:57 +0200
-Message-ID: <20260918052906.12226-4-memxor@gmail.com>
+Subject: [PATCH bpf-next v4 4/8] selftests/bpf: Cover helper memory access permissions
+Date: Fri, 18 Sep 2026 07:28:58 +0200
+Message-ID: <20260918052906.12226-5-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260918052906.12226-1-memxor@gmail.com>
 References: <20260918052906.12226-1-memxor@gmail.com>
@@ -82,104 +82,161 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3854; i=memxor@gmail.com; h=from:subject; bh=BtbPTp3bvsW1TxjvDUqlQOTdttaorz0OJx1tLsRqAM8=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvN6Vdz676m3zxsrvpwbdvC35ev742Uzp1zguFSFw//H r8FVuf7OkpZGMS4GGTFFFlK/u9jMj5R+TvQdhk3zBxWJpAhDFycAjCRr58Y/koL//wfwMR85zbX MfX3G3LTTlnryD7jvLQmctfc2foHyyUYGa72+9i7nbz3iO8Lg+nUZX/f+8k0bpkme02H60hw/OK gHwwA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4121; i=memxor@gmail.com; h=from:subject; bh=e6dFVBjscNtgx4KHvWR1TgJtx/PI4OyPW2Bkw+z78a0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvN6Vess2pnRP5dELw74uml3d/reHYUq1zava6nRPoh6 /PNN6xjOkpZGMS4GGTFFFlK/u9jMj5R+TvQdhk3zBxWJpAhDFycAjCRmCsM/51+pU7qPlujtGaB 5qrHj54aPnd4JTn3pE+T0hGR5D6u6RIM/wuUPGbopM5+qPbdc4bCjUPr1i79wsztuCG08dcvm7m nQ5gB
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
 From: Eduard Zingerman <eddyz87@gmail.com>
 
-MEM_WRITE without MEM_UNINIT denotes memory that may be read as well as
-written. Helper argument checking currently requests only BPF_WRITE, which
-checks stack initialization but omits read permission checks on map values.
-For example, bpf_check_mtu() reads its mtu_len argument before overwriting it,
-but the verifier permits that argument to point into a BPF_F_WRONLY_PROG map.
+Check that fixed-size and sized helper in/out buffers require both read
+and write permission. Cover bpf_check_mtu() and bpf_fib_lookup(), including
+read/write buffers as positive controls.
 
-Derive generic memory access from argument flags: read-only for inputs,
-write-only for MEM_WRITE | MEM_UNINIT, and read/write for MEM_WRITE alone.
-Encode MEM_WRITE when classifying kfunc memory arguments and resolving
-scalar-only struct pointers, replacing the kfunc-specific access override.
+Keep rejecting read-only buffers for bpf_check_mtu(), and verify that a
+write-only map remains a valid destination for bpf_get_current_comm(),
+whose output is annotated MEM_UNINIT.
 
-This rejects write-only map values passed to helper arguments that require
-initialized writable memory. Generic kfunc __uninit output bookkeeping is
-completed in a following patch.
-
-Fixes: 8ea607330a39 ("bpf: Fix overloading of MEM_UNINIT's meaning")
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/verifier.c | 24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
+ .../progs/verifier_helper_access_var_len.c    | 41 ++++++++++
+ .../selftests/bpf/progs/verifier_mtu.c        | 75 +++++++++++++++++++
+ 2 files changed, 116 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1d5e4ee64fc0..21eb806b1351 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -8886,6 +8886,15 @@ static int process_map_ptr_arg(struct bpf_verifier_env *env, struct bpf_reg_stat
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c b/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c
+index d1452ef6f2f9..6d2c6aec129f 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c
++++ b/tools/testing/selftests/bpf/progs/verifier_helper_access_var_len.c
+@@ -822,4 +822,45 @@ __naked void bytes_no_leak_init_memory(void)
+ 	: __clobber_all);
  }
  
-+static enum bpf_access_type func_arg_access_type(enum bpf_arg_type arg_type)
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__uint(map_flags, BPF_F_WRONLY_PROG);
++	__type(key, __u32);
++	__type(value, struct bpf_fib_lookup);
++} map_fib_wo SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, struct bpf_fib_lookup);
++} map_fib_rw SEC(".maps");
++
++SEC("tc")
++__failure __msg("read from map forbidden")
++int writeonly_sized_input(struct __sk_buff *ctx)
 +{
-+	if (!(arg_type & MEM_WRITE))
-+		return BPF_READ;
-+	if (arg_type & MEM_UNINIT)
-+		return BPF_WRITE;
-+	return BPF_READ | BPF_WRITE;
++	struct bpf_fib_lookup *params;
++	__u32 key = 0;
++
++	params = bpf_map_lookup_elem(&map_fib_wo, &key);
++	if (params)
++		bpf_fib_lookup(ctx, params, sizeof(*params), 0);
++	return 0;
 +}
 +
- static int check_func_arg(struct bpf_verifier_env *env, u32 arg, u32 slot, u32 prev_slot,
- 			  struct bpf_call_arg_meta *meta,
- 			  int insn_idx)
-@@ -9180,9 +9189,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg, u32 slot, u32 p
- 		if (!(arg_type & MEM_FIXED_SIZE))
- 			break;
- 
--		access_type = arg_type & MEM_WRITE ? BPF_WRITE : BPF_READ;
--		if (meta->btf)
--			access_type = BPF_READ | BPF_WRITE;
-+		access_type = func_arg_access_type(arg_type);
- 
- 		err = check_mem_reg(env, reg, argno, arg_size, access_type, meta, &known_memory);
- 		if (err < 0) {
-@@ -9228,9 +9235,7 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg, u32 slot, u32 p
- 		if (meta->btf && bpf_register_is_null(buff_reg))
- 			break;
- 
--		access_type = fn->arg_type[arg - 1] & MEM_WRITE ? BPF_WRITE : BPF_READ;
--		if (meta->btf)
--			access_type = BPF_READ | BPF_WRITE;
-+		access_type = func_arg_access_type(fn->arg_type[arg - 1]);
- 
- 		zero_size_allowed = meta->btf || base_type(arg_type) == ARG_MEM_SIZE_OR_ZERO;
- 
-@@ -12436,7 +12441,8 @@ static int resolve_func_arg_type(struct bpf_verifier_env *env,
- 			PTR_ERR(resolve_ret));
- 		return -EINVAL;
- 	}
--	*arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE | (*arg_type & PTR_MAYBE_NULL);
-+	*arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE |
-+		    (*arg_type & PTR_MAYBE_NULL);
- 
- 	return 0;
++SEC("tc")
++__success
++int readwrite_sized_input(struct __sk_buff *ctx)
++{
++	struct bpf_fib_lookup *params;
++	__u32 key = 0;
++
++	params = bpf_map_lookup_elem(&map_fib_rw, &key);
++	if (params)
++		bpf_fib_lookup(ctx, params, sizeof(*params), 0);
++	return 0;
++}
++
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_mtu.c b/tools/testing/selftests/bpf/progs/verifier_mtu.c
+index 256956ea1ac5..af89ce3d30f7 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_mtu.c
++++ b/tools/testing/selftests/bpf/progs/verifier_mtu.c
+@@ -17,4 +17,79 @@ int tc_uninit_mtu(struct __sk_buff *ctx)
+ 	return TCX_PASS;
  }
-@@ -12933,7 +12939,7 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 				reg_arg_name(env, argno), btf_type_str(ref_t), ref_tname);
- 			return -EINVAL;
- 		}
--		arg_type = ARG_PTR_TO_MEM;
-+		arg_type = ARG_PTR_TO_MEM | MEM_WRITE;
- 	} else if (btf_type_is_struct(ref_t))
- 		/* A pointer to a struct without a size argument is classified as ARG_PTR_TO_BTF_ID */
- 		arg_type = ARG_PTR_TO_BTF_ID;
-@@ -12958,7 +12964,7 @@ get_kfunc_arg_type(struct bpf_verifier_env *env, struct bpf_call_arg_meta *meta,
- 			return -EINVAL;
- 		}
- 		proto->arg_size[arg] = type_size;
--		arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE;
-+		arg_type = ARG_PTR_TO_MEM | MEM_FIXED_SIZE | MEM_WRITE;
- 	}
  
- 	if (is_kfunc_arg_uninit(meta->btf, &args[arg]))
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__uint(map_flags, BPF_F_WRONLY_PROG);
++	__type(key, __u32);
++	__type(value, __u32);
++} map_mtu_wo SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u32);
++} map_mtu_rw SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__uint(map_flags, BPF_F_RDONLY_PROG);
++	__type(key, __u32);
++	__type(value, __u32);
++} map_mtu_ro SEC(".maps");
++
++SEC("tc/ingress")
++__failure __msg("read from map forbidden")
++int tc_writeonly_mtu(struct __sk_buff *ctx)
++{
++	__u32 key = 0;
++	__u32 *mtu;
++
++	mtu = bpf_map_lookup_elem(&map_mtu_wo, &key);
++	if (mtu)
++		bpf_check_mtu(ctx, 0, mtu, 0, 0);
++	return TCX_PASS;
++}
++
++SEC("tc/ingress")
++__success
++int tc_readwrite_mtu(struct __sk_buff *ctx)
++{
++	__u32 key = 0;
++	__u32 *mtu;
++
++	mtu = bpf_map_lookup_elem(&map_mtu_rw, &key);
++	if (mtu)
++		bpf_check_mtu(ctx, 0, mtu, 0, 0);
++	return TCX_PASS;
++}
++
++SEC("tc/ingress")
++__failure __msg("write into map forbidden")
++int tc_readonly_mtu(struct __sk_buff *ctx)
++{
++	__u32 key = 0;
++	__u32 *mtu;
++
++	mtu = bpf_map_lookup_elem(&map_mtu_ro, &key);
++	if (mtu)
++		bpf_check_mtu(ctx, 0, mtu, 0, 0);
++	return TCX_PASS;
++}
++
++SEC("tc/ingress")
++__success
++int tc_writeonly_output(struct __sk_buff *ctx)
++{
++	__u32 key = 0;
++	__u32 *out;
++
++	out = bpf_map_lookup_elem(&map_mtu_wo, &key);
++	if (out)
++		bpf_get_current_comm(out, sizeof(*out));
++	return TCX_PASS;
++}
++
+ char LICENSE[] SEC("license") = "GPL";
 -- 
 2.53.0
 
