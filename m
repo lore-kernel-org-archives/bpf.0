@@ -1,116 +1,199 @@
-Received: from mail-pz2-f40.google.com (mail-pz2-f40.google.com [74.125.228.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D0F2652B2
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 01:29:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B034397945;
+	Fri, 18 Sep 2026 01:31:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789694999; cv=none; b=fI9feF3X75lWZMBYqJu2ajLnlgvtGs0Csj6dOoEy2ENOJF1jwBJmpcVrM6AIRlgav9YnMv+K/xWDThHUQWfGk3Qa9OU5kifwJApDZDPreyoCcoom/ytaJKLEwT3ua63F7nswR99TrdilZs6a8xTkEGxswLLkxPTaDRqmpFUzsos=
+	t=1789695096; cv=none; b=h5GEieJ3FsiTCajimMVxqzc4qwQP3i/vqWFhjemennhdF1b04CaoA7kpGms8sws5qlMnQMSMQNuK9OV9F8gyuLwQRrCdp7WCMdbQ5UqVIdNQ1WsxJZUP4NOYOhiXi2iDJFmh+OwxISIWK4hZgfY9iXC6D1PCKhZHsalmeerEs2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789694999; c=relaxed/simple;
-	bh=iI0zBzfG1hsDHz6i6vCemlZH6syFW4P/KDHxX9QZmH0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:
-	 References:In-Reply-To; b=Oi8XrdS/UhyNJ3Gb+UdMBYy/IiX+29Jq9BVF0ssIWkCE7kvBl/ASEDuzhGlyysx37f7LKtruIDVcUOdWS12IHm7/7kCtXEglRV15Ve5Sk6ThNI7nk4G6q+EMWaI/byMtH0jwPYbS0H+3ifhN/0urXwKWPlbdV8udZkA7FhG8bXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZDWb7+RZ; arc=none smtp.client-ip=74.125.228.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789695096; c=relaxed/simple;
+	bh=KcvIEKDbuHaSZeVIuvf/LZGzwrzfBHO5EJbBtNbuUBs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=q05p7gWu+F+7Gq6orwHelBhLdqc5JZsj/n5Cq/iafJjQjSelFuBWakeEKWBJT2A4ZvXjs8rdEXvfu8AXy22W+n+xfRsU6qSwef3CqXAt6hWayxMx/pGKqsQuQYevQv5ZIUCi4l8zsOL1jZrTxQvo6T5HLeeb3emb1jA7Zc0V5pw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n9w5twsB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZDWb7+RZ"
-Received: by mail-pz2-f40.google.com with SMTP id 41be03b00d2f7-cc5121bcf1aso110252a12.1
-        for <bpf@vger.kernel.org>; Thu, 17 Sep 2026 18:29:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789694997; x=1790299797; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:message-id:date:content-type
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=vbHRw9e+J0REPOf8TNkwmKIHKyLdrdPDh38QRnbIRiU=;
-        b=ZDWb7+RZz6kDNMTMVo45vxMMmT4lWY8ib4Psim9IR/7F1UrRdLLvZU41bjagMzVUge
-         isFKXUbZ0BjxvBg4hdWHm+h3RVaCIJscz/JazMhxGsV5JAv9QAWDbKNTldZZyjY8JYtw
-         2e+j7lUiRsAGeM9oYCsi+OlMEvTvnhGl3ZDgW6Gkfy0WFEohVN23djw1rgwxHfJZoHNq
-         031kCx3EAR0hsWDpsWt+DXbNOzGXB0ch5un5zWjuLBwjotojhddFrI3rqzN6IHMRP+cu
-         rSrsbz6cy1gp6bqcNoqJHNhLta/VRRMW03AIBtefJxqFBwjRYlCcpE8GDFKrKGbteD3H
-         ZONQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789694997; x=1790299797;
-        h=in-reply-to:references:to:from:subject:message-id:date:content-type
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vbHRw9e+J0REPOf8TNkwmKIHKyLdrdPDh38QRnbIRiU=;
-        b=NOGxMb/rWlMVJHfyk9cywZpgnv0S7SMmwabeQrYLpa8U8K9tw+MQ84qhWMgqNGvbf8
-         VZHyaohhffPhFL5PqqICuo0w8ybwHWRpwZJRR4bMPte0eqttIrTgQMM2v0hDEaOvtG8s
-         kc+JGxSY84ZT/3QEFND7c0sdjV4tJYRxGx6zPQXzfxz6q6N1aYrvd4zEWk6FIkIpyACH
-         Tzi81mctLn3j2yVUNuoHgPGwG9qdDhrfzxhYJ8dUhdvlToTQNN+i8bcEy14rd++oK6oT
-         P2WciMF2UfzFzVwsP6kqyiRu97L1S5G4UA7o1z0Eg+wtYXvsZvn5hi3WqbXDOMpv2HFm
-         sU7Q==
-X-Forwarded-Encrypted: i=1; AKwUvBy5F+ebrcjARRW0lkCkG9vbeqGpP+OflyyHJxqSB4zOOhSG1abIxKsRMBkZrk+4ou5OVnM=@vger.kernel.org
-X-Gm-Message-State: AFuF++kwyftICkLK+gKhGTTC5AyJK0yghHKRSge6ZuTYVFFwyIsCI81A
-	fxKcxCkn0sPH++dgJC1bCXYd0X+88fqgI2ILuW8MjVTUt732FPIvOtkg
-X-Gm-Gg: AYBFou3akjlkV9iRxT50m6AoZG7WrVQaPM8N0eBX6XIzNo/v27ZiZh2ADYARqIWZBF1
-	2jWf1LQpqgZ86C30OQ8kMq9wxCoMtSOtpAu2OnHnJZZxYS9CAiN1I/eK8A/b5qsq2LezOK+MBzl
-	Y0krNhv39toSbTCx9xDamd/isouPazaacnUYxVRS0HSbduS0dkcEJkKYoP0USf+g90QXp3geF7/
-	riyT7fUKzzpU85fnur9jXukWWhQCsvKfub9UG0z11K5/u95hKeNOfsDW7HbUL/n2p7kS03MBh7k
-	U6vh7w/4pJd7n/nrf8vcVcftjVev6wOsZNQ6m4inv1Z3YX+W4ZZYEzVdQmtWLMi+PlBC62geYYI
-	ekaU91BEDjtC28uJKcishccBiXn6Zder3GwWDm1R9FwpaU6JOUZMIMcbrkJoGrmmA9Wvy7SMh97
-	rTnuIm0C3YemZyRsQ4WXeJMGVkd+p9YPix0ZZRQeE+qQaT0cliD+7RZVvm1i7FL/t2s1oRk1ETZ
-	hPCNZAt9RlgU7eTmDoyyz2jtwmC1yn8jURkAxw9S51hZVS27Hr04J5E3a0dhozrEjuwjbsoLL1w
-	Qw6q
-X-Received: by 2002:a17:90b:3f84:b0:39e:4c7e:f042 with SMTP id 98e67ed59e1d1-39e54f91d4amr1930776a91.31.1789694997537;
-        Thu, 17 Sep 2026 18:29:57 -0700 (PDT)
-Received: from localhost ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e36115cc8sm7493789a91.3.2026.09.17.18.29.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Sep 2026 18:29:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n9w5twsB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FA281F000FF;
+	Fri, 18 Sep 2026 01:31:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789695094;
+	bh=QS9nIJ3FvUZ63E7dpFZbqyaI/csq1+1IMiM7Bt7yE8s=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=n9w5twsBM6EzMXlxvcWG4u/vYk2lqGpSEyjvZ+w/lx+KsrBL9AsgAfnTj9YcM/VvQ
+	 KhwpJ+VBMdAqTDp0K2Mit49WC4iVAWXyHGpH+C9A/JFAimcxytx6ykFU7oMxehEbHH
+	 5nQerTdmRBLFhhZXdXZ06ni5GUavO9XvfvwZ7isK3JFGdxqDV2ByviJK0Z8di8ewc+
+	 PFVKXlrFUG6sLDA8FGGEPSc3gBzQi7R/Dm8LBAGSueQtwIdntC7EeJQLhc5Ot7dKr3
+	 jlvy0KyKep/mYA5llKFugdPAMuQhR62IEBEeRiWKCjgRyV4zbh23d+woIf0XJirnNR
+	 1qqt0iSpHt7+w==
+From: Jakub Kicinski <kuba@kernel.org>
+To: jiayuan.chen@linux.dev
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	bpf@vger.kernel.org,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	horms@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	shuah@kernel.org,
+	kuniyu@google.com,
+	liuhangbin@gmail.com,
+	mkarsten@uwaterloo.ca,
+	toke@redhat.com,
+	lorenzo.bianconi@oss.qualcomm.com,
+	echaudro@redhat.com,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf v3 1/2] bpf, veth: xdp: fix page_pool page leak on skb-backed XDP
+Date: Thu, 17 Sep 2026 18:31:28 -0700
+Message-ID: <20260918013128.3451350-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260911135711.109338-2-jiayuan.chen@linux.dev>
+References: <20260911135711.109338-2-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 18 Sep 2026 01:29:56 +0000
-Message-Id: <DLI1XF72KLXJ.3JTQWV4WFT55P@gmail.com>
-Subject: Re: [PATCH] bpf: use str_plural() in diag_print_history()
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Lalit Shankar Chowdhury" <lalitshankarch@gmail.com>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong
- Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "open list:BPF [GENERAL] (Safe Dynamic Programs
- and Tools)" <bpf@vger.kernel.org>, "open list"
- <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20260917204648.9110-1-lalitshankarch@gmail.com>
-In-Reply-To: <20260917204648.9110-1-lalitshankarch@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu Sep 17, 2026 at 8:46 PM UTC, Lalit Shankar Chowdhury wrote:
-> Use the string choice helper function to simplify the code.
->
-> Signed-off-by: Lalit Shankar Chowdhury <lalitshankarch@gmail.com>
-> ---
->  kernel/bpf/diagnostics.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
-> index 0abbbe177e31..ff139777ac64 100644
-> --- a/kernel/bpf/diagnostics.c
-> +++ b/kernel/bpf/diagnostics.c
-> @@ -2354,6 +2354,6 @@ static void diag_print_history(struct bpf_verifier_=
-env *env,
->  	if (log->first_seq)
->  		diag_write(env, "  %llu older causal-history event%s not retained beca=
-use diagnostic "
->  			   "event storage reached capacity\n",
-> -			   log->first_seq, log->first_seq =3D=3D 1 ? "" : "s");
-> +			   log->first_seq, str_plural(log->first_seq));
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+---
+bpf, veth: xdp: fix page_pool page leak on skb-backed XDP
 
-Nack.
+This adds an XDP_FLAGS_FRAGS_PAGE_POOL xdp_buff flag that the two skb-cow
+sites (generic XDP and veth) set, so bpf_xdp_shrink_data() frees a released
+frag to the page_pool instead of using xdp->rxq->mem.type. The flag is
+stripped on buff -> frame conversion and re-derived from frame->mem_type on
+frame -> buff conversion.
 
-Instead propose a revert of commit 9ca5facd0400f I will be fully
-supporitve to delete this obfuscation garbage.
+Closes: https://syzkaller.appspot.com/bug?extid=237bbeed8dfe0699b7f5
 
-pw-bot: cr
+> diff --git a/include/net/xdp.h b/include/net/xdp.h
+> index aa742f413c358..8fd4139e9cbd3 100644
+> --- a/include/net/xdp.h
+> +++ b/include/net/xdp.h
 
+[ ... ]
+
+> @@ -394,6 +412,15 @@ void xdp_convert_frame_to_buff(const struct xdp_frame *frame,
+>  	xdp->data_meta = frame->data - frame->metasize;
+>  	xdp->frame_sz = frame->frame_sz;
+>  	xdp->flags = frame->flags;
+> +	/*
+> +	 * frame->flags never carries XDP_FLAGS_FRAGS_PAGE_POOL (it is stripped
+> +	 * in xdp_update_frame_from_buff()); re-derive it from the frame's own
+> +	 * memory type. veth and devmap rebuild a buff here and run a program
+> +	 * whose rxq says MEM_TYPE_PAGE_SHARED, so without this a shrink would
+> +	 * free a page_pool frag through page_frag_free().
+> +	 */
+> +	if (frame->mem_type == MEM_TYPE_PAGE_POOL)
+> +		xdp_buff_set_frag_pp(xdp);
+>  }
+
+[ ... ]
+
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 532405988fd98..861c878d0a6d6 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -4377,6 +4377,13 @@ static bool bpf_xdp_shrink_data(struct xdp_buff *xdp, skb_frag_t *frag,
+>  	if (mem_type == MEM_TYPE_XSK_BUFF_POOL) {
+>  		netmem = 0;
+>  		zc_frag = bpf_xdp_shrink_data_zc(xdp, shrink, tail, release);
+> +	} else if (xdp_buff_is_frag_pp(xdp)) {
+> +		/*
+> +		 * Skb-backed XDP (generic XDP, veth) cow's the frags into a
+> +		 * page_pool while the rxq stays MEM_TYPE_PAGE_SHARED, so free
+> +		 * the frag to the pool, not via page_frag_free().
+> +		 */
+> +		mem_type = MEM_TYPE_PAGE_POOL;
+>  	}
+>  
+>  	if (release) {
+
+[Severity: High]
+The new flag only overrides mem_type in one direction (towards
+MEM_TYPE_PAGE_POOL), while mem_type is still initialized from the shared
+xdp->rxq->mem.type:
+
+net/core/filter.c:bpf_xdp_shrink_data() {
+	enum xdp_mem_type mem_type = xdp->rxq->mem.type;
+	...
+}
+
+The commit message says veth's rq->xdp_rxq.mem "is shared per-queue state"
+that "can be clobbered under a packet still in flight". veth also writes a
+frame's memory type into it and never restores it:
+
+drivers/net/veth.c:veth_xdp_rcv_one() {
+	case XDP_TX:
+		orig_frame = *frame;
+		xdp->rxq->mem.type = frame->mem_type;
+	...
+	case XDP_REDIRECT:
+		orig_frame = *frame;
+		xdp->rxq->mem.type = frame->mem_type;
+}
+
+Only veth_disable_xdp_range() puts rq->xdp_rxq.mem back to rq->xdp_mem.
+
+So can the opposite direction still go wrong on a veth queue?
+
+1) A multi-buff frame with frame->mem_type == MEM_TYPE_PAGE_POOL (e.g.
+   redirected in from a page_pool NIC) takes XDP_TX or XDP_REDIRECT, and
+   rq->xdp_rxq.mem.type stays MEM_TYPE_PAGE_POOL for every later packet on
+   that queue.
+
+2) A later multi-buff frame whose frame->mem_type is MEM_TYPE_PAGE_SHARED
+   (the peer's veth_xdp_rcv_skb() XDP_TX/XDP_REDIRECT path stamps
+   xdp->rxq->mem = rq->xdp_mem into the frame) or MEM_TYPE_PAGE_ORDER0
+   arrives. xdp_convert_frame_to_buff() does not set
+   XDP_FLAGS_FRAGS_PAGE_POOL for it, and it does not clear the flag either,
+   so bpf_xdp_shrink_data() picks up the stale MEM_TYPE_PAGE_POOL from the
+   rxq.
+
+3) If the program then calls bpf_xdp_adjust_tail() with a negative offset
+   that consumes a whole frag, the release path ends in:
+
+net/core/xdp.c:__xdp_return() {
+	case MEM_TYPE_PAGE_POOL:
+		netmem = netmem_compound_head(netmem);
+		...
+		/* No need to check netmem_is_pp() as mem->type knows this a
+		 * page_pool page
+		 */
+		page_pool_put_full_netmem(netmem_get_pp(netmem), netmem,
+					  napi_direct);
+}
+
+There is no netmem_is_pp() validation here, so netmem_get_pp() on a plain
+page returns whatever occupies the overlaid field, and NULL for a page that
+veth already released from its pool. Can that dereference a garbage or NULL
+struct page_pool *, or hand a foreign page to an unrelated pool's cache?
+
+Would it be more robust for bpf_xdp_shrink_data() to derive the frag memory
+type entirely from the buff (i.e. also express "not page_pool" instead of
+falling back to rxq->mem.type), so the shared and clobberable veth rxq type
+is not consulted at all?
+
+Note this residual path is not addressed later in the series: the diff of
+net/, drivers/net/veth.c and include/net/xdp.h between this commit and
+6c9c432f is empty, the following patch only adds a selftest.
