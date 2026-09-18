@@ -1,48 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82D7752ED21;
-	Fri, 18 Sep 2026 21:25:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3057452F26F;
+	Fri, 18 Sep 2026 21:25:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789766711; cv=none; b=UeCoeJLeQv/qlOThgt2ZjxhNQrpqiWQ5TZroMy4gtCvkqeXaILVr7MJ0zwuQLEy0HTbd1r+QNvSSVjeJaNl659WXDMvYpNke8P8uS5AmDkfLSIHMVn+O6XwUw11LU8Avvf3BTSuzYf+fC6r/3bfN+2VZ+Uk/YwSmMY7xosv17Vg=
+	t=1789766713; cv=none; b=QCzOAK0HMRd2SNqWHAwJlpT0qEx+XEbQGigEziVPhg+x2ME/WC7znw3WRRVMREfCxbbeVNT3twE2jEs7pqO0ioNsUk3jjLRleSPG8FNoIuDH/pz4Qd/4uibot5IEgTrPeOOe8PlVy0iWT9L4yd/Ueu0Lb7vCWG5daq2qpJplkIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789766711; c=relaxed/simple;
-	bh=NxemBkcpOxHcTHt2Ca0k4VZJiTLtFgSmzqjEze2H4Pw=;
+	s=arc-20240116; t=1789766713; c=relaxed/simple;
+	bh=sQKjj1Vx30kHsvvc2cJFd2V0ogwSzZaUpRNz4VVLkBw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=b2OHS+7/mw5xdCw+Znb8I2cThlAdRjZyTsCvUfqgGwGg7K8AMxhobymRBtf9pM2lCn3r06g1ms+1nGBRIWlfzOD2eX72Jgk/ERKFjkDx0vlTr0FFjZmlO8ocPSr8pLza+hRcAl9AqnoMi1QtmeoEhpoJb2xBk48gj/GTtQJylFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ffjgqm1w; arc=none smtp.client-ip=192.198.163.18
+	 MIME-Version; b=fnTjfHfpP5r5XJdB/3YdbmCjuunspFEZaEbnqDxyS+VhYZtRBE0hGfQjrnqo6s56gN6PBUIV0UIg4f0IEh1/KvM3GQJQWgDO7jnb5zMIIYN52tBaVoJB3aaiWCtFKpNWlX1ab6L9EJvCGEQVKtZpqVCxgSXMlx/2Zj18XiGY79s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jU+G3hud; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ffjgqm1w"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jU+G3hud"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789766710; x=1821302710;
+  t=1789766711; x=1821302711;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=NxemBkcpOxHcTHt2Ca0k4VZJiTLtFgSmzqjEze2H4Pw=;
-  b=Ffjgqm1w69UZujewIFED2vLYnU44n1X2XvvWQdGUeeQsoyTGns5Sp01S
-   JBi96NTNR/aWb3WTRNcyrnbd1D63a6HQjUQghhZ1UzoxI8yV7zirjTiDa
-   gC4rNeJne5bX0pqUkGSQDUjQzyD+0i8g2jmYWNTkqwLLe6WstuWXSt191
-   lIuW9/TWdce9/pRisppZdXCbqu43JT82H3oEvl1dmNfp9iON5TYzFvLDj
-   1e24zS4mE8eVwgwmK+ZfxrFKxZ9eLJKid3I2wazd0ExahQH4j32pv5M2z
-   objglx1Xbm7vRCAJBU2nPK40EEsL5W2zcTUvCIIOxBHS0kjJq2Y3wZeXq
+  bh=sQKjj1Vx30kHsvvc2cJFd2V0ogwSzZaUpRNz4VVLkBw=;
+  b=jU+G3hudVL9UnnrzsK/UaKNPy89SyrId9v+alIiXTKh+pUzlfGszJV9B
+   5Jj690uf4UMAYtOoeEVOFmob979MKc04OtJan8o/9yVWLd0OERO3yUFxy
+   ZFUyksSLJq9nQ4cRjjbJ2wvpfIBIu1B+9DJGpbv0LEkjyVCk9YAyy4TYz
+   n+8YAMVsK5/IoYDW3Zk7eCCHDPmZKn8YyueuzJ/i4or8NWBNT9f0Mv7kE
+   NR90FK6y5PUvc+LssAYiRDMtr+vgIRyWRmXobyaie+yAUASg9reEDFU1m
+   0P9q0F+O/dYWTU/pB+Yw+zn/TxY9wPs+fhU3J2SbSxPDxUKVqK7Y1AMdm
    Q==;
-X-CSE-ConnectionGUID: yDt32SVsQs+CUv1b5BngNQ==
-X-CSE-MsgGUID: jBPB+KSORP6e9oNBPbbApw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11909"; a="89436270"
+X-CSE-ConnectionGUID: Omt+e4YVSwee+upLcb+n8Q==
+X-CSE-MsgGUID: DXyf5AYLSxSGA4xfMHji0A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11909"; a="89436291"
 X-IronPort-AV: E=Sophos;i="6.27,109,1787036400"; 
-   d="scan'208";a="89436270"
+   d="scan'208";a="89436291"
 Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2026 14:25:07 -0700
-X-CSE-ConnectionGUID: HTVGCfCaSzWGuCFKjpNVJg==
-X-CSE-MsgGUID: hUap7SlyQ2aGojyna0zguQ==
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2026 14:25:08 -0700
+X-CSE-ConnectionGUID: jFZU+Mh4Qv6N+kzq4FdcLA==
+X-CSE-MsgGUID: +00q3q51Sw6PlUK0w06qHA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,109,1787036400"; 
-   d="scan'208";a="271251416"
+   d="scan'208";a="271251429"
 Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by fmviesa007.fm.intel.com with ESMTP; 18 Sep 2026 14:25:06 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 18 Sep 2026 14:25:07 -0700
 From: Tony Nguyen <anthony.l.nguyen@intel.com>
 To: davem@davemloft.net,
 	kuba@kernel.org,
@@ -50,9 +50,9 @@ To: davem@davemloft.net,
 	edumazet@google.com,
 	andrew+netdev@lunn.ch,
 	netdev@vger.kernel.org
-Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+Cc: Chenguang Zhao <zhaochenguang@kylinos.cn>,
 	anthony.l.nguyen@intel.com,
-	zhaochenguang@kylinos.cn,
+	maciej.fijalkowski@intel.com,
 	magnus.karlsson@intel.com,
 	jacob.e.keller@intel.com,
 	przemyslaw.kitszel@intel.com,
@@ -65,10 +65,11 @@ Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
 	john.fastabend@gmail.com,
 	sdf@fomichev.me,
 	bpf@vger.kernel.org,
-	Sunitha Mekala <sunithax.d.mekala@intel.com>
-Subject: [PATCH net 6/8] i40e: do not expose netdev too early
-Date: Fri, 18 Sep 2026 14:24:53 -0700
-Message-ID: <20260918212458.550425-7-anthony.l.nguyen@intel.com>
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+	Patryk Holda <patryk.holda@intel.com>
+Subject: [PATCH net 8/8] i40e: xsk: fix multi-buffer XDP_PASS skb construction
+Date: Fri, 18 Sep 2026 14:24:55 -0700
+Message-ID: <20260918212458.550425-9-anthony.l.nguyen@intel.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20260918212458.550425-1-anthony.l.nguyen@intel.com>
 References: <20260918212458.550425-1-anthony.l.nguyen@intel.com>
@@ -80,84 +81,63 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+From: Chenguang Zhao <zhaochenguang@kylinos.cn>
 
-i40e_vsi_setup() registers the netdev before rings and q_vectors are fully
-allocated and mapped. Once register_netdev() returns, userspace can reach
-netdev callbacks such as ndo_open(), so the VSI backing state must already
-be ready.
+When AF_XDP ZC receives a multi-buffer frame and the XDP program
+returns XDP_PASS, i40e_construct_skb_zc() copies frags into a new
+skb. The copy used skb_frag_page() as the memcpy source (page
+metadata instead of packet data) and passed a virtual address to
+__skb_fill_page_desc_noacc(), which expects a struct page *.
 
-Move register_netdev() to the end of the setup path, after ring/q_vector
-allocation, ring mapping and RSS configuration. Keep freeing an allocated
-but not registered netdev on the error path.
+Use skb_frag_address() for the copy, attach frags with
+skb_add_rx_frag() so len/data_len/truesize are updated, and on
+dev_alloc_page() failure free the skb via the shared out path so
+xsk_buff_free() still runs and previously attached pages are
+released by kfree_skb.
 
-Fixes: 41c445ff0f48 ("i40e: main driver core")
-Reported-by: Sashiko AI Review <sashiko-bot@kernel.org>
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Tested-by: Sunitha Mekala <sunithax.d.mekala@intel.com> (A Contingent worker at Intel)
+Fixes: 1c9ba9c14658 ("i40e: xsk: add RX multi-buffer support")
+Signed-off-by: Chenguang Zhao <zhaochenguang@kylinos.cn>
+Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+Reviewed-by: Jason Xing <kerneljasonxing@gmail.com>
+Acked-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Tested-by: Patryk Holda <patryk.holda@intel.com>
 Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c | 29 ++++++++++++---------
- 1 file changed, 17 insertions(+), 12 deletions(-)
+ drivers/net/ethernet/intel/i40e/i40e_xsk.c | 13 +++++--------
+ 1 file changed, 5 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-index 2b4b061302db..82037faf960f 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -14449,15 +14449,6 @@ struct i40e_vsi *i40e_vsi_setup(struct i40e_pf *pf, u8 type,
- 				goto err_netdev;
- 			SET_NETDEV_DEVLINK_PORT(vsi->netdev, &pf->devlink_port);
- 		}
--		ret = register_netdev(vsi->netdev);
--		if (ret)
--			goto err_dl_port;
--		vsi->netdev_registered = true;
--		netif_carrier_off(vsi->netdev);
--#ifdef CONFIG_I40E_DCB
--		/* Setup DCB netlink interface */
--		i40e_dcbnl_setup(vsi);
--#endif /* CONFIG_I40E_DCB */
- 		fallthrough;
- 	case I40E_VSI_FDIR:
- 		/* set up vectors and rings if needed */
-@@ -14485,6 +14476,19 @@ struct i40e_vsi *i40e_vsi_setup(struct i40e_pf *pf, u8 type,
- 		if (ret)
- 			goto err_config;
- 	}
-+
-+	if (vsi->netdev) {
-+		ret = register_netdev(vsi->netdev);
-+		if (ret)
-+			goto err_config;
-+		vsi->netdev_registered = true;
-+		netif_carrier_off(vsi->netdev);
-+#ifdef CONFIG_I40E_DCB
-+		/* Setup DCB netlink interface */
-+		i40e_dcbnl_setup(vsi);
-+#endif /* CONFIG_I40E_DCB */
-+	}
-+
- 	return vsi;
+diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+index 9f47388eaba5..a4247710c85b 100644
+--- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
++++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
+@@ -318,22 +318,19 @@ static struct sk_buff *i40e_construct_skb_zc(struct i40e_ring *rx_ring,
+ 		goto out;
  
- err_config:
-@@ -14495,13 +14499,14 @@ struct i40e_vsi *i40e_vsi_setup(struct i40e_pf *pf, u8 type,
- 	if (vsi->netdev_registered) {
- 		vsi->netdev_registered = false;
- 		unregister_netdev(vsi->netdev);
--		free_netdev(vsi->netdev);
--		vsi->netdev = NULL;
+ 	for (int i = 0; i < nr_frags; i++) {
+-		struct skb_shared_info *skinfo = skb_shinfo(skb);
+ 		skb_frag_t *frag = &sinfo->frags[i];
++		unsigned int frag_size = skb_frag_size(frag);
+ 		struct page *page;
+-		void *addr;
+ 
+ 		page = dev_alloc_page();
+ 		if (!page) {
+ 			dev_kfree_skb(skb);
+-			return NULL;
++			skb = NULL;
++			goto out;
+ 		}
+-		addr = page_to_virt(page);
+ 
+-		memcpy(addr, skb_frag_page(frag), skb_frag_size(frag));
+-
+-		__skb_fill_page_desc_noacc(skinfo, skinfo->nr_frags++,
+-					   addr, 0, skb_frag_size(frag));
++		memcpy(page_to_virt(page), skb_frag_address(frag), frag_size);
++		skb_add_rx_frag(skb, i, page, 0, frag_size, PAGE_SIZE);
  	}
--err_dl_port:
- 	if (vsi->type == I40E_VSI_MAIN)
- 		i40e_devlink_destroy_port(pf);
- err_netdev:
-+	if (vsi->netdev) {
-+		free_netdev(vsi->netdev);
-+		vsi->netdev = NULL;
-+	}
- 	i40e_aq_delete_element(&pf->hw, vsi->seid, NULL);
- err_vsi:
- 	i40e_vsi_clear(vsi);
+ 
+ out:
 -- 
 2.47.1
 
