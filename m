@@ -1,325 +1,229 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f31.google.com (mail-pz2-f31.google.com [74.125.228.31])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D3AE52D2B0;
-	Fri, 18 Sep 2026 21:25:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA81652CCEB
+	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 21:26:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.31
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789766713; cv=none; b=bpEFhnPHuhSKv2tJLnXFTIXTPNfcAgseS0G7KLNQTNlQiFyvSCubeesZMt5P2O39ZIf4DkCHjy1wunVPBwnMihdD0NQrz3YL1ntVexIDqV5kcuM0Eitn3k+lcFE3XgOJNDI1gGnqqOsTnyBKDEWAY6CjBF88lPvZAXVbZ551sJo=
+	t=1789766793; cv=none; b=gjDZLT+zeavjQPMP66OvT/TjUZB8dOt9tY+W8Hrh1TVVjvdDUxHLbFbJa4G1kyeXXx/kHyQ2QE76nvudI7fJJiPbXkdCQgRHgVWnQkbFQtsHkdmEnQGPu8NbpRH/zeOFmXuV5tCit8BM7euyfMXXV9FLWaqbQpEBxKRXx5C9N6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789766713; c=relaxed/simple;
-	bh=G+qs214tpQ8TyMdX1uOAAIs99jrpPfghTU6Q0VeCX9Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I+6GYaWVUeDjUoBEJL6N+MLK9xvztdh3XU0lUZl+jPGarjhIuAjDblFQ1NkvmFajp1bPRBCKyQ8n9KrbrXxbcYFMqbiIx3JPg6va/q2POZnfeGrSO6Coxt/73SD/DiU5EHZvYacM8FHe09j7mdwH3H9WRlFNdOGqOXa1pPWVjnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K58MQzS9; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1789766793; c=relaxed/simple;
+	bh=piQ/qmdh5vGrLseCH4oX99pnj7X0x5hoLNKV1iykz48=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=ZreTyyvZBSAYNVsKJdR8VKVSIMKGJXesKqtARQBMcWUfi8L+YUtLJkpiT4yd/N9skLt98eyM8oW2wLR7O9NRuIx+ErTb+LejVwkT3nhe1mRegpVBSoi5C99gJVFj1Cfrwztj+d+hjRVP7O9skPk9KN9TfGKnrpjZmr8ZC5rFFKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mNTv6Alo; arc=none smtp.client-ip=74.125.228.31
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K58MQzS9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789766710; x=1821302710;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=G+qs214tpQ8TyMdX1uOAAIs99jrpPfghTU6Q0VeCX9Y=;
-  b=K58MQzS9P0xy1R7CjeQYuoT7MiyyVvvoUZZ3E2WC8HZYmQNJ9kuWH6BA
-   9hoC+n5q8a3MAdizC20g1ZZ2sTa+oajiTOCxbol7hVh/gubt5soJKXD3W
-   8ZzbwbANxc4I/NkF0zUVsek47sOK6VO4P9zcpRPlGWdF/bJDeWpCq/i31
-   oTSzWmFZM57vbcOAXDp91xO9vGxq3+4CFpzMQk37AfftfJPHUdapAF3cw
-   ipFc60Aj0NZD6FDja+n42coBLMuzz7KfVomj5cPYaZX3EwtFJLfbxa9AE
-   SLA9tJYx7VrIuw2yPrV5Z/lRPpIRjVAEfHwh3y1rObkel4hbEyDOThUuM
-   Q==;
-X-CSE-ConnectionGUID: cwBtIBvsQLG2051OnoTKYA==
-X-CSE-MsgGUID: vPi7a6LeTvetS7i/FR26QA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11909"; a="89436280"
-X-IronPort-AV: E=Sophos;i="6.27,109,1787036400"; 
-   d="scan'208";a="89436280"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2026 14:25:08 -0700
-X-CSE-ConnectionGUID: 3U76s+/RTzWlErULRitSbg==
-X-CSE-MsgGUID: lJ1BTKnQTl+YTi6JMXRqgA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,109,1787036400"; 
-   d="scan'208";a="271251426"
-Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by fmviesa007.fm.intel.com with ESMTP; 18 Sep 2026 14:25:07 -0700
-From: Tony Nguyen <anthony.l.nguyen@intel.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	netdev@vger.kernel.org
-Cc: Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	anthony.l.nguyen@intel.com,
-	zhaochenguang@kylinos.cn,
-	magnus.karlsson@intel.com,
-	jacob.e.keller@intel.com,
-	przemyslaw.kitszel@intel.com,
-	jbrandeb@kernel.org,
-	horms@kernel.org,
-	kerneljasonxing@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	bpf@vger.kernel.org,
-	Sunitha Mekala <sunithax.d.mekala@intel.com>
-Subject: [PATCH net 7/8] i40e: keep q_vectors array in sync with channel count changes
-Date: Fri, 18 Sep 2026 14:24:54 -0700
-Message-ID: <20260918212458.550425-8-anthony.l.nguyen@intel.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20260918212458.550425-1-anthony.l.nguyen@intel.com>
-References: <20260918212458.550425-1-anthony.l.nguyen@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mNTv6Alo"
+Received: by mail-pz2-f31.google.com with SMTP id 41be03b00d2f7-cc1ceb47d55so264597a12.1
+        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 14:26:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789766791; x=1790371591; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=D3SEXFUxByL8NwUA0aascO5krkdBelJ+D590uzi7yTc=;
+        b=mNTv6AlosrVIQyufi0IV0pzu5f2qpw7mTvbw/ZeftIjGRqzWJwG564SNqOMJiA9Skc
+         pY5EC+4gXprPKZGcqHneRSzrmRE7+VEtllgVYe8p18p+bQXz4vLWbnZU1TrszMLYmsfX
+         EONOe3ElNqRi6MyIZgx+pBaKbj3a0yOBWdbS86doDISx+yoQGm0p1Tp5MqdM+FZlWzQp
+         V77igpIA6SK1A89CZnbTSAnhHaRq11TJvZdMjQJiGVF36NUp8FfKonLRhMK1OMJ8w0X2
+         GWpQEtG5y3o/XYUQoTBhYLGMoxM9v4DFFShUeJww4zPctYrMlmPdtBGLgTgm/IHVnuvs
+         dScQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789766791; x=1790371591;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=D3SEXFUxByL8NwUA0aascO5krkdBelJ+D590uzi7yTc=;
+        b=JTPRBp3rr9JhkdQlgdj8vuj7VY0NI05NmfWaHq5myMAPmc+Z7x9HRK3anqcNJ3RyCz
+         p2taKB2I4dDstIcXF2Ntr06kjfxud8OPpeVD7MsbQtUzIiPXim/+M4Gkje/OgdGvCW3P
+         5oI3uLYzKA9BPtZ2opN36SYqO0KJknq4i7fK9KdvNOIROvqKGRCX0qpGXr5KroGb6Pyn
+         oZI0M8jmDSkjQ+OcadZLJRUe64gTnLug9ZRQWIhPVO6T/Ks8vf/7T9qUEBqYJUSLVg7e
+         TKyMOB23jxEImkVQ1t/RCp/V0aIJOzxT4cbZR0cKHn/4G6dC+HzxiH/LITPT6xAUbbNU
+         4tnw==
+X-Forwarded-Encrypted: i=1; AKwUvBzrBnGwLcUsN+HCUOIEvcJxuoLM/uL4psxRJHbVnEw78T4Lx4Sl0NtM+3kFyvcYXqWBoLU=@vger.kernel.org
+X-Gm-Message-State: AFuF++mBOZ0F+bF1EbbRhP/qU0SNurajhjjqcmcPuiJ4fA+kYTB9zXVn
+	2EaU65sbNoImYxt/gVwqJky9CgdE5G3KERqoo1f7mQbfABnJ8RGlBcFs
+X-Gm-Gg: AYBFou2zRy16C2QiF8MP4+PlV8R+koe6g9pWVTfyeB39KR6Wmk/PpWnh6r+GwA9h6pc
+	J1j6hoTDNjqaCXX5rrsbdmw9YmnNB+ZbzqkshI143NrVTjTYtz+lYXoLx65tp/AkFS9p4EU9WnF
+	xT7eJE7OVBXIGFCeWpMCSfoJ84AR7Rh0K0SMlKHzZU32BtlkHORmkhSH41QgDBnMdYVMdtgbLBN
+	2ixNSvmdGZNBk+itYExk2gdhnJh+5VL3/qK/X9pj7ZLBDlPI5M/SA9kKVN3GDjzHIarSsrsvmqL
+	+QAi6JpFssLjZgAWvic8OLva0YI+J9U2k7abeQFd/swkJhJykHm5q7XVjqo5q45zVUAphlU49pn
+	6YmefP5F/rA9BS1RF0znhtO+dRxWgZWTh6wAzb9JsjT1cEYSUE6ovmAZYBM6OiHWLUDYst6txQJ
+	tqX8VTqbcLEIjHsaDrkLmeMZOmbpsbEA5kUP0aKT84eYTtjsXGF/YVTdGzdGbGJRAIy+YIOsw/T
+	R+j9rZs7H32JpH63+TXH7o/P2BoRuFkUtlnpCQsWZAZ1zFiwxDTwnARaqGex/dTP+xSFDLoWx5U
+	GxKt
+X-Received: by 2002:a17:90b:2584:b0:39e:6c68:fd89 with SMTP id 98e67ed59e1d1-39e6c68feb9mr902813a91.30.1789766791008;
+        Fri, 18 Sep 2026 14:26:31 -0700 (PDT)
+Received: from localhost ([153.61.198.254])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e6cb427casm1165720a91.17.2026.09.18.14.26.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Sep 2026 14:26:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 18 Sep 2026 21:26:29 +0000
+Message-Id: <DLIRDKA6G2IQ.2Q62BXX7CJWIW@gmail.com>
+Subject: Re: [PATCH RFC v4 07/13] bpf, x86: Take a Tasks Trace reader in the
+ trampoline around its call-outs
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Josef Bacik" <josef@toxicpanda.com>, "Paul E. McKenney"
+ <paulmck@kernel.org>, "Frederic Weisbecker" <frederic@kernel.org>, "Neeraj
+ Upadhyay" <neeraj.upadhyay@kernel.org>, "Joel Fernandes"
+ <joelagnelf@nvidia.com>, "Boqun Feng" <boqun@kernel.org>, "Thomas Gleixner"
+ <tglx@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>, "Steven
+ Rostedt" <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mark Rutland" <mark.rutland@arm.com>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
+ <x86@kernel.org>, "Catalin Marinas" <catalin.marinas@arm.com>, "Will
+ Deacon" <will@kernel.org>, "Puranjay Mohan" <puranjay@kernel.org>, "Xu
+ Kuohai" <xukuohai@huaweicloud.com>, "Paul E. McKenney"
+ <paulmck@kernel.org>, "Frederic Weisbecker" <frederic@kernel.org>, "Neeraj
+ Upadhyay" <neeraj.upadhyay@kernel.org>, "Joel Fernandes"
+ <joelagnelf@nvidia.com>, "Boqun Feng" <boqun@kernel.org>, "Thomas Gleixner"
+ <tglx@kernel.org>, "Peter Zijlstra" <peterz@infradead.org>, "Steven
+ Rostedt" <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Mark Rutland" <mark.rutland@arm.com>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
+ <x86@kernel.org>, "Catalin Marinas" <catalin.marinas@arm.com>, "Will
+ Deacon" <will@kernel.org>, "Puranjay Mohan" <puranjay@kernel.org>, "Xu
+ Kuohai" <xukuohai@huaweicloud.com>
+Cc: "Andy Lutomirski" <luto@kernel.org>, "Josh Triplett"
+ <josh@joshtriplett.org>, "Uladzislau Rezki" <urezki@gmail.com>, "Mathieu
+ Desnoyers" <mathieu.desnoyers@efficios.com>, "Lai Jiangshan"
+ <jiangshanlai@gmail.com>, "Zqiang" <qiang.zhang@linux.dev>, "Juergen Gross"
+ <jgross@suse.com>, "Luis Chamberlain" <mcgrof@kernel.org>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, <linux-kernel@vger.kernel.org>,
+ <rcu@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+ <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ <xen-devel@lists.xenproject.org>, "Andy Lutomirski" <luto@kernel.org>,
+ "Josh Triplett" <josh@joshtriplett.org>, "Uladzislau Rezki"
+ <urezki@gmail.com>, "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+ "Lai Jiangshan" <jiangshanlai@gmail.com>, "Zqiang" <qiang.zhang@linux.dev>,
+ "Juergen Gross" <jgross@suse.com>, "Luis Chamberlain" <mcgrof@kernel.org>,
+ "Ihor Solodrai" <ihor.solodrai@linux.dev>, <linux-kernel@vger.kernel.org>,
+ <rcu@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>,
+ <bpf@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+ <xen-devel@lists.xenproject.org>
+X-Mailer: aerc 0.17.0
+References: <20260918-b4-rcu-tasks-preempt-qs-v4-0-63f0e9d69661@toxicpanda.com> <20260918-b4-rcu-tasks-preempt-qs-v4-7-63f0e9d69661@toxicpanda.com>
+In-Reply-To: <20260918-b4-rcu-tasks-preempt-qs-v4-7-63f0e9d69661@toxicpanda.com>
 
-From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+On Fri Sep 18, 2026 at 2:49 PM UTC, Josef Bacik wrote:
+> On HAVE_RCU_TRAMPOLINE_READERS kernels Tasks RCU keeps a BPF trampoline
+> image allocated only while a task using it is a Tasks Trace RCU reader
+> or is executing text that rcu_tasks_trampoline_text() recognises.  The
+> image itself is such text, but the C glue and the programs it calls are
+> not, and only sleepable programs take rcu_read_lock_trace() today.
+>
+> Have the x86-64 JIT open-code rcu_read_lock_trace() and
+> rcu_read_unlock_trace() in the trampoline, as ftrace_64.S does for
+> ftrace_caller: one reader from just after the frame is set up to just
+> before the original function is called, covering __bpf_tramp_enter()
+> and the fentry and fmod_ret programs, and a second one from just after
+> the original function returns to just before the final register
+> restore, covering the fexit programs and __bpf_tramp_exit().  The
+> original function itself runs outside both, since it may run for a long
+> time and the image is pinned by im->pcref across it.  Trampolines that
+> do not call the original function get a single reader around all their
+> programs.  The second reader is entered before ip_after_call, so the
+> ip_after_call -> ip_epilogue jump that bpf_tramp_image_put() patches in
+> is inside it, and the fmod_ret early-exit branch lands after that point
+> still holding the first reader, so exactly one is held on every path.
+>
+> The sequence uses r10 and r11, which are scratch at each emission point,
+> and references current_task and rcu_tasks_trace_srcu_struct by absolute
+> sign-extended address, the form the JIT already relies on for
+> this_cpu_off.  Sleepable programs' own rcu_read_lock_trace() simply
+> nests.  Nothing is emitted on other configurations.
+>
+> Suggested-by: Alexei Starovoitov <ast@kernel.org>
+> Assisted-by: LLM
+> Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+> ---
+>  arch/x86/net/bpf_jit_comp.c | 113 ++++++++++++++++++++++++++++++++++++++=
+++++++
+>  1 file changed, 113 insertions(+)
+>
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 2853e87797a7..c991f7ceacdf 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/memory.h>
+>  #include <linux/sort.h>
+>  #include <linux/execmem.h>
+> +#include <linux/rcupdate_trace.h>
+>  #include <asm/extable.h>
+>  #include <asm/ftrace.h>
+>  #include <asm/set_memory.h>
+> @@ -722,6 +723,97 @@ static void emit_indirect_jump(u8 **pprog, int bpf_r=
+eg, u8 *ip)
+>  	*pprog =3D prog;
+>  }
+> =20
+> +/*
+> + * Open-coded rcu_read_lock_trace() / rcu_read_unlock_trace() for the
+> + * trampoline, see CONFIG_HAVE_RCU_TRAMPOLINE_READERS and the equivalent
+> + * macros in arch/x86/kernel/ftrace_64.S.  The image is not relocated, s=
+o
+> + * current_task and rcu_tasks_trace_srcu_struct are referenced by absolu=
+te
+> + * (sign-extended 32-bit) address, the form the JIT already relies on fo=
+r
+> + * this_cpu_off.  Uses r10 and r11, which are scratch at every emission
+> + * point, and clobbers flags.
+> + *
+> + * lock:                                  unlock:
+> + *   mov  r11, gs:[current_task]            mov  r11, gs:[current_task]
+> + *   mov  r10d, [r11+nesting]               mov  r10d, [r11+nesting]
+> + *   inc  dword ptr [r11+nesting]           sub  r10d, 1
+> + *   test r10d, r10d                        jnz  2f
+> + *   jnz  1f                                mov  r10, [r11+scp]
+> + *   mov  r10, [&srcu.srcu_ctrp]            mov  dword ptr [r11+nesting]=
+, 0
+> + *   inc  qword ptr gs:[r10+locks]          (smp_mb)
+> + *   mov  [r11+scp], r10                    inc  qword ptr gs:[r10+unloc=
+ks]
+> + *   (smp_mb)                               jmp  3f
+> + * 1:                                     2: mov [r11+nesting], r10d
+> + *                                        3:
+> + */
+> +static void emit_trace_rcu_reader(u8 **pprog, bool lock)
+> +{
+> +#ifdef CONFIG_TASKS_RCU_TRAMPOLINE_READERS
+> +	const u32 nesting =3D offsetof(struct task_struct, trc_reader_nesting);
+> +	const u32 scp =3D offsetof(struct task_struct, trc_reader_scp);
 
-For the main VSI, i40e_set_num_rings_in_vsi() always derives
-num_q_vectors from pf->num_lan_msix. At the same time, ethtool -L stores
-the user requested channel count in vsi->req_queue_pairs and the queue
-setup path uses that value for the effective number of queue pairs.
+nesting_off ?
+scp_off ?
+Otherwise
+EMIT(nesting, 4);
+is a bit confusing.
 
-This leaves queue and vector counts out of sync after shrinking channel
-count via ethtool -L. The active queue configuration is reduced, but the
-VSI still keeps the full PF-sized q_vector topology.
+> +	const bool mb =3D !IS_ENABLED(CONFIG_TASKS_TRACE_RCU_NO_MB);
+> +	u8 *prog =3D *pprog;
+> +
+> +	BUILD_BUG_ON(IS_ENABLED(CONFIG_NEED_SRCU_NMI_SAFE));
+> +	BUILD_BUG_ON(offsetof(struct srcu_ctr, srcu_locks) !=3D 0);
+> +	BUILD_BUG_ON(offsetof(struct srcu_ctr, srcu_unlocks) !=3D 8);
 
-That mismatch breaks reconfiguration flows which rely on vector/NAPI
-state matching the effective channel configuration. In particular,
-toggling /sys/class/net/<dev>/threaded after reducing the channel count
-can hang, and later channel-count changes can fail because VSI reinit
-does not rebuild q_vectors to match the new vector count.
+Looks too hardcoded here.
+Why not to use the same approach as with offsetof() few lines above?
 
-Fix this by making the main VSI num_q_vectors follow the effective
-requested channel count, capped by the available MSI-X vectors. Update
-i40e_vsi_reinit_setup() to rebuild q_vectors during VSI reinit so the
-vector topology is refreshed together with the ring arrays when channel
-count changes.
+Overall looks ok,
+but I wonder what Paul will say that rcu_read_lock_tasks_trace()
+becomes baked in into JITs and will be pretty hard to change.
 
-Keep alloc_queue_pairs unchanged and based on pf->num_lan_qps so the VSI
-retains its full queue capacity. Also do not touch irq_pile when
-rebuilding vectors.
-
-Selftest napi_threaded.py was originally used when Jakub reported hang
-on /sys/class/net/<dev>/threaded toggle. In order to make it pass on
-i40e, use persistent NAPI configuration for q_vector NAPIs so NAPI
-identity and threaded settings survive q_vector reallocation across
-channel-count changes. This is achieved by using netif_napi_add_config()
-when configuring q_vectors.
-
-$ export NETIF=ens259f1np1
-$ sudo -E env PATH="$PATH" ./tools/testing/selftests/drivers/net/napi_threaded.py
-TAP version 13
-1..3
-ok 1 napi_threaded.napi_init
-ok 2 napi_threaded.change_num_queues
-ok 3 napi_threaded.enable_dev_threaded_disable_napi_threaded
-Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Reported-by: Jakub Kicinski <kuba@kernel.org>
-Closes: https://lore.kernel.org/intel-wired-lan/20260316133100.6054a11f@kernel.org/
-Fixes: d2a69fefd756 ("i40e: Fix changing previously set num_queue_pairs for PFs")
-Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Tested-by: Sunitha Mekala <sunithax.d.mekala@intel.com> (A Contingent worker at Intel)
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
----
- drivers/net/ethernet/intel/i40e/i40e_main.c | 69 +++++++++++++--------
- 1 file changed, 44 insertions(+), 25 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-index 82037faf960f..32c0cb6caa17 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -11400,10 +11400,14 @@ static void i40e_service_timer(struct timer_list *t)
- static int i40e_set_num_rings_in_vsi(struct i40e_vsi *vsi)
- {
- 	struct i40e_pf *pf = vsi->back;
-+	u16 qps;
- 
- 	switch (vsi->type) {
- 	case I40E_VSI_MAIN:
- 		vsi->alloc_queue_pairs = pf->num_lan_qps;
-+		qps = vsi->req_queue_pairs ?
-+		      min(vsi->req_queue_pairs, pf->num_lan_qps) :
-+		      pf->num_lan_qps;
- 		if (!vsi->num_tx_desc)
- 			vsi->num_tx_desc = ALIGN(I40E_DEFAULT_NUM_DESCRIPTORS,
- 						 I40E_REQ_DESCRIPTOR_MULTIPLE);
-@@ -11411,7 +11415,7 @@ static int i40e_set_num_rings_in_vsi(struct i40e_vsi *vsi)
- 			vsi->num_rx_desc = ALIGN(I40E_DEFAULT_NUM_DESCRIPTORS,
- 						 I40E_REQ_DESCRIPTOR_MULTIPLE);
- 		if (test_bit(I40E_FLAG_MSIX_ENA, pf->flags))
--			vsi->num_q_vectors = pf->num_lan_msix;
-+			vsi->num_q_vectors = clamp(qps, 1, pf->num_lan_msix);
- 		else
- 			vsi->num_q_vectors = 1;
- 
-@@ -11463,12 +11467,11 @@ static int i40e_set_num_rings_in_vsi(struct i40e_vsi *vsi)
- /**
-  * i40e_vsi_alloc_arrays - Allocate queue and vector pointer arrays for the vsi
-  * @vsi: VSI pointer
-- * @alloc_qvectors: a bool to specify if q_vectors need to be allocated.
-  *
-  * On error: returns error code (negative)
-  * On success: returns 0
-  **/
--static int i40e_vsi_alloc_arrays(struct i40e_vsi *vsi, bool alloc_qvectors)
-+static int i40e_vsi_alloc_arrays(struct i40e_vsi *vsi)
- {
- 	struct i40e_ring **next_rings;
- 	int size;
-@@ -11487,19 +11490,20 @@ static int i40e_vsi_alloc_arrays(struct i40e_vsi *vsi, bool alloc_qvectors)
- 	}
- 	vsi->rx_rings = next_rings;
- 
--	if (alloc_qvectors) {
--		/* allocate memory for q_vector pointers */
--		size = sizeof(struct i40e_q_vector *) * vsi->num_q_vectors;
--		vsi->q_vectors = kzalloc(size, GFP_KERNEL);
--		if (!vsi->q_vectors) {
--			ret = -ENOMEM;
--			goto err_vectors;
--		}
-+	/* allocate memory for q_vector pointers */
-+	size = sizeof(struct i40e_q_vector *) * vsi->num_q_vectors;
-+	vsi->q_vectors = kzalloc(size, GFP_KERNEL);
-+	if (!vsi->q_vectors) {
-+		ret = -ENOMEM;
-+		goto err_vectors;
- 	}
- 	return ret;
- 
- err_vectors:
- 	kfree(vsi->tx_rings);
-+	vsi->tx_rings = NULL;
-+	vsi->rx_rings = NULL;
-+	vsi->xdp_rings = NULL;
- 	return ret;
- }
- 
-@@ -11572,7 +11576,7 @@ static int i40e_vsi_mem_alloc(struct i40e_pf *pf, enum i40e_vsi_type type)
- 	if (ret)
- 		goto err_rings;
- 
--	ret = i40e_vsi_alloc_arrays(vsi, true);
-+	ret = i40e_vsi_alloc_arrays(vsi);
- 	if (ret)
- 		goto err_rings;
- 
-@@ -11597,18 +11601,15 @@ static int i40e_vsi_mem_alloc(struct i40e_pf *pf, enum i40e_vsi_type type)
- /**
-  * i40e_vsi_free_arrays - Free queue and vector pointer arrays for the VSI
-  * @vsi: VSI pointer
-- * @free_qvectors: a bool to specify if q_vectors need to be freed.
-  *
-  * On error: returns error code (negative)
-  * On success: returns 0
-  **/
--static void i40e_vsi_free_arrays(struct i40e_vsi *vsi, bool free_qvectors)
-+static void i40e_vsi_free_arrays(struct i40e_vsi *vsi)
- {
- 	/* free the ring and vector containers */
--	if (free_qvectors) {
--		kfree(vsi->q_vectors);
--		vsi->q_vectors = NULL;
--	}
-+	kfree(vsi->q_vectors);
-+	vsi->q_vectors = NULL;
- 	kfree(vsi->tx_rings);
- 	vsi->tx_rings = NULL;
- 	vsi->rx_rings = NULL;
-@@ -11668,7 +11669,7 @@ static int i40e_vsi_clear(struct i40e_vsi *vsi)
- 	i40e_put_lump(pf->irq_pile, vsi->base_vector, vsi->idx);
- 
- 	bitmap_free(vsi->af_xdp_zc_qps);
--	i40e_vsi_free_arrays(vsi, true);
-+	i40e_vsi_free_arrays(vsi);
- 	i40e_clear_rss_config_user(vsi);
- 
- 	pf->vsi[vsi->idx] = NULL;
-@@ -12042,7 +12043,8 @@ static int i40e_vsi_alloc_q_vector(struct i40e_vsi *vsi, int v_idx)
- 	cpumask_copy(&q_vector->affinity_mask, cpu_possible_mask);
- 
- 	if (vsi->netdev)
--		netif_napi_add(vsi->netdev, &q_vector->napi, i40e_napi_poll);
-+		netif_napi_add_config(vsi->netdev, &q_vector->napi,
-+				      i40e_napi_poll, v_idx);
- 
- 	/* tie q_vector and vsi together */
- 	vsi->q_vectors[v_idx] = q_vector;
-@@ -14197,8 +14199,9 @@ int i40e_vsi_release(struct i40e_vsi *vsi)
-  **/
- static int i40e_vsi_setup_vectors(struct i40e_vsi *vsi)
- {
--	int ret = -ENOENT;
- 	struct i40e_pf *pf = vsi->back;
-+	bool reuse_irq_lump = false;
-+	int ret = -ENOENT;
- 
- 	if (vsi->q_vectors[0]) {
- 		dev_info(&pf->pdev->dev, "VSI %d has existing q_vectors\n",
-@@ -14206,7 +14209,10 @@ static int i40e_vsi_setup_vectors(struct i40e_vsi *vsi)
- 		return -EEXIST;
- 	}
- 
--	if (vsi->base_vector) {
-+	if (vsi->type == I40E_VSI_MAIN && vsi->base_vector)
-+		reuse_irq_lump = true;
-+
-+	if (vsi->base_vector && !reuse_irq_lump) {
- 		dev_info(&pf->pdev->dev, "VSI %d has non-zero base vector %d\n",
- 			 vsi->seid, vsi->base_vector);
- 		return -EEXIST;
-@@ -14226,6 +14232,10 @@ static int i40e_vsi_setup_vectors(struct i40e_vsi *vsi)
- 	*/
- 	if (!test_bit(I40E_FLAG_MSIX_ENA, pf->flags))
- 		return ret;
-+
-+	if (reuse_irq_lump)
-+		return ret;
-+
- 	if (vsi->num_q_vectors)
- 		vsi->base_vector = i40e_get_lump(pf, pf->irq_pile,
- 						 vsi->num_q_vectors, vsi->idx);
-@@ -14266,11 +14276,20 @@ static struct i40e_vsi *i40e_vsi_reinit_setup(struct i40e_vsi *vsi,
- 	pf = vsi->back;
- 
- 	i40e_put_lump(pf->qp_pile, vsi->base_queue, vsi->idx);
-+	i40e_vsi_free_q_vectors(vsi);
- 	i40e_vsi_clear_rings(vsi);
-+	i40e_vsi_free_arrays(vsi);
- 
--	i40e_vsi_free_arrays(vsi, false);
- 	i40e_set_num_rings_in_vsi(vsi);
--	ret = i40e_vsi_alloc_arrays(vsi, false);
-+	ret = i40e_vsi_alloc_arrays(vsi);
-+	if (ret)
-+		goto err_netdev;
-+
-+	/* Rebuild q_vectors during VSI reinit because the effective channel
-+	 * count may change num_q_vectors. Keep vector topology aligned with the
-+	 * queue configuration after ethtool's .set_channels() callback.
-+	 */
-+	ret = i40e_vsi_setup_vectors(vsi);
- 	if (ret)
- 		goto err_netdev;
- 
-@@ -14282,7 +14301,7 @@ static struct i40e_vsi *i40e_vsi_reinit_setup(struct i40e_vsi *vsi,
- 		dev_info(&pf->pdev->dev,
- 			 "failed to get tracking for %d queues for VSI %d err %d\n",
- 			 alloc_queue_pairs, vsi->seid, ret);
--		goto err_netdev;
-+		goto err_rings;
- 	}
- 	vsi->base_queue = ret;
- 
--- 
-2.47.1
+We also lose rcu_tt lockdep runtime checks.
+So lockdep might get confused?
 
