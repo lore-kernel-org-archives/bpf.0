@@ -1,260 +1,204 @@
-Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A7AE4F7999
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 13:18:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8801448D1B;
+	Fri, 18 Sep 2026 13:21:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789737518; cv=none; b=U9znLAsOKdlv8pCP2S7urbNDn5SlAcrSoHTu5fYk7OieAITUlbG72r6QbrSawhEGjg3rXa8KTCccf9+do9uhGqY9b0qWWUNcCRSXEEP91Nu+gUhQ+El6FJPWp/2IZrVMpsjbRroEdGyBmCIN57IRMJjKGvm/4BF/dpV6IMA+QV0=
+	t=1789737673; cv=none; b=C1Gkdqpnb04cnL0tJUSmFO+ZCT9gnl9xjewlFCxorB6KM7U/JN1l/2AWeBF5lwq0a77vHn9Fc7oqBn/bJ+/+ut25+8N8GNIFLStspC3+yZz7bO97msUWj4ez+FHcHRlPxhF2LvdlZR2AcnNY0+EewYYzyOwV6gT4UCzWQghqBC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789737518; c=relaxed/simple;
-	bh=GnQNNaO2NdAe4bfr6j79tdcCpkRyZDIf9oDO6K4Un58=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VYl8DR29mqhxqk12WT27X+gI/9s0GAn/OmWFg8kfNNQBQmgJJRxhqDvHPYwJA1XUf85WbNAc6BmzN70MXEkzenYZMfHNRU7Uz6cWozf6w0w3YHfLtYaRFcbyWXHvPGL3lRBF9Mi+xfrap4buXKFLAD/+HhBz1flXRwKChsWUXOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dfNj6vqq; arc=none smtp.client-ip=74.125.225.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789737673; c=relaxed/simple;
+	bh=q9MlBAFpzeRNsgJB0XNvJREWaiaMY04cUxk1fBjFkvc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cKpxoJbRsUh5mGAFv60qahKypt2bThhDWziWgBddfqhbUNKGZJTE035X5wP2Pp8ejw5JSdbjdL/WRsWCZd4/0Cj4rlU3sqTxFngGSYCJul6x3WN2Rh1nVdJsJWMYVX19XpxcCREY8mXzulSsn7b0+0NxpLmbkHUTw0vQ5FbM7wA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TfzaMgjx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dfNj6vqq"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-482f635552aso586440f8f.2
-        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 06:18:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789737513; x=1790342313; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=fpIPJYBrAn9lh0X90aJ+LjetM4Yd20S6QCxk4a13+gY=;
-        b=dfNj6vqq9xkhGvDp+J6LNGtrm5ncKHKgZ8DFRcbBaYW1fEYVgQRm+GygaOxmtkowpi
-         Hn6UAlfO3JrbHYqvVctOMS/O46fN8RBxPeAq7HwsObKpN4Gv5xnKfFZyiYSV/85gpsCK
-         mJ0zFAZNfCANkCk6/ZCsf6OzyzYBiAPY+OM6t2Xz1NGPPiDp0nnbvMTkE9MjIOLuZ3nj
-         ZzmJDso5Pp7WkAoRqsX3wzyzblhY9prTKhybIRe5eJ6VZAvHwqsS0DgByxx3ZWm2EHbY
-         ZojEHTVgSft6SrLfQFWYn4EhDj2/OxavCHGMoq74PDzTq6Ap8TY8UtCLmh6uKSDtbYBR
-         Bwag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789737513; x=1790342313;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=fpIPJYBrAn9lh0X90aJ+LjetM4Yd20S6QCxk4a13+gY=;
-        b=WqRILlieqjF4AETp1aYBhlbOjSaT48D0cZBv6DTJPLXflm8hMAAYCsDcrQwW+rCMyZ
-         YBVm++CXZW1+o/JmYSPuMm6IjEmRhxUQvW5A0Ze6RROOj1JswjPYXE9VU6XacPc+Y36E
-         tepMQSheZsgMcs5SS9OMJgWjLp9Bf6C1GO9bvbp03Y24xP+yBayBKZJ5C+B8mwUDbsXO
-         B004RmmnHPWcObdCrFNBeqALnhXnbB8FsuqBMfJqm/1uNb10XkI2hxFavAxVMKtmY8nm
-         3vUI3y8iTapUbTzSF1sbOA2K47r95rr4AxVWuuk92JuKg5sJVpXCN3nuM3EmAEgwa8/M
-         6H1w==
-X-Gm-Message-State: AFuF++kTauXzZS04j41ClbsL3fcuKIU1pmGGVhQhxY/YA++pZuayLkfv
-	6UN8CqTsAKextyuc5Wf0Khb/x9fuCFQgWamk/KPbYcebUHrBtvb9//dSv9DpLHdA
-X-Gm-Gg: AYBFou30Dfq1PI3RCnVcsBx8npPHbr11NIx00JqoFfZ5kBdO/ZpOIIUpSVfzJ5SdSlz
-	YpfJ2M1j+b2PpIqEezrpbvKA4UB+zo7CM96dgBmz6+jitFmuoZsdWn3NK7iMWXUvw/dMyYyKH0d
-	l6eKLUl89ufv7gfUfq2Mhg5wijuXcSGg/0A1qjXLhhLo2WHWf+OQ6lbP1Bd/0Z8FQ/pc31r50Jc
-	g5X6z/m5x/Kv9TJNJquD9/VOr/rIBdbTkZr9KH7q/znWKP4M502g9jeaIcPkPLE7F/1+CSxy/sg
-	I1L51wLMRu4KX6pLa9kVu45WgQQ9jpihegdA2tbHbojYgd9nlZ36XPzBgWR+h6JxV8hA7X96In9
-	kHbuDvhfV0drEbpavnvXLIORfB3lGQCZHULsgu336HfveVAjr2GxIxWxTInp/GKW4b0Xg3pcDEY
-	fLK5irAC586a8D7FtGlhyXu6I2QwNCeUFTq2rakrpUk+GtCK3cxP+1f/AkSoAI2LeelLS0D32r9
-	zCXAUHQUxdruYk=
-X-Received: by 2002:a05:6000:41f0:b0:487:7fd:730 with SMTP id ffacd0b85a97d-4871e254ef7mr3501858f8f.13.1789737513163;
-        Fri, 18 Sep 2026 06:18:33 -0700 (PDT)
-Received: from dell-desktop ([2a02:587:4b4e:8500:290c:210b:1c76:5710])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4871feb5de3sm4424549f8f.1.2026.09.18.06.18.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 06:18:32 -0700 (PDT)
-From: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
-To: bpf@vger.kernel.org
-Cc: linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	david@kernel.org,
-	akpm@linux-foundation.org,
-	andrii@kernel.org,
-	ast@kernel.org,
-	brauner@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	kpsingh@kernel.org,
-	ljs@kernel.org,
-	matt@bobrowski.net,
-	memxor@gmail.com,
-	song@kernel.org,
-	sun.jian.kdev@gmail.com,
-	utilityemal77@gmail.com,
-	viro@zeniv.linux.org.uk,
-	tasos.papagiannnis@gmail.com
-Subject: [PATCH bpf-next v9 5/5] selftests/bpf: Test mm_struct user memory kfuncs with linux_binprm
-Date: Fri, 18 Sep 2026 16:17:57 +0300
-Message-ID: <20260918131757.42802-6-tasos.papagiannnis@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260918131757.42802-1-tasos.papagiannnis@gmail.com>
-References: <20260918131757.42802-1-tasos.papagiannnis@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TfzaMgjx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67ECF1F000FF;
+	Fri, 18 Sep 2026 13:20:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789737669;
+	bh=0xpULa2wThyMyC/xm34rNy2PVoRdKfkNjg/wDjNfAbA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=TfzaMgjxtuNYRSbgy2oM9VNvelBoHpssOxVnn3XSg1NBMWU+/jyuXP6IaWZPY1CyA
+	 HdBMtjIknOhPruLGftRV7i8l8p2FKFX9fh6wCnG6H7oIwP4PW1xdz9+MUzns7blyED
+	 /oRJYHsPVqdDxPAyuN2AzxSAiLvBhcP8CKPzAWi22BWwuNke+22ALcPYId6jeNIBML
+	 tQQNk+We4UYkN+CSHkOuucCPZKJx6kWkj+b3NHpOKoKa54bgQVSWJGafkpCLc8uAXu
+	 3AdyFrmOR8pMPgGGIaBQnhqN7aE1U/3MowHa1LPEb32ScKkPhZnAMxVtJ6HiM44AnV
+	 XbSuPP1rSj3rQ==
+Date: Fri, 18 Sep 2026 14:20:34 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: Mike Rapoport <rppt@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	David Hildenbrand <david@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen" <mkp@kernel.org>, 
+	Jaya Kumar <jayalk@intworks.biz>, Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, 
+	Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
+	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
+	Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
+	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
+	Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, selinux@vger.kernel.org, linux-sound@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, fuse-devel@lists.linux.dev
+Subject: Re: [PATCH v2 01/40] mm/vma: fix mmap_prepare file handling, remove
+ file_doesnt_need_get
+Message-ID: <aq06hcheI4OGi_3A@gremlin>
+References: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org>
+ <20260914-b4-mmap-prepare-vma-flag-sanify-v2-1-7d9781ed5361@kernel.org>
+ <aquz9Z9JrK_H_E0g@kernel.org>
+ <aq01JFp8hRReyY-O@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aq01JFp8hRReyY-O@gmail.com>
 
-Add a sleepable BPF LSM program attached to bprm_check_security to test
-bpf_copy_from_user_mm() and bpf_copy_from_user_mm_str().
+On Fri, Sep 18, 2026 at 05:57:51AM -0700, Breno Leitao wrote:
+> On Thu, Sep 17, 2026 at 12:33:41PM +0300, Mike Rapoport wrote:
+> > On Mon, Sep 14, 2026 at 03:57:21PM +0100, Lorenzo Stoakes (ARM) wrote:
+> > > The map->file_doesnt_need_get flag is confusing and the existing
+> > > implementation has holes.
+> > >
+> > > Drivers are permitted to change the owning file of a mapping. If they do
+> > > so, they are required to take a reference on that file.
+> > >
+> > > The mmap() operation which ultimately invokes __mmap_region() is guaranteed
+> > > to drop the refcount for the original file the mapping was made under, but
+> > > this is not true for the replaced file.
+> > >
+> > > This has been addressed so far by tracking map->file_doesnt_need_get, which
+> > > is rather poorly named and unfortunately fails to correctly track whether
+> > > or not an additional put were needed in a number of cases.
+> > >
+> > > Make life easier by removing this flag, and instead drop the reference for
+> > > both mmap_prepare and the deprecated mmap callback in a new function
+> > > put_map().
+> > >
+> > > Track whether this needs to be done by aligning mmap_state with
+> > > vm_area_desc and store the original file in the map->file field, keeping
+> > > the updated file in map->vm_file.
+> > >
+> > > In order to have the same behaviour for both types of hooks, only drop the
+> > > reference __mmap_new_file_vma() itself took in its error path, deferring
+> > > the replaced file's reference to put_map().
+> > >
+> > > To make this work correctly, map->vm_file has to be updated before any
+> > > error handling, so update __mmap_new_file_vma() and call_mmap_prepare() to
+> > > set this field first.
+> > >
+> > > Also when mmap_prepare() changes the file and is then merged, the reference
+> > > count also must be decremented, so update the logic to call put_map() in
+> > > this case too.
+> > >
+> > > Also update __compat_vma_mmap() to manually perform this step for stacked
+> > > file systems using the compatibility layer, and update
+> > > compat_set_vma_from_desc() to replace vma_set_file() with a correct
+> > > refcount/file update.
+> > >
+> > > No in-tree driver is impacted by the incorrect implementation of this
+> > > currently (no driver that does this is mergeable for one), so this does not
+> > > need to be a fix.
+> >
+> > But the patch iteslf needs to be fixed :)
+> >
+> > It seems to be the change that broke the CI.
+> >
+> > The rest is from LLM, take it with a grain of salt :)
+> >
+> > mm-ci mm-unstable red build - bisect analysis
+> > ==============================================
+> >
+> > Bad commit: 2a937a04babf1 "mm/vma: fix mmap_prepare file handling, remove
+> > file_doesnt_need_get" - first patch of Lorenzo Stoakes' 40-patch series
+> > "mm: make VMA flag semantics explicit, eliminate VM_SPECIAL" (v2).
+> > https://lore.kernel.org/all/20260914-b4-mmap-prepare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org
+> >
+> > Symptom: tools/testing/selftests/mm/pfnmap.c triggers
+> > "BUG: Bad page map in process pfnmap" during __zap_vma_range()/vm_normal_page(),
+> > seen on process exit/munmap. CI's run-mm-selftests.sh greps guest dmesg for
+> > BUG|WARNING and fails the job regardless of the test's own exit code.
+>
+> I am seeing something similar here and stress-ng can reproduce it:
+>
+>       WARNING: mm/memory.c:3225 at do_remap_pfn_range+0x9b4/0x9f0, CPU#25: stress-ng-dev/354858
+>       Call trace:
+>        do_remap_pfn_range+0x9b4/0x9f0 (P)
+>        remap_pfn_range_complete+0xac/0xd0
+>        mmap_action_complete+0xcc/0x3d8
+>        mmap_region+0xb54/0x1978
+>        do_mmap+0x588/0xb18
+>        vm_mmap_pgoff+0x1e4/0x320
+>        ksys_mmap_pgoff+0x2d8/0x510
+>        __arm64_sys_mmap+0x100/0x128
+>
+>       BUG: Bad page map in process stress-ng-dev  pte:0160000000000fcf
+>       addr:0000ffe8d9080000 vm_flags:00000071 anon_vma:0000000000000000 mapping:ffff0000a0c4ea98 index:0 (file) ffe8d9080 (anon)
+>       file:mem fault:0x0 mmap:0x0 mmap_prepare: mmap_mem_prepare read_folio:0x0
+>       Call trace:
+>        print_bad_page_map+0x63c/0x740
+>        vm_normal_page+0x228/0x240
+>        __zap_vma_range+0xbe0/0x34a0
+>        unmap_vmas+0x240/0x318
+>        unmap_region+0x12c/0x238
+>        vms_complete_munmap_vmas+0x318/0x958
+>        do_vmi_align_munmap+0x254/0x2f8
+>        do_vmi_munmap+0xc4/0xf8
+>        __vm_munmap+0x174/0x288
+>        __arm64_sys_munmap+0x70/0x90
 
-Starting at bprm->p, verify that bpf_copy_from_user_mm() can copy the
-contiguous NUL-separated argument and environment data. Then use
-bpf_copy_from_user_mm_str() to read each argument and environment string
-separately, advancing the offset by the length returned from each call.
+Yup I already fixed it and respun the series :)
 
-Signed-off-by: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>
----
- .../bpf/prog_tests/copy_from_user_bprm.c      | 65 +++++++++++++++++
- .../selftests/bpf/progs/copy_from_user_bprm.c | 69 +++++++++++++++++++
- 2 files changed, 134 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c
- create mode 100644 tools/testing/selftests/bpf/progs/copy_from_user_bprm.c
+https://lore.kernel.org/all/20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org/
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c b/tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c
-new file mode 100644
-index 000000000000..310370689427
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/copy_from_user_bprm.c
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <errno.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+
-+#include <test_progs.h>
-+
-+#include "copy_from_user_bprm.skel.h"
-+
-+void test_copy_from_user_bprm(void)
-+{
-+	char data[] = "first\0second-argument\0SOME_ENV=a\0OTHER_ENV=something";
-+	char arg0[] = "first";
-+	char arg1[] = "second-argument";
-+	char env0[] = "SOME_ENV=a";
-+	char env1[] = "OTHER_ENV=something";
-+	struct copy_from_user_bprm *skel;
-+	pid_t child;
-+	int status;
-+
-+	skel = copy_from_user_bprm__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open_and_load"))
-+		return;
-+
-+	if (!ASSERT_OK(copy_from_user_bprm__attach(skel), "attach"))
-+		goto out;
-+
-+	child = fork();
-+	if (!ASSERT_GE(child, 0, "fork"))
-+		goto out;
-+
-+	if (!child) {
-+		char *const argv[] = { arg0, arg1, NULL };
-+		char *const envp[] = { env0, env1, NULL };
-+
-+		skel->bss->monitored_pid = getpid();
-+		execvpe("true", argv, envp);
-+		_exit(errno);
-+	}
-+
-+	if (!ASSERT_EQ(waitpid(child, &status, 0), child, "waitpid"))
-+		goto out;
-+
-+	if (ASSERT_TRUE(WIFEXITED(status), "child_exited"))
-+		ASSERT_EQ(WEXITSTATUS(status), EPERM, "exec_errno");
-+
-+	ASSERT_EQ(skel->bss->bprm_argc, 2, "bprm_argc");
-+	ASSERT_EQ(skel->bss->bprm_envc, 2, "bprm_envc");
-+	ASSERT_EQ(skel->bss->data_len, sizeof(data), "data_len");
-+	ASSERT_EQ(skel->bss->invalid_flags_ret, -EINVAL, "invalid_flags_ret");
-+	ASSERT_EQ(skel->bss->copy_ret, 0, "copy_ret");
-+	ASSERT_EQ(skel->bss->arg0_ret, sizeof(arg0), "arg0_ret");
-+	ASSERT_EQ(skel->bss->arg1_ret, sizeof(arg1), "arg1_ret");
-+	ASSERT_EQ(skel->bss->env0_ret, sizeof(env0), "env0_ret");
-+	ASSERT_EQ(skel->bss->env1_ret, sizeof(env1), "env1_ret");
-+	ASSERT_EQ(memcmp(skel->bss->data, data, sizeof(data)), 0, "data");
-+	ASSERT_EQ(memcmp(skel->bss->arg0, arg0, sizeof(arg0)), 0, "arg0");
-+	ASSERT_EQ(memcmp(skel->bss->arg1, arg1, sizeof(arg1)), 0, "arg1");
-+	ASSERT_EQ(memcmp(skel->bss->env0, env0, sizeof(env0)), 0, "env0");
-+	ASSERT_EQ(memcmp(skel->bss->env1, env1, sizeof(env1)), 0, "env1");
-+
-+out:
-+	copy_from_user_bprm__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c b/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c
-new file mode 100644
-index 000000000000..00ecba3ea567
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/copy_from_user_bprm.c
-@@ -0,0 +1,69 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <errno.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int monitored_pid;
-+int bprm_argc;
-+int bprm_envc;
-+int data_len;
-+int invalid_flags_ret;
-+int copy_ret;
-+int arg0_ret;
-+int arg1_ret;
-+int env0_ret;
-+int env1_ret;
-+char data[64] = {};
-+char arg0[32] = {};
-+char arg1[32] = {};
-+char env0[32] = {};
-+char env1[32] = {};
-+
-+SEC("lsm.s/bprm_check_security")
-+int BPF_PROG(check_exec_args, struct linux_binprm *bprm)
-+{
-+	u32 pid = bpf_get_current_pid_tgid() >> 32;
-+	struct mm_struct *mm;
-+	u64 offset = 0;
-+
-+	if (pid != monitored_pid)
-+		return 0;
-+
-+	mm = bprm->mm;
-+	if (!mm)
-+		return 0;
-+
-+	bprm_argc = bprm->argc;
-+	bprm_envc = bprm->envc;
-+
-+	/* this is the total size of args and envs starting from bprm->p */
-+	data_len = bprm->exec - bprm->p;
-+
-+	invalid_flags_ret = bpf_copy_from_user_mm(data, sizeof(data), (void *)bprm->p, mm, ~0ULL);
-+
-+	copy_ret = bpf_copy_from_user_mm(data, sizeof(data), (void *)bprm->p, mm, 0);
-+	if (copy_ret)
-+		return 0;
-+
-+	/* arg0 is at bprm->p */
-+	arg0_ret = bpf_copy_from_user_mm_str(arg0, sizeof(arg0), (void *)(bprm->p + offset), mm, BPF_F_PAD_ZEROS);
-+	offset += arg0_ret;
-+
-+	/* arg1 is at bprm->p + arg0_ret */
-+	arg1_ret = bpf_copy_from_user_mm_str(arg1, sizeof(arg1), (void *)(bprm->p + offset), mm, BPF_F_PAD_ZEROS);
-+	offset += arg1_ret;
-+
-+	/* env0 is at bprm->p + arg0_ret + arg1_ret */
-+	env0_ret = bpf_copy_from_user_mm_str(env0, sizeof(env0), (void *)(bprm->p + offset), mm, BPF_F_PAD_ZEROS);
-+	offset += env0_ret;
-+
-+	/* env1 is at bprm->p + arg0_ret + arg1_ret + env0_ret */
-+	env1_ret = bpf_copy_from_user_mm_str(env1, sizeof(env1), (void *)(bprm->p + offset), mm, BPF_F_PAD_ZEROS);
-+
-+	return -EPERM;
-+}
--- 
-2.55.0
-
+--
+Cheers, Lorenzo
