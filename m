@@ -1,46 +1,48 @@
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+Received: from mx0a-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1A3438C2A0;
-	Fri, 18 Sep 2026 01:59:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B5473B5307;
+	Fri, 18 Sep 2026 01:59:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789696805; cv=none; b=GpweK73KIdqT9QGptaRDYkocVC0xS8Lp3QWCt4szQ1h5QJm0uQU96Un1q5lT+63zpX4qhUyVdAmHTE/iv0MZe1pSzUJptfoVWmxUPTRKHpopGiVaUcp9OWOPqR6gsOX2iVjNrsOMJ09nmfIeudMe0t2o2lSFHkneUAViyvb1vxk=
+	t=1789696815; cv=none; b=Fs9DIC/acvZUTNpQGVQlle/lNnLvvq8SlgDEhaN5oW7jCctvTfprwK1X1B6X3wLD85gTDWnR+W6KQSlb0BgnBJD767l5qYChhjtXK5+CVQEYu1cnZ38Skg/8CyJxcDMFFb6F/Km24dnyqseE5rafZZWZQ4/+rjvAfXCQpjiWnYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789696805; c=relaxed/simple;
-	bh=gWUx5j5oU7jO57h8YKX5/xHFu55v07z63FrpLq332/I=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fz0VfWQ/hWxhO6SShVQFHqYPyilo7r1wW8bIXMsoEeFofQNHhXAfhhyl84M/fgmhk/VaNNzT68hAlgE4neYCZ+gpAyj3j2xX31R3BN1l6nfBN4tGyM9LFvO9iw3zDCX7zcKhsNfcgZzs0sAsibTAkMxQQwSjIT0trHGE0rED1QI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=AktFNGmI; arc=none smtp.client-ip=67.231.148.174
+	s=arc-20240116; t=1789696815; c=relaxed/simple;
+	bh=jh79Wmv/3WNIlb8EYjNTRIt6VLD3FT7HVdr64uqRyc4=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=a2GHNoFU9sr3IkWqYP9APc2ahb01F76rWnrUdsWZmnR4WAVAY7ZuK8BctSA6YCm6lIo7WjF65yxzB2UflLAWtqFP8W1ZZL5wnXpPAVqUgT6OE/3TM599w+65mMGqWsf2PYVcr8WqVaOswWoVkD0YgNW0rT2NOxn3INfRGGh/NoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=VdajZnEq; arc=none smtp.client-ip=67.231.148.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=marvell.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="AktFNGmI"
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68HLGHNf1864774;
-	Thu, 17 Sep 2026 18:59:18 -0700
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="VdajZnEq"
+Received: from pps.filterd (m0431384.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68HLFGfX3942899;
+	Thu, 17 Sep 2026 18:59:23 -0700
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=pfpt0220; bh=Wevjj2okCfAH9g6xtSwjyOk
-	SBpNqbKMHWghhWptnNus=; b=AktFNGmIKB/K3Qyipr5eQ5IMIoE8Ha7Heketlfm
-	Xps0eo3wbGYGU7JsfRqXdr3oUd5E+/F6/wD+1SGPSnxROV0k/z7N9p7BdLIzctXc
-	7Xs5dWrlY5wD+5Za5r7eu0uI3FWAp63zSXFMHEHctwPYTUD3s9RMXqo7OEoCacFu
-	ffr5IvlyJUNEH7l1oU2OYhrCMVaxxtZy77lsmhY8KhusT1H1x14dmzVwciP16Ldm
-	+bjCDYgGS0gM1ENpV4ocZLZsDPojuFRkHzWUPzstvs5w4pSrzGkF4hvGjq89cFxU
-	HvRP21Fd2lGT/9pfOrxfK4mToST4+rbw8hHQg99WNNBCqig==
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pfpt0220; bh=0
+	FQF4LuLvm1DgtP4k9/ydSDAYswpm3lR90XC63sA+f0=; b=VdajZnEqZQK1Po6TD
+	kg8YP68kzyJtBYhafwyYJuS0s/gl7aTH0xlUA8CmASqhEghWuBUkc7qMC2piniZV
+	wED71aeuoAGmylPbFSdp/PXepO1YFr/p1aerJ9VsExDlsW7a9vp9B1I0ZIrGWhuK
+	okmcbJJjUZ7yTBmPaAENHVpaicUaq2GcSpJYcXojPB6g9dItoKtUd5JwL+hN0lSg
+	zkEGalhXgZvka+PXUMW4jdjJTDwDkoQmoPt5lTX9PywZpKFOpndOCtOnTqlqE+O5
+	v0k+DaglxdPOYjvHA5MpF3pyws093Mh2vW9KqERH1jzGDvxOWgz298QzmPs1JiZW
+	jBOww==
 Received: from dc5-exch05.marvell.com ([199.233.59.128])
-	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4grmcs35n2-1
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4gra5ypuyg-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 17 Sep 2026 18:59:18 -0700 (PDT)
+	Thu, 17 Sep 2026 18:59:23 -0700 (PDT)
 Received: from DC5-EXCH05.marvell.com (10.69.176.209) by
  DC5-EXCH05.marvell.com (10.69.176.209) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.25; Thu, 17 Sep 2026 18:59:17 -0700
+ 15.2.1544.25; Thu, 17 Sep 2026 18:59:22 -0700
 Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH05.marvell.com
  (10.69.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
- Transport; Thu, 17 Sep 2026 18:59:17 -0700
+ Transport; Thu, 17 Sep 2026 18:59:22 -0700
 Received: from rkannoth-OptiPlex-7090.. (unknown [10.28.36.165])
-	by maili.marvell.com (Postfix) with ESMTP id 32ED63F7055;
-	Thu, 17 Sep 2026 18:59:12 -0700 (PDT)
+	by maili.marvell.com (Postfix) with ESMTP id EA3853F7055;
+	Thu, 17 Sep 2026 18:59:17 -0700 (PDT)
 From: Ratheesh Kannoth <rkannoth@marvell.com>
 To: <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <netdev@vger.kernel.org>
@@ -50,10 +52,12 @@ CC: <andrew+netdev@lunn.ch>, <ast@kernel.org>, <daniel@iogearbox.net>,
         <sdf@fomichev.me>, <sgoutham@marvell.com>,
         Ratheesh Kannoth
 	<rkannoth@marvell.com>
-Subject: [PATCH v16 net-next 0/2] octeontx2: mqprio bandwidth offload for NIX TX schedulers
-Date: Fri, 18 Sep 2026 07:29:04 +0530
-Message-ID: <20260918015906.1255204-1-rkannoth@marvell.com>
+Subject: [PATCH v16 net-next 1/2] octeontx2: use atomic bitops for PF/VF and rep flags
+Date: Fri, 18 Sep 2026 07:29:05 +0530
+Message-ID: <20260918015906.1255204-2-rkannoth@marvell.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260918015906.1255204-1-rkannoth@marvell.com>
+References: <20260918015906.1255204-1-rkannoth@marvell.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -62,169 +66,1077 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: uIloFvMFWbmyjV01IvZ-cxfDZ568-pTj
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE4MDAyNCBTYWx0ZWRfX7GlHh7bOWyxS
- CQeYhbMptjg/REBwO1lAGf7VhAkgd3evWhjBRtvxsjJjFXb6Rs1dZt+GIB4HlpOUUWKzBbR0R2B
- yoZLeyCrotwcALn9IK9vyg+EFtWxM6A=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE4MDAyNCBTYWx0ZWRfX5092Gn6iUZ2+
- fix1fU7VM7fkqusL0seuWUZfY9ikGbKz7IzDYxoDkbc84GRLfQz4yqnQRb5VlrebBeDYk+vLXUP
- mhCjgLrgzHYVlqouToh3uiBx4t1YcyrmRlmAbzCCiLuhocvcwITjOVf+qQyt2i0I/auAfIiLe4b
- j0ysMY0J/a4+rLMwO6nYUqryIzRCW9i252IGpFnwZAseE8RKGsyc5OId7P04fZqpfPVS4NAPjK/
- ONgoZCPtW33BbkOKmX72+Bgc+1FwQMga4Nvo44GZGlpNoA4sc/zdfLciWO+1ZfP62nyazoaXVTV
- knb8Qz0TsTiSGmsk+y6qSG6tLcNz4uQVrGrj0Hn3n0mGIslwR44dZQgc/mLzcLyB2s9iTnjh+JC
- +1YenevzaP+54NvUV6Y64cgYWGAUxXyUWBUE+Jj2j7Y71hpZa8lu8Xwu39A7CzSlf5ODsgJ9WCq
- Fx4v1ZBum5adY62veqA==
-X-Proofpoint-ORIG-GUID: uIloFvMFWbmyjV01IvZ-cxfDZ568-pTj
-X-Authority-Analysis: v=2.4 cv=fbs4WEQF c=1 sm=1 tr=0 ts=6aac9af6 cx=c_pps
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE4MDAyNCBTYWx0ZWRfX+DRVkB5uPHa1
+ 1xzzW17YNUNJ3VqXBpi+AWbL2wZcBQcqNDp8wVVb6p3auy4w2KO1ebZJMqGhPayCY2NpbkQj9MS
+ S43FEwKkXBfw4VDG+dw3poWkJjKYGCM=
+X-Proofpoint-GUID: yXnGyHLZ5_Ia3SVExiPYIRKwqkKfa6wi
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE4MDAyNCBTYWx0ZWRfX94mjlypCX9s3
+ phKOfxPh/KoOt9Ixl+VLLob+oXJo2QbOvWEmjPCYfVovWzwrrLEXLankMmUXb9pIBOutILszcFQ
+ GdN5BE+Yz0a87Ka/pMyFY6cvoODeK9fomgTsxZOUFl7K+Dg6l+Ce7o0uvsdY9LaETkEUV2Slq7K
+ CG+YmDr0xFgKeStRa8vRlBGPcP+Yxi+h5bRsqjxQo43coqgeXsM9c1VNi9+u8g5e863bSALydaM
+ Y5wJAnnIhVfsBfV97+c7bbXKbOn+A5sx1rCFJbLChz/PyOEjCEZVq2K4E8yowo/mjM9bnqirGpt
+ 81mqYVXT0VB2qgrg0yoLCs8GQlu9hMi/kdpI2FDWpGgs7KFxFA97ah6WHcqZKAyaZuvUcoMjoRX
+ 5r6dWnYN4Bdv5l+7hTrZmsQEt7o1GMhbbcaNWDfC5M0DKegJwZcX1aYyZUbGo4IJE0eTsLf3qrX
+ GH4j3/YZuk6Ci8/xfqg==
+X-Proofpoint-ORIG-GUID: yXnGyHLZ5_Ia3SVExiPYIRKwqkKfa6wi
+X-Authority-Analysis: v=2.4 cv=TekDJhQh c=1 sm=1 tr=0 ts=6aac9afb cx=c_pps
  a=rEv8fa4AjpPjGxpoe8rlIQ==:117 a=rEv8fa4AjpPjGxpoe8rlIQ==:17
  a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22 a=l0iWHRpgs5sLHlkKQ1IR:22
- a=EAYMVhzMl8SCOHhVQcBL:22 a=VwQbUJbxAAAA:8 a=M5GUcnROAAAA:8 a=c92rfblmAAAA:8
- a=mZJLW0nktbS-JGkZBT8A:9 a=OBjm3rFKGHvpk9ecZwUJ:22 a=GvGzcOZaWPEFPQC_NcjD:22
+ a=TtqV-g6YmW1Jfm2GSLaY:22 a=M5GUcnROAAAA:8 a=REpVsXYNUi8hGgUnutoA:9
+ a=OBjm3rFKGHvpk9ecZwUJ:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-09-17_05,2026-09-16_02,2025-10-01_01
 
-This series adds hardware offload for channel-mode mqprio with
-TC_MQPRIO_SHAPER_BW_RATE on Marvell octeontx2/cn10k PF and VF RVU
-netdevices. Each non-QoS transmit queue is shaped by programming MDQ CIR/PIR
-on the NIX TX scheduler. When bandwidth offload is active, the driver
-allocates one SMQ per queue, parents every MDQ under TL4[0], and maps each
-traffic class min/max rate to the queue(s) in that class.
+Replace non-atomic u64 flag read-modify-write with unsigned long
+bitmaps and set_bit/clear_bit/test_bit access across the NIC driver.
 
-The NIX TX scheduler hierarchy cannot be reprogrammed live today, so
-mqprio add, replace, delete, and failed-replace rollback rebuild it by
-bouncing the netdev through ndo_stop()/ndo_open(). That intentionally
-drops in-flight traffic on each change. otx2_mqprio_restart_netdev() clears
-__LINK_STATE_START before ndo_stop() and does not call
-dev_deactivate()/dev_activate(); carrier and TX queues are restored after
-ndo_open() via the normal link-event path when the link is up. Cache the
-active rates and restore MDQ shapers from otx2_mqprio_up() during ndo_open();
-fail closed if restoration fails, leaving ndo_open() unsuccessful and the
-interface administratively down.
+Add otx2_set_flag(), otx2_clear_flag() and otx2_test_flag() helpers
+for struct otx2_nic, use bitops directly on rep_dev->flags, and sync
+representor state to the PF mailbox context via otx2_sync_flags_from_rep().
+Define representor VF initialization as OTX2_REP_VF_INITIALIZED (bit 21)
+in the shared flag namespace.
 
-Track mqprio configuration in mq_offload_snap snapshots (TC layout and
-rates). On tc qdisc replace, stage the new configuration while keeping
-the previous snapshot for rollback: failed setup restores the old
-snapshot via netdev restart when the interface is running, successful
-graft is recorded through TC_ROOT_GRAFT, and teardown of the replaced
-qdisc instance commits the staged snapshot without tearing down the live
-offload.
-
-Patch 1 converts PF/VF and representor flag access to atomic bitops.
-Patch 2 depends on it for safe OTX2_FLAG_INTF_DOWN and OTX2_FLAG_PORT_UP
-updates on asynchronous mbox paths and during the mqprio netdev bounce.
-
-The driver rejects offload unless the interface is running and the device
-advertises CIR+PIR support. PF and VF RVU netdevices share the same TC
-offload path via ndo_setup_tc / otx2_open(); SDP representors are not
-supported. Per-TC rates are rejected when a traffic class spans more than
-one queue. Concurrent PFC, XDP, SDP rep, or HTB use is blocked, and ethtool
-channel count changes are blocked while mqprio bandwidth offload is active.
-
-Ratheesh Kannoth (2):
-  octeontx2: use atomic bitops for PF/VF and rep flags
-  octeontx2-pf: add mqprio bandwidth offload for NIX TX schedulers
-
- .../ethernet/marvell/octeontx2/nic/cn10k_ipsec.c   |   8 +-
- .../ethernet/marvell/octeontx2/nic/otx2_common.c   | 154 +++-
- .../ethernet/marvell/octeontx2/nic/otx2_common.h   | 107 ++-
- .../ethernet/marvell/octeontx2/nic/otx2_dcbnl.c    |   6 +
- .../ethernet/marvell/octeontx2/nic/otx2_devlink.c  |   2 +-
- .../ethernet/marvell/octeontx2/nic/otx2_ethtool.c  |  29 +-
- .../ethernet/marvell/octeontx2/nic/otx2_flows.c    |  34 +-
- .../net/ethernet/marvell/octeontx2/nic/otx2_pf.c   |  95 ++-
- .../net/ethernet/marvell/octeontx2/nic/otx2_tc.c   | 838 ++++++++++++++++++++-
- .../net/ethernet/marvell/octeontx2/nic/otx2_txrx.c |  16 +-
- .../net/ethernet/marvell/octeontx2/nic/otx2_vf.c   |  10 +-
- .../net/ethernet/marvell/octeontx2/nic/otx2_xsk.c  |   4 +-
- drivers/net/ethernet/marvell/octeontx2/nic/qos.c   |  11 +
- .../net/ethernet/marvell/octeontx2/nic/qos_sq.c    |   4 +-
- drivers/net/ethernet/marvell/octeontx2/nic/rep.c   |  32 +-
- drivers/net/ethernet/marvell/octeontx2/nic/rep.h   |   3 +-
- 16 files changed, 1203 insertions(+), 150 deletions(-)
-
+Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
 ---
+ .../marvell/octeontx2/nic/cn10k_ipsec.c       |  8 +-
+ .../marvell/octeontx2/nic/otx2_common.c       |  8 +-
+ .../marvell/octeontx2/nic/otx2_common.h       | 77 ++++++++++++------
+ .../marvell/octeontx2/nic/otx2_devlink.c      |  2 +-
+ .../marvell/octeontx2/nic/otx2_ethtool.c      | 21 +++--
+ .../marvell/octeontx2/nic/otx2_flows.c        | 34 ++++----
+ .../ethernet/marvell/octeontx2/nic/otx2_pf.c  | 78 +++++++++----------
+ .../ethernet/marvell/octeontx2/nic/otx2_tc.c  | 30 +++----
+ .../marvell/octeontx2/nic/otx2_txrx.c         | 16 ++--
+ .../ethernet/marvell/octeontx2/nic/otx2_vf.c  | 10 +--
+ .../ethernet/marvell/octeontx2/nic/otx2_xsk.c |  4 +-
+ .../ethernet/marvell/octeontx2/nic/qos_sq.c   |  4 +-
+ .../net/ethernet/marvell/octeontx2/nic/rep.c  | 32 ++++----
+ .../net/ethernet/marvell/octeontx2/nic/rep.h  |  3 +-
+ 14 files changed, 178 insertions(+), 149 deletions(-)
 
-v15 -> v16: Addressed sashiko comments on v15 and aligned documentation with code.
-- Sync representor flags through OTX2_FLAG_MAX in otx2_sync_flags_from_rep()
-  instead of hard-coding OTX2_REP_VF_INITIALIZED as the loop bound.
-- Drop the rvu_nix.c is_valid_txschq() ratelimited error print from the mqprio
-  patch; remove the misplaced atomic-bitops and AF-debug paragraphs from the
-  mqprio commit message (they belong to patch 1 or are out of scope).
-- Extend mq_offload_snap to record prio_tc_map[] and mqprio rate flags; restore
-  the full netdev TC layout (num_tc, queue ranges, and priority map) via
-  otx2_mqprio_apply_snap_netdev() on rollback paths.
-- Defer netdev TC restore on failed replace (otx2_mqprio_netdev_tc_work) so
-  rollback survives mqprio_destroy() clearing dev->num_tc after setup errors
-  once the core unwinds the failed qdisc instance.
-- Stop calling dev_deactivate()/dev_activate() from otx2_mqprio_restart_netdev();
-  bounce the interface with ndo_stop()/ndo_open() only and restore carrier
-  through the normal link-event path after ndo_open(), avoiding qdisc
-  reentrancy during tc replace graft.
-- Preserve netdev TC mappings when tearing down an offloaded instance that is
-  replaced by a software mqprio graft (otx2_mqprio_keep_netdev_tc()) instead
-  of always calling netdev_set_num_tc(0) and breaking the live replacement.
-- Return an error from otx2_mqprio_down() when clearing hardware shapers fails
-  and keep offload software state, instead of v15's behaviour of clearing
-  rate_limit while stale MDQ limits may remain programmed.
-- Rebuild the TX scheduler via netdev restart in otx2_mqprio_restore_old() on
-  a running interface after failed-replace rollback so partially applied MDQ
-  shapers are not left running with mismatched software state.
-- Clear txschq_cnt[] in otx2_txschq_stop() after freeing scheduler nodes so
-  post-stop shaper mailbox operations do not consult stale counts.
-- Document fail-closed ndo_open() when otx2_mqprio_up() cannot restore shapers,
-  and that PF/VF RVU netdevices share the ndo_setup_tc / otx2_open() offload
-  path (SDP representors remain unsupported); downgrade the mqprio restart
-  notice to netdev_dbg().
-	https://lore.kernel.org/netdev/20260911105521.689565-1-rkannoth@marvell.com/
-
-v14 -> v15: Addressed sashiko comments.
-- Split atomic PF/VF and representor flag access into a preparatory patch
-  so mqprio netdev-restart and mbox paths can update OTX2_FLAG_INTF_DOWN
-  and OTX2_FLAG_PORT_UP without data races on the shared flags word.
-- Clear mqprio software state when hardware shaper teardown fails, warn,
-  and still bounce the netdev on delete so offload does not remain stuck
-  active after a mailbox error.
-	https://lore.kernel.org/netdev/20260904031553.3196916-1-rkannoth@marvell.com/
-
-v13 -> v14: Addressed sashiko comments.
-- Use atomic set_bit()/clear_bit() for OTX2_FLAG_INTF_DOWN and
-  OTX2_FLAG_PORT_UP updates on netdev-restart and mbox paths.
-- Block concurrent mqprio bandwidth offload and HTB shaping.
-- Fail ndo_open() if otx2_mqprio_up() cannot restore MDQ shapers.
-- Rebuild the TX scheduler via netdev restart in otx2_mqprio_restore_old()
-  when rolling back a failed replace on a running interface.
-- Return an error from otx2_mqprio_down() if clearing hardware shapers
-  fails instead of clearing software state anyway.
-	https://lore.kernel.org/netdev/20260904031553.3196916-1-rkannoth@marvell.com/
-
-v12 -> v13: Addressed sashiko comments.
-	https://sashiko.dev/#/patchset/20260903023324.3078284-1-rkannoth%40marvell.com
-
-v11 -> v12: Addressed sashiko comments.
-	https://sashiko.dev/#/patchset/20260902015500.2985371-1-rkannoth%40marvell.com
-v10 -> v11: Addressed sashiko comments.
-	https://sashiko.dev/#/patchset/20260831131014.2639581-1-rkannoth%40marvell.com
-
-v9 -> v10: Addressed sashiko/jacub comments.
-	https://sashiko.dev/#/message/20260817032747.1765883-1-rkannoth%40marvell.com
-
-v8 -> v9: Addressed Sashiko comments
-	https://lore.kernel.org/netdev/aoJ6FhtWue0FHDQV@rkannoth-OptiPlex-7090/
-v7 -> v8: Addressed Sashiko comments
-	https://sashiko.dev/#/patchset/20260811085050.3212280-1-rkannoth%40marvell.com
-v6 -> v7: Addressed Sashiko comments
-	https://sashiko.dev/#/message/20260810034738.1786029-1-rkannoth%40marvell.com
-v5 -> v6: Addressed Sashiko comments
-	https://lore.kernel.org/netdev/20260806095434.1144397-1-rkannoth@marvell.com/
-v4 -> v5: Addressed sashiko comments
-	https://sashiko.dev/#/patchset/20260803042724.3380209-1-rkannoth%40marvell.com
-v3 -> v4: Addressed sashiko comments
-	https://lore.kernel.org/netdev/20260729105139.2302908-1-rkannoth@marvell.com/
-v2 -> v3: Addressed sashiko comments
-	https://lore.kernel.org/netdev/amnYX866mYx02cBe@rkannoth-OptiPlex-7090/T/#m67310cbec48b21c7720858ab3a1ea083a0f8dc10
-v1 -> v2: Addressed sashiko comments
-	https://lore.kernel.org/netdev/20260724075010.2665758-1-rkannoth@marvell.com/
-
---
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c
+index 77543d472345..50ec4542c418 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/cn10k_ipsec.c
+@@ -334,7 +334,7 @@ static int cn10k_outb_cpt_init(struct net_device *netdev)
+ 						CN10K_CPT_LF_NQX(0));
+ 
+ 	/* Set ipsec offload enabled for this device */
+-	pf->flags |= OTX2_FLAG_IPSEC_OFFLOAD_ENABLED;
++	otx2_set_flag(pf, OTX2_FLAG_IPSEC_OFFLOAD_ENABLED);
+ 
+ 	cn10k_cpt_device_set_available(pf);
+ 	return 0;
+@@ -356,7 +356,7 @@ static int cn10k_outb_cpt_clean(struct otx2_nic *pf)
+ 	}
+ 
+ 	/* Set ipsec offload disabled for this device */
+-	pf->flags &= ~OTX2_FLAG_IPSEC_OFFLOAD_ENABLED;
++	otx2_clear_flag(pf, OTX2_FLAG_IPSEC_OFFLOAD_ENABLED);
+ 
+ 	/* Disable CPTLF Instruction Queue (IQ) */
+ 	cn10k_outb_cptlf_iq_disable(pf);
+@@ -820,7 +820,7 @@ void cn10k_ipsec_clean(struct otx2_nic *pf)
+ 	if (!is_dev_support_ipsec_offload(pf->pdev))
+ 		return;
+ 
+-	if (!(pf->flags & OTX2_FLAG_IPSEC_OFFLOAD_ENABLED))
++	if (!otx2_test_flag(pf, OTX2_FLAG_IPSEC_OFFLOAD_ENABLED))
+ 		return;
+ 
+ 	if (pf->ipsec.sa_workq) {
+@@ -945,7 +945,7 @@ bool cn10k_ipsec_transmit(struct otx2_nic *pf, struct netdev_queue *txq,
+ 	u16 dlen;
+ 
+ 	/* Check for IPSEC offload enabled */
+-	if (!(pf->flags & OTX2_FLAG_IPSEC_OFFLOAD_ENABLED))
++	if (!otx2_test_flag(pf, OTX2_FLAG_IPSEC_OFFLOAD_ENABLED))
+ 		goto drop;
+ 
+ 	sp = skb_sec_path(skb);
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+index 175992188c18..b421cb75e44b 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+@@ -220,10 +220,10 @@ int otx2_set_mac_address(struct net_device *netdev, void *p)
+ 		eth_hw_addr_set(netdev, addr->sa_data);
+ 		/* update dmac field in vlan offload rule */
+ 		if (netif_running(netdev) &&
+-		    pfvf->flags & OTX2_FLAG_RX_VLAN_SUPPORT)
++		    otx2_test_flag(pfvf, OTX2_FLAG_RX_VLAN_SUPPORT))
+ 			otx2_install_rxvlan_offload_flow(pfvf);
+ 		/* update dmac address in ntuple and DMAC filter list */
+-		if (pfvf->flags & OTX2_FLAG_DMACFLTR_SUPPORT)
++		if (otx2_test_flag(pfvf, OTX2_FLAG_DMACFLTR_SUPPORT))
+ 			otx2_dmacflt_update_pfmac_flow(pfvf);
+ 	} else {
+ 		return -EPERM;
+@@ -275,8 +275,8 @@ int otx2_config_pause_frm(struct otx2_nic *pfvf)
+ 		goto unlock;
+ 	}
+ 
+-	req->rx_pause = !!(pfvf->flags & OTX2_FLAG_RX_PAUSE_ENABLED);
+-	req->tx_pause = !!(pfvf->flags & OTX2_FLAG_TX_PAUSE_ENABLED);
++	req->rx_pause = otx2_test_flag(pfvf, OTX2_FLAG_RX_PAUSE_ENABLED);
++	req->tx_pause = otx2_test_flag(pfvf, OTX2_FLAG_TX_PAUSE_ENABLED);
+ 	req->set = 1;
+ 
+ 	err = otx2_sync_mbox_msg(&pfvf->mbox);
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+index 5850bc1870a1..90cf302bbe6d 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+@@ -482,6 +482,32 @@ struct pf_irq_data {
+ 	int mdevs;
+ };
+ 
++enum otx2_flag_bits {
++	OTX2_FLAG_RX_TSTAMP_ENABLED,
++	OTX2_FLAG_TX_TSTAMP_ENABLED,
++	OTX2_FLAG_INTF_DOWN,
++	OTX2_FLAG_MCAM_ENTRIES_ALLOC,
++	OTX2_FLAG_NTUPLE_SUPPORT,
++	OTX2_FLAG_UCAST_FLTR_SUPPORT,
++	OTX2_FLAG_RX_VLAN_SUPPORT,
++	OTX2_FLAG_VF_VLAN_SUPPORT,
++	OTX2_FLAG_PF_SHUTDOWN,
++	OTX2_FLAG_RX_PAUSE_ENABLED,
++	OTX2_FLAG_TX_PAUSE_ENABLED,
++	OTX2_FLAG_TC_FLOWER_SUPPORT,
++	OTX2_FLAG_TC_MATCHALL_EGRESS_ENABLED,
++	OTX2_FLAG_TC_MATCHALL_INGRESS_ENABLED,
++	OTX2_FLAG_DMACFLTR_SUPPORT,
++	OTX2_FLAG_PTP_ONESTEP_SYNC,
++	OTX2_FLAG_ADPTV_INT_COAL_ENABLED,
++	OTX2_FLAG_TC_MARK_ENABLED,
++	OTX2_FLAG_REP_MODE_ENABLED,
++	OTX2_FLAG_PORT_UP,
++	OTX2_FLAG_IPSEC_OFFLOAD_ENABLED,
++	OTX2_FLAG_REP_VF_INITIALIZED,
++	OTX2_FLAG_MAX,
++};
++
+ struct otx2_nic {
+ 	void __iomem		*reg_base;
+ 	struct net_device	*netdev;
+@@ -490,28 +516,7 @@ struct otx2_nic {
+ 	u16			tx_max_pktlen;
+ 	u16			rbsize; /* Receive buffer size */
+ 
+-#define OTX2_FLAG_RX_TSTAMP_ENABLED		BIT_ULL(0)
+-#define OTX2_FLAG_TX_TSTAMP_ENABLED		BIT_ULL(1)
+-#define OTX2_FLAG_INTF_DOWN			BIT_ULL(2)
+-#define OTX2_FLAG_MCAM_ENTRIES_ALLOC		BIT_ULL(3)
+-#define OTX2_FLAG_NTUPLE_SUPPORT		BIT_ULL(4)
+-#define OTX2_FLAG_UCAST_FLTR_SUPPORT		BIT_ULL(5)
+-#define OTX2_FLAG_RX_VLAN_SUPPORT		BIT_ULL(6)
+-#define OTX2_FLAG_VF_VLAN_SUPPORT		BIT_ULL(7)
+-#define OTX2_FLAG_PF_SHUTDOWN			BIT_ULL(8)
+-#define OTX2_FLAG_RX_PAUSE_ENABLED		BIT_ULL(9)
+-#define OTX2_FLAG_TX_PAUSE_ENABLED		BIT_ULL(10)
+-#define OTX2_FLAG_TC_FLOWER_SUPPORT		BIT_ULL(11)
+-#define OTX2_FLAG_TC_MATCHALL_EGRESS_ENABLED	BIT_ULL(12)
+-#define OTX2_FLAG_TC_MATCHALL_INGRESS_ENABLED	BIT_ULL(13)
+-#define OTX2_FLAG_DMACFLTR_SUPPORT		BIT_ULL(14)
+-#define OTX2_FLAG_PTP_ONESTEP_SYNC		BIT_ULL(15)
+-#define OTX2_FLAG_ADPTV_INT_COAL_ENABLED BIT_ULL(16)
+-#define OTX2_FLAG_TC_MARK_ENABLED		BIT_ULL(17)
+-#define OTX2_FLAG_REP_MODE_ENABLED		 BIT_ULL(18)
+-#define OTX2_FLAG_PORT_UP			BIT_ULL(19)
+-#define OTX2_FLAG_IPSEC_OFFLOAD_ENABLED		BIT_ULL(20)
+-	u64			flags;
++	unsigned long		flags;
+ 	u64			*cq_op_addr;
+ 
+ 	struct bpf_prog		*xdp_prog;
+@@ -593,6 +598,34 @@ struct otx2_nic {
+ 	unsigned long		*af_xdp_zc_qidx;
+ };
+ 
++static inline void otx2_set_flag(struct otx2_nic *nic, unsigned int flag)
++{
++	set_bit(flag, &nic->flags);
++}
++
++static inline void otx2_clear_flag(struct otx2_nic *nic, unsigned int flag)
++{
++	clear_bit(flag, &nic->flags);
++}
++
++static inline bool otx2_test_flag(struct otx2_nic *nic, unsigned int flag)
++{
++	return test_bit(flag, &nic->flags);
++}
++
++static inline void otx2_sync_flags_from_rep(struct otx2_nic *dst,
++					    unsigned long *src_flags)
++{
++	unsigned int flag;
++
++	for (flag = 0; flag < OTX2_FLAG_MAX; flag++) {
++		if (test_bit(flag, src_flags))
++			set_bit(flag, &dst->flags);
++		else
++			clear_bit(flag, &dst->flags);
++	}
++}
++
+ static inline bool is_otx2_lbkvf(struct pci_dev *pdev)
+ {
+ 	return (pdev->device == PCI_DEVID_OCTEONTX2_RVU_AFVF) ||
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_devlink.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_devlink.c
+index 4a5ce0e67dda..863a5ced9a26 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_devlink.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_devlink.c
+@@ -104,7 +104,7 @@ static int otx2_dl_ucast_flt_cnt_validate(struct devlink *devlink, u32 id,
+ 	struct otx2_nic *pfvf = otx2_dl->pfvf;
+ 
+ 	/* Check for UNICAST filter support*/
+-	if (!(pfvf->flags & OTX2_FLAG_UCAST_FLTR_SUPPORT)) {
++	if (!otx2_test_flag(pfvf, OTX2_FLAG_UCAST_FLTR_SUPPORT)) {
+ 		NL_SET_ERR_MSG_MOD(extack,
+ 				   "Unicast filter not enabled");
+ 		return -EINVAL;
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ethtool.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ethtool.c
+index a05dee0085a3..4fe473d9ea0d 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ethtool.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_ethtool.c
+@@ -354,14 +354,14 @@ static int otx2_set_pauseparam(struct net_device *netdev,
+ 		return -EOPNOTSUPP;
+ 
+ 	if (pause->rx_pause)
+-		pfvf->flags |= OTX2_FLAG_RX_PAUSE_ENABLED;
++		otx2_set_flag(pfvf, OTX2_FLAG_RX_PAUSE_ENABLED);
+ 	else
+-		pfvf->flags &= ~OTX2_FLAG_RX_PAUSE_ENABLED;
++		otx2_clear_flag(pfvf, OTX2_FLAG_RX_PAUSE_ENABLED);
+ 
+ 	if (pause->tx_pause)
+-		pfvf->flags |= OTX2_FLAG_TX_PAUSE_ENABLED;
++		otx2_set_flag(pfvf, OTX2_FLAG_TX_PAUSE_ENABLED);
+ 	else
+-		pfvf->flags &= ~OTX2_FLAG_TX_PAUSE_ENABLED;
++		otx2_clear_flag(pfvf, OTX2_FLAG_TX_PAUSE_ENABLED);
+ 
+ 	return otx2_config_pause_frm(pfvf);
+ }
+@@ -470,8 +470,7 @@ static int otx2_get_coalesce(struct net_device *netdev,
+ 	cmd->rx_max_coalesced_frames = hw->cq_ecount_wait;
+ 	cmd->tx_coalesce_usecs = hw->cq_time_wait;
+ 	cmd->tx_max_coalesced_frames = hw->cq_ecount_wait;
+-	if ((pfvf->flags & OTX2_FLAG_ADPTV_INT_COAL_ENABLED) ==
+-			OTX2_FLAG_ADPTV_INT_COAL_ENABLED) {
++	if (otx2_test_flag(pfvf, OTX2_FLAG_ADPTV_INT_COAL_ENABLED)) {
+ 		cmd->use_adaptive_rx_coalesce = 1;
+ 		cmd->use_adaptive_tx_coalesce = 1;
+ 	} else {
+@@ -502,15 +501,14 @@ static int otx2_set_coalesce(struct net_device *netdev,
+ 	}
+ 
+ 	/* Check and update coalesce status */
+-	if ((pfvf->flags & OTX2_FLAG_ADPTV_INT_COAL_ENABLED) ==
+-			OTX2_FLAG_ADPTV_INT_COAL_ENABLED) {
++	if (otx2_test_flag(pfvf, OTX2_FLAG_ADPTV_INT_COAL_ENABLED)) {
+ 		priv_coalesce_status = 1;
+ 		if (!ec->use_adaptive_rx_coalesce)
+-			pfvf->flags &= ~OTX2_FLAG_ADPTV_INT_COAL_ENABLED;
++			otx2_clear_flag(pfvf, OTX2_FLAG_ADPTV_INT_COAL_ENABLED);
+ 	} else {
+ 		priv_coalesce_status = 0;
+ 		if (ec->use_adaptive_rx_coalesce)
+-			pfvf->flags |= OTX2_FLAG_ADPTV_INT_COAL_ENABLED;
++			otx2_set_flag(pfvf, OTX2_FLAG_ADPTV_INT_COAL_ENABLED);
+ 	}
+ 
+ 	/* 'cq_time_wait' is 8bit and is in multiple of 100ns,
+@@ -556,8 +554,7 @@ static int otx2_set_coalesce(struct net_device *netdev,
+ 	 * 'on' to 'off'.
+ 	 */
+ 	if (priv_coalesce_status &&
+-	    ((pfvf->flags & OTX2_FLAG_ADPTV_INT_COAL_ENABLED) !=
+-	     OTX2_FLAG_ADPTV_INT_COAL_ENABLED)) {
++	    (!otx2_test_flag(pfvf, OTX2_FLAG_ADPTV_INT_COAL_ENABLED))) {
+ 		hw->cq_time_wait = CQ_TIMER_THRESH_DEFAULT;
+ 		hw->cq_ecount_wait = CQ_CQE_THRESH_DEFAULT;
+ 	}
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
+index 99d78fc5a2c4..b8ff49f0f6e3 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_flows.c
+@@ -270,9 +270,9 @@ int otx2_alloc_mcam_entries(struct otx2_nic *pfvf, u16 count)
+ 	flow_cfg->max_flows = allocated;
+ 
+ 	if (allocated) {
+-		pfvf->flags |= OTX2_FLAG_MCAM_ENTRIES_ALLOC;
+-		pfvf->flags |= OTX2_FLAG_NTUPLE_SUPPORT;
+-		pfvf->flags |= OTX2_FLAG_TC_FLOWER_SUPPORT;
++		otx2_set_flag(pfvf, OTX2_FLAG_MCAM_ENTRIES_ALLOC);
++		otx2_set_flag(pfvf, OTX2_FLAG_NTUPLE_SUPPORT);
++		otx2_set_flag(pfvf, OTX2_FLAG_TC_FLOWER_SUPPORT);
+ 	}
+ 
+ 	if (allocated != count)
+@@ -376,7 +376,7 @@ int otx2_mcam_entry_init(struct otx2_nic *pfvf)
+ 	flow_cfg->unicast_offset = vf_vlan_max_flows;
+ 	flow_cfg->rx_vlan_offset = flow_cfg->unicast_offset +
+ 					flow_cfg->ucast_flt_cnt;
+-	pfvf->flags |= OTX2_FLAG_UCAST_FLTR_SUPPORT;
++	otx2_set_flag(pfvf, OTX2_FLAG_UCAST_FLTR_SUPPORT);
+ 
+ 	/* Check if NPC_DMAC field is supported
+ 	 * by the mkex profile before setting VLAN support flag.
+@@ -401,11 +401,11 @@ int otx2_mcam_entry_init(struct otx2_nic *pfvf)
+ 	}
+ 
+ 	if (frsp->enable) {
+-		pfvf->flags |= OTX2_FLAG_RX_VLAN_SUPPORT;
+-		pfvf->flags |= OTX2_FLAG_VF_VLAN_SUPPORT;
++		otx2_set_flag(pfvf, OTX2_FLAG_RX_VLAN_SUPPORT);
++		otx2_set_flag(pfvf, OTX2_FLAG_VF_VLAN_SUPPORT);
+ 	}
+ 
+-	pfvf->flags |= OTX2_FLAG_MCAM_ENTRIES_ALLOC;
++	otx2_set_flag(pfvf, OTX2_FLAG_MCAM_ENTRIES_ALLOC);
+ 	mutex_unlock(&pfvf->mbox.lock);
+ 
+ 	/* Allocate entries for Ntuple filters */
+@@ -415,7 +415,7 @@ int otx2_mcam_entry_init(struct otx2_nic *pfvf)
+ 		return 0;
+ 	}
+ 
+-	pfvf->flags |= OTX2_FLAG_TC_FLOWER_SUPPORT;
++	otx2_set_flag(pfvf, OTX2_FLAG_TC_FLOWER_SUPPORT);
+ 
+ 	refcount_set(&flow_cfg->mark_flows, 1);
+ 	return 0;
+@@ -479,7 +479,7 @@ int otx2_mcam_flow_init(struct otx2_nic *pf)
+ 		return err;
+ 
+ 	/* Check if MCAM entries are allocate or not */
+-	if (!(pf->flags & OTX2_FLAG_UCAST_FLTR_SUPPORT))
++	if (!otx2_test_flag(pf, OTX2_FLAG_UCAST_FLTR_SUPPORT))
+ 		return 0;
+ 
+ 	pf->mac_table = devm_kzalloc(pf->dev, sizeof(struct otx2_mac_table)
+@@ -501,7 +501,7 @@ int otx2_mcam_flow_init(struct otx2_nic *pf)
+ 	if (!pf->flow_cfg->bmap_to_dmacindex)
+ 		return -ENOMEM;
+ 
+-	pf->flags |= OTX2_FLAG_DMACFLTR_SUPPORT;
++	otx2_set_flag(pf, OTX2_FLAG_DMACFLTR_SUPPORT);
+ 
+ 	return 0;
+ }
+@@ -521,7 +521,7 @@ static int otx2_do_add_macfilter(struct otx2_nic *pf, const u8 *mac)
+ 	struct npc_install_flow_req *req;
+ 	int err, i;
+ 
+-	if (!(pf->flags & OTX2_FLAG_UCAST_FLTR_SUPPORT))
++	if (!otx2_test_flag(pf, OTX2_FLAG_UCAST_FLTR_SUPPORT))
+ 		return -ENOMEM;
+ 
+ 	/* dont have free mcam entries or uc list is greater than alloted */
+@@ -1167,7 +1167,7 @@ static int otx2_is_flow_rule_dmacfilter(struct otx2_nic *pfvf,
+ 	u64 ring_cookie = fsp->ring_cookie;
+ 	u32 flow_type;
+ 
+-	if (!(pfvf->flags & OTX2_FLAG_DMACFLTR_SUPPORT))
++	if (!otx2_test_flag(pfvf, OTX2_FLAG_DMACFLTR_SUPPORT))
+ 		return false;
+ 
+ 	flow_type = fsp->flow_type & ~(FLOW_EXT | FLOW_MAC_EXT | FLOW_RSS);
+@@ -1364,7 +1364,7 @@ int otx2_add_flow(struct otx2_nic *pfvf, struct ethtool_rxnfc *nfc)
+ 	}
+ 
+ 	ring = ethtool_get_flow_spec_ring(fsp->ring_cookie);
+-	if (!(pfvf->flags & OTX2_FLAG_NTUPLE_SUPPORT))
++	if (!otx2_test_flag(pfvf, OTX2_FLAG_NTUPLE_SUPPORT))
+ 		return -ENOMEM;
+ 
+ 	/* Number of queues on a VF can be greater or less than
+@@ -1596,7 +1596,7 @@ int otx2_destroy_ntuple_flows(struct otx2_nic *pfvf)
+ 	struct otx2_flow *iter, *tmp;
+ 	int err;
+ 
+-	if (!(pfvf->flags & OTX2_FLAG_NTUPLE_SUPPORT))
++	if (!otx2_test_flag(pfvf, OTX2_FLAG_NTUPLE_SUPPORT))
+ 		return 0;
+ 
+ 	if (!flow_cfg->max_flows)
+@@ -1629,7 +1629,7 @@ int otx2_destroy_mcam_flows(struct otx2_nic *pfvf)
+ 	struct otx2_flow *iter, *tmp;
+ 	int err;
+ 
+-	if (!(pfvf->flags & OTX2_FLAG_MCAM_ENTRIES_ALLOC))
++	if (!otx2_test_flag(pfvf, OTX2_FLAG_MCAM_ENTRIES_ALLOC))
+ 		return 0;
+ 
+ 	/* remove all flows */
+@@ -1658,7 +1658,7 @@ int otx2_destroy_mcam_flows(struct otx2_nic *pfvf)
+ 		return err;
+ 	}
+ 
+-	pfvf->flags &= ~OTX2_FLAG_MCAM_ENTRIES_ALLOC;
++	otx2_clear_flag(pfvf, OTX2_FLAG_MCAM_ENTRIES_ALLOC);
+ 	flow_cfg->max_flows = 0;
+ 	mutex_unlock(&pfvf->mbox.lock);
+ 
+@@ -1721,7 +1721,7 @@ int otx2_enable_rxvlan(struct otx2_nic *pf, bool enable)
+ 	int err;
+ 
+ 	/* Dont have enough mcam entries */
+-	if (!(pf->flags & OTX2_FLAG_RX_VLAN_SUPPORT))
++	if (!otx2_test_flag(pf, OTX2_FLAG_RX_VLAN_SUPPORT))
+ 		return -ENOMEM;
+ 
+ 	if (enable) {
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+index c0e2100de1d9..32582b6347ea 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+@@ -879,7 +879,7 @@ static void otx2_handle_link_event(struct otx2_nic *pf)
+ 	struct cgx_link_user_info *linfo = &pf->linfo;
+ 	struct net_device *netdev = pf->netdev;
+ 
+-	if (pf->flags & OTX2_FLAG_PORT_UP)
++	if (otx2_test_flag(pf, OTX2_FLAG_PORT_UP))
+ 		return;
+ 
+ 	pr_info("%s NIC Link is %s %d Mbps %s duplex\n", netdev->name,
+@@ -907,11 +907,11 @@ static int otx2_mbox_up_handler_rep_event_up_notify(struct otx2_nic *pf,
+ 
+ 	if (info->event == RVU_EVENT_PORT_STATE) {
+ 		if (info->evt_data.port_state) {
+-			pf->flags |= OTX2_FLAG_PORT_UP;
++			otx2_set_flag(pf, OTX2_FLAG_PORT_UP);
+ 			netif_carrier_on(netdev);
+ 			netif_tx_start_all_queues(netdev);
+ 		} else {
+-			pf->flags &= ~OTX2_FLAG_PORT_UP;
++			otx2_clear_flag(pf, OTX2_FLAG_PORT_UP);
+ 			netif_tx_stop_all_queues(netdev);
+ 			netif_carrier_off(netdev);
+ 		}
+@@ -953,7 +953,7 @@ int otx2_mbox_up_handler_cgx_link_event(struct otx2_nic *pf,
+ 	}
+ 
+ 	/* interface has not been fully configured yet */
+-	if (pf->flags & OTX2_FLAG_INTF_DOWN)
++	if (otx2_test_flag(pf, OTX2_FLAG_INTF_DOWN))
+ 		return 0;
+ 
+ 	otx2_handle_link_event(pf);
+@@ -1828,7 +1828,7 @@ void otx2_free_hw_resources(struct otx2_nic *pf)
+ 	free_req = otx2_mbox_alloc_msg_nix_lf_free(mbox);
+ 	if (free_req) {
+ 		free_req->flags = NIX_LF_DISABLE_FLOWS | NIX_LF_DONT_FREE_DFT_IDXS;
+-		if (!(pf->flags & OTX2_FLAG_PF_SHUTDOWN))
++		if (!otx2_test_flag(pf, OTX2_FLAG_PF_SHUTDOWN))
+ 			free_req->flags |= NIX_LF_DONT_FREE_TX_VTAG;
+ 		if (otx2_sync_mbox_msg(mbox))
+ 			dev_err(pf->dev, "%s failed to free nixlf\n", __func__);
+@@ -2135,21 +2135,21 @@ int otx2_open(struct net_device *netdev)
+ 	}
+ 	otx2_write64(pf, NIX_LF_RAS_ENA_W1S, NIX_LF_RAS_MASK);
+ 
+-	if (pf->flags & OTX2_FLAG_RX_VLAN_SUPPORT)
++	if (otx2_test_flag(pf, OTX2_FLAG_RX_VLAN_SUPPORT))
+ 		otx2_enable_rxvlan(pf, true);
+ 
+ 	/* When reinitializing enable time stamping if it is enabled before */
+-	if (pf->flags & OTX2_FLAG_TX_TSTAMP_ENABLED) {
+-		pf->flags &= ~OTX2_FLAG_TX_TSTAMP_ENABLED;
++	if (otx2_test_flag(pf, OTX2_FLAG_TX_TSTAMP_ENABLED)) {
++		otx2_clear_flag(pf, OTX2_FLAG_TX_TSTAMP_ENABLED);
+ 		otx2_config_hw_tx_tstamp(pf, true);
+ 	}
+-	if (pf->flags & OTX2_FLAG_RX_TSTAMP_ENABLED) {
+-		pf->flags &= ~OTX2_FLAG_RX_TSTAMP_ENABLED;
++	if (otx2_test_flag(pf, OTX2_FLAG_RX_TSTAMP_ENABLED)) {
++		otx2_clear_flag(pf, OTX2_FLAG_RX_TSTAMP_ENABLED);
+ 		otx2_config_hw_rx_tstamp(pf, true);
+ 	}
+ 
+-	pf->flags &= ~OTX2_FLAG_INTF_DOWN;
+-	pf->flags &= ~OTX2_FLAG_PORT_UP;
++	otx2_clear_flag(pf, OTX2_FLAG_INTF_DOWN);
++	otx2_clear_flag(pf, OTX2_FLAG_PORT_UP);
+ 	/* 'intf_down' may be checked on any cpu */
+ 	smp_wmb();
+ 
+@@ -2161,7 +2161,7 @@ int otx2_open(struct net_device *netdev)
+ 		otx2_handle_link_event(pf);
+ 
+ 	/* Install DMAC Filters */
+-	if (pf->flags & OTX2_FLAG_DMACFLTR_SUPPORT)
++	if (otx2_test_flag(pf, OTX2_FLAG_DMACFLTR_SUPPORT))
+ 		otx2_dmacflt_reinstall_flows(pf);
+ 
+ 	otx2_tc_apply_ingress_police_rules(pf);
+@@ -2186,7 +2186,7 @@ int otx2_open(struct net_device *netdev)
+ err_tx_stop_queues:
+ 	netif_tx_stop_all_queues(netdev);
+ 	netif_carrier_off(netdev);
+-	pf->flags |= OTX2_FLAG_INTF_DOWN;
++	otx2_set_flag(pf, OTX2_FLAG_INTF_DOWN);
+ 	/* free NIXLF POISON irq */
+ 	vec = pci_irq_vector(pf->pdev,
+ 			     pf->hw.nix_msixoff + NIX_LF_POISON_VEC);
+@@ -2220,13 +2220,13 @@ int otx2_stop(struct net_device *netdev)
+ 	int qidx, vec, wrk;
+ 
+ 	/* If the DOWN flag is set resources are already freed */
+-	if (pf->flags & OTX2_FLAG_INTF_DOWN)
++	if (otx2_test_flag(pf, OTX2_FLAG_INTF_DOWN))
+ 		return 0;
+ 
+ 	netif_carrier_off(netdev);
+ 	netif_tx_stop_all_queues(netdev);
+ 
+-	pf->flags |= OTX2_FLAG_INTF_DOWN;
++	otx2_set_flag(pf, OTX2_FLAG_INTF_DOWN);
+ 	/* 'intf_down' may be checked on any cpu */
+ 	smp_wmb();
+ 
+@@ -2457,7 +2457,7 @@ static int otx2_config_hw_rx_tstamp(struct otx2_nic *pfvf, bool enable)
+ 	struct msg_req *req;
+ 	int err;
+ 
+-	if (pfvf->flags & OTX2_FLAG_RX_TSTAMP_ENABLED && enable)
++	if (otx2_test_flag(pfvf, OTX2_FLAG_RX_TSTAMP_ENABLED) && enable)
+ 		return 0;
+ 
+ 	mutex_lock(&pfvf->mbox.lock);
+@@ -2478,9 +2478,9 @@ static int otx2_config_hw_rx_tstamp(struct otx2_nic *pfvf, bool enable)
+ 
+ 	mutex_unlock(&pfvf->mbox.lock);
+ 	if (enable)
+-		pfvf->flags |= OTX2_FLAG_RX_TSTAMP_ENABLED;
++		otx2_set_flag(pfvf, OTX2_FLAG_RX_TSTAMP_ENABLED);
+ 	else
+-		pfvf->flags &= ~OTX2_FLAG_RX_TSTAMP_ENABLED;
++		otx2_clear_flag(pfvf, OTX2_FLAG_RX_TSTAMP_ENABLED);
+ 	return 0;
+ }
+ 
+@@ -2489,7 +2489,7 @@ static int otx2_config_hw_tx_tstamp(struct otx2_nic *pfvf, bool enable)
+ 	struct msg_req *req;
+ 	int err;
+ 
+-	if (pfvf->flags & OTX2_FLAG_TX_TSTAMP_ENABLED && enable)
++	if (otx2_test_flag(pfvf, OTX2_FLAG_TX_TSTAMP_ENABLED) && enable)
+ 		return 0;
+ 
+ 	mutex_lock(&pfvf->mbox.lock);
+@@ -2510,9 +2510,9 @@ static int otx2_config_hw_tx_tstamp(struct otx2_nic *pfvf, bool enable)
+ 
+ 	mutex_unlock(&pfvf->mbox.lock);
+ 	if (enable)
+-		pfvf->flags |= OTX2_FLAG_TX_TSTAMP_ENABLED;
++		otx2_set_flag(pfvf, OTX2_FLAG_TX_TSTAMP_ENABLED);
+ 	else
+-		pfvf->flags &= ~OTX2_FLAG_TX_TSTAMP_ENABLED;
++		otx2_clear_flag(pfvf, OTX2_FLAG_TX_TSTAMP_ENABLED);
+ 	return 0;
+ }
+ 
+@@ -2537,8 +2537,8 @@ int otx2_config_hwtstamp_set(struct net_device *netdev,
+ 
+ 	switch (config->tx_type) {
+ 	case HWTSTAMP_TX_OFF:
+-		if (pfvf->flags & OTX2_FLAG_PTP_ONESTEP_SYNC)
+-			pfvf->flags &= ~OTX2_FLAG_PTP_ONESTEP_SYNC;
++		if (otx2_test_flag(pfvf, OTX2_FLAG_PTP_ONESTEP_SYNC))
++			otx2_clear_flag(pfvf, OTX2_FLAG_PTP_ONESTEP_SYNC);
+ 
+ 		cancel_delayed_work(&pfvf->ptp->synctstamp_work);
+ 		otx2_config_hw_tx_tstamp(pfvf, false);
+@@ -2549,7 +2549,7 @@ int otx2_config_hwtstamp_set(struct net_device *netdev,
+ 					   "One-step time stamping is not supported");
+ 			return -ERANGE;
+ 		}
+-		pfvf->flags |= OTX2_FLAG_PTP_ONESTEP_SYNC;
++		otx2_set_flag(pfvf, OTX2_FLAG_PTP_ONESTEP_SYNC);
+ 		schedule_delayed_work(&pfvf->ptp->synctstamp_work,
+ 				      msecs_to_jiffies(500));
+ 		fallthrough;
+@@ -2835,7 +2835,7 @@ static int otx2_set_vf_vlan(struct net_device *netdev, int vf, u16 vlan, u8 qos,
+ 	if (proto != htons(ETH_P_8021Q))
+ 		return -EPROTONOSUPPORT;
+ 
+-	if (!(pf->flags & OTX2_FLAG_VF_VLAN_SUPPORT))
++	if (!otx2_test_flag(pf, OTX2_FLAG_VF_VLAN_SUPPORT))
+ 		return -EOPNOTSUPP;
+ 
+ 	return otx2_do_set_vf_vlan(pf, vf, vlan, qos, proto);
+@@ -3086,7 +3086,7 @@ int otx2_realloc_msix_vectors(struct otx2_nic *pf)
+ 	 * interrupt range (QINT, CINT, GINT, ERR and POISON vectors).
+ 	 */
+ 	num_vec = hw->nix_msixoff;
+-	if (pf->flags & OTX2_FLAG_REP_MODE_ENABLED)
++	if (otx2_test_flag(pf, OTX2_FLAG_REP_MODE_ENABLED))
+ 		num_vec += NIX_LF_CINT_VEC_START + hw->max_queues;
+ 	else
+ 		num_vec += NIX_LF_POISON_VEC + 1;
+@@ -3273,7 +3273,7 @@ static int otx2_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	pf->pdev = pdev;
+ 	pf->dev = dev;
+ 	pf->total_vfs = pci_sriov_get_totalvfs(pdev);
+-	pf->flags |= OTX2_FLAG_INTF_DOWN;
++	otx2_set_flag(pf, OTX2_FLAG_INTF_DOWN);
+ 
+ 	hw = &pf->hw;
+ 	hw->pdev = pdev;
+@@ -3328,23 +3328,23 @@ static int otx2_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	if (err)
+ 		goto err_del_mcam_entries;
+ 
+-	if (pf->flags & OTX2_FLAG_NTUPLE_SUPPORT)
++	if (otx2_test_flag(pf, OTX2_FLAG_NTUPLE_SUPPORT))
+ 		netdev->hw_features |= NETIF_F_NTUPLE;
+ 
+-	if (pf->flags & OTX2_FLAG_UCAST_FLTR_SUPPORT)
++	if (otx2_test_flag(pf, OTX2_FLAG_UCAST_FLTR_SUPPORT))
+ 		netdev->priv_flags |= IFF_UNICAST_FLT;
+ 
+ 	/* Support TSO on tag interface */
+ 	netdev->vlan_features |= netdev->features;
+ 	netdev->hw_features  |= NETIF_F_HW_VLAN_CTAG_TX |
+ 				NETIF_F_HW_VLAN_STAG_TX;
+-	if (pf->flags & OTX2_FLAG_RX_VLAN_SUPPORT)
++	if (otx2_test_flag(pf, OTX2_FLAG_RX_VLAN_SUPPORT))
+ 		netdev->hw_features |= NETIF_F_HW_VLAN_CTAG_RX |
+ 				       NETIF_F_HW_VLAN_STAG_RX;
+ 	netdev->features |= netdev->hw_features;
+ 
+ 	/* HW supports tc offload but mutually exclusive with n-tuple filters */
+-	if (pf->flags & OTX2_FLAG_TC_FLOWER_SUPPORT)
++	if (otx2_test_flag(pf, OTX2_FLAG_TC_FLOWER_SUPPORT))
+ 		netdev->hw_features |= NETIF_F_HW_TC;
+ 
+ 	netdev->hw_features |= NETIF_F_LOOPBACK | NETIF_F_RXALL;
+@@ -3595,18 +3595,18 @@ static void otx2_remove(struct pci_dev *pdev)
+ 
+ 	pf = netdev_priv(netdev);
+ 
+-	pf->flags |= OTX2_FLAG_PF_SHUTDOWN;
++	otx2_set_flag(pf, OTX2_FLAG_PF_SHUTDOWN);
+ 
+-	if (pf->flags & OTX2_FLAG_TX_TSTAMP_ENABLED)
++	if (otx2_test_flag(pf, OTX2_FLAG_TX_TSTAMP_ENABLED))
+ 		otx2_config_hw_tx_tstamp(pf, false);
+-	if (pf->flags & OTX2_FLAG_RX_TSTAMP_ENABLED)
++	if (otx2_test_flag(pf, OTX2_FLAG_RX_TSTAMP_ENABLED))
+ 		otx2_config_hw_rx_tstamp(pf, false);
+ 
+ 	/* Disable 802.3x pause frames */
+-	if (pf->flags & OTX2_FLAG_RX_PAUSE_ENABLED ||
+-	    (pf->flags & OTX2_FLAG_TX_PAUSE_ENABLED)) {
+-		pf->flags &= ~OTX2_FLAG_RX_PAUSE_ENABLED;
+-		pf->flags &= ~OTX2_FLAG_TX_PAUSE_ENABLED;
++	if (otx2_test_flag(pf, OTX2_FLAG_RX_PAUSE_ENABLED) ||
++	    otx2_test_flag(pf, OTX2_FLAG_TX_PAUSE_ENABLED)) {
++		otx2_clear_flag(pf, OTX2_FLAG_RX_PAUSE_ENABLED);
++		otx2_clear_flag(pf, OTX2_FLAG_TX_PAUSE_ENABLED);
+ 		otx2_config_pause_frm(pf);
+ 	}
+ 
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+index 039fd47ebf52..ddb46b580c3b 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_tc.c
+@@ -159,7 +159,7 @@ static int otx2_tc_validate_flow(struct otx2_nic *nic,
+ 				 struct flow_action *actions,
+ 				 struct netlink_ext_ack *extack)
+ {
+-	if (nic->flags & OTX2_FLAG_INTF_DOWN) {
++	if (otx2_test_flag(nic, OTX2_FLAG_INTF_DOWN)) {
+ 		NL_SET_ERR_MSG_MOD(extack, "Interface not initialized");
+ 		return -EINVAL;
+ 	}
+@@ -223,7 +223,7 @@ static int otx2_tc_egress_matchall_install(struct otx2_nic *nic,
+ 	if (err)
+ 		return err;
+ 
+-	if (nic->flags & OTX2_FLAG_TC_MATCHALL_EGRESS_ENABLED) {
++	if (otx2_test_flag(nic, OTX2_FLAG_TC_MATCHALL_EGRESS_ENABLED)) {
+ 		NL_SET_ERR_MSG_MOD(extack,
+ 				   "Only one Egress MATCHALL ratelimiter can be offloaded");
+ 		return -ENOMEM;
+@@ -244,7 +244,7 @@ static int otx2_tc_egress_matchall_install(struct otx2_nic *nic,
+ 						    otx2_convert_rate(entry->police.rate_bytes_ps));
+ 		if (err)
+ 			return err;
+-		nic->flags |= OTX2_FLAG_TC_MATCHALL_EGRESS_ENABLED;
++		otx2_set_flag(nic, OTX2_FLAG_TC_MATCHALL_EGRESS_ENABLED);
+ 		break;
+ 	default:
+ 		NL_SET_ERR_MSG_MOD(extack,
+@@ -261,13 +261,13 @@ static int otx2_tc_egress_matchall_delete(struct otx2_nic *nic,
+ 	struct netlink_ext_ack *extack = cls->common.extack;
+ 	int err;
+ 
+-	if (nic->flags & OTX2_FLAG_INTF_DOWN) {
++	if (otx2_test_flag(nic, OTX2_FLAG_INTF_DOWN)) {
+ 		NL_SET_ERR_MSG_MOD(extack, "Interface not initialized");
+ 		return -EINVAL;
+ 	}
+ 
+ 	err = otx2_set_matchall_egress_rate(nic, 0, 0);
+-	nic->flags &= ~OTX2_FLAG_TC_MATCHALL_EGRESS_ENABLED;
++	otx2_clear_flag(nic, OTX2_FLAG_TC_MATCHALL_EGRESS_ENABLED);
+ 	return err;
+ }
+ 
+@@ -505,7 +505,7 @@ static int otx2_tc_parse_actions(struct otx2_nic *nic,
+ 			mark = act->mark;
+ 			req->match_id = mark & OTX2_RX_MATCH_ID_MASK;
+ 			req->op = NIX_RX_ACTION_DEFAULT;
+-			nic->flags |= OTX2_FLAG_TC_MARK_ENABLED;
++			otx2_set_flag(nic, OTX2_FLAG_TC_MARK_ENABLED);
+ 			refcount_inc(&nic->flow_cfg->mark_flows);
+ 			break;
+ 
+@@ -942,7 +942,7 @@ static void otx2_destroy_tc_flow_list(struct otx2_nic *pfvf)
+ 	struct otx2_flow_config *flow_cfg = pfvf->flow_cfg;
+ 	struct otx2_tc_flow *iter, *tmp;
+ 
+-	if (!(pfvf->flags & OTX2_FLAG_MCAM_ENTRIES_ALLOC))
++	if (!otx2_test_flag(pfvf, OTX2_FLAG_MCAM_ENTRIES_ALLOC))
+ 		return;
+ 
+ 	list_for_each_entry_safe(iter, tmp, &flow_cfg->flow_list_tc, list) {
+@@ -1195,12 +1195,12 @@ static int otx2_tc_del_flow(struct otx2_nic *nic,
+ 	/* Disable TC MARK flag if they are no rules with skbedit mark action */
+ 	if (flow_node->req.match_id)
+ 		if (!refcount_dec_and_test(&flow_cfg->mark_flows))
+-			nic->flags &= ~OTX2_FLAG_TC_MARK_ENABLED;
++			otx2_clear_flag(nic, OTX2_FLAG_TC_MARK_ENABLED);
+ 
+ 	if (flow_node->is_act_police) {
+ 		__clear_bit(flow_node->rq, &nic->rq_bmap);
+ 
+-		if (nic->flags & OTX2_FLAG_INTF_DOWN)
++		if (otx2_test_flag(nic, OTX2_FLAG_INTF_DOWN))
+ 			goto free_mcam_flow;
+ 
+ 		mutex_lock(&nic->mbox.lock);
+@@ -1246,10 +1246,10 @@ static int otx2_tc_add_flow(struct otx2_nic *nic,
+ 	struct npc_install_flow_req *req, dummy;
+ 	int rc, err, entry;
+ 
+-	if (!(nic->flags & OTX2_FLAG_TC_FLOWER_SUPPORT))
++	if (!otx2_test_flag(nic, OTX2_FLAG_TC_FLOWER_SUPPORT))
+ 		return -ENOMEM;
+ 
+-	if (nic->flags & OTX2_FLAG_INTF_DOWN) {
++	if (otx2_test_flag(nic, OTX2_FLAG_INTF_DOWN)) {
+ 		NL_SET_ERR_MSG_MOD(extack, "Interface not initialized");
+ 		return -EINVAL;
+ 	}
+@@ -1444,7 +1444,7 @@ static int otx2_tc_ingress_matchall_install(struct otx2_nic *nic,
+ 	if (err)
+ 		return err;
+ 
+-	if (nic->flags & OTX2_FLAG_TC_MATCHALL_INGRESS_ENABLED) {
++	if (otx2_test_flag(nic, OTX2_FLAG_TC_MATCHALL_INGRESS_ENABLED)) {
+ 		NL_SET_ERR_MSG_MOD(extack,
+ 				   "Only one ingress MATCHALL ratelimitter can be offloaded");
+ 		return -ENOMEM;
+@@ -1469,7 +1469,7 @@ static int otx2_tc_ingress_matchall_install(struct otx2_nic *nic,
+ 		err = cn10k_set_matchall_ipolicer_rate(nic, entry->police.burst, rate);
+ 		if (err)
+ 			return err;
+-		nic->flags |= OTX2_FLAG_TC_MATCHALL_INGRESS_ENABLED;
++		otx2_set_flag(nic, OTX2_FLAG_TC_MATCHALL_INGRESS_ENABLED);
+ 		break;
+ 	default:
+ 		NL_SET_ERR_MSG_MOD(extack,
+@@ -1486,13 +1486,13 @@ static int otx2_tc_ingress_matchall_delete(struct otx2_nic *nic,
+ 	struct netlink_ext_ack *extack = cls->common.extack;
+ 	int err;
+ 
+-	if (nic->flags & OTX2_FLAG_INTF_DOWN) {
++	if (otx2_test_flag(nic, OTX2_FLAG_INTF_DOWN)) {
+ 		NL_SET_ERR_MSG_MOD(extack, "Interface not initialized");
+ 		return -EINVAL;
+ 	}
+ 
+ 	err = cn10k_free_matchall_ipolicer(nic);
+-	nic->flags &= ~OTX2_FLAG_TC_MATCHALL_INGRESS_ENABLED;
++	otx2_clear_flag(nic, OTX2_FLAG_TC_MATCHALL_INGRESS_ENABLED);
+ 	return err;
+ }
+ 
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+index 8d2d607bc92f..f65ba44db60b 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+@@ -171,7 +171,7 @@ static void otx2_set_rxtstamp(struct otx2_nic *pfvf,
+ 	u64 timestamp, tsns;
+ 	int err;
+ 
+-	if (!(pfvf->flags & OTX2_FLAG_RX_TSTAMP_ENABLED))
++	if (!otx2_test_flag(pfvf, OTX2_FLAG_RX_TSTAMP_ENABLED))
+ 		return;
+ 
+ 	timestamp = pfvf->ptp->convert_rx_ptp_tstmp(*(u64 *)data);
+@@ -374,13 +374,13 @@ static void otx2_rcv_pkt_handler(struct otx2_nic *pfvf,
+ 	}
+ 	otx2_set_rxhash(pfvf, cqe, skb);
+ 
+-	if (!(pfvf->flags & OTX2_FLAG_REP_MODE_ENABLED)) {
++	if (!otx2_test_flag(pfvf, OTX2_FLAG_REP_MODE_ENABLED)) {
+ 		skb_record_rx_queue(skb, cq->cq_idx);
+ 		if (pfvf->netdev->features & NETIF_F_RXCSUM)
+ 			skb->ip_summed = CHECKSUM_UNNECESSARY;
+ 	}
+ 
+-	if (pfvf->flags & OTX2_FLAG_TC_MARK_ENABLED)
++	if (otx2_test_flag(pfvf, OTX2_FLAG_TC_MARK_ENABLED))
+ 		skb->mark = parse->match_id;
+ 
+ 	skb_mark_for_recycle(skb);
+@@ -513,7 +513,7 @@ static int otx2_tx_napi_handler(struct otx2_nic *pfvf,
+ 		     ((u64)cq->cq_idx << 32) | processed_cqe);
+ 
+ #if IS_ENABLED(CONFIG_RVU_ESWITCH)
+-	if (pfvf->flags & OTX2_FLAG_REP_MODE_ENABLED)
++	if (otx2_test_flag(pfvf, OTX2_FLAG_REP_MODE_ENABLED))
+ 		ndev = pfvf->reps[qidx]->netdev;
+ 	else
+ #endif
+@@ -526,7 +526,7 @@ static int otx2_tx_napi_handler(struct otx2_nic *pfvf,
+ 
+ 		if (qidx >= pfvf->hw.tx_queues)
+ 			qidx -= pfvf->hw.xdp_queues;
+-		if (pfvf->flags & OTX2_FLAG_REP_MODE_ENABLED)
++		if (otx2_test_flag(pfvf, OTX2_FLAG_REP_MODE_ENABLED))
+ 			qidx = 0;
+ 		txq = netdev_get_tx_queue(ndev, qidx);
+ 		netdev_tx_completed_queue(txq, tx_pkts, tx_bytes);
+@@ -599,11 +599,11 @@ int otx2_napi_handler(struct napi_struct *napi, int budget)
+ 
+ 	if (workdone < budget && napi_complete_done(napi, workdone)) {
+ 		/* If interface is going down, don't re-enable IRQ */
+-		if (pfvf->flags & OTX2_FLAG_INTF_DOWN)
++		if (otx2_test_flag(pfvf, OTX2_FLAG_INTF_DOWN))
+ 			return workdone;
+ 
+ 		/* Adjust irq coalese using net_dim */
+-		if (pfvf->flags & OTX2_FLAG_ADPTV_INT_COAL_ENABLED)
++		if (otx2_test_flag(pfvf, OTX2_FLAG_ADPTV_INT_COAL_ENABLED))
+ 			otx2_adjust_adaptive_coalese(pfvf, cq_poll);
+ 
+ 		if (likely(cq))
+@@ -1137,7 +1137,7 @@ static void otx2_set_txtstamp(struct otx2_nic *pfvf, struct sk_buff *skb,
+ 
+ 	if (unlikely(!skb_shinfo(skb)->gso_size &&
+ 		     (skb_shinfo(skb)->tx_flags & SKBTX_HW_TSTAMP))) {
+-		if (unlikely(pfvf->flags & OTX2_FLAG_PTP_ONESTEP_SYNC &&
++		if (unlikely(otx2_test_flag(pfvf, OTX2_FLAG_PTP_ONESTEP_SYNC) &&
+ 			     otx2_ptp_is_sync(skb, &ptp_offset, &udp_csum_crt))) {
+ 			origin_tstamp = (struct ptpv2_tstamp *)
+ 					((u8 *)skb->data + ptp_offset +
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
+index f7765e19d78a..5f7915231ca3 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_vf.c
+@@ -610,7 +610,7 @@ static int otx2vf_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	vf->dev = dev;
+ 	vf->iommu_domain = iommu_get_domain_for_dev(dev);
+ 
+-	vf->flags |= OTX2_FLAG_INTF_DOWN;
++	otx2_set_flag(vf, OTX2_FLAG_INTF_DOWN);
+ 	hw = &vf->hw;
+ 	hw->pdev = vf->pdev;
+ 	hw->rx_queues = qcount;
+@@ -824,10 +824,10 @@ static void otx2vf_remove(struct pci_dev *pdev)
+ 	vf = netdev_priv(netdev);
+ 
+ 	/* Disable 802.3x pause frames */
+-	if (vf->flags & OTX2_FLAG_RX_PAUSE_ENABLED ||
+-	    (vf->flags & OTX2_FLAG_TX_PAUSE_ENABLED)) {
+-		vf->flags &= ~OTX2_FLAG_RX_PAUSE_ENABLED;
+-		vf->flags &= ~OTX2_FLAG_TX_PAUSE_ENABLED;
++	if (otx2_test_flag(vf, OTX2_FLAG_RX_PAUSE_ENABLED) ||
++	    otx2_test_flag(vf, OTX2_FLAG_TX_PAUSE_ENABLED)) {
++		otx2_clear_flag(vf, OTX2_FLAG_RX_PAUSE_ENABLED);
++		otx2_clear_flag(vf, OTX2_FLAG_TX_PAUSE_ENABLED);
+ 		otx2_config_pause_frm(vf);
+ 	}
+ 
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_xsk.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_xsk.c
+index 0e8a6a6486c4..7808588a0234 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_xsk.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_xsk.c
+@@ -96,7 +96,7 @@ static void otx2_clean_up_rq(struct otx2_nic *pfvf, int qidx)
+ 	u64 iova;
+ 
+ 	/* If the DOWN flag is set SQs are already freed */
+-	if (pfvf->flags & OTX2_FLAG_INTF_DOWN)
++	if (otx2_test_flag(pfvf, OTX2_FLAG_INTF_DOWN))
+ 		return;
+ 
+ 	cq = &qset->cq[qidx];
+@@ -172,7 +172,7 @@ int otx2_xsk_wakeup(struct net_device *dev, u32 queue_id, u32 flags)
+ 	struct otx2_cq_poll *cq_poll = NULL;
+ 	struct otx2_qset *qset = &pf->qset;
+ 
+-	if (pf->flags & OTX2_FLAG_INTF_DOWN)
++	if (otx2_test_flag(pf, OTX2_FLAG_INTF_DOWN))
+ 		return -ENETDOWN;
+ 
+ 	if (queue_id >= pf->hw.rx_queues || queue_id >= pf->hw.tx_queues)
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c b/drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c
+index 2872adabc830..5f09e2960144 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c
+@@ -238,7 +238,7 @@ int otx2_qos_enable_sq(struct otx2_nic *pfvf, int qidx)
+ 	struct otx2_hw *hw = &pfvf->hw;
+ 	int pool_id, sq_idx, err;
+ 
+-	if (pfvf->flags & OTX2_FLAG_INTF_DOWN)
++	if (otx2_test_flag(pfvf, OTX2_FLAG_INTF_DOWN))
+ 		return -EPERM;
+ 
+ 	sq_idx = hw->non_qos_queues + qidx;
+@@ -288,7 +288,7 @@ void otx2_qos_disable_sq(struct otx2_nic *pfvf, int qidx)
+ 	sq_idx = hw->non_qos_queues + qidx;
+ 
+ 	/* If the DOWN flag is set SQs are already freed */
+-	if (pfvf->flags & OTX2_FLAG_INTF_DOWN)
++	if (otx2_test_flag(pfvf, OTX2_FLAG_INTF_DOWN))
+ 		return;
+ 
+ 	sq = &pfvf->qset.sq[sq_idx];
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/rep.c b/drivers/net/ethernet/marvell/octeontx2/nic/rep.c
+index 0f5d5642d3f7..7df82c22cc12 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/rep.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/rep.c
+@@ -93,9 +93,9 @@ static int rvu_rep_mcam_flow_init(struct rep_dev *rep)
+ 	rep->flow_cfg->max_flows = allocated;
+ 
+ 	if (allocated) {
+-		rep->flags |= OTX2_FLAG_MCAM_ENTRIES_ALLOC;
+-		rep->flags |= OTX2_FLAG_NTUPLE_SUPPORT;
+-		rep->flags |= OTX2_FLAG_TC_FLOWER_SUPPORT;
++		set_bit(OTX2_FLAG_MCAM_ENTRIES_ALLOC, &rep->flags);
++		set_bit(OTX2_FLAG_NTUPLE_SUPPORT, &rep->flags);
++		set_bit(OTX2_FLAG_TC_FLOWER_SUPPORT, &rep->flags);
+ 	}
+ 
+ 	INIT_LIST_HEAD(&rep->flow_cfg->flow_list);
+@@ -109,14 +109,14 @@ static int rvu_rep_setup_tc_cb(enum tc_setup_type type,
+ 	struct rep_dev *rep = cb_priv;
+ 	struct otx2_nic *priv = rep->mdev;
+ 
+-	if (!(rep->flags & RVU_REP_VF_INITIALIZED))
++	if (!test_bit(OTX2_FLAG_REP_VF_INITIALIZED, &rep->flags))
+ 		return -EINVAL;
+ 
+-	if (!(rep->flags & OTX2_FLAG_TC_FLOWER_SUPPORT))
++	if (!test_bit(OTX2_FLAG_TC_FLOWER_SUPPORT, &rep->flags))
+ 		rvu_rep_mcam_flow_init(rep);
+ 
+ 	priv->netdev = rep->netdev;
+-	priv->flags = rep->flags;
++	otx2_sync_flags_from_rep(priv, &rep->flags);
+ 	priv->pcifunc = rep->pcifunc;
+ 	priv->flow_cfg = rep->flow_cfg;
+ 
+@@ -303,9 +303,9 @@ static void rvu_rep_state_evt_handler(struct otx2_nic *priv,
+ 	rep_id = rvu_rep_get_repid(priv, info->pcifunc);
+ 	rep = priv->reps[rep_id];
+ 	if (info->evt_data.vf_state)
+-		rep->flags |= RVU_REP_VF_INITIALIZED;
++		set_bit(OTX2_FLAG_REP_VF_INITIALIZED, &rep->flags);
+ 	else
+-		rep->flags &= ~RVU_REP_VF_INITIALIZED;
++		clear_bit(OTX2_FLAG_REP_VF_INITIALIZED, &rep->flags);
+ }
+ 
+ int rvu_event_up_notify(struct otx2_nic *pf, struct rep_event *info)
+@@ -382,7 +382,7 @@ static void rvu_rep_get_stats64(struct net_device *dev,
+ {
+ 	struct rep_dev *rep = netdev_priv(dev);
+ 
+-	if (!(rep->flags & RVU_REP_VF_INITIALIZED))
++	if (!test_bit(OTX2_FLAG_REP_VF_INITIALIZED, &rep->flags))
+ 		return;
+ 
+ 	stats->rx_packets = rep->stats.rx_frames;
+@@ -453,7 +453,7 @@ static int rvu_rep_open(struct net_device *dev)
+ 	struct otx2_nic *priv = rep->mdev;
+ 	struct rep_event evt = {0};
+ 
+-	if (!(rep->flags & RVU_REP_VF_INITIALIZED))
++	if (!test_bit(OTX2_FLAG_REP_VF_INITIALIZED, &rep->flags))
+ 		return 0;
+ 
+ 	netif_carrier_on(dev);
+@@ -472,7 +472,7 @@ static int rvu_rep_stop(struct net_device *dev)
+ 	struct otx2_nic *priv = rep->mdev;
+ 	struct rep_event evt = {0};
+ 
+-	if (!(rep->flags & RVU_REP_VF_INITIALIZED))
++	if (!test_bit(OTX2_FLAG_REP_VF_INITIALIZED, &rep->flags))
+ 		return 0;
+ 
+ 	netif_carrier_off(dev);
+@@ -547,7 +547,7 @@ static int rvu_rep_napi_init(struct otx2_nic *priv,
+ 		otx2_write64(priv, NIX_LF_CINTX_INT(qidx), BIT_ULL(0));
+ 		otx2_write64(priv, NIX_LF_CINTX_ENA_W1S(qidx), BIT_ULL(0));
+ 	}
+-	priv->flags &= ~OTX2_FLAG_INTF_DOWN;
++	otx2_clear_flag(priv, OTX2_FLAG_INTF_DOWN);
+ 	return 0;
+ 
+ err_free_cints:
+@@ -632,7 +632,7 @@ void rvu_rep_destroy(struct otx2_nic *priv)
+ 	int rep_id;
+ 
+ 	rvu_eswitch_config(priv, false);
+-	priv->flags |= OTX2_FLAG_INTF_DOWN;
++	otx2_set_flag(priv, OTX2_FLAG_INTF_DOWN);
+ 	rvu_rep_free_cq_rsrc(priv);
+ 	for (rep_id = 0; rep_id < priv->rep_cnt; rep_id++) {
+ 		rep = priv->reps[rep_id];
+@@ -801,8 +801,8 @@ static int rvu_rep_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+ 	pci_set_drvdata(pdev, priv);
+ 	priv->pdev = pdev;
+ 	priv->dev = dev;
+-	priv->flags |= OTX2_FLAG_INTF_DOWN;
+-	priv->flags |= OTX2_FLAG_REP_MODE_ENABLED;
++	otx2_set_flag(priv, OTX2_FLAG_INTF_DOWN);
++	otx2_set_flag(priv, OTX2_FLAG_REP_MODE_ENABLED);
+ 
+ 	hw = &priv->hw;
+ 	hw->pdev = pdev;
+@@ -845,7 +845,7 @@ static void rvu_rep_remove(struct pci_dev *pdev)
+ 	struct otx2_nic *priv = pci_get_drvdata(pdev);
+ 
+ 	otx2_unregister_dl(priv);
+-	if (!(priv->flags & OTX2_FLAG_INTF_DOWN))
++	if (!otx2_test_flag(priv, OTX2_FLAG_INTF_DOWN))
+ 		rvu_rep_destroy(priv);
+ 	otx2_detach_resources(&priv->mbox);
+ 	if (priv->hw.lmt_info)
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/rep.h b/drivers/net/ethernet/marvell/octeontx2/nic/rep.h
+index 5bc9e2c7d800..45707c434d89 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/rep.h
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/rep.h
+@@ -37,8 +37,7 @@ struct rep_dev {
+ 	struct delayed_work stats_wrk;
+ 	struct devlink_port dl_port;
+ 	struct otx2_flow_config	*flow_cfg;
+-#define RVU_REP_VF_INITIALIZED		BIT_ULL(0)
+-	u64 flags;
++	unsigned long		flags;
+ 	u16 rep_id;
+ 	u16 pcifunc;
+ 	u8 mac[ETH_ALEN];
+-- 
 2.43.0
+
