@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-1.mta0.migadu.com [91.218.175.1])
+Received: from mta1.migadu.com (out-133.mta1.migadu.com [95.215.58.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D963238228A
-	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 19:33:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B5521E097
+	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 19:37:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789846384; cv=none; b=kb/0KJKwnfJPjoYmKzMHn/sFd7F926GqCP0AjognqUn727lLP7nNUCFPw0MiumJEjLEmfknFxgCnLnGcD3epcpULmXR8Ou/Xmhw4+nvvMGgGFKeTYjicM6RrypGDXNSIYstNO77nWzvDLRXvmdKdV/F3sXqYVIySChM3+BEf4EE=
+	t=1789846675; cv=none; b=i7fL3ETC+fXva9IvYJr07+gYTgfUDTt/epVDNRWLJFSLIwO0WJOYUBQ8dUvt5eP8NgyH1mzr9Emj69Mf9XtbnFI18uli+2Eg9WAd6kmjQwdHxKOvl4WcuF4FeaJUUDDkfw2lhyaKiVOy8sNp6LZdsfUw7y243J8g+S9q+wQtWPo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789846384; c=relaxed/simple;
-	bh=xE6jfuoKYQZYMCxqg6NzQAVyKkFWrTVReaqnbLiNe50=;
+	s=arc-20240116; t=1789846675; c=relaxed/simple;
+	bh=Qf159ozv3ptJ94sPAF3+71RPqkNsFz3N0iav+2Zt8eU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lVEaXAm3VtuuOHRb1S2f30mUbh8Gm379Gwqoy4+nL/KC15oWFeLJ4CrFbA/KfuAClPvq7srRSn3f0mBQSIr4MWyiu0JsB9LAggTQL76amHvEHPr0a0m4nC8FgyyJK7ft77/tsScpII1SDNpee4E//7UDyKt5S30S+z6Hh26dEzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PZif4kU0; arc=none smtp.client-ip=91.218.175.1
+	 In-Reply-To:Content-Type; b=PeOEo5gNItrpGmz3ldcXSp+ZSqOC0zy8oNAenobBF2uD+UxhI3jGYGVC6ExniCprowFR8Cc1nxLzYoleD8lqlPE7QJUrijaEexGegx0W9aQwvBC5v4wM0By83yQwNOoau5bf9ioMj+dPRkqjY3M7Ewf2Ma3TEodM8u4f6IagBZI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HG3H+6oc; arc=none smtp.client-ip=95.215.58.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PZif4kU0"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HG3H+6oc"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=xE6jfuoKYQZYMCxqg6NzQAVyKkFWrTVReaqnbLiNe50=;
+DKIM-Signature: a=rsa-sha256; bh=Qf159ozv3ptJ94sPAF3+71RPqkNsFz3N0iav+2Zt8eU=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789846379; v=1; x=1790451179;
- b=PZif4kU00aImbpF0X1VKZhrf97ZVfzeccLTwI06qeDxsH4HnxMQbPvzf4ijTIY+etQERa2FK
- 0Vqj+PfrCpryMfG6K5gMD9mes0L44H+zppYQBFdSkWGCjjF26wzvnRubH3FwkPKycv2kvhnaDjY
- EyCMW8fmhidTMn/GZjgvCc7k=
+ t=1789846669; v=1; x=1790451469;
+ b=HG3H+6ocmHPWCoujpfLIYJx4jombZcZhBeU5oQcm9Zoguds52x7Q+KHTG9NN0UesIS5FujCx
+ Rhp9lmP0scezvK3kClUBI+Q8nTRxVNTqCQFwDKmC21UxOhde5FE7NdwIcI86OkexTUFKEHRf8yT
+ MDJosgU+Mh+Q4ZR6NpcYpl2E=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 96355e51f462fce3;
-	Sat, 19 Sep 2026 19:32:58 +0000
-X-Mizu-Trace-ID: 96355e51f462fce3
+Received: by smtp.migadu.com with ESMTPS id 6149f87e05e14491;
+	Sat, 19 Sep 2026 19:37:49 +0000
+X-Mizu-Trace-ID: 6149f87e05e14491
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <1dfb59b4-9c23-45f7-8fac-ade2cedb3685@linux.dev>
-Date: Sat, 19 Sep 2026 12:32:53 -0700
+Message-ID: <c4c47944-578d-4694-8933-c8fbb09e76e9@linux.dev>
+Date: Sat, 19 Sep 2026 12:37:45 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,64 +38,82 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 06/20] bpf: Explore the landing pads no call
- site reaches
+Subject: Re: [PATCH bpf-next v2 09/20] bpf: Refuse a private stack for a
+ program with an exception cleanup table
 Content-Language: en-GB
 To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
 Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
  eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
  mason@kernel.org, ihor.solodrai@linux.dev
-References: <20260918044228.3287877-1-yonghong.song@linux.dev>
- <ef212951f3582678f582cf9d5664dcbd95377640aaf27eebdc53c86df81a7176@mail.kernel.org>
+References: <20260918044243.3288865-1-yonghong.song@linux.dev>
+ <6d68bdd97e85a2c8b74ab62769fd7846a3f9c83f825697eb9fd35a6723842a73@mail.kernel.org>
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <ef212951f3582678f582cf9d5664dcbd95377640aaf27eebdc53c86df81a7176@mail.kernel.org>
+In-Reply-To: <6d68bdd97e85a2c8b74ab62769fd7846a3f9c83f825697eb9fd35a6723842a73@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
 On 9/17/26 10:44 PM, bot+bpf-ci@kernel.org wrote:
->> commit c93117f24a1a9cc39bfeaef79c42dbff02d8c455
->> Author: Yonghong Song <yonghong.song@linux.dev>
->>
->>      bpf: Explore the landing pads no call site reaches
->>
->>      A cleanup record need not cover a call an exception can unwind out of: a
->>      frontend is free to emit a region around a helper or an ordinary kfunc,
->>      both nounwind here. Nothing marks a call site then, and that record's
->>      landing pad is reached by nothing at all -- leaving bpf_check_cfg() to
->>      refuse the program over code its own frontend had no way not to emit:
->>
->>         0: call bpf_preempt_disable
->>         1: call bpf_preempt_enable      record = { begin = 1, end = 2, pad = 4 }
->>         2: r0 = 0
->>         3: exit
->>         4: r1 = pads_ran ll             landing pad
->>         6: r2 = *(u64 *)(r1 + 0)
->>         7: r2 |= RAN_NOUNWIND_REC
->>         8: *(u64 *)(r1 + 0) = r2
->>         9: call bpf_unwind_resume
->>        10: exit
->>
->>      The range [1,2) holds one call, and it is a kfunc, so an exception cannot
->>      come out of it. cleanup_mark_call_sites() marks nothing, nothing pushes an
->>      edge to 4, and 4 through 10 are reachable from nothing: "unreachable insn
->>      4". The pad is dead, which is correct -- no exception can ever arrive at it
->>      -- but the program is fine and has to load.
->>
->>      Walk every pad the table names that the edges did not reach, the way the
->>      walk is already re-seeded at an exception callback. From there the pad is
->>      code like any other: do_check() never enters it, because no call site
->>      dispatches to it, so the dead code sweep removes it along with everything
->>      else that was not reached.
->>
->>      Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> This looks like a bug fix for the earlier commit that made exception landing
-> pads reachable in the CFG. Should this include:
+>> A landing pad is about to start running outside its own frame, on the
+>> bpf_throw() walker's stack, with that frame's registers put back from a
+>> spill area whose contents arch_bpf_run_cleanup_pad() knows how to read. The
+>> x86-64 JIT addresses a private-stack program's frame through a scratch
+>> register that it recomputes after each call rather than through rbp, and no
+>> spill area holds that register, so a pad there would address its frame
+>> through whatever the kernel left behind.
+> The description says the x86-64 JIT 'recomputes after each call'. Does the
+> JIT actually recompute it?
 >
->    Fixes: a67011bbbca1ba95 ("bpf: Make exception landing pads reachable in the CFG")
+> Looking at the x86 JIT, emit_priv_frame_ptr() (arch/x86/net/bpf_jit_comp.c)
+> is emitted once in the prologue, and the value in X86_REG_R9 is carried
+> across calls by push_r9()/pop_r9() around each call site; BPF_REG_FP
+> accesses are rewritten to X86_REG_R9.
+>
+> The load-bearing half of the argument is still correct -
+> arch_bpf_run_cleanup_pad() (added later in the series,
+> arch/x86/net/bpf_cleanup_pad.S) restores only r15/r14/r13/rbx/r12 and rbp
+> from the spill area and never restores r9, so a pad in a private-stack
+> program would address its frame through a stale register.
+>
+> Only the described mechanism (recompute vs save/restore around calls) is
+> wrong, which makes the justification harder to check against the JIT.
+>
+>> Everywhere rather than arch-conditionally: arm64 keeps its private
+>> stack pointer in x27, which is in the prologue spill and so survives, but a
+>> rule that holds on one arch and not the other is not worth the second code
+>> path when nothing is lost but an optimization.
+> Does 'nothing is lost but an optimization' understate the effect?
+>
+> The private-stack mode also changes the verifier's stack-depth accounting,
+> not just JIT codegen. In check_max_stack_depth_subprog() a
+> PRIV_STACK_ADAPTIVE subprog is checked against MAX_BPF_STACK on its own ('if
+> (subprog_depth > MAX_BPF_STACK)'), while a NO_PRIV_STACK subprog accumulates
+> into 'depth' and the whole bpf2bpf chain must fit in MAX_BPF_STACK
+> ('combined stack size of %d calls is %d. Too large').
+>
+> So for the prog types bpf_enable_priv_stack() would have returned
+> PRIV_STACK_ADAPTIVE for (kprobe/tracepoint/perf_event/raw_tp, and
+> tracing/lsm/struct_ops with a recursion or an explicit request), a program
+> carrying a cleanup table whose nested subprog depths sum above 512 bytes now
+> fails to load rather than losing performance.
+>
+> Worth stating in the changelog, since it is a load-time visible restriction
+> on the new feature rather than an optimization.
 
-No need for this Fixes tag.
+Okay, comments and commit message may have some stale things or something
+like (when nothing is lost but an optimization) is not correct. Will fix.
+
+>
+> Related: kernel/sched/ext/ext.c sets prog->aux->priv_stack_requested for
+> sched_ext dispatch/sub_caps_updated, and verifier.c rejects such a request
+> when the JIT cannot honour it; here the request is silently ignored instead.
+>
+> This looks like a bug fix for private stack support. Should this include:
+>
+>    Fixes: a76ab5731e32d ("bpf: Find eligible subprogs for private stack support")
+
+Fixes tag is unnecessary.
 
 >
 >
