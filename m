@@ -1,80 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-101.mta0.migadu.com [91.218.175.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9615621CC59;
-	Sat, 19 Sep 2026 05:51:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D42E3655F6
+	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 07:35:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789797074; cv=none; b=h6AnzlJgymCQOnNYiQQWpB/Y+1f2sucyWA/dtleyUuotIPh0Fty/sS3Z/yO7TW50QrEmDQtY2JCIb+ARZ343+gZmo0ppQywHKGPaCFl2he71tg0llopxi74ibsqH+uj5HDQIlPqmSKCbP1PVQuLOjBSBrPZIF4lqSvKt1tXISDs=
+	t=1789803306; cv=none; b=GNq0wUuB/HAfb53gKEHnCwRV4DV3/dRaYPTTEg2C1w2ACKXRE4K2U5zuFVfg2f25BbPxzSrvIYgFb9+BjO9GjdQCt8j0ZIxpILNHtvhIpDlQMgUJL3mahB5+3dWD5wjuN+vWNEqmvy13qpDkZJYrPs3n3mjeI+du5wCd3NlUFq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789797074; c=relaxed/simple;
-	bh=6TnbxwobvnfcCGQoiLtwCF4d93A2jLSOfkWUcNSju7M=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=oQyOe62M/dSf/5cb5SZOK5TyKlHc+c8uXYo/Ny/MuCkXePQwjE7thx6NnRitk7Lqaq2fIKCa2hyBZqLFd3azjZIpYnTpaElrmNe0/2uIVCDKhMY/AemS6GfXSHmdW/zJyOMaiSB+WVOJBKibqCTd5LulHwp4xQFiaicyzaGO+mQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PWY4dakD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789803306; c=relaxed/simple;
+	bh=bwTHF6NnPL2Nf6L0KvSVWduTuK3JmVHwj2sjNly6dPo=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=e9SCtOGpM5EssfPLlXT432aIASxPPrk11my9ZrzGn2R5HRTc0XyJU6UyRNBn9hyA0uldqD0OVDtJfrvY3tYQsC6PlAQWIP34G6KFf40/c/b9vXG0cRTkKQnCI4O1PYnsNxBTE3RpFfQcdbyIZGnO8GoXn2N/idsLmXDnGLBd1rI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jrkY5f59; arc=none smtp.client-ip=91.218.175.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PWY4dakD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 131E81F000FF;
-	Sat, 19 Sep 2026 05:51:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789797073;
-	bh=jrex8TXUpZ7q52aHdwMMLlcZJ89BHOHwDFw4QUASyqc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=PWY4dakDAwmVQcw4ka5aSyAlD8Na19vBS6Xnva/bEMSX6kKzlU1bU+eso76y89N5D
-	 CA0q2HnKe5+S/M8jRp8TtWqkzBZxD/jU0Nos6MICGqMrn17QTABDQDHghTlI+id2TS
-	 FNm76KaCOMf/NI3KOEtANSvg2tyAZNXRBSvGof0mcgy8DXk73wj7IQMAe7vsDEDuWh
-	 XY/JjM2rAjm8ZotSZV9aXI8JTsdWPQNdmKr6BeNFK+Q6Lgj3sKUlLo15+c339Apiqu
-	 GeF0JbVXL8BfeYwqv6jEBY1dfeWS+fOfz9Gy7tFwKIzDwzNpPrjGcaJYBwtOsH8DEo
-	 nZM23aupJoDTA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 197843924440;
-	Sat, 19 Sep 2026 05:50:07 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jrkY5f59"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=bwTHF6NnPL2Nf6L0KvSVWduTuK3JmVHwj2sjNly6dPo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789803301; v=1; x=1790408101;
+ b=jrkY5f59AO1rrkbeDGnUAJiQsf+UARwOfR38Ih2pV3qCG2BVedCN66sS6Xh0Jrj/JMBRBcvS
+ eHgCAPTBrTtqIzGAGLootoakKC2dk4qpdIGe79VYB5ro4Dc2C7AaFKdiQP/QKyj2gbstDh8/Jt7
+ juo3vlu9A57wjuDarjhlfKMA=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 95f1a4aad28e81c8;
+	Sat, 19 Sep 2026 07:35:01 +0000
+X-Mizu-Trace-ID: 95f1a4aad28e81c8
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <748ca00e-61af-4698-86a9-cb28a41c7471@linux.dev>
+Date: Sat, 19 Sep 2026 15:34:52 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, daniel@iogearbox.net, linux-kselftest@vger.kernel.org,
+ cuitao@kylinos.cn
+Subject: Re: [RFC PATCH v5 1/5] blk-iocost: add BPF struct_ops cost model
+ support
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, tj@kernel.org,
+ josef@toxicopanda.com, axboe@kernel.dk, ameryhung@gmail.com
+References: <20260918031751.1255420-1-cui.tao@linux.dev>
+ <20260918031751.1255420-2-cui.tao@linux.dev>
+ <DLIK37JYD35X.3NZ4ZHTHDKAFX@gmail.com>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <DLIK37JYD35X.3NZ4ZHTHDKAFX@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] samples/bpf: remove unused hash_func01.h header
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178979700590.1279646.8949803445782759365.git-patchwork-notify@kernel.org>
-Date: Sat, 19 Sep 2026 05:50:05 +0000
-References: <20260918041148.602323-1-enelsonmoore@gmail.com>
-In-Reply-To: <20260918041148.602323-1-enelsonmoore@gmail.com>
-To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- sdf@fomichev.me, ndesaulniers@google.com, morbo@google.com,
- justinstitt@google.com, bpf@vger.kernel.org, netdev@vger.kernel.org,
- llvm@lists.linux.dev, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, davem@davemloft.net,
- kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com, nathan@kernel.org
 
-Hello:
+Hi Alexei,
 
-This patch was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Thu, 17 Sep 2026 21:11:45 -0700 you wrote:
-> samples/bpf/hash_func01.h has been unused since commit 91dda69b08de
-> ("samples/bpf: Remove the xdp_redirect* utilities"). Remove it.
+在 2026/9/18 23:43, Alexei Starovoitov 写道:
+> On Fri, Sep 18, 2026 at 11:17 AM Tao Cui <cui.tao@linux.dev> wrote:
+>> The registration and binding model follows the TCP congestion
+>> model registration pattern: registering a struct_ops makes the model
+>> available by its name (char name[IOCOST_MODEL_NAME_LEN], validated at
+>> init_member), while
+>> io.cost.model binds one registered model to a device with
+>> "model=<name>" and unbinds with "model=linear" or "ctrl=auto/user".
+>> Unregistering a model removes it from the registry, but its name
 > 
-> Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-> ---
->  samples/bpf/hash_func01.h | 55 ---------------------------------------
->  1 file changed, 55 deletions(-)
->  delete mode 100644 samples/bpf/hash_func01.h
+> I don't think it's what Tejun asked for in v1. He asked for a per-device
+> struct_ops instance where attaching switches the device to bpf and
+> detaching switches it back. Instead there is a global name registry,
+> a lifecycle list, an "unregistered but still bound" state and a
+> refcount_t on top of bpf_struct_ops_get(), and every version since v3
+> had a lifetime bug in exactly that code.
+> Do it like hid_bpf_ops does with hid_id: device in the struct_ops,
+> bind in .reg, unbind in .unreg, and le
+> t struct_ops own the lifetime.
+> 
 
-Here is the summary with links:
-  - samples/bpf: remove unused hash_func01.h header
-    https://git.kernel.org/bpf/bpf-next/c/559b90b855ce
+Thanks for pointing this out.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+You are right. I misunderstood Tejun's comment from v1. I took
+"per-device" as selecting a registered model by name for each device,
+which led to the current registry/lifecycle design.
 
+My original implementation followed the tcp-cc style named model
+approach, but that was not what Tejun was suggesting. The intended
+model should be a per-device struct_ops instance, with attach/detach
+controlling the switch between the BPF model and the builtin model,
+and the struct_ops core owning the lifetime.
+
+> pls wait for Tejun's feedback before respinning.
+> 
+
+I'll rework the design in that direction and wait for Tejun's feedback
+before sending another revision.
+
+Thanks,
+Tao
+
+> pw-bot: cr
 
