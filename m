@@ -1,151 +1,208 @@
-Received: from mta0.migadu.com (out-95.mta0.migadu.com [91.218.175.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB6E41A55D
-	for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 23:38:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 177D52DCBEC;
+	Sat, 19 Sep 2026 00:27:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789774702; cv=none; b=ROjEWQ85CyesG7a/0BPgx6Yh5M6LruGPxmSZ7oX30IV9qpQYkCNmn+5OZ0nl1+k/JDXelfr6AePsyWd0WFBBGl1qWaQgqMEC+yBKTkoYScz2ScvSHx7NqB2eEcb8H6szhzXo7RBg6E+63nuJDf4AaYvwY0r50jbs51oC1zbhbFM=
+	t=1789777640; cv=none; b=pEDkvupt/sK2WtPwB7jlMypcd2165fgM2vR0d/X2TRC5lTbh4IpmoButFBusy5ilJf2V0nKRpxBmNtZqe5nw82Jnaq7AaWvoybmntirrYnNtieT98OuNxmlCsaoAiW8hxAXOaznnMDwhWtMm3m5+PWtgg5Ssepwjvzf86MoPHsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789774702; c=relaxed/simple;
-	bh=+krH3OIS8l+72/XxaoAip/+rtgiDlS6xmuwtgaO2k60=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JWmoGWKxvRQZIJILM4JdIjf231oTvGmc6AhSRcGLxlHI3CykxuMCQ5c6WD3Q+gn5TqbWokF4NC9sG5xAaeaQXisIL3NtvgnR24BS2JlpwfKcHrvNfmjds65g1jsHwEpMHtIIchWbiTTOBr3/FyMVCb23JakJPjNsAcXkOW+/K3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YrxwS3eE; arc=none smtp.client-ip=91.218.175.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789777640; c=relaxed/simple;
+	bh=fYjJCoMwHmQye7/VloP5QI8g55DMF1gGv8QsEafA+tA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tq93VuNt78Z6g4HwwNHIXW7l/EghGEMolfkgFjUXbHrDPPzLHM6o9Pl5oD0CMzTvmakwiGZzWhbgcwaDEbWrMaorKEZs6MsLsZZaJsJZih/xRC1byuurgreKYZQbAyZTNEdAZlXYJqz4JyBln/4g6r8QVez/zX3Xk0W5qg0LOY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JuV/wG2s; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YrxwS3eE"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=+krH3OIS8l+72/XxaoAip/+rtgiDlS6xmuwtgaO2k60=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789774699; v=1; x=1790379499;
- b=YrxwS3eElbFAUynEEErY2/amaVXSfqRzidzD6wBv0ikRSDumj4aikV1YIET9gf0pkZXoion5
- vhgW2MBFUg8U6PuDY2bqucX54fSXBOK4jgFhVNn5Ar0kEKuXoDAm6Ptj4oOpu3jUahyx2VQDPEZ
- /YFnAf6EwFxQztJND8ov4U1s=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 8b15bcd15894cdae;
-	Fri, 18 Sep 2026 23:38:08 +0000
-X-Mizu-Trace-ID: 8b15bcd15894cdae
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <9dfc8e17-8830-470e-803a-b466df58e52b@linux.dev>
-Date: Fri, 18 Sep 2026 16:38:03 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JuV/wG2s"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78EE41F000FF;
+	Sat, 19 Sep 2026 00:27:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789777634;
+	bh=OZopYLFTJlf3PkMhPLbAyetqyxTv3lYaNJu5W/0y9dk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=JuV/wG2sz0qCIQSjQxsrReDBEzPo7huMI8B/ftpiCGhQ3UIfd7h8V5pbJkl3Jtn9N
+	 t6I+HuVuH47jco2b0SNsuD7buEfsry8aR9XZU6p3VJn3wq+SKa5nVxpu8O4Nrdhiod
+	 9oiaXsEGWCTtfPW0D9G3gaDarIGcuEk4EdUVM32MvcllbccEAZs7gnWH3eruoVfYk7
+	 2MQVk3fXUiV5KYdrrPzZNZqtbWXsMny/KgpmIkW0wYYHQXxrCtypVFrsrdW5pFfaX9
+	 obyph5+lgJaXEUYndIU2dB2kzbAuxmJEZlCXkbAYI9sBfPlIfqW3L/DSelB88Qy5Cf
+	 hgCGj2lW0NuAg==
+From: Kees Cook <kees@kernel.org>
+To: Bill Wendling <morbo@google.com>
+Cc: Kees Cook <kees@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	=?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack@google.com>,
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
+	=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?= <mic@digikod.net>,
+	bpf@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Gow <david@davidgow.net>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Petr Mladek <pmladek@suse.com>,
+	Shuvam Pandey <shuvampandey1@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	nikitash.mariiaw@gmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH v2 2/9] seq_buf: Do not pop from an overflowed seq_buf
+Date: Fri, 18 Sep 2026 17:27:00 -0700
+Message-Id: <20260919002714.4060307-2-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260919002658.stay.929-kees@kernel.org>
+References: <20260919002658.stay.929-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 01/13] bpf: move linked-scalar flags out of
- bpf_reg_state->id [NFC]
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bot+bpf-ci@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- martin.lau@kernel.org, mason@kernel.org
-References: <20260910164635.459558-2-vineet.gupta@linux.dev>
- <6ba21fcb39349c144c340d3605e25a30710ff43c5ea0c53045e78f4408411fdd@mail.kernel.org>
- <4cddd4a4-d684-46c9-862e-5708797f399d@linux.dev>
- <DLH1N1KP02XT.1KJ79QEMQORI2@gmail.com>
-From: Vineet Gupta <vineet.gupta@linux.dev>
-Content-Language: en-US
-In-Reply-To: <DLH1N1KP02XT.1KJ79QEMQORI2@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5577; i=kees@kernel.org; h=from:subject; bh=fYjJCoMwHmQye7/VloP5QI8g55DMF1gGv8QsEafA+tA=; b=owGbwMvMwCVmps19z/KJym7G02pJDFlrr93IXbp7Ld+m2KjGktU8+ry/9k2bf1eww21LT8Q0l s3KGzdnd5SyMIhxMciKKbIE2bnHuXi8bQ93n6sIM4eVCWQIAxenAExkjxHD/3TRVR4XOIL2fMwO FDufcllw9wzWJoP7lUnPVl3wyTkv1szwv1z6NO/BO/cY7fcISvstXznZQP6X1MKCUwuTlG/s1qs 6zgsA
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
+When a seq_buf has overflowed, its len is size + 1, so seq_buf_pop()
+decrements len to size and reads buffer[size], one byte past the end of
+the buffer. It also leaves len equal to size, which no longer counts as
+overflowed, so a truncated seq_buf then looks like a complete, full one.
 
-On 9/16/26 2:03 PM, Alexei Starovoitov wrote:
-> On Mon Sep 14, 2026 at 6:02 PM UTC, Vineet Gupta wrote:
->>
->> On 9/10/26 11:22 PM, bot+bpf-ci@kernel.org wrote:
->>>> diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
->>>> index 66fb11b6c6a7..d974baad37ee 100644
->>>> --- a/kernel/bpf/states.c
->>>> +++ b/kernel/bpf/states.c
->>> [ ... ]
->>>
->>>> @@ -369,13 +369,6 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
->>>>     * and r7.id=0 (both independent), without temp IDs both would map old_id=X
->>>>     * to cur_id=0 and pass. With temp IDs: r6 maps X->temp1, r7 tries to map
->>>>     * X->temp2, but X is already mapped to temp1, so the check fails correctly.
->>>> - *
->>>> - * When old_id has BPF_ADD_CONST set, the compound id (base | flag) and the
->>>> - * base id (flag stripped) must both map consistently. Example: old has
->>>> - * r2.id=A, r3.id=A|flag (r3 = r2 + delta), cur has r2.id=B, r3.id=C|flag
->>>> - * (r3 derived from unrelated r4). Without the base check, idmap gets two
->>>> - * independent entries A->B and A|flag->C|flag, missing that A->C conflicts
->>>> - * with A->B. The base ID cross-check catches this.
->>>>     */
->>>>    static bool check_scalar_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
->>>>    {
->>>> @@ -384,15 +377,7 @@ static bool check_scalar_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
->>>>
->>>>    	cur_id = cur_id ? cur_id : ++idmap->tmp_id_gen;
->>>>
->>>> -	if (!check_ids(old_id, cur_id, idmap))
->>>> -		return false;
->>>> -	if (old_id & BPF_ADD_CONST) {
->>>> -		old_id &= ~BPF_ADD_CONST;
->>>> -		cur_id &= ~BPF_ADD_CONST;
->>>> -		if (!check_ids(old_id, cur_id, idmap))
->>>> -			return false;
->>>> -	}
->>>> -	return true;
->>>> +	return check_ids(old_id, cur_id, idmap);
->>>>    }
->>> [ ... ]
->>>
->>>> diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
->>>> index d571fbfc86a3..da6cb961a520 100644
->>>> --- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
->>>> +++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
->>> [ ... ]
->>>
->>>> @@ -648,10 +648,10 @@ l_exit_%=:							\
->>>>    }
->>>>
->>>>    /*
->>>> - * Test that regsafe() verifies base_id consistency for BPF_ADD_CONST
->>>> + * Test that regsafe() verifies base_id consistency for ADD_CONST_*
->>>>     * linked scalars during state pruning.
->>>>     *
->>>> - * The false branch (explored first) links R3 to R2 via ADD_CONST.
->>>> + * The false branch (explored first) links R3 to R2 via ADD_CONST_64.
->>>>     * The true branch (runtime path) links R3 to R4 (unrelated base_id).
->>>>     * At the merge point, pruning must fail because the linkage topology
->>>>     * differs.
->>> Does this comment still match what the code does? The patch removes the
->>> "base_id" concept from kernel/bpf/states.c (deleted the paragraph that
->>> defined it, removed the two-level compound/base id check from
->>> check_scalar_ids), but the comment here still describes the test as
->>> verifying "base_id consistency" and refers to "unrelated base_id" on the
->>> next line.
->>>
->>> Looking at the function name and __description below:
->>>
->>>>     */
->>>>    __description("add_const base_id must be consistent for pruning")
->>>>    __failure __msg("invalid variable-offset")
->>>>    __naked void add_const_base_id_pruning(void)
->>> and later at line 695:
->>>
->>>>    	/* Runtime: R2.id=A, R4.id=C: base_ids A vs C inconsistent,
->>>>    	 * pruning should have failed. */
->>> Should these be updated to use current terminology, or does "base_id"
->>> still have meaning in this context? The test itself still works correctly
->>> after the patch, so this appears to be a documentation consistency
->>> question rather than a functional issue.
->> Indeed base_id as a term is gone, but just id alone might be confusing
->> as well.
->> How about link id as a replacement for base_id
-> I don't think "link id" fits either. Just use id.
+An overflowed seq_buf logically has no last character to pop: the
+length of what was written has been lost, and the last byte of the
+buffer may be the NUL written by vsnprintf() or bytes that were never
+committed. Return -1 for an overflowed seq_buf, as for an empty one,
+and leave it overflowed, as the rest of the seq_buf API does until
+seq_buf_clear() or seq_buf_init().
 
-OK.
+The current callers do not reach this, e.g. trace_syscalls only calls
+trace_seq_pop() when the trace_seq it pops from has not overflowed, and
+kernel/bpf/diagnostics.c sets the length from strnlen() before popping.
 
-Thx,
--Vineet
+Add tests for the pop corner cases.
+
+Tests passed under qemu on ARCH=x86_64 with GCC 16.2.0 and CONFIG_KASAN=y,
+and on big-endian ARCH=s390 with GCC s390x-linux-gnu 16.1.0.
+
+Fixes: 32e0f607ac6a2 ("tracing: Add trace_seq_pop() and seq_buf_pop()")
+Assisted-by: LLM
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+Cc: "Günther Noack" <gnoack@google.com>
+Cc: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+Cc: "Mickaël Salaün" <mic@digikod.net>
+Cc: <bpf@vger.kernel.org>
+Cc: <linux-security-module@vger.kernel.org>
+Cc: <linux-trace-kernel@vger.kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: David Gow <david@davidgow.net>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Shuvam Pandey <shuvampandey1@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+---
+ include/linux/seq_buf.h   |  4 ++--
+ include/linux/trace_seq.h |  5 ++++-
+ lib/tests/seq_buf_kunit.c | 42 +++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 48 insertions(+), 3 deletions(-)
+
+diff --git a/include/linux/seq_buf.h b/include/linux/seq_buf.h
+index 9f2839e73f8a..f5a350347bc5 100644
+--- a/include/linux/seq_buf.h
++++ b/include/linux/seq_buf.h
+@@ -155,11 +155,11 @@ static inline void seq_buf_commit(struct seq_buf *s, int num)
+  *
+  * Removes the last written character to the seq_buf @s.
+  *
+- * Returns the last character or -1 if it is empty.
++ * Returns the last character, or -1 if @s is empty or has overflowed.
+  */
+ static inline int seq_buf_pop(struct seq_buf *s)
+ {
+-	if (!s->len)
++	if (!s->len || seq_buf_has_overflowed(s))
+ 		return -1;
+ 
+ 	s->len--;
+diff --git a/include/linux/trace_seq.h b/include/linux/trace_seq.h
+index 697d619aafdc..7174ebf3f015 100644
+--- a/include/linux/trace_seq.h
++++ b/include/linux/trace_seq.h
+@@ -86,7 +86,10 @@ static inline bool trace_seq_has_overflowed(struct trace_seq *s)
+  *
+  * Removes the last written character to the trace_seq @s.
+  *
+- * Returns the last character or -1 if it is empty.
++ * Returns the last character, or -1 if the underlying seq_buf is empty or
++ * has overflowed. Note that only that buffer is consulted: a @s marked
++ * full by a write that did not fit, which trace_seq_has_overflowed()
++ * reports as overflowed, still pops the last character written.
+  */
+ static inline int trace_seq_pop(struct trace_seq *s)
+ {
+diff --git a/lib/tests/seq_buf_kunit.c b/lib/tests/seq_buf_kunit.c
+index 9ceccdc3029f..d5a0c618b880 100644
+--- a/lib/tests/seq_buf_kunit.c
++++ b/lib/tests/seq_buf_kunit.c
+@@ -115,6 +115,47 @@ static void seq_buf_putc_test(struct kunit *test)
+ 	KUNIT_EXPECT_STREQ(test, seq_buf_str(&s), "");
+ }
+ 
++static void seq_buf_pop_test(struct kunit *test)
++{
++	DECLARE_SEQ_BUF(s, 8);
++	struct seq_buf t;
++	char *buf;
++
++	/* Nothing to pop. */
++	KUNIT_EXPECT_EQ(test, seq_buf_pop(&s), -1);
++	KUNIT_EXPECT_EQ(test, s.len, 0);
++
++	seq_buf_puts(&s, "hello");
++	KUNIT_EXPECT_EQ(test, seq_buf_pop(&s), 'o');
++	KUNIT_EXPECT_EQ(test, seq_buf_used(&s), 4);
++	KUNIT_EXPECT_STREQ(test, seq_buf_str(&s), "hell");
++
++	/* A 0xff byte must not be mistaken for an empty buffer. */
++	seq_buf_putc(&s, 0xff);
++	KUNIT_EXPECT_EQ(test, seq_buf_pop(&s), 0xff);
++
++	/* A full buffer pops its last byte. */
++	seq_buf_puts(&s, "abc");
++	seq_buf_putc(&s, 'd');
++	KUNIT_EXPECT_FALSE(test, seq_buf_has_overflowed(&s));
++	KUNIT_EXPECT_EQ(test, seq_buf_used(&s), 8);
++	KUNIT_EXPECT_EQ(test, seq_buf_pop(&s), 'd');
++	KUNIT_EXPECT_EQ(test, seq_buf_used(&s), 7);
++	KUNIT_EXPECT_STREQ(test, seq_buf_str(&s), "hellabc");
++
++	/*
++	 * An overflowed buffer has nothing to pop, and stays overflowed. Use
++	 * a buffer allocated at its exact size, so that KASAN reports any
++	 * read past its end.
++	 */
++	buf = kunit_kmalloc(test, 16, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_NULL(test, buf);
++	seq_buf_init(&t, buf, 16);
++	KUNIT_EXPECT_EQ(test, seq_buf_printf(&t, "%s", "longer than sixteen"), -1);
++	KUNIT_EXPECT_EQ(test, seq_buf_pop(&t), -1);
++	KUNIT_EXPECT_TRUE(test, seq_buf_has_overflowed(&t));
++}
++
+ static void seq_buf_printf_test(struct kunit *test)
+ {
+ 	DECLARE_SEQ_BUF(s, 32);
+@@ -355,6 +396,7 @@ static struct kunit_case seq_buf_test_cases[] = {
+ 	KUNIT_CASE(seq_buf_puts_test),
+ 	KUNIT_CASE(seq_buf_puts_overflow_test),
+ 	KUNIT_CASE(seq_buf_putc_test),
++	KUNIT_CASE(seq_buf_pop_test),
+ 	KUNIT_CASE(seq_buf_printf_test),
+ 	KUNIT_CASE(seq_buf_printf_overflow_test),
+ 	KUNIT_CASE(seq_buf_get_buf_commit_test),
+-- 
+2.34.1
+
