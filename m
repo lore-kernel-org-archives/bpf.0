@@ -1,65 +1,65 @@
-Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFEBB323416
-	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 14:38:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF3F2360EC4
+	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 14:38:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789828736; cv=none; b=uhpZ7IjVlfy+TNcqHDG1mTYynUxxrZjxzc4vb/wqfz8e5QWz9Lhx24HQ202/hL8vymB1KZhQU39kVNYyzX3O15Un3FW0XDD5XAyolPjzSX5D2toySh5gXGXD/mujCQoHFmDAoZ61tXDFML6o+DeCk+1R/nHDVnj49w+wEfJAgow=
+	t=1789828741; cv=none; b=Mq/e69A3JtI+qiecc5P9zsOkCfsPchcCL2WGfbM1MvOYbiJ6x2F7fepBlcXVGVNsP3St5IdDzM+jOhE/Vm4vontMdo0OtFLPwn/MumkdQhtL9WKq/+3n8Hl594+yAYOJgIpLxFRLxffsz/x+Qi24WbY999K5khfkhHGZlXuIedU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789828736; c=relaxed/simple;
-	bh=CyLVBdF6HZsyd/B8ZtdVAcP2QBNL8FUqGKolgEHBUho=;
+	s=arc-20240116; t=1789828741; c=relaxed/simple;
+	bh=av8t/T6ZS5uCE/nEyR9vVivlj8OSsiMscYwP23L8oIc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=BiryO/kg297+nFjSlIeJ52YE6q5t0zP8Mna+mP84ppRfrPWDrUKiANozIyimtUJxdRNbJumuxQ8zOqHqhe9VKw/b3zdv3p1Jbk/TYfMHjrbz4WRxOCV3F5Cng9HpPhsJ9CB/3Ajprn+hni5mg4JmzN/QHkuPr5NvrRlIvk6Hyy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hy1ds6Ve; arc=none smtp.client-ip=74.125.227.171
+	 MIME-Version; b=cFL4SzyKQKfaMbyVgmsh6v9LxsRfMLniQKBFDwgE8pnzzZVUPEbNhbiY/Byjj/IAf+px5qACf3dO46Ucp7E8BlWe+6q4NrtjWnaaRuu3T1gZkS7siJDDoU2CsDVoJVH43O5YuCp81PsqNKvB5cRLAzqGLIdPk/+7rscPBkh/me4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gdBd7JFg; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hy1ds6Ve"
-Received: by mail-pj2-f43.google.com with SMTP id d9443c01a7336-2d747ec6188so10365065ad.3
-        for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 07:38:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gdBd7JFg"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d747ed1368so21494495ad.1
+        for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 07:38:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789828734; x=1790433534; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789828739; x=1790433539; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=hsFrPyRZipOaZhEq/8OQA/iN9lQPDPtm3xyWhXDtLjQ=;
-        b=Hy1ds6VeT6CEiGHKFJ0bKuU+98QVBAYZde/dp4cFuRK0D4Segv8bvU/Tdr813U4jRb
-         Lp2C7YCERv8Rh7L+JzLMZnniACvyTKZ1NztBlFZRdaHY3tjza4TGnOZTADy7WDnv5Ivc
-         lP66tW22/pd1tMTEzaJW3L+4I8d+7HlM5QO4r5BZ26569XlVNjlLrTmMFdDMdBqsttii
-         RGf6gCEnw97oKFOOOOMdxzedYIO9A5XnIhFkW4j3w+Vu+KJaiLdsLd51OaHFkj23d+To
-         njmG3vN1daPdSj8v2eGlb0I/RnD1dcfOyuVRCQx122IWc4ggT+IFu7GMi8Yez+VR7A7C
-         xlwg==
+        bh=Mg7vwSHdpgkjHuAuSf6HmJMBzQg1Mbs7T+3qFylATrw=;
+        b=gdBd7JFgIWkdZvt42Vp6+76AsV3stf6PB10xc19jamFxAZiJwIIUw/O3TiHbO0FmkG
+         x9xKyHu8X0NhN1/GYSB6+5bRI1ipGv4/E9aohY/jd6Y6i2qantHU+iiE7u2Mi3fYq3Au
+         rHVX6BBEBDjMrSoBK7+gTKiXWur9DTQc0gjzumYS0WUCytmernbI+8VUazwFIHSB3PBU
+         lwwCR1WtgjhTPtrtvJRPNuSr+jIW3ghFMPWrk0NpvevEDnCByDFCsQ768Fj6IPQ+kDUy
+         rsKiPz65bVzjd0jwatMLq2AgyW73YMqKVqwxexLxXfU1H/lT+EVLc5DNdlq7g1tSlby5
+         c4aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789828734; x=1790433534;
+        d=1e100.net; s=20260707; t=1789828739; x=1790433539;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=hsFrPyRZipOaZhEq/8OQA/iN9lQPDPtm3xyWhXDtLjQ=;
-        b=ZeybIsN0OFx6xyabHkQ0f3sLYPeemODCUMmp8ovDZzHK0S0c6rwzmm8E8LGQ8RcXk9
-         UI8Kfj0CzJ58308PW7whIX795RnaZThNaOzlLXz0nKgF0Bc/0nsvQnPCSAHU+QrFgrQD
-         uC3yBt91fkdlTgCbUir87cy9x6M/mNJBB4cscqRBkecGQ6o84tTC08MwCXvioA9M2YRn
-         R2dxE1xOFOQVKPX/2Cu9jOLkhuV58DvNvB3YhxaBd/p/uLivt3hQDr/gFzDWzulyc8ip
-         IKO2iEs33r08tAjpMoA63xaHxSIXn2FZDiQulMOKOudMRduolBrRjzS75XqOtganBzFi
-         HOPQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwSWE6V57FUe8Qb0dfzQ8jt4gOxxR/SrpNtApvOMQGDBbkm1e4Qrv4bPA8o30dP0nC7bbY=@vger.kernel.org
-X-Gm-Message-State: AFuF++k/LAU+yadiQK9cltPjNEz/10vWnvOrgh7RMVafdtT0XHj1f2sy
-	6J1id34Hz0Ta4x3aN9KtIEUCkn1kF1FwGGXQ0fw5u8pAqeaPcv9MqRdy
-X-Gm-Gg: AYBFou09VWZT2Vz/5kB/QK0GO+8bt27c01QGIMZ3Hq2Z9JhsmlY7KRh7rmwiDggI+Of
-	4k68kQmmNv880d8RJ8H/GTIXirulpP6XOj4BCynry9SClEM8f5TyAKRP3uncQB5LrgQORkHJyMm
-	WhvzlP67OrbslCUSgnJcZdG2KhPIIRtBGJ9Yeqx+Zy3rcrtRFE1YkjwEnEwzg1uJsSWnkNxo0JC
-	sr2ifJf0Fhhc1trJQjmjobmLuYyaUJWildVpXwElyDL7vFLgENPxPgTRjG4zLBeC9rB5iiBOW8a
-	caO/N8vSWXnca3YyI/6RLcHZjGCkOVmDSmxQMqAMwS3ZEd7O+LXh6H00uV6VfZCY+mBM8ZaKob+
-	zqEw029gOnfJGLqk1MnvGinY5CV0z3DEVvYcvW7HvrD5pawzLTOyLh2swKABrbA66XB1daWDeTL
-	yt55EvgJ6K3x1ZKgCasI+i/uCLQ1a/kj1ig+C5lEoX3O7vCvGScNGP2w/b6RLxUQGLjYh8te5zD
-	KU1AM78/hX/vQ84t/bwnG4w86j6ZEggno1eJkPHstO6sPRSKmFsFfdI04Q8zM7NhF969KJuPw5p
-	5XpXkKh2gGUhs66eRuUE6p0K/T0V+tIekfPv6HP4MNewFOS17CSllQa+oTM=
-X-Received: by 2002:a17:903:4b0d:b0:2dd:c100:424c with SMTP id d9443c01a7336-2ddc100456amr36507175ad.48.1789828734264;
-        Sat, 19 Sep 2026 07:38:54 -0700 (PDT)
+        bh=Mg7vwSHdpgkjHuAuSf6HmJMBzQg1Mbs7T+3qFylATrw=;
+        b=tQVmW0Ca/vX1mMo+63p9gkRE8Ix2X5YB99L9WvPACL12vj/uaZ8uci+KXxRhzC6h/8
+         M7nGLVGQZX7PrUgw9WsoErSRHXDpNSDrBhE3exxm0q9sUbl6bXx+ACRS1fobzWxGF0fC
+         pwUAhEyPWCxPqkYvKS4fXr/zIvcPSpsZGyujtiWqM/bUJCERJDB08idL9JsfIr+2Ch47
+         awnhhDJMjWj7o7x/CZBRnHPgrvuralUgvxb0AGQ88AluHOIEGC2ueXt/P3lweJG5fUV9
+         zYwvCs6fXR+DNIGrFqKjpWKyLcw45E1c+279xQnqvktLFIXslYKfXuRQXDlmjMT/aveb
+         A+fg==
+X-Forwarded-Encrypted: i=1; AKwUvBzHUwJypoFYZC4qPRWRjdKi/UzhlnZbYlZnSdhVEi13xsDZtV9dG5oLVxTa8WDe+CVqqUc=@vger.kernel.org
+X-Gm-Message-State: AFuF++nYaej7jossvGDA3jg+gbz+834QbkiVWL1uC9OAtWrUs5tkUbEn
+	+w2IBpiZQQNcP33s0YcFt79/v9AdcxYVpJh0p8I/ZUPq44G2oov1YZLp
+X-Gm-Gg: AYBFou2jHJiBZ4y6rvFhRdkrIPsJPCfVpx3n1feu7JX0ERpoCTVk87YtCSsrTqtscQ3
+	QX3Zj+FvA/Y06cdFs/CNG1EdAItHN4jQnEH2Jyd3EQR1JQHRGcOirRDo1AJZP7Us8Al+vys7ViC
+	zSL45zRrUaArPdcV+f5JE8p8QrLDhNLDImFal1NRbI9Dmbs7Jt0uRXem6YCOV5+dpUtVIsfCDZA
+	ZKwCGzI52ULxoITLAp6P4UoZjO7hLrlIs2v1K8+/ObEW937cymYIqtG+NHh3uEeWG5uBqiD4IyF
+	apterrOpBZ0XWfoMYn+eanfQbEKYNtERpKVaSKJP/9XOesT+8ESmiIcvPNMChMtLVH4/T2b1MxW
+	bade0JLqZH2RF+jKpQtF/DJgDQeqJjVqk480jV+OgETP9PDGOwoMHBIb0n1dQHucFQza9zaRA9P
+	YgNnzVANVif9F5BIpcsx3jinAGWEHCr4yG9WSzh/85aC/S0tpUoEt0xRAwxrnc+kRjpJTzwhbv2
+	T3E0D+WbWot3NqaXTKA2XPYvLnM9wvovzcB0VAzE8p9h0M3vr8oijgSeZRMsrPaU4/Q0cLhx6Jn
+	OqxvW46MPpDMOt22gLvdHzfDQy27UgpBHjoyn34Jf2+khlcK4Ar3j9K1Wd4=
+X-Received: by 2002:a17:903:1112:b0:2dd:c053:c20a with SMTP id d9443c01a7336-2ddc053c2a1mr41919155ad.38.1789828738993;
+        Sat, 19 Sep 2026 07:38:58 -0700 (PDT)
 Received: from KERNELXING-MC1.tencent.com ([43.132.141.21])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ddc179ed79sm10711715ad.43.2026.09.19.07.38.51
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ddc179ed79sm10711715ad.43.2026.09.19.07.38.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Sep 2026 07:38:53 -0700 (PDT)
+        Sat, 19 Sep 2026 07:38:58 -0700 (PDT)
 From: Jason Xing <kerneljasonxing@gmail.com>
 To: davem@davemloft.net,
 	edumazet@google.com,
@@ -71,9 +71,9 @@ To: davem@davemloft.net,
 Cc: netdev@vger.kernel.org,
 	bpf@vger.kernel.org,
 	Jason Xing <kerneljasonxing@gmail.com>
-Subject: [PATCH RFC net-next 2/9] bpf: add bpf_ktime_get_real_ns() kfunc
-Date: Sat, 19 Sep 2026 22:37:25 +0800
-Message-Id: <20260919143732.11772-3-kerneljasonxing@gmail.com>
+Subject: [PATCH RFC net-next 3/9] tcp: record a start time in the tx path for SK_BPF_CB_TIMESTAMPING_V2
+Date: Sat, 19 Sep 2026 22:37:26 +0800
+Message-Id: <20260919143732.11772-4-kerneljasonxing@gmail.com>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20260919143732.11772-1-kerneljasonxing@gmail.com>
 References: <20260919143732.11772-1-kerneljasonxing@gmail.com>
@@ -85,45 +85,64 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce a new BPF kfunc bpf_ktime_get_real_ns() that returns the
-current CLOCK_REALTIME time. This allows BPF programs to perform
-accurate delay calculations without clock domain mismatch issue.
+Add a new field sk_start_time to 'struct sock' to support different
+types of sockets (TCP/UDP/ICMP...) to record the pre-set start time
+value and then propagates it into skbs.
 
-Previously BPF programs only had access to monotonic, boot and
-TAI clocks (bpf_ktime_get_ns/boot_ns/tai_ns), none of which can be
-subtracted from a realtime start time.
+Start time might vary across different protocols, so for TCP the
+patch picks the entry of tcp_sendmsg_locked as the start time because
+1) it already holds the socket lock,
+2) it nearly reflects when to trigger a sendmsg syscall from applications.
+
+The value for TCP is a real (wall-clock) time from ktime_get_real() so
+it stays comparable with the timestamps produced elsewhere in the stack
+and can be consumed directly by a BPF prog using newly added
+bpf_ktime_get_real_ns()).
+
+A later patch copies this value onto every skb entailed by the TCP
+write queue.
 
 Signed-off-by: Jason Xing <kerneljasonxing@gmail.com>
 ---
-https://lore.kernel.org/all/20260518082344.96647-2-kerneljasonxing@gmail.com/
----
- kernel/bpf/helpers.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ include/net/sock.h | 2 ++
+ net/ipv4/tcp.c     | 4 ++++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index b3cc5c8fc875..7a0db620a273 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -2335,6 +2335,11 @@ void bpf_rb_root_free(const struct btf_field *field, void *rb_root,
+diff --git a/include/net/sock.h b/include/net/sock.h
+index 51185222aac2..782ad5fc8ff5 100644
+--- a/include/net/sock.h
++++ b/include/net/sock.h
+@@ -314,6 +314,7 @@ struct sk_filter;
+   *	@mptcp_retransmit_timer: mptcp retransmit timer
+   *	@sk_stamp: time stamp of last packet received
+   *	@sk_stamp_seq: lock for accessing sk_stamp on 32 bit architectures only
++  *	@sk_start_time: start time recorded for SK_BPF_CB_TIMESTAMPING_V2
+   *	@sk_tsflags: SO_TIMESTAMPING flags
+   *	@sk_bpf_cb_flags: used in bpf_setsockopt()
+   *	@sk_use_task_frag: allow sk_page_frag() to use current->task_frag.
+@@ -552,6 +553,7 @@ struct sock {
+ #if BITS_PER_LONG==32
+ 	seqlock_t		sk_stamp_seq;
+ #endif
++	ktime_t			sk_start_time;
+ 	int			sk_disconnects;
  
- __bpf_kfunc_start_defs();
+ 	union {
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index b4237d0e994d..28730a3e4473 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -1129,6 +1129,10 @@ int tcp_sendmsg_locked(struct sock *sk, struct msghdr *msg, size_t size)
  
-+__bpf_kfunc u64 bpf_ktime_get_real_ns(void)
-+{
-+	return ktime_to_ns(ktime_get_real());
-+}
+ 	flags = msg->msg_flags;
+ 
++	if (static_branch_unlikely(&bpfts_v2_needed_key) &&
++	    SK_BPF_CB_FLAG_TEST(sk, SK_BPF_CB_TIMESTAMPING_V2))
++		sk->sk_start_time = ktime_get_real();
 +
- /**
-  * bpf_obj_new() - allocate an object described by program BTF
-  * @local_type_id__k: type ID in program BTF
-@@ -4972,6 +4977,7 @@ BTF_ID_FLAGS(func, bpf_task_work_schedule_resume, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_dynptr_from_file)
- BTF_ID_FLAGS(func, bpf_dynptr_file_discard, KF_RELEASE)
- BTF_ID_FLAGS(func, bpf_timer_cancel_async)
-+BTF_ID_FLAGS(func, bpf_ktime_get_real_ns)
- BTF_KFUNCS_END(common_btf_ids)
- 
- static const struct btf_kfunc_id_set common_kfunc_set = {
+ 	sockc = (struct sockcm_cookie){ .tsflags = READ_ONCE(sk->sk_tsflags) };
+ 	if (msg->msg_controllen) {
+ 		sockc_err = sock_cmsg_send(sk, msg, &sockc);
 -- 
 2.43.7
 
