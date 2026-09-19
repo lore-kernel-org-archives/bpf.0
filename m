@@ -1,36 +1,36 @@
-Received: from mta1.migadu.com (out-133.mta1.migadu.com [95.215.58.133])
+Received: from mta1.migadu.com (out-58.mta1.migadu.com [95.215.58.58])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B5521E097
-	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 19:37:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E6035C693
+	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 19:54:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.58
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789846675; cv=none; b=i7fL3ETC+fXva9IvYJr07+gYTgfUDTt/epVDNRWLJFSLIwO0WJOYUBQ8dUvt5eP8NgyH1mzr9Emj69Mf9XtbnFI18uli+2Eg9WAd6kmjQwdHxKOvl4WcuF4FeaJUUDDkfw2lhyaKiVOy8sNp6LZdsfUw7y243J8g+S9q+wQtWPo=
+	t=1789847697; cv=none; b=ZEBvFAiCV5/s4c/g+RimazpjXI7TQflsouYWYeCntS/CC5RSaouP4jOiLcSrUpMnny6fF4vUFkDxjvAuVVF2OGMouyfFDox/eEnwobAv9awBK+lMsVnOGE/q6thb9PeDRbS03f5g4o9SmA3B2A9ATqCP3hMoLKpsSW0KepOejCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789846675; c=relaxed/simple;
-	bh=Qf159ozv3ptJ94sPAF3+71RPqkNsFz3N0iav+2Zt8eU=;
+	s=arc-20240116; t=1789847697; c=relaxed/simple;
+	bh=UpURaZtWbRJesNZxcDlHzEUhk6z0xy0v22xCFxKo72k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PeOEo5gNItrpGmz3ldcXSp+ZSqOC0zy8oNAenobBF2uD+UxhI3jGYGVC6ExniCprowFR8Cc1nxLzYoleD8lqlPE7QJUrijaEexGegx0W9aQwvBC5v4wM0By83yQwNOoau5bf9ioMj+dPRkqjY3M7Ewf2Ma3TEodM8u4f6IagBZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HG3H+6oc; arc=none smtp.client-ip=95.215.58.133
+	 In-Reply-To:Content-Type; b=roxUdwEGvm903l/gb4dxhkQT4GZ+i93fY7IVlrgJvWITCC8P5Z22wi21KUyRdSzb6wG4LB2YjcgVIeFSmKMTHXyBjGhcZTKW+d8bhHux0n7SuIQSru5r4vU9QAkjIiv6smxwWucyRHnvX/HKN6BznbPFAlkFYWZbfbNKXSohOnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vNUDajF9; arc=none smtp.client-ip=95.215.58.58
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HG3H+6oc"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vNUDajF9"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Qf159ozv3ptJ94sPAF3+71RPqkNsFz3N0iav+2Zt8eU=;
+DKIM-Signature: a=rsa-sha256; bh=UpURaZtWbRJesNZxcDlHzEUhk6z0xy0v22xCFxKo72k=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789846669; v=1; x=1790451469;
- b=HG3H+6ocmHPWCoujpfLIYJx4jombZcZhBeU5oQcm9Zoguds52x7Q+KHTG9NN0UesIS5FujCx
- Rhp9lmP0scezvK3kClUBI+Q8nTRxVNTqCQFwDKmC21UxOhde5FE7NdwIcI86OkexTUFKEHRf8yT
- MDJosgU+Mh+Q4ZR6NpcYpl2E=
+ t=1789847692; v=1; x=1790452492;
+ b=vNUDajF9m2F46d3YCsVLky8EpFxCgqO1Tu5/5HpJXj5mGvnN4PTZV6Hp07c4pklyUZ78w9s/
+ 6ZV83Ymwd4/6WXpjiF4/h9kMlSMCXa7m49NlQHH6g9Qk4ZiEPiC4pae+zDeODufHzLaw7ND7rzw
+ FVpVkcnJq+PoTqd/qCBVjjpY=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6149f87e05e14491;
-	Sat, 19 Sep 2026 19:37:49 +0000
-X-Mizu-Trace-ID: 6149f87e05e14491
+Received: by smtp.migadu.com with ESMTPS id 9f78eb9fe24046e1;
+	Sat, 19 Sep 2026 19:54:52 +0000
+X-Mizu-Trace-ID: 9f78eb9fe24046e1
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <c4c47944-578d-4694-8933-c8fbb09e76e9@linux.dev>
-Date: Sat, 19 Sep 2026 12:37:45 -0700
+Message-ID: <09acae72-dfdc-4715-83ba-c6dd2849dba9@linux.dev>
+Date: Sat, 19 Sep 2026 12:54:48 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,82 +38,142 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 09/20] bpf: Refuse a private stack for a
- program with an exception cleanup table
+Subject: Re: [PATCH bpf-next v2 10/20] bpf: Dispatch exception cleanup pads
+ from bpf_throw()
 Content-Language: en-GB
 To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
 Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
  eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
  mason@kernel.org, ihor.solodrai@linux.dev
-References: <20260918044243.3288865-1-yonghong.song@linux.dev>
- <6d68bdd97e85a2c8b74ab62769fd7846a3f9c83f825697eb9fd35a6723842a73@mail.kernel.org>
+References: <20260918044248.3289362-1-yonghong.song@linux.dev>
+ <eb5c029a500542566d71ececa22da94f0e301c49c95880bfec3fcc5f46c36ea4@mail.kernel.org>
 From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <6d68bdd97e85a2c8b74ab62769fd7846a3f9c83f825697eb9fd35a6723842a73@mail.kernel.org>
+In-Reply-To: <eb5c029a500542566d71ececa22da94f0e301c49c95880bfec3fcc5f46c36ea4@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 9/17/26 10:44 PM, bot+bpf-ci@kernel.org wrote:
->> A landing pad is about to start running outside its own frame, on the
->> bpf_throw() walker's stack, with that frame's registers put back from a
->> spill area whose contents arch_bpf_run_cleanup_pad() knows how to read. The
->> x86-64 JIT addresses a private-stack program's frame through a scratch
->> register that it recomputes after each call rather than through rbp, and no
->> spill area holds that register, so a pad there would address its frame
->> through whatever the kernel left behind.
-> The description says the x86-64 JIT 'recomputes after each call'. Does the
-> JIT actually recompute it?
+On 9/17/26 10:58 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
+>> index b2bf831242b85..521086d084a35 100644
+>> --- a/kernel/bpf/exception.c
+>> +++ b/kernel/bpf/exception.c
+> [ ... ]
 >
-> Looking at the x86 JIT, emit_priv_frame_ptr() (arch/x86/net/bpf_jit_comp.c)
-> is emitted once in the prologue, and the value in X86_REG_R9 is carried
-> across calls by push_r9()/pop_r9() around each call site; BPF_REG_FP
-> accesses are rewritten to X86_REG_R9.
+>> +static int cmp_u32(const void *a, const void *b)
+>> +{
+>> +	u32 x = *(const u32 *)a, y = *(const u32 *)b;
+>> +
+>> +	return x < y ? -1 : x > y;
+>> +}
+> [ ... ]
 >
-> The load-bearing half of the argument is still correct -
-> arch_bpf_run_cleanup_pad() (added later in the series,
-> arch/x86/net/bpf_cleanup_pad.S) restores only r15/r14/r13/rbx/r12 and rbp
-> from the spill area and never restores r9, so a pad in a private-stack
-> program would address its frame through a stale register.
->
-> Only the described mechanism (recompute vs save/restore around calls) is
-> wrong, which makes the justification harder to check against the JIT.
->
->> Everywhere rather than arch-conditionally: arm64 keeps its private
->> stack pointer in x27, which is in the prologue spill and so survives, but a
->> rule that holds on one arch and not the other is not worth the second code
->> path when nothing is lost but an optimization.
-> Does 'nothing is lost but an optimization' understate the effect?
->
-> The private-stack mode also changes the verifier's stack-depth accounting,
-> not just JIT codegen. In check_max_stack_depth_subprog() a
-> PRIV_STACK_ADAPTIVE subprog is checked against MAX_BPF_STACK on its own ('if
-> (subprog_depth > MAX_BPF_STACK)'), while a NO_PRIV_STACK subprog accumulates
-> into 'depth' and the whole bpf2bpf chain must fit in MAX_BPF_STACK
-> ('combined stack size of %d calls is %d. Too large').
->
-> So for the prog types bpf_enable_priv_stack() would have returned
-> PRIV_STACK_ADAPTIVE for (kprobe/tracepoint/perf_event/raw_tp, and
-> tracing/lsm/struct_ops with a recursion or an explicit request), a program
-> carrying a cleanup table whose nested subprog depths sum above 512 bytes now
-> fails to load rather than losing performance.
->
-> Worth stating in the changelog, since it is a load-time visible restriction
-> on the new feature rather than an optimization.
+>> +/* Is @idx in the sorted array @at of @n instruction indices? */
+>> +static bool insn_idx_in(const u32 *at, u32 n, u32 idx)
+>> +{
+>> +	u32 l = 0, r = n;
+>> +
+>> +	while (l < r) {
+>> +		u32 m = l + (r - l) / 2;
+>> +
+>> +		if (idx < at[m])
+>> +			r = m;
+>> +		else if (idx > at[m])
+>> +			l = m + 1;
+>> +		else
+>> +			return true;
+>> +	}
+>> +	return false;
+>> +}
+> This isn't a bug, but could insn_idx_in() just use bsearch() from
+> <linux/bsearch.h>, reusing the cmp_u32() already defined above for the
+> sort()? kernel/bpf/fixups.c in this series uses bsearch() for similar
+> lookups.
 
-Okay, comments and commit message may have some stale things or something
-like (when nothing is lost but an optimization) is not correct. Will fix.
+Good point. will do.
 
 >
-> Related: kernel/sched/ext/ext.c sets prog->aux->priv_stack_requested for
-> sched_ext dispatch/sub_caps_updated, and verifier.c rejects such a request
-> when the JIT cannot honour it; here the request is silently ignored instead.
+>> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+>> index f120ae66dbbcb..134aafa6a6c9b 100644
+>> --- a/kernel/bpf/fixups.c
+>> +++ b/kernel/bpf/fixups.c
+> [ ... ]
 >
-> This looks like a bug fix for private stack support. Should this include:
+>> @@ -1113,6 +1120,116 @@ static void bpf_restore_subprog_starts(struct bpf_verifier_env *env, u32 *orig_s
+>>   	env->subprog_info[env->subprog_cnt].start = env->prog->len;
+>>   }
+>>
+>> +static int cleanup_info_for_subprog(struct bpf_verifier_env *env, struct bpf_prog *sub,
+>> +				    u32 start, u32 end)
+>> +{
+>> +	struct bpf_cleanup_info *recs;
+>> +	u32 i, cnt = 0;
+>> +	int err;
+>> +
+>> +	if (!env->cleanup_info_cnt)
+>> +		return 0;
+>> +
+>> +	err = bpf_cleanup_alloc_info(sub->aux);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	err = cleanup_throw_sites_for_subprog(env, sub, start, end);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	err = cleanup_pad_body_for_subprog(env, sub, start, end);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	for (i = start; i < end; i++)
+>> +		if (env->insn_aux_data[i].cleanup_pad)
+>> +			cnt++;
+>> +	if (!cnt)
+>> +		return 0;
+>> +
+>> +	recs = kvmalloc_array(cnt, sizeof(*recs), GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
+>> +	if (!recs)
+>> +		return -ENOMEM;
+>> +
+>> +	for (i = start, cnt = 0; i < end; i++) {
+>> +		u32 pad = env->insn_aux_data[i].cleanup_pad;
+>> +
+>> +		if (!pad)
+>> +			continue;
+>> +		pad--;
+>> +		if (verifier_bug_if(pad < start || pad >= end, env,
+>> +				    "insn %u is covered by a landing pad at %u outside its subprog [%u, %u)",
+>> +				    i, pad, start, end)) {
+>> +			kvfree(recs);
+>> +			return -EFAULT;
+>> +		}
+>> +		recs[cnt].begin_off = i - start;
+>> +		recs[cnt].end_off = i - start + 1;
+>> +		recs[cnt].landing_pad_off = pad - start;
+>> +		cnt++;
+>> +	}
+>> +	return bpf_cleanup_attach_info(sub->aux, recs, cnt);
+>> +}
+> [ ... ]
 >
->    Fixes: a76ab5731e32d ("bpf: Find eligible subprogs for private stack support")
+>>   static int jit_subprogs(struct bpf_verifier_env *env)
+>>   {
+>>   	struct bpf_prog *prog = env->prog, **func, *tmp;
+> [ ... ]
+>
+>> @@ -1250,6 +1367,10 @@ static int jit_subprogs(struct bpf_verifier_env *env)
+>>   		func[i]->aux->token = prog->aux->token;
+>>   		if (!i)
+>>   			func[i]->aux->exception_boundary = env->seen_exception;
+>> +		err = cleanup_info_for_subprog(env, func[i], subprog_start,
+>> +					       env->subprog_info[i + 1].start);
+> This isn't a bug, but would passing subprog_end (already computed a few
+> lines above from env->subprog_info[i + 1].start) be clearer here? It
+> keeps the cleanup table's end bound explicitly tied to the same value
+> jit_subprogs() uses for func[i]->len.
 
-Fixes tag is unnecessary.
+Good point. subprog_end is a good choice.
 
 >
 >
