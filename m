@@ -1,78 +1,58 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B3BE2DA756
-	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 16:42:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2B6036CDF2
+	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 16:57:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789836156; cv=none; b=VESyjh/mUUlrNgVKo3hEJCDat+v9MpAlu3MTve6glBJKttTFWVL/APYAKd6LmG2znytdzS4WtGFn601rLmtykUAp+sIPtic3Ji4tKoTAxcsYYEQvMZiLgZuWL9o9EDnx612eCRJtY59rityfkkdMKJ3qJgp+D6Wn3SpQzWlXyjc=
+	t=1789837041; cv=none; b=jEib4I5FVLMbIAkfH8amKM2iEoU4oQzKmGiEYsL16DOZzLcfhJYgqdh6LLhoMx1XElNXLXk/K2pGWLlc9Mjhv3FgOxZewMBBwezRw2iksULy/xeRzrH9NxmqDQ+lN4m9Jv120mNxea9Ir3+dbxOXQ2xvVAbULMOtVj0OiBZP5is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789836156; c=relaxed/simple;
-	bh=JVJEG10QpxqFEwdyZIB38MLFPe88JI7zrVfyq5LZbbg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oB7afok4+A1JkMXoNW5zU7Xhqq9zsNmkKl/LcW4nSgJdPFp2QRWvpvLDOL5f/IDzo9k1GJ3yXq+NoWMox41nISgC8q+dX5ajtVV69fifK9dcHoCW0U8NQvwjHZKCXi9/VBn0Alr3oyZ+TugtSKUaiUjmMsUbwd6cKWiaXScLfzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TEweOOHH; arc=none smtp.client-ip=74.125.228.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789837041; c=relaxed/simple;
+	bh=hvxvSXy9zxObibYYOn645R5UnPTSLLug4hs/arQVoUU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=RnXddbz3Men29VoZuWAVXEAI93MNOHorNa+jmwkTNz3tBmqZ32z1YqcO8piExuCDLIh25G2dFUSLI4vN5+MVijVWuyjXkxowleUtHotCQb2SNkfYDb29y/mLDfFyu2Pap+Ob/o87AZMTB0zh/GnapD2AX9tVzzeGY0EqFT0wJ1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LNc4NYML; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TEweOOHH"
-Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc1cea34f01so1476883a12.1
-        for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 09:42:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789836154; x=1790440954; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=zge4203G5fzA0HJcctJxiqb2PSA8Yppb6wTn6T3YJOk=;
-        b=TEweOOHHVMP9PFdkcDKlsUZCCflpcERYXc/O5ZEd/6OkK/QB+VZPiNJAunamJ9ttqw
-         Lmv8FVbN9hsicn6Y9zPy1Bz+7HG9syusnpZWt46YS2cnD0BndEH+fHeVF5SQ6nJ6Pq/8
-         VjdpV2bVNLSfayjfKeIzFMVLxLs4HtZf+Zhk0G9NrmB8BM1kZJ80gc3BhSjffP/PTbj2
-         hm6Rrzvmcsb6CwJYhhcg0QulKE870vSaXBh7rpNnusjs/J2IGdKGGpLoo5HJiJ7zyJaZ
-         oTbSNcuVeZ+Je3mW8mcJNgnDDPxjIcMD5mUhApnpEEwUqqEbYkmprdXYoRAkCEI9EuQq
-         VSPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789836154; x=1790440954;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=zge4203G5fzA0HJcctJxiqb2PSA8Yppb6wTn6T3YJOk=;
-        b=eAUp8ZRtwpg8LlLdB4yrCpuvp71hi2FC3JCd3pJb/VWeRJ4fojzqr6JJm7iBAQAJ2i
-         pLx4CR/ST+GXSgcRYeqSez1bNBBeK+EpD/OMYu6G2n0YmrU+T91USNXZDAMPzyFKZmaS
-         +nxrGwy417K6/zZMcVJI5Ak4D8+BQds9jB0Ugc16cdVkT9MYsozRWinqR8R8DrJ3AThd
-         wFOyGe+rcsvFtKS981S4aeLJHpLufEtyLfyz+QS3XflBeI/pFY+EYtDPboJNyA5dM/QU
-         zT4fGkAWNmhvlKjWdIpPu16WrO7vJ6F1z83WaFkB3BVk4kFJtT51nzstyn7OpB8oV1QY
-         Arsg==
-X-Gm-Message-State: AFuF++kkitSJHGvA6HexnTc+tf0pd2YSngPlWzwnAyaj+/HYpD7M1P0a
-	HngBDoAbJt/Vmb1iViV2+QcfeCaBjeHlajKe8gqe0awo7rEe/2Yrqfeinev3HP2z
-X-Gm-Gg: AYBFou3go65D+JzG4it1S8l1fMB19B+vo+H6vLDv+TPbaEwX5sYGx5Fg9KzEVtBc1Kf
-	n+hLO+jcHpluYoFpnLKsF8yJrP/tM7xPkq/L/LIqS/WM1mcNqmCTYd+kWisAtxiJ9EOCO33p2tk
-	GmwSvwr1XgQOoCemmNy7HqegOBkByBI5rcWSJjBUK+KJvHVlWAX1k0N1tPr/DRBAEAk6SQcBOde
-	Cp69+sXz29/TqN1curVx27IGF6+mkeMdbuSsJk6tAQzRpVTs67UFLL2bUTW4QmxiR/TEf1xP6lk
-	Q/WsRBS4F00bSV0W7oZ+8vAhyG1mFJvVjFwqdR5w5bireaSK18DuwnDdt0J9mWe12ScZNQnPsWg
-	7QwSRTSaGzKUQh8YtfHeyiyEAwlwyZWJWgRkx5rE454nvKOei4kxyzm8pDw0cm7hbCjuTbmj9ej
-	wKLn7Y8YZNCX0P+0gXntb4Vgkm8+90ToV0gsD/xfp0K09z+szA3UlcyUQeSXoGa9mbpMnZqOHBa
-	5bcuKi5oXUujK8Hn0bKUnSZViySh1oTuU6oqteyefLTFV4J9A==
-X-Received: by 2002:a05:6a21:9204:b0:3cc:ebeb:3efe with SMTP id adf61e73a8af0-3dd8c424e26mr10214174637.9.1789836154499;
-        Sat, 19 Sep 2026 09:42:34 -0700 (PDT)
-Received: from localhost.localdomain ([2405:201:51:102d:5562:18f8:11da:acda])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33c3311a6e5sm7104245eec.7.2026.09.19.09.42.32
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 19 Sep 2026 09:42:34 -0700 (PDT)
-From: Abhinav Madake <abhinavmadake@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Abhinav Madake <abhinavmadake@gmail.com>
-Subject: [PATCH bpf-next] libbpf: Return -EINVAL from btf__align_of() for unknown type ID
-Date: Sat, 19 Sep 2026 22:12:29 +0530
-Message-ID: <20260919164229.95154-1-abhinavmadake@gmail.com>
-X-Mailer: git-send-email 2.47.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LNc4NYML"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C3B51F000FF;
+	Sat, 19 Sep 2026 16:57:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789837038;
+	bh=cTLeGTS8SlD8XFUjNMy1WAiOBWiYPXUavk1UEmj4ymQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=LNc4NYML8US+Duj1O5yowd8iYPE9gNmA4clgIOJUN1ecccQjURtACN7Gk4LKIEYYX
+	 hNctJ0J91PI4BJmdgqejB1ZULN2WRx4OJOUT9PA24u3Aeq1BwbBZ9gDJ67Cg3X3rYP
+	 ZjKpV4wnjPFc1P8y1IMrPNNm1GZgmekx5nvBBeilOrJxViKL+ixllAjmrg8tq99uqL
+	 Xw+N2ZtWs3l6QGV2dVnd74wprz1pBgH/SSiHB2ngPgTif4ikXSOWTMRDf3gXNE0zas
+	 vrtiAjz9V2Y6uhg8BIXVuOQtiTHt4WuPmjXBoAP98rvZMeKHmOk3auldeSOsOn21Sq
+	 2wJMvtNPvUSog==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next] libbpf: Return -EINVAL from btf__align_of()
+ for unknown type ID
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Abhinav Madake" <abhinavmadake@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260919164229.95154-1-abhinavmadake@gmail.com>
+References: <20260919164229.95154-1-abhinavmadake@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sat, 19 Sep 2026 16:57:18 +0000
+Message-Id: <20260919165718.9C3B51F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: btf__align_of() negative error breaks btf_dump.c
+--
+
+commit d6024f50b48c7fc7873ce247e9f420706729d50a
+Author: Abhinav Madake <abhinavmadake@gmail.com>
+
+libbpf: Return -EINVAL from btf__align_of() for unknown type ID
 
 btf__align_of() passes the result of btf__type_by_id() straight to
 btf_kind() without checking for NULL, so an unknown type ID
@@ -88,29 +68,63 @@ through the recursive struct/array/typedef cases), crashes.
 Check for NULL and return -EINVAL, matching btf__type_by_id().
 
 Link: https://github.com/libbpf/libbpf/issues/983
-Signed-off-by: Abhinav Madake <abhinavmadake@gmail.com>
----
- tools/lib/bpf/btf.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 908bd3442..d15bc09ac 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -986,8 +986,12 @@ done:
- int btf__align_of(const struct btf *btf, __u32 id)
- {
- 	const struct btf_type *t = btf__type_by_id(btf, id);
--	__u16 kind = btf_kind(t);
-+	__u16 kind;
- 
-+	if (!t)
-+		return libbpf_err(-EINVAL);
-+
-+	kind = btf_kind(t);
- 	switch (kind) {
- 	case BTF_KIND_INT:
- 	case BTF_KIND_ENUM:
--- 
-2.47.0
+> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> index 908bd344229d5..d15bc09ac53de 100644
+> --- a/tools/lib/bpf/btf.c
+> +++ b/tools/lib/bpf/btf.c
+> @@ -986,8 +986,12 @@ __s64 btf__resolve_size(const struct btf *btf, __u32=
+ type_id)
+>  int btf__align_of(const struct btf *btf, __u32 id)
+>  {
+>  	const struct btf_type *t =3D btf__type_by_id(btf, id);
+> -	__u16 kind =3D btf_kind(t);
+> +	__u16 kind;
+> =20
+> +	if (!t)
+> +		return libbpf_err(-EINVAL);
 
+[Severity: Medium]
+Will this negative return value break callers in tools/lib/bpf/btf_dump.c
+that expect 0 on error?
+
+When btf_dump.c processes invalid BTF types, this -EINVAL return bypasses
+checks for 0, leading to modulo operations with a negative number promoted
+to a large unsigned integer.
+
+In ptr_is_aligned(), the negative alignment bypasses the check for 0:
+
+tools/lib/bpf/btf_dump.c:ptr_is_aligned() {
+	int alignment =3D btf__align_of(btf, type_id);
+
+	if (alignment =3D=3D 0)
+		return false;
+
+	return ((uintptr_t)data) % alignment =3D=3D 0;
+}
+
+In btf_is_struct_packed(), the error bypasses the false-check (which
+expects 0), causing an invalid modulo operation with 8 * -22 promoted
+to unsigned:
+
+tools/lib/bpf/btf_dump.c:btf_is_struct_packed() {
+    ...
+		align =3D btf__align_of(btf, m->type);
+		bit_sz =3D btf_member_bitfield_size(t, i);
+		if (align && bit_sz =3D=3D 0 && m->offset % (8 * align) !=3D 0)
+			return true;
+    ...
+}
+
+Should the callers in btf_dump.c be updated to handle negative return
+values?
+
+> +
+> +	kind =3D btf_kind(t);
+>  	switch (kind) {
+>  	case BTF_KIND_INT:
+>  	case BTF_KIND_ENUM:
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260919164229.9515=
+4-1-abhinavmadake@gmail.com?part=3D1
