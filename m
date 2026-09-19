@@ -1,115 +1,71 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out-2uec-a98.jellyfish.systems (out-2uec-a98.jellyfish.systems [63.250.43.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D787A2EC083
-	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 11:35:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2ABD27B35F
+	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 12:01:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.250.43.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789817733; cv=none; b=QAfQyKC8oykuRwUGgPr9rB9HWCsf7UKT9O0invEDIbs+OnPdyE/rmP90hGrCsImbN/7619v4RJ6ckRlq3lYffvTLDjkliVyr50tNezJgz7ACXBgaYYWX2qNcwvlsspLYcLoWxuumgeRz/7rR4hxR6RplHZs8o5UK44Gp1hB+4wo=
+	t=1789819277; cv=none; b=DRdjN1neTFJe0yJSrtekMrFcNYpy8uPm0QxkEQGMgOYdZuUnHvvq7wTNik38Cbb6R1r4XBjIHYvkByXr53O2L5iS2UnvGNDkiOxA1lPcn3/jJrvsRC8JWYhvJQ9yOfyLEz7wSvfWWSc1+TlH4BUO2RpP4ZVpxZeRWY+DdKjBoug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789817733; c=relaxed/simple;
-	bh=aQtKxpQwpf+hOsxFrVrFonJ3KebqKkv3y/5wKjqvcXI=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=bNm5K/CGDllksn87K3a/swhSL1EdAjxtzG2RcPoi8zMjfhB5sE++xa/LbWfFczUkkYT7XMrNTa7hwspxpjr+fK/Nxp4suMMh5ED35Um6dq1bdkoFffuGHumF6ac3a0pkCAdKm2Skm/20mUMigg0EQf57MljcfpaUDa4nau+JvGI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JmeV/Vma; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789819277; c=relaxed/simple;
+	bh=Jdbtc7DFhLtiUWh+PEh7yNbUvxZT1UPsUi0m/9Hg6oY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID; b=dQMhEcS4JgszfA1h4AwbbvWzS8JIoaEFHo5Aj5NPY/CKaaScjG7tBsrcpMMPBOFy853lnQYni+LwEyoFYFhVbecGgvtYAKwyXL83F2f8PhPmXDe7oIPgwIYwageJA9h5YAHbo99jqvUWHsoVHWjKgD0/blCsYHfP3yT3MEkjrrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=lFt/Y8+7; arc=none smtp.client-ip=63.250.43.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JmeV/Vma"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EFC81F00898;
-	Sat, 19 Sep 2026 11:35:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789817731;
-	bh=f5EIB2gr5BWw4a+7dLSmE5ErKj39RbyhtndgZeNjcvg=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=JmeV/VmasoDGSbdlc9O7Hb3e6QX4e59patEeIMbIdzBJ0FlwiuybV9td22oPdq8Gr
-	 /wMqzzkZWTI4t8X0dZhCT9E8W1Xhi05JUFPqSNCx2QIIYsu5/spxZU2rZZBbTqB259
-	 oaULBeULVi/yNwVuWSitprcHmBIMbdswTGFQPm1dF/Ocnn/MmbJyb+leVTkd6ER9Gm
-	 dLRfxgA/KqWB3spstZosiVfY5fPUzm+WOLaoi1gxVdHSh67SzwsBRWbYxYjhxhrPHf
-	 +P4e9Rp8dpBDJKaCzFhmi0hf3AfTNtutQin4wSGFAxe/u315JQ+1uV3WfkSw2pZfbG
-	 ApQQ8fDHRBFmg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v7 10/14] net: lan966x: add PCIe FDMA support
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Daniel Machon" <daniel.machon@microchip.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260918-lan966x-pci-fdma-v7-10-0ecc179c8a2c@microchip.com>
-References: <20260918-lan966x-pci-fdma-v7-0-0ecc179c8a2c@microchip.com>
- <20260918-lan966x-pci-fdma-v7-10-0ecc179c8a2c@microchip.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 19 Sep 2026 11:35:30 +0000
-Message-Id: <20260919113531.4EFC81F00898@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="lFt/Y8+7"
+Received: from [172.20.10.14] (unknown [39.144.124.9])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hn76X5q5Pz8sWP;
+	Sat, 19 Sep 2026 11:48:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1789818503;
+	bh=Jdbtc7DFhLtiUWh+PEh7yNbUvxZT1UPsUi0m/9Hg6oY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=lFt/Y8+7Md0a5mjz4gIRy3BF9KMoB26hGRveEjZPvFwL7XAXCtGft/NoBASXX7lzy
+	 JLPlWtGxDZzUwnmeACjwBG8UFREbG2c8lT2VRzVTxvVQh1JYXh8DHYxxnGfRzFH1wP
+	 tsaAXFC/lCFSM960x7rCRTOjCdz+imC0ngWW6VpWHOBdG0MMPbbMo2BXkmH3AJL2HM
+	 XQZr4ktfCMZy2sybll8FsHJ5LOdSeVhs1dZpScc8pgt4ukbRDpn25LPWw7w/jRhM6f
+	 8ZPz0Q5inZP6UuXiVSBt9oEsW21mwd0vSuncYg/UXjY663wxGTWiwHWlmNVGPABtub
+	 74XyxhyAX/VaA==
+From: Tianyi Chen <hi@tychen.cc>
+To: Quentin Monnet <qmo@kernel.org>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, eddyz87@gmail.com,
+ ihor.solodrai@linux.dev, linux-kselftest@vger.kernel.org
+Subject:
+ Re: [PATCH bpf-next v3 1/2] bpftool: Read ring buffer maps with event_pipe
+In-Reply-To: <de9a4fa5-568d-4be5-bccd-04340be59352@kernel.org>
+References: <20260911025114.190899-1-diannaaav@gmail.com>
+ <20260911025114.190899-2-diannaaav@gmail.com>
+ <de9a4fa5-568d-4be5-bccd-04340be59352@kernel.org>
+Date: Sat, 19 Sep 2026 19:48:15 +0800
+Message-ID: <178981849513.1262776.17093336533785961556@tychen.cc>
+X-Envelope-From: hi@tychen.cc
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] net: lan966x: rx_bytes statistic undercounts received frame size
---
+Hi Quentin,
 
-commit 33bf15bc7637a43a47c2a31af68430d11cdb1f96
-Author: Daniel Machon <daniel.machon@microchip.com>
+> Let's adjust the functions to take multiple arguments, instead
 
-    net: lan966x: add PCIe FDMA support
-   =20
-    Add PCIe FDMA support for lan966x. The PCIe FDMA path uses contiguous
-    DMA buffers mapped through the endpoint's ATU, with memcpy-based frame
-    transfer instead of per-page DMA mappings.
+Thanks, v4 follows your completion proposal and also addresses the
+argument diagnostic, p_err() and redundant-comment feedback.
 
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/=
-drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> new file mode 100644
-> index 0000000000000..5d6902459f200
-> --- /dev/null
-> +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-[ ... ]
-> +static struct sk_buff *lan966x_fdma_pci_rx_get_frame(struct lan966x_rx *=
-rx,
-> +						     u64 src_port)
-> +{
-[ ... ]
-> +	skb->protocol =3D eth_type_trans(skb, skb->dev);
-> +
-> +	if (lan966x->bridge_mask & BIT(src_port)) {
-> +		skb->offload_fwd_mark =3D 1;
-> +
-> +		skb_reset_network_header(skb);
-> +		if (!lan966x_hw_offload(lan966x, src_port, skb))
-> +			skb->offload_fwd_mark =3D 0;
-> +	}
-> +
-> +	skb->dev->stats.rx_bytes +=3D skb->len;
+> As bpf-ci's review says, please look into reusing the existing helpers
+> if possible.
 
-[Severity: Medium]
-Does this regression undercount the received frame size for the rx_bytes
-statistic?
+The test now reuses detect_bpftool_path() and checks the exec-error write.
+All 18 subtests pass, including the new unknown-argument case. I also
+checked completion matching and plain/JSON polling-error output.
 
-In lan966x_fdma_pci_rx_get_frame(), eth_type_trans() inherently pulls the
-Ethernet header from the SKB, reducing skb->len. Additionally, if
-lan966x_hw_offload() optionally calls skb_vlan_untag(), it further reduces
-the length.
+v4 is a new thread:
+https://lore.kernel.org/r/20260919110721.1230756-1-hi@tychen.cc
 
-Adding this modified, smaller skb->len to the rx_bytes counter instead of
-the original wire length causes the statistic to systematically undercount
-received bytes by at least 14 bytes (the MAC header size) per packet, and
-potentially more if VLAN tags are present.
-
-Although this pattern may have been copied from the existing non-PCI path,
-it is a newly introduced instance in this file. A check of the subsequent
-patches in this series reveals the problem remains unfixed in the final sta=
-te
-of the series (commit f075590a2768b1e0f139412f8b14c4b61658552e).
-
-Could the original length be recorded for the statistic before the headers
-are pulled?
-
-> +	skb->dev->stats.rx_packets++;
-> +
-> +	return skb;
-> +}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260918-lan966x-pc=
-i-fdma-v7-0-0ecc179c8a2c@microchip.com?part=3D10
+Thanks,
+Tianyi
