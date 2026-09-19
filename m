@@ -1,102 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-111.mta1.migadu.com [95.215.58.111])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CABD2C0F7F;
-	Sat, 19 Sep 2026 17:24:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474721A262A
+	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 17:32:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789838677; cv=none; b=Vgsw74PlELy/OOeyBZX000/DGZv/ZA/IgwBlE7JEK2h9n6av1OoppyRDng5vmtq/UqhiL6VgkMHzRp8iizRnfqqCwQnPqBsB1n6uIVyfVowers1LOErjTzBfBgh4Hu5oR+QKpgpK1UDugHAOo9COwuhQtC8YtDGEcObzuMzPE0I=
+	t=1789839174; cv=none; b=gts/CMSIgYCmm6/ebpJQhWSJZHl95DcX1Np79G0q/XlRad7LZZPtNf+ZrO0azwLwkX3IZ3kAVM7eUYBYcyfHobod/5k95pbh0RgFZKEtmMGID7S9CT6E7szDW7ARi2eoU2C7yFBjbmmZ8BKqGMcXwJO7nHOVwCeu/6L0jLzwQcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789838677; c=relaxed/simple;
-	bh=NL8V09Q6u01VhFxHqUAioylOD2cM+3iuSrQCSDc7epA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=cg2YTx7FWfw2cEeGtaxZ4fgT5SrCDB48QBW4hohUaKmU5jKT1CdsaHJJmNTyuNe2urfu3eS0zd6guexjlQygYCs9PM3mJzfMXaORL4ezdCksrYbSUerqSPlBAYPizTlZCAVK3V4cJfKilQ7iLMmINrZ6O1hMqW4HVSAKfTp5JYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hh54c9Gl; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789839174; c=relaxed/simple;
+	bh=ymlogA30i9B8E/U0OlUaZVK+x3fFDIw4of2VH+NmyjI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Q8n7Whh3l4E4ZvEDID1oJZh7LP4ww7Sero4WsdhgMoG5r0Ix36YpSdQwlvxpwD9RgfxV6Hola7TAJtqSxjYqIz0WVr7gxB675W2+j1nV2am2gKyZd0cib7nQbytIOBSQbgHw9fLnsJCzOR6mN1lauQUu+oMELBEKc/Kpt1z5MTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UlyzKN2B; arc=none smtp.client-ip=95.215.58.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hh54c9Gl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B78C61F000FF;
-	Sat, 19 Sep 2026 17:24:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789838676;
-	bh=yFoYUW8L5Pr3/ncIv3dUGYKBJIvbDHs5bbEy4fzn7w4=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=hh54c9GlK1vhCPVQ/WTqRJMamZy8T2TKlkO94ur3nmZAfGA0DHPQ4uFklAOZIjTFC
-	 tJIfc3bj6ib4j/0uf+vTfHsgylYigOEEMKD9XER7c+wXTQbI8ewStjHuJ46yOuDSvB
-	 ydwX3Pp330/BMAqABk+z9xiWHp74OE6DaAC8SBTFhQkJy+vlap2FC7N2tMXEr7UpLM
-	 HYmWTXR+RdE8UnnYnIyE+AQRVxJWrybzduFWBqQl3wNI+OfghUNNEEvRYhijXPTPMk
-	 rtbJFqOsrZ6jhCw0RdOR1h1rnGjYN+A4LOmScyhQGVs8mL5M6yWVHR9U023cnSejSf
-	 /gg5dzwvZo5ZA==
-From: sashiko-bot@kernel.org
-Subject: Re: [RFC PATCH] mm: restrict can_spin_trylock() to preemptible
- context on PREEMPT_RT
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Karl Mehltretter" <kmehltretter@gmail.com>
-Cc: linux-rt-devel@lists.linux.dev, linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <20260919171443.90512-1-kmehltretter@gmail.com>
-References: <20260919171443.90512-1-kmehltretter@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sat, 19 Sep 2026 17:24:35 +0000
-Message-Id: <20260919172435.B78C61F000FF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UlyzKN2B"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=ymlogA30i9B8E/U0OlUaZVK+x3fFDIw4of2VH+NmyjI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789839169; v=1; x=1790443969;
+ b=UlyzKN2B9Qbb3GnCnHWFV6JTanVL06VKiJXVEO993X9h2clVr8bZmRhtjrVkxTM3V0vBYWWb
+ 4MPuToEcwb6X2Oj6hN1wkl6YJXl7cJtG84DW0+bw4kiFTN30Dz+ej+a89oYQb0QHLRXLNJ9eGUq
+ fMCRJMkqhkCYlE9K+wXyAtkI=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id e7a9e43ca0fa8c19;
+	Sat, 19 Sep 2026 17:32:48 +0000
+X-Mizu-Trace-ID: e7a9e43ca0fa8c19
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <b6a90c30-1264-4e89-ab41-f9599e9b47bd@linux.dev>
+Date: Sat, 19 Sep 2026 10:32:42 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 07/20] bpf: Refuse exception cleanup shapes
+ bpf_throw() cannot dispatch
+Content-Language: en-GB
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, kernel-team@fb.com
+References: <20260917055645.3926444-1-yonghong.song@linux.dev>
+ <20260917055721.3930090-1-yonghong.song@linux.dev>
+ <DLJ0YN08I6GZ.324HCC3XBJ738@gmail.com>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <DLJ0YN08I6GZ.324HCC3XBJ738@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] mm: can_spin_trylock() uses !preemptible() causing persistent ba=
-ilout
---
 
-commit da2bda4aca43320be916d709a95e77705d7bd75f
-Author: Karl Mehltretter <kmehltretter@gmail.com>
 
-mm: restrict can_spin_trylock() to preemptible context on PREEMPT_RT
+On 9/18/26 9:57 PM, Alexei Starovoitov wrote:
+> On Wed, Sep 16, 2026 at 10:57 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+>> diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
+>> index dfe9c2a9ce7d..b2bf831242b8 100644
+>> --- a/kernel/bpf/exception.c
+>> +++ b/kernel/bpf/exception.c
+> [...]
+>
+>> +static enum cleanup_insn_kind cleanup_classify(struct bpf_verifier_env *env, u32 i,
+>> +					       int *next, int *target)
+>> +{
+>> +	struct bpf_insn *insn = &env->prog->insnsi[i];
+>> +	u8 class = BPF_CLASS(insn->code);
+>> +
+>> +	*next = i + 1;
+>> +	*target = -1;
+>> +
+>> +	if (insn->code == (BPF_LD | BPF_IMM | BPF_DW)) {
+>> +		*next = i + 2;
+>> +		return CLEANUP_INSN_PLAIN;
+>> +	}
+>> +	if (class != BPF_JMP && class != BPF_JMP32)
+>> +		return CLEANUP_INSN_PLAIN;
+> robot voice:
+>
+> LD_ABS/LD_IND is not plain. bpf_check_cfg() treats it as an abnormal
+> return and gen_ld_abs() later patches in a real "r0 = 0; exit" for the
+> failed load. With this classification a pad in a tc prog that keeps
+> skb in r6 and does an ld_abs passes t
+> he "reaches no exit" check,
+> cleanup_check_pad_insn() doesn't look at it, and check_ld_abs() only
+> wants no locks/refs held at that point. At run time a failed load runs
+> the subprog epilogue on the walker's stack: callee regs get popped
+> from arch_bpf_run_cleanup_pad()'s frame, leave/ret with rbp == the
+> unwinding frame goes straight back into the BPF caller with garbage
+> in rbx/r13-r15, and the rest of bpf_throw() is abandoned.
+> Treat it like BPF_EXIT here or refuse it in a pad body like tail call.
 
-This patch resolves a deadlock on PREEMPT_RT during kmalloc_nolock() by
-restricting can_spin_trylock() to preemptible contexts only. It prevents
-nested lock acquisition of the pi_lock when called from sched_waking
-tracepoints inside try_to_wake_up().
+Yes, this is an issue. For insns in landing pad, we should not allow
+LD_ABS/LD_IND since they will have a hidden return. So the above suggestion
+to refuse it in a pad body is correct.
 
-> diff --git a/mm/internal.h b/mm/internal.h
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-[ ... ]
-> @@ -1641,10 +1641,14 @@ static inline bool can_spin_trylock(void)
->  	 * confuse PI logic, so return immediately if called from hard IRQ or
->  	 * NMI.
->  	 *
-> -	 * Note, irqs_disabled() case is ok. spin_trylock() can be called
-> -	 * from raw_spin_lock_irqsave region.
-> +	 * Task context with a raw spinlock held is not safe either. The
-> +	 * caller may hold a pi_lock, like a BPF program on a tracepoint in
-> +	 * try_to_wake_up(). rt_spin_trylock() takes the rtmutex wait_lock
-> +	 * and can take a pi_lock under it. rt_spin_unlock() wakes a waiter
-> +	 * if there is one, which takes a pi_lock again. The locks held by
-> +	 * the caller are not known here, so allow preemptible context only.
->  	 */
-> -	if (IS_ENABLED(CONFIG_PREEMPT_RT) && (in_nmi() || in_hardirq()))
-> +	if (IS_ENABLED(CONFIG_PREEMPT_RT) && !preemptible())
 
-[Severity: Medium]
-Does this !preemptible() check create a persistent bailout for ALLOC_TRYLOCK
-paths on PREEMPT_RT?
-
-BPF programs attached to non-faultable tracepoints run with preemption
-disabled via guard(preempt_notrace). When they attempt to create task local
-storage using kmalloc_nolock(), it calls can_spin_trylock().
-
-Because preemption is always disabled inside the tracepoint, this check
-acts as a persistent bailout rather than a transient one, unconditionally
-failing the allocation on PREEMPT_RT. Will this permanently break BPF task
-storage creation in tracepoints on PREEMPT_RT?
-
->  		return false;
-> =20
->  	/* On UP, spin_trylock() always succeeds even when it is locked */
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260919171443.9051=
-2-1-kmehltretter@gmail.com?part=3D1
