@@ -1,64 +1,64 @@
-Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93CAC47C0EB
-	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 11:01:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEADB3B4E95
+	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 11:01:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789815680; cv=none; b=qCXysmLJuwsGiwV59Hl1ZqTcmgQ75iK4rk6a23dkCGfVW+d7rN4ShFp6nixqR3LPm9j0GftTHVlArWMU1KAO55aqHlyx/Lme0XiJYUWM1wIzfz+uGOsB1IoOENEICPLraTiEJ0Wy+QssDcTWL0pC3D8gS3frV5NZvnkb3pmYr1A=
+	t=1789815693; cv=none; b=M7e1xLDUedZ/al3tC4IXOy5sHohEjDBDPvevtpFT6FxNOJNQ5kqr6S46P7GXQ1+nEfr+mxnR9e3/yayhKceHXcJqrXLZmNJkcG+6QbaDthfIpmALKoTAZjWW20GX7Ir5npeNt3L7Sy2izkovo5AJiepXPc8My5Y2O5d/HlNpchM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789815680; c=relaxed/simple;
-	bh=Wn9+l2JU84UKw0Yiuc7+aPiX65TB6uHIAEb0BYHiXSQ=;
+	s=arc-20240116; t=1789815693; c=relaxed/simple;
+	bh=ieyVfeWZqbE1yKbLmklEHB6pUgsMwiuMSXZ+6dhoRdA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Tf5Nkx3nPH+404XXYMVbJQtseIUl298eAqTUoC7QWaZpPTdFridSbloBjWf64+SAKYY3N4O1GZzRXfSN4r8c0BTlGgNTbj/epvtgZ1p8LLD+8iQRRxBTp7urTF09FNUBTvLDg7QvRslCaPqEd+CD+bbd2qdTfx0pw2vaFC1dHZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IyTMN9t9; arc=none smtp.client-ip=74.125.228.42
+	 MIME-Version; b=cBgTo8u/8NdCsuKR3toC6ijIVyitEojaidodp21iv+n2JqKtDQr5I2vR/ccTWTwTQWaFld1n+vJMAQ1uHVkCbp27YlEYgc2IpK3O4h42okyJADI26/E6CAap4oUDqgoP8CX8R1V3Kx6Mb7a5uNieMkIRaW7o875e7YSaDzcnul4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=clZn9/ua; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IyTMN9t9"
-Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc1cea50dc0so709412a12.2
-        for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 04:01:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="clZn9/ua"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccc02279so1284882a91.1
+        for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 04:01:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789815678; x=1790420478; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789815691; x=1790420491; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=I7N46zResu6Oq8coyXJXO8ECM93/wLky7ePjmFlAAoA=;
-        b=IyTMN9t9wzkxDoQGKqLt13m/xtlfT6VEp09EJRUXqlLrtn6xuXxV9WfXlW9pPj0bj1
-         S1kJaRW12hQZjH7rWFNqSizWv3fAOxQZIHRG+WR88cf5AhM4a3MVcg11YSEh6kna1NRR
-         X1YDYBJxzRW1KtDvzs/OE9tvhQZWteKdzKK9p/dn2xfExbzs8UqVuIdTQV4IA8dbB3s4
-         o9uKkDLDK49uIQ5zDQL0WTrIVFkLNh/d1e1UfjQ3g3+j2H/I4ZsiDBmri9j6K4n6AEHq
-         h6r4kyA08QTH49++hQcy8vCLLikh3DJx9ZqQtfj0Nk6yaaHKPhbiyI7Kss+2vcDXT0af
-         POlQ==
+        bh=5CrEZGhAP68TvzaEU08InnPyZJBhHkfbU1+U3CFH3UQ=;
+        b=clZn9/uaP18IW7DvFCYpoXARmC0vHJrCmEE3vA2XDMVDxCaLvmkYNQBAIcZy2ubVYz
+         /qldp9QhV1QGiBjx24mtuouBG8yTfFN+dYbOFPlWd6QpHNOz2VZhALqgTQE7sWq4AKg7
+         g5ivaxL97KewFi/PiULHhQ4DDETBrjfhxZQtPve51MjE4D9Svp5NtdoAlN21hNaSMWBK
+         dJmNotjQM3et7nzXyHBiv7dO+g1fk7Hagoruz3Q2/wetuwmAxNMKQoLb6gwEPzBfNiRu
+         HuVRy3a4dZJIOVZ7ry1XJoNrRYklgvwAzLjEV/MUugn8SyBVoY7Y6tdzaGxF0ULBYYZt
+         v3iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789815678; x=1790420478;
+        d=1e100.net; s=20260707; t=1789815691; x=1790420491;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=I7N46zResu6Oq8coyXJXO8ECM93/wLky7ePjmFlAAoA=;
-        b=otA0GEEebhLlhZGjEntkYqIT++16jgtkP3R2h1UXSt/pww4Cb9VYxB/99A5c6Mh/CP
-         DqNIM3FslWYf++oYhFvzSZJqy03TFJkHhbxfIUcjznQ88BHBTnv8AmM1vghQUIh+F2nt
-         M9irLFQjsABNi29wRxy+OiScewXtO+naUaJEd40z037hpUsGbjbEYYhn/Ct91jmv7cPG
-         GgWjEynTN7IOQ+VIALdBAz1JwCfo/qzdrUr1n+pasCPCrbQYSLsPjRuDyqUthqVtXJFq
-         HWc4M+4UiRbJySuvQd7zoaxHcv8/TmnD3hYEsECEaQC58hRMwmDCRP5l3byxU4/j72Z3
-         WFsQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzGDGCYo8H4a5moRzw28+rauIxV8smbcGsCBMJ2qII71z1nhJrQ0xPltfK60q5txyd3KY0=@vger.kernel.org
-X-Gm-Message-State: AFuF++mXfrQakp2FamdDZxQOctUP6525TUGIOtk+gVOzzl/w/txcm1uR
-	EbR6r13TzktaFd913J04OeI7s3RbAhhvFnmYg9N0vx/VdTl0Ge3+zms5
-X-Gm-Gg: AYBFou1yX7Qb+WGG0PCS5UtnBs1UAgscDA1LlBxjvHfSVDlJfmHA7YTVDu/3k9vnrZ1
-	qT0Ag+InBe2QFdbOb2TGaBblHZ6oaKfnJ4iH27WoHc3/64WDCQPQdchsYzPdvpCrI0kzDWNQb3k
-	crf36rZ434Pl98kZ8YPIvDHAKJPc4z+UQCTrpHUUe7j4521jNXGCfdXdEkNK8lJvLE7L0vxCbt1
-	PjeJ6BNQrTg8xjB+NBwNmuiDSsZzEncoRxHLMLKvdD2GiO+LPRLVB2d2V5BaYYyF2Wf1ceIL8nz
-	ZIZbXKSDEsjAmfSTNraqNhu29tlOekOowIkY25eRU+Hk+svMhu9HsLOA6pNhZ/91L67oOBlou8W
-	CodZGPIkqF8ylUgkQ35myR2Qz910PWfq7MZIiSbr+DfeSHPRqujra+hENpu3ieLwTMT/ba/UFRJ
-	U/Jsj6rSIdL41CPy1jRkESJk1JkzQokQ5HG1OqSXkWFaUvWFDRwIqcjSjVbSeQ6JOzNHYy8ut5R
-	12sZ2+tmt2THY3kieMqC+B3nNeEKfJl
-X-Received: by 2002:a17:90a:1057:b0:39f:d323:c988 with SMTP id 98e67ed59e1d1-39fd323d93fmr1553771a91.48.1789815677698;
-        Sat, 19 Sep 2026 04:01:17 -0700 (PDT)
+        bh=5CrEZGhAP68TvzaEU08InnPyZJBhHkfbU1+U3CFH3UQ=;
+        b=UvqO8ecA5+js7z5nXthO49ORCfaL6a9Sc7K8hYZqyDQoeXFsl5hnvAzUxK2vb2XZt4
+         cKXkYEmqUfIFmeH7kng1A1PPO6xsFxQCVzCyOE6aftaMGRmlR5UOc2g9n5GdtlfW0H82
+         v0aSnHaQysn+RhqUar6vefGYfW0L0bXiM9sCWGo5CQZfBhfx08F+08ekfsiqvkMlugKl
+         yhf7fPXqJ6FSShQbd6f5MwnEQkQDeVLltnUt/O8TDtbvmqIF+oNiUWlByq/1K59TdmRY
+         z/sGFBD6ktTYcmXn8eOXAvscV9Qsr81EUN923uu2DAddnSfOBCpXv3zIGEDN7906yEon
+         Y2Xw==
+X-Forwarded-Encrypted: i=1; AKwUvBzHvF+R49jgO5YhbNzqBsB8tSCZAxiajOHiB3/+febze//Nu57jIID3esj+cKfsoGxM244=@vger.kernel.org
+X-Gm-Message-State: AFuF++kcyHnxTclPgcsQm5I4YSMeRdqJ/hcZnuhCXJEL3mE4lPQJ1hhJ
+	mQ80bwlFqktmcjA7r0UcfeSQPT2QCB+MHfeUOVNCo7VUNC6DTpCrJH2d
+X-Gm-Gg: AYBFou1ChMfdd7iVBvq8Mk4j4puiKmggk8LJqxKAby4nBvQU8NLKomsdrQv4dnzuqDc
+	g62coVHDzJQRM9ft1/nxCFT19bgRK5v7M3K9XqduNmyVkyGe7YBtjfL4URAiK1o7xnunOjoBUWl
+	omIF+9nUgUYnd2mcEdWu+NAm6ixr8+iYGC7dBSKOObOjGauIFEcl/JEjBF4Nf7jXZEBfLHwAvT/
+	0Br3yHlhMIVHb79Js3b3uObD0wNAuWR7a0MebAxbrfpxZbPOsjVcygmQOtngwYY1n2HFjtmWvcI
+	shj+tZJBKT4u/aD3SqWNncU9ssEIUiAVp6w8GjMW5kT3/QUQXfBtE/oagvUxiqVo4EGdDFmIGM3
+	RGH6hAw/eQSdZg1nhLp/1jEPTPnUbyfRX1hSy9201YnXy2+FXbwfdASFk3VvllZ5kxFKmdowBMf
+	BUwhKFee53jk/qlGzduyufu4FSNE4Sfh9LJHALrL2egl/abTmbWNkJEJ7fy2Yvs23zBf8QqCCeH
+	JDIWOR9omi604s/Np98dU6V+HHOh5Z4
+X-Received: by 2002:a17:90b:2584:b0:39e:6c68:c787 with SMTP id 98e67ed59e1d1-39e6c68ca2emr3126815a91.61.1789815689714;
+        Sat, 19 Sep 2026 04:01:29 -0700 (PDT)
 Received: from 192.168.50.3 ([198.176.50.208])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e6c4ba12csm4147054a91.11.2026.09.19.04.01.03
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e6c4ba12csm4147054a91.11.2026.09.19.04.01.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Sep 2026 04:01:15 -0700 (PDT)
+        Sat, 19 Sep 2026 04:01:29 -0700 (PDT)
 From: bestswngs@gmail.com
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -80,14 +80,14 @@ Cc: martin.lau@linux.dev,
 	sdf@fomichev.me,
 	xmei5@asu.edu,
 	co+ac0a8c41de69121d@bugs.sh,
-	Weiming Shi <bestswngs@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH bpf v2 1/2] bpf: reject dev-bound-only programs on other devices
-Date: Sat, 19 Sep 2026 19:00:53 +0800
-Message-ID: <20260919110053.497301-2-bestswngs@gmail.com>
+	Weiming Shi <bestswngs@gmail.com>
+Subject: [PATCH bpf v2 2/2] selftests: net: test cross-device XDP dev-bound attachment
+Date: Sat, 19 Sep 2026 19:00:54 +0800
+Message-ID: <20260919110053.497301-3-bestswngs@gmail.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260917161335.1020405-2-bestswngs@gmail.com>
+In-Reply-To: <20260919110053.497301-2-bestswngs@gmail.com>
 References: <20260917161335.1020405-2-bestswngs@gmail.com>
+ <20260919110053.497301-2-bestswngs@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -98,60 +98,51 @@ Content-Transfer-Encoding: 8bit
 
 From: Weiming Shi <bestswngs@gmail.com>
 
-__bpf_offload_dev_match() falls back to comparing offdev pointers after an
-exact netdev mismatch. Bound-only programs normally have NULL offdevs, so
-unrelated netdevs compare equal. A bound-only program on an
-offload-registered netdev can instead inherit a real offdev and match a
-sibling port. With CAP_BPF and CAP_NET_ADMIN, a caller can use
-bpf(BPF_LINK_CREATE) with a different target ifindex to run metadata kfuncs
-specialized for the bound driver on the target driver's xdp_buff. Running a
-veth-bound program on tun reads beyond tun's bare stack xdp_buff as a
-veth_xdp_buff.
+Add a regression test which loads dev-bound-only XDP programs on both ends
+of a veth pair. Verify that attaching one program to the other device is
+rejected with the expected extack.
 
-  Oops: general protection fault, probably for non-canonical address
-  KASAN: null-ptr-deref in range [0x0000000000000010-0x0000000000000017]
-  RIP: 0010:veth_xdp_rx_timestamp (drivers/net/veth.c:1673)
-  Call Trace:
-   ...
-   tun_build_skb (drivers/net/tun.c:1739)
-   tun_get_user (drivers/net/tun.c:1856)
-   tun_chr_write_iter (drivers/net/tun.c:2091)
-   vfs_write (fs/read_write.c:595 fs/read_write.c:687)
-   ksys_write (fs/read_write.c:739)
-   do_syscall_64 (arch/x86/entry/syscall_64.c:84)
-   entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121)
-  Kernel panic - not syncing: Fatal exception in interrupt
+The second program keeps a bound-only registration for the target device,
+recreating the NULL-offdev collision fixed by the previous patch.
 
-Restrict non-offloaded programs to exact netdev matches and retain the
-shared-offdev fallback only for genuinely offloaded multi-port programs.
-
-Cc: stable@vger.kernel.org
-Fixes: 2b3486bc2d23 ("bpf: Introduce device-bound XDP programs")
-Reported-by: <co+ac0a8c41de69121d@bugs.sh>
 Link: https://lore.kernel.org/bpf/20260917161335.1020405-2-bestswngs@gmail.com/
 Assisted-by: LLM
 Signed-off-by: Weiming Shi <bestswngs@gmail.com>
 ---
 Changes in v2:
-- Drop the redundant offdev NULL check.
-- State the capability requirements instead of using attacker wording.
-- Move the regression test to patch 2.
+- New patch.
 
- kernel/bpf/offload.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/net/bpf_offload.py | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
-index 0d6f55695..d85539981 100644
---- a/kernel/bpf/offload.c
-+++ b/kernel/bpf/offload.c
-@@ -698,6 +698,8 @@ static bool __bpf_offload_dev_match(struct bpf_prog *prog,
- 		return false;
- 	if (offload->netdev == netdev)
- 		return true;
-+	if (!bpf_prog_is_offloaded(prog->aux))
-+		return false;
+diff --git a/tools/testing/selftests/net/bpf_offload.py b/tools/testing/selftests/net/bpf_offload.py
+index c856d266c..017910b4d 100755
+--- a/tools/testing/selftests/net/bpf_offload.py
++++ b/tools/testing/selftests/net/bpf_offload.py
+@@ -995,6 +995,24 @@ try:
+     rm("/sys/fs/bpf/devbound")
+     sim.wait_for_flush()
  
- 	ondev1 = bpf_offload_find_netdev(offload->netdev);
- 	ondev2 = bpf_offload_find_netdev(netdev);
++    start_test("Test dev-bound program on a different device...")
++    cmd("ip link add bpfveth0 type veth peer name bpfveth1")
++    try:
++        bpftool_prog_load("sample_ret0.bpf.o", "/sys/fs/bpf/devbound0",
++                          dev_bind="bpfveth0")
++        bpftool_prog_load("sample_ret0.bpf.o", "/sys/fs/bpf/devbound1",
++                          dev_bind="bpfveth1")
++        ret, _, err = ip("link set dev bpfveth1 xdpdrv " +
++                         bpf_pinned("/sys/fs/bpf/devbound0"), fail=False,
++                         include_stderr=True)
++        fail(ret == 0, "dev-bound program attached to a different device")
++        check_extack(err, "Program bound to different device.", args)
++    finally:
++        cmd("ip link del bpfveth0", fail=False)
++        rm("/sys/fs/bpf/devbound0")
++        rm("/sys/fs/bpf/devbound1")
++    bpftool_prog_list_wait(expected=0)
++
+     start_test("Test XDP load failure...")
+     sim.dfs["dev/bpf_bind_verifier_accept"] = 0
+     ret, _, err = bpftool_prog_load("sample_ret0.bpf.o", "/sys/fs/bpf/offload",
 -- 
 2.55.0
