@@ -1,64 +1,64 @@
-Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
+Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D9138E8CA
-	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 01:42:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0074839184B
+	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 01:42:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789782146; cv=none; b=hUl6NX8kUNMx/9q8JSdxpTCq328Ng9WNzKZF4QnXWjPIk/cvdMr/ycDnYVFDzKtsg9z6lxj2ReaDJ+FKisAoEPlDugnPjWq7ujG6p7eg1xRS2bbPNiH1FwIOivYEdBfL/VDEFpi6lXTbuVYkZcTWn1r4MVCcnWSA7q40+5AJ3sQ=
+	t=1789782146; cv=none; b=E24wW6qRlSf1GGE76oRDj9ZDLWWXnBcZcBAFedgZCm56AXBqAryktVJtG8MqcCZhWDQanMhwEREvMpccCB16b104EiVoE4uv30x/tVpmbjk8TFhRsCqfJ+hBfdhFVzZkSksYJNRmqpd3z1YWweP+yyf+zk/3W+mFzkz8V7UaYXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789782146; c=relaxed/simple;
-	bh=Mks0GsV+4VOCxSALRLHJuj2BnRudCbmv3rCBiQsttRQ=;
+	bh=hIVbs7YWtDY4LwlJbAtWQqDgc2Y/wZBrzXkRXEJgykI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DUI00VKIzwVvo42ZbiDxJ2uM2JSbUiqpBeXlIbI4hKIL5oKdGSlOESnKeI0ZlQey0hUxCnBFs2T243e1Mn7HCrFG00kYc5oqV7uyXOIbi4iWyNKp+fvHQN6n9yDsQWdKbIuIcARuH+SEaHw0AtCgwoh4iYzbEKpO5qpqjfm9bS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CX/U25E9; arc=none smtp.client-ip=74.125.225.74
+	 MIME-Version; b=m5HbgRiI2Gs/3KcWBkbkE/YBcYUQ4ZX5yl8nGIoBv74i8ZXKUWNmnNpOHbl4+JCAynH38cmJOsrDCkvvI8WsBkb5DcQTP1XjNK/9pRk8G9fC82Gbaya/eszvdXtyAQtEOk/BwQ3a3EnNaowAiU77yibzrtbkow5YIhCdQG3jVNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kDLJTHu0; arc=none smtp.client-ip=74.125.225.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CX/U25E9"
-Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-484373a2e82so492149f8f.0
-        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 18:42:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kDLJTHu0"
+Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-49ccea58fe3so2872285e9.1
+        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 18:42:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789782136; x=1790386936; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789782138; x=1790386938; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Pjcqf1F/zdQiFmUf/TFt104dMjJoQ4uqckdO96KDt5o=;
-        b=CX/U25E9Pueb+oPC9WAKD5FwFcUzoPJXMidlLPUriSRHTpPlQifP0tu5WtrJX0VD2A
-         4H/i2/on81c+xZ+pMB0LvPgdIc4gOIhx2+Rthn32c7JwiECFlXXPPdHBbrp7Wdv5YZZy
-         WPwM/rPP81yNkhL2daVww7wAbNaD7ZcBiA93A2Bd1VVornjLI121WJPlz/V00b7U85Em
-         M+WEIOeHiQ36VF+TTki6/5gVxabyu958+sy1xQizXW+MyiO3vP7xUqwETPpFMo6PZo/H
-         pAFdzvX+MnHfbC/azavQE6oJjSb/+JRM16cfdS1Bl2Q1fLwHfUMxDExZX4ZBSCLi/SvA
-         oxKQ==
+        bh=Gab2MLBhumkLdDb8h1rXkYjNAYIU+06hP2pKB86hnqs=;
+        b=kDLJTHu0Mnxu1gYgiw8BHNdQ77V55l7pyDzeoTBT0U+XP7ax/jT+rTSIGY/Um4IO5x
+         tTU6DUEoysR2AlwfO2e/8ULT+1I7EEQGXAPl7tB8lYjk+zkfdHKW53zaF3XkeXwlyXYq
+         xD2LepePhaq4UcEby9gx5W4M5iWcbrkb2CYig86dSi5AdYzqVRVEZ0/z6qF0blMuVepH
+         86m+Th3R5dxd/phHT6KGHts7KVYMU45VuCOMhp4pwbNgfwM3Iq/bGDzKr1i+feVtfup2
+         oQB8U6NnJIlFdCebr9S8fgtNyt9dJFf685aYCFj5gRRdChh0mXXM/mtTWiiETnLMjKmX
+         4+Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789782136; x=1790386936;
+        d=1e100.net; s=20260707; t=1789782138; x=1790386938;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Pjcqf1F/zdQiFmUf/TFt104dMjJoQ4uqckdO96KDt5o=;
-        b=tp2ta0bwFBmr3DhLHyG4UyOVxciJ9qXyCPuT4OpIeu1Vp5pYfkep06lv7h/FLA7BOQ
-         eRBQqwPE5MVFtttSNeke6BdmCAbt+Eq+95PDaqkkXeD4+3Ik8lKV1NA5yADkWU0EQECo
-         h1Xa/bEk+wHBQOFC0Nk2E06ZQuB/jjGJ2PHjEvj3HVPByN1KFIMXVx84U300L8WJL/R3
-         UiCKHDGMIKx44Qrd9XeY6GKiW9ABQ/0hWZINsxxW5Ddka/dlD5lLfoAZoBjBZq7hqq1q
-         I1SJutfeOWl03/QOYS7RsiUSFRvhnYXdQyqDw4tJ55X3dxW0AlBTcEE0X1/3WIIUZDim
-         iprQ==
-X-Gm-Message-State: AFuF++lGKpARpi9/SKuT2uKhGDzzimykw49Zwrot9JWfrFl8IPfky6xk
-	09svuEgi82Uab8YJxFNZueB9uY1JJVAJDkLtwRMe7yrW/rOHG3PUnxmgSa9UipkX
-X-Gm-Gg: AYBFou1+jH+T3jm0d60IK1u3YOL+1gM+AyZef7rhzNUlZw0ILhooY0mAiKFKGXWAQ2o
-	Usb5I7Nfjyy6TYuNelHMwO7NMxeb97xWskNHCw3qLekrVxqcgOKIPnolN2F/gnLbTVHys519sNp
-	l0JTSUDg4M54jWuV+LI824IjrNIjoFbKhegP27WNMs3irsQ1tuPH3NEi2J4/whltdj/hD3misQQ
-	1wI6YyJINjWVRJ2mQMa42wZp2AZ8VcQzTSMryZ6qaKnLOxOAafv4WWB8gsue7oRmqolagQpCnju
-	CywCd9FYOyfKRZ2h06GU5yBV3Y6og+Hrbn8Ws9KFTfLrbG64ILK+FHRf1/h3HB6ENKJog9vv8gJ
-	tfnGFwIi/EZCACCL1dvRyGoermCx76XakYYsNx8HJjOPJrJprriKLm/FfkrLlFRv/ReQUZFUqC/
-	LTUCU6sf83w7nzQoJ2JmSB2sQjUwYKOGt5DV3SnIaVALXgZMpOYJ694/6/stZ+VyeprczcU/A4y
-	pfjPWqy3a0x+O3Gx5DKRAeewEv9mOhQ5xvLfr6CVJ2hDVpDQKAkt/LneIqmNFv+bqmPvB8krg6T
-	IoduqNQML6xup1wAM3BoM39607Hveb+xVsefAQ==
-X-Received: by 2002:a05:6000:18a9:b0:487:88b:4681 with SMTP id ffacd0b85a97d-4871e21aa62mr11289092f8f.10.1789782136219;
-        Fri, 18 Sep 2026 18:42:16 -0700 (PDT)
+        bh=Gab2MLBhumkLdDb8h1rXkYjNAYIU+06hP2pKB86hnqs=;
+        b=BYy4iKVkM6kVSpOV3oEy+/PqyI5ahxY7TsFMCWGiFDov2i74Xz6QDoeXLcbdyRywuN
+         14YjqZT5X60xROMWKo0ckL7ruZ7M9ne+kK/BklD2uU6W4jt7/YnLw9ENfPVlyo7NLCjh
+         k1g9PyT0ryPk46+AWsWYPzOBrgs8dFt/x6Y57v3OGIE/o1GqI7D4QlmOQyGG4Jl0+xuL
+         vVJ3RDxiY26uLw+IwGiWysoSuNhH4gfYiQCs4SrQEXmVjMxzNfYCDlRPtSeW2KC7bvdm
+         fs96+YAjJ2ndR08sOUwHyBIhXZN7IQ0QnU7aiRC/yZlgzDsAQmrAX2INstxNs9XeDs4c
+         zQ8Q==
+X-Gm-Message-State: AFuF++ko1tWGcdt7Y/m2WUyFVfK5A7ma6SxrFf9hGhIthZHhGLYHc7je
+	0f+R5YHLyOcZVoJ+nZLMJdAVaoqP18q3MBhHDaYNjbZ9ssn8RIa2wxVD9GnojAPB
+X-Gm-Gg: AYBFou3MPnsmmncEqNu+H6LQCGs6GQ2L/xBKTIU6C7rTbm4alA40X9Gu+i17cTin977
+	xf1yUCk3uf37Nvuu8xXgu9iFAg3DEaOsSJJzETve9dNfx+N+M88ELxcjDMI6JTW9CFx9eYGKIwx
+	6J+fYFrpYhOErRP72NHLwp5GE9Tc42YCXiP+v8fBTp90QiPNR9hIzWqvPbev4s4EBojnPcOkGss
+	v64hH28l8SjsHZZa2u6tfa8jYjVc6hI5oNPXLgWPJ9ybI7282kWdiVTPAVBDH516RQF26LfIQ+t
+	GXBZeMLNQgVOG3FK/s4EUoqKPxzLQC8ChutMu1P37jWEgJ3CVwh79cEzXpbKyEW1LkUPbQzi7Rx
+	pQs11gWyHRf0FuJto+XBtX7GwdILWJP4LiENzqJapoY1Psdi+eStM7vN+iiXUp/K+/yhdP1NTi/
+	U+0Zwmr2bM5/vYZjWl8Q2HSGVtXZL09TdFGXhPAo5q31AmffF52171m7LVyJKPq4aVUmoXqJ/8F
+	ec3IXajYNh4rjB5Mmwv+Qju78/vZ17eHYKN4kFZagneglaA93ne6Mk2AuuzkmjjpqFtxyLFZ5J1
+	zv/RJSLpxCx3HZ4vLx1FOpHFG2pIZFe1evmNUA==
+X-Received: by 2002:a05:600c:4e8f:b0:49e:7cc2:e6c2 with SMTP id 5b1f17b1804b1-49fc584dc37mr57405765e9.27.1789782137911;
+        Fri, 18 Sep 2026 18:42:17 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48724460753sm3065855f8f.10.2026.09.18.18.42.15
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fc585920fsm224795265e9.4.2026.09.18.18.42.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 18:42:15 -0700 (PDT)
+        Fri, 18 Sep 2026 18:42:17 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Eduard Zingerman <eddyz87@gmail.com>,
@@ -69,9 +69,9 @@ Cc: Eduard Zingerman <eddyz87@gmail.com>,
 	Nicholas Carlini <npc@anthropic.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf v4 1/2] bpf: Compare stack frames in regs_exact()
-Date: Sat, 19 Sep 2026 03:42:10 +0200
-Message-ID: <20260919014213.1840880-2-memxor@gmail.com>
+Subject: [PATCH bpf v4 2/2] selftests/bpf: Cover frame changes in bounded loops
+Date: Sat, 19 Sep 2026 03:42:11 +0200
+Message-ID: <20260919014213.1840880-3-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260919014213.1840880-1-memxor@gmail.com>
 References: <20260919014213.1840880-1-memxor@gmail.com>
@@ -81,143 +81,73 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5553; i=memxor@gmail.com; h=from:subject; bh=Mks0GsV+4VOCxSALRLHJuj2BnRudCbmv3rCBiQsttRQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvts5PXuEr5fXd1ZEy99a57UVPzIo8dHPUlLmXrNDN+C Vyv7ZDtKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwEQ85RgZ3sju9Q/8rnfpkVew 9VTnup7qQw5CH8JqzWJuvd79fcEEFYb/Naa5Vfv133XdbxLI3zDzxOz+9T9Fpy5Y+sL8I/O9Fov vDAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2025; i=memxor@gmail.com; h=from:subject; bh=hIVbs7YWtDY4LwlJbAtWQqDgc2Y/wZBrzXkRXEJgykI=; b=kA0DAAoWRy03e2NUL4MByyZiAGqt5smgEz1kDkMy4eYK4BHoUHiQisdSSrSfXvyRyTE3ikmzj Ih1BAAWCgAdFiEEdP++AjPIeftRPaYLRy03e2NUL4MFAmqt5skACgkQRy03e2NUL4PEEgEA/6Xs aglk0mUCjaeaV9OtMCp6rY1mXpqKgxLCgttpXbcA/2qcQcOp9g46iT8EQTrZxF4thaaSPoAldtL TcXt7RlEL
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-regs_exact() compares the register state up to id, followed by the ID
-mappings, but does not compare frameno. The PTR_TO_STACK case in regsafe()
-checks frameno separately, which is bypassed when exact comparison is
-requested. Consequently, infinite-loop detection can treat pointers to
-different stack frames as the same pointer and reject a finite loop.
+Add a finite loop whose progress is represented only by changing the
+frame number of a stack pointer. The loop first reads zero from the
+caller's stack, switches to the same offset in the callee's stack, and
+exits after reading one on its next iteration.
 
-For example, initialize fp-8 to zero in the caller and to one in the
-callee, then pass the caller's fp-8 to the callee as r1:
+Force frequent checkpoints so the test exercises infinite-loop detection,
+and check that the program returns one when run.
 
-    loop:
-        r0 = *(u64 *)(r1 + 0);
-        if r0 != 0 goto done;
-        r1 = r10;
-        r1 += -8;
-        goto loop;
-    done:
-        exit;
+Without the frameno comparison in regs_exact(), the program is rejected
+with an "infinite loop detected" diagnostic instead of loading
+successfully.
 
-The loop terminates after reading the callee's slot on its second
-iteration. At the loop header, however, the only relevant difference is
-r1's frameno, so exact comparison incorrectly reports an infinite loop.
-The same problem occurs when the pointer is spilled to the stack.
-
-Move frameno into the type-specific metadata union, ahead of id, so the
-existing prefix comparison in regs_exact() covers it. Ordinary stack
-pointers do not use another union member. Iterator and IRQ stack-slot
-states use their dedicated union views and do not need a frame lookup.
-This also keeps bpf_reg_state at 80 bytes.
-
-Since frameno now shares storage with other pointer metadata, it is only
-meaningful for PTR_TO_STACK registers. Return NULL from bpf_func() for
-other register types. process_iter_arg(), get_constant_map_key() and
-is_dynptr_reg_valid_init() look up the frame before checking the register
-type and would otherwise index frame[] with a byte of the register's map
-or BTF pointer. They dereference the frame only after their type check.
-
-Move the states_maybe_looping() boundary from frameno to precise after the
-field relocation. Its prefix comparison continues to cover the complete
-value state and now includes frameno.
-
-Continue to ignore precise. Precision marks control whether pruning may
-ignore scalar ranges; they do not change the represented values, and exact
-comparison already compares those ranges unconditionally. Marks can also
-change through backtracking while an ancestor state is still being
-explored.
-
-Fixes: d5b892fd607a ("bpf: make infinite loop detection in is_state_visited() exact")
-Reported-by: Eduard Zingerman <eddyz87@gmail.com>
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Tested-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf_verifier.h | 23 +++++++++++++++--------
- kernel/bpf/states.c          |  7 ++-----
- 2 files changed, 17 insertions(+), 13 deletions(-)
+ .../selftests/bpf/progs/verifier_loops1.c     | 36 +++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index a7202b44ab10..6fe8e5dc57aa 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -45,6 +45,14 @@ struct bpf_reg_state {
- 	union {
- 		/* valid when type == PTR_TO_PACKET */
- 		int range;
-+		/*
-+		 * Valid when type == PTR_TO_STACK. Inside the callee two registers
-+		 * can be both PTR_TO_STACK like R1=fp-8 and R2=fp-8, but one of them
-+		 * points to this function stack while another to the caller's stack.
-+		 * To differentiate them 'frameno' is used which is an index in
-+		 * bpf_verifier_state->frame[] array pointing to bpf_func_state.
-+		 */
-+		u8 frameno;
- 
- 		/*
- 		 * For CONST_PTR_TO_MAP, PTR_TO_MAP_KEY, PTR_TO_MAP_VALUE and
-@@ -155,14 +163,6 @@ struct bpf_reg_state {
- 	 * during state comparisons.
- 	 */
- 	u32 map_uid;
--	/*
--	 * Inside the callee two registers can be both PTR_TO_STACK like
--	 * R1=fp-8 and R2=fp-8, but one of them points to this function stack
--	 * while another to the caller's stack. To differentiate them 'frameno'
--	 * is used which is an index in bpf_verifier_state->frame[] array
--	 * pointing to bpf_func_state.
--	 */
--	u8 frameno;
- 	/* if (!precise && SCALAR_VALUE) min/max/tnum don't affect safety */
- 	bool precise;
- };
-@@ -1239,11 +1239,18 @@ static inline int bpf_get_spi(s32 off)
- 	return (-off - 1) / BPF_REG_SIZE;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_loops1.c b/tools/testing/selftests/bpf/progs/verifier_loops1.c
+index d248ce877f14..48a966cda199 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_loops1.c
++++ b/tools/testing/selftests/bpf/progs/verifier_loops1.c
+@@ -303,4 +303,40 @@ __naked void maybe_exit_scc_bug1(void)
+ 	::: __clobber_all);
  }
  
 +/*
-+ * Return the function state a stack pointer register refers to. frameno
-+ * shares storage with other pointer metadata, so return NULL for any
-+ * other register type instead of indexing frame[] with aliased bytes.
++ * The loop reads zero from the caller's stack on its first iteration and
++ * one from the callee's stack on its second iteration. At the loop header,
++ * only the frame number of the pointer in r1 changes.
 + */
- static inline struct bpf_func_state *bpf_func(struct bpf_verifier_env *env,
- 					      const struct bpf_reg_state *reg)
- {
- 	struct bpf_verifier_state *cur = env->cur_state;
- 
-+	if (reg->type != PTR_TO_STACK)
-+		return NULL;
- 	return cur->frame[reg->frameno];
- }
- 
-diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index e4ec007f7fa6..012b82513a3b 100644
---- a/kernel/bpf/states.c
-+++ b/kernel/bpf/states.c
-@@ -644,10 +644,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 		return range_within(rold, rcur) &&
- 		       tnum_in(rold->var_off, rcur->var_off);
- 	case PTR_TO_STACK:
--		/* two stack pointers are equal only if they're pointing to
--		 * the same stack frame, since fp-8 in foo != fp-8 in bar
--		 */
--		return regs_exact(rold, rcur, idmap) && rold->frameno == rcur->frameno;
-+		return regs_exact(rold, rcur, idmap);
- 	case PTR_TO_ARENA:
- 		return true;
- 	case PTR_TO_INSN:
-@@ -1126,7 +1123,7 @@ static bool states_maybe_looping(struct bpf_verifier_state *old,
- 	fcur = cur->frame[fr];
- 	for (i = 0; i < MAX_BPF_REG; i++)
- 		if (memcmp(&fold->regs[i], &fcur->regs[i],
--			   offsetof(struct bpf_reg_state, frameno)))
-+			   offsetof(struct bpf_reg_state, precise)))
- 			return false;
- 	return true;
- }
++static __naked __noinline __used
++void loop_stack_frames_reg(void)
++{
++	asm volatile (
++	"*(u64 *)(r10 - 8) = 1;"
++"1:"
++	"r0 = *(u64 *)(r1 + 0);"
++	"if r0 != 0 goto 2f;"
++	"r1 = r10;"
++	"r1 += -8;"
++	"goto 1b;"
++"2:"
++	"exit;"
++	::: __clobber_all);
++}
++
++SEC("xdp")
++__description("bounded loop changing stack frame in a register")
++__success __retval(1)
++__flag(BPF_F_TEST_STATE_FREQ)
++__naked void bounded_loop_stack_frames_reg(void)
++{
++	asm volatile (
++	"*(u64 *)(r10 - 8) = 0;"
++	"r1 = r10;"
++	"r1 += -8;"
++	"call loop_stack_frames_reg;"
++	"exit;"
++	::: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.53.0
 
