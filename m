@@ -1,88 +1,54 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3553F368D60
-	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 08:45:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3C83CBE79;
+	Sat, 19 Sep 2026 09:44:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789807526; cv=none; b=rWDP0hJVF25YbU/ekfGlXiLZ/XMP7g/DqZT/Z+KDBYfchi+FvLAr5DnYJhsQ1cVLFRQrU81RxaM6f+YJ168lutY344rIoovnVA7444uRp0gRz54D9SsF+R/W26yEJ0b8gw2LFw3fKK9Q49ybmjbaFV/M/rhW4O6/6zchY/GcnBA=
+	t=1789811101; cv=none; b=Ku7gK04ciiQKUnfqWWP+6TJ9OkoSz3AIerG7mVZ9P6f1EmKzJHh9K7qWOpZy6PlwurO6ksUNiNC7HBkc+d2ITZKTVijcU6LSExTo4j2A6/qwIdWO/3TBZMpJvY0c0/6WJz7D2hIk0WNIFCCiI0i+TwxQLxGVw9BYfGfZeT4ovsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789807526; c=relaxed/simple;
-	bh=UOrrPjy9U6hTumnq35vaYDk2G8KIx536Lrz1Qem3k10=;
+	s=arc-20240116; t=1789811101; c=relaxed/simple;
+	bh=J0VzSDZQmuR/ny4xw4pcK0QXPE0s4hb51DZx21HbVTc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kFNngSwiltRKsaw3d9Th9wCyNpuJUW7h8j0c05mMzJdC85fXewQg4NatV/jnCslioHoXcuXWtHCHB/gv71kUqKIl5e8VFlv1wl6OWE8biEB1JrouItA97N0l7ntEUG1/EcEV6ycL2diVwc96uywrZbqNldkdhajLDzL/xR/BiPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V/3er83I; arc=none smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 MIME-Version; b=JBceb/bYKmI526E1uiqpd0W/X74HImP2merw8HUGSGSe5Mwok3h6zEWUIzaEJmHGpG+LJt4KstkroMpYoDrgRbhlEkS/cxqQEogTPwn+2GZJdh+yZFg3poGZ73DJgLp+54qXVu/3mSIym5OyY/ErC1YrVDxyp/6ub/Wvn2nuPDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=hJzQBPlb; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V/3er83I"
-Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccafb751so1279397a91.2
-        for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 01:45:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789807524; x=1790412324; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=cVgf5x7BtLeIcBzEQmUKmsyxl9448TEEFnXHBSKRvUE=;
-        b=V/3er83IjiJH53o3VXI38vv5HBzHOh8Fy4FODzq7BPGAD4jml3jaIZEYnkEu68gL4s
-         qO9Mtl0NnGRKGPJrm7QWryKITQX+Q/EaQD7YbG1EEminCua7lMA/XEqrcQX/ku05UYHv
-         vpjX6egqGoAB05IqKFWhSp6GO75XNsjYnv0uISR8cQqCdM45uINntID/NKjnXZSAkRQN
-         rDFtwZRz63ZJnPcIRTG3mKcuzjhSnIalMYZZxericoZdlzQj5ZnnQunUCzgro1pGMdDu
-         Jv4kgZFWKLxiqs6TlXUT5GeblFkBkFIXd5ntPi02Er6MxpPSDavPYNAXevL15V1Wu8KZ
-         Fsww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789807524; x=1790412324;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cVgf5x7BtLeIcBzEQmUKmsyxl9448TEEFnXHBSKRvUE=;
-        b=w+ZjLGoXtrrL0kzUPtfJ/aSOVpXgCcEx0Th2l4jPjdY5KFPdPs/6gnbOh5N4DQ3Ilr
-         od0kTmLaSyZJ6Yzhl0RqPABdc+NA2CChxfyXgKjVm6Zjw+tzTnmLnSzwgeDMzSDIsE1w
-         Ua52AtHaGL2ThY2KdyPWl5j+0bxQ3M04HNuKT/uKc2oT2qYAA6+Pe1G+caVf4fqDYn/y
-         pgS1FEDB+WGuiD+710tVJjHu4bA2+1nFghhyEWH9afn4ikW1wzF+vsz8g4hskA9/KF2n
-         hcWjA7UgMRXD6IW8o14spbigeHF0Vv87fpgPfj0UhtJpO3uZr6ipPZ19jiyJH3hSHBwu
-         SY+g==
-X-Gm-Message-State: AFuF++nfbplqWLCMKNiFekVXrxh/w7FXeKnX81pEfGPGZHXTkpfV0hUm
-	lR3V3Db766FOgTKaw7feOAAbakZY2VTcbEARK94ZIoywIbExv7VcI9jGaSTxsfkxA6cZ06Fk
-X-Gm-Gg: AYBFou3pZUJVpMxaKPhSjKMqNXX4aNY7hKabVBT0Q/cmNPZo/cqJBb1/wHU+6xR1WJq
-	Xp47zS2DydINIRqD+BQC5BXX90mk3nVpI1pTRqFHIx3l9m1uIEp/Xtsd4z7FS6JEnOhW34vMFaZ
-	nNf3APUOHxopHx1vpQ8W1W/wLljUbZWI/wgiQUtKiaDPo7A8uBuMnRgZ1JZ5ColtWbt+MGMdfAj
-	Gr+jvR32iBsp8vpCuxQbzFp/bRFWkh383NFrC26xtnejdey8HG5jyiZo1jZKHunkWI7DFvLEdkK
-	fkg83nikBsbi7jQ2wpMoStSBdYB2BOlrbbKQKeOtmykCBNQI1eJPMg0WKHDPk9+OBpc8NyIcywv
-	YLPszv1HJ0WMdNSN+g5PuRusR4+JOH21Rxt4fdHk/iCQqTe2UecZ8gkNf648mc8GVjUs2zSwoK8
-	QeMHmkdzgwX4WE1MUtgco9dHlQFqY5BA6wz8Ftny1GPjw4K1N7heQhFUP3R/liB4Rk1Ye+PxLzW
-	CP9hPG9+4qwjrTJV+xD0eYMGbxH4xYiz0l7mFE7Snoltihic2MDvbzlXWdFlH5MOfxVy8Hr2JMB
-	0pjhaQ==
-X-Received: by 2002:a17:90b:5346:b0:39e:6c69:7779 with SMTP id 98e67ed59e1d1-39e6c697a4fmr4246853a91.34.1789807524517;
-        Sat, 19 Sep 2026 01:45:24 -0700 (PDT)
-Received: from lenovo-thinkbook (42-2-127-248.static.netvigator.com. [42.2.127.248])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e6ca4ef3esm3556837a91.1.2026.09.19.01.45.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Sep 2026 01:45:23 -0700 (PDT)
-From: Yuqi Xu <xuyuqiabc@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="hJzQBPlb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Il
+	rQt5VrdhD9gIkiQAfFKZQskxVSv6LD4qqQfdMNGgw=; b=hJzQBPlbFV1h4tRMDn
+	gaoNsMuib3Ca4eU4Ndo9DPfetlMSphMfYEJEzm1cNvpLRKT51VJcEnqV6BKxsgys
+	LHmdfkizEfKsAHtWZSUHT1Jzfe9UiitPbtVEM78NeuJ3RndOak5/TzByOcuaVmC6
+	VU6LkyWbT+ZES0M9cFWOFmXDY=
+Received: from localhost (unknown [])
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wAn5MxhWa5qaUAsBg--.43112S2;
+	Sat, 19 Sep 2026 17:44:02 +0800 (CST)
+From: Hui Su <sh_def@163.com>
+To: bpf@vger.kernel.org,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>,
+	Quentin Monnet <qmo@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
 	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	stable@vger.kernel.org,
-	Vega <vega@nebusec.ai>,
-	Ren Wei <weir@nebusec.ai>,
-	xuyq21@lenovo.com
-Subject: [PATCH bpf 1/1] bpf: crypto: check params size before reading reserved fields
-Date: Sat, 19 Sep 2026 16:45:02 +0800
-Message-ID: <4f3ab4b03e79017e215521743996555439bf0bb3.1789802413.git.xuyuqiabc@gmail.com>
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hui Su <sh_def@163.com>
+Subject: [PATCH bpf-next v2 1/3] bpf: Report BPF_F_PREORDER in cgroup program queries
+Date: Sat, 19 Sep 2026 18:43:58 +0900
+Message-ID: <20260919094400.600585-2-sh_def@163.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <cover.1789802413.git.xuyuqiabc@gmail.com>
-References: <cover.1789802413.git.xuyuqiabc@gmail.com>
+In-Reply-To: <20260919094400.600585-1-sh_def@163.com>
+References: <20260919094400.600585-1-sh_def@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -90,43 +56,76 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wAn5MxhWa5qaUAsBg--.43112S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tr1rXr17uF1rJFyxZrWxtFb_yoW8Kw4kpF
+	4vqFW7C3W7Zr1aqa18t3yFvFW0g3Z3XF1UCF9xJw15uay7Wr1xtr92yFW5uFy5ArW7Ar10
+	vF90vrn8WF1jvF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zioq2tUUUUU=
+X-CM-SenderInfo: xvkbvvri6rljoofrz/
 
-bpf_crypto_ctx_create() is a kfunc whose second argument is declared
-with the __sz annotation, so the verifier only guarantees that
-params__sz bytes of params are valid.  The function nevertheless reads
-params->reserved[0] and params->reserved[1] (offsets 14 and 15) before
-comparing params__sz against the size of struct bpf_crypto_params, so a
-BPF program can pass a shorter buffer and have the kernel read past the
-region that was validated for it.
+Commit 4b82b181a26c ("bpf: Allow pre-ordering for bpf cgroup progs")
+introduced BPF_F_PREORDER to request pre-order execution across the
+cgroup hierarchy, altering the effective prog array ordering.
 
-Move the size check in front of the reserved field reads.
+While pl->flags stores BPF_F_PREORDER for each attached program,
+__cgroup_bpf_query() currently does not report it. When querying
+attached programs (!effective_query), __cgroup_bpf_query() fills
+prog_attach_flags[] with cgrp->bpf.flags[atype] for all entries,
+omitting the per-program BPF_F_PREORDER attribute.
 
-Fixes: 3e1c6f35409f ("bpf: make common crypto API for TC/XDP programs")
-Cc: stable@vger.kernel.org
-Reported-by: Vega <vega@nebusec.ai>
-Assisted-by: LLM
-Signed-off-by: Yuqi Xu <xuyuqiabc@gmail.com>
-Reviewed-by: Ren Wei <weir@nebusec.ai>
+Extend direct cgroup program queries to merge (pl->flags & BPF_F_PREORDER)
+with the cgroup-wide flags when copying prog_attach_flags to user space.
+Only BPF_F_PREORDER is extracted from pl->flags to ensure transient
+positioning flags (such as BPF_F_BEFORE, BPF_F_AFTER, BPF_F_ID, or
+BPF_F_REPLACE) are not leaked to user space. Also perform both ID and
+attach flags copies within the same hlist iteration.
+
+This extends prog_attach_flags[] with the per-program BPF_F_PREORDER bit.
+This can introduce new prog_attach_flags[] values with BPF_F_PREORDER set,
+for example 0x40 (BPF_F_PREORDER), 0x41 (BPF_F_ALLOW_OVERRIDE |
+BPF_F_PREORDER), or 0x42 (BPF_F_ALLOW_MULTI | BPF_F_PREORDER) depending
+on the cgroup-wide attachment mode.
+
+Older bpftool versions treat such combinations as unknown flags; bpftool
+support is updated later in this series.
+
+Signed-off-by: Hui Su <sh_def@163.com>
 ---
- kernel/bpf/crypto.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ kernel/bpf/cgroup.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
-index 51f89cecefb4..3f3fe2450fc6 100644
---- a/kernel/bpf/crypto.c
-+++ b/kernel/bpf/crypto.c
-@@ -149,8 +149,9 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
- 	const struct bpf_crypto_type *type;
- 	struct bpf_crypto_ctx *ctx;
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 696b27383974..eb9e0985ac43 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -1515,19 +1515,19 @@ static int __cgroup_bpf_query(struct cgroup *cgrp, const union bpf_attr *attr,
+ 				id = prog_list_id(pl);
+ 				if (copy_to_user(prog_ids + i, &id, sizeof(id)))
+ 					return -EFAULT;
++				if (prog_attach_flags) {
++					flags = cgrp->bpf.flags[atype] |
++						(pl->flags & BPF_F_PREORDER);
++					if (copy_to_user(prog_attach_flags + i,
++							 &flags, sizeof(flags)))
++						return -EFAULT;
++				}
+ 				if (++i == cnt)
+ 					break;
+ 			}
  
--	if (!params || params->reserved[0] || params->reserved[1] ||
--	    params__sz != sizeof(struct bpf_crypto_params)) {
-+	if (!params ||
-+	    params__sz != sizeof(struct bpf_crypto_params) ||
-+	    params->reserved[0] || params->reserved[1]) {
- 		*err = -EINVAL;
- 		return NULL;
- 	}
+-			if (prog_attach_flags) {
+-				flags = cgrp->bpf.flags[atype];
+-
+-				for (i = 0; i < cnt; i++)
+-					if (copy_to_user(prog_attach_flags + i,
+-							 &flags, sizeof(flags)))
+-						return -EFAULT;
++			if (prog_attach_flags)
+ 				prog_attach_flags += cnt;
+-			}
+ 		}
+ 
+ 		prog_ids += cnt;
 -- 
 2.55.0
 
