@@ -1,109 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0070525B090;
-	Sat, 19 Sep 2026 05:41:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789796479; cv=none; b=n4mEE0+7x+U253QX1J8kSWa+emhi1z0SkZzmKLBoG2Rvi38uyVZLF31xBHl38i5YmvmiHtRk4gce4QbTU9OSGk6x64EEl9NWJ3zreYOxOA1n24RYcnNrpnrYqRLUham+N2TqLtHyfslLR56SMybgsXwGAJzEdZyejKlztB++dVM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789796479; c=relaxed/simple;
-	bh=PL/D+o+ZESzAdUsIYaJLQtexbMp3AjWc6YEvF6S2s5s=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=U6xvUgAzAY3CYQZMFkDZ/bNZkXHrzX2MgT93YpNlScjCZmaVKdiD8VPflNOxjZvBn6Da9CCGXItfNPtxGHxufuKGMhZYJvthEFz2MxH8ipsc2gAV5tGsQZGQooiYp+e/RTqXq9zRhSsS7XW/Le0BkidBCQF/Kd5KejHeQjusEu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gK87OeS1; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409232DCF45
+	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 05:44:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789796698; cv=pass; b=dcAeR///6O1JkGNhWU5wwo8fgPjtKJbS7Kpn2i9zHXcMWcbfspQBJCZuW6LzGcCA/6u+hf+R0ySlcTtiV+5Y44+IZcFgUI8CTQJQ6dJJwYN9VgSPiL1v0DXFwtYEDMz/6J9lkGVkHKfaIZTlFmg+jMzHKrU26pFp26RhPL2NkHs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789796698; c=relaxed/simple;
+	bh=ic3wmoCCnpNHkoLUgFgDCvLUOEG/SacGXw7TtvYdhsE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=m22FS7P3Wsumj59fWfdWolnfKf8F2fYBgrVIdapVt+ZjiWHNSfk0cabi9hYENYFN7a7zwrjB3bTb5tyHvtusG8B2n0PuB7XvQUNberVPP/YsZsClYR74sxIkG2SlhrGOY1oh1jXv9Fc81CKKTHTcAgtbZZlFTFgSFsEmsnqE3VY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YrhRXREe; arc=pass smtp.client-ip=74.125.228.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gK87OeS1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 898421F000FF;
-	Sat, 19 Sep 2026 05:41:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789796477;
-	bh=bjZmcNI5FA7SBAJaHY0Qr8fU0zq6hfuv3Cg60N7CNgo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=gK87OeS1RUggbbzZc2Jkz4vZLAKBi0iTBNwGQcRnHv3/5vT4Ymt9WPxJbYxfpaQDN
-	 h/3/DfsaZHdOHub02OanVF4c5Q50qevNNUhHdAopP7npqmxF6ssCl9Behg/vDvX93h
-	 ysItBqRRUBB5R1g8KQD0JOyQm0tUlWDYvFfX/dh4FG51CdtfSaXkVWRLPBatFtZs/k
-	 5g7JX5D5Cj5KJKsvONsTMe8j6kXy7/EEGsgNXkACeczY2olHMVtjUwLTjJYima37Qv
-	 9WdZUoNt4255DLQOPjUKah0edVwBoJNeZAl1r/xwj49QZqCC+3EFxZJKOvEIIGAcaH
-	 MPS35lAdirDAw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 9393E3924440;
-	Sat, 19 Sep 2026 05:40:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YrhRXREe"
+Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85a4329731cso1165429b3a.3
+        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 22:44:57 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789796696; cv=none;
+        d=google.com; s=arc-20260327;
+        b=C5uoCRC6VcQxmlEoxGshPrZHlJOJCXLhszxbWZZea8jic2fSUHGulstUlCXNz2xDck
+         dz+7IwUSJ/hWnwUz9U81b1fXaCo8fKYcjU47b3+ZIiYWIel74v8ZPylF14ehq779vwwR
+         UvU9eD/R1l07FLgdGw1TrNBGUNrJEn9KRm37LLrf7X/WCgcNULO/7B4ul5e5ZwttVBOk
+         r7ckD8ZJYbaKOytLhh5QWyFnfN9khDA0QJP8GV8bNJnyroj4Vg6w4yjJ4V+Lxpwm62Lk
+         Am4E7AoqVEj5nCCvmC/AcSice1N36AUYqXKTabIKMfvP/8GdvnL/U7W8PYhe9KjWbI1J
+         L9Nw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=TTSICFICYYV90/lo5t2/z441tnwq8yhovKqA2AQy4hU=;
+        fh=EvoHFlDgCMxEP3ME7AEQ6Dl3bLccAjezN9teA2aJKdc=;
+        b=aOlrMs/zrO8ciqYWXjzKk10HLQf0ySrSzO3PIn0rN6t2gN8VEyN/crIFUuiQXRNvUD
+         TGva18NALUOWzVMTE2FYLiRh+m4Fsisdzg8pXhwLv8Y/21rxoRKoBgoOCIyP8pqQCy0G
+         GQFvwqAThUel9Low0M2KGhQKoTeo6jxJfUPgcOZ8qUj8C3i3Ccqf7SvC6pTOFbyT+qtS
+         4uat1on73ptcxKZR710OvoLFr/CxupxelgrboUp6lIXSHIzWGDo2ZIHF/h1i/XbAm53h
+         yunbZf00eZWCgYoyaS+2SkE6LPSJRVeh72qQHuvEjIOEk0uTtfhVVi+TK7V6D4lKNfHE
+         MRAA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789796696; x=1790401496; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=TTSICFICYYV90/lo5t2/z441tnwq8yhovKqA2AQy4hU=;
+        b=YrhRXREeDT9dZCfWnWKh5Dr2aeDu3z5NfuZKHZxj1/pCr+wREYUR54A2gyFcXwecVZ
+         hgVZR8liJiZWw6F0Vhz1IQ6xT6x6i/zRi/g8/4KdER5WqZlcaeBsHrC4Jfhv6kzlnJ5s
+         CtFPF+1+1UCfAZRTyLOx4WryZgIdAnz6AgVa2aGbLxTefF0AiS0G4GrvYDrpl/Psxi8f
+         31Y7PCAo1npA7zBd+s1VpfQDjxYbT5lBtVGQdkXLzzwK1hSLrtyeijtwZY6Y7pbRft0X
+         yJl+/8WwfPGv08V5wZqp28hKgdjMJpRkiQJSeSdoKhGlzFfxVTX6SzK6D/4AFq+Z6M2/
+         XMiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789796696; x=1790401496;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=TTSICFICYYV90/lo5t2/z441tnwq8yhovKqA2AQy4hU=;
+        b=L3yC31w1JnygeO8eoRQHKctmQmfcE378y/SQHwr6GITgTjPIplvHHYX8Lc5uzoVIHl
+         IzqgJOhFdxjrB/FRM5O2S+g9t2frQS7N9Sd3/zBowsie0pUfYeDHfetAzqPuaNunfmWB
+         HwWbVZnt8wAfr8JSyIzafhx1W91CmB+S6NU1OMoIZo297+tKvdBLK+tzZ0Ray857GWqS
+         +doN+5nubNGjVSasLy1m+CDsdBtkj3PLK8sh2VIhrs3kyQoSA5k/jcu/7HPzqXKigflP
+         2RPtIMurnTtQc4+W6iPs9m/qhzR3FOYNnDV3GdvQ/tQJK3tAEwLCBqYEQ0D+lA/41Tj3
+         MITg==
+X-Forwarded-Encrypted: i=1; AKwUvBz0IqF9cOfHbuounIngZ0mzFBbC/+BxobSjJmv/TMINF2wuaZp/BI0ncBO3QxN57RURBt0=@vger.kernel.org
+X-Gm-Message-State: AFuF++ntob90KKa2+L2syy3qJJm4wAR3YU7mh4kPWI+zkSly/wo8am9D
+	wY7aRFwgLU23GaE6Bn2Dfjvw84XAiA+nmyx+v19mvB/I7wVoUumGBp13XNQITirvF6wsVKuqmxI
+	e2XXBHOqTT3ZbIoP5bnxVxgGFgXnE/Js=
+X-Gm-Gg: AYBFou05qtkYe8LbqM9uFANGKaHYdLX72R9WFfONNVdkwmK8qTaLm66cqtQGp7jvTJj
+	HLbUIjikwq0p+tkoTzanyNTpCpnKQnNTRqPtCowuJZYK6Ml4lKy1puVxSNkUz6MbGg3EWlwksO+
+	GYLSmzFZRKRcjJcVZMLx223srePCu1KSI0MycmHdg4+N1EKfTd5DUGlpLRi7ZNDDgD9i62YmiDK
+	N/8gkvUcecr9wfEtDTmoN0KtA12d9dnWqslYvyxm99AUgWXbXDvZ+HG5CVHKci4jKbgJKw/mPnA
+	QZnWklggG14b3rq5ALG9EnjOKYUbbofeN4cC7WerIOXLShNwvcTc8hCDI8nMUttnV8anZxewshk
+	DmfllEf/HRvY3g8Hnjhh0kwD39I1pmMLGTgd0DI6PtqOIK1T2/t015xNvmsoX25WZaRv3fT98sQ
+	==
+X-Received: by 2002:a05:6a20:3d8d:b0:3da:6bdd:2308 with SMTP id
+ adf61e73a8af0-3dd8c4ff25dmr8514188637.18.1789796696494; Fri, 18 Sep 2026
+ 22:44:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 00/15] bpf: A common way to attach struct_ops
- to a
- cgroup
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178979641040.1277927.5226384464308914139.git-patchwork-notify@kernel.org>
-Date: Sat, 19 Sep 2026 05:40:10 +0000
-References: <20260917200542.3689605-1-ameryhung@gmail.com>
-In-Reply-To: <20260917200542.3689605-1-ameryhung@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com,
- andrii@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@kernel.org, shakeel.butt@linux.dev, roman.gushchin@linux.dev,
- kuniyu@google.com, kerneljasonxing@gmail.com, kernel-team@meta.com
+References: <20260915021338.1520964-1-main.kalliope@gmail.com> <20260915021338.1520964-2-main.kalliope@gmail.com>
+In-Reply-To: <20260915021338.1520964-2-main.kalliope@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 18 Sep 2026 22:44:44 -0700
+X-Gm-Features: AcwNN1Vh-GA3y-jQOYzFbcyt-JLyUr5-tYXcOs23bIU7VIPtAK935mc0-3bwOM8
+Message-ID: <CAADnVQK7PqU+VXgZFOLqDSs8m0-DXWmm5+_Lg4gddrwdvd3N0w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/5] bpf, x86: Add support for BPF_MOVSX in the
+ i386 JIT
+To: Nicholas Dudar <main.kalliope@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Wang YanQing <udknight@gmail.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	"H. Peter Anvin" <hpa@zytor.com>, bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Kuan-Wei Chiu <visitorckw@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+On Mon, Sep 14, 2026 at 7:14=E2=80=AFPM Nicholas Dudar <main.kalliope@gmail=
+.com> wrote:
+>
+> The i386 JIT lowers register BPF_MOVSX as an ordinary move because
+> do_jit() does not inspect insn->off. The generated code therefore copies
+> the source instead of sign-extending the selected low bits. Context-acces=
+s
+> conversion can also introduce MOVSX while lowering signed loads, so
+> rejecting BPF_MEMSX does not protect those paths.
+>
+> Stage the source low word in EAX and use the native byte and word
+> sign-extension instructions. Derive the high word from the sign bit for
+> ALU64 and retain verifier-managed zero extension for ALU32.
+>
+> Assisted-by: Codex:gpt-6
+> Signed-off-by: Nicholas Dudar <main.kalliope@gmail.com>
+> ---
+>  arch/x86/net/bpf_jit_comp32.c | 51 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>
+> diff --git a/arch/x86/net/bpf_jit_comp32.c b/arch/x86/net/bpf_jit_comp32.=
+c
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+I don't think anyone cares to spend their time or their tokens on the
+dead platform.
 
-On Thu, 17 Sep 2026 13:05:26 -0700 you wrote:
-> Hi,
-> 
-> I am continuing Martin's work to support attaching struct_ops to cgroup.
-> 
-> At LSF/MM/BPF 2025, Martin presented [1] the need for a new interface
-> to extend tcp_sock operations instead of adding more BPF_SOCK_OPS_*CB
-> enum values. The need for predictable ordering when attaching struct_ops
-> to a cgroup was also briefly discussed.
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v4,01/15] bpf: Remove __rcu tagging in st_link->map
-    https://git.kernel.org/bpf/bpf-next/c/012089512144
-  - [bpf-next,v4,02/15] bpf: Make struct_ops tasks_rcu grace period optional
-    https://git.kernel.org/bpf/bpf-next/c/5db69b0fbdc8
-  - [bpf-next,v4,03/15] bpf: Add bpf_struct_ops accessor helpers
-    https://git.kernel.org/bpf/bpf-next/c/3668bc410260
-  - [bpf-next,v4,04/15] bpf: Remove unnecessary prog_list_prog() check
-    https://git.kernel.org/bpf/bpf-next/c/1ef6cb2cc587
-  - [bpf-next,v4,05/15] bpf: Replace prog_list_prog() check with direct pl->prog and pl->link check
-    https://git.kernel.org/bpf/bpf-next/c/c6dde091dc12
-  - [bpf-next,v4,06/15] bpf: Add prog_list_init_item(), prog_list_replace_item(), and prog_list_id()
-    https://git.kernel.org/bpf/bpf-next/c/4d71b3e0821f
-  - [bpf-next,v4,07/15] bpf: Move LSM trampoline unlink into bpf_cgroup_link_auto_detach()
-    https://git.kernel.org/bpf/bpf-next/c/2ef54525d2fc
-  - [bpf-next,v4,08/15] bpf: Add a few bpf_cgroup_array_* helper functions
-    https://git.kernel.org/bpf/bpf-next/c/e176821b68d8
-  - [bpf-next,v4,09/15] bpf: Add infrastructure to support attaching struct_ops to cgroups
-    https://git.kernel.org/bpf/bpf-next/c/369d9dcd8fb8
-  - [bpf-next,v4,10/15] bpf: Allow all struct_ops to use bpf_dynptr_from_skb()
-    https://git.kernel.org/bpf/bpf-next/c/6d4ce907665d
-  - [bpf-next,v4,11/15] bpf: tcp: Support selected sock_ops callbacks as struct_ops
-    https://git.kernel.org/bpf/bpf-next/c/5ac77ae32940
-  - [bpf-next,v4,12/15] bpf: tcp: Support parse/len/write header option hooks in bpf_tcp_ops
-    https://git.kernel.org/bpf/bpf-next/c/3bb54768fe3e
-  - [bpf-next,v4,13/15] libbpf: Support attaching struct_ops to a cgroup
-    https://git.kernel.org/bpf/bpf-next/c/6bad848e3f70
-  - [bpf-next,v4,14/15] selftests/bpf: Test attaching struct_ops to a cgroup
-    https://git.kernel.org/bpf/bpf-next/c/ae7b5234fa8b
-  - [bpf-next,v4,15/15] selftests/bpf: Add test for bpf_tcp_ops header option hooks
-    https://git.kernel.org/bpf/bpf-next/c/d7399d91417b
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+pw-bot: cr
