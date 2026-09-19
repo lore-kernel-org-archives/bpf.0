@@ -1,194 +1,122 @@
-Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FE6D54704A
-	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 04:55:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189F631B83B
+	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 04:57:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789793732; cv=none; b=SKiVpt4NiKHLVOWST6eLNJA3cQMhMiiUxaSzs3n2fQonz5QH2yjGmSj9rfsmyrRYenpysSFqaJfduaODAg9tDCCuamQbOURWUolfxmTO0j0Oa31YTKFR2ANkaQp/VbCn0lnHuC4uKMoINC7vRul/N4QTQR0NZ9ZDg/Lmz2TcaNQ=
+	t=1789793834; cv=none; b=tt0s+g1v/eHbe+XmlVr6InsahbsoUskSS240mirSTe8dqD2baO5QKbPiZQvirpkU/r85APyBdcI+P9RjPsA1wtsZI8HQHk3v7li5O8EOgVV2cvpQ4sWALQtXnprc2ZppT5aYZH7KEsTP6SUt5pec7Pf4OTruHKeWf6IETS3Y+kw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789793732; c=relaxed/simple;
-	bh=mQXvGj/1ZhlpI5x1xgsizbo/FjVBEb9gbL2dKN3OrCk=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=kBe1ngkiaLN9ZxlAp/40zX+r3cA632oXrB227nmU9Hv8VZTKXBnn8ZzgBJbt4KWAHItP7vXRg85sIGcdZYWBA52yRHdYunIAivPzCgv2ioBFjwCYFg1cDC+Z9dZMIFoBxgH+t2cb/HcfG5M4Oybx0EW2hLqg3Zahr0+48+4tb/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oa3iJZmz; arc=none smtp.client-ip=74.125.228.42
+	s=arc-20240116; t=1789793834; c=relaxed/simple;
+	bh=Bm9T7VsbpN4kAeOh6i+m2XK8iqNQI+ZnFx7v2vTBHlw=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=jJbOJJwkJGPw4SmA4cQzVGNQ5/jcO6MVNOZ/IMTfbnjKwakJOt7NnfEjpXUdM8rwTuOnSer6iRhhG+9caWcLdkBpGRmBJAmQCR79zRD3vJCsZ/q1fU5tAurbw6dBOsMgtEQRF5DMg5tDhhnVc9TlPBwwstNVk58y5ruoqTwbOcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WClvpW2q; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oa3iJZmz"
-Received: by mail-pz2-f42.google.com with SMTP id d2e1a72fcca58-86dd69a1b15so499145b3a.0
-        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 21:55:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WClvpW2q"
+Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-39b5b07ec78so1023971a91.3
+        for <bpf@vger.kernel.org>; Fri, 18 Sep 2026 21:57:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789793730; x=1790398530; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=8126oMm6t7slDrtus16ZsnBIitmGk5AAdc1Of8AAUGA=;
-        b=Oa3iJZmzvHFahWJDtLhAFIT8s//1w2N7Z8kDbcXBogu3B1SlB8faDNpRouKqKWoSqn
-         i1X2jyUQ03ipgd2XIVFejtytk3WjxwcuEzg+aNo5oZrE9T0HQ15CiG1w1ae7FaaU6Nqh
-         w81mRHtjBhpZhzFEKA8PqO4VEgEwkXD3ybcLTfrMrFDQOjiHQzrbbK8dYEcsyyz4FUn5
-         Y1I65qrxwrd+vvygR8L/oHWcLMr6dUBR0v0c8cmtuRGxyx3c7GQLry/D+NfjycojP78S
-         HNfw6qR28cuNbxSd7P+UcsxXsW98OxpP6IxZmxKmANXhENE3u7b/Lkyg6taTEOEelkha
-         w7zw==
+        d=gmail.com; s=20251104; t=1789793832; x=1790398632; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=+yPadxEEa48XwAs6qga1q8XePDfActjosPWpavIz+SI=;
+        b=WClvpW2qxYxtQBywpyIGoj+NhAx4Px9BkM//9htUAK7lfwy+WjsvBFiLwq43uaXbzd
+         WDyl+SM9JS+S0hTKYhRQLON0uS+sWhW7WcibsQ5y9YBfjcICGr9PB88iGApPKe0synQr
+         72uhtZewjX6naf/Bn/F1LDNZmoSkyKmJEDpebUlq9tjfhpdghGDCb6nCbHivDLpV/5F1
+         Mw7U3pFrqaMO5CLLjnWnf1tVcOW0SK8Z73o7GLZzlB1OOZkhTFpZiF0aC4pWKlICpVQW
+         UKb9rOxsZClmuluytiw4inRvkO6K0Ses6vVjuKiuOOTeYpbCCLZLl93h1HUjhaazzSS+
+         6wTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789793730; x=1790398530;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1789793832; x=1790398632;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=8126oMm6t7slDrtus16ZsnBIitmGk5AAdc1Of8AAUGA=;
-        b=CJtirOL2KVZpHLU5B0AccwDJMQTVJVGSNb8uEjt509XmDegGW9fKrw4PORgCejT2v7
-         L/Thfj9U/TGnlhkPYHiCeW737S/QLdJ5uCoaZVMJG4skalccN8/hsl5RRZ8wUI6btp19
-         VlOzBnYW8h8cnIYuzMaTd2NHBtBkAc2h+J8e21cRvZr9Ve/w+67msB096bqWFKFURW3C
-         haRpFcyaS4yaN/OMGZ5JclBCi4hC77BS3wadLXbTSOPafLCKXKgCqLxuAY9b8hLoH4jt
-         ajgGmD3K5/gro8TL1zxw/jX/qIjbZVcGZE72X4nsHCOABG+6SNGMaWiM9w4X9kYVPxgi
-         zN6Q==
-X-Forwarded-Encrypted: i=1; AKwUvBy3XmZdu0vyh2whfgqIb61LharffbmokOFnHt6G4pgd+LyX0kWL8gpelOJoP+OYVm0RinU=@vger.kernel.org
-X-Gm-Message-State: AFuF++ngqBq45rVlW90p7Hyjfq0yb2nD5EWg19BNy+LdQHpmNRR6Rnie
-	hDOH9CRLJDbO3vQjh65rUvqfj4mBpVjMI8zid1vm1stoQUxWqckifIXe
-X-Gm-Gg: AYBFou1n+J4ZvFGVj3nTqsv6wMZDY06jXZUX2zQW0cp0XTTnP+i/E+Y8WOKsTqGFAqV
-	ylwlgsgwZzKoFXGVf04t06fYWWuL9NBOQrvkqmIQqjfOZjqZfxnOKso2fzHtVCP8YQBfLy/5FUu
-	NaHZ8t90OeO9tbc+tNNJum9jsLWRrC9MVezUvDxFlM8ilOmAu7y1RlyTjQe/o0I0We7H5ONyqPu
-	XYdU8kTt+iPxK8r5WGgbs8Aw9nLgw5jNNUvNB7EvHVo5w9UBHCxvZcgs5j2dyVqjA1W6kHGOysL
-	Lwgy2VxoTSdunP40IwfgM/zDHEJTBBrjVZKRODWXe5iTJZvu4T7osjkerfXK0TLaZ77RD/yHmC/
-	oX/ngM62n25etkqKxiqJCuCe1lWtyUHK5LaPP5HhRzaL3QrgsLlvJjQrFd4hv0MGnLK286OBtk9
-	38j1nT9jwrFiJpDr265L38Q4L8drTOHRg+65/SvVgdsdNH5GErHpH+U870zdCkYnhVUCTpPNUon
-	fHl5CCOyIt+bskwbLjVQfqnaTOwIV6VbWMxlJmdpBf5ZhlBvasehbwpCo8VpGY4JlHaUYqR36Yy
-	epZl
-X-Received: by 2002:a05:6a00:1d9c:b0:878:3704:e0f0 with SMTP id d2e1a72fcca58-8783704f769mr291139b3a.22.1789793730121;
-        Fri, 18 Sep 2026 21:55:30 -0700 (PDT)
-Received: from localhost ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-877aa401474sm557306b3a.53.2026.09.18.21.55.29
+        bh=+yPadxEEa48XwAs6qga1q8XePDfActjosPWpavIz+SI=;
+        b=wMq6fJdAVyZYDgy7Y9HG9K+ifUCijlBwQVg+1zo+VNsbiEIDbQoFFuO/t+CwLkVjLb
+         5TebowvDKXe3Mn4Wl9kN/AcVc6c1MBgZZE6xciSXHJAcNFakU+NJ7sU0r0aMkuKuur1d
+         GYGIY4I/UIX5rnEDv5nA67s3EJDVUgkuseVhDIrG5duUrPvbw9rdqmWjsd5GcyruGZms
+         BLK2gOmSewIJZlQbs0Hk2M9Vwihz7P2OR0ScdF6B1wpesQiSdnO8ekqHV/yybBiWBT0o
+         P8zlHsMPbkDuHMOZrL0SxIDMoNzgGjZpct2MXF0w69K+0C/p8B4S4oDiqUeqZ42pxR+3
+         YE2g==
+X-Forwarded-Encrypted: i=1; AKwUvByuvjiMIy3BiphlFkLjuuf2L5H48NiTsFohq/PapK0jJboCgUn9y1228CykIttC9PtyXrI=@vger.kernel.org
+X-Gm-Message-State: AFuF++l6hJjrJL5T3M5sLCjfdkCExw7wWJFUvtO4cBiRPT/dMfeS6mQK
+	uTU8N4G+n1MRbNEDW4rSLF5drfcfvdMh93ooxrCQcB+ulwSSdhL7eflj
+X-Gm-Gg: AYBFou3e+Tb4qFzWfoPWd/6Doqm/Q7dtfvYd/rTI1wv/XUKKQkfAR308L5eIz6JAP9H
+	XpeKQJr37HIPPsrJKJZHH0UU7pEn+TyAO+Y5z+Wd2jLkf2JjZkTtyWzpdCHV/OnC4+y6t+8L8eZ
+	X2XWJbG2dvEPOw2l1dhwYp0b5StquzzukOGC344GmRYwtApsQfz2E09c5PDbYkmVySI2E/LDpSB
+	wpKu+SXD7B14sA6llnJS90ZcWEGoYUs0yUr/4EJXXmhdwFCB9100IIEYMsvn61nVAYf+CvvXEl9
+	YNmSXwbK+weLQQ1fc4tMTxEHH9JqkMuVEojNoYMLUrZZUTum10gVtXrDGhwsKncQiv2jOg2WvCU
+	+qsvhXp/0RqT8ukZB0Ce1h77zNOGPctpurHtu9hijum1Jk9QxLcRpp+TONSD9zdYVsm9PNC7lK9
+	nrKYvHyz0AGLJOw+SnMzysBTVYV3Yy/tKS+Dm51RHOzc6jQkRn2gXSpUr3XHrzuPq98ggW9YhlM
+	8coUM1qpOpibMbmqmJM71mQtmBQ+RPA+18vY3YtSQYii4aGpueYzejUkXIAIcfYqyCIU5lAI8BW
+	N8E=
+X-Received: by 2002:a17:90b:5305:b0:39e:4c81:6c64 with SMTP id 98e67ed59e1d1-39e54dbeb52mr8417807a91.31.1789793832278;
+        Fri, 18 Sep 2026 21:57:12 -0700 (PDT)
+Received: from localhost ([153.61.198.247])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e6ca86d83sm2410562a91.6.2026.09.18.21.57.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 18 Sep 2026 21:55:29 -0700 (PDT)
+        Fri, 18 Sep 2026 21:57:11 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Sat, 19 Sep 2026 04:57:10 +0000
+Message-Id: <DLJ0YN08I6GZ.324HCC3XBJ738@gmail.com>
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ <kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next 07/20] bpf: Refuse exception cleanup shapes
+ bpf_throw() cannot dispatch
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
+In-Reply-To: <20260917055721.3930090-1-yonghong.song@linux.dev>
+References: <20260917055645.3926444-1-yonghong.song@linux.dev> <20260917055721.3930090-1-yonghong.song@linux.dev>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 19 Sep 2026 04:55:28 +0000
-Message-Id: <DLJ0XC51BJVC.3P80YCN4K6KP6@gmail.com>
-Cc: <ast@kernel.org>, <andrii@kernel.org>, <daniel@iogearbox.net>,
- <eddyz87@gmail.com>, <kernel-team@fb.com>, <ast@kernel.org>,
- <andrii@kernel.org>, <daniel@iogearbox.net>, <martin.lau@kernel.org>,
- <eddyz87@gmail.com>, <mason@kernel.org>, <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v2 03/20] bpf: Add lookups for exception
- cleanup resumes and landing pads
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <bot+bpf-ci@kernel.org>, <yonghong.song@linux.dev>,
- <bpf@vger.kernel.org>
-X-Mailer: aerc 0.17.0
-References: <20260918044211.3286855-1-yonghong.song@linux.dev>
- <5dacf8db0cf086b921c09c3b65da5bff0d1957eb96a3a11906781a6a80c02c2d@mail.kernel.org>
-In-Reply-To: <5dacf8db0cf086b921c09c3b65da5bff0d1957eb96a3a11906781a6a80c02c2d@mail.kernel.org>
+MIME-Version: 1.0
 
-On Fri Sep 18, 2026 at 5:44 AM UTC, bot+bpf-ci wrote:
-> > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.=
-h
-> > index c08505b9ba821..f9bccd3e0f4db 100644
-> > --- a/include/linux/bpf_verifier.h
-> > +++ b/include/linux/bpf_verifier.h
-> > @@ -681,6 +681,11 @@ struct bpf_insn_aux_data {
-> >  	bool needs_zext; /* alu op needs to clear upper bits */
-> >  	bool non_sleepable; /* helper/kfunc may be called from non-sleepable =
-context */
-> >  	bool is_iter_next; /* bpf_iter_<type>_next() kfunc call */
-> > +	/*
-> > +	 * 1 + the instruction index of the exception cleanup landing pad thi=
-s
-> > +	 * call site unwinds to, or 0 for none.
-> > +	 */
-> > +	u32 cleanup_pad;
-> >  	bool call_with_percpu_alloc_ptr; /* {this,per}_cpu_ptr() with prog pe=
-rcpu alloc */
-> >  	u8 alu_state; /* used in combination with alu_limit */
->
-> [ ... ]
->
-> > diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> > index 2add8001c3ec3..82b00fac6bd6a 100644
-> > --- a/kernel/bpf/fixups.c
-> > +++ b/kernel/bpf/fixups.c
-> > @@ -261,6 +261,11 @@ static void adjust_insn_aux_data(struct bpf_verifi=
-er_env *env,
-> >  		}
-> >  	}
-> >
-> > +	if (env->cleanup_info_cnt)
-> > +		for (i =3D 0; i < prog_len; i++)
-> > +			if (data[i].cleanup_pad > off + 1)
-> > +				data[i].cleanup_pad +=3D cnt - 1;
-> > +
->
-> [ ... ]
->
-> > @@ -549,6 +554,7 @@ static int verifier_remove_insns(struct bpf_verifie=
-r_env *env, u32 off, u32 cnt)
-> >  	struct bpf_insn_aux_data *aux_data =3D env->insn_aux_data;
-> >  	unsigned int orig_prog_len =3D env->prog->len;
-> >  	int err;
-> > +	u32 i;
-> >
-> >  	if (bpf_prog_is_offloaded(env->prog->aux))
-> >  		bpf_prog_offload_remove_insns(env, off, cnt);
-> > @@ -573,6 +579,17 @@ static int verifier_remove_insns(struct bpf_verifi=
-er_env *env, u32 off, u32 cnt)
-> >  		sizeof(*aux_data) * (orig_prog_len - off - cnt));
-> >  	env->insn_aux_data_len -=3D cnt;
-> >
-> > +	if (env->cleanup_info_cnt) {
-> > +		for (i =3D 0; i < env->insn_aux_data_len; i++) {
-> > +			u32 pad =3D aux_data[i].cleanup_pad;
-> > +
-> > +			if (pad > off + cnt)
-> > +				aux_data[i].cleanup_pad =3D pad - cnt;
-> > +			else if (pad > off)
-> > +				aux_data[i].cleanup_pad =3D 0;
-> > +		}
-> > +	}
-> > +
-> >  	return 0;
-> >  }
->
-> Can this logic handle NOP removal correctly? When bpf_opt_remove_nops()
-> calls verifier_remove_insns(env, i, 1) to remove a single fall-through
-> goto +0, if a cleanup record names that instruction as its landing pad,
-> then pad =3D=3D off + 1, so pad > off is true and cleanup_pad becomes 0.
->
-> But removing the NOP leaves the pad's next instruction at the same
-> index, so the correct landing pad index stays unchanged rather than
-> being zeroed. For example:
->
->     off:     some_call with cleanup_pad =3D off+1
->     off+1:   goto +0  (NOP landing pad)
->     off+2:   actual cleanup code
->
-> After removing the NOP at off+1:
->
->     off:     some_call (cleanup_pad should still be off+1)
->     off+1:   actual cleanup code (was at off+2)
->
-> The `else if (pad > off)` arm erases the record instead of preserving
-> it. Nothing rejects NOP landing pads during validation - a goto +0 has
-> code 0x05, not 0x00, so check_cleanup_info() accepts it.
->
-> The ordering makes the loss escape validation: bpf_check_cleanup_exceptio=
-ns()
-> runs before bpf_opt_remove_nops(), so the verifier proves the cleanup
-> path releases acquired references, but then the NOP removal zeroes
-> cleanup_pad, and later cleanup_info_for_subprog() sees `if (!pad)
-> continue;` and omits the record from the runtime table. The program is
-> accepted but bpf_throw() finds no pad for that call site and skips the
-> cleanup, leaking whatever the pad was supposed to release.
->
-> Does the `else if (pad > off)` arm need to distinguish removals that
-> consume the landing pad instruction itself versus removals that happen
-> before it?
+On Wed, Sep 16, 2026 at 10:57 PM Yonghong Song <yonghong.song@linux.dev> wrote:
+> diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
+> index dfe9c2a9ce7d..b2bf831242b8 100644
+> --- a/kernel/bpf/exception.c
+> +++ b/kernel/bpf/exception.c
 
-bot is correct here.
-pls fix
+[...]
 
-pw-bot: cr
+> +static enum cleanup_insn_kind cleanup_classify(struct bpf_verifier_env *env, u32 i,
+> +					       int *next, int *target)
+> +{
+> +	struct bpf_insn *insn = &env->prog->insnsi[i];
+> +	u8 class = BPF_CLASS(insn->code);
+> +
+> +	*next = i + 1;
+> +	*target = -1;
+> +
+> +	if (insn->code == (BPF_LD | BPF_IMM | BPF_DW)) {
+> +		*next = i + 2;
+> +		return CLEANUP_INSN_PLAIN;
+> +	}
+> +	if (class != BPF_JMP && class != BPF_JMP32)
+> +		return CLEANUP_INSN_PLAIN;
+
+robot voice:
+
+LD_ABS/LD_IND is not plain. bpf_check_cfg() treats it as an abnormal
+return and gen_ld_abs() later patches in a real "r0 = 0; exit" for the
+failed load. With this classification a pad in a tc prog that keeps
+skb in r6 and does an ld_abs passes t
+he "reaches no exit" check,
+cleanup_check_pad_insn() doesn't look at it, and check_ld_abs() only
+wants no locks/refs held at that point. At run time a failed load runs
+the subprog epilogue on the walker's stack: callee regs get popped
+from arch_bpf_run_cleanup_pad()'s frame, leave/ret with rbp == the
+unwinding frame goes straight back into the BPF caller with garbage
+in rbx/r13-r15, and the rest of bpf_throw() is abandoned.
+Treat it like BPF_EXIT here or refuse it in a pad body like tail call.
