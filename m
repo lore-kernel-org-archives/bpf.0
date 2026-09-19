@@ -1,115 +1,120 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC5122C0261
-	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 23:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930723218BA
+	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 23:21:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789860106; cv=none; b=AcAjWxwR7ODI8FNR9KLjxHnp0+ycDaVF7Vbu1Su8d9/MWv8RQqc0RDEhQD4IBvmZmHD7NmA/Jxr42xkNfGy8GXKhAjDJLb3f2TJp7GZrgEPQSbloyknwBcpCI+KYUUmchloiw5W6wLLmapXqhlASdBQIOc4P5U+wbUr61raSrvE=
+	t=1789860117; cv=none; b=fQEXzkgewLlfkjAPcL0pi+HRJE/IsypRvBJ9/fmbX9fDJqKa0nNxbgMs0Hq0DI34jRDtSQnrtcJl6hzeZ7tqw8xrgkwYQYLWehwfZwk7AX/THtshWgPaHriZ0lrgBkaniM8cf+Ko+jZeGG881OA4nJnGUEh6110ViOFOOUxU2FQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789860106; c=relaxed/simple;
-	bh=rBz6B/di5S9FHTrFPqqLTj34SBL7t+mg2w5ZyJVUd6Y=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=R3mE5NG2E+6pd08PIsJOZHnE0cnDK9Xd5Pudkxnvk2JBxdG2Nf10ItSPIn1D2alJqfCrCfHzbVuECb14nzVrOtk9z6ApFQ5YUsCkUkF5HmgaVYk1vKyj1dAJNLdjG9bBN58jXSdS95U4Gi/toA9pXyUbnylLt9COdDIWe72PzRk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g/5W8r2f; arc=none smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789860117; c=relaxed/simple;
+	bh=Dz9Pg/RisBylqu21YuBa+QNZhpaAG0yys7Xa/DGJtIw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DYPcEbMh9wSsTZuSAL8+KG4ta3YmVFjbH093++q1Bu2NKl1QA6fz5Hmal2ffTioIeGLJqqmFWWDykYnX6aLjfJeh45LfOqyq79uH5hXbCJzcejkXJSlxIwrNbBIoU5tDlVdROR9J4vO7BpUc2NYChKbQzZypxVyhqmfR4yLUdng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NoQpOaeQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g/5W8r2f"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccafb751so1561340a91.2
-        for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 16:21:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789860104; x=1790464904; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=uvzYLHxwxs2iR6mGVYBYcimLQ2Sg/Va4WyJg4K0mC4g=;
-        b=g/5W8r2fZ70GTVo3kIkd4VTrw45Q4MZr2ID2dPV3LgFawz9O7S0AR5sbY0wVM7EOvw
-         Yxgq9vXYYB3zRJ6z0AUF3UWQf9tMCKNZ4Lh+oSVjKj+G4P3uvNi/J25o+9d6lSLm7geM
-         f9ztyliiElFKZgB9OMgLKcAYm735mBtadt+WhgEw8kWNznVNFq3qxWkaSAoFJA9rPL+M
-         87sxPmTqEC3zfptVvtEiAlSmtZ/BgG33AOtrYC4HBAcPML+9LKTGwF5vtufgQkd/rrE/
-         xzj5pX4RfPLiHcM7WrdfOktK4doTJZOmda84F4Shg9658sn9kzposfNU3zFMH6q4lcxs
-         GyJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789860104; x=1790464904;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=uvzYLHxwxs2iR6mGVYBYcimLQ2Sg/Va4WyJg4K0mC4g=;
-        b=RTA+fTm6DJ/ewEFRTBNr8s8prLOYcVvmJt1uu0SWr6mmZLG0HwDYVXQlVPNdmDxett
-         ixwPVZRAast4JU/Lf7WafSY4RP4h93vOT48oQp3GR5eMH8eC+OWOojUbbOmTDpTzLt45
-         aNGs+HA/ZnqUuiZMilvKxW9zxHu+8nWWwriGmTlZ9tphAbtHN2b9OW/tVFsqETWxCFXJ
-         rt0vVjFShHP8zpWsciSteFfvDIFjmFWGnicmmijd8XaPxxyOPNeq6+iN8VFw6N4ltuZV
-         fh7iPJZbyoGqDCQUoK2oIGQSD58YJYscXXmb7ZwKwzv37Qsm5NihBlIpc0LHXQjoSwap
-         0NOQ==
-X-Forwarded-Encrypted: i=1; AKwUvByqit0MG4bJxrklL97nX8Sio7PMDNVAPbIC0xAqTEz0xeoqUMksnun1veI5J2tIKib4+qQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++lrKgRrTkWLpzyHjqrg2g7q/evbnx1evNEiDz57VKnsAmnoVnQB
-	ZaC5JDuV80NiLvq20Y/hPnzPjwX55/oInAeddt2JtCc6sIPLcxLFSc9m
-X-Gm-Gg: AYBFou2lCyNu0Qtc6feCYhxdZUwKHfeadRAJHS6MM2seiE2rtXfZtaNF/D4aLLi2crd
-	UAoZdbsaNn7b8w25E0j4eKXZaGiZkcCC+KU1BH3vIVaJ4Via0WWa76ph4nG5i+5GoVQCSjKOPii
-	n0N8P80nQ/Fc8C33kInFrRAWLvvv4oxQp/b8gGXch162i44NSjo36ZQgBlNLM2RcPttWtvJ+gO0
-	0JBPTuL1SzLNCs6adJ21PX/zCrI4u8LyrmJqeQfXsoAOcw2G36VjRLuhu3Hr5+f2TJVQmptGTWL
-	c1uV6SOdQvMfAehLV60qMX32EdkNoPxw38OP/S8yeua5qR5G7cg1L6s0YPSPWmUP9qFpcaPQ5VY
-	IbTLuA9g+LkSgIZ6B6pHmNo093MLQjniqemEt3pMR0pdEIS1Kloz5Y3xV5l0IyeD3qCt0vld4MQ
-	n3hKCZquXtSfaFwJ1dHueuyPB9U8bgIKk2J/LRhObBr64pWaxT4TrW9Qf47cnwm+sZD/bEXflMh
-	4aHR0Xwdahze89QSpSf0dIUXUte6oM6mABLMXFMfxRFLFVXec1GM/PT6z4tnXX5e1wE9HpfBCtu
-	ZlQLCAEKZfiMudY=
-X-Received: by 2002:a17:90b:5305:b0:381:6c5:3f63 with SMTP id 98e67ed59e1d1-39e54dcd917mr17679110a91.6.1789860104144;
-        Sat, 19 Sep 2026 16:21:44 -0700 (PDT)
-Received: from localhost ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e6c3145e5sm6749632a91.5.2026.09.19.16.21.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 19 Sep 2026 16:21:43 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Sat, 19 Sep 2026 23:21:43 +0000
-Message-Id: <DLJOGC7M106N.33I0V3YRNYB8E@gmail.com>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] bpf: arena: Flush stale TLB entries before reusing
- ranges
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Andrea Righi" <arighi@nvidia.com>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>
-In-Reply-To: <20260919224616.3123513-1-arighi@nvidia.com>
-References: <20260919224616.3123513-1-arighi@nvidia.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NoQpOaeQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 444E21F000FF
+	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 23:21:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789860116;
+	bh=M2emGDt6ZD/PlD99DnGeYO2tV70JoaEZig2v2GPbr3o=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=NoQpOaeQ8eRPAsoWhljliNHLMkQ3/VkCPq6Mf60ggXZAQjaDGR6EPOhCbZRKkA6zP
+	 8JBQFtSBywHZeSqZfLnBOH5Zx/p5FjaAKlGGTY1dvS0QJqFV0QxptDo0/2tkHVhsp6
+	 C89emFqbNAmUG8VoLQ1KAD1/IJfvIgrDMhgX9EPcwrrJj8CBMkZDJGL/d8kv/1XWij
+	 Loos/gXqaRuxQl84fpy6qp6QCz2U0IHfuQmZMaZOQpZHAlcd5HWlvCPlcShakGYqut
+	 cwl4F1iAQgnFHslRlVMhk+RJaYI9PkSU3wF6CxecEhBKkk3x+3DUvGsJ9WX0A3N8V1
+	 JcOYmO4jYetTg==
+Received: by mail-qv2-f12.google.com with SMTP id 6a1803df08f44-90cdfcc3e14so7413606d6.0
+        for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 16:21:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBxblBDmBthwaNZrzgXar8jBDF88g5/1FammtOUTjwwTYESbJU7W2kW1Oj56o28trCahX2c=@vger.kernel.org
+X-Gm-Message-State: AFuF++mV2MfVGU6DGqoFKXZGtD7tJcBSijkcrsIYE8xhhcLu5T46cmGA
+	cdqg89vTlL3kGeofJjJ6gtCYw39OPe98oPYizcqeSrvJeIUBDHC6ih8tpANj7LESr4Wo2/3vu+D
+	XEFw37+CcaB9j1Njo4CG2puVKBq98wmM=
+X-Received: by 2002:a05:620a:4416:b0:93b:d7a4:9d4d with SMTP id
+ af79cd13be357-93bf5770d59mr363723285a.32.1789860115649; Sat, 19 Sep 2026
+ 16:21:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <cover.1789714023.git.zhuhui@kylinos.cn> <02f0a8dc45a840d7801ec17e0c1168f7dacf9b73.1789714023.git.zhuhui@kylinos.cn>
+ <b115ece2-33a1-412e-ac25-38f339a13599@gmail.com> <aq2bo5Q-YUj7lkxn@linux.dev> <CAGsJ_4wauwY1-xRdM4aVb7FkSttKYzsKsWH4pF4i=Sspri0-jw@mail.gmail.com>
+In-Reply-To: <CAGsJ_4wauwY1-xRdM4aVb7FkSttKYzsKsWH4pF4i=Sspri0-jw@mail.gmail.com>
+From: Barry Song <baohua@kernel.org>
+Date: Sun, 20 Sep 2026 07:21:44 +0800
+X-Gmail-Original-Message-ID: <CAGsJ_4yXMcPASKtOBZWnyN1ztoGFoGjChT3N25UrFL9QovAdGw@mail.gmail.com>
+X-Gm-Features: AcwNN1U1j2QcyV3XRNhP_V-Q0Z2asX8-vPO3_K_IxjKnLVixdgROQw93LqTOeL0
+Message-ID: <CAGsJ_4yXMcPASKtOBZWnyN1ztoGFoGjChT3N25UrFL9QovAdGw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v12 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
+To: Shakeel Butt <shakeel.butt@linux.dev>
+Cc: JP Kobryn <inwardvessel@gmail.com>, Hui Zhu <hui.zhu@linux.dev>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+	David Hildenbrand <david@kernel.org>, Geliang Tang <geliang@kernel.org>, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	Hui Zhu <zhuhui@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Sep 20, 2026 at 12:46 AM Andrea Righi <arighi@nvidia.com> wrote:
-> @@ -911,11 +910,17 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
->  			zap_pages(arena, full_uaddr, 1);
->  		__free_page(page);
->  	}
-> +
-> +	ret = raw_res_spin_lock_irqsave(&arena->spinlock, flags);
-> +	if (ret)
-> +		goto defer_publish;
-> +	range_tree_set(&arena->rt, pgoff, page_cnt);
-> +	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+On Sun, Sep 20, 2026 at 6:36=E2=80=AFAM Barry Song <baohua@kernel.org> wrot=
+e:
+[...]
+> > > Related to the previous comment, you treat the special values as part=
+ of
+> > > the range. It works currently, but creates a layout dependency on the
+> > > enum. I think it would be more future-proof if you did:
+> > >
+> > > if (swappiness !=3D -1 && swappiness !=3D SWAPPINESS_ANON_ONLY) {
+> > >       if (swappiness < MIN_SWAPPINESS || swappiness > MAX_SWAPPINESS)
+> > >               return -EINVAL;
+> > > }
+> > >
+> > > The previous comments I brought up are now resolved, so assuming you'=
+ll
+> > > make the changes above you can include:
+> > >
+> > > Reviewed-by: JP Kobryn <jp.kobryn@linux.dev>
+> >
+> > Hui, please make these changes and just send this patch in next version=
+.
+>
+> Hi JP and Shakeel,
+>
+> This feels a bit weird to me, since 0=E2=80=93201 are all valid
+> swappiness values.
+>
+> 201 (`SWAPPINESS_ANON_ONLY`) is just as valid a swappiness value
+> as 200. In contrast, -1 is a different story, as it indicates
+> completely different semantics.
+>
+> If 201 is treated as a special value, then 0 (`MIN_SWAPPINESS`)
+> should be treated the same way for MGLRU, since 0 means file-only
+> reclaim there. This isn't the case for CLRU, where swappiness 0
+> can still reclaim anon folios.
+>
+> If possible, I'd vote for keeping Hui's current code :-)
 
-Now the ptes are cleared in one locked section and the range is set in
-another, and arena_vm_fault() can get in between. It doesn't look at
-the range tree to decide. It does vmalloc_to_page(), sees no page,
-range_tree_clear() of an already clear range returns 0, so it allocates
-a page and installs it into the kernel pte. Then the code above marks
-that range free. The next bpf_arena_alloc_pages() that picks it hits
-  WARN_ON_ONCE(pte_page(old) != d->arena->scratch_page)
-in apply_range_set_cb(), returns NULL, puts t
-he range back into the
-tree, and the next call does the same. All it takes is user space
-touching the page while the prog frees it.
+On second thought, you might be right, as there could theoretically be a
+case where `SWAPPINESS_ANON_ONLY` is not defined as
+`MAX_SWAPPINESS + 1`, but as, for example, 400 or some other value.
 
-iirc Emil has patches that address this issue differently.
+That said, I find `MAX_SWAPPINESS` and `SWAPPINESS_ANON_ONLY` really
+weird. Somehow, I feel `MAX_SWAPPINESS` should be
+`SWAPPINESS_ANON_ONLY`, since 201 is actually the maximum valid
+swappiness value, rather than 200.
 
-pw-bot: cr
+For the change suggested by JP, I think it is right if we don't clean up
+`MAX_SWAPPINESS` and `SWAPPINESS_ANON_ONLY` properly.
+
+With the change suggested by JP,
+
+Reviewed-by: Barry Song <baohua@kernel.org>
