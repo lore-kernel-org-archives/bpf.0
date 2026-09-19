@@ -1,158 +1,116 @@
-Received: from mta0.migadu.com (out-91.mta0.migadu.com [91.218.175.91])
+Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FAE2C15A0
-	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 17:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.91
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B22D36F911
+	for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 17:45:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789839770; cv=none; b=XJ9QNDFtB1rmE1uPjwvaJ7cMQpRmxTajkqeQp6HOpNwiUZh3MhDOZDTiHcGMOEeSuKvVzhdBbvhymLbzzMIYSMV8bHUqkUEfnbn+6FmKitMxuOjxkVg+UcSpQj96b4+okq883QGiXMyy5hrQZdVtOPXqepT5rslhfUYwbaTked8=
+	t=1789839940; cv=none; b=fdKDzkkaT7ZUxvXQ2GB47TFC3t4XRfjXtMHf1Y05z5UmMqBh6KyrCPUxX5UkMiDWmFTMLfPR72/FKMqSYSYGlxfmTRQPoQ96kWjUznVd4h1sD2Kum1sCBZ0wuWi97TDxSO5hDwGs0ZeSBHaZZUeXdqxBUgP/ilNDo9ALcspCLS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789839770; c=relaxed/simple;
-	bh=zOeeRnT0rswrqDiHwBLoEV5dx48OemSKG90rAMorN7A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rk+TfpJJio7o5bljXAaCBLK8TBBR2ouSrkbMy69C+Iv1vAokV+e+WAs06sVp8llCTFK81/Oq5JvBKWkrYHOQ9+LVs2zmfxQeQC135Mo4/OWhqDSxwG+sA91wy86rbbIYo+ylJ1Sa7fsw/IGH5izow9xmlF5KKxwUM6totmxTtFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fARD/YEa; arc=none smtp.client-ip=91.218.175.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1789839940; c=relaxed/simple;
+	bh=F1HWSGz3U0kWWAZ7mzfJy+fCde0t5UpLTXKYOZhUHYk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gRl+hdZ+RPmWcEkfJqN8y0Y8bpkzWVv7CiY4yHe/VesjU4R2HFjEgJvpwjlAHPUfzV6MNHtMCZhU2F0n4GXzhCgDYb1rNaEdf5EwkSDPU4VpKsE3kfxVEY6CEQ1/RWvmOzw+spvwC03pXC4AVCiHz6av9JZm6x9HVFqE9xFzflE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ljmelfy5; arc=none smtp.client-ip=74.125.228.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fARD/YEa"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=zOeeRnT0rswrqDiHwBLoEV5dx48OemSKG90rAMorN7A=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789839765; v=1; x=1790444565;
- b=fARD/YEaayZ3lYxisb14g5hC5ec6p40SlEnuzE3uZ8CGWh5qNwcz4KpPl1fbSgyKOAGKNSYb
- yjLqQeWdlL6l3thM/AIT1ER4gmM7AuwFUQBOkBUDiZipcMXIFMBp6gFT1gAROQw9vi9uX74fdLj
- zIMG/sgnixaDA4uY6WuDtfbs=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 5e8de4e3a749d7b8;
-	Sat, 19 Sep 2026 17:42:45 +0000
-X-Mizu-Trace-ID: 5e8de4e3a749d7b8
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <b26afda4-a84a-4aa9-bd8e-0d56d1daafb8@linux.dev>
-Date: Sat, 19 Sep 2026 10:42:41 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ljmelfy5"
+Received: by mail-pz2-f41.google.com with SMTP id 41be03b00d2f7-cc1cea4bfb6so790372a12.3
+        for <bpf@vger.kernel.org>; Sat, 19 Sep 2026 10:45:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789839938; x=1790444738; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=w13p09vQ1xPtpT2gPYEZ5b/f1eI2PdcpNfAfK3i3t3E=;
+        b=ljmelfy5DIL6wAulm4NTI1vay4nba/2FKRsfb2aSrJSNWMImRfPOafCI/jwf/kAL1x
+         zFnpkqXT29y1dkf0KX+7iQql6Vqyyk4g2RnmeAQg9DqSd2KUxTSED6s1DtjtER5yMP3W
+         uW9OR56g55OeAwnrx7l5DFlN1paiyUUFyRz2k7iL0B2DsxeKwkklOBkSet37sg3kto+t
+         JpiqowRuZzZ+3bo6mK0o3+SA6Jd0jcrLwDNjplSacoGzdRqPS2Ijr0wnwEIYxM46tmoF
+         ujD99MZakE4c7jxHNk098gonYPsS0bhnsdFnolmsbqblGvgUlEQbw692MjwEwV1y6thM
+         zVDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789839938; x=1790444738;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=w13p09vQ1xPtpT2gPYEZ5b/f1eI2PdcpNfAfK3i3t3E=;
+        b=ZT8Kmxu/w4zYHZDNczcYBa/3yoRJROackJlbwqWHHTDf21Yv76Qjfwlj1eJzBJLYd7
+         MWiv3hEayWtEgTDAcH6qdv46S56ybt1ZOkn+99X28NPSLyQv0iRMmNyfRf65VthHT+wp
+         iJYCcy17R9VX5xQp4NmI9aZiezleMN3UZ5HpdOxJem0KYhrSXPBtB8N7oXhGAL7C8/1p
+         BYlg71QEXCIy1i3PPTx+9cdvaFFbj6p2DYS356MjhMZxNsLRsMCaO10bgIhLInoQZNeE
+         LPzbVYzZZvnj/YtvKnvgEJ3WTkQO5FRDYEGN7AXfHySSL6ngguwXMcw6Jxz0UFaPLlWe
+         tkoQ==
+X-Gm-Message-State: AFuF++lxV2uqy/kIZdVsDD26k7nsAJ7WEl9GjeFPgwCWooAIeHI2OV0s
+	neNjTXTNLWj/s274QBl8+KMMDuIHbbR8sPKuxP0pQE60SoI+9ZvzBAvCEGspHsWvB4g=
+X-Gm-Gg: AYBFou2OfcyAdbnEcPftVe7/NSwLoXnXCrIrrD+zYUUdrOGc8WRWCJFRn9ilQYhFf77
+	oRrteW6lgednRjc/F1wpM2/1gH7H4lHaVc1MBaJDF/kLVW7bcbeb/RspKeTI6K5Qohfgg84A/D/
+	bXwooY+5Y4y/Z/McXKTC/WjMBdEdUnuwSUXmjl+JLzw+5t5w+pPEY/kfxNxvnP7GxOBNgno9nvw
+	pC7SfMlKnSw/ZmKNBBNpZPZ0IrtF5SeWgE5uyEDgQZEooX6Fx+WvkVM8dbURszoTHgZK3LbSgEH
+	oBtEvlBhpvkXk0inekqsNE6idZHgReLCyu1GaM+DwvXBPy5bTYp7kVMbB/mcizGnlAidgqD5bxD
+	mb/xBaF6TjmCmglApAm50b+MjKGmu3swRemYgSxnoq2MXoRWwGDetkDArULZngjoIEvBf7fLyun
+	Gy+WIiA62GqOZRBih9C24LcuQtdEn6BwQc1AFUrFLw46b9ApNpBoRk3Sr7WeZJzrajURNaLgpBD
+	tM7BvT5YN1V6KftcIKqGSKAk9j+HX5Z3kgQVU/lhuJ1fYAE
+X-Received: by 2002:a05:6a21:7481:b0:3cc:3d08:da2b with SMTP id adf61e73a8af0-3dd8c2f6ab9mr9917888637.15.1789839938360;
+        Sat, 19 Sep 2026 10:45:38 -0700 (PDT)
+Received: from localhost.localdomain ([2405:201:51:102d:5562:18f8:11da:acda])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33c32f17d77sm7915983eec.3.2026.09.19.10.45.35
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 19 Sep 2026 10:45:38 -0700 (PDT)
+From: Abhinav Madake <abhinavmadake@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Abhinav Madake <abhinavmadake@gmail.com>
+Subject: [PATCH bpf-next v2] libbpf: Check for unknown type ID in btf__align_of()
+Date: Sat, 19 Sep 2026 23:15:32 +0530
+Message-ID: <20260919174532.25407-1-abhinavmadake@gmail.com>
+X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20260919164229.95154-1-abhinavmadake@gmail.com>
+References: <20260919164229.95154-1-abhinavmadake@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 03/20] bpf: Add lookups for exception cleanup
- resumes and landing pads
-Content-Language: en-GB
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bot+bpf-ci@kernel.org,
- bpf@vger.kernel.org
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, kernel-team@fb.com, martin.lau@kernel.org,
- mason@kernel.org, ihor.solodrai@linux.dev
-References: <20260918044211.3286855-1-yonghong.song@linux.dev>
- <5dacf8db0cf086b921c09c3b65da5bff0d1957eb96a3a11906781a6a80c02c2d@mail.kernel.org>
- <DLJ0XC51BJVC.3P80YCN4K6KP6@gmail.com>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <DLJ0XC51BJVC.3P80YCN4K6KP6@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+btf__align_of() passes the result of btf__type_by_id() to btf_kind()
+without a NULL check, so an unknown type ID crashes. Parsed BTF cannot
+hit this since btf_sanity_check() rejects dangling references, but BTF
+built with btf__add_*() can, as those only check the ID range.
 
+Return 0 with errno set to EINVAL, like the unsupported-kind case.
 
-On 9/18/26 9:55 PM, Alexei Starovoitov wrote:
-> On Fri Sep 18, 2026 at 5:44 AM UTC, bot+bpf-ci wrote:
->>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->>> index c08505b9ba821..f9bccd3e0f4db 100644
->>> --- a/include/linux/bpf_verifier.h
->>> +++ b/include/linux/bpf_verifier.h
->>> @@ -681,6 +681,11 @@ struct bpf_insn_aux_data {
->>>   	bool needs_zext; /* alu op needs to clear upper bits */
->>>   	bool non_sleepable; /* helper/kfunc may be called from non-sleepable context */
->>>   	bool is_iter_next; /* bpf_iter_<type>_next() kfunc call */
->>> +	/*
->>> +	 * 1 + the instruction index of the exception cleanup landing pad this
->>> +	 * call site unwinds to, or 0 for none.
->>> +	 */
->>> +	u32 cleanup_pad;
->>>   	bool call_with_percpu_alloc_ptr; /* {this,per}_cpu_ptr() with prog percpu alloc */
->>>   	u8 alu_state; /* used in combination with alu_limit */
->> [ ... ]
->>
->>> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
->>> index 2add8001c3ec3..82b00fac6bd6a 100644
->>> --- a/kernel/bpf/fixups.c
->>> +++ b/kernel/bpf/fixups.c
->>> @@ -261,6 +261,11 @@ static void adjust_insn_aux_data(struct bpf_verifier_env *env,
->>>   		}
->>>   	}
->>>
->>> +	if (env->cleanup_info_cnt)
->>> +		for (i = 0; i < prog_len; i++)
->>> +			if (data[i].cleanup_pad > off + 1)
->>> +				data[i].cleanup_pad += cnt - 1;
->>> +
->> [ ... ]
->>
->>> @@ -549,6 +554,7 @@ static int verifier_remove_insns(struct bpf_verifier_env *env, u32 off, u32 cnt)
->>>   	struct bpf_insn_aux_data *aux_data = env->insn_aux_data;
->>>   	unsigned int orig_prog_len = env->prog->len;
->>>   	int err;
->>> +	u32 i;
->>>
->>>   	if (bpf_prog_is_offloaded(env->prog->aux))
->>>   		bpf_prog_offload_remove_insns(env, off, cnt);
->>> @@ -573,6 +579,17 @@ static int verifier_remove_insns(struct bpf_verifier_env *env, u32 off, u32 cnt)
->>>   		sizeof(*aux_data) * (orig_prog_len - off - cnt));
->>>   	env->insn_aux_data_len -= cnt;
->>>
->>> +	if (env->cleanup_info_cnt) {
->>> +		for (i = 0; i < env->insn_aux_data_len; i++) {
->>> +			u32 pad = aux_data[i].cleanup_pad;
->>> +
->>> +			if (pad > off + cnt)
->>> +				aux_data[i].cleanup_pad = pad - cnt;
->>> +			else if (pad > off)
->>> +				aux_data[i].cleanup_pad = 0;
->>> +		}
->>> +	}
->>> +
->>>   	return 0;
->>>   }
->> Can this logic handle NOP removal correctly? When bpf_opt_remove_nops()
->> calls verifier_remove_insns(env, i, 1) to remove a single fall-through
->> goto +0, if a cleanup record names that instruction as its landing pad,
->> then pad == off + 1, so pad > off is true and cleanup_pad becomes 0.
->>
->> But removing the NOP leaves the pad's next instruction at the same
->> index, so the correct landing pad index stays unchanged rather than
->> being zeroed. For example:
->>
->>      off:     some_call with cleanup_pad = off+1
->>      off+1:   goto +0  (NOP landing pad)
->>      off+2:   actual cleanup code
->>
->> After removing the NOP at off+1:
->>
->>      off:     some_call (cleanup_pad should still be off+1)
->>      off+1:   actual cleanup code (was at off+2)
->>
->> The `else if (pad > off)` arm erases the record instead of preserving
->> it. Nothing rejects NOP landing pads during validation - a goto +0 has
->> code 0x05, not 0x00, so check_cleanup_info() accepts it.
->>
->> The ordering makes the loss escape validation: bpf_check_cleanup_exceptions()
->> runs before bpf_opt_remove_nops(), so the verifier proves the cleanup
->> path releases acquired references, but then the NOP removal zeroes
->> cleanup_pad, and later cleanup_info_for_subprog() sees `if (!pad)
->> continue;` and omits the record from the runtime table. The program is
->> accepted but bpf_throw() finds no pad for that call site and skips the
->> cleanup, leaking whatever the pad was supposed to release.
->>
->> Does the `else if (pad > off)` arm need to distinguish removals that
->> consume the landing pad instruction itself versus removals that happen
->> before it?
-> bot is correct here.
-> pls fix
+Link: https://github.com/libbpf/libbpf/issues/983
+Signed-off-by: Abhinav Madake <abhinavmadake@gmail.com>
+---
+v2: return 0 with errno instead of -EINVAL, callers test for 0.
 
-Agree with bot about for two different cases. Will fix.
+ tools/lib/bpf/btf.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
->
-> pw-bot: cr
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 908bd3442..6bfbc7a65 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -986,8 +986,12 @@ done:
+ int btf__align_of(const struct btf *btf, __u32 id)
+ {
+ 	const struct btf_type *t = btf__type_by_id(btf, id);
+-	__u16 kind = btf_kind(t);
++	__u16 kind;
+ 
++	if (!t)
++		return errno = EINVAL, 0;
++
++	kind = btf_kind(t);
+ 	switch (kind) {
+ 	case BTF_KIND_INT:
+ 	case BTF_KIND_ENUM:
+-- 
+2.47.0
 
