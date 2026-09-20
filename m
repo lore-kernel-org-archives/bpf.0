@@ -1,29 +1,29 @@
 Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4202728C2BF
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 21:04:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 571B143C069
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 21:04:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.38.64.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789938280; cv=none; b=nT7zLGO0KdjfbHK3oz+sV/8GcrAoF7Ai0rtwRzLQ4wl2RVdWhFjq6qQHlkK1xyrNN0hk1DbHAtJ2QxuyWLMcBrP2ezf3cqrbGxPwL/843Koz6xKdltcaRb8m92icR3EpW3tvR1e5KeMOvwX9PZCfXj+cVg6WsWpT1AagbDLIjO0=
+	t=1789938282; cv=none; b=F35oUCzOE0HSrphK9N8ETCOX3qWbYHLGI4WIOxyOxvn546X9aLwmdNdNa9ldgCtRIxLTxMonxNa1rDrSViuKJP5oBr9dS7S2chnNq41mPAWjwxLkYvBoqh7oe8YjeyGzIDrv6QrdCts8qtg+AtIJKD4LmqWEFEv4PYzkwP/kPTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789938280; c=relaxed/simple;
-	bh=MnbZilKnyopiDbolSFZk0/qywszkNsVB0/7QwLp+XPE=;
+	s=arc-20240116; t=1789938282; c=relaxed/simple;
+	bh=S6UnhimCtX7R+FxQ5a/+F0qr/QC7/1DBBbdjZtu5z6c=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bMOaCyrgsrOzMJTrprBeB426RDgvfedDYID0hYvElU1Pinz97FQOFShfE+63WaUlixL0sVw6l1VAc2UPTjW/9aOzA4zc/txKKS2KW7P2PLErcMKIf8gFDgG8wFyuJBmU00Urn/pBkIkHzzOi4Zb1Xj1Ig9o0T+/zdMFv4sbWQEs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn; spf=pass smtp.mailfrom=mail.ustc.edu.cn; dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b=DRv4QP63; arc=none smtp.client-ip=202.38.64.46
+	 MIME-Version; b=C2AOID3LVgIbwxWEJLgTqEtKXtU/S/Wxvk3RU9bwGsWlDzajlRRgZOy5Jxic8VcgNhzx1q4d2OS9x4L3eVNXtK3DRb1Yk75djLLCBpY5VJvwCX8IvD8FjmrMVV0Xpg3osrbU+8337Pg5/eqeajPYfsrT832XvJHBeP4W8kGVnLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn; spf=pass smtp.mailfrom=mail.ustc.edu.cn; dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b=KphC0Rjm; arc=none smtp.client-ip=202.38.64.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b="DRv4QP63"
+	dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b="KphC0Rjm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
 	Message-ID:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=BH2Dt0fHDHrsJeahc40zO/GDCpD81PuLMq
-	GcBG1T3TI=; b=DRv4QP633t3XV+D3IUueFRah0xpk9h18KLSNMXWqg/mskiTK6Y
-	UnXojaWQxts5gw8pQjLdsEcauwYmvSYRmuaJsX7wp+w0BOYcaPuJ3vsSnxLX9i7V
-	KqWdJtgghbvscCQfykYujTQwu0dgg5O/xIXJzZ8Hor18KvJ+2WVhh/fLo=
+	Content-Transfer-Encoding; bh=4MUbcv8KpMly/4g74TDkVso+HNwkELAWpp
+	4pMnJWOxA=; b=KphC0RjmF401B8VcpEqaddUzsV4gHny+CyX0OISt0RUoW6B1DT
+	GjWihYF3U1aS0mx5pkhHHJTgZIbQT47/U0LeKo/cZ6jkc/u95K6j1G+Ue+0EOJCo
+	E40E3og1fVNt9BpofMskiGv/sCF0JwOyta84RIdVTIzRh28WnMtjCHHYs=
 Received: from localhost (unknown [222.195.81.68])
-	by mailimap2024 (Coremail) with SMTP id 3pYKCgCXly5cSrBq3TBAAQ--.2595S2;
-	Mon, 21 Sep 2026 05:04:28 +0800 (CST)
+	by mailimap2024 (Coremail) with SMTP id 3pYKCgBXWzJeSrBq5jBAAQ--.2211S2;
+	Mon, 21 Sep 2026 05:04:30 +0800 (CST)
 From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -32,9 +32,9 @@ Cc: ast@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	sun.jian.kdev@gmail.com
-Subject: [PATCH bpf v2 1/2] bpf: Reject non-negative offsets in stack_slot_obj_get_spi()
-Date: Mon, 21 Sep 2026 05:04:21 +0800
-Message-ID: <20260920210423.345636-2-xyx2021@mail.ustc.edu.cn>
+Subject: [PATCH bpf v2 2/2] selftests/bpf: Reject iterator destruction through fp+0
+Date: Mon, 21 Sep 2026 05:04:22 +0800
+Message-ID: <20260920210423.345636-3-xyx2021@mail.ustc.edu.cn>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260920210423.345636-1-xyx2021@mail.ustc.edu.cn>
 References: <20260920210423.345636-1-xyx2021@mail.ustc.edu.cn>
@@ -45,60 +45,73 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:3pYKCgCXly5cSrBq3TBAAQ--.2595S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cr48XrWrZw45JF1UWw47XFb_yoW8XrW8pF
-	sagFy7tFyvvF1j9FnFvanruFyUC3WDGw47CFZ0y3yfAr1xtF1DXa4UKFWYqa4ayFW8Zw1F
-	vF109wsFqayUZa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:3pYKCgBXWzJeSrBq5jBAAQ--.2211S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFWfCF1rAF1xXFyDJFyxXwb_yoW8Ar45pF
+	s7uasxKryrJr47JwsrAw48Wa1FgFWkXFyUtan2kFyFyF1rJrn7GF1vkFWDJr9xJrWrAwsI
+	v3WYkwsxGr1UAa7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUU9Sb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
 	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
 	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
 	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
 	C2z280aVCY1x0267AKxVWxJr0_GcWlnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8I
-	j28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_Jr
-	ylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxG
+	j28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF
+	1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxG
 	rwCY1x0262kKe7AKxVWUAVWUtwCY02Avz4vE14v_CwCF04k20xvY0x0EwIxGrwCFx2IqxV
 	CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
 	6r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
 	WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG
 	6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
-	1UYxBIdaVFxhVjvjDU0xZFpf9x07j7J5rUUUUU=
+	1UYxBIdaVFxhVjvjDU0xZFpf9x07jxF4_UUUUU=
 X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
 
-bpf_get_spi() computes (-off - 1) / BPF_REG_SIZE using C division,
-which truncates toward zero. For off == 0, this produces spi 0, the
-same index used by the valid stack slot at fp-8.
+Add a verifier regression test that initializes a numeric iterator at fp-8
+and attempts to destroy it through fp+0. The verifier must reject the
+non-negative offset instead of treating it as the initialized stack slot.
 
-stack_slot_obj_get_spi() currently checks alignment and the resulting
-spi bounds, but does not reject the non-negative offset itself. It can
-therefore validate a PTR_TO_STACK register holding fp+0 against an
-iterator stored at fp-8 even though the runtime receives the actual fp+0
-pointer. An effectful iterator kfunc can then interpret memory outside
-the BPF stack as iterator state.
+Check the offset diagnostic to ensure rejection happens at the stack
+object address check. The numeric iterator destroy operation is a no-op;
+this test checks verifier rejection and does not run the program.
 
-Reject non-negative offsets before converting the offset to an spi. All
-valid stack objects begin at a negative offset from the frame pointer.
-
-Fixes: 06accc8779c1 ("bpf: add support for open-coded iterator loops")
 Assisted-by: LLM
 Reviewed-by: Sun Jian <sun.jian.kdev@gmail.com>
 Signed-off-by: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
 ---
- kernel/bpf/verifier.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../selftests/bpf/progs/iters_state_safety.c  | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 02be326f235c1..dd8bb179d39eb 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -567,7 +567,7 @@ static int stack_slot_obj_get_spi(struct bpf_verifier_env *env, struct bpf_reg_s
- 	}
+diff --git a/tools/testing/selftests/bpf/progs/iters_state_safety.c b/tools/testing/selftests/bpf/progs/iters_state_safety.c
+index 646026430e9b5..e5bb9fe6d5e53 100644
+--- a/tools/testing/selftests/bpf/progs/iters_state_safety.c
++++ b/tools/testing/selftests/bpf/progs/iters_state_safety.c
+@@ -52,6 +52,28 @@ int create_and_destroy(void *ctx)
+ 	return 0;
+ }
  
- 	off = reg->var_off.value;
--	if (off % BPF_REG_SIZE) {
-+	if (off >= 0 || off % BPF_REG_SIZE) {
- 		verbose(env, "cannot pass in %s at an offset=%d\n", obj_kind, off);
- 		return -EINVAL;
- 	}
++/* fp+0 is not a stack slot. bpf_get_spi(0) used to alias spi 0 (fp-8). */
++SEC("?raw_tp")
++__failure __msg("cannot pass in iter at an offset=0")
++int destroy_fp0_fail(void *ctx)
++{
++	struct bpf_iter_num iter;
++
++	asm volatile ("r1 = %[iter];"
++		"r2 = 0;"
++		"r3 = 1000;"
++		"call %[bpf_iter_num_new];"
++		/* r10 is fp+0, one byte above the top of the BPF stack */
++		"r1 = r10;"
++		"call %[bpf_iter_num_destroy];"
++		:
++		: __imm_ptr(iter), ITER_HELPERS
++		: __clobber_common
++	);
++
++	return 0;
++}
++
+ SEC("?raw_tp")
+ __failure __msg("Unreleased reference id=1")
+ int create_and_forget_to_destroy_fail(void *ctx)
 -- 
 2.43.0
 
