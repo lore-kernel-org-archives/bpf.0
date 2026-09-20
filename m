@@ -1,185 +1,128 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0923DFC6A
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 07:25:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3CB23002DD;
+	Sun, 20 Sep 2026 07:30:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789889104; cv=none; b=IlE1YNu4OrbUaZrFog+nhNJw/o8QjCNVIgbMtVFceFD58b8sAq3frzRD/RSFHBskPch7xIzgjHeTAQ0c/lYI5BYjnECMWSORtFJVGHhpENlJSlt96XrVzPh3GshTO68SpQTzVhTkVvZXqJJPfCPJHdYhoIcQmGrVY+/eta007i4=
+	t=1789889451; cv=none; b=edvkCPfeF1SazAEvp2fwIU/q6IQGpOQ+dXZYJ8/zOT4kLBcX3ocIwsHddevs9kzTJ22ZzipRcInbhjly70FT0TeS8DeuSbtnKmvCrVXIVSUtAlKY3vy51AulSI4c62m6Ta8MQrYO6Tl/cs3U4g4MWmPidFbY2enmCh7HGfaOHsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789889104; c=relaxed/simple;
-	bh=ObADTlzoiTA6U2yvY2GshZzVd6tdDp6Ev6J9pWdWFpo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fRrHjxVDuOn1wnrIcA013llqWs+adhgNbi2t9N1HylKlIn7B0pJSMMKpWMWVP4jDAaVZ2F9U2DGorKArgA7Uo8NIl7vy6+DYUDivQ8BQYHkTqeucq7XqEO4hYQDY3bEThKD1ZU558IDiDn/Ym7cgh9OT1wTlCJUBzbBWhRyvFjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aeJz9tJD; arc=none smtp.client-ip=74.125.228.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789889451; c=relaxed/simple;
+	bh=hmw7PL6rA600kATIzt8ky7c+Ug3B0QKSJP/gM/Lp/sQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=KakmugWpWB4G4qjVuP6zv9udPUwhuB+ta4n0dPQfO0LXT3lsRy4b5cXwpx0CSkkup/fU+Xr5SoL0z3nE/QF8YJnqbjtyylV7uJp+eD3y5S+9uHHHg9Nid38usVua1r7I3w4g/bxZmBwsEY9R0OlAjgS7tL5MRojnqDuKNjRAGig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EuD+4cwI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aeJz9tJD"
-Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85469b355ffso1216073b3a.1
-        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 00:25:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789889099; x=1790493899; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=gOTpVBg6yPuc/XTyIpDgsbvA7J2tB8bOdXuJs8CMv5I=;
-        b=aeJz9tJDlgGqXDpwmg17rdebHsEgNeKwq56CrolZAU66C5Povl95IUNMoKEyA7kcaA
-         DokxkG3N9QWO7QfzxbhDlAVPu4JMlTnXNXRpYtgA8x8EaMUjTXqus6Dgat+JL+Fevk3c
-         rac9kaJ5SpDDLlfgXR0QzTcKGpc576/2chR+3skHz+/kDrMse/BaPVV5iVZnLPCFu1/c
-         ReV1IxLvAEOkmov53j6O3QDKUtI69JFNMZFVD2qOdRQjp4UWDZbMo+h2vjQuAfRd++6v
-         8OPXItDNSibKLfMMmre0nKQhJ5BkMbKYKNOFs3x+AR05r2jz410qscYXJI88YsbdhGuw
-         mmqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789889099; x=1790493899;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=gOTpVBg6yPuc/XTyIpDgsbvA7J2tB8bOdXuJs8CMv5I=;
-        b=SIcnRPNW/EBOZVAjuAv2AZz3pX088tnxAuwnAuCuoTPSoNSuyTClg/bTMjdOfgYzYj
-         6CFD6fJI4BZNoLn90+IAr5vpDC7r3YnwfjRy9wSRY3vIzNsnV2cHXMeVjfvsg3tqq4Mg
-         YFg8HfXbXrJClqtgBwrVVxzTiHitvtJmKiyz6xzLnAiNJt3BTxWWKO5LKusqVB8vmpuy
-         +yndrkY/hl88s1bjg1ooW81TnMw7AU6EaU+j9cVxAMgMyTDH541LIxZxkk+oabkdbcX0
-         NO64A165bQSDL+wQtMIlUKOJE4mgSZPtyfpGyddqOHXuq5IHdVF45QK3+bNMVmMAJn4t
-         2ZQw==
-X-Gm-Message-State: AFuF++nN4+LBzXjdnQYONfzZ/duiZHGnlwT3mMYE8MM2SSmPlBNRDmtW
-	FIZ2Ro0NoXA6GMSEO+PH0xlUVOp4ePmcsrU0+5SGSyeJ45D5gsCHyX20NdFkp38NY7w=
-X-Gm-Gg: AYBFou1oOySZNNyOTioOSe4LHkV8CZio7tMihAevnY+omCGmHBGoM0h+WCyTnRaQJ3H
-	pkjDaElRNKfjipeHaV4+Sj+dc4B+hQOAe/cLLnPsfZwTekZzDdBEoQEMbxA4a5a9FTG/2uLd3dO
-	4z/+LfRJ///PQNMIwXZ8h5KenfoL+SZ5uou3aebx4JCuERDY1rkxasP/VYvI7jFInmrjQT0C9cY
-	0bf1OAJ+v2pgjCJrrbC1WZKilFN3SbjWbQIRCdZ67An8QYcOzugOb43SGWq1011ZI9Q2vkepyaM
-	UT4rXRGeC0iC3CcT+n6tlA3nH2aYrYbp/CwBkdFD3orsLLuzINjyHKyVxeS+ttdTnElUmkYFtwY
-	9sXr8MXe3taNcsuHtdHjvEm0/WjPDwhlwa2uLfjh/HVMnbPctB24HNUYQc5WYEBGUgR54SC3GLJ
-	5OI/0sgNlrOFa9iuQdzHyaVEXYn+Olj2bQtY17ppWoJ3hk8c0TOno3rPDdvOp9ZH56oUTiRNQ1m
-	2ChNIWafPnCdMZTIutWkEis8zTGY1C5yyFXTR82dlDMxVSd/kE=
-X-Received: by 2002:aa7:88c3:0:b0:878:3783:8a4b with SMTP id d2e1a72fcca58-87837839351mr3593980b3a.51.1789889099106;
-        Sun, 20 Sep 2026 00:24:59 -0700 (PDT)
-Received: from lenovo-thinkbook.lenovo.com ([58.247.171.4])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-877a9b0d62csm1668019b3a.39.2026.09.20.00.24.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Sep 2026 00:24:58 -0700 (PDT)
-From: Yuqi Xu <xuyuqiabc@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Vadim Fedorenko <vadim.fedorenko@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	stable@vger.kernel.org,
-	Vega <vega@nebusec.ai>,
-	Ren Wei <weir@nebusec.ai>,
-	xuyq21@lenovo.com
-Subject: Re: [PATCH bpf 1/1] bpf: crypto: check params size before reading reserved fields
-Date: Sun, 20 Sep 2026 15:24:41 +0800
-Message-ID: <20260920072441.60435-1-xuyuqiabc@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <4f3ab4b03e79017e215521743996555439bf0bb3.1789802413.git.xuyuqiabc@gmail.com>
-References: <4f3ab4b03e79017e215521743996555439bf0bb3.1789802413.git.xuyuqiabc@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EuD+4cwI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 751E41F000FF;
+	Sun, 20 Sep 2026 07:30:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789889450;
+	bh=NlcQPH+hnV8k+jkyyiuMykhGBZ8m+4m85Q2Yy0P4LsI=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=EuD+4cwI1om3+k6trMDbGR6lIg817UZgwYUOnfM8yDv81K9zWwxeJbpxsmu1jYmGU
+	 0ulrGgk8F9dAAxpHHlLBET0+gh0QZQcHDW+NbacBiQ+c2tUOHa1f+0mZ6kqT4jXNM3
+	 KbzM3XlPoS4m8kHdy+0Kivl3nL06N/41gDi4KXqsb82sdWuTsf3k8hXOhlhEbZ5xKf
+	 TClEBYzPuhBHCrl1HXDKleAgiqGsh7dtFSNWQGvUk2E0L+JMsUZNkkZtRX9l3G4lr/
+	 coJG6B8W/j0BEM2R3qSlBJLITnuNPOzDlNmIink8/iZ6GlJJcMk0IkoXZlNndymkMm
+	 g5DB3VXB9cVfg==
+Content-Type: multipart/mixed; boundary="===============8035067619570924591=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <4a411cdeff7f7ac68d0c938b22e0acf2c8beb96db88ba1ee7961c981efb3394c@mail.kernel.org>
+In-Reply-To: <20260920063442.499577-1-yangfeng59949@163.com>
+References: <20260920063442.499577-1-yangfeng59949@163.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Reject bpf_skb_output() from return-side tracing
+From: bot+bpf-ci@kernel.org
+To: yangfeng59949@163.com,kpsingh@kernel.org,matt@bobrowski.net,song@kernel.org,jolsa@kernel.org,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,yonghong.song@linux.dev,emil@etsalapatis.com,rostedt@goodmis.org,mhiramat@kernel.org,mathieu.desnoyers@efficios.com
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-trace-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Sun, 20 Sep 2026 07:30:47 +0000 (UTC)
 
-Hi all,
+--===============8035067619570924591==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This note is about a Sashiko finding on the already-applied patch
-(a11212910cf0); that review was not posted to the list.  The note
-below is analysis only; I am not asking to change the merged patch.
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 29260951aa871..cdede3926e5d6 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -1339,6 +1339,20 @@ static inline bool is_trace_fsession(const struct bpf_prog *prog)
+>  		prog->expected_attach_type == BPF_TRACE_FSESSION_MULTI);
+>  }
+>
+> +static bool tracing_prog_may_run_after_target(const struct bpf_prog *prog)
+> +{
+> +	/* The target may consume pointer arguments before these programs run. */
+> +	switch (prog->expected_attach_type) {
+> +	case BPF_TRACE_FEXIT:
+> +	case BPF_TRACE_FEXIT_MULTI:
+> +	case BPF_TRACE_FSESSION:
+> +	case BPF_TRACE_FSESSION_MULTI:
+> +		return true;
+> +	default:
+> +		return false;
+> +	}
+> +}
+> +
 
-> The `algo` string in `struct bpf_crypto_params` is not checked for
-> null-termination before being passed to the crypto API. A BPF program
-> can fill this array and subsequent fields with non-null bytes, causing
-> `vsnprintf` in `request_module` to read out-of-bounds, potentially
-> resulting in a kernel panic or leaking kernel memory to user-space.
-> locations: kernel/bpf/crypto.c:165 `bpf_crypto_ctx_create`;
-> kernel/bpf/crypto.c:185
+Does this new helper need to be static inline? The function is defined
+unconditionally here but only referenced inside the CONFIG_NET block of
+tracing_prog_func_proto():
 
-This is a valid finding.  It is also pre-existing and independent of the
-params__sz out-of-bounds read that this patch fixes.
+kernel/trace/bpf_trace.c:tracing_prog_func_proto() {
+    ...
+    switch (func_id) {
+#ifdef CONFIG_NET
+    case BPF_FUNC_skb_output:
+        if (tracing_prog_may_run_after_target(prog))
+            return NULL;
+        return &bpf_skb_output_proto;
+    ...
+#endif
+    ...
+}
 
-The kfunc's __sz annotation only bounds-checks the buffer: the verifier
-calls check_mem_size_reg() on the params / params__sz pair and checks
-that params__sz bytes of the pointer are readable.  It neither zeroes
-nor NUL-terminates the buffer.  After the size check in
-bpf_crypto_ctx_create(), params__sz == sizeof(struct bpf_crypto_params)
-== 408, so algo[] (offset 16, 128 bytes, kernel/bpf/crypto.c:33) lies
-inside the validated region, but nothing guarantees a NUL anywhere in
-it.  A program can pass reserved[0] = reserved[1] = 0 (which the
-function requires) and fill algo[] and the trailing fields with non-NUL
-bytes.
+bpf_trace.c is built from CONFIG_BPF_EVENTS (kernel/trace/Makefile) which
+depends on BPF_SYSCALL and (KPROBE_EVENTS || UPROBE_EVENTS) and PERF_EVENTS
+(kernel/trace/Kconfig) -- none of which imply CONFIG_NET.
 
-type->has_algo(params->algo) (kernel/bpf/crypto.c:165) then reaches an
-unbounded read:
+CONFIG_BPF_EVENTS=y with CONFIG_NET=n is valid, and in that configuration
+tracing_prog_may_run_after_target() becomes a defined-but-unreferenced
+non-inline static:
 
-  bpf_crypto_lskcipher_has_algo()
-    crypto_has_skcipher()          crypto/skcipher.c:666
-      crypto_type_has_alg()        crypto/algapi.c:1039
-        crypto_find_alg()          crypto/api.c:535
-          crypto_alg_mod_lookup()  crypto/api.c:338
-            crypto_larval_lookup()  crypto/api.c:290
-              request_module("crypto-%s", name)   crypto/api.c:303
-                vsnprintf(module_name, MODULE_NAME_LEN, fmt, args)
-                                                  kernel/module/kmod.c:150
+  kernel/trace/bpf_trace.c:1342:13: warning: 'tracing_prog_may_run_after_target' defined but not used [-Wunused-function]
 
-The "%s" conversion has no precision, so vsnprintf() does a plain
-strlen() on name; it keeps reading through key[], key_len and authsize
-and past the 408-byte region that the verifier validated, until it finds
-a zero byte.  KASAN reports a slab-out-of-bounds read if the object ends
-before the next zero.  That is the extent of the bug: the OOB is only
-that strlen()/string_nocheck walk past the 408-byte region.  An
-unterminated algo makes vsnprintf()'s "%s" read unbounded, but when the
-return value is >= MODULE_NAME_LEN, kmod.c returns -ENAMETOOLONG and
-does not reach call_modprobe() or the usermode helper.
+With CONFIG_WERROR=y (init/Kconfig) this becomes a build failure.
 
-The finding also cites kernel/bpf/crypto.c:185.  That line is a blank
-line, not a second use of algo; if (!ctx) after kzalloc is at 181.
-The nearby second use of params->algo is type->alloc_tfm() at 187;
-185 is a near miss for that line.  A 128-byte all-non-NUL algo cannot
-match any already-loaded cra_name, so has_algo() returns false,
-bpf_crypto_ctx_create() sets -EOPNOTSUPP, and type->alloc_tfm() is
-not reached.
+The pre-existing predicates immediately above (is_kprobe_session(),
+is_uprobe_multi(), is_uprobe_session(), is_trace_fsession()) are all
+written as static inline, which is why they don't trigger this warning.
 
-This is only reachable from BPF_PROG_TYPE_SYSCALL (the
-crypt_init_kfunc_set registration at kernel/bpf/crypto.c:393), which
-requires CAP_BPF, so it is not an unprivileged attack.  Still, the
-verifier-validated buffer is the trust boundary, and reading past it is
-a bug regardless.
+Would declaring tracing_prog_may_run_after_target() as static inline fix
+this?
 
-Relationship to this patch: the patch only moves the params__sz
-comparison ahead of the reserved[] reads.  The algo[] termination
-problem exists identically before and after it, so it is a separate root
-cause and is neither fixed nor worsened here.
+>  static const struct bpf_func_proto *
+>  kprobe_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>  {
+> @@ -1730,6 +1744,8 @@ tracing_prog_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>  	switch (func_id) {
+>  #ifdef CONFIG_NET
+>  	case BPF_FUNC_skb_output:
+> +		if (tracing_prog_may_run_after_target(prog))
+> +			return NULL;
+>  		return &bpf_skb_output_proto;
+>  	case BPF_FUNC_xdp_output:
+>  		return &bpf_xdp_output_proto;
 
-A follow-up would validate that the strings are terminated before
-handing them to the crypto API, for example:
 
-  if (strnlen(params->algo, sizeof(params->algo)) == sizeof(params->algo) ||
-      strnlen(params->type, sizeof(params->type)) == sizeof(params->type)) {
-          *err = -EINVAL;
-          return NULL;
-  }
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-(memchr(params->algo, '\0', sizeof(params->algo)) is equivalent.)
-params is const, so writing
-params->algo[sizeof(params->algo) - 1] = '\0' would modify the
-caller's buffer; explicitly rejecting an unterminated name is cleaner
-than silently truncating it.  params->type[] is only compared with
-strcmp() against the short, NUL-terminated registered type names, so
-it cannot drive the unbounded read, but validating both keeps them
-consistent.
-
-That would be a separate patch (Fixes: 3e1c6f35409f), not a change to
-the already-merged commit.  Happy to send it if you want it.
-
-Thanks,
-Yuqi Xu
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35495259029
+--===============8035067619570924591==--
