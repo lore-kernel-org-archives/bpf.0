@@ -1,66 +1,43 @@
-Received: from mail-pj2-f34.google.com (mail-pj2-f34.google.com [74.125.227.162])
+Received: from mta1.migadu.com (out-168.mta1.migadu.com [95.215.58.168])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE0D36894B
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 13:24:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.162
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A4D043DEC4
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 13:31:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.168
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789910650; cv=none; b=EVOpqIzVvP0Y2frep3JkkNV5hSvdn6QvIm/Umv17K/qlIIgRNBrwOkK1/CgReJ0OWtdEJC0cxpe6RJ7rIkiZjWNGXjJOJWn7c31Rttt43ADjpYJmluwWVMnxAmZiWltC594AS2DywigD/zr5UGXD00ZUtgjm9c92EqYwrU53ZSU=
+	t=1789911079; cv=none; b=qqNbYYlBm5SmLVpIP5zLh7ZwCirKcCNqGGLsf9VA1hehDSORjWFR+HSP7r9zR681GnvvCOzR3EVR33pGRbLGJu0tLj+CbKbgZ/qtmKHiZZATrvDVb3A4GJJk6MArYwNLHIS8MXNOM4iESAjM6+okbLwUb+OPOx4OQ975lFtPa1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789910650; c=relaxed/simple;
-	bh=vN3GvPXhDGTPAyw8RqSAV5H+01VWk0+oT9MkbAuDN1M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iFWKJieSBXTn4XWS+7BpESvED+lYDbhg8LCCcutQcQ8NBL3sQtI6F1ZQqWS81X/VYc3KUol0r2Gbr9bLPCN31J8kYeu8n8DW0tWAOhZA5tQDqdifA5powAozlHOtoG4s5Pz3d8ImAXTufUyLCAz5S5lio7mqrHkyGVGVyIklE4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FY4xCnnw; arc=none smtp.client-ip=74.125.227.162
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789911079; c=relaxed/simple;
+	bh=uDtyRmpDb+WDFPmmFIx7Blzf3eFlsCSDFT8s63WbMEw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jAWca9Jgcrukd6/1Uy1A62c7+pfo3sAEZ2ZNCr5VbWfSSZtEnrlX0CqrV7M8V+NURZmXqF8q7SMkNpEPAGy8IdoWcKu26du/ry/jijRNaJD1nZrHlvho3GC5QswKwTei/YP9FgJKJkXmT8XuEglq2I1WIozSis4MbTOTwc/FZyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ls6v4er8; arc=none smtp.client-ip=95.215.58.168
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FY4xCnnw"
-Received: by mail-pj2-f34.google.com with SMTP id d9443c01a7336-2d747eb79f7so14699765ad.1
-        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 06:24:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789910645; x=1790515445; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QpXb80c2/A/RkMSYNkLi4WaEDGLQJKU+a9vHUD3ajSE=;
-        b=FY4xCnnwH8QrURp3IFAD775fNLmM6ER47q/k5iYYjXh24+HSH1TnJCAyNb53N1qoQt
-         cLABgFtb2DZlLr4DEX0miDjPyKQ/GpvxymTJIGbCbJK2HWvDxSEIAFzQfnJlJHoSY9OJ
-         Jch7mrVyQyUmS6J3f5SjhYpzX/6kL6GDxDM/k4b3UELrtka7ponsw6T3zWfjBl5fOgTL
-         1Y5861F/vSluyl9qztUCneBH38f0UTbS+p5xS/zE9q74qEyYHG68bVYVatuuPM0z8sUG
-         q3FgAHa/Q/NSLnjuD/k39PGaD02V0yoj4tWVS60l7zNCHz49gmX+lr9PlqcPhnmOFLLB
-         2pcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789910645; x=1790515445;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QpXb80c2/A/RkMSYNkLi4WaEDGLQJKU+a9vHUD3ajSE=;
-        b=uKtbPWWioYdJFQheeXsgEYaXnkDhhU+qJGPw07Ke13PDsVkWlaEakYhZXiLtss01kB
-         f7AakraU5pXYHDny5K2JR5/RrFzq2pKjdQalQpYfhg6lywFRLuVaqcRNh8LFCCX4IA+9
-         EWR2XQUQbA2zfeA94rjZTckSKO94IjMaG6OJUTUquIDHzvxHhZOAYaE9XuBUTYHTIhdY
-         z5g8s/2pGFju8Jzy7mjuBxgzm4ueOYuxCDrArXNkpyujXCbIxMK7toPm/96ZNdT3kWxp
-         kyGQ9oKH60zD7wgR+sP6uGfTs2apYrsuxppQZ9GfE6ptcRPeRjTC9sLNIgVKif9pGyzA
-         ABow==
-X-Gm-Message-State: AFuF++kHrgQHdlBcPWcRIOLzGOOItTZn481gxPtQXertEJLS4nlqoioo
-	OE4UsPg1VjOFXKEjQpFnqsDck+fuM7xrPQpdh3KS006iUGzw7spP8NJV
-X-Gm-Gg: AYBFou1WSAXQttYl2ZqHJ2NtUFGHEUDD7WlDUdzieG3ff3mf1dYZMLVWai/vnvMnp6o
-	4rgUUX0eshLuu7UERCtGDPdnHWv6M7tcCgtmmgm8LY3gCcmiU11NvWqLXNsrKqd+M/aCJ5pxHaU
-	yHqZTNSb0J1p/iW2e0GuVbEWtMa35A017Usgib2Fxrc5vcN7T4ej+JMh7hMeM/Vk9ASMsoc9hFk
-	JV5sv2eXI/K1ixftLbeS7reT0hz4PLGrDgxoseq0PsWV+IyGy4HJlKaMw6UNRjle9wxKodnMMiZ
-	gxAL/nfGrh5eL7NOdJYS5g0IBGvhqd+9NbFRYKMOY3Xc0APwgkXeIGBqjlC8kIP0dJhv9/yx7Vk
-	P0b0WQFHA3qxlKc+PhL20q+YHuaym5oEdsd3bN/vf4SrYbFtZPLcXROH0qQcHse7jKCogYQsaPt
-	HPcdsxkicOt4TBxmRT8OORvHgNGsWwmszfsHw3s+Wu6Xg6YDEOwo3MJNAWxyGOxiKzckZOEqKZe
-	9h9OkqjNjfXKpKUrvXZeYDZtquYqZdXrPOiPUh+9MA=
-X-Received: by 2002:a17:903:b84:b0:2dd:c053:82fa with SMTP id d9443c01a7336-2ddc053843cmr65687345ad.49.1789910644813;
-        Sun, 20 Sep 2026 06:24:04 -0700 (PDT)
-Received: from 192.168.50.3 ([198.176.50.208])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df44393990sm4857795ad.20.2026.09.20.06.23.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Sep 2026 06:24:04 -0700 (PDT)
-From: Weiming Shi <bestswngs@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ls6v4er8"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=uDtyRmpDb+WDFPmmFIx7Blzf3eFlsCSDFT8s63WbMEw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789911072; v=1; x=1790515872;
+ b=ls6v4er8iU8U2eNMIvfCmOlzl2Jb5t1aipvwHMXCT/G6vpPJolbJafUA/XnWFqhzksp1Fi9L
+ 3lg6kE9PCLfnZ8NPX9qUVGd1ya5hDUm+7poCDCDH5HT+VZaZhMsEPqaVL/KD40wGlMtjdtBGq7Q
+ GFDWTh5HPNPwvCsE1Xwjq1q8=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id a63260104eddab42;
+	Sun, 20 Sep 2026 13:31:12 +0000
+X-Mizu-Trace-ID: a63260104eddab42
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: netdev@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
@@ -70,28 +47,12 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	co+ac0a8c41de69121d@bugs.sh,
-	Xiang Mei <xmei5@asu.edu>,
-	Weiming Shi <bestswngs@gmail.com>
-Subject: [PATCH bpf v2 RESEND 2/2] selftests: net: test cross-device XDP dev-bound attachment
-Date: Sun, 20 Sep 2026 21:23:05 +0800
-Message-ID: <20260920132303.4109240-4-bestswngs@gmail.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260920132303.4109240-3-bestswngs@gmail.com>
-References: <20260920132303.4109240-3-bestswngs@gmail.com>
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net v1] bpf: cpumap: fix use-after-free of dev_rx on netdev unregister
+Date: Sun, 20 Sep 2026 21:30:15 +0800
+Message-ID: <20260920133017.248620-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -100,55 +61,307 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a regression test which loads dev-bound-only XDP programs on both ends
-of a veth pair. Verify that attaching one program to the other device is
-rejected with the expected extack.
+1. The ring holds the ingress device with no reference.
 
-The second program keeps a bound-only registration for the target device,
-recreating the NULL-offdev collision fixed by the previous patch.
+Native XDP stores it in the frame:
 
-Link: https://lore.kernel.org/bpf/20260917161335.1020405-2-bestswngs@gmail.com/
-Assisted-by: LLM
-Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+	cpu_map_enqueue()
+		xdpf->dev_rx = dev_rx;
+		bq_enqueue()
+
+Generic XDP queues the skb as is, skb->dev is the ingress device:
+
+	cpu_map_generic_redirect()
+		ptr_ring_produce(rcpu->queue, skb);
+
+Both sit in rcpu->queue until the kthread runs.
+
+2. The kthread builds the skb from that pointer and hands it to the
+stack, skb->dev has no reference either:
+
+	cpu_map_kthread_run()
+		__xdp_build_skb_from_frame()
+			eth_type_trans()	/* sets skb->dev */
+		gro_receive_skb()
+
+The cpumap XDP prog uses it too, as rxq.dev and in xdp_do_redirect().
+
+3. If the device is torn down while the frames wait in the ring, the
+pointer is stale. Nothing in unregister knows about the ring:
+flush_all_backlogs() only walks the softnet backlog, synchronize_net()
+does not wait for a kthread, and no reference stops free_netdev().
+Seen with a veth in a netns, XDP redirect to a cpumap entry, and
+"ip link del" while the kthread was not scheduled:
+
+  BUG: KASAN: slab-use-after-free in eth_type_trans+0x4d9/0x590
+  Read of size 8 at addr ffff888100634500 by task cpumap/1/map:2/623
+  Call Trace:
+   <TASK>
+   dump_stack_lvl+0x91/0xf0
+   print_report+0xd1/0x630
+   kasan_report+0xf3/0x130
+   __asan_report_load8_noabort+0x14/0x30
+   eth_type_trans+0x4d9/0x590
+   __xdp_build_skb_from_frame+0x311/0x860
+   cpu_map_kthread_run+0x852/0x1ca0
+   kthread+0x3a2/0x4d0
+   ret_from_fork+0x619/0x8e0
+   ret_from_fork_asm+0x1a/0x30
+   </TASK>
+
+  Allocated by task 609:
+   __kvmalloc_node_noprof+0x382/0xae0
+   alloc_netdev_mqs+0x8a/0x12c0
+   rtnl_create_link+0xad5/0xf10
+   veth_newlink+0x214/0xb50
+   rtnl_newlink+0xd60/0x2640
+   rtnetlink_rcv_msg+0x74a/0xc30
+   netlink_rcv_skb+0x147/0x400
+
+  Freed by task 631:
+   kfree+0x282/0x660
+   kvfree+0x31/0x40
+   netdev_release+0x6d/0x90
+   device_release+0xce/0x250
+   kobject_put+0x18d/0x4f0
+   netdev_run_todo+0x7fb/0x10f0
+   rtnl_dellink+0x392/0xc10
+   rtnetlink_rcv_msg+0x74a/0xc30
+   netlink_rcv_skb+0x147/0x400
+
+The easy fix is a reference per frame:
+
+	cpu_map_enqueue()
+		xdpf->dev_rx = dev_rx;
+		dev_hold()
+	cpu_map_kthread_run()
+		gro_receive_skb()
+		dev_put()
+
+GRO is the problem. The skb may stay in rcpu->gro after
+gro_receive_skb(), and even after cpu_map_gro_flush() some skbs stay,
+flush_old only pushes the old ones. So we can't tell which skbs really
+left, and so can't tell when to dev_put(). Doing it right needs a hook
+in the GRO core path. Not worth it.
+
+So do what the softnet backlog does and use the netdev notifier:
+
+1. On NETDEV_UNREGISTER, take the ring size and ask the kthread to
+   consume that many frames, or until the ring is empty. After that,
+   every frame that was in the ring has been handled by the stack or
+   dropped. The device is closed, so no new frames for it can show up.
+2. The kthread wakes the notifier once it got there. The device is
+   still alive until then, so the frames are handled as usual.
+3. On the last round of the drain, flush GRO fully, flush_old is 0.
+   Every other round keeps the flush logic as is.
+
+One hole is left: the cpumap prog may redirect the frame to another
+cpumap entry, and that ring may have reported done already. So while
+the device is unregistering, drop on XDP_REDIRECT instead. That check
+only runs when the prog picks XDP_REDIRECT.
+
+The notifier has to ask every entry, a cpumap entry is not tied to a
+netns and any device can feed it. So an unregister anywhere drains
+every ring in the system. The work is bounded by the ring size, and
+the frames had to be consumed anyway. Nothing changes on the hot path,
+the kthread reads one field per batch.
+
+Fixes: 9c270af37bb6 ("bpf: XDP_REDIRECT enable use of cpumap")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
-Resend:
-- Start a new thread after the previous v2 was threaded under v1; no patch
-  changes.
+Local review flagged that a full GRO flush can hand a PTP packet to
+skb_defer_rx_timestamp(), which keeps skb->dev in the PHY driver's
+queue. That needs dev->phydev, which phy_disconnect() clears on
+dev_close(), before reg_state changes. Anything queued before that is
+owned by the PHY driver, same as on the normal NAPI path. Not a cpumap
+issue, so not handled here.
+---
+ kernel/bpf/cpumap.c | 102 ++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 98 insertions(+), 4 deletions(-)
 
-Changes in v2:
-- New patch.
-
- tools/testing/selftests/net/bpf_offload.py | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/tools/testing/selftests/net/bpf_offload.py b/tools/testing/selftests/net/bpf_offload.py
-index c856d266c..017910b4d 100755
---- a/tools/testing/selftests/net/bpf_offload.py
-+++ b/tools/testing/selftests/net/bpf_offload.py
-@@ -995,6 +995,24 @@ try:
-     rm("/sys/fs/bpf/devbound")
-     sim.wait_for_flush()
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index 5e59ab896f058..bc2186adcd9a4 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -74,8 +74,18 @@ struct bpf_cpu_map_entry {
  
-+    start_test("Test dev-bound program on a different device...")
-+    cmd("ip link add bpfveth0 type veth peer name bpfveth1")
-+    try:
-+        bpftool_prog_load("sample_ret0.bpf.o", "/sys/fs/bpf/devbound0",
-+                          dev_bind="bpfveth0")
-+        bpftool_prog_load("sample_ret0.bpf.o", "/sys/fs/bpf/devbound1",
-+                          dev_bind="bpfveth1")
-+        ret, _, err = ip("link set dev bpfveth1 xdpdrv " +
-+                         bpf_pinned("/sys/fs/bpf/devbound0"), fail=False,
-+                         include_stderr=True)
-+        fail(ret == 0, "dev-bound program attached to a different device")
-+        check_extack(err, "Program bound to different device.", args)
-+    finally:
-+        cmd("ip link del bpfveth0", fail=False)
-+        rm("/sys/fs/bpf/devbound0")
-+        rm("/sys/fs/bpf/devbound1")
-+    bpftool_prog_list_wait(expected=0)
+ 	struct completion kthread_running;
+ 	struct rcu_work free_work;
 +
-     start_test("Test XDP load failure...")
-     sim.dfs["dev/bpf_bind_verifier_accept"] = 0
-     ret, _, err = bpftool_prog_load("sample_ret0.bpf.o", "/sys/fs/bpf/offload",
++	/* NETDEV_UNREGISTER handshake, see cpu_map_netdev_event(). Non-zero
++	 * is a pending request: frames the kthread still has to consume.
++	 */
++	struct list_head list;
++	wait_queue_head_t drain_wq;
++	u32 drain_left;
+ };
+ 
++static LIST_HEAD(cpu_map_list);
++static DEFINE_MUTEX(cpu_map_mutex);
++
+ struct bpf_cpu_map {
+ 	struct bpf_map map;
+ 	/* Below members specific for map type */
+@@ -136,6 +146,14 @@ static void __cpu_map_ring_cleanup(struct ptr_ring *ring)
+ 	}
+ }
+ 
++/* cpumap to cpumap redirect: don't pass on a frame whose device is going
++ * away, the target ring may already be done draining for it.
++ */
++static bool cpu_map_dev_unregistering(const struct net_device *dev)
++{
++	return unlikely(READ_ONCE(dev->reg_state) != NETREG_REGISTERED);
++}
++
+ static u32 cpu_map_bpf_prog_run_skb(struct bpf_cpu_map_entry *rcpu,
+ 				    void **skbs, u32 skb_n,
+ 				    struct xdp_cpumap_stats *stats)
+@@ -153,6 +171,11 @@ static u32 cpu_map_bpf_prog_run_skb(struct bpf_cpu_map_entry *rcpu,
+ 			skbs[pass++] = skb;
+ 			break;
+ 		case XDP_REDIRECT:
++			if (cpu_map_dev_unregistering(skb->dev)) {
++				kfree_skb(skb);
++				stats->drop++;
++				break;
++			}
+ 			err = xdp_do_generic_redirect(skb->dev, skb, &xdp,
+ 						      rcpu->prog);
+ 			if (unlikely(err)) {
+@@ -213,6 +236,11 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_map_entry *rcpu,
+ 			}
+ 			break;
+ 		case XDP_REDIRECT:
++			if (cpu_map_dev_unregistering(xdpf->dev_rx)) {
++				xdp_return_frame(xdpf);
++				stats->drop++;
++				break;
++			}
+ 			err = xdp_do_redirect(xdpf->dev_rx, &xdp,
+ 					      rcpu->prog);
+ 			if (unlikely(err)) {
+@@ -310,14 +338,16 @@ static int cpu_map_kthread_run(void *data)
+ 		struct cpu_map_ret ret = { };
+ 		void *frames[CPUMAP_BATCH];
+ 		void *skbs[CPUMAP_BATCH];
+-		u32 i, n, m;
++		bool drained = false;
++		u32 i, n, m, left;
+ 		bool empty;
+ 
+ 		/* Release CPU reschedule checks */
+ 		if (__ptr_ring_empty(rcpu->queue)) {
+ 			set_current_state(TASK_INTERRUPTIBLE);
+ 			/* Recheck to avoid lost wake-up */
+-			if (__ptr_ring_empty(rcpu->queue)) {
++			if (__ptr_ring_empty(rcpu->queue) &&
++			    !READ_ONCE(rcpu->drain_left)) {
+ 				schedule();
+ 				sched = 1;
+ 				last_qs = jiffies;
+@@ -398,10 +428,23 @@ static int cpu_map_kthread_run(void *data)
+ 		/* Flush either every 64 packets or in case of empty ring */
+ 		packets += n;
+ 		empty = __ptr_ring_empty(rcpu->queue);
+-		if (packets >= NAPI_POLL_WEIGHT || empty) {
+-			cpu_map_gro_flush(rcpu, empty);
++		left = READ_ONCE(rcpu->drain_left);
++		if (unlikely(left)) {
++			/* We are draining, drained is true on the last round */
++			left -= min(n, left);
++			drained = empty || !left;
++			if (!drained)
++				WRITE_ONCE(rcpu->drain_left, left);
++		}
++		if (packets >= NAPI_POLL_WEIGHT || empty || drained) {
++			cpu_map_gro_flush(rcpu, empty || drained);
+ 			packets = 0;
+ 		}
++		/* Only report back once GRO is flushed too */
++		if (unlikely(drained)) {
++			WRITE_ONCE(rcpu->drain_left, 0);
++			wake_up(&rcpu->drain_wq);
++		}
+ 
+ 		local_bh_enable(); /* resched point, may call do_softirq() */
+ 	}
+@@ -473,6 +516,7 @@ __cpu_map_entry_alloc(struct bpf_map *map, struct bpf_cpumap_val *value,
+ 	rcpu->map_id = map->id;
+ 	rcpu->value.qsize  = value->qsize;
+ 	gro_init(&rcpu->gro);
++	init_waitqueue_head(&rcpu->drain_wq);
+ 
+ 	if (fd > 0) {
+ 		err = __cpu_map_load_bpf_program(rcpu, map, fd);
+@@ -500,6 +544,10 @@ __cpu_map_entry_alloc(struct bpf_map *map, struct bpf_cpumap_val *value,
+ 	 */
+ 	wait_for_completion(&rcpu->kthread_running);
+ 
++	mutex_lock(&cpu_map_mutex);
++	list_add_tail(&rcpu->list, &cpu_map_list);
++	mutex_unlock(&cpu_map_mutex);
++
+ 	return rcpu;
+ 
+ free_prog:
+@@ -528,6 +576,11 @@ static void __cpu_map_entry_free(struct work_struct *work)
+ 	 */
+ 	rcpu = container_of(to_rcu_work(work), struct bpf_cpu_map_entry, free_work);
+ 
++	/* Unlink first, so the notifier can't wait on a kthread we stop */
++	mutex_lock(&cpu_map_mutex);
++	list_del(&rcpu->list);
++	mutex_unlock(&cpu_map_mutex);
++
+ 	/* kthread_stop will wake_up_process and wait for it to complete.
+ 	 * cpu_map_kthread_run() makes sure the pointer ring is empty
+ 	 * before exiting.
+@@ -832,3 +885,44 @@ void __cpu_map_flush(struct list_head *flush_list)
+ 		wake_up_process(bq->obj->kthread);
+ 	}
+ }
++
++/* Frames carry a raw dev_rx pointer and can sit in the ring, or as skbs in
++ * GRO, for as long as the kthread is not scheduled. Nothing holds the netdev
++ * for them, so before it is freed make every kthread consume what was queued
++ * at this point and do a full GRO flush. The device is closed, so no new
++ * frames for it can show up while we wait.
++ */
++static int cpu_map_netdev_event(struct notifier_block *nb,
++				unsigned long event, void *ptr)
++{
++	struct bpf_cpu_map_entry *rcpu;
++
++	if (event != NETDEV_UNREGISTER)
++		return NOTIFY_OK;
++
++	mutex_lock(&cpu_map_mutex);
++	list_for_each_entry(rcpu, &cpu_map_list, list) {
++		/* Worst case the whole ring is for this device, plus a batch
++		 * the kthread may have pulled out before seeing the request.
++		 */
++		WRITE_ONCE(rcpu->drain_left, rcpu->queue->size + CPUMAP_BATCH);
++		wake_up_process(rcpu->kthread);
++	}
++	list_for_each_entry(rcpu, &cpu_map_list, list)
++		wait_event(rcpu->drain_wq, !READ_ONCE(rcpu->drain_left));
++	mutex_unlock(&cpu_map_mutex);
++
++	return NOTIFY_OK;
++}
++
++static struct notifier_block cpu_map_notifier = {
++	.notifier_call = cpu_map_netdev_event,
++};
++
++static int __init cpu_map_init(void)
++{
++	register_netdevice_notifier(&cpu_map_notifier);
++
++	return 0;
++}
++subsys_initcall(cpu_map_init);
 -- 
-2.55.0
+2.43.0
+
