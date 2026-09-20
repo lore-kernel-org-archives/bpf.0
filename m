@@ -1,200 +1,129 @@
-Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5D223D8116
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 05:44:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E83431E846
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 05:56:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789883055; cv=none; b=johPsjW+Bu/ue5G/jwxtOQGsr8+0VYlrxrzPkMtJ/3J7XU1y7LN1VGdR+/K28+dyaDCXIMAr8BotMLKqBirq5W+lemHvtwdLz+vITUl8wgW6FF/BltX3bVSMqxtZHuWr8IN9qbmJVBIrqt03S5rjFOscAmNULpOMjacaxURLCU0=
+	t=1789883815; cv=none; b=Btb7wFO92X2YTTWm+4Tnb5idE9d5mY1KVOV7IvV2wcLYjNHfg1F1B08T2kIDchBgyfqrwROk5GsY1Hq/cB/NnqUq5hOadHkOtLgwjfKaL65UaxmALQUXGPmGOD2YTE9PbeouXI0z7G/+Z/dD9dGRf3G7vj8iXdYiBuMw0gGX4Zw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789883055; c=relaxed/simple;
-	bh=q+ZCMvzMbn2ZgMqoGgRJ9H91gUX3v1hmR5SGX7v5tVY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=g3CZOlqQtFwZUHd06m1D/2s/l9sNNkrKxgzi3JQbNwWMQWjbttjVq64qH8EXWyCaoIFpJ3ZuSi49a2CjComAUPZguNR9g5xny6hvziTOv2BDN9Nn7A2L+x+v92upF37jNGEQzPI1EdsvBPLKilWZ6wM4DgtKfvjvOGM6yKxrfcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
-Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 6DC1C2BEBABCAB; Sat, 19 Sep 2026 22:44:08 -0700 (PDT)
-From: Yonghong Song <yonghong.song@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	kernel-team@fb.com
-Subject: [PATCH bpf-next v3 20/20] selftests/bpf: Load an exception cleanup program from a light skeleton
-Date: Sat, 19 Sep 2026 22:44:08 -0700
-Message-ID: <20260920054408.875401-1-yonghong.song@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260920054225.864535-1-yonghong.song@linux.dev>
+	s=arc-20240116; t=1789883815; c=relaxed/simple;
+	bh=yidVDL+Z1GrKYA/7kQ0t4oPrfK9atkmhqGx+BPWz/mY=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ZTiPFQleN1tWDBDKDfExyervYDmNktPt8dmNESzZKDfdxoy/pHlI4b05VuwF4oQqXrM1BslbK7AD5T5mu5FOa+l3hwFxo+/8/W1Aty5+eX0b9m/Y0wdtnsxOwq6GmuJW4KGTSjnJ4UmcAZybmgV4ZgxqFazSouSqYcTB1DdtTdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iEvbmxvg; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iEvbmxvg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D6D91F000FF;
+	Sun, 20 Sep 2026 05:56:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789883813;
+	bh=mY9oytsbcodhTTQkQ1xRscgZ9QQNBM941U12J0Iw440=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=iEvbmxvgPKjdE9Ny3rugu2LgjH9nseQAmmxw/7587sU56gbGs5kM29tO4dDDh35No
+	 rkoGRva5a+trhG3kl/fIcC/lYZkQZyGiz2hAwAZ1N+mgNVQk4BLzZCz5QGyR1vC8ed
+	 +iWCJf3U9LdL9RMsJSI7CuuLkxFnVlp369bsFsXV7oshtJ2KzvHKTCMUm1MRLeqqpM
+	 BuzIT1VivsH6utBMLATo+0Bbwb3ZOo1wKWg8lLtWC3T21FWs5gqnNBydQos1OhEyuH
+	 kAphk2aIn54xX5lBSyBrGMe52nOuNyP5+sBThzuLQOYjcMXOQHGnGkYL7erU9FDTmJ
+	 ZnUpSp34jUSdA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v3 01/20] bpf: Accept the compiler's exception
+ cleanup table at program load
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yonghong Song" <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260920054231.865520-1-yonghong.song@linux.dev>
 References: <20260920054225.864535-1-yonghong.song@linux.dev>
+ <20260920054231.865520-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 20 Sep 2026 05:56:52 +0000
+Message-Id: <20260920055653.6D6D91F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
 
-For a light skeleton, libbpf hands the records to bpf_gen__prog_load(),
-which writes them into a blob and emits a loader program that issues
-BPF_PROG_LOAD from inside the kernel. Nothing about that is shared with t=
-he
-ordinary path: the attr is built field by field, and the kfunc names are
-resolved by the loader program when it runs.
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: unbounded memory allocation in check_cleanup_info via clean=
+up_info_cnt
+--
 
-exceptions_cleanup_light.c is the smallest program that can tell whether =
-a
-table survives that trip: one record covering the bpf_throw() call itself=
-,
-one pad that sets a bit and resumes. If the table arrives, the pad runs a=
-nd
-the cookie comes back; if it does not, the program does not load at all.
+commit 18ab7230f0d26780fd3b40453aca2155a679f967
+Author: Yonghong Song <yonghong.song@linux.dev>
 
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
----
- tools/testing/selftests/bpf/Makefile          |  2 +-
- .../selftests/bpf/exceptions_cleanup.h        |  3 ++
- .../bpf/prog_tests/exceptions_cleanup.c       | 28 +++++++++++++
- .../bpf/progs/exceptions_cleanup_light.c      | 39 +++++++++++++++++++
- 4 files changed, 71 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
-light.c
+bpf: Accept the compiler's exception cleanup table at program load
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-index 7ea5ba1df29e..981cc2643049 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -523,7 +523,7 @@ LINKED_SKELS :=3D test_static_linked.skel.h linked_fu=
-ncs.skel.h		\
- LSKELS :=3D fexit_sleep.c trace_printk.c trace_vprintk.c map_ptr_kern.c =
-	\
- 	core_kern.c core_kern_overflow.c test_ringbuf.c			\
- 	test_ringbuf_n.c test_ringbuf_map_key.c test_ringbuf_write.c    \
--	test_ringbuf_overwrite.c
-+	test_ringbuf_overwrite.c exceptions_cleanup_light.c
-=20
- LSKELS_SIGNED :=3D fentry_test.c fexit_test.c atomics.c
-=20
-diff --git a/tools/testing/selftests/bpf/exceptions_cleanup.h b/tools/tes=
-ting/selftests/bpf/exceptions_cleanup.h
-index 383af9edf6f5..e14b651263b8 100644
---- a/tools/testing/selftests/bpf/exceptions_cleanup.h
-+++ b/tools/testing/selftests/bpf/exceptions_cleanup.h
-@@ -35,6 +35,9 @@
- #define RAN_VAR_STACK		0x40000
- #define RAN_GLOBAL_PAD		0x80000
-=20
-+/* progs/exceptions_cleanup_light.c: the one pad it has. */
-+#define RAN_LIGHT		0x1
-+
- #define CLEANUP_REC(begin, end, landing_pad)			\
- 	".pushsection .bpf_cleanup,\"a\",@progbits;"		\
- 	".long " begin ";"					\
-diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c =
-b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
-index e74b27ac655b..b69be77b2e26 100644
---- a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
-@@ -8,6 +8,7 @@
- #include "exceptions_cleanup_freplace.skel.h"
- #include "exceptions_cleanup_pad_freplace.skel.h"
- #include "exceptions_cleanup_ext_table.skel.h"
-+#include "exceptions_cleanup_light.lskel.h"
-=20
- /* foo3 threw: every frame that has a pad ran it. */
- #define PADS_FOO3_THREW \
-@@ -170,6 +171,30 @@ static void test_ext_table(struct exceptions_cleanup=
-_shapes *skel)
- 	exceptions_cleanup_ext_table__destroy(fr);
- }
-=20
-+static void test_light_skeleton(void)
-+{
-+	struct exceptions_cleanup_light_lskel *skel;
-+	__u64 ctx =3D 0;
-+	int err;
-+
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		    .ctx_in =3D &ctx,
-+		    .ctx_size_in =3D sizeof(ctx),
-+	);
-+
-+	skel =3D exceptions_cleanup_light_lskel__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "light open_and_load"))
-+		return;
-+
-+	err =3D bpf_prog_test_run_opts(skel->progs.entry_light.prog_fd, &topts)=
-;
-+	if (!ASSERT_OK(err, "run"))
-+		goto out;
-+	ASSERT_EQ(topts.retval, THROW_COOKIE, "retval");
-+	ASSERT_EQ(skel->bss->pads_ran, RAN_LIGHT, "pads_ran");
-+out:
-+	exceptions_cleanup_light_lskel__destroy(skel);
-+}
-+
- static void test_shapes(void)
- {
- 	struct exceptions_cleanup_shapes *skel;
-@@ -420,6 +445,9 @@ void test_exceptions_cleanup(void)
-=20
- 	exceptions_cleanup__destroy(skel);
-=20
-+	if (test__start_subtest("light_skeleton"))
-+		test_light_skeleton();
-+
- 	test_shapes();
-=20
- 	RUN_TESTS(exceptions_cleanup_fail);
-diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup_light.c=
- b/tools/testing/selftests/bpf/progs/exceptions_cleanup_light.c
-new file mode 100644
-index 000000000000..de7ae478d67f
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup_light.c
-@@ -0,0 +1,39 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "exceptions_cleanup.h"
-+
-+static __used __noinline void __kfunc_btf_anchor(void)
-+{
-+	bpf_throw(0);
-+	bpf_preempt_disable();
-+	bpf_preempt_enable();
-+	bpf_unwind_resume();
-+}
-+
-+__u64 pads_ran =3D 0;
-+
-+SEC("syscall")
-+__naked int entry_light(void)
-+{
-+	asm volatile (
-+	"call bpf_preempt_disable;"
-+	"r1 =3D %[cookie];"
-+"1:"	"call bpf_throw;"		/* cleanup region */
-+"2:"
-+	"exit;"
-+"3:"					/* landing pad */
-+	"call bpf_preempt_enable;"
-+	PAD_RAN("%[ran]")
-+	"call bpf_unwind_resume;"
-+	"exit;"
-+	CLEANUP_REC("1b", "2b", "3b")
-+	:
-+	: [cookie]"i"(THROW_COOKIE), [ran]"i"(RAN_LIGHT),
-+	  __imm_addr(pads_ran)
-+	: __clobber_all);
-+}
-+
-+char _license[] SEC("license") =3D "GPL";
+This commit adds support for BPF exception handling cleanup tables generated
+by LLVM. It introduces a new UAPI to pass the .bpf_cleanup table into the
+kernel via BPF_PROG_LOAD, along with the necessary validation logic in
+check_cleanup_info().
+
+Link: https://github.com/llvm/llvm-project/pull/192164 [1]
+
+> diff --git a/kernel/bpf/check_btf.c b/kernel/bpf/check_btf.c
+> index 0e8b3ccc7a5b9..d03dc791042a2 100644
+> --- a/kernel/bpf/check_btf.c
+> +++ b/kernel/bpf/check_btf.c
+
+[ ... ]
+
+> @@ -407,6 +407,149 @@ static int check_core_relo(struct bpf_verifier_env =
+*env,
+>  	return err;
+>  }
+> =20
+> +static int cleanup_insn_subprog(struct bpf_verifier_env *env, u32 off)
+> +{
+
+[ ... ]
+
+> +static int check_cleanup_info(struct bpf_verifier_env *env,
+> +			      const union bpf_attr *attr,
+> +			      bpfptr_t uattr)
+> +{
+> +	u32 krec_size =3D sizeof(struct bpf_cleanup_info);
+> +	u32 i, nrec, urec_size, min_size, prev_end =3D 0;
+> +	struct bpf_cleanup_info *krecord;
+> +	bpfptr_t urecord;
+> +	int ret =3D -EINVAL;
+> +
+> +	nrec =3D attr->cleanup_info_cnt;
+> +	if (!nrec)
+> +		return 0;
+> +	if (nrec > INT_MAX / krec_size)
+> +		return -EINVAL;
+
+[Severity: Medium]
+Can an unprivileged user trigger a multi-gigabyte memory allocation here
+by passing an artificially large attr->cleanup_info_cnt?
+
+While the allocation below uses GFP_KERNEL_ACCOUNT and will not cause a CPU
+lockup, kvcalloc() still attempts to allocate and zero up to ~2.1 GB of
+memory.
+
+Since each cleanup info record must cover at least one instruction and
+they cannot overlap, is there a case where nrec could legitimately
+exceed env->prog->len? Would it be safer to add a bounds check like
+if (nrec > env->prog->len) before the allocation to prevent this
+resource churn?
+
+> +
+> +	urec_size =3D attr->cleanup_info_rec_size;
+> +	if (urec_size < MIN_BPF_CLEANUP_INFO_SIZE ||
+> +	    urec_size > MAX_CLEANUP_INFO_REC_SIZE ||
+> +	    urec_size % sizeof(u32)) {
+> +		verbose(env, "invalid cleanup info rec size %u\n", urec_size);
+> +		return -EINVAL;
+> +	}
+> +
+> +	krecord =3D kvcalloc(nrec, krec_size, GFP_KERNEL_ACCOUNT | __GFP_NOWARN=
+);
+
+[ ... ]
+
 --=20
-2.53.0-Meta
-
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260920054225.8645=
+35-1-yonghong.song@linux.dev?part=3D1
