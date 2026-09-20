@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C72AE31D39A
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 06:01:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24DF31D39A
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 06:01:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789884073; cv=none; b=AnPXH8H3m8vWz2lJFTF1A1JI5BLzubCqvhNDPJC1GU4vch3VwLcW49iJMgsg/SF5dOjLHH0IzqCEv1MedibrRqpTxskMT0coNGc8Fc3+FyN+bj022F4ORfHuZnG9/qO3iW4Z7oIZNlCU4vKSZ6B2e9ddbwS9UAB7OPrsTNmx2LY=
+	t=1789884080; cv=none; b=sBvRGISf5IyuihEDMf2deCVlKk6YN1sAU7W+wpRGCD544UHyOn+6zgRa768mSxbvBEO2NPqXCaae0VEpQrs1FIUyWDswXiOMOJ1rwaG1Ph3GpjtArchOytjOKOyaOE2SNcEWl/gbhV/Sp/kSpU1JowKUDvs2IPmaWASQ9ZMAmak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789884073; c=relaxed/simple;
-	bh=qJJ2tU2MydiGR5/7k41lt4fADJqYIqQRuMqsQ7qgJ1U=;
+	s=arc-20240116; t=1789884080; c=relaxed/simple;
+	bh=ck6+cYlqBrqZX35hK1WbN/O66WCpUC7hKaW2ozBx0Kc=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=NGJd1KEew3bCb7QPl6/VVsCWbHYvnkFutRs1RNRImPn775ngYKXMGGI1xKxZAFwkoIbwI3ZCvBiAr22LND75EIfPK3rQN/nIN+jUdKJIpypu0m3tit1qJl5rZWLOv9wqv9rs2cLgWSZ8920gizjy2hEV5SCNd167NHlDAvD/Rds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aHZDDmUE; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=ny0wzWVp5GZg8R5/On5bJz0Kx14IBjtnjCicN0XgLFCHDiMpAcz0jpwsvxhx3xc80pxHTLXlwdHmGBlLr0wdgJpy4VG7hXDjsRBFtBxf730j3aonnfOrXDbVEhAlKqfwzf6V8jM8f6hE7ueg6Cd5uU3sCR69vqdgVJ1IYJPSxxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gmYevJGj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aHZDDmUE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B9011F000FF;
-	Sun, 20 Sep 2026 06:01:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gmYevJGj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1F911F000FF;
+	Sun, 20 Sep 2026 06:01:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789884072;
-	bh=ablm1lcVRA2SPK/r1zW8O7laW4af410ZQ8sp8/GYNxI=;
+	s=k20260515; t=1789884077;
+	bh=H4V8KRQ1kcrkevoy87UZWBqzYN7yUHGgB5TcvCmsleU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=aHZDDmUEJwT2lYGnV7Oao4aeegtRXEwaFZ/R/5H/SDWZLb5iBLv+kqSNClnSfwdVS
-	 gNsyB+/GGXOXMppJQpXBdnJ28hPa+DHonWnT3Tmc+3MQtH4G2sxrvKbRuIiTF9bkH/
-	 w0TGqkHooEJmDPtW6T6hTh2Z9awlQbeK5cELS7g47pF402Nnqm2m0j3qY/LL1qMBnt
-	 PNaYG+x1uO1Bqs9LrKLeb6NbV3wJZGhKsBfXbxqekq8ntDHvPsTnvXbJVj15S9QbBZ
-	 YpsegYO9YkWoERN3ZlV4yFxMN8KCY1ZMB1d8lus+c3Z1TZD4YmZnv8ryfLvoSOOsUv
-	 004MI79s/MD1w==
+	b=gmYevJGjiOBQzk8094IVrTq2NJwtlz0IH1J/ZH0lhtzWsh9hxM8l6hPziniNugzwx
+	 BpZY9VKm8Ol6tkO6KvafHgVFMC2T7EQWEDlMNVILUMRzTncyj/0qjXME8pJeO7jvZW
+	 5bHExZRZbQbLz+ktMdzFdRlmI7ocny9eA2cnAWqUUppFI6g+cghDS+wWi0a/bQnUbf
+	 ausopiN4u0pM6H+PHMgqMrcX91HdhduX517xB2EprMnhIlA78cXPtRhyWxEUDrUV6I
+	 VsDJMI2G6ja2b7+92EnYgMjJF9egkm+tamWZEJqXZPv8yrXuChQcV/GwWzfLGZpdeT
+	 gzIXJfVjb4aAQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 16/20] libbpf: Carry the exception cleanup
- table through the light skeleton
+Subject: Re: [PATCH bpf-next v3 19/20] selftests/bpf: Cover the exception
+ cleanup shapes the chain does not reach
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260920054347.872462-1-yonghong.song@linux.dev>
+In-Reply-To: <20260920054403.874319-1-yonghong.song@linux.dev>
 References: <20260920054225.864535-1-yonghong.song@linux.dev>
- <20260920054347.872462-1-yonghong.song@linux.dev>
+ <20260920054403.874319-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 20 Sep 2026 06:01:11 +0000
-Message-Id: <20260920060112.1B9011F000FF@smtp.kernel.org>
+Date: Sun, 20 Sep 2026 06:01:17 +0000
+Message-Id: <20260920060117.B1F911F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,67 +47,91 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] bpf: Integer overflow in cleanup_info_tot_sz leads to heap buffer =
-overflow
+- [Low] bpf: multi-line comments violate the modern BPF subsystem style
 --
 
-commit ae662736be5da05d165c478a926196fe248e707a
+commit 31d63d33bfdfb4e044e29aa2e2717a6f909808c9
 Author: Yonghong Song <yonghong.song@linux.dev>
 
-libbpf: Carry the exception cleanup table through the light skeleton
+selftests/bpf: Cover the exception cleanup shapes the chain does not reach
 
-This commit updates the light skeleton generator to emit BPF_PROG_LOAD
-instructions that include the exception cleanup table. It stores the cleanup
-records in the loader's bytes blob, calculates the needed buffer size, and
-byte-swaps the records for cross-endian builds.
+This commit adds tests to cover exception cleanup scenarios that the call
+chain doesn't reach. It introduces new shapes like dead continuations, shar=
+ed
+callees, and throwing subprograms in BPF selftests.
 
-> diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
-> index af3a04f161ac1..2345fbdd46f56 100644
-> --- a/tools/lib/bpf/gen_loader.c
-> +++ b/tools/lib/bpf/gen_loader.c
-
+> diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c =
+b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
+> --- a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
 [ ... ]
-
-> @@ -998,6 +1000,9 @@ static void info_blob_bswap(struct bpf_gen *gen, int=
- func_info, int line_info,
-> =20
->  	for (i =3D 0; i < gen->core_relo_cnt; i++)
->  		bpf_core_relo_bswap(cr++);
+> +	/* A pad in the main program's own frame, not in a subprogram. */
+> +	if (test__start_subtest("main_program_pad"))
+> +		run_shape(skel, skel->progs.entry_main_pad, 101, THROW_COOKIE,
+> +			  RAN_MAIN_PAD);
 > +
-> +	for (i =3D 0; i < load_attr->cleanup_info_cnt; i++)
-> +		bpf_cleanup_info_bswap(ci++);
+> +	/* The same call site either way: the subprogram's throw unwinds into
+> +	 * this frame and runs its pad, an extension's stops at its own boundar=
+y.
+> +	 */
 
-[Severity: High]
-Does this loop write beyond the allocated buffer if cleanup_info_tot_sz
-overflowed during its calculation?
+[Severity: Low]
+This isn't a bug, but does this comment in test_shapes() violate the modern
+BPF subsystem multi-line comment style? The opening /* is preferred to be
+on its own line.
 
-If an untrusted user provides a malicious BPF ELF object with a very large
-.bpf_cleanup section, load_attr->cleanup_info_cnt can be extremely large.
-The loop uses this un-wrapped count to byte-swap entries, writing past the
-end of the buffer if the allocation size was wrapped.
+> +	if (test__start_subtest("freplace_subprog_throws"))
+> +		run_shape(skel, skel->progs.entry_freplace, 7, THROW_COOKIE,
+> +			  RAN_FREPLACE);
+> +	if (test__start_subtest("freplace_extension_throws"))
+> +		test_freplace(skel);
+[ ... ]
+> diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup_shapes.=
+c b/tools/testing/selftests/bpf/progs/exceptions_cleanup_shapes.c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup_shapes.c
+[ ... ]
+> +__u64 magic =3D 0x5eed;
+> +__u64 pads_ran =3D 0;
+> +__u64 pad_runs =3D 0;
+> +
+> +/* 1. Everything a cleanup table leaves dead: a throw's continuation, th=
+e tail
+> + * after a resume with an ld_imm64 and a branch in it, and the block onl=
+y that
+> + * continuation reaches.
+> + */
 
->  }
-> =20
->  void bpf_gen__prog_load(struct bpf_gen *gen,
-> @@ -1011,8 +1016,11 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
->  			       load_attr->line_info_rec_size;
->  	int core_relo_tot_sz =3D gen->core_relo_cnt *
->  			       sizeof(struct bpf_core_relo);
-> +	int cleanup_info_tot_sz =3D load_attr->cleanup_info_cnt *
-> +				  load_attr->cleanup_info_rec_size;
+[Severity: Low]
+This isn't a bug, but does this multi-line comment above sweep_frame() foll=
+ow
+the preferred BPF subsystem format? The opening /* should typically reside
+on its own line.
 
-[Severity: High]
-Can this multiplication overflow a 32-bit integer?
+> +static __used __naked __noinline __u64 sweep_frame(void)
+> +{
+[ ... ]
+> +SEC("syscall")
+> +int entry_sweep(void *ctx)
+> +{
+> +	return sweep_frame();
+> +}
+> +
+> +/* 2. A callee called from both a covered and an uncovered site: the pad
+> + * belongs to the call site, not the callee. Either site can throw, and =
+the RCU
+> + * lock between them is what an unwind out of the uncovered one leaks.
+> + */
 
-If load_attr->cleanup_info_cnt is a huge value (e.g., 0x15555556),
-multiplying it by cleanup_info_rec_size (12) will wrap around a 32-bit
-integer.=20
+[Severity: Low]
+This isn't a bug, but similarly, does this comment above shared_callee() ne=
+ed
+the opening /* placed on its own line to match the modern BPF comment style?
 
-This would result in a small wrapped value being assigned to
-cleanup_info_tot_sz (e.g., 0x15555556 * 12 =3D 4294967304, wrapping to 8).
-The resulting undersized allocation passed to add_data() would then lead
-to the out-of-bounds write in info_blob_bswap().
+> +static __used __noinline __u64 shared_callee(__u64 x)
+> +{
+> +	if (x > 100)
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260920054225.8645=
-35-1-yonghong.song@linux.dev?part=3D16
+35-1-yonghong.song@linux.dev?part=3D19
