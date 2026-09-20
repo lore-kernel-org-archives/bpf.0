@@ -1,270 +1,261 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7798456E04;
-	Sun, 20 Sep 2026 21:16:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C2B45A2A2;
+	Sun, 20 Sep 2026 21:16:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789939004; cv=none; b=KGTSpyJ1xKgY/9ILExYfS5/O0I8vGMDMqoi7O3N5o1/VbraM+IORbudFO0h9Za4gB8m8mlppA5NDVoOLtHYKwMY2e2H0Cs+4zWkQ8j+B3x7iQxV8TnWgyElc4GdRTDK5HWKYhznijiWo0oT8XVKHd5kkLCoMjfxjSZOeYVnuLDo=
+	t=1789939008; cv=none; b=TTVSUg2aqD1KtYKW2NBgqSF66eBZk1bZHYqOfUbYFLd9TSIs/D/oGeESk56uYpBZ18N04Wv8QaW7JkK9/az5BEJg0yzDbQiI3nTip/klFqKp0Pc85rZmucXzlc4tCJ4tvfJKGs9INZauuq2H3Q8K3md+4yO/tptNnVOSMJKsOXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789939004; c=relaxed/simple;
-	bh=kx55kT3bKj10jHdfEaFKrtXmbLQzoa/51FWF0mZu1Ns=;
+	s=arc-20240116; t=1789939008; c=relaxed/simple;
+	bh=4WdrKt8AKz6G6QYbkTvwcLiL7itkcl3/e4TpzrVv8U8=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=SFz+1+bWx1rJCho7L7Xd2vW2S+2U7DeI/HgJ+Zg+dJuyf8STR6rWg8Ym6kkYNnaxGZnZ8Hone2qdjqSmka1QGB6ICIJs1tDMDRwKR7mYppCdNZLpY+5tYPgWe7okpFxsrX5GBqZp6RIQFXvk6N2jrWnVbGXIzOH6cgXu0jVtqLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y7QHwwP7; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=DN3aX7ScZeY/biYaY4SfTYUSl+mn5YRCTBfn/3f9T0CW6bEtGduhICLyJjVZpwhW3BdAU+mpVNCwM75vgmg1Hjyzi49jZ/2/LZ0rDZaHVA+lkLcQJCnKorEK+Gq3ATJQY3/QATSaFJDC+8Duy+I9nV0xryfMPvYt+XclWVmIhsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZMRyOv5W; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y7QHwwP7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C1FA1F000FF;
-	Sun, 20 Sep 2026 21:16:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZMRyOv5W"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F5F1F00893;
+	Sun, 20 Sep 2026 21:16:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789939002;
-	bh=PBGInfjkwxwAGUnEe8tY1hoZnVx7snPkf2oCVB+ndIQ=;
+	s=k20260515; t=1789939006;
+	bh=uH60GIKNKr56csHW3uhTAYrw3Kq784GrIw38oikXzzo=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Y7QHwwP7fuZyFJzHNNBOz6JFvKrpdwpV6KCkIpbtYYv8NrOzF0Mz9q4+f8LvICAUz
-	 tFMJdNNNRgIBkmotIt8rUgTj6mz5m1Qa1y3ZeHCgsj7S0aX+DaggeoXWkigWiqhJol
-	 eJmHDXOXwPnjdJkBpbmTDfmbVofAX4mJ+RWO+1GO6OIOFoZq7A36usmhXY0aFzvRkj
-	 dG1okwc2i9ZVwSXyaeW72v1SmQoswREv1uLAxuhQh0+DcLJBH8SmzlBHR7CcEby+HY
-	 1eY3zRhsyUWgYTMnDwXHQFgnvCTpKwhdix/o2oLE5MQwbOlfNV+BzYYy0BX2DEKsfI
-	 rqYKpsn3D2ZQg==
-Content-Type: multipart/mixed; boundary="===============0464181429910322057=="
+	b=ZMRyOv5WCJyTXMSstujmuS4FgW7KsRJOVY9ENQnz1eQvWc82aLCcKHD4gL2EE6e1O
+	 rXCrz/0K7m+fdrwVZXdmma28bmWUkxZYitfoXoPUEi9X1jZDfZceaE8YHHND9zPcOp
+	 sQgAro6MY2ZUjV1H/rvydGHhTZL4elDHjje7cwWTnFywG2qZ/ev2JOzRwblAU0XsNm
+	 hencheMH6yECWmFO3/psSJtRyhd5vlW2nk02Wyod19YVMuMIpNxqxOdi+N9VUAn6//
+	 GjzeD7Wbnjdt3ALLpvP3ywgCdOsILVHKVnA+53TJewhripWDEFB4N64XP7OZE7DRpo
+	 7+E+Bj6FZYvZw==
+Content-Type: multipart/mixed; boundary="===============5629786104314495298=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <dade43647238ac35540c960adf4a484b8ac4c5b597cb4c7365b53f2b57cbe3f7@mail.kernel.org>
-In-Reply-To: <20260920195633.3033620-3-kuniyu@google.com>
-References: <20260920195633.3033620-3-kuniyu@google.com>
-Subject: Re: [PATCH bpf-next 2/7] bpf: tcp: Introduce bpf_tcp_ops.{enqueue,dequeue}_rcvq().
+Message-Id: <8c657a1bbe5876b5978f66e8daf807c210af2c89e6a938fc6eaa04cbc6b21e90@mail.kernel.org>
+In-Reply-To: <20260920195633.3033620-8-kuniyu@google.com>
+References: <20260920195633.3033620-8-kuniyu@google.com>
+Subject: Re: [PATCH bpf-next 7/7] selftest: bpf: Add test for bpf_tcp_ops.{enqueue,dequeue}_rcvq().
 From: bot+bpf-ci@kernel.org
 To: kuniyu@google.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com
 Cc: yonghong.song@linux.dev,john.fastabend@gmail.com,sdf@fomichev.me,edumazet@google.com,ncardwell@google.com,willemb@google.com,ukyab@berkeley.edu,cleger@meta.com,kuniyu@google.com,kuni1840@gmail.com,bpf@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun, 20 Sep 2026 21:16:40 +0000 (UTC)
+Date: Sun, 20 Sep 2026 21:16:44 +0000 (UTC)
 
---===============0464181429910322057==
+--===============5629786104314495298==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> index d61ee00052e33..f2d838bcb0a7f 100644
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-> @@ -3053,6 +3053,12 @@ struct bpf_tcp_ops {
->  			      struct request_sock *req, struct sk_buff *syn_skb,
->  			      enum tcp_synack_type synack_type,
->  			      u32 opt_off);
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tcp_autolowat.c b/tools/testing/selftests/bpf/prog_tests/tcp_autolowat.c
+> new file mode 100644
+> index 0000000000000..c5ead4af24f85
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/tcp_autolowat.c
+> @@ -0,0 +1,350 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright 2026 Google LLC */
+> +#include <sys/epoll.h>
+
+Does this file need to include <sched.h> for unshare() and CLONE_NEWNET?
+The calls are at tcp_autolowat_setup_cb() but there's no direct include.
+Every other bpf prog_test that unshares a netns includes <sched.h>
+explicitly (bind_perm.c, setget_sockopt.c, sock_fields.c, tcp_hdr_options.c,
+tcp_custom_syncookie.c). It compiles today only because test_progs.h pulls
+in <pthread.h>, which brings <sched.h> transitively under _GNU_SOURCE.
+
 > +
-> +	/* Called when an incoming skb is enqueued to sk->sk_receive_queue. */
-> +	void (*enqueue_rcvq)(struct sock *sk, struct sk_buff *skb);
+> +#include "test_progs.h"
+> +#include "cgroup_helpers.h"
+> +#include "network_helpers.h"
 > +
-> +	/* Called after data is dequeued from sk->sk_receive_queue. */
-> +	void (*dequeue_rcvq)(struct sock *sk);
->  };
->
->  #define bpf_tcp_ops_call(op, sk, ...)					\
-> @@ -3144,6 +3150,18 @@ static inline void tcp_bpf_rtt(struct sock *sk, long mrtt, u32 srtt)
->  	bpf_tcp_ops_call(rtt, sk, mrtt, srtt);
->  }
->
-> +static inline void bpf_tcp_ops_enqueue_rcvq(struct sock *sk, struct sk_buff *skb)
-> +{
-> +	if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_RCVQ_CB_FLAG))
-> +		bpf_tcp_ops_call(enqueue_rcvq, sk, skb);
-> +}
-> +
-> +static inline void bpf_tcp_ops_dequeue_rcvq(struct sock *sk)
-> +{
-> +	if (BPF_SOCK_OPS_TEST_FLAG(tcp_sk(sk), BPF_SOCK_OPS_RCVQ_CB_FLAG))
-> +		bpf_tcp_ops_call(dequeue_rcvq, sk);
-> +}
-> +
+> +#include "tcp_autolowat.skel.h"
 
 [ ... ]
 
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index a4456b4194122..a714b36a74940 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ -1610,6 +1610,8 @@ void tcp_cleanup_rbuf(struct sock *sk, int copied)
->  	     "cleanup rbuf bug: copied %X seq %X rcvnxt %X\n",
->  	     tp->copied_seq, TCP_SKB_CB(skb)->end_seq, tp->rcv_nxt);
->  	__tcp_cleanup_rbuf(sk, copied);
-> +
-> +	bpf_tcp_ops_dequeue_rcvq(sk);
->  }
+> +struct rpc_test_case {
+> +	char data[4096];
+> +	struct rpc_descriptor desc[32];
+> +	struct rpc_event event[32];
+> +} rpc_test_cases[] = {
 
-The comment at the top of the file documents dequeue_rcvq() as "Called
-after data is dequeued from sk->sk_receive_queue". Is it accurate to
-invoke this callback unconditionally at the tail of tcp_cleanup_rbuf()?
+Should rpc_test_cases[] be static? It's currently defined with external
+linkage, and test_progs links every prog_tests/*.o together. Every
+comparable table in neighboring tests is static (test_cases[] in
+ctx_rewrite.c, sk_bypass_prot_mem.c, crafted_cases[] in reg_bounds.c,
+bond_test_cases[] in xdp_bonding.c). All other file-scope objects in this
+file are already static.
 
-Looking at the callers, tcp_cleanup_rbuf(sk, copied) is invoked:
+> +	{
+> +		.desc = {
+> +			{ .header_len = 100, .payload_len = 150 },
+> +		},
+> +		.event = {
+> +			{ .type = RPC_EVENT_AUTOLOWAT,	.val = 1},
+> +			/* Single full RPC message in skb. */
+> +			{ .type = RPC_EVENT_SEND,	.len = RPC_DESC_SIZE + 100 + 150},
+> +			{ .type = RPC_EVENT_EPOLL,	.nfds = 1},
+> +			{ .type = RPC_EVENT_RCVLOWAT,	.rcvlowat = RPC_DESC_SIZE + 100 + 150},
+> +		},
+> +	},
+> +	{
+> +		.desc = {
+> +			{.header_len = 100, .payload_len = 150},
+> +			{.header_len = 100, .payload_len = 150},
+> +			{.header_len = 100, .payload_len = 150},
+> +		},
+> +		.event = {
+> +			{ .type = RPC_EVENT_AUTOLOWAT,	.val = 1},
+> +			/* Two full RPC messages in skb. */
+> +			{.type = RPC_EVENT_SEND,	.len = (RPC_DESC_SIZE + 100 + 150) * 2},
+> +			{.type = RPC_EVENT_EPOLL,	.nfds = 1},
+> +			{.type = RPC_EVENT_RCVLOWAT,	.rcvlowat = (RPC_DESC_SIZE + 100 + 150) * 2},
+> +			/* Single full RPC message in skb. */
+> +			{ .type = RPC_EVENT_SEND,	.len = RPC_DESC_SIZE + 100 + 150},
+> +			{ .type = RPC_EVENT_EPOLL,	.nfds = 1},
+> +			{ .type = RPC_EVENT_RCVLOWAT,	.rcvlowat = (RPC_DESC_SIZE + 100 + 150) * 3},
+> +		},
+> +	},
+> +	{
+> +		.desc = {
+> +			{.header_len = 100, .payload_len = 150},
+> +			{.header_len = 100, .payload_len = 150},
+> +			{.header_len = 100, .payload_len = 150},
+> +		},
+> +		.event = {
+> +			{ .type = RPC_EVENT_AUTOLOWAT,	.val = 1},
+> +			/* Two full RPC messages in skb. */
+> +			{.type = RPC_EVENT_SEND,	.len = (RPC_DESC_SIZE + 100 + 150) * 2},
+> +			{.type = RPC_EVENT_EPOLL,	.nfds = 1},
+> +			{.type = RPC_EVENT_RCVLOWAT,	.rcvlowat = (RPC_DESC_SIZE + 100 + 150) * 2},
+> +			/* Single full RPC message in skb. */
+> +			{ .type = RPC_EVENT_SEND,	.len = RPC_DESC_SIZE},
 
-1. From __tcp_sock_set_quickack():
+Does this comment match the event? The comment says "Single full RPC
+message in skb" but the send is only RPC_DESC_SIZE (8 bytes) without the
+250-byte header+payload. This is what distinguishes this case from
+rpc_test_cases[1] where the identical comment sits above
+.len = RPC_DESC_SIZE + 100 + 150. The expected rcvlowat that follows
+(unchanged at (RPC_DESC_SIZE + 100 + 150) * 2) confirms the intent: only
+the next descriptor arrives, so SO_RCVLOWAT stays at the still-unread
+complete frames. Since the comment is the only thing explaining this case's
+purpose, does it need to say "Only the next descriptor in skb" instead?
 
-net/ipv4/tcp.c:__tcp_sock_set_quickack() {
-    ...
-    tcp_cleanup_rbuf(sk, 1);
-}
-
-This call forces an ACK from setsockopt(TCP_QUICKACK) or TCP_NODELAY
-without touching the receive queue.
-
-2. From tcp_recvmsg_locked() with copied == 0:
-
-net/ipv4/tcp.c:tcp_recvmsg_locked() {
-    ...
-    tcp_cleanup_rbuf(sk, copied);
-    ...
-    sk_wait_data(sk, &timeo, last);
-}
-
-This happens before sk_wait_data() when no data has been dequeued yet.
-
-3. From tcp_recvmsg_locked() with MSG_PEEK:
-
-The final tcp_cleanup_rbuf(sk, copied) runs with copied > 0, but the
-skbs remain queued and copied_seq is unchanged because MSG_PEEK leaves
-the data in the queue.
-
-With the kfunc added later in the series, dequeue_rcvq() can call
-__tcp_set_rcvlowat(..., wakeup=true), which triggers tcp_data_ready()
--> sk->sk_data_ready(). If a BPF program lowers sk_rcvlowat from the
-dequeue_rcvq() callback, would these no-dequeue paths cause spurious
-EPOLLIN wakeups that the feature is meant to suppress?
-
-Should the hook be gated on an actual dequeue (copied > 0 and not
-MSG_PEEK), or should the documented contract be adjusted?
+> +			{ .type = RPC_EVENT_EPOLL,	.nfds = 1},
+> +			{ .type = RPC_EVENT_RCVLOWAT,	.rcvlowat = (RPC_DESC_SIZE + 100 + 150) * 2},
+> +		},
+> +	},
 
 [ ... ]
 
-> diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> index 6ac6f9d5b6c38..c60c61bb0a715 100644
-> --- a/net/ipv4/tcp_input.c
-> +++ b/net/ipv4/tcp_input.c
-> @@ -5344,6 +5344,8 @@ static void tcp_ofo_queue(struct sock *sk)
->  			continue;
->  		}
->
-> +		bpf_tcp_ops_enqueue_rcvq(sk, skb);
+> +static int tcp_autolowat_setup_cb(struct tcp_autolowat_test_cb *cb, int family)
+> +{
+> +	struct epoll_event ev = {};
+> +	int err;
+> +	int i;
 > +
->  		tail = skb_peek_tail(&sk->sk_receive_queue);
->  		eaten = tail && tcp_try_coalesce(sk, tail, skb, &fragstolen);
->  		tcp_rcv_nxt_update(tp, TCP_SKB_CB(skb)->end_seq);
-> @@ -5547,6 +5549,8 @@ static int __must_check tcp_queue_rcv(struct sock *sk, struct sk_buff *skb,
->  	int eaten;
->  	struct sk_buff *tail = skb_peek_tail(&sk->sk_receive_queue);
->
-> +	bpf_tcp_ops_enqueue_rcvq(sk, skb);
+> +	for (i = 0; i < ARRAY_SIZE(cb->fd); i++)
+> +		cb->fd[i] = -1;
 > +
->  	eaten = (tail &&
->  		 tcp_try_coalesce(sk, tail,
->  				  skb, fragstolen)) ? 1 : 0;
+> +	cb->saved_netns = open("/proc/self/ns/net", O_RDONLY);
+> +	if (!ASSERT_OK_FD(cb->saved_netns, "save netns"))
+> +		goto err;
+> +
+> +	err = unshare(CLONE_NEWNET);
+> +	if (!ASSERT_OK(err, "unshare"))
+> +		goto err;
+> +
+> +	err = system("ip link set dev lo up");
+> +	if (!ASSERT_OK(err, "set up lo"))
+> +		goto err;
 
-In tcp_queue_rcv(), bpf_tcp_ops_enqueue_rcvq(sk, skb) is invoked after
-tail has been cached from sk->sk_receive_queue but before tail is
-dereferenced by tcp_try_coalesce(). Can the BPF callback synchronously
-drain sk->sk_receive_queue, leaving tail pointing at freed memory?
+A subsystem pattern flags this as potentially concerning: network-namespace
+setup is open-coded here with open("/proc/self/ns/net") + unshare() +
+system("ip link ..."), and tcp_autolowat_teardown_cb() does the matching
+setns()+close(). The BPF selftest tree has a SYS() wrapper in
+test_progs.h that is exactly ASSERT_OK(system(cmd), cmd) plus a goto
+label, so the system() call could use that. Nine other bpf prog_tests
+already do the unshare(CLONE_NEWNET)+saved-fd idiom the same way this does
+(bind_perm.c, bpf_iter_setsockopt.c, flow_dissector_reattach.c,
+setget_sockopt.c, sk_lookup.c, sock_fields.c, sk_assign.c,
+tcp_custom_syncookie.c, tcp_hdr_options.c), and network_helpers'
+open_netns()/close_netns() operate on a named netns (ip netns add), not an
+anonymous unshare. Is the current pattern acceptable here, or would using
+SYS() for the ip command be an improvement?
 
-Concrete path (verified in this commit):
+[ ... ]
 
-1. net/ipv4/bpf_tcp_ops.c only blocks bpf_setsockopt() for
-rwnd_init/timeout_init/hdr_opt_len/write_hdr_opt:
+> diff --git a/tools/testing/selftests/bpf/progs/tcp_autolowat.c b/tools/testing/selftests/bpf/progs/tcp_autolowat.c
+> new file mode 100644
+> index 0000000000000..bb96e19e7589d
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/tcp_autolowat.c
+> @@ -0,0 +1,312 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Copyright 2026 Google LLC */
+> +#include "vmlinux.h"
+> +
+> +#include <string.h>
+> +#include <limits.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +#include <bpf/bpf_core_read.h>
+> +
+> +#include "bpf_kfuncs.h"
+> +#include "bpf_tracing_net.h"
 
-net/ipv4/bpf_tcp_ops.c:bpf_tcp_ops_get_func_proto() {
-    case BPF_FUNC_setsockopt:
-        if (moff == offsetof(struct bpf_tcp_ops, rwnd_init) || ... write_hdr_opt))
-            return NULL;
-        return &bpf_sk_setsockopt_proto;
-}
+[ ... ]
 
-enqueue_rcvq is not in the blocked list, so a prog attached to
-.enqueue_rcvq may call bpf_setsockopt(). The commit message states the
-intended use is to adjust sk->sk_rcvlowat, so
-bpf_setsockopt(SOL_SOCKET, SO_RCVLOWAT, ...) is permitted.
+> +static void tcp_set_autolowat(struct tcp_autolowat_cb *cb,
+> +			      struct sock *sk)
+> +{
+> +	struct tcp_sock *tp = (struct tcp_sock *)sk;
+> +	u32 val; /* To handle wraparound. */
+> +
+> +	LOG("Setting rcvlowat: tp->copied_seq: %u, rpc_desc_seq: %u, rpc_end_seq: %u, rpc_desc_buff_len: %u",
+> +	    TP_SEQ(copied_seq), CB_SEQ(rpc_desc_seq),
+> +	    CB_SEQ(rpc_end_seq), cb->rpc_desc_buff_len);
+> +
+> +	if (before(tp->copied_seq, cb->rpc_desc_seq))
+> +		val = cb->rpc_desc_seq - tp->copied_seq;
+> +	else if (cb->rpc_desc_buff_len != RPC_DESC_SIZE)
+> +		val = RPC_DESC_SIZE;
+> +	else
+> +		val = cb->rpc_end_seq - tp->copied_seq;
+> +
+> +	if (val != tp->inet_conn.icsk_inet.sk.sk_rcvlowat) {
+> +		bpf_tcp_ops_set_rcvlowat(sk, val);
 
-2. bpf_sk_setsockopt -> _bpf_setsockopt -> __bpf_setsockopt ->
-sol_socket_sockopt() accepts SO_RCVLOWAT and calls sk_setsockopt().
+Does this compile? The call to bpf_tcp_ops_set_rcvlowat() has no
+declaration anywhere in the translation unit. Checking:
 
-3. sk_setsockopt() SO_RCVLOWAT calls tcp_set_rcvlowat() for a TCP
-socket with a non-NULL sk->sk_socket.
+- vmlinux.h is generated by bpftool btf dump, which never emits function
+  prototypes (libbpf's BTF dumper marks BTF_KIND_FUNC as ORDERED and emits
+  nothing for it).
 
-4. tcp_set_rcvlowat() calls tcp_data_ready(sk):
+- bpf_helpers.h/bpf_helper_defs.h only declare BPF helpers, not kfuncs.
 
-net/ipv4/tcp.c:tcp_set_rcvlowat() {
-    ...
-    tcp_data_ready(sk);
-}
+- bpf_kfuncs.h declares each kfunc explicitly with __ksym, but has no
+  entry for bpf_tcp_ops_set_rcvlowat.
 
-net/ipv4/tcp_input.c:tcp_data_ready() {
-    if (tcp_epollin_ready(sk, sk->sk_rcvlowat) || sock_flag(sk, SOCK_DONE))
-        READ_ONCE(sk->sk_data_ready)(sk);
-}
+- Grep over tools/ finds the identifier only at the two call sites in this
+  file (here and tcp_disable_autolowat()).
 
-Since tail != NULL means unread bytes are queued, rcv_nxt - copied_seq >
-0, and the prog chooses the new (small) rcvlowat, tcp_epollin_ready()
-returns true.
+All of progs/*.c are built with -Wall -Werror -std=gnu11 (Makefile:463-472),
+and a call to an undeclared function in C99+/gnu11 is an error. Even if the
+diagnostic were suppressed, an implicitly declared function carries no
+__ksym attribute, so libbpf would not emit a kfunc relocation and the
+program could not be loaded. The call itself looks correct: the kernel
+kfunc is int bpf_tcp_ops_set_rcvlowat(struct sock *sk, int rcvlowat,
+const struct bpf_prog_aux *aux) registered with KF_IMPLICIT_ARGS, and
+resolve_btfids drops the implicit argument from the BPF-visible signature.
+Doesn't this just need the declaration, like:
 
-5. For a socket whose sk_data_ready drains the receive queue:
+  extern int bpf_tcp_ops_set_rcvlowat(struct sock *sk, int rcvlowat) __ksym;
 
-SOCKMAP verdict mode: sk_psock_verdict_data_ready() ->
-tcp_read_skb() unlinks and consumes every queued skb:
+in this file or in bpf_kfuncs.h?
 
-net/core/skmsg.c:sk_psock_verdict_data_ready() {
-    ...
-    ops->read_skb(sk, sk_psock_verdict_recv);
-}
-
-net/ipv4/tcp.c:tcp_read_skb() {
-    while ((skb = skb_peek(&sk->sk_receive_queue)) != NULL) {
-        ...
-        __skb_unlink(skb, &sk->sk_receive_queue);
-        ...
-        if (used < 0 || !skb->len) {
-            tcp_eat_recv_skb(sk, skb);
-            ...
-        }
-        ...
-    }
-}
-
-There is no pause, ownership guard, or re-entrancy protection.
-
-SOCKMAP strparser/kTLS: sk_psock_strp_data_ready() ->
-strp_data_ready() -> strp_read_sock() -> tcp_bpf_strp_read_sock() ->
-tcp_eat_recv_skb() -> __skb_unlink() + __kfree_skb()/
-skb_attempt_defer_free(). strp_data_ready() only defers to a workqueue
-when the socket is owned by a user; in the softirq receive path it runs
-inline.
-
-6. Control returns to tcp_queue_rcv(), which then evaluates:
-
-eaten = (tail && tcp_try_coalesce(sk, tail, skb, fragstolen)) ? 1 : 0;
-
-tcp_try_coalesce() immediately dereferences the stale pointer:
-
-net/ipv4/tcp_input.c:tcp_try_coalesce() {
-    if (TCP_SKB_CB(to)->end_seq != TCP_SKB_CB(from)->seq)
-        return false;
-    ...
-}
-
-This causes a use-after-free if the skb was freed, or silent data
-duplication/loss plus sk_rmem_alloc mis-accounting if the skb was
-unlinked but not yet freed (handed to the psock ingress queue).
-
-Note that the sibling hook in tcp_ofo_queue() is not affected because
-tail is read *after* bpf_tcp_ops_enqueue_rcvq(). Would reading tail
-after the callback in tcp_queue_rcv() as well close this window? The skb
-being queued is still owned by the caller and is not on any queue, so it
-cannot be consumed by the nested drain.
-
-Also note that bpf_sk_setsockopt_nodelay_proto was introduced
-specifically to block TCP_NODELAY because "TCP_NODELAY triggers
-tcp_push_pending_frames() and re-enters CA_EVENT_TX_START in
-bpf_tcp_cc", but bpf_tcp_ops uses the unfiltered
-bpf_sk_setsockopt_proto. Is this difference intentional?
+[ ... ]
 
 
 ---
@@ -272,4 +263,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35535082194
---===============0464181429910322057==--
+--===============5629786104314495298==--
