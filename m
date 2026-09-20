@@ -1,21 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3A5931D39A
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 05:43:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED5D3D7D6B
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 05:43:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789883009; cv=none; b=ay+Q1HeB+twRHILSEcAS/25a+D0L12/tRLjM87Hm+UkyO36PSpLik1VsrchPxapd+RpB0ikvV5x0GZNfUdgb5VcS4M2OhT/RjV8uGxgvZYy7t+ssc2nDml4DROskarjLvF2tqdjqbjNfqj6ZJ42gr39U8dc+BB1KEdCx+NedOOA=
+	t=1789883013; cv=none; b=h/LfPdwCpuFcmIyQwdkDKszY3T3Sjy9u49ss9AsjYZj9IqsCA+8hAq1gBFWI9DkGxMh2pAnxBC3qDYmKviabv91GPnfEttO6cjuEXy5DeZp1xWxOQS/gIWnZCyAQJp4tIvMvdjLdiygUmaDod2TvJkMaq2juitIV40UGJqfMFwk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789883009; c=relaxed/simple;
-	bh=xea/2r96v2/lVhccL0iPwRmVNCyjYcNAZsr0aGKdR1A=;
+	s=arc-20240116; t=1789883013; c=relaxed/simple;
+	bh=U+z4EwoE0oJXdDXbRxZQZz6atmmGqrTt07Hfw83La0s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RXxVh66k9rMAxzkZGPehOKmG4c3aOsghk4huoDbKCcEJSRAXxg0tKfKEps6dsKiRCA9PTe4O9CuAuNScs70UWh4o8u5seqhsqAudLWqCnsmB0aBwNwU0OADPN2Xi1LSXnSwen9CFYdn4gjB08OmfbSdoWlVU/PjA41IpsB5JoZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	 MIME-Version; b=MTcvO7zd3WUbak6RpzQrUtlTC0WgjADEbPZAVIDsuIBFbg/3fEgpXkytyCCtN/6I3DWPcSs1pUQ8ktM7TLqlcJoYf6Hdz0FC184sjXY89S7o3hlFM/W/F3BC6v8Fx3AIpPm6GZPtMEh1UjlxMfBsD5XVeZElZRqZSLPuqVoi51s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id 499F92BEBAB736; Sat, 19 Sep 2026 22:43:17 -0700 (PDT)
+	id 65D1C2BEBAB75B; Sat, 19 Sep 2026 22:43:22 -0700 (PDT)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -23,9 +23,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	kernel-team@fb.com
-Subject: [PATCH bpf-next v3 10/20] bpf: Dispatch exception cleanup pads from bpf_throw()
-Date: Sat, 19 Sep 2026 22:43:17 -0700
-Message-ID: <20260920054317.870021-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v3 11/20] bpf, x86: Dispatch exception cleanup pads at run time
+Date: Sat, 19 Sep 2026 22:43:22 -0700
+Message-ID: <20260920054322.870313-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260920054225.864535-1-yonghong.song@linux.dev>
 References: <20260920054225.864535-1-yonghong.song@linux.dev>
@@ -37,763 +37,354 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-Stop discarding the frames an exception unwinds through. bpf_throw()
-already walks the BPF call stack with arch_bpf_stack_walk() to find the
-exception boundary; have it look each frame's return address up in that
-(sub)program's cleanup table on the way and run the landing pad a matchin=
-g
-record names.
+Provide the arch half for x86-64: force the full callee-saved spill for a
+program carrying a cleanup table so the walker can find a frame's r6-r9 i=
+n
+its callee's prologue, record where that spill area starts, build the
+native cleanup table from the JIT's addrs[], emit a bare return for a pad=
+'s
+bpf_unwind_resume(), and hand control to a pad from
+arch_bpf_run_cleanup_pad().
 
-A pad is run as a subroutine of the walker, not jumped to. It executes wi=
-th
-the unwinding frame's frame pointer and BPF callee-saved registers, so
-everything it reads is that frame's, but on the current stack far below i=
-t,
-so nothing it calls can disturb the frame it is cleaning up after. It end=
-s
-in what the JIT emits for its bpf_unwind_resume(), which hands control ba=
-ck
-to the walker rather than to the frame's caller. That is exactly the
-procedure the LLVM commit emitting the section describes.
-
-Restoring the frame's r6-r9 is what makes this work, and it is only
-possible because the callee about to be discarded spilled them in its own
-prologue. bpf_cleanup_force_spill() tells a JIT to make that spill
-unconditional and of a known shape for every subprogram of a program
-carrying a cleanup table, and aux->exc->spill_off records where it starts=
-,
-so the walker needs no per-frame metadata. The frame that called
-bpf_throw() has no callee to have spilled anything and never runs its own
-epilogue, so the JIT spills that frame's registers at the throw site
-instead, in the area aux->exc->throw_spill_off names.
-
-The main program needs the table handed to it rather than built for it.
-jit_subprogs() compiles it as func[0], but the ksym covering that image i=
-s
-the one bpf_prog_load() registers for the outer bpf_prog, and that is wha=
-t
-the walker finds -- so without the handover a landing pad in the main
-program's own frame is never dispatched, silently, since the exception
-still reaches the boundary and the cookie still comes back.
-
-Which instructions a JIT has to lower its own way reach it as indices int=
-o
-the (sub)program, aux->exc->throw_at and ->resume_at, carried there from
-the insn_aux_data marks so that patching keeps them pointing at the right
-instruction.
-
-All of it hangs off bpf_prog_aux by a single pointer. bpf_prog_aux is on
-every BPF program and this is a niche feature, so struct bpf_exception_in=
-fo
-exists only for a program that carries a table, and aux->exc being set is
-what says the program carries one at all.
+Support is gated on CONFIG_UNWINDER_ORC, the same requirement
+arch_bpf_stack_walk() and therefore bpf_throw() already have here, and
+bpf_cleanup_pad.o is built only there. Nothing else can call it, and a
+frame-pointer build would have objtool validate a routine that has to car=
+ry
+BPF r10 in rbp rather than a frame pointer ("call without frame pointer
+save/setup", an error under CONFIG_OBJTOOL_WERROR).
 
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- include/linux/bpf.h    |  84 +++++++++++++++++++++
- include/linux/filter.h |   1 +
- kernel/bpf/core.c      |  30 +++++++-
- kernel/bpf/exception.c | 163 +++++++++++++++++++++++++++++++++++++++++
- kernel/bpf/exception.h |   7 ++
- kernel/bpf/fixups.c    | 141 +++++++++++++++++++++++++++++++++++
- kernel/bpf/helpers.c   |  34 +++++++++
- 7 files changed, 457 insertions(+), 3 deletions(-)
+ arch/x86/net/Makefile          |  3 ++
+ arch/x86/net/bpf_cleanup_pad.S | 80 ++++++++++++++++++++++++++++++++++
+ arch/x86/net/bpf_jit_comp.c    | 79 ++++++++++++++++++++++++++++-----
+ 3 files changed, 150 insertions(+), 12 deletions(-)
+ create mode 100644 arch/x86/net/bpf_cleanup_pad.S
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 5033b934ffd9..0502b9fc4a6d 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1774,6 +1774,89 @@ enum bpf_sig_keyring {
- 	BPF_SIG_KEYRING_BPF,
- };
-=20
-+/*
-+ * One cleanup region of a JITed (sub)program: @pad is the landing pad t=
-o run
-+ * for a return address in (begin, end], the native code of its call sit=
-es.
-+ */
-+struct bpf_cleanup_range {
-+	u64 begin;
-+	u64 end;
-+	u64 pad;
-+};
+diff --git a/arch/x86/net/Makefile b/arch/x86/net/Makefile
+index dddbefc0f439..8bb22644ba10 100644
+--- a/arch/x86/net/Makefile
++++ b/arch/x86/net/Makefile
+@@ -7,4 +7,7 @@ ifeq ($(CONFIG_X86_32),y)
+         obj-$(CONFIG_BPF_JIT) +=3D bpf_jit_comp32.o
+ else
+         obj-$(CONFIG_BPF_JIT) +=3D bpf_jit_comp.o bpf_timed_may_goto.o
++        ifdef CONFIG_UNWINDER_ORC
++                obj-$(CONFIG_BPF_JIT) +=3D bpf_cleanup_pad.o
++        endif
+ endif
+diff --git a/arch/x86/net/bpf_cleanup_pad.S b/arch/x86/net/bpf_cleanup_pa=
+d.S
+new file mode 100644
+index 000000000000..025a54e718a4
+--- /dev/null
++++ b/arch/x86/net/bpf_cleanup_pad.S
+@@ -0,0 +1,80 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
 +
-+struct bpf_exception_info {
-+	struct bpf_cleanup_info *info;
-+	struct bpf_cleanup_range *ranges;
-+	/* Landing pad instruction indices, sorted and deduplicated. */
-+	u32 *pad_at;
-+	/* bpf_throw() call instruction indices, sorted. */
-+	u32 *throw_at;
-+	/* Likewise for bpf_unwind_resume(), the way back out of a pad. */
-+	u32 *resume_at;
-+	/* One bit per instruction that only runs while unwinding. */
-+	unsigned long *pad_body;
-+	u32 nr_info;
-+	u32 nr_ranges;
-+	u32 nr_pad_at;
-+	u32 nr_throw_at;
-+	u32 nr_resume_at;
-+	u32 nr_pad_body;
-+	/* Offset from a frame's FP to the caller's spilled r6-r9. */
-+	s32 spill_off;
-+	/* Likewise, to the registers a frame spills before calling bpf_throw()=
-. */
-+	s32 throw_spill_off;
-+};
-+
-+#ifdef CONFIG_BPF_SYSCALL
-+bool bpf_cleanup_force_spill(const struct bpf_prog *prog);
-+bool bpf_cleanup_insn_is_pad(const struct bpf_prog *prog, u32 idx);
-+bool bpf_cleanup_insn_in_pad(const struct bpf_prog *prog, u32 idx);
-+bool bpf_cleanup_insn_is_throw(const struct bpf_prog *prog, u32 idx);
-+bool bpf_cleanup_insn_is_resume(const struct bpf_prog *prog, u32 idx);
-+int bpf_cleanup_attach_main_prog(struct bpf_verifier_env *env, struct bp=
-f_prog *prog);
-+void bpf_cleanup_fill_native_ranges(struct bpf_prog *prog, u32 *addrs, v=
-oid *image);
-+void bpf_cleanup_free_info(struct bpf_prog_aux *aux);
-+#else
-+static inline bool bpf_cleanup_force_spill(const struct bpf_prog *prog)
-+{
-+	return false;
-+}
-+
-+static inline bool bpf_cleanup_insn_is_pad(const struct bpf_prog *prog, =
-u32 idx)
-+{
-+	return false;
-+}
-+
-+static inline bool bpf_cleanup_insn_in_pad(const struct bpf_prog *prog, =
-u32 idx)
-+{
-+	return false;
-+}
-+
-+static inline bool bpf_cleanup_insn_is_throw(const struct bpf_prog *prog=
-, u32 idx)
-+{
-+	return false;
-+}
-+
-+static inline bool bpf_cleanup_insn_is_resume(const struct bpf_prog *pro=
-g, u32 idx)
-+{
-+	return false;
-+}
-+
-+static inline int bpf_cleanup_attach_main_prog(struct bpf_verifier_env *=
-env,
-+					       struct bpf_prog *prog)
-+{
-+	return 0;
-+}
-+
-+static inline void bpf_cleanup_fill_native_ranges(struct bpf_prog *prog,=
- u32 *addrs, void *image)
-+{
-+}
-+
-+static inline void bpf_cleanup_free_info(struct bpf_prog_aux *aux)
-+{
-+}
-+#endif
-+
- struct bpf_prog_aux {
- 	atomic64_t refcnt;
- 	u32 used_map_cnt;
-@@ -1854,6 +1937,7 @@ struct bpf_prog_aux {
- 	char name[BPF_OBJ_NAME_LEN];
- 	u64 (*bpf_exception_cb)(u64 cookie, u64 sp, u64 bp, u64, u64);
- 	u16 stack_arg_sp_adjust;
-+	struct bpf_exception_info *exc;
- #ifdef CONFIG_SECURITY
- 	void *security;
- #endif
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 2582a7606e46..b0c495e94f74 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1243,6 +1243,7 @@ bool bpf_jit_supports_arena_args(void);
- bool bpf_jit_supports_far_kfunc_call(void);
- bool bpf_jit_supports_exceptions(void);
- bool bpf_jit_supports_cleanup_pads(void);
-+void arch_bpf_run_cleanup_pad(u64 pad, u64 frame_fp, u64 spill_base);
- bool bpf_jit_supports_ptr_xchg(void);
- bool bpf_jit_supports_arena(void);
- bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index a379cd1ec4c6..f19712be12a7 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -292,6 +292,7 @@ void __bpf_prog_free(struct bpf_prog *fp)
- 		mutex_destroy(&fp->aux->dst_mutex);
- 		mutex_destroy(&fp->aux->st_ops_assoc_mutex);
- 		kfree(fp->aux->poke_tab);
-+		bpf_cleanup_free_info(fp->aux);
- 		kfree(fp->aux);
- 	}
- 	free_percpu(fp->stats);
-@@ -2625,13 +2626,21 @@ static bool bpf_prog_select_interpreter(struct bp=
-f_prog *fp)
- 	return select_interpreter;
- }
-=20
--static struct bpf_prog *bpf_prog_jit_compile(struct bpf_verifier_env *en=
-v, struct bpf_prog *prog)
-+static struct bpf_prog *bpf_prog_jit_compile(struct bpf_verifier_env *en=
-v, struct bpf_prog *prog,
-+					     int *err)
- {
- #ifdef CONFIG_BPF_JIT
- 	struct bpf_prog *orig_prog;
-+	int ret;
-=20
--	if (!bpf_prog_need_blind(prog))
-+	if (!bpf_prog_need_blind(prog)) {
-+		ret =3D bpf_cleanup_attach_main_prog(env, prog);
-+		if (ret) {
-+			*err =3D ret;
-+			return prog;
-+		}
- 		return bpf_int_jit_compile(env, prog);
-+	}
-=20
- 	orig_prog =3D prog;
- 	prog =3D bpf_jit_blind_constants(env, prog);
-@@ -2642,6 +2651,13 @@ static struct bpf_prog *bpf_prog_jit_compile(struc=
-t bpf_verifier_env *env, struc
- 	if (IS_ERR(prog))
- 		goto out_restore;
-=20
-+	ret =3D bpf_cleanup_attach_main_prog(env, prog);
-+	if (ret) {
-+		*err =3D ret;
-+		bpf_jit_prog_release_other(orig_prog, prog);
-+		goto out_restore;
-+	}
-+
- 	prog =3D bpf_int_jit_compile(env, prog);
- 	if (prog->jited) {
- 		bpf_jit_prog_release_other(prog, orig_prog);
-@@ -2681,8 +2697,10 @@ struct bpf_prog *__bpf_prog_select_runtime(struct =
-bpf_verifier_env *env, struct
- 		if (*err)
- 			return fp;
-=20
--		fp =3D bpf_prog_jit_compile(env, fp);
-+		fp =3D bpf_prog_jit_compile(env, fp, err);
- 		bpf_prog_jit_attempt_done(fp);
-+		if (*err)
-+			return fp;
- 		if (!fp->jited && jit_needed) {
- 			*err =3D -ENOTSUPP;
- 			return fp;
-@@ -3480,6 +3498,12 @@ bool __weak bpf_jit_supports_cleanup_pads(void)
- 	return false;
- }
-=20
-+/* Call @pad with the frame pointer @frame_fp and r6-r9 spilled at @spil=
-l_base. */
-+void __weak arch_bpf_run_cleanup_pad(u64 pad, u64 frame_fp, u64 spill_ba=
-se)
-+{
-+	WARN_ON_ONCE(1);
-+}
-+
- bool __weak bpf_jit_supports_timed_may_goto(void)
- {
- 	return false;
-diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
-index 4859d6484cc8..d4dcbcf4fb25 100644
---- a/kernel/bpf/exception.c
-+++ b/kernel/bpf/exception.c
-@@ -1,7 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <linux/bitmap.h>
- #include <linux/bpf.h>
- #include <linux/bpf_verifier.h>
-+#include <linux/bsearch.h>
- #include <linux/btf.h>
- #include <linux/btf_ids.h>
- #include <linux/filter.h>
-@@ -499,3 +501,164 @@ int bpf_cleanup_pad_of_call(struct bpf_verifier_env=
- *env, u32 idx)
-=20
- 	return pad ? (int)pad - 1 : -1;
- }
++#include <linux/bpf_cleanup_abi.h>
++#include <linux/linkage.h>
++#include <asm/nospec-branch.h>
 +
 +/*
-+ * Every subprogram of a cleanup-carrying program spills the BPF callee-=
-saved
-+ * registers, even one that never throws: a frame's spill holds its call=
-er's
-+ * registers, and that is what the walker restores before running the ca=
-ller's
-+ * pad. The exception callback does not, because it reuses the boundary =
-frame
-+ * rather than building one of its own.
++ * The x86-64 BPF JIT prologue spills, once bpf_cleanup_force_spill() ma=
+kes it
++ * unconditional, r12, rbx, r13, r14 and r15 in that order -- so within =
+the
++ * spill area the lowest address holds r15 and the highest r12. The thro=
+w-site
++ * spill the JIT emits uses the same layout, so the routine below reads =
+both
++ * the same way:
++ *
++ *	spill_base + 0		BPF r9  (r15)
++ *	spill_base + 8		BPF r8  (r14)
++ *	spill_base + 16		BPF r7  (r13)
++ *	spill_base + 24		BPF r6  (rbx)
++ *	spill_base + 32		r12 (arena base, not a BPF register)
 + */
-+bool bpf_cleanup_force_spill(const struct bpf_prog *prog)
-+{
-+	return prog->aux->exc && !prog->aux->exception_cb;
-+}
 +
-+const struct bpf_cleanup_range *bpf_cleanup_pad_for_ip(const struct bpf_=
-prog *prog, u64 ip)
-+{
-+	const struct bpf_exception_info *exc =3D prog->aux->exc;
-+	u32 l =3D 0, r =3D exc ? exc->nr_ranges : 0;
++	.code64
++	.section .text, "ax"
 +
-+	while (l < r) {
-+		u32 m =3D l + (r - l) / 2;
-+		const struct bpf_cleanup_range *rec =3D &exc->ranges[m];
++/*
++ * void arch_bpf_run_cleanup_pad(u64 pad, u64 frame_fp, u64 spill_base)
++ *
++ * rdi =3D native address of the landing pad
++ * rsi =3D frame pointer of the frame the pad belongs to
++ * rdx =3D spill area holding that frame's BPF callee-saved registers
++ *
++ * Give the pad the register state of its own frame and call it. The pad=
+ ends
++ * in the bare return the JIT emits for its bpf_unwind_resume(), so it c=
+omes
++ * back here rather than returning to its frame's caller. It runs on thi=
+s
++ * stack, far below the frame it is cleaning up after, so nothing it cal=
+ls can
++ * reach into that frame.
++ *
++ * rbp addresses the pad's frame and rsp this one, so the two are not th=
+e
++ * neighbours a JITed frame expects them to be. That is why
++ * cleanup_check_pad_insn() refuses a call in a pad that passes an argum=
+ent on
++ * the stack: the JIT stages those relative to rbp, and the callee reads=
+ them
++ * relative to rsp.
++ */
++SYM_FUNC_START(arch_bpf_run_cleanup_pad)
++	ANNOTATE_NOENDBR
 +
-+		if (ip <=3D rec->begin)
-+			r =3D m;
-+		else if (ip > rec->end)
-+			l =3D m + 1;
-+		else
-+			return rec;
-+	}
-+	return NULL;
-+}
++	pushq %rbp
++	pushq %rbx
++	pushq %r12
++	pushq %r13
++	pushq %r14
++	pushq %r15
++	/* Keep the pad's entry rsp congruent to a normal call's. */
++	subq $8, %rsp
 +
-+static int cmp_u32(const void *a, const void *b)
-+{
-+	u32 x =3D *(const u32 *)a, y =3D *(const u32 *)b;
++	movq 0(%rdx), %r15
++	movq 8(%rdx), %r14
++	movq 16(%rdx), %r13
++	movq 24(%rdx), %rbx
++	movq 32(%rdx), %r12
++	/* rbp is BPF r10, so this is the whole of the pad's frame setup. */
++	movq %rsi, %rbp
 +
-+	return x < y ? -1 : x > y;
-+}
++	/* CALL_NOSPEC needs the target in a register; rcx is BPF r4, dead. */
++	movq %rdi, %rcx
 +
-+int bpf_cleanup_alloc_info(struct bpf_prog_aux *aux)
-+{
-+	if (aux->exc)
-+		return 0;
-+	aux->exc =3D kzalloc_obj(struct bpf_exception_info, GFP_KERNEL_ACCOUNT =
-| __GFP_NOWARN);
-+	return aux->exc ? 0 : -ENOMEM;
-+}
++	/* BPF r0 on the way into a pad, not whatever the kernel left in rax. *=
+/
++	movl $BPF_PAD_ENTRY_R0, %eax
 +
-+int bpf_cleanup_attach_info(struct bpf_prog_aux *aux, struct bpf_cleanup=
-_info *recs, u32 cnt)
-+{
-+	struct bpf_exception_info *exc =3D aux->exc;
-+	struct bpf_cleanup_range *ranges;
-+	u32 i, n_at, *at;
++	CALL_NOSPEC rcx
 +
-+	if (!cnt) {
-+		kvfree(recs);
-+		return 0;
-+	}
-+
-+	ranges =3D kvcalloc(cnt, sizeof(*ranges), GFP_KERNEL_ACCOUNT | __GFP_NO=
-WARN);
-+	if (!ranges) {
-+		kvfree(recs);
-+		return -ENOMEM;
-+	}
-+
-+	/* The pads on their own, sorted and deduplicated. */
-+	at =3D kvmalloc_array(cnt, sizeof(*at), GFP_KERNEL_ACCOUNT | __GFP_NOWA=
-RN);
-+	if (!at) {
-+		kvfree(ranges);
-+		kvfree(recs);
-+		return -ENOMEM;
-+	}
-+	for (i =3D 0; i < cnt; i++)
-+		at[i] =3D recs[i].landing_pad_off;
-+	sort(at, cnt, sizeof(*at), cmp_u32, NULL);
-+	for (i =3D 0, n_at =3D 0; i < cnt; i++)
-+		if (!n_at || at[n_at - 1] !=3D at[i])
-+			at[n_at++] =3D at[i];
-+
-+	exc->pad_at =3D at;
-+	exc->nr_pad_at =3D n_at;
-+	exc->info =3D recs;
-+	exc->nr_info =3D cnt;
-+	exc->ranges =3D ranges;
-+	/* Withheld until the JIT has filled the table in. */
-+	exc->nr_ranges =3D 0;
-+	return 0;
-+}
-+
-+void bpf_cleanup_fill_native_ranges(struct bpf_prog *prog, u32 *addrs, v=
-oid *image)
-+{
-+	struct bpf_exception_info *exc =3D prog->aux->exc;
-+	u32 i, n;
-+
-+	if (!exc || !exc->nr_info || !exc->ranges)
-+		return;
-+
-+	n =3D exc->nr_info;
-+	for (i =3D 0; i < n; i++) {
-+		const struct bpf_cleanup_info *rec =3D &exc->info[i];
-+
-+		if (WARN_ON_ONCE(rec->begin_off >=3D prog->len ||
-+				 rec->end_off > prog->len ||
-+				 rec->landing_pad_off >=3D prog->len))
-+			return;
-+		exc->ranges[i].begin =3D (u64)(long)image + addrs[rec->begin_off];
-+		exc->ranges[i].end =3D (u64)(long)image + addrs[rec->end_off];
-+		exc->ranges[i].pad =3D (u64)(long)image + addrs[rec->landing_pad_off];
-+	}
-+	exc->nr_ranges =3D n;
-+}
-+
-+void bpf_cleanup_free_info(struct bpf_prog_aux *aux)
-+{
-+	struct bpf_exception_info *exc =3D aux->exc;
-+
-+	if (!exc)
-+		return;
-+	kvfree(exc->ranges);
-+	kvfree(exc->info);
-+	kvfree(exc->pad_at);
-+	kvfree(exc->throw_at);
-+	kvfree(exc->resume_at);
-+	bitmap_free(exc->pad_body);
-+	kfree(exc);
-+	aux->exc =3D NULL;
-+}
-+
-+/* Is @idx in the sorted array @at of @n instruction indices? */
-+static bool insn_idx_in(const u32 *at, u32 n, u32 idx)
-+{
-+	return bsearch(&idx, at, n, sizeof(*at), cmp_u32);
-+}
-+
-+bool bpf_cleanup_insn_is_pad(const struct bpf_prog *prog, u32 idx)
-+{
-+	const struct bpf_exception_info *exc =3D prog->aux->exc;
-+
-+	return exc && insn_idx_in(exc->pad_at, exc->nr_pad_at, idx);
-+}
-+
-+bool bpf_cleanup_insn_is_throw(const struct bpf_prog *prog, u32 idx)
-+{
-+	const struct bpf_exception_info *exc =3D prog->aux->exc;
-+
-+	return exc && insn_idx_in(exc->throw_at, exc->nr_throw_at, idx);
-+}
-+
-+bool bpf_cleanup_insn_is_resume(const struct bpf_prog *prog, u32 idx)
-+{
-+	const struct bpf_exception_info *exc =3D prog->aux->exc;
-+
-+	return exc && insn_idx_in(exc->resume_at, exc->nr_resume_at, idx);
-+}
-+
-+bool bpf_cleanup_insn_in_pad(const struct bpf_prog *prog, u32 idx)
-+{
-+	const struct bpf_exception_info *exc =3D prog->aux->exc;
-+
-+	return exc && exc->pad_body && idx < exc->nr_pad_body &&
-+	       test_bit(idx, exc->pad_body);
-+}
-diff --git a/kernel/bpf/exception.h b/kernel/bpf/exception.h
-index 7313dd2b65a1..c0e68ce227c8 100644
---- a/kernel/bpf/exception.h
-+++ b/kernel/bpf/exception.h
-@@ -5,11 +5,18 @@
++	addq $8, %rsp
++	popq %r15
++	popq %r14
++	popq %r13
++	popq %r12
++	popq %rbx
++	popq %rbp
++	RET
++SYM_FUNC_END(arch_bpf_run_cleanup_pad)
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index d4a980140b48..04db7d7fc397 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -357,6 +357,12 @@ struct jit_context {
+ /* Number of bytes that will be skipped on tailcall */
+ #define X86_TAIL_CALL_OFFSET	(12 + ENDBR_INSN_SIZE)
 =20
- #include <linux/types.h>
-=20
-+struct bpf_cleanup_info;
-+struct bpf_cleanup_range;
-+struct bpf_prog;
-+struct bpf_prog_aux;
- struct bpf_verifier_env;
-=20
- int bpf_prepare_cleanup_exceptions(struct bpf_verifier_env *env);
- int bpf_check_cleanup_exceptions(struct bpf_verifier_env *env);
- int bpf_cleanup_check_callback(struct bpf_verifier_env *env, int subprog=
-);
- int bpf_cleanup_pad_of_call(struct bpf_verifier_env *env, u32 idx);
-+int bpf_cleanup_alloc_info(struct bpf_prog_aux *aux);
-+int bpf_cleanup_attach_info(struct bpf_prog_aux *aux, struct bpf_cleanup=
-_info *recs, u32 cnt);
-+const struct bpf_cleanup_range *bpf_cleanup_pad_for_ip(const struct bpf_=
-prog *prog, u64 ip);
-=20
- #endif /* _LINUX_BPF_EXCEPTION_H */
-diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-index 558653d3046d..169cbf9f4415 100644
---- a/kernel/bpf/fixups.c
-+++ b/kernel/bpf/fixups.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <linux/bitmap.h>
- #include <linux/bpf.h>
- #include <linux/btf.h>
- #include <linux/bpf_verifier.h>
-@@ -10,6 +11,7 @@
- #include <linux/perf_event.h>
- #include <net/xdp.h>
- #include "disasm.h"
-+#include "exception.h"
-=20
- #define verbose(env, fmt, args...) bpf_verifier_log_write(env, fmt, ##ar=
-gs)
-=20
-@@ -257,6 +259,14 @@ static void adjust_insn_aux_data(struct bpf_verifier=
-_env *env,
- 			data[i].non_stack_access =3D
- 				data[off + cnt - 1].non_stack_access;
- 			data[off + cnt - 1].non_stack_access =3D false;
-+			data[i].cleanup_throw_site =3D
-+				data[off + cnt - 1].cleanup_throw_site;
-+			data[off + cnt - 1].cleanup_throw_site =3D false;
-+			data[i].cleanup_resume_site =3D
-+				data[off + cnt - 1].cleanup_resume_site;
-+			data[off + cnt - 1].cleanup_resume_site =3D false;
-+			data[i].cleanup_pad =3D data[off + cnt - 1].cleanup_pad;
-+			data[off + cnt - 1].cleanup_pad =3D 0;
- 		} else if (bpf_is_mem_insn(insn + i)) {
- 			data[i].non_stack_access =3D true;
- 		}
-@@ -1114,6 +1124,129 @@ static void bpf_restore_subprog_starts(struct bpf=
-_verifier_env *env, u32 *orig_s
- 	env->subprog_info[env->subprog_cnt].start =3D env->prog->len;
- }
-=20
-+static bool cleanup_kfunc_site(const struct bpf_insn_aux_data *aux, bool=
- resume)
-+{
-+	return resume ? aux->cleanup_resume_site : aux->cleanup_throw_site;
-+}
++/*
++ * Throw-site spill: r15, r14, r13, rbx, r12 low to high, the layout the
++ * prologue's pushes leave, so arch_bpf_run_cleanup_pad() reads both ali=
+ke.
++ */
++#define X86_CLEANUP_SPILL_SZ	(5 * 8)
 +
-+static int cleanup_kfunc_sites_for_subprog(struct bpf_verifier_env *env,=
- u32 start, u32 end,
-+					   bool resume, u32 **at_p, u32 *nr_p)
-+{
-+	u32 i, cnt =3D 0, *at;
-+
-+	for (i =3D start; i < end; i++)
-+		if (cleanup_kfunc_site(&env->insn_aux_data[i], resume))
-+			cnt++;
-+	if (!cnt)
-+		return 0;
-+
-+	at =3D kvmalloc_array(cnt, sizeof(*at), GFP_KERNEL_ACCOUNT | __GFP_NOWA=
-RN);
-+	if (!at)
-+		return -ENOMEM;
-+
-+	for (i =3D start, cnt =3D 0; i < end; i++) {
-+		if (!cleanup_kfunc_site(&env->insn_aux_data[i], resume))
-+			continue;
-+		at[cnt++] =3D i - start;
-+	}
-+
-+	*at_p =3D at;
-+	*nr_p =3D cnt;
-+	return 0;
-+}
-+
-+static int cleanup_pad_body_for_subprog(struct bpf_verifier_env *env, st=
-ruct bpf_prog *sub,
-+					u32 start, u32 end)
-+{
-+	unsigned long *bits;
-+	u32 i, cnt =3D 0;
-+
-+	for (i =3D start; i < end; i++)
-+		if (env->insn_aux_data[i].in_cleanup_pad)
-+			cnt++;
-+	if (!cnt)
-+		return 0;
-+
-+	bits =3D bitmap_zalloc(end - start, GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
-+	if (!bits)
-+		return -ENOMEM;
-+
-+	for (i =3D start; i < end; i++)
-+		if (env->insn_aux_data[i].in_cleanup_pad)
-+			__set_bit(i - start, bits);
-+
-+	sub->aux->exc->pad_body =3D bits;
-+	sub->aux->exc->nr_pad_body =3D end - start;
-+	return 0;
-+}
-+
-+static int cleanup_info_for_subprog(struct bpf_verifier_env *env, struct=
- bpf_prog *sub,
-+				    u32 start, u32 end)
-+{
-+	struct bpf_cleanup_info *recs;
-+	u32 i, cnt =3D 0;
-+	int err;
-+
-+	if (!env->cleanup_info_cnt)
-+		return 0;
-+
-+	err =3D bpf_cleanup_alloc_info(sub->aux);
-+	if (err)
-+		return err;
-+
-+	err =3D cleanup_kfunc_sites_for_subprog(env, start, end, false,
-+					      &sub->aux->exc->throw_at,
-+					      &sub->aux->exc->nr_throw_at);
-+	if (err)
-+		return err;
-+
-+	err =3D cleanup_kfunc_sites_for_subprog(env, start, end, true,
-+					      &sub->aux->exc->resume_at,
-+					      &sub->aux->exc->nr_resume_at);
-+	if (err)
-+		return err;
-+
-+	err =3D cleanup_pad_body_for_subprog(env, sub, start, end);
-+	if (err)
-+		return err;
-+
-+	for (i =3D start; i < end; i++)
-+		if (env->insn_aux_data[i].cleanup_pad)
-+			cnt++;
-+	if (!cnt)
-+		return 0;
-+
-+	recs =3D kvmalloc_array(cnt, sizeof(*recs), GFP_KERNEL_ACCOUNT | __GFP_=
-NOWARN);
-+	if (!recs)
-+		return -ENOMEM;
-+
-+	for (i =3D start, cnt =3D 0; i < end; i++) {
-+		u32 pad =3D env->insn_aux_data[i].cleanup_pad;
-+
-+		if (!pad)
-+			continue;
-+		pad--;
-+		if (verifier_bug_if(pad < start || pad >=3D end, env,
-+				    "insn %u is covered by a landing pad at %u outside its subprog [=
-%u, %u)",
-+				    i, pad, start, end)) {
-+			kvfree(recs);
-+			return -EFAULT;
-+		}
-+		recs[cnt].begin_off =3D i - start;
-+		recs[cnt].end_off =3D i - start + 1;
-+		recs[cnt].landing_pad_off =3D pad - start;
-+		cnt++;
-+	}
-+	return bpf_cleanup_attach_info(sub->aux, recs, cnt);
-+}
-+
-+int bpf_cleanup_attach_main_prog(struct bpf_verifier_env *env, struct bp=
-f_prog *prog)
-+{
-+	if (!env || env->subprog_cnt > 1)
-+		return 0;
-+	return cleanup_info_for_subprog(env, prog, 0, prog->len);
-+}
-+
- static int jit_subprogs(struct bpf_verifier_env *env)
+ static void push_r9(u8 **pprog)
  {
- 	struct bpf_prog *prog =3D env->prog, **func, *tmp;
-@@ -1251,6 +1384,10 @@ static int jit_subprogs(struct bpf_verifier_env *e=
-nv)
- 		func[i]->aux->token =3D prog->aux->token;
- 		if (!i)
- 			func[i]->aux->exception_boundary =3D env->seen_exception;
-+		err =3D cleanup_info_for_subprog(env, func[i], subprog_start,
-+					       subprog_end);
-+		if (err)
-+			goto out_free;
- 		func[i] =3D bpf_int_jit_compile(env, func[i]);
- 		if (!func[i]->jited) {
- 			err =3D -ENOTSUPP;
-@@ -1355,6 +1492,8 @@ static int jit_subprogs(struct bpf_verifier_env *en=
-v)
- 	prog->aux->bpf_exception_cb =3D (void *)func[env->exception_callback_su=
-bprog]->bpf_func;
- 	prog->aux->exception_boundary =3D func[0]->aux->exception_boundary;
- 	prog->aux->stack_arg_sp_adjust =3D func[0]->aux->stack_arg_sp_adjust;
-+	prog->aux->exc =3D func[0]->aux->exc;
-+	func[0]->aux->exc =3D NULL;
- 	bpf_prog_jit_attempt_done(prog);
- 	return 0;
- out_free:
-@@ -1935,6 +2074,8 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *env=
-)
- 			goto next_insn;
- 		if (insn->src_reg =3D=3D BPF_PSEUDO_CALL)
- 			goto next_insn;
-+		if (env->insn_aux_data[i + delta].cleanup_resume_site)
-+			goto next_insn;
- 		if (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL) {
- 			ret =3D bpf_fixup_kfunc_call(env, insn, insn_buf, i + delta, &cnt);
- 			if (ret)
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 2163fd40f349..d639dfbc3cbb 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -31,6 +31,7 @@
- #include <linux/buildid.h>
+ 	u8 *prog =3D *pprog;
+@@ -832,7 +838,7 @@ static void emit_bpf_tail_call_indirect(struct bpf_pr=
+og *bpf_prog,
+ 	/* Inc tail_call_cnt if the slot is populated. */
+ 	EMIT4(0x48, 0x83, 0x00, 0x01);            /* add qword ptr [rax], 1 */
 =20
- #include "../../lib/kstrtox.h"
-+#include "exception.h"
+-	if (bpf_prog->aux->exception_boundary) {
++	if (bpf_prog->aux->exception_boundary || bpf_cleanup_force_spill(bpf_pr=
+og)) {
+ 		pop_callee_regs(&prog, all_callee_regs_used);
+ 		pop_r12(&prog);
+ 	} else {
+@@ -899,7 +905,7 @@ static void emit_bpf_tail_call_direct(struct bpf_prog=
+ *bpf_prog,
+ 	/* Inc tail_call_cnt if the slot is populated. */
+ 	EMIT4(0x48, 0x83, 0x00, 0x01);                /* add qword ptr [rax], 1=
+ */
 =20
- /* If kernel subsystem is allowing eBPF programs to call this function,
-  * inside its own verifier_ops->get_func_proto() callback it should retu=
-rn
-@@ -3398,8 +3399,36 @@ struct bpf_throw_ctx {
- 	u64 sp;
- 	u64 bp;
- 	int cnt;
-+	const struct bpf_prog *callee;
-+	u64 callee_fp;
- };
+-	if (bpf_prog->aux->exception_boundary) {
++	if (bpf_prog->aux->exception_boundary || bpf_cleanup_force_spill(bpf_pr=
+og)) {
+ 		pop_callee_regs(&prog, all_callee_regs_used);
+ 		pop_r12(&prog);
+ 	} else {
+@@ -1977,6 +1983,7 @@ static int do_jit(struct bpf_verifier_env *env, str=
+uct bpf_prog *bpf_prog, int *
+ 	u8 *ip, *prog =3D temp;
+ 	u32 stack_depth;
+ 	int callee_saved_size;
++	u32 throw_spill, prologue_depth;
+ 	s32 outgoing_arg_base;
+ 	int err;
 =20
-+static void bpf_run_cleanup_pad(struct bpf_throw_ctx *ctx, const struct =
-bpf_prog *prog,
-+				u64 ip, u64 fp)
-+{
-+	const struct bpf_exception_info *exc =3D prog->aux->exc;
-+	const struct bpf_cleanup_range *rec;
-+	u64 spill_base;
+@@ -2015,7 +2022,10 @@ static int do_jit(struct bpf_verifier_env *env, st=
+ruct bpf_prog *bpf_prog, int *
+=20
+ 	detect_reg_usage(insn, insn_cnt, callee_regs_used);
+=20
+-	emit_prologue(&prog, image, stack_depth,
++	throw_spill =3D bpf_cleanup_force_spill(bpf_prog) ? X86_CLEANUP_SPILL_S=
+Z : 0;
++	prologue_depth =3D stack_depth + throw_spill;
 +
-+	if (!exc || !exc->nr_ranges)
-+		return;
-+	rec =3D bpf_cleanup_pad_for_ip(prog, ip);
-+	if (!rec)
-+		return;
++	emit_prologue(&prog, image, prologue_depth,
+ 		      bpf_prog_was_classic(bpf_prog), tail_call_reachable,
+ 		      bpf_is_subprog(bpf_prog), bpf_prog->aux->exception_cb);
+=20
+@@ -2024,7 +2034,7 @@ static int do_jit(struct bpf_verifier_env *env, str=
+uct bpf_prog *bpf_prog, int *
+ 	/* Exception callback will clobber callee regs for its own use, and
+ 	 * restore the original callee regs from main prog's stack frame.
+ 	 */
+-	if (bpf_prog->aux->exception_boundary) {
++	if (bpf_prog->aux->exception_boundary || bpf_cleanup_force_spill(bpf_pr=
+og)) {
+ 		/* We also need to save r12, which is not mapped to any BPF
+ 		 * register, as we throw after entry into the kernel, which may
+ 		 * overwrite r12.
+@@ -2039,9 +2049,10 @@ static int do_jit(struct bpf_verifier_env *env, st=
+ruct bpf_prog *bpf_prog, int *
+=20
+ 	/* Compute callee-saved register area size. */
+ 	callee_saved_size =3D 0;
+-	if (bpf_prog->aux->exception_boundary || arena_vm_start)
++	if (bpf_prog->aux->exception_boundary || bpf_cleanup_force_spill(bpf_pr=
+og) ||
++	    arena_vm_start)
+ 		callee_saved_size +=3D 8; /* r12 */
+-	if (bpf_prog->aux->exception_boundary) {
++	if (bpf_prog->aux->exception_boundary || bpf_cleanup_force_spill(bpf_pr=
+og)) {
+ 		callee_saved_size +=3D 4 * 8; /* rbx, r13, r14, r15 */
+ 	} else {
+ 		int j;
+@@ -2063,7 +2074,19 @@ static int do_jit(struct bpf_verifier_env *env, st=
+ruct bpf_prog *bpf_prog, int *
+ 	 * Note that tail_call_reachable is guaranteed to be false when
+ 	 * stack args exist, so tcc pushes need not be accounted for.
+ 	 */
+-	outgoing_arg_base =3D -(round_up(stack_depth, 8) + callee_saved_size);
++	outgoing_arg_base =3D -(round_up(stack_depth, 8) + throw_spill + callee=
+_saved_size);
 +
 +	/*
-+	 * The callee is always another subprogram of this program -- the walk
-+	 * ends at any frame that is not one -- so its prologue spilled these
-+	 * registers and its exc is there to say where.
++	 * Lowest address of each spill area, as an offset from rbp; see
++	 * bpf_cleanup_pad.S for the layout. The 16 is the tail call counter
++	 * pair emit_prologue_tail_call() pushes above the callee-saved one.
 +	 */
-+	if (ctx->callee)
-+		spill_base =3D ctx->callee_fp + ctx->callee->aux->exc->spill_off;
-+	else
-+		spill_base =3D fp + exc->throw_spill_off;
++	if (bpf_cleanup_force_spill(bpf_prog)) {
++		bpf_prog->aux->exc->spill_off =3D -(round_up(stack_depth, 8) + throw_s=
+pill +
++						  (tail_call_reachable ? 16 : 0) +
++						  callee_saved_size);
++		bpf_prog->aux->exc->throw_spill_off =3D -(round_up(stack_depth, 8) + t=
+hrow_spill);
++	}
+=20
+ 	/*
+ 	 * Allocate outgoing stack arg area for args 7+ only.
+@@ -2110,7 +2133,8 @@ static int do_jit(struct bpf_verifier_env *env, str=
+uct bpf_prog *bpf_prog, int *
+ 				dst_reg =3D X86_REG_R9;
+ 		}
+=20
+-		if (bpf_insn_is_indirect_target(env, bpf_prog, i - 1))
++		if (bpf_insn_is_indirect_target(env, bpf_prog, i - 1) ||
++		    bpf_cleanup_insn_is_pad(bpf_prog, i - 1))
+ 			EMIT_ENDBR();
+=20
+ 		ip =3D image + addrs[i - 1] + (prog - temp);
+@@ -2903,9 +2927,27 @@ static int do_jit(struct bpf_verifier_env *env, st=
+ruct bpf_prog *bpf_prog, int *
+ 		case BPF_JMP | BPF_CALL: {
+ 			const struct btf_func_model *fm =3D NULL;
+=20
++			if (bpf_cleanup_insn_is_throw(bpf_prog, i - 1)) {
++				/* Spill r6-r9 and r12 where the bpf_throw() walker looks. */
++				s32 off =3D bpf_prog->aux->exc->throw_spill_off;
++				u8 *spill =3D prog;
 +
-+	arch_bpf_run_cleanup_pad(rec->pad, fp, spill_base);
++				emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_9, off + 0);
++				emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_8, off + 8);
++				emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_7, off + 16);
++				emit_stx(&prog, BPF_DW, BPF_REG_FP, BPF_REG_6, off + 24);
++				emit_stx(&prog, BPF_DW, BPF_REG_FP, X86_REG_R12, off + 32);
++				ip +=3D prog - spill;
++			}
++
++			if (bpf_cleanup_insn_is_resume(bpf_prog, i - 1)) {
++				emit_return(&prog, image + addrs[i - 1] + (prog - temp));
++				break;
++			}
++
+ 			func =3D (u8 *) __bpf_call_base + imm32;
+ 			if (src_reg =3D=3D BPF_PSEUDO_CALL && tail_call_reachable) {
+-				LOAD_TAIL_CALL_CNT_PTR(stack_depth);
++				LOAD_TAIL_CALL_CNT_PTR(prologue_depth);
+ 				ip +=3D 7;
+ 			}
+ 			if (!imm32)
+@@ -2948,13 +2990,13 @@ static int do_jit(struct bpf_verifier_env *env, s=
+truct bpf_prog *bpf_prog, int *
+ 							  &prog,
+ 							  ip,
+ 							  callee_regs_used,
+-							  stack_depth,
++							  prologue_depth,
+ 							  ctx);
+ 			else
+ 				emit_bpf_tail_call_indirect(bpf_prog,
+ 							    &prog,
+ 							    callee_regs_used,
+-							    stack_depth,
++							    prologue_depth,
+ 							    ip,
+ 							    ctx);
+ 			break;
+@@ -3215,7 +3257,8 @@ static int do_jit(struct bpf_verifier_env *env, str=
+uct bpf_prog *bpf_prog, int *
+ 			}
+ 			/* Deallocate outgoing args 7+ area. */
+ 			emit_add_rsp(&prog, outgoing_rsp);
+-			if (bpf_prog->aux->exception_boundary) {
++			if (bpf_prog->aux->exception_boundary ||
++			    bpf_cleanup_force_spill(bpf_prog)) {
+ 				pop_callee_regs(&prog, all_callee_regs_used);
+ 				pop_r12(&prog);
+ 			} else {
+@@ -4385,6 +4428,13 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_ve=
+rifier_env *env, struct bpf_pr
+ 		 */
+ 		bpf_prog_update_insn_ptrs(prog, addrs, image);
+=20
++		/*
++		 * Same mapping, consumed by the bpf_throw() frame walker:
++		 * turn the cleanup records into native address ranges now
++		 * that the image is final.
++		 */
++		bpf_cleanup_fill_native_ranges(prog, addrs, image);
++
+ 		/*
+ 		 * ctx.prog_offset is used when CFI preambles put code *before*
+ 		 * the function. See emit_cfi(). For FineIBT specifically this code
+@@ -4501,6 +4551,11 @@ bool bpf_jit_supports_exceptions(void)
+ 	return IS_ENABLED(CONFIG_UNWINDER_ORC);
+ }
+=20
++bool bpf_jit_supports_cleanup_pads(void)
++{
++	return IS_ENABLED(CONFIG_UNWINDER_ORC);
 +}
 +
- static bool bpf_stack_walker(void *cookie, u64 ip, u64 sp, u64 bp)
+ bool bpf_jit_supports_private_stack(void)
  {
- 	struct bpf_throw_ctx *ctx =3D cookie;
-@@ -3416,6 +3445,11 @@ static bool bpf_stack_walker(void *cookie, u64 ip,=
- u64 sp, u64 bp)
- 	if (!prog)
- 		return !ctx->cnt;
- 	ctx->cnt++;
-+
-+	bpf_run_cleanup_pad(ctx, prog, ip, bp);
-+	ctx->callee =3D prog;
-+	ctx->callee_fp =3D bp;
-+
- 	if (bpf_is_subprog(prog))
- 		return true;
- 	ctx->aux =3D prog->aux;
+ 	return true;
 --=20
 2.53.0-Meta
 
