@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083423A4521
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC23A3A9018
 	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 14:39:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789915177; cv=none; b=WbYXpQ6QZh2lRaGJW6HVyBtL2qpsAHnqFMhuRb4z4PVrU5z835FWTOHL5DNWps6dgx+dvTmEf7PNOqsZA5CHzBrpYkQBw3stRJLXxVriQ0EnNP9HPgZ/qHya2AQlEISCIGBuqsxOFx2jg6Pft5WWCl1oxNAj0aNVcfSDU2DpJCU=
+	t=1789915177; cv=none; b=Ja5363hJbWcP79RJqnQkecxVnNoP4g8N466MVJ5SQiyxAxi7h6TgcuojFP0p9Np7RR3nDbtYH/b0BH/AvTEzh5IP++s9aaRr1kjACdTrEK7xPsoUrlewGpVH+P7LwXlFVO/OnO7mys6qBm8U1xWcv6EFtvlaycaJeUnjbtpOCSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789915177; c=relaxed/simple;
-	bh=xvySHzWpQAmm6bXYpOBBvNb7hERajzkEZYJWYuTH0XY=;
+	bh=wTzd58hwp1SXe3jTcRDun+6ck+5T6NYwmmiIxWfAINU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=oBasJG283dTSVLpIzch7VqbWJ+ggsxbDwmE5QpRSf1u9JzXgoMbGjvA4Poh8dWgR2iN33z1CtihOzJk4vAj8rnDD3k7xM4iFIxOplXq+VcN9CUvfPqtB8pYyeod7ld2/6g5Ap7/maUg3/LHtbCTM4cBvSRJaR8eSyrHiT3etlcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VpW5h0ia; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=Cs1jdb47xJ+Aa8JMKt/HiDrpQXdcx0zrKRQeIO0nFvSw5jP+tUAjaDVaRb2CcPxigBHsCFaTrT32r4wEylLAsh0FZpi1DOS6j900wITUslRAClh7YTFwgRIHOl6TMAiEDkAQeVzoGlOsxAzFhgoNectGwcDrpbZ+20jc6blkwg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4nXPcNc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VpW5h0ia"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BCB61F00893;
-	Sun, 20 Sep 2026 14:39:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4nXPcNc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D75D71F000FF;
+	Sun, 20 Sep 2026 14:39:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1789915171;
-	bh=WuMLTS/rrG3rgkPIpjXMxOJF8mdtG0deh5wWVq+KUvU=;
+	bh=O2Q6olASqRnD60yK1oZpX3ZWZlCCga1dZ673JHtYqTo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=VpW5h0iank743N5vaedaTUscXSfUjjkqMOgF3EqvdjCVNEiCa9jXcfqKsieWgefhJ
-	 KiyjDjOZMLJpDIu5HMx4cOVtwPITZxAYSE5zB/3kzG5cnfQ8USxZVr4AFrYunJi0Gc
-	 68OYID3kZnDnlVmXZ/1WFfh99sfDK5yyGtnUtlCoQTJmiE6VR12GqdJ1C/o6zS+xW/
-	 1iuX3T3i/leJ6FWN+mYBzEAR4ls2SwxIiPs2n3Y1dkWHjOpCIa+LD1YfjdbcGswZgJ
-	 XgOD1EKOUzHigOwf3eI9+1cduWI7v64mm+jTl6V1m7iryvhDbxpiJ5xQl4v8VwM/nk
-	 CiR2wKYWzvg1Q==
+	b=X4nXPcNcvPochGiB447EEDchDWENCg+8LrIDv+kUNB4wVR2BBe1Q71jpm/UC1klH7
+	 UcCzgZv16rQkmAsqk7iWwWR4lt0/9J6iH4WkslX6OziP0nSdd7K6H1KkkKii9xhInC
+	 0DJa1RLrbQxH+ZZWeZeApJMP+RZlVDMrNL/Nw2TdJmWz9ydvYEWsNFDB0WQB2clXcu
+	 /pYFtfiW2c1LNfw2eeENNZUjUp0N8lCPSrtY4ZItX30dHwJt4EE9q3cOPPwcUBQIxf
+	 9C9hM65FvFxqRGMWrgwzXZmCrsFuGdH20F/cXm4duE5cxgzBWphbm8XsbEz+Mip9lV
+	 BbV30e4dJ/2JQ==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC net-next 8/9] net: generate the start time for every
- skb in the rx path
+Subject: Re: [PATCH RFC net-next 4/9] net: reuse skb_shared_hwtstamps for
+ BPF Timestamping v2
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jason Xing" <kerneljasonxing@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260919143732.11772-9-kerneljasonxing@gmail.com>
+In-Reply-To: <20260919143732.11772-5-kerneljasonxing@gmail.com>
 References: <20260919143732.11772-1-kerneljasonxing@gmail.com>
- <20260919143732.11772-9-kerneljasonxing@gmail.com>
+ <20260919143732.11772-5-kerneljasonxing@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 20 Sep 2026 14:39:31 +0000
-Message-Id: <20260920143931.8BCB61F00893@smtp.kernel.org>
+Date: Sun, 20 Sep 2026 14:39:30 +0000
+Message-Id: <20260920143930.D75D71F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,100 +47,74 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Critical] net: start_time and hwtstamp union aliasing causes UAPI breaka=
-ge
-- [High] net: modifying shared skb_shinfo in net_timestamp_check corrupts c=
-loned skbs
+- [High] net: BPF start_time breaks SOF_TIMESTAMPING_RAW_HARDWARE and names=
+pace isolation
+- [Medium] net: hardware TX timestamps overwrite start_time breaking BPF la=
+tency tracking
 --
 
-commit f67f60b2a43b1183b5caab4725cd26a0b5760176
+commit a3500c380740df14fa2b49c448a409fd50a64d25
 Author: Jason Xing <kerneljasonxing@gmail.com>
 
-net: generate the start time for every skb in the rx path
+net: reuse skb_shared_hwtstamps for BPF Timestamping v2
 
-This commit extends net_timestamp_check() to record an in-kernel start time
-in the skb's shared hwtstamps. It enables computing how long an skb has
-spent in the stack during the RX path.
+This commit reuses the hwtstamp field in skb_shared_hwtstamps to store a
+software start time for BPF Timestamping V2. A start_time union member is
+added that shares storage with hwtstamp.
 
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 1da3250f25d2c..e358d28ae6c3f 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -2501,11 +2501,17 @@ static inline void net_timestamp_set(struct sk_bu=
-ff *skb)
->  		skb->tstamp =3D ktime_get_real();
->  }
-> =20
-> -#define net_timestamp_check(COND, SKB)				\
-> -	if (static_branch_unlikely(&netstamp_needed_key)) {	\
-> -		if ((COND) && !(SKB)->tstamp)			\
-> -			(SKB)->tstamp =3D ktime_get_real();	\
-> -	}							\
-> +#define net_timestamp_check(COND, SKB)					\
-> +	if (static_branch_unlikely(&netstamp_needed_key) ||		\
-> +	    static_branch_unlikely(&bpfts_v2_needed_key)) {		\
-> +		if (static_branch_unlikely(&netstamp_needed_key) &&	\
-> +		    (COND) && !(SKB)->tstamp)				\
-> +			(SKB)->tstamp =3D ktime_get_real();		\
-> +		if (static_branch_unlikely(&bpfts_v2_needed_key) &&	\
-> +		    !skb_hwtstamps(SKB)->hwtstamp)			\
-> +			skb_hwtstamps(SKB)->start_time =3D		\
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index 0f4a4f4bafb2a..275c797f6a4b5 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+[ ... ]
+> @@ -462,6 +468,7 @@ static inline bool skb_frag_must_loop(struct page *p)
+>  struct skb_shared_hwtstamps {
+>  	union {
+>  		ktime_t	hwtstamp;
+> +		ktime_t	start_time;
 
 [Severity: High]
-Does this code modify shared skb_shinfo without verifying SKB exclusivity?
+Could unioning start_time and hwtstamp impact SOF_TIMESTAMPING_RAW_HARDWARE
+and namespace isolation?
 
-The skb_hwtstamps(SKB) macro resolves to &skb_shinfo(skb)->hwtstamps, which
-is explicitly shared across all clones of an SKB.
+When BPF Timestamping v2 is enabled via bpfts_v2_needed_key,
+net_timestamp_check() populates start_time for received packets lacking a
+hardware timestamp. Because they share memory, __sock_recv_timestamp() sees
+this as a non-zero hwtstamp.
 
-In the RX path, such as in netif_rx_internal() where net_timestamp_check()
-is called, packets may be clones. For example, TCP transmits a clone while
-retaining the original SKB in its retransmit queue, and if sent over a
-loopback interface, this clone is directly passed to netif_rx().
+Applications requesting SOF_TIMESTAMPING_RAW_HARDWARE (such as PTP daemons)
+will erroneously receive the software-generated start_time as a real hardwa=
+re
+timestamp in tss.ts[2], which could corrupt clock servos.
 
-Writing directly to shared SKB metadata without calling skb_unshare() or
-verifying exclusivity via skb_cloned() can cause data races and silent
-corruption across all concurrent users of the cloned SKB.
+Furthermore, skb_scrub_packet() clears skb->tstamp to prevent timing leaks
+across namespaces, but it does not clear skb_hwtstamps(). Smuggling a
+software timestamp in the hardware timestamp union appears to bypass
+namespace isolation.
 
-[Severity: Critical]
-Does this code also inadvertently overwrite hardware timestamps delivered to
-userspace?
+[Severity: Medium]
+Will hardware TX timestamps overwrite start_time and affect BPF latency
+tracking?
 
-In include/linux/skbuff.h, start_time and hwtstamp are aliases in the same
-union:
+BPF Timestamping V2 intends to measure latency by stamping start_time upon
+packet enqueue. When a hardware TX timestamp is received, __skb_tstamp_tx()
+calls skb_tstamp_tx_report_bpf_timestamping(), which assigns:
 
-struct skb_shared_hwtstamps {
-	union {
-		ktime_t hwtstamp;
-		ktime_t start_time;
-		void *netdev_data;
-	};
-};
+    *skb_hwtstamps(skb) =3D *hwtstamps;
 
-When a packet without a hardware timestamp comes through, this assignment
-writes a software timestamp into start_time, silently overwriting the empty
-hwtstamp field with a non-zero value.
+before invoking the BPF program via bpf_skops_tx_timestamping().
 
-Later, when the packet propagates up the stack to a socket with
-SOF_TIMESTAMPING_RAW_HARDWARE enabled, __sock_recv_timestamp() checks the
-timestamp:
+Because start_time shares the same union as hwtstamp, this assignment
+overwrites the enqueue start_time with the TX completion time before the BPF
+program runs on the BPF_SOCK_OPS_TSTAMP_SND_HW_CB hook.
 
-net/socket.c:__sock_recv_timestamp() {
-    ...
-    if (shhwtstamps->hwtstamp) {
-        tss.ts[2] =3D shhwtstamps->hwtstamp;
-    ...
-}
+Could this cause the BPF program to read the hardware timestamp instead of
+the original start_time, preventing correct latency calculations?
 
-Will this cause applications like PTP daemons to falsely receive a software
-timestamp as a hardware timestamp, breaking the SO_TIMESTAMPING UAPI?
-
-> +				(SKB)->tstamp ?: ktime_get_real();	\
-> +	}								\
-> =20
->  bool is_skb_forwardable(const struct net_device *dev, const struct sk_bu=
-ff *skb)
->  {
+>  		void *netdev_data;
+>  	};
+>  };
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260919143732.1177=
-2-1-kerneljasonxing@gmail.com?part=3D8
+2-1-kerneljasonxing@gmail.com?part=3D4
