@@ -1,120 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f43.google.com (mail-pz2-f43.google.com [74.125.228.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC23A3A9018
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 14:39:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E603328B56
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 16:17:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789915177; cv=none; b=Ja5363hJbWcP79RJqnQkecxVnNoP4g8N466MVJ5SQiyxAxi7h6TgcuojFP0p9Np7RR3nDbtYH/b0BH/AvTEzh5IP++s9aaRr1kjACdTrEK7xPsoUrlewGpVH+P7LwXlFVO/OnO7mys6qBm8U1xWcv6EFtvlaycaJeUnjbtpOCSM=
+	t=1789921066; cv=none; b=XJnNXVg5aM7n35VU0IVWlNFMxPjcGjacMzpttJBNY8Z5K2nBG2ux2Dl6niUIxangQjGlyN7nlBzVeI7gbjwq7a1ZNO98+i7V39r7q11/Z29zTQXI7C0D0J2MwH2oA2ciorBl0cAIa2LNghY+JqMSJcxN5GNyH73LM2Sse1RZbdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789915177; c=relaxed/simple;
-	bh=wTzd58hwp1SXe3jTcRDun+6ck+5T6NYwmmiIxWfAINU=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Cs1jdb47xJ+Aa8JMKt/HiDrpQXdcx0zrKRQeIO0nFvSw5jP+tUAjaDVaRb2CcPxigBHsCFaTrT32r4wEylLAsh0FZpi1DOS6j900wITUslRAClh7YTFwgRIHOl6TMAiEDkAQeVzoGlOsxAzFhgoNectGwcDrpbZ+20jc6blkwg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4nXPcNc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789921066; c=relaxed/simple;
+	bh=q3+uLqBCNGSzkE7tv6YmXIvrM+sKuNRFRAZZq6awJKM=;
+	h=Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
+	 References:MIME-Version; b=pMF2TBJ6V7R4uUi5ZLHtHbaOzhUmOgd9V1GYs+erB+3oIvRfcwCpOt5lcmBfxrbqtc9BLEY2QygzFMpH9R1MuURm1MLgzPUgwCy3kExLWPl7Ug8sVvbgPHLxYl5d97H7xe1rI7DouKzBBgcRY6CZtU+UwV7HgqR6M38f6Bg58B0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=duKHX4Dt; arc=none smtp.client-ip=74.125.228.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4nXPcNc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D75D71F000FF;
-	Sun, 20 Sep 2026 14:39:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789915171;
-	bh=O2Q6olASqRnD60yK1oZpX3ZWZlCCga1dZ673JHtYqTo=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=X4nXPcNcvPochGiB447EEDchDWENCg+8LrIDv+kUNB4wVR2BBe1Q71jpm/UC1klH7
-	 UcCzgZv16rQkmAsqk7iWwWR4lt0/9J6iH4WkslX6OziP0nSdd7K6H1KkkKii9xhInC
-	 0DJa1RLrbQxH+ZZWeZeApJMP+RZlVDMrNL/Nw2TdJmWz9ydvYEWsNFDB0WQB2clXcu
-	 /pYFtfiW2c1LNfw2eeENNZUjUp0N8lCPSrtY4ZItX30dHwJt4EE9q3cOPPwcUBQIxf
-	 9C9hM65FvFxqRGMWrgwzXZmCrsFuGdH20F/cXm4duE5cxgzBWphbm8XsbEz+Mip9lV
-	 BbV30e4dJ/2JQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC net-next 4/9] net: reuse skb_shared_hwtstamps for
- BPF Timestamping v2
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jason Xing" <kerneljasonxing@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260919143732.11772-5-kerneljasonxing@gmail.com>
-References: <20260919143732.11772-1-kerneljasonxing@gmail.com>
- <20260919143732.11772-5-kerneljasonxing@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 20 Sep 2026 14:39:30 +0000
-Message-Id: <20260920143930.D75D71F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="duKHX4Dt"
+Received: by mail-pz2-f43.google.com with SMTP id d2e1a72fcca58-868a9c48f9eso2789479b3a.3
+        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 09:17:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789921065; x=1790525865; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=eDlZ0Axn1IVbcM7wq+/bUYuF1RFbaZNrtATk3Wq6DJU=;
+        b=duKHX4Dt8MebFrNKOBbwKA2zHIAc5hYGd4rZx9EIq/TFka+FWnjzmOfANMEadtVZaa
+         kz1z3TP7YwkYEGG+UFUA//LL3YuQesxIUkNWyvhnr9MS6c6SMrQfRMBdUHX74hHb2Kbu
+         VRbcwEfgS5YO9rD0BTR4oujohJt+MsTbwrY1WYxSPuC//gjd2GN3zUQa+W2bpytcV2bq
+         mUv4FIBOMPlg4SkpDrHihSaZdEQlMpdHxo4e+2i4HS0XRv3tDxjEHFCx/M4otdm5ZElU
+         zUkjvPY1Z26Zppry1wxFyP2neIN1nfe1jGkQGzPHCEkV5UYRRLO2WHX3gx5iO9Ee6g6X
+         InkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789921065; x=1790525865;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
+         :from:subject:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=eDlZ0Axn1IVbcM7wq+/bUYuF1RFbaZNrtATk3Wq6DJU=;
+        b=dp5skiDCHDVmS4PcLBMpt3pJfKDRUDtFe9t/mJxsKhr/In56eM1UQd8gSphsZ5P9Qk
+         T/B1bmryzjZTK0GbKRKqQsXNVeKN10ycC9d2npi9Zg4K2/orPMAKhAMycRLjr+LbAueP
+         d/1ZGuNVFiEG6I/Q+8oz9y9Rvmeglm8fNlpyRDQlQDlEr1N744OLY+QiDYpGKKLvvdr7
+         1VxqN/Eqd3j77KdQ9hGQVS9KmvzRQklYHaQtx6uLgURb5jJQw7wFGyliUCE3tg3DDy5Z
+         TyouTA/0hfyrIi8zIeFl4nPIiK7ZDCfpcdLoVoGR0oUMpc9hfgtY1hP5tIomWEy+Tfdo
+         7i+g==
+X-Forwarded-Encrypted: i=1; AKwUvBzVqkDdKDVrdgqTwOqjHC+WypIWMXdKFJeFDuBMN/mdj6BJdH7NbuhQxwWQzPxvRwIg1jQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++llCXPWGkcP4L4zoWuRlJuVX8HeVTkZFHb1SVvl8SXiefpv/PiI
+	bRtua7Rrq2QhwTKaB+2QWpvj04NT4pyhmQvzO9HvwQYTgtE/sJSBcFFh
+X-Gm-Gg: AYBFou0ET9w36+E0XQ1rTFtcfHP6gO2jpBGUIBHHRP7XjUMiMgZj5Yb4Eb2kVQd3kY4
+	AeU7SjrtcqTf+oaUXTsnhQrCDlpO7CulQ9DisiGqqFRk9EHyR5CMnB5MiRwqxf/xf3V4LhcXq5a
+	7a6kNLiZmdqbaBieDvgU4IgYsXo1kYw2GS4njnOnq+fUEnbN9DIOa1nY2m3AhJ2IyeqqjO7i7VM
+	ZjY4poqXoxfl7v9dl+IjVXgSx8f8Zbh0uzKwsttFtgVjAA2CIfRvUKE22/LvXgB2PGsGz0lT9Ss
+	NQtsbwJ/hCdz0GX3I2fD6dTI+pg4ihaZ/7z2084u1mIKCvrrIry3LIZgBAB/YljK2X+jCAZZokF
+	ePi4Jk3BCCn6bnEosp1VaCgcycGPt/r9Vs85Gs5Nlpiyh/pzn2nKg5/Rl5JWxSIlGxBQRu54+da
+	f4GAx/j2yJvtbOXdCMz4+16nAkToUY2Z15xtrKuCrRWPZyUoO7XmiDaBzmDQU6k0CTCNfNgx3QB
+	wAKbcHFum/h9Yze36NpkLBJqp3isAL6LDZclxxT5dXWlA6Hjm88Z8EoeGWeqLR3p1qJY+4GtmID
+	xNw1
+X-Received: by 2002:a05:6a00:4b01:b0:848:4faa:480b with SMTP id d2e1a72fcca58-874dccf8702mr13211565b3a.12.1789921064613;
+        Sun, 20 Sep 2026 09:17:44 -0700 (PDT)
+Received: from localhost ([153.61.198.250])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-877aa6fd3ecsm2107269b3a.59.2026.09.20.09.17.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Sep 2026 09:17:44 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Sun, 20 Sep 2026 16:17:43 +0000
+Message-Id: <DLKA28VU4GIV.I4EVTT076Y5Q@gmail.com>
+Subject: Re: [PATCH net v1] bpf: cpumap: fix use-after-free of dev_rx on
+ netdev unregister
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <netdev@vger.kernel.org>
+Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "David S. Miller"
+ <davem@davemloft.net>, "Jakub Kicinski" <kuba@kernel.org>, "Jesper Dangaard
+ Brouer" <hawk@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+In-Reply-To: <20260920133017.248620-1-jiayuan.chen@linux.dev>
+References: <20260920133017.248620-1-jiayuan.chen@linux.dev>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] net: BPF start_time breaks SOF_TIMESTAMPING_RAW_HARDWARE and names=
-pace isolation
-- [Medium] net: hardware TX timestamps overwrite start_time breaking BPF la=
-tency tracking
---
+On Sun, Sep 20, 2026 at 09:30 PM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
+> So do what the softnet backlog does and use the netdev notifier:
+>
+> 1. On NETDEV_UNREGISTER, take the ring size and ask the kthread to
+>    consume that many frames, or until the ring is empty. After that,
+>    every frame that was in the ring has been handled by the stack or
+>    dropped. The device is closed, so no new frames for it can show up.
 
-commit a3500c380740df14fa2b49c448a409fd50a64d25
-Author: Jason Xing <kerneljasonxing@gmail.com>
+That's not what the backlog does. flush_backlog() unlinks only the skbs
+with skb->dev->reg_state == NETREG_UNREGISTERING and frees them.
+It doesn't feed them to the stack, doesn't touch packets of other
+devices, and flush_all_backlogs() runs once per
+unregister_netdevice_many(), not once per device.
 
-net: reuse skb_shared_hwtstamps for BPF Timestamping v2
+> @@ -528,6 +576,11 @@ static void __cpu_map_entry_free(struct work_struct *work)
+>  	 */
+>  	rcpu = container_of(to_rcu_work(work), struct bpf_cpu_map_entry, free_work);
+>
+> +	/* Unlink first, so the notifier can't wait on a kthread we stop */
+> 
++	mutex_lock(&cpu_map_mutex);
+> +	list_del(&rcpu->list);
+> +	mutex_unlock(&cpu_map_mutex);
+> +
+>  	/* kthread_stop will wake_up_process and wait for it to complete.
 
-This commit reuses the hwtstamp field in skb_shared_hwtstamps to store a
-software start time for BPF Timestamping V2. A start_time union member is
-added that shares storage with hwtstamp.
+After list_del() the ring still has frames and the kthread has to be
+scheduled to consume them. kthread_stop() only wakes it up. When the
+device is unregistered in that window the notifier doesn't see the
+entry, doesn't wait, the netdev is freed and the kthread hits the same
+eth_type_trans() UAF.
 
-> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> index 0f4a4f4bafb2a..275c797f6a4b5 100644
-> --- a/include/linux/skbuff.h
-> +++ b/include/linux/skbuff.h
-[ ... ]
-> @@ -462,6 +468,7 @@ static inline bool skb_frag_must_loop(struct page *p)
->  struct skb_shared_hwtstamps {
->  	union {
->  		ktime_t	hwtstamp;
-> +		ktime_t	start_time;
-
-[Severity: High]
-Could unioning start_time and hwtstamp impact SOF_TIMESTAMPING_RAW_HARDWARE
-and namespace isolation?
-
-When BPF Timestamping v2 is enabled via bpfts_v2_needed_key,
-net_timestamp_check() populates start_time for received packets lacking a
-hardware timestamp. Because they share memory, __sock_recv_timestamp() sees
-this as a non-zero hwtstamp.
-
-Applications requesting SOF_TIMESTAMPING_RAW_HARDWARE (such as PTP daemons)
-will erroneously receive the software-generated start_time as a real hardwa=
-re
-timestamp in tss.ts[2], which could corrupt clock servos.
-
-Furthermore, skb_scrub_packet() clears skb->tstamp to prevent timing leaks
-across namespaces, but it does not clear skb_hwtstamps(). Smuggling a
-software timestamp in the hardware timestamp union appears to bypass
-namespace isolation.
-
-[Severity: Medium]
-Will hardware TX timestamps overwrite start_time and affect BPF latency
-tracking?
-
-BPF Timestamping V2 intends to measure latency by stamping start_time upon
-packet enqueue. When a hardware TX timestamp is received, __skb_tstamp_tx()
-calls skb_tstamp_tx_report_bpf_timestamping(), which assigns:
-
-    *skb_hwtstamps(skb) =3D *hwtstamps;
-
-before invoking the BPF program via bpf_skops_tx_timestamping().
-
-Because start_time shares the same union as hwtstamp, this assignment
-overwrites the enqueue start_time with the TX completion time before the BPF
-program runs on the BPF_SOCK_OPS_TSTAMP_SND_HW_CB hook.
-
-Could this cause the BPF program to read the hardware timestamp instead of
-the original start_time, preventing correct latency calculations?
-
->  		void *netdev_data;
->  	};
->  };
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260919143732.1177=
-2-1-kerneljasonxing@gmail.com?part=3D4
+pw-bot: cr
