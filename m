@@ -1,185 +1,153 @@
-Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED263E0C4C
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 21:10:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 786FC229B38
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 21:13:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.140
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789938645; cv=pass; b=HKwlttBCTpx0j+/iOo3ICdw4FWx27C3Yzf5DZ5dLGE6f3sdN0vhRqkPYure6NuVpbhQQJyf5BZPEp0kB7WWNMNRv+gOVpcDKg6f9XCc0s7uXTOIddGftYEtmi/KkiGFchQeO7YKMwAKH3eDHS4pt9q643pj2AACLYfBHxn8b4BY=
+	t=1789938788; cv=pass; b=g1VHyTI4PpV78EA3Fy6Xd+5jjkxEjIYlmGuJGq7GwdbGFx5i7MnPJbWvQd4CqghCpa5vxLXW4OhoSJH4lcEZamK9sz2nuydCqob4Q7CxpKBTWNFiS9FyexVeTs4/ktz5j9cIMJr3mH7ZMIbhJxMIt2QRkSk04qOM6Wp35kpCN+Q=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789938645; c=relaxed/simple;
-	bh=69/FIpXcRvK5VlNg8OdO/Vit0CelQGLcfTglHil7KWE=;
+	s=arc-20240116; t=1789938788; c=relaxed/simple;
+	bh=1mjK4bzoIfjfpA05yhN5AbaKrxIyn0c+nGmaQXfpgRk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZpqjB/I2DhhJqv66Qe+X/8toxWvHnTnMnCbWythB7t/iXfPE2pCDy2z/Ho2r1j18TQHTIJeSfMFUdR3Qob3S0QQnZJBuK8XElXTOPwjkHjutMGJl54QCQFoM1pub9KZ7eOPAHvwAxZeNiB/qs1R/5ee/UCLa0yRhz5yW5FhN1Eg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r4IDczSJ; arc=pass smtp.client-ip=74.125.228.76
+	 To:Cc:Content-Type; b=nrxhuRG5Y9Rj8t+46Lh17UqcHdpvDv6s7jePCZS1K045i7zcvgrN4Wox1zcI560hJFPVLs9DCKNcQpdoP560F2CaDIjIFiGkyDQ5QcJPBSKrJ+KpfkGcHpVWeU9V9cYFbTld5ofAislAH3dWrdugBs7tOYVWHSaV1lZphzhUIJQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hmKmTgXj; arc=pass smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r4IDczSJ"
-Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a803458ba0so3028359a12.0
-        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 14:10:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789938642; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hmKmTgXj"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccd66bb4so2049469a91.1
+        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 14:13:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789938787; cv=none;
         d=google.com; s=arc-20260327;
-        b=euoLfbnCy7XBpRekvzHbVYZ5B9AiTPQpgPGNgcfWiX84nyFIqVHbSf4NXAXPjXn3qO
-         Nus9Nc14xh+f5iT6bOBzmOErgZ2am6YOpYQFLhzHf9SLUHGShzfn6s+EiFEAj+upb7gb
-         Hnzznfqdhdx8ZwmRcX9OSOXAau7gbOpAKTMbCgBYk4TgFaLKiJcBmkKcAQIYe5DKjHvY
-         JXJn9PFD23F+FUpvFzEOgWPBN1Ppwyx2IVEDl6VUHMqTu5n8/tscUkbcoTbbJmwR60j6
-         kyAXx5Bw4A9UHSy0bS/GSVudeo6w1Qsclj3HBHL9/TtbHImpg0T+4XGDWax9uoW59pdv
-         YP7Q==
+        b=LYedce1UOPvnOfwItOOA7MJ4oygz8tdaxtK2WZlGXwUUHOaJz+6K6FaBZHcbrt51hI
+         CYafuzK0i7+RqB0UmaJmbdtk+vK2H7cTakO0cLirzXJV3T1/RhzE3yhtlxvNkDnr1hxZ
+         6pXQv4ggy1TyFIsULWQkqj/DuB6f9zsnx9dGe87nfZsbdKOFoj6etaItqbOtOq1KD+Kc
+         zjSn4bRBvdQ9ixjxXVykgYzEnRx0+i73CcRy2869SaJ4GQW2j03WfwAQqUX2HcLXzqCF
+         84Whow1M8W8kGjQdc6hGWwoULFSTD87bQcTQAqztIEGwzoTkTmxoMKq24u2NGSePs3Oy
+         hSPg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=EYvxESqkXL+/6XOtOcDBnAusVQ1+xIAcUiUyD6HUoSY=;
-        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
-        b=GLAF0m7OMUvGvbJQBvyR52hotq/EZYNQBhYTUZQhMSqKpw/wgYN+o8fDeLh0/bS+sy
-         T7c381OsufoHO4OgqqFIXvMrQnmlXbUYAQ8FKgGEFUc/fPGBpz9NKcyQv/x8S45bV3dK
-         Mvkrl/s9FSSYUOGg5nFqArMzSVf5oMBTu07ond/1xIYYVoQgFujv5Enhyt41TVwwPNhe
-         5slLdA/R6kP5PKgpJ3rM5LukpPMff2eBbg5VoY96b1uC6C5u+CS1BsJYbjXcg/Da6luG
-         UR8bzc8ddhy9YYnyWIjDe1bCI5VWcxEHvu5dks4F8phmUCwtJ2TGDaQKA43Wp69XnxIT
-         Weow==;
+        bh=2TbkS5vrvn8yW8ujxuvZ93y2O9e7zUBaytbnHS0C3Ho=;
+        fh=1MqXq3SNNQ40iDqjsOzR4YnWB9LepOoirnAu7lXYLXo=;
+        b=oZhIRghnzwSP1d1XWppm8waptrpdCL9xmp7GxIArWCN+ycW+NrpeAq5VcFeuTd6lca
+         pPD50B381+zYGWSfYkLeF20MbOMBeh0FAE9K41y/a1iGL8l1+RWV61bxwoe277CTZ4mw
+         0JUgSiXBqxjQsmiIwlaQUlh7AH/GjpNKjvfQhsfkL7m6tO5TL9rAa2GRKcNS6PkUqylU
+         wHjoK4QN2tFZgj9HoZaNGxvUtnca9tMO47AxMQXn395/wpgKFs+malJvJshvSW46OHWl
+         gTk7xMJfzdcvX0S1W5X1oKC60B16fA/N3wXkTFYSMv/ssxgGY1E8lozlqntXbNFsPNtR
+         gh/g==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789938642; x=1790543442; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1789938787; x=1790543587; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=EYvxESqkXL+/6XOtOcDBnAusVQ1+xIAcUiUyD6HUoSY=;
-        b=r4IDczSJzux4rzvGBNh/fLLfXOnRYxFlD4Hdn/tNGpZq52Egc1Q3/AkR99mb5EdUD8
-         GHbwdbAJcWirRclz4oRcnwYdEhKltOMNWBRxuwtveY7iU4FGChDFDEaZbGDwtwNue2WM
-         OcjeRpYCxsism/6yPAmO0uOz25m0JuCbIb9kMUhSY0aQC6P2hVL1msEf7xoJUnXMBQ5y
-         SGPTemwMdPU/ENYZC5Vg6lHKToleljE0MAytRnGGcf4dxDQDz6b/HDyLO72+UuSPkI6h
-         Xg5tp+QBMPLuJCqmZXGXKdTJk81iGHABpc1YLKVWsmcUn6gcAqpxvSL827b66uWiXmOM
-         2ocg==
+        bh=2TbkS5vrvn8yW8ujxuvZ93y2O9e7zUBaytbnHS0C3Ho=;
+        b=hmKmTgXjNMoSPm3i7o6gtuCNIqQ8wG/qGnEjtnVGOk42t05iXwv1ttiaxZsTz9qDJD
+         CjmcjWMxxukCjVE+y8gaD0pEDQOou/7regI4sZqvW6fn0oE8TN0G8pQFyK+4v8gCPAiM
+         wuuj2Hr9EfOleGC1zkAldkdqK5ASgnA4ufXKhvwdj9db7Nv5xQt9I3dh5U1h6mhftsLy
+         biKZJfs5e9hGa1GtuswO+g4nZJ6t1s2U995RlAhiMeqOkdF3KvyxixWfjJR+Jidw7e0y
+         /LU5PAcP1ELQ37aZNjE8CeSZHWkN4OMphrR9BrJBnduqqY1ADIglqoq9OjLeCAGqlZFO
+         +YPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789938642; x=1790543442;
+        d=1e100.net; s=20260707; t=1789938787; x=1790543587;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=EYvxESqkXL+/6XOtOcDBnAusVQ1+xIAcUiUyD6HUoSY=;
-        b=xFnBhVG6Ky8MV067igbWdMS18qr9d+hhMcmt+sfIwp1iL1tU1+a9S0dNoJ4drjUYLX
-         ve+ujX8/6DjuE31U4DIHkv/0N0ijRyo5JKV7HMbjyba0YF43iX4hnWBSbm+ist2mgMDc
-         HgUGfqx/ohYE/7A6z8RrFMp/hy00BQ3ZYCJC0glcN8tH2n/ZFc6psZTYDCbYq9BGtJd2
-         sl3zrlr16plSDWFSLIiepFGVP29Jv1c56jc9byBCJQKNE5lity3xDT1OI5U7LJbnjdGb
-         NYsSYgOtz8Xc6ouEEq9Ia36Rfu6zyjCRXJQZ50hdUr2RQgkv5LR4qmcRgIPxKJPTUijv
-         ZvIQ==
-X-Gm-Message-State: AFuF++kIAzUYsjBs2AefHW+PAD2dtnoQALS0ZDJjOWTgJouC1h/pZrgT
-	UF1vUnfk7NrZRTGh/g/oxiBQkd63xsayXLyUREkqRGt3x5ziDntbbSSeWGHcSWXOChJUnoc1ttG
-	am0WQU0YaJ4VGT1FImBJD7EH7bu3Lfmi2HJ1kR5pFS5xs3A6rikUFa/j3lCc=
-X-Gm-Gg: AYBFou19kXDOP5NZOgFARkb4x3C5alnMTNYk4iOOGIdh+JMXjg7lAFL2GUkJdtOfdfq
-	PNVXs2BC2JCO2aBNgcOrHSn9+1DQaH4jCWps9a7OqSlDNsw0X+Za/X/37OVKn4m030O9RvNJ9sD
-	7Up9ZInzgG1ErkZJmzBd8+f8fYmrXd3Nf/tj65GWKP20FbTa1mp0AY3kFRJeid8rF9CIKpm6ZSo
-	BgXeka38IZ1lAghLmNPexdRSc3o7OUOnz1ANX6ogTekSi9mqaUC9XLljwy3BzlECkrcPkGngNPL
-	XBGCLrAD1PqZMBsDG2ejcuKq0/v4HsNrTmTfbcAwhKKThENpQIs+h+EvrDNPY5JJx7I4AhE9Gyp
-	Qn2sKVSvX0KgyKYgIU2Vc1r0e7QmLKkWCLRJMTxyfrVV3QxhOBYo+RzfJx/tg2MTZw+I=
-X-Received: by 2002:a05:6402:42cb:b0:6a9:4edc:849a with SMTP id
- 4fb4d7f45d1cf-6aa55edb017mr6546558a12.3.1789938641410; Sun, 20 Sep 2026
- 14:10:41 -0700 (PDT)
+        bh=2TbkS5vrvn8yW8ujxuvZ93y2O9e7zUBaytbnHS0C3Ho=;
+        b=21UChcjh0ULu3ZFWGWkWz5svxojD7JFM6h5xCkwddX777ZE7EYyJSrLcLdUxiUo3rY
+         A8ezEYw+sk1jRyE98QRoXlAujvA3r7smoSCV2V5DpZE56/vJucpCf834Oi63shYd76wc
+         vFlnr0ixM1DzmzVa4v1incmh+mO4mnqHSG0rhbTJZI0HXqvw0kReKO6xzOtKmUreexzo
+         ks3YSCgFfvv1BIWsU4MFMo99laTDcReUWmGpJ9LDT/EFSdqNE/dltrDDLLwU8mHJiB80
+         RaIfPAp54/HMD2Kk+58MOQfqAfPz/obzwuut0WaIB6LOXttHYl7Wv4+gJXlQ0f8ETalr
+         6Tmw==
+X-Forwarded-Encrypted: i=1; AKwUvBzVWKfa8bhqnhxuOUYxOQpjD+uh8Ih5x32fYhUguQ6KSpc6uHw55RDgV9XV4EPNAmHtnmA=@vger.kernel.org
+X-Gm-Message-State: AFuF++laP36S4HLwO9tMYYvf0WQhZ5OjUCT86IrqCnpUef9rCzpsrphc
+	YeOq7hHhIg6yrBolUliB+7AKzvUXIhkwRdwYD4xcBW9/9lKzDX2eNEbUsLiaPvq4nSbT7z9MDqR
+	cLS37Xlu5qXXGoJOLwTqHd2OhvSDBJY6isQzTKrUV
+X-Gm-Gg: AYBFou2KlE7m/Fo8NZ7se6R2PfUiyvkzgz7dLBxvhhyaGXfZ/G+dcoQb/9y1Ou97oUp
+	DZnqxysgjYFUegtcQE+D9uiykaPJm8qVakMwzloqxK9HFBz9zh48BDV+O5AI7j8nuK6ptOFP2PM
+	J05xxuqheZ5QBHolK99gdY0pVr1Z4B5CJ9nGtkidSg2HhMspW1JmLi6ThN2Y2j1JJsLrIDElgZC
+	GmGMVRYKbu7Lo7YCL+RQapH4wOd5BXhFf5U8oK5FNLo6dLdV8nY8qgzkE1HCtE36EfxpQS10KdC
+	e7lEctBt/9oCKOaw6bEhP9Lf4pRwQ8GQc7CmirpiIXPTlDk8VgdcB3W7bpiX3UnAsDqV5CAhZfJ
+	ob1UsmuxxFqW8JOIMivMg5uHmxDTNVeCnh+u+AtOaKsRhe0szIvsQdzJpHUpuGIAjP51MKSVHl0
+	D2pA==
+X-Received: by 2002:a17:90b:48c7:b0:3a0:3d1c:2dc1 with SMTP id
+ 98e67ed59e1d1-3a03d1c3a24mr2589830a91.67.1789938786366; Sun, 20 Sep 2026
+ 14:13:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260920195633.3033620-1-kuniyu@google.com> <20260920195633.3033620-7-kuniyu@google.com>
- <20260920201333.A40C81F000FF@smtp.kernel.org>
-In-Reply-To: <20260920201333.A40C81F000FF@smtp.kernel.org>
+References: <20260920195633.3033620-5-kuniyu@google.com> <386c023dc4bca44689253b97a3f71c7758d9a320a014cb12e21562cba72a3443@mail.kernel.org>
+In-Reply-To: <386c023dc4bca44689253b97a3f71c7758d9a320a014cb12e21562cba72a3443@mail.kernel.org>
 From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Sun, 20 Sep 2026 14:10:26 -0700
-X-Gm-Features: AcwNN1WlwcrlxX3Pn_Cb1NE8oUHBEHoAjP2yqHBfg1NXE2grE4ZnMmSHo80OmKU
-Message-ID: <CAAVpQUAJJ2RmL_dTH=M2s2Tj9mypL2YtYK7t6tCSaEj4bYY9Uw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 6/7] bpf: tcp: Add kfunc to adjust sk->sk_rcvlowat.
-To: sashiko-reviews@lists.linux.dev
-Cc: bpf@vger.kernel.org
+Date: Sun, 20 Sep 2026 14:12:55 -0700
+X-Gm-Features: AcwNN1VOFKzOS0OdgPcvkrdxKWm41uZitVdcprTPwzhwp3cOlmHDu6WtAiYEeTU
+Message-ID: <CAAVpQUB9p-ELucWW+Vk8NjCJv4eXr6Ux0f5OmWidFD-F1iTxgA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 4/7] tcp: Split out __tcp_set_rcvlowat().
+To: bot+bpf-ci@kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, sdf@fomichev.me, 
+	edumazet@google.com, ncardwell@google.com, willemb@google.com, 
+	ukyab@berkeley.edu, cleger@meta.com, kuni1840@gmail.com, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, martin.lau@kernel.org, mason@kernel.org, 
+	ihor.solodrai@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Sep 20, 2026 at 1:13=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+On Sun, Sep 20, 2026 at 2:01=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
 >
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [High] bpf: tcp: OOB access and type confusion in bpf_tcp_ops_set_rcvlo=
-wat()
-> --
+> > In the enqueue path, tcp_data_ready() is always called after
+> > the hooks in tcp_queue_rcv() and tcp_ofo_queue().
 >
-> commit c903e36ae4ed7b68c1aea9023743a57be672cd2a
-> Author: Kuniyuki Iwashima <kuniyu@google.com>
+> Does this "always" claim hold for every enqueue-side hook site?
 >
-> bpf: tcp: Add kfunc to adjust sk->sk_rcvlowat.
+> Looking at the callers of tcp_queue_rcv() in net/ipv4/tcp_input.c:
 >
-> This commit adds a new BPF kfunc bpf_tcp_ops_set_rcvlowat() to dynamicall=
-y
-> adjust the receive low watermark for TCP sockets. It clamps negative valu=
-es
-> to INT_MAX and configures the wakeup flag appropriately depending on the
-> calling hook (enqueue vs dequeue).
+>   - tcp_data_queue() -> tcp_data_ready() at line 5709,
+>     but only if (!sock_flag(sk, SOCK_DEAD))
+>   - tcp_rcv_established() fast path -> tcp_data_ready() at line 6694
+>   - tcp_send_rcvq() (line 5565, TCP repair, tp->repair_queue =3D=3D TCP_R=
+ECV_QUEUE)
+>     calls tcp_queue_rcv(sk, skb, &fragstolen) at line 5601 but never call=
+s
+>     tcp_data_ready() or sk->sk_data_ready() at all
 >
-> > diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
-> > index b0e14b54917eb..3768b1440eb77 100644
-> > --- a/net/ipv4/bpf_tcp_ops.c
-> > +++ b/net/ipv4/bpf_tcp_ops.c
-> > @@ -359,8 +359,62 @@ static struct bpf_struct_ops bpf_tcp_ops =3D {
-> >       .owner =3D THIS_MODULE,
-> >  };
-> >
-> > +__bpf_kfunc_start_defs();
-> > +
-> > +__bpf_kfunc int bpf_tcp_ops_set_rcvlowat(struct sock *sk, int rcvlowat=
-,
-> > +                                      const struct bpf_prog_aux *aux)
-> > +{
-> > +     u32 moff =3D aux->attach_st_ops_member_off;
-> > +     bool wakeup =3D false;
-> > +
-> > +     if (moff =3D=3D offsetof(struct bpf_tcp_ops, dequeue_rcvq))
-> > +             wakeup =3D true;
-> > +
-> > +     if (rcvlowat < 0)
-> > +             rcvlowat =3D INT_MAX;
-> > +
-> > +     return __tcp_set_rcvlowat(sk, rcvlowat, wakeup);
+> And there's a third enqueue hook site the message doesn't mention:
+> bpf_tcp_ops_enqueue_rcvq() in tcp_fastopen_add_skb()
+> (net/ipv4/tcp_fastopen.c:284), which also has no following tcp_data_ready=
+().
 >
-> [Severity: High]
-> Could this lead to an out-of-bounds slab memory access if a BPF program
-> passes a non-TCP socket?
+> So wakeup =3D=3D false doesn't always mean "a wakeup happens later" on th=
+e repair
+> and TFO paths.
 
-No, false-positive.
+This is mentioned in the kfunc patch.  TFO path calls
+sk->sk_state_change() later and wakes up the thread anyway.
 
-This kfunc is supported in encode_rcvq() and decode_rcvq()
-only, and we don't support lookup helpers there.
-
-
+> There's no functional regression since neither tcp_send_rcvq()
+> nor tcp_fastopen_add_skb() signalled the reader before this series either=
+, and
+> the later commit 0390d95e0979c explains the tcp_fastopen_add_skb() case.
 >
-> Because the kfunc accepts a generic struct sock *sk parameter, the BPF
-> verifier allows passing any socket type. For example, a trusted UDP
-> socket could be obtained via bpf_sk_lookup_udp() and passed directly here=
-.
+> Could the changelog be more precise about which paths it covers? Perhaps =
+naming
+> tcp_data_queue()/tcp_rcv_established() specifically, and noting that
+> tcp_send_rcvq()/tcp_fastopen_add_skb() have no reader to wake?
 >
-> However, __tcp_set_rcvlowat() blindly casts the socket to struct tcp_sock=
- *:
 >
-> net/ipv4/tcp.c:__tcp_set_rcvlowat() {
->     struct tcp_sock *tp =3D tcp_sk(sk);
->     ...
->     if (tp->window_clamp && tp->window_clamp < val)
->         WRITE_ONCE(tp->window_clamp, val);
-> }
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
 >
-> This writes to tp->window_clamp, which resides well beyond the bounds of =
-a
-> UDP socket structure.
->
-> Additionally, does this permit concurrent modification of the socket stat=
-e
-> since the looked-up socket isn't guaranteed to be locked?
->
-> > +}
-> > +
-> > +__bpf_kfunc_end_defs();
->
-> [ ... ]
->
-> --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260920195633.30=
-33620-1-kuniyu@google.com?part=3D6
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/355350=
+82194
