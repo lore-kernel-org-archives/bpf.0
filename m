@@ -1,83 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B4792F3C07;
-	Sun, 20 Sep 2026 21:01:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F379023ABBE
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 21:04:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.38.64.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789938081; cv=none; b=qfPbM0NTU6XAYtArQNce6A/G+CqOZj4blWE6D9KELiHP7/VgEODc5xsiaIv/Q3CJBcYo7ZoroDG+5nDb7YpW+odoRip5/sVpvJmEofjwlMo4gzphw4hyxkvCb3ShjfL5spt4KPb7cRQwMNEO6VRP5LL1QDL4uEAWknnb4PY5eIA=
+	t=1789938279; cv=none; b=rpb34ItHWkBHTH6zzugTSL0RMbb119DNsKbSxCHZHNiKuchfRae52TB7dXopcWw4QNC/ul3xmNgtwGw16cS0roFUPe5iKS/Aj3u4htRfYlLE50bSiHGyt/z3+RBoqO7V/x/oHawM4A5yZntaSkHbA/8BEcPrdkvt6Ayx3JWVs0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789938081; c=relaxed/simple;
-	bh=lu/NTm6cxk4GFQfaeHH1pmv71VcOXDDSpCWZhEKlgaw=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=hQqX5OwtDWE2Hee9q879DHjUv5gPR38Tua7QYUMbN6NH/OQlgvSp/bWH4B+9E38jD5a3T3QOe7bW1FQf6S8/Hun1jiEWARmyohajC5L0HuN57JFQ5Dpu9Ukjow80ETLrH4d7u6glmg7wVZmIDIvNP42HI4d3iDxEx65q3ywdtaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HfisFl30; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789938279; c=relaxed/simple;
+	bh=PaoNmXiHoQf4Qn+GdroQNjdNrZO8CJIVCNa1ju9eDrs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZhjqHHDdxIAl04SoIogLsi34wnCEJ4ttMbqMzX04F8n+RsCB8MIh1ivLOoU65rEdJ1dpJcCjk5F3fPr5oZv8bs7ia1oq+2QsKClHBWixoYpRQHCSzXYFB8ZMhyzAnnHt0FW/E501NybJTdQzgvrPmdpwf3LZSn1N4C813NS8ldY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn; spf=pass smtp.mailfrom=mail.ustc.edu.cn; dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b=hKv/6MqH; arc=none smtp.client-ip=202.38.64.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HfisFl30"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87AC51F000FF;
-	Sun, 20 Sep 2026 21:01:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789938079;
-	bh=3W1p1k7TMU+snbpcdtGYoLU8pWAIw+of9fM9R/xz/cE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=HfisFl30bJEOw6xyGAlrcqnDZ2tptSpbPNUPCGU/s6L+ZrU/VGFmJwmDXpoSR7y+5
-	 kk6WY6q0tp08bxKJ10W/OoddWMLsssV4fm6iW38wupwzi+CgJNNAdwrfvQFb3BZ+I2
-	 PVpO26hb72FNVha7LmWBwJBBTvYVSGvKvOgMgsqhm+4ebV45agbNhC9ydNWAxTXGj8
-	 y/NC+iI+N5N7/CUSXQtgTPD60eTFHyRQe32u2PPNxtHMKsraeD3OIcXQoO/3gEHTJx
-	 qbJPnoN6N8Kl6Gb3PVslvL4XBw1Fb/wBv6+Pfx1FM2fC9DmxiuzXnXksb0QXx7bzCt
-	 KdZQ6ERtXfxaA==
-Content-Type: multipart/mixed; boundary="===============8009789460764158187=="
+	dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b="hKv/6MqH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
+	Message-ID:MIME-Version:Content-Transfer-Encoding; bh=zZ5C0GofVh
+	gDgyVNIxbE7MM+Z1fSQ+Oa2ECkukeXh74=; b=hKv/6MqH+KrQDrDMbPfXC1KhM+
+	S30+dZiij9SRxn0/KyAppWCvfmPERTalKXhxPYocMcL4+LjsdUfMgQvVku0Uy6MY
+	rRdggATxwjr+81+c9ILFGM2kh102h1Ff5ze/zBKgRFNeyALDageCWtVM/OX4a03O
+	zxnRlip2ndD7w0Jw8=
+Received: from localhost (unknown [222.195.81.68])
+	by mailimap2024 (Coremail) with SMTP id 3pYKCgB3dCtYSrBq0jBAAQ--.2113S2;
+	Mon, 21 Sep 2026 05:04:24 +0800 (CST)
+From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	sun.jian.kdev@gmail.com
+Subject: [PATCH bpf v2 0/2] bpf: Reject non-negative stack object offsets
+Date: Mon, 21 Sep 2026 05:04:20 +0800
+Message-ID: <20260920210423.345636-1-xyx2021@mail.ustc.edu.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <386c023dc4bca44689253b97a3f71c7758d9a320a014cb12e21562cba72a3443@mail.kernel.org>
-In-Reply-To: <20260920195633.3033620-5-kuniyu@google.com>
-References: <20260920195633.3033620-5-kuniyu@google.com>
-Subject: Re: [PATCH bpf-next 4/7] tcp: Split out __tcp_set_rcvlowat().
-From: bot+bpf-ci@kernel.org
-To: kuniyu@google.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com
-Cc: yonghong.song@linux.dev,john.fastabend@gmail.com,sdf@fomichev.me,edumazet@google.com,ncardwell@google.com,willemb@google.com,ukyab@berkeley.edu,cleger@meta.com,kuniyu@google.com,kuni1840@gmail.com,bpf@vger.kernel.org,netdev@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun, 20 Sep 2026 21:01:17 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:3pYKCgB3dCtYSrBq0jBAAQ--.2113S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww4rKrWxCFyxXF45GF1kuFg_yoW8Cryrpa
+	97Cay3tFWDt3WfKa17Ga17Cry5Kan5GF15JF1xJwnYvrWUXr1kAFZakw18uF9F9ryxXr17
+	uF1YvF9xJr1UAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9ab7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwV
+	C2z280aVCY1x0267AKxVWxJr0_GcWlnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8I
+	j28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr
+	4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxG
+	rwCY1x0262kKe7AKxVWUAVWUtwCY02Avz4vE14v_CwCF04k20xvY0x0EwIxGrwCFx2IqxV
+	CFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r10
+	6r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxV
+	WUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG
+	6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_Gr
+	UvcSsGvfC2KfnxnUUI43ZEXa7IUY83vUUUUUU==
+X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
 
---===============8009789460764158187==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Reject non-negative offsets before converting a stack object address to a
+stack slot index. Add a regression test for iterator destruction through
+fp+0.
 
-> In the enqueue path, tcp_data_ready() is always called after
-> the hooks in tcp_queue_rcv() and tcp_ofo_queue().
+Changes in v2:
+- Split the kernel change and selftest as requested by Andrii.
+- Rebase onto bpf/master at a11212910cf09b2fe8db9afa41ef60c4f81879c5.
+- Keep the original code and test changes unchanged and retain Sun Jian's
+  Reviewed-by on both parts.
 
-Does this "always" claim hold for every enqueue-side hook site?
+v1: https://lore.kernel.org/bpf/20260911084314.3481637-1-xyx2021@mail.ustc.edu.cn/
+Split request: https://lore.kernel.org/bpf/CAEf4BzbYzt-Riekpc-A=MfQft9ZELwSDSE8kkQO1ZOyR3O_FAg@mail.gmail.com/
 
-Looking at the callers of tcp_queue_rcv() in net/ipv4/tcp_input.c:
+Validation on this exact candidate with a matching bpf_testmod:
+  - W=1 verifier, full kernel/modules, changed BPF objects and test_progs
+    builds passed.
+  - iters: 1/97 passed; 0 skipped.
+  - dynptr: 2/132 passed; 0 skipped.
+  - irq: 1/33 passed; 0 skipped.
+  - res_spin_lock: 3/14 passed; 1 skipped.
+  - file_reader: 1/8 passed; 0 skipped.
+  - kmem_cache_iter: 1/3 passed; 0 skipped.
+  - dmabuf_iter: 1/4 passed; 0 skipped.
 
-  - tcp_data_queue() -> tcp_data_ready() at line 5709,
-    but only if (!sock_flag(sk, SOCK_DEAD))
-  - tcp_rcv_established() fast path -> tcp_data_ready() at line 6694
-  - tcp_send_rcvq() (line 5565, TCP repair, tp->repair_queue == TCP_RECV_QUEUE)
-    calls tcp_queue_rcv(sk, skb, &fragstolen) at line 5601 but never calls
-    tcp_data_ready() or sk->sk_data_ready() at all
+No selected test failed. The VM ran with panic_on_warn and panic_on_oops;
+no kernel WARN, Oops or panic was found.
 
-And there's a third enqueue hook site the message doesn't mention:
-bpf_tcp_ops_enqueue_rcvq() in tcp_fastopen_add_skb()
-(net/ipv4/tcp_fastopen.c:284), which also has no following tcp_data_ready().
+res_spin_lock_stress skips because the VM has no hardware PMU.
 
-So wakeup == false doesn't always mean "a wakeup happens later" on the repair
-and TFO paths. There's no functional regression since neither tcp_send_rcvq()
-nor tcp_fastopen_add_skb() signalled the reader before this series either, and
-the later commit 0390d95e0979c explains the tcp_fastopen_add_skb() case.
+Annotated verifier tests check load outcomes and diagnostics. The full
+unfiltered suite, sanitizer configurations and architecture matrix were
+not run.
 
-Could the changelog be more precise about which paths it covers? Perhaps naming
-tcp_data_queue()/tcp_rcv_established() specifically, and noting that
-tcp_send_rcvq()/tcp_fastopen_add_skb() have no reader to wake?
+Please queue this fix for stable after it reaches the BPF tree.
+
+Xu Yunxiang (2):
+  bpf: Reject non-negative offsets in stack_slot_obj_get_spi()
+  selftests/bpf: Reject iterator destruction through fp+0
+
+ kernel/bpf/verifier.c                         |  2 +-
+ .../selftests/bpf/progs/iters_state_safety.c  | 22 +++++++++++++++++++
+ 2 files changed, 23 insertions(+), 1 deletion(-)
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+base-commit: a11212910cf09b2fe8db9afa41ef60c4f81879c5
+-- 
+2.43.0
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35535082194
---===============8009789460764158187==--
