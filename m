@@ -1,66 +1,66 @@
 Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40BA3E6DFA
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 10:21:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 623481C84A2
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 10:29:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789899673; cv=none; b=QEKzn5uUQCc7CbAuaePAzSvR6f2wKm3rrD3uoejnCKtgZAJy938bs9Qzs+90ni8GeIwUZlLLC6FrWxL0mW9anRTCAmHN5iA8GNhSrviEFx/gxYuMO4ya1uiufvLoKqZ8c3SdEwHrAzpoyRI9SkCk/+GyMZUXrTHtG0fw3JGDE3Q=
+	t=1789900172; cv=none; b=byZaLU7ED9ZcWk06gfVtNUup+WMSmg7TVgupmhODHb7J5vJVPNbevwgyGA2vIupM743nmwES/6Kj+tdNw/eHs0+UPlysQYqgz4srcVP7HWMC5n6RFacuwrZjeCkPM57CJXeSba9m8CzLsCcVnD+me2/tlwLgWCwRVMMeWXyGOeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789899673; c=relaxed/simple;
-	bh=DXs70q+uj0fOTubAL/yj2nRY1q+Sd8JFHOY3sHHBGhE=;
+	s=arc-20240116; t=1789900172; c=relaxed/simple;
+	bh=4BQzVeanwVtXbuFPAfnsnMd1d3bi+yl+uv6Kg2oGZKU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IKQN4uR8Oc+WN5E1XTNGSN+nl5gjeVpVzEheNNRzEPghKGvtrkQa3IVinnljQZfYnzEkBU9gB4DHQsBp/n9tXjeVzEG/SV1bBFKqFHS290YAjlMkv0ezFSte7GDYQAnq9iQdqu48Ak8NpBFdIz7wSNgzdfv3mXJGP4B++pCSkHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R9m/wlJc; arc=none smtp.client-ip=74.125.227.140
+	 MIME-Version; b=e3tkeeYFvQZqjYI+YKVzC2j29qrYCV8hGekiBnMSByd0alD3sGiJeZfz9JxouGOS9sLHbSuj7stRphUO/O/sXmSLq2eojdqOsc7QCVHMIg2wIjKKEYXjYao1VMeguDoIG1hcdtzOLXYJs+kw+iqMzxgGhDspCKexHAvQ0ps7heQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dl8DSgqV; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R9m/wlJc"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747ed9866so18959775ad.2
-        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 03:21:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dl8DSgqV"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2dd58e1e2c7so18311355ad.0
+        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 03:29:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789899671; x=1790504471; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789900171; x=1790504971; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DXs70q+uj0fOTubAL/yj2nRY1q+Sd8JFHOY3sHHBGhE=;
-        b=R9m/wlJcx2ZyuYnkIdwDaRDO8ThzohwKv7zrxAqJNj+JDAdHYoApbOWFMPXc0SvQMb
-         z+A5maB1IKu6z94MXl+r0cO3h8Cpfz+1m7u6aMaoIcC384ffE8ZfJaw4f7Eq0NYDbbY3
-         ARJKpWu1J+8CM9g5YhG0t05S4n0Q5Iu0e0QrR+6/1Hi50LZPjpPCQcNDQ4u1dm3wsrIy
-         Euo3zuVgRV8KyvNlUJvLF60El9U0HYYIK38QR+9z3w7/3o1ZQYswleml0bs8KDxnZBTy
-         +33mVF9dFIucWCD1UGhM3fnETViUvmXBTqIrKvt4ijx/NOtUrLyAAOINWOqg/CwqzOTk
-         HlFA==
+        bh=O8eOaouCq4BZ2q/2gl/vLSyGwMVXimj9oVClFLBXxtU=;
+        b=Dl8DSgqVoU3P0YI+GebN72zguYlXcnRF8Ybq4+FtIAFLvtK85Bscpx61Hpp27QVKip
+         4bxIqF8DMsy/SptQz5anx7wTojmTBSXGR+ko538YVvd6Ks7cp14gw7G4cU5Ue6lrTDes
+         whFS8afyKW2jSMavW+UTQsnnTLiVWssQD3UCpJdF0EwEBfndFa83A+h5HpcLHVfncDdG
+         iPPVsvOumeY3kuK25sai8pmq1x2GwnaRmI6f0eMcQ3iZZRpHfXYucFjAUwu15AbIdzcD
+         oHbzQitPK6RW2WzwT6xuajA9aTCh98Iaa/U7DbuIetkPWv4i46fCUBNerRmr4dOaoBhP
+         m9+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789899671; x=1790504471;
+        d=1e100.net; s=20260707; t=1789900171; x=1790504971;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=DXs70q+uj0fOTubAL/yj2nRY1q+Sd8JFHOY3sHHBGhE=;
-        b=KovIdQHtkDcN+0V5oN5ej3YMZvnSjxiFvkLRTXdPMvYR1m5c/je0s4uoFSNWdSDIMx
-         xeO7PrjzAVs4YNVKPJMiUt/17tq0zE/pHx92ZDxO0dXo/9Z/GwZUA/Dzh1MIO2bKcf8w
-         R04mLfxtAs0mwshOVUQvXKFzSvcdU3KUUoUHnlxo3bSUVRKvbZEyQlNIHweC/RntHYwb
-         M+MroOjx9AICisRW/6SSP/X3iz1cNa05LkYtyf/zpWjuA0aozW/lDTwcSTJs3FtrOIoG
-         hgQb2lzMYJWQUHOfC/KnNuW3pXsFWYcujsTnD4363Zl44qZyiTxzsc2NbP+njwLX1e99
-         XF5A==
-X-Forwarded-Encrypted: i=1; AKwUvBwo6MXa2VNaEsQ7GIbIiiPN6qgm34ioyjhypSQAwiKcgwaw6DEEAtA7qGI/sXjdwRWZKiE=@vger.kernel.org
-X-Gm-Message-State: AFuF++mJun3vFTp57HXmjAznCrEvmfhq0aVa7TqwGvqovecTGN1vEd1N
-	9IktVV+o2QSwGG3lFVCwV0BTZjuihozQcSWcqyomtEqzi8V5eAxDZGE=
-X-Gm-Gg: AYBFou0ewHu/N8pxlDBMJdBXdtr76q8jcA7kk9U+nzN/qRPNU4jaCf00EvnztZT8KPK
-	1Axc85nqTGBRGHjU0sHRBDMANyXGPkp3moZmsUCY4Ykeo7sgzeY2RluOOJj9CJr9R5W+xlxizQz
-	rSz9FjuwF8E0HT3uUcL4c2ly130xTYisWdSemT6F48Kvw5jdrFTdXUwy9VvgshXFgeFRAMrYl1H
-	UtCOBgweQpbe6iepmUBbyS3lIrOwaPKj5TCgGakBVEoaHFGPZcPFHtTywoX4QtQwz2iqhlDXiXO
-	mEcVaFhKy/BOPkwQzRGf6gTsVIY9C/bvHvtI/sspbeBDrk1B6yOCrtCGjqLGwqguQ4UAvmL6QRh
-	RK4ffCTQLKXBz5ZFme7LEaz6LIoqu4ypTTfnklpvihw4WzMjphxMMIbdsf5oxKVEX+V0njBsEtT
-	jj+GPb6AEDWin+/uU9SPWxAtH11oMIjSFhaOlLc85ATETT1M5j5iwSMdtEZgVPoce1a2WgzZBvV
-	Ayi8zCW3SqmTFIEW5d/HohIw4g=
-X-Received: by 2002:a17:90b:3a43:b0:39e:6c68:c778 with SMTP id 98e67ed59e1d1-39e6c68ca12mr6544339a91.46.1789899671224;
-        Sun, 20 Sep 2026 03:21:11 -0700 (PDT)
+        bh=O8eOaouCq4BZ2q/2gl/vLSyGwMVXimj9oVClFLBXxtU=;
+        b=iuW6p3y4C0WXTtFExsyQjlwewU4VD4ASYYW6mX+5EQMenw00UA4jVB6ws6guyJzymk
+         fAqInl07FlN589UPI7cWM23uVCx0bek+XlwrePhxMbghDhsVG+y7DZ8gwpeevYi4mKqV
+         0IXf/jz3gumQWPhwDqejOaN1RMq0+evo6+eXalrMyh1l3AkJTyFvrn6rnxKEXmQA3HXA
+         78NaNvCnUmqbMh2EZeRsBNXZdW0ehcWvU7fqBue/Hx1ZXWAtJMx4bX6ch3Tq1SmFFqUK
+         muB3hqsQBi4FexPncgQy0lKE0MqhPZHqeO4+Y/GIF/uA2WH92+4A1+niXBl7TfHUdvhK
+         NLEw==
+X-Forwarded-Encrypted: i=1; AKwUvBwe2YctV6yJ76e8DiO8lqS92gq5jEYAkDNr/CgZbrtGmawHgVvAwfU2Rl2QGQY4/rxnTlY=@vger.kernel.org
+X-Gm-Message-State: AFuF++kuxNPD5Y/c5q5WjoOnCVZlEu1X4cfOZMuT8aXebb1xxeVTsrMO
+	7G/PNn8xzhdTiIevChA4Ve9M3Q4ByGJMkfoyWW1r91tpyJB3+YjhXPw=
+X-Gm-Gg: AYBFou3Zq/DhO4IqCSqxIlTigcHK6w8jcVAsczJi3CcTOxO/YcquFmtwusIThb5aBT6
+	AkhEHOC05wD8z5rv4RQTLwnEYk9yQpwKuf0AeVNBFAV3b5EtFroQ9e7I0EltIwlMU6aHjiHUF1M
+	xeVh736/o08ZuDMpNVIRoJ3WoMYSS40/Sqhu4GOjekt3l7azacyCEBmyMVcmD6tB/0IyUJuETwM
+	BS58m0cQScx2I6Xc9g5lKO071Ym/I7Y7mJDmlHu07cQe1UL535jSTQsK2j52tOW9gpHpIkJJvpp
+	f7LVtE1tjUkPkKx7WnQhmwQ9zYfBcV3cgybFY8qliSDPhc91T8HmC8Z6obPNYAsQaeCrpSHE42c
+	la/TEoCnvzb+Qv+VgopJgcfEm41gkz8NgrK841JIPx38qOhILoLZdTqjH0m6fA5+T6Boti34+Go
+	xa7bGU7+xJpouFAH2N7Y5DepbEIbfX3vCpHBCC5lI1pSgaHAxd6xh3W0pN6ERg7/eN64q7e72pb
+	jf+RZCP6I90knwvDKeWXWBVnLs=
+X-Received: by 2002:a17:903:2349:b0:2dd:c100:b2c6 with SMTP id d9443c01a7336-2ddc100b360mr62001525ad.49.1789900170830;
+        Sun, 20 Sep 2026 03:29:30 -0700 (PDT)
 Received: from ydg-Zenbook-14-UM3406GA ([2001:2d8:7f00:8c85:e0d6:4b87:c472:c9ae])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e6c37a88csm8550850a91.8.2026.09.20.03.21.07
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ddc17da543sm18500155ad.69.2026.09.20.03.29.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Sep 2026 03:21:10 -0700 (PDT)
+        Sun, 20 Sep 2026 03:29:30 -0700 (PDT)
 From: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
-To: sashiko-reviews@lists.linux.dev,
+To: bot+bpf-ci@kernel.org,
 	bpf@vger.kernel.org
 Cc: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -68,20 +68,22 @@ Cc: ast@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	martin.lau@linux.dev,
+	martin.lau@kernel.org,
 	song@kernel.org,
 	yonghong.song@linux.dev,
 	jolsa@kernel.org,
 	emil@etsalapatis.com,
 	ihor.solodrai@linux.dev,
+	mason@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	donggeunyoo.kernel@gmail.com
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Test per-cpu initialization of a BPF_F_CPU created element
-Date: Sun, 20 Sep 2026 19:21:05 +0900
-Message-ID: <20260920102105.445051-1-donggeunyoo.kernel@gmail.com>
+Subject: Re: [PATCH bpf 1/2] bpf: Zero-fill other CPUs when BPF_F_CPU creates a per-cpu hash element
+Date: Sun, 20 Sep 2026 19:29:23 +0900
+Message-ID: <20260920102923.445964-1-donggeunyoo.kernel@gmail.com>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260920095859.635921F000FF@smtp.kernel.org>
-References: <20260920093153.439743-1-donggeunyoo.kernel@gmail.com> <20260920093153.439743-3-donggeunyoo.kernel@gmail.com> <20260920095859.635921F000FF@smtp.kernel.org>
+In-Reply-To: <eeaf9112a1ba86d1cbfbd5287cc67bcc13adb07861cced93eb4c51167758b3fe@mail.kernel.org>
+References: <20260920093153.439743-1-donggeunyoo.kernel@gmail.com> <20260920093153.439743-2-donggeunyoo.kernel@gmail.com> <eeaf9112a1ba86d1cbfbd5287cc67bcc13adb07861cced93eb4c51167758b3fe@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -90,30 +92,24 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Sun, 20 Sep 2026 09:58:58 +0000, sashiko-bot@kernel.org wrote:
-> [Severity: Medium]
-> Does this force a hard failure on uniprocessor systems instead of correctly
-> skipping the test?
->
-> Since UP is a valid hardware configuration for running selftests, if a test
-> requires multiple CPUs, shouldn't it gracefully skip using test__skip()
-> rather than asserting a failure?
+On Sun, 20 Sep 2026 10:19:00 +0000 (UTC), bot+bpf-ci@kernel.org wrote:
+> Does the block comment above this condition need updating? It says the value
+> goes to the "current one" and explains the whole branch with "onallcpus=false
+> always when coming from bpf prog."
+[...]
+> Could the comment be updated to cover both entry conditions?
 
-Right, that is a bug in the test. With one possible CPU there is no second
-CPU that could hold a stale value, so the case this subtest exists for
-cannot occur; booted with -smp 1, all three of the new subtests fail rather
-than skip. I will use test__skip() in v2.
+Yes, it should. What is there stays correct for the !onallcpus arm, where the
+value does go to the current cpu and the reason is the one given, so v2 adds
+the second arm rather than rewording the first:
 
-> [Severity: Low]
-> This isn't a bug, but the BPF subsystem strictly requires multi-line comments
-> to have the opening /* on its own line. Could this be reformatted to match
-> the required style?
-
-It is not a requirement, but it is the documented preference, so I will
-follow it. Commit 82b8000c28b5 ("net: drop special comment style") removed
-the netdev comment rule, which leaves the general preference in
-Documentation/process/coding-style.rst, and that is the form you describe.
-checkpatch checks neither form. I will reformat the comment in v2.
+	/* When not setting the initial value on all cpus, zero-fill element
+	 * values for other cpus. Otherwise, bpf program has no way to ensure
+	 * known initial values for cpus other than current one
+	 * (onallcpus=false always when coming from bpf prog).  A BPF_F_CPU
+	 * update also sets a single cpu, and the element may be recycled, so
+	 * the other cpus must not keep what the previous key left there.
+	 */
 
 Thanks,
 Donggeun
