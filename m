@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3386229B228
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 20:11:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A4E3E1694
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 20:13:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789935114; cv=none; b=QGiE2Ki/utv19dE9ZOWetjwATcY9cLgGujXA4sYf011x+jDGn0JiHv4BSw+81tXMncEmAXJbFYgPJd5vXlRuCSGFjWVXoAQs4dfipW4DXbfwNtzpq9qcFSXchhIteMa42/F11+07oclSoFmrNKaLJtlyjr2U4Ll6AR4dLaL5gsA=
+	t=1789935215; cv=none; b=NSLMu4QXPURrKXjWC4vQyB66H8351O/bRrdSwVhVYzhKOnRptnzlIc555qt6Rn89d9NMUwYlEJRPRDfgKe+XPIXX+HWa2l43O+7KZVbLU6KrxZNc0sRpue2BVJyCzmH2SD1wTENWpHhg7A822qfwIFGENpwVFNPt3ZsWytQM5GQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789935114; c=relaxed/simple;
-	bh=5Jrb3Spufrx339CT6lq9CG0cjEoF7vNJC/KN6cPQ9xw=;
+	s=arc-20240116; t=1789935215; c=relaxed/simple;
+	bh=BfsAI3FWnNQgRJ2OWfKkiLz5SH+LSfTCcOy8Gs+1ncQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=AQt+aFCzykk/LMnMEUl7rfSDAOQPBlu+3evu+if31KL7IP7H1aIctcNwtQhKFiAkcZxahPip+8s5vtWsl+SuwOVbCeMf2ptbHteIlf9YmDUrkNlQ04pEtvq7EtJ8QXsJPXTC8toQ2FvwP0IaKNiNiaPKlnxKZMQmE9Zl4Cy5Oa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YapnhfXe; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=kb6gireIntr08K49h+2K9edg1dG5PfPIYS4OSS4eP6HLcJSkqf8hLtw348iGdnAgv3OqwXPpybn3ecVAckQKEvqkMLySky2jJyFpBqHq3aPa0OgFg24gaXf4SdODpt63A0rHac0PJ6hgoSj80ckNG0pPF5yOTRGJ0KSANDyMOu0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DTuXZzXV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YapnhfXe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CED21F000FF;
-	Sun, 20 Sep 2026 20:11:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DTuXZzXV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A40C81F000FF;
+	Sun, 20 Sep 2026 20:13:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789935112;
-	bh=k6H3HStpUBavrH86DF0jsCslob2KE47xaZn4+3Ut8mw=;
+	s=k20260515; t=1789935213;
+	bh=X9RzaSITVjJHWKEHgVn/+kiZf3m1aBf5q531baR/fos=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YapnhfXeYQ1jDu2bLTUX//Ql666lsnbSD0ZMf60wGVC81SZDUJlPA4UpQEdhdFr6n
-	 37SLNQuhP4uh411LqSYOcomhZLMGl6uyZ3FCPSWlGUDGyL/e2ZVttBkBuQuAGClZmn
-	 PCO0RRJ1orutcOZ33zFIDxEBCO4phq7DwCzEM8+vTdvtYXKFu4ejcge54w+H7P7UcU
-	 CH7k5drL55mCnBMYH70L8WLQhrX+cBuA3oGuxocB8KzGDuMCgthl6rgaFq95ZWJn5g
-	 Q7nZhn4kEeqd/x7tFICpuv7fPi5dbzpYlWHnrKO3B8zJTmYnFYrJXUQTPeIgbYg0lc
-	 qlhFTMLdzrKig==
+	b=DTuXZzXVHmvbMV/U92SWn8Bhymai+nUWEeJY8Ikz8KFqSym4EVXw5gtntRKdVlCO0
+	 2kel3yHUTWywkFD0TzLH0HrcV1YgDyia1YADoEv+E8+0HVHUT7Yb+amxqLNkh3xE+0
+	 Yxgq7AiT45ub1ofrBG5s41ADoXfzeo0CrjqswJVpyyfb9c6Noo4Yr5baYowMm2kEoy
+	 jX+m73128htlvQWIkjcEQU1VHi6YRb/HAqLZAEoDKj3ljIjU/aoo7sp95RZXip/uFy
+	 5sIsR4A4HzsorYS8bmYvLQftCk3RtOaqQMRkErhiiASyX6lAcfjXGUJXbMKgB4ckYw
+	 xEHtN+RAyq+xA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 3/7] bpf: tcp: Support
- bpf_sock_ops_cb_flags_set() for bpf_tcp_ops.
+Subject: Re: [PATCH bpf-next 6/7] bpf: tcp: Add kfunc to adjust
+ sk->sk_rcvlowat.
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Kuniyuki Iwashima" <kuniyu@google.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260920195633.3033620-4-kuniyu@google.com>
+In-Reply-To: <20260920195633.3033620-7-kuniyu@google.com>
 References: <20260920195633.3033620-1-kuniyu@google.com>
- <20260920195633.3033620-4-kuniyu@google.com>
+ <20260920195633.3033620-7-kuniyu@google.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Sun, 20 Sep 2026 20:11:52 +0000
-Message-Id: <20260920201152.8CED21F000FF@smtp.kernel.org>
+Date: Sun, 20 Sep 2026 20:13:33 +0000
+Message-Id: <20260920201333.A40C81F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,63 +47,73 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [High] bpf: data race in bpf_tcp_ops_cb_flags_set() on unlocked sockets
+- [High] bpf: tcp: OOB access and type confusion in bpf_tcp_ops_set_rcvlowa=
+t()
 --
 
-commit 56d7f542a8c499237807954e17f2fae35e5e276b
+commit c903e36ae4ed7b68c1aea9023743a57be672cd2a
 Author: Kuniyuki Iwashima <kuniyu@google.com>
 
-bpf: tcp: Support bpf_sock_ops_cb_flags_set() for bpf_tcp_ops.
+bpf: tcp: Add kfunc to adjust sk->sk_rcvlowat.
 
-This patch allows clearing or setting bpf_sock_ops_cb_flags via the
-bpf_sock_ops_cb_flags_set() helper within various bpf_tcp_ops callbacks.
+This commit adds a new BPF kfunc bpf_tcp_ops_set_rcvlowat() to dynamically
+adjust the receive low watermark for TCP sockets. It clamps negative values
+to INT_MAX and configures the wakeup flag appropriately depending on the
+calling hook (enqueue vs dequeue).
 
 > diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
-> index c68d1fa323058..6d0452441b6c5 100644
+> index b0e14b54917eb..3768b1440eb77 100644
 > --- a/net/ipv4/bpf_tcp_ops.c
 > +++ b/net/ipv4/bpf_tcp_ops.c
-[ ... ]
-> @@ -220,6 +220,24 @@ const struct bpf_func_proto bpf_tcp_ops_get_retval_p=
-roto =3D {
->  	.ret_type	=3D RET_INTEGER,
+> @@ -359,8 +359,62 @@ static struct bpf_struct_ops bpf_tcp_ops =3D {
+>  	.owner =3D THIS_MODULE,
 >  };
 > =20
-> +BPF_CALL_2(bpf_tcp_ops_cb_flags_set, struct sock *, sk, int, argval)
-> +{
-> +	int val =3D argval & BPF_SOCK_OPS_ALL_CB_FLAGS;
+> +__bpf_kfunc_start_defs();
 > +
-> +	tcp_sk(sk)->bpf_sock_ops_cb_flags =3D val;
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> +__bpf_kfunc int bpf_tcp_ops_set_rcvlowat(struct sock *sk, int rcvlowat,
+> +					 const struct bpf_prog_aux *aux)
+> +{
+> +	u32 moff =3D aux->attach_st_ops_member_off;
+> +	bool wakeup =3D false;
+> +
+> +	if (moff =3D=3D offsetof(struct bpf_tcp_ops, dequeue_rcvq))
+> +		wakeup =3D true;
+> +
+> +	if (rcvlowat < 0)
+> +		rcvlowat =3D INT_MAX;
+> +
+> +	return __tcp_set_rcvlowat(sk, rcvlowat, wakeup);
 
 [Severity: High]
-If an unlocked socket is passed to bpf_tcp_ops_cb_flags_set(), it looks like
-concurrent updates to the flags from other CPUs could be clobbered, causing
-BPF TCP callbacks to fail to invoke when expected.
+Could this lead to an out-of-bounds slab memory access if a BPF program
+passes a non-TCP socket?
 
-Does this code modify the socket flags without acquiring the socket lock
-or asserting that the socket is currently owned by the caller?
+Because the kfunc accepts a generic struct sock *sk parameter, the BPF
+verifier allows passing any socket type. For example, a trusted UDP
+socket could be obtained via bpf_sk_lookup_udp() and passed directly here.
 
-> +
-> +	return argval & ~BPF_SOCK_OPS_ALL_CB_FLAGS;
+However, __tcp_set_rcvlowat() blindly casts the socket to struct tcp_sock *:
+
+net/ipv4/tcp.c:__tcp_set_rcvlowat() {
+    struct tcp_sock *tp =3D tcp_sk(sk);
+    ...
+    if (tp->window_clamp && tp->window_clamp < val)
+        WRITE_ONCE(tp->window_clamp, val);
+}
+
+This writes to tp->window_clamp, which resides well beyond the bounds of a
+UDP socket structure.
+
+Additionally, does this permit concurrent modification of the socket state
+since the looked-up socket isn't guaranteed to be locked?
+
 > +}
 > +
-> +static const struct bpf_func_proto bpf_tcp_ops_cb_flags_set_proto =3D {
-> +	.func		=3D bpf_tcp_ops_cb_flags_set,
-> +	.gpl_only	=3D false,
-> +	.ret_type	=3D RET_INTEGER,
-> +	.arg1_type	=3D ARG_PTR_TO_BTF_ID,
-> +	.arg1_btf_id	=3D &btf_sock_ids[BTF_SOCK_TYPE_TCP],
-        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> +__bpf_kfunc_end_defs();
 
-[Severity: High]
-Since the verifier accepts any PTR_TO_BTF_ID of type TCP here, it seems
-privileged BPF programs could pass refcounted but unlocked sockets, leading
-to the data race mentioned above.
-
-Could the use of ARG_PTR_TO_BTF_ID allow a BPF program to pass an unlocked
-socket obtained via helpers like bpf_sk_lookup_tcp() and bpf_skc_to_tcp_soc=
-k()?
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260920195633.3033=
-620-1-kuniyu@google.com?part=3D3
+620-1-kuniyu@google.com?part=3D6
