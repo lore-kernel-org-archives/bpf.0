@@ -1,170 +1,218 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 743FE3E40E5
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 07:55:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D84D24676D
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 08:56:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789890938; cv=none; b=f5WQavdbZx3wNS02Z8omwpyaUq5jOJvHcTIZCl3DwQUOe2XaR+Mdcjip8qWDxeqt3rRstuUfdTVRCKbyFWFDW4BXON/JPaha6h24cznNwSOdLMgFlLpC4weSyW6cMVpnfRaPI38E9OwYtXNq6jROqOZruFOukIIACzM+PFxpt3M=
+	t=1789894570; cv=none; b=jrkCN3def++48X3eY7djuu32I55WgQ7RjsMLjAw6bm4Q2HXtcTU3cwMA2JMkU+ilnS4oFfbZ30x8Ld2Fmi3q/coEapWsm+TR3E8dStbKcoc/zeMu3+h+usxsBhi4NKo+GMIFPZ7nWzlAeNp9ZXv5eUNRX35fwJjik12tbKBD19I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789890938; c=relaxed/simple;
-	bh=b0bDuD1LZgSRiC1UmemKX/tGg2f6GIdP8dzxzMBCLvI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=LQo777N/UgKZ2wuuBQGiTjvXhVoW9bRFBZ4H5jw9OToHNnit5DaAfgr/NQ0Jvp9V/LJWAzobkOH9HX7maCek6WIPyzEpZK1stGi1z5kYVdmKnn53OE9ETmfwhzgLTc1RgbTj9KejsxXQByyn3g/LoCpOnao9yfHtBRJaF+5GPKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=IATISA/u; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=LjTXRlSY; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1789894570; c=relaxed/simple;
+	bh=8cKFAgpgqhS+17SJQQKIYTCM7mizfHIf1eAUYCkryRc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cvfssTnRrLaqyyO25Q3oYs/t7dWeG6/36xwDylka4Z9s2O1pz6cWbRM7BGE9bzN10/ulYyxnlgtnBUmUxXEkM3AKjeKDzuFaQHNxDVAwnPV6huUnhBkNmpaD8AGZEg3Q6nlxKd+bCEQqjp4/Wj4snvWdO5i2uHBQ27bwC+jid1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IJrL9eL8; arc=none smtp.client-ip=74.125.228.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="IATISA/u";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="LjTXRlSY"
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68K55MaE2096953
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 07:55:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=pfx6bFZMERQUrEBTxPu8VU
-	3eqd+xw8Jj7J3BM1EDBcQ=; b=IATISA/uzXCNai6GH7dAEwXGGjFGpgMHOk9YGG
-	weTZJckRXeF9ErvS6FJiHsj9u1fQEJxYB9VFD/Rt3RRrNWkNwsfFWCghByE2d5g0
-	XgiMxzTxKrUtzAoTqI7hiERPSvtEPTl+91r1JDeZSformC9bqP9pdkDMOFezGULX
-	idCJEQMM++szYvkKW1p0lUmO4ty8/LyHPzNKxmYfSjUQsTClVtdy6wsj4UOB/R/N
-	4pRgTJ1S/6dF626xc4OyqSEai8DPp33+iKZql85UfzE7t8IYRxQtinLhPoejx86M
-	8BLZqrQOFcQtZvCLx7xS+fqwvXRYshKbNAcgZpjSyrbnR2BQ==
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4gshyxtkpn-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 07:55:36 +0000 (GMT)
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-939f925ba4eso213217185a.3
-        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 00:55:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IJrL9eL8"
+Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85469e211a3so1792594b3a.2
+        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 01:56:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1789890935; x=1790495735; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=pfx6bFZMERQUrEBTxPu8VU3eqd+xw8Jj7J3BM1EDBcQ=;
-        b=LjTXRlSYNNrPvzNHWTRqAx8LhlRcZYFQsvzCcFU3TipUXnWL/hzeNpuY+B8ScNoCB3
-         nxi5KWndgHNC3B4yqFDLFFn2IvnO2BdNVrTTa7U+S/am3lQLcX4UJ0c7R6U6kvKTImMR
-         Xj+C1jPh4NZrq6uS0fUHP6m0eDSwzn2a+xdkSTcgMcmWsUDnUpQ97vrpp/SDDYoNl7g8
-         VtNCx5YogKuE9SuxX/XX0gfYS070blwdgIdZUG97bo/ayHjrA0bXHXNeaLWXzk/nGTSr
-         QpZuptI+qY9HJN9uEGJ/3IzgLLaWbDpUd90KZfr6XKwq6RQQANV2BVm6WnrGMOW9OUrK
-         1zJQ==
+        d=gmail.com; s=20251104; t=1789894569; x=1790499369; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ksHOnUlot+h0QG2tWISkabaiPA1ToC05lg3IcvETRK4=;
+        b=IJrL9eL8LN9h+jBBEOv4Z3veSO+c0zbufw+xXL5CsVQb0k1BLQ3K/V1hRDRVVDMe2h
+         cEAPuHNomzBSjQouXbc1jK0XwpveTZ6hXotPSJ1BaXToMZpeIXGHguHEroZUNuVUqxe1
+         X8WtOC0LrsYoSNBC43LOC4t3XbB8GFw06eelxSd+NcpyGR02Cy2VfX4ALC3RSiDsLWXB
+         ljwsGB4489bfkUGIKx72MScIhMTM6IIDu+cV9XxsFYoWXUI95JghpiDKTfpoahRYhOQG
+         T3UluY3CiH3y48lFIizCIzfs3uIA8Vvrt92bl4g0JOsVwIeWtOvjgsaB5xHXnqQg8Cgq
+         pq+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789890935; x=1790495735;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=pfx6bFZMERQUrEBTxPu8VU3eqd+xw8Jj7J3BM1EDBcQ=;
-        b=HamK73wGsXVmGFhvdwS7uwfoTDPkfJOC+YLLJxEbctpkPvysGaut5tUHaWr+B1jNeB
-         1kr2uQCvDAL29i5PM0zLWq7BPo1L67yttBLSWZccR9GyzDs5KH53rFk29Yh72sNIzJtA
-         aolMl014ZiRQk7nxlMWgDNu9TTDyjf70QBAgZyITkG3lnFipvHfRmyclAOMlZEkhsuUm
-         YV4YKHGBCEWTuIcDwFdGzA/9hiFd63+U0REBhDqNcln+/7P1AoZOh02akWcsbpm3T4AK
-         soUbUlbb2F6Q9yMBXsXz+J87kfr+Ei0TEm6S8sZ0M24696J0iVKFCygOa6EeLc7bOrgj
-         NMMg==
-X-Forwarded-Encrypted: i=1; AKwUvBwBce9E0LfWEkjqpcfjA98Wn1vm0q7a6MpHF87vL75OwPZZP3DqQD9vnFI6CuUdC7VcBxM=@vger.kernel.org
-X-Gm-Message-State: AFuF++mb8fPvp7XIWI+xNr+MamS8kPvJilFeL9PcZoDqxE4IZe7sd/2f
-	5b64YMnExjwLf8A7POMTNgD6upqcGkah1leZU0qHhIp46bsXO7VR2uI48vBykQDasooRDKrbgvW
-	vrYc4sugKGeaLkKIMIcXP7xrm55WwlPfqyqRgNqysHbTFTtLd+uwHpyA=
-X-Gm-Gg: AYBFou2KW7LivnxCC1Mtf7CaEJLa4998wNvE4ss6e/UU6ORFrlqNKNx/Z+M/ysEvk5G
-	S7rRRezyzp3zG4g+jSp6d2bGzc8b3SzDqFfzgT9BXuzKmztJ28pO0fTUzmrUC6D6XH3beL9RCVK
-	STKsF773GWwknxTAzMdutXxCsDuC0VTz0iXIRXS62eARmRV75tPHK0HjLMQFPsfxaMA7a/Bo2mo
-	7tPDO1QJ+Z/ugYSyTFbfXU8AlBf3lx56GUKSAVXoNoN6uLwfJdFCaR9XNVI23W2hMmRcYNcBhrQ
-	KVV+rbkB4KG7AtxLlqlXdO+600ULLZ7JjaecaRiGBxKHbuQXwMG95k8LIsSksoFcgsmIZemXjEK
-	E3bOsSDLoBwiPNA==
-X-Received: by 2002:a05:620a:4148:b0:93b:d7a1:ba1a with SMTP id af79cd13be357-93bf57851c9mr458278885a.69.1789890935613;
-        Sun, 20 Sep 2026 00:55:35 -0700 (PDT)
-X-Received: by 2002:a05:620a:4148:b0:93b:d7a1:ba1a with SMTP id af79cd13be357-93bf57851c9mr458277085a.69.1789890935172;
-        Sun, 20 Sep 2026 00:55:35 -0700 (PDT)
-Received: from localhost ([188.216.77.92])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fcd090f0csm178070855e9.15.2026.09.20.00.55.34
+        d=1e100.net; s=20260707; t=1789894569; x=1790499369;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ksHOnUlot+h0QG2tWISkabaiPA1ToC05lg3IcvETRK4=;
+        b=U+oIBv+MkAS6uns11U8aDMAaoKVKZt3Hk0dpwXTU5g4HoCInmCx2zZ+C8KLQkYuy74
+         JiR6EFnkcqdETXqRduvpq5DFllyXT2GO4xjxrb6EK4aL8n33nhPtnkpQF18sk5HX9tUX
+         hWU2KT03HfMLS+AL6i1OrWUNRKI89b/P3WAW/Gs6LWdPB1Apn43Z6LdrRJBrak1zZK8l
+         vz393lDjMKxRiF+bQCIO/aREcA1tPS8hYcR+4GfTObVV1ghBMT3m6yC2902qgZY4XKUV
+         x89z+vXr4rxrCHpjeWSMkDQpUYbzKPM+7lDOJiaEXWEzVqs+wLoJeKcxVWGlERGXo0eG
+         zkHg==
+X-Gm-Message-State: AFuF++kvXMH/LZgPFhpOoBpThk1FEByoJh+d+5q+krUx245GbQfCl5si
+	zGAiwmXf0j554kcvNvs9zNquvci0G+jvRSfXR0MD1qQoJ8fc5injnOZs
+X-Gm-Gg: AYBFou3zIS+TrHXhfjQDOlaDbZpfme8vCOCcYgpgfGIX8U8JZd2pvydFE/wPQK+QOnr
+	B/lR4kMwEw0OZfxzYgfNel+4IU5eJf1lfRdlYP2oxzXw+kWeJveRv5KADZXgXbALvWETR3N6Stu
+	k3RlhsN1jMJEgzP4E57j/AF7Qg/xJC0Gkgj72tSlAr62pmQ4QPOkLrHqqS62IYax+L273OHmLVp
+	/rqvb5rWw4r9ieJ1kUHHQnchEsPqNSL2m0lhgJHzySHdgEevQ19hNMwD7VtxJ2q26htNRSCYbbt
+	Mx8Hl3e9zQrAVnTiDtcuqJ3Ds+V6ok0cg+ViBfVe/lcKW6NPTgf+u3H60sl7GHbjoTMIB1VgPwj
+	HFWqUcKGXtB9lClkMFPPWbIUC9fOKiHByVwqihQuTRn3JMb2G2AJxDryDWE8J9FsQKWoquxxMDT
+	5kN5ofP3hrLapV92IaPcNvCqjjq0vKgRS7NiQnK3FAtQpSOT8qVdhs9i7OH8P9FjMZ591Nw/ELw
+	HI+NC/4q44PXeCxPdh/zSSkn1BcrF5b5554SkLUfXVoUrzCx4tpLgtD7g0cm6LpZ1JfFOhU9l5U
+	AIk8L+JSkMprFUex4I5Jpg==
+X-Received: by 2002:a05:6a00:44cb:b0:869:2b72:525d with SMTP id d2e1a72fcca58-874db7f1b4bmr11472071b3a.7.1789894568618;
+        Sun, 20 Sep 2026 01:56:08 -0700 (PDT)
+Received: from blackbox ([2401:4900:8838:4a03:4141:6b61:e799:72f6])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-877aa1099e5sm1758732b3a.49.2026.09.20.01.56.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Sep 2026 00:55:34 -0700 (PDT)
-From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-Date: Sun, 20 Sep 2026 09:55:09 +0200
-Subject: [PATCH net] net: mvneta: clear XDP pfmemalloc flag between frames
+        Sun, 20 Sep 2026 01:56:08 -0700 (PDT)
+From: Madhav Khosla <madhav.khoslaa@gmail.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org
+Cc: bpf@vger.kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	sdf@fomichev.me,
+	=?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+	Madhav Khosla <madhav.khoslaa@gmail.com>
+Subject: [PATCH bpf-next v3] selftests/bpf: Fix csum_partial() dropping trailing byte on odd length
+Date: Sun, 20 Sep 2026 14:25:49 +0530
+Message-ID: <20260920085549.867099-1-madhav.khoslaa@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260920-mvneta-xdp-clear-frag-fix-v1-1-d7efadecf959@oss.qualcomm.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MQQqEMAwAvyI5G7CCXepXxEOs0Q1olVSkIP59w
- x5nYOaBzCqcoa8eUL4ly5EMXF1B/FJaGWU2hrZpfRNcwP1OfBGW+cS4MSkuSisuUvBD0QfHznd
- hAutPZdP/9wAWwfi+P/0hThlwAAAA
-X-Change-ID: 20260919-mvneta-xdp-clear-frag-fix-7ac691e1659b
-To: Marcin Wojtas <marcin.s.wojtas@gmail.com>,
-        Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>,
-        Toke Hoiland-Jorgensen <toke@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-X-Mailer: b4 0.14.3
-X-Authority-Analysis: v=2.4 cv=PaRqFShd c=1 sm=1 tr=0 ts=6aaf9178 cx=c_pps
- a=qKBjSQ1v91RyAK45QCPf5w==:117 a=WpTaRW6qxYHRGzLzQsVYzg==:17
- a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=3WHJM1ZQz_JShphwDgj5:22
- a=EUspDBNiAAAA:8 a=GC6wR5CVy_D9Ox6dz04A:9 a=0bXxn9q0MV6snEgNplNhOjQmxlI=:19
- a=QEXdDO2ut3YA:10 a=NFOGd7dJGGMPyQGDc5-O:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTIwMDExMyBTYWx0ZWRfXxULMqIJC8ZFL
- +B3pPcleUIc5ZBrnlNvWj8EgyjWOYu5gsFcw4HaxKKAghs+WeX0gEGlHpLYL6ZIJHOFx1TrMdC/
- HbDhRoVHuPv/BLCPDGiJA2Z4Jzj1X30=
-X-Proofpoint-GUID: 3qXgwxlEcDNSJBQy-ZHNP4xPLgx7z_CO
-X-Proofpoint-ORIG-GUID: 3qXgwxlEcDNSJBQy-ZHNP4xPLgx7z_CO
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTIwMDExMyBTYWx0ZWRfX5J8GAus2+8MR
- PLRK1WeUQV3VOX42Kp2EL2x3fOMzTP41BzcfdUn+7H2zROPQGTz4zvbLqvgHCNT2fuxU6GX2ZWM
- oyUV4fVSJ2Oqi4SR39SNT5+5YkXivipG89j1bFkFkMTxsgg0xB+nkg8bQxPLxGRDKYPLOR7yaRu
- vT3tAFy21IsPIVEbM48ONsYYZYI+7VwvPNCfokM8y+pDATuRSjLzWbYHRTjhFBNM+oFKEAgYfu5
- wW0JFml2sj/WZlt29JFVaB0riyff5i5Y8XgtRnf5bB5HmIh7XxSK2GeVc/P3pTiLYjEwwfucTe1
- XAcnw2hqxB5weIbutnv8UwTzRnLb7p06iDnHArMV0xpjW19pUHHTxJIbZAPFsZ4gJfqstIjgPbp
- Ztm8HboUdpDOAAxQvoWMXVtFp+rJ43lBtEEkeluw7cnT0P9beFP+yTbkX9jRfJliNTc96a6w+qv
- 3fXaNZYsaO5KE1eM1TQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-20_02,2026-09-16_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 suspectscore=0 impostorscore=0 clxscore=1015 spamscore=0
- bulkscore=0 malwarescore=0 adultscore=0 priorityscore=1501 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609200113
+Content-Transfer-Encoding: 8bit
 
-In mvneta_swbm_add_rx_fragment() the XDP pfmemalloc flag is set on the
-xdp_buff if the page under pressure is a pfmemalloc one. The xdp_buff is
-reused for the next packet and the flag is never cleared, so a pfmemalloc
-fragment in one packet wrongly marks the skb of a subsequent packet as
-pfmemalloc. Clear the flag in mvneta_swbm_rx_frame(), which is invoked for
-each new frame.
+csum_partial() computes num_u16 = len >> 1 and only sums that many
+16-bit words, so the last byte of an odd-length buffer never gets
+added to the checksum. RFC 1071 says it should be padded with a zero
+byte and summed as one more word, not dropped.
 
-Fixes: ed7a58cb40bd ("net: marvell: rely on xdp_update_skb_shared_info utility routine")
-Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+This backs build_ip_csum(), build_udp_v4_csum() and
+build_udp_v6_csum(), used by flow_dissector_classification.c and
+xdp_metadata.c to hand-build packets. No current caller builds an
+odd-length payload, so nothing fails today, but a future one would
+get a silently wrong checksum.
+
+Also bump flow_dissector_classification's TEST_PACKET_LEN from 100 to
+99 so this actually gets exercised instead of staying latent.
+
+f4504af68575 wrote the len >> 1 division, but it only ever passed
+sizeof(iphdr), always even, so it couldn't hit the bug. Tagging
+bcc00987bc56 instead, since it added the first caller,
+build_udp_v4_csum()/build_udp_v6_csum(), that can pass an odd length.
+
+Verified with test_progs under vmtest.sh: without the fix, an odd
+TEST_PACKET_LEN makes the kernel drop the packet over a bad checksum
+and flow_dissector_classification fails; with the fix, both
+flow_dissector_classification and xdp_metadata pass.
+
+Fixes: bcc00987bc56 ("selftests/bpf: add network helpers to generate udp checksums")
+Signed-off-by: Madhav Khosla <madhav.khoslaa@gmail.com>
 ---
- drivers/net/ethernet/marvell/mvneta.c | 1 +
- 1 file changed, 1 insertion(+)
+v2 -> v3:
+- Move the revision changelog and sample test output below --- so
+  they don't end up in the permanent commit history (Alexis)
+- Drop the Link tag; one is added automatically on merge (Alexis)
+- Paste a passing run too, not just the failure (Alexis)
+- Also run xdp_metadata, since it uses the same helpers (Alexis)
 
-diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-index 543e566425c1..32416999f3d6 100644
---- a/drivers/net/ethernet/marvell/mvneta.c
-+++ b/drivers/net/ethernet/marvell/mvneta.c
-@@ -2341,6 +2341,7 @@ mvneta_swbm_rx_frame(struct mvneta_port *pp,
- 	/* Prefetch header */
- 	prefetch(data);
- 	xdp_buff_clear_frags_flag(xdp);
-+	xdp_buff_clear_frag_pfmemalloc(xdp);
- 	xdp_prepare_buff(xdp, data, pp->rx_offset_correction + MVNETA_MH_SIZE,
- 			 data_len, true);
+v1 -> v2:
+- comment style: opening /* on its own line, per BPF selftests style
+- Retarget the Fixes tag to bcc00987bc56. commit f4504af68575
+  ("selftests/bpf: move ip checksum helper to network helpers") moved
+  the helper, but sizeof(iphdr) is always a multiple of 32 bit words /
+  4 Bytes (iph->ihl counts in 4-byte words), so the odd-length path
+  was never reachable through build_ip_csum(). csum_partial() first
+  gets called with a length that isn't guaranteed even in
+  bcc00987bc56, via build_udp_v4_csum()/build_udp_v6_csum().
+- TEST_PACKET_LEN 100 -> 99 so an existing test catches this instead
+  of the bug staying unexercised
+
+Without the fix and with TEST_PACKET_LEN=99, flow_dissector_classification
+fails under vmtest.sh:
+
+    test_flow_dissector_classification:FAIL:test third port unexpected
+    test third port: actual 0 != expected 10
+    #137/6   flow_dissector_classification/ipv6:FAIL
+    #137     flow_dissector_classification:FAIL
+    Summary: 1/0 PASSED, 0 SKIPPED, 1/6 FAILED
+
+With the fix, ./test_progs -t flow_dissector_classification passes under
+vmtest.sh:
+
+    #137/1   flow_dissector_classification/ipv4:OK
+    #137/2   flow_dissector_classification/ipv4_continue_dissect:OK
+    #137/3   flow_dissector_classification/ipip:OK
+    #137/4   flow_dissector_classification/gre:OK
+    #137/5   flow_dissector_classification/port_range:OK
+    #137/6   flow_dissector_classification/ipv6:OK
+    #137     flow_dissector_classification:OK
+    Summary: 1/6 PASSED, 0 SKIPPED, 0/0 FAILED
+
+TEST_PACKET_LEN is 99 by default now, so no need to force it anymore.
+Ran alongside xdp_metadata too, since it's the other user of
+build_udp_v4_csum()/build_udp_v6_csum():
+
+    #137/1   flow_dissector_classification/ipv4:OK
+    #137/2   flow_dissector_classification/ipv4_continue_dissect:OK
+    #137/3   flow_dissector_classification/ipip:OK
+    #137/4   flow_dissector_classification/gre:OK
+    #137/5   flow_dissector_classification/port_range:OK
+    #137/6   flow_dissector_classification/ipv6:OK
+    #137     flow_dissector_classification:OK
+    #755     xdp_metadata:OK
+    Summary: 2/6 PASSED, 0 SKIPPED, 0/0 FAILED
+---
+ tools/testing/selftests/bpf/network_helpers.h     | 15 +++++++++++++--
+ .../prog_tests/flow_dissector_classification.c    |  2 +-
+ 2 files changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index 75133119c04a..878c9fc5c37c 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -129,12 +129,23 @@ static __u16 csum_fold(__u32 csum)
+ 
+ static __wsum csum_partial(const void *buf, int len, __wsum sum)
+ {
+-	__u16 *p = (__u16 *)buf;
++	const __u8 *p = buf;
+ 	int num_u16 = len >> 1;
+ 	int i;
+ 
+ 	for (i = 0; i < num_u16; i++)
+-		sum += p[i];
++		sum += ((const __u16 *)p)[i];
++
++	/*
++	 * RFC 1071: an odd-length buffer's trailing byte is paired with
++	 * a zero pad byte to form the final 16-bit word.
++	 */
++	if (len & 1) {
++		__u16 tail = 0;
++
++		__builtin_memcpy(&tail, p + len - 1, 1);
++		sum += tail;
++	}
+ 
+ 	return sum;
  }
-
----
-base-commit: e3bfd25626b44b6fa61a13c17178922171d519ce
-change-id: 20260919-mvneta-xdp-clear-frag-fix-7ac691e1659b
-
-Best regards,
+diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector_classification.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector_classification.c
+index 80b153d3ddec..421dfa6c4ea3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/flow_dissector_classification.c
++++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector_classification.c
+@@ -27,7 +27,7 @@
+ #define TEST_NAME_MAX_LEN (32 + SUBTEST_NAME_MAX_LEN)
+ #define MAX_SOURCE_PORTS 3
+ #define TEST_PACKETS_COUNT 10
+-#define TEST_PACKET_LEN 100
++#define TEST_PACKET_LEN 99
+ #define TEST_PACKET_PATTERN 'a'
+ #define TEST_IPV4 "192.168.0.1/32"
+ #define TEST_IPV6 "100::a/128"
 -- 
-Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+2.55.0
 
