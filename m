@@ -1,300 +1,172 @@
-Received: from ustc.edu.cn (smtp.ustc.edu.cn [202.38.64.46])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 560BD30D3E5
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 21:04:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.38.64.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789938288; cv=none; b=X8ouGZodkWNOP2PrgTwILSUuQyAmg8h3lzc/5DA+ARR29Qvnz3ZgmPV8D9hoHvI/Y19d8KC92f8eKt0b878cVU01F8fNr0PFUxz4XEy3CSthhofnvZeE8JWpB9aIlr97GeD6c5WKLfphr9aRRLms062aa8cDkPp77pspMLnaY/I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789938288; c=relaxed/simple;
-	bh=DcHN0e0TGXQUsgkF07f2vQh8fcpZf9BvZwFHf/3RAyg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lx13pou2eSlyuZOUbdj+n/hbFPiEMbPkhNrC6fcUKD5bG227BdG/nnaX2o9BhW7qCdKcNc3eGnKs1+5LAqB9uayH/XDKABhgYsImkJ8TyzIbwUOTj11lgmo/tvSslkr+U4NE9uG748SK2R2yiNzT90FLD9hdIGHp6NWBsFW2wZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn; spf=pass smtp.mailfrom=mail.ustc.edu.cn; dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b=gKZPOzUj; arc=none smtp.client-ip=202.38.64.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mail.ustc.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mail.ustc.edu.cn
+Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F92D3E0C7A
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 21:06:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.76
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789938364; cv=pass; b=ZCu7WALewJeuKtNogic1wfC17MjmzV0FJBQ41zjAvtRxkzbWrFbIJuo51W0khMeOIcQpmAYLnN0somKgwS6NQ1uiZyD63B31BNPy2o/IoidIly3/B/oLwU4qB6y2KO93WHrCiwbt5qKWke/tPQHeN/WTF9lI+nG2QDUASETHlCs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789938364; c=relaxed/simple;
+	bh=ezRCTTrs6uvQwF5UbpYaqGjiPx6ukx27ZxH2gOL/sak=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=X0b5idSu0pT7rqP6cZ8jwcFdpp6Ej0PIECneUDQ15z3WDSWfTKf+dB3XNgZJh/APq5jPME3aHuZn4Rg4u6f3KzvSmSVGCmIwcyD68W9xmte1iUkS+wKEfnVCiO+Z9w4uQ51N/UHruPIAxyXewFZKrY2gGKOM5mShqMKCGt0UU3o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nSOxkM9J; arc=pass smtp.client-ip=74.125.228.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mail.ustc.edu.cn header.i=@mail.ustc.edu.cn header.b="gKZPOzUj"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nSOxkM9J"
+Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a985fba28bso2717902a12.3
+        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 14:06:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789938361; cv=none;
+        d=google.com; s=arc-20260327;
+        b=YEHKlzTqPJaJbu65E2kkIJNvDy23FAG6EJtuLjGdG2gmicC7ZfIXNCWlv91CmeTtQa
+         AMViV++LqpKRJ6/0o0q1e5YuAafVAnhzymFdsikeH/Xh4RjZDUl/Id7WaBCHlqLs4qdA
+         3wehXuEWBsJCJp+077zVe0SzIY6L/ihvvlDOjeP70gOkVr2cnJO9AyAea+FWnQGho23U
+         /+YQbDF8vdHpBvwoJGxOwGJGg0YvDgA5W+XAu3j5cn6eww7KBjlS8Hidwj5MY1l392Uo
+         a4CgI5GmpkZ68iKCID1rFLK0BYatouGm2ApxIOeIBBs6Czg02OEteKbx/saeyhzDw3ro
+         iZ5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=yTysyvua/pHRkgj+3i2IdhzgN1OTX4ZBg0dHDR1pdSM=;
+        fh=uA360uvxR9S0K/Y4Lovo7aIaGlBwzVBnnb2BKWupr/4=;
+        b=KXLagTYMCu7FADj43uXt6u4AI/mCJPK+h8MFG7a5CwxxMaDKgYaDnRP4k+cw5URSaa
+         w0UIRwh4qxR1GE4AZIXDYjylJhr1SEW6YxxyXuLVyqbfgW3B6qiSJEOwXLBwKQl1OVOy
+         DN9THCclTuxw2fC3bVq2E7NSUTh5JB3tF9A7JSRUW/gXybRh8UsIPwaepiPiz9uCUPzh
+         GpYtAA96pdZWhDkGF+BkrkZeWJVhzscqzKPtUIYl5i4z7r8pLAo5Eu3SoiAsLcvTAIPm
+         gfTRNWTD9nKth+vctPNhNqeOYXZiAJj7T16WMARA0PWAoMufTcSav7oQMQxpS0OVWTr0
+         +Xtg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mail.ustc.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-	Message-ID:In-Reply-To:References:MIME-Version:
-	Content-Transfer-Encoding; bh=/By7TAampVfKuxsgN+e/zQAHZ9+d9ZJ+8P
-	0DgkaVxmI=; b=gKZPOzUjIO+ge0T1SlE5OBu9eBHB8pJVCt4lat4mJXECvqW0Vd
-	ZGYqS0cn67KkatCCOilsnKgUVaFeCxzFb8IvjGxTSm9J55ihv8yw//FqCqdgswro
-	7M9pnVVIWzVfP0NHN1gQnog0q0+MgWlXj5hMFnT7BXsgxkQcPSlb9h3M0=
-Received: from localhost (unknown [222.195.81.68])
-	by mailimap2024 (Coremail) with SMTP id 3pYKCgA3OjFsSrBqEzFAAQ--.11823S2;
-	Mon, 21 Sep 2026 05:04:45 +0800 (CST)
-From: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	ameryhung@gmail.com,
-	sashiko-bot@kernel.org
-Subject: [PATCH bpf-next v5 2/2] selftests/bpf: Test dynptr teardown on subprog return
-Date: Mon, 21 Sep 2026 05:04:38 +0800
-Message-ID: <20260920210438.345847-3-xyx2021@mail.ustc.edu.cn>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260920210438.345847-1-xyx2021@mail.ustc.edu.cn>
-References: <20260920210438.345847-1-xyx2021@mail.ustc.edu.cn>
+        d=google.com; s=20251104; t=1789938361; x=1790543161; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=yTysyvua/pHRkgj+3i2IdhzgN1OTX4ZBg0dHDR1pdSM=;
+        b=nSOxkM9JY1Z0ohaPKwTsn+k5xano2MO+n08zG89cj6M0z7oHEoMkRR65XFqyodrQrI
+         1GHGgAVx4fyuhvrZ05D75VKAhBgjnREcnAcQUklEQKaQxvsAbYnYJ+3GtpxBmA+xp0kE
+         9d2xLtZAdurv7izJB3iuASAWXac2Cs3FTGsDfxnm3F18uI0tfSi+9g9KzdffChmlrtfe
+         5/14ZrjahhULURFseJrKIyol7GvtvAwh1VariMbFMjLA7ZEMwhZDen7P1V3RANv6dVvu
+         D1yF9Ob9HxA9/ZlW5VKyayGX1VBuMkQ+nMG4aHXgZO0RTG8mms1i6bFMPmuQTVPV3sZo
+         0MOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789938361; x=1790543161;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=yTysyvua/pHRkgj+3i2IdhzgN1OTX4ZBg0dHDR1pdSM=;
+        b=aeDSSAg58OgUdAUzNaIV3jOpYzoA3xXkNsS8GUoeFLdJ2ahriQ0h8jOGRfO2GeL/XE
+         uy5ztOBQvkymXY7erbFpV/0esSSGC3nUrbEEyycd2jNu15f00ec6vsHon3lauEtCYCSQ
+         VghpQi+gT6pu1ATygW9+1/uLcL81lhQvHG5sEADqOBRagtq7eGcmhGKj8pIYFlseXJ30
+         fJJvujjJKxBXe5wwqrcXjHSoeExtOUnGI2oh0ETT3adr3WJ7rv4YS25m3WuJmxDlAHUb
+         pCWjEZ2CV6I1JgytfTnF4z4ta/yHAR08+p5/HAHynQVlCmSUPRyftcLyzM11id/M1aMk
+         roBQ==
+X-Gm-Message-State: AFuF++mrfT1jKXLuT98PjLiTpL6HSlkhDR0RKo9G8jaT8Qx95f9PLWUm
+	86cqvR8Hg7RNepCjl2CLdDsMs6HTVnTnoscDG5NuymFCXAUJjq0wRdP5DlwhirkNSUc7qZ7aVRl
+	dZ0litBhaf2JhvHFwWvwLy1GH/hZUll5bm1RmEOWUboC1z4Do9cvmQEjjfTs=
+X-Gm-Gg: AYBFou1DawdTkzf81arcMPmosWiZXkPoi66n2LqPXBwtkKOHhXxWiCkQcXL8TCbzy2h
+	OOg+vMgotrlTqjbUU2SeQ6gy5HW87NYVjOt9g008NPcRqMb9pE5R3FYcj3ft0qZO5PFBFITwdNF
+	4yCI9qtDM3CztRv4cXI12TyAa/d2MYlVxEollppxnCM0cawHjnU2qKNPO2u3Gy/pGONmvM1u6Zd
+	X0+FOaCJfa4+LRlbcxwbUITcgRWfgB8tKRbr7FwqG1IjK3Gf7Krz2/Oaqpz9rNmOOvcClz6VmAc
+	dGIxXqOjh8uYy8pGI5R+hZOCokWrQzYFZxvb89j25jEsL5YzM5e2QfnNOOzpiSn6+y6MJ1/EhXU
+	Zq2yAoQiQlEVXOGpbo+pmgwMG2CpWJI2ywlKcsFy4zWQJe/jrHNv5WMXKzfuOB0wkB8k=
+X-Received: by 2002:a05:6402:23c7:b0:6aa:4529:4cb7 with SMTP id
+ 4fb4d7f45d1cf-6aa53135128mr6241277a12.16.1789938360721; Sun, 20 Sep 2026
+ 14:06:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:3pYKCgA3OjFsSrBqEzFAAQ--.11823S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Wry5XrW3JF4kZF18Cr4DJwb_yoWxKF47pF
-	W8uryYvFy8JF42gry7Xr4xZa1F9Fsxur17Gry3K345Aw1UJr98ZF1xKayUWr98Kr45u3y5
-	Za9Fgay3uF18GFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9vb7Iv0xC_tr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
-	vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq
-	07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6r
-	W5McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vI
-	r41lc7CjxVAaw2AFwI0_JF0_Jw1lc2xSY4AK67AK6F4l42xK82IYc2Ij64vIr41l4I8I3I
-	0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
-	GVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
-	0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xva
-	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
-	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU06OJUUUUUU==
-X-CM-SenderInfo: h010jiysr6zt1loo32lwfovvfxof0/
+References: <20260920195633.3033620-1-kuniyu@google.com> <20260920195633.3033620-4-kuniyu@google.com>
+ <20260920201152.8CED21F000FF@smtp.kernel.org>
+In-Reply-To: <20260920201152.8CED21F000FF@smtp.kernel.org>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Sun, 20 Sep 2026 14:05:44 -0700
+X-Gm-Features: AcwNN1VEogJIW5LP6aFMhmS47H4x3mFx-fob5a_vGfNv5ifJJNAKN1ium1p3ZmE
+Message-ID: <CAAVpQUCXjzvPo868ygwA8-xzyYG8woDqSHpHctTB86i9WR_QSA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 3/7] bpf: tcp: Support bpf_sock_ops_cb_flags_set()
+ for bpf_tcp_ops.
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add failure tests for slices that escape a subprogram from a dynptr in the
-callee stack. Cover immediate use of a ring buffer clone slice,
-release-time invalidation of a caller dynptr slice after it crosses a
-subprogram return, and immediate use of an skb dynptr slice in a qdisc
-program.
+On Sun, Sep 20, 2026 at 1:11=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
+>
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [High] bpf: data race in bpf_tcp_ops_cb_flags_set() on unlocked sockets
+> --
+>
+> commit 56d7f542a8c499237807954e17f2fae35e5e276b
+> Author: Kuniyuki Iwashima <kuniyu@google.com>
+>
+> bpf: tcp: Support bpf_sock_ops_cb_flags_set() for bpf_tcp_ops.
+>
+> This patch allows clearing or setting bpf_sock_ops_cb_flags via the
+> bpf_sock_ops_cb_flags_set() helper within various bpf_tcp_ops callbacks.
+>
+> > diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
+> > index c68d1fa323058..6d0452441b6c5 100644
+> > --- a/net/ipv4/bpf_tcp_ops.c
+> > +++ b/net/ipv4/bpf_tcp_ops.c
+> [ ... ]
+> > @@ -220,6 +220,24 @@ const struct bpf_func_proto bpf_tcp_ops_get_retval=
+_proto =3D {
+> >       .ret_type       =3D RET_INTEGER,
+> >  };
+> >
+> > +BPF_CALL_2(bpf_tcp_ops_cb_flags_set, struct sock *, sk, int, argval)
+> > +{
+> > +     int val =3D argval & BPF_SOCK_OPS_ALL_CB_FLAGS;
+> > +
+> > +     tcp_sk(sk)->bpf_sock_ops_cb_flags =3D val;
+>         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>
+> [Severity: High]
+> If an unlocked socket is passed to bpf_tcp_ops_cb_flags_set(),
 
-Cover the error path where a subprogram would otherwise lose the last
-dynptr capable of releasing a referenced resource.
+This should not happen.
 
-Also add a success control which derives a slice from a caller-owned dynptr
-and creates a separate clone in the callee. Destroying that local clone on
-return must not invalidate the caller dynptr's slice.
+The hook is only supported on hooks under sock_owned_by_me(),
+and bpf_tcp_ops does not support socket lookup helpers.
 
-Assisted-by: LLM
-Signed-off-by: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
----
- .../selftests/bpf/prog_tests/bpf_qdisc.c      |  2 +
- ...disc_fail__invalid_dynptr_returned_slice.c | 76 +++++++++++++++
- .../testing/selftests/bpf/progs/dynptr_fail.c | 95 +++++++++++++++++++
- 3 files changed, 173 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_returned_slice.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c b/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
-index 6dbd1487343c0..122ecb7e98e2a 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_qdisc.c
-@@ -11,6 +11,7 @@
- #include "bpf_qdisc_fail__invalid_dynptr.skel.h"
- #include "bpf_qdisc_fail__invalid_dynptr_slice.skel.h"
- #include "bpf_qdisc_fail__invalid_dynptr_cross_frame.skel.h"
-+#include "bpf_qdisc_fail__invalid_dynptr_returned_slice.skel.h"
- #include "bpf_qdisc_fail__untrusted_write.skel.h"
- #include "bpf_qdisc_dynptr_use_after_invalidate_clone.skel.h"
- 
-@@ -230,6 +231,7 @@ void test_ns_bpf_qdisc(void)
- 		test_incompl_ops();
- 	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr);
- 	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr_cross_frame);
-+	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr_returned_slice);
- 	RUN_TESTS(bpf_qdisc_fail__invalid_dynptr_slice);
- 	RUN_TESTS(bpf_qdisc_fail__untrusted_write);
- 	RUN_TESTS(bpf_qdisc_dynptr_use_after_invalidate_clone);
-diff --git a/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_returned_slice.c b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_returned_slice.c
-new file mode 100644
-index 0000000000000..8217f4c4c00c4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_qdisc_fail__invalid_dynptr_returned_slice.c
-@@ -0,0 +1,76 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include "bpf_experimental.h"
-+#include "bpf_qdisc_common.h"
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int proto;
-+
-+static __noinline struct ethhdr *slice_in_subprog(struct sk_buff *skb)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_dynptr_from_skb((struct __sk_buff *)skb, 0, &ptr);
-+	return bpf_dynptr_slice(&ptr, 0, NULL, sizeof(struct ethhdr));
-+}
-+
-+SEC("struct_ops")
-+__failure __msg("invalid mem access 'scalar'")
-+int BPF_PROG(invalid_dynptr_returned_slice, struct sk_buff *skb,
-+	     struct Qdisc *sch, struct bpf_sk_buff_ptr *to_free)
-+{
-+	struct ethhdr *hdr;
-+
-+	hdr = slice_in_subprog(skb);
-+	if (!hdr) {
-+		bpf_qdisc_skb_drop(skb, to_free);
-+		return NET_XMIT_DROP;
-+	}
-+
-+	/* this should fail */
-+	proto = hdr->h_proto;
-+
-+	bpf_qdisc_skb_drop(skb, to_free);
-+
-+	return NET_XMIT_DROP;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+struct sk_buff *BPF_PROG(bpf_qdisc_test_dequeue, struct Qdisc *sch)
-+{
-+	return NULL;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+int BPF_PROG(bpf_qdisc_test_init, struct Qdisc *sch, struct nlattr *opt,
-+	     struct netlink_ext_ack *extack)
-+{
-+	return 0;
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+void BPF_PROG(bpf_qdisc_test_reset, struct Qdisc *sch)
-+{
-+}
-+
-+SEC("struct_ops")
-+__auxiliary
-+void BPF_PROG(bpf_qdisc_test_destroy, struct Qdisc *sch)
-+{
-+}
-+
-+SEC(".struct_ops")
-+struct Qdisc_ops test = {
-+	.enqueue   = (void *)invalid_dynptr_returned_slice,
-+	.dequeue   = (void *)bpf_qdisc_test_dequeue,
-+	.init      = (void *)bpf_qdisc_test_init,
-+	.reset     = (void *)bpf_qdisc_test_reset,
-+	.destroy   = (void *)bpf_qdisc_test_destroy,
-+	.id        = "bpf_qdisc_test",
-+};
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-index 55c9a6be7fc56..02d9d19a37ffd 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -1892,6 +1892,101 @@ int clone_invalidate4(void *ctx)
- 	return 0;
- }
- 
-+static __noinline void clone_slice_in_subprog(struct bpf_dynptr *ptr, int **data)
-+{
-+	struct bpf_dynptr clone;
-+
-+	bpf_dynptr_clone(ptr, &clone);
-+	*data = bpf_dynptr_data(&clone, 0, sizeof(val));
-+}
-+
-+static __noinline void caller_slice_in_subprog(struct bpf_dynptr *ptr, int **data)
-+{
-+	struct bpf_dynptr clone;
-+
-+	*data = bpf_dynptr_data(ptr, 0, sizeof(val));
-+	bpf_dynptr_clone(ptr, &clone);
-+}
-+
-+static __noinline void reserve_dynptr_in_subprog(void)
-+{
-+	struct bpf_dynptr ptr;
-+
-+	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
-+}
-+
-+/* A subprogram cannot lose the last dynptr that can release a resource. */
-+SEC("?raw_tp")
-+__failure __msg("cannot overwrite referenced dynptr")
-+int referenced_dynptr_lost_on_subprog_return(void *ctx)
-+{
-+	reserve_dynptr_in_subprog();
-+
-+	return 0;
-+}
-+
-+/*
-+ * Destroying a local clone on return must not invalidate a slice whose
-+ * source dynptr belongs to the caller.
-+ */
-+SEC("?raw_tp")
-+__success
-+int caller_dynptr_slice_across_subprog_valid(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	int *data = NULL;
-+
-+	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
-+	caller_slice_in_subprog(&ptr, &data);
-+	if (data)
-+		*data = 123;
-+	bpf_ringbuf_submit_dynptr(&ptr, 0);
-+
-+	return 0;
-+}
-+
-+/*
-+ * A slice that escapes a clone's call frame is invalid once the local
-+ * clone is destroyed on return.
-+ */
-+SEC("?raw_tp")
-+__failure __msg("invalid mem access 'scalar'")
-+int clone_slice_returned_frame_invalid(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	int *data = NULL;
-+
-+	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
-+	clone_slice_in_subprog(&ptr, &data);
-+	if (data)
-+		/* this should fail */
-+		*data = 123;
-+	bpf_ringbuf_submit_dynptr(&ptr, 0);
-+
-+	return 0;
-+}
-+
-+/*
-+ * A slice from a caller-owned dynptr survives the subprogram return, but
-+ * releasing the shared reservation must invalidate it.
-+ */
-+SEC("?raw_tp")
-+__failure __msg("invalid mem access 'scalar'")
-+int caller_dynptr_slice_release_after_subprog_invalid(void *ctx)
-+{
-+	struct bpf_dynptr ptr;
-+	int *data = NULL;
-+
-+	bpf_ringbuf_reserve_dynptr(&ringbuf, val, 0, &ptr);
-+	caller_slice_in_subprog(&ptr, &data);
-+	bpf_ringbuf_submit_dynptr(&ptr, 0);
-+	if (data)
-+		/* this should fail */
-+		*data = 123;
-+
-+	return 0;
-+}
-+
- /* Invalidating a dynptr should invalidate any data slices
-  * of its parent
-  */
--- 
-2.43.0
+> it looks like
+> concurrent updates to the flags from other CPUs could be clobbered, causi=
+ng
+> BPF TCP callbacks to fail to invoke when expected.
+>
+> Does this code modify the socket flags without acquiring the socket lock
+> or asserting that the socket is currently owned by the caller?
+>
+> > +
+> > +     return argval & ~BPF_SOCK_OPS_ALL_CB_FLAGS;
+> > +}
+> > +
+> > +static const struct bpf_func_proto bpf_tcp_ops_cb_flags_set_proto =3D =
+{
+> > +     .func           =3D bpf_tcp_ops_cb_flags_set,
+> > +     .gpl_only       =3D false,
+> > +     .ret_type       =3D RET_INTEGER,
+> > +     .arg1_type      =3D ARG_PTR_TO_BTF_ID,
+> > +     .arg1_btf_id    =3D &btf_sock_ids[BTF_SOCK_TYPE_TCP],
+>         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>
+> [Severity: High]
+> Since the verifier accepts any PTR_TO_BTF_ID of type TCP here, it seems
+> privileged BPF programs could pass refcounted but unlocked sockets, leadi=
+ng
+> to the data race mentioned above.
+>
+> Could the use of ARG_PTR_TO_BTF_ID allow a BPF program to pass an unlocke=
+d
+> socket obtained via helpers like bpf_sk_lookup_tcp() and bpf_skc_to_tcp_s=
+ock()?
 
+Same false-positive.  bpf_tcp_ops does not support such lookup helpers.
