@@ -1,298 +1,280 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from 66-220-144-178.mail-mxout.facebook.com (66-220-144-178.mail-mxout.facebook.com [66.220.144.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 302B37081A;
-	Sun, 20 Sep 2026 04:35:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29DD53D16FD
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 05:42:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789878937; cv=none; b=bEN+FmfoTZPYAzuSDG8VvaoN1xBl9PGmoc246PooY/QylEHXoZ67NO2srodwspGlUKEESKfs81hh0UnJyfuqUOAY0UE3jL+hYUyQfmcECOa8MNcmuhUlN2i9GSc4ZAf+LtuZQGG4BBFMHvo+sk1leLaOxlb+a9/92dYs8wRbXio=
+	t=1789882961; cv=none; b=MuszxMClQNgr13TJMOlA7S7aeRwUcx11/zn0LUXbN1HS6hkwZMworGVtjZJV6V8Rc1QqoCUmMP5yzU7Gyzi/R58XIsdTSmATXIBrUvw5YpWSWVcDLglXAfgMhPG+DRfpe0EpY8sgGd81TSZE5D4/hjzDDiFCPFOMg9Yr60R/KhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789878937; c=relaxed/simple;
-	bh=X9452GZOsoxH71+dDIbUWi5SCjE3A8OTF91wvag1CYs=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LKWdDF6wN/XGuuNGvUjQh+4psh0y6WOyNy2KrIIxCcIEF65B/D7kZY7+XH7J2uQrwE+AdmryChSyVx2VxJoRqt3kMtxqYDYXXn+98CTcMqf329s1u6LRZ0PUxEGUl5dIx2rncqUWgcpQ70S77e0yICTSw+9Z5riL4zbcMvMK4ZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=blm+E5F6; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="blm+E5F6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41BD51F000FF;
-	Sun, 20 Sep 2026 04:35:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789878935;
-	bh=REtQQFeFLxxgvb61TQxQg3pfZz8pkUCj+S64puRpRlM=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=blm+E5F6uBWFsmbblEZtWPaqsR1k34UMnuF8IjXCGL7bS0WBm+tb0CZEdt5IBx38A
-	 1cTPv0fNIf1T+Pifs3A+RJ7NoeX/0dn6w5j7KBDxSr/dvljpItbFTix3gMivXjjV9s
-	 i/JHJM1//DPDIwaFOnGaGdlvqqiwlTyrXtz59EYXUjqc0uKxGwRy+ldgw5YcMCnfh2
-	 qaTYYpYi5pQ3GLxLojVr4KaNER/2REoWgpIx9MaJiLohjJKqEF/XJfnjamYm2j0OOY
-	 LWfWNhIZvo9u32hcxecZDN5+CawxDpjuzrkOpazzIyH3osrZlzFA6LYfQhAHcqec2k
-	 ct3JSmzEZMlvA==
-Subject: Re: [PATCH net] bpf: lwt: clear stale IP control block after pushing
- an encap header
-From: netdev-bot+sashiko@kernel.org
-To: xmei5@asu.edu
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- co+ff13a35f73bb7891@bugs.sh, stable@vger.kernel.org
-Date: Sun, 20 Sep 2026 04:35:34 +0000
-Message-ID: <178987893476.2160803.2740674038834651129@kernel.org>
-In-Reply-To: <20260916041102.1914333-1-xmei5@asu.edu>
-References: <20260916041102.1914333-1-xmei5@asu.edu>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1789882961; c=relaxed/simple;
+	bh=SuSLwEpybPnHBNjeWkHSnnQenVd7QihOEP/d5m49qus=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gzQumSUQH2PXHW5XWwvN6ggEbxtR1AttdSQbV6Zw0E1cDGVnCzl/5bITIT3sRSXYs/0FIu9UW3VIHR3CXRzNSfI/DcUU2a4YsR8UGBU8fDUNFSE+8FWfav8i5u/YKVB1jfpNoGHbmpBSX8J2wQ31waJPrSAA/RIh453dl26o/VY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 244152BEB75CDD; Sat, 19 Sep 2026 22:42:25 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	kernel-team@fb.com
+Subject: [PATCH bpf-next v3 00/20] bpf: Run exception cleanup landing pads when bpf_throw() unwinds
+Date: Sat, 19 Sep 2026 22:42:25 -0700
+Message-ID: <20260920054225.864535-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 3 potential
-issue(s) to consider.
+bpf_throw() walks the BPF call stack to the exception boundary and
+discards every frame in between. A frame that owns something -- an RCU
+read lock, a preemption-disabled section, a referenced kptr -- never gets
+to give it back, so the verifier refuses to let such a frame throw at
+all. That is the whole reason a Rust program cannot use bpf_throw() as
+its panic path right now: Rust's Drop glue *is* that give-back, and there
+is nowhere to run it.
 
-Critical: 0 · High: 2 · Medium: 1 · Low: 0
+LLVM 23 added the compiler half ([1]). A Rust function that owns a value
+across a call that can unwind
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
+    fn foo() {
+        let _guard =3D RcuReadGuard::new();  /* bpf_rcu_read_lock()   */
+        may_throw();                       /* extern "C-unwind"     */
+    }                                      /* Drop: rcu_read_unlock */
 
-- [High] Incomplete IPv4 control-block sanitization in
-  bpf_lwt_push_ip_encap() (net/core/lwt_bpf.c:652-653): only…
-- [High] The new IPCB/IP6CB reset in bpf_lwt_push_ip_encap()
-  (net/core/lwt_bpf.c:652-663) is executed from inside the BPF program…
-- [Medium] bpf: type confusion in bpf_lwt_push_ip_encap drops VRF
-  association
+lowers to an invoke with a cleanup landing pad holding the Drop call, and
+the BPF backend writes one record per invoke region into a .bpf_cleanup
+section: a flat table of 12-byte (begin, end, landing_pad) triples, each
+field a byte offset into the code section. The rule is "if a frame unwind=
+s
+with its return address in [begin, end), run landing_pad before discardin=
+g
+it". A pad ends with a call to _Unwind_Resume(), which the kernel provide=
+s
+as the bpf_unwind_resume() kfunc.
 
---
+This series is the kernel half: take that table at BPF_PROG_LOAD, teach
+the verifier that a covered call can also go to its landing pad, and have
+bpf_throw() run the pads as it walks.
 
-bpf: lwt: clear stale IP control block after pushing an encap header
+C has no unwinding, so the selftests spell out by hand what a frontend
+emits -- a call site bracketed by two labels, a landing pad, and a record
+tying them together. The frame above, written that way:
 
-This adds control block sanitization to bpf_lwt_push_ip_encap() after the
-encapsulation header is pushed and the network header is reset, clearing
-IPCB(skb)->opt for IPv4 and the whole IP6CB for IPv6 (keeping iif, nhoff
-and IP6SKB_L3SLAVE). It is aimed at a KASAN stack out-of-bounds write in
-__ip_options_echo() reached through ip_forward() -> icmp_send().
+        "call bpf_rcu_read_lock;"
+    "1:"    "call foo3;"                /* cleanup region */
+    "2:"
+        ... normal path, ends in bpf_rcu_read_unlock ...
+    "6:"                                /* landing pad */
+        "call bpf_rcu_read_unlock;"
+        "call bpf_unwind_resume;"
+        CLEANUP_REC("1b", "2b", "6b")
 
-> diff --git a/net/core/lwt_bpf.c b/net/core/lwt_bpf.c
-> index da49364ec63de..17be476b57172 100644
-> --- a/net/core/lwt_bpf.c
-> +++ b/net/core/lwt_bpf.c
-> @@ -649,6 +649,18 @@ int bpf_lwt_push_ip_encap(struct sk_buff *skb, void *hdr, u32 len, bool ingress)
->  	if (ingress)
->  		skb_postpush_rcsum(skb, iph, len);
->  	skb_reset_network_header(skb);
-> +	if (ipv4) {
-> +		memset(&(IPCB(skb)->opt), 0, sizeof(IPCB(skb)->opt));
-> +	} else {
+Right now that program does not load: the throw inside foo3 is reported a=
+s
+"bpf_throw cannot be used inside bpf_rcu_read_lock-ed region", because as
+far as the verifier is concerned nothing will ever unlock. With the serie=
+s
+the verifier walks the unwind the same way the run time will -- into the
+pad, which unlocks, then on to the next frame -- and the program both
+loads and releases the lock when it throws.
 
-[Severity: High]
-Why does the IPv4 branch only clear IPCB(skb)->opt instead of the whole
-inet_skb_parm?  struct inet_skb_parm has more inner-packet state after
-opt:
+Design
+=3D=3D=3D=3D=3D=3D
 
-include/net/ip.h:
-struct inet_skb_parm {
-	int			iif;
-	struct ip_options	opt;		/* Compiled IP options */
-	u16			flags;
-	...
-	u16			frag_max_size;
-};
+A pad is run, not lowered. bpf_throw() already walks the frames with
+arch_bpf_stack_walk(); it now looks each frame's return address up in
+that (sub)program's table and calls the pad as a subroutine of the walker=
+,
+with the unwinding frame's frame pointer and its callee-saved registers
+restored from the spill its callee's prologue left. The pad therefore see=
+s
+its own frame but runs on the walker's stack, far below it, so nothing it
+calls can disturb the frame it is cleaning up after. The JIT turns its
+bpf_unwind_resume() into the way back to the walker.
 
-flags and frag_max_size were computed for the inner packet and are then
-read against the newly pushed outer header:
+The verifier walks the same thing, step for step, so the resource rules
+are unchanged: whatever a pad releases is released in the verifier state
+too, and check_resource_leak() simply moves from "a throw was seen" to th=
+e
+end of the walk.
 
-  - ip_forward() does
+  1-2    uapi: cleanup_info in BPF_PROG_LOAD, struct bpf_cleanup_info,
+         and the bpf_unwind_resume() kfunc
+  3-9    verifier: mark the covered call sites, give them an edge to the
+         pad, walk the unwind, and refuse the shapes that cannot be
+         dispatched
+  10     bpf_throw(): dispatch pads while walking
+  11-12  x86-64 and arm64 JITs
+  13-17  libbpf: collect .bpf_cleanup, pass it to the kernel, resolve
+         _Unwind_Resume, carry it through the light skeleton and the
+         static linker
+  18-20  selftests
 
-	if (IPCB(skb)->flags & IPSKB_DOREDIRECT && !opt->srr &&
-	    !skb_sec_path(skb))
-		ip_rt_send_redirect(skb);
+Limitations
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
-    so a stale IPSKB_DOREDIRECT from __mkroute_input() makes the redirect
-    be built from the new outer ip_hdr(skb).
+  - Cleanup pads only. A catch pad -- one that ends in a plain exit rathe=
+r
+    than a resume, which is what Rust's catch_unwind would need -- is
+    refused: the walker calls a pad as a subroutine and cannot hand a fra=
+me
+    back its own execution. LLVM refuses type-specific catches and filter=
+s
+    on its side as well.
+  - A JIT that can dispatch pads is required: x86-64 (with
+    CONFIG_UNWINDER_ORC, which bpf_throw() already needs there) and arm64=
+.
+    Anywhere else the load fails with -EOPNOTSUPP rather than silently
+    doing nothing.
+  - No offloaded programs, no private stack, and no combining a table wit=
+h
+    an exception callback.
+  - In a pad body: no tail call, no BPF_LD_[ABS|IND], no indirect jump, a=
+nd
+    no on-stack call arguments -- each of them reads or writes a stack th=
+e
+    pad does not own.
+  - The Rust toolchain does not properly support BPF exception handling
+    yet. The tables the selftests use are hand-written inline asm, which
+    the assembler turns into the same relocations the BPF AsmPrinter emit=
+s,
+    so libbpf and the kernel see an object indistinguishable from a
+    compiler-generated one.
 
-  - ip_exceeds_mtu() does
+  [1] https://github.com/llvm/llvm-project/pull/192164
+      llvm commit 9d51c891b719 ("[BPF] Add exception handling support
+      with .bpf_cleanup section")
 
-	if (unlikely(IPCB(skb)->frag_max_size > mtu))
-		return true;
+Changelog
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+  v2 -> v3:
+    - v2: https://lore.kernel.org/bpf/20260918044156.3283973-1-yonghong.s=
+ong@linux.dev/
+    - Keep a landing pad's record when opt_remove_nops() deletes a pad th=
+at is
+      a nop, instead of dropping it after the verifier has already checke=
+d the
+      call site against it.
+    - Refuse a BPF_LD_[ABS|IND] in a pad body.
+    - Teach mark_chain_precision() about the throw-to-pad edge, which cro=
+sses
+      frames with no instruction to account for them.
+    - Refuse a bpf_unwind_resume() in any frame but the one whose landing=
+ pad
+      the walker entered.
+    - Check raw_data, alignment and bounds before the static linker write=
+s
+      through a relocation in a non-executable section, which may be SHT_=
+NOBITS.
+  v1 -> v2:
+    - v1: https://lore.kernel.org/bpf/20260917055645.3926444-1-yonghong.s=
+ong@linux.dev/
+    - Consolidate all usages of kern_extern_name() in a single patch in l=
+ibbpf.
+    - Avoid compiler warning and add proper cleanup_info_cnt guard in lib=
+bpf when
+      collecting .bpf_cleanup records.
+    - Add cleanup_info_cnt condition for emit_rel_store() with cleanup_in=
+fo.
 
-    and __ip_finish_output() does
+Yonghong Song (20):
+  bpf: Accept the compiler's exception cleanup table at program load
+  bpf: Add the bpf_unwind_resume() kfunc
+  bpf: Add lookups for exception cleanup resumes and landing pads
+  bpf: Prepare for an exception cleanup table before the CFG walk
+  bpf: Make exception landing pads reachable in the CFG
+  bpf: Explore the landing pads no call site reaches
+  bpf: Refuse exception cleanup shapes bpf_throw() cannot dispatch
+  bpf: Walk the exception unwind in the verifier
+  bpf: Refuse a private stack for a program with an exception cleanup
+    table
+  bpf: Dispatch exception cleanup pads from bpf_throw()
+  bpf, x86: Dispatch exception cleanup pads at run time
+  bpf, arm64: Dispatch exception cleanup pads at run time
+  libbpf: Resolve the compiler's _Unwind_Resume to the kernel's kfunc
+  libbpf: Add cleanup_info to bpf_prog_load_opts
+  libbpf: Collect .bpf_cleanup records and pass them to the kernel
+  libbpf: Carry the exception cleanup table through the light skeleton
+  libbpf: Let the static linker carry .bpf_cleanup relocations
+  selftests/bpf: Add an end-to-end .bpf_cleanup exception test
+  selftests/bpf: Cover the exception cleanup shapes the chain does not
+    reach
+  selftests/bpf: Load an exception cleanup program from a light skeleton
 
-	if (skb->len > mtu || IPCB(skb)->frag_max_size)
-		return ip_fragment(net, sk, skb, mtu, ip_finish_output2);
+ arch/arm64/net/Makefile                       |   2 +-
+ arch/arm64/net/bpf_cleanup_pad.S              |  95 ++
+ arch/arm64/net/bpf_jit_comp.c                 |  91 +-
+ arch/x86/net/Makefile                         |   3 +
+ arch/x86/net/bpf_cleanup_pad.S                |  80 ++
+ arch/x86/net/bpf_jit_comp.c                   |  79 +-
+ include/linux/bpf.h                           |  84 ++
+ include/linux/bpf_cleanup_abi.h               |  16 +
+ include/linux/bpf_verifier.h                  |  17 +-
+ include/linux/filter.h                        |   2 +
+ include/uapi/linux/bpf.h                      |   9 +
+ kernel/bpf/Makefile                           |   2 +-
+ kernel/bpf/backtrack.c                        |  21 +-
+ kernel/bpf/cfg.c                              |  71 +-
+ kernel/bpf/check_btf.c                        | 147 +++
+ kernel/bpf/core.c                             |  35 +-
+ kernel/bpf/exception.c                        | 664 ++++++++++++
+ kernel/bpf/exception.h                        |  22 +
+ kernel/bpf/fixups.c                           | 166 ++-
+ kernel/bpf/helpers.c                          |  46 +
+ kernel/bpf/liveness.c                         |  20 +
+ kernel/bpf/states.c                           |   6 +
+ kernel/bpf/syscall.c                          |   2 +-
+ kernel/bpf/verifier.c                         | 166 ++-
+ tools/include/uapi/linux/bpf.h                |   9 +
+ tools/lib/bpf/bpf.c                           |   6 +-
+ tools/lib/bpf/bpf.h                           |   7 +-
+ tools/lib/bpf/gen_loader.c                    |  29 +-
+ tools/lib/bpf/libbpf.c                        | 320 +++++-
+ tools/lib/bpf/libbpf_internal.h               |  10 +
+ tools/lib/bpf/linker.c                        |  36 +-
+ tools/testing/selftests/bpf/Makefile          |   2 +-
+ .../selftests/bpf/exceptions_cleanup.h        |  55 +
+ .../bpf/prog_tests/exceptions_cleanup.c       | 454 ++++++++
+ .../selftests/bpf/progs/exceptions_cleanup.c  | 152 +++
+ .../bpf/progs/exceptions_cleanup_ext_table.c  |  48 +
+ .../bpf/progs/exceptions_cleanup_fail.c       | 662 ++++++++++++
+ .../bpf/progs/exceptions_cleanup_freplace.c   |  17 +
+ .../bpf/progs/exceptions_cleanup_light.c      |  39 +
+ .../progs/exceptions_cleanup_pad_freplace.c   |  17 +
+ .../bpf/progs/exceptions_cleanup_shapes.c     | 984 ++++++++++++++++++
+ 41 files changed, 4621 insertions(+), 72 deletions(-)
+ create mode 100644 arch/arm64/net/bpf_cleanup_pad.S
+ create mode 100644 arch/x86/net/bpf_cleanup_pad.S
+ create mode 100644 include/linux/bpf_cleanup_abi.h
+ create mode 100644 kernel/bpf/exception.c
+ create mode 100644 kernel/bpf/exception.h
+ create mode 100644 tools/testing/selftests/bpf/exceptions_cleanup.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/exceptions_cle=
+anup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup.=
+c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+ext_table.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+freplace.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+light.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+pad_freplace.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+shapes.c
 
-    so a frag_max_size left over from ip_frag_reasm() steers the outer
-    packet into fragmentation or an ICMP FRAG_NEEDED drop.
+--=20
+2.53.0-Meta
 
-  - xfrm4_policy_check(NULL, XFRM_POLICY_FWD, skb) in ip_forward()
-    reaches __xfrm_check_dev_nopolicy(), which does
-
-	return IPCB(skb)->flags & IPSKB_NOPOLICY;
-
-    so a stale IPSKB_NOPOLICY bit skips the IPsec forward policy check
-    for the re-routed outer flow.
-
-Can the cross-family case make this worse?  For an inner IPv6 packet with
-a pushed outer IPv4 header (program returns BPF_LWT_REROUTE, so
-bpf_lwt_input_reroute() -> ip_route_input_noref() -> dst_input() ->
-ip_forward()), IPCB->flags sits at skb->cb[20..21], which aliases
-inet6_skb_parm's frag_max_size/srhoff (layout depends on
-CONFIG_IPV6_MIP6).  Does that turn an IPv6 reassembly size into an
-arbitrary IPSKB_* bitmask, including IPSKB_REROUTED, which makes
-__ip_finish_output() skip NF_INET_POST_ROUTING?
-
-Both precedents cited in the commit message do a full clear:
-
-net/ipv4/ip_tunnel_core.c:iptunnel_xmit()
-	memset(IPCB(skb), 0, sizeof(*IPCB(skb)));
-	IPCB(skb)->flags = ipcb_flags;
-
-net/ipv6/seg6_local.c (commit 44930446dde4)
-		memset(IPCB(skb), 0, sizeof(*IPCB(skb)));
-		IPCB(skb)->iif = iif;
-		if (l3slave)
-			IPCB(skb)->flags |= IPSKB_L3SLAVE;
-
-Would it make sense to mirror that here, since the IPv6 branch below
-already follows the pattern?
-
-> +		bool l3slave = ipv6_l3mdev_skb(IP6CB(skb)->flags);
-> +		int iif = IP6CB(skb)->iif;
-> +
-> +		memset(IP6CB(skb), 0, sizeof(*IP6CB(skb)));
-> +		IP6CB(skb)->iif = iif;
-> +		IP6CB(skb)->nhoff = offsetof(struct ipv6hdr, nexthdr);
-> +		if (l3slave)
-> +			IP6CB(skb)->flags |= IP6SKB_L3SLAVE;
-> +	}
-
-[Severity: Medium]
-Which family does ipv4 actually describe here?  It is derived from
-iph->version of the header being pushed (hdr), i.e. the *outer*
-encapsulation, while the control block that is being sanitized still
-belongs to the *inner*, already-received packet.  For a cross-family
-encap the two disagree, and this branch then reads and rewrites the cb
-through the wrong union member.
-
-Concretely, for an inner IPv4 packet with an outer IPv6 header pushed
-(ipv4 == false), l3slave is computed from IP6CB(skb)->flags, which lives
-at skb->cb[16..17].  That range aliases the tail of IPCB(skb)->opt: opt
-starts at cb[4], so cb[16] is ip_options' bitfield byte
-(is_strictroute..ts_needaddr) and cb[17] is opt.router_alert.  The flag
-this code is trying to preserve, IPSKB_L3SLAVE, is BIT(7) of
-IPCB(skb)->flags at cb[20], which is not read at all.  In practice bit 6
-of the aliased u16 is always zero (little-endian: it is padding after the
-six option bits; big-endian: it is bit 6 of router_alert, which
-ip_options_compile() sets to an in-header offset below 64), so l3slave
-evaluates to false unconditionally.  The following memset() then covers
-sizeof(struct inet6_skb_parm) == 24 bytes (int iif forces the size up),
-which includes IPCB(skb)->flags at cb[20], so the genuine IPSKB_L3SLAVE
-bit of the inner packet is cleared and never restored.
-
-The effect is that an lwt-bpf encap route inside a VRF silently loses the
-l3mdev association: the ipv6_l3mdev_skb() / IPSKB_L3SLAVE consumers
-further down the receive and socket-lookup paths see a packet that did
-not arrive on an enslaved device.  Note also that iif survives only by
-coincidence, because struct inet_skb_parm and struct inet6_skb_parm both
-place iif at offset 0, and that the IP6CB(skb)->nhoff store at cb[14..15]
-lands on opt.rr/opt.ts for the same reason - correctness by aliasing is
-not something we want to depend on in a stable backport.
-
-Shouldn't the choice of which control block to clear and which bits to
-carry over be keyed on the family of the packet already on the skb
-(e.g. skb->protocol, sampled before it is overwritten with ETH_P_IP /
-ETH_P_IPV6 further down) rather than on the header being pushed?  And
-when the families differ, how do you want to translate the preserved
-state - map IPSKB_L3SLAVE to IP6SKB_L3SLAVE (and vice versa) along with
-iif, or just clear both blocks and accept the loss?  Please spell that
-out, since with CONFIG_NET_L3_MASTER_DEV=n ipv6_l3mdev_skb() is a
-constant false and no test will notice the difference.
-
-[Severity: High]
-Is this reset still in effect by the time the packet reaches ip_forward()?
-
-bpf_lwt_push_ip_encap() is only reachable from inside the running BPF
-program, via bpf_lwt_in_push_encap()/bpf_lwt_xmit_push_encap() in
-net/core/filter.c:
-
-	case BPF_LWT_ENCAP_IP:
-		return bpf_push_ip_encap(skb, hdr, len, true /* ingress */);
-
-and the program is invoked from run_lwt_bpf() as:
-
-	bpf_compute_data_pointers(skb);
-	ret = bpf_prog_run_save_cb(lwt->prog, skb);
-
-__bpf_prog_run_save_cb() in include/linux/filter.h does:
-
-	if (unlikely(prog->cb_access)) {
-		memcpy(cb_saved, cb_data, sizeof(cb_saved));
-		memset(cb_data, 0, sizeof(cb_saved));
-	}
-
-	res = bpf_prog_run(prog, skb);
-
-	if (unlikely(prog->cb_access))
-		memcpy(cb_data, cb_saved, sizeof(cb_saved));
-
-cb_data is bpf_skb_cb(skb) == qdisc_skb_cb(skb)->data, i.e. skb->cb+8 for
-BPF_SKB_CB_LEN == 20 bytes, so skb->cb[8..27].
-
-Does that range cover exactly the fields this patch is trying to clear?
-struct inet_skb_parm puts opt at cb[4], and struct ip_options is:
-
-include/net/inet_sock.h:
-struct ip_options {
-	__be32		faddr;
-	__be32		nexthop;
-	unsigned char	optlen;
-	unsigned char	srr;
-	unsigned char	rr;
-	unsigned char	ts;
-
-so optlen/srr/rr/ts land at cb[12..15], inside the saved-and-restored
-window, and only opt.faddr at cb[4..7] stays cleared.  The IPv6 branch has
-the same problem: srcrt/dst1/lastopt/nhoff/flags occupy cb[8..17], so the
-newly assigned nhoff and the IP6SKB_L3SLAVE bit are also discarded.
-
-Is prog->cb_access reachable for lwt programs?  lwt_is_valid_access()
-allows it:
-
-		case bpf_ctx_range_till(struct __sk_buff, cb[0], cb[4]):
-			break;
-
-and bpf_convert_ctx_access(), used by lwt_in/out/xmit_verifier_ops, sets:
-
-	case offsetof(struct __sk_buff, cb[0]) ...
-	     offsetofend(struct __sk_buff, cb[4]) - 1:
-		...
-		prog->cb_access = 1;
-
-So for any lwt-bpf program that reads or writes cb[], the restore puts
-opt.optlen and opt.rr back to the inner-header-relative values, and
-
-net/ipv4/ip_options.c:__ip_options_echo() {
-	sptr = skb_network_header(skb);
-	...
-	memcpy(dptr, sptr+sopt->rr, optlen);
-}
-
-runs with those stale offsets again.  Neither bpf_input() nor
-bpf_lwt_input_reroute()/bpf_lwt_xmit_reroute() redo the clearing after
-run_lwt_bpf() returns.  Would doing this after the program run instead
-close the hole for cb-accessing programs?
-
-A second effect of clearing inside the program run: the memset covers the
-program's live __sk_buff->cb scratch area (cb[0..2] for the IPv4 branch,
-and cb[0..3] for the IPv6 branch since IP6CB spans cb[0..23]).  Is that
-change of behavior intended for programs that stash data in cb across a
-bpf_lwt_push_encap() call?
-
-Would it be worth adding a regression test with an encapsulating lwt
-program that also accesses cb[]?
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260916041102.1914333-1-xmei5%40asu.edu
