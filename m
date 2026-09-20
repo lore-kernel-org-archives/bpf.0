@@ -1,108 +1,152 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FB53DD854
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 16:21:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCE6E45FFAE
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 16:32:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789921308; cv=none; b=hTnOT4aD9TP+0iCVH8UsVoLmyz2I56WdwGtVsaa7bzbk5/GnUsIxL7VkhrDPRlsCJnjirKnwsGFAmhQMxyrHIxWz0ETdkDWRAEr+jvvcTUuN3kdQtcwqZNBaRa81mOQZaAw5cxnzWBLMMNu+8nunJfOy47aIhtx+SAeasDm+hoo=
+	t=1789921959; cv=none; b=EJiBLqSkojS4dMrKX/dNWltTtczTqiMQ+fQLCUsfBDpqFT4afxxHKy65BxGO8aHvjAb3KtB005/LK2kK+AsIQJxil+sLgPad3sRHuOgD36rxXnQmI78qJvvJsPAyfb7moSUPc9KipZZ+LNEbVJUoHBZOcC/1rhqi/auMUK7nKFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789921308; c=relaxed/simple;
-	bh=qfdM3YubCe2IP79evjGQNlSp/HU4IyfWbW9l+cBm2Rg=;
-	h=Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
-	 References:MIME-Version; b=op3sOcROWZn3QpOea87xdOdrjSeq9Gg3+O6VUPDt2I+J9j0Fm6CdhurOIBOGz+8hAhSAc4X4LH5pgSItRBQZcvXuE+xf4rYpWPPgPUNdqcCdyz+N0KukgtcWKnZQbaLqcSyE44T9jfho/uLO4p3aaISd6zNv5+o//DRnV9nrrRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qGepoum3; arc=none smtp.client-ip=74.125.227.140
+	s=arc-20240116; t=1789921959; c=relaxed/simple;
+	bh=1Mmp9z7COGyxK9xnnEX9yk23blndC2AFARmxjMGR9SE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GjbkCvCa2cgRmzgac1ZS/nC9yppel8QMG41mbttcLySYP6w3n2+lriGNACgfirP7Amrj6J6GL0y3gBS0kyXXB3cNQIPk5ImEPhiChVm3q75RF1TO2Z2sK0x9b1frbM0GRnMUWInnB3WwQZRJWB4WhngK3ZMAi03o0ygNpGYiDQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OMwLqta3; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qGepoum3"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccafb74fso2298934a91.3
-        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 09:21:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OMwLqta3"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d747eefae4so6713295ad.0
+        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 09:32:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789921306; x=1790526106; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Gy5ssaabRSlN5kBFNvs8mh80/gy44esWLyC1RJAbEbs=;
-        b=qGepoum3EieqrlPF7DutwuW8Fc2VyWKRJkCu/M+PyxqYxN6PISB4Ba41CAQy6SUvIt
-         ZBYqjtYi/jgBvXej7PPpe3izlR/z0V8yk3OlEb3Qj4CbY2wU63Neui7mte80/EVqefEA
-         hEE6gDxLfcLdr0Ij4bzCVh8G7WoDDDaLJ63wpCbkUAyGdD1WU5E0wx2BS92ELIw+2/fj
-         I091/bi1WcMT3RVFM26y0lq5orT0ExYCqW9pxZ24hk+bxVEB9OfEoOoRKtMtXTKB+O/j
-         OLSyWbQvrCuyAT46+lXIfj4g7cD8HcqWTtuh8ofAeZjsfdvFs4R0k3c2Mam5uZ88/fO5
-         +Stw==
+        d=gmail.com; s=20251104; t=1789921954; x=1790526754; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=EjNvBDr5WCXy3HSYn/Z6xkY91W8OnRmASt3rgB5rG98=;
+        b=OMwLqta36CrdAHNfNKkDSVrmoI6SxBJR6I2pvysXOLZF/TcmDpY9ncmOb+0lPcXIwC
+         +3TufLYHobp8TQUsrbKFabgSoqJsHzEPAWadO1d2TE4lkuK8xz3As6LvGDs4XNvskY3E
+         AMrHbXJDSIXVkilWysblukGiqPu0e+ougjblUKwIRNKrM3yJUzXfvd3kpWoMxpH432Yv
+         0UzXNZks5qnd5/MB8vorZZOMP3R5/ITBeHG5gDAKiSBNAjanEqmuagMlE162MMyPrmNB
+         RdTOLPvZFvza1mc4EQdEllbHnPzaj0bxLB3dtsA9fvIGz3wCnaxe/RpUXRYSpihqQH+R
+         mEEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789921306; x=1790526106;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Gy5ssaabRSlN5kBFNvs8mh80/gy44esWLyC1RJAbEbs=;
-        b=V55Jsu/fKX+XbUlTrIJv7ro57v2OSfwFI7f+KqPdvaGa3TIQBnWT5vukooonRNSpR6
-         H+vznDlEJhIUCLn/cHSwt4hlJm9LZgVbdXxPTG2Fbt0alIL3dZhwD6kEAlFfkrCYMch8
-         /r1WiHVAm2NvCz46IF0BX0S3OPfQMEZZZPEFy14zDZ/ySUKDwRkhVrOOP0Kd/LCW3ns4
-         HwrvOVQCxJzkXpQdLwRIHqVkWe4eeT/LQs5nMYx5MN6Ezl7a9uFT+d2j2x0ubiUGo6aQ
-         RuV/p1MPFisKEUZ0qzisHVWs2FIrs/QXoxjLvVE1R5qPHhVaFcKjyi5YhyWXscbnKJxW
-         RAZw==
-X-Forwarded-Encrypted: i=1; AKwUvBwYbuoz/SlLZayyTG6ixm0qyUXLHsq3TQ/d0gLABMnONh//tzjc78Tzbf/TkynJrzXIeuM=@vger.kernel.org
-X-Gm-Message-State: AFuF++kkmid2rjME7quLGYPlxRPJzq9ONcuEN3gC6Sq20/2K//xxKiUE
-	7Y1v5yL0QBWzFJSQEl2V378U0NfGqcpPr02aifONIzk3/A4mPZXMH8NF
-X-Gm-Gg: AYBFou2az5WPfy2vtugXO+xRT1UmgdboYnYPcnvo2SdoTCTMNPCy8i4rbO9zXpMq4mX
-	HiHm1yfkBacGGNNrZSivQGXpEYxyKlac7wTx+zBPX+bimXLkyhC3qtpW/G0+8BZqdEMgWJJrGjT
-	ai5bcYocfvG9lJ6JhTO7jHRsNNtFcTQKyVFpN2M2xGMjF3uc8xwcZ0xWDYwW+caHiH9qCGh0CU3
-	GseIvDUAizwGjCssOzzWH4ScQdOo9aLLloS2DtjPoMU/eqUDv0enm4eMSVl5E2mb4k4jxNSKsdS
-	VKRVtq08KsYFGG6c6JCqht99Ye/Chg2rcKL8Sqbo0vRmzhmFm3HRgO6mZkvagcwhbqBSkNcTAdG
-	MMW5OrS0QfIMBTlAHMV4twUEJc1wwks//ncmHhn9pCe6VOkZkY55FGJiJZYjJag/PBcRh9CsUiL
-	AnUUpCpoOPmXfJTMQCnykNClSm0wUhaEatgWiYvaQnBFEQjLn4aB7F5CLLcUEXcSUiIN5rXrvEG
-	aO+/D2bdM2WEZOw+opp1qyVqZ7qaKhTnRRGXpNXyZbFaS0c2X8CmkJJvfFhqKW4BZ9HBumZD8Dn
-	N+Xx
-X-Received: by 2002:a17:90b:1647:b0:39e:4498:4863 with SMTP id 98e67ed59e1d1-39e54f4187emr17716173a91.10.1789921306000;
-        Sun, 20 Sep 2026 09:21:46 -0700 (PDT)
-Received: from localhost ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a03bcecdd2sm1495785a91.1.2026.09.20.09.21.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Sep 2026 09:21:45 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Sun, 20 Sep 2026 16:21:44 +0000
-Message-Id: <DLKA5BT4JBZD.30HJC03MXC30U@gmail.com>
-Subject: Re: [PATCH bpf 1/2] bpf: Zero-fill other CPUs when BPF_F_CPU
- creates a per-cpu hash element
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Donggeun Yoo" <donggeunyoo.kernel@gmail.com>, <bpf@vger.kernel.org>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
- <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
- <ihor.solodrai@linux.dev>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-In-Reply-To: <20260920093153.439743-2-donggeunyoo.kernel@gmail.com>
-References: <20260920093153.439743-1-donggeunyoo.kernel@gmail.com> <20260920093153.439743-2-donggeunyoo.kernel@gmail.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20260707; t=1789921954; x=1790526754;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=EjNvBDr5WCXy3HSYn/Z6xkY91W8OnRmASt3rgB5rG98=;
+        b=LnJTu3xKRhXFOOd2zMzyhfZktyAE270c4I220/1WB9PE37C3fQXEu9rDKfnGAAdx9G
+         tJ8ryRJMojga8X00d3au/U7EZTjsYhCi7Z44JiKbxkNL4G8fJIv2/yBG37AqKZy4PMT1
+         oEmZ2JwRT8EpExltsHBSmts8raKlPsVf0/62qrs2wwiekmbPWeYf6b3QbgQJfp2vBfsN
+         HfE1rz5enu4Li/mIWMWcMwXR75xEe/ZocMlgFonKEsgrQYKpd+joLvNQEzm3aPUdgEWM
+         snM8k+Yu14nmapNjfI4U5TWgCzIH3aM5ISVbvVwHduu97oUqjTgaZSnDMxCp4hUXpEn8
+         E1mw==
+X-Forwarded-Encrypted: i=1; AKwUvBzBH9lBMmRlImqB7t7gUk3KK5YW+UDaDkLH6yOB7RvBcnh7q8agTATxCZAgtxArKA4AG7o=@vger.kernel.org
+X-Gm-Message-State: AFuF++n4a623NPVnJcwdI6NvHwfHMLb63sRhyqePBLviXwKs8mTMqtUV
+	gZKAMNFbuYX1LtT1J9crr82FuQ1tSWGbWemeSSZCa5mCSHWSP64+WoEM
+X-Gm-Gg: AYBFou0HanQryMGfJBG009xfMX+WjpFq1Zbhi/B7+35dCaOx/UPbq1hCBbJ21FfE7HF
+	I3NO5JpCEFXAySPwFP+qzHBZTnTZK8xBDIu+s+zraoRxGlIQzQ/V7TJnGwZNgHWiA0MZhCtP7no
+	v9j7v6Y1qZNW9jGYvYywGcX6DKQTnFH5IzzLLIWic4pXApzdASNHAIniqEoKf30Io0N9KSlKiCA
+	ayn/ZoV+d/s9Khid3HEaHHJCGnh1u+KRTjjtHeGnq/+tUjnINdRp+pCDanL3JMWpA8Y1z3eQ673
+	9P+sy8NEvx6qZs6AEfyp60uOda5Qsjrxf470J8y6Ra9l9iZTfgsjV/XiV2kaGwtB7VRtlakgRuv
+	B5BSbnXEWmttanmWH0tEri6t7/GCyhZUzaSsKJ3hT1IQow/Ik75vEkaTV1gtdqzD6X34sLBzlMn
+	0Cr8DOevhf0sEI9mGSt+LtmSh6eLFvM+D7r6ZdFkcCRCPxemj7LOZuktdwY/P+IaHVYJms3Nva3
+	+c+T/e17ZU601gR/5j8/SVcI4NNrYlL
+X-Received: by 2002:a17:903:2352:b0:2d8:d4cf:fe49 with SMTP id d9443c01a7336-2ddb21f74e1mr91357915ad.15.1789921953672;
+        Sun, 20 Sep 2026 09:32:33 -0700 (PDT)
+Received: from 192.168.50.3 ([198.176.50.208])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ddc17e17e0sm21784355ad.70.2026.09.20.09.32.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Sep 2026 09:32:31 -0700 (PDT)
+From: Weiming Shi <bestswngs@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	Peter Oskolkov <posk@google.com>,
+	Xiang Mei <xmei5@asu.edu>
+Subject: [PATCH v3 0/3] bpf: clear stale IPv4 options after LWT encapsulation
+Date: Mon, 21 Sep 2026 00:32:08 +0800
+Message-ID: <20260920163211.795547-1-bestswngs@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sun, Sep 20, 2026 at 06:31 PM Donggeun Yoo <donggeunyoo.kernel@gmail.com> wrote:
-> Fixes: c6936161fd55 ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_hash and lru_percpu_hash maps")
-> Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+This series implements the post-run CB reset suggested by Daniel, reuses the
+existing save/restore wrapper, and propagates cb_access from freplace
+programs before their activation.
 
-Pls cc Leon on respin.
+Patch 1 handles freplace cb_access propagation. Patch 2 marks successful LWT
+IP header pushes and resets the restored protocol CB after the program runs.
+Patch 3 contains the selftests, covering direct and freplace CB access, VRF
+ingress, and packets already marked encapsulated before entering LWT.
 
-[...]
+Changes since v2:
+- Replace the LWT state tracking and extra CB copy with a post-run reset after
+  bpf_prog_run_save_cb() restores the protocol control block.
+- Propagate cb_access from freplace programs in a separate prerequisite patch.
+- Mark only successful BPF_LWT_ENCAP_IP pushes, covering packets already
+  marked encapsulated without treating failed SEG6 operations as completed
+  header replacements.
+- Select the reset layout from the protocol callback which next consumes the
+  packet, preserving ingress interface and L3-slave state across family
+  changes and initializing the IPv6 network-header offset.
+- Save and restore the marker around nested LWT runs.
+- Add selftests for direct and freplace CB access, VRF ingress, and packets
+  already marked encapsulated before entering LWT.
 
-> @@ -1056,12 +1056,12 @@ static void pcpu_init_value(struct bpf_htab *htab, void __percpu *pptr,
->  	 * known initial values for cpus other than current one
->  	 * (onallcpus=false always when coming from bpf prog).
->  	 */
-> -	if (!onallcpus) {
-> -		int current_cpu = raw_smp_processor_id();
-> +	if (!onallcpus || (map_flags & BPF_F_CPU)) {
-> +		int init_cpu = onallcpus ? map_flags >> 32 : raw_smp_processor_id();
+Validation: the full KASAN+BTF kernel build passes. All five selftest cases
+pass with none skipped and no KASAN report, Oops, or panic. The new
+already-encapsulated case fails on the earlier transition-based implementation
+and passes with this series.
 
-The comment above covers only the bpf prog case now.
-Pls update it, but one short sentence about BPF_F_CPU is enough.
-What you proposed in reply to the bot is too verbose.
+Previous version:
+https://lore.kernel.org/bpf/20260916170406.1280954-2-bestswngs@gmail.com/
 
-pw-bot: cr
+Review discussion:
+https://lore.kernel.org/bpf/48990076-414c-4196-99b9-86fce41b8054@iogearbox.net/
+https://lore.kernel.org/bpf/97695bef-507a-403a-84ae-c2e222b3dc65@iogearbox.net/
+
+Weiming Shi (3):
+  bpf: propagate cb_access from freplace programs
+  bpf: clear stale IPv4 options after LWT encapsulation
+  selftests/bpf: cover stale CB after LWT IP encapsulation
+
+ include/linux/bpf.h                           |   2 +-
+ include/linux/filter.h                        |   8 +-
+ kernel/bpf/syscall.c                          |   6 +
+ net/core/lwt_bpf.c                            |  47 +++
+ .../selftests/bpf/prog_tests/lwt_ip_encap.c   | 288 ++++++++++++++++++
+ .../bpf/progs/lwt_ip_encap_stale_cb.c         | 100 ++++++
+ .../progs/lwt_ip_encap_stale_cb_freplace.c    |  32 ++
+ 7 files changed, 479 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/lwt_ip_encap_stale_cb.c
+ create mode 100644 tools/testing/selftests/bpf/progs/lwt_ip_encap_stale_cb_freplace.c
+
+
+base-commit: 6c096bb08de97cdca051fecddad22cac6a1fd275
+-- 
+2.55.0
