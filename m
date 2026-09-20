@@ -1,137 +1,130 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E315F37DAD0
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 06:31:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCE7537DAD0
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 06:31:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789885914; cv=none; b=mhX+q1lVmfIWfZKvZHyPc1GRV71uG9ygyIdfI7V9FBwvgQGrrl+VdJAL6UyPXOktDGGeJVId/uGw/+bVWRel3aBb7P+pj4nbMtUttGFhMlJquRfn9TJXg/mmkVaQFc/X3tGbySkkWxj+FyGSUD/abb10KQnr0rCFrKqzBqvpOAs=
+	t=1789885916; cv=none; b=XeXUxpass5RPtiFB+MEjlxWmbgw+2W42BB2D8Vls3Um4pvSik6xn1FiDlzyERQ6rn1q/CqqZAwSwkHgsyzwsxam23BDaU7diaHlidIhkT747+LJOrteOJ3wCRuzxW4BcwRhfqZO2RYGoqM7wUdhCF97QOGlBxr0Og/B64Mc9d4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789885914; c=relaxed/simple;
-	bh=XJzr7srircKro/MNIQ0NR05Qx6gBqk9hZvJ5AnVj7hk=;
+	s=arc-20240116; t=1789885916; c=relaxed/simple;
+	bh=K90b6s5wmWhKp5e1RMMVKwc92fnowWYkpo3yQUh8zss=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=ewEYWtqBz/NX0g0i7np7ZQYvjffdVrpK7788S1ccG5pZ7SQGHea2UgHgAVekR8/LLNLtd5D3ZFeBNds95VAQ13xq3PxMjx8OLQoPAS8wA2Koe1KtbiHFUzdB8PLCuxU/3tV4rN2lBFvaparr0KelsPWGusXzgVuJm/iy1LBkIqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l2skwc9O; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=jDDmMG5TTwL7zloUF8O9F/MqjVKXDj/6o+UDOtutZp4XLi/C2YnV6Yc7SHrvNW60CKmSqqa4OqodX8GSpPWf7neIkedw98PUGrcieVqAXF+MG5tg1pFHFRpdLCiAjbRby5ZFiwO41OiOIIqPZb+LOYsDumQm2ILtUfhnYcz8sNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b0dKG0dk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l2skwc9O"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 329E71F000FF;
-	Sun, 20 Sep 2026 06:31:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b0dKG0dk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26F3A1F000FF;
+	Sun, 20 Sep 2026 06:31:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789885912;
-	bh=AvNBKE6y7blsvEyKiSkSbVwEyCh76UAL4tpTf1WJ62A=;
+	s=k20260515; t=1789885915;
+	bh=sOnd1ppRL6ng58ovyu2aYaGJj03NdgXHnljRUFsGQkY=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=l2skwc9OsQ/Aj4C41Bp0xCGQs9pw3Z0ogaGu62zAT/YJJgn4kDDHg3xJtmNeNbDoX
-	 VfXBoy40CAKikaCfq/IwYuR2r0Pv24EGkcymalDPL81lDK8E3Pe2Eprwaf6XZtrdW8
-	 zYRo6ufwvW1rJgchEiJcU1TAqUE2+kmFZncXXkMYM9UVr8hR0rqECmV6yoXCbFM4Nu
-	 oRAx46Nu5UH9003lYfDQhbkj+gNe1L1dC3MpoNEyTbluMOQV+Pz0Ny6ipg0suDfexV
-	 0QwACvdHU68WrGwz3BisPs0o8uHGkXN7JtyzhEFGFgdXeo009+n9OUPERNpqYLF8yH
-	 a7S+PUebKxzfg==
-Content-Type: multipart/mixed; boundary="===============4972820713869885235=="
+	b=b0dKG0dkDvVkhOIXT+4aLkBfyTuuS7ifMJvoc7kLB3Y+AvwrMCwOZW4XZxcBPZEZ4
+	 srz4+puODR+KLfXeEFoXDQs6uzVF7FjmvY6/0hUUyvrg24dLhtZ3BcGPzqoA2BnETi
+	 UVEJA/bghQMdfzov44ojLnIJGl0uEEkqcjyFg+rtV/Pc5tXszVbK1YmMSytV3Qc9jP
+	 VSQz4rcR5Yo+95EsRTq/VXdCwX1w6aw2CAxqaCPYNumwsN5PiLDAKurL9NtQgda52j
+	 TsevakXUHhaEUCYm9ceeyJwH2njZ4tyVfT2+8sRJa5zEaQ+V7sPsJjbiNAdKwOG3rr
+	 1zLng57D4xE6w==
+Content-Type: multipart/mixed; boundary="===============6774932007669049647=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a956e774692a94a2926fb953553f546ab0293fca13f6d021bc3d75e89752bcf9@mail.kernel.org>
-In-Reply-To: <20260920054408.875401-1-yonghong.song@linux.dev>
-References: <20260920054408.875401-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v3 20/20] selftests/bpf: Load an exception cleanup program from a light skeleton
+Message-Id: <fb1fb8d9a506beb7657f12aa599bce576b6e97f4329b91ab874e5c4bb595ebb3@mail.kernel.org>
+In-Reply-To: <20260920054241.866442-1-yonghong.song@linux.dev>
+References: <20260920054241.866442-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v3 03/20] bpf: Add lookups for exception cleanup resumes and landing pads
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun, 20 Sep 2026 06:31:51 +0000 (UTC)
+Date: Sun, 20 Sep 2026 06:31:54 +0000 (UTC)
 
---===============4972820713869885235==
+--===============6774932007669049647==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 7ea5ba1df29e..981cc2643049 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -523,7 +523,7 @@ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
->  LSKELS := fexit_sleep.c trace_printk.c trace_vprintk.c map_ptr_kern.c 	\
->  	core_kern.c core_kern_overflow.c test_ringbuf.c			\
->  	test_ringbuf_n.c test_ringbuf_map_key.c test_ringbuf_write.c    \
-> -	test_ringbuf_overwrite.c
-> +	test_ringbuf_overwrite.c exceptions_cleanup_light.c
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index c08505b9ba82..f9bccd3e0f4d 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -681,6 +681,11 @@ struct bpf_insn_aux_data {
+>  	bool needs_zext; /* alu op needs to clear upper bits */
+>  	bool non_sleepable; /* helper/kfunc may be called from non-sleepable context */
+>  	bool is_iter_next; /* bpf_iter_<type>_next() kfunc call */
+> +	/*
+> +	 * 1 + the instruction index of the exception cleanup landing pad this
+> +	 * call site unwinds to, or 0 for none.
+> +	 */
+> +	u32 cleanup_pad;
+>  	bool call_with_percpu_alloc_ptr; /* {this,per}_cpu_ptr() with prog percpu alloc */
+>  	u8 alu_state; /* used in combination with alu_limit */
+>  	/* true if STX or LDX instruction is a part of a spill/fill
 
 [ ... ]
 
-> diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup_light.c b/tools/testing/selftests/bpf/progs/exceptions_cleanup_light.c
-> new file mode 100644
-> index 000000000000..de7ae478d67f
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup_light.c
-> @@ -0,0 +1,39 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include "bpf_misc.h"
-> +#include "exceptions_cleanup.h"
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index 2add8001c3ec..dd1a6b5a6afd 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+> @@ -261,6 +261,11 @@ static void adjust_insn_aux_data(struct bpf_verifier_env *env,
+>  		}
+>  	}
+>
+> +	if (env->cleanup_info_cnt)
+> +		for (i = 0; i < prog_len; i++)
+> +			if (data[i].cleanup_pad > off + 1)
+> +				data[i].cleanup_pad += cnt - 1;
 > +
-> +static __used __noinline void __kfunc_btf_anchor(void)
-> +{
-> +	bpf_throw(0);
-> +	bpf_preempt_disable();
-> +	bpf_preempt_enable();
-> +	bpf_unwind_resume();
-> +}
 
-Are the kfunc declarations in scope here? The file includes only
-<vmlinux.h>, <bpf/bpf_helpers.h>, "bpf_misc.h", and
-"exceptions_cleanup.h".
+Does this miss the case where the original instruction is not placed last
+in the patch buffer? Looking at adjust_insn_aux_data(), there's logic
+earlier in the function that handles non_stack_access when the patched
+instructions contain the original:
 
-bpf_throw(), bpf_preempt_disable(), and bpf_preempt_enable() are
-normally declared with __ksym in tools/testing/selftests/bpf/
-bpf_experimental.h, which is not included. bpf_unwind_resume() has no
-declaration in any userspace header in the tree.
+kernel/bpf/fixups.c:adjust_insn_aux_data() {
+    for (i = off; i < off + cnt - 1; i++) {
+        /* Expand insni[off]'s seen count to the patched range. */
+        data[i].seen = old_seen;
+        data[i].zext_dst = bpf_insn_def32(new_prog, insn + i) >= 0;
+        if (!memcmp(insn + i, original_insn, sizeof(struct bpf_insn))) {
+            data[i].non_stack_access =
+                data[off + cnt - 1].non_stack_access;
+            data[off + cnt - 1].non_stack_access = false;
+        } else if (bpf_is_mem_insn(insn + i)) {
+            data[i].non_stack_access = true;
+        }
+    }
+}
 
-Without __ksym == __attribute__((section(".ksyms"))), these become
-implicit function declarations, and libbpf's bpf_object__collect_externs()
-will reject any extern not in a ".ksyms" DATASEC when it tries to
-relocate the calls in the inline asm below.
+The memcmp branch transfers non_stack_access from data[off + cnt - 1] to
+data[i] when it finds the original instruction. A bit further down,
+indirect_target gets similar treatment.
 
-The __kfunc_btf_anchor() function exists specifically to produce extern
-BTF FUNCs that libbpf can relocate for the 'call bpf_throw' and
-'call bpf_unwind_resume' sites in the inline asm. If the declarations
-are implicit, either the compile fails or bpftool rejects the object when
-generating the light skeleton.
+cleanup_pad is a property of one specific call instruction (the landing
+pad this call site unwinds to), not of an instruction slot. When
+bpf_patch_insn_data() parks the original instruction's aux record in
+data[off + cnt - 1] but the patch buffer places the original instruction
+at position i (not last), shouldn't cleanup_pad be transferred the same
+way?
 
-Should this file include "bpf_experimental.h" and add a declaration for
-bpf_unwind_resume()? The identical pattern appears in
-progs/exceptions_cleanup.c, progs/exceptions_cleanup_shapes.c, and
-progs/exceptions_cleanup_ext_table.c from earlier commits in this series,
-so the fix may need to be series-wide.
+Without this transfer, after such a patch the surviving call instruction
+would have cleanup_pad == 0 (no landing pad) and an unrelated newly
+generated instruction would carry the pad index instead. The CFG edge from
+the call to its pad would disappear, and an exception unwinding through
+that frame would silently skip its cleanup.
 
-> +
-> +__u64 pads_ran = 0;
-> +
-> +SEC("syscall")
-> +__naked int entry_light(void)
-> +{
-> +	asm volatile (
-> +	"call bpf_preempt_disable;"
-> +	"r1 = %[cookie];"
-> +"1:"	"call bpf_throw;"		/* cleanup region */
-> +"2:"
-> +	"exit;"
-> +"3:"					/* landing pad */
-> +	"call bpf_preempt_enable;"
-> +	PAD_RAN("%[ran]")
-> +	"call bpf_unwind_resume;"
-> +	"exit;"
-> +	CLEANUP_REC("1b", "2b", "3b")
-> +	:
-> +	: [cookie]"i"(THROW_COOKIE), [ran]"i"(RAN_LIGHT),
-> +	  __imm_addr(pads_ran)
-> +	: __clobber_all);
-> +}
-> +
-> +char _license[] SEC("license") = "GPL";
+A later commit (d710bf82c5e9, "bpf: Dispatch exception cleanup pads from
+bpf_throw()") adds these lines to the memcmp branch:
+
+    data[i].cleanup_pad = data[off + cnt - 1].cleanup_pad;
+    data[off + cnt - 1].cleanup_pad = 0;
+
+Should that transfer belong in this commit, which introduces the field and
+claims to keep it in step?
 
 
 ---
@@ -139,4 +132,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35492765538
---===============4972820713869885235==--
+--===============6774932007669049647==--
