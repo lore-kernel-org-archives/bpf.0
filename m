@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA123AAF49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 083423A4521
 	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 14:39:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789915175; cv=none; b=Ewc5Yqn4X48r9BGI245dqCcFkSTP5rcRpoFy2UtUQHTwp6vkjyXao8o0MUraEbXYaZ9w4EE3msG2V9TVH+vSOjq49R1akmYTsnJZLPC4iEHh6BlmiYso1u5dMpuSElyrE+HADM1TX5iWL5vyiak0VTEie4ZBjfVVe2lgOyIz2Kk=
+	t=1789915177; cv=none; b=WbYXpQ6QZh2lRaGJW6HVyBtL2qpsAHnqFMhuRb4z4PVrU5z835FWTOHL5DNWps6dgx+dvTmEf7PNOqsZA5CHzBrpYkQBw3stRJLXxVriQ0EnNP9HPgZ/qHya2AQlEISCIGBuqsxOFx2jg6Pft5WWCl1oxNAj0aNVcfSDU2DpJCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789915175; c=relaxed/simple;
-	bh=1IkbNLOe/M+YGxvfKbqbhXLG8hbOs8JzxZDBORH059k=;
+	s=arc-20240116; t=1789915177; c=relaxed/simple;
+	bh=xvySHzWpQAmm6bXYpOBBvNb7hERajzkEZYJWYuTH0XY=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=l+6+7UY80hEl8MIVzffz68MwhsveDcVuNxlFjtOECulwpHzfCaTBDu5cy/AJUJok/08vY67u9yNO/rUyWqfMjwhwHBtXeY1It+X18LBr4NeaTtevLBM8Eca+Zv0LQcYCp4734iSrBuvMvpr8OsRFF29CI/t8QHizW6AIMrst6vI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fi4J1Xtj; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=oBasJG283dTSVLpIzch7VqbWJ+ggsxbDwmE5QpRSf1u9JzXgoMbGjvA4Poh8dWgR2iN33z1CtihOzJk4vAj8rnDD3k7xM4iFIxOplXq+VcN9CUvfPqtB8pYyeod7ld2/6g5Ap7/maUg3/LHtbCTM4cBvSRJaR8eSyrHiT3etlcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VpW5h0ia; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fi4J1Xtj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F4A41F00898;
-	Sun, 20 Sep 2026 14:39:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VpW5h0ia"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BCB61F00893;
+	Sun, 20 Sep 2026 14:39:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789915172;
-	bh=EYGYGt1Kc1zXxK/pPvYfYYgcWgAhvK7paYwmzXHsGPc=;
+	s=k20260515; t=1789915171;
+	bh=WuMLTS/rrG3rgkPIpjXMxOJF8mdtG0deh5wWVq+KUvU=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Fi4J1XtjKgN+jEWCbXxWMtm+fkuhcAZA9UKvnLpIxIC2giRIR/eDsXEGKx6us42wc
-	 clHQzypPoGmczfc/dBXN4FCJsta3z+WuHu70Xv6ujtQ+7jcyuyQtuFSa6fURNvYHWs
-	 nTbcFom3N/LP9zbr39nsV7kXoZStYYYIknXDgKXl1HS1xO9sm+ooSblu+EiO+gkQkv
-	 KjsqR7cDh96Y02u2GuALmGkRmGy19jfky57Ui3uvZvwblegXwYoNu3D/IaV4dgfJm4
-	 xNJ54GnJ70V5gXoUeYBkF2r/DjrpGbo10JlJimZ8j8xiF/7NxdmlN2ECoI5/7qQqhz
-	 pM2vFGezyC5Ag==
+	b=VpW5h0iank743N5vaedaTUscXSfUjjkqMOgF3EqvdjCVNEiCa9jXcfqKsieWgefhJ
+	 KiyjDjOZMLJpDIu5HMx4cOVtwPITZxAYSE5zB/3kzG5cnfQ8USxZVr4AFrYunJi0Gc
+	 68OYID3kZnDnlVmXZ/1WFfh99sfDK5yyGtnUtlCoQTJmiE6VR12GqdJ1C/o6zS+xW/
+	 1iuX3T3i/leJ6FWN+mYBzEAR4ls2SwxIiPs2n3Y1dkWHjOpCIa+LD1YfjdbcGswZgJ
+	 XgOD1EKOUzHigOwf3eI9+1cduWI7v64mm+jTl6V1m7iryvhDbxpiJ5xQl4v8VwM/nk
+	 CiR2wKYWzvg1Q==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH RFC net-next 9/9] tcp: handle the start time of each
- split skb in the tx path
+Subject: Re: [PATCH RFC net-next 8/9] net: generate the start time for every
+ skb in the rx path
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jason Xing" <kerneljasonxing@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260919143732.11772-10-kerneljasonxing@gmail.com>
+In-Reply-To: <20260919143732.11772-9-kerneljasonxing@gmail.com>
 References: <20260919143732.11772-1-kerneljasonxing@gmail.com>
- <20260919143732.11772-10-kerneljasonxing@gmail.com>
+ <20260919143732.11772-9-kerneljasonxing@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Sun, 20 Sep 2026 14:39:31 +0000
-Message-Id: <20260920143932.3F4A41F00898@smtp.kernel.org>
+Message-Id: <20260920143931.8BCB61F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,100 +47,100 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Medium] bpf: __tcp_transmit_skb() drops start_time when copying cloned S=
-KBs
-- [Medium] bpf: tcp_mtu_probe() misses start_time propagation for partially=
- consumed SKBs
+- [Critical] net: start_time and hwtstamp union aliasing causes UAPI breaka=
+ge
+- [High] net: modifying shared skb_shinfo in net_timestamp_check corrupts c=
+loned skbs
 --
 
-commit 29685480e121f376d52c9ec47c6328d8844a8e0f
+commit f67f60b2a43b1183b5caab4725cd26a0b5760176
 Author: Jason Xing <kerneljasonxing@gmail.com>
 
-tcp: handle the start time of each split skb in the tx path
-   =20
-Segmentation and collapsing create or reuse skbs with a fresh
-shared_info, which would otherwise drop the start time recorded
-on the original skb.
-   =20
-Handle every TCP path that manipulates the shared hwtstamps:
-   =20
-  - tcp_gso_segment(): handle the gso case. Propagate the same
-    gso_skb's start time to every resulting segment.
-   =20
-  - tcp_fragment/tso_fragment(): handle the tso/recovery.. cases.
-    Copy the start time onto the second half of the split so both
-    fragments keep it.
-   =20
-  - tcp_skb_collapse_tstamp(): handle collapse case. Copy the eaten
-    skb's start time onto the survivor.
-   =20
-  - __tcp_retransmit_skb(): handle retrans case - the retransmit
-    path __tcp_retransmit_skb->__pskb_copy.
+net: generate the start time for every skb in the rx path
 
-> diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-> index 00417a4292225..cb43215e8b3c9 100644
-> --- a/net/ipv4/tcp_output.c
-> +++ b/net/ipv4/tcp_output.c
+This commit extends net_timestamp_check() to record an in-kernel start time
+in the skb's shared hwtstamps. It enables computing how long an skb has
+spent in the stack during the RX path.
 
-[ ... ]
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 1da3250f25d2c..e358d28ae6c3f 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -2501,11 +2501,17 @@ static inline void net_timestamp_set(struct sk_bu=
+ff *skb)
+>  		skb->tstamp =3D ktime_get_real();
+>  }
+> =20
+> -#define net_timestamp_check(COND, SKB)				\
+> -	if (static_branch_unlikely(&netstamp_needed_key)) {	\
+> -		if ((COND) && !(SKB)->tstamp)			\
+> -			(SKB)->tstamp =3D ktime_get_real();	\
+> -	}							\
+> +#define net_timestamp_check(COND, SKB)					\
+> +	if (static_branch_unlikely(&netstamp_needed_key) ||		\
+> +	    static_branch_unlikely(&bpfts_v2_needed_key)) {		\
+> +		if (static_branch_unlikely(&netstamp_needed_key) &&	\
+> +		    (COND) && !(SKB)->tstamp)				\
+> +			(SKB)->tstamp =3D ktime_get_real();		\
+> +		if (static_branch_unlikely(&bpfts_v2_needed_key) &&	\
+> +		    !skb_hwtstamps(SKB)->hwtstamp)			\
+> +			skb_hwtstamps(SKB)->start_time =3D		\
 
-> @@ -3669,6 +3673,7 @@ int __tcp_retransmit_skb(struct sock *sk, struct sk=
-_buff *skb, int segs)
->  			nskb =3D __pskb_copy(skb, MAX_TCP_HEADER, GFP_ATOMIC);
->  			if (nskb) {
->  				nskb->dev =3D NULL;
-> +				skb_copy_start_time(nskb, skb);
->  				err =3D tcp_transmit_skb(sk, nskb, 0, GFP_ATOMIC);
->  			} else {
->  				err =3D -ENOBUFS;
+[Severity: High]
+Does this code modify shared skb_shinfo without verifying SKB exclusivity?
 
-[Severity: Medium]
-Does this code miss propagating the start_time when copying cloned SKBs in
-__tcp_transmit_skb()?
+The skb_hwtstamps(SKB) macro resolves to &skb_shinfo(skb)->hwtstamps, which
+is explicitly shared across all clones of an SKB.
 
-In __tcp_transmit_skb(), if clone_it is true and the original SKB is
-already cloned (e.g., still held by Qdisc), it calls pskb_copy():
+In the RX path, such as in netif_rx_internal() where net_timestamp_check()
+is called, packets may be clones. For example, TCP transmits a clone while
+retaining the original SKB in its retransmit queue, and if sent over a
+loopback interface, this clone is directly passed to netif_rx().
 
-net/ipv4/tcp_output.c:__tcp_transmit_skb() {
+Writing directly to shared SKB metadata without calling skb_unshare() or
+verifying exclusivity via skb_cloned() can cause data races and silent
+corruption across all concurrent users of the cloned SKB.
+
+[Severity: Critical]
+Does this code also inadvertently overwrite hardware timestamps delivered to
+userspace?
+
+In include/linux/skbuff.h, start_time and hwtstamp are aliases in the same
+union:
+
+struct skb_shared_hwtstamps {
+	union {
+		ktime_t hwtstamp;
+		ktime_t start_time;
+		void *netdev_data;
+	};
+};
+
+When a packet without a hardware timestamp comes through, this assignment
+writes a software timestamp into start_time, silently overwriting the empty
+hwtstamp field with a non-zero value.
+
+Later, when the packet propagates up the stack to a socket with
+SOF_TIMESTAMPING_RAW_HARDWARE enabled, __sock_recv_timestamp() checks the
+timestamp:
+
+net/socket.c:__sock_recv_timestamp() {
     ...
-		tcp_skb_tsorted_save(oskb) {
-			if (unlikely(skb_cloned(oskb)))
-				skb =3D pskb_copy(oskb, gfp_mask);
-			else
-				skb =3D skb_clone(oskb, gfp_mask);
-		} tcp_skb_tsorted_restore(oskb);
-    ...
-}
-
-When pskb_copy() is executed, it fails to propagate the original SKB's
-start_time to the new transmit SKB. This allocates a new skb_shared_info
-with a zeroed start_time, silently dropping timestamps for these packets.
-
-[Severity: Medium]
-Could there be another missed start_time propagation for partially
-consumed SKBs in tcp_mtu_probe()?
-
-tcp_mtu_probe() allocates a new MTU probe SKB (nskb) with a zeroed
-start_time, and then absorbs payload from queued SKBs. If the first
-SKB is larger than the probe size, it takes the else branch to
-partially consume it:
-
-net/ipv4/tcp_output.c:tcp_mtu_probe() {
-    ...
-		} else {
-			TCP_SKB_CB(nskb)->tcp_flags |=3D TCP_SKB_CB(skb)->tcp_flags &
-						   ~(TCPHDR_FIN|TCPHDR_PSH);
-			__pskb_trim_head(skb, copy);
-			tcp_set_skb_tso_segs(skb, mss_now);
-			TCP_SKB_CB(skb)->seq +=3D copy;
-		}
+    if (shhwtstamps->hwtstamp) {
+        tss.ts[2] =3D shhwtstamps->hwtstamp;
     ...
 }
 
-In this partial consumption branch, tcp_eat_one_skb() is not invoked, and
-start_time is never explicitly copied, leaving the MTU probe packet with
-start_time =3D 0.
+Will this cause applications like PTP daemons to falsely receive a software
+timestamp as a hardware timestamp, breaking the SO_TIMESTAMPING UAPI?
+
+> +				(SKB)->tstamp ?: ktime_get_real();	\
+> +	}								\
+> =20
+>  bool is_skb_forwardable(const struct net_device *dev, const struct sk_bu=
+ff *skb)
+>  {
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260919143732.1177=
-2-1-kerneljasonxing@gmail.com?part=3D9
+2-1-kerneljasonxing@gmail.com?part=3D8
