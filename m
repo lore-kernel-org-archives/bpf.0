@@ -1,118 +1,111 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6722C35C681
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 09:49:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 050D93932C8
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 09:58:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789897759; cv=none; b=fB4/QtRTNxWwBogSqEtLzZ6Qh6JorkP9PDMLJhKNJv7hHVNqUjGh6Y69HMP03LWJsAqOFG/0TAZO6Y9+I4ubx6fRhGZYKdFDJ7sA2YvP0iQcZEJx7K5+R17ZwB5Xf/5i3RNiNXcqz2vziqZYTqONhguqG87DPE5HincSgR8sWuo=
+	t=1789898341; cv=none; b=sHkohvOloqf+aXlkC0LNFmuXMN1EEtMZVgqVILcTRlcbv5IRV/AXe/DRCFqKm3Xh+QxVSrn8qSpigkbOktd9IgtxjCSCWUfvyDjDKL3hw/eP5BIuvAlXEglTIAE9kX8ipRw9Mnns3igY9Er+tNSAW8ALWuEC62pspMuWfrYBM/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789897759; c=relaxed/simple;
-	bh=hy5DaRegCJlQD9CCuoxg9CvJ7LgMGAVCkqJHD+NDUBc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=HbZobcOJSOWBcM3Hkkwwb7RhaItOsuw7vHqwGXrytXPp62kDmRjFDNR6rzk9PWqa8Y98Hyuo56v4EfbIlS/Z6IOJRUxTyJHKFYcfyWBDSbTYZmLEoc3iKvFC3BhIqd2GECP+b5tTDYwsee35tX1DYE7Wq8TrlhZb6QqPIo6+N/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bTGuxxkj; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789898341; c=relaxed/simple;
+	bh=NjEPOuXBvpnYuziSga+cIxytuk9WMFPfY1XbqRdE4pk=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=LfddFi4gx+iry1cfBFpwAKVqaJ2bTAcS2CSVLV8wsDE4HAs0dlg3BvTU4fX0R+Hn4ko0RFSUX4DI14LkT4MNGzmX+ZJ5ejbc6jYQHvtVB1qDp2A658eM/7cNF/hRvPCpiTCDq1OxRWdixQ7BBPgVDOuyyVghs7BcgD1IqMFdVyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gm3LshPt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bTGuxxkj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED1DF1F000FF;
-	Sun, 20 Sep 2026 09:49:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gm3LshPt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 635921F000FF;
+	Sun, 20 Sep 2026 09:58:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789897754;
-	bh=kR9ZxXat1+PynPm68AdzooRr4C306S/nSzAOjXurcG4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=bTGuxxkjgdjlr8UTW3jOOXXsgtYntQwHYR98c/dI8K9eRuoQYFZ7evNzdAwP6SulR
-	 wspce00Ch5CEdI6/wVZWobs78qnJw1v05QQ+WaaMhTitV7nt/Qf+jOlmyvIJ8pC8R5
-	 Q0dubbwerNzYdL/EfG/30hBzrqInJngga3O6p/JWzCg6jg2hKMoW+uUNXUkOv3K19Q
-	 HjfPbk8v3bdhnlRXurpyoulSI5fqYjqPXwfLOMwiRJnde2mjqvfqddk3OPcvdEf2U+
-	 W3AK30kUBZkCHKenAenPMJZwDzl39nepaYVSVDlGgkqCym9Z0KOytJexF9mZWBk8Ro
-	 NzLRMtcVKPmdA==
-Content-Type: multipart/mixed; boundary="===============3526114758495915422=="
+	s=k20260515; t=1789898339;
+	bh=t3FVuoSVTBMf11GXKaD/mTbVsElq9xyVwtvK0XSVzlo=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=gm3LshPtzUpRsx8/dH4kr+CVjzPBVetSVZr5Rssjaog2DK15aOQZrVBAsTgYZ6Dra
+	 HkzfhUBBHKccB9ZqxOHZSBjQnfHIt8JRZcVosBKNfyvJejX03uPQqeAozzA9wGMS9V
+	 LFfEHe6mnnvgbQ2T7RtHhv+motQbb8IKOh5DjZzvU0otnHIgwmF7UH45/3ZLS2jcP2
+	 a8o5Yw295D65Xd0lvjX0X4jWPNOAiVHf/0cVDnE4TZG48+7Gsi9XuWuX0S9cvJTMz0
+	 7uKYtnfAp2n669dqksGBL0NmlKeMFsyPMGpafHhtcyddcpuef9jaakUt89KSgAPLco
+	 /sKVUfbpw/3aw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf 2/2] selftests/bpf: Test per-cpu initialization of a
+ BPF_F_CPU created element
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Donggeun Yoo" <donggeunyoo.kernel@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260920093153.439743-3-donggeunyoo.kernel@gmail.com>
+References: <20260920093153.439743-1-donggeunyoo.kernel@gmail.com>
+ <20260920093153.439743-3-donggeunyoo.kernel@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Sun, 20 Sep 2026 09:58:58 +0000
+Message-Id: <20260920095859.635921F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <2b256fca1cae3f89250063e96a43c9601e9a3d4ff2567e28637562e74ccf2d09@mail.kernel.org>
-In-Reply-To: <20260920085549.867099-1-madhav.khoslaa@gmail.com>
-References: <20260920085549.867099-1-madhav.khoslaa@gmail.com>
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Fix csum_partial() dropping trailing byte on odd length
-From: bot+bpf-ci@kernel.org
-To: madhav.khoslaa@gmail.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: bpf@vger.kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,sdf@fomichev.me,alexis.lothore@bootlin.com,madhav.khoslaa@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Sun, 20 Sep 2026 09:49:11 +0000 (UTC)
 
---===============3526114758495915422==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [Medium] bpf: test inappropriately fails on uniprocessor systems instead =
+of skipping
+- [Low] bpf: multi-line comment does not follow required subsystem style
+--
 
-> csum_partial() computes num_u16 = len >> 1 and only sums that many
-> 16-bit words, so the last byte of an odd-length buffer never gets
-> added to the checksum. RFC 1071 says it should be padded with a zero
-> byte and summed as one more word, not dropped.
->
-> This backs build_ip_csum(), build_udp_v4_csum() and
-> build_udp_v6_csum(), used by flow_dissector_classification.c and
-> xdp_metadata.c to hand-build packets. No current caller builds an
-> odd-length payload, so nothing fails today, but a future one would
-> get a silently wrong checksum.
->
-> Also bump flow_dissector_classification's TEST_PACKET_LEN from 100 to
-> 99 so this actually gets exercised instead of staying latent.
->
-> f4504af68575 wrote the len >> 1 division, but it only ever passed
-> sizeof(iphdr), always even, so it couldn't hit the bug. Tagging
-> bcc00987bc56 instead, since it added the first caller,
-> build_udp_v4_csum()/build_udp_v6_csum(), that can pass an odd length.
->
-> Verified with test_progs under vmtest.sh: without the fix, an odd
-> TEST_PACKET_LEN makes the kernel drop the packet over a bad checksum
-> and flow_dissector_classification fails; with the fix, both
-> flow_dissector_classification and xdp_metadata pass.
->
-> Fixes: bcc00987bc56 ("selftests/bpf: add network helpers to generate udp checksums")
-> Signed-off-by: Madhav Khosla <madhav.khoslaa@gmail.com>
+commit 5dd1fa65516377d52d53f05992d195284eba751e
+Author: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
 
-Should the Fixes tag target f4504af68575 instead of bcc00987bc56?
+selftests/bpf: Test per-cpu initialization of a BPF_F_CPU created element
 
-The tag currently points to bcc00987bc56, but that commit never touched
-csum_partial(). Looking at the commit:
+This commit adds a subtest to verify that a BPF_F_CPU map update correctly
+zeros out the value on other CPUs when creating a new element. It runs this
+test against PERCPU_HASH, non-preallocated PERCPU_HASH, and LRU_PERCPU_HASH.
 
-  git show --stat bcc00987bc56
+> diff --git a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c b/tool=
+s/testing/selftests/bpf/prog_tests/percpu_alloc.c
+> index a72ae0b29f6e9..d0084a2405bed 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
+> @@ -350,6 +350,74 @@ static void test_lru_percpu_hash_cpu_flag(void)
+>  	test_percpu_map_cpu_flag(BPF_MAP_TYPE_LRU_PERCPU_HASH);
+>  }
+> =20
+> +/* A BPF_F_CPU update that creates an element must zero the value on the=
+ other
+> + * cpus, rather than leave them holding whatever the recycled element la=
+st
+> + * contained.  max_entries is 1 so the second key can only reuse the ele=
+ment
+> + * the first one released.
+> + */
 
-shows it adds 42 lines to network_helpers.h consisting only of
-csum_tcpudp_magic(), csum_ipv6_magic(), build_udp_v4_csum() and
-build_udp_v6_csum().
+[Severity: Low]
+This isn't a bug, but the BPF subsystem strictly requires multi-line commen=
+ts
+to have the opening /* on its own line. Could this be reformatted to match
+the required style?
 
-The buggy code being fixed here was introduced by f4504af68575
-("selftests/bpf: move ip checksum helper to network helpers"), whose diff
-adds:
+> +static void test_percpu_map_cpu_flag_create(enum bpf_map_type map_type, =
+__u32 map_flags)
+> +{
+> +	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags =3D map_flags);
+> +	const u32 stale =3D 0xDEADC0DE, fresh =3D 0xC0FFEE;
+> +	int nr_cpus, cpu, map_fd, err, key;
+> +	u32 value;
+> +	u64 flags;
+> +
+> +	nr_cpus =3D libbpf_num_possible_cpus();
+> +	if (!ASSERT_GT(nr_cpus, 1, "libbpf_num_possible_cpus"))
+> +		return;
 
-  +static __wsum csum_partial(const void *buf, int len, __wsum sum)
-  +{
-  +	__u16 *p = (__u16 *)buf;
-  +	int num_u16 = len >> 1;
+[Severity: Medium]
+Does this force a hard failure on uniprocessor systems instead of correctly
+skipping the test?
 
-The commit message's rationale for retargeting the tag is also
-self-undermining. It says bcc00987bc56 "added the first caller ... that
-*can* pass an odd length", while the paragraph above states "No current
-caller builds an odd-length payload, so nothing fails today".
+Since UP is a valid hardware configuration for running selftests, if a test
+requires multiple CPUs, shouldn't it gracefully skip using test__skip()
+rather than asserting a failure?
 
-As of every released kernel, no caller of build_udp_v4_csum() or
-build_udp_v6_csum() passes an odd length. Before this patch TEST_PACKET_LEN
-was 100, so udph->len was 108, and xdp_metadata.c only ever passes
-iph->ihl << 2 == 20. The odd length is introduced by this very patch.
-
-So either the tag belongs on f4504af68575, which actually wrote the
-len >> 1 truncation, or the bug is latent-only and there should be no Fixes
-tag at all. The tag as written points at a commit that neither contains the
-defect nor exposes it.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35501508732
---===============3526114758495915422==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260920093153.4397=
+43-1-donggeunyoo.kernel@gmail.com?part=3D2
