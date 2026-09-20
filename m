@@ -1,86 +1,80 @@
-Received: from mail-pz2-f43.google.com (mail-pz2-f43.google.com [74.125.228.43])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E603328B56
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 16:17:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FB53DD854
+	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 16:21:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789921066; cv=none; b=XJnNXVg5aM7n35VU0IVWlNFMxPjcGjacMzpttJBNY8Z5K2nBG2ux2Dl6niUIxangQjGlyN7nlBzVeI7gbjwq7a1ZNO98+i7V39r7q11/Z29zTQXI7C0D0J2MwH2oA2ciorBl0cAIa2LNghY+JqMSJcxN5GNyH73LM2Sse1RZbdA=
+	t=1789921308; cv=none; b=hTnOT4aD9TP+0iCVH8UsVoLmyz2I56WdwGtVsaa7bzbk5/GnUsIxL7VkhrDPRlsCJnjirKnwsGFAmhQMxyrHIxWz0ETdkDWRAEr+jvvcTUuN3kdQtcwqZNBaRa81mOQZaAw5cxnzWBLMMNu+8nunJfOy47aIhtx+SAeasDm+hoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789921066; c=relaxed/simple;
-	bh=q3+uLqBCNGSzkE7tv6YmXIvrM+sKuNRFRAZZq6awJKM=;
+	s=arc-20240116; t=1789921308; c=relaxed/simple;
+	bh=qfdM3YubCe2IP79evjGQNlSp/HU4IyfWbW9l+cBm2Rg=;
 	h=Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
-	 References:MIME-Version; b=pMF2TBJ6V7R4uUi5ZLHtHbaOzhUmOgd9V1GYs+erB+3oIvRfcwCpOt5lcmBfxrbqtc9BLEY2QygzFMpH9R1MuURm1MLgzPUgwCy3kExLWPl7Ug8sVvbgPHLxYl5d97H7xe1rI7DouKzBBgcRY6CZtU+UwV7HgqR6M38f6Bg58B0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=duKHX4Dt; arc=none smtp.client-ip=74.125.228.43
+	 References:MIME-Version; b=op3sOcROWZn3QpOea87xdOdrjSeq9Gg3+O6VUPDt2I+J9j0Fm6CdhurOIBOGz+8hAhSAc4X4LH5pgSItRBQZcvXuE+xf4rYpWPPgPUNdqcCdyz+N0KukgtcWKnZQbaLqcSyE44T9jfho/uLO4p3aaISd6zNv5+o//DRnV9nrrRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qGepoum3; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="duKHX4Dt"
-Received: by mail-pz2-f43.google.com with SMTP id d2e1a72fcca58-868a9c48f9eso2789479b3a.3
-        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 09:17:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qGepoum3"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccafb74fso2298934a91.3
+        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 09:21:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789921065; x=1790525865; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789921306; x=1790526106; darn=vger.kernel.org;
         h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
          :from:subject:message-id:date:content-type:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=eDlZ0Axn1IVbcM7wq+/bUYuF1RFbaZNrtATk3Wq6DJU=;
-        b=duKHX4Dt8MebFrNKOBbwKA2zHIAc5hYGd4rZx9EIq/TFka+FWnjzmOfANMEadtVZaa
-         kz1z3TP7YwkYEGG+UFUA//LL3YuQesxIUkNWyvhnr9MS6c6SMrQfRMBdUHX74hHb2Kbu
-         VRbcwEfgS5YO9rD0BTR4oujohJt+MsTbwrY1WYxSPuC//gjd2GN3zUQa+W2bpytcV2bq
-         mUv4FIBOMPlg4SkpDrHihSaZdEQlMpdHxo4e+2i4HS0XRv3tDxjEHFCx/M4otdm5ZElU
-         zUkjvPY1Z26Zppry1wxFyP2neIN1nfe1jGkQGzPHCEkV5UYRRLO2WHX3gx5iO9Ee6g6X
-         InkQ==
+        bh=Gy5ssaabRSlN5kBFNvs8mh80/gy44esWLyC1RJAbEbs=;
+        b=qGepoum3EieqrlPF7DutwuW8Fc2VyWKRJkCu/M+PyxqYxN6PISB4Ba41CAQy6SUvIt
+         ZBYqjtYi/jgBvXej7PPpe3izlR/z0V8yk3OlEb3Qj4CbY2wU63Neui7mte80/EVqefEA
+         hEE6gDxLfcLdr0Ij4bzCVh8G7WoDDDaLJ63wpCbkUAyGdD1WU5E0wx2BS92ELIw+2/fj
+         I091/bi1WcMT3RVFM26y0lq5orT0ExYCqW9pxZ24hk+bxVEB9OfEoOoRKtMtXTKB+O/j
+         OLSyWbQvrCuyAT46+lXIfj4g7cD8HcqWTtuh8ofAeZjsfdvFs4R0k3c2Mam5uZ88/fO5
+         +Stw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789921065; x=1790525865;
+        d=1e100.net; s=20260707; t=1789921306; x=1790526106;
         h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
          :from:subject:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=eDlZ0Axn1IVbcM7wq+/bUYuF1RFbaZNrtATk3Wq6DJU=;
-        b=dp5skiDCHDVmS4PcLBMpt3pJfKDRUDtFe9t/mJxsKhr/In56eM1UQd8gSphsZ5P9Qk
-         T/B1bmryzjZTK0GbKRKqQsXNVeKN10ycC9d2npi9Zg4K2/orPMAKhAMycRLjr+LbAueP
-         d/1ZGuNVFiEG6I/Q+8oz9y9Rvmeglm8fNlpyRDQlQDlEr1N744OLY+QiDYpGKKLvvdr7
-         1VxqN/Eqd3j77KdQ9hGQVS9KmvzRQklYHaQtx6uLgURb5jJQw7wFGyliUCE3tg3DDy5Z
-         TyouTA/0hfyrIi8zIeFl4nPIiK7ZDCfpcdLoVoGR0oUMpc9hfgtY1hP5tIomWEy+Tfdo
-         7i+g==
-X-Forwarded-Encrypted: i=1; AKwUvBzVqkDdKDVrdgqTwOqjHC+WypIWMXdKFJeFDuBMN/mdj6BJdH7NbuhQxwWQzPxvRwIg1jQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++llCXPWGkcP4L4zoWuRlJuVX8HeVTkZFHb1SVvl8SXiefpv/PiI
-	bRtua7Rrq2QhwTKaB+2QWpvj04NT4pyhmQvzO9HvwQYTgtE/sJSBcFFh
-X-Gm-Gg: AYBFou0ET9w36+E0XQ1rTFtcfHP6gO2jpBGUIBHHRP7XjUMiMgZj5Yb4Eb2kVQd3kY4
-	AeU7SjrtcqTf+oaUXTsnhQrCDlpO7CulQ9DisiGqqFRk9EHyR5CMnB5MiRwqxf/xf3V4LhcXq5a
-	7a6kNLiZmdqbaBieDvgU4IgYsXo1kYw2GS4njnOnq+fUEnbN9DIOa1nY2m3AhJ2IyeqqjO7i7VM
-	ZjY4poqXoxfl7v9dl+IjVXgSx8f8Zbh0uzKwsttFtgVjAA2CIfRvUKE22/LvXgB2PGsGz0lT9Ss
-	NQtsbwJ/hCdz0GX3I2fD6dTI+pg4ihaZ/7z2084u1mIKCvrrIry3LIZgBAB/YljK2X+jCAZZokF
-	ePi4Jk3BCCn6bnEosp1VaCgcycGPt/r9Vs85Gs5Nlpiyh/pzn2nKg5/Rl5JWxSIlGxBQRu54+da
-	f4GAx/j2yJvtbOXdCMz4+16nAkToUY2Z15xtrKuCrRWPZyUoO7XmiDaBzmDQU6k0CTCNfNgx3QB
-	wAKbcHFum/h9Yze36NpkLBJqp3isAL6LDZclxxT5dXWlA6Hjm88Z8EoeGWeqLR3p1qJY+4GtmID
-	xNw1
-X-Received: by 2002:a05:6a00:4b01:b0:848:4faa:480b with SMTP id d2e1a72fcca58-874dccf8702mr13211565b3a.12.1789921064613;
-        Sun, 20 Sep 2026 09:17:44 -0700 (PDT)
-Received: from localhost ([153.61.198.250])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-877aa6fd3ecsm2107269b3a.59.2026.09.20.09.17.43
+        bh=Gy5ssaabRSlN5kBFNvs8mh80/gy44esWLyC1RJAbEbs=;
+        b=V55Jsu/fKX+XbUlTrIJv7ro57v2OSfwFI7f+KqPdvaGa3TIQBnWT5vukooonRNSpR6
+         H+vznDlEJhIUCLn/cHSwt4hlJm9LZgVbdXxPTG2Fbt0alIL3dZhwD6kEAlFfkrCYMch8
+         /r1WiHVAm2NvCz46IF0BX0S3OPfQMEZZZPEFy14zDZ/ySUKDwRkhVrOOP0Kd/LCW3ns4
+         HwrvOVQCxJzkXpQdLwRIHqVkWe4eeT/LQs5nMYx5MN6Ezl7a9uFT+d2j2x0ubiUGo6aQ
+         RuV/p1MPFisKEUZ0qzisHVWs2FIrs/QXoxjLvVE1R5qPHhVaFcKjyi5YhyWXscbnKJxW
+         RAZw==
+X-Forwarded-Encrypted: i=1; AKwUvBwYbuoz/SlLZayyTG6ixm0qyUXLHsq3TQ/d0gLABMnONh//tzjc78Tzbf/TkynJrzXIeuM=@vger.kernel.org
+X-Gm-Message-State: AFuF++kkmid2rjME7quLGYPlxRPJzq9ONcuEN3gC6Sq20/2K//xxKiUE
+	7Y1v5yL0QBWzFJSQEl2V378U0NfGqcpPr02aifONIzk3/A4mPZXMH8NF
+X-Gm-Gg: AYBFou2az5WPfy2vtugXO+xRT1UmgdboYnYPcnvo2SdoTCTMNPCy8i4rbO9zXpMq4mX
+	HiHm1yfkBacGGNNrZSivQGXpEYxyKlac7wTx+zBPX+bimXLkyhC3qtpW/G0+8BZqdEMgWJJrGjT
+	ai5bcYocfvG9lJ6JhTO7jHRsNNtFcTQKyVFpN2M2xGMjF3uc8xwcZ0xWDYwW+caHiH9qCGh0CU3
+	GseIvDUAizwGjCssOzzWH4ScQdOo9aLLloS2DtjPoMU/eqUDv0enm4eMSVl5E2mb4k4jxNSKsdS
+	VKRVtq08KsYFGG6c6JCqht99Ye/Chg2rcKL8Sqbo0vRmzhmFm3HRgO6mZkvagcwhbqBSkNcTAdG
+	MMW5OrS0QfIMBTlAHMV4twUEJc1wwks//ncmHhn9pCe6VOkZkY55FGJiJZYjJag/PBcRh9CsUiL
+	AnUUpCpoOPmXfJTMQCnykNClSm0wUhaEatgWiYvaQnBFEQjLn4aB7F5CLLcUEXcSUiIN5rXrvEG
+	aO+/D2bdM2WEZOw+opp1qyVqZ7qaKhTnRRGXpNXyZbFaS0c2X8CmkJJvfFhqKW4BZ9HBumZD8Dn
+	N+Xx
+X-Received: by 2002:a17:90b:1647:b0:39e:4498:4863 with SMTP id 98e67ed59e1d1-39e54f4187emr17716173a91.10.1789921306000;
+        Sun, 20 Sep 2026 09:21:46 -0700 (PDT)
+Received: from localhost ([153.61.198.244])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a03bcecdd2sm1495785a91.1.2026.09.20.09.21.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 20 Sep 2026 09:17:44 -0700 (PDT)
+        Sun, 20 Sep 2026 09:21:45 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Sun, 20 Sep 2026 16:17:43 +0000
-Message-Id: <DLKA28VU4GIV.I4EVTT076Y5Q@gmail.com>
-Subject: Re: [PATCH net v1] bpf: cpumap: fix use-after-free of dev_rx on
- netdev unregister
+Date: Sun, 20 Sep 2026 16:21:44 +0000
+Message-Id: <DLKA5BT4JBZD.30HJC03MXC30U@gmail.com>
+Subject: Re: [PATCH bpf 1/2] bpf: Zero-fill other CPUs when BPF_F_CPU
+ creates a per-cpu hash element
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <netdev@vger.kernel.org>
-Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "David S. Miller"
- <davem@davemloft.net>, "Jakub Kicinski" <kuba@kernel.org>, "Jesper Dangaard
- Brouer" <hawk@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
- <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, <bpf@vger.kernel.org>,
+To: "Donggeun Yoo" <donggeunyoo.kernel@gmail.com>, <bpf@vger.kernel.org>
+Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+ <ihor.solodrai@linux.dev>, <linux-kselftest@vger.kernel.org>,
  <linux-kernel@vger.kernel.org>
-In-Reply-To: <20260920133017.248620-1-jiayuan.chen@linux.dev>
-References: <20260920133017.248620-1-jiayuan.chen@linux.dev>
+In-Reply-To: <20260920093153.439743-2-donggeunyoo.kernel@gmail.com>
+References: <20260920093153.439743-1-donggeunyoo.kernel@gmail.com> <20260920093153.439743-2-donggeunyoo.kernel@gmail.com>
 X-Mailer: mkdraft (claude review draft; edit before sending)
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -90,36 +84,25 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Sun, Sep 20, 2026 at 09:30 PM Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
-> So do what the softnet backlog does and use the netdev notifier:
->
-> 1. On NETDEV_UNREGISTER, take the ring size and ask the kthread to
->    consume that many frames, or until the ring is empty. After that,
->    every frame that was in the ring has been handled by the stack or
->    dropped. The device is closed, so no new frames for it can show up.
+On Sun, Sep 20, 2026 at 06:31 PM Donggeun Yoo <donggeunyoo.kernel@gmail.com> wrote:
+> Fixes: c6936161fd55 ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_hash and lru_percpu_hash maps")
+> Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
 
-That's not what the backlog does. flush_backlog() unlinks only the skbs
-with skb->dev->reg_state == NETREG_UNREGISTERING and frees them.
-It doesn't feed them to the stack, doesn't touch packets of other
-devices, and flush_all_backlogs() runs once per
-unregister_netdevice_many(), not once per device.
+Pls cc Leon on respin.
 
-> @@ -528,6 +576,11 @@ static void __cpu_map_entry_free(struct work_struct *work)
+[...]
+
+> @@ -1056,12 +1056,12 @@ static void pcpu_init_value(struct bpf_htab *htab, void __percpu *pptr,
+>  	 * known initial values for cpus other than current one
+>  	 * (onallcpus=false always when coming from bpf prog).
 >  	 */
->  	rcpu = container_of(to_rcu_work(work), struct bpf_cpu_map_entry, free_work);
->
-> +	/* Unlink first, so the notifier can't wait on a kthread we stop */
-> 
-+	mutex_lock(&cpu_map_mutex);
-> +	list_del(&rcpu->list);
-> +	mutex_unlock(&cpu_map_mutex);
-> +
->  	/* kthread_stop will wake_up_process and wait for it to complete.
+> -	if (!onallcpus) {
+> -		int current_cpu = raw_smp_processor_id();
+> +	if (!onallcpus || (map_flags & BPF_F_CPU)) {
+> +		int init_cpu = onallcpus ? map_flags >> 32 : raw_smp_processor_id();
 
-After list_del() the ring still has frames and the kthread has to be
-scheduled to consume them. kthread_stop() only wakes it up. When the
-device is unregistered in that window the notifier doesn't see the
-entry, doesn't wait, the netdev is freed and the kthread hits the same
-eth_type_trans() UAF.
+The comment above covers only the bpf prog case now.
+Pls update it, but one short sentence about BPF_F_CPU is enough.
+What you proposed in reply to the bot is too verbose.
 
 pw-bot: cr
