@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CCCB479891
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 23:31:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3E90201278
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 23:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790033490; cv=none; b=KC/KjrvGgbT1qnChsvgS0zHE1BW/tO3t3jGtw/rpE3Dyc7AKCLR9znMz9cXEUrrR1XNu8jXuElwt43tA5F9tj/bqQh/PQhfzqO3aO6HQp/e90rB0GusObgBmX6bjTPAxpEMiNTm4GcW0YvategF0tjrSu9IpYdzeCVZJjJWnjZY=
+	t=1790033834; cv=none; b=MC9SVMbx1ImG0AxO72N0WbHRUCYZuFDm+b4nR081WX67x48MvtoJrgQC5s3S8xioJOvMENJPKhCtESjvunHu3woI/2gA6koQl/mFMqPixUQCsYTCMZ64TVHdOf8xEzLHmERwbwY67R1vgPXg/KYNZtSpLIaYmfy+EdQ+3ZgkQvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790033490; c=relaxed/simple;
-	bh=wtqz3NdEXMjhkexr46jBzc3EdKtuW4oNX9WOGQiyC0c=;
+	s=arc-20240116; t=1790033834; c=relaxed/simple;
+	bh=DPEnjMpMBGzjTIXUDqsI1hqSmmqjmhNXmXYsQ5eWAk0=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=Qc7lEOoKAWfEUnuvPl30nRBdSVgeUvti5EMPsASUy1Y7ORcPB12MPjrn7CvUlKlBNK5FKCs4fF/B5KA5rCTFkONQShK5Wy9TtqT//GS+Kdq9ZHg878+7eTBi9vrCR2c24Lt7HIA4ZLDBd23pyV73grFJCbNqDMr3M+ToHE+/4sU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QfsmJR6i; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=n20ZnPhrXL1NcG441UZHP67ZcZbjjCPEvUTQwnlWJLtrYo3xWOLjLtMTsBrx5+akpp6Q3y/3/eAkXighg84rh1OfYerY7pZLdv90cXKYbXVf/veqnM33SICljhV5Bpzmfp9bwLSqWnBfzb2QE8RZkkHb3wLV7t+eRdzJkjH/czY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fNAK65rz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QfsmJR6i"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12D7F1F0089C;
-	Mon, 21 Sep 2026 23:31:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fNAK65rz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18F791F000FF;
+	Mon, 21 Sep 2026 23:37:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790033482;
-	bh=DKv4iBnu7aQ9+C5jLj77KhMkU6qdaOgKTQEO1uTI89E=;
+	s=k20260515; t=1790033833;
+	bh=yRpdVW7fpYzvAJKDHzaqOtz8IyYoYlMK0+nbU5xw/W8=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=QfsmJR6iBf1XfhZXRhMtfWswWr+KvoIKIE6lAOJ5cGx1YOIPUWXey6YwhFYyFHsrG
-	 3VbAQm2ruduWjTH3gKktFQRvrns/DGEx35TwoBhHt5m/yi0Li7rK4+GRmmnPmhZLr7
-	 ibXEKCYk6LiKfGdk6NpPZRL27v6uepSfnzdCH/EA6NUQ5ljMZ9oorAmEhffhhlLTrD
-	 TmNC4/VoumruwBo/2mE8/ScZuXRdy4aTPv674WJAIeIk+v3FDIJF/jR0oTEHxG1s2g
-	 aJOaYXtXg7L6tZ4V4aephWZp+SSqrBSpXtMl2ByH1PgsNBLZtnuwL+pgBp2t4pW2yt
-	 b6r79oSmijU1g==
+	b=fNAK65rzJngPjOj1zQDbzGZOwGYBgKW1HbY4a9N19X6qvTBsEyGVZsWV66NI8LQSp
+	 GoTcGYq7g+OJz6Gg963YaNyxSLiAibQcN9gvvcDqcUUt6p2Na3BNEqYYKDTkmOL72u
+	 DtOdxlU4NFyMqddP3BhG9u7oSnGr4HKShCXiCvPIlheKdkDLD3U8xbqh3989uqyC55
+	 h9SFRhxURGeP+5JPAEAw7+FIlGx0qjyFDXChxb90eNe/8wuUvORAo4LDi6jPAHDfRh
+	 gMPEp76YnGqW+N5SGDCRwRvad8kuq6hvj8b3KFo4PaVYLNpdc4Jo8Hc/ZUsG3JLrB0
+	 SIzduv2dhHKNA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 5/7] libbpf: Version
- bpf_program__set_autoattach() ABI change
+Subject: Re: [PATCH bpf-next v4 6/7] selftests/bpf: Cover BPF program load
+ strategy transitions
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260921223937.3203093-6-andrey.grodzovsky@crowdstrike.com>
+In-Reply-To: <20260921223937.3203093-7-andrey.grodzovsky@crowdstrike.com>
 References: <20260921223937.3203093-1-andrey.grodzovsky@crowdstrike.com>
- <20260921223937.3203093-6-andrey.grodzovsky@crowdstrike.com>
+ <20260921223937.3203093-7-andrey.grodzovsky@crowdstrike.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 21 Sep 2026 23:31:21 +0000
-Message-Id: <20260921233122.12D7F1F0089C@smtp.kernel.org>
+Date: Mon, 21 Sep 2026 23:37:12 +0000
+Message-Id: <20260921233713.18F791F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,74 +47,71 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Medium] libbpf: internal versioned aliases improperly exposed in public =
-ABI
+- [Medium] bpf: ignored bpf_program__set_load_strategy() return value in se=
+lftest
 --
 
-commit f4a1074a0b47562f2c3d7f448c920fa57fb2ed38
-Author: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-libbpf: Version bpf_program__set_autoattach() ABI change
+commit 9bfec64bd482deb3a43ba282aed9959f4435d987
+Author: Slava Imameev <slava.imameev@crowdstrike.com>
 
-This commit splits bpf_program__set_autoattach() via ELF symbol versioning.=
-=20
-It introduces a deprecated variant bound to LIBBPF_1.0.0 and a new variant=
-=20
-returning int bound to LIBBPF_1.8.0 to handle manual load strategy rejectio=
-ns.
+selftests/bpf: Cover BPF program load strategy transitions
 
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
-> @@ -393,6 +393,12 @@ LIBBPF_API bool bpf_program__autoload(const struct b=
-pf_program *prog);
->  LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool =
-autoload);
->  LIBBPF_API bool bpf_program__autoattach(const struct bpf_program *prog);
->  LIBBPF_API int bpf_program__set_autoattach(struct bpf_program *prog, boo=
-l autoattach);
-> +/* this "specialization" should go away once the deprecation window for
-> + * bpf_program__set_autoattach_deprecated() closes
-> + */
-> +LIBBPF_API int bpf_program__set_autoattach_v1_8_0(struct bpf_program *pr=
-og, bool autoattach);
-> +LIBBPF_DEPRECATED_SINCE(1, 8, "use int-returning bpf_program__set_autoat=
-tach() instead")
-> +LIBBPF_API void bpf_program__set_autoattach_deprecated(struct bpf_progra=
-m *prog, bool autoattach);
+Adds a load_type test to cover load strategy transitions
+(DISABLED/AUTO/MANUAL) and compatibility with boolean auto-attach states.
+Also tests the manual load/attach cycle after loading an object.
 
-[Severity: Medium]
-Does exposing these internal versioned aliases in the public header=20
-defeat the purpose of transparent ELF versioning?
-
-Building any application against this updated header might expose these=20
-internal symbols, and dynamic linking could permanently bind them to the=20
-polluted ABI.=20
-
-Additionally, because the deprecation macro is attached to the internal ali=
-as=20
-rather than the standard name, will users ever see the deprecation warning=
-=20
-naturally when they call bpf_program__set_autoattach()?
-
+> diff --git a/tools/testing/selftests/bpf/prog_tests/load_type.c b/tools/t=
+esting/selftests/bpf/prog_tests/load_type.c
+> new file mode 100644
+> index 0000000000000..ab42c3e887fce
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/load_type.c
+> @@ -0,0 +1,186 @@
 [ ... ]
-
-> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-> --- a/tools/lib/bpf/libbpf.map
-> +++ b/tools/lib/bpf/libbpf.map
-> @@ -465,6 +465,8 @@ LIBBPF_1.8.0 {
->  		bpf_program__clone;
->  		bpf_program__load;
->  		bpf_program__load_strategy;
-> +		bpf_program__set_autoattach;
-> +		bpf_program__set_autoattach_deprecated;
+> +void test_load_type(void)
+> +{
+> +	struct bpf_link *link =3D NULL;
+> +	struct test_load_type *skel;
+> +	int err;
+> +
+> +	skel =3D test_load_type__open();
+> +	if (!ASSERT_OK_PTR(skel, "skel_open"))
+> +		return;
+> +
+> +	/* don't load prog1 */
+> +	bpf_program__set_load_strategy(skel->progs.prog1, BPF_PROG_LOAD_STRATEG=
+Y_DISABLED);
+> +
+> +	/* load and attach prog2 */
+> +	bpf_program__set_load_strategy(skel->progs.prog2, BPF_PROG_LOAD_STRATEG=
+Y_AUTO);
 
 [Severity: Medium]
-Is it intended to export the internal compat implementation as a public=20
-symbol in the new LIBBPF_1.8.0 namespace?
+Is it intentional that test_load_type() ignores the return value of
+bpf_program__set_load_strategy() for prog1 and prog2?
 
-This appears to permanently leak the internal compatibility symbol into the
-public ABI.
+Since this selftest is designed to verify load strategy transitions, failing
+to check the return value might silently mask regressions. If the API
+introduces a bug where transitioning to AUTO fails (e.g., returning -EINVAL=
+),
+the API call would return an error but the program's strategy would remain
+its default (which is already AUTO for prog2).
+
+Because prog2 remains AUTO, the subsequent test assertions expecting AUTO
+behavior would still pass, completely missing the API failure it was design=
+ed
+to catch. Should these calls use ASSERT_OK() similar to how prog3 is checked
+below?
+
+> +	if (!ASSERT_TRUE(bpf_program__autoload(skel->progs.prog2), "prog2_autol=
+oad"))
+> +		goto cleanup;
+> +
+> +	err =3D bpf_program__set_load_strategy(skel->progs.prog3, BPF_PROG_LOAD=
+_STRATEGY_MANUAL);
+> +	if (!ASSERT_OK(err, "set_load_strategy_manual"))
+> +		goto cleanup;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260921223937.3203=
-093-1-andrey.grodzovsky@crowdstrike.com?part=3D5
+093-1-andrey.grodzovsky@crowdstrike.com?part=3D6
