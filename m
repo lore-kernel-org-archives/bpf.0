@@ -1,70 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-105.mta0.migadu.com [91.218.175.105])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A4B468C11;
-	Mon, 21 Sep 2026 09:23:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A55845D93E
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 09:27:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789982608; cv=none; b=KBnZaV4UFjopHRqYPwfDvSkE1AtM1E2I/aMTyxYw84fyC4FY89P7UQ/eHaUbko/nYDeBmxmF8o3H5bUpcLsH0J8KLgOkK7Uo8cb5VZcvJeu2VwIcsdVjH9CHiFKbu5YawDDbFO4jp8UW93TeX0rc1WRgCneCal5/cp0MoSpWDvs=
+	t=1789982828; cv=none; b=OlqtFEsQQ6mJrJkl6pBsHVGmXjWrudSAoSSohccOg2Nifg1SjjrnMvVwhBuCjSS9lcW2ZWfA3HlILJReKOS7YcagiE/24S/F3Hfr0Ii3JvB6RLQ6LomMtxFpV5tnAfQrSgQnmh0HNbBjUDr52aIrqWHtAvQPWXSrrN2n/ZfUR5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789982608; c=relaxed/simple;
-	bh=0GCgDTrahHxYdOlKMe5DzW2ZMKBCwbFRqOYTKzT8K0Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ikX+CUPVYy3zzaCvaKjz2GeUp+OmjS7GEtuZXFHMYowWI/cNME1hD5dcr93GS1KmvZqzlgULDgh6DaI+BqXkMqZEj2R5pGgpzZ6buRmDnKheBRpozEpcortIXHyae/jfG0TE+dWIC5D3GwzEjGW+Itov6XpqxwM+0mK5FYkI+iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oTdkgfsW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789982828; c=relaxed/simple;
+	bh=JniXzAKE9lpfUkjCAlN/VixjQ/mB0ZFDM8/tNkDSlNg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Lv9aKk43Lg4KYGapH+OwsNyxB1EQnk7wfRk0dt95F/ZLRi8Y8mRF4aUztYLccYtztdDilbQC6QHONM7VcQRhUuKpEgNfsxgLirJNfHOufMWfjzi3hAxB/l4N5rr5WcMHCuROhRPp1rGs4L6IlN/k95jWkrZZIUp8An110duOR9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=R8biPaaa; arc=none smtp.client-ip=91.218.175.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oTdkgfsW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 495821F00893;
-	Mon, 21 Sep 2026 09:23:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789982607;
-	bh=lgcRpVT/EUgwTLpBjhgsD85e5m8lHmeUn6T4yaa2HiM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=oTdkgfsW4QqLuxjgzfF2IbF/Z/Fou35z0k60eVDVffdFe+NT2pGcKlOEfrkU2Sniw
-	 PWui1AOxGcRfIjBCSkWoAZ583R4WeonNsDWCjo3jq7rvMidex7E+8HxN+fXCP1XZB/
-	 oDuXLvy3F9bC6o4P4Cnryx2WAWVN/t6f8fgE3tqYYxGZIhIik9quaD8ZKo5KArt5mv
-	 /QbbQ7KHLlGT93dK9ZFklc7kwI/qSkORYqzg6dm6teqGOWL8Af5Zy9Qp5BP1BZLAYa
-	 Q49obE8+EK8J5b6CvDUby8VQfdIullyqpandi+ZpQU0O65O4MJteMaBzH/k5oTrgg0
-	 bsMiFj2x4ubkA==
-Message-ID: <e04ee6bf-70f9-40d6-83c6-1b7a48996b34@kernel.org>
-Date: Mon, 21 Sep 2026 10:23:25 +0100
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="R8biPaaa"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=JniXzAKE9lpfUkjCAlN/VixjQ/mB0ZFDM8/tNkDSlNg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789982824; v=1; x=1790587624;
+ b=R8biPaaa9MhhaQBKatfYtizr7gXq6775Lw62rL2rd+EJ7vGe2mzuicT9pJnZj/zn3q/rtBDs
+ c9XyLkL5fZst0WjmBDL9t9IZlpYZpwihIkUDMUW1c/zEkgJ1V8aJaq1CU93kBKSqzHETtbXlbbY
+ fYgFUpr7/pvo7pBiH3BvQZ7I=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta10.migadu.com with ESMTPS id cc5d6d6b42a8116f;
+	Mon, 21 Sep 2026 09:27:04 +0000
+X-Mizu-Trace-ID: cc5d6d6b42a8116f
+X-Migadu-Flow: FLOW_OUT
+Date: Mon, 21 Sep 2026 17:26:53 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: netdev-bot+sashiko@kernel.org
+Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, donald.hunter@gmail.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	liuhangbin@kylinos.cn
+Subject: Re: [PATCH net-next 4/6] netlink: specs: rt-route: describe lwtunnel
+ IP options
+Message-ID: <arD4XbtvSt-bo_8a@fedora>
+References: <20260917-ynl_rt_encap-v1-4-fbbe6e680571@kylinos.cn>
+ <178997269588.2160803.17770495644903940757@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v5 1/2] bpftool: Read ring buffer maps with
- event_pipe
-To: Tianyi Chen <hi@tychen.cc>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev,
- linux-kselftest@vger.kernel.org
-References: <20260921073556.99421-1-hi@tychen.cc>
- <20260921073556.99421-2-hi@tychen.cc>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <20260921073556.99421-2-hi@tychen.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <178997269588.2160803.17770495644903940757@kernel.org>
 
-2026-09-21 16:35 UTC+0900 ~ Tianyi Chen <hi@tychen.cc>
-> map event_pipe only accepts perf event arrays, leaving no built-in way
-> to inspect records produced through the BPF ring buffer API. Extend it
-> to consume queued and live BPF_MAP_TYPE_RINGBUF records in plain or
-> JSON output, retaining the existing perf event array path.
+On Mon, Sep 21, 2026 at 06:38:15AM +0000, netdev-bot+sashiko@kernel.org wrote:
+> Thank you for your contribution! Sashiko AI review found 3 potential
+> issue(s) to consider.
 > 
-> Ring buffers have a shared consumer position and no implicit CPU or
-> timestamp. Document that this command consumes records rather than
-> observing them passively, and reject perf-only CPU/index selectors.
+> Critical: 0 · High: 0 · Medium: 2 (1) · Low: 1
 > 
-> A producer can keep ring_buffer__poll() busy after a stop signal, so
-> return -EINTR from the record callback when stopping. Keep stdio out of
-> the shared signal handler and preserve callback output errors.
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
 > 
-> Link: https://github.com/libbpf/bpftool/issues/54
-> 
-> Assisted-by: LLM
-> Signed-off-by: Tianyi Chen <hi@tychen.cc>
+> - [Medium] New `lwtunnel-ip-opt-erspan.index` attribute in
+>   Documentation/netlink/specs/rt-route.yaml is declared as host-order…
+> - [Medium] The new `lwtunnel-ip-opts` / `lwtunnel-ip-opt-geneve` sets
+>   cannot represent multi-option Geneve tunnels.
 
-Tested-by: Quentin Monnet <qmo@kernel.org>
+Thanks, this is a new inspire. I will update it in my v3 patch and post 1
+week later to make sure v2 have enough reviews.
+
+Hangbin
