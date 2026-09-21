@@ -1,49 +1,49 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28BD148F835
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 22:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C25751A757
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 22:39:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790030401; cv=none; b=WNEZuOexcZt4u0J5McCmqKLq1TQyZZfdFsEhIk5PipmLHIO4pIkzjs88YRAdr1Koy1ZqS0ZcX5hbICMLJfxG7SB6rdjziGhtMp03yE6ST7i1EA3GR+r5r2cnrBph6eplFaBM1LkZKATz/WuEi2dP9+cT76ta0u5Am5Td5mgwTCw=
+	t=1790030401; cv=none; b=GZYCb0bY7WiJDvuR4I/OH5YfEbej0NrJBI+fGrOHq1xybbVw0exsWvQmlzlqr97BeqMGuFaZ9zvdJqObff/aNXcUpFLJXP31gHb3QNaIm5dCkZCQbkTLU/UM4R8ETFd3QMzqlsH+OGB7l/kJL37QibVq+LyRTc1vLg420dfwNzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790030401; c=relaxed/simple;
-	bh=Ak46jCvZ2WxrtoTUoLT1M/3WNlcRsblXb7S23JGp56U=;
+	bh=KNWZW8eB3j6zpN8SQ7wsHAX/5xI1S4m0dH5DqE/VqnA=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BBTcWgAVaYZrcLv1eQpVO8a9T2nnOI/0hd5uU4O1qpvhwKWZhPPa+RbKbcuoeLylBgGo1IreVQ7I9CHqSpWzBfS3WxQGNQ2wlkUyIA6jdMnk8QIrJ48s8qbTWbEwBOZobIL0ogmWRvVxOT5issYe23+PQIj7dur7kI8/064I0Ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=t48tgfMm; arc=none smtp.client-ip=148.163.152.16
+	 MIME-Version:Content-Type; b=XLiA/3b2s4QmG2ajfKoVOBTGibpIFsMvIzfbNTn1SxkQaHLPMG6axfJrOoKCGVrUe34HDd9gWxA6zCtPkVIrog4B0fk2g9Peqc4sIqvwsOZ1pA/W2M8qRdlHll79eJvq6077LIb54ojSJEeZdVWwdazaHo97GulU/hPsliuMZPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=b1LhMPpV; arc=none smtp.client-ip=148.163.148.77
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="t48tgfMm"
-Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68LHVEjM2637431;
-	Mon, 21 Sep 2026 22:39:44 GMT
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="b1LhMPpV"
+Received: from pps.filterd (m0354650.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68LHuiLN3819043;
+	Mon, 21 Sep 2026 22:39:46 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
 	 h=cc:content-transfer-encoding:content-type:date:from
 	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=I6pTffqkS9wXDzkKse56F/A4a4Msj2QvmDvsxVbU9AM=; b=t48t
-	gfMm455/gfAced278xQLwdach6PCP9bV7zwL56j8rj7C0CnNEV+eHxYMtgg1laEL
-	KspSrW5kaFX2ccsFhpT0zWxdw1I8L0Mm9ZBpCgcBk8UDyVl/YXSOb74r3DsgO1V1
-	2dNhrEYGE2VwfmWcKnVn4WdU2LwuBMee3HZTbohl0NQIJOdE5zcNN6pK9sh95lC9
-	EFjuG9TL6BKMOnSyMLvqIMs3oQ17xsU3BKtI0H7cV0IaM2V/WWceMCVGSDJkk3LW
-	tztd3m6smQouktkJxdDC6Bb34EOscYnOmmoRiWQkCTK4OLYk34oFyYbDNBMtOh44
-	DMh3iUelq4jN/peBTg==
+	default; bh=dwhZNmFy1JAR3RaFK/ylbRSoOcsz9cY7G4SsWQfUjBI=; b=b1Lh
+	MPpVrdVE07CvPCfw8I5hmZrXnIY+VPXYJf2N3Ph2r4VxhG4OP1hoYD+6wqseT6rI
+	3rUoasTSLuzDu54uW7RRhv8MBNmM4OnFV5i3It4JZ9tChuU574qvW4eF4tcOdtxU
+	/VFIvMHdzYWTpl16ByKdHchaoSrP7l0nzuLMplK9SHIHy5cua2qdsrQprN5laU9g
+	/HDAaXd4LItCkwI6GW00sEOB64wiHEZ3K9bs/Vg1OJ5/Uu+WmRttG5lkwAeg5Hwu
+	6on8Mbcnh5UU+NBAV0fIDKbcZ8MlygPlaU6cji8QwhbFXIoCZwKQpZvKZzTcLEdm
+	PG6HWFUaRTuwbF9W1A==
 Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4gu9270yuj-1
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4gu9e5rxes-2
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 21 Sep 2026 22:39:44 +0000 (GMT)
+	Mon, 21 Sep 2026 22:39:46 +0000 (GMT)
 Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
  04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46; Mon, 21 Sep 2026 22:39:42 +0000
+ 15.2.2562.46; Mon, 21 Sep 2026 22:39:44 +0000
 From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
 To: <bpf@vger.kernel.org>, <andrii@kernel.org>
 CC: <ast@kernel.org>, <martin.kelly@crowdstrike.com>,
         <slava.imameev@crowdstrike.com>, <linux-open-source@crowdstrike.com>
-Subject: [PATCH bpf-next v4 3/7] libbpf: Support declarative manual load via SEC("!...") prefix
-Date: Mon, 21 Sep 2026 18:39:33 -0400
-Message-ID: <20260921223937.3203093-4-andrey.grodzovsky@crowdstrike.com>
+Subject: [PATCH bpf-next v4 5/7] libbpf: Version bpf_program__set_autoattach() ABI change
+Date: Mon, 21 Sep 2026 18:39:35 -0400
+Message-ID: <20260921223937.3203093-6-andrey.grodzovsky@crowdstrike.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260921223937.3203093-1-andrey.grodzovsky@crowdstrike.com>
 References: <20260921223937.3203093-1-andrey.grodzovsky@crowdstrike.com>
@@ -57,89 +57,132 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: 04WPEXCH014.crowdstrike.sys (10.100.11.87) To
  04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTIxMDMzMSBTYWx0ZWRfX8N3UuKCkipQw
- DFZKla9leJhNeCyvYbUHaMSFeiDfMs4wbHLbm4C9pkLKoNysqSFIegV5jHo4+ktydV2jVenobcV
- 1lPwTKs5v8Ylstr9B599FXI/Vk3rPqjqkiiV5vAU9i8hecK4DxndoEnjtOlGof3uS8TSDRgFhMz
- cRJn20WTudXj5l9OSwNN2jCCEC2SU4bRMAizclYNRIHZixdh3RhStPsjpxDUZr/smC0+Qg9zR/c
- WOvD1Yt7JOH231YJKeHNUwXBUW/nIhrQtRnZaoL07RyXUKCNxuwAE0mudOI37zOGfR0PVxIFD+r
- bz7RNCujsFBkHCARY4NYkGokzAGU3nREcRCwtiN3nTaa04a2NcVdin01LbzHP2WkBrbUuxLQKeA
- vTztcC/4/wPWxaW+5El0W6amJAbQFTRvMiohuE2aWz/Cc6QNMxzwAPwcXhQ8w8V0gj34dfV6rZA
- u6mkQRgxI1ctshTepFA==
-X-Proofpoint-GUID: f4GVdTN11nNE71e56D5Xw2l1wTScBqh1
-X-Proofpoint-ORIG-GUID: f4GVdTN11nNE71e56D5Xw2l1wTScBqh1
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTIxMDMzMSBTYWx0ZWRfX02/evHE8fiO7
- DMgfKFOPzOWzyJifI82MBj7LHG5SMwdGk1DOawXQ9hwShGE3yHXcaN1S+VA+6pNkwkWvfUtXUyG
- odKe5wsibui23Gze0qf7I+8ybG561lveXVVsuntAszfCbIntMDDI
-X-Authority-Analysis: v=2.4 cv=BOsmP1QG c=1 sm=1 tr=0 ts=6ab1b230 cx=c_pps
+X-Proofpoint-ORIG-GUID: 2gDPLWrOZsFH2ZbqgwswM2r3R1gxUczW
+X-Authority-Analysis: v=2.4 cv=L/iI0OT8 c=1 sm=1 tr=0 ts=6ab1b232 cx=c_pps
  a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
  a=EjBHVkixTFsA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=GCXdLZfFv8EKBZhKOxZ5:22 a=VwQbUJbxAAAA:8
- a=pl6vuDidAAAA:8 a=LpP_590H9VDjBmbmCXQA:9
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=t04HzT_fAfAF5W-3wVZy:22 a=pl6vuDidAAAA:8
+ a=_7pdZih7oDRld-5tXWwA:9
+X-Proofpoint-GUID: 2gDPLWrOZsFH2ZbqgwswM2r3R1gxUczW
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTIxMDMzMSBTYWx0ZWRfX2Hpyxo3vMujY
+ gxxFOu/a/kNnykkuYmZh3rPBzwAML460QRrzwPS1gMaqAp4xmeJj+PlCWWVOCPDMsD3eDLkD/Or
+ zrtcO7PaS3OSsmN9F6SB53kKbBsbSizQoffvOcTeDFPvrphdueKr
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTIxMDMzMSBTYWx0ZWRfX0OeqPRr3+SGw
+ 2RmEK+V35hpJvZ/cjc0+Fh/1D1ZoAVqohU7NKrDVdUKHD8aAUmc81wnRdUpQVHP2fHZMyRshvsw
+ mE7T5XVL8qpweDVK67hKs2CEwGr2F6CZMZyrA0pL1/F+lI7JAuo3DEyO5UHg08dwg480ekDENmo
+ l+hpp3rszki3IPy4BGcMgUAYLKOcU7OxGCwzj46t7oe5sk5bhADwVUpC/4xZUNKBw/hAc2ivfjq
+ cn/TVw5miHKCW5gBO3gRvsEWaS+YWzNXD005lmrE3p5FI57+Q1+WT6EgGH5xqG/Jvp6xi8vR75s
+ +xJQv1cetmURlPt4zWHZ/KUFC53fMf/VFRVcQdR3+kRne28dGFtZ06YMEZO8F81WY1g3o846CV7
+ 12UgTS/GLUI1TV51O7lJaKwXHjP8XZVxFvaE1z9AMvjOYeX8p4Ry7jyVkyMkggMzVXGjLhW1WBl
+ NhqiiE0z429k7wudBJQ==
 X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11912
  signatures=596817
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 phishscore=0 suspectscore=0 malwarescore=0 adultscore=0
- spamscore=0 priorityscore=1501 bulkscore=0 lowpriorityscore=0 clxscore=1015
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609210331
+ lowpriorityscore=0 spamscore=0 malwarescore=0 clxscore=1015
+ priorityscore=1501 suspectscore=0 impostorscore=0 phishscore=0 adultscore=0
+ bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2609040000
+ definitions=main-2609210331
 
-Add a SEC("!...") section-name prefix, letting a program declare
-itself manually-loaded in its source instead of requiring an
-imperative bpf_program__set_load_strategy() call, following the exact
-convention already used for SEC("?...").
+bpf_program__set_autoattach()'s return type changed from void to int to
+let callers observe the new -EINVAL rejection for MANUAL-strategy
+programs, but the symbol stayed under its original LIBBPF_1.0.0 node in
+libbpf.map. Binaries already linked against the old void-returning ABI
+recorded a request for exactly that symbol@version pair at link time;
+without a version bump they would silently start hitting the new
+rejection behavior underneath them after a libbpf upgrade.
 
-The prefix is recognized and stripped in bpf_object__init_prog(),
-before find_sec_def() ever runs, directly setting load_strategy to
-MANUAL and initializing autoattach/saved_autoattach - the same place
-and same style '?' already uses, and before BTF or sec_def exist.
+Split the symbol via ELF symbol versioning:
+
+  - bpf_program__set_autoattach_deprecated() keeps the original
+    unconditional behavior, bound via COMPAT_VERSION() to the existing
+    LIBBPF_1.0.0 node.
+  - bpf_program__set_autoattach_v1_8_0() carries the new MANUAL-rejecting
+    behavior, bound via DEFAULT_VERSION() to the new LIBBPF_1.8.0 node.
+
+Old binaries keep resolving bpf_program__set_autoattach() to the old
+behavior at runtime; anything linked against the current headers/map
+gets the new int-returning, MANUAL-rejecting behavior. Also adds the
+missing __LIBBPF_MARK_DEPRECATED_1_8 gate to libbpf_common.h (only the
+1.0 gate existed) so LIBBPF_DEPRECATED_SINCE(1, 8, ...) can mark the
+deprecated variant.
 
 Assisted-by: Claude:claude-sonnet-5
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
 Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
 ---
- tools/lib/bpf/libbpf.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ tools/lib/bpf/libbpf.c        | 9 ++++++++-
+ tools/lib/bpf/libbpf.h        | 6 ++++++
+ tools/lib/bpf/libbpf.map      | 2 ++
+ tools/lib/bpf/libbpf_common.h | 6 ++++++
+ 4 files changed, 22 insertions(+), 1 deletion(-)
 
 diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 61195d16ee0f..789d2df7eaae 100644
+index 6e7ec026d944..3e4eaeafea0e 100644
 --- a/tools/lib/bpf/libbpf.c
 +++ b/tools/lib/bpf/libbpf.c
-@@ -890,16 +890,25 @@ bpf_object__init_prog(struct bpf_object *obj, struct bpf_program *prog,
- 	/* libbpf's convention for SEC("?abc...") is that it's just like
- 	 * SEC("abc...") but the corresponding bpf_program starts out with
- 	 * autoload set to false.
-+	 *
-+	 * Similarly, SEC("!abc...") marks the program for manual loading:
-+	 * it is skipped by the bulk auto-load pass and must be explicitly
-+	 * loaded later via bpf_program__load_manually().
- 	 */
- 	if (sec_name[0] == '?') {
- 		prog->load_strategy = BPF_PROG_LOAD_STRATEGY_DISABLED;
- 		/* from now on forget there was ? in section name */
- 		sec_name++;
-+	} else if (sec_name[0] == '!') {
-+		prog->load_strategy = BPF_PROG_LOAD_STRATEGY_MANUAL;
-+		/* from now on forget there was ! in section name */
-+		sec_name++;
- 	} else {
- 		prog->load_strategy = BPF_PROG_LOAD_STRATEGY_AUTO;
- 	}
+@@ -9903,7 +9903,14 @@ bool bpf_program__autoattach(const struct bpf_program *prog)
+ 	return prog->autoattach;
+ }
  
--	prog->autoattach = true;
-+	prog->saved_autoattach = true;
-+	prog->autoattach = prog->load_strategy != BPF_PROG_LOAD_STRATEGY_MANUAL;
+-int bpf_program__set_autoattach(struct bpf_program *prog, bool autoattach)
++COMPAT_VERSION(bpf_program__set_autoattach_deprecated, bpf_program__set_autoattach, LIBBPF_1.0.0)
++void bpf_program__set_autoattach_deprecated(struct bpf_program *prog, bool autoattach)
++{
++	prog->autoattach = autoattach;
++}
++
++DEFAULT_VERSION(bpf_program__set_autoattach_v1_8_0, bpf_program__set_autoattach, LIBBPF_1.8.0)
++int bpf_program__set_autoattach_v1_8_0(struct bpf_program *prog, bool autoattach)
+ {
+ 	if (prog->load_strategy == BPF_PROG_LOAD_STRATEGY_MANUAL)
+ 		return libbpf_err(-EINVAL);
+diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+index 5e44bcfa2ca1..8a04d81ccaeb 100644
+--- a/tools/lib/bpf/libbpf.h
++++ b/tools/lib/bpf/libbpf.h
+@@ -379,6 +379,12 @@ LIBBPF_API bool bpf_program__autoload(const struct bpf_program *prog);
+ LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool autoload);
+ LIBBPF_API bool bpf_program__autoattach(const struct bpf_program *prog);
+ LIBBPF_API int bpf_program__set_autoattach(struct bpf_program *prog, bool autoattach);
++/* this "specialization" should go away once the deprecation window for
++ * bpf_program__set_autoattach_deprecated() closes
++ */
++LIBBPF_API int bpf_program__set_autoattach_v1_8_0(struct bpf_program *prog, bool autoattach);
++LIBBPF_DEPRECATED_SINCE(1, 8, "use int-returning bpf_program__set_autoattach() instead")
++LIBBPF_API void bpf_program__set_autoattach_deprecated(struct bpf_program *prog, bool autoattach);
  
- 	/* inherit object's log_level */
- 	prog->log_level = obj->log_level;
-@@ -15399,7 +15408,7 @@ int bpf_program__set_load_strategy(struct bpf_program *prog, enum bpf_prog_load_
- 		 * A gen_loader implementation is being called for autoloaded
- 		 * programs and defines its own model for loading BPF programs.
- 		 * To pass a BPF program to gen_loader, set the program's load strategy
--		 * to LD_AUTOLOAD.
-+		 * to BPF_PROG_LOAD_STRATEGY_AUTO.
- 		 */
- 		if (obj->gen_loader)
- 			return libbpf_err(-EOPNOTSUPP);
+ struct bpf_insn;
+ 
+diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+index 8def5474885a..999e791d9887 100644
+--- a/tools/lib/bpf/libbpf.map
++++ b/tools/lib/bpf/libbpf.map
+@@ -465,6 +465,8 @@ LIBBPF_1.8.0 {
+ 		bpf_program__clone;
+ 		bpf_program__load;
+ 		bpf_program__load_strategy;
++		bpf_program__set_autoattach;
++		bpf_program__set_autoattach_deprecated;
+ 		bpf_program__set_load_strategy;
+ 		btf__find_by_name_kind_own;
+ 		btf__new_empty_opts;
+diff --git a/tools/lib/bpf/libbpf_common.h b/tools/lib/bpf/libbpf_common.h
+index 8fe248e14eb6..12ad4f5f558f 100644
+--- a/tools/lib/bpf/libbpf_common.h
++++ b/tools/lib/bpf/libbpf_common.h
+@@ -36,6 +36,12 @@
+ #define __LIBBPF_MARK_DEPRECATED_1_0(X)
+ #endif
+ 
++#if __LIBBPF_CURRENT_VERSION_GEQ(1, 8)
++#define __LIBBPF_MARK_DEPRECATED_1_8(X) X
++#else
++#define __LIBBPF_MARK_DEPRECATED_1_8(X)
++#endif
++
+ /* This set of internal macros allows to do "function overloading" based on
+  * number of arguments provided by used in backwards-compatible way during the
+  * transition to libbpf 1.0
 -- 
 2.34.1
 
