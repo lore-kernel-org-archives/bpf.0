@@ -1,126 +1,110 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACBF45D912;
-	Mon, 21 Sep 2026 09:49:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB28F318146
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 10:07:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789984170; cv=none; b=WBzTLMrtJTOqnTi0h+16lnDARG+UpA+twCQl/5UZsyw7QpjPHajsMbpzTBvQ1O6UbfvC3suDfSSxyIxLsO932pvQhmuOK0ViIFX9b2z4/vFr74s9+Z2CRDAMNEsyFiIGA65pA0u/FIZiqIkNZCTYloWicyTpFOnvQA0o7kc7kKg=
+	t=1789985263; cv=none; b=BphgpdKi4RlOETNY83jD/+tWMOy39lj7shmq86Ll6KJGIwgyE+eA4AolYP9gtQMJ3MmMwmeCzh8x3xlQ3y3Em6gb0pKOaE6b8r8HrQyJInE38wEnbzBHSJKcf5N07kyXhVJRYfg0183gifznl4B8yd3lb/C1uTpEtnEKMpEuenA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789984170; c=relaxed/simple;
-	bh=HBsA9PM43GuWZO+qfQBfYt0z5BjFpNX/qpgO9J2YFuo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=WRaWCqZcPh9D1C8LQckas5b3lwxSCoZ9Jc6k+68L+1oTuUh32im4gBKfXVao536oLlyF4FgwHH97fSvEqkHwetzGG5vKpX7pKvI+JHIH6z85yBroH+BYM8LprczYROa4mDmTyRRyOM2rZo4qy/TszrAwQ/CEDPFkR82CaN1Jfkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L4Nq7CGW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789985263; c=relaxed/simple;
+	bh=8EsRu5SgbU6BrRmG1fjYUk+QXy2eVr8PXPXFExgBezc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=htG1qlqW+vAn0wEwagqnqiya1rD0Iq3IZvcbZU+SPkCqfkz6LS/mxET5hXFENphCtTHcI4MSmQRchl9yQ4zVvIBmsu0jHpnlpYTIoiVBd9BFLiUNE2shggOobPkek7rSIi6GUptSLqr0LOYHRAvo0WFgdY3ngXQdOJ6vQpgiDmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lqjhmfrt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L4Nq7CGW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29ED91F000FF;
-	Mon, 21 Sep 2026 09:49:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lqjhmfrt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DF2E1F000FF;
+	Mon, 21 Sep 2026 10:07:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789984168;
-	bh=L7Oq+XJqX0LzSIGBwuR1yRjmlCpODghQmCE1YBpzvP8=;
-	h=Date:From:To:Cc:Subject;
-	b=L4Nq7CGWPnWEOIe3JljlO3NzmADToiH7NKA2Jv6c484u4F1wVvbxE5ydcsqZrTsA9
-	 EfLhu2LBAYz7Pcxiq3LZOqKwDJSsMfLbNfNlI+VgRshwd0fdJ3Vrld7yfqosbNtbPG
-	 jH8KOHoFrNxKndeaotAAbjSQ0M1gOs+KzsUgES35k/Ba93uSOhhj1Hs4CPCP30CTn/
-	 sEfZfoCtElv5g2ZeuqVYSPFhpHgtPfNAsXbnzoyMLbbxv9BbaMlQqX/QAA5D13bo1f
-	 kQLUt4q+bGtK6NgNTVyrvCjlqvvMNRLNNFZRNnzRk85i5/foDhzttvOwk468YTqMBB
-	 GxJmwfbe6lqfA==
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-	id BE60D1AC52F5; Mon, 21 Sep 2026 10:49:25 +0100 (BST)
-Date: Mon, 21 Sep 2026 11:49:25 +0200
-From: Mark Brown <broonie@kernel.org>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Networking <netdev@vger.kernel.org>
-Cc: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
-Message-ID: <arD9pUBavrJQ8TRT@sirena.co.uk>
+	s=k20260515; t=1789985262;
+	bh=dVENwTzVei36fMOF4Z86OYJA3B+/DIrzQzwnp6Pw1c8=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=LqjhmfrtYWg41Mc80ELSQXPTcjPFXav4G0g0CeQ00ZId6icFJ61d4rJW/nghPOJRz
+	 3v5a0UY05QTfzhCwrGOMruPopaANKh4wyGqCnMUG8WCuYZ5jgmt2Gw8gwzQ05iagz6
+	 0k9gjHZo0VR0b2x6O3kaM/SpeTVcGTanqKmKVoDOpoWZdB0EU4CaHnKPYkN+sxX927
+	 klOVLF1i8CQy4qNPsRU2xBiudmv7HfjRwQZs/1bYqGZeQNcA1VClNdrneQW5o6KwzN
+	 VbOyoSmJjoDK9D2q+8qsrDGbIsCG4weRLqfrw4Jeho2Gj96hiPAWgUg5JwfJ4ecMbz
+	 vtMTm5ljRqf8A==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next v2 4/6] netlink: specs: rt-route: describe
+ lwtunnel IP options
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Hangbin Liu" <hangbin.liu@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260920-ynl_rt_encap-v2-4-c664a3e726f6@kylinos.cn>
+References: <20260920-ynl_rt_encap-v2-0-c664a3e726f6@kylinos.cn>
+ <20260920-ynl_rt_encap-v2-4-c664a3e726f6@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 21 Sep 2026 10:07:41 +0000
+Message-Id: <20260921100742.3DF2E1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="gZN7iER2B7tM4djM"
-Content-Disposition: inline
 
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] netlink: specs: missing multi-attr: true for geneve array in rt-=
+route
+--
 
---gZN7iER2B7tM4djM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+commit feeb3960dd5418925dfc5011791a483d8533a2c6
+Author: Hangbin Liu <liuhangbin@kylinos.cn>
 
-Hi all,
+netlink: specs: rt-route: describe lwtunnel IP options
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+Replace binary opts in lwtunnel-ip and lwtunnel-ip6 with a nested
+lwtunnel-ip-opts set. Add attribute sets for geneve, vxlan, and erspan
+IP options to match linux/lwtunnel.h.
 
-  kernel/bpf/helpers.c
+> diff --git a/Documentation/netlink/specs/rt-route.yaml b/Documentation/ne=
+tlink/specs/rt-route.yaml
+> index 86fc52f856bff..4b12a8a586521 100644
+> --- a/Documentation/netlink/specs/rt-route.yaml
+> +++ b/Documentation/netlink/specs/rt-route.yaml
+[ ... ]
+> @@ -560,6 +562,62 @@ attribute-sets:
+>        -
+>          name: link
+>          type: u32
+> +  -
+> +    name: lwtunnel-ip-opts
+> +    name-prefix: lwtunnel-ip-opts-
+> +    attributes:
+> +      -
+> +        name: geneve
+> +        type: nest
+> +        nested-attributes: lwtunnel-ip-opt-geneve
 
-between commit:
+[Severity: Medium]
+Will auto-generated userspace Netlink libraries fail to generate requests
+with multiple GENEVE options?
 
-  81c975aae375d ("bpf: Require CAP_PERFMON for kfuncs reading memory")
+The kernel strictly expects multiple distinct LWTUNNEL_IP_OPTS_GENEVE nests
+on the request path to configure multiple options. This is parsed via
+nla_for_each_attr() in ip_tun_parse_opts():
 
-=66rom the bpf tree and commit:
+net/ipv4/ip_tunnel_core.c:ip_tun_parse_opts() {
+    ...
+		case LWTUNNEL_IP_OPTS_GENEVE:
+			if (type && type !=3D IP_TUNNEL_GENEVE_OPT_BIT)
+				return -EINVAL;
+			opt_len =3D ip_tun_parse_opts_geneve(nla, info, opts_len,
+							   extack);
+    ...
+}
 
-  3f9d98dfed79f ("bpf: Add user memory access kfuncs for mm_struct")
+Without multi-attr: true, auto-generated clients will treat the geneve
+attribute as a singular scalar nest (max-items: 1) and restrict requests
+to a single option.
 
-=66rom the bpf-next tree.
+Should this attribute specify multi-attr: true to avoid a functional regres=
+sion
+in expressiveness compared to the legacy binary type?
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-diff --cc kernel/bpf/helpers.c
-index 712dca5a2c5bd,82402d97ce67c..0000000000000
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@@ -4920,12 -5049,14 +5049,14 @@@ BTF_ID_FLAGS(func, bpf_wq_set_callback
-  BTF_ID_FLAGS(func, bpf_wq_start)
-  BTF_ID_FLAGS(func, bpf_preempt_disable)
-  BTF_ID_FLAGS(func, bpf_preempt_enable)
- -BTF_ID_FLAGS(func, bpf_iter_bits_new, KF_ITER_NEW)
- +BTF_ID_FLAGS(func, bpf_iter_bits_new, KF_ITER_NEW | KF_PERFMON)
-  BTF_ID_FLAGS(func, bpf_iter_bits_next, KF_ITER_NEXT | KF_RET_NULL)
-  BTF_ID_FLAGS(func, bpf_iter_bits_destroy, KF_ITER_DESTROY)
- -BTF_ID_FLAGS(func, bpf_copy_from_user_str, KF_SLEEPABLE)
- -BTF_ID_FLAGS(func, bpf_copy_from_user_mm, KF_SLEEPABLE)
- -BTF_ID_FLAGS(func, bpf_copy_from_user_mm_str, KF_SLEEPABLE)
- -BTF_ID_FLAGS(func, bpf_copy_from_user_task_str, KF_SLEEPABLE)
- -BTF_ID_FLAGS(func, bpf_get_kmem_cache)
- +BTF_ID_FLAGS(func, bpf_copy_from_user_str, KF_SLEEPABLE | KF_PERFMON)
-++BTF_ID_FLAGS(func, bpf_copy_from_user_mm, KF_SLEEPABLE | KF_PERFMON)
-++BTF_ID_FLAGS(func, bpf_copy_from_user_mm_str, KF_SLEEPABLE | KF_PERFMON)
- +BTF_ID_FLAGS(func, bpf_copy_from_user_task_str, KF_SLEEPABLE | KF_PERFMON)
- +BTF_ID_FLAGS(func, bpf_get_kmem_cache, KF_PERFMON)
-  BTF_ID_FLAGS(func, bpf_iter_kmem_cache_new, KF_ITER_NEW | KF_SLEEPABLE)
-  BTF_ID_FLAGS(func, bpf_iter_kmem_cache_next, KF_ITER_NEXT | KF_RET_NULL |=
- KF_SLEEPABLE)
-  BTF_ID_FLAGS(func, bpf_iter_kmem_cache_destroy, KF_ITER_DESTROY | KF_SLEE=
-PABLE)
-
---gZN7iER2B7tM4djM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqw/aQACgkQJNaLcl1U
-h9AFSggAhb2Dk0lPYAKdAuGHjD6ShmhpnW2H8vySrTKhDQJBgSfB2XTc04WiPifh
-o2m/zgOtn1Or26x4Tunfhn36vTga+TlrcK+ZqsWRJ6bHUmX9lSauVaDsa+CZDFe+
-NpcBuXapYDue3rR3B4Obz4vJHSSJA+1skaTPFDIT2Xc8h4QNUdXQeGjcwpz3CYa5
-XImS6fQKnLAbDDMDC8+eppTc3s0j0tjl1FHSNkA8rsnTvhul3Mz0hlicgD2yCmkp
-e6Ei8WQd/Uu34+0tK44SV9pO43yHNzJwJa6xvtpunn8juCc+NVzhzgFygckpWk1I
-fKXiIAGYXiakQHxLBvQD/O+SQX5kHA==
-=acpp
------END PGP SIGNATURE-----
-
---gZN7iER2B7tM4djM--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260920-ynl_rt_enc=
+ap-v2-0-c664a3e726f6@kylinos.cn?part=3D4
