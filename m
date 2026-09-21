@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818894229D0
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:20:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633093CC32E
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:20:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790025638; cv=none; b=jzRTJZ9a8KeLc0aDZe1ZtkiZJniEnwSn6ofp46A/w0gv3QdriMBAof7AcSYWwpoI7P97poGE9QIy1w40ouenB944krvBHQeBDC/BTs9gNISQEeBYDqW3PSTVt6KJ7jxFilmvw66tARzI6nvp5KI/Sa4r5PNXM4PPzhzxdCWD+cQ=
+	t=1790025659; cv=none; b=Oo3AbKkpxlC5g/ibnCEwgkGftfDWCAhVZXy3UnSq2eQnO831bU2n5u6eIgQU+YyAGWIdK+hFL1AXOnhs7eeQKzgNVsgvJJvfrhtV/gjDl6caSpamXyjV9XkPiFGS/6RdcD771xoRjs7YJ7qMPUYPZ/sjZvq4gkkqKe+p2rf3bMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790025638; c=relaxed/simple;
-	bh=LEs31QVTr0YKj7W7RJax82M8u9rrjupsDnvtPtckke4=;
+	s=arc-20240116; t=1790025659; c=relaxed/simple;
+	bh=ZksmvrZCmevSMarXX4eH25EiNs+9539ADZ4qvMRjGfA=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=utyXjtXBrMG6OU+8cVMt5ZBnDwDqRbpqX3MB95NZDJMczAgW6cIac1kicH3MZev1mLv6aJD1oXcyBnylpxMzta6sqS0aafb7pGDRarquySPTHWCd3hQazWNNwQsC9MrQHWYsflXFJY7EITfmvJE+mYLpB2nps6gFRWSnXjDtQSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U3B+B+ip; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=c344NuK6u6uneY+S7KB+t7xy74tydxnyvaH3xW6YFFwU2FQJ/01zgrLLG37YWhTfCn636qXGGDhr4LQKN1BB56wdK7tHCAwFVrhsVqS0Fos5JmOGHMvKP4fWHusihyvZM62wRswoHE23eb4eVfBnCI9VrNnhAHQHwvV4dHUJVXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XjwcqUzR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U3B+B+ip"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 254681F000FF;
-	Mon, 21 Sep 2026 21:20:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XjwcqUzR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D23021F000FF;
+	Mon, 21 Sep 2026 21:20:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790025637;
-	bh=gs2IWNYJOovjoMSuF8Tt3IXK/gLIlXZu0NHoaaxEAWc=;
+	s=k20260515; t=1790025658;
+	bh=ncAJyelRRbA2dnFp3xTGkqxyVnSfZqAcIQtOin6CAOo=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=U3B+B+ipQOqucHkGnfxnY9WJ6sWpMfqhm+yORuZofD/d0zgB+7eGlL3VBfaHgXHYF
-	 14KQiJqKwEcjpQ+87zFTBJ1+qS+K13qUrhQS1fgGIlEFX/iwJCZPBZZLOVFYQwN6Pt
-	 N4ZRoq8br53wH/l5w+BHAWb437yImrkGHV/R/UZqvyIhRCrSQVMi+i6Mv/SqG47ZfS
-	 Olhdpgr5kTNlgD51Et1Veq2d6XlZUoFdETViDM3zQmDJG+KprXJN2rkXi9RkJlfsXF
-	 Iv0sQjb2Ev44PyTYuPyyYhRQ/hzNtYVMM7DvcBRneG8p6QN4GtQTwhJxagZo4UPLNL
-	 7yGoCypVygByA==
+	b=XjwcqUzRDw6GlWyedPMWsbxqZkK/O/pPSR4nGVAarceI44ubSK1RA5mKWwzZZjsMl
+	 fMIEyRQnMtaLjiwh+7COAtJUgRLM+PENU5Y+S5XhcfWqAuKdkk9/ID1+BwVgTh+SiX
+	 BjqoYMgY/O2PLjXfHmuzu10UWysv/xF6tzp7gBS958YD8mQS02iz084QYyf6wLgN5G
+	 nFZcitP7EY7KDpv4JH2UXtq8mMQYFVD1ymvQIeAd6kiZHNOhH2I6QZjHeIuqXzxD1H
+	 WwkBCCkvSauFZNN+4THry0QjodgMyJ7gbi+4RiJ7VlIROoeAePuKpoOD4BzWhGlbhh
+	 zXHSZBo81nKOg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 15/20] libbpf: Collect .bpf_cleanup records
- and pass them to the kernel
+Subject: Re: [PATCH bpf-next v4 07/20] bpf: Refuse exception cleanup shapes
+ bpf_throw() cannot dispatch
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Yonghong Song" <yonghong.song@linux.dev>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260921210150.1723467-1-yonghong.song@linux.dev>
+In-Reply-To: <20260921210109.1719713-1-yonghong.song@linux.dev>
 References: <20260921210033.1715000-1-yonghong.song@linux.dev>
- <20260921210150.1723467-1-yonghong.song@linux.dev>
+ <20260921210109.1719713-1-yonghong.song@linux.dev>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Mon, 21 Sep 2026 21:20:36 +0000
-Message-Id: <20260921212037.254681F000FF@smtp.kernel.org>
+Date: Mon, 21 Sep 2026 21:20:57 +0000
+Message-Id: <20260921212057.D23021F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,77 +47,140 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 1 potential issue(=
 s) to consider:
-- [Low] bpf: invalid multi-line comment style in libbpf.c
+- [High] bpf: kernel stack leak via >5 arg BPF-to-BPF calls in exception pa=
+ds
 --
 
-commit 640e4ca07507c0fa24643be768ba697d779b3ae5
+commit 961251cb485953d7f6bd99ead3712d0e8268b8eb
 Author: Yonghong Song <yonghong.song@linux.dev>
-Subject: libbpf: Collect .bpf_cleanup records and pass them to the kernel
 
-This commit parses the compiler-emitted .bpf_cleanup section and extracts
-the table of cleanup records. It resolves section relocations for each reco=
-rd,
-validates alignment, and passes the per-program cleanup information to the
-kernel during program load.
+bpf: Refuse exception cleanup shapes bpf_throw() cannot dispatch
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 13ae9175e9686..e3e4db59fb5f4 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-[ ... ]
-> @@ -4854,6 +4892,235 @@ static struct bpf_program *find_prog_by_sec_insn(=
-const struct bpf_object *obj,
-[ ... ]
-> +		slot_sec[slot] =3D sym->st_shndx;
-> +		/* The addend lives in the section data, which libelf leaves in
-> +		 * the object's byte order; a non-section symbol additionally
-> +		 * contributes its own value.
-> +		 */
-> +		slot_val[slot] =3D (native ? vals[slot] : bswap_32(vals[slot])) +
-> +				 sym->st_value;
-> +	}
-
-[Severity: Low]
-This isn't a bug, but does this multi-line comment follow the preferred BPF=
+This commit adds verification logic to reject specific control flow shapes=
 =20
-subsystem style? I believe the opening /* is typically expected to be on it=
-s=20
-own line.
+that bpf_throw() and the exception cleanup handling cannot safely dispatch.=
+=20
+It performs post-CFG checks using bpf_check_cleanup_exceptions() to inspect=
+=20
+pad reachability, catch pads, and unwinding safety.
+
+> diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
+> index 67af78baa558d..da8fa6eb7e4b9 100644
+> --- a/kernel/bpf/exception.c
+> +++ b/kernel/bpf/exception.c
 
 [ ... ]
-> +		for (j =3D 0; j < CLEANUP_REC_FIELDS; j++) {
-> +			size_t idx =3D raw->insn_idx[j], final;
-> +			struct bpf_program *p;
+
+> +static int cleanup_check_pad_insn(struct bpf_verifier_env *env, u32 i)
+> +{
+> +	struct bpf_insn *insn =3D &env->prog->insnsi[i];
 > +
-> +			/* The end of a range is exclusive, so it may name the
-> +			 * instruction just past the last one of a function,
-> +			 * which belongs to the next function or to nothing at
-> +			 * all. Ask about the last instruction the range covers,
-> +			 * the way the kernel does.
-> +			 */
-> +			if (j =3D=3D CLEANUP_REC_END) {
+> +	if (bpf_helper_call(insn) && insn->imm =3D=3D BPF_FUNC_tail_call) {
+> +		verbose(env,
+> +			"bpf_tail_call() at insn %u is in an exception cleanup landing pad\n",
+> +			i);
+> +		return -EINVAL;
+> +	}
+> +	/* A BPF_LD_[ABS|IND] can leave the frame through its epilogue. */
+> +	if (BPF_CLASS(insn->code) =3D=3D BPF_LD &&
+> +	    (BPF_MODE(insn->code) =3D=3D BPF_ABS || BPF_MODE(insn->code) =3D=3D=
+ BPF_IND)) {
+> +		verbose(env,
+> +			"BPF_LD_[ABS|IND] at insn %u is in an exception cleanup landing pad\n=
+",
+> +			i);
+> +		return -EINVAL;
+> +	}
+> +	if (is_stack_arg_st(insn) || is_stack_arg_stx(insn)) {
+> +		verbose(env,
+> +			"insn %u passes an on-stack call argument in an exception cleanup lan=
+ding pad\n",
+> +			i);
+> +		return -EINVAL;
+> +	}
+> +	if (bpf_pseudo_kfunc_call(insn)) {
+> +		struct bpf_call_summary cs;
+> +
+> +		if (bpf_get_call_summary(env, insn, &cs) &&
+> +		    cs.arg_slot_cnt > MAX_BPF_FUNC_REG_ARGS) {
 
-[Severity: Low]
-This isn't a bug, but should this multi-line comment be formatted with the=
-=20
-opening /* on a separate line to match the rest of the BPF subsystem?
+[Severity: High]
+Does this omit checking BPF-to-BPF calls (bpf_pseudo_call) for on-stack
+arguments?
+
+The JIT executes exception cleanup landing pads on the unwinder's stack (rs=
+p),
+while rbp points to the BPF frame. This check restricts kfuncs from passing
+arguments on the stack, but seems to miss BPF subprograms because
+bpf_get_call_summary() returns false for them.
+
+If a pad calls a BPF subprogram requiring more than 5 arguments, could the
+callee read uninitialized kernel stack memory belonging to the unwinder's
+caller?
+
+> +			verbose(env,
+> +				"insn %u passes an on-stack call argument in an exception cleanup la=
+nding pad\n",
+> +				i);
+> +			return -EINVAL;
+> +		}
+> +	}
+> +	return 0;
+> +}
 
 [ ... ]
-> +			if (owner =3D=3D prog) {
-> +				final =3D raw->insn_idx[j] - prog->sec_insn_off;
-> +			} else if (prog_is_subprog(obj, owner) && owner->sub_insn_off) {
-> +				/* sub_insn_off is where this subprogram was
-> +				 * appended to the main program being relocated;
-> +				 * zero means it is not part of it.
-> +				 */
-> +				final =3D owner->sub_insn_off +
-> +					raw->insn_idx[j] - owner->sec_insn_off;
 
-[Severity: Low]
-This isn't a bug, but could we adjust this comment to have the opening /* o=
-n=20
-its own line for consistency as well?
+> +static int cleanup_mark_pad_bodies(struct cleanup_ctx *ctx)
+> +{
+> +	struct bpf_verifier_env *env =3D ctx->env;
+> +	u32 i, sp =3D 0;
+> +	int ret;
+
+[ ... ]
+
+> +	while (sp) {
+> +		u32 j =3D ctx->stack[--sp];
+> +		enum cleanup_insn_kind kind;
+> +		int next, target, sub;
+> +		u32 start, end;
+> +
+> +		ret =3D cleanup_check_pad_insn(env, j);
+> +		if (ret)
+> +			return ret;
+> +
+> +		sub =3D cleanup_subprog_of(env, j);
+> +		start =3D env->subprog_info[sub].start;
+> +		end =3D env->subprog_info[sub + 1].start;
+> +		kind =3D cleanup_succ(env, j, start, end, &next, &target);
+> +
+> +		if (kind =3D=3D CLEANUP_INSN_CALL) {
+> +			/* check_subprogs() registered every call target. */
+> +			int callee =3D cleanup_subprog_of(env, j + env->prog->insnsi[j].imm +=
+ 1);
+> +
+> +			if (env->subprog_info[callee].might_throw) {
+
+[Severity: High]
+Since cleanup_mark_pad_bodies() allows BPF-to-BPF calls in landing pads as
+long as they don't throw, should it also verify that the callee does not
+take on-stack arguments?
+
+For example, by checking if env->subprog_info[callee].arg_slot_cnt <=3D
+MAX_BPF_FUNC_REG_ARGS?
+
+Without this check, a subprogram requiring more than 5 arguments could be
+called, potentially leading to the kernel stack data leak mentioned above.
+
+> +				verbose(env,
+> +					"cleanup landing pad calls subprog %d at insn %u, which can throw w=
+hile an exception is in flight\n",
+> +					callee, j);
+> +				return -EINVAL;
+> +			}
+> +		}
+
+[ ... ]
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260921210033.1715=
-000-1-yonghong.song@linux.dev?part=3D15
+000-1-yonghong.song@linux.dev?part=3D7
