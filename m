@@ -1,181 +1,96 @@
-Received: from mail-pz2-f28.google.com (mail-pz2-f28.google.com [74.125.228.28])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721305158B8
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.28
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790026579; cv=pass; b=GcOtaj9mHYkweZMp+2RV17EqTim1DvI2Gq//gIGl9Y7VngWxwqG/a/VRZRVjS640HaFMYDxd2P5Z31UafceGmLckYVyuOmoa0y4NEhGNGV31nh/5G3Q9Q/bGR78SCDKJQtaUcu1qBMEgQk+gWT0sPLPWpt1eMF7ITNOcOrlzrh4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790026579; c=relaxed/simple;
-	bh=0xRxgq2j53JlZwoPQFcrgqq0FbNHb3eRgpC1bShN5I0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KoQb39GsfniTSRy9sBQNsZSI15HYaZlsXjyxZ37mPv0c2T767okqPgZ0Xg8qbvBR9WUg0QeY17aAwA+4fD+aH4fLF7zDYHnxW8/1NlY9mXASK/wx+ml67mwjxvgaN35KO3dLcCOU48PC4eRugxNCiiLxv/Y9bbrWTW2UVm/YoS4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gZeNWsg6; arc=pass smtp.client-ip=74.125.228.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5F8F3ACA41
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:38:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790026737; cv=none; b=H0pFp+OHE4+UAUjXZI/174I3kaoj3bWXleVeqepP4od/ach5jhXyoz3xRkcxp5ca5AVSJhzjM9u0ck0x0TNOxMQR+/H2b8UsUojM49943i2Kk5cVjzQLDiLEGzmA7Z5DPR6Ew9uRqWEzZDAbLlrIN2vMdlkC27Q3e5owPQw3x7U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790026737; c=relaxed/simple;
+	bh=/qPloI02lgy1nAg779509SLqUwvVyORR2vbuu1BDry0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=kQwBaBXERgRgwiUa/WYpOpVnVxFxdm5aexMl0AmcYUjkSqLU+6ucF2/RKa+Vu3ALVTwkJYSZ07hkzkRwt5sS0hB54bsKRS48Ta85OZO2Xoz6bcmcP2cctuVyXqbXS1e1tRDJT9yHVXuz9fuPeD+R6Am2XKX3S1bgPeH/v4iTelY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O0xLV0/0; arc=none smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gZeNWsg6"
-Received: by mail-pz2-f28.google.com with SMTP id 41be03b00d2f7-cc745abb731so885825a12.2
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 14:36:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790026578; cv=none;
-        d=google.com; s=arc-20260327;
-        b=jBbX9wDeBlTfm+0aC5b8HCoHfxoq4D+SYg81rwsmor7Y0sIGlZ5RivC76eKh8H//Om
-         0cnsG5rVQ0iLHN0JDqp8y3q0u3Kclb2acNl6CtmX086Pr+9BBphBzv3yQUZPP6OaAANu
-         zf2kEaE/A+uccIo4EyA58XOclPSJo2piL+Kh1rnAQIWWw1OyKiiNeqIKbUChFCLF8AAa
-         X+O9zc0Wl6VlmCSzw2KJ2TGv9LpNRWiHcI95De29nuGuC7fhVM9MsGj3pj3vCia6Fb0A
-         rox/bqbz4LGLZxB6No7wnyI52XoVu0bpWVFxxUsNU1KOss/7o3/uAkqyf/lxLmnKEdsP
-         bSFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=9S4UN1V9mLtIU5XAJ4Mj87c5tZOTpom4ugNvERFaqpw=;
-        fh=aeLlabBLhLvbDTtydx87+nUKYHH5r5nDRNtbc2PjsO4=;
-        b=eoRJdwUQIWmbaAUigcIOa5eqz1miAGfozeydXKL4GgEJv3MjA9+wwDpnKgbIaMrdcw
-         l21n65Md8qx+MWqcFx8NZhfZ+gfMHXqSoVfBV6pw6T0DgustECl7CaXWGDfQO93TfRWw
-         MK/iJOyWjCl1v58GO71xe8v1/RQ4lKx5GGxQVd14qVl1TbZKqDGi1y/zz9n54sixJ6aV
-         cnw9+6QLwZxGXJQwhg9n0SepAeksJG1XrDFkpBHLAizHwJjhcX6j031xJl0GpG+LDhHT
-         +BaVeS1p6NsnQOEobbSbXGrSdE8K4bsnyC+BRcZMGXecv4LWHY6zBL819FgetFZ23WXL
-         LLxQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O0xLV0/0"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccd66bb4so3014838a91.1
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 14:38:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790026578; x=1790631378; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=9S4UN1V9mLtIU5XAJ4Mj87c5tZOTpom4ugNvERFaqpw=;
-        b=gZeNWsg6WlFdyHjnqhIj00tMaoIcN4/2P/AinBetUew1vSGStLi5sm2QfW3sOCn9XJ
-         08Sb3olbZ5zNrr9ZJAv5OnpMBIy+vKqTYGvsNnZuP9o+Dg9klLwcs2GNBAavMCuSoM/m
-         CQAA6ZSA2eP9SKMO7FW4RpxH/ou2vHgrXhtptZTK0BSqujv8xcLbsCeVkC2Hmq1hDbHp
-         RkE2c0BFJWgDXg2YUyw+Tu3Vuzku5Yj+dKmXBlKi0OI9obcKsv5wL4lWjoSJxzw1vApL
-         ODPkFFg0z0MDXF5cmuFqt/XQme+0HuB4fwdh6WhVXFcB+gJToqq+TqQqfvBImPpOJNme
-         O+aA==
+        d=gmail.com; s=20251104; t=1790026736; x=1790631536; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=fOy8/RNRzY1tOz6cQBgcO5pZGBDfnV1e2ekt+qahNxY=;
+        b=O0xLV0/06hB5aERdOnFSKt/IrfaYLXCtd1sM5I+68/UtsnNxXNOTWWs2gh98Hp0IoI
+         k5azI6WUE1HfrHi5MYPCaRFwtVCr8ns00qfDb1gnWXbNVrG1eZpkuAg6u+KuaeCjZDF1
+         g30gft2UksIMulaYTkzlsqoV0pZJk4e8rRqpQIYULbwZD0mnwqxDpSX5br1T4dqrBpfA
+         3NDkf/6P/IluFhVzz+8TlfMknWhZN0C4dW/4VF8YMzw2g1SW/lrLUP3bj21epAhQZApp
+         E5ULKfyMrGuATsrsPX0LNgV1i3JGgjPUiUxlafvBrbH/0lUcK4bEMxtxFAdfjciag4h+
+         aWRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790026578; x=1790631378;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1790026736; x=1790631536;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9S4UN1V9mLtIU5XAJ4Mj87c5tZOTpom4ugNvERFaqpw=;
-        b=BG4Vg6KHaXiemJ4hsB1otTcAep8yZamYdQ9VBrpMGB5vvgiAfnKpo8qUF8W7E5zR6M
-         JV0Lm5rgtHmB2rq/pV0Lwqe+wvb3iIruBn9pFDjP6/Bv0zgQqipLzp67xwvOCQfziYol
-         m0qgs8BOvbllHXrUpPvOPhW/HYcz8hbTGX5r6P2bvTjTJg0k3Zhir+f1ufxB0mvtdqPE
-         SGdgCEgYXnaOEyR83KC7bVnYOY2MDYE8YdSb8oyRm1sTcXefTuWo7volYK7DQTuZoZgu
-         m6IPHxJO/nI6Zi92pspisJy6GSttS5YrgHswHXnCJdPRQEU+6IaZgIM69+werCWwaxSO
-         LHMw==
-X-Forwarded-Encrypted: i=1; AKwUvBxHx/xVr5O6+yc1U/HyEVOz/qUgCS9DZdAQC0UgHiQb/tODpWqfWFdSLul/V08elmibKXs=@vger.kernel.org
-X-Gm-Message-State: AFuF++ncPR5sI4xpVQhgTtiA7hfdKaZnzbU/dhuySYYBvLTYwUaJSzCx
-	etrDt83C3NLzYj/xIOBfzuxSPJR0hDOV+w4lCfe8Q/O48yJ9xttY6++cP+n504yLChf9SU8Lcea
-	xyt0ZClbaA7Va8e2jW6a0aeCajzmNYj5EPaqE/Kzj
-X-Gm-Gg: AYBFou1P0bEu/AS6HcaTqecPEHIHRRFT4ie+WT12lplecdV6r4LfuEMoEKbuh2qa4H9
-	eZCDLG8/Dy7qWsyQsqsDBsxwZUbNU/vxnIhB8/YQAMmXSCdtaWiCUKaZ2mlHIg4nhaONWDVJXnL
-	jxxkKQ+qbdPftKG0PwvfMZaogUAWHTK9uSiBEw9rqYcu2lL6/ks/aPgAbae9cPkzq0j56aAJcZD
-	KGlCVlTqHhdLaaHIkMu6wz6cItrI2rFYppIUUQi2zpo1XT1o53kJJ4gqof0+kcoN7sO7WBsn5lX
-	ShJGjcY0HL8iqpiiKAt62Yv0pG9GS4bDMfClDCymyhJhH/UyBrO9ITOD05H76wsKg1Pvp1Kewqr
-	4eSzuG6WwaJkySV/h3SOkefRMVH2LVF4C2/g3Ja5qc88zFwM6VeQx83zdYo7l1u3Q9S4eSRbpNj
-	hjjmYQuZxFJs41HvecTTxcqw==
-X-Received: by 2002:a05:6a20:548d:b0:3dd:85a8:cac7 with SMTP id
- adf61e73a8af0-3dd8c44e2famr18712394637.30.1790026577083; Mon, 21 Sep 2026
- 14:36:17 -0700 (PDT)
+        bh=fOy8/RNRzY1tOz6cQBgcO5pZGBDfnV1e2ekt+qahNxY=;
+        b=In71CbgouAiFexSOheSaogtFHGCZydOsEXtt5h7GyDx++PaGSNrn0mPDe8YdqJgSIB
+         DXRqrEtN4NfWBDNnJpC2cm1HL0hzW0SyZ5Tuc1Kc4vXGYwUJ97pFyWFgt10jF4pd5rj3
+         m3nJw/wETlnIIgEE6rYgnXgStKVDuIhFZiWYAUi5gkORequkNOlJXHejaeE3UcPBe4Y3
+         VlXJrb2AQjdjclNY7EFhBAHpAp3mHpRF+2qIXNrRFQSz2oIwGadFjOoCioFDVt7GDmmL
+         iCTQ2xvNL6q0c7ryzSVRPtJm7MRaze2FHnniy7f/V3IB8SejF2HoSblV3gpGtZVJItcN
+         qgEQ==
+X-Forwarded-Encrypted: i=1; AKwUvBx8iq2O7pYcc/Di691fEs4ANXIPMB/yfiEpV7fViZLrUrVe5eB9hScBO0LbQD7p8L6EEz0=@vger.kernel.org
+X-Gm-Message-State: AFuF++kMymvCqcCYjHV8cS9gGXV44qu6QWSFo9cvYEt4h6kEx+ucul/m
+	cLmFtcHT6eIBD4mT3oHO1MRVYdeyxw1tnTAB/UcU8BPWym4+Bs2PbkDg
+X-Gm-Gg: AYBFou1aMvHY83sVLtCfYycpXRm/QUCSAMSYvvENP4GPDBbzOLq7EUkWz684J5s5lUv
+	MhW7qKy6NoAuM3gWhuM6VaE9dsX5DTxIZ7FXD/+mu8aWOCdKN6CG82jNTy6D2pGjobbtRLZMhxt
+	EtY4YnX3AkSV+Y5zWIAzRiX8UH2lxdMbqMPPQ40oWWkGZNxkhTG6I9T8uIT25AinXztW5iwmLqK
+	hJn+DOay9oXtRh1UOah+3pYMqVTKnfBsGqIMzDaBraPzMPBen6rzZhF9yHsi3OpwfUAO/1ZkLgJ
+	BKg7tuSeq078wsNof5uIAg0eI3xsi397of/xGGYeUvFhfgZDNiJeTzS3Q0OiLUZMFU2C7DkITUe
+	ARMb+bQtKYYNhTCStuSnJ2q/Czu3PUDbFVOGckPlFedQSdeeE1Wtx+VTyRFo6kvsNkXOjaSnvJB
+	XgVAB0lYd4LxUfDfZhBx/5G9vSUUoIViyF58ecWMjRmt32ytun8vlaKF3ji74rywcITMp96XnP7
+	ZsqIeWB9S7szFS/VWQNEvPOCUluqp6N71jF3A56T/X8M0NePCkCDxNId0kD6y5VqOuBZK1o/1sb
+	Chg=
+X-Received: by 2002:a17:90b:540e:b0:39e:6c69:34cc with SMTP id 98e67ed59e1d1-3a06af71be5mr288446a91.48.1790026735973;
+        Mon, 21 Sep 2026 14:38:55 -0700 (PDT)
+Received: from localhost ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a066d9e41csm1169904a91.0.2026.09.21.14.38.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Sep 2026 14:38:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260920195633.3033620-1-kuniyu@google.com> <20260920195633.3033620-7-kuniyu@google.com>
- <arGYSbQ97ORDvSBl@devvm7509.cco0.facebook.com>
-In-Reply-To: <arGYSbQ97ORDvSBl@devvm7509.cco0.facebook.com>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Mon, 21 Sep 2026 14:36:05 -0700
-X-Gm-Features: AcwNN1Wmuqzqu6AVItlJJYH99pXCMxSAZwEMncsGSowQkA6OYTAXgvMp6Luf5KY
-Message-ID: <CAAVpQUDSU8QbnLm2ajR0NKTRNr75-6yXKaerG-ZcUkOLKz70rw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 6/7] bpf: tcp: Add kfunc to adjust sk->sk_rcvlowat.
-To: Stanislav Fomichev <sdf.kernel@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Eric Dumazet <edumazet@google.com>, 
-	Neal Cardwell <ncardwell@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Tenzin Ukyab <ukyab@berkeley.edu>, =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@meta.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 21 Sep 2026 21:38:55 +0000
+Message-Id: <DLLBIPSD0DIQ.2TN5XN34VFQQX@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>, <bpf@vger.kernel.org>,
+ <ast@kernel.org>, <andrii@kernel.org>, <daniel@iogearbox.net>,
+ <kernel-team@meta.com>, <eddyz87@gmail.com>, <memxor@gmail.com>
+Cc: "Mykyta Yatsenko" <yatsenko@meta.com>, "Anton Protopopov"
+ <a.s.protopopov@gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpf: Speed up htab lookups for u32/u64 keys
+X-Mailer: aerc 0.17.0
+References: <20260921-hashtab_fast_hashfn-v2-1-79aa962ec56b@meta.com>
+In-Reply-To: <20260921-hashtab_fast_hashfn-v2-1-79aa962ec56b@meta.com>
 
-On Mon, Sep 21, 2026 at 1:50=E2=80=AFPM Stanislav Fomichev <sdf.kernel@gmai=
-l.com> wrote:
->
-> On 09/20, Kuniyuki Iwashima wrote:
-> > bpf_tcp_ops.{enqueue,dequeue}_rcvq() were added to parse skb and
-> > adjust sk->sk_rcvlowat dynamically to suppress unnecessary wakeups.
-> >
-> > Let's add a new kfunc to set sk->sk_rcvlowat.
-> >
-> > Negative values are clamped to INT_MAX, consistent with SO_RCVLOWAT.
-> >
-> > For enqueue_rcvq(), wakeup is set to false because:
-> >
-> >   * tcp_data_ready() is always called after the hooks in
-> >     tcp_queue_rcv() and tcp_ofo_queue().
-> >
-> >   * when tcp_fastopen_add_skb() is called for TFO SYN, the socket is
-> >     not yet accept()ed, and when called for TFO SYN+ACK, the socket
-> >     is woken up by sk->sk_state_change() anyway.
-> >
-> > For dequeue_rcvq(), wakeup is set to true because tcp_data_ready()
-> > is not called in that path.
-> >
-> > An alternative would be to support bpf_setsockopt() for these
-> > hooks.
-> >
-> > However, that approach involves excessive conditionals and an
-> > unnecessary memcpy(), costs we do not want to pay for every skb
-> > in the TCP fast path.
-> >
-> > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> > ---
-> >  net/ipv4/bpf_tcp_ops.c | 56 +++++++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 55 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
-> > index b0e14b54917e..3768b1440eb7 100644
-> > --- a/net/ipv4/bpf_tcp_ops.c
-> > +++ b/net/ipv4/bpf_tcp_ops.c
-> > @@ -359,8 +359,62 @@ static struct bpf_struct_ops bpf_tcp_ops =3D {
-> >       .owner =3D THIS_MODULE,
-> >  };
-> >
-> > +__bpf_kfunc_start_defs();
-> > +
-> > +__bpf_kfunc int bpf_tcp_ops_set_rcvlowat(struct sock *sk, int rcvlowat=
-,
-> > +                                      const struct bpf_prog_aux *aux)
-> > +{
-> > +     u32 moff =3D aux->attach_st_ops_member_off;
-> > +     bool wakeup =3D false;
-> > +
-> > +     if (moff =3D=3D offsetof(struct bpf_tcp_ops, dequeue_rcvq))
-> > +             wakeup =3D true;
->
-> [..]
->
-> > +     if (rcvlowat < 0)
-> > +             rcvlowat =3D INT_MAX;
->
-> nit: the same check exists in setsockopt. Any reason not to move it
-> to your new __tcp_set_rcvlowat ?
+On Mon Sep 21, 2026 at 9:28 PM UTC, Mykyta Yatsenko wrote:
+>   Change:
+>                          key size (bytes)
+>                       1        4        8       10
+>     small         -2.79% +156.15%  +63.11%   -0.94%
+>     medium        -0.79%  +87.17%  +49.83%   -1.28%
+>     large         -6.84%  +50.32%  +29.58%   -0.12%
 
-Maybe we could duplicate it for each protocol, but I feel the logic should
-reside in the core part.
+now we're talking :)
 
-$ chgrep -E "\.set_rcvlowat.*?=3D"
-net/vmw_vsock/af_vsock.c:2672: .set_rcvlowat =3D vsock_set_rcvlowat,
-net/mptcp/protocol.c:4730: .set_rcvlowat   =3D mptcp_set_rcvlowat,
-net/ipv6/af_inet6.c:691: .set_rcvlowat   =3D tcp_set_rcvlowat,
+Will apply after CI finishes.
 
->
-> Acked-by: Stanislav Fomichev <sdf@fomichev.me>
-
-Thanks !
