@@ -1,120 +1,190 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC1C244667
-	for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 21:21:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5193E26D4C3
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 00:22:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789939264; cv=none; b=DWYmuCnMAHxgHF7ySfRAlTTZWgsNli3EcexbbZT+phQt3omlG42W9R92Ay4PGG9xa3ckV/HiC12ArOJxZO4oxRN7Pk7gEPYfIZJuTmqgPD6YUt0KjKHTYfshceuJisnsL9K6j+Yo4GbPxz42lG3zf6brhcx9HGhG2awUcdqzuRM=
+	t=1789950138; cv=none; b=QZKVu8bC3w1xjWym4QDAKTx190hLLBAb+FUUNSjAUhW95zTwAt/qrPlmpKl8ztrqOAxnCgHiQpRzxbfp9rkBTZOLx3r4dIavwT8lydHjqtvE+t0g/4HyaZrwgvYdvunmoJKjv7tqxDzmyY55VbiuB7GSewnODGbhOC0p8pz26wA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789939264; c=relaxed/simple;
-	bh=K7+BBuYWEIiY9/8uOT+/He+L26yqgSUYLTkSO3k6NI8=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=TjSVgkwTGpSsCJfzFi7nkV8n/hjwYMqPFKpw5ns7MMW2pInNzy/iE/lVg3ADCuo7Ts2tifKGW8b0d2dWErOl/wgxMFgrBrBZZTeutuZnE/buwn7DTIyE9rWqkBulF+qv9dUcJF+bP82LA0pppLLeRBGUWtiYkOkYG8OYXJ2EXck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HjVHcihe; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789950138; c=relaxed/simple;
+	bh=QMpJAHW6iJKz7zydVmvohHjsWjgI3mZnZNwE9Q/LXqE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Vk9c6/Y/t89he7228U1s1yrj/2NYdEtkQ2R8jvDfcKlTD0W2iPMLXfBmR8/YnON+RqX8538eMWACT6Qvoqe/NI+yOoOfgvF6wLhH5T+306VdyLyWwcZd3DK+8iR1wyLDURmjgybQN/c6MYi72ZSZF/NXQ3Oni9JooiHvlfF0TaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U8SnrT/9; arc=none smtp.client-ip=209.85.214.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HjVHcihe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14CE61F000FF;
-	Sun, 20 Sep 2026 21:21:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789939262;
-	bh=Jb0FjVtN+3FgmjbihNnaVtrEm2eMvGF5+jWdd2hmz6o=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=HjVHcihes5ZVJT2vZWO2a5qZb/da8Xf365Y5lRnds0Vc/6AIumxRoV4gq91ynJGlG
-	 ayjFC9YK+fpXR8CLVStePClWpWEJwXTJ+TtznNi/n6GonC7AEXY17i7/hRe/lESMti
-	 ubpmcO61EuCmS10ONU705NXnpifgJJ95lsiHMZww/tkaMdfE0pJ6wNzhb/wZ3VkU1G
-	 wigrQE0vGB+Hv0lbqgnI0o0x5/kow/Q+k9b8cFZ5w3rfJjxe1SsUjNYOMlfMzQntT0
-	 lP3r+9auiwfUHPvURK2VIgPJ28Vl/msCdWOO7kdYAbamvE2GyDRCOlqQqXYnhG2LOz
-	 zX2bu30L4zYdQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v5 1/2] bpf: Track iterator-owned BTF pointer
- lifetimes
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Xu Yunxiang" <xyx2021@mail.ustc.edu.cn>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260920210432.345758-2-xyx2021@mail.ustc.edu.cn>
-References: <20260920210432.345758-1-xyx2021@mail.ustc.edu.cn>
- <20260920210432.345758-2-xyx2021@mail.ustc.edu.cn>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Sun, 20 Sep 2026 21:21:01 +0000
-Message-Id: <20260920212102.14CE61F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U8SnrT/9"
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2d94a158dc8so45483645ad.2
+        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 17:22:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1789950137; x=1790554937; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=MFnE1lNKWOxXaJ6iiEL1DLT3dpDyZMEN/2e4s9+fthI=;
+        b=U8SnrT/9JoivbVKHrh026ol9folWHS/WqoT8i0rTfazY+sggMb0QqJ2kRNpaGM6Dcg
+         +RrYz3dTXW1wtabmm7W06yZxOc2rVSB3OpQwr8LcZYmLPw05wT1OEmJowQEUKiNdBHFS
+         QBJAalapCalcrEuC9JEY636ssuubTTc1FxwRmhT82IkpEwgcUtvXqEUV82EVoB6QaLvL
+         ZBw6cbYtutJ5nkeMc27x22BWdRrsXGnlbCOFimr0YFI3f/baQBAA/qxOR9K+sA0B1ZJa
+         zj1ogYXFuXbZbstDK6GVu3npNi2/bxx/QSgdKAjLJEtzYDhGATWh+yDtRPC+vqudAX0B
+         STpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789950137; x=1790554937;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:mime-version:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=MFnE1lNKWOxXaJ6iiEL1DLT3dpDyZMEN/2e4s9+fthI=;
+        b=Nip3S1+DdgwXZMqJCPgDcJU8ZqYjI2j4TYZrs2xRDc9mTyOL17UpCZF1V/VCDDE3AE
+         SeEHoE9/fnMTsvzQCMuGIDlOV/h+zFkMFSrsISFNOpGICymxSvHXOyFKhaDEhRD/tSe3
+         HNwkJ9e3Ll2x5Wi5IbQruk1jJgcRMTWOLmvIl8LYA0Wx23+Ym7N5Zk7G+/DFqxjqTNFX
+         hsx++1bC/S93rVK80rDy77Hd+6S9ZcapgsKb8vdgGN17RHoas8QeUR7V3X5Qn9SMlqH9
+         qfsLKzYtkc8gqFauO6H5zKMdeWNiyJFp9IZ+ujlJhy+2/HkysaWOgSVJiuC4s1KN8pL1
+         UmNw==
+X-Gm-Message-State: AFuF++mzJkmcUzi6H0N2MBuhoqZC1myK/45D4ovk2nj9WM9bakXPQvt8
+	9THHOpXx2a0QgvzzBnPDKTZ7tVyWSNlUDCREabREwzGDLkctyLALwQpYmYlULVQ40JJIho5A2cZ
+	3mPfPSuHiMG0yDNMvOw==
+X-Received: from plcp9.prod.google.com ([2002:a17:902:e349:b0:2df:4244:c983])
+ (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:903:8c6:b0:2df:42de:f71 with SMTP id d9443c01a7336-2df42de1624mr31028995ad.19.1789950136472;
+ Sun, 20 Sep 2026 17:22:16 -0700 (PDT)
+Date: Sun, 20 Sep 2026 17:22:02 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.55.0.1082.g2b9226bbc0-goog
+Message-ID: <20260921002206.184660-1-tjmercier@google.com>
+Subject: [PATCH bpf-next v5 0/2] bpf: htab: Reduce memory use of hash maps
+From: "T.J. Mercier" <tjmercier@google.com>
+To: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	ihor.solodrai@linux.dev, mykyta.yatsenko5@gmail.com
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	"T.J. Mercier" <tjmercier@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf: Incomplete invalidation of iter-owned dynptrs and derived m=
-emory slices
---
+Memory is expensive and scarce these days. This series reduces the
+memory use of BPF hash maps by eliminating the per-element overheads
+below. This saves up to 50% of per-element memory use for standard and
+PCPU hash maps. The memory use of LRU hash maps is unaffected.
 
-commit 1d039be28498ad8b8b6d1373478f0903a6cc5f06
-Author: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
+Map Type & Configuration           | Old size | New size | Savings
+-----------------------------------|----------|----------|--------
+Standard (key =E2=89=A4 8 B, val =E2=89=A4 8 B)    |   64 B   |   32 B   | =
+50.0%
+Per-CPU (prealloc) (key =E2=89=A4 8 B)     |   64 B   |   32 B   | 50.0%
+Per-CPU (non-prealloc) (key =E2=89=A4 8 B) |   64 B   |   40 B   | 37.5%
+LRU (Any key/value size)           |    -     |    -     | 00.0%
 
-bpf: Track iterator-owned BTF pointer lifetimes
+1) Unused LRU / PCPU fields in standard and PCPU hash maps (patch 1)
+struct htab_elem is used for all hash map types, and includes fields
+that are not always used (bpf_lru_node, ptr_to_pptr). For standard
+(non-LRU, non-PCPU) hash maps the 24 bytes for the bpf_lru_node (union)
+are entirely overhead and can be eliminated. Non-preallocated PCPU maps
+only need the 8 byte ptr_to_pptr which is currently unioned with the
+unneeded 24 byte bpf_lru_node, so 16 bytes of overhead can be
+eliminated. Preallocated PCPU maps don't need ptr_to_pptr, so 24 bytes
+of overhead can be saved.
 
-This commit opts specific iterators into tracking the element lifetime,
-associating the PTR_TO_BTF_ID results with the iterator reference. It
-invalidates the previous result before advancing the iterator or destroying
-it.
+2) Hash caching for small keys (patch 2)
+For hash maps with small key sizes (=E2=89=A4 word size), comparing keys on=
+ly
+requires a single instruction. Currently the 4 byte hash value (8 byte
+aligned and padded) is used for this, but offers no performance
+advantage in this case and can be eliminated.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -7824,6 +7841,27 @@ static bool is_kfunc_arg_iter(struct bpf_call_arg_=
-meta *meta, int arg_idx,
->  	return btf_param_match_suffix(meta->btf, arg, "__iter");
->  }
-> =20
-> +static int invalidate_iter_owned_btf_ptrs(struct bpf_verifier_env *env, =
-u32 parent_id)
-> +{
-> +	struct bpf_func_state *unused;
-> +	struct bpf_reg_state *reg;
-> +	int err;
-> +
-> +	err =3D check_reference_children_leak(env, parent_id);
-> +	if (err)
-> +		return err;
-> +
-> +	/* Opted-in iterators can release their previous element on next. */
-> +	bpf_for_each_reg_in_vstate(env->cur_state, unused, reg, ({
-> +		if (base_type(reg->type) !=3D PTR_TO_BTF_ID || reg->parent_id !=3D par=
-ent_id)
-> +			continue;
-> +		bpf_diag_record_scrub(env, reg, BPF_DIAG_MOD_REF_RELEASE);
-> +		mark_reg_invalid(env, reg);
-> +	}));
+The implementation splits htab_elem into dedicated structures for the
+different map types (htab_elem, htab_elem_pcpu, htab_elem_lru with
+hashed and unhashed variants) so that the map-type specific fields
+exist only in structures where they are necessary. In all hashed
+variants, the hash is always at a -8 byte offset from the start of
+htab_elem. The elem_offset map field supports the different sized
+element headers, and allows dynamic offsets to be kept out of the hot
+lookup path. It is used primarliy for allocation / free, and indexing
+preallocated elements.
 
-[Severity: Medium]
-Does this loop completely invalidate all derived pointers?
+run_bench_htab_mem.sh shows the following changes across 10 runs on my
+3995WX.
 
-In mark_stack_slots_dynptr(), the lifetime of a dynptr is explicitly tied
-to the iter-owned backing object using the parent ID:
+Benchmark (all in kops/sec)  |  Avg. Before  |  Avg. After  | Delta
+-----------------------------|---------------|--------------|--------
+prealloc overwrite           | 116.26 =C2=B1 4.3  | 118.81 =C2=B1 4.2 | +2.=
+19%
+prealloc batch_add_batch_del | 128.43 =C2=B1 3.6  | 128.89 =C2=B1 2.9 | +0.=
+35%
+prealloc add_del_on_diff_cpu | 22.91 =C2=B1 0.69  | 22.44 =C2=B1 0.62 | -2.=
+07%
+normal overwrite             | 72.43 =C2=B1 3.13  | 81.06 =C2=B1 1.49 | +11=
+.9%
+normal batch_add_batch_del   | 45.20 =C2=B1 0.78  | 50.09 =C2=B1 0.56 | +10=
+.8%
+normal add_del_on_diff_cpu   | 12.02 =C2=B1 0.24  | 12.80 =C2=B1 0.18 | +6.=
+49%
 
-/* All non-clone constructors take their backing object in R1. */
-parent_id =3D reg_lifetime_id(env, &cur_regs(env)[BPF_REG_1]);
+---
+Changes in v5:
+Rebase on top of bpf-next/for-next
 
-However, the invalidation logic here restricts its checks to PTR_TO_BTF_ID.
-It ignores STACK_DYNPTR slots because bpf_for_each_reg_in_vstate expands
-to use a mask of 1 << STACK_SPILL, skipping STACK_DYNPTR entirely.
+Update elem_size check in map_ptr_kern selftest to 40 in first patch
+(Sashiko)
 
-It also misses PTR_TO_MEM slices because of the strict PTR_TO_BTF_ID
-type check.
+Place hash at constant compile-time offset before htab_elem, to allow
+removal of key_offset. (Andrii Nakryiko)
+This avoids dynamic htab->key_offset load and pointer arithmetic. The
+struct declarations got reworked to implement this, and htab_node was
+dropped. All map_in_map changes became unnecessary and were dropped.
 
-If a BPF program creates a non-referenced dynptr from an iter-owned object,
-or creates a PTR_TO_MEM slice from it, will these pointers remain usable
-after the iterator advances and frees the underlying element, leading to a
-use-after-free?
+Fix key update before pptr, value initialization for recycled elements
+and lockless readers. (Sashiko finding on internal run)
+Read / write memory barriers and READ_ONCE() / WRITE_ONCE() were added
+for this.
 
-> +
-> +	return 0;
-> +}
+Combine rhtab_mem_dtor() and htab_mem_dtor() implementations.
 
+Fixed the KMALLOC_MAX_SIZE overflow check since sizeof(struct htab_elem)
+shrinks in both patches.
+
+Changes in v4:
+Removed inline from new functions per BPF CI (netdev/source_inline).
+
+From Mykyta Yatsenko:
+Factor out duplicate lookup_elem code into __lookup_elem_raw.
+Use offsetof instead of sizeof for key_offset assignments in
+htab_map_alloc (patch 1).
+Eliminate branching and htab_elem casting in htab_elem_hash /
+htab_elem_set_hash.
+
+Changes in v3:
+From Sashiko on torn reads/writes:
+Use a local unsigned long and READ_ONCE / WRITE_ONCE instead of memcmp /
+memcpy for atomic key comparisons for hashless elements.
+
+Changes in v2:
+Make maximum key_size for !has_hash depend on word size for atomicity
+on 32-bit.
+
+From Mykyta Yatsenko:
+Put the htab_elem* common initial sequence in its own struct (htab_node)
+and reuse it across all element types that share it. Eliminate
+associated BUILD_BUG_ON additions.
+Replace both the hash and key fields with data[].
+Store has_hash in struct bpf_htab, and avoid per-element reads of it.
+
+T.J. Mercier (2):
+  bpf: htab: Split htab_elem_lru and htab_elem_pcpu off of htab_elem
+  bpf: htab: Reduce elem_size by 8 bytes for small key sizes
+
+ kernel/bpf/hashtab.c                          | 351 +++++++++++++-----
+ .../selftests/bpf/progs/map_ptr_kern.c        |   2 +-
+ 2 files changed, 255 insertions(+), 98 deletions(-)
+
+
+base-commit: b99f71407ce529ba01a9392f477522d2e76c6613
 --=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260920210432.3457=
-58-1-xyx2021@mail.ustc.edu.cn?part=3D1
+2.55.0.1082.g2b9226bbc0-goog
+
