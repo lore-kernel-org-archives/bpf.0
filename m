@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC5CA5218A3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDFF15218A6;
 	Mon, 21 Sep 2026 22:36:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790030220; cv=none; b=ftBzmKWUOHBEameCV0d8OxlUrl8e5o+I1TkBNnJGnurd4bmmWH6qYgTT4x5aNq59WmgIePJkqFPYJZWFpLoYxp1JOt3wG5CcGlwYbKpHm0su8oFt9zaOmTh/rC+6se4eBzAoMNXQZtMjQNNcc7P29FNi+BCBXQMIEJMI7NTJ9do=
+	t=1790030220; cv=none; b=HD+/fslFX3eUJ2m4/WCoS1Guv4UXPMhqin/M5wzz3fsAC2Y/bO82qIpojiUrLfZoUkwFOhmQO55vazcBEXrOZO/fTa5vB2jN9WKsr0Z75787bEi9Jb4NhGR2dDhTYbBdSSJ8Nf+pWQEaoYMeQfUSiy/iPttkJJw+W+o1Yj3xo+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790030220; c=relaxed/simple;
-	bh=uvWdK8NfQN7p9IOprPpFwqlWaTuJKOV5OuP7m5H1fmE=;
+	bh=pgUhBiEg73bIVoV2ofBsXEvGou/hL6SEl/g8tC9tIjw=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=D0EwQmctH7rsG6jExJrGdtZQW0T7RxrvRqrgPg+YX3RuCTTB4UotzOaUyBmh7vfbqAzpmTpvID8g7EcIwPdr7zfL6wFwZWK9Firvd106/Lt6rZsWDzxyqNONZxebF5Ydg0hGgfmeywbfnY/SETX5tSJIcuawCwEjPI+Z/cW3IqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hfPkYh0U; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=MhhLqqkXNzG4fOQ5syWnfdObmQqHQ6cC27zKCtyLjwiGCEJ8KDr3jM8WJAMoJiw7ppFsvNBKQsiITNB/cXrBxtoGdBdsNednLWYX0+Zl4UzKGXGEZtQrIFSJtlRoysUQc2wvNHh/ay6zCN4HHi/WvoiDFvHJi/np9ccOR8FlMws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ESPtoGJI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hfPkYh0U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3E221F00898;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ESPtoGJI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D66C11F00899;
 	Mon, 21 Sep 2026 22:36:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1790030216;
-	bh=zNg04sqksHPmSdtRgNN4hiYfNLV1OdWfT8Tgixz7/RU=;
+	bh=6PRe6lqrU24knYhzbuqLK6/Nc7WBWqovdWCiChRp3+Q=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=hfPkYh0UxDSaGakSKQwurqo+Z7F5p5yb1NUe0TCBMn5iHyoZvHfj0BARyXafoeIPp
-	 Qf7ZsYmEHObcNUsfkLc36cx4blhSvaZKcN2Bubb/kaTbXShhGKU04abu19uRzb6lXf
-	 IJ7l1Xpi3Ym6WhR0MsslkDtCjxg139oQHheDXuZWiM5E+C0E064EsDPm+NxND4HRL9
-	 vcNyT6sH+q8w3r1ntVkv010u8bVxAzDApQzwolwP2M35NqxNyIBzzh44nHaY6djT4q
-	 cPcY065vYkt/d8WOYUifFVMxzhTP+A9OR5AthtkGvJu7ZuT8It9DMhgkWty3r7MxDf
-	 qXpYTJHXl8g/w==
+	b=ESPtoGJIuGpIbjq9Pr6w78YFzAg6Qo9w1AETIgNzEF1jyGXeXFSDyFRc7k6Q/3D/0
+	 Jmj6zJekNDtP6HBt2GHG4oYJjtzHeGeHnx165HKjAbf7lptmmnqIoEh4akiGTokeca
+	 MSqsarsQ/L/tLehg/yi0hbMmx6mlbqEdy/HIshZ4BL6+qsZAf1mQkGkm7s8D4ZSQ0l
+	 Vv6LP7tsX/jTSzjQdf3rHQoKyysqWnVa/2Bj5lIAdrihug/NRo4x1DVcOc6JXo2rI2
+	 g+ho+PS8BhPn0AyHaFtNoNhiN9OK0W+JnvHUGxaRYDmHugsXqpmxlxESJ0Z/tEEN9j
+	 5B16oZQqarAlg==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93A333927206;
-	Mon, 21 Sep 2026 21:20:10 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 19AF93927205;
+	Mon, 21 Sep 2026 21:20:09 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,41 +37,39 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3] bpftool: Compute map size of light skeletons
- at
- runtime
+Subject: Re: [PATCH] [v2] bpf: add printf attributes
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179002560916.3241479.13976100510316448696.git-patchwork-notify@kernel.org>
-Date: Mon, 21 Sep 2026 21:20:09 +0000
-References: <20260915161450.96249-1-leon.hwang@linux.dev>
-In-Reply-To: <20260915161450.96249-1-leon.hwang@linux.dev>
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, qmo@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+ <179002560791.3241479.4745904474529201466.git-patchwork-notify@kernel.org>
+Date: Mon, 21 Sep 2026 21:20:07 +0000
+References: <20260915213123.2361066-1-arnd@kernel.org>
+In-Reply-To: <20260915213123.2361066-1-arnd@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, arnd@arndb.de, martin.lau@linux.dev,
  song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, linux-kernel@vger.kernel.org
+ emil@etsalapatis.com, ihor.solodrai@linux.dev, ameryhung@gmail.com,
+ kees+treewide@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
 
 Hello:
 
 This patch was applied to bpf/bpf-next.git (master)
 by Andrii Nakryiko <andrii@kernel.org>:
 
-On Wed, 16 Sep 2026 00:14:50 +0800 you wrote:
-> bpftool rounds memory-mapped data map sizes to the host page size when
-> generating a light skeleton. The generated code therefore uses a 64K
-> mapping size when bpftool runs on a 64K-page host, even if the skeleton
-> runs on a 4K-page target. The target rejects the oversized map mmap(),
-> causing failure of loading the light skeleton.
+On Tue, 15 Sep 2026 23:30:09 +0200 you wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> When try to run 64K-page selftests on 4K-page VM, the error message does
-> not provide the reason about page size.
+> Building with extra warnings enabled shows a missing printf attribute:
+> 
+> kernel/bpf/diagnostics.c: In function 'bpf_diag_source':
+> kernel/bpf/diagnostics.c:828:9: error: function 'bpf_diag_source' might be a candidate for 'gnu_printf' format attribute [-Werror=suggest-attribute=format]
+>   828 |         msg = bpf_diag_vfmt(env, fmt, args);
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v3] bpftool: Compute map size of light skeletons at runtime
-    https://git.kernel.org/bpf/bpf-next/c/a885470df10b
+  - [v2] bpf: add printf attributes
+    https://git.kernel.org/bpf/bpf-next/c/7f2b0b57a8d7
 
 You are awesome, thank you!
 -- 
