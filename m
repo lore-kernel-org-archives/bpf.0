@@ -1,148 +1,111 @@
-Received: from mail-ed2-f35.google.com (mail-ed2-f35.google.com [74.125.228.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC864534A9
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 09:22:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.99
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789982527; cv=pass; b=s+kZIFzrM4+eImejW/vfDg79+hw12vC+nS3DUHw5n2G/MGgLMQFKPsvjBEWhXOOimtGBKvGW+LqcwqGehuK2zWGX6d4rIkzCpchD9pC+GC4aTfGdcW407+ly7ZHA5NHqs9sp6d0OokdnUnXau/hLpFfCwaX8V+4JViZ1E5UQXps=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789982527; c=relaxed/simple;
-	bh=hqdt3u8jCZRU7i15Gds4QdFvF2nrfx3fmaJvhq9NnOM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fec5J5rTIhIR9rkWf1rTnLzPIorHUFvVF/SqGe4zkT+taM+mI4rCcWJs3LG7Xx+UeHhGHbB9v42LuN9PAaunEar9O8XBvNaDPnipDiRJ9bTWLvhQy+xEbbGWVUJfQTZpsiaBOZsvlQYGuJtnr/HiX1XE5986F8oa9YvdQ34auF0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=US/CpIsr; arc=pass smtp.client-ip=74.125.228.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E1C23750D5
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 09:22:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789982530; cv=none; b=UGjAUcWCKmTT0RWGZxJ4bbxiXwGBTaVJWPoj4H72+m1EQZdrZLnLARTSBVnbYAjHyRuDmu/B8CHG4WRtN+k4khdbsm/HhiPu+0uN7hfoObs6ghdcevErLwys5j9SKghyS3A3yG5Q2NyACJDuWxFzVkahQblaw/YjhxSwZFurmw0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789982530; c=relaxed/simple;
+	bh=b+nb+6pmFUHzeT1WLBkxbkm6bq+OTl8sDyhPAdUvy+k=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=F1E1Xy7oBKNLDm1zlGzpB3y7MLEA4ayj1eErK/TCgqQx7wsCUdYpXkjh9vQfmHYygpm4A/ueIwrgeu3WHRRAdZ8KJFaG3QIHDLx0GJ1BgfATh2vUQ5hY/smMEzCmD/nKUGfzLNnMMD0ziZrqA+S7Di9gxhkPI61tuEOKPVVjyBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iaWtOJAk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="US/CpIsr"
-Received: by mail-ed2-f35.google.com with SMTP id 4fb4d7f45d1cf-6a98dfb8002so3790406a12.2
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 02:22:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789982524; cv=none;
-        d=google.com; s=arc-20260327;
-        b=NQJDwAzdYiz5f40gONvJopmbpswp1LLcN5OQmNudiX28wd0FONeOlWIg3XBXSzAtrm
-         GI4F8fSJv+U1QWvcEcVl3hRjpr0iK9B2x+Z4PA+5vXk9Q4PnBsLmibdB+1+JiFJ7Blo5
-         PRn/zCrUp48V0Zbhg8B5IR68wqeeeD1zHo/oAy68oteYMEWh6lgKwzTbWjWMhlAGgU8+
-         0K0Wcednfs4UfQi1vZ9asHKtuILVBldmRvYAcaiLeqnVvgAXdXw3TczCbNIy2lOGDR6t
-         TThniUW30nM6n7qbwjhaSBkW4Yy7FvD8jPCVs2DloX1G/GDFX3zhOZGd4MEhnK3E/kuf
-         p5dQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=bRimAqTrykfY5xHk+b/on9tWMPf6/fHaN43wr8alvnY=;
-        fh=JrhgCnAikvvfB7IDLxact1PMuBp3bg7HblfGMuGQIAI=;
-        b=JU/F/Znlmje0C+AxIXkVxiqMtKFq1hJO0hZBTKNIKaHaGm0DdPYXD8L2my08AsG2HZ
-         NACMQmnRBuOAHFl5hUMI8PV2aMLmI0+W2pCx2GtWcoJKvoRVafYiwNOnQVGLTVZh8rWi
-         VtrjQda1VPVDWuO7jRrDD1dZNwtH/mkcYOg9o1tgotub8cMsE6tmT2CY1dRIbLVjSQuX
-         QuhZRJp+x9XJpcvyQuuRVnhEB6rUcRQ2rmJFF45FXC0AYNFHxJmLfUkPZ0iRWbKqOh++
-         EcEkvm0JTVMEEQM8C1ZT7bpcNWYrRaxqFpbYdtJ6JJHXGSuipWgcuniTehbNjufhmGd7
-         /PVA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789982524; x=1790587324; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=bRimAqTrykfY5xHk+b/on9tWMPf6/fHaN43wr8alvnY=;
-        b=US/CpIsrjeWBfOTqnzFGMcHb6VmvK+629h8KYtDlhr4k46xuKUpDQZN5yChO8wX2TY
-         DJ0UEkftc/0YGvG83K0pO/CJXF1ZDJErvpP4QIlt8SKUTrwhWFosbP3xamqXTJqwe9NZ
-         RBBdIFbdOIpo0lE6oMjIMMlQUie+DekqHz441coB6Sci2VzIqDCXS9cvY02MPOh/0w2l
-         X+OaKKH32XWXRm0CNfzjacpIoTiRn8U1bei3WYk4EMv4Bnl85OndTVck9W173iisdlzR
-         /CUoj4tvwGcRl5PHTgAnRcZFb/6Bkidhxy18cHI0AnhIBoeAdrvy9S+G9MeVOKPq9WAV
-         CODg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789982524; x=1790587324;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=bRimAqTrykfY5xHk+b/on9tWMPf6/fHaN43wr8alvnY=;
-        b=re0q1/AQy9whzTcv7Rwp9Bsr7WlzM07z/KA3Gbro2xCnWXVgO57W0muj3jXcMCKl+f
-         kIAC5M1G0dWfLO4F4hWg9BoutTJSqlTnKysqQWzh5LrN03kMGQXUNzg+tDVxIqKCIgZN
-         eST2mXGA3MOqJwdnUioMnO7m10uLh/NL7caKR9iXODlhMmHZ1g7S6CocerIN8d5UwUTR
-         fku4/hi8vR2MTaakvb3AQLxD49tBrDYhs9i2keFLmF5kX966AXsq7Uv2iJ+Qc2myOckB
-         sLMFB5VHWQPRoSIkDLX53CW28Kb9nyYv9Ol8evWfHmvRf6fFYXMwp+ugRXwbtSwBjZ5d
-         db1Q==
-X-Gm-Message-State: AFuF++maXKfaVqFlZFLkzri2m9RNll6XN/K7BXtT0QokEB5fAMbGmLPa
-	DMlrUTnkgq9DhQ7BGy6sc8AdIn3B3GxMEMz8hPlWgiwiubm817M08d5cob4QAI1ccsJSF82xvhl
-	pHhV3TK9xaaF7NNZIRp50TfMNuYFM2GQ=
-X-Gm-Gg: AYBFou107Pq1z67uqqcloQhwN5bSJDarLSNwmLS9tzfJYJPaCmTGZAGuCHqNlIUZRwE
-	pUfyv5k88FZkvkX7mXIo0P1BsgrdroNGgCdNBE98ttq9YnZYkRzmLdRPvgdqEAlabdOg1b656Rl
-	Q4sj5isIfh+Ult6s6w7TKnXw3Mk3eJFhE+4Sv9yJW1kOtWxvo9guFHTCFjmQVI3aGAzxqUmRA5c
-	5DVrV4KNoYkhrHGKrlNFKxiITNX1auiRQAqBRtxqGdmYqJaw/UiQhZ+P0zn+5dMzNsF5Ql/BE/I
-	u6+MnqWWHfWWWeuF1HGTRbvL4HFD81MhHlrzei03txGEt/xWyIS5
-X-Received: by 2002:a17:907:5cb:b0:c21:450d:cd7e with SMTP id
- a640c23a62f3a-c2a15788ea4mr816301766b.9.1789982523770; Mon, 21 Sep 2026
- 02:22:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iaWtOJAk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F46F1F000FF;
+	Mon, 21 Sep 2026 09:22:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789982528;
+	bh=VssJ4ZW5JglZM8dA+YuAZxmjQ22k/CtixoVATYN8SuA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=iaWtOJAkrQ8eAdT4xpNBcU24GdrrMBDpNoeAxAQ3jAPPZSY/yQ8yWzBFb/De2M+gR
+	 sbmD7hJjk0CyxjwE/wJ868rmVvLtZ+FcZefHOYbu1ikVxxS+wplgL1mBRGG+KIx2Q8
+	 TF7Q9Qu0d6Sp3rJO9l/Vn2gU5HyqBV+xCERMQocJWTVbxJ/7l1OcFQFazipkwEhxPZ
+	 tnJOYMRH54RYEfZWD8qhsq2ZOEqbRRjAjV0k1M+T3h8Qg3HfXBjMyW6GiX7Y8XjyDg
+	 tPwpJfAezDvl5b/dEB3MyYrYb5lL9LDtKVIAL5l6yIyQPBRL6o+XOZ/zGUL6VDwKIH
+	 c/v5dQiVXSgWg==
+Content-Type: multipart/mixed; boundary="===============3860847443415516457=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260921075855.2065871-3-nickolay.lysenko@gmail.com> <447aaf4b6cf6a6df572afd5323e516ab32554c776b63c08639abde301eba925e@mail.kernel.org>
-In-Reply-To: <447aaf4b6cf6a6df572afd5323e516ab32554c776b63c08639abde301eba925e@mail.kernel.org>
-From: Mykola Lysenko <nickolay.lysenko@gmail.com>
-Date: Mon, 21 Sep 2026 11:21:50 +0200
-X-Gm-Features: AcwNN1UfUQ-6-swm1lrdJDmFp4LWNbku9VR60SUcN_Ko9xw3EwJeVLRuAdZwxXs
-Message-ID: <CAMtxOX0fj6V=4n_wmT1OYpt+bwahwbkR_cey9z9H5r4Cto05fQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v8 2/9] selftests/bpf: drop stale lines, restore
- two header dependencies
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, eddyz87@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, memxor@gmail.com, 
-	martin.lau@kernel.org, mason@kernel.org, ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <a242ffd77138377c8726e5a7e52609fbe0352e8cc4a3b9efe48eecf566057cc4@mail.kernel.org>
+In-Reply-To: <20260921075855.2065871-10-nickolay.lysenko@gmail.com>
+References: <20260921075855.2065871-10-nickolay.lysenko@gmail.com>
+Subject: Re: [PATCH bpf-next v8 9/9] selftests/bpf: build each test runner instance in its own sub-make
+From: bot+bpf-ci@kernel.org
+To: nickolay.lysenko@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,memxor@gmail.com,nickolay.lysenko@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 21 Sep 2026 09:22:06 +0000 (UTC)
 
-On Mon, Sep 21, 2026 at 11:06=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
->
-> > diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selft=
-ests/bpf/Makefile
-> > index bfb788ea65618..3606ee8ab7949 100644
-> > --- a/tools/testing/selftests/bpf/Makefile
-> > +++ b/tools/testing/selftests/bpf/Makefile
->
-> [ ... ]
->
-> > @@ -339,7 +336,7 @@ $(OUTPUT)/test_sockmap: $(CGROUP_HELPERS) $(TESTING=
-_HELPERS)
-> >  $(OUTPUT)/test_tcpnotify_user: $(CGROUP_HELPERS) $(TESTING_HELPERS) $(=
-TRACE_HELPERS)
-> >  $(OUTPUT)/test_sock_fields: $(CGROUP_HELPERS) $(TESTING_HELPERS)
-> >  $(OUTPUT)/test_tag: $(TESTING_HELPERS)
-> > -$(OUTPUT)/flow_dissector_load: $(TESTING_HELPERS)
-> > +$(OUTPUT)/flow_dissector_load: $(TESTING_HELPERS) flow_dissector_load.=
-h
->                                                        ^^^^^^^^^^^^^^^^^^=
-^^
-> >  $(OUTPUT)/test_maps: $(TESTING_HELPERS)
-> >  $(OUTPUT)/test_verifier: $(TESTING_HELPERS) $(CAP_HELPERS) $(UNPRIV_HE=
-LPERS)
-> >  $(OUTPUT)/xsk.o: $(BPFOBJ)
->
-> This isn't a bug, but since the patch is already retiring the stale
-> references to flow_dissector_load.h, would it make sense to drop the
-> TRUNNER_EXTRA_SOURCES entry in the same go? Only flow_dissector_load.c
-> seems to include the header now, and that binary gets its dependency from
-> the line restored above.
+--===============3860847443415516457==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Thanks. Patch 9 removes TRUNNER_EXTRA_SOURCES entirely, including the
-flow_dissector_load.h entry. The dependency added here on the
-flow_dissector_load binary remains. I would leave that cleanup in patch 9,
-together with the runner restructuring.
+> diff --git a/tools/testing/selftests/bpf/Makefile.runner b/tools/testing/selftests/bpf/Makefile.runner
+> new file mode 100644
+> index 0000000000000..d266c42468882
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/Makefile.runner
+> @@ -0,0 +1,125 @@
 
->
-> [ ... ]
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/355776=
-80350
+[ ... ]
+
+> +# Permissive build behaviour (skip-on-failure compile, partial-link) only
+> +# applies to test_progs and its flavors; runners that use strong cross-object
+> +# references (e.g. test_maps) keep strict semantics even when permissive.
+> +PERMISSIVE_TESTS := $(if $(filter test_progs,$(RUNNER)),$(PERMISSIVE))
+
+[ ... ]
+
+> +# compile individual test files
+> +# Note: we cd into output directory to ensure embedded BPF object is found
+> +# The %.test.d dependency files are a side effect of the -MMD below; the
+> +# separate no-recipe rule for them orders the first compilation after
+> +# skeleton generation and re-orders test object compilation when headers
+> +# change.
+> +$(TEST_OBJS): $(RDIR)/%.test.o: $(TESTS_DIR)/%.c | $(RDIR)/%.test.d
+> +	$(call msg,TEST-OBJ,$(BINARY),$@)
+> +	$(Q)(cd $(@D) && $(CC) -I. $(CFLAGS) -MMD -MT $@ -c $(CURDIR)/$< $(LDLIBS) -o $(@F)) $(if \
+> +		$(PERMISSIVE_TESTS),$(call skip_on_fail,TEST))
+
+Does the backslash placement here cause the $(if) condition to be
+unconditionally true?
+
+The backslash-newline sits inside the $(if ...) call between the
+function name and its first argument. GNU make preserves
+backslash-newline in recipe lines (so the shell can join continued
+commands), and does not strip whitespace from the condition string
+before testing it. The raw condition text becomes '\' + newline +
+tabs + '$(PERMISSIVE_TESTS)', and since a backslash is not
+whitespace, the condition string is never empty.
+
+This means $(call skip_on_fail,TEST) is always appended, regardless
+of PERMISSIVE_TESTS. The guard collapses to permissive for every
+runner, including test_maps, contradicting the comment at line 50
+that says permissive build behavior only applies to test_progs.
+
+With BPF_STRICT_BUILD=0, a map_tests/*.c file that fails to compile
+would now report success, have its .o deleted by skip_on_fail, and
+then fail later in the test_maps link with 'No such file or
+directory' for the removed object, instead of failing at compile
+with the real diagnostic.
+
+Moving the continuation to complete the condition on the first line
+would fix this:
+
+	$(Q)(cd $(@D) && $(CC) -I. $(CFLAGS) -MMD -MT $@ -c $(CURDIR)/$< $(LDLIBS) -o $(@F)) \
+		$(if $(PERMISSIVE_TESTS),$(call skip_on_fail,TEST))
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35577680350
+--===============3860847443415516457==--
