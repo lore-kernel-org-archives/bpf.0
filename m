@@ -1,70 +1,74 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-30.mta0.migadu.com [91.218.175.30])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A821E3C10B9;
-	Mon, 21 Sep 2026 17:40:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C55D3043C8
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 17:46:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790012417; cv=none; b=omTo9SSRADtpGvJTqTxd740/fC38JfP4PW3wiqkI9DCAgW01XaFpQnH9Wks8LwUBGzXoXg3zqQR0EhMeRQvK235vmiksJOLlBQGkoV2uwLoOyTicSTa8cFVbLhmGznUWsepPqa9EhGQZTWK1UvRATzh4KMk1cQIXa+KJdwjWlWw=
+	t=1790012805; cv=none; b=a8p6idXRsPYobFK0aUfSJXIrYk3rMhwFfUILIdqumdS951nk/RoAvaIbtUf7+90b0UazQ20WkjDcqHPFXoCdbopfQx+6yWEACn3xgDB9Cj5mjuz50CP15PsEDwIJxFLpRUa3Bo8F0YTBbWGk0af0AI3KjbUqZg37+unGBjFjzz0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790012417; c=relaxed/simple;
-	bh=jD1Ry46DGVBPEXo6cyCks+UGuJM0O7YxIFBNv0kjY3Q=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=p6TQakz9kDfyzvkH9NpP6eYvdBMm5EpO9zcRwnK5DsxjF8qbcTFJGGOgW1fF7y7jrS+KtXxNPFhDQFsuBNApgUj/qV+NgS+LOQSOdvydQm97cU03nxstSVqeSTkgVRFGna8WGlVQDulDcKZ/eslAADiVsF/A7CzjSnqnVEW4T4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PK/YEveJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790012805; c=relaxed/simple;
+	bh=64lfCXfUKLeF20RwvIRRfQ2FAbTLlQvRGhRFhAU69ow=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JPmvJVT68Z1LOqVMn4I7uk10qmo3qVicG/amlnoW7LcO8z79VP/uJNPS1zx9Z35GR31fJSNCRE8LCNkxVLtcOhIDXubq3Hl6gGqgfuSR+61turlU07tkf6ZnsN9j0qI1JWlRAlmOhFMhyLjmNHjnorN99F92XDnt/QHAEeGjWEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CQp0lvGh; arc=none smtp.client-ip=91.218.175.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PK/YEveJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C87811F000FF;
-	Mon, 21 Sep 2026 17:40:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790012416;
-	bh=jD1Ry46DGVBPEXo6cyCks+UGuJM0O7YxIFBNv0kjY3Q=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=PK/YEveJf6qjG64ztoZ5i/O/cyfiRIBZNtDbNobQodpaxCPEvB332s+j3pF5+Ljn8
-	 qCbyl6gwYku78q3IjiAoU4uG5hR71lf4cMrz5jTgO6zGflTjKoeflKSiezcJ52wCCN
-	 HbKRdeeOyg3F0gRTXu8095HbC9JpL0aWA7VAxVwApSs+y8V6eaBgx6AyxiyIiclIeS
-	 0c1x/43XGnTghUT2JNaqzSN+BDYLLAu0fAgwdygo5M9dl+DHgFsLz3Ce6uA6sps7zt
-	 rW/6y1EJTQnYtEBRmWGm4+I6RE0zUnLojuD8FvKKZCADWt4qjAoAi1pKemMi9AXrXZ
-	 Kms4/t3OCBXrw==
-Date: Mon, 21 Sep 2026 07:40:15 -1000
-Message-ID: <a29f5b829952f6a8f15128a4115c5765@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Usama Arif <usama.arif@linux.dev>
-Cc: arighi@nvidia.com,
-	bpf@vger.kernel.org,
-	bsegall@google.com,
-	changwoo@igalia.com,
-	dietmar.eggemann@arm.com,
-	etsal@meta.com,
-	juri.lelli@redhat.com,
-	kprateek.nayak@amd.com,
-	linux-kernel@vger.kernel.org,
-	mgorman@suse.de,
-	mingo@redhat.com,
-	peterz@infradead.org,
-	rostedt@goodmis.org,
-	sched-ext@lists.linux.dev,
-	tj@kernel.org,
-	vincent.guittot@linaro.org,
-	void@manifault.com,
-	vschneid@redhat.com,
-	yphbchou0911@gmail.com
-Subject: Re: [PATCH] sched_ext: Specialize the DSQ hashtable compare
-In-Reply-To: <20260921171928.1639407-1-usama.arif@linux.dev>
-References: <20260921171928.1639407-1-usama.arif@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CQp0lvGh"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=64lfCXfUKLeF20RwvIRRfQ2FAbTLlQvRGhRFhAU69ow=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790012802; v=1; x=1790617602;
+ b=CQp0lvGhEUIwULRGwidEEZFO9V7On3HX/Fwi+WprCz46dULhaLOdDhidByqc74xC/nkHzSmT
+ eehX24Z8plVmdXv1BIJMOnZ6eQa7uGc+gkzMphB/hdt3kJbAuYi+cKPXSPoVLKK7nkOVH3xDkDV
+ kdU1zcwslnUImqpmHt+VN83c=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 2c77fd262556d35a;
+	Mon, 21 Sep 2026 17:46:32 +0000
+X-Mizu-Trace-ID: 2c77fd262556d35a
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <0dde6d25-540a-4acc-9375-0df16f1b835a@linux.dev>
+Date: Mon, 21 Sep 2026 18:46:28 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] sched_ext: Specialize the DSQ hashtable compare
+To: Tejun Heo <tj@kernel.org>
+Cc: arighi@nvidia.com, bpf@vger.kernel.org, bsegall@google.com,
+ changwoo@igalia.com, dietmar.eggemann@arm.com, etsal@meta.com,
+ juri.lelli@redhat.com, kprateek.nayak@amd.com, linux-kernel@vger.kernel.org,
+ mgorman@suse.de, mingo@redhat.com, peterz@infradead.org,
+ rostedt@goodmis.org, sched-ext@lists.linux.dev, vincent.guittot@linaro.org,
+ void@manifault.com, vschneid@redhat.com, yphbchou0911@gmail.com
+References: <20260921171928.1639407-1-usama.arif@linux.dev>
+ <a29f5b829952f6a8f15128a4115c5765@kernel.org>
+Content-Language: en-US
+From: Usama Arif <usama.arif@linux.dev>
+In-Reply-To: <a29f5b829952f6a8f15128a4115c5765@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Applied to sched_ext/for-7.4 with the dsq_cmpfn() signature joined onto one
-line.
 
-scx_tid_hash and scx_sched_hash have the same u64 key and also fall back to
-rhashtable_compare(). scx_bpf_tid_to_task() sits on hot paths too. Do you
-want to do the same for them as a follow-up?
 
-Thanks.
+On 21/09/2026 18:40, Tejun Heo wrote:
+> Applied to sched_ext/for-7.4 with the dsq_cmpfn() signature joined onto one
+> line.
+> 
+> scx_tid_hash and scx_sched_hash have the same u64 key and also fall back to
+> rhashtable_compare(). scx_bpf_tid_to_task() sits on hot paths too. Do you
+> want to do the same for them as a follow-up?
 
---
-tejun
+Yes, let me send those as follow-ups! Thanks!
+
+> 
+> Thanks.
+> 
+> --
+> tejun
+
