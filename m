@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2D545FFB1;
-	Mon, 21 Sep 2026 09:49:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACBF45D912;
+	Mon, 21 Sep 2026 09:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789984165; cv=none; b=AqH/zTy7nHxGBI0yvYSI9/EV64xopSJdcJYRamXyBNJTmKDoMdjQyydjSgPWbHrY3/e0Yc/ilKB8k4jBsTYsKuT+HVKnR87aRC/srQQJYuexdvnMiJNW9LpM/v1/Zt1QPMORgcTDGCvQsQMvzC/jvFxrQBLaZxZZPKOQ9UDBmwo=
+	t=1789984170; cv=none; b=WBzTLMrtJTOqnTi0h+16lnDARG+UpA+twCQl/5UZsyw7QpjPHajsMbpzTBvQ1O6UbfvC3suDfSSxyIxLsO932pvQhmuOK0ViIFX9b2z4/vFr74s9+Z2CRDAMNEsyFiIGA65pA0u/FIZiqIkNZCTYloWicyTpFOnvQA0o7kc7kKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789984165; c=relaxed/simple;
-	bh=Plj3ubrbq80/5zTNv+zIFt0JV/f2PwbaT0asYbrROl8=;
+	s=arc-20240116; t=1789984170; c=relaxed/simple;
+	bh=HBsA9PM43GuWZO+qfQBfYt0z5BjFpNX/qpgO9J2YFuo=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=qW2aVTpoW7TznEIImb2bKK2QCjbRqyMaM2ERWdhHyq9c2vPPO/n4OBdK+Cbk5WurIUWfg5mFakQuD4Buc8uVCkiTX3i8vsh6BxGFqgEGoF7lxmWv4gR7SoduFeZ19yHYZ0whXGgAGdl3L4EmZg9pUJrRbt8ZlVx49PT/07CW5/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CGe7oLVl; arc=none smtp.client-ip=100.103.45.18
+	 Content-Disposition; b=WRaWCqZcPh9D1C8LQckas5b3lwxSCoZ9Jc6k+68L+1oTuUh32im4gBKfXVao536oLlyF4FgwHH97fSvEqkHwetzGG5vKpX7pKvI+JHIH6z85yBroH+BYM8LprczYROa4mDmTyRRyOM2rZo4qy/TszrAwQ/CEDPFkR82CaN1Jfkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L4Nq7CGW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CGe7oLVl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F01951F000FF;
-	Mon, 21 Sep 2026 09:49:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L4Nq7CGW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29ED91F000FF;
+	Mon, 21 Sep 2026 09:49:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789984163;
-	bh=qOAymg80ms4ZcX4uHWsep3q5H6ndyNtx30yc62/Ry7w=;
+	s=k20260515; t=1789984168;
+	bh=L7Oq+XJqX0LzSIGBwuR1yRjmlCpODghQmCE1YBpzvP8=;
 	h=Date:From:To:Cc:Subject;
-	b=CGe7oLVlH1/fCp1r6p9wD89LXvRSUqwa47aZjeBub18Qt84rVaFEzl5zOF9oDDAZk
-	 /L6uDDVnNmnYkpKD0HQ4w05QYXDvthBamn1RNEDOD2v/XcQNqHANKVO4JX6e2l++NH
-	 FkvRstQgk6LLCTXUEQNvGtaQwUUHVKTKxGL/Iocxhi9mNn2ZFNd3Ufkun/0rgYeNdH
-	 YWXqSVl+thO6PARVeMK13IaYlDzMejQslweamHi7GnmcEPr6zQuXDqUr/5vWOXqPxT
-	 78me/gX9OO11VjIFBy9LsT4ibLkE/ER9lJ3gs//LqhOEwWs4LHJynkeUjNSJsVo4wv
-	 l3Wnn92FDsnMA==
+	b=L4Nq7CGWPnWEOIe3JljlO3NzmADToiH7NKA2Jv6c484u4F1wVvbxE5ydcsqZrTsA9
+	 EfLhu2LBAYz7Pcxiq3LZOqKwDJSsMfLbNfNlI+VgRshwd0fdJ3Vrld7yfqosbNtbPG
+	 jH8KOHoFrNxKndeaotAAbjSQ0M1gOs+KzsUgES35k/Ba93uSOhhj1Hs4CPCP30CTn/
+	 sEfZfoCtElv5g2ZeuqVYSPFhpHgtPfNAsXbnzoyMLbbxv9BbaMlQqX/QAA5D13bo1f
+	 kQLUt4q+bGtK6NgNTVyrvCjlqvvMNRLNNFZRNnzRk85i5/foDhzttvOwk468YTqMBB
+	 GxJmwfbe6lqfA==
 Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-	id 99EAE1AC52F6; Mon, 21 Sep 2026 10:49:12 +0100 (BST)
-Date: Mon, 21 Sep 2026 11:49:12 +0200
+	id BE60D1AC52F5; Mon, 21 Sep 2026 10:49:25 +0100 (BST)
+Date: Mon, 21 Sep 2026 11:49:25 +0200
 From: Mark Brown <broonie@kernel.org>
 To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Eduard Zingerman <eddyz87@gmail.com>,
@@ -37,15 +37,10 @@ To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
 	Networking <netdev@vger.kernel.org>
 Cc: Anastasios Papagiannis <tasos.papagiannnis@gmail.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
 	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Muchun Song <songmuchun@bytedance.com>
-Subject: linux-next: manual merge of the bpf-next tree with the mm tree
-Message-ID: <arD9mGTj9upScb9t@sirena.co.uk>
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
+Message-ID: <arD9pUBavrJQ8TRT@sirena.co.uk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,11 +48,11 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="9yycvWMy1Ul2gL/7"
+	protocol="application/pgp-signature"; boundary="gZN7iER2B7tM4djM"
 Content-Disposition: inline
 
 
---9yycvWMy1Ul2gL/7
+--gZN7iER2B7tM4djM
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
@@ -66,15 +61,15 @@ Hi all,
 
 Today's linux-next merge of the bpf-next tree got a conflict in:
 
-  mm/internal.h
+  kernel/bpf/helpers.c
 
 between commit:
 
-  c1b742df568b9 ("mm/hugetlb: localize struct huge_bootmem_page")
+  81c975aae375d ("bpf: Require CAP_PERFMON for kfuncs reading memory")
 
-=66rom the mm tree and commit:
+=66rom the bpf tree and commit:
 
-  69d38c792c53a ("mm: Add copy_remote_mm_str()")
+  3f9d98dfed79f ("bpf: Add user memory access kfuncs for mm_struct")
 
 =66rom the bpf-next tree.
 
@@ -85,42 +80,47 @@ is submitted for merging.  You may also want to consider cooperating
 with the maintainer of the conflicting tree to minimise any particularly
 complex conflicts.
 
-diff --cc mm/internal.h
-index 3b9fdb826162d,9e3be236f18c0..0000000000000
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@@ -24,7 -23,17 +24,10 @@@
-  #include "vma.h"
- =20
-  struct folio_batch;
- -struct hstate;
- =20
-+ int __copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
-+ 		void *buf, int len, unsigned int gup_flags);
-+=20
- -struct huge_bootmem_page {
- -	struct list_head list;
- -	struct hstate *hstate;
- -	unsigned long flags;
- -};
- -
-  /* mm/workingset.c */
-  bool workingset_test_recent(void *shadow, bool file, bool *workingset,
-  			    bool flush);
+diff --cc kernel/bpf/helpers.c
+index 712dca5a2c5bd,82402d97ce67c..0000000000000
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@@ -4920,12 -5049,14 +5049,14 @@@ BTF_ID_FLAGS(func, bpf_wq_set_callback
+  BTF_ID_FLAGS(func, bpf_wq_start)
+  BTF_ID_FLAGS(func, bpf_preempt_disable)
+  BTF_ID_FLAGS(func, bpf_preempt_enable)
+ -BTF_ID_FLAGS(func, bpf_iter_bits_new, KF_ITER_NEW)
+ +BTF_ID_FLAGS(func, bpf_iter_bits_new, KF_ITER_NEW | KF_PERFMON)
+  BTF_ID_FLAGS(func, bpf_iter_bits_next, KF_ITER_NEXT | KF_RET_NULL)
+  BTF_ID_FLAGS(func, bpf_iter_bits_destroy, KF_ITER_DESTROY)
+ -BTF_ID_FLAGS(func, bpf_copy_from_user_str, KF_SLEEPABLE)
+ -BTF_ID_FLAGS(func, bpf_copy_from_user_mm, KF_SLEEPABLE)
+ -BTF_ID_FLAGS(func, bpf_copy_from_user_mm_str, KF_SLEEPABLE)
+ -BTF_ID_FLAGS(func, bpf_copy_from_user_task_str, KF_SLEEPABLE)
+ -BTF_ID_FLAGS(func, bpf_get_kmem_cache)
+ +BTF_ID_FLAGS(func, bpf_copy_from_user_str, KF_SLEEPABLE | KF_PERFMON)
+++BTF_ID_FLAGS(func, bpf_copy_from_user_mm, KF_SLEEPABLE | KF_PERFMON)
+++BTF_ID_FLAGS(func, bpf_copy_from_user_mm_str, KF_SLEEPABLE | KF_PERFMON)
+ +BTF_ID_FLAGS(func, bpf_copy_from_user_task_str, KF_SLEEPABLE | KF_PERFMON)
+ +BTF_ID_FLAGS(func, bpf_get_kmem_cache, KF_PERFMON)
+  BTF_ID_FLAGS(func, bpf_iter_kmem_cache_new, KF_ITER_NEW | KF_SLEEPABLE)
+  BTF_ID_FLAGS(func, bpf_iter_kmem_cache_next, KF_ITER_NEXT | KF_RET_NULL |=
+ KF_SLEEPABLE)
+  BTF_ID_FLAGS(func, bpf_iter_kmem_cache_destroy, KF_ITER_DESTROY | KF_SLEE=
+PABLE)
 
---9yycvWMy1Ul2gL/7
+--gZN7iER2B7tM4djM
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqw/ZcACgkQJNaLcl1U
-h9DCRgf/S6rSqkJe9utzdVZ2ExVllxwc3pAqiY69HWpOGZMGfga4mBanMb8AY+nJ
-voVK0FtScwTS3ANByQZkrYs5kDgBNdnWwVvNoYSm/CQmg4kyYzIYDjXAIdLU+LeG
-GHO7V2VPf4De6Qk5L5HriEjJRoEgVapdmyhiqxVzu2qLVlzJB8SD/FCXYd7E4BOV
-Tem1436FxxrRtA7bAB6a99GORCzN7tWPGao6qIpEDRD3PPtzLARXi7ne5h5AyTxx
-OejUCwrDDMN1Fo+Q934+m/hH5sR0Ny1BzTHWIr9RuYxpQdphTmYCfb1CXQ6zkztX
-fV2KilrGFx2T9Y3UWHEvvmyRMBtAJw==
-=IlkG
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqw/aQACgkQJNaLcl1U
+h9AFSggAhb2Dk0lPYAKdAuGHjD6ShmhpnW2H8vySrTKhDQJBgSfB2XTc04WiPifh
+o2m/zgOtn1Or26x4Tunfhn36vTga+TlrcK+ZqsWRJ6bHUmX9lSauVaDsa+CZDFe+
+NpcBuXapYDue3rR3B4Obz4vJHSSJA+1skaTPFDIT2Xc8h4QNUdXQeGjcwpz3CYa5
+XImS6fQKnLAbDDMDC8+eppTc3s0j0tjl1FHSNkA8rsnTvhul3Mz0hlicgD2yCmkp
+e6Ei8WQd/Uu34+0tK44SV9pO43yHNzJwJa6xvtpunn8juCc+NVzhzgFygckpWk1I
+fKXiIAGYXiakQHxLBvQD/O+SQX5kHA==
+=acpp
 -----END PGP SIGNATURE-----
 
---9yycvWMy1Ul2gL/7--
+--gZN7iER2B7tM4djM--
