@@ -1,149 +1,179 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx2-f12.google.com (mail-yx2-f12.google.com [74.125.224.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 277F83C3F58
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 15:59:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790006387; cv=none; b=pqNtZ+IHLii6Ffg7N9eSEObX5uBLB4R+QlUioRI9RWM8F4Van7oIRiTKF5T6CzmEv2gOkocxyeq8WrEBZP5Finpnc0gzRriPUIWMaqfB8y2EgzSDXaDmma/S6yW2pEVAYeRSFGnoOEPdtV9UMukqh2qbECH8njGpOtbPo9Fl6AM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790006387; c=relaxed/simple;
-	bh=v/q8Pks4DRp+sZnSR9urT63GT271YuxfubLRI8+0N7k=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=aGDJsn9AIGZC089WFIn5BTRbw7vFHbUYt2zW/nb4aaPaotUscRSktoTuPwWIO6SbICz3f1M6/5Xw7XPnoSY9lNZoOilej5XoHCW+CaarfmjYmWU5ulI/XvnR+yY8Og+dRYNylTokCgtzuwdqoes1nHgk37WgxhXOwSKLArqRcKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gwEokjxE; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBFB04CDDFE
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 16:25:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790007905; cv=pass; b=r9zzLlWTndDlNVJycxrjryNzgTConjNkVoDI9YR5o6rRhGazK7qddF2OelS2gC1GyYBOjGid90Frj0kE4JS0XljfmbkobnfT8kRqCOXdpgdcVEj/y4t6rdatUAbDHRYAimdWjvCD4udy5PEbiLoHbLiaK7hQUNKLaokwMAVzvNM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790007905; c=relaxed/simple;
+	bh=tQzdD12zrT7V7gvs7VjAz44916mnPRGWzcIJa1GNvs4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=B+x9rlQpr/1cZPvDMQH2nk0oIy/CAKn89AlXlT68CfOqzc8a2SIHMcu0P05/zy4/acYBuQmo9N1ZdStgnhAkaW/znznQLkzaodS43t9J4/dVLkW9Pv9KlphfYyL1nLucIfjPtL3dzgOl/X3N0RvHhTI3mNi6yTfc8tPrn+9wz0I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dzXQzUD9; arc=pass smtp.client-ip=74.125.224.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gwEokjxE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 949431F00893;
-	Mon, 21 Sep 2026 15:59:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790006385;
-	bh=1ccwwRZHKt/zDegwQK2HJHD9hOQrgLx9p/WeRr4BjeA=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=gwEokjxE0swbvScg9k4qIvzZvnR5HZq7toEO8FtGYhgrdQZ1F8KuO7W2mmIRqK5bn
-	 9zm7+pv9T3XDdrqldu2nNqvpvik0+TwtQrzn0vHTALcK6plTK+Yv2pp8sgnWohWqfz
-	 XNNz92mg+T0511sWcpkjOJn9+fU2GfdLNR6+Iyd3yo4ePlfJg21TEmXYP2EeQ8TP66
-	 GOStwGVU3onkCdm5qAXzO8icbhZuSjwzlXSMEy01gSz6Yk9hGJUtN+XzOzrmx9ZFws
-	 0Sjt8W0t9K+oaFeoSSoI87LoLTSuGWloAmNm6kutqArr61IbqKf7DXDJhswiBeTet1
-	 R8sqI2MOGjsGw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH] bpf: add diagnostics for rejected memory and map
- accesses
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Suchit Karunakaran" <suchitkarunakaran@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260921154650.130677-1-suchitkarunakaran@gmail.com>
-References: <20260921154650.130677-1-suchitkarunakaran@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 21 Sep 2026 15:59:45 +0000
-Message-Id: <20260921155945.949431F00893@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dzXQzUD9"
+Received: by mail-yx2-f12.google.com with SMTP id 956f58d0204a3-66e50968489so2929497d50.0
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 09:25:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790007903; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Iu+zA4Tt2BNVhT3ffUM7v+BOMz2LlZcqr/EHe/BSrXF7cva19jDf7yygo7NCSzTzYO
+         Fr8CV/2qAZ7HPAclvT9F00xqTu9EuzXPCOcZHXIgzg3f9TzTJXnyH+jgc9RXFTJm3GUt
+         bmIQtY8flI+7bB7ronlcZRCUCzLp62CMjO0Hj4R3zuCavQid4HPbJV3xupPDrsP28dWZ
+         FNDys/EvBP66wIg6ZMV9RAYvo3uoMWDJRpL7gYClRsBEfj7vTrYbIfGETMG/20u38x1G
+         eJlvxZWY7PXKX9TAqWjoF80vGphpLg/UVLp1MfB7A9q3WE5jb5Z018rqR856MqPHE5cQ
+         werg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=FscOTKf6GX9LsYtYTRZ38iEWAQ8+A7NhnQp2GLbb0QM=;
+        fh=XyNoAWnAgfOuYe+SHH8a1AKhdxxzhlufrWHJcwOZt/I=;
+        b=GFAGBd0K71phQ61EUNbGsqRrG2KMyVOnhgftZUVF7aiHC7K8hvnyPk2Nw9h07oBKDF
+         oK6nbR7Mi/D0IZSOyHSRXhotZ4ueSuC0zh4G7fC1Zyrn/NSorTwmr77KeLhVnmB+vmXf
+         c7kN9aB+2jRoBhgvjmm8ErEJgCmG8C5UqKu60CWPnGYAf5AyDjR0uNTf0X6iK18lDsIU
+         dGqbcdpAZYjnYEOVoYim1FqvI5vXJvO01XswThd1hPTOHc5jTcDgsdncvWbQggwLoJeY
+         evYd6ZCGixwSVRrHCoeb1r4qQnHoRq2Nvz3l6CWDGCTDAZ5yc3ap/8dYm78v4p35Vbxp
+         ZzRQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790007903; x=1790612703; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=FscOTKf6GX9LsYtYTRZ38iEWAQ8+A7NhnQp2GLbb0QM=;
+        b=dzXQzUD9aQp+/l7NVQZpQWmwtie/4d36Ok64i7dmRhWmPyDvJsinw+jEZWspg54Eoe
+         BQ4FHr0VznKmfLdR2p1CggwWijyS20mf15xLId08dKkZ+w6HHBd4Qa6zZmvB1shN35DU
+         R/hVdgclw6I1loxNb0g1ZrgDfOs/3F5I2YrWHb/YucecdPS5Q9fReo016uHWJXBop0DQ
+         pA8cBhxobYaoibgg3sUr2rQSWIuDVBZezSygK63JpmuYto+f9B/eTlsL+beRfzKRtHSl
+         uB99Oo6S3bL2+CSEse+FN4TJJk7s/C0P6DPCyxQmLuIfxpg6g1Ud+mIihsHy+h1p3iF5
+         rVbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790007903; x=1790612703;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=FscOTKf6GX9LsYtYTRZ38iEWAQ8+A7NhnQp2GLbb0QM=;
+        b=RI/5FVTTGbkdKZOF1m+b1bRa9PlX+jGjHSqQVBulx/Q8QHNsOY4URwgDFkDN3XT+fQ
+         dtKANxrK0eGTT+BM5XF+1qFgDtta9LwNmWwjD6pzohW3cDwzQkmL0bdKfU7LAkEp8Ugh
+         3xnXx4x8vAbH1Z5z1+yP7OmH4v5ECnhrjMGRdh2LmSVPuwavQCUkv/DzQVEUiFIJYALi
+         phpDXptKdLLlxezcVZVUlaJBsZ8uplpmCkAj9AzJvyoIXkVMPy8q6OSQAMByPwbZBKq9
+         ggayVFcPBtzjxEaEXkwTOYx459CsEGKhGbvNlw79ZhV+ekzVVga6emA6oJVtt5YM+HMq
+         lmtg==
+X-Gm-Message-State: AFuF++lGvNVIVk/ilK/tqRk4/B9s2g1MGHt9d4tPISJx1zXJM5P0cRzJ
+	Z1ovJ1IOLPiznmw+1rWFPVIMiQ7OgBbvfWmOmLyIHJVBixkAQa6qIuUz9xp13dDVil5NEZDxzYs
+	qmkL+q6iHTO99e6jEaDOpiUkKKXFZUSC3UA==
+X-Gm-Gg: AYBFou0Obs4KcM3MZ6TJwmK3nQ0KzfTzKM9PfiX/6je27sb2BJEi4LJOjcuOYOZ1REB
+	THJCZjgLWC29AnbCZSQIqYlvR7duiX3nx1nmRIDtOAvYDHV2vbP3Cc5GxHDAVe8Cl2495t4EJ1S
+	V9CiYuZBFho9KCQRfZn83LQHdfRy95Rci8XmGqPNHvCqoBQONxanoUQu+UFCTWonyGxfdzJ32N3
+	Np3c5XGTPFtwiB99PYnEKgL5Iewg/MnkvtXVrk4R6ri0pM1HksCXaCBXAnYN3oe9RNs12C4bqfR
+	hoohh+dAX3jdN0ZJp/VDicmWeDy/8qGNJjJWHF6Tkc5QYYnRPj7/+53iIodft5kOtjqRyw+xHHc
+	UP+eCQfE/l6+ypEwRSGU0/oRjXq6vdqlDtJFSLinJrVwx9PXf54hF8VglsXZ6a1+v3rjeRt5Sv1
+	4e35FptDOZVsO9M4gmevngPr0=
+X-Received: by 2002:a05:690e:c4e:b0:672:be40:5eaf with SMTP id
+ 956f58d0204a3-672be40629dmr713487d50.54.1790007902724; Mon, 21 Sep 2026
+ 09:25:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20260904195132.141068-1-sidchintamaneni@gmail.com> <DLKORFKGW8D8.XVSVVIH3Q6Q@gmail.com>
+In-Reply-To: <DLKORFKGW8D8.XVSVVIH3Q6Q@gmail.com>
+From: Siddharth Chintamaneni <sidchintamaneni@gmail.com>
+Date: Mon, 21 Sep 2026 09:24:51 -0700
+X-Gm-Features: AcwNN1VSvI94aKmDMDlc9C_7_9UyySkBSsqPddt2OeIwAs5C5fHNExBLC9Hitxg
+Message-ID: <CAE5sdEgLFFcsQ8rpraQ4L-EvppqxUn+=ZdHFgker2Wd--EGL6g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 0/7] Fix timed may_goto with private stacks
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Anton Protopopov <a.s.protopopov@gmail.com>, Puranjay Mohan <puranjay@kernel.org>, 
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, rlmenge@gmail.com, 
+	hargar@linux.microsoft.com, apais@microsoft.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Low] bpf: incomplete diagnostic coverage for read-only and packet writes
---
+<SNIP>
 
-commit 4bb7159fc40bb3fd0415a49f32660f99d3a92102
-Author: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+> I think we can keep this fix local to x86. Would be less churn in the end=
+.
+>
+> The problem is that x86 switches the BPF frame pointer from RBP to R9 for
+> private stacks, but the trampoline still uses RBP. arm64 and powerpc64 ke=
+ep
+> using X25 and R31 respectively for both stack modes, so their trampolines
+> already use the right frame pointer.
+>
+> Instead of changing the generic fixup, can we resolve the pointer in the =
+x86 JIT
+> when emitting the call to arch_bpf_timed_may_goto()? We already know whet=
+her
+> priv_frame_ptr is set there. R10 contains the offset passed through BPF_R=
+EG_AX,
+> so we can emit:
+>
+> /* Private stack */
+> leaq (%r9, %r10), %r10
+>
+> /* Normal stack */
+> leaq (%rbp, %r10), %r10
+>
+> Then remove the LEA from the x86 trampoline, as patch 2 already does.
+>
 
-    bpf: add diagnostics for rejected memory and map accesses
-   =20
-    Emit structured verifier diagnostics when BPF programs are rejected for
-    unsupported or prohibited memory operations. Cover sign-extending arena
-    loads without JIT support, read/write access restrictions on maps, writ=
-es
-    through read-only pointers, direct packet writes, and modifying helpers
-    used with BPF_F_RDONLY_PROG.
+make sense! I thought that the remaining arch's have a similar private
+stacks approach to x86. I'll give it a try and re-spin the patch.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 18aad4886f9cf..a4ca95168a01f 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -6529,6 +6535,9 @@ static int check_mem_access(struct bpf_verifier_env=
- *env, int insn_idx, struct b
->  		if (t =3D=3D BPF_WRITE && rdonly_mem) {
->  			verbose(env, "%s cannot write into %s\n",
->  				reg_arg_name(env, argno), reg_type_str(env, reg->type));
-> +			bpf_diag_policy(env, insn_idx, "write through a read-only memory poin=
-ter",
-> +					"this pointer permits reads only",
-> +					"Use a writable destination, or copy the data into a writable buffe=
-r before modifying it.");
->  			return -EACCES;
->  		}
-
-[Severity: Low]
-This isn't a bug introduced by this patch, but does the check for PTR_TO_BUF
-also need this diagnostic when rejecting direct writes in check_mem_access(=
-)?
-
-kernel/bpf/verifier.c:check_mem_access() {
-	...
-	} else if (base_type(reg->type) =3D=3D PTR_TO_BUF &&
-		   !type_may_be_null(reg->type)) {
-		bool rdonly_mem =3D type_is_rdonly_mem(reg->type);
-		u32 *max_access;
-
-		if (rdonly_mem) {
-			if (t =3D=3D BPF_WRITE) {
-				verbose(env, "%s cannot write into %s\n",
-					reg_arg_name(env, argno), reg_type_str(env, reg->type));
-				return -EACCES;
-			}
-	...
-}
-
-Should writes to read-only PTR_TO_MEM and PTR_TO_BUF via helper function
-arguments also emit the structured diagnostic?
-
-kernel/bpf/verifier.c:check_helper_mem_access() {
-	...
-	case PTR_TO_MEM:
-		if (type_is_rdonly_mem(reg->type)) {
-			if (access_type =3D=3D BPF_WRITE) {
-				verbose(env, "%s cannot write into %s\n",
-					reg_arg_name(env, argno), reg_type_str(env, reg->type));
-				return -EACCES;
-			}
-		}
-	...
-}
-
-[ ... ]
-> @@ -6608,6 +6617,9 @@ static int check_mem_access(struct bpf_verifier_env=
- *env, int insn_idx, struct b
->  	} else if (reg_is_pkt_pointer(reg)) {
->  		if (t =3D=3D BPF_WRITE && !may_access_direct_pkt_data(env, NULL, t)) {
->  			verbose(env, "cannot write into packet\n");
-> +			bpf_diag_policy(env, insn_idx, "direct packet write",
-> +					"direct packet writes are disabled for this program type",
-> +					"Remove the direct write, or perform the modification in a program =
-type and hook that support packet writes.");
->  			return -EACCES;
->  		}
-
-[Severity: Low]
-This is a pre-existing issue, but should the same diagnostic be emitted when
-packet writes are rejected via helper function arguments?
-
-kernel/bpf/verifier.c:check_helper_mem_access() {
-	...
-	case PTR_TO_PACKET:
-	case PTR_TO_PACKET_META:
-		if (!may_access_direct_pkt_data(env, meta, access_type)) {
-			verbose(env, "function access to the packet is not allowed\n");
-			return -EACCES;
-		}
-	...
-}
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260921154650.1306=
-77-1-suchitkarunakaran@gmail.com?part=3D1
+> This gives bpf_check_timed_may_goto() the same address used by the genera=
+ted
+> loads and stores: the BPF frame pointer plus the counter=E2=80=99s stack =
+offset. For
+> normal stacks, we just move the existing calculation into the JIT. For pr=
+ivate
+> stacks, we use R9 instead of RBP, which fixes the mismatch.
+>
+> The existing save/restore of R9 around the call should stay. We also leav=
+e RBP
+> alone, since it is still needed for the native frame chain and unwinding.
+>
+> I haven=E2=80=99t tested this approach, so it still needs checking with b=
+oth normal and
+> private stacks.
+>
+> pw-bot: cr
+>
+> > Siddharth Chintamaneni (7):
+> >   bpf: Fix timed may_goto stack pointer for private stacks
+> >   bpf, x86: Use resolved pointer for timed may_goto
+> >   bpf, arm64: Use resolved pointer for timed may_goto
+> >   bpf, powerpc64: Use resolved pointer for timed may_goto
+> >   bpf, riscv: Use resolved pointer for timed may_goto
+> >   bpf, s390: Use resolved pointer for timed may_goto
+> >   selftests/bpf: Test timed may_goto with private stacks
+> >
+> >  arch/arm64/net/bpf_timed_may_goto.S           | 12 ++------
+> >  arch/powerpc/net/bpf_timed_may_goto.S         |  8 ++---
+> >  arch/riscv/net/bpf_timed_may_goto.S           | 13 ++++----
+> >  arch/s390/net/bpf_jit_comp.c                  |  6 ++--
+> >  arch/s390/net/bpf_timed_may_goto.S            |  8 ++---
+> >  arch/x86/net/bpf_timed_may_goto.S             |  6 ----
+> >  kernel/bpf/fixups.c                           | 19 ++++++------
+> >  .../bpf/progs/verifier_bpf_fastcall.c         | 30 ++++++++++---------
+> >  .../selftests/bpf/progs/verifier_may_goto_1.c | 17 ++++++-----
+> >  .../bpf/progs/verifier_private_stack.c        | 19 ++++++++++++
+> >  10 files changed, 75 insertions(+), 63 deletions(-)
+> >
+> >
+> > base-commit: d761934c9483ecde93fe99d8705282f716dfee50
+>
