@@ -1,272 +1,97 @@
-Received: from mta1.migadu.com (out-82.mta1.migadu.com [95.215.58.82])
+Received: from mail-pj2-f1.google.com (mail-pj2-f1.google.com [74.125.227.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCF3F439F88
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 20:40:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.82
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2767B4C1503
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 20:50:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.129
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790023229; cv=none; b=ptf5d8u3MJjLGTigY9gFcjZm+ZkALQy0wGwybwvIxjftFR8rfFuTmUFemz7veoRHDgI+wfqXgCsHNOZKPkTe6h/+fyJBMnMmrz+9d3t8vEdpYb23zPc6QpTKBIgA2ApWAdG8aVd7Pj8VF2YFtv0nv29uAtgcuip9DRbdYIugas8=
+	t=1790023815; cv=none; b=cg9slnEDZqgkObzkkaYY103Y5OY00J+jgFvMURB6bFn7RqoBlGBSSSZqkyZov27OqqXNcojgbHPmrZB8victasqVrqCvU+Z6EDThWAhsJI/T1xePJFIjA+IVK321V5+2mzH2JC2IvST/CPyt9HUpxr0BYXjcPVLXa/6Xj+lWsWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790023229; c=relaxed/simple;
-	bh=+NjMmAqTe3DBtOof46jNgH0Ha5pqjYKueS3olSSLV1E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QLB5E1vEER3XspFKByo1BAZ1BHnSCxvf234ntjh7XVTSUz0arRH/gb3tj5TOhz4Gljz4GidfVdS2Ffa3aN5DuH0RW5ZMMqafUzJerocI6cAvSmqCdzk/y/sJ8BMnJnD1u1BxFdnC1HUv1xwIkP938hn0Wi7CE5zxa9jYotHnScw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dxsMG4IV; arc=none smtp.client-ip=95.215.58.82
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790023815; c=relaxed/simple;
+	bh=zZDP+BUxTYverF2YsFJcsQhL9mL6T7bJo9J1gf8XrVQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OVDEQYVJH9VmGu+egGGIXBjj8THvcx5g86AlUWkjWOvTYybViqpzQlLu+F7NoE2c6JXK+TMGIRp0Fvvh2/BWqtncJOV2hN6Uc3mnxNADLf4e0hk3woZPVNd25dKGS5t4w60ybrz6qskp3SaNNWvbTtNsEOKamO6uLgxcRvlfKoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nGtYoiVX; arc=none smtp.client-ip=74.125.227.129
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dxsMG4IV"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=+NjMmAqTe3DBtOof46jNgH0Ha5pqjYKueS3olSSLV1E=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790023222; v=1; x=1790628022;
- b=dxsMG4IVKcsgAW39Y4sXV6+b6bqlaDLpCkx0xBNMz4E6FAB9ejKFXjHDtkp87YDdnMhcHu6W
- 4svO360/jz064Qx5NXLb4fbLHua3DVEYw4Gq8aH94KCS2IikQWidWkUvTvZMZlyyCGYoPrfH0I4
- 5o/PTtAoNIYeN5We1ItZvIm4=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 66aea15dc36d8793;
-	Mon, 21 Sep 2026 20:40:19 +0000
-X-Mizu-Trace-ID: 66aea15dc36d8793
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <6f95ec90-194a-4304-9673-c7bb50065223@linux.dev>
-Date: Mon, 21 Sep 2026 14:40:15 -0600
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nGtYoiVX"
+Received: by mail-pj2-f1.google.com with SMTP id d9443c01a7336-2dae660f31bso30477625ad.1
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 13:50:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790023809; x=1790628609; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=K2GjyH/smBenoTcMmVaPg55qIuCzt7uV7xXBVHGA+A0=;
+        b=nGtYoiVX8BXQYMAiwuZ/ZFYU5DkQIsKnoPYyZ11RHp2WfMz5Wn8j+6iXogL++5UsX/
+         VK+F0CRv/j8q8Tc5H2BR1vRRHdGJMwlz3DMJMUtEEliFoP0psjhNlF7qqY4czweQxdp1
+         7bsT/iFkIFgs45FcL1r6skwH0vudgNBDWAX/ALosHXFvY15P3izuwelLrciP5rDvgFcT
+         lbuX7Y0XeX+iWRGg+onZqjmSDFbB6E+JIA+cExc0xRXrSX+5D966HHqcBtlGOY/vOtkx
+         6erwK5W+M+QZycYO9KjEW5IfS/3SswFr8/XaAonClUYRCIjRx1/YjLQc1bnQqTuWwNVY
+         lXPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790023809; x=1790628609;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=K2GjyH/smBenoTcMmVaPg55qIuCzt7uV7xXBVHGA+A0=;
+        b=bLKfd8HmdZ9na5c79zwpwb0lOZh5YENQNH5qipy1UonsCL/2Ru0nwQDcFG478dU11V
+         DYbEAagHdmWycquL8/KthoF9Nd2tzTHRSDnHZa2gJJGhx0dAk50p+A77RyFkpx84LC1p
+         PwJulwS7uemJCS7myRetVezHh1L/QfOXFBOhZn0WCnpnji5CyGwHdGrKIzEaWjsZ16zP
+         qeBrN895nimDYO6pi4WL1QH7sQJqCzFe6shr4GAKO3GNC8nrYbP2JCl8kPsdq6t01loA
+         ZJT5knyIyZvrEnovdbPXeQO9vRjvlqAgjTor2GmkgZmXSNrjLOsynRwIpvWSkgLA0Z6w
+         LQ5Q==
+X-Forwarded-Encrypted: i=1; AKwUvBzDKofg/HWZcBcYWeASS5PLYaw8+WnIW1SsyUrfd8cCtj4TWXeRAanIBonuzz9dmuOH95o=@vger.kernel.org
+X-Gm-Message-State: AFuF++kizIlk0tbL+1dRjpAfNGY8GB3Ov+OfG48LoQ1m20VWInALqG9C
+	Uts0grAZWGb1kllbZP4gPlC/NN1WZPSZniHxNMG7ScihO6TNsbLJFlUl
+X-Gm-Gg: AYBFou3XjaeU0FDZZsS29OfsKLBZyfNnzdzigBtVyZ85hGUq2/y4ukPEe/KOQ/MBfRN
+	EaXv5TfELrP+7r66oV/opf9NfJ0Jf+xynw1LodcFWeDBYWIeuXcQaZn4DfI2yTA2ymg42FeGK4z
+	9VsDgeIStr1J3YNkKQZht6lOFrtrWo5ZlFsXNuM6ukMIy3yciGgiO4Ppk8Jt0nNN5p3oHz9gMOR
+	U8NdK4UdCgFG82shBJxEAZGHqNGADR9Yrswx/u6cFSj9PP/DeoLow83xh4SGlkOh45DLHVUMXve
+	ivY19RBs5eRmoBovpD+n/eB1LxMLfJfaKfeZBWOKczzm2ls8Pdtkoli5Zs3iF3Ly6PBkqwe+ekT
+	1pbJRMNWnlJ1/tH0fV7IVOQuN/ifqI6pCBBZFv9ljO+j1di8PBewCZZ+n8B5QLBGzVdPkpj0UzN
+	tjecAZzQYQNwmq17Cnakut1o4P3V14MLGFVH+McogSC9z5QX/9rqEyu/kv5YGJYY7DEQ==
+X-Received: by 2002:a17:903:2c0d:b0:2d9:123c:8c49 with SMTP id d9443c01a7336-2ddb1b9a1famr181080635ad.14.1790023809022;
+        Mon, 21 Sep 2026 13:50:09 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:54::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df5b8075f8sm472845ad.83.2026.09.21.13.50.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Sep 2026 13:50:08 -0700 (PDT)
+Date: Mon, 21 Sep 2026 13:48:06 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Kuniyuki Iwashima <kuniyu@google.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, 
+	Willem de Bruijn <willemb@google.com>, Tenzin Ukyab <ukyab@berkeley.edu>, 
+	=?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@meta.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next 1/7] selftest: bpf: Use
+ BPF_SOCK_OPS_ALL_CB_FLAGS + 1 for bad_cb_test_rv.
+Message-ID: <arGYABcr0mfrFXoX@devvm7509.cco0.facebook.com>
+References: <20260920195633.3033620-1-kuniyu@google.com>
+ <20260920195633.3033620-2-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] selftests/bpf: Fixes for out-of-tree builds
-To: =?UTF-8?B?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>,
- ihor.solodrai@linux.dev, nickolay.lysenko@gmail.com
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Emil Tsalapatis <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Song Liu <song@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Andrii Nakryiko <andrii@kernel.org>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>
-References: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
-From: "Nico Pache (Red Hat)" <nico.pache@linux.dev>
-Content-Language: en-US, en-ZM
-In-Reply-To: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260920195633.3033620-2-kuniyu@google.com>
 
-
-
-On 7/28/26 6:06 PM, Ricardo B. Marlière (SUSE) wrote:
-> Hello,
+On 09/20, Kuniyuki Iwashima wrote:
+> Once bpf_sock_ops_cb_flags_set() supports a new flag,
+> tcpbpf_user.c fails due to the hard-coded max value, 0x80.
 > 
-
-Hello! Thanks for posting this.
-
-The Fedora build system is rather complex, especially around selftests BPF. We
-are also discovering we need these changes.
-
-Due to some other oddities in our build system, we would also like to specify a 
-precompiled vmlinux, rather than defaulting to $(objtree)/vmlinux.
-
-I developed the following commit on top of these changes, and was finally able
-to get a successful build in our env.
-
-commit 616e12baf39ac44680c1dc22d31dbeea63e196b7
-Author: Nico Pache <npache@redhat.com>
-Date:   Fri Aug 7 12:37:36 2026 -0600
-
-    kbuild, selftests/bpf: allow overriding the module BTF base
-    
-    scripts/Makefile.modfinal currently hard-codes $(objtree)/vmlinux as the
-    BTF base used for module BTF generation. That works for in-tree builds,
-    but selftests/bpf/test_kmods may need to reuse a vmlinux resolved from a
-    prepared build tree or from /sys/kernel/btf/vmlinux.
-    
-    Add a VMLINUX_BTF_BASE override so module BTF generation can use that
-    pre-resolved vmlinux instead.
-    
-    Signed-off-by: Nico Pache <npache@redhat.com>
-
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 01a37ec872b9..fd16e66aa156 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -38,16 +38,19 @@ quiet_cmd_ld_ko_o = LD [M]  $@
- 		$(KBUILD_LDFLAGS_MODULE) $(LDFLAGS_MODULE)		\
- 		-T $(objtree)/scripts/module.lds -o $@ $(filter %.o, $^)
- 
-+VMLINUX_BTF_BASE ?= $(objtree)/vmlinux
-+VMLINUX_BTF_BASE_PREREQ := $(wildcard $(VMLINUX_BTF_BASE))
-+
- quiet_cmd_btf_ko = BTF [M] $@
-       cmd_btf_ko = 							\
--	if [ ! -f $(objtree)/vmlinux ]; then				\
--		printf "Skipping BTF generation for %s due to unavailability of vmlinux\n" $@ 1>&2; \
-+	if [ ! -f $(VMLINUX_BTF_BASE) ]; then				\
-+		printf "Skipping BTF generation for %s due to unavailability of %s\n" $@ $(VMLINUX_BTF_BASE) 1>&2; \
- 	else	\
--		$(CONFIG_SHELL) $(srctree)/scripts/gen-btf.sh --btf_base $(objtree)/vmlinux $@; \
-+		$(CONFIG_SHELL) $(srctree)/scripts/gen-btf.sh --btf_base $(VMLINUX_BTF_BASE) $@; \
- 	fi;
- 
--# Re-generate module BTFs if either module's .ko or vmlinux changed
--%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
-+# Re-generate module BTFs if either module's .ko or BTF base changed
-+%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(VMLINUX_BTF_BASE_PREREQ)) FORCE
- 	+$(call if_changed,ld_ko_o)
- ifdef CONFIG_DEBUG_INFO_BTF_MODULES
- 	+$(if $(newer-prereqs),$(call cmd,btf_ko))
-diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/testing/selftests/bpf/test_kmods/Makefile
-index 53e47e715ec4..8580eee34f32 100644
---- a/tools/testing/selftests/bpf/test_kmods/Makefile
-+++ b/tools/testing/selftests/bpf/test_kmods/Makefile
-@@ -11,6 +11,8 @@ KMOD_O_VALID := $(if $(KMOD_O),$(if $(wildcard $(KMOD_O)/Module.symvers),$(KMOD_
- KDIR ?= $(if $(KMOD_O_VALID),$(SRCTREE_KDIR), \
- 	    $(if $(wildcard $(SRCTREE_KDIR)/Module.symvers),$(SRCTREE_KDIR), \
- 		/lib/modules/$(shell uname -r)/build))
-+# The parent bpf/Makefile may already have resolved a usable BTF base.
-+VMLINUX_BTF_BASE_ARG := $(if $(VMLINUX_BTF),VMLINUX_BTF_BASE=$(abspath $(VMLINUX_BTF)))
- 
- ifeq ($(V),1)
- Q =
-@@ -32,10 +34,12 @@ PERMISSIVE := $(filter 0,$(BPF_STRICT_BUILD))
- all:
- ifeq ($(PERMISSIVE),)
- 	$(Q)$(MAKE) -C $(KDIR) $(if $(KMOD_O_VALID),O=$(KMOD_O_VALID) KBUILD_OUTPUT=$(KMOD_O_VALID),KBUILD_OUTPUT=) \
-+		$(VMLINUX_BTF_BASE_ARG) \
- 		$(if $(OUTPUT),MO=$(OUTPUT)) \
- 		M=$(TEST_KMOD_DIR) modules
- else ifneq ("$(wildcard $(KDIR))", "")
- 	$(Q)$(MAKE) -C $(KDIR) $(if $(KMOD_O_VALID),O=$(KMOD_O_VALID) KBUILD_OUTPUT=$(KMOD_O_VALID),KBUILD_OUTPUT=) \
-+		$(VMLINUX_BTF_BASE_ARG) \
- 		$(if $(OUTPUT),MO=$(OUTPUT)) \
- 		M=$(TEST_KMOD_DIR) modules
- endif
-
-
-Given your series was defferred, and there is a "rewrite" coming, what would
-be the best approach to working together (between us three) to get these
-fixes in that series too. 
-
-Cheers,
--- Nico 
-
-> When doing a simple out-of-tree build, e.g.:
+> Let's replace 0x80 with BPF_SOCK_OPS_ALL_CB_FLAGS + 1.
 > 
-> $ git clean -fdx
-> $ mkdir ../build
-> $ make defconfig O=../build
-> $ scripts/kconfig/merge_config.sh -O ../build ../build/.config tools/testing/selftests/bpf/{config,config.x86_64}
-> $ make O=../build
-> $ make -C tools/testing/selftests install O=$PWD/../build SKIP_TARGETS= TARGETS=bpf
-> 
-> Will leave behind several build artifacts:
-> 
-> $ git clean -fdx
-> Removing tools/testing/selftests/bpf/libarena/asan.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/asan_asan.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/buddy.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/buddy_asan.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/common.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/common_asan.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/libarena.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/libarena.skel.h
-> Removing tools/testing/selftests/bpf/libarena/libarena_asan.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/libarena_asan.skel.h
-> Removing tools/testing/selftests/bpf/libarena/rbtree.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/rbtree_asan.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/spmc.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/spmc_asan.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/st_asan_buddy.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/st_asan_buddy_asan.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/st_buddy.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/st_buddy_asan.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/test_parallel_spmc.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/test_parallel_spmc_asan.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/test_rbtree.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/test_rbtree_asan.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/test_spmc.bpf.o
-> Removing tools/testing/selftests/bpf/libarena/test_spmc_asan.bpf.o
-> Removing tools/testing/selftests/bpf/map_tests/tests.h
-> Removing tools/testing/selftests/bpf/prog_tests/tests.h
-> Removing tools/testing/selftests/bpf/test_kmods/..module-common.o.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.Module.symvers.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_test_modorder_x.ko.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_test_modorder_x.mod.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_test_modorder_x.mod.o.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_test_modorder_x.o.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_test_modorder_y.ko.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_test_modorder_y.mod.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_test_modorder_y.mod.o.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_test_modorder_y.o.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_test_no_cfi.ko.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_test_no_cfi.mod.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_test_no_cfi.mod.o.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_test_no_cfi.o.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_test_rqspinlock.ko.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_test_rqspinlock.mod.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_test_rqspinlock.mod.o.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_test_rqspinlock.o.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_testmod.ko.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_testmod.mod.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_testmod.mod.o.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_testmod.o.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/.bpf_testmod.o.d
-> Removing tools/testing/selftests/bpf/test_kmods/.module-common.o
-> Removing tools/testing/selftests/bpf/test_kmods/.modules.order.cmd
-> Removing tools/testing/selftests/bpf/test_kmods/Module.symvers
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_modorder_x.ko
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_modorder_x.mod
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_modorder_x.mod.c
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_modorder_x.mod.o
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_modorder_x.o
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_modorder_y.ko
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_modorder_y.mod
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_modorder_y.mod.c
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_modorder_y.mod.o
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_modorder_y.o
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_no_cfi.ko
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_no_cfi.mod
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_no_cfi.mod.c
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_no_cfi.mod.o
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_no_cfi.o
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_rqspinlock.ko
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_rqspinlock.mod
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_rqspinlock.mod.c
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_rqspinlock.mod.o
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_test_rqspinlock.o
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_testmod.ko
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_testmod.mod
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_testmod.mod.c
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_testmod.mod.o
-> Removing tools/testing/selftests/bpf/test_kmods/bpf_testmod.o
-> Removing tools/testing/selftests/bpf/test_kmods/modules.order
-> Removing tools/testing/selftests/bpf/verification_cert.h
-> Removing tools/testing/selftests/bpf/verifier/tests.h
-> 
-> This series fixes this.
-> 
-> Assisted-by: claude sonnet
-> Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
-> ---
-> Ricardo B. Marlière (SUSE) (3):
->       selftests/bpf: Route generated test headers to OUTPUT
->       selftests/bpf: Route libarena build artifacts to OUTPUT
->       selftests/bpf: Route test_kmods build artifacts to OUTPUT
-> 
->  tools/testing/selftests/bpf/Makefile            | 45 ++++++++++++++-----------
->  tools/testing/selftests/bpf/libarena/Makefile   | 24 +++++++------
->  tools/testing/selftests/bpf/test_kmods/Makefile |  3 ++
->  3 files changed, 42 insertions(+), 30 deletions(-)
-> ---
-> base-commit: 62cc90241548d5570ee68e01aaba6506964e9811
-> change-id: 20260728-selftests-bpf_oot-da8b59be69fc
-> 
-> Best regards,
-> --  
-> Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
-> 
-> 
+> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
 
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
