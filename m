@@ -1,111 +1,91 @@
-Received: from mail-pz2-f40.google.com (mail-pz2-f40.google.com [74.125.228.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C379F374A11
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:04:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7FD4FD29C
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:13:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790024697; cv=none; b=fe8PjtzfbyLNieEHhfF6vf7kIGS3CAEERBiHI2vgiPfvMjXQhj7ekzfjPHxjOJlx2tGKzRblQ+6V4A4pf+mYwlsQbS+eRoBO9hbm7sej+R6ILvwpeXoZD13czQo0hKMRXCBTBJ7maH28LAltd6oWBiT0/URtEicZxnbTzmm2434=
+	t=1790025239; cv=none; b=ZcdT1uLrXuNamRyq4DDAx4Bpcdn9YRiJWyUCL9vIxmMzw6vv3T1uC5ipqTlCiBieMFAHj4Ys5VdnFZqYa52TR5gJc50Stjw7hud36+NwKy+WYFAtdrY9YUcOUoBM+tDsRP0rBOVu5YM8zNH9gh/etpC0S+KgTNYnoaktVqdXTgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790024697; c=relaxed/simple;
-	bh=TCU5uKqftm6pV8ySX7thVj6H867cmVD/gp11mWSo7sQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=U3wcDNGRrfp9mEu6T9ZBXI/5eoIT2RTpT/0mI+S8EScAxF/WFKqhV+IZxuux80pIJLh84iFbM+4VwjYjlVho8uf1sAiCQmEpACv8EzIZRnbr1WUUkttBKjhiXk77YD8nQL7Jkz0V8/IuLOVeIGPDrS4+UGQh0enbMGj5Y43BHwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iknVkfMn; arc=none smtp.client-ip=74.125.228.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790025239; c=relaxed/simple;
+	bh=caYiNmLv2rKCemRnIAg74NIWJ3ng0o0IBHUDuhcgbrU=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=eBfhWe5tG+9g6NhOc6XAmJbWhGbKezuH0tI3pmEBj9Sm+75x65pW2GCXu8hW7Xk3A4FT5MkkzNM2sH+trAxxFu5tltcI3fgYbw9agm7NBeOvdUSRZwj3WKiSkAPYOWP9uZSY2rTlBCNkYq0NkPuUBHQNdFLTxmAeTyqWrhde0iE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KrKy/qQK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iknVkfMn"
-Received: by mail-pz2-f40.google.com with SMTP id 41be03b00d2f7-cc750a1482fso396172a12.2
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 14:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790024695; x=1790629495; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=TCU5uKqftm6pV8ySX7thVj6H867cmVD/gp11mWSo7sQ=;
-        b=iknVkfMnxUBLQ3gdy8HebjX+bt4CiPsD77qBlM2Tvsnod1RNAsi0kvF+gyF1UPMK4S
-         MEAo5Cm6y53FCrH7cX1cyT1u8XQUcrO5FsjTsiVl/+QatfZyTMZ+d/m8mfhf3MdjbnkE
-         0AyMvaRr66EtvaGe+pSMLWq9oseUzDfjI8o8q84Bvkgrb3nReTq6WuUbTDjA2xE2CJOA
-         IeqDFuCJJRfKq7eUKgf27X7oH+fLUWbXaWqgF1s9t7cW2qlTmQe1wTQS4pqlUShh0wxH
-         u8IatgVEyIAMxlgD8Nw0Lw29bwmklOgHaDG0bfz6wTOK65Pg6E0qhV7UFCeiXrkIh/a3
-         /fJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790024695; x=1790629495;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=TCU5uKqftm6pV8ySX7thVj6H867cmVD/gp11mWSo7sQ=;
-        b=oE5zAX5jmeI+erYGoH+vUnOOZk63AAhIxLiUUu3NXu9qkgZeGeDB8y2LTQbzSuLJiE
-         kNjqnp7erFp4VLbsgFNudn+3NQ86NSR/xiS0M8+iiiX22D9GSYS2rqBuORG0TcgEpdxd
-         urroCETYlr9RDeDSdBZEPgQFxu8VBa+SY1ndwlnGSLppxFuHPlqZ+lAlLwlV8yxTjste
-         yL/t6ulEz8Y94D0ppSNFS0+UlNmwtpjvhmv+0K3gh1UDk/BLqPyvELSdvvJZMxUEQT74
-         NzKL80++TBfWuKYfjHjX2hVbtvxp/HJMJVqRTNAWFgilUCB+nVde1o3qOlcE9qT26dPf
-         ZdwA==
-X-Gm-Message-State: AFuF++k40OSL8g5TLnqTFsLZE6yRzyXy1vykVBkYu0YbZX1F2aOvR7s/
-	Y0ZK8GbDG8AfGnkl2sLgScYMKkLWQ5GZQByz9PlkiJ7SAmYzWOcf4mkF
-X-Gm-Gg: AYBFou3H4ThYAGc+rjJIEDRkIEAvvX5GLkOeJLofQ/pI/v3Rmqt8iYCsm1NetJzP9Bg
-	RwrNtOOaNXZLpOWPap+0tPQqRfx70VTN1rrd1MvnBn7yiETiwlm5zpdW5/pYvXs1xrRDrOKnb74
-	TouHA3EZqgj+FkHnq0u8L2DbsxDpDe3cw2w6nLRr3PxWimMN9Kq/VODkkpwBRVvKozli+71jVYn
-	NhwdlTZy7iXcEkFo0zQIB6aTd8MwQDw6TiBiWXDI4FgDelZi9P7HGA+yUoGEezhnsAtmTMmjJix
-	fXWaSScf2nJUsdisz+s55eammp73oQeqISW2VeWZz+UMQaqSevqWe4EmCdp8raUCuAmRGCGUoNn
-	JvbUd6qDrjuQ+vCp34ho/GFMRke6AkVk++QonGaV0WIzRIfN2POF85zB1fS+luqdbtGEeKKtjTp
-	lEbPGY8cOUEw+ke4Z7dyy5uLTKT86wsula5o+aSdpukur+keUepW+kVXPBjmkRiUvDjYayVtBki
-	rT0pI6dOEaV4YI2I8GfCDag1xrljBkC8vQKIc21x8CPHPXtdg+Pbb6K8w==
-X-Received: by 2002:a17:90b:5585:b0:3a0:4146:2955 with SMTP id 98e67ed59e1d1-3a041462df3mr5954509a91.61.1790024695006;
-        Mon, 21 Sep 2026 14:04:55 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:9de9:26b9:a969:69d7? ([2620:10d:c090:500::5:f95e])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33e5ebc659dsm649340eec.11.2026.09.21.14.04.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 14:04:54 -0700 (PDT)
-Message-ID: <d3a251acf5131bea732e23bbd135a5fdebec9ad6.camel@gmail.com>
-Subject: Re: [PATCH 0/3] selftests/bpf: Fixes for out-of-tree builds
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: "Nico Pache (Red Hat)" <nico.pache@linux.dev>, "Ricardo B."
- =?ISO-8859-1?Q?Marli=E8re?= "(SUSE)"	 <ricardo@marliere.net>,
- ihor.solodrai@linux.dev, nickolay.lysenko@gmail.com
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, Emil Tsalapatis
-	 <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>, Yonghong Song
-	 <yonghong.song@linux.dev>, Song Liu <song@kernel.org>, Andrii Nakryiko
-	 <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Alexei Starovoitov
-	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
-	 <martin.lau@linux.dev>
-Date: Mon, 21 Sep 2026 14:04:52 -0700
-In-Reply-To: <6f95ec90-194a-4304-9673-c7bb50065223@linux.dev>
-References: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
-	 <6f95ec90-194a-4304-9673-c7bb50065223@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KrKy/qQK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D91A41F000FF;
+	Mon, 21 Sep 2026 21:13:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790025236;
+	bh=pPgKZQTAndTz9PlXzk+4733D9tBKrcmTN7Vp0i7QhHQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=KrKy/qQKxSvfMcDlogenID8dS47r9+NE1NlH+l6kGZUxFOXo6V+cXyar070OkKGhT
+	 0CRpXwCVTFCgNqyvCnWiPx2hqN7/trolCIPU1iX/ItXufAfXxm4DRXbjSzwcMUretr
+	 osGPQrWWnzHs6tx0NptmbKRrgOneDAi/F0d0UiNthIi+i6IFbnaD3uDlVECE8tJP2f
+	 gPsxlK5mY7EJiOZ/VKRikYZTeR94SJIFn0zCo2MZjkgnSKcXc9UO6S2HeQ75K4xnyo
+	 6UOrtzDsHal07ZYvNLbgsU1GhP6g3+Gz16sYFlY2QEAlV43WNiEc2br3zTPGnckH8C
+	 rnI4FjDmKsoMA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4 13/20] libbpf: Resolve the compiler's
+ _Unwind_Resume to the kernel's kfunc
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Yonghong Song" <yonghong.song@linux.dev>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260921210140.1722891-1-yonghong.song@linux.dev>
+References: <20260921210033.1715000-1-yonghong.song@linux.dev>
+ <20260921210140.1722891-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+Date: Mon, 21 Sep 2026 21:13:55 +0000
+Message-Id: <20260921211355.D91A41F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Mon, 2026-09-21 at 14:40 -0600, Nico Pache (Red Hat) wrote:
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] bpf: multi-line comment style violation in kern_extern_name()
+--
 
-...
+commit 293bdf5bcf5e7193069a28fa045283b34511449e
+Author: Yonghong Song <yonghong.song@linux.dev>
 
-> Given your series was defferred, and there is a "rewrite" coming, what wo=
-uld
-> be the best approach to working together (between us three) to get these
-> fixes in that series too.=20
+libbpf: Resolve the compiler's _Unwind_Resume to the kernel's kfunc
 
-The, "rewrite", as you call it, had landed today.
-So the series in question can be re-spun.
-Regarding your patch on top of it, it appears you can just post is separate=
-ly.
-However, I am inclined to be confrontational towards changes like this one.
-The purpose of the selftests makefile is to run selftests as appropriate
-for current tip of the kernel tree using a very specific kernel configurati=
-on.
-Main users of this makefile are BPF developers and BPF CI.
-Support for distros customizing the makefile is a non-goal.
-The "PERMISSIVE" change done enough damage already.
+LLVM terminates a cleanup landing pad with a call to _Unwind_Resume.
+The kernel provides that terminator as a kfunc, but under the name
+bpf_unwind_resume. This patch translates the name during both direct
+load and light skeleton resolutions to ensure it resolves correctly.
 
-...
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index cd1ea1bb53cbf..13ae9175e9686 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -8379,6 +8379,15 @@ static void fixup_verifier_log(struct bpf_program =
+*prog, char *buf, size_t buf_s
+>  	}
+>  }
+> =20
+> +/* LLVM terminates a cleanup landing pad with a call to _Unwind_Resume, =
+the
+> + * base unwind ABI's entry point for carrying an unwind on once a frame's
+> + * cleanups have run. The kernel knows it as bpf_unwind_resume.
+> + */
+
+[Severity: Low]
+This isn't a bug, but does this newly added comment violate the strict BPF
+subsystem multi-line comment style rules? The BPF subsystem guide requires
+multi-line comments to have the opening /* on its own line, with the text
+starting on the subsequent line.
+
+> +static const char *kern_extern_name(const char *name)
+> +{
+> +	return strcmp(name, "_Unwind_Resume") ? name : "bpf_unwind_resume";
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260921210033.1715=
+000-1-yonghong.song@linux.dev?part=3D13
