@@ -1,85 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15BDC47A883
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 23:21:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CCCB479891
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 23:31:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790032910; cv=none; b=a+AHHhsO87iBuR2oR1gHTqhJ15K7IKPsJ9YXO/2KHl3SHv8Tsv22ZMIXT3syZ5xblgyy57k+w6iHJeF6Lb7lI6FX3m68/iqzl9glIJ7Q3iJ47ghSypZMWmHUaBsfRFAHPC8aC7cUlmVtzsM5AZCAhTXD7YwUmeIuCTcyYMUkYgQ=
+	t=1790033490; cv=none; b=KC/KjrvGgbT1qnChsvgS0zHE1BW/tO3t3jGtw/rpE3Dyc7AKCLR9znMz9cXEUrrR1XNu8jXuElwt43tA5F9tj/bqQh/PQhfzqO3aO6HQp/e90rB0GusObgBmX6bjTPAxpEMiNTm4GcW0YvategF0tjrSu9IpYdzeCVZJjJWnjZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790032910; c=relaxed/simple;
-	bh=BBXdkGFoRNI1964DKrhoV3etvclN993VYIhbaCl6F88=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Xy/Kr0TnlRj/bC2KK+i0V7vtQm4Ja1GJll53T5jYL4Wp3zarrnrZUNuPrf95N9a0Ez4kD9IyEQIfLak3o+jIr1FON8RTzSSdfM6m+lk8fvLgA7j6+Oi3x8ufdwPv3RWGG0BEwsy0IhvcK2lrD4DVbBWqHWy4CO7M4RzKrMjS9mE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=loVxU0Mm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790033490; c=relaxed/simple;
+	bh=wtqz3NdEXMjhkexr46jBzc3EdKtuW4oNX9WOGQiyC0c=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=Qc7lEOoKAWfEUnuvPl30nRBdSVgeUvti5EMPsASUy1Y7ORcPB12MPjrn7CvUlKlBNK5FKCs4fF/B5KA5rCTFkONQShK5Wy9TtqT//GS+Kdq9ZHg878+7eTBi9vrCR2c24Lt7HIA4ZLDBd23pyV73grFJCbNqDMr3M+ToHE+/4sU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QfsmJR6i; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="loVxU0Mm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DF291F00893;
-	Mon, 21 Sep 2026 23:21:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QfsmJR6i"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12D7F1F0089C;
+	Mon, 21 Sep 2026 23:31:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790032909;
-	bh=vtJ+cZvsKcoSGzjbWt5awftaK0qljPIKu5rTqbPJbRQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=loVxU0MmpxPmMgvZL0VMikYn3aVpiFWLJcppwyo/XjIALXih9dKYyZ4Kt1eZtCBrn
-	 oTa3YwI8hsYl8CNIgH+AzlOIVnYQPmJgTt8JyUJxlFe9L2hcn/8ObDLjIl17i6b9FN
-	 vMRdP9IiQdD8k3ejmP38WoHoaZuc6AV1v87cAhdbKUmP+29bXlKT/xKDk5DMDqpvka
-	 L/tF28C7t9VLWM9f3U7s5w03Mlxp5kOQAPpNXvxlg/AxBSSEltxbyXhEmN6QpXNEo4
-	 072z73+m/TWK/+LnbgfwRYq0VcvJe9vC5szGgC76RgKtoPYi/ll6pGqsJ4TbC3bXdR
-	 Y0wtjWz3ZcQAw==
-Content-Type: multipart/mixed; boundary="===============6478683053718833315=="
+	s=k20260515; t=1790033482;
+	bh=DKv4iBnu7aQ9+C5jLj77KhMkU6qdaOgKTQEO1uTI89E=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=QfsmJR6iBf1XfhZXRhMtfWswWr+KvoIKIE6lAOJ5cGx1YOIPUWXey6YwhFYyFHsrG
+	 3VbAQm2ruduWjTH3gKktFQRvrns/DGEx35TwoBhHt5m/yi0Li7rK4+GRmmnPmhZLr7
+	 ibXEKCYk6LiKfGdk6NpPZRL27v6uepSfnzdCH/EA6NUQ5ljMZ9oorAmEhffhhlLTrD
+	 TmNC4/VoumruwBo/2mE8/ScZuXRdy4aTPv674WJAIeIk+v3FDIJF/jR0oTEHxG1s2g
+	 aJOaYXtXg7L6tZ4V4aephWZp+SSqrBSpXtMl2ByH1PgsNBLZtnuwL+pgBp2t4pW2yt
+	 b6r79oSmijU1g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v4 5/7] libbpf: Version
+ bpf_program__set_autoattach() ABI change
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Andrey Grodzovsky" <andrey.grodzovsky@crowdstrike.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260921223937.3203093-6-andrey.grodzovsky@crowdstrike.com>
+References: <20260921223937.3203093-1-andrey.grodzovsky@crowdstrike.com>
+ <20260921223937.3203093-6-andrey.grodzovsky@crowdstrike.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 21 Sep 2026 23:31:21 +0000
+Message-Id: <20260921233122.12D7F1F0089C@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <7253a3b91b000dc7fb7200330834d77e5ccd34c313f358515ac465e33100d8b0@mail.kernel.org>
-In-Reply-To: <20260921223937.3203093-4-andrey.grodzovsky@crowdstrike.com>
-References: <20260921223937.3203093-4-andrey.grodzovsky@crowdstrike.com>
-Subject: Re: [PATCH bpf-next v4 3/7] libbpf: Support declarative manual load via SEC("!...") prefix
-From: bot+bpf-ci@kernel.org
-To: andrey.grodzovsky@crowdstrike.com,bpf@vger.kernel.org,andrii@kernel.org
-Cc: ast@kernel.org,martin.kelly@crowdstrike.com,slava.imameev@crowdstrike.com,linux-open-source@crowdstrike.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 21 Sep 2026 23:21:47 +0000 (UTC)
 
---===============6478683053718833315==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] libbpf: internal versioned aliases improperly exposed in public =
+ABI
+--
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 939f0d6378e3..476172933a1f 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -892,16 +892,25 @@ bpf_object__init_prog(struct bpf_object *obj, struct bpf_program *prog,
->  	/* libbpf's convention for SEC("?abc...") is that it's just like
->  	 * SEC("abc...") but the corresponding bpf_program starts out with
->  	 * autoload set to false.
-> +	 *
-> +	 * Similarly, SEC("!abc...") marks the program for manual loading:
-> +	 * it is skipped by the bulk auto-load pass and must be explicitly
-> +	 * loaded later via bpf_program__load_manually().
-> +	 */
+commit f4a1074a0b47562f2c3d7f448c920fa57fb2ed38
+Author: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+libbpf: Version bpf_program__set_autoattach() ABI change
 
-Does bpf_program__load_manually() exist?  Looking at the tree at this
-commit, git grep finds only this comment.  The real API added earlier in
-the series (commit 7f73306ceddb) is bpf_program__load():
+This commit splits bpf_program__set_autoattach() via ELF symbol versioning.=
+=20
+It introduces a deprecated variant bound to LIBBPF_1.0.0 and a new variant=
+=20
+returning int bound to LIBBPF_1.8.0 to handle manual load strategy rejectio=
+ns.
 
-tools/lib/bpf/libbpf.h:2179  LIBBPF_API int bpf_program__load(struct bpf_program *prog);
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -393,6 +393,12 @@ LIBBPF_API bool bpf_program__autoload(const struct b=
+pf_program *prog);
+>  LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool =
+autoload);
+>  LIBBPF_API bool bpf_program__autoattach(const struct bpf_program *prog);
+>  LIBBPF_API int bpf_program__set_autoattach(struct bpf_program *prog, boo=
+l autoattach);
+> +/* this "specialization" should go away once the deprecation window for
+> + * bpf_program__set_autoattach_deprecated() closes
+> + */
+> +LIBBPF_API int bpf_program__set_autoattach_v1_8_0(struct bpf_program *pr=
+og, bool autoattach);
+> +LIBBPF_DEPRECATED_SINCE(1, 8, "use int-returning bpf_program__set_autoat=
+tach() instead")
+> +LIBBPF_API void bpf_program__set_autoattach_deprecated(struct bpf_progra=
+m *prog, bool autoattach);
 
-The rest of the series uses the correct name - libbpf.h's doc for
-bpf_program__unload() references bpf_program__load() for reloading a
-MANUAL-strategy program, and the selftests added later in the series call
-bpf_program__load(skel->progs.prog4) for the SEC("!...") program.  So the
-only documentation of the new SEC("!...") prefix points at a symbol that
-will fail to link.
+[Severity: Medium]
+Does exposing these internal versioned aliases in the public header=20
+defeat the purpose of transparent ELF versioning?
+
+Building any application against this updated header might expose these=20
+internal symbols, and dynamic linking could permanently bind them to the=20
+polluted ABI.=20
+
+Additionally, because the deprecation macro is attached to the internal ali=
+as=20
+rather than the standard name, will users ever see the deprecation warning=
+=20
+naturally when they call bpf_program__set_autoattach()?
 
 [ ... ]
 
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -465,6 +465,8 @@ LIBBPF_1.8.0 {
+>  		bpf_program__clone;
+>  		bpf_program__load;
+>  		bpf_program__load_strategy;
+> +		bpf_program__set_autoattach;
+> +		bpf_program__set_autoattach_deprecated;
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+[Severity: Medium]
+Is it intended to export the internal compat implementation as a public=20
+symbol in the new LIBBPF_1.8.0 namespace?
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35664584544
---===============6478683053718833315==--
+This appears to permanently leak the internal compatibility symbol into the
+public ABI.
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260921223937.3203=
+093-1-andrey.grodzovsky@crowdstrike.com?part=3D5
