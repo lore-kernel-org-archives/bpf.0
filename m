@@ -1,84 +1,81 @@
-Received: from mail-pz2-f40.google.com (mail-pz2-f40.google.com [74.125.228.40])
+Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843553B14DE
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:42:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 966912E266C
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790026980; cv=none; b=C4kpwDeZhchMHz+lHmKx2mSclpl9YpdqCV6tv2cHLBm0LuCr5Mg/VUXWdg4pW4ueWVjaqPlZBmLNNafo/o1aSLpVnoANUwvbE/BOaKuZw6CfQZc5aTTo3Sjis4HH2rS+PftoeJexRRi2sOgN0SsM1uKpzF5Y/rjCjMoetOddQy8=
+	t=1790027174; cv=none; b=au7aVVd/ejn9EC/we4Uh9Z7IzBpTjmojFI+ynlcuUlUAUoMTzUmk+yYQqZXTlqo3TjSVKy011IVn+ve0TIibvAI5z6rST6nWiANHx1tl5ck40XhKWXJsU9/Y57D2ea5Q6gcb/gs7wsXfcaqgfRoufMc5Kurxf82gjYUZTpDn7CU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790026980; c=relaxed/simple;
-	bh=a13AyurKY1c5+qqcymP6nHwCYS5mFQ93kWPFnMhP4Dc=;
+	s=arc-20240116; t=1790027174; c=relaxed/simple;
+	bh=Lpsj2AIrNn5OYLVGgW/c8Mb25nQRGTHDlg/fM9u1Xb0=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nJk2r4iQooPsBnTTLw2HxdkfhZeTByAd4u4F4lMwTSMuuZGAALsWZQ3h4+nA7JS8Os6YXdA++DxFjPsC4YG8MTr3iNQPUIPj5rPKJs45Hfep8fj5t1UwdaGwMoNYU8G4iPjpm6GTTTqZixTgLm7bFFpM47cYZPF79lMHjUpAdFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O4Vjw832; arc=none smtp.client-ip=74.125.228.40
+	 Content-Type:MIME-Version; b=dX19rqdQtV7SUmPFcESQMq7oUvrPy3VTOixkk+NVyHBzv26LUG7iLXCiugTZbdjlF6AJQfYjGMuDp3UOo/18DAQb2VpfOik5sM4RetOJrklANB6pYl+yUPHW0vA7Zcmsh8qMehfETJDNvvT8w25bhMyEc657Hh6HFJVrfGZbYVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qkUwh6zg; arc=none smtp.client-ip=74.125.227.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O4Vjw832"
-Received: by mail-pz2-f40.google.com with SMTP id 41be03b00d2f7-cc745abb731so888628a12.2
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 14:42:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qkUwh6zg"
+Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-396ccafb752so2887116a91.0
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 14:46:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790026979; x=1790631779; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790027173; x=1790631973; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
          :cc:subject:date:message-id:reply-to:content-type;
-        bh=a13AyurKY1c5+qqcymP6nHwCYS5mFQ93kWPFnMhP4Dc=;
-        b=O4Vjw832ZQAq+hb1wDsEfYSh8Yz2MCGM5G3wY8dUQzw+q5Fd7tLHW2VfKn9Pfp9xwo
-         lSDQk6MpoBAbFMKkNpeLuKiJ9b3qG4eZ2VVIFWDt6RhsaUHHr0bMYWiu2Lwx8jdL3jKP
-         C1zgg8Ki3k+3M9fTg4VunPyozoACOrvTkduoMop/0ZAqCMAhsp3l3doJ05oecnM3yT/P
-         xvZVCcsfFP8o0V6f00Kb44PcBcYMkqtH0kI3RXRtqNNJJxjeinOBnoB4nH6B4k2Rv771
-         kyW8d7yY4WDBf366wPPaPUFBqyoNyUYdzGR0PibcdK9eTRNQ2Uuhk+YxcHSsCN/f7xt8
-         FtDg==
+        bh=92hRYVcexh6+JTkiDvLTeHtBfBKhH+HBsj8HKf7XgwY=;
+        b=qkUwh6zg7Pp2BSVmfuMUv4bWWgxqneHz79qGw56dX2AFbAiIFzFwXnjPgTrAYGodLZ
+         qAbYKr3u3uAaNsyin81zmuzML5tIZ4UdYdd0wuhb4oJTvWeW+GOhjd0/naNBoxMIQN20
+         ajLeYAWM2lNkyr0wKKTYeUPW82E8Vv9Bh0NXD7k2pUOyqIyYuk/K04BCzxVzYUjp17Ee
+         StgNY3HRHDgZSMuE1XNirQBmOkBWDupjQ89Vu2dG20JjDR5/ys9wswO7QOrjCyWM3/Iv
+         2MpGOBzQIwWX+1APz3vJIaF/LLP0/3bexb0JE41665oV4NJ8xLxQuaf2e1UWs+vtiL7f
+         aTEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790026979; x=1790631779;
+        d=1e100.net; s=20260707; t=1790027173; x=1790631973;
         h=mime-version:user-agent:content-transfer-encoding:content-type
          :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=a13AyurKY1c5+qqcymP6nHwCYS5mFQ93kWPFnMhP4Dc=;
-        b=lnhOeQW1z4u8Hur+7Gk0eNSprywfloFkGv2QjDx4n6HIBwxwDbaA4Y++mlC0ubllb7
-         /wUxMriLEQ1apFeNGchW/5amX7fRk+XoCf+Gy6f1vUfFR5iuvGBnf/yFOdYb0eYv6wat
-         WG0PfG1s2PVWbRH5GF7GqKXHlVxGjH9rxAvPhpHZr8nZ1snGVDw9h+FG7+UEhJgbGdVs
-         kHtTBtpVOHWdg6xClqlC3EVtomhE4MX8t7d+Euz7iq6g1NFSsEUCa0a3P8+fjcHz6ejo
-         N1rgkNDH7+daf17I7zBolxr5RLuaRwfEPbtOhp4zLi0R6zczUAJ4/OHlkbnNHCxq4yed
-         er/g==
-X-Gm-Message-State: AFuF++nyGBZBvN6/fyYEMypUqJ2I6702+plLycMKxOM97rtyxQP/oIZ9
-	3+awipjcLv/deF3umyGVfzzlrbMNHRUiF0wkCkjLE0Zz/H88gtN5Gv2c
-X-Gm-Gg: AYBFou3iU2Du/CGfzcWtJ3kMuUfx81y78XBJsa7Jx8AmvnFGPIO77Lv2Iuw4RheOqLQ
-	LIOqDyGGyThydzru3Dg1jj7fy77/GfgjPlx5d7NEx0iB4VQZyETIzT/zKZNaFClX7hfBiXSBwOX
-	MpCwJNcUI66Q2nKgFgR5sbkBdb4/aIdVaKYpQMlolMqgHAxpGdPDqEY5/A3/C4Y+Tx3RdZ2N39R
-	e6U2k86Ceb5dkYbnnCAREqneuZXYtU4xNYR8VyRZYvtjz7WwTRPWcdQQ6FZrYvJtzqP/rLU6ZIy
-	2bMaG6eO2etM6Ol00BoY2DCaJEu75yFCFB9qjZAW1btNA3ZtWix5Uj4wa0cStQhK0aD6p/3iDST
-	7dGTAEZO8SNd+J4JN5SVuUUeXECS02+BOO9JqSaO9fwerXDF6xHqJ2wxH9AmU/ATWvztlL/YcxM
-	xp1GJ0h5FwY1Hi5FgWaGRaFYSuEijMsSdovghhZfRDIAME7hzhLg1qPp1df2ntKVXTUuPdAbPF1
-	fIkD+f6K1v0lJYdaBspccMaRgJxo8WDdNz3YKhFNqLAj1CxIlEcatq2mQ==
-X-Received: by 2002:a05:6a20:439f:b0:3d2:df:1854 with SMTP id adf61e73a8af0-3dd8c2aaa7emr18757138637.6.1790026978803;
-        Mon, 21 Sep 2026 14:42:58 -0700 (PDT)
+        bh=92hRYVcexh6+JTkiDvLTeHtBfBKhH+HBsj8HKf7XgwY=;
+        b=VRFXaSr2nOuD/OX0AgHwGROI73srNeNJ7FaKwCkMkQZMKGEybe84t0ZW228EgnXxta
+         kn00/exPTlcSsf1FPnl0OoAseu0PDuIcU1VJFeI987Ql1SXYlSvZarNQaOvDw6k2FGuu
+         fmG//RsJWQZpe91aL0pGWTKuXZARPkGT0pSWkfQ/EJdodUaPUVjxkFyoot8DhTJSQkqF
+         fZzxaZ/s1V+juKoHMUsVFff4KDWu+B5JZqUs5b8JxC1RfxPWKx7B4Tp7Rr63MQX34L/r
+         rqnlBKb/igt2BiXqPsv7F0mp7jTLRl3jVd1QNIpHwOvGXJpKhdatnMzn93gcKPyAyvBd
+         YpTw==
+X-Forwarded-Encrypted: i=1; AKwUvByxa6AvIRUDawYYAE1EVyqFABUZHd4aZgIZlO3P/mOAy3DgZG9sZp0duyDDoBnScJlzJEA=@vger.kernel.org
+X-Gm-Message-State: AFuF++nerxt+PgM13EAhBd7Phhjd/Q0SMl92N7mX0bG7IZdtfm58gPel
+	CXg8FuHSqDGC7vrqZJrLVne14z3ZNXbRjQFON96ZTLmcbNeT1rK2iXiI
+X-Gm-Gg: AYBFou0KBbu98TNHuYq5sxdi4zgujH4bZrAQcLJtmA/wuKZKIVwQzYkS0zIfEvrUPHl
+	AV1ifh92T6FDAiSVpnw0yfNO+hbtObN54CmbSM7fo3uD5q2m2NlOiAAI0yxo/+ls7dt37wUH+RN
+	/8pMBv4jDeo3XEnbeciJCDuMXPUcSSyPTm4fxi9XOpXVOEyDTaGWXCMfi5efCujCAqmIzoNSKZJ
+	J0ARVVIKEmKu1iAvoSg5Yxfg4BfxUMVbIEjnTlG/WaCMrNAJ7pM9THX75v5WvMVMSLJupU61Keb
+	xaE3aMKene/UfCcdhhadn4XEo9nbBmNnICti875RfdfcWp77P+vNV56UK48rCrvp8P4+fpqMDiE
+	dgpORIzKdyNHRHHk9p/N3PjQTUwQiq3qgfvzsCVpmB9JUYqulNBiD2yOSm07j75zBlqjBHIjbS1
+	A7b4/iMqdZe95sozL2NfBYGoQhtVTrLpOqUFS9mSy/CM/5UMU3VtPmnUeWzHqU5bkfWt3oHJZHm
+	Hi10uU6gT19OfSmnxIF5AbOUH7CRGPIqEiU9eICma4qm7sSguABi96E5w==
+X-Received: by 2002:a17:902:ce0c:b0:2df:336b:9c2a with SMTP id d9443c01a7336-2df336b9c5bmr93989305ad.70.1790027172483;
+        Mon, 21 Sep 2026 14:46:12 -0700 (PDT)
 Received: from ?IPv6:2a03:83e0:115c:1:9de9:26b9:a969:69d7? ([2620:10d:c090:500::5:f95e])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-144f0c456c4sm454233c88.6.2026.09.21.14.42.57
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33e5ec6ea45sm756396eec.30.2026.09.21.14.46.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 14:42:58 -0700 (PDT)
-Message-ID: <2a1875a99b173fec18d214419efbe876dcd95ad1.camel@gmail.com>
-Subject: Re: [PATCH 0/3] selftests/bpf: Fixes for out-of-tree builds
+        Mon, 21 Sep 2026 14:46:12 -0700 (PDT)
+Message-ID: <f03d6246dca7a772e44bc31c98e7950d64ee55d3.camel@gmail.com>
+Subject: Re: [PATCH v3 bpf-next 09/11] bpftool: Add ability to dump
+ LOC_PARAM, LOC_PROTO and LOCSEC
 From: Eduard Zingerman <eddyz87@gmail.com>
-To: "Nico Pache (Red Hat)" <nico.pache@linux.dev>, "Ricardo B."
- =?ISO-8859-1?Q?Marli=E8re?= "(SUSE)"	 <ricardo@marliere.net>,
- ihor.solodrai@linux.dev, nickolay.lysenko@gmail.com
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, Emil Tsalapatis
-	 <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>, Yonghong Song
-	 <yonghong.song@linux.dev>, Song Liu <song@kernel.org>, Andrii Nakryiko
-	 <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Alexei Starovoitov
-	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
-	 <martin.lau@linux.dev>
-Date: Mon, 21 Sep 2026 14:42:56 -0700
-In-Reply-To: <9e055710-d607-4a4c-95c8-eb3a0b4aa1a1@linux.dev>
-References: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
-	 <6f95ec90-194a-4304-9673-c7bb50065223@linux.dev>
-	 <d3a251acf5131bea732e23bbd135a5fdebec9ad6.camel@gmail.com>
-	 <9e055710-d607-4a4c-95c8-eb3a0b4aa1a1@linux.dev>
+To: Alan Maguire <alan.maguire@oracle.com>, ast@kernel.org,
+ andrii@kernel.org, 	jolsa@kernel.org
+Cc: daniel@iogearbox.net, ihor.solodrai@linux.dev, yonghong.song@linux.dev, 
+	song@kernel.org, qmo@kernel.org, martin.lau@linux.dev, memxor@gmail.com, 
+	emil@etsalapatis.com, bpf@vger.kernel.org, nsc@kernel.org,
+ puranjay@kernel.org, 	yatsenko@meta.com
+Date: Mon, 21 Sep 2026 14:46:09 -0700
+In-Reply-To: <53e01dce-efdc-4e8f-8510-e23cba17c429@oracle.com>
+References: <20260916074118.1007116-1-alan.maguire@oracle.com>
+	 <20260916074118.1007116-10-alan.maguire@oracle.com>
+	 <a53eaf9758d1110ad7a2211b55533ffd470e083f.camel@gmail.com>
+	 <53e01dce-efdc-4e8f-8510-e23cba17c429@oracle.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
@@ -89,60 +86,82 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Mon, 2026-09-21 at 15:15 -0600, Nico Pache (Red Hat) wrote:
->=20
-> On 9/21/26 3:04 PM, Eduard Zingerman wrote:
-> > On Mon, 2026-09-21 at 14:40 -0600, Nico Pache (Red Hat) wrote:
+On Mon, 2026-09-21 at 19:47 +0100, Alan Maguire wrote:
+> On 18/09/2026 21:51, Eduard Zingerman wrote:
+> > On Wed, 2026-09-16 at 08:41 +0100, Alan Maguire wrote:
 > >=20
 > > ...
 > >=20
-> > > Given your series was defferred, and there is a "rewrite" coming, wha=
-t would
-> > > be the best approach to working together (between us three) to get th=
-ese
-> > > fixes in that series too.=20
+> > > +static void btf_loc_param_str(const struct btf_type *t, char *str, s=
+ize_t sz)
+> > > +{
+> > > +	const struct btf_loc_param *p;
+> > > +	__u32 i =3D 0, vlen;
+> > > +	__u64 value;
+> > > +	bool negative =3D false;
+> > > +	char regs[32] =3D {};
+> > > +	char num[32] =3D {};
+> > > +	const char *op =3D "";
+> > > +
+> > > +	if (!t || !btf_is_loc_param(t)) {
+> > > +		snprintf(str, sz, "<invalid>");
+> > > +		return;
+> > > +	}
+> > > +
+> > > +	p =3D btf_loc_param(t);
+> > > +	vlen =3D btf_vlen(t);
+> > > +
+> > > +	if (p->flags & BTF_LOC_PARAM_REG) {
+> > > +		__u32 nregs =3D (p->flags =3D=3D BTF_LOC_PARAM_REG) ? vlen : 1;
+> > > +
+> > > +		if (nregs > vlen) {
+> > > +			snprintf(str, sz, "?");
+> > > +			return;
+> > > +		}
+> > > +
+> > > +		switch (nregs) {
+> > > +		case 2:
+> > > +			snprintf(regs, sizeof(regs), "r%u, r%u",
+> > > +				 p->values[0], p->values[1]);
 > >=20
-> > The, "rewrite", as you call it, had landed today.
->=20
-> oh thats great news. I checked on Friday and didnt see it. Thanks for the=
- update :)
->=20
-> > So the series in question can be re-spun.
-> > Regarding your patch on top of it, it appears you can just post is sepa=
-rately.
-> > However, I am inclined to be confrontational towards changes like this =
-one.
-> > The purpose of the selftests makefile is to run selftests as appropriat=
-e
-> > for current tip of the kernel tree using a very specific kernel configu=
-ration.
-> > Main users of this makefile are BPF developers and BPF CI.
->=20
-> Yeah we are trying to reincorporate BPF as part of our CI. It has bit rot=
-ted in
-> the Fedora env, and our large amount of build variant is where things are
-> starting to go wrong. We need to build selftests for multiple variants, a=
-nd be
-> able to specify which variant we are building for. Hence the out-of-tree =
-build
-> with specific vmlinux.
-
-Why can't you build the kernel and the selftests in the same out of tree lo=
-cation?
-The change you are proposing is contained, but it's a death by thousand cut=
-s,
-the selftests makefile is quite a Frankenstein's monster already.
-
-> Is there any other approach you'd suggest? I personally dont work on BPF,=
- but am
-> trying to cleanup/fix our selftests builds for Upstream/Fedora CI.
-
-How many Fedora-specific kernel patches do you carry already?
-
-> Thanks,
-> -- Nico
->=20
-> > Support for distros customizing the makefile is a non-goal.
-> > The "PERMISSIVE" change done enough damage already.
+> > I agree with Jiri regarding the register names. It's not a huge table,
+> > e.g. [1], 20 lines for x86 ~> 100-200 lines that would not really
+> > change to handle all architectures that have BPF jits.
+> > And it would be very convenient for those using the tool.
 > >=20
-> > ...
+>=20
+> Yeah, it's doable, it's just that it is more portable when done in
+> pfunct; we can use dwfl interface to get register names [1]. With
+> pfunct changes in that tree we get output that is either arch-independent
+> (standalone BTF) or when combined with ELF info from vmlinux
+> gives us the arch-specific register names, containing function etc.
+> To see the inline site for ip_send_skb for example:
+>=20
+> $ pfunct --inline_sites -f ip_send_skb --elf vmlinux /sys/kernel/btf/vmli=
+nux.inline
+> 0xffffffff8201f241 [ip_push_pending_frames+0x31, .text +0x101f241] ip_sen=
+d_skb(struct net * net [%rbx], struct sk_buff * skb [%rax])
+>=20
+> (above does not need DWARF at all, just BTF + ELF info, so will work with=
+ a
+> debuginfo-stripped vmlinux)
+>=20
+> So for me the tool to reach for in understanding the raw BTF is
+> bpftool, whereas to apply the arch-specific transformations, locate the
+> absolute addresses etc I'd use pfunct. But that's just me; I'm happy to
+> go with the consensus here. Given the current library support, I think
+> maintaining per-arch tables in bpftool (rather than introducing a new
+> library dependency) would be the way to go if we do add it.
+>=20
+> Quentin, what do you think? Are per-arch tables for registers in bpftool
+> ok from your side? Thanks!
+>=20
+> Alan
+>=20
+> [1] https://github.com/alan-maguire/dwarves/blob/0da899665b04f16c3f68c0b7=
+36834a15e045c3c9/pfunct.c#L95
+
+Adding dwfl as an (optional?) dependency for bpftool and reusing the
+same code as [1] might be an option as well.
+
+...
