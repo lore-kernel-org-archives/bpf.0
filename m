@@ -1,212 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C6DA3AFD16
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:56:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790027811; cv=none; b=JMeNpZhQ4Nau4KqTxo9rxDGpxTosdakKtQnE1BHgrOi4sBMcILWdnmCvJvXpAm7vgA9hLKrCPpSVMQSihz2XLvJuD+Ng+/5Y0dgjkfaEo5YJrjw+f5rmtX+aV2bIIZVcycYvGvaBARIXuOzUQhFJLhR1fktmHxWMBDQ7nhn/zAY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790027811; c=relaxed/simple;
-	bh=flymVxaESJmcNzEwb8revyfMIk/AqVamBzkRhPDa5r4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=G2dnV4vhqP/hNW/AkVvsvKku1kJDnIugFxwd+XfocnaHo+5I0bNdfL9drN7MmOodG1oY+ULacJq2JKjM6xoDnys6esyF2X/8cMyWj1fGKu/tf4r4qotqUJjCUA06TpYxagZxGT6r3W0jO1boLax8L/ODYFLrCL+3rRuUuT3+ZCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J9/mVFNl; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB04B229B38
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.141
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790027998; cv=pass; b=otEZLmeoYczb7pCWcdKy0lUUomdiFN0xz67QrCrJss9273O63gqDXdrU6e8xfDmLbkHjZ9m6OAQMwz3DVHu8XpOCfrIQLqoj073oxR0gkiQBsNTiCIbndf6D6P8t8uMPN6IixTbuAYfgDItRFDCnZMsMHkOjl75pYiShtb3Wu84=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790027998; c=relaxed/simple;
+	bh=ZSXJsLG0n5mKfVuoD1VqTcG9MfIiLklpu0DxRJ4e1Qk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rh52F44d92p/QCajMrVsXn0kdSfZ0HFIttLMWfpfS39oLcnYEyHf0J+RP2ABSeOTBcWcd4kaEyC1N38Yl4NtNn4diRYUZZl+KVa/Lc1Y0DMAcvtfYNdXqpngoJzkfaCazg7Gw2aqbzSZJmGYcojm4GcKKaNmoQEuSkydAD5zzvk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M1AxPoWO; arc=pass smtp.client-ip=74.125.227.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J9/mVFNl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1498E1F000FF;
-	Mon, 21 Sep 2026 21:56:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790027810;
-	bh=d7TghIZ70u4huxeNHZ1ddszij0ZnW0gIvxjHQCcNz0Q=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=J9/mVFNl8+DdFn2weiZcNahJT2WOevPrAdWOcukEfElZl18Stoj09OEW36z1MXPbl
-	 aqLuC72KXlV5Unm4he0K43fMsxbvUKTF71XEe5fxX14eNBmq//s3nBkcceJ3qXyA4m
-	 kH66GLm95XQvoXxaasMo57uI6gXSwcgm65tDbmwCL/2TFbDXeJdVmISQbsOvThUxcC
-	 sFv5i9yedKDClB6TG+rO1dl4UbKfKdI+yWzMA5M5Qrr+M6mKbtHYrO9XqxCZFDtXqw
-	 X9aQXVo5apN4k9oG1oXlg8pZgtHY5sw/4HMsOJYma1VckKLooMbsA2+Nw4aFqj7RFM
-	 mpq9OIuJKxcOw==
-Content-Type: multipart/mixed; boundary="===============5978879528784475066=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M1AxPoWO"
+Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccafb74fso3335493a91.3
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 14:59:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790027996; cv=none;
+        d=google.com; s=arc-20260327;
+        b=NIMSZTOJW56rLtFGQ9m5CPGgOa81tqokfOaVVJG/Iumht/OMCAI0ESM5fziEFgkSPt
+         NLjvJlUcyVQ3wpezbiherab479l/USB+4IS2ctoDv4vF3747FO2U2VKifIfqZasyJis0
+         e+98thJU1cYEAr5X0NPGLg18gkF5gogUG/v36UvsvyYWy8d7v57Gb13TMKAlABx7pBmG
+         oExzTA228XVhk+r3uIfeLXK3i+o6+X7FQZDUfumbA9uv2gptHnowvlnWreBPvKI2IZQo
+         lYsD1WUNuCGavwUzlYmWgyZoRlBM1mOXLD1ZrPLIaLE4sRwOK9Knlv2HgYidmVgaIWCs
+         bRDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Zidmu+RY3RU2nq/L1X/QMRBfI/Kp6AgQCY+485qcP0w=;
+        fh=fe3ZoP8lDZdK1DWy0CC1h1r1Nb1THfssTUvMBL8zgAk=;
+        b=OpUEWF7bejf6EZbRAFj8TUKFC9ej4GB/ekhrgRZNkUuHAjFW9Lf95KB4vWCkxWLthf
+         bzKEaRvFusNcvzcxch62Jcg4TT67rpC4UVUmWIDhiI8W4UMOayElFVyiJSaAI0XQfnRS
+         Nf6m66se6wAJGoy+xurtQpjNmtgkk3mzCtnWAQz/2NmYUWTwpH34ldnTHyWFG8J5Cc4m
+         fUPckIpWmB2piPeGDEElt7OP318x259lIrjG0xOZtIH1pyPWeOW4mVHByZrr+GX13IBH
+         E1HjcrDQu0PG30cQBP1a3boIKJCHoDarZlpOM78bqANHzWYXL8VWu96sBSHJWZTMTKuB
+         1VVA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790027996; x=1790632796; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Zidmu+RY3RU2nq/L1X/QMRBfI/Kp6AgQCY+485qcP0w=;
+        b=M1AxPoWOCazRfv5+Iy4vbbs8fWR100N7HuGQG1DuJHKsi+u3DAWmiYm4Jq4Df+O7eF
+         C8K0ZInYQqnEMPAs+mFUrtM8c4sGgtb7jeRtpzqF8uAN51aF12wVIDdIST7Dc72VNKo1
+         GhcnwBZcHFurrPgCjocHJSwb8HZEOX4L1iwfwOMIN1HT4BnHp2ck9O2cVIXEbN7RwWph
+         qK9fmr9r11moNKlC5InrApwUb4qLZFlIG34ZNfI8/b6uavSlEnSboDktGdadzgGmh2Sv
+         SnBnEuOnGI+yVuw0Q7a/p8xREi48vxxEiDyJQjtZFAlaopy7CWUtKmj/5KsiPmINz3gW
+         4nfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790027996; x=1790632796;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Zidmu+RY3RU2nq/L1X/QMRBfI/Kp6AgQCY+485qcP0w=;
+        b=cjbqaVZbHygvhh6vJ2ZWL+GJ2vjC/SKGnqQFAalsg489f76cRkI3ky8ds8PorLI479
+         ciRfQGjvTcP7dXBiAcUvswEHfZiicd/86UeTtGcy8+kPgEcxAADgMfdoF4iU1rmZI1KK
+         8t4CoyCQXQixNb9DkJpaHpeJhVFYEG9EHWveuKiTNlUa6QweySBv+CjbuAISeCyIVrLJ
+         bhbybJXYnpDgDC62DTwAr+Nm2B80eG7ja/1SFt+H0l4mD0SB0wRFzHGwzZOyryp9/Huy
+         utdaDwuUyXRPC2YzN6zRV8wQch8VAGTxxnemLOHUst0E97ulbSwy8I7Rd5AStljcuSu3
+         yTOw==
+X-Forwarded-Encrypted: i=1; AKwUvBzmj8YNU4mYg9XUyunkE30sg3Spb6rdYOqRUubGagJCaeOw2W11CMhhv1Y9qxpP1A2ar6Y=@vger.kernel.org
+X-Gm-Message-State: AFuF++n+VmzUvvT02oV0ctWdI0Og7F3/8xch6i0SujWcVyiyf60qM3jK
+	Oi1MWM7K/JObtiBkBk1EJZjlH+KX0ir0SY69BBtGZKDdaBR86Fr2Qk1RsUiBXV+B0L6WygAue+q
+	v+ipb53JZBTpnfB4wnMBxrCAhpjWcOi0=
+X-Gm-Gg: AYBFou2MO+2Cs0+4R7+43Uc/RmFRvdx4KmWShw44K0XjekJ2CPkCE/1JvGsk/mpK6oJ
+	Ve6QvzwlU0YJUaWQgR2Kw9GnhnAgpG70qiv9m7GEu0YAvfITW8tuHtMpgtk9mLk9S7y4TrwmM3g
+	cRvcqH0mZ1qEGwORTyCXV2x8jHAdE43jWAIA+cACPKwIHxb8yUEbdOzNplMIgclGT5Y0UkyjT43
+	n00iaUkweYMJlIm65OhH1GAZw4BsXpEmnBLvxNMl7mPP+iKY6Sr5uIhqHtEChxrpfnprJuskxYb
+	1iCbTcwNV6YaNtXnE5M/hjrOHhTcgDmwg4Cc2o2UfXHRt9cVuTXDfqtRMI+g+SD+BWxmmYdbbEq
+	e9Qg3Neh5+NsxrE8KQuZSodFYUe2YnkxJYtMmrblizplbQ3VeDpCE
+X-Received: by 2002:a17:90b:4a01:b0:3a0:4abe:fcbd with SMTP id
+ 98e67ed59e1d1-3a04abf0758mr4461121a91.19.1790027996048; Mon, 21 Sep 2026
+ 14:59:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <63ad27833368df7c3cf2f4d1fd582a1306663c96c207f7745bd656e8011ed3a4@mail.kernel.org>
-In-Reply-To: <20260921210205.1724656-1-yonghong.song@linux.dev>
-References: <20260921210205.1724656-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v4 18/20] selftests/bpf: Add an end-to-end .bpf_cleanup exception test
-From: bot+bpf-ci@kernel.org
-To: yonghong.song@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 21 Sep 2026 21:56:48 +0000 (UTC)
+References: <20260918102052.1247819-1-sh_def@163.com> <20260918102052.1247819-3-sh_def@163.com>
+In-Reply-To: <20260918102052.1247819-3-sh_def@163.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 21 Sep 2026 14:59:41 -0700
+X-Gm-Features: AcwNN1Vk_AiZZqIRosmo3DKcpKEGJc9ONZnAL9NkbbMjJk-8DXnpZgX_IG1otnc
+Message-ID: <CAEf4BzaxH2geQUUOOGw8S0fhm3c9Z0H5r75QPo9_ziiqU6MF2g@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 2/2] bpftool: Fix sparse CPU IDs in prog profile
+To: Hui Su <sh_def@163.com>
+Cc: qmo@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	ihor.solodrai@linux.dev, davem@davemloft.net, kuba@kernel.org, 
+	horms@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============5978879528784475066==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Fri, Sep 18, 2026 at 3:21=E2=80=AFAM Hui Su <sh_def@163.com> wrote:
+>
+> bpftool prog profile currently treats the number of possible CPUs as
+> both the logical CPU ID range and the stride of the perf event array.
+> That misses valid logical CPUs when the possible CPU mask is sparse, such
+> as 0,2-3, and can use incorrect PERF_EVENT_ARRAY keys.
+>
+> Keep the compact possible CPU count for per-CPU result buffers, while
+> using the actual logical CPU IDs for perf events and the maximum logical
+> CPU ID plus one as the metric stride in the PERF_EVENT_ARRAY. Keep the
+> userspace perf file descriptor index separate from the BPF map key. Do
+> not advance profile_perf_event_cnt for CPUs that return ENODEV, since it
+> tracks opened userspace perf file descriptors rather than event-array
+> slots.
+>
+> Tested:
+> - Built tools/bpf/bpftool successfully on the host.
+> - Booted an arm64 QEMU guest with a patched virt device tree reporting
+>   possible=3D0,2-3, present=3D0,2-3, and online=3D0,2-3.
+> - Ran both pre-fix and fixed bpftool with cycles and instructions against
+>   a BTF-enabled fentry target. The pre-fix binary faulted in
+>   perf_event_alloc(), while the fixed binary reached perf-event setup and
+>   reported failure to create the instructions event on CPU 0. QEMU did
+>   not provide a usable hardware PMU runtime result, so no profile counts
+>   are claimed.
+>
+> Fixes: 47c09d6a9f67 ("bpftool: Introduce "prog profile" command")
+> Link: https://lore.kernel.org/bpf/20260813160858.1042834-3-sh_def@163.com=
+/
+> Signed-off-by: Hui Su <sh_def@163.com>
+> ---
+>  tools/bpf/bpftool/prog.c                  | 51 +++++++++++++++--------
+>  tools/bpf/bpftool/skeleton/profiler.bpf.c |  8 ++--
+>  2 files changed, 38 insertions(+), 21 deletions(-)
+>
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
-> new file mode 100644
-> index 000000000000..c932da7cbec1
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
+I don't think these fixes should go into bpf tree, please rebase them
+onto bpf-next/master and resend. As is they don't apply cleanly.
 
-[ ... ]
-
-> @@ -0,0 +1,121 @@
-
-[ ... ]
-
-> +	err = exceptions_cleanup__load(skel);
-> +	if (err) {
-> +		if (err == -EOPNOTSUPP &&
-> +		    strstr(log, "exception cleanup needs a JIT that can dispatch landing pads"))
-> +			test__skip();
-
-A subsystem pattern flags this as potentially concerning: the load failure
-is correctly turned into a skip rather than a failure, but the skip carries
-no reason. test__skip() is called with nothing printed, so the only output
-is the harness' bare '#N exceptions_cleanup:SKIP' line. Is there a reason
-to omit the skip message here?
-
-A reader of a CI log cannot tell whether the test was skipped because the
-JIT cannot dispatch landing pads, because the test was denylisted, or for
-some other reason. Roughly a third of the existing test__skip() sites in
-prog_tests/ print a reason, e.g. fprintf(stderr, "%s:SKIP: JIT cannot
-dispatch landing pads\n", __func__) alongside test__skip(). (Note that
-test_progs' test__skip() has no message parameter, so the reason has to be
-printed separately.)
-
-The skip decision itself is correct and precisely gated on the kernel's
-message from kernel/bpf/exception.c:440, so this is a diagnosability nit
-rather than a functional defect.
-
-> diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup.c b/tools/testing/selftests/bpf/progs/exceptions_cleanup.c
-> new file mode 100644
-> index 000000000000..a3a8c14e0db2
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup.c
-
-[ ... ]
-
-> +static __used __noinline __u64 foo3(__u64 x)
-> +{
-> +	bpf_preempt_disable();
-> +	if (x > 100)
-> +		asm volatile (
-> +		"r1 = %[cookie];"
-> +	"1:"	"call bpf_throw;"		/* cleanup region */
-> +	"2:"
-> +		"goto 3f;"
-> +	"4:"					/* landing pad */
-> +		"r7 = r0;"
-> +		"call bpf_preempt_enable;"
-> +		PAD_RAN("%[ran]")
-> +		"r1 = r7;"
-> +		"call bpf_unwind_resume;"
-
-This isn't a bug, but is the r7/r1 shuffle in foo3()'s pad meant to
-demonstrate that callee-saved state survives a pad-internal call, or can
-those two instructions be dropped so all three pads call bpf_unwind_resume()
-the same way?
-
-The pad saves r0 into the callee-saved r7 across the bpf_preempt_enable()
-call and restores it into r1 immediately before 'call bpf_unwind_resume'.
-bpf_unwind_resume() is declared as taking no arguments, and at pad entry r0
-is not the throw cookie but the fixed constant the kernel writes there
-(BPF_PAD_ENTRY_R0 == 1), so both instructions appear to be dead stores.
-
-The two other pads in the same file (foo2 label 6 and foo1v label 8) call
-bpf_unwind_resume without any register setup.
-
-> diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup_fail.c b/tools/testing/selftests/bpf/progs/exceptions_cleanup_fail.c
-> new file mode 100644
-> index 000000000000..db6ac7d8bd6d
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup_fail.c
-
-[ ... ]
-
-> +#if defined(__BPF_FEATURE_STACK_ARGUMENT)
-
-[ ... ]
-
-> +static __used __naked __noinline __u64 stack_arg_pad_frame(void)
-> +{
-> +	asm volatile (
-> +	"call bpf_preempt_disable;"
-> +"1:"	"call inner_throw;"		/* cleanup region */
-> +"2:"
-> +	"call bpf_preempt_enable;"
-> +	"r0 = 0;"
-> +	"exit;"
-> +"3:"					/* landing pad */
-> +	"call bpf_preempt_enable;"
-> +	"r1 = 1;"
-> +	"r2 = 2;"
-> +	"r3 = 3;"
-> +	"r4 = 4;"
-> +	"r5 = 5;"
-> +	"*(u64 *)(r11 - 8) = 6;"	/* the sixth argument */
-> +	"call six_args;"
-> +	"call bpf_unwind_resume;"
-> +	"exit;"
-> +	CLEANUP_REC("1b", "2b", "3b")
-> +	::: __clobber_all);
-> +}
-
-[ ... ]
-
-> +static __used __naked __noinline __u64 kfunc_arg_pad_frame(void)
-> +{
-> +	asm volatile (
-> +	"call bpf_preempt_disable;"
-> +	"r1 = 11;"
-> +"1:"	"call bpf_throw;"		/* cleanup region */
-> +"2:"
-> +	"r0 = 0;"
-> +	"exit;"
-> +"3:"					/* landing pad */
-> +	"call bpf_preempt_enable;"
-> +	"r1 = 1;"
-> +	"r2 = 2;"
-> +	"r3 = 3;"
-> +	"r4 = 4;"
-> +	"r5 = 5;"
-> +	"call bpf_kfunc_call_test_pair_arg_nofit;"
-> +	"call bpf_unwind_resume;"
-> +	"exit;"
-> +	CLEANUP_REC("1b", "2b", "3b")
-> +	::: __clobber_all);
-> +}
-
-This isn't a bug, but since case 14 (kfunc_arg_pad_frame) is rejected on
-the kfunc's BTF argument-slot count before do_check() runs, do the r1..r5
-assignments there carry any weight, or were they carried over from case 13
-(stack_arg_pad_frame)?
-
-kfunc_arg_pad_frame() is instruction-for-instruction identical to
-stack_arg_pad_frame() except that the '*(u64 *)(r11 - 8) = 6; call
-six_args;' pair is replaced by a single 'call
-bpf_kfunc_call_test_pair_arg_nofit;', and both carry the same __msg()
-expectation. In case 13 the r1..r5 setup pairs with the r11 store that the
-kernel rule actually matches on; in case 14 the rejection comes purely from
-the kfunc's BTF argument-slot count, which the verifier computes before
-do_check() ever runs, so the five register assignments carry no weight
-there.
-
-Would a shared macro for the repeated frame skeleton ('call
-bpf_preempt_disable / 1: call inner_throw / 2: call bpf_preempt_enable / r0
-= 0 / exit / 3: ...') make the one differing instruction in each case easier
-to see? The same six-instruction frame skeleton is repeated verbatim across
-roughly eleven __naked frames in the file.
+pw-bot: cr
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35656368472
---===============5978879528784475066==--
+[...]
