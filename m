@@ -1,109 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from gentwo.org (gentwo.org [62.72.0.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B1CEADC
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 17:56:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81CB39734A;
+	Mon, 21 Sep 2026 17:57:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790013409; cv=none; b=D4cxRBAK/PkhT/bByahSBz+OQ08CgNvAiD+MON86zYHaiWkU/DlHr0bLIxfBtI2ejO+tU/8mJlutpGxgaFW50vJ/NJsIkAJ32hkxe8WZn0/jaXQNWu0sO3BjFTZDsHIKs3LqN/eXLpX/Cro7CPI3B2s6hRyY5kyY4nj+Mjr7/VE=
+	t=1790013436; cv=none; b=CipGWFylV3EqCHlcK6PqwxXtcZPZETCzXcjjT21rBWlBbL20yiYkfFLtuSGKaDb/7WUzZ+8/NgzdK3lZxO4XF+KHdkSNN1D5PBpcsltnvHDcFzATqJhDTE81mwdly3Yb6LcTB4uH1VUvu6ch6bIxR61NBKbNiu9WfMaBy3bKQMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790013409; c=relaxed/simple;
-	bh=hIroAZwSc3nQoJlCZ3vJeNTsUcIIxf9QIgTArRQ7t/0=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=qqOJVgw+XwZ29DJPHM22bjMQN4xmvJFBX7kMrDEz6GtgO+w01IjGLiBkrHWL3dl7jyz8aHvuvf18PZJxKPEWdgMGJfML4o+naCMNMZ9RBJVdQpfKvUnqKK3HH/Ho55otDZXP8QkoGl3xZWHhDcZZwhrOXaSEkzMvP9iBfI6FmJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=byc9AtDi; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790013436; c=relaxed/simple;
+	bh=XW2kMLggkRWNkVt6ExhJhc6qzBTBSihv+LUgIX5RMcA=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=RivnL9I70PG7Jjm0kZLD8uMmlzbYsUMY1DP4bWyqeI1uL6FI0u0Wlf27TCvXmyLXWI7Vi21SCeZRSvVLcj+0kx+8XLaTERuZxRsMqpkxbjyLNUn6pEbqVGSBEjXq0g3RwYfDKxyz676Gqvc8Sx23KoXKvO2jUqguq8RSWBd0WjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=DsymiE1M; arc=none smtp.client-ip=62.72.0.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="byc9AtDi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F4871F000FF;
-	Mon, 21 Sep 2026 17:56:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790013407;
-	bh=+HsvVaTmCWU5tvDHmGEEMjz5K8fFzIUwcE+jTXyENXs=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=byc9AtDinWAvQz9H3lzBNSwf4sFVJupD78ME/CuvjVwAc5cuVqJ47DY6/ohVmx/C+
-	 OzVwQs1L3TaP5aD+FERJetAAre4bOhsSZaO9h6GmbDiI+1uv7/dKjDsIKkjnp3DWO8
-	 Zzfao7H6GnBKUIO1rb1ZpaVhifxo2MxbzWPpmjgMWccYb95cMAyWxiYR6WnkiQZ3J9
-	 qLqfSvYZuggJsMFz7NEuFwwHIT6ozpuHXhHhPrlJ/dVvjIcoLxpLRDvoNaEVVFrNlB
-	 BERDdn/PRfIejMzKDbOvXDowxRkFnXtZp2lNtrzbAfQApIHibFicv1aajfvx2aZ98v
-	 LJSJCcm2zvDRg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v4 2/2] selftests/bpf: cover stale CB after LWT IP
- encapsulation
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Weiming Shi" <bestswngs@gmail.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260921173910.90847-3-bestswngs@gmail.com>
-References: <20260921173910.90847-1-bestswngs@gmail.com>
- <20260921173910.90847-3-bestswngs@gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 21 Sep 2026 17:56:47 +0000
-Message-Id: <20260921175647.9F4871F000FF@smtp.kernel.org>
+	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="DsymiE1M"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
+	s=default; t=1790012833;
+	bh=XW2kMLggkRWNkVt6ExhJhc6qzBTBSihv+LUgIX5RMcA=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=DsymiE1MQAtmEN6uUB15xdAYVJDZfNgJnj2uprYa57YqGKxBPw/trT1vR1DDzhUmO
+	 mG9CZX/7ouqOPVy1PfkrG6LJZR68SWo47gb09EdLmAGiAeSYTe398ITRq5Z08JDXrL
+	 1zi94uzbdB0Ko5/ITaTybb562kwpWXK8p179l0Rc=
+Received: by gentwo.org (Postfix, from userid 1003)
+	id 85E8E406E1; Mon, 21 Sep 2026 10:47:13 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+	by gentwo.org (Postfix) with ESMTP id 82BF2406DE;
+	Mon, 21 Sep 2026 10:47:13 -0700 (PDT)
+Date: Mon, 21 Sep 2026 10:47:13 -0700 (PDT)
+From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+cc: Haris Okanovic <harisokn@amazon.com>, linux-kernel@vger.kernel.org, 
+    linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+    linux-pm@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de, 
+    catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org, 
+    akpm@linux-foundation.org, mark.rutland@arm.com, ast@kernel.org, 
+    rafael@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com, 
+    zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com, rdunlap@infradead.org, 
+    david.laight.linux@gmail.com, broonie@kernel.org, 
+    joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, 
+    konrad.wilk@oracle.com, ashok.bhat@arm.com
+Subject: Re: [PATCH v15 12/16] cpuidle/poll_state: Wait for need-resched via
+ tif_need_resched_relaxed_wait()
+In-Reply-To: <878q58z2ej.fsf@oracle.com>
+Message-ID: <3e8bda45-0aa7-d0be-8aad-dab95902dcde@gentwo.org>
+References: <20260831202251.305046-1-ankur.a.arora@oracle.com> <20260831202251.305046-13-ankur.a.arora@oracle.com> <178908146776.2725577.2613699832033292946.b4-review@b4> <878q58z2ej.fsf@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf: bpf_lwt_encap_stale breaks lwt_ip_encap_vxlan test due to a=
-uto-loading
---
+On Fri, 11 Sep 2026, Ankur Arora wrote:
 
-commit 62bf6da3e832e187b8a03919cec2518d27ebceed
-Author: Weiming Shi <bestswngs@gmail.com>
+>
+> Thanks for retesting.
+>
+> > The new unit tests all pass on both metal and virt variants of the same machines.
+> >
+> > I hope we can merge this soon.
+>
+> Yes indeed. I'll send out one more version which addresses a few minor
+> bot comments (and patch-1 needs a re-review because of changes.)
+>
+> But other than that this is as mergeable as it will ever be.
 
-selftests/bpf: cover stale CB after LWT IP encapsulation
+I dont see it anywhere. Is this patchset scheduled to be merged?
 
-This commit adds regression coverage to the LWT IP encapsulation test. It
-verifies that the restored protocol control block no longer contains the
-inner header's cached option offsets after LWT program execution.
-
-Link: https://lore.kernel.org/bpf/DLKB3UXOH0IS.1UL8NV9HSJFXG@gmail.com/
-
-> diff --git a/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c b/tool=
-s/testing/selftests/bpf/progs/test_lwt_ip_encap.c
-> index 4a934fccf8f5b..8b57c7fb7fa8a 100644
-> --- a/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c
-> +++ b/tools/testing/selftests/bpf/progs/test_lwt_ip_encap.c
-
-[ ... ]
-
-> @@ -80,6 +83,29 @@ int bpf_lwt_encap_gre6(struct __sk_buff *skb)
->  	return BPF_LWT_REROUTE;
->  }
-> =20
-> +SEC("encap_stale")
-> +int bpf_lwt_encap_stale(struct __sk_buff *skb)
-> +{
-
-[Severity: Medium]
-Will this new program cause the existing lwt_ip_encap_vxlan() test to fail
-unconditionally?
-
-Since "encap_" is an unknown section name prefix for libbpf, it defaults to
-the BPF_PROG_TYPE_UNSPEC program type.=20
-
-The existing lwt_ip_encap_vxlan() test function relies on
-test_lwt_ip_encap__load(skel) to load the skeleton. It manually disables
-auto-loading for preexisting programs (like encap_gre and encap_vxlan) but
-was not updated to disable auto-loading for this newly added encap_stale
-program.=20
-
-Consequently, libbpf attempts to load it, sees BPF_PROG_TYPE_UNSPEC, and
-returns -EINVAL, which immediately fails the lwt_ip_encap_vxlan() test.
-Should this program's auto-loading be explicitly disabled in the existing
-tests?
-
-> +	struct iphdr iph =3D {};
-> +
-> +	/* Exercise CB restore before post-run invalidation. */
-> +	if (skb->cb[0])
-> +		return BPF_DROP;
-
-[ ... ]
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260921173910.9084=
-7-1-bestswngs@gmail.com?part=3D2
