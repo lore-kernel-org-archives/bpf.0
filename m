@@ -1,193 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED5B34FDA4A
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:40:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CD4A51615B
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:42:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790026821; cv=none; b=LPxgzbbpvuDbHY/F3QLEi7ZVijPo55rye7Aka3KNwRpJwC4MB7myBPgPEyFaG38prOlqofJheH3nUuMQ72LGTFH9rsAZKU6Et0WfHDRJOpVBsxpqgv/0yjGh1pii1WA5KC6FK5pqLmRt+8ZSIp0WWW3zHCQmHtcekiCZLbQjSrw=
+	t=1790026941; cv=none; b=U41dwHmPD9qJ223P7wDbURbOrhnmNYXRPIeZIAIz6UvLKm+3RoSKNLeYdoByg5/uI5CODWnAiEKXQjWtLKykU8pbqllxTK4EaWFngrfPbEI+UZtjO0uTj9ZfK5ZQh7DLVv4pcWhNiHDlER+iltYGnoTHCUDmWnQjKZ8WmWTGPOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790026821; c=relaxed/simple;
-	bh=gczUHT0Ug/nDRssTN4hfHhPp+BrkFtUY3mx+HsRavKA=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hrhNy3yUfd01f8nXJraX4XeppQvGxrp1fpwhvGUxKBc4VOdkIwIAafGbpE/2SZdC/2p80djMiBQDNnpjEpUy9NssSkSRtYJcab/dQLqXjfOWGvpH6ufBXFnqHyZfJo7OAkK60zODjK27VCFD1KqjsFPeVIvvbtT9hydiV5LddN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mTcsucgO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790026941; c=relaxed/simple;
+	bh=S0F59O00IfudgmumFPj+8WjSRuyfC/75f3Pd4lPfDxg=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=KKnm4A6aWnDXTgBUmfg+x5hPR0sLTOnHqlTdfmWKBzqc9CXYCJ72M4LYmm16XuxXVuWn82JrS6mUHOm1P3oV22TH0ysGASXSqy1DLCG6SynMkd+ZFVwFMGKEOq0MNJstl+Aqc04GKjtlvgb0DRROfPsJ6zjFwksiiQWuhBra5uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gNk1vVLv; arc=none smtp.client-ip=74.125.227.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mTcsucgO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C01F1F000FF;
-	Mon, 21 Sep 2026 21:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790026819;
-	bh=6xDBSQA8NZxE3abbSdrT5RkZiJeOQrCqe1Kso/vkglk=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=mTcsucgOmRMUZzVODZp6Y+Ne5JQX7J2jc4mtLgfa6MiS2NLOoZj59rITH1iYMQEet
-	 5V8xLQIQyys79ZZSegIep019pbCZzY40iPtaptN8mqbrOTk9/UZ6P6s3E2yc+va3+2
-	 L0n9q4p+FEj9SoRlIuoW5q5fxJQ43brNLVjJ2Hi94jRKZeHGFZxg/siFu3Aeb+3rbb
-	 BKNnIzqCIFtv9GfOkQ1YOzt5DUbxhT/Rra2zqvWgU64Wm/NFc9DpIRekuGij0j/VyM
-	 9NzfVBWP2ywcEUC3MU7zC3TP1ds7J06H+UUWnU6VRNcoZR84y+hnideQQV89slg8G/
-	 i5WRjAkB4ASJA==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 08/20] bpf: Walk the exception unwind in the
- verifier
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260921210114.1720196-1-yonghong.song@linux.dev>
-References: <20260921210033.1715000-1-yonghong.song@linux.dev>
- <20260921210114.1720196-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 21 Sep 2026 21:40:18 +0000
-Message-Id: <20260921214019.5C01F1F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gNk1vVLv"
+Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-396ccb1a98dso2700401a91.0
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 14:42:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790026940; x=1790631740; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=S0F59O00IfudgmumFPj+8WjSRuyfC/75f3Pd4lPfDxg=;
+        b=gNk1vVLv5a52+Z3Uh1/tiWwAS3QtjG52Zn+lC0xQd/EGBiwwEUyV3IpZPUOoN8+I8L
+         stCzQYnbtOehg4r++Bl6Gl8cM3tYuLCLCWXDEMYzKJVdfjBtwD/C/ODG/mdOBnx99y2F
+         OCtiREtVFDn+oQts1L1li0UILk83745P48oab8Kz7lCiB9Xn6/Q1TeuxPdcvxjArKUf1
+         tVizfrkNHQt2cOZvwOFurYQNfmpMPGSPCPxsz9Of57fDzb1Z5bEQs/p8YD9M+JD/Fn5Z
+         uazoO6yzXO2fYC7RRlQ9j6+aeT+5pdutaHXzBNCRs49cRrk9s7G1UPlS7c/AD93mWeXs
+         K0GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790026940; x=1790631740;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=S0F59O00IfudgmumFPj+8WjSRuyfC/75f3Pd4lPfDxg=;
+        b=Jv3g74j05x/47za1wBFqy8VtHdQ58BcilscDposAzLD4v6JaaE3zOSNBvO28pf1bph
+         M5wNh7++LYCeoKO1ZS3jWBzV+wvGS1snuPBvMj/zY4AJPUmXBc8/aA4jQseQFqT+pWud
+         vqtS8vLVc/oAsrVwAp77gRQh8IALV+Rip25kk5ac2JcfTA3h54xH4Vy1wZhS3FiLUsj0
+         NEgH//JokZm1pyhiGOgsOFxf6FQ005ZeZs8jJK7BLguZed2eIKvTj10TOzFI5T3YbH/v
+         QUqKxniY+FVxkDfXC3C33byk+7MKCKSV4bEEvy/SmzaGY/lj+ProgkWmY4IcrkReYrg6
+         1Efg==
+X-Gm-Message-State: AFuF++l6yFIFBr5OT6mDB50Ozm9Ktrtd/HDmkhYEypyBTnwR2diUCZpt
+	GGJ5JlVXWSEap+zo1ipMdrumySOXnIemLHATzoupnKAcgaBJRFWQoStJ
+X-Gm-Gg: AYBFou0T4K95WeFCc9cnSdsmMtlkEgZN1eRad+Nt78t+wMEvdKuVzpNKEXX/6Hp3Vs/
+	eKwOSSwFTQeQZwFmjEAzS5Jsp+CrZCW7z7zmNOUMnf9BvF3wmvFT4SkBH4PfFmjEWFRpjAKE80t
+	nD7sK0m+TwLSgRIvRATDDEBLT+xnGxSoeaQu+sERb3jDR2ZV6rj76SPYe748bO1HRJERx+7y3Y2
+	ufh2GiVpBVoFX6ke6fVDG2wrCQfKleGXPhOzFdEBu+aLOC0MIUvEWp0ZNEZ53td/TVi/wip9b54
+	UfvS8WDSBjXPpJTdMU6L62vTML94aZAkJ/dF3odVtfhiblCQb1j9GyzZaOyJF9I+QAeYhTSB4sV
+	kDMlP+XJ8U6NpOrzXe809De9g3TiKoAp1fd3HFNUP+nzxswNU3MswrTYLUUKobzuJCd6pW5FtT+
+	cOVtWKqIGDu1vDPF+vychutkCewmLIbM+XBha6Q+NkMzb2kwTssln6jj7eAm2RbDTRhp4+9BNOd
+	DmvFADuj22Ll/dzAgt2/tdEX8XotwQdMXe+PUEBvbTU5CYTvvUfuBqhV8i/as4dCgkW1wwPJfac
+	6CA=
+X-Received: by 2002:a17:90b:4ace:b0:3a0:4023:bb00 with SMTP id 98e67ed59e1d1-3a04023bca4mr6180002a91.46.1790026939659;
+        Mon, 21 Sep 2026 14:42:19 -0700 (PDT)
+Received: from localhost ([153.61.198.253])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a03bcecdd2sm4134180a91.1.2026.09.21.14.42.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Sep 2026 14:42:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 21 Sep 2026 21:42:18 +0000
+Message-Id: <DLLBLB8VWMGJ.1YXGT94V6NJ5G@gmail.com>
+Subject: Re: [PATCH 0/3] selftests/bpf: Fixes for out-of-tree builds
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Eduard Zingerman" <eddyz87@gmail.com>, "Nico Pache (Red Hat)"
+ <nico.pache@linux.dev>, =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?=
+ <ricardo@marliere.net>, <ihor.solodrai@linux.dev>,
+ <nickolay.lysenko@gmail.com>
+Cc: <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Jiri Olsa" <jolsa@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
+ <linux-kernel@vger.kernel.org>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>
+X-Mailer: aerc 0.17.0
+References: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
+ <6f95ec90-194a-4304-9673-c7bb50065223@linux.dev>
+ <d3a251acf5131bea732e23bbd135a5fdebec9ad6.camel@gmail.com>
+In-Reply-To: <d3a251acf5131bea732e23bbd135a5fdebec9ad6.camel@gmail.com>
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [High] bpf: BPF_EXIT in exception cleanup pads bypasses runtime unwinding
-- [High] bpf: nested bpf_throw() in landing pads causes kernel NULL pointer=
- dereference
-- [Medium] bpf: R0 precision tracking is not cleared across exception edges
---
+On Mon Sep 21, 2026 at 9:04 PM UTC, Eduard Zingerman wrote:
+> The "PERMISSIVE" change done enough damage already.
 
-commit cdb6004b5b8821aea00d57d94b9ac5bcf916b6a4
-Author: Yonghong Song <yonghong.song@linux.dev>
-Subject: bpf: Walk the exception unwind in the verifier
+Pls do a partial revert of it.
 
-This commit updates the BPF verifier to walk the exception unwinding path
-step for step when bpf_throw() is called. This aligns the verifier with
-the runtime unwinder to properly handle landing pads for exception cleanup.
-
-> diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
-> index 507a366dffa47..bf5e7e6ab78f3 100644
-> --- a/kernel/bpf/backtrack.c
-> +++ b/kernel/bpf/backtrack.c
-[ ... ]
-> @@ -909,6 +913,14 @@ int bpf_mark_chain_precision(struct bpf_verifier_env=
- *env,
->  				 */
->  				return 0;
->  			subseq_idx =3D i;
-> +			/* This insn is a landing pad the unwind reached from
-> +			 * a throw or a resume hist->unwind_frames frames
-> +			 * deeper. No insn stands between the two, so enter
-> +			 * those frames here, the way BPF_EXIT enters one.
-> +			 */
-> +			for (fr =3D 0; hist && fr < hist->unwind_frames; fr++)
-> +				if (bt_subprog_enter(bt))
-> +					return -EFAULT;
->  			i =3D get_prev_insn_idx(st, i, &history);
->  			if (i =3D=3D -ENOENT)
->  				break;
-
-[Severity: Medium]
-When traversing the exception edge here, does the backtrack correctly clear
-the precision tracking for R0 in the pad's frame?
-
-When returning from a throw to a landing pad, R0 is initialized to
-BPF_PAD_ENTRY_R0 by the kernel unwinder. Since its precision might be
-tracked if used in a conditional jump in the pad, this backtrack loop uses
-bt_subprog_enter(bt) but does not appear to clear R0's precision mask in
-the pad's frame.
-
-This could leave R0 erroneously tracked in the pad's frame as the backtrack
-proceeds, eventually reaching the program entry and triggering a
-verifier_bug() that rejects valid BPF programs with -EFAULT.
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 680ae191aa3f5..2bc08c18ebc89 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-[ ... ]
-> @@ -14585,7 +14588,7 @@ static int check_kfunc_call(struct bpf_verifier_e=
-nv *env, struct bpf_insn *insn,
->  		env->prog->call_session_cookie =3D true;
-> =20
->  	if (bpf_is_throw_kfunc(insn))
-> -		return process_bpf_exit_full(env, NULL, true);
-> +		return unwind_step(env, insn_idx, &env->insn_idx);
-> =20
->  	return 0;
->  }
-
-[Severity: High]
-Is there anything preventing a nested exception from being thrown here?
-
-There doesn't seem to be a check for env->cur_state->unwinding before
-processing bpf_throw(), which allows a program to throw an exception from
-within a landing pad.
-
-At runtime, the landing pad is executed via arch_bpf_run_cleanup_pad(),
-placing kernel frames on the call stack above the BPF frames. A nested call
-to bpf_throw() would invoke arch_bpf_stack_walk().
-
-Since it would encounter the non-BPF frame for arch_bpf_run_cleanup_pad(),
-bpf_prog_ksym_find() returns NULL. With ctx->cnt being non-zero, the walk
-halts prematurely, causing a blind dereference of ctx.aux->bpf_exception_cb
-and leading to a kernel NULL pointer dereference.
-
-[ ... ]
-> @@ -18522,25 +18624,11 @@ static int process_bpf_exit_full(struct bpf_ver=
-ifier_env *env,
->  	 * for which reference_state must match caller reference
->  	 * state when it exits.
->  	 */
-> -	int err =3D check_resource_leak(env, exception_exit,
-> -				      exception_exit || !env->cur_state->curframe,
-> -				      exception_exit ? "bpf_throw" :
-> +	int err =3D check_resource_leak(env, false, !env->cur_state->curframe,
->  				      "BPF_EXIT instruction in main prog");
->  	if (err)
->  		return err;
-> =20
-> -	/* The side effect of the prepare_func_exit which is
-> -	 * being skipped is that it frees bpf_func_state.
-> -	 * Typically, process_bpf_exit will only be hit with
-> -	 * outermost exit. copy_verifier_state in pop_stack will
-> -	 * handle freeing of any extra bpf_func_state left over
-> -	 * from not processing all nested function exits. We
-> -	 * also skip return code checks as they are not needed
-> -	 * for exceptional exits.
-> -	 */
-> -	if (exception_exit)
-> -		return PROCESS_BPF_EXIT;
-> -
->  	if (env->cur_state->curframe) {
->  		/* exit from nested function */
->  		err =3D prepare_func_exit(env, &env->insn_idx);
-[ ... ]
-> @@ -18747,7 +18837,7 @@ static int do_check_insn(struct bpf_verifier_env =
-*env, bool *do_print_state)
->  				env->insn_idx +=3D insn->imm + 1;
->  			return INSN_IDX_UPDATED;
->  		} else if (opcode =3D=3D BPF_EXIT) {
-> -			return process_bpf_exit_full(env, do_print_state, false);
-> +			return process_bpf_exit_full(env, do_print_state);
->  		}
->  		return check_cond_jmp_op(env, insn, &env->insn_idx);
->  	}
-
-[Severity: High]
-Are we correctly handling BPF_EXIT when an exception is in flight?
-
-Because process_bpf_exit_full() is called unconditionally without checking
-if env->cur_state->unwinding is true, the verifier treats BPF_EXIT from a
-landing pad as a normal subprogram return (when curframe > 0).
-
-It pops the frame and continues verifying the caller's instructions, where
-an attacker might place lock releases to satisfy check_resource_leak().
-
-At runtime, BPF_EXIT emits a bare 'ret' instruction. When executed from
-arch_bpf_run_cleanup_pad(), it behaves like bpf_unwind_resume() by
-returning control to the kernel unwinder, which silently discards the
-caller frame without executing it.
-
-This discrepancy could allow BPF programs to bypass verifier resource
-checks and leak locks or references at runtime.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260921210033.1715=
-000-1-yonghong.song@linux.dev?part=3D8
