@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 237CE36F90A;
-	Mon, 21 Sep 2026 06:38:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E14C373C12;
+	Mon, 21 Sep 2026 06:38:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789972698; cv=none; b=q+VVTAlxp8QocYb4RXTTvfB9Lh4Ibix4LBe5WcMys+cnVFqwdboj/fG+or4PptqetmMoGZc1F0i0KPC+F9BpofSOxj/42eP1cU/lh6MEjpSXAV7xZqqd6iWylwM8oL1ST4x2n90FlrG9e6K8pw6bilt1up7wlf+fntexoV6CLa8=
+	t=1789972698; cv=none; b=SziRA4/xSsUw9T9/CyPflVGHBTyX3sRCk/XKt5032z19Tz1HyFye2GcT//m1acEWk6sfcZyowomabDK9wec6CiSp2FeyoWdPw5it7TFpiDZhXGw4T2zJU1g9yPrSP3teS7lgjmssw7al11yOMGIAvRHEEvbBvV9B8UU/45TIeJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789972698; c=relaxed/simple;
-	bh=9jMS24w8T9/Iwx+fDxdj04EaAMFKVFMuy5ao1Ssiw8Q=;
+	bh=CGiHqk5TsRnOuJM+UjP9p7U5IQXpp3ubd6D0Hzp4r0w=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=L9i0cDSQtEDuytkGB+Ahr2ODOVJK+kDcNL2ayx+/XShHL5HQQNxvJgP9Dc0N8b6Ok1jJbbiBv9mdYf9Y7iiOsGMavHAO5iHDzSLT0TOrrdL6hgUNtky+P9y7bAMBqSEGn+qHrRg7koKSIXXtS3FqNQCasMsjm14FJ0ZOxxXV+Oc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lxFp/P6t; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=KilGpnndmCVXGQPg/wL9DmQ3MbrpDTF5bLhYOYJGsyj6fWsKb7sEqPu2p0OTaXabmYN4c+C2Mnlk/EZN6D4CiqE7gQuaQgyycGG78m5y42KKSFwaOcvuFajlU84dSIjAU5E3dDC/vL69FZYuFfia98eZrlbSNzHWDraCzVcJiFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CYHw90nE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lxFp/P6t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08B4D1F00899;
-	Mon, 21 Sep 2026 06:38:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CYHw90nE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ADB81F00893;
+	Mon, 21 Sep 2026 06:38:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789972695;
-	bh=shxNcuWti3/+oQ17+LN5PpSuwNQZGgc8fK6UujU3mLk=;
+	s=k20260515; t=1789972696;
+	bh=HrpZjqcUa/VSzBtStdfiVD5ts6S8NWwGG+kimhJT3uc=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=lxFp/P6t9N9BfqQdrWbfbnd5mRBxAEqAHusHgfoHqq2/YLY9RYImSfech6/LcU5Q5
-	 Y9ZbitewLJStUlEKoxQx1k7L5arFRI+XxGVDDB25uwzexIUKhiYj3ssyzRMyQ+iqd8
-	 /Hv8SfATTCnrEzl4Ob1eTySVAE4ywaOZ8+Td0abPF0KFHj/tJXm6pZzAlk2sCrUpW4
-	 B8bRBDGxU9Odl8lPKnYGy1ie6429PoRnV2cIGehQ31NekFOmlW4XXL2rtlFqVk95Ni
-	 YqMYCLzD9HGbW4Xu4bsOsWxrgLKcIVQvZCJTBY81XZ+/9UjhUNU2ztIvGDPiElLfz3
-	 LFcI922NZVIgA==
-Subject: Re: [PATCH net-next 3/6] netlink: specs: rt-route: add lwtunnel encap
- sub-message support
+	b=CYHw90nE4IQgTZo50gbrKEyLCKpRbK0mkvwMh9Gi/OJby15IUY4DfG0LFgbxD1/uc
+	 i9zdNCKMC+LrAnTs4LT/kzY6cM5YCiUYZHQPonGipEu0eFgAf+y8uRs7wkUm4TISm5
+	 RN/MVapfizQnE0ZOCUVE865wvn2vpHciQKsIDrl3shjwi0w9VOl0UIipeW1dsGJd9I
+	 RNjb2Epmtlk2yFcfgtY8iCrugbeHoh0u4bktQbKoUfJ+3P91bKfg9ABjNfKkBOqsLB
+	 y+drUBtqBrrtQa+pBWocm5e1my8AvdFxe1HnLeK5KHKRrO8BicD7sl3er6NmiZpdrq
+	 1mVL5XdXogfkg==
+Subject: Re: [PATCH net-next 4/6] netlink: specs: rt-route: describe lwtunnel
+ IP options
 From: netdev-bot+sashiko@kernel.org
 To: hangbin.liu@linux.dev
 Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
  edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
  donald.hunter@gmail.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  bpf@vger.kernel.org, liuhangbin@kylinos.cn
-Date: Mon, 21 Sep 2026 06:38:14 +0000
-Message-ID: <178997269458.2160803.9466830531181053829@kernel.org>
-In-Reply-To: <20260917-ynl_rt_encap-v1-3-fbbe6e680571@kylinos.cn>
-References: <20260917-ynl_rt_encap-v1-3-fbbe6e680571@kylinos.cn>
-X-sashiko-severity: High
+Date: Mon, 21 Sep 2026 06:38:15 +0000
+Message-ID: <178997269588.2160803.17770495644903940757@kernel.org>
+In-Reply-To: <20260917-ynl_rt_encap-v1-4-fbbe6e680571@kylinos.cn>
+References: <20260917-ynl_rt_encap-v1-4-fbbe6e680571@kylinos.cn>
+X-sashiko-severity: Medium
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -51,7 +51,7 @@ MIME-Version: 1.0
 Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 1 · Medium: 1 · Low: 1
+Critical: 0 · High: 0 · Medium: 2 (1) · Low: 1
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -59,265 +59,234 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] Newly described lwtunnel encap attributes that the kernel
-  puts/gets in network byte order are declared as host-order integers,…
-- [Medium] Generated C parser can dereference a NULL selector string:
-  with RTA_ENCAP modelled as a sub-message selected by the `encap-type`…
-- [Low] The newly added selector enum (`encap-type`), the `encap-data`
-  sub-message and all eleven tunnel-specific attribute sets are added…
+- [Medium] New `lwtunnel-ip-opt-erspan.index` attribute in
+  Documentation/netlink/specs/rt-route.yaml is declared as host-order…
+- [Medium] The new `lwtunnel-ip-opts` / `lwtunnel-ip-opt-geneve` sets
+  cannot represent multi-option Geneve tunnels.
+- [Low] The four newly added attribute sets (`lwtunnel-ip-opts` at rt-
+  route.yaml:561, `lwtunnel-ip-opt-geneve` at 577, `lwtunnel-ip-opt-…
+
+Pre-existing issues:
+- [Medium] This problem wasn't introduced by this patch, but in the very
+  `lwtunnel-ip` / `lwtunnel-ip6` sets the patch edits, `id` is declared…
 
 --
 
-netlink: specs: rt-route: add lwtunnel encap sub-message support
+netlink: specs: rt-route: describe lwtunnel IP options
 
-This adds an encap-type enum to the rt-route spec and turns RTA_ENCAP into
-a sub-message keyed by that enum, with new attribute sets describing the
-mpls, ip, ila, ip6, seg6, bpf, seg6-local, rpl, ioam6 and xfrm payloads.
-It also extends tools/net/ynl/Makefile.deps so the generated rt-route code
-picks up the relevant uapi headers.
+This converts the opaque binary opts attribute in the lwtunnel-ip and
+lwtunnel-ip6 attribute sets into a nest pointing at a new lwtunnel-ip-opts
+set, and adds three new sets describing the geneve, vxlan and erspan IP
+tunnel options.
 
 > diff --git a/Documentation/netlink/specs/rt-route.yaml b/Documentation/netlink/specs/rt-route.yaml
-> index 253037ea5176a..0e236da140dc5 100644
+> index 0e236da140dc5..6030d7cb8d0d1 100644
 > --- a/Documentation/netlink/specs/rt-route.yaml
 > +++ b/Documentation/netlink/specs/rt-route.yaml
-> @@ -99,6 +99,58 @@ definitions:
->          name: ra-withdrawn
->          doc: A Router Advertisement withdrew the route with a zero
->            lifetime.
-> +  -
-> +    name: encap-type
-> +    type: enum
-> +    name-prefix: lwtunnel-encap-
-> +    enum-name:
-> +    entries:
-> +      - none
-> +      - mpls
-> +      - ip
-> +      - ila
-> +      - ip6
-> +      - seg6
-> +      - bpf
-> +      - seg6-local
-> +      - rpl
-> +      - ioam6
-> +      - xfrm
-
-[Severity: Low]
-This isn't a bug, but the new encap-type definition, the encap-data
-sub-message and all eleven new attribute sets (mpls-iptunnel, lwtunnel-ip,
-ila-attrs, lwtunnel-ip6, seg6-iptunnel, lwt-bpf, seg6-local, rpl-iptunnel,
-ioam6-iptunnel, lwt-xfrm) carry no doc properties, while the neighbouring
-rt-route-notify and rt-route-flags definitions in the same file do document
-their entries.
-
-Could a doc be added for at least the selector enum and each attribute set,
-including a note that some members are deliberately left as binary here and
-converted in follow-up patches?
-
-> +
-> +sub-messages:
-> +  -
-> +    name: encap-data
-> +    formats:
-> +      -
-> +        value: mpls
-> +        attribute-set: mpls-iptunnel
-
-[ ... ]
-
-> +      -
-> +        value: xfrm
-> +        attribute-set: lwt-xfrm
->  
->  attribute-sets:
->    -
-> @@ -174,9 +226,12 @@ attribute-sets:
+> @@ -375,7 +375,8 @@ attribute-sets:
+>          type: pad
 >        -
->          name: encap-type
->          type: u16
-> +        enum: encap-type
->        -
->          name: encap
-> -        type: binary  # tunnel specific nest
-> +        type: sub-message
-> +        sub-message: encap-data
-> +        selector: encap-type
+>          name: opts
+> -        type: binary  # lwtunnel ip nest options
+> +        type: nest
+> +        nested-attributes: lwtunnel-ip-opts
 
 [Severity: Medium]
-Can this crash the generated C parser when the peer kernel knows an encap
-type that the spec does not?
+This isn't a bug introduced by this patch, but while the lwtunnel-ip and
+lwtunnel-ip6 sets are being touched here, both declare id as plain u64 and
+flags as plain u16 with no byte-order property:
 
-The enum here lists values 0..10 (none..xfrm, i.e. today's
-LWTUNNEL_ENCAP_MAX). TypeSubMessage._attr_get() in
-tools/net/ynl/pyynl/ynl_gen_c.py only guards the zero case:
+  name: lwtunnel-ip
+  ...
+      -
+        name: id
+        type: u64
+  ...
+      -
+        name: flags
+        type: u16
 
-	if (!dst->encap_type)
-		return ynl_submsg_failed(yarg, "encap", "encap-type");
-	if (rt_route_encap_data_parse(&parg, rt_route_encap_type_str(dst->encap_type), attr))
+The kernel encodes and decodes both as big-endian.  In
+ip_tun_fill_encap_info():
 
-and _put_enum_to_str_helper() generates the lookup as:
-
-	if (value < 0 || value >= (int)YNL_ARRAY_SIZE(rt_route_encap_type_strmap))
-		return NULL;
-
-while the sub-message parser emitted by parse_rsp_submsg() starts with
-
-	if (!strcmp(sel, "mpls"))
-
-with no NULL check on sel. So a binary built from this tree dumping routes
-from a kernel that added LWTUNNEL_ENCAP_* value 11 would call
-strcmp(NULL, "mpls") while parsing an ordinary RTM_GETROUTE reply.
-
-Before this change RTA_ENCAP was type binary, so unknown encap types parsed
-harmlessly. Should the enum-to-string conversion introduced by "tools: ynl:
-convert enum selector to string for sub-message parsing" fall back to
-ynl_submsg_failed() when the lookup returns NULL, given this spec is its
-first consumer?
-
->        -
->          name: expires
->          type: u32
-> @@ -277,6 +332,229 @@ attribute-sets:
-
-[ ... ]
-
-> +  -
-> +    name: lwtunnel-ip
-> +    name-prefix: lwtunnel-ip-
-> +    header: linux/lwtunnel.h
-> +    attributes:
-> +      -
-> +        name: id
-> +        type: u64
-> +      -
-> +        name: dst
-> +        type: u32
-> +        byte-order: big-endian
-> +        display-hint: ipv4
-> +      -
-> +        name: src
-> +        type: u32
-> +        byte-order: big-endian
-> +        display-hint: ipv4
-> +      -
-> +        name: ttl
-> +        type: u8
-> +      -
-> +        name: tos
-> +        type: u8
-> +      -
-> +        name: flags
-> +        type: u16
-
-[Severity: High]
-Do these declarations byte-swap the tunnel id and tunnel flags on
-little-endian hosts?
-
-dst and src above correctly carry byte-order: big-endian, but id and flags
-do not, while the kernel encodes both in network order in
-net/ipv4/ip_tunnel_core.c:
-
-ip_tun_fill_encap_info()
-	nla_put_be64(skb, LWTUNNEL_IP_ID, tun_info->key.tun_id, LWTUNNEL_IP_PAD)
-	nla_put_be16(skb, LWTUNNEL_IP_FLAGS, ip_tunnel_flags_to_be16(...))
-
-ip_tun_build_state()
-	tun_info->key.tun_id = nla_get_be64(tb[LWTUNNEL_IP_ID]);
-
-Without a byte-order property, NlAttr.get_format() in
-tools/net/ynl/pyynl/lib/ynl.py returns format_.native:
-
-	if byte_order:
-	    return format_.big if byte_order == "big-endian" else format_.little
-	return format_.native
-
-and the same format is used by _add_attr() when packing requests, so both
-dumps and route creation would see reversed bytes, including flag bits such
-as TUNNEL_KEY landing in the wrong byte.
-
-The same question applies to the ila-attrs locator, identifier and
-locator-match below, which are __be64 on the wire (note the __force casts in
-net/ipv6/ila/ila_lwt.c):
-
-	p->locator.v64 = (__force __be64)nla_get_u64(tb[ILA_ATTR_LOCATOR]);
-	nla_put_u64_64bit(skb, ILA_ATTR_LOCATOR, (__force u64)p->locator.v64, ILA_ATTR_PAD)
-
-and to lwtunnel-ip6 id and flags, which use nla_put_be64()/nla_put_be16()
-for LWTUNNEL_IP6_ID and LWTUNNEL_IP6_FLAGS in ip6_tun_fill_encap_info().
-
-> +      -
-> +        name: pad
-> +        type: pad
-> +      -
-> +        name: opts
-> +        type: binary  # lwtunnel ip nest options
-> +  -
-> +    name: ila-attrs
-> +    name-prefix: ila-attr-
-> +    header: linux/ila.h
-> +    attributes:
-> +      -
-> +        name: locator
-> +        type: u64
-> +      -
-> +        name: identifier
-> +        type: u64
-> +      -
-> +        name: locator-match
-> +        type: u64
-
-[ ... ]
-
-> +  -
-> +    name: lwtunnel-ip6
-> +    name-prefix: lwtunnel-ip6-
-> +    header: linux/lwtunnel.h
-> +    attributes:
-> +      -
-> +        name: id
-> +        type: u64
-
-[ ... ]
-
-> +      -
-> +        name: flags
-> +        type: u16
-
-[ ... ]
-
-> +  -
-> +    name: seg6-local
-> +    name-prefix: seg6-local-
-> +    header: linux/seg6_local.h
-> +    attributes:
-
-[ ... ]
-
-> +      -
-> +        name: nh4
-> +        type: u32
-> +        display-hint: ipv4
-
-[Severity: High]
-Should nh4 also carry byte-order: big-endian?
-
-SEG6_LOCAL_NH4 is a raw struct in_addr in net/ipv6/seg6_local.c:
-
-	[SEG6_LOCAL_NH4] = NLA_POLICY_EXACT_LEN(sizeof(struct in_addr)),
+	if (nla_put_be64(skb, LWTUNNEL_IP_ID, tun_info->key.tun_id,
+			 LWTUNNEL_IP_PAD) ||
 	...
-	memcpy(&slwt->nh4, nla_data(attrs[SEG6_LOCAL_NH4]), sizeof(struct in_addr));
+	    nla_put_be16(skb, LWTUNNEL_IP_FLAGS,
+			 ip_tunnel_flags_to_be16(tun_info->key.tun_flags)) ||
 
-With u32 plus display-hint: ipv4 and no byte-order, ynl unpacks and packs it
-natively, so does an END.DX4 route created through ynl end up with a
-byte-reversed next hop (192.0.2.1 written as 1.2.0.192), and dumps rendering
-it reversed?
+and ip_tun_build_state() reads them back with nla_get_be64() /
+nla_get_be16().  ip6_tun_fill_encap_info() and ip6_tun_build_state() do the
+same for LWTUNNEL_IP6_ID and LWTUNNEL_IP6_FLAGS.
 
-The affected attributes above (lwtunnel-ip id/flags, lwtunnel-ip6 id/flags,
-ila-attrs locator/identifier/locator-match, seg6-local nh4) appear unchanged
-through the end of the series, so respinning this patch rather than fixing it
-later would keep the spec contract correct from the start.
+Would generated codecs therefore byte-swap the tunnel id and flags on
+little-endian hosts?  Since this patch adds byte-order: big-endian to a new
+neighbouring attribute, would it make sense to annotate these two in the
+same series so the edited sets are self-consistent?
 
 [ ... ]
+
+> @@ -555,6 +557,59 @@ attribute-sets:
+>        -
+>          name: link
+>          type: u32
+> +  -
+> +    name: lwtunnel-ip-opts
+> +    name-prefix: lwtunnel-ip-opts-
+> +    attributes:
+> +      -
+> +        name: geneve
+> +        type: nest
+> +        nested-attributes: lwtunnel-ip-opt-geneve
+
+[Severity: Low]
+Should these four new sets carry header: linux/lwtunnel.h?
+
+The LWTUNNEL_IP_OPTS_*, LWTUNNEL_IP_OPT_GENEVE_*, LWTUNNEL_IP_OPT_VXLAN_*
+and LWTUNNEL_IP_OPT_ERSPAN_* enums all live in
+include/uapi/linux/lwtunnel.h, and every sibling lwtunnel set in this same
+file already declares it (lwtunnel-ip, lwtunnel-ip6, lwt-bpf, lwt-xfrm).
+
+In ynl_gen_c.py the header property is what suppresses re-rendering of the
+enum:
+
+    for definition in parsed['definitions'] + parsed['attribute-sets']:
+        if 'header' not in definition:
+            continue
+
+Without it, does C codegen re-define LWTUNNEL_IP_OPTS_GENEVE and friends
+locally instead of including <linux/lwtunnel.h>, risking duplicate
+definitions when both headers are used?
+
+[Severity: Medium]
+Can this set represent a tunnel carrying more than one Geneve option?
+
+ip_tun_fill_encap_opts_geneve() opens a single LWTUNNEL_IP_OPTS_GENEVE nest
+and then loops, emitting one CLASS/TYPE/DATA triplet per option inside that
+one nest:
+
+	while (tun_info->options_len > offset) {
+		opt = ip_tunnel_info_opts(tun_info) + offset;
+		if (nla_put_be16(skb, LWTUNNEL_IP_OPT_GENEVE_CLASS,
+				 opt->opt_class) || ...
+
+On the input side ip_tun_parse_opts() accumulates repeated Geneve nests,
+rejecting only cross-type repeats:
+
+		case LWTUNNEL_IP_OPTS_GENEVE:
+			if (type && type != IP_TUNNEL_GENEVE_OPT_BIT)
+				return -EINVAL;
+
+Neither the outer geneve attribute nor the inner class/type/data attributes
+are marked multi-attr: true.  nlspec.py defaults to single:
+
+        self.is_multi = yaml.get('multi-attr', False)
+
+and ynl.py then overwrites earlier values:
+
+        if not is_multi:
+            rsp[name] = decoded
+
+So for a route created with something like
+
+  ip route add ... encap ip id 1 geneve_opts 0102:80:00001111,0102:81:00002222 ...
+
+would a decoder keep only the last triplet, and would an encoder be unable
+to express more than one option at all?  The previous binary modelling of
+opts preserved the whole payload, so is this conversion lossy as it stands?
+
+Note that adding multi-attr only to the outer geneve attribute would not be
+enough for reply decoding, since the repeated triplets live inside one nest.
+
+> +      -
+> +        name: vxlan
+> +        type: nest
+> +        nested-attributes: lwtunnel-ip-opt-vxlan
+> +      -
+> +        name: erspan
+> +        type: nest
+> +        nested-attributes: lwtunnel-ip-opt-erspan
+> +  -
+> +    name: lwtunnel-ip-opt-geneve
+> +    name-prefix: lwtunnel-ip-opt-geneve-
+> +    attributes:
+> +      -
+> +        name: class
+> +        type: u16
+> +        byte-order: big-endian
+> +      -
+> +        name: type
+> +        type: u8
+> +      -
+> +        name: data
+> +        type: binary
+
+[Severity: Low]
+Should data record the kernel's length constraints via checks: max-len?
+
+geneve_opt_policy caps the attribute:
+
+	[LWTUNNEL_IP_OPT_GENEVE_DATA]	= { .type = NLA_BINARY, .len = 127 },
+
+and ip_tun_parse_opts_geneve() additionally requires 4-byte granularity:
+
+	data_len = nla_len(attr);
+	if (data_len % 4)
+		return -EINVAL;
+
+so 124 bytes is the largest payload the kernel accepts.  As written, can
+spec-driven tooling build a request the kernel rejects with a bare -EINVAL?
+
+> +  -
+> +    name: lwtunnel-ip-opt-vxlan
+> +    name-prefix: lwtunnel-ip-opt-vxlan-
+> +    attributes:
+> +      -
+> +        name: gbp
+> +        type: u32
+> +  -
+> +    name: lwtunnel-ip-opt-erspan
+> +    name-prefix: lwtunnel-ip-opt-erspan-
+> +    attributes:
+> +      -
+> +        name: ver
+> +        type: u8
+> +      -
+> +        name: index
+> +        type: u32
+
+[Severity: Medium]
+Is index missing byte-order: big-endian here?
+
+The kernel treats LWTUNNEL_IP_OPT_ERSPAN_INDEX as big-endian on both
+paths.  ip_tun_fill_encap_opts_erspan() does:
+
+	    nla_put_be32(skb, LWTUNNEL_IP_OPT_ERSPAN_INDEX, md->u.index))
+
+and ip_tun_parse_opts_erspan() does:
+
+			md->u.index = nla_get_be32(attr);
+
+nlspec.py reads byte_order = yaml.get('byte-order'), which is None when the
+property is absent, so generated codecs would use native order.  On
+little-endian hosts, would an index of 1 decode as 0x01000000, and would a
+request built from this spec program a swapped index that the kernel
+accepts as-is?
+
+The erspan_opt_policy entry is { .type = NLA_U32 }, which is a size-only
+check and does not contradict the be32 accessors.  The class attribute added
+in lwtunnel-ip-opt-geneve in this same patch does carry
+byte-order: big-endian, so this looks like an oversight rather than an
+intentional difference.
+
+> +      -
+> +        name: dir
+> +        type: u8
+> +      -
+> +        name: hwid
+> +        type: u8
+
+Thanks for looking at these.
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260917-ynl_rt_encap-v1-0-fbbe6e680571%40kylinos.cn
