@@ -1,30 +1,30 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E96014883F
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 10:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C16736B92D
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 10:15:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789985749; cv=none; b=EBGxmim+cgp85n6f2EYxBlQHJxurK666otnsQzj584mWCtol6cG2Rt52Z1M7QhHJ2HF+mm2/Kc+JifvsSvPxjsEsjDfYv2BZVB22cpx87/ZomyD0BFjUWkSc2jCab+ITot99S4RtJ7Z75Dh7hdPwq5kmP8cy5lqM8Nn7aes8/yk=
+	t=1789985752; cv=none; b=K49/vf9jgBQtf2L9WPPLXHcuTI42su8RpbQaerPUwbAHt7OXMy2k2idG20NrHHj6TeE6ueIlT1AcBVhxA52I1N07zrpl6xO4UWx0J4lXsQ0/oQOuw1sIp2NThjRfE6G1L/gE9rjBJ2xokvxcxulTWyn8mcnoenoMv6yVdBm1wUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789985749; c=relaxed/simple;
-	bh=OFbrWjzY3Y4ucpuujSi7QXkJRT7WCI4BLh+hDLpXV2c=;
+	s=arc-20240116; t=1789985752; c=relaxed/simple;
+	bh=1KozyOnx0Y/fygt+qkgZX3CLtXy013yUbzbhHF58IeA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hYS+9tPm8Gb4w0Y6AkXjR9E35Kpb7worsWIFcMJLw7Jv3CtwjjMEm3Jktn34zs0I0w2JCYlSo16yEJoaORK0Joiv9lwEn4wYj/URofraOHguNJz4VvsVrofv8+AR5PfQocWI2YyaMN1wjXOiTim/6vpBY8Pzp2RAzHElrou0AHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=F/k5Clss; arc=none smtp.client-ip=220.197.31.2
+	 MIME-Version; b=Vrq0nl/ZfK8nrti4+dWY1L3MQSut9Bn0ni9MtLE7CeHwNBoWb26Csd6N0X5YSidOnkoqyFKGJOZlsxJj27MF1dswSZqC8lb4NTXmRQq6LprSS6qNG9PZXwDCsEwLM1ZyI7w8mA4s27DnafH59rHjelL3cd+C9dUeG/Jflcl0g8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=NHd3Ki2T; arc=none smtp.client-ip=117.135.210.3
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="F/k5Clss"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="NHd3Ki2T"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=xY
-	QIE+QRPkR7RdDsWz6GhOtjQAIHsuppHC9BvG7tFDU=; b=F/k5ClssC1TXn0Bqm4
-	WdS1OicmM6BWqp8BrpAhLkGW45QDPs9qRIojWUinQNIyRHHEP4sdT89+Ip1U0Yhg
-	Jzr6bOhsXvFXzTqHozANno9thIbMNs+20ySIyalSyOlvWbFJDEMnjs4gumjTZEBu
-	nrUsdyuF6tXGGyis9JniLiZyY=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=lO
+	RyCKFIuCuVRio5ZcEWe5vwzfB5MAhQOR3/y4EL10s=; b=NHd3Ki2Tf/EWXxUAW6
+	wSU6wIjPOaK3ZDes92B9YOfrHUsM4dhq+r4kEA9DrChP8Sp6qms6CuUwCyi9Igx3
+	l8d0AcJ5rR1a1ljAuhO0DdOTFglqcaDUzs1x5gINshCcS+gyRJumNEnZsOmtFJ5e
+	5N/UbYxWhXYjO0mm7qjRRTeTU=
 Received: from kylin-ERAZER-H610M.. (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wCHHsuiA7FqJ+caBw--.352S3;
-	Mon, 21 Sep 2026 18:15:01 +0800 (CST)
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wCHHsuiA7FqJ+caBw--.352S4;
+	Mon, 21 Sep 2026 18:15:02 +0800 (CST)
 From: Yun Lu <luyun_611@163.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -39,9 +39,9 @@ To: ast@kernel.org,
 	ihor.solodrai@linux.dev
 Cc: yatsenko@meta.com,
 	bpf@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/2] bpf: Fix task work scheduling and callback race
-Date: Mon, 21 Sep 2026 18:14:52 +0800
-Message-ID: <20260921101453.69273-2-luyun_611@163.com>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add task work scheduling race test
+Date: Mon, 21 Sep 2026 18:14:53 +0800
+Message-ID: <20260921101453.69273-3-luyun_611@163.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260921101453.69273-1-luyun_611@163.com>
 References: <20260921101453.69273-1-luyun_611@163.com>
@@ -52,213 +52,474 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wCHHsuiA7FqJ+caBw--.352S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW3Xw4xWF1UCrWkXr4UCw4rXwb_yoWfJF18pr
-	ZYvw1jyw4kWanFqF4avw4xAF1fKwsaya15Gr4kKr9Iyws8Xrn7Z348tF17tF4rCrs5JF1U
-	Zr4qy3yI9r45Z3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jY5lbUUUUU=
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbCwwXwv2qxA6X+LAAA3m
+X-CM-TRANSID:_____wCHHsuiA7FqJ+caBw--.352S4
+X-Coremail-Antispam: 1Uf129KBjvAXoW3Kw1UWF18Xr1DWFWDKryDZFb_yoW8JFy3Co
+	Z3ua15tw1kGr97Awn7Xa4vyr4YganFgas5Zr40grW5AF1fZrWYvF1kCw4fJw1xZF4Fqa43
+	ZFy8Zw1rCw48JFyrn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUx0PfUUUUU
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC7Abwv2qxA6Z0sQAA3e
 
 From: Yun Lu <luyun@kylinos.cn>
 
-bpf_task_work_irq() publishes a task_work callback before changing the
-context from SCHEDULING to SCHEDULED.  The callback can therefore run on
-another CPU while the irq_work handler is still using the same scheduling
-round.
+Exercise task-work scheduling, callback completion and map-value deletion
+on separate execution contexts. Rotate through context reuse, deletion
+after callback completion and deletion immediately before scheduling.
+These variants stress the SCHEDULING/SCHEDULED cancellation window and
+reuse of the same context across rounds.
 
-Nothing currently orders the handler's use of ctx->task against
-bpf_task_work_ctx_reset().  The callback can reset ctx->task and publish
-STANDBY before the handler resumes, allowing map-value deletion to make the
-handler pass NULL to task_work_cancel().  Publishing STANDBY this early
-also allows a new round to reuse the context and irq_work while the old
-handler is still running.
+Use READY and a single packed RESULT containing the generation and error,
+so scheduling errors cannot be missed without relying on ordering between
+separate map slots. Give every callback a unique generation so a late
+callback cannot satisfy a later assertion. Retry transient -EBUSY results
+while a previous callback wrapper is finishing. In the immediate-delete
+variant, accept -EBUSY and a follow-up -ENOENT when deletion wins the race.
 
-One concrete interleaving is:
+Select two CPUs from the process affinity mask, bound the thread-start
+wait and use an atomic stop handshake. Skip when fewer than two CPUs are
+available, while reporting thread creation or affinity setup errors as
+test failures.
 
-  1. CPU 0 changes PENDING to SCHEDULING in bpf_task_work_irq() and
-     successfully publishes ctx->work with task_work_add(), but has not yet
-     attempted the SCHEDULING-to-SCHEDULED transition.
-
-  2. The target task on CPU 1 runs the callback.  It changes SCHEDULING to
-     RUNNING, executes the BPF subprogram, then bpf_task_work_ctx_reset()
-     releases ctx->task and sets it to NULL.  The callback changes RUNNING
-     to STANDBY and drops its ctx reference.
-
-  3. CPU 2 deletes the map value.  bpf_task_work_cancel_and_free() changes
-     STANDBY to FREED.  Since the old state is not SCHEDULED, it does not
-     queue cancellation and drops the map's ctx reference.
-
-  4. CPU 0 resumes.  Its SCHEDULING-to-SCHEDULED cmpxchg observes FREED, so
-     bpf_task_work_cancel() calls task_work_cancel(NULL, &ctx->work).
-
-If deletion changes the state to FREED before the callback runs, the
-callback instead takes its FREED exit and may drop the last ctx reference.
-The destroy path then resets ctx->task, producing the same NULL dereference
-when CPU 0 resumes.
-
-A controlled reproducer that delays CPU 0 between task_work_add() and the
-state cmpxchg triggered the following fault on a v7.3-rc3 based x86-64 KVM
-guest:
-
-  BUG: kernel NULL pointer dereference, address: 0000000000000890
-  #PF: supervisor read access in kernel mode
-  RIP: task_work_cancel+0xd/0xa0
-  RDI: 0000000000000000
-  CR2: 0000000000000890
-  Call Trace:
-   <IRQ>
-   bpf_task_work_irq+0x95/0x100
-   irq_work_run_list+0x4f/0x90
-   irq_work_run+0x18/0x50
-   __sysvec_irq_work+0x18/0xb0
-   sysvec_irq_work+0x66/0x80
-   </IRQ>
-
-0x890 is the task_struct::task_works offset in that build.  It is read by
-task_work_pending() through the NULL task argument.  The rcu_read_lock() in
-bpf_task_work_irq() only keeps ctx memory alive; it does not retain
-ctx->task.  A NULL check would still race with releasing the task
-reference.
-
-Fix this by making the callback claim RUNNING before synchronizing with the
-scheduling irq_work.  RUNNING prevents map-value deletion from
-reinitializing the irq_work for asynchronous cancellation, so
-irq_work_sync() waits for the scheduling invocation that published the
-callback.  Only after that invocation returns may the callback execute the
-BPF subprogram, reset task/prog and publish STANDBY.
-
-Pin the context with one temporary reference held by the scheduling
-handler.  If deletion wins and the callback takes its FREED exit first,
-this reference prevents destruction from resetting ctx->task before the
-handler completes its cancellation attempt.
-
-An add failure has no callback to perform the synchronization.  Initialize
-the scheduling irq_work when the context is created and reject a new round
-while the failed invocation remains BUSY.  This prevents overlapping
-invocations from sharing the single BUSY bit and making a later
-irq_work_sync() return before its scheduling handler has finished.
-
-The callback runs in task context after task_work_run() has released
-task->pi_lock, and existing task_work callbacks such as ____fput() may
-sleep.  Keep the Tasks Trace RCU read-side section across irq_work_sync()
-so the map value remains live until the callback finishes.  No context
-fields or states are added, and the existing cancellation and destruction
-paths are retained.
-
-Fixes: 38aa7003e369 ("bpf: task work scheduling kfuncs")
 Signed-off-by: Yun Lu <luyun@kylinos.cn>
 ---
- kernel/bpf/helpers.c | 46 ++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 40 insertions(+), 6 deletions(-)
+ .../selftests/bpf/prog_tests/test_task_work.c | 283 ++++++++++++++++++
+ .../selftests/bpf/progs/task_work_race.c      | 126 ++++++++
+ 2 files changed, 409 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/task_work_race.c
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index b3cc5c8fc875..e5d5683626ea 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -4469,6 +4469,14 @@ static void bpf_task_work_callback(struct callback_head *cb)
- 		bpf_task_work_ctx_put(ctx);
- 		return;
- 	}
-+	if (WARN_ON_ONCE(state != BPF_TW_SCHEDULING &&
-+			 state != BPF_TW_SCHEDULED)) {
-+		bpf_task_work_ctx_put(ctx);
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_task_work.c b/tools/testing/selftests/bpf/prog_tests/test_task_work.c
+index 774b31a5f6ca..ff56976f4226 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_task_work.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_task_work.c
+@@ -5,10 +5,14 @@
+ #include <stdio.h>
+ #include "task_work.skel.h"
+ #include "task_work_fail.skel.h"
++#include "task_work_race.skel.h"
+ #include <linux/bpf.h>
+ #include <linux/perf_event.h>
+ #include <sys/syscall.h>
+ #include <time.h>
++#include <pthread.h>
++#include <sched.h>
++#include <unistd.h>
+ 
+ static int perf_event_open(__u32 type, __u64 config, int pid)
+ {
+@@ -155,3 +159,282 @@ void test_task_work(void)
+ 
+ 	RUN_TESTS(task_work_fail);
+ }
++
++#define TASK_WORK_RACE_ROUNDS	1500
++
++/* Must match progs/task_work_race.c. */
++enum task_work_race_status {
++	RACE_ARM_SEQ,
++	RACE_READY_SEQ,
++	/* High 32 bits hold the sequence, low 32 bits the signed error. */
++	RACE_RESULT,
++};
++
++struct task_work_race_value {
++	__u32 seq;
++	char data[60];
++	struct bpf_task_work tw;
++};
++
++struct task_work_race_ctx {
++	int stop;
++	int setup_err;
++	int trigger_tid;
++	int target_tid;
++	int trigger_cpu;
++	int target_cpu;
++};
++
++static int task_work_race_pin_cpu(int cpu)
++{
++	cpu_set_t set;
++
++	CPU_ZERO(&set);
++	CPU_SET(cpu, &set);
++	return pthread_setaffinity_np(pthread_self(), sizeof(set), &set);
++}
++
++static void *task_work_race_trigger(void *arg)
++{
++	struct task_work_race_ctx *ctx = arg;
++	int err;
++
++	err = task_work_race_pin_cpu(ctx->trigger_cpu);
++	if (err)
++		__atomic_store_n(&ctx->setup_err, err, __ATOMIC_RELEASE);
++	__atomic_store_n(&ctx->trigger_tid, syscall(__NR_gettid),
++			 __ATOMIC_RELEASE);
++	while (!__atomic_load_n(&ctx->stop, __ATOMIC_ACQUIRE))
++		getppid();
++	return NULL;
++}
++
++static void *task_work_race_target(void *arg)
++{
++	struct task_work_race_ctx *ctx = arg;
++	int err;
++
++	err = task_work_race_pin_cpu(ctx->target_cpu);
++	if (err)
++		__atomic_store_n(&ctx->setup_err, err, __ATOMIC_RELEASE);
++	__atomic_store_n(&ctx->target_tid, syscall(__NR_gettid),
++			 __ATOMIC_RELEASE);
++	while (!__atomic_load_n(&ctx->stop, __ATOMIC_ACQUIRE))
++		getppid();
++	return NULL;
++}
++
++static int task_work_race_status(struct task_work_race *skel, int idx,
++				 __s64 *value)
++{
++	return bpf_map_lookup_elem(bpf_map__fd(skel->maps.status), &idx,
++				   value);
++}
++
++static int task_work_race_set_status(struct task_work_race *skel, int idx,
++				     __s64 value)
++{
++	return bpf_map_update_elem(bpf_map__fd(skel->maps.status), &idx,
++				   &value, BPF_ANY);
++}
++
++static int task_work_race_wait_ready(struct task_work_race *skel, __u32 seq)
++{
++	int i;
++
++	for (i = 0; i < 2000000 / 100; i++) {
++		__s64 value = 0;
++
++		if (!task_work_race_status(skel, RACE_READY_SEQ, &value) &&
++		    value == seq)
++			return 0;
++		if (!task_work_race_status(skel, RACE_RESULT, &value) &&
++		    (__u32)((__u64)value >> 32) == seq)
++			/*
++			 * The BPF program finished between the two reads:
++			 * RESULT makes waiting for READY unnecessary. Any error
++			 * that occurred before READY is checked by the caller.
++			 */
++			return 0;
++		usleep(100);
++	}
++	return -ETIMEDOUT;
++}
++
++static int task_work_race_prepare_elem(struct task_work_race *skel)
++{
++	struct task_work_race_value value = {};
++	int key = 0;
++
++	if (!bpf_map_lookup_elem(bpf_map__fd(skel->maps.hmap), &key, &value))
++		return 0;
++	if (errno != ENOENT)
++		return -errno;
++	if (bpf_map_update_elem(bpf_map__fd(skel->maps.hmap), &key, &value,
++				BPF_NOEXIST))
++		return -errno;
++	return 0;
++}
++
++static int task_work_race_arm(struct task_work_race *skel, __u32 seq)
++{
++	if (task_work_race_set_status(skel, RACE_ARM_SEQ, seq))
++		return -errno;
++	return task_work_race_wait_ready(skel, seq);
++}
++
++static int task_work_race_check_done(struct task_work_race *skel, __u32 seq)
++{
++	int i;
++
++	for (i = 0; i < 2000000 / 100; i++) {
++		__s64 result = 0;
++
++		if (!task_work_race_status(skel, RACE_RESULT, &result) &&
++		    (__u32)((__u64)result >> 32) == seq)
++			return (__s32)result;
++		usleep(100);
++	}
++	return -ETIMEDOUT;
++}
++
++static int task_work_race_wait_callback(struct task_work_race *skel,
++					__u32 seq)
++{
++	int i, key = seq;
++
++	for (i = 0; i < 2000000 / 100; i++) {
++		__u64 completed = 0;
++
++		if (!bpf_map_lookup_elem(bpf_map__fd(skel->maps.completed),
++					 &key, &completed) && completed)
++			return 0;
++		usleep(100);
++	}
++	return -ETIMEDOUT;
++}
++
++void serial_test_task_work_race(void)
++{
++	struct task_work_race_ctx ctx = {};
++	struct task_work_race *skel;
++	pthread_t trigger, target;
++	cpu_set_t allowed;
++	int cpu, cpu_count = 0;
++	bool target_started = false, trigger_started = false;
++	int err, i, key = 0;
++
++	if (sched_getaffinity(0, sizeof(allowed), &allowed)) {
++		ASSERT_OK(-errno, "sched_getaffinity");
++		return;
++	}
++	for (cpu = 0; cpu < CPU_SETSIZE && cpu_count < 2; cpu++) {
++		if (!CPU_ISSET(cpu, &allowed))
++			continue;
++		if (!cpu_count)
++			ctx.trigger_cpu = cpu;
++		else
++			ctx.target_cpu = cpu;
++		cpu_count++;
++	}
++	if (cpu_count < 2) {
++		printf("%s:SKIP:need two CPUs in the process affinity mask\n",
++		       __func__);
++		test__skip();
 +		return;
 +	}
 +
-+	/* Do not release this round's resources until its scheduler is done. */
-+	irq_work_sync(&ctx->irq_work);
- 
- 	key = (void *)map_key_from_value(ctx->map, ctx->map_val, &idx);
- 
-@@ -4495,6 +4503,12 @@ static void bpf_task_work_irq(struct irq_work *irq_work)
- 		bpf_task_work_ctx_put(ctx);
- 		return;
- 	}
-+	/*
-+	 * Pin the ctx until this handler is done. The callback may observe
-+	 * FREED and drop its ref first, and destroy must not reset ctx->task
-+	 * before the cancellation attempt below.
-+	 */
-+	refcount_inc(&ctx->refcnt);
- 
- 	err = task_work_add(ctx->task, &ctx->work, ctx->mode);
- 	if (err) {
-@@ -4504,20 +4518,26 @@ static void bpf_task_work_irq(struct irq_work *irq_work)
- 		 * gone to FREED already, which is fine as we already cleaned up after ourselves
- 		 */
- 		(void)cmpxchg(&ctx->state, BPF_TW_SCHEDULING, BPF_TW_STANDBY);
-+		/*
-+		 * No callback was published, so drop both refs owned by this
-+		 * failed round: the callback ref and the scheduler's temporary ref.
-+		 */
-+		bpf_task_work_ctx_put(ctx);
- 		bpf_task_work_ctx_put(ctx);
- 		return;
- 	}
- 
- 	/*
--	 * It's technically possible for just scheduled task_work callback to
--	 * complete running by now, going SCHEDULING -> RUNNING and then
--	 * dropping its ctx refcount. Instead of capturing an extra ref just
--	 * to protect below ctx->state access, we rely on rcu_read_lock
--	 * above to prevent kfree_rcu from freeing ctx before we return.
-+	 * The callback may already be running on the target task's CPU, but
-+	 * it waits for this invocation to finish before resetting task/prog
-+	 * or publishing STANDBY, and the temporary reference above keeps the
-+	 * ctx alive no matter how the other references are dropped here.
- 	 */
- 	state = cmpxchg(&ctx->state, BPF_TW_SCHEDULING, BPF_TW_SCHEDULED);
- 	if (state == BPF_TW_FREED)
- 		bpf_task_work_cancel(ctx); /* clean up if we switched into FREED state */
++	skel = task_work_race__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++	if (!ASSERT_OK(task_work_race__attach(skel), "attach"))
++		goto cleanup;
 +
-+	bpf_task_work_ctx_put(ctx);
- }
- 
- static struct bpf_task_work_ctx *bpf_task_work_fetch_ctx(struct bpf_task_work *tw,
-@@ -4537,6 +4557,7 @@ static struct bpf_task_work_ctx *bpf_task_work_fetch_ctx(struct bpf_task_work *t
- 	memset(ctx, 0, sizeof(*ctx));
- 	refcount_set(&ctx->refcnt, 1); /* map's own ref */
- 	ctx->state = BPF_TW_STANDBY;
-+	init_irq_work(&ctx->irq_work, bpf_task_work_irq);
- 
- 	old_ctx = cmpxchg(&twk->ctx, NULL, ctx);
- 	if (old_ctx) {
-@@ -4555,6 +4576,7 @@ static struct bpf_task_work_ctx *bpf_task_work_acquire_ctx(struct bpf_task_work
- 							   struct bpf_map *map)
- {
- 	struct bpf_task_work_ctx *ctx;
-+	enum bpf_task_work_state state;
- 
- 	/*
- 	 * Sleepable BPF programs hold rcu_read_lock_trace but not
-@@ -4579,6 +4601,19 @@ static struct bpf_task_work_ctx *bpf_task_work_acquire_ctx(struct bpf_task_work
- 		bpf_task_work_ctx_put(ctx);
- 		return ERR_PTR(-EBUSY);
- 	}
-+	/*
-+	 * An add failure publishes STANDBY before its irq_work handler
-+	 * returns. Do not let a new round requeue the same irq_work until that
-+	 * handler has cleared BUSY. Otherwise two invocations can overlap on
-+	 * different CPUs; either tail can clear the shared BUSY bit and let a
-+	 * later irq_work_sync() return while the other invocation still runs.
-+	 */
-+	if (unlikely(irq_work_is_busy(&ctx->irq_work))) {
-+		state = cmpxchg(&ctx->state, BPF_TW_PENDING, BPF_TW_STANDBY);
-+		WARN_ON_ONCE(state != BPF_TW_PENDING && state != BPF_TW_FREED);
-+		bpf_task_work_ctx_put(ctx);
-+		return ERR_PTR(-EBUSY);
++	err = pthread_create(&target, NULL, task_work_race_target, &ctx);
++	if (!ASSERT_OK(err, "pthread_create target"))
++		goto cleanup;
++	target_started = true;
++	err = pthread_create(&trigger, NULL, task_work_race_trigger, &ctx);
++	if (!ASSERT_OK(err, "pthread_create trigger"))
++		goto stop;
++	trigger_started = true;
++
++	for (i = 0; i < 5000000 / 100; i++) {
++		if (__atomic_load_n(&ctx.trigger_tid, __ATOMIC_ACQUIRE) &&
++		    __atomic_load_n(&ctx.target_tid, __ATOMIC_ACQUIRE))
++			break;
++		usleep(100);
 +	}
- 
- 	/*
- 	 * If no process or bpffs is holding a reference to the map, no new callbacks should be
-@@ -4628,7 +4663,6 @@ static int bpf_task_work_schedule(struct task_struct *task, struct bpf_task_work
- 	ctx->map = map;
- 	ctx->map_val = (void *)tw - map->record->task_work_off;
- 	init_task_work(&ctx->work, bpf_task_work_callback);
--	init_irq_work(&ctx->irq_work, bpf_task_work_irq);
- 
- 	irq_work_queue(&ctx->irq_work);
- 	return 0;
++	if (!ASSERT_TRUE(__atomic_load_n(&ctx.trigger_tid, __ATOMIC_ACQUIRE) &&
++			 __atomic_load_n(&ctx.target_tid, __ATOMIC_ACQUIRE),
++			 "thread start"))
++		goto stop;
++	if (!ASSERT_OK(__atomic_load_n(&ctx.setup_err, __ATOMIC_ACQUIRE),
++		       "thread affinity"))
++		goto stop;
++
++	skel->bss->trigger_tid = __atomic_load_n(&ctx.trigger_tid, __ATOMIC_ACQUIRE);
++	skel->bss->target_tid = __atomic_load_n(&ctx.target_tid, __ATOMIC_ACQUIRE);
++
++	for (i = 0; i < TASK_WORK_RACE_ROUNDS; i++) {
++		__u32 seq = i + 1;
++		int variant = i % 3;
++
++		if (!ASSERT_OK(task_work_race_prepare_elem(skel), "prepare elem") ||
++		    !ASSERT_OK(task_work_race_arm(skel, seq), "round ready"))
++			goto stop;
++
++		if (variant == 2 &&
++		    !ASSERT_OK(bpf_map_delete_elem(bpf_map__fd(skel->maps.hmap),
++						   &key), "early delete"))
++			goto stop;
++
++		err = task_work_race_check_done(skel, seq);
++		/*
++		 * Variant 2 deletes the element right after READY, so losing
++		 * the race against the scheduling kfunc is a valid outcome:
++		 * the schedule itself fails with -EBUSY (ctx already FREED),
++		 * and the retry on the next tracepoint invocation fails with
++		 * -ENOENT because the element is gone.  Either way the round
++		 * exercised the deletion paths; a later variant 0 round
++		 * recreates the element.
++		 */
++		if (variant == 2 && (err == -EBUSY || err == -ENOENT))
++			err = 0;
++		if (!ASSERT_OK(err, "schedule")) {
++			fprintf(stderr, "round %d schedule failed: %d\n", i, err);
++			goto stop;
++		}
++
++		if (variant != 2 &&
++		    !ASSERT_OK(task_work_race_wait_callback(skel, seq),
++			       "callback"))
++			goto stop;
++
++		if (variant == 1 &&
++		    !ASSERT_OK(bpf_map_delete_elem(bpf_map__fd(skel->maps.hmap),
++						   &key), "late delete"))
++			goto stop;
++	}
++
++	/* A distinct completion generation prevents an old callback satisfying this. */
++	if (!ASSERT_OK(task_work_race_prepare_elem(skel), "final prepare") ||
++	    !ASSERT_OK(task_work_race_arm(skel, TASK_WORK_RACE_ROUNDS + 1),
++		       "final ready") ||
++	    !ASSERT_OK(task_work_race_check_done(skel,
++					TASK_WORK_RACE_ROUNDS + 1),
++		       "final schedule") ||
++	    !ASSERT_OK(task_work_race_wait_callback(skel,
++					     TASK_WORK_RACE_ROUNDS + 1),
++		       "final callback"))
++		goto stop;
++
++stop:
++	__atomic_store_n(&ctx.stop, 1, __ATOMIC_RELEASE);
++	if (trigger_started)
++		pthread_join(trigger, NULL);
++	if (target_started)
++		pthread_join(target, NULL);
++cleanup:
++	task_work_race__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/task_work_race.c b/tools/testing/selftests/bpf/progs/task_work_race.c
+new file mode 100644
+index 000000000000..c94eca510cb3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/task_work_race.c
+@@ -0,0 +1,126 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 KylinSoft Corporation. */
++#include <vmlinux.h>
++#include <stdbool.h>
++#include <errno.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_misc.h"
++
++char _license[] SEC("license") = "GPL";
++
++#define TASK_WORK_RACE_MAX_SEQ	2048
++
++enum task_work_race_status {
++	RACE_ARM_SEQ,
++	RACE_READY_SEQ,
++	/* High 32 bits hold the sequence, low 32 bits the signed error. */
++	RACE_RESULT,
++	RACE_STATUS_MAX,
++};
++
++int trigger_tid;
++int target_tid;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, RACE_STATUS_MAX);
++	__type(key, int);
++	__type(value, __s64);
++} status SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, TASK_WORK_RACE_MAX_SEQ);
++	__type(key, int);
++	__type(value, __u64);
++} completed SEC(".maps");
++
++struct task_work_race_value {
++	__u32 seq;
++	char data[60];
++	struct bpf_task_work tw;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__uint(max_entries, 4);
++	__type(key, int);
++	__type(value, struct task_work_race_value);
++} hmap SEC(".maps");
++
++static __always_inline void set_status(int key, __s64 value)
++{
++	__s64 *slot;
++
++	slot = bpf_map_lookup_elem(&status, &key);
++	if (slot)
++		*slot = value;
++}
++
++static int process_work(struct bpf_map *map, void *key, void *value)
++{
++	struct task_work_race_value *work = value;
++	__u64 *done;
++	int seq = work->seq;
++
++	if (seq <= 0 || seq >= TASK_WORK_RACE_MAX_SEQ)
++		return 0;
++	done = bpf_map_lookup_elem(&completed, &seq);
++	if (done)
++		*done = 1;
++	return 0;
++}
++
++SEC("tracepoint/syscalls/sys_enter_getppid")
++int race_sched_work(void *ctx)
++{
++	struct task_work_race_value *work;
++	struct task_struct *task;
++	__s64 *arm, *result;
++	__u32 tid = (__u32)bpf_get_current_pid_tgid();
++	int key = 0, err;
++	__u32 seq;
++
++	if (tid != trigger_tid)
++		return 0;
++
++	key = RACE_ARM_SEQ;
++	arm = bpf_map_lookup_elem(&status, &key);
++	key = RACE_RESULT;
++	result = bpf_map_lookup_elem(&status, &key);
++	if (!arm || !result || *arm <= 0 ||
++	    (__u32)((__u64)*result >> 32) == *arm)
++		return 0;
++	seq = *arm;
++
++	task = bpf_task_from_pid(target_tid);
++	if (!task) {
++		err = -ESRCH;
++		goto out_done;
++	}
++
++	key = 0;
++	work = bpf_map_lookup_elem(&hmap, &key);
++	if (!work) {
++		err = -ENOENT;
++		goto out_task;
++	}
++
++	work->seq = seq;
++	set_status(RACE_READY_SEQ, seq);
++	err = bpf_task_work_schedule_signal(task, &work->tw, &hmap,
++					    process_work);
++	if (err == -EBUSY) {
++		bpf_task_release(task);
++		return 0;
++	}
++
++out_task:
++	bpf_task_release(task);
++out_done:
++	/* Publish the sequence and its error in one store. */
++	*result = ((__u64)seq << 32) | (__u32)err;
++	return 0;
++}
 -- 
 2.43.0
 
