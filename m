@@ -1,188 +1,149 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C25751A757
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 22:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F73351AFC1;
+	Mon, 21 Sep 2026 22:41:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790030401; cv=none; b=GZYCb0bY7WiJDvuR4I/OH5YfEbej0NrJBI+fGrOHq1xybbVw0exsWvQmlzlqr97BeqMGuFaZ9zvdJqObff/aNXcUpFLJXP31gHb3QNaIm5dCkZCQbkTLU/UM4R8ETFd3QMzqlsH+OGB7l/kJL37QibVq+LyRTc1vLg420dfwNzk=
+	t=1790030511; cv=none; b=P385BNZFgCaoLaivCYY9f/9PRZOMVm2reQmyfrSEg044/iIsQpfG35+lvldhoVEm3PQVG4ebWGFQGX3vXI9jd513Cw1bMrnfRfkr4UF0ywUHYC9i1Lb7etSK22lf0mlORloZGdSkQabMm5oIDLQEHaIgrdvMgjO/4EPYdrOkOMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790030401; c=relaxed/simple;
-	bh=KNWZW8eB3j6zpN8SQ7wsHAX/5xI1S4m0dH5DqE/VqnA=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XLiA/3b2s4QmG2ajfKoVOBTGibpIFsMvIzfbNTn1SxkQaHLPMG6axfJrOoKCGVrUe34HDd9gWxA6zCtPkVIrog4B0fk2g9Peqc4sIqvwsOZ1pA/W2M8qRdlHll79eJvq6077LIb54ojSJEeZdVWwdazaHo97GulU/hPsliuMZPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=b1LhMPpV; arc=none smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1790030511; c=relaxed/simple;
+	bh=OBX7XpNtC+yrBEvD6sPv+E9K03bWHgqVaHlrEWl+1PY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MGULqVant+5Wux78AKS+L6VAVM/zJSyttZ+aSyu+wH9Ac+evG2fE28s4xOQf3IScCqWndUue1EW5zSsMh/Pz+idZlSAXx4y8br1NXs0EYX4/A4IRcP2tZF7dQ15xxWr2tmEjny1Egb+km3d7GTHwWj48R+l1vnK5QPHzBTmn7FY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GtldKd8/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="b1LhMPpV"
-Received: from pps.filterd (m0354650.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68LHuiLN3819043;
-	Mon, 21 Sep 2026 22:39:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=dwhZNmFy1JAR3RaFK/ylbRSoOcsz9cY7G4SsWQfUjBI=; b=b1Lh
-	MPpVrdVE07CvPCfw8I5hmZrXnIY+VPXYJf2N3Ph2r4VxhG4OP1hoYD+6wqseT6rI
-	3rUoasTSLuzDu54uW7RRhv8MBNmM4OnFV5i3It4JZ9tChuU574qvW4eF4tcOdtxU
-	/VFIvMHdzYWTpl16ByKdHchaoSrP7l0nzuLMplK9SHIHy5cua2qdsrQprN5laU9g
-	/HDAaXd4LItCkwI6GW00sEOB64wiHEZ3K9bs/Vg1OJ5/Uu+WmRttG5lkwAeg5Hwu
-	6on8Mbcnh5UU+NBAV0fIDKbcZ8MlygPlaU6cji8QwhbFXIoCZwKQpZvKZzTcLEdm
-	PG6HWFUaRTuwbF9W1A==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4gu9e5rxes-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 21 Sep 2026 22:39:46 +0000 (GMT)
-Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.46; Mon, 21 Sep 2026 22:39:44 +0000
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-To: <bpf@vger.kernel.org>, <andrii@kernel.org>
-CC: <ast@kernel.org>, <martin.kelly@crowdstrike.com>,
-        <slava.imameev@crowdstrike.com>, <linux-open-source@crowdstrike.com>
-Subject: [PATCH bpf-next v4 5/7] libbpf: Version bpf_program__set_autoattach() ABI change
-Date: Mon, 21 Sep 2026 18:39:35 -0400
-Message-ID: <20260921223937.3203093-6-andrey.grodzovsky@crowdstrike.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260921223937.3203093-1-andrey.grodzovsky@crowdstrike.com>
-References: <20260921223937.3203093-1-andrey.grodzovsky@crowdstrike.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GtldKd8/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 882FB1F000FF;
+	Mon, 21 Sep 2026 22:41:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790030509;
+	bh=dDu/I/jl47PhoBil2/ZTm2tiiw/rtG0yrhZ/WCeLz5E=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=GtldKd8/h1XxhH/vDHRTecc1tObnZv9wXiSMh1EyiUfhQARiF0HxrNO8iNcSfAPz3
+	 SBB4RpXgvPaKAEAtjGfhSmYtiIxIIiloKFZ6LZdhPnqZbDgjwAgRstFqIbUAmZ7aW1
+	 mC8/Kmafpd15IpnvlHawqqV4S+1hDfKqFW4OEU7bLX8Qyo5v/UVIFLxr/fMWrH8M/1
+	 B1ujLSiQM864nxLQTlNg0WQqUfnkW00nzvXbsocQBv22O/ZqhlPn7UOu8uKO2/zdYI
+	 CbKO28k4/jArJ1pFG0JWtWxHH3xkSJtVEA53JR/hwPZ/1RtBlLeBvJ9FVRYCkny6og
+	 7gdKVNjtoAd7g==
+Date: Mon, 21 Sep 2026 15:41:47 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Weiming Shi <bestswngs@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
+ Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ co+65e5c76b187f08b2@bugs.sh, Xiang Mei <xmei5@asu.edu>,
+ stable@vger.kernel.org
+Subject: Re: [PATCH net] veth: manage XDP program pointers during channel
+ resize
+Message-ID: <20260921154147.4e1e092d@kernel.org>
+In-Reply-To: <20260917153923.904124-3-bestswngs@gmail.com>
+References: <20260917153923.904124-3-bestswngs@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH014.crowdstrike.sys (10.100.11.87) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Proofpoint-ORIG-GUID: 2gDPLWrOZsFH2ZbqgwswM2r3R1gxUczW
-X-Authority-Analysis: v=2.4 cv=L/iI0OT8 c=1 sm=1 tr=0 ts=6ab1b232 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=t04HzT_fAfAF5W-3wVZy:22 a=pl6vuDidAAAA:8
- a=_7pdZih7oDRld-5tXWwA:9
-X-Proofpoint-GUID: 2gDPLWrOZsFH2ZbqgwswM2r3R1gxUczW
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTIxMDMzMSBTYWx0ZWRfX2Hpyxo3vMujY
- gxxFOu/a/kNnykkuYmZh3rPBzwAML460QRrzwPS1gMaqAp4xmeJj+PlCWWVOCPDMsD3eDLkD/Or
- zrtcO7PaS3OSsmN9F6SB53kKbBsbSizQoffvOcTeDFPvrphdueKr
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTIxMDMzMSBTYWx0ZWRfX0OeqPRr3+SGw
- 2RmEK+V35hpJvZ/cjc0+Fh/1D1ZoAVqohU7NKrDVdUKHD8aAUmc81wnRdUpQVHP2fHZMyRshvsw
- mE7T5XVL8qpweDVK67hKs2CEwGr2F6CZMZyrA0pL1/F+lI7JAuo3DEyO5UHg08dwg480ekDENmo
- l+hpp3rszki3IPy4BGcMgUAYLKOcU7OxGCwzj46t7oe5sk5bhADwVUpC/4xZUNKBw/hAc2ivfjq
- cn/TVw5miHKCW5gBO3gRvsEWaS+YWzNXD005lmrE3p5FI57+Q1+WT6EgGH5xqG/Jvp6xi8vR75s
- +xJQv1cetmURlPt4zWHZ/KUFC53fMf/VFRVcQdR3+kRne28dGFtZ06YMEZO8F81WY1g3o846CV7
- 12UgTS/GLUI1TV51O7lJaKwXHjP8XZVxFvaE1z9AMvjOYeX8p4Ry7jyVkyMkggMzVXGjLhW1WBl
- NhqiiE0z429k7wudBJQ==
-X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11912
- signatures=596817
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 spamscore=0 malwarescore=0 clxscore=1015
- priorityscore=1501 suspectscore=0 impostorscore=0 phishscore=0 adultscore=0
- bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2609040000
- definitions=main-2609210331
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-bpf_program__set_autoattach()'s return type changed from void to int to
-let callers observe the new -EINVAL rejection for MANUAL-strategy
-programs, but the symbol stayed under its original LIBBPF_1.0.0 node in
-libbpf.map. Binaries already linked against the old void-returning ABI
-recorded a request for exactly that symbol@version pair at link time;
-without a version bump they would silently start hitting the new
-rejection behavior underneath them after a libbpf upgrade.
+On Thu, 17 Sep 2026 23:39:25 +0800 Weiming Shi wrote:
+> veth_set_channels() tears down XDP resources for removed RX queues
+> without clearing rq->xdp_prog.  If the program is then detached or
+> replaced, those queues keep the old pointer after bpf_prog_put().  A
+> later channel increase can re-enable NAPI and run the freed program.
+> 
+> Clear the program pointer after taking an RX queue offline, and publish
+> the current program only after bringing the queue back online succeeds.
+> 
+>   BUG: unable to handle page fault for address: ffffc90000256048
+>   Oops: Oops: 0000 [#1] SMP KASAN NOPTI
+>   RIP: veth_xdp_rcv_skb (include/linux/filter.h:779
+>                          include/net/xdp.h:696 drivers/net/veth.c:820)
+>   Call Trace:
+>    veth_xdp_rcv (drivers/net/veth.c:941)
+>    veth_poll (drivers/net/veth.c:986)
+>    __napi_poll (net/core/dev.c:7787)
+>    net_rx_action (net/core/dev.c:7850 net/core/dev.c:8007)
+>    handle_softirqs (kernel/softirq.c:645)
+>   Kernel panic - not syncing: Fatal exception in interrupt
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 4752eeb3d891 ("veth: implement support for set_channel ethtool op")
+> Reported-by: <co+65e5c76b187f08b2@bugs.sh>
+> Assisted-by: LLM
+> Signed-off-by: Weiming Shi <bestswngs@gmail.com>
+> ---
+>  drivers/net/veth.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index 6ed3ee81153fb..ef7624bc2c0ec 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
+> @@ -1247,12 +1247,15 @@ static int veth_napi_enable(struct net_device *dev)
+>  static void veth_disable_range_safe(struct net_device *dev, int start, int end)
+>  {
+>  	struct veth_priv *priv = netdev_priv(dev);
+> +	int i;
+>  
+>  	if (start >= end)
+>  		return;
+>  
+>  	if (priv->_xdp_prog) {
+>  		veth_napi_del_range(dev, start, end);
+> +		for (i = start; i < end; i++)
+> +			rcu_assign_pointer(priv->rq[i].xdp_prog, NULL);
+>  		veth_disable_xdp_range(dev, start, end, false);
+>  	} else if (veth_gro_requested(dev)) {
+>  		veth_napi_del_range(dev, start, end);
+> @@ -1262,7 +1265,7 @@ static void veth_disable_range_safe(struct net_device *dev, int start, int end)
+>  static int veth_enable_range_safe(struct net_device *dev, int start, int end)
+>  {
+>  	struct veth_priv *priv = netdev_priv(dev);
+> -	int err;
+> +	int err, i;
+>  
+>  	if (start >= end)
+>  		return 0;
+> @@ -1281,6 +1284,9 @@ static int veth_enable_range_safe(struct net_device *dev, int start, int end)
+>  			veth_disable_xdp_range(dev, start, end, true);
+>  			return err;
+>  		}
+> +		for (i = start; i < end; i++)
+> +			rcu_assign_pointer(priv->rq[i].xdp_prog,
+> +					   priv->_xdp_prog);
+>  	} else if (veth_gro_requested(dev)) {
+>  		return veth_napi_enable_range(dev, start, end);
+>  	}
 
-Split the symbol via ELF symbol versioning:
+This is pure slop, cramming loops into functions which have none.
+Shameful, really.
 
-  - bpf_program__set_autoattach_deprecated() keeps the original
-    unconditional behavior, bound via COMPAT_VERSION() to the existing
-    LIBBPF_1.0.0 node.
-  - bpf_program__set_autoattach_v1_8_0() carries the new MANUAL-rejecting
-    behavior, bound via DEFAULT_VERSION() to the new LIBBPF_1.8.0 node.
+Please test this and submit it if it passes the tests:
 
-Old binaries keep resolving bpf_program__set_autoattach() to the old
-behavior at runtime; anything linked against the current headers/map
-gets the new int-returning, MANUAL-rejecting behavior. Also adds the
-missing __LIBBPF_MARK_DEPRECATED_1_8 gate to libbpf_common.h (only the
-1.0 gate existed) so LIBBPF_DEPRECATED_SINCE(1, 8, ...) can mark the
-deprecated variant.
-
-Assisted-by: Claude:claude-sonnet-5
-Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
----
- tools/lib/bpf/libbpf.c        | 9 ++++++++-
- tools/lib/bpf/libbpf.h        | 6 ++++++
- tools/lib/bpf/libbpf.map      | 2 ++
- tools/lib/bpf/libbpf_common.h | 6 ++++++
- 4 files changed, 22 insertions(+), 1 deletion(-)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 6e7ec026d944..3e4eaeafea0e 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -9903,7 +9903,14 @@ bool bpf_program__autoattach(const struct bpf_program *prog)
- 	return prog->autoattach;
- }
+diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+index 6ed3ee81153f..5d5e8ebce65a 100644
+--- a/drivers/net/veth.c
++++ b/drivers/net/veth.c
+@@ -1054,6 +1054,8 @@ static int __veth_napi_enable_range(struct net_device *dev, int start, int end)
+        for (i = start; i < end; i++) {
+                struct veth_rq *rq = &priv->rq[i];
  
--int bpf_program__set_autoattach(struct bpf_program *prog, bool autoattach)
-+COMPAT_VERSION(bpf_program__set_autoattach_deprecated, bpf_program__set_autoattach, LIBBPF_1.0.0)
-+void bpf_program__set_autoattach_deprecated(struct bpf_program *prog, bool autoattach)
-+{
-+	prog->autoattach = autoattach;
-+}
-+
-+DEFAULT_VERSION(bpf_program__set_autoattach_v1_8_0, bpf_program__set_autoattach, LIBBPF_1.8.0)
-+int bpf_program__set_autoattach_v1_8_0(struct bpf_program *prog, bool autoattach)
- {
- 	if (prog->load_strategy == BPF_PROG_LOAD_STRATEGY_MANUAL)
- 		return libbpf_err(-EINVAL);
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index 5e44bcfa2ca1..8a04d81ccaeb 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -379,6 +379,12 @@ LIBBPF_API bool bpf_program__autoload(const struct bpf_program *prog);
- LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool autoload);
- LIBBPF_API bool bpf_program__autoattach(const struct bpf_program *prog);
- LIBBPF_API int bpf_program__set_autoattach(struct bpf_program *prog, bool autoattach);
-+/* this "specialization" should go away once the deprecation window for
-+ * bpf_program__set_autoattach_deprecated() closes
-+ */
-+LIBBPF_API int bpf_program__set_autoattach_v1_8_0(struct bpf_program *prog, bool autoattach);
-+LIBBPF_DEPRECATED_SINCE(1, 8, "use int-returning bpf_program__set_autoattach() instead")
-+LIBBPF_API void bpf_program__set_autoattach_deprecated(struct bpf_program *prog, bool autoattach);
++               if (priv->_xdp_prog)
++                       rcu_assign_pointer(rq->xdp_prog, priv->_xdp_prog);
+                napi_enable(&rq->xdp_napi);
+                rcu_assign_pointer(priv->rq[i].napi, &priv->rq[i].xdp_napi);
+        }
+@@ -1088,6 +1090,7 @@ static void veth_napi_del_range(struct net_device *dev, int start, int end)
  
- struct bpf_insn;
- 
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index 8def5474885a..999e791d9887 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -465,6 +465,8 @@ LIBBPF_1.8.0 {
- 		bpf_program__clone;
- 		bpf_program__load;
- 		bpf_program__load_strategy;
-+		bpf_program__set_autoattach;
-+		bpf_program__set_autoattach_deprecated;
- 		bpf_program__set_load_strategy;
- 		btf__find_by_name_kind_own;
- 		btf__new_empty_opts;
-diff --git a/tools/lib/bpf/libbpf_common.h b/tools/lib/bpf/libbpf_common.h
-index 8fe248e14eb6..12ad4f5f558f 100644
---- a/tools/lib/bpf/libbpf_common.h
-+++ b/tools/lib/bpf/libbpf_common.h
-@@ -36,6 +36,12 @@
- #define __LIBBPF_MARK_DEPRECATED_1_0(X)
- #endif
- 
-+#if __LIBBPF_CURRENT_VERSION_GEQ(1, 8)
-+#define __LIBBPF_MARK_DEPRECATED_1_8(X) X
-+#else
-+#define __LIBBPF_MARK_DEPRECATED_1_8(X)
-+#endif
-+
- /* This set of internal macros allows to do "function overloading" based on
-  * number of arguments provided by used in backwards-compatible way during the
-  * transition to libbpf 1.0
--- 
-2.34.1
-
+                rcu_assign_pointer(priv->rq[i].napi, NULL);
+                napi_disable(&rq->xdp_napi);
++               rcu_assign_pointer(rq->xdp_prog, NULL);
+                __netif_napi_del(&rq->xdp_napi);
+        }
+        synchronize_net();
