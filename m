@@ -1,203 +1,262 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E193DEFE7
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 667E23D8902
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:28:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790025738; cv=none; b=K26NNCTfgPfIFflhBayf/eMbL8wKH0Whge8dUsW9w7fQlhdboPmIShl7bIU00kpxpNR5ICyguH8WPpq1tg/CrMYawbz/+mw5mFFqz+NtDUFy7PKjhZSlvFxwAQ4h8IZKhTCGL5GSUhW6xwFCFcwa3308qa/RYsdNP/EMUWuBItc=
+	t=1790026107; cv=none; b=AGLbzFV9jfd7pyDaKJK2ovEd4vbtIVjw8fc1hgcppDFsFOksSKhv4fp1xExxshQwEyLfE58VFDtBRRn4bv/5HysjPSJMNj8N0inkNrrGI4xiRaGPJdh4DkxmPa2mu9V6XzJeVfOmO/3hNEFZQhi3D3DWpuhQ0H0THfdz4usTLds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790025738; c=relaxed/simple;
-	bh=L4tiXsSzKGSaWL0JqsEaVuokRPDpdToyWD9tvuvcK5Y=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=kH2ReEgV4cQFqXMsw/vKGznfa6iU4UwIorEM57qwIJpTA6+HLNT2x2gt3eyl2omUllcmv1PUF8RqYYZzPR48YngPAYTtp2sro0eH9RIk95WbptIzmkKYV8BGBC16ifnfl47AiP1M3GYgHWETySXgOu59H27L9t5Qc2HklHHEQt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YWEd7+8N; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790026107; c=relaxed/simple;
+	bh=g5GJG6c9xyTT7+BCnWj7ZXdcGKvL8usybthaZcLAXkQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=NUzcWphzVCrv3f6W0RRCblGdCwQrXKw7Jh3IgXImsHnlD5RrpyHZK/DTFKGS8JIIjf4LjQQloHE2Hz17Cedjhgr3OENUWvjJoVZaV+5jrdu5ny1fya7DCHW5OzOCJUMn+HR/1N6ORXpYuPSfxxsCpDu2qQeKpWEtmhNxXhryfW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IGFBvLiG; arc=none smtp.client-ip=74.125.231.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YWEd7+8N"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2D8F1F000FF;
-	Mon, 21 Sep 2026 21:22:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790025733;
-	bh=K1NSoEhn9d2Kodx+J0bGbw2TV6xS7BE4tnEX4kfBYTM=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=YWEd7+8NvcbJD6KnPANSO2KnjwTVYotVkJllzUsy9O5bCTA37VVSJUblgIqi4Opil
-	 4Xklp5Xn0jHzIZ4zT1SAuRieaFG1WqJKYU3bHrXXi+t7QGPIodKtEI6PaZNMNm8Tji
-	 BA63Ghr9bUfA6hS0idVauqGhC6lJXHAxcqTNVtp22KUxiBaSOvwFMbFjRPN/oHpcOL
-	 7j6MNaqHrgZERuWMSKHqztFTJLrjXj2acmal2+ocs00BQfpb8kxOD30fZ39hQrmkNd
-	 ydBF0paFQc2QJ1+weMrGK6X61IEwRFRrF83MFR/BMDQK3fScLLG4jzWirC7KxMmcbE
-	 ZDPt3qB3lc3zg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v4 18/20] selftests/bpf: Add an end-to-end
- .bpf_cleanup exception test
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Yonghong Song" <yonghong.song@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260921210205.1724656-1-yonghong.song@linux.dev>
-References: <20260921210033.1715000-1-yonghong.song@linux.dev>
- <20260921210205.1724656-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 21 Sep 2026 21:22:13 +0000
-Message-Id: <20260921212213.B2D8F1F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IGFBvLiG"
+Received: by mail-oi2-f13.google.com with SMTP id 5614622812f47-4b37a39a42dso1285424b6e.0
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 14:28:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790026105; x=1790630905; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=+i6o7GkzSF5xhU7sycQXlwKc3jnyfIN+7UiK/HuibvU=;
+        b=IGFBvLiG07ELHn9u/BMlzp+jCeXd2vaVbRYvxAe9quiIG9GYIiTLrY8hQ+Gbhqaw4i
+         iSssVB8gljiCSOIgt1qlnOI6MMRUuUBarzqRMPYWJGqbP6SFpaiZDLV6lFdQBLzUlEUY
+         N6eoo+2/0MYNeAUeVRiFiY9SmI25izeBajgyVuz4B7DBSJyEHakJ0cxwBZTgsbrzPktq
+         B/iE/crfBH/YVMFBRw8Mi9YEY+Y3dfG8/lZrmGF7Ua3Yep/qbnpw+ipmG0sec0JEqcF/
+         JK2+ejC7HBwI2p1JkT8IJ7QXDU8AyUgS3qNb6tvYeUtGy9IY/WJFRfizncAIZa9Knrm4
+         ikIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790026105; x=1790630905;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=+i6o7GkzSF5xhU7sycQXlwKc3jnyfIN+7UiK/HuibvU=;
+        b=pucLg47Gh2Mr9wmpwmgMUNlr0pKCboeqHtVtANveCo5MdIyo0BSIvjHFzezz9ZVc4R
+         7czoqJhHLoi5qP5EFF/Idem7MtUFmCWyMaIE9hZsGaW1yJBhBRO0zdXOIZAu13jFV8Ef
+         l/q6k9vQpi9BuVx5vlAaigKt+MAzYT5B2s2oBp+dT4iDflNjP9CjGOxeIqh7uKRWTIgF
+         YLLb6a/SytwVI3T1n6R143HLqnsKRWaEq8Zc7gf2xj2OcGY6FJfeT4JRtQsf6qBK3acQ
+         eyAD5wmXjefx4udtPROUwgvk/7b9zVSzNZ4EXsU3TsJ0FWazFPzgXADy6HDbd/oSGnMQ
+         Re9w==
+X-Gm-Message-State: AFuF++m/Q/MQM4HTM714LpgPOYazaYhR5xeNeZGoBC3w5+lsMdJvLHFw
+	QtEdnwy+0L4fBVc+BLt6kKJw+J2ojP2py3Gp6BDBW+jej4Hkv/ePQgiN
+X-Gm-Gg: AYBFou2sybmq1pajhOVQC74EvRTkBbv6FWlm2zleA9SjU5sFjU1YDGFLuButCbsXPzF
+	zsQ7oCIKQfY6khhQ01zHVq0p5L8iPYJENoprU6HmKNDXr5NL98dgeLAGkpmdmKjK4VCaMPoiu6L
+	LzWRcicHaXoJze/SuPDT9ESLTLdgnBOUCrHYrvWwaySIc8vyEP1YIC2KtF7iAMAVaPnGp2/YXyV
+	6SOHWkViD/LUupBM8r8R/O0z9UUFaFXcIx6TtUiwewA2cOeDxurJNh8kYaXBRz6Ssbo35ic+DI0
+	se0j+PZOBeIfkZU7a/abZwCNwgigO2DiVuot3p8Z7zxFIIxI7SLvDr695d3bsbtcjUiGC8CFld4
+	+PNFLSqG0xRNlArjBz/HvkgoAtdYk76VqqEJXRgI5nYfX1O4gnsWjrZUmEf4GaCWSf8BJ9vgiLd
+	SwMuL/mZO55Nz+FQRDJ8zfTVu8Gz/unP0gfTO4Rua51gI1rHRpGfzN54tlvqB0ag==
+X-Received: by 2002:a4a:edc3:0:b0:6b1:4845:9a76 with SMTP id 006d021491bc7-6d1580786f3mr856610eaf.1.1790026105131;
+        Mon, 21 Sep 2026 14:28:25 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:72::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6d181ae5a14sm432138eaf.3.2026.09.21.14.28.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Sep 2026 14:28:24 -0700 (PDT)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Date: Mon, 21 Sep 2026 14:28:17 -0700
+Subject: [PATCH bpf-next v2] bpf: Speed up htab lookups for u32/u64 keys
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260921-hashtab_fast_hashfn-v2-1-79aa962ec56b@meta.com>
+X-B4-Tracking: v=1; b=H4sIAHChsWoC/23NQQqDMBSE4auEWZtiXqmiq95DRGJ8abIwShLEI
+ t691G67HH745kDi6DmhFQcibz75JaAVVAgYp8OLpZ/QClBJVdmoSjqdXNbjYHXKw3fYIBt+0Hg
+ 3RHXFKATWyNbvl9phXK0MvGf0hYDzKS/xfd1t6uo/mdRfeVNSSduQ5poMWzM9Z876ZpYZ/XmeH
+ 8XKCW2/AAAA
+X-Change-ID: 20260916-hashtab_fast_hashfn-9e52b3c2276e
+To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+ daniel@iogearbox.net, kernel-team@meta.com, eddyz87@gmail.com, 
+ memxor@gmail.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>, 
+ Anton Protopopov <a.s.protopopov@gmail.com>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790026102; l=6161;
+ i=yatsenko@meta.com; s=20260324; h=from:subject:message-id;
+ bh=klYkD/UfVahvAsNX2ylLTW4rdg2QjBRyrXyE08PFpDg=;
+ b=SGZgAlzgiv7AQaLH2XNin2+l5siBUfozckwp3eik+oYJ3vs2E5fFbRXnJT+JMdPTbJI5hw/OR
+ 1+BT220qfFzD1dQPurP8J8/ZaOvwiLaKprEM304Bxg4I/BXBPVOVLMk
+X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
+ pk=1zCUBXUa66KmzfjNsG8YNlMj2ckPdqBPvFq2ww3/YaA=
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Medium] bpf: endianness bug in raw BPF instruction emission
-- [Low] bpf: BPF Comment Style Violation
---
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-commit 322ad0f798ee8015c8f51c953009198fc70b2b9b
-Author: Yonghong Song <yonghong.song@linux.dev>
+Four- and eight-byte keys are common enough to warrant specialized htab
+lookups. Fold JHASH_INITVAL and the key length into hashrnd once when
+allocating maps with these key sizes.
 
-selftests/bpf: Add an end-to-end .bpf_cleanup exception test
+For JITed BPF_MAP_TYPE_HASH lookups, htab_map_gen_lookup() also knows the
+map's fixed key size. Select u32- and u64-specific lookup entry points so
+the compiler can specialize both hash setup and key comparison. Other key
+sizes continue to use the generic lookup entry point.
 
-This commit adds an end-to-end test for exception cleanup using .bpf_cleanup
-records. It defines inline assembly constructs mimicking compiler output to
-evaluate how the kernel handles and optionally rejects various landing pad
-combinations and malformed paths.
+This preserves the jhash2() result and lookup semantics while avoiding
+generic length handling and repeated state setup.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c =
-b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
-> new file mode 100644
-> index 0000000000000..c932da7cbec16
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/exceptions_cleanup.c
-> @@ -0,0 +1,121 @@
-[ ... ]
-> +/* A table with more records than the program has instructions: no valid=
- one
-> + * can look like that, and it is refused before the kernel allocates for=
- it.
-> + */
+Measure this with six runs of:
 
-[Severity: Low]
-Does this code adhere to the BPF comment style guidelines?
+  ./bench -w3 -d10 -a bpf-hashmap-lookup \
+      --key_size KEY_SIZE --max_entries MAX_ENTRIES \
+      --nr_entries NR_ENTRIES --nr_loops NR_LOOPS \
+      --map_flags 0x40
 
-The BPF subsystem requires multi-line comments to have the opening '/*'
-on its own line, with the comment text starting on the next line. In
-test_cleanup_info_cnt(), the text starts on the same line as the opening.
+inside a vng guest with two vCPUs and 4 GiB of RAM. Run the baseline
+first and the optimized kernel second. Use these workloads:
 
-> +static void test_cleanup_info_cnt(void)
-> +{
-[ ... ]
-> +	/* Turned away on the count, rather than on whatever the records past
-> +	 * the one below happen to hold.
-> +	 */
+             max_entries   nr_entries    nr_loops
+  small              512          256   8,388,608
+  medium          10,000        5,000   8,000,000
+  large          100,000       50,000   8,000,000
 
-[Severity: Low]
-This isn't a bug, but there's another multi-line comment in
-test_cleanup_info_cnt() starting on the same line as the opening '/*'.
+Mean throughput in million lookups per second is:
 
-> +	ASSERT_HAS_SUBSTR(log, "cleanup info has 1048576 records for 2 instruct=
-ions",
-> +			  "log");
-> +}
-> +
-> +void test_exceptions_cleanup(void)
-> +{
-[ ... ]
-> +	/* foo3 returns 2 ^ 1 =3D=3D 3, so foo2 throws from its own second regi=
-on;
-> +	 * foo3's frame is long gone, so its pad must not run.
-> +	 */
+  Baseline:
+                         key size (bytes)
+                      1        4        8       10
+    small         89.45    91.21   103.40    91.74
+    medium       125.97    80.25    91.94    78.52
+    large        140.67    53.56    58.68    47.31
 
-[Severity: Low]
-This isn't a bug, but this multi-line comment in test_exceptions_cleanup()
-also starts the text on the same line as the opening '/*'.
+  Optimized:
+                         key size (bytes)
+                      1        4        8       10
+    small         86.95   233.63   168.65    90.88
+    medium       124.97   150.20   137.76    77.51
+    large        131.06    80.51    76.04    47.25
 
-> +	if (test__start_subtest("throw_from_foo2"))
-> +		run(skel, 2, THROW_COOKIE, PADS_FOO2_THREW);
-> +
-> +	exceptions_cleanup__destroy(skel);
-[ ... ]
-> diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup.c b/too=
-ls/testing/selftests/bpf/progs/exceptions_cleanup.c
-> new file mode 100644
-> index 0000000000000..a3a8c14e0db28
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup.c
-> @@ -0,0 +1,157 @@
-[ ... ]
-> +/* Called from foo1, which owns nothing and has no cleanup record: a cal=
-l an
-> + * exception may leave with no landing pad to run on the way. The throw =
-is
-> + * never taken -- @never is a global, so the verifier cannot prune it --=
- and
-> + * the bit says the ordinary return path ran.
-> + */
+  Change:
+                         key size (bytes)
+                      1        4        8       10
+    small         -2.79% +156.15%  +63.11%   -0.94%
+    medium        -0.79%  +87.17%  +49.83%   -1.28%
+    large         -6.84%  +50.32%  +29.58%   -0.12%
 
-[Severity: Low]
-This isn't a bug, but this multi-line comment before bump() in
-exceptions_cleanup.c also violates the BPF comment style requirement.
+The u32 specialization improves lookup throughput by 50-156%, and the
+u64 specialization improves it by 30-63%. Ten-byte controls remain
+within a 1.3% slowdown. One-byte controls range from -6.8% to -0.8%.
 
-> +static __used __naked __noinline void bump(void)
-> +{
-[ ... ]
-> diff --git a/tools/testing/selftests/bpf/progs/exceptions_cleanup_fail.c =
-b/tools/testing/selftests/bpf/progs/exceptions_cleanup_fail.c
-> new file mode 100644
-> index 0000000000000..db6ac7d8bd6de
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/exceptions_cleanup_fail.c
-> @@ -0,0 +1,662 @@
-[ ... ]
-> +/* 1. A subprogram that may unwind, also used as a helper callback:
-> + * bpf_loop()'s own kernel frame would end the walk before it found a
-> + * boundary.
-> + */
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+Acked-by: Anton Protopopov <a.s.protopopov@gmail.com>
+---
+Changes in v2:
+- Added variants of __htab_map_lookup_elem() functions with inlined
+u32/u64 key sizes, use them in htab_map_gen_lookup();
+improved lookup perf significantly (Alexei)
+- Link to v1: https://patch.msgid.link/20260921-hashtab_fast_hashfn-v1-1-f92ae72cefcd@meta.com
+---
+ kernel/bpf/hashtab.c | 49 ++++++++++++++++++++++++++++++++++++++++++-------
+ 1 file changed, 42 insertions(+), 7 deletions(-)
 
-[Severity: Low]
-This isn't a bug, but this multi-line comment before throwing_cb() in
-exceptions_cleanup_fail.c starts text on the same line as the opening '/*'.
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 6f331c80130d..77c96105eda8 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -612,6 +612,13 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
+ 		htab->hashrnd = 0;
+ 	else
+ 		htab->hashrnd = get_random_u32();
++	/*
++	 * Fold the jhash constant and key length into hashrnd once for the
++	 * fixed-size fast paths instead of doing it on every lookup.
++	 */
++	if (htab->map.key_size == sizeof(u32) ||
++	    htab->map.key_size == sizeof(u64))
++		htab->hashrnd += JHASH_INITVAL + htab->map.key_size;
+ 
+ 	htab_init_buckets(htab);
+ 
+@@ -679,9 +686,19 @@ static struct bpf_map *htab_map_alloc(union bpf_attr *attr)
+ 
+ static inline u32 htab_map_hash(const void *key, u32 key_len, u32 hashrnd)
+ {
+-	if (likely(key_len % 4 == 0))
++	const u32 *k = key;
++	u32 b;
++
++	if (key_len == sizeof(u32))
++		b = 0;
++	else if (key_len == sizeof(u64))
++		b = k[1];
++	else if (likely(key_len % 4 == 0))
+ 		return jhash2(key, key_len / 4, hashrnd);
+-	return jhash(key, key_len, hashrnd);
++	else
++		return jhash(key, key_len, hashrnd);
++
++	return __jhash_nwords(k[0], b, 0, hashrnd);
+ }
+ 
+ static inline struct bucket *__select_bucket(struct bpf_htab *htab, u32 hash)
+@@ -735,17 +752,15 @@ static struct htab_elem *lookup_nulls_elem_raw(struct hlist_nulls_head *head,
+  * The return value is adjusted by BPF instructions
+  * in htab_map_gen_lookup().
+  */
+-static void *__htab_map_lookup_elem(struct bpf_map *map, void *key)
++static __always_inline void *__htab_lookup(struct bpf_map *map, void *key, u32 key_size)
+ {
+ 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
+ 	struct hlist_nulls_head *head;
+ 	struct htab_elem *l;
+-	u32 hash, key_size;
++	u32 hash;
+ 
+ 	WARN_ON_ONCE(!bpf_rcu_lock_held());
+ 
+-	key_size = map->key_size;
+-
+ 	hash = htab_map_hash(key, key_size, htab->hashrnd);
+ 
+ 	head = select_bucket(htab, hash);
+@@ -755,6 +770,21 @@ static void *__htab_map_lookup_elem(struct bpf_map *map, void *key)
+ 	return l;
+ }
+ 
++static void *__htab_map_lookup_elem(struct bpf_map *map, void *key)
++{
++	return __htab_lookup(map, key, map->key_size);
++}
++
++static void *__htab_map_lookup_elem_u32(struct bpf_map *map, void *key)
++{
++	return __htab_lookup(map, key, sizeof(u32));
++}
++
++static void *__htab_map_lookup_elem_u64(struct bpf_map *map, void *key)
++{
++	return __htab_lookup(map, key, sizeof(u64));
++}
++
+ static void *htab_map_lookup_elem(struct bpf_map *map, void *key)
+ {
+ 	struct htab_elem *l = __htab_map_lookup_elem(map, key);
+@@ -783,7 +813,12 @@ static int htab_map_gen_lookup(struct bpf_map *map, struct bpf_insn *insn_buf)
+ 
+ 	BUILD_BUG_ON(!__same_type(&__htab_map_lookup_elem,
+ 		     (void *(*)(struct bpf_map *map, void *key))NULL));
+-	*insn++ = BPF_EMIT_CALL(__htab_map_lookup_elem);
++	if (map->key_size == sizeof(u32))
++		*insn++ = BPF_EMIT_CALL(__htab_map_lookup_elem_u32);
++	else if (map->key_size == sizeof(u64))
++		*insn++ = BPF_EMIT_CALL(__htab_map_lookup_elem_u64);
++	else
++		*insn++ = BPF_EMIT_CALL(__htab_map_lookup_elem);
+ 	*insn++ = BPF_JMP_IMM(BPF_JEQ, ret, 0, 1);
+ 	*insn++ = BPF_ALU64_IMM(BPF_ADD, ret,
+ 				offsetof(struct htab_elem, key) +
 
-> +static int throwing_cb(__u32 idx, void *ctx)
-> +{
-[ ... ]
-> +	/* gotox r2, as a raw insn: the mnemonic only reached the LLVM
-> +	 * assembler in llvm 22, and BPF_RAW_INSN() needs <linux/bpf.h>, which
-> +	 * vmlinux.h rules out.
-> +	 */
-> +	".8byte 0x20d;"
+---
+base-commit: 6e1ac8758fcd07bee12ccaff0087cc66930a4187
+change-id: 20260916-hashtab_fast_hashfn-9e52b3c2276e
 
-[Severity: Medium]
-Will this raw instruction emission work correctly on big-endian architectur=
-es?
+Best regards,
+--  
+Mykyta Yatsenko <yatsenko@meta.com>
 
-The inline assembly in gotox_in_pad() emits a 64-bit integer literal. On a
-little-endian target, 0x20d places the correct opcode bytes at the start
-(offset 0). However, on a big-endian target, the 64-bit value is emitted wi=
-th
-leading zeros, placing 0x00 in the code byte. This corrupts the instruction
-stream and will cause the BPF verifier to reject it.
-
-> +"l0_%=3D:"
-> +	"call bpf_unwind_resume;"
-> +	"exit;"
-[ ... ]
-> +	/* r0 =3D *(u32 *)skb[0]. Spelled as a raw insn because BPF_LD_ABS()
-> +	 * needs <linux/filter.h>, which this file cannot have -- vmlinux.h
-> +	 * already defines the uapi enums.
-> +	 */
-> +	".8byte 0x20;"
-
-[Severity: Medium]
-Similarly here in ld_abs_in_pad(), does emitting 0x20 as an 8-byte literal
-corrupt the instruction stream on big-endian architectures?
-
-On big-endian targets, this will evaluate with 0x00 at the code byte instead
-of BPF_LD_ABS (0x20), causing malformed instructions to be passed to the
-verifier.
-
-> +	"call bpf_unwind_resume;"
-> +	"exit;"
-> +	CLEANUP_REC("1b", "2b", "3b")
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260921210033.1715=
-000-1-yonghong.song@linux.dev?part=3D18
