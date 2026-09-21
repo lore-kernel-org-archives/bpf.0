@@ -1,63 +1,63 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pj2-f42.google.com (mail-pj2-f42.google.com [74.125.227.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF50A449B1A
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 07:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F05DE30DEA6
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 07:59:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789977586; cv=none; b=ZZxMRyp19zpkjcS/39+7FmsoGInmx+/lfBYxhOsZiYhDLbPz/RMjNsAveiFdD6T9nNyHGVolnT3eBvfcwku7LiTJ0EXhkQ4nGjsQ11TXBAViWxTlVCMe/73SVATi/AOyaS4HknLjjv9skOlHNQHEdkNMqCH64v9T7MtN84Z4Kxk=
+	t=1789977587; cv=none; b=HIgHkekoBJHdl7x4DH/zzMsyHan87Mb/BKVOrcZNPGxIfBWGohhD4VLqyvL7wDYwhO3TFkm5O1CJGZvmoP154XVUgFAb5EiBAprMoIbwyqZQHoHAwMl3prSiNZUVDqXU+iUt68YFLYeuEq+mkkPx5T44fchkIy35gTQCiR4uYkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789977586; c=relaxed/simple;
-	bh=0WUrvWgR3dgAiab7SIYWPeAivNmq2XI2fvWaNkUtn/s=;
+	s=arc-20240116; t=1789977587; c=relaxed/simple;
+	bh=cNEAhccFxK7ECb49KDgLHHMvIxpr0he2lkGTONekjfY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PoXaQoUFwxsnKp5zoHzVllZkOJq4a9zGkUI/eOttCZvOu3zhGjydNCMsOqxJehW17JzGoBjroHMT5d7uxk9kxCCH3ZbTC7sQhUE8lyMGW7AJQu5WqrlSm3IE+pr79uxTaY0/Gc3ugzMpxboORKAaFzcyaWO4brxVWZsJ61QA9zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kRZodoKF; arc=none smtp.client-ip=74.125.227.140
+	 MIME-Version; b=SWgzXatnZp6bb0HlhgdDP4CJ8/6TOSujLe2DG66a99l85Ia6/2wH9Zqc5zw2dtjr50w+fsjJDX8QqMqjeYB+/WLzMSpJZ/aWpKgTpRQbmq34IvATHrksJqHnoI1pbTQ623wANK1PN6QWQR/g3I9xOLvjptCDYy0+fVuJmkOIL+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nhYinYkw; arc=none smtp.client-ip=74.125.227.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kRZodoKF"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747ed1368so32157455ad.1
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 00:59:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nhYinYkw"
+Received: by mail-pj2-f42.google.com with SMTP id 98e67ed59e1d1-3a02902dce2so799674a91.1
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 00:59:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789977584; x=1790582384; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1789977585; x=1790582385; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=yT2MaGkiNqk2Zp19hZ3osqvIDm9Y0kvfXP4DN3U7yio=;
-        b=kRZodoKFpzfPilfjURhg6q08cGyY4jAdviTiskqZHVijoAb+LLlBrxrdHoGdrr379l
-         TZ64vNlngz15frOX/B5KwlgJfuzpsb7EMQIOHwEwEOzhzptDhAdOlevXq6KndKXGBseR
-         214GnnkgFOXGnULlx7Vq8aI3wYGEIW0lZXOtR9ncbRMRXyDrcLoi9+RefCbEjX3RVGnK
-         9p/HNRphCzrPECLJIawBgBTKpRoBHC7vhdJI5F7hXSW0TAEx+zfCz4LrdFcob0ZixzdE
-         txoKJxxDE+ABKVvXL7Q49Utj7kMkD8X5/jzg058lnyEnNzNyP8WEkx8gtE0mCLyGUQv6
-         9XKw==
+        bh=dfpO5FEPxmdK7lE9IAY9fAaLr4IOsZrDtgEtwNko6kw=;
+        b=nhYinYkwYBkfCTqDPyRk4zFk7juASxnee1nW1D57dB/52T7y8Vyjv+LuGlnZhDP230
+         KxJyA4yubsXbj0tG8sHqblpsrx6PH7CSQKzPNRj06/sHyHhGPDNoU/aOC0oXqt0BVRHU
+         iXke3D8yXN3WX8iGj8f3+/f9QYuatn+0gz6Gwpx10g8lZniG+oQp83x6dfvfIhd6ysSQ
+         GKMzI6wHMt9h8FCZumOAWA8+ZPTXvkgEyVBAej2ZudqujUqhD5EjJ4J+ZXmv+bkl7LKj
+         0XLGzmnXaiSTDzqrI3J2dtoZwcTI+2ATVaS4WOByCzJ08nRplw7571heNN0s3y6p8jdy
+         x0jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789977584; x=1790582384;
+        d=1e100.net; s=20260707; t=1789977585; x=1790582385;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=yT2MaGkiNqk2Zp19hZ3osqvIDm9Y0kvfXP4DN3U7yio=;
-        b=Q2ujSHXRHvLWMIMJJLVHMJmYpHQFlZ/o2lu/a+5x7dcBxDZYA64RTI7E9fpZ00a2Cy
-         v1QIOKicRgxac8qOavhec9ZOKykfjDnDsI+Yj2Fq1xCJQGmc+0XBfV7kO7y9hNwDHQDP
-         b8lLte1yYStwIsfnSxc/epIy8wi7OjFjU9Hk3vrAvMGLO0YelUj0wIMbOkYORCHmWqB6
-         422mRiJ96nV7RfFn7CRYTRLmcm3SzO5CeHl4HFSbI9K+v7VYtRubT0b2BfbFYCKl3CKS
-         gTLYpsgWwcsWikX7aXUEB9jJ/zHEHLLBCGwpXygAILR0KHDlbNgzT3iLnlHxoe0ZJ78y
-         hyhA==
-X-Gm-Message-State: AFuF++lMvPvSuPWcQdOWkT6t5Y+T9S6j+GeaSs7UTlHdbEkaj6JfxKjF
-	sttAEN+r9E1zGw8da49eSG50ypigzzCQCb6Sz5AS7O+6BecUYHWMHQb4zKJbgUDPP3Q=
-X-Gm-Gg: AYBFou3/60cUYQigpybPWm6oTRKp1qukeYCfMS8SRNQnZ7IFnJGe8SzmtykUiLHwVDk
-	dC/qfRK4lqU+LVPTTYSjKtMhxx+QunXomKd0I8/+4AMNYWpgEgWt30a5Wr36aQaEURpvIho53aT
-	b4v99yxglrxW4uRBpydRVcOOjOMw4ir3fNiDJk90xFTTxuh0OrYWibIyVBx02NuJuAXKOQ4yriW
-	Nep2Sjvzrc1jVtyZTkQQhUzrxDArRgqlkJ0OpOnA8135vtKxl25w4UR0FjSTT9v8l6XO7UYbNdg
-	0zCOjadcDAOd74PPfb47RId/65RBKarFekRBxeimeoVnl2R+B+A3ZuJFk1s/wUeVrmyhA37KZ1b
-	/Kxye4tm3rXyMjoM9E4cUx+bBQh/H43T7dttYWVPQD2mzI1en9pFnKFEeE8eqV6PNNLgcYCDzUB
-	9Kn6hF3ma7gplXxqfXMIi3pbgbvGVPbNvEgeiQgYyKYfa4vAvRXxVLnUrzlZ1fZrBa478S8UmgM
-	vvFAPyvjo+k8jcompkgq5GNoZpUDx+iW6AQqpnl99qgw2vXfNwxmMpPanQehVMbhA==
-X-Received: by 2002:a17:90b:2d47:b0:39d:f4fd:8075 with SMTP id 98e67ed59e1d1-39e54c9c7b7mr15422768a91.19.1789977584241;
-        Mon, 21 Sep 2026 00:59:44 -0700 (PDT)
+        bh=dfpO5FEPxmdK7lE9IAY9fAaLr4IOsZrDtgEtwNko6kw=;
+        b=yOQ6T5jXX844l0cFTUxZUDD5UqZ3wCqhJqj6A+VVdOvcaMckgwiL5x7e/SKH10JMF4
+         QgXbHEodKwi+mY9yKQBI1u/PgNuRQvkJZbDKkUI3ZWc5YOsAag1LrwtEyKWNIFogY24O
+         IUayYael9WZq6je+wFjZTFjg4jRoeNiokX/GiEwkkLTTCNRgyEXVwqEtW5acyKe+TOFC
+         HrAeGPXk7FnG8jUldstdjoghFgFoQRf7bxpG+OL3I/f4H7WocZ8phnvE0bEUsjuaBzRH
+         twAGievXvUklhrVffWtTeegyFcY4ZAKuggYcSIW7QbqSYuSPCs5a6zZ22r4asQ6nN1/7
+         QIzA==
+X-Gm-Message-State: AFuF++l3PY/Y0+e1IZsMF9KbabNTx7V9/EkSTfZWJtZv1NSdIwKjIgQE
+	8Jpi5NiPY3cRhPVWc9C83JnZwSDn10Eq5iYuUti9U8mQ1BUY0v7AVkibf8S/5Td0JQg=
+X-Gm-Gg: AYBFou11bHiyP212vZ7r79GuPvT/pFCTxmmvTB3pFN8uQfojpzludEgJRasKBslbHoP
+	8cReDFCZgwAxZD33xosx8vdXPwU67XHUl+zUn3ZDdDrhUEgzDJ+ABnGazBMXLXL6ne/P47JCOv+
+	3NtZpEf0EP1lgbxTJya2CmioxI0aoc25IrkZPpEXP2PdQj0vU/E4VFwxdHFo3b7fU4Gg/MctS37
+	DbfqT8Wq1t8bUyqKD9Yxu/Kqi1XHMBcweFWj/ntVYamJ6U++sUWabAj1Och+CwmFn64vSi/LNiF
+	SYlu+G7zguXflWHJqktjWJs0S9uhOBSKW/dNvmFFxLK+9ec7CcBNdKqgVm39kEOBmGyDN6nyZOt
+	BRAL2qihp6mdfLb/S7dXj6nMTn1u5JQXmP6JHPF07oi5vIeAQNeRZ9IlqTZcTa1EHw7PhoFVFim
+	va9n1Gr5yKRlbYk4skmWZtKhqVtgWaJz/P6C8gLKsXcTnYtrwfQGLy8oCkmoF+sZ9/mcrhzOL4T
+	2WYlUcvMEwQinVQaOUf2eDhDIOelJSWHNZGcKL8xxxdxMMJn+Cu1ldawBV5QBIT3Q==
+X-Received: by 2002:a17:90a:1057:b0:39f:d323:c988 with SMTP id 98e67ed59e1d1-39fd323d93fmr5427357a91.48.1789977585132;
+        Mon, 21 Sep 2026 00:59:45 -0700 (PDT)
 Received: from powertower.tail474ae1.ts.net (d173-181-19-173.bchsia.telus.net. [173.181.19.173])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e6f1835adsm12843830a91.6.2026.09.21.00.59.43
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39e6f1835adsm12843830a91.6.2026.09.21.00.59.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 00:59:43 -0700 (PDT)
+        Mon, 21 Sep 2026 00:59:44 -0700 (PDT)
 From: Mykola Lysenko <nickolay.lysenko@gmail.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -70,9 +70,9 @@ Cc: ast@kernel.org,
 	jolsa@kernel.org,
 	memxor@gmail.com,
 	nickolay.lysenko@gmail.com
-Subject: [PATCH bpf-next v8 5/9] selftests/bpf: generate verifier/tests.h in a regular recipe
-Date: Mon, 21 Sep 2026 00:58:51 -0700
-Message-ID: <20260921075855.2065871-6-nickolay.lysenko@gmail.com>
+Subject: [PATCH bpf-next v8 6/9] selftests/bpf: derive the bench object list from the sources
+Date: Mon, 21 Sep 2026 00:58:52 -0700
+Message-ID: <20260921075855.2065871-7-nickolay.lysenko@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260921075855.2065871-1-nickolay.lysenko@gmail.com>
 References: <20260921075855.2065871-1-nickolay.lysenko@gmail.com>
@@ -84,36 +84,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The verifier/tests.h recipe is a $(shell ...) expansion: the command
-runs while make expands the recipe line - including under make -n - its
-exit status is discarded, and the resulting (empty) expansion is what
-make actually executes.
+bench links every benchs/bench_*.c object. Derive the object list with a
+wildcard so adding a benchmark no longer requires updating the link
+rule. Skeleton prerequisites remain explicit.
+
+The sorted list changes object link order and the binary's symbol
+layout; no benchmark behaves differently.
 
 Signed-off-by: Mykola Lysenko <nickolay.lysenko@gmail.com>
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/bpf/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/Makefile | 28 ++++------------------------
+ 1 file changed, 4 insertions(+), 24 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 5bcb762dc3fc..0e23cb506777 100644
+index 0e23cb506777..99237c3b32d5 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -910,12 +910,12 @@ $(eval $(call DEFINE_TEST_RUNNER,test_maps))
- # them (e.g., test.h is using completely pattern), that it's worth just
- # explicitly defining all the rules explicitly.
- verifier/tests.h: verifier/*.c
--	$(shell ( cd verifier/; \
-+	$(Q)( cd verifier/; \
- 		  echo '/* Generated header, do not edit */'; \
- 		  echo '#ifdef FILL_ARRAY'; \
- 		  ls *.c 2> /dev/null | sed -e 's@\(.*\)@#include \"\1\"@'; \
- 		  echo '#endif' \
--		) > verifier/tests.h)
-+		) > verifier/tests.h
- $(OUTPUT)/test_verifier: test_verifier.c verifier/tests.h $(BPFOBJ) | $(OUTPUT)
+@@ -951,7 +951,8 @@ $(OUTPUT)/test_cpp: test_cpp.cpp $(OUTPUT)/test_core_extern.skel.h $(BPFOBJ)
+ 	$(call msg,CXX,,$@)
+ 	$(Q)$(CXX) $(CXXFLAGS) $(filter %.a %.o %.cpp,$^) $(LDLIBS) -o $@
+ 
+-# Benchmark runner
++# Benchmark runner. Every benchs/bench_*.c is compiled and linked in.
++BENCH_OBJS := $(sort $(patsubst benchs/%.c,$(OUTPUT)/%.o,$(wildcard benchs/bench_*.c)))
+ $(OUTPUT)/bench_%.o: benchs/bench_%.c bench.h $(BPFOBJ)
+ 	$(call msg,CC,,$@)
+ 	$(Q)$(CC) $(CFLAGS) -O2 -c $(filter %.c,$^) $(LDLIBS) -o $@ $(call skip_on_fail,BENCH)
+@@ -982,30 +983,9 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
+ 		 $(TESTING_HELPERS) \
+ 		 $(TRACE_HELPERS) \
+ 		 $(CGROUP_HELPERS) \
+-		 $(OUTPUT)/bench_count.o \
+-		 $(OUTPUT)/bench_rename.o \
+-		 $(OUTPUT)/bench_trigger.o \
+-		 $(OUTPUT)/bench_ringbufs.o \
+-		 $(OUTPUT)/bench_bloom_filter_map.o \
+-		 $(OUTPUT)/bench_bpf_loop.o \
+-		 $(OUTPUT)/bench_bpf_for.o \
+-		 $(OUTPUT)/bench_strncmp.o \
+-		 $(OUTPUT)/bench_bpf_hashmap_full_update.o \
+-		 $(OUTPUT)/bench_local_storage.o \
+-		 $(OUTPUT)/bench_local_storage_rcu_tasks_trace.o \
+-		 $(OUTPUT)/bench_bpf_hashmap_lookup.o \
+-		 $(OUTPUT)/bench_local_storage_create.o \
+-		 $(OUTPUT)/bench_htab_mem.o \
+-		 $(OUTPUT)/bench_bpf_crypto.o \
+-		 $(OUTPUT)/bench_sockmap.o \
+-		 $(OUTPUT)/bench_lpm_trie_map.o \
+-		 $(OUTPUT)/bench_bpf_timing.o \
+-		 $(OUTPUT)/bench_bpf_nop.o \
+-		 $(OUTPUT)/bench_xdp_lb.o \
+-		 $(OUTPUT)/bench_libarena.o \
++		 $(BENCH_OBJS) \
+ 		 $(OUTPUT)/usdt_1.o \
+-		 $(OUTPUT)/usdt_2.o \
+-		 #
++		 $(OUTPUT)/usdt_2.o
  	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(CFLAGS) $(filter %.a %.o %.c,$^) $(LDLIBS) -o $@
+ 	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@ $(call skip_on_fail,LINK,,(some benchmarks may have been skipped))
+ 
 -- 
 2.43.0
 
