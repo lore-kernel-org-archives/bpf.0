@@ -1,149 +1,156 @@
-Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B1733BB119
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 19:54:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.76
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790020457; cv=pass; b=glTDE/dJBlWOvVY3hLUaBAvDk5cv46jdErzvKYcIQ33QsvfHds9N5btB7odzHvAyXa11UiIOGNi2NOBs7Mc6C8/h1zWka6xN5PesbEY+c7C7Ulc7ti1w+5mhIbEO8lsIdZkDpQR897Albo6mAyRgJYS/ua6eg+gg4+doI5GJmoo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790020457; c=relaxed/simple;
-	bh=+K0x7Oa0SLCPC9/TMd/49GdUdR/oPlDXAf+dxWf8XbA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ttx2pgPvt6yM5oJ0UrZRZOZDxru/ju9s1UmB0E7CliQ8vYxdZKte978gpOlHo9f0q4e4I7Y/lbtblHFFGQwJwiZl7jZ6qJ0KG4Ocav8HhMtCB9ngR3D5IoA/w1v4u+sjBtus2pqw28xvAa2YgyTI/NhKw7V02uB8GZEKe5XZ8yo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bV+Hzsxp; arc=pass smtp.client-ip=74.125.228.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05958409289;
+	Mon, 21 Sep 2026 20:18:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790021929; cv=none; b=ASFYnDDa71GeHGVCF8A0NbVEEQ6oedBddjTcMyTzDwy5VTPrU8SUd3ZAmp/8M+Q/bcpkkCY8e9EDGy5CmnoEE3fR9Z7X/lLxlHRHlB5iVpXfC0jshus60JE/yVNaNn+B1v2eR038xeXTQv14ZQNiHoasf+wPwBTUqjpc69jcotw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790021929; c=relaxed/simple;
+	bh=Be41t9GnhtdKdrttGlBob35yJI02MpKBTZIK0xTJEXw=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=OqKumLJ4hKSaZXoaCWKyG5aEOQshi46k0QvWA8vO2U6ruYgnKRP/D0YMmCuBlsd8WOjDb9oLb9M/RxInvzhY/1AXvTGXwO/nprgUO4V47bB9yl9PJR+guWVgUuEUGNr6n57PdowgZrBOnq6IJANfgeXO41K8pJSovH49XUZRyvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g8662Sq6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bV+Hzsxp"
-Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a60590a85cso6420214a12.0
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 12:54:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790020454; cv=none;
-        d=google.com; s=arc-20260327;
-        b=laXo0fWqxKBmRF1NYRP29w42RAYq8tRI83cu3U5MICW4rxP+D2YZsLTCILzTQCodSl
-         FSFz32ufRxvUTfDcygCxKHrfK5w7KNI4N0rNmBLJIBkmJXGYcaoX0mDMpj04ceiOyMz1
-         R7GUoh3QkT3aJEBNG3m5BcvIn7xr8pcltfsaCPMjGWwB1rioovhMdaQaAEvH1fQVtPCL
-         4u7XNJ1wzlrqpv4RQzoAQrjjuCXLE/37lACmHAcekQA0ewJserFNunoyDNUlEyREwVBZ
-         ooEGmC2/PDDrpY5jR1mBW3MdYsnSjDbVCzCWiQHdwIqiimauqMicVGrY3QlzpNvdb5IE
-         KWYg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=jcLPg4sxIMnPVu9DYBY2crfmwfHr/m7CBHhYvP1Mzt8=;
-        fh=dZIwNpALj6cHjG+3IuvzXyjvjoJG0KO0vRIxGeoyGhs=;
-        b=ELngknTeBdUHAfU6iJ3BzZYPBQYsapawQlqv6kDtYr4Yt+vdE4uUxhqT1wj1TM7rc9
-         eCIK/8JLU17kWNRG+zTH/SZgm4DnCMvLgn+dBDjU/gbUostjyOWxEYd9YaqoLAexl3Ig
-         1XwGnCDcr4XrvxNK7zSye1GJ8D+Df8snXlIf3A3rLTW1YLC1xoXQxp/Yp6whZ9EMnLoY
-         lou3DpngTvK8w2r5ZOeaog+u1iJ6JxSYZS7NB6dw/7ytjqT4kH14gM59CiOk7Le7eDHQ
-         ZinNOEySflWcfwVF43T3BQAz4khKR0K2Lc3ndVB6g6wsedEG9ZCQSPknmJrZaW5ooxmr
-         14BA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790020454; x=1790625254; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=jcLPg4sxIMnPVu9DYBY2crfmwfHr/m7CBHhYvP1Mzt8=;
-        b=bV+Hzsxp8aJpIjHUvEz/4JSdqYpl+Oen5Dzn+8rjtxhIwX6uQEwACdmarrIsm0iOGE
-         ICsrUhONONoC1ldzQr56MaJRafTmWm5FQEr0yDaH1mxR0s97H3WzYYkXBDvkx0PaMkzX
-         Mqxv9Td4nnX/clgV07Egt4TqedpdzyURLjjp6srrgBoOtrVbVdGVZPUJ5G93EkLzsL/s
-         WH5YGB3xOzy7M8qs51zQVZ9upZXizEjBtCcR18be8LLDmtenBSwPT+fHF/hmMpH/noy8
-         xgeFOLnyKi6H4wwt8P7aT6K/nxDIC4LPoKnMmJaHYqtn7S7lnfD1zD+nWFmU3/j1RYh5
-         QKsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790020454; x=1790625254;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=jcLPg4sxIMnPVu9DYBY2crfmwfHr/m7CBHhYvP1Mzt8=;
-        b=nD4l44Q4l2jGy3U5l3ytOs2m4EfLNd/bykvxxd+94yMgoiKqGsJUnW8Pnc60BquvJY
-         9NucWwIxtGau2Qw8bo+p0DUgT+ix+kR681ywpUcX07AeS6XXzsSClA0TmcVSdT0Mzol7
-         iO/9x/rNAgf0o3C0nIFvqc8qt24m3r390ww+b+q99tVoK/WREfxpvuWEijJc7TLIIGzY
-         DcfKTGlVoqo5ofOco5yl+3Kc3XIYHgR/VNLRsEmiaZV2i0X9B0JBdTd5vlzG6kjL+zVn
-         ATgEkAs5y5tMEb/JuVU+5ysUwK3mBC2FOJ4D6vKnfWE9Ras0R7XyTOyyxYs0xflvieWL
-         s1kA==
-X-Forwarded-Encrypted: i=1; AKwUvBz5Zz/+HTLMoLTaFY85MyjSwy1VCUW6ncSHiCTzRYy2vB/VWVcxJ3G8dptxwYm9LHZM1to=@vger.kernel.org
-X-Gm-Message-State: AFuF++m+PtRsrauN30iK/WgHMdty4JDfv1jkYn08t2wZmySCn2B0X1wZ
-	tdS5SkoGTZcEbiv4cjae7EjWPwAnCOAJ9Cuau2tYcLxJJbtefs0iuGQbDStSTTXfe2fz+yR/Max
-	12zfxLs42eNpkq9dWnJdj+o560lyumUu8f/VMMhMppx+e
-X-Gm-Gg: AYBFou1eEfW+R5psYDSmSsYNz3qIO3cmW2jkS2N6dQM3txW6hCrOjm8L794TG+wNmW8
-	VHQzRmbR44FxLYojpgUyHdO31dGkcQm/KUUcn04CkuZOsDhI/bAxsUfT2dZVtvdACWBiKZGtFO7
-	HJOVymB+tFf/oV04SD5xKUX4shJHI4P1gqYq9qxpBiDEFyM2xCS0yoC/qzhU8F/3FpAh+PlEPRK
-	lmlH14LknBjOIU7mef8IEQGYVJWS7ODhiOxXcxJ8PhmZJ3foMsalpOP9j9tNTtsiazbOYLpUUsh
-	J2Il5gKh22xww0NuRRhNpHOKlF0Z7SXooZpn42UOVRjl9hMDvvN6BBNmBj1Fa/sRacujM/Wk9Da
-	b1gb5
-X-Received: by 2002:a05:6402:24dc:b0:6a7:ee56:8156 with SMTP id
- 4fb4d7f45d1cf-6aa579ad808mr7351821a12.36.1790020453888; Mon, 21 Sep 2026
- 12:54:13 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g8662Sq6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 746BF1F000FF;
+	Mon, 21 Sep 2026 20:18:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790021927;
+	bh=ieEhb6jjY0UBH1dTCrUM3Ez15vKWo6P+jDCOL+A1+/I=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=g8662Sq6+M6vieBCdsrT46bpQpMP0TUgTi/3gwlLDQk6JPFNRxBodAWR52f/E0N9v
+	 Dk0lOVdWTTu1opT3DIlm2LZlQKPdd32JuyQndd5DqXFzfUqdVTH4QdLqWnIyEyNw/Z
+	 q0LWD+Ln22BPc1fDprE1RFZpoGnzi1taaDhInvxI0d0gsRS9WbHnzeP73+XeZGWoAk
+	 hdUMTChjtgGCMWfs7TTY91KWePmS+N0lmdu9Eviaqxe2/mLe+0UFZzL+D9rsEDal1j
+	 XXEkQH5Cncz/HsgnvgRAyUC1HR3Ja86c+2WrnlqDmH0VMUcfGsA3gBYmaHkUynj47g
+	 FFPl5+8BwMsIg==
+Content-Type: multipart/mixed; boundary="===============6412665407398203201=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260915154248.3612028-1-puranjay@kernel.org> <20260915154248.3612028-2-puranjay@kernel.org>
- <210f1bfa-e6ae-4d1e-a920-a6c8c9b4269f@gmail.com> <CANk7y0gzipiJrObW0fbh0gP2DgKeZAUvCNuvaOdJrGWgE81LkQ@mail.gmail.com>
- <ede9d515-a103-461e-8244-656af641c6c9@paulmck-laptop> <CAADnVQ+bmTPScUBfOtD8Sj9H8KjAqU2-XocFsP3G2qgNA7q_Pg@mail.gmail.com>
-In-Reply-To: <CAADnVQ+bmTPScUBfOtD8Sj9H8KjAqU2-XocFsP3G2qgNA7q_Pg@mail.gmail.com>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Mon, 21 Sep 2026 20:53:59 +0100
-X-Gm-Features: AcwNN1WnN7QHPB5f7ZzrNkV-R4PXF9XQw_TXw_WLfugdc3j3gLzzQZ6PR4IytP0
-Message-ID: <CANk7y0hC6kzOct8r1cDpRnXgvvqNqpfcn9JWOnicR+JisNc6+Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 1/4] bpf: Add bpf_call_rcu() kfunc
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, 
-	bpf <bpf@vger.kernel.org>, rcu@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, "Harry Yoo (Oracle)" <harry@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <41b3ffb9922beb0c24d302a85752d4f82ed168fec13f6b1926e34274d9e31338@mail.kernel.org>
+In-Reply-To: <20260921191407.1742386-4-puranjay@kernel.org>
+References: <20260921191407.1742386-4-puranjay@kernel.org>
+Subject: Re: [PATCH bpf-next v5 3/4] bpf: Add bpf_call_rcu_tasks_trace() kfunc
+From: bot+bpf-ci@kernel.org
+To: puranjay@kernel.org,bpf@vger.kernel.org,rcu@vger.kernel.org
+Cc: puranjay@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,harry@kernel.org,paulmck@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 21 Sep 2026 20:18:45 +0000 (UTC)
 
-On Sat, Sep 19, 2026 at 6:16=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Fri, Sep 18, 2026 at 9:03=E2=80=AFAM Paul E. McKenney <paulmck@kernel.=
-org> wrote:
-> >
-> > > >
-> > > > I tried to fully embed structure back when implementing bpf_task_wo=
-rk,
-> > > > Alexei rejected that approach, because some of the structures (irq_=
-work) I used
-> > > > are not in our control and might change. I think this applies here:=
- `struct rcu_head rcu`.
-> > > >
-> > > > Link: https://lore.kernel.org/bpf/CAADnVQJy0tAj9jkLrD1cBFkLK-DayjG6=
-uNGZ3OBQh4V5Zt=3DWnQ@mail.gmail.com/
-> > >
-> > > I agree with your analysis. Although struct rcu_head is unlikely to
-> > > change but still, I will change this to a heap allocated version wher=
-e
-> > > we only keep a pointer and not the structure inline.
-> >
-> > You can always use a union, as is done elsewhere in some cases.
-> >
-> > That would preserve independence from the rcu_head definition, while
-> > avoiding the need for memory allocation.
->
-> In most of the cases kernel internal data structures shouldn't dictate th=
-e size
-> of uapi struct, but in this case
-> struct bpf_rcu_head {
->  __u64 __opaque[8];
-> } __attribute__((aligned(8)));
-> is the right trade off.
-> I cannot imagine how rcu_head would grow from here.
-> Two pointers is what it needs and it will stay this way tomorrow and
-> years from now.
-> The rcu logic needs a pointer to callback and ctx. So two pointers.
-> Let's not introduce memory allocation for highly improbable rcu_head chan=
-ges.
+--===============6412665407398203201==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-I sent v5 with minor changes and kept:
-struct bpf_rcu_head {
-  __u64 __opaque[8];
- } __attribute__((aligned(8)));
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 8a01dd4058a03..301b35bd85c8a 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -4838,21 +4838,10 @@ static void bpf_rcu_run_callback(struct rcu_head *rcu)
+>  	bpf_prog_put(prog);
+>  }
+>
+> -/**
+> - * bpf_call_rcu - Invoke a BPF callback after an RCU grace period
+> - * @rh: struct bpf_rcu_head in a BPF map value
+> - * @map__const_map: bpf_map that embeds struct bpf_rcu_head in the values
+> - * @callback: BPF subprogram, invoked as callback(map, key, value) for the value holding @rh
+> - * @aux: bpf_prog_aux of the caller, implicitly set by the verifier
+> - *
+> - * Return: 0, -EBUSY if @rh is already queued, -EPERM if @map is held by neither a process
+> - * nor bpffs, or -EBADF if the calling program is going away.
+> - */
+> -__bpf_kfunc int bpf_call_rcu(struct bpf_rcu_head *rh, void *map__const_map,
+> -			     bpf_rcu_callback_t callback, struct bpf_prog_aux *aux)
+> +static int __bpf_call_rcu(struct bpf_rcu_head *rh, struct bpf_map *map, void *callback,
+> +			  struct bpf_prog_aux *aux, bool trace)
+>  {
+>  	struct bpf_rcu_head_kern *rhk = (void *)rh;
+> -	struct bpf_map *map = map__const_map;
+>  	struct bpf_prog *prog;
+>
+>  	BUILD_BUG_ON(sizeof(struct bpf_rcu_head_kern) > sizeof(struct bpf_rcu_head));
+
+This isn't a bug, but why does __bpf_call_rcu() take 'void *callback'
+instead of keeping 'bpf_rcu_callback_t callback' like the kfunc
+wrappers? The two call sites both receive a typed bpf_rcu_callback_t and
+pass it into the void * parameter, which is an implicit
+function-pointer-to-object-pointer conversion (accepted by gcc/clang only
+because the kernel doesn't build with -Wpedantic). Keeping
+'bpf_rcu_callback_t callback' would preserve type checking at the two
+call sites and match the cast pattern used elsewhere in this file
+(helpers.c:bpf_timer_set_callback, bpf_wq_set_callback_impl) without
+costing anything.
+
+> @@ -4872,13 +4861,50 @@ __bpf_kfunc int bpf_call_rcu(struct bpf_rcu_head *rh, void *map__const_map,
+>  		return -EBADF;
+>  	}
+>
+> -	rhk->callback_fn = (bpf_callback_t)(void *)callback;
+> +	rhk->callback_fn = (bpf_callback_t)callback;
+>  	rhk->map = map;
+>  	rhk->prog = prog;
+> -	call_rcu(&rhk->rcu, bpf_rcu_run_callback);
+> +	if (trace)
+> +		call_rcu_tasks_trace(&rhk->rcu, bpf_rcu_run_callback);
+> +	else
+> +		call_rcu(&rhk->rcu, bpf_rcu_run_callback);
+>  	return 0;
+>  }
+
+This isn't a bug, but would passing the call_rcu variant (or naming the
+flag 'tasks_trace') read better than a bare 'bool trace' parameter? The
+only behavioural difference between the two kfuncs is which queueing
+function is used, but it's carried through a 'bool trace' flag that the
+reader has to trace to the bottom of the helper to interpret. The name
+'trace' is also ambiguous in a BPF file where 'trace' usually means
+tracing programs rather than RCU-tasks-trace.
+
+> +/**
+> + * bpf_call_rcu - Invoke a BPF callback after an RCU grace period
+> + * @rh: struct bpf_rcu_head in a BPF map value
+> + * @map__const_map: bpf_map that embeds struct bpf_rcu_head in the values
+> + * @callback: BPF subprogram, invoked as callback(map, key, value) for the value holding @rh
+> + * @aux: bpf_prog_aux of the caller, implicitly set by the verifier
+> + *
+> + * Return: 0, -EBUSY if @rh is already queued, -EPERM if @map is held by neither a process
+> + * nor bpffs, or -EBADF if the calling program is going away.
+> + */
+> +__bpf_kfunc int bpf_call_rcu(struct bpf_rcu_head *rh, void *map__const_map,
+> +			     bpf_rcu_callback_t callback, struct bpf_prog_aux *aux)
+> +{
+> +	return __bpf_call_rcu(rh, map__const_map, callback, aux, false);
+> +}
+> +
+> +/**
+> + * bpf_call_rcu_tasks_trace - Invoke a BPF callback after an RCU tasks trace grace period
+> + * @rh: struct bpf_rcu_head in a BPF map value
+> + * @map__const_map: bpf_map that embeds struct bpf_rcu_head in the values
+> + * @callback: BPF subprogram, invoked as callback(map, key, value) for the value holding @rh
+> + * @aux: bpf_prog_aux of the caller, implicitly set by the verifier
+> + *
+> + * Waits for sleepable BPF programs too.  The callback itself is not sleepable either way.
+> + *
+> + * Return: 0, -EBUSY if @rh is already queued, -EPERM if @map is held by neither a process
+> + * nor bpffs, or -EBADF if the calling program is going away.
+> + */
+> +__bpf_kfunc int bpf_call_rcu_tasks_trace(struct bpf_rcu_head *rh, void *map__const_map,
+> +					 bpf_rcu_callback_t callback, struct bpf_prog_aux *aux)
+> +{
+> +	return __bpf_call_rcu(rh, map__const_map, callback, aux, true);
+> +}
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35644498619
+--===============6412665407398203201==--
