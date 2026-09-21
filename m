@@ -1,171 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EDA377AA1;
-	Mon, 21 Sep 2026 06:38:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F0538AC7D
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 06:56:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789972701; cv=none; b=RuG0UGORsRAtVB45RAlzBd7nKxqiTu1t9qi4gLX7wV9NXb+eo8I8gZ5bTR8vWWP7alMFx1c4cKMv5jz6LUq4MU7BxkIX1/9dgWfM0mcyFxFBiGE1G8U1zyBscAaXCbLd8s7GJKUu/hxvq1pteB1QFVzYZpoTs6iv3GGn5BRjJfQ=
+	t=1789973784; cv=none; b=HXuREI+OMkHR0zkNj/DBPUUhUuq/G5EoanRbK7jD/idFqLpWOT26VNdPToqO2OjtcElUV4pcfBz2eK396olh3+tSMVqGmUn5BWWNhosLL87nXbn3tIYTB4eca2Zer/UFVotKQaZ2kve4pGviG+AFAttfqqLaDaLHzN06pnr4dmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789972701; c=relaxed/simple;
-	bh=av7b8k4TaDZ78d2UuXsX8d+SrVCoNudj09wDyVqYdCo=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iryWw7qoU8kg6JuBkaDWc8NRy5bWw14EGs8NB5zNUxNysQnQJzpg5arhO3dGWUkpx+sF3Pq0dGqa4e93grBzTZmaUPDFKdOSL5DeD2jyZFkH8gGZ9YFeDFD8CCNJYjidcAtvuJ5Wwf3eYBc5Cs7dJfsAnjTAOj7Ikpla6BlpTx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HMoV12BC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789973784; c=relaxed/simple;
+	bh=EkucCOPz8GZoCCEzERPCc1P/c5lfa7EDa7Hlgmx02AA=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=rEGU6DkS/l37YTMDyaWo4RiPB4dIY9JYZMkANp4yFWoSXoF2NT71N6EX0sZRpA89lCVnxx1QdUpHJieN7h/B8e8ITQo+iqBFglxg4GBDNlXkKGPFUzXo730HOdrjiHHAirKkvU1eFc466Qxk8BmeITRu0azBMQ4aJ91RMNG9oYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lH2XapNI; arc=none smtp.client-ip=74.125.225.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HMoV12BC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAC0C1F00893;
-	Mon, 21 Sep 2026 06:38:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789972699;
-	bh=Y4jE66NJS02PB9RnKwqWmkL3qkxjOW4XR7o+CYDXN5Y=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=HMoV12BCIjFyf0D04FW2dy8S/bYJcqK9PWFoqlwbvhjk8gJZQ1zy2bU2C85Nn5fKO
-	 E9AuKQ4n7S8N7FsRTYEsnQvLCyM2F15MsP/eKitcA56tcqAkNpFd8kXrKKTLtpJ1oo
-	 rwHg4Y7APX/QhL4L/uXbs6t0hhn5i1WDGNHXAl/LAsmlIHrYviM8qph3VhSGQ6jKLN
-	 saQdrJYXeTnPLmDypojDDJvsr18nr1gLb8TCOQnfwP9vv6bfXpkULDrwtngHXziSWH
-	 fc6hvo0NyeJARWWnTf2dFS1P127qhUknKn7UAfRHIbKuLyMGALXi4Q3wsffd0nsYXn
-	 CdHtM7zFEXIDw==
-Subject: Re: [PATCH net-next 6/6] netlink: specs: rt-route: describe
- seg6-local actions, counters and flavors
-From: netdev-bot+sashiko@kernel.org
-To: hangbin.liu@linux.dev
-Cc: dsahern@kernel.org, idosch@nvidia.com, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
- donald.hunter@gmail.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, liuhangbin@kylinos.cn
-Date: Mon, 21 Sep 2026 06:38:18 +0000
-Message-ID: <178997269841.2160803.16028415760620210470@kernel.org>
-In-Reply-To: <20260917-ynl_rt_encap-v1-6-fbbe6e680571@kylinos.cn>
-References: <20260917-ynl_rt_encap-v1-6-fbbe6e680571@kylinos.cn>
-X-sashiko-severity: Medium
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lH2XapNI"
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-49b963f51f6so11795005e9.1
+        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 23:56:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789973781; x=1790578581; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=EkucCOPz8GZoCCEzERPCc1P/c5lfa7EDa7Hlgmx02AA=;
+        b=lH2XapNIbMgfWFe7sTKpWeHxiCEsZbYaVKjtkxDyANXtYz93i0hmg12JbNd1qKYmB/
+         o5HUPAboqdnzpOKr+u/173tdXHWqZuP7mgI7x+uj04z5f5YzSMM/zY+qZPufZ0JhuN4e
+         8yR5kHNFystMvZeG/gctS/V4zy9aiOi9injSE7sxhp9GWs9+Ww7Za+1XyrDIiOlPfxuj
+         vj52q6JrGmQ4b6FqeJj94rg/FCb0vP+++2ca9ismrSMC+4ti65fOIC3EA+PcbnCjyUO+
+         dNhY/s87s2h65ZD8CX/ogIuhFt0pnemq1Wu6aieAKNcblHMqeamjICj1DFD/tEN4zWBC
+         Bo5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789973781; x=1790578581;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=EkucCOPz8GZoCCEzERPCc1P/c5lfa7EDa7Hlgmx02AA=;
+        b=HHzlhJjRW/AIPc2KjFrI1Ubg9IOHCQPwohT0fhWxPP0NJBf1U+SFfFrP2USS2cdc6F
+         EIGudcWaTevd36EdM3Q778bcHaCxQZvwLgShZJjtCQ9xyHcKwcuZn2YH8mvwMRxHg+tJ
+         8yLDhWCRIv025Lu95S7+L8SRmU4UacZcxWcUBBRYxvQaDhpdPshRkfIT3LpAp09cvOHA
+         Rf7GidUabJ4m/feELY9tJmLp+0mh4Zx1RXFMyN417r1hUrbLFcrs17E6xBdgfgy+wKdh
+         t1Ujqz5ZrTB020eLN+V+FAw1wSv2xhY2JXxnj+N2xgdSvMJMGLJ8bQwBRKH+7MQ+f7is
+         X7Bw==
+X-Forwarded-Encrypted: i=1; AKwUvBzrXOAIHwMs5E6mW/8tfI14LuVX3lQtw/GSNQ0OBgWPb5TFL2jTA1eObDNmkD317d9RBmI=@vger.kernel.org
+X-Gm-Message-State: AFuF++mytEuq1996vtxtEWl7HGFgj0StZiKHw9/Bujvj/j5W3DcmPNJk
+	hgbDfw5/BAhu9SxYGkuSRoYBEuUq6/DinqG+XYq/H1g5cmj8VX/B8CpT
+X-Gm-Gg: AYBFou37zrcy6yxmkll97AdjuxUL6BPuydvuVOFKvIusEo+GXFZi/NyWiJnyfmdHJlm
+	6dvyTAj+JHdVgMl/SVafctow2e5krgTKkEH1F2UHPFrEcOl/zx701X/P2coZgW/dD9vUw9Tsgx4
+	ZTlEYkuWhrksUGOcmzd5Pn3nyziupss+AzboDng2JOH7dVrivFa9YHVKY5tHTmWkMNBMUCmcBfg
+	oX9HZGkKxN7lspKahRJLUuL4oyPtrGZ5cmukW43ZF3Dsq/0MMNmy024XXhpEB2fQRxqNuGujJ7F
+	11G/V1rSsx1YmvxhaC6od5fzBuCV2mSathsdL4zNH+hsFN3gdD5JpwE4mCGokRVxiXw1xsR41zr
+	yHrTtfhaxmY6sVooH9QFQ+PSdm/rmdSVQ/dJzLH8/fisA9FJOFqppkazP7hmPBufIU+nkFXHMgT
+	OIPp32UAJMHp5piUvJo7bs/rT/rVkDEqK8k8msinOJcZxqmrT29e5WzUgN3jJ8QPEARPFWROB3w
+	26S07EKnRCX14Lm3tlAtQwBl7Kdg15dTK0UAzHAmKRdoccGO7pDd467Hl1xpdpSPojoePdtN9bs
+	KgQleOGdcGW8s69jpKQc5at2U4zb3u7sGQXzucwYg9vI/ah8
+X-Received: by 2002:a05:600c:83cd:b0:49c:c0d4:53d9 with SMTP id 5b1f17b1804b1-49fc56f7a11mr113732135e9.14.1789973780380;
+        Sun, 20 Sep 2026 23:56:20 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fcd068124sm201507435e9.3.2026.09.20.23.56.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Sep 2026 23:56:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 21 Sep 2026 08:56:18 +0200
+Message-Id: <DLKSQY1PP3WS.2ARYV8F47YY55@gmail.com>
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Hui Zhu" <hui.zhu@linux.dev>, "Roman Gushchin"
+ <roman.gushchin@linux.dev>, "JP Kobryn" <inwardvessel@gmail.com>, "Shakeel
+ Butt" <shakeel.butt@linux.dev>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song
+ Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
+ Olsa" <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Shuah
+ Khan" <shuah@kernel.org>, "David Hildenbrand" <david@kernel.org>, "Barry
+ Song" <baohua@kernel.org>, "Geliang Tang" <geliang@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>
+Cc: "Hui Zhu" <zhuhui@kylinos.cn>, "JP Kobryn" <jp.kobryn@linux.dev>
+Subject: Re: [PATCH v13] mm/bpf: Add bpf_proactive_reclaim kfunc
+X-Mailer: aerc 0.21.0
+References: <20260921030854.17858-1-hui.zhu@linux.dev>
+In-Reply-To: <20260921030854.17858-1-hui.zhu@linux.dev>
 
-Thank you for your contribution! Sashiko AI review found 1 potential
-issue(s) to consider.
+On Mon Sep 21, 2026 at 5:08 AM CEST, Hui Zhu wrote:
+> From: Hui Zhu <zhuhui@kylinos.cn>
+>
+> BPF programs can observe memory pressure on a cgroup, e.g. refault
+> stats via bpf_mem_cgroup_page_state(), but cannot act on it:
+> triggering reclaim requires writing to memory.reclaim, which BPF
+> cannot do.
+>
+> Add bpf_proactive_reclaim(), a sleepable kfunc performing one
+> proactive reclaim pass on a memcg, like a write to memory.reclaim
+> but without retrying until the target is reached, so that when and
+> how hard to reclaim is BPF policy rather than hard-coded thresholds.
+> The reclaim target of a single call is capped at MEMCG_CHARGE_BATCH,
+> as high_work_func() does for memory.high; reclaiming more is left to
+> the program, which can call the kfunc once per bpf_wq callback and
+> stop at any point. It is limited to BPF_PROG_TYPE_SYSCALL, because
+> other sleepable programs may run with filesystem locks held, on
+> which the reclaim path could deadlock via filesystem shrinkers.
+>
+> Convert MIN_SWAPPINESS, MAX_SWAPPINESS and SWAPPINESS_ANON_ONLY from
+> macros to an enum so that they are emitted into BTF and usable from
+> BPF programs via vmlinux.h.
+>
+> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+> Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
+> Reviewed-by: JP Kobryn <jp.kobryn@linux.dev>
+> Reviewed-by: Barry Song <baohua@kernel.org>
+> ---
 
-Critical: 0 · High: 0 · Medium: 1 · Low: 0
+Applied.
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [Medium] Incomplete/misleading description of the SEG6_LOCAL_FLAVORS
-  operation field: the newly added `seg6-local-flv` attribute set…
-
---
-
-netlink: specs: rt-route: describe seg6-local actions, counters and flavors
-
-This adds a seg6-local-actions enum definition, annotates the seg6-local
-action attribute with it, and replaces the binary counters/flavors
-attributes with nests described by the new seg6-local-cnt and
-seg6-local-flv attribute sets.
-
-> diff --git a/Documentation/netlink/specs/rt-route.yaml b/Documentation/netlink/specs/rt-route.yaml
-> index 5e9537f7dfad4..3929a877aa279 100644
-> --- a/Documentation/netlink/specs/rt-route.yaml
-> +++ b/Documentation/netlink/specs/rt-route.yaml
-> @@ -116,6 +116,29 @@ definitions:
->        - rpl
->        - ioam6
->        - xfrm
-> +  -
-> +    name: seg6-local-actions
-> +    type: enum
-> +    name-prefix: seg6-local-action-
-> +    enum-name:
-> +    entries:
-> +      - unspec
-> +      - end
-> +      - end-x
-
-[ ... ]
-
-> +      - end-bpf
-> +      - end-dt46
->  
->  sub-messages:
->    -
-
-[ ... ]
-
-> @@ -624,6 +650,35 @@ attribute-sets:
->        -
->          name: name
->          type: string
-
-[ ... ]
-
-> +  -
-> +    name: seg6-local-flv
-> +    name-prefix: seg6-local-flv-
-> +    attributes:
-> +      -
-> +        name: operation
-> +        type: u32
-
-[Severity: Medium]
-Should the operation attribute here also carry an enum annotation, with
-enum-as-flags: true?
-
-SEG6_LOCAL_FLV_OPERATION does not carry an ordinal, it carries a bitmask
-built from the flavor-operation enum in include/uapi/linux/seg6_local.h:
-
-enum {
-	SEG6_LOCAL_FLV_OP_UNSPEC,
-	SEG6_LOCAL_FLV_OP_PSP,
-	SEG6_LOCAL_FLV_OP_USP,
-	SEG6_LOCAL_FLV_OP_USD,
-	SEG6_LOCAL_FLV_OP_NEXT_CSID,
-	__SEG6_LOCAL_FLV_OP_MAX
-};
-
-net/ipv6/seg6_local.c turns those into bit positions:
-
-#define SEG6_F_LOCAL_FLV_OP(flvname)	BIT(SEG6_LOCAL_FLV_OP_##flvname)
-
-and seg6_local_init() confirms the u32 attribute holds one bit per
-operation:
-
-	BUILD_BUG_ON(SEG6_LOCAL_FLV_OP_MAX + 1 > BITS_PER_TYPE(__u32));
-
-parse_nla_flavors() reads the attribute and validates it against the
-per-action supported-ops mask, and put_nla_flavors() writes finfo->flv_ops
-back, so both directions are masks.
-
-As written, a user-space client generated from this spec sees an opaque
-integer, and setting it to 4 for next-csid means BIT(2), i.e. USP, or
-gets rejected with EINVAL depending on the action.
-
-The sibling rt-* specs describe such fields with a flags definition plus
-enum-as-flags, for example ifa-flags in
-Documentation/netlink/specs/rt-addr.yaml and ifi-flags in
-Documentation/netlink/specs/rt-link.yaml.
-
-Since the same patch does add enum: seg6-local-actions for the action
-attribute, the two enumerated fields of the same uAPI header end up
-described inconsistently: action decodes symbolically while operation
-stays a plain integer.  Would it make sense to add the matching
-type: flags definition (unspec/psp/usp/usd/next-csid) here as well, given
-that the generated enum names are themselves user visible and changing
-them later is awkward?
-
-> +      -
-> +        name: lcblock-bits
-> +        type: u8
-> +      -
-> +        name: lcnode-fn-bits
-> +        type: u8
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260917-ynl_rt_encap-v1-0-fbbe6e680571%40kylinos.cn
+> [...]
