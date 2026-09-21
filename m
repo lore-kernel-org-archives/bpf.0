@@ -1,71 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81B7376A12;
-	Mon, 21 Sep 2026 19:15:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D2153932D9
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 19:25:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790018134; cv=none; b=AbGZeTeKa6rIzFTfM+/j4XJ+q5jQyhoUCgsfh1P4BK5MdMae6H/2mimhgMm8ZMBeHPFjYxpGfu7tSx3olNtyVQpapgwzzSJX6vNXVi641OwB+bCh6VqnykrTu168q9gbsVUkPzdnAymcaeS1fObUcWx+rltz6MAmKBDgKVQfnfY=
+	t=1790018740; cv=none; b=nhTB5rmdwPtAICpW4gA9JGyRAfhqAdgnnBSIfKHoBaXIFf2eUK4w+NskTwYxFM2eQY32BvIpejukJg89pfdH2xM6YweT+khMl7TzsB9kHrbXVa/4efGuY2ouE59SsWVSLk5qwhY9jqe5V1CWYScBLL/5nhCGVP/Og8AnXEsZBMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790018134; c=relaxed/simple;
-	bh=1DtMai3V3kiVLqjineDsFbm8zZzMEdYBtgrN2LZaJ4U=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=nq5jNvNjai3a6BxldDO2CbX+h+WsFKHgzOITTKvqVSptDGUqfM8+QHQSRxOaqyCcM7zRehvS2EctypdtAV6QopQHZLo2EIxeLxqNGeZT/nAKowfJNQbegcmUwc4nKVKZoSshgsnfkHQpWZhg2Cn6Qa+TEZoFq+YOgKqIt5sfTSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a02abwHi; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790018740; c=relaxed/simple;
+	bh=cLiYL9rGQYToozjHmCoO/++POUwLYi62770zyxP5zbw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=WybwAyYxBMcgXBqaWdx80/xOi0xnpJFpVWnKNPwp5qLtujGMAJVbcFOiygJigYuH29wPa44BfzCsVH8WUzd3ph/wrbn0fS9Yajb3xgSj1m+2CBWTVmBokCH1DanZDJrQjUyz96ttqjlp8mvJ1m8E20Q7Kpyn29Ghky2CvzWeCY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T6StEWer; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a02abwHi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A774D1F00893;
-	Mon, 21 Sep 2026 19:15:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T6StEWer"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEE4F1F00893;
+	Mon, 21 Sep 2026 19:25:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790018133;
-	bh=8hSkDufjo3UYdhcc6/PO/YCzjZj51zL1OxsBdaPWaTA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=a02abwHizeexXH8wXiUh7evoTHc9Ls8fAxrcjDmU7yj6FsKDRJlPXezmUTV71uNLk
-	 XTvEYUD9RzJrG/RmhAe6dLgFmL4RgaC0v0qyx1EnGHRUE7l++xgBVuUDr3M0vTrNQ3
-	 rmSwLh181vfoqYzm1+VMwjJisKVmoNGaMtXvt+YH/H4j/sSi9IoLMvtu1AG1B3IrCr
-	 6R/lsdBHuyOPF6szN5jipDH6wSkFEfONxM4nfQ56dzVX0ffidfYURERsyHtIpsCbDk
-	 W05xC8NdL4rnaMCRJ4T1jwLa0NHIRQNaY62u2++sE5VngSEwsOZPvBjrlFxoItRX6C
-	 IWuZljjsykTEg==
-Date: Mon, 21 Sep 2026 09:15:32 -1000
-Message-ID: <2460bfe776dad67779dbd5526c14d31a@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Usama Arif <usama.arif@linux.dev>
-Cc: arighi@nvidia.com,
-	bpf@vger.kernel.org,
-	bsegall@google.com,
-	changwoo@igalia.com,
-	dietmar.eggemann@arm.com,
-	etsal@meta.com,
-	juri.lelli@redhat.com,
-	kprateek.nayak@amd.com,
-	linux-kernel@vger.kernel.org,
-	mgorman@suse.de,
-	mingo@redhat.com,
-	peterz@infradead.org,
-	rostedt@goodmis.org,
-	sched-ext@lists.linux.dev,
-	tj@kernel.org,
-	vincent.guittot@linaro.org,
-	void@manifault.com,
-	vschneid@redhat.com,
-	yphbchou0911@gmail.com
-Subject: Re: [PATCH 0/2] sched_ext: Specialize TID and scheduler hashtable
- compares
-In-Reply-To: <20260921185943.4031480-1-usama.arif@linux.dev>
-References: <20260921185943.4031480-1-usama.arif@linux.dev>
+	s=k20260515; t=1790018739;
+	bh=Ty/LszTCfWxgfSCNdrzpWzoUMPgzOPK0iDLaoKwiz5w=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=T6StEWerHDIp8rRQfJ1OiBu2hknimmJM4fO6UdipSfWzt4lcqfgoeLMCMweQSQW+w
+	 qKIgoZKYUCPA/E0lLRbMX0l6IhLwVuqSAEdy9ayc7dSIG09M3VcyfJMh/5GnaZzo82
+	 Ht4y26ZhfTawcpq61Ug75fg+0tzy415SxJWPLl5/HQ+noSf4tOPuyNkWSEUXnR22Yn
+	 aIXv0xx8FbtoARJXs6QMhkoX4sAWTCmtVOWXVmwDLcNcCV4JRxdSeg6gETba6fdmLc
+	 eiYmPz368iQo5rJ0aLghQHJLCtDGye+zGmos7KcqddukX2OUhb9bMnEtg7inypELIB
+	 CHW9s56ub1ZNA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v5 2/4] selftests/bpf: Add tests for
+ bpf_call_rcu()
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Puranjay Mohan" <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260921191407.1742386-3-puranjay@kernel.org>
+References: <20260921191407.1742386-1-puranjay@kernel.org>
+ <20260921191407.1742386-3-puranjay@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Mon, 21 Sep 2026 19:25:38 +0000
+Message-Id: <20260921192538.EEE4F1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-> Usama Arif (2):
->   sched_ext: Specialize the TID hashtable compare
->   sched_ext: Specialize the scheduler hashtable compare
-
-Applied 1-2 to sched_ext/for-7.4 with the scx_tid_cmpfn() signature joined
-onto one line.
-
-Thanks.
-
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] bpf: selftest sleepable_callback fails to properly test callback=
+ restriction
 --
-tejun
+
+commit 8dcd9155da335ebebbf25f7c26266814bb232e74
+Author: Puranjay Mohan <puranjay@kernel.org>
+
+selftests/bpf: Add tests for bpf_call_rcu()
+   =20
+This commit adds selftests to cover bpf_call_rcu() functionality, checking
+grace periods, callback re-arming, teardown handling, and negative tests
+including verifier rejection of a sleepable callback.
+
+> diff --git a/tools/testing/selftests/bpf/progs/call_rcu_fail.c b/tools/te=
+sting/selftests/bpf/progs/call_rcu_fail.c
+> new file mode 100644
+> index 0000000000000..bf60a27731fb3
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/call_rcu_fail.c
+
+[ ... ]
+
+> +SEC("syscall")
+> +__failure __msg("sleepable helper bpf_copy_from_user") __msg("in non-sle=
+epable prog")
+> +int sleepable_callback(void *ctx)
+> +{
+
+[Severity: Medium]
+Does SEC("syscall") cause this test to pass for the wrong reason?
+
+Since the main program is marked as non-sleepable, the verifier will reject
+the sleepable helper regardless of the callback context. Should this be
+changed to SEC("syscall.s") so the main program is sleepable, which would
+properly force the verifier to reject the helper purely because it is inside
+the non-sleepable callback context?
+
+> +	struct elem *e;
+> +
+> +	e =3D bpf_map_lookup_elem(&arr, &key);
+> +	if (!e)
+> +		return 0;
+> +	bpf_call_rcu(&e->rh, &arr, sleepable_reclaim);
+> +	return 0;
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260921191407.1742=
+386-1-puranjay@kernel.org?part=3D2
