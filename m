@@ -1,230 +1,337 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+Received: from mta0.migadu.com (out-142.mta0.migadu.com [91.218.175.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505703033EC
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 02:44:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.141
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789958688; cv=pass; b=ERrH+gA5Ev6dQxApFIOhm66BKne0sMuMJXai2j2uh4lgL3+wRnz6xQploJh04agrrAuPROVuOSpFOiuwoEKM/+0poN4RcbfIVV2zVFOk1Smu1GgcLpIATXXEaNe4X6v2raaonWA4yKUahwzdle8OqYa4+gD29CBftwEVFGXeU6M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789958688; c=relaxed/simple;
-	bh=bvJeiEbXoWPFF06hCLDrPbaWPob0szAckAtK0XuiYME=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SSgOUAalw9X/CsaCo+XNnKu4lwYSPI7fEnHhvjbym9NkWvINzWtsYrxUyAWRNjIykVBEkZGh8f5ysTZLhxG4kYcJ9CYAw066KWzD35BIbZMZY3D6ktynxcm+UmcXtbBnQ0weeAQfxUGlXKTB/RUHh9zRZRA7JYMvYNYYXdgYuVc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Cii1ic2f; arc=pass smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 288A226FDAC
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 03:09:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.142
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789960166; cv=none; b=f1WSVJ/8UaE3P4IGJ+rjZfuwkJ2CEhLarp50HB2Q8mgI1rgE53fP7lC9d5es5Kx5mN8GlvEWNVlTuqVSWxCILBcmwhPZO+Rp2YH8J2KqvsHu7Igd0aGpx6YWgcLkHgxy3pGNidxDvzgaCrQuhXwPrHwHBboUfcicoZ177T2tnag=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789960166; c=relaxed/simple;
+	bh=Pr36zQGGDXb1592EAcgXlxtVmVxsnSiLjuYzQo3Q1fw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Rp3Di80Cgp1rfUVexleGkGGR+QSTMNxQtGNYy3fhYZZEvYPF82Et88ad0uZ3C8hO0q/ez1CJe5VUA3WlmjSoF/n5650xVSvqnjJ6IJEsCzHWU3GClWCpQyDamV0xoO1OKWz5akE6fq41SHoksjkBSuKUoDJ2SVM/ODHgolG6LWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kEiHRa+q; arc=none smtp.client-ip=91.218.175.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Cii1ic2f"
-Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d747eb79f6so15195635ad.0
-        for <bpf@vger.kernel.org>; Sun, 20 Sep 2026 19:44:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789958687; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Ivnr53wVyQpF3vDN2UfP2Z/CSi1qwxA5Ioi5Xx/Ir2oz+1ESO5tGF/7OyES3tKnQjA
-         R9IVXHnAFON4P7QToFBImkz4LVP6YO/+i2k+yg3Kog6TOduOJvmZEfa6uFP+x/t4OxAa
-         rj55pvC5x5oaHXmhHFWWLYvL5ehsX1nOuWZHT3appiPlD1vIuburMKFKdwe4Kpf0sDZm
-         Z0w85ft70GB2lYHWWNqff/QDCaOekH38mkjTo6kcsYE/WcK3UK1jt6vk8GXO22XOfyPf
-         7L/8k1j5HDGCAls1c1UQJjKgU07JaPiAU/kd9H1yVj3FwWZ69JVbis9NAjFSYTfkVk5C
-         zp2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=2Tev7/sptcmKn54rHbAqw+siNwCkqV/Wt6jvN5QgiB0=;
-        fh=yzPjHCZygnB8U5/KB4ua28QtwqQWCVYbaWZbkkPJclc=;
-        b=LD+GEB2KChRGtohqbWKPt/0cyRpkjieD2StX0XSfXKS9xKoVTGIobNMuzihyjjVbUu
-         bsrnuNLXxvfsWw0c+2H33g2eF6nZY7S6HuQFlbNAoQoiqxuEwSzmXA7bLlzztZFCnKCz
-         j38rl56KaLfhIFOjtBp/3eR1jx1i6qy+PYHlkka1L5YCwsf9ypBwkoC24Who5lglSkCm
-         4nFlkfTDu8uBlJ2H0OhdSDAHxH2FuVTTUSoxa/z+NYGAxuDNgc/xthJx4hpskdAc2fMG
-         jOi+NgAfV+iB1ZNADM3tdB80JbGPmXKdoWyR/Izpi7pDzlsxDMkuueh7xalE4u2lokiQ
-         k/7Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1789958687; x=1790563487; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=2Tev7/sptcmKn54rHbAqw+siNwCkqV/Wt6jvN5QgiB0=;
-        b=Cii1ic2f1/HniWBWYRJdEoBwduoNrwQ+QHomh5y50PUaeLteRWCKSNui98aYanv3JS
-         Ry69fHwBNblqQzn3iSXB5NVCXBOW/TZGO+c/Pzi89tDYLOzy6+0/n+9edPm+HKINo9Zt
-         OmEXoKLY7RBRUH1QYaFFeh5GxiQDy81jHNZOq/AGAz0oW5gOl5pE2an7zVMsVq6KW1Er
-         w5gDeOFOURUvfjJaB0hXWdql/MtcQoyxajD/0JQJMLAMI0ucUF516q+ClKagjSkRQ7SC
-         40p+WvFXxDMgPQtZtcvK0qt79cXRKB+lOzHXfV6yCnLv2knRT7wHCUEBaJmxXLr1MjTN
-         bzyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789958687; x=1790563487;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=2Tev7/sptcmKn54rHbAqw+siNwCkqV/Wt6jvN5QgiB0=;
-        b=DgxE0tr4qlaYkcN/sZ0ldn4kB/eJk6vd25L1AcbbHnLFMaoNY0gNz6fe7nveGCgc+B
-         Od1f1nl35fYsAOhY8pXd5uf88VkVq9+QaFDAmFZ5UFf/c+XSOCYpKc+ImKF6TH84U6pu
-         Ual09+jblFdXdxLTAzCBsoa7KWm9/dblBr+0sLP8+h0bnBii2+OMtdLch+q+50ZraZUs
-         /iMvuM1VdlQ1dtt/+YPIul9IQYzlmz579iYAvN+wG6oWkgkijbnGaPb69rWp1mspK7QL
-         4bwLIYwq8thkGPBtu4XFkw0PzdRwjuz51rYmoYsOaLeJyoW0x81zt1bt0VR04zmh5P5o
-         lAng==
-X-Forwarded-Encrypted: i=1; AKwUvBwILjN/hx09U6Au/1Qk2482l6fk/O1nZ3Ff5klewK3UoCo1l3dmN1VhzQl5tDnRNEEb5Hw=@vger.kernel.org
-X-Gm-Message-State: AFuF++mDEWqO/g3OU0C7E1asm5DiEKf9pdhFuFbGttcYeLmUSWkODOwX
-	stgdKFbJEW5eBT0jm64w86t5diALl7fvqqbszndA1dhCnfn2gBELn+evuZjQLv7ixn4I1wNPLiZ
-	tbUoDJvjIQ+mzTxeoLkSMrO7FEk+Ny97GSDKQEo0b
-X-Gm-Gg: AYBFou0sl2LrukBeMn4bsE99Ozg0W+hLUTL8UKr2PIhDy6I4dqN0p2YiP3WZrpqyDm+
-	Jt3ZWNKvLaXRx45q+7s2GVi/+Ie+s2amQpYKQim+JoecG1nm1UmegOyfewfC2Z0yYrRNRQPOTqu
-	Ki7yxyDJtZUICAGtTHjxfFfgRp57IP9kkbVIKK98yDHNJlFXAcfz+e3o8p+r/ckRdVmnI7TYxOB
-	nWQZ8klYEEElWLzCp6roZvM0rZ+IsuAxNU5K6OXbYY24UTWyQvNZ74zsrI0tEiZ1OZyNr/FIWDJ
-	tJxswKbilbAz87jPmbeJWgc2UKJ7y7x1DNXmYq6a+LrBqwB+ZN3NbK1yYh531iIgwEgRzoqatvC
-	h830cP5HQbAuo0IEJWnM=
-X-Received: by 2002:a17:902:ce0c:b0:2dd:ad73:c989 with SMTP id
- d9443c01a7336-2ddb1bc360emr136942245ad.33.1789958686614; Sun, 20 Sep 2026
- 19:44:46 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kEiHRa+q"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Pr36zQGGDXb1592EAcgXlxtVmVxsnSiLjuYzQo3Q1fw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789960160; v=1; x=1790564960;
+ b=kEiHRa+qoL98GI3nIEwcIfue06kr2PGmVv1FnhhNYcSh8vFWgkpFD9S/O+J6O8a/+drDPVD6
+ nUI7X2NJQXISXebWcprF4XdC/wgmNbpmRw7uczi0lXu9P0GJsRmKIxseBTv2bWETJIsNMLbMcxd
+ 3bUaQ+k/bpTWfUgbaDx6ff2Y=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta11.migadu.com with ESMTPS id 33f18758b0cca24e;
+	Mon, 21 Sep 2026 03:09:19 +0000
+X-Mizu-Trace-ID: 33f18758b0cca24e
+X-Migadu-Flow: FLOW_OUT
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Roman Gushchin <roman.gushchin@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	Barry Song <baohua@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>,
+	JP Kobryn <jp.kobryn@linux.dev>
+Subject: [PATCH v13] mm/bpf: Add bpf_proactive_reclaim kfunc
+Date: Mon, 21 Sep 2026 11:08:54 +0800
+Message-ID: <20260921030854.17858-1-hui.zhu@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAHC9VhTM7emi9vxs+5Za8Hrc_e9dg7fZx+Z6BGUc4VQ1qhEAUA@mail.gmail.com>
- <DLD0VQ3D8CYC.3V5ZT8HDMY4IH@gmail.com> <aqTZdCz6JaoK16Fp@zenbox>
- <DLDL7KK3FZKU.17ADLLWJVXB5F@gmail.com> <CAHC9VhS0JckwfomqLTUJkZZkDSgeRXYOjMmPQYErgYynQYqMKQ@mail.gmail.com>
- <CAADnVQJCJjy9Eiwn6-88c0iOk4LfgPU6KBv+w0JZdBzmXBMUCw@mail.gmail.com>
- <CAHC9VhTh446SkpPF-hUiLYOHipuurzkgju_nH9LsRGdERSAL1w@mail.gmail.com>
- <CAADnVQLZscKkCxvK5puuOE1aN8nW6PnaS+_dx_zBQjjP2T-DFg@mail.gmail.com>
- <20260915-laken-ferngeblieben-verflachen-bafe1f296b02@brauner>
- <CAHC9VhTC5YvALs5K76qDBP9bDRpZPc_V-U8DPZ8qhNsCsXyLnQ@mail.gmail.com> <20260916-vollrausch-tango-bagger-420300d403c7@brauner>
-In-Reply-To: <20260916-vollrausch-tango-bagger-420300d403c7@brauner>
-From: Paul Moore <paul@paul-moore.com>
-Date: Sun, 20 Sep 2026 22:44:34 -0400
-X-Gm-Features: AcwNN1XwWf1qiBIc7wIqlPXy7pUKTJ8jTM7dbiiGU__XYQo3ndI3fN_ernAyi1A
-Message-ID: <CAHC9VhR9dBMptt2tQLjvkTjXsJd+uDGxOAoEGR6iMQkPWMFsAw@mail.gmail.com>
-Subject: Re: LSM boundaries. Was: [PATCH bpf-next v3 04/15] lsm: Add the
- bpf_lsm_policy_release kfunc and policy object destructor
-To: Christian Brauner <brauner@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Justin Suess <utilityemal77@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, KP Singh <kpsingh@kernel.org>, 
-	Matt Bobrowski <matt@bobrowski.net>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Kees Cook <kees@kernel.org>, 
-	Casey Schaufler <casey@schaufler-ca.com>, =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Jan Kara <jack@suse.cz>, Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Eduard <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Tingmao Wang <m@maowtm.org>, bpf <bpf@vger.kernel.org>, 
-	LSM List <linux-security-module@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 16, 2026 at 4:48=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
-> On Tue, Sep 15, 2026 at 09:48:59AM -0400, Paul Moore wrote:
-> > On Tue, Sep 15, 2026 at 9:00=E2=80=AFAM Christian Brauner <brauner@kern=
-el.org> wrote:
-> > > On Sun, Sep 13, 2026 at 07:24:14PM -0700, Alexei Starovoitov wrote:
-> > > > On Sun, Sep 13, 2026 at 5:10=E2=80=AFPM Paul Moore <paul@paul-moore=
-.com> wrote:
-> > > > >
-> > > > > On Sun, Sep 13, 2026 at 7:25=E2=80=AFPM Alexei Starovoitov
-> > > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > > > On Sun, Sep 13, 2026 at 12:41=E2=80=AFPM Paul Moore <paul@paul-=
-moore.com> wrote:
-> > > > > > > On Sat, Sep 12, 2026 at 3:33=E2=80=AFPM Alexei Starovoitov
-> > > > > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > > > > > On Fri Sep 11, 2026 at 10:26 PM PDT, Justin Suess wrote:
-> > > > > > > > >
-> > > > > > > > > If fs/, mm/, drivers/, net/, are permitted to have kfuncs=
-, then why not
-> > > > > > > > > security/? kfuncs.rst doesn't seem to forbid this.
-> > > > > > > >
-> > > > > > > > because fs, mm, net see the value in bpf. bpf helps these s=
-ubsytems
-> > > > > > > > to focus on their core technologies and moves policy decisi=
-ons out of
-> > > > > > > > kernel and into bpf.
-> > > > > > > > while lsm people treat bpf as arch-enemy.
-> > > > > > >
-> > > > > > > It's amusing to read this when just this week we merged a pat=
-chset
-> > > > > > > into the LSM tree for the benefit of those writing BPF LSMs. =
- If you
-> > > > > > > look at the discussion around patch 2/2 you will even see a r=
-easonable
-> > > > > > > exchange between Matt Bobrowski, a BPF LSM maintainer, and me=
- about
-> > > > > > > the patch.  Alexei is obviously welcome to his own opinion, b=
-ut I
-> > > > > > > would encourage those reading this thread to look beyond his =
-comments.
-> > > > > > >
-> > > > > > > https://lore.kernel.org/linux-security-module/20260904-lsm-mo=
-unt-idmaps-v3-0-920a1963675d@amutable.com/
-> > > > > >
-> > > > > > And that's an example of unacceptable land grab by LSM folks
-> > > > > > that I'm concerned about.
-> > > > >
-> > > > > I made sure that patchset was ACK'd or Reviewed-by'd a VFS mainta=
-iner,
-> > > > > a BPF LSM maintainer, and the Smack maintainer before merging (I
-> > > > > covered the LSM and SELinux parts).  You might want to double che=
-ck
-> > > > > your definition of "land grab".
-> > > >
-> > > > You're still missing the point.
-> > > > Christian could have landed it via vfs tree with your ack for secur=
-ity/*.
-> > > > You have no power over lsm hook changes within vfs.
-> > >
-> > > Which tbf is generally how I like to handle thing especially since we
-> > > usually have a lot of changes. But I'm open to shared branches as wel=
-l.
-> > >
-> > > So I think we naturally have to modify existing LSM hooks. But it's
-> > > shared pain. Since we use BPF LSM heavily in systemd we generally hav=
-e
-> > > to absorb such growing pains as well.
-> >
-> > I have no problem with topic branches that various trees can pull, but
-> > I do have an issue with the VFS tree merging patchsets that haven't
-> > been properly ACK'd as well as the VFS tree creating topic branches
-> > for patchsets that aren't primarily VFS changes.  See below:
-> >
-> > https://lore.kernel.org/linux-security-module/CAHC9VhTE82bRRSXSUuMOdrfo=
-Mh=3DxOb5hDvqiKWzBKD1urab3hA@mail.gmail.com/
-> >
-> > Christian, if you want us to move forward with topic branches in the
-> > LSM tree for LSM changes that touch fs/ code I'm happy to do that, but
-> > I need an acknowledgement from you that the behaviors mentioned above
-> > will be cleaned up in the future.
->
-> This is another instance where one of your mails around how to organize
-> process ends up reading like you're lecturing your peers. This is not
-> just my impression btw. That impression is shared by other subsystem
-> maintainers - including in your own.
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-If my comments came across as a lecture, you are likely hearing the
-frustration of having to revisit a topic where my past requests for
-some mutual understanding on process have been ignored or silently
-discarded.  If you have been offended by the tone of my comments,
-please understand that I have been offended by your actions.
+BPF programs can observe memory pressure on a cgroup, e.g. refault
+stats via bpf_mem_cgroup_page_state(), but cannot act on it:
+triggering reclaim requires writing to memory.reclaim, which BPF
+cannot do.
 
-> If another subsystems hooks into the vfs layer or filesystems that the
-> vfs trees maintain then the default will always be that the vfs layer
-> provides the shared tree to pull.
+Add bpf_proactive_reclaim(), a sleepable kfunc performing one
+proactive reclaim pass on a memcg, like a write to memory.reclaim
+but without retrying until the target is reached, so that when and
+how hard to reclaim is BPF policy rather than hard-coded thresholds.
+The reclaim target of a single call is capped at MEMCG_CHARGE_BATCH,
+as high_work_func() does for memory.high; reclaiming more is left to
+the program, which can call the kfunc once per bpf_wq callback and
+stop at any point. It is limited to BPF_PROG_TYPE_SYSCALL, because
+other sleepable programs may run with filesystem locks held, on
+which the reclaim path could deadlock via filesystem shrinkers.
 
-Regardless of how we got here, I think we can agree that we both want
-to sort this out and find a way to work better moving forward, yes?
+Convert MIN_SWAPPINESS, MAX_SWAPPINESS and SWAPPINESS_ANON_ONLY from
+macros to an enum so that they are emitted into BTF and usable from
+BPF programs via vmlinux.h.
 
-My request is the same as it ever was: please don't merge code for one
-of the subsystems I am responsible for maintaining without an explicit
-ACK or reviewed-by tag on the patch{set} you are merging.  As for who
-merges what, and where, considering past history, I think it's
-probably going to be difficult to find a single generic rule that will
-make both of us happy.  Perhaps we can simply agree to have a
-discussion about where the patches are merged when we are
-ACK'ing/Review'ing them?  In other words, there would be no default
-merging tree/branch, the default would be for us to discuss how best
-to get the changes in Linus' tree on a per-patchset basis.
+Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+Acked-by: Shakeel Butt <shakeel.butt@linux.dev>
+Reviewed-by: JP Kobryn <jp.kobryn@linux.dev>
+Reviewed-by: Barry Song <baohua@kernel.org>
+---
+Changelog:
+v13:
+According to the comment of Shakeel, send this patch alone.
+According to the comment of JP, document
+@swappiness as [MIN_SWAPPINESS, MAX_SWAPPINESS] with -1 and
+SWAPPINESS_ANON_ONLY as special modes; validate -1 and
+SWAPPINESS_ANON_ONLY as special values instead of range endpoints, so
+the check no longer depends on the enum layout. No change in accepted
+values.
+v12:
+Redo performance tests and update performance data.
+According to the comments of Barry, fix comments issue.
+Based on the AI review and my re-examination of selftests, updated the
+contents below.
+Express RECLAIM_SIZE in bytes so it is right on non-4K page kernels.
+Drop the local PAGE_SIZE macro, RECLAIM_SIZE is now a byte count.
+Remove the unused bpf_helpers.h, bpf_tracing.h and bpf_core_read.h.
+Rename CLOCK_MONOTONIC_ID to CLOCK_MONOTONIC to match the kernel.
+Drop the CSS_DYING test, it is never set on a cgroup's own css.
+Document that the lookup fails inside rmdir(), not at last put.
+Count bpf_timer_start() failures so a stalled loop is visible.
+Record the kfunc errno so failure is not read as an idle cgroup.
+Note that an idle tick discards the refault delta.
+Reject tmpfs for /tmp and the working dir, else the workload OOMs.
+Pass the mkstemp() fds to the children so no stale path is reopened.
+Read the timing file with lseek() and read() on the shared fd.
+Write the timing with snprintf() and write(), checking truncation.
+Close the data and time fds on every cleanup path.
+Remove fcntl.h, nothing calls open() any more.
+Factor disable_swap() out of the two cgroup setups.
+Recreate the cgroups between bench runs so both start cold.
+Guard the speedup calculation against a zero baseline.
+Drop the non-bench timing printf, it was noise on passing runs.
+Assert only TARGET_GONE, the outcome rmdir() actually guarantees.
+End the wait loop only on target_gone so later events are seen.
+Compare reclaimed_bytes against 0, a check that can now fail.
+Poll the keepalive reader with WNOHANG and report its exit code.
+Clear reader_pid after reaping so cleanup cannot kill a new PID.
+Rename the ring_buffer__poll() result to n, it counts events.
+Print timer_failures and last_reclaim_err when an assert fails.
+Explain why bench_printf() needs the stdout fallback and no # prefix.
+v11:
+According to the comments of Kumar, fix reclaim_cgroup() to not treat
+a negative bpf_proactive_reclaim() return as reclaimed bytes.
+According to the comments of Shakeel, shorten the commit message.
+v10:
+According to the comments of JP, drop redundant swap.h include, turn
+swappiness macros into a BTF-visible enum, and clarify the -1 swappiness
+semantics in docs and code in code patch.
+report each reclaim outcome via ringbuf and wait for events with timeout
+instead of sleep-polling, log workload timings instead of failing on
+them, drop a debug printf, and add a TEST_MEMCG_ASYNC_RECLAIM_BENCH
+baseline-comparison mode in the selftests patch.
+Include the benchmark numbers in the cover letter.
+v9:
+According to the comments of JP, copy the motivation from the cover
+letter to the commit message, restructure the kfunc documentation
+to separate the direct and asynchronous calling contexts, fold the
+fs-lock warning into the SYSCALL-only rationale, soften the "bounded
+unit of work" wording (only the reclaim target is capped), and drop
+the redundant comment above the reclaim kfunc set registration.
+v8:
+According to the comments of Andrew, Kumar and Shakeel, drop the
+bpf_in_reclaim_context() check because the SYSCALL-only restriction
+already rules out reentrancy.
+According to the comments of Kumar, Add the swappiness argument to
+bpf_proactive_reclaim().
+v7:
+According to the comments of JP, clamp the reclaim target of one
+bpf_proactive_reclaim() call to MEMCG_CHARGE_BATCH so each call is
+a bounded unit of work, and document the batching policy in the kfunc.
+selftest: check the target cgroup for dying state before reclaiming
+from it, and add the memcg_async_reclaim_dying test covering target
+removal while reclaim is running.
+v6:
+According to the comments of Kumar and Shakeel, Restrict
+bpf_proactive_reclaim() to BPF_PROG_TYPE_SYSCALL by moving it
+to a dedicated kfunc set registered for that program type only, and
+document the clean-process-context requirement in its kerneldoc.
+v5:
+According to the comments of Andrii, Kumar and Shakeel, remove
+bpf_proactive_reclaim_swappiness.
+v4:
+According to the comments of bot+bpf-ci and sashiko, also check
+current->reclaim_state to close the fentry-on-trace-iter recursion
+window in bpf_in_reclaim_context.
+Return bytes instead of pages ( nr * PAGE_SIZE ) in
+bpf_proactive_reclaim_pages and bpf_proactive_reclaim_swappiness.
+Return (unsigned long)-1 on out-of-range swappiness (was 0).
+Kdoc of both kfuncs: updated Return descriptions; added FS-lock deadlock
+warning to bpf_proactive_reclaim.
+Fix potential child process leak in selftests.
+Use _exit() instead of exit() in forked children in selftests.
+Rename reclaimed_pages to reclaimed_bytes in selftests.
+Fix comments issues in selftests.
+v3:
+According to the comments of bot+bpf-ci, add a shared helper
+bpf_proactive_reclaim_pages() that is called by bpf_proactive_reclaim
+and bpf_proactive_reclaim_swappiness.
+According to the comments of sashiko and bot+bpf-ci, fix the issues of
+selftests.
+v2:
+According to the comments of Shakeel Butt, replace
+bpf_try_to_free_mem_cgroup_pages() with
+bpf_proactive_reclaim(memcg, size) and
+bpf_proactive_reclaim_swappiness(memcg, size, swappiness).
+According to the comments of Kumar Kartikeya Dwivedi, drop patch 2
+and patch 3.
+Remove bpf_thread_wq code in patch 4.
+According to the comments of sashiko-bot, fix the issues of selftests.
 
-I'm sure you have your own thoughts, but I figured it would be helpful
-to get something out here as a start.
+ mm/bpf_memcontrol.c | 65 ++++++++++++++++++++++++++++++++++++++++++++-
+ mm/internal.h       | 10 ++++---
+ 2 files changed, 70 insertions(+), 5 deletions(-)
 
---=20
-paul-moore.com
+diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+index 716df49d7647..d8f579c28560 100644
+--- a/mm/bpf_memcontrol.c
++++ b/mm/bpf_memcontrol.c
+@@ -8,6 +8,8 @@
+ #include <linux/memcontrol.h>
+ #include <linux/bpf.h>
+ 
++#include "internal.h"
++
+ __bpf_kfunc_start_defs();
+ 
+ /**
+@@ -159,6 +161,51 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
+ 	mem_cgroup_flush_stats(memcg);
+ }
+ 
++/**
++ * bpf_proactive_reclaim - proactively reclaim memory from a memory cgroup
++ * @memcg: the target memory cgroup to reclaim from.
++ * @size: the amount of memory to reclaim, in bytes, clamped to
++ *        MEMCG_CHARGE_BATCH.
++ * @swappiness: the reclaim swappiness, in the range [MIN_SWAPPINESS,
++ *              MAX_SWAPPINESS], or one of the special modes: -1 to use
++ *              the memcg's own swappiness, or SWAPPINESS_ANON_ONLY to
++ *              reclaim only anon folios.
++ *
++ * Performs one proactive reclaim pass on @memcg, like a write to
++ * memory.reclaim but without retrying until @size is reached. Call it
++ * repeatedly to reclaim more than one batch.
++ *
++ * Only available to BPF_PROG_TYPE_SYSCALL, because other sleepable programs
++ * may run with filesystem locks held, which the reclaim path can deadlock
++ * on via filesystem shrinkers.
++ *
++ * Return: The amount of memory reclaimed, in bytes, or a negative error.
++ */
++__bpf_kfunc long bpf_proactive_reclaim(struct mem_cgroup *memcg,
++				       unsigned long size,
++				       int swappiness)
++{
++	unsigned long nr_reclaimed;
++	unsigned long nr_pages;
++
++	if (swappiness != -1 && swappiness != SWAPPINESS_ANON_ONLY) {
++		if (swappiness < MIN_SWAPPINESS || swappiness > MAX_SWAPPINESS)
++			return -EINVAL;
++	}
++
++	if (size < PAGE_SIZE)
++		return -EINVAL;
++
++	nr_pages = min(size / PAGE_SIZE, (unsigned long)MEMCG_CHARGE_BATCH);
++
++	nr_reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages, GFP_KERNEL,
++						    MEMCG_RECLAIM_MAY_SWAP |
++						    MEMCG_RECLAIM_PROACTIVE,
++						    swappiness == -1 ? NULL : &swappiness);
++
++	return nr_reclaimed * PAGE_SIZE;
++}
++
+ __bpf_kfunc_end_defs();
+ 
+ BTF_KFUNCS_START(bpf_memcontrol_kfuncs)
+@@ -174,19 +221,35 @@ BTF_ID_FLAGS(func, bpf_mem_cgroup_flush_stats, KF_SLEEPABLE)
+ 
+ BTF_KFUNCS_END(bpf_memcontrol_kfuncs)
+ 
++BTF_KFUNCS_START(bpf_memcontrol_reclaim_kfuncs)
++BTF_ID_FLAGS(func, bpf_proactive_reclaim, KF_SLEEPABLE)
++BTF_KFUNCS_END(bpf_memcontrol_reclaim_kfuncs)
++
+ static const struct btf_kfunc_id_set bpf_memcontrol_kfunc_set = {
+ 	.owner          = THIS_MODULE,
+ 	.set            = &bpf_memcontrol_kfuncs,
+ };
+ 
++static const struct btf_kfunc_id_set bpf_memcontrol_reclaim_kfunc_set = {
++	.owner          = THIS_MODULE,
++	.set            = &bpf_memcontrol_reclaim_kfuncs,
++};
++
+ static int __init bpf_memcontrol_init(void)
+ {
+ 	int err;
+ 
+ 	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
+ 					&bpf_memcontrol_kfunc_set);
+-	if (err)
++	if (err) {
+ 		pr_warn("error while registering bpf memcontrol kfuncs: %d", err);
++		return err;
++	}
++
++	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
++					&bpf_memcontrol_reclaim_kfunc_set);
++	if (err)
++		pr_warn("error registering bpf reclaim kfuncs: %d\n", err);
+ 
+ 	return err;
+ }
+diff --git a/mm/internal.h b/mm/internal.h
+index 7c326965a94f..9e3be236f18c 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -77,11 +77,13 @@ unsigned long lruvec_lru_size(struct lruvec *lruvec, enum lru_list lru,
+ 
+ #define MEMCG_RECLAIM_MAY_SWAP (1 << 1)
+ #define MEMCG_RECLAIM_PROACTIVE (1 << 2)
+-#define MIN_SWAPPINESS 0
+-#define MAX_SWAPPINESS 200
++enum {
++	MIN_SWAPPINESS = 0,
++	MAX_SWAPPINESS = 200,
+ 
+-/* Just reclaim from anon folios in proactive memory reclaim */
+-#define SWAPPINESS_ANON_ONLY (MAX_SWAPPINESS + 1)
++	/* Just reclaim from anon folios in proactive memory reclaim */
++	SWAPPINESS_ANON_ONLY = MAX_SWAPPINESS + 1,
++};
+ 
+ unsigned long try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
+ 					   unsigned long nr_pages,
+-- 
+2.43.0
+
