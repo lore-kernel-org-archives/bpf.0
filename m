@@ -1,168 +1,216 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FFA2E6CB8
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:56:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FD833AFD16
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790027802; cv=none; b=tzlSbSamuwSNeT2Gs92h2AdblSDMyQLvos9v71VgvFIKsBpjwk8oDcv+iNEMLAvrjDc35OA5tBXU8J29BTDO7kwdDYTBgTMtDenswv9mzuFscIKnB1SwdgYIhoVqbpPkkuQBNFaGOSCE3gQgkOGKycwhKjZhTWzKuLMPh6ZJQ6o=
+	t=1790027805; cv=none; b=Vhi9smuJbiz9H2jlIgNhrtCPmE+DkDIZ1gUge/iYvaNCL6zXw3Wj7APw+wxDJCQSOA/nebAyrw14HvisZpMzGE4Muy7X5FxxAgxpnwEtRrTqYrzA9GiCbLNz2C89+EfMehbOizsIuc2rJs9IU7KHpoHLi0CDjh3aztgswfrq7v8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790027802; c=relaxed/simple;
-	bh=Y4d7nNsd7D3/9jMUHwzziuY/TIgXk473Z6diLSk91j0=;
+	s=arc-20240116; t=1790027805; c=relaxed/simple;
+	bh=wnX26qRjz/IZSwqT3nucbkbC5ifwBh5F0RmAuIWclBo=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=f8RBJ7CyIHvZp1q1Fj+7IzBDAa0+LB35FuIQKYCEpGy0ycuXNV4cgtm7oxG/R30IgfNfUU1WhomRh1yb4x91IF7LK56h6Cyo96mKRZbTiQ+RjWEy+J6ikm/UkZcluyIXxYDCoUztPn7YsjIHcqucGLONythG3sLbkbpL8FGFEmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gvzEAmKO; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=ZA+qb6qyeYDmwQS9pDh/+bfQ1uNDVcg+pL0dNG1e5EdvIMOVzpd+18giACDwlksMcveqkGdx+h46ur3UmObk5q2EZJ734hmtjLtaz+tf+Pe5cvzR2l943jtA7vUAic1VRpBLxGckrhOwM6mQOmRCkxueZjdt1wYGhEKqZ0Ezew8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GfkBJ3J/; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gvzEAmKO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E1A41F000FF;
-	Mon, 21 Sep 2026 21:56:39 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GfkBJ3J/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 553DB1F000FF;
+	Mon, 21 Sep 2026 21:56:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790027800;
-	bh=ctvH2/bDhiAwe3vaAtfoUXDgs1MRE/3LuoHM0L5jK50=;
+	s=k20260515; t=1790027803;
+	bh=QK+rtWC/kGXy381Hh3F76z4j82+qrLbYo/9LYN9F4TE=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=gvzEAmKOZ/nTQx8bG9fq9YAAOM7ZWWvSekIca2dwzpGzwRZj5U7BHjbFGpp5Uies8
-	 6a8pF5K2Bvna+uB4G3hPm6Mkq9B8fKXSYpDx+15Dlqei2GRDDy48hl1b5Ldbiutr3/
-	 1D2FRkaJQLbKe9qbTewwo2QbV8ysboXkTBTjLrududWMIIBGAWlI1MFBnLcPxvjFNC
-	 7oGRmQ4CcFkWYxmmuCw9sL47PvTGVQz5grKMkk509j0rODpMTa0AxHRrjx/8AwYMEQ
-	 WJD3ojI+nuy/c/fi9hHaVyxKYe0F4iX94ZrKhaXKN0FRHjTKdzDs8k5DrawcdhVeSU
-	 JolfZ1RSZ/StA==
-Content-Type: multipart/mixed; boundary="===============0334522547505686193=="
+	b=GfkBJ3J/yk5SWsVO37K1RJ35plx78kCYCfy/KDR7wLgxOc2mXBGcpzBERrrKkd7JR
+	 9kps18FPAk/DYLm0r6dG/7f4ue6z8ckzdgHHUavTeS6y7JvREO9Jrh1vemF2/6tgGI
+	 axvJoiFnEXe4FjC5rCBj134LYhEXwOiuPeghlCdWxFjgjSbUNTWSSzuEYWtcByW+qd
+	 UvNJZTH7BL0JCMI6DXYgvfaa7oUGzDzhR3gRESht74acf9SX2DM8cc7LvCT87STlRI
+	 KTcSzHmVlxqSLylhE1wafAybbSF8jDV0faqwVyVwhlLQ6jv9KmLQqaY276s4Q/DHL5
+	 dQRuchN/0ag7w==
+Content-Type: multipart/mixed; boundary="===============1652680925608114801=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f9dfcec80a2e1ed0d2362a2580f24da70dae6b2f4a734c59a806d2c33c2028b3@mail.kernel.org>
-In-Reply-To: <20260921210038.1715324-1-yonghong.song@linux.dev>
-References: <20260921210038.1715324-1-yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v4 01/20] bpf: Accept the compiler's exception cleanup table at program load
+Message-Id: <8e41c978495f9f21b81d1dcb6815e1ab5ba4a1485e544715e9baa1815eb64b82@mail.kernel.org>
+In-Reply-To: <20260921210109.1719713-1-yonghong.song@linux.dev>
+References: <20260921210109.1719713-1-yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v4 07/20] bpf: Refuse exception cleanup shapes bpf_throw() cannot dispatch
 From: bot+bpf-ci@kernel.org
 To: yonghong.song@linux.dev,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Mon, 21 Sep 2026 21:56:39 +0000 (UTC)
+Date: Mon, 21 Sep 2026 21:56:42 +0000 (UTC)
 
---===============0334522547505686193==
+--===============1652680925608114801==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: Accept the compiler's exception cleanup table at program load
->
-> LLVM 23 added exception handling support for BPF with the .bpf_cleanup
-> section ([1]). Rust code compiled with panic=unwind runs cleanup code
-> (Drop glue) when bpf_throw() fires, and the LLVM BPF backend emits that
-> section from the landing pads the frontend produced. Plain C cannot
-> generate .bpf_cleanup unless inline asm is used. The Rust compiler does not
-> *properly* support BPF exception handling yet, but the kernel can support
-> the table today, and inline assembly is enough to test it.
->
-> Add the UAPI to carry the .bpf_cleanup table into the kernel. BPF_PROG_LOAD
-> grows cleanup_info, cleanup_info_cnt and cleanup_info_rec_size, and struct
-> bpf_cleanup_info describes one record as a triple of instruction indices:
-> the half-open call-site range [begin_off, end_off) and the landing_pad_off
-> the frame resumes at. check_cleanup_info() validates the table a program is
-> loaded with, so the rest of the kernel can rely on it.
+> diff --git a/kernel/bpf/exception.c b/kernel/bpf/exception.c
+> index 67af78baa558..da8fa6eb7e4b 100644
+> --- a/kernel/bpf/exception.c
+> +++ b/kernel/bpf/exception.c
+> @@ -3,12 +3,24 @@
+>  #include <linux/bpf.h>
+>  #include <linux/bpf_verifier.h>
+>  #include <linux/btf.h>
+>  #include <linux/btf_ids.h>
+>  #include <linux/filter.h>
+>  #include <linux/slab.h>
+> +#include <linux/sort.h>
 
-This isn't a bug, but since the table is freed at the end of bpf_check()
-and nothing reads env->cleanup_info yet, would it help to say here that
-later patches in the series are the consumers, rather than that the rest
-of the kernel can already rely on it?
+This isn't a bug, but is <linux/sort.h> used by anything in this patch,
+or would it sit better in the later patch that adds the sort() call?
 
->
-> Link: https://github.com/llvm/llvm-project/pull/192164 [1]
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-
-> diff --git a/kernel/bpf/check_btf.c b/kernel/bpf/check_btf.c
-> index 0e8b3ccc7a5b..17af0a414d74 100644
-> --- a/kernel/bpf/check_btf.c
-> +++ b/kernel/bpf/check_btf.c
-> @@ -407,6 +407,153 @@ static int check_core_relo(struct bpf_verifier_env *env,
->  	return err;
->  }
->
-> +static int cleanup_insn_subprog(struct bpf_verifier_env *env, u32 off)
-> +{
-> +	struct bpf_subprog_info *info;
-> +
-> +	if (off >= env->prog->len)
-> +		return -1;
-> +	info = bpf_find_containing_subprog(env, off);
-> +	return info ? info - env->subprog_info : -1;
-> +}
-
-This isn't a bug, but would a name like cleanup_off_subprog() or
-insn_subprog_idx() read a little less like an action here, given it
-returns a subprog index?
-
-> +
-> +#define MIN_BPF_CLEANUP_INFO_SIZE	12
-> +#define MAX_CLEANUP_INFO_REC_SIZE	MAX_FUNCINFO_REC_SIZE
-> +
-> +static int check_cleanup_info(struct bpf_verifier_env *env,
-> +			      const union bpf_attr *attr,
-> +			      bpfptr_t uattr)
-> +{
-> +	u32 krec_size = sizeof(struct bpf_cleanup_info);
-> +	u32 i, nrec, urec_size, min_size, prev_end = 0;
-> +	struct bpf_cleanup_info *krecord;
-> +	bpfptr_t urecord;
-> +	int ret = -EINVAL;
-> +
-> +	nrec = attr->cleanup_info_cnt;
-> +	if (!nrec)
-> +		return 0;
-> +	/* Disjoint ranges, so no more records than instructions. */
-> +	if (nrec > env->prog->len) {
-> +		verbose(env, "cleanup info has %u records for %u instructions\n",
-> +			nrec, env->prog->len);
-> +		return -EINVAL;
-> +	}
-> +
-> +	urec_size = attr->cleanup_info_rec_size;
-> +	if (urec_size < MIN_BPF_CLEANUP_INFO_SIZE ||
-> +	    urec_size > MAX_CLEANUP_INFO_REC_SIZE ||
-> +	    urec_size % sizeof(u32)) {
-> +		verbose(env, "invalid cleanup info rec size %u\n", urec_size);
-> +		return -EINVAL;
-> +	}
-> +
-> +	krecord = kvcalloc(nrec, krec_size, GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
-> +	if (!krecord)
-> +		return -ENOMEM;
-> +
-> +	min_size = min_t(u32, krec_size, urec_size);
-> +	urecord = make_bpfptr(attr->cleanup_info, uattr.is_kernel);
-> +	for (i = 0; i < nrec; i++) {
-> +		struct bpf_cleanup_info *rec = &krecord[i];
-> +		int sb, se, sl;
-> +
-> +		ret = bpf_check_uarg_tail_zero(urecord, krec_size, urec_size);
-> +		if (ret) {
-> +			if (ret == -E2BIG) {
-> +				verbose(env, "nonzero tailing record in cleanup info\n");
-> +				if (copy_to_bpfptr_offset(uattr,
-> +							  offsetof(union bpf_attr,
-> +								   cleanup_info_rec_size),
-> +							  &min_size, sizeof(min_size)))
-> +					ret = -EFAULT;
-> +			}
-> +			goto err_free;
-> +		}
-> +
-> +		if (copy_from_bpfptr(rec, urecord, min_size)) {
-> +			ret = -EFAULT;
-> +			goto err_free;
-> +		}
-> +		bpfptr_add(&urecord, urec_size);
-
-This isn't a bug, but with this being the fourth copy of the
-rec_size-check / tail-zero / copy_from_bpfptr preamble in this file
-(prepare_btf_func, check_btf_line, check_core_relo and now
-check_cleanup_info), would it be worth pulling the common part into a
-small helper parameterised by the record size and the bpf_attr offset?
+A scan of exception.c and exception.h at this commit finds no sort(),
+sort_r(), cmp_func_t, cmp_r_func_t or swap_func_t. The first sort() call
+in the file arrives three commits later, in 07c93d6858af ("bpf: Dispatch
+exception cleanup pads from bpf_throw()"), which adds sort(at, cnt,
+sizeof(*at), cmp_u32, NULL) without needing to touch the include block
+because this patch already added the header.
 
 [ ... ]
+
+> @@ -29,12 +154,260 @@ static void cleanup_mark_kfunc_sites(struct bpf_verifier_env *env)
+> +static int cleanup_mark_pad_bodies(struct cleanup_ctx *ctx)
+> +{
+> +	struct bpf_verifier_env *env = ctx->env;
+> +	u32 i, sp = 0;
+> +	int ret;
+> +
+> +	for (i = 0; i < env->cleanup_info_cnt; i++) {
+> +		u32 pad = env->cleanup_info[i].landing_pad_off;
+> +
+> +		if (in_pad(env, pad))
+> +			continue;
+> +
+> +		ret = cleanup_pad_is_catch(ctx, pad);
+> +		if (ret < 0)
+> +			return ret;
+> +		if (ret) {
+> +			verbose(env,
+> +				"catch landing pad %u is not supported yet, only cleanup pads that resume\n",
+> +				pad);
+> +			return -EOPNOTSUPP;
+> +		}
+> +		env->insn_aux_data[pad].in_cleanup_pad = true;
+> +		ctx->stack[sp++] = pad;
+> +	}
+> +
+> +	while (sp) {
+> +		u32 j = ctx->stack[--sp];
+> +		enum cleanup_insn_kind kind;
+> +		int next, target, sub;
+> +		u32 start, end;
+> +
+> +		ret = cleanup_check_pad_insn(env, j);
+> +		if (ret)
+> +			return ret;
+> +
+> +		sub = cleanup_subprog_of(env, j);
+> +		start = env->subprog_info[sub].start;
+> +		end = env->subprog_info[sub + 1].start;
+> +		kind = cleanup_succ(env, j, start, end, &next, &target);
+> +
+> +		if (kind == CLEANUP_INSN_CALL) {
+> +			/* check_subprogs() registered every call target. */
+> +			int callee = cleanup_subprog_of(env, j + env->prog->insnsi[j].imm + 1);
+
+This isn't a bug, but the comment credits the wrong verifier pass.
+
+check_subprogs() (kernel/bpf/verifier.c:3081-3146) does not register or
+validate call targets at all - it explicitly skips them:
+
+    if (BPF_OP(code) == BPF_CALL)
+            goto next;
+
+Its only jobs are setting has_tail_call/has_ld_abs/exit_idx and checking
+that jump targets stay inside the containing subprog. The guarantee the
+comment is reaching for actually comes from add_subprogs()
+(verifier.c:2985-3053), which does
+
+    ret = add_subprog(env, i + insn->imm + 1);
+
+for every bpf_pseudo_call() insn, with add_subprog() rejecting off < 0 ||
+off >= insn_cnt. That is what makes cleanup_subprog_of() unable to return
+-1 here, so the code is correct - only the comment is wrong.
+
+A reader who follows the comment to check_subprogs() finds the opposite of
+what it claims, which is worse than no comment, since this is the
+documented reason an array index is left unchecked. Could the comment say
+"add_subprogs() registered every call target" instead?
+
+> +
+> +			if (env->subprog_info[callee].might_throw) {
+> +				verbose(env,
+> +					"cleanup landing pad calls subprog %d at insn %u, which can throw while an exception is in flight\n",
+> +					callee, j);
+> +				return -EINVAL;
+> +			}
+> +		}
+> +
+> +		if (next >= 0 && !in_pad(env, next)) {
+> +			env->insn_aux_data[next].in_cleanup_pad = true;
+> +			ctx->stack[sp++] = next;
+> +		}
+> +		if (target >= 0 && !in_pad(env, target)) {
+> +			env->insn_aux_data[target].in_cleanup_pad = true;
+> +			ctx->stack[sp++] = target;
+> +		}
+> +	}
+> +	return 0;
+> +}
+
+[ ... ]
+
+> @@ -154,12 +448,43 @@ int bpf_prepare_cleanup_exceptions(struct bpf_verifier_env *env)
+> +static int cleanup_check_pad_insn(struct bpf_verifier_env *env, u32 i)
+> +{
+> +	struct bpf_insn *insn = &env->prog->insnsi[i];
+> +
+> +	if (bpf_helper_call(insn) && insn->imm == BPF_FUNC_tail_call) {
+> +		verbose(env,
+> +			"bpf_tail_call() at insn %u is in an exception cleanup landing pad\n",
+> +			i);
+> +		return -EINVAL;
+> +	}
+> +	/* A BPF_LD_[ABS|IND] can leave the frame through its epilogue. */
+> +	if (BPF_CLASS(insn->code) == BPF_LD &&
+> +	    (BPF_MODE(insn->code) == BPF_ABS || BPF_MODE(insn->code) == BPF_IND)) {
+> +		verbose(env,
+> +			"BPF_LD_[ABS|IND] at insn %u is in an exception cleanup landing pad\n",
+> +			i);
+> +		return -EINVAL;
+> +	}
+> +	if (is_stack_arg_st(insn) || is_stack_arg_stx(insn)) {
+> +		verbose(env,
+> +			"insn %u passes an on-stack call argument in an exception cleanup landing pad\n",
+> +			i);
+> +		return -EINVAL;
+> +	}
+> +	if (bpf_pseudo_kfunc_call(insn)) {
+> +		struct bpf_call_summary cs;
+> +
+> +		if (bpf_get_call_summary(env, insn, &cs) &&
+> +		    cs.arg_slot_cnt > MAX_BPF_FUNC_REG_ARGS) {
+> +			verbose(env,
+> +				"insn %u passes an on-stack call argument in an exception cleanup landing pad\n",
+> +				i);
+> +			return -EINVAL;
+> +		}
+> +	}
+> +	return 0;
+> +}
+
+This isn't a bug, but would it be clearer to funnel both on-stack-argument
+branches through a single labelled exit, or to differentiate the two
+messages (e.g. mention the kfunc argument spill in the second one) so the
+log says which shape was rejected?
+
+Because the two messages are identical, the log does not distinguish which
+of the two shapes was rejected, and a future edit to the wording has to be
+applied in both places.
 
 
 ---
@@ -170,4 +218,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35656368472
---===============0334522547505686193==--
+--===============1652680925608114801==--
