@@ -1,35 +1,47 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out-2z4y-a165.jellyfish.systems (out-2z4y-a165.jellyfish.systems [198.54.127.165])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB853ACA60;
-	Mon, 21 Sep 2026 07:01:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27DD4252BE
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 07:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789974075; cv=none; b=G0NjBloXo4uuu3BCiBBt0PcTp2VTnTrbJ20XcVPKId7daeZmKBsKgL57iVn4zLIy/AmogVqFHcncZ2SIri34+/3RbJQ/J+RD3UjHO+GJZ5aA0bk4PQw0FoFtmSpPHYv+RbIvlBsaYmDCsAi1rLO81n8hDYJjkRt87xell9uPERY=
+	t=1789976192; cv=none; b=X+xjEJD9l/TJM3PT+ms96bOHXbD1858Xros6UPPpi2iAt9TaR8GKXVyy4U+4gW1IpGfslHWkHD4Y711CEOAljLCvSPmdCs6hNEt17czgfyFuinhapobZNPy9Ybxk/AWTdkq/oNk/HEPdHvlvjQ2XlKgEohwSN0XrZxXaPCJUPqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789974075; c=relaxed/simple;
-	bh=8uKZ2h9aFeBSVaGeVI4oZYCHFvta2ndx/uBNjfFsYM4=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=k7dls4rP9FnpVJSK6utOV57Qv20dOyYNp2ZTnExjvy29wCatatK3Wo04VY0VSAgezAFB634BPOk8wrrwGc3wMslBTEoFqdHlgkWRLXvPlK6aeqtzooLpOknKImpdlUcCAUXlAHSyeus5b3imnovznvRSamY2k/tSHQqiXgeK4lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m0fJ9EKu; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789976192; c=relaxed/simple;
+	bh=lBk5cEgSKUwfgd1f1BPMPtWh6xj1Jp85fT8tgnBqHuE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qKuxkd3NajkK6Zulkz8wrZPiJj076GkjrtFsx4xj5SaYZH8qiBW5dzaXACS4uRTUybAOKUF0wIzTKKRgFDivV6bCTk8uOFW/f6KHUMKmo9IXzuVLEdaxiD20L68OEHN6v7QBiBXBn6HtBy7UhLwXJjFRMtWfCCYSm3gQPNBnjog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=ifRqYZLS; arc=none smtp.client-ip=198.54.127.165
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m0fJ9EKu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D3F01F00893;
-	Mon, 21 Sep 2026 07:01:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789974073;
-	bh=i78DpXU6G1P6U4iTP5gmX5SRaeIRgR1YaUqQ+TZuQSU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=m0fJ9EKuEOApABqdpECx+B0q8OocMmr/FLt2AthD34JiaM11GD+aTrxDCpHVGyIM4
-	 m6XwioEK/PAGKvQxZcI14MOiFhkJa/vQJ4N8LDA96DoEBeA9jgvE6FySzjWEMrEI7M
-	 0otTHvecRE5IIGSEYybo2kC0ExJKmpE6Adsiu9MLzYwHIOGEq+p3vmn8n1tKoX1ETW
-	 NcmMzdjNfbadpRqunWbRKD/cI+3vd1lWwDrog6jhV16oTLEJ9bcdHwwo3U2BWaj+tm
-	 7ZsgR0rP6gAbD8Xfu9CE72IVjenPXYyBW9taNAFLXAU3j1CuyrKK1bBm9YgMk2MazH
-	 1qvBjGR/Le7sQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 939BC3926266;
-	Mon, 21 Sep 2026 07:00:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="ifRqYZLS"
+Received: from fedora (unknown [117.136.111.114])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4hpFQW1vxrz8sYP;
+	Mon, 21 Sep 2026 07:36:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
+	s=spacemail; t=1789976165;
+	bh=x0ylWZptud494IW/g9Rj9XK6VykW/vNQo0wTx8WL8Wk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ifRqYZLSuYj4+AoR56pEBdO3Mo6+iHQuSXzujd7dyrwwqGc9Hoj9D7xFowO+mZAKP
+	 lW7o40PkY8WNty1kVVC5dQLQbDWpTmHLTJ2xihbF3B4BR1JESE6eaMdFp0C7YX50MU
+	 d48YrHFCIirgIF4grCIRa+hIZ3GDD0yt+rSIjMyD0KReUX6CDOoDf8X8y/n+qXDYLa
+	 guitb5Qw3+338863xjNlfkzVis+FcWJk9iDNbU7JYec0NMlI1Li8gF4DbLc1ilFl5C
+	 76ayyVKtF9YTZuCIom/L6aOFlJd8uxi9RtytTd8gmUQozMQfeOB73k5cXL/M1QQZQV
+	 DcV8Pp/ayae3w==
+From: Tianyi Chen <hi@tychen.cc>
+To: bpf@vger.kernel.org
+Cc: qmo@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	ihor.solodrai@linux.dev,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v5 0/2] bpftool: Consume ring buffer maps with event_pipe
+Date: Mon, 21 Sep 2026 16:35:54 +0900
+Message-ID: <20260921073556.99421-1-hi@tychen.cc>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,45 +49,44 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v13] mm/bpf: Add bpf_proactive_reclaim kfunc
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178997400515.2390936.16367635369472910068.git-patchwork-notify@kernel.org>
-Date: Mon, 21 Sep 2026 07:00:05 +0000
-References: <20260921030854.17858-1-hui.zhu@linux.dev>
-In-Reply-To: <20260921030854.17858-1-hui.zhu@linux.dev>
-To: Hui Zhu <hui.zhu@linux.dev>
-Cc: roman.gushchin@linux.dev, inwardvessel@gmail.com, shakeel.butt@linux.dev,
- akpm@linux-foundation.org, andrii@kernel.org, eddyz87@gmail.com,
- ihor.solodrai@linux.dev, ast@kernel.org, daniel@iogearbox.net,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- shuah@kernel.org, david@kernel.org, baohua@kernel.org, geliang@kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, zhuhui@kylinos.cn, jp.kobryn@linux.dev
+X-Envelope-From: hi@tychen.cc
 
-Hello:
+Extend map event_pipe to consume BPF ring buffer records, with plain and
+JSON output and focused tests for records, shutdown and invalid arguments.
 
-This patch was applied to bpf/bpf-next.git (master)
-by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+Changes in v5:
+- Suppress cpu/index completion after selecting a ring buffer map by id,
+  name or pinned path, using _bpftool_map_guess_map_type(). Keep the
+  existing suggestions for perf event arrays and unresolved map types.
+- Rebase onto current bpf-next. No other changes from v4.
 
-On Mon, 21 Sep 2026 11:08:54 +0800 you wrote:
-> From: Hui Zhu <zhuhui@kylinos.cn>
-> 
-> BPF programs can observe memory pressure on a cgroup, e.g. refault
-> stats via bpf_mem_cgroup_page_state(), but cannot act on it:
-> triggering reclaim requires writing to memory.reclaim, which BPF
-> cannot do.
-> 
-> [...]
+This addresses the v4 review:
+https://lore.kernel.org/r/a89e2e325b87c215e0fb6e4a24284922d7656cfc0e2a247f0c8c1cd823764c23@mail.kernel.org
 
-Here is the summary with links:
-  - [v13] mm/bpf: Add bpf_proactive_reclaim kfunc
-    https://git.kernel.org/bpf/bpf-next/c/48ea1ba704aa
+Built bpftool and reran all 18 ringbuf subtests against it in an x86-64
+VM; all passed. Also checked completion against live ringbuf and
+perf_event_array maps by id, name and pinned path, plus unresolved maps
+and already-specified selectors with mocked output.
 
-You are awesome, thank you!
+v4: https://lore.kernel.org/r/20260919110721.1230756-1-hi@tychen.cc
+
+Tianyi Chen (2):
+  bpftool: Read ring buffer maps with event_pipe
+  selftests/bpf: Cover bpftool ring buffer event_pipe
+
+ .../bpf/bpftool/Documentation/bpftool-map.rst |  14 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |  59 +--
+ tools/bpf/bpftool/map_perf_ring.c             |  87 +++-
+ tools/testing/selftests/bpf/bpftool_helpers.c |   2 +-
+ tools/testing/selftests/bpf/bpftool_helpers.h |   1 +
+ .../bpf/prog_tests/bpftool_ringbuf.c          | 417 ++++++++++++++++++
+ .../selftests/bpf/progs/bpftool_ringbuf.c     |  47 ++
+ 7 files changed, 578 insertions(+), 49 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_ringbuf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/bpftool_ringbuf.c
+
+
+base-commit: 48ea1ba704aa3a9975e917411ee05bbe67d65744
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.55.0
 
