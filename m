@@ -1,126 +1,141 @@
-Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
+Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C58E24C6537
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 17:39:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.76
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790012344; cv=pass; b=Ru/WT1h26e+V4yzy75KLgCyvl8+T2NU0ZXdFOy9EEU6xTWHvzlWUqHhyo4ZiDHZpgA/J+Uz5Q/N+5ANdoMiLFytB9gCcY2bWTrqowKTNaaUVT0YxWgzKUKTL2AQrAh8ZnbHXeD4cktu3oeU21wtLNWhhRTDShXPxlc8qFzJ+qhE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790012344; c=relaxed/simple;
-	bh=kP92Ak7RvzGy2hBVDe8IS5YHe71q5T7c9Q++nOdItZM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RW4sJeJHfYG0Xd0s9Wi3hu07N6VxccoJTuSLkUIxkIZbqI/RYdq/l3baYfGVDGgmeA8nL5VeyIlEvPSA5fFUP22vEHfhlfq95PaIICNrZAJfamd9UTB6F/zwP/Z4STo4GRzMGbdcvyYRYYPDxGwaNzHwr/wYw+ilFv8jJArDHn4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=J3rz5TjC; arc=pass smtp.client-ip=74.125.231.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F1F4EC675
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 17:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790012373; cv=none; b=PdC3eZhlgHU5j3uZ7Ak5KylvYw+zqnZGkVfSeuPxvFsmYMJxSAa3pb39cAewBNfDjb24C6Q5mdikFgwshSTfdsxaOhkt/Pcr3H74y4I6PE78y+tsVIfeR8cEDDVRQnjCLvkEcKH5g0bhub3WjmUc/oQrv8/hZgmG3d2WkiUzxw4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790012373; c=relaxed/simple;
+	bh=HhFClUICP7LmPKOCpv+tBSAjahEijfSps+4cVHoIynM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EDQXN8Zu8zCimyfVzBz+AqIZBoR+Sh10G2sF5LoaHe9LtL9eUlQSSWKBt3pHPrIkYIk4KPEi/GyuaBIqhVGdyiGNv35nfhFDvvr/vzv5bJd5FXhotk2JrBIrD+FRbMN0e6JL2CyybHIBbSb91I+pGSRp/ZaBI3/h5ZIcje8jlug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X3a2Ts0G; arc=none smtp.client-ip=74.125.228.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="J3rz5TjC"
-Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-47be948a50fso2307110fac.0
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 10:39:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790012341; cv=none;
-        d=google.com; s=arc-20260327;
-        b=IFXv2QuWCZuKvTbpd6arUoPNSuc8KbdsPhj566EFHd24hZsZYRjoVbFdzM7Xm8ysux
-         nqThSGAwFndco2Dc9+msdPzTwP1FI14gY/AXDZWWqs+ZGdpWB8EF3TzeVboV/sSFPJIi
-         TojUh+ZcAyBbpBNKn80TgcPIVEwTlu35Wi0HYpQcJX/XEB2hc9yhtnnRSi0ivQAmVmKQ
-         PyBoTeXNdRoi5VdsV5icPuMRNW5xQE4utTEIhyhfkMueB0x7Jr2+7eXklqxnHBKjPmVc
-         PmJOOEYFkdhKefj1NNUphQsD1sgiKuxjiakU2ecqbqJVVGirWiUdGxw5BCjlKvkWJJv1
-         8Lsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=WqxxhkWEnQe8FoDsGHahW+AX2LGvlhUkNfobMA0XIzI=;
-        fh=o7SJMttBUAkyWzrebud+qqj2Ifzf7cQi7sfXxzvKKe0=;
-        b=mpYWhJ8lA87KHT8dSQlTAgw9kWCY+Cyda6D9xptp1+9hCXzgvTXUsDibXA5QUQKgDE
-         8ZAcFjNJ2k/fLg6WQ3WviaA9s8vCcgYV9Yr9BhG7HsG+Vf3qCVwssnC0SWsoG07Ny9Ar
-         SVt57saEH2FKGEY+sIxbCcdFshHU0cg6yj4c0RdCagi5/u17sNnUI1mSiUlLhWv5sox2
-         PaCNDn3ZQ9lgOcQEjZYRbLlkmnDzskf8hEtvk1uMchnJIH4zQAhOsXAPdrb7UNsLdgOJ
-         5C8c3uh4QvphHpPGqG9gLzg3JEugxH8FxANwltyc6eNjunjjuE4iKXhW908+nfO1gchH
-         R4PQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X3a2Ts0G"
+Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-85469d249c5so2695398b3a.3
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 10:39:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790012341; x=1790617141; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=WqxxhkWEnQe8FoDsGHahW+AX2LGvlhUkNfobMA0XIzI=;
-        b=J3rz5TjCItSSQgWeAAjIWkD1JRNLanF+PgODdumJkjJwjkaI+AQRCBzbQ/0EKTMeas
-         cIujKsX0atUzDcQC7R6zWNIioGJGVw61I7eGPyrTm+Q5w4a9S6Ih1qTob33phnrS2BuE
-         yXjPEz7BcMuf6Po4I1dpQFpUaDhbmtj2sbWoDZoRlTJBWcrPDhgBS4LgqMt3v+flMfhz
-         JTZRPChzC/j5BRssufUjKOZG6IrhHz5IDV8DEAuZcqyxcwXgMOFRujaw8z2X0nu072my
-         nZPXH53P5HxKxcoq+0JE72hws5j1Tj/26OY2NLiM9o/gvL29W2spMSG+wrIUe6TB8b27
-         /VCg==
+        d=gmail.com; s=20251104; t=1790012371; x=1790617171; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=jINDts3UuKVPqaZDvWUfm35N/OrGGobyZ1ICHQzvtsU=;
+        b=X3a2Ts0Gi+7GKV1OXyIntTqUVYfXrGSdqu84S5KrQLDGJeStjfvQkEiRxK+zNVAF0g
+         DkK6mlCcuKPPMAYKGeOtwxE91PBUe7uzQjRCe7TgW5uUA2ryKZcUJHmsJCK8ONM5Idiz
+         KdXAOOK+5xWy8NAq9WsHvgMkc2byBuFoyAFHvG/Jds8V9PLiHxuCaXzR/SaCl0kdA0IL
+         IdbMmZYUEiCvsHrCQ/ZxuNrK3oXg1XEtjzSrz3uQsYvI4rL8yHmSCkqs6czvInxksdUF
+         4Y/8gNnbX5k/vFJRSufQqbNJCZBPn5/HmWxm2lUdArJwPSgVYEbzHO0hC9D6tdWxmr+u
+         WlDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790012341; x=1790617141;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=WqxxhkWEnQe8FoDsGHahW+AX2LGvlhUkNfobMA0XIzI=;
-        b=HLTdXLawwJBrC6yk3XwnmYtjWe+HjHalGUXXgSSmMddNFVbpNEYhGvG6GUR80DtH8V
-         NDexfHnFYOyk2bWGRpC0/sVehIaUMuzKhqTS+8ag4o7NK98SeTQEA4KEkKVodtJcsxEK
-         YO8+cLppb4BoCsyQp6z1bjiEqvTwvqwv382irlAgco2mpvs6/fHKSuCmA7c+mEzbpwqG
-         IEVJ2S2B6L+q0rrdGjJscUY6PbexUT9HqMrudqyvauAcuVLGp9zbWuXr3loshtv6nVc+
-         CwbGGhr4QLhSxGLqmR6pSPb1hrnDnzD4FODgdJpx0fP4jclhOc7BWM7qQPZOFwNdBM/h
-         kgAg==
-X-Forwarded-Encrypted: i=1; AKwUvBzGeXFMbvEVwsmvl8tdwdKRj/zZOCwd8vdfNoa8ppdSlX4yCe/K7p+3PWpvIjE+/atNXMo=@vger.kernel.org
-X-Gm-Message-State: AFuF++nZH0Hh/Mwk8lF90GHfU5ZLZ0QrKlHx3Vp9SRxT0U1DkhQ0KjFp
-	mzR2vhvLiEtDziPMqPaIyZcz1XS174KntDK62OZOcSzCEa9Wf0Prv9wbhrQo7wkjoymL0mAn1Y9
-	D+Y9zJ7y6MNkgVFBPYvyE95+VZ37MOnU=
-X-Gm-Gg: AYBFou2Ta9GW67wnFd6cydhdjPxRzrFsk0wMWoCpsEO8pRYEe+gFktqwg3IdiXlG+R4
-	KjX9BvAjM1RxiImHEOSBvI7zb6UKSpugUGK8nYQqjDeAfBtX53lV7umz7rNERny6TAHl72pzeuP
-	SnJVhhi3igX7hgQFJogfiSfUepfxvNbo7qaXtOyKdbYbRqgE9NJkIU9iXkqNHmUhMprvPYZ5bJr
-	EZ13c4Nk6nGBPTQReDpesOvDeAoLrO8SKPd2ulcBDWoSikiDtirX7wtKbG0I8odtKXIs6eysQNp
-	AAmCX/UgJNDDQvoOtuxxnuw+N/ywBWJT3DBQm1U9mEp5tFqw3B6AAJirQPo9CUXO7825d093N/G
-	Iqjo/X5OBm5AO0Q==
-X-Received: by 2002:a05:6870:96ab:b0:43b:b245:30ac with SMTP id
- 586e51a60fabf-486e575539emr11232161fac.16.1790012341499; Mon, 21 Sep 2026
- 10:39:01 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790012371; x=1790617171;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jINDts3UuKVPqaZDvWUfm35N/OrGGobyZ1ICHQzvtsU=;
+        b=Xx2Iy9OWIyhduupRLYgDDgvwef0Y+wCg7nKpW2MHJYivrNw+fcjEJk5eP8u6tqpwEc
+         eaGX2eU0fR7jcZT2/W/xazI4pcvfmlxyr35C7iEL3W+cJPYY76oRyhCmYIumufImI27+
+         jM3odL8c3fSz2IZmxqv46TzXJXE4F9UAdK9S6d12nL7hihYNBwDd2W7LqK/yRIHfmm2B
+         E3N3fIEBbJUacYJ/XB/zy8cLB1ScVwJJ8e0MiqWbONG14lTX+rznySB1YkFyVacb4Mw7
+         BFodhHBdK0jeIzETpR1zndiT9GeQlBZWw/hs3RUmXH0Ok59ASZJYNd5BoxlzGCEk2Y+v
+         DNEQ==
+X-Gm-Message-State: AFuF++mdFa+Vz0SOPwgGf4LWB4qKjOb7gd18lH/fY0aqwZrz9SxUU+fy
+	RgvfJf7+XnIp8yjW32h7ZCRkOmhDwK9HEYY7pZaXY2Z8fwCvbXgpgu+c
+X-Gm-Gg: AYBFou2VM1X6WfW5MApZHUGRX4Qu8ZEvqA5/5GT0uWQrHfUCan67wUyDpY5yal+0RlB
+	g9KLSQYHb82eFFSSV9AsQP9lRT8q7SbkXIEHaplGhUv6kRjdk+++/+ZmUM9+cTtAaHxVu7Q9s7R
+	qhq3dLSPVdGE6mX2DOtKgguW552EVsUyY0mNoHkAIYTXt8SdbQC/m4vR//YSwDb5ozZLZnwzEow
+	avmRM76ifYlc5dsl9g0wmEguFNqv5bX/IHBO3kOQ6P47CU9i/v42ZKel5S1kmLiv0dCtu3X2dHs
+	4cO7HBTELsmW0O2DK269NrSdZV9x98XQ3ENPWvrcrdLx/cF1anX+M4g0HnMr0J6J5xoC9h1QUzp
+	x/lSnLmrRP5/4PHT8+z94pjBY0cj2pCiuKVEiicwMOOQ+YsMgGNNp3hdQ+s6eqUeHXM0eSCErho
+	98djBLmU9GI+RRsM7V01Gr+ahN7OmqUPyU3w03S9Cuu/OBcE5BgijXOOOdBkY7CO6A67KpUmiO9
+	cOiyh8cxbloBPHxfN4hITzJz/43NC4nCsu2MzZiXfo=
+X-Received: by 2002:a05:6a20:4304:b0:3d0:d1f1:6ec5 with SMTP id adf61e73a8af0-3dd8c2dd73fmr18840357637.4.1790012370973;
+        Mon, 21 Sep 2026 10:39:30 -0700 (PDT)
+Received: from 192.168.50.3 ([198.176.50.208])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc72af0955esm3986985a12.32.2026.09.21.10.39.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Sep 2026 10:39:30 -0700 (PDT)
+From: Weiming Shi <bestswngs@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Xiang Mei <xmei5@asu.edu>,
+	Weiming Shi <bestswngs@gmail.com>
+Subject: [PATCH v4 0/2] bpf: clear stale IPv4 options after LWT encapsulation
+Date: Tue, 22 Sep 2026 01:39:08 +0800
+Message-ID: <20260921173910.90847-1-bestswngs@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260921154650.130677-1-suchitkarunakaran@gmail.com> <DLL5PFJLT64M.1W82K71YXNT3A@gmail.com>
-In-Reply-To: <DLL5PFJLT64M.1W82K71YXNT3A@gmail.com>
-From: Suchit Karunakaran <suchitkarunakaran@gmail.com>
-Date: Mon, 21 Sep 2026 23:08:49 +0530
-X-Gm-Features: AcwNN1XeWmSNSpYjUTctrJrH5Vc0O-P93rFea4YdAqzuTsR8qSpMr_fjrprOGQ0
-Message-ID: <CAO9wTFjK+oRT-maca6A1UDBrgYTGB0Zr48UiLm2Ees835POOFg@mail.gmail.com>
-Subject: Re: [PATCH] bpf: add diagnostics for rejected memory and map accesses
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	ihor.solodrai@linux.dev, john.fastabend@gmail.com, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Mon, 21 Sept 2026 at 22:35, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon, Sep 21, 2026 at 09:16 PM Suchit Karunakaran <suchitkarunakaran@gmail.com> wrote:
-> >                                       verbose(env, "sign extending loads from arena are not supported yet\n");
-> > +                                     bpf_diag_policy(
-> > +                                             env, i + delta, "sign-extending arena load",
-> > +                                             "the current JIT does not support this load instruction for arena memory",
-> > +                                             "Use a kernel and architecture with JIT support for this arena load.");
->
-> Did you read what AI generated for you?
-> "Use a kernel and architecture with JIT support for this arena load."
-> ?!?!
->
-> Please apply human filter to every single line of "your" patches.
->
-> pw-bot: cr
+bpf_lwt_push_ip_encap() rebases the network header after prepending an
+outer IP header, but can leave IPCB(skb)->opt describing the inner IPv4
+header. An ingress LWT route can then make an ICMP error consume stale
+option offsets.
 
-Hi Alexei. I'm sorry for the oversight. I somehow misinterpreted it as
-"Use a kernel and architecture with JIT that supports this arena
-load." Is the following diagnostic message fine? If yes I'll correct
-it in v2.
-bpf_diag_policy(env, i + delta,
-"sign-extending arena load", "the current JIT backend doesn't
-implement sign-extending loads from arena memory",
- "Use a kernel and architecture where the BPF JIT supports
-sign-extending loads from arena memory.");
+Patch 1 marks completed LWT IP encapsulation and clears the stale metadata
+after bpf_prog_run_save_cb() has restored the protocol control block. For
+same-family IPv4 encapsulation it clears only IPCB(skb)->opt. For a family
+change it resets the new family's control block following
+seg6_do_srh_encap(). Patch 2 adds compact coverage to the existing LWT IP
+encapsulation selftest.
+
+Changes:
+
+v4:
+- Follow Alexei Starovoitov's suggestion to drop the independent freplace
+  patch and keep cb_access as one bit.
+- Clear only IPv4 options when the family is unchanged; use skb->protocol
+  and the SEG6 precedent when it changes.
+- Rebase on bpf-next and replace the standalone selftest with compact
+  coverage in the existing LWT IP encapsulation test.
+
+v3: https://lore.kernel.org/bpf/20260920163211.795547-1-bestswngs@gmail.com/
+- Follow Daniel Borkmann's suggestion to reset the CB after
+  bpf_prog_run_save_cb() restores it, avoiding an extra CB copy.
+- Split out freplace handling and selftests, and cover CB access, VRF,
+  nested runs, and already-encapsulated packets.
+
+v2: https://lore.kernel.org/bpf/20260916170406.1280954-2-bestswngs@gmail.com/
+- Preserve the protocol CB for programs without ctx->cb[] access and restore
+  the proper layout for the final packet consumer.
+
+v1: https://lore.kernel.org/bpf/20260915170147.3943392-2-bestswngs@gmail.com/
+
+Weiming Shi (2):
+  bpf: clear stale IPv4 options after LWT encapsulation
+  selftests/bpf: cover stale CB after LWT IP encapsulation
+
+ include/linux/filter.h                        |  1 +
+ net/core/lwt_bpf.c                            | 30 ++++++++++++
+ .../selftests/bpf/prog_tests/lwt_ip_encap.c   | 45 ++++++++++++++++++
+ .../selftests/bpf/progs/test_lwt_ip_encap.c   | 47 +++++++++++++++++++
+ 4 files changed, 123 insertions(+)
+
+-- 
+2.55.0
