@@ -1,186 +1,153 @@
-Received: from mail-pj2-f19.google.com (mail-pj2-f19.google.com [74.125.227.147])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5221050E582
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 19:10:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1DF511239;
+	Mon, 21 Sep 2026 19:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790017822; cv=none; b=RLjY/qy8w+0TGGZwbt1HOs3EmVliA0MTLpP5YIvVoqXOGvCILvKWpV8W+7dN+6qwllCvsNYp3YrEnYL0tRCpn2ByVJXhJKMU7vu/l2jZjDkSm+642xULkfAkF0rzyfd9r24b3D8EcsBxC4XA3i2RwTr4x44NLTA8Hrr9aYBFci4=
+	t=1790018053; cv=none; b=TwfyzXQ+HTkoAb9BHjpDFLMujajW2GfmeK0LDpfw/TlNHCjF4bVTr7Cyho0ovd18ynBc/QoTN6AikTTyQDMuq2XQ7B6y7/GlTWJzA8QwRpw+W8CG1OjT8jmCmWzS+6k1FpqW1K45xdeok8qV1QmRDKu2jPVkTFOWmoeq9IQX2OE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790017822; c=relaxed/simple;
-	bh=fLE4kBRgNTrXXygiginl/GXPxW8+G8PbmvTmG7jemJI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dnAAeqMNzfUsrQg/QtKFLYajEBel+RZPlH/kBKJ6GXrLhCm5Llm192kML6oUfWWrvTXXsQzWbQLczheQ4sGq0G2Wsmw/i9eEG49iPm1LLeRSlcOb8tL6ro5V9hgZEATrzVdnzX6q4HcbSILFDKk/c0you7+kAg/W2P7u3NmVvjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nSRshtni; arc=none smtp.client-ip=74.125.227.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790018053; c=relaxed/simple;
+	bh=C7uF4hzH+MlY7IqoBvHWbdkqBBqEiGIA85oq+nh4Ol4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QRyJmZZ62HVNz68GLuhzuustAzKw82ruV9Tts8dbikPPjjJSJAfPeMeKB6Dzohjek9d7ixyk2Sl11Li3HV4OeD9j76fPWg1vyUGmYFdFLv+x/HwFY9PVU5xHk1MnoNEc56z9kinmjrjpBA+nnxPBXkWbSzIdH2CHi8NGTE0oUQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SOUX57yZ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nSRshtni"
-Received: by mail-pj2-f19.google.com with SMTP id d9443c01a7336-2db18fe433fso29716195ad.2
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 12:10:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790017820; x=1790622620; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=9GQz6TWkhxOvlxYTvUXGyKqMCgFXGx1b0EjZiCciSS0=;
-        b=nSRshtniGviRrXdBvwF+UMm2ClEQCd0Y16dWJaLBAvuvIsgknQ97fLAp+5z9mWoLRL
-         +S6GAJBwHBb/flHbslHM/vD5XaphH1t1W2KWJ56mX2xuOq/lZC+ojq5E2LHnSxsAazT7
-         x3ijNRVPDPeCPNyfF0QdGQ7NTKwwGIqdFcKqipMHRzXcwCedG2benIy8+f7sj2PaZ7ji
-         ePb2leZhMmRVlcwzybSbCIRPRlItMt/hEPG14ijJ1Q2thVIAVR8b1GCpsLxRN9ts3NW2
-         QKWYXbBgBgHysv4t3/kGHZ8PTj6ZYPeIUOPNXz8WuqjQifWfTJGE8YihM7DLfhmiDRve
-         43+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790017820; x=1790622620;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9GQz6TWkhxOvlxYTvUXGyKqMCgFXGx1b0EjZiCciSS0=;
-        b=arfnTw6vA7SKqDcGunXUp12pHslUmvjfXtRLf3u/Az733SyVf3kAeD/DnmnNb649B3
-         g7bvIQPsn9oC9Nn8RAeEL56r7+ZrcQG6bE7vswjP8qlqghs+/Wc2Me8Ax5uTDU+lh/Oa
-         UWmWBob/A8mJPBL76BAjwcajNvXBFhmKPKd9aujfjegXrpZtBHyTyLlwC4A1ll5jvq75
-         mfPgV1WIzxTXJIDRy11nQD7holVQ8/l4AXVoYi/SSRkmklJ2+yftfY/tnA6/8ODOAyj/
-         n1dtKjDhYWKWX+64ZIWJppf3SZQEOqOpS5eZ7LRYxWFpXICX+hYxtxAW0miF25T0JNpb
-         8uaw==
-X-Forwarded-Encrypted: i=1; AKwUvBygTmSl4mG4GxORyQH8450jcHkCah4cwh6Env0Kf5AHBy3bk/WiItfkcB8BJ0PMLwGM5jU=@vger.kernel.org
-X-Gm-Message-State: AFuF++ksmmxPhZ9QPKKd3hXcpBlL3dxObCaz8kVNji80W/NUTS5rsy6C
-	YFQ2Xm5SZVHdm8GPP1HyR2XKfKWZfdDVf4kWhLFya/mP9XsXmbtue6Tn
-X-Gm-Gg: AYBFou24/TPD+ZETEsF5/vox2Z9jgCimX+KE8N+l0PAaOLDrkzQ3BlRY07xdsIRI1Nb
-	AzZKPgEBEJ4SdMCstoHasbktZ/AQ/uW9BBvR9Iv7pVBmC5Dtq+8OorNZ700Nc54D/LzuHN0WsZp
-	ZBjFOGIqf/6E3qrzJZ+udVCqNKRG+CIt06G7Nna3RU+67tNQgjKJ+7mIa3wmxq39aGkiS0M5iqf
-	+cjv2qZl+yRIZgx7/VcwIFGP9LPyqODCBeCpELVW9zBkl36HErQNEnsV6dwXnhVIXLstb1UxfHB
-	/gLm3gYK4bZrNOxRzWFRh+eKizJy+It75XNzpM3xunpEKZyOi5G18ekYahsMeO1gayLk+YDn1CJ
-	f0TFJWS9BGBzw5mFpAFUnk1hk7upSquBrFQR57tMydvMVWfN/C7KkIj56tGzq5NZIAyFHZqO2QW
-	ZQ305DGztn92PMLdKfn6fXy3rLnS6VqDPxMb/bYtWoYSGVwCofx4ZDMc/PpttR1dFAXA1GjXMe9
-	IjSCu8pVkt8Bt5yFPnzKjHHOsRI4a+6PqeqKkGrwhE05nfmEME0X/D+mg==
-X-Received: by 2002:a17:903:f90:b0:2dd:ad74:6d17 with SMTP id d9443c01a7336-2df5b26afa5mr982235ad.29.1790017820525;
-        Mon, 21 Sep 2026 12:10:20 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:9de9:26b9:a969:69d7? ([2620:10d:c090:500::5:f95e])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33e5ec0d55esm46896eec.20.2026.09.21.12.10.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 12:10:20 -0700 (PDT)
-Message-ID: <e9aad352ba82dadd97a17867108b5db1865fa38d.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
- across zero-extending movs
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Vineet Gupta
-	 <vineet.gupta@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau	
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song	
- <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis	
- <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, John
- Fastabend	 <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>, bpf	
- <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, "open
- list:KERNEL SELFTEST FRAMEWORK"	 <linux-kselftest@vger.kernel.org>
-Date: Mon, 21 Sep 2026 12:10:17 -0700
-In-Reply-To: <DLL84IMPTRQF.3DOQQTN2KCAEW@gmail.com>
-References: <20260910164635.459558-1-vineet.gupta@linux.dev>
-	 <20260910164635.459558-4-vineet.gupta@linux.dev>
-	 <DLDKI0ZXYI7H.1XQZZE2RCU7IF@gmail.com>
-	 <4ab75099-0e95-4fee-81da-6f4198e3e6a0@linux.dev>
-	 <CAADnVQ+N9tzBJ0Bbvp8_8QvR+QcCP4ej5CgV_kRHt=iw4BANSQ@mail.gmail.com>
-	 <202c45e2-58ba-4ad5-a234-c90703031f91@linux.dev>
-	 <CAADnVQ+Si9Au8J_j2nt+ZzFq6WPaz8hpmh0n=_dFysZmSOeipA@mail.gmail.com>
-	 <ff18ccb77a554000a030199e8c1fbb7d8d298e18.camel@gmail.com>
-	 <DLL84IMPTRQF.3DOQQTN2KCAEW@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SOUX57yZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F31981F00893;
+	Mon, 21 Sep 2026 19:14:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790018052;
+	bh=81jOZj+4d4X4V5/bgmxVSYhfYYhbUzgNRrSHGKFIaiM=;
+	h=From:To:Cc:Subject:Date;
+	b=SOUX57yZ79fm9/wF85SHPspjk/JWaht8/65qaCT6kkOPtgBvyX2v+qx+7szkwQcGr
+	 e0c88JlrOmCPJmqsqUGif7zgXBXP432el3RBef5UU33i9xEJBQxi1oguD9wqYIpkhO
+	 RXBCzgtisXzzBcuP/acQAB/TAQk/iDHBuaeBaveOJsj1SLa2YXz3yvTP4cLF6T3Zk9
+	 lF4uPCKl/cpfDlsM5Tzi7r6ivLv/46e+16qJU9oUq685gIBr2xT9n1Z6cECCTRbpSz
+	 IwjiFYfJBKr5EMmgWAn7U4UqocEzoNoOOwCHROYQKBU2RONzdazx87iURCblvciDJW
+	 9F8j9BPHItxqw==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org,
+	rcu@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	"Alexei Starovoitov" <ast@kernel.org>,
+	"Daniel Borkmann" <daniel@iogearbox.net>,
+	"Andrii Nakryiko" <andrii@kernel.org>,
+	"Martin KaFai Lau" <martin.lau@linux.dev>,
+	"Eduard Zingerman" <eddyz87@gmail.com>,
+	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+	"Song Liu" <song@kernel.org>,
+	"Yonghong Song" <yonghong.song@linux.dev>,
+	"Harry Yoo (Oracle)" <harry@kernel.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH bpf-next v5 0/4] bpf: Add bpf_call_rcu() and bpf_call_rcu_tasks_trace()
+Date: Mon, 21 Sep 2026 12:14:01 -0700
+Message-ID: <20260921191407.1742386-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2026-09-21 at 18:59 +0000, Alexei Starovoitov wrote:
-> On Mon Sep 21, 2026 at 5:28 PM UTC, Eduard Zingerman wrote:
-> > On Wed, 2026-09-16 at 17:30 -0700, Alexei Starovoitov wrote:
-> > > On Wed, Sep 16, 2026 at 5:08=E2=80=AFPM Vineet Gupta <vineet.gupta@li=
-nux.dev> wrote:
-> > > >=20
-> > > > It ended up with full testsuite run parity - after 4 incremental pa=
-tches.
-> > > > But the pattern of all those patches was adding some predicate /
-> > > > special-casing to reg->add_const
-> > > >=20
-> > > > hunk 1
-> > > >=20
-> > > > -       if (src_reg->add_const)
-> > > > +       if (src_reg->add_const && src_reg->delta)
-> > >=20
-> > > why? It should not.
-> > > My point is that zero is not special.
-> > > It should be handled within the current framework.
-> > > All these extra hunks are not correct.
-> > > ADD_CONST_32 logic should work for delta =3D=3D 0 just like
-> > > it works for delta =3D=3D 1.
-> >=20
-> > After thinking about it some more, I agree that having an orthogonal
-> > encoding would be nice. However, it appears that the split should be
-> > somewhat different:
-> >=20
-> >   struct bpf_reg_state {
-> >     ...
-> >     s32 delta;
-> >     u32 id;
-> >     enum id_link_kind { full, zext, sext } link_kind;
-> >     ...
-> >   }
-> >=20
-> > Where:
-> > - id =3D=3D 0 =3D> no id link
-> > - full =3D> all 64-bits of the register are identical to
-> >           all 64-bits of a scalar value `id' (let's call it X).
-> >           =E2=88=80 rA{.id =3D=3D X, .link =3D=3D full}, rB{X,full} =3D=
-> rA =3D=3D rB
-> > - zext =3D> lower 32-bits of the register are identical to
-> >           lower 32-bits of a scalar value X,
-> >           upper 32-bits of the register are null.
-> >           =E2=88=80 rA{.id =3D=3D X, .link =3D=3D ?}, rB{X,zext} =3D> r=
-A % 32 =3D=3D rB % 32
-> > - sext =3D> lower 32-bits of the register are identical to
-> >           lower 32-bits of a scalar value X,
-> >           upper 32-bits of the register are either 0 or 1,
-> >           depending on the bit 31 value.
-> >           =E2=88=80 rA{.id =3D=3D X, .link =3D=3D ?}, rB{X,sext} =3D> s=
-ext(rA % 32) =3D=3D sext(rB % 32)
->=20
-> hmm.
-> there is also 32-bit link with delta, right?
+Changelog:
+v4: https://lore.kernel.org/all/20260915154248.3612028-1-puranjay@kernel.org/
+Changes in v5:
+- Rename the "hash_map" subtest to "bad_map" so that it matches its
+  helper test_call_rcu_bad_map() (bpf-ci)
+- Bump the callback counter after chain_err in the selftest callback.
+  Userspace polls that counter and then reads chain_err, so it could
+  still see the initial value before the re-arm had stored one, which
+  let the chain subtest's assertion pass without checking anything
+- Say in patch 1 why embedding struct rcu_head in a uapi struct is
+  acceptable here (Mykyta, Paul, Alexei)
+- Rebase on bpf-next/master
+v3: https://lore.kernel.org/all/20260915143640.36292-1-puranjay@kernel.org/
+Changes in v4:
+- Drop an unrelated hunk in bpf_async_update_prog_callback() that turned
+  PTR_ERR(prog) into -EBADF.  That is the shared bpf_timer/bpf_wq path
+  and bpf_prog_inc_not_zero() returns -ENOENT, so it would have changed
+  the errno bpf_timer_set_callback() and bpf_wq_set_callback() report to
+  userspace (Sashiko).  No other changes from v3
+v2: https://lore.kernel.org/all/20260915114240.3269184-1-puranjay@kernel.org/
+Changes in v3:
+- Move the bpf_call_rcu_tasks_trace() verifier bits from patch 1 to
+  patch 3; patch 1 alone emitted "resolve_btfids: unresolved symbol
+  bpf_call_rcu_tasks_trace" (Sashiko)
+- Poll the callback counter with an acquire load (Sashiko)
+- teardown: v2 only checked that the program was eventually freed, which
+  passes even if nothing was ever armed.  Also assert that the chain ran,
+  and read the -EPERM back through an independent .bss fd
+- Use kern_sync_rcu() instead of open coding the grace-period wait
+- Return -EBADF rather than -ENOENT when the calling program is going
+  away, matching bpf_task_work_schedule()
+- mismatch_map now pins the bpf_rcu_head label the new code emits; it
+  passed with that branch removed.  Add a two_heads test, and wait for
+  each grace period separately in the chain test
+- Commit messages: correct the -EPERM parity claim, explain the inline
+  callback state and the struct size, motivate the tasks trace flavour
+v1: https://lore.kernel.org/all/20260907134552.1772405-1-puranjay@kernel.org/
+Changes in v2:
+- Rebase on bpf-next/master
+- Use rcu_read_lock_dont_migrate() over open coding (Alexei)
+- Improve re-arming selftest to detect failure (Sashiko)
 
-My point is that delta is independent of 32-bit/64-bit property.
-`delta' can be used to propagate in both directions:
-- full 64 bit -> 32 bit sign/zero-extened
-- 32 bit sign/zero-extened -> full 64-bit
+BPF programs that manage their own objects have no way to run their own
+logic once an RCU grace period has elapsed.  bpf_obj_drop() defers a
+free, but returning an index to an allocator or unpinning a resource
+once readers are done has no equivalent.  sched_ext's BPF library works
+around this today by pushing freed nodes onto a list and having a
+userspace thread call membarrier(MEMBARRIER_CMD_GLOBAL) and then run a
+BPF program to reclaim them; it is the first intended user.
 
-> > The reason for such subdivision is that:
-> >=20
-> >   (X + delta) % 32 =3D=3D X % 32 + delta % 32 =3D=3D X % 32 + delta iff=
- delta < 2^32
-> >=20
-> > Meaning that a non-zero delta can still be used to infer the state of
-> > the lower 32-bits, e.g.:
-> > - if  r1 =3D (X + delta) % 32
-> > - and r2 =3D X
-> > - and there is a comparison `if r1 < 42 goto ...`
-> >=20
-> > This comparison adds constraints on lower bits of r1,
-> > and it is correct to transfer these constraints to lower bits of r2
-> > by subtracting delta from r1 and using lower bits of the result.
->=20
-> Not sure what you're arguing about.
-> My only point is that 32-bit link with delta makes special
-> handling of zext unnecessary.
-> I still don't hear a strong reason why it needs to be handled
-> outside of 32-bit-link-with-delta.
+Add:
 
-I'm arguing that the following encoding:
-- ADD_CONST_32 (delta is valid, sign extend flag invalid)
-- ADD_CONST_64 (delta is valid, sign extend flag invalid)
-- sign extend flag (delta is invalid)
+	int bpf_call_rcu(struct bpf_rcu_head *rh, void *map,
+			 int (*callback)(struct bpf_map *map, void *key,
+					 void *value));
 
-I strictly worse.
+and bpf_call_rcu_tasks_trace(), same signature, which also waits for
+sleepable programs.
+
+@rh is a struct bpf_rcu_head embedded in a value of @map, so the
+callback runs as callback(map, key, value) for the element it lives in
+and needs no cookie.  The field is only accepted in BPF_MAP_TYPE_ARRAY,
+and arming holds a reference on the calling program until the callback
+has run.  Patch 1 covers the lifetime rules.
+
+This needs
+
+  https://lore.kernel.org/all/20260810122758.183765-1-puranjay@kernel.org/
+
+for call_rcu() and call_srcu() to be safe from the contexts a BPF
+program can be called in.
+
+Puranjay Mohan (4):
+  bpf: Add bpf_call_rcu() kfunc
+  selftests/bpf: Add tests for bpf_call_rcu()
+  bpf: Add bpf_call_rcu_tasks_trace() kfunc
+  selftests/bpf: Add a test for bpf_call_rcu_tasks_trace()
+
+ include/linux/bpf.h                           |  10 +
+ include/uapi/linux/bpf.h                      |   4 +
+ kernel/bpf/btf.c                              |   7 +
+ kernel/bpf/helpers.c                          | 102 +++++++
+ kernel/bpf/map_in_map.c                       |   4 +
+ kernel/bpf/map_iter.c                         |   6 +
+ kernel/bpf/syscall.c                          |  11 +-
+ kernel/bpf/verifier.c                         |  84 +++++-
+ tools/include/uapi/linux/bpf.h                |   4 +
+ .../selftests/bpf/prog_tests/call_rcu.c       | 275 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/call_rcu.c  | 110 +++++++
+ .../selftests/bpf/progs/call_rcu_fail.c       | 114 ++++++++
+ 12 files changed, 728 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/call_rcu.c
+ create mode 100644 tools/testing/selftests/bpf/progs/call_rcu.c
+ create mode 100644 tools/testing/selftests/bpf/progs/call_rcu_fail.c
+
+
+base-commit: 15972a29ac91dbbf4d33246962b7fcc7b1dea7ed
+-- 
+2.53.0-Meta
+
