@@ -1,147 +1,287 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525EE3F9F44
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 13:31:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9DA749EC74;
+	Mon, 21 Sep 2026 13:42:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789997486; cv=none; b=EVGh+n5+3c1iRZBkdup/61741AUseAxMz37018FSveE0rsVtXvXKz1NeV/g4zDg2sUDygdgqT0GMWK2d6I2dOc6AdaA0SJp93FiI7xCKY8XIFtDxZzBE7lXdb6Vb7SFdaC/uvghttjIFcoWX1hnHjXXr+3eoNFk27EdHTmTZHbc=
+	t=1789998140; cv=none; b=TKDULMX4Pgj8YvcVmx7WB2WXgfwV29/SluAscs4f2bfamAKjsfIiTOT5G8s0sh5t8V/ACps4PeqpJ9oH0yiJeIU6xnhU2icg0EUEjHTOTYpdLavhc7ug1Xp5dyOukmJNzvzgFxnlEKf4djj2z4DtRwYDe1xJ6z0tOKA70p8QnUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789997486; c=relaxed/simple;
-	bh=z5lzI2rCXW9UbXvUQ0qvO2O+FApH5UI+tIDJmCjrpNw=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uU8+QiclJ6A2uMfSgWWzD/wsUL1v9qmYjZQFpsUbtDBLG7ti9SYd36oT3pwseHltN/frg9zFE5X+G2C0ZkDentx/sSj07S4Q4av4nCYQzwjwic31NQKo/MkZjZ0klCX8IyRqNctDVEIGsykrR3Ul3RWmpmzbH8Hkd0kMVZ1FMNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cGPk2GbE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789998140; c=relaxed/simple;
+	bh=7G9UEBLZgbrN9P4Cfw5Muu4RseL/ECoPsopwRmszSCU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=I7s1F05zwAfv34TgB451PYQct+5ibtrya/aQZMEQ0qdcrmlcaFVHcwH98wnQHtBCK/3IBNAXFVdTmnpy6926hep0ZomQInYAuyPJnglYfkS8AdajKR7JP9oAZdhqNJOM4VwWvCYAcVZcETx6bJa32MeYAr2qlzeMHtpSCBygpU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WlkpR2nE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cGPk2GbE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EF3E1F0089A;
-	Mon, 21 Sep 2026 13:31:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WlkpR2nE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1A8C1F000FF;
+	Mon, 21 Sep 2026 13:42:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789997482;
-	bh=TdcUonrTTdL15C+kFc1nt6IyqqKU2WpcKXW5fw1ILXE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=cGPk2GbE7dp2TXVlMSXkQin94zWEZujSgFbEWN2CHOuI9uGJi5u4PWmOOowsIMV5j
-	 Njek6KmpvnH04gMK1Kk6cC5Ams8famH3Xpjz17oNo8RYuDeAtvbxQTTYuCIAKSTbCj
-	 3+NS9BqMT9QgtHoPMR+D7QcUYQhV3K04uWB/Q5JK5IrNRI7zjOzzuJHgz4EgrBi7mn
-	 +dh8e9fKK3n+7SDISgKiynmbUz6vvL9eOvwt2a9UkRaztEmRAGOd9EZ9pW6RJSLBKp
-	 6xMzuNy6mBmicdKIsEKEOU6ZvwRXkeBRL2apQtnI5CnaXsY9HDvjgzMRWpPjmuz9jq
-	 6gM6Prk0FM5mw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v1] bpf: cpumap: fix use-after-free of dev_rx on
- netdev unregister
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260920133017.248620-1-jiayuan.chen@linux.dev>
-References: <20260920133017.248620-1-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Mon, 21 Sep 2026 13:31:21 +0000
-Message-Id: <20260921133122.5EF3E1F0089A@smtp.kernel.org>
+	s=k20260515; t=1789998137;
+	bh=Gq0vTj/q+xiEShcvzmhfh6dP6o4g9VLSysSl8QLb3j8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=WlkpR2nE17QOZ6zGUzSrJYVr8Kw3DFKfWXsMDeXpbY+q0KIooRx7jZ/crujoKwIwp
+	 m63RatM18OEByBGSwPX2q+FotJNoCQPBNvXvPB/Fmcj+5qXrfio/133IaZEmn/P972
+	 yqtxRCVFdNAN5Hcybu9jTEvMHsNOfP1GV/VT6SWGnDNPUhpHw6Pu2wi4zRY8FzWmaF
+	 R03773xsMgXlHXexWISvTUm7XdEjDyHqX3tz4CqvTd14uy3haNipAJtfOt2Dgv57kq
+	 nHBV/U6bSEc+kbXmd5dDsQ2B9kMKuJDbi5GNoGz2DB1AOJvrkTmfbnTXqQkM0NvaIB
+	 xak/UDyaYsmUA==
+Message-ID: <15ea6ca1-e891-4929-bd58-c0e561b1cf6b@kernel.org>
+Date: Mon, 21 Sep 2026 14:42:13 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 3/3] bpftool: Add support for BPF_F_PREORDER
+ cgroup attach flag
+To: Hui Su <sh_def@163.com>, bpf@vger.kernel.org,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260919094400.600585-1-sh_def@163.com>
+ <20260919094400.600585-4-sh_def@163.com>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20260919094400.600585-4-sh_def@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [High] bpf: cpumap: UAF of netdev due to unlinking dying entry before kth=
-read stop
-- [High] bpf: cpumap: TOCTOU race in dev unregistering check allows UAF via=
- chained redirects
---
+2026-09-19 18:44 UTC+0900 ~ Hui Su <sh_def@163.com>
+> Commit 4b82b181a26c ("bpf: Allow pre-ordering for bpf cgroup progs")
+> introduced BPF_F_PREORDER to request pre-order execution across the
+> cgroup hierarchy. Furthermore, attachments legitimately use combinations
+> such as BPF_F_ALLOW_MULTI | BPF_F_PREORDER or
+> BPF_F_ALLOW_OVERRIDE | BPF_F_PREORDER.
+> 
+> With BPF_PROG_QUERY reporting the per-program BPF_F_PREORDER attribute,
+> bpftool's exact-match formatter falls back to "unknown(40)" when
+> BPF_F_PREORDER is present alone, or "unknown(41)" / "unknown(42)" when
+> combined with BPF_F_ALLOW_OVERRIDE or BPF_F_ALLOW_MULTI. Additionally,
+> do_attach() only accepts "multi" and "override", rejecting "preorder" with
+> "unknown option".
+> 
+> Before:
+>   $ bpftool cgroup show <cg>
+>   1234  cgroup_inet_ingress  unknown(42)  test_prog
+>   $ bpftool cgroup attach <cg> cgroup_inet_ingress id 5678 multi preorder
+>   Error: unknown option: preorder
+> 
+> After:
+>   $ bpftool cgroup show <cg>
+>   1234  cgroup_inet_ingress  multi,preorder  test_prog
+>   $ bpftool cgroup attach <cg> cgroup_inet_ingress id 5678 multi preorder
+>   (attaches successfully)
+> 
+> Refactor the attach flags formatter into a bitmask formatter that outputs
+> comma-separated flag names while preserving unrecognized bits as
+> "unknown(...)". Accept "preorder" in do_attach(), update the cgroup
+> documentation and synopsis to express valid flag combinations, and teach
+> bash completion about them ("multi" or "override" optionally combined with
+> "preorder").
+> 
+> Signed-off-by: Hui Su <sh_def@163.com>
 
-commit 357385e1a9c647836291f6c8f562ac50211ab22f
-Author: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-bpf: cpumap: fix use-after-free of dev_rx on netdev unregister
+Thank you, please find some comments inline below:
 
-This commit adds a netdev unregister notifier to drain cpumap kthreads to
-prevent use-after-free of stale netdev pointers in queued frames. It forces
-kthreads to consume existing frames and flush GRO caches before unregistrat=
-ion
-completes. It also checks for unregistered devices during cpumap redirects =
-to
-drop stale packets.
 
-> diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-> index 5e59ab896f058..bc2186adcd9a4 100644
-> --- a/kernel/bpf/cpumap.c
-> +++ b/kernel/bpf/cpumap.c
-[ ... ]
-> @@ -153,6 +171,11 @@ static u32 cpu_map_bpf_prog_run_skb(struct bpf_cpu_m=
-ap_entry *rcpu,
->  			skbs[pass++] =3D skb;
->  			break;
->  		case XDP_REDIRECT:
-> +			if (cpu_map_dev_unregistering(skb->dev)) {
-> +				kfree_skb(skb);
-> +				stats->drop++;
-> +				break;
-> +			}
+> ---
+>  .../bpftool/Documentation/bpftool-cgroup.rst  | 25 ++++++---
+>  tools/bpf/bpftool/bash-completion/bpftool     |  4 +-
+>  tools/bpf/bpftool/cgroup.c                    | 55 +++++++++++++------
+>  3 files changed, 56 insertions(+), 28 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
+> index e8185596a759..f8408ed44d74 100644
+> --- a/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-cgroup.rst
+> @@ -45,7 +45,7 @@ CGROUP COMMANDS
+>  |     **cgroup_unix_recvmsg** | **cgroup_sysctl** |
+>  |     **cgroup_getsockopt** | **cgroup_setsockopt** |
+>  |     **cgroup_inet_sock_release** }
+> -| *ATTACH_FLAGS* := { **multi** | **override** }
+> +| *ATTACH_FLAGS* := { **multi** [ **preorder** ] | **override** [ **preorder** ] | **preorder** }
 
-[Severity: High]
-Is there a time-of-check to time-of-use (TOCTOU) race here when chaining
-cpumap-to-cpumap redirects?
 
-During a redirect from cpumap A to cpumap B, kthread A might check
-cpu_map_dev_unregistering() and see the device is still registered, then get
-preempted.
+This looks more complex than it should, I think this should work just as
+well:
 
-A netdev unregister could then trigger the notifier, which sets drain_left
-for all kthreads and starts waiting. Kthread B might wake up, find its queue
-empty, report drain_left =3D 0, and wake the notifier.
+    *ATTACH_FLAGS* := { [ **multi** | **override** ] [ **preorder** ] }
 
-Then kthread A resumes, enqueues its packet to cpumap B, finishes its batch,
-reports drain_left =3D 0, and wakes the notifier.
+(and same for HELP_SPEC_ATTACH_FLAGS in cgroup.c)
 
-Since the notifier checks the wait queues one-by-one independently in
-cpu_map_netdev_event():
 
-	list_for_each_entry(rcpu, &cpu_map_list, list)
-		wait_event(rcpu->drain_wq, !READ_ONCE(rcpu->drain_left));
-
-It could unblock because both queues eventually reported 0, allowing the
-netdev to be freed. Kthread B could then wake up to process the newly
-enqueued packet, leading to a use-after-free on the netdevice.
-
->  			err =3D xdp_do_generic_redirect(skb->dev, skb, &xdp,
->  						      rcpu->prog);
-[ ... ]
-> @@ -528,6 +576,11 @@ static void __cpu_map_entry_free(struct work_struct =
-*work)
->  	 */
->  	rcpu =3D container_of(to_rcu_work(work), struct bpf_cpu_map_entry, free=
-_work);
-> =20
-> +	/* Unlink first, so the notifier can't wait on a kthread we stop */
-> +	mutex_lock(&cpu_map_mutex);
-> +	list_del(&rcpu->list);
-> +	mutex_unlock(&cpu_map_mutex);
+>  
+>  DESCRIPTION
+>  ===========
+> @@ -75,20 +75,27 @@ bpftool cgroup attach *CGROUP* *ATTACH_TYPE* *PROG* [*ATTACH_FLAGS*]
+>      Attach program *PROG* to the cgroup *CGROUP* with attach type *ATTACH_TYPE*
+>      and optional *ATTACH_FLAGS*.
+>  
+> -    *ATTACH_FLAGS* can be one of: **override** if a sub-cgroup installs some
+> +    *ATTACH_FLAGS* can include: **override** if a sub-cgroup installs some
+>      bpf program, the program in this cgroup yields to sub-cgroup program;
+>      **multi** if a sub-cgroup installs some bpf program, that cgroup program
+> -    gets run in addition to the program in this cgroup.
+> +    gets run in addition to the program in this cgroup;
+> +    **preorder** requests that this program executes in ancestor-to-descendant
+> +    order before non-preorder descendants-to-ancestors programs during evaluation
+> +    across the cgroup hierarchy. Note that **preorder** alone does not enable
+> +    multi-program attachment; specify **multi** together with **preorder** to
+> +    attach multiple programs.
+>  
+> -    Only one program is allowed to be attached to a cgroup with no attach flags
+> -    or the **override** flag. Attaching another program will release old
+> -    program and attach the new one.
+> +    Only one program is allowed to be attached to a cgroup unless the
+> +    **multi** flag is specified. Without **multi**, attaching another program
+> +    replaces the existing program, provided the **override** setting matches.
+>  
+>      Multiple programs are allowed to be attached to a cgroup with **multi**.
+> -    They are executed in FIFO order (those that were attached first, run
+> -    first).
+> +    Programs marked with **preorder** are placed before non-preorder programs
+> +    in the effective program array. Within each ordering class at the same
+> +    cgroup level, attachment order is preserved.
+>  
+> -    Non-default *ATTACH_FLAGS* are supported by kernel version 4.14 and later.
+> +    **multi** and **override** are supported by kernel version 4.14 and later.
+> +    **preorder** was introduced upstream in Linux 6.15.
+>  
+>      *ATTACH_TYPE* can be one of:
+>  
+> diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
+> index 75cbcb512eba..a51c68029e16 100644
+> --- a/tools/bpf/bpftool/bash-completion/bpftool
+> +++ b/tools/bpf/bpftool/bash-completion/bpftool
+> @@ -1057,7 +1057,6 @@ _bpftool()
+>                  attach|detach)
+>                      local BPFTOOL_CGROUP_ATTACH_TYPES="$(bpftool feature list_builtins attach_types 2>/dev/null | \
+>                          grep '^cgroup_')"
+> -                    local ATTACH_FLAGS='multi override'
+>                      # Check for $prev = $command first
+>                      if [ $prev = $command ]; then
+>                          _filedir
+> @@ -1087,7 +1086,8 @@ _bpftool()
+>                                  # "id|pinned|tag|name" (we already checked for
+>                                  # that). This should only leave the case when
+>                                  # we need attach flags for "attach" commamnd.
+> -                                _bpftool_one_of_list "$ATTACH_FLAGS"
+> +                                _bpftool_one_of_list 'multi override'
+> +                                _bpftool_once_attr 'preorder'
+>                              fi
+>                              return 0
+>                              ;;
+> diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
+> index ce69d1e5468e..6ea0492ea532 100644
+> --- a/tools/bpf/bpftool/cgroup.c
+> +++ b/tools/bpf/bpftool/cgroup.c
+> @@ -56,7 +56,7 @@ static const int cgroup_attach_types[] = {
+>  };
+>  
+>  #define HELP_SPEC_ATTACH_FLAGS						\
+> -	"ATTACH_FLAGS := { multi | override }"
+> +	"ATTACH_FLAGS := { multi [ preorder ] | override [ preorder ] | preorder }"
+>  
+>  #define HELP_SPEC_ATTACH_TYPES						\
+>  	"       ATTACH_TYPE := { cgroup_inet_ingress | cgroup_inet_egress |\n" \
+> @@ -269,6 +269,39 @@ static int show_effective_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
+>  	return 0;
+>  }
+>  
+> +static const char *format_attach_flags(__u32 attach_flags, char *buf, size_t sz)
+> +{
+> +	static const struct {
+> +		__u32 flag;
+> +		const char *name;
+> +	} flags[] = {
+> +		{ BPF_F_ALLOW_MULTI, "multi" },
+> +		{ BPF_F_ALLOW_OVERRIDE, "override" },
+> +		{ BPF_F_PREORDER, "preorder" },
+> +	};
+> +	size_t len = 0;
+> +	size_t i;
+> +	int n;
 > +
+> +	buf[0] = '\0';
+> +	for (i = 0; i < ARRAY_SIZE(flags); i++) {
+> +		if (attach_flags & flags[i].flag) {
+> +			n = snprintf(buf + len, sz - len, "%s%s",
+> +				     len ? "," : "", flags[i].name);
+> +			if (n < 0 || (size_t)n >= sz - len)
+> +				return buf;
+> +			len += n;
+> +			attach_flags &= ~flags[i].flag;
+> +		}
+> +	}
 
-[Severity: High]
-Does unlinking this entry before stopping the kthread open a window for a
-use-after-free?
 
-If a netdev unregister happens concurrently with a map update freeing this
-entry, cpu_map_netdev_event() will iterate over cpu_map_list.
+I'm fine with that for bpftool's plain output. For JSON, given that we
+introduce a change here already (output will be "multi,preorder" when
+BPF_F_PREORDER is set, instead of "multi" previously), we should maybe
+take that chance to print an array instead? Like this:
 
-Since the entry is already removed from the list via list_del(), the notifi=
-er
-won't wait for this dying kthread to drain.
+    "attach_flags": [ "multi", "preorder" ]
 
-The netdevice can then be freed, but the kthread could still be processing
-its queue while shutting down via kthread_stop(), potentially accessing the
-freed netdevice through xdpf->dev_rx or skb->dev.
 
->  	/* kthread_stop will wake_up_process and wait for it to complete.
->  	 * cpu_map_kthread_run() makes sure the pointer ring is empty
->  	 * before exiting.
->  	 */
->  	kthread_stop(rcpu->kthread);
+> +
+> +	if (attach_flags)
+> +		snprintf(buf + len, sz - len, "%sunknown(%x)",
+> +			 len ? "," : "", attach_flags);
+> +
+> +	return buf;
+> +}
+> +
+>  static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
+>  				   int level)
+>  {
+> @@ -276,7 +309,7 @@ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
+>  	__u32 prog_attach_flags[1024] = {0};
+>  	const char *attach_flags_str;
+>  	__u32 prog_ids[1024] = {0};
+> -	char buf[32];
+> +	char buf[64];
+>  	__u32 iter;
+>  	int ret;
+>  
+> @@ -296,21 +329,7 @@ static int show_attached_bpf_progs(int cgroup_fd, enum bpf_attach_type type,
+>  		__u32 attach_flags;
+>  
+>  		attach_flags = prog_attach_flags[iter] ?: p.attach_flags;
+> -
+> -		switch (attach_flags) {
+> -		case BPF_F_ALLOW_MULTI:
+> -			attach_flags_str = "multi";
+> -			break;
+> -		case BPF_F_ALLOW_OVERRIDE:
+> -			attach_flags_str = "override";
+> -			break;
+> -		case 0:
+> -			attach_flags_str = "";
+> -			break;
+> -		default:
+> -			snprintf(buf, sizeof(buf), "unknown(%x)", attach_flags);
+> -			attach_flags_str = buf;
+> -		}
+> +		attach_flags_str = format_attach_flags(attach_flags, buf, sizeof(buf));
+>  
+>  		show_bpf_prog(prog_ids[iter], type,
+>  			      attach_flags_str, level);
+> @@ -593,6 +612,8 @@ static int do_attach(int argc, char **argv)
+>  			attach_flags |= BPF_F_ALLOW_MULTI;
+>  		} else if (is_prefix(argv[i], "override")) {
+>  			attach_flags |= BPF_F_ALLOW_OVERRIDE;
+> +		} else if (is_prefix(argv[i], "preorder")) {
+> +			attach_flags |= BPF_F_PREORDER;
+>  		} else {
+>  			p_err("unknown option: %s", argv[i]);
+>  			goto exit_cgroup;
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260920133017.2486=
-20-1-jiayuan.chen@linux.dev?part=3D1
