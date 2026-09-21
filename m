@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-132.mta0.migadu.com [91.218.175.132])
+Received: from mta0.migadu.com (out-137.mta0.migadu.com [91.218.175.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D4E4F473D
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 18:59:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2844F96D6
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 18:59:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790017195; cv=none; b=fzkuNMMa2Qqwl8MjiOUKwZhaKEWXFL1AR82TFrIRQf7UpBHg/ir8U0G8qSDa8TY1T4A6AS+z/eE0yE0y5G3ONdjIJu/LVcfuYl2wTKLp07sZuirTx/ueEEIwwUiJGwo+7a/i0xBAOncEWJwjko3c8MIw40yeWJcNkE1E9mifOIA=
+	t=1790017197; cv=none; b=WVWbsxYFxzBVJS/T4iAo5rxBr/fV3pBID4zx3fQAeke4HXNJETVaClfDB5xhn3h+xOfW8quLZ2GHKwdjAnHr8eLz0r1C7tbcJPEAjEXtLT/nIcOPaU9ZS0o6jW3XZSdXyQMzLL27BzuQPcPxIeHgyNJ2fjY29NLhL/M5nkA1vck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790017195; c=relaxed/simple;
-	bh=Pofm77rzod73Bt78uY4E3DD44RNhgOcg2uywXtDlWwI=;
+	s=arc-20240116; t=1790017197; c=relaxed/simple;
+	bh=owL6q3Fk9/55Zw1NYDaaYKrFvFrDV8FYtck2SkEVXUk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pvBlPTll/wAxkefIAzGWO2lLUUYGQUHcB5K1qsu44+uz+/TSerGbLCkyeaLDtzD2Rr2i4cJ7JJ9R0D4APJJZk7HkrF81d1Rw+scm/u9wh+SrEwJLhi3/6GGv54kwsa3rmggJS7MvLDkP2V0iCo0akY9RpPG4oLR8uCUrHS9ggi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Nb8aaqsY; arc=none smtp.client-ip=91.218.175.132
+	 MIME-Version; b=mUCEQIBHgnyAmAbz97pK/Lf+kXdTd6XMpMebpj8AwHmzcgedsCmQHc/L3JVKDH9CX7tSXGalE8uRznFDHOjhim8g0vr9qU7ATwtIBXT8ZblA6Wpw+TQmWhSuPkmU5wkqilFBo1pIr4lpVFpX1x7hHODBFpDTbAocS0/ua89JqG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vGRQM2Gx; arc=none smtp.client-ip=91.218.175.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Nb8aaqsY"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vGRQM2Gx"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Pofm77rzod73Bt78uY4E3DD44RNhgOcg2uywXtDlWwI=;
+DKIM-Signature: a=rsa-sha256; bh=owL6q3Fk9/55Zw1NYDaaYKrFvFrDV8FYtck2SkEVXUk=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790017190; v=1; x=1790621990;
- b=Nb8aaqsYC7gc15nF4KAHNxgQHBbHU0FUWw4HuzyQZ5+r4AokV7j4ul92QCgBPz1TsCVuqPnS
- JYaW8UbwnacPJRaPcPTYwlUf6s4BXIMJhOGE9UFJwCeky/tiP2Q36ZetzIvpTwAyk8yO5sEd3Gh
- FZFKJQGCJfUa5ngHkfwMysZ0=
+ t=1790017192; v=1; x=1790621992;
+ b=vGRQM2GxPtn9yhfYeP2kSB6orQZ641hGUiBhFnYhqS5p7qdGdFaDtTV8j6WKOLHq+0+Q5Y8A
+ xh056bi544xXDJunL9Qe989UPO9HzxXb+6K4EcKZsDwnOdDNjlwCbsFRv3ql1Bx7HoJXlaRJlX6
+ Uq3pEZcHOENlusOytBwcE8cY=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta11.migadu.com with ESMTPS id 3e8edb1392227131;
-	Mon, 21 Sep 2026 18:59:50 +0000
-X-Mizu-Trace-ID: 3e8edb1392227131
+Received: by mta12.migadu.com with ESMTPS id c7c189aa1dad7a7d;
+	Mon, 21 Sep 2026 18:59:52 +0000
+X-Mizu-Trace-ID: c7c189aa1dad7a7d
 X-Migadu-Flow: FLOW_OUT
 From: Usama Arif <usama.arif@linux.dev>
 To: arighi@nvidia.com,
@@ -50,9 +50,9 @@ To: arighi@nvidia.com,
 	vschneid@redhat.com,
 	yphbchou0911@gmail.com
 Cc: Usama Arif <usama.arif@linux.dev>
-Subject: [PATCH 1/2] sched_ext: Specialize the TID hashtable compare
-Date: Mon, 21 Sep 2026 11:59:11 -0700
-Message-ID: <20260921185943.4031480-2-usama.arif@linux.dev>
+Subject: [PATCH 2/2] sched_ext: Specialize the scheduler hashtable compare
+Date: Mon, 21 Sep 2026 11:59:12 -0700
+Message-ID: <20260921185943.4031480-3-usama.arif@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260921185943.4031480-1-usama.arif@linux.dev>
 References: <20260921185943.4031480-1-usama.arif@linux.dev>
@@ -64,16 +64,16 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-scx_tid_hash_params does not provide an object comparison function, so
-rhashtable falls back to rhashtable_compare(). Although the key is one
-naturally aligned u64, the generic comparison reads the key offset and
-length from the table parameters at runtime and emits an out-of-line
-memcmp() for each element walked.
+scx_sched_hash_params does not provide an object comparison function,
+so rhashtable falls back to rhashtable_compare(). Although the
+sub-cgroup ID key is one naturally aligned u64, the generic comparison
+reads the key offset and length from the table parameters at runtime and
+emits an out-of-line memcmp() for each element walked.
 
-scx_bpf_tid_to_task() can sit on hot scheduling paths. Supply an
-obj_cmpfn so the const parameters passed into the inlined rhashtable
-lookup specialize the comparison to a single equality test against
-scx->tid.
+Supply an obj_cmpfn so lookups specialize to a single equality test
+against ops.sub_cgroup_id. ext.c and sub.c are included in the same
+build_policy.c translation unit, so the compiler can fold the const
+callback into scx_find_sub_sched() even though its source is in sub.c.
 
 The result is only tested against zero, so the ordering provided by
 memcmp() is not observable. No functional change intended.
@@ -85,31 +85,31 @@ Signed-off-by: Usama Arif <usama.arif@linux.dev>
  1 file changed, 11 insertions(+)
 
 diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
-index 646affba4e3c4..288d6b80bbca0 100644
+index 288d6b80bbca0..87fa09c71eb0f 100644
 --- a/kernel/sched/ext/ext.c
 +++ b/kernel/sched/ext/ext.c
-@@ -52,10 +52,21 @@ struct rhashtable scx_sched_hash;
- #endif
+@@ -41,10 +41,21 @@ struct scx_sched __rcu *scx_root;
+ LIST_HEAD(scx_sched_all);
  
- /* see SCX_OPS_TID_TO_TASK */
-+static __always_inline int scx_tid_cmpfn(struct rhashtable_compare_arg *arg,
-+					 const void *ptr)
+ #ifdef CONFIG_EXT_SUB_SCHED
++static __always_inline int scx_sched_cmpfn(struct rhashtable_compare_arg *arg,
++					   const void *ptr)
 +{
-+	const struct sched_ext_entity *scx = ptr;
++	const struct scx_sched *sch = ptr;
 +
-+	BUILD_BUG_ON(sizeof_field(struct sched_ext_entity, tid) != sizeof(u64));
++	BUILD_BUG_ON(sizeof_field(struct scx_sched, ops.sub_cgroup_id) != sizeof(u64));
 +
-+	return scx->tid != *(const u64 *)arg->key;
++	return sch->ops.sub_cgroup_id != *(const u64 *)arg->key;
 +}
 +
- static const struct rhashtable_params scx_tid_hash_params = {
- 	.key_len		= sizeof_field(struct sched_ext_entity, tid),
- 	.key_offset		= offsetof(struct sched_ext_entity, tid),
- 	.head_offset		= offsetof(struct sched_ext_entity, tid_hash_node),
-+	.obj_cmpfn		= scx_tid_cmpfn,
- 	.insecure_elasticity	= true,	/* inserted/removed under scx_tasks_lock */
+ const struct rhashtable_params scx_sched_hash_params = {
+ 	.key_len		= sizeof_field(struct scx_sched, ops.sub_cgroup_id),
+ 	.key_offset		= offsetof(struct scx_sched, ops.sub_cgroup_id),
+ 	.head_offset		= offsetof(struct scx_sched, hash_node),
++	.obj_cmpfn		= scx_sched_cmpfn,
+ 	.insecure_elasticity	= true,	/* inserted under scx_sched_lock */
  };
- static struct rhashtable scx_tid_hash;
+ 
 -- 
 2.53.0-Meta
 
