@@ -1,148 +1,300 @@
-Received: from mail-pj2-f0.google.com (mail-pj2-f0.google.com [74.125.227.128])
+Received: from 66-220-144-179.mail-mxout.facebook.com (66-220-144-179.mail-mxout.facebook.com [66.220.144.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1274CDA08
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 20:50:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C90A74FD7B9
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 21:00:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.144.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790023821; cv=none; b=VWajqBVzqV4G4WacwEXaNwRiAlLR+wt66xqw299Uaiib0xRe5LAlSDMw/mLPvH8DKtZrS2RJVBRH+c39DCupyKuDMjwM9ATKT7RVMRAsNR3qoxW4k0nIFjzwY1rodamBCH1EVyS0rM7IZ8xnbLQcXjXRisEZsPBOpsgWiCH23uE=
+	t=1790024452; cv=none; b=VWp46cUEI+2J/nNX0OgtpQHkYAKB6FcLsuRX1zMRB0QVkbe3CBlBASj1iQM68X3LNK3ceueO5jCCWpN7mM9N0MtvJhuK7Ig7DIRxZKiBB9iymyf9GQJ6+Hzy+lNH0TgZiMrmqHKsZ9t6Nflxm72D13GVLQex5Zxfp36NROU7Lws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790023821; c=relaxed/simple;
-	bh=3K8Eb+I83CUdRxVGCXUQQ3WdhV4CTwASv1dj1hWjeMY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hxloSncmlR6ZFYHBdLZCcamX3+xb+dZs24U3oRaNxXQNzK+qLpK1uoIFHaIgvQkCupeXftpU+4m6dHlIUDZvGhbnAKThzpb5eeduJeZjYrmmIibP9YsWNthL9pe/HOrQKOc4V2X98maWbtt9sE/QDfwcMexFKVMoAKKFaeRnKQQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WcYK3XM/; arc=none smtp.client-ip=74.125.227.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WcYK3XM/"
-Received: by mail-pj2-f0.google.com with SMTP id 98e67ed59e1d1-39e0e245eadso1510698a91.0
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 13:50:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790023813; x=1790628613; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=yyjdCKnMEmCaPdT+aCEi89L+hag448HkiD8Oh8/mPNU=;
-        b=WcYK3XM/pcB1qgTp+4lpeqJuu7ezehURnD3j9xE7j6gc08oZfdi66hTvxXAg/Msphe
-         5BjGI383ZRntYHjjcdGRiug9NB+mfjZsKPSrPITYNRh6GoM4d6PXM+ZSgqJoLSTPrI9L
-         jE3Wz6gDv1w5+oKozJ3mv5C5PlkDHxGto9S8AxFA3GpuAb60MggRsFTfuGOfSULf2suB
-         t0RExfEM6kNhIU8Zv9RG/WuVz3rW1AWHhjnSATTUyJ4TJWFPPzvCvdfw1neXOL5Z7NWq
-         Sa/YJ4z4xDXV3dhry68jdxAHglBfzTdXPueXeywtfSDBxldt6HtiPnREJx58zEETARqg
-         RSTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790023813; x=1790628613;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=yyjdCKnMEmCaPdT+aCEi89L+hag448HkiD8Oh8/mPNU=;
-        b=GO/bCJrneKSvzIWbLBKmqowU96ZEBGitScVbha3Ze0EeRsOZq+4+hm2Nz0UPCGsbSd
-         lZl9Hck/6iSvQztgmpohs7srpKORVR90ZxmqXhDF8MC+wdw9znmMu4L2RCwA11DZeJ8w
-         jofgbjtVBpFxH8slGg6mMVvqnoLBhxZ0dz+pFMU4PWeNO7lppM/vYwaoGNHwO2Gkbnx3
-         STtnksh+YgAZFjaoNm+ObDqx2PpEN7a2Hx1z0ZRuT5sia3aq5rmQdRlUlzxaGupMf+BE
-         rhnEPUoW3wSUzwjtFtdAi/sAEZz1OBEhyRE4IbNxA1Uq45KeFP55qUKLshjXC5ldLNcf
-         nMPQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzYy9MYuTt/042Kf4S3nWiCxttVErZotpWV0nUHm0l0rhpCWbbdU1LDb3ENb/rofZbW7aI=@vger.kernel.org
-X-Gm-Message-State: AFuF++m1jSAbKUgLTRd5y0pbUJhPzyOVC74fIHOHW9R/34nciCgT6XS1
-	I1sluRDl2cKuKX6MAm6zxNyO2F5TxRZvSdOt/J2cuMqZwl1rvkIfCqV3
-X-Gm-Gg: AYBFou1b48eprq54ukMNu/qzW2Y9Z2BWRVaHgs4UoxZbHRFbuwaIr2rS2qM/XFNjqoJ
-	isLe3wkhsN6cGmTwuZDpujntLja8TupUBlNCltGW/uD4lteQuKFZy/K+ngMfvoqT2lcEnkPKD0n
-	9LWN+hMHeceUN+GfvldiohzwThVDegfozZmxVcoVB68BOORuiUQpl1kGEXE2y2hpdL4dPVCaVxs
-	Ucl7ERiIIJlSRmKMkXZvlracSoKqkZW+MgYflFYsiNnJUGPhrDk4NNj96cDjzjZDJuTYGCE++kh
-	a5fXry9mRRPpVd7jdU6EB+A3Z+B/eOaoHUEruVcoqJO84xRTymFreN01Db9UiRDuc7zWOmIeLk6
-	4iy/54v2ruIxZjKpt+qmXAmh4dRqR+wj1RgaRNEH0Ird/9CJIIOydKhqeSzdolbZU7pIio70tsg
-	SerRL44v9pMlK3TGeD8kEhytIhh1siLKGERwN1qZrEte24/x6OFSyceCTqR4IRHjPa
-X-Received: by 2002:a17:90b:17c1:b0:398:e86b:ce14 with SMTP id 98e67ed59e1d1-39e54e3f526mr16896686a91.20.1790023813036;
-        Mon, 21 Sep 2026 13:50:13 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:40::])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a069a0c7aesm477642a91.16.2026.09.21.13.50.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 13:50:12 -0700 (PDT)
-Date: Mon, 21 Sep 2026 13:49:46 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Eric Dumazet <edumazet@google.com>, Neal Cardwell <ncardwell@google.com>, 
-	Willem de Bruijn <willemb@google.com>, Tenzin Ukyab <ukyab@berkeley.edu>, 
-	=?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@meta.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org
-Subject: Re: [PATCH bpf-next 6/7] bpf: tcp: Add kfunc to adjust
- sk->sk_rcvlowat.
-Message-ID: <arGYSbQ97ORDvSBl@devvm7509.cco0.facebook.com>
-References: <20260920195633.3033620-1-kuniyu@google.com>
- <20260920195633.3033620-7-kuniyu@google.com>
+	s=arc-20240116; t=1790024452; c=relaxed/simple;
+	bh=CJo+jzol/qjWAssVrFOAjT+t3ICKwLYH/xu16reuvVs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uIZZYHEeHN/y60Q+KLKFE7meRhUVe/enIdm4AlWHgVL2m+0cZWJOzkIePCkpTmznxv2xNvg51IA1XL4jGmc0/YM2aPbat5syC8w3VwGlqDwfel2OcN1d0Ltx6nLM5YEIQuaASMQSP+YDNwhSk2khb4cVbaFRHRtTAeYICP9fhyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.144.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
+Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
+	id 52E9F2C448A25C; Mon, 21 Sep 2026 14:00:33 -0700 (PDT)
+From: Yonghong Song <yonghong.song@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	kernel-team@fb.com
+Subject: [PATCH bpf-next v4 00/20] bpf: Run exception cleanup landing pads when bpf_throw() unwinds
+Date: Mon, 21 Sep 2026 14:00:33 -0700
+Message-ID: <20260921210033.1715000-1-yonghong.song@linux.dev>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260920195633.3033620-7-kuniyu@google.com>
+Content-Transfer-Encoding: quoted-printable
 
-On 09/20, Kuniyuki Iwashima wrote:
-> bpf_tcp_ops.{enqueue,dequeue}_rcvq() were added to parse skb and
-> adjust sk->sk_rcvlowat dynamically to suppress unnecessary wakeups.
-> 
-> Let's add a new kfunc to set sk->sk_rcvlowat.
-> 
-> Negative values are clamped to INT_MAX, consistent with SO_RCVLOWAT.
-> 
-> For enqueue_rcvq(), wakeup is set to false because:
-> 
->   * tcp_data_ready() is always called after the hooks in
->     tcp_queue_rcv() and tcp_ofo_queue().
-> 
->   * when tcp_fastopen_add_skb() is called for TFO SYN, the socket is
->     not yet accept()ed, and when called for TFO SYN+ACK, the socket
->     is woken up by sk->sk_state_change() anyway.
-> 
-> For dequeue_rcvq(), wakeup is set to true because tcp_data_ready()
-> is not called in that path.
-> 
-> An alternative would be to support bpf_setsockopt() for these
-> hooks.
-> 
-> However, that approach involves excessive conditionals and an
-> unnecessary memcpy(), costs we do not want to pay for every skb
-> in the TCP fast path.
-> 
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> ---
->  net/ipv4/bpf_tcp_ops.c | 56 +++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 55 insertions(+), 1 deletion(-)
-> 
-> diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
-> index b0e14b54917e..3768b1440eb7 100644
-> --- a/net/ipv4/bpf_tcp_ops.c
-> +++ b/net/ipv4/bpf_tcp_ops.c
-> @@ -359,8 +359,62 @@ static struct bpf_struct_ops bpf_tcp_ops = {
->  	.owner = THIS_MODULE,
->  };
->  
-> +__bpf_kfunc_start_defs();
-> +
-> +__bpf_kfunc int bpf_tcp_ops_set_rcvlowat(struct sock *sk, int rcvlowat,
-> +					 const struct bpf_prog_aux *aux)
-> +{
-> +	u32 moff = aux->attach_st_ops_member_off;
-> +	bool wakeup = false;
-> +
-> +	if (moff == offsetof(struct bpf_tcp_ops, dequeue_rcvq))
-> +		wakeup = true;
+bpf_throw() walks the BPF call stack to the exception boundary and
+discards every frame in between. A frame that owns something -- an RCU
+read lock, a preemption-disabled section, a referenced kptr -- never gets
+to give it back, so the verifier refuses to let such a frame throw at
+all. That is the whole reason a Rust program cannot use bpf_throw() as
+its panic path right now: Rust's Drop glue *is* that give-back, and there
+is nowhere to run it.
 
-[..]
+LLVM 23 added the compiler half ([1]). A Rust function that owns a value
+across a call that can unwind
 
-> +	if (rcvlowat < 0)
-> +		rcvlowat = INT_MAX;
+    fn foo() {
+        let _guard =3D RcuReadGuard::new();  /* bpf_rcu_read_lock()   */
+        may_throw();                       /* extern "C-unwind"     */
+    }                                      /* Drop: rcu_read_unlock */
 
-nit: the same check exists in setsockopt. Any reason not to move it
-to your new __tcp_set_rcvlowat ?
+lowers to an invoke with a cleanup landing pad holding the Drop call, and
+the BPF backend writes one record per invoke region into a .bpf_cleanup
+section: a flat table of 12-byte (begin, end, landing_pad) triples, each
+field a byte offset into the code section. The rule is "if a frame unwind=
+s
+with its return address in [begin, end), run landing_pad before discardin=
+g
+it". A pad ends with a call to _Unwind_Resume(), which the kernel provide=
+s
+as the bpf_unwind_resume() kfunc.
 
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
+This series is the kernel half: take that table at BPF_PROG_LOAD, teach
+the verifier that a covered call can also go to its landing pad, and have
+bpf_throw() run the pads as it walks.
+
+C has no unwinding, so the selftests spell out by hand what a frontend
+emits -- a call site bracketed by two labels, a landing pad, and a record
+tying them together. The frame above, written that way:
+
+        "call bpf_rcu_read_lock;"
+    "1:"    "call foo3;"                /* cleanup region */
+    "2:"
+        ... normal path, ends in bpf_rcu_read_unlock ...
+    "6:"                                /* landing pad */
+        "call bpf_rcu_read_unlock;"
+        "call bpf_unwind_resume;"
+        CLEANUP_REC("1b", "2b", "6b")
+
+Right now that program does not load: the throw inside foo3 is reported a=
+s
+"bpf_throw cannot be used inside bpf_rcu_read_lock-ed region", because as
+far as the verifier is concerned nothing will ever unlock. With the serie=
+s
+the verifier walks the unwind the same way the run time will -- into the
+pad, which unlocks, then on to the next frame -- and the program both
+loads and releases the lock when it throws.
+
+Design
+=3D=3D=3D=3D=3D=3D
+
+A pad is run, not lowered. bpf_throw() already walks the frames with
+arch_bpf_stack_walk(); it now looks each frame's return address up in
+that (sub)program's table and calls the pad as a subroutine of the walker=
+,
+with the unwinding frame's frame pointer and its callee-saved registers
+restored from the spill its callee's prologue left. The pad therefore see=
+s
+its own frame but runs on the walker's stack, far below it, so nothing it
+calls can disturb the frame it is cleaning up after. The JIT turns its
+bpf_unwind_resume() into the way back to the walker.
+
+The verifier walks the same thing, step for step, so the resource rules
+are unchanged: whatever a pad releases is released in the verifier state
+too, and check_resource_leak() simply moves from "a throw was seen" to th=
+e
+end of the walk.
+
+  1-2    uapi: cleanup_info in BPF_PROG_LOAD, struct bpf_cleanup_info,
+         and the bpf_unwind_resume() kfunc
+  3-9    verifier: mark the covered call sites, give them an edge to the
+         pad, walk the unwind, and refuse the shapes that cannot be
+         dispatched
+  10     bpf_throw(): dispatch pads while walking
+  11-12  x86-64 and arm64 JITs
+  13-17  libbpf: collect .bpf_cleanup, pass it to the kernel, resolve
+         _Unwind_Resume, carry it through the light skeleton and the
+         static linker
+  18-20  selftests
+
+Limitations
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+  - Cleanup pads only. A catch pad -- one that ends in a plain exit rathe=
+r
+    than a resume, which is what Rust's catch_unwind would need -- is
+    refused: the walker calls a pad as a subroutine and cannot hand a fra=
+me
+    back its own execution. LLVM refuses type-specific catches and filter=
+s
+    on its side as well.
+  - A JIT that can dispatch pads is required: x86-64 (with
+    CONFIG_UNWINDER_ORC, which bpf_throw() already needs there) and arm64=
+.
+    Anywhere else the load fails with -EOPNOTSUPP rather than silently
+    doing nothing.
+  - No offloaded programs, no private stack, and no combining a table wit=
+h
+    an exception callback.
+  - In a pad body: no tail call, no BPF_LD_[ABS|IND], no indirect jump, a=
+nd
+    no on-stack call arguments -- each of them reads or writes a stack th=
+e
+    pad does not own.
+  - The Rust toolchain does not properly support BPF exception handling
+    yet. The tables the selftests use are hand-written inline asm, which
+    the assembler turns into the same relocations the BPF AsmPrinter emit=
+s,
+    so libbpf and the kernel see an object indistinguishable from a
+    compiler-generated one.
+
+  [1] https://github.com/llvm/llvm-project/pull/192164
+      llvm commit 9d51c891b719 ("[BPF] Add exception handling support
+      with .bpf_cleanup section")
+
+Changelog
+=3D=3D=3D=3D=3D=3D=3D=3D=3D
+  v3 -> v4:
+    - v3: https://lore.kernel.org/bpf/20260920054225.864535-1-yonghong.so=
+ng@linux.dev/
+    - Rebase on bpf-next due to conflict.
+    - Reserve the throw-site spill area only in a (sub)program that calls
+      bpf_throw(): 40 bytes of stack per frame on x86-64, 80 on arm64.
+    - Bound the record count by the number of instructions in the program=
+,
+      and name both in the message.
+    - Refuse a .bpf_cleanup section in libbpf whose record count cannot b=
+e
+      handed to the kernel as a count times a record size in an int.
+    - Fix the static linker's new bounds check, which could itself wrap, =
+and
+      refuse a section too small to hold one field.
+    - WARN once if the body of bpf_unwind_resume() is ever reached, the w=
+ay
+      bpf_throw() does where its exception callback should never return.
+    - Rename nr_pad_body to pad_body_bits, use BTF_ID_LIST_SINGLE, move
+      cleanup_pad out of insn_aux_data's bools, drop an arm64 include.
+  v2 -> v3:
+    - v2: https://lore.kernel.org/bpf/20260918044156.3283973-1-yonghong.s=
+ong@linux.dev/
+    - Keep a landing pad's record when opt_remove_nops() deletes a pad th=
+at is
+      a nop, instead of dropping it after the verifier has already checke=
+d the
+      call site against it.
+    - Refuse a BPF_LD_[ABS|IND] in a pad body.
+    - Teach mark_chain_precision() about the throw-to-pad edge, which cro=
+sses
+      frames with no instruction to account for them.
+    - Refuse a bpf_unwind_resume() in any frame but the one whose landing=
+ pad
+      the walker entered.
+    - Check raw_data, alignment and bounds before the static linker write=
+s
+      through a relocation in a non-executable section, which may be SHT_=
+NOBITS.
+  v1 -> v2:
+    - v1: https://lore.kernel.org/bpf/20260917055645.3926444-1-yonghong.s=
+ong@linux.dev/
+    - Consolidate all usages of kern_extern_name() in a single patch in l=
+ibbpf.
+    - Avoid compiler warning and add proper cleanup_info_cnt guard in lib=
+bpf when
+      collecting .bpf_cleanup records.
+    - Add cleanup_info_cnt condition for emit_rel_store() with cleanup_in=
+fo.
+
+Yonghong Song (20):
+  bpf: Accept the compiler's exception cleanup table at program load
+  bpf: Add the bpf_unwind_resume() kfunc
+  bpf: Add lookups for exception cleanup resumes and landing pads
+  bpf: Prepare for an exception cleanup table before the CFG walk
+  bpf: Make exception landing pads reachable in the CFG
+  bpf: Explore the landing pads no call site reaches
+  bpf: Refuse exception cleanup shapes bpf_throw() cannot dispatch
+  bpf: Walk the exception unwind in the verifier
+  bpf: Refuse a private stack for a program with an exception cleanup
+    table
+  bpf: Dispatch exception cleanup pads from bpf_throw()
+  bpf, x86: Dispatch exception cleanup pads at run time
+  bpf, arm64: Dispatch exception cleanup pads at run time
+  libbpf: Resolve the compiler's _Unwind_Resume to the kernel's kfunc
+  libbpf: Add cleanup_info to bpf_prog_load_opts
+  libbpf: Collect .bpf_cleanup records and pass them to the kernel
+  libbpf: Carry the exception cleanup table through the light skeleton
+  libbpf: Let the static linker carry .bpf_cleanup relocations
+  selftests/bpf: Add an end-to-end .bpf_cleanup exception test
+  selftests/bpf: Cover the exception cleanup shapes the chain does not
+    reach
+  selftests/bpf: Load an exception cleanup program from a light skeleton
+
+ arch/arm64/net/Makefile                       |   2 +-
+ arch/arm64/net/bpf_cleanup_pad.S              |  95 ++
+ arch/arm64/net/bpf_jit_comp.c                 |  91 +-
+ arch/x86/net/Makefile                         |   3 +
+ arch/x86/net/bpf_cleanup_pad.S                |  80 ++
+ arch/x86/net/bpf_jit_comp.c                   |  81 +-
+ include/linux/bpf.h                           |  90 ++
+ include/linux/bpf_cleanup_abi.h               |  16 +
+ include/linux/bpf_verifier.h                  |  17 +-
+ include/linux/filter.h                        |   2 +
+ include/uapi/linux/bpf.h                      |   9 +
+ kernel/bpf/Makefile                           |   2 +-
+ kernel/bpf/backtrack.c                        |  20 +-
+ kernel/bpf/cfg.c                              |  71 +-
+ kernel/bpf/check_btf.c                        | 151 +++
+ kernel/bpf/core.c                             |  35 +-
+ kernel/bpf/exception.c                        | 663 ++++++++++++
+ kernel/bpf/exception.h                        |  22 +
+ kernel/bpf/fixups.c                           | 166 ++-
+ kernel/bpf/helpers.c                          |  48 +
+ kernel/bpf/liveness.c                         |  20 +
+ kernel/bpf/states.c                           |   6 +
+ kernel/bpf/syscall.c                          |   2 +-
+ kernel/bpf/verifier.c                         | 176 +++-
+ tools/include/uapi/linux/bpf.h                |   9 +
+ tools/lib/bpf/bpf.c                           |   6 +-
+ tools/lib/bpf/bpf.h                           |   7 +-
+ tools/lib/bpf/gen_loader.c                    |  29 +-
+ tools/lib/bpf/libbpf.c                        | 327 +++++-
+ tools/lib/bpf/libbpf_internal.h               |  10 +
+ tools/lib/bpf/linker.c                        |  36 +-
+ tools/testing/selftests/bpf/Makefile.skel     |   2 +-
+ .../selftests/bpf/exceptions_cleanup.h        |  55 +
+ .../bpf/prog_tests/exceptions_cleanup.c       | 495 +++++++++
+ .../selftests/bpf/progs/exceptions_cleanup.c  | 157 +++
+ .../bpf/progs/exceptions_cleanup_ext_table.c  |  48 +
+ .../bpf/progs/exceptions_cleanup_fail.c       | 662 ++++++++++++
+ .../bpf/progs/exceptions_cleanup_freplace.c   |  17 +
+ .../bpf/progs/exceptions_cleanup_light.c      |  39 +
+ .../progs/exceptions_cleanup_pad_freplace.c   |  17 +
+ .../bpf/progs/exceptions_cleanup_shapes.c     | 982 ++++++++++++++++++
+ 41 files changed, 4694 insertions(+), 72 deletions(-)
+ create mode 100644 arch/arm64/net/bpf_cleanup_pad.S
+ create mode 100644 arch/x86/net/bpf_cleanup_pad.S
+ create mode 100644 include/linux/bpf_cleanup_abi.h
+ create mode 100644 kernel/bpf/exception.c
+ create mode 100644 kernel/bpf/exception.h
+ create mode 100644 tools/testing/selftests/bpf/exceptions_cleanup.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/exceptions_cle=
+anup.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup.=
+c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+ext_table.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+freplace.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+light.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+pad_freplace.c
+ create mode 100644 tools/testing/selftests/bpf/progs/exceptions_cleanup_=
+shapes.c
+
+--=20
+2.53.0-Meta
+
