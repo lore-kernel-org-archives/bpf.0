@@ -1,359 +1,175 @@
-Received: from mta0.migadu.com (out-162.mta0.migadu.com [91.218.175.162])
+Received: from mail-pz2-f43.google.com (mail-pz2-f43.google.com [74.125.228.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF635396D03
-	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 19:26:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.162
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B67394471
+	for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 19:27:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790018798; cv=none; b=jHG1D/tIe4WG4Q7mCW0orUL8N9b7M7MJSt+3ttlQE1KxrMhDSLQ1iUBPhJNkzdQiCIyqGUXByLmWKPNcb8RFcOmE/Nymy7O4EkdUD+z/rh+AR+EFCgU9AjrPgRA4jPmH9RnuEI36+R+8kny3W/Pks9z4Tgsu2/rqlhNcJIh+x3g=
+	t=1790018859; cv=none; b=ZiwuOafPtMgiWWmCHinpf2te55Uhnp0FpbbzyQ4KgSdJC9e2ix5cTcR374/cHqxXtAqiMgNNcpVmX3UDorekObSg2N8qyPUyt14PyrzamW2Z0uCMlHvpuI/3IQDxeWwwzWgMIGRf2PHhXuh2pdfw8xq49asNGHWCHjtNAiiyaUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790018798; c=relaxed/simple;
-	bh=S4IiI0QtQMZJ6UHYEdTwEsQ4SJWFZYS+fNpb6Z0WBxU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BaX7dhAvcw/W0o27xTZ6bsbu4iBqH2F/xdY84965U8NEKh6+J3bphjMs3xP+aAfD4NAZS6xy9q339l2s0IcRc+8VBjNMdL4wDMXhEcGgd4XLTmVMvMcxsWebx92PJV3CbjOM1OZjrEOnLFC7cny+HEt/Ayx9codS3lgsZG/201M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=h1YidvtP; arc=none smtp.client-ip=91.218.175.162
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790018859; c=relaxed/simple;
+	bh=4on2XQCCKq79/vtxCsDoimfudfbqBXEbuHawU+G11pc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=LpV5Bft04fKLGkU+h/1xBIvEF4BfXjHh37c9bFiyCVzsXoxd2HDx9la6e6OGluDIgKQdxGQLxCZ/0CO+nkO+D7mXOoyWrCnpo62jGqIwey1tEqhP8jkv0e4Ux+Uf+QaS3qu7Uks8avBKt5IsVj/4BcHkAOpItNoPtyM7214K71E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZPE4PbSz; arc=none smtp.client-ip=74.125.228.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="h1YidvtP"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=S4IiI0QtQMZJ6UHYEdTwEsQ4SJWFZYS+fNpb6Z0WBxU=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790018794; v=1; x=1790623594;
- b=h1YidvtPF/BMmhACJVDlhSVdqZR0Q2VpuuiNocO/6hDPxq3TbMfAZsyzHS1mMv8uIcDu7FX/
- OeDmh4XubtmXU/C1LU2QJPuaMSjAbnN+uFgJtv4ekidvhKwYEUsT/T1FsOp1IukiRrHag+7jU+a
- /GKyASDiqCEPLOz2n1qqBQVs=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 923039e922c66b75;
-	Mon, 21 Sep 2026 19:26:34 +0000
-X-Mizu-Trace-ID: 923039e922c66b75
-X-Migadu-Flow: FLOW_OUT
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Alexei Starovoitov <ast@kernel.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	JP Kobryn <jp.kobryn@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	Michal Koutny <mkoutny@suse.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	hui.zhu@linux.dev,
-	Donet Tom <donettom@linux.ibm.com>,
-	Greg Thelen <gthelen@google.com>,
-	Meta kernel team <kernel-team@meta.com>,
-	linux-mm@kvack.org,
-	bpf@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 4/4] selftests/bpf: add a cgroupfs lock-holder bpf_memcg_ops sample
-Date: Mon, 21 Sep 2026 12:25:59 -0700
-Message-ID: <20260921192559.2619635-5-shakeel.butt@linux.dev>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260921192559.2619635-1-shakeel.butt@linux.dev>
-References: <20260921192559.2619635-1-shakeel.butt@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZPE4PbSz"
+Received: by mail-pz2-f43.google.com with SMTP id d2e1a72fcca58-8693af0d7c4so3715052b3a.3
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 12:27:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790018857; x=1790623657; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=+BuFRYJQioQsFKMrRoqK+vwHlNR8DMCln0kaU+pU5wk=;
+        b=ZPE4PbSzVro93qo/gQkB40ESIYppDzFxJ9Cw5xxWAKZM0D1yeCeDAqezL5ns6dBxjy
+         uZWUuijflIdYXihjLrA+VYfPfEXMnUwYj8fIDZ8qvH/WjdJoD9tLcCppsvKnV0CUCpEQ
+         ciadN17WT/ntmg2CaPXiZ8cIS6RQHs2LJiAVXgFlmBciSDmjvY77pMMpHjAOYufxYGIx
+         FcOfp+msRxwYIuMfIKT+RnEBVkpn16wA9WxH6uuWy9HLAsZHtSW8Vxe4ohdtKzASxu+z
+         hQiE/wqhlPJKCMM7POOcwe5F/iXkigSuunZk3b+2KYmzsYsWXC0jMvXQCVrX/QAE4s9K
+         Ns2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790018857; x=1790623657;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+BuFRYJQioQsFKMrRoqK+vwHlNR8DMCln0kaU+pU5wk=;
+        b=DG+5p3U8en5O7eC6c6rIPwnpMTXr2W10vQNF8vyKR1UVsUaPEpkUN20p1/7rc41wfK
+         ibh2wYtNabfPSfJmyjx1zfxOPDGTYTjZueg8XXwwCLtXEiWqpWxtEhztn0iPCzWZGBhm
+         UzWjzSFeeiGw0to9INmKk1rrVekBX/oYnk6/mmYlKpyY4wCBNPlahA8qUJjErMvuI60r
+         SeBuGFIkG2V5VTJw80CHhGNJosKH/13fYhi6kKh+nUJ3AlMY5sRBX6Le32mmQnY3ydCR
+         Z7gD/MJLuGNAoNRYJSwmfiBARegEF5dKhKlSm5vgXPvC1oVSIu000peRP1Lo11x/cgnN
+         JTQw==
+X-Forwarded-Encrypted: i=1; AKwUvBzDHkxRgWMr5+FOrSaSUjr7k+ZEwd8ItuuJ6yg8I8fwDvBZMKSmGJvIB7gEHuI4HwG1Oqs=@vger.kernel.org
+X-Gm-Message-State: AFuF++nA24U6UfNHNiWrL+MRnCmR6eP5UTnVnyuULk0Z0xEtlW4gGupa
+	zo4us6z0aEzw4VhWYVNTndJvQjsc+zhtzBqpnv1wNQdufQfP1fhZ1es2
+X-Gm-Gg: AYBFou3HXFR7eQCcFAMEq4lyUn5PyzBhFAcNyioxp2qu5AQdLq+93SiNfgkh9gMJFdR
+	M9hycbKXHF4+51Yalo2vG9Lrjzb6C75cJ2Jv7I5k8PcxKLtuUbErTBXxoouAV1Kt1HSTifWdK70
+	i2o5qkJ5V2scvZFN9x+tnkDFeSDwkNKbd0c7+xLKYbthpxKeLfA0Q6Z1nd5og7rVcTaWL8GaqrS
+	wZurc2DCxQx/faO6lTZpwOg+YohjBDQ8CMItepgYF+3XONFyw6aWTSdHWD6xQ1dBj3+nHWVZdA6
+	ejF6plGn8bekyWMuiStvstDFBy+uS78BvRSRe3bgeXz9ZWhx7S41A9Y4ofpx6FoYPqju/6Dww5j
+	2Lm9IjjK5ziDHbg3KBPxPoddvFdP2uWgf4Dlin6df3NhJ7iHOlESDGSjM2q7dThum2yd60PLvEJ
+	tasgnZ0QQ69Qp/stgkztVtXDEnxxlcf41TmXqkMcgTyMy2bJIL5QXZs+ZTtdmnAoH0jn3qVTKcN
+	VjFAAWiB3GU7e7DOoYYDgOFzI8FWUKj2cyLLz2ijBCG2XrRjA2JJEYrSnMCHoh5Qw4fbreFjtyk
+	tgA=
+X-Received: by 2002:a05:6a00:4655:b0:874:705d:f651 with SMTP id d2e1a72fcca58-874de60e6c9mr16128267b3a.31.1790018857181;
+        Mon, 21 Sep 2026 12:27:37 -0700 (PDT)
+Received: from localhost ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87bf7eb8574sm1309b3a.43.2026.09.21.12.27.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Sep 2026 12:27:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 21 Sep 2026 19:27:36 +0000
+Message-Id: <DLL8Q69N7BUD.1HI0MKU2M2UGE@gmail.com>
+To: "Eduard Zingerman" <eddyz87@gmail.com>, "Vineet Gupta"
+ <vineet.gupta@linux.dev>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Kumar
+ Kartikeya Dwivedi" <memxor@gmail.com>, "Martin KaFai Lau"
+ <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Shuah Khan" <shuah@kernel.org>, "bpf" <bpf@vger.kernel.org>, "LKML"
+ <linux-kernel@vger.kernel.org>, "open list:KERNEL SELFTEST FRAMEWORK"
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v2 03/13] bpf: track low-32 scalar equality
+ across zero-extending movs
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+X-Mailer: aerc 0.17.0
+References: <20260910164635.459558-1-vineet.gupta@linux.dev>
+ <20260910164635.459558-4-vineet.gupta@linux.dev>
+ <DLDKI0ZXYI7H.1XQZZE2RCU7IF@gmail.com>
+ <4ab75099-0e95-4fee-81da-6f4198e3e6a0@linux.dev>
+ <CAADnVQ+N9tzBJ0Bbvp8_8QvR+QcCP4ej5CgV_kRHt=iw4BANSQ@mail.gmail.com>
+ <202c45e2-58ba-4ad5-a234-c90703031f91@linux.dev>
+ <CAADnVQ+Si9Au8J_j2nt+ZzFq6WPaz8hpmh0n=_dFysZmSOeipA@mail.gmail.com>
+ <ff18ccb77a554000a030199e8c1fbb7d8d298e18.camel@gmail.com>
+ <DLL84IMPTRQF.3DOQQTN2KCAEW@gmail.com>
+ <e9aad352ba82dadd97a17867108b5db1865fa38d.camel@gmail.com>
+In-Reply-To: <e9aad352ba82dadd97a17867108b5db1865fa38d.camel@gmail.com>
 
-A bpf_memcg_ops policy that keeps tasks holding a cgroupfs kernfs lock out
-of inline memory.high enforcement.
+On Mon Sep 21, 2026 at 7:10 PM UTC, Eduard Zingerman wrote:
+> On Mon, 2026-09-21 at 18:59 +0000, Alexei Starovoitov wrote:
+> > On Mon Sep 21, 2026 at 5:28 PM UTC, Eduard Zingerman wrote:
+> > > On Wed, 2026-09-16 at 17:30 -0700, Alexei Starovoitov wrote:
+> > > > On Wed, Sep 16, 2026 at 5:08=E2=80=AFPM Vineet Gupta <vineet.gupta@=
+linux.dev> wrote:
+> > > > >=20
+> > > > > It ended up with full testsuite run parity - after 4 incremental =
+patches.
+> > > > > But the pattern of all those patches was adding some predicate /
+> > > > > special-casing to reg->add_const
+> > > > >=20
+> > > > > hunk 1
+> > > > >=20
+> > > > > -       if (src_reg->add_const)
+> > > > > +       if (src_reg->add_const && src_reg->delta)
+> > > >=20
+> > > > why? It should not.
+> > > > My point is that zero is not special.
+> > > > It should be handled within the current framework.
+> > > > All these extra hunks are not correct.
+> > > > ADD_CONST_32 logic should work for delta =3D=3D 0 just like
+> > > > it works for delta =3D=3D 1.
+> > >=20
+> > > After thinking about it some more, I agree that having an orthogonal
+> > > encoding would be nice. However, it appears that the split should be
+> > > somewhat different:
+> > >=20
+> > >   struct bpf_reg_state {
+> > >     ...
+> > >     s32 delta;
+> > >     u32 id;
+> > >     enum id_link_kind { full, zext, sext } link_kind;
+> > >     ...
+> > >   }
+> > >=20
+> > > Where:
+> > > - id =3D=3D 0 =3D> no id link
+> > > - full =3D> all 64-bits of the register are identical to
+> > >           all 64-bits of a scalar value `id' (let's call it X).
+> > >           =E2=88=80 rA{.id =3D=3D X, .link =3D=3D full}, rB{X,full} =
+=3D> rA =3D=3D rB
+> > > - zext =3D> lower 32-bits of the register are identical to
+> > >           lower 32-bits of a scalar value X,
+> > >           upper 32-bits of the register are null.
+> > >           =E2=88=80 rA{.id =3D=3D X, .link =3D=3D ?}, rB{X,zext} =3D>=
+ rA % 32 =3D=3D rB % 32
+> > > - sext =3D> lower 32-bits of the register are identical to
+> > >           lower 32-bits of a scalar value X,
+> > >           upper 32-bits of the register are either 0 or 1,
+> > >           depending on the bit 31 value.
+> > >           =E2=88=80 rA{.id =3D=3D X, .link =3D=3D ?}, rB{X,sext} =3D>=
+ sext(rA % 32) =3D=3D sext(rB % 32)
+> >=20
+> > hmm.
+> > there is also 32-bit link with delta, right?
+>
+> My point is that delta is independent of 32-bit/64-bit property.
+> `delta' can be used to propagate in both directions:
+> - full 64 bit -> 32 bit sign/zero-extened
+> - 32 bit sign/zero-extened -> full 64-bit
 
-About forty functions take that lock, one of them through guard(rwsem_read),
-so the sample tracks the lock rather than its callers.  A SEC("syscall")
-program finds kernfs_rwsem and kernfs_supers_rwsem inside
-cgrp_dfl_root.kf_root, and fentry/fexit on the rwsem primitives keeps a
-per-task depth for those two addresses.  Every other kernfs user has its own
-kernfs_root, so its own locks, which keeps this to cgroupfs.
+both? how ?
+I was under impression that in 32-bit domain delta is one way.
+rX =3D ...
+wY =3D wX
+wY +=3D 5
 
-down_*() return once the lock is held, so an acquire is counted on their
-exit and a release on the entry of up_*().  The killable, interruptible and
-trylock forms are covered too, checking the return so a failed acquire does
-not count.  downgrade_write() needs no hook.  The depth is clamped at zero
-for tasks already holding the lock when the hooks went on.
-
-Two counters guard against passing for the wrong reason: one counts a holder
-that reached inline enforcement anyway, and one counts a holder that could
-not be tracked.  Both must be 0.
-
-Measured with a reproducer [1] for the bug fixed by the patch proposed
-in [2], on a kernel without that fix:
-
-                                      baseline    policy    upstream fix
-  max kernfs_rwsem hold, worker        2.049 s     199 us   not taken
-  max kernfs_supers_rwsem hold         2.049 s     4.8 ms   2.056 s
-  max kernfs_rwsem write wait          4.096 s     6.2 ms   8.7 ms
-  walker passes over /sys/fs/cgroup        352       5711   6700
-  churn mkdir+rmdir ops                 13 059    364 832   415 488
-  churn max latency                     30.7 s    15.1 ms   12.7 ms
-
-The policy does better than the fix on kernfs_supers_rwsem, which the fix
-does not help: it drops kernfs_rwsem from the delivery loop, while the
-policy stops the worker stalling at all.
-
-The throughput columns are about 8% under what the same policy reaches
-hooking one function.  That is the cost of the tracking and motivates
-more optimized way to track the shared locks which can cause isolation
-issues between unrelated workloads.
-
-There is no harness yet, so these numbers come from the reproducer and not
-from the test suite.
-
-[1] https://github.com/shakeelb/mempressure-repros/tree/main/kernfs-notify-memcg
-[2] https://lore.kernel.org/20260910045406.485295-1-shakeel.butt@linux.dev/
-
-Signed-off-by: Shakeel Butt <shakeel.butt@linux.dev>
----
- .../bpf/progs/memcg_ops_lockholder.c          | 222 ++++++++++++++++++
- 1 file changed, 222 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/memcg_ops_lockholder.c
-
-diff --git a/tools/testing/selftests/bpf/progs/memcg_ops_lockholder.c b/tools/testing/selftests/bpf/progs/memcg_ops_lockholder.c
-new file mode 100644
-index 000000000000..09a74f21f3da
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/memcg_ops_lockholder.c
-@@ -0,0 +1,222 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Keep tasks holding a cgroupfs kernfs lock out of inline memory.high
-+ * enforcement.
-+ */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+/* cgrp_dfl_root has no BTF variable, so take it as an untyped ksym. */
-+extern const void cgrp_dfl_root __ksym;
-+
-+/* Set by resolve_locks() below, before any of the hooks are attached. */
-+__u64 kernfs_rwsem_addr;
-+__u64 kernfs_supers_rwsem_addr;
-+
-+struct lock_state {
-+	__s32 depth;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_TASK_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, struct lock_state);
-+} lock_state SEC(".maps");
-+
-+/* Charges from a task holding one of the locks: each is a stall avoided. */
-+__u64 deferrals;
-+/* Charges from everyone else, where we said nothing. */
-+__u64 passthroughs;
-+/* A holder reached inline enforcement anyway.  Must stay zero. */
-+__u64 violations;
-+/*
-+ * A holder went untracked because task storage could not be created.  That
-+ * looks just like a pass, and gets likelier under the pressure we are
-+ * testing.  Must stay zero too.
-+ */
-+__u64 mark_failures;
-+
-+/*
-+ * Find the two rw_semaphores in the cgroup2 kernfs_root.  The loader runs this
-+ * once before attaching the hooks, so none of them sees a zero address.  Every
-+ * other kernfs user has its own kernfs_root, hence its own locks, which is
-+ * what keeps this to cgroupfs.
-+ */
-+SEC("syscall")
-+int resolve_locks(void *ctx)
-+{
-+	struct cgroup_root *root = (struct cgroup_root *)&cgrp_dfl_root;
-+	struct kernfs_root *kf;
-+
-+	kf = BPF_CORE_READ(root, kf_root);
-+	if (!kf)
-+		return 1;
-+
-+	kernfs_rwsem_addr = (__u64)kf +
-+		bpf_core_field_offset(struct kernfs_root, kernfs_rwsem);
-+	kernfs_supers_rwsem_addr = (__u64)kf +
-+		bpf_core_field_offset(struct kernfs_root, kernfs_supers_rwsem);
-+	return 0;
-+}
-+
-+static __always_inline bool is_cgroup_kernfs_lock(const void *sem)
-+{
-+	__u64 addr = (__u64)sem;
-+
-+	return addr && (addr == kernfs_rwsem_addr ||
-+			addr == kernfs_supers_rwsem_addr);
-+}
-+
-+static __always_inline void note_acquire(const void *sem)
-+{
-+	struct lock_state *st;
-+
-+	if (!is_cgroup_kernfs_lock(sem))
-+		return;
-+
-+	st = bpf_task_storage_get(&lock_state, bpf_get_current_task_btf(), NULL,
-+				  BPF_LOCAL_STORAGE_GET_F_CREATE);
-+	if (!st) {
-+		__sync_fetch_and_add(&mark_failures, 1);
-+		return;
-+	}
-+	st->depth++;
-+}
-+
-+static __always_inline void note_release(const void *sem)
-+{
-+	struct lock_state *st;
-+
-+	if (!is_cgroup_kernfs_lock(sem))
-+		return;
-+
-+	st = bpf_task_storage_get(&lock_state, bpf_get_current_task_btf(), NULL, 0);
-+	if (!st)
-+		return;
-+	/* A task already holding it when we attached has no acquire to match. */
-+	if (st->depth > 0)
-+		st->depth--;
-+}
-+
-+/*
-+ * down_*() return once the lock is held, so the hold runs from their exit to
-+ * the entry of up_*().  That excludes the wait.
-+ *
-+ * downgrade_write() needs no hook: the lock stays held, and the up_read()
-+ * after it pairs with the original down_write().
-+ */
-+
-+SEC("fexit/down_read")
-+int BPF_PROG(down_read_exit, struct rw_semaphore *sem)
-+{
-+	note_acquire(sem);
-+	return 0;
-+}
-+
-+SEC("fexit/down_write")
-+int BPF_PROG(down_write_exit, struct rw_semaphore *sem)
-+{
-+	note_acquire(sem);
-+	return 0;
-+}
-+
-+/* The killable and interruptible forms return 0 when they got the lock. */
-+SEC("fexit/down_read_killable")
-+int BPF_PROG(down_read_killable_exit, struct rw_semaphore *sem, int ret)
-+{
-+	if (!ret)
-+		note_acquire(sem);
-+	return 0;
-+}
-+
-+SEC("fexit/down_read_interruptible")
-+int BPF_PROG(down_read_interruptible_exit, struct rw_semaphore *sem, int ret)
-+{
-+	if (!ret)
-+		note_acquire(sem);
-+	return 0;
-+}
-+
-+SEC("fexit/down_write_killable")
-+int BPF_PROG(down_write_killable_exit, struct rw_semaphore *sem, int ret)
-+{
-+	if (!ret)
-+		note_acquire(sem);
-+	return 0;
-+}
-+
-+/* The trylocks return 1 when they got the lock. */
-+SEC("fexit/down_read_trylock")
-+int BPF_PROG(down_read_trylock_exit, struct rw_semaphore *sem, int ret)
-+{
-+	if (ret == 1)
-+		note_acquire(sem);
-+	return 0;
-+}
-+
-+SEC("fexit/down_write_trylock")
-+int BPF_PROG(down_write_trylock_exit, struct rw_semaphore *sem, int ret)
-+{
-+	if (ret == 1)
-+		note_acquire(sem);
-+	return 0;
-+}
-+
-+SEC("fentry/up_read")
-+int BPF_PROG(up_read_enter, struct rw_semaphore *sem)
-+{
-+	note_release(sem);
-+	return 0;
-+}
-+
-+SEC("fentry/up_write")
-+int BPF_PROG(up_write_enter, struct rw_semaphore *sem)
-+{
-+	note_release(sem);
-+	return 0;
-+}
-+
-+/* If a holder gets here, the policy did not work. */
-+SEC("fentry/__mem_cgroup_handle_over_high")
-+int BPF_PROG(over_high_enter)
-+{
-+	struct lock_state *st;
-+
-+	st = bpf_task_storage_get(&lock_state, bpf_get_current_task_btf(), NULL, 0);
-+	if (st && st->depth > 0)
-+		__sync_fetch_and_add(&violations, 1);
-+	return 0;
-+}
-+
-+/* BPF_PROG() uses "ctx" for the raw argument array, hence "mctx" here. */
-+SEC("struct_ops")
-+__u32 BPF_PROG(kernfs_high_policy, const struct bpf_memcg_ctx *mctx)
-+{
-+	struct lock_state *st;
-+
-+	/*
-+	 * mctx->task is the charging task.  No F_CREATE, so this is just an
-+	 * RCU read, and the counters are atomics on .bss.  Both are fine here.
-+	 */
-+	st = bpf_task_storage_get(&lock_state, mctx->task, NULL, 0);
-+	if (!st || st->depth <= 0) {
-+		__sync_fetch_and_add(&passthroughs, 1);
-+		return BPF_MEMCG_HIGH_NO_OPINION;
-+	}
-+
-+	__sync_fetch_and_add(&deferrals, 1);
-+
-+	/* The kernel ORs this with what the other policies return. */
-+	return BPF_MEMCG_HIGH_DEFER_INLINE;
-+}
-+
-+SEC(".struct_ops.link")
-+struct bpf_memcg_ops kernfs_lockholder = {
-+	.high_policy = (void *)kernfs_high_policy,
-+};
--- 
-2.53.0-Meta
+if wY =3D=3D 10
+We cannot do -5 to rX
+and we cannot use your above 'full' encoding for wY +=3D 5.
+Currently we use BPF_ADD_CONST32 for wY +=3D 5
+I don't see how 'full' can work.
 
