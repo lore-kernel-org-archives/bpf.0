@@ -1,33 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2AA37F8B6;
-	Tue, 22 Sep 2026 01:31:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710C63815D3;
+	Tue, 22 Sep 2026 01:31:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790040673; cv=none; b=Z3OD5bj//M67NzrMAE6xmE1J/9FsqssUf//ZZ7l+s0mBD2JkTgXmICPsY6rVeroiMoHbQJ7mRTp+jFfRz32yV0ZILThIBA6dkuEbZk6RU5P+kIVcelkZDRD6ImB56iGLCfqnWZHmMHDSc/1Nrh32Q7mejB500zxM4t/u2GjHGxQ=
+	t=1790040675; cv=none; b=W0rduIw6njYBidWUXdu7kW3iRPL71uXvwbSko+1U2f7vAK6+oyocDCUN9ovOG7VGjT6ax2VWI2Jn83GnxEMiwwB9IoY9coG88SX7eFcnq40EIcpOG4op+l7AwTeTY8BsOOegkLGuEqyJ6uYgF+Pyemk6WokBWCpE7BDzxc6ai2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790040673; c=relaxed/simple;
-	bh=uoLGOVgwBogdF69VCBugkWjTqnm+x9t4v+V4vt3bIcM=;
+	s=arc-20240116; t=1790040675; c=relaxed/simple;
+	bh=V9SpNQbsgfkzyv2k/+hD8cRjEpWWrBexPTwRYfHYimE=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=sF6pBc7x1kAM6vSTH4qbTd6uQgnLUTB/nsM7ZHT1kk8lIvoB9h075EHD+t/QVMhkoDiKhCNQ/tY4bt8uhlOeoMsIBzsnxBq5NRiwNBSnKcdQLntDC+8+0MIwxbPXqhocDcuIlC9HvBJtX+9G2uMkSxewFxFhFZ5xhBdcTQfwE8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZFXRAK0s; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=LRiaLmQlB2b/Ev3aofuPJfOSvnKM9KszFdhqLg3r2b0XSZqvQ+bj6q7mB2+8Q3zKB9cD4eNmoGgMyJ/VQN3k/NvinlTM6H3GuqZTaVW7UoC5GV0ROGR3gGvxSqea/FFd6qKnzFw+4l55Nu6qPHYlAn+n60brFh7E2a7PapV+uwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ax1dYJsW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZFXRAK0s"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3F691F00893;
-	Tue, 22 Sep 2026 01:31:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ax1dYJsW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0FCC1F00899;
+	Tue, 22 Sep 2026 01:31:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790040672;
-	bh=bDWGwR/NPr1WssQaVehT1pIEJDZprbebaZQr51+3LGs=;
+	s=k20260515; t=1790040674;
+	bh=xewNfa1Hs/ZoeGXM8ztNZJZxmuT8z51qUI+OT+vlhDI=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ZFXRAK0sXqInpy2FVGHYmmybSUawsZcPeHizG7MPrdS8q9KC8J3IrLZ/bGB6Pbixp
-	 v7JUrfO6dC/jSjXR6cB666d2+qiLENdulj4r1aAODhTA5ehvj+OBQTZ2ewVT9tjmYf
-	 QLOULjL7Phj/UYu74LQSGV7iqeyyjzx/4Td1ltlKGLajVXLBQ2Sjh15BH2TiUFps/p
-	 daSFVoB1SXr/AZDzhkRkFOknGj2YIou6CoU2SNjMtBObrvxLoD0jTYWXAzaIHzHqp3
-	 9rv05XVPNji0m+BLkCc3mHDTYI6IbhFujx5+NIjiCG0W2H1UhfyuGew87wnrxutfFv
-	 qX82y2KfF5hVg==
-Subject:
- Re: [PATCH net 4/8] i40e: avoid deadlock when calling unregister_netdev()
+	b=ax1dYJsW/jY7P3xTpx5+FlRRGeLHPZOfzQmexaxAuLRIdmdnb0w3Uj4XlHU0pC5xf
+	 hxhRbufW0m9PYzR7q0hiGTMohlaudJ3fPBNOzlNPfKWIoURMzC3AGlWKEVFVzoysmN
+	 FhNc5CKMkNrq27QTcBrbXwm3BAv66LZqW0sqvibW6AV3uWjQVVKZdQ35wyVP5hlYEB
+	 XWXSOdVH5lirx+wpLNa/VABICTyDGR495wokT5k7J7nJKD1S0o+Bug8sIkilynG6KM
+	 BYQn4ThLF+snW/QPhCVSFgsFhGVR92DNZ9wM75AKUYz10axbCmRTa1TA72C7ZrnY62
+	 vmP8aUAVoWKFQ==
+Subject: Re: [PATCH net 6/8] i40e: do not expose netdev too early
 From: netdev-bot+sashiko@kernel.org
 To: anthony.l.nguyen@intel.com
 Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
@@ -38,10 +37,10 @@ Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
  kerneljasonxing@gmail.com, ast@kernel.org, daniel@iogearbox.net,
  hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
  bpf@vger.kernel.org, sunithax.d.mekala@intel.com
-Date: Tue, 22 Sep 2026 01:31:10 +0000
-Message-ID: <179004067040.2160803.1559812086096525304@kernel.org>
-In-Reply-To: <20260918212458.550425-5-anthony.l.nguyen@intel.com>
-References: <20260918212458.550425-5-anthony.l.nguyen@intel.com>
+Date: Tue, 22 Sep 2026 01:31:12 +0000
+Message-ID: <179004067224.2160803.5016911027685852459@kernel.org>
+In-Reply-To: <20260918212458.550425-7-anthony.l.nguyen@intel.com>
+References: <20260918212458.550425-7-anthony.l.nguyen@intel.com>
 X-sashiko-severity: High
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -52,10 +51,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 1 potential
+Thank you for your contribution! Sashiko AI review found 3 potential
 issue(s) to consider.
 
-Critical: 0 · High: 1 (1) · Medium: 0 (2) · Low: 0
+Critical: 0 · High: 1 · Medium: 0 · Low: 2
 
 If you believe none of the issues are legitimate, please reply to each
 issue of Medium severity or higher and explain why the AI is wrong.
@@ -63,222 +62,204 @@ If any of them are legitimate and you plan to respin, please let patchwork
 know by including "pw-bot: cr" as a separate line at the end of your reply
 (one such reply per series is enough).
 
-- [High] Incomplete fix: the RTNL self-deadlock is only removed from the
-  i40e_vsi_reinit_setup() arm of i40e_setup_pf_switch().
-
-Pre-existing issues:
-- [High] Dangling main-VSI references after a failed VSI reinit.
-- [Medium] NULL pointer dereference when the reinit unwind re-enters
-  ndo_stop after q_vectors/rings were released.
-- [Medium] Memory leak in the asymmetric unwind of
-  i40e_vsi_reinit_setup() as it exists at this commit: the two early…
+- [High] The patch narrows but does not close the window it claims to
+  close for the driver's primary netdev.
+- [Low] Dead error-path code left behind by the reordering: the block at
+  i40e_main.c:14498-14502 (`err_rings: if (vsi->netdev_registered) {…
+- [Low] Two pieces of externally visible netdev state are still installed
+  after registration, contradicting the 'publish late' invariant the…
 
 --
 
-i40e: avoid deadlock when calling unregister_netdev()
+i40e: do not expose netdev too early
 
-This adds a lock_acquired parameter to i40e_vsi_reinit_setup() so the
-err_netdev unwind uses unregister_netdevice() when RTNL is already held by
-the rebuild path, and unregister_netdev() otherwise. The caller in
-i40e_setup_pf_switch() forwards its own lock_acquired flag.
+This moves register_netdev() in i40e_vsi_setup() from the middle of the
+netdev setup case to the end of the function, after ring and q_vector
+allocation, ring-to-vector mapping and VMDQ2 RSS configuration.  The
+error path is reworked so an allocated but unregistered netdev is still
+freed.
 
 > diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-> index 65aa50330aac..5ea8731ece08 100644
+> index 2b4b061302db..82037faf960f 100644
 > --- a/drivers/net/ethernet/intel/i40e/i40e_main.c
 > +++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+> @@ -14449,15 +14449,6 @@ struct i40e_vsi *i40e_vsi_setup(struct i40e_pf *pf, u8 type,
+>  				goto err_netdev;
+>  			SET_NETDEV_DEVLINK_PORT(vsi->netdev, &pf->devlink_port);
+>  		}
+> -		ret = register_netdev(vsi->netdev);
+> -		if (ret)
+> -			goto err_dl_port;
+> -		vsi->netdev_registered = true;
+> -		netif_carrier_off(vsi->netdev);
+> -#ifdef CONFIG_I40E_DCB
+> -		/* Setup DCB netlink interface */
+> -		i40e_dcbnl_setup(vsi);
+> -#endif /* CONFIG_I40E_DCB */
+>  		fallthrough;
+>  	case I40E_VSI_FDIR:
+>  		/* set up vectors and rings if needed */
+> @@ -14485,6 +14476,19 @@ struct i40e_vsi *i40e_vsi_setup(struct i40e_pf *pf, u8 type,
+>  		if (ret)
+>  			goto err_config;
+>  	}
+> +
+> +	if (vsi->netdev) {
+> +		ret = register_netdev(vsi->netdev);
+> +		if (ret)
+> +			goto err_config;
+> +		vsi->netdev_registered = true;
 
-[ ... ]
+[Severity: High]
+For the MAIN VSI, does this really close the window described in the
+commit message?  register_netdev() is still called from inside
+i40e_vsi_setup(), which runs from
+i40e_probe() -> i40e_setup_pf_switch() -> i40e_vsi_setup().
 
-> @@ -14308,7 +14310,10 @@ static struct i40e_vsi *i40e_vsi_reinit_setup(struct i40e_vsi *vsi)
->  err_netdev:
+After i40e_vsi_setup() returns for the MAIN VSI, i40e_setup_pf_switch()
+still programs PF-wide state the datapath depends on:
+
+	i40e_vlan_stripping_disable(main_vsi);
+	i40e_fdir_sb_setup(pf);
+	ret = i40e_setup_pf_filter_control(pf);
+	...
+	if (test_bit(I40E_FLAG_RSS_ENA, pf->flags))
+		i40e_pf_config_rss(pf);
+	i40e_link_event(pf);
+	i40e_ptp_init(pf);
+
+Note that only VMDQ2 gets RSS configured inside i40e_vsi_setup():
+
+	if (test_bit(I40E_HW_CAP_RSS_AQ, pf->hw.caps) &&
+	    vsi->type == I40E_VSI_VMDQ2) {
+		ret = i40e_vsi_config_rss(vsi);
+
+so the MAIN netdev is published before PFQF_HENA/HKEY/HLUT, PFQF_CTL_0 and
+the VLAN strip configuration are written.  Back in i40e_probe(),
+__I40E_DOWN is cleared and i40e_setup_misc_vector() arms the ICR0 admin
+queue vector only after i40e_setup_pf_switch() has returned.
+
+i40e_open() gates on:
+
+	if (test_bit(__I40E_TESTING, pf->state) ||
+	    test_bit(__I40E_BAD_EEPROM, pf->state))
+		return -EBUSY;
+
+which does not test __I40E_DOWN or any probe-complete state, and
+register_netdev() drops RTNL before returning while probe holds no lock
+that blocks rtnetlink.  Can a concurrent "ip link set up" (udev or
+NetworkManager reacting to the freshly published ifindex) therefore reach
+i40e_vsi_open() -> i40e_up_complete() while the PF's global hardware state
+is still being programmed and while i40e_intr() still refuses to service
+ICR0 because __I40E_DOWN is set?
+
+There is also the probe failure case.  i40e_setup_pf_switch() returns the
+(otherwise non-fatal) i40e_setup_pf_filter_control() error, and a
+i40e_setup_misc_vector() failure jumps to err_vsis:
+
+	err_vsis:
+		set_bit(__I40E_DOWN, pf->state);
+		i40e_ptp_stop(pf);
+		i40e_clear_interrupt_scheme(pf);
+		kfree(pf->vsi);
+
+with no unregister_netdev() anywhere on that path, and err_switch_setup
+then frees the PF itself.  Does this leave an already registered, possibly
+already opened netdev in the system whose netdev_priv()->vsi->back points
+at freed memory, so a later ndo_open, ndo_get_stats64, ethtool or close
+touches freed q_vectors and a freed struct i40e_pf?
+
+Would registering the netdev only once i40e_probe() has completed, or
+gating ndo_open on a "PF ready" state, be a more complete fix than moving
+registration a few statements later inside i40e_vsi_setup()?
+
+> +		netif_carrier_off(vsi->netdev);
+> +#ifdef CONFIG_I40E_DCB
+> +		/* Setup DCB netlink interface */
+> +		i40e_dcbnl_setup(vsi);
+> +#endif /* CONFIG_I40E_DCB */
+> +	}
+
+[Severity: Low]
+Since the commit declares the "publish late" invariant, should these two
+steps move ahead of register_netdev() as well?
+
+register_netdev() emits NETDEV_REGISTER/RTM_NEWLINK and drops RTNL before
+returning, while alloc_etherdev_mq() leaves __LINK_STATE_NOCARRIER clear.
+Can the initial link notification therefore advertise IFF_LOWER_UP, with a
+carrier-down linkwatch event following immediately once
+netif_carrier_off() runs?  netif_carrier_off() sets the bit before its
+early return:
+
+net/sched/sch_generic.c:netif_carrier_off() {
+	if (!test_and_set_bit(__LINK_STATE_NOCARRIER, &dev->state)) {
+		if (dev->reg_state == NETREG_UNINITIALIZED)
+			return;
+	...
+}
+
+so it looks intended to be callable before registration.
+
+Similarly, i40e_dcbnl_setup() installs the ops and only then populates the
+state:
+
+drivers/net/ethernet/intel/i40e/i40e_dcb_nl.c:i40e_dcbnl_setup() {
+	dev->dcbnl_ops = &dcbnl_ops;
+
+	/* Set initial IEEE DCB settings */
+	i40e_dcbnl_set_all(vsi);
+}
+
+Does a DCB request arriving between register_netdev() and the dcbnl_ops
+assignment get -EOPNOTSUPP from dcb_doit() on a DCB-capable port:
+
+net/dcb/dcbnl.c:dcb_doit() {
+	if (!netdev->dcbnl_ops)
+		return -EOPNOTSUPP;
+	...
+}
+
+and is there a second window where dcbnl_ops is live but
+i40e_dcbnl_set_all() has not run yet?  Assigning dcbnl_ops and clearing
+carrier before register_netdev(), leaving only i40e_dcbnl_set_all()
+afterwards, would avoid both windows.
+
+> +
+>  	return vsi;
+>  
+>  err_config:
+> @@ -14495,13 +14499,14 @@ struct i40e_vsi *i40e_vsi_setup(struct i40e_pf *pf, u8 type,
 >  	if (vsi->netdev_registered) {
 >  		vsi->netdev_registered = false;
-> -		unregister_netdev(vsi->netdev);
-> +		if (lock_acquired)
-> +			unregister_netdevice(vsi->netdev);
-> +		else
-> +			unregister_netdev(vsi->netdev);
->  		free_netdev(vsi->netdev);
->  		vsi->netdev = NULL;
+>  		unregister_netdev(vsi->netdev);
+> -		free_netdev(vsi->netdev);
+> -		vsi->netdev = NULL;
 >  	}
 
-[Severity: High]
-This isn't a bug introduced by this patch, but now that this unwind can
-actually run to completion instead of deadlocking, what happens to
-pf->lan_vsi afterwards?
+[Severity: Low]
+Is this err_rings block still reachable after the reordering?
 
-The tail of this path is:
+i40e_vsi_mem_alloc() sets vsi->netdev_registered = false for every VSI, and
+after this patch the only assignment of true sits after every
+goto err_config/err_qvec/err_rings/err_netdev in i40e_vsi_setup(), followed
+only by netif_carrier_off(), i40e_dcbnl_setup() and "return vsi".  If
+register_netdev() itself fails the flag is still false, so the condition
+looks always false when the unwind path runs.
 
-	i40e_aq_delete_element(&pf->hw, vsi->seid, NULL);
-	i40e_vsi_clear(vsi);
-	return NULL;
+Would dropping it be clearer, so a later patch adding a step after
+registration does not assume the unwind already deregisters the netdev?
 
-and i40e_vsi_clear() does:
-
-	pf->vsi[vsi->idx] = NULL;
-	...
-free_vsi:
-	kfree(vsi);
-
-pf->lan_vsi is never reset to I40E_NO_VSI, so i40e_pf_get_main_vsi()
-returns NULL from then on.
-
-After i40e_setup_pf_switch() returns -EAGAIN, i40e_rebuild() only clears
-__I40E_RESET_FAILED, __I40E_RESET_RECOVERY_PENDING and
-__I40E_TIMEOUT_RECOVERY_PENDING; neither __I40E_DOWN nor __I40E_SUSPENDED
-is set, so the service task keeps running. Can the next watchdog tick or
-link event then oops in i40e_link_event(), which dereferences the main VSI
-with no NULL check?
-
-	if (new_link == old_link &&
-	    new_link_speed == old_link_speed &&
-	    (test_bit(__I40E_VSI_DOWN, vsi->state) ||
-	     new_link == netif_carrier_ok(vsi->netdev)))
-		return;
-	...
-	i40e_print_link_message(vsi, new_link);
-
-There is also the ethtool -L caller. i40e_reconfig_rss_queues() caches the
-main VSI pointer, calls the void i40e_reset_and_rebuild(pf, true, true) and
-then keeps using the pointer:
-
-	i40e_reset_and_rebuild(pf, true, true);
-	...
-	if (queue_count < vsi->rss_size) {
-	...
-	qcount = vsi->num_queue_pairs / vsi->tc_config.numtc;
-
-Does that dereference a VSI that this error path already kfree()d, since the
-rebuild failure is not reported back to the caller?
-
-[Severity: Medium]
-This is a pre-existing issue, but the ordering between err_rings and
-err_netdev looks worth a second look now that the unregister actually
-proceeds under RTNL.
-
-err_rings calls i40e_vsi_free_q_vectors(vsi), which NULLs every
-vsi->q_vectors[i], and then falls through to this unregister. Both
-unregister_netdevice() and unregister_netdev() reach
-unregister_netdevice_many_notify() -> netif_close_many(), which calls
-ndo_stop for any device that still has IFF_UP set:
-
-net/core/dev.c:netif_close_many() {
-	list_for_each_entry_safe(dev, tmp, head, close_list)
-		if (!(dev->flags & IFF_UP))
-			list_del_init(&dev->close_list);
-
-	__dev_close_many(head);
-}
-
-IFF_UP is still set because the reset quiesce calls ndo_stop directly rather
-than dev_close():
-
-i40e_quiesce_vsi() {
-	...
-		vsi->netdev->netdev_ops->ndo_stop(vsi->netdev);
-	...
-}
-
-So i40e_close() -> i40e_vsi_close() runs on the already dismantled VSI:
-
-	if (!test_and_set_bit(__I40E_VSI_DOWN, vsi->state))
-		i40e_down(vsi);
-
-and i40e_down() -> i40e_napi_disable_all() dereferences the freed vector
-array without a NULL check:
-
-		struct i40e_q_vector *q_vector = vsi->q_vectors[q_idx];
-
-		if (q_vector->rx.ring || q_vector->tx.ring)
-
-__I40E_VSI_DOWN can still be clear here, since i40e_prep_for_reset()
-returns early and skips i40e_pf_quiesce_all_vsi() when a reset is already
-pending:
-
-	if (test_and_set_bit(__I40E_RESET_RECOVERY_PENDING, pf->state))
-		return;
-
-Can this combination oops in i40e_napi_disable_all(), or is there something
-in the ethtool/ndo entry points that prevents a reinit from starting while
-another reset is pending?
-
-[Severity: Medium]
-This isn't a bug introduced by this patch either, and it looks already
-addressed in this tree, but noting it for completeness: the two early
-goto err_netdev paths (i40e_vsi_alloc_arrays() failure and i40e_get_lump()
-failure) skip i40e_vsi_free_q_vectors(), which only the err_rings label
-performs:
-
-err_rings:
-	i40e_vsi_free_q_vectors(vsi);
-err_netdev:
-
-With the older shape of this function, which kept the previously allocated
-q_vectors alive across the reinit, i40e_vsi_clear() -> i40e_vsi_free_arrays()
-would only free the pointer array:
-
-	if (free_qvectors) {
-		kfree(vsi->q_vectors);
-		vsi->q_vectors = NULL;
-	}
-
-leaving each struct i40e_q_vector orphaned, since free_netdev() only unlinks
-NAPI instances from dev->napi_list and does not free the containing
-q_vector. The commit "i40e: keep q_vectors array in sync with channel count
-changes" moves i40e_vsi_free_q_vectors() to the top of
-i40e_vsi_reinit_setup() and re-creates the vectors via
-i40e_vsi_setup_vectors(), so no live q_vector objects remain when the early
-err_netdev paths run and the leak is gone.
-
-> @@ -15030,7 +15035,7 @@ static int i40e_setup_pf_switch(struct i40e_pf *pf, bool reinit, bool lock_acqui
->  			main_vsi = i40e_vsi_setup(pf, I40E_VSI_MAIN,
->  						  uplink_seid, 0);
->  		else if (reinit)
-> -			main_vsi = i40e_vsi_reinit_setup(main_vsi);
-> +			main_vsi = i40e_vsi_reinit_setup(main_vsi, lock_acquired);
-
-[Severity: High]
-Should the other arm of this if/else get the same treatment? Both branches
-are entered with identical lock state:
-
-i40e_rebuild() {
-	...
-	if (!lock_acquired)
-		rtnl_lock();
-	ret = i40e_setup_pf_switch(pf, reinit, true);
-	...
-}
-
-but i40e_vsi_setup() still takes RTNL itself, both on success:
-
-	ret = register_netdev(vsi->netdev);
-	if (ret)
-		goto err_dl_port;
-	vsi->netdev_registered = true;
-
-and on its unwind, which is the exact pattern this patch just replaced:
-
-err_msix:
-	if (vsi->netdev_registered) {
-		vsi->netdev_registered = false;
-		unregister_netdev(vsi->netdev);
-		free_netdev(vsi->netdev);
-		vsi->netdev = NULL;
-	}
-
-Can the !main_vsi branch be reached with RTNL held? The err_netdev path
-patched above ends in i40e_vsi_clear(), which sets pf->vsi[vsi->idx] = NULL
-and kfree()s the VSI without resetting pf->lan_vsi, so
-i40e_pf_get_main_vsi() returns NULL on the next reset. The following
-rebuild would then take:
-
-		if (!main_vsi)
-			main_vsi = i40e_vsi_setup(pf, I40E_VSI_MAIN,
-						  uplink_seid, 0);
-
-with rtnl_mutex already held, and register_netdev() -> rtnl_lock() would
-self-deadlock on the non-recursive mutex, which is the failure mode this
-commit describes fixing.
+> -err_dl_port:
+>  	if (vsi->type == I40E_VSI_MAIN)
+>  		i40e_devlink_destroy_port(pf);
+>  err_netdev:
+> +	if (vsi->netdev) {
+> +		free_netdev(vsi->netdev);
+> +		vsi->netdev = NULL;
+> +	}
+>  	i40e_aq_delete_element(&pf->hw, vsi->seid, NULL);
+>  err_vsi:
+>  	i40e_vsi_clear(vsi);
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260918212458.550425-1-anthony.l.nguyen%40intel.com
