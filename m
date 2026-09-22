@@ -1,382 +1,216 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+Received: from mail-pj2-f8.google.com (mail-pj2-f8.google.com [74.125.227.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1324EB87A
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 20:40:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.141
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790109632; cv=pass; b=mXFrXc1CAOxTATe8Ex+J9IDU/ZAfloUoOIQJn1g4rWb6szd+v+m0Js6O1kUifNVdnLENfK/YXDgPyrQhm49MRrAwaSy4gTNVdaXOZNdhvzjaobuk2W8LqoY7gXjRQGCKjzJgTpzKk4cSB3n83Qw4zaUmGFbxEfFDcLPCnjjp2ZU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790109632; c=relaxed/simple;
-	bh=T5qON6NA5741RSYOZ73ufhgHMwUbpgwOLeDYHKzAZ/8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WfaK38MbRSYss2V/UhtWzSOteUDktSxgtE9bDKLo89hammeUDmwZDqgdz/t8BpY/WM5MUBQVCSyaDHMg71dlRXdt/8WGgL0HuzPe6QNAUN3QtFBr2+k4NH5jU3Re5GKJO+jAOwf9aesjAauSr3r+q2NcF7THunIMxSqq2BFxQtQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JQIeuLBy; arc=pass smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6885C42E415
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 20:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.136
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790110408; cv=none; b=NBH9si1InVa3wUZGMJNClYaapBkfWBZNVXrGCctzgch1o59utoEYts/9XuJmFb7fuI5dPyQj2scK2tFYyhHfaIkk/uj2U/IKJ+iI3MaIbn5J65gmo9BluOaHljpaLrb7nI8j4RYnwXMqLlSgNrxrhmyzafSQStZIxMggylIgSvo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790110408; c=relaxed/simple;
+	bh=/5Ovrt5SIzUgxaxdFXnnNjtd+rE2C1y05J62Y3qD1Tg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UncFfvq7OhmsTbYBBrDN7j+xZygUaiGyD674AlHnJokrNm4HZzUuXyAoQpGANRBB4Sy66nqy1RvqVRL6P9VfGrC11vQW0Xq8RL1h4tRwvOxXAaIboPReze3rsul4KGj/LXwOw1kZp8Kt8VOKwn9pwsgrwQwJR6XEYc/v7JI56KY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wyqwpwcj; arc=none smtp.client-ip=74.125.227.136
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JQIeuLBy"
-Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-398b3b189e0so211666a91.2
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 13:40:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790109622; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ZhmDgekVaCy9qieH+ETcszbqBCg6mxdowGRXBjG7jw5GwDTdERminsr/MG30TsCT8V
-         VmFCUKS+RQQDPydlA4nJTsHiOq2t/Mz8bMgmBvITaYN875fmqJVlk7DKJqwGPfHj7IgW
-         N9Ow0ZlXfl3QtNUK1lrbHAqc49fBHRFpJ9apnu2uOTQBfVoGTXUVqPq1FN9DBFPyyPo6
-         EvyVsi92TJIv21akXZZ3YiOV44UqtbgWsYiNi8YZTAyEzueDN4s3r615XdC3NHythH8h
-         uJx+ZXnE/2+tqvA390u899vruumochEsYy8VPXymZ+NW0zEt12LGjkPg/G7Y6DJWLadJ
-         mTwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=pt1Jvyl7y2ucT15n2cP/CxwuiPgjJqJ1dgsK6z+frno=;
-        fh=5WU3aPJgn6uwP1GtqnTWhLTSem3PZArtlt7gsTWuv/M=;
-        b=NtGVG2Y4u0oSTeRkJUx9rTnIjbz1j3QBPQHAxMxokOyrT/EdLCB5G9sQR5xCfPIP80
-         KsPpqbLw8k+CQk93lL9v5KDzdHENTgL+2NUOWLrnzgKspG0UI9roDjlnn9pLNxNQoK2s
-         li/AQmO99Sw/59FfUo2EcZ/sDfPh5aImZcSA7plz5xIy+BMXsuPn1Mu2fcAWSzJfmHyi
-         qWn5YzZuI+qFukIukXhz3OqyUErD0lb4jrEcScwXjQYdP1Vyh3p8Q3JArFNJ7Uvz5Bna
-         lTp23qpdjYkvhnVtCot6w8aFsqrQoFRPjP+sVRhrSP9jQMTN7G44ebxbF0gXgk/g8ao7
-         wRRA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wyqwpwcj"
+Received: by mail-pj2-f8.google.com with SMTP id d9443c01a7336-2db33361b2fso1439295ad.1
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 13:53:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790109622; x=1790714422; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=pt1Jvyl7y2ucT15n2cP/CxwuiPgjJqJ1dgsK6z+frno=;
-        b=JQIeuLBy90mdr/qiiXpdhBoElXkSGzRJibOBQ/q8sc9zthsCsAA3TEXIBpn3TyL/I5
-         zbuQ2XeZQiiXCsl9KexGojmhjF96XblINGP9wBtQan8igCjjmnm+WgundPmIU3hDNxBL
-         e3CHIiiy3vwLGVsbI7lWK/D9BmynlQACCZ6d6SVM+iqeACgcUx7O6NNtAP7O9NPfZKWI
-         kXd3qe3+GtafpKk5BF1RI7XKfZqBEwv0M1oErf9N5Sfka3A1hzruiDD9Jo1dmrtx0JNS
-         bbezXfebzq4SWO0Rzl3/t0O2Im5k48rIyFHsqpkYEPxKEjQoHvSedYEGe4IdxfqEPBdq
-         l2kA==
+        d=gmail.com; s=20251104; t=1790110390; x=1790715190; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=cN/bUNYr6k4szo+6LYbJD9AWHo4WOhhjO1JliVkVGmw=;
+        b=WyqwpwcjFzQOBQe7yuMlBIiAYtb/Xg0D4qMydtskKUPhrI+DCwv5NJfn7303pDSWGi
+         vOH4T6drnLuUbjL0HiF/9YbVpVbgF8t7fOVKAt9SzqiOnCnZXtfWkLe8NcIjZkkFoEtf
+         vxbBOL3WwkqUKa6/QSTu8HeYnays6QfQCcPy5iOfk11GZ8Oz0d/uz6+BRyJTYlPA90LP
+         bAJCZoDrQvYMTPxKmdSetRai5azSYLrUrmT2/XsntNV4pqq+dyGlsGVoKbpx691IVuP6
+         DGQDTZAD8vs0YTTAG1LUqmUxBxLev2gKfcISk6yw30X83Oy0Y8EUYwoUX4eBgEfLZZld
+         vL1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790109622; x=1790714422;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=pt1Jvyl7y2ucT15n2cP/CxwuiPgjJqJ1dgsK6z+frno=;
-        b=x/kHSG1eaiWnEr1aisoEw1hdx9UYxFtfzbNkPQP0F/QbM6gg9Qki6/e4CGp6wB/2ez
-         +za2IPx5TW8GSgEMVqQWsn///wMLVRZhdxbeyojpAlfF9iGQCbS4F1s+f0ZkJtCNyDCM
-         cwCa7RGjlk9dPHfhpqeOh6o0JV+tKLwEJ1Labj7gv+XKO6Ov/OBB9B3atwtMqbe2CJP/
-         wuDEmSmN41vzcNJa1xexJDRjBTt0sKdagdrUafRrOv28bUJ4P9kYGXBuFgQvkgZsZY8Z
-         x0IQsxK46b/0AnYwcDaap9B9mAYdDk/CYfiRHQWbai6t0+8ZDFnSUTTPDDMOfZ7Ihfgx
-         4wFA==
-X-Gm-Message-State: AFuF++nWcPJD971G1LWdDiiYcSmmAvqWfoy5CTaQ9yK8bCzAH7+h047a
-	BAqIIl5JAMJ2cKt+fAKaLosrwWj0GMiVAV3BGTDOVFZveY99e82arcd6mvrpLEuyRzqDRTjV/cu
-	5QfHU3BQ2s177cfXBk6WxTgJ7PuGjrYc=
-X-Gm-Gg: AYBFou1JLOoQX03PZtggo+CU6EF5Xb8rYkkXm9J+XLR8B1m8Dm6B1CgBbJdpcjWyhSR
-	5WB8VDU3+Ii0MEX5he+MrqEwJP6q1iMaoAb9tAprKeGs/tUmpjFhI62ULrgS0qOwpHT3d7lvxmt
-	/Ysbi7ytyggQtN4N2c5pf6fiBcC0hj2nnrMLbfKQD93VbSWunpPJy+p/6mMzCTAhO27qFcdMSEG
-	uqakbw6v7zfpD4Ea9dR4NHE6j+XL/QpPgSrcO9dFilF9nmAFV4oOHMJyH7SRDFA1Gyh/jljCMwJ
-	K4xFSJYiNGsZr7f89MfNbQBPfnk3KcevqHbAwOSJvXU2ThFxQ9KRSg7CF6JW6Ct0F+eu6fMdpFt
-	bD3Eqt2evioksQsB3/KpWMqRUblSgMRzkiwRiYvnLYUykiDm631WS
-X-Received: by 2002:a17:90b:1dc9:b0:398:9bd5:490b with SMTP id
- 98e67ed59e1d1-3a07e5e929amr377167a91.18.1790109621759; Tue, 22 Sep 2026
- 13:40:21 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790110390; x=1790715190;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=cN/bUNYr6k4szo+6LYbJD9AWHo4WOhhjO1JliVkVGmw=;
+        b=EIkyLb/TBfmJQuYPIKD3gzKDi0nw43ii1sqYYvDkcBm0kviVReHRiWJ4huNwY6S1Ef
+         1vhloKms+Me7C+RC7YqTsUVhfTrNQwaEtm15LxSaBpG1NlHO2yc0buJi5HCGUdq12WRG
+         vZ/2Yzu0JHGO/f8Abefr5UyCNHmMqkxaV/4Vy+QqItpe4WVUN/mJJSU8fjY4g2KbcwqP
+         VNokLhf2Q1D3hzYkqAH92x9s8Z8p7ApznCt3y5Vu5TsXVmoBzXlldsByL/+kRbBO3piP
+         ANk4dME0mWTZkMd7p/qxa5KSnOrWkv59mHxHG1sFaHUjbRwIVDiq9aXXlCeCnJkNQCpb
+         K7sA==
+X-Forwarded-Encrypted: i=1; AKwUvByAQP3qQT4Ro3GykIxWkNtA0gOT1HRIUTDx1JRDB6RAIMnE9O+RBAGyVTRQ6Txtzkxvl4g=@vger.kernel.org
+X-Gm-Message-State: AFuF++ktCbwYrQcwzd8NCMZ/AXfgNd4yyWpWArr2yKfvdbfL/NL2tAGB
+	9tv5VaM+K3B1v76kXLoY55aQK47OG3C+n1X+Kug4avpvFcbh+oj7JYGR
+X-Gm-Gg: AYBFou3RWjvlWOV2SYz6eJVreLG6EjfeIbOXMeXhjl3rVITjGu3unjEqmVK1NepTQ5/
+	zGoUM1arEI1LKhtW8Fo+yrzXiyxHFLuWEx809x325dtm3SBOBxATARU/MgTkmD8qqoC9yIVgbLz
+	kZV9sq31aLNCuYbswzPN4BM1oscYTMTl6V7GPWuL0Y1TtrT8ksx5HuL6iwtRrJ1/rEnlzg7xE3J
+	ROmdSngW9nFI4GCAaePXmd8qyxgb/ZLx1WYjdZqAtZLgebzTI7h3Citz7h5G/4rBFAHleNsL65X
+	PWAuXasEmUjnrBCfK6YkFIjMBfM0wlcldX31awgzGKB9irQpT4mbhnfQB3MFhcTtomuFMRapSvJ
+	ukzOrUK01toOH5eGd3go6T2p7MAe8GsOfJywUONeLuB0HgIedlUvy3/vrDQg6ZFXPLQs3jKfc1M
+	8gzow4fSeTzuLc5ZzTXbs5ML6vdWqcaaFtiNGev06ClYKHgbcOk1O0Y7elul9N7WyLqGDEFcv+1
+	xw=
+X-Received: by 2002:a17:903:2c50:b0:2dd:c100:a5e7 with SMTP id d9443c01a7336-2df69e2b857mr5039605ad.59.1790110389518;
+        Tue, 22 Sep 2026 13:53:09 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:49::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6a60c4a8sm931315ad.79.2026.09.22.13.53.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2026 13:53:09 -0700 (PDT)
+Date: Tue, 22 Sep 2026 13:53:04 -0700
+From: Stanislav Fomichev <sdf.kernel@gmail.com>
+To: Jason Xing <kerneljasonxing@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, horms@kernel.org, willemb@google.com, kuniyu@google.com, 
+	netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH RFC net-next 0/9] net: BPF Timestamping 2.0 for TCP
+Message-ID: <arLpc9BBv_W6nw8c@devvm7509.cco0.facebook.com>
+References: <20260919143732.11772-1-kerneljasonxing@gmail.com>
+ <arF7FGr8rQqDw8Pj@devvm7509.cco0.facebook.com>
+ <CAL+tcoDossUOJCVwZ-6U519L_bNMYngnd82e1_oQB-czA6rL3A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260810164622.1829843-1-puranjay@kernel.org> <CANk7y0ixo5a3Vfzj_HVhVHRNce2Rsit4pP27GCtXd4jHHzmiKg@mail.gmail.com>
-In-Reply-To: <CANk7y0ixo5a3Vfzj_HVhVHRNce2Rsit4pP27GCtXd4jHHzmiKg@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 22 Sep 2026 13:40:06 -0700
-X-Gm-Features: AcwNN1VfX9BxvsRTDOPajUz-x6IR-_JlVRJ0qqTEHps-VTBBc72fFFdiYC1A20M
-Message-ID: <CAEf4BzapC=7YM2QLMyKKfyOWGgBTfEJmPPN8e9Jf5xT9SutBTQ@mail.gmail.com>
-Subject: Re: [PATCH v6 0/3] arm64: Add BRBE support for bpf_get_branch_snapshot()
-To: Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>, 
-	James Clark <james.clark@linaro.org>
-Cc: bpf@vger.kernel.org, Puranjay Mohan <puranjay12@gmail.com>, 
-	Anshuman Khandual <anshuman.khandual@arm.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Leo Yan <leo.yan@arm.com>, Rob Herring <robh@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>, 
-	Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>, 
-	Stephane Eranian <eranian@google.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif <usama.arif@linux.dev>, 
-	linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL+tcoDossUOJCVwZ-6U519L_bNMYngnd82e1_oQB-czA6rL3A@mail.gmail.com>
 
-On Tue, Sep 1, 2026 at 6:45=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.com=
-> wrote:
->
-> Hi James,
->
-> Can you review this version of the patchset? It is implementing what
-> we discussed in the thread on the last version.
->
+On 09/22, Jason Xing wrote:
+> On Tue, Sep 22, 2026 at 2:45 AM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
+> >
+> > On 09/19, Jason Xing wrote:
+> > > From: Jason Xing <kernelxing@gmail.com>
+> > >
+> > > Greeting,
+> > >
+> > > It's BPF Timestamping 2.0 that aims to observe the packet latency
+> > > more efficiently and simply for different protocols. The current
+> > > series is only focused on TCP protocol.
+> > >
+> > > At Netdev 0x1a/Netconf 2026, the history, background, motivation and
+> > > rough implementation of the feature were exhaustively introduced[1].
+> > >
+> > > History
+> > > =======
+> > > - In 2009, Patrick Ohly implemented the basic infrastructure
+> > > - In 2014, Willem de Bruijn enhanced the TCP latency observation
+> > > - In 2024, Jason Xing proposed its lightweight BPF version
+> > > Detailed slides from 28 to 32 [1].
+> > >
+> > > Background
+> > > ==========
+> > > Even though BPF Timetamping 1.0 is comparatively low-overhead,
+> > > transparent, it's still complicated due to a few points inherited
+> > > from the design:
+> > > - Inflexible/fixed reporting phases (qdisc/driver/ack)
+> > >   When we confirm the issue arises from the kernel by using attribution
+> > >   ability of timestamping feature, we need to further minimize the scope
+> > >   until the issue is fixed. That means, we then have to resort to write
+> > >   a few complex BPF progs with the similar functionalities (like skb
+> > >   level tag) which should not happen.
+> > > - Not enough low-overhead
+> > >   Serving the sensitive applications, an always-on latency observation
+> > >   platform should mitigate the self-impact as much as possible. As we
+> > >   can conclude from BPF Timestamping selftests, there are some blocking
+> > >   and time-consuming points like where reading/writing BPF maps happen
+> > >   in the extremely hot paths.
+> > > - Minor flaws
+> > >   There are a few minor flaws inherited from the initial design, like
+> > >   missing tagging the last packet[2][3][4].
+> > > Detailed slides from 33 to 39 [1].
+> > >
+> > > Motivation
+> > > ==========
+> > > During the process of the large scale deployment over the last few years,
+> > > we eventually realized timestamping feature doesn't support container
+> > > scenario and we need a finer-grained and flexible tracing tool (packet
+> > > basis) after a few rounds of attribution of issues.
+> > >
+> > > Design
+> > > ======
+> > > - Start time
+> > >   For the specific protocol, we need to accurately set the start time of
+> > >   each packet first. For TCP, we chose the entry of tcp_sendmsg_locked
+> > >   and the driver time as the start point, so that any BPF program is
+> > >   capable of computing the delta between start time and current time.
+> > > - Simplicity
+> > >   Previous BPF program (like selftests) is too complex to implement. The
+> > >   core idea is to make everything as simple as possible. And it should be
+> > >   decoupled from BPF area and previous timestamping feature as much as
+> > >   possible.
+> > > - Flexibility
+> > >   BPF program hooking any function with skb parameter can get the latency
+> > >   value, which means it's no longer bound to the pre-embeded reporting
+> > >   phases (see __skb_tstamp_tx)
+> > > - Efficiency
+> > >   Avoid the previous BPF operations as much as possible. Make sure the
+> > >   feature achieves the lowest performance impact, which means only time
+> > >   operations remain.
+> > > Detailed slides from 40 to 62 [1].
+> > >
+> > > Implementations
+> > > ===============
+> > > in-kernel
+> > > - Find a suitable place to timestamp for each packet
+> > > - Pick the right start time for TCP
+> > > - Handle the split skb due to various reasons
+> > > BPF prog
+> > > - Hook any functions that carry skb parameter
+> > > - Read out the start time from the skb
+> > > - Generate the current time and then compute the latency
+> > >
+> > > Discussion?
+> > > ===========
+> > > - Do we need a kfunc to allow users to reset the start time of each skb?
+> > >   What I had in mind is if someone tries to observe the latency between
+> > >   two specific functions (rather than tcp_sendmsg_locked).
+> > > - Current implementation is real hardware timestamp always wins, which
+> > >   means BPF prog possibly gets the hardware time that is not aligned
+> > >   with bpf_ktime_get_real_ns.
+> > > - After the series, do we need to implement the same logic for
+> > >   SYN/FIN/PROBE... As far as I know according to numerous user reports,
+> > >   a small handful of issues came from 3-way handshake.
+> > > - Reusing the slot of hwtstamp might bring potential problems or make the
+> > >   code hard to maintain. Can we add a timestamping specific field in
+> > >   skb to deal with the latency observation?
+> > > - netdev_data conflict in IGC driver. It seems unavoidable to pollute
+> > >   start time when it's enabled. Should V2 feature coexist with hardware
+> > >   timestamping?
+> > > - Should V2 coexist with net timestamping and BPF timestamping? If not,
+> > >   the maintenance should be easier.
+> >
+> > After netconf discussion, I was under the impressions that no kernel
+> > changes are needed, so what changed? Is it hard to track start_time
+> 
+> Ah, you refered to the internal version, right? We wrote a kernel
+> module implementing similar logic which differently finds/borrows an
+> unused field of socket to store the start time. It's quite similar to
+> the series actually.
+> 
+> After deploying it at a small scale in production, I think it's
+> meaningful to upstream it. But as you noticed, there are remaining
+> discussion points on which I hope we can share opinions, especially
+> the future shape.
+> 
+> > from tcp_sendmsg_locked on the bpf side that we need kernel support?
 
-James, do you mind reviewing the patches again, seems like Puranjay
-went with the implementation you suggested, would be nice to review
-and ack, if it looks good to you.
+[..]
 
-Mark, Will, you guys seems to be designated as maintainers for
-drivers/perf/arm_brbe.c, can you please take a look and give your
-feedback as well? This is important and useful feature for newer arm64
-CPUs, it would be great to get access to this functionality that we
-had on x86-64 side for a long while now. Please help get this upstream
-or, if it's not in the right shape, guide Puranjay towards a better
-implementation. Thank you!
+> Sure, we need kernel support that why I'm trying to introduce the
+> sk_start_time to help.
+> https://lore.kernel.org/all/20260919143732.11772-4-kerneljasonxing@gmail.com/
 
-> Thanks,
-> Puranjay
->
-> On Mon, Aug 10, 2026 at 5:46=E2=80=AFPM Puranjay Mohan <puranjay@kernel.o=
-rg> wrote:
-> >
-> > Changelog:
-> > v5: https://lore.kernel.org/all/20260616155716.2631508-1-puranjay@kerne=
-l.org/
-> > Changes in v6:
-> > - Split the two perf/core patches out into their own series [3]. They
-> >   fix bugs of their own and do not depend on this one.
-> > - Add raw_local_daif_save() and raw_local_daif_restore(), so the
-> >   snapshot can mask exceptions without trace_hardirqs_off() evicting
-> >   the records it is about to read (new patch 1).
-> > - Rework the snapshot. Clear PMCR_EL0.E across the BRBFCR_EL1
-> >   read-modify-write so that a freeze cannot set PAUSED behind the saved
-> >   value, and unpause before restarting the counters, since a paused
-> >   BRBE cannot freeze for its own overflow handler (James Clark).
-> > - Skip the pause entirely when BRBE is disabled or already frozen, and
-> >   invalidate only when the snapshot was the one to pause it.
-> > - Run valid_brbe_version() before masking exceptions; the static call
-> >   is only reached from BPF programs, which run with migration disabled.
-> > - Fold cpu_has_brbe() into valid_brbe_version() and drop the
-> >   arm_brbe_ prefix from the snapshot callback (James Clark).
-> > - Derive the selftest skip threshold from the waste and hit limits it
-> >   depends on, so the two cannot drift apart.
-> >
-> > v4: https://lore.kernel.org/all/20260527121207.2312181-1-puranjay@kerne=
-l.org/
-> > Changes in v5:
-> > - Rework patch 2: drop the UAPI union. Instead rename the helper to per=
-f_clear_branch_entry() and
-> >   clear the entry with a single
-> >         *br =3D (struct perf_branch_entry){ }.
-> >   This stays kernel-internal, with no changes to the uapi/ or tools/ he=
-aders (James Clark).
-> > - Add an isb() to the BRBCR_EL1 =3D=3D 0 early-exit in the snapshot, fo=
-r consistency with the other
-> >   two exit paths (bpf-ci).
-> > - Add Rob Herring's Reviewed-by to patch 3
-> >
-> > v3: https://lore.kernel.org/all/20260413185740.3286146-1-puranjay@kerne=
-l.org/
-> > Changes in v4:
-> > - Fix leaking branch records when scheduled task has an unrelated perf =
-event (Sashiko)
-> > - Update tools/include/uapi/linux/perf_event.h as well for patch 2
-> > - Introduce cpu_has_brbe() and use it in
-> >   arm_brbe_snapshot_branch_stack(0 to make sure we don't run on a CPU
-> >   without BRBE.
-> > - Add explicit isb() after after writing to SYS_BRBFCR_EL1.
-> > - Rebase on latest arm64 tree.
-> >
-> > v2: https://lore.kernel.org/all/20260318171706.2840512-1-puranjay@kerne=
-l.org/
-> > Changes in v3:
-> > - Move NULL pmu_ctx fix from arm_pmuv3.c to perf core (Leo Yan)
-> > - Use union to clear branch entry bitfields instead of per-field
-> >   zeroing (Leo Yan)
-> > - Remove per-CPU brbe_active flag; check BRBCR_EL1 =3D=3D 0 instead (Ro=
-b
-> >   Herring)
-> > - Remove redundant valid_brbidr() check in snapshot path (Rob Herring)
-> > - Introduce for_each_brbe_entry() iterator to deduplicate bank
-> >   iteration (Rob Herring)
-> > - Include perf core maintainers (Leo Yan, Rob Herring)
-> >
-> > v1: https://lore.kernel.org/all/20260313180352.3800358-1-puranjay@kerne=
-l.org/
-> > Changes in v2:
-> > - Rebased on arm64/for-next/core
-> > - Add per-CPU brbe_active flag to guard against UNDEFINED sysreg access
-> >   on non-BRBE CPUs in heterogeneous big.LITTLE systems.
-> > - Fix pre-existing bug in perf_clear_branch_entry_bitfields() that miss=
-ed
-> >   zeroing new_type and priv bitfields, added as a separate patch with
-> >   Fixes tags (new patch 2).
-> > - Use architecture-specific selftest threshold (#if defined(__aarch64__=
-))
-> >   instead of raising the global threshold, to preserve x86 regression
-> >   detection.
-> >
-> > RFC: https://lore.kernel.org/all/20260102214043.1410242-1-puranjay@kern=
-el.org/
-> > Changes from RFC:
-> >  - Fix pre-existing NULL pointer dereference in armv8pmu_sched_task()
-> >    found by Leo Yan during testing (patch 1)
-> >  - Pause BRBE before local_daif_save() to avoid branch pollution from
-> >    trace_hardirqs_off()
-> >  - Use local_daif_save() to prevent pNMI race from counter overflow
-> >    (Mark Rutland)
-> >  - Reuse perf_entry_from_brbe_regset() instead of duplicating register
-> >    read logic, by making it accept NULL event (Mark Rutland)
-> >  - Invalidate BRBE after reading to maintain record contiguity for
-> >    other consumers (Mark Rutland)
-> >  - Adjust selftest wasted_entries threshold for ARM64 (patch 3)
-> >  - Tested on ARM FVP with BRBE enabled
-> >
-> > This series enables the bpf_get_branch_snapshot() BPF helper on ARM64
-> > by implementing the perf_snapshot_branch_stack static call for ARM's
-> > Branch Record Buffer Extension (BRBE).
-> >
-> > bpf_get_branch_snapshot() [1] allows BPF programs to capture hardware
-> > branch records on-demand from any BPF tracing context. This was
-> > previously only available on x86 (Intel LBR) since v5.16. With BRBE
-> > available on ARMv9, this series closes the gap for ARM64.
-> >
-> > Usage model
-> > -----------
-> >
-> > The helper works in conjunction with perf events. The userspace
-> > component of the BPF application opens a perf event with
-> > PERF_SAMPLE_BRANCH_STACK on each CPU, which configures the hardware
-> > to continuously record branches into BRBE (on ARM64) or LBR (on x86).
-> > A BPF program attached to a tracepoint, kprobe, or fentry hook can
-> > then call bpf_get_branch_snapshot() to snapshot the branch buffer at
-> > any point. Without an active perf event, BRBE is not recording and
-> > the buffer is empty.
-> >
-> > On-demand branch snapshots from BPF are useful for diagnosing which
-> > specific code path was taken inside a function. Stack traces only show
-> > function boundaries, but branch records reveal the exact sequence of
-> > jumps, calls, and returns within a function -- making it possible to
-> > identify which specific error check triggered a failure, or which
-> > callback implementation was invoked through a function pointer.
-> >
-> > For example, retsnoop [2] is a BPF-based tool for non-intrusive
-> > mass-tracing of kernel internals. Its LBR mode (--lbr) creates per-CPU
-> > perf events with PERF_SAMPLE_BRANCH_STACK and then uses
-> > bpf_get_branch_snapshot() in its fentry/fexit BPF programs to capture
-> > branch records whenever a traced function returns an error.
-> >
-> > Consider debugging a bpf() syscall that returns -EINVAL when creating
-> > a BPF map with invalid parameters. Running retsnoop on an ARM64 FVP
-> > with BRBE to trace the bpf() syscall and array_map_alloc_check():
-> >
-> >   $ retsnoop -e '*sys_bpf' -a 'array_map_alloc_check' --lbr=3Dany \
-> >              -F -k vmlinux --debug full-lbr
-> >   $ simfail bpf-bad-map-max-entries-array  # in another terminal
-> >
-> > Output of retsnoop:
-> >
-> >   --- fentry BPF program (entries #63-#17) ---
-> >
-> >   [#63-#59] __htab_map_lookup_elem: hash table walk with memcmp        =
-(hashtab.c)
-> >   [#58] __htab_map_lookup_elem+0x98  -> dump_bpf_prog+0xc850           =
-(hashtab.c:750)
-> >   [#57-#55] ... dump_bpf_prog internal branches ...
-> >   [#54] dump_bpf_prog+0xcab8        -> bpf_get_current_pid_tgid+0x0    =
-(helpers.c:225)
-> >   [#53] bpf_get_current_pid_tgid+0x1c -> dump_bpf_prog+0xcabc          =
-(helpers.c:225)
-> >   [#52-#51] ... dump_bpf_prog -> __htab_map_lookup_elem ...
-> >   [#50-#47] __htab_map_lookup_elem: htab_map_hash (jhash2), select_buck=
-et
-> >   [#46-#42] lookup_nulls_elem_raw: hash chain walk with memcmp         =
-(hashtab.c:717)
-> >   [#41] __htab_map_lookup_elem+0x98  -> dump_bpf_prog+0xcaf8           =
-(hashtab.c:750)
-> >   [#40-#37] ... dump_bpf_prog -> bpf_ktime_get_ns ...
-> >   [#36] bpf_ktime_get_ns+0x10       -> ktime_get_mono_fast_ns+0x0      =
-(helpers.c:178)
-> >   [#35-#32] ktime_get_mono_fast_ns: tk_clock_read -> arch_counter_get_c=
-ntpct
-> >   [#31] ktime_get_mono_fast_ns+0x9c -> bpf_ktime_get_ns+0x14           =
-(timekeeping.c:493)
-> >   [#30] bpf_ktime_get_ns+0x18       -> dump_bpf_prog+0xcd50            =
-(helpers.c:178)
-> >   [#29-#25] ... dump_bpf_prog internal branches ...
-> >   [#24] dump_bpf_prog+0x11b28       -> __bpf_prog_exit_recur+0x0       =
-(trampoline.c:1190)
-> >   [#23-#17] __bpf_prog_exit_recur: rcu_read_unlock, migrate_enable     =
-(trampoline.c:1195)
-> >
-> >   --- array_map_alloc_check (entries #16-#12) ---
-> >
-> >   [#16] dump_bpf_prog+0x11b38       -> array_map_alloc_check+0x8       =
-(arraymap.c:55)
-> >   [#15] array_map_alloc_check+0x18  -> array_map_alloc_check+0xb8      =
-(arraymap.c:56)
-> >         . bpf_map_attr_numa_node       . bpf_map_attr_numa_node
-> >   [#14] array_map_alloc_check+0xbc  -> array_map_alloc_check+0x20      =
-(arraymap.c:59)
-> >         . bpf_map_attr_numa_node
-> >   [#13] array_map_alloc_check+0x24  -> array_map_alloc_check+0x94      =
-(arraymap.c:64)
-> >   [#12] array_map_alloc_check+0x98  -> dump_bpf_prog+0x11b3c           =
-(arraymap.c:82)
-> >
-> >   --- fexit trampoline overhead (entries #11-#00) ---
-> >
-> >   [#11] dump_bpf_prog+0x11b5c       -> __bpf_prog_enter_recur+0x0      =
-(trampoline.c:1145)
-> >   [#10-#03] __bpf_prog_enter_recur: rcu_read_lock, migrate_disable     =
-(trampoline.c:1146)
-> >   [#02] __bpf_prog_enter_recur+0x114 -> dump_bpf_prog+0x11b60          =
-(trampoline.c:1157)
-> >   [#01] dump_bpf_prog+0x11b6c       -> dump_bpf_prog+0xd230
-> >   [#00] dump_bpf_prog+0xd340        -> brbe_snapshot_branch_stack+0x0  =
-   (arm_brbe.c:814)
-> >
-> >                    el0t_64_sync+0x168
-> >                    el0t_64_sync_handler+0x98
-> >                    el0_svc+0x28
-> >                    do_el0_svc+0x4c
-> >                    invoke_syscall.constprop.0+0x54
-> >     373us [-EINVAL] __arm64_sys_bpf+0x8
-> >                     __sys_bpf+0x87c
-> >                     map_create+0x120
-> >      95us [-EINVAL] array_map_alloc_check+0x8
-> >
-> > The FVP's BRBE buffer has 64 entries (BRBE supports 8, 16, 32, or
-> > 64). Of these, entries #63-#17 (47) are consumed by the fentry BPF
-> > trampoline that ran before the function, and entries #11-#00 (12)
-> > are consumed by the fexit trampoline that runs after. Entry #00
-> > shows the very last branch recorded before BRBE is paused: the call
-> > into brbe_snapshot_branch_stack().
-> >
-> > The 5 useful entries (#16-#12) show the exact path taken inside
-> > array_map_alloc_check(). Record #14 shows a jump from line 56
-> > (bpf_map_attr_numa_node) to line 59 (the if-condition), and #13
-> > shows an immediate jump from line 59 (attr->max_entries =3D=3D 0) to
-> > line 64 (return -EINVAL), skipping lines 60-63. This pinpoints
-> > max_entries=3D=3D0 as the cause -- a diagnosis impossible with stack
-> > traces alone.
-> >
-> > [1] 856c02dbce4f ("bpf: Introduce helper bpf_get_branch_snapshot")
-> > [2] https://github.com/anakryiko/retsnoop
-> > [3] https://lore.kernel.org/all/20260810133540.1947118-1-puranjay@kerne=
-l.org/
-> >
-> > Puranjay Mohan (3):
-> >   arm64: Add raw variants of local_daif_save() and local_daif_restore()
-> >   perf/arm64: Add BRBE support for bpf_get_branch_snapshot()
-> >   selftests/bpf: Adjust entry thresholds for ARM64 BRBE
-> >
-> >  arch/arm64/include/asm/daifflags.h            |  41 +++++-
-> >  arch/arm64/kernel/suspend.c                   |   7 +-
-> >  drivers/perf/arm_brbe.c                       | 135 ++++++++++++++----
-> >  drivers/perf/arm_brbe.h                       |   9 ++
-> >  drivers/perf/arm_pmuv3.c                      |   5 +-
-> >  .../bpf/prog_tests/get_branch_snapshot.c      |  28 ++--
-> >  6 files changed, 175 insertions(+), 50 deletions(-)
-> >
-> >
-> > base-commit: 03a2e393994ca27567fe060e066806589c547fbc
-> > --
-> > 2.53.0-Meta
-> >
+Why can you not do this on the bpf side? There is even now a sendmsg_locked
+tracepoint with skb/sk argument. Or is it mostly because you can't
+distinguish between cgroups? And looking at your example [1] and don't
+see why a tracepoint won't be enough. Or is it too much overhead? In this
+case, it needs to have some numbers attached...
+
+1: https://lore.kernel.org/all/CAL+tcoD36zA=TYSzKSNWV0Ypo_HRBRU_Qh6rQtPL51aXR54p7Q@mail.gmail.com/
