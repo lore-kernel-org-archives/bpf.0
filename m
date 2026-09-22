@@ -1,69 +1,69 @@
-Received: from mail-qv2-f18.google.com (mail-qv2-f18.google.com [74.125.230.146])
+Received: from mail-qk2-f42.google.com (mail-qk2-f42.google.com [74.125.230.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8193815E4
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 02:32:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575D037F8BA
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 02:33:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790044369; cv=none; b=ugrJP0tbpaSXn1XDFZ9BEmkvZ87ZbSvyI0KhUUKvSGFMyW709Ir6fS1w2JK2KpcY9WTD5R6nSk+iYCYNw5y8I4up3TLHKyIt7Bkg2/JA59PSxtnxFlb5qjHd2ReJWOCTNhRcpd5XufdHnoUNv6xihMjr4Q20W2NVYkS8GVJJEWI=
+	t=1790044416; cv=none; b=gJs7GVaqu2/FLMJ5bgjkyavll+Z0EOR7kNG8dGvqb41rXtmrYwptcr66B83nhV1XRYRKfLDGWvBGg6YzA/gQ8hSCn0K2ResDosuuHVOBDK516q/xCuyss3fy0V1iXDhz1QmhSeM8hmXfY8HTkd2PUFzB2+XI/xZYP39RcTA/Nl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790044369; c=relaxed/simple;
-	bh=I7rYeQZ4spsxQVfaE2Sayb+dFXGxTZqIS2lZCUAJvtU=;
+	s=arc-20240116; t=1790044416; c=relaxed/simple;
+	bh=O8YdW4YSHUYyF3GwEQN16WzJM7UkZZFfh8RzVwv7xJM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=P0ThXUuXyjjpxsZByaYUHpIZidsC7TvR48sL+aSkunAZ87hvbo8RL7xBLk67OISsSpz1iOnQ7qJiRtDRgDtcaSra8l1LaEHhTf13dGi5jIMsMtb7qtFBBuVq5xIsxJCuSk36R0yHg2UflDwPSX/makRohZLV8cLcvl7AU56mwFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=stsEQMTS; arc=none smtp.client-ip=74.125.230.146
+	 In-Reply-To:To:Cc; b=dWy/pEwKOxtHeh0l47q295bjVxhEvvhnbU2NZVs/mVJouNZ2Qf0Kjyp7n8ocvpYiZGWYicxnEgIyXi1WfiMaeWcZfM0LhtD+EVw15qWTLCL43I5BsVT7EjKb+4VHjRbDpX5YvPN1xaIbUQCwls3wHzE+AJUyNKuJKy6mLoHX2tY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=qnop8KF3; arc=none smtp.client-ip=74.125.230.234
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="stsEQMTS"
-Received: by mail-qv2-f18.google.com with SMTP id 6a1803df08f44-90cdfc6db0bso31425206d6.3
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 19:32:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="qnop8KF3"
+Received: by mail-qk2-f42.google.com with SMTP id d75a77b69052e-5329fc7b325so24307461cf.0
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 19:33:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1790044366; x=1790649166; darn=vger.kernel.org;
+        d=toxicpanda.com; s=google; t=1790044413; x=1790649213; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Nk/uI/WquaXkRgHHd/dzhScVzrCkrWpp6IlwsBXJcUg=;
-        b=stsEQMTSXsH6TSaXgLPanfDG+ZB9lpdKb8Qdd/MQSQhEiAZ9Tsq4CzuncjAQMrBqY8
-         haGPpmbT9v4BGjvCjknX1P1frm+r/f9N5QmtFRhmp4bFyqebWatGWSm/Kkh3tTOjiKA9
-         J6gtUAz1SKrCgD+AANX5IbOlKlbDf1y0Ri53op/zGkR96yi8Jcyh6NhxeY9rMtIV5odH
-         dMTH401e7p802G6mRqrJB7+Uswuv7vZsEi/gB4twsXD91CTzEQC3wvBpFtyCnOxGPh99
-         Q58SwoKnQ2IppVz0UnrJQ3igez3msApyIouP5HCaBJNZWmsyXaoZlIp0S+jLYT07C+Qd
-         PA5A==
+        bh=MkP56mJgKixcgLXoBxrfzz0NyJo14L+hjKFrNfKE/2k=;
+        b=qnop8KF3/xW7MwL1cIJXYaz6P00OjjBFrfHjtnUWJtITYukvpJlNeH67b5oRueMoeN
+         +9iNeNuROHtNBwVOTMxFGCYqdea5MgnfuzTmuV7+Uyo0h97iJRgpdNvB1Zl3SXORxe/6
+         UFXPHDHz2UTjAK3LnoIlPD0HJW460Ck1CYDtKPikLXiurZkm7bRXd9XLl7PMJSVJGqPu
+         Vm/c99t9vVQgjsuKmh7g9c+oi5FWSwaSdqjES/dhgofRGDi6Iu9GPbDAPpR1Q44b/oMv
+         a2JxoQUU+ci+gBPzSJpVIHq/QWMAcxnJYplsZ3xVsgDXF/VJ5YBP+po7IIbHbnom3PE8
+         iIUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790044366; x=1790649166;
+        d=1e100.net; s=20260707; t=1790044413; x=1790649213;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Nk/uI/WquaXkRgHHd/dzhScVzrCkrWpp6IlwsBXJcUg=;
-        b=iF0UhOL+BnCTfHTE/tqwYA+Ji6snm0kpWxPxfvEswCtSlmSmwQL+zk4n+8ujSrUzyL
-         UuXRDSz/5gGjoC9kBaqTCf2TQBCcxIAIXkCEDfv4sWKzRrxuhGg/0rCBgFEEg5Q62PlD
-         cVWqshMRE53g3Wfs4B6sm1xvofzk/qy3lFkT1n3Z1MG1x+Mzy7YwMaolRX8+Tg5/Nrmm
-         lU+zr0oI9U+YxPvT+m5NSML4JxYVODRgk2T3+Kex9xyrqBMGfVVf1R0mQmOQhf3KqIo+
-         i2+a0Thu95fVaVBx3eVnFp9LfQ2d9Fx5CRDwR23hu1Psrrxll89j9dWMvdhYYJUb5RZd
-         UKww==
-X-Forwarded-Encrypted: i=1; AKwUvBwTDJm1BaWaihnDHv3dQWJ6zdHUA4nbFYcXQJ35Eh4psQbp7001dAQI4LEYG4PsqL23Chs=@vger.kernel.org
-X-Gm-Message-State: AFuF++l3ZJHWbIiweBLbJ9jQDsRzwT7Rmp33o8y4DJG0ntkspkg6BzRO
-	0J2asDXZ2ntvTL1oASfHml9NfYTm1opDH/fRgkVSgiR/XKfcOoDoUp8gYTKOFAIDPM8=
-X-Gm-Gg: AYBFou3d9o4mR3iq8Yt+SGQnpa+KFMCLpgT7Gg3xaRzpK+Ne00XHicJRV3XD/Bu/STm
-	6PWCDjI6x+1a918wSf1nR3n4g0bEtU8lzYc2ZeYNB6Fa0JDW1VHKF6MnPT9HZ7rWZaMvxAqoMzr
-	W7fL1QzMQbls8GVYbqhSwh1RuJnf7MmeiiGSwFBfXryWFM+/biDFDjvS02WtfWPMZYJLTg/pir5
-	8MWDhX87sOkHyBEK7eI+16KkVziQ/umc1xqd/+al6TsJXcWwP3LSHSTfR4hLY199jWuA6ArXTFF
-	cFJEKrmHTusKTp9wfE4kyVXs9rPHcu+MR/n0OeIY+krhENarKEY4ONgKaGTteut66+SzGe7+ome
-	KpwX/Of3PPymdGUsn2ZUHtPfqh4w7A7DSTE5eQUtpRMB3mdQXUbbT6isPyuMIIM3ccO9WoH6XDK
-	+OGvFGh2xn/dRXmltDZGruLlXopCxfuiPpma4Pet3Vd6vmjFSiAGLLLMDkNYVjlPe132jdlZgO2
-	uv4/waQTgyAx4I=
-X-Received: by 2002:a05:6214:5017:b0:911:9385:8581 with SMTP id 6a1803df08f44-913fc948279mr35279286d6.28.1790044365561;
-        Mon, 21 Sep 2026 19:32:45 -0700 (PDT)
+        bh=MkP56mJgKixcgLXoBxrfzz0NyJo14L+hjKFrNfKE/2k=;
+        b=b23rH3v2LWuRXKUKBW/chn+uL+tDBLIxX0SEhsdw6aHYSsLuo23Nbdwud9e6Pnk7Tw
+         ocCt46Nv7xf4Dt75+5b96mz09xidWOrxdQTd9TNEdzqKEC7sOlo/hVamdd052IHv6jCb
+         jbkf7qk6WRd9O3/OSctSPEwU+WoyHVzECcai75/xz4US/8ju/CB4gLmycowDnYFP3rz/
+         QmmNL/eW7YzZmQwSKx+KEsUqJ90aBmi+B7SMLR8OVyV4rIFjBXNMPCuiBfyYskT3e1OL
+         WRdVEHBpepb0IubdBAqzt+VAfSxRVRTL78ZjZ1aNCnNnQYOfwwWU5iB7g5B32M2aC8bE
+         Y1Rw==
+X-Forwarded-Encrypted: i=1; AKwUvBwCi/oXHWefZf/1N/fiJ2cLBd+lgaqsGyazPpV0TM13msL+UUuhenCeh5AZkoaSS9d3T8s=@vger.kernel.org
+X-Gm-Message-State: AFuF++n7iP2GvZRh/W/TJu8bcnAkMm5n5MuX8oQqOzQY3Dn7mevhRAlC
+	81xjf+qno06fz0LKBXcWMuDIYrmLmAER63XcSsTksQMzqrh+empODhZ/2tOZIh6bvrU=
+X-Gm-Gg: AYBFou0CH9BC5DhSuhzaoXcXhGGMV5g/61fi3sgGJevIH+gj6A89lBuFlRsZSnDc5DV
+	oGqFwWf1oA064u2CgN5kHjzNZTHX01qk607PUrcc6FBGA0DZ+fScRx0imGonPb95XT4len5An8M
+	7QbHTt3eIkbDlRiTUqnu3o/r3VGVd0fRqN50T48a9wdRN4Y+jV/4k6c7ZDaJYLk8WfXPNRAa0O4
+	DXhnV9uu28poHfIEmW9OAIpCGwu+WgXjOXHXV5dzX4OeI2J2OLFZ2OwRWhd8kba1JJo1RbszaTe
+	9WE39+tjvXk/+1ImM5ZgT0uL3s2l70Vt61LRScrJO/w9ccuzD5x3VYy/FZlaR7bPz9pvNYyV8Hg
+	LXfYtd2fhVm1vAxXWit2osvK0g1NUr7nyPIh9riWeLSJC56710A5TlzoHo3UkhgiXy+xXMYgwAl
+	fitHuBm4Il2/KstQuO1xu77Fi/HqywhZ2u1RNuFKSAuH38O6bSVBpIEJG3PyQM2Sw/isBr5xGp/
+	eeRZxwd8WNWjYt/
+X-Received: by 2002:ac8:5a12:0:b0:52d:cda5:abfd with SMTP id d75a77b69052e-532d8e10f9amr37728211cf.38.1790044412692;
+        Mon, 21 Sep 2026 19:33:32 -0700 (PDT)
 Received: from toxicpanda.com ([153.61.196.250])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-914024c20e0sm4740526d6.21.2026.09.21.19.32.44
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-914024ee211sm4656006d6.34.2026.09.21.19.33.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 19:32:44 -0700 (PDT)
+        Mon, 21 Sep 2026 19:33:32 -0700 (PDT)
 From: Josef Bacik <josef@toxicpanda.com>
-Date: Tue, 22 Sep 2026 02:23:29 +0000
-Subject: [PATCH v5 10/13] samples: ftrace: Make the direct-call trampolines
- Tasks Trace readers
+Date: Tue, 22 Sep 2026 02:23:30 +0000
+Subject: [PATCH v5 11/13] rcutorture: Make Tasks RCU readers Tasks Trace
+ readers where required
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,7 +72,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260922-b4-rcu-tasks-preempt-qs-v5-10-410f57770bad@toxicpanda.com>
+Message-Id: <20260922-b4-rcu-tasks-preempt-qs-v5-11-410f57770bad@toxicpanda.com>
 References: <20260922-b4-rcu-tasks-preempt-qs-v5-0-410f57770bad@toxicpanda.com>
 In-Reply-To: <20260922-b4-rcu-tasks-preempt-qs-v5-0-410f57770bad@toxicpanda.com>
 To: "Paul E. McKenney" <paulmck@kernel.org>, 
@@ -86,427 +86,59 @@ Cc: Boqun Feng <boqun@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
  linux-trace-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  linux-kernel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1790043820; l=13193;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1790043820; l=1716;
  i=josef@toxicpanda.com; h=from:subject:message-id;
- bh=I7rYeQZ4spsxQVfaE2Sayb+dFXGxTZqIS2lZCUAJvtU=;
+ bh=O8YdW4YSHUYyF3GwEQN16WzJM7UkZZFfh8RzVwv7xJM=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgUBr36M/n0nWN0DNbnxwzIiCZez6MG
  JiruuNaSCI/zXsAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QM+2t5V2gfw8IUSy1qDoDGQkdXuWXVx8UOA8l4idX6itSYIr+3cJvizuGAn0kC3lS3jW3yYg3Kb
- 0Ft51r6OGEA0=
+ QN+SSmbqaUDY715i7pHjObQRKDl/n4FuMBV449sPKr77qotFd+q5BWjod9YbtBMN8iSeWuFGbqu
+ 3faoKTTHOvw4=
 X-Developer-Key: i=josef@toxicpanda.com; a=openssh;
  fpr=SHA256:C8kOX2QUJCMqnCX+KEeoqRAjLo9L+ELOSH2NSAJHqGA
 
-The sample direct trampolines are exactly the kind of out-of-line
-register_ftrace_direct() user whose lifetime depends on Tasks RCU
-waiting for a task inside them: nothing else stops rmmod while a task is
-preempted in my_direct_func().  On HAVE_RCU_TRAMPOLINE_READERS
-architectures that wait only covers Tasks Trace RCU readers, so give the
-samples a small shared header with rcu_read_lock_trace() and
-rcu_read_unlock_trace() open-coded as instruction strings for x86-64 and
-arm64 -- the same sequences as ftrace_64.S and entry-ftrace.S, using
-caller-saved non-argument scratch registers -- and bracket every
-call-out with them.  The instructions outside the bracket are module
-text, covered by ftrace_direct_mark_module().  Other architectures get
-empty definitions.
+rcutorture's "tasks" flavor has empty readlock/readunlock hooks because
+a classic Tasks RCU reader is simply code that does not block.  Under
+CONFIG_TASKS_RCU_TRAMPOLINE_READERS a preemption outside trampoline text
+is also a quiescent state, and the thing real readers (trampolines) do
+to stay protected across their call-outs is take rcu_read_lock_trace(),
+so have the torture readers do the same there.  Otherwise a preempted
+torture reader would rightly be treated as quiescent and the test would
+report false-positive too-short grace periods.
 
 Assisted-by: LLM
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 ---
- samples/ftrace/ftrace-direct-modify.c       |   9 ++
- samples/ftrace/ftrace-direct-multi-modify.c |   9 ++
- samples/ftrace/ftrace-direct-multi.c        |   5 ++
- samples/ftrace/ftrace-direct-too.c          |   5 ++
- samples/ftrace/ftrace-direct.c              |   5 ++
- samples/ftrace/ftrace-direct.h              | 126 ++++++++++++++++++++++++++++
- 6 files changed, 159 insertions(+)
+ kernel/rcu/rcutorture.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrace-direct-modify.c
-index 164d9dd6fd92..937c8d8c2a1b 100644
---- a/samples/ftrace/ftrace-direct-modify.c
-+++ b/samples/ftrace/ftrace-direct-modify.c
-@@ -2,6 +2,7 @@
- #include <linux/module.h>
- #include <linux/kthread.h>
- #include <linux/ftrace.h>
-+#include "ftrace-direct.h"
- #if !defined(CONFIG_ARM64) && !defined(CONFIG_PPC32)
- #include <asm/asm-offsets.h>
- #endif
-@@ -73,7 +74,9 @@ asm (
- "	pushq %rbp\n"
- "	movq %rsp, %rbp\n"
- 	CALL_DEPTH_ACCOUNT
-+	TRACE_RCU_READ_LOCK
- "	call my_direct_func1\n"
-+	TRACE_RCU_READ_UNLOCK
- "	leave\n"
- 	ASM_RET
- "	.size		my_tramp1, .-my_tramp1\n"
-@@ -85,7 +88,9 @@ asm (
- "	pushq %rbp\n"
- "	movq %rsp, %rbp\n"
- 	CALL_DEPTH_ACCOUNT
-+	TRACE_RCU_READ_LOCK
- "	call my_direct_func2\n"
-+	TRACE_RCU_READ_UNLOCK
- "	leave\n"
- 	ASM_RET
- "	.size		my_tramp2, .-my_tramp2\n"
-@@ -141,11 +146,13 @@ asm (
- "	.globl		my_tramp1\n"
- "   my_tramp1:"
- "	hint	34\n" // bti	c
-+	TRACE_RCU_READ_LOCK
- "	sub	sp, sp, #16\n"
- "	stp	x9, x30, [sp]\n"
- "	bl	my_direct_func1\n"
- "	ldp	x30, x9, [sp]\n"
- "	add	sp, sp, #16\n"
-+	TRACE_RCU_READ_UNLOCK
- "	ret	x9\n"
- "	.size		my_tramp1, .-my_tramp1\n"
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index 794937e13e7c..ab870ef09af0 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -1142,13 +1142,23 @@ static struct rcu_torture_ops trivial_preempt_ops = {
+  * Definitions for RCU-tasks torture testing.
+  */
  
-@@ -153,11 +160,13 @@ asm (
- "	.globl		my_tramp2\n"
- "   my_tramp2:"
- "	hint	34\n" // bti	c
-+	TRACE_RCU_READ_LOCK
- "	sub	sp, sp, #16\n"
- "	stp	x9, x30, [sp]\n"
- "	bl	my_direct_func2\n"
- "	ldp	x30, x9, [sp]\n"
- "	add	sp, sp, #16\n"
-+	TRACE_RCU_READ_UNLOCK
- "	ret	x9\n"
- "	.size		my_tramp2, .-my_tramp2\n"
- "	.popsection\n"
-diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
-index b03766c6217b..e12e5c8b83f0 100644
---- a/samples/ftrace/ftrace-direct-multi-modify.c
-+++ b/samples/ftrace/ftrace-direct-multi-modify.c
-@@ -2,6 +2,7 @@
- #include <linux/module.h>
- #include <linux/kthread.h>
- #include <linux/ftrace.h>
-+#include "ftrace-direct.h"
- #if !defined(CONFIG_ARM64) && !defined(CONFIG_PPC32)
- #include <asm/asm-offsets.h>
- #endif
-@@ -77,10 +78,12 @@ asm (
- "	pushq %rbp\n"
- "	movq %rsp, %rbp\n"
- 	CALL_DEPTH_ACCOUNT
-+	TRACE_RCU_READ_LOCK
- "	pushq %rdi\n"
- "	movq 8(%rbp), %rdi\n"
- "	call my_direct_func1\n"
- "	popq %rdi\n"
-+	TRACE_RCU_READ_UNLOCK
- "	leave\n"
- 	ASM_RET
- "	.size		my_tramp1, .-my_tramp1\n"
-@@ -92,10 +95,12 @@ asm (
- "	pushq %rbp\n"
- "	movq %rsp, %rbp\n"
- 	CALL_DEPTH_ACCOUNT
-+	TRACE_RCU_READ_LOCK
- "	pushq %rdi\n"
- "	movq 8(%rbp), %rdi\n"
- "	call my_direct_func2\n"
- "	popq %rdi\n"
-+	TRACE_RCU_READ_UNLOCK
- "	leave\n"
- 	ASM_RET
- "	.size		my_tramp2, .-my_tramp2\n"
-@@ -154,6 +159,7 @@ asm (
- "	.globl		my_tramp1\n"
- "   my_tramp1:"
- "	hint	34\n" // bti	c
-+	TRACE_RCU_READ_LOCK
- "	sub	sp, sp, #32\n"
- "	stp	x9, x30, [sp]\n"
- "	str	x0, [sp, #16]\n"
-@@ -162,6 +168,7 @@ asm (
- "	ldp	x30, x9, [sp]\n"
- "	ldr	x0, [sp, #16]\n"
- "	add	sp, sp, #32\n"
-+	TRACE_RCU_READ_UNLOCK
- "	ret	x9\n"
- "	.size		my_tramp1, .-my_tramp1\n"
- 
-@@ -169,6 +176,7 @@ asm (
- "	.globl		my_tramp2\n"
- "   my_tramp2:"
- "	hint	34\n" // bti	c
-+	TRACE_RCU_READ_LOCK
- "	sub	sp, sp, #32\n"
- "	stp	x9, x30, [sp]\n"
- "	str	x0, [sp, #16]\n"
-@@ -177,6 +185,7 @@ asm (
- "	ldp	x30, x9, [sp]\n"
- "	ldr	x0, [sp, #16]\n"
- "	add	sp, sp, #32\n"
-+	TRACE_RCU_READ_UNLOCK
- "	ret	x9\n"
- "	.size		my_tramp2, .-my_tramp2\n"
- "	.popsection\n"
-diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftrace-direct-multi.c
-index 3fe6ddaf0b69..a970464ed378 100644
---- a/samples/ftrace/ftrace-direct-multi.c
-+++ b/samples/ftrace/ftrace-direct-multi.c
-@@ -3,6 +3,7 @@
- 
- #include <linux/mm.h> /* for handle_mm_fault() */
- #include <linux/ftrace.h>
-+#include "ftrace-direct.h"
- #include <linux/sched/stat.h>
- #if !defined(CONFIG_ARM64) && !defined(CONFIG_PPC32)
- #include <asm/asm-offsets.h>
-@@ -56,10 +57,12 @@ asm (
- "	pushq %rbp\n"
- "	movq %rsp, %rbp\n"
- 	CALL_DEPTH_ACCOUNT
-+	TRACE_RCU_READ_LOCK
- "	pushq %rdi\n"
- "	movq 8(%rbp), %rdi\n"
- "	call my_direct_func\n"
- "	popq %rdi\n"
-+	TRACE_RCU_READ_UNLOCK
- "	leave\n"
- 	ASM_RET
- "	.size		my_tramp, .-my_tramp\n"
-@@ -101,6 +104,7 @@ asm (
- "	.globl		my_tramp\n"
- "   my_tramp:"
- "	hint	34\n" // bti	c
-+	TRACE_RCU_READ_LOCK
- "	sub	sp, sp, #32\n"
- "	stp	x9, x30, [sp]\n"
- "	str	x0, [sp, #16]\n"
-@@ -109,6 +113,7 @@ asm (
- "	ldp	x30, x9, [sp]\n"
- "	ldr	x0, [sp, #16]\n"
- "	add	sp, sp, #32\n"
-+	TRACE_RCU_READ_UNLOCK
- "	ret	x9\n"
- "	.size		my_tramp, .-my_tramp\n"
- "	.popsection\n"
-diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
-index bf2411aa6fd7..abc098c2ab7a 100644
---- a/samples/ftrace/ftrace-direct-too.c
-+++ b/samples/ftrace/ftrace-direct-too.c
-@@ -3,6 +3,7 @@
- 
- #include <linux/mm.h> /* for handle_mm_fault() */
- #include <linux/ftrace.h>
-+#include "ftrace-direct.h"
- #if !defined(CONFIG_ARM64) && !defined(CONFIG_PPC32)
- #include <asm/asm-offsets.h>
- #endif
-@@ -61,6 +62,7 @@ asm (
- "	pushq %rbp\n"
- "	movq %rsp, %rbp\n"
- 	CALL_DEPTH_ACCOUNT
-+	TRACE_RCU_READ_LOCK
- "	pushq %rdi\n"
- "	pushq %rsi\n"
- "	pushq %rdx\n"
-@@ -70,6 +72,7 @@ asm (
- "	popq %rdx\n"
- "	popq %rsi\n"
- "	popq %rdi\n"
-+	TRACE_RCU_READ_UNLOCK
- "	leave\n"
- 	ASM_RET
- "	.size		my_tramp, .-my_tramp\n"
-@@ -110,6 +113,7 @@ asm (
- "	.globl		my_tramp\n"
- "   my_tramp:"
- "	hint	34\n" // bti	c
-+	TRACE_RCU_READ_LOCK
- "	sub	sp, sp, #48\n"
- "	stp	x9, x30, [sp]\n"
- "	stp	x0, x1, [sp, #16]\n"
-@@ -119,6 +123,7 @@ asm (
- "	ldp	x0, x1, [sp, #16]\n"
- "	ldp	x2, x3, [sp, #32]\n"
- "	add	sp, sp, #48\n"
-+	TRACE_RCU_READ_UNLOCK
- "	ret	x9\n"
- "	.size		my_tramp, .-my_tramp\n"
- "	.popsection\n"
-diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direct.c
-index 5368c8c39cbb..99b65ad2fccc 100644
---- a/samples/ftrace/ftrace-direct.c
-+++ b/samples/ftrace/ftrace-direct.c
-@@ -3,6 +3,7 @@
- 
- #include <linux/sched.h> /* for wake_up_process() */
- #include <linux/ftrace.h>
-+#include "ftrace-direct.h"
- #if !defined(CONFIG_ARM64) && !defined(CONFIG_PPC32)
- #include <asm/asm-offsets.h>
- #endif
-@@ -54,9 +55,11 @@ asm (
- "	pushq %rbp\n"
- "	movq %rsp, %rbp\n"
- 	CALL_DEPTH_ACCOUNT
-+	TRACE_RCU_READ_LOCK
- "	pushq %rdi\n"
- "	call my_direct_func\n"
- "	popq %rdi\n"
-+	TRACE_RCU_READ_UNLOCK
- "	leave\n"
- 	ASM_RET
- "	.size		my_tramp, .-my_tramp\n"
-@@ -97,6 +100,7 @@ asm (
- "	.globl		my_tramp\n"
- "   my_tramp:"
- "	hint	34\n" // bti	c
-+	TRACE_RCU_READ_LOCK
- "	sub	sp, sp, #32\n"
- "	stp	x9, x30, [sp]\n"
- "	str	x0, [sp, #16]\n"
-@@ -104,6 +108,7 @@ asm (
- "	ldp	x30, x9, [sp]\n"
- "	ldr	x0, [sp, #16]\n"
- "	add	sp, sp, #32\n"
-+	TRACE_RCU_READ_UNLOCK
- "	ret	x9\n"
- "	.size		my_tramp, .-my_tramp\n"
- "	.popsection\n"
-diff --git a/samples/ftrace/ftrace-direct.h b/samples/ftrace/ftrace-direct.h
-new file mode 100644
-index 000000000000..726f67048ff5
---- /dev/null
-+++ b/samples/ftrace/ftrace-direct.h
-@@ -0,0 +1,126 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef _SAMPLES_FTRACE_DIRECT_H
-+#define _SAMPLES_FTRACE_DIRECT_H
-+
-+#include <linux/stringify.h>
-+
 +/*
-+ * A direct-call trampoline is entered with no lock, refcount or RCU marker
-+ * held; only Tasks RCU keeps it (and, for a module, its text) alive while a
-+ * task is inside it or preempted in something it called.  On architectures
-+ * that select HAVE_RCU_TRAMPOLINE_READERS, Tasks RCU only waits for such a
-+ * task while it is a Tasks Trace RCU reader, so the trampoline must enter one
-+ * before calling out and leave it afterwards, exactly like the ftrace and BPF
-+ * trampolines do.  See register_ftrace_direct().  The instructions before the
-+ * lock and after the unlock are covered by ftrace_direct_mark_module().
-+ *
-+ * These are rcu_read_lock_trace() / rcu_read_unlock_trace() open-coded as
-+ * instruction strings for use inside the samples' asm() trampolines, after
-+ * the versions in arch/x86/kernel/ftrace_64.S and
-+ * arch/arm64/kernel/entry-ftrace.S.  The scratch registers are caller-saved
-+ * and not argument registers, so they are dead on entry to and exit from an
-+ * fentry trampoline; the flags are clobbered.
-+ *
-+ * The generated asm-offsets.h is only pulled in on the architectures that need
-+ * it here: it is not generally safe to include from C (e.g. PPC32's TASK_SIZE
-+ * and arm64's TRAMP_VALIAS clash with the C definitions).
++ * A classic Tasks RCU reader is any stretch of kernel code that does not
++ * voluntarily block.  With CONFIG_TASKS_RCU_TRAMPOLINE_READERS a preemption
++ * outside trampoline text also ends it, and what a trampoline does to stay
++ * protected across its call-out is take a Tasks Trace reader, so model that.
 + */
-+#if defined(CONFIG_TASKS_RCU_TRAMPOLINE_READERS) && defined(CONFIG_X86_64)
-+
-+#include <asm/asm-offsets.h>
-+
-+#ifndef CONFIG_TASKS_TRACE_RCU_NO_MB
-+#define TRACE_RCU_MB	"	lock addl $0, -4(%rsp)\n"
-+#else
-+#define TRACE_RCU_MB
-+#endif
-+
-+#define TRACE_RCU_READ_LOCK							\
-+	"	movq %gs:current_task(%rip), %r11\n"					\
-+	"	movl " __stringify(TASK_trc_reader_nesting) "(%r11), %r10d\n"		\
-+	"	incl " __stringify(TASK_trc_reader_nesting) "(%r11)\n"		\
-+	"	testl %r10d, %r10d\n"							\
-+	"	jnz 771f\n"								\
-+	"	movq rcu_tasks_trace_srcu_struct+" __stringify(SRCU_srcu_ctrp) "(%rip), %r10\n" \
-+	"	incq %gs:" __stringify(SRCU_CTR_srcu_locks) "(%r10)\n"			\
-+	"	movq %r10, " __stringify(TASK_trc_reader_scp) "(%r11)\n"		\
-+	TRACE_RCU_MB								\
-+	"771:\n"
-+
-+#define TRACE_RCU_READ_UNLOCK							\
-+	"	movq %gs:current_task(%rip), %r11\n"					\
-+	"	movl " __stringify(TASK_trc_reader_nesting) "(%r11), %r10d\n"		\
-+	"	subl $1, %r10d\n"							\
-+	"	jnz 772f\n"								\
-+	"	movq " __stringify(TASK_trc_reader_scp) "(%r11), %r10\n"		\
-+	"	movl $0, " __stringify(TASK_trc_reader_nesting) "(%r11)\n"		\
-+	TRACE_RCU_MB								\
-+	"	incq %gs:" __stringify(SRCU_CTR_srcu_unlocks) "(%r10)\n"		\
-+	"	jmp 773f\n"								\
-+	"772:	movl %r10d, " __stringify(TASK_trc_reader_nesting) "(%r11)\n"	\
-+	"773:\n"
-+
-+#elif defined(CONFIG_TASKS_RCU_TRAMPOLINE_READERS) && defined(CONFIG_ARM64)
-+
-+#include <asm/alternative-macros.h>
-+#include <asm/cpucaps.h>
-+/* arm64's asm-offsets.h redefines TRAMP_VALIAS from <asm/fixmap.h>. */
-+#pragma push_macro("TRAMP_VALIAS")
-+#undef TRAMP_VALIAS
-+#include <asm/asm-offsets.h>
-+#pragma pop_macro("TRAMP_VALIAS")
-+
-+#ifndef CONFIG_TASKS_TRACE_RCU_NO_MB
-+#define TRACE_RCU_MB	"	dmb	ish\n"
-+#else
-+#define TRACE_RCU_MB
-+#endif
-+
-+#define TRACE_RCU_SRCU_CTRP	"rcu_tasks_trace_srcu_struct+" __stringify(SRCU_SRCU_CTRP)
-+
-+/* x14 = this CPU's offset; then atomically increment the long at x14 + \areg */
-+#define TRACE_RCU_PERCPU_INC(areg)						\
-+	ALTERNATIVE("	mrs	x14, tpidr_el1\n", "	mrs	x14, tpidr_el2\n",		\
-+		    ARM64_HAS_VIRT_HOST_EXTN)					\
-+	"	add	x14, x14, " areg "\n"						\
-+	"778:	ldxr	x15, [x14]\n"							\
-+	"	add	x15, x15, #1\n"							\
-+	"	stxr	w16, x15, [x14]\n"						\
-+	"	cbnz	w16, 778b\n"
-+
-+#define TRACE_RCU_READ_LOCK							\
-+	"	mrs	x12, sp_el0\n"							\
-+	"	ldr	w13, [x12, #" __stringify(TSK_TRC_READER_NESTING) "]\n"	\
-+	"	add	w14, w13, #1\n"							\
-+	"	str	w14, [x12, #" __stringify(TSK_TRC_READER_NESTING) "]\n"	\
-+	"	cbnz	w13, 771f\n"							\
-+	"	adrp	x13, " TRACE_RCU_SRCU_CTRP "\n"					\
-+	"	ldr	x13, [x13, #:lo12:" TRACE_RCU_SRCU_CTRP "]\n"			\
-+	"	str	x13, [x12, #" __stringify(TSK_TRC_READER_SCP) "]\n"		\
-+	"	add	x13, x13, #" __stringify(SRCU_CTR_SRCU_LOCKS) "\n"		\
-+	TRACE_RCU_PERCPU_INC("x13")						\
-+	TRACE_RCU_MB								\
-+	"771:\n"
-+
-+#define TRACE_RCU_READ_UNLOCK							\
-+	"	mrs	x12, sp_el0\n"							\
-+	"	ldr	w13, [x12, #" __stringify(TSK_TRC_READER_NESTING) "]\n"	\
-+	"	subs	w13, w13, #1\n"							\
-+	"	b.ne	772f\n"								\
-+	"	ldr	x13, [x12, #" __stringify(TSK_TRC_READER_SCP) "]\n"		\
-+	"	str	wzr, [x12, #" __stringify(TSK_TRC_READER_NESTING) "]\n"	\
-+	TRACE_RCU_MB								\
-+	"	add	x13, x13, #" __stringify(SRCU_CTR_SRCU_UNLOCKS) "\n"		\
-+	TRACE_RCU_PERCPU_INC("x13")						\
-+	"	b	773f\n"								\
-+	"772:	str	w13, [x12, #" __stringify(TSK_TRC_READER_NESTING) "]\n"	\
-+	"773:\n"
-+
-+#else
-+
-+#define TRACE_RCU_READ_LOCK
-+#define TRACE_RCU_READ_UNLOCK
-+
-+#endif
-+
-+#endif /* _SAMPLES_FTRACE_DIRECT_H */
+ static int tasks_torture_read_lock(void)
+ {
++	if (IS_ENABLED(CONFIG_TASKS_RCU_TRAMPOLINE_READERS))
++		rcu_read_lock_trace();
+ 	return 0;
+ }
+ 
+ static void tasks_torture_read_unlock(int idx)
+ {
++	if (IS_ENABLED(CONFIG_TASKS_RCU_TRAMPOLINE_READERS))
++		rcu_read_unlock_trace();
+ }
+ 
+ static void rcu_tasks_torture_deferred_free(struct rcu_torture *p)
 
 -- 
 2.55.0
