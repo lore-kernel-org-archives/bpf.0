@@ -1,58 +1,53 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4688E33DEC2;
-	Tue, 22 Sep 2026 19:33:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CCB33DEC2;
+	Tue, 22 Sep 2026 19:33:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790105594; cv=none; b=ek4+QtciS+mf3d9wLiRrGdUTdyCCBmmWjqoWcdu0cx0DF56CCJS41z/Gu5RvqDt6Ct3kciYGg8V5t575HosQ+ctC8TSs6LyCgqCqyXqLGmGnbUx0UC7osU91JgM/TRBPmFOxLVxxbpNBaBc6oyPutKhaxk8CzAD7aHGBAZ3j0rw=
+	t=1790105605; cv=none; b=eB96ZTfd2mhJFeSURz0uZFEICVsg5rMqZ3kkR/08SR2zwb9+BuUMEpsBO3jqJaTfYoCxy4gGOR3I1Y16C+Jhrz6cY0lgo209gM0AJvR+zCugyC54cM6C5qSxdK59plVNG5sheDB20w+jfZ42sXxvbqOcLwrKh/DuKHarpenBgVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790105594; c=relaxed/simple;
-	bh=iiJJQfBkLFyxIlvKugCAcfYophjpKylV/4Fx+zHD+cU=;
+	s=arc-20240116; t=1790105605; c=relaxed/simple;
+	bh=PRoocq1O4fAGktz+8rCUaT+Bpf5yzp0H9WYzBEZ72jg=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=I09WieNNS8kSKAqSnin9fepIgnG84A4raIhpx6AG1nbLPwO44VaZtHzc1N1VOgU5L6QMu53EXXk/u/UasrQK0AEY2dlWSQTKNtCwDzjZIpcaE4pZuMP7FfiuYBVTgrEsJKgd45CUcLzTelj5WEtulJ78NDr5eCr3GXMZAx1EGNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L8638J1m; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=q+Oh0+Q2omQQKJj6x81BDeaKBWXZcaEL8yqrlgeAzpcJkc0ABQTKIN+GB3whcOX+dVY2rdInfj/IsYBbbh67bJHDNDq7jyONfqhN/1Xu795Ome2N75+OjHVEb8a7iC/PPlD1tH6OKKEqL9XuNIswAAFBDuGaHVkbhe35wNzdbK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eHy/aO/Z; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L8638J1m"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBC881F000FF;
-	Tue, 22 Sep 2026 19:33:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eHy/aO/Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F60F1F000FF;
+	Tue, 22 Sep 2026 19:33:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790105593;
-	bh=iiJJQfBkLFyxIlvKugCAcfYophjpKylV/4Fx+zHD+cU=;
+	s=k20260515; t=1790105603;
+	bh=PRoocq1O4fAGktz+8rCUaT+Bpf5yzp0H9WYzBEZ72jg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=L8638J1mWaOM0Z+2w9jxm/wrRcYGi5bogdvO+SZaG5GLjqCB7/K6fwkGfpe1xwaLQ
-	 FcpU7SIxNBwa4klmdQwCaqNHkLm2WJwAgbGdr960db0H4Yr1zs8fcfXjLYSjko65D9
-	 Y5jjGeoypZ/jwaKAaPRAkEF+V5L2kk7ox2DX3+sxXv+frfVRAoGxsCdPUEHf5URZbZ
-	 3rdFRjIWdWHwgvPjTCOvvpKLJ1x0I/NkLIIYBIA934Qz1+xLAFpQucNArnT78+aOTF
-	 qz8gj2wYc+F6BFN+UpgAukwbd/zuRKJ/yY02SnJ97tAh4HVFYIDqUH/1eZOG4zXvKO
-	 Yy7T4YOSMZREA==
+	b=eHy/aO/ZsqXNj51iHp3vwGMraYfLcc5VktZhDSWDEryLe/LJXjQKu9B+bW0QX0YVb
+	 th/vRD0LrqhomizImqHR8qH7mGvOFsVOtst9OU+pVMszPY9ZeZUFHDKXviSt4nKhGr
+	 P8fuZrnJMKQco5hZ826FuhGoXsluD+JL6tpmfvhMUTWFF3532DzmOImmabMG80dzkC
+	 uTehftnaF984N2QBISfvEcJhURXwQaEt837gZaGTykJWWwVHcF3AOWP4muA1EG7Qmb
+	 dTCNhrqgXKH0Uz8/6PCxS7l0tDizEWWCaPKyGAXjzLKwoME3Uiyjgtg7jEmqO6B6Yq
+	 1Rm1Pc7NIYpbw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 08/14] parisc: mask compat syscall arguments in
- syscall_get_arguments()
+Subject: Re: [PATCH v3 07/14] openrisc: pass pt_regs to
+ audit_syscall_entry()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ricardo Robaina" <rrobaina@redhat.com>
-Cc: bpf@vger.kernel.org, audit@vger.kernel.org
-In-Reply-To: <65f32a82d590b11984723fa6f26ff96175679f9a.1790088067.git.rrobaina@redhat.com>
+Cc: audit@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <db72a3d5414b6b5f187c51710981296974ffcca6.1790088067.git.rrobaina@redhat.com>
 References: <cover.1790088067.git.rrobaina@redhat.com>
- <65f32a82d590b11984723fa6f26ff96175679f9a.1790088067.git.rrobaina@redhat.com>
+ <db72a3d5414b6b5f187c51710981296974ffcca6.1790088067.git.rrobaina@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 22 Sep 2026 19:33:12 +0000
-Message-Id: <20260922193312.EBC881F000FF@smtp.kernel.org>
+Date: Tue, 22 Sep 2026 19:33:23 +0000
+Message-Id: <20260922193323.9F60F1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-> A 32-bit compat task may leave garbage in the upper 32 bits of the
-> argument registers. Mask it off in syscall_get_arguments() so that
-> in-kernel consumers such as seccomp and audit observe the same values
-> the syscall actually used.
->=20
-> This previously happened for audit in the parisc do_syscall_trace_enter()
-> compat path; do it in the helper so all callers benefit and to prepare
-> for passing pt_regs to audit_syscall_entry().
+> audit_syscall_entry() now takes a pointer to pt_regs and extracts
+> the syscall arguments itself via syscall_get_arguments(). Drop the
+> individual argument registers from the call and pass regs instead.
 >=20
 > Signed-off-by: Ricardo Robaina <rrobaina@redhat.com>
 
@@ -60,5 +55,5 @@ Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1790088067.gi=
-t.rrobaina@redhat.com?part=3D8
+t.rrobaina@redhat.com?part=3D7
 
