@@ -1,205 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-78.mta1.migadu.com [95.215.58.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECAF24570D4;
-	Tue, 22 Sep 2026 10:05:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A93375326D2
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 10:18:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790071510; cv=none; b=X/wy20/fGFCnmUIwKGlIapoGUXjQjQfaaLivYJ3HQlloJ8w+mvjdIvQt1kYZ2NhdqyXSXmz/ByipikGUbrD+kvR8vuhShDouZIdKljJOFLgYpuVFxUL2yLKlTYCh0QdYx5ZXt60QueRtvcDFLy4Sr9tyQgHrpZviYwUWroVKXgw=
+	t=1790072338; cv=none; b=ZcIIi4ViRj0B/99953U7gvwkO+zaMcGvUp8m85IaV4TOJjv7BjCwOtI8iUAPHIcPutitIjAJtI2/mKLp8k38XTNAfrxKanIcDbOrRsEX8OZJcY0r7YfBYoco7vGtjybdv88j1RpuQsSM5FtVTC0ViMS9nUQ5EnVauK2zprXqmuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790071510; c=relaxed/simple;
-	bh=e1OPguSznv0oaoWEQ835BMLZphcamQK6RYvbQxI3zms=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=U9wnvJn2/Klu7++xRgRZJKpYA+gpgMzcx7yTlyFk8P5IXM3zzhrcZeE4ecx6clrRRbZGAxO0lHT4s21hcBUsfay0AXxKrGCIbfDP5V+ZJya3z8IPZN2si0g5c289Ws9eNR6fatLv8l2gsJHh6MNFwdpvz3gExrYyaQhklC+iWcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TKE6s0xy; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790072338; c=relaxed/simple;
+	bh=Cosv6Q7QMcJPuxGXk1cdr2Q6rkscbhpUAhVZPsCP5e0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LfAk3LGvsH/w5+gXCvcj7kpXFbmk53PGBZsJpCi08Xs2kwe5hqKLVy/D1oTs4myZDJMWLWnhpWlIHtFSD+jHO57H9rldH1u4yF3tgTzvTQ1PV/PtaFRVXD2u3E62cnIZWYEgurISKLMvx+TA+2fC3IFYFeW7N6Ie8mbd4DhzQik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hHhgMqKh; arc=none smtp.client-ip=95.215.58.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TKE6s0xy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D95E1F000FF;
-	Tue, 22 Sep 2026 10:05:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790071508;
-	bh=w2sZxf+PXOvNNTzDd/9WHwR+bGg7r6uPFpZLwJ0woQc=;
-	h=Date:From:To:Cc:Subject;
-	b=TKE6s0xyO5zpNxZoQf3uHhv9ip5+KCBng83OcGHn3+tREzOEhut9Hl+xkeeVvNVUH
-	 dfxSX9qwyAHQwXxFBRiTcNabV3FIQEdYbaSLCIEA43wiR2f5SslQ6UuuKJGQ92+qiT
-	 55NYXQ4Yhy4QKTw0RGt6ZUF3PuMTbSCrwGVVTey53KBpRH8nMR70GRiwHNwIXqkwVK
-	 Axt9vijRZK5ovkmoGiVwigZi4G3IsIpjNwYFvbgzgiGfZLzE319dDNR2JfRpJqrBLm
-	 Z8ZIuRnNQUGRZ42SzrZ0QTBi8Dg9J0EirYjyyqf9ZSBUlNGrctLGszbMXJ1yCT/oYh
-	 ublzq4ZqjGfPg==
-Received: by finisterre.sirena.org.uk (Postfix, from userid 1000)
-	id DA04F1AC56BF; Tue, 22 Sep 2026 11:05:02 +0100 (BST)
-Date: Tue, 22 Sep 2026 12:05:02 +0200
-From: Mark Brown <broonie@kernel.org>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hHhgMqKh"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Cosv6Q7QMcJPuxGXk1cdr2Q6rkscbhpUAhVZPsCP5e0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790072332; v=1; x=1790677132;
+ b=hHhgMqKhY0TYmZucUupIEhfcfznNf0KxEfgzQayBVLmxkt209itwCTNSq6BYuZbdzhncvLDk
+ xAgz5OqkzQVeIj8cySPqtyFfoQxR04aeGsMP70pvWGycZoBDvhkOZJGvm9Dqi4BwkXzywBYh/sd
+ DEaAvUmQCGV/JWgi2QKIAtbU=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id f7a8795b067e54db;
+	Tue, 22 Sep 2026 10:18:52 +0000
+X-Mizu-Trace-ID: f7a8795b067e54db
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Networking <netdev@vger.kernel.org>
-Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
-Message-ID: <arJSzo-jhnM-Tkvm@sirena.co.uk>
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v9 0/3] bpf: arena: handle memory.max on fault-in with reclaim
+Date: Tue, 22 Sep 2026 18:17:32 +0800
+Message-ID: <20260922101831.192102-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pyZ6XOk+o1SSkcvv"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+
+Since commit e66fe1bc6d25 ("bpf: arena: Reintroduce memcg accounting"),
+arena pages are charged to the memcg of the process that created the arena.
+That exposes a problem in the arena user page fault path: the fault-in
+allocation runs under arena->spinlock, so it can only use the non-blocking
+allocator, which never reclaims. Once memory.current is at memory.max the
+allocation simply fails, even when the memcg is full of page cache that
+could be dropped right away. Reaching memory.max is completely normal for a
+healthy application - e.g. reading a large file fills memory.current with
+page cache - and the process then gets SIGSEGV on a perfectly valid arena
+address.
+
+Preallocate the page outside the lock (patch 1), the way do_anonymous_page()
+does, so the allocation can sleep and reclaim. It never invokes the OOM
+killer: the page is charged to the map's memcg, which need not be the
+faulting task's, so an OOM there could kill unrelated tasks in the map's
+cgroup. On a genuine failure the fault returns VM_FAULT_SIGBUS. patch 2&3
+adds a selftest that fills a memcg with reclaimable page cache and faults an
+arena in under memory.max: without the fix the child gets SIGSEGV on a valid
+address, with it the fault-in reclaims and succeeds.
 
 
---pyZ6XOk+o1SSkcvv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+v8 -> v9:
+   - Trim the two comments in arena_vm_fault() to a sentence or two; the
+     details are in the commit log. (Alexei Starovoitov)
 
-Hi all,
+v7 -> v8:
+   - Merge patch 1 into patch 2. (Alexei Starovoitov)
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+v4 -> v7:
+   - Simplify the implementation: do not aim for OOM anymore. An arena is
+     shared between processes and can be shared across cgroups, so the OOM
+     killer is the wrong tool here - it would act on the map's memcg, which
+     need not be the faulting task's. Only try to reclaim now, via
+     __GFP_RETRY_MAYFAIL. Everything else is kept as before.
+   - selftest: changed accordingly - fill the memcg with reclaimable page
+     cache and check that the arena fault-in succeeds by reclaiming it,
+     instead of relying on an OOM kill.
 
-  tools/testing/selftests/bpf/prog_tests/verifier.c
+v3 -> v4:
+   - rebase bpf-next and fix conflict
+   - add Reviewed-by tag from Emil Tsalapatis
 
-between commit:
+v2 -> v3:
+   - selftest: check the memcg OOM via memory.events "oom_kill" instead of
+     the exit signal; it only aims to pass on the fixed kernel, since the
+     unfixed SIGSEGV is racy.
 
-  a903f145a8914 ("selftests/bpf: Add tests for the KF_PERFMON gates")
+v1 -> v2:
+   - Rebase on the separate deadlock fix (found by the Sashiko AI review),
+     now applied to bpf-next.
+   - Honor the map's NUMA node on fault-in.
+   - Return VM_FAULT_SIGBUS for the non-recoverable faults (lock, range-tree
+     and page-table failures); a scratch-page hole stays VM_FAULT_SIGSEGV
+     only under BPF_F_SEGV_ON_FAULT. (Kumar Kartikeya Dwivedi)
+   - Add read_cgroup_file() to cgroup_helpers instead of open-coding the
+     /mnt/... path in the test. (Emil Tsalapatis)
+   - Dump the cgroup memory stats on test failure to ease debugging.
 
-=66rom the bpf tree and commit:
+v8:
+https://lore.kernel.org/bpf/20260918084123.39477-1-jiayuan.chen@linux.dev/
+v7:
+https://lore.kernel.org/bpf/20260917015618.7488-1-jiayuan.chen@linux.dev/#r
+v4:
+https://lore.kernel.org/bpf/20260821050250.35112-1-jiayuan.chen@linux.dev/T/#t
+v2:
+https://lore.kernel.org/bpf/20260805091720.139924-1-jiayuan.chen@linux.dev/
+v1:
+https://lore.kernel.org/bpf/20260727062521.376231-1-jiayuan.chen@linux.dev/
 
-  a8bbd9ee1bbc7 ("selftests/bpf: Cover generic __uninit output initializati=
-on")
+Jiayuan Chen (3):
+  bpf: arena: allocate the fault-in page outside the lock
+  selftests/bpf: Add read_cgroup_file() to cgroup_helpers
+  selftests/bpf: Add a test for arena fault-in under memory.max
 
-=66rom the bpf-next tree.
+ kernel/bpf/arena.c                            |  83 ++++++--
+ tools/testing/selftests/bpf/cgroup_helpers.c  |  67 ++++++
+ tools/testing/selftests/bpf/cgroup_helpers.h  |   4 +
+ .../selftests/bpf/prog_tests/arena_memcg.c    | 196 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/arena_memcg.c |  23 ++
+ 5 files changed, 353 insertions(+), 20 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_memcg.c
 
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
+-- 
+2.43.0
 
-diff --cc kernel/bpf/helpers.c
-index 712dca5a2c5bd,501c7ce35cba9..0000000000000
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@@ -4920,12 -5049,14 +5049,14 @@@ BTF_ID_FLAGS(func, bpf_wq_set_callback
-  BTF_ID_FLAGS(func, bpf_wq_start)
-  BTF_ID_FLAGS(func, bpf_preempt_disable)
-  BTF_ID_FLAGS(func, bpf_preempt_enable)
- -BTF_ID_FLAGS(func, bpf_iter_bits_new, KF_ITER_NEW)
- +BTF_ID_FLAGS(func, bpf_iter_bits_new, KF_ITER_NEW | KF_PERFMON)
-  BTF_ID_FLAGS(func, bpf_iter_bits_next, KF_ITER_NEXT | KF_RET_NULL)
-  BTF_ID_FLAGS(func, bpf_iter_bits_destroy, KF_ITER_DESTROY)
- -BTF_ID_FLAGS(func, bpf_copy_from_user_str, KF_SLEEPABLE)
- -BTF_ID_FLAGS(func, bpf_copy_from_user_mm, KF_SLEEPABLE)
- -BTF_ID_FLAGS(func, bpf_copy_from_user_mm_str, KF_SLEEPABLE)
- -BTF_ID_FLAGS(func, bpf_copy_from_user_task_str, KF_SLEEPABLE)
- -BTF_ID_FLAGS(func, bpf_get_kmem_cache)
- +BTF_ID_FLAGS(func, bpf_copy_from_user_str, KF_SLEEPABLE | KF_PERFMON)
-++BTF_ID_FLAGS(func, bpf_copy_from_user_mm, KF_SLEEPABLE | KF_PERFMON)
-++BTF_ID_FLAGS(func, bpf_copy_from_user_mm_str, KF_SLEEPABLE | KF_PERFMON)
- +BTF_ID_FLAGS(func, bpf_copy_from_user_task_str, KF_SLEEPABLE | KF_PERFMON)
- +BTF_ID_FLAGS(func, bpf_get_kmem_cache, KF_PERFMON)
-  BTF_ID_FLAGS(func, bpf_iter_kmem_cache_new, KF_ITER_NEW | KF_SLEEPABLE)
-  BTF_ID_FLAGS(func, bpf_iter_kmem_cache_next, KF_ITER_NEXT | KF_RET_NULL |=
- KF_SLEEPABLE)
-  BTF_ID_FLAGS(func, bpf_iter_kmem_cache_destroy, KF_ITER_DESTROY | KF_SLEE=
-PABLE)
-diff --cc mm/internal.h
-index 0434dfcfc36f1,9e3be236f18c0..0000000000000
---- a/mm/internal.h
-+++ b/mm/internal.h
-@@@ -24,7 -23,17 +24,10 @@@
-  #include "vma.h"
- =20
-  struct folio_batch;
- -struct hstate;
- =20
-+ int __copy_remote_mm_str(struct mm_struct *mm, unsigned long addr,
-+ 		void *buf, int len, unsigned int gup_flags);
-+=20
- -struct huge_bootmem_page {
- -	struct list_head list;
- -	struct hstate *hstate;
- -	unsigned long flags;
- -};
- -
-  /* mm/workingset.c */
-  bool workingset_test_recent(void *shadow, bool file, bool *workingset,
-  			    bool flush);
-diff --cc tools/testing/selftests/bpf/prog_tests/cb_refs.c
-index 490e15e7126d9,c32c6dab49bce..0000000000000
---- a/tools/testing/selftests/bpf/prog_tests/cb_refs.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cb_refs.c
-@@@ -11,9 -11,9 +11,9 @@@ struct=20
-  	const char *prog_name;
-  	const char *err_msg;
-  } cb_refs_tests[] =3D {
-- 	{ "underflow_prog", "release kfunc bpf_kfunc_call_test_release expects r=
-eferenced PTR_TO_BTF_ID passed to R1" },
-- 	{ "leak_prog", "Possibly NULL pointer passed to helper R2" },
-+ 	{ "underflow_prog", "R1 type=3Dscalar expected=3Dptr_, trusted_ptr_, rcu=
-_ptr_" },
-+ 	{ "leak_prog", "Unreleased reference id=3D4 alloc_insn=3D3" }, /* alloc_=
-insn=3D3{2,3} */
- -	{ "nested_cb", "Unreleased reference id=3D4 alloc_insn=3D2" }, /* alloc_=
-insn=3D2{4,5} */
- +	{ "nested_cb", "Unreleased reference id=3D5 alloc_insn=3D2" }, /* alloc_=
-insn=3D2{4,5} */
-  	{ "non_cb_transfer_ref", "Unreleased reference id=3D4 alloc_insn=3D1" },=
- /* alloc_insn=3D1{1,2} */
-  };
- =20
-diff --cc tools/testing/selftests/bpf/prog_tests/verifier.c
-index 8b439e194bcc5,4f1e1c1cd5ab3..0000000000000
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@@ -54,7 -55,9 +56,10 @@@
-  #include "verifier_iterating_callbacks.skel.h"
-  #include "verifier_jeq_infer_not_null.skel.h"
-  #include "verifier_jit_convergence.skel.h"
-+ #include "verifier_kfunc_packet_access.skel.h"
- +#include "verifier_kfunc_perfmon.skel.h"
-+ #include "verifier_kfunc_uninit.skel.h"
-+ #include "verifier_kfunc_uninit_multi.skel.h"
-  #include "verifier_ld_ind.skel.h"
-  #include "verifier_ldsx.skel.h"
-  #include "verifier_leak_ptr.skel.h"
-@@@ -219,7 -224,9 +227,10 @@@ void test_verifier_int_ptr(void
-  void test_verifier_iterating_callbacks(void)  { RUN(verifier_iterating_ca=
-llbacks); }
-  void test_verifier_jeq_infer_not_null(void)   { RUN(verifier_jeq_infer_no=
-t_null); }
-  void test_verifier_jit_convergence(void)      { RUN(verifier_jit_converge=
-nce); }
-+ void test_verifier_kfunc_packet_access(void)  { RUN_TESTS(verifier_kfunc_=
-packet_access); }
- +void test_verifier_kfunc_perfmon(void)        { RUN(verifier_kfunc_perfmo=
-n); }
-+ void test_verifier_kfunc_uninit(void)         { RUN_TESTS(verifier_kfunc_=
-uninit); }
-+ void test_verifier_kfunc_uninit_multi(void)   { RUN_TESTS(verifier_kfunc_=
-uninit_multi); }
-  void test_verifier_load_acquire(void)         { RUN(verifier_load_acquire=
-); }
-  void test_verifier_ld_ind(void)               { RUN(verifier_ld_ind); }
-  void test_verifier_ldsx(void)                  { RUN(verifier_ldsx); }
-
---pyZ6XOk+o1SSkcvv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqyUssACgkQJNaLcl1U
-h9AJLgf/b204gVZX/IeKYjNsCB9oiOd1gN6gDrO/ftoVIVnn1GXoRKJqyV7RC60s
-PewUH50nX3R5Ttqo+hS1upltjwYW0azQ69Z+F2VAOZ+eDpTZTeDbdP0P+DwQqWqg
-OuvRZXgaqFTmuC/cw6GlDJImOwWKFNR67KYU0596NVx690UOBR6X2+oB8luyTu/y
-QTMOT6ThGrqIFTKw/LKUqRDJaCIt8e+CT6ZbAPWSM5HrEfWL6qG8PSnkcC3LcazC
-umNCvfubGCzXxYDwi8U8Qr2dJWWp7EoUD6E7L8RAB6MA6oqOuNpQ4jDrOPJFJx0B
-1ZUUGgeRTDKC3JdAFDpsp+uak+L7RQ==
-=qm5D
------END PGP SIGNATURE-----
-
---pyZ6XOk+o1SSkcvv--
