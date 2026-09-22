@@ -1,69 +1,69 @@
-Received: from mail-qk2-f42.google.com (mail-qk2-f42.google.com [74.125.230.234])
+Received: from mail-qv2-f43.google.com (mail-qv2-f43.google.com [74.125.230.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575D037F8BA
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 02:33:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8309C2EBBA1
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 02:34:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790044416; cv=none; b=gJs7GVaqu2/FLMJ5bgjkyavll+Z0EOR7kNG8dGvqb41rXtmrYwptcr66B83nhV1XRYRKfLDGWvBGg6YzA/gQ8hSCn0K2ResDosuuHVOBDK516q/xCuyss3fy0V1iXDhz1QmhSeM8hmXfY8HTkd2PUFzB2+XI/xZYP39RcTA/Nl4=
+	t=1790044451; cv=none; b=RGhWCM5yv0jhGfKWmqM2ua75QMXIq+RIWxP1DDb95/KkIq7kBgOnMU2JfPVRqENbYbf8sBnnroAxDw+4kldLWVkgKrlGpglGt3NMkhE2O86OmOufHwnIP2O4M6vnqQnAS3w99WpR7NzsSvsWpDF6lD7m7RczGbS2UAS1ulWle3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790044416; c=relaxed/simple;
-	bh=O8YdW4YSHUYyF3GwEQN16WzJM7UkZZFfh8RzVwv7xJM=;
+	s=arc-20240116; t=1790044451; c=relaxed/simple;
+	bh=EMsOGg9VRxBcocei3P3dGUkU8foVu6cO35v23va9IOs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dWy/pEwKOxtHeh0l47q295bjVxhEvvhnbU2NZVs/mVJouNZ2Qf0Kjyp7n8ocvpYiZGWYicxnEgIyXi1WfiMaeWcZfM0LhtD+EVw15qWTLCL43I5BsVT7EjKb+4VHjRbDpX5YvPN1xaIbUQCwls3wHzE+AJUyNKuJKy6mLoHX2tY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=qnop8KF3; arc=none smtp.client-ip=74.125.230.234
+	 In-Reply-To:To:Cc; b=LuSScAWyskN8ChugKjXnok6D8dVDbM+BLvs2z0wcz6I4H1Ur67gPvSZ2hxH8sIEEJLesi+amXBXCk84n9/812HTRApQHfYKrb4we/sGo3ZXlzUF7U9YkTZnxOoLVeoenXRURNqffC0GB3Uaj+AM3lC+i5kEKQ4Yl8Mo5EE28WXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=gxu6iCps; arc=none smtp.client-ip=74.125.230.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="qnop8KF3"
-Received: by mail-qk2-f42.google.com with SMTP id d75a77b69052e-5329fc7b325so24307461cf.0
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 19:33:34 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="gxu6iCps"
+Received: by mail-qv2-f43.google.com with SMTP id 6a1803df08f44-90cdfcbe207so41783976d6.3
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 19:34:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1790044413; x=1790649213; darn=vger.kernel.org;
+        d=toxicpanda.com; s=google; t=1790044448; x=1790649248; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=MkP56mJgKixcgLXoBxrfzz0NyJo14L+hjKFrNfKE/2k=;
-        b=qnop8KF3/xW7MwL1cIJXYaz6P00OjjBFrfHjtnUWJtITYukvpJlNeH67b5oRueMoeN
-         +9iNeNuROHtNBwVOTMxFGCYqdea5MgnfuzTmuV7+Uyo0h97iJRgpdNvB1Zl3SXORxe/6
-         UFXPHDHz2UTjAK3LnoIlPD0HJW460Ck1CYDtKPikLXiurZkm7bRXd9XLl7PMJSVJGqPu
-         Vm/c99t9vVQgjsuKmh7g9c+oi5FWSwaSdqjES/dhgofRGDi6Iu9GPbDAPpR1Q44b/oMv
-         a2JxoQUU+ci+gBPzSJpVIHq/QWMAcxnJYplsZ3xVsgDXF/VJ5YBP+po7IIbHbnom3PE8
-         iIUA==
+        bh=vixDe7y/8fdtCmwAQ+Tlt/gsuGiEiA9j8JVU0h22FWI=;
+        b=gxu6iCpsUuLPXgYUiCTsOhdCO0oUcbJMBjMPpP+jv0eOHhhCXhGwUeIs2HbNQ20DHx
+         74qKmviwa3RDrCJ7/9SzC3LYu0B9qZiq+5geSmAmd1lXncRixovrhMmqKpR0VohQ1W0Q
+         jTaNOe2nZxjJVrveqr8GHCCcHdZWmjGs5eqXGSVA08vZ/Cy4PVwRnkqczI8d4de7SEBh
+         PIl1D3KJ8rVTur1Y2QIIEAXJZviOyS0YuCtPLU/DFmzblAiFHYxUvd3ejTUgCcd4nLFr
+         qGMy8pp96s6aeeS5/W0b4ATIkBgLliiR2U1+mMJ7ruU1y5jxhOgCgcRf219wL53YetDD
+         dafw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790044413; x=1790649213;
+        d=1e100.net; s=20260707; t=1790044448; x=1790649248;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=MkP56mJgKixcgLXoBxrfzz0NyJo14L+hjKFrNfKE/2k=;
-        b=b23rH3v2LWuRXKUKBW/chn+uL+tDBLIxX0SEhsdw6aHYSsLuo23Nbdwud9e6Pnk7Tw
-         ocCt46Nv7xf4Dt75+5b96mz09xidWOrxdQTd9TNEdzqKEC7sOlo/hVamdd052IHv6jCb
-         jbkf7qk6WRd9O3/OSctSPEwU+WoyHVzECcai75/xz4US/8ju/CB4gLmycowDnYFP3rz/
-         QmmNL/eW7YzZmQwSKx+KEsUqJ90aBmi+B7SMLR8OVyV4rIFjBXNMPCuiBfyYskT3e1OL
-         WRdVEHBpepb0IubdBAqzt+VAfSxRVRTL78ZjZ1aNCnNnQYOfwwWU5iB7g5B32M2aC8bE
-         Y1Rw==
-X-Forwarded-Encrypted: i=1; AKwUvBwCi/oXHWefZf/1N/fiJ2cLBd+lgaqsGyazPpV0TM13msL+UUuhenCeh5AZkoaSS9d3T8s=@vger.kernel.org
-X-Gm-Message-State: AFuF++n7iP2GvZRh/W/TJu8bcnAkMm5n5MuX8oQqOzQY3Dn7mevhRAlC
-	81xjf+qno06fz0LKBXcWMuDIYrmLmAER63XcSsTksQMzqrh+empODhZ/2tOZIh6bvrU=
-X-Gm-Gg: AYBFou0CH9BC5DhSuhzaoXcXhGGMV5g/61fi3sgGJevIH+gj6A89lBuFlRsZSnDc5DV
-	oGqFwWf1oA064u2CgN5kHjzNZTHX01qk607PUrcc6FBGA0DZ+fScRx0imGonPb95XT4len5An8M
-	7QbHTt3eIkbDlRiTUqnu3o/r3VGVd0fRqN50T48a9wdRN4Y+jV/4k6c7ZDaJYLk8WfXPNRAa0O4
-	DXhnV9uu28poHfIEmW9OAIpCGwu+WgXjOXHXV5dzX4OeI2J2OLFZ2OwRWhd8kba1JJo1RbszaTe
-	9WE39+tjvXk/+1ImM5ZgT0uL3s2l70Vt61LRScrJO/w9ccuzD5x3VYy/FZlaR7bPz9pvNYyV8Hg
-	LXfYtd2fhVm1vAxXWit2osvK0g1NUr7nyPIh9riWeLSJC56710A5TlzoHo3UkhgiXy+xXMYgwAl
-	fitHuBm4Il2/KstQuO1xu77Fi/HqywhZ2u1RNuFKSAuH38O6bSVBpIEJG3PyQM2Sw/isBr5xGp/
-	eeRZxwd8WNWjYt/
-X-Received: by 2002:ac8:5a12:0:b0:52d:cda5:abfd with SMTP id d75a77b69052e-532d8e10f9amr37728211cf.38.1790044412692;
-        Mon, 21 Sep 2026 19:33:32 -0700 (PDT)
+        bh=vixDe7y/8fdtCmwAQ+Tlt/gsuGiEiA9j8JVU0h22FWI=;
+        b=XTd7cDRdizZvQTC/1R+M+xwenm95DLgx1fsEVBziQUVtVqv+jxf5QpAMU/vf6b+2YD
+         b3oyCA4kpf6Qpe2ezXOUsTHOfOZybnDdJ1Z1au9NzEx1VoRqRkeKmpbqr8+CtveiNVGf
+         VQVoB4oMmO50Z9jWqCY9YsQMTnvVOcHlBfR7bQt8JzNheG39yMuUkTmagK3mh7tibILJ
+         wddhmKes5iIyEYh+q8eYwgyZh132mjK3iHx+dWrtIEY3BsxEl7p7wii32Ona3Vot1cgi
+         u8bfF55NfovFYci4xNdUDdAhWZZQN9/SKJcev3sqU36sd2S72GXCQxDjwftHkCRHs3tm
+         B3HA==
+X-Forwarded-Encrypted: i=1; AKwUvByendl4qmR86aENTRZCLVY2MWQKQcGv5lOsWRwVEERDrYl+SxnYURmJsTTJJsilaW7n6Cs=@vger.kernel.org
+X-Gm-Message-State: AFuF++m9nr0n46YlrJRy8UXftniFo8NRITXSykl3kVAu9jvdABYW/tdK
+	8IisTBEKk7iaWBNv0pTysuWfnCXp6Thd6IWO+Jp4b5SFR+ih9848Px6t9MVjd437M/g=
+X-Gm-Gg: AYBFou3LAUEFdKYwsVlDzUdWKQ8cf9e6bWBHp1eHjg1toz0z56A+1LySSX+tC3IJMx5
+	2MNvhh5o7PyPm/Cvf4WLuOOKuBkNtVXcCZoi+QnlERUZYNAS5pL9ub0z7Ku4oJQY8Io5apSxJmN
+	nn9cS/Yxao7sZNi0QJ91yJP5678pmWZYbV5siXI0MmDw+5ZNueMM/eUbl5rkN2eK02ZAoqV4B6N
+	QMi+25loCKIAN3XqGmBPJzg4wJhkzdjZKkAMZTqGACfxBLusBG2l5F7HMlrrewtg6mqEbiic9LO
+	StPrXrxGnFCim6J5tJlDvjjWE9RkL/ltYOXGDfXoPYF5L5NQbloznG2y88daH+VpIyNmBr53M+g
+	CwRf77KdjmSSm1AUmO2tkiy3DUc9Jw0s1KZiNzUTKHfTqR7bRZgI3c/ij506QwOVUEyB274EqWF
+	XhERwCB29LwflGUcGA/qw7R+UCwbresrvzyLKM/SChLp58HzcehBJ49QeDQbX4rQEEnLP7IYVXS
+	WpeIMhY+UbkhiY=
+X-Received: by 2002:a05:6214:1304:b0:90e:9875:b48c with SMTP id 6a1803df08f44-913fc8b1f2dmr34711036d6.12.1790044448184;
+        Mon, 21 Sep 2026 19:34:08 -0700 (PDT)
 Received: from toxicpanda.com ([153.61.196.250])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-914024ee211sm4656006d6.34.2026.09.21.19.33.32
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-9140250b82asm4582396d6.39.2026.09.21.19.34.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 19:33:32 -0700 (PDT)
+        Mon, 21 Sep 2026 19:34:07 -0700 (PDT)
 From: Josef Bacik <josef@toxicpanda.com>
-Date: Tue, 22 Sep 2026 02:23:30 +0000
-Subject: [PATCH v5 11/13] rcutorture: Make Tasks RCU readers Tasks Trace
- readers where required
+Date: Tue, 22 Sep 2026 02:23:31 +0000
+Subject: [PATCH v5 12/13] rcu-tasks-trace: Assert no reader is held on
+ return to userspace
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,7 +72,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260922-b4-rcu-tasks-preempt-qs-v5-11-410f57770bad@toxicpanda.com>
+Message-Id: <20260922-b4-rcu-tasks-preempt-qs-v5-12-410f57770bad@toxicpanda.com>
 References: <20260922-b4-rcu-tasks-preempt-qs-v5-0-410f57770bad@toxicpanda.com>
 In-Reply-To: <20260922-b4-rcu-tasks-preempt-qs-v5-0-410f57770bad@toxicpanda.com>
 To: "Paul E. McKenney" <paulmck@kernel.org>, 
@@ -86,59 +86,76 @@ Cc: Boqun Feng <boqun@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
  linux-trace-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
  linux-kernel@vger.kernel.org, Josef Bacik <josef@toxicpanda.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1790043820; l=1716;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1790043820; l=2581;
  i=josef@toxicpanda.com; h=from:subject:message-id;
- bh=O8YdW4YSHUYyF3GwEQN16WzJM7UkZZFfh8RzVwv7xJM=;
+ bh=EMsOGg9VRxBcocei3P3dGUkU8foVu6cO35v23va9IOs=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgUBr36M/n0nWN0DNbnxwzIiCZez6MG
  JiruuNaSCI/zXsAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QN+SSmbqaUDY715i7pHjObQRKDl/n4FuMBV449sPKr77qotFd+q5BWjod9YbtBMN8iSeWuFGbqu
- 3faoKTTHOvw4=
+ QLzeLb/2gtbRDPx3ssZtnGVRsANVTMmhDuPYTamLR1rD3jjMOpYIakVJmblm2P6SqGgYyithDIa
+ ERiWg9/irxQs=
 X-Developer-Key: i=josef@toxicpanda.com; a=openssh;
  fpr=SHA256:C8kOX2QUJCMqnCX+KEeoqRAjLo9L+ELOSH2NSAJHqGA
 
-rcutorture's "tasks" flavor has empty readlock/readunlock hooks because
-a classic Tasks RCU reader is simply code that does not block.  Under
-CONFIG_TASKS_RCU_TRAMPOLINE_READERS a preemption outside trampoline text
-is also a quiescent state, and the thing real readers (trampolines) do
-to stay protected across their call-outs is take rcu_read_lock_trace(),
-so have the torture readers do the same there.  Otherwise a preempted
-torture reader would rightly be treated as quiescent and the test would
-report false-positive too-short grace periods.
+With trampolines now taking rcu_read_lock_trace() open-coded from
+assembly and JIT-emitted code, an unbalanced reader would silently
+turn every later Tasks Trace grace period on that task into a stall.
+No task can legitimately reach userspace with current->trc_reader_nesting
+non-zero, so under CONFIG_PROVE_RCU check it in the generic entry
+code's return-to-user validation, next to the existing kmap and lockdep
+assertions.  Compiles away otherwise.
 
 Assisted-by: LLM
 Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 ---
- kernel/rcu/rcutorture.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ include/linux/irq-entry-common.h | 2 ++
+ include/linux/rcupdate_trace.h   | 7 +++++++
+ 2 files changed, 9 insertions(+)
 
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index 794937e13e7c..ab870ef09af0 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -1142,13 +1142,23 @@ static struct rcu_torture_ops trivial_preempt_ops = {
-  * Definitions for RCU-tasks torture testing.
-  */
- 
-+/*
-+ * A classic Tasks RCU reader is any stretch of kernel code that does not
-+ * voluntarily block.  With CONFIG_TASKS_RCU_TRAMPOLINE_READERS a preemption
-+ * outside trampoline text also ends it, and what a trampoline does to stay
-+ * protected across its call-out is take a Tasks Trace reader, so model that.
-+ */
- static int tasks_torture_read_lock(void)
+diff --git a/include/linux/irq-entry-common.h b/include/linux/irq-entry-common.h
+index e19b41ee6b18..d42568a488a7 100644
+--- a/include/linux/irq-entry-common.h
++++ b/include/linux/irq-entry-common.h
+@@ -5,6 +5,7 @@
+ #include <linux/context_tracking.h>
+ #include <linux/hrtimer_rearm.h>
+ #include <linux/kmsan.h>
++#include <linux/rcupdate_trace.h>
+ #include <linux/rseq_entry.h>
+ #include <linux/static_call_types.h>
+ #include <linux/syscalls.h>
+@@ -214,6 +215,7 @@ static __always_inline void __exit_to_user_mode_validate(void)
  {
-+	if (IS_ENABLED(CONFIG_TASKS_RCU_TRAMPOLINE_READERS))
-+		rcu_read_lock_trace();
- 	return 0;
+ 	/* Ensure that kernel state is sane for a return to userspace */
+ 	kmap_assert_nomap();
++	rcu_tasks_trace_assert_idle();
+ 	lockdep_assert_irqs_disabled();
+ 	lockdep_sys_exit();
  }
+diff --git a/include/linux/rcupdate_trace.h b/include/linux/rcupdate_trace.h
+index dcdb11643496..9eb7f92c710b 100644
+--- a/include/linux/rcupdate_trace.h
++++ b/include/linux/rcupdate_trace.h
+@@ -217,6 +217,12 @@ unsigned long rcu_tasks_trace_batches_completed(void);
+ // Placeholders to enable stepwise transition.
+ void __init rcu_tasks_trace_suppress_unused(void);
  
- static void tasks_torture_read_unlock(int idx)
- {
-+	if (IS_ENABLED(CONFIG_TASKS_RCU_TRAMPOLINE_READERS))
-+		rcu_read_unlock_trace();
- }
++/* A task must never reach userspace inside an rcu_read_lock_trace() reader. */
++static inline void rcu_tasks_trace_assert_idle(void)
++{
++	WARN_ON_ONCE(IS_ENABLED(CONFIG_PROVE_RCU) && READ_ONCE(current->trc_reader_nesting));
++}
++
+ #else
+ static inline unsigned long rcu_tasks_trace_batches_completed(void) { return 0; }
+ /*
+@@ -226,6 +232,7 @@ static inline unsigned long rcu_tasks_trace_batches_completed(void) { return 0;
+ static inline void call_rcu_tasks_trace(struct rcu_head *rhp, rcu_callback_t func) { BUG(); }
+ static inline void rcu_read_lock_trace(void) { BUG(); }
+ static inline void rcu_read_unlock_trace(void) { BUG(); }
++static inline void rcu_tasks_trace_assert_idle(void) { }
+ #endif /* #ifdef CONFIG_TASKS_TRACE_RCU */
  
- static void rcu_tasks_torture_deferred_free(struct rcu_torture *p)
+ DEFINE_LOCK_GUARD_0(rcu_tasks_trace,
 
 -- 
 2.55.0
