@@ -1,149 +1,204 @@
-Received: from mail-oo2-f39.google.com (mail-oo2-f39.google.com [74.125.231.167])
+Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4270B4A49B3
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 20:15:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.167
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 774983A641D
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 20:17:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.76
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790108141; cv=pass; b=rWlrukpscXQ1l17f2iv2pwllvDiCchwbP9NdxZT2Ng1WYsXd6gCRwyXgUgCEyrZZWRudRBO322E7+I6Pw4+ZRCuSkNqp7VZTeEp9We+XORpki/dpvBaagLeF2mGaiUlVBreUyyoEsZw0MBysw5nntIej2qy3MwnQgYYb8yo3CrY=
+	t=1790108261; cv=pass; b=n9c8CrpSeVIJBmQzbaX7zE3Rv2SCdbdxwQTTYo8k9y3IU/+x/wHmgar+f4WmdWKTgdy1ocxtQeY+UhoAVYBN2DzdQZ8KbipUv30H+tILSAvide/0oHruq6FFbxip32Pw1XSiiYc8SDH1E4x+dZq+P/7srP0Kdy0A0tfIw4FKxzs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790108141; c=relaxed/simple;
-	bh=mCEp/0gDCFHj+udesBZqQz+WyqBpGnnRo9HeqnIVIaI=;
+	s=arc-20240116; t=1790108261; c=relaxed/simple;
+	bh=9V3KVTiyZVv6wI40G1w3QCcbEG+arVAbC65vd6l13bo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rlqMy2di6LwAy00PhX2dCL8AGonVpNPYJAFkwrpLR9L4K0tHZM4uPp9XIp3prCI3vd2d5YPl99EjDWlS6VW1z3lszZRtfYctLaojQ6LiUsl2Z4LuBz1w9NfjF18o6yuxudy34HYWVNjSobc7F4kyyQyzpCxDxkM9NQy2M/exuF0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dsGy+Hxn; arc=pass smtp.client-ip=74.125.231.167
+	 To:Cc:Content-Type; b=p3phJQgaTMyTJgWU0HufzraTXXfBrTPjQgUQDQO8iAH5MqzldxGGV67IXQYi5r72dsbl74mZUwdH/HkkdEGyAdcsLt4Fp7cpAZwtWzwKSouq5S2a4mz0gGnCaUBZOjoYtLJ+3DnSpAKYPBAd9w+xroUl/nJ8MtbLQPqHCAX2Pw4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hq3oTguv; arc=pass smtp.client-ip=74.125.231.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dsGy+Hxn"
-Received: by mail-oo2-f39.google.com with SMTP id 006d021491bc7-6bd42f1c01cso151588eaf.2
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 13:15:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790108122; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hq3oTguv"
+Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-46accbdfb21so263080fac.1
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 13:17:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790108234; cv=none;
         d=google.com; s=arc-20260327;
-        b=AtW739mpVerfE6vEw2xuO2Ev1Ma4WRprlriDD8noa6kz5mx+kW3+NPT4a7VUVnR7OL
-         lNNw01zywbi5SivvpIkZzZ+P+qASDresdVj7VfbNDhn1+rTdfWD4eXZWZA8JI8SAQnDI
-         iM83Pxc8f5HF+5P0mhqnoQoU+xlCA38esfiCKyQz0Icv7nzTEeRR1lqbyIfwQR4wPnN0
-         HXziRDZOgmBPZwz4KLkPal9KD/2Fmv2QCEobnXXJlPKPCL1JRf4l/vvutd7gK1j8WMD9
-         kHxo0OutuTVa/n0wl5nciGjRDUGwzyS3duRYY+Biy5qTBNWPWIaWZk3Q1c4Ijt4wQ92M
-         VSOw==
+        b=fsWjy13tagxU8tKHoV39MjeG3rfTIBKKIW/RxDjwoOYndu/Sp6ZDPYR6U2aFaGZ/jh
+         ev5vCah2wNgdG9OyLgBm/n4GohY8vLfBQS7/D9c3nULU8b0r4sF+LULL4voANiOtp8Zc
+         VVo4oGZixnTNWk6J0ge8AFCxUMDb/rNhHHNL67sREqUNo/MEW+23Bq34GX2Fl6moWayV
+         1G0URn4qDgovD8j7yJWwpD1X/LdaLcQLh6F8wpY+Z+AdyvdHtrK+tgJTjajfzHAqea8E
+         j6JVR6m4CPaIJdfzRvp8/DtEoOGuDhmB/EqGuX0UwN9+Q6Aqa0CWZ9xBakZA2jCQ3ZnA
+         Xk/A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=uVx3elEB3t8n1eAOngOcFYDzr4OwdmHXD0B/yfUjmwA=;
-        fh=CBAo6MQMHgA5MRbUa815kkt+KVNLMhChIWh90PjX8rA=;
-        b=EwiYi+c073WV83Iu6vQ3K/WD48Hq73QlFkgw70d3SwOOVXYUOU7Z7JegNIzsxF/+jT
-         33a2y9sD3TcJ9JNWnAXSEPze482yodbt3CuMablHA1BKJxNBVL9V6yxg7Cjo9gcROHXs
-         K7HYc7vj+Wzrzj1q825z6t3XhXygsw0GxMQ1bSRh1Rg2gx1KmA8KvOv+8J51lMSH7EwR
-         +s62chORZZheEnIbQa5o6BVkwOIRqZfNNM9tr89RCskXsWKdU6Xr4Nz7RJkE+Tco8qey
-         Jno6c3nsGaggWt8e0/fQst7DaZWHQp+Iutg8YgtC+4Kr2CI/yTmdnziLu7SOZ8kQz7Nk
-         OzPw==;
+        bh=QcJg5n7sOOPwVaLZ6LVxB6ocMORc9n4O7Z2iUI9KKlU=;
+        fh=nskOhJawYMy+x9WfuMLfoXmPVtAcOID6DogK8RiSaQk=;
+        b=sxZDz3K2v5DdnTws11s3EJCEwXsthTVIMu9Lu4Dyd0MUiYKwqAQ7F6QmPLMyP+Yerz
+         /YII3ecASZAzbHZJcbBs8EeBNikE6NOcFvd4NrDDUwti8KDmteMOT8hp2NbRHXhrQ+L8
+         LPDHlPQagxaApLtqynITsM3zVi67CziSJBQDWfwASFV/ragACj+NIvohbYWLwHiap4FH
+         NnCgOP0DDXzzklbvnoiGKD8JqNoK1Vokbh3gA9D40CHbB8fee6C8U5uGPI/msyCvctvs
+         fYjBEStlE8+uQusIG7LI8G2zwseK+rpfiaToh5wf3JlSN3Z7sOXvYUJtjrwqUBo7rgiW
+         4erQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790108122; x=1790712922; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790108234; x=1790713034; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=uVx3elEB3t8n1eAOngOcFYDzr4OwdmHXD0B/yfUjmwA=;
-        b=dsGy+HxnaaSNCejDg0NtLQ0whRocRiavLOEGb/SGmsPw8BCZbdVXdba9lEyXK9Gozw
-         3lWF2M+SvH8iBMqk3a9u5mSmgDFyr9h8jo337PdSZsNlEUbbeHfuMGBuZ36s6mZCH50p
-         h8W/DyfLgtQcXJABi/liJv6tx/CSWRP0S4FO+7RddaRvecNVuVeY1okJL3AopxqXF/iX
-         a9MH07tAR6dSX6qHxBFJ2UkLIaQrYd/glJA3KbubMgLD95rFM9YVEt19UhZIykwKOrni
-         sKhkSKx+Icwsc1gFXjcDVFmi75MUFGbe2CUKWs0CZ6bG7leUlfzzlFqM+ElfmhG160yx
-         V14A==
+        bh=QcJg5n7sOOPwVaLZ6LVxB6ocMORc9n4O7Z2iUI9KKlU=;
+        b=Hq3oTguvc69DIA1IK9Dt/hXfKDIP2jJraAlmln35Hw6OEZ8niOUvVy/1g8pyYhAv/K
+         zeE1FB+oepqaHnQMUa192kcXjMoyY2YxRBDhjS9T0i4Gu5C8FGEOEbdIjHfhf48Ft6EP
+         1ee3XYzgbt2yaaQybkGgr1Kyp1hzPjAYBvghgP2BjN6vmqoPL4qeQZUy9YEhZyM9M6Xj
+         0FXf+31QSTMqXJyyTa4VN9znpLW79JTj8OCFMJkppPHe8P7OlbRPdfoal6se6pa4ja6x
+         htEB1ROUMFa9Hxa35Gap17GuOr6LEwNP0JHB7T3o7+axuRN1kcCZxdiZ64dTrpCzzQcA
+         AOEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790108122; x=1790712922;
+        d=1e100.net; s=20260707; t=1790108234; x=1790713034;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=uVx3elEB3t8n1eAOngOcFYDzr4OwdmHXD0B/yfUjmwA=;
-        b=GY12aa1r78OcI66O7vWTZHwFlERf9Qbk3kSHq5UA9N/xNM5g17MIja17WfoLf9uT0a
-         dbTvYzCcOzy135hhPNpxqJYxgH+XgbVNRf6Y1e2HGXRh96/B7H76uXa8GX45Dy095M8E
-         n2kgNNsdrgj8KyriEQvACNH2eonBzZ/uf2/M32A3sefM9Mk4RZm0OP+sfNW1cS9BwZda
-         EGXNsVBeE33aKKIdv6KEH/DkzowMZJitjsC21qYgZ2iCqhNzjloWr26MITgRlTZCkc5q
-         O6ALoS9YMK7uFAOMsW9F+Q8iuHg43N9GZ/185V/0NimvWCxjFXt4oIbuzK1XXw6jy+Vo
-         Yq6Q==
-X-Gm-Message-State: AFuF++kpPF5wKzrrUsJwI3hI6rqz6ITVFLZKHqo6yKAA9G8HVnYqN5y7
-	gQafH4cLXHzG7mcwZTysheN0U/HlKICIQqBrn9GhgpRELnsSgJqiccGvj2wmMw7zOtcxkJPWKRz
-	9HTFpMZG5pw4R2OujKqlNO/UOTFQDXZo=
-X-Gm-Gg: AYBFou138UPtKJkCJ0u5McjaYz/Uq8VXcqsANfOvA67DUJXaYErum2PQfJqc9Ub/JlD
-	zFg7Rlpfl8nSDXe+FfjpquQcT3Y/nmhReHnK+2jOzldy1ukyntSwZO1Tn/fecUiXAch5JFUHnoj
-	Ud8mkqfkbhlpZvGx6GpBIAz4Xh7hBIph/yyX/ZF9hzYVrwLuX+c2n1yW6X5LkqKKtFANrUla+L4
-	hshjajOsSkQiE7Xayjl72DZFN4SAcmb1yFNG/BWKOUYYxH17olrQMhP9fqXcNz4/pXqmJWkQJnk
-	Tp0CM4zJwjQbwL5eRSRsV+tr4fblrlGbI83tl+YMHLcV5mRdJaBqd0I+PTo5O3eulICQhYrAy6B
-	h62q31RY=
-X-Received: by 2002:a05:6820:4c0d:b0:6cd:3ffc:e32b with SMTP id
- 006d021491bc7-6d2d261ca81mr468446eaf.73.1790108122487; Tue, 22 Sep 2026
- 13:15:22 -0700 (PDT)
+        bh=QcJg5n7sOOPwVaLZ6LVxB6ocMORc9n4O7Z2iUI9KKlU=;
+        b=JtWqCal2ILgmlRA3pzMNVDPsOpnPWccxpzr6XinbdEgUa2FpjvPPE6t2oe8LkHQdm9
+         LvoE8wnaf68mnDX/W9B9CbBDPDqxoUJcUoz1mFE8Q9kdTsQvOiSeJ7/ZH5H2rNyZl6E6
+         NAtbf04ubRWgZ9lssoBfuoxzmPQ7w98Ss/9gxVlKWEsSA/LIx2zs0i3BP/BhLKsr60Jx
+         /Tj6NTbmIhAsswOLE0tIcNTFplz07EW51M2nxwrkvn4pRndB5qHwLYVwdxbH1ocHrJT4
+         6pA4w2w/pFR2B+3y+teiKuv+Z8zGT/bRehoWkEX/4Un9pwoTV68Wrbf2C4j6H5dCq+p9
+         ByRw==
+X-Gm-Message-State: AFuF++l9oPyqyUlIRJlB2hNWUwDOW+f3n6fSYDtBBmohPNH/d4nbfgR/
+	cduxFdl93k3PDhcfwzqBFBMUnd4DcMxZ/yR6Pg7SykhiMN1dW0LudlF892d5/5r3Ehad/YalKJ6
+	p0Ao62zXt8R1aPQErv8HQdiJFr/9FXIWCm049
+X-Gm-Gg: AYBFou1+CcDw9PvbB+wqtre6Gv3+LED0j5eUJ8CEc6vUDrflrTQglJix15A+Zg6oSwm
+	MVuvhUbL4f8jydRl8WH++rqsPU75hG7pEW2/9lHghfP1tT7M9WJQRdjur8yfhvfJppKeuhBvc7s
+	zDTVQuizDm9O3GikrM7DSpRmo37dCID08mPTsOQRT0agrVPRsjum15erFKU8QCyS69TAmSl+o50
+	BeeOfSdSa5JhXq6nGYvKJpYzJFSgeX6RMux2tYKA8cggnr1DUiEyBH0V3MtFm0u5KTSk60e5Ba1
+	RhOKxUd4fQp//szsS48uxEZN3HygbhC64ZCDvu7SvEzsR8fHkb/QdnjahlcRN2WcHlEuMrY=
+X-Received: by 2002:a05:6820:81c9:b0:6c9:80d8:a207 with SMTP id
+ 006d021491bc7-6d2d2622351mr445563eaf.68.1790108234294; Tue, 22 Sep 2026
+ 13:17:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260922172028.6269-1-emil@etsalapatis.com> <20260922172028.6269-2-emil@etsalapatis.com>
-In-Reply-To: <20260922172028.6269-2-emil@etsalapatis.com>
+References: <20260922172028.6269-1-emil@etsalapatis.com> <20260922172028.6269-3-emil@etsalapatis.com>
+In-Reply-To: <20260922172028.6269-3-emil@etsalapatis.com>
 From: Amery Hung <ameryhung@gmail.com>
-Date: Tue, 22 Sep 2026 13:15:09 -0700
-X-Gm-Features: AcwNN1UVDsg65rPEAMRirnKU1eEF0cNOI3a7FG5sWYjRPvHMVqk42xmf1-ryA4g
-Message-ID: <CAMB2axPZSbLNMONRt1NUi7iyji4zfT9MjHp315a0Gvq22opvyA@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 01/11] bpf: Fix bounds check for skb-backed dynptrs
+Date: Tue, 22 Sep 2026 13:16:57 -0700
+X-Gm-Features: AcwNN1XiYZPnaP5SRicCGj5AlCNONGjzkq8fstgTnhVQRWjQxe7fEQGRoeX3cmM
+Message-ID: <CAMB2axOg4d9BtEiSe8f_gRK8HW71XcxCJZhw207evsB+cyn_nQ@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 02/11] selftests/bpf: Test dynptr slices past end
+ of skb
 To: Emil Tsalapatis <emil@etsalapatis.com>
 Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, daniel@iogearbox.net, netdev@vger.kernel.org, 
-	Nicholas Carlini <nicholas@carlini.com>, Jiayuan Chen <jiayuan.chen@linux.dev>
+	memxor@gmail.com, daniel@iogearbox.net, netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 22, 2026 at 10:21=E2=80=AFAM Emil Tsalapatis <emil@etsalapatis.=
+On Tue, Sep 22, 2026 at 11:37=E2=80=AFAM Emil Tsalapatis <emil@etsalapatis.=
 com> wrote:
 >
-> The skb_pointer_if_linear() function checks whether a
-> memory region of length len starting at offset off into
-> the skb is in the linear area, and returns a pointer to
-> the region if so. The check currently subtracts between
-> skb_headlen and offset of the check, and since skb_headlen
-> is unsigned the subtraction can underflow. This causes the
-> bounds check to spuriously pass and generate an arbitrary
-> pointer of the form *(skb->data + off).
+> Add a selftest to ensure dynptr slices cannot include
+> past the end of the linear area of an skb.
 >
-> The only user of this helper is currently skb-backed BPF
-> dynptr code. Returning the wrong pointer leads to the
-> dynptr erroneously being backed with invalid memory.
->
-> Ensure the subtraction cannot underflow, and fail the check if
-> it would. Use u64 arithmetic to also prevent overflow when
-> calculating (skb_headlen(skb) - off) since off is unsigned.
->
-> Fixes: 6f5a630d7c57 ("bpf, net: Introduce skb_pointer_if_linear().")
-> Reported-by: Nicholas Carlini <nicholas@carlini.com>
-> Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 > Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+> ---
+>  .../testing/selftests/bpf/prog_tests/dynptr.c | 10 ++++++++++
+>  .../selftests/bpf/progs/dynptr_success.c      | 20 +++++++++++++++++++
+>  2 files changed, 30 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/test=
+ing/selftests/bpf/prog_tests/dynptr.c
+> index 5fda11590..439656036 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+> @@ -9,6 +9,7 @@
+>  enum test_setup_type {
+>         SETUP_SYSCALL_SLEEP,
+>         SETUP_SKB_PROG,
+> +       SETUP_SKB_PROG_NONLINEAR,
+>         SETUP_SKB_PROG_TP,
+>         SETUP_XDP_PROG,
+>  };
+> @@ -32,6 +33,7 @@ static struct {
+>         {"test_ringbuf", SETUP_SYSCALL_SLEEP},
+>         {"test_skb_readonly", SETUP_SKB_PROG},
+>         {"test_dynptr_skb_data", SETUP_SKB_PROG},
+> +       {"test_dynptr_skb_slice_non_linear", SETUP_SKB_PROG_NONLINEAR},
+>         {"test_dynptr_skb_meta_data", SETUP_SKB_PROG},
+>         {"test_dynptr_skb_meta_flags", SETUP_SKB_PROG},
+>         {"test_adjust", SETUP_SYSCALL_SLEEP},
+> @@ -94,7 +96,9 @@ static void verify_success(const char *prog_name, enum =
+test_setup_type setup_typ
+>                 bpf_link__destroy(link);
+>                 break;
+>         case SETUP_SKB_PROG:
+> +       case SETUP_SKB_PROG_NONLINEAR:
+>         {
+> +               struct __sk_buff ctx =3D {};
+>                 int prog_fd;
+>                 char buf[64];
+>
+> @@ -106,6 +110,12 @@ static void verify_success(const char *prog_name, en=
+um test_setup_type setup_typ
+>                             .repeat =3D 1,
+>                 );
+>
+> +               if (setup_type =3D=3D SETUP_SKB_PROG_NONLINEAR) {
+> +                       ctx.data_end =3D ETH_HLEN + sizeof(struct iphdr);
+> +                       topts.ctx_in =3D &ctx;
+> +                       topts.ctx_size_in =3D sizeof(ctx);
+> +               }
+> +
+>                 prog_fd =3D bpf_program__fd(prog);
+>                 if (!ASSERT_GE(prog_fd, 0, "prog_fd"))
+>                         goto cleanup;
+> diff --git a/tools/testing/selftests/bpf/progs/dynptr_success.c b/tools/t=
+esting/selftests/bpf/progs/dynptr_success.c
+> index e0745b6e4..b668ebd61 100644
+> --- a/tools/testing/selftests/bpf/progs/dynptr_success.c
+> +++ b/tools/testing/selftests/bpf/progs/dynptr_success.c
+> @@ -10,6 +10,7 @@
+>  #include "errno.h"
+>
+>  #define PAGE_SIZE_64K 65536
+> +#define TEST_SKB_LINEAR_SIZE (sizeof(struct ethhdr) + sizeof(struct iphd=
+r))
+>
+>  char _license[] SEC("license") =3D "GPL";
+>
+> @@ -211,6 +212,25 @@ int test_dynptr_skb_data(struct __sk_buff *skb)
+>         return 1;
+>  }
+>
+> +SEC("?tc")
+> +int test_dynptr_skb_slice_non_linear(struct __sk_buff *skb)
+> +{
+> +       struct bpf_dynptr ptr;
+> +       void *data;
+> +
+> +       if (bpf_dynptr_from_skb(skb, 0, &ptr)) {
+> +               err =3D 1;
+> +               return 1;
+> +       }
+> +
+> +       /* Ensure we cannot read past the end of the buffer. */
+
+nit: maybe "end of the linear area of an skb" to be clear?
 
 Reviewed-by: Amery Hung <ameryhung@gmail.com>
 
-> ---
->  include/linux/skbuff.h | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> index 421f6fc45..c8e219030 100644
-> --- a/include/linux/skbuff.h
-> +++ b/include/linux/skbuff.h
-> @@ -4372,7 +4372,10 @@ skb_header_pointer_careful(const struct sk_buff *s=
-kb, int offset,
->  static inline void * __must_check
->  skb_pointer_if_linear(const struct sk_buff *skb, int offset, int len)
->  {
-> -       if (likely(skb_headlen(skb) - offset >=3D len))
-> +       unsigned int uoffset =3D (unsigned int)offset;
+> +       data =3D bpf_dynptr_slice(&ptr, TEST_SKB_LINEAR_SIZE + 1, NULL, 1=
+);
+> +       if (data)
+> +               err =3D 2;
 > +
-> +       if (likely(uoffset <=3D skb_headlen(skb) &&
-> +                  (unsigned int)len <=3D skb_headlen(skb) - uoffset))
->                 return skb->data + offset;
->         return NULL;
->  }
+> +       return 1;
+> +}
+> +
+>  SEC("?tc")
+>  int test_dynptr_skb_meta_data(struct __sk_buff *skb)
+>  {
 > --
 > 2.54.0
 >
