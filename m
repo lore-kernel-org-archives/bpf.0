@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-237.mta1.migadu.com [95.215.58.237])
+Received: from mta1.migadu.com (out-240.mta1.migadu.com [95.215.58.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6938352FE41
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 22:55:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.237
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98B31531AF8
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 22:55:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790117749; cv=none; b=QUD7DVAGwuIU/Cny7e6SBkFhRWGgNWn4WdKrS8hVsE5uA34O7GTKg/03PnTWawFWokxHRdr1xg/XqL14bEA0vEh1deWKT5xNACv9PXZdbngmp+mbqNYHkfKS4ED0eLfsR+jR8aLzGBklF69cvoT29aYjtCyrZWTxgxofqZTkYu0=
+	t=1790117753; cv=none; b=oj/INvGVWQ4NqPpmDFVnTJ+2CKrmo5gbSLIE5rNc7Z3M32niKDP+rP7IOPolvrrCML3SglYAp7vnjjm/SeI23CtibuvWKwjzgGYfkRaRdPK8MMrN+V5UNnyRTTmc9kniTY4wFkgaHBWgnyE0GyGC/Kz22yKBe1SHf7ZPBGswEVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790117749; c=relaxed/simple;
-	bh=Azhr/Ymn+QhvjiuQXJGj9VxIyXHjY5pCGMdkRbVMMcY=;
+	s=arc-20240116; t=1790117753; c=relaxed/simple;
+	bh=GLYDVWUo9vlxL9owdIP78Jsu7Teexjv82ekJ8dgAFIU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qoTORuk5VEfbzlmjJ3dFKYIZowl/joW9niTlfD6/ZmZvZ6odxa25Pj0O1SjypSgnxXs/erDyd5pz5c4wYwmk5QgMpCxxX2kbJ/g2JB8tH/mCe8b0oAUk6Jl3s6jx02cmvbSrN/iboUiGeV4KL7A6q34MftMqKKeX9IfKtjBppA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WQk0ZACf; arc=none smtp.client-ip=95.215.58.237
+	 MIME-Version; b=bfONAzRrROVaw6PUdMeprXaFsxpNHhVzmviX9IT/U8S2YZC1DMABzWoUY+5Jc+SSZq6n9yXDxbT1U4yHKDoO5qmSa5WHP4DmnjcKoce5vF6oDoWlVFJwPu6AajGW9v+2axs8zsQ2ooNYFrBv+T25QWjEkpHZD28ekWwGw3MkfME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Xd7zHWVo; arc=none smtp.client-ip=95.215.58.240
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WQk0ZACf"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Xd7zHWVo"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=Azhr/Ymn+QhvjiuQXJGj9VxIyXHjY5pCGMdkRbVMMcY=;
+DKIM-Signature: a=rsa-sha256; bh=GLYDVWUo9vlxL9owdIP78Jsu7Teexjv82ekJ8dgAFIU=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790117743; v=1; x=1790722543;
- b=WQk0ZACfXQg7DKuNSAYOpgk5aYv9TBodi/ijlaM4u440NcZtUzBRGjy4hF/sz1bJso/Qzhe8
- qCaVbx+xRy7d5iJOjfdo/9EN8iP2Fjtq9yEohA7dGhGUaahtpyGSsTukm23C5sP0GtBPFwKxog4
- waiBiKP6ztHGMneEXsWc9szM=
+ t=1790117746; v=1; x=1790722546;
+ b=Xd7zHWVoi37khI1DqaZyroOpTo4SreMIjIX8LHX+0Q/0gUBIYYoo3W59fyQfGaRMS78n0UGZ
+ UPi0fgFHahvlvn+2c+CR9KXeLoKWaN4/gqxnx2RG4VA7mOOuwMm00SurN6C6FUxtBrLeyOiZF7J
+ hLuinSE7rHNfqWa5ohjnZG+0=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 6d67416f0fb06a32;
-	Tue, 22 Sep 2026 22:55:43 +0000
-X-Mizu-Trace-ID: 6d67416f0fb06a32
+Received: by smtp.migadu.com with ESMTPS id 7fe70d7a76de0350;
+	Tue, 22 Sep 2026 22:55:46 +0000
+X-Mizu-Trace-ID: 7fe70d7a76de0350
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: rostedt@goodmis.org,
@@ -40,11 +40,10 @@ Cc: mark.rutland@arm.com,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	kernel-team@meta.com,
-	Vineet Gupta <vineet.gupta@linux.dev>,
-	stable@vger.kernel.org
-Subject: [PATCH 1/2] tracing: fgraph: Raise FTRACE_RETSTACK_ALLOC_SIZE to 1024
-Date: Tue, 22 Sep 2026 15:55:25 -0700
-Message-ID: <20260922225526.1554758-2-vineet.gupta@linux.dev>
+	Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [PATCH 2/2] tracing: fgraph: Add a cond_resched() to the shadow stack retry loop
+Date: Tue, 22 Sep 2026 15:55:26 -0700
+Message-ID: <20260922225526.1554758-3-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260922225526.1554758-1-vineet.gupta@linux.dev>
 References: <20260922225526.1554758-1-vineet.gupta@linux.dev>
@@ -56,125 +55,76 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When ftrace graphing is turned on, all tasks in the system missing
-return stack page are assigned one. This is done in a simplistic
-multi-sweep loop of FTRACE_RETSTACK_ALLOC_SIZE (currently 32) tasks
-at a time as follows:
+This is supplementary to previous patch and is effective only for
+!PREEMPTION kernels.
 
-   start_graph_tracing()
-	do {
-		alloc_retstack_tasklist
-	} while (-EAGAIN);
+The preceding patch cuts the number of sweeps over the thread list by
+32x, but the loop is still O(N^2). Each pass walks from the same start
+init_task under rcu_read_lock() with no reschedule point. On a kernel
+that cannot preempt the walk, a large enough thread count lets one task
+monopolize a CPU until the walk completes.
 
-   alloc_retstack_tasklist()
-	alloc x32           # GFP_KERNEL, may sleep
-	rcu_read_lock()     # preempt off
-		for_each_process_thread    walk N_total, no cond_resched
-                     t->ret_stack = new_page
-	rcu_read_unlock()   # preempt enable but no explicit yield
+Add a cond_resched() between sweeps which is safe since it is outside
+the RCU read-side critical section.
 
-Each successive iteration of loop invokes for_each_process_thread()
-which doesn't support cursor based resume and always restarts from the
-init_task. Thus each successive loop needs to skip the tasks assigned
-ret_stack in prior sweeps and thus take longer and longer to find the
-candidate 32 tasks. And while the loop end calls rcu unlock,
-and re-enables preemption briefly, there is no explicit yield.
+It is understood that this is effectively a no-op for CONFIG_PREEMPTION
+builds, which is what default x86 and arm64 kernels are today.
+A CONFIG_PREEMPT_DYNAMIC build with "preempt={none,voluntary}"
+used to work but even that got inhibited since the commit
+7dadeaa6e851 ("sched: Further restrict the preemption modes").
+Measured on a 60-core machine with a PREEMPT_LAZY kernel and 400000
+idle threads, this patch changes neither the runtime nor the yield
+count, which stays at zero.
 
-The total number of iterations turn out to be
+Where it does have effect is !CONFIG_PREEMPTION builds: architectures
+that still offer PREEMPT_NONE or PREEMPT_VOLUNTARY, and the stable
+kernels where x86 PREEMPT_NONE remains a build-time choice. Verified
+on a 6.16 PREEMPT_NONE kernel, 240000 idle threads, three runs each,
+with the loop instrumented to count passes and cond_resched() yields:
 
-	N_total * N_null / (2 * FTRACE_RETSTACK_ALLOC_SIZE)
+	                 time            yields   soft lockup
+	unpatched        51.3-54.6 s     -        3 of 3
+	cond_resched()   52.7-53.0 s     592-609  0 of 3
 
-where N_total is the number of threads on the system and N_null the number
-of those whose ret_stack is still NULL. After boot with no fgraph user that
-is every thread.
+The runtime is unchanged and the soft lockups are gone. Every
+need_resched() converts to a yield, giving an average of about 98 ms
+between reschedules.
 
-This is not a tracing-only path. Since commit 4346ba160409 ("fprobe:
-Rewrite fprobe on function-graph tracer") fprobe is built on fgraph,
-so an ordinary kprobe_multi BPF attach that flips ftrace_graph_active
-from 0 to 1 pays the whole cost inside one bpf() syscall. Commit
-2c67dc457bc6 ("tracing: fprobe: optimization for entry only case")
-narrows that to return and session probes but does not remove it.
+There is a second effect on those builds. When cond_resched() does not
+reschedule it still calls rcu_all_qs() on !CONFIG_PREEMPT_RCU kernels,
+reporting a quiescent state. So the two failures seen in the field are
+addressed by two mechanisms: the soft lockup by yielding so the
+watchdog can run, and the RCU stall by reporting a quiescent state
+even on passes where no yield happens.
 
-A host running hundreds of thousands of threads, with the current batch
-size of 32, turns the ftrace_graph_active 0 -> 1 transition into a
-multi-second, and eventually multi-minute, operation which showed up as
-RCU stall and softlockup_panic on heavily loaded Meta Fleet machines
-with preemption disabled.
+This is deliberately separable from the preceding patch. If the view
+is that a no-op on the architectures anyone runs is not worth carrying,
+dropping this one leaves the batch-size fix intact.
 
-    rcu: INFO: rcu_sched self-detected stall on CPU
-    rcu: 0-....: (20718 ticks this GP) (t=21000 jiffies g=913 q=8 ncpus=8)
-    CPU: 0 UID: 0 PID: 160141 Comm: bpftrace
-     ___slab_alloc+0x549/0xa20
-     kmem_cache_alloc_noprof+0x16c/0x340
-     register_ftrace_graph+0x3d7/0x6c0
-     register_fprobe_ips+0x2d5/0x310
-     bpf_kprobe_multi_link_attach+0x218/0x7e0
-     __sys_bpf+0x267a/0x27a0
-
-Fix this by raising the batch to 1024.
-
-Measured on a 60-core Sapphire Rapids machine, running a PREEMPT_LAZY
-kernel (CONFIG_PREEMPT_DYNAMIC=y, mode lazy) timing the write that
-drives the ftrace_graph_active 0 -> 1 transition. Threads are spawned
-while fgraph is inactive so every one of them has ret_stack == NULL,
-and the loop was instrumented to count passes:
-
-	threads   batch 32              batch 1024
-	          passes   time         passes   time     speedup
-	100000     3126     15.3 s        98      0.44 s   34.8x
-	200000     6253     59.1 s       196      1.61 s   36.7x
-	400000    12503    227.8 s       391      7.25 s   31.4x
-
-At smaller thread counts (<= 200k), speedups are better than expected
-due to cache locality, and degrade at 400k threads due to cache misses.
-
-This is a latency fix, specially on preemptible kernels.
-On !CONFIG_PREEMPTION builds, where the walk is not preemptible, the
-same loop additionally produces RCU stall and soft lockup splats;
-those are a separate problem, and raising the batch only helps there
-by making the operation too short to trip the thresholds.
-
-The cost is a larger allocation burst. Shadow stacks are
-SHADOW_STACK_SIZE (4K) each, so a batch is a 4M GFP_KERNEL burst out
-of fgraph_stack_cachep taken while ftrace_lock and fprobe_mutex are
-held, and the pointer array kcalloc()'d by start_graph_tracing() grows
-from 256 bytes to 8K. Both are still ordinary kmalloc sizes, and any
-unused tail of the batch is freed at the end of the pass as before.
-1024 was picked to keep that array a single order-1 allocation; going
-much higher would need kvmalloc.
-
-This is a constant-factor improvement, not a cure: the retry loop
-stays O(N_total * N_null), so wall time still grows quadratically with
-the thread count and the batch will need revisiting as hosts get
-bigger. Making the walk resume from a cursor instead of restarting
-from the head would fix this properly, but task_struct lifetime makes
-it considerably more involved, so it is left for later.
-
-Fixes: f201ae2356c7 ("tracing/function-return-tracer: store return stack into task_struct and allocate it dynamically")
-Cc: stable@vger.kernel.org
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
- include/linux/ftrace.h | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ kernel/trace/fgraph.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index bd76a16a63af..d2f8e433ce53 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -1317,7 +1317,12 @@ unsigned long *fgraph_get_task_var(struct fgraph_ops *gops);
- #define __notrace_funcgraph		notrace
+diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+index ed455b53513b..86d11217c584 100644
+--- a/kernel/trace/fgraph.c
++++ b/kernel/trace/fgraph.c
+@@ -1249,6 +1249,14 @@ static int start_graph_tracing(void)
  
- #define FTRACE_RETFUNC_DEPTH 50
--#define FTRACE_RETSTACK_ALLOC_SIZE 32
-+/*
-+ * Batch for handing out Shadow stacks in one sweep.
-+ * This bounds how many times task list is walked and the allocation
-+ * burst given page size of 4K.
-+ */
-+#define FTRACE_RETSTACK_ALLOC_SIZE 1024
+ 	do {
+ 		ret = alloc_retstack_tasklist(ret_stack_list);
++		/*
++		 * Each pass rescans the thread list from the head, so the
++		 * loop is O(threads^2) overall. The RCU read-side section
++		 * ends with the pass, and both locks held here (ftrace_lock,
++		 * and fprobe_mutex for fprobe users) are mutexes, so it is
++		 * safe to give the CPU up in between.
++		 */
++		cond_resched();
+ 	} while (ret == -EAGAIN);
  
- extern int register_ftrace_graph(struct fgraph_ops *ops);
- extern void unregister_ftrace_graph(struct fgraph_ops *ops);
+ 	if (!ret) {
 -- 
 2.53.0-Meta
 
