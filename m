@@ -1,216 +1,263 @@
-Received: from mail-pj2-f8.google.com (mail-pj2-f8.google.com [74.125.227.136])
+Received: from mail-oi2-f12.google.com (mail-oi2-f12.google.com [74.125.231.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6885C42E415
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 20:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.136
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790110408; cv=none; b=NBH9si1InVa3wUZGMJNClYaapBkfWBZNVXrGCctzgch1o59utoEYts/9XuJmFb7fuI5dPyQj2scK2tFYyhHfaIkk/uj2U/IKJ+iI3MaIbn5J65gmo9BluOaHljpaLrb7nI8j4RYnwXMqLlSgNrxrhmyzafSQStZIxMggylIgSvo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790110408; c=relaxed/simple;
-	bh=/5Ovrt5SIzUgxaxdFXnnNjtd+rE2C1y05J62Y3qD1Tg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UncFfvq7OhmsTbYBBrDN7j+xZygUaiGyD674AlHnJokrNm4HZzUuXyAoQpGANRBB4Sy66nqy1RvqVRL6P9VfGrC11vQW0Xq8RL1h4tRwvOxXAaIboPReze3rsul4KGj/LXwOw1kZp8Kt8VOKwn9pwsgrwQwJR6XEYc/v7JI56KY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wyqwpwcj; arc=none smtp.client-ip=74.125.227.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 591BF3B993A
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 21:25:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.204
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790112342; cv=pass; b=WeebR3nG60ZgTVQp5hRUuTDluAlNVZ2m+TlBauCVQuqlByw4MChPVlUuWxowT5DxCbJ+GgHZyo5P04Wda7h7uuzCOzSylhlEbLapl7tyrgGbpj8RPH/MKXoQb2Gj9Y5dGll+pNMdbLzoJkUtI0SULcYz5QpZD2d3D1m6OQAFbzI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790112342; c=relaxed/simple;
+	bh=pXYvhRI2QGsBBW3YRAxvYrIFCISaKUPoPZrA0Uk82g8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AqP5W34n7kLC151XwJQh+juwy4eqQ+PRKZWatmX6uJ8CmZUCLGAimxfj+iJjIjWw9w+efp+kVa31sK1m/+/WNl7HfIUVtSHXxbigfCPCi/pLN0GSBH+Aq8fiuGKtMWVoXgTS9m8fPmfbKAFvaAJTynXP19C0WR+bMUvstDLeS/U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OSkq5i8v; arc=pass smtp.client-ip=74.125.231.204
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wyqwpwcj"
-Received: by mail-pj2-f8.google.com with SMTP id d9443c01a7336-2db33361b2fso1439295ad.1
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 13:53:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OSkq5i8v"
+Received: by mail-oi2-f12.google.com with SMTP id 46e09a7af769-7f4f0d37f9dso199931a34.1
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 14:25:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790112323; cv=none;
+        d=google.com; s=arc-20260327;
+        b=TPN8bxeS1FNaANWoIDZjBCkZUMHxDvWGjAMz8jF9l1GAg3ByBjAkyyt6blS0uHEWeW
+         22GYh9kxgYdhvvmw27lRTmxkes1v5R5o80sjkphuDsczXl2pIcVHF3YYomX/6l17XYJ7
+         PN+fznoo2Ke5Ps3yAWFbCQx8GsCJyTNgM7UGtIcmhVS3yOOoP1MCdpsR+DwwRR7inzmM
+         4lYzKTAcEWdk4511wPDWGoTIddTQxiOecwut6kSMJamjw2p4JR8chLEc7tT1lhJd7dNZ
+         wE9hmhZqn/3e4ni+6FRXOJcAvtnwaZUeZAoQ5GGO8gq8beNtdIjCd5vM81xUuv3TOevY
+         i41A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=AuJYqNlcz0zNjaMhYbGZxdr1/HF9I12Q60L33tc4/FI=;
+        fh=Mn4Kp/tm7wGzuMnNO6K1cvcBgh/rlyOQShpIgHQn+LA=;
+        b=ZWmXO2OP90K41eJ0U8dZPCF2gnAMIol7TIkdyzSzvVnCMDyy6Nelo4kyLydRW7AT8Y
+         cmUr9C71eFHX37QuxrJBkeS4bAX4jIpxfXVTT8qVkwrWPP+mMQvZfwLi+/8eYNnkjejb
+         2sckNyGDF5Wb1hldrzuVfcPXBdLAq8B4rKSnpCHYrKi2DTb8AFOwP50fPQsAAIOxBGZE
+         4PFmfhhbP+2edP40/jmlEAzaGHg3q6n3GOng38ZvaKE3eHeuzf09+PkaqvmMXc5qWn/H
+         PYzXazLIvhsA8UC/e1OkgxH6Jq3q0+zdMKlDpSZf7U5C8fF1qq8AAA+X3lqib+jHcrvo
+         b/jw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790110390; x=1790715190; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cN/bUNYr6k4szo+6LYbJD9AWHo4WOhhjO1JliVkVGmw=;
-        b=WyqwpwcjFzQOBQe7yuMlBIiAYtb/Xg0D4qMydtskKUPhrI+DCwv5NJfn7303pDSWGi
-         vOH4T6drnLuUbjL0HiF/9YbVpVbgF8t7fOVKAt9SzqiOnCnZXtfWkLe8NcIjZkkFoEtf
-         vxbBOL3WwkqUKa6/QSTu8HeYnays6QfQCcPy5iOfk11GZ8Oz0d/uz6+BRyJTYlPA90LP
-         bAJCZoDrQvYMTPxKmdSetRai5azSYLrUrmT2/XsntNV4pqq+dyGlsGVoKbpx691IVuP6
-         DGQDTZAD8vs0YTTAG1LUqmUxBxLev2gKfcISk6yw30X83Oy0Y8EUYwoUX4eBgEfLZZld
-         vL1Q==
+        d=gmail.com; s=20251104; t=1790112323; x=1790717123; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=AuJYqNlcz0zNjaMhYbGZxdr1/HF9I12Q60L33tc4/FI=;
+        b=OSkq5i8vINRwKHr7NQaM1cdkw/VoB8P0qLnJ3tKKo9NWlKlcMXVfnA+OIHLCQiLrPE
+         it0hL4EGw9qi/EOy91MRleZ0rXLFHflqa/bcrXHKw1GZ6hXJOlBrPNzX+4oeddN70kvO
+         KTlLuLb0TzWY4y5+w49pM6/XB3ILmFfiAmGTFu+JeElfER8qMr+pKSPKw7xDgZ1/X4Y8
+         8pceMb1M5oaKEwu1vzAsoC6I1TUC1r84LCls8FPgtqa9uPDPBDJnIOuhBXgcuqz5lWzQ
+         huSWc5gxdGcMOjsiMRNHXWFyylbheXzINsanmanzdyucdeZrRkyTgMlSYWxRITlukIif
+         Gupw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790110390; x=1790715190;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=cN/bUNYr6k4szo+6LYbJD9AWHo4WOhhjO1JliVkVGmw=;
-        b=EIkyLb/TBfmJQuYPIKD3gzKDi0nw43ii1sqYYvDkcBm0kviVReHRiWJ4huNwY6S1Ef
-         1vhloKms+Me7C+RC7YqTsUVhfTrNQwaEtm15LxSaBpG1NlHO2yc0buJi5HCGUdq12WRG
-         vZ/2Yzu0JHGO/f8Abefr5UyCNHmMqkxaV/4Vy+QqItpe4WVUN/mJJSU8fjY4g2KbcwqP
-         VNokLhf2Q1D3hzYkqAH92x9s8Z8p7ApznCt3y5Vu5TsXVmoBzXlldsByL/+kRbBO3piP
-         ANk4dME0mWTZkMd7p/qxa5KSnOrWkv59mHxHG1sFaHUjbRwIVDiq9aXXlCeCnJkNQCpb
-         K7sA==
-X-Forwarded-Encrypted: i=1; AKwUvByAQP3qQT4Ro3GykIxWkNtA0gOT1HRIUTDx1JRDB6RAIMnE9O+RBAGyVTRQ6Txtzkxvl4g=@vger.kernel.org
-X-Gm-Message-State: AFuF++ktCbwYrQcwzd8NCMZ/AXfgNd4yyWpWArr2yKfvdbfL/NL2tAGB
-	9tv5VaM+K3B1v76kXLoY55aQK47OG3C+n1X+Kug4avpvFcbh+oj7JYGR
-X-Gm-Gg: AYBFou3RWjvlWOV2SYz6eJVreLG6EjfeIbOXMeXhjl3rVITjGu3unjEqmVK1NepTQ5/
-	zGoUM1arEI1LKhtW8Fo+yrzXiyxHFLuWEx809x325dtm3SBOBxATARU/MgTkmD8qqoC9yIVgbLz
-	kZV9sq31aLNCuYbswzPN4BM1oscYTMTl6V7GPWuL0Y1TtrT8ksx5HuL6iwtRrJ1/rEnlzg7xE3J
-	ROmdSngW9nFI4GCAaePXmd8qyxgb/ZLx1WYjdZqAtZLgebzTI7h3Citz7h5G/4rBFAHleNsL65X
-	PWAuXasEmUjnrBCfK6YkFIjMBfM0wlcldX31awgzGKB9irQpT4mbhnfQB3MFhcTtomuFMRapSvJ
-	ukzOrUK01toOH5eGd3go6T2p7MAe8GsOfJywUONeLuB0HgIedlUvy3/vrDQg6ZFXPLQs3jKfc1M
-	8gzow4fSeTzuLc5ZzTXbs5ML6vdWqcaaFtiNGev06ClYKHgbcOk1O0Y7elul9N7WyLqGDEFcv+1
-	xw=
-X-Received: by 2002:a17:903:2c50:b0:2dd:c100:a5e7 with SMTP id d9443c01a7336-2df69e2b857mr5039605ad.59.1790110389518;
-        Tue, 22 Sep 2026 13:53:09 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:49::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6a60c4a8sm931315ad.79.2026.09.22.13.53.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2026 13:53:09 -0700 (PDT)
-Date: Tue, 22 Sep 2026 13:53:04 -0700
-From: Stanislav Fomichev <sdf.kernel@gmail.com>
-To: Jason Xing <kerneljasonxing@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, horms@kernel.org, willemb@google.com, kuniyu@google.com, 
-	netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH RFC net-next 0/9] net: BPF Timestamping 2.0 for TCP
-Message-ID: <arLpc9BBv_W6nw8c@devvm7509.cco0.facebook.com>
-References: <20260919143732.11772-1-kerneljasonxing@gmail.com>
- <arF7FGr8rQqDw8Pj@devvm7509.cco0.facebook.com>
- <CAL+tcoDossUOJCVwZ-6U519L_bNMYngnd82e1_oQB-czA6rL3A@mail.gmail.com>
+        d=1e100.net; s=20260707; t=1790112323; x=1790717123;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=AuJYqNlcz0zNjaMhYbGZxdr1/HF9I12Q60L33tc4/FI=;
+        b=GhBPJk429PxpHQTd8293aXheb6ZCWqhwfk0L2ZfLTTP5wG7giPjSvoke2YSpqCOiEM
+         5pUmKOgdUos3okb8SHMFIa59A0UllJyESD6m96AJpRl8tDNtmuAlrdotOfxZtcmSkuGV
+         cepLsA6lfud7b1+oEVjdx5lk1AKiOQ7Q4ipwrQYblL7KnUhTzk3v8io6kTd5k96lAfv0
+         ob5gfF5ToZEeazb5kDzeiqYHy6iHmpXjn8cC66PJ3AXelhsswW+u35Z0x/XeFcr117s+
+         MApMBFHZrwLs1bLHZQ4GkPUeJFQdxJxjiLIMufpulUIOO1dhHzjPS9I5WhW9zZ8iO/1/
+         FCfw==
+X-Gm-Message-State: AFuF++liSzR3LKi4eUBe513VjWWY/OU8SxZMmzneJZB+N/TYMTl52eeK
+	LnLxnTTe53Y9AX2ea8pBi8quu9T8QoMAqrqd2rbMCLuHAsTsspIpKKL+E4EOx8PomeUlZmEyCyC
+	bGzKK8+fQHQzAWI+yz9hZ9kjZf0RRdqo=
+X-Gm-Gg: AYBFou2C3oGTX/c1W8AvQIqhaz9YTEFbDrK1qARWC928eoGo44yBQkZpSUGtt7mDpnY
+	UL3qK+vx22uSEDa2fyBo9Y+HrTfGQmFb+DGeJhGT58xYNikn1JQ1eP4GMeQJjZ3TucCLQ1bqQA6
+	Fwg5L7AAIYEDvIlltiRxuo/zy1KuDhG2S6MKtwsvsR1yfE9OWEAEXQimYH6W5m7OvWYyzWrCVMP
+	PCoerdjuCjNuLDOVQQos/1UpsR04k059oauzwdiQdhtyDbnPLV4/dNvjHJAJGZpPqaPNtd7IXfd
+	l2+d13mjNpztUVDv2RLijUa8W0Rj0JylQcPWLBAhdv1C4sE+kqbKwezEeDor40wZyuwP5uM=
+X-Received: by 2002:a05:6820:81cb:b0:6b2:69bf:c8d7 with SMTP id
+ 006d021491bc7-6d2cff3fea4mr645741eaf.10.1790112323062; Tue, 22 Sep 2026
+ 14:25:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL+tcoDossUOJCVwZ-6U519L_bNMYngnd82e1_oQB-czA6rL3A@mail.gmail.com>
+References: <20260920210438.345847-1-xyx2021@mail.ustc.edu.cn> <20260920210438.345847-2-xyx2021@mail.ustc.edu.cn>
+In-Reply-To: <20260920210438.345847-2-xyx2021@mail.ustc.edu.cn>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Tue, 22 Sep 2026 14:25:08 -0700
+X-Gm-Features: AcwNN1VgA74wWA7Xo29HWMftmoxSc1Da10njS8DwcdHY8cYoZSTwYkR5lptmPKw
+Message-ID: <CAMB2axMmrTb+UZ84UD48MwMtXbk1s9bWtreU3AOfjzU0fPT0BA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 1/2] bpf: Destroy callee-local dynptrs on
+ subprog return
+To: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
+	sashiko-bot@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 09/22, Jason Xing wrote:
-> On Tue, Sep 22, 2026 at 2:45 AM Stanislav Fomichev <sdf.kernel@gmail.com> wrote:
-> >
-> > On 09/19, Jason Xing wrote:
-> > > From: Jason Xing <kernelxing@gmail.com>
-> > >
-> > > Greeting,
-> > >
-> > > It's BPF Timestamping 2.0 that aims to observe the packet latency
-> > > more efficiently and simply for different protocols. The current
-> > > series is only focused on TCP protocol.
-> > >
-> > > At Netdev 0x1a/Netconf 2026, the history, background, motivation and
-> > > rough implementation of the feature were exhaustively introduced[1].
-> > >
-> > > History
-> > > =======
-> > > - In 2009, Patrick Ohly implemented the basic infrastructure
-> > > - In 2014, Willem de Bruijn enhanced the TCP latency observation
-> > > - In 2024, Jason Xing proposed its lightweight BPF version
-> > > Detailed slides from 28 to 32 [1].
-> > >
-> > > Background
-> > > ==========
-> > > Even though BPF Timetamping 1.0 is comparatively low-overhead,
-> > > transparent, it's still complicated due to a few points inherited
-> > > from the design:
-> > > - Inflexible/fixed reporting phases (qdisc/driver/ack)
-> > >   When we confirm the issue arises from the kernel by using attribution
-> > >   ability of timestamping feature, we need to further minimize the scope
-> > >   until the issue is fixed. That means, we then have to resort to write
-> > >   a few complex BPF progs with the similar functionalities (like skb
-> > >   level tag) which should not happen.
-> > > - Not enough low-overhead
-> > >   Serving the sensitive applications, an always-on latency observation
-> > >   platform should mitigate the self-impact as much as possible. As we
-> > >   can conclude from BPF Timestamping selftests, there are some blocking
-> > >   and time-consuming points like where reading/writing BPF maps happen
-> > >   in the extremely hot paths.
-> > > - Minor flaws
-> > >   There are a few minor flaws inherited from the initial design, like
-> > >   missing tagging the last packet[2][3][4].
-> > > Detailed slides from 33 to 39 [1].
-> > >
-> > > Motivation
-> > > ==========
-> > > During the process of the large scale deployment over the last few years,
-> > > we eventually realized timestamping feature doesn't support container
-> > > scenario and we need a finer-grained and flexible tracing tool (packet
-> > > basis) after a few rounds of attribution of issues.
-> > >
-> > > Design
-> > > ======
-> > > - Start time
-> > >   For the specific protocol, we need to accurately set the start time of
-> > >   each packet first. For TCP, we chose the entry of tcp_sendmsg_locked
-> > >   and the driver time as the start point, so that any BPF program is
-> > >   capable of computing the delta between start time and current time.
-> > > - Simplicity
-> > >   Previous BPF program (like selftests) is too complex to implement. The
-> > >   core idea is to make everything as simple as possible. And it should be
-> > >   decoupled from BPF area and previous timestamping feature as much as
-> > >   possible.
-> > > - Flexibility
-> > >   BPF program hooking any function with skb parameter can get the latency
-> > >   value, which means it's no longer bound to the pre-embeded reporting
-> > >   phases (see __skb_tstamp_tx)
-> > > - Efficiency
-> > >   Avoid the previous BPF operations as much as possible. Make sure the
-> > >   feature achieves the lowest performance impact, which means only time
-> > >   operations remain.
-> > > Detailed slides from 40 to 62 [1].
-> > >
-> > > Implementations
-> > > ===============
-> > > in-kernel
-> > > - Find a suitable place to timestamp for each packet
-> > > - Pick the right start time for TCP
-> > > - Handle the split skb due to various reasons
-> > > BPF prog
-> > > - Hook any functions that carry skb parameter
-> > > - Read out the start time from the skb
-> > > - Generate the current time and then compute the latency
-> > >
-> > > Discussion?
-> > > ===========
-> > > - Do we need a kfunc to allow users to reset the start time of each skb?
-> > >   What I had in mind is if someone tries to observe the latency between
-> > >   two specific functions (rather than tcp_sendmsg_locked).
-> > > - Current implementation is real hardware timestamp always wins, which
-> > >   means BPF prog possibly gets the hardware time that is not aligned
-> > >   with bpf_ktime_get_real_ns.
-> > > - After the series, do we need to implement the same logic for
-> > >   SYN/FIN/PROBE... As far as I know according to numerous user reports,
-> > >   a small handful of issues came from 3-way handshake.
-> > > - Reusing the slot of hwtstamp might bring potential problems or make the
-> > >   code hard to maintain. Can we add a timestamping specific field in
-> > >   skb to deal with the latency observation?
-> > > - netdev_data conflict in IGC driver. It seems unavoidable to pollute
-> > >   start time when it's enabled. Should V2 feature coexist with hardware
-> > >   timestamping?
-> > > - Should V2 coexist with net timestamping and BPF timestamping? If not,
-> > >   the maintenance should be easier.
-> >
-> > After netconf discussion, I was under the impressions that no kernel
-> > changes are needed, so what changed? Is it hard to track start_time
-> 
-> Ah, you refered to the internal version, right? We wrote a kernel
-> module implementing similar logic which differently finds/borrows an
-> unused field of socket to store the start time. It's quite similar to
-> the series actually.
-> 
-> After deploying it at a small scale in production, I think it's
-> meaningful to upstream it. But as you noticed, there are remaining
-> discussion points on which I hope we can share opinions, especially
-> the future shape.
-> 
-> > from tcp_sendmsg_locked on the bpf side that we need kernel support?
+On Sun, Sep 20, 2026 at 2:04=E2=80=AFPM Xu Yunxiang <xyx2021@mail.ustc.edu.=
+cn> wrote:
+>
+> A data slice is valid only while the specific dynptr that produced it
+> remains valid. prepare_func_exit() copies a subprogram return value into
+> the caller and then frees the callee state without applying the normal
+> destruction semantics to dynptrs in the callee stack.
+>
+> A callee can therefore derive a slice from a local dynptr, return or spil=
+l
+> the slice into its caller, and then let the dynptr disappear with the
+> callee frame. The slice retains the id of a dynptr that is no longer in t=
+he
+> verifier state, so the verifier continues to accept accesses through it.
+>
+> Before the object relationship refactor, bpf_dynptr_data() slices from
+> referenced dynptrs also carried the shared reference id, allowing a later
+> release to catch some of these escaped slices. The refactor made those
+> slices precise children of their source dynptr and exposed the missing
+> teardown as an accepted stale access even after the shared resource is
+> released.
+>
+> Before freeing a callee, scan the first slot of every dynptr in its stack
+> and call destroy_if_dynptr_stack_slot(). The existing teardown rejects
+> losing the last dynptr for a referenced resource and invalidates the dynp=
+tr
+> and all of its descendants, including slices held in the caller. Propagat=
+e
+> any teardown error through prepare_func_exit().
+>
+> Reuse the existing teardown API and diagnostic. Update the affected
+> callback test expectation in this change so the commit remains test-clean=
+.
+>
+> Fixes: 308c7a0ae885 ("bpf: Refactor object relationship tracking and fix =
+dynptr UAF bug")
+> Reported-by: Sashiko <sashiko-bot@kernel.org>
+> Closes: https://lore.kernel.org/r/20260829040712.B1B511F000E9@smtp.kernel=
+.org
+> Suggested-by: Amery Hung <ameryhung@gmail.com>
+> Link: https://lore.kernel.org/r/CAMB2axOmdHwSrHihSRskDywkCmEGQOX+6dZPN_A9=
+u-HhxY3UDA@mail.gmail.com
+> Assisted-by: LLM
+> Signed-off-by: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>
+> ---
+>  kernel/bpf/verifier.c                         | 28 +++++++++++++++++++
+>  .../testing/selftests/bpf/progs/dynptr_fail.c |  4 +--
+>  2 files changed, 30 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 18aad4886f9cf..99b8f9add5c47 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -843,6 +843,31 @@ static int dynptr_ref_cnt(struct bpf_verifier_env *e=
+nv, int v_parent_id)
+>         return ref_cnt;
+>  }
+>
+> +static int destroy_dynptrs_on_func_exit(struct bpf_verifier_env *env,
+> +                                       struct bpf_func_state *callee)
+> +{
+> +       int i, err;
+> +
+> +       for (i =3D 0; i < callee->allocated_stack / BPF_REG_SIZE; i++) {
+> +               struct bpf_stack_state *slot =3D &callee->stack[i];
+> +
+> +               if (slot->slot_type[0] !=3D STACK_DYNPTR ||
+> +                   !slot->spilled_ptr.dynptr.first_slot)
+> +                       continue;
+> +
+> +               /*
+> +                * A callee-local dynptr is destroyed when its stack fram=
+e goes
+> +                * away. Apply the normal stack-slot teardown so referenc=
+es cannot
+> +                * be lost and slices derived from that dynptr are invali=
+dated.
+> +                */
+> +               err =3D destroy_if_dynptr_stack_slot(env, callee, i);
+> +               if (err)
+> +                       return err;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
 
-[..]
+The naming of destroy_dynptrs_on_func_exit() is too specific. Can we
+make it generic and resue it in two other places? For example:
 
-> Sure, we need kernel support that why I'm trying to introduce the
-> sk_start_time to help.
-> https://lore.kernel.org/all/20260919143732.11772-4-kerneljasonxing@gmail.com/
+  static int destroy_dynptrs_in_stack_slots(struct bpf_verifier_env *env,
+                                          struct bpf_func_state *state,
+                                          int first_spi, int last_spi)
+  {
+        int spi, err;
 
-Why can you not do this on the bpf side? There is even now a sendmsg_locked
-tracepoint with skb/sk argument. Or is it mostly because you can't
-distinguish between cgroups? And looking at your example [1] and don't
-see why a tracepoint won't be enough. Or is it too much overhead? In this
-case, it needs to have some numbers attached...
+        for (spi =3D first_spi; spi <=3D last_spi; spi++) {
+                err =3D destroy_if_dynptr_stack_slot(env, state, spi);
+                if (err)
+                        return err;
+        }
 
-1: https://lore.kernel.org/all/CAL+tcoD36zA=TYSzKSNWV0Ypo_HRBRU_Qh6rQtPL51aXR54p7Q@mail.gmail.com/
+        return 0;
+  }
+
+  The callers would become:
+
+  /* mark_stack_slots_dynptr() */
+  err =3D destroy_dynptrs_in_stack_slots(env, state, spi - 1, spi);
+
+  /* check_stack_write_var_off() */
+  err =3D destroy_dynptrs_in_stack_slots(env, state,
+                                     bpf_get_spi(max_off - 1),
+                                     bpf_get_spi(min_off));
+
+  /* prepare_func_exit(): invalidate slices that escaped into the caller. *=
+/
+  err =3D destroy_dynptrs_in_stack_slots(
+        env, callee, 0, callee->allocated_stack / BPF_REG_SIZE - 1);
+
+WDYT?
+
+>  static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
+>                                         struct bpf_func_state *state, int=
+ spi)
+>  {
+> @@ -11061,6 +11086,9 @@ static int prepare_func_exit(struct bpf_verifier_=
+env *env, int *insn_idx)
+>                         bpf_diag_mod_end(env);
+>                 }
+>         }
+
+nit: add one more empty line here.
+
+> +       err =3D destroy_dynptrs_on_func_exit(env, callee);
+> +       if (err)
+> +               return err;
+>
+>         /* for callbacks like bpf_loop or bpf_for_each_map_elem go back t=
+o callsite,
+>          * there function call logic would reschedule callback visit. If =
+iteration
+> diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/test=
+ing/selftests/bpf/progs/dynptr_fail.c
+> index 1cd61d72c166f..55c9a6be7fc56 100644
+> --- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
+> +++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+> @@ -125,9 +125,9 @@ static int missing_release_callback_fn(__u32 index, v=
+oid *data)
+>         return 0;
+>  }
+>
+> -/* Any dynptr initialized within a callback must have bpf_dynptr_put cal=
+led */
+> +/* A callback cannot return with the last dynptr for a referenced resour=
+ce. */
+>  SEC("?raw_tp")
+> -__failure __msg("Unreleased reference id")
+> +__failure __msg("cannot overwrite referenced dynptr")
+>  int ringbuf_missing_release_callback(void *ctx)
+>  {
+>         bpf_loop(10, missing_release_callback_fn, NULL, 0);
+> --
+> 2.43.0
+>
