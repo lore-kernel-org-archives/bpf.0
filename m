@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB5A5326BF;
-	Tue, 22 Sep 2026 23:51:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47CA753A397;
+	Tue, 22 Sep 2026 23:51:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790121089; cv=none; b=kwzrYCnMYNHwSAgPaaU35A5eRqc5GYjSlt+C1TDFxmkpwv5lfumYnJ/UJjSfh431luTu5Krk0Eew4M67/PVi/Tzsj1ruDrPxgx+6Yu/xgkaF9ki6N8JkjwGKdIyNt/vMjYUW++8zV5thk+tJkZl5/o19bzjP45w6hTVsNF8xEDA=
+	t=1790121090; cv=none; b=VFFkZZFIsLQDIi0Zpiiu9CLCcvkSSx9ER5WuFtGrFM1sAQy36jB9FpDjLr1jHUMQMowdrAU9QdNW8yaIAnotciJO3K2uo5i2QnXIKrpxGWxX5LViQezMKecUu4XjmJOAPCaXy+KrvMG6i3fbmSJtt8Jzhqfp3g0omGXAd+WFY7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790121089; c=relaxed/simple;
-	bh=LlGSkpwbyugjR99XkQu+pVMzwhYEmclRlaK9SvNY+HU=;
+	s=arc-20240116; t=1790121090; c=relaxed/simple;
+	bh=pzIXoUkXZUuRItdPlxMI/vriWSqOHOkFrEivzHnld8M=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=V9ggjuJ0bOvbZVhd/T2oh8EbprDBH+Q8giiOePJdRsfbTDpvnbR9Ht/lJGw6rFzcYF3AmDV4bTcnOuCSuh3UuDxKEUc2xxtcjYeu8KXxWDaw8tglPoSt366hbJwGTFxHos3KhDubHqZT4FnBcPjYEnCCWBHC9kPx70zMi87hCws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n6qIyUxy; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=CdI4aYUIOjTdUNXYTqAMnq6Q+QqT5nEUAkkrWcuiRQcvWw8clHH9nuILoSHownUGIc9ubL+oFPAbOLpAV/ZKnA9kH8ONV5KiVexzosAn0QxOS8sWbxIkPtBluyF/SZlsuQarJ1o4HQYrC5+9eXRKqtHl4/8kSLm+WvhMZ/OytOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fZy+RkYr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n6qIyUxy"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A61D61F00893;
-	Tue, 22 Sep 2026 23:51:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fZy+RkYr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A6F51F000FF;
+	Tue, 22 Sep 2026 23:51:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790121087;
-	bh=7BMGuvL3UFn1iVFtpzaUOONIrPrX87iLGVn/0q1dW7k=;
+	s=k20260515; t=1790121089;
+	bh=hIHS9ZT0yvp0KzPQBwpWWHTyda6SsL/n6IC6kywKrdA=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=n6qIyUxyDVppZj+Kl2dA/gqy83mkEVUncNHJOEdEzt0uH8r/mKiZ2zdg0pqZC4lZc
-	 wJNf9UW1V/BCDD2Lgsuo1E5++vAV81HgUJU7+rhzAjiv+q3M3q+JgdpmXGhSgTn0Z4
-	 x5jNmCaq0dN63ePbmj7o0826HySwgF8nVIyO4u2kzqfdwoVm3jRXPfMk7xyooE190h
-	 cJcbjPAyA6IofSvNYx1ZO13cL4IpEQD8kRe2KQzF+kPINijiVSHAirrehHs5FcKW0U
-	 lvUlHCA/jz4QWhRuKPJnvSDWJoEFnvXbt0/DowxY5eDbMpEGVrhhzwlUZg9fS8qQ8W
-	 5dN3yV5vTDMMA==
+	b=fZy+RkYrF6BjJhQbmfgGeV+kq66kxjyJr/Mpd3QAIo0pCrpM1c6Ozt0r+bAnMBBCj
+	 d5x5B/TKy0bV4BmFn9Kz05Dc1MGlkE2tSFAHZ1jqMGmoFJRqM13fObqH1S3Y4mjWBK
+	 lEKGE076GRKAjUuZVNG76b7yeqvI/5jKozyySSN/WCNWHw20Q5Ole/MFzqPzALx+g4
+	 joS9yv3sXt3rj92okICEJr4gOVCSju9kmRGH/rLyGtHJBAALYotSle6mBE8rcqE3aw
+	 u/uRXmX/VWEjnq2Jl9JdRB1XkRUiAboOq7JRpLsW6WM0ll1m1lQXVpasxifJPSg6ww
+	 xabl8jl8iX/yw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93A483822D65;
-	Tue, 22 Sep 2026 23:50:19 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 19C843822D65;
+	Tue, 22 Sep 2026 23:50:21 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,43 +37,46 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/2] bpf,
- mips: Add BPF_MOVSX support to the JITs
+Subject: Re: [PATCH bpf-next v6 0/4] bpf: Add bpf_call_rcu() and
+ bpf_call_rcu_tasks_trace()
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179012101814.134796.2287786050720557901.git-patchwork-notify@kernel.org>
-Date: Tue, 22 Sep 2026 23:50:18 +0000
-References: <20260912041220.444715-1-main.kalliope@gmail.com>
-In-Reply-To: <20260912041220.444715-1-main.kalliope@gmail.com>
-To: Nicholas Dudar <main.kalliope@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, johan.almbladh@anyfinetworks.com,
- paulburton@kernel.org, tsbogend@alpha.franken.de, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, ihor.solodrai@linux.dev, bpf@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+ <179012101963.134796.5104936283975615071.git-patchwork-notify@kernel.org>
+Date: Tue, 22 Sep 2026 23:50:19 +0000
+References: <20260922200208.3203834-1-puranjay@kernel.org>
+In-Reply-To: <20260922200208.3203834-1-puranjay@kernel.org>
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org, rcu@vger.kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+ eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, harry@kernel.org, paulmck@kernel.org
 
 Hello:
 
 This series was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Sat, 12 Sep 2026 00:12:18 -0400 you wrote:
-> Add the five MOVSX forms to the MIPS32 and MIPS64 JITs, which currently
-> emit them as ordinary moves. Patch 1 factors register moves into helpers;
-> patch 2 adds sign extension.
-> 
-> Use seb/seh on MIPS32 R2+ and doubleword shift pairs on MIPS64, where
-> normalizing the source for seb/seh would eliminate the instruction saving.
-> The MIPS64 sequence also matches GCC's generic lowering [1].
+On Tue, 22 Sep 2026 13:00:49 -0700 you wrote:
+> Changelog:
+> v5: https://lore.kernel.org/all/20260921191407.1742386-1-puranjay@kernel.org/
+> Changes in v6:
+> - Size struct bpf_rcu_head at 48 bytes rather than 64, matching what the
+>   inline state uses (Alexei)
+> - Trim patch 1's changelog: drop the reasoning about possible future
+>   layouts and about what the other async kfuncs return
+> - Rebase on bpf-next/master
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v3,1/2] bpf, mips: Factor register moves into helpers
-    https://git.kernel.org/bpf/bpf-next/c/86187bd3cd5a
-  - [bpf-next,v3,2/2] bpf, mips: Add support for BPF_MOVSX in the JITs
-    https://git.kernel.org/bpf/bpf-next/c/07ebb8c386d3
+  - [bpf-next,v6,1/4] bpf: Add bpf_call_rcu() kfunc
+    https://git.kernel.org/bpf/bpf-next/c/1832696b2207
+  - [bpf-next,v6,2/4] selftests/bpf: Add tests for bpf_call_rcu()
+    https://git.kernel.org/bpf/bpf-next/c/908a60853b8d
+  - [bpf-next,v6,3/4] bpf: Add bpf_call_rcu_tasks_trace() kfunc
+    https://git.kernel.org/bpf/bpf-next/c/db1b20ed6b09
+  - [bpf-next,v6,4/4] selftests/bpf: Add a test for bpf_call_rcu_tasks_trace()
+    https://git.kernel.org/bpf/bpf-next/c/b22f65a009ad
 
 You are awesome, thank you!
 -- 
