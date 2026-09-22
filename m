@@ -1,126 +1,310 @@
-Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
+Received: from mail-dl2-f42.google.com (mail-dl2-f42.google.com [74.125.229.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B4E4A8438
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 19:53:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1B14A091E
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 19:55:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790106823; cv=none; b=rpPP3Au8V1opfp24LPUpDX2xMXfzyJqX1HAsL3NC63Vl4ctlKAqY2pgkzkcTPn1ss+SXEM+UfAhJacdvTRjASuPzzn+End5kEI6utcz8yoC0ouAZdy/ppsiWrBQWvrCB/Odb9QVcrvF5eLpXCwt6yCRfIziF58Lg3YNdCUsoX4o=
+	t=1790106946; cv=none; b=LzefXy8DnMh0KP7EfdLcRM0nTkB++nvNcOSSN132xrH0415p+nGrOTxTvkBKj1n/7C+KSxQNWNmRKbYTYEOSmLQGkUeb4P1AiXLo6jtc6PXWg90lnJOcAk21i+tojnsAPUbDHm1zDfjhAZfcrTEhRAYCda2kLnJK8gfM+OuAlr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790106823; c=relaxed/simple;
-	bh=rVQcvu2nQ9hhpSlEWzP2hEyq51SDjt+QGpBeBBaBtz4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Nf4nLKWOKhgGGfmE3pd7p4SLuT9swDYUs7M+PMgdFO7C5c7kBop93oIJIqJiq99FVWbxSIW1vTEVsosJFnNDVpvi0GTievuYpVq+nrJyyKFj5aLQ1IH/xug8T2kS3Df7/66SA5vFty9gLhKfM4zgmaSHKpjr3MlI4oXrjGrO+0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A7dIBAnB; arc=none smtp.client-ip=74.125.231.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790106946; c=relaxed/simple;
+	bh=IQCPqAcKfTSMbnbhBNrVI2Xy4poxRTksS098B2Eb/DA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n/T5Lp/34Q89JdN0dgEHgSRhyU8Klq84Z/oRSilqwQzMHjTikAvVfDIPTbgyDE/wG71+Imdg4NPoYBP4Xo20desBG/ogc8UEVATezlfTa7XNuZ10fRFTPPkKltq5xu1N1u+44z0ZukaMl68uDhH5Qc8v/RcSIIPFFrdHf3bWmRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com; spf=pass smtp.mailfrom=trailofbits.com; dkim=pass (2048-bit key) header.d=trailofbits.com header.i=@trailofbits.com header.b=e5edXr/8; arc=none smtp.client-ip=74.125.229.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trailofbits.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A7dIBAnB"
-Received: by mail-oi2-f13.google.com with SMTP id 5614622812f47-4bb359e6878so184500b6e.0
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 12:53:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=trailofbits.com header.i=@trailofbits.com header.b="e5edXr/8"
+Received: by mail-dl2-f42.google.com with SMTP id a92af1059eb24-144df39b6cfso189687c88.1
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 12:55:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790106820; x=1790711620; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=30kr5BweW/mill+9FpYAClX2qkZFuhc6bMu71N8WrHI=;
-        b=A7dIBAnBpdbzaWlZKqZ1VhkmnbdUsGHhZOp2KG7NKtD50ueAoCKaG2HC2YjQr4HEPz
-         t7B4kfv5PeX/ec9jZLRrqJ5WAKpjFvuh2s5416BvlatY4ucLgaBJM44NS3Unajox2jeI
-         of65jOoBsacQPnS1IEvSJGP9q+Dxl38nf6BsdIe/k3C/p9XX1xRQc5/PeKztKDVGFLPy
-         pK31A+A1Wj/UUXOfntxDrvWANVK0vrELOxCnJXymZg8MckOgEEdbQEaUg/RaEMv0s39X
-         3pBVPxGhzi+fPfi18lBD/6sY5sp9XLcyWRrCC3TLtCjIInhmri5qjjJbuwe14zVa7Mdm
-         pvaA==
+        d=trailofbits.com; s=google; t=1790106944; x=1790711744; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=IQ9k2LdyZWOUW3xTJYRrKh41LbCR8tTkAlidpFMhPxM=;
+        b=e5edXr/8g8bsauAvJp+ATgEwJt/10Of850dEU/nvIEjD/gRCt/QPyHB5kuWGZScQZp
+         p7lN8k9Gsf9ZM4N0PX7TatChfYCnjIpqhQcmffRgXHDKbAyp11CLwLwsUCI/1K5CAeAB
+         jvf6yAVd3T/ZfvvsxWcXztH1zfffZlUiYPJG2Ukt9ssEvSLyxBuZ5KkkQsuez23gOVlO
+         MiZNu80UyVTZB6ZjjsEskq9tpvCUmTHg3H74qrLlAf6IONdV0DvqSxKosSH/KFaGRvkk
+         7jDCS8qUc4gk9Q5ljgG00Q6bBASNtzv9ScC+gIoZlJjhvrtAzxaXxZgfXAYAyhE4tP0D
+         XO+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790106820; x=1790711620;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=30kr5BweW/mill+9FpYAClX2qkZFuhc6bMu71N8WrHI=;
-        b=yu2ad1glYScToIsEZ+bMiZeluGZUvZjeJOYPqYzwaEzoRBoY2lbaOE26vqWV93M51f
-         ggNvfNajVNXLUHprQvoNFqiDrkqu/hoGcU3j9lme5LQlr63Ak0So+g/Dw+OEJOnd//37
-         iuqlK8fAz8A9GltqARq2NTMavUWZuwCx/JMvg2eI9mS28AVDrfoaWOtF157JEJ+i8zHA
-         tUeXqAjGOJWDU0IG3NhWAcbZM2S1N6ASSdelKbkLkNdtRMg1ln0gmvBVnvK6iUxBTNmK
-         LNJNCJqJikHswzf4Co0pD08IeY4xES7zOoO+6pVHQO8jwwRYchDe7zK8JACm36moCJpR
-         l3NQ==
-X-Forwarded-Encrypted: i=1; AKwUvBx1cLnnIpyF0+qWnHT/TV6mBaw+557qev4gkmdYA4kC+bVKrPgQG/2JXaO1PYM+l4s0buY=@vger.kernel.org
-X-Gm-Message-State: AFuF++lPULsKfEF5JZ+kHBw6hqfmb3D+D4eysPvvHe/2uhjwIRd+ls/4
-	eSIFKDSgVVWsFFUQWGhXAQxM1JbX3ZECr5hUwgBJvmaInF6Extts2kNB
-X-Gm-Gg: AYBFou2yjZ/hwpXxD1mrcbxc1q6hqyMEyJ9qTwEqIE7Xf4v/FR9dVqThQ+X24LnkWVO
-	qLyUSVK7BpOch2z7pNC56xt8lKeuArGzxTzyohQqyLP+HdGCPuPNqomFSZFDdNS9TM7Co3zWpR4
-	7Inx+dGKbVSCJ5cWInW42ZaO/l40SzdXpY/pJva/RnNXGcjYCUCDTqyBsMeCBjv9zCrHl3pQdFW
-	CC+UfNzlbu6U/vDAVWvhnB6TGbbrFDSqLnc5zrVNdfK02GGcPXQ+t9KEMavp72Ehk/R/hIit/AX
-	6CdF4+eAarlZeQrX7+USqEF/5nVxJY7L/fAq3BxCDHQSFSwJqBd952qqbjUSryPFPr9y6DnN7k9
-	jzErmZm+Gn9+14TLujDEyKgfza2CJiRtfMREgjMKP8r68SoU7fRJCienolmZDAUS4NVezibkFdD
-	zMQyx0dYssLROHbCgmx+s7ELpuc4rNxMTALmllhRF5Mjc/b0Lxs1JYR0ybF2rpoV05o12+
-X-Received: by 2002:a05:6820:810c:b0:6b7:46e9:96fb with SMTP id 006d021491bc7-6d2d25210c4mr422952eaf.43.1790106820016;
-        Tue, 22 Sep 2026 12:53:40 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:73::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6d2dacc5db9sm426923eaf.2.2026.09.22.12.53.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2026 12:53:39 -0700 (PDT)
-From: Daniel Zahka <daniel.zahka@gmail.com>
-Date: Tue, 22 Sep 2026 12:53:28 -0700
-Subject: [PATCH net-next] eth: fbnic: put back netmem reference
- xdp_buff_add_frag() fails
+        d=1e100.net; s=20260707; t=1790106944; x=1790711744;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=IQ9k2LdyZWOUW3xTJYRrKh41LbCR8tTkAlidpFMhPxM=;
+        b=y6JThwLX6lsi+KJgFSS3ibcxmhFjhXgGETJhurdLhFyJhTpYtkPo9I8zIeKVdenQ76
+         1/WV3mX7CBVktlt4yqZffBCN51IP/cQ3C5HvroLvuXx1NT24nTmpWKkrWC8EQGkz70SZ
+         EEHpgu1S05Mt+vZ/W+1UP84w9iv43skULrbWErjs0IWOH3Zmg+D4tMdOK6g4zc7IrZy7
+         KIVs3m0DKbTzyaZzE+8c63GQHW9rdvYlqC9twhQx86VdwqAZ1d14qVimWDyBIfaqAM4g
+         PHLWq1sM/1yoyuO6mGhm59sGdan3Z7Z9HrvbV+hDie2PhpkdubNykx7PF7VXUvFcRpTG
+         TdJA==
+X-Forwarded-Encrypted: i=1; AKwUvBziZQy9kLzBdwkNgP8aeU1td62iRhwxZCwxBRQMR2bF+xnB5e1t8yT+v/6/o3Q6YUIw8L0=@vger.kernel.org
+X-Gm-Message-State: AFuF++nWsVYhbGpavRp1mfZOvUiO/KQU8eaLDN8L5pKQU+LKwGopvIFc
+	V2X7NdsWqqVGz2mMbEb3EzSJEiTps6/z8VaTtzFY6vePMlPt8a0lFG5HMNf4xA+MM98=
+X-Gm-Gg: AYBFou1w2ZxYvHrY/udMYb64cGIWV53SiKayjvSJFdgB5K1Fb3yJBq8X8HjxiRIXQz2
+	ay4627YvQGh9Zr65au8Tp2BtQlonnZXI236lBP5mbgs9WEZI9ckVCJoZ4MNf+RVpB87ufDYmIfa
+	7Dnar97+tZol4rBN2DqX6cpkR+7sQB64Cl/batUK+LRlTkS6Al1BYakfmUSS4y9HZ6KjzqQwWV+
+	JY5HN+EJYzgj+PFeu/AGNNDLBHK4BfCFQj0zRw0T9+cIfhgS8ylgWCbqc0TeYhSpA8kZiMEZIeq
+	aoM5PB2qHzsIO/uGlM6fBdS4jMB+WT29Z60yDJL9CEj3PVzz7yRC5oxOGlh/XdqPunqnCiEYyNH
+	XjMysE4tDw/llqVZZHzmSlfnSvF+avHFt+dpGNezPUY9BYQI+k4G/V2Jyhd0FS248qDg6EGpS4c
+	zINxUwa9E3961NqeOP7u8XHmTmFoxsdJR2bcdAAMcKkWBWjCr0KjprIGqvlA7T9M8j6CebUrxyW
+	qZIxZnqpPO6RIHnWdUyyuhZYWFhki7LFtFO2Cl8OYBhnpOtHP7DukCNooYXH4vblQDR99dgif5V
+	3ytxnQ==
+X-Received: by 2002:a05:7022:fa9:b0:143:2719:a501 with SMTP id a92af1059eb24-144f9173969mr664924c88.40.1790106943509;
+        Tue, 22 Sep 2026 12:55:43 -0700 (PDT)
+Received: from localhost.localdomain ([2603:8001:5f01:8bab:c016:77a6:d382:7611])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-144f949e51asm578264c88.1.2026.09.22.12.55.42
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 22 Sep 2026 12:55:43 -0700 (PDT)
+From: Artem Dinaburg <artem@trailofbits.com>
+To: stable@vger.kernel.org
+Cc: Artem Dinaburg <artem@trailofbits.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Joanne Koong <joannelkoong@gmail.com>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@kernel.org>
+Subject: [PATCH 6.1.y] bpf: bpf_sk_storage: Fix invalid wait context lockdep report
+Date: Tue, 22 Sep 2026 15:55:38 -0400
+Message-ID: <20260922195539.26679-1-artem@trailofbits.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260922-fbnic-refcount-fix-v1-1-31e5862c9893@gmail.com>
-X-B4-Tracking: v=1; b=H4sIALfcsmoC/x2MywqAIBAAfyX23EIZPX8lOqittZct1EKI/j3pO
- AwzDwTyTAGm4gFPNwc+JENdFmB3LRshr5lBVaqrRqXQGWGLnpw9LonoOKHuB9PontqmM5DDM1t
- O/3QGoYhCKcLyvh95Vav4bgAAAA==
-To: Alexander Duyck <alexanderduyck@fb.com>, 
- Jakub Kicinski <kuba@kernel.org>, kernel-team@meta.com, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org
-X-Mailer: b4 0.13.0
+Content-Transfer-Encoding: 8bit
 
-fbnic_add_rx_frag() takes a page_pool reference out of the buffer's
-pagecnt_bias before handing the fragment to xdp_buff_add_frag(). If that
-call fails it has not taken ownership of the netmem: the fragment is not
-recorded in the shared info, and fbnic_put_pkt_buff() will not put the
-reference back.
+From: Martin KaFai Lau <martin.lau@kernel.org>
 
-Put the netmem reference back on the failure path.
+[ Upstream commit a96a44aba556c42b432929d37d60158aca21ad4c ]
 
-Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
+'./test_progs -t test_local_storage' reported a splat:
+
+[   27.137569] =============================
+[   27.138122] [ BUG: Invalid wait context ]
+[   27.138650] 6.5.0-03980-gd11ae1b16b0a #247 Tainted: G           O
+[   27.139542] -----------------------------
+[   27.140106] test_progs/1729 is trying to lock:
+[   27.140713] ffff8883ef047b88 (stock_lock){-.-.}-{3:3}, at: local_lock_acquire+0x9/0x130
+[   27.141834] other info that might help us debug this:
+[   27.142437] context-{5:5}
+[   27.142856] 2 locks held by test_progs/1729:
+[   27.143352]  #0: ffffffff84bcd9c0 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire+0x4/0x40
+[   27.144492]  #1: ffff888107deb2c0 (&storage->lock){..-.}-{2:2}, at: bpf_local_storage_update+0x39e/0x8e0
+[   27.145855] stack backtrace:
+[   27.146274] CPU: 0 PID: 1729 Comm: test_progs Tainted: G           O       6.5.0-03980-gd11ae1b16b0a #247
+[   27.147550] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.14.0-0-g155821a1990b-prebuilt.qemu.org 04/01/2014
+[   27.149127] Call Trace:
+[   27.149490]  <TASK>
+[   27.149867]  dump_stack_lvl+0x130/0x1d0
+[   27.152609]  dump_stack+0x14/0x20
+[   27.153131]  __lock_acquire+0x1657/0x2220
+[   27.153677]  lock_acquire+0x1b8/0x510
+[   27.157908]  local_lock_acquire+0x29/0x130
+[   27.159048]  obj_cgroup_charge+0xf4/0x3c0
+[   27.160794]  slab_pre_alloc_hook+0x28e/0x2b0
+[   27.161931]  __kmem_cache_alloc_node+0x51/0x210
+[   27.163557]  __kmalloc+0xaa/0x210
+[   27.164593]  bpf_map_kzalloc+0xbc/0x170
+[   27.165147]  bpf_selem_alloc+0x130/0x510
+[   27.166295]  bpf_local_storage_update+0x5aa/0x8e0
+[   27.167042]  bpf_fd_sk_storage_update_elem+0xdb/0x1a0
+[   27.169199]  bpf_map_update_value+0x415/0x4f0
+[   27.169871]  map_update_elem+0x413/0x550
+[   27.170330]  __sys_bpf+0x5e9/0x640
+[   27.174065]  __x64_sys_bpf+0x80/0x90
+[   27.174568]  do_syscall_64+0x48/0xa0
+[   27.175201]  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
+[   27.175932] RIP: 0033:0x7effb40e41ad
+[   27.176357] Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 90 f3 0f 1e fa 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 8b 0d8
+[   27.179028] RSP: 002b:00007ffe64c21fc8 EFLAGS: 00000202 ORIG_RAX: 0000000000000141
+[   27.180088] RAX: ffffffffffffffda RBX: 00007ffe64c22768 RCX: 00007effb40e41ad
+[   27.181082] RDX: 0000000000000020 RSI: 00007ffe64c22008 RDI: 0000000000000002
+[   27.182030] RBP: 00007ffe64c21ff0 R08: 0000000000000000 R09: 00007ffe64c22788
+[   27.183038] R10: 0000000000000064 R11: 0000000000000202 R12: 0000000000000000
+[   27.184006] R13: 00007ffe64c22788 R14: 00007effb42a1000 R15: 0000000000000000
+[   27.184958]  </TASK>
+
+It complains about acquiring a local_lock while holding a raw_spin_lock.
+It means it should not allocate memory while holding a raw_spin_lock
+since it is not safe for RT.
+
+raw_spin_lock is needed because bpf_local_storage supports tracing
+context. In particular for task local storage, it is easy to
+get a "current" task PTR_TO_BTF_ID in tracing bpf prog.
+However, task (and cgroup) local storage has already been moved to
+bpf mem allocator which can be used after raw_spin_lock.
+
+The splat is for the sk storage. For sk (and inode) storage,
+it has not been moved to bpf mem allocator. Using raw_spin_lock or not,
+kzalloc(GFP_ATOMIC) could theoretically be unsafe in tracing context.
+However, the local storage helper requires a verifier accepted
+sk pointer (PTR_TO_BTF_ID), it is hypothetical if that (mean running
+a bpf prog in a kzalloc unsafe context and also able to hold a verifier
+accepted sk pointer) could happen.
+
+This patch avoids kzalloc after raw_spin_lock to silent the splat.
+There is an existing kzalloc before the raw_spin_lock. At that point,
+a kzalloc is very likely required because a lookup has just been done
+before. Thus, this patch always does the kzalloc before acquiring
+the raw_spin_lock and remove the later kzalloc usage after the
+raw_spin_lock. After this change, it will have a charge and then
+uncharge during the syscall bpf_map_update_elem() code path.
+This patch opts for simplicity and not continue the old
+optimization to save one charge and uncharge.
+
+This issue is dated back to the very first commit of bpf_sk_storage
+which had been refactored multiple times to create task, inode, and
+cgroup storage. This patch uses a Fixes tag with a more recent
+commit that should be easier to do backport.
+
+Fixes: b00fa38a9c1c ("bpf: Enable non-atomic allocations in local storage")
+Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
+Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Link: https://lore.kernel.org/bpf/20230901231129.578493-2-martin.lau@linux.dev
+
+[ Backport to 6.1.y: retain the pre-reuse_now unlink/free API while
+  moving the charged element allocation outside local_storage->lock. ]
+Assisted-by: LLM
+Signed-off-by: Artem Dinaburg <artem@trailofbits.com>
 ---
-This error path was introduced in commit 61f9a066c309 ("eth: fbnic: Use
-shinfo to track frags state on Rx"). This is not a fix though, because
-the branch is unreachable if the device is behaving correctly.
----
- drivers/net/ethernet/meta/fbnic/fbnic_txrx.c | 1 +
- 1 file changed, 1 insertion(+)
+Hi Greg, Sasha, and BPF maintainers,
 
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-index 447ec5522499..bbc3c9e89a38 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_txrx.c
-@@ -1045,6 +1045,7 @@ static void fbnic_add_rx_frag(struct fbnic_napi_vector *nv, u64 rcd,
- 		pkt->add_frag_failed = true;
- 		netdev_err_once(nv->napi.dev,
- 				"Failed to add fragment to xdp_buff\n");
-+		page_pool_put_full_netmem(qt->sub1.page_pool, netmem, true);
+I am continuing backporting CVE fixes still missing from 6.1.y.
+This fix is inherited by v6.6 and every later mainline release, but 6.1.y
+still has the affected code. The target-specific adjustment is described
+in the bracketed note above.
+
+Could you please queue it for 6.1.y?
+
+Thanks,
+Artem Dinaburg
+
+CVE: CVE-2023-53857
+
+Build: This patch was included in an x86_64 allmodconfig and
+CONFIG_WERROR=y build.
+It produced vmlinux and modules with no new warnings or errors.
+
+AI assistance: An LLM helped find, adapt, and validate this
+backport; I reviewed the patch and test output.
+
+ kernel/bpf/bpf_local_storage.c | 47 ++++++++++------------------------
+ 1 file changed, 14 insertions(+), 33 deletions(-)
+
+diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
+index 51a9f024c18298..23cbd7b1b810d7 100644
+--- a/kernel/bpf/bpf_local_storage.c
++++ b/kernel/bpf/bpf_local_storage.c
+@@ -373,7 +373,7 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+ 			 void *value, u64 map_flags, gfp_t gfp_flags)
+ {
+ 	struct bpf_local_storage_data *old_sdata = NULL;
+-	struct bpf_local_storage_elem *selem = NULL;
++	struct bpf_local_storage_elem *alloc_selem, *selem = NULL;
+ 	struct bpf_local_storage *local_storage;
+ 	unsigned long flags;
+ 	int err;
+@@ -427,11 +427,12 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+ 		}
  	}
+ 
+-	if (gfp_flags == GFP_KERNEL) {
+-		selem = bpf_selem_alloc(smap, owner, value, true, gfp_flags);
+-		if (!selem)
+-			return ERR_PTR(-ENOMEM);
+-	}
++	/* A lookup has just been done before and concluded a new selem is
++	 * needed. The chance of an unnecessary alloc is unlikely.
++	 */
++	alloc_selem = selem = bpf_selem_alloc(smap, owner, value, true, gfp_flags);
++	if (!alloc_selem)
++		return ERR_PTR(-ENOMEM);
+ 
+ 	raw_spin_lock_irqsave(&local_storage->lock, flags);
+ 
+@@ -443,13 +444,13 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+ 		 * simple.
+ 		 */
+ 		err = -EAGAIN;
+-		goto unlock_err;
++		goto unlock;
+ 	}
+ 
+ 	old_sdata = bpf_local_storage_lookup(local_storage, smap, false);
+ 	err = check_flags(old_sdata, map_flags);
+ 	if (err)
+-		goto unlock_err;
++		goto unlock;
+ 
+ 	if (old_sdata && (map_flags & BPF_F_LOCK)) {
+ 		copy_map_value_locked(&smap->map, old_sdata->data, value,
+@@ -458,23 +459,7 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+ 		goto unlock;
+ 	}
+ 
+-	if (gfp_flags != GFP_KERNEL) {
+-		/* local_storage->lock is held.  Hence, we are sure
+-		 * we can unlink and uncharge the old_sdata successfully
+-		 * later.  Hence, instead of charging the new selem now
+-		 * and then uncharge the old selem later (which may cause
+-		 * a potential but unnecessary charge failure),  avoid taking
+-		 * a charge at all here (the "!old_sdata" check) and the
+-		 * old_sdata will not be uncharged later during
+-		 * bpf_selem_unlink_storage_nolock().
+-		 */
+-		selem = bpf_selem_alloc(smap, owner, value, !old_sdata, gfp_flags);
+-		if (!selem) {
+-			err = -ENOMEM;
+-			goto unlock_err;
+-		}
+-	}
+-
++	alloc_selem = NULL;
+ 	/* First, link the new selem to the map */
+ 	bpf_selem_link_map(smap, selem);
+ 
+@@ -485,20 +470,16 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
+ 	if (old_sdata) {
+ 		bpf_selem_unlink_map(SELEM(old_sdata));
+ 		bpf_selem_unlink_storage_nolock(local_storage, SELEM(old_sdata),
+-						false, true);
++						true, true);
+ 	}
+ 
+ unlock:
+ 	raw_spin_unlock_irqrestore(&local_storage->lock, flags);
+-	return SDATA(selem);
+-
+-unlock_err:
+-	raw_spin_unlock_irqrestore(&local_storage->lock, flags);
+-	if (selem) {
++	if (alloc_selem) {
+ 		mem_uncharge(smap, owner, smap->elem_size);
+-		kfree(selem);
++		kfree(alloc_selem);
+ 	}
+-	return ERR_PTR(err);
++	return err ? ERR_PTR(err) : SDATA(selem);
  }
  
-
----
-base-commit: 6598456d72e48d779445bfec8f72114747f8b8d7
-change-id: 20260922-fbnic-refcount-fix-a78b3a7e536b
-
-Best regards,
+ static u16 bpf_local_storage_cache_idx_get(struct bpf_local_storage_cache *cache)
 -- 
-Daniel Zahka <daniel.zahka@gmail.com>
+2.39.5
 
