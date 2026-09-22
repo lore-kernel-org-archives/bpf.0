@@ -1,78 +1,75 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+Received: from mail-pj2-f38.google.com (mail-pj2-f38.google.com [74.125.227.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4DFF3B0597
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 02:56:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9974F2EEE84
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 03:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790045795; cv=none; b=P8MTGMb1QFZUEK+/7pBILU7gl9zAKaojuddzW3EqMCWQiWIqaPvkdt6KLsr1+uEVwRHS0K4BLPUsVXOyb0iYBZ7jTqSAKIhpLmf36t8i90MQ0E0ud8sbYvxzNrab0RP0C5Jl4yPHIJTZgR47QIb4Nws02sRWtpAQoDQZmtIZnP0=
+	t=1790046102; cv=none; b=JXcSCt2qMcxG12YJ8X5iUqNPr1VCgl1VWuxxd9S+thZD0rn+LB5raf1IIaK4oTAl0slKXrpohNF4Y54FkFAMRMWYxFYjO6/Xcwkhkdybs24dBk53jPGZuaUtH2mrOD2gw1QTDfW5mNPyrQ19xinkrHJrCedwEVDH7n8UHQ4J4PU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790045795; c=relaxed/simple;
-	bh=V10nE095iAxhND586WVi3ydp655144IJcV/JwU3ZZSQ=;
-	h=Content-Type:Date:Message-Id:Subject:From:To:Cc:In-Reply-To:
-	 References:MIME-Version; b=o3BZs370dfDCgxuVU/WFY/wMgM6TPgwALSQvg7YYK4SFwfObvRXCwkOknmdRgoaBisXQg1W9XSMi4zPIeTCCDY8jTl5jbEvGQAr2PmmhyPQ7wDF0y1zy3R0wj4cjtcxcUqbeMTJCEG3tXNA2CpnJxxhbwiGMtn5dSwxI0LrwHm8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GUGik1By; arc=none smtp.client-ip=74.125.227.141
+	s=arc-20240116; t=1790046102; c=relaxed/simple;
+	bh=mrZFcael0i2SHdBnYzZgJ135z3Sm7u+UibmRrm3Y01k=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=MM6l6qfePfZ/1pDQqQFYYYO378ZScOTcWdLy76FzzVZIRnOIiP4tmCLZ12oteqtlH5NLEq/CY+6++MiGb0+piccXHW2gMmE+hISas/GxnWyPwppMAKRbsveW3pmED0X8H/YU+SLKmJ+9XIaO3m81I+17j27boSgSEeaxYCT1VE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YtWsABcZ; arc=none smtp.client-ip=74.125.227.166
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GUGik1By"
-Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d91ede8035so44328545ad.3
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 19:56:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YtWsABcZ"
+Received: by mail-pj2-f38.google.com with SMTP id d9443c01a7336-2d747ec6185so22780695ad.0
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 20:01:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790045792; x=1790650592; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=qWn74aSe9vHqqWyJdcxw2M0E5GLGlq6lTeD93Rg+rNw=;
-        b=GUGik1ByXFtUqtEX49wCZiYOdwSbf3Uuw6IDoNM3PmN24bYmtkSZ27aRizBpLoqY8Y
-         sJstmzvU9QGfFfcQhgiTczZD9z5AaQ+/YZBQ88EEauQqC9Wgg7m7BiBmoK+VNhofMVLe
-         gh0eGDYRUpcxboZ7piVeP+z3PANZrtpvwc2OSLODPbfDwcqxJxv7Bk7HonwA0XXyPv2W
-         cnjjvzFlL+6h1P1o08EoVNhQHZlLBlZh5SM99UqhfCK/O5JziaQ2hI44KhMuI15FeQJU
-         FYLx+x+V9hJJK/AtYrl6l92J/4B/7fXRvH+/8hftYcp9bucRyG6XBfzyk6S3UtX8iFbv
-         wakA==
+        d=gmail.com; s=20251104; t=1790046100; x=1790650900; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=VToeL6vAbXQdg6OORL5InxeCdnH1MZA2FYzoAYymOug=;
+        b=YtWsABcZSpNnN2q6gpz6tEpag5/LNOnoLq7rEPoV2XDYINApD0EATz2MPjtYszGjQ0
+         Hxg0Mkp5c7NsBN0HYby3sHzbmqV3n7MxkuoNasWHKKWjKromKShNYXeOrpjvfZgNHMGB
+         iriQM6a1q0p210evTU/cdQG3NWuJtIG4yjKkmLRLVE37gpW4rLlskZ784IcEX3cNO+tS
+         QPMPoWPRcFcqP5e6axKjn63kgUE7ERRkC2INQCXilb2Bcq2TyvAj9Hj7yZfkv/2FiFi9
+         Wb1/eRRvIkQppVhxf9Y+R4m6rqcBoGj0SWhk5yTh1cb0EYnzq1QfrF0hfCI8TJEPuUOw
+         QOnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790045792; x=1790650592;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:cc:to
-         :from:subject:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1790046100; x=1790650900;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=qWn74aSe9vHqqWyJdcxw2M0E5GLGlq6lTeD93Rg+rNw=;
-        b=umG6Dw5MEa2UEoQRdZq8zVWLCihMfz/FnFHqUbhqS25fZQ6VjMkZk/OOazY3z9F720
-         GjKskwDPLeV0q/Ud5KbprMjZN9n7PucRGpHY5u+Hr0Bhis+tKEIOMBo4f2C/SD8yd1I5
-         ozyS3zVEU2H2n8zhnWrDPOexMu8QrNNBUspt7xDVx8+OfHjkMYzpCbEiQpwxpD20A5Gf
-         rRgEw4J9BFHGn6t964h7KCBgyo5yIdjVmmR70IPrKrEPn3mwTvlHHzPzLSrE2v/VM6Hl
-         UnSTaTQUPFYgWrHvecZHoOEZ3BAcoozILxG6bR4SEQHy2V5AyLHk95A/dQXN1tGxcoDD
-         ntlA==
-X-Forwarded-Encrypted: i=1; AKwUvBz3oGG3Zez6iBkTMPDe9lKFkKWrJzHzGSQpCXCcUU6gXr3AsCO98jGHWl6j/yERRCCyLMc=@vger.kernel.org
-X-Gm-Message-State: AFuF++kcR3Sc/EL2SzxfYG1LlaweeXE+kwya0DsFXFyY63DaETNNfH4O
-	sOdgoVVi8yV0FetfTozQ3V5yI4USLpFrwTSynK9vBv0KRYF9unZ5V6rE
-X-Gm-Gg: AYBFou3l97S2tmZu1cxWpk+aMx8XenqghdjlJmNIbu9Sl0dbUw4C6qPcc+Ff7Gy4HEh
-	d40u6/Xhz2qe1OiCMLopPm2jvaJtPf6H8t9EV9rNbTh0k0IluXUdkIDflLm/AtZYUHprHX/nNGV
-	Qjn+ZCgDuOxzHs9QWCHbWcxLHsOnf5NJ7d+9rSnyVgUNRPJOu3V2/fHb+zEKeC42JSpj+hEp9Fv
-	A9I8C6fGCvG26qplCTsrxwbYo8DDnOFt3VwTrTvw2BFNSAwDpD0CN09KLIImOmiLcPNGtkxXYdt
-	uNPeCWE4iZ4YQtxw/K5ZrXYiCnBAuKEEFkxGn3aZYpGwlwufwJhKPEAk3Y3SjNck8tvggv785le
-	oEMl6IjC0CSO7G9Go8VIeEpY439Zi3jbbbRoKbjidKMEPYk+YKjJv08YFVhupqS/ab1PqX2hRGr
-	NSG1ZVz5Lr3lEyAXcS0SODUwpDky5uUfe6qNAz7TAFtJQ0FaXSo/O90A840vW1/lAWp4tk3eS1a
-	qUCiImqUxbbhlPhd2Buk+lYJaAC8Lbd5PgIhxMB/S+hAlJxkCJ78dzxKR3i3nkTJOgaI7P7bb4d
-	KbQ=
-X-Received: by 2002:a17:902:d490:b0:2df:425b:308a with SMTP id d9443c01a7336-2df425b32c5mr75269455ad.42.1790045792325;
-        Mon, 21 Sep 2026 19:56:32 -0700 (PDT)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df5d019fb1sm1733865ad.17.2026.09.21.19.56.31
+        bh=VToeL6vAbXQdg6OORL5InxeCdnH1MZA2FYzoAYymOug=;
+        b=0C84UbKbcFD/eM+WPn1hOURe99ZwZoR/KgUKCg3gN0gQdP4AF3Jn37EGFaneqfcbFL
+         hiW8Tc+eB25KDGyjFRtzNCgF/aVlu+B3Pgzz7SI1b2wxFYM15cYWjryyYTsTvXVTZU/M
+         MfVQyfx2xzlT1ZI21ODKsjQAkADrCZ5c1TwfHDCmUS7yJoVQrrMv3zlZMzb6O0+ap8A9
+         feJAY2HGhWRdOE334QV8oyLmx/nwoJf3A9rVftJjtvv7W7RE1zmfBbLaKSQ//335XnQp
+         4bclUEdAGW4fU3eNu5SinatDlo6IirNXaNIll6SmX69sgdfFnqMkySMmh7JweAHsp4KE
+         8TQA==
+X-Gm-Message-State: AFuF++ng3WPNgvn9F/Hq1ADzHYZl1JuvbYECz/zRoaWz+FRPjK72YHxX
+	DvV0HOpsetcr7Yo+/cBHZr3lcYwvisZ6QYgq5g78RYeUwYfRLylou1uK
+X-Gm-Gg: AYBFou2pYFCppZOAfXxvBXjO3IxekmovtwNAlrdknpWTU+PvD7aUWzaBA0cvn1bD0jC
+	EtGf+K8lC+VhG+NS5RME0xiJxBb8SnzZdEc4qZlt9PFSRhnIzjv6+bxWV8H1snz+nLnuRz64QJA
+	2nbXUrKQ2YzdRYFxYkfs0fviyxbHQmtqjXjLhAku5qTw0FegoYaMkLj1snUiwQt5yQWDcXgBp81
+	FlYaUCT7Sn3g76Eho9dplvCTqNCLqfrrm5zqVwAwpKYWzoza1zLW3f/cdFdl3MAR2VFzduArxfu
+	H02GZ/xv2Rul768O3rgQiYfTCZukH8pJmNnpNuEmLA1lcJB/u7ApGumlwynY4OiT0lKkZnab/xw
+	LnVtZjYqdTV8t1awGXwZDb4Tz+POwj59QQxClXasLZOz2IZAxnjhQX2N3lA6BENLoUGI+Qwr0L3
+	33jBoZtn/W9fUVrT5F1ahAteMVsczQa7orkHCYJdTtj1+h0jhPLESCPDh1CYzQRJiyUSBylabQB
+	cbTMJkkHA31he/0y9tZT5VM6RfUXgWEqIBaPv/PN7Wsje2jMjySPOfz9sYG1wHci2qpG9kTfUjs
+	eWc=
+X-Received: by 2002:a17:90b:2b8c:b0:39e:b7:cbea with SMTP id 98e67ed59e1d1-39e54e3d37fmr17962423a91.18.1790046099700;
+        Mon, 21 Sep 2026 20:01:39 -0700 (PDT)
+Received: from localhost ([153.61.198.243])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a06e570d9esm549993a91.10.2026.09.21.20.01.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Sep 2026 19:56:32 -0700 (PDT)
+        Mon, 21 Sep 2026 20:01:39 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Tue, 22 Sep 2026 02:56:31 +0000
-Message-Id: <DLLI9W7O2V5G.1PNFXWYX854FU@gmail.com>
-Subject: Re: [PATCH bpf-next 01/17] bpf: Fix infinite loop in
- check_max_stack_depth()
+Date: Tue, 22 Sep 2026 03:01:39 +0000
+Message-Id: <DLLIDTH3V5WR.3M19UWMDAHFMQ@gmail.com>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 10/17] bpf: Recognize pointers to functions in
+ read-only maps
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
-Cc: <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <memxor@gmail.com>, <a.s.protopopov@gmail.com>, <martin.lau@kernel.org>,
- <yonghong.song@linux.dev>, <mason@kernel.org>, <ihor.solodrai@linux.dev>
-In-Reply-To: <58bd021020f98b1ae36acbf611049344613d50ea0c768de4430c6923d3544e2f@mail.kernel.org>
-References: <20260922011323.1298619-2-alexei.starovoitov@gmail.com> <58bd021020f98b1ae36acbf611049344613d50ea0c768de4430c6923d3544e2f@mail.kernel.org>
+To: <sashiko-reviews@lists.linux.dev>
+In-Reply-To: <20260922013100.6DF101F000FF@smtp.kernel.org>
+References: <20260922011323.1298619-1-alexei.starovoitov@gmail.com> <20260922011323.1298619-11-alexei.starovoitov@gmail.com> <20260922013100.6DF101F000FF@smtp.kernel.org>
 X-Mailer: mkdraft (claude review draft; edit before sending)
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -82,11 +79,44 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Tue, Sep 22, 2026 at 02:01 AM bot+bpf-ci@kernel.org <bot+bpf-ci@kernel.org> wrote:
-> This looks like a bug fix for async callback support. Should this include:
+On Tue, Sep 22, 2026 at 01:31 AM sashiko-bot@kernel.org <sashiko-bot@kernel.org> wrote:
+>> +		/*
+>> +		 * The program that didn't load is not a user of the map. libbpf
+>> +		 * loads the program again to get the log of the verifier.
+>> +		 */
+>> +		cmpxchg(&map->user, (unsigned long)aux, 0);
 >
->   Fixes: 7ddc80a476c2 ("bpf: Teach stack depth check about async callbacks.")
+> [Severity: Medium]
+> Will this properly clear the map's user state if the BPF_MAP_USER_PATCHED
+> flag was set before a failure?
+>
+> If jit_subprogs() sets the BPF_MAP_USER_PATCHED flag, map->user becomes
+> me | BPF_MAP_USER_PATCHED. If a failure happens afterward, this cmpxchg()
+> strictly expects map->user to equal aux, which will fail to match.
+>
+> This can leave the map permanently locked in the patched state, causing
+> libbpf's subsequent reload attempt (to obtain the verifier log) to fail
+> with -EBUSY.
 
-Nope.
-No fixes tags was deliberate.
+No. Not a bug.
 
+>> +		} else if (verifier_bug_if(ptr->used, env, "function of map '%s' offset %u is removed",
+>> +					   ptr->map->name, ptr->map_off)) {
+>
+> [Severity: High]
+> Does eagerly setting ptr->used = true in check_func_ptr_read() lead to a
+> verifier bug here if the function is never actually called?
+>
+> If a program simply reads the function pointer from the map but does not
+> invoke callx, check_func_ptr_read() still flags it as used. Since the
+> subprogram is never called, dead-code elimination can remove it.
+>
+> When jit_subprogs() later evaluates the deleted but "used" pointer, it
+> incorrectly triggers a WARN_ONCE and returns -EFAULT, rejecting a valid
+> program.
+
+hmm. A prog can read the pointer and never call the
+function, e.g. when the load is hoisted above a branch. Then the
+function is dead, 'used' is set and jit_subprogs() hits
+verifier_bug_if().
+Will follow up with one line fix.
