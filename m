@@ -1,64 +1,64 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05449357D1E
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 01:13:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042FE3655E4
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 01:13:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790039621; cv=none; b=OJxHXpLT1dhpaE2ZFka0CPu8dCJsGuQfu68YE8A3qcR35om17l5MMexHEQtiKcE4cr4KjxwDd+clG4hoIabPaceRaUH5pOttSvSF9JiXwYx+VJerH0um/DoZ4kwQsU7OTQtSd31s0gIIJYkk7NxzxlupqkzRxPqLMiQS1ExYK3Q=
+	t=1790039624; cv=none; b=u2KdjhO18Bi7zpfTxPghzusfPi+I5UGObv/rWZ2+r34zZJ6evda+bqS+sTxtQA1nDc/dgCESKv3u1pNuXl0uGUPfLbTVaM/tAhKcZxMZBI5GQ7IXLdHm526W0kTCSN5b8RAFRAsn1fR/pKfTj9omobzKYZR9VzcL7KbZ5YewbQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790039621; c=relaxed/simple;
-	bh=6MPv1v8mFaJ7hWL4Erlfc2pkcb2aU7wQJUl4ghsFhFU=;
+	s=arc-20240116; t=1790039624; c=relaxed/simple;
+	bh=5wHgZPnkRsHrWDa7uIHhIOY0vjBbq+cDF2mBpaEeiTU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Z++W2WtKLZg6ai9j2jY9zeAxBdWiIgLrV2X3eV52CmNySmxBLQRu38l0A5uKW/Dwbcf5sRl+EAYL8n3k9iaCtpI0FXlUQnfWuHm1JETYJH97OPj4sMfHf3VVXiJGPYmP2qvpduef7q2AKqhpLGbaABV1ADcnE9WdosluHCLTaj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LB2PD3nO; arc=none smtp.client-ip=74.125.227.140
+	 MIME-Version; b=FAH8pbnqfXmkGYVvT/CyAW2soLK1tP9dM/B1MJMZWwMVxC4x2jd+cxWiTGBBFBvj5Ep8kPbvOImRciQcJNY5Qd1ut6hV75bBx8kE0Ydk/URMvboWPyvfee339R5GzUyhQkJk2Z9bA6EPK6MKbdmV/o+Ryz3uhTRHAqDe6ElMc3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UQTyuz7D; arc=none smtp.client-ip=74.125.228.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LB2PD3nO"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccda24a3so2724148a91.0
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 18:13:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UQTyuz7D"
+Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-86efece610cso2581473b3a.0
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 18:13:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790039619; x=1790644419; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790039622; x=1790644422; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=HOb30dgaSLoeeaRuzhX+9sNJPD8P8kM5wAZCsI/iShI=;
-        b=LB2PD3nOSuxh10l7hNpG9D5SvLoR3GOaTdwJk9Toi7GumzObK3AxJp6yC53kkhhNkV
-         Ls8J9OXXeSPScs6wNpA+OB9neDUK8WA+y1aZWexOb/amO4xXZ7rXkL9kOrO9hb3/ml7J
-         A/0A3tgqZjjkU+dpWfpMMbY+Np93f9KXf6aNxQkGr6Ndqo3casiaP024Gs05sm9dX2pf
-         82MezVoJJM3g5p5Sm6tn7/s0Rxpm2+mmPLn3spw1m6toeZjYNeU48fgE8/xr9WQcyFBi
-         U7jqGq9W2vE4JzWFixRJWlrdAUc5WEY57rYAcSAW4ZwHmbThNEf9dM3v+Mi3NtUZ6jEk
-         aBrw==
+        bh=cBRK9VXq3KZXsD393Mq8Z3DcWbnaAsIxU9F6bZ+9CLo=;
+        b=UQTyuz7D0zc5r2RQSUZWpBa9gyDuk6ha6i/a1A5cDj384RGn5z6x+fRf1BRMdeq8xp
+         WC9pG8r6HgA00MJn5ALpz0w71qSS0S7m1oCvjOppLlaDZz3fg4ueemZuZvelQMZQmiDG
+         p/4QmckEI51l7IMI2jQzm3iGzqDJ+hXciRLn3EksdjVrdlEUmCIUavslWHa0Cd9TBwUo
+         EQSsxV8UY1q4nSB9rlZVKPLqWXVAJlEMFp5NvreiEM3r4/aAkjQgtJ7hvoApufHafDlm
+         ejMK4c65lCyWo+omBvz+C3XD3fSeGAXHS0Fabzk8dL01lwbiKmyg6ZMAI+BeFqmtvfgk
+         rxRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790039619; x=1790644419;
+        d=1e100.net; s=20260707; t=1790039622; x=1790644422;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=HOb30dgaSLoeeaRuzhX+9sNJPD8P8kM5wAZCsI/iShI=;
-        b=cT/OcP6m/9JLyVXFm4zvnT7jGYzXQq5+9D3rQ8GHcXtiEBf3N0KNSdEe2nj3kJvB05
-         VQEBPmqfIxsHee7b7X0+yHg6TpEvUJdgtHK56g3e032jldWmwCyUdCx4ZrIT1/IOOXgg
-         uKyX5M02FZyILvG8018cOVhPnk7NKnwb8Gtci6XGO3Wa3+WuNjoWa4UZqBdWkfjVySNv
-         83DzZjw9Uz4JcTfp+TGQG+zYmr4dX4nEdvjF6q0YqApo/HJ3TjIzE/iClQEKQJzlJMy3
-         +SvF6JMsy/3yLqasOBV/DgLq6j3hOEU7oOF6FwUVWaNkA/jEI+n/i+oKfE+BbN+N1Fjq
-         HpMg==
-X-Gm-Message-State: AFuF++kVZViPFt5rl0h05XDL0Uwa4FQ+1WrR1k6waATdE8Ipp98GhiE/
-	KsKOSDIqECDifzaJguZ1AsEOnCaboHNwxISdGi+bGamqo1uLD9/MCqn87j9J2w==
-X-Gm-Gg: AYBFou1bnK+hWnue3HBIikD8uQOzUnvB/jfR+UIxdDO0+xvJL6JY3GrQolDxHUzeE2a
-	wusXNuoYxLTK7D9C0/IeqRsixfz3km+wpYAFtHBkfhXUT8fUG169X02ZREmEn9jA9mY3nKpkNyj
-	l56aGeh42fe5SAd14jkKWKZovnK5z0CXK/zyviZ3Wmc78OjxThJiX7rSwNCjtcer5VGtSVbw9QB
-	Y8B62BkudC0ihLSiRzmOF9hCk0agWh9mrrwdYDu/jE87MT5iCarQST0MMLoCk1ZkO/ZP4rBqIhI
-	oVzMJx6e+Rr7pGcrqVwXOy11LYiYVwG3ZVYer6G+2ZwXp0Nx6UZsHWgO4n1CbrhMXNrf/PDymMl
-	mXHsQi+CFyNfL2ZgbV3TGST570SFaTMVq0n/LQI29xV3Ap/Q0oMiHEBw6Wy6tFd8RnSt70umQwL
-	NaBIrrI4iiV6xl/d2rQiN9fmyeAEY+IId7YUbatLhHgix0i3rbaq2iUvtIIjlG7mqj4wGj7y1cy
-	f7YJFR/B+4R6NsXDcEWvFE/OVpbE6eCUKCPMxqXqmwNEe8Bq9LPs6YOXQOUt9ZS4YvAx99kP35v
-	yqFYEVTajNRsp7vtP1hie7BRRkhktk90JQqR0zAMTco=
-X-Received: by 2002:a17:90a:38c4:b0:3a0:3881:eabe with SMTP id 98e67ed59e1d1-3a03881eb2cmr5071204a91.5.1790039619079;
-        Mon, 21 Sep 2026 18:13:39 -0700 (PDT)
+        bh=cBRK9VXq3KZXsD393Mq8Z3DcWbnaAsIxU9F6bZ+9CLo=;
+        b=R+wGvBHsAqfDv4nUK2gcUQ5hXJKwFEjyAtERXY134xnuP8LxWFWemQQAwNgyVVObae
+         hi4/jWcHbCpqCNzgU4n6RG31uRHR1Ely3w7pHBM0jeBMJ8u7dmf2OOehaW/itdB/r1l8
+         dxosrQpDqAG5a+eqSLSGWo95x2+sH1O6vYQZEDU+DT+lV6zRlv7rFyBudS+g517YdmcU
+         HQvAiBRNlXPOVIUlcfD8xWyvq2XIzjVenMGO0K+RERukbGxhvztjlsMv698s03bN1SKz
+         8ZvpqsPS8rnXJBOjFRDCTrerXOQF2ScpaEyMqL88wqX4w9BJf6t5XejhvaBpkp9zhmLK
+         TGbw==
+X-Gm-Message-State: AFuF++nxJTzakiBXf3Yoibrkjz+uU8B+KfpLMnVvWUoJhQS9epZ22xtm
+	6yog+5oHB3HJJB3RXrIZgDpB/M4LaexeWdV5ZtzNO6M2AQhKe+ytZI28S0ov8A==
+X-Gm-Gg: AYBFou3jqVq5X+4JV/859MI4MBYFlz9KGHASYKfyICUt0lpKnhQY91RBDk0LIYGmYU/
+	jG90JYpS6VckOmkYQ1cPQWZtQn1V1tnsVQMnh2bYEeL8f6zG1q8jzKQqJLbpQgCjHoRZD56U6R5
+	v9qA2D8qJwOoKaz40MlQCCXnMkJwrLOWU9jQGuMV4Cuhm4oM1GNzL09gLSi4ZmGDujr+mwYZoIr
+	C++qwZddaMLO7D0moC8oGPtRssZfe80fDrzmh/ym9a2fGpN+1aJ2pLJ/Dfveeu/3XH7AVsKsl69
+	NE4Ux2+YSZlSQECyiFpFTMzrCTpbXnZiPfQwuAc89qEbplP8HpdxeqLdqO5K6YaOpETbMX4kYew
+	GKImIYD1TjZoh29U5dAoR/L6/HaxeFFz7yeBh/2nqJdtKBjFbOkNsgWd8vBYS2G6nydxEUskZBU
+	v6qa9zv5ifbEkhPKgt/o1Wm10j7W4IGV7zaNVW5mrVnt/e7g3Ff4vVj8MxQ5VxVlGWlhKBF6aTh
+	QYBkS/JP9APvrNSYQzQPc0fS6ukj13HmDXR8eLL1dMXjYSxy7uiN7n8fNAoMOeszgGRDAziNO0K
+	ABqt7GysWkRUOBLnqjQPqCvUpMbUuhnRz0yHSa6vGuIuOgqV65YGgg==
+X-Received: by 2002:a05:6a00:e15:b0:869:ffe4:47a3 with SMTP id d2e1a72fcca58-874ddd01bb9mr16352192b3a.20.1790039622123;
+        Mon, 21 Sep 2026 18:13:42 -0700 (PDT)
 Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a06e5cd2e4sm243947a91.16.2026.09.21.18.13.38
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87c333aa9cdsm50574b3a.59.2026.09.21.18.13.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 18:13:38 -0700 (PDT)
+        Mon, 21 Sep 2026 18:13:41 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -66,9 +66,9 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	a.s.protopopov@gmail.com
-Subject: [PATCH bpf-next 02/17] selftests/bpf: Test recursion through a global function and a callback
-Date: Tue, 22 Sep 2026 01:13:08 +0000
-Message-ID: <20260922011323.1298619-3-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 03/17] bpf: Don't fold loads from insn_array maps into constants
+Date: Tue, 22 Sep 2026 01:13:09 +0000
+Message-ID: <20260922011323.1298619-4-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260922011323.1298619-1-alexei.starovoitov@gmail.com>
 References: <20260922011323.1298619-1-alexei.starovoitov@gmail.com>
@@ -82,55 +82,38 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Add a test for recursion
-callback -> static func -> global func -> bpf_loop() -> callback
-that used to hang check_max_stack_depth().
+bpf_compute_const_regs() constant-folds loads from frozen read-only maps
+via bpf_map_direct_read(). insn_array maps are frozen and read-only too,
+but their values are addresses of jitted insns that are not known during
+verification. bpf_map_direct_read() returns zero, the register loaded
+from the first two elements of a jump table becomes const 0 and
+bpf_prune_dead_branches() may rewrite a conditional jump on it.
+
+check_map_mem_read() in the main pass marks such register as PTR_TO_INSN.
+Treat it as unknown in const_fold as well.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../bpf/progs/verifier_global_subprogs.c      | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ kernel/bpf/const_fold.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-index 966f49348787..27fbe54e8795 100644
---- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-@@ -536,4 +536,35 @@ int return_from_void_global(struct __sk_buff *skb)
- 	return 0;
- }
+diff --git a/kernel/bpf/const_fold.c b/kernel/bpf/const_fold.c
+index 7f1b30059cc8..982125026eaf 100644
+--- a/kernel/bpf/const_fold.c
++++ b/kernel/bpf/const_fold.c
+@@ -181,7 +181,12 @@ static void const_reg_xfer(struct bpf_verifier_env *env, struct const_arg_info *
+ 		int off = src->val + insn->off;
+ 		u64 val = 0;
  
-+int global_calls_loop(int x);
-+
-+static __noinline int static_calls_global(int x)
-+{
-+	return global_calls_loop(x);
-+}
-+
-+static __noinline int loop_cb_calls_static(u32 i, void *ctx)
-+{
-+	return static_calls_global(i);
-+}
-+
-+__noinline int global_calls_loop(int x)
-+{
-+	bpf_loop(1, loop_cb_calls_static, NULL, 0);
-+	return 0;
-+}
-+
-+/*
-+ * loop_cb_calls_static() -> static_calls_global() -> global_calls_loop() ->
-+ * bpf_loop() -> loop_cb_calls_static() is an unbounded recursion that the
-+ * main verification pass can't see, because it doesn't follow calls of global
-+ * functions. None of the functions use stack.
-+ */
-+SEC("?raw_tp")
-+__failure __msg("recursive call from global_calls_loop() to loop_cb_calls_static()")
-+int recursion_via_global_func_and_callback(const void *ctx)
-+{
-+	return loop_cb_calls_static(0, NULL);
-+}
-+
- char _license[] SEC("license") = "GPL";
++		/*
++		 * Values of insn_array map are addresses of jitted instructions,
++		 * which are not known until the program is jitted.
++		 */
+ 		if (!bpf_map_is_rdonly(map) || !map->ops->map_direct_value_addr ||
++		    map->map_type == BPF_MAP_TYPE_INSN_ARRAY ||
+ 		    off < 0 || off + size > map->value_size ||
+ 		    bpf_map_direct_read(map, off, size, &val, is_ldsx)) {
+ 			*dst = unknown;
 -- 
 2.55.0
 
