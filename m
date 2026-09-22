@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C1E378D8B;
-	Tue, 22 Sep 2026 23:51:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECB5A5326BF;
+	Tue, 22 Sep 2026 23:51:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790121087; cv=none; b=bHsfFmyTTsr/scqzkBMC11cThMKVGg24Ywi6LUCU28qmuN/H3vPsgzrbaRO5yLsl7OeyIVTKnDLAlB+55IaCdiodvaFbavBot+7I0O3sm5d8No9G4Nzdm+CsCb/37Kjc1plsx3ys+oFjANsv+m7pr9ml43GLlMTM6lquy4t43zg=
+	t=1790121089; cv=none; b=kwzrYCnMYNHwSAgPaaU35A5eRqc5GYjSlt+C1TDFxmkpwv5lfumYnJ/UJjSfh431luTu5Krk0Eew4M67/PVi/Tzsj1ruDrPxgx+6Yu/xgkaF9ki6N8JkjwGKdIyNt/vMjYUW++8zV5thk+tJkZl5/o19bzjP45w6hTVsNF8xEDA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790121087; c=relaxed/simple;
-	bh=EWnN7TGAoOMKxBwQ5BC7UQDZw94y0isDXpjj2yfbpj0=;
+	s=arc-20240116; t=1790121089; c=relaxed/simple;
+	bh=LlGSkpwbyugjR99XkQu+pVMzwhYEmclRlaK9SvNY+HU=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Jp6W1KGVEjR92vIXoRQflxuu0TJsGuTUh0GFG4I8gLsNGy5pC+C9T5dvKXygi63PWcvKIk9r1nyQzbtIoOD+RUS6Vcx14GraXp6Ujm7Xp3aAqE+yPB+52K+1Nnza7K2fiyG8Wcz6wORMuDDdXYPrLjUk+1TQhSJpYYW9+6FLcic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ED5IIdrv; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=V9ggjuJ0bOvbZVhd/T2oh8EbprDBH+Q8giiOePJdRsfbTDpvnbR9Ht/lJGw6rFzcYF3AmDV4bTcnOuCSuh3UuDxKEUc2xxtcjYeu8KXxWDaw8tglPoSt366hbJwGTFxHos3KhDubHqZT4FnBcPjYEnCCWBHC9kPx70zMi87hCws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n6qIyUxy; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ED5IIdrv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C4DE1F000FF;
-	Tue, 22 Sep 2026 23:51:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n6qIyUxy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A61D61F00893;
+	Tue, 22 Sep 2026 23:51:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790121086;
-	bh=o/qkaM9uNu14Mm40qezBhcFOumMShI5Kb9WsB98xHJ0=;
+	s=k20260515; t=1790121087;
+	bh=7BMGuvL3UFn1iVFtpzaUOONIrPrX87iLGVn/0q1dW7k=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=ED5IIdrvqg8EkaWUiEtEoynm+1OErj7FDHaCIakOGA4R49JH91T5GcVC3IrExqEA2
-	 tOrwDr9glPhlOYGkiQNqC3SyCR7BgQ0J9IIberzU3GMkd4busyNp8JmRRkiUJNaFnp
-	 L8NAx986n/LLIo3PROsf4W7LZ2g8cSfyfS8tkF5y4EEZsuJzTvvIDypXFPlkdNXZnV
-	 T++phynQ6oCinq2N9dLKO09wbgp2oZfKmbGxGFdFQ2yIktue9F8jG+4CvXDU3Bymap
-	 cSiG6WzgrMf9DzgAyAxRMs52RQvsX3+WjNIoBQfZ8vc1YGG5AKAIj8e5DR1B3xMvgL
-	 NEgkFUpDN7DsA==
+	b=n6qIyUxyDVppZj+Kl2dA/gqy83mkEVUncNHJOEdEzt0uH8r/mKiZ2zdg0pqZC4lZc
+	 wJNf9UW1V/BCDD2Lgsuo1E5++vAV81HgUJU7+rhzAjiv+q3M3q+JgdpmXGhSgTn0Z4
+	 x5jNmCaq0dN63ePbmj7o0826HySwgF8nVIyO4u2kzqfdwoVm3jRXPfMk7xyooE190h
+	 cJcbjPAyA6IofSvNYx1ZO13cL4IpEQD8kRe2KQzF+kPINijiVSHAirrehHs5FcKW0U
+	 lvUlHCA/jz4QWhRuKPJnvSDWJoEFnvXbt0/DowxY5eDbMpEGVrhhzwlUZg9fS8qQ8W
+	 5dN3yV5vTDMMA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 1997B3822D65;
-	Tue, 22 Sep 2026 23:50:18 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93A483822D65;
+	Tue, 22 Sep 2026 23:50:19 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,44 +37,43 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/3] bpf, mips: Add signed div/mod support
+Subject: Re: [PATCH bpf-next v3 0/2] bpf,
+ mips: Add BPF_MOVSX support to the JITs
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <179012101689.134796.18001774666321300872.git-patchwork-notify@kernel.org>
-Date: Tue, 22 Sep 2026 23:50:16 +0000
-References: <20260911213340.3767930-1-main.kalliope@gmail.com>
-In-Reply-To: <20260911213340.3767930-1-main.kalliope@gmail.com>
+ <179012101814.134796.2287786050720557901.git-patchwork-notify@kernel.org>
+Date: Tue, 22 Sep 2026 23:50:18 +0000
+References: <20260912041220.444715-1-main.kalliope@gmail.com>
+In-Reply-To: <20260912041220.444715-1-main.kalliope@gmail.com>
 To: Nicholas Dudar <main.kalliope@gmail.com>
-Cc: tsbogend@alpha.franken.de, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- johan.almbladh@anyfinetworks.com, paulburton@kernel.org,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, philmd@oss.qualcomm.com
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, johan.almbladh@anyfinetworks.com,
+ paulburton@kernel.org, tsbogend@alpha.franken.de, martin.lau@linux.dev,
+ song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+ emil@etsalapatis.com, ihor.solodrai@linux.dev, bpf@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 
 Hello:
 
 This series was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Fri, 11 Sep 2026 17:33:37 -0400 you wrote:
-> The MIPS JITs do not interpret the insn->off value that selects signed
-> DIV/MOD semantics, so negative operands produce unsigned results.
+On Sat, 12 Sep 2026 00:12:18 -0400 you wrote:
+> Add the five MOVSX forms to the MIPS32 and MIPS64 JITs, which currently
+> emit them as ordinary moves. Patch 1 factors register moves into helpers;
+> patch 2 adds sign extension.
 > 
-> Factor div/mod emission into helpers, add the missing signed uasm
-> operations, and decode insn->off in the div/mod emitters. On MIPS32,
-> use signed 64-bit helpers for ALU64 operations.
+> Use seb/seh on MIPS32 R2+ and doubleword shift pairs on MIPS64, where
+> normalizing the source for seb/seh would eliminate the instruction saving.
+> The MIPS64 sequence also matches GCC's generic lowering [1].
 > 
 > [...]
 
 Here is the summary with links:
-  - [bpf-next,v4,1/3] bpf, mips: Factor out div/mod emission helpers
-    https://git.kernel.org/bpf/bpf-next/c/a2710072ddec
-  - [bpf-next,v4,2/3] MIPS: uasm: Add signed div/mod and sign-extension emitters
-    https://git.kernel.org/bpf/bpf-next/c/668508db5ecb
-  - [bpf-next,v4,3/3] bpf, mips: Add support for BPF_SDIV and BPF_SMOD
-    https://git.kernel.org/bpf/bpf-next/c/47c26a8570d1
+  - [bpf-next,v3,1/2] bpf, mips: Factor register moves into helpers
+    https://git.kernel.org/bpf/bpf-next/c/86187bd3cd5a
+  - [bpf-next,v3,2/2] bpf, mips: Add support for BPF_MOVSX in the JITs
+    https://git.kernel.org/bpf/bpf-next/c/07ebb8c386d3
 
 You are awesome, thank you!
 -- 
