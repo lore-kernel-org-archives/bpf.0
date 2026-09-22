@@ -1,110 +1,108 @@
-Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4421A35F197
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 02:54:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE9AA3AEF45;
+	Tue, 22 Sep 2026 02:55:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790045686; cv=none; b=JrfWVDAvoRt1SR5gppDJ1h1plrb1+C96YF1ly0he8pjoUFppHRt4pDNWpGAfekSB+i6lBmodQrTtcSMvHHu4xy+IVTad5KsqfTNHeGLwYZAP121Yixq44MbtSmETU+AEjyq1TMhkUtY/ReAaajtyBvzJ/7HRRYlyqa2QY04B1GQ=
+	t=1790045730; cv=none; b=H/T/LPemZvqpBADdT1FKpyZCNwaHZOiDxP18UNzoPdIYIeyL/zp6NY4FsM5wbEm5bu+Ew23NgGAIGSNHiPmM2hfZ4g5sgfYbfXSpTizOBgv0Kt+XEBKslw/jBXdqyDmDJI3SOXv48dLicOTwZuQI+g5rKr4CnmWDF27EOQ37jtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790045686; c=relaxed/simple;
-	bh=aeyTWcs9E+uxhD5i9by9Aiw1/t/1P3Hmw+3P//Rf/j0=;
-	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
-	 References:MIME-Version; b=ZgUJtQVp1wM/8+6ZHQ9b4+4HKp2+iDZFXxgK89qRP3YzykXiVYo4eD4C0zlaw+z5xdbGehmFIalLTTmeChlX0uLAjHbYoGq60V1DzbTq658G3x6PU1CHYG6IMIDLAxTXYQwzsZAWwkpLfaWqGeK5qqwV/6ex0KAsnzk1Uc7MEig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AJ33fB5D; arc=none smtp.client-ip=74.125.227.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790045730; c=relaxed/simple;
+	bh=JrEPSEG+2GMgTccrrptW0dhR3BsGXub2ydxPSWL4s48=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rjfJ8pBd4S+v5c7Uv445QMdrFJo5dJT+GxtoHTz7IFkt66aZzC6GkQn603+zDZvHeiSMiNsD6iF6bMyQuTui0DIg723YOlt+ReKepd99n+7bCcl93mqoV0QRaQlNMCl5GaWO/HQC32FjQtDVu5LZBDgbphTjGwZVWwj04HfSc+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=PLcMX0jv; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AJ33fB5D"
-Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-39dacf053eeso2676251a91.2
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 19:54:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790045674; x=1790650474; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=UrryUBh0wA9y45vzn1E+3pGPW3cTDea6KxpezXzlJsE=;
-        b=AJ33fB5DUhWURYz6SWNtaULDCv19R4WGFQbH+NitcCD7qnu7Xe+kVPXTTHWDH9NlGz
-         dEQ+26/+RHu+2ouMXluT0WOmGATmaZerl6YH6fSM9P3Gj/gGYGOuni69ppqRpDosX6Xu
-         4elXOYxKkDdGw+3NWQSdez2tDMKjLfuIQKen2dyRBEfkw8Bo6NoKdcoZQyYS7vhrYEDA
-         GA5nx4cQA3Cw1Syn/QRXJke/pqj4CS8pziaLZExdX2FLZ+ecNqKwexraaCQqzyW1eTrf
-         YXlB+tnwIfS0E5uyfqAqrndXAtO5EsfQJmBYesYzgWFf6WEyDqQpT8crDmfXFHM1EWdn
-         /w3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790045674; x=1790650474;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:from
-         :subject:cc:to:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UrryUBh0wA9y45vzn1E+3pGPW3cTDea6KxpezXzlJsE=;
-        b=PpIrqnRByawrQ8SteXMbXyUg2rSHS/loypP5G0sAqIm5jQxCVkYqO8G1lBfoz+HsyQ
-         1fjGrAmv+TdAsQiTURK5755dA1gMNDP0dICh6P/wT3YN7DFH0XEQURCh0Txa7SLxuVvM
-         F2fgMGurM0VkiUYUiSmNFWl/OxipVRZ92kDhUc2xF3OrVT/8EG1XpzQHeStD5Y9amTv/
-         supxpQgp94OsPT+jvUJxwogN0YDmk8MRiNP++nZKU5YK3zEpNfQKGZuYrBd9DHiD6/Ii
-         Q63m7wCarUB4IsTIxiniry2ViMUkhDqnILbVvAOpD3jmBoSEQmvdg/pCgTqRhmStWnVt
-         Uo3w==
-X-Gm-Message-State: AFuF++kMUI5FKKZpmRIT8cB5saKM3cn9WkajMesiZYXCqt0nYyyy79AU
-	2cuSLhqb8GfVUeWdpqz/KlT5feFleljDicsnunSeUHZH0lIyizxlPSd8
-X-Gm-Gg: AYBFou0irlaLu01S9U05XHRy34J7k3s2GneiAPDKbDg9f1I+Q+lw+1rUMcEPTY0LdoK
-	/GRNOD5K3YUNkwG352HqLV9Qc98hku1afJa371IiKtY5I2q5r9IneGuMVgu8tBoKgUUSmvIReur
-	sde85Ft+6mq5pwAUxhJBDGBcSROMqrXTjMGRwZT6cQAX1i3ZR1Au5pWomWPqsbzUxXn2BwB1p06
-	alljHuf8lAernEldvq3jNT26Oqvmbg4s7T1RaSjl6gtOEczv2S7IwmdqfY8DRtoajuEJSTzBFhv
-	xArXzVspW6QeN2DwUU/frGeViT9t6hYRR2QDgGZ9OsLeSt6s95+v+e+8ZvDOqFcrxzDJqOQARz2
-	F7wDgZUjeWrw0PzaQmiMxbLVzh0/KyFxiuaDaf9TJLDYX4ggq4z64IzmdFUUMMiywTYd1qPNgCC
-	DGqquFVLGhoL0F5t3o1IP46PdqnZWmv4wUU3qmqcD7piJJJsKdTMme9VMPHMy2J7JpkBuGT4HnO
-	3p2QYHlgt60ZYyv3a6e/NOl8PHyUQ4d+Qve3K58ol1mVzCw8isUb5WkgcOTuVvEmNzWCIg/+/2Y
-	AjA=
-X-Received: by 2002:a17:90b:3e85:b0:39e:3baa:bd3a with SMTP id 98e67ed59e1d1-39e54dca2fbmr18001286a91.12.1790045674245;
-        Mon, 21 Sep 2026 19:54:34 -0700 (PDT)
-Received: from localhost ([153.61.198.253])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a06cb2b46csm303914a91.3.2026.09.21.19.54.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Sep 2026 19:54:33 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 22 Sep 2026 02:54:33 +0000
-Message-Id: <DLLI8DZ44BSN.35MO12IZJET8H@gmail.com>
-To: <sashiko-reviews@lists.linux.dev>
-Cc: <bpf@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 06/17] bpf: Add callx calls to the call graph
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-In-Reply-To: <20260922012711.C2F581F000FF@smtp.kernel.org>
-References: <20260922011323.1298619-1-alexei.starovoitov@gmail.com> <20260922011323.1298619-7-alexei.starovoitov@gmail.com> <20260922012711.C2F581F000FF@smtp.kernel.org>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="PLcMX0jv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Ad
+	g7kbz1bBWlYlX55aUt4LHA4s1d7qVYz81vMeI5iy4=; b=PLcMX0jvAHPIBtSDgt
+	HAS+QZXXRC4EcPvePpaiDNvVg9lJH+nef3RDpN7wRMGjIKcLGAfxRMDYEIFbthDp
+	l7MK6DnnSltvplbvC3ltEdUISqDq6wJlMQV/CBoufuSaU0sGnvMUqISDc8yGF6ie
+	sn1EPV7FIo19R8oOshrCVz7Z4=
+Received: from localhost (unknown [])
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wD3t9ry7bFqfwUZAA--.3726S2;
+	Tue, 22 Sep 2026 10:54:43 +0800 (CST)
+From: Hui Su <sh_def@163.com>
+To: bpf@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Yonghong Song <yonghong.song@linux.dev>,
+	Quentin Monnet <qmo@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hui Su <sh_def@163.com>
+Subject: [PATCH bpf-next v3 0/3] bpf: expose cgroup preorder attachment state to userspace
+Date: Tue, 22 Sep 2026 11:54:39 +0900
+Message-ID: <20260922025442.3176057-1-sh_def@163.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3t9ry7bFqfwUZAA--.3726S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Aw47CF43Ary5ZF1kGF17Wrg_yoW8CrWxpa
+	95WrW3Kw15GF1fArWfK3yIgrZYkan3JF4DGF13t348ZF47Xry0yrZakF4Fvr13XFW7CF47
+	Z34Yyr9xWw1jvFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi7GYPUUUUU=
+X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbC6hS-H2qx7fTSWQAA3X
 
-On Tue, Sep 22, 2026 at 01:27 AM sashiko-bot@kernel.org <sashiko-bot@kernel.org> wrote:
->> +		if (bpf_is_callx(insn + i)) {
->> +			/*
->> +			 * Walk the callees recorded by the main verification
->> +			 * pass one by one, returning to this insn after each.
->> +			 */
->> +			if (dinfo[idx].callx_insn != i) {
->> +				dinfo[idx].callx_insn = i;
->> +				dinfo[idx].callx_next = 0;
->> +			}
->> +			sidx = next_callx_callee(env, idx, dinfo[idx].callx_next);
->
-> [Severity: High]
-> Could this lead to a quadratic path explosion and unbounded CPU time in the
-> verifier?
->
-> The callx_edges bitmap appears to aggregate all distinct callees for an
-> entire caller subprogram. If I am reading this correctly,
-> check_max_stack_depth_subprog iterates over this entire aggregate bitmap
-> for every single callx instruction in that subprogram.
->
-> If a subprogram has K callx instructions and M distinct callees, would the
-> verifier evaluate K * M edges here instead of just K edges? Across nested
-> subprogram calls, it seems like this combinatorial amplification could
-> evaluate paths exponentially. Since this pass lacks state pruning or
-> complexity bounds, could this bypass the verifier complexity limits and hang
-> the kernel thread?
+The BPF_F_PREORDER attach flag changes the ordering of programs in the
+effective cgroup program array, but BPF_PROG_QUERY did not report the
+per-program flag. This series exposes that state and updates bpftool to
+display, accept, and document this flag.
 
-Not a bug. K * M is intentional. The edges are recorded per caller,
-not per insn.
+The series is split into three patches:
+
+1. Report BPF_F_PREORDER in direct cgroup program queries.
+2. Add selftests for direct and link-based program queries.
+3. Add bpftool support for text, JSON, command-line, completion, and
+   documentation handling of BPF_F_PREORDER.
+
+Changes in v3:
+- Simplify the changelogs for patches 1 and 2.
+- Simplify the ATTACH_FLAGS synopsis and represent attach flags as an
+  array in JSON output, as suggested by Quentin Monnet.
+- Widen the plain-text AttachFlags column for combined flags.
+- Address checkpatch line-length and alignment warnings.
+
+Testing:
+- PASS: cgroup_mprog_opts, cgroup_preorder, and bpftool cgroup
+  plain-text/JSON smoke (x86_64 QEMU/KVM).
+- PASS: bpftool build, Documentation build, bash -n, and checkpatch on
+  generated v3 patches.
+
+Previous versions:
+v2: https://lore.kernel.org/bpf/20260919094400.600585-1-sh_def@163.com/
+v1: https://lore.kernel.org/bpf/20260918172407.3459188-1-sh_def@163.com/
+
+Hui Su (3):
+  bpf: Report BPF_F_PREORDER in cgroup program queries
+  selftests/bpf: Test querying BPF_F_PREORDER cgroup attachments
+  bpftool: Add support for BPF_F_PREORDER cgroup attach flag
+
+ kernel/bpf/cgroup.c                           | 16 +--
+ .../bpftool/Documentation/bpftool-cgroup.rst  | 25 +++--
+ tools/bpf/bpftool/bash-completion/bpftool     |  4 +-
+ tools/bpf/bpftool/cgroup.c                    | 99 +++++++++++++------
+ .../bpf/prog_tests/cgroup_mprog_opts.c        | 71 ++++++++++++-
+ 5 files changed, 166 insertions(+), 49 deletions(-)
+
+
+base-commit: 79dc258c9392051420a26f1504c647bd3d27c66a
+-- 
+2.55.0
+
