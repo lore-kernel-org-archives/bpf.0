@@ -1,124 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C097F340400
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 03:01:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB6019D8BC;
+	Tue, 22 Sep 2026 03:11:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790046105; cv=none; b=lJsLJC01HGZFcqiGgxBipYT/N+dm3U1Q/cKYX+EYF+eYWeWrZ94AbbR3euYK3O32+xvdeDYSupsIeOjxDdsS7bEktyt3BB5y/G37HuXlHgwFN8ZNIaszGW+poAAmBmDs31MCdpi5DQ8/nMUbLGv0lyP+RL6E9TZcwqmsCQjdC40=
+	t=1790046691; cv=none; b=uzJpicmmgRB+j8wXUm4JlZ5/r5ByycFYi09Aebzo2KkRSa9Yv7RJ+K4yfkKdzeG3oDYYn6LXm6lCcMa30ogKdjUFQeZSvxALHWPzbnMbUYQMT1llN8297h5wqrOPO2LTbNGJW+jc6vX+LCuVyXUAggjF3PrfnZAvtPUKDwM4qbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790046105; c=relaxed/simple;
-	bh=66nZ/1XFHol/Rw8BE0RJafNsIZMfRKBZ31vv5YZKJck=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=YNI2akDf1rIuC64o0jqwxqHOkqVCt0BMF9BVS7Dn6WtsGts7GQwJhvVe9jCHNz5g4DOeYnsdILcZNKXHl4ciq8pYulgBw7l6Jas31kvfy0zlnZs9AoZUs6V4ko+pwLRCtHlCtUfUcoILH36o6XLRZvXuDZKlRLtzZ2GKUVIEmv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SZvEEDkh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790046691; c=relaxed/simple;
+	bh=WLRYkkbBWDKPMJXCvjf6ULDKHUK5Pfaitj6yTfelGUo=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=ik/8hk+LZEv0bMs6Q+j8HMWc/I8hofc7CXwMY72X3WYQJkH8mTMR3ek7++2TFJ1BZ/G/l0ejLgHnJNqgIomKZfTf2kVocq0CXD7oT9SdmPStahwDofDfxqxaeNk5deBczSuCj1Q4ZJmb2IerBU8vZhLw31NJW3H2FT8aS79qF1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gEqSKjgM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SZvEEDkh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4F7F1F000FF;
-	Tue, 22 Sep 2026 03:01:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gEqSKjgM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD8FD1F000FF;
+	Tue, 22 Sep 2026 03:11:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790046104;
-	bh=TgaTRvAGszXEM1fyp9Eq7637Sx2tHbLXThmSX77gDB0=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=SZvEEDkhEiGVbzuw9C2kXjGX+MJKyA05xa+21mGwTb1HikmDAEeBUa4D6gFPbevAA
-	 z5pE3qSRQylkHax/HIbq+EH/wKHFs9KMSo4Rliw//cyn8ehZXvwWwggNjNQMjbz9Rk
-	 +xvoZN9NEy7S4yNZrWHVgxzo5ys1IIWNGa85a01MvP8n38V9VtpYT7Sk4pRnFsvNo4
-	 n8syy7d1THLTC52t5FOTm+xxYfqs5D1mz+sJlaT/uDOULn6uxIH+X4el1Ewq0ZOvn5
-	 BAT1qVid3uGO4mImHEwHzWOROHfqaJSSlmLTW4M5FsYVfSRBPEked0GbLBne1iCZC7
-	 k3LCP3Wu/N0nQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 3/3] bpftool: Add support for BPF_F_PREORDER
- cgroup attach flag
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Hui Su" <sh_def@163.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260922025442.3176057-4-sh_def@163.com>
-References: <20260922025442.3176057-1-sh_def@163.com>
- <20260922025442.3176057-4-sh_def@163.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 22 Sep 2026 03:01:43 +0000
-Message-Id: <20260922030143.E4F7F1F000FF@smtp.kernel.org>
+	s=k20260515; t=1790046690;
+	bh=XyNCoq/etK8VeSwcZtzf9WuBv6P9bzgHrlMb9BH//o0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=gEqSKjgM4G5xPfJTYQv1LR2kutPUZxItSCcCzzm/PJQ+t+Vp1wm4/jEmdPng+fC4U
+	 JnkTRwogPwTy+/uZWZ/nFD2nj4cYzHWH0KEJgal/RZ6Y9bM6tcIcogmdoINrn4wlAY
+	 0EBQAPLuYfCxCHNay9BipAOhiQ4sFVFszhHcRHzFmalyJBegR9nbz9PLCFY71+ILnO
+	 Auya2yVihZTe8E5xkrWcZhyBq/gyCQALGQo1bY6U0LmIqGvWFXGjrbzJjHKTW15u4e
+	 lsQCTd3LmW3Lgql4YIfDLFij3+8PwoT2qkIB63AOPekmWYJ6sGRBu/VbAUa27RDmsw
+	 7MIEA0knZmSiw==
+Content-Type: multipart/mixed; boundary="===============6030411877518670542=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <76cb003abe9b55df08565c2bd3954e1b7a5300309a6d721111cd454359f050ae@mail.kernel.org>
+In-Reply-To: <20260922-b4-rcu-tasks-preempt-qs-v5-12-410f57770bad@toxicpanda.com>
+References: <20260922-b4-rcu-tasks-preempt-qs-v5-12-410f57770bad@toxicpanda.com>
+Subject: Re: [PATCH v5 12/13] rcu-tasks-trace: Assert no reader is held on return to userspace
+From: bot+bpf-ci@kernel.org
+To: josef@toxicpanda.com,paulmck@kernel.org,frederic@kernel.org,ast@kernel.org,rostedt@goodmis.org
+Cc: boqun@kernel.org,mhiramat@kernel.org,mark.rutland@arm.com,peterz@infradead.org,tglx@kernel.org,daniel@iogearbox.net,andrii@kernel.org,puranjay@kernel.org,rcu@vger.kernel.org,bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-arm-kernel@lists.infradead.org,linux-kernel@vger.kernel.org,josef@toxicpanda.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 22 Sep 2026 03:11:27 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] bpf: bpftool JSON ABI breakage for attach_flags field
---
+--===============6030411877518670542==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 7ba7f84eaca8177e2045dffce655aae4da559465
-Author: Hui Su <sh_def@163.com>
-
-bpftool: Add support for BPF_F_PREORDER cgroup attach flag
-
-This commit adds support for the BPF_F_PREORDER cgroup attach flag to
-bpftool. It updates attach operations to accept the new flag and modifies
-the show operations to output combinations of attach flags, rather than
-just a single flag.
-
-> diff --git a/tools/bpf/bpftool/cgroup.c b/tools/bpf/bpftool/cgroup.c
-> index ce69d1e5468e3..fee1a260f6d1a 100644
-> --- a/tools/bpf/bpftool/cgroup.c
-> +++ b/tools/bpf/bpftool/cgroup.c
-
-[ ... ]
-
-> +static void show_attach_flags_json(__u32 flags)
+> diff --git a/include/linux/irq-entry-common.h b/include/linux/irq-entry-common.h
+> index e19b41ee6b18..d42568a488a7 100644
+> --- a/include/linux/irq-entry-common.h
+> +++ b/include/linux/irq-entry-common.h
+> @@ -5,6 +5,7 @@
+>  #include <linux/context_tracking.h>
+>  #include <linux/hrtimer_rearm.h>
+>  #include <linux/kmsan.h>
+> +#include <linux/rcupdate_trace.h>
+>  #include <linux/rseq_entry.h>
+>  #include <linux/static_call_types.h>
+>  #include <linux/syscalls.h>
+> @@ -214,6 +215,7 @@ static __always_inline void __exit_to_user_mode_validate(void)
+>  {
+>  	/* Ensure that kernel state is sane for a return to userspace */
+>  	kmap_assert_nomap();
+> +	rcu_tasks_trace_assert_idle();
+>  	lockdep_assert_irqs_disabled();
+>  	lockdep_sys_exit();
+>  }
+> diff --git a/include/linux/rcupdate_trace.h b/include/linux/rcupdate_trace.h
+> index dcdb11643496..9eb7f92c710b 100644
+> --- a/include/linux/rcupdate_trace.h
+> +++ b/include/linux/rcupdate_trace.h
+> @@ -217,6 +217,12 @@ unsigned long rcu_tasks_trace_batches_completed(void);
+>  // Placeholders to enable stepwise transition.
+>  void __init rcu_tasks_trace_suppress_unused(void);
+>
+> +/* A task must never reach userspace inside an rcu_read_lock_trace() reader. */
+> +static inline void rcu_tasks_trace_assert_idle(void)
 > +{
-> +	char buf[32];
-> +	size_t i;
-> +
-> +	jsonw_name(json_wtr, "attach_flags");
-> +	jsonw_start_array(json_wtr);
-> +
-> +	for (i =3D 0; i < ARRAY_SIZE(attach_flag_names); i++) {
-> +		if (!(flags & attach_flag_names[i].flag))
-> +			continue;
-> +
-> +		jsonw_string(json_wtr, attach_flag_names[i].name);
-> +		flags &=3D ~attach_flag_names[i].flag;
-> +	}
-> +
-> +	if (flags) {
-> +		snprintf(buf, sizeof(buf), "unknown(%x)", flags);
-> +		jsonw_string(json_wtr, buf);
-> +	}
-> +
-> +	jsonw_end_array(json_wtr);
+> +	WARN_ON_ONCE(IS_ENABLED(CONFIG_PROVE_RCU) && READ_ONCE(current->trc_reader_nesting));
 > +}
+> +
+          ^^^^
+
+This isn't a bug, but since rcu_read_lock_trace_held() already exists a
+few lines up, would rcu_tasks_trace_assert_no_reader() (or
+..._assert_not_held()) read better here than ..._assert_idle(), given
+that "idle" already means the dynticks/RCU-not-watching state elsewhere
+in RCU?
+
+And would it be worth moving it above the "Placeholders to enable
+stepwise transition" comment so it does not read as part of that group?
+
+>  #else
+>  static inline unsigned long rcu_tasks_trace_batches_completed(void) { return 0; }
+>  /*
 
 [ ... ]
 
-> @@ -182,7 +240,7 @@ static int show_bpf_prog(int id, enum bpf_attach_type=
- attach_type,
->  		else
->  			jsonw_uint_field(json_wtr, "attach_type", attach_type);
->  		if (!(query_flags & BPF_F_QUERY_EFFECTIVE))
-> -			jsonw_string_field(json_wtr, "attach_flags", attach_flags_str);
-> +			show_attach_flags_json(attach_flags);
 
-[Severity: Medium]
-Does this change break bpftool's JSON ABI by changing the attach_flags
-field from a string to an array?
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Previously, this field was output as a single string. Changing the data type
-to an array could cause external scripts or applications using strict JSON
-parsers to crash or fail to unmarshal the output when running=20
-bpftool cgroup show -j.
-
-Would it be safer to format the multiple flags as a single comma-separated
-string in the JSON output, similar to what is done for the plain-text outpu=
-t,
-to maintain backwards compatibility?
-
->  		jsonw_string_field(json_wtr, "name", prog_name);
->  		if (attach_btf_name)
->  			jsonw_string_field(json_wtr, "attach_btf_name", attach_btf_name);
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260922025442.3176=
-057-1-sh_def@163.com?part=3D3
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35680506278
+--===============6030411877518670542==--
