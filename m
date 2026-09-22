@@ -1,103 +1,167 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DF1A2F7EFC
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 01:40:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 388D335950;
+	Tue, 22 Sep 2026 01:47:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790041233; cv=none; b=AAmQ97sArhF7fuk7TpWsd43UvN15zb2YWA6/+HO0X6Jl2inHsk28csgxh8CpWbYiqY+Ohxcas+PIUDOZWNFYVEy+gUlXTtSmdR4/eJDl8oRgt/MfVgymFuJMqV0AaoSI2J5P9vuizeDifNwroCckqBq0h5RU19KQGariJW+AE5g=
+	t=1790041636; cv=none; b=tHvMzrZa+qaG3b67mOPVE1hkkGm7Ck47dXFQUHzKQV18gOAbXqoLBEIKMdU2l87jW98+U1sowPSzUKgXQPxlwoMM4ySAu/Gq8/d66h29wSWHWLq4Wa/fon+AILiRRQBewrUMm/lK18aYVtSdi8qqbseRkU2y2cV2y4BLA9IXMHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790041233; c=relaxed/simple;
-	bh=+P63ffgjr3pdboURh9eeuRYyJNt86mz/vkXw2ggL6o0=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=NZaTt0EY1pBrq/JnAMjExAzaBWF74noI8/Ddj02xVZqwgOFZ+XKmyxWpDEohysfL/2uPPVsJ9tc+4lL8PD0jtkP+sxnZnrtZeUMLWd53DzHVKaRy+Wbl5u+XuOHhMFCukv+tJ3rzXV0bWJUtQaNaflegSYCA8oxx/bVc1OdHOS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D+tsQLBG; arc=none smtp.client-ip=74.125.227.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790041636; c=relaxed/simple;
+	bh=P4cWs59fPLpdZiJfbFmlcyCdSFuvJpAsJ5W+WfsUxBg=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=RFmg68wEkXRfsDs5h1unUx7GePpy4tfHIzOpX1AhCmbHEK49WQtUayzO4lN6ZFwKsBDcO3JWcN/4yCit20OG85i9W+kPfOHMpnVPnsHUIpmLyFaP0MjWIMNey5pGd9oEEJSZEXu2vLteVXjZh31vJvxt2F82zgt0a0FnzAMcDFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j4kQ+c/b; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D+tsQLBG"
-Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2db22383fe8so23392945ad.2
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 18:40:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790041232; x=1790646032; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=uv9sBMtX3Z/AnKEaJOOadu3m/dKGHE50lWXdsUYLDwo=;
-        b=D+tsQLBGSpZtjlROBa+g83n9rojZArC4hZlkEsYQlaQ2bBI0rrbjX0YqqE6xmBpo/q
-         9z5Hvw4V+G/TvD+W19+atBHanHfT9+epQxYVEWTvCYxAyTw6fwVmualKiSeeX4TsHtK7
-         n9SUSD4vrCBOqBg2uBoG7gnTiC0kFv+AgCAjrTvPu7yCuKmYQSI97YsLFWj/9EXDF4om
-         0DflcFRYcYvxXp8cUuyzyCvmf7lDnPwwvnTLyf2yPjQnzH8rHZOe0KudwTjGkspBPR4L
-         V2hJWGJHvQcQNQYl6k71rilWVeVGb41l3223TERNMzy5R1tSqnZD89HwwcFq82t0HpoP
-         +jQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790041232; x=1790646032;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=uv9sBMtX3Z/AnKEaJOOadu3m/dKGHE50lWXdsUYLDwo=;
-        b=ja0KksoNhxeYFPM5QX7MU5h9OMxPjjxeHS0nF6LOeDcC6kfPrLG9mdp3SXsaFiSJ/t
-         c4GkT1s8ll9b+mK3g9TH33YpqNJXIKkE59eeJdlRsYhLkHLiLQAueMm3lhSRtWInWRJj
-         B9JxFsCMkAD9v+qXTQX7Xz1MfXdu4KoQPvaGeYgR7a39wGspdpXSd2pfKeDaTgc+DdyX
-         JLhYvz98IoaArCKCvNbOSDh3jSaEe43QzYblw9Q2SykAkzuCMyLeaVjqVLu7ZEVMhCBN
-         XCCnNBaYKUbrlk3GVGDJ68pkq9c5H8WsUf20PHGZa2Cpxdnp6hEprY/lG05N1IBoPtrd
-         pScQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxWmGaeCDVvctK7UUYkUUkMcSNeguc/rGnB5tFhPqNem6aimLVEIYh9/iJyI0DH+HCUuhw=@vger.kernel.org
-X-Gm-Message-State: AFuF++lUFTRZdb08BEGkZzEJ/68R+MiEOH6pwOctcAdTw8fUa1evJoHY
-	xmPS43RVGm6Y//wrDkv+jgGxJ++abwZq8cEG3zkM/6KuuGcsD1BvS/Vp
-X-Gm-Gg: AYBFou2gM1FbcdpqhihYMl78eZjiF7Uc9S1gyuSKVc/7h0SKTNTHn4plGEz5qafopbF
-	3NrhF+JGbMU1PkjRElTOpA7pyQp4LLpq2MoDOYmlQoMR/MNF5n1hbnh8ty9sH7gAbf/kYsSOmh3
-	0e7JZSTURm/yYqbz5TGhHXwZlS5X7n6DoGrRzGjwDUPXyyXkMXKnbaPx8PAp4YhVbem9HbY4DCg
-	hwKflWCpRS1688VJyUn9+hO6FbqDdcHW1DXlpDvYt9WMP7op83KMgitVoTUdKkAhXuT/JeaIy8G
-	m7dAJudGAbgos7gPFhVH3yODd0UDWWdXwNUDOkDd45q6TVn2r3QnE9NueRz5gtSJYaxmPKjQupg
-	2Uh/WhrwpsgM7eVT3kFqZXbBKUY2qVLnLOtOuT3Nxeba9Riy3ycQpbXlVWvRi0MwO2mJjkaekUV
-	xi6iTYtnBd9MWK7l7+5lC733I3nYiS6ud98SP7SEBxcIMFWKL4ANcblylcjOjnQ/DPXu5SiZn4m
-	AYVn3gBi9gouiTJEh4I1jfLFBEvyzRCwET4KuJiwPuskV58YRYZPsfoiKXlC6dsJ7zHFUQodOvZ
-	wfXsZjFxzKJ4Vw==
-X-Received: by 2002:a17:903:26c8:b0:2dd:c0ff:e72e with SMTP id d9443c01a7336-2ddc0ffe9ffmr111566545ad.64.1790041231501;
-        Mon, 21 Sep 2026 18:40:31 -0700 (PDT)
-Received: from localhost ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df5d053e87sm1056265ad.63.2026.09.21.18.40.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Sep 2026 18:40:30 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 22 Sep 2026 01:40:30 +0000
-Message-Id: <DLLGNOQ59JIC.1O76G4NM0FXZ1@gmail.com>
-Cc: "Mykyta Yatsenko" <yatsenko@meta.com>, "Anton Protopopov"
- <a.s.protopopov@gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Speed up htab lookups for u32/u64 keys
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>, <bpf@vger.kernel.org>,
- <andrii@kernel.org>, <daniel@iogearbox.net>, <kernel-team@meta.com>,
- <eddyz87@gmail.com>, <memxor@gmail.com>
-In-Reply-To: <20260921-hashtab_fast_hashfn-v2-1-79aa962ec56b@meta.com>
-References: <20260921-hashtab_fast_hashfn-v2-1-79aa962ec56b@meta.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j4kQ+c/b"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19D761F000FF;
+	Tue, 22 Sep 2026 01:47:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790041634;
+	bh=kYCtTqAp0FpGIEPCO6wZN02nOVvmRN6t7ooHdj1rSZM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=j4kQ+c/bXo8sXJRfZmIwBbKGlmHMOj8GOn04vIRK+BLCjok4WDLq2aB3bKjNGQt5j
+	 j4F0wrkLQ3/E+jSTlb+H7YQApCPOLE+oiYu9sXg0sbZ3YEys+OcBnizOtsqEhHalgm
+	 cp9d2/IeB5lJ90JHzK3bKJ9mAvkjbcWRhFDUm1tdv9rep/hFvH0iKVsTqeDP55arOY
+	 nGBgJm05WjVGIW62924uQse55FOpI/zNVS26dvR7UgcPPrJNKFa7egsIaOLWuViYIn
+	 YCPhjQxvaGrsVKunBVmQmv2VNhgcrHgOsPQkDDRcHn8ie4ZWZPm8pTfjafVdY1fm0d
+	 nMHEwO8+0JsDg==
+Content-Type: multipart/mixed; boundary="===============0048666262407725720=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <95fa69c85978e3cf60ef6fed25b5b38278934373c921777ab38b4202d7bf75b6@mail.kernel.org>
+In-Reply-To: <20260922010333.1226537-7-ihor.solodrai@linux.dev>
+References: <20260922010333.1226537-7-ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v1 6/6] selftests/bpf: Cover callback-frame map key lifetime
+From: bot+bpf-ci@kernel.org
+To: ihor.solodrai@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com
+Cc: ameryhung@gmail.com,emil@etsalapatis.com,npc@anthropic.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 22 Sep 2026 01:47:13 +0000 (UTC)
 
-On Mon, Sep 21, 2026 at 02:28 PM Mykyta Yatsenko <mykyta.yatsenko5@gmail.com> wrote:
-> +	/*
-> +	 * Fold the jhash constant and key length into hashrnd once for the
-> +	 * fixed-size fast paths instead of doing it on every lookup.
-> +	 */
-> +	if (htab->map.key_size == sizeof(u32) ||
-> +	    htab->map.key_size == sizeof(u64))
-> +		htab->hashrnd += JHASH_INITVAL + htab->map.key_size;
+--===============0048666262407725720==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This optimization is probably not needed anymore?
+> selftests/bpf: Cover callback-frame map key lifetime
+>
+> Parking the key in callback_ctx and dereferencing it after the iteration
+> is rejected for array and percpu-array maps, whose key lives in
+> bpf_for_each_array_elem()'s frame.
+>
+> Two cases must keep verifying, and are the reason the declaration is not
+> in the shared map_set_for_each_callback_args(): the same shape over a
+> hash map, whose key points into the element, and parking the element
+> value, which lives until map teardown.
 
-> -static void *__htab_map_lookup_elem(struct bpf_map *map, void *key)
-> +static __always_inline void *__htab_lookup(struct bpf_map *map, void *key, u32 key_size)
+This isn't a bug, but would it read more precisely to split these - the
+hash-map case as the reason the declaration is per-map-ops, and the
+parked-value case as a guard that only the key was declared frame-scoped?
 
-__htab_lookup() is __always_inline, but htab_map_hash() and
-lookup_nulls_elem_raw() that consume key_size are not.
-Whether memcmp() becomes a single compare in _u32/_u64 variants
-is up to the compiler. Make both __always_inline?
+Looking at 6cd471d244f2, the placement decision is driven by the first case
+(hash_park_map_key), since that's what would break if mark_frame_scoped_arg
+for BPF_REG_2 moved into the shared map_set_for_each_callback_args. The
+second case (array_park_map_value) parks R3 (PTR_TO_MAP_VALUE), which no
+placement of a BPF_REG_2 declaration can affect.
 
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+> index 1fbcc5228306..2e0c56888953 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_iterating_callbacks.c
+
+[ ... ]
+
+> @@ -800,4 +814,81 @@ __naked void check_add_const_regsafe_off(void)
+>  	: __clobber_common);
+>  }
+>
+> +struct key_ctx {
+> +	__u32 *key;
+> +};
+> +
+> +static long park_key_cb(struct bpf_map *map, __u32 *key, __u64 *value,
+> +			void *context)
+> +{
+> +	struct key_ctx *c = context;
+> +
+> +	c->key = key;
+> +	return 0;
+> +}
+> +
+> +/* bpf_for_each_array_elem() passes a key from its own stack frame. */
+> +SEC("?raw_tp")
+> +__failure __msg("invalid mem access 'scalar'")
+> +int array_park_map_key(void *ctx)
+> +{
+> +	struct key_ctx c = {};
+> +
+> +	bpf_for_each_map_elem(&map, park_key_cb, &c, 0);
+> +	if (c.key)
+> +		return *c.key;
+> +	return 0;
+> +}
+> +
+> +SEC("?raw_tp")
+> +__failure __msg("invalid mem access 'scalar'")
+> +int percpu_array_park_map_key(void *ctx)
+> +{
+> +	struct key_ctx c = {};
+> +
+> +	bpf_for_each_map_elem(&percpu_map, park_key_cb, &c, 0);
+> +	if (c.key)
+> +		return *c.key;
+> +	return 0;
+> +}
+> +
+> +/* A hash key points into the element, which outlives the callback. */
+> +SEC("?raw_tp")
+> +__success
+> +int hash_park_map_key(void *ctx)
+> +{
+> +	struct key_ctx c = {};
+> +
+> +	bpf_for_each_map_elem(&hash_map, park_key_cb, &c, 0);
+> +	if (c.key)
+> +		return *c.key;
+> +	return 0;
+> +}
+> +
+> +struct value_ctx {
+> +	__u64 *value;
+> +};
+> +
+> +static long park_value_cb(struct bpf_map *map, __u32 *key, __u64 *value,
+> +			  void *context)
+> +{
+> +	struct value_ctx *c = context;
+> +
+> +	c->value = value;
+> +	return 0;
+> +}
+> +
+> +/* Only the key is frame-scoped; the element lives until map teardown. */
+> +SEC("?raw_tp")
+> +__success
+> +int array_park_map_value(void *ctx)
+> +{
+> +	struct value_ctx c = {};
+> +
+> +	bpf_for_each_map_elem(&map, park_value_cb, &c, 0);
+> +	if (c.value)
+> +		return *c.value;
+> +	return 0;
+> +}
+> +
+>  char _license[] SEC("license") = "GPL";
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35674974944
+--===============0048666262407725720==--
