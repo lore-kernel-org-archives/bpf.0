@@ -1,35 +1,46 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F654DEC1A
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 09:49:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A0C47DF9C
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 10:02:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790070593; cv=none; b=HdMRyw4vT/s37bJJ4/E285c6FKdQ/mQQ1BjPuEk0yeq+9IJSyLe4b2wPxLMeniegAUHL2WXdwNoG05IoiFn2AIMKg2pqo/2MRDu/h1l2X6eD9pfOC0PdNpli9SfXABkTk7CPfXThaX3vOocwcZ3V1/a8Wqxw+vTMuOnge8xyRtM=
+	t=1790071327; cv=none; b=Gjh4hGuaMHSSFi2uAF4JtJliANl1vek3BUXgzy7hc52iWsuAVoGdamCaVjjSswWpgbTDg6kU41yAYU5FmKSf5bKTMCeCFw6VsB9dqHwQNv0SgH9ixu+NCA47AhgjIpYr6RC1tdJwHvXkNv9GVXTrd8xe0XSgr/lQ/3AZ8GpqrJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790070593; c=relaxed/simple;
-	bh=VR1I70M9bQNSvWIJGh+K0LSZoEApq1y6B7+ZdbsCYo8=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=U0lByHbe/VoDmWpE1emlmuwkaORNs0rOp69Gqtvs8lTMrRCnPVfm1g57RNY1BFbvbKPgFENEDmbBaNn6QizMiQNzIPoMpQvGbLSQEkNrojJxPBGpC6bq23YCFr6+fN2VxD/feK9kkAYZOeqkfygQRUwGO9kpGn4xLmMsMX5lBPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=W363IDUe; arc=none smtp.client-ip=220.197.31.2
+	s=arc-20240116; t=1790071327; c=relaxed/simple;
+	bh=W5DbtMnk1ZYUbX/qgS2uBENdrRE/spZ9tidycG6IeUQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bv7CHXyk5cYiS6vxt7g2rSNxE4dtQEV2ivLus4yNdVZtpvxov6QAAzoYExXBD3eZb17OakZLB4cLTzIx3Iot0t8ZOJhzu3Yngc6p7IRjJDmO4XMeuXvrKdfmTPnb0MIeGHd81k/MMKkZ4LbdwGRsEGSFX0AOMOL9N7lYKHb5GK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=dQqY9eRp; arc=none smtp.client-ip=220.197.31.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="W363IDUe"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="dQqY9eRp"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=+/
-	+bX+JQKb2RyxPr0ReKgZcP27kFy+gPAF/4i/g6jLA=; b=W363IDUeTY6j5csGzD
-	xCe64hSjdCI/qIwrKdYIneF/DuFMe8Dh0bGJ632y9Uqh4Fl9xxrLYZW7W2k/w3Nn
-	pNdhRM7sA0kTQcsvNiNPCjci8jhw8wg6LqMrct2ZkknoC2mVnlCzN8fE43b778eU
-	Khwvy5TrSAizpZb4T9anp9Wrk=
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=n6
+	lzrqs31LJW3vRAQmziRVkGw9PgnRxT0QFhHoLo2Dg=; b=dQqY9eRpyfJCPI7KVT
+	7dat7djKPK50SFJvY2NzszbmVs66B8OmHJmtRg10XNh9rhdR1+N7deFAdli5w/o1
+	uvPs1YQMU1p0AmOpOJRcJd7/lDUFmXKfd2M3Ccjfdf6HiwnrkxV5BHzqJ88uB/df
+	FquG1YoO5mf/pAylbHfYDpX1k=
 Received: from kylin-ERAZER-H610M.. (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wDHr_I0T7Jq5bZYAA--.9083S2;
-	Tue, 22 Sep 2026 17:49:41 +0800 (CST)
+	by gzsmtp1 (Coremail) with SMTP id PCgvCgD3HzLjUbJqDJOzAg--.12558S2;
+	Tue, 22 Sep 2026 18:01:08 +0800 (CST)
 From: Yun Lu <luyun_611@163.com>
-To: luyun_611@163.com,
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev
+Cc: yatsenko@meta.com,
 	bpf@vger.kernel.org
 Subject: [PATCH bpf-next v3 0/2] bpf: Fix task work scheduling race
-Date: Tue, 22 Sep 2026 17:49:36 +0800
-Message-ID: <20260922094938.135826-1-luyun_611@163.com>
+Date: Tue, 22 Sep 2026 18:00:40 +0800
+Message-ID: <20260922100042.136818-1-luyun_611@163.com>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -38,12 +49,12 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDHr_I0T7Jq5bZYAA--.9083S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxZF1kur1fGFWxJFy7Zry5Jwb_yoWrJF1Upr
-	ZYgw1ayr4kGa1Iya17Zw4xXryfKan3ta15Grs2qryUAry5WFn2ya47KF1UtFWUGryvvF1F
-	vr4qqa97ur4Y9FDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRRc_3UUUUU=
-X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbC6xUo9mqyTzWWUwAA3H
+X-CM-TRANSID:PCgvCgD3HzLjUbJqDJOzAg--.12558S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxZF1kur1fGFWxJFy7Zry5Jwb_yoWrJFyUpr
+	ZYgw1ayrWkGa1Iya17Zw4xWrySkan3Ka15Gr4vqryUAry5WF12ya4UKF1UtFWUJryvvFyF
+	vr4qq397uF4j9FJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jbxhLUUUUU=
+X-CM-SenderInfo: pox130jbwriqqrwthudrp/xtbCwwTUo2qyUeRgOgAA3H
 
 From: Yun Lu <luyun@kylinos.cn>
 
@@ -107,9 +118,10 @@ Testing:
 - Built with KASAN, lockdep, PROVE_RCU, DEBUG_ATOMIC_SLEEP and
   KMEMLEAK; test_progs -t task_work and 900 stress rounds in QEMU are
   clean, zero leaks reported.
-- Deterministic A/B replay (debug delay in the scheduling irq_work,
-  validation only): unpatched panics 3/3 in task_work_cancel(),
-  patched survives 3/3 with the callback staying non-blocking.
+- Replayed the deterministic reproducer (debug-delay only, not part of
+  the series): without the fix it panics reliably in
+  task_work_cancel(); with the fix the callback staying non-blocking
+  and the guest stays healthy.
 
 Yun Lu (2):
   bpf: Fix task work scheduling and callback race
