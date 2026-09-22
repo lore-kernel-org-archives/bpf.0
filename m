@@ -1,64 +1,62 @@
-Received: from mail-pz2-f32.google.com (mail-pz2-f32.google.com [74.125.228.32])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32CD576ED5
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 17:20:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84A4C576ED3
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 17:20:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790097635; cv=none; b=MniAn8jWttMQiqdOyfvRokIhoAam4TiKrXB/FePRN2jwSxotMqaRvteEuQT+RwVB0RMaA2PgNIxGN+X8RpE9R1xSwUH45V9fuIEV16PvcUJr826zr4gaoYl0lzdIbjShWiBlP5CMcd2YwMFubYoJ8BaAZsRzfg+h2DCOGGh4Rd4=
+	t=1790097635; cv=none; b=RyM5qQ5qKxgmctLYRiNNdkKLMzimkZ0iSK1s70PE7jQtl0HrBxdiMoSL6pf74DxFfy/HO3GmlZXYysSEI0gTwyw2hkn3a2TRv1RnuYmmjLgFJOXQlMTQA/sHqrFCxJf6ft0Xl+iSvmcLh86mOwzHn7a6K3GuvIu/E/DhQUuMIHI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790097635; c=relaxed/simple;
-	bh=EctU5tIWtB2qjqn1ZLRB7qyQZKQFVQkM/uMviUC6kBw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a5oVGYV239Cw+l78CiQUAOCPqbCDhLXfTmv4ljpIVyvH/0cJnF6NtXJVRDl5TNO4awmRyU/q61LD2KhfPtzZ85m4SNrO0ftjahPlRTD2cmfzKCdR37l3PIjv7BgTQvQoPrB44FHlVgC9Qlwzhej+b+BnoXc5YATMYBqeGXZq4xc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Vj93JdUF; arc=none smtp.client-ip=74.125.228.32
+	bh=YGMK1R0R9ravte3mZzxq5dPBRIF9YN5gHhuG4Lxk7qw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TIhlRMWvOsvNmg8Aw/7oYRhldSflb8fAs5w1oxaJP9Ul8U3CxX0iZX678Y2kHzGuao8MNO0TWVDLzBlfT0+ZU0GplgHhqWxU7YvNT/J5jImkk6FIF14YXuvCuu7QxlqUgw48xlJYKcDeG6B2JXWuFcZIDA670t8ckpSo2Yx56Pk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=h3b12TkV; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Vj93JdUF"
-Received: by mail-pz2-f32.google.com with SMTP id 41be03b00d2f7-cc4d04d73b8so145343a12.1
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 10:20:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="h3b12TkV"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccafb752so132441a91.0
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 10:20:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790097633; x=1790702433; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Ox2RZ0k+DkbRVW04kS8F4kKfbRT+U8FtjRI8GPPnTMk=;
-        b=Vj93JdUFj5Z8TrHJ6YL8sz3TYpIlPwW8ZixT1CKg6sEYBBYwNkvvnGZla0RsYcla7q
-         zv93/vHwk49wgN+KndhyuY+xPfh/UIBh0RgkBlRlCR7BZ5EdNi2nafH2S3ycMe4k1wo3
-         R4mUb57sOZwR4iiOHjO8FRvbkJzvdv1i1Gs37jctqLlINI6GDGgTl98higO8wAzcdLYZ
-         NlHARfV/hxdkCSVywWVJSE+cicVGKF7KlBNduKRzqneMdKYYHNT1t6Iga036J/oH4rTO
-         oad+LSAe+5XPelDPM2G8to9okb5GoUnlu9kYa0Geewm6RSyFK7RQdruImX46a45CoyQe
-         p7ww==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790097632; x=1790702432; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=m73w8MScEFOpXNoHT5D1Hw0tXoHQrkRbgHhw9/iqEPI=;
+        b=h3b12TkVAqVP4JPpixa1HMBZjEQ62G13iJNxkBlTstZmcKNDTiQtscvVZZY5Kyfe6B
+         KhrLWP9PfhyMeAdT4/zEZHismXAPfvVrfJuf7/LSN50jeA/ZWqRULi5U10XcwfvdK6PQ
+         l8hvFqPz7GxeQm5SITnhjl8Ui0YQbsTxNd7Qr/Yqmc3rr/uDGYUdqZK/Qz5e56E5OSpn
+         Bk8oycG8B7LeZKLT1QBst4BpS9CYNls0Hd/pMgW5d3MwZ70l3pviKanSa3sjPeHtsLga
+         Dn2KOn/ziatuN9bARR+XlFQSyPBJPXEuGLED83yMHUSp8FEcT7+Yjog/8gT8VkendGWP
+         xFDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790097633; x=1790702433;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Ox2RZ0k+DkbRVW04kS8F4kKfbRT+U8FtjRI8GPPnTMk=;
-        b=gFalcQ0kVQvsvtqVZfo8TuZNhnMXJK6xZsN0+nrQhv2lEZjpzOLGzkBDm74NtDMuuo
-         ccK4LTm2CD3CP/vhbePX7K9+xDBfR34hEYc3JcWObj1wzn1KPI6RsTX4p/lMNJ/Nsar7
-         7JIsOsfFVe+UdYjAbBX5kYOS3Q4EDpMvtJ0Th4F7CukdZpNZvJa4WowW/zIQ19cpAPMv
-         AJ9z1cjQ/qT4FQxv3UjGkq+giQAbW/GnfpIzGb3OlLCY3ol9nQy4P6COfWXHb1uSc/7h
-         MbOHGEft63aEYVjn6NfDJPkH7n5dsOrpHNOiI42qgliQ8y3ZDrUrqu59t0ymciUPb4tP
-         m2sQ==
-X-Gm-Message-State: AFuF++mBz8OKxF+83iVr1VSPIibdYzlEuIatNYST2w06+zXVUXXAaORO
-	CDEYxHuZYk/cOg8tug4a87Uh+lw2z9AEE1p8bs4Lkk4fCyyoLLVVUBw8ieZl76vDjTQQCzBOi1e
-	7GDLxEhw=
-X-Gm-Gg: AYBFou2HAt5H+FGDPejFrdlb0o1WGeP1q39z19qCl/iWmc/VBAYFyADfsugiiBLkO2q
-	vZ2X+C3andSfcJX+J7dRPx1JdnWRWABIwQIHAHDXoTXWj1LHC3i6/y8cEaA1eE2rv1SjoTurgCt
-	tgJrhjpFxULh/2uB1Dz/eQqCnyuDHxIzjg0VvTCp2jLQZDkVmiwL0PvQSWmp93uZHCDYqA5IkGs
-	MUK5IlHeAZ9FEFpinY2Y8HfkI4ImIYC8XH7EVpoTObksr15TIykA/Gfy0MlKyS7WtHtwZ1GdQxe
-	mAYj3KpLs1X/SnBG5YhPWKjjf9EGceu+lo0R7v7FJH2I95mHP5z+eKi1sMRlMVlOZKa19yfDhnq
-	pTDnjcIYIBksvkE0PvREv/b0cNqMHNpYIT3Lio6sfk0jCBSbKlVfRs9mjqky+mToW0QjI118tfZ
-	ubCzMkxmBmGQ4HxKEVc/JeCetcoF8pQQJ8USn/uEp3GOc7zuZEu8xFbwAG+QviZHD8HV2ZP5D2o
-	yZOiTicLh3EVQWregc6Co5jUvjo/WJa07Ww9ARgCA==
-X-Received: by 2002:a17:90b:3e4b:b0:39e:6c69:34d4 with SMTP id 98e67ed59e1d1-3a07e793f0dmr98798a91.56.1790097632838;
-        Tue, 22 Sep 2026 10:20:32 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790097632; x=1790702432;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=m73w8MScEFOpXNoHT5D1Hw0tXoHQrkRbgHhw9/iqEPI=;
+        b=W5zSFYie93NP3JeMUpnR0qS8M2qShqXN+Jvr++ayQ7USWbZyJR7wdd0sZOBhN8sopL
+         kJW3J0AR9nFq7gzZFXEhXcc89uZFhzuV5W3Dhbplz+ocYEojIrJWnik60WCi3TXbar/U
+         hngXoDTsGjduGW6V/z1rxjcFw6AohGhfEPUkXF4R1FSk8Brzwfup6vx6carUg9XXyLQC
+         0bYo3qWK9f/NUOZgqjk/N9YrlF0Ix18uJGjmDzeNpXOdiexnlxSR9GVvO/LQnmGlC7ph
+         ddF2YnnPQF2CySD+K80LYIfLnKJRq9CecERnBQAiwtrzzq+ao2CJ7/G9Xxu0h1aVC4WP
+         r3Wg==
+X-Gm-Message-State: AFuF++nNwObYXgIjgVdRKOZ39U2sWXkZhmx74a1qVNX6xh/sjMpfPEJV
+	jHKTAn259hlX9810+d3QM2YOrxdFUOU7SGHWc8IRW50OR7yD6YEoiqDwA7BaAQT4T/888+xNVhW
+	aSRas
+X-Gm-Gg: AYBFou3OvMfoMAtLjQtfEGp7B9Gz81ygjGozXRXWSTuOElboXwc94vl94ZP+ZSDJfQP
+	myCMKjlN+jFWSKo2sBuI5UHjoe3cVs1wnuroQbnQPXvc+YzK7v5DROMPp/GQz5Fs9blraoYvNLM
+	RMEXkgt662Z0+Rt03ZUVOSVaqcngSVX/D3JphuQvtly5HJ6/dNme10xtQl8jTAg+px+SsCrcMQ9
+	8iWKLymCfKT7HPQv7abMHpbYQbbWJNjBpv5ui3IEvAZblvzY2HKCcUqQ8qfgcoYpDhYMAW4QzXk
+	5fNcS2nebNHVy3yS7vNU9B5ZTuHcQBIiHwE2O5uIQUy+NqBokYrCaCyilJvpqB1LMyKyqRNjyxr
+	IP+p1AghVo6mb5vRAj3IvuugCfr3LKzBcn60JGR1DVuVF+hc5TNaRgau4TfzxDuo+AdgVpGFkNE
+	qiSqhyLPEDEfg4YUgpHWJAYu6+c+erEeevqiNrEwlRV7RCC6l8xSGR0nlnw803KFzezfopDDXot
+	Q/tgEYqX8EAO38XQ7TC1pijADJ/kIEIAnGDk//2Ig==
+X-Received: by 2002:a17:90a:d64f:b0:3a0:7d88:c2ac with SMTP id 98e67ed59e1d1-3a07e65d0bemr104505a91.18.1790097631698;
+        Tue, 22 Sep 2026 10:20:31 -0700 (PDT)
 Received: from alpine05.ht.home (69-172-153-146.cable.teksavvy.com. [69.172.153.146])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a06cb7159fsm1774824a91.4.2026.09.22.10.20.31
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a06cb7159fsm1774824a91.4.2026.09.22.10.20.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2026 10:20:32 -0700 (PDT)
+        Tue, 22 Sep 2026 10:20:31 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -67,15 +65,11 @@ Cc: ast@kernel.org,
 	memxor@gmail.com,
 	daniel@iogearbox.net,
 	netdev@vger.kernel.org,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Nicholas Carlini <nicholas@carlini.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>
-Subject: [PATCH bpf v2 01/11] bpf: Fix bounds check for skb-backed dynptrs
-Date: Tue, 22 Sep 2026 17:20:18 +0000
-Message-ID: <20260922172028.6269-2-emil@etsalapatis.com>
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf v2 00/11] skb/arena bugfixes
+Date: Tue, 22 Sep 2026 17:20:17 +0000
+Message-ID: <20260922172028.6269-1-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260922172028.6269-1-emil@etsalapatis.com>
-References: <20260922172028.6269-1-emil@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -84,47 +78,44 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The skb_pointer_if_linear() function checks whether a
-memory region of length len starting at offset off into
-the skb is in the linear area, and returns a pointer to
-the region if so. The check currently subtracts between
-skb_headlen and offset of the check, and since skb_headlen
-is unsigned the subtraction can underflow. This causes the
-bounds check to spuriously pass and generate an arbitrary
-pointer of the form *(skb->data + off).
+Set of verifier-focused bugfixes related to dynptrs, SKB
+management in BPF, and dynptrs.
 
-The only user of this helper is currently skb-backed BPF
-dynptr code. Returning the wrong pointer leads to the
-dynptr erroneously being backed with invalid memory.
-
-Ensure the subtraction cannot underflow, and fail the check if
-it would. Use u64 arithmetic to also prevent overflow when
-calculating (skb_headlen(skb) - off) since off is unsigned.
-
-Fixes: 6f5a630d7c57 ("bpf, net: Introduce skb_pointer_if_linear().")
-Reported-by: Nicholas Carlini <nicholas@carlini.com>
-Reviewed-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
----
- include/linux/skbuff.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-index 421f6fc45..c8e219030 100644
---- a/include/linux/skbuff.h
-+++ b/include/linux/skbuff.h
-@@ -4372,7 +4372,10 @@ skb_header_pointer_careful(const struct sk_buff *skb, int offset,
- static inline void * __must_check
- skb_pointer_if_linear(const struct sk_buff *skb, int offset, int len)
- {
--	if (likely(skb_headlen(skb) - offset >= len))
-+	unsigned int uoffset = (unsigned int)offset;
-+
-+	if (likely(uoffset <= skb_headlen(skb) &&
-+		   (unsigned int)len <= skb_headlen(skb) - uoffset))
- 		return skb->data + offset;
- 	return NULL;
- }
+v1 -> v2 (https://lore.kernel.org/bpf/20260916050830.8774-1-emil@etsalapatis.com/)
+
+- (01/11) Adjust typecasting to just be unsigned int (Jakub)
+- (09/11) Test for the new field in stacksafe when comparing registers (bot-ci)
+- (01/11, 03/11) Added Reviewed-by by Jiayuan
+
+Emil Tsalapatis (11):
+  bpf: Fix bounds check for skb-backed dynptrs
+  selftests/bpf: Test dynptr slices past end of skb
+  bpf: Fix bpf_sock context code generation
+  selftests/bpf: Add selftests for rx_queue_mapping context access
+  bpf: Reject pkt arguments in mutating subprogs
+  selftests/bpf: Test rejection of pkt args to mutating subprogs
+  bpf: Prevent variable arena/non-arena register contents
+  selftests/bpf: Test for mixed arena/nonarena code paths
+  bpf: Track whether dynptr type is known
+  bpf: Track skb memory invalidation by packet-backed dynptrs
+  selftests/bpf: Test dynptr slice invalidation on skb clobber
+
+ include/linux/bpf_verifier.h                  |   5 +
+ include/linux/skbuff.h                        |   5 +-
+ kernel/bpf/cfg.c                              |  10 +-
+ kernel/bpf/states.c                           |   1 +
+ kernel/bpf/verifier.c                         | 112 +++++++++--
+ net/core/filter.c                             |   7 +-
+ .../testing/selftests/bpf/prog_tests/dynptr.c |  10 +
+ .../testing/selftests/bpf/progs/dynptr_fail.c | 183 ++++++++++++++++++
+ .../selftests/bpf/progs/dynptr_success.c      |  20 ++
+ .../selftests/bpf/progs/verifier_arena.c      |  49 +++++
+ .../bpf/progs/verifier_global_ptr_args.c      |  53 +++++
+ .../selftests/bpf/progs/verifier_sock.c       |  38 ++++
+ 12 files changed, 475 insertions(+), 18 deletions(-)
+
 -- 
 2.54.0
 
