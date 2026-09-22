@@ -1,143 +1,183 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f35.google.com (mail-wr2-f35.google.com [74.125.225.99])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914CB23ED6A
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 08:59:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C38AD4D7D46
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 09:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790067542; cv=none; b=JqX0d7ztZEewD+GXZmAmiu0U5ILZtWbQvpNSR1BviCqNed/H+mcMnBrDyNhYC5woE5NIf3ilY4b/eSRsQdcy5etFF83vYhXuXRBcB76Df1cH/cSdaUNrQWIn++eQt8syOlS/Q5SAKGnD+AKuxW9FSvT4a3gfvP1pv/i+vxYcE7o=
+	t=1790067836; cv=none; b=O8BWM0a2ej0o3sQlw0UpL8HaHBaU1CSupx4/fHSpnYXAGzZTzJ1Z4sBiaA14SfPwhXy+x8uJzEOsO3oW+QborFdlRGJv6tlI9X+8w8U1Coob6IUms+WUUZvY48m13Yc45W2eot7d67r4fhtESFQNt7kXMyoqAkirfS2ss0WTgEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790067542; c=relaxed/simple;
-	bh=VVv2kDJFKReIrqp9pGYKuq9Wml1yMmmsjdn494SXU+s=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=CyJrMAxfB90J+/60nhru5PvcRf6uh6F6IQjgc7MusjdssyZIEwcKMFch3hLevHH6BcsXmzdEVapNteDWbfvuGgilBi7KLQdK5v8R3/TWKHyC/HRsAhNmTdlRDIQDEEP20QLbgwTj8x+aKqWIuvGaOKUoD0Z9qsliRrD4BybCyZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ahsjZ24a; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790067836; c=relaxed/simple;
+	bh=VTfd+kx4IzMN4HwWKAFk70C0fOTr88FdJxqeHWCpGr0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gyYtt8ql2sbDhDXMh6xREkyLDeIkgpTs7cee6fT43VJjR2HViTmCUUkrSSYkavQbaKPNoYqD1t+yf+lZF64ckNjMYs53t/zJM8hCCZvDCWAqGpSlL9K0+/IP9CSmTyLhGVF2De9Fn7GIDWeARwonZeww/Y12lGnkE9kD8GkzCjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jm1bRRHs; arc=none smtp.client-ip=74.125.225.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ahsjZ24a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1195F1F000FF;
-	Tue, 22 Sep 2026 08:59:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790067541;
-	bh=57Fe0R4HbaOrWlQHd5p7lQyWokwH9WcFtjpHtgiS9CU=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=ahsjZ24ahMvhGP3ILjwfj+xlwIWQsaYAbjGOQ3QUdjhoTyG9UQq7Zc/lmiTRVcosC
-	 0oh7TFbsYIqGULgL+AuqHObcD/VDBvqNZ9ss2zquSVoW2pwePBVwYJuknfGsNoUj4M
-	 ccZAl9QOwZQW8iRDHfuvlRru/RYB9NBoclwwkN9cnKvaOEec8OWPiR2mPwnYPSfsTu
-	 QEKTzvKHu2EnEMebdWS5YvWeY49Px9vSQQHZH5IoDeb+F4wmrABXzi7VHqymhWlhIa
-	 Aflk0u0TAx/0XgHNpBpIxsrZQORoMsKkRdkwx7UbjXPvX77N30hKsMFhUiPJYqiRZA
-	 o+IvepRJ9GYsQ==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next v2] net: stmmac: rework stmmac_rx to support
- XDP rx multi-buff
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Lorenzo Bianconi" <lorenzo.bianconi@oss.qualcomm.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260921-stmmac-rx-mb-v2-1-6e826e1ff306@oss.qualcomm.com>
-References: <20260921-stmmac-rx-mb-v2-1-6e826e1ff306@oss.qualcomm.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 22 Sep 2026 08:59:00 +0000
-Message-Id: <20260922085901.1195F1F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jm1bRRHs"
+Received: by mail-wr2-f35.google.com with SMTP id ffacd0b85a97d-4885a1480a2so1049704f8f.3
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 02:03:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790067833; x=1790672633; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=hBmqSfthoDkMfU3pfMgMsdFTjh/btwHVLwZmR3sypjM=;
+        b=jm1bRRHsT98+lIiHTAmpF08989N4++WC+xUV1gRF28bGPVJ8MW6u7k9GqKizMK4utI
+         OtRt339ZNJdyhBR6mwWhDpJFJpT2BOlbiXWxqjPvi4hkvOgf0h4Zowi/UyhoQt3/zRQc
+         kvCVLazwg9/m4lcx71bK6aJJTxg8z9SYj4UJzXIoFycQMOwRytFZd1CWgAqCcFPkQedk
+         hQaKq580USnnBWlba0Z989PefR+/SPPvxu8i5v6q8zDjAfwVsNgdtMmNbJZLW/EBXiws
+         vvbDNUpVaLD5mGKuu6TdUw3If5PaQdDSmr9sgyLC9MpDXhCERPN98lRNk3Iao8s04AKH
+         Tubw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790067833; x=1790672633;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hBmqSfthoDkMfU3pfMgMsdFTjh/btwHVLwZmR3sypjM=;
+        b=CPwbcmJ1P+LsWFsfIoc2BXPj3HUvkgwehDQ9Ed/oclh1dzP/3dHfgxBTH8Pb/yjh8f
+         OD2l2SrmIeU2Qij5AQ08Ab+LFZjTocDCy93+FuCALhMk+IIGab8ejH9DsszjfxiixJqj
+         dVP7iBzQUfCm55XgEwE8gV8NzPEmSGPWTfTtYzflsAcMslh+aWW2LGAVjYH0qbZePIEV
+         sq8hMHqmsGIJtVpEPDh5Cl8kCt3rGmqlvFgxX3rNYz+tNXzbsJPm9GP25qFGRRQQuGaO
+         oqxSikSIZoShvEiC5Tmh+c08znjqaM/FwFb3TEOO2bGpBCP3sI+YGIEpwil4jkIsgIKf
+         WPdw==
+X-Forwarded-Encrypted: i=1; AKwUvBwd/NOAWkpV7vaydjRFC8NUpSI6bT9UYWrNnu8TSOMAuH9MWN5waT+EXMl77nx2mlOSHjE=@vger.kernel.org
+X-Gm-Message-State: AFuF++kIKGvPZm48QfcVfW/9/hPfTTEg67/J2vVLKjdyb9uBMh3RYSzF
+	xiScJb5kNbnQ4341f5IIcSetuCxqlT/IsYGYhgn/d/y0xZeTEXecnjKJ
+X-Gm-Gg: AYBFou3jbIKggFtyPaSY6CeLD3qtPg9qn8D2FcxkGKO9WuqdmiH7V1Xr8i6uoTi3WbL
+	TsGmCSMd0/sePmWUiFFc2jFs8c3tBwdWQDDntrQ7qadqdByRLHhKFxl5qo8xwfKkk+OCfvkYTJb
+	gmPqcpwkdqw0jZOvIZ1KvScO2BHYDXqWZ17JYlJgOKul4MkVNZX6YpIvJyBEz5Hm9q7keOwIGyg
+	ipaZGx+0lzX9NPwPUzvD+57TtjfN8i3PvUA4bvuE3TC81wDbTIozXpjxqV243pVV40qhnzs4nj0
+	TaZ4oJMBlBveUraxHzMqZRVQuGJmgkyoqO3Ps7C5qgCgoTrnx/SyniYtPqwUpDjhKzNX+o+tY/l
+	q7bsq1x1wcp4UQcsViYxVR2cWefUcdyaXOy7x0bIG2XaYQHGgM65Pxui/dRkD7vRSLsP2zGhl+g
+	0anLS1viagL3hKobufR3sRvrDIlZEaoKBj93z0VQsGPGJzHfV58ej23KsOndsv3S91b6BaUHvU0
+	sV9dv6CTbU5jSmd8aV2NHTyU9V+rD05GoM=
+X-Received: by 2002:a05:600c:310d:b0:49d:15b9:2a2a with SMTP id 5b1f17b1804b1-49fc5721b9dmr200390075e9.10.1790067832375;
+        Tue, 22 Sep 2026 02:03:52 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fdaaf0074sm34525095e9.3.2026.09.22.02.03.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2026 02:03:52 -0700 (PDT)
+Date: Tue, 22 Sep 2026 10:03:51 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Jim Cromie <jim.cromie@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes
+ <ljs@kernel.org>, Kees Cook <kees@kernel.org>, Masahiro Yamada
+ <masahiroy@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] kallsyms: Match compressed tokens on the fly
+ during binary search
+Message-ID: <20260922100351.04555f43@pumpkin>
+In-Reply-To: <20260922-ksyms-tune-v2-3-a333ee31eac7@gmail.com>
+References: <20260922-ksyms-tune-v2-0-a333ee31eac7@gmail.com>
+	<20260922-ksyms-tune-v2-3-a333ee31eac7@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
-s) to consider:
-- [Medium] net: stmmac: missing drop accounting when XDP fragment addition =
-fails
---
+On Tue, 22 Sep 2026 01:19:21 -0600
+Jim Cromie <jim.cromie@gmail.com> wrote:
 
-commit ec049e650a3e45a0def65bd264e60d42d99ff7f9
-Author: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-
-net: stmmac: rework stmmac_rx to support XDP rx multi-buff
-
-This commit builds the xdp_buff by accumulating descriptors so the XDP
-program runs on the full packet. It saves the state in rx_q->state across
-NAPI poll boundaries and builds the skb from the head buffer and fragments.
-
-Link: https://lore.kernel.org/r/20260918-stmmac-rx-mb-v1-1-0b4517d404af@oss=
-.qualcomm.com
-
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
-net/ethernet/stmicro/stmmac/stmmac_main.c
-> index bf9e7e4cb1c31..7d1149511c55d 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-
-[ ... ]
-
-> @@ -5866,6 +5932,33 @@ static int stmmac_rx(struct stmmac_priv *priv, int=
- limit, u32 queue)
->  			xdp_init_buff(&ctx.xdp, bufsz, &rx_q->xdp_rxq);
->  			xdp_prepare_buff(&ctx.xdp, page_address(buf->page),
->  					 buf->page_offset, buf1_len, true);
-> +			first_desc =3D false;
-> +			buf->page =3D NULL;
-> +		} else if (buf1_len) {
-> +			error |=3D !stmmac_build_xdp_frags(priv, rx_q, buf1_len,
-> +							 buf->page,
-> +							 buf->page_offset,
-> +							 dma_dir, &ctx.xdp);
-
-[Severity: Medium]
-When stmmac_build_xdp_frags() returns false, the error flag is set.
-
-This could happen when receiving large frames (e.g. Jumbo frames) on hardwa=
-re
-configured with small DMA buffers, leading to many descriptors per frame.
-
-Will this cause the packet to be silently dropped without updating
-rx_dropped or rx_errors?
-
-> +			buf->page =3D NULL;
-> +		}
+> kallsyms_lookup_names() runs a binary search across kallsyms_names[],
+> a packed array of ~130k encoded kernel symbols.  For each of the ~17
+> comparisons in the search, it currently decompresses the candidate
+> symbol into a temporary buffer on the stack before calling strcmp().
+> 
+> Comparing raw tokens directly in compressed space is impossible.  The
+> BPE token table assigns values by frequency, not alphabetical order
+> (e.g. token 0x05 might expand to "zebra" while 0x42 expands to "apple"),
+> so comparing raw token values scrambles lexicographical order.
+> 
+> However, full string expansion is equally wasteful: roughly 16 of the
+> 17 binary search steps fail within the first two characters.
+> 
+> Introduce kallsyms_strcmp_symbol() to compare ASCII queries against
+> compressed tokens on the fly.  It walks kallsyms_token_index and
+> kallsyms_token_table incrementally, matching characters directly and
+> bailing out on the first character mismatch without expanding subsequent
+> tokens.
+> 
+> This optimization:
+> 
+> 0. Avoids decompressing non-matching tokens, short-circuiting ~94% of
+>    binary search character expansions without adding any tables in
+>    .rodata.
+> 
+> 1. Drops the 512-byte namebuf buffer from the kernel stack in
+>    kallsyms_lookup_names().
+> 
+> 2. Leaves sequential address ordering and kallsyms_expand_symbol()
+>    streaming invariants intact for /proc/kallsyms and table walks.
+> 
+> Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+...
+> +/*
+> + * Compare an uncompressed ASCII string against a compressed symbol table entry.
+> + * Returns negative if name < sym, positive if name > sym, 0 if equal.
+> + * Exits immediately on the first mismatched character without decompressing
+> + * the rest of the symbol name.
+> + */
+> +static int kallsyms_strcmp_symbol(unsigned int off, const char *name)
+> +{
+> +	int skipped_first = 0;
+> +	const char *tptr;
+> +	unsigned int len;
+> +	const u8 *data = get_symbol_data(off, &len);
 > +
-> +		if (buf2_len) {
-> +			error |=3D !stmmac_build_xdp_frags(priv, rx_q, buf2_len,
-> +							 buf->sec_page,
-> +							 buf->page_offset,
-> +							 dma_dir, &ctx.xdp);
-> +			buf->sec_page =3D NULL;
-> +		}
+> +	while (len) {
+> +		tptr = &kallsyms_token_table[kallsyms_token_index[*data]];
+> +		data++;
+> +		len--;
 > +
-> +		if (likely(status & rx_not_ls))
-> +			goto read_again;
+> +		while (*tptr) {
+> +			if (skipped_first) {
+> +				int diff = (unsigned char)*name - (unsigned char)*tptr;
 > +
-> +		if (unlikely(error))
-> +			goto error_free_frag;
-
-[ ... ]
-
-> @@ -5989,13 +6036,24 @@ static int stmmac_rx(struct stmmac_priv *priv, in=
-t limit, u32 queue)
->  		rx_packets++;
->  		rx_bytes +=3D len;
->  		count++;
-> +		continue;
-> +error_free_frag:
-> +		if (!first_desc) {
-> +			stmmac_xdp_put_buff(rx_q, &ctx.xdp, -1);
-> +			first_desc =3D true;
+> +				if (diff != 0)
+> +					return diff;
+> +				name++;
+> +			} else {
+> +				skipped_first = 1;
+> +			}
+> +			tptr++;
 > +		}
-> +		dev_kfree_skb(skb);
-> +		skb =3D NULL;
-> +		count++;
+> +	}
+> +
+> +	return (unsigned char)*name - '\0';
+> +}
 
-[Severity: Medium]
-If we reach this teardown path due to an error, the frame is consumed and
-the polling count is incremented, but no interface drop statistics appear to
-be updated.
+Since len can't be zero you can move the test to the bottom and remove the
+skipped_first test completely. Something like:
 
-Could this make debugging MTU or fragmentation issues difficult, since drops
-(such as exceeding MAX_SKB_FRAGS) would be invisible to monitoring? Should
-rx_dropped or rx_errors be incremented here?
+	tptr = &kallsyms_token_table[kallsyms_token_index[*data++]] + 1;
+	for (;;) {
+		do {
+			int diff = (unsigned char)*name++ - (unsigned char)*tptr++;
+			if (diff)
+				return diff;
+		} while (*tptr);
+		if (!--len)
+			break;
+		tptr = &kallsyms_token_table[kallsyms_token_index[*data++]];
+	}
+	return (unsigned char)*name;
 
->  	}
+Also 'char' is now 'unsigned char' in all kernel builds you don't
+need the casts.
+But I'd make the types explicitly 'unsigned char' just in case.
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260921-stmmac-rx-=
-mb-v2-1-6e826e1ff306@oss.qualcomm.com?part=3D1
+David 
+		
+
+>  
+>  /*
+>   * Find the offset on the compressed stream given an index in the
+...
