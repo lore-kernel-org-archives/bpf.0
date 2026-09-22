@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3040154DAF2;
-	Tue, 22 Sep 2026 13:00:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A25A550DAC;
+	Tue, 22 Sep 2026 13:01:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790082060; cv=none; b=YR5eA8gQ1pvDCRtzveLULToYH2UShvdxypXyeK3QI863R0ENKOCy9t83AIjJ2C8NLWa4/vUzY77lXAgulUdiuzsurphRej87mwO8Dkn1kWoX8b9MEm2XeNOO6TN6+UObMw1ZbMSvZxNIoE3OJ/EsdgxhTnnaXlnXKFw7Vmjs1sY=
+	t=1790082062; cv=none; b=dPQHA9F6ILnP/ZfEd7IPlkAkpYeg+0KKvWvlYz6YXTgpr+CF4+YM0ljIje3hAQo3ufgsTbTV5cN8UuK/9jL37GGv7YgAsW175P0gjoVDslVyyoDu05vzrbOsYUn+J2s9XbUkVWfZ+EC/Kic6aP+gMoeTdTZmbxGXa6R+iLjw2wA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790082060; c=relaxed/simple;
-	bh=DqDpdIsUd+jtuEVLbDym52RxrrtoVHe82WeatP1LnZ8=;
+	s=arc-20240116; t=1790082062; c=relaxed/simple;
+	bh=TnmBcq19iPivSY1KngWuLjMnr/g513y72ncpsujykOo=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Jwobyo6jG7b0ercvzXmdKYFZ+431J/xM/hpWWtqRdmCx/Ohl0fLxourOk0XiW8WibVslZEzSGaG3aWMMEzfMI1xgYZn9igU/zfiqud5tHEBrkdLFtDlVHkxI23H5UrHrYVcBXq52OvzbPrKRjp6R7tN578gfpsT3BCNStFGdL1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GbCExJVh; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=hTH26OdUwNGQlARzInZr+qEnlqSrB1MzF9RSM9ouGF3sMhGRfOYaqz0vUiiM17wBrJ0/oSLF1z+ZyskmQpRIf7S/YPQ2RbfRdH1b0u57qfL0evEsgvo2AA8a9du1yEXgelwAY1oYWAqbXieaxVPGi+L2iifnNrkfQbjH29JqWL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e37JHfks; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GbCExJVh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C288B1F000FF;
-	Tue, 22 Sep 2026 13:00:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e37JHfks"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE0551F008A7;
+	Tue, 22 Sep 2026 13:00:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790082059;
-	bh=PUsE9yYFqfPx684JqjlrnAsRdOemuN8nrgTdith8yn4=;
+	s=k20260515; t=1790082061;
+	bh=WFwTVnJi02mjfIgr5QoGfThRyGwmOlxJuM0wJDAdo9M=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=GbCExJVhEnJ2Oegj8CtUT6F1lylujYvC6TeY7mLJUwf4r3rcGvUKcn7LpxyobrlfV
-	 IL2nRpcq+JIXRVArIX4SfHStrYWrCjme5+rCSZJkWaJFDWpqbB1oV1zNHqeL+IZr8a
-	 l6QdFm1b4de1XzpmjzN2xl0+c6bHtCnSv1J80IKKH5fPTsM8mOgtPrhP/YUO2SwG0l
-	 NrLalpnF4eEZEyuLOhQpFj68RDPIMNLPmILeom64sTwPy0RUzNMXsW3v1b2c7Jscow
-	 LharGAJwsEpsm/35u7e9DMtaZD1MpB40jT82t2DtVDFG67eyaxL0FSgLx1B5deEhNv
-	 I4boPJiSTx/DA==
-Subject: Re: [PATCH net-next v7 13/14] misc: lan966x-pci: dts: extend cpu reg
- to cover PCIE DBI space
+	b=e37JHfksb2icoaT+Q32VrrzC0lU/t8K+26CLfF2t4cb61wNxn7kqXGBK8Nzmjru0d
+	 u7Bn5x+ADUKOeFdDmrtdoNvhD+sQROCIWXcYJTcpd3Gz7C90ozKPqDQZu85exPmTi7
+	 Tv31dQHNCz0ATMdKhulfn/gPfIsC3UV0RTqnQlY2xmlMvnb7Zbvmytz9geZKen4ZFe
+	 wlUSfLlBom8V8IYxqtTSq81TYVnbocadczji6ph6CzyAk5wk7o5K8Fs6EWgBFavOYh
+	 WTSpp5Fj0QEAR13zvQd1SL5vdyd1yne9MtwWZnNIasdFz7khRSY/O5cQTejdnemJ9N
+	 mrWvn8wuai3nw==
+Subject: Re: [PATCH net-next v7 14/14] misc: lan966x-pci: dts: add fdma
+ interrupt to overlay
 From: netdev-bot+sashiko@kernel.org
 To: daniel.machon@microchip.com
 Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
@@ -38,10 +38,10 @@ Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
  gregkh@linuxfoundation.org, mohsin.bashr@gmail.com, richardcochran@gmail.com,
  netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org
-Date: Tue, 22 Sep 2026 13:00:57 +0000
-Message-ID: <179008205732.2160803.970343877489221523@kernel.org>
-In-Reply-To: <20260918-lan966x-pci-fdma-v7-13-0ecc179c8a2c@microchip.com>
-References: <20260918-lan966x-pci-fdma-v7-13-0ecc179c8a2c@microchip.com>
+Date: Tue, 22 Sep 2026 13:00:59 +0000
+Message-ID: <179008205925.2160803.1332329555699452493@kernel.org>
+In-Reply-To: <20260918-lan966x-pci-fdma-v7-14-0ecc179c8a2c@microchip.com>
+References: <20260918-lan966x-pci-fdma-v7-14-0ecc179c8a2c@microchip.com>
 X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,56 +58,62 @@ you want to address the nit picks below when you respin.
 
 Low priority / nit picks for your consideration:
 
-- [Low] Claimed DT-overlay/driver mismatch: the overlay whose "cpu" reg
-  is extended for the ATU registers still declares only interrupts = <12…
+- [Low] Concern retained for combined policy, but my verification says
+  FALSE POSITIVE.
 
 --
 
-misc: lan966x-pci: dts: extend cpu reg to cover PCIE DBI space
+misc: lan966x-pci: dts: add fdma interrupt to overlay
 
-This grows the "cpu" reg region of the lan966x switch node in the PCI
-overlay from 0x100000 to 0x800000 so the iATU outbound window registers
-at offset 0x400000+ fall inside the mapping.
+This adds OIC interrupt 14 to the switch node of the lan966x PCI device tree
+overlay and names it "fdma". With the name present, the lan966x driver picks
+up the FDMA interrupt and uses the FDMA-based injection/extraction path for
+PCIe instances.
 
 > diff --git a/drivers/misc/lan966x_pci.dtso b/drivers/misc/lan966x_pci.dtso
-> index 7b196b0a0eb6..7bb726550caf 100644
+> index 7bb726550caf..5bb12dbc0843 100644
 > --- a/drivers/misc/lan966x_pci.dtso
 > +++ b/drivers/misc/lan966x_pci.dtso
-> @@ -135,7 +135,7 @@ lan966x_phy1: ethernet-lan966x_phy@2 {
+> @@ -141,8 +141,9 @@ switch: switch@e0000000 {
 >  
->  				switch: switch@e0000000 {
->  					compatible = "microchip,lan966x-switch";
-> -					reg = <0xe0000000 0x0100000>,
-> +					reg = <0xe0000000 0x0800000>,
->  					      <0xe2000000 0x0800000>;
->  					reg-names = "cpu", "gcb";
->  
+>  					interrupt-parent = <&oic>;
+>  					interrupts = <12 IRQ_TYPE_LEVEL_HIGH>,
+> +						     <14 IRQ_TYPE_LEVEL_HIGH>,
+>  						     <9 IRQ_TYPE_LEVEL_HIGH>;
+> -					interrupt-names = "xtr", "ana";
+> +					interrupt-names = "xtr", "fdma", "ana";
 
 [Severity: Low]
-At this commit the same switch node still only declares:
+This isn't a bug, but would it be worth spelling out in the commit message
+that this line alone changes behaviour for every existing PCIe deployment?
 
-	interrupts = <12 IRQ_TYPE_LEVEL_HIGH>,
-		     <9 IRQ_TYPE_LEVEL_HIGH>;
-	interrupt-names = "xtr", "ana";
+The overlay is built into the module (drivers/misc/Makefile adds
+lan966x_pci.dtbo.o and lan966x_pci_load_overlay() applies it from
+__dtbo_lan966x_pci_begin), so there is no way for a user to opt out of the
+new name.
 
-so lan966x_probe() does not find a named "fdma" interrupt:
+In lan966x_probe() the presence of the name is the only thing that selects
+the data path:
 
 	lan966x->fdma_irq = platform_get_irq_byname(pdev, "fdma");
-	if (lan966x->fdma_irq > 0) { ... lan966x->fdma = true; }
+	if (lan966x->fdma_irq > 0) {
+		...
+		lan966x->fdma = true;
 
-and lan966x_fdma_pci_init() returns early before the ATU setup:
+and lan966x_probe_port() then derives the advertised MTU ceiling from it:
 
-	if (!lan966x->fdma)
-		return 0;
+	dev->max_mtu = lan966x_is_pci(lan966x) && lan966x->fdma ?
+		       FDMA_PCI_MAX_MTU : ETH_MAX_MTU;
 
-which leaves the enlarged "cpu" window without a consumer until the next
-patch in the series, "misc: lan966x-pci: dts: add fdma interrupt to
-overlay", adds <14 IRQ_TYPE_LEVEL_HIGH> and the "fdma" name to this node.
+So after this patch PCIe ports report FDMA_PCI_MAX_MTU instead of
+ETH_MAX_MTU, and ndo_change_mtu rejects values above that cap.
 
-Is it worth folding the two overlay changes into one patch, or ordering
-the interrupt patch first, so the tree is never in the intermediate state?
-The driver falls back to register based extraction/injection in the
-meantime, so this looks harmless either way.
+FDMA_PCI_MAX_MTU is derived from PAGE_SIZE << MAX_PAGE_ORDER, which the
+preceding commit "net: lan966x: add PCIe FDMA MTU change support" documents
+as 15498 on a 4KB-page, MAX_PAGE_ORDER=10 build, i.e. above any practical
+jumbo value, so the change looks intentional and harmless in practice.
+Would a sentence in this commit message noting the switch to FDMA and the
+resulting max_mtu change make the series easier to bisect against later?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260918-lan966x-pci-fdma-v7-0-0ecc179c8a2c%40microchip.com
