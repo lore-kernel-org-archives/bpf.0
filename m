@@ -1,326 +1,494 @@
-Received: from mail-oo2-f39.google.com (mail-oo2-f39.google.com [74.125.231.167])
+Received: from mail-oa2-f12.google.com (mail-oa2-f12.google.com [74.125.231.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB08E3B6BE8
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 20:06:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.167
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790107602; cv=pass; b=RUsr1M3YM30oAJBgxngpmgUZwba/ECrRlaOscDTmmDENPME7KBJuERPqUnYhiLnROgL0fllJHdtP864p1FNp7iCn4usyb+4ETFjJyJuFWqVZIellqS/tnfJocYRor24592noQ+XtWGCuLGG8W/I1/mDdsKvxbBg/UfNQEdb8ioY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790107602; c=relaxed/simple;
-	bh=oopxYa8TuCfAuUvcsqnK/5H6pNeWJdkEIzvH4dGsKAk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t5pzyCfplnVb53u8HrVmtV8zv8Zn7R/W/KR9RCiANUT9B9Cl7JGL80A+8GlY3ZEdgEzQuGEu93Bqqp0835+pa4TiVwsVkPgqb9j8NutrEeKKdYk3rIg7fIpXbzR1qtq6AQlqQ7u7V/l+1ayvl4EQ7x+TtXVUHCKgJV2LGiN4oS0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZZMxZKzO; arc=pass smtp.client-ip=74.125.231.167
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7BF39A80E
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 20:08:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.76
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790107725; cv=none; b=sMLtVFhyJgd56Rif1k9Cxz0cQcwgPfPLJxX0Mkd5YHSXhsD8Bhe3PgyYJ/o20XWmTBKTqlZXvTz2GZ0HVRNepS/HzAzvXQmPFRwfmF91nxwb6O2uFP/1h3xiQ4wVSfZMxYA3BB2dD7J4SPGshxzh6667ULW674QP3EdKZkwJNkI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790107725; c=relaxed/simple;
+	bh=oV2R0UvbYfIVB77jCAXauJRFelOAEdJiPFl6JJAX4x8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=k0gqFjUW3y/4/IzQ3twyR9CnLQWICenV1LUG2EIFtsrnvkOMnRUD5+qi0/ilxt5CXb/QVu3+vx5rhxlZvcA3pCFGf5bCc6SU+mb0XYuHXwgKNbk5x2l4SkxKZ8eIl48TG2l8ZwaM/pze+CkOuFTNGDyN+U8ZPyQawdW9sI+eHIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pCRgEqE4; arc=none smtp.client-ip=74.125.231.76
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZZMxZKzO"
-Received: by mail-oo2-f39.google.com with SMTP id 006d021491bc7-6bcc0c495efso134222eaf.3
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 13:06:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790107590; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ZA2uaUqniR+03U3Cf5SMlgJsa/qdF8MJqUGR3ywSSPkSTGML9KNRtwHxuWqvfTMvuQ
-         tKKYwn8H1NPzFNzXAizkV3/zOQoWQorr7QVkYW2laV+CQbIZNdps3ohn1IdSBQeyq4ND
-         00PLDBLjm4FE+YRsq3hiRXvYmYIBSnZoFX9ejanjA3VS6aYKZP2NVv3Yhg8KYB+VtOKR
-         m2HpcHl56RZ6R2+g+0YBfSoX3DmQLj3iVnuPERybcq/8WcnVZwI6sjutLVFO0FkT2MSu
-         Nc8mPv/x1FQTrBlT6GxW5mqSkIX+NXd2RTFvZQtPo5Aq22nmCPzUzvo0pNR1mwazggOi
-         4OLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=yZYtLMrY/lz/UHlJvfGuuEXI7lAfV+4zqb2W/SZyXtg=;
-        fh=Ihki2uHo2+n7gLJjZD0E7m9aHmSrh6klQEbS31s+Ewg=;
-        b=AXocYITnOZhOIFrTmTZ5Esy+6F0fOyFWaih5eiqpEZrFGY/+4jUmkOmL7hJSe+Wgzb
-         O2jrtDw8vbKGOwQph4+810EN1wJV7nAHTqE8mRZXD88Nb+UazF9CEbAQ2gLcE9+iMV16
-         4doOWN01jl+8zJbG//hTEKddymT6hIxOqaPVUa1RLbzxrfI84x+druOymW4MxWC2Tyvq
-         PbVx1R5Jb7WqLzcjjIO8jUR4SetAF5jGz1f6zVQZ2vISxyMuWTxe5+kIqLEPImNIXaag
-         rqfrEAxq+6oBzYMdk4WCU27Yc6ZRTxBS4P8gti7LnQ4JyI9ZXdSI6K09A6xDdJb0wUrD
-         G42Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pCRgEqE4"
+Received: by mail-oa2-f12.google.com with SMTP id 586e51a60fabf-46accbdfc20so243283fac.0
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 13:08:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790107590; x=1790712390; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=yZYtLMrY/lz/UHlJvfGuuEXI7lAfV+4zqb2W/SZyXtg=;
-        b=ZZMxZKzO77KpwPSkFZi82nmn1Oo8V4s2X9Pc6+T9nk/ablgEl3V8P2lBJasvhQbV5X
-         jCz5EfVdKdxiHDOJ11uDbBEjY8lWhtBM/LVQ7bNFufGqC4DiUm4hCA2CRtazLV+vcDYd
-         pvLkJ7iLBcZQbusF5vLAPDG/dbWYYFjz/eASbHaleeJXH4yj+welt2esc6Khekugz0dL
-         3YgBxWm+uRW/m0/aNGmLP3WGirLEvGuqipYnQDnhm0eJcj5QM1rexd9GHdtJ0/DEkSx2
-         AQEIaZherzNFh4uvMumQOQNktIhbyuVfCUFaAk1XwH2xczG/6gGtmhLXxGqe+T1JUANt
-         loqg==
+        d=gmail.com; s=20251104; t=1790107707; x=1790712507; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=LBg7HSnbebtbldS1DMZtF5kZINYwBocaor4sCHxt5Tc=;
+        b=pCRgEqE4khEDpdPRa3ou3l33bl7/a+DblSU+2/H144HfKfaOlc3cPdpzVaXtD8IZfp
+         tVhJ/j+UfkjmLUiCtEC9C6GwKMkEZtxhV39AW583WJQLim/fdgeTWCinUEXgBpOw5FJ/
+         j0C0QXFIr2djUyp3zr64Fu0dzOESwKhp9Q8Mgml3jnbbVXBER6mYfbz9HJ9kvVvouJOc
+         pUgXTRqTNy9O4uNFlg1hPhvvYTZcuWc1q9s67sldmbC0osoVi7FgDUzVKuqJvGaIrLeW
+         hQC+azg+v3pgmoyvd+1LU0vw86b+rzZUhZyr2tM6liH/w1FxlT1OaEclEbAW2DMyp5Ej
+         ft9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790107590; x=1790712390;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1790107707; x=1790712507;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=yZYtLMrY/lz/UHlJvfGuuEXI7lAfV+4zqb2W/SZyXtg=;
-        b=LC2F6Mn4/Ev+P1r/H13p2e4RBba9Z7+tS4xGvVxKJWcjo4wuZahagY5GetP6W168Mf
-         y61VbNP7hEmpN5WY5hNU43nNiCfISiuCA2pbtptfM+IiUoK5J3qiViMYC73dsVOKugYd
-         wiMjDELiEzfx1bRScGnHlCQPsf1vvEdg59L7bnlPEC68JM3ENa6VExtxa9EdofgskAY7
-         MTkU1EtwdMBFgKWqZYneSfSXW53i7BoVAwV8aUEbbu7/O/H6kz/FGW/mUXxxnCPhmnVr
-         HuDwTs7jij+DL6Lw4QhyB8CuhkWJWHwhV6jCvXJHrNYaU1p3RfeKuKAck+5TYQQkzrGm
-         ftDw==
-X-Gm-Message-State: AFuF++lWyRXtdctd7FN0Y42xxFD/RZ1WEe8JDvBzFSKVaSc2IB5++eTp
-	/hV0ogmjnT+SvJpXB2ykXjjtgz4kYSmOrj0i2Grsfe31gPLTckrlXXUSiGkfSEdX/vzWX1Af32T
-	gG8UIlQJEsceHhosRHYsFnIGofFJUeFY=
-X-Gm-Gg: AYBFou2CCRfyOeXoITRGnc7LUaz/1wJCPPURTsFmd4af1oova3PZc0aqANw+krIo3n+
-	VhJqsK9M4BIbJWnTFVSMnJGvT7eIej2/svS39fopUA0b/wBTIxJnF0Jr5AwLpLfdeEKlmlB+lsn
-	OGi5hXADCnxicWTEDRBHKfQZha4x33uHVilp7T148ksmhxq2Ao1Zsv2kuxEkhnOk30HAveZGiHZ
-	ydd19U51P1fg8dLSw2KdVijiyAkW0lq6lzj0uKDtghRRTeM9kvpIy7n2F7gXSm7BvcIo+dQIZSV
-	lZvtK8oOECyY35KMOLwKA1GzY9xunbO1Ma9Hb1CMCcXvbqdtfgvN38Hd5B2i9GEvPT8KQwg=
-X-Received: by 2002:a05:6820:2909:b0:6bf:70ee:7e85 with SMTP id
- 006d021491bc7-6d2d0a2f30cmr384754eaf.27.1790107589712; Tue, 22 Sep 2026
- 13:06:29 -0700 (PDT)
+        bh=LBg7HSnbebtbldS1DMZtF5kZINYwBocaor4sCHxt5Tc=;
+        b=fUgtGUI/fdS4ROtsR5JxncuUqnoa6UnT6CGUH6KQpUY685wLUYQ0wS/VEActJKD12m
+         Bbv+MJWFKnFTzYMXFKUTPzLGTMZS7XmfMNYk7AQLEhNZcJl0iFbny5+zyokVE9y0eCD7
+         54KWiWCu1GAG+Z2Z1/pDw2BnaqOU6v3FryTQwF94E03xFcHu00/BizuaVMGB8L0bAOvy
+         4GMhkCj0d36QexoddPNLzdAC2Vq4OFESdjyutUOXfE+B/VUoJBY6hhjBl7iSnYTIDK/l
+         aepIYpy3xg8EQnH4BwQ9MOvL4RuUmdfJq4ZwRXDYgriF2e0/f1molGltGHTllL+R83ch
+         kPbA==
+X-Forwarded-Encrypted: i=1; AKwUvBySlgul/CLginTDzgs1NKGl3dVAmN3Y2LzZPfWc5zTFNlJ5KiGrSxq5/uAEIIB9Y2E6qt0=@vger.kernel.org
+X-Gm-Message-State: AFuF++ndApnQtsfQOZFc57QKixSEKVdIV47ifml/54Xmn0UStaLBoy+f
+	aDb8qpO3dT16d2aF9v1xx21rkcoza6jnXobSS6Xx5vvVeX6YYCC8JbMQ
+X-Gm-Gg: AYBFou3pYIN+F6Dk7BXJa+wMv5+0BA+krADlpUSZM1M+V8PQQAmVeMnuWn6kFA8Unzu
+	fvfcK2jpOSudpo5R3pS4wXbp6u99OSzBFGB6s90/msx3VgW8yEjGHSY4krO7Qk+oCxGpXRD/oz5
+	8GsnMWBsE7JsNB5Cp+kLzUpzLREZjUi6bBW105dhU8YXee/tVG8PyovtnGjUzM5Fh69Wutv3EFy
+	8H2ye6DCD2Q/oUrIlkkuYze8Gxup8L0hkHKkHPx/lnKcLNJDBybxDaLISfif3HQvX9FUmi+zLt1
+	M+FiXUtDgCVyk6PKjeS426d6Wp8WX/1FZ7aVqcGLeWKohJ2YeLPBXhZNRs4X7c7mqOR/ubmbE9t
+	AAEehNdqxWPfV4TZQqYNfXdDIrN+LpA7vWmpkzu16mzitwLSWqn+k5fPJHkN7A++NP4UTF9jG+T
+	DiPHfxbAu+NC5Gzh8QvKNP9MOtwuSRUT0HvJZJaY42ea7M83D4WRBN8PtuBx8Qr4M9JgbgZoOLG
+	YaK5v9qIgTSLrcElktT8aNcIHzHJuUAos4andjDnYWF9RJMxmjnYzzoGv3TNcExf3WR4MJht2Vm
+	7AoWxcimqY2G5Dhi4U9bv1c9NNlj/A==
+X-Received: by 2002:a05:6870:239b:b0:485:d31b:775f with SMTP id 586e51a60fabf-4908ab4a750mr780817fac.29.1790107707408;
+        Tue, 22 Sep 2026 13:08:27 -0700 (PDT)
+Received: from [100.82.231.29] (c-98-38-17-99.hsd1.co.comcast.net. [98.38.17.99])
+        by smtp.googlemail.com with ESMTPSA id 586e51a60fabf-4908eb9237asm564087fac.12.2026.09.22.13.08.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2026 13:08:26 -0700 (PDT)
+From: Jim Cromie <jim.cromie@gmail.com>
+Date: Tue, 22 Sep 2026 14:08:18 -0600
+Subject: [PATCH v4 1/4] kallsyms: Add test_kallsyms_perf module to
+ benchmark lookup latency
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260922172028.6269-1-emil@etsalapatis.com> <20260922172028.6269-11-emil@etsalapatis.com>
-In-Reply-To: <20260922172028.6269-11-emil@etsalapatis.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Tue, 22 Sep 2026 13:06:15 -0700
-X-Gm-Features: AcwNN1V6t4UlnptBc42tKTteOzivco_IF7aLcikzvu8F_5C3XhpW1GSKAhvgCTs
-Message-ID: <CAMB2axMWU469XKFGEkvp46R7y+Uw0p4gAK8nT9-o2zdFGu0Vng@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 10/11] bpf: Track skb memory invalidation by
- packet-backed dynptrs
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, daniel@iogearbox.net, netdev@vger.kernel.org, 
-	Nicholas Carlini <nicholas@carlini.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260922-ksyms-tune-v4-1-92acea84b911@gmail.com>
+References: <20260922-ksyms-tune-v4-0-92acea84b911@gmail.com>
+In-Reply-To: <20260922-ksyms-tune-v4-0-92acea84b911@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>, Kees Cook <kees@kernel.org>, 
+ David Laight <david.laight.linux@gmail.com>, 
+ Masahiro Yamada <masahiroy@kernel.org>, linux-kernel@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, 
+ Jim Cromie <jim.cromie@gmail.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1790107704; l=12494;
+ i=jim.cromie@gmail.com; s=20260203; h=from:subject:message-id;
+ bh=oV2R0UvbYfIVB77jCAXauJRFelOAEdJiPFl6JJAX4x8=;
+ b=4RC9VqdWCoHfhnvqxQjqjGuKtFE8tpMesrUk8A7+J44QEhTnOF5OBqOU8fJOYC7+dIna2lG1N
+ ZoOQW0suFA+BWYKk4EhY44KSQ0Za8f9KWsWJtmaG2uND9w5tKqmshhW
+X-Developer-Key: i=jim.cromie@gmail.com; a=ed25519;
+ pk=C6E5ODlPQo7ZBynATXH9wg7K6HxP0pIXyf4s38Qw0XE=
 
-On Tue, Sep 22, 2026 at 10:24=E2=80=AFAM Emil Tsalapatis <emil@etsalapatis.=
-com> wrote:
->
-> A dynptr can be backed by skb memory, and kfuncs that
-> write but also read the underlying area may reallocate
-> the backing memory in the process of pulling the skb.
-> However, the verifier does not track these calls as
-> possibly invalidating packet pointers, and does not
-> do so after their call site.
->
-> Expand the verifier to track dynptr kfuncs for packet
-> invalidation.
->
-> Fixes: 5fc5d8fded57 ("bpf: Add bpf_dynptr_memset() kfunc")
-> Fixes: a498ee7576de ("bpf: Implement dynptr copy kfuncs")
-> Fixes: daec295a7094 ("bpf/helpers: Introduce bpf_dynptr_copy kfunc")
-> Reported-by: Nicholas Carlini <nicholas@carlini.com>
-> Suggested-by: Nicholas Carlini <nicholas@carlini.com>
-> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
-> ---
->  include/linux/bpf_verifier.h |  2 ++
->  kernel/bpf/cfg.c             | 10 +++++--
->  kernel/bpf/verifier.c        | 51 ++++++++++++++++++++++++++++++++++--
->  3 files changed, 59 insertions(+), 4 deletions(-)
->
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index f57730d1d..8a9b7a2f2 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -1589,6 +1589,7 @@ struct bpf_call_arg_meta {
->
->         /* Only set by kfunc */
->         bool r0_rdonly;
-> +       bool dynptr_may_clobber_pkt_ptr;
+To evaluate optimizations and measure performance regressions across
+kallsyms lookups, add a lightweight microbenchmark module in lib/.
 
-I would suggest making it common to helper and kfunc and not specific to dy=
-nptr:
+Configure CONFIG_TEST_KALLSYMS_PERF as a built-in test (bool) rather
+than a loadable module (tristate). Building the test directly into
+vmlinux allows exercising internal kallsyms traversal APIs without
+exporting internal symbol iterators (EXPORT_SYMBOL_GPL) to modules,
+preserving kernel symbol table encapsulation.
 
-bool pkt_changed;
+The module exercises the primary kallsyms resolution paths:
+0. Name-to-Address binary search: Benchmarks lookups across common
+   kernel functions (hits) and non-existent symbol strings (misses,
+   exercising the full binary search tree depth).
 
-Then, helper and kfunc and all share this following block:
+1. Address-to-Name resolution: Benchmarks address decoding latency
+   via sprint_symbol() and sprint_symbol_no_offset().
 
-        if (meta->pkt_changed)
-                clear_all_pkt_pointers(env);
+2. Sequential table scan: Measures complete table iteration latency
+   via kallsyms_on_each_symbol().
 
-This also matches the existing changes_pkt_data terminology.
+The module exposes a num_iters parameter (default: 100,000) and a
+sysfs trigger to repeat benchmark runs on demand.
 
->         u32 kfunc_flags;
->         const struct btf_type *func_proto;
->         const char *func_name;
-> @@ -1642,6 +1643,7 @@ static inline bool bpf_is_kfunc_sleepable(struct bp=
-f_call_arg_meta *meta)
->         return meta->kfunc_flags & KF_SLEEPABLE;
->  }
->  bool bpf_is_kfunc_pkt_changing(struct bpf_call_arg_meta *meta);
-> +bool bpf_is_kfunc_maybe_pkt_changing(struct bpf_call_arg_meta *meta);
->  struct bpf_iarray *bpf_iarray_realloc(struct bpf_iarray *old, size_t n_e=
-lem);
->  int bpf_copy_insn_array_uniq(struct bpf_map *map, u32 start, u32 end, u3=
-2 *off);
->  bool bpf_insn_is_cond_jump(u8 code);
-> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-> index 842c7d1ea..cb499d19d 100644
-> --- a/kernel/bpf/cfg.c
-> +++ b/kernel/bpf/cfg.c
-> @@ -73,6 +73,12 @@ static void mark_subprog_might_throw(struct bpf_verifi=
-er_env *env, int off)
->         subprog->might_throw =3D true;
->  }
->
-> +static bool bpf_helper_maybe_changes_pkt_data(enum bpf_func_id func_id)
-> +{
-> +       return bpf_helper_changes_pkt_data(func_id) ||
-> +              func_id =3D=3D BPF_FUNC_dynptr_write;
-> +}
-> +
->  /* 't' is an index of a call-site.
->   * 'w' is a callee entry point.
->   * Eventually this function would be called when env->cfg.insn_state[w] =
-=3D=3D EXPLORED.
-> @@ -510,7 +516,7 @@ static int visit_insn(int t, struct bpf_verifier_env =
-*env)
->                          */
->                         if (ret =3D=3D 0 && fp->might_sleep)
->                                 mark_subprog_might_sleep(env, t);
-> -                       if (bpf_helper_changes_pkt_data(insn->imm))
-> +                       if (bpf_helper_maybe_changes_pkt_data(insn->imm))
->                                 mark_subprog_changes_pkt_data(env, t);
->                         if (insn->imm =3D=3D BPF_FUNC_tail_call) {
->                                 ret =3D visit_abnormal_return_insn(env, t=
-);
-> @@ -543,7 +549,7 @@ static int visit_insn(int t, struct bpf_verifier_env =
-*env)
->                          */
->                         if (ret =3D=3D 0 && bpf_is_kfunc_sleepable(&meta)=
-)
->                                 mark_subprog_might_sleep(env, t);
-> -                       if (ret =3D=3D 0 && bpf_is_kfunc_pkt_changing(&me=
-ta))
-> +                       if (ret =3D=3D 0 && bpf_is_kfunc_maybe_pkt_changi=
-ng(&meta))
->                                 mark_subprog_changes_pkt_data(env, t);
->                         if (ret =3D=3D 0 && bpf_is_throw_kfunc(insn))
->                                 mark_subprog_might_throw(env, t);
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index da110cdbc..e916ce89c 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -8278,6 +8278,7 @@ static bool is_kfunc_arg_scalar_with_name(const str=
-uct btf *btf,
->                                           const char *name);
->  static bool is_bpf_cast_to_kern_ctx_kfunc(const struct bpf_call_arg_meta=
- *meta);
->  static bool is_bpf_dynptr_clone_kfunc(const struct bpf_call_arg_meta *me=
-ta);
-> +static bool is_kfunc_dynptr_may_clobber_pkt_ptr(struct bpf_call_arg_meta=
- *meta);
->  static bool is_bpf_iter_css_task_new_kfunc(const struct bpf_call_arg_met=
-a *meta);
->  static bool is_bpf_obj_drop_kfunc(u32 func_id);
->  static bool is_bpf_percpu_obj_drop_kfunc(u32 func_id);
-> @@ -9320,6 +9321,15 @@ static int check_func_arg(struct bpf_verifier_env =
-*env, u32 arg, u32 slot, u32 p
->                 err =3D process_dynptr_func(env, reg, argno, insn_idx, ar=
-g_type, meta);
->                 if (err)
->                         return err;
-> +               /*
-> +                * These kfuncs only clobber packet pointers when their
-> +                * destination dynptr, argument 0, is backed by skb packe=
-t data.
-> +                */
-> +               if (arg =3D=3D 0 && is_kfunc_dynptr_may_clobber_pkt_ptr(m=
-eta) &&
-> +                   (meta->dynptr.type_unknown ||
-> +                    meta->dynptr.type =3D=3D BPF_DYNPTR_TYPE_SKB ||
-> +                    meta->dynptr.type =3D=3D BPF_DYNPTR_TYPE_SKB_META))
-> +                       meta->dynptr_may_clobber_pkt_ptr =3D true;
->                 break;
->         }
->         case ARG_PTR_TO_ITER:
-> @@ -11759,7 +11769,8 @@ static int check_helper_call(struct bpf_verifier_=
-env *env, struct bpf_insn *insn
->                 if (dynptr_type =3D=3D BPF_DYNPTR_TYPE_INVALID)
->                         return -EFAULT;
->
-> -               if (dynptr_type =3D=3D BPF_DYNPTR_TYPE_SKB ||
-> +               if (meta.dynptr.type_unknown ||
-> +                   dynptr_type =3D=3D BPF_DYNPTR_TYPE_SKB ||
->                     dynptr_type =3D=3D BPF_DYNPTR_TYPE_SKB_META)
->                         /* this will trigger clear_all_pkt_pointers(), wh=
-ich will
->                          * invalidate all dynptr slices associated with t=
-he skb
-> @@ -12787,9 +12798,45 @@ static bool is_kfunc_bpf_preempt_enable(struct b=
-pf_call_arg_meta *meta)
->         return is_kfunc_call(meta, special_kfunc_list[KF_bpf_preempt_enab=
-le]);
->  }
->
-> +/*
-> + * Dynptr kfuncs that may clobber packet pointers when called with an sk=
-b or
-> + * skb_meta backed destination dynptr by pulling the packet.
-> + */
-> +BTF_SET_START(dynptr_may_clobber_pkt_ptr_kfuncs)
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+---
+Changes in v4:
+- Ignore early boot invocations in param_set_trigger() when system_state
+  < SYSTEM_RUNNING to prevent NULL pointer dereference in ktime_get_ns()
+  prior to timekeeping_init() (addresses Sashiko AI review).
+- Prevent sysfs TOCTOU divide-by-zero panic: reject num_iters == 0 in
+  param setter, snapshot iters locally via READ_ONCE, and serialize runs
+  with bench_lock mutex (addresses Sashiko AI review).
+- Eliminate multi-second boot stall: add run_on_boot parameter (default
+  false) so late_initcall only runs benchmark when explicitly requested
+  (addresses Sashiko AI review).
+- Chunk lookup loops in 4096-iter batches with cond_resched() outside
+  the timing bracket to prevent preemption sleep time from inflating
+  reported latency (addresses Sashiko AI review).
 
-This set identifies kfuncs that write to dynptr-backed memory. Whether
-such a write can invalidate packet pointers is determined separately
-from the destination dynptr type. How about:
+Changes in v3:
+- Convert CONFIG_TEST_KALLSYMS_PERF from tristate to bool and drop
+  kallsyms iterator EXPORT_SYMBOL_GPL exports to preserve security
+  encapsulation (addresses Sashiko AI review).
+- Drop 'default m' from lib/Kconfig.debug.
+- Add cond_resched() every 16k iterations to avoid soft lockups.
+- Replace direct 64-bit division with div_u64() to fix 32-bit builds.
+- Guard against divide-by-zero when num_iters=0.
+- Replace tcp_v4_rcv with panic in hit_symbols to prevent failures wo
+  CONFIG_INET.
+- Switch to late_initcall for built-in invocation.
+---
+ lib/Kconfig.debug        |  10 ++
+ lib/Makefile             |   1 +
+ lib/test_kallsyms_perf.c | 302 +++++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 313 insertions(+)
 
-  BTF_SET_START(dynptr_memory_write_kfuncs)
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 134b15a44625..4b9669e64db9 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -3122,6 +3122,16 @@ config TEST_STATIC_KEYS
+ 
+ 	  If unsure, say N.
+ 
++config TEST_KALLSYMS_PERF
++	bool "kallsyms performance benchmark test module"
++	depends on KALLSYMS
++	help
++	  This builds test_kallsyms_perf to benchmark latency across
++	  Name-to-Address binary search, Address-to-Name resolution,
++	  and full table walks.
++
++	  If unsure, say N.
++
+ config TEST_DYNAMIC_DEBUG
+ 	tristate "Test DYNAMIC_DEBUG"
+ 	depends on DYNAMIC_DEBUG
+diff --git a/lib/Makefile b/lib/Makefile
+index dfab958327c5..149968ff3f6b 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -85,6 +85,7 @@ obj-$(CONFIG_TEST_RHASHTABLE) += test_rhashtable.o
+ obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_keys.o
+ obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_key_base.o
+ obj-$(CONFIG_TEST_DYNAMIC_DEBUG) += test_dynamic_debug.o
++obj-$(CONFIG_TEST_KALLSYMS_PERF) += test_kallsyms_perf.o
+ 
+ obj-$(CONFIG_TEST_BITMAP) += test_bitmap.o
+ ifeq ($(CONFIG_CC_IS_CLANG)$(CONFIG_KASAN),yy)
+diff --git a/lib/test_kallsyms_perf.c b/lib/test_kallsyms_perf.c
+new file mode 100644
+index 000000000000..03ff5f1d51c5
+--- /dev/null
++++ b/lib/test_kallsyms_perf.c
+@@ -0,0 +1,302 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Microbenchmark and correctness test module for kallsyms subsystem
++ *
++ * Measures CPU latency across:
++ *  - Name-to-Address binary search (hits & misses)
++ *  - Address-to-Name symbol resolution (sprint_symbol, buildid)
++ *  - Full kernel symbol iteration (kallsyms_on_each_symbol)
++ */
++
++#define pr_fmt(fmt) "test_kallsyms: " fmt
++
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/kernel.h>
++#include <linux/kallsyms.h>
++#include <linux/ktime.h>
++#include <linux/compiler.h>
++#include <linux/sched.h>
++#include <linux/math.h>
++#include <linux/mutex.h>
++#include <linux/minmax.h>
++
++#define BENCH_CHUNK_SIZE 4096
++
++static unsigned int num_iters = 100000;
++
++static int param_set_num_iters(const char *val, const struct kernel_param *kp)
++{
++	unsigned int n;
++	int ret;
++
++	ret = kstrtouint(val, 0, &n);
++	if (ret)
++		return ret;
++	if (!n)
++		return -EINVAL;
++
++	*((unsigned int *)kp->arg) = n;
++	return 0;
++}
++
++static const struct kernel_param_ops param_ops_num_iters = {
++	.set = param_set_num_iters,
++	.get = param_get_uint,
++};
++module_param_cb(num_iters, &param_ops_num_iters, &num_iters, 0644);
++MODULE_PARM_DESC(num_iters, "Number of iterations per microbenchmark (must be > 0)");
++
++static bool run_on_boot;
++module_param(run_on_boot, bool, 0444);
++MODULE_PARM_DESC(run_on_boot, "Run benchmark during boot (default: false)");
++
++static DEFINE_MUTEX(bench_lock);
++
++static const char * const hit_symbols[] = {
++	"_printk",
++	"schedule",
++	"vfs_read",
++	"do_sys_openat2",
++	"kernel_clone",
++	"panic",
++	"kallsyms_lookup_names",
++	"vm_area_alloc",
++};
++
++static const char * const miss_symbols[] = {
++	"nonexistent_symbol_0001",
++	"xyz_dummy_missing_symbol",
++	"__never_compiled_in_kernel",
++	"ext4_nonexistent_func_xyz",
++	"bpf_not_real_helper_stub",
++	"vfs_missing_handler_probe",
++	"tcp_v4_unimplemented_path",
++	"driver_fake_init_routine",
++};
++
++static int match_cb(void *data, unsigned long addr)
++{
++	unsigned long *out = data;
++
++	*out = addr;
++	return 1;
++}
++
++static int count_cb(void *data, const char *name, unsigned long addr)
++{
++	unsigned long *cnt = data;
++
++	(*cnt)++;
++	return 0;
++}
++
++static void run_name_lookup_bench(unsigned int iters)
++{
++	u64 t0, t1, dt_hit = 0, dt_miss = 0;
++	unsigned long addr = 0;
++	unsigned int i, nr_hits, nr_misses;
++
++	nr_hits = ARRAY_SIZE(hit_symbols);
++	nr_misses = ARRAY_SIZE(miss_symbols);
++
++	/* 0. Correctness validation */
++	for (i = 0; i < nr_hits; i++) {
++		const char *sym = hit_symbols[i];
++		unsigned long a1 = 0;
++
++		kallsyms_on_each_match_symbol(match_cb, sym, &a1);
++		if (!a1)
++			pr_err("CORRECTNESS FAILURE: hit sym '%s' not found\n", sym);
++	}
++	for (i = 0; i < nr_misses; i++) {
++		const char *sym = miss_symbols[i];
++		unsigned long a1 = 0;
++
++		kallsyms_on_each_match_symbol(match_cb, sym, &a1);
++		if (a1)
++			pr_err("CORRECTNESS FAILURE: miss sym '%s' unexpectedly found a1=%lx\n",
++			       sym, a1);
++	}
++
++	/* 1. Name search: Existing symbols (Hits) */
++	for (i = 0; i < iters; i += BENCH_CHUNK_SIZE) {
++		unsigned int chunk = min_t(unsigned int, BENCH_CHUNK_SIZE, iters - i);
++		unsigned int j;
++
++		cond_resched();
++		t0 = ktime_get_ns();
++		for (j = 0; j < chunk; j++) {
++			const char *sym = hit_symbols[(i + j) % nr_hits];
++
++			kallsyms_on_each_match_symbol(match_cb, sym, &addr);
++			OPTIMIZER_HIDE_VAR(addr);
++		}
++		t1 = ktime_get_ns();
++		dt_hit += t1 - t0;
++	}
++
++	/* 2. Name search: Non-existent symbols (Misses - 17 bsearch probes) */
++	for (i = 0; i < iters; i += BENCH_CHUNK_SIZE) {
++		unsigned int chunk = min_t(unsigned int, BENCH_CHUNK_SIZE, iters - i);
++		unsigned int j;
++
++		cond_resched();
++		t0 = ktime_get_ns();
++		for (j = 0; j < chunk; j++) {
++			const char *sym = miss_symbols[(i + j) % nr_misses];
++
++			kallsyms_on_each_match_symbol(match_cb, sym, &addr);
++			OPTIMIZER_HIDE_VAR(addr);
++		}
++		t1 = ktime_get_ns();
++		dt_miss += t1 - t0;
++	}
++
++	pr_info("Name Search Hit:  %llu ns/lookup (%llu ms total, %u iters)\n",
++		div_u64(dt_hit, iters), div_u64(dt_hit, 1000000), iters);
++	pr_info("Name Search Miss: %llu ns/lookup (%llu ms total, %u iters)\n",
++		div_u64(dt_miss, iters), div_u64(dt_miss, 1000000), iters);
++}
++
++static void run_address_lookup_bench(unsigned int iters)
++{
++	u64 t0, t1, dt_sprint = 0, dt_bldid = 0;
++	char symname[KSYM_SYMBOL_LEN];
++	unsigned long addrs[ARRAY_SIZE(hit_symbols)];
++	unsigned int i, nr_addrs = 0;
++
++	for (i = 0; i < ARRAY_SIZE(hit_symbols); i++) {
++		unsigned long addr = 0;
++
++		kallsyms_on_each_match_symbol(match_cb, hit_symbols[i], &addr);
++		if (addr)
++			addrs[nr_addrs++] = addr;
++	}
++
++	if (!nr_addrs) {
++		pr_warn("Address benchmark skipped: no test addresses resolved\n");
++		return;
++	}
++
++	/* 1. Address-to-name resolution (sprint_symbol) */
++	for (i = 0; i < iters; i += BENCH_CHUNK_SIZE) {
++		unsigned int chunk = min_t(unsigned int, BENCH_CHUNK_SIZE, iters - i);
++		unsigned int j;
++
++		cond_resched();
++		t0 = ktime_get_ns();
++		for (j = 0; j < chunk; j++) {
++			unsigned long addr = addrs[(i + j) % nr_addrs];
++
++			sprint_symbol(symname, addr);
++			barrier_data(symname);
++		}
++		t1 = ktime_get_ns();
++		dt_sprint += t1 - t0;
++	}
++
++	/* 2. Address without offset (sprint_symbol_no_offset) */
++	for (i = 0; i < iters; i += BENCH_CHUNK_SIZE) {
++		unsigned int chunk = min_t(unsigned int, BENCH_CHUNK_SIZE, iters - i);
++		unsigned int j;
++
++		cond_resched();
++		t0 = ktime_get_ns();
++		for (j = 0; j < chunk; j++) {
++			unsigned long addr = addrs[(i + j) % nr_addrs];
++
++			sprint_symbol_no_offset(symname, addr);
++			barrier_data(symname);
++		}
++		t1 = ktime_get_ns();
++		dt_bldid += t1 - t0;
++	}
++
++	pr_info("sprint_symbol:           %llu ns/lookup (%llu ms total, %u iters)\n",
++		div_u64(dt_sprint, iters), div_u64(dt_sprint, 1000000), iters);
++	pr_info("sprint_symbol_no_offset: %llu ns/lookup (%llu ms total, %u iters)\n",
++		div_u64(dt_bldid, iters), div_u64(dt_bldid, 1000000), iters);
++}
++
++static void run_table_walk_bench(void)
++{
++	u64 t0, t1, dt_walk = 0;
++	unsigned long total_symbols = 0;
++	int iter = 50;
++	int i;
++
++	for (i = 0; i < iter; i++) {
++		total_symbols = 0;
++		cond_resched();
++		t0 = ktime_get_ns();
++		kallsyms_on_each_symbol(count_cb, &total_symbols);
++		t1 = ktime_get_ns();
++		dt_walk += t1 - t0;
++	}
++
++	pr_info("Table Full Walk:  %llu ns/sym (%llu us/pass, %lu symbols scanned, %d passes)\n",
++		div_u64(div_u64(dt_walk, iter), total_symbols ? total_symbols : 1),
++		div_u64(div_u64(dt_walk, iter), 1000), total_symbols, iter);
++}
++
++static int run_kallsyms_benchmark(void)
++{
++	unsigned int iters;
++	int ret = 0;
++
++	if (!mutex_trylock(&bench_lock)) {
++		pr_warn("Benchmark already running\n");
++		return -EBUSY;
++	}
++
++	iters = READ_ONCE(num_iters);
++	if (!iters) {
++		pr_err("num_iters must be non-zero\n");
++		ret = -EINVAL;
++		goto out;
++	}
++
++	pr_info("==================================================\n");
++	pr_info("Starting kallsyms performance benchmark (iters=%u)\n", iters);
++	pr_info("==================================================\n");
++
++	run_name_lookup_bench(iters);
++	run_address_lookup_bench(iters);
++	run_table_walk_bench();
++
++	pr_info("==================================================\n");
++	pr_info("kallsyms benchmark complete\n");
++	pr_info("==================================================\n");
++
++out:
++	mutex_unlock(&bench_lock);
++	return ret;
++}
++
++static int param_set_trigger(const char *val, const struct kernel_param *kp)
++{
++	if (system_state < SYSTEM_RUNNING) {
++		pr_warn("Early boot run ignored; use test_kallsyms_perf.run_on_boot=1 or trigger via sysfs\n");
++		return 0;
++	}
++	return run_kallsyms_benchmark();
++}
++
++static const struct kernel_param_ops param_ops_trigger = {
++	.set = param_set_trigger,
++};
++module_param_cb(run_test, &param_ops_trigger, NULL, 0200);
++MODULE_PARM_DESC(run_test, "Write 1 to trigger kallsyms benchmark run");
++
++static int __init test_kallsyms_init(void)
++{
++	if (run_on_boot)
++		return run_kallsyms_benchmark();
++	return 0;
++}
++late_initcall(test_kallsyms_init);
++
++MODULE_DESCRIPTION("Microbenchmark test module for kallsyms subsystem");
++MODULE_AUTHOR("Jim Cromie <jim.cromie@gmail.com>");
++MODULE_LICENSE("GPL");
 
-> +BTF_ID(func, bpf_dynptr_memset)
-> +BTF_ID(func, bpf_dynptr_copy)
-> +#ifdef CONFIG_BPF_EVENTS
-> +BTF_ID(func, bpf_probe_read_user_dynptr)
-> +BTF_ID(func, bpf_probe_read_kernel_dynptr)
-> +BTF_ID(func, bpf_probe_read_user_str_dynptr)
-> +BTF_ID(func, bpf_probe_read_kernel_str_dynptr)
-> +BTF_ID(func, bpf_copy_from_user_dynptr)
-> +BTF_ID(func, bpf_copy_from_user_str_dynptr)
-> +BTF_ID(func, bpf_copy_from_user_task_dynptr)
-> +BTF_ID(func, bpf_copy_from_user_task_str_dynptr)
-> +#endif
-> +BTF_SET_END(dynptr_may_clobber_pkt_ptr_kfuncs)
-> +
-> +static bool is_kfunc_dynptr_may_clobber_pkt_ptr(struct bpf_call_arg_meta=
- *meta)
+-- 
+2.55.0
 
-Likewise, perhaps:
-
-  static bool is_kfunc_dynptr_memory_write(...)
-
-This keeps the two concepts separate: the set classifies the
-operation, while meta.changes_pkt_data records the effect for this
-particular call.
-
-> +{
-> +       return meta->btf && btf_id_set_contains(&dynptr_may_clobber_pkt_p=
-tr_kfuncs,
-> +                                               meta->func_id);
-> +}
-> +
->  bool bpf_is_kfunc_pkt_changing(struct bpf_call_arg_meta *meta)
->  {
-> -       return is_kfunc_call(meta, special_kfunc_list[KF_bpf_xdp_pull_dat=
-a]);
-> +       return is_kfunc_call(meta, special_kfunc_list[KF_bpf_xdp_pull_dat=
-a]) ||
-> +              meta->dynptr_may_clobber_pkt_ptr;
-> +}
-> +
-> +/*
-> + * More conservative version of the above used in check_cfg(),
-> + * where no register state exists and the dynptr type is unknown.
-> + */
-> +bool bpf_is_kfunc_maybe_pkt_changing(struct bpf_call_arg_meta *meta)
-> +{
-> +       return bpf_is_kfunc_pkt_changing(meta) ||
-> +              is_kfunc_dynptr_may_clobber_pkt_ptr(meta);
->  }
->
->  static u32 kfunc_abi_slots(const struct btf_func_model *fm)
-> --
-> 2.54.0
->
->
