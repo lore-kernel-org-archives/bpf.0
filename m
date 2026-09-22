@@ -1,88 +1,107 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f7.google.com (mail-wm2-f7.google.com [74.125.225.135])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A328337A493;
-	Tue, 22 Sep 2026 02:15:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24F5435F60A
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 02:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790043331; cv=none; b=n9Jp9yrW9n9l8uEQfSpe04jcMI5jM5fjgu0kaoWtajPCqVajk/RLA1BgkHFWeNN90iG7t2DFyr3SEzz5HYw/phPaMhwuuE36ub3p84QodlfGmqi6Cxw32i3V8F24qozDFqoGDnU3TNGUsd8UqPFrW/ulgQzZlNI4Z7bKRlwXpYA=
+	t=1790043338; cv=none; b=OycRFsaNlQaicKHw+7jtnmPNcQjknKznJ++QhhKtCTjJYFN+buqTHQjdtJ58qmtfJ7fmJOZu29e7CKUYxOFPYp1SRlwHtUCsZCOfhqTQkViOhYPgrtChkUCDfHRyhjTOoAjd6BB1yZfD2poMtagg64rzcQv7Slebx6BglN10MZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790043331; c=relaxed/simple;
-	bh=upAmf7O340LggVwD9B/khjrfXTIQE89XLpGNVVnBCE0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=I0SPz7/RTd5qDbYuAdqc/NlsgyTFFcD9q4IjllBrPRBXkoRf3ciUBcbSk9/erIB8+naIzI5zteLQvggETPd08NnzkPKxbYyxOtlYcA9O4bQTboC04xyXDaN1hZvIPcIMNTB1J7a/TQIefv9Mr/XmoPfWdavTc1dULoPPOs7BDn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f0ogEMs2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790043338; c=relaxed/simple;
+	bh=estz9036jhOCyptL6P7XbpDuYAT3nR4TDFVhFqpU4dk=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=VUExhEWAhMEtwDdCJfl8jNcjarUVLIyYKgKYma+vw1AzXbg+OXlWx5RXy8AtRlbhxSLrnQGo3/IoWjr5tmg2tLmZTj3mOUNZ6YKTvJh7trAdTtQcM0Qp8cnLcztcC3jpNDDaTy0fM0m6F/a+qpY1X1vsfmzsZAWzLG+TfTGLk8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FyvO99Ot; arc=none smtp.client-ip=74.125.225.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f0ogEMs2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A91CC1F000FF;
-	Tue, 22 Sep 2026 02:15:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790043330;
-	bh=JZJuwIbYXbTVm20ZJPRd0Ya8OsuYiYtiR7JJkaR0h50=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=f0ogEMs2n0Er94M4gC1pq94XxsBFWtTNBGlioqXZE1SA/XmhHdW7xBmEW780M45xv
-	 cBrSlFvEHIt0RkoT6JmX4s0AuWlTB0V9r+/bmELfA/VxLEnu++CNCoJrjbW5mH58yb
-	 vUA700350sQOMruXYpjhaYkXqBy+8PBnOmZgzWBy9XbTM/5XD5UjN8fs6sNwx3hEVo
-	 uDKMF+eTrQUA1K2OATCjGm86Axd2EllawzyDfyjwfnbHWO6Mzxb3/aU8T3gOHumKut
-	 RcOhmrLuKlTeIU0mpIYHUOgwmwyIev2HoluVGF+pMBS5Gn3fGr3uu4xB19ECkFRqf8
-	 gXoiwPDgaXZjw==
-Content-Type: multipart/mixed; boundary="===============1972334872518367697=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FyvO99Ot"
+Received: by mail-wm2-f7.google.com with SMTP id 5b1f17b1804b1-49e8361492fso14235365e9.0
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 19:15:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790043335; x=1790648135; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=hxB3du36QEhM+5rIVLMv9L+rOeqXn1CgyNGA4L6zhYM=;
+        b=FyvO99OtbhtCHiMy9FRpe/jYLeppGfAR74qSNENQPYpRi6JvVKLS81wUu4Z2YVicc0
+         k2kQFNMhO5IlrNN/AvY61EgJ68DWWYfcZtUa0ejkUnpSriFwypAf6EHCQkiyxV+sJPr7
+         XWrNhxX9Xiec5wtCOjPJbH7ZSbZlrps3vtehTliKvY9rl0vq+D15gqotpqzVeDGN857O
+         x2g9+98hCemKo9z7FUxYF/URRNGmm0f+KcAnPlfOgJc7O7DfQW9rKEymPDF2hnc0kvma
+         zlSP13TerQQ20ggK/FUlEscL5z+NRosivZmOw6TahxwuSCCO1EyTLj2EEWOVVsaElXDd
+         xRgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790043335; x=1790648135;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hxB3du36QEhM+5rIVLMv9L+rOeqXn1CgyNGA4L6zhYM=;
+        b=uUUvJcE1iIxwlOpW2X6+Wcwt6mdfXRc4FdQTgpvlcMJ5nKpw/qqG7yD7OfvxJ3HGCO
+         5BXlHiLF7LUWC5uUAOsTuqMH8N4dsaAjto51kyspNzuBbyVrOJlX/XDowmTx9z3ZJ7y/
+         s+K+Mrk7RZE7wEJHbtcRHxr0RPhagpRUmhkOkk6MWh3fQ/9KpT06bYpbi8syiLn8jrV0
+         ClgAlOnDUXeVgxog8jAhMVgY/ECSZotVJr+wE/iElVsQVn0u2WPknEv7PLls9gphovHz
+         IFFw3XWF3OesuWdgX6aPxkM4LGC94bh2PTj8FDWDcFu+/lf46PxTqQTAzUUbd/tfXEPR
+         1Pcw==
+X-Forwarded-Encrypted: i=1; AKwUvBz3kFzN3bJIY1MEsDrH73/ggeEARNU9Fn9KZ03pOa9BcHCDIvfy6ynGuppgBt6tDdzoILg=@vger.kernel.org
+X-Gm-Message-State: AFuF++mok/Eq0OlPJFxlQElhgAt3jBq9NPTXndfkQstFTKNZWMYdovrm
+	GZprcoJCX9luVKjsxCJpS3IQZTkSmWypsf4G9Zyz+yOSqya2EMGLvwl8
+X-Gm-Gg: AYBFou20iwuGEVIvACTQ/sZyPd4DBVS/nRDHI/OP5jmx3U+8WDF1lgqgWoUCvrQ2tv4
+	DaUwzCAHsjPhj8CDU1BHAINbtoslHFa/GozSM8k/HU8R0icS7qe5EsX7I6RGBVIDuNRNnPiih4u
+	FCCaFhYrb4xaNqBPXgiPRvN93gLimWUuN4ymDqyb+tdl3LvDB5zPTtxeNMJie9qDqaJ7o4n3nRT
+	EgSpHVp6FnIU0e/ZdzlmoVEsmUPpxjNBnHm5QiqlOcfyD1x4fiOyTDW+GvqxOa2KPeFSIGWk5UH
+	8JkD7p1CIzJ1AE00OnmyGWjX2oIMCyouqz/+Yd+BaGgsThz6C9FKBffYgjoB1i5pzbzC73u3DnC
+	v04ysy9H9IooGm4OvgsqQbdwtFdjG/ZNfzEpb2cYJcTZrmV6BC9ho9IPClRPngYlyCLtge9DVkI
+	Wg8bBWyY+eM/PE4CDo6lnUoqBaFM6NBV4sLtrunRVmZTqu1dgapKvwXLlY/0wyWd29gUZtZMQUI
+	B17hUoAoGCFkfITfcDCcY3NdAKL/ne/M6Fa5H+BCI/AWNvR47CJ0pL/BKSVOC2wYW/COUXrnuVb
+	a59STXBZsApx8P4qLUmuXnyu2FwY1jWvhg==
+X-Received: by 2002:a05:600c:a14:b0:499:b65e:49c9 with SMTP id 5b1f17b1804b1-49fc568f7a7mr165868005e9.10.1790043335375;
+        Mon, 21 Sep 2026 19:15:35 -0700 (PDT)
+Received: from localhost ([2a04:ee40:2228:a500:f8e2:3a74:69bf:2c6a])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fd8cc061fsm34968545e9.4.2026.09.21.19.15.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Sep 2026 19:15:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <03d6f574722589dc54b917ece6a488e1f3c2ee836e1b1aaeca523e58506d8d8e@mail.kernel.org>
-In-Reply-To: <20260921185943.4031480-3-usama.arif@linux.dev>
-References: <20260921185943.4031480-3-usama.arif@linux.dev>
-Subject: Re: [PATCH 2/2] sched_ext: Specialize the scheduler hashtable compare
-From: bot+bpf-ci@kernel.org
-To: usama.arif@linux.dev,arighi@nvidia.com,bpf@vger.kernel.org,bsegall@google.com,changwoo@igalia.com,dietmar.eggemann@arm.com,etsal@meta.com,juri.lelli@redhat.com,kprateek.nayak@amd.com,linux-kernel@vger.kernel.org,mgorman@suse.de,mingo@redhat.com,peterz@infradead.org,rostedt@goodmis.org,sched-ext@lists.linux.dev,tj@kernel.org,vincent.guittot@linaro.org,void@manifault.com,vschneid@redhat.com,yphbchou0911@gmail.com
-Cc: usama.arif@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 22 Sep 2026 02:15:27 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 22 Sep 2026 04:15:34 +0200
+Message-Id: <DLLHEJEV6BLC.11XRTTF4NRGBI@gmail.com>
+Cc: "Amery Hung" <ameryhung@gmail.com>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>, "Nicholas Carlini" <npc@anthropic.com>,
+ <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v1 0/6] bpf: Scope callback arguments to their
+ frame
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Andrii Nakryiko" <andrii@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>
+X-Mailer: aerc 0.22.0
+References: <20260922010333.1226537-1-ihor.solodrai@linux.dev>
+ <DLLGYV7DI406.JRNDNAZ4S29I@gmail.com>
+In-Reply-To: <DLLGYV7DI406.JRNDNAZ4S29I@gmail.com>
 
---===============1972334872518367697==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
-> index 124bf827791ed..705a937268505 100644
-> --- a/kernel/sched/ext/ext.c
-> +++ b/kernel/sched/ext/ext.c
-> @@ -41,10 +41,21 @@ struct scx_sched __rcu *scx_root;
->  LIST_HEAD(scx_sched_all);
+On Tue Sep 22, 2026 at 3:55 AM CEST, Alexei Starovoitov wrote:
+> On Mon, Sep 21, 2026 at 06:03 PM Ihor Solodrai <ihor.solodrai@linux.dev> =
+wrote:
 >
->  #ifdef CONFIG_EXT_SUB_SCHED
-> +static __always_inline int scx_sched_cmpfn(struct rhashtable_compare_arg *arg,
-> +					   const void *ptr)
-> +{
-> +	const struct scx_sched *sch = ptr;
-> +
-> +	BUILD_BUG_ON(sizeof_field(struct scx_sched, ops.sub_cgroup_id) != sizeof(u64));
-> +
-> +	return sch->ops.sub_cgroup_id != *(const u64 *)arg->key;
-> +}
-> +
+>> Neither has a local fix: both arguments point into a helper's own
+>> frame, with nothing longer-lived to anchor them to.
+>
+> It's the same problem as a pointer to callee's stack.
+> check_stack_write_fixed_off() deals with it like this:
+>   if (state !=3D cur && reg->type =3D=3D PTR_TO_STACK) {
+>           verbose(env, "cannot spill pointers to stack into stack frame o=
+f the caller\n");
+>           return -EINVAL;
+>   }
+> CONST_PTR_TO_DYNPTR wasn't spillable before 7.3, so nothing depends
+> on parking it in the caller's frame. Reject it there too ?
+> and then no need for REF_TYPE_FRAME complexity?
 
-This isn't a bug, but scx_sched_cmpfn() and scx_tid_cmpfn() (added in
-the preceding patch, twenty lines below in this file) differ only in the
-container type and field -- would a small generator macro be worth it
-here, or is spelling both out clearer at two instances?
-
->  const struct rhashtable_params scx_sched_hash_params = {
->  	.key_len		= sizeof_field(struct scx_sched, ops.sub_cgroup_id),
->  	.key_offset		= offsetof(struct scx_sched, ops.sub_cgroup_id),
->  	.head_offset		= offsetof(struct scx_sched, hash_node),
-> +	.obj_cmpfn		= scx_sched_cmpfn,
->  	.insecure_elasticity	= true,	/* inserted under scx_sched_lock */
->  };
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35676595280
---===============1972334872518367697==--
++1, will be much simpler fix.
