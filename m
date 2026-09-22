@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CCB33DEC2;
-	Tue, 22 Sep 2026 19:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF6FE33DEC2;
+	Tue, 22 Sep 2026 19:33:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790105605; cv=none; b=eB96ZTfd2mhJFeSURz0uZFEICVsg5rMqZ3kkR/08SR2zwb9+BuUMEpsBO3jqJaTfYoCxy4gGOR3I1Y16C+Jhrz6cY0lgo209gM0AJvR+zCugyC54cM6C5qSxdK59plVNG5sheDB20w+jfZ42sXxvbqOcLwrKh/DuKHarpenBgVw=
+	t=1790105610; cv=none; b=RT+w7RbSy5bg790UhZxl2DszS1oIv+43kfKcWeN9rym3gLLmaItmtu4cHZGUdbUnvXSVw1ypIrr1n5lXOApDzo2iE3H7iMkA/3qgUbvULLkLc4pKALwk6eqI6kBaitnXyDuDTDzBA9AR0WAZfReXLBxk9IjrFYKn6ViR6joATEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790105605; c=relaxed/simple;
-	bh=PRoocq1O4fAGktz+8rCUaT+Bpf5yzp0H9WYzBEZ72jg=;
+	s=arc-20240116; t=1790105610; c=relaxed/simple;
+	bh=zsAgMhRu6W+KL17jcSGMbQugsdfd+SO/3H//AgLfaL4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=q+Oh0+Q2omQQKJj6x81BDeaKBWXZcaEL8yqrlgeAzpcJkc0ABQTKIN+GB3whcOX+dVY2rdInfj/IsYBbbh67bJHDNDq7jyONfqhN/1Xu795Ome2N75+OjHVEb8a7iC/PPlD1tH6OKKEqL9XuNIswAAFBDuGaHVkbhe35wNzdbK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eHy/aO/Z; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=FYn7IK7Fs6rsZZgJpk3KXUm2vH/vF6jkSiV+6x3jRK80O8jcfxliav0VJbxBMcErRkfj/mghk6L/A7ktiIMtQ/f9hlw3GSRP4QzPqV4wpDoJ0QZqqU1++DsBJ0w8MIDc69wAhkESstLbM505xh68cWNSAdNrnWWw0uyx7+aoduI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QKxTX+yw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eHy/aO/Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F60F1F000FF;
-	Tue, 22 Sep 2026 19:33:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QKxTX+yw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A8351F000FF;
+	Tue, 22 Sep 2026 19:33:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790105603;
-	bh=PRoocq1O4fAGktz+8rCUaT+Bpf5yzp0H9WYzBEZ72jg=;
+	s=k20260515; t=1790105609;
+	bh=zsAgMhRu6W+KL17jcSGMbQugsdfd+SO/3H//AgLfaL4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=eHy/aO/ZsqXNj51iHp3vwGMraYfLcc5VktZhDSWDEryLe/LJXjQKu9B+bW0QX0YVb
-	 th/vRD0LrqhomizImqHR8qH7mGvOFsVOtst9OU+pVMszPY9ZeZUFHDKXviSt4nKhGr
-	 P8fuZrnJMKQco5hZ826FuhGoXsluD+JL6tpmfvhMUTWFF3532DzmOImmabMG80dzkC
-	 uTehftnaF984N2QBISfvEcJhURXwQaEt837gZaGTykJWWwVHcF3AOWP4muA1EG7Qmb
-	 dTCNhrqgXKH0Uz8/6PCxS7l0tDizEWWCaPKyGAXjzLKwoME3Uiyjgtg7jEmqO6B6Yq
-	 1Rm1Pc7NIYpbw==
+	b=QKxTX+ywNyGMbmOJgM3m6z//1VKWYLaA5dj5DGtT3p5BSjGHuv3wazqMVHEoEk4Qw
+	 QKswjoXSXibcPbcv+/wSKDTCQqnWQt7WwM5lcoEVClNhaKF69srkwfYLNA603ltLZZ
+	 svddsA4ORr5LTpmeZqsT6mB/P/FmS3Xyb5PASCHug9ymmtYM245fIA0ZxHDoBrXue3
+	 sMqe99sK6A8fYuM4y9I4g/uOrkHrEqMY9avW9kjNzLJU9rUN8iCQMKQbogPH/adQkp
+	 +jIrkBe6L3XeXbHXHAphRp2aKgzUGKIkbKX2zRmhg+K6UEwlS+XI6MnRCSuko0Etjw
+	 +3P/PolMTClPg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH v3 07/14] openrisc: pass pt_regs to
- audit_syscall_entry()
+Subject: Re: [PATCH v3 10/14] sh: pass pt_regs to audit_syscall_entry()
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Ricardo Robaina" <rrobaina@redhat.com>
-Cc: audit@vger.kernel.org, bpf@vger.kernel.org
-In-Reply-To: <db72a3d5414b6b5f187c51710981296974ffcca6.1790088067.git.rrobaina@redhat.com>
+Cc: bpf@vger.kernel.org, audit@vger.kernel.org
+In-Reply-To: <5dfecab68baf591c7d4c9778550bdc134f81c00e.1790088067.git.rrobaina@redhat.com>
 References: <cover.1790088067.git.rrobaina@redhat.com>
- <db72a3d5414b6b5f187c51710981296974ffcca6.1790088067.git.rrobaina@redhat.com>
+ <5dfecab68baf591c7d4c9778550bdc134f81c00e.1790088067.git.rrobaina@redhat.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 22 Sep 2026 19:33:23 +0000
-Message-Id: <20260922193323.9F60F1F000FF@smtp.kernel.org>
+Date: Tue, 22 Sep 2026 19:33:28 +0000
+Message-Id: <20260922193329.3A8351F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,5 +54,5 @@ Sashiko has reviewed this patch and found no issues. It looks great!
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/cover.1790088067.gi=
-t.rrobaina@redhat.com?part=3D7
+t.rrobaina@redhat.com?part=3D10
 
