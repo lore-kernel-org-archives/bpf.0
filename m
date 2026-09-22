@@ -1,125 +1,134 @@
-Received: from mail-dl2-f43.google.com (mail-dl2-f43.google.com [74.125.229.171])
+Received: from mail-oi2-f28.google.com (mail-oi2-f28.google.com [74.125.231.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 165EF40BCB8
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 23:08:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790118541; cv=none; b=cMX3nLsOx/56cmIaD0XNUIoixEEmpRNr+FV9LJTG4S1X3v/enkBOu41n6PKrIL8Q8LFNbgK14NPum2CXeErVKHS75IsKdtDtstfbNzaHFcw9kLUvA5ySBcUnhhU3Vx08CCdr1s20bRhpOyPLcflUDX/BPIw1ZhFOW1DF6wc2TEI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790118541; c=relaxed/simple;
-	bh=gYG4G+mttOpRdZ42grlU2zuBUzBzODittM+9dw3vwAI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bYbj0prwTH88KVbRNspd0WyUfXzE8h4dwsFfpcUE9xX+f00JsF65jW5JnOJIuc8qaMcUzIyZXPhWbn0BiInWRZStPNRUkk8X4OixtrtvMkJbFZA3TRrpXSu/TuZY0XoDZ5HUrrgD4wjjXeaQcwgUZacfgPXVKCu3EgxsqAoAr84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fywyLVBp; arc=none smtp.client-ip=74.125.229.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13CD3BCD19
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 23:13:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.220
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790118806; cv=pass; b=qesVE0UGbHSN50T5kn2oMFqLrmV2SlNL3h8X2g6xLG+svFUnfOySOSApqb7z3S+uycA2mJWsimubaMZJylNpnI8pVhDjPFrFRtvbr1bZ5gGLA+Q4XRcy1XGjk/ZxTZsLf+I8ciAwHn3qBavvJQUZkjy0eNubuXvY+mDO0B8VJ4s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790118806; c=relaxed/simple;
+	bh=IvStUyu83m+ZJpmK/qxea4d8TSjPT6RM7HE02/b7XTI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uNr74m4+j3SyCOp+3EesqOB/bBTIQvqSmZ9YF8QtfsPcHpE+VP2iCgR1pOAKw+gpbd7unlu89Cpzx8vWdAd+IIuTgqqnOm+pYH8jif+aMIoaNs8n8tsGO1dBLdAw/+jQoKBbHsSN57QZfK/xvW+2Shplh7OrJzEKaeZypdh1bqo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c8w6fVzt; arc=pass smtp.client-ip=74.125.231.220
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fywyLVBp"
-Received: by mail-dl2-f43.google.com with SMTP id a92af1059eb24-142dd025d07so288141c88.2
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 16:08:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c8w6fVzt"
+Received: by mail-oi2-f28.google.com with SMTP id 46e09a7af769-80a18990c76so365145a34.2
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 16:13:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790118804; cv=none;
+        d=google.com; s=arc-20260327;
+        b=BOyPTSN7rCsJUBR6isqU5LutySyGnftFBqeazwgn4JByEjm6Xxlk4IfhOEb17LTV6N
+         v5QLCHfk7Or6oMiOtZ3b5vY/6R1LMaTm9C3Y8o1qfD8usCbanlkfa46j5CzZZoqfxMdf
+         jNhUsH+g3uNaexG2W7OV8Ld/YEXYK6lo/At/W3+qlvRVlJLVhEs51xXi1P21o3QmPBQa
+         XQkwHh1QL+qz/OE1bDjWXyzA7lMXy/kibWPOemJlLPJTK2T4cdwlI9yJxBtKI5bFYmr0
+         i7N2baD+D0rjwfVF6hNUCRN8xXVvPHebgAIgrAt/jDFQXsyt6McOB1zuJ9YsZTvrUiej
+         zhTA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=GrWBDc+UFxi1ZgQ3XQujmrT38Ch5FJY+n9RTw4cpuEY=;
+        fh=kKBr0GEZmbS2iRctuyUw7o/8INyekhCS1u5F5UMtxQA=;
+        b=Zai/aPNm3kD+gEacWep/pJKwBuC0N4+jczgrBNnm0dcgSvXbXJdW0TCskyJEK6OtRQ
+         3rZnFnJZCDwY4R0SzzV1ssUvkk9aYsKt8Vp33WdHLL0+cTivinrhY3nM+cJBSmvTLaov
+         MK6cwOFlA7HRtkv9zNwXWpeHe0nWa7PAQkJlwmCwF7Jphvm2E74pFSj7bR4qyOnubOjR
+         0bnaEfw/jl6M8kUwyc47apS05MzM1O4WbI6CRRtmYqNOeXxpOm41CnlUspomW2f0i+xa
+         5vXPSSv6uXGwslgwJpHyRLt9fCFDiI+mkx4rWKuJHiRFXQGJeWtx6wkSBck4NwjTkFa/
+         ff4Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790118539; x=1790723339; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=gYG4G+mttOpRdZ42grlU2zuBUzBzODittM+9dw3vwAI=;
-        b=fywyLVBpajrxHTXkDtq5Zq6/NIqi+UBi23Gs0E9qgpEckXAh7AYLbM/aotWTo+QhdW
-         qfRySVvVAHWlhVGCY1tRmdJKSXbwYCfvkmRApq52/hWaCLSRKXJW7/MZQhYNdoxew9Z9
-         x8MNAH0jDpXhxpym1RIq62QJYOmFVDcGxgL0ONn+5bQZJp7OpX/czu/GNhFjBZQch5an
-         In6Tess9bnpGlCBisU0gobADRlg9wRH9kd5dl4l208gGS9AtIXd1JwHVxOIwyU+yNw6k
-         Q8DhgcL6wnqE3hS5H5sg2BhhaewDwnWxgNwX7a3/gA0uQ+m/aTAewOwFW2LJ+htosFXg
-         swPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790118539; x=1790723339;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1790118804; x=1790723604; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gYG4G+mttOpRdZ42grlU2zuBUzBzODittM+9dw3vwAI=;
-        b=Em4gSxF94irPqiLNOqGwcHUyzRhhNf/2HGCpoCycRgrSD7tXmPReoncuDGXLyvJUES
-         qHaLA3oVZFf7CjifPFQPvH2HBoVtQZkGDJjTWsWcx0OzQ6pVs0olhWH9l/NMmKGL5ySI
-         92SFHAAXYWY8NhpneHEquFZ3rMTR3qNq6JBk0KfOLJUw9LIIzMDZfDsWLTdJlbO8BIsq
-         gCPibgm+8skH4VSMHO7GRIG1XoCkY1zjaNXXcJ5viK51OqcRqqEMWEJC/HGem2aJ98lI
-         HD17LU+16klsPygaeNM9hRIvVBMTdKw3kJteq0Fz52p1NpeKO2LPT/++4nQt1l95Te6e
-         J6ug==
-X-Forwarded-Encrypted: i=1; AKwUvBxs7h3+z9MaZv7fotz6EyY/Gxusa5bP1kwWjeuBGYD815hA/B3h7xVc2oVgSeEC1050TKs=@vger.kernel.org
-X-Gm-Message-State: AFuF++l5x/NXzS/OlrysogXEh3hjofSf7Gui35m1bY43/PGn2QCVao/o
-	PwI141TTmpwbyqi9baGNUttcky4cAQvouuzfXZL6kSD0HjLcwhh492B8
-X-Gm-Gg: AYBFou0pkRueVn7ndg0hMbj+tCyKQ5yLtFz7jH0iCWhu0Vg1QKWazjPHGKTnGEGMg6e
-	Bq5HGg4mXOrDBO+LZ499XmI/yqmwBdVz/k5/Dna0lmGoJSdEkLn0c7oCdfniEDgBs0Z/RzF24l9
-	z2+itSwmpc8dYpiYEj7msBK/EM87y5iRy/RUrIyhhOPn3lrJ90K/lU4W8o7Jic0rxNR134KFkRu
-	bjGDE8wNMGPxK1a32Sq/O90uEj1U/NaK9SfXUctu5X3KOBlBQWH5Bsh73FxNNjjl1+rQ2T+ANp3
-	pFxpe8zOvKK+c46zMgpIqGvVwDDqtAB3MXR4vaKCvldmp3jbZbqOklGk520T3bEjD7A9TriQ55B
-	uPNvRVFLJ3sJ4vNM7iWGBiYa+74OFVub+OFDHHSXX8Z8+BvekZBM3hIbA1FymJb/TL/ZLrzXYNa
-	wPATfm/WBfZ5Rdd2+a7y5oX65qVbcQADp8zmSCMpJc6qzFNbBuxo/WlARqyXpFpfuOWDpLphHZ1
-	I6/X0uDuqkfxA+bZQGC3cQ/jaMH+L6CVnxzY4DWWWSgW2r4bnSeofQo6g==
-X-Received: by 2002:a05:7022:3b89:b0:143:490b:93da with SMTP id a92af1059eb24-144f917a192mr1004895c88.39.1790118538997;
-        Tue, 22 Sep 2026 16:08:58 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:f4d5:5623:3480:5143? ([2620:10d:c090:500::7:fbb7])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-144f988342asm1194044c88.11.2026.09.22.16.08.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2026 16:08:58 -0700 (PDT)
-Message-ID: <37e53199dfda608de30a31fc51d22ed2b25d6d2e.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 00/20] bpf: Run exception cleanup landing
- pads when bpf_throw() unwinds
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Yonghong Song
-	 <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com
-Date: Tue, 22 Sep 2026 16:08:57 -0700
-In-Reply-To: <DLM6BVU1G0V3.29T5BPPZTZ77Z@gmail.com>
-References: <20260921210033.1715000-1-yonghong.song@linux.dev>
-	 <7e7076ce94e803403bcee003569d4b2ac7bc4e2c.camel@gmail.com>
-	 <DLLHFJDS6G5L.2B273FIKF9A09@gmail.com>
-	 <7eba4eb055e15d5c78f463d013fa98bb21d7b494.camel@gmail.com>
-	 <DLM6BVU1G0V3.29T5BPPZTZ77Z@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+        bh=GrWBDc+UFxi1ZgQ3XQujmrT38Ch5FJY+n9RTw4cpuEY=;
+        b=c8w6fVztT8ff4ZMxjGGOCwfPnb2wzO7djpEhGDgKXwmeFjmNbtbEFUD/UrzqF1IHHX
+         MNLUkdRvimQdiBGnjXM/NppqovVg6gB62KmlPuib2drJxMJ7ehYWY4hwDncS7ie7lOqt
+         Pyih9nRcUhdYzuJGPWZA0Mka+fmj3mmxe1RBImguxD1osprCJD7GCeNMiIV8JLE80FTo
+         CrfcxtiLCl6Wb7nvVwzutLE9Q+kiUMBKOqCGo79sTRp4/+aUnkpwiV4664aIAofXoCvC
+         GMuPG6EHT8EqEY55Fpu/TjmpOvVjGbUPFtO+PivKUYNdui7mANSyukocE0Xai1lTLVBK
+         93VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790118804; x=1790723604;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=GrWBDc+UFxi1ZgQ3XQujmrT38Ch5FJY+n9RTw4cpuEY=;
+        b=r65g396H0EeoNfAXWaaqy6/Msi8K46Xpuv4NgUY4O5blLaDx68vGl9OFgj7wOjzjYJ
+         ZOBZrAoCqxk3DNL1kO2qQPKfr1Hcc3jb3EiSpaqyi4D9ktQO64NkJURXDL5sXgoO6vNE
+         LOVHQIjiA7uKnhkBgccdGHd6noNKUZg3ATZqiG4S+e2e7gs6iCoEfkLlI7sggVjqf21h
+         +ZZkNdnAJJXKcACpaAd6t030b3ftJiEPxvFYyLtyQhmWjWUpAJYh/wNbrMMqCF6fag/Q
+         BQySbHfdp/V8A810nmwqGdgdFjrlNl+ScZ7t+vgqSgsneK8CPEkpCY2C7ZcMBYNBvd5I
+         VO1w==
+X-Gm-Message-State: AFuF++nY0PPQEZrIRX5h27Tr95S/ERhZNtn4H/HOsco8TSCrTSKFn0RQ
+	B/OFxEFWYyPqJa/y122lx1zjarfKtDc9OfU+dVR0zExvEDPN+YhcHALX6wCvQ8gEIulIsmoWWSC
+	j0pTnw4doEZR7729lPK2x9MZStd8w/r0=
+X-Gm-Gg: AYBFou1UQv3ISOnHkbFuWzDjY2S/VMagjCNrrcvngFi/nE6pIs+UPWlRmj9y2ELu6+R
+	sKbbs49xbwJwsuEtNiLPwMjAPma47XSfZ2+1sYzJaiFg1gY77WG+WAt6JY289dPu1w3bUmLaQbi
+	t+poFooljv9mORfdE2KI3FzcKaqbTqljHnBY6Q5RWpVl3M2k/YSoUZW/eP/XBn1kM4EvStKgksk
+	xXXlppKf4rW8E0YNQV/VF49vilMd7kNnryREUbBZlO6Dp6vXH9VX3zHATp03OWA/Yiip8ucfEIF
+	HEuZKVJpvPojDvQS/XfwgJXWjmqrvwZFOTJlmFNSJKzzMrPP7Mg7gmpj2gGDz/ujaeFm7dc=
+X-Received: by 2002:a05:6820:814:b0:6b3:b9d1:f629 with SMTP id
+ 006d021491bc7-6d2d0b2df22mr724319eaf.31.1790118803668; Tue, 22 Sep 2026
+ 16:13:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260920210432.345758-1-xyx2021@mail.ustc.edu.cn> <20260920210432.345758-2-xyx2021@mail.ustc.edu.cn>
+In-Reply-To: <20260920210432.345758-2-xyx2021@mail.ustc.edu.cn>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Tue, 22 Sep 2026 16:13:10 -0700
+X-Gm-Features: AcwNN1Uc9OOpPOk250_vaYwaGb-pLfM88ZiUXHUiEzdjJG70kEGKvt8Uq2sgUbQ
+Message-ID: <CAMB2axNe5CX8QcF9BU4RRsC9BORAjnMAx8OX1ywLaCDBj=wyHg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 1/2] bpf: Track iterator-owned BTF pointer lifetimes
+To: Xu Yunxiang <xyx2021@mail.ustc.edu.cn>, memxor@gmail.com
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev, 
+	puranjay@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 2026-09-22 at 21:47 +0000, Alexei Starovoitov wrote:
-> On Tue Sep 22, 2026 at 4:27 AM UTC, Eduard Zingerman wrote:
-> >=20
-> > Total size of executable sections for all Meta BPF object files used
-> > for CI veristat testing is 10Mb. Of these there are 30K non-helper
-> > call instructions in total.
-> > So we are talking about increase by 8 * 30K =3D 240K ~ 2.4% worst case.
-> > Note that the instruction encoding optimized for size already hearts
-> > us in src/dst registers department: we have no room for virtual
-> > registers, which would have simplified e.g. register allocation task
-> > for ARM64. Point being that optimizing intermediate IR for size is not
-> > always a right target.
->=20
-> I wasn't talking about increase in bpf ELF size,
-> but the amount of the verifier work necessary to double the number
-> of call insns.
+> +++ b/include/linux/btf.h
+> @@ -80,6 +80,7 @@
+>  #define KF_ARENA_ARG2   (1 << 15) /* kfunc takes an arena pointer as its second argument */
+>  #define KF_IMPLICIT_ARGS (1 << 16) /* kfunc has implicit arguments supplied by the verifier */
+>  #define KF_SPINLOCK_SAFE (1 << 17) /* kfunc is allowed inside bpf_spin_lock-ed region */
+> +#define KF_ITER_LIFETIME (1 << 18) /* next result borrows the current element's lifetime */
 
-I don't understand what you mean by the amount of the verifier work.
-Traced program paths would remain the same, only the encoding of the
-information about exceptions changes.
+I would hardcode it using the special kfunc list instead of
+introducing KF_ITER_LIFETIME.
 
-> > As Kartikeya says in a sibling email, I mean generic verifier
-> > capability to accept any program by introducing runtime checks.
-> > Verifier's capacity to infer safety conditions for various
-> > instructions is orthogonal to rustc's assumptions about landing pad
-> > boundaries. E.g. rustc/llvm might infer that certain memory access is
-> > within bounds and optimize bound checks out, it is not a given that
-> > verifier would come to a same conclusion and that some landing pad
-> > would be declared for an instruction.
->=20
-> Replied to Kumar. I don't think the verifier will ever insert
-> runtime checks with control flow at random points.
-> If we teach rustc to insert may_goto then it will be done
-> at rustc/llvm level. Not by the verifier.
+>
+>  /*
+>   * Tag marking a kernel function as a kfunc. This is meant to minimize the
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 314ecb0e593b0..6a287f808200b 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
 
-Fighting the verifier after rustc transformations would be especially fun.
-Do we have a working toolchain somewhere? I can work a few examples.
+[...]
+
+> @@ -6224,9 +6236,14 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+>         }
+>
+>         if (atype == BPF_READ && value_regno >= 0) {
+> +               u32 parent_id = reg_lifetime_id(env, reg);
+> +
+>                 ret = mark_btf_ld_reg(env, regs, value_regno, ret, reg->btf, btf_id, flag);
+>                 if (ret < 0)
+>                         return ret;
+> +               if ((regs[value_regno].type & PTR_TRUSTED) &&
+> +                   !(regs[value_regno].type & (MEM_RCU | MEM_PERCPU | MEM_USER)))
+> +                       regs[value_regno].parent_id = parent_id;
+>         }
+>
+
+CC Kumar, who might be also working on it and have a fix locally
+(mentioned in [0]).
+
+[0] https://lore.kernel.org/bpf/DLGYPZAL708V.3GFLANAPH2L8O@gmail.com/#t
