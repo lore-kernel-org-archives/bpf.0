@@ -1,95 +1,83 @@
-Received: from mta0.migadu.com (out-128.mta0.migadu.com [91.218.175.128])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CEC33C4176
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 03:32:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE88038C423;
+	Tue, 22 Sep 2026 03:35:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790047963; cv=none; b=QDxH6p0KZ7yKbukzV22juU43DNXR5YaVqVOBuscFeTcG+FkyLolAz2BZ4tGzviHWEob5wZZ/MoQoJCwhveRvMakB+sjnDAKbIQrNTJ6XcYO46CEvQrHFlhCUahp4rQyGZw3S1dHLtJaXEHMYX0dPLAhRagYEE2ne2hBNLVEYupM=
+	t=1790048138; cv=none; b=ZXaeQN3v8NUVheJARK2PRH4xtsfKLUX0wZ6+P53JO2l77VBwCxrqBdBtk/JjkkalWWGVxBZVFQxckba4aAIDtiqnEMcxa/Ssr4ruIWQf+l9xpVq8v8s+rto4G9SR/KLn6bpnPh5BrHxoSx710SzlCF7aiLHmG3x3zKalUsBBHco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790047963; c=relaxed/simple;
-	bh=TaNM4TjHbeg106Qb5CxF/zlhHcAB/XZrLDYs87bIYjE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lXqgw8RZFW6elHYPH6aRDsxRpsNMy1YvPJFmPxpiVxFtap1n6lLpqOtMG6+5u6tZPxO9Ew6w/y4gGsd94TXqpM1x/OMWE59ubJtdk2IkQcf/V/cXI9rjtfOf/+tXZ7OmlVne8WMcqNlyXbEd9UWV8miqPcvU7FLZDAtJ9OZHbIo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SaUJBEr7; arc=none smtp.client-ip=91.218.175.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790048138; c=relaxed/simple;
+	bh=+FWlMO2cLI9SxgR2ihPHzlFIH0pLd+kC4fMPBKil/Qc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=NKlRWZ5BsBo5fcsWcI7Z5ij6srq/3Y/IrhnWG8Cr+wBF32aSFtK4NYqix3VJK7CBjHkIhhGDGSpze9sjKHWdqXoTEJWBZIfzu+yBP4GmIo2JwRrlW4nzYkr8gCYGmNq0QysMDXwRasbZ36xfsPGiD98ghwWFQ/iktYZl7bZbIzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fUKNa/hd; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SaUJBEr7"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=TaNM4TjHbeg106Qb5CxF/zlhHcAB/XZrLDYs87bIYjE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790047954; v=1; x=1790652754;
- b=SaUJBEr7lT0DgZV2C8uBqw6PSk+4mtGbPRcreo3hdXMQ9+L9K9zQww/zRHUiZ7Zn5BZyBMtr
- bsfJusgQqG0s2airjtngSG8dRl7BeqJOFV25LHi/K2sqaM28iOZRjvn5ktUTZaIdkoqVZBb5Z4g
- ZlselTc0daT/3OflAxXYIRBA=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 395a06e1c64c2332;
-	Tue, 22 Sep 2026 03:32:34 +0000
-X-Mizu-Trace-ID: 395a06e1c64c2332
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <e9c4cc88-15f1-4cdd-ada4-adac5ac289e0@linux.dev>
-Date: Mon, 21 Sep 2026 20:32:31 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fUKNa/hd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C52DA1F000FF;
+	Tue, 22 Sep 2026 03:35:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790048133;
+	bh=WtEJJnI23HMrvJ1nLmsa7kWdStULy778TOJcpNKSbbw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=fUKNa/hdOHyAYp1daoHBAx94b+RvDrx0R9Hp5CTaq6b60oFQ59lV4J8Okxeofqpao
+	 kgTZ6GQcYMEXK5UK6Dnu19icDYfUBIr9McTHB3xfjciF5SroVP9m4AIXHYE0ToFc9Y
+	 m/650gxZ5ZnaJTCtGxDfgYCe16zZ7XRLMzT1bqFmSY/a8LOeY3MZfqckQ39jbwVcdt
+	 SeG0xq89Q33ndu0hMf2e3vXGUc6HzoaBSyZVi1gzjMAH1q9KLW7Hk3q/JcAbqIIN8P
+	 lOUJpEaHYN9pqK+VweionZyb+PRU6EDSdmLX7zNglw5+wahlPcbyVdQcuzinDzvvnn
+	 RH9ocCGbXPjOg==
+Content-Type: multipart/mixed; boundary="===============6597116511644733316=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v4 06/20] bpf: Explore the landing pads no call
- site reaches
-Content-Language: en-GB
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
-References: <20260921210033.1715000-1-yonghong.song@linux.dev>
- <20260921210104.1718697-1-yonghong.song@linux.dev>
- <cfed0048af0a603a4e71894e8a36c5ae2cf6bb66.camel@gmail.com>
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <cfed0048af0a603a4e71894e8a36c5ae2cf6bb66.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <5de177edfbaed1c26e91a222f2636a56b48a96001cba1d4dab7e37b57e312a0b@mail.kernel.org>
+In-Reply-To: <20260922-b4-rcu-tasks-preempt-qs-v5-10-410f57770bad@toxicpanda.com>
+References: <20260922-b4-rcu-tasks-preempt-qs-v5-10-410f57770bad@toxicpanda.com>
+Subject: Re: [PATCH v5 10/13] samples: ftrace: Make the direct-call trampolines Tasks Trace readers
+From: bot+bpf-ci@kernel.org
+To: josef@toxicpanda.com,paulmck@kernel.org,frederic@kernel.org,ast@kernel.org,rostedt@goodmis.org
+Cc: boqun@kernel.org,mhiramat@kernel.org,mark.rutland@arm.com,peterz@infradead.org,tglx@kernel.org,daniel@iogearbox.net,andrii@kernel.org,puranjay@kernel.org,rcu@vger.kernel.org,bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-arm-kernel@lists.infradead.org,linux-kernel@vger.kernel.org,josef@toxicpanda.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 22 Sep 2026 03:35:30 +0000 (UTC)
+
+--===============6597116511644733316==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
+> commit 1deb3b548a13555ffd63d9373f054d6da02ad75e
+> Author: Josef Bacik <josef@toxicpanda.com>
+> Date:   Tue Sep 22 02:23:29 2026 +0000
+>
+>     samples: ftrace: Make the direct-call trampolines Tasks Trace readers
+>
+>     The sample direct trampolines are exactly the kind of out-of-line
+>     register_ftrace_direct() user whose lifetime depends on Tasks RCU
+>     waiting for a task inside them: nothing else stops rmmod while a task is
+>     preempted in my_direct_func().  On HAVE_RCU_TRAMPOLINE_READERS
+>     architectures that wait only covers Tasks Trace RCU readers, so give the
+>     samples a small shared header with rcu_read_lock_trace() and
+>     rcu_read_unlock_trace() open-coded as instruction strings for x86-64 and
+>     arm64 -- the same sequences as ftrace_64.S and entry-ftrace.S, using
+>     caller-saved non-argument scratch registers -- and bracket every
+>     call-out with them.  The instructions outside the bracket are module
+>     text, covered by ftrace_direct_mark_module().  Other architectures get
+>     empty definitions.
+>
+>     Assisted-by: LLM
+>     Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+
+This looks like a bug fix for the direct trampoline lifetime issue.
+Should this include:
+
+  Fixes: 32999f49426a ("rcu-tasks: Add a Tasks RCU implementation for reader-marked trampolines")
 
 
-On 9/21/26 4:58 PM, Eduard Zingerman wrote:
-> On Mon, 2026-09-21 at 14:01 -0700, Yonghong Song wrote:
->> A cleanup record need not cover a call an exception can unwind out of: a
->> frontend is free to emit a region around a helper or an ordinary kfunc,
->> both nounwind here. Nothing marks a call site then, and that record's
->> landing pad is reached by nothing at all -- leaving bpf_check_cfg() to
->> refuse the program over code its own frontend had no way not to emit:
->>
->>     0: call bpf_preempt_disable
->>     1: call bpf_preempt_enable      record = { begin = 1, end = 2, pad = 4 }
->>     2: r0 = 0
->>     3: exit
->>     4: r1 = pads_ran ll             landing pad
->>     6: r2 = *(u64 *)(r1 + 0)
->>     7: r2 |= RAN_NOUNWIND_REC
->>     8: *(u64 *)(r1 + 0) = r2
->>     9: call bpf_unwind_resume
->>    10: exit
->>
->> The range [1,2) holds one call, and it is a kfunc, so an exception cannot
->> come out of it. cleanup_mark_call_sites() marks nothing, nothing pushes an
->> edge to 4, and 4 through 10 are reachable from nothing: "unreachable insn
->> 4". The pad is dead, which is correct -- no exception can ever arrive at it
->> -- but the program is fine and has to load.
->>
->> Walk every pad the table names that the edges did not reach, the way the
->> walk is already re-seeded at an exception callback. From there the pad is
->> code like any other: do_check() never enters it, because no call site
->> dispatches to it, so the dead code sweep removes it along with everything
->> else that was not reached.
->>
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->> ---
-> Yonghong, have you observed such dead code being generated by rustc?
-> It is a bit surprising, tbh.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-The above code is with inline asm. rustc won't be able to generate such 
-code.
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35680506278
+--===============6597116511644733316==--
