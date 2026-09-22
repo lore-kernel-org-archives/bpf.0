@@ -1,160 +1,177 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D301D372B4B
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 01:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8E828C009
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 01:31:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790040434; cv=none; b=dQqJq8zMp/+LN0iCL3ERjtb0DVYii8yI3tB2MaLihSdTR3xIVnzd3L7tyYM3a/v4d0SPeOqdEI2rXGPZq3uc9DO46u+4Ahwssxkx2zFW/mlBL6jrvObhhqW8Oy7+UkWtTaBpqw2u0neiQ1SaRHoP9K3Nl2QLkGOsJqD/HfsJd0M=
+	t=1790040662; cv=none; b=gV4hqn1Z5WQUrtH+BZTAWzAAK06/wQvenYeztxZvRpanLQSIRr8pnNa8KqDHvo1bFiTE1Te8RiFJaWhkxs7VOFLgj2U5NEpMAWdJIJMy3Gq3v3zqfLmO3o6NC6Zl92BOyyowaAFPMDKrd4wAf1zPThc+ODRqI5pF2gEHxYRjsz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790040434; c=relaxed/simple;
-	bh=SxCDKT5k+bRqAOGzOHBytWT+vwnS4e6PngbRaPRUHaE=;
+	s=arc-20240116; t=1790040662; c=relaxed/simple;
+	bh=kRve9lIyA2wfqIKecmesAAAtIguTqGXaldo0qwmebKQ=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=GpgEABo7ZLuQFeXzCJIn3pQhfBhKCspeyOXrHPYofiRgtmhjEBV6IWlHFyF1TUvCX3WdYlchGo2eUASoS81yH4VmgP4y0J7XH1mYMgSiTcr0gsKYs+IcZThiCnkB2ANLJ7q63Ra8ofhPZbGdzBcAVkKoiwsFupHMD+xiiQ0C/IQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z7NEENBu; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=cJIDsg1XDLoioEm43Gm5jDSgAi0Fa4miTBGsa3rMJUlwINcC0WWwx98G1RY94maTP8UAZpU2lSWhNlfMBixbMIfrdusK8SGbZ8CikHmMCkCkGyU40woIyNzWMeoKhF85J8i5ofnAh1OJcriAZRRexO8pzWm7sjCaoknq4RMa5oQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X/A+dkFx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z7NEENBu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B21C1F00893;
-	Tue, 22 Sep 2026 01:27:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X/A+dkFx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DF101F000FF;
+	Tue, 22 Sep 2026 01:31:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790040432;
-	bh=ehYGfBPKc3BSdUklUAY02wSJrVw7M8twDOfauG5/DgM=;
+	s=k20260515; t=1790040660;
+	bh=mon8H04TccavTGifG6fhQKYHTRSgBn490ZI8BhJL+hg=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Z7NEENBu5/XdNEu8tOM50fZlXuLJdwAadwQ+IZKjFTnYi2qaoN7/+NOqZpcW4bzc7
-	 myZ17/OPYyYs59VmdFt3y1xE9GdTuUNqEcmxEfVOJ8frBgrtyBCJ6W50iwDzhrCDQ7
-	 xRr/w/ydtAWSwUViGE+oEyqzv5eT3QayOKCRjaDKPjeTtLR9wvvIS6Fv7KHgRViLEA
-	 a41VfUjNwsdr2u3OYuzgOJrpJEvOXE9QRPiL+myC8VjIB0IbxvR6o+m6ZetU+B/xat
-	 1NxEg5FT2Lj9iU29aeMLRxKBWc3b7xAt2pSF3/w/nijK2vclZy7eRbVIq/+Km6kqci
-	 I5CDoCCGmR6zA==
+	b=X/A+dkFxCPpWILSs0ITOJY1UhllQGGfC1UJUaVMsx1TGy5DN9jY3l6yWujm+eeaQd
+	 SF1QYTlNzQAvTOOPzgSW0N8wKZlddBvjp9PI8h9JN8PPcoTASoKeJtMbnZ+FU45R+e
+	 vxcRnXqH7Rm5IEiMRnkAgOBarzolhsgAXjRK350Pumc9xRid9Wa4jYhaB0loNYBLLU
+	 H4kF6Z/jAfFykngrxvuqVHIKllx2cePyq5xdrcLeusIk5VsfUIxtgNQoRUZuVyPajn
+	 9ipyLaIQiOj/J4vwIg03UL0LZrd+FUsEcoV/v8niJL+El1gqzpb/Z0mTCgbzfVKOYZ
+	 uqev70I89SyyA==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 07/17] bpf, x86: Add JIT support for callx
+Subject: Re: [PATCH bpf-next 10/17] bpf: Recognize pointers to functions in
+ read-only maps
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260922011323.1298619-8-alexei.starovoitov@gmail.com>
+In-Reply-To: <20260922011323.1298619-11-alexei.starovoitov@gmail.com>
 References: <20260922011323.1298619-1-alexei.starovoitov@gmail.com>
- <20260922011323.1298619-8-alexei.starovoitov@gmail.com>
+ <20260922011323.1298619-11-alexei.starovoitov@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Tue, 22 Sep 2026 01:27:12 +0000
-Message-Id: <20260922012712.6B21C1F00893@smtp.kernel.org>
+Date: Tue, 22 Sep 2026 01:31:00 +0000
+Message-Id: <20260922013100.6DF101F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] bpf: callx bypasses KCFI due to missing caller-side hash check
+- [High] bpf: verifier incorrectly rejects valid programs and triggers WARN=
+_ONCE when reading uncalled function pointers
+- [Medium] bpf: map user state is not restored on JIT failure, breaking lib=
+bpf log reloads
 --
 
-commit d4dfd1b46a3e02ea97924c833ac04239e01627f1
+commit ac5645576aa732578e623a1ca8af9bcff7aa9194
 Author: Alexei Starovoitov <ast@kernel.org>
-Subject: bpf, x86: Add JIT support for callx
 
-This commit adds JIT support for BPF indirect calls via the register that
-holds the address of the BPF subprog. It introduces the emit_indirect_call
-helper to handle the translation using ITS or retpoline thunks.
+bpf: Recognize pointers to functions in read-only maps
 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
+Compilers put pointers to functions into read-only data: tables of
+functions, struct ops, vtables, where they're mixed with sizes,
+alignments and other data. Rust vtables are like that.
+Let callx call through them.
+
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index 868350977f0cb..273f74068068c 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
 [ ... ]
-> @@ -749,6 +749,46 @@ static void emit_indirect_jump(u8 **pprog, int bpf_r=
-eg, u8 *ip)
->  	*pprog =3D prog;
+> @@ -3029,6 +3029,11 @@ void __bpf_free_used_maps(struct bpf_prog_aux *aux,
+>  			map->ops->map_poke_untrack(map, aux);
+>  		if (sleepable)
+>  			atomic64_dec(&map->sleepable_refcnt);
+> +		/*
+> +		 * The program that didn't load is not a user of the map. libbpf
+> +		 * loads the program again to get the log of the verifier.
+> +		 */
+> +		cmpxchg(&map->user, (unsigned long)aux, 0);
+
+[Severity: Medium]
+Will this properly clear the map's user state if the BPF_MAP_USER_PATCHED
+flag was set before a failure?
+
+If jit_subprogs() sets the BPF_MAP_USER_PATCHED flag, map->user becomes
+me | BPF_MAP_USER_PATCHED. If a failure happens afterward, this cmpxchg()
+strictly expects map->user to equal aux, which will fail to match.
+
+This can leave the map permanently locked in the patched state, causing
+libbpf's subsequent reload attempt (to obtain the verifier log) to fail
+with -EBUSY.
+
+>  		bpf_map_put(map);
+>  	}
 >  }
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index 2add8001c3ec3..e568b9b790b5c 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
+[ ... ]
+> @@ -1285,6 +1289,57 @@ static int jit_subprogs(struct bpf_verifier_env *e=
+nv)
+>  		cond_resched();
+>  	}
 > =20
-> +static void __emit_indirect_call(u8 **pprog, int reg, bool ereg)
-> +{
-> +	u8 *prog =3D *pprog;
+> +	/*
+> +	 * The addresses of all functions are final. Replace the offsets of
+> +	 * functions with them in the maps of the program, see
+> +	 * resolve_func_ptrs(). The program must be the only user of such map.
+> +	 * From now on no other program can use it, see bpf_map_claim().
+> +	 */
+> +	for (i =3D 0; i < env->func_ptr_cnt; i++) {
+> +		struct bpf_func_ptr *ptr =3D &env->func_ptrs[i];
+> +		unsigned long me =3D (unsigned long)prog->aux;
+> +		u64 addr, old, new =3D 0;
 > +
-> +	if (ereg)
-> +		EMIT1(0x41);
+> +		/* pointers are sorted by map */
+> +		if ((!i || ptr->map !=3D ptr[-1].map) &&
+> +		    cmpxchg(&ptr->map->user, me, me | BPF_MAP_USER_PATCHED) !=3D me) {
+> +			verbose(env, "map '%s' is used by another program\n", ptr->map->name);
+> +			err =3D -EBUSY;
+> +			goto out_free;
+> +		}
 > +
-> +	EMIT2(0xFF, 0xD0 + reg);
+> +		/* it's the address of the value of the map whatever the offset is */
+> +		err =3D ptr->map->ops->map_direct_value_addr(ptr->map, &addr, 0);
+> +		if (verifier_bug_if(err, env, "no value of map '%s'", ptr->map->name))=
+ {
+> +			err =3D -EFAULT;
+> +			goto out_free;
+> +		}
+> +		addr +=3D ptr->map_off;
 > +
-> +	*pprog =3D prog;
-> +}
-> +
-> +/* call *bpf_reg */
-> +static int emit_indirect_call(u8 **pprog, int bpf_reg, u8 *ip)
-> +{
-> +	u8 *prog =3D *pprog;
-> +	int reg =3D reg2hex[bpf_reg];
-> +	bool ereg =3D is_ereg(bpf_reg);
-> +	int err =3D 0;
-> +
-> +	if (cpu_feature_enabled(X86_FEATURE_INDIRECT_THUNK_ITS)) {
-> +		OPTIMIZER_HIDE_VAR(reg);
-> +		err =3D emit_call(&prog, its_static_thunk(reg + 8*ereg), ip);
-> +	} else if (cpu_feature_enabled(X86_FEATURE_RETPOLINE_LFENCE)) {
-> +		EMIT_LFENCE();
-> +		__emit_indirect_call(&prog, reg, ereg);
-> +	} else if (cpu_feature_enabled(X86_FEATURE_RETPOLINE)) {
-> +		OPTIMIZER_HIDE_VAR(reg);
-> +		if (cpu_feature_enabled(X86_FEATURE_CALL_DEPTH))
-> +			err =3D emit_call(&prog, &__x86_indirect_call_thunk_array[reg + 8*ere=
-g], ip);
-> +		else
-> +			err =3D emit_call(&prog, &__x86_indirect_thunk_array[reg + 8*ereg], i=
-p);
-> +	} else {
-> +		__emit_indirect_call(&prog, reg, ereg);
+> +		if (ptr->xlated_off !=3D BPF_FUNC_PTR_DELETED) {
+> +			subprog =3D bpf_find_subprog(env, ptr->xlated_off);
+> +			if (verifier_bug_if(subprog <=3D 0, env, "no function at insn %u",
+> +					    ptr->xlated_off)) {
+> +				err =3D -EFAULT;
+> +				goto out_free;
+> +			}
+> +			new =3D (unsigned long)func[subprog]->bpf_func;
+> +		} else if (verifier_bug_if(ptr->used, env, "function of map '%s' offse=
+t %u is removed",
+> +					   ptr->map->name, ptr->map_off)) {
 
 [Severity: High]
-Does emit_indirect_call() emit raw indirect branches without KCFI hash
-validation?
+Does eagerly setting ptr->used =3D true in check_func_ptr_read() lead to a
+verifier bug here if the function is never actually called?
 
-If KCFI is active, it seems __emit_indirect_call() emits a bare indirect
-branch instruction without the preceding caller-side hash check.
+If a program simply reads the function pointer from the map but does not
+invoke callx, check_func_ptr_read() still flags it as used. Since the
+subprogram is never called, dead-code elimination can remove it.
 
-If an attacker were able to overwrite a spilled subprogram pointer, could t=
-hey
-trigger this execution path to jump to an arbitrary kernel address and bypa=
-ss
-KCFI protections?
+When jit_subprogs() later evaluates the deleted but "used" pointer, it
+incorrectly triggers a WARN_ONCE and returns -EFAULT, rejecting a valid
+program.
 
+> +			/* the program that reads the pointer might call the function */
+> +			err =3D -EFAULT;
+> +			goto out_free;
+> +		}
+> +		/* else the function is dead code, nothing calls it, the pointer is NU=
+LL */
+> +
+> +		old =3D (u64)ptr->orig_off * sizeof(struct bpf_insn);
+> +		if (verifier_bug_if(cmpxchg64((u64 *)(unsigned long)addr, old, new) !=
+=3D old, env,
+> +				    "map '%s' offset %u changed", ptr->map->name, ptr->map_off)) {
+> +			err =3D -EFAULT;
+> +			goto out_free;
+> +		}
 > +	}
 > +
-> +	*pprog =3D prog;
-> +	return err;
-> +}
-> +
-[ ... ]
-> @@ -4414,6 +4472,16 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_ve=
-rifier_env *env, struct bpf_pr
->  	return prog;
->  }
-> =20
-> +bool bpf_jit_supports_callx(void)
-> +{
-> +	/*
-> +	 * FineIBT poisons ENDBR at the entry of a JITed function and expects
-> +	 * indirect callers to go through the CFI preamble instead.
-> +	 * callx doesn't do that yet.
-> +	 */
-> +	return cfi_mode !=3D CFI_FINEIBT;
-
-[Severity: High]
-Can bpf_jit_supports_callx() incorrectly allow indirect calls to be compiled
-when KCFI is enabled?
-
-The current logic blocks FineIBT but permits compilation when the CFI mode =
-is
-CFI_KCFI.
-
-Since emit_indirect_call() does not currently emit caller-side hash checks,
-allowing compilation under KCFI seems to introduce uninstrumented indirect
-branches into kernel space.
-
-> +}
-> +
->  bool bpf_jit_supports_kfunc_call(void)
->  {
->  	return true;
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260922011323.1298=
-619-1-alexei.starovoitov@gmail.com?part=3D7
+619-1-alexei.starovoitov@gmail.com?part=3D10
