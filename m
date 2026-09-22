@@ -1,73 +1,83 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B18F5314D05;
-	Tue, 22 Sep 2026 03:16:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3A9A3A3815;
+	Tue, 22 Sep 2026 03:22:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790046980; cv=none; b=hVmhbF7tFUnxLxagbHTH7566Td0EdGjr9iTV/MoNXoE2xS9K4qU0bX5tb9LhWMsIK++Hg0SUpTL//qnbkks8gvIrcdR8J1WkWIw14iXg0P2h1P+s1lukfaPAVaPIDF0bBJ+sZZ+h2+WyHLNsDzeIQEF25ATs5JHPWZm7GlwS0kQ=
+	t=1790047341; cv=none; b=A65F3sM6476aGTvGfhcNDA4n6tcv7l8WoangQM8jI9gdE5PuQ4tWbWVFm9iwO2+EmAmjSY136BV4Fus5X+mje3MMz9+1smOuSA/87tH4ptaLxUB900E/2eFgH6pmrTyamubbMaEOBCdY8bCymn2OzwAzcrsPzm97juax4+2vj/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790046980; c=relaxed/simple;
-	bh=5uQ+8p3PM2qLrd5BKrJFE5PB13djnVE5F7PfGTl1R8U=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CFQnZHklpWrcHtbw68veYz/520SI4JyiY8ltB0FRalKd/t+VramJ1RpcLRQC8WkcHx3sXuKGPe2b2fx7GgIo0autRxeR2wbCZRsiY1xjiX3/KI9mafgkfxZo6/kC5m9qUJWf2i4u89HxeV38kPsvTXPM4PLXajau4FuKVUjSfJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=nieMWeJT; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1790047341; c=relaxed/simple;
+	bh=KF7mc1Ly1kFwYtSxCT25pyvXNwlbOJlwOugdFFRVKZA=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=RhXtxVK6i68k79FPubAOs0pa9HXRxzDKuye0k3pPW2+6Fn6hK5x6s7FKh2wAIjLTJ1MRjx/X8q3BlOoeU1ptnfS5oI9IFLDtu++hPL2TROMk/ng3aHTHDUp8SzGNHzqTw41E17NjBdB7NctDG6IPGMUO6VDaW0WAS9Fg4BWbYGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XyTfXxNi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="nieMWeJT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:Message-ID:From:To:Subject:MIME-Version:
-	Content-Type; bh=5uQ+8p3PM2qLrd5BKrJFE5PB13djnVE5F7PfGTl1R8U=;
-	b=nieMWeJTDnETVz7o6VrsbtIfQeH2LJayjxLpalK6rePsZZULyZDurtsNnOh9WS
-	Z8xYw0zr1bfhxORdHaYuKS2eUv3syfhwmJVxWNyQwQfKOF3oOeR4ekzH+BP++M/0
-	aafU46GW3Lq/GLihVaEHzWoKejh9r/saxufIhmHLjzGTA=
-Received: from localhost (unknown [])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wD3n53H8rFqcm8aAA--.12894S2;
-	Tue, 22 Sep 2026 11:15:20 +0800 (CST)
-Date: Tue, 22 Sep 2026 12:15:19 +0900
-Message-ID: <df65573062819d671499dcb3bf3b8b92.sh_def@163.com>
-From: Hui Su <sh_def@163.com>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: qmo@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	horms@kernel.org
-Subject: Re: [PATCH bpf v2 2/2] bpftool: Fix sparse CPU IDs in prog profile
-In-Reply-To: <CAEf4BzaxH2geQUUOOGw8S0fhm3c9Z0H5r75QPo9_ziiqU6MF2g@mail.gmail.com>
-References: <20260918102052.1247819-1-sh_def@163.com>
-	<20260918102052.1247819-3-sh_def@163.com>
-	<CAEf4BzaxH2geQUUOOGw8S0fhm3c9Z0H5r75QPo9_ziiqU6MF2g@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XyTfXxNi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D4EB1F000FF;
+	Tue, 22 Sep 2026 03:22:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790047339;
+	bh=8HfsmWe18vqaIcsmBURthJcIj9m0ORvWdZMKM+oBDQU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=XyTfXxNihIPoDS6At5q0W54OiorJXa/2PrFWQ6EE1wm23IUj66LZAPhxJYu0pLS2G
+	 1KQZjhatjx2ZifOfHqgECb6+whVG20CsWi8sSEudzSAQ3MdoUES5MLIf3NxVhd0ThN
+	 5GzNifSNQouMiGetl2TsPuvpEgvtEEirDPMdSl9ghr2ywFcO8+224AjtCaqm4kJyJw
+	 Fb9vTSZf+vZNSgjDb7B+tbnyljroqeBVLSISyr35f4625A5jq3aZ4wuPzP6UkDcK02
+	 q+GV/JcbTmjgOs1wouNolcdp6urbu5pgLSJnlwVzoLnq+n5q8zPldDLTTwPELpjK1e
+	 YMffkVBUqWQpg==
+Content-Type: multipart/mixed; boundary="===============5613520125627611600=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3n53H8rFqcm8aAA--.12894S2
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxU58nYDUUUU
-X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbCwgj1VWqx8shIVwAA3U
+Message-Id: <ebf2ee78977b3aae08c12e4ba0a18f48463567e20fd282f25acf11f5af375030@mail.kernel.org>
+In-Reply-To: <20260922-b4-rcu-tasks-preempt-qs-v5-6-410f57770bad@toxicpanda.com>
+References: <20260922-b4-rcu-tasks-preempt-qs-v5-6-410f57770bad@toxicpanda.com>
+Subject: Re: [PATCH v5 06/13] x86/kprobes: Take a Tasks Trace reader in the optprobe template
+From: bot+bpf-ci@kernel.org
+To: josef@toxicpanda.com,paulmck@kernel.org,frederic@kernel.org,ast@kernel.org,rostedt@goodmis.org
+Cc: boqun@kernel.org,mhiramat@kernel.org,mark.rutland@arm.com,peterz@infradead.org,tglx@kernel.org,daniel@iogearbox.net,andrii@kernel.org,puranjay@kernel.org,rcu@vger.kernel.org,bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-arm-kernel@lists.infradead.org,linux-kernel@vger.kernel.org,josef@toxicpanda.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 22 Sep 2026 03:22:17 +0000 (UTC)
 
-> I don't think these fixes should go into bpf tree, please rebase them
-> onto bpf-next/master and resend. As is they don't apply cleanly.
+--===============5613520125627611600==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Thanks, I'll rebase the series onto bpf-next/master and resend it.
+> x86/kprobes: Take a Tasks Trace reader in the optprobe template
+>
+> The jump-optimized kprobe template calls optimized_callback() from a
+> dynamically allocated slot with preemption enabled, and only Tasks RCU
+> keeps that slot alive under a task preempted in the callback.  For
+> HAVE_RCU_TRAMPOLINE_READERS that means the template must be a Tasks
+> Trace reader across the call, so open-code rcu_read_lock_trace() and
+> rcu_read_unlock_trace() around it as ftrace_64.S does.  The template
+> lives in .rodata and is memcpy()d into each slot without relocation
+> processing, so the references to current_task and
+> rcu_tasks_trace_srcu_struct are absolute (R_X86_64_32S, relocated for
+> KASLR like any other) rather than %rip-relative.  %rax and %rcx have
+> already been saved by SAVE_REGS_STRING and are dead after the call.
+>
+> The slot itself is dynamically allocated text, so the instructions
+> before the lock and after the unlock are covered by the irq-exit check.
+> 64-bit only; 32-bit x86 does not take part.
+>
+> Assisted-by: LLM
+> Signed-off-by: Josef Bacik <josef@toxicpanda.com>
 
-Hui
+This looks like a bug fix for the preemption issue introduced when commit
+a19b2e3d7839 removed IRQ disabling from optimized kprobes. Should this
+include:
 
+  Fixes: a19b2e3d7839 ("kprobes/x86: Remove IRQ disabling from ftrace-based/optimized kprobes")
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35680506278
+--===============5613520125627611600==--
