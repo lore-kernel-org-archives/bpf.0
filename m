@@ -1,147 +1,137 @@
-Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD730EACD
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 05:49:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.205
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790056186; cv=pass; b=MpzYeIouhjgwfZgbECjwFZ4Nhil8ImDXh+CpL5zyr8r44qm7Am4B3cyc6cLf17Pxv+Z7W/RjDrc6l/2nuYF0u1k5aQiDEeejblVUvys9/SD0fwbxOHRz2UUt884hSljNszSzm04UIvGKllGtGcY6cNbS2LnWoRaf+TLLcWXPEJQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790056186; c=relaxed/simple;
-	bh=IaiBMhZiUx180hfzBlwurDk/2OaLS6t9ll9ildR+i7Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hB40FZRXZZ4dqZlcx+9qXAMriFdXHjUGklU3y3xjqmKqlu8dQgKRQAzCVYkBZUEYZWaBGC+5FYzIYARLEa/XukJ8d8aDod/4oRlYpIYPrhrbBhA0uWOnnfuGcdNxEyyP0F+CcGUgp831MWuESG9GOJkpcIvH9iRkq3rKHxhvVWg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hWtDYcLC; arc=pass smtp.client-ip=74.125.231.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4465382F08
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 06:04:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790057067; cv=none; b=jwIvB3Llca6xeh/bQfFgJuTuZggSQ2tSDtlgxiedg0aV3el3w40ZoxVQcKc8U0z0vt3Ve8fF4t2TjXcMU59y7axgtLQhkrBX275/5YAoKM62IFJXd4ipVEICefquKws/5SkJNv8sEFkLDqTeqsFMk2bAv5Atr1NfksvnJtfadK8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790057067; c=relaxed/simple;
+	bh=ElBhcqsUM2Ad9S8ZEGyEN9t/tY74rVMwa0Q7cwzZwxY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tYkfQmvDfldxguSAGcALpuWDACxOBP0eKJ7Eixa1bqtfvAcb3FJHH12eN8DRMXgHi5pskqNWyCY8Rs+sKm3RECPU3rghqOtI4gaGRn7SqImf3ZO+s0jNL2DUIM7twKGtH9qN2KL3yhIRO0zWyS7NHc80btF5I746M2cs6848Pm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cOUlU9aP; arc=none smtp.client-ip=74.125.225.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hWtDYcLC"
-Received: by mail-oi2-f13.google.com with SMTP id 5614622812f47-4c2c08ff3f8so2569735b6e.1
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 22:49:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790056183; cv=none;
-        d=google.com; s=arc-20260327;
-        b=IsCohdD5AbE30wdir+tnZQfrV6xnEaywtl5U2kyWmUC/v0vyHnvFshz3JG43EfVUKr
-         XYNpUS0QwQcxL6T2JP1s9sQ2zWXOTql80DlVJ+6lt0j83wB3J8RGna/qmJugTgepYcNG
-         WpWX7stveDxOVzJWK6tTNeWPlz7UjquXuKz/OeFHaj5z1bkWERKi/rM59Y9b9m8v2KGc
-         3WJcJo5S2Sp4Wvslu4cs3SxRu16dvXmSYxyyxV8RQoDjOLaMRV3+TlF1n26ZcFQSo5fO
-         L9Uhe4g7sVRgSjd2R5M3NP3svCdKYHaRJTIJ4a3dR5kDYUVLc8slUo1i3wZdlTpTD02Y
-         57cA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=DPxPXWoz+HQZCMKgPFUzkLpcsujYcZZJRRnxahFNCJA=;
-        fh=Vr4NkisCPZNNWUg5bYTtWHCzuHr8KfWRuJTfhM/1ceE=;
-        b=IsfYkZ1Tt1zE+KgKjSvSX60ptZX1ZCmDEpwVpAGSTl7yxpW0dsSEt6Bcw4m0xodTYT
-         fjORQTK6C7Zqmz4lKXMlyhtwqqjTTy0wYU39vYWdzTFk/tczNuIo5RWeoZOUz0peIxxU
-         DLT0Pgn9w5mYKm+WLg9wWYmz2FX2Fx4VWgDY4kKEAz0r+1oiy4xZHEanHWEMliulFe5H
-         Gy1NLG5SwITMy8eD2yAo2iC1vi917fLw/0zzDroaOvVhGyTYGdnWj6FPa6Pkd+ad38Iy
-         HHJx1CU6c4PNRX4nd5VWQjlLqEDHsQWptnmfDgCuXQKETmva+zvYLOp6/r8pG5gcAcQz
-         uRXQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cOUlU9aP"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49cd4ba9f68so50073245e9.1
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 23:04:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790056183; x=1790660983; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=DPxPXWoz+HQZCMKgPFUzkLpcsujYcZZJRRnxahFNCJA=;
-        b=hWtDYcLCiA0hFsOwAxPW+sj2VcZYiwFaK91IBI2QgBUDZIYgzb9oGbpSwLGLdvbXH5
-         ylViM86n33S/mBiXwnQiiKIafiowFWdnwQGvNdxCzYReHQZe/kYWRFjme9RsRbxOsBLh
-         3ri+6jatKzqMme4qK0x8Cloe8T9TIAFoX1jPFUbQs3g3iBreSYmMbPGBK3faKIwcIQ9i
-         jOT6ooGauQ8WK4v0v7Y73ResKKYbog5lZ/KCmKMoRMl85GvSMOnHp7boYuCh3fOi5woy
-         +aUAn94CZQ3S6D7ZZ437hjw5et/I1nYxTOXK4/MSII8UheCyimqPcIBc599WL1itekz+
-         TreA==
+        d=gmail.com; s=20251104; t=1790057064; x=1790661864; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=hZ4t+Je/NuLiMzspe4ek1fsrc4XzG00tppqvK5+4Vd4=;
+        b=cOUlU9aPDElGa3P8qm8wIjdeSU1gtl4mttHu2+TmctwN1+nWAI+Oo39N0H6jU9/J/T
+         jqJDVEtkYbKjUClvhJJrcdx2B47ZFULZ40TCWw+46wygywHKHXgPdkFV0ykdLSfowyno
+         PAQRq+Z4YvmvI0hIwKgoM2VNWAeZuWpv7/9HXhPvWZC2mC4VqQSYR53BV7kmhGu3nKln
+         UmXQjPUAfiZax8mpmraWbmNs8NryCIJuiuoG6CraO3bD9a0K6LIsl8Q4M/u7Nt9GeNbI
+         /ppGrULftKvqw/Q0rLiecsZEyj30/NE4itnhHvQ/nncP9Jj2SXR69P9wIPR+Fb4wh3H1
+         PEkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790056183; x=1790660983;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=DPxPXWoz+HQZCMKgPFUzkLpcsujYcZZJRRnxahFNCJA=;
-        b=XI9N4NLtrYr8GTvS14ukwbzZaQRH6VHzAFKMvZ+Ot3h/EeB9v/BwQApA6Y8pdV3B9H
-         e+rxNpNuslbITUAjyT8mSJfoopaCsnrDdcG5eLq8EW2HZo8rfhv8+sANSggy7q4OLgyZ
-         aqY8AgRJjjUSICv75RE/03dCoZ4OvtW8Q6xTgBO3Grh491aKAuEHAU7Opei74bkEPnAc
-         +dwGGQ59VpUS4R1b5PzwvQopm/sJ84E5sM2A+4XcZxmCQ9bQn/uJM8QKszpOf32COx96
-         G9I4ARrnogS2L2+aloQmVopPUYI+XLHgq2j99U8DhZPTLkAk85AyGYuJ7mblosZEbgBw
-         H8hA==
-X-Forwarded-Encrypted: i=1; AKwUvBydD1La7Pt5LqQX4PbKO+ncSPSkJ0SWk/0GrKWvsH30tIJGXKbKNspjcFwYLejApRx0zbs=@vger.kernel.org
-X-Gm-Message-State: AFuF++k3P1Vk4FYMuxbjA2GI3qV1U6jl+0nuImiRHE7fg6QzdkPpCk/b
-	sAY7wIj/jJQWehAQx/BTiE+RcvOXMUOZIEdEHJtz+saWQIdAbQNQ31faM/Ex9lb0LrioGGezhFK
-	BfDbvFh/WznwFolGq21Y4goHbB78LcQDdaSGiXSw=
-X-Gm-Gg: AYBFou2QcblvAuEFNmNbfICI2zS05H0BXD98xBTRCQIeZZVTMxOGgVoGBR3QTlqgaCq
-	eEPa8/3ntoe6mEoxRGEBo3HG7vSmXV0XXQaJLRoZY6rGcWWSooSWJc2b1gGb3YTpQCrtzifmi6b
-	jQg4KABttqrZ+8FIeOB5wsMN0X2Q3yogcICrtARttNZJ+8As/JkZv03ZtsOmuowCvWj8F+ilHb1
-	7hAj/UPAPvxx2dEaLi/cfPZ18UJRmSMyHMu/KUvIa+/w2EAVTP32FtCUCjU8MlPoh6ot/s+exmp
-	zLQQC3Fx2y5X1zVORS0VVvzcs97JcCSEzkPU+rFNM95XGzf6cyEl5oFxVhMHwxwBZRlMFMGyGjp
-	Ej9DgkCIHug==
-X-Received: by 2002:a05:6808:4f21:b0:4b9:a829:f012 with SMTP id
- 5614622812f47-4d4657acac9mr1212151b6e.30.1790056183526; Mon, 21 Sep 2026
- 22:49:43 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790057064; x=1790661864;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hZ4t+Je/NuLiMzspe4ek1fsrc4XzG00tppqvK5+4Vd4=;
+        b=jdxewMvzrpPOyPOU5WF/+mM0uA2OX9015duc3KJQM80jyrU3Xc3aWyjgmoh8N9qyC2
+         D4mKMt3sPzq0psKGgLsWiqe9159RRXlgIKBzZc+5CrdFyE8AVmDDi7Nh73a52j6srUWi
+         fvpxZAj7yCKmhtZ46HEhdqLY037nSbN9DWS6Mq4S/oDe+i4NlYgNCGie0wW1qoearmby
+         fDOQqrzkXYll34NJ+xHxwc3GhGpe0+BFa8FhLJ37/USv54wxUM+Zl0jDawzESgwd/y5T
+         H1CoQjR9k+15JC5yJqViOSlg+upgpMST2Xvi3XMPwxlP7viBoT1851rstkbYkIbUggcU
+         H4zg==
+X-Forwarded-Encrypted: i=1; AKwUvBxcS7kWDsA9oGo898FBWGdL052ra4PfY652Up1UfgDyFyLCRQbe2Xem6O1nKyWc93AYyGc=@vger.kernel.org
+X-Gm-Message-State: AFuF++k/8gqW9rZp1XhdoDnWsjcXJoYX+EcPkx3w3wLHxmHAip84g4ME
+	nw8FMFOJ+72yW0aCA/bsDUPGdud8J3txAefQbhOKE55F5Z/dEpjTaRVD
+X-Gm-Gg: AYBFou36q2Cn5fbryghs3Xa/CGudw192i5ijFCWoJnfEU/isCj8Yx7OKSBY1VdaGIDq
+	uiUShbC416+ZrwEozy3zc29nz+uLJ03MHxkcK9fso1qmd0Z07Hz2ncyT/dOWfyvdTyZMGO4dPOi
+	nThz/3F5yTcCofRXNoGyZskj3FIUUo7agq5+l3qnScqbTfz08CJsUDmxXhbfE0oDDTg/kNuZ6es
+	Micc+Yqn9LgJeL7PNavW6eZHGdkJxqLs+/NjYQrBo3jduJohsCpO8xSJYoHFh2NPD58q96tavTX
+	GU8cd2yrlMehUIhxFdREc8+Bp4hhRHq1NhK3aJFfgYiQNsV9Y5xVBXvIbl+lIjUCx++RldC70h7
+	VgBgpr+t6I6piZ8CVPcovDuw9HFo1147KCpWWPsgZZ9/kDQ2/MTdS/WWFscM1aToaa2CNdGBoJg
+	hoZVMB7AnLxDbNzYK8/XY9cD0dMXGjMTtzmg+Cl6VNglDjcSw80ENmfd/DWnscFbTzw/Np7Ryoh
+	Crp5hHIg1MmptvcWLR3ODYa+00KtQS4yZfvjYk7rlKkcuGRk8uysMOtes4LZ6r2JkYgQFbLfTjk
+	TrzgoR9nkNFfN8GOZysCSV9npM8PWspS7hGVJATuJYcraLu9acwtf5n6ijHaVfjA7jY5Bdv97w=
+	=
+X-Received: by 2002:a05:600c:474e:b0:49e:7cff:f8ca with SMTP id 5b1f17b1804b1-49fc5743c69mr172251345e9.29.1790057063419;
+        Mon, 21 Sep 2026 23:04:23 -0700 (PDT)
+Received: from unknown748F3CBA5068 (dynamic-2a02-3100-a5e6-3401-ecdc-1e24-2e52-02d6.310.pool.telefonica.de. [2a02:3100:a5e6:3401:ecdc:1e24:2e52:2d6])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48862793792sm2769226f8f.31.2026.09.21.23.04.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Sep 2026 23:04:22 -0700 (PDT)
+Date: Tue, 22 Sep 2026 08:04:21 +0200
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Vlastimil Babka <vbabka@kernel.org>, Harry Yoo <harry@kernel.org>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Andrew Morton <akpm@linux-foundation.org>, 
+	Hao Li <hao.li@linux.dev>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>, 
+	Amery Hung <ameryhung@gmail.com>, Swaraj Gaikwad <swarajgaikwad1925@gmail.com>, 
+	Clark Williams <clrkwllms@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, linux-mm@kvack.org, 
+	bpf@vger.kernel.org, linux-rt-devel@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH] mm: restrict can_spin_trylock() to preemptible
+ context on PREEMPT_RT
+Message-ID: <arIY0wMQjCCsqidI@gmail.com>
+References: <20260919171443.90512-1-kmehltretter@gmail.com>
+ <DLJHZEZMLW0F.27OPPS218CX9Q@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260921154650.130677-1-suchitkarunakaran@gmail.com>
- <DLL5PFJLT64M.1W82K71YXNT3A@gmail.com> <CAO9wTFjK+oRT-maca6A1UDBrgYTGB0Zr48UiLm2Ees835POOFg@mail.gmail.com>
- <DLL8564LZU8N.16W933Z547TYI@gmail.com>
-In-Reply-To: <DLL8564LZU8N.16W933Z547TYI@gmail.com>
-From: Suchit Karunakaran <suchitkarunakaran@gmail.com>
-Date: Tue, 22 Sep 2026 11:19:31 +0530
-X-Gm-Features: AcwNN1W6xOYvi9sFyoWMbEvyWviGH90dvlmITiywUV51uj567TW5Vdt-iXrGmWI
-Message-ID: <CAO9wTFjNX18eynH7EJGjzMeE+yXx9XesLSW9gJCYXTSqNJMavQ@mail.gmail.com>
-Subject: Re: [PATCH] bpf: add diagnostics for rejected memory and map accesses
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	ihor.solodrai@linux.dev, john.fastabend@gmail.com, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DLJHZEZMLW0F.27OPPS218CX9Q@gmail.com>
 
-On Tue, 22 Sept 2026 at 00:30, Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon Sep 21, 2026 at 5:38 PM UTC, Suchit Karunakaran wrote:
-> > On Mon, 21 Sept 2026 at 22:35, Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Mon, Sep 21, 2026 at 09:16 PM Suchit Karunakaran <suchitkarunakaran@gmail.com> wrote:
-> > > >                                       verbose(env, "sign extending loads from arena are not supported yet\n");
-> > > > +                                     bpf_diag_policy(
-> > > > +                                             env, i + delta, "sign-extending arena load",
-> > > > +                                             "the current JIT does not support this load instruction for arena memory",
-> > > > +                                             "Use a kernel and architecture with JIT support for this arena load.");
-> > >
-> > > Did you read what AI generated for you?
-> > > "Use a kernel and architecture with JIT support for this arena load."
-> > > ?!?!
-> > >
-> > > Please apply human filter to every single line of "your" patches.
-> > >
-> > > pw-bot: cr
-> >
-> > Hi Alexei. I'm sorry for the oversight. I somehow misinterpreted it as
-> > "Use a kernel and architecture with JIT that supports this arena
-> > load." Is the following diagnostic message fine? If yes I'll correct
-> > it in v2.
-> > bpf_diag_policy(env, i + delta,
-> > "sign-extending arena load", "the current JIT backend doesn't
-> > implement sign-extending loads from arena memory",
-> >  "Use a kernel and architecture where the BPF JIT supports
-> > sign-extending loads from arena memory.");
->
-> No. That is still wrong. Put yourself in user's shoes.
-> How would you react to this message?
->
+On Sat, Sep 19, 2026 at 06:17:30PM +0100, Alexei Starovoitov wrote:
+> 6.19 had this check in kmalloc_nolock() only. alloc_pages_nolock() and
+> free_pages_nolock() allowed irqs disabled since they were introduced,
+> and arena was sleepable only under a mutex back then.
 
-Hi Alexei, thanks for the review. After some research, I found that
-the sign extending load instruction was introduced in BPF ISA V4.
-Given that, would the following diagnostic message be more helpful for
-users?
-bpf_diag_policy(env, i + delta,
-"sign-extending load from arena memory",
-"the current JIT backend doesn't implement sign-extending loads from
-arena memory",
-"Recompile the BPF program with Clang's -mcpu=v3 to avoid generating
-sign-extending load instructions.");
+Hi Alexei,
+
+Thanks for the review!
+
+> No. This kills bpf arena on RT.
+
+I have now confirmed by testing that the RFC breaks both BPF arena paths
+on PREEMPT_RT.
+
+> As Sebastian said in
+> https://lore.kernel.org/r/20260831143500.x-saxdAs@linutronix.de
+> raw_spinlock_t is fine in general. pi_lock is special. rq lock too,
+> I think, since rt_spin_unlock() can end up in try_to_wake_up().
+> The check has to be about those and not about every irq/preempt
+> disabled section.
+
+This leaves me unsure where the boundary between the MM and BPF fixes
+should be. I see four possible directions:
+
+a) Change MM so _nolock() allocation remains safe and can still succeed
+   while pi_lock or an rq lock is held. Existing BPF behavior would
+   remain unchanged. Is this feasible, or would it require substantial
+   allocator changes?
+
+b) Restore BPF local storage's dedicated allocator, and document, with
+   debug checks if possible, that _nolock() must not be used in those
+   scheduler-lock contexts. Since the allocator change would restore
+   the behavior before f484f4a3e058 and be confined to BPF, could this
+   also be suitable for stable kernels?
+
+c) Have MM detect those contexts and return NULL. This prevents the
+   deadlock while preserving ordinary raw-lock callers such as arena,
+   but task-storage creation from scheduler tracepoints then fails
+   deterministically.
+
+d) Combine (b) and (c) restore BPF functionality first, then add
+   the MM restriction for other and future callers.
+
+Are these the right alternatives? In particular, what behavior is
+intended from the _nolock() API in these scheduler-lock contexts?
+
+Thanks,
+Karl
