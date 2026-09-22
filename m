@@ -1,56 +1,56 @@
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D69E4AA419
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 19:45:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69CEB4A7C95
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 19:45:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790106366; cv=none; b=cCuDPbWCzDYWfpbcAKFUFTwAGwZgcQXz1jBWUEMU0qSNEnNkelPSyN2lBFlJ58YH+pssouoUo/g8xiUjBgJjRmCOHvjEgDzt3M/ksRKloRN8VjHlByzVV/d28bnRX1FmLuaMhIoDXI2BB8epwbpMfOvA+I/+EIqVQN1uPoIg9ws=
+	t=1790106367; cv=none; b=nSn1qzY2ZqylqBFB/aEeXFQBfeEp0WvH/MDsMbxTsKnjd0Mg8wHV9Qcg+D6J0GNjOvjVDoe/oQD6YfyzfFKQIH15HqZYzR8ec3uj+5mAiGzhXmkuJ/22aslrB77BQrkgZbO0WUESuSchR5XuVYU042VLh/MOYsvCDjJwpBwJcDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790106366; c=relaxed/simple;
-	bh=1EJkBF60HcU/pLER8OktBdGOFBFfB6U9QISFMdwHHNY=;
+	s=arc-20240116; t=1790106367; c=relaxed/simple;
+	bh=ecSyTfJPz96M1UC/DhEKoRu2pGbe4F6v4SIrDUuNNkg=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=l67/J+6vpxw4IuMAecSjQ6L2Nezx0/IEz2h6gSYFZtEMjLXsl4Ye934V0DvL2H9CRknOvSAtP/APIuO9fdv4a3z99El0EnsEQvZhcxW6apwAhl6+Lif4sO+rBjmrx7welOqXLpaJ5sB5Bxv85o7Mo7xd23hGosWxbXcwp/w0s0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GF2W7ZMe; arc=none smtp.client-ip=209.85.210.197
+	 To:Cc:Content-Type; b=ITkFVYfIKZ53KREvuQ54TOkKmKiOSSJiYPEjWA0G/nF0bgRK4cRK53OJbF4iI7cqHOBa4pVWwxAhi0uMnUB48WkyM/+miEhTFKZCz/jqrvRxZAXxUwBrBv3fPTGDaOHBGJCsI2NWq2yjhJ3OQqC8mdBMSwuQyL/dEdlNOz7eK3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ejvYmY18; arc=none smtp.client-ip=209.85.214.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--joshwash.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GF2W7ZMe"
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8679cfe5019so350937b3a.0
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 12:45:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ejvYmY18"
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2d55d8cd938so2766685ad.1
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 12:45:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790106351; x=1790711151; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1790106355; x=1790711155; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=lE/2nZUBQE5y8bltkgjlYIgZWN2LasehNWmZI4UlYBI=;
-        b=GF2W7ZMeAwEiZhP3ksEcJ62yH4pS4zP1EEIK0gf8m4g04RRqZIVM/71EkmeGSYDXzn
-         JpfybL+tDDEYlk82YRhhijL4zqQPD+H7i2pjrJ+BVGu77P2Ho32cdToYBFF1FOsbCVoZ
-         46tutafUzUNry0eudlN+6E3LP8sSMIP94cJmddekjYQ0q1V5us2cdgtMoQxQW5AlLUvk
-         FNDDQhxt4EXWDsq41yJMd7+bv7LT1Dmd0LE+/j76/+Rk1zoDWZHPkP6uH9C8CdpWK3qB
-         jOCMFpOJ0p89eiv7l8Y0Jcj/Pxn0lFIJ85asdFImCLxVgytiNtO24ylqVL6INSwsAbm6
-         yzJg==
+        bh=R0lSci6HT5gQeGkphetiqsMSe/tz0UwH39MUVuL7NZk=;
+        b=ejvYmY18PQ1hH6dgBLjaV/k5vnyyz7ieNeRVlq0Hnuy8SGUc9LHFSS+s+yBI80R/wD
+         m4iGey8h++uGkdUxZU3KsmvJfg0G1//1u2TmdutdVhsj1of09ebdz3GM4O+jUrWArUm4
+         jGI5h+9QSB5whgLd2ydiTZO5OuL2sIZ+qDJxJfUN0BjKuFFFdPjG5MBhOzJSbHVf7BiH
+         AhV1j5kTL6wVHbSrrbqR85gGPGGDT8PXgRaWeInNaGmLy0WaUeDDMZwPvEMLRBiHZ/P7
+         oQagtbvAwkUpdzQnrltCd5ZL6AxuXLGRzKafqIaqP4Y7RyjX6ilf2qzIEgWXKl/d0I5+
+         hMKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790106351; x=1790711151;
+        d=1e100.net; s=20260707; t=1790106355; x=1790711155;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=lE/2nZUBQE5y8bltkgjlYIgZWN2LasehNWmZI4UlYBI=;
-        b=lhbpuxAOFvtlRsV/cboC5Jinaln0hKixkvwUDenL7hzCx/+NgXsMLbyHG/XoaH7dtC
-         aiWOpP+WNoX8yHhsYFPsgt9PjDgB2dkXN/Qz8nBb4HSEOL2BqdYlkGflC7iPFGjg8okq
-         z+GrcbQmlddcLEKV+T6CtlOkwh6FR1vILBlS2k/V1CjD9pyQ1yGwhlvCxpaVGcR1T0nZ
-         LlTp2b8Rz0aWg7NHUWw+v9WPpxfvDOiJ+MAAZqTCRv73GKaaQWCjh4RjUQbs3KYQcklT
-         yWDLffaFWMex7Lsfgoosl6CDxeR656vfTGrogHo/cLul38M0QANea9KD56F//t0HEpU4
-         RJ2w==
-X-Forwarded-Encrypted: i=1; AKwUvBxpMDzIt+1wuM2eu+7ohhoVpJXEME0Uz95ZomstOLDyQ8tPi7TiUR/5KYeyfD7v8KP88Rs=@vger.kernel.org
-X-Gm-Message-State: AFuF++lNS0c8xKqI+u6KOZPSHnSLbZbJTgFakMeXO+xn8uv0+fysSpUk
-	Se42x5WmLkpFjip+SQQEGp4Pi0aavSAQoVKLDnjl3e/RFgg7+XgnA9EBZM+/8Y6g9iHAbKaL+em
-	c5KVxPexezGSdXg==
-X-Received: from pfqy13.prod.google.com ([2002:aa7:9e0d:0:b0:848:5540:2ad5])
+        bh=R0lSci6HT5gQeGkphetiqsMSe/tz0UwH39MUVuL7NZk=;
+        b=qtvslZXcs9vtBJW8rk3glut+i2IKiUvzn2diPapDptbI9HMB4cNeluGbF6m3x0tYfr
+         ObKme3iT3KNRGnxV0IlIzZRu8izbhc4YQVLWQ6W4U7FPOKArVqMcaqfqSoO/V5C0zBI0
+         VMelERO13Ihdx22jbySH94L4LnTYizk6OkmqC6elkEwkIitj3CbiCOpb/Zl9e7n98Kgj
+         od74H9WvSHEBJb9rzRjq0LInQY8XLgi43rZv0ap+jIcSKlkr4uacybUTX/A0VQx9/jGj
+         9X5o4DUCm+sLi2w27bL1LUHw1qIZ5oVZhdoK+b9QeH0AgHKIhClyjX8NWm6vgIXsyDI/
+         0WJg==
+X-Forwarded-Encrypted: i=1; AKwUvByMnm1ejaF296jfRvQX78fcjVT7VIv8HA/mgLqd7ekkandukKTfFj5nq02r6LHH5DswO/c=@vger.kernel.org
+X-Gm-Message-State: AFuF++musJPpIjpZ2OiHsXP2p5rUxh4w9fXLk1bdi4ZkvjPN4IJWrzmz
+	lnMA3yH3EIzvYrDOEaNkQjgrAUfA02TpdtjEms9vDi43FM3OXsM0SNO2+ti/86FDwH2xfN9hP3I
+	3VcYiDf+ofxP7Jw==
+X-Received: from plcy11.prod.google.com ([2002:a17:903:10b:b0:2df:638e:e034])
  (user=joshwash job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a00:1911:b0:87d:430:1578 with SMTP id d2e1a72fcca58-87d1b8a0852mr683603b3a.29.1790106351015;
- Tue, 22 Sep 2026 12:45:51 -0700 (PDT)
-Date: Tue, 22 Sep 2026 12:45:31 -0700
+ 2002:a17:902:e548:b0:2dd:c053:9c73 with SMTP id d9443c01a7336-2df69dea44bmr3666085ad.41.1790106354635;
+ Tue, 22 Sep 2026 12:45:54 -0700 (PDT)
+Date: Tue, 22 Sep 2026 12:45:33 -0700
 In-Reply-To: <20260922194533.631387-1-joshwash@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -60,9 +60,9 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260922194533.631387-1-joshwash@google.com>
 X-Mailer: git-send-email 2.55.0.1082.g2b9226bbc0-goog
-Message-ID: <20260922194533.631387-8-joshwash@google.com>
-Subject: [PATCH net v2 7/9] gve: disable NAPI when registering XSK pools in
- QPL mode
+Message-ID: <20260922194533.631387-10-joshwash@google.com>
+Subject: [PATCH net v2 9/9] gve: prevent XDP frame leak and corruption during
+ DQO TX cleanup
 From: Joshua Washington <joshwash@google.com>
 To: netdev@vger.kernel.org
 Cc: Joshua Washington <joshwash@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
@@ -77,90 +77,231 @@ Cc: Joshua Washington <joshwash@google.com>, Harshitha Ramamurthy <hramamurthy@g
 	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-As a result of QPL modes not posting XSK buffers directly to the NIC,
-they do not need to recreate queues or re-post DMA buffers.
+From: Eddie Phillips <eddiephillips@google.com>
 
-However, traffic should still be quiesced because both the driver and
-the XDP redirect stack must have the same knowledge about whether a
-given packet is being processed with AF_XDP zero-copy enabled or not.
-GVE in QPL mode does not current respect this, which could lead to a
-race condition between packet processing and the XSK_BUFF_POOL memory
-model registration.
+When tearing down a DQO TX ring or processing miss completions,
+pending packets were assumed to be SKBs. If an XDP frame was pending
+during cleanup or timeout, cur_state->skb was accessed on an xdpf
+union pointer or the XDP frame was leaked without calling
+xdp_return_frame().
 
-Quiesce traffic by disabling the NAPI while the XSK_BUFF_POOL memory
-model is being registered with the kernel.
+Refactor gve_tx_clean_pending_packets(), gve_handle_miss_completion(),
+and remove_miss_completions() to switch on pending_packet->type.
 
-Fixes: fd8e40321a12 ("gve: Add AF_XDP zero-copy support for GQI-QPL format")
+Fixes: d8a8ca14c937 ("gve: add XDP_TX and XDP_REDIRECT support for DQ RDA")
 Cc: stable@vger.kernel.org
-Reviewed-by: Harshitha Ramamurthy <hramamurthy@google.com>
+Signed-off-by: Eddie Phillips <eddiephillips@google.com>
 Signed-off-by: Joshua Washington <joshwash@google.com>
 ---
 v2:
-- newly introduced
+- Newly introduced.
 ---
- drivers/net/ethernet/google/gve/gve_main.c | 41 ++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ drivers/net/ethernet/google/gve/gve_tx_dqo.c | 155 +++++++++++++------
+ 1 file changed, 104 insertions(+), 51 deletions(-)
 
-diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/ethernet/google/gve/gve_main.c
-index 49ae2b8c6a27..f2bd4011de23 100644
---- a/drivers/net/ethernet/google/gve/gve_main.c
-+++ b/drivers/net/ethernet/google/gve/gve_main.c
-@@ -1626,6 +1626,40 @@ static int gve_xdp_xmit(struct net_device *dev, int n,
- 	return -EOPNOTSUPP;
+diff --git a/drivers/net/ethernet/google/gve/gve_tx_dqo.c b/drivers/net/ethernet/google/gve/gve_tx_dqo.c
+index 78f946ae7264..e8481b993beb 100644
+--- a/drivers/net/ethernet/google/gve/gve_tx_dqo.c
++++ b/drivers/net/ethernet/google/gve/gve_tx_dqo.c
+@@ -186,6 +186,49 @@ static void gve_unmap_packet(struct device *dev,
+ 	pkt->num_bufs = 0;
  }
  
-+static void gve_disable_xsk_napis(struct gve_priv *priv, u16 qid)
++static struct gve_tx_pending_packet_dqo *
++gve_xsk_reorder_queue_head(struct gve_tx_ring *tx)
 +{
-+	struct napi_struct *napi_rx, *napi_tx;
-+	u16 tx_qid;
++	u32 head = tx->dqo_compl.xsk_reorder_queue_head;
 +
-+	napi_rx = &priv->ntfy_blocks[priv->rx[qid].ntfy_id].napi;
-+	napi_disable_locked(napi_rx);
++	if (head == tx->dqo_compl.xsk_reorder_queue_tail) {
++		tx->dqo_compl.xsk_reorder_queue_tail =
++			atomic_read_acquire(&tx->dqo_tx.xsk_reorder_queue_tail);
 +
-+	tx_qid = gve_xdp_tx_queue_id(priv, qid);
-+	napi_tx = &priv->ntfy_blocks[priv->tx[tx_qid].ntfy_id].napi;
-+	napi_disable_locked(napi_tx);
-+}
-+
-+static void gve_enable_xsk_napis(struct gve_priv *priv, u16 qid)
-+{
-+	struct napi_struct *napi_rx, *napi_tx;
-+	u16 tx_qid;
-+
-+	napi_rx = &priv->ntfy_blocks[priv->rx[qid].ntfy_id].napi;
-+	napi_enable_locked(napi_rx);
-+
-+	tx_qid = gve_xdp_tx_queue_id(priv, qid);
-+	napi_tx = &priv->ntfy_blocks[priv->tx[tx_qid].ntfy_id].napi;
-+	napi_enable_locked(napi_tx);
-+
-+	if (gve_is_gqi(priv)) {
-+		if (gve_rx_work_pending(&priv->rx[qid]))
-+			napi_schedule(napi_rx);
-+
-+		if (gve_tx_clean_pending(priv, &priv->tx[tx_qid]))
-+			napi_schedule(napi_tx);
++		if (head == tx->dqo_compl.xsk_reorder_queue_tail)
++			return NULL;
 +	}
++
++	return &tx->dqo.pending_packets[tx->dqo.xsk_reorder_queue[head]];
 +}
 +
- static int gve_xsk_pool_enable(struct net_device *dev,
- 			       struct xsk_buff_pool *pool,
- 			       u16 qid)
-@@ -1655,7 +1689,14 @@ static int gve_xsk_pool_enable(struct net_device *dev,
- 		return 0;
++static void gve_xsk_reorder_queue_pop_dqo(struct gve_tx_ring *tx)
++{
++	tx->dqo_compl.xsk_reorder_queue_head++;
++	tx->dqo_compl.xsk_reorder_queue_head &= tx->dqo.complq_mask;
++}
++
++static void gve_tx_process_xsk_completions(struct gve_tx_ring *tx)
++{
++	u32 num_xsks = 0;
++
++	while (true) {
++		struct gve_tx_pending_packet_dqo *pending_packet =
++			gve_xsk_reorder_queue_head(tx);
++
++		if (!pending_packet ||
++		    pending_packet->state != GVE_PACKET_STATE_XSK_COMPLETE)
++			break;
++
++		num_xsks++;
++		gve_xsk_reorder_queue_pop_dqo(tx);
++		gve_free_pending_packet(tx, pending_packet);
++	}
++
++	if (num_xsks)
++		xsk_tx_completed(tx->xsk_pool, num_xsks);
++}
++
+ /* gve_tx_free_desc - Cleans up all pending tx requests and buffers.
+  */
+ static void gve_tx_clean_pending_packets(struct gve_tx_ring *tx)
+@@ -201,11 +244,30 @@ static void gve_tx_clean_pending_packets(struct gve_tx_ring *tx)
+ 		else
+ 			gve_unmap_packet(tx->dev, cur_state);
  
- 	if (gve_is_qpl(priv)) {
-+		gve_disable_xsk_napis(priv, qid);
+-		if (cur_state->skb) {
+-			dev_consume_skb_any(cur_state->skb);
+-			cur_state->skb = NULL;
++		switch (cur_state->type) {
++		case GVE_TX_PENDING_PACKET_DQO_SKB:
++			if (cur_state->skb) {
++				dev_consume_skb_any(cur_state->skb);
++				cur_state->skb = NULL;
++			}
++			break;
++		case GVE_TX_PENDING_PACKET_DQO_XDP_FRAME:
++			if (cur_state->xdpf) {
++				xdp_return_frame(cur_state->xdpf);
++				cur_state->xdpf = NULL;
++			}
++			break;
++		case GVE_TX_PENDING_PACKET_DQO_XSK:
++			cur_state->state = GVE_PACKET_STATE_XSK_COMPLETE;
++			break;
++		default:
++			WARN_ON_ONCE(1);
++			break;
+ 		}
+ 	}
 +
- 		err = gve_reg_xsk_pool(priv, dev, pool, qid);
-+		/* Make sure it is visible to the workers on datapath */
-+		smp_mb();
-+
-+		gve_enable_xsk_napis(priv, qid);
-+
- 		if (err)
- 			goto err_xsk_pool_dma_mapped;
- 	} else {
++	if (tx->xsk_pool)
++		gve_tx_process_xsk_completions(tx);
+ }
+ 
+ static void gve_tx_init_ring_state_dqo(struct gve_tx_ring *tx)
+@@ -1089,28 +1151,6 @@ static void gve_xsk_reorder_queue_push_dqo(struct gve_tx_ring *tx,
+ 	atomic_set_release(&tx->dqo_tx.xsk_reorder_queue_tail, tail);
+ }
+ 
+-static struct gve_tx_pending_packet_dqo *
+-gve_xsk_reorder_queue_head(struct gve_tx_ring *tx)
+-{
+-	u32 head = tx->dqo_compl.xsk_reorder_queue_head;
+-
+-	if (head == tx->dqo_compl.xsk_reorder_queue_tail) {
+-		tx->dqo_compl.xsk_reorder_queue_tail =
+-			atomic_read_acquire(&tx->dqo_tx.xsk_reorder_queue_tail);
+-
+-		if (head == tx->dqo_compl.xsk_reorder_queue_tail)
+-			return NULL;
+-	}
+-
+-	return &tx->dqo.pending_packets[tx->dqo.xsk_reorder_queue[head]];
+-}
+-
+-static void gve_xsk_reorder_queue_pop_dqo(struct gve_tx_ring *tx)
+-{
+-	tx->dqo_compl.xsk_reorder_queue_head++;
+-	tx->dqo_compl.xsk_reorder_queue_head &= tx->dqo.complq_mask;
+-}
+-
+ /* Transmit a given skb and ring the doorbell. */
+ netdev_tx_t gve_tx_dqo(struct sk_buff *skb, struct net_device *dev)
+ {
+@@ -1347,8 +1387,25 @@ static void gve_handle_miss_completion(struct gve_priv *priv,
+ 			secs_to_jiffies(GVE_REINJECT_COMPL_TIMEOUT);
+ 	add_to_list(tx, &tx->dqo_compl.miss_completions, pending_packet);
+ 
+-	*bytes += pending_packet->skb->len;
+-	(*pkts)++;
++	switch (pending_packet->type) {
++	case GVE_TX_PENDING_PACKET_DQO_SKB:
++		if (pending_packet->skb) {
++			*bytes += pending_packet->skb->len;
++			(*pkts)++;
++		}
++		break;
++	case GVE_TX_PENDING_PACKET_DQO_XDP_FRAME:
++		if (pending_packet->xdpf) {
++			*bytes += pending_packet->xdpf->len;
++			(*pkts)++;
++		}
++		break;
++	case GVE_TX_PENDING_PACKET_DQO_XSK:
++		break;
++	default:
++		WARN_ON_ONCE(1);
++		break;
++	}
+ }
+ 
+ static void remove_miss_completions(struct gve_priv *priv,
+@@ -1377,9 +1434,26 @@ static void remove_miss_completions(struct gve_priv *priv,
+ 		else
+ 			gve_unmap_packet(tx->dev, pending_packet);
+ 
+-		/* This indicates the packet was dropped. */
+-		dev_kfree_skb_any(pending_packet->skb);
+-		pending_packet->skb = NULL;
++		switch (pending_packet->type) {
++		case GVE_TX_PENDING_PACKET_DQO_SKB:
++			if (pending_packet->skb) {
++				/* This indicates the packet was dropped. */
++				dev_kfree_skb_any(pending_packet->skb);
++				pending_packet->skb = NULL;
++			}
++			break;
++		case GVE_TX_PENDING_PACKET_DQO_XDP_FRAME:
++			if (pending_packet->xdpf) {
++				xdp_return_frame(pending_packet->xdpf);
++				pending_packet->xdpf = NULL;
++			}
++			break;
++		case GVE_TX_PENDING_PACKET_DQO_XSK:
++			break;
++		default:
++			WARN_ON_ONCE(1);
++			break;
++		}
+ 
+ 		u64_stats_update_begin(&tx->statss);
+ 		tx->dropped_pkt++;
+@@ -1426,27 +1500,6 @@ static void remove_timed_out_completions(struct gve_priv *priv,
+ 	}
+ }
+ 
+-static void gve_tx_process_xsk_completions(struct gve_tx_ring *tx)
+-{
+-	u32 num_xsks = 0;
+-
+-	while (true) {
+-		struct gve_tx_pending_packet_dqo *pending_packet =
+-			gve_xsk_reorder_queue_head(tx);
+-
+-		if (!pending_packet ||
+-		    pending_packet->state != GVE_PACKET_STATE_XSK_COMPLETE)
+-			break;
+-
+-		num_xsks++;
+-		gve_xsk_reorder_queue_pop_dqo(tx);
+-		gve_free_pending_packet(tx, pending_packet);
+-	}
+-
+-	if (num_xsks)
+-		xsk_tx_completed(tx->xsk_pool, num_xsks);
+-}
+-
+ int gve_clean_tx_done_dqo(struct gve_priv *priv, struct gve_tx_ring *tx,
+ 			  struct napi_struct *napi)
+ {
 -- 
 2.55.0.1082.g2b9226bbc0-goog
 
