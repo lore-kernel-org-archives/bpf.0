@@ -1,64 +1,64 @@
-Received: from mail-pj2-f14.google.com (mail-pj2-f14.google.com [74.125.227.142])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80749364EBF
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 01:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7082F357D1E
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 01:14:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790039661; cv=none; b=Tg8hdfa72hF2UJf+a8+6kM/h5UD7KlpsKZYFPaZQWs5l0zqWC0DJ3rGY183gPrc2giGCFgaQXOcVpIlmt9BTqjzpQhNzrlph4RtBU/fCBsH1P/4+8Ov3azTWE09URRpfIhFiHRTQSQtx4CPqNHExpw9EBtFqRbFjs3ZR2Jl8+6U=
+	t=1790039665; cv=none; b=ms+9dDrHhQyyuNHSLnsXbYDKtsdpyEvUS6UPGtiJNbGDAbtRwCBxklLNc5VVy7KPy4F8lD9gYTvbCa0M4YORS6yObUluhK61E+Mnf8GMRDxhjXSaqO8lLdaiCjgN8Css//V/uRzFTL1zu/Pit0mGiFUMEss4sBOolbTkygBJeYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790039661; c=relaxed/simple;
-	bh=aRTHwNfJCmSjKATwxosktV2XLCFIFu9ipRd6D2M/yYs=;
+	s=arc-20240116; t=1790039665; c=relaxed/simple;
+	bh=eexBqtqenc1hnmMsGMnXwirFHngkVBZxSQZYd5rAVEo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PxDwyy1OuADdJpdypTygG2beLw5i7/E7ikEaQcLplo72wkOd59+jS7vsNrqKOMPjTrDc6OU/lq+f1hmg5zfFAOSVA1isBjWPjkkRUyrAzO3+6+m+P5aYfkUUIEMuiSX2eoVpa15+AKXZM0W9AJgUTQwkRCYBmuafwqaNjh3+OEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EQLexo89; arc=none smtp.client-ip=74.125.227.142
+	 MIME-Version; b=Tyh865FaujI+rCNBV7B1egEwHtHCglqgCgIDLpAkaumn8+rjkpDaOiYf42LBmu56yU6bUkKndXQO0DTJSQ7sEIBBq/owZ2AUh0jPeLR2FvMjHuhs685NE6VJpwPO6aSAAzs8kKOkIfpAetyLESUFK9UewjmaLY+bJ3vj8fd7ENA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fkL6zGnu; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EQLexo89"
-Received: by mail-pj2-f14.google.com with SMTP id d9443c01a7336-2dd58e1e2c7so32364845ad.0
-        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 18:14:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fkL6zGnu"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396cccbba92so3215443a91.0
+        for <bpf@vger.kernel.org>; Mon, 21 Sep 2026 18:14:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790039659; x=1790644459; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790039662; x=1790644462; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=pMXZAyntyWZo2/7CLFlrhhNZAkAM+VurKCNG8Q0Pr20=;
-        b=EQLexo89ixSt+5FYe3NqUQo57PUvVX0CvYG9dOF1DiTyolzcq5CCI04PLIRosGTy1Z
-         lmGilnIp4aiia56QibYcX2Js6B92HRlPdFNHSdNpuayEGm2qW59vAXn6EgvXo4pZuMjf
-         YynlgwMEJxtJSCWE5KBFDZvSro13HBIt3m/G8Hrih6htxAD7uDgxToiV2uvMDINQWmm5
-         x4TdVi5enuNAJu67dfdzGSfdswONROi496RTMSf5bj+qVowXNGIzfW29I6/K/Z0lEouI
-         Oh8tkVd4LHaycElVkb4C7TaQRzF2og1Sp9aAqJ9H2RSBVJfTEmr4IG0aKCEasnKXqtkE
-         qbkw==
+        bh=Dvjo2TTpqIBpvrWwy+Rq1rdVynAVONB4nNOZSjZjHdA=;
+        b=fkL6zGnuduQRAkjqckBGmnTn94jU8lIccrZymKFF15dzzVYJQ+3FNBj1cpBlYJMdLC
+         JFonC8NcumVEFo6g8VIo+78obXVRzQQfdWeTT01UoXIG633GFoBBwiLytg8Y59VvSsdF
+         PqpduDOx1rLIvE330AgKu0BURIcMuvY5jouQ6Tyd3SIwjFCjXGdIBbj6I1Tg8dDqVEBr
+         ilL/l2CZ9OgY1EmC6G8oMZut+/970i9TGRe+ocJIhSaVgBWdh4O8M5AeRpqJ2PjyJ5Nm
+         P7WASbJABZgTSbOZ3CWmfsIT3z/7HH5my9VpP9IkxuVLiWsbUkAZN8gI7Bl4VwAQGMET
+         Xzwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790039659; x=1790644459;
+        d=1e100.net; s=20260707; t=1790039662; x=1790644462;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=pMXZAyntyWZo2/7CLFlrhhNZAkAM+VurKCNG8Q0Pr20=;
-        b=Rp1qInewOFqk/0S1M4HtgOiiz5jYwTe2Cug/BsnBIMiPuPad1+WDt6BuoSTU2wLxBt
-         sPSTU0W9s1HJ3ArdS99f0Vf10UHDc4nxnKzGRH4vSQ7BHlKSAJjz4ovclg/FKkiF7N49
-         lXxRtri+L2QD8dV89346tk40KhLq226T02ZbEVQFW19O/GEshFAt8cD5C1G2QL/iqH3X
-         tzmUdoaAa+/Dc7jZucdq39dgdi+tOU5zTlY28zBvbXLvgkZssEu9SQcY5a/0Mc6CBDop
-         dE7DMAB9n1p1FUbPBwE0iabWHcktcseaZXdoJGeCzJGZqfiiiHxa4LXEr5Qgn4mcRDqT
-         dDVQ==
-X-Gm-Message-State: AFuF++lZ1VlnDDtixChy9T0FDJzvob1VJ2yyIV+oO682tPeUSnJd3Gte
-	88Jr9lR/gmO4mgE+Yp1DGEOr0OtF5S/ao2DSespnkVtgrK1vG8fT9g0oTAsMOw==
-X-Gm-Gg: AYBFou0hdxp1TJ8s4BVGT7YA7eKXDej8e3u6zqQBsiEPh3uQgJgqEoyX7ESeDUGuExA
-	1HG3C/SejHaDWC+pZDeT3c1v04SURgZO18/mYIsO4uoOtXumXEUni8LbydAm/6pMQyHHgLUZfa3
-	9Zsf6jXtmvATDo761+5tqlzc8kmZoqVvrVoOEE+VHIHI2yj2CDSOV+hOl80tUFKlpVnAB7qSgMl
-	EI7thVtmI7BYaMtr1voAVIsRIZDyPKAd94bvu/7ClmWWAlpfzMR7sdJULOxtZxoUVDZWLT8FvDJ
-	V85JvNWccmkGDOBjCRKq3DKJXv713PisDg/2Q4H/T2SfyuHe7HlqIrBVvayYZ1EpaULAaKj40m+
-	Gz02d9ewkKjUg/CSPwXeWs7P/OgWYizmCyETzNY53yB8RtI0PfzHOnOa01Fvakenz0kCOhbn1rG
-	q1iHCpMswZYNtFSOJ5McIFt6yI8UyZWqWlcd4WWN5rB7T15kBYxS5E5AiSGK3CoKl2utt/4O2eu
-	VsWF+gB2DayLn3Y5Pe8OxZbcWb1ZoIZKjuElvPa5PaWeg5ucrc92K6YkHYcJK4nkOanQhr7S5fz
-	IShaGmVATc6UVqqf1H4uEcaeMFo5Moi3ASTB+FZDXa0=
-X-Received: by 2002:a17:903:2f48:b0:2dd:c100:b2d0 with SMTP id d9443c01a7336-2df5b3aab07mr10719565ad.59.1790039658564;
-        Mon, 21 Sep 2026 18:14:18 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.244])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df5cf84150sm945185ad.6.2026.09.21.18.14.17
+        bh=Dvjo2TTpqIBpvrWwy+Rq1rdVynAVONB4nNOZSjZjHdA=;
+        b=JSLLDgfaG1RniLbe8IcHM89fR5C6vZQC/daHQ7buGnqibL8X4y1M6SBxACcuWq/ihP
+         S2P963h5ueggwg8gpdwU67kSNkFyI+L1GC8VKGux83geKC9yxdZH6vK74qaJtmeTuE4y
+         oox49D3HXR8BOplnuPoUxrxQQ9NGC/rZjBG2qSy9wSct48x/1J/BqhE6V2JjDHwW89vj
+         Qp8AiNEJPBSWslkg7hI5oD0vWrtmI4iIWIABmiMGSWpb+HYSCx95W2KKe6brzzaWyVFp
+         OGV3ak9+wCyKSQkSArhehbBKH+sgImfQI5LmPlbmsEU7GXsFnj3U38gR0mL85AxkWcAE
+         7zwQ==
+X-Gm-Message-State: AFuF++l18juRXogRsZF/nnQvORsZq9kBnbFSMz/WVAT3mkNpOORk12g9
+	C2ChbJ6JWIsXtt1H6xugcTfUAc8WrEzKomynEd0RQnITUUAYaFExhETBYGCw8g==
+X-Gm-Gg: AYBFou0ypoY3rFh8Y0ksGbYB90gKAW+sRX2iEkU48NAhttGsyS34XQY/IsygIYCw7+o
+	cfil+JF65yqR7512G55mkZoVinfGqDqKMZqQ1xwgK+i8DgYnrY9pKkeQWZW15lSCrRDT1FNVUWc
+	n0wTueLdhHt9AV9PJ6lEbOatvaQYU3mpkUSZZQZApWJNQBX/COLEWUrkIX9GbiPqHyxKMzmwTkg
+	P12EXBk/iHohVKXRM7roWSBSB/y4dWVWp82UbCbymskQZMmCBIGS2a+F2hXW6mfmBOrbsWBJmta
+	Omwx93CC0nDsQnFISc3W3LnskgCiyq5a+EMmuir9aQYIK19iz5KQSzyCwr6eiOW/aGwCuIH2Nbm
+	hTUNf+cpRcFL7svDGsij1iqBFSy9u4Z6ejT1HCxIqZGiq8l71vZvCLvThznQEUMGY4979ltzuY8
+	wR21AFk3s+6Zq+a1uQB7dL0O5gAeGj9oDLHKkfIgspPsnV93/SBwOETb2wKSiOhajRVu7zsYqkq
+	Lmj13KFV4rYIcWHtgU9lvIHQRtYxm27IEN9G1KgdG8POQvp1vNXmQxivvZOhxdyg4RWMTNf1psc
+	we54YwJYwgadFiH66ugii4p5Vo0jTfzsrQF01Qfu1ho=
+X-Received: by 2002:a17:90b:51c1:b0:39e:6c6a:209f with SMTP id 98e67ed59e1d1-39e6c6a22ffmr11514443a91.64.1790039661425;
+        Mon, 21 Sep 2026 18:14:21 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a06747204csm1637425a91.11.2026.09.21.18.14.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Sep 2026 18:14:18 -0700 (PDT)
+        Mon, 21 Sep 2026 18:14:21 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -66,9 +66,9 @@ Cc: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	a.s.protopopov@gmail.com
-Subject: [PATCH bpf-next 15/17] selftests/bpf: Add tests for callx
-Date: Tue, 22 Sep 2026 01:13:21 +0000
-Message-ID: <20260922011323.1298619-16-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 16/17] selftests/bpf: Add tests for callx through pointers in read-only data
+Date: Tue, 22 Sep 2026 01:13:22 +0000
+Message-ID: <20260922011323.1298619-17-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260922011323.1298619-1-alexei.starovoitov@gmail.com>
 References: <20260922011323.1298619-1-alexei.starovoitov@gmail.com>
@@ -82,57 +82,395 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Add verifier_callx tests:
-- calls via r0, callee saved regs, pointer passed as argument, returned
-  from subprog, spilled/filled, different callees on different paths.
-  These are executed to test JIT.
-- invalid operands: scalar, other pointers, modified and variable
-  PTR_TO_FUNC, global functions, reserved fields, JMP32.
-- callx under lock.
-- bounded and unbounded recursion via callx.
-- stack depth of call chains through callx, including address taken
-  several frames above callx.
-- tail calls in the callee and the caller of callx.
-- stack liveness: caller slots read by callee stay alive.
-- no const propagation across callx.
-- precision backtracking through callx.
-- function pointers in C.
+Add verifier_callx_rodata tests where pointers to functions are in
+.rodata, libbpf stores offsets there and the kernel recognizes them:
+- vtable-like data in .rodata and .data.rel.ro, one of two vtables picked
+  at run time, const and variable index, array of structs where
+  the index skips the data, address of an element, table without
+  a symbol. These are executed.
+- data next to a pointer is still a constant.
+- all functions the index can select are verified. The rest are not.
+- index that may select non-pointer, partial and misaligned reads,
+  arithmetic on the pointer.
+- pointer to a global function is not recognized.
+- recursion and stack depth via a table.
+- CAP_BPF without CAP_PERFMON.
+- C: array of functions, NULL check of an element that
+  bpf_prune_dead_branches() must not fold, struct ops with data, switch
+  that may become a table, packed struct with misaligned pointers.
+
+Add callx_func_ptr_map test that doesn't use libbpf logic: map that
+another prog uses is not scanned, the prog that failed to load is not
+a user, the offset in the map is replaced at load, the data is not, no
+other prog including second instance of the same one can use the map
+after that.
+
+Add callx_rodata_lskel test: two progs with a table of functions in
+.rodata loaded by light skeleton, with .rodata set by user space.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
+ tools/testing/selftests/bpf/Makefile.skel     |   2 +-
+ .../bpf/prog_tests/callx_func_ptr_map.c       | 192 ++++++
+ .../bpf/prog_tests/callx_rodata_lskel.c       |  55 ++
  .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../selftests/bpf/progs/verifier_callx.c      | 984 ++++++++++++++++++
- 2 files changed, 986 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_callx.c
+ .../selftests/bpf/progs/callx_rodata.c        |  43 ++
+ .../bpf/progs/verifier_callx_rodata.c         | 651 ++++++++++++++++++
+ 6 files changed, 944 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/callx_func_ptr_map.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
+ create mode 100644 tools/testing/selftests/bpf/progs/callx_rodata.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
 
+diff --git a/tools/testing/selftests/bpf/Makefile.skel b/tools/testing/selftests/bpf/Makefile.skel
+index 580d1d82c186..3d92cdca62ed 100644
+--- a/tools/testing/selftests/bpf/Makefile.skel
++++ b/tools/testing/selftests/bpf/Makefile.skel
+@@ -33,7 +33,7 @@ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
+ LSKELS := fexit_sleep.c trace_printk.c trace_vprintk.c map_ptr_kern.c 	\
+ 	core_kern.c core_kern_overflow.c test_ringbuf.c			\
+ 	test_ringbuf_n.c test_ringbuf_map_key.c test_ringbuf_write.c    \
+-	test_ringbuf_overwrite.c
++	test_ringbuf_overwrite.c callx_rodata.c
+ 
+ LSKELS_SIGNED := fentry_test.c fexit_test.c atomics.c
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/callx_func_ptr_map.c b/tools/testing/selftests/bpf/prog_tests/callx_func_ptr_map.c
+new file mode 100644
+index 000000000000..19f96792df5d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/callx_func_ptr_map.c
+@@ -0,0 +1,192 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * The kernel replaces the offsets of functions in a frozen read-only map with
++ * their addresses when the program is loaded. The program has to be the only
++ * user of the map, and no other program can use the map after that.
++ */
++#include <test_progs.h>
++#include <linux/filter.h>
++#include <bpf/btf.h>
++
++#if defined(__x86_64__) || defined(__aarch64__)
++
++#define CALLEE_INSN	6
++#define DATA		0x1234
++
++/*
++ * main:   r2 = &value; r2 = *(u64 *)(r2 + 8); r1 = 10; callx r2; exit
++ * add1:   r0 = r1; r0 += 1; exit
++ *
++ * where value is { DATA, offset of add1 in the program }.
++ */
++static const struct bpf_insn callx_insns[] = {
++	BPF_LD_MAP_VALUE(BPF_REG_2, 0, 0),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_2, 8),
++	BPF_MOV64_IMM(BPF_REG_1, 10),
++	BPF_RAW_INSN(BPF_JMP | BPF_CALL | BPF_X, BPF_REG_2, 0, 0, 0),
++	BPF_EXIT_INSN(),
++	BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
++	BPF_ALU64_IMM(BPF_ADD, BPF_REG_0, 1),
++	BPF_EXIT_INSN(),
++};
++
++/* reads the data of the map */
++static const struct bpf_insn reader_insns[] = {
++	BPF_LD_MAP_VALUE(BPF_REG_2, 0, 0),
++	BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_2, 0),
++	BPF_EXIT_INSN(),
++};
++
++/* refers to the map and is rejected: r0 is not set */
++static const struct bpf_insn bad_insns[] = {
++	BPF_LD_MAP_VALUE(BPF_REG_2, 0, 0),
++	BPF_EXIT_INSN(),
++};
++
++static char log_buf[16 * 1024];
++static struct bpf_func_info func_info[2];
++static int btf_fd;
++
++static int create_map(void)
++{
++	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_RDONLY_PROG);
++	__u64 value[2] = { DATA, CALLEE_INSN * sizeof(struct bpf_insn) };
++	int fd, zero = 0;
++
++	fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, "callx_rodata", sizeof(int), sizeof(value), 1,
++			    &opts);
++	if (!ASSERT_OK_FD(fd, "map_create"))
++		return -1;
++	if (!ASSERT_OK(bpf_map_update_elem(fd, &zero, value, 0), "map_update") ||
++	    !ASSERT_OK(bpf_map_freeze(fd), "map_freeze")) {
++		close(fd);
++		return -1;
++	}
++	return fd;
++}
++
++static int load(const struct bpf_insn *prog_insns, int cnt, int map_fd)
++{
++	LIBBPF_OPTS(bpf_prog_load_opts, opts,
++		.log_buf = log_buf,
++		.log_size = sizeof(log_buf),
++		.log_level = 1,
++	);
++	struct bpf_insn insns[ARRAY_SIZE(callx_insns)];
++
++	if (prog_insns == callx_insns) {
++		/* add1() is referred to by the data only and is found through func_info */
++		opts.prog_btf_fd = btf_fd;
++		opts.func_info = func_info;
++		opts.func_info_cnt = 2;
++		opts.func_info_rec_size = sizeof(func_info[0]);
++	}
++	memcpy(insns, prog_insns, cnt * sizeof(insns[0]));
++	insns[0].imm = map_fd;
++	log_buf[0] = 0;
++	return bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, "callx_map", "GPL", insns, cnt, &opts);
++}
++
++#define LOAD(insns, map_fd) load(insns, ARRAY_SIZE(insns), map_fd)
++
++static void run(int prog_fd, int expected, const char *name)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	char pkt[64] = {};
++
++	topts.data_in = pkt;
++	topts.data_size_in = sizeof(pkt);
++	if (ASSERT_OK(bpf_prog_test_run_opts(prog_fd, &topts), name))
++		ASSERT_EQ(topts.retval, expected, name);
++}
++
++void test_callx_func_ptr_map(void)
++{
++	int int_id, proto_id, map_fd = -1, prog_fd = -1, reader_fd = -1, fd, zero = 0;
++	struct btf *btf;
++	__u64 value[2];
++
++	btf = btf__new_empty();
++	if (!ASSERT_OK_PTR(btf, "btf_new"))
++		return;
++	int_id = btf__add_int(btf, "int", 4, BTF_INT_SIGNED);
++	proto_id = btf__add_func_proto(btf, int_id);
++	func_info[0].insn_off = 0;
++	func_info[0].type_id = btf__add_func(btf, "main_prog", BTF_FUNC_GLOBAL, proto_id);
++	func_info[1].insn_off = CALLEE_INSN;
++	func_info[1].type_id = btf__add_func(btf, "add1", BTF_FUNC_STATIC, proto_id);
++	if (!ASSERT_GT(func_info[1].type_id, 0, "btf_add_func") ||
++	    !ASSERT_OK(btf__load_into_kernel(btf), "btf_load"))
++		goto out;
++	btf_fd = btf__fd(btf);
++
++	/*
++	 * Another program relies on what the map has: it's verified with
++	 * the data folded into constants. Pointers to functions are not looked
++	 * for in such map.
++	 */
++	map_fd = create_map();
++	if (map_fd < 0)
++		goto out;
++	reader_fd = LOAD(reader_insns, map_fd);
++	if (!ASSERT_OK_FD(reader_fd, "load_reader"))
++		goto out;
++	fd = LOAD(callx_insns, map_fd);
++	if (!ASSERT_LT(fd, 0, "load_shared"))
++		close(fd);
++	ASSERT_HAS_SUBSTR(log_buf, "unreachable insn 6", "log_shared");
++	run(reader_fd, DATA, "run_reader");
++	close(reader_fd);
++	reader_fd = -1;
++	close(map_fd);
++
++	map_fd = create_map();
++	if (map_fd < 0)
++		goto out;
++
++	/* a program that is rejected is not a user, libbpf loads it again to get the log */
++	fd = LOAD(bad_insns, map_fd);
++	if (!ASSERT_LT(fd, 0, "load_bad"))
++		close(fd);
++
++	prog_fd = LOAD(callx_insns, map_fd);
++	if (!ASSERT_OK_FD(prog_fd, "load_callx")) {
++		printf("%s\n", log_buf);
++		goto out;
++	}
++	run(prog_fd, 11, "run_callx");
++
++	/* the offset of the function is gone from the map, the data is intact */
++	if (ASSERT_OK(bpf_map_lookup_elem(map_fd, &zero, value), "map_lookup")) {
++		ASSERT_EQ(value[0], DATA, "data");
++		ASSERT_NEQ(value[1], CALLEE_INSN * sizeof(struct bpf_insn), "pointer");
++	}
++
++	/* no other program can use the map now, another instance of the same one too */
++	fd = LOAD(reader_insns, map_fd);
++	if (!ASSERT_EQ(fd, -EBUSY, "load_reader_after"))
++		close(fd);
++	ASSERT_HAS_SUBSTR(log_buf, "has addresses of functions of another program", "log_reader");
++	fd = LOAD(callx_insns, map_fd);
++	if (!ASSERT_EQ(fd, -EBUSY, "load_second_instance"))
++		close(fd);
++
++	run(prog_fd, 11, "run_callx_again");
++out:
++	if (reader_fd >= 0)
++		close(reader_fd);
++	if (prog_fd >= 0)
++		close(prog_fd);
++	if (map_fd >= 0)
++		close(map_fd);
++	btf__free(btf);
++}
++
++#else
++
++void test_callx_func_ptr_map(void)
++{
++	test__skip();
++}
++
++#endif
+diff --git a/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c b/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
+new file mode 100644
+index 000000000000..5c60f352ff44
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
+@@ -0,0 +1,55 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++
++#include "callx_rodata.lskel.h"
++
++#if defined(__x86_64__) || defined(__aarch64__)
++
++static void run(int prog_fd, int expected, const char *name)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	char pkt[64] = {};
++
++	topts.data_in = pkt;
++	topts.data_size_in = sizeof(pkt);
++	if (ASSERT_OK(bpf_prog_test_run_opts(prog_fd, &topts), name))
++		ASSERT_EQ(topts.retval, expected, name);
++}
++
++/*
++ * Every program gets its own copy of .rodata with the offsets of its functions.
++ * The copies have what user space puts into .rodata before the load.
++ */
++void test_callx_rodata_lskel(void)
++{
++	struct callx_rodata_lskel *skel;
++
++	skel = callx_rodata_lskel__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return;
++
++	skel->rodata->bias = 7;
++
++	if (!ASSERT_OK(callx_rodata_lskel__load(skel), "load"))
++		goto out;
++
++	skel->bss->op_idx = 0;
++	run(skel->progs.select_op.prog_fd, 17, "add_bias");
++	skel->bss->op_idx = 1;
++	run(skel->progs.select_op.prog_fd, 30, "mul3");
++	skel->bss->op_idx = 2;
++	run(skel->progs.select_op.prog_fd, -1, "out_of_range");
++	/* mul3(add_bias(4)) */
++	run(skel->progs.both_ops.prog_fd, 33, "both_ops");
++out:
++	callx_rodata_lskel__destroy(skel);
++}
++
++#else
++
++void test_callx_rodata_lskel(void)
++{
++	test__skip();
++}
++
++#endif
 diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 4f1e1c1cd5ab..dc4ed6d9e5e4 100644
+index dc4ed6d9e5e4..3e07b957ee80 100644
 --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
 +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -27,6 +27,7 @@
- #include "verifier_btf_ctx_access.skel.h"
+@@ -28,6 +28,7 @@
  #include "verifier_btf_unreliable_prog.skel.h"
  #include "verifier_call_large_imm.skel.h"
-+#include "verifier_callx.skel.h"
+ #include "verifier_callx.skel.h"
++#include "verifier_callx_rodata.skel.h"
  #include "verifier_cfg.skel.h"
  #include "verifier_cgroup_inv_retcode.skel.h"
  #include "verifier_cgroup_skb.skel.h"
-@@ -196,6 +197,7 @@ void test_verifier_bswap(void)                { RUN(verifier_bswap); }
- void test_verifier_btf_ctx_access(void)       { RUN(verifier_btf_ctx_access); }
+@@ -198,6 +199,7 @@ void test_verifier_btf_ctx_access(void)       { RUN(verifier_btf_ctx_access); }
  void test_verifier_btf_unreliable_prog(void)  { RUN(verifier_btf_unreliable_prog); }
  void test_verifier_call_large_imm(void)       { RUN(verifier_call_large_imm); }
-+void test_verifier_callx(void)                { RUN(verifier_callx); }
+ void test_verifier_callx(void)                { RUN(verifier_callx); }
++void test_verifier_callx_rodata(void)         { RUN(verifier_callx_rodata); }
  void test_verifier_cfg(void)                  { RUN(verifier_cfg); }
  void test_verifier_cgroup_inv_retcode(void)   { RUN(verifier_cgroup_inv_retcode); }
  void test_verifier_cgroup_skb(void)           { RUN(verifier_cgroup_skb); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_callx.c b/tools/testing/selftests/bpf/progs/verifier_callx.c
+diff --git a/tools/testing/selftests/bpf/progs/callx_rodata.c b/tools/testing/selftests/bpf/progs/callx_rodata.c
 new file mode 100644
-index 000000000000..ec63d2107e6c
+index 000000000000..7475c87cdaed
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_callx.c
-@@ -0,0 +1,984 @@
++++ b/tools/testing/selftests/bpf/progs/callx_rodata.c
+@@ -0,0 +1,43 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/* Tests for callx: indirect calls of bpf subprogs */
++/* callx through pointers to functions in .rodata, loaded by light skeleton */
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++typedef int (*op_fn)(int);
++
++/* set by user space before the programs are loaded, it's in .rodata too */
++const volatile int bias = 1;
++
++int op_idx;
++
++static __noinline int add_bias(int x)
++{
++	return x + bias;
++}
++
++static __noinline int mul3(int x)
++{
++	return x * 3;
++}
++
++static op_fn const ops[] = { add_bias, mul3 };
++
++SEC("socket")
++int select_op(void *ctx)
++{
++	unsigned int i = op_idx;
++
++	if (i >= sizeof(ops) / sizeof(ops[0]))
++		return -1;
++	return ops[i](10);
++}
++
++/* functions have other offsets in this program */
++SEC("socket")
++int both_ops(void *ctx)
++{
++	return ops[1](ops[0](4));
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
+new file mode 100644
+index 000000000000..419a90b1f894
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
+@@ -0,0 +1,651 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Tests for callx through pointers to functions in read-only data */
 +
 +#include <linux/bpf.h>
 +#include <bpf/bpf_helpers.h>
@@ -141,34 +479,24 @@ index 000000000000..ec63d2107e6c
 +
 +#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
 +
-+#define CALLX_INSN(DST, SRC, OFF, IMM) \
-+	BPF_RAW_INSN(BPF_JMP | BPF_CALL | BPF_X, DST, SRC, OFF, IMM)
++/*
++ * Read-only data with pointers to functions, where the compiler puts tables
++ * of functions, structures of operations and vtables. libbpf resolves
++ * a pointer to the offset of the function in the program and the kernel
++ * recognizes it by that value.
++ */
++#define DATA(SECTION, NAME, ...)				\
++	".pushsection " SECTION ",@progbits;"			\
++	".balign 8;"						\
++	#NAME "_%=:"						\
++	__VA_ARGS__						\
++	".type " #NAME "_%=, @object;"				\
++	".size " #NAME "_%=, .-" #NAME "_%=;"			\
++	".popsection;"
 +
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, long long);
-+} map_array SEC(".maps");
++#define RODATA(NAME, ...) DATA(".rodata,\"a\"", NAME, __VA_ARGS__)
 +
-+struct val_with_lock {
-+	struct bpf_spin_lock lock;
-+	int cnt;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, struct val_with_lock);
-+} map_lock SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-+	__uint(max_entries, 1);
-+	__uint(key_size, sizeof(int));
-+	__uint(value_size, sizeof(int));
-+} map_prog SEC(".maps");
++#define FUNC_TABLE2(NAME, F0, F1) RODATA(NAME, ".quad " #F0 "; .quad " #F1 ";")
 +
 +__naked __noinline __used
 +static unsigned long add1(void)
@@ -190,321 +518,366 @@ index 000000000000..ec63d2107e6c
 +	);
 +}
 +
-+/* apply(fn, x) { return fn(x); } */
-+__naked __noinline __used
-+static unsigned long apply(void)
-+{
-+	asm volatile (
-+		"r3 = r1;"
-+		"r1 = r2;"
-+		"callx r3;"
-+		"exit;"
-+	);
-+}
-+
++/* the second element of the table is called */
 +SEC("socket")
-+__success __retval(6)
-+__naked void callx_basic(void)
++__success __retval(12)
++__naked void callx_rodata_const_index(void)
 +{
 +	asm volatile (
-+		"r1 = 5;"
-+		"r2 = %[add1] ll;"
++		FUNC_TABLE2(tbl, add1, add2)
++		"r2 = tbl_%= ll;"
++		"r2 = *(u64 *)(r2 + 8);"
++		"r1 = 10;"
 +		"callx r2;"
 +		"exit;"
-+		:
-+		: __imm_addr(add1)
-+		: __clobber_all);
++		::: __clobber_all);
 +}
 +
-+/* callx is printed by the verifier log and xlated dump */
++/*
++ * The program reads the address of a function from the data, so pointers to
++ * functions in data are recognized only for programs that may leak pointers.
++ * Otherwise nothing refers to the functions.
++ */
 +SEC("socket")
-+__success __log_level(2)
-+__msg("(8d) callx r2")
-+__xlated("callx r2")
-+__naked void callx_disasm(void)
++__success __retval(12)
++__failure_unpriv __msg_unpriv("unreachable insn")
++__caps_unpriv(CAP_BPF)
++__naked void callx_rodata_needs_perfmon(void)
 +{
 +	asm volatile (
-+		"r1 = 5;"
-+		"r2 = %[add1] ll;"
++		FUNC_TABLE2(tbl, add1, add2)
++		"r2 = tbl_%= ll;"
++		"r2 = *(u64 *)(r2 + 8);"
++		"r1 = 10;"
 +		"callx r2;"
 +		"exit;"
-+		:
-+		: __imm_addr(add1)
-+		: __clobber_all);
++		::: __clobber_all);
 +}
 +
-+/* different callees are called by the same callx on different paths */
++/* the address of an element is used instead of the address of the table */
++SEC("socket")
++__success __retval(12)
++__naked void callx_rodata_elem_addr(void)
++{
++	asm volatile (
++		FUNC_TABLE2(tbl, add1, add2)
++		"r2 = tbl_%= + 8 ll;"
++		"r2 = *(u64 *)(r2 + 0);"
++		"r1 = 10;"
++		"callx r2;"
++		"exit;"
++		::: __clobber_all);
++}
++
++/* pointers to functions are mixed with other data like in a vtable */
++SEC("socket")
++__success __retval(23)
++__log_level(2)
++__msg("r1 = *(u64 *)(r6 +0)          ; R1=7")
++__msg("r2 = *(u64 *)(r6 +8)          ; R2=func()")
++__naked void callx_rodata_mixed_with_data(void)
++{
++	asm volatile (
++		RODATA(vt, ".quad 7; .quad add1; .quad 13; .quad add2;")
++		"r6 = vt_%= ll;"
++		"r1 = *(u64 *)(r6 + 0);"
++		"r2 = *(u64 *)(r6 + 8);"
++		/* add1(7) */
++		"callx r2;"
++		"r7 = r0;"
++		"r1 = *(u64 *)(r6 + 16);"
++		"r2 = *(u64 *)(r6 + 24);"
++		/* add2(13) */
++		"callx r2;"
++		"r0 += r7;"
++		"exit;"
++		::: __clobber_all);
++}
++
++/*
++ * Position independent code keeps constants with pointers in .data.rel.ro.
++ * libbpf treats it as read-only data.
++ */
++SEC("socket")
++__success __retval(23)
++__naked void callx_data_rel_ro(void)
++{
++	asm volatile (
++		DATA(".data.rel.ro,\"aw\"", vt, ".quad 7; .quad add1; .quad 13; .quad add2;")
++		"r6 = vt_%= ll;"
++		"r1 = *(u64 *)(r6 + 0);"
++		"r2 = *(u64 *)(r6 + 8);"
++		"callx r2;"
++		"r7 = r0;"
++		"r1 = *(u64 *)(r6 + 16);"
++		"r2 = *(u64 *)(r6 + 24);"
++		"callx r2;"
++		"r0 += r7;"
++		"exit;"
++		::: __clobber_all);
++}
++
++/* an array of structures: the index selects one of the functions, not the data */
 +SEC("socket")
 +__success __retval(11)
-+__naked void callx_two_callees(void)
++__naked void callx_rodata_array_of_structs(void)
 +{
 +	asm volatile (
++		RODATA(arr, ".quad add1; .quad 0x1111; .quad add2; .quad 0x2222;")
 +		"call %[bpf_get_prandom_u32];"
 +		"r6 = r0;"
 +		"r6 &= 1;"
-+		"r2 = %[add1] ll;"
-+		"if r6 == 0 goto +2;"
-+		"r2 = %[add2] ll;"
++		"r3 = r6;"
++		"r3 <<= 4;"
++		"r2 = arr_%= ll;"
++		"r2 += r3;"
++		"r2 = *(u64 *)(r2 + 0);"
 +		"r1 = 10;"
 +		"callx r2;"
 +		/* add1(10) - 0 or add2(10) - 1 */
 +		"r0 -= r6;"
 +		"exit;"
 +		:
-+		: __imm(bpf_get_prandom_u32),
-+		  __imm_addr(add1),
-+		  __imm_addr(add2)
++		: __imm(bpf_get_prandom_u32)
 +		: __clobber_all);
 +}
 +
-+/* pointer to a function is passed as an argument */
-+SEC("socket")
-+__success __retval(45)
-+__naked void callx_fn_as_arg(void)
-+{
-+	asm volatile (
-+		"r1 = %[add2] ll;"
-+		"r2 = 40;"
-+		"call apply;"
-+		"r6 = r0;"
-+		"r1 = %[add1] ll;"
-+		"r2 = 2;"
-+		"call apply;"
-+		"r0 += r6;"
-+		"exit;"
-+		:
-+		: __imm_addr(add1),
-+		  __imm_addr(add2)
-+		: __clobber_all);
-+}
-+
-+__naked __noinline __used
-+static unsigned long get_add1(void)
-+{
-+	asm volatile (
-+		"r0 = %[add1] ll;"
-+		"exit;"
-+		:
-+		: __imm_addr(add1)
-+		: __clobber_all);
-+}
-+
-+/* pointer to a function is returned from a subprog and called via r0 */
++/* dynamic dispatch: which vtable is used is not known until run time */
 +SEC("socket")
 +__success __retval(2)
-+__naked void callx_r0(void)
++__naked void callx_rodata_two_vtables(void)
 +{
 +	asm volatile (
-+		"call get_add1;"
-+		"r1 = 1;"
-+		"callx r0;"
-+		"exit;"
-+		::: __clobber_all);
-+}
-+
-+/* pointer to a function survives spill/fill */
-+SEC("socket")
-+__success __retval(9)
-+__naked void callx_spill_fill(void)
-+{
-+	asm volatile (
-+		"r2 = %[add2] ll;"
-+		"*(u64 *)(r10 - 8) = r2;"
++		RODATA(vt_a, ".quad 1; .quad add1;")
++		RODATA(vt_b, ".quad 0; .quad add2;")
 +		"call %[bpf_get_prandom_u32];"
-+		"r1 = 7;"
-+		"r9 = *(u64 *)(r10 - 8);"
-+		"callx r9;"
++		"r6 = vt_a_%= ll;"
++		"r0 &= 1;"
++		"if r0 == 0 goto +2;"
++		"r6 = vt_b_%= ll;"
++		"r1 = *(u64 *)(r6 + 0);"
++		"r2 = *(u64 *)(r6 + 8);"
++		/* add1(1) or add2(0) */
++		"callx r2;"
 +		"exit;"
 +		:
-+		: __imm(bpf_get_prandom_u32),
-+		  __imm_addr(add2)
++		: __imm(bpf_get_prandom_u32)
 +		: __clobber_all);
 +}
 +
-+__naked __noinline __used
-+static unsigned long clobber_callee_saved(void)
-+{
-+	asm volatile (
-+		"r6 = 100;"
-+		"r7 = 100;"
-+		"r8 = 100;"
-+		"r9 = 100;"
-+		"r0 = r1;"
-+		"exit;"
-+	);
-+}
-+
-+/* r6-r9 are preserved across callx */
++/* both functions are verified, either of them is called */
 +SEC("socket")
 +__success __retval(11)
-+__naked void callx_callee_saved_regs(void)
++__naked void callx_rodata_var_index(void)
 +{
 +	asm volatile (
-+		"r6 = 1;"
-+		"r7 = 2;"
-+		"r8 = 3;"
-+		"r9 = 4;"
-+		"r1 = 1;"
-+		"r2 = %[clobber_callee_saved] ll;"
++		FUNC_TABLE2(tbl, add1, add2)
++		"call %[bpf_get_prandom_u32];"
++		"r6 = r0;"
++		"r6 &= 1;"
++		"r3 = r6;"
++		"r3 <<= 3;"
++		"r2 = tbl_%= ll;"
++		"r2 += r3;"
++		"r2 = *(u64 *)(r2 + 0);"
++		"r1 = 10;"
 +		"callx r2;"
-+		"r0 += r6;"
-+		"r0 += r7;"
-+		"r0 += r8;"
-+		"r0 += r9;"
++		/* add1(10) - 0 or add2(10) - 1 */
++		"r0 -= r6;"
 +		"exit;"
 +		:
-+		: __imm_addr(clobber_callee_saved)
++		: __imm(bpf_get_prandom_u32)
 +		: __clobber_all);
 +}
 +
-+/* r1-r5 are scratched by callx */
++/* a table that has no symbol, the compiler generates such for a switch statement */
 +SEC("socket")
-+__failure __msg("R1 !read_ok")
-+__naked void callx_scratches_args(void)
++__success __retval(11)
++__naked void callx_rodata_no_symbol(void)
 +{
 +	asm volatile (
-+		"r1 = 5;"
-+		"r2 = %[add1] ll;"
++		".pushsection .rodata,\"a\",@progbits;"
++		".balign 8;"
++	".Lanon_%=:"
++		".quad add1;"
++		".quad add2;"
++		".popsection;"
++		"call %[bpf_get_prandom_u32];"
++		"r6 = r0;"
++		"r6 &= 1;"
++		"r3 = r6;"
++		"r3 <<= 3;"
++		"r2 = .Lanon_%= ll;"
++		"r2 += r3;"
++		"r2 = *(u64 *)(r2 + 0);"
++		"r1 = 10;"
 +		"callx r2;"
++		"r0 -= r6;"
++		"exit;"
++		:
++		: __imm(bpf_get_prandom_u32)
++		: __clobber_all);
++}
++
++/* the first instruction of the function is removed by the verifier */
++__naked __noinline __used
++static unsigned long nop_add1(void)
++{
++	asm volatile (
++		"goto +0;"
 +		"r0 = r1;"
++		"r0 += 1;"
 +		"exit;"
-+		:
-+		: __imm_addr(add1)
-+		: __clobber_all);
++	);
 +}
 +
-+/* return value of the callee is tracked */
++/* the pointer follows the function when instructions are removed */
 +SEC("socket")
-+__success __log_level(2)
-+__msg("R0=6")
-+__naked void callx_retval_is_tracked(void)
++__success __retval(11)
++__naked void callx_rodata_func_starts_with_nop(void)
 +{
 +	asm volatile (
-+		"r1 = 5;"
-+		"r2 = %[add1] ll;"
++		RODATA(tbl, ".quad nop_add1; .quad 0;")
++		"r2 = tbl_%= ll;"
++		"r2 = *(u64 *)(r2 + 0);"
++		"r1 = 10;"
 +		"callx r2;"
 +		"exit;"
-+		:
-+		: __imm_addr(add1)
-+		: __clobber_all);
++		::: __clobber_all);
++}
++
++/* can't be called with a scalar in r1 */
++__naked __noinline __used
++static unsigned long deref_r1(void)
++{
++	asm volatile (
++		"r0 = *(u64 *)(r1 + 0);"
++		"exit;"
++	);
 +}
 +
 +__naked __noinline __used
-+static unsigned long write42(void)
++static unsigned long ret0(void)
 +{
 +	asm volatile (
-+		"r2 = 42;"
-+		"*(u64 *)(r1 + 0) = r2;"
 +		"r0 = 0;"
 +		"exit;"
 +	);
 +}
 +
-+/* callee writes into the stack of the caller */
++/* every function that might be called is verified */
 +SEC("socket")
-+__success __retval(42)
-+__naked void callx_callee_writes_caller_stack(void)
++__failure __msg("R1 invalid mem access 'scalar'")
++__naked void callx_rodata_all_callees_verified(void)
 +{
 +	asm volatile (
++		FUNC_TABLE2(tbl, ret0, deref_r1)
++		"call %[bpf_get_prandom_u32];"
++		"r0 &= 1;"
++		"r0 <<= 3;"
++		"r2 = tbl_%= ll;"
++		"r2 += r0;"
++		"r2 = *(u64 *)(r2 + 0);"
 +		"r1 = 0;"
-+		"*(u64 *)(r10 - 8) = r1;"
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"r2 = %[write42] ll;"
 +		"callx r2;"
-+		"r0 = *(u64 *)(r10 - 8);"
 +		"exit;"
 +		:
-+		: __imm_addr(write42)
++		: __imm(bpf_get_prandom_u32)
 +		: __clobber_all);
 +}
 +
++/* a function that is never called is not verified, it's dead code */
 +SEC("socket")
-+__failure __msg("R1 has type scalar, expected func")
-+__naked void callx_scalar(void)
++__success __retval(0)
++__naked void callx_rodata_unused_callee(void)
 +{
 +	asm volatile (
++		FUNC_TABLE2(tbl, ret0, deref_r1)
++		"r2 = tbl_%= ll;"
++		"r2 = *(u64 *)(r2 + 0);"
 +		"r1 = 0;"
-+		"callx r1;"
-+		"exit;"
-+		::: __clobber_all);
-+}
-+
-+SEC("socket")
-+__failure __msg("R2 !read_ok")
-+__naked void callx_uninit_reg(void)
-+{
-+	asm volatile (
 +		"callx r2;"
 +		"exit;"
 +		::: __clobber_all);
 +}
 +
++/* the index may select what is not a pointer to a function */
 +SEC("socket")
-+__failure __msg("R10 has type fp, expected func")
-+__naked void callx_fp(void)
++__failure __msg("overlaps with a pointer to a function")
++__naked void callx_rodata_index_beyond_table(void)
 +{
 +	asm volatile (
-+		"callx r10;"
++		RODATA(tbl, ".quad add1; .quad add2; .quad 0x1234; .quad 0x5678;")
++		"call %[bpf_get_prandom_u32];"
++		"r0 &= 3;"
++		"r0 <<= 3;"
++		"r2 = tbl_%= ll;"
++		"r2 += r0;"
++		"r2 = *(u64 *)(r2 + 0);"
++		"r1 = 10;"
++		"callx r2;"
++		"exit;"
++		:
++		: __imm(bpf_get_prandom_u32)
++		: __clobber_all);
++}
++
++/* the address of a function is not known until the program is jitted */
++SEC("socket")
++__failure __msg("read of 4 bytes at offset")
++__msg("overlaps with a pointer to a function")
++__naked void callx_rodata_partial_read(void)
++{
++	asm volatile (
++		FUNC_TABLE2(tbl, add1, add2)
++		"r2 = tbl_%= ll;"
++		"r0 = *(u32 *)(r2 + 0);"
 +		"exit;"
 +		::: __clobber_all);
 +}
 +
 +SEC("socket")
-+__failure __msg("R1 has type map_value, expected func")
-+__naked void callx_map_value(void)
++__failure __msg("read of 8 bytes at offset")
++__msg("overlaps with a pointer to a function")
++__naked void callx_rodata_misaligned_read(void)
 +{
 +	asm volatile (
-+		"r1 = %[map_array] ll;"
-+		"r2 = r10;"
-+		"r2 += -4;"
-+		"r3 = 0;"
-+		"*(u32 *)(r2 + 0) = r3;"
-+		"call %[bpf_map_lookup_elem];"
-+		"if r0 == 0 goto 1f;"
-+		"r1 = r0;"
-+		"callx r1;"
-+	"1:"
-+		"r0 = 0;"
++		RODATA(tbl, ".quad add1; .quad add2; .quad 0;")
++		"r2 = tbl_%= ll;"
++		"r0 = *(u64 *)(r2 + 4);"
 +		"exit;"
-+		:
-+		: __imm(bpf_map_lookup_elem),
-+		  __imm_addr(map_array)
-+		: __clobber_all);
++		::: __clobber_all);
 +}
 +
-+/* the address of a subprog can't be modified before the call */
++/* the data next to a pointer is still known to the verifier */
++SEC("socket")
++__success __retval(0x1234)
++__log_level(2)
++__msg("R0=4660")
++__naked void callx_rodata_data_is_const(void)
++{
++	asm volatile (
++		RODATA(tbl, ".quad add1; .quad 0x1234;")
++		"r2 = tbl_%= ll;"
++		"r0 = *(u64 *)(r2 + 8);"
++		"exit;"
++		::: __clobber_all);
++}
++
++/* the pointer read from the data can't be modified */
 +SEC("socket")
 +__failure __msg("dereference of modified func ptr R2 off=8 disallowed")
-+__naked void callx_modified_ptr(void)
++__naked void callx_rodata_modified_ptr(void)
 +{
 +	asm volatile (
-+		"r1 = 5;"
-+		"r2 = %[add1] ll;"
++		FUNC_TABLE2(tbl, add1, add2)
++		"r2 = tbl_%= ll;"
++		"r2 = *(u64 *)(r2 + 0);"
 +		"r2 += 8;"
++		"r1 = 10;"
 +		"callx r2;"
 +		"exit;"
-+		:
-+		: __imm_addr(add1)
-+		: __clobber_all);
-+}
-+
-+SEC("socket")
-+__failure __msg("variable func access var_off=")
-+__naked void callx_variable_ptr(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"r0 &= 8;"
-+		"r2 = %[add1] ll;"
-+		"r2 += r0;"
-+		"r1 = 5;"
-+		"callx r2;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32),
-+		  __imm_addr(add1)
-+		: __clobber_all);
++		::: __clobber_all);
 +}
 +
 +__noinline __used
@@ -513,239 +886,47 @@ index 000000000000..ec63d2107e6c
 +	return x + 3;
 +}
 +
-+/* only static subprogs can be called via callx */
++/* a pointer to a global function is not recognized, it's a number */
 +SEC("socket")
-+__failure __msg("callback function not static")
-+__naked void callx_global_func(void)
++__failure __msg("R2 has type scalar, expected func")
++__naked void callx_rodata_global_func(void)
 +{
 +	asm volatile (
-+		"r1 = 5;"
-+		"r2 = %[global_add3] ll;"
++		FUNC_TABLE2(tbl, add1, global_add3)
++		"r2 = tbl_%= ll;"
++		"r2 = *(u64 *)(r2 + 8);"
++		"r1 = 10;"
 +		"callx r2;"
 +		"exit;"
-+		:
-+		: __imm_addr(global_add3)
-+		: __clobber_all);
++		::: __clobber_all);
 +}
 +
-+#define DEFINE_CALLX_RESERVED_FIELDS_PROG(NAME, SRC_REG, OFF, IMM)		\
-+	SEC("socket")								\
-+	__failure __msg("BPF_CALL|BPF_X uses reserved fields")			\
-+	__naked void callx_reserved_field_ ## NAME(void)			\
-+	{									\
-+		asm volatile (							\
-+			"r1 = 5;"						\
-+			"r2 = %[add1] ll;"					\
-+			".8byte %[callx_r2];"					\
-+			"exit;"							\
-+			:							\
-+			: __imm_addr(add1),					\
-+			  __imm_insn(callx_r2, CALLX_INSN(BPF_REG_2, (SRC_REG), (OFF), (IMM))) \
-+			: __clobber_all);					\
-+	}
-+
-+DEFINE_CALLX_RESERVED_FIELDS_PROG(src_reg, BPF_REG_1, 0, 0)
-+DEFINE_CALLX_RESERVED_FIELDS_PROG(off, BPF_REG_0, 1, 0)
-+DEFINE_CALLX_RESERVED_FIELDS_PROG(imm, BPF_REG_0, 0, 1)
-+
-+SEC("socket")
-+__failure __msg("unknown opcode 8e")
-+__naked void callx_jmp32(void)
++/* selfcall(n) { return n ? tbl[0](n - 1) : 0; }, where tbl[0] == selfcall */
++__naked __noinline __used
++static unsigned long selfcall(void)
 +{
 +	asm volatile (
-+		"r1 = 5;"
-+		"r2 = %[add1] ll;"
-+		".8byte %[callx32_r2];"
-+		"exit;"
-+		:
-+		: __imm_addr(add1),
-+		  __imm_insn(callx32_r2,
-+			     BPF_RAW_INSN(BPF_JMP32 | BPF_CALL | BPF_X, BPF_REG_2, 0, 0, 0))
-+		: __clobber_all);
-+}
-+
-+/* similar to calls of static subprogs callx is allowed under a lock */
-+SEC("tc")
-+__success __retval(3)
-+__naked void callx_under_lock(void)
-+{
-+	asm volatile (
-+		"r1 = 0;"
-+		"*(u32 *)(r10 - 4) = r1;"
-+		"r2 = r10;"
-+		"r2 += -4;"
-+		"r1 = %[map_lock] ll;"
-+		"call %[bpf_map_lookup_elem];"
-+		"if r0 != 0 goto 1f;"
-+		"exit;"
-+	"1:"
-+		"r6 = r0;"
-+		"r1 = r6;"
-+		"call %[bpf_spin_lock];"
-+		"r1 = 1;"
-+		"r2 = %[add2] ll;"
++		FUNC_TABLE2(tbl, selfcall, ret0)
++		"r0 = 0;"
++		"if r1 == 0 goto 1f;"
++		"r1 += -1;"
++		"r2 = tbl_%= ll;"
++		"r2 = *(u64 *)(r2 + 0);"
 +		"callx r2;"
-+		"r7 = r0;"
-+		"r1 = r6;"
-+		"call %[bpf_spin_unlock];"
-+		"r0 = r7;"
-+		"exit;"
-+		:
-+		: __imm(bpf_map_lookup_elem),
-+		  __imm(bpf_spin_lock),
-+		  __imm(bpf_spin_unlock),
-+		  __imm_addr(map_lock),
-+		  __imm_addr(add2)
-+		: __clobber_all);
-+}
-+
-+/* helpers are still not allowed under a lock in the callee */
-+__naked __noinline __used
-+static unsigned long call_helper(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32)
-+		: __clobber_all);
-+}
-+
-+SEC("tc")
-+__failure __msg("function calls are not allowed while holding a lock")
-+__naked void callx_helper_under_lock(void)
-+{
-+	asm volatile (
-+		"r1 = 0;"
-+		"*(u32 *)(r10 - 4) = r1;"
-+		"r2 = r10;"
-+		"r2 += -4;"
-+		"r1 = %[map_lock] ll;"
-+		"call %[bpf_map_lookup_elem];"
-+		"if r0 != 0 goto 1f;"
-+		"exit;"
-+	"1:"
-+		"r6 = r0;"
-+		"r1 = r6;"
-+		"call %[bpf_spin_lock];"
-+		"r2 = %[call_helper] ll;"
-+		"callx r2;"
-+		"r1 = r6;"
-+		"call %[bpf_spin_unlock];"
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_map_lookup_elem),
-+		  __imm(bpf_spin_lock),
-+		  __imm(bpf_spin_unlock),
-+		  __imm_addr(map_lock),
-+		  __imm_addr(call_helper)
-+		: __clobber_all);
-+}
-+
-+/* self(fn) { return fn(fn); } */
-+__naked __noinline __used
-+static unsigned long self(void)
-+{
-+	asm volatile (
-+		"callx r1;"
-+		"exit;"
-+	);
-+}
-+
-+/* unbounded recursion is caught by the main verification pass */
-+SEC("socket")
-+__failure __msg("frames is too deep")
-+__naked void callx_unbounded_recursion(void)
-+{
-+	asm volatile (
-+		"r1 = %[self] ll;"
-+		"call self;"
-+		"exit;"
-+		:
-+		: __imm_addr(self)
-+		: __clobber_all);
-+}
-+
-+/* countdown(fn, n) { return n ? fn(fn, n - 1) : 0; } */
-+__naked __noinline __used
-+static unsigned long countdown(void)
-+{
-+	asm volatile (
-+		"r0 = 0;"
-+		"if r2 == 0 goto 1f;"
-+		"r2 += -1;"
-+		"callx r1;"
 +	"1:"
 +		"exit;"
-+	);
-+}
-+
-+/*
-+ * The depth of the recursion is known to the main verification pass,
-+ * but recursive calls are not allowed regardless.
-+ */
-+SEC("socket")
-+__failure __msg("recursive call from countdown() to countdown()")
-+__naked void callx_bounded_recursion(void)
-+{
-+	asm volatile (
-+		"r1 = %[countdown] ll;"
-+		"r2 = 2;"
-+		"call countdown;"
-+		"exit;"
-+		:
-+		: __imm_addr(countdown)
-+		: __clobber_all);
-+}
-+
-+/* ping(fn1, fn2, n) { return n ? fn2(fn2, fn1, n - 1) : 0; } */
-+__naked __noinline __used
-+static unsigned long ping(void)
-+{
-+	asm volatile (
-+		"r0 = 0;"
-+		"if r3 == 0 goto 1f;"
-+		"r3 += -1;"
-+		"r4 = r1;"
-+		"r1 = r2;"
-+		"r2 = r4;"
-+		"callx r1;"
-+	"1:"
-+		"exit;"
-+	);
-+}
-+
-+__naked __noinline __used
-+static unsigned long pong(void)
-+{
-+	asm volatile (
-+		"r0 = 0;"
-+		"if r3 == 0 goto 1f;"
-+		"r3 += -1;"
-+		"r4 = r1;"
-+		"r1 = r2;"
-+		"r2 = r4;"
-+		"callx r1;"
-+	"1:"
-+		"exit;"
-+	);
++		::: __clobber_all);
 +}
 +
 +SEC("socket")
-+__failure __msg("recursive call from")
-+__naked void callx_mutual_recursion(void)
++__failure __msg("recursive call from selfcall() to selfcall()")
++__naked void callx_rodata_recursion(void)
 +{
 +	asm volatile (
-+		"r1 = %[ping] ll;"
-+		"r2 = %[pong] ll;"
-+		"r3 = 3;"
-+		"call ping;"
++		"r1 = 2;"
++		"call selfcall;"
 +		"exit;"
-+		:
-+		: __imm_addr(ping),
-+		  __imm_addr(pong)
-+		: __clobber_all);
++		::: __clobber_all);
 +}
 +
 +__naked __noinline __used
@@ -758,349 +939,173 @@ index 000000000000..ec63d2107e6c
 +	);
 +}
 +
-+/* stack of the callee of callx is accounted */
++/* stack of all possible callees is accounted */
 +SEC("socket")
 +__failure __msg("combined stack size of 2 calls is")
-+__naked void callx_stack_depth(void)
++__naked void callx_rodata_stack_depth(void)
 +{
 +	asm volatile (
++		FUNC_TABLE2(tbl, ret0, use_stack_304)
 +		"r0 = 0;"
 +		"*(u64 *)(r10 - 304) = r0;"
-+		"r2 = %[use_stack_304] ll;"
-+		"callx r2;"
-+		"exit;"
-+		:
-+		: __imm_addr(use_stack_304)
-+		: __clobber_all);
-+}
-+
-+/* apply_stack_304(fn) { char buf[304]; return fn(); } */
-+__naked __noinline __used
-+static unsigned long apply_stack_304(void)
-+{
-+	asm volatile (
-+		"r0 = 0;"
-+		"*(u64 *)(r10 - 304) = r0;"
-+		"callx r1;"
-+		"exit;"
-+	);
-+}
-+
-+/*
-+ * The address of use_stack_304() is taken by the main prog that doesn't
-+ * use stack, but it is called from apply_stack_304().
-+ */
-+SEC("socket")
-+__failure __msg("combined stack size of 3 calls is")
-+__naked void callx_stack_depth_nested(void)
-+{
-+	asm volatile (
-+		"r1 = %[use_stack_304] ll;"
-+		"call apply_stack_304;"
-+		"exit;"
-+		:
-+		: __imm_addr(use_stack_304)
-+		: __clobber_all);
-+}
-+
-+SEC("socket")
-+__success __retval(0)
-+__naked void callx_stack_depth_ok(void)
-+{
-+	asm volatile (
-+		"r0 = 0;"
-+		"*(u64 *)(r10 - 200) = r0;"
-+		"r2 = %[use_stack_304] ll;"
-+		"callx r2;"
-+		"exit;"
-+		:
-+		: __imm_addr(use_stack_304)
-+		: __clobber_all);
-+}
-+
-+__naked __noinline __used
-+static unsigned long do_tail_call(void)
-+{
-+	asm volatile (
-+		"r2 = %[map_prog] ll;"
-+		"r3 = 0;"
-+		"call %[bpf_tail_call];"
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_tail_call),
-+		  __imm_addr(map_prog)
-+		: __clobber_all);
-+}
-+
-+SEC("socket")
-+__failure __msg("tail_calls are not allowed in functions called via callx")
-+__naked void callx_tail_call_in_callee(void)
-+{
-+	asm volatile (
-+		"r2 = %[do_tail_call] ll;"
-+		"callx r2;"
-+		"exit;"
-+		:
-+		: __imm_addr(do_tail_call)
-+		: __clobber_all);
-+}
-+
-+/* tail call in the caller of callx is fine */
-+SEC("socket")
-+__success __retval(3)
-+__naked void callx_tail_call_in_caller(void)
-+{
-+	asm volatile (
-+		"r6 = r1;"
-+		"r1 = 2;"
-+		"r2 = %[add1] ll;"
-+		"callx r2;"
-+		"r7 = r0;"
-+		"r1 = r6;"
-+		"r2 = %[map_prog] ll;"
-+		"r3 = 0;"
-+		"call %[bpf_tail_call];"
-+		"r0 = r7;"
-+		"exit;"
-+		:
-+		: __imm(bpf_tail_call),
-+		  __imm_addr(map_prog),
-+		  __imm_addr(add1)
-+		: __clobber_all);
-+}
-+
-+/* read_idx(p) { return ((char *)map_value)[*p]; } */
-+__naked __noinline __used
-+static unsigned long read_idx(void)
-+{
-+	asm volatile (
-+		"r6 = *(u64 *)(r1 + 0);"
-+		"r1 = 0;"
-+		"*(u32 *)(r10 - 4) = r1;"
-+		"r2 = r10;"
-+		"r2 += -4;"
-+		"r1 = %[map_array] ll;"
-+		"call %[bpf_map_lookup_elem];"
-+		"if r0 == 0 goto 1f;"
-+		"r0 += r6;"
-+		"r0 = *(u8 *)(r0 + 0);"
-+	"1:"
-+		"exit;"
-+		:
-+		: __imm(bpf_map_lookup_elem),
-+		  __imm_addr(map_array)
-+		: __clobber_all);
-+}
-+
-+/*
-+ * Stack slots of the caller that might be read by the callee of callx
-+ * have to be considered alive at the checkpoints before callx and
-+ * inside of the callee. Otherwise the state with fp-8 == 1000 is pruned
-+ * and out of bounds access in read_idx() goes unnoticed.
-+ */
-+SEC("socket")
-+__failure __msg("invalid access to map value, value_size=8 off=1000 size=1")
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void callx_callee_reads_caller_stack(void)
-+{
-+	asm volatile (
 +		"call %[bpf_get_prandom_u32];"
-+		"r1 = 1000;"
-+		"*(u64 *)(r10 - 8) = r1;"
-+		"if r0 == 0 goto 1f;"
-+		"r1 = 0;"
-+		"*(u64 *)(r10 - 8) = r1;"
-+	"1:"
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"r2 = %[read_idx] ll;"
-+		"callx r2;"
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32),
-+		  __imm_addr(read_idx)
-+		: __clobber_all);
-+}
-+
-+/* in bounds access in read_idx() is fine */
-+SEC("socket")
-+__success __retval(0)
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void callx_callee_reads_caller_stack_ok(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"r1 = 7;"
-+		"*(u64 *)(r10 - 8) = r1;"
-+		"if r0 == 0 goto 1f;"
-+		"r1 = 0;"
-+		"*(u64 *)(r10 - 8) = r1;"
-+	"1:"
-+		"r1 = r10;"
-+		"r1 += -8;"
-+		"r2 = %[read_idx] ll;"
++		"r0 &= 1;"
++		"r0 <<= 3;"
++		"r2 = tbl_%= ll;"
++		"r2 += r0;"
++		"r2 = *(u64 *)(r2 + 0);"
 +		"callx r2;"
 +		"exit;"
 +		:
-+		: __imm(bpf_get_prandom_u32),
-+		  __imm_addr(read_idx)
++		: __imm(bpf_get_prandom_u32)
 +		: __clobber_all);
 +}
 +
-+/* same as above, but the pointer to the stack is passed through one more frame */
-+SEC("socket")
-+__failure __msg("invalid access to map value, value_size=8 off=1000 size=1")
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void callx_callee_reads_caller_stack_nested(void)
-+{
-+	asm volatile (
-+		"call %[bpf_get_prandom_u32];"
-+		"r1 = 1000;"
-+		"*(u64 *)(r10 - 8) = r1;"
-+		"if r0 == 0 goto 1f;"
-+		"r1 = 0;"
-+		"*(u64 *)(r10 - 8) = r1;"
-+	"1:"
-+		"r1 = %[read_idx] ll;"
-+		"r2 = r10;"
-+		"r2 += -8;"
-+		"call apply;"
-+		"r0 = 0;"
-+		"exit;"
-+		:
-+		: __imm(bpf_get_prandom_u32),
-+		  __imm_addr(read_idx)
-+		: __clobber_all);
-+}
-+
-+/* registers that are constant before callx are not constant after it */
-+SEC("socket")
-+__success __retval(1)
-+__naked void callx_clobbers_const_regs(void)
-+{
-+	asm volatile (
-+		"r0 = 0;"
-+		"r1 = 0;"
-+		"r2 = %[add1] ll;"
-+		"callx r2;"
-+		/* dead branch pruning must not assume that r0 is still 0 */
-+		"if r0 == 0 goto 1f;"
-+		"r0 = 1;"
-+		"exit;"
-+	"1:"
-+		"r0 = 2;"
-+		"exit;"
-+		:
-+		: __imm_addr(add1)
-+		: __clobber_all);
-+}
-+
-+/* scalar argument passed through callx is tracked precisely */
-+__naked __noinline __used
-+static unsigned long identity(void)
-+{
-+	asm volatile (
-+		"r0 = r1;"
-+		"exit;"
-+	);
-+}
-+
-+long long vals[] SEC(".data.vals") = {1, 2, 3, 4};
-+
-+SEC("socket")
-+__success __log_level(2)
-+__msg("mark_precise: frame0: regs=r0 stack= before 12: (95) exit")
-+__msg("mark_precise: frame1: regs=r0 stack= before 11: (bf) r0 = r1")
-+__msg("mark_precise: frame1: regs=r1 stack= before 4: (8d) callx r2")
-+__msg("mark_precise: frame0: regs=r1 stack= before 3: (bf) r1 = r6")
-+__msg("mark_precise: frame0: regs=r6 stack= before 2: (b7) r6 = 3")
-+__retval(4)
-+__naked void callx_precision(void)
-+{
-+	asm volatile (
-+		"r2 = %[identity] ll;"
-+		"r6 = 3;"
-+		"r1 = r6;"
-+		"callx r2;"
-+		"r0 *= 8;"
-+		"r1 = %[vals] ll;"
-+		"r1 += r0;"
-+		"r0 = *(u64 *)(r1 + 0);"
-+		"exit;"
-+		:
-+		: __imm_addr(identity),
-+		  __imm_addr(vals)
-+		: __clobber_all);
-+}
-+
-+/* function pointers in C */
++/* pointers to functions in C */
 +
 +typedef int (*op_fn)(int);
 +
-+static __noinline int mul3(int x)
-+{
-+	return x * 3;
-+}
++#define DEFINE_OP(N) static __noinline int op##N(int x) { return x * (N + 2) + N; }
 +
-+static __noinline int sub7(int x)
-+{
-+	return x - 7;
-+}
++DEFINE_OP(0)  DEFINE_OP(1)  DEFINE_OP(2)  DEFINE_OP(3)
++DEFINE_OP(4)  DEFINE_OP(5)  DEFINE_OP(6)  DEFINE_OP(7)
++DEFINE_OP(8)  DEFINE_OP(9)  DEFINE_OP(10) DEFINE_OP(11)
++DEFINE_OP(12) DEFINE_OP(13) DEFINE_OP(14) DEFINE_OP(15)
 +
-+static __noinline int apply_op(op_fn op, int x)
-+{
-+	return op(x);
-+}
-+
-+SEC("socket")
-+__success __retval(36)
-+int callx_c_fn_as_arg(void *ctx)
-+{
-+	/* (5 * 3) + (28 - 7) */
-+	return apply_op(mul3, 5) + apply_op(sub7, 28);
-+}
-+
-+SEC("socket")
-+__success __retval(30)
-+int callx_c_select(void *ctx)
-+{
-+	__u32 rnd = bpf_get_prandom_u32() & 1;
-+	op_fn op = rnd ? mul3 : sub7;
-+	int x = rnd ? 10 : 37;
-+
-+	/* 10 * 3 or 37 - 7 */
-+	return op(x);
-+}
-+
-+struct ops {
-+	op_fn first;
-+	op_fn second;
-+	int bias;
++static op_fn const ops[] = {
++	op0, op1, op2,  op3,  op4,  op5,  op6,  op7,
++	op8, op9, op10, op11, op12, op13, op14, op15,
 +};
 +
-+static __noinline int run_ops(const struct ops *ops, int x)
++int op_idx = 11;
++
++SEC("socket")
++__success __retval(50)
++int callx_c_table(void *ctx)
 +{
-+	return ops->second(ops->first(x)) + ops->bias;
++	unsigned int i = op_idx;
++
++	if (i >= sizeof(ops) / sizeof(ops[0]))
++		return -1;
++	/* op11(3) = 3 * 13 + 11 */
++	return ops[i](3);
 +}
 +
 +SEC("socket")
-+__success __retval(100)
-+int callx_c_ops_on_stack(void *ctx)
++__success __retval(50)
++int callx_c_table_null_check(void *ctx)
 +{
-+	struct ops a, b;
++	unsigned int i = op_idx;
++	op_fn op;
 +
-+	/* avoid an initializer with function pointers in .rodata */
-+	a.first = mul3;
-+	a.second = sub7;
-+	a.bias = 10;
-+	b.first = sub7;
-+	b.second = mul3;
-+	b.bias = 1;
++	if (i >= sizeof(ops) / sizeof(ops[0]))
++		return -1;
++	/* the address of a function is not known until the program is jitted */
++	op = ops[i];
++	if (!op)
++		return -2;
++	return op(3);
++}
 +
-+	/* ((7 * 3) - 7 + 10) + ((32 - 7) * 3 + 1) */
-+	return run_ops(&a, 7) + run_ops(&b, 32);
++/* a structure of operations, where pointers to functions are mixed with data */
++struct shape_ops {
++	int id;
++	op_fn area;
++	long scale;
++	op_fn perimeter;
++};
++
++static const struct shape_ops square_ops = { 1, op1, 10, op2 };
++static const struct shape_ops circle_ops = { 2, op3, 20, op1 };
++
++static __noinline int use_shape(const struct shape_ops *ops, int x)
++{
++	return ops->area(x) * ops->scale + ops->perimeter(ops->id);
++}
++
++SEC("socket")
++__success __retval(433)
++int callx_c_ops_mixed_with_data(void *ctx)
++{
++	/*
++	 * square: op1(2) * 10 + op2(1) = 7 * 10 + 6 = 76
++	 * circle: op3(3) * 20 + op1(2) = 18 * 20 + 7 = 367
++	 * minus 10 when op_idx is not what it is set to
++	 */
++	return use_shape(&square_ops, 2) + use_shape(&circle_ops, 3) - (op_idx == 11 ? 10 : 0);
++}
++
++/* the ops are selected at run time */
++SEC("socket")
++__success __retval(367)
++int callx_c_ops_selected(void *ctx)
++{
++	const struct shape_ops *ops = op_idx == 11 ? &circle_ops : &square_ops;
++
++	return use_shape(ops, 3);
++}
++
++/* the compiler might turn the switch into a table that has no symbol */
++static __noinline int call_by_switch(unsigned int idx, int x)
++{
++	op_fn op;
++
++	switch (idx) {
++	case 0:
++		op = op8;
++		break;
++	case 1:
++		op = op9;
++		break;
++	case 2:
++		op = op10;
++		break;
++	case 3:
++		op = op11;
++		break;
++	case 4:
++		op = op12;
++		break;
++	case 5:
++		op = op13;
++		break;
++	case 6:
++		op = op14;
++		break;
++	case 7:
++		op = op15;
++		break;
++	default:
++		return -1;
++	}
++	return op(x);
++}
++
++SEC("socket")
++__success __retval(50)
++int callx_c_switch_table(void *ctx)
++{
++	/* op11(3) = 3 * 13 + 11 */
++	return call_by_switch(op_idx - 8, 3);
++}
++
++/*
++ * Misaligned pointers to functions are ignored, the rest of the data is
++ * accessible as before.
++ */
++static const struct {
++	char tag;
++	op_fn op;
++} __attribute__((packed)) packed_ops[] = {
++	{ 5, op0 },
++	{ 7, op1 },
++};
++
++SEC("socket")
++__success __retval(7)
++int callx_c_packed_struct(void *ctx)
++{
++	return packed_ops[op_idx & 1].tag;
 +}
 +
 +#else
