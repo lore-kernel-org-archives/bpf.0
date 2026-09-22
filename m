@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-213.mta1.migadu.com [95.215.58.213])
+Received: from mta0.migadu.com (out-207.mta0.migadu.com [91.218.175.207])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F94E35C1BD
-	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 01:04:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.213
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE111285061
+	for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 01:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790039043; cv=none; b=tynajQ2KXnP+CfBUHZNxCnUBYcMU0CHATYOsEO4wt22vKf592SVBrNKKfB2gQ8CHJBnTfbb0E/yMbDvhmDC8yV8Xo15fGlJXDR93XXJIVAQKtUWRzbTqPKUGtD4tYyLg73KFVtMrABweZlHpgK2OxWWeN8EGhIVG28Oj7M0/2GQ=
+	t=1790039051; cv=none; b=pIq3QOyWAu+IcOXCiTymsv3r9g9miEfcNqyUkP/h/cGrH4Dvz1jPODlC3ot8yZMINScg89wydN7onAdbz7FyV6+UAqgELhnlbVNQJN1I2c2w8s+4m9OpbomWWVlBFY2/zojoV/pe66F14+dUZqntxFLM9aUcwVlGOw76fuEsVfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790039043; c=relaxed/simple;
-	bh=zuITKrDzK/W04QHVPRkQzNSVbpIuObx0xfz+lo2tIGI=;
+	s=arc-20240116; t=1790039051; c=relaxed/simple;
+	bh=BZocnogs0CgdLwdI0RpXwNe1/4+SbNzNm3pVU9Fn/kU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kesSz7QeXI1AJev3J9LHhyQI3xRT5N/FwkzjxenHwpbEF0EWA8L1JBEN6T1EYOjspuFEXKpX+/2JBREyciwowthnrgp2RXnhZb0FJf4PyNYLDCyYiIzrm3OobjLeXV1A5+mDOFygfup+C4xTyJqV8e/N700u+FGiu7/F8xkl9d8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=po37Qn95; arc=none smtp.client-ip=95.215.58.213
+	 MIME-Version; b=ZBWj0ySKhxwqLVZtAy4h6CZWkNYdB8hP0aNfylZFnbxp8kRjgphHSAZvrc79op+5ewh0NBrb7nowNC2+2rbH0utbBCvj/ajvlpRz1oTNXbYQKM7rku1/SlQs371KiwI5xPrAfVOLFw1EckpcsuS6KARtQMtLWdwf8JGf4ugzobE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HMXR3sCx; arc=none smtp.client-ip=91.218.175.207
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="po37Qn95"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HMXR3sCx"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=zuITKrDzK/W04QHVPRkQzNSVbpIuObx0xfz+lo2tIGI=;
+DKIM-Signature: a=rsa-sha256; bh=BZocnogs0CgdLwdI0RpXwNe1/4+SbNzNm3pVU9Fn/kU=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790039040; v=1; x=1790643840;
- b=po37Qn95s8NCUgBqP9yLGPar77/YYmG/1NrsB63a8GCcJauT084FtuoSlEZRrmxPCdFoizIa
- Z9D6J1WVdfXRzJcMaV5ocg3izUpNYgZo6aanH+15NuYPiHmjJBOz63FNtvBntqNYYEwDwP2LKr3
- Dd8fKAHknK4+8hVEre34TLYI=
+ t=1790039047; v=1; x=1790643847;
+ b=HMXR3sCx5v7J29GB7uodGr8n+vrP9R0UB9qxGFjCfzi8bT23dimfxvUdVtkXKIeCEqpzSNKq
+ uEelYB1haW5wLh4hL8t0b1UGvRmH0jVlH4lBBPiXtvkeBZzGJxJ1nXvaPXQ5ZINBawpN5jCaMyX
+ 0NLTLvWg04LvkLoz8XluOsAY=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by mta10.migadu.com with ESMTPS id 94195cd9d5b62b7a;
-	Tue, 22 Sep 2026 01:04:00 +0000
-X-Mizu-Trace-ID: 94195cd9d5b62b7a
+Received: by mta10.migadu.com with ESMTPS id 15fce196c86a403b;
+	Tue, 22 Sep 2026 01:04:07 +0000
+X-Mizu-Trace-ID: 15fce196c86a403b
 X-Migadu-Flow: FLOW_OUT
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -41,9 +41,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 2/6] bpf: Scope the bpf_user_ringbuf_drain() dynptr to its callback frame
-Date: Mon, 21 Sep 2026 18:03:29 -0700
-Message-ID: <20260922010333.1226537-3-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v1 3/6] bpf: Name the callback in frame-release diagnostics
+Date: Mon, 21 Sep 2026 18:03:30 -0700
+Message-ID: <20260922010333.1226537-4-ihor.solodrai@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260922010333.1226537-1-ihor.solodrai@linux.dev>
 References: <20260922010333.1226537-1-ihor.solodrai@linux.dev>
@@ -55,68 +55,103 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_user_ringbuf_drain() peeks a sample, initialises a struct
-bpf_dynptr_kern on its own stack, passes it to the callback, and calls
-__bpf_user_ringbuf_sample_release() as soon as the callback returns.
-Neither the descriptor nor the sample it describes is valid afterwards.
+A frame-owned reference is dropped through the same descendant walk as a
+program-owned one, so a program that uses a callback argument after the
+callback returns is told "resource release invalidated this value".
+No resource was released, and nothing the program did caused it.
 
-set_user_ringbuf_callback_state() only gives the callback's R1 a type.
-The callback can therefore store the CONST_PTR_TO_DYNPTR register into
-callback_ctx, which points into a frame that outlives the call, and the
-program can use it after the drain returns. Three routes reach past the
-callback:
+Add __release_reference() with the reason parameter.
 
-  - the register itself, spillable since v7.3-rc1, which points at a
-    descriptor on reused kernel stack and gives the program an arbitrary
-    kernel read/write
+The message names the callback rather than the frame because a
+callback is the only thing that declares a frame-scoped argument
+today, and it is what the program author recognises.
 
-  - a bpf_dynptr_data() or bpf_dynptr_slice() result, which carries
-    the dynptr's id as its parent_id
-
-  - a bpf_dynptr_clone(), which is a by-value copy in the caller's
-    frame and can be sliced after the drain returns
-
-Declare R1 frame-scoped so all three are invalidated when the callback
-frame is popped.
-
-Reported-by: Nicholas Carlini <npc@anthropic.com>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- kernel/bpf/verifier.c | 12 ++++++++----
- 1 file changed, 8 insertions(+), 4 deletions(-)
+ kernel/bpf/diagnostics.c |  3 +++
+ kernel/bpf/diagnostics.h |  1 +
+ kernel/bpf/verifier.c    | 18 +++++++++++-------
+ 3 files changed, 15 insertions(+), 7 deletions(-)
 
+diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+index 5ecfa86ed49f..0610c3f6b334 100644
+--- a/kernel/bpf/diagnostics.c
++++ b/kernel/bpf/diagnostics.c
+@@ -2233,6 +2233,9 @@ static void diag_print_mod(struct bpf_verifier_env *env, const struct bpf_diag_h
+ 								   "resource release invalidated "
+ 								   "this value";
+ 		break;
++	case BPF_DIAG_MOD_FRAME_RELEASE:
++		reason = "the callback that owned this value returned";
++		break;
+ 	case BPF_DIAG_MOD_PKT_DATA_CHANGE:
+ 		reason = "packet data may have moved";
+ 		break;
+diff --git a/kernel/bpf/diagnostics.h b/kernel/bpf/diagnostics.h
+index a4102fb049ec..b5cab4d79c1a 100644
+--- a/kernel/bpf/diagnostics.h
++++ b/kernel/bpf/diagnostics.h
+@@ -22,6 +22,7 @@ enum bpf_diag_mod_reason {
+ 	BPF_DIAG_MOD_SPILL,
+ 	BPF_DIAG_MOD_VAR_WRITE,
+ 	BPF_DIAG_MOD_REF_RELEASE,
++	BPF_DIAG_MOD_FRAME_RELEASE,
+ 	BPF_DIAG_MOD_PKT_DATA_CHANGE,
+ 	BPF_DIAG_MOD_NON_OWN_REF,
+ 	BPF_DIAG_MOD_CALLER_SAVED,
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index a0a9d3d18f63..9775a6d38d3b 100644
+index 9775a6d38d3b..ba0c8c27b45f 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -707,11 +707,15 @@ static void mark_dynptr_stack_regs(struct bpf_verifier_env *env,
- 	__mark_dynptr_reg(sreg2, type, false, id, parent_id);
+@@ -10169,7 +10169,8 @@ static int idstack_pop(struct bpf_idmap *idmap)
  }
  
--static void mark_dynptr_cb_reg(struct bpf_verifier_env *env,
--			       struct bpf_reg_state *reg,
-+/*
-+ * A callback dynptr argument is valid only until the frame is popped, so
-+ * setup_func_entry() assigns its id along with the frame reference.
-+ */
-+static void mark_dynptr_cb_reg(struct bpf_func_state *callee, u32 regno,
- 			       enum bpf_dynptr_type type)
+ /* Release id and objects derived from it iteratively in a DFS manner */
+-static int release_reference(struct bpf_verifier_env *env, int id)
++static int __release_reference(struct bpf_verifier_env *env, int id,
++			       enum bpf_diag_mod_reason reason)
  {
--	__mark_dynptr_reg(reg, type, true, ++env->id_gen, 0);
-+	__mark_dynptr_reg(&callee->regs[regno], type, true, 0, 0);
-+	mark_frame_scoped_arg(callee, regno);
+ 	u32 mask = (1 << STACK_SPILL) | (1 << STACK_DYNPTR);
+ 	struct bpf_verifier_state *vstate = env->cur_state;
+@@ -10224,14 +10225,12 @@ static int release_reference(struct bpf_verifier_env *env, int id)
+ 
+ 				if (reg->dynptr.first_slot)
+ 					dyn_stack--;
+-				bpf_diag_record_scrub(env, &dyn_stack[0].spilled_ptr,
+-						      BPF_DIAG_MOD_REF_RELEASE);
+-				bpf_diag_record_scrub(env, &dyn_stack[1].spilled_ptr,
+-						      BPF_DIAG_MOD_REF_RELEASE);
++				bpf_diag_record_scrub(env, &dyn_stack[0].spilled_ptr, reason);
++				bpf_diag_record_scrub(env, &dyn_stack[1].spilled_ptr, reason);
+ 				invalidate_dynptr(env, dyn_stack);
+ 				continue;
+ 			}
+-			bpf_diag_record_scrub(env, reg, BPF_DIAG_MOD_REF_RELEASE);
++			bpf_diag_record_scrub(env, reg, reason);
+ 			if (!stack || stack->slot_type[BPF_REG_SIZE - 1] == STACK_SPILL)
+ 				mark_reg_invalid(env, reg);
+ 		}));
+@@ -10240,6 +10239,11 @@ static int release_reference(struct bpf_verifier_env *env, int id)
+ 	return 0;
  }
  
- static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
-@@ -10962,7 +10966,7 @@ static int set_user_ringbuf_callback_state(struct bpf_verifier_env *env,
- 	 * callback_fn(const struct bpf_dynptr_t* dynptr, void *callback_ctx);
- 	 */
- 	bpf_mark_reg_not_init(env, &callee->regs[BPF_REG_0]);
--	mark_dynptr_cb_reg(env, &callee->regs[BPF_REG_1], BPF_DYNPTR_TYPE_LOCAL);
-+	mark_dynptr_cb_reg(callee, BPF_REG_1, BPF_DYNPTR_TYPE_LOCAL);
- 	callee->regs[BPF_REG_2] = caller->regs[BPF_REG_3];
++static int release_reference(struct bpf_verifier_env *env, int id)
++{
++	return __release_reference(env, id, BPF_DIAG_MOD_REF_RELEASE);
++}
++
+ /* Find the first reference owned by frame @frameno, or 0 if it owns none. */
+ static u32 frame_reference_id(struct bpf_verifier_state *state, u32 frameno)
+ {
+@@ -10265,7 +10269,7 @@ static int release_frame_reference(struct bpf_verifier_env *env, int id)
+ 		break;
+ 	}
  
- 	/* unused */
+-	return release_reference(env, id);
++	return __release_reference(env, id, BPF_DIAG_MOD_FRAME_RELEASE);
+ }
+ 
+ static void invalidate_non_owning_refs(struct bpf_verifier_env *env)
 -- 
 2.55.0
 
