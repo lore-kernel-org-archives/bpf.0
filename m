@@ -1,286 +1,166 @@
-Received: from mail-wm2-f4.google.com (mail-wm2-f4.google.com [74.125.225.132])
+Received: from mail-pz2-f43.google.com (mail-pz2-f43.google.com [74.125.228.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644234BF94C
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 16:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.132
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790182412; cv=none; b=fS9RD24o2WkbiYKwUEzq3IUEMfAyn+ZR2m363hqxyepIit3A4ojjpqZBZBYuK1Sq0S96KxQRM4BsEDaiPz+Bgi4/4LK9I54K6v0ToDEF/uQTHCgfmWEoH/wLqyvIL70M3SVZGBbofDCy9txoSzuWP6MxokIPhCFAMmBtuQAZjAE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790182412; c=relaxed/simple;
-	bh=p/0KZ68LGr2iJJaK0QtwantBUJwpkmc/lQxRK1SBwvI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=Pi92xzmy9fYYuHvzJykCNluWKNSjcWY/RjIROBZjPUqQh8KZvWqhi9/rOKsBd9/pEFnSWv143YZ/Hh+1RN9MKj9cfQnDjMS5f8TWsZLGCks+FWvruBPV6RuznLY1HrbUhxch119rIJ4pl1URbCr5q2Mph57fERnBlAfW+kYdgoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bgq4g0Bo; arc=none smtp.client-ip=74.125.225.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF3754280D
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 16:57:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790182676; cv=pass; b=u5L0TmUCGWjaSX0byC+3CcpY/aoWMj2E1zDzCCiNb/gE77AN0Q1uGZbMVdciLf6Xp0+UVAx3U8VAQipLnk3vEtUQ/cE9s/wKEqD+zmhevJ5/mB4HUMxRx29IkBfayb+cEctytMc2w68lGX0rD4TT7gLRuQu5WsK9mA3bORwppdo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790182676; c=relaxed/simple;
+	bh=McqDOGf5r1CnE1bN7FiRiYswkQTi90pIdMUmOHjlXZk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E1ELuPbMJ59Y5JrCrPrLCmhZGNQrVg6eNlKW6qRPYSCo+ehP8cHOvKxFWjBx3zceZWGS1b9hybExM6ON1XM7lns+x/SY2j3H6u5E61cZ8MgSM+zyUKzs2jTYFSIwDJ9puxYx9r8zxmeY05BSOl4pkT9Sy2TIapyTvptfR/fCvyo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=JjkYbBrz; arc=pass smtp.client-ip=74.125.228.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bgq4g0Bo"
-Received: by mail-wm2-f4.google.com with SMTP id 5b1f17b1804b1-49cd71f9909so2320145e9.1
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 09:53:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="JjkYbBrz"
+Received: by mail-pz2-f43.google.com with SMTP id d2e1a72fcca58-85469d249c5so773227b3a.3
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 09:57:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790182673; cv=none;
+        d=google.com; s=arc-20260327;
+        b=TksPzsCXSk8b/T3KGSjtlrP7d51LDF2Ku5hUvhRImrAHnbbl2ilYxwYHY/6KPbb+Bv
+         r/rqpgpyNRNMTSuSCtdcgNTmpWZ0rx3Col8jKKgOwTXV1uQN5Y04JYIZqT9aKSGIkP24
+         PB06lr0nkZJ7wpdTOxs19FRX4Wvp2k2qoNteO8y5dE70FJg96AiJC/L/JdP6osAEOxP+
+         ZliBzo13bEIgjvJukx96PTVWBs7q877sg+R4gnt5r16BAv7eXFCeJQ60t2FkpxjFpuus
+         jBzo+Ml0CXC0M/Xq/ya4aom7DYRv2iwyLxuK5sWolbJZ44mVvZ+LczJH1ynPVEXyH4lG
+         ab7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Ijs+6l1Z4Lnz2cWqooyvDNYk6B/Cjo1CnXBD1Ikc0Ww=;
+        fh=TPS6RMEfLRXaiFD53OmxSVz6Tt4HYiHLuP3KSeRC+8E=;
+        b=MpB9nhZnHpOgk2R+6nRgrCy7UacIY63JZ7musW5/YLDXUaiZE6Z+Owf7EwsIpHQWO4
+         vIr44oS8EW6tP3D2cQBbLXKFWCj8nTUSpz65Rs6TjCQIIqJS/3GQ/nzbvmLXdWWTdG7r
+         FP1ltYtx5+2EJlnBkxwhqkJe3RWyYSSRhYm3K661MOMDujOYehudK25b9IWKR5joAaZa
+         UrUOgZJ1LBXXj1bZkGrcxQe6tJH9TVGDafOeD4+1u9pe3leqdj99GuBj5d6OuZkze38T
+         T0SSXgYUEDayKIOFe+3wDyMtbKTlWd/ZDr2Ol/01aHRtqxBX25rAgxOiSEjvYCsrBaK1
+         Ab9A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790182409; x=1790787209; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=ed3QXESutta5PNgIuWlBBjkorsQK7Sz7FQtCM4TE32s=;
-        b=bgq4g0BoqaCqSt5G1eNc1DZXIF4Owmeg157qMKh39k5eZdJ3KnNZi2+cLlDrDd36qu
-         YcAiCFzNFWTWCxfw8zv0onxTyX9jqxtbwLT0+xFunQclVVagTkGEs8VJsQUyAuWDozbU
-         tF5NRSJ6lrtoVJMs/TVaAbX27FhwxJ838/nOUdnNHP3RGaOJawIGrL17c2bPyGlHg+1R
-         IMMyDskVOtGgrwMgBrvTnngVrpxM0RoLR5k9Dnk+w+5mDdaX22cXS4Q3Wc7ZQ1lgM6+o
-         3m6AI9I0PYRoC1i9N5zr6HwcX9BzpP9EKEh6nUPS0y0TnElcdyJH2R3zstgsJV8K7vag
-         xxoQ==
+        d=paul-moore.com; s=google; t=1790182673; x=1790787473; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Ijs+6l1Z4Lnz2cWqooyvDNYk6B/Cjo1CnXBD1Ikc0Ww=;
+        b=JjkYbBrzfIpHFHkcivEd1rTidlNFx00ArknNboJSZP9Nyth6ClIwumGeYFLEHnok80
+         bfNrZQx4b/eVJgy3ezqlkuyPjwF1qqQfZSYxMvp+smJufFKk3sa4Vm4W7QJXp7KlhkgF
+         QJ9qM/J5IkqiPjPNZI618VQT+4y4CNlv/sTzC1mR7RZuKTk6djaHgcndC3MGRfI/7pum
+         QgOvt2A5uv59QxbJiGvSbKZwjWcjkHylEMCVRbwSofk7ibvkO+O9gjGzktpRC68n70C8
+         b3Dwwin/JhXzLvtlswLPf59ARMM8w5kD2/xpOeu1ttgweQZHuQVoWguYKmSeppzG4Lvd
+         fvPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790182409; x=1790787209;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1790182673; x=1790787473;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ed3QXESutta5PNgIuWlBBjkorsQK7Sz7FQtCM4TE32s=;
-        b=ytrgibqMdYq5J1xTvSjQpIOp8baplcYEOqaC+kNPAzAceeTzvdyUr5nGPYmF0D9+UZ
-         McETaKc18RkLY8oWpNjfijalYi4whLCSrGliCg+NqZVg0MCdQdg62o3B0NPSQ3wg1Q4/
-         lrJiG8OeigQSIzBgcA82NjHSlRNB4BXMWMW53t4HzKdbnTrJt9tD8eONrPSRGlEzpslc
-         4Vc1EGpPK4AfeAB1dwhG8yTwHdFV5TZKAqaR4S4bf77UZt5Lk/FhKsF1Qx+1dC24u4F5
-         Ck4SdwNNt+lMqGYM6KdCAZZZBj0l6zJ2zk/bgslmv3r2omQb+3Y0/F+sd5jkSlP5plEG
-         r+xw==
-X-Forwarded-Encrypted: i=1; AKwUvBwbQ1xA5oLU+QJCOMz3fup/RwfgYdDvehyrhATVpxUY84Vh9MUaAngiYN8BHgV78AGu/vI=@vger.kernel.org
-X-Gm-Message-State: AFuF++l5FM/NH6YTGoRnyiG8lSncZKaCXlSQo8zwhU6WiMsgTscC3J5f
-	zMjSzRxnnwleKRmtWvnHLV4lR4jaFQ96aca0bMFDedkXv+EEWn1JGn/gdSvKut2T
-X-Gm-Gg: AYBFou1/OeZISMNXMYYHIlWPWJPvbz/aLijVP+cNlm6ZBoFEVfiHSQxbmZBGgX9+S3Y
-	6Wsr9WzuP9m2mQfQ2PVdcZRCXy8YrpaIPGhwxN5oVO3nikXFmhzoWrGXSn0fbRy8v3xBDPbvH6O
-	T78DbVg1OzRWKTCnCYp9XL7dxCzY6O0zV7EivadHiqEmy1ctCVtLA3ln3KZCKwolm5VO1lO3Jin
-	DRBygAd3alNbjZ3qzeOrCVSecALpIhluZsNdNSLi9yBJzMp3gckKrtb9q5bSo2Nl0Ixou0/1/nt
-	fGIFOcjcRnSSba6RfA7fTNDOX7/QsdzPPM2fUCkk5jdQ8dRQD6ztEjt7z/ZuCFjex44SaCAIvJQ
-	e7nfP6dl63lrJlwfpSgoSXXB+cLdrzKI4O+A2FleWTnwivxBEWYMI5RYfb1EhL8SJSH1P7ifKve
-	MEpyMhQKFElD2d3K91mRjAXRTt25GQZRE1KHYVgJMuHVh0GMZ9IwxNAjgknugXBfIGLME4MmhYz
-	po0S9jStPdnOTdmyNVlLm9aqWNzI1GiV9GbtJ14m6D/lsqEl4O0wWkzF45bfzul/XAZ2aDOB28N
-	Tdn89sLn7HmSZtqopfcw8aYLVvYES3VIrRflMPbRwkz598MU
-X-Received: by 2002:a05:600c:c493:b0:49f:ce78:3564 with SMTP id 5b1f17b1804b1-49fdee0a323mr46208655e9.21.1790182408356;
-        Wed, 23 Sep 2026 09:53:28 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fde1c0f6csm107711875e9.3.2026.09.23.09.53.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Sep 2026 09:53:27 -0700 (PDT)
+        bh=Ijs+6l1Z4Lnz2cWqooyvDNYk6B/Cjo1CnXBD1Ikc0Ww=;
+        b=ljAaKrMRDYfw9HMu5IZulHfVZYB57du064Ha9ofSZrediQmquNmQET7o0agNZ3QoLW
+         JUlZiwnqtDBhinIiCwZjKFsQOV9FiWqcthdQX4d8Kd+EFfTt9PhK8+xmylr5ZDmJFgjs
+         TqvX1zd/svI6tuvwhMG89YGOAFiYUle9gxPZd6RyJ2oCg+MJ9vO+q4t+RC7QTkrALlul
+         6esde1/xHuvNnf/Ig9xAZs9eHIwEDRgvSPj3PpOJQBfGc9NjgrrYWoc3Mk1GiRyjKFF7
+         xB2AdKQBFoDtNpV+OhvUZI4S8pVcmLlkoOa0jaIg/Xt6tyG1QVku2azxZix2dlrO6fB6
+         tTuw==
+X-Forwarded-Encrypted: i=1; AKwUvBy9pRaaFCKzBSf4uP+YFP54MLwihAO0RQNt/dWcghPEyQsVEmMb0V+7sl/yk+H0oBbqbyY=@vger.kernel.org
+X-Gm-Message-State: AFuF++lqJVFlR2MarB2qSUc8AIAtzhYdML6nD3LVmAk2JtAOVqmQD2XT
+	S+boPqnHjNGXsZDncPbPKmDjIFdPqfC6srwGoVZO9B9gsbHU+sME1P7PoPb1rTA2RhI2zckknbr
+	2lLXYIDEx0nUnbJYhrQ/X5CCvaMl3B2fPfjn3hhRKbmCm3+MGosd+rt85
+X-Gm-Gg: AYBFou0gqfvA75Txasfu2wHEViyRIxgi5grZEN0Y9cKRMt9ffvscZvLUSZ4x/aiHTGC
+	x6ZWXuBC8nR6MvtznR2/my+jC0Kls/B1EQl4eeByWQY5Kik0ws0+KyZp0bi9PkBmaoLt5poRUdd
+	mW5bOMgXjmUZIT9wpxeeEU7S8I3rDmpWbnELaCczRFS1jqrfTjmBRlp/i/wTo/gyHKFZrxE0OHq
+	eIVJfOfOQ7uRD9qMsN+60KLmYfbE3NO0PNcEg7ZtqMevYtzzh+sOCRtEYeXMnPJ6EO9XZ06bjAz
+	KJmGGrM+ga2iLRsw8Z9z8JWUiOSlw3b9AQNaWeB29XC/KZcd2nCpc9L8tuIXfiNUePbyWfPe9jk
+	7V4EmV0YPuyY=
+X-Received: by 2002:a05:6a00:2d11:b0:878:3783:8a83 with SMTP id
+ d2e1a72fcca58-87d1d0b7a7fmr2881163b3a.53.1790182672888; Wed, 23 Sep 2026
+ 09:57:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260915150739.284189-1-daniel@iogearbox.net> <20260915150739.284189-5-daniel@iogearbox.net>
+In-Reply-To: <20260915150739.284189-5-daniel@iogearbox.net>
+From: Paul Moore <paul@paul-moore.com>
+Date: Wed, 23 Sep 2026 12:57:40 -0400
+X-Gm-Features: AcwNN1XZMabSPPsGaBL7S-QH7qLqXRrYdrHmvEhiaqbQfwf82MsfQqNIw9dalxc
+Message-ID: <CAHC9VhR2Zp9LzDRwDOZoesOC7o8hretfgRH-PRqQRXA0EES2vA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 4/8] bpf, lsm: Let BPF LSM provide xattrs at
+ inode creation
+To: Daniel Borkmann <daniel@iogearbox.net>, dwindsor@gmail.com
+Cc: alexei.starovoitov@gmail.com, brauner@kernel.org, john.fastabend@gmail.com, 
+	memxor@gmail.com, kpsingh@kernel.org, matt@bobrowski.net, bpf@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 23 Sep 2026 18:53:27 +0200
-Message-Id: <DLMUP8JM4L3U.1A9R0QUFFIQV9@gmail.com>
-Cc: "Puranjay Mohan" <puranjay12@gmail.com>, <bpf@vger.kernel.org>,
- <rcu@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Harry Yoo (Oracle)" <harry@kernel.org>, "Paul
- E. McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH bpf-next v6 0/4] bpf: Add bpf_call_rcu() and
- bpf_call_rcu_tasks_trace()
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260922200208.3203834-1-puranjay@kernel.org>
- <CAEf4BzaifaWk+oHu-berWcKuS6Y5WfkcFTKZW-iMCPxG0=5i0w@mail.gmail.com>
- <CANk7y0g8Mh-je_o_nyXQ3zsGVeAsz2qMfgDtv4j-MXhAJ7PcMA@mail.gmail.com>
- <DLMNTHW945RO.TLPGJHZRWHUY@gmail.com>
- <CAEf4BzaR=oQz13GVxM+DjLkyjCjFmETvj9=bAuccLNKCXHJPaw@mail.gmail.com>
-In-Reply-To: <CAEf4BzaR=oQz13GVxM+DjLkyjCjFmETvj9=bAuccLNKCXHJPaw@mail.gmail.com>
 
-On Wed Sep 23, 2026 at 6:45 PM CEST, Andrii Nakryiko wrote:
-> On Wed, Sep 23, 2026 at 4:29=E2=80=AFAM Kumar Kartikeya Dwivedi
-> <memxor@gmail.com> wrote:
->>
->> On Wed Sep 23, 2026 at 12:37 PM CEST, Puranjay Mohan wrote:
->> > On Wed, Sep 23, 2026 at 12:41=E2=80=AFAM Andrii Nakryiko
->> > <andrii.nakryiko@gmail.com> wrote:
->> >>
->> >> On Tue, Sep 22, 2026 at 1:02=E2=80=AFPM Puranjay Mohan <puranjay@kern=
-el.org> wrote:
->> >> >
->> >> > Changelog:
->> >> > v5: https://lore.kernel.org/all/20260921191407.1742386-1-puranjay@k=
-ernel.org/
->> >> > Changes in v6:
->> >> > - Size struct bpf_rcu_head at 48 bytes rather than 64, matching wha=
-t the
->> >> >   inline state uses (Alexei)
->> >> > - Trim patch 1's changelog: drop the reasoning about possible futur=
-e
->> >> >   layouts and about what the other async kfuncs return
->> >> > - Rebase on bpf-next/master
->> >> >
->> >> > v4: https://lore.kernel.org/all/20260915154248.3612028-1-puranjay@k=
-ernel.org/
->> >> > Changes in v5:
->> >> > - Rename the "hash_map" subtest to "bad_map" so that it matches its
->> >> >   helper test_call_rcu_bad_map() (bpf-ci)
->> >> > - Bump the callback counter after chain_err in the selftest callbac=
-k.
->> >> >   Userspace polls that counter and then reads chain_err, so it coul=
-d
->> >> >   still see the initial value before the re-arm had stored one, whi=
-ch
->> >> >   let the chain subtest's assertion pass without checking anything
->> >> > - Say in patch 1 why embedding struct rcu_head in a uapi struct is
->> >> >   acceptable here (Mykyta, Paul, Alexei)
->> >> > - Rebase on bpf-next/master
->> >> > v3: https://lore.kernel.org/all/20260915143640.36292-1-puranjay@ker=
-nel.org/
->> >> > Changes in v4:
->> >> > - Drop an unrelated hunk in bpf_async_update_prog_callback() that t=
-urned
->> >> >   PTR_ERR(prog) into -EBADF.  That is the shared bpf_timer/bpf_wq p=
-ath
->> >> >   and bpf_prog_inc_not_zero() returns -ENOENT, so it would have cha=
-nged
->> >> >   the errno bpf_timer_set_callback() and bpf_wq_set_callback() repo=
-rt to
->> >> >   userspace (Sashiko).  No other changes from v3
->> >> > v2: https://lore.kernel.org/all/20260915114240.3269184-1-puranjay@k=
-ernel.org/
->> >> > Changes in v3:
->> >> > - Move the bpf_call_rcu_tasks_trace() verifier bits from patch 1 to
->> >> >   patch 3; patch 1 alone emitted "resolve_btfids: unresolved symbol
->> >> >   bpf_call_rcu_tasks_trace" (Sashiko)
->> >> > - Poll the callback counter with an acquire load (Sashiko)
->> >> > - teardown: v2 only checked that the program was eventually freed, =
-which
->> >> >   passes even if nothing was ever armed.  Also assert that the chai=
-n ran,
->> >> >   and read the -EPERM back through an independent .bss fd
->> >> > - Use kern_sync_rcu() instead of open coding the grace-period wait
->> >> > - Return -EBADF rather than -ENOENT when the calling program is goi=
-ng
->> >> >   away, matching bpf_task_work_schedule()
->> >> > - mismatch_map now pins the bpf_rcu_head label the new code emits; =
-it
->> >> >   passed with that branch removed.  Add a two_heads test, and wait =
-for
->> >> >   each grace period separately in the chain test
->> >> > - Commit messages: correct the -EPERM parity claim, explain the inl=
-ine
->> >> >   callback state and the struct size, motivate the tasks trace flav=
-our
->> >> > v1: https://lore.kernel.org/all/20260907134552.1772405-1-puranjay@k=
-ernel.org/
->> >> > Changes in v2:
->> >> > - Rebase on bpf-next/master
->> >> > - Use rcu_read_lock_dont_migrate() over open coding (Alexei)
->> >> > - Improve re-arming selftest to detect failure (Sashiko)
->> >> >
->> >> > BPF programs that manage their own objects have no way to run their=
- own
->> >> > logic once an RCU grace period has elapsed.  bpf_obj_drop() defers =
-a
->> >> > free, but returning an index to an allocator or unpinning a resourc=
-e
->> >> > once readers are done has no equivalent.  sched_ext's BPF library w=
-orks
->> >> > around this today by pushing freed nodes onto a list and having a
->> >> > userspace thread call membarrier(MEMBARRIER_CMD_GLOBAL) and then ru=
-n a
->> >> > BPF program to reclaim them; it is the first intended user.
->> >> >
->> >> > Add:
->> >> >
->> >> >         int bpf_call_rcu(struct bpf_rcu_head *rh, void *map,
->> >> >                          int (*callback)(struct bpf_map *map, void =
-*key,
->> >> >                                          void *value));
->> >> >
->> >> > and bpf_call_rcu_tasks_trace(), same signature, which also waits fo=
-r
->> >> > sleepable programs.
->> >> >
->> >> > @rh is a struct bpf_rcu_head embedded in a value of @map, so the
->> >> > callback runs as callback(map, key, value) for the element it lives=
- in
->> >> > and needs no cookie.  The field is only accepted in BPF_MAP_TYPE_AR=
-RAY,
->> >>
->> >> Isn't restricting this to BPF_MAP_TYPE_ARRAY unnecessarily restrictiv=
-e
->> >> in practice? Do other APIs of similar kind have this limitation? E.g.=
-,
->> >> bpf_task_work_schedule() or timer, I don't think they limit user to
->> >> just ARRAY maps, it's way too inflexible.
->> >
->> > Right, bpf_timer and bpf_task_work take HASH/LRU_HASH/ARRAY. They can
->> > because they can cancel: on element delete bpf_obj_free_fields() calls
->>
->> bpf_obj_cancel_fields(). bpf_obj_free_fields() is no longer called excep=
-t when
->> the object is being freed finally.
->>
->> > bpf_task_work_cancel_and_free(), which reaches task_work_cancel(), so
->> > a pending callback never runs against a recycled element.
->> > A queued RCU callback cannot be cancelled. rcu_barrier() is the only
->> > thing that waits for one, and it sleeps, so it is not callable from an
->> > element delete. Array elements are never freed individually, which is
->> > what makes it safe.
->>
->> If cancel is a noop, can you not simply skip it on map update?
->>
->> It is a bit unfortunate we can't provide cancel semantics, it will be ye=
-t
->> another divergence from how all other async callbacks work...sigh.
->>
->> >
->> > I can think of a complicated way to support hash maps but that would
->> > need making the state dynamically allocated and finding a way to
->> > cancel the callbacks. But I would do it as a follow-up if there is a
->> > real use case.
->>
->> That would mean allocation and frees, it is already quite expensive as i=
-s for a
->> call_rcu() primitive (with the refcount bumps and atomics).
+On Tue, Sep 15, 2026 at 11:07=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.=
+net> wrote:
 >
-> maybe so, but as is ARRAY is a severe limitation and makes a lot of
-> cases either unusable or requiring extra sequential ID allocation
-> logic to remap some HASH map entry to index in an ARRAY map, just so
-> you can call rcu callback for a given kernel object stored in HASH
-> map.
+> From: David Windsor <dwindsor@gmail.com>
 >
-> E.g., think about keep as set of sockets, or tasks, or whatnot in HASH
-> or RHASHTABLE (especially the latter one with support for resizing).
-> How would you do bpf_call_rcu() for them with unduly complications,
-> limitations and a lot of waste (unlike HASH you can't have lazy memory
-> allocation).
+> Many in-kernel LSMs (SELinux, Smack, IMA) store security labels in extend=
+ed
+> attributes. For these LSMs, atomic labeling during inode creation is
+> critical: if the inode becomes accessible before its xattr is set, it is
+> briefly unlabeled, which can disrupt LSMs making policy decisions based
+> on file labels. Existing LSMs solve this by setting xattrs in the
+> inode_init_security hook, which runs before the inode becomes accessible.
+> BPF LSM programs currently lack this capability because the hook uses an
+> output parameter (xattr_count) that BPF programs cannot write to, and
+> existing kfuncs like bpf_set_dentry_xattr() require a dentry that isn't
+> available until after the inode is accessible.
+>
+> Add a bpf_inode_init_xattr() kfunc that takes the hook's own xattrs and
+> xattr_count arguments, passed through from the program's context, and
+> claims a slot via lsm_get_xattr_slot() on the program's behalf. The
+> xattr_count output argument is exposed to inode_init_security programs
+> as trusted read-only memory, so programs can pass it to the kfunc but
+> cannot modify the count themselves.
+>
+> Reserve BPF_LSM_INODE_INIT_XATTRS slots in bpf_lsm_blob_sizes the way
+> every other xattr-providing LSM does, for the life of the kernel. The
+> framework keys the collection off the reserved slot count, so a kernel
+> built with CONFIG_BPF_LSM=3Dy now allocates the xattr array on every inod=
+e
+> creation, whether or not a program sits on the hook.
+>
+> Give the hook a strong prototype in bpf_lsm_proto.c so that its qstr and
+> xattrs arguments are marked __nullable. Both can be NULL for some callers=
+.
+> Without the annotation the verifier otherwise hands the program a trusted
+> non-NULL pointer which it dereferences. Also, keep the hook out of the
+> sleepable set. inode_init_security runs inside the transaction creating
+> the inode, with a journal handle held on ext4 and btrfs and the parent's
+> i_rwsem down, which is why everything on the path allocates GFP_NOFS.
+>
+> Signed-off-by: David Windsor <dwindsor@gmail.com>
+> Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
+> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+> ---
+>  fs/bpf_fs_kfuncs.c         | 99 ++++++++++++++++++++++++++++++++++++++
+>  include/linux/bpf_lsm.h    | 11 ++++-
+>  kernel/bpf/bpf_lsm.c       | 22 ++++++++-
+>  kernel/bpf/bpf_lsm_proto.c | 15 ++++++
+>  security/bpf/hooks.c       |  1 +
+>  5 files changed, 145 insertions(+), 3 deletions(-)
 
-Yeah, I don't disagree. We would also need to support storing them in more =
-map
-types to make it woth with arenas (which was one of the motivations for the
-feature).
+@Daniel, you were CC'd on David's previous patches, so I'm guessing
+you saw my objection[1], but just in case you hadn't please look at my
+comments where I requested that David's proposed LSM kfunc be located
+in security/bpf_lsm_kfuncs.c as opposed to fs/bpf_fs_kfuncs.c.  It
+would be really nice if we could sort this out now and avoid having
+this drag out or escalate.
 
-Perhaps it is better to make cancel a noop / unsupported and skip it when a=
- map
-element is deleted. That will be the easiest path to enabling it, but it do=
-es
-create (perhaps surprising) divergence from some of the other async callbac=
-k
-primitives.
+@David, simply for my own understanding, did you ask Daniel to do
+this, or was Daniel operating on his own with this patchset?
 
-That said, I do think performance should be a consideration for this API; m=
-aybe
-unlike other ones, I would expect that this could be called very frequently=
-. I
-had concerns about prog refcount increment as well, but didn't really bring=
- it
-up since it is something that can be addressed after the fact (maybe using =
-pcpu
-refs). But once we promise supporting cancellation, it is hard to walk that
-back. I think it's less of a concern for other async cb types. In practice,
-except to support map semantics I don't know if anyone will use cancellatio=
-n API
-either, the kernel side never grew such support.
+[1] https://lore.kernel.org/linux-security-module/CAHC9VhTS7rSnBqg00ZxNkcZy=
+h_=3DEeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com/
 
-Anyway, overall the best path to me seems to be just enabling it as is and
-declaring bpf_obj_cancel_fields() on this noop. Existing synchronization sh=
-ould
-be enough to ensure callback stops getting issued once element is finally f=
-reed
-back to kernel allocator.
+--=20
+paul-moore.com
