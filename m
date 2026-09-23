@@ -1,195 +1,117 @@
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B15D311C32
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 14:31:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790173878; cv=pass; b=spYaiXQt2pBVP3g3DIMwCVyf0XQCUz6olfW6wAbdAxT7dYJYCslg2qqAQ2Q767qrlsTl4GBUCUvMKqmKlhaIl1+XreuCaHtz9AtCrch2zWjFHXyA4t4UUcV9VD7ATt/r33EVOb/hyBFQnkGuoy/h16EL7lwc4hQe2E4GQcyKW3Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790173878; c=relaxed/simple;
-	bh=3IRQTfCkVu29EAhzhIq8HL8xV9bhN+vmwTvfaTzW1hg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TO7Nm/uyWEz09twvk1rmdB1oLvtAKIWGnFxPWeBVPocWbsCnpGBMaKHV93PzFxZiD0E56REyzRdQWFpdt2oqUfeqCGQVMlX4Qkjg+zDnkD3hajAkz3DuZn1VE7lKtHwp7WZSLTv/3hTkUxfCRNksB9E4KIwnJ2hL4m+6wba16Co=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=C+1Ohl3z; arc=pass smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="C+1Ohl3z"
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-532e9ad9a1eso208091cf.0
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 07:31:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790173876; cv=none;
-        d=google.com; s=arc-20260327;
-        b=L4oWL/JbzuBSkzGpcEYGtx7/i14TilFcuFIqZsURGnOyVy2STnMR/Zsb4tTBBqfv+g
-         5dc2P93OdcUmSDnM+wU+gaR2Vc31+qtiV795QixeWzaRl4GheG5dNpZ4Iy1yMTXWwjyB
-         gXpQ3D0HGwZ7DjZ0QXEWOqjPe51qLniUYBnEU1ppGSOh/cKo/yKrxN5cr0+aQ+zZoMxB
-         8bQuX19F9moiKOT6WejJxfri9CW0PgaMouLuA/Kr5TW9Tl2QKlzKV3dK3iVEzD4jjbrD
-         u4qy4280TfEpgeI06rjR6U2OU6ISf+D0/7rIJntzEGsyp4jFWE2QqThkYCSfuZsYfJLE
-         lssA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=3IRQTfCkVu29EAhzhIq8HL8xV9bhN+vmwTvfaTzW1hg=;
-        fh=Q6tOcWHCABglRIuzgJHll7ZilANuGOfDPDG3Ztkgktc=;
-        b=IYoyO8FJgRYZgZZo+C3Q5pp9AZCNhmfDgsRqPeX0T3K2Kyt/Um8B+YYF13b19cJi6d
-         pZsrjftBz6p83NlrBjjvSgYlTCIxbpf4VCYOPHeiSUedOF2kY9WjHAXvxNbsf+b438i9
-         +8N1/YI1Om23MtwxW2uRjvYk25j7g3xdkLujFsgRjS2snnFy4+oAINdMP3WMpONToBzt
-         oASWLrnikaRXgfG4A08ACTsqvYIzf2SsCTFfLuDcAnDehOpsfSe0L0gAxOMNTIQCSYVd
-         bwU4dxGbLNpFmk3ehimlmxbtQpitn2W3iqpbxjouaQsEMQputIUWyrVhtCOwKSgr6OAt
-         +LUw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790173876; x=1790778676; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=3IRQTfCkVu29EAhzhIq8HL8xV9bhN+vmwTvfaTzW1hg=;
-        b=C+1Ohl3zbsMrjh1dB/zOjZD8WctelSpuD7HSjz83HtCzxAu2uQCdrvdk6mQA/qDmED
-         XPmCruc/0qesoh5ZaUY/8kYU55YuQDkrL+NWB4/GzBktzO6vR8i1QACk+3pme9wnGQCn
-         VZQmjl8KrY0HTHromA139b+tgbWQilZ3lTmZ8bgk7A7cwz+FVWfgOIYzhOmTDxAQ89K+
-         VZ5tGKKWdn2SxsyXoo0ZRNPy/7aL5Z2Tdfk7aj0pDU/c4b+4zxQCe6XqJRfIBBmHEG8r
-         fY+QEIfNks1XUT2d6WUeW6MkoHO+EYXflKlYvUF0fbOWU0DbvpsKlrTvHc30tBgH/z4n
-         u9Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790173876; x=1790778676;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3IRQTfCkVu29EAhzhIq8HL8xV9bhN+vmwTvfaTzW1hg=;
-        b=U9nbwTC9y1mnpWeCsfoe9P29s+UScivRZ7kWv5XgRgSgkw7B9kDoh4lYwjhtSmII0+
-         9d8hlnAkzWApe4gTHGsmZVKaiEfD4mvLZkZmlq2RhJXondOtd23iOqimYEnl4baYeK6b
-         r9hU8uh3npGo3SErzrZsKRZLd9EXcIer4u7a/9xpEWlBVja+kO9mzFAU3yBBcmbeQdOi
-         ITFlE3PKU5RH1RIp1TcS7QusKjx5m6wxg3gI+1l/fqxdjpCsAh9srkIWypyffIjwnEJB
-         v7XVlsXbUEHpm7wnrKSZiGAMoehvYqQ56T3e3AL2xkbYKKQT3tKqL5p7Lt2tOnbblvaY
-         r9yQ==
-X-Forwarded-Encrypted: i=1; AKwUvBz/Q7I/NUihLyjmRCpVzy56LdP/KUCLXYpkqBcd31d9fC8kJteDXVES/ITHD6SpBDKPJvU=@vger.kernel.org
-X-Gm-Message-State: AFuF++mUKu+fDlDON7oEshp4RyxmAc+04n9Fz3yssUzFD1yed8QZsEL5
-	DbwvCM5ac0EaAjhBGIvRJxBqJgm2lsFJD2YBkaOT6C2Qzk0//CdlSQ2g30ryFEZNdG2rfXkM3R0
-	NliF+wCJjuJsbnyXktWTNziyeScWUYX3sKp2eHVEE
-X-Gm-Gg: AYBFou3ejkcYCaa1cclRtU6vA4w+Iias8RNrA6fpM8ZNo/jtOnPfRsgXvJCJauIxlo6
-	qObc2uO52u5fSlSrAGc6bMV2YmphHWxHbUbCxZMLK6AW2LfmQ3YVnko4IZeLbOu1em2BXH8T6tN
-	T6q2y5/xL1k9N6OMXU65uUHZG0uRkDGDscwkF0asVoCVXok8k13QAlizUklGrl8orvgWeo2fzoY
-	loszofKtnWptG1A12mqZ03kI2ge5vnsg4OsbOFeeyUBSVvNPYRavCA9Hy7NHOI/bDxiSi3D6eZc
-	/Ybz/X2TjljNnqpg+2kjLVZBWYSuJ00H8yYlKm1JnmDNq//b5u8x7Tkro3odlQwDgvPI0lK8Nii
-	VMP91IyIwVQ==
-X-Received: by 2002:a05:622a:260e:b0:532:9d15:2e5a with SMTP id
- d75a77b69052e-532ede89b29mr14598791cf.1.1790173874906; Wed, 23 Sep 2026
- 07:31:14 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB8950B429;
+	Wed, 23 Sep 2026 14:38:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790174286; cv=none; b=P5HaWixqqbaH9qBJokX/8jpnhxe7wCC2xcrz5SfHrABejR59R2aompmcdk4Wyz4uqJbcbzhWl/ywrXPwqtJd8aD8H/U3tKtUJQQ5fuHlRMP/63s6NozPlCoMPSqAj8Bssq9Hmh6JUMZ/qXeY8Eb8rbij+GtyWoPQ9VCseyiF5w0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790174286; c=relaxed/simple;
+	bh=OaEJKFqGikVM89zewHcJ8VzvCRGKmVPi7EEfIKContI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bBaC4Mfhho5Bbh0D+MOMhKyfznQlNS8zSBnomXCOhB7rnsY7Tepa7oWfeuvw2GFqScLMEyRK80I8OarUAnbuQemnWyJ8wVhBhn5JPVgDR6m3NLR1hJsSPeW+/VMHSS4ZA72J4wTp4lPcbmN67chuPiq9I2H46MbBLAvcFcs8iCM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hqfgq1nFXzKHMTY;
+	Wed, 23 Sep 2026 22:37:27 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 392FF40574;
+	Wed, 23 Sep 2026 22:37:53 +0800 (CST)
+Received: from ultra.huawei.com (unknown [10.90.53.71])
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgAX6Co_5LNqbS2UBQ--.27216S2;
+	Wed, 23 Sep 2026 22:37:52 +0800 (CST)
+From: Pu Lehui <pulehui@huaweicloud.com>
+To: bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Pu Lehui <pulehui@huawei.com>
+Subject: [PATCH bpf-next] riscv, bpf: Fix missing sign-ext for signed 1-byte and 2-byte kfunc args
+Date: Wed, 23 Sep 2026 14:41:54 +0000
+Message-Id: <20260923144154.934674-1-pulehui@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org>
- <20260914180811.057cba8fcc48d6e0b53a2683@linux-foundation.org>
- <0b064fe6-ddb3-4f26-a1f2-2e9dd88d590f@kernel.org> <CAJuCfpFBichJH4OcmSHTb1rOuQBT6k5pXeua9_KgpWjDBKvsYw@mail.gmail.com>
- <aq6kzpK7wPl3iFGe@gremlin> <aq6lW9FvL69QeA9H@gremlin> <arOCPN02xB7mykju@gremlin>
- <b007cd0f-29ef-457a-8e44-63ab26f3bcd0@kernel.org>
-In-Reply-To: <b007cd0f-29ef-457a-8e44-63ab26f3bcd0@kernel.org>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Wed, 23 Sep 2026 07:31:02 -0700
-X-Gm-Features: AclHuK_ZGTwaB8ygIyiOyIIeQNRzbEtns-G_Cds8CuZ4q61CHw7YMjTifucik0o
-Message-ID: <CAJuCfpHL=dHjT=O4S88ZBvT1DyodAtCL9QTryepzs3EMwoECDQ@mail.gmail.com>
-Subject: Re: [PATCH v2 00/40] mm: make VMA flag semantics explicit, eliminate VM_SPECIAL
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>, 
-	Pedro Falcato <pfalcato@suse.de>, Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
-	Takashi Iwai <tiwai@suse.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	"Martin K. Petersen" <mkp@kernel.org>, Jaya Kumar <jayalk@intworks.biz>, Simona Vetter <simona@ffwll.ch>, 
-	Helge Deller <deller@gmx.de>, Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, 
-	Peter Xu <peterx@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, 
-	Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, 
-	Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
-	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
-	Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, 
-	Baoquan He <baoquan.he@linux.dev>, Youngjun Park <youngjun.park@lge.com>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Qi Zheng <qi.zheng@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Axel Rasmussen <axelrasmussen@google.com>, 
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-rdma@vger.kernel.org, 
-	selinux@vger.kernel.org, linux-sound@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
-	fuse-devel@lists.linux.dev, Takashi Iwai <tiwai@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgAX6Co_5LNqbS2UBQ--.27216S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KF48Wry5ury3JFWUXFWfGrg_yoW8WF15pF
+	15C34akF9Yqw1IvFy8AF48Wr15Gr4vva17uFWj9a45JFW2qFWrWr4rKw4Yvay5urZ5u3WF
+	kryqgwn7u3yku3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
+	w2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+	6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
+	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+	xUIa0PDUUUU
+X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
-On Wed, Sep 23, 2026 at 1:40=E2=80=AFAM David Hildenbrand (Arm)
-<david@kernel.org> wrote:
->
-> On 9/23/26 10:13, Lorenzo Stoakes (ARM) wrote:
-> > On Sat, Sep 19, 2026 at 04:09:13PM +0100, Lorenzo Stoakes (ARM) wrote:
-> >> On Sat, Sep 19, 2026 at 04:05:57PM +0100, Lorenzo Stoakes (ARM) wrote:
-> >>>
-> >>> Thanks guys!
-> >>
-> >> Note v3 has been posted to fix a stupid bug in 1/40 + attack some very=
- trivial
-> >> sashiko stuff
-> >>
-> >> https://lore.kernel.org/linux-mm/20260917-b4-mmap-prepare-vma-flag-san=
-ify-v3-0-4583d8a23bca@kernel.org/
-> >
-> > Just a gentle nudge on this :)
-> >
-> > If you guys or anybody else has some time it'd be appreciated! (obv. th=
-e v3 as
-> > linked above not this v2!)
-> >
-> > I know the series seems intimidating but most of the commits are very s=
-mall and
-> > it's been in -next for a while.
->
-> Busy with too many other things sorry. Its time will come.
+From: Pu Lehui <pulehui@huawei.com>
 
-Had to take care of the pile of bugs but I'm on it now.
+On RV64, the ABI requires sign-extension for signed 1-byte and 2-byte
+kfunc args. However, the RV64 JIT currently does not perform
+sign-extension for such kfunc args.
 
->
-> --
-> Cheers,
->
-> David
+Before commit 7ce090afbf72 ("bpf: Infer zext_dst based on static
+register liveness analysis"), state pruning could potentially omit
+zero-extension of 32-bit subregisters, which inadvertently masked the
+above issue by making the args appear as if they had been properly
+sign-extended. After that commit, the problem is exposed, causing the
+kfunc_call/kfunc_call_test4 selftest to fail.
+
+Fix this by extending the existing sign-extension logic to handle signed
+1-byte and 2-byte kfunc args as well.
+
+Fixes: 443574b03387 ("riscv, bpf: Fix kfunc parameters incompatibility between bpf and riscv abi")
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ arch/riscv/net/bpf_jit_comp64.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index 2504df1fa111..74efe4b138d2 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -1823,9 +1823,10 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+ 
+ 			for (idx = 0; idx < fm->nr_args; idx++) {
+ 				u8 reg = bpf_to_rv_reg(BPF_REG_1 + idx, ctx);
++				bool sign = fm->arg_flags[idx] & BTF_FMODEL_SIGNED_ARG;
+ 
+-				if (fm->arg_size[idx] == sizeof(int))
+-					emit_sextw(reg, reg, ctx);
++				if (sign_extend(reg, reg, fm->arg_size[idx], sign, ctx))
++					return -EINVAL;
+ 			}
+ 		}
+ 
+-- 
+2.34.1
+
