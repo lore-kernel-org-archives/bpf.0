@@ -1,492 +1,159 @@
-Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
+Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61CC5592E5
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 19:11:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C8995328AD
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 19:11:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790190709; cv=none; b=bKPPfRdIZMJQvei3blsZDMCSw0N+PWtE7w2Lw1Md3E2PZrWqM5XocGTvIVeTmvaKEA8yGX14pVeEeLw4QAGR50xUNzGk9HczVsBc+F7g59XG7BGFUFnfgIO7wieRBDQnIxvMrWDG3c1TJbcQ5uA5bb9t+YQcEZy4q0BgnkU+xNk=
+	t=1790190709; cv=none; b=d3f61R6NpUoyehVDSujcDNaCBY8+xosH6ogdQU7osMyxbQ7ouxjG1p2Qrz2vACKTridRUhuCcqwF+++ebaXw0ACSmoTWgTtPwzYB6y6tfmx4t7SsQqYSW848ayhyYbUoBd0IL3LUd9MjElQ6I5tjpgB5i0oGneyan15aEbARW5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790190709; c=relaxed/simple;
-	bh=hLFI4CFxCL2iSbtIVUXUhXMd1In57vSDVSEqXAQy6/Q=;
+	bh=YsaXVuWFzVdH4R7CpK/TNxOX6xP3adSZLquic/EznZc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RKoN3KgYTkhqL0hEMApTZ+UeAmiC5bUfQlJ959rFaXQ7YlQH0wR4QZ3yZGgLTDAJY8Z0lYfTV8mnwX0BTFbJZV9JqmJI+HchMd/W5AhGqW5LzRzP4O54LYWgQCrQcYzRE1yFbGGwa6xkBcPbVonFuXdZLbBqRU+l9iNoeMSpVCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=MWXEgPPF; arc=none smtp.client-ip=74.125.225.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	 MIME-Version; b=btfMa7owKsjrjZCAd6rJvq9stvPpbvGnpvTRjiA0+UMWEQHU74MEnLAjXrtPf7yu/RH4ESO4Y1dewtRdqBmg1Re4HHG82gkkktcVTrMZ4C/1CE/gU1qy/ZZbHFZXMThYNRD5O61E8mHMXcqmKT5wQ+k1V7RuixIDlDFRAqpAUOE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AQuSiMKM; arc=none smtp.client-ip=74.125.225.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="MWXEgPPF"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-485b1d2874fso545160f8f.0
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 12:11:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AQuSiMKM"
+Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-4843147998cso54195f8f.0
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 12:11:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790190705; x=1790795505; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790190705; x=1790795505; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=SMVFKkaEKJ+ZyTp7/yZ/k0F2Qa778nhhy9DOdbB+tFk=;
-        b=MWXEgPPFUZfTzs4+ai5KeKHAVzLLkoXS9GggZxl+z431xSe8eHQu33VG0eXZKer+Rd
-         IYEdYTXNaH37DYM934talXRvCJjfHER8kvXaEnwmWc9L/7Yg5KK3FKJ6PE6UkcxcuxMe
-         67+ODH0qCOUQmxzGRE7cZFM/cAI6QDSg2w/nkqB2BGCUAFevzPu/mGSXeU8RxiT1amzz
-         rOepgtuDA6XLIJXtYsR9EDeCDffznFzAR2HcsJzrfEF1Mtv/y0egiCYAouDuBwcLLJcn
-         nGRk3u2a9SwmxyMwKf0VPvgZO5Ggcl/Eyd6IwRVSSVLEXlON++V7OzXhXG6panJVEK/7
-         DRbQ==
+        bh=UoLIbkiEqwoQ67Df9ssfLSqnnsuughpEtt998ehDZfA=;
+        b=AQuSiMKMfgnl1sciRFOExKq6nnexerbKjcfmBWyR8jmZpa/S+zykeVXTAQJkUHRQbM
+         QM3Lt1Ak+ttJksOlxNXkZKfaKfEoWHg87JSxb1GIOa8aojU+wSC/neUsMOGNWFk8EycH
+         k2hdIp/h84/w27C6ZmWJhLxIxba0DbOOQ0Tu1keTTqOz2YLaIAKrjdHQRPAYvT4NnAYj
+         QhUSGlJHSy3n1B1uB66r7fdJY3mRg0XlMMIA6OVRRzZs2O9jnODBjOPrKOnmtBtfFp7X
+         uS7eU5r18RsGQkW7JecQLmeGqfBAtIuR3aV2x+rKzsKFeGjHitMXnBeyZJ0TdpZKvWm4
+         l06A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20260707; t=1790190705; x=1790795505;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SMVFKkaEKJ+ZyTp7/yZ/k0F2Qa778nhhy9DOdbB+tFk=;
-        b=VdEyeHWGEFvAJEJw6yXZbqzIRN8Mu8qNOaW8N36Qha/7WSwdzjM1OZGSvDAXLxDeLr
-         pfN+f6WZ4h++SyG3Tn0whOu2ydUAO27Ozz979p4kUv7FShDzzoFhTYdfRYs9qnZ32Wfo
-         cWomIjFQcssBEyd6EZe3C820P9Flqam9QBFvpiYfWn20gBYDY4YqPg9q01dmPUBLzRSe
-         nhUKVqYoeFfrkf/txqGnCjw24kspc5yU0FQ7tQVN4kbLwCPN/EZeD05PpVldhd70FJ2I
-         2qOrV86pVIH12SupHkzy2fwf1knVjN5cwvI+FdLP9w80H2PQ8+bzTkCHv0s5hh7wYTL0
-         K6Rw==
-X-Gm-Message-State: AFuF++kp+rvWvNhwO2f+Ir4jcdNt+RcgfYFj+heuUfCZaa0ATNEG1YQQ
-	lyD/V/nUapuGP+64G0PLO7fpbwinPEKd9D4f5Jtq4UXoG+uHXo+TP8WP0IFgReL1uRSmxVn4/zk
-	8WupouRpx+w==
-X-Gm-Gg: AYBFou0TbQWVrWAkUa7Tpvt9CHRbGM7Ao7QBvMWjCGUfjfdUqR46gsWQkvQCnNp9pig
-	EjXQUdOOM0HXKYgyCOK5eAN4fnTJvs4xpo2IhJZP8DwRFju6FkuLM57/NbKv0j48q8ZPz1kiuGN
-	DW7ockKVEKGqW1gI+COpxEItrHXzGFzc4YJlZ401Dp73uH0LarLNM0JmWaQr1Zj10ZX/gotyL94
-	hE0dSuScFYwU+vqrJ23CWHPeIBwpF6vd4qWUkyH5eSLF/CcamNdWJfFP3sG32GSBGjcyVd6YL4r
-	7cTBhWd153ersmpL4Ea416OgSmUdH23JJ1ZhdQXbpb1rJqMrQ5ymB2BhkUfweohevxYC/lhfZB8
-	fe6aLfV9YAqVg9KEZHZkmBiXe/TZpichS1YcYqtOjjhqLtbYr4GnRBZBKUnomb9tg8X8Dtdd6NJ
-	oAJz0bpvy0sdlNrFBASQQ4gy6t7QoyALLptOjZJtjedw0djfa8qP/8OvELTq2/
-X-Received: by 2002:a05:6000:2211:b0:485:8ea0:da8c with SMTP id ffacd0b85a97d-488716c6d66mr204145f8f.16.1790190704584;
-        Wed, 23 Sep 2026 12:11:44 -0700 (PDT)
-Received: from alpine05.lan ([2620:10d:c090:600::1:2f89])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886877a2a5sm9473563f8f.26.2026.09.23.12.11.41
+        bh=UoLIbkiEqwoQ67Df9ssfLSqnnsuughpEtt998ehDZfA=;
+        b=sZpH5iK4949idFBTOd+9zvTzSNtDJJPPn3/Ws0zV03RwSVTtrUoArCTW2VoSkt7VGg
+         hbn5Pw2iiTgsW5Y79C+gvJ3da1PzpAxOmT5E9tH8AUKeUTYO6Knhlp+tXU1g95mmO+5U
+         mTUI1G7vgtKwHG+vVYGVfmyiwuadVu7rhDV30SZ+SLQzHXKtoJk4rCGudCK+j7qDDxT5
+         Wyy1oDwRykcB6QEq2P4UnlWAPo/dhu/UyM0e8dL19PXiw58gO4TM8GZ0moULwk9oeMtE
+         FmJ9W1e6kEBQkUYldEzSBBexfuw1PVC7XnU2ZCsQjrRWVgMLOuJSC00giD/5yPqxUwMt
+         Zxug==
+X-Gm-Message-State: AFuF++lX1ZZzDX06RosWEcxDP27vLMQZHQ5aI4Uf04/GOiY1+p+28ksu
+	1pvyb082FsgWmYmeVUIEFQm7CuwMAI0jS5GLMSKR+I4mTR03qv8QDmayF0zrVMgo
+X-Gm-Gg: AYBFou3WIM7i+kNP2rckMFd/qiFd2rUTKBOEmZe+IuU/FG5p01JImxl0C+SSDOyLCqs
+	r/zvk6Z0V+AWYl+VdtBqnwwxxHiQJIEmkPLC1No7hdN/+sozqa8bsdUWuvKeBtD8N6Qb80cjVyT
+	yPn8xwiBohkswbNVF3irTfRdPyE2dGQ+HJhzdP2+QV7bpZ3X2+QLRUn+EBOvpXzFXQT9q650OGF
+	BteYNkOhftxBRVfZpTwpcryfSFEUF3Ttw7Pw4uCbHdCA3C1S9XuN1BwGbu0bcjswohXgqokAMCZ
+	hmgdaQD1vefopNLKU0VHcgT4fBfCf1I4K97jD98NyMlVeuyx+olY2LO3BChHXe7a1JOjyUCL4lN
+	UxMwNtmc2c0MHHrrg5e2lEXLw2/lDWYcCm+Mymngw8MR0hEHxEP8057VLql9qCWVgqV17TV7OcI
+	5MH9T4zAe+1BrPFJcCTauarwEn1xsqwzR40DaifEpfaWnBKruVMY4DOEik4uGLao9m2gvWMhXKs
+	JvgzgIGw2hYe5fPn6ppo1OKCVIWeu8KSbfohZF850ymWXtafjWD93aaLNnbOs0K8RUGOzIOUUMo
+	APciLRNM92u3T7xwK9j5bb6E4Z7mFWqzRaeDAQ==
+X-Received: by 2002:a05:600c:1f83:b0:49b:8f5e:51fb with SMTP id 5b1f17b1804b1-49fe66c8087mr2937845e9.3.1790190705372;
+        Wed, 23 Sep 2026 12:11:45 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe1432362sm44685145e9.1.2026.09.23.12.11.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 23 Sep 2026 12:11:44 -0700 (PDT)
-From: Emil Tsalapatis <emil@etsalapatis.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	daniel@iogearbox.net,
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Mykola Lysenko <nickolay.lysenko@gmail.com>
-Subject: [PATCH bpf-next v3 3/6] bpf: Fix arena race between page free and alloc leading to incoherency
-Date: Wed, 23 Sep 2026 19:11:22 +0000
-Message-ID: <20260923191125.5311-4-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260923191125.5311-1-emil@etsalapatis.com>
-References: <20260923191125.5311-1-emil@etsalapatis.com>
+	Tejun Heo <tj@kernel.org>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v1 02/18] bpf: Widen the stack slot index in the jump history
+Date: Wed, 23 Sep 2026 21:11:09 +0200
+Message-ID: <20260923191139.2816206-3-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260923191139.2816206-1-memxor@gmail.com>
+References: <20260923191139.2816206-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2794; i=memxor@gmail.com; h=from:subject; bh=YsaXVuWFzVdH4R7CpK/TNxOX6xP3adSZLquic/EznZc=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWuL4hejx88dptoIXO5esj3ssGyfir0UxxIug6DCe3l7N wU9nnCqo5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABN5q8Lwm+VvmoiB65QTukul Yu7tFIp/6Rz3pShHRC+VbxPLqc03TjIy7NsaaHis83D65LoXfKLnxO/tV9+sv8xMSXZxuUnD370 q7AA=
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Existing arena kfunc code has an underlying race condition
-that can lead to writes being lost from the BPF program's
-point of view:
+Jump history entries record the stack slot touched by a spill or fill in
+a 6-bit field, which only fits the 64 slots of a 512-byte frame and is
+pinned to that size by a static_assert on MAX_BPF_STACK. Move the flags
+into the first word and give the slot index 12 bits of the second word
+instead, so the entry stays 16 bytes while frames of up to 32 KiB can
+be recorded.
 
-a) A memory range gets freed by operation (1), and its range
-is added back to the arena range tree.
+Introduce MAX_BPF_STACK_SLOTS for the number of 8-byte slots a frame can
+have and use it for the static_assert and for BPF_ID_MAP_SIZE, so the
+verifier expresses per-frame capacity through one constant.
 
-b) A concurrent allocation (2) reallocates the range, and does
-writes to it. Writes from that CPU may follow the stale TLB
-entries into the pages that are about to be freed.
+No functional change.
 
-c) (1) invalidates the TLB. The old pages, and any writes done
-to them, are now inaccessible. zap_pages() similarly removes the
-mappings for userspace threads.
-
-This can be triggered by particularly demanding BPF arena data
-structures that constantly allocate and deallocate memory, like
-hash table allocations.
-
-Solve this ABA problem by preventing range reallocation until
-TLB invalidation/unmapping is complete. First, mark the range
-freed but unavailable. Afterwards, drop the spinlock and
-flush the kernel TLB and zap user page tables. Then pick up
-the lock again and mark the ranges as available once again,
-completing the free operation.
-
-Reported-by: Mykola Lysenko <nickolay.lysenko@gmail.com>
-Fixes: b8467290edab ("bpf: arena: make arena kfuncs any context safe")
-Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/arena.c      | 156 ++++++++++++++++++++++++++++++++++++----
- kernel/bpf/range_tree.c |  36 ++++++++--
- kernel/bpf/range_tree.h |   5 +-
- 3 files changed, 176 insertions(+), 21 deletions(-)
+ include/linux/bpf_verifier.h | 21 ++++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 197ac3df68c7..9df4c74ff171 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -76,6 +76,7 @@ struct arena_free_span {
- 	struct llist_node node;
- 	unsigned long uaddr;
- 	u32 page_cnt;
-+	bool release_only;
- };
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 36e0c6b97533..b1c0f981fe68 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -242,6 +242,14 @@ enum bpf_stack_slot_type {
  
- u64 bpf_arena_get_kern_vm_start(struct bpf_arena *arena)
-@@ -551,7 +552,11 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 	}
+ #define BPF_REG_SIZE 8	/* size of eBPF register in bytes */
  
- 	ret = range_tree_clear(&arena->rt, vmf->pgoff, 1);
--	if (ret) {
-+	/* If a range is unavailable, try again. */
-+	if (ret == -EAGAIN) {
-+		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+		goto retry;
-+	} else if (ret) {
- 		fault_ret = VM_FAULT_SIGBUS;
- 		goto out_err_locked_memcg;
- 	}
-@@ -585,6 +590,19 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 	if (new_page)
- 		free_pages_nolock(new_page, 0);
- 	return fault_ret;
-+
-+retry:
-+	bpf_map_memcg_exit(old_memcg, new_memcg);
-+	if (new_page)
-+		free_pages_nolock(new_page, 0);
-+
-+	if (!(vmf->flags & FAULT_FLAG_ALLOW_RETRY))
-+		return VM_FAULT_SIGBUS;
-+
-+	if (!(vmf->flags & FAULT_FLAG_RETRY_NOWAIT))
-+		release_fault_lock(vmf);
-+
-+	return VM_FAULT_RETRY;
- }
- 
- static const struct vm_operations_struct arena_vm_ops = {
-@@ -890,6 +908,7 @@ static void zap_pages(struct bpf_arena *arena, long uaddr, long page_cnt)
- static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt, bool sleepable)
- {
- 	struct mem_cgroup *new_memcg, *old_memcg;
-+	struct range_node *unavail_node = NULL;
- 	u64 full_uaddr, uaddr_end;
- 	long kaddr, pgoff;
- 	struct page *page;
-@@ -898,6 +917,7 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
- 	struct arena_free_span *s;
- 	struct clear_range_data cdata;
- 	unsigned long flags;
-+	bool release_only = false;
- 	int ret = 0;
- 
- 	/* only aligned lower 32-bit are relevant */
-@@ -924,7 +944,20 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
- 	if (ret)
- 		goto defer;
- 
--	range_tree_set_avail(&arena->rt, pgoff, page_cnt);
-+	unavail_node = range_tree_set_unavail(&arena->rt, pgoff, page_cnt);
-+	if (IS_ERR(unavail_node)) {
-+		ret = PTR_ERR(unavail_node);
-+		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+		/*
-+		 * For -EAGAIN: An overlapping fault reserves
-+		 * the range before installing its PTE.
-+		 */
-+		if (ret == -ENOMEM || ret == -EAGAIN)
-+			goto defer;
-+		WARN_ON_ONCE(ret);
-+		bpf_map_memcg_exit(old_memcg, new_memcg);
-+		return;
-+	}
- 
- 	init_llist_head(&free_pages);
- 	cdata.arena = arena;
-@@ -954,6 +987,16 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
- 			zap_pages(arena, full_uaddr, 1);
- 		__free_page(page);
- 	}
-+
-+	ret = raw_res_spin_lock_irqsave(&arena->spinlock, flags);
-+	if (ret) {
-+		release_only = true;
-+		goto defer;
-+	}
-+
-+	ret = range_tree_make_avail(&arena->rt, pgoff, page_cnt);
-+	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+	WARN_ON_ONCE(ret);
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
- 
- 	return;
-@@ -961,16 +1004,33 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
- defer:
- 	s = kmalloc_nolock(sizeof(struct arena_free_span), __GFP_ACCOUNT, -1);
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
--	if (!s)
-+	if (!s) {
- 		/*
--		 * If allocation fails in non-sleepable context, pages are intentionally left
--		 * inaccessible (leaked) until the arena is destroyed. Cleanup or retries are not
--		 * possible here, so we intentionally omit them for safety.
-+		 * Directly mark the region available. Unavailable regions must
-+		 * always be transient, and a permanent one breaks the assumptions
-+		 * made in the allocation/faulting code. The operation is safe because
-+		 * unavailable nodes are not modified by the range tree code without a reference
-+		 * to the node. The modification from unavailable to available also does
-+		 * not require touching anything in the tree apart from the node itself,
-+		 * so it can be done locklessly. The downside is fragmentation in the tree,
-+		 * since we cannot merge with neighbors, but this is a) safe and b) better
-+		 * than leaking the range.
- 		 */
-+		if (release_only)
-+			range_node_mark_available(unavail_node);
-+
-+		/*
-+		 * If we haven't even zapped the pages, intentionally leave them
-+		 * inaccessible (leaked) until the arena is destroyed. Cleanup or
-+		 * retries are not possible here, so we intentionally omit them for safety.
-+		 */
-+
- 		return;
-+	}
- 
- 	s->page_cnt = page_cnt;
- 	s->uaddr = uaddr;
-+	s->release_only = release_only;
- 	llist_add(&s->node, &arena->free_spans);
- 	irq_work_queue(&arena->free_irq);
- }
-@@ -1019,13 +1079,16 @@ static void arena_free_worker(struct work_struct *work)
- 	struct mem_cgroup *new_memcg, *old_memcg;
- 	struct llist_node *list, *pos, *t;
- 	struct arena_free_span *s;
-+	struct range_node *unavail_node;
- 	u64 arena_vm_start, user_vm_start;
--	struct llist_head free_pages;
-+	struct llist_head free_pages, teardown_spans;
- 	struct clear_range_data cdata;
- 	struct page *page;
- 	unsigned long full_uaddr;
- 	long kaddr, page_cnt, pgoff;
- 	unsigned long flags;
-+	bool retry = false;
-+	int ret;
- 
- 	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
- 		schedule_work(work);
-@@ -1035,28 +1098,58 @@ static void arena_free_worker(struct work_struct *work)
- 	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
- 
- 	init_llist_head(&free_pages);
-+	init_llist_head(&teardown_spans);
- 	cdata.arena = arena;
- 	cdata.free_pages = &free_pages;
- 	arena_vm_start = bpf_arena_get_kern_vm_start(arena);
- 	user_vm_start = bpf_arena_get_user_vm_start(arena);
- 
- 	list = llist_del_all(&arena->free_spans);
--	llist_for_each(pos, list) {
-+	llist_for_each_safe(pos, t, list) {
- 		s = llist_entry(pos, struct arena_free_span, node);
- 		page_cnt = s->page_cnt;
--		kaddr = arena_vm_start + s->uaddr;
- 		pgoff = compute_pgoff(arena, s->uaddr);
- 
-+		if (s->release_only) {
-+			ret = range_tree_make_avail(&arena->rt, pgoff, page_cnt);
-+			WARN_ON_ONCE(ret);
-+			kfree_nolock(s);
-+			continue;
-+		}
-+
-+		kaddr = arena_vm_start + s->uaddr;
-+
-+		unavail_node = range_tree_set_unavail(&arena->rt, pgoff, page_cnt);
-+		if (IS_ERR(unavail_node)) {
-+			ret = PTR_ERR(unavail_node);
-+			/* Kick off another attempt at the end of this call. */
-+			if (ret == -EAGAIN) {
-+				llist_add(pos, &arena->free_spans);
-+				retry = true;
-+				continue;
-+			}
-+
-+			/*
-+			 * An -ENOMEM failure is the same failure mode as in
-+			 * the defer: path of arena_free_pages(). Do not treat
-+			 * the leak as a bug.
-+			 */
-+			if (ret != -ENOMEM)
-+				WARN_ON_ONCE(ret);
-+
-+			kfree_nolock(s);
-+			continue;
-+		}
-+
- 		/* clear ptes and collect pages in free_pages llist */
- 		apply_to_existing_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
- 					     apply_range_clear_cb, &cdata);
--
--		range_tree_set_avail(&arena->rt, pgoff, page_cnt);
-+		__llist_add(pos, &teardown_spans);
- 	}
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 
--	/* Iterate the list again without holding spinlock to do the tlb flush and zap_pages */
--	llist_for_each_safe(pos, t, list) {
-+	/* Keep ranges unavailable until their stale translations are gone. */
-+	llist_for_each_safe(pos, t, READ_ONCE(teardown_spans.first)) {
- 		s = llist_entry(pos, struct arena_free_span, node);
- 		page_cnt = s->page_cnt;
- 		full_uaddr = clear_lo32(user_vm_start) + s->uaddr;
-@@ -1067,8 +1160,6 @@ static void arena_free_worker(struct work_struct *work)
- 
- 		/* remove pages from user vmas */
- 		zap_pages(arena, full_uaddr, page_cnt);
--
--		kfree_nolock(s);
- 	}
- 
- 	/* free all pages collected by apply_to_existing_page_range() in the first loop */
-@@ -1077,7 +1168,42 @@ static void arena_free_worker(struct work_struct *work)
- 		__free_page(page);
- 	}
- 
-+	if (!llist_empty(&teardown_spans)) {
-+		if (raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
-+			llist_for_each_safe(pos, t, __llist_del_all(&teardown_spans)) {
-+				s = llist_entry(pos, struct arena_free_span, node);
-+				s->release_only = true;
-+				llist_add(pos, &arena->free_spans);
-+			}
-+
-+			schedule_work(work);
-+			bpf_map_memcg_exit(old_memcg, new_memcg);
-+			return;
-+		}
-+
-+		llist_for_each_safe(pos, t, __llist_del_all(&teardown_spans)) {
-+			s = llist_entry(pos, struct arena_free_span, node);
-+			page_cnt = s->page_cnt;
-+			pgoff = compute_pgoff(arena, s->uaddr);
-+			/*
-+			 * This range tree operation does not allocate memory,
-+			 * and so should never fail regardless of contention
-+			 * or memory pressure. This is in contrast to regular
-+			 * inserts that _can_ fail under memory pressure and
-+			 * force us to defer the free.
-+			 */
-+			ret = range_tree_make_avail(&arena->rt, pgoff, page_cnt);
-+			WARN_ON_ONCE(ret);
-+			kfree_nolock(s);
-+		}
-+		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+	}
-+
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
-+
-+	/* Retry if any region was unavailable for free. */
-+	if (retry)
-+		schedule_work(work);
- }
- 
- static void arena_free_irq(struct irq_work *iw)
-diff --git a/kernel/bpf/range_tree.c b/kernel/bpf/range_tree.c
-index 456db58650bd..9472cf1bc26d 100644
---- a/kernel/bpf/range_tree.c
-+++ b/kernel/bpf/range_tree.c
-@@ -3,6 +3,7 @@
- #include <linux/interval_tree_generic.h>
- #include <linux/slab.h>
- #include <linux/bpf.h>
-+#include <linux/err.h>
- #include "range_tree.h"
- 
- /*
-@@ -45,7 +46,21 @@ struct range_node {
- /* Is the range available for merging? */
- static inline bool range_available(struct range_node *rn)
- {
--	return rn && rn->available;
-+	/* Pairs with smp_store_release() in range_node_mark_available(). */
-+	return rn && smp_load_acquire(&rn->available);
-+}
-+
 +/*
-+ * Mark a node as available. Designed to be used locklessly
-+ * as a last-ditch effort to avoid leaking unavailable range
-+ * tree nodes when all attempts to directly or indirectly
-+ * free an arena region has failed. See arena_free_pages()
-+ * for more info.
++ * Largest number of BPF_REG_SIZE stack slots a single frame can have. A frame
++ * may use any part of the MAX_BPF_STACK budget; check_max_stack_depth()
++ * enforces the bound on the combined depth of frames sharing the kernel stack
++ * and on each frame using a private stack.
 + */
-+void range_node_mark_available(struct range_node *rn)
-+{
-+	/* Pairs with smp_load_acquire() in range_available(). */
-+	smp_store_release(&rn->available, true);
- }
- 
- static struct range_node *rb_to_range_node(struct rb_node *rb)
-@@ -321,7 +336,8 @@ int range_tree_make_avail(struct range_tree *rt, u32 start, u32 len)
- }
- 
- /* Set the range in this range tree */
--static int range_tree_set(struct range_tree *rt, u32 start, u32 len, bool available)
-+static int range_tree_set(struct range_tree *rt, u32 start, u32 len, bool available,
-+			  struct range_node **new_rn)
- {
- 	u32 last = start + len - 1;
- 	struct range_node *right;
-@@ -364,18 +380,28 @@ static int range_tree_set(struct range_tree *rt, u32 start, u32 len, bool availa
- 	left->rn_start = start;
- 	left->rn_last = last;
- 	range_it_insert(left, rt);
-+	if (new_rn)
-+		*new_rn = left;
- 
- 	return 0;
- }
- 
- int range_tree_set_avail(struct range_tree *rt, u32 start, u32 len)
- {
--	return range_tree_set(rt, start, len, true);
-+	return range_tree_set(rt, start, len, true, NULL);
- }
- 
--int range_tree_set_unavail(struct range_tree *rt, u32 start, u32 len)
-+struct range_node *range_tree_set_unavail(struct range_tree *rt, u32 start, u32 len)
- {
--	return range_tree_set(rt, start, len, false);
-+	struct range_node *rn = NULL;
-+	int err;
++#define MAX_BPF_STACK_SLOTS	(MAX_BPF_STACK / BPF_REG_SIZE)
 +
-+	err = range_tree_set(rt, start, len, false, &rn);
-+	if (err)
-+		return ERR_PTR(err);
-+	if (WARN_ON_ONCE(!rn))
-+		return ERR_PTR(-EINVAL);
-+	return rn;
- }
- 
- void range_tree_destroy(struct range_tree *rt)
-diff --git a/kernel/bpf/range_tree.h b/kernel/bpf/range_tree.h
-index aa27edf451bc..4f9ea2acea29 100644
---- a/kernel/bpf/range_tree.h
-+++ b/kernel/bpf/range_tree.h
-@@ -10,12 +10,15 @@ struct range_tree {
- 	struct rb_root_cached range_size_root;
+ /* 4-byte stack slot granularity for liveness analysis */
+ #define BPF_HALF_REG_SIZE	4
+ #define STACK_SLOT_SZ		4
+@@ -424,12 +432,11 @@ struct bpf_jmp_history_entry {
+ 	/* insn idx can't be bigger than 1 million */
+ 	u32 idx : 20;
+ 	u32 frame : 4;	/* stack access frame number */
+-	u32 spi : 6;	/* stack slot index (0..63) */
+-	u32 : 2;
+-	u32 prev_idx : 20;
+ 	/* special INSN_F_xxx flags */
+ 	u32 flags : 4;
+-	u32 : 8;
++	u32 : 4;
++	u32 prev_idx : 20;
++	u32 spi : 12;	/* stack slot index */
+ 	/*
+ 	 * additional registers that need precision tracking when this
+ 	 * jump is backtracked, vector of five 11-bit records
+@@ -438,12 +445,12 @@ struct bpf_jmp_history_entry {
  };
  
-+struct range_node;
-+
- void range_tree_init(struct range_tree *rt);
- void range_tree_destroy(struct range_tree *rt);
+ static_assert(MAX_CALL_FRAMES <= (1 << 4));
+-static_assert(MAX_BPF_STACK / 8 <= (1 << 6));
++static_assert(MAX_BPF_STACK_SLOTS <= (1 << 12));
  
- int range_tree_clear(struct range_tree *rt, u32 start, u32 len);
- int range_tree_set_avail(struct range_tree *rt, u32 start, u32 len);
--int range_tree_set_unavail(struct range_tree *rt, u32 start, u32 len);
-+struct range_node *range_tree_set_unavail(struct range_tree *rt, u32 start, u32 len);
-+void range_node_mark_available(struct range_node *rn);
- int range_tree_make_avail(struct range_tree *rt, u32 start, u32 len);
- int is_range_tree_set(struct range_tree *rt, u32 start, u32 len);
- s64 range_tree_find(struct range_tree *rt, u32 len);
+ /* Maximum number of bpf_reg_state objects that can exist at once */
+ #define MAX_STACK_ARG_SLOTS (MAX_BPF_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS)
+-#define BPF_ID_MAP_SIZE ((MAX_BPF_REG + MAX_BPF_STACK / BPF_REG_SIZE + \
+-			  MAX_STACK_ARG_SLOTS) * MAX_CALL_FRAMES)
++#define BPF_ID_MAP_SIZE ((MAX_BPF_REG + MAX_BPF_STACK_SLOTS + MAX_STACK_ARG_SLOTS) * \
++			 MAX_CALL_FRAMES)
+ struct bpf_verifier_state {
+ 	/* call stack tracking */
+ 	struct bpf_func_state *frame[MAX_CALL_FRAMES];
 -- 
-2.52.0
+2.53.0
 
