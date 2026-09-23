@@ -1,177 +1,221 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B8E73876BE
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 23:23:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C34873876BE
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 23:23:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790205811; cv=none; b=f4qfEkvd0ieO2d5kEBGEUr3CJBJW6vn89kxKdMmcaL9lMtLSUWw+OQZlGkS4If9tzzCbiIGaB+yUtM44o+r1BlIqKI+Va04mLdUHKmcJ/etI1ansla15Tf8ZJe6291exrVGUdkN7emlohpzXqCKVhdlYEk2G+9IXKuPFhPV7Akk=
+	t=1790205815; cv=none; b=rHPirP1SHb9Uy5FGI2lt8pGDR+Sm9MjXloDkJhqQDPR+Hz8BQe4dZTnrKwWedVYrNPbA3w21ImePPDnDCrrDZUbiN3rwHvvBdrWvYu8kzkPV5CclCRRb+F3+S8lTkaynncSNPFVDPHLvyvPXZiSirM6wU41NYc0MkIsMOoIcNnw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790205811; c=relaxed/simple;
-	bh=mLspR3E7bkVNGMzlNKmSZsG+TNiKFIInfBpD5HOKcGE=;
+	s=arc-20240116; t=1790205815; c=relaxed/simple;
+	bh=qZQIJh7uM1cQNHGGc4JfEPtKXQx3RpHLPlu6pT00Utk=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=LzhnCKwOnR6xAmQG4uGloxUuEfGW8BTBDgACLAOkyFFtFX+6Kf3wPBivgOqei9jh8nj+hT7TQnlEAwN9iYXYUZ5OM5SAo62yznayyNbxDqFZ9hR5JyMc0BAuUHdw/74VS4QkxNTvLMb4C1DdcSGTEh0dpCrTcKkq7+bYML+c/7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NbdmgFug; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=Q2m8vcQENGWIFIqGzMcbDv5hv4n6QElHQoxkNaE41ou2ZoD9xE1FJNm1VlH+LbwLF2Ry1Xkl8omqRs9X8pFVrFPgAbLyBr54qN4NUU06DjFHxr8TPF3zUgHhRsAk2HkCqJlPNFRIPsMMrAc8rc7pSxxUQMytYHUqICBSH/xKncg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MqFtCYA9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NbdmgFug"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E48161F000FF;
-	Wed, 23 Sep 2026 23:23:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MqFtCYA9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2596A1F000FF;
+	Wed, 23 Sep 2026 23:23:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790205810;
-	bh=2NS2j3ADybIY/BErzYw3VrDO+itoDUnTnWY9s7cdxPY=;
+	s=k20260515; t=1790205813;
+	bh=RDd3KwMOWyaBiOF+I/xKJ3IuPwAvcxr3OMvEPS5Oh6w=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=NbdmgFugRY6HfF71VSDu900+MHoRp3EDWFAl9RCVUA3P03Z+ZwZI5ki35pKs70TL2
-	 COskNPNYvyQqZQpLIySdygHQgqnkLrRQl/Ync0b4egytpnXD8ZMF5YN9P0ddyK8fRp
-	 wTl1JnGbUn3j5Vn1n+X3Y/K0MSJsfhZ3tlTBNG2U71VDRS4881D3nnen1GkNWyh/Sk
-	 8wIoWAshB5XANQkFBZZbPNzxbR8W1mz+SGxjzGzGNMqWupChF4N5GwMlYfd7SeIwVa
-	 oVjhQ3i6zygeRb6IqD37tfcLxQMpa8S7b2sYd92atYg7eZlo7DfW0Vl1h1Og6glxpN
-	 8+YJpr0kbvgBg==
-Content-Type: multipart/mixed; boundary="===============2926117444529474610=="
+	b=MqFtCYA92CQBo3k/o3ffd1i1fNd5m0zagh9suv0zny/tkkb6hx7aoMM6VhHF10Zg9
+	 YiUYioz3yBAhC9jhoWSg5m5eEor1KTQPXZ2gT84qil4fVV4CF76d58phnY7HJbte50
+	 qJvWezQhAdc4UQSxgOOrWWfVgu3RgZKZcOVZCucV5XtO0N3/89GrzJNL8B+NF/YREG
+	 nIPK27+K4tlLs3Twn7b/YqKTxc7jsZc0qvIIEG6u9UpKovDDwB55nVvyTeZf379o57
+	 GOjLV50ThC33Z/O5l8+YuvQAPiEO51nX2oOS8I8mesiPkNuv6bcXSWpUIXZUc16NoQ
+	 eQ/SQtMMKxTKw==
+Content-Type: multipart/mixed; boundary="===============7335568898387699739=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <fba497a61959c4f4205f8084c94df1543d4c0e5153aa8bacd9ed2eef13115340@mail.kernel.org>
-In-Reply-To: <20260923223554.562379-9-alexei.starovoitov@gmail.com>
-References: <20260923223554.562379-9-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 8/8] selftests/bpf: Add tests for widened loops
+Message-Id: <0d70bf9223370e198d837f262ed9c826df920a5966ba089a268d1d234d6c632d@mail.kernel.org>
+In-Reply-To: <20260923223554.562379-7-alexei.starovoitov@gmail.com>
+References: <20260923223554.562379-7-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 6/8] bpf: Walk loops with widened states first
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 23 Sep 2026 23:23:28 +0000 (UTC)
+Date: Wed, 23 Sep 2026 23:23:32 +0000 (UTC)
 
---===============2926117444529474610==
+--===============7335568898387699739==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-> index 4f1e1c1cd5ab3..5bed8f9587772 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-> @@ -65,6 +65,7 @@
->  #include "verifier_live_stack.skel.h"
->  #include "verifier_liveness_exp.skel.h"
->  #include "verifier_load_acquire.skel.h"
-> +#include "verifier_loop_widen.skel.h"
->  #include "verifier_loops1.skel.h"
->  #include "verifier_lwt.skel.h"
->  #include "verifier_map_in_map.skel.h"
-> @@ -234,6 +235,7 @@ void test_verifier_leak_ptr(void)             { RUN(verifier_leak_ptr); }
->  void test_verifier_linked_scalars(void)       { RUN(verifier_linked_scalars); }
->  void test_verifier_live_stack(void)           { RUN(verifier_live_stack); }
->  void test_verifier_liveness_exp(void)         { RUN(verifier_liveness_exp); }
-> +void test_verifier_loop_widen(void)           { RUN(verifier_loop_widen); }
->  void test_verifier_loops1(void)               { RUN(verifier_loops1); }
->  void test_verifier_lwt(void)                  { RUN(verifier_lwt); }
->  void test_verifier_map_in_map(void)           { RUN(verifier_map_in_map); }
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index fb35f8a7aedd2..e02ee286067d2 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -1068,6 +1068,8 @@ struct bpf_verifier_env {
+>  	bool widen_loops;
+>  	/* the walk did or tried that, so a failure can be due to the lost precision */
+>  	bool widen_used;
+> +	/* insns processed by a walk that was given up */
+> +	u32 insn_wasted;
+>  	struct bpf_iarray *succ;
+>  	struct bpf_iarray *gotox_tmp_buf;
+>  };
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 2fb5a66bd7d49..871aa45031d61 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-Does this registration need architecture filtering? Several of the
-__success subtests in verifier_loop_widen.c appear to require JIT
-exception support for the loop widening path to work.
+[ ... ]
 
-Looking at the series, commit 3a779857709c5 ("bpf: Add may_goto to loops
-that are not walked to the end") shows that widening at a loop head happens
-only when loop_head_guard() returns true. In bpf_is_state_visited(), when
-cannot_throw() returns a reason string, the code does:
+> +/* What a walk changes outside of verifier states and per insn data. */
+> +struct walk_snapshot {
+> +	struct bpf_insn_aux_data *insn_aux;
+> +	struct bpf_func_info_aux *func_aux;
+> +	struct bpf_subprog_info *subprogs;
+> +	struct bpf_prog *prog;
+> +	u64 log_pos, diag_pos;
+> +	u32 insn_processed, prev_insn_processed;
+> +	u32 jmps_processed, prev_jmps_processed;
+> +	u32 total_states, peak_states, max_states_per_insn, longest_mark_read_walk;
+> +	u32 explored_states_size, free_list_size, num_backedges;
+> +	u32 id_gen, pass_cnt, max_stack_depth;
+> +	u32 max_ctx_offset, max_pkt_offset, max_tp_access, max_rdonly_access, max_rdwr_access;
+> +	bool seen_direct_write, seen_exception, explore_alu_limits, tail_call_reachable;
+> +	void *arena;
+> +};
 
-    if (!loop_head_guard(env, insn_idx, widen_from, cur)) {
-        loop_head = false;
-        widen_from = NULL;
+[ ... ]
+
+> +static void walk_snapshot_restore(struct bpf_verifier_env *env, struct walk_snapshot *s)
+> +{
+> +	struct bpf_prog_aux *aux = env->prog->aux;
+> +
+> +	memcpy(env->insn_aux_data, s->insn_aux,
+> +	       array_size(env->prog->len, sizeof(*env->insn_aux_data)));
+> +	memcpy(env->subprog_info, s->subprogs, sizeof(env->subprog_info));
+> +	memcpy(env->prog, s->prog, offsetof(struct bpf_prog, insnsi));
+                    ^^^^
+
+Does this memcpy leak a callchain buffer reference?
+
+The bpf_prog header (everything before insnsi) contains the bitfield
+has_callchain_buf (include/linux/bpf.h:1926). This is not just a flag -
+it records that a reference was taken on the global perf callchain buffers.
+
+check_helper_call() takes the reference when it encounters
+bpf_get_stack() or bpf_get_task_stack():
+
+kernel/bpf/verifier.c:check_helper_call() {
+    if ((func_id == BPF_FUNC_get_stack ||
+         func_id == BPF_FUNC_get_task_stack) &&
+        !env->prog->has_callchain_buf) {
+        ...
+        err = get_callchain_buffers(sysctl_perf_event_max_stack);
+        ...
+        env->prog->has_callchain_buf = true;
     }
+}
 
-And in cannot_throw() (kernel/bpf/verifier.c):
+The matching put is only in bpf_prog_free_deferred():
 
-    if (!env->prog->jit_requested || !bpf_jit_supports_exceptions())
-        return "JIT does not support exceptions";
+kernel/bpf/core.c:bpf_prog_free_deferred() {
+    if (aux->prog->has_callchain_buf)
+        put_callchain_buffers();
+}
 
-Only x86 (with CONFIG_UNWINDER_ORC), arm64, s390 and powerpc64 implement
-bpf_jit_supports_exceptions(). On riscv64 and loongarch, the __weak default
-returns false.
+Consider this sequence when the widened walk fails and is redone:
 
-When widening is not available, the verifier walks every loop iteration.
-Tests like stride4_ne_250k, stride4_down_250k, stride1_lt_1m, and
-nested_stride4 each need well over 1M processed instructions (stride4_ne_250k
-alone is 250000 trips x 5 insns), so they fail with "BPF program is too
-large" even though they are annotated __success.
+1. walk_snapshot_save() snapshots the header with has_callchain_buf == 0
 
-Similarly, spin_until_flag and spin_until_flag_ja are not widened on those
-platforms, so their infinite loops are rejected instead of getting a
-may_goto guard.
+2. The widened walk reaches bpf_get_stack() or bpf_get_task_stack() for
+   the first time. get_callchain_buffers() increments nr_callchain_events
+   and sets has_callchain_buf = 1
 
-tools/testing/selftests/bpf/DENYLIST.riscv64 already has an entry for
-the exceptions test:
+3. The walk fails with widen_used set (e.g. -EINVAL, -EACCES, or -E2BIG
+   from bpf_commit_loop_guards()). walk_snapshot_restore() copies the
+   saved header back with has_callchain_buf == 0, but the reference is
+   still held
 
-    exceptions                              # JIT does not support exceptions
+4. The second walk reaches the helper again. Since has_callchain_buf is
+   0, get_callchain_buffers() is called again, incrementing
+   nr_callchain_events a second time and setting the bit
 
-But there's no corresponding entry for verifier_loop_widen. Other tests
-that depend on this capability use __arch_x86_64, __arch_arm64, __arch_s390x
-tags (like progs/verifier_may_goto_1.c does), or __load_if_JITed().
+5. When the program is freed, bpf_prog_free_deferred() calls
+   put_callchain_buffers() once, so one reference leaks
 
-Should verifier_loop_widen either be added to DENYLIST.riscv64 and similar
-deny lists, or should the architecture-dependent tests in
-progs/verifier_loop_widen.c use __arch_* or __load_if_JITed() annotations
-to skip on platforms without exception support?
+Each such load leaks one count on nr_callchain_events. The count never
+returns to zero, so release_callchain_buffers() never runs and the per-CPU
+callchain buffers stay allocated forever.
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_widen.c b/tools/testing/selftests/bpf/progs/verifier_loop_widen.c
-> new file mode 100644
-> index 0000000000000..4bdfc198bfaa8
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/verifier_loop_widen.c
+Also, perf_event_max_stack_handler() in kernel/events/callchain.c returns
+-EBUSY while nr_callchain_events != 0, so writes to the
+kernel.perf_event_max_stack and kernel.perf_event_max_contexts_per_stack
+sysctls fail permanently once this happens.
 
-[ ... ]
+Trigger requirements (all reachable today):
+- The program is loaded with bpf_capable
+- It has a loop (scc_cnt > 1) and is not offloaded
+- It calls bpf_get_stack() or bpf_get_task_stack()
+- The widened walk fails with widen_used set
 
-> +/* same loop, 250000 trips, too many to walk every one of them */
-> +SEC("socket")
-> +__success
-> +__naked void stride4_ne_250k(void)
+The commit message says 126 selftests programs are walked twice, so the
+redo path is hit often. Any repeated load of such a program leaks more
+references.
 
-[ ... ]
+The commit message says the restore covers the "flags of the prog", but
+has_callchain_buf is a flag that owns a resource. Should the restore
+either preserve has_callchain_buf across the memcpy (save and OR it back
+in afterwards) or call put_callchain_buffers() when the live header has
+the bit set and the snapshot does not?
 
-> +/* 8 byte stride, 32-bit counter */
-> +SEC("socket")
-> +__success
-> +__naked void stride8_ne_w_125k(void)
-
-[ ... ]
-
-> +/* counts down by 4 to zero */
-> +SEC("socket")
-> +__success
-> +__naked void stride4_down_250k(void)
+> +	if (s->func_aux)
+> +		memcpy(aux->func_info_aux, s->func_aux, func_aux_size(env));
 
 [ ... ]
 
-> +/* step of 1 and '<', no alignment to make use of */
-> +SEC("socket")
-> +__success
-> +__naked void stride1_lt_1m(void)
+> +	if (!(env->log.level & BPF_LOG_LEVEL2))
+> +		bpf_vlog_reset(&env->log, s->log_pos);
+> +	bpf_diag_event_log_restore(env, s->diag_pos);
+> +}
 
 [ ... ]
 
-> +/* two loops, one in the other */
-> +SEC("socket")
-> +__success
-> +__naked void nested_stride4(void)
-
-[ ... ]
-
-> +/*
-> + * Nothing in the loop changes what it tests. may_goto that the verifier
-> + * adds to the back-edge ends the program: 0 is returned instead of 2.
-> + */
-> +SEC("socket")
-> +__success __retval(0)
-> +__naked void spin_until_flag(void)
-
-[ ... ]
-
-> +/* same with the back-edge that is not a conditional jump */
-> +SEC("socket")
-> +__success __retval(0)
-> +__naked void spin_until_flag_ja(void)
+> +static int do_check_prog(struct bpf_verifier_env *env)
+> +{
+> +	struct walk_snapshot snap;
+> +	int ret;
+> +
+> +	/* no loops without bpf_capable, the driver of an offloaded prog sees every insn visit */
+> +	if (!env->bpf_capable || env->scc_cnt <= 1 || bpf_prog_is_offloaded(env->prog->aux)) {
+> +		ret = do_check_main(env);
+> +		return ret ?: do_check_subprogs(env);
+> +	}
+> +
+> +	env->scc_converged = kvzalloc_objs(*env->scc_converged, BITS_TO_LONGS(env->scc_cnt),
+> +					   GFP_KERNEL_ACCOUNT);
+> +	if (!env->scc_converged)
+> +		return -ENOMEM;
+> +	ret = walk_snapshot_save(env, &snap);
+> +	if (ret)
+> +		return ret;
+> +
+> +	env->widen_loops = true;
+> +	env->widen_used = false;
+> +	ret = do_check_main(env);
+> +	ret = ret ?: do_check_subprogs(env);
+> +	if (!ret && env->widen_used)
+> +		ret = bpf_commit_loop_guards(env);
+> +	env->widen_loops = false;
+> +	if (ret && ret != -ENOMEM && ret != -EAGAIN && ret != -EFAULT && env->widen_used) {
+> +		walk_snapshot_restore(env, &snap);
+> +		if (env->log.level & BPF_LOG_LEVEL)
+> +			verbose(env, "walk with widened loops failed, walking every iteration\n");
+> +		ret = do_check_main(env);
+> +		ret = ret ?: do_check_subprogs(env);
+> +	}
+> +	walk_snapshot_free(&snap);
+> +	return ret;
+> +}
 
 [ ... ]
 
@@ -181,4 +225,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35929952632
---===============2926117444529474610==--
+--===============7335568898387699739==--
