@@ -1,84 +1,83 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B079851DB09
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 22:14:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 006A139FCCC
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 22:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790201679; cv=none; b=o+2LAnPvBAUI79QGkfqNBbH07+qe/UVv6ZyEBywqBpS80s/v74ChNP4OH6cWcJ0F+Ep3F9Vm2u64HoFuaZ/JWWGmecuAHZDzfUdHbhhq/b5uZ627N7QKfQ/m9aukfErqnpfP3LNEyIuvJaVEQMz6AtHJn+dCEpOJCmj+n95kFqc=
+	t=1790201947; cv=none; b=W9NI9OukzJc2ZylK5Ggqvmj7TBc/ADMEL0CGn6dwZsbtHPX9l67TK3T99RmwzYEl8SFfGuFWQby3sQV8NDb/I6vRulM7MOrMvKzIzu8BrZZiomQ3GakMIeEtY6OlsbE27YmlajolmBuiwGPWNxbB5z/3Nt1ep3IDkblyYAF+Qpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790201679; c=relaxed/simple;
-	bh=uJ9Ja/yw3DCK+Q8bIovnQGbdgYhEbxK9PA4FsD7RXXE=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=MxFCYKUJQmYEby8ZRwhd+qzkCRlQTmqwsVCId57twQD81L6+TZdhxeKvGA6459nO5Vm1qcueZY3LxgfWLqOT58Q2HbcNrBYkHlmr1R/haK6PzO4WHAjSBtOekSJGRClYjJYxEw9ip+lcW3O+xtWaN354AR9tOZJ97dvT898FRTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XdJHqS6H; arc=none smtp.client-ip=74.125.228.12
+	s=arc-20240116; t=1790201947; c=relaxed/simple;
+	bh=XH8TnUbnT3+BboXmTdrDuUHD/GmPsQAJ8uz34lJaAeU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=TnqCJbjrP8tiWhAcYIwOemsW0cIVN3v5lailodrsw+gjyp4VsekaArCe3CvMPQnu+xgVOhDD8QFU6nHWeVs9MPmhiLnaSsSeZFDLQ629Y18jZiDRDY1Rayomap10lH5oHMYfKLsam6BiQrp3FjpcXN+upVmZxoXS9ZZM53vpAeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CYEBAiAM; arc=none smtp.client-ip=74.125.82.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XdJHqS6H"
-Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc4d04d740cso741123a12.0
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 15:14:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CYEBAiAM"
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-33e456e7869so227168eec.0
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 15:19:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790201678; x=1790806478; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=6EYOTy+QnW26hbR5HcrXAKWXiAYxeIUHU6uN6hbrPqA=;
-        b=XdJHqS6HDCfkdZn7Mo0OIKwZynepCer74nEIhXiLe67o+fYf8Ax568JL/peG4JyaN1
-         NFDNQhYnPi5i3ygaFZrK49tk/2u4VWSMWJRHfu1nklG/2WJjzNOcqk8NWjRCg+zym4Oh
-         9Jxio1BAVtYpJDn+JIEby7fVT0ST7ryfhqcF7EmOtjofu43z0Le8ZOPm+xieJkOWAhcy
-         bgKRYQfMcmpIh79ZEmXMfnM7yHHd7kTF5EFARhYnm3PFYRo7fXdGTwzHbKtm8r/2kZuw
-         4Lb85PJJ4G5nSPYoM8b+1XlNcgCfUdFI2DjuY1uk8v9+Wl46VgVPek8Dx95nW4wzEFg8
-         TqLQ==
+        d=gmail.com; s=20251104; t=1790201945; x=1790806745; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=N+E/ewHSjCRVy1duSzYX+ovpgjaE/jJhn6efKCT5Zrw=;
+        b=CYEBAiAMMuK+cLEhkbpLRuxRkxyzNpGrbWeqr2dFAy6EudQ9DuTlH7m80cAw7ygjF8
+         L3II0QhB+/9Yp2Xb5bNtcBfVHZ96xV8ECTws+hLC/80SzMTndmDm/cxHbJFHNspgebgS
+         wmnVURXWbopPt4/qQsALW6jkulk/BXfJlrx7UbwQeg8quTtM/K0Lf86YhdlQtNLqhM70
+         HwlpJmEgD8QhiwIcorgwC89HsuJmGi59kd5zujDViFE0GMvKRbiIsVcqFAtfnCasT0Dm
+         jr+vRg4P+jrTShM81Js5Fw4RLp0cqqO31cNSzF9rw8kxung7ADYTWOp6alvd07co0K4x
+         WZxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790201678; x=1790806478;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1790201945; x=1790806745;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6EYOTy+QnW26hbR5HcrXAKWXiAYxeIUHU6uN6hbrPqA=;
-        b=Viat7/UPuqPmOBx3cSL7wJeQglKPqvQ3J83+CUBYqGWUuJbrnwBn6gZ4zymRuoDzQS
-         7pMnlupC0mDqSUCIGVrSf14/IU8eJ1LAevfgLF9IXfUidUurYkIGiwj1OcshSIzIBtLL
-         gC5lU06JwCH72Sh7/vhEb0PJheYOROy3dEGUONkpOmOEvkaNzOLVUiOTTGEC1ghqh8Zw
-         k2TTHMDYbKGNngWlfuWnpcSpKYzwdaQo9Z/W3ZO0OfYKHluyamYJVVGPqESAXfQWEqb0
-         6+KQpj+bOKwjBP0hl750xAANUsmBZsy8Sr+8V9epk6yF5OZDPz7ed/9lh9bj1O1Y6jzf
-         ZKmw==
-X-Forwarded-Encrypted: i=1; AKwUvBxkzVeSkEnMNv8xqXDQlXIzloZcR2EG74/FMhav7fvQYB4PMG6AV8PVAWxsz6AkYj5hfk4=@vger.kernel.org
-X-Gm-Message-State: AFuF++mUCBFx347429QJiQQFlGv9Jwu+Cl6Vq45RjFoEnVayV144FdEe
-	k3e90lbz+SNscLc9YxerQ6+AijrqU/Z7ygE31FVUNW3O7ysxwocV+NIC
-X-Gm-Gg: AYBFou0hBKXrlDuIugKgRBjgmywsi533f+GwxZM5Lh6jw7eOTwF4zYj3Fale/uTCeHy
-	YLc/SFY6jS2VOu44GmLbh7CzWlvVdDolQt+K7e5aBK6UaxfOhJdWEQ4lQdlNVhwjgMZtFUbXfue
-	QgTEWf1zNHNDjpHEIYCJL1nZhGTboxt5JD6h65Nfid369xzYl7tlaJJlNACUHGKZrXooyDf4Rph
-	D+BZR3YX5gp5n/ceE0fMHWaUkS6haATigH/s4T+BK9JuZi87QT27ltdGucPCAjW2Z/bH15Y6y+z
-	oL2Vk2GH09FCZDeEMTWR4na/Ul5pmMqmi/ftpcncs45ZWGQj0Efl+nrCdiGO/i8cMBymgNmN9jN
-	MlV3Lkm+4QcZKOeuGfIvO4tIQOuItY/OAsscJx/Qk/S+rjFM7/AvnCNmNiNAoFywI2ztHl9nZhJ
-	PXy4KBysnoOWJGoK4GiTTVbNIYS5y/h6slDcss91aAXgj+6fh7LQ3xEUO4+cF2OyZ2YFKLXc8Pr
-	vH8X9MdB5C1CrDgXHa7SWZyP2RavfbyRyEZ3XipnQOZVlPawQiAq/USsi5wTpG4hld7f55HvCgr
-	014f5+azevsFTpY=
-X-Received: by 2002:a17:90b:2e49:b0:3a0:94af:19f2 with SMTP id 98e67ed59e1d1-3a0986e8093mr382567a91.5.1790201677809;
-        Wed, 23 Sep 2026 15:14:37 -0700 (PDT)
-Received: from localhost ([153.61.198.249])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0974ec5c4sm1012390a91.5.2026.09.23.15.14.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Sep 2026 15:14:37 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 23 Sep 2026 22:14:37 +0000
-Message-Id: <DLN1J4YTAX4I.15CNAUSP5LQC8@gmail.com>
-Cc: <linux-kernel@vger.kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Yuan Chen"
- <chenyuan@kylinos.cn>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Keep target extended until its last
- freplace link detaches
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: <chenyuan_fl@163.com>, <bpf@vger.kernel.org>
-In-Reply-To: <20260923090635.368488-2-chenyuan_fl@163.com>
-References: <20260923090635.368488-1-chenyuan_fl@163.com> <20260923090635.368488-2-chenyuan_fl@163.com>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+        bh=N+E/ewHSjCRVy1duSzYX+ovpgjaE/jJhn6efKCT5Zrw=;
+        b=0TelVkoIHDN73AD+9A+0IgcOWR5sZhVyDcNbGCkxbvMuU+apBkPMcoNY0IiiwFarwN
+         3Wuz5DO3V4EBpXLh1DGw8GmxZSDLKmuVAa1bgie+AuQ/ffsvyaYK6pxhyVZJ5ILSJZMo
+         9MOvi/HXYqD0GywOru2SlA+eLt3DdKhBLm1jC7vfh6yii5ijsdZSizHbV9RipOk8f6Ka
+         ofqN+GrBbA6sOeWN+aCzG977m6uJcP43yt3gVrWLLEDuqcb2iW0CzIisw2lXcRLVF0lZ
+         HfcE+ZlcNXZya9UikqWotn5dufcXWrMJbs5NZ6vEz1QoV1abKodv9J4ujUK6isAMyXfv
+         KF6g==
+X-Forwarded-Encrypted: i=1; AKwUvBxzF4Fw8T4LIcRWr+ceD8TLc+kkClTDOzPKxxy1WHPQhax+cUHgty81XpZb2rKrjGQ/slE=@vger.kernel.org
+X-Gm-Message-State: AFuF++lruMER70qAeTn60A03cX124djDiyaEtnBqqcwZ1uYDyX32H7yu
+	gAtVqm9wChkpsVTdoHMEYuM1nIzm8ktthxpn9JTb41QaJ+QlJEgfwjwYctq2zn35
+X-Gm-Gg: AYBFou0/Rc71Qxu5aRSyd0/YsFWXOaZDl0RgyfyS5yMlxweJRgV0tpBbhTT6U7P/+Nr
+	RAOz54VIWIxv/x9HnQ3F7gPXDpRfZbSbfR+Yqgh17yKVVYyvptRSUHkLpZp4lMVwepCTf//G34W
+	ZE7FI8Vpukdq0JgVzygdpw6TkiWymu8uWt9WLs62nZlPlmivA6WG2lpVGUxYRF/uyr2GAly2XDD
+	ooDlF0GxLfnQRlpN9JZAldy9B8YOty+jKy605Gwz0hH1RCyvVfQd0iaktOvI35nsrkvm4HfDVuW
+	bU5ehobeU8TZcErzGExHh/1uZhQh728fOWfUdKD8DxDdGQWQonzlv0Pc7uUgzyyZBg1WTdhkBM8
+	o27Zvd25PMJbMFQc5VtTA9oGj4PWDaDK8M7vKDpfX7sMpYGLRKG59lc9wWlriEG4tpjibcMxOmK
+	4AfHxIkenKpYcwPqXKIBLtKvsEKEWvSIxq6v7ehnXy9x4QPZMt/Aqp1mviCVHZDjNPVLHBfXVQJ
+	2H8GyvXK/raCSnXQ9lrrdiVkuDYo9W18xnvq4A8dq8kpLxPi0MEpNvlkw==
+X-Received: by 2002:a05:7300:ec97:b0:33c:1e4c:151d with SMTP id 5a478bee46e88-34003faa083mr316669eec.7.1790201944808;
+        Wed, 23 Sep 2026 15:19:04 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:179a:a128:9d0d:40be? ([2620:10d:c090:500::5:48f8])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33e95c7d003sm7887062eec.9.2026.09.23.15.19.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2026 15:19:04 -0700 (PDT)
+Message-ID: <9d794d45da75370d010dd0234cbba5dea61c19ba.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v5 07/21] bpf: Explore the landing pads no call
+ site reaches
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Yonghong Song
+	 <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
+ kernel-team@fb.com
+Date: Wed, 23 Sep 2026 15:19:03 -0700
+In-Reply-To: <DLN0K7231LF2.1UNIBGA546C90@gmail.com>
+References: <20260923045846.2414643-1-yonghong.song@linux.dev>
+	 <20260923045922.2417689-1-yonghong.song@linux.dev>
+	 <df24934c5ecbd70bc35b528b8e58ae668ce02051.camel@gmail.com>
+	 <DLN0K7231LF2.1UNIBGA546C90@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -86,9 +85,32 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Wed, Sep 23, 2026 at 05:06 PM chenyuan_fl@163.com <chenyuan_fl@163.com> wrote:
-> +	u64 freplace_link_cnt; /* counts freplace links extending this prog */
+On Wed, 2026-09-23 at 21:28 +0000, Alexei Starovoitov wrote:
 
-u64 ? It's bounded by BPF_MAX_SUBPROGS.
+...
 
-pw-bot: cr
+> imo the following is cleaner:
+> - do not repurpose bpf_throw() for this new thing.
+>   Introduce new kfunc that will do the unwind, let's name it bpf_unwind()=
+ ?
+> - replace all 'call bpf_unwind_resume' with NOP by the verifier (or may w=
+ith bpf_exit. tbd)
+>   Technically rustc or llvm can do that too, but it's cleaner to do in th=
+e verifier.
+> - In bpf_unwind() walk all exception tables and replace return addresses
+>   in corresponding frames to landing_pad_ip-s.
+> - just return from bpf_unwind().
+>   restoring callee saved registers will happen automatically by correspon=
+ding
+>   frames and there is no need to search exception tables at each step.
+>   That's what typical eh unwinder does, but it's doing it due to C++ logi=
+c
+>   that is more complex that Rust. For Rust unwinds we don't need all that=
+.
+>   The above algorithm will do.
+
++1, makes sense.
+After return address rewrite the unwind would have to jump to it's epilogue=
+, right?
+Why not reusing bpf_throw() though, is it because of the exception cb mecha=
+nics?
