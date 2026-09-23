@@ -1,64 +1,64 @@
-Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55DD5442B09
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 06:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C1C644213A
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 06:14:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790144081; cv=none; b=A4psasCf2T0TP3XINNqFrWSlnVzap3YhzN273oskZH9NKZuWZTWLi6u8UPQIount5Jcwd9xOkIwUJSxHvUjdYsxhOzpYwAnw095XKLW6p9oTceOnUFp9x0RVv64YwfnMQFBgRwJHO0gT9smz68yUPCrA1vB04nexJjipS/c+YDQ=
+	t=1790144081; cv=none; b=LpxI72o+pGgrTw1bhsmzH1CiHefHxMF667e0OIauJGR0BNgGy3IFITgIxvHnxThsTQ6K/XChFY3jgf27UIVO74bqgWBwy5NKYuUPbMmxU75/SK5zLv2qmdLhgkMWzeIjKIe9oqGFW4hYtakE5VYF9GTswYs0bwfN8+kv4xqZbXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790144081; c=relaxed/simple;
-	bh=HQEoUFSRkDwo3mIuZncleieykvTm3519HX87sXc86FI=;
+	bh=LR+35UwwI99qPvfVKyCOlw5rmo7MW/U2VJik0XkCJf4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a/n5QeuBYwNIHOxfVxSmlV6Yi7BoPxMw41mikx/2x7ufj7NPuNHEhnqeMr47VUz5NhliTR/ITnN1TMW7aYri80bW/3D7Ld3y4UU4M4lWFdSD0j+FnQhQXpT37X95EiEGwOz456tmT1Ek2vAdvLHJcuPcjrKme4vlV/PANK5+hec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=K+KFmsKK; arc=none smtp.client-ip=74.125.227.171
+	 MIME-Version; b=gpR/Oif8J7UQ1dkzVBhH/s7ny7IlUyh94+4v3WD9lNLdpf2FFW9geMO7Oqad1qFRPigOva/fdh9SaSpGWkfxG+KRMu3THPaS2n/3oTjVNWijDXGvclXdARLKVKQcyR9yuU+LiXuhiEqWGTOTzhXdorv+Ag+zWJCgBCA29oAMKr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=KXTHQeH9; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="K+KFmsKK"
-Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-398c066106cso349218a91.1
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 23:14:32 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="KXTHQeH9"
+Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccda24a3so352029a91.0
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 23:14:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790144070; x=1790748870; darn=vger.kernel.org;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790144073; x=1790748873; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=2ownvmNvG9hG7pOJ8SQ6E2wH+OAqpxy4dMiSZ+cKCUc=;
-        b=K+KFmsKKo/WH174SBGtrt+N8X5vOA/DnNmjj1tNsGbvc8dGb53xGLehpZwvfE8RCDS
-         BK8A8uBwiNb0xN0v4ZxtzqyiaHYtoF11RW6incsnHJLuZNIeyjAzdPtTOjKksLZsooY2
-         SSKDsDuB0VnRDr7u9VmGRqvhRDTzwPrrl3TUIUcr1oJDt1LdfzHpYOLCxlmsU2muY78P
-         XcnsmlpoVrcJlzYOsivkC3rr3Iz9SxyfDxuQKHDZWXuHGr0XHZLKpLUbS0tNu6SVT7xT
-         v1zDWm86P6oSrg5WiBBdX0toC2BypAy9fe8vBt+/iBqwPhzUMSKx1PQIFSWcOCmgeTh4
-         KM9g==
+        bh=po0C5fenyTZin9gYAVmxN8hOMCqUdaZwvALXB+AcDh8=;
+        b=KXTHQeH9lQfcOBvKombSeFKyEu9OcsvmnRKH39LbM+ZJ4WgFKFTxxnRbD4Xo7usBMH
+         opMgf51QT72k3NYjxHuhi/GehfcXOXtWMJhfyBxFHpMlIup/k09k56MlrWVF6W09Uewa
+         AXG0lYpFwWir7YcddCWLhV2opNAf6LAPGa2amqq1CYUGvJnG8b7jUcLbuJdX5Uc6JQdi
+         +4CEnxf83dI0G2zpYoOLvkSvkfS8ekgO6uJ3k1V45MTiw3UkPTeNTgr0Q7E+SzBXWv3n
+         mkXoslwVrgfMsFQ+zXZGxbU7/J3I40rCE/uxbEZ914xU5my0yj6ka83deHLjZc7obho8
+         pj8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790144070; x=1790748870;
+        d=1e100.net; s=20260707; t=1790144073; x=1790748873;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2ownvmNvG9hG7pOJ8SQ6E2wH+OAqpxy4dMiSZ+cKCUc=;
-        b=LyZB62Y1UPtmNOnj93PB7yjziwfcmGm0eIifxnJG95l/GryflDXUKdNRcWOGrL3SK/
-         10qOT+anokVmRLu7+a1SjBRvPGsLvhb7QIrmMGBgNp22180QgS6rX75S5+Mo9KaXN4np
-         Q1EOz5ed3/p/IbPLTAubTCQxKAUBl7PoedY85Hw+mA86NFnRDuvglOym02yAv1LnKMHA
-         ZhIrawpdOcTVg/Dp+ouO0rts955lrKLukk3zZIYw6OFukCHNWgV95bBUWswL/ToYEP+D
-         X97TXXHQTiwKW7ysDPZWFh76iQ+aXHZZc1Eah9ciuumF+yJutFjk4zURFdQJqnr9WhJX
-         jeBA==
-X-Gm-Message-State: AFuF++ksiGdDAWHbUuHb/qFQU2Qq1kd0d7O1gUOsnbJZoJZz5U19QBTF
-	2Qgddd/VweSaAICLRXnR4m4qtOFZoVEfLa80f8Xix2iLgiRPVqX682ans36Kd0BR7fgPUAKVZdL
-	p9/4E
-X-Gm-Gg: AYBFou1dLrb2qcxXYvnLOAnqF/IwKGESmjYe2r31EuoVXWr46YllMqCkkFQguOsCEyN
-	UZ6rw9sUIzs0x7ErGK71B0wyqTFwj+TKxXpGCXkRj7XqS4EG6YQ0MdWo4FCMc3rcUlx/g76GG4s
-	GBHdNv52olu9eVPRXMwj9HUB22GG/Gj1ljqXYvFCf2imDo0nz2wHiNEtdPoOItwanYOE2hBK1Ht
-	AHGzWWZR6SkV4YU4+FpmcRU8qRuPWG0imXl69oRvK5zruvmgFvwbrX2CGz6mKgKt6Jx4dizHQnA
-	OOW4NgfFc1LlFCB8mmJ+6Die08hhJdsd9KWBxmLMh5bCa0BNyG4Oyg9m/1xTDjUNPgY7/hddlML
-	FlCzMGhz1+X6TON/GDX+xFFO73VxqcV8tkHA/XdzrpeiQct8Fs6m+uOZM7ftUpx1ynFmK9wZE1a
-	hhH4QYQkLubcnWCl4qFGo1tlcEmPZKv5P8F8JGW0x6kfZAHaX0ZlIe9wppl4tUuBooTE0om0M9R
-	4Ig+XV70CrPTfFjvU2GkUtHaRkt5Ljw23s+6crnyYwYc1F85+eg
-X-Received: by 2002:a17:90b:258b:b0:39d:f66e:1720 with SMTP id 98e67ed59e1d1-3a07e54e52fmr1476264a91.13.1790144069770;
-        Tue, 22 Sep 2026 23:14:29 -0700 (PDT)
+        bh=po0C5fenyTZin9gYAVmxN8hOMCqUdaZwvALXB+AcDh8=;
+        b=i4W9kMkkRxaEsyoVIJpFRmkU6IIlqaQ2JZQESob+YlIILIGlNGxzU/Z1JZ9Odvr4q9
+         hfcxzHWoB2IfVe0mQTnbJXSxqcLSdOXpZgKrmvtuT8ApZHjPfDPXs5j/XN5CqIG3ZEOf
+         XDQV/beUvqEdje88Ye/3wxa4vRS/+epXOxB34C/+OjyelbtrR3TEBDWJMUWPQ27OToI3
+         LsWF+aLDlRsd1/mn1swcq1TUA3kJ3+cvGfYUHg6Fa9MntJPOm3LRZSkgbb/dbxN8vnGC
+         YriKtiN54domkvXPcaHS+91/CGvjW2pMk+af8NDrRb0D4wrX+LM+4MuNH5lBoDQs+hZZ
+         /F+g==
+X-Gm-Message-State: AFuF++mNG4zVvKm/wCmZ2smlr5Ouk+SN1ibuxnFit7Fcj+hwh8QzdhH8
+	cBb5gz67WZcgFZa06+iWp2XAKTg/DmY2FAH6EsIbYxSE9iPJMnSMcGVvFshZw78aiBSdX46gNrZ
+	IKQtj
+X-Gm-Gg: AYBFou3QxX9ZW262PZDIN7C+sNd0tYK91TNnGqHzmPvVHhlhwHH4fm+frGutk2L81YO
+	fb2689eEa5a1D6y40tXD9ka9VCY+vqMOLUAkE5xFHSrRVWXDoSVxQwYHgqLMIK6MAFBJpqF6hgY
+	AE8ixPmetshRczEpWGfjTRPDtK8DUUiGcLwNE+8j09kS7KUx2rjRanceGkKXKIhYn7oipQjAkIr
+	n9/ZujdLQiR0b2z1ObAkkbEHzvsy6W3xd9ZT0n/QzEQfcyZaDwNu9bGL3ErYBcWvqVSjFHf6h9N
+	7vNSVl/Vh5hgDgDVjp01dOYLsxyKOlh4vTc/TRNWr71yUdUHWfEBL8bB6ZV+xdTpcaodDXySW4d
+	pEjCvZEwvHrMFRrLu0JktFeWSZ0QOjOJkQT4C/F8gzQ7jplW9PArGEuFXmKHcVxTAjqr3dEONdV
+	8Cp5B2UOdNnERkSlYb/JvNyDxKWNAw8T5lh0JmdQ7NysxGke7ibqxBD683MM8nZ+XFlX8AuIIA9
+	BeJiBNbHQ6lT8r8PkbIO3b0pU7d+A4XCUOKRlKdYA==
+X-Received: by 2002:a17:90b:37c3:b0:39e:6c68:1550 with SMTP id 98e67ed59e1d1-3a07e67ce75mr1250927a91.24.1790144073425;
+        Tue, 22 Sep 2026 23:14:33 -0700 (PDT)
 Received: from alpine05.ht.home (69-172-153-146.cable.teksavvy.com. [69.172.153.146])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a07de57682sm3562652a91.16.2026.09.22.23.14.29
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a07de57682sm3562652a91.16.2026.09.22.23.14.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2026 23:14:29 -0700 (PDT)
+        Tue, 22 Sep 2026 23:14:33 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -67,9 +67,9 @@ Cc: ast@kernel.org,
 	memxor@gmail.com,
 	daniel@iogearbox.net,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v2 2/7] bpf: Track availability information for ranges in range tree
-Date: Wed, 23 Sep 2026 06:14:20 +0000
-Message-ID: <20260923061425.7045-3-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v2 6/7] bpf: Avoid unavailable range leakage during arena_free_pages()
+Date: Wed, 23 Sep 2026 06:14:24 +0000
+Message-ID: <20260923061425.7045-7-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260923061425.7045-1-emil@etsalapatis.com>
 References: <20260923061425.7045-1-emil@etsalapatis.com>
@@ -81,378 +81,240 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Arena address ranges are currently encoded in a range tree: Ranges
-present in the tree are free and available for allocation, while
-absent ranges are allocated. However, this opens up the arena code to
-subtle races between page table updates, range tree updates, and
-concurrent allocations that can cause permanent inconsistencies.
+The arena_free_pages() call is designed to leak the attempted
+freed page when it is unable to either directly complete or
+defer the operation. This is valid for ranges for which freeing
+has not started. For those already marked as unavailable in the
+range tree, leaving them permanently unavailable breaks the
+assumption that unavailable ranges denote an operation currently
+in progress.
 
-Avoiding such races involves distinguishing between memory ranges that
-are free and ready to be allocated, and ranges that are being freed but
-should not be reused yet. Such tracking is cleanly possible through the
-arena's range tree. The range tree is only consumed by arena and has no
-additional future consumers, so it can be tailored towards tracking more
-state. Alternatives such as deferring range freeing require more
-asynchrony and per-range state tracking in the main arena code, and can
-introduce additional race conditions.
+Atomically turn the range available instead. The only point a
+range can be leaked as unavailable is when failing to regrab the
+arena spinlock after zapping the range. At that point, the only
+operation left to complete the free is to mark the range available.
+The spinlock is required to merge the range with adjacent free ones
+to avoid range space fragmentation, but this is not necessary for
+correctness or safety. Just flip the range node back to available
+without the spinlock then.
 
-Expand the tree to track whether a range present in the tree is
-available for allocation. For now, all ranges are available: We add
-the option to add back a range in an unavailable state, and to move
-already present ranges from unavailable to available. We do not
-implement other transitions, since they are not required to support
-BPF arenas.
+This is safe because unavailable nodes are not affected by operations
+done to the other nodes, and vice versa for changing the node's available
+state. We can thus treat pointers to newly created unavailable nodes
+as transient references we drop when we mark the node available.
+We do not make the layout of the range_node part of the tree's public
+API.
 
-The patch adds two operations: Adding a range as unavailable, and
-turning a range from unavailable to available. Unavailable ranges are
-not mergable, and will be imminently be turned available by the ongoing
-arena free() operation that created them. Turning ranges from
-unavailable to available is a simple flag change on the range with an
-optional merge with adjacent available ranges.
+The new operation causes fragmentation in the range tree. This is
+preferable to leaking the range, even setting aside the correctness
+issue.
 
-This diff adds -EAGAIN as a possible return value for range_tree_clear().
-This is triggered by code in subsequent diffs, when there is an attempt
-to use a range that has not been completely freed yet.
-
+Fixes: 226d4d4d1272 ("bpf: Fix arena race between page free and alloc leading to incoherency")
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- kernel/bpf/arena.c      |  12 +--
- kernel/bpf/range_tree.c | 177 ++++++++++++++++++++++++++++++++++------
- kernel/bpf/range_tree.h |   4 +-
- 3 files changed, 159 insertions(+), 34 deletions(-)
+ kernel/bpf/arena.c      | 42 +++++++++++++++++++++++++++++++----------
+ kernel/bpf/range_tree.c | 36 ++++++++++++++++++++++++++++++-----
+ kernel/bpf/range_tree.h |  5 ++++-
+ 3 files changed, 67 insertions(+), 16 deletions(-)
 
 diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 7b6847200b43..f49b52fa8586 100644
+index 8594b76dae61..299525f93bbd 100644
 --- a/kernel/bpf/arena.c
 +++ b/kernel/bpf/arena.c
-@@ -317,7 +317,7 @@ static struct bpf_map *arena_map_alloc(union bpf_attr *attr)
- 		goto err_free_arena;
- 
- 	range_tree_init(&arena->rt);
--	err = range_tree_set(&arena->rt, 0, attr->max_entries);
-+	err = range_tree_set_avail(&arena->rt, 0, attr->max_entries);
- 	if (err)
- 		goto err_free_scratch;
- 	mutex_init(&arena->lock);
-@@ -520,13 +520,13 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 	/* Account into memcg of the process that created bpf_arena */
- 	ret = bpf_map_alloc_pages(map, NUMA_NO_NODE, 1, &page);
- 	if (ret) {
--		range_tree_set(&arena->rt, vmf->pgoff, 1);
-+		range_tree_set_avail(&arena->rt, vmf->pgoff, 1);
- 		goto out_sigsegv_memcg;
- 	}
- 
- 	ret = apply_to_page_range(&init_mm, kaddr, PAGE_SIZE, apply_range_set_cb, &data);
- 	if (ret) {
--		range_tree_set(&arena->rt, vmf->pgoff, 1);
-+		range_tree_set_avail(&arena->rt, vmf->pgoff, 1);
- 		free_pages_nolock(page, 0);
- 		goto out_sigsegv_memcg;
- 	}
-@@ -766,7 +766,7 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
- 	return clear_lo32(arena->user_vm_start) + uaddr32;
+@@ -489,6 +489,7 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
+ 	struct bpf_map *map = vmf->vma->vm_file->private_data;
+ 	struct bpf_arena *arena = container_of(map, struct bpf_arena, map);
+ 	struct mem_cgroup *new_memcg, *old_memcg;
++	struct range_node *unavail_node;
+ 	struct page *page;
+ 	long kbase, kaddr;
+ 	unsigned long flags;
+@@ -551,10 +552,11 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
  out:
--	range_tree_set(&arena->rt, pgoff + mapped, page_cnt - mapped);
-+	range_tree_set_avail(&arena->rt, pgoff + mapped, page_cnt - mapped);
+ 	/* Reserve the page while installing its user PTE without the arena lock. */
+ 	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
+-	ret = range_tree_set_unavail(&arena->rt, vmf->pgoff, 1);
++	unavail_node = range_tree_set_unavail(&arena->rt, vmf->pgoff, 1);
+ 	bpf_map_memcg_exit(old_memcg, new_memcg);
  	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 	if (mapped) {
- 		flush_vmap_cache(kern_vm_start + uaddr32, mapped << PAGE_SHIFT);
-@@ -881,7 +881,7 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
+-	if (ret) {
++	if (IS_ERR(unavail_node)) {
++		ret = PTR_ERR(unavail_node);
+ 		if (ret == -EAGAIN)
+ 			goto retry;
+ 		return VM_FAULT_OOM;
+@@ -895,6 +897,7 @@ static void zap_pages(struct bpf_arena *arena, long uaddr, long page_cnt)
+ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt, bool sleepable)
+ {
+ 	struct mem_cgroup *new_memcg, *old_memcg;
++	struct range_node *unavail_node = NULL;
+ 	u64 full_uaddr, uaddr_end;
+ 	long kaddr, pgoff;
+ 	struct page *page;
+@@ -930,8 +933,9 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
  	if (ret)
  		goto defer;
  
--	range_tree_set(&arena->rt, pgoff, page_cnt);
-+	range_tree_set_avail(&arena->rt, pgoff, page_cnt);
+-	ret = range_tree_set_unavail(&arena->rt, pgoff, page_cnt);
+-	if (ret) {
++	unavail_node = range_tree_set_unavail(&arena->rt, pgoff, page_cnt);
++	if (IS_ERR(unavail_node)) {
++		ret = PTR_ERR(unavail_node);
+ 		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+ 		/*
+ 		 * For -EAGAIN: An overlapping fault reserves
+@@ -989,13 +993,29 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
+ defer:
+ 	s = kmalloc_nolock(sizeof(struct arena_free_span), __GFP_ACCOUNT, -1);
+ 	bpf_map_memcg_exit(old_memcg, new_memcg);
+-	if (!s)
++	if (!s) {
++		/*
++		 * Directly mark the region available. Unavailable regions must
++		 * always be transient, and a permanent one breaks the assumptions
++		 * made in the allocation/faulting code. The operation is safe because
++		 * unavailable nodes are not modified by the range tree code without a reference
++		 * to the node. The modification from unavailable to available also does
++		 * not require touching anything in the tree apart from the node itself,
++		 * so it can be done locklessly. The downside is fragmentation in the tree,
++		 * since we cannot merge with neighbors, but this is a) safe and b) better
++		 * than leaking the range.
++		 */
++		if (release_only)
++			range_node_mark_available(unavail_node);
++
+ 		/*
+-		 * If allocation fails in non-sleepable context, pages are intentionally left
+-		 * inaccessible (leaked) until the arena is destroyed. Cleanup or retries are not
+-		 * possible here, so we intentionally omit them for safety.
++		 * If we haven't even zapped the pages, intentionally leave them
++		 * inaccessible (leaked) until the arena is destroyed. Cleanup or
++		 * retries are not possible here, so we intentionally omit them for safety.
+ 		 */
++
+ 		return;
++	}
  
- 	init_llist_head(&free_pages);
- 	cdata.arena = arena;
-@@ -1008,7 +1008,7 @@ static void arena_free_worker(struct work_struct *work)
- 		apply_to_existing_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
- 					     apply_range_clear_cb, &cdata);
+ 	s->page_cnt = page_cnt;
+ 	s->uaddr = uaddr;
+@@ -1048,6 +1068,7 @@ static void arena_free_worker(struct work_struct *work)
+ 	struct mem_cgroup *new_memcg, *old_memcg;
+ 	struct llist_node *list, *pos, *t;
+ 	struct arena_free_span *s;
++	struct range_node *unavail_node;
+ 	u64 arena_vm_start, user_vm_start;
+ 	struct llist_head free_pages;
+ 	struct clear_range_data cdata;
+@@ -1081,8 +1102,9 @@ static void arena_free_worker(struct work_struct *work)
+ 		pgoff = compute_pgoff(arena, s->uaddr);
+ 		kaddr = arena_vm_start + s->uaddr;
  
--		range_tree_set(&arena->rt, pgoff, page_cnt);
-+		range_tree_set_avail(&arena->rt, pgoff, page_cnt);
- 	}
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 
+-		ret = range_tree_set_unavail(&arena->rt, pgoff, page_cnt);
+-		if (ret) {
++		unavail_node = range_tree_set_unavail(&arena->rt, pgoff, page_cnt);
++		if (IS_ERR(unavail_node)) {
++			ret = PTR_ERR(unavail_node);
+ 			/* Kick off another attempt at the end of this call. */
+ 			if (ret == -EAGAIN)
+ 				continue;
 diff --git a/kernel/bpf/range_tree.c b/kernel/bpf/range_tree.c
-index fdf7ba7aefe0..456db58650bd 100644
+index 46a32623efb2..62ebf4df51cb 100644
 --- a/kernel/bpf/range_tree.c
 +++ b/kernel/bpf/range_tree.c
-@@ -39,8 +39,15 @@ struct range_node {
- 	u32 rn_start;
- 	u32 rn_last; /* inclusive */
- 	u32 __rn_subtree_last;
-+	bool available; /* range is available for allocating. */
- };
+@@ -3,6 +3,7 @@
+ #include <linux/interval_tree_generic.h>
+ #include <linux/slab.h>
+ #include <linux/bpf.h>
++#include <linux/err.h>
+ #include "range_tree.h"
  
-+/* Is the range available for merging? */
-+static inline bool range_available(struct range_node *rn)
-+{
-+	return rn && rn->available;
-+}
-+
- static struct range_node *rb_to_range_node(struct rb_node *rb)
+ /*
+@@ -45,7 +46,21 @@ struct range_node {
+ /* Is the range available for merging? */
+ static inline bool range_available(struct range_node *rn)
  {
- 	return rb_entry(rb, struct range_node, rb_range_size);
-@@ -55,20 +62,30 @@ static u32 rn_size(struct range_node *rn)
- static inline struct range_node *__find_range(struct range_tree *rt, u32 len)
- {
- 	struct rb_node *rb = rt->range_size_root.rb_root.rb_node;
--	struct range_node *best = NULL;
-+	struct rb_node *best = NULL;
-+	struct range_node *rn;
- 
- 	while (rb) {
--		struct range_node *rn = rb_to_range_node(rb);
-+		rn = rb_to_range_node(rb);
- 
- 		if (len <= rn_size(rn)) {
--			best = rn;
-+			best = rb;
- 			rb = rb->rb_right;
- 		} else {
- 			rb = rb->rb_left;
- 		}
- 	}
- 
--	return best;
-+	/* Filter unavailable ranges. */
-+	while (best) {
-+		rn = rb_to_range_node(best);
-+		if (range_available(rn))
-+			return rn;
-+
-+		best = rb_prev(best);
-+	}
-+
-+	return NULL;
- }
- 
- s64 range_tree_find(struct range_tree *rt, u32 len)
-@@ -135,10 +152,19 @@ range_it_iter_first(struct range_tree *rt, u32 start, u32 last)
- /* Clear the range in this range tree */
- int range_tree_clear(struct range_tree *rt, u32 start, u32 len)
- {
-+	u32 first = start;
- 	u32 last = start + len - 1;
- 	struct range_node *new_rn;
- 	struct range_node *rn;
- 
-+	/* Scan for unavailable ranges and try again if so. */
-+	while ((rn = range_it_iter_first(rt, first, last))) {
-+		if (!range_available(rn))
-+			return -EAGAIN;
-+
-+		first = rn->rn_last + 1;
-+	}
-+
- 	while ((rn = range_it_iter_first(rt, start, last))) {
- 		if (rn->rn_start < start && rn->rn_last > last) {
- 			u32 old_last = rn->rn_last;
-@@ -153,6 +179,7 @@ int range_tree_clear(struct range_tree *rt, u32 start, u32 len)
- 						NUMA_NO_NODE);
- 			if (!new_rn)
- 				return -ENOMEM;
-+			new_rn->available = rn->available;
- 			new_rn->rn_start = last + 1;
- 			new_rn->rn_last = old_last;
- 			range_it_insert(new_rn, rt);
-@@ -199,23 +226,12 @@ int is_range_tree_set(struct range_tree *rt, u32 start, u32 len)
- 	return -ESRCH;
- }
- 
--/* Set the range in this range tree */
--int range_tree_set(struct range_tree *rt, u32 start, u32 len)
-+/* Do we have adjacent ranges (and do not overlap with them)? */
-+static int range_get_adjacent(struct range_tree *rt, u32 start, u32 last,
-+		struct range_node **leftp, struct range_node **rightp)
- {
--	u32 last = start + len - 1;
- 	struct range_node *right;
- 	struct range_node *left;
--	int err;
--
--	/* Is this whole range already set ? */
--	left = range_it_iter_first(rt, start, last);
--	if (left && left->rn_start <= start && left->rn_last >= last)
--		return 0;
--
--	/* Clear out everything in the range we want to set. */
--	err = range_tree_clear(rt, start, len);
--	if (err)
--		return err;
- 
- 	/* Do we have a left-adjacent range ? */
- 	left = range_it_iter_first(rt, start - 1, start - 1);
-@@ -227,34 +243,141 @@ int range_tree_set(struct range_tree *rt, u32 start, u32 len)
- 	if (right && right->rn_start != last + 1)
- 		return -EFAULT;
- 
--	if (left && right) {
-+	*leftp = left;
-+	*rightp = right;
-+
-+	return 0;
+-	return rn && rn->available;
++	/* Pairs with smp_store_release() in range_node_mark_available(). */
++	return rn && smp_load_acquire(&rn->available);
 +}
 +
 +/*
-+ * Merge with adjacent available ranges if possible. The new [start, last]
-+ * has already been confirmed to be adjacent with left/right by the caller.
++ * Mark a node as available. Designed to be used locklessly
++ * as a last-ditch effort to avoid leaking unavailable range
++ * tree nodes when all attempts to directly or indirectly
++ * free an arena region has failed. See arena_free_pages()
++ * for more info.
 + */
-+static int range_tree_merge(struct range_tree *rt, u32 start, u32 last,
-+		struct range_node *left, struct range_node *right)
++void range_node_mark_available(struct range_node *rn)
 +{
-+	if (range_available(left) && range_available(right)) {
- 		/* Combine left and right adjacent ranges */
- 		range_it_remove(left, rt);
- 		range_it_remove(right, rt);
- 		left->rn_last = right->rn_last;
- 		range_it_insert(left, rt);
- 		kfree_nolock(right);
--	} else if (left) {
-+	} else if (range_available(left)) {
- 		/* Combine with the left range */
- 		range_it_remove(left, rt);
- 		left->rn_last = last;
- 		range_it_insert(left, rt);
--	} else if (right) {
-+	} else if (range_available(right)) {
- 		/* Combine with the right range */
- 		range_it_remove(right, rt);
- 		right->rn_start = start;
- 		range_it_insert(right, rt);
- 	} else {
--		left = kmalloc_nolock(sizeof(struct range_node), __GFP_ACCOUNT, NUMA_NO_NODE);
--		if (!left)
--			return -ENOMEM;
--		left->rn_start = start;
--		left->rn_last = last;
--		range_it_insert(left, rt);
-+		/* No merge available. */
-+		return -ENOENT;
- 	}
-+
++	/* Pairs with smp_load_acquire() in range_available(). */
++	smp_store_release(&rn->available, true);
+ }
+ 
+ static struct range_node *rb_to_range_node(struct rb_node *rb)
+@@ -321,7 +336,8 @@ int range_tree_make_avail(struct range_tree *rt, u32 start, u32 len)
+ }
+ 
+ /* Set the range in this range tree */
+-static int range_tree_set(struct range_tree *rt, u32 start, u32 len, bool available)
++static int range_tree_set(struct range_tree *rt, u32 start, u32 len, bool available,
++			  struct range_node **new_rn)
+ {
+ 	u32 last = start + len - 1;
+ 	struct range_node *right;
+@@ -364,18 +380,28 @@ static int range_tree_set(struct range_tree *rt, u32 start, u32 len, bool availa
+ 	left->rn_start = start;
+ 	left->rn_last = last;
+ 	range_it_insert(left, rt);
++	if (new_rn)
++		*new_rn = left;
+ 
  	return 0;
  }
  
-+/* Make a range available, possibly merging. */
-+int range_tree_make_avail(struct range_tree *rt, u32 start, u32 len)
-+{
-+	u32 last = start + len - 1;
-+	struct range_node *rn;
-+	struct range_node *right;
-+	struct range_node *left;
-+	int err;
-+
-+	/*
-+	 * Confirm the range exists is unavailable,
-+	 * and fits the requested range exactly.
-+	 */
-+	rn = range_it_iter_first(rt, start, last);
-+	if (!rn || rn->available)
-+		return -EINVAL;
-+
-+	if (rn->rn_start != start || rn->rn_last != last)
-+		return -EINVAL;
-+
-+	err = range_get_adjacent(rt, start, last, &left, &right);
-+	if (err)
-+		return err;
-+
-+	/* If no merging required, just make available. */
-+	if (!range_available(left) && !range_available(right)) {
-+		rn->available = true;
-+		return 0;
-+	}
-+
-+	/* Can merge, remove the range already. */
-+	start = rn->rn_start;
-+	last = rn->rn_last;
-+	range_it_remove(rn, rt);
-+	kfree_nolock(rn);
-+
-+	return range_tree_merge(rt, start, last, left, right);
-+}
-+
-+/* Set the range in this range tree */
-+static int range_tree_set(struct range_tree *rt, u32 start, u32 len, bool available)
-+{
-+	u32 last = start + len - 1;
-+	struct range_node *right;
-+	struct range_node *left;
-+	int err;
-+
-+	/* Is this whole range already set ? */
-+	left = range_it_iter_first(rt, start, last);
-+	if (left && left->rn_start <= start && left->rn_last >= last &&
-+	    range_available(left) && available)
-+		return 0;
-+
-+	/* Clear out everything in the range we want to set. */
-+	err = range_tree_clear(rt, start, len);
-+	if (err)
-+		return err;
-+
-+	/* Get adjacent ranges and check for overlaps. */
-+	err = range_get_adjacent(rt, start, last, &left, &right);
-+	if (err)
-+		return err;
-+
-+	/*
-+	 * If the range is not available for allocation, don't merge.
-+	 * Unavailable ranges are in the process of being freed and should
-+	 * be imminently marked available, so merging them with other
-+	 * unavailable ranges will just lead to splitting the range back
-+	 * almost immediately.
-+	 */
-+	if (available) {
-+		err = range_tree_merge(rt, start, last, left, right);
-+		if (!err)
-+			return 0;
-+	}
-+
-+	left = kmalloc_nolock(sizeof(struct range_node), __GFP_ACCOUNT, NUMA_NO_NODE);
-+	if (!left)
-+		return -ENOMEM;
-+	left->available = available;
-+	left->rn_start = start;
-+	left->rn_last = last;
-+	range_it_insert(left, rt);
-+
-+	return 0;
-+}
-+
-+int range_tree_set_avail(struct range_tree *rt, u32 start, u32 len)
-+{
-+	return range_tree_set(rt, start, len, true);
-+}
-+
-+int range_tree_set_unavail(struct range_tree *rt, u32 start, u32 len)
-+{
-+	return range_tree_set(rt, start, len, false);
-+}
-+
- void range_tree_destroy(struct range_tree *rt)
+ int range_tree_set_avail(struct range_tree *rt, u32 start, u32 len)
  {
- 	struct range_node *rn;
+-	return range_tree_set(rt, start, len, true);
++	return range_tree_set(rt, start, len, true, NULL);
+ }
+ 
+-int range_tree_set_unavail(struct range_tree *rt, u32 start, u32 len)
++struct range_node *range_tree_set_unavail(struct range_tree *rt, u32 start, u32 len)
+ {
+-	return range_tree_set(rt, start, len, false);
++	struct range_node *rn = NULL;
++	int err;
++
++	err = range_tree_set(rt, start, len, false, &rn);
++	if (err)
++		return ERR_PTR(err);
++	if (WARN_ON_ONCE(!rn))
++		return ERR_PTR(-EINVAL);
++	return rn;
+ }
+ 
+ int range_tree_remove_unavail(struct range_tree *rt, u32 start, u32 len)
 diff --git a/kernel/bpf/range_tree.h b/kernel/bpf/range_tree.h
-index ff0b9110eb71..aa27edf451bc 100644
+index 4b12ef51cc0b..79295abe3684 100644
 --- a/kernel/bpf/range_tree.h
 +++ b/kernel/bpf/range_tree.h
-@@ -14,7 +14,9 @@ void range_tree_init(struct range_tree *rt);
+@@ -10,12 +10,15 @@ struct range_tree {
+ 	struct rb_root_cached range_size_root;
+ };
+ 
++struct range_node;
++
+ void range_tree_init(struct range_tree *rt);
  void range_tree_destroy(struct range_tree *rt);
  
  int range_tree_clear(struct range_tree *rt, u32 start, u32 len);
--int range_tree_set(struct range_tree *rt, u32 start, u32 len);
-+int range_tree_set_avail(struct range_tree *rt, u32 start, u32 len);
-+int range_tree_set_unavail(struct range_tree *rt, u32 start, u32 len);
-+int range_tree_make_avail(struct range_tree *rt, u32 start, u32 len);
+ int range_tree_set_avail(struct range_tree *rt, u32 start, u32 len);
+-int range_tree_set_unavail(struct range_tree *rt, u32 start, u32 len);
++struct range_node *range_tree_set_unavail(struct range_tree *rt, u32 start, u32 len);
++void range_node_mark_available(struct range_node *rn);
+ int range_tree_remove_unavail(struct range_tree *rt, u32 start, u32 len);
+ int range_tree_make_avail(struct range_tree *rt, u32 start, u32 len);
  int is_range_tree_set(struct range_tree *rt, u32 start, u32 len);
- s64 range_tree_find(struct range_tree *rt, u32 len);
- 
 -- 
 2.54.0
 
