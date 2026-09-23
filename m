@@ -1,184 +1,539 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E45563FBF;
-	Wed, 23 Sep 2026 19:11:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55D9562610
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 19:11:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790190718; cv=none; b=qwTMX9WNThe78w0wMMFReaa+kHVVlt1PUSmqxDqB4kUszFT3r3yJa6Fv3NKuHM/Cs2D+0qjnJdQkTkbpCC2LlVXKsatPhUwvf95AX8lnVu2jNEVw/B3s4LeP4OKCXWDNGYy6izkET/sQtU08oFZRxw0m3qC9zJMAdf0xKbACi64=
+	t=1790190719; cv=none; b=Q48D8Hiw5F5HwokhA9RK+F51CEXTH1bVZxe12P8x2GGIz2f42yl4L/qYbBxWdnwCcQeEUpAMooBgNjXynrT1RpceZzARxNBX9OTSf3GBAVuDhEq6lskvMe2GswgLjck/HhalCBtBkCL3/4w//8sZ5tVQnIEHQ/kFPa8Zc7DoLd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790190718; c=relaxed/simple;
-	bh=9wNnJWqpX2HCqVGYevz7wE4LRB1ObhaQEt3drGqu1jk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iHAzGHKeRIXHY62nSt8T3WiesyR6r0XFxeKtk5COk0UDUSRF+cXCXaXi6MlRN6highmstCn3bvRpl0qA5Kr/dmCIjHTJsay4aQOmHhwDvyZfQ/YiN1AefpoajWWPRdVa2F6rH5x8Y+R8iMZz+z2EiiCPQdvs/BzowfxggyFov9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=KbQ2imc9; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1790190719; c=relaxed/simple;
+	bh=M7bzZgoIPMZpxX7BKiCdEgMfrfKpKEGiYrWtAwMmCk4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=T+g+3p9b3UfHsHvwQCv2MhmVRpM+tyywCdYsBpWJWE9TX+nx7xE/LC3DZatecjcNGVixcKW7fldggdH7PK2qcNupyh2nfjZaB0ioZ0mYrosgAzJSDIMc6k3rfUpNUIC9KFfq1MfDA+znjoiFSR2bBungwmFgbmojyCOr0+3i5BY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=M6mnHYKp; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="KbQ2imc9"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=XjVnJQ+Ibmtg1jWcz4XfALtNL+ZLsNxZ+9JRPfOwmtU=; b=KbQ2imc9gCAmye0lgdQYOrjpcA
-	VicQXigXIC+MrobS+RzonJsvdoKeldapjqVXHiA+rNuinAuEWHlY/Mo+aPgkW2dKWlX8JXaF2o5oJ
-	rNsHMRmyYWbAQ8UiZq9pApVPbIkP+kT5fP4Y++Rh7vJnkUeROq8EUMurp8u/AYvemZrM5cOgoXDrm
-	1B6K94cH8Ucpwyv+wU1DPJaOGUF/HVDsEul28VzXxihkaTbQtaHss3G0D+pd6AZ/RqOi5WOp/bAT2
-	Q/5P6ABSlMftDlSfpmhiaJXP30/dHfFxpRYH0PTSkUXE1CMPqCNbcd8IrGIS3adoB5xgwoyUYQVSk
-	2RpbSM6g==;
-Received: from sslproxy08.your-server.de ([78.47.166.52])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1x9SNe-000NYW-2C;
-	Wed, 23 Sep 2026 21:11:46 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1x9SN6-0008y1-0Z;
-	Wed, 23 Sep 2026 21:11:45 +0200
-Message-ID: <04fe4568-90cb-4aac-a21d-c0443e418b46@iogearbox.net>
-Date: Wed, 23 Sep 2026 21:11:44 +0200
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="M6mnHYKp"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b91369d18so8914725e9.0
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 12:11:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790190715; x=1790795515; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=8vz+OJtLM3XkeiFi+QeHOu1f6Nk+xwecqMmBxXmW1Ns=;
+        b=M6mnHYKpwSO2ghf+W3qAvpPz31joT+G2Ff7CzfkPrOEyWTVh1WrOtH/1bxO1sfj1FG
+         cAs/7tJOHTl3XgNhOyPFaIm+Nt5CLnaV1Rc+xhpnrwvDRlSJ9CHXYwB0+miPNvxWbwY/
+         rgh3MDS06MiH54/DNkYIIn06I8L/5uhBNDQpSbkb6N6+VO5IZg1SQ5qDAePjGjViRKw0
+         0BMdzlFo+JbtP+I42KF7JX2iEBvjL2MTxIhjzMYyzOtxLFplYtdHZjlLWc2f0yDVJKwj
+         LOjkSX07kICKK/4AKOO6IIf/KElz+JDXqvtNyVIhKb54m1/AJ9A/u8dzCkwkR3S8Wdgo
+         9tOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790190715; x=1790795515;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=8vz+OJtLM3XkeiFi+QeHOu1f6Nk+xwecqMmBxXmW1Ns=;
+        b=tL/a6UVRfgWEI0P2H4Go+EvPV8aE4n4fcT5yGjyct8PWuq/FVi0WxGJhJ+nMh9rFUq
+         0hlYBlELCDk5ZQAoynQG94Gy655opcdfa/HRzNQOrbLg/hXrfsznks9A96qziHeyq4Cb
+         zDlEx/UTzHHvL7rxo+7qezHxs5Z3FD4XXU7ogogmyZN7P9XYR2/rKHGoR1B22vDx9UZ+
+         d+9MjSCDDukUh4Z4mf+G3dhiLtw92uj1poy30KBB5DA+DqwdEIV1I/jfuqlA4W2iYrKr
+         lcTw46a/78YibkNxuMnMH9MzUFynUBbmBRsz3jxDNs9qIfb6lrB9aopSc/Af6rF07gI9
+         /wYw==
+X-Gm-Message-State: AFuF++lm4M4ONGPOo0VLILCPuAnnoPe83I2ZEy2gImsYaRyrgFxZEA4R
+	cSWGMiYmcKK/gVMn8Wqu2bcSYjwNHrvetNuB+/9RfcnvvZE1acnVJUTPBsJptl78ucs6fjIS8XX
+	9ZX8QSMbTsQ==
+X-Gm-Gg: AYBFou1IWFiIX0i37eVW5yoYNtKjcfUP2dxnHo278GRHBdc3k0Ot7xpuozAPcV7N/7m
+	RGfJpXiy2s/6KxY+l/VdAWhgTBKMX+J/yO/B2F2kIATzIGZTPVFfig9EJOnsnrteO0gQ3i/xdjV
+	zWdCvwHf6CecrnOJ8sUJRbw7JBnDkbWABUhN6w20QS9pMKbsC5om6YNh3hYDK5y2qg0XaoxoMjQ
+	gehsC0O3yPJxlIuz818z7PZM6YNTMTc51lmvtb8oQpsuZCbOeADhkxr9O+HmXn/03xPs+gtt+RN
+	SKvbtn9+6mnoJ7rBOLaSzmZcFQBrcqwaqJywa0rIoHDPqX5PP5eawo1sZepkMzhllgjhRss2fRS
+	nDXCyO8uxGRO+Ko7rglUKAAwYa9YoBLPJfSsd+Lb/4wj5aBM2AhSOCSMOKo3I+5y7EkhPqVwQtQ
+	GhWenFs8qjWY85K7mzHQnNLt6rO/CXIi17PXGLDf1Oru7pfkBu2NM07b50o/UPRDbIspqp1w==
+X-Received: by 2002:a05:600c:4688:b0:49b:96a0:5c00 with SMTP id 5b1f17b1804b1-49fe66c61fcmr3168225e9.13.1790190714810;
+        Wed, 23 Sep 2026 12:11:54 -0700 (PDT)
+Received: from alpine05.lan ([2620:10d:c090:600::1:2f89])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886877a2a5sm9473563f8f.26.2026.09.23.12.11.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2026 12:11:54 -0700 (PDT)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	daniel@iogearbox.net,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next v3 6/6] selftests/bpf: Add arena allocation race tests
+Date: Wed, 23 Sep 2026 19:11:25 +0000
+Message-ID: <20260923191125.5311-7-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260923191125.5311-1-emil@etsalapatis.com>
+References: <20260923191125.5311-1-emil@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 4/8] bpf, lsm: Let BPF LSM provide xattrs at
- inode creation
-To: Paul Moore <paul@paul-moore.com>, dwindsor@gmail.com
-Cc: alexei.starovoitov@gmail.com, brauner@kernel.org,
- john.fastabend@gmail.com, memxor@gmail.com, kpsingh@kernel.org,
- matt@bobrowski.net, bpf@vger.kernel.org,
- linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260915150739.284189-1-daniel@iogearbox.net>
- <20260915150739.284189-5-daniel@iogearbox.net>
- <CAHC9VhR2Zp9LzDRwDOZoesOC7o8hretfgRH-PRqQRXA0EES2vA@mail.gmail.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <CAHC9VhR2Zp9LzDRwDOZoesOC7o8hretfgRH-PRqQRXA0EES2vA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28132/Wed Sep 23 08:24:42 2026)
 
-On 9/23/26 6:57 PM, Paul Moore wrote:
-> On Tue, Sep 15, 2026 at 11:07 AM Daniel Borkmann <daniel@iogearbox.net> wrote:
->> From: David Windsor <dwindsor@gmail.com>
->>
->> Many in-kernel LSMs (SELinux, Smack, IMA) store security labels in extended
->> attributes. For these LSMs, atomic labeling during inode creation is
->> critical: if the inode becomes accessible before its xattr is set, it is
->> briefly unlabeled, which can disrupt LSMs making policy decisions based
->> on file labels. Existing LSMs solve this by setting xattrs in the
->> inode_init_security hook, which runs before the inode becomes accessible.
->> BPF LSM programs currently lack this capability because the hook uses an
->> output parameter (xattr_count) that BPF programs cannot write to, and
->> existing kfuncs like bpf_set_dentry_xattr() require a dentry that isn't
->> available until after the inode is accessible.
->>
->> Add a bpf_inode_init_xattr() kfunc that takes the hook's own xattrs and
->> xattr_count arguments, passed through from the program's context, and
->> claims a slot via lsm_get_xattr_slot() on the program's behalf. The
->> xattr_count output argument is exposed to inode_init_security programs
->> as trusted read-only memory, so programs can pass it to the kfunc but
->> cannot modify the count themselves.
->>
->> Reserve BPF_LSM_INODE_INIT_XATTRS slots in bpf_lsm_blob_sizes the way
->> every other xattr-providing LSM does, for the life of the kernel. The
->> framework keys the collection off the reserved slot count, so a kernel
->> built with CONFIG_BPF_LSM=y now allocates the xattr array on every inode
->> creation, whether or not a program sits on the hook.
->>
->> Give the hook a strong prototype in bpf_lsm_proto.c so that its qstr and
->> xattrs arguments are marked __nullable. Both can be NULL for some callers.
->> Without the annotation the verifier otherwise hands the program a trusted
->> non-NULL pointer which it dereferences. Also, keep the hook out of the
->> sleepable set. inode_init_security runs inside the transaction creating
->> the inode, with a journal handle held on ext4 and btrfs and the parent's
->> i_rwsem down, which is why everything on the path allocates GFP_NOFS.
->>
->> Signed-off-by: David Windsor <dwindsor@gmail.com>
->> Co-developed-by: Daniel Borkmann <daniel@iogearbox.net>
->> Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
->> ---
->>   fs/bpf_fs_kfuncs.c         | 99 ++++++++++++++++++++++++++++++++++++++
->>   include/linux/bpf_lsm.h    | 11 ++++-
->>   kernel/bpf/bpf_lsm.c       | 22 ++++++++-
->>   kernel/bpf/bpf_lsm_proto.c | 15 ++++++
->>   security/bpf/hooks.c       |  1 +
->>   5 files changed, 145 insertions(+), 3 deletions(-)
-> 
-> @Daniel, you were CC'd on David's previous patches, so I'm guessing
-> you saw my objection[1], but just in case you hadn't please look at my
-> comments where I requested that David's proposed LSM kfunc be located
-> in security/bpf_lsm_kfuncs.c as opposed to fs/bpf_fs_kfuncs.c.  It
-> would be really nice if we could sort this out now and avoid having
-> this drag out or escalate.
+Add selftests to handle arena page allocation-related races.
+Ensure that concurrent frees and nonsleepable/sleepable page
+allocations, as well as allocations from userspace, do not
+lead to inconsistent or lost data.
 
-Paul, I reached out to David recently asking whether I could offer some
-help with the BPF bits, added some bug fixes and a lot more BPF selftests
-as I think the inode xattr init is valuable work and something we need as
-well. I just reread this whole thread below given its quite a while back
-and didn't follow in too much detail back then.. the location as it is is
-perfectly fine, I see no reason to change it, and I guess that makes three
-of us then including the VFS folks [0]. In that file there are a number of
-other kfuncs as well already related to xattr in context of dentry, files,
-etc. I don't see a point at all on endless bike shedding on this, its
-perfectly reasonably where this is located. In case you have some technical
-comment or found a bug, let me know, happy to address.
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+---
+ .../selftests/bpf/prog_tests/arena_race.c     | 270 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/arena_race.c  | 159 +++++++++++
+ 2 files changed, 429 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_race.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_race.c
 
-   [0] https://lore.kernel.org/bpf/20260625-schnabel-rennmaschine-parieren-bcb352c3cf59@brauner/
-
-> @David, simply for my own understanding, did you ask Daniel to do
-> this, or was Daniel operating on his own with this patchset?
-> 
-> [1] https://lore.kernel.org/linux-security-module/CAHC9VhTS7rSnBqg00ZxNkcZyh_=EeJmn_4z3CTCCxreEEDtTtg@mail.gmail.com/
-> 
+diff --git a/tools/testing/selftests/bpf/prog_tests/arena_race.c b/tools/testing/selftests/bpf/prog_tests/arena_race.c
+new file mode 100644
+index 000000000000..c2da611421f3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/arena_race.c
+@@ -0,0 +1,270 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define _GNU_SOURCE
++#include <sched.h>
++#include <sys/syscall.h>
++#include <test_progs.h>
++
++#include "arena_race.skel.h"
++
++struct free_thread_ctx {
++	struct arena_race *skel;
++	int err;
++	__u32 retval;
++};
++
++struct fault_thread_ctx {
++	__u64 *addr;
++	int stop;
++};
++
++static int run_prog(struct bpf_program *prog, const char *name)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	int err;
++
++	err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
++	return ASSERT_OK(err, name) && ASSERT_OK(opts.retval, name) ? 0 : -1;
++}
++
++/* Trigger the sleepable free page path. */
++static void *run_free_thread(void *arg)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	struct free_thread_ctx *ctx = arg;
++
++	ctx->skel->bss->target_tid = sys_gettid();
++	ctx->err = bpf_prog_test_run_opts(
++		bpf_program__fd(ctx->skel->progs.free_page), &opts);
++	ctx->retval = opts.retval;
++	return NULL;
++}
++
++/* Continuously fault in the address. */
++static void *fault_reader_thread(void *arg)
++{
++	struct fault_thread_ctx *ctx = arg;
++
++	while (!READ_ONCE(ctx->stop))
++		(void)READ_ONCE(*ctx->addr);
++	return NULL;
++}
++
++static int wait_for(int *p)
++{
++	__u64 deadline = get_time_ns() + 5ULL * 1000 * 1000 * 1000;
++
++	while (!READ_ONCE(*p)) {
++		if (get_time_ns() > deadline)
++			return -ETIMEDOUT;
++	}
++	return 0;
++}
++
++static struct arena_race *setup_arena(__u64 **addr, bool trace_flush)
++{
++	struct arena_race *skel;
++	size_t arena_sz;
++	char *base;
++	int err;
++
++	skel = arena_race__open();
++	if (!ASSERT_OK_PTR(skel, "open"))
++		return NULL;
++	err = bpf_program__set_autoload(skel->progs.trace_flush, trace_flush);
++	if (!ASSERT_OK(err, "trace_flush_autoload"))
++		goto err_out;
++
++	err = arena_race__load(skel);
++	if (!ASSERT_OK(err, "load"))
++		goto err_out;
++	err = arena_race__attach(skel);
++	if (!ASSERT_OK(err, "attach"))
++		goto err_out;
++
++	if (run_prog(skel->progs.alloc_old, "alloc_old"))
++		goto err_out;
++	if (skel->bss->skip) {
++		test__skip();
++		goto err_out;
++	}
++
++	base = bpf_map__initial_value(skel->maps.arena, &arena_sz);
++	if (!ASSERT_OK_PTR(base, "arena_base"))
++		goto err_out;
++	*addr = (__u64 *)(base + getpagesize());
++	if (!ASSERT_EQ((unsigned long)skel->bss->ptr, (unsigned long)*addr,
++		       "arena_ptr"))
++		goto err_out;
++	return skel;
++
++err_out:
++	arena_race__destroy(skel);
++	return NULL;
++}
++
++static void test_free_before_flush(bool deferred)
++{
++	struct free_thread_ctx ctx = {};
++	struct arena_race *skel;
++	pthread_t thread;
++	__u64 *addr;
++	bool thread_created = false, flush_seen = false, completed = false;
++	int err;
++
++	if (libbpf_find_vmlinux_btf_id("flush_tlb_kernel_range",
++					BPF_TRACE_FENTRY) <= 0) {
++		printf("%s:SKIP: flush_tlb_kernel_range is not an fentry target\n",
++		       __func__);
++		test__skip();
++		return;
++	}
++
++	skel = setup_arena(&addr, true);
++	if (!skel)
++		return;
++
++	/* Pause during a TLB flush to widen the race window. */
++	skel->bss->pause_on_flush = 1;
++
++	if (deferred) {
++		/*
++		 * Test the nonsleepable free path that gets
++		 * deferred to a worker in the kernel. We do
++		 * so by triggering the arena operation from
++		 * a nonsleepable tracepoint context.
++		 */
++		skel->bss->trigger_pid_tgid =
++			((__u64)getpid() << 32) | (__u32)sys_gettid();
++		skel->bss->trigger_syscall = SYS_getpgid;
++		skel->bss->deferred_free = 1;
++		if (!ASSERT_GE(syscall(SYS_getpgid, 0), 0, "deferred_free"))
++			goto release;
++	} else {
++		/*
++		 * Test the sleepable arena free path through a
++		 * syscall test prog.
++		 */
++		ctx.skel = skel;
++		err = pthread_create(&thread, NULL, run_free_thread, &ctx);
++		if (!ASSERT_OK(err, "pthread_create")) {
++			skel->bss->release = 1;
++			goto out;
++		}
++		thread_created = true;
++	}
++
++	/* Wait until the worker thread triggers a flush. */
++	err = wait_for(&skel->bss->flush_entered);
++	if (!ASSERT_OK(err, "flush_entered"))
++		goto release;
++
++	flush_seen = true;
++
++	/* Force a reallocation during the flush. */
++	run_prog(skel->progs.try_realloc, "realloc_before_flush");
++	ASSERT_NULL(skel->bss->realloc_ptr, "realloc_before_flush");
++
++release:
++	skel->bss->release = 1;
++	if (thread_created) {
++		ASSERT_OK(pthread_join(thread, NULL), "pthread_join");
++		thread_created = false;
++		completed = ASSERT_OK(ctx.err, "free_run") &&
++			    ASSERT_OK(ctx.retval, "free_retval");
++	} else if (skel->bss->target_tid) {
++		err = wait_for(&skel->bss->worker_exited);
++		completed = ASSERT_OK(err, "worker_exited");
++	}
++	ASSERT_FALSE(skel->bss->timed_out, "flush_timed_out");
++
++	if (flush_seen && completed &&
++	    !run_prog(skel->progs.try_realloc, "realloc_after_flush")) {
++		ASSERT_EQ((unsigned long)skel->bss->realloc_ptr,
++			  (unsigned long)addr, "realloc_after_flush");
++		ASSERT_EQ(*addr, skel->rodata->new_marker, "new_marker");
++	}
++out:
++	arena_race__destroy(skel);
++}
++
++/*
++ * Force a race between a faulting thread in userspace and a
++ * free operation on the arena.
++ */
++static void test_fault_free_realloc(void)
++{
++	struct fault_thread_ctx fault = {};
++	struct arena_race *skel;
++	pthread_t fault_thread;
++	bool fault_created = false;
++	__u64 *addr;
++	__u64 expected, value;
++	int err, i;
++
++	skel = setup_arena(&addr, false);
++	if (!skel)
++		return;
++
++	skel->bss->realloc_after_free = 1;
++
++	fault.addr = addr;
++	err = pthread_create(&fault_thread, NULL, fault_reader_thread, &fault);
++	if (!ASSERT_OK(err, "pthread_create_fault"))
++		goto out;
++	fault_created = true;
++
++	for (i = 0; i < 1000; i++) {
++		LIBBPF_OPTS(bpf_test_run_opts, opts);
++
++		err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.free_page),
++					     &opts);
++		if (err) {
++			ASSERT_OK(err, "free_realloc");
++			break;
++		}
++		if (opts.retval) {
++			ASSERT_OK(opts.retval, "free_realloc");
++			break;
++		}
++		value = *addr;
++		expected = skel->bss->current_marker;
++		if (value != expected) {
++			ASSERT_EQ(value, expected, "marker_after_realloc");
++			break;
++		}
++	}
++
++	WRITE_ONCE(fault.stop, 1);
++	if (fault_created) {
++		ASSERT_OK(pthread_join(fault_thread, NULL), "pthread_join_fault");
++		fault_created = false;
++	}
++out:
++	WRITE_ONCE(fault.stop, 1);
++	if (fault_created)
++		pthread_join(fault_thread, NULL);
++	arena_race__destroy(skel);
++}
++
++void serial_test_arena_race(void)
++{
++	cpu_set_t cpuset;
++	int err;
++
++	err = sched_getaffinity(0, sizeof(cpuset), &cpuset);
++	if (!ASSERT_OK(err, "sched_getaffinity"))
++		return;
++	if (CPU_COUNT(&cpuset) < 2) {
++		printf("%s:SKIP: at least two runnable CPUs are required\n", __func__);
++		test__skip();
++		return;
++	}
++
++	if (test__start_subtest("free_before_flush"))
++		test_free_before_flush(false);
++	if (test__start_subtest("deferred_free_before_flush"))
++		test_free_before_flush(true);
++	if (test__start_subtest("fault_free_realloc"))
++		test_fault_free_realloc();
++}
+diff --git a/tools/testing/selftests/bpf/progs/arena_race.c b/tools/testing/selftests/bpf/progs/arena_race.c
+new file mode 100644
+index 000000000000..56ebfd727324
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/arena_race.c
+@@ -0,0 +1,159 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define BPF_NO_KFUNC_PROTOTYPES
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_experimental.h"
++#include <bpf_arena_common.h>
++
++const volatile __u64 old_marker = 0x1111222233334444ULL;
++const volatile __u64 new_marker = 0x5555666677778888ULL;
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARENA);
++	__uint(map_flags, BPF_F_MMAPABLE);
++	__uint(max_entries, 4);
++#ifdef __TARGET_ARCH_arm64
++	__ulong(map_extra, 0x1ull << 32);
++#else
++	__ulong(map_extra, 0x1ull << 44);
++#endif
++} arena SEC(".maps");
++
++bool skip;
++
++void __arena *ptr;
++void __arena *realloc_ptr;
++bool realloc_after_free;
++__u64 current_marker;
++__u64 marker_seq;
++
++int target_tid;
++int pause_on_flush;
++int flush_entered;
++int release;
++int timed_out;
++
++__u64 trigger_pid_tgid;
++long trigger_syscall;
++int deferred_free;
++int worker_armed;
++int worker_exited;
++
++static __always_inline void wait_for_release(void)
++{
++	while (!*(volatile int *)&release && can_loop)
++		;
++	if (!*(volatile int *)&release)
++		timed_out = 1;
++}
++
++SEC("syscall")
++int alloc_old(void *ctx)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
++	__u64 __arena *p;
++	char __arena *base = arena_base(&arena);
++
++	realloc_ptr = NULL;
++	ptr = bpf_arena_alloc_pages(&arena, base + __PAGE_SIZE, 1,
++				    NUMA_NO_NODE, 0);
++	if (!ptr)
++		return 1;
++	p = (__u64 __arena *)ptr;
++	*p = old_marker;
++	current_marker = old_marker;
++#else
++	skip = true;
++#endif
++	return 0;
++}
++
++SEC("syscall")
++int free_page(void *ctx)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
++	__u64 __arena *p;
++	__u64 marker;
++
++	if (!ptr)
++		return 1;
++	bpf_arena_free_pages(&arena, ptr, 1);
++	if (!realloc_after_free)
++		return 0;
++
++	marker = new_marker + ++marker_seq;
++	realloc_ptr = bpf_arena_alloc_pages(&arena, ptr, 1, NUMA_NO_NODE, 0);
++	if (realloc_ptr)
++		ptr = realloc_ptr;
++	else
++		realloc_ptr = ptr;
++	p = (__u64 __arena *)ptr;
++	*p = marker;
++	current_marker = marker;
++#endif
++	return 0;
++}
++
++SEC("syscall")
++int try_realloc(void *ctx)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
++	__u64 __arena *p;
++
++	realloc_ptr = bpf_arena_alloc_pages(&arena, ptr, 1, NUMA_NO_NODE, 0);
++	if (realloc_ptr) {
++		ptr = realloc_ptr;
++		p = (__u64 __arena *)realloc_ptr;
++		*p = new_marker;
++		current_marker = new_marker;
++	}
++#endif
++	return 0;
++}
++
++SEC("tp_btf/sys_enter")
++int BPF_PROG(deferred_free_prog, struct pt_regs *regs, long id)
++{
++#if defined(__BPF_FEATURE_ADDR_SPACE_CAST) || defined(BPF_ARENA_FORCE_ASM)
++	if (!deferred_free || bpf_get_current_pid_tgid() != trigger_pid_tgid ||
++	    id != trigger_syscall)
++		return 0;
++
++	deferred_free = 0;
++	/* The worker can run on another CPU before the kfunc returns. */
++	worker_armed = 1;
++	bpf_arena_free_pages(&arena, ptr, 1);
++#endif
++	return 0;
++}
++
++SEC("fentry/arena_free_worker")
++int BPF_PROG(trace_free_worker, struct work_struct *work)
++{
++	if (worker_armed && !target_tid)
++		target_tid = (__u32)bpf_get_current_pid_tgid();
++	return 0;
++}
++
++SEC("fexit/arena_free_worker")
++int BPF_PROG(trace_free_worker_ret, struct work_struct *work)
++{
++	if ((__u32)bpf_get_current_pid_tgid() == target_tid)
++		worker_exited = 1;
++	return 0;
++}
++
++SEC("?fentry/flush_tlb_kernel_range")
++int BPF_PROG(trace_flush, unsigned long start, unsigned long end)
++{
++	if (!pause_on_flush ||
++	    (__u32)bpf_get_current_pid_tgid() != target_tid)
++		return 0;
++	flush_entered = 1;
++	wait_for_release();
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
+-- 
+2.52.0
 
