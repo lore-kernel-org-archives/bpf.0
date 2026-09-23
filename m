@@ -1,174 +1,210 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7244A3905F4
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 23:37:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8C33905F4
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 23:37:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790206625; cv=none; b=reaPkkU5OrnxiJf8aVkVnmP7YC03RrFn0gXgmlqZ/0i8dFvsxARkHi54jvwckFeIm5hdqgrqbML2BuYk9xmsc0aBVvR5pRrQbI77IF9ENPxNYHiGWt1zD7OeWkyRzQec0+m+CvNU5Tfjos5Ym/WSMtuGpy0ZSODRH3lt21vWiQs=
+	t=1790206629; cv=none; b=YZRAUFuX7nOSNqYrIFK6DkBrkG/yi8ECpYTJWAhhbTRVXr/FCYTmCriYiYnZAaPR58atmQ+0nt1DKwoGaqjv4rIMyazpZWygSkDD+aBMJCdADtmkMWgdFGnmuamp1f4Y87wfzAOh/zxIOWGKnLheV3K8fjiDrEyqrtPMzfOPTNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790206625; c=relaxed/simple;
-	bh=yPSTXMbh37CBGmthbRsFzbNx6Xikj8IXI70+CXA9tSM=;
+	s=arc-20240116; t=1790206629; c=relaxed/simple;
+	bh=kE5HN6IEtUDyR0NYi1ujgz85skb5wAv5kmZAU5Qdr6I=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=LQKi6d4kfX4zR8SeKmfrRbRc/Iyw0PtDwftJZMFFMAqrpDL7Ux9cNOKEMNP8PIGzDkgAyffU4Ld5h6VJPQMkt5Kk7klX8O8k8tYgbIwfj6ADEEVcWo+oXfix9sA7WiLKsJeFQc8Hl3S3hWxWDR0DAB01Pk4X+/JXkS0unz7RjWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DrwHRiuU; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=P8UzaTs4gzrTchvodGDCH8Tk2inAj3w9Bj26wbciz2wpyRCfNBSbvl/8mDMc/uP9Ua5lJFy2+uSo9pGjfNoCaCY3/Xa0tAlUoYT/pjOJ1kPqdGdaKR3NaZpuAZ7PrBx3mfEYEM7TM5p4mS46jH+uC2lHUTDo0upqNUM/51iXUh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EVwu1i2Q; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DrwHRiuU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D4AB1F000FF;
-	Wed, 23 Sep 2026 23:37:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EVwu1i2Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E081F000FF;
+	Wed, 23 Sep 2026 23:37:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790206624;
-	bh=f5vKtBJskkbfb7GD3Lhcmw/W+3lkm1xAwTUSWiE4R9k=;
+	s=k20260515; t=1790206627;
+	bh=N8hSfk6Wl2b9hDgHap0AFCiHOE+WoW++h15s8vo66bc=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=DrwHRiuUnw0M/j2jTyuHWonmJG2ysstW0wxVtCMB8Y2ZyADv2whR3K7nUPmrtEz5n
-	 pF0L7M+8gH/X4SCvaPxHJsDU91NDa8YNn2IzkmaWJTkMuTGzS4zlVj8G9z/pbq6AaB
-	 f9INYSPprJHcPkvvRmMSIySnWqANfXChNISSyYNZn2ZAApWcZTWwX8WdWs4aPBHoQl
-	 zLnRgBaGopBDlpfihefeHGhJBoZsTIEY/0fKQVCZdaj3fkOX40Qc/n9eBHbxfxl6mj
-	 ndDy4yj1uWLFa2V/aPhexwsNnOznslZFQN49I6sPIzCHpcb2sBwtdox3UBG1QhySx7
-	 81dv3mdSd0cDw==
-Content-Type: multipart/mixed; boundary="===============5101018974809254939=="
+	b=EVwu1i2QXt6uDkeXcSXAlwIXg1KAFQaOQcfIlwtCmQSNe+QI3KCVU5c9npM4DQOi3
+	 8B297My7PNDuTZgeHwrytAlhMYYa8UugA4EkhawHfj1kcpPoOLi4ceDR9blYL2LSoj
+	 YDkjIzBFwR60aYTB2F8i02GzTjfH6OrkbCa6DwJooQoAq3TX57xrd/Q5BM0M3IsTjW
+	 RVEBYugLJLiDSJwMd9zRuQFx4fHfZ+PFg2YXnrCT0iECRBeXXPPHg252NBNFFGI5SF
+	 filzdlVChs0dP2xyPAruCqpPJ3gH6WVM8sarDIUIu9hGvkSPDJYb8y7x0jUBoqQvlI
+	 4r/9fVGrwGcEQ==
+Content-Type: multipart/mixed; boundary="===============5014498001170898123=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <7aaf2aca8bbbed1a2a89d5819cf5f6c5e0181a746995abf727027a07ffc238ec@mail.kernel.org>
-In-Reply-To: <20260923223554.562379-3-alexei.starovoitov@gmail.com>
-References: <20260923223554.562379-3-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 2/8] bpf: Mark loop heads in check_cfg()
+Message-Id: <18bd41964fbba19f88700b86cb724513f56e55764ed20cf4986f7f7073355b35@mail.kernel.org>
+In-Reply-To: <20260923223554.562379-8-alexei.starovoitov@gmail.com>
+References: <20260923223554.562379-8-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 7/8] selftests/bpf: Adjust tests to widened loops
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 23 Sep 2026 23:37:02 +0000 (UTC)
+Date: Wed, 23 Sep 2026 23:37:05 +0000 (UTC)
 
---===============5101018974809254939==
+--===============5014498001170898123==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index 92f528c456052..5a08f079a4896 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -709,6 +709,9 @@ struct bpf_insn_aux_data {
->  	u32 non_stack_access:1; /* instruction can access non-stack memory */
->  	/* true if some jump or call instruction targets this instruction */
->  	u32 jump_target:1;
-> +	u32 loop_head:1; /* target of a back-edge */
-> +	u32 backedge_ft:1; /* the edge to the next insn is a back-edge */
-> +	u32 backedge_br:1; /* the jump is a back-edge */
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+> index 902a70d5afeb6..2dc37090d7a4f 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
 
-Do these comments accurately describe what push_insn() records? The bit
-seems to be chosen by push_insn()'s e argument rather than by where the edge
-actually goes.
+[ ... ]
 
-Looking at visit_insn() in kernel/bpf/cfg.c, it walks the only edge of an
-unconditional jump as FALLTHROUGH:
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_cfg.c b/tools/testing/selftests/bpf/progs/verifier_cfg.c
+> index 3c3bb03e8217a..700eadf5d430a 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_cfg.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_cfg.c
+> @@ -98,8 +98,8 @@ l0_%=:	r1 = r0;					\
+>
+>  SEC("socket")
+>  __description("conditional loop")
+> -__failure __msg("infinite loop detected")
+> -__msg_unpriv("back-edge")
+> +__success
+> +__failure_unpriv __msg_unpriv("back-edge")
+>  __naked void conditional_loop(void)
+>  {
+>  	asm volatile ("					\
 
-kernel/bpf/cfg.c:visit_insn() {
-    /* unconditional jump with single edge */
-    ret = push_insn(t, t + off + 1, FALLTHROUGH, env);
-}
+Can this test pass on arches where the JIT doesn't support exceptions?
+Adding the may_goto guard depends on bpf_jit_supports_exceptions()
+returning true in the verifier's cannot_throw() check. When that check
+fails, the loop isn't widened, and the verifier rejects the program with
+"infinite loop detected" or "BPF program is too large" like before the
+series.
 
-For a backward goto/gotol, wouldn't the jump back-edge set backedge_ft, with
-backedge_br staying clear even though "the jump is a back-edge"?
+Looking at bpf_jit_supports_exceptions() in kernel/bpf/verifier.c:
 
-Similarly, for ldimm64 (including the pseudo func load) the FALLTHROUGH edge
-goes to t + 2, not t + 1, and for the pseudo func the BRANCH edge goes to a
-callback entry which is not a jump.
+	if (!env->prog->jit_requested || !bpf_jit_supports_exceptions())
+		return "JIT does not support exceptions";
 
-This mismatch affects the series. is_backedge() in de2a4da618ff needs its
-own note ("check_cfg() does not record the edge of an unconditional jump as
-a jump"). It picks the bit with insn_idx == prev + 1, which means it reads
-backedge_br for a back-edge that is the fall-through of an ldimm64 (do_check()
-goes from t to t + 2 with prev_insn_idx == t). It does the same for the
-fall-through of a call to a static subprog, where env->prev_insn_idx at
-callsite + 1 is the callee's BPF_EXIT (prepare_func_exit()). In both cases
-loop_head_guard() then skips the may_goto guard.
+Arches where bpf_jit_supports_exceptions() is false include riscv64
+(which has an official config.riscv64, and DENYLIST.riscv64 already lists
+"exceptions # JIT does not support exceptions"), loongarch, ppc32, and x86
+without CONFIG_UNWINDER_ORC. Kernels with the JIT disabled are also
+affected.
 
-Could the comments say these are the FALLTHROUGH and BRANCH edges as
-check_cfg() walks them? That would clarify the intent for later readers.
+This applies to the other tests updated in this commit as well:
+ - verifier_movsx: MOV32SX, S8, var_off u32_max
+ - verifier_search_pruning: short_loop1
+ - verif_scale_loop3
+ - test_verifier: "calls: conditional call 6"
 
->  	/*
->  	 * CFG strongly connected component this instruction belongs to,
->  	 * zero if it is a singleton SCC.
-> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-> index 842c7d1eabccc..748bf544d3ba5 100644
-> --- a/kernel/bpf/cfg.c
-> +++ b/kernel/bpf/cfg.c
-> @@ -137,8 +137,14 @@ static int push_insn(int t, int w, int e, struct bpf_verifier_env *env)
->  		insn_stack[env->cfg.cur_stack++] = w;
->  		return KEEP_EXPLORING;
->  	} else if ((insn_state[w] & 0xF0) == DISCOVERED) {
-> -		if (env->bpf_capable)
-> +		if (env->bpf_capable) {
-> +			env->insn_aux_data[w].loop_head = true;
-> +			if (e == FALLTHROUGH)
-> +				env->insn_aux_data[t].backedge_ft = true;
-> +			else
-> +				env->insn_aux_data[t].backedge_br = true;
->  			return DONE_EXPLORING;
-> +		}
->  		verbose_linfo(env, t, "%d: ", t);
->  		verbose_linfo(env, w, "%d: ", w);
->  		verbose(env, "back-edge from insn %d to %d\n", t, w);
+None of these use __load_if_JITed(), __arch_x86_64, __arch_arm64,
+__arch_s390x gating, F_NEEDS_JIT_ENABLED, or DENYLIST.riscv64 entries,
+so they will fail instead of being skipped on those arches.
 
-Loop heads and back-edges are recorded here in push_insn(). But check_cfg()
-also finds back-edges in visit_gotox_insn(), which still drops them without
-recording:
+Per the selftests guide, a test that fails when a capability is missing,
+instead of skipping, is a bug.
 
-kernel/bpf/cfg.c:415 visit_gotox_insn() {
-    /* EXPLORED || DISCOVERED */
-    if (insn_state[w])
-        continue;
-}
+Should these tests be gated on JIT plus exception support? For example,
+__load_if_JITed() and arch masks in the test_loader programs,
+F_NEEDS_JIT_ENABLED for test_verifier, and a skip for verif_scale_loop3,
+or adding them to DENYLIST.riscv64?
 
-A DISCOVERED target at that point is a back-edge of the indirect jump. It
-sets neither loop_head on w nor a backedge bit on t. So the commit message's
-"check_cfg() finds back-edges ... Remember their targets as loop heads"
-doesn't hold for gotox. Loops closed by a computed goto (goto *jt[i] to a
-label at the loop top, as exercised in selftests/bpf/progs/bpf_gotox.c) get
-no loop head. A gotox back-edge to a head marked through another edge also
-looks like an entry edge.
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
+> index 195b27a51224f..280ccee336635 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
 
-Nothing reads the bits in this commit. But the later commits in
-8f70ee36d2ef..7d6b7dd8cb91 assume every back-edge is recorded:
+[ ... ]
 
-de2a4da618ff ("bpf: Widen scalars at loop heads"): is_backedge() returns
-aux->backedge_ft || aux->backedge_br for any BPF_JA prev insn. For gotox
-that is always false. The same commit changes the EXACT-repeat check in
-bpf_is_state_visited() so that under widen_loops it prunes (loop = true)
-instead of reporting "infinite loop detected".
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_precision.c b/tools/testing/selftests/bpf/progs/verifier_precision.c
+> index f4459561bf393..88358586e7964 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_precision.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_precision.c
+> @@ -152,22 +152,21 @@ __naked int bpf_store_release(void)
+>  SEC("?raw_tp")
+>  __success __log_level(2)
+>  /*
+> - * Without the bug fix there will be no history between "last_idx 3 first_idx 3"
+> - * and "parent state regs=" lines. "R0=6" parts are here to help anchor
+> - * expected log messages to the one specific mark_chain_precision operation.
+> - *
+> - * This is quite fragile: if verifier checkpointing heuristic changes, this
+> - * might need adjusting.
+> + * The state is widened when it comes back to the loop head, so the exit test
+> + * is decided only on the first trip around the loop. "R0=2" parts are here to
+> + * help anchor expected log messages to that mark_chain_precision operation.
+>   */
+> -__msg("2: (07) r0 += 1                       ; R0=6")
+> +__msg("2: (07) r0 += 1                       ; R0=2")
+>  __msg("3: (35) if r0 >= 0xa goto pc+1")
+> -__msg("mark_precise: frame0: last_idx 3 first_idx 3 subseq_idx -1")
+> +__msg("mark_precise: frame0: last_idx 3 first_idx 1 subseq_idx -1")
+>  __msg("mark_precise: frame0: regs=r0 stack= before 2: (07) r0 += 1")
+>  __msg("mark_precise: frame0: regs=r0 stack= before 1: (07) r0 += 1")
+> -__msg("mark_precise: frame0: regs=r0 stack= before 4: (05) goto pc-4")
+> -__msg("mark_precise: frame0: regs=r0 stack= before 3: (35) if r0 >= 0xa goto pc+1")
+> -__msg("mark_precise: frame0: parent state regs= stack=:  R0=P4")
+> -__msg("3: R0=6")
+> +__msg("mark_precise: frame0: parent state regs=r0 stack=:  R0=P0")
+> +__msg("mark_precise: frame0: last_idx 0 first_idx 0 subseq_idx 1")
+> +__msg("mark_precise: frame0: regs=r0 stack= before 0: (b7) r0 = 0")
+> +__msg("3: R0=2")
+> +__msg("loop head 1 widened, pass 1")
+> +__msg("1: safe")
+>  __naked int state_loop_first_last_equal(void)
+>  {
+>  	asm volatile (
+> @@ -175,11 +174,7 @@ __naked int state_loop_first_last_equal(void)
+>  	"l0_%=:"
+>  		"r0 += 1;"
+>  		"r0 += 1;"
+> -		/* every few iterations we'll have a checkpoint here with
+> -		 * first_idx == last_idx, potentially confusing precision
+> -		 * backtracking logic
+> -		 */
+> -		"if r0 >= 10 goto l1_%=;"	/* checkpoint + mark_precise */
+> +		"if r0 >= 10 goto l1_%=;"	/* mark_precise */
+>  		"goto l0_%=;"
+>  	"l1_%=:"
+>  		"exit;"
 
-3a779857709c ("bpf: Add may_goto to loops that are not walked to the end"):
-loop_head_guard() returns true without a guard when !is_backedge().
-bpf_mark_loop_guard() has an explicit gotox case (op == BPF_JA &&
-BPF_SRC(insn->code) == BPF_X -> "not a jump" -> guard_impossible). That case
-can never be reached, because the bits are never set for gotox.
+Does this test still cover the original bug it was written to test?
+state_loop_first_last_equal was the regression test for precision
+backtracking when a checkpoint has first_idx == last_idx and jump history.
+The old expectations checked the "before 4: (05) goto pc-4" / "before 3:
+(35) if r0 >= 0xa" history between "last_idx 3 first_idx 3" and "parent
+state regs=" lines.
 
-Scenario at 7d6b7dd8cb91 (bpf_capable):
+As the commit message says, loop widening means that checkpoint no longer
+happens. The test now only checks one straight-line backtrack from the
+first trip. The name no longer describes what it tests, and nothing else
+covers the first_idx == last_idx case.
 
-  head:
-      v = *(volatile u32 *)map_val;
-      goto *jt[v & 1];        /* jt = { &&head, &&out } */
-  out:
-      return 0;
+The backtracking code in bpf_mark_chain_precision/get_prev_insn_idx is
+unchanged and still runs through the every-iteration walk in these cases:
 
-push_insn() sees no back-edge, so there is no loop head. visit_gotox_insn()
-makes the gotox insn a prune point. On the second trip the state there is
-EXACT equal to the in-progress one, so it is pruned with widen_used. The out
-target leaves the SCC, so "loop ... never exits" does not fire.
-bpf_commit_loop_guards() has no guard_pending or guard_impossible to act on,
-and the program is accepted with nothing bounding the loop at run time.
-Before the series this was rejected with "infinite loop detected". The same
-happens if head also has a conditional back-edge: that edge gets a may_goto,
-but the gotox edge does not.
+	loops that hold references or locks
+	callbacks
+	fallback walk after a widened walk fails
+	JITs without exception support
 
-Should visit_gotox_insn() also mark loop_head on DISCOVERED targets and
-record the back-edge on the gotox insn (for example backedge_br)? The later
-bpf_mark_loop_guard() would then set guard_impossible and fall back to
-walking every iteration.
+So a regression of the original bug would no longer be caught on
+JIT-capable arches.
+
+Should there be a variant that forces the old walk, for example by holding
+a reference across the loop or using a program type where 0 is not a valid
+return value, and keep the old expectations for that variant?
+
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_search_pruning.c b/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
+> index f40e57251e941..7098b44faafc5 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
+> index 8b94b87135bcf..c7c501bfc660a 100644
+> --- a/tools/testing/selftests/bpf/verifier/calls.c
+> +++ b/tools/testing/selftests/bpf/verifier/calls.c
+
+[ ... ]
 
 
 ---
@@ -176,4 +212,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35929952632
---===============5101018974809254939==--
+--===============5014498001170898123==--
