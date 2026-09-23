@@ -1,177 +1,296 @@
-Received: from mail-vs2-f40.google.com (mail-vs2-f40.google.com [74.125.227.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF14D444706
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 06:56:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.40
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790146618; cv=pass; b=j8DWonx7v3ruI/88YrEguDeWFq4gH8pz+hhaRuKR7OyuzE8Fdm6043EeIH5AlG9SzWE3/3Y3rEedEJFzoKo872M24lcJOgZx7X5WwIvPKXzyTHm3zkqjJ0i2ZQg6CtZ+l61TtzoizNCfFsIxyyATCf39F9OQuOi6zQh6p+Ufe0c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790146618; c=relaxed/simple;
-	bh=9xHQ3WPoBRJA6pLffeOMmxeaFKJ9Fi/A5A4l8P9y8gY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tksl4QH+cD/R3n2OpdoSGBnVb2A2tsRUuZ/33Lir8bIAXFSMIbm+vLo10UEDUgPY2dzyiZ1TCodjHHKotHFb/JZXz10ppEtOtV8rA6TGUuOy/B+2BZOLsQy2fVJ5gz8rwgnsexeepprPv5bJh6FJgoDeSWqVq968rUFPTVJomQc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wWEtOpNU; arc=pass smtp.client-ip=74.125.227.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF71A2773D;
+	Wed, 23 Sep 2026 07:07:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790147275; cv=none; b=lBRFozd/sY0SUEmYjIro/lA4QTOi2vUsGOCbxNPU/6Yzpk6ae70JLywa8qrR1QjmCGg39xap34adhvMaYNVjC6QDW6qYBGBZLWBU211DXbRM7Dhk3yEwGrfRppnRc4Oa0b2cV1u7t5wpLRHAB4wT8gvWGO3V1xS3K2wqfubV7d0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790147275; c=relaxed/simple;
+	bh=orzSAAp/TYdSyiSlITswyr5ZI6KYw8GybSx0o1i2fYw=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sq92PdfRc5i7j6uPFp2ZuoeQO1/e9hS4SqN+riCZX4OZX9utLILMuKHV6f+UzA7VeUojYEnXVfbDzL1bI30Go1LHMlZIoK2O88eeecCxjZb5fJvZUkdvEIe7/4KLZtEYZRMP7Z9gRRtmiv15f+Px2n3X00tAcyG6WcQf9x78QtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=djzuZwi1; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wWEtOpNU"
-Received: by mail-vs2-f40.google.com with SMTP id ada2fe7eead31-7ab11c26693so315197137.2
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 23:56:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790146609; cv=none;
-        d=google.com; s=arc-20260327;
-        b=qE8TR0eIhcGOO/tOrhcJprpd8lbqsIvtXKAN0uCa0g5XL4rQAAqHH9TJQayO8jLznK
-         vozyUxT3oFEgy2r/9eVE0h8mArfXukkm4GDGsZqRyO0JrhaFeld10uk20+wbesvi1J5h
-         OCShdJ2UD7xKBaX5Pb5qAmNwXK3AjVDeCoDzYxgWkcJbeARrTSlFeBzLGQa94MUVhKHP
-         bMb0A1YWxpD+sDKQ2DS6lFLHaSjqQ4HGP96UrjjTgc7ryWPULqvR/ssTgU8ymzQZGoja
-         GdnNO/YYiNSeSo2tn8k2Wsys4QvgitddZg0KT0Mv2/FGWlQx1kvmByQ9F2bZFCmZwVmh
-         LjOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=sAxPiacOiPR9kbZrzNk61u7R2KSBWQzo+Rt1br4Efz8=;
-        fh=YrLyplKMrQQBy9lT1WIR30hnfgIkSaPUkDBOrqLc8X4=;
-        b=jfLno8Kmy78lrPPF6mZiX8BXquPo5Vxs1qjxIbjrK2hYiqo/ig4oNNGAMjpdpwIyyc
-         movPNkpVftF+11QxKMPeq2CQnpGX4Gqut/YOo2hSgCNJC5OeFLEfuc9NbCNh+5eOt+qz
-         Yp7hD3L+t5bhsTTLlggchlHXlRen+DHFxV/Az6Wl/W8YFj53ERxv/jSCDfaAD7CiLRqO
-         114E+AG/RbSNndFfrnL8DPDUB0G/IZ0O0wUEKv8Fq9fVXBtR9Es+1RuxBfQDb2Azdq2I
-         zQc2H91FUirB4p9TAUyfeeh3DRsIAASDHcfwqAVul90+r7DTa4r2ZMMI7nW6yymxooXK
-         lcYg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790146609; x=1790751409; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=sAxPiacOiPR9kbZrzNk61u7R2KSBWQzo+Rt1br4Efz8=;
-        b=wWEtOpNUa9sGj8YtxaIBJtBrYgTi81YS+4zSJEiO/qu34ICwjYCOdSZ9+ZBQCjlU9Q
-         ye1UfVsCtlp1oVKwbh5GXP2DG4aI8fj9hbmAqRSLbPm15jYKyQR+6J5fn2a/4LIBeLpK
-         F1kxiCOqYxQz2RqzuI9tUbB0SR1hzVgTDNJwI3O10UKuxTuLi6RHuhMug94Y/PUwlMN0
-         P6D9aS97oajLDPiVJwvC0VLI8MH0RQKtJH4mPX9aC+XqOoEpbeyjyxmsqEMbetheXlND
-         8Z3fCwwkQ5kH4g8/jeRgdMFTpFF4FPzE/1rpKenfuVMpRjctkOPsPIpkYQW+o4yGIrBT
-         MO5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790146609; x=1790751409;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=sAxPiacOiPR9kbZrzNk61u7R2KSBWQzo+Rt1br4Efz8=;
-        b=bhBLQltofeIzgcxEv38RFH2INo3ZSwJZoAlllX3iPQxigSq+rPmB1eglCo5xbbEOhE
-         Ks1q6kJaznENrs47rfYkFbrbkM5lC0/xyPIngreL0KK+3owHzMxs9zZ/PbBDZde4D7yx
-         CkGZKtRUr8VWqsMNsDgm8Ewo3cujKHTRNYJldzpGxMIYmgpx1yc8R28DKbZCVzMVUJnN
-         w2dhu2lNTNtdy5t6PMQWUst+4NwoF7/QJG4AchsZ8IDgHJQjc596zNDw0ili3Kvvw/ho
-         2QA33BI3Thv3HNMZPxZod+4HLkdmh+7L5YXeXpT1iayfD1weYp2cqDfWJSOksUtE/dIx
-         ffPQ==
-X-Forwarded-Encrypted: i=1; AKwUvByRZ9NgmHhATWfh3GeVXzTsb5NgGObw4ajwO96+UUcP18daxEKAbuYLIqpRVuDVPZep770=@vger.kernel.org
-X-Gm-Message-State: AFuF++mXukmEyl07YT6M4hd86hQfdFL+lg2W87dGjwDjLE0HCKol2cCf
-	jMHmaqC/giXB6QPFeZCFIJrzxXcCeYlFFzsJxrZUWalJDD7wkrxiAWTB2iT+E49PUrNuqd62r7/
-	w0AgOalQjv2kv1BnnX5Wmm/EicXyD1v8lIdGsMgo=
-X-Gm-Gg: AYBFou13+W+AT8Izblh6Diac/YXgKo3EhOqk9aKr7PKzCIunLh1ikTBFdultSQnIXvJ
-	ddjMGwRuN2g4l5zN+5RzAfjgCnZ63KZ7A4tXVw+nYDSacJRbG+OE5t+x8R+YR78LlCoHRXAlPjF
-	uanE6ptueKhkJWe4bSKDAsL4Ww2E62x4SUV+hoGaLHrzetIMriRWsLZSR+ru2fCnUDLIJXYl223
-	mhuOwpBKTPOgLTxCHs+25HDBpZZ1uIJHFSP2Z0RxWcgreICoyWlJfmxIs2b1bolnhd4iTQSrQzx
-	c8nNP6qEOw00pJynLN3nn1r9+cFObths98BvxcaCEyXkMDSzR4FQUZQMnfr/bi+D9Dtx4jYoiY4
-	OCE4hlO10Zu1sTnDmXrQk
-X-Received: by 2002:a05:6102:c94:b0:7a7:19aa:8a81 with SMTP id
- ada2fe7eead31-7ac1ceab000mr1709991137.28.1790146608109; Tue, 22 Sep 2026
- 23:56:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="djzuZwi1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1790147273; x=1821683273;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=orzSAAp/TYdSyiSlITswyr5ZI6KYw8GybSx0o1i2fYw=;
+  b=djzuZwi1gFmAMQkdNt/qcWV7IbJwu2ApYDOnbmutNaYkVeNogNm0LaiH
+   3yifCt6MQhRf5762ss1o65KSAoMBurTMYDQtI7Roy//A5BJUhvRHSAJOy
+   K36gGoPU6seE2gP4C0KsbJ4YMHHPpc1GAifOg1oLUoUY8lpDhSUVRec/0
+   eT2xnVJ0gvFDOeX3Wg9I7LAtej0EiPWAFHiC3xFKT5d1YBrvv0kgKS4F1
+   7IhpOLokccUVtxVw57FXqCXW2fQb9NHYmlshV/9FPkRB+N9gy0xG3EwWP
+   BLQwWaOGwP9G1hkmJwyqjTiIa50Ed+t4k2YHhY4dLOaIoTRG2SFztxzkt
+   A==;
+X-CSE-ConnectionGUID: UUQhEpgOQGa3bB9ahQY9fg==
+X-CSE-MsgGUID: /seKL8cbTGKmGzzU0oUv6A==
+X-IronPort-AV: E=Sophos;i="6.27,118,1787036400"; 
+   d="scan'208";a="231145174"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2026 00:07:52 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.87.151) by
+ chn-vm-ex4.mchp-main.com (10.10.87.33) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.2562.49; Wed, 23 Sep 2026 00:07:52 -0700
+Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Wed, 23 Sep 2026 00:07:48 -0700
+Date: Wed, 23 Sep 2026 09:07:47 +0200
+From: Daniel Machon <daniel.machon@microchip.com>
+To: <netdev-bot+sashiko@kernel.org>
+CC: <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, <horatiu.vultur@microchip.com>,
+	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
+	<ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
+	<john.fastabend@gmail.com>, <sdf@fomichev.me>, <herve.codina@bootlin.com>,
+	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <mohsin.bashr@gmail.com>,
+	<richardcochran@gmail.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next v7 04/14] net: lan966x: add FDMA LLP register
+ write helper
+Message-ID: <20260923070747.sunyth2nbmi6hq3h@DEN-DL-M70577.microsemi.net>
+References: <20260918-lan966x-pci-fdma-v7-4-0ecc179c8a2c@microchip.com>
+ <179008204609.2160803.35249597205544955@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260923063114.2683575-1-morbo@google.com> <20260923064622.90D881F000FF@smtp.kernel.org>
-In-Reply-To: <20260923064622.90D881F000FF@smtp.kernel.org>
-From: Bill Wendling <morbo@google.com>
-Date: Tue, 22 Sep 2026 23:56:30 -0700
-X-Gm-Features: AclHuK8okRDYHTzt7mr8q9IW4N8bIkemMSEoI0A8lraA56wTX6JOq4NKSUi0ez8
-Message-ID: <CAGG=3QUPSZeAPQg=MmxXqqvr3xM3PwV84HVGKryhmk8qJZoTkA@mail.gmail.com>
-Subject: Re: [PATCH] HID: bpf: add __counted_by_ptr attribute to device_data
-To: sashiko-reviews@lists.linux.dev
-Cc: dmitry.torokhov@gmail.com, linux-input@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <179008204609.2160803.35249597205544955@kernel.org>
 
-On Tue, Sep 22, 2026 at 11:46=E2=80=AFPM <sashiko-bot@kernel.org> wrote:
->
-> Thank you for your contribution! Sashiko AI review found 1 potential issu=
-e(s) to consider:
-> - [High] hid-bpf: false-positive bounds check panic via data race in __hi=
-d_bpf_allocate_data()
+> Thank you for your contribution! Sashiko AI review found 2 potential
+> issue(s) to consider.
+> 
+> Critical: 0 · High: 0 (1) · Medium: 1 · Low: 1
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [Medium] By moving the FDMA_DCB_LLP/LLP1 writes out of
+>   lan966x_fdma_tx_activate() into lan966x_fdma_tx_alloc()…
+> - [Low] The patch deletes the comment 'When activating a channel, first
+>   is required to write the first DCB address and then to activate it'…
+> 
+> Pre-existing issues:
+> - [High] lan966x_fdma_rx_alloc() (lan966x_fdma.c:135) and
+>   lan966x_fdma_tx_alloc() (line 217) discard the return value of…
+> 
 > --
->
-> commit 4a962db9c72042e7d956ca752f9439fb64fe5e37
-> Author: Bill Wendling <morbo@google.com>
->
-> HID: bpf: add __counted_by_ptr attribute to device_data
->
-> The 'struct hid_bpf' contains a 'device_data' pointer field and an
-> 'allocated_data' field that specifies the size in bytes. This commit
-> adds the '__counted_by_ptr' attribute to 'device_data' to enable bounds
-> checking sanitizers.
->
-> > diff --git a/include/linux/hid_bpf.h b/include/linux/hid_bpf.h
-> > index 19fffa4574a47..f45fb9cccece8 100644
-> > --- a/include/linux/hid_bpf.h
-> > +++ b/include/linux/hid_bpf.h
-> > @@ -185,10 +185,12 @@ struct hid_bpf_ops {
+> 
+> net: lan966x: add FDMA LLP register write helper
+> 
+> This moves the FDMA_DCB_LLP/LLP1 register writes out of
+> lan966x_fdma_rx_start() and lan966x_fdma_tx_activate() into the RX/TX
+> allocation functions, adding a shared lan966x_fdma_llp_configure() helper
+> plus one extra call in the lan966x_fdma_reload() restore path.  The stated
+> motivation is that the upcoming PCIe FDMA path programs ATU-translated
+> addresses into these registers.
+> 
+> A few questions below.
+> 
+> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > index 41d4ec7f2f57..b8344fd5e5ad 100644
+> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c
+> > @@ -109,6 +109,13 @@ static int lan966x_fdma_rx_alloc_page_pool(struct lan966x_rx *rx)
+> >       return 0;
+> >  }
 > >
-> >  /* stored in each device */
-> >  struct hid_bpf {
-> > -     u8 *device_data;                /* allocated when a bpf program o=
-f type
-> > -                                      * SEC(f.../hid_bpf_device_event)=
- has been attached
-> > -                                      * to this HID device
-> > -                                      */
-> > +     /*
-> > +      * allocated when a bpf program of type
-> > +      * SEC(f.../hid_bpf_device_event) has been attached
-> > +      * to this HID device
-> > +      */
-> > +     u8 *device_data __counted_by_ptr(allocated_data);
->
+> > +static void lan966x_fdma_llp_configure(struct lan966x *lan966x, u64 addr,
+> > +                                    u8 channel_id)
+> > +{
+> > +     lan_wr(lower_32_bits(addr), lan966x, FDMA_DCB_LLP(channel_id));
+> > +     lan_wr(upper_32_bits(addr), lan966x, FDMA_DCB_LLP1(channel_id));
+> > +}
+> > +
+> >  static int lan966x_fdma_rx_alloc(struct lan966x_rx *rx)
+> >  {
+> >       struct lan966x *lan966x = rx->lan966x;
+> > @@ -128,6 +135,8 @@ static int lan966x_fdma_rx_alloc(struct lan966x_rx *rx)
+> >       fdma_dcbs_init(fdma, FDMA_DCB_INFO_DATAL(fdma->db_size),
+> >                      FDMA_DCB_STATUS_INTR);
+> >
+> > +     lan966x_fdma_llp_configure(lan966x, fdma->dma, fdma->channel_id);
+> > +
+> >       return 0;
+> >  }
+> 
 > [Severity: High]
-> Does this newly added attribute introduce a false-positive bounds check p=
-anic?
->
-> The commit message mentions that allocated_data is always set before any
-> access, but looking at __hid_bpf_allocate_data() in
-> drivers/hid/bpf/hid_bpf_dispatch.c, it appears the pointer is assigned be=
-fore
-> the count without memory barriers:
->
->         *data =3D alloc_data;
->         *size =3D alloc_size;
->
-> Concurrently, if an incoming HID report triggers
-> dispatch_hid_bpf_device_event() (which holds driver_input_lock but not
-> prog_list_lock), could it observe a non-NULL device_data pointer while th=
-e
-> allocated_data count still evaluates to 0?
->
-> If so, would the new __counted_by_ptr() attribute cause sanitizers to eva=
-luate
-> the buffer size as 0 while device_data is active, triggering a false-posi=
-tive
-> kernel panic when memcpy(ctx_kern.data, data, *size) is called?
->
-This is a false-positive, though arguably correct way to look at how
-initializations of a counted buffer with its count field should be
-ordered. It's a false-positive, because assigning the buffer isn't an
-access. I'll send a v2.
-
--bw
-
-> >       u32 allocated_data;
-> >       bool destroyed;                 /* prevents the assignment of any=
- progs */
+> This isn't a bug introduced by this patch, but since the new LLP write now
+> sits right after it: should lan966x_fdma_rx_alloc() check the return value
+> of fdma_dcbs_init() before arming the channel?
+> 
+> fdma_dcbs_init() is fallible and stops at the first failing descriptor:
+> 
+> drivers/net/ethernet/microchip/fdma/fdma_api.c:fdma_dcbs_init() {
+>         for (i = 0; i < fdma->n_dcbs; i++) {
+>                 err = fdma_dcb_add(fdma, i, info, status);
+>                 if (err)
+>                         return err;
+>         }
+> }
+> 
+> and lan966x_fdma_rx_dataptr_cb() returns -ENOMEM when
+> page_pool_dev_alloc_pages() fails, without updating rx->page[dcb][db] or
+> *dataptr.  So under memory pressure the chain is left truncated, the
+> remaining DB dataptrs stay 0, and rx->page[] keeps its previous contents
+> while this function still returns 0 and now also programs the LLP.
+> 
+> In lan966x_fdma_reload() the success branch then runs, which releases every
+> page in old_pages to the old pool and calls page_pool_destroy(page_pool)
+> while rx->page[] still references those pages.  A later
+> lan966x_fdma_rx_free_pages() at deinit, or on the next MTU change, would
+> then call page_pool_put_full_page() on pages already returned to a
+> destroyed pool.  In the probe path the same suppressed failure leaves NULL
+> entries in rx->page[] that lan966x_fdma_rx_free_pages() dereferences
+> unconditionally.
+> 
+> RX would also stall, since the software dcb_index wraps modulo n_dcbs while
+> the hardware only walks the truncated part of the ring.
+> 
+> Interestingly the PCIe variant added later in this series does check the
+> same call, so would it make sense to propagate the error here as well?
+> 
+> > @@ -137,14 +146,6 @@ static void lan966x_fdma_rx_start(struct lan966x_rx *rx)
+> >       struct fdma *fdma = &rx->fdma;
+> >       u32 mask;
 > >
->
+> > -     /* When activating a channel, first is required to write the first DCB
+> > -      * address and then to activate it
+> > -      */
+> > -     lan_wr(lower_32_bits((u64)fdma->dma), lan966x,
+> > -            FDMA_DCB_LLP(fdma->channel_id));
+> > -     lan_wr(upper_32_bits((u64)fdma->dma), lan966x,
+> > -            FDMA_DCB_LLP1(fdma->channel_id));
+> > -
+> >       lan_wr(FDMA_CH_CFG_CH_DCB_DB_CNT_SET(fdma->n_dbs) |
+> >              FDMA_CH_CFG_CH_INTR_DB_EOF_ONLY_SET(1) |
+> >              FDMA_CH_CFG_CH_INJ_PORT_SET(0) |
+> 
+> [Severity: Low]
+> This isn't a bug, but the comment documenting the hardware ordering rule
+> ("first is required to write the first DCB address and then to activate
+> it") is removed from both lan966x_fdma_rx_start() and
+> lan966x_fdma_tx_activate(), and is not restated at
+> lan966x_fdma_llp_configure() or at either FDMA_CH_ACTIVATE site.
+> 
+> The requirement becomes an implicit contract between the allocation and
+> activation functions, which is what forces the extra open-coded call in the
+> lan966x_fdma_reload() restore path below.  Could the rule be documented at
+> the helper, or near the FDMA_CH_ACTIVATE writes?
+> 
+> All activation paths in the current tree do have a matching LLP write
+> before them, so this is only about the lost documentation.
+> 
+> Also, the commit message says the writes are moved "into the allocation
+> functions", but a third call site is added in lan966x_fdma_reload(), which
+> is not an allocation function.  Could that be mentioned as well?
+> 
+> > @@ -215,6 +216,8 @@ static int lan966x_fdma_tx_alloc(struct lan966x_tx *tx)
+> >
+> >       fdma_dcbs_init(fdma, 0, 0);
+> >
+> > +     lan966x_fdma_llp_configure(lan966x, fdma->dma, fdma->channel_id);
+> > +
+> >       return 0;
+> >
+> >  out:
+> 
+> [Severity: High]
+> This is the same pre-existing unchecked fdma_dcbs_init() described above,
+> on the TX side; it is not introduced by this patch, but the new LLP write
+> and the unconditional "return 0" now follow it directly.
+> 
+> > @@ -236,14 +239,6 @@ static void lan966x_fdma_tx_activate(struct lan966x_tx *tx)
+> >       struct fdma *fdma = &tx->fdma;
+> >       u32 mask;
+> >
+> > -     /* When activating a channel, first is required to write the first DCB
+> > -      * address and then to activate it
+> > -      */
+> > -     lan_wr(lower_32_bits((u64)fdma->dma), lan966x,
+> > -            FDMA_DCB_LLP(fdma->channel_id));
+> > -     lan_wr(upper_32_bits((u64)fdma->dma), lan966x,
+> > -            FDMA_DCB_LLP1(fdma->channel_id));
+> > -
+> >       lan_wr(FDMA_CH_CFG_CH_DCB_DB_CNT_SET(fdma->n_dbs) |
+> >              FDMA_CH_CFG_CH_INTR_DB_EOF_ONLY_SET(1) |
+> >              FDMA_CH_CFG_CH_INJ_PORT_SET(0) |
+> 
+> [Severity: Medium]
+> Can the injection channel now be activated before the LLP has been
+> programmed during probe?
+> 
+> lan966x_probe() sets lan966x->fdma = true before the port loop that calls
+> lan966x_probe_port() -> register_netdev(), and only calls
+> lan966x_fdma_init() afterwards.  lan966x_port_xmit() dispatches purely on
+> that flag:
+> 
+> drivers/net/ethernet/microchip/lan966x/lan966x_main.c:lan966x_port_xmit() {
+>         spin_lock(&lan966x->tx_lock);
+>         if (port->lan966x->fdma)
+>                 err = lan966x_fdma_xmit(skb, ifh, dev);
+>         ...
+> }
+> 
+> lan966x_fdma_init() sets tx.fdma.n_dcbs/n_dbs and the ops before calling
+> lan966x_fdma_tx_alloc(), and lan966x_fdma_tx_alloc() does not take
+> tx_lock.  So an xmit landing between fdma_dcbs_init() and the new
+> lan966x_fdma_llp_configure() would find a valid dcbs_buf and DCB ring and
+> go:
+> 
+> lan966x_fdma_xmit() -> lan966x_fdma_tx_start() -> lan966x_fdma_tx_activate()
+> 
+> which after this patch writes FDMA_CH_ACTIVATE without programming the
+> LLP, so the engine would fetch its first DCB from the post-reset LLP value
+> of 0.  tx->activated is latched true there, so the LLP would never be
+> programmed for that channel afterwards:
+> 
+>         if (likely(lan966x->tx.activated)) {
+>                 lan966x_fdma_tx_reload(tx);
+>         } else {
+>                 /* Because it is first time, then just activate */
+>                 lan966x->tx.activated = true;
+>                 lan966x_fdma_tx_activate(tx);
+>         }
+> 
+> Before this patch tx_activate() wrote the LLP immediately before the
+> activate bit, so this ordering was not possible.  Note the same probe
+> window already exposes a pre-existing tx->dcbs_buf == NULL dereference in
+> lan966x_fdma_get_next_dcb() while n_dcbs is already set, so would
+> registering the netdevs after lan966x_fdma_init() be the better fix?
+
+Netdev registration should be done last, yes - and that is the fix that should
+go to net (as mentioned in v6). The probe window is real, but not something
+introduced by this series.
+
+> 
+> > @@ -876,6 +871,9 @@ static int lan966x_fdma_reload(struct lan966x *lan966x, int new_mtu)
+> >                                          MEM_TYPE_PAGE_POOL, page_pool);
+> >       }
+> >
+> > +     lan966x_fdma_llp_configure(lan966x, lan966x->rx.fdma.dma,
+> > +                                lan966x->rx.fdma.channel_id);
+> > +
+> >       lan966x_fdma_rx_start(&lan966x->rx);
+> >
+> >       lan966x_fdma_wakeup_netdev(lan966x);
+> 
 > --
-> Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260923063114.26=
-83575-1-morbo@google.com?part=3D1
+> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260918-lan966x-pci-fdma-v7-0-0ecc179c8a2c%40microchip.com
