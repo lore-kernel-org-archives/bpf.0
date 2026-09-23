@@ -1,405 +1,230 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABCF415F00;
-	Wed, 23 Sep 2026 06:41:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A234418EC
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 06:45:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790145690; cv=none; b=GO2kbRirEh12DD3zA8l8sNiuOYbKIrzWOjf7nZxjCJPgIUQqy54LlASZx+ZcYFbm1bO2a6LCR9jXtuA0dzv4fLYmiiQwsK8FjCfFzJaAPfkpMrOy1/2QTwkLjUXX4RQ2OrLOOiV3S7ocq2rAlcl1u0d2uu9Ca/XDPWYXGhjxCWc=
+	t=1790145904; cv=none; b=X47Ee2b0RO/tUw+mpwz4BL/ninPNMfEzhN6PsQPz0I+LL+vpAas5ualaFeCIrU7fHS7hLQt5QijpMGQkpXAWMPHxAlTAhQdB0PqK6m7bK+ebsnQIxkSAIrk2Iu0ktB/ZvVQx8A5w4HK57zMbpZ0ASASgrU5BGoPsyADZbFgFc60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790145690; c=relaxed/simple;
-	bh=vMRciAZ175VWO2J32cGUF/F9D7Trztf0tZEVIb+di+o=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=EGKrXTQ6++sHHH1KNb0nrDPU6IDeOPx5ldC6dwieutRI8NETEDbvNgCUIoSU14ncVZyBKEZck5iWVzdUTCtVj9eIseuyhYP8smgjXC9pn/81o4GW9HBxsFyqm1E6QWAixjoQ5JUcF6m3NSToLOPQgSjiePhoFvJmUYsVaT+t6WI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kh4AQ26O; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790145904; c=relaxed/simple;
+	bh=1294r34xTc1bW7Bz7mgtVPp9Nhyz2aDNnMbKdaxaj6g=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=n9zgEXG3GRFlUpYHu1JzqBymYsFWwztALxygVdSQ/4oeY7D1lc/cbR8F0I1eTVxDouRm8rLXKJhWL0z7dp7TIY8yIQ5I9qJ5KypJhjwEMqCJwbaVct+8WwOCL7W1MO2dSbOwvqKvHNRWOmBsB2+WABM9I+CIMt8LfQgj15XBP08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZZXNJiY/; arc=none smtp.client-ip=209.85.221.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kh4AQ26O"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C8A1F000FF;
-	Wed, 23 Sep 2026 06:41:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790145682;
-	bh=2W4NE5J+KhZtrDQBDt/XwIKj7xSOG+lvJrpx1ZfD3WE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Kh4AQ26OksIbGC0k1FMrdRH1tU4dxQXllArQlHmZTRMDpXMRnanD2BWVhKMZQwcE3
-	 hbpz1OqO+DqS6dTie61sfkqtqxMkCbbcKs/vEKtqt/pNjMofBp07CzWuMkSvCpzN5H
-	 7fnatDP5xuirLARW53rk9INT2Cy61r5x+LUsT6zdUdI8PalaBJskEabFe9Clt/9Grr
-	 4JpYlA4YmzCMozxuAOIuv5zOUyG0g2M5kcmcXR0HW271DHdGHXE4M7FMC80BJVIamb
-	 JW7xOe4A66iM+uR1omSSG1LZsHQuqjjQYfWO8m/+mrMpRh5UT0ljTGJAgJbMnSb4NU
-	 kCPbicPsDU8nA==
-Content-Type: multipart/mixed; boundary="===============0426560887140224341=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZZXNJiY/"
+Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-488615e6cfcso714978f8f.0
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 23:45:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790145898; x=1790750698; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Iuwszkn0aQaPLUZ6WX3hy2i6Ad8mCKcVtyvt0xKMgMs=;
+        b=ZZXNJiY/OICst1ILLXMv7dlf9yORRFWQavTicogRtVLBhqnQ7h0zjZvUOw1qXzws/B
+         l249bIkZe7neVkFofQ7ql4y+J+yz5UhRaqxE9CuATajr9850U3p3T1LJOXsJFFTVMtMX
+         U7AWHoYUeLfVKEq44b59TGsGw/W66a4hq+TycfUQU+GxJqvO3/HSZx0SRXQAqNGqsML+
+         v1vsQNjWjsXmu/A68/6lwhlpZkp1ljf9iPCY4qkXy8rDQ+zKLPvStad5HNtdhHOewpVX
+         B7g9+M6n2Q62EH5hNBVhmvoLQkYGaSM923gNUdn6QV+2ngHh4XfmK7PgX6Tpc5GukEI2
+         ZjSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790145898; x=1790750698;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Iuwszkn0aQaPLUZ6WX3hy2i6Ad8mCKcVtyvt0xKMgMs=;
+        b=yED19Fd2de62pvJk9fkHnxTcuQB2g5dMBoWDPq1hYnOuZwbOQ/gf5cpcegx0s9fGKI
+         PYSS49dZuhzI3ZxVmpCr9KWjhr/WS/SboWxlJMMQDA540WppTAV7VKQZpgkrNlCq79Vh
+         B8WfQnBUXS4N2YR9mdBe8ZobhzN6Mk5b8jJ3y/3eUfB7+QzXAql0IMoWxYSWs/hqValb
+         TJs2ErCM2T1ynuJIaCimfYljxeLftLaGIiV6TYyfYAZpm3rO82CrOYXcVH7mDBKMH1W4
+         ptFVthDGxtKuVgkuNBHv7KpEp18JFYkY8v6LeZGUnlDYq9YCgKnqrpK4zEexUrNdzO/x
+         MZ6A==
+X-Forwarded-Encrypted: i=1; AKwUvBzM7/qpqW3IDeDMbVog4fwYCyIl+EEbKCuvm3lswjfkyC5Ph4Bxxlm1FbPv8eDGH0yhnlM=@vger.kernel.org
+X-Gm-Message-State: AFuF++knQUwrd80Fj2wVMR3oUtN1e05BHXcrgXdP86kBBR7gANdaOPBX
+	Unrn50foII8Lna0WS5/Bg6sJap+75ICj99QRx2R+Z2ExWWuOabey9gou
+X-Gm-Gg: AYBFou1N7amzRlku7w7Px0YB/KEX+Oo+5b94JyD9P6V8khTbI/+lT0hx/p830FGHviN
+	SWfJokV0LsO4DgQ4XZGbqYbZsQSTJKiuSpHz7ipt9HR0s+TtKyUiftMtAFjYLdIok0vUyVNBgz7
+	YPvOmHXpi3TKY3j6Dj4IJsE8Gh/tXG8eoy4A4PjiYElLFoDftc8Hs4qSTuTlV/Gtz3NRr9CAhPk
+	s60vvAQSs4NIXuDRpQl5xonmpplD+9WELlyVgksFeX4ERzbZX2fqwo1AhNGJa7F6k1uUpExgxJO
+	y+TAJBDW8sqaBT2h3jthxGdvXILF56uZYMRf78lkkvKny0/IfanmXQAzyD2O4amS482DBFJACuf
+	Z5jWdBNXsHhHhpJVf7S4XtdYlIYGkzEzDv7iRg20KPoVRuMxhHC8xxe/xr1KC1yCdSXZfxnZCuf
+	2iq2nMQ17GjG3rY0qdbgpgBHKVbRik9KionXIXcfSAIAd0D+o+5NIddDeAY91anoi0/trRgcgcH
+	mr+BKHEy6spaM2gY9kaTRG4BxUeJDWPLc/1a3i2QXuxe5GLJpw1qQeCbhyIYeMxil2olPgFJqba
+	ysCDnTEF7PWeX5CRsPWvL5p12aHXh37Dcs+OTQ==
+X-Received: by 2002:a05:600c:6d8e:b0:49c:ff66:7d88 with SMTP id 5b1f17b1804b1-49fd883cd5emr57599765e9.7.1790145898261;
+        Tue, 22 Sep 2026 23:44:58 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-488682668dcsm4857404f8f.1.2026.09.22.23.44.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Sep 2026 23:44:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <f0a28d1ffadcd0dbc3209da34afb902c4911ad9e31cd90a1b640d4c1592cf11d@mail.kernel.org>
-In-Reply-To: <20260923053948.30617-6-wanjay@amazon.com>
-References: <20260923053948.30617-6-wanjay@amazon.com>
-Subject: Re: [PATCH bpf-next 5/6] bpf: defer registrations until the vmlinux BTF is available
-From: bot+bpf-ci@kernel.org
-To: wanjay@amazon.com,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: alan.maguire@oracle.com,martin.lau@linux.dev,yonghong.song@linux.dev,nathan@kernel.org,nsc@kernel.org,linux-kbuild@vger.kernel.org,mcgrof@kernel.org,petr.pavlu@suse.com,linux-modules@vger.kernel.org,arnd@arndb.de,linux-kernel@vger.kernel.org,abuehaze@amazon.com,doebel@amazon.de,jay.wang.upstream@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 23 Sep 2026 06:41:19 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 23 Sep 2026 08:44:57 +0200
+Message-Id: <DLMHRC6161TE.14EBFU123T4PK@gmail.com>
+Cc: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ <kernel-team@fb.com>
+Subject: Re: [PATCH bpf-next v4 00/20] bpf: Run exception cleanup landing
+ pads when bpf_throw() unwinds
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Eduard Zingerman" <eddyz87@gmail.com>, "Alexei Starovoitov"
+ <alexei.starovoitov@gmail.com>
+X-Mailer: aerc 0.21.0
+References: <20260921210033.1715000-1-yonghong.song@linux.dev>
+ <7e7076ce94e803403bcee003569d4b2ac7bc4e2c.camel@gmail.com>
+ <DLLHFJDS6G5L.2B273FIKF9A09@gmail.com>
+ <DLLHQDZBGDUO.2TT8UBHIMZEFK@gmail.com>
+ <DLM696EA5JAQ.3DBNX7Z6DB7N3@gmail.com>
+ <CAP01T76JZUzzyr50dk0NzGv73p12v8E17Lbgy1_yZVqg3Qju0g@mail.gmail.com>
+ <DLMFEI43TYVI.1KNMAQLNWT2JC@gmail.com>
+ <16a889ab8ae491155ca962bf2e14e83e1f921cf3.camel@gmail.com>
+In-Reply-To: <16a889ab8ae491155ca962bf2e14e83e1f921cf3.camel@gmail.com>
 
---===============0426560887140224341==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/include/linux/btf.h b/include/linux/btf.h
-> index 0bf10811fe53..3b99d6386dec 100644
-> --- a/include/linux/btf.h
-> +++ b/include/linux/btf.h
-
-[ ... ]
-
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 50eb7a95fd82..cbba20a908e9 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-
-[ ... ]
-
-> @@ -8792,11 +8857,55 @@ static int btf_vmlinux_module_coming(struct module *mod)
->  	smp_store_release(&btf_vmlinux_raw, data);
->  	return 0;
->  }
-> +
-> +/*
-> + * The vmlinux BTF is not available yet and must not be loaded from the
-> + * module notifier (that would nest a module load into a module load).  Keep
-> + * the module's BTF for btf_parse_deferred_modules().  The .BTF data can be
-> + * exposed in sysfs right away, it needs no parsing.
-> + */
-> +static int btf_module_defer(struct btf_module *btf_mod, struct module *mod)
-> +{
-> +	int err;
-> +
-> +	btf_mod->data = kvmemdup(mod->btf_data, mod->btf_data_size,
-> +				 GFP_KERNEL | __GFP_NOWARN);
-> +	if (!btf_mod->data)
-> +		return -ENOMEM;
-> +	btf_mod->data_size = mod->btf_data_size;
-> +
-> +	if (mod->btf_base_data) {
-> +		btf_mod->base_data = kvmemdup(mod->btf_base_data,
-> +					      mod->btf_base_data_size,
-> +					      GFP_KERNEL | __GFP_NOWARN);
-> +		if (!btf_mod->base_data) {
-> +			kvfree(btf_mod->data);
-> +			return -ENOMEM;
-> +		}
-> +		btf_mod->base_data_size = mod->btf_base_data_size;
-> +	}
-> +
-> +	err = btf_module_sysfs_add(btf_mod, mod->name, btf_mod->data,
-> +				   btf_mod->data_size);
-> +	if (err) {
-> +		kvfree(btf_mod->data);
-> +		kvfree(btf_mod->base_data);
-> +		return err;
-> +	}
-
-The comment states the .BTF data "can be exposed in sysfs right away,
-it needs no parsing". For modules with a .BTF.base section (split BTF),
-is this accurate?
-
-btf_parse_deferred_modules() later calls btf_relocate() which rewrites
-btf_mod->data in place (btf_relocate_rewrite_type_id() and
-btf_relocate_rewrite_strs() modify btf->data directly). The sysfs file
-exposes unrelocated BTF until that runs.
-
-Can userspace tools reading /sys/kernel/btf/<module> between module load
-and vmlinux BTF arrival get type ids and string offsets relative to the
-distilled .BTF.base (which is never exposed), making the data unusable?
-
-Also, can reads that overlap the btf_relocate() in-place rewrite get a
-mix of pre- and post-relocation bytes, since sysfs_bin_attr_simple_read()
-reads attr->private/attr->size with no synchronization against
-btf_parse_deferred_modules()?
-
-Does treating btf_module_sysfs_add() failure as fatal make sense here?
-A few lines below, the non-deferred path at kernel/bpf/btf.c:8984
-deliberately ignores the same failure as non-fatal:
-
-    /* not fatal, the module BTF is usable without the sysfs file */
-    btf_module_sysfs_add(btf_mod, btf->name, btf->data, btf->data_size);
-
-A transient -ENOMEM or unexpected -EEXIST in sysfs_create_bin_file()
-costs the module its BTF entirely instead of just its sysfs file.
-
-> +
-> +	list_add(&btf_mod->list, &btf_modules);
-> +	return 0;
-> +}
-
-[ ... ]
-
-> @@ -8905,6 +9033,87 @@ static int __init btf_module_init(void)
->  }
+On Wed Sep 23, 2026 at 8:16 AM CEST, Eduard Zingerman wrote:
+> On Wed, 2026-09-23 at 04:54 +0000, Alexei Starovoitov wrote:
+>> On Wed Sep 23, 2026 at 4:36 AM UTC, Kumar Kartikeya Dwivedi wrote:
+>> >
+>> > You can obviously insert aborts at any point in the program, provided
+>> > such a primitive works, even when the compiler doesn't see it. It is
+>> > just a way to halt program execution along a given path, and has
+>> > plenty of precedents (assert(false), std::terminate(), panic!() =3D
+>> > abort). That property can be used for several purposes, including
+>> > proving a condition true on the other path that does not abort, and
+>> > retaining that path condition throughout the rest of the program. That
+>> > is basically the gist of Eduard's suggestion.
+>>
+>> That's only true for user space.
+>> For bpf progs there is no such primitive. bpf_throw() is not it.
+>> We cannot make it work from arbitrary places without introducing
+>> massive verifier debt for automatic creation of exception tables
+>> or via equally massive runtime penalty to remember all things to cleanup=
+.
 >
->  fs_initcall(btf_module_init);
-> +
-> +#if IS_MODULE(CONFIG_DEBUG_INFO_BTF)
-> +/*
-> + * CONFIG_DEBUG_INFO_BTF=m: the vmlinux BTF has just become available.  Parse
-> + * the BTF of the modules that were loaded before it, and apply the
-> + * registrations that waited for them.  Called from bpf_get_btf_vmlinux()
-> + * once btf_vmlinux is published, with no locks held.
-> + */
-> +void btf_parse_deferred_modules(void)
-> +{
-> +	/* Pairs with the publication in bpf_get_btf_vmlinux() */
-> +	struct btf *vmlinux_btf = smp_load_acquire(&btf_vmlinux);
-> +	struct btf_deferred_reg *reg, *rtmp;
-> +	struct btf_module *btf_mod, *tmp;
-> +	bool parsed = false;
-> +	LIST_HEAD(regs);
-> +	struct btf *btf;
-> +	int err;
-> +
-> +	if (IS_ERR_OR_NULL(vmlinux_btf))
-> +		return;
-> +
-> +	mutex_lock(&btf_module_mutex);
-> +	list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
-> +		if (btf_mod->btf)
-> +			continue;
-> +
-> +		btf = btf_parse_module(btf_mod->module->name, vmlinux_btf,
-> +				       btf_mod->data, btf_mod->data_size, true,
-> +				       btf_mod->base_data, btf_mod->base_data_size);
-> +		err = PTR_ERR_OR_ZERO(btf);
-> +		if (!err) {
-> +			err = btf_alloc_id(btf);
-> +			if (err) {
-> +				/* btf owns the data now, btf_free() drops it */
-> +				btf_mod->data = NULL;
-> +				btf_free(btf);
-> +			}
-> +		}
+> I'm not sure that automatic exception tables would be all that more
+> complex, current implementation is not that trivial either.
+> Plus you mention LLMs-the-almighty yourself.
+>
+> But speaking of runtime costs.
+> For a program like this:
+>
+>   main:
+>     a()
+>   a:
+>     b()
+>   b:
+>     throw()
+>
+> The series currently generates push r6-r9 at entry to each function.
+> This is needed to recover r6-r9 for the landing pads.
+> See the program and disassembly below.
+> Do we want to address this somehow, or is the idea that for complex
+> subprograms the sequence would amortize away?
+> On x86 the information about registers location at throw/landing-pad-entr=
+y
+> is stored in .eh_frame section, as far as I understand.
+>
+> BPF:
+>
+>   jit_probe_b:
+> 	r1 =3D 32;
+>   1:	call bpf_throw;
+>   2:	r0 =3D 0;
+> 	exit;
+>   3:	call bpf_unwind_resume;
+> 	exit;
+> 	CLEANUP_REC(1b, 2b, 3b)
+>
+>   jit_probe_a:
+> 	r6 =3D 0x1234;
+>   1:	call jit_probe_b;
+>   2:	r0 =3D 0;
+> 	exit;
+>   3:	r1 =3D r6;
+> 	call bpf_unwind_resume;
+> 	exit;
+> 	CLEANUP_REC(1b, 2b, 3b)
+>
+>   jit_probe_main:
+> 	jit_probe_a();
+> 	return 0;
+>
+> x86:
+>
+>   jit_probe_main:
+>     0:	endbr64
+>     4:	nopl	(%rax,%rax)
+>     9:	nopl	(%rax)
+>     c:	pushq	%rbp
+>     d:	movq	%rsp, %rbp
+>     10:	endbr64
+>     14:	pushq	%r12
+>     16:	pushq	%rbx
+>     17:	pushq	%r13
+>     19:	pushq	%r14
+>     1b:	pushq	%r15
+>     1d:	callq	0x30
+>
+>   jit_probe_a:
+>     0:	endbr64
+>     4:	nopl	(%rax,%rax)
+>     9:	nopl	(%rax)
+>     c:	pushq	%rbp
+>     d:	movq	%rsp, %rbp
+>     10:	endbr64
+>     14:	pushq	%r12
+>     16:	pushq	%rbx
+>     17:	pushq	%r13
+>     19:	pushq	%r14
+>     1b:	pushq	%r15
+>     1d:	movl	$0x1234, %ebx
+>     22:	callq	0x9c
+>     27:	endbr64
+>     2b:	movq	%rbx, %rdi
+>     2e:	retq
+>
+>   jit_probe_b:
+>     0:	endbr64
+>     4:	nopl	(%rax,%rax)
+>     9:	nopl	(%rax)
+>     c:	pushq	%rbp
+>     d:	movq	%rsp, %rbp
+>     10:	endbr64
+>     14:	subq	$0x28, %rsp
+>     1b:	pushq	%r12
+>     1d:	pushq	%rbx
+>     1e:	pushq	%r13
+>     20:	pushq	%r14
+>     22:	pushq	%r15
+>     24:	movl	$0x20, %edi
+>     29:	movq	%r15, -0x28(%rbp)
+>     2d:	movq	%r14, -0x20(%rbp)
+>     31:	movq	%r13, -0x18(%rbp)
+>     35:	movq	%rbx, -0x10(%rbp)
+>     39:	movq	%r12, -0x8(%rbp)
+>     3d:	callq	0xffffffffe18c5c5c
+>     42:	endbr64
+>     46:	retq
+>
 
-[ ... ]
+That is really bad codegen. There might be a way to argue it's slightly ok =
+for
+x86 in terms of cost in prologue, but it looks really bad for arm64. I thin=
+k we
+need to find a better way of handling this...
 
-> +		/*
-> +		 * Registrations are applied after dropping the mutex (they
-> +		 * walk btf_modules); pin what they need until then.
-> +		 */
-> +		list_for_each_entry_safe(reg, rtmp, &btf_mod->deferred_regs, list) {
-> +			list_del(&reg->list);
-> +			if (!try_module_get(btf_mod->module)) {
-> +				btf_free_deferred_reg(reg);
-> +				continue;
-> +			}
-> +			btf_get(btf);
-> +			reg->btf = btf;
-> +			reg->module = btf_mod->module;
-> +			list_add_tail(&reg->list, &regs);
-> +		}
-> +	}
-> +	mutex_unlock(&btf_module_mutex);
+Basically on entry to a subprog on arm64 we spill 80 bytes worth of registe=
+rs,
+ignoring spills around throw site which might be less problematic.
 
-Can try_module_get() on a MODULE_STATE_COMING module guarantee the module
-image outlives the registration?
-
-The deferred registrations are created from the module's own init routine
-(register_btf_kfunc_id_set() / register_btf_id_dtor_kfuncs() /
-__register_bpf_struct_ops() call btf_defer_reg()), so they are queued
-while the module is still MODULE_STATE_COMING.
-
-btf_try_get_module() at kernel/bpf/btf.c:9128 deliberately refuses to pin
-COMING modules:
-
-    /* We must only consider module whose __init routine has
-     * finished, hence we must check for BTF_MODULE_F_LIVE flag,
-     * which is set from the notifier callback for
-     * MODULE_STATE_LIVE.
-     */
-    if ((btf_mod->flags & BTF_MODULE_F_LIVE) && try_module_get(btf_mod->module))
-
-tools/testing/selftests/bpf/prog_tests/bpf_mod_race.c exercises this
-check because a refcount on a COMING module is not a lifetime guarantee.
-
-If that module's init then fails, kernel/module/main.c:3208 does:
-
-  fail:
-    mod->state = MODULE_STATE_GOING;
-    synchronize_rcu();
-    module_put(mod);
-    blocking_notifier_call_chain(&module_notify_list, MODULE_STATE_GOING, mod);
-    ...
-    free_module(mod);
-
-free_module() (kernel/module/main.c:1417) never waits for the module
-refcount and goes straight to free_mod_mem(mod). The pin taken above
-does not defer the free, so btf_apply_deferred_regs() then dereferences
-reg->kfunc.kset / reg->st_ops in the freed module image and writes the
-freed per-cpu refcount with module_put(reg->module).
-
-[ ... ]
-
-> @@ -10335,8 +10574,183 @@ int __register_bpf_struct_ops(struct bpf_struct_ops *st_ops)
->  	return err;
->  }
->  EXPORT_SYMBOL_GPL(__register_bpf_struct_ops);
-> +#else
-> +static int btf_struct_ops_add(struct btf *btf, struct bpf_struct_ops *st_ops)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +#endif
-
-Is the new btf_struct_ops_add() stub reachable?
-
-Preprocessor structure in kernel/bpf/btf.c:
-
-  10421  #ifdef CONFIG_BPF_JIT
-  10536    static int btf_struct_ops_add(...)        /* real */
-  10553    int __register_bpf_struct_ops(...)
-  10572      err = btf_struct_ops_add(btf, st_ops);
-  10577  #else
-  10578    static int btf_struct_ops_add(...)        /* NEW stub */
-  10582  #endif
-  10591  #ifdef BTF_MODULE_NOTIFIER
-  10670    return btf_struct_ops_add(btf, reg->st_ops);
-  10752  #endif /* BTF_MODULE_NOTIFIER */
-
-The stub's only reference is inside btf_apply_deferred_reg(), compiled
-only when BTF_MODULE_NOTIFIER is defined:
-
-  kernel/bpf/btf.c:8706  #if IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES) || IS_MODULE(CONFIG_DEBUG_INFO_BTF)
-  kernel/bpf/btf.c:8707  #define BTF_MODULE_NOTIFIER 1
-
-With CONFIG_BPF_SYSCALL=y (btf.c is built), CONFIG_BPF_JIT=n and
-CONFIG_DEBUG_INFO_BTF=n (or =y with CONFIG_MODULES=n), the stub is
-defined and never referenced. CONFIG_BPF_JIT is a plain bool with no
-default (kernel/bpf/Kconfig:46), so =n with BPF_SYSCALL=y is an ordinary
-configuration.
-
-This produces a -Wunused-function warning, which is a build failure with
-CONFIG_WERROR=y.
-
-> +
-> +/*
-> + * CONFIG_DEBUG_INFO_BTF=m: registrations made before the BTF they apply to
-> + * is available.  Registrations for vmlinux wait in btf_vmlinux_deferred_regs
-> + * until btf_parse_vmlinux() applies them; registrations for a module wait in
-> + * its struct btf_module until btf_parse_deferred_modules() does.  Both lists
-> + * are protected by btf_module_mutex.
-> + */
-> +#ifdef BTF_MODULE_NOTIFIER
-> +static LIST_HEAD(btf_vmlinux_deferred_regs);
-> +/* Set when the vmlinux BTF is parsed; new registrations apply directly */
-> +static bool btf_vmlinux_regs_closed;
-
-[ ... ]
-
-> +/*
-> + * The vmlinux BTF has just been parsed; apply the registrations that waited
-> + * for it.  Runs under btf_vmlinux_lock, before @btf is published, so nothing
-> + * can observe a vmlinux BTF without its kfuncs and struct_ops.
-> + *
-> + * Applying a registration can queue further ones: a struct_ops ->init()
-> + * registers the kfuncs of its hook.  Those must not go through
-> + * bpf_get_btf_vmlinux() (we hold its lock), so the queue stays open until
-> + * a pass applies nothing new, and only then are registrations applied directly.
-> + */
-> +static void btf_apply_deferred_vmlinux_regs(struct btf *btf)
-> +{
-> +	struct btf_deferred_reg *reg, *tmp;
-> +	LIST_HEAD(regs);
-> +	int err;
-> +
-> +	if (!IS_MODULE(CONFIG_DEBUG_INFO_BTF))
-> +		return;
-> +
-> +	mutex_lock(&btf_module_mutex);
-> +	while (!list_empty(&btf_vmlinux_deferred_regs)) {
-> +		list_splice_init(&btf_vmlinux_deferred_regs, &regs);
-> +		mutex_unlock(&btf_module_mutex);
-
-Can this introduce a circular lock dependency?
-
-btf_apply_deferred_vmlinux_regs() is called from btf_parse_vmlinux()
-(kernel/bpf/btf.c:6597), which runs with btf_vmlinux_lock held by
-bpf_get_btf_vmlinux():
-
-  kernel/bpf/verifier.c:21184  mutex_lock(&btf_vmlinux_lock);
-  kernel/bpf/verifier.c:21187      btf = btf_parse_vmlinux();
-  kernel/bpf/verifier.c:21197  mutex_unlock(&btf_vmlinux_lock);
-
-The new mutex_lock(&btf_module_mutex) at kernel/bpf/btf.c:10724 creates:
-
-  (A) btf_vmlinux_lock -> btf_module_mutex  [NEW]
-
-Two pre-existing edges close the cycle:
-
-  (B) cand_cache_mutex -> btf_vmlinux_lock
-      bpf_core_apply() kernel/bpf/btf.c:10269  mutex_lock(&cand_cache_mutex);
-      bpf_core_apply() kernel/bpf/btf.c:10270  cc = bpf_core_find_cands(...);
-      bpf_core_find_cands() kernel/bpf/btf.c:10165  main_btf = bpf_get_btf_vmlinux();
-
-  (C) btf_module_mutex -> cand_cache_mutex
-      btf_module_notify() MODULE_STATE_GOING kernel/bpf/btf.c:9001
-          mutex_lock(&btf_module_mutex);
-      btf_module_notify() kernel/bpf/btf.c:9015  btf_module_free(btf_mod);
-      btf_module_free() kernel/bpf/btf.c:8810  purge_cand_cache(btf_mod->btf);
-      purge_cand_cache() kernel/bpf/btf.c:10092  mutex_lock(&cand_cache_mutex);
-
-Both edges (B) and (A) are taken by the same thread:
-
-  CPU 0: BPF_PROG_LOAD with CO-RE relocations    |  CPU 1: rmmod <module with BTF>
-    bpf_check() -> bpf_check_btf_info()          |
-      -> check_core_relo()                       |
-        -> bpf_core_apply()                      |
-           mutex_lock(&cand_cache_mutex)  [10269]|    mutex_lock(&btf_module_mutex) [9001]
-           -> bpf_core_find_cands()              |
-              -> bpf_get_btf_vmlinux()           |
-                 mutex_lock(&btf_vmlinux_lock)   |
-                                        [21184]  |
-                 -> btf_parse_vmlinux()          |
-                   -> btf_apply_deferred_vmlinux_regs()
-                      mutex_lock(&btf_module_mutex) <-- BLOCKS [10724]
-                                                   |
-                                                   |    btf_module_free() -> purge_cand_cache()
-                                                   |      mutex_lock(&cand_cache_mutex) [10092]
-                                                   |      <-- BLOCKS
-
-Both waits are plain uninterruptible mutex_lock(); there is no trylock,
-timeout or bounded retry, so the two tasks hang permanently.
-
-Required config: CONFIG_DEBUG_INFO_BTF=m (the IS_MODULE() guard at 10721)
-together with CONFIG_DEBUG_INFO_BTF_MODULES=y, which supplies the
-module-BTF entries that edge (C) frees. That combination is supported and
-explicitly exercised: DEBUG_INFO_BTF_MODULES is 'default y' and 'depends
-on DEBUG_INFO_BTF && MODULES' (lib/Kconfig.debug:428), and the final
-commit 2f5aab95d2b8 states it was 'Tested with ... =y vs =m, both with
-CONFIG_DEBUG_INFO_BTF_MODULES=y'.
-
-[ ... ]
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index a7b73bc146a8..b6f094d5306a 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -21160,12 +21160,14 @@ int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 bt
->  /*
->   * Returns the parsed vmlinux BTF, NULL if the kernel has none, or an ERR_PTR
->   * if it is malformed.  With CONFIG_DEBUG_INFO_BTF=m the BTF lives in the
-> - * btf_vmlinux module; the first caller loads it and parses it.  May sleep.
-> + * btf_vmlinux module; the first caller loads it, parses it and then registers
-> + * the BTF of the modules that were loaded before it.  May sleep.
->   */
->  struct btf *bpf_get_btf_vmlinux(void)
->  {
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35824427607
---===============0426560887140224341==--
+> ...
