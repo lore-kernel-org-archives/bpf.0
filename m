@@ -1,305 +1,344 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 653585328AD
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11C3842F715
 	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 19:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790190712; cv=none; b=koyZvmnE9xfJhikUUOIcfBtyFysV4vZ5dFLTQW86IokTQ7CXwSyULJYtU5RE4vUNWJ1HlKxpQr8Zt395GgOFnYEYIF3FCLeGnOZpNZ2aHJL9zkhEm31zBnL+dVd5H3022y59e/k7pY5fLD89jAaI9LzJiy+URPn/33NOaCraMbE=
+	t=1790190713; cv=none; b=pfscZk2GwgZcMnU/e7TCjKo6ITf13Y3mohjMiNyVyGLRNPzYffCvFitSCmSw+Vu6k9Jt2kTB/iycOLtEsX2ZrpDgHRpkipr7E3yS1zy+K1F0HyMUQNxLdUYyNDOnSYWmKiC8yqQEfSuHz+Bqp498mcdniFu5E20AaVzLk4/36BU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790190712; c=relaxed/simple;
-	bh=kr+12xj5IlgY5hVWQlR4ClbUlgb+j4p/AlAnyGAh/kE=;
+	s=arc-20240116; t=1790190713; c=relaxed/simple;
+	bh=2rffb2/22h3cPGNU03VRFqjex3KUiXc0UQiSHnzw2VQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Vy5lnUJ0PT6o7JoibNyzBlMccYoA99QDVc+EbUmPnDUSFSabXKH9lmROrT7unBNV+E+pdH/Y0Y+VklwKql6SCD5WQkEDsUZAN2Al74uS3+My+AdLgQQg13nOzWZ/jnFpICo/2Vd20ZGgUeKzDOwJhnBrZ9rquZJjjdR7BVx3vyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=XSatlPFM; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	 MIME-Version; b=J/MHrcrCBivfAL0N63J1aI2i4UNrJCQCuQIyal9LB1MTCus6WxQr4QX/rreMnwPRZekLShh6IQN5ylQLGacqINmuAYW1wEfOkBPzcBBJo2p7w/3YmVZ1DQcsVFdF+MCBQEbix8p4acemzGYeUt+UiFztSQ8YHVXB+H/89l69vk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LKAs8IIP; arc=none smtp.client-ip=74.125.225.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="XSatlPFM"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-48442ea8f59so86368f8f.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LKAs8IIP"
+Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-48433107499so578129f8f.0
         for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 12:11:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790190708; x=1790795508; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790190709; x=1790795509; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=FvQbVwcAdrLYUhYJmYRDZ2DqtnmZ5+Dv6z1gLdDfYAs=;
-        b=XSatlPFM1uUVfgvHbEKDm7ZAxIKvJcF9DWRoPSvVOa1jxLg2txtbFnoo6c8ubVig/h
-         NeieryEQXVuNv5+Ej/GeovHtS6HeEM0A6kVzb6UFS7CAdFL1UnxI3dfqN5QcqiaaK6IH
-         tp+ngxmAHtc3v1mNcrooHkZVOeFnSP337miOeA/9wyV7G7Y+qhCCh52OGRdMYInROd+q
-         6IWHj6VLjvI49MNz2YGCR3fQbBcl+KKDob3iQlOmCGXJFpOqVas7SrD2Kigh6MDguHWy
-         0NYJ/bpAcEkG8dcLk4/uuyzgyJSOhyuHmW68bBCH+lhCjezh1JPrqkbuoCV2dk8lYyZq
-         PX6w==
+        bh=8iXzVCv1V6X1RUH449xt7QKbkO2ga7uTyZxGO/JUD+Y=;
+        b=LKAs8IIPWUjxF5NBUI4F40SvTQpnUqXAaOh12OAQ850BDmrAB+CUhy/p3L97Qlggii
+         pYJ5XXHbbUp7QhLmkitntWjjF03t4+/sYMjkg51VHzwdD1Q5VpOkX82fXRQLPnKupxcg
+         Ftq0r1adlSVczrJ6WHmcp7gbFMhY6pFzcsDMjSyOu1/RDKw8HKs/IiLQAxvIb9mbeooZ
+         4g7ZKp2VcBa1ONCwkXzIqfQrGNE9ZOKNLd+2cSR5e6pA/NpjRW5p1A8h6PowQ0Z8nTKE
+         cm6lFpcNRu/Dd3Wa8X4j5oZFvGXCIC4eA9FdHa3eKuu62fYYOs62+tk+kXT+G4L0HMos
+         mrog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790190708; x=1790795508;
+        d=1e100.net; s=20260707; t=1790190709; x=1790795509;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=FvQbVwcAdrLYUhYJmYRDZ2DqtnmZ5+Dv6z1gLdDfYAs=;
-        b=qrOyDucRLUxyCKGWO5WQHRQ0bzqdh1cv/3dUlbnveQy9vh5nYXdKGPRzrI56/F+JhT
-         PHBku5yoZTr89Q508o594YUOzvjq2PYg9Tidm8rHUFgh+36rxGaPJkfVtffF2chMZwd8
-         OH4iJuE2kesqadrkheAXCEtWiw5RzgBOkPVRf0zdrRZkNno47Msda39yS7lOCT2eUdQ2
-         +xMOXe+ml98+BknKAxXtKgyM5Jk+ETyC4wjHo1hb2E3QwHo0Z8P2uB+aAaHsGgZS4tbp
-         IJqnHgAFWIv74Y+g/73gyifXGyyVWcfpt5RrdCS9VntZHYWJGervbjOcGNtjEyI4JktQ
-         ZesA==
-X-Gm-Message-State: AFuF++maSwnfZjdw0VRU6gcWWDu4PX+BVg1tPDTs26BMBThaF7McmsCh
-	xIj34e7Xy+5yAhfMKgB4o+41kKPK2j7f7xW4cPh0EpvzDvv3lzaWJKsjwE8wVauWY2Pp3cBnMyZ
-	cUsGrYigiHA==
-X-Gm-Gg: AYBFou1gbZmIuciKKE0NegSdePxYl5LjQ0lj4V2BqsqVQ5KtfMtZ1P/bREre58S+6vk
-	8u81pBSscrscOScruJFln5By4VLq7PG0Tw8shWBUGuiOim+gWULA2+2xw8aJ48hk6r2k7MCStGl
-	29lYe7DzrqXRBozQpEHDjurHSvhbKY78pyAMNYXuHO8k1FTtBNoDta+aAuaikNQp2KrFoTfR5U1
-	WhRQpkcCKN9i6Wz79N68K3YWwtPdnlsI9oQB5gReyPJpP0A+7/JFBH1hjF1+vhNfZEx8JbMYo9/
-	IhmSrCj7PUDz+f7+lGbtIy8vnWCwi/1+ZYHxPqbHkERMnZ2d4CghzNz7Z6uo/9mixt6Yny3tqCR
-	vN6s+IBFFl4sdZ+Ok4yw7jGsLdpzognUjqV+7NkpmpopOS7LOhqQJYvGm48ct8u10KXLMYOUPYA
-	hDSWz6aAXjI7ER5M4G6tf72gQQnZpx1Ptx2XI6bCrHxBcFrJHlvmzFE/WiA3Y=
-X-Received: by 2002:a05:6000:4712:b0:487:955:e6c3 with SMTP id ffacd0b85a97d-48871338f42mr265370f8f.0.1790190708447;
-        Wed, 23 Sep 2026 12:11:48 -0700 (PDT)
-Received: from alpine05.lan ([2620:10d:c090:600::1:2f89])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886877a2a5sm9473563f8f.26.2026.09.23.12.11.44
+        bh=8iXzVCv1V6X1RUH449xt7QKbkO2ga7uTyZxGO/JUD+Y=;
+        b=A3XWIzdp1Xf4NIxNZzgRwbdEXYYVjrNXZMeWqiRNiGp/dFLptXcXZ3ZNYC1Jjm2nMy
+         XfJLkvw0tDktm0BBCeACjIypT7z0CAyQzTU58/1tyK3B4kHEEEwxNZBfs2w0PXq+ZcXn
+         cMI031h7pSxS2vRXfEwgkDEbEZNIOVa9GTAkr/Az4RekvFwjSKLXYhEZbZh5udJczpXk
+         Uybbdl1/+/R0a9IkXIUWmePOgK9Gf6/sFwVecBZnNKIw2M5YgDrVv1IhjNoEhlBHpQWn
+         1Ow7E6sRwkxUWAPyZbLdB6Lr1syZlR1Gq2DetzHizyuXnau7kF5o/UfeZBDwwWV0G/KR
+         z09Q==
+X-Gm-Message-State: AFuF++ntrJDdWFSVeCRlcDlXF+mYlxh3m48+RTXboZDG3okwgGRmq5en
+	tTMCz6amSrtVScQRuqeeSq7VsYM1umzGDb5UOZryP2oP96K8lkfT5cfroU307ft/
+X-Gm-Gg: AYBFou0xoenyT6PMVYtInoaBJBRgW0K6E4g2jYFD95pgNcRUv1yG/mRZhynTWwr0h3S
+	X6smYokYWTHCCbKE9ynkUwyvcHI8TbFLhPXjfhyiSpjWGnL37XXij9P2YxngVsYH3BI3Tv0c4TS
+	hfV8FV1eO0zhKuiFmneE18DO7cJQmgN6YApG1RkU6RV7yhSPqGusYoJf2WUuqMEyjhyx9RMVmnA
+	FteGRt6ftyYs1Ap5fMYhyyuhzSfQvRuTDdOf35qDCevKu7b0gr/DkgTIqJrMD5ZJAyh9mOL2GVs
+	b9kpMnaW7HPPb4Ih5NeVfwVVHSiTFsQDEenhUxU/cVxPQ2In7980cvrxGZ1AGvLYii+/s6mAlIi
+	/xiDCVDLjq7V7NhYxisDaGQWyPlkPzlcw237+3vXbmCMA7Ix9a0O2r0t21AGth9EO1kDMqM2UPR
+	rHx7YNr790e3CWhw8DGV19iuvIhSmQ4k8ZNfCNeTDGTrp83xTjwEuU2FaWc2R2VZl+OvoxGf9eC
+	gxM9DO7SeQ9DRv2CrD2dyXLmdjgEWWsSSLGWsphLdTxKhBn5fZnNOu2cDg7Rld90+34AlC0cxFI
+	/3AxQQuYXqv9/A6hornIhPHPA+3KuGTS+3QJSQ==
+X-Received: by 2002:a05:600c:190e:b0:49d:1840:4fd2 with SMTP id 5b1f17b1804b1-49fe66fbed0mr2238755e9.23.1790190709027;
+        Wed, 23 Sep 2026 12:11:49 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fdf158147sm71375255e9.0.2026.09.23.12.11.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 12:11:47 -0700 (PDT)
-From: Emil Tsalapatis <emil@etsalapatis.com>
+        Wed, 23 Sep 2026 12:11:48 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	daniel@iogearbox.net,
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
-	Puranjay Mohan <puranjay@kernel.org>
-Subject: [PATCH bpf-next v3 4/6] bpf: Add explicit state machine for arena free spans
-Date: Wed, 23 Sep 2026 19:11:23 +0000
-Message-ID: <20260923191125.5311-5-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260923191125.5311-1-emil@etsalapatis.com>
-References: <20260923191125.5311-1-emil@etsalapatis.com>
+	Tejun Heo <tj@kernel.org>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v1 04/18] bpf: Track backtracking stack slots with bitmaps
+Date: Wed, 23 Sep 2026 21:11:11 +0200
+Message-ID: <20260923191139.2816206-5-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260923191139.2816206-1-memxor@gmail.com>
+References: <20260923191139.2816206-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9878; i=memxor@gmail.com; h=from:subject; bh=2rffb2/22h3cPGNU03VRFqjex3KUiXc0UQiSHnzw2VQ=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWuL4pfr8z7NfxlQWq7QWs5y3qSB35ovIrD+vy5L163YN 2LJhj86SlkYxLgYZMUUWUr+72MyPlH5O9B2GTfMHFYmkCEMXJwCMJFjaQx/5f7nTrFw2qbT7fC7 PN9036xsh2ll2x0S+6w6JuRkJXuHMfyzle/7IM49Y912/XQpri9OT5gmHtyn0sZ/x2d30us3hxa xAAA=
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-The arena_free_worker() call currently tracks the status
-of each arena_free_span by placing it into a separate
-list. This requires multiple list manipulation calls
-during the freeing operation, complicating the code for
-no reason.
+Precision backtracking keeps the stack slots that still need a precise
+mark in one u64 per frame, which ties it to frames of at most 64 slots.
+Turn the per-frame masks into bitmaps sized by MAX_BPF_STACK_SLOTS and
+use the bitmap helpers for setting, clearing, testing and iterating
+them. The formatting helper takes a bitmap and the leftover-slot bug
+reports print the formatted slot list instead of a hex mask.
 
-Add an explicit state machine for span state. This
-avoids encoding the states within temporary list membership,
-and also allows for safely reschedulign freeing work for each
-span separately.
+mark_reg_stack_read() collected zero spills in a u64 of its own before
+handing it to the backtracker; it now counts them and revisits the
+range to mark each slot, which drops the only remaining mask-typed
+entry point.
 
-Suggested-by: Puranjay Mohan <puranjay@kernel.org>
-Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+No functional change.
+
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/arena.c | 108 +++++++++++++++++++++++++++------------------
- 1 file changed, 65 insertions(+), 43 deletions(-)
+ include/linux/bpf_verifier.h | 13 +++-----
+ kernel/bpf/backtrack.c       | 65 ++++++++++++++++++++++--------------
+ kernel/bpf/verifier.c        | 15 ++++++---
+ 3 files changed, 54 insertions(+), 39 deletions(-)
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index 9df4c74ff171..69c8924f4c30 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -72,11 +72,18 @@ struct bpf_arena {
- static void arena_free_worker(struct work_struct *work);
- static void arena_free_irq(struct irq_work *iw);
- 
-+enum arena_free_span_state {
-+	ARENA_FREE_SPAN_NOT_STARTED,	/* Freeing not started */
-+	ARENA_FREE_SPAN_UNAVAIL,	/* Region cleared & unavailable */
-+	ARENA_FREE_SPAN_ZAPPED,		/* Region zapped and cleared */
-+	ARENA_FREE_SPAN_FAILED,		/* Freeing operation cannot continue */
-+};
-+
- struct arena_free_span {
- 	struct llist_node node;
- 	unsigned long uaddr;
- 	u32 page_cnt;
--	bool release_only;
-+	enum arena_free_span_state state;
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 77cda3b3a3e9..905a081d4b62 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -879,7 +879,7 @@ struct backtrack_state {
+ 	struct bpf_verifier_env *env;
+ 	u32 frame;
+ 	u32 reg_masks[MAX_CALL_FRAMES];
+-	u64 stack_masks[MAX_CALL_FRAMES];
++	unsigned long stack_masks[MAX_CALL_FRAMES][BITS_TO_LONGS(MAX_BPF_STACK_SLOTS)];
+ 	u8 stack_arg_masks[MAX_CALL_FRAMES];
  };
  
- u64 bpf_arena_get_kern_vm_start(struct bpf_arena *arena)
-@@ -1030,7 +1037,7 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
+@@ -1317,12 +1317,7 @@ static inline void bpf_bt_set_frame_reg(struct backtrack_state *bt, u32 frame, u
  
- 	s->page_cnt = page_cnt;
- 	s->uaddr = uaddr;
--	s->release_only = release_only;
-+	s->state = release_only ? ARENA_FREE_SPAN_ZAPPED : ARENA_FREE_SPAN_NOT_STARTED;
- 	llist_add(&s->node, &arena->free_spans);
- 	irq_work_queue(&arena->free_irq);
- }
-@@ -1081,7 +1088,7 @@ static void arena_free_worker(struct work_struct *work)
- 	struct arena_free_span *s;
- 	struct range_node *unavail_node;
- 	u64 arena_vm_start, user_vm_start;
--	struct llist_head free_pages, teardown_spans;
-+	struct llist_head free_pages;
- 	struct clear_range_data cdata;
- 	struct page *page;
- 	unsigned long full_uaddr;
-@@ -1098,7 +1105,6 @@ static void arena_free_worker(struct work_struct *work)
- 	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
- 
- 	init_llist_head(&free_pages);
--	init_llist_head(&teardown_spans);
- 	cdata.arena = arena;
- 	cdata.free_pages = &free_pages;
- 	arena_vm_start = bpf_arena_get_kern_vm_start(arena);
-@@ -1107,27 +1113,19 @@ static void arena_free_worker(struct work_struct *work)
- 	list = llist_del_all(&arena->free_spans);
- 	llist_for_each_safe(pos, t, list) {
- 		s = llist_entry(pos, struct arena_free_span, node);
--		page_cnt = s->page_cnt;
--		pgoff = compute_pgoff(arena, s->uaddr);
+ static inline void bpf_bt_set_frame_slot(struct backtrack_state *bt, u32 frame, u32 slot)
+ {
+-	bt->stack_masks[frame] |= 1ull << slot;
+-}
 -
--		if (s->release_only) {
--			ret = range_tree_make_avail(&arena->rt, pgoff, page_cnt);
--			WARN_ON_ONCE(ret);
--			kfree_nolock(s);
-+		if (s->state != ARENA_FREE_SPAN_NOT_STARTED)
- 			continue;
--		}
+-static inline void bpf_bt_set_frame_slot_mask(struct backtrack_state *bt, u32 frame, u64 mask)
+-{
+-	bt->stack_masks[frame] |= mask;
++	__set_bit(slot, bt->stack_masks[frame]);
+ }
  
-+		page_cnt = s->page_cnt;
-+		pgoff = compute_pgoff(arena, s->uaddr);
- 		kaddr = arena_vm_start + s->uaddr;
+ static inline void bt_set_frame_stack_arg_slot(struct backtrack_state *bt, u32 frame, u32 slot)
+@@ -1337,7 +1332,7 @@ static inline bool bt_is_frame_reg_set(struct backtrack_state *bt, u32 frame, u3
  
- 		unavail_node = range_tree_set_unavail(&arena->rt, pgoff, page_cnt);
- 		if (IS_ERR(unavail_node)) {
- 			ret = PTR_ERR(unavail_node);
- 			/* Kick off another attempt at the end of this call. */
--			if (ret == -EAGAIN) {
--				llist_add(pos, &arena->free_spans);
--				retry = true;
-+			if (ret == -EAGAIN)
- 				continue;
--			}
+ static inline bool bt_is_frame_slot_set(struct backtrack_state *bt, u32 frame, u32 slot)
+ {
+-	return bt->stack_masks[frame] & (1ull << slot);
++	return test_bit(slot, bt->stack_masks[frame]);
+ }
  
- 			/*
- 			 * An -ENOMEM failure is the same failure mode as in
-@@ -1137,20 +1135,24 @@ static void arena_free_worker(struct work_struct *work)
- 			if (ret != -ENOMEM)
- 				WARN_ON_ONCE(ret);
+ bool bpf_map_is_rdonly(const struct bpf_map *map);
+@@ -1531,7 +1526,7 @@ struct bpf_subprog_info *bpf_find_containing_subprog(struct bpf_verifier_env *en
+ const char *bpf_subprog_name(const struct bpf_verifier_env *env, int subprog);
+ int bpf_jmp_offset(struct bpf_insn *insn);
+ struct bpf_iarray *bpf_insn_successors(struct bpf_verifier_env *env, u32 idx);
+-void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, u64 stack_mask);
++void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, const unsigned long *stack_mask);
+ bool bpf_subprog_is_global(const struct bpf_verifier_env *env, int subprog);
  
--			kfree_nolock(s);
-+			s->state = ARENA_FREE_SPAN_FAILED;
- 			continue;
- 		}
+ /* Kinds of member a by-value struct or union may be composed of. */
+diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
+index 6733d4078930..db1be14d0a68 100644
+--- a/kernel/bpf/backtrack.c
++++ b/kernel/bpf/backtrack.c
+@@ -129,13 +129,26 @@ static inline void bt_reset(struct backtrack_state *bt)
+ 	bt->env = env;
+ }
  
-+		s->state = ARENA_FREE_SPAN_UNAVAIL;
+-static inline u32 bt_empty(struct backtrack_state *bt)
++static inline bool bt_frame_stack_empty(struct backtrack_state *bt, u32 frame)
+ {
+-	u64 mask = 0;
++	return bitmap_empty(bt->stack_masks[frame], MAX_BPF_STACK_SLOTS);
++}
 +
- 		/* clear ptes and collect pages in free_pages llist */
- 		apply_to_existing_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
- 					     apply_range_clear_cb, &cdata);
--		__llist_add(pos, &teardown_spans);
- 	}
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 
- 	/* Keep ranges unavailable until their stale translations are gone. */
--	llist_for_each_safe(pos, t, READ_ONCE(teardown_spans.first)) {
-+	llist_for_each_safe(pos, t, list) {
- 		s = llist_entry(pos, struct arena_free_span, node);
-+		if (s->state != ARENA_FREE_SPAN_UNAVAIL)
-+			continue;
++static inline bool bt_stack_empty(struct backtrack_state *bt)
++{
++	return bt_frame_stack_empty(bt, bt->frame);
++}
 +
- 		page_cnt = s->page_cnt;
- 		full_uaddr = clear_lo32(user_vm_start) + s->uaddr;
- 		kaddr = arena_vm_start + s->uaddr;
-@@ -1160,6 +1162,12 @@ static void arena_free_worker(struct work_struct *work)
++static inline bool bt_empty(struct backtrack_state *bt)
++{
++	u32 mask = 0;
+ 	int i;
  
- 		/* remove pages from user vmas */
- 		zap_pages(arena, full_uaddr, page_cnt);
-+
-+		/*
-+		 * Used to avoid zapping twice if we fail the lock acquisition
-+		 * below and rerun the span through this function.
-+		 */
-+		s->state = ARENA_FREE_SPAN_ZAPPED;
- 	}
- 
- 	/* free all pages collected by apply_to_existing_page_range() in the first loop */
-@@ -1168,40 +1176,54 @@ static void arena_free_worker(struct work_struct *work)
- 		__free_page(page);
- 	}
- 
--	if (!llist_empty(&teardown_spans)) {
--		if (raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
--			llist_for_each_safe(pos, t, __llist_del_all(&teardown_spans)) {
--				s = llist_entry(pos, struct arena_free_span, node);
--				s->release_only = true;
--				llist_add(pos, &arena->free_spans);
-+	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags)) {
-+		llist_for_each_safe(pos, t, list) {
-+			s = llist_entry(pos, struct arena_free_span, node);
-+
-+			if (s->state == ARENA_FREE_SPAN_FAILED) {
-+				kfree_nolock(s);
-+				continue;
- 			}
- 
--			schedule_work(work);
--			bpf_map_memcg_exit(old_memcg, new_memcg);
--			return;
-+			llist_add(pos, &arena->free_spans);
-+			retry = true;
- 		}
-+		goto done;
+-	for (i = 0; i <= bt->frame; i++)
+-		mask |= bt->reg_masks[i] | bt->stack_masks[i] | bt->stack_arg_masks[i];
++	for (i = 0; i <= bt->frame; i++) {
++		mask |= bt->reg_masks[i] | bt->stack_arg_masks[i];
++		if (!bt_frame_stack_empty(bt, i))
++			return false;
 +	}
  
--		llist_for_each_safe(pos, t, __llist_del_all(&teardown_spans)) {
--			s = llist_entry(pos, struct arena_free_span, node);
--			page_cnt = s->page_cnt;
--			pgoff = compute_pgoff(arena, s->uaddr);
--			/*
--			 * This range tree operation does not allocate memory,
--			 * and so should never fail regardless of contention
--			 * or memory pressure. This is in contrast to regular
--			 * inserts that _can_ fail under memory pressure and
--			 * force us to defer the free.
--			 */
--			ret = range_tree_make_avail(&arena->rt, pgoff, page_cnt);
--			WARN_ON_ONCE(ret);
-+	llist_for_each_safe(pos, t, list) {
-+		s = llist_entry(pos, struct arena_free_span, node);
-+
-+		/* Remove the spans of failed allocations. */
-+		if (s->state == ARENA_FREE_SPAN_FAILED) {
- 			kfree_nolock(s);
-+			continue;
- 		}
--		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-+
-+		if (s->state == ARENA_FREE_SPAN_NOT_STARTED) {
-+			llist_add(pos, &arena->free_spans);
-+			retry = true;
-+			continue;
-+		}
-+
-+		page_cnt = s->page_cnt;
-+		pgoff = compute_pgoff(arena, s->uaddr);
-+		/*
-+		 * This range tree operation does not allocate memory,
-+		 * and so should never fail regardless of contention
-+		 * or memory pressure. This is in contrast to regular
-+		 * inserts that _can_ fail under memory pressure and
-+		 * force us to defer the free.
-+		 */
-+		ret = range_tree_make_avail(&arena->rt, pgoff, page_cnt);
-+		WARN_ON_ONCE(ret);
-+		kfree_nolock(s);
- 	}
-+	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 
-+done:
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
- 
--	/* Retry if any region was unavailable for free. */
- 	if (retry)
- 		schedule_work(work);
+ 	return mask == 0;
  }
+@@ -187,7 +200,7 @@ static inline void bt_clear_reg(struct backtrack_state *bt, u32 reg)
+ 
+ static inline void bt_clear_frame_slot(struct backtrack_state *bt, u32 frame, u32 slot)
+ {
+-	bt->stack_masks[frame] &= ~(1ull << slot);
++	__clear_bit(slot, bt->stack_masks[frame]);
+ }
+ 
+ static inline u32 bt_frame_reg_mask(struct backtrack_state *bt, u32 frame)
+@@ -200,14 +213,14 @@ static inline u32 bt_reg_mask(struct backtrack_state *bt)
+ 	return bt->reg_masks[bt->frame];
+ }
+ 
+-static inline u64 bt_frame_stack_mask(struct backtrack_state *bt, u32 frame)
++static inline unsigned long *bt_frame_stack_mask(struct backtrack_state *bt, u32 frame)
+ {
+ 	return bt->stack_masks[frame];
+ }
+ 
+-static inline u64 bt_stack_mask(struct backtrack_state *bt)
++static inline unsigned long *bt_stack_mask(struct backtrack_state *bt)
+ {
+-	return bt->stack_masks[bt->frame];
++	return bt_frame_stack_mask(bt, bt->frame);
+ }
+ 
+ static inline u8 bt_stack_arg_mask(struct backtrack_state *bt)
+@@ -239,17 +252,16 @@ static void fmt_reg_mask(char *buf, ssize_t buf_sz, u32 reg_mask)
+ 			break;
+ 	}
+ }
+-/* format stack slots bitmask, e.g., "-8,-24,-40" for 0x15 mask */
+-void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, u64 stack_mask)
++
++/* format stack slots bitmask, e.g., "-8,-24,-40" for slots 0, 2 and 4 */
++void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, const unsigned long *stack_mask)
+ {
+-	DECLARE_BITMAP(mask, 64);
+ 	bool first = true;
+ 	int i, n;
+ 
+ 	buf[0] = '\0';
+ 
+-	bitmap_from_u64(mask, stack_mask);
+-	for_each_set_bit(i, mask, 64) {
++	for_each_set_bit(i, stack_mask, MAX_BPF_STACK_SLOTS) {
+ 		n = snprintf(buf, buf_sz, "%s%d", first ? "" : ",", -(i + 1) * 8);
+ 		first = false;
+ 		buf += n;
+@@ -458,10 +470,11 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+ 				/* we are now tracking register spills correctly,
+ 				 * so any instance of leftover slots is a bug
+ 				 */
+-				if (bt_stack_mask(bt) != 0) {
+-					verifier_bug(env,
+-						     "static subprog leftover stack slots %llx",
+-						     bt_stack_mask(bt));
++				if (!bt_stack_empty(bt)) {
++					bpf_fmt_stack_mask(env->tmp_str_buf, TMP_STR_BUF_LEN,
++							   bt_stack_mask(bt));
++					verifier_bug(env, "static subprog leftover stack slots %s",
++						     env->tmp_str_buf);
+ 					return -EFAULT;
+ 				}
+ 				/* propagate r1-r5 to the caller */
+@@ -494,9 +507,11 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
+ 					     bt_reg_mask(bt));
+ 				return -EFAULT;
+ 			}
+-			if (bt_stack_mask(bt) != 0) {
+-				verifier_bug(env, "callback leftover stack slots %llx",
+-					     bt_stack_mask(bt));
++			if (!bt_stack_empty(bt)) {
++				bpf_fmt_stack_mask(env->tmp_str_buf, TMP_STR_BUF_LEN,
++						   bt_stack_mask(bt));
++				verifier_bug(env, "callback leftover stack slots %s",
++					     env->tmp_str_buf);
+ 				return -EFAULT;
+ 			}
+ 			/* clear r1-r5 in callback subprog's mask */
+@@ -874,7 +889,7 @@ int bpf_mark_chain_precision(struct bpf_verifier_env *env,
+ 			if (st->curframe == 0 &&
+ 			    st->frame[0]->subprogno > 0 &&
+ 			    st->frame[0]->callsite == BPF_MAIN_FUNC &&
+-			    bt_stack_mask(bt) == 0 &&
++			    bt_stack_empty(bt) &&
+ 			    (bt_reg_mask(bt) & ~BPF_REGMASK_ARGS) == 0) {
+ 				bitmap_from_u64(mask, bt_reg_mask(bt));
+ 				for_each_set_bit(i, mask, 32) {
+@@ -888,8 +903,9 @@ int bpf_mark_chain_precision(struct bpf_verifier_env *env,
+ 				return 0;
+ 			}
+ 
+-			verifier_bug(env, "backtracking func entry subprog %d reg_mask %x stack_mask %llx",
+-				     st->frame[0]->subprogno, bt_reg_mask(bt), bt_stack_mask(bt));
++			bpf_fmt_stack_mask(env->tmp_str_buf, TMP_STR_BUF_LEN, bt_stack_mask(bt));
++			verifier_bug(env, "backtracking func entry subprog %d reg_mask %x stack_mask %s",
++				     st->frame[0]->subprogno, bt_reg_mask(bt), env->tmp_str_buf);
+ 			return -EFAULT;
+ 		}
+ 
+@@ -950,8 +966,7 @@ int bpf_mark_chain_precision(struct bpf_verifier_env *env,
+ 				}
+ 			}
+ 
+-			bitmap_from_u64(mask, bt_frame_stack_mask(bt, fr));
+-			for_each_set_bit(i, mask, 64) {
++			for_each_set_bit(i, bt_frame_stack_mask(bt, fr), MAX_BPF_STACK_SLOTS) {
+ 				if (verifier_bug_if(i >= bpf_stack_nr_slots(func),
+ 						    env, "stack slot %d, total slots %d",
+ 						    i, bpf_stack_nr_slots(func)))
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index fa80f95105fb..a66f1688407c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -3864,10 +3864,9 @@ static int mark_reg_stack_read(struct bpf_verifier_env *env,
+ {
+ 	struct bpf_verifier_state *vstate = env->cur_state;
+ 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
+-	u64 zero_spill_mask = 0;
+ 	int i, slot, spi;
+ 	u8 *stype;
+-	int zeros = 0;
++	int zeros = 0, zero_spills = 0;
+ 
+ 	for (i = min_off; i < max_off; i++) {
+ 		slot = -i - 1;
+@@ -3880,7 +3879,7 @@ static int mark_reg_stack_read(struct bpf_verifier_env *env,
+ 		}
+ 		if (stype[slot % BPF_REG_SIZE] == STACK_SPILL &&
+ 		    bpf_register_is_null(&bpf_stack_slot(ptr_state, spi)->spilled_ptr)) {
+-			zero_spill_mask |= 1ull << spi;
++			zero_spills++;
+ 			zeros++;
+ 			continue;
+ 		}
+@@ -3891,8 +3890,14 @@ static int mark_reg_stack_read(struct bpf_verifier_env *env,
+ 		 * so the whole register == const_zero.
+ 		 */
+ 		__mark_reg_const_zero(env, &state->regs[dst_regno]);
+-		if (zero_spill_mask) {
+-			bpf_bt_set_frame_slot_mask(&env->bt, ptr_state->frameno, zero_spill_mask);
++		if (zero_spills) {
++			for (i = min_off; i < max_off; i++) {
++				slot = -i - 1;
++				spi = slot / BPF_REG_SIZE;
++				stype = bpf_stack_slot(ptr_state, spi)->slot_type;
++				if (stype[slot % BPF_REG_SIZE] == STACK_SPILL)
++					bpf_bt_set_frame_slot(&env->bt, ptr_state->frameno, spi);
++			}
+ 			return mark_chain_precision_batch(env, env->cur_state);
+ 		}
+ 	} else {
 -- 
-2.52.0
+2.53.0
 
