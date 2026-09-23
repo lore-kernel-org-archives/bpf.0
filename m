@@ -1,66 +1,66 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2233E49D9
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 21:29:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCD08440A0A
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 21:34:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790198942; cv=none; b=CpdqUTxtOsW+dZbjU/9eoCXoyXeTQiY5DNsYWsVjg3a8Uhx3nEafFbXt+RXbfwFw9Up3veWSu54P+90oJsIKYDyOddnbokarOHzUbV7Wk97tEvRodtqqYbKNVCIvIHLXcAGuHAx6M6y8aakr3hjUr/4o5iUnMs7KVk5AHqsFZfg=
+	t=1790199264; cv=none; b=gAppvVk3vKTchceh9qC82YDm/ngAagNKCW1HnkoMvL8Cu6FqlvTzmDKqNh1d9PEfbdd8zN7WsixBpN+e96Duawl7E6MbxkqZne/NGoV2q35KbNc7jPNZir6whFee0f+CGQp5mKL48qeOAyjtmnTfHKyS9gKsJs2iZP1Kgt58+sc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790198942; c=relaxed/simple;
-	bh=Hcx+TbiSyZ06XaWdzx7ntmGDoavFroa+xd8aK4z0n7s=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=BoT+ZJj7dscoI+lrFNLEkd5A1UmyKnD+CgX5IF/poKENQ+IW3duCFE1QEpxu7vHpc71J9DA+yYu++PW8/S1FCCgQyJugAvSn8aSxnFkg9HLKnr5AedN64mwpJE/uKfZ3o7sm07mJUGFwWvQ2Rzr1KvW9bK7NOXu5/vpkKDRct7U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZbpEdoCZ; arc=none smtp.client-ip=74.125.227.141
+	s=arc-20240116; t=1790199264; c=relaxed/simple;
+	bh=hCjA6hT150Fr5EXgey98L1Rmb0ZSdrHBHTyvU2FmCzM=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=YCKrEX6th4JPzXrxSPn+HmdI7Umhnh/XCf1b8e1Jr9YGLCI0mF6q/FP9yhA9mALc1a1VyQZjj109gsaBJD0AUYs3ZNL3vvwqqn81m1X4gu3fPI3GtrZogA1EO02Ee8vPd3lH8yd301tT7gC2IlgymAvdbAb4LWci0g2aisj460Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TsbRAUZW; arc=none smtp.client-ip=74.125.228.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZbpEdoCZ"
-Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d747ec6188so6879595ad.3
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 14:29:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TsbRAUZW"
+Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc50bcf87b2so729409a12.1
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 14:34:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790198940; x=1790803740; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=gmail.com; s=20251104; t=1790199262; x=1790804062; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=jJFE1Y7PJhPok+AeZ7Zn2U5TClLq5FTw8KPyr1E7W2o=;
-        b=ZbpEdoCZQEtM2Fu98n1fmH8YA5ILez6I+eRl2FDFT9eFTdPm54pqzYfYeUhaxqDqE+
-         WhdyNL2jaICxatzThJi3qpyRSUNQEQZQbmbNTKrwoNy4iEE+itKIRwOcjpW5bsDF2/1P
-         saFL8zT3PAjSnJhq27C+4mW7j9tVAYjZ1GYCS7irNZzRvmPd8snedt7b4bEzGJhh3J2t
-         Tl/ed1jIBmBNKPzCR/zF6RQFKvwYHz3zc2c5CuUTg+KONux8GvFvn5wd1sBKsS+yf2Dw
-         QKlKZ3gmtbjCtEV2NUckwH5oX6FaZuAoveChgB1oPekS/Vj+yhcn+QZ2K1AQAFT2Vzlv
-         Cpjg==
+        bh=TKfea148yvi254UpE9LgHTWcQAwc7ZQjf5xowxiJDkA=;
+        b=TsbRAUZWG0nJv+E1Rf09itTw8k13pw+IN+oveK6yzDfWme9Bt0k15wgWPMBN45l+Gr
+         N+mY5EA5kFznr8/L14ji7REQNnwKfiKg1Z8UGE5js7njXormaNk8jXBO0TfrvWfVFRLI
+         /UP1q65FVvFkNKyA+bliV5SiVGwa9oDTfI3i83a/BrleQqr65vDUvPgCvqAnHjfmBuoW
+         OgyT8zSEHh2JRgYREGJO1hm1TcyBQSyvyz6sK5/WKVGhWYprXh881RKAF1eiewO2X9UO
+         xk2Nc0uLmzGc6wR/f4bViyn6LcVI1m4uFXsGwe/a3yrJ2NqpbMwTYsQPuzdu2Ful/7r5
+         SWHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790198940; x=1790803740;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
+        d=1e100.net; s=20260707; t=1790199262; x=1790804062;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=jJFE1Y7PJhPok+AeZ7Zn2U5TClLq5FTw8KPyr1E7W2o=;
-        b=GNYel4EhbO+/8y9JZLiUc6zmcvgSFym/1mzyYcYt7/G1whbbarRhDKGxRKOZNcgxwl
-         m5LwdKwS66ESowpAoHXp/a3WvXIqP//OrYL8oOXWSy4FirOyAY4OFO8k7JuCUjY3Lqmm
-         l8fwk7IJ8jGA0mb68ntiKeJVi/sHrY2MlYbPhDI+jgMBSmgcrtoXqSFieTHPKrxJQ0fq
-         Kt5XuRpyKDxwWfbYasqJnr+bFp3E5s1qfYp6552AcDd58Movo19tF1DDm5kx3/bsvG+U
-         6thDrd6IscZhtQYaVtJqprkT+Ox49mktUPgSIpYBPDjzobrENdppcKtrSG5HAlclNfMI
-         2RkQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzn2fyM+6dqRu+86qYrO4DhYItPv6wt4ruSZs3lBl3vJmPMrYKcy6YPeNx84F0ePrja+kE=@vger.kernel.org
-X-Gm-Message-State: AFuF++nLEzeeb89fBtsil+xwPn3hc69nGuo4b8fH1vLrDSiegXrCveEF
-	KUxDYthtGBegkSGvpd5FSwm6hkqZbkX0TEW1tmoHU+fZI4ZkA/UQwMex
-X-Gm-Gg: AYBFou2UU2gf077c2bvv1TePgbRe764wrSEZZ+EnYObAQV+A75o2av/dGeiPil4wqNf
-	PsfGG6i2LGPmFZt/omcjCimvIe5yYdg8Q1Jo1cpB0+I0Vm3HDe4fgKrM/7hQ/vy9D0Z0zn+LtWF
-	14U43Bmw4+ft4N9bzTGkZ/LOwl/rpg2lMU3YpfdykLFcivezk1U/oX0Qnn0capt1N4Q3LyuBF+D
-	pxPzaXck9LIUU0tu0g3ur3mrkMnbJta8j3jiSWsp/uKo+D2P31egL3CuWEhu/7GgLa29XV+K9pd
-	oNsyKYCh1goDMM2pyRyPW9ljNZUeja+Cw5wKekazx/4+VxVBpEabUjPYa1xZNKwcoVbLj1Glfxj
-	LoU54HDqBQf9lZulVgLiCa6s9AzkMKVUD0x8I1c3hbOXHyx3CQRN/6ArJZbci2rR++Ii+sEU3Xl
-	0DSVBzGdBuzCLNpvvdKToSU9z3NnC1UVZzA6zBE4+/ETLRqXWb2V8BOJnjdFNCdvgywTJGLQc2B
-	f8hql6YIen32E5u05ikc/0JbIHptq8VoObkVDXkKytga0VE6Ux/ft7gWk1y336sWVKyd0Gf+0bW
-	A9M=
-X-Received: by 2002:a17:903:ac3:b0:2dd:c100:4258 with SMTP id d9443c01a7336-2df7e2639f9mr3030355ad.60.1790198939789;
-        Wed, 23 Sep 2026 14:28:59 -0700 (PDT)
-Received: from localhost ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df71957de5sm13111825ad.74.2026.09.23.14.28.59
+        bh=TKfea148yvi254UpE9LgHTWcQAwc7ZQjf5xowxiJDkA=;
+        b=XoFGSVkOXack4ZOCNB5Ed8fKo/+m5lnUZXRV6gqkc3bY6IoMiD/DF2PeqgFdObGTQx
+         fdf4yvQ+AL/A8ge2/DkuWGUSjXxHRhgt0/75P4f5B5t4CUOPbI0nuLpnoacjz3Y1iGKw
+         DbuIKaIXLSU4Y0OzAxjBfP6ULm1qZ+/pULGhK6sustYoZKtWAoH4v2sooXo9I3owVi3O
+         M2qPs8RktVqL+pQq8yQk9i+/wjmYx+jcP2LYhBT0CX4FKRmQ4G5keb6+Mjv5X74W2rWN
+         2nckZv798ZDDf0q/CHB52bxat4kikzvehxz0bCuG3D9HgREyVX0ykDfWkcQONnUW9KMY
+         rgxg==
+X-Forwarded-Encrypted: i=1; AKwUvBx581enKz71DMWllXaeiSEkXAgQDUhgvUSHOUePvK5FTBNuEE/9vLkNU9vZV5RCtxk2PZs=@vger.kernel.org
+X-Gm-Message-State: AFuF++l7X51YrSFWFtkxzJF9+k9qKvXJQ/F5S7+Wi5tMYPIx6Cd59rqm
+	5pXLplkyXRAkPnkJM/Lew3NlawFwal9zXLcO1nbDW2j3KcTIlwh8ADm6
+X-Gm-Gg: AYBFou3F6aKPI4Fj/7xZ41iv+KWcZiY0l10bCiq6ke0wICmNIIoZsei/S6mmYUnMM8j
+	W7U8NdSiDWhdtHdxA5NX8xcslFn0sqdfWIhxckzrwgeLsADGEAQ+Mu8JftjOCWuxQcG05Yv8bqD
+	Wju8cskJ81M//SBjP60F/H9JIbBaWkn9GEB/1O101WGxc6vZSNYh+5/9IH67FUIkCDWIxTHrIQe
+	vQiNazP+1YclqVz8X/70GLwoO7aCIi7cnUDlEtiyDfk2y8d0C4NBg9dBuItQK1Jxl2+aBbqrH/P
+	LetM6/KkE8O7/pqWBgEVlg9gv3EDcNItD1KyWj1Hma99QLXPKj27XQzg7C/SeBlLa16Rfv9kLEE
+	7dyXeXxyNf/tqOwgsvRUwPhFO/DS2bxzRhzQzjJmyr7QO32zHIKoCjgT18Z6HPF3sRlq+1gdyBe
+	jQV5OJ0O7lXtXCr2dWpoo7cM8/QLjICEu+8ek6MX8STTgJsS07vQT6EEFdy7qJQU/01oQPYyI4F
+	/gbc9ITD++Ig7gvYvqkUoyCVe5DVcfD2golxTrdHcAqsCvAn8/cxZIugsNilSj9JBQCWIMVxaXT
+	Dr18
+X-Received: by 2002:a17:903:1b28:b0:2dd:89b1:7fdb with SMTP id d9443c01a7336-2df7dc02b1bmr3807795ad.9.1790199261982;
+        Wed, 23 Sep 2026 14:34:21 -0700 (PDT)
+Received: from localhost ([153.61.198.250])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6a5f965esm16427995ad.75.2026.09.23.14.34.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Sep 2026 14:28:59 -0700 (PDT)
+        Wed, 23 Sep 2026 14:34:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,97 +69,138 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 23 Sep 2026 21:28:58 +0000
-Message-Id: <DLN0K7231LF2.1UNIBGA546C90@gmail.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, "Yonghong Song"
- <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
+Date: Wed, 23 Sep 2026 21:34:21 +0000
+Message-Id: <DLN0OB4STWN9.1101L0OPX69QV@gmail.com>
+Cc: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
  <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
  <kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next v5 07/21] bpf: Explore the landing pads no call
- site reaches
+Subject: Re: [PATCH bpf-next v4 00/20] bpf: Run exception cleanup landing
+ pads when bpf_throw() unwinds
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Andrii Nakryiko"
+ <andrii.nakryiko@gmail.com>, "Eduard Zingerman" <eddyz87@gmail.com>
 X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
-References: <20260923045846.2414643-1-yonghong.song@linux.dev>
- <20260923045922.2417689-1-yonghong.song@linux.dev>
- <df24934c5ecbd70bc35b528b8e58ae668ce02051.camel@gmail.com>
-In-Reply-To: <df24934c5ecbd70bc35b528b8e58ae668ce02051.camel@gmail.com>
+References: <20260921210033.1715000-1-yonghong.song@linux.dev>
+ <7e7076ce94e803403bcee003569d4b2ac7bc4e2c.camel@gmail.com>
+ <DLLHFJDS6G5L.2B273FIKF9A09@gmail.com>
+ <7eba4eb055e15d5c78f463d013fa98bb21d7b494.camel@gmail.com>
+ <DLM6BVU1G0V3.29T5BPPZTZ77Z@gmail.com>
+ <37e53199dfda608de30a31fc51d22ed2b25d6d2e.camel@gmail.com>
+ <DLM8NP9S8A4E.1YIS9HRMSR62@gmail.com>
+ <a9c4ebe0c1a08d7025179b1ec2297a4d975cd072.camel@gmail.com>
+ <b3a29c0b77ada6a7eff101a5d8b4e83021a3052e.camel@gmail.com>
+ <CAEf4BzaStrSG-hGERB8J=mt3agEq7d9L8+L9rsr4Z+=68gtA-w@mail.gmail.com>
+ <DLMY4E5MYGQI.29MKOKECHM134@gmail.com>
+In-Reply-To: <DLMY4E5MYGQI.29MKOKECHM134@gmail.com>
 
-On Wed Sep 23, 2026 at 4:26 PM UTC, Eduard Zingerman wrote:
-> On Tue, 2026-09-22 at 21:59 -0700, Yonghong Song wrote:
->> A cleanup record need not cover a call an exception can unwind out of: a
->> frontend is free to emit a region around a helper or an ordinary kfunc,
->> both nounwind here. Nothing marks a call site then, and that record's
->> landing pad is reached by nothing at all -- leaving bpf_check_cfg() to
->> refuse the program over code its own frontend had no way not to emit:
->>=20
->>    0: call bpf_preempt_disable
->>    1: call bpf_preempt_enable      record =3D { begin =3D 1, end =3D 2, =
-pad =3D 4 }
->>    2: r0 =3D 0
->>    3: exit
->>    4: r1 =3D pads_ran ll             landing pad
->>    6: r2 =3D *(u64 *)(r1 + 0)
->>    7: r2 |=3D RAN_NOUNWIND_REC
->>    8: *(u64 *)(r1 + 0) =3D r2
->>    9: call bpf_unwind_resume
->>   10: exit
->>=20
->> The range [1,2) holds one call, and it is a kfunc, so an exception canno=
-t
->> come out of it. mark_call_sites() marks nothing, nothing pushes an edge =
-to
->> 4, and 4 through 10 are reachable from nothing: "unreachable insn 4". Th=
-e
->> pad is dead, which is correct -- no exception can ever arrive at it -- b=
-ut
->> the program is fine and has to load.
->>=20
->> Walk every pad the table names that the edges did not reach, the way the
->> walk is already re-seeded at an exception callback. From there the pad i=
-s
->> code like any other: do_check() never enters it, because no call site
->> dispatches to it, so the dead code sweep removes it along with everythin=
-g
->> else that was not reached.
->>=20
->> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
->> ---
+On Wed Sep 23, 2026 at 7:34 PM UTC, Kumar Kartikeya Dwivedi wrote:
+> On Wed Sep 23, 2026 at 9:24 PM CEST, Andrii Nakryiko wrote:
+>> On Wed, Sep 23, 2026 at 12:04=E2=80=AFPM Eduard Zingerman <eddyz87@gmail=
+.com> wrote:
+>>>
+>>> On Tue, 2026-09-22 at 17:04 -0700, Eduard Zingerman wrote:
+>>> > On Tue, 2026-09-22 at 23:37 +0000, Alexei Starovoitov wrote:
+>>> > > On Tue Sep 22, 2026 at 11:08 PM UTC, Eduard Zingerman wrote:
+>>> > > > On Tue, 2026-09-22 at 21:47 +0000, Alexei Starovoitov wrote:
+>>> > > > > On Tue Sep 22, 2026 at 4:27 AM UTC, Eduard Zingerman wrote:
+>>> > > > > >
+>>> > > > > > Total size of executable sections for all Meta BPF object fil=
+es used
+>>> > > > > > for CI veristat testing is 10Mb. Of these there are 30K non-h=
+elper
+>>> > > > > > call instructions in total.
+>>> > > > > > So we are talking about increase by 8 * 30K =3D 240K ~ 2.4% w=
+orst case.
+>>> > > > > > Note that the instruction encoding optimized for size already=
+ hearts
+>>> > > > > > us in src/dst registers department: we have no room for virtu=
+al
+>>> > > > > > registers, which would have simplified e.g. register allocati=
+on task
+>>> > > > > > for ARM64. Point being that optimizing intermediate IR for si=
+ze is not
+>>> > > > > > always a right target.
+>>> > > > >
+>>> > > > > I wasn't talking about increase in bpf ELF size,
+>>> > > > > but the amount of the verifier work necessary to double the num=
+ber
+>>> > > > > of call insns.
+>>> > > >
+>>> > > > I don't understand what you mean by the amount of the verifier wo=
+rk.
+>>> > > > Traced program paths would remain the same, only the encoding of =
+the
+>>> > > > information about exceptions changes.
+>>> > >
+>>> > > Any new insn requires plumbing through out.
+>>> > > imo ld_imm64 encoding FD inline was a mistake.
+>>> > > We should have went with relocations through out.
+>>> > > Much cleaner to extend.
+>>> > > Same philosophy here. Landing pad is a metadata.
+>>> > > It's not a good idea to encode metadata into assembly instruction.
+>>> > > bpf ISA is not a high level IR.
+>>> >
+>>> > Here [1] is Yonghong's series repackaged by codex with the following
+>>> > encoding:
+>>> >
+>>> >   call <subprog-or-kfunc> // regular encoding
+>>> >   unwind <label>          // a new instruction that must follow the c=
+all instruction
+>>> >
+>>> > The amount of the verifier/libbpf code dropped from ~2K to 1K lines.
+>>> >
+>>> > [1] https://github.com/eddyz87/bpf/tree/unwind-postfix
+>>>
+>>> I want to highlight this once more, before it gets buried.
+>>>
+>>> Whether landing pad is metadata or not is a matter of opinion,
+>>> seeing the program CFG from it's source w/o a need to consult
+>>> additional tables is definitely a plus.
+>>> Same with ld_imm64, and yes it adds a few checks in the verifier,
+>>> but those checks are trivial.
+>>>
+>>> I looked a bit at what other VMs/IRs do and it's a mix:
+>>> - JVM has exception tables similar to ours (begin, end, landing-pad).
+>>> - GCC (gimple and rtl) have landing pad address attached to an
+>>>   instruction / control flow graph node.
+>>> - LLVM has invoke instruction that takes three parameters:
+>>>   what to call, where to jump on success, where to jump to unwind.
+>>>
+>>> With that in mind, I think that the rational thing to do is to choose
+>>> based on the implementation complexity. Compared to v5 [2] of this
+>>> series the branch [1] allows to forgo:
+>>> - UAPI to copy the cleanup table from user space (patch #2)
 >
-> Yonghong, in v4 you said that rustc does not generate dead landing pads.
-> Why do we need this patch?
+> We will still have UAPI, in form of new instruction, so this is less sali=
+ent.
+>
+>>> - insn_aux_data changes for cleanup_pad address (patch #4)
+>>> - simplifies check_cfg() handling (patch #5)
+>>> - simplifies main verification pass (patch #9):
+>>>   - throw raises unwinding flag
+>>>   - varifier interprets `unwind` as any other instruction,
+>>>         jump if unwinding, fallthrough during normal operation.
+>>> - dramatically simplifies libbpf part, dropping patches #16,17,18:
+>>>   - no need to collect cleanup tables from elf
+>>>   - no need to relocate these tables
+>>>   - no need to pass them to the syscall
+>>>
+>
+> All of these do make sense.
 
-It's not dead. commit log is incorrect.
+Sorry, all I hear is a knee jerk reaction to a lot of slop.
+yes. a lot of it is not needed, but invoke approach is no go.
+As I said couple time [ip_start, ip_end] is not a single call insn.
+libbpf patches do a bunch of unnecessary copy paste,
+but that's because we didn't do insn_array support cleanly.
+From libbpf pov bpf_cleanup section shouldn't be any different as
+"one more section with pointers to instructions".
 
-I bet C code that caused such asm didn't mark bpf_preempt_enable as nothrow=
-,
-so compiler correctly emitted exception table.
-Now commit log argues that this helper doesn't throw in reality.
-Well, too late, the mistake was made earlier.
-
-I don't like the unwind approach taken by later patches in the series.
-
-imo the following is cleaner:
-- do not repurpose bpf_throw() for this new thing.
-  Introduce new kfunc that will do the unwind, let's name it bpf_unwind() ?
-- replace all 'call bpf_unwind_resume' with NOP by the verifier (or may wit=
-h bpf_exit. tbd)
-  Technically rustc or llvm can do that too, but it's cleaner to do in the =
-verifier.
-- In bpf_unwind() walk all exception tables and replace return addresses
-  in corresponding frames to landing_pad_ip-s.
-- just return from bpf_unwind().
-  restoring callee saved registers will happen automatically by correspondi=
-ng
-  frames and there is no need to search exception tables at each step.
-  That's what typical eh unwinder does, but it's doing it due to C++ logic
-  that is more complex that Rust. For Rust unwinds we don't need all that.
-  The above algorithm will do.
-
-Also please add an example where [ip_start, ip_end] range is more than just=
- a call
-insn. I mentioned it couple times as the reason why 'invoke' aka 16-byte in=
-sn
-approach doesn't work.
-I'm pretty sure I saw such IP ranges generated by rustc.
+Sorry, we're not doing new 16-byte insn. We can chat about it
+during the meeting, but I feel it will be a waste of time.
+New insn doesn't reduce amount of slop.
+Ed's example 1k vs 2k is a counter example.
+This is just one llm vs another. Both sucked and both slop.
+Just different amount of it.
 
