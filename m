@@ -1,148 +1,200 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F6B3C1D78;
-	Wed, 23 Sep 2026 05:59:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9024043C7B1;
+	Wed, 23 Sep 2026 06:04:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790143147; cv=none; b=oag2JSqCWS6xji7ScrdLRt4DTosVyfhlZBvyNnb/EkjuOqNVl7g8+xBCY2arBAYrUEJ9neHOjZhtUputiXQE+C4eaeIbZeEK4a2ZJP4pdhN2AEnSpcZNOg4KbsqM6Iu/1w7S+BsdWTv3Nhh9G5DbKN1vRSeoKCHmdfqTgMMzu6M=
+	t=1790143462; cv=none; b=E+BcGNhnFFjQQmUjGrARwzmmuf3W3D6gXM5BvlCwX/u02VS88H+/cxJqB9gB8B0TVt3bla7s3EwXzJ6vpDC/Rwa7gQfUFhQ+IDnPF/A0l4eZWTRxA2pN0tnA6r8IFzwC6PimqhoCCMDBq5b3MNIITYb8nb6HDzYK5a2C0wCLYWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790143147; c=relaxed/simple;
-	bh=M+Dh18T30Y7l0FjzQwUTMpr2r1Egz5+CpN8CPIQz6GE=;
+	s=arc-20240116; t=1790143462; c=relaxed/simple;
+	bh=KZZLvh/Rnb+SX6UdsPekIii9ycH3G+daLNCp8ikcsD4=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=uP8rd9qg5oFMPHsceq+BNnbFwH8Z1JKALQiF3bXMii5Dvqo0mZDFcg/vDBk3DwGUmAAQLMww1PvFdFW450S+sNIbE1egwqegxmis06eOKq3acg2xs9oglsjH5gcBET+cW6slE0nbSjK5yCptncegINqYp7qg/yZDYnAMWEsXd2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MoP1fRht; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=H7B+lydb3xRSf4iaOVUxM/4Dm7P6Eg3FVt8ULxX2qyK0628B+lEiRSwg+sdp/hOAjf/TOTNCWx6be0sEK6VzyXh9ZbosplaTboPI4msDh/gg/5dXiWlA/N1YEIXCCLbT1TVx0PjiHu51ya7Gp5dDBWTFY5g1y9yWbZx5+FC1X1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rv4vERby; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MoP1fRht"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACA941F000FF;
-	Wed, 23 Sep 2026 05:59:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rv4vERby"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F141F00893;
+	Wed, 23 Sep 2026 06:04:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790143145;
-	bh=KY6QslC0AqZ8ob0If7C66yuuQZpv9s+3WWjtuA9bAbk=;
+	s=k20260515; t=1790143461;
+	bh=HKCy1J0wtnVlGdqfStoYZ8oHIGxDhEI8aQlme7TXDd4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=MoP1fRhtHX5oYZsYLu0G4F+PfCY0R41F9z+bv8QX1Fel4IGIng3apFl1ZXU7sK9aB
-	 +dI1O3c8LERKUCNKaXl/kwpevPHZn74v7ahQpoVe/twllW8MulA3KUiMyCWd1pT5m8
-	 0yW53FpCVvDxqg+Xc+MHBlVxZFnXIyA+NbPcMC+RV4tXd9x33oHYO6zy5BGg74OUEk
-	 tYqt7rqeZ2+0GxpqNUSUg5QFtg+UvzRDQnJYS5PMZnHBHGf68v+MEfi7kq3C8S5Xf5
-	 FwsuSzak88JUGYgztekBcVNliP6AAX/qGadXMQeLp1X8zcYrDHPf0heU+Yt+S9F4iv
-	 ktiiD+ENO+0Mw==
+	b=Rv4vERbyhGsv97hKC8J9ezxt9Pk2upGOvjgN733PtIOi1Na0u+Hj9k/LUBSYwEuH6
+	 iLj7bnoD6r1SebCOaXdp67Ki4W9H/H6eEPy9BRHtFwOLhrnkL3+MhzsPeaDeCqr6eA
+	 FeBZNM3pcjGMcbIbpv0sQY+kMqIfqaz/3yUUvrqBAO77Aygphe+j9fjZmuLbuKHNyi
+	 /Q3DTcjSwuntLxKAlFFM7Pv2lkOgjzmIkgSiiDFagrQY6BT2BdJToNjNrOGF+5WF/Q
+	 PnY8odYCW/9SbVHRAK+5QGkt/px9bP04iG2KfBWKX4dFvRXaarJz/KGrniWKaPiAiA
+	 0pfg3V8d8GWGg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 6/6] kbuild, bpf: allow building the vmlinux
- BTF as a module
+Subject: Re: [PATCH bpf-next 3/6] bpf: fetch the vmlinux BTF where kernel
+ types enter a program
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jay Wang" <wanjay@amazon.com>
-Cc: bpf@vger.kernel.org, linux-modules@vger.kernel.org
-In-Reply-To: <20260923053948.30617-7-wanjay@amazon.com>
+Cc: linux-modules@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20260923053948.30617-4-wanjay@amazon.com>
 References: <20260923053948.30617-1-wanjay@amazon.com>
- <20260923053948.30617-7-wanjay@amazon.com>
+ <20260923053948.30617-4-wanjay@amazon.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 23 Sep 2026 05:59:05 +0000
-Message-Id: <20260923055905.ACA941F000FF@smtp.kernel.org>
+Date: Wed, 23 Sep 2026 06:04:20 +0000
+Message-Id: <20260923060420.F3F141F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+Thank you for your contribution! Sashiko AI review found 5 potential issue(=
 s) to consider:
-- [High] kbuild: global module relinks when CONFIG_DEBUG_INFO_BTF=3Dm
-- [Low] kbuild: non-POSIX head -c in gen-btf.sh breaks strict environments
+- [High] bpf: crash on blind dereference of ERR_PTR from bpf_get_btf_vmlinu=
+x()
+- [High] bpf: single vmlinux BTF parse failure permanently bricks verifier
+- [Medium] bpf: context translation fails for EXT/TRACING progs without vml=
+inux BTF
+- [Medium] bpf: AB-BA deadlock between bpf_verifier_lock and request_module=
+()
+- [Medium] bpf: bpf_snprintf_btf fails because vmlinux BTF load is skipped
 --
 
-commit 7587d72dd889263f91882b475224bac4cf470c15
+commit 68de9774165f5e9dfaacde093071f89754bece4b
 Author: Jay Wang <wanjay@amazon.com>
 
-kbuild, bpf: allow building the vmlinux BTF as a module
+bpf: fetch the vmlinux BTF where kernel types enter a program
 
-This commit makes CONFIG_DEBUG_INFO_BTF a tristate, allowing the vmlinux BT=
-F=20
-to be built as a module (btf_vmlinux) rather than part of the kernel image.=
-=20
-It defers loading the BTF until it is first needed, saving memory on system=
-s=20
-where it goes unused.
+This commit delays the fetching and parsing of vmlinux BTF in the BPF
+verifier, moving it from an upfront operation for all programs to an
+on-demand fetch. This prevents unnecessary module loading and memory usage
+for BPF programs that do not rely on kernel types.
 
-> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-> index 01a37ec872b90..ad182f84b5fcf 100644
-> --- a/scripts/Makefile.modfinal
-> +++ b/scripts/Makefile.modfinal
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index a7c9e2d8965d5..2425ea74b61d6 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -2873,7 +2873,8 @@ int bpf_add_kfunc_call(struct bpf_verifier_env *env=
+, u32 func_id, u16 offset)
+>  	tab =3D prog_aux->kfunc_tab;
+>  	btf_tab =3D prog_aux->kfunc_btf_tab;
+>  	if (!tab) {
+> -		if (!btf_vmlinux) {
+> +		/* with CONFIG_DEBUG_INFO_BTF=3Dm this is where the vmlinux BTF gets l=
+oaded */
+> +		if (IS_ERR_OR_NULL(bpf_get_btf_vmlinux())) {
+
+[Severity: Medium]
+Could this introduce an AB-BA deadlock with the module loader?
+
+For unprivileged programs, bpf_check() acquires bpf_verifier_lock before
+executing instruction verification. When CONFIG_DEBUG_INFO_BTF=3Dm, this
+on-demand fetch calls request_module() which blocks and spawns a usermode
+helper (modprobe).
+
+If the usermode helper (or another user-space process triggered during the
+module load) attempts to load an unprivileged BPF program, it will block
+indefinitely waiting for bpf_verifier_lock.
 
 [ ... ]
 
-> -# Re-generate module BTFs if either module's .ko or vmlinux changed
-> -%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $=
-(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
-> -	+$(call if_changed,ld_ko_o)
-> +# Modules that get a .BTF section: all of them with CONFIG_DEBUG_INFO_BT=
-F_MODULES,
-> +# otherwise only the vmlinux BTF carrier module with CONFIG_DEBUG_INFO_B=
-TF=3Dm.
->  ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-> -	+$(if $(newer-prereqs),$(call cmd,btf_ko))
-> +btf-modules :=3D $(modules:%.o=3D%.ko)
-> +else ifeq ($(CONFIG_DEBUG_INFO_BTF),m)
-> +btf-modules :=3D $(filter %/btf_vmlinux.ko,$(modules:%.o=3D%.ko))
->  endif
+> @@ -11568,6 +11570,20 @@ static int release_reg(struct bpf_verifier_env *=
+env, struct bpf_reg_state *reg,
+>  	return err;
+>  }
+> =20
+> +/* Does calling @fn bring kernel BTF types into the program state? */
+> +static bool helper_uses_vmlinux_btf(const struct bpf_func_proto *fn)
+> +{
+> +	int i;
 > +
-> +# Re-generate module BTFs if either module's .ko or vmlinux changed
-> +%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $=
-(btf-modules),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
+> +	if (base_type(fn->ret_type) =3D=3D RET_PTR_TO_BTF_ID)
+> +		return true;
+> +	for (i =3D 0; i < MAX_BPF_FUNC_ARGS; i++) {
+> +		if (base_type(fn->arg_type[i]) =3D=3D ARG_PTR_TO_BTF_ID)
+> +			return true;
+> +	}
+> +	return false;
+> +}
+
+[Severity: Medium]
+Does this logic miss helpers that require the vmlinux BTF but don't explici=
+tly
+take or return a PTR_TO_BTF_ID?
+
+For instance, the bpf_snprintf_btf helper takes a struct btf_ptr * as an
+ARG_PTR_TO_MEM. Because this isn't caught by helper_uses_vmlinux_btf(), the
+verifier skips loading the BTF.
+
+At runtime, the helper calls bpf_peek_btf_vmlinux(). Since the module was
+never loaded by the verifier, this returns NULL and the helper functionally
+fails with -EINVAL, potentially breaking valid BPF programs that rely on it.
+
+[ ... ]
+
+> @@ -21724,7 +21762,11 @@ int bpf_check(struct bpf_prog **prog, union bpf_=
+attr *attr, bpfptr_t uattr,
+>  	if (ret)
+>  		goto err_prep;
+> =20
+> -	bpf_get_btf_vmlinux();
+> +	/*
+> +	 * The vmlinux BTF is not fetched up front: with CONFIG_DEBUG_INFO_BTF=
+=3Dm
+> +	 * it is loaded on demand, at the points where kernel types enter the
+> +	 * program (attach_btf, kfuncs, ksyms, map pointers, BTF-typed helpers).
+> +	 */
 
 [Severity: High]
-Will this implicit rule globally add vmlinux as a prerequisite to every mod=
-ule
-if btf-modules is non-empty?
+Can a single transient module load or parse failure permanently brick the
+verifier?
 
-When CONFIG_DEBUG_INFO_BTF=3Dm and CONFIG_DEBUG_INFO_BTF_MODULES is disable=
-d,
-btf-modules evaluates to kernel/bpf/btf_vmlinux.ko. Since btf-modules is
-non-empty, the $(and $(btf-modules),$(KBUILD_BUILTIN),$(objtree)/vmlinux)
-expression will evaluate to $(objtree)/vmlinux for the generic %.ko target.
+If bpf_get_btf_vmlinux() fails (e.g., due to ENOMEM or a temporary module l=
+oad
+failure), btf_parse_vmlinux() returns an ERR_PTR which is permanently cached
+in btf_vmlinux via smp_store_release(&btf_vmlinux, btf).
 
-Does this inject vmlinux as a prerequisite for every module in the tree (not
-just btf_vmlinux.ko), triggering broad unnecessary relinks of all kernel
-modules whenever a built-in file is modified during incremental builds?
+The verifier unconditionally checks if (IS_ERR(btf_vmlinux)) at the beginni=
+ng
+of bpf_check(). Consequently, a single transient failure permanently breaks=
+ the
+loading of all subsequent BPF programs system-wide, including those that do=
+ not
+require BTF.
 
-> +	+$(call if_changed,ld_ko_o)
-> +	+$(if $(and $(filter $@,$(btf-modules)),$(newer-prereqs)),$(call cmd,bt=
-f_ko))
->  	+$(call cmd,check_tracepoint)
+[Severity: Medium]
+Does removing this upfront fetch break context translation for EXT and TRAC=
+ING
+programs?
 
-[ ... ]
+When loading a BPF_PROG_TYPE_EXT or BPF_PROG_TYPE_TRACING program targeting
+another BPF program, bpf_prog_load() skips fetching the vmlinux BTF. If the
+program does not trigger an on-demand BTF load via kfuncs or helpers, the
+global bpf_ctx_convert.t remains NULL.
 
-> diff --git a/scripts/gen-btf.sh b/scripts/gen-btf.sh
-> index 8ca96eb10a69e..7fa3189a3ded8 100755
-> --- a/scripts/gen-btf.sh
-> +++ b/scripts/gen-btf.sh
+During verification, btf_ctx_access() calls btf_translate_to_vmlinux(), whi=
+ch
+uses find_canonical_prog_ctx_type(). Because bpf_ctx_convert.t is NULL,
+translation fails and the verifier incorrectly rejects valid context access=
+es.
 
-[ ... ]
+[Severity: High]
+Does delaying the BTF load expose paths to blind ERR_PTR dereferences?
 
-> @@ -133,6 +190,34 @@ if [ -n "${BTF_BASE}" ]; then
->  	BTFGEN_MODE=3D"module"
->  fi
-> =20
-> +if [ -n "${PLACEHOLDER}" ]; then
-> +	btf_data=3D${ELF_FILE}.btf.o
-> +	echo "" | ${CC} ${CLANG_FLAGS} ${KBUILD_CPPFLAGS} ${KBUILD_CFLAGS} -fno=
--lto -c -x c -o ${btf_data} -
-> +	head -c 36 /dev/zero > ${ELF_FILE}.BTF.meta
+Because the patch makes the BTF load lazy, it is more likely to fail much l=
+ater
+in the verification process, exposing paths that blindly dereference the
+pointer returned by bpf_get_btf_vmlinux() without checking IS_ERR().
 
-[Severity: Low]
-Is it safe to use the non-POSIX -c flag for head here?
+For example, btf_prepare_func_args() does:
 
-The -c option is a GNU/Busybox extension and is not defined in the
-POSIX.1-2017 standard. On strict environments where head only accepts
-the -n flag, will this cause the kernel build to fail?
+    vmlinux_btf =3D bpf_get_btf_vmlinux();
+    ref_t =3D btf_type_by_id(vmlinux_btf, kern_type_id);
 
-> +	${OBJCOPY} --add-section .BTF.meta=3D${ELF_FILE}.BTF.meta \
-> +		--set-section-flags .BTF.meta=3Dalloc,readonly ${btf_data}
-> +	${OBJCOPY} --only-section=3D.BTF.meta --strip-all ${btf_data}
-> +	exit 0
-> +fi
-> +
+And btf_check_kfunc_name() does:
+
+    id =3D btf_find_by_name_kind(bpf_get_btf_vmlinux(), func_name, kind);
+
+If bpf_get_btf_vmlinux() returns an ERR_PTR, passing it directly to these
+functions will result in a kernel panic.
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260923053948.3061=
-7-1-wanjay@amazon.com?part=3D6
+7-1-wanjay@amazon.com?part=3D3
