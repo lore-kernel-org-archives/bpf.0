@@ -1,220 +1,148 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6660417BDE;
-	Wed, 23 Sep 2026 05:56:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F6B3C1D78;
+	Wed, 23 Sep 2026 05:59:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790142995; cv=none; b=kjOYD9y9NCAocxhelU+DV7t7E27k7Z/67mVPs26RsxRHTbLHonSg14mqyDTWIPo4eg1myTsRxoUdDOehJG99erf6nWpACadfW8H4UJ7BVlqVz/Yx2CXMkQcsSoWruM5qvBchh2mPy8Rw9ySyIJzcEtZUNERI5FGGa21v41ZY7FQ=
+	t=1790143147; cv=none; b=oag2JSqCWS6xji7ScrdLRt4DTosVyfhlZBvyNnb/EkjuOqNVl7g8+xBCY2arBAYrUEJ9neHOjZhtUputiXQE+C4eaeIbZeEK4a2ZJP4pdhN2AEnSpcZNOg4KbsqM6Iu/1w7S+BsdWTv3Nhh9G5DbKN1vRSeoKCHmdfqTgMMzu6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790142995; c=relaxed/simple;
-	bh=LHRkgYMGYHd5TOTDuAxn9X2OHHqe/hwOFFY9csHvISE=;
+	s=arc-20240116; t=1790143147; c=relaxed/simple;
+	bh=M+Dh18T30Y7l0FjzQwUTMpr2r1Egz5+CpN8CPIQz6GE=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=rUx/TvPY+MboaKNwAOGF0vzDSosjofj7nH2WZL3MP+Y0yX0iCZsh6Sq9AcXQ4lNq/ZKwHxL1BWkbWU7sHAJI/x9EhAyagR3Ek2HhOqq/OUSuPFg3iByiAfcSzqzqAj5KCZyu+6KZqgEdqf4fp7WIbXNxYqj/4LxmwX6ZiIsrJXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vob0Q6dl; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=uP8rd9qg5oFMPHsceq+BNnbFwH8Z1JKALQiF3bXMii5Dvqo0mZDFcg/vDBk3DwGUmAAQLMww1PvFdFW450S+sNIbE1egwqegxmis06eOKq3acg2xs9oglsjH5gcBET+cW6slE0nbSjK5yCptncegINqYp7qg/yZDYnAMWEsXd2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MoP1fRht; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vob0Q6dl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B74C1F000FF;
-	Wed, 23 Sep 2026 05:56:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MoP1fRht"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACA941F000FF;
+	Wed, 23 Sep 2026 05:59:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790142993;
-	bh=xT1ze2th8t0zSVXqxp9TifWt62vsAFgys063Qr9/o4E=;
+	s=k20260515; t=1790143145;
+	bh=KY6QslC0AqZ8ob0If7C66yuuQZpv9s+3WWjtuA9bAbk=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=Vob0Q6dluHJEZ3CWumGMxEECkOmz6m6KwfZbpCDqhfG6hvMbIr9/F73eiMOzuXir/
-	 spdzIN3+MKAMYIVwyRmq13JtSuXayvK+62+phI6UVGv8l70H1UbgqCdolbNWf62EKd
-	 04jxX3otRT7Rj3v1bLO97jtc4ODsGtUSxNI4CYCJ4owUq3oGAVVaqIB0kKntgvN/Rz
-	 XDKMYt8ZoZsL+F/vn+sjkoXU3K9+p0eYHZr1oh7W2rMw2dVKgY59ECl3PeFVRnMZyz
-	 w7Um4BSlKiOxgwHKL+H7/88z3DXA8sG/UlnsYriPH7radK2KbwGsi+5sUeCOvf2buR
-	 CLnxLwdzJf5rg==
+	b=MoP1fRhtHX5oYZsYLu0G4F+PfCY0R41F9z+bv8QX1Fel4IGIng3apFl1ZXU7sK9aB
+	 +dI1O3c8LERKUCNKaXl/kwpevPHZn74v7ahQpoVe/twllW8MulA3KUiMyCWd1pT5m8
+	 0yW53FpCVvDxqg+Xc+MHBlVxZFnXIyA+NbPcMC+RV4tXd9x33oHYO6zy5BGg74OUEk
+	 tYqt7rqeZ2+0GxpqNUSUg5QFtg+UvzRDQnJYS5PMZnHBHGf68v+MEfi7kq3C8S5Xf5
+	 FwsuSzak88JUGYgztekBcVNliP6AAX/qGadXMQeLp1X8zcYrDHPf0heU+Yt+S9F4iv
+	 ktiiD+ENO+0Mw==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next 5/6] bpf: defer registrations until the vmlinux
- BTF is available
+Subject: Re: [PATCH bpf-next 6/6] kbuild, bpf: allow building the vmlinux
+ BTF as a module
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Jay Wang" <wanjay@amazon.com>
 Cc: bpf@vger.kernel.org, linux-modules@vger.kernel.org
-In-Reply-To: <20260923053948.30617-6-wanjay@amazon.com>
+In-Reply-To: <20260923053948.30617-7-wanjay@amazon.com>
 References: <20260923053948.30617-1-wanjay@amazon.com>
- <20260923053948.30617-6-wanjay@amazon.com>
+ <20260923053948.30617-7-wanjay@amazon.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Wed, 23 Sep 2026 05:56:32 +0000
-Message-Id: <20260923055633.5B74C1F000FF@smtp.kernel.org>
+Date: Wed, 23 Sep 2026 05:59:05 +0000
+Message-Id: <20260923055905.ACA941F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 4 potential issue(=
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [High] bpf: UAF in sysfs reader on module BTF alloc ID failure
-- [High] bpf: data corruption via un-synchronized kfunc registrations
-- [Medium] bpf: race condition causes transient BPF program load failures
-- [Medium] bpf: memory leak of vmlinux deferred queue on alloc ID failure
+- [High] kbuild: global module relinks when CONFIG_DEBUG_INFO_BTF=3Dm
+- [Low] kbuild: non-POSIX head -c in gen-btf.sh breaks strict environments
 --
 
-commit 7468b94a7c4356b1f1498b95a9030eec1830ffa1
+commit 7587d72dd889263f91882b475224bac4cf470c15
 Author: Jay Wang <wanjay@amazon.com>
-Subject: bpf: defer registrations until the vmlinux BTF is available
 
-This commit changes the BPF subsystem to defer kfunc, dtor kfunc, and
-struct_ops registrations until the vmlinux BTF is parsed. This allows
-configuring CONFIG_DEBUG_INFO_BTF as a module so it doesn't need to be pars=
-ed
-at boot if not required.
+kbuild, bpf: allow building the vmlinux BTF as a module
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 50eb7a95fd825..cbba20a908e9d 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
+This commit makes CONFIG_DEBUG_INFO_BTF a tristate, allowing the vmlinux BT=
+F=20
+to be built as a module (btf_vmlinux) rather than part of the kernel image.=
+=20
+It defers loading the BTF until it is first needed, saving memory on system=
+s=20
+where it goes unused.
+
+> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
+> index 01a37ec872b90..ad182f84b5fcf 100644
+> --- a/scripts/Makefile.modfinal
+> +++ b/scripts/Makefile.modfinal
+
 [ ... ]
-> @@ -6581,7 +6583,15 @@ struct btf *btf_parse_vmlinux(void)
->  	if (err) {
->  		btf_free(btf);
->  		btf =3D ERR_PTR(err);
-> +		goto err_out;
->  	}
+
+> -# Re-generate module BTFs if either module's .ko or vmlinux changed
+> -%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $=
+(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
+> -	+$(call if_changed,ld_ko_o)
+> +# Modules that get a .BTF section: all of them with CONFIG_DEBUG_INFO_BT=
+F_MODULES,
+> +# otherwise only the vmlinux BTF carrier module with CONFIG_DEBUG_INFO_B=
+TF=3Dm.
+>  ifdef CONFIG_DEBUG_INFO_BTF_MODULES
+> -	+$(if $(newer-prereqs),$(call cmd,btf_ko))
+> +btf-modules :=3D $(modules:%.o=3D%.ko)
+> +else ifeq ($(CONFIG_DEBUG_INFO_BTF),m)
+> +btf-modules :=3D $(filter %/btf_vmlinux.ko,$(modules:%.o=3D%.ko))
+>  endif
 > +
-> +	/*
-> +	 * With CONFIG_DEBUG_INFO_BTF=3Dm, kfunc, dtor kfunc and struct_ops
-> +	 * registrations for vmlinux made before the BTF was available were
-> +	 * queued; apply them now, before the BTF becomes visible to anyone.
-> +	 */
-> +	btf_apply_deferred_vmlinux_regs(btf);
->  err_out:
->  	btf_verifier_env_free(env);
->  	return btf;
+> +# Re-generate module BTFs if either module's .ko or vmlinux changed
+> +%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $=
+(btf-modules),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
 
-[Severity: Medium]
-When btf_alloc_id() fails, the code jumps to err_out, which bypasses the ca=
-ll
-to btf_apply_deferred_vmlinux_regs(). Does this leave the items in the
-btf_vmlinux_deferred_regs queue stranded, causing a memory leak for those
-dynamically allocated deferred registrations? Also, since
-btf_vmlinux_regs_closed is never set, would subsequent registrations contin=
-ue
-to queue infinitely?
+[Severity: High]
+Will this implicit rule globally add vmlinux as a prerequisite to every mod=
+ule
+if btf-modules is non-empty?
+
+When CONFIG_DEBUG_INFO_BTF=3Dm and CONFIG_DEBUG_INFO_BTF_MODULES is disable=
+d,
+btf-modules evaluates to kernel/bpf/btf_vmlinux.ko. Since btf-modules is
+non-empty, the $(and $(btf-modules),$(KBUILD_BUILTIN),$(objtree)/vmlinux)
+expression will evaluate to $(objtree)/vmlinux for the generic %.ko target.
+
+Does this inject vmlinux as a prerequisite for every module in the tree (not
+just btf_vmlinux.ko), triggering broad unnecessary relinks of all kernel
+modules whenever a built-in file is modified during incremental builds?
+
+> +	+$(call if_changed,ld_ko_o)
+> +	+$(if $(and $(filter $@,$(btf-modules)),$(newer-prereqs)),$(call cmd,bt=
+f_ko))
+>  	+$(call cmd,check_tracepoint)
 
 [ ... ]
-> @@ -8905,6 +9033,87 @@ static int __init btf_module_init(void)
->  }
+
+> diff --git a/scripts/gen-btf.sh b/scripts/gen-btf.sh
+> index 8ca96eb10a69e..7fa3189a3ded8 100755
+> --- a/scripts/gen-btf.sh
+> +++ b/scripts/gen-btf.sh
+
+[ ... ]
+
+> @@ -133,6 +190,34 @@ if [ -n "${BTF_BASE}" ]; then
+>  	BTFGEN_MODE=3D"module"
+>  fi
 > =20
->  fs_initcall(btf_module_init);
+> +if [ -n "${PLACEHOLDER}" ]; then
+> +	btf_data=3D${ELF_FILE}.btf.o
+> +	echo "" | ${CC} ${CLANG_FLAGS} ${KBUILD_CPPFLAGS} ${KBUILD_CFLAGS} -fno=
+-lto -c -x c -o ${btf_data} -
+> +	head -c 36 /dev/zero > ${ELF_FILE}.BTF.meta
+
+[Severity: Low]
+Is it safe to use the non-POSIX -c flag for head here?
+
+The -c option is a GNU/Busybox extension and is not defined in the
+POSIX.1-2017 standard. On strict environments where head only accepts
+the -n flag, will this cause the kernel build to fail?
+
+> +	${OBJCOPY} --add-section .BTF.meta=3D${ELF_FILE}.BTF.meta \
+> +		--set-section-flags .BTF.meta=3Dalloc,readonly ${btf_data}
+> +	${OBJCOPY} --only-section=3D.BTF.meta --strip-all ${btf_data}
+> +	exit 0
+> +fi
 > +
-> +#if IS_MODULE(CONFIG_DEBUG_INFO_BTF)
-> +/*
-> + * CONFIG_DEBUG_INFO_BTF=3Dm: the vmlinux BTF has just become available.=
-  Parse
-> + * the BTF of the modules that were loaded before it, and apply the
-> + * registrations that waited for them.  Called from bpf_get_btf_vmlinux()
-> + * once btf_vmlinux is published, with no locks held.
-> + */
-> +void btf_parse_deferred_modules(void)
-> +{
-[ ... ]
-> +		err =3D PTR_ERR_OR_ZERO(btf);
-> +		if (!err) {
-> +			err =3D btf_alloc_id(btf);
-> +			if (err) {
-> +				/* btf owns the data now, btf_free() drops it */
-> +				btf_mod->data =3D NULL;
-> +				btf_free(btf);
-> +			}
-> +		}
-> +		if (err) {
-> +			/*
-> +			 * The module is loaded and stays.  Unlike at load time
-> +			 * there is no way to reject it, so drop its BTF.
-> +			 */
-> +			pr_warn("failed to validate module [%s] BTF: %d\n",
-> +				btf_mod->module->name, err);
-> +			list_del(&btf_mod->list);
-> +			btf_module_free(btf_mod);
-> +			continue;
-> +		}
-
-[Severity: High]
-Could the btf_free() call above introduce a use-after-free window for
-concurrent sysfs readers? The backing buffer btf->data (which was originally
-btf_mod->data) is freed by btf_free(). Even though btf_mod->data is set to
-NULL, the sysfs file for the module remains active until btf_module_free()
-removes it. If there is a concurrent read to /sys/kernel/btf/<module>, can =
-it
-dereference the freed attr->private pointer?
-
-[ ... ]
-> +		/* btf->data is btf_mod->data now, the sysfs file keeps working */
-> +		btf_mod->data =3D NULL;
-> +		kvfree(btf_mod->base_data);
-> +		btf_mod->base_data =3D NULL;
-> +		btf_mod->btf =3D btf;
-> +		parsed =3D true;
-
-[Severity: Medium]
-Here btf_mod->btf is assigned, which makes the module BTF visible globally.
-Since this happens before the deferred kfuncs and struct_ops are actually
-registered, is there a race condition where a concurrent BPF program load
-attempts to use this BTF, but fails verification because the kfuncs are not
-yet in the module's kfunc_set_tab?
-
-> +
-> +		/*
-> +		 * Registrations are applied after dropping the mutex (they
-> +		 * walk btf_modules); pin what they need until then.
-> +		 */
-> +		list_for_each_entry_safe(reg, rtmp, &btf_mod->deferred_regs, list) {
-> +			list_del(&reg->list);
-> +			if (!try_module_get(btf_mod->module)) {
-> +				btf_free_deferred_reg(reg);
-> +				continue;
-> +			}
-> +			btf_get(btf);
-> +			reg->btf =3D btf;
-> +			reg->module =3D btf_mod->module;
-> +			list_add_tail(&reg->list, &regs);
-> +		}
-> +	}
-> +	mutex_unlock(&btf_module_mutex);
-> +
-> +	if (parsed)
-> +		purge_cand_cache(NULL);
-> +	btf_apply_deferred_regs(&regs);
-> +}
-> +#endif /* IS_MODULE(CONFIG_DEBUG_INFO_BTF) */
-
-[Severity: High]
-Is it possible for data corruption to occur here due to concurrent kfunc
-registrations? Because the btf_module_mutex is dropped and btf_mod->btf has
-already been set, a concurrent module initcall could perform a new
-register_btf_kfunc_id_set(). Since btf_mod->btf is no longer NULL, it would
-bypass the deferral queue and proceed to btf_kfunc_id_set_add() directly.
-
-If btf_apply_deferred_regs() is running simultaneously, both paths could
-concurrently invoke btf_populate_kfunc_set(), which mutates btf->kfunc_set_=
-tab
-without synchronization:
-
-kernel/bpf/btf.c:btf_populate_kfunc_set() {
-    ...
-	/* Grow set */
-	set =3D krealloc(tab->sets[hook],
-		       struct_size(set, pairs, set_cnt + add_set->cnt),
-		       GFP_KERNEL | __GFP_NOWARN);
-	if (!set) {
-		ret =3D -ENOMEM;
-		goto end;
-	}
-
-	/* For newly allocated set, initialize set->cnt to 0 */
-	if (!tab->sets[hook])
-		set->cnt =3D 0;
-	tab->sets[hook] =3D set;
-    ...
-}
-
-Would this result in double-free or use-after-free on the krealloc, or lost
-kfunc registrations?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260923053948.3061=
-7-1-wanjay@amazon.com?part=3D5
+7-1-wanjay@amazon.com?part=3D6
