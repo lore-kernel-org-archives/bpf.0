@@ -1,92 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E6C15326BB;
-	Wed, 23 Sep 2026 13:56:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4707D1BD9C9
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 14:02:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790171766; cv=none; b=drFLhQDvdYme5eTXxHZ7qlwswdO2f4mFH7cmfUozJrMr3j6zoxtKXlc0hIxoTEnR5FLR8ZSq5HS6KAK3GWXSJyYVJ2ZB35IBKgJAc1GXl7D8ISJpXW3kvSI6FTN0k7b6zimfO95tTd2zVWUVclNKsmNC/h8rLoJPsPL1oU7iv10=
+	t=1790172136; cv=none; b=iL+M5kYjCOdgHGHap+FDvYriKIE76wjPckE5uwIZPWaRvTvqKZDgVuLxtME5nyH9n/f6+MLncPtv3xUFeRLX/EclIZCEu/Qj9NbunP6p1TxCaTVSs5Yd3VMqPO+E6yEGNtBtAe2OT9g5wK6p292ZevGIu+PwS7AoPDrTCLQG7c4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790171766; c=relaxed/simple;
-	bh=zqDy86mP9fmqxJ+z6nD8B7gI9aGd8Nj7Y7iVprPg1qc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=RoX4oVgk9xSD9xP4R5cg0NdpXmevP5L28nPpkwNj+GxZLw49Dgjt53BeFgelQ+WSPpltKRkEld2ZpgjQn8a3Yz/NsUY7mYLs+yZMDSVupaMLMUznBUMZLGiX38Obyb3/U7S2BwD6E1OYD80ancpzNX5SZdXKgndlVQ9lswPlez0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bsXP6fbu; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790172136; c=relaxed/simple;
+	bh=LXvl/qUJ37h4FkoSVE3G5fyr63b7m75DJ0CZksxVXIY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P7USayQXU4KRV5b9hSCRjEryFkyV4GeQMr3IyD2JXu+QD6ebUaSRRlWHlhWL6xDQ4TwWPn9mS5kImGm5jiZFld6dx8bhZItZO5Kl//4SHcQ/C1e8y9u3nEYOeEksx6tcTHPGPiK90UgEJcCEqSsWRg8L7sUaiNrGXeU4OP1rNEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b55QB9sU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bsXP6fbu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1CFE1F008A0;
-	Wed, 23 Sep 2026 13:56:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b55QB9sU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED481F000FF;
+	Wed, 23 Sep 2026 14:02:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790171765;
-	bh=/RkMoEre4s0cWwdK8pJI3qLzangpGPybRLGHnZa2kcY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=bsXP6fbu3tADeWx3UZmNQmxUeu+hk9l2AVXYnpdgrU3Sq/eDl0cuboXcSTq4mhGNI
-	 MOIzvLFdgmt9DrQVWJeKBqpO0moXOBvv0mGWYee61ztRmuhYkGEeJcVX6sU6DFdSYo
-	 /V7BX2I9LFamNA3TSFBCplKficQd7ppVMaWcpGfzfWfbGzxy1tUMp+l9xrHgKIGNMh
-	 ZJV+o5oZfHCuuFdogX6L0rLnOOJfn0g2Pkby6zAN1/yGOy5R5TWINFzYmlixcbOnYS
-	 TSmaWvjVMHMPWjesbsstMqxKgUSSDAKBlC3HAyS1yinqrLA2fHVjqzkZYNYw5ewc68
-	 6B2/b+tp6PHUw==
-Content-Type: multipart/mixed; boundary="===============8758721912312969620=="
+	s=k20260515; t=1790172134;
+	bh=f3NCkfWK690TRx2kDOXO3j1cSKTHL+MVUIiHN64MvmY=;
+	h=From:To:Cc:Subject:Date;
+	b=b55QB9sUQk0w0dZhFO/RmXpAFuZEjq4PyxTrCWA6zmN1qUvrRvhBZ3/01arZbE5rN
+	 WN7OjJSMH06Sewf73M9sraxtL3jw5wsuYsIS5uLnDhn3Bod8X+Ez4ewxMrNoJDRS1H
+	 +3VICvVp3uAOayFYRjTIkuP++00cAuAdnBMoKwsK7Emd83bhHtfryUJ5X/9JVoXxs9
+	 Mol/1SfHwdlS+GQUntHvosfM0jxXIRxkYjRUHBLjvBw24nK0CQ5NHfhJoKxWorgiC0
+	 Cbg0+Vvyw0wEpmwEp0ZSQqyK7/WL+AW6frpCKb/Un4AzGdwFo5OL0U7TLMwsrD/y8c
+	 JcnVsuuyacWNA==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	"Alexei Starovoitov" <ast@kernel.org>,
+	"Daniel Borkmann" <daniel@iogearbox.net>,
+	"Andrii Nakryiko" <andrii@kernel.org>,
+	"Martin KaFai Lau" <martin.lau@linux.dev>,
+	"Eduard Zingerman" <eddyz87@gmail.com>,
+	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+	"Song Liu" <song@kernel.org>,
+	"Yonghong Song" <yonghong.song@linux.dev>
+Subject: [PATCH bpf-next 0/2] bpf: Fix loop detection for re-arming async callbacks
+Date: Wed, 23 Sep 2026 07:01:48 -0700
+Message-ID: <20260923140152.4005097-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d96c63f73df29f7a250296c2734afc94f516716f270e51e33e311691010c6a34@mail.kernel.org>
-In-Reply-To: <20260923130856.1157-2-cp0613@linux.alibaba.com>
-References: <20260923130856.1157-2-cp0613@linux.alibaba.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf, riscv: Add support for indirect jumps
-From: bot+bpf-ci@kernel.org
-To: cp0613@linux.alibaba.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,memxor@gmail.com,bjorn@kernel.org,puranjay@kernel.org
-Cc: ihor.solodrai@linux.dev,eddyz87@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,pulehui@huawei.com,pjw@kernel.org,palmer@dabbelt.com,shuah@kernel.org,guoren@kernel.org,bpf@vger.kernel.org,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 23 Sep 2026 13:56:02 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============8758721912312969620==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+is_state_visited() skips the infinite loop check when two states differ in
+async_entry_cnt, since seeing the same state on a second entry into an
+async callback is not a loop. It reads that from the innermost frame, but
+push_async_cb() sets in_async_callback_fn and async_entry_cnt on the
+callback's own frame, and setup_func_entry() copies neither, so a subprog
+called by the callback carries neither.
 
-> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-> index ed0a6f871dea..9de3749fb268 100644
-> --- a/arch/riscv/net/bpf_jit_comp64.c
-> +++ b/arch/riscv/net/bpf_jit_comp64.c
+A callback which re-arms itself and calls a subprog therefore has its two
+entries compared at a loop inside that subprog, and is rejected:
 
-[ ... ]
+  infinite loop detected at insn 57
 
-> diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
-> index 2fb0b4e198b9..15acf249fed4 100644
-> --- a/arch/riscv/net/bpf_jit_core.c
-> +++ b/arch/riscv/net/bpf_jit_core.c
+Patch 1 reads both from frame 0, which push_async_cb() makes the callback's
+frame at any call depth.
 
-[ ... ]
+Patch 2 covers both directions: a timer callback which re-arms through
+bpf_timer_set_callback() and reaches a bounded loop through a static
+subprog, which fails to load without patch 1, and a callback which never
+returns, which must still be rejected either way. Nothing covered an async
+callback before, so neither direction was tested.
 
-> @@ -176,6 +179,15 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
->  		for (i = 0; i < prog->len; i++)
->  			ctx->offset[i] = ninsns_rvoff(ctx->offset[i]);
->  		bpf_prog_fill_jited_linfo(prog, ctx->offset);
-> +
-> +		/*
-> +		 * bpf_prog_update_insn_ptrs() wants the start of each insn, so
-> +		 * shift the linfo array by one and get insn 0 from the prologue.
-> +		 */
-> +		for (i = prog->len - 1; i > 0; i--)
-> +			ctx->offset[i] = ctx->offset[i - 1];
-> +		ctx->offset[0] = ninsns_rvoff(ctx->prologue_len);
-> +		bpf_prog_update_insn_ptrs(prog, ctx->offset, jit_data->ro_image);
->  out_offset:
->  		kvfree(ctx->offset);
->  		kfree(jit_data);
+Puranjay Mohan (2):
+  bpf: Look at frame 0 when telling async callback entries apart
+  selftests/bpf: Add timer tests for a re-arming callback with a loop
 
-This isn't a bug, but could the comment say "shift ctx->offset[] by one"
-rather than "shift the linfo array by one"? The jited_linfo was already
-filled in by the bpf_prog_fill_jited_linfo() call above, and it is the
-JIT's own offset table that is being rewritten here.
+ kernel/bpf/states.c                           |  4 +-
+ .../testing/selftests/bpf/prog_tests/timer.c  | 33 ++++++++++++
+ tools/testing/selftests/bpf/progs/timer.c     | 50 ++++++++++++++++++-
+ .../selftests/bpf/progs/timer_failure.c       | 29 +++++++++++
+ 4 files changed, 113 insertions(+), 3 deletions(-)
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+base-commit: 91f8613d95ad8cd99d8baf094806d1ef98bc6380
+-- 
+2.53.0-Meta
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35866214591
---===============8758721912312969620==--
