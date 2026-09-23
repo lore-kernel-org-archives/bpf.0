@@ -1,129 +1,140 @@
-Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680B33E8323
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 18:06:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FA1F427A10;
+	Wed, 23 Sep 2026 18:07:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790186771; cv=none; b=IxIytIkOamVVTDeQT+gbLt22G8FOk8LSKzMYVWEb98gidVl5e3qd/dQCpuFBmfDkLyUhlmuhpVZ6ZrM/Q55MSPpFhxPJ0r0fbdN6y/1vF5vX798XPNYabN6iszpp/LEw38XtcFj+WFNhwkvwQsSTr2g/cEC+8DbI1fU4UB0tPuo=
+	t=1790186858; cv=none; b=Qc+vnjjPgemXkCcC9jhpz+h4KBzilP2/U/5q0tVrgr23Bp+xGnDKVbvhe/MU8wiQ9GQ0PQ8gJOFwAdECZ/CuWpw+ZJ/5QGZzYSib7R3gg6CjO4jKZq9VVDDTHHoS1Wb9L90a0dzxd7M7MAm5BqSC6q5Sl0W9o+BfTj522hGeWAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790186771; c=relaxed/simple;
-	bh=i2XkLeOAuP6yRudyOpQxOo6nw7+tJ/QuA4/JdG/MHLY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MHRuBhA1AoYAXasbRY7FSemv9Kk1495VsmdL7wLG8FYdaLhVRZRZUVSAkPxOg6eAM6Q5sVqBOhle0ZY3Q9l/dyggc58SkmmXRlOEvLHih8PvZ38X4DmqvwVclUnf/dA96QybN/mnvUjKfVXIN2JiO8n3DYiQOtd4Mx4iTsXjsSA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rnn+BDN6; arc=none smtp.client-ip=74.125.231.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790186858; c=relaxed/simple;
+	bh=U5+nhunaLiSVoMI+VdQBIfVkc9YsZ6zc1C4hVwZKmCM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UQODosILX4M9chOGqxsrclKa2ZjPLoqrrLSc/VF3WMgRfIGRas5g1fCqR+O0k8K1cHAa/c3hCMKg1dbayM2N8cCDqVRIVM1YgByd7FHmKYCuZ0ZCTm5P+jNHuFP86PUiZOgthQPRHQJgkLDgmQOf7hG6g64BGKpGkWSkluz+jVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZJpmvu7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rnn+BDN6"
-Received: by mail-oi2-f13.google.com with SMTP id 5614622812f47-4c112aaaf04so848616b6e.1
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 11:06:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790186769; x=1790791569; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=DVBitp2ypb5rk+Duv9E+85B2/ZBqaQtfqUeJKLPpBlA=;
-        b=Rnn+BDN6aP0KQBGO6WKtQvfWPk6R7v3Gs2syX/YQ3MoLooNPUbzGm/UfuSGLTdZw3S
-         jU/qjfB1D5M6KdQUFdfELvZZUFlpneAvavxEBq/Yy7or7Yds6RoM+lMAdVXfHT6ZdONG
-         Yuy+pNPOEe7OqiPUWiB2xeUjkdJBiWVCdRvWs2Twri5BwKZ+mhINGISV+y4OwgcElkUF
-         aPh9Qnb+gYSLrzfSygk1C3a65+QeFAd+QtbDp3z+paVd4po9WgBNRY8NrWZfwlVvjur+
-         35l0tuXsDyAfovHobH4JpUVpkFYeJC6ZtPSuPtbsYl3H90P75Ktm3CXP2ftC+1rqQtkp
-         S45Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790186769; x=1790791569;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=DVBitp2ypb5rk+Duv9E+85B2/ZBqaQtfqUeJKLPpBlA=;
-        b=VlutlmCN1TCvZvl/4mr/H1kml7NoJOAaEvSPY1KubLT8Wsp1ynfFDm6XnJXOmMVbQ5
-         3JAqKrFBbsIgU7XdaSEgbwax1HgKp/Xuv0nBww2Evmrhbup4P8+OqtyboiCU/MeLYXtg
-         AicV3ocTWT52rK4eTuRPZlcUWzlN5xXxKZinDElLF/xhehsOyXAmrVwNYlWJLZ1DOc4s
-         JzUKQRwuZvGE1bmFHIicOpYafVKtN88/Fcs8AUEfSXcuw0fxfrAZoISODwc5JUtPRjoH
-         r+ldLIQ53pD9XCQ0EIn5QC8H0cB4XOC08E1ZDlm3KTQXy5kq/EC55++oFwTs5g/Iw/Ms
-         nPuQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxRhwYHIo9OjTIZhgp7r3dXtBKXLFon2/KTtLzw2FV9Y9Sdtj6Viaewcm+Q6QPzc9eL9o4=@vger.kernel.org
-X-Gm-Message-State: AFuF++m9D8za66QvlmgN0WYSsFry5FM1s73qc4m08u9hY43VMl9Wlp+b
-	Ai8LIyaG0b4KrqiXilGoPAOHCLd4ljH4y41IAlKPNFq1GBAe/ESV489g
-X-Gm-Gg: AYBFou0VRj6TGL7XB9Tkmtp1d3djFb17ihvuG9gM4aGWrjtGltf0H3U/SsW9oXFitnK
-	2yY6zBAajbsS+NdFp3js5vpHGUnGohZBrEkhTKv1H6Rhpm5+Vxk+iQ+YG/IusbW3e2VQ2SUxgtq
-	m+wP639m2oeo16okp9sZOQauId+6jXebl9C4iFtuzEZOdoInmpeuRe3WET1Kj/bRuu9C4lvmruh
-	NbokSS98KGzORWOaU//NEKbRzKCHBNf/EYiV6TynEsPMdDNhOsyor8JsBsdsd6GABHU8HkG3MPF
-	ibTnLHEqgMEOamMRNlCWHm2gmk+w6V9mzH3dwxGrdEoKnlVYxOKST73WDDlXTfIA65+bM6/6v35
-	8m4QecoFSNfFTT4pbn5aBKZv8yRnqHxWPfetth51IRXAS4Y9mtMnBbHWWApo82bVTeK8TR03bt0
-	WiXGdxkWXA5GNc27KAMBtzxUm1Vbun5yY3xOZZouEJjow+8/v8qXe7xp0c7xrk+gWMuJSUUIIOG
-	R96o3T0sMhc891ap2TwnuY4PTSwJG+w3zud2YwPCR6lK/fw6eCn0EtQ
-X-Received: by 2002:a05:6808:199c:b0:4cb:f21c:a795 with SMTP id 5614622812f47-4d5b930b740mr4483430b6e.29.1790186769270;
-        Wed, 23 Sep 2026 11:06:09 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:c487:37ae:5ef2:4c1? ([2620:10d:c090:500::7:ac0c])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-81604bae8cdsm3696386a34.27.2026.09.23.11.06.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 11:06:09 -0700 (PDT)
-Message-ID: <0c312ad4f725193e714a50c5fcfc31ad2b273f7d.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v5 07/21] bpf: Explore the landing pads no call
- site reaches
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com
-Date: Wed, 23 Sep 2026 11:06:07 -0700
-In-Reply-To: <3469ede8-6c37-49c9-b261-d2c8506eada5@linux.dev>
-References: <20260923045846.2414643-1-yonghong.song@linux.dev>
-	 <20260923045922.2417689-1-yonghong.song@linux.dev>
-	 <df24934c5ecbd70bc35b528b8e58ae668ce02051.camel@gmail.com>
-	 <3469ede8-6c37-49c9-b261-d2c8506eada5@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZJpmvu7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0BA91F000FF;
+	Wed, 23 Sep 2026 18:07:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790186857;
+	bh=+vDPcquJM7GahtjddOoqJJfhDpqWnXxKLvU+vehlwfQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=kZJpmvu7LipMdS7s6+mj9xDLvZhIbIEu5iavgnSnpKXpDsyvWxAwjkhQfEWK5EvB3
+	 puajcWtvMf/x7BQSh8XixkLDEZbx1IP0iI8dXlEFD83TJlneF5YQjtadOY6PFulIF6
+	 L0G2y+7enOt+6AmbfvtSPxtYFRJzsw6kPgFlIF6GL0488YwRZ2KqW28I0ftI63c6Jn
+	 Jh8OoFaA4UUyN8HygG5Q4MSkdgZkPKCj3SN2TP2BpTdxH/M1bgouZwMEDeqCyM3OFC
+	 swXiKbV5JxoXCdQRQsVCdO5HqcoPaSEEausVGKdlcYl+OQ9i14JSTEpnH+23iJUVkG
+	 82Dr4cmCduoCA==
+Date: Wed, 23 Sep 2026 19:07:30 +0100
+From: Simon Horman <horms@kernel.org>
+To: Daniel Machon <daniel.machon@microchip.com>
+Cc: netdev-bot+sashiko@kernel.org, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, horatiu.vultur@microchip.com,
+	steen.hegelund@microchip.com, UNGLinuxDriver@microchip.com,
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	john.fastabend@gmail.com, sdf@fomichev.me, herve.codina@bootlin.com,
+	arnd@arndb.de, gregkh@linuxfoundation.org, mohsin.bashr@gmail.com,
+	richardcochran@gmail.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH net-next v7 10/14] net: lan966x: add PCIe FDMA support
+Message-ID: <20260923180730.GV13925@horms.kernel.org>
+References: <20260918-lan966x-pci-fdma-v7-10-0ecc179c8a2c@microchip.com>
+ <179008205148.2160803.12818321368571406375@kernel.org>
+ <20260923084538.wgkw2nt5ergoxcot@DEN-DL-M70577>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260923084538.wgkw2nt5ergoxcot@DEN-DL-M70577>
 
-On Wed, 2026-09-23 at 10:27 -0700, Yonghong Song wrote:
-
-...
-
-> This patch is to avoid a verification failure. Let us say, we remove this
-> patch and run the following
->    ./test_progs -t exceptions_cleanup
-> and we will get the following failure:
+On Wed, Sep 23, 2026 at 10:45:38AM +0200, Daniel Machon wrote:
 
 ...
 
-> This patch intends to explore *unreachable* insns to avoid verification f=
-ailure.
->
-> I think due to "record =3D { begin =3D 1, end =3D 2, pad =3D 4 }", it is =
-considered that the code at 'pad =3D 4'
-> is not dead, but actually it does dead later so we have the above failure=
-.
->
-> So I add this patch to avoid failure. But maybe we should just remove thi=
-s patch,
-> and mark this test as failure as indeed landing pad is not reachable.
->
-> WDYT?
+> > [Severity: Medium]
+> > Is this path expected to work on a big-endian host?
+> > 
+> > Until now the descriptor producer and the FDMA engine were both on the
+> > little-endian SoC, so the native-endian descriptor layout in
+> > drivers/net/ethernet/microchip/fdma/fdma_api.h was fine:
+> > 
+> >   struct fdma_db {
+> >         u64 dataptr;
+> >         u64 status;
+> >   };
+> > 
+> >   struct fdma_dcb {
+> >         u64 nextptr;
+> >         u64 info;
+> >         struct fdma_db db[FDMA_DB_MAX];
+> >   };
+> > 
+> > With PCIe FDMA the descriptors live in host memory and are fetched by the
+> > endpoint, so the host and the engine can disagree on byte order. The
+> > translated addresses written here, and the status/info words written by
+> > __fdma_db_add()/__fdma_dcb_add(), all go out in host byte order, and the
+> > HW-written DONE/BLOCKL fields are read back the same way in
+> > lan966x_fdma_pci_get_next_dcb() and lan966x_fdma_pci_rx_check_frame().
+> > 
+> > CONFIG_MCHP_LAN966X_PCI in drivers/misc/Kconfig only has
+> > 
+> >   depends on PCI
+> >   depends on OF_OVERLAY
+> > 
+> > so a big-endian host (e.g. powerpc) can select it. On such a host, would
+> > the engine see byte-swapped nextptr/dataptr and length fields, i.e. would
+> > RX/TX not work at all? Should the descriptor fields become explicit
+> > little-endian types with accessors at the hardware boundary, or should the
+> > Kconfig entry gain a little-endian dependency?
+> 
+> Hmm. Never tested on PowerPC, not this driver nor the DT overlay mechanism it
+> relies on for PCI deployment, which has only been exercised on ARM and x86 so
+> far (AFAICT) [1].
+> 
+> [1] https://lore.kernel.org/all/20240430183301.46568e35@bootlin.com/
 
-But that's a self-fulfilling thing, the test you are pointing at looks
-as follows:
+I don't think that the baseline expectation is that drivers are tested
+on big-endian systems, but rather that reasonable effort is made to ensure
+that byte-order usage is correct.
 
- /*
-  * 15. A region around a call the kernel knows cannot unwind: no call site=
- is
-  * marked, nothing reaches the pad, and the sweep removes it. The program =
-is
-  * otherwise ordinary and has to load.
-  */
- static __used __naked __noinline __u64 nounwind_rec_frame(void)
- {
-         ...
- }
+In this case I suggest that will involve using __le64 instead of u64,
+coupled with calling le64_to_cpu() and cpu_to_le64() as appropriate.
 
-So, the test is added to test this cfg pass, the cfg pass is added to
-make this test pass, meanwhile compiler does not generate such code.
-I don't see a point, tbh.
+Sparse can aid with getting this right.
+
+...
+
+> > [Severity: Medium]
+> > Is rx_bytes meant to count the frame as it arrived on the wire?
+> > 
+> > By the time this runs, skb->len has already been reduced twice: the
+> > skb_trim() above drops ETH_FCS_LEN, and eth_type_trans() pulls the
+> > MAC header out of the linear region, so skb->len is short by at least
+> > ETH_HLEN. If lan966x_hw_offload() ends up untagging a VLAN header,
+> > that is another four bytes gone. So every packet delivered through
+> > lan966x_fdma_pci_rx_get_frame() undercounts rx_bytes by 14 bytes or
+> > more, which is visible to userspace via ip -s link.
+> > 
+> > The frame length is available before any of that surgery happens --
+> > data_len from FDMA_DCB_STATUS_BLOCKL(db->status), or skb->len right
+> > after the skb_pull(skb, IFH_LEN_BYTES) -- so accounting could be done
+> > there instead.
+> > 
+> > I realise this mirrors what the existing register/page path in
+> > lan966x_fdma.c does, so if the intent is to keep the two backends
+> > byte-for-byte consistent, please say so; otherwise it would be good
+> > not to copy the miscount into the new file.
+> 
+> Not only lan966x, but sparx5 and lan969x does the exact same thing, increasing
+> rx_bytes after headers are pulled.  The undercount is real, but not visible to
+> userspace. Both implementations (platform and PCI) read hardware counters directly
+
+I'm a little unsure, but if it's consistent then I guess that is ok.
+It's an old interface anyway.
