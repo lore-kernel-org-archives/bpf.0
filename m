@@ -1,69 +1,69 @@
-Received: from mail-oi2-f12.google.com (mail-oi2-f12.google.com [74.125.231.204])
+Received: from mail-oi2-f31.google.com (mail-oi2-f31.google.com [74.125.231.223])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1971A362149
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 01:44:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B505B368D55
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 01:44:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.223
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790127857; cv=none; b=hK28br+wvDtL+Zuy1I1Bp8tWa8uwA7kee+yWBZAyCPJT5c2Q4cwdRYirpNuyW3F/S83Q9hzgqLMJzdD8KHZBtGaRUq7sVMndlVeUTplB2DGLLPzLntGFE7kVnH8ZY0/Sj3jxIPebfe83N84+brW5l4/V+z18XPvIfTEzo3cnh+w=
+	t=1790127863; cv=none; b=hXvhfKklAbMkW9xI8wCJGA9UBsfDnQQuwOEnVFTRbRZtUzskAcTC86KFxKMgQHrHFBHrc5IDZS1magaT7XMDnT5K+Bv7aRV//4hwhbGtobPu+nBdn1ORPtip8ChJkMTymVOKsOpYWmu7RZEul8jfzQoGDcT4NJbt4SxRPbKgHFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790127857; c=relaxed/simple;
-	bh=o0iShjNZAxUXFZWQqHEz22YgxqgnbrV5wQV+P9YPBHI=;
+	s=arc-20240116; t=1790127863; c=relaxed/simple;
+	bh=arZ0JmcmqjRA3PSHgHbocDF4UPmH5TcQirEW4s9ekeo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kzA/XG/wppNZLmAbQ7EVX+Dxa0NNVxILzFuRNOn+Ljg6AiIjYCVz3b2NlG8PsqNi8qeRpQ14c/szJxq18z8ppyKuKmJENDuz/mYE9tqlxDpPvs4SAHbVlGynrNRwjwgrDsv2MMS8EDfmj79RoERuhdFjoLBHZbX2SjkJwVxL8V8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JWgHReXO; arc=none smtp.client-ip=74.125.231.204
+	 In-Reply-To:To:Cc; b=ZGB4DTIawhPHGvvONHLyzYAhbbsrNaSCC6bcmnjByGxMley3apvBCnqpG59GGhRvKNk+NxVuFVOoKmR09lESnLbsJUmS/eI6fGcQx3AGAB1iQ83W2SAJBuFmJcqkeoXcwPHH8eQXaeXziHFUPwA95g58q2M/eI8XBMzOWDxpCwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=esbriPC3; arc=none smtp.client-ip=74.125.231.223
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JWgHReXO"
-Received: by mail-oi2-f12.google.com with SMTP id 46e09a7af769-801a8bf8112so263589a34.1
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 18:44:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="esbriPC3"
+Received: by mail-oi2-f31.google.com with SMTP id 46e09a7af769-8144632e066so332709a34.0
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 18:44:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790127850; x=1790732650; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790127858; x=1790732658; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=ihPf/LLEQb8l4ShZkPaFaAbjikoZ8D4pWzy9PwbIMFs=;
-        b=JWgHReXOdmZ18NgQOMTXkYIgpJ7tAks5ihFBmfOZCDoeXy7QEHJ7cFCkdrVT9KU0OH
-         m76MxIWa2/MDPqjSHt5PkBNNGzoJT0OD5+MJmExdb55345y6lfaDN7DMmZh+C7yvSMWq
-         qdlRS88yowx4glfcXYk3T9eTEU38wnJV83keFC0Pq5bnjCXmMwvcI9mSbgSfJY8omGtf
-         epp1LbvbtAxGiTmahgRtPdE0JDTKifVqMz2jHAlwtpRVO04XVZquF/y67yq4KbjnTf9o
-         0KrwClb1VzqEqppfsZCnJ7s7oiAT67PgtXKcmCZQ+VxcoboHslGxSMcMmy016ehHPnRr
-         5XpQ==
+        bh=SyZJoUyrlSl1/6SsfQ3YuWvmPYYk4jJTS8vAeISQEe8=;
+        b=esbriPC39yvOjlwEHAa2i4xx17ziAsN/ffzMUBLInCop71dDSZolX4xtD+UhSpptNM
+         +aDeG24hKBmIi08ONT3lTVq9S8F0kir+rbEyxcp2xp5wgmBdL6Q0p1+ZX3CZhp7re5Mw
+         ok4okYvdTeqQ+Cra4mKE++sw72xSIeWEbwQVfTxtIgWXS0JT/HjUKleoe6TrNRcfpjx4
+         SyOcUX583CJV4eUaXipUGjkgUSFehWd1MUV9tEenPi5XABHr9zJKqtORny5QvwD9zfhN
+         BsmHi5lE4uHtVPcKVNyplQFQOHBKXzDDQDmNPvFLZlMa5Zh0UMCjcY/h9baKhcA9vpar
+         9J7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790127850; x=1790732650;
+        d=1e100.net; s=20260707; t=1790127858; x=1790732658;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ihPf/LLEQb8l4ShZkPaFaAbjikoZ8D4pWzy9PwbIMFs=;
-        b=kcRhgk0lz/wtEn7MLo1b6Jpinedjj1h4/Z+g7tifu9aOKyYP3K1xxmjaL+bT571b1K
-         7cJuUDy6QMwoONM+PRQCawwo2s8Q3H0uqwPXC3tplG/L/ugXhzm/TK5ViI7yxHvlWhQh
-         malAWhI25tV9H5qbvx0Euac9XuqJ9MZsYhk1jjdBlN4YnjMbM7yAqzZIIShu4owdJocC
-         SxGzglpVPT3Ktu9yBiVypjb7tzyaXkbvKhE4huWI6T2X1vNbmML+qoXeaCpEQsxRbfW0
-         gdncXINHq0OjuSJIjTWyOBS9EIojhIW7Ucvb8DvO+nfpQViCUKnkvDzOmsCAlPplMmLO
-         5qYA==
-X-Forwarded-Encrypted: i=1; AKwUvBy5kDCIFSqDePaYMYdmg9M1yaj7NjMk3tujrEaC7DgV+mxnI6eQ1f4mx1xATFSzwhWyfa4=@vger.kernel.org
-X-Gm-Message-State: AFuF++l7MgPCDR+9bJ4CPL12atvfbL6pZDyDBA83HyGYUaoHTAV3NgbL
-	+nWtgTGr/gYDjtl5VFykJcqLZTuYN3QkU9ROgBar00lO+2Tsjyma4wev
-X-Gm-Gg: AYBFou1nOmpc2NtfXMdfDxjgPavLwuZ7+uA1p0qRqTjb/n2MyMJW4C0F3/t//LGunFo
-	VG/blL29rbh6bHHrbMyzvhoNKvmsjKCluZYtaYnPN1eBVo3sdAmSurphdbkwi51XvaQWy+eNknQ
-	sFTi481kHDHRrHRyd0wuxMxveExSHbaazLeBxRsZ6OEa0ipNbZHuZqE9TsPaXhzfcWewMdgMbd1
-	xKh98oPs9W+fyklhoET6ryRsd0cwQefjhHD3iJiCg4axiSVH4UFvilV0g3w9mHPbWMAmLeDUqD8
-	brmw4b4soUZKVw7Ekp+lEwcUFsFLVPG6u9YyGFKVCRa36WS+273348o6FvYcjEtyMQrt0rdezLA
-	32L27mLBPo/W+4EYJHlTTpwMBRZWB4uTLcOhsZexd/VundhOoKOxPsTsytPwrOYQ2V5MXSsJHK4
-	gXuVAst6Zb38NGr5qTg7MRKVPIt4mGW5BztIg06HGfwIwz0/ZLjH5jtdMMiTlCHruA/Jtd1zvHn
-	WU5fg==
-X-Received: by 2002:a05:6830:907:b0:800:bca4:5626 with SMTP id 46e09a7af769-815f0b6d936mr1330423a34.19.1790127850117;
-        Tue, 22 Sep 2026 18:44:10 -0700 (PDT)
-Received: from localhost ([2a03:2880:30ff:6::])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-816049bb6fbsm1656532a34.23.2026.09.22.18.44.08
+        bh=SyZJoUyrlSl1/6SsfQ3YuWvmPYYk4jJTS8vAeISQEe8=;
+        b=cD5JiwiBh4O81xv6N/0suBS5WmT3rUuk1FKaF8XY+zHEeBAO7ierdAFpxeLp344zO5
+         mD00AJkZUBHeWoZh3d1zib6VCxRkDeb+8jwilnVGMkS+Y/8M/yBg0uITiQzga0uy38UC
+         /aJIMbYf7JsGt8eGDqKkm/8bDpJnwsWJD5Daq+MlwlEIJ4z5K0ZLLQhi6F+p4ON+wm/u
+         lUvm7N7e7Z9RvMjYABGjnryDztepTVH+0thn3xKKbsRTBRkdm1frd/hOhms27BCSRh3b
+         jqGS/qT1QWEcFCwS+3Xwt8EwCf1JsyYSkyiko/po68gj87pljcMzfkEYLfLPlp9N3n16
+         YHqg==
+X-Forwarded-Encrypted: i=1; AKwUvBzFDNIIyVHJUhl4jW+5wZHgo+cR1yOkDzRsv3547sLbrU3fd49YJRaJgKnD1YbTgWzrkvY=@vger.kernel.org
+X-Gm-Message-State: AFuF++kaHGalbnbd9ijxiTY9SglUdHjb7StKitX8fME8Q4bZ0Vcr7XvY
+	c3FQPrrHfugBBdJdSE9TBY9FThhHft9a6mxFRDUzO3wWZuZAF4G+n9hE
+X-Gm-Gg: AYBFou1yMUytH6fbQh3tHoDZ31myurRAtkqvQAF6ZQ5/23ZhRtG4qNrCGNE9PpalR5Q
+	vBz8kkgUYcqBkrrKx91PQDOxxluwi2dO9sAHexMJqNMpW1v6Bjb5yc4hP0MwsyUIcphGKrXO8G6
+	JhnODJjiaUuYI23PZ9et26wBAchcydIP0WHEugodV4EqwAko7+fbp5Mdg5QGFgNU6hu4E95+jQM
+	EcBRvuP+PpPWd0pR6iggyi8REYzckrkTLhJrCMbuzVgNnNcZdBnwFs2foNW3v6FFbsyAdotlKdS
+	GBS1At9zXuMaIrSkPLflhCivtF16Uz/9LhWFJ+GzBI08VBLZzW/qKR+PHL2JJDWFHa2SG3u98DA
+	F7dU3B9UX5JDOZQgWKfkesjvn9Igg8cofL3DlUWYcS8FPi3+v5ETenVKhTnoKVlKsUE9wU+WJyu
+	AWfZDio5oWXVHPeu99rNjEdvYBpDdKUgAoOmVtX6AkMj0iewpg7+1M0AFD14amcEmg/gd3TAeIc
+	l2M6gw=
+X-Received: by 2002:a05:6830:83b6:b0:7f4:effa:a5c4 with SMTP id 46e09a7af769-815ee4a5d74mr1416800a34.1.1790127858381;
+        Tue, 22 Sep 2026 18:44:18 -0700 (PDT)
+Received: from localhost ([2a03:2880:30ff:43::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-816044c858bsm1806570a34.19.2026.09.22.18.44.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2026 18:44:09 -0700 (PDT)
+        Tue, 22 Sep 2026 18:44:16 -0700 (PDT)
 From: Daniel Zahka <daniel.zahka@gmail.com>
-Date: Tue, 22 Sep 2026 18:43:42 -0700
-Subject: [PATCH net-next 4/8] eth: mpnic: implement Tx queue allocation and
- cleanup
+Date: Tue, 22 Sep 2026 18:43:44 -0700
+Subject: [PATCH net-next 6/8] eth: mpnic: add a netdevice and basic Tx
+ handling
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,7 +72,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260922-linux-mpnic-v1-4-236844f53072@gmail.com>
+Message-Id: <20260922-linux-mpnic-v1-6-236844f53072@gmail.com>
 References: <20260922-linux-mpnic-v1-0-236844f53072@gmail.com>
 In-Reply-To: <20260922-linux-mpnic-v1-0-236844f53072@gmail.com>
 To: Alexander Duyck <alexanderduyck@fb.com>, 
@@ -90,698 +90,561 @@ Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  bpf@vger.kernel.org
 X-Mailer: b4 0.13.0
 
-Queues come in triads of two work queues and one completion queue. The
-Tx triad only uses the first work queue for now, the second one will be
-used for the XDP ring later.
+Register the network interface and let it transmit skbs.
 
-Add the ring structures, the per NAPI vector allocation of triads,
-descriptor memory and interrupts, and the completion processing. The
-completion queue does not report one entry per packet, it reports a
-work queue head, so a single completion can release many packets.
+The typical TWQ descriptor sequence for an skb is: 1 primary metadata,
+followed by 0 or more non-last address + length (A/L) descriptors,
+terminated by an always present last A/L descriptor.
 
-Nothing enables the queues in hardware or submits anything to them yet,
-that comes with the next two changes.
+The device does not write a Tx completion unless it is requested in the
+primary metadata desc. The xmit path sets this bit when the stack does
+not report netdev_xmit_more(). This can create a problem if the last
+packet in a burst is dropped by the driver. To deal with that case, the
+driver latches the last metadata for which a completion was not
+requested, and uses this to request a completion and flush queued
+packets when one is dropped.
+
+There is no link state yet, so carrier follows the administrative
+state.
 
 Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
 ---
  drivers/net/ethernet/meta/mpnic/Makefile       |   1 +
- drivers/net/ethernet/meta/mpnic/mpnic_csr.h    |  23 ++
- drivers/net/ethernet/meta/mpnic/mpnic_netdev.h |  26 ++
- drivers/net/ethernet/meta/mpnic/mpnic_txrx.c   | 496 +++++++++++++++++++++++++
- drivers/net/ethernet/meta/mpnic/mpnic_txrx.h   |  80 ++++
- 5 files changed, 626 insertions(+)
+ drivers/net/ethernet/meta/mpnic/mpnic.h        |   2 +
+ drivers/net/ethernet/meta/mpnic/mpnic_csr.h    |   7 +
+ drivers/net/ethernet/meta/mpnic/mpnic_netdev.c | 176 +++++++++++++++++++++++++
+ drivers/net/ethernet/meta/mpnic/mpnic_netdev.h |   4 +
+ drivers/net/ethernet/meta/mpnic/mpnic_pci.c    |  25 ++++
+ drivers/net/ethernet/meta/mpnic/mpnic_txrx.c   | 157 ++++++++++++++++++++++
+ drivers/net/ethernet/meta/mpnic/mpnic_txrx.h   |   5 +
+ 8 files changed, 377 insertions(+)
 
 diff --git a/drivers/net/ethernet/meta/mpnic/Makefile b/drivers/net/ethernet/meta/mpnic/Makefile
-index 3aa7c6a5ab5e..67d617f49a8a 100644
+index 67d617f49a8a..d5bdbd5bd1c7 100644
 --- a/drivers/net/ethernet/meta/mpnic/Makefile
 +++ b/drivers/net/ethernet/meta/mpnic/Makefile
-@@ -11,4 +11,5 @@ mpnic-y := \
+@@ -10,6 +10,7 @@ obj-$(CONFIG_MPNIC) += mpnic.o
+ mpnic-y := \
  	mpnic_init.o \
  	mpnic_irq.o \
++	mpnic_netdev.o \
  	mpnic_pci.o \
-+	mpnic_txrx.o \
+ 	mpnic_txrx.o \
  # End of mpnic-y
+diff --git a/drivers/net/ethernet/meta/mpnic/mpnic.h b/drivers/net/ethernet/meta/mpnic/mpnic.h
+index 628fd48c997d..78359ab6abb1 100644
+--- a/drivers/net/ethernet/meta/mpnic/mpnic.h
++++ b/drivers/net/ethernet/meta/mpnic/mpnic.h
+@@ -23,11 +23,13 @@ enum {
+ 
+ struct mpnic_dev {
+ 	struct device *dev;
++	struct net_device *netdev;
+ 
+ 	u32 __iomem *uc_addr0;
+ 
+ 	u16 num_irqs;
+ 
++	u64 dsn;
+ 	u32 mps;
+ 	u32 readrq;
+ 	u8 relaxed_ord;
 diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_csr.h b/drivers/net/ethernet/meta/mpnic/mpnic_csr.h
-index 42eee18de474..49595c495141 100644
+index a2133024b2cf..f7c50bc70d8a 100644
 --- a/drivers/net/ethernet/meta/mpnic/mpnic_csr.h
 +++ b/drivers/net/ethernet/meta/mpnic/mpnic_csr.h
-@@ -16,6 +16,13 @@
+@@ -15,6 +15,13 @@
+ /* Transmit Work Descriptor Format */
  #define MPNIC_TWD_L2_HLEN		DESC_GENMASK(5, 0)
  #define MPNIC_TWD_FLAG_REQ_COMPLETION	DESC_BIT(37)
- 
-+#define MPNIC_TWD_ADDR			DESC_GENMASK(45, 0)
-+#define MPNIC_TWD_LEN			DESC_GENMASK(63, 48)
-+
-+/* Tx Completion Descriptor Format */
-+#define MPNIC_TCD_TYPE0_HEAD0		DESC_GENMASK(15, 0)
-+#define MPNIC_TCD_DONE			DESC_BIT(63)
-+
- /* Common fields for all DESC_CFG CSRs */
- #define MPNIC_DESC_CFG_NUM_DESCS	CSR_GENMASK(2, 0)
- #define MPNIC_DESC_CFG_START_ADDR	CSR_GENMASK(19, 8)
-@@ -29,6 +36,22 @@
-  *	Name				Index			Address
-  *****************************************************************************/
- 
-+/* NIC_CORE_TDF */
-+#define MPNIC_TWQ_TAIL(i, j)		(0x4 + 1024 * (i) + 2 * (j))
-+								/* 0x10 */
-+
-+/* NIC_CORE_TCM */
-+#define MPNIC_TCQ_HEAD(i)		(0x8e + 1024 * (i))	/* 0x238 */
-+
-+/* NIC_CORE_TIM */
-+#define MPNIC_TIM_CTL1(i)		(0xc0 + 1024 * (i))	/* 0x300 */
-+#define MPNIC_TIM_CTL1_UPD_IGN_LONG_EVENT_CNT	CSR_BIT(48)
-+#define MPNIC_TIM_CTL1_UPD_IGN_LONG_TIME_CNT	CSR_BIT(49)
-+#define MPNIC_TIM_CTL1_UPD_IGN_SHORT_TIME_CNT	CSR_BIT(50)
-+#define MPNIC_TIM_CTL1_MASK			CSR_BIT(51)
-+#define MPNIC_TIM_CTL1_MASK_EN			CSR_BIT(52)
-+#define MPNIC_TIM_CTL1_TRIGGER			CSR_BIT(53)
-+
- /* NIC_CORE_RBP_HP_GLBL */
- #define MPNIC_BDQ_GLBL_CTL0		0x420080		/* 0x1080200 */
- #define MPNIC_BDQ_GLBL_CTL0_MAX_REQ_SIZE	CSR_GENMASK(26, 18)
-diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_netdev.h b/drivers/net/ethernet/meta/mpnic/mpnic_netdev.h
-new file mode 100644
-index 000000000000..f98adf209b45
---- /dev/null
-+++ b/drivers/net/ethernet/meta/mpnic/mpnic_netdev.h
-@@ -0,0 +1,26 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) Meta Platforms, Inc. and affiliates. */
-+
-+#ifndef _MPNIC_NETDEV_H_
-+#define _MPNIC_NETDEV_H_
-+
-+#include <linux/types.h>
-+
-+#include "mpnic.h"
-+#include "mpnic_txrx.h"
-+
-+struct mpnic_net {
-+	struct mpnic_ring *tx[MPNIC_MAX_TXQS];
-+
-+	struct mpnic_napi_vector *napi[MPNIC_MAX_NAPI_VECTORS];
-+
-+	struct net_device *netdev;
-+	struct mpnic_dev *mpd;
-+
-+	u32 txq_size;
-+
-+	u16 num_napi;
-+	u16 num_tx_queues;
++#define MPNIC_TWD_FLAG_DEST_MAC		DESC_BIT(43)
++#define MPNIC_TWD_TYPE			DESC_GENMASK(47, 46)
++enum {
++	MPNIC_TWD_TYPE_META	= 0,
++	MPNIC_TWD_TYPE_AL	= 2,
++	MPNIC_TWD_TYPE_LAST_AL	= 3,
 +};
-+
-+#endif /* _MPNIC_NETDEV_H_ */
-diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
+ 
+ #define MPNIC_TWD_ADDR			DESC_GENMASK(45, 0)
+ #define MPNIC_TWD_LEN			DESC_GENMASK(63, 48)
+diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c b/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c
 new file mode 100644
-index 000000000000..fe360a26a27b
+index 000000000000..62dc9018f2f8
 --- /dev/null
-+++ b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
-@@ -0,0 +1,496 @@
++++ b/drivers/net/ethernet/meta/mpnic/mpnic_netdev.c
+@@ -0,0 +1,176 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/* Copyright (c) Meta Platforms, Inc. and affiliates. */
 +
-+#include <linux/bitfield.h>
-+#include <linux/dma-mapping.h>
++#include <linux/etherdevice.h>
++#include <linux/ipv6.h>
++#include <linux/netdevice.h>
 +#include <linux/pci.h>
-+#include <linux/slab.h>
++#include <linux/types.h>
 +
 +#include "mpnic.h"
 +#include "mpnic_netdev.h"
 +#include "mpnic_txrx.h"
 +
-+struct mpnic_xmit_cb {
-+	u32 bytecount;
-+	u8 desc_count;
-+};
-+
-+#define MPNIC_XMIT_CB(__skb) ((struct mpnic_xmit_cb *)((__skb)->cb))
-+
-+/* Leave the interrupt moderation counters alone when arming or masking */
-+#define MPNIC_TIM_PARAM_CFG_PRESERVE_MASK \
-+	(MPNIC_TIM_CTL1_UPD_IGN_LONG_EVENT_CNT | \
-+	 MPNIC_TIM_CTL1_UPD_IGN_LONG_TIME_CNT | \
-+	 MPNIC_TIM_CTL1_UPD_IGN_SHORT_TIME_CNT)
-+
-+static void mpnic_nv_irq_disable(struct mpnic_napi_vector *nv)
++static int mpnic_open(struct net_device *netdev)
 +{
-+	mpnic_wr64(nv->mpd, MPNIC_TIM_CTL1(nv->qt[0].cmpl.q_idx),
-+		   MPNIC_TIM_PARAM_CFG_PRESERVE_MASK |
-+		   MPNIC_TIM_CTL1_MASK_EN | MPNIC_TIM_CTL1_MASK);
-+}
-+
-+static void mpnic_nv_irq_rearm(struct mpnic_napi_vector *nv)
-+{
-+	/* Rearming a single queue on a given IRQ rearms all the other
-+	 * queues mapped to the same IRQ.
-+	 */
-+	mpnic_wr64(nv->mpd, MPNIC_TIM_CTL1(nv->qt[0].cmpl.q_idx),
-+		   MPNIC_TIM_PARAM_CFG_PRESERVE_MASK | MPNIC_TIM_CTL1_MASK_EN);
-+}
-+
-+static unsigned int mpnic_desc_unused(struct mpnic_ring *ring)
-+{
-+	return (ring->head - ring->tail - 1) & ring->size_mask;
-+}
-+
-+static struct netdev_queue *mpnic_txring_txq(const struct net_device *dev,
-+					     const struct mpnic_ring *ring)
-+{
-+	return netdev_get_tx_queue(dev, ring->q_idx);
-+}
-+
-+static void mpnic_unmap_single_twd(struct device *dev, __le64 *twd)
-+{
-+	u64 raw_twd = le64_to_cpu(*twd);
-+
-+	dma_unmap_single(dev, FIELD_GET(MPNIC_TWD_ADDR, raw_twd),
-+			 FIELD_GET(MPNIC_TWD_LEN, raw_twd), DMA_TO_DEVICE);
-+}
-+
-+static void mpnic_unmap_page_twd(struct device *dev, __le64 *twd)
-+{
-+	u64 raw_twd = le64_to_cpu(*twd);
-+
-+	dma_unmap_page(dev, FIELD_GET(MPNIC_TWD_ADDR, raw_twd),
-+		       FIELD_GET(MPNIC_TWD_LEN, raw_twd), DMA_TO_DEVICE);
-+}
-+
-+static void mpnic_clean_twq0(struct mpnic_napi_vector *nv, int napi_budget,
-+			     struct mpnic_ring *ring, bool discard,
-+			     unsigned int hw_head)
-+{
-+	u64 total_bytes = 0, total_packets = 0;
-+	unsigned int head = ring->head;
-+	struct netdev_queue *txq;
-+	unsigned int clean_desc;
-+
-+	clean_desc = (hw_head - head) & ring->size_mask;
-+
-+	while (clean_desc) {
-+		struct sk_buff *skb = ring->tx_buf[head];
-+		unsigned int desc_cnt;
-+
-+		desc_cnt = MPNIC_XMIT_CB(skb)->desc_count;
-+		if (desc_cnt > clean_desc)
-+			break;
-+
-+		ring->tx_buf[head] = NULL;
-+
-+		clean_desc -= desc_cnt;
-+
-+		/* Step over the metadata descriptor */
-+		head++;
-+		head &= ring->size_mask;
-+		desc_cnt--;
-+
-+		mpnic_unmap_single_twd(nv->dev, &ring->desc[head]);
-+		head++;
-+		head &= ring->size_mask;
-+		desc_cnt--;
-+
-+		while (desc_cnt--) {
-+			mpnic_unmap_page_twd(nv->dev, &ring->desc[head]);
-+			head++;
-+			head &= ring->size_mask;
-+		}
-+
-+		total_bytes += MPNIC_XMIT_CB(skb)->bytecount;
-+		total_packets++;
-+
-+		napi_consume_skb(skb, napi_budget);
-+	}
-+
-+	if (!total_bytes)
-+		return;
-+
-+	ring->head = head;
-+
-+	if (discard)
-+		return;
-+
-+	txq = mpnic_txring_txq(nv->napi.dev, ring);
-+	netif_txq_completed_wake(txq, total_packets, total_bytes,
-+				 mpnic_desc_unused(ring),
-+				 MPNIC_TX_DESC_WAKEUP);
-+}
-+
-+static void mpnic_commit_cq_head(struct mpnic_ring *cmpl)
-+{
-+	u32 head = cmpl->head;
-+
-+	/* The tail shadows the last value written to the doorbell, so a
-+	 * completion queue which has not moved costs no MMIO write.
-+	 */
-+	if (cmpl->tail != head) {
-+		cmpl->tail = head;
-+		writeq(head & cmpl->size_mask, cmpl->doorbell);
-+	}
-+}
-+
-+static void mpnic_clean_tcq(struct mpnic_napi_vector *nv,
-+			    struct mpnic_q_triad *qt, int napi_budget)
-+{
-+	struct mpnic_ring *cmpl = &qt->cmpl;
-+	__le64 *raw_tcd, done;
-+	u32 head = cmpl->head;
-+	s32 head0 = -1;
-+
-+	done = (head & (cmpl->size_mask + 1)) ? 0 : cpu_to_le64(MPNIC_TCD_DONE);
-+	raw_tcd = &cmpl->desc[head & cmpl->size_mask];
-+
-+	/* Walk the completion queue collecting the heads reported by NIC.
-+	 * Only the first work queue is enabled and no packet asks for a
-+	 * timestamp, so every completion is a plain head update and the
-+	 * descriptor type does not have to be decoded.
-+	 */
-+	while ((*raw_tcd & cpu_to_le64(MPNIC_TCD_DONE)) == done) {
-+		u64 tcd;
-+
-+		dma_rmb();
-+
-+		tcd = le64_to_cpu(*raw_tcd);
-+		head0 = FIELD_GET(MPNIC_TCD_TYPE0_HEAD0, tcd);
-+
-+		raw_tcd++;
-+		head++;
-+
-+		if (unlikely(!(head & cmpl->size_mask))) {
-+			done ^= cpu_to_le64(MPNIC_TCD_DONE);
-+			raw_tcd = &cmpl->desc[0];
-+		}
-+	}
-+
-+	cmpl->head = head;
-+
-+	if (head0 >= 0)
-+		mpnic_clean_twq0(nv, napi_budget, &qt->sub0, false, head0);
-+}
-+
-+static int mpnic_poll(struct napi_struct *napi, int budget)
-+{
-+	struct mpnic_napi_vector *nv = container_of(napi,
-+						    struct mpnic_napi_vector,
-+						    napi);
-+	int i;
-+
-+	for (i = 0; i < nv->txt_count; i++)
-+		mpnic_clean_tcq(nv, &nv->qt[i], budget);
-+
-+	for (i = 0; i < nv->txt_count; i++)
-+		mpnic_commit_cq_head(&nv->qt[i].cmpl);
-+
-+	if (likely(napi_complete_done(napi, 0)))
-+		mpnic_nv_irq_rearm(nv);
-+
-+	return 0;
-+}
-+
-+static irqreturn_t mpnic_msix_clean_rings(int __always_unused irq, void *data)
-+{
-+	struct mpnic_napi_vector *nv = data;
-+
-+	napi_schedule_irqoff(&nv->napi);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void mpnic_free_napi_vector(struct mpnic_net *mpn,
-+				   struct mpnic_napi_vector *nv)
-+{
-+	int i;
-+
-+	for (i = 0; i < nv->txt_count; i++)
-+		mpn->tx[nv->qt[i].sub0.q_idx] = NULL;
-+
-+	mpnic_free_irq(nv->mpd, nv->v_idx, nv);
-+	netif_napi_del_locked(&nv->napi);
-+	mpn->napi[nv->v_idx - MPNIC_NON_NAPI_VECTORS] = NULL;
-+	kfree(nv);
-+}
-+
-+void mpnic_free_napi_vectors(struct mpnic_net *mpn)
-+{
-+	int i;
-+
-+	for (i = 0; i < mpn->num_napi; i++)
-+		if (mpn->napi[i])
-+			mpnic_free_napi_vector(mpn, mpn->napi[i]);
-+}
-+
-+static void mpnic_ring_init(struct mpnic_ring *ring, u32 __iomem *doorbell,
-+			    int q_idx)
-+{
-+	ring->doorbell = doorbell;
-+	ring->q_idx = q_idx;
-+}
-+
-+static int mpnic_alloc_napi_vector(struct mpnic_dev *mpd,
-+				   struct mpnic_net *mpn, unsigned int idx)
-+{
-+	u32 __iomem *uc_addr = READ_ONCE(mpd->uc_addr0);
-+	struct mpnic_napi_vector *nv;
++	struct mpnic_net *mpn = netdev_priv(netdev);
 +	int err;
 +
-+	/* Doorbells are plain pointers into the register window, they have
-+	 * no way of noticing that it went away.
-+	 */
-+	if (!uc_addr)
-+		return -EIO;
-+
-+	nv = kzalloc_flex(*nv, qt, 1);
-+	if (!nv)
-+		return -ENOMEM;
-+
-+	nv->txt_count = 1;
-+	nv->mpd = mpd;
-+	nv->dev = mpd->dev;
-+	nv->v_idx = idx + MPNIC_NON_NAPI_VECTORS;
-+
-+	mpn->napi[idx] = nv;
-+	netif_napi_add_config_locked(mpn->netdev, &nv->napi, mpnic_poll, idx);
-+	netif_napi_set_irq_locked(&nv->napi,
-+				  pci_irq_vector(to_pci_dev(mpd->dev),
-+						 nv->v_idx));
-+
-+	snprintf(nv->name, sizeof(nv->name), "%s-TxRx-%u",
-+		 mpn->netdev->name, idx);
-+
-+	err = mpnic_request_irq(mpd, nv->v_idx, mpnic_msix_clean_rings, 0,
-+				nv->name, nv);
-+	if (err)
-+		goto err_napi_del;
-+
-+	mpnic_ring_init(&nv->qt[0].sub0, &uc_addr[MPNIC_TWQ_TAIL(idx, 0)], idx);
-+	mpnic_ring_init(&nv->qt[0].cmpl, &uc_addr[MPNIC_TCQ_HEAD(idx)], idx);
-+	mpn->tx[idx] = &nv->qt[0].sub0;
-+
-+	return 0;
-+
-+err_napi_del:
-+	netif_napi_del_locked(&nv->napi);
-+	mpn->napi[idx] = NULL;
-+	kfree(nv);
-+	return err;
-+}
-+
-+int mpnic_alloc_napi_vectors(struct mpnic_net *mpn)
-+{
-+	unsigned int i;
-+	int err;
-+
-+	for (i = 0; i < mpn->num_napi; i++) {
-+		err = mpnic_alloc_napi_vector(mpn->mpd, mpn, i);
-+		if (err)
-+			goto err_free_vectors;
-+	}
-+
-+	return 0;
-+
-+err_free_vectors:
-+	mpnic_free_napi_vectors(mpn);
-+
-+	return err;
-+}
-+
-+static void mpnic_free_ring_resources(struct device *dev,
-+				      struct mpnic_ring *ring)
-+{
-+	kvfree(ring->tx_buf);
-+	ring->tx_buf = NULL;
-+
-+	/* If size is not set there are no descriptors present */
-+	if (!ring->size)
-+		return;
-+
-+	dma_free_coherent(dev, ring->size, ring->desc, ring->dma);
-+	ring->size_mask = 0;
-+	ring->size = 0;
-+}
-+
-+static int mpnic_alloc_ring_desc(struct mpnic_net *mpn,
-+				 struct mpnic_ring *ring, u32 count)
-+{
-+	struct device *dev = mpn->netdev->dev.parent;
-+	size_t size;
-+
-+	size = ALIGN(array_size(sizeof(*ring->desc), count), 4096);
-+
-+	ring->desc = dma_alloc_coherent(dev, size, &ring->dma,
-+					GFP_KERNEL | __GFP_NOWARN);
-+	if (!ring->desc)
-+		return -ENOMEM;
-+
-+	ring->size_mask = count - 1;
-+	ring->size = size;
-+
-+	return 0;
-+}
-+
-+static void mpnic_free_tx_qt_resources(struct mpnic_net *mpn,
-+				       struct mpnic_q_triad *qt)
-+{
-+	struct device *dev = mpn->netdev->dev.parent;
-+
-+	mpnic_free_ring_resources(dev, &qt->cmpl);
-+	mpnic_free_ring_resources(dev, &qt->sub0);
-+}
-+
-+static int mpnic_alloc_tx_qt_resources(struct mpnic_net *mpn,
-+				       struct mpnic_q_triad *qt)
-+{
-+	int err;
-+
-+	err = mpnic_alloc_ring_desc(mpn, &qt->sub0, mpn->txq_size);
++	err = mpnic_alloc_napi_vectors(mpn);
 +	if (err)
 +		return err;
 +
-+	qt->sub0.tx_buf = kvzalloc_objs(*qt->sub0.tx_buf, mpn->txq_size,
-+					GFP_KERNEL | __GFP_NOWARN);
-+	if (!qt->sub0.tx_buf) {
-+		err = -ENOMEM;
-+		goto err_free_qt;
-+	}
-+
-+	err = mpnic_alloc_ring_desc(mpn, &qt->cmpl, mpn->txq_size);
++	err = mpnic_alloc_resources(mpn);
 +	if (err)
-+		goto err_free_qt;
++		goto err_free_napi_vectors;
 +
-+	return 0;
++	err = mpnic_set_netif_queues(mpn);
++	if (err)
++		goto err_free_resources;
 +
-+err_free_qt:
-+	mpnic_free_tx_qt_resources(mpn, qt);
-+	return err;
-+}
++	mpnic_enable(mpn);
++	mpnic_napi_enable(mpn);
 +
-+static void mpnic_free_nv_resources(struct mpnic_net *mpn,
-+				    struct mpnic_napi_vector *nv)
-+{
-+	int i;
-+
-+	for (i = 0; i < nv->txt_count; i++)
-+		mpnic_free_tx_qt_resources(mpn, &nv->qt[i]);
-+}
-+
-+static int mpnic_alloc_nv_resources(struct mpnic_net *mpn,
-+				    struct mpnic_napi_vector *nv)
-+{
-+	int i, err;
-+
-+	for (i = 0; i < nv->txt_count; i++) {
-+		err = mpnic_alloc_tx_qt_resources(mpn, &nv->qt[i]);
-+		if (err)
-+			goto err_free_qt_resources;
-+	}
-+
-+	return 0;
-+
-+err_free_qt_resources:
-+	while (i--)
-+		mpnic_free_tx_qt_resources(mpn, &nv->qt[i]);
-+	return err;
-+}
-+
-+void mpnic_free_resources(struct mpnic_net *mpn)
-+{
-+	int i;
-+
-+	for (i = 0; i < mpn->num_napi; i++)
-+		mpnic_free_nv_resources(mpn, mpn->napi[i]);
-+}
-+
-+int mpnic_alloc_resources(struct mpnic_net *mpn)
-+{
-+	int i, err;
-+
-+	for (i = 0; i < mpn->num_napi; i++) {
-+		err = mpnic_alloc_nv_resources(mpn, mpn->napi[i]);
-+		if (err)
-+			goto err_free_resources;
-+	}
++	netif_tx_wake_all_queues(netdev);
++	netif_carrier_on(netdev);
 +
 +	return 0;
 +
 +err_free_resources:
-+	while (i--)
-+		mpnic_free_nv_resources(mpn, mpn->napi[i]);
-+
++	mpnic_free_resources(mpn);
++err_free_napi_vectors:
++	mpnic_free_napi_vectors(mpn);
 +	return err;
 +}
 +
-+int mpnic_set_netif_queues(struct mpnic_net *mpn)
++static int mpnic_stop(struct net_device *netdev)
 +{
-+	int i, j, err;
++	struct mpnic_net *mpn = netdev_priv(netdev);
 +
-+	err = netif_set_real_num_tx_queues(mpn->netdev, mpn->num_tx_queues);
-+	if (err)
-+		return err;
++	netif_carrier_off(netdev);
 +
-+	for (i = 0; i < mpn->num_napi; i++) {
-+		struct mpnic_napi_vector *nv = mpn->napi[i];
++	mpnic_napi_disable(mpn);
++	netif_tx_disable(netdev);
 +
-+		for (j = 0; j < nv->txt_count; j++)
-+			netif_queue_set_napi(mpn->netdev, nv->qt[j].sub0.q_idx,
-+					     NETDEV_QUEUE_TYPE_TX, &nv->napi);
-+	}
++	mpnic_disable(mpn);
++	mpnic_wait_all_queues_idle(mpn->mpd);
++	mpnic_flush(mpn);
++
++	mpnic_reset_netif_queues(mpn);
++	mpnic_free_resources(mpn);
++	mpnic_free_napi_vectors(mpn);
 +
 +	return 0;
 +}
 +
-+void mpnic_reset_netif_queues(struct mpnic_net *mpn)
++static const struct net_device_ops mpnic_netdev_ops = {
++	.ndo_open		= mpnic_open,
++	.ndo_stop		= mpnic_stop,
++	.ndo_validate_addr	= eth_validate_addr,
++	.ndo_start_xmit		= mpnic_xmit_frame,
++};
++
++/**
++ * mpnic_netdev_free - Free the netdev associated with mpnic
++ * @mpd: Driver specific structure to free netdev from
++ **/
++void mpnic_netdev_free(struct mpnic_dev *mpd)
 +{
-+	int i, j;
-+
-+	for (i = 0; i < mpn->num_napi; i++) {
-+		struct mpnic_napi_vector *nv = mpn->napi[i];
-+
-+		for (j = 0; j < nv->txt_count; j++)
-+			netif_queue_set_napi(mpn->netdev, nv->qt[j].sub0.q_idx,
-+					     NETDEV_QUEUE_TYPE_TX, NULL);
-+	}
++	free_netdev(mpd->netdev);
++	mpd->netdev = NULL;
 +}
 +
-+void mpnic_napi_disable(struct mpnic_net *mpn)
++/**
++ * mpnic_netdev_alloc - Allocate a netdev and associate it with mpnic
++ * @mpd: Driver specific structure to associate the netdev with
++ *
++ * Return: NULL on failure.
++ **/
++struct net_device *mpnic_netdev_alloc(struct mpnic_dev *mpd)
 +{
-+	int i;
++	struct net_device *netdev;
++	struct mpnic_net *mpn;
++	unsigned int queues;
 +
-+	for (i = 0; i < mpn->num_napi; i++) {
-+		napi_disable_locked(&mpn->napi[i]->napi);
++	netdev = alloc_etherdev_mq(sizeof(*mpn), MPNIC_MAX_RXQS);
++	if (!netdev)
++		return NULL;
 +
-+		mpnic_nv_irq_disable(mpn->napi[i]);
-+	}
++	SET_NETDEV_DEV(netdev, mpd->dev);
++	mpd->netdev = netdev;
++
++	netdev->netdev_ops = &mpnic_netdev_ops;
++	netdev->request_ops_lock = true;
++
++	mpn = netdev_priv(netdev);
++	mpn->netdev = netdev;
++	mpn->mpd = mpd;
++
++	mpn->txq_size = MPNIC_TXQ_SIZE_DEFAULT;
++
++	queues = min(netif_get_num_default_rss_queues(),
++		     mpd->num_irqs - MPNIC_NON_NAPI_VECTORS);
++	mpn->num_tx_queues = queues;
++	mpn->num_napi = queues;
++
++	netdev->features |= NETIF_F_SG;
++	netdev->hw_features |= netdev->features;
++	netdev->vlan_features |= netdev->features;
++
++	netdev->min_mtu = IPV6_MIN_MTU;
++	netdev->max_mtu = MPNIC_MAX_JUMBO_FRAME_SIZE - ETH_HLEN;
++
++	netif_carrier_off(netdev);
++	netif_tx_stop_all_queues(netdev);
++
++	return netdev;
 +}
 +
-+void mpnic_napi_enable(struct mpnic_net *mpn)
++static int mpnic_dsn_to_mac_addr(u64 dsn, char *addr)
 +{
-+	int i;
++	addr[0] = (dsn >> 56) & 0xFF;
++	addr[1] = (dsn >> 48) & 0xFF;
++	addr[2] = (dsn >> 40) & 0xFF;
++	addr[3] = (dsn >> 16) & 0xFF;
++	addr[4] = (dsn >> 8) & 0xFF;
++	addr[5] = dsn & 0xFF;
 +
-+	for (i = 0; i < mpn->num_napi; i++)
-+		napi_enable_locked(&mpn->napi[i]->napi);
++	return is_valid_ether_addr(addr) ? 0 : -EINVAL;
++}
 +
-+	/* Force the first interrupt on each vector to guarantee that any
-+	 * completions posted during bringup are processed. Use the TRIGGER
-+	 * pulse rather than the level triggered global interrupt set, which
-+	 * can jam the mask/pending state machine if it collides with a
-+	 * concurrent unmask.
++/**
++ * mpnic_netdev_register - Assign the MAC address and register the netdev
++ * @netdev: Netdev to register
++ *
++ * The permanent address is derived from the PCIe device serial number, the
++ * same way the firmware and the BMC derive it. A random address would break
++ * provisioning, so refuse to spawn the interface if the serial number does
++ * not yield a valid one.
++ *
++ * Return: non-zero on failure.
++ **/
++int mpnic_netdev_register(struct net_device *netdev)
++{
++	struct mpnic_net *mpn = netdev_priv(netdev);
++	struct mpnic_dev *mpd = mpn->mpd;
++	u8 addr[ETH_ALEN];
++	int err;
++
++	err = mpnic_dsn_to_mac_addr(mpd->dsn, addr);
++	if (err) {
++		dev_err(mpd->dev, "MAC addr %pM invalid\n", addr);
++		return err;
++	}
++
++	ether_addr_copy(netdev->perm_addr, addr);
++	eth_hw_addr_set(netdev, addr);
++
++	/* Abort if MMIO has failed. This has to be the last check before
++	 * registration, the register accessors can only detach the device
++	 * once it has been registered.
 +	 */
-+	for (i = 0; i < mpn->num_napi; i++) {
-+		struct mpnic_napi_vector *nv = mpn->napi[i];
++	if (!mpnic_present(mpd))
++		return -EIO;
 +
-+		mpnic_wr64(mpn->mpd, MPNIC_TIM_CTL1(nv->qt[0].cmpl.q_idx),
-+			   MPNIC_TIM_PARAM_CFG_PRESERVE_MASK |
-+			   MPNIC_TIM_CTL1_MASK_EN | MPNIC_TIM_CTL1_TRIGGER);
-+	}
-+
-+	mpnic_wrfl(mpn->mpd);
++	return register_netdev(netdev);
 +}
-diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.h b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.h
-new file mode 100644
-index 000000000000..0d4667666b5b
---- /dev/null
-+++ b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.h
-@@ -0,0 +1,80 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) Meta Platforms, Inc. and affiliates. */
+diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_netdev.h b/drivers/net/ethernet/meta/mpnic/mpnic_netdev.h
+index f98adf209b45..df682d194826 100644
+--- a/drivers/net/ethernet/meta/mpnic/mpnic_netdev.h
++++ b/drivers/net/ethernet/meta/mpnic/mpnic_netdev.h
+@@ -23,4 +23,8 @@ struct mpnic_net {
+ 	u16 num_tx_queues;
+ };
+ 
++struct net_device *mpnic_netdev_alloc(struct mpnic_dev *mpd);
++void mpnic_netdev_free(struct mpnic_dev *mpd);
++int mpnic_netdev_register(struct net_device *netdev);
 +
-+#ifndef _MPNIC_TXRX_H_
-+#define _MPNIC_TXRX_H_
-+
-+#include <linux/if_ether.h>
+ #endif /* _MPNIC_NETDEV_H_ */
+diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_pci.c b/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
+index 127b71b44b0f..968cd611b8ea 100644
+--- a/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
++++ b/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
+@@ -4,11 +4,13 @@
+ #include <linux/dma-mapping.h>
+ #include <linux/err.h>
+ #include <linux/module.h>
 +#include <linux/netdevice.h>
-+#include <linux/skbuff.h>
-+#include <linux/types.h>
-+#include <net/netdev_queues.h>
+ #include <linux/pci.h>
+ #include <linux/slab.h>
+ #include <linux/types.h>
+ 
+ #include "mpnic.h"
++#include "mpnic_netdev.h"
+ 
+ #define PCI_DEVICE_ID_META_MPNIC	0x0014
+ 
+@@ -20,6 +22,10 @@ static void mpnic_mmio_err(struct mpnic_dev *mpd, u32 reg)
+ 	dev_err(mpd->dev,
+ 		"Failed read (idx 0x%x AKA addr 0x%x), disabled CSR access, awaiting reset\n",
+ 		reg, reg << 2);
 +
-+#include "mpnic.h"
++	/* Tell the stack the device has lost its PCIe link */
++	if (mpd->netdev)
++		netif_device_detach(mpd->netdev);
+ }
+ 
+ u64 mpnic_rd64(struct mpnic_dev *mpd, u32 reg)
+@@ -58,6 +64,7 @@ static struct mpnic_dev *mpnic_alloc(struct pci_dev *pdev)
+ 	pci_set_drvdata(pdev, mpd);
+ 	mpd->dev = &pdev->dev;
+ 
++	mpd->dsn = pci_get_dsn(pdev);
+ 	mpd->mps = pcie_get_mps(pdev);
+ 	mpd->readrq = pcie_get_readrq(pdev);
+ 	mpd->relaxed_ord = pcie_relaxed_ordering_enabled(pdev);
+@@ -74,6 +81,7 @@ static struct mpnic_dev *mpnic_alloc(struct pci_dev *pdev)
+  **/
+ static int mpnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ {
++	struct net_device *netdev;
+ 	void __iomem *uc_addr0;
+ 	struct mpnic_dev *mpd;
+ 	int err;
+@@ -120,8 +128,23 @@ static int mpnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	if (err)
+ 		goto err_free_irqs;
+ 
++	netdev = mpnic_netdev_alloc(mpd);
++	if (!netdev) {
++		dev_err(&pdev->dev, "Netdev allocation failed\n");
++		err = -ENOMEM;
++		goto err_free_irqs;
++	}
 +
-+struct mpnic_net;
++	err = mpnic_netdev_register(netdev);
++	if (err) {
++		dev_err(&pdev->dev, "Netdev registration failed: %d\n", err);
++		goto err_free_netdev;
++	}
 +
-+/* Space we have to have available in a work queue to take a packet:
-+ *	1 descriptor per page
-+ *	+ 1 descriptor for the skb head
-+ *	+ 1 descriptor for the metadata
-+ *	+ 7 descriptors to keep the tail out of the head's cacheline
-+ * If we cannot guarantee that we return NETDEV_TX_BUSY.
+ 	return 0;
+ 
++err_free_netdev:
++	mpnic_netdev_free(mpd);
+ err_free_irqs:
+ 	mpnic_free_irqs(mpd);
+ err_free_mpd:
+@@ -138,6 +161,8 @@ static void mpnic_remove(struct pci_dev *pdev)
+ {
+ 	struct mpnic_dev *mpd = pci_get_drvdata(pdev);
+ 
++	unregister_netdev(mpd->netdev);
++	mpnic_netdev_free(mpd);
+ 	mpnic_free_irqs(mpd);
+ 	kfree(mpd);
+ }
+diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
+index cb4d1427434c..f4ad8caf6ce6 100644
+--- a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
++++ b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
+@@ -17,6 +17,8 @@ struct mpnic_xmit_cb {
+ };
+ 
+ #define MPNIC_XMIT_CB(__skb) ((struct mpnic_xmit_cb *)((__skb)->cb))
++#define MPNIC_TWD_TYPE_MASK(_type) \
++	cpu_to_le64(FIELD_PREP(MPNIC_TWD_TYPE, MPNIC_TWD_TYPE_##_type))
+ 
+ /* Leave the interrupt moderation counters alone when arming or masking */
+ #define MPNIC_TIM_PARAM_CFG_PRESERVE_MASK \
+@@ -51,6 +53,29 @@ static struct netdev_queue *mpnic_txring_txq(const struct net_device *dev,
+ 	return netdev_get_tx_queue(dev, ring->q_idx);
+ }
+ 
++static void mpnic_tx_doorbell(struct mpnic_ring *ring, __le64 *meta)
++{
++	*meta |= cpu_to_le64(MPNIC_TWD_FLAG_REQ_COMPLETION);
++	ring->deferred_meta = -1;
++
++	/* Force DMA writes to flush before writing to tail */
++	dma_wmb();
++
++	writeq(ring->tail, ring->doorbell);
++}
++
++/* Packets handed to us with xmit_more set are left in the ring without a
++ * doorbell, and without a completion request, in the expectation that the
++ * packet ending the burst will ring for all of them. If that packet gets
++ * dropped instead we have to ring here, otherwise the descriptors sit in
++ * the ring until the next transmit, which may never come.
 + */
-+#define MPNIC_MAX_SKB_DESC		(MAX_SKB_FRAGS + 9)
-+#define MPNIC_TX_DESC_WAKEUP		(MPNIC_MAX_SKB_DESC * 2)
++static void mpnic_tx_flush_doorbell(struct mpnic_ring *ring)
++{
++	if (ring->deferred_meta >= 0)
++		mpnic_tx_doorbell(ring, &ring->desc[ring->deferred_meta]);
++}
 +
-+#define MPNIC_MAX_NAPI_VECTORS		1024u
+ static void mpnic_unmap_single_twd(struct device *dev, __le64 *twd)
+ {
+ 	u64 raw_twd = le64_to_cpu(*twd);
+@@ -67,6 +92,138 @@ static void mpnic_unmap_page_twd(struct device *dev, __le64 *twd)
+ 		       FIELD_GET(MPNIC_TWD_LEN, raw_twd), DMA_TO_DEVICE);
+ }
+ 
++static bool
++mpnic_tx_map(struct mpnic_ring *ring, struct sk_buff *skb, __le64 *meta)
++{
++	struct device *dev = skb->dev->dev.parent;
++	unsigned int tail = ring->tail, first;
++	unsigned int size, data_len;
++	skb_frag_t *frag;
++	dma_addr_t dma;
++	__le64 *twd;
 +
-+struct mpnic_ring {
-+	void **tx_buf;			/* Packets outstanding in a TWQ */
++	tail++;
++	tail &= ring->size_mask;
++	first = tail;
 +
-+	u32 __iomem *doorbell;		/* Pointer to CSR space for ring */
-+	__le64 *desc;			/* Descriptor ring memory */
-+	u16 size_mask;			/* Size of ring in descriptors - 1 */
-+	u16 q_idx;			/* Hardware queue index */
++	size = skb_headlen(skb);
++	data_len = skb->data_len;
 +
-+	u32 head, tail;			/* Head/Tail of ring */
++	if (size > FIELD_MAX(MPNIC_TWD_LEN))
++		goto err_dma;
 +
-+	/* TWQ only, index of the metadata descriptor of the last packet
-+	 * placed in the ring without ringing the doorbell, -1 if the
-+	 * doorbell is in sync with the tail.
-+	 */
-+	s32 deferred_meta;
++	dma = dma_map_single(dev, skb->data, size, DMA_TO_DEVICE);
 +
-+	/* Slow path fields follow */
-+	dma_addr_t dma;			/* Phys addr of descriptor memory */
-+	size_t size;			/* Size of descriptor ring in memory */
-+};
++	for (frag = &skb_shinfo(skb)->frags[0];; frag++) {
++		twd = &ring->desc[tail];
 +
-+/* The device pairs two work queues with one completion queue. On the Tx
-+ * side only the first work queue is used for now, the second one becomes
-+ * the XDP ring.
-+ */
-+struct mpnic_q_triad {
-+	struct mpnic_ring sub0, sub1, cmpl;
-+};
++		if (dma_mapping_error(dev, dma))
++			goto err_dma;
 +
-+struct mpnic_napi_vector {
-+	struct napi_struct napi;
-+	struct device *dev;		/* Device for DMA unmapping */
-+	struct mpnic_dev *mpd;
++		*twd = cpu_to_le64(FIELD_PREP(MPNIC_TWD_ADDR, dma) |
++				   FIELD_PREP(MPNIC_TWD_LEN, size) |
++				   FIELD_PREP(MPNIC_TWD_TYPE,
++					      MPNIC_TWD_TYPE_AL));
 +
-+	u16 v_idx;
-+	u16 txt_count;
++		tail++;
++		tail &= ring->size_mask;
 +
-+	char name[IFNAMSIZ + 11];
++		if (!data_len)
++			break;
 +
-+	struct mpnic_q_triad qt[];
-+};
++		size = skb_frag_size(frag);
++		data_len -= size;
 +
-+int mpnic_alloc_napi_vectors(struct mpnic_net *mpn);
-+void mpnic_free_napi_vectors(struct mpnic_net *mpn);
-+int mpnic_alloc_resources(struct mpnic_net *mpn);
-+void mpnic_free_resources(struct mpnic_net *mpn);
-+int mpnic_set_netif_queues(struct mpnic_net *mpn);
-+void mpnic_reset_netif_queues(struct mpnic_net *mpn);
-+void mpnic_napi_enable(struct mpnic_net *mpn);
-+void mpnic_napi_disable(struct mpnic_net *mpn);
++		if (size > FIELD_MAX(MPNIC_TWD_LEN))
++			goto err_dma;
 +
-+#endif /* _MPNIC_TXRX_H_ */
++		dma = skb_frag_dma_map(dev, frag, 0, size, DMA_TO_DEVICE);
++	}
++
++	*twd |= MPNIC_TWD_TYPE_MASK(LAST_AL);
++
++	MPNIC_XMIT_CB(skb)->desc_count = ((twd - meta) + 1) & ring->size_mask;
++
++	skb_tx_timestamp(skb);
++
++	ring->tail = tail;
++
++	/* Verify there is room for another packet */
++	netif_txq_maybe_stop(mpnic_txring_txq(skb->dev, ring),
++			     mpnic_desc_unused(ring), MPNIC_MAX_SKB_DESC,
++			     MPNIC_TX_DESC_WAKEUP);
++
++	if (__netdev_tx_sent_queue(mpnic_txring_txq(skb->dev, ring),
++				   MPNIC_XMIT_CB(skb)->bytecount,
++				   netdev_xmit_more()))
++		mpnic_tx_doorbell(ring, meta);
++	else
++		ring->deferred_meta = meta - ring->desc;
++
++	return false;
++err_dma:
++	if (net_ratelimit())
++		netdev_err(skb->dev, "TX DMA map failed\n");
++
++	while (tail != first) {
++		tail--;
++		tail &= ring->size_mask;
++		twd = &ring->desc[tail];
++		if (tail == first)
++			mpnic_unmap_single_twd(dev, twd);
++		else
++			mpnic_unmap_page_twd(dev, twd);
++	}
++
++	return true;
++}
++
++#define MPNIC_MIN_FRAME_LEN	60
++
++static netdev_tx_t mpnic_xmit_frame_ring(struct sk_buff *skb,
++					 struct mpnic_ring *ring)
++{
++	__le64 *meta = &ring->desc[ring->tail];
++	u32 tail = ring->tail;
++
++	if (skb_put_padto(skb, MPNIC_MIN_FRAME_LEN))
++		goto err_drop;
++
++	if (!netif_txq_maybe_stop(mpnic_txring_txq(skb->dev, ring),
++				  mpnic_desc_unused(ring), MPNIC_MAX_SKB_DESC,
++				  MPNIC_TX_DESC_WAKEUP)) {
++		mpnic_tx_flush_doorbell(ring);
++		return NETDEV_TX_BUSY;
++	}
++
++	ring->tx_buf[tail] = skb;
++	*meta = cpu_to_le64(MPNIC_TWD_FLAG_DEST_MAC);
++
++	MPNIC_XMIT_CB(skb)->bytecount = skb->len;
++	MPNIC_XMIT_CB(skb)->desc_count = 0;
++
++	if (mpnic_tx_map(ring, skb, meta))
++		goto err_free;
++
++	return NETDEV_TX_OK;
++
++err_free:
++	dev_kfree_skb_any(skb);
++	ring->tx_buf[tail] = NULL;
++	ring->tail = tail;
++err_drop:
++	mpnic_tx_flush_doorbell(ring);
++
++	return NETDEV_TX_OK;
++}
++
++netdev_tx_t mpnic_xmit_frame(struct sk_buff *skb, struct net_device *dev)
++{
++	struct mpnic_net *mpn = netdev_priv(dev);
++
++	return mpnic_xmit_frame_ring(skb, mpn->tx[skb_get_queue_mapping(skb)]);
++}
++
+ static void mpnic_clean_twq0(struct mpnic_napi_vector *nv, int napi_budget,
+ 			     struct mpnic_ring *ring, bool discard,
+ 			     unsigned int hw_head)
+diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.h b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.h
+index 68a773133fa2..2add4ad0d39a 100644
+--- a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.h
++++ b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.h
+@@ -26,6 +26,10 @@ struct mpnic_net;
+ 
+ #define MPNIC_MAX_NAPI_VECTORS		1024u
+ 
++#define MPNIC_TXQ_SIZE_DEFAULT		1024
++
++#define MPNIC_MAX_JUMBO_FRAME_SIZE	9742
++
+ struct mpnic_ring {
+ 	void **tx_buf;			/* Packets outstanding in a TWQ */
+ 
+@@ -68,6 +72,7 @@ struct mpnic_napi_vector {
+ 	struct mpnic_q_triad qt[];
+ };
+ 
++netdev_tx_t mpnic_xmit_frame(struct sk_buff *skb, struct net_device *dev);
+ int mpnic_alloc_napi_vectors(struct mpnic_net *mpn);
+ void mpnic_free_napi_vectors(struct mpnic_net *mpn);
+ int mpnic_alloc_resources(struct mpnic_net *mpn);
 
 -- 
 2.52.0
