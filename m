@@ -1,164 +1,141 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38EF444C4FD
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 19:45:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722A944C678
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 19:57:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790192758; cv=none; b=P06DZqksHgcBnsZwxUSKL8Bk8H+7UopmBFK48JImoPxEVVByToUOdkE85nkBVVXRPgt2snO18SaYJJrjm4P1EzJAzDWsInkJfa9k5jjUol9RY1QdLIUuX3HmZkJjmuK7jPBgkoDx6u8RvmJeQci5BWVTWHkSoRJoGF6aGQ8T/NM=
+	t=1790193466; cv=none; b=cB+aXV6RaO44Fe5Zl5bun1egfgeJ1p4xjRzKlgYOJJvHQxr6I0F8IocXwJPS9uAMfRYUntx55eMijorAZqPpu0fLy2Vv+h/sJcScQHR/Pjq6Mrwc8ujI0yCg8wmlcjrHzXhVAx1ibfLZs6zaUbW9VWaobaTLPzzCjmS5V+FAxkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790192758; c=relaxed/simple;
-	bh=o3WTXNSpt1RtWSDZflrH3eztvxeuVKIejyc6QlAYUzo=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=V/j4bprbqLvKxgwFCZxIezFVdLDcEeLFQ9f37rSw6bH8fnIyjjU9jzCyA2XqG4mI3t0oipuR2L3enk0DmraLlzz/ciws04dxd+K7TsGZTj+5DREDSNbGzW2WuX/2iVIq6qymSXzpM7nHggj5meQIrNgBXH13IVyDZtIhBGdcKjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L5g6ay34; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790193466; c=relaxed/simple;
+	bh=Z/4NfYRkerR6Fzitixj4zJL0aK/hzEtXn1IbKrmLi1w=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=R8kESt5pPSKwnbbf5Kx4TJj6nqlOwqDq5jC6fthhKqSf6gFykZ9C9FpqeFcgA3tRrVdPyaFsaRrwoo42a01HfRAFAqnJPUQtMilx6lN/7ErGoUt0IsdPWdNKqujfP88TNVaJo77EV2wNU8JaAAS5R9+NWmhBNPMvXp3mNlm1jzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZH62cn4i; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L5g6ay34"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC81F1F00893;
-	Wed, 23 Sep 2026 19:45:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZH62cn4i"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A63411F000FF;
+	Wed, 23 Sep 2026 19:57:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790192757;
-	bh=mWYsOjT/honulXiNL+Fa3CiVt0RkAq6nSe+ou5gCcac=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=L5g6ay34p4BfHadTZAfJvfDGcaYQ6c9Ief1jgcFlzt+NiMqk2tcRIdg2iLCy/sYeG
-	 vxFyphOBW2v+qWM6ho0DuOPByrkJORc/+GOcuboNNHh73oFCVChd9oScsKai2CPrBM
-	 fm+VZS92cDG5Pp2QdENrPhxuaoVyVSewpaUzpCc1h/QDK9m6qmtwiJaeUCOIYRUFWL
-	 ryrkm61eKFwEUYMl7kJK8v9fGnuSDfzvdJw7WBDJmXcrSVr4wXFAGqFCvlhFcjMcoX
-	 /QbzXxy/rJ4LJkHQp/93hbU/X0jJXPgaPuA7ZkWzLsZPR8fP1jN52nYv2Ab4d59Ip3
-	 kduXZZdbKMAPg==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net v2 8/9] gve: ensure XDP mem model is registered when
- disabling XSK pools
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Joshua Washington" <joshwash@google.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260922194533.631387-9-joshwash@google.com>
-References: <20260922194533.631387-1-joshwash@google.com>
- <20260922194533.631387-9-joshwash@google.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 23 Sep 2026 19:45:56 +0000
-Message-Id: <20260923194556.CC81F1F00893@smtp.kernel.org>
+	s=k20260515; t=1790193465;
+	bh=aOnXOFsPdWZC4sLr9f0Wb2KrKnurVAs33OnmYE5Syn4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=ZH62cn4icn25krMIy+xRObUW0KQwYxUtIlvsEdu43GpasUhi2SUSpNE9t+CxHaU0n
+	 ONLC1Zaac6G9r0B/R354V974tak+zFl/aI6GDCBLnlx/xrJLoOi2wQlLE1ZHx6TXTB
+	 KRWcy/iZs+3JL+mzPCckyk+5wUIzKXnZpnwUL9mf1Ut3emCfuWcWIi5kLnYiQ/Tm/n
+	 VHTF7CW3+1AtMiA7u01Hrp6u1L7ywidkBIfJuJuYCtHxdwv3IoKzhvM+VZgHwDp7nY
+	 Y9Tx+pJLKhuLNCF3nygEdL8UGicZPk6DaHV8GdhwkWPnf7z/aeKIyv0UjJWWT5gRKU
+	 RWCsS+ZIfjd8g==
+Content-Type: multipart/mixed; boundary="===============8478301700528267284=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Message-Id: <731653ff84bafb19361b62836f366d369799041bf18166b016dc7ff13eff5b73@mail.kernel.org>
+In-Reply-To: <20260923191139.2816206-2-memxor@gmail.com>
+References: <20260923191139.2816206-2-memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 01/18] bpf: Add accessors for verifier stack slots
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,tj@kernel.org,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 23 Sep 2026 19:57:43 +0000 (UTC)
 
-Thank you for your contribution! Sashiko AI review found 3 potential issue(=
-s) to consider:
-- [Critical] net/gve: GQI RDA missing ring state reset causes host-device d=
-esync
-- [Critical] net/gve: Use-After-Free of XSK pool in RDA mode upon disable
-- [High] net/gve: QPL TX stall due to missing allocation counters reset
---
+--===============8478301700528267284==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-commit 94bf684b19419e50950102b96994b969bc7787bd
-Author: Joshua Washington <joshwash@google.com>
-Subject: gve: ensure XDP mem model is registered when disabling XSK pools
+> bpf: Add accessors for verifier stack slots
+>
+> The verifier indexes a frame's stack state directly through
+> state->stack[spi] and computes the number of tracked slots as
+> allocated_stack / BPF_REG_SIZE in every file that touches stack slots.
+> Route all of these through two helpers, bpf_stack_slot() and
+> bpf_stack_nr_slots(), so the layout of the per-frame stack state is
+> visible in one place and can change without touching every user.
+> Both take a const frame: the slot accessor returns the slot through the
+> frame's stack pointer, so read-only code such as the state printer can
+> use it without giving up its qualifiers. Functions that look up the
+> same slot repeatedly now fetch it once.
+>
+> No functional change.
+>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-This patch modifies how the GVE driver disables XSK pools to ensure the
-memory model is registered correctly. In QPL mode, it registers the memory
-model live. In RDA mode, it fully restarts the rings to handle potential
-memory allocation failures safely.
+The commit message makes two universal claims that the tree does not back
+up after this patch.
 
-> diff --git a/drivers/net/ethernet/google/gve/gve_main.c b/drivers/net/eth=
-ernet/google/gve/gve_main.c
-> --- a/drivers/net/ethernet/google/gve/gve_main.c
-> +++ b/drivers/net/ethernet/google/gve/gve_main.c
+1) "Route all of these through two helpers ... so the layout of the
+per-frame stack state is visible in one place and can change without
+touching every user."
 
-[ ... ]
+At least two users of struct bpf_func_state::stack still depend on the raw
+layout:
 
-> @@ -1735,31 +1776,11 @@ static int gve_xsk_pool_disable(struct net_device=
- *dev,
->  	if (!netif_running(dev) || !priv->tx_cfg.num_xdp_queues)
->  		goto unmap_and_return;
-> =20
-> -	/* Stop and start RDA queues to repost buffers. */
-> -	if (!gve_is_qpl(priv) && priv->xdp_prog) {
-> -		err =3D gve_configure_rings_xdp(priv, priv->rx_cfg.num_queues);
-> -		if (err)
-> -			return err;
-> -	}
-> -
-> -	napi_rx =3D &priv->ntfy_blocks[priv->rx[qid].ntfy_id].napi;
-> -	napi_disable_locked(napi_rx); /* make sure current rx poll is done */
-> -
-> -	tx_qid =3D gve_xdp_tx_queue_id(priv, qid);
-> -	napi_tx =3D &priv->ntfy_blocks[priv->tx[tx_qid].ntfy_id].napi;
-> -	napi_disable_locked(napi_tx); /* make sure current tx poll is done */
-> -
-> -	gve_unreg_xsk_pool(priv, qid);
-> -	smp_mb(); /* Make sure it is visible to the workers on datapath */
-> -
-> -	napi_enable_locked(napi_rx);
-> -	napi_enable_locked(napi_tx);
+drivers/net/ethernet/netronome/nfp/bpf/verifier.c:nfp_bpf_map_update_value_ok():
 
-[ ... ]
+    state = env->cur_state->frame[reg3->frameno];
+    ...
+    soff = -(off + i) - 1;
+    stack_entry = &state->stack[soff / BPF_REG_SIZE];
 
-> +	if (gve_is_qpl(priv)) {
-> +		err =3D gve_unreg_xsk_pool_live(priv, dev, qid);
-> +	} else {
-> +		/* Stop and start RDA queues to repost buffers. */
-> +		err =3D gve_restart_rings(priv);
-> +	}
+This is the exact state->stack[spi] indexing the message says was removed.
+It was not converted.
 
-[Severity: Critical]
-In the branch for RDA mode, gve_restart_rings() is called, but it appears
-to omit unregistering the XSK pool, which was previously handled by
-gve_unreg_xsk_pool().
+kernel/bpf/diagnostics.c:reg_to_target(), which this patch edits (the nslots
+line), still does raw pointer arithmetic that assumes stack is a flat array:
 
-Since gve_restart_rings() stops and starts the hardware queues reusing
-the existing memory arrays, the tx->xsk_pool and rx->xsk_pool pointers
-are never cleared to NULL. The pool memory is unmapped and subsequently
-freed by the XDP framework.
+    start = (unsigned long)state->stack;
+    end = (unsigned long)(state->stack + nslots);
+    ...
+    spi = ((const char *)reg - (const char *)state->stack) /
+          sizeof(*state->stack);
 
-When NAPI polling resumes on the restarted rings, could fast-path
-functions like gve_clean_tx_done_dqo() check and dereference the stale
-tx->xsk_pool pointer, leading to a use-after-free?
+If bpf_stack_slot() ever stops being &frame->stack[spi], both sites will
+silently compute wrong slots. So the stated goal (the layout can change
+without touching every user) does not hold yet.
 
-[Severity: Critical]
-Also regarding this RDA mode restart path: when the rings are restarted,
-the start path re-registers queues with the hardware, which resets the
-device's expected descriptor pointers to 0.
+Nothing later in 277f2757dee8..7757cddf610a changes the helpers, the layout,
+or the nfp code, so this is not a runtime bug in the series. It is an
+incomplete conversion, or a message that needs narrowing.
 
-However, looking at gve_tx_stop_ring_gqi(), it does not seem to reset
-the software ring pointers (tx->req and tx->done) unlike the DQO path.
+2) "Functions that look up the same slot repeatedly now fetch it once."
 
-When transmission resumes, could the host use its stale absolute pointers
-and ring the doorbell with a large offset, causing the device to
-interpret this as a massive burst of packets and read uninitialized memory?
+Several converted functions still call the accessor twice for the same
+index:
 
-> diff --git a/drivers/net/ethernet/google/gve/gve_tx_dqo.c b/drivers/net/e=
-thernet/google/gve/gve_tx_dqo.c
-> --- a/drivers/net/ethernet/google/gve/gve_tx_dqo.c
-> +++ b/drivers/net/ethernet/google/gve/gve_tx_dqo.c
+bpf_get_spilled_reg():
 
-[ ... ]
+    (1 << bpf_stack_slot(frame, slot)->slot_type[BPF_REG_SIZE - 1]) & mask)
+    return &bpf_stack_slot(frame, slot)->spilled_ptr;
 
-> +static void gve_tx_reset_ring_dqo(struct gve_tx_ring *tx)
-> +{
-> +	size_t size;
-> +
-> +	/* Reset dqo_tx fields. */
-> +	tx->dqo_tx.head =3D 0;
-> +	tx->dqo_tx.tail =3D 0;
-> +	tx->dqo_tx.last_re_idx =3D 0;
-> +	tx->dqo_tx.posted_packet_desc_cnt =3D 0;
-> +	tx->dqo_tx.completed_packet_desc_cnt =3D 0;
-> +	tx->dqo_tx.free_pending_packets =3D 0;
+bpf_mark_all_scalars_precise():
 
-[Severity: High]
-This function resets the standard TX fields, but it seems to miss
-resetting the QPL allocation counters (tx->dqo_tx.alloc_tx_qpl_buf_cnt
-and tx->dqo_tx.free_tx_qpl_buf_cnt).
+    if (!bpf_is_spilled_reg(bpf_stack_slot(func, j)))
+    reg = &bpf_stack_slot(func, j)->spilled_ptr;
 
-Since gve_tx_init_ring_state_dqo() later sets
-tx->dqo_compl.free_tx_qpl_buf_cnt to 0, will the available buffer
-calculation upon restart use a stale, large alloc count against a zeroed
-free count? This might make the queue incorrectly think no QPL buffers
-are available, resulting in a TX stall.
+bpf_mark_chain_precision():
 
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260922194533.6313=
-87-1-joshwash@google.com?part=3D8
+    if (!bpf_is_spilled_scalar_reg(bpf_stack_slot(func, i))) {
+    reg = &bpf_stack_slot(func, i)->spilled_ptr;
+
+The same pattern appears in states.c (propagate_precision,
+iter_active_depths_differ, mark_all_scalars_imprecise) and verifier.c
+(check_stack_write_var_off, get_constant_map_key, collect_linked_regs,
+widen_imprecise_scalars). Only some functions, such as
+print_verifier_state(), were changed to fetch once.
+
+Should nfp_bpf_map_update_value_ok() be converted to bpf_stack_slot(), and
+reg_to_target() given a note or helper for its address-range check?
+Otherwise the changelog could be narrowed to match what the patch actually
+does.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35909853278
+--===============8478301700528267284==--
