@@ -1,215 +1,107 @@
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CFD49EC68
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 11:29:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C1F149EC72
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 11:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790163002; cv=none; b=tMMTmjtMXeEw4jE3p+6fa/fozGAew8Pxr5JievNp2nwfYiXPVcmu5ijuqiBnOh1s3Q6qKh9yoZkb7Ijt7aROsNZg5fe3VN0h3DD225swMpf4UQw1wurfmzrrLvLELQqh8AY1QnVpfQf7HzovI+s0HmtiSqejrZuc8kvREiIc1Os=
+	t=1790163004; cv=none; b=f45VqP56dgJoxBLffdj3cczoIGyTYqCNyYfIaWt4yRCfqQTB94wMhiDTnyPHb7/OaenfzQYW8kjgLbTjpODlqmcBM7PCzjT4JcGhOlGipJE4ZRC7w66aNcNobUIDHUC/xEIAMLqB2LsF+AGsRwDux7UgHpZpserGW3qex0Zoe+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790163002; c=relaxed/simple;
-	bh=opWqWSXnGRjYbUf5OxwbuCPUUj3bvnft5t6/JcjWp8k=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=lFRSkwUbDrIc5CcLQQ6960NV7MaU9ILUpYicYFIwYS8bk9E6/XIz/7YBrnzT21B/CRTAICZgJzo6H0J+Bjhfvv84fF1UXH6/6KeGB6MIruDv+5pPN7K1K2kDfDcvHnGTeOqEoyGRPe8g5cOymtI0Sjmbb55eqsJ0NFYLYf+BACw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YKwmrzHO; arc=none smtp.client-ip=74.125.225.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790163004; c=relaxed/simple;
+	bh=AYhacAIOU9DfNtEKQcLBl4WUi74t7QonBaw7zJRbTMw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N9Jf46e4rOFNtq14FGPkFckO848HmyKj1Legrn5DRJXMXlj18lYUa1IX1osdAdT9AWcSm12XXbgN9ZhYf5l61NufzCFKDjvSmEW6diH4s/Y7eUPaEpkjunZTmtg62ZO2iES6UXU+NZR2MI05uQzCknClMkql5l0I9haYGqvmyZs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Fb207IAT; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YKwmrzHO"
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-483960225ccso198870f8f.1
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 04:29:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790162995; x=1790767795; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=5TJi5pYYgXT5a+4BNFFHNYyeAaTkJJY7o8Za71zVW8k=;
-        b=YKwmrzHOa8Jv1ydKrAvZTY/oA2BVptcvSs0NzieSMnhhSzRPBP3itghlC8DdbNmo6y
-         TsHMHp13WPapCmW7KMnsR9Pw8FB6cd+STLcdgRrzLFOC1iVUTgXscIN9qg7Yl5MciA/B
-         sApYddJeG2H3s4FoSWlCv11oYR+6NsKLzhOzoLakNt9T8HtrmhmLrT7+IMIG6ayTHUNp
-         eK/SvtScLuH0Di4ocfk1qIKyZD5HXjGV3m+TBXzJnh767dn/7kiQc7XdMTDa59rHNh7x
-         syspQfzoKMflix+pJmkJDBzzIrw2fv3Q/GZP+lxElsImzmJmTQasZHWrLtuC5A1ZkKIW
-         LxIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790162995; x=1790767795;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5TJi5pYYgXT5a+4BNFFHNYyeAaTkJJY7o8Za71zVW8k=;
-        b=gJUT3CFhKrcYK90pLgosENfatO7HKB3KZZDWdmzvL5KvuZRPTvZqsX+XBIiTQB7fct
-         63KMYNml4vei2ilwiYXG3kiT054MhQWqMtphQCCrt8Tgm6Vel5PNUkRxmpg0UHxiLK58
-         6bTpXESpUDrzjz3itPOspnVaeOLtl4J7qDzXI7M3sdVBP7W6OfwsytbzLbbqYK+/A4+T
-         AOu5sjx9N7+r5VOunGvBvYyH3X1cRM3RTXPQBQKub+fvJk9rMqwlrpsDr/AWRZSy7hDu
-         uQTKSCGaIE7stXwM7kfdJcITXRFUw0wgysMDCrl6KANWBS/a4gphnn/tbAJsgXfztU1L
-         KMlA==
-X-Gm-Message-State: AFuF++mkvBuCU1rgesoUPnJjjb9bIKFQkPKcAqegHSG8fkb42Mkj7OP0
-	XNrzXoqGl8gfS0hCN0UMJFJ1uBr7QI/G/QDuN/iqzrgy6IfaS7xWBoNcwzlW9n6j
-X-Gm-Gg: AYBFou1Cv9sn4OrH3o+7A37B/kf+a1je+IbAGjPwamOcMJ9syY9FN4mykqTWlAoas9b
-	wZ6xtbGuOs4fQrYLYZcPFFeu4hHszdlJsTBJEcShGoMbYzcGGHf+Mj6d2ZFM1uVB1jri14OIR72
-	B6i1XtBNq+bc5qGI6p7geRt556SCulMMxULIdVEkGaC+X6MwU0R7L5j7xvGOTKqPy46uSwkviDJ
-	4fuzWYtWey90eLSeHAZA9I6L1wA87A60Xgd23EIUCiuY1fGqRueHtjFYgo0jS7IeaGuageMjmeh
-	stDH0GzylQ6FHBjZ8ODXOMG0CYLfEHpB97H4LZxBhuR2kbjnp0bNB3gKtEZOYaeB3wdTm8ERQcw
-	+BG1JYR6yqAgaF+jVOg5JrG7OfyR7JNb9O+SRABeVwAyQgfhibSFGM3SKMs3H4+8mN36PrHx6wV
-	/mQQKn2CDfQTrHhkOhSTyFXp//kEUpTRi/VArDjsRcWmKKDUGol/TrW5Lv1L9NI3EAyzsqP6A8l
-	BvJ/dITFSujDDVzwYgwV1Z2c/sKUYKo5KDzsvLUhbdYqaRnFrXk+fLRqcNHEsiPN2aL5BINI16G
-	fyqDF/SJvBgSOcyYtD3KkG9lbPEMmJL85HZhBXaXKnGbdpL0
-X-Received: by 2002:a05:6000:1886:b0:487:172:6293 with SMTP id ffacd0b85a97d-48867060a67mr3901721f8f.3.1790162994662;
-        Wed, 23 Sep 2026 04:29:54 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886876c119sm6797699f8f.15.2026.09.23.04.29.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Sep 2026 04:29:54 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Fb207IAT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790162996;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AYhacAIOU9DfNtEKQcLBl4WUi74t7QonBaw7zJRbTMw=;
+	b=Fb207IATAaahzU+wEXIdwY96m0PXMCfIdoMP/uIo72XhouV14w8SoSKYMTnKjRhUsUbtjP
+	vUfZ9wyQn2F3mOen34i38x1ZtFHIA6ihT/iQKynvgdNcquwTcAZDVvS2VfMfs/U/9a35jq
+	ylmsnT3TwSVO75FJ/wLJam42+3a708I=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-363-gooFaoLZMMuKAK_dogOFiQ-1; Wed,
+ 23 Sep 2026 07:29:53 -0400
+X-MC-Unique: gooFaoLZMMuKAK_dogOFiQ-1
+X-Mimecast-MFC-AGG-ID: gooFaoLZMMuKAK_dogOFiQ_1790162988
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8D61E1955F14;
+	Wed, 23 Sep 2026 11:29:44 +0000 (UTC)
+Received: from fedora (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 27F2A418;
+	Wed, 23 Sep 2026 11:29:29 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Wed, 23 Sep 2026 13:29:44 +0200 (CEST)
+Date: Wed, 23 Sep 2026 13:29:28 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Ricardo Robaina <rrobaina@redhat.com>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-um@lists.infradead.org, bpf@vger.kernel.org,
+	paul@paul-moore.com, eparis@redhat.com, sgrubb@redhat.com,
+	richard.henderson@linaro.org, mattst88@gmail.com, linmag7@gmail.com,
+	linux@armlinux.org.uk, catalin.marinas@arm.com, will@kernel.org,
+	guoren@kernel.org, monstr@monstr.eu, tsbogend@alpha.franken.de,
+	jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+	shorne@gmail.com, James.Bottomley@hansenpartnership.com,
+	deller@gmx.de, ysato@users.sourceforge.jp, dalias@libc.org,
+	glaubitz@physik.fu-berlin.de, davem@davemloft.net,
+	andreas@gaisler.com, richard@nod.at,
+	anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+	chris@zankel.net, jcmvbkbc@gmail.com, tglx@kernel.org,
+	peterz@infradead.org, luto@kernel.org
+Subject: Re: [PATCH v3 01/14] audit: log all six syscall arguments in the
+ SYSCALL record
+Message-ID: <arO4GNT_5wNEYsCO@redhat.com>
+References: <cover.1790088067.git.rrobaina@redhat.com>
+ <855572d1b7461e7f258547be0f11c74029755110.1790088067.git.rrobaina@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 23 Sep 2026 13:29:53 +0200
-Message-Id: <DLMNTHW945RO.TLPGJHZRWHUY@gmail.com>
-Subject: Re: [PATCH bpf-next v6 0/4] bpf: Add bpf_call_rcu() and
- bpf_call_rcu_tasks_trace()
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Puranjay Mohan" <puranjay12@gmail.com>, "Andrii Nakryiko"
- <andrii.nakryiko@gmail.com>
-Cc: <bpf@vger.kernel.org>, <rcu@vger.kernel.org>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Harry Yoo (Oracle)"
- <harry@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260922200208.3203834-1-puranjay@kernel.org>
- <CAEf4BzaifaWk+oHu-berWcKuS6Y5WfkcFTKZW-iMCPxG0=5i0w@mail.gmail.com>
- <CANk7y0g8Mh-je_o_nyXQ3zsGVeAsz2qMfgDtv4j-MXhAJ7PcMA@mail.gmail.com>
-In-Reply-To: <CANk7y0g8Mh-je_o_nyXQ3zsGVeAsz2qMfgDtv4j-MXhAJ7PcMA@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <855572d1b7461e7f258547be0f11c74029755110.1790088067.git.rrobaina@redhat.com>
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
 
-On Wed Sep 23, 2026 at 12:37 PM CEST, Puranjay Mohan wrote:
-> On Wed, Sep 23, 2026 at 12:41=E2=80=AFAM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
->>
->> On Tue, Sep 22, 2026 at 1:02=E2=80=AFPM Puranjay Mohan <puranjay@kernel.=
-org> wrote:
->> >
->> > Changelog:
->> > v5: https://lore.kernel.org/all/20260921191407.1742386-1-puranjay@kern=
-el.org/
->> > Changes in v6:
->> > - Size struct bpf_rcu_head at 48 bytes rather than 64, matching what t=
-he
->> >   inline state uses (Alexei)
->> > - Trim patch 1's changelog: drop the reasoning about possible future
->> >   layouts and about what the other async kfuncs return
->> > - Rebase on bpf-next/master
->> >
->> > v4: https://lore.kernel.org/all/20260915154248.3612028-1-puranjay@kern=
-el.org/
->> > Changes in v5:
->> > - Rename the "hash_map" subtest to "bad_map" so that it matches its
->> >   helper test_call_rcu_bad_map() (bpf-ci)
->> > - Bump the callback counter after chain_err in the selftest callback.
->> >   Userspace polls that counter and then reads chain_err, so it could
->> >   still see the initial value before the re-arm had stored one, which
->> >   let the chain subtest's assertion pass without checking anything
->> > - Say in patch 1 why embedding struct rcu_head in a uapi struct is
->> >   acceptable here (Mykyta, Paul, Alexei)
->> > - Rebase on bpf-next/master
->> > v3: https://lore.kernel.org/all/20260915143640.36292-1-puranjay@kernel=
-.org/
->> > Changes in v4:
->> > - Drop an unrelated hunk in bpf_async_update_prog_callback() that turn=
-ed
->> >   PTR_ERR(prog) into -EBADF.  That is the shared bpf_timer/bpf_wq path
->> >   and bpf_prog_inc_not_zero() returns -ENOENT, so it would have change=
-d
->> >   the errno bpf_timer_set_callback() and bpf_wq_set_callback() report =
-to
->> >   userspace (Sashiko).  No other changes from v3
->> > v2: https://lore.kernel.org/all/20260915114240.3269184-1-puranjay@kern=
-el.org/
->> > Changes in v3:
->> > - Move the bpf_call_rcu_tasks_trace() verifier bits from patch 1 to
->> >   patch 3; patch 1 alone emitted "resolve_btfids: unresolved symbol
->> >   bpf_call_rcu_tasks_trace" (Sashiko)
->> > - Poll the callback counter with an acquire load (Sashiko)
->> > - teardown: v2 only checked that the program was eventually freed, whi=
-ch
->> >   passes even if nothing was ever armed.  Also assert that the chain r=
-an,
->> >   and read the -EPERM back through an independent .bss fd
->> > - Use kern_sync_rcu() instead of open coding the grace-period wait
->> > - Return -EBADF rather than -ENOENT when the calling program is going
->> >   away, matching bpf_task_work_schedule()
->> > - mismatch_map now pins the bpf_rcu_head label the new code emits; it
->> >   passed with that branch removed.  Add a two_heads test, and wait for
->> >   each grace period separately in the chain test
->> > - Commit messages: correct the -EPERM parity claim, explain the inline
->> >   callback state and the struct size, motivate the tasks trace flavour
->> > v1: https://lore.kernel.org/all/20260907134552.1772405-1-puranjay@kern=
-el.org/
->> > Changes in v2:
->> > - Rebase on bpf-next/master
->> > - Use rcu_read_lock_dont_migrate() over open coding (Alexei)
->> > - Improve re-arming selftest to detect failure (Sashiko)
->> >
->> > BPF programs that manage their own objects have no way to run their ow=
-n
->> > logic once an RCU grace period has elapsed.  bpf_obj_drop() defers a
->> > free, but returning an index to an allocator or unpinning a resource
->> > once readers are done has no equivalent.  sched_ext's BPF library work=
-s
->> > around this today by pushing freed nodes onto a list and having a
->> > userspace thread call membarrier(MEMBARRIER_CMD_GLOBAL) and then run a
->> > BPF program to reclaim them; it is the first intended user.
->> >
->> > Add:
->> >
->> >         int bpf_call_rcu(struct bpf_rcu_head *rh, void *map,
->> >                          int (*callback)(struct bpf_map *map, void *ke=
-y,
->> >                                          void *value));
->> >
->> > and bpf_call_rcu_tasks_trace(), same signature, which also waits for
->> > sleepable programs.
->> >
->> > @rh is a struct bpf_rcu_head embedded in a value of @map, so the
->> > callback runs as callback(map, key, value) for the element it lives in
->> > and needs no cookie.  The field is only accepted in BPF_MAP_TYPE_ARRAY=
-,
->>
->> Isn't restricting this to BPF_MAP_TYPE_ARRAY unnecessarily restrictive
->> in practice? Do other APIs of similar kind have this limitation? E.g.,
->> bpf_task_work_schedule() or timer, I don't think they limit user to
->> just ARRAY maps, it's way too inflexible.
+On 09/22, Ricardo Robaina wrote:
 >
-> Right, bpf_timer and bpf_task_work take HASH/LRU_HASH/ARRAY. They can
-> because they can cancel: on element delete bpf_obj_free_fields() calls
-
-bpf_obj_cancel_fields(). bpf_obj_free_fields() is no longer called except w=
-hen
-the object is being freed finally.
-
-> bpf_task_work_cancel_and_free(), which reaches task_work_cancel(), so
-> a pending callback never runs against a recycled element.
-> A queued RCU callback cannot be cancelled. rcu_barrier() is the only
-> thing that waits for one, and it sleeps, so it is not callable from an
-> element delete. Array elements are never freed individually, which is
-> what makes it safe.
-
-If cancel is a noop, can you not simply skip it on map update?
-
-It is a bit unfortunate we can't provide cancel semantics, it will be yet
-another divergence from how all other async callbacks work...sigh.
-
+> The SYSCALL record currently logs only four of the six syscall
+> arguments (a0-a3). The remaining two are captured but silently
+> discarded before reaching the audit context. This leads to the
+> need for auxiliary records when audit-relevant data lands in the
+> 5th or 6th argument of a syscall.
 >
-> I can think of a complicated way to support hash maps but that would
-> need making the state dynamically allocated and finding a way to
-> cancel the callbacks. But I would do it as a follow-up if there is a
-> real use case.
+> Extend the SYSCALL record to log all six arguments, by adding
+> arguments a4 and a5 (5th and 6th syscall arguments respectively)
+> inline within the existing record. Also add the two new args to
+> the audit rules switch case, so audit rules can filter on them.
+>
+> Rather than plumbing two more register arguments through every
+> architecture's syscall entry path, retrieve the arguments from
+> pt_regs via syscall_get_arguments(). To keep the series bisectable,
+> add new helpers audit_syscall_entry_regs() and
+> __audit_syscall_entry_regs() that take a pointer to pt_regs, rather
+> than modifying the existing ones in place. Later patches convert
+> each architecture over to the new helpers, and a final patch removes
+> the legacy helpers and renames the new ones back to the original
+> naming.
 
-That would mean allocation and frees, it is already quite expensive as is f=
-or a
-call_rcu() primitive (with the refcount bumps and atomics).
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+
