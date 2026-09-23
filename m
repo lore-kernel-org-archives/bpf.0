@@ -1,79 +1,79 @@
-Received: from mail-pj2-f21.google.com (mail-pj2-f21.google.com [74.125.227.149])
+Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB7B23537FE
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 22:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768F547F77C
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 23:04:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790204152; cv=none; b=km8MmfmlDXrG2QXyJBjYZHWdACKYnbu/NR/uXmdBetmfOJ3TPHALRqLb+Eg94/9n9haFaI0Fgz/zvP+DSa9LzPwhDwoxBceW9wDQfPQ073T6feRQW7n71xMs/PHEkl7qbYEKsygOO25A5bZN9910M3HYMshNGPMMordHxmFmFFU=
+	t=1790204646; cv=none; b=bnyAkON8U3CXTTFfq5mh54AiWMG8JydxRn7u74rQKZnYK/zXVc/FyXGsDSPW1OdvIp4js8pRVDuhPaXUP5pPbbWiKAkFnrSzIdqzNHXTO/GAfqKk6w1hwJDCDdKG8x+6NT+brGjVsLLOltR94zBKSmj66KcL22G0HIrVQ84aebE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790204152; c=relaxed/simple;
-	bh=Mv5nMxGjXfBmeqXqUI9FM4Et6lA3qj56wOs79P3rdKI=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=b3PXK8F1K60fhr66YCPi1yyFbdEQXlLP8vjtNe8wVysaeJEMxte4LGle5fL/MYbi+rBD9DYVHsGWDyzx6edFznUK8mUJA47rI3IkJ/JkoB88wkRaDSGV5zDiJZCZkQDPupvXTWCXrfPUS1lqT7NsC8yhXKm0NVWEmjTC0+XAv/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=If7d4tWA; arc=none smtp.client-ip=74.125.227.149
+	s=arc-20240116; t=1790204646; c=relaxed/simple;
+	bh=p+jVyMeUEQUL09ifX1F8LQwxzyHKOSVwtkvnb98dS6s=;
+	h=Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
+	 References:MIME-Version; b=qBU2nyw6nM5J7zyQ1kL1eFo4C7YA3qfh8jCp2CaCXtivO6K7AcqOY3PECwYo2UJgyanGrpBwW3SHPPWGWgzblPC9Wyh/O9if6coGih582LD/KG5e6WTL6BlbghUbo9ujN9nu3hr4mJz7nxbNfm11U3DnZnRPJ3/6zuHV6OAAmmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BvfNOaQt; arc=none smtp.client-ip=74.125.228.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="If7d4tWA"
-Received: by mail-pj2-f21.google.com with SMTP id d9443c01a7336-2d747f0b25dso9317925ad.2
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 15:55:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BvfNOaQt"
+Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-85469d249c6so989058b3a.1
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 16:04:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790204147; x=1790808947; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1790204645; x=1790809445; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=VkVyETEvIfFqCTDaVFYFDJ9vOsB4y2E+1sqksFOPboE=;
-        b=If7d4tWA+2bgLhrZX/Wi7Xb5QSC4rhYScup02FduzEKDn/eMb9X8NU7Un5GRA8F7AR
-         v0NnX0iQtj3qqtOAVglcLvb8ns7rNbiS50ee7VZ0sTQNclbumcsl6xFUVcBm7JoZYfIx
-         sESgLTHhpJ4wGslQYkQxrwCihdHN5ZBC/dysWWHVb2u3BixIsCPWoGmqs7Ws+QEmOop/
-         ey5gTAop5fhOlM25IuUXhwM9OFi7ngpOsKc97YeQPY866zhPtgVbSrJpjVrW7/tCdH9b
-         Fpsadkg9ZdPOs46zUC7EQZUUFXW+9i/rrnZ71lCP2MRz3uTsPXvtJBqPO5k6YluRGmGI
-         X+JA==
+        bh=u3OBrGaW5JSQye02Yg0C4tyMSPz/cwRqY9o094bfJF0=;
+        b=BvfNOaQtASyLr3gLSGXMq0DVIujAkdH2IweQRXXC3gS9zdBk/rf3QEehhK36k9sW7P
+         jWT0kPR9AED1i9Hg83o5xeQCUedF1fOKDUGhHXz5jPuED4qXMdKWbW/S8f13jCam7liK
+         oso4ovZvLCTqXIhoQrLOwNwIBnfPYhq18f8P6mpjarZH69Ljsja5YiqF3TFkoHFhSkfY
+         YY2KNnnQvDOulBnl7Fe72DrmuEcRjfjZsyfNAS+s8fzzsNfRZsLvRU1CD/w7XYHSjc68
+         V7D5klujugyluwQM040m5Yl5xIZZ2Qkyhp8UT/PPE2QjmMg5i+9jJCG1o2Az+ZJPfD3Q
+         i8nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790204147; x=1790808947;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
+        d=1e100.net; s=20260707; t=1790204645; x=1790809445;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=VkVyETEvIfFqCTDaVFYFDJ9vOsB4y2E+1sqksFOPboE=;
-        b=egcP+kO2EQXSOFX5A7D2h4R2WNJAxFRmfnWRTgMrG1vJSy0M2Gy4fzaaxMAMYgos69
-         SM0CSUcCsvIDFLKJ2wwDo98q2bpvtnKgPEyeA5T5BpG92tHXDRosYLCX/u5iQPdevO7O
-         LDOUuaowbw6SUmpie6CECQqF3zec+vMxDX/ztyTpP5vje4tk3lVN8sYRmvlgkrK0Hwaw
-         W18nQrsgPvv7QEe67vTEe0Sy/VGKHBX3KDYnpQtVujRRMiDytgcbMhN6+P6yxMX1H/ei
-         lloQ3xgEXGxADgNFJ/ymwHzZ4jpzoas1QezaOWZiVnIhuTPxsTK2mJj9SQbP9hqxh+7Q
-         l9CQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxonVTZk3BWcqOu2zKZ2yYajCbZe0hTOsncvCdu8duzh00t2HWUaZ86/Cs3WfZS3eH/KyE=@vger.kernel.org
-X-Gm-Message-State: AFuF++nhs2mN/P13FiDoxXhxwtm7PwgIo6FwZrsDBfEx5VGnQ7QPg8+L
-	BL9tA51kLMzJZZwGCy4TNonVKiWQfOnOu6OJNCs1/TNIpurRSPQPTcWJ
-X-Gm-Gg: AYBFou2djUMDfxojNflLEZyHwMd0u/iVt2e9fD/1cJOLAavn6WGevEYBCVzipGMunfH
-	pcsnrU0FWAHVw92Lndz6brzYyw37YHbO3NYMivzHDJygR7qBoo8BSj2FKhzj1zpNkxjMTBhb6h6
-	+NXxTd0eoRffzvwDBCn1ybE57JvRQXRHJ+WkrJot6X9M5rLc3+G68hL9U57KLWoGb1R7yhXEW0Z
-	kkksLRGi9ppxopDnulP/rrGcRsSEhQhhGvRYKuG7VxY4wUoBZAKumilyMIWdQreFucw+QTAj5s5
-	0oG50jWCUXZskNO9RnH7hHtqItAS0wrKAKTgJQa6ydjh2t9MxC0Mqh+taLGAVJme2UdH6OtgnYp
-	dluT4t/lTpQu9J8DxSmrQ6k9i7UXS3hDTUktkFL6kCd3DdVTPyaGC+EjQ5TqCkXzX5Bd2brfCQp
-	LHNsWZjW/+btM069d000WtvbkZKwNJVgtpnZ9Jp1wHoJpvyTSPaPFZNXUAYncHGCXTw4HnbBuLI
-	tyaWO4cizPvtOiO0PJYSk5eJbP5El7n6nEV0mbOy1qReXEaetnsBatF4Os2KgBWRvlCmjJy7lEi
-	FSY=
-X-Received: by 2002:a17:903:1aac:b0:2dd:c100:313e with SMTP id d9443c01a7336-2df7e256059mr5039585ad.58.1790204146987;
-        Wed, 23 Sep 2026 15:55:46 -0700 (PDT)
+        bh=u3OBrGaW5JSQye02Yg0C4tyMSPz/cwRqY9o094bfJF0=;
+        b=M0uunNmQMFfMS9ChSW5xcvfZVHZGMxY73E7kPRn4G+ztHTrojqVPuEzCo/QF5y80Cc
+         8glz9mfsf7vgFsGq3HVKIMyn91TYtfVpD1rytF/43/Ix0mu/wsD5x3HpgeD94Ydvdoyu
+         ntUQc9QskalxuquBCLGUJY5EpDDMQQIavnuHHbds+pzExNau50Ui5YdKKCEsU1N3XcLi
+         NX/5J9jgp/xucJdTMMP/Jd/1bcvQfVrKLKYDexkH0P57yKksii6aS6zBLU/7BZRuFjpS
+         rZdkxAV9u0C5x1O0Tam3f7ckXJI7THFx9GAT9zdxYkBemAgpiLtvF3U44aPtt/x0i4cx
+         or0w==
+X-Forwarded-Encrypted: i=1; AKwUvBwTUvsdk4pmFJyPFEBw5rnThsk8XHVwoVrHKIe6dcAagMGotjT4Wlb6qNwKh/xo1+fACLc=@vger.kernel.org
+X-Gm-Message-State: AFuF++mKJHfxpue+VvvX2kCOC8XqOE4UNI9u7PN6zHbRGU1ILpYU9+Ll
+	6bPsRQHnT4fZ7ghLpW9lTnk1qeb32kmxQYCVPTgtH9LuIe5TkKuhoy8c
+X-Gm-Gg: AYBFou3UfceT8YvwaIMg6A8RnQcoCl+lj064xylafKj8X/YrjJBhsL1guUvpwdRM7WH
+	BeBiMf935y4E9va9TgBMoe30HABT8Y+XsbewgUXCMMGIbF0A03Jw3IPzJBXvm56ZCt/8DAkAj+J
+	ChOfh79XKa/+JSNoCLrYXDLec6/aMDbtHJLflP+bXvYNn+43mWApYyDyk22lLPhXs8TXGQnNtvm
+	9D77MsvqhNpj4iiwNXOzWr78TYdqn2g6a01fu7AsgIoIsQTInPm38LYCBn02BiTaew/198SAc9u
+	2n5t9hY1+CbhgrK+YXzwUn07eFRDgojk7DL1LVq9gGMBWyWUyrXn8QxZUkhAPCUh5G4Hxg9ZmvM
+	c46BQjfKTa3sUYGI18N9IBrqTa2VQf9b7bkNU3BD9BPieR/KN44d02ACGws7fk8shrg5cTEjdv8
+	1oP8IQpDoB7VUXzciRtqxlfYAWleGsH1vpFQ1kkVls50iJOLFHWkhiUXNsPeyJPKZiy+qWD4Yzo
+	VqEaVpbzolAPMrtHkLiu+5Ri/HLkpMcA/CxAXO+DyVhb4Wsd861zkyCb6zb0Rkq0Yx8FR57ANhe
+	9m0=
+X-Received: by 2002:a05:6a00:4c18:b0:878:34d7:6a28 with SMTP id d2e1a72fcca58-87e9bb85c53mr455578b3a.42.1790204644616;
+        Wed, 23 Sep 2026 16:04:04 -0700 (PDT)
 Received: from localhost ([153.61.198.251])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6afc80easm17247065ad.30.2026.09.23.15.55.46
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87d3894211asm1759781b3a.36.2026.09.23.16.04.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Sep 2026 15:55:46 -0700 (PDT)
+        Wed, 23 Sep 2026 16:04:04 -0700 (PDT)
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 23 Sep 2026 22:55:46 +0000
-Message-Id: <DLN2ENBJI5F7.1S4FUJ3ROP51V@gmail.com>
-Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Tejun Heo" <tj@kernel.org>,
- <kkd@meta.com>, <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next v1 12/18] bpf: Size the per-frame verifier
- structures for a 2 KiB stack
+Date: Wed, 23 Sep 2026 23:04:03 +0000
+Message-Id: <DLN2KZR6RHH5.2OO4ZIR0XA36T@gmail.com>
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
-In-Reply-To: <20260923191139.2816206-13-memxor@gmail.com>
-References: <20260923191139.2816206-1-memxor@gmail.com> <20260923191139.2816206-13-memxor@gmail.com>
+To: "Yun Lu" <luyun_611@163.com>, <daniel@iogearbox.net>,
+ <andrii@kernel.org>, <eddyz87@gmail.com>, <memxor@gmail.com>,
+ <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
+ <jolsa@kernel.org>, <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>
+Cc: <yatsenko@meta.com>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Fix task work scheduling and
+ callback race
+In-Reply-To: <20260922100042.136818-2-luyun_611@163.com>
+References: <20260922100042.136818-1-luyun_611@163.com> <20260922100042.136818-2-luyun_611@163.com>
 X-Mailer: mkdraft (claude review draft; edit before sending)
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -83,18 +83,32 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Wed, Sep 23, 2026 at 09:11 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> -#define FRAME_HALF_SPIS		(MAX_BPF_STACK / BPF_HALF_REG_SIZE)
-> +#define FRAME_HALF_SPIS		(MAX_BPF_STACK_JIT / BPF_HALF_REG_SIZE)
+On Tue, Sep 22, 2026 at 06:00 PM Yun Lu <luyun_611@163.com> wrote:
+> -	err = task_work_add(ctx->task, &ctx->work, ctx->mode);
+> +	task = get_task_struct(ctx->task);
+> +	err = task_work_add(task, &ctx->work, ctx->mode);
 
-MAX_ARG_SPILL_SLOTS in liveness.c is still 64.
-fp_off_to_slot() returns -1 for anything below fp-512, so
-  r6 = *(u64 *)(r10 - 520)
-makes r6 ARG_IMPRECISE in fill_from_stack() no matter what was
-spilled there. The next load or store through r6 goes to
-record_imprecise() and marks the whole stack of every frame as read.
-A prog that keeps spills below fp-512 gets no help from liveness
-and all of its frames carry 8 word masks.
+Why?
+There should be no need for get_task_struct().
+rcu_read_lock() keeps task_struct around.
+bpf_task_release() is put_task_struct_rcu_user(), so the task is
+freed after rcu gp and guard(rcu)() covers the whole handler.
+  task = ctx->task;
+is enough.
+The commit log still says that rcu_read_lock() "does not retain
+ctx->task". why?
 
-The numbers in the cover letter are for selftests that fit in 512.
-Pls share veristat numbers for progs that use more than that.
+[...]
+
+> +	if (unlikely(irq_work_is_busy(&ctx->irq_work))) {
+> +		(void)cmpxchg(&ctx->state, BPF_TW_PENDING, BPF_TW_STANDBY);
+> +		bpf_task_work_ctx_put(ctx);
+> +		return ERR_PTR(-EBUSY);
+> +	}
+
+This is a fix for a different bug.
+Pls split it into a separate patch and describe the sequence in
+its commit log the way it's done for the first one.
+"publishing a false SCHEDULED state" doesn't say what breaks.
+
+pw-bot: cr
