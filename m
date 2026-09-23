@@ -1,165 +1,140 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09A9056E056;
-	Wed, 23 Sep 2026 20:12:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE7458122B
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 20:12:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790194337; cv=none; b=KKcjMbnZRUgHXV9LkurY8DpYcfH29NVgPb+lU0Gp9v0t3Bq9yfR6PSpoSku2qrpyedPBAWNucZUdraRvOjDsPJB9xHzYMyHVLcwKInJ84f2eaYGGrgKstpA9h4UfjzvuvfqvZhbGSC88+LehVUNsFgZL8giIhqeB8sBFXxpKlus=
+	t=1790194373; cv=none; b=JW8irmqfKNuh3ioj7QqzJquWUjO+Qo9rKI0JGvJQW3QhJ8lMHYBo/LVWGXNYWgBASfaxKHwr/rqKI9ttC0Khbjhiutp26685MY17LQdwEn7M6CZ0ZhNt42nKkfZxQ/DNtCKSMxB/oBNiaQ1hpr8byZgQoWY/tnhuvocrSC5IC3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790194337; c=relaxed/simple;
-	bh=xjbIiGtnPGGNdB7Cp4RtxhvrfWalzWVLJYOsERWZ//k=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I0wsOsGhJUBQoEaNf5I14R0dO4NBG5JcOuMWBFn12B+HwFhtVLgejf8y+uvvriTFg/mlPdtI936KWU4ZfG84JmbJUk0WwcwMnyk1arJTeDgLlXKzPBjNaEAXLd27/n6+Tc0lzOiJzFTQpVINqAP+rQI+64DNwa1uyuPdBXcCYBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=zHPROmlt; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1790194373; c=relaxed/simple;
+	bh=wAEuQNjEMmFW5aZClx53ALoIyHMSSJNPMinF1Nal70Y=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=JU2lrvhhqjaQTQ26bhU3tS0WNiwuv/kGq+pTPlw1aI9s0FeZwdDukInL8zOPeZeoAenzlw+m3IovzRQQo0Cvy5qACg8jqvQjfXp/JA9W3vDRU/izukq9BK9s7i/aa3se8hKAtNMSxwhQmIb2+efimoYg/20yCHjdw7ZiMSpJV/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TBOzKP9k; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="zHPROmlt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1790194328; x=1821730328;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xjbIiGtnPGGNdB7Cp4RtxhvrfWalzWVLJYOsERWZ//k=;
-  b=zHPROmlth7VU9Nr6k7HsJh+qjv0GWsvqCoULJ4+Ejve2660zNxKIVZkG
-   6yXYH6qN4YpakL6Dbi+PhCFoTeNOapSEy1+298WbJzlbtgC0sSdo5DhxY
-   3edWpsfULpGpQC2NPHTxYBAQy3AFKox2eDmnLmaEzFS1FhH5lRBmEkJtm
-   zYERSiUsGjFMyNIEWtzB24a8T2SAMwOWjIwJxtLnIZdN+b3wJbsvTqDht
-   bM68i981ETKO81bUiqGdE1kHoW+MY+i2mFCVlW98NxXCBm939RroGhEAo
-   Daze0q9xiARJQOf2n0R9f8p7M12sLXprjhAamN6QRO1YRqnWc/euYO+HS
-   w==;
-X-CSE-ConnectionGUID: c8w4xk0VQIK9kL7RzabfGg==
-X-CSE-MsgGUID: PlFzdfUORdq11vQkFWPh5g==
-X-IronPort-AV: E=Sophos;i="6.27,119,1787036400"; 
-   d="scan'208";a="74202281"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2026 13:12:00 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex1.mchp-main.com (10.10.87.30) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.49; Wed, 23 Sep 2026 13:11:59 -0700
-Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Wed, 23 Sep 2026 13:11:55 -0700
-Date: Wed, 23 Sep 2026 22:11:55 +0200
-From: Daniel Machon <daniel.machon@microchip.com>
-To: Simon Horman <horms@kernel.org>
-CC: <netdev-bot+sashiko@kernel.org>, <andrew+netdev@lunn.ch>,
-	<davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-	<pabeni@redhat.com>, <horatiu.vultur@microchip.com>,
-	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
-	<ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
-	<john.fastabend@gmail.com>, <sdf@fomichev.me>, <herve.codina@bootlin.com>,
-	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <mohsin.bashr@gmail.com>,
-	<richardcochran@gmail.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH net-next v7 10/14] net: lan966x: add PCIe FDMA support
-Message-ID: <20260923201155.lbbbtx22adz2ilhg@DEN-DL-M70577.microsemi.net>
-References: <20260918-lan966x-pci-fdma-v7-10-0ecc179c8a2c@microchip.com>
- <179008205148.2160803.12818321368571406375@kernel.org>
- <20260923084538.wgkw2nt5ergoxcot@DEN-DL-M70577>
- <20260923180730.GV13925@horms.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TBOzKP9k"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 258951F00898;
+	Wed, 23 Sep 2026 20:12:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790194363;
+	bh=JGiYvQ1+a8NmS3ajeASpGC/dbBojlZOw7TmzqPIsptA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=TBOzKP9k7i6X/GNMwMncK2C1UoP08f+/ILj5QEnQvwGrs/PRJeVvKRKAElCe1BwDl
+	 QJrshGrel7//j5hvkyNlrxs6CrxJOr7g+V33XTejbyqIBi+B61tEQ5rqy+GnppEPdo
+	 qgk/MlVr9BtyamGjt4p9ZXsQIz2/iCtPuZ1WSIK0FnrCWn8vIMjuhjmQTZqJ/jlxOs
+	 eegdMubj7cYFaP6OStWaa0F/LP7WuzF1I+AR3S7vzwcF1L2oiPQ1XWTxwmeAnR9V/x
+	 jv1RCeYaPayX2OFMz+vjJhMpHx2o0eIMtah737hZiJ6pyXxuy1whulhv76N2eEFZ5b
+	 Ec3M4k/CbkqlA==
+Content-Type: multipart/mixed; boundary="===============2181079628725225313=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <a1d67ea63858c1e4125d88f346df080360f4a9dd7b17e53163ccbfdb0dddd2c3@mail.kernel.org>
+In-Reply-To: <20260923191139.2816206-13-memxor@gmail.com>
+References: <20260923191139.2816206-13-memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 12/18] bpf: Size the per-frame verifier structures for a 2 KiB stack
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,tj@kernel.org,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 23 Sep 2026 20:12:42 +0000 (UTC)
+
+--===============2181079628725225313==
 Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260923180730.GV13925@horms.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> On Wed, Sep 23, 2026 at 10:45:38AM +0200, Daniel Machon wrote:
-> 
-> ...
-> 
-> > > [Severity: Medium]
-> > > Is this path expected to work on a big-endian host?
-> > >
-> > > Until now the descriptor producer and the FDMA engine were both on the
-> > > little-endian SoC, so the native-endian descriptor layout in
-> > > drivers/net/ethernet/microchip/fdma/fdma_api.h was fine:
-> > >
-> > >   struct fdma_db {
-> > >         u64 dataptr;
-> > >         u64 status;
-> > >   };
-> > >
-> > >   struct fdma_dcb {
-> > >         u64 nextptr;
-> > >         u64 info;
-> > >         struct fdma_db db[FDMA_DB_MAX];
-> > >   };
-> > >
-> > > With PCIe FDMA the descriptors live in host memory and are fetched by the
-> > > endpoint, so the host and the engine can disagree on byte order. The
-> > > translated addresses written here, and the status/info words written by
-> > > __fdma_db_add()/__fdma_dcb_add(), all go out in host byte order, and the
-> > > HW-written DONE/BLOCKL fields are read back the same way in
-> > > lan966x_fdma_pci_get_next_dcb() and lan966x_fdma_pci_rx_check_frame().
-> > >
-> > > CONFIG_MCHP_LAN966X_PCI in drivers/misc/Kconfig only has
-> > >
-> > >   depends on PCI
-> > >   depends on OF_OVERLAY
-> > >
-> > > so a big-endian host (e.g. powerpc) can select it. On such a host, would
-> > > the engine see byte-swapped nextptr/dataptr and length fields, i.e. would
-> > > RX/TX not work at all? Should the descriptor fields become explicit
-> > > little-endian types with accessors at the hardware boundary, or should the
-> > > Kconfig entry gain a little-endian dependency?
-> >
-> > Hmm. Never tested on PowerPC, not this driver nor the DT overlay mechanism it
-> > relies on for PCI deployment, which has only been exercised on ARM and x86 so
-> > far (AFAICT) [1].
-> >
-> > [1] https://lore.kernel.org/all/20240430183301.46568e35@bootlin.com/
-> 
-> I don't think that the baseline expectation is that drivers are tested
-> on big-endian systems, but rather that reasonable effort is made to ensure
-> that byte-order usage is correct.
-> 
-> In this case I suggest that will involve using __le64 instead of u64,
-> coupled with calling le64_to_cpu() and cpu_to_le64() as appropriate.
-> 
-> Sparse can aid with getting this right.
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index d8cafd3d74aa..11fa9f1f087c 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -19,11 +19,12 @@
+>   * that converting umax_value to int cannot overflow.
+>   */
+>  #define BPF_MAX_VAR_SIZ	(1 << 29)
+> -/* size of tmp_str_buf in bpf_verifier.
+> - * we need at least 306 bytes to fit full stack mask representation
+> - * (in the "-8,-16,...,-512" form)
+> +/*
+> + * size of tmp_str_buf in bpf_verifier.
+> + * we need at least 1399 bytes to fit full stack mask representation
+> + * (in the "-8,-16,...,-2048" form)
+>   */
+> -#define TMP_STR_BUF_LEN 320
+> +#define TMP_STR_BUF_LEN 1408
 
-Ack.
+TMP_STR_BUF_LEN is raised to 1408 so that bpf_fmt_stack_mask() can render
+all 256 slots. The commit message says the buffer grows "so that all 256
+slots still fit". But every place that consumes env->tmp_str_buf prints it
+through verbose() -> bpf_verifier_vlog(), which formats into a fixed kbuf:
 
-I am a little reluctant, when I cant really test it properly. Sashiko gives
-another solution - adding a LE dependency to the Kconfig of the misc PCI driver,
-maybe that'll do?
+kernel/bpf/log.c:bpf_verifier_vlog() {
+    n = vscnprintf(log->kbuf, BPF_VERIFIER_TMP_LOG_SIZE, fmt, args);
+}
 
-> 
-> ...
-> 
-> > > [Severity: Medium]
-> > > Is rx_bytes meant to count the frame as it arrived on the wire?
-> > >
-> > > By the time this runs, skb->len has already been reduced twice: the
-> > > skb_trim() above drops ETH_FCS_LEN, and eth_type_trans() pulls the
-> > > MAC header out of the linear region, so skb->len is short by at least
-> > > ETH_HLEN. If lan966x_hw_offload() ends up untagging a VLAN header,
-> > > that is another four bytes gone. So every packet delivered through
-> > > lan966x_fdma_pci_rx_get_frame() undercounts rx_bytes by 14 bytes or
-> > > more, which is visible to userspace via ip -s link.
-> > >
-> > > The frame length is available before any of that surgery happens --
-> > > data_len from FDMA_DCB_STATUS_BLOCKL(db->status), or skb->len right
-> > > after the skb_pull(skb, IFH_LEN_BYTES) -- so accounting could be done
-> > > there instead.
-> > >
-> > > I realise this mirrors what the existing register/page path in
-> > > lan966x_fdma.c does, so if the intent is to keep the two backends
-> > > byte-for-byte consistent, please say so; otherwise it would be good
-> > > not to copy the miscount into the new file.
-> >
-> > Not only lan966x, but sparx5 and lan969x does the exact same thing, increasing
-> > rx_bytes after headers are pulled.  The undercount is real, but not visible to
-> > userspace. Both implementations (platform and PCI) read hardware counters directly
-> 
-> I'm a little unsure, but if it's consistent then I guess that is ok.
-> It's an old interface anyway.
+BPF_VERIFIER_TMP_LOG_SIZE is still 1024 (include/linux/bpf_verifier.h).
+The precision backtracking log lines are:
+
+kernel/bpf/backtrack.c: {
+    verbose(env, "stack=%s before ", env->tmp_str_buf);
+    verbose(env, "stack=%s: ", env->tmp_str_buf);
+}
+
+With a full 256-slot mask, the "stack=%s before " line is 1412 bytes and is
+silently cut at 1023 characters. The remaining slots and the trailing
+" before " / ": " separator are lost, so the next log fragment runs into
+the truncated mask.
+
+The mask alone goes over the kbuf limit once roughly 168 or more slots are
+set. The larger tmp_str_buf therefore does not deliver the complete log
+line the comment and commit message promise. The extra 1 KiB only helps up
+to the 1023-character kbuf limit.
+
+This commit only resizes the structures; the verifier still caps the stack
+at 512 bytes here. The problem becomes reachable later in the same series,
+in d1a4a32c6444 ("bpf, x86: Allow programs 2 KiB of stack") and
+5782325bd60a ("bpf, arm64: Allow programs 2 KiB of stack"), which let
+bpf_jit_supports_large_stack() programs use more than 64 slots. No later
+commit in 00a8442f56e5..7757cddf610a changes BPF_VERIFIER_TMP_LOG_SIZE or
+the print sites.
+
+The impact is limited to log readability (no memory-safety or
+verification-result impact), but selftests or tools that parse the stack=
+mask from level-2 logs will see incomplete data.
+
+Should BPF_VERIFIER_TMP_LOG_SIZE be raised to at least TMP_STR_BUF_LEN
+plus a small prefix, or should the mask be emitted in pieces with several
+verbose() calls?
+
+>  /* Patch buffer size */
+>  #define INSN_BUF_SIZE 32
+>
+> @@ -243,12 +244,13 @@ enum bpf_stack_slot_type {
+>  #define BPF_REG_SIZE 8	/* size of eBPF register in bytes */
+>
+>  /*
+> - * Largest number of BPF_REG_SIZE stack slots a single frame can have. A frame
+> - * may use any part of the MAX_BPF_STACK budget; check_max_stack_depth()
+> - * enforces the bound on the combined depth of frames sharing the kernel stack
+> - * and on each frame using a private stack.
+> + * Largest number of BPF_REG_SIZE stack slots a single frame can have, sized
+> + * for the largest stack budget any JIT supports. A frame may use any part of
+> + * its program's budget; check_max_stack_depth() enforces the budget on the
+> + * combined depth of frames sharing the kernel stack and on each frame using
+> + * a private stack.
+>   */
+> -#define MAX_BPF_STACK_SLOTS	(MAX_BPF_STACK / BPF_REG_SIZE)
+> +#define MAX_BPF_STACK_SLOTS	(MAX_BPF_STACK_JIT / BPF_REG_SIZE)
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35909853278
+--===============2181079628725225313==--
