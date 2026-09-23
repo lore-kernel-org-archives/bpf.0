@@ -1,450 +1,234 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDFB74A0928
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 19:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97215328AD
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 19:11:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790190705; cv=none; b=pQbqkzv0QShIFaKbHuocGVXtnmGAYgcUV26oEiF3Ap9radLB3MMLokB4GnreNBPcnqeSmweDEGtuYPAiaDnbRzdjPSOeTACcilo4E18h5m3Soa7GgzC+XteKULShcuENmlp4GRS1cgZry5aU5cODFtruzHG8f7/JK42wdT88isc=
+	t=1790190706; cv=none; b=jVWK0Q80+/e2nc6fVUFD98mMZCQT1dDa06fd+I++EOOgSOsWvynrDdIwRV/usUBsq0vgVmMhN9Ugcd7zSZMalfdWyVwZJLTRvbPnNHgWjMdWCb/9TQp1cSVV8rsFOMAbN/DoSI0zQ4Vm3SwG7CYdACF0fmkb6vbESYemNZRO3Nk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790190705; c=relaxed/simple;
-	bh=Z7c/w9iRH3ZMpar/4oRDraqZ1XJSLhz0IdJCVy+5M58=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y1gJauP/VphOivqp21fqROfn68j3OZnmZtdAFyBZeqVdH8wpQjs1TnXI1lF9zwNREP4hDE3uEzV026xMrEbl4Xl5q82So2Inbiw1RazqaqgirQs+NrV7TcHOl/rZ4khE9/8hys4r+ywLFlanPaXctIYE3vIGLpU/mmJn4tGZ7WU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=hVdahgOy; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1790190706; c=relaxed/simple;
+	bh=TAPKAL2Eo7nAyEnxL2O5WR/UawbrjeY7f2eUkQ4h4og=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LyWvFhC1p2JJA3J51HGk8WOf2kkoBIzqX/Z4PjoO/yOcbQrXR8/M8+vaUGfo1ZmgI9op32yNms5MUfLihlbn7vWovimbFgfSih6A2/0IEfVedYx1lUYd29klDSXCcWsnKn4KB2ii49C3+q4VkO/O1Y187/uhGOlBp1EQbm3GsfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=maOMp1ef; arc=none smtp.client-ip=74.125.225.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="hVdahgOy"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b91369d18so8912785e9.0
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 12:11:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="maOMp1ef"
+Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-482e61db882so368832f8f.0
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 12:11:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790190701; x=1790795501; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=WzhVmk6DR3mwewQwGZTvTSK4SarOwYhabwzSmF2exlc=;
-        b=hVdahgOyiI7nXXkwexGQrwfdIOrH/v3JRIDC5yZYxYR9UJ2LLBOg1GkwX8VUf47d//
-         +BN/gb3E0crvsRwtY14z1MhO+cSd7Fiq06K0sgHLkdgI9dTWxLFTub5tQdPVbrEuQYUV
-         gya5GxnyF9zxb5TptqWavqJJ3hRuq17hcZC9cQbY/6dIH2ZAKCXY9b00V94fEgFrQ1Mj
-         jdKsVRyZqa+l05xb41pPJyZ4ROfDmtuLLPitrlE3hsno+CCZDClYZI7DU61CpXuc3l/5
-         TlXeLrc5O1VnbGs+TgGZOwMx77iTmunX3+vuUHEwM5We7yFzvAeoj3Hs2WeUmX8R8EZS
-         x4JA==
+        d=gmail.com; s=20251104; t=1790190702; x=1790795502; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ms/rWu8RaoMUMzQd6eTodIQutk/LvSGU9t8EyM/qwxY=;
+        b=maOMp1efj3VefFW7SsUQZDlFYH4aJDj5oZUjdVjJvlM2jkKbrkjMV/H1rnIELFA/qN
+         iH4DIvGCAn2cTEg+4VYALkydt2R2S90SZm+Pl4cn50ObjO/entdMnOF46KDE7ObhHbYz
+         WZ5nRsqxxB8MAYHwIf4aS0LuP5uWFCgwd2SoS2S8m44m1ch5WuKLt4eeUF75ofNyAxDw
+         1f8QFgXkU0fM9vrPESNfBNGIoNNA0MTn8ZrFhWct12iQtP937fPRsPzN15338jAwEtJG
+         ssVotnHMQ001AdhPAM88OfnYY6hB/HGbCe9b5oqw1g291bqDtzjX12PzhxPGM2ippowC
+         6Tbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790190701; x=1790795501;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=WzhVmk6DR3mwewQwGZTvTSK4SarOwYhabwzSmF2exlc=;
-        b=imguTFQduvDdYRtaxKToGMYCgyT+C+eSymd+76dRvjF8SmW8tPIx33xgvT8HhiyUeh
-         yN1JulyMSGyKuOoarJzTrjRG4uH4zyoyQFYY8Qd41FUfhapkYH2kWczQoeUUX7w0TWpW
-         hFF/jy2t3B50X3ag1Tpp7y/ALktUxLcn5xZF9nUm4i83QF7sL9lZTlVLxPy0kEPl0Ktz
-         tgIzJUQEUUIXOt7s4t5K/k6Z1nUCY2jwK2/uKEMKTlSxrhF64xZAhxx3/xY1iHRlIvBB
-         5Nwc0pCiElQhjSAVw6y29l5RqDRMFe3CcxU9Yione63KaPH3p4hmEljG5mDRYyulR9Yh
-         1T0g==
-X-Gm-Message-State: AFuF++m0eTBg7SStPRcoopFd1jPGFlM2BP/xN4Z8g32rKBW/RA9hLweS
-	BYTQ9EwV0scALgY5IxhsyF+MaxcVRo8u385riczyyc+SA65+VbUDasMOm8hVOFK6I+/hJPnWhK0
-	RODoTLeEAjw==
-X-Gm-Gg: AYBFou0/qUJKjA6FiZ8AIN7DXSNZY93GajKCFwJ0gfZ0J/Bafr++Xxh9/mJSh7MWUef
-	NhV94lbjQkaVCRDVupO5GGDD16xqI/c0wUBdrlI+XjFfWeqK6wHczRwqH0IHdv0KevefKGrbl2H
-	e0rxryfC1xdx72sZ1X+KISW+AJHsasEWZxmhBHkBxj/aKzjtkq3JkBWG3eHMhPtnxBSpv8sSPs/
-	LXu36rLZbV43SVgc4dX+fuulU/bWXpvNFPicn+/htAeKRrF2agqjJbCobqTvLRGtCzmKSjN0aJM
-	/pjP0tTc+GDhoN8HKwd0IheexiTRYO0mjGpTvTjRk8Po0Ecx6trhzeEgZELsdJe0IAJqqripLpU
-	57E2muwHaTGSlO2vH53KvT/kDRvstcfSxw5JMv9uUFDVVO5zbad9Aqwu/+HO59+XFyz4pkKOPbd
-	yIUxZrXhdARoP9O7hFUL1Hq+Q5NlcKw9Qc3sxcOMkkqk72C1CJ4OLL3kSS584+kXo/DeMCoQ==
-X-Received: by 2002:a05:600c:8411:b0:49c:fc6e:a3da with SMTP id 5b1f17b1804b1-49fe66ef334mr2573535e9.25.1790190700834;
-        Wed, 23 Sep 2026 12:11:40 -0700 (PDT)
-Received: from alpine05.lan ([2620:10d:c090:600::1:2f89])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886877a2a5sm9473563f8f.26.2026.09.23.12.11.37
+        d=1e100.net; s=20260707; t=1790190702; x=1790795502;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ms/rWu8RaoMUMzQd6eTodIQutk/LvSGU9t8EyM/qwxY=;
+        b=TLaR3vx4CyKXuDf9UXDJm3j2QG4XW1VqMiYjYuJB0gBEMlR+aH79QptEUzVQdVcYSN
+         9n/RZOF6r/0xRli9ENGiznzDJNps4B1FN9j2MZQSNdceeT4/U+Jjp4qHpTXEB1LwfRIL
+         2+A1Q1fDkLDX8gZPN/mVWO79bTIIwXM3vi5qoMTFlOu8rvp9nKMaPFYp9Tj9y6F6cdRu
+         tVk9sg8AG9WxtwzYDAoke+07AL1YL9mXgJ2dE1Ym9nWrlB0Y/I/xm+ncVR99bwrCALTH
+         ZKJYaz1ycotPhD6ko9xkT6x1vCORWCQvLWsVqMMdnO3mU+dSbnrZ2A4kqLu4E8b1v8zq
+         4Q6g==
+X-Gm-Message-State: AFuF++kTyF/VRjY+1uzulGPHfhdOvNgZoM/kVEfdDzF8ZCKHQGVBGJBR
+	0YdvcC9XslaPO2k8vDlh5U0TwSbikQWqwHjludJ0nff6JrV0C6/MDNdJ3rCYXJh7
+X-Gm-Gg: AYBFou2q7939QcwDCg+VyYQZUcL0FmZm/b/5qbvkFrx8CLboCjVvtowdX3cYbpbLH6m
+	85Dc26mvJryFvDLCHu8BRLrM4K7poXpFO0bkOf6Jbdt3bLYJt3Vt64OdOkgRl93zjzNvW8eF2RK
+	HYSPEE9ftipDMJPsCkcVSh1L63KXAF0PBCHzEp2C7s1FOGaXftcg+RgDKLFSR1oR4J4oSIDsDen
+	LO2xhDHDisAlYj66V9lGOxyB/pv0xKHZd+N7ATdn6F3GNvUp/XXIU1SvF+p2IFXV9uwiSURMIwi
+	3lNFQaRFng6aArpRVNwN7F6kwFqN2kWvs+vLBte+k3z9Z9EE2HSBOtmRD2C6g1KpPPsmXLsn6b6
+	1OVAlR+VGgNMgfhbU+aQnZO6JoiIkY0gkFc01SxISO5wNYR61H92GfZsMgAH6jEI/iFdnODfNv8
+	OUyV4uVdKy0dM6Qap/UiV3NG7oS+PvyOBaYrKzAcZrsr/dP4S9G/Go+O8bEbVn+92P2Y6LuBgrs
+	S+5YUeqq0ZgLKdkSYgeBrtwCPgVRJSTztbmD3KMk7xddrM5E0LFB9qto8Y1i5y816jfJ7EYTB3f
+	7MQGtcc39RJuYJ3htmp1BkkziEofM4MVdxNucQ==
+X-Received: by 2002:a05:600c:c16d:b0:49f:cac3:c68a with SMTP id 5b1f17b1804b1-49fe66f9ff1mr2330075e9.31.1790190701481;
+        Wed, 23 Sep 2026 12:11:41 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48868889409sm7330546f8f.35.2026.09.23.12.11.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 23 Sep 2026 12:11:40 -0700 (PDT)
-From: Emil Tsalapatis <emil@etsalapatis.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	daniel@iogearbox.net,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v3 2/6] bpf: Track availability information for ranges in range tree
-Date: Wed, 23 Sep 2026 19:11:21 +0000
-Message-ID: <20260923191125.5311-3-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260923191125.5311-1-emil@etsalapatis.com>
-References: <20260923191125.5311-1-emil@etsalapatis.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Tejun Heo <tj@kernel.org>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v1 00/18] Raise BPF program stack size to 2KiB
+Date: Wed, 23 Sep 2026 21:11:07 +0200
+Message-ID: <20260923191139.2816206-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8308; i=memxor@gmail.com; h=from:subject; bh=TAPKAL2Eo7nAyEnxL2O5WR/UawbrjeY7f2eUkQ4h4og=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWuL4ucD3+PaHY4xe/nO4upqDk8OPD/v7QTOa9HGv8K2u tglrajuKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwEQCrzH8s1ybFKlrfTOEpY/V 9vKalzu1JA8Yf5lr/zzyMyvLLG1bG4b/ZXd/Kd2/ciBk7vel93xYNkVmlRueZQxem2/csDDHfLE eFwA=
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Arena address ranges are currently encoded in a range tree: Ranges
-present in the tree are free and available for allocation, while
-absent ranges are allocated. However, this opens up the arena code to
-subtle races between page table updates, range tree updates, and
-concurrent allocations that can cause permanent inconsistencies.
+BPF programs get 512 bytes of stack. This series raises that to 2 KiB
+on x86-64 and arm64. The budget covers a whole call chain, or each frame
+on a private stack, and a single function may use all of it. The
+interpreter, offloaded programs and the other JITs keep 512 bytes.
 
-Avoiding such races involves distinguishing between memory ranges that
-are free and ready to be allocated, and ranges that are being freed but
-should not be reused yet. Such tracking is cleanly possible through the
-arena's range tree. The range tree is only consumed by arena and has no
-additional future consumers, so it can be tailored towards tracking more
-state. Alternatives such as deferring range freeing require more
-asynchrony and per-range state tracking in the main arena code, and can
-introduce additional race conditions.
+The x86-64 and arm64 JITs do not depend on 512-byte frames: both encode
+frame sizes in wide enough immediates, and on both a tail call pops the
+caller's frame and lands in the target's prologue before the target sets
+up its own.
 
-Expand the tree to track whether a range present in the tree is
-available for allocation. For now, all ranges are available: We add
-the option to add back a range in an unavailable state, and to move
-already present ranges from unavailable to available. We do not
-implement other transitions, since they are not required to support
-BPF arenas.
+The verifier needs several changes, however. Its bookkeeping assumes at
+most 64 slots per frame: the jump history and linked register records
+carry 6-bit slot indexes, backtracking and the scratched-slot log keep
+one u64 per frame, the id map is sized for 64 slots per frame, and
+liveness keeps three fixed 128-bit masks per instruction per frame.
+Growing all of this fourfold would make every program pay for stack
+limits that most program will not exercise. Therefore, some dynamicity
+is needed without blowing verifier memory usage out of proportion.
 
-The patch adds two operations: Adding a range as unavailable, and
-turning a range from unavailable to available. Unavailable ranges are
-not mergable, and will be imminently be turned available by the ongoing
-arena free() operation that created them. Turning ranges from
-unavailable to available is a simple flag change on the range with an
-optional merge with adjacent available ranges.
+The series first removes these assumptions without changing what
+verifies (patches 1-8). The liveness masks become bitmaps as wide as the
+stack a frame actually uses, and the id scratch grows on demand. It then
+adds a per-program budget, bpf_prog_stack_limit(): 2 KiB when the
+program is JITed, not offloaded, and the JIT reports
+bpf_jit_supports_large_stack() along with tail calls from subprograms,
+and 512 bytes otherwise. Finally, it turns the budget on for x86-64 and
+arm64.
 
-This diff adds -EAGAIN as a possible return value for range_tree_clear().
-This is triggered by code in subsequent diffs, when there is an attempt
-to use a range that has not been completely freed yet.
+Tail calls need no separate limit. A tail call pops the frame that makes
+it, and the frames its callers leave behind are still limited to 256
+bytes by the existing rule for tail calls from subprograms. Only the
+final program's frame in a tail call chain grows, from 512 bytes to 2
+KiB, so the chain's worst-case kernel stack use grows from about 8.5 KiB
+to about 10 KiB. The budget does not depend on privilege: an
+unprivileged program cannot call other BPF functions, so its tail calls
+leave no frame behind and its worst case is a single 2 KiB frame.
 
-Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
----
- kernel/bpf/arena.c      |  10 +--
- kernel/bpf/range_tree.c | 177 ++++++++++++++++++++++++++++++++++------
- kernel/bpf/range_tree.h |   4 +-
- 3 files changed, 158 insertions(+), 33 deletions(-)
+Memory was measured as the peak kernel memory allocated during each
+BPF_PROG_LOAD, for all 5075 loadable selftest programs, against bpf-next
+at 79dc258c9392. "Total" is the sum of the per-program peaks. Two runs of
+one kernel agree to 0.01% in total; a handful of small programs differ by
+one 64 KiB allocation between runs, and those one-off jumps are left out
+of the per-program rows.
 
-diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-index c6369ea5e208..197ac3df68c7 100644
---- a/kernel/bpf/arena.c
-+++ b/kernel/bpf/arena.c
-@@ -317,7 +317,7 @@ static struct bpf_map *arena_map_alloc(union bpf_attr *attr)
- 		goto err_free_arena;
- 
- 	range_tree_init(&arena->rt);
--	err = range_tree_set(&arena->rt, 0, attr->max_entries);
-+	err = range_tree_set_avail(&arena->rt, 0, attr->max_entries);
- 	if (err)
- 		goto err_free_scratch;
- 	mutex_init(&arena->lock);
-@@ -561,7 +561,7 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
- 
- 	ret = apply_to_page_range(&init_mm, kaddr, PAGE_SIZE, apply_range_set_cb, &data);
- 	if (ret) {
--		range_tree_set(&arena->rt, vmf->pgoff, 1);
-+		range_tree_set_avail(&arena->rt, vmf->pgoff, 1);
- 		fault_ret = VM_FAULT_SIGBUS;
- 		goto out_err_locked_memcg;
- 	}
-@@ -809,7 +809,7 @@ static long arena_alloc_pages(struct bpf_arena *arena, long uaddr, long page_cnt
- 	bpf_map_memcg_exit(old_memcg, new_memcg);
- 	return clear_lo32(arena->user_vm_start) + uaddr32;
- out:
--	range_tree_set(&arena->rt, pgoff + mapped, page_cnt - mapped);
-+	range_tree_set_avail(&arena->rt, pgoff + mapped, page_cnt - mapped);
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 	if (mapped) {
- 		flush_vmap_cache(kern_vm_start + uaddr32, mapped << PAGE_SHIFT);
-@@ -924,7 +924,7 @@ static void arena_free_pages(struct bpf_arena *arena, long uaddr, long page_cnt,
- 	if (ret)
- 		goto defer;
- 
--	range_tree_set(&arena->rt, pgoff, page_cnt);
-+	range_tree_set_avail(&arena->rt, pgoff, page_cnt);
- 
- 	init_llist_head(&free_pages);
- 	cdata.arena = arena;
-@@ -1051,7 +1051,7 @@ static void arena_free_worker(struct work_struct *work)
- 		apply_to_existing_page_range(&init_mm, kaddr, page_cnt << PAGE_SHIFT,
- 					     apply_range_clear_cb, &cdata);
- 
--		range_tree_set(&arena->rt, pgoff, page_cnt);
-+		range_tree_set_avail(&arena->rt, pgoff, page_cnt);
- 	}
- 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
- 
-diff --git a/kernel/bpf/range_tree.c b/kernel/bpf/range_tree.c
-index fdf7ba7aefe0..456db58650bd 100644
---- a/kernel/bpf/range_tree.c
-+++ b/kernel/bpf/range_tree.c
-@@ -39,8 +39,15 @@ struct range_node {
- 	u32 rn_start;
- 	u32 rn_last; /* inclusive */
- 	u32 __rn_subtree_last;
-+	bool available; /* range is available for allocating. */
- };
- 
-+/* Is the range available for merging? */
-+static inline bool range_available(struct range_node *rn)
-+{
-+	return rn && rn->available;
-+}
-+
- static struct range_node *rb_to_range_node(struct rb_node *rb)
- {
- 	return rb_entry(rb, struct range_node, rb_range_size);
-@@ -55,20 +62,30 @@ static u32 rn_size(struct range_node *rn)
- static inline struct range_node *__find_range(struct range_tree *rt, u32 len)
- {
- 	struct rb_node *rb = rt->range_size_root.rb_root.rb_node;
--	struct range_node *best = NULL;
-+	struct rb_node *best = NULL;
-+	struct range_node *rn;
- 
- 	while (rb) {
--		struct range_node *rn = rb_to_range_node(rb);
-+		rn = rb_to_range_node(rb);
- 
- 		if (len <= rn_size(rn)) {
--			best = rn;
-+			best = rb;
- 			rb = rb->rb_right;
- 		} else {
- 			rb = rb->rb_left;
- 		}
- 	}
- 
--	return best;
-+	/* Filter unavailable ranges. */
-+	while (best) {
-+		rn = rb_to_range_node(best);
-+		if (range_available(rn))
-+			return rn;
-+
-+		best = rb_prev(best);
-+	}
-+
-+	return NULL;
- }
- 
- s64 range_tree_find(struct range_tree *rt, u32 len)
-@@ -135,10 +152,19 @@ range_it_iter_first(struct range_tree *rt, u32 start, u32 last)
- /* Clear the range in this range tree */
- int range_tree_clear(struct range_tree *rt, u32 start, u32 len)
- {
-+	u32 first = start;
- 	u32 last = start + len - 1;
- 	struct range_node *new_rn;
- 	struct range_node *rn;
- 
-+	/* Scan for unavailable ranges and try again if so. */
-+	while ((rn = range_it_iter_first(rt, first, last))) {
-+		if (!range_available(rn))
-+			return -EAGAIN;
-+
-+		first = rn->rn_last + 1;
-+	}
-+
- 	while ((rn = range_it_iter_first(rt, start, last))) {
- 		if (rn->rn_start < start && rn->rn_last > last) {
- 			u32 old_last = rn->rn_last;
-@@ -153,6 +179,7 @@ int range_tree_clear(struct range_tree *rt, u32 start, u32 len)
- 						NUMA_NO_NODE);
- 			if (!new_rn)
- 				return -ENOMEM;
-+			new_rn->available = rn->available;
- 			new_rn->rn_start = last + 1;
- 			new_rn->rn_last = old_last;
- 			range_it_insert(new_rn, rt);
-@@ -199,23 +226,12 @@ int is_range_tree_set(struct range_tree *rt, u32 start, u32 len)
- 	return -ESRCH;
- }
- 
--/* Set the range in this range tree */
--int range_tree_set(struct range_tree *rt, u32 start, u32 len)
-+/* Do we have adjacent ranges (and do not overlap with them)? */
-+static int range_get_adjacent(struct range_tree *rt, u32 start, u32 last,
-+		struct range_node **leftp, struct range_node **rightp)
- {
--	u32 last = start + len - 1;
- 	struct range_node *right;
- 	struct range_node *left;
--	int err;
--
--	/* Is this whole range already set ? */
--	left = range_it_iter_first(rt, start, last);
--	if (left && left->rn_start <= start && left->rn_last >= last)
--		return 0;
--
--	/* Clear out everything in the range we want to set. */
--	err = range_tree_clear(rt, start, len);
--	if (err)
--		return err;
- 
- 	/* Do we have a left-adjacent range ? */
- 	left = range_it_iter_first(rt, start - 1, start - 1);
-@@ -227,34 +243,141 @@ int range_tree_set(struct range_tree *rt, u32 start, u32 len)
- 	if (right && right->rn_start != last + 1)
- 		return -EFAULT;
- 
--	if (left && right) {
-+	*leftp = left;
-+	*rightp = right;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Merge with adjacent available ranges if possible. The new [start, last]
-+ * has already been confirmed to be adjacent with left/right by the caller.
-+ */
-+static int range_tree_merge(struct range_tree *rt, u32 start, u32 last,
-+		struct range_node *left, struct range_node *right)
-+{
-+	if (range_available(left) && range_available(right)) {
- 		/* Combine left and right adjacent ranges */
- 		range_it_remove(left, rt);
- 		range_it_remove(right, rt);
- 		left->rn_last = right->rn_last;
- 		range_it_insert(left, rt);
- 		kfree_nolock(right);
--	} else if (left) {
-+	} else if (range_available(left)) {
- 		/* Combine with the left range */
- 		range_it_remove(left, rt);
- 		left->rn_last = last;
- 		range_it_insert(left, rt);
--	} else if (right) {
-+	} else if (range_available(right)) {
- 		/* Combine with the right range */
- 		range_it_remove(right, rt);
- 		right->rn_start = start;
- 		range_it_insert(right, rt);
- 	} else {
--		left = kmalloc_nolock(sizeof(struct range_node), __GFP_ACCOUNT, NUMA_NO_NODE);
--		if (!left)
--			return -ENOMEM;
--		left->rn_start = start;
--		left->rn_last = last;
--		range_it_insert(left, rt);
-+		/* No merge available. */
-+		return -ENOENT;
- 	}
-+
- 	return 0;
- }
- 
-+/* Make a range available, possibly merging. */
-+int range_tree_make_avail(struct range_tree *rt, u32 start, u32 len)
-+{
-+	u32 last = start + len - 1;
-+	struct range_node *rn;
-+	struct range_node *right;
-+	struct range_node *left;
-+	int err;
-+
-+	/*
-+	 * Confirm the range exists is unavailable,
-+	 * and fits the requested range exactly.
-+	 */
-+	rn = range_it_iter_first(rt, start, last);
-+	if (!rn || rn->available)
-+		return -EINVAL;
-+
-+	if (rn->rn_start != start || rn->rn_last != last)
-+		return -EINVAL;
-+
-+	err = range_get_adjacent(rt, start, last, &left, &right);
-+	if (err)
-+		return err;
-+
-+	/* If no merging required, just make available. */
-+	if (!range_available(left) && !range_available(right)) {
-+		rn->available = true;
-+		return 0;
-+	}
-+
-+	/* Can merge, remove the range already. */
-+	start = rn->rn_start;
-+	last = rn->rn_last;
-+	range_it_remove(rn, rt);
-+	kfree_nolock(rn);
-+
-+	return range_tree_merge(rt, start, last, left, right);
-+}
-+
-+/* Set the range in this range tree */
-+static int range_tree_set(struct range_tree *rt, u32 start, u32 len, bool available)
-+{
-+	u32 last = start + len - 1;
-+	struct range_node *right;
-+	struct range_node *left;
-+	int err;
-+
-+	/* Is this whole range already set ? */
-+	left = range_it_iter_first(rt, start, last);
-+	if (left && left->rn_start <= start && left->rn_last >= last &&
-+	    range_available(left) && available)
-+		return 0;
-+
-+	/* Clear out everything in the range we want to set. */
-+	err = range_tree_clear(rt, start, len);
-+	if (err)
-+		return err;
-+
-+	/* Get adjacent ranges and check for overlaps. */
-+	err = range_get_adjacent(rt, start, last, &left, &right);
-+	if (err)
-+		return err;
-+
-+	/*
-+	 * If the range is not available for allocation, don't merge.
-+	 * Unavailable ranges are in the process of being freed and should
-+	 * be imminently marked available, so merging them with other
-+	 * unavailable ranges will just lead to splitting the range back
-+	 * almost immediately.
-+	 */
-+	if (available) {
-+		err = range_tree_merge(rt, start, last, left, right);
-+		if (!err)
-+			return 0;
-+	}
-+
-+	left = kmalloc_nolock(sizeof(struct range_node), __GFP_ACCOUNT, NUMA_NO_NODE);
-+	if (!left)
-+		return -ENOMEM;
-+	left->available = available;
-+	left->rn_start = start;
-+	left->rn_last = last;
-+	range_it_insert(left, rt);
-+
-+	return 0;
-+}
-+
-+int range_tree_set_avail(struct range_tree *rt, u32 start, u32 len)
-+{
-+	return range_tree_set(rt, start, len, true);
-+}
-+
-+int range_tree_set_unavail(struct range_tree *rt, u32 start, u32 len)
-+{
-+	return range_tree_set(rt, start, len, false);
-+}
-+
- void range_tree_destroy(struct range_tree *rt)
- {
- 	struct range_node *rn;
-diff --git a/kernel/bpf/range_tree.h b/kernel/bpf/range_tree.h
-index ff0b9110eb71..aa27edf451bc 100644
---- a/kernel/bpf/range_tree.h
-+++ b/kernel/bpf/range_tree.h
-@@ -14,7 +14,9 @@ void range_tree_init(struct range_tree *rt);
- void range_tree_destroy(struct range_tree *rt);
- 
- int range_tree_clear(struct range_tree *rt, u32 start, u32 len);
--int range_tree_set(struct range_tree *rt, u32 start, u32 len);
-+int range_tree_set_avail(struct range_tree *rt, u32 start, u32 len);
-+int range_tree_set_unavail(struct range_tree *rt, u32 start, u32 len);
-+int range_tree_make_avail(struct range_tree *rt, u32 start, u32 len);
- int is_range_tree_set(struct range_tree *rt, u32 start, u32 len);
- s64 range_tree_find(struct range_tree *rt, u32 len);
- 
+                                      patches 1-8   whole series
+  total                                  -0.72%        -0.51%
+    4940 programs under 1 MiB            -0.32%        -0.14%
+     116 programs of 1-16 MiB            -0.58%        +0.23%
+      19 programs of 16 MiB or more      -1.10%        -1.05%
+  median program                          0.0%          0.0%
+  programs growing by more than 5%          7            56
+  largest increase                        +16%		+19%
+  largest decrease                       -5.0%         -5.0%
+
+The savings come from liveness: a frame within 256 bytes needs 24 bytes
+of masks per instruction instead of 48. The largest are pyperf600
+(-5.2 MiB, -2.0%), pyperf180 (-3.2 MiB, -2.8%), pyperf100 (-2.8 MiB,
+-3.1%) and test_verif_scale2 (-1.0 MiB, -5.0%).
+
+The increases have two causes:
+
+ * history: the jump history entry grows from 16 to 20 bytes, which
+   penalizes loop-heavy programs. This is already present in patches 1-8.
+ * masks: a frame read as a whole through a pointer of unknown offset
+   keeps liveness masks as wide as the 2 KiB budget. This appears only
+   once the budget is raised.
+
+The largest absolute increases for the whole series (peak in MiB):
+
+  program                                   before  after   MiB      %  cause
+  loop1/nested_loops                          17.6   19.2  +1.5    +9%  history
+  strobemeta_bpf_loop/on_event                10.5   11.8  +1.3   +12%  masks
+  verifier_loops1/jumps_out_rather_than_in     4.4    5.1  +0.7   +16%  history
+  pyperf600_bpf_loop/on_event                  5.6    6.3  +0.7   +12%  masks
+  pyperf600_nounroll/on_event                 80.3   80.9  +0.6    +1%  history
+  strobemeta_nounroll2/on_event               44.5   45.1  +0.6    +1%  both
+  strobemeta/on_event                        201.8  202.4  +0.5  +0.3%  history
+  test_tcp_custom_syncookie                   10.8   11.2  +0.4    +4%  masks
+  strobemeta_nounroll1/on_event               20.9   21.3  +0.4    +2%  both
+  linked_list/global_list_push_pop_multiple    5.0    5.4  +0.3    +6%  history
+
+The largest relative increases are small programs whose frame is read as
+a whole, each growing by 50 to 110 KiB: verifier_bitfield_write +15 to
+19%, test_tc_tunnel +13 to 15% and dynptr_success +12%.
+
+In terms of verification time, the changes are within margin of error.
+
+For more details, please see the individual commits.
+
+Kumar Kartikeya Dwivedi (18):
+  bpf: Add accessors for verifier stack slots
+  bpf: Widen the stack slot index in the jump history
+  bpf: Store linked registers in the jump history as an array
+  bpf: Track backtracking stack slots with bitmaps
+  bpf: Track scratched stack slots with a bitmap
+  bpf: Treat unknown-size stack reads as reaching the frame top
+  bpf: Size liveness stack masks by the stack each frame uses
+  bpf: Grow the verifier id scratch on demand
+  selftests/bpf: Cover the tail call caller stack depth limit
+  selftests/bpf: Check that narrow stack stores define no slot
+  selftests/bpf: Check liveness merge of masks with different widths
+  bpf: Size the per-frame verifier structures for a 2 KiB stack
+  bpf: Bound program stack use by a per-program limit
+  selftests/bpf: Add load conditions on the program stack limit
+  selftests/bpf: Give the 512-byte stack boundary tests a 2 KiB twin
+  bpf, x86: Allow programs 2 KiB of stack
+  bpf, arm64: Allow programs 2 KiB of stack
+  selftests/bpf: Test the 2 KiB stack budget
+
+ Documentation/bpf/bpf_design_QA.rst           |  10 +-
+ arch/arm64/net/bpf_jit_comp.c                 |   5 +
+ arch/x86/net/bpf_jit_comp.c                   |  12 +
+ include/linux/bpf_verifier.h                  | 191 ++++-----
+ include/linux/filter.h                        |   6 +
+ kernel/bpf/backtrack.c                        |  97 +++--
+ kernel/bpf/core.c                             |  13 +
+ kernel/bpf/diagnostics.c                      |   6 +-
+ kernel/bpf/liveness.c                         | 362 +++++++++++------
+ kernel/bpf/log.c                              |  13 +-
+ kernel/bpf/states.c                           | 130 +++---
+ kernel/bpf/verifier.c                         | 315 ++++++++-------
+ .../bpf/prog_tests/struct_ops_private_stack.c |  31 ++
+ .../selftests/bpf/prog_tests/tailcalls.c      |  42 ++
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../selftests/bpf/progs/async_stack_depth.c   |  75 ++++
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   3 +
+ .../bpf/progs/struct_ops_private_stack_fail.c |  47 ++-
+ .../progs/struct_ops_private_stack_large.c    |  51 +++
+ .../bpf/progs/tailcall_large_stack.c          |  62 +++
+ .../selftests/bpf/progs/test_global_func1.c   |  65 +++
+ .../bpf/progs/test_global_func_deep_stack.c   |  33 +-
+ .../bpf/progs/verifier_large_stack.c          | 377 ++++++++++++++++++
+ .../selftests/bpf/progs/verifier_live_stack.c |  79 +++-
+ .../selftests/bpf/progs/verifier_raw_stack.c  |  21 +
+ .../selftests/bpf/progs/verifier_stack_ptr.c  |  53 +++
+ .../selftests/bpf/progs/verifier_tailcall.c   |  57 +++
+ .../selftests/bpf/progs/verifier_var_off.c    |  32 ++
+ tools/testing/selftests/bpf/test_loader.c     |  24 ++
+ tools/testing/selftests/bpf/testing_helpers.c |  41 ++
+ tools/testing/selftests/bpf/testing_helpers.h |   1 +
+ tools/testing/selftests/bpf/verifier/calls.c  | 122 ++++--
+ 32 files changed, 1883 insertions(+), 495 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_private_stack_large.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall_large_stack.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_large_stack.c
+
+
+base-commit: 91f8613d95ad8cd99d8baf094806d1ef98bc6380
 -- 
-2.52.0
+2.53.0
 
