@@ -1,62 +1,64 @@
-Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
+Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4059643F8B8
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 06:14:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11895442361
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 06:14:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790144078; cv=none; b=OzUZYVbyx6E4+vCJzdYJNVXleuCgiHcC2t73NeWLX+7I3P9hzbQ8gnti+rpOWZlSH4Y1Co01hivgv5mXByk9ZtUQsSQNjYM5NusdX52RjxzsGrjmsjcbYK5NLjQ9Zi7gGks2cJ+DNY6O90xDErNQXfBptJwaesX3k3IlAo8kWHw=
+	t=1790144080; cv=none; b=ZIk1c7A7bEWBA7d1GmMnoGPw15BXqwKIPpz1UePY4cR6KPFVey+6SR/vMWY5z5ZMQgrTz0GBX2NbCpopWV7h0loNaG5/D4J/inp3s6uMcSwFT31SzEKq9CKoV47IyZ7Uxs2GdQDkrhRehQu6CnLGzOoRw5NsmwMVVlP2Lg3Wxhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790144078; c=relaxed/simple;
-	bh=agAqNNUBYNg7b1wljCSqAF+tugBm7+/YdsW/rlGnqis=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b6OTZ1wq5yCwsLyoBqzSqB0GIRV9SbWisSgxNSwqwiK45RBKBDTwYAwhSlhXnkHFcVJCO8EdE+dFLo0neuVCtF2XNveivaqbGdd7BJfE5XJK7Az74o7CavSNaHpt4NhzpvECMFVEavy5PiQb8WZkb9GZ8S5EGjYFFRLWKOVYMZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=vJR3gEFm; arc=none smtp.client-ip=74.125.228.41
+	s=arc-20240116; t=1790144080; c=relaxed/simple;
+	bh=+rZFpISLHxdyqnpaRhpGxVvyQDaBVEYWHLxJ1a0Rxjs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=P1LQlxmv/KrH6kz8JUSWtCyec2FmUZeG6vknpZA3wTzMzoXhi85FSXOPGEEq67KbIZkQbM7wDL2bPBTz9Ow5hnNaWne+B35vgguNZfOyP6GAyt2QhL1ptQqEdi3kMzXT1Dg8UVgTI/q1JgReuwqskTGizihwkUG5+XSSCFZ7f2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=OyI8Emev; arc=none smtp.client-ip=74.125.227.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="vJR3gEFm"
-Received: by mail-pz2-f41.google.com with SMTP id 41be03b00d2f7-cc50d1b048eso433415a12.1
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 23:14:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="OyI8Emev"
+Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-396ccafb751so357731a91.2
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 23:14:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790144068; x=1790748868; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CLRKfby84+NJ1ZT9HYzhPYGPFrhk3GmlXO1Tpatk72U=;
-        b=vJR3gEFmrMrNCoTYE2uCAGwp8FYG0B2Jlxb0CnXdCGHSaTDc4LibWk6CtoEPfp7VTr
-         NOpCwemI8U7XDJsiJsLibLC6M+/lNh5Sk5lJXeDBWAZES4r82EdzMa6t7+qVtPsgj46E
-         6P6OAl9aJIuYNbubP0sgnKTkeVe9qCqlTR9o1Tiu+EW0+4YHw3OqUkRqS2nameqtD5NM
-         TIQBgxSmzqXjuR4JFyfoLwbfOjIYc6c2M4EukZfk3qapa2vPvd1VBAwp1evUarRxgilw
-         dK0DSz3yhkkYBmVINIf981PfUMKHNescUdY+KVfzTbGcG83lMJ03DCniK9QI2t+tayVP
-         p8Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790144068; x=1790748868;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790144072; x=1790748872; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=CLRKfby84+NJ1ZT9HYzhPYGPFrhk3GmlXO1Tpatk72U=;
-        b=QvELw4FFFBqmfEWm2jImkJl8PAaOcdx3x/MFy15rZLbB3IRRFq7tmrKWtm5futKGX6
-         1HeSDTeJfwJVwZ00xnBV5lkN+Ir/zWdU3aNgXrkFd+tvv2XzBDj+plYwSBI9oyNq5sXG
-         w/7mPFziDswkoVdli12Xn+s/kGWke64I2gq80nSiIHg0MWp9VpkzTl0e+RjEUXyrYKZA
-         Itsm2oq3P1LqKfKR5OPPLkI8e9fsJDPLtAC2NRTHBu5VizizsMl1yOj986B79DLNid6v
-         goZ9iKITw10b8pTocxjqhZRSQ2wn17etCjaS862QXD3vREGzOdbqJRmOYyspgvYHsZeU
-         shDw==
-X-Gm-Message-State: AFuF++njZyU4NIFcVlSJNV2Y8BLNtJVTtMvWe9kQ/99Fjy8qpgn9DM1p
-	48UqtY7xvBvea+98mQvPM5BPql7uL3w5tncAve3JkDH93NdCKWxGyuXcruteJEOB/a+mcZvOwPm
-	oQbefTB9e3A==
-X-Gm-Gg: AYBFou3oxzVUp0CARJI//KGjhlyjs6zfUjIPNWW9AKnvSSQnEVJChVDMSNJ343+IaGz
-	DkasJcM8qVolvGa6Di4+dAuZdu0cF5WrGOpIz8FU+hb7L2wgNMEKjZJVGtahAP40OxChFxMez6f
-	EB/6ZNDSC/1KkXjRLn7XK/4gQXYnAkLnWFAWTpGc1+0MH59wyHOYWxDWB57fI9dP/B0zroxu6+R
-	MkU5lIYrkNrHz8TTfRCIf+lNNkfm4uAhxE9L+9/RBQh3phP8ARDE9y2bpfMXjz95U5uJnz/if/M
-	H/oRPv/hIjIHN0O1e3LOSJsvon59vJ0BYWzQdNUB9daiPpsyLHOC+59Zs0RotKhC2w3LfWOLa1N
-	q4g6ZvH0FkmBHyRYlF/lR4x9XFhcmvQnMA1r9XN9TzwsAIlfI3/9XtAqA/9LWA9lRmltvgoEhwV
-	D8Jw8oVQgPEKq+Z9xqmRpux/JSeDBr0eHXm5TImKnhNLfI5UN7Nh0ZNcdA2kgqvdKgI873ZXTlr
-	7F12LruRXSZDK3xBpRH4q+ew7+Iury/3/H18r8xv4+7F6C/qn6t
-X-Received: by 2002:a17:90b:1e0c:b0:39d:ec43:df74 with SMTP id 98e67ed59e1d1-3a07e4a253emr1503184a91.12.1790144067859;
-        Tue, 22 Sep 2026 23:14:27 -0700 (PDT)
+        bh=MOtnD8d71SlNDuUKe552TkAwYaRk9WG7l3v+8ZbQSWo=;
+        b=OyI8EmevhIkWHzrn26cEcSd5tNl7UWyWey0rfLxhc1xou30qBpAUhDmPJ2PONqqOI5
+         egIchG1nJD+yOgp5rB9DhCqvKPjxBS8gvz22KJPyjlQZUZDdJKZ1bD8b4A5o968MPF1O
+         Dwjh28x7dFZ2SIfh9l0Lo7100PbHhFjH1aJ5vtk+YhGnd7G6KpfUA2nCdBo/U2iAcCcy
+         tny+8CpVz0PM/oeUlorF/9r8aJVj5byG5FsgFDE7TtLg6Kk05FldQ4V1c6eYwnMWx1/a
+         Yjj7vHNdkFK7G9fEZkhgPYyL+KFEAV74yqHUcVhyv/NpdmxDVVcq48cmfwWlU+QkdAD6
+         i2pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790144072; x=1790748872;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=MOtnD8d71SlNDuUKe552TkAwYaRk9WG7l3v+8ZbQSWo=;
+        b=AyjcOJomO8nLpGjTDg7hXMuGEZEI57K3E5614fq5+mpR3QtIeWW9riNpK9JE7azpPx
+         nA+UxodCM6rl4JZK6vXcgg3zarFcl9/0Zz4yoMF1iw35/QhmPon0YnC/CchIMfdQVb5i
+         mrEJbVp9QGGzlE3EsRPFpw8OFcAYhTV470obSHYn1esgsiofZjZtfiZKIy0ZaGA9/P2R
+         cTotdQIvVHPAt7U8aSOKSdvqoxHIN8/2yowkbhQXcDjQurLagd1KgRY9u/Am7ygD7rPR
+         WOly9GqX9vmpjM+HP5yKFa3PndcRq73Yoj8r4048DqesRUQ8R7QDoffa3ajEtPK/8x3T
+         MvoQ==
+X-Gm-Message-State: AFuF++lTQJIUi+giYgRdv7XzBmQF7IJe70ZkbEFkMlOgUTfrq8x2kQw7
+	6PI099ifBw015Y9DQGWbcobu7x/dYqaXwQsLlizUpQPBcLKvlagAVE31yJbQnk7Z449aSVO47V7
+	rIKWjDUKsKQ==
+X-Gm-Gg: AYBFou0jtGNSVf1mr+I6P03XMWXJl13BCtwEbDNJDU5B8EVmLkM7QiY5vXNYdyXhCyj
+	/u32opdVFC4s8OivQlN1hmFGJNvBJeliUyMbOkCe+RoiK1rSouO3qTxgsEzPLjQVUyoViBqdPGT
+	0Kh0FFx3r/Mj8XIJ5Ysh9vOLBTlp5E/C3ka1jJQ/J3SaOB6axJy7Wmat57qNa2WLnt4vOLTVJn5
+	dXsnUe+A+0LXACA6H5d8FxzNO1VrsNYfVn9RPkCfH4gCG0//sJ5dt5O9Bow//O4W3in9DfTmBGW
+	5aa51XYlZkWW4JIbWkzq2YQUB5tJa5kTq/wcBZmKmhqOoVfnIcEYivp0Rhn+O4Y6Xzm2rEKhvIy
+	DjWwzWNtfE6gCGJnacARX+Bz/8DIhWtvwBL2/Z3327d7vm7qSr0s+xSBWvpJqHPcad8csW81Aw+
+	NuHwfje8V7JmSF/4oOLGjdsgBiADl+ytTByUgVDzO0YuSwEs4PORUvcsc49bexy4pdY4PkvTJP+
+	PYFElxYCpaP3UVmCPGxV7PgWvPABhxU1kaXd9+UIN683PaS8FM5
+X-Received: by 2002:a17:90b:4f8a:b0:39e:218c:d47c with SMTP id 98e67ed59e1d1-3a07e557910mr1489033a91.9.1790144072425;
+        Tue, 22 Sep 2026 23:14:32 -0700 (PDT)
 Received: from alpine05.ht.home (69-172-153-146.cable.teksavvy.com. [69.172.153.146])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a07de57682sm3562652a91.16.2026.09.22.23.14.27
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a07de57682sm3562652a91.16.2026.09.22.23.14.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2026 23:14:27 -0700 (PDT)
+        Tue, 22 Sep 2026 23:14:32 -0700 (PDT)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -64,12 +66,13 @@ Cc: ast@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com,
 	daniel@iogearbox.net,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Puranjay Mohan <puranjay@kernel.org>
-Subject: [PATCH bpf-next v2 0/7] bpf: Fix arena memory incoherence
-Date: Wed, 23 Sep 2026 06:14:18 +0000
-Message-ID: <20260923061425.7045-1-emil@etsalapatis.com>
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next v2 5/7] bpf: Atomically update PTE and range tree in arena VM fault handler
+Date: Wed, 23 Sep 2026 06:14:23 +0000
+Message-ID: <20260923061425.7045-6-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260923061425.7045-1-emil@etsalapatis.com>
+References: <20260923061425.7045-1-emil@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,62 +81,158 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
+The arena allocation code currently has a race in the fault handler
+that can cause userspace threads to write to the wrong arena page.
 
-Setting up arena memory for a task currently requires two operations:
-Adjusting its range tree, used for tracking which memory is allocated;
-and adjusting its page tables/flushing its TLB state. These operations
-cannot happen atomically because their critical sections do not nest.
-This lack of atomicity is the source of two bugs that can lead to
-incoherence between different users of the same arena, wherein they
-observe different pages for the same address.
+a) The fault handler removes a range from the range tree to mark the
+addresses as allocated, then installs a page A into the kernel page
+tables.
 
-Address the problem by more finely tracking the state of each address.
-Expand the range tree used for address state tracking with a third
-state, used to denote whether an address range is unavailable, either
-because it is being freed or because it is being populated by a VM
-fault. Use this extra state in the arena page freeing/fault logic
-to ensure that operations on a single address properly serialize.
+b) A concurrent free/reallocation removes A and installs a page B.
 
+c) The fault handler still goes ahead with installing page A in the
+page table. The kernel sees page B, while userspace sees page A.
+
+There is no way to protect the PTE installation and the range tree
+modification simultaneously, because we cannot nest the synchronization
+primitives for their respective critical sections. PTE allocation
+may require allocations due to PTE reclamation, and its spinlock
+becomes sleepable under PREEMPT_RT. Thus we cannot do this operation
+while holding the range tree spinlock. There is no public API for
+manually taking this spinlock, so we nest the range tree operation
+inside it.
+
+Solve this issue by adjusting the range tree in two steps. First,
+mark the address of the page being allocated as unavailable. Then
+drop the range spinlock, insert the PTE, take the range spinlock
+again, and fully remove it from the range tree. Concurrent free
+operations get serialized to before the fault handler, while
+it is not possible to allocate the page once it has been reserved.
+Concurrent page fault handler calls retry until the page is fully
+allocated by the original call.
+
+Also return VM_FAULT_RETRY for transient allocation failures. These
+are a) faulting on pages that are temporarily marked unavailable in
+the range tree and b) rqspinlock acquisition failures.
+
+Fixes: b8467290edab ("bpf: arena: make arena kfuncs any context safe")
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: Puranjay Mohan <puranjay@kernel.org>
-
-v1 -> v2 (https://lore.kernel.org/bpf/20260902070239.16968-1-emil@etsalapatis.com/)
-
-- Use __range_iter_next() in is_range_tree_set() (bot-ci)
-- Move -EAGAIN handling to the patch where the errno is introduced (bot-ci)
-- Add refactoring patch for (Puranjay)
-- Avoid leaking unavailable range tree nodes with atomic mark_available
-  operation()
-- Avoid retries on res spinlock locking for -EDEADLK (Puranjay)
-
 ---
+ kernel/bpf/arena.c      | 41 +++++++++++++++++++++++++++++++----------
+ kernel/bpf/range_tree.c | 14 ++++++++++++++
+ kernel/bpf/range_tree.h |  1 +
+ 3 files changed, 46 insertions(+), 10 deletions(-)
 
-Emil Tsalapatis (7):
-  bpf: Update is_range_tree_set to work for consecutive ranges
-  bpf: Track availability information for ranges in range tree
-  bpf: Fix arena race between page free and alloc leading to incoherency
-  bpf: Add explicit state machine for arena free spans
-  bpf: Atomically update PTE and range tree in arena VM fault handler
-  bpf: Avoid unavailable range leakage during arena_free_pages()
-  selftests/bpf: Add arena allocation race tests
-
- kernel/bpf/arena.c                            | 223 +++++++++++++--
- kernel/bpf/range_tree.c                       | 237 ++++++++++++---
- kernel/bpf/range_tree.h                       |   8 +-
- .../selftests/bpf/prog_tests/arena_race.c     | 270 ++++++++++++++++++
- .../testing/selftests/bpf/progs/arena_race.c  | 159 +++++++++++
- 5 files changed, 839 insertions(+), 58 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_race.c
- create mode 100644 tools/testing/selftests/bpf/progs/arena_race.c
-
- ---
-
- NOTE: This version has two additional patches, one NFC one a fix for an
- issue introduced in this series while fixing another. For the former, I
- think we should keep it as a separate patch to make it more clear what
- each change does. The latter is murkier - we can avoid the temporary
- regression by spreading Patch 6 into Patches 2 and 3 if need be.
-
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index ad58aeaa0c87..8594b76dae61 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -492,18 +492,18 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
+ 	struct page *page;
+ 	long kbase, kaddr;
+ 	unsigned long flags;
++	vm_fault_t ret_fault;
+ 	int ret;
+ 
+ 	kbase = bpf_arena_get_kern_vm_start(arena);
+ 	kaddr = kbase + (u32)(vmf->address);
+ 
+-	if (raw_res_spin_lock_irqsave(&arena->spinlock, flags))
+-		/*
+-		 * A failed lock means a possible deadlock was detected. Don't
+-		 * return VM_FAULT_RETRY: this handler never took mmap_lock, but
+-		 * the fault path would re-take it on retry and deadlock. Fail.
+-		 */
++	ret = raw_res_spin_lock_irqsave(&arena->spinlock, flags);
++	/* If we are deadlocking somehow, no way to ensure forward progress. */
++	if (ret == -EDEADLK)
+ 		return VM_FAULT_SIGBUS;
++	if (ret)
++		goto retry;
+ 
+ 	page = vmalloc_to_page((void *)kaddr);
+ 	if (page) {
+@@ -549,10 +549,31 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
+ 	flush_vmap_cache(kaddr, PAGE_SIZE);
+ 	bpf_map_memcg_exit(old_memcg, new_memcg);
+ out:
+-	page_ref_add(page, 1);
++	/* Reserve the page while installing its user PTE without the arena lock. */
++	bpf_map_memcg_enter(&arena->map, &old_memcg, &new_memcg);
++	ret = range_tree_set_unavail(&arena->rt, vmf->pgoff, 1);
++	bpf_map_memcg_exit(old_memcg, new_memcg);
+ 	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
+-	vmf->page = page;
+-	return 0;
++	if (ret) {
++		if (ret == -EAGAIN)
++			goto retry;
++		return VM_FAULT_OOM;
++	}
++
++	ret_fault = vmf_insert_page(vmf->vma, vmf->address, page);
++
++	while ((ret = raw_res_spin_lock_irqsave(&arena->spinlock, flags))) {
++		/* If we somehow deadlocked stop trying to take the lock. */
++		if (ret == -EDEADLK)
++			return VM_FAULT_SIGBUS;
++
++		cond_resched();
++	}
++
++	ret = range_tree_remove_unavail(&arena->rt, vmf->pgoff, 1);
++	raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
++	WARN_ON_ONCE(ret);
++	return ret_fault;
+ out_sigsegv_memcg:
+ 	bpf_map_memcg_exit(old_memcg, new_memcg);
+ out_sigsegv:
+@@ -648,7 +669,7 @@ static int arena_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
+ 	 * of user_vm_start. Set VM_DONTCOPY to prevent arena VMA from
+ 	 * being copied into the child process on fork.
+ 	 */
+-	vm_flags_set(vma, VM_DONTEXPAND | VM_DONTCOPY);
++	vm_flags_set(vma, VM_DONTEXPAND | VM_DONTCOPY | VM_MIXEDMAP);
+ 	vma->vm_ops = &arena_vm_ops;
+ 	return 0;
+ }
+diff --git a/kernel/bpf/range_tree.c b/kernel/bpf/range_tree.c
+index 456db58650bd..46a32623efb2 100644
+--- a/kernel/bpf/range_tree.c
++++ b/kernel/bpf/range_tree.c
+@@ -378,6 +378,20 @@ int range_tree_set_unavail(struct range_tree *rt, u32 start, u32 len)
+ 	return range_tree_set(rt, start, len, false);
+ }
+ 
++int range_tree_remove_unavail(struct range_tree *rt, u32 start, u32 len)
++{
++	u32 last = start + len - 1;
++	struct range_node *rn;
++
++	rn = range_it_iter_first(rt, start, last);
++	if (!rn || rn->available || rn->rn_start != start || rn->rn_last != last)
++		return -EINVAL;
++
++	range_it_remove(rn, rt);
++	kfree_nolock(rn);
++	return 0;
++}
++
+ void range_tree_destroy(struct range_tree *rt)
+ {
+ 	struct range_node *rn;
+diff --git a/kernel/bpf/range_tree.h b/kernel/bpf/range_tree.h
+index aa27edf451bc..4b12ef51cc0b 100644
+--- a/kernel/bpf/range_tree.h
++++ b/kernel/bpf/range_tree.h
+@@ -16,6 +16,7 @@ void range_tree_destroy(struct range_tree *rt);
+ int range_tree_clear(struct range_tree *rt, u32 start, u32 len);
+ int range_tree_set_avail(struct range_tree *rt, u32 start, u32 len);
+ int range_tree_set_unavail(struct range_tree *rt, u32 start, u32 len);
++int range_tree_remove_unavail(struct range_tree *rt, u32 start, u32 len);
+ int range_tree_make_avail(struct range_tree *rt, u32 start, u32 len);
+ int is_range_tree_set(struct range_tree *rt, u32 start, u32 len);
+ s64 range_tree_find(struct range_tree *rt, u32 len);
 -- 
 2.54.0
 
