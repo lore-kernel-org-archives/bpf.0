@@ -1,465 +1,125 @@
-Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA52D3BCD19
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 19:25:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790191545; cv=pass; b=Kpy5/NUgyNMq5wqzi2GojwWqfUyU0mPRbBXlw8cU6mRdLLN4mBmEE8YciGK6QjHgLHXorAA4XunKq9HJXWjs2fY++arjeanhBv/gdjMDS2evdjBwW43y+0TTM5Dgk6qP2JzmHipQbfAd418QUmv8641ShoaCJZylpxUKosjeYCk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790191545; c=relaxed/simple;
-	bh=DTpJoqcps9RyblLs1PlT4OUx7eE0BfdGkN12l+SH5S4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cp5NJUrvAX9NboI3rRXEL5pXzBibvoo3SAXY9+dOLN+FL0JCSsnLE9pB/EEGtqmklAj/Yctf7DZyh592tCaBGVKZFuSmZc5F1uudCzao5Y4t7ioud244XmYvOxQvrzf2csoEnARrv4Y+Z2IAEMo4SCJP+8ZSbH+7wYo/qkuIggQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bbpiZVvn; arc=pass smtp.client-ip=74.125.228.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C853E6DF4
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 19:26:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790191570; cv=none; b=e2b0Zkpf5Gb+3KLe+kDHZBqDx/4W1PCTin+V4/qYt8T3viLRKHFq6TDk3wXOFSZ9K91Mqiqo7oSbcpR1wVh/nEFn45gg+YDvvIIrS+aRHF32+8XX7nX97my1A11WH0lCkkLxXFfasRjT9gAQIx5Fd5aweBS1CA72egcy/y1mSFg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790191570; c=relaxed/simple;
+	bh=Qh1CCBCHJp/zokwPP//s9rm1Y6jzv9brzDRep+tVzCE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=MDAoAn2fDJyHX9kEUP7+08Keuj7voh4Jg3M+ELFLsdqajhhCGx7r8Dm1quS1NHrGk+p8ztPRbyWqr3iSaqwkqXkBB2LTMWggI8CV4oW+Uq+HcEBNl8BkcmDnnmk+w4UJbz8OXsC1JpMmZ241LvaT0cjjnI5JLOCI8mJdRkEAbk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IzRLthfW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bbpiZVvn"
-Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc1cea50dc0so475205a12.2
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 12:25:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790191543; cv=none;
-        d=google.com; s=arc-20260327;
-        b=OSBlzNFdTWniiln1ijHFTiJdMMBQ9PQYGRqaCN+Vb7GfY9yNKcfQfjMZxHZRdxOOhG
-         zqJa0FqHbHA/azMzwk1a6J19y8KR6eApUbxp6eN7W4IabnVTxGJXeFaqyLM6T0PBd8qb
-         Rb6WPZ7E2UwBSuhWvfevs5/9lEX4G62f64Tm9grgkf6AFxSfsX/55dwoROPpvyOUYHwd
-         uOWTnFOCwjQOLFBEjAbdJleMvH+pCp8GM4g7Qb7k0vFMAWig/6Eyo0Hm7WdKcQSTfGt8
-         bbxrd33tPoaEgOQkt9DUiuOvVSRIF+MshZawvgMwh8EsO87iqcKZwG+wKWCVAZZwooyz
-         izRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Z7c0VL7zF9YMH7MNJ9a73b3SqFY7TUHxkX3PupMjtc0=;
-        fh=Z6of9p4UBkM9B6a9G++erIAAIxdfmb3R7qyGxyhF2XM=;
-        b=qjEeYN6SNl72rLfDEv6Ffy9kqwiQXHA7GOpstVsNpKKyWTTDfcwUDn4pJ1OxMWK64Z
-         Y2OVd8qZfhw79JXi4+to4fq9RRiNbRwibbHU5HyjClLQtR1DxaQbfs8bZwCGy5m7PiyX
-         /Eecu+bZvGasrF+1ELJLnFAnGL+eTz52B7nPmQzsFRC4SNF+Z2dsCijOkefDR9DgpJmP
-         OXyDdgq7UvM3GGSsvScs6bkjSp1LEbzJxKtMb3SbV5wsnaiaEGFlPPY8k734TqFYHkrN
-         YzFKW6/9QowIBZ2x5MbJ4XEthA9M4U975yswqwxIxCZZu3c4dc+1MvqSJaX74hr5EX8L
-         4ytA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790191543; x=1790796343; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Z7c0VL7zF9YMH7MNJ9a73b3SqFY7TUHxkX3PupMjtc0=;
-        b=bbpiZVvnj/aQZev0GhKj/AVXfqEhAaEVukqv+DDs2VXpRZAuZfwBbJw5EsG0gvI0yu
-         HTL5HSmXF62ezCa4BnOJKoxb8snqnqFeoxN4T9YyXzVdj7t4wbyjABKPQIHyWP1TGYJo
-         gmiFTJZKD1nBFy3lEnlaLjYfeZTG39dZsWcmkYaQqmIEfta5lq8od8KHycTtC0YcTEv8
-         03W3LLUf/RZPWSF0Sg2A7TGDYrHwYW5BiL1868iEU7tX6MeCmVd0aycHukVa3qB7gE8K
-         thqUB0nt4J4YubJsuHYZzeXDYn+QH8JX0D0XKfOUvYAQZiwDpXXv7ybYwfRMZJgbdtOP
-         Pggw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790191543; x=1790796343;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Z7c0VL7zF9YMH7MNJ9a73b3SqFY7TUHxkX3PupMjtc0=;
-        b=FT8vWHixl/QzgwkbAeFPukSCipfm+wnghbsbXfWYpH6XIsLMWdz+hecyhJ4ITHknkA
-         tB1ONLg119R6v4ICbVv0euaxV7RC0uVlsYzx3TrWbuXNEQXy1zoAesxejcOnyi48m9Z7
-         wZaboVHjHVtPQxq/N2gHpNZ48aH6/bSJwbEHEKFnjlS/nsRYWpPz0kljoTEGQV9nlUa0
-         fBgdJPQTthWRVqhzhiZRIlmbfVzgAODoPWSUKj3auhyckntlujZ+lsEUmdS+mHHtXRi5
-         upqeOFCg5SPGjfY3JhfrHaGKP1JoehRCBNflmEDhbKSK3cMo1Bwqb2xBWQvvnn3os7t2
-         fDkA==
-X-Forwarded-Encrypted: i=1; AKwUvBze7k4eNsB2YbdEbjyK4jtKu7WeeSisPN+UcsT3DxHnoDbUo1k3SFdCroVa96D+3wK6k5I=@vger.kernel.org
-X-Gm-Message-State: AFuF++kW2IE60JVoA6DGNjAW7O7Qim25AVZv+/pTKuBDWTZVFf9SX8PH
-	xKerQEqtUyXJYHQTv9FWlsp+avyUGzwk+lrfSmfhr/o1kZN0ekfzlinJrLKGMHC2xh3/x6OkAzt
-	LcslxkoQpzO/TBc+nuRXvWZiEUbFs2NM=
-X-Gm-Gg: AYBFou1zJshFmQknlKBKx+2LfFgkLNyoZmdfE/991CFY/AZohoQcecNMKxz9TogDmCw
-	Aklap0Y2umfZKzAld9s/B19cf3C8i+8wrTwOApMvJf8XPj0mSk6m59jpvHsfWvTxSnG97D2K7EE
-	u2MctyqAozzm571SxqL5IT8OKkdbeoV7EnNDsndlO4blVJOunC0T474CQmRb0r2u6JQujsK3wCo
-	hwzX9xOA3GQkqVgqol9B4euAkdJKC68GiGqmI3UmbOVsC1kP+68M8zAfIFBbZsyftYn3pD0ZBwE
-	OA1umc9DiPm+Md4rg5YnX2mfoooili9mmkQmrQM3pdDK58bp5AjD5Ehf2VYrRyHWZIdR+DbTQ3l
-	qjl2CCu2WnPefQptI9DY+g7TgvmnOUhM+NKk0Yw==
-X-Received: by 2002:a17:90b:4d09:b0:39f:d323:c988 with SMTP id
- 98e67ed59e1d1-3a098dff5e3mr90526a91.48.1790191542592; Wed, 23 Sep 2026
- 12:25:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IzRLthfW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FC661F000FF;
+	Wed, 23 Sep 2026 19:26:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790191567;
+	bh=RNVx5m2vzUBCVEDEYzmh3eOtlAWxx1UkLpEXjwoeJPI=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=IzRLthfWUDqzEFCT+gWL7XGCGYUpmhNMaWpnQw+6u6QVXGGYSIB6TIipXCpCh+3rC
+	 SJOnCus0tWPdF9g1FgaS+Q1OlwMqhA1Z/YfZsi15yjafETU9cXH5ed6zwxFvrHoE8T
+	 W90n/UwEBCg3cLhLAsPpccavFuBDsKbGYAyLTQ0DUbfY9gh3RgdLTcIuuFAcURZHFH
+	 XG6ne7UY/2XDvkUQ7NBSCHXtZjRy0XZecu8xYgnIaM4yDIGbzIi2ohLcLfnXB+Jfnk
+	 x2dvuCcYrI4kG07inQDnJgiJkPsfBslX8u7cPHjAAv0+VTd1s4o7Fmz+YgWdpMGprk
+	 2nx6rzREnyb2g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next v1 11/18] selftests/bpf: Check liveness merge
+ of masks with different widths
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260923191139.2816206-12-memxor@gmail.com>
+References: <20260923191139.2816206-1-memxor@gmail.com>
+ <20260923191139.2816206-12-memxor@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 23 Sep 2026 19:26:07 +0000
+Message-Id: <20260923192607.8FC661F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260922200208.3203834-1-puranjay@kernel.org> <CAEf4BzaifaWk+oHu-berWcKuS6Y5WfkcFTKZW-iMCPxG0=5i0w@mail.gmail.com>
- <CANk7y0g8Mh-je_o_nyXQ3zsGVeAsz2qMfgDtv4j-MXhAJ7PcMA@mail.gmail.com>
- <DLMNTHW945RO.TLPGJHZRWHUY@gmail.com> <CAEf4BzaR=oQz13GVxM+DjLkyjCjFmETvj9=bAuccLNKCXHJPaw@mail.gmail.com>
- <DLMUP8JM4L3U.1A9R0QUFFIQV9@gmail.com> <CAEf4BzYvSXNKu2qtBHEvmFg8sm3yJS_2xRUmuQhfjfx79VfgNQ@mail.gmail.com>
- <DLMW293TO3P3.3SKQ637LNLYQR@gmail.com> <CAEf4BzYLZtHvD9s8N9UA-VmHUD1zKO=kQhKDvxLHHWQsFgu_cw@mail.gmail.com>
- <CANk7y0g01QX-0ZqtF9FhL-9pmrLtXqyRVsyQo1UE9A-wTaO16A@mail.gmail.com>
-In-Reply-To: <CANk7y0g01QX-0ZqtF9FhL-9pmrLtXqyRVsyQo1UE9A-wTaO16A@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 23 Sep 2026 12:25:30 -0700
-X-Gm-Features: AcwNN1UtvFSbvMz0aiDzYNPPWIXwg7ucvzyEtCIQhhnTLRq-3wZ4AAVRMQuDWmQ
-Message-ID: <CAEf4BzYs=PiHMzbLU9rt-O1kRff4_yOzopK_x4bfOgmhN0h9=Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 0/4] bpf: Add bpf_call_rcu() and bpf_call_rcu_tasks_trace()
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org, rcu@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, "Harry Yoo (Oracle)" <harry@kernel.org>, 
-	"Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 23, 2026 at 11:31=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.c=
-om> wrote:
->
-> On Wed, Sep 23, 2026 at 7:22=E2=80=AFPM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Wed, Sep 23, 2026 at 10:57=E2=80=AFAM Kumar Kartikeya Dwivedi
-> > <memxor@gmail.com> wrote:
-> > >
-> > > On Wed Sep 23, 2026 at 6:59 PM CEST, Andrii Nakryiko wrote:
-> > > > On Wed, Sep 23, 2026 at 9:53=E2=80=AFAM Kumar Kartikeya Dwivedi
-> > > > <memxor@gmail.com> wrote:
-> > > >>
-> > > >> On Wed Sep 23, 2026 at 6:45 PM CEST, Andrii Nakryiko wrote:
-> > > >> > On Wed, Sep 23, 2026 at 4:29=E2=80=AFAM Kumar Kartikeya Dwivedi
-> > > >> > <memxor@gmail.com> wrote:
-> > > >> >>
-> > > >> >> On Wed Sep 23, 2026 at 12:37 PM CEST, Puranjay Mohan wrote:
-> > > >> >> > On Wed, Sep 23, 2026 at 12:41=E2=80=AFAM Andrii Nakryiko
-> > > >> >> > <andrii.nakryiko@gmail.com> wrote:
-> > > >> >> >>
-> > > >> >> >> On Tue, Sep 22, 2026 at 1:02=E2=80=AFPM Puranjay Mohan <pura=
-njay@kernel.org> wrote:
-> > > >> >> >> >
-> > > >> >> >> > Changelog:
-> > > >> >> >> > v5: https://lore.kernel.org/all/20260921191407.1742386-1-p=
-uranjay@kernel.org/
-> > > >> >> >> > Changes in v6:
-> > > >> >> >> > - Size struct bpf_rcu_head at 48 bytes rather than 64, mat=
-ching what the
-> > > >> >> >> >   inline state uses (Alexei)
-> > > >> >> >> > - Trim patch 1's changelog: drop the reasoning about possi=
-ble future
-> > > >> >> >> >   layouts and about what the other async kfuncs return
-> > > >> >> >> > - Rebase on bpf-next/master
-> > > >> >> >> >
-> > > >> >> >> > v4: https://lore.kernel.org/all/20260915154248.3612028-1-p=
-uranjay@kernel.org/
-> > > >> >> >> > Changes in v5:
-> > > >> >> >> > - Rename the "hash_map" subtest to "bad_map" so that it ma=
-tches its
-> > > >> >> >> >   helper test_call_rcu_bad_map() (bpf-ci)
-> > > >> >> >> > - Bump the callback counter after chain_err in the selftes=
-t callback.
-> > > >> >> >> >   Userspace polls that counter and then reads chain_err, s=
-o it could
-> > > >> >> >> >   still see the initial value before the re-arm had stored=
- one, which
-> > > >> >> >> >   let the chain subtest's assertion pass without checking =
-anything
-> > > >> >> >> > - Say in patch 1 why embedding struct rcu_head in a uapi s=
-truct is
-> > > >> >> >> >   acceptable here (Mykyta, Paul, Alexei)
-> > > >> >> >> > - Rebase on bpf-next/master
-> > > >> >> >> > v3: https://lore.kernel.org/all/20260915143640.36292-1-pur=
-anjay@kernel.org/
-> > > >> >> >> > Changes in v4:
-> > > >> >> >> > - Drop an unrelated hunk in bpf_async_update_prog_callback=
-() that turned
-> > > >> >> >> >   PTR_ERR(prog) into -EBADF.  That is the shared bpf_timer=
-/bpf_wq path
-> > > >> >> >> >   and bpf_prog_inc_not_zero() returns -ENOENT, so it would=
- have changed
-> > > >> >> >> >   the errno bpf_timer_set_callback() and bpf_wq_set_callba=
-ck() report to
-> > > >> >> >> >   userspace (Sashiko).  No other changes from v3
-> > > >> >> >> > v2: https://lore.kernel.org/all/20260915114240.3269184-1-p=
-uranjay@kernel.org/
-> > > >> >> >> > Changes in v3:
-> > > >> >> >> > - Move the bpf_call_rcu_tasks_trace() verifier bits from p=
-atch 1 to
-> > > >> >> >> >   patch 3; patch 1 alone emitted "resolve_btfids: unresolv=
-ed symbol
-> > > >> >> >> >   bpf_call_rcu_tasks_trace" (Sashiko)
-> > > >> >> >> > - Poll the callback counter with an acquire load (Sashiko)
-> > > >> >> >> > - teardown: v2 only checked that the program was eventuall=
-y freed, which
-> > > >> >> >> >   passes even if nothing was ever armed.  Also assert that=
- the chain ran,
-> > > >> >> >> >   and read the -EPERM back through an independent .bss fd
-> > > >> >> >> > - Use kern_sync_rcu() instead of open coding the grace-per=
-iod wait
-> > > >> >> >> > - Return -EBADF rather than -ENOENT when the calling progr=
-am is going
-> > > >> >> >> >   away, matching bpf_task_work_schedule()
-> > > >> >> >> > - mismatch_map now pins the bpf_rcu_head label the new cod=
-e emits; it
-> > > >> >> >> >   passed with that branch removed.  Add a two_heads test, =
-and wait for
-> > > >> >> >> >   each grace period separately in the chain test
-> > > >> >> >> > - Commit messages: correct the -EPERM parity claim, explai=
-n the inline
-> > > >> >> >> >   callback state and the struct size, motivate the tasks t=
-race flavour
-> > > >> >> >> > v1: https://lore.kernel.org/all/20260907134552.1772405-1-p=
-uranjay@kernel.org/
-> > > >> >> >> > Changes in v2:
-> > > >> >> >> > - Rebase on bpf-next/master
-> > > >> >> >> > - Use rcu_read_lock_dont_migrate() over open coding (Alexe=
-i)
-> > > >> >> >> > - Improve re-arming selftest to detect failure (Sashiko)
-> > > >> >> >> >
-> > > >> >> >> > BPF programs that manage their own objects have no way to =
-run their own
-> > > >> >> >> > logic once an RCU grace period has elapsed.  bpf_obj_drop(=
-) defers a
-> > > >> >> >> > free, but returning an index to an allocator or unpinning =
-a resource
-> > > >> >> >> > once readers are done has no equivalent.  sched_ext's BPF =
-library works
-> > > >> >> >> > around this today by pushing freed nodes onto a list and h=
-aving a
-> > > >> >> >> > userspace thread call membarrier(MEMBARRIER_CMD_GLOBAL) an=
-d then run a
-> > > >> >> >> > BPF program to reclaim them; it is the first intended user=
-.
-> > > >> >> >> >
-> > > >> >> >> > Add:
-> > > >> >> >> >
-> > > >> >> >> >         int bpf_call_rcu(struct bpf_rcu_head *rh, void *ma=
-p,
-> > > >> >> >> >                          int (*callback)(struct bpf_map *m=
-ap, void *key,
-> > > >> >> >> >                                          void *value));
-> > > >> >> >> >
-> > > >> >> >> > and bpf_call_rcu_tasks_trace(), same signature, which also=
- waits for
-> > > >> >> >> > sleepable programs.
-> > > >> >> >> >
-> > > >> >> >> > @rh is a struct bpf_rcu_head embedded in a value of @map, =
-so the
-> > > >> >> >> > callback runs as callback(map, key, value) for the element=
- it lives in
-> > > >> >> >> > and needs no cookie.  The field is only accepted in BPF_MA=
-P_TYPE_ARRAY,
-> > > >> >> >>
-> > > >> >> >> Isn't restricting this to BPF_MAP_TYPE_ARRAY unnecessarily r=
-estrictive
-> > > >> >> >> in practice? Do other APIs of similar kind have this limitat=
-ion? E.g.,
-> > > >> >> >> bpf_task_work_schedule() or timer, I don't think they limit =
-user to
-> > > >> >> >> just ARRAY maps, it's way too inflexible.
-> > > >> >> >
-> > > >> >> > Right, bpf_timer and bpf_task_work take HASH/LRU_HASH/ARRAY. =
-They can
-> > > >> >> > because they can cancel: on element delete bpf_obj_free_field=
-s() calls
-> > > >> >>
-> > > >> >> bpf_obj_cancel_fields(). bpf_obj_free_fields() is no longer cal=
-led except when
-> > > >> >> the object is being freed finally.
-> > > >> >>
-> > > >> >> > bpf_task_work_cancel_and_free(), which reaches task_work_canc=
-el(), so
-> > > >> >> > a pending callback never runs against a recycled element.
-> > > >> >> > A queued RCU callback cannot be cancelled. rcu_barrier() is t=
-he only
-> > > >> >> > thing that waits for one, and it sleeps, so it is not callabl=
-e from an
-> > > >> >> > element delete. Array elements are never freed individually, =
-which is
-> > > >> >> > what makes it safe.
-> > > >> >>
-> > > >> >> If cancel is a noop, can you not simply skip it on map update?
-> > > >> >>
-> > > >> >> It is a bit unfortunate we can't provide cancel semantics, it w=
-ill be yet
-> > > >> >> another divergence from how all other async callbacks work...si=
-gh.
-> > > >> >>
-> > > >> >> >
-> > > >> >> > I can think of a complicated way to support hash maps but tha=
-t would
-> > > >> >> > need making the state dynamically allocated and finding a way=
- to
-> > > >> >> > cancel the callbacks. But I would do it as a follow-up if the=
-re is a
-> > > >> >> > real use case.
-> > > >> >>
-> > > >> >> That would mean allocation and frees, it is already quite expen=
-sive as is for a
-> > > >> >> call_rcu() primitive (with the refcount bumps and atomics).
-> > > >> >
-> > > >> > maybe so, but as is ARRAY is a severe limitation and makes a lot=
- of
-> > > >> > cases either unusable or requiring extra sequential ID allocatio=
-n
-> > > >> > logic to remap some HASH map entry to index in an ARRAY map, jus=
-t so
-> > > >> > you can call rcu callback for a given kernel object stored in HA=
-SH
-> > > >> > map.
-> > > >> >
-> > > >> > E.g., think about keep as set of sockets, or tasks, or whatnot i=
-n HASH
-> > > >> > or RHASHTABLE (especially the latter one with support for resizi=
-ng).
-> > > >> > How would you do bpf_call_rcu() for them with unduly complicatio=
-ns,
-> > > >> > limitations and a lot of waste (unlike HASH you can't have lazy =
-memory
-> > > >> > allocation).
-> > > >>
-> > > >> Yeah, I don't disagree. We would also need to support storing them=
- in more map
-> > > >> types to make it woth with arenas (which was one of the motivation=
-s for the
-> > > >> feature).
-> > > >>
-> > > >> Perhaps it is better to make cancel a noop / unsupported and skip =
-it when a map
-> > > >> element is deleted. That will be the easiest path to enabling it, =
-but it does
-> > > >> create (perhaps surprising) divergence from some of the other asyn=
-c callback
-> > > >> primitives.
-> > > >
-> > > > I don't see much need for cancellation, but a more useful/sane
-> > > > behavior would be rearming on subsequent calls to bpf_call_rcu(). T=
-his
-> > > > would also handle update/delete/reuse of entries. Not sure how hard=
- it
-> > > > is to support that in kernel's call_rcu() implementation, though, b=
-ut
-> > > > that would solve the problem, because it should always be OK to del=
-ay
-> > > > call_rcu() callback, but not the other way around (which is what wo=
-uld
-> > > > happen today because we will ignore subsequent bpf_call_rcu() calls=
-).
-> > > >
-> > >
-> > > Hm. One of the design points for this was maintaining our own lists a=
-nd using
-> > > more lower level RCU primitives to poll for the grace period. I wonde=
-r if some
-> > > of this could be made easier that way. I will think a bit more about =
-this.
-> > >
-> > > We could probably also do the waiting_for_gp amortization that memall=
-oc.c on top.
-> > >
-> > > >>
-> > > >> That said, I do think performance should be a consideration for th=
-is API; maybe
-> > > >> unlike other ones, I would expect that this could be called very f=
-requently. I
-> > > >
-> > > > I'm not sure why this has to be super high frequency API to use, tb=
-h.
-> > > > You'd normally use this when cleaning up when some kernel object is
-> > > > freed, no? Sure that can be relatively frequent, but not to the poi=
-nt
-> > > > where we should be *that* concerned with refcount or atomics overhe=
-ad
-> > > > per se (multi-cpu cache bouncing of refcounting is a concern, but n=
-ot
-> > > > sure what you can do about that).
-> > > >
-> > >
-> > > Yeah it depends, but I think you can make the other case as well.  Go=
-ing by
-> > > optimizations made in memalloc.c for hashtab, imagine implementing an=
- arena hash
-> > > table using this stuff. You'd definitely want it to be as cheap as po=
-ssible and
-> > > approach the kernel implementation.
-> > >
-> > > If multiple CPUs dispatching it leads to constant cache line bouncing=
-, it will
-> > > fail to scale with number of CPUs. The user then does their own batch=
-ing to
-> > > amortize the cost and pace the calls, but it's just more complexity p=
-ushed down
-> > > on the callers, and it might build up memory pressure because items a=
-re now not
-> > > being freed as quickly and hit locks in the allocator (one of the mai=
-n reasons
-> > > BPF maps have memory reuse semantics, to avoid exhausting caches and =
-hitting
-> > > allocator locks).
-> > >
-> > > Anyway, I know we kicked the can down the road for now on prog refcou=
-nts, and
-> > > can cache allocations etc. to amortize the cost there, but I hope tha=
-t I could
-> > > illustrate why I think it might be more sensitive to performance diff=
-erences
-> > > than some of the other primitives.
-> >
-> > no, that's a good point, but I think the solution here is to make
-> > prog's refcount more scalable by using per-cpu refcount approach,
-> > right?
-> >
-> > >
-> > > >> had concerns about prog refcount increment as well, but didn't rea=
-lly bring it
-> > > >> up since it is something that can be addressed after the fact (may=
-be using pcpu
-> > > >> refs). But once we promise supporting cancellation, it is hard to =
-walk that
-> > > >> back. I think it's less of a concern for other async cb types. In =
-practice,
-> > > >> except to support map semantics I don't know if anyone will use ca=
-ncellation API
-> > > >> either, the kernel side never grew such support.
-> > > >>
-> > > >> Anyway, overall the best path to me seems to be just enabling it a=
-s is and
-> > > >
-> > > > you mean enabling for HASH or keeping it for ARRAY only? If the
-> > > > latter, my concern is that to support HASH we might need to change =
-the
-> > > > internal structure and break that 48-byte size, so we should probab=
-ly
-> > > > decide all this before we get this into the next Linux release.
-> > >
-> > > I did mean enabling it in other maps, yes, sorry, I think I wrote it =
-in a
-> >
-> > ah ok, +1 to that
-> >
-> > > confusing manner. I was just speculating that we can bail on cancelli=
-ng and see
-> > > whether we can make it work. I probably need to spend a little more t=
-ime
-> > > thinking it through.
-> > >
-> >
-> > I think there is, I'll let Puranjay provide details as we just had a
-> > discussion offlist.
->
-> I think I can come up with a way for supporting hashmaps, by keeping
-> the element alive until the callback has run rather than trying to
-> cancel it.
->
-> On delete the map asks the head first: that sets a dead bit and
-> reports whether a callback is still outstanding. If one is, the
-> element stays unlinked but is not returned to the allocator; the
-> callback does that at the end through a new map_release_elem(), since
-> only the map knows whether that is a freelist push or
-> bpf_mem_cache_free(). The dead bit stops it being armed again, so
-> there is a definite last callback and exactly one side releases the
-> element.
->
-> That needs one more bit of state in the head that covers the rcu_head,
-> which RCU dequeues before invoking so the callback can still re-arm,
-> and a count that covers the element, which has to live until the last
-> callback
-> returns. Both fit in the u32 already there, so struct bpf_rcu_head
-> does not grow and there is no allocation.
->
-> What do you think of this approach??
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Low] bpf: merge_keeps_whole_frame_read test is vacuous on some 64-bit ar=
+chs
+--
 
-I haven't looked in details into the current bpf_rcu_head
-implementation, but overall all this makes sense. Please give it a try
-and let's see how it ends up looking and working.
+commit 1299c778ee1ba2ffa8d447fa3ce55a6d2aec24cd
+Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+
+selftests/bpf: Check liveness merge of masks with different widths
+
+This commit adds a selftest to verify that merge_instances() correctly
+widens liveness masks of different widths when a function instance is
+analyzed through different call sites.
+
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/to=
+ols/testing/selftests/bpf/progs/verifier_live_stack.c
+> index f8758eb62dac5..a94365decd5f1 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+> @@ -2861,3 +2861,52 @@ __naked void narrow_store_defines_nothing(void)
+
+[ ... ]
+
+> +SEC("socket")
+> +__log_level(2)
+> +__msg("stack use/def subprog#{{[0-9]+}} merge_read_all_callee (d2,cs{{[0=
+-9]+}}):")
+> +__msg("(79) r0 =3D *(u64 *)(r1 +0){{.*}}; use: fp0-8..-512")
+> +__naked void merge_keeps_whole_frame_read(void)
+> +{
+> +	asm volatile (
+> +	"r1 =3D 0;"
+> +	"*(u64 *)(r10 - 8) =3D r1;"
+> +	"*(u64 *)(r10 - 16) =3D r1;"
+> +	"*(u64 *)(r10 - 264) =3D r1;"
+
+[Severity: Low]
+Is this test effectively vacuous on 64-bit architectures with a 512-byte st=
+ack
+limit?
+
+The precise 8-byte read at offset -264 touches half-slot 66. This means the
+mask requires 66 bits, which on a 64-bit architecture occupies 2 words.
+
+The second pass performs an unknown-offset read, forcing a whole-frame mask.
+For a 512-byte stack limit, this covers 128 half-slots (128 bits), which
+also occupies 2 words.
+
+Because both masks occupy 2 words, the actual widening logic in
+widen_frame_masks() is silently skipped, missing the intended test coverage.
+
+While later patches in this series might raise the stack limit for some
+architectures, the test remains mathematically vacuous on 64-bit architectu=
+res
+that retain the 512-byte limit (e.g., RISC-V, s390x, or when JIT is off).
+
+Would changing the precise read to an offset <=3D 256 (e.g., -248) correctly
+produce a 1-word mask and test the intended logic universally?
+
+> +	"call %[bpf_get_prandom_u32];"
+> +	"r0 &=3D 8;"
+> +	"r1 =3D r10;"
+> +	"r1 +=3D -16;"
+> +	"r1 +=3D r0;"
+> +	"call merge_read_all_mid;"
+> +	"r1 =3D r10;"
+> +	"r1 +=3D -264;"
+> +	"call merge_read_all_mid;"
+> +	"r0 =3D 0;"
+> +	"exit;"
+> +	:: __imm(bpf_get_prandom_u32)
+> +	: __clobber_all);
+> +}
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260923191139.2816=
+206-1-memxor@gmail.com?part=3D11
