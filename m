@@ -1,381 +1,405 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71E7944605B;
-	Wed, 23 Sep 2026 06:35:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABCF415F00;
+	Wed, 23 Sep 2026 06:41:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790145351; cv=none; b=fomMZHL3H9QAsV2ICLHfeoDzOEZCbPvBVwiBtZagz5VJs80e1wSYtVd6pd29TcEidIdF8yWE6wZtrvkXzwrmFnS1nkrLPb7/8IiSvecAbaiSrcmEp0fKzNvEE1ZCIj763h+oRvQrJcV7FqRBgTVKKFYx23AccUYmr2/NLGAcOYM=
+	t=1790145690; cv=none; b=GO2kbRirEh12DD3zA8l8sNiuOYbKIrzWOjf7nZxjCJPgIUQqy54LlASZx+ZcYFbm1bO2a6LCR9jXtuA0dzv4fLYmiiQwsK8FjCfFzJaAPfkpMrOy1/2QTwkLjUXX4RQ2OrLOOiV3S7ocq2rAlcl1u0d2uu9Ca/XDPWYXGhjxCWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790145351; c=relaxed/simple;
-	bh=uWMyBK+GEIC8XIjvo+9hH4bmP0RZRas3U1WVp92xNUY=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LgbnLPDH7Go7vMlD+hX1c3RKrUfrw4ZIjbA+96bgfnsXe5AjufzFKkIzMz4+y/re2e9a8bX2Tyn9CCIcxuX1ZQSDKlI6L3mXHRnEDvtj8hGTE+zrH6ShQoKr5BlP/bj4nYIRvY7PtADG1Yx5yQlJE/RHQfkZicUcvT037SCQ58o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=ew699ooy; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1790145690; c=relaxed/simple;
+	bh=vMRciAZ175VWO2J32cGUF/F9D7Trztf0tZEVIb+di+o=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=EGKrXTQ6++sHHH1KNb0nrDPU6IDeOPx5ldC6dwieutRI8NETEDbvNgCUIoSU14ncVZyBKEZck5iWVzdUTCtVj9eIseuyhYP8smgjXC9pn/81o4GW9HBxsFyqm1E6QWAixjoQ5JUcF6m3NSToLOPQgSjiePhoFvJmUYsVaT+t6WI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kh4AQ26O; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="ew699ooy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1790145346; x=1821681346;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=uWMyBK+GEIC8XIjvo+9hH4bmP0RZRas3U1WVp92xNUY=;
-  b=ew699ooyru2h82RD6HHWDIfTqlLrVUhUvkEPvr6qRTRp8UH3FwsTuHg5
-   EyAT8b2Pvux585t480GfG0bbasX7csL6ifvQSQlVUqI/LqSHAAUx1ax6B
-   rI8p6s1ysPCpkRx04cZfkNfdD5U64Yp4mYp1sJpfNBaOdbG+2vPXgwKHk
-   AhIR4bcnD0fUnboBVlVcioLcYiotJJlMZRd0AwjFo6MIElqll2Vsh4SKV
-   XuISjKrgGnVl4UArtKESz25Q9SYtDskM0G8JYKoFO8VJmWHnnARdNGHNF
-   4gJZl4mCokX1iBngi1qtFQ3QB5xtUisTBd9LiNCMxempZ0JLpHJTf+lEB
-   Q==;
-X-CSE-ConnectionGUID: DjSYN1hFTa6DTU9vOVwW+w==
-X-CSE-MsgGUID: FCR6vOsSRQGXyF3ZG4siEw==
-X-IronPort-AV: E=Sophos;i="6.27,118,1787036400"; 
-   d="scan'208";a="231143838"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 22 Sep 2026 23:35:34 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Tue, 22 Sep 2026 23:35:33 -0700
-Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Tue, 22 Sep 2026 23:35:29 -0700
-Date: Wed, 23 Sep 2026 08:35:29 +0200
-From: Daniel Machon <daniel.machon@microchip.com>
-To: <netdev-bot+sashiko@kernel.org>
-CC: <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
-	<kuba@kernel.org>, <pabeni@redhat.com>, <horatiu.vultur@microchip.com>,
-	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
-	<ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
-	<john.fastabend@gmail.com>, <sdf@fomichev.me>, <herve.codina@bootlin.com>,
-	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <mohsin.bashr@gmail.com>,
-	<richardcochran@gmail.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH net-next v7 03/14] net: microchip: fdma: add PCIe ATU
- support
-Message-ID: <20260923063529.qm35iz2qjxgkvowh@DEN-DL-M70577.microsemi.net>
-References: <20260918-lan966x-pci-fdma-v7-3-0ecc179c8a2c@microchip.com>
- <179008204420.2160803.14375469578712775106@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kh4AQ26O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C8A1F000FF;
+	Wed, 23 Sep 2026 06:41:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790145682;
+	bh=2W4NE5J+KhZtrDQBDt/XwIKj7xSOG+lvJrpx1ZfD3WE=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Kh4AQ26OksIbGC0k1FMrdRH1tU4dxQXllArQlHmZTRMDpXMRnanD2BWVhKMZQwcE3
+	 hbpz1OqO+DqS6dTie61sfkqtqxMkCbbcKs/vEKtqt/pNjMofBp07CzWuMkSvCpzN5H
+	 7fnatDP5xuirLARW53rk9INT2Cy61r5x+LUsT6zdUdI8PalaBJskEabFe9Clt/9Grr
+	 4JpYlA4YmzCMozxuAOIuv5zOUyG0g2M5kcmcXR0HW271DHdGHXE4M7FMC80BJVIamb
+	 JW7xOe4A66iM+uR1omSSG1LZsHQuqjjQYfWO8m/+mrMpRh5UT0ljTGJAgJbMnSb4NU
+	 kCPbicPsDU8nA==
+Content-Type: multipart/mixed; boundary="===============0426560887140224341=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <179008204420.2160803.14375469578712775106@kernel.org>
+Message-Id: <f0a28d1ffadcd0dbc3209da34afb902c4911ad9e31cd90a1b640d4c1592cf11d@mail.kernel.org>
+In-Reply-To: <20260923053948.30617-6-wanjay@amazon.com>
+References: <20260923053948.30617-6-wanjay@amazon.com>
+Subject: Re: [PATCH bpf-next 5/6] bpf: defer registrations until the vmlinux BTF is available
+From: bot+bpf-ci@kernel.org
+To: wanjay@amazon.com,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: alan.maguire@oracle.com,martin.lau@linux.dev,yonghong.song@linux.dev,nathan@kernel.org,nsc@kernel.org,linux-kbuild@vger.kernel.org,mcgrof@kernel.org,petr.pavlu@suse.com,linux-modules@vger.kernel.org,arnd@arndb.de,linux-kernel@vger.kernel.org,abuehaze@amazon.com,doebel@amazon.de,jay.wang.upstream@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 23 Sep 2026 06:41:19 +0000 (UTC)
 
-> Thank you for your contribution! Sashiko AI review found 4 potential
-> issue(s) to consider.
-> 
-> Critical: 0 · High: 0 · Medium: 1 · Low: 3
-> 
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
-> 
-> - [Medium] fdma_pci_atu_region_map() programs base/limit/target and then
->   issues the region-enable write (CTRL2 bit31) and returns immediately;…
-> - [Low] fdma_pci_atu_region_map()
->   (drivers/net/ethernet/microchip/fdma/fdma_pci.c:138) validates that…
-> - [Low] fdma_pci_atu_configure_translation() programs lower/upper base
->   (+0x8/+0xc), limit (+0x10) and lower/upper target (+0x14/+0x18), and…
-> - [Low] fdma_pci_atu_translate_addr() (fdma_pci.c:181) computes
->   region->base_addr + (addr - region->target_addr) with no check that…
-> 
-> --
-> 
-> net: microchip: fdma: add PCIe ATU support
-> 
-> Adds a PCIe ATU layer for the Microchip FDMA engine so that a lan966x or
-> lan969x acting as a PCIe endpoint can reach host memory. The outbound
-> address space 0x10000000-0x1fffffff is split into six regions that are
-> claimed and programmed when FDMA buffers are allocated.
-> 
-> A few questions on the new ATU code below.
-> 
-> > diff --git a/drivers/net/ethernet/microchip/fdma/fdma_api.c b/drivers/net/ethernet/microchip/fdma/fdma_api.c
-> > index e78c3590da9e..a3c9e3097c5c 100644
-> > --- a/drivers/net/ethernet/microchip/fdma/fdma_api.c
-> > +++ b/drivers/net/ethernet/microchip/fdma/fdma_api.c
-> > @@ -127,6 +127,50 @@ void fdma_free_phys(struct fdma *fdma)
-> >  }
-> >  EXPORT_SYMBOL_GPL(fdma_free_phys);
-> >
-> > +#if IS_ENABLED(CONFIG_MCHP_LAN966X_PCI)
-> > +/* Allocate coherent DMA memory and map it in the ATU. */
-> > +int fdma_alloc_coherent_and_map(struct device *dev, struct fdma *fdma,
-> > +                             struct fdma_pci_atu *atu)
-> > +{
-> > +     struct fdma_pci_atu_region *region;
-> > +     int err;
-> > +
-> > +     if (WARN_ON(fdma->atu_region))
-> > +             return -EBUSY;
-> > +
-> > +     /* The ATU cannot express a limit finer than the region granularity, so
-> > +      * the hardware widens the programmed limit to that boundary. Pad the
-> > +      * allocation to match, or the outbound window would extend past the
-> > +      * memory we own.
-> > +      */
-> > +     fdma->size = ALIGN(fdma->size, FDMA_PCI_ATU_REGION_ALIGN);
-> > +
-> > +     err = fdma_alloc_coherent(dev, fdma);
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     region = fdma_pci_atu_region_map(atu, fdma->dma, fdma->size);
-> > +     if (IS_ERR(region)) {
-> > +             fdma_free_coherent(dev, fdma);
-> > +             return PTR_ERR(region);
-> > +     }
-> > +
-> > +     fdma->atu_region = region;
-> > +
-> > +     return 0;
-> > +}
-> > +EXPORT_SYMBOL_GPL(fdma_alloc_coherent_and_map);
-> > +
-> > +/* Free coherent DMA memory and unmap the memory in the ATU. */
-> > +void fdma_free_coherent_and_unmap(struct device *dev, struct fdma *fdma)
-> > +{
-> > +     fdma_pci_atu_region_unmap(fdma->atu_region);
-> > +     fdma->atu_region = NULL;
-> > +     fdma_free_coherent(dev, fdma);
-> > +}
-> > +EXPORT_SYMBOL_GPL(fdma_free_coherent_and_unmap);
-> > +#endif
-> 
-> [ ... ]
-> 
-> > diff --git a/drivers/net/ethernet/microchip/fdma/fdma_pci.c b/drivers/net/ethernet/microchip/fdma/fdma_pci.c
-> > new file mode 100644
-> > index 000000000000..dd1dc46cbc9d
-> > --- /dev/null
-> > +++ b/drivers/net/ethernet/microchip/fdma/fdma_pci.c
-> > @@ -0,0 +1,208 @@
-> 
-> [ ... ]
-> 
-> > +#define FDMA_PCI_ATU_ADDR            0x300000
-> > +#define FDMA_PCI_ATU_IDX_SIZE        0x200
-> > +#define FDMA_PCI_ATU_ENA_REG         0x4
-> > +#define FDMA_PCI_ATU_ENA_BIT         BIT(31)
-> > +#define FDMA_PCI_ATU_LWR_BASE_ADDR   0x8
-> > +#define FDMA_PCI_ATU_UPP_BASE_ADDR   0xc
-> > +#define FDMA_PCI_ATU_LIMIT_ADDR      0x10
-> > +#define FDMA_PCI_ATU_LWR_TARGET_ADDR 0x14
-> > +#define FDMA_PCI_ATU_UPP_TARGET_ADDR 0x18
-> 
-> [ ... ]
-> 
-> > +/* Configure the address translation in the ATU. */
-> > +static void
-> > +fdma_pci_atu_configure_translation(struct fdma_pci_atu_region *region)
-> > +{
-> > +     struct fdma_pci_atu *atu = region->atu;
-> > +     int idx = region->idx;
-> > +
-> > +     writel(lower_32_bits(region->base_addr),
-> > +            fdma_pci_atu_addr_get(atu->addr,
-> > +                                  FDMA_PCI_ATU_LWR_BASE_ADDR, idx));
-> > +
-> > +     writel(upper_32_bits(region->base_addr),
-> > +            fdma_pci_atu_addr_get(atu->addr,
-> > +                                  FDMA_PCI_ATU_UPP_BASE_ADDR, idx));
-> > +
-> > +     /* The OB address space lies entirely below 4GB, so the limit always
-> > +      * fits the lower limit register and the upper one is left alone.
-> > +      */
-> > +     writel(region->limit_addr,
-> > +            fdma_pci_atu_addr_get(atu->addr, FDMA_PCI_ATU_LIMIT_ADDR, idx));
-> > +
-> > +     writel(lower_32_bits(region->target_addr),
-> > +            fdma_pci_atu_addr_get(atu->addr,
-> > +                                  FDMA_PCI_ATU_LWR_TARGET_ADDR, idx));
-> > +
-> > +     writel(upper_32_bits(region->target_addr),
-> > +            fdma_pci_atu_addr_get(atu->addr,
-> > +                                  FDMA_PCI_ATU_UPP_TARGET_ADDR, idx));
-> > +}
-> 
-> [Severity: Low]
-> The offsets used here match the DesignWare unrolled iATU layout: block at
-> DBI + 0x300000, 0x200 stride per region, Control 2 at +0x4 with enable in
-> bit 31, base at +0x8/+0xc, limit at +0x10, target at +0x14/+0x18.
-> 
-> That layout also has a Control 1 register at +0x0 selecting the outbound
-> TLP type, the function number and the ECRC/TD bits, and it is never
-> written here. fdma_pci_atu_init() claims all six outbound regions and
-> only clears Control 2, so each region keeps whatever Control 1 value it
-> already held.
-> 
-> The generic driver for the same block always programs it explicitly
-> before enabling:
-> 
-> drivers/pci/controller/dwc/pcie-designware.c:dw_pcie_prog_outbound_atu() {
->         ...
->         val = atu->type | atu->routing | PCIE_ATU_FUNC_NUM(atu->func_no);
->         ...
->         dw_pcie_writel_atu_ob(pci, atu->index, PCIE_ATU_REGION_CTRL1, val);
->         ...
-> }
-> 
-> Is it safe to inherit Control 1 from whatever configured the outbound
-> windows before the driver probes, or should it be programmed for the
-> memory TLP type explicitly?
-> 
-> > +/* Map a host DMA address into a free outbound region. */
-> > +struct fdma_pci_atu_region *
-> > +fdma_pci_atu_region_map(struct fdma_pci_atu *atu, u64 target_addr, int size)
-> > +{
-> > +     struct fdma_pci_atu_region *region;
-> > +
-> > +     if (!atu)
-> > +             return ERR_PTR(-EINVAL);
-> > +
-> > +     if (size <= 0)
-> > +             return ERR_PTR(-EINVAL);
-> > +
-> > +     if (size > fdma_pci_atu_region_size())
-> > +             return ERR_PTR(-ERANGE);
-> > +
-> > +     /* The ATU region base is only ever aligned to FDMA_PCI_ATU_REGION_ALIGN;
-> > +      * require the same alignment of the host target address, since the ATU
-> > +      * translates addr - target_addr + base_addr and any misalignment here
-> > +      * would shift every translated address by the same amount.
-> > +      */
-> > +     if (!IS_ALIGNED(target_addr, FDMA_PCI_ATU_REGION_ALIGN))
-> > +             return ERR_PTR(-EINVAL);
-> 
-> [Severity: Low]
-> Should size also be checked against FDMA_PCI_ATU_REGION_ALIGN here?
-> 
-> fdma_pci.h documents the requirement for both arguments:
-> 
-> /* Outbound regions are 64KB granular (datasheet section 3.24.7.4.1), so both
->  * the region base and the mapped size must be aligned to this.
->  */
-> 
-> /* Map a host DMA address into a free ATU region. target_addr and size must be
->  * FDMA_PCI_ATU_REGION_ALIGN aligned; a misaligned target_addr returns -EINVAL.
->  */
-> 
-> but only target_addr is verified, and the unaligned value then goes
-> straight into the hardware limit:
-> 
->         region->limit_addr = region->base_addr + size - 1;
-> 
-> Per the commit message the hardware widens that limit to the 64KB
-> boundary, so an unaligned size would leave the outbound window covering
-> up to 64KB - 1 beyond the buffer.
-> 
-> The single in-tree caller, fdma_alloc_coherent_and_map(), pads with
-> fdma->size = ALIGN(fdma->size, FDMA_PCI_ATU_REGION_ALIGN) before
-> allocating, so nothing can hit this today, but the invariant lives in the
-> caller while fdma_pci_atu_region_map() is exported. Would it make sense
-> to enforce it in the primitive too?
-> 
-> > +     mutex_lock(&atu->lock);
-> > +
-> > +     region = fdma_pci_atu_region_get_free(atu);
-> > +     if (IS_ERR(region)) {
-> > +             mutex_unlock(&atu->lock);
-> > +             return region;
-> > +     }
-> > +
-> > +     region->target_addr = target_addr;
-> > +     region->limit_addr = region->base_addr + size - 1;
-> > +     region->in_use = true;
-> > +
-> > +     fdma_pci_atu_configure_translation(region);
-> > +     fdma_pci_atu_region_enable(region);
-> > +
-> > +     mutex_unlock(&atu->lock);
-> > +
-> > +     return region;
-> > +}
-> > +EXPORT_SYMBOL_GPL(fdma_pci_atu_region_map);
-> 
-> [Severity: Medium]
-> Does the enable write need to be read back before the region is treated
-> as mapped?
-> 
-> fdma_pci_atu_region_enable() issues a posted write of bit 31 to Control 2
-> and fdma_pci_atu_region_map() returns immediately, so the caller can arm
-> the FDMA channel (later in the series
-> lan966x_fdma_pci_rx_alloc() programs the LLP with region->base_addr and
-> lan966x_fdma_rx_start() starts the channel) before the outbound window is
-> known to be live. There is also no way for the API to report a window
-> that never enables.
-> 
-> The generic driver for this register layout polls instead:
-> 
-> drivers/pci/controller/dwc/pcie-designware.c:dw_pcie_prog_outbound_atu() {
->         ...
->         /*
->          * Make sure ATU enable takes effect before any subsequent config
->          * and I/O accesses.
->          */
->         for (retries = 0; retries < LINK_WAIT_MAX_IATU_RETRIES; retries++) {
->                 val = dw_pcie_readl_atu_ob(pci, atu->index, PCIE_ATU_REGION_CTRL2);
->                 if (val & PCIE_ATU_ENABLE)
->                         return 0;
-> 
->                 mdelay(LINK_WAIT_IATU);
->         }
->         ...
->         return -ETIMEDOUT;
-> }
+--===============0426560887140224341==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Issue addressed and dismissed in v6 - same finding, unchanged.
+> diff --git a/include/linux/btf.h b/include/linux/btf.h
+> index 0bf10811fe53..3b99d6386dec 100644
+> --- a/include/linux/btf.h
+> +++ b/include/linux/btf.h
 
-> 
-> The same applies in reverse on teardown: fdma_pci_atu_region_unmap()
-> issues the disable write and fdma_free_coherent_and_unmap() calls
-> fdma_free_coherent() right after, without confirming the window is down
-> before those pages go back to the allocator.
-> 
-> > +/* Translate a host DMA address to the corresponding OB address. */
-> > +u64 fdma_pci_atu_translate_addr(struct fdma_pci_atu_region *region, u64 addr)
-> > +{
-> > +     return region->base_addr + (addr - region->target_addr);
-> > +}
-> > +EXPORT_SYMBOL_GPL(fdma_pci_atu_translate_addr);
-> 
-> [Severity: Low]
-> Can this return an address belonging to a different region?
-> 
-> All six regions are contiguous slices of the same outbound space
-> (base_addr = 0x10000000 + i * region_size), and nothing here checks that
-> addr falls inside [target_addr, target_addr + mapped size) or that
-> region->in_use is still set. An address outside the mapping silently
-> lands in a neighbouring window and the FDMA would then read or write
-> another buffer's host target rather than failing.
-> 
-> fdma_pci_atu_region_unmap() also resets target_addr to 0 while leaving
-> base_addr alone:
-> 
->         region->target_addr = 0;
->         region->in_use = false;
-> 
-> so a translation on a released region returns base_addr + addr.
-> 
-> The in-tree users, lan966x_fdma_pci_dataptr_cb() and
-> lan966x_fdma_pci_nextptr_cb(), only pass offsets inside the mapped
-> buffer, and fdma_free_coherent_and_unmap() clears fdma->atu_region, so no
-> current path feeds a bad address. Since the region already stores
-> limit_addr, would a bounds and in_use assertion be worth adding?
-> 
-> [ ... ]
-> 
-> --
-> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260918-lan966x-pci-fdma-v7-0-0ecc179c8a2c%40microchip.com
+[ ... ]
+
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 50eb7a95fd82..cbba20a908e9 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+
+[ ... ]
+
+> @@ -8792,11 +8857,55 @@ static int btf_vmlinux_module_coming(struct module *mod)
+>  	smp_store_release(&btf_vmlinux_raw, data);
+>  	return 0;
+>  }
+> +
+> +/*
+> + * The vmlinux BTF is not available yet and must not be loaded from the
+> + * module notifier (that would nest a module load into a module load).  Keep
+> + * the module's BTF for btf_parse_deferred_modules().  The .BTF data can be
+> + * exposed in sysfs right away, it needs no parsing.
+> + */
+> +static int btf_module_defer(struct btf_module *btf_mod, struct module *mod)
+> +{
+> +	int err;
+> +
+> +	btf_mod->data = kvmemdup(mod->btf_data, mod->btf_data_size,
+> +				 GFP_KERNEL | __GFP_NOWARN);
+> +	if (!btf_mod->data)
+> +		return -ENOMEM;
+> +	btf_mod->data_size = mod->btf_data_size;
+> +
+> +	if (mod->btf_base_data) {
+> +		btf_mod->base_data = kvmemdup(mod->btf_base_data,
+> +					      mod->btf_base_data_size,
+> +					      GFP_KERNEL | __GFP_NOWARN);
+> +		if (!btf_mod->base_data) {
+> +			kvfree(btf_mod->data);
+> +			return -ENOMEM;
+> +		}
+> +		btf_mod->base_data_size = mod->btf_base_data_size;
+> +	}
+> +
+> +	err = btf_module_sysfs_add(btf_mod, mod->name, btf_mod->data,
+> +				   btf_mod->data_size);
+> +	if (err) {
+> +		kvfree(btf_mod->data);
+> +		kvfree(btf_mod->base_data);
+> +		return err;
+> +	}
+
+The comment states the .BTF data "can be exposed in sysfs right away,
+it needs no parsing". For modules with a .BTF.base section (split BTF),
+is this accurate?
+
+btf_parse_deferred_modules() later calls btf_relocate() which rewrites
+btf_mod->data in place (btf_relocate_rewrite_type_id() and
+btf_relocate_rewrite_strs() modify btf->data directly). The sysfs file
+exposes unrelocated BTF until that runs.
+
+Can userspace tools reading /sys/kernel/btf/<module> between module load
+and vmlinux BTF arrival get type ids and string offsets relative to the
+distilled .BTF.base (which is never exposed), making the data unusable?
+
+Also, can reads that overlap the btf_relocate() in-place rewrite get a
+mix of pre- and post-relocation bytes, since sysfs_bin_attr_simple_read()
+reads attr->private/attr->size with no synchronization against
+btf_parse_deferred_modules()?
+
+Does treating btf_module_sysfs_add() failure as fatal make sense here?
+A few lines below, the non-deferred path at kernel/bpf/btf.c:8984
+deliberately ignores the same failure as non-fatal:
+
+    /* not fatal, the module BTF is usable without the sysfs file */
+    btf_module_sysfs_add(btf_mod, btf->name, btf->data, btf->data_size);
+
+A transient -ENOMEM or unexpected -EEXIST in sysfs_create_bin_file()
+costs the module its BTF entirely instead of just its sysfs file.
+
+> +
+> +	list_add(&btf_mod->list, &btf_modules);
+> +	return 0;
+> +}
+
+[ ... ]
+
+> @@ -8905,6 +9033,87 @@ static int __init btf_module_init(void)
+>  }
+>
+>  fs_initcall(btf_module_init);
+> +
+> +#if IS_MODULE(CONFIG_DEBUG_INFO_BTF)
+> +/*
+> + * CONFIG_DEBUG_INFO_BTF=m: the vmlinux BTF has just become available.  Parse
+> + * the BTF of the modules that were loaded before it, and apply the
+> + * registrations that waited for them.  Called from bpf_get_btf_vmlinux()
+> + * once btf_vmlinux is published, with no locks held.
+> + */
+> +void btf_parse_deferred_modules(void)
+> +{
+> +	/* Pairs with the publication in bpf_get_btf_vmlinux() */
+> +	struct btf *vmlinux_btf = smp_load_acquire(&btf_vmlinux);
+> +	struct btf_deferred_reg *reg, *rtmp;
+> +	struct btf_module *btf_mod, *tmp;
+> +	bool parsed = false;
+> +	LIST_HEAD(regs);
+> +	struct btf *btf;
+> +	int err;
+> +
+> +	if (IS_ERR_OR_NULL(vmlinux_btf))
+> +		return;
+> +
+> +	mutex_lock(&btf_module_mutex);
+> +	list_for_each_entry_safe(btf_mod, tmp, &btf_modules, list) {
+> +		if (btf_mod->btf)
+> +			continue;
+> +
+> +		btf = btf_parse_module(btf_mod->module->name, vmlinux_btf,
+> +				       btf_mod->data, btf_mod->data_size, true,
+> +				       btf_mod->base_data, btf_mod->base_data_size);
+> +		err = PTR_ERR_OR_ZERO(btf);
+> +		if (!err) {
+> +			err = btf_alloc_id(btf);
+> +			if (err) {
+> +				/* btf owns the data now, btf_free() drops it */
+> +				btf_mod->data = NULL;
+> +				btf_free(btf);
+> +			}
+> +		}
+
+[ ... ]
+
+> +		/*
+> +		 * Registrations are applied after dropping the mutex (they
+> +		 * walk btf_modules); pin what they need until then.
+> +		 */
+> +		list_for_each_entry_safe(reg, rtmp, &btf_mod->deferred_regs, list) {
+> +			list_del(&reg->list);
+> +			if (!try_module_get(btf_mod->module)) {
+> +				btf_free_deferred_reg(reg);
+> +				continue;
+> +			}
+> +			btf_get(btf);
+> +			reg->btf = btf;
+> +			reg->module = btf_mod->module;
+> +			list_add_tail(&reg->list, &regs);
+> +		}
+> +	}
+> +	mutex_unlock(&btf_module_mutex);
+
+Can try_module_get() on a MODULE_STATE_COMING module guarantee the module
+image outlives the registration?
+
+The deferred registrations are created from the module's own init routine
+(register_btf_kfunc_id_set() / register_btf_id_dtor_kfuncs() /
+__register_bpf_struct_ops() call btf_defer_reg()), so they are queued
+while the module is still MODULE_STATE_COMING.
+
+btf_try_get_module() at kernel/bpf/btf.c:9128 deliberately refuses to pin
+COMING modules:
+
+    /* We must only consider module whose __init routine has
+     * finished, hence we must check for BTF_MODULE_F_LIVE flag,
+     * which is set from the notifier callback for
+     * MODULE_STATE_LIVE.
+     */
+    if ((btf_mod->flags & BTF_MODULE_F_LIVE) && try_module_get(btf_mod->module))
+
+tools/testing/selftests/bpf/prog_tests/bpf_mod_race.c exercises this
+check because a refcount on a COMING module is not a lifetime guarantee.
+
+If that module's init then fails, kernel/module/main.c:3208 does:
+
+  fail:
+    mod->state = MODULE_STATE_GOING;
+    synchronize_rcu();
+    module_put(mod);
+    blocking_notifier_call_chain(&module_notify_list, MODULE_STATE_GOING, mod);
+    ...
+    free_module(mod);
+
+free_module() (kernel/module/main.c:1417) never waits for the module
+refcount and goes straight to free_mod_mem(mod). The pin taken above
+does not defer the free, so btf_apply_deferred_regs() then dereferences
+reg->kfunc.kset / reg->st_ops in the freed module image and writes the
+freed per-cpu refcount with module_put(reg->module).
+
+[ ... ]
+
+> @@ -10335,8 +10574,183 @@ int __register_bpf_struct_ops(struct bpf_struct_ops *st_ops)
+>  	return err;
+>  }
+>  EXPORT_SYMBOL_GPL(__register_bpf_struct_ops);
+> +#else
+> +static int btf_struct_ops_add(struct btf *btf, struct bpf_struct_ops *st_ops)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+> +#endif
+
+Is the new btf_struct_ops_add() stub reachable?
+
+Preprocessor structure in kernel/bpf/btf.c:
+
+  10421  #ifdef CONFIG_BPF_JIT
+  10536    static int btf_struct_ops_add(...)        /* real */
+  10553    int __register_bpf_struct_ops(...)
+  10572      err = btf_struct_ops_add(btf, st_ops);
+  10577  #else
+  10578    static int btf_struct_ops_add(...)        /* NEW stub */
+  10582  #endif
+  10591  #ifdef BTF_MODULE_NOTIFIER
+  10670    return btf_struct_ops_add(btf, reg->st_ops);
+  10752  #endif /* BTF_MODULE_NOTIFIER */
+
+The stub's only reference is inside btf_apply_deferred_reg(), compiled
+only when BTF_MODULE_NOTIFIER is defined:
+
+  kernel/bpf/btf.c:8706  #if IS_ENABLED(CONFIG_DEBUG_INFO_BTF_MODULES) || IS_MODULE(CONFIG_DEBUG_INFO_BTF)
+  kernel/bpf/btf.c:8707  #define BTF_MODULE_NOTIFIER 1
+
+With CONFIG_BPF_SYSCALL=y (btf.c is built), CONFIG_BPF_JIT=n and
+CONFIG_DEBUG_INFO_BTF=n (or =y with CONFIG_MODULES=n), the stub is
+defined and never referenced. CONFIG_BPF_JIT is a plain bool with no
+default (kernel/bpf/Kconfig:46), so =n with BPF_SYSCALL=y is an ordinary
+configuration.
+
+This produces a -Wunused-function warning, which is a build failure with
+CONFIG_WERROR=y.
+
+> +
+> +/*
+> + * CONFIG_DEBUG_INFO_BTF=m: registrations made before the BTF they apply to
+> + * is available.  Registrations for vmlinux wait in btf_vmlinux_deferred_regs
+> + * until btf_parse_vmlinux() applies them; registrations for a module wait in
+> + * its struct btf_module until btf_parse_deferred_modules() does.  Both lists
+> + * are protected by btf_module_mutex.
+> + */
+> +#ifdef BTF_MODULE_NOTIFIER
+> +static LIST_HEAD(btf_vmlinux_deferred_regs);
+> +/* Set when the vmlinux BTF is parsed; new registrations apply directly */
+> +static bool btf_vmlinux_regs_closed;
+
+[ ... ]
+
+> +/*
+> + * The vmlinux BTF has just been parsed; apply the registrations that waited
+> + * for it.  Runs under btf_vmlinux_lock, before @btf is published, so nothing
+> + * can observe a vmlinux BTF without its kfuncs and struct_ops.
+> + *
+> + * Applying a registration can queue further ones: a struct_ops ->init()
+> + * registers the kfuncs of its hook.  Those must not go through
+> + * bpf_get_btf_vmlinux() (we hold its lock), so the queue stays open until
+> + * a pass applies nothing new, and only then are registrations applied directly.
+> + */
+> +static void btf_apply_deferred_vmlinux_regs(struct btf *btf)
+> +{
+> +	struct btf_deferred_reg *reg, *tmp;
+> +	LIST_HEAD(regs);
+> +	int err;
+> +
+> +	if (!IS_MODULE(CONFIG_DEBUG_INFO_BTF))
+> +		return;
+> +
+> +	mutex_lock(&btf_module_mutex);
+> +	while (!list_empty(&btf_vmlinux_deferred_regs)) {
+> +		list_splice_init(&btf_vmlinux_deferred_regs, &regs);
+> +		mutex_unlock(&btf_module_mutex);
+
+Can this introduce a circular lock dependency?
+
+btf_apply_deferred_vmlinux_regs() is called from btf_parse_vmlinux()
+(kernel/bpf/btf.c:6597), which runs with btf_vmlinux_lock held by
+bpf_get_btf_vmlinux():
+
+  kernel/bpf/verifier.c:21184  mutex_lock(&btf_vmlinux_lock);
+  kernel/bpf/verifier.c:21187      btf = btf_parse_vmlinux();
+  kernel/bpf/verifier.c:21197  mutex_unlock(&btf_vmlinux_lock);
+
+The new mutex_lock(&btf_module_mutex) at kernel/bpf/btf.c:10724 creates:
+
+  (A) btf_vmlinux_lock -> btf_module_mutex  [NEW]
+
+Two pre-existing edges close the cycle:
+
+  (B) cand_cache_mutex -> btf_vmlinux_lock
+      bpf_core_apply() kernel/bpf/btf.c:10269  mutex_lock(&cand_cache_mutex);
+      bpf_core_apply() kernel/bpf/btf.c:10270  cc = bpf_core_find_cands(...);
+      bpf_core_find_cands() kernel/bpf/btf.c:10165  main_btf = bpf_get_btf_vmlinux();
+
+  (C) btf_module_mutex -> cand_cache_mutex
+      btf_module_notify() MODULE_STATE_GOING kernel/bpf/btf.c:9001
+          mutex_lock(&btf_module_mutex);
+      btf_module_notify() kernel/bpf/btf.c:9015  btf_module_free(btf_mod);
+      btf_module_free() kernel/bpf/btf.c:8810  purge_cand_cache(btf_mod->btf);
+      purge_cand_cache() kernel/bpf/btf.c:10092  mutex_lock(&cand_cache_mutex);
+
+Both edges (B) and (A) are taken by the same thread:
+
+  CPU 0: BPF_PROG_LOAD with CO-RE relocations    |  CPU 1: rmmod <module with BTF>
+    bpf_check() -> bpf_check_btf_info()          |
+      -> check_core_relo()                       |
+        -> bpf_core_apply()                      |
+           mutex_lock(&cand_cache_mutex)  [10269]|    mutex_lock(&btf_module_mutex) [9001]
+           -> bpf_core_find_cands()              |
+              -> bpf_get_btf_vmlinux()           |
+                 mutex_lock(&btf_vmlinux_lock)   |
+                                        [21184]  |
+                 -> btf_parse_vmlinux()          |
+                   -> btf_apply_deferred_vmlinux_regs()
+                      mutex_lock(&btf_module_mutex) <-- BLOCKS [10724]
+                                                   |
+                                                   |    btf_module_free() -> purge_cand_cache()
+                                                   |      mutex_lock(&cand_cache_mutex) [10092]
+                                                   |      <-- BLOCKS
+
+Both waits are plain uninterruptible mutex_lock(); there is no trylock,
+timeout or bounded retry, so the two tasks hang permanently.
+
+Required config: CONFIG_DEBUG_INFO_BTF=m (the IS_MODULE() guard at 10721)
+together with CONFIG_DEBUG_INFO_BTF_MODULES=y, which supplies the
+module-BTF entries that edge (C) frees. That combination is supported and
+explicitly exercised: DEBUG_INFO_BTF_MODULES is 'default y' and 'depends
+on DEBUG_INFO_BTF && MODULES' (lib/Kconfig.debug:428), and the final
+commit 2f5aab95d2b8 states it was 'Tested with ... =y vs =m, both with
+CONFIG_DEBUG_INFO_BTF_MODULES=y'.
+
+[ ... ]
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index a7b73bc146a8..b6f094d5306a 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -21160,12 +21160,14 @@ int bpf_check_attach_btf_id_multi(struct btf *btf, struct bpf_prog *prog, u32 bt
+>  /*
+>   * Returns the parsed vmlinux BTF, NULL if the kernel has none, or an ERR_PTR
+>   * if it is malformed.  With CONFIG_DEBUG_INFO_BTF=m the BTF lives in the
+> - * btf_vmlinux module; the first caller loads it and parses it.  May sleep.
+> + * btf_vmlinux module; the first caller loads it, parses it and then registers
+> + * the BTF of the modules that were loaded before it.  May sleep.
+>   */
+>  struct btf *bpf_get_btf_vmlinux(void)
+>  {
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35824427607
+--===============0426560887140224341==--
