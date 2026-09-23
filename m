@@ -1,109 +1,110 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 428775372E2;
-	Wed, 23 Sep 2026 14:38:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D54385383CA;
+	Wed, 23 Sep 2026 14:42:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790174300; cv=none; b=O2Uebjh3aleABjKY95cTgFLTx4SEytmYaHAMoGuTUYwV0b4IOLKVOPgF4soiABY8gxiMC4SRiUIG+zuO/a1jbPjWuiHZh31Xmw8+vTzhXfGzL5KPmxLLn5RZmFctdFAwFEdaGt7c2FAM6dBT6G2Ujl3h/Nyz04giTGWmub1EfGA=
+	t=1790174554; cv=none; b=iBNcOW05tvjsDzF2kkJV34qBWIK6rw755tGqHphzOaEiWcgBP2BvhGlTAoxauEDcIvjgB8hvS6d3ZYDzDGlCGeJHs1XsjgwXqS91jn4UryOFc+D9YnC970iJKSVrMMgRVwczw9kdan2HLKlsBoNzf4l5TidkEDY2vHT6KMaxft4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790174300; c=relaxed/simple;
-	bh=jo94GN64USZXPL2xH0g3ZXB5EEGg5PvXg0Vq2m5XFGg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EwMTngxi/fWSYPzAGlPuP1aU+De6nLaVX2+yTMFG4NT5feWefXh/jIdIQFADN8ft0/lCqLMmi/Rv1SKTJGuom5xJcoY4XaxbQsxP2b7Q61cPQotgrMo23gJfPlSg+iVrUrCHU4yAXPODO9yVrwbSHEfvsdTc5k5F6Qs4uAOx4ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hqfhN4WsWzYQtqp;
-	Wed, 23 Sep 2026 22:37:56 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id B09A540561;
-	Wed, 23 Sep 2026 22:38:13 +0800 (CST)
-Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB3+A9V5LNqq0eGBQ--.55710S2;
-	Wed, 23 Sep 2026 22:38:13 +0800 (CST)
-From: Pu Lehui <pulehui@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next] riscv, bpf: Adjust bpf_func to account for CFI offset in bpf_jit_free
-Date: Wed, 23 Sep 2026 14:42:16 +0000
-Message-Id: <20260923144216.934701-1-pulehui@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1790174554; c=relaxed/simple;
+	bh=pb1Y2vRzilAyJ10jFU3uRta9rlV3u7GCInaNLpAAePc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=WANWNkgay6QJenb2Ywt2tV0D2VmU+pcKoYKni8KrLySnL0fv1KE52cgD0S/kebuZancKFjg+N1zyNkh/dU2ljhlAmRsx/LEyWXH8wvclG9BCgAH8sJNE43rJzaOQJCqqKXSgbI/c+zuyKwX3eh5wb2ti6fRHS4K6W2Q+iaxZRjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=yTPORjqb; arc=none smtp.client-ip=113.46.200.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="yTPORjqb"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=X2Z8+iw+Qf9IbHL3sN6Im6/BxTzJRdFnEh+g1tCkdWg=;
+	b=yTPORjqb+XbCWgPE9G/GsAlmwLahdxpMYfzPsdyNbGQ1vWBlj2owPy3lBZw5XQxhTNselH8ZX
+	If06OzshV6hD661IeNC3iLf3tuz2yWLI0rIJZzHcai6pMav6KJVFsIMxRurif8EfupS0SkzuB3e
+	mqSv3hHgbS2qQ13vLztDdFc=
+Received: from mail.maildlp.com (unknown [172.19.162.144])
+	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4hqfWf26HbzpStW;
+	Wed, 23 Sep 2026 22:30:22 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id A3B004056D;
+	Wed, 23 Sep 2026 22:42:20 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
+ (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Wed, 23 Sep
+ 2026 22:42:19 +0800
+Message-ID: <c7eceba4-fd29-4c80-9829-3948708b826f@huawei.com>
+Date: Wed, 23 Sep 2026 22:42:19 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgB3+A9V5LNqq0eGBQ--.55710S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF18Xr4fKFykGrykGF45Jrb_yoW8JFWUpF
-	4kGr1fC34kWrn7KF4ktr10grW8Jw4DWw1xWryUu345KFnIgF92v3Z3C34jgFW5CFyUK3WF
-	9rWagr13Aa4kX37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
-	n4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
-	0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8
-	ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
-	CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
-	wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
-	7IU0bAw3UUUUU==
-X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
-
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] riscv, bpf: Fix missing sign-ext for signed
+ 1-byte and 2-byte kfunc args
+Content-Language: en-US
+To: Pu Lehui <pulehui@huaweicloud.com>, <bpf@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+CC: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Alexei Starovoitov
+	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+	<andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya
+ Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
+	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+	<jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
+	<ihor.solodrai@linux.dev>, Puranjay Mohan <puranjay@kernel.org>, Paul
+ Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Alexandre
+ Ghiti <alex@ghiti.fr>
+References: <20260923144154.934674-1-pulehui@huaweicloud.com>
 From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <20260923144154.934674-1-pulehui@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
-When CFI is enabled, the actual BPF program entry point is shifted
-forward by a CFI preamble. During bpf_jit_free(), this shifted pointer
-causes the wrong ro_header to be fetched, leading to a potential invalid
-memory free.
 
-Fix this by subtracting cfi_get_offset() from prog->bpf_func to
-correctly restore the original JITed allocation address before freeing.
+Sorry for the noise. That was an accidental send—this patch has already 
+been merged.
 
-Fixes: e63985ecd226 ("bpf, riscv64/cfi: Support kCFI + BPF on riscv64")
-Signed-off-by: Pu Lehui <pulehui@huawei.com>
----
-- Separate from the patch series [0].
-[0] https://lore.kernel.org/bpf/20260725154915.2488611-1-pulehui@huaweicloud.com
-
- arch/riscv/net/bpf_jit_core.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
-index 2fb0b4e198b9..470a6ace5662 100644
---- a/arch/riscv/net/bpf_jit_core.c
-+++ b/arch/riscv/net/bpf_jit_core.c
-@@ -244,6 +244,7 @@ void bpf_jit_free(struct bpf_prog *prog)
- 			kvfree(jit_data->ctx.offset);
- 			kfree(jit_data);
- 		}
-+		prog->bpf_func = (void *)prog->bpf_func - cfi_get_offset();
- 		hdr = bpf_jit_binary_pack_hdr(prog);
- 		bpf_jit_binary_pack_free(hdr, NULL);
- 		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(prog));
--- 
-2.34.1
-
+On 2026/9/23 22:41, Pu Lehui wrote:
+> From: Pu Lehui <pulehui@huawei.com>
+> 
+> On RV64, the ABI requires sign-extension for signed 1-byte and 2-byte
+> kfunc args. However, the RV64 JIT currently does not perform
+> sign-extension for such kfunc args.
+> 
+> Before commit 7ce090afbf72 ("bpf: Infer zext_dst based on static
+> register liveness analysis"), state pruning could potentially omit
+> zero-extension of 32-bit subregisters, which inadvertently masked the
+> above issue by making the args appear as if they had been properly
+> sign-extended. After that commit, the problem is exposed, causing the
+> kfunc_call/kfunc_call_test4 selftest to fail.
+> 
+> Fix this by extending the existing sign-extension logic to handle signed
+> 1-byte and 2-byte kfunc args as well.
+> 
+> Fixes: 443574b03387 ("riscv, bpf: Fix kfunc parameters incompatibility between bpf and riscv abi")
+> Signed-off-by: Pu Lehui <pulehui@huawei.com>
+> ---
+>   arch/riscv/net/bpf_jit_comp64.c | 5 +++--
+>   1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+> index 2504df1fa111..74efe4b138d2 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
+> @@ -1823,9 +1823,10 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
+>   
+>   			for (idx = 0; idx < fm->nr_args; idx++) {
+>   				u8 reg = bpf_to_rv_reg(BPF_REG_1 + idx, ctx);
+> +				bool sign = fm->arg_flags[idx] & BTF_FMODEL_SIGNED_ARG;
+>   
+> -				if (fm->arg_size[idx] == sizeof(int))
+> -					emit_sextw(reg, reg, ctx);
+> +				if (sign_extend(reg, reg, fm->arg_size[idx], sign, ctx))
+> +					return -EINVAL;
+>   			}
+>   		}
+>   
