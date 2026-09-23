@@ -1,27 +1,27 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFB8950B429;
-	Wed, 23 Sep 2026 14:38:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 428775372E2;
+	Wed, 23 Sep 2026 14:38:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790174286; cv=none; b=P5HaWixqqbaH9qBJokX/8jpnhxe7wCC2xcrz5SfHrABejR59R2aompmcdk4Wyz4uqJbcbzhWl/ywrXPwqtJd8aD8H/U3tKtUJQQ5fuHlRMP/63s6NozPlCoMPSqAj8Bssq9Hmh6JUMZ/qXeY8Eb8rbij+GtyWoPQ9VCseyiF5w0=
+	t=1790174300; cv=none; b=O2Uebjh3aleABjKY95cTgFLTx4SEytmYaHAMoGuTUYwV0b4IOLKVOPgF4soiABY8gxiMC4SRiUIG+zuO/a1jbPjWuiHZh31Xmw8+vTzhXfGzL5KPmxLLn5RZmFctdFAwFEdaGt7c2FAM6dBT6G2Ujl3h/Nyz04giTGWmub1EfGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790174286; c=relaxed/simple;
-	bh=OaEJKFqGikVM89zewHcJ8VzvCRGKmVPi7EEfIKContI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bBaC4Mfhho5Bbh0D+MOMhKyfznQlNS8zSBnomXCOhB7rnsY7Tepa7oWfeuvw2GFqScLMEyRK80I8OarUAnbuQemnWyJ8wVhBhn5JPVgDR6m3NLR1hJsSPeW+/VMHSS4ZA72J4wTp4lPcbmN67chuPiq9I2H46MbBLAvcFcs8iCM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	s=arc-20240116; t=1790174300; c=relaxed/simple;
+	bh=jo94GN64USZXPL2xH0g3ZXB5EEGg5PvXg0Vq2m5XFGg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EwMTngxi/fWSYPzAGlPuP1aU+De6nLaVX2+yTMFG4NT5feWefXh/jIdIQFADN8ft0/lCqLMmi/Rv1SKTJGuom5xJcoY4XaxbQsxP2b7Q61cPQotgrMo23gJfPlSg+iVrUrCHU4yAXPODO9yVrwbSHEfvsdTc5k5F6Qs4uAOx4ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hqfgq1nFXzKHMTY;
-	Wed, 23 Sep 2026 22:37:27 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 392FF40574;
-	Wed, 23 Sep 2026 22:37:53 +0800 (CST)
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hqfhN4WsWzYQtqp;
+	Wed, 23 Sep 2026 22:37:56 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id B09A540561;
+	Wed, 23 Sep 2026 22:38:13 +0800 (CST)
 Received: from ultra.huawei.com (unknown [10.90.53.71])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgAX6Co_5LNqbS2UBQ--.27216S2;
-	Wed, 23 Sep 2026 22:37:52 +0800 (CST)
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB3+A9V5LNqq0eGBQ--.55710S2;
+	Wed, 23 Sep 2026 22:38:13 +0800 (CST)
 From: Pu Lehui <pulehui@huaweicloud.com>
 To: bpf@vger.kernel.org,
 	linux-riscv@lists.infradead.org,
@@ -43,9 +43,9 @@ Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
 	Alexandre Ghiti <alex@ghiti.fr>,
 	Pu Lehui <pulehui@huawei.com>
-Subject: [PATCH bpf-next] riscv, bpf: Fix missing sign-ext for signed 1-byte and 2-byte kfunc args
-Date: Wed, 23 Sep 2026 14:41:54 +0000
-Message-Id: <20260923144154.934674-1-pulehui@huaweicloud.com>
+Subject: [PATCH bpf-next] riscv, bpf: Adjust bpf_func to account for CFI offset in bpf_jit_free
+Date: Wed, 23 Sep 2026 14:42:16 +0000
+Message-Id: <20260923144216.934701-1-pulehui@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -54,64 +54,56 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAX6Co_5LNqbS2UBQ--.27216S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KF48Wry5ury3JFWUXFWfGrg_yoW8WF15pF
-	15C34akF9Yqw1IvFy8AF48Wr15Gr4vva17uFWj9a45JFW2qFWrWr4rKw4Yvay5urZ5u3WF
-	kryqgwn7u3yku3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvFb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+X-CM-TRANSID:Syh0CgB3+A9V5LNqq0eGBQ--.55710S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF18Xr4fKFykGrykGF45Jrb_yoW8JFWUpF
+	4kGr1fC34kWrn7KF4ktr10grW8Jw4DWw1xWryUu345KFnIgF92v3Z3C34jgFW5CFyUK3WF
+	9rWagr13Aa4kX37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
 	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAa
-	w2AFwI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
-	Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
-	6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
-	kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
-	xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
-	xUIa0PDUUUU
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
+	n4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+	0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8
+	ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+	CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
+	wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+	7IU0bAw3UUUUU==
 X-CM-SenderInfo: psxovxtxl6x35dzhxuhorxvhhfrp/
 
 From: Pu Lehui <pulehui@huawei.com>
 
-On RV64, the ABI requires sign-extension for signed 1-byte and 2-byte
-kfunc args. However, the RV64 JIT currently does not perform
-sign-extension for such kfunc args.
+When CFI is enabled, the actual BPF program entry point is shifted
+forward by a CFI preamble. During bpf_jit_free(), this shifted pointer
+causes the wrong ro_header to be fetched, leading to a potential invalid
+memory free.
 
-Before commit 7ce090afbf72 ("bpf: Infer zext_dst based on static
-register liveness analysis"), state pruning could potentially omit
-zero-extension of 32-bit subregisters, which inadvertently masked the
-above issue by making the args appear as if they had been properly
-sign-extended. After that commit, the problem is exposed, causing the
-kfunc_call/kfunc_call_test4 selftest to fail.
+Fix this by subtracting cfi_get_offset() from prog->bpf_func to
+correctly restore the original JITed allocation address before freeing.
 
-Fix this by extending the existing sign-extension logic to handle signed
-1-byte and 2-byte kfunc args as well.
-
-Fixes: 443574b03387 ("riscv, bpf: Fix kfunc parameters incompatibility between bpf and riscv abi")
+Fixes: e63985ecd226 ("bpf, riscv64/cfi: Support kCFI + BPF on riscv64")
 Signed-off-by: Pu Lehui <pulehui@huawei.com>
 ---
- arch/riscv/net/bpf_jit_comp64.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+- Separate from the patch series [0].
+[0] https://lore.kernel.org/bpf/20260725154915.2488611-1-pulehui@huaweicloud.com
 
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 2504df1fa111..74efe4b138d2 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1823,9 +1823,10 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 
- 			for (idx = 0; idx < fm->nr_args; idx++) {
- 				u8 reg = bpf_to_rv_reg(BPF_REG_1 + idx, ctx);
-+				bool sign = fm->arg_flags[idx] & BTF_FMODEL_SIGNED_ARG;
- 
--				if (fm->arg_size[idx] == sizeof(int))
--					emit_sextw(reg, reg, ctx);
-+				if (sign_extend(reg, reg, fm->arg_size[idx], sign, ctx))
-+					return -EINVAL;
- 			}
+ arch/riscv/net/bpf_jit_core.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
+index 2fb0b4e198b9..470a6ace5662 100644
+--- a/arch/riscv/net/bpf_jit_core.c
++++ b/arch/riscv/net/bpf_jit_core.c
+@@ -244,6 +244,7 @@ void bpf_jit_free(struct bpf_prog *prog)
+ 			kvfree(jit_data->ctx.offset);
+ 			kfree(jit_data);
  		}
- 
++		prog->bpf_func = (void *)prog->bpf_func - cfi_get_offset();
+ 		hdr = bpf_jit_binary_pack_hdr(prog);
+ 		bpf_jit_binary_pack_free(hdr, NULL);
+ 		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(prog));
 -- 
 2.34.1
 
