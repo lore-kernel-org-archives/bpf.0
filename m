@@ -1,230 +1,115 @@
-Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A234418EC
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 06:45:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5D9C420477
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 06:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790145904; cv=none; b=X47Ee2b0RO/tUw+mpwz4BL/ninPNMfEzhN6PsQPz0I+LL+vpAas5ualaFeCIrU7fHS7hLQt5QijpMGQkpXAWMPHxAlTAhQdB0PqK6m7bK+ebsnQIxkSAIrk2Iu0ktB/ZvVQx8A5w4HK57zMbpZ0ASASgrU5BGoPsyADZbFgFc60=
+	t=1790145943; cv=none; b=pNCeCCiUHw1bfJKgnv31uFjCxUaZViGw8r32hMwCrI/jiu3dj4Gl6QRRB/PkOllGyd9GzSzXfb5avtaCO5kBjpoKGIwoR6x9rG40KInZIteClZdLi6AjfeQ+7ZIraC7z8x2IhzX2wbtOvs9leeVlB2N+IASy8k0Zw1go1830uXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790145904; c=relaxed/simple;
-	bh=1294r34xTc1bW7Bz7mgtVPp9Nhyz2aDNnMbKdaxaj6g=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=n9zgEXG3GRFlUpYHu1JzqBymYsFWwztALxygVdSQ/4oeY7D1lc/cbR8F0I1eTVxDouRm8rLXKJhWL0z7dp7TIY8yIQ5I9qJ5KypJhjwEMqCJwbaVct+8WwOCL7W1MO2dSbOwvqKvHNRWOmBsB2+WABM9I+CIMt8LfQgj15XBP08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZZXNJiY/; arc=none smtp.client-ip=209.85.221.65
+	s=arc-20240116; t=1790145943; c=relaxed/simple;
+	bh=aK2aqYqamsgaccI5EqzajH3hBOuFj8lCi2KvYEB98Ik=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sglrRNHt75RANm7ObF+GGcOnGlaf6X8vYAH+loZtkIb+uJQcLVi2Ig08Bnb1OsZzJlxjP6duovAbKcX/V+U+sGhHaven989MUeWf15RhhR4+Pmmo0ILuwXj2LSz7zKj7AqYY6jXYHFOrsoUo9SJlQ8LPk76m3B6q+UvKNKzifBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cZzJW7l5; arc=none smtp.client-ip=74.125.228.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZZXNJiY/"
-Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-488615e6cfcso714978f8f.0
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 23:45:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cZzJW7l5"
+Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc1cebcb8d7so225112a12.0
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 23:45:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790145898; x=1790750698; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Iuwszkn0aQaPLUZ6WX3hy2i6Ad8mCKcVtyvt0xKMgMs=;
-        b=ZZXNJiY/OICst1ILLXMv7dlf9yORRFWQavTicogRtVLBhqnQ7h0zjZvUOw1qXzws/B
-         l249bIkZe7neVkFofQ7ql4y+J+yz5UhRaqxE9CuATajr9850U3p3T1LJOXsJFFTVMtMX
-         U7AWHoYUeLfVKEq44b59TGsGw/W66a4hq+TycfUQU+GxJqvO3/HSZx0SRXQAqNGqsML+
-         v1vsQNjWjsXmu/A68/6lwhlpZkp1ljf9iPCY4qkXy8rDQ+zKLPvStad5HNtdhHOewpVX
-         B7g9+M6n2Q62EH5hNBVhmvoLQkYGaSM923gNUdn6QV+2ngHh4XfmK7PgX6Tpc5GukEI2
-         ZjSw==
+        d=gmail.com; s=20251104; t=1790145934; x=1790750734; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=jf7lHPjpC1ERi/Fh9E7eD3fYAA78G+cWgR06Ldr61Z8=;
+        b=cZzJW7l5b0nGPT/OQP5px2lnLjD/LtUaodgtFFjS+LsrprUbBiLNHVzDtPMVavSEyz
+         9INN7o4PT37yqMh1QCC8xpnpMwJILMgIar3HewHdoOAnGcTGW0rBcAcZSPrqxFlpm6Ua
+         UdG1gYWVMyqE0ms34AzNiv4CqUsiny/Op5pjs9byzj98+jtbw8hyWy9C+/NcI1YBJQfZ
+         Gwe80++t7VoIrMQ3u4i78PFDXcuKXvUJphQxRdWuXvmH+t7HYje1GwOkAxxgNloUQwPf
+         e9Jqs1zth+E5cKW8S7IavYJLdhQDQze5WwgHgYGJBMRh+0EW8ggxqzyfx0WbcXXo48Sq
+         gElw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790145898; x=1790750698;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+        d=1e100.net; s=20260707; t=1790145934; x=1790750734;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Iuwszkn0aQaPLUZ6WX3hy2i6Ad8mCKcVtyvt0xKMgMs=;
-        b=yED19Fd2de62pvJk9fkHnxTcuQB2g5dMBoWDPq1hYnOuZwbOQ/gf5cpcegx0s9fGKI
-         PYSS49dZuhzI3ZxVmpCr9KWjhr/WS/SboWxlJMMQDA540WppTAV7VKQZpgkrNlCq79Vh
-         B8WfQnBUXS4N2YR9mdBe8ZobhzN6Mk5b8jJ3y/3eUfB7+QzXAql0IMoWxYSWs/hqValb
-         TJs2ErCM2T1ynuJIaCimfYljxeLftLaGIiV6TYyfYAZpm3rO82CrOYXcVH7mDBKMH1W4
-         ptFVthDGxtKuVgkuNBHv7KpEp18JFYkY8v6LeZGUnlDYq9YCgKnqrpK4zEexUrNdzO/x
-         MZ6A==
-X-Forwarded-Encrypted: i=1; AKwUvBzM7/qpqW3IDeDMbVog4fwYCyIl+EEbKCuvm3lswjfkyC5Ph4Bxxlm1FbPv8eDGH0yhnlM=@vger.kernel.org
-X-Gm-Message-State: AFuF++knQUwrd80Fj2wVMR3oUtN1e05BHXcrgXdP86kBBR7gANdaOPBX
-	Unrn50foII8Lna0WS5/Bg6sJap+75ICj99QRx2R+Z2ExWWuOabey9gou
-X-Gm-Gg: AYBFou1N7amzRlku7w7Px0YB/KEX+Oo+5b94JyD9P6V8khTbI/+lT0hx/p830FGHviN
-	SWfJokV0LsO4DgQ4XZGbqYbZsQSTJKiuSpHz7ipt9HR0s+TtKyUiftMtAFjYLdIok0vUyVNBgz7
-	YPvOmHXpi3TKY3j6Dj4IJsE8Gh/tXG8eoy4A4PjiYElLFoDftc8Hs4qSTuTlV/Gtz3NRr9CAhPk
-	s60vvAQSs4NIXuDRpQl5xonmpplD+9WELlyVgksFeX4ERzbZX2fqwo1AhNGJa7F6k1uUpExgxJO
-	y+TAJBDW8sqaBT2h3jthxGdvXILF56uZYMRf78lkkvKny0/IfanmXQAzyD2O4amS482DBFJACuf
-	Z5jWdBNXsHhHhpJVf7S4XtdYlIYGkzEzDv7iRg20KPoVRuMxhHC8xxe/xr1KC1yCdSXZfxnZCuf
-	2iq2nMQ17GjG3rY0qdbgpgBHKVbRik9KionXIXcfSAIAd0D+o+5NIddDeAY91anoi0/trRgcgcH
-	mr+BKHEy6spaM2gY9kaTRG4BxUeJDWPLc/1a3i2QXuxe5GLJpw1qQeCbhyIYeMxil2olPgFJqba
-	ysCDnTEF7PWeX5CRsPWvL5p12aHXh37Dcs+OTQ==
-X-Received: by 2002:a05:600c:6d8e:b0:49c:ff66:7d88 with SMTP id 5b1f17b1804b1-49fd883cd5emr57599765e9.7.1790145898261;
-        Tue, 22 Sep 2026 23:44:58 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-488682668dcsm4857404f8f.1.2026.09.22.23.44.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 22 Sep 2026 23:44:57 -0700 (PDT)
+        bh=jf7lHPjpC1ERi/Fh9E7eD3fYAA78G+cWgR06Ldr61Z8=;
+        b=FnG3NRPD1bJYvDKuaLKLUYYnjsQfMg4/K07ZX/Bza3BbrnjIthXo/L9FQrb4fiEhJA
+         rR0XZWCcynNz8s8C4TM3rEpKJigUrvwcHaOITUPehm89ZSDVlMW9D4o6Euf0eNpTXFBL
+         MdYPy+QX0QjnnqImL2KnF3ID11Ar1eo+u3X2CqVIvdR2MSBwmfQhIF6wSzj6c4cu06Ry
+         vWrGFSPV88jXe+1ix2XAjYswXWouHNCC1UkzJXfxX/0vqoAsGYruYusovQs5v9YqeU2N
+         4zeCj2TRD0s2lNBw6dFoRD+8TerBDYOm5hKsC7hKVWoe5iCJR8He4f4S2doJ4I6Fc8sq
+         OISA==
+X-Forwarded-Encrypted: i=1; AKwUvBwQI3e3I0r6RleZ4fWauPj8nC7146wjBWrUQwIkJYGe4KWsInG4v8YnCzMwXstsYb71nRg=@vger.kernel.org
+X-Gm-Message-State: AFuF++lAPe8WnsKvMXTTwUEMDFM+EDCUEeIWzYbMCYRtVOSwsJIFDG3+
+	uOqXgj3jXeyMxUAO7e6tJCiVSUP55HAk9IYaG5tGqJ8fZrlMsziPw4F4
+X-Gm-Gg: AYBFou3EJMFPEdifiJcnMIHMS4wMkczcuwzgWroxx2+njC5xexk6+N0d/PdBgyJcyvE
+	M7Ok/g5GBuifLz6Gm5FP+xU7xZTcBgvMpBTBMGgl9vnCqAuZi8O1gMNthvNrwJ7jFSmvOOwWoH2
+	NBv+csrFIGvZUsk05b+E6MngkzzJRRURGEdM5TkktKzV+9MQGXVYPguSbMPCHpLKiC2+3ura/GV
+	hWHqhfztTopZTXNl9APURxPGHLuU+mlxjXZfrM4i5AWDMU9IRP1uH+rAgIzw/Q5cT/iht2QogKG
+	K71/X42sJw2kiyiuMm/PXsZ3kK6vMCrgc0SljQ4GTA0kD7DTOJCvhJGmywR/bcolxsE0/p+K6Wy
+	0+q8rBxH2/NCyTVV/9W0ulBXNR3so0zNo62qO5jMPtHwQ/15nQLe6ZU+XVfJC00av0wFjopp/Qr
+	V1G0JcpXBrhnVhDcl7XwN9RfW5NAahEIyxfvTzydrZhwiZy00qcGAoNVdHkef7Yv9f2zq+/G3Yw
+	ZJEYlheYx3mgX3p6hNaxqoXBlz6EBEmC7Uc
+X-Received: by 2002:a17:90a:f947:b0:39e:6c68:fd93 with SMTP id 98e67ed59e1d1-3a07e6195e3mr1027545a91.40.1790145933845;
+        Tue, 22 Sep 2026 23:45:33 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a07ddaf4f5sm3187979a91.4.2026.09.22.23.45.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2026 23:45:33 -0700 (PDT)
+Message-ID: <a47eb8c7aa3c9806b2a4e01554f5c6daa3fa9f6c.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v5 12/21] bpf, x86: Dispatch exception cleanup
+ pads at run time
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
+ <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
+ kernel-team@fb.com
+Date: Tue, 22 Sep 2026 23:45:30 -0700
+In-Reply-To: <20260923045948.2420512-1-yonghong.song@linux.dev>
+References: <20260923045846.2414643-1-yonghong.song@linux.dev>
+	 <20260923045948.2420512-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10+b1 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 23 Sep 2026 08:44:57 +0200
-Message-Id: <DLMHRC6161TE.14EBFU123T4PK@gmail.com>
-Cc: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>,
- "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- <kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next v4 00/20] bpf: Run exception cleanup landing
- pads when bpf_throw() unwinds
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, "Alexei Starovoitov"
- <alexei.starovoitov@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260921210033.1715000-1-yonghong.song@linux.dev>
- <7e7076ce94e803403bcee003569d4b2ac7bc4e2c.camel@gmail.com>
- <DLLHFJDS6G5L.2B273FIKF9A09@gmail.com>
- <DLLHQDZBGDUO.2TT8UBHIMZEFK@gmail.com>
- <DLM696EA5JAQ.3DBNX7Z6DB7N3@gmail.com>
- <CAP01T76JZUzzyr50dk0NzGv73p12v8E17Lbgy1_yZVqg3Qju0g@mail.gmail.com>
- <DLMFEI43TYVI.1KNMAQLNWT2JC@gmail.com>
- <16a889ab8ae491155ca962bf2e14e83e1f921cf3.camel@gmail.com>
-In-Reply-To: <16a889ab8ae491155ca962bf2e14e83e1f921cf3.camel@gmail.com>
+MIME-Version: 1.0
 
-On Wed Sep 23, 2026 at 8:16 AM CEST, Eduard Zingerman wrote:
-> On Wed, 2026-09-23 at 04:54 +0000, Alexei Starovoitov wrote:
->> On Wed Sep 23, 2026 at 4:36 AM UTC, Kumar Kartikeya Dwivedi wrote:
->> >
->> > You can obviously insert aborts at any point in the program, provided
->> > such a primitive works, even when the compiler doesn't see it. It is
->> > just a way to halt program execution along a given path, and has
->> > plenty of precedents (assert(false), std::terminate(), panic!() =3D
->> > abort). That property can be used for several purposes, including
->> > proving a condition true on the other path that does not abort, and
->> > retaining that path condition throughout the rest of the program. That
->> > is basically the gist of Eduard's suggestion.
->>
->> That's only true for user space.
->> For bpf progs there is no such primitive. bpf_throw() is not it.
->> We cannot make it work from arbitrary places without introducing
->> massive verifier debt for automatic creation of exception tables
->> or via equally massive runtime penalty to remember all things to cleanup=
-.
->
-> I'm not sure that automatic exception tables would be all that more
-> complex, current implementation is not that trivial either.
-> Plus you mention LLMs-the-almighty yourself.
->
-> But speaking of runtime costs.
-> For a program like this:
->
->   main:
->     a()
->   a:
->     b()
->   b:
->     throw()
->
-> The series currently generates push r6-r9 at entry to each function.
-> This is needed to recover r6-r9 for the landing pads.
-> See the program and disassembly below.
-> Do we want to address this somehow, or is the idea that for complex
-> subprograms the sequence would amortize away?
-> On x86 the information about registers location at throw/landing-pad-entr=
-y
-> is stored in .eh_frame section, as far as I understand.
->
-> BPF:
->
->   jit_probe_b:
-> 	r1 =3D 32;
->   1:	call bpf_throw;
->   2:	r0 =3D 0;
-> 	exit;
->   3:	call bpf_unwind_resume;
-> 	exit;
-> 	CLEANUP_REC(1b, 2b, 3b)
->
->   jit_probe_a:
-> 	r6 =3D 0x1234;
->   1:	call jit_probe_b;
->   2:	r0 =3D 0;
-> 	exit;
->   3:	r1 =3D r6;
-> 	call bpf_unwind_resume;
-> 	exit;
-> 	CLEANUP_REC(1b, 2b, 3b)
->
->   jit_probe_main:
-> 	jit_probe_a();
-> 	return 0;
->
-> x86:
->
->   jit_probe_main:
->     0:	endbr64
->     4:	nopl	(%rax,%rax)
->     9:	nopl	(%rax)
->     c:	pushq	%rbp
->     d:	movq	%rsp, %rbp
->     10:	endbr64
->     14:	pushq	%r12
->     16:	pushq	%rbx
->     17:	pushq	%r13
->     19:	pushq	%r14
->     1b:	pushq	%r15
->     1d:	callq	0x30
->
->   jit_probe_a:
->     0:	endbr64
->     4:	nopl	(%rax,%rax)
->     9:	nopl	(%rax)
->     c:	pushq	%rbp
->     d:	movq	%rsp, %rbp
->     10:	endbr64
->     14:	pushq	%r12
->     16:	pushq	%rbx
->     17:	pushq	%r13
->     19:	pushq	%r14
->     1b:	pushq	%r15
->     1d:	movl	$0x1234, %ebx
->     22:	callq	0x9c
->     27:	endbr64
->     2b:	movq	%rbx, %rdi
->     2e:	retq
->
->   jit_probe_b:
->     0:	endbr64
->     4:	nopl	(%rax,%rax)
->     9:	nopl	(%rax)
->     c:	pushq	%rbp
->     d:	movq	%rsp, %rbp
->     10:	endbr64
->     14:	subq	$0x28, %rsp
->     1b:	pushq	%r12
->     1d:	pushq	%rbx
->     1e:	pushq	%r13
->     20:	pushq	%r14
->     22:	pushq	%r15
->     24:	movl	$0x20, %edi
->     29:	movq	%r15, -0x28(%rbp)
->     2d:	movq	%r14, -0x20(%rbp)
->     31:	movq	%r13, -0x18(%rbp)
->     35:	movq	%rbx, -0x10(%rbp)
->     39:	movq	%r12, -0x8(%rbp)
->     3d:	callq	0xffffffffe18c5c5c
->     42:	endbr64
->     46:	retq
->
+On Tue, 2026-09-22 at 21:59 -0700, Yonghong Song wrote:
 
-That is really bad codegen. There might be a way to argue it's slightly ok =
-for
-x86 in terms of cost in prologue, but it looks really bad for arm64. I thin=
-k we
-need to find a better way of handling this...
+...
 
-Basically on entry to a subprog on arm64 we spill 80 bytes worth of registe=
-rs,
-ignoring spills around throw site which might be less problematic.
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index d4a980140b48..26df52050cd7 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
 
-> ...
+...
+
+> @@ -2024,7 +2034,7 @@ static int do_jit(struct bpf_verifier_env *env, str=
+uct bpf_prog *bpf_prog, int *
+> =C2=A0	/* Exception callback will clobber callee regs for its own use, an=
+d
+> =C2=A0	 * restore the original callee regs from main prog's stack frame.
+> =C2=A0	 */
+> -	if (bpf_prog->aux->exception_boundary) {
+> +	if (bpf_prog->aux->exception_boundary || bpf_exc_force_spill(bpf_prog))=
+ {
+
+On option to avoid spilling all the registers would be to use register
+liveness information at call sites and collect a union of registers
+alive at landing pads for all callers of this particular function.
+Wdyt?
+
+> =C2=A0		/* We also need to save r12, which is not mapped to any BPF
+> =C2=A0		 * register, as we throw after entry into the kernel, which may
+> =C2=A0		 * overwrite r12.
+
+...
