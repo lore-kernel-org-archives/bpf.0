@@ -1,56 +1,96 @@
-Received: from mta0.migadu.com (out-164.mta0.migadu.com [91.218.175.164])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A867539760
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 15:47:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.164
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A0053C3D2;
+	Wed, 23 Sep 2026 15:54:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790178443; cv=none; b=CePeiLbgjG83wzTgQH2vCABQrncSl+7md7tE66Z4Zy8ieQbkyur+ebbyoJfCdJcUxTL2k1sgdZesnXVy7bFFoQqf0/ktzNIz8J29j+DEW+HjB3Lvz2/vm6x3eGjyfJzsSgiNK0DcLSLOZxZqYvjPJFRX5c+HF32exkRJYdORlbk=
+	t=1790178847; cv=none; b=UK7KiHlHPMcx95JFhpXTcYBH7GDGmOUMFggzglJP2tMI5qCVhk3xox24s5DXWpVTV9RmZTc23ExJKqJxDrdeMqkh/UySaiMMJlk8RNatcHuL5khtffZYrL7sFD7LmaBFM8rSTxgRbkx6vDy+9Po94XKNxvVCqMFWKhsY2WWkzQs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790178443; c=relaxed/simple;
-	bh=HNkEwA1ANe2Cy1ef5VkR+k5aNsAR9SDnOLDe/iDUfoE=;
+	s=arc-20240116; t=1790178847; c=relaxed/simple;
+	bh=J6iRxLrD4DDe9CKcU5VUOBrrbnObxkIIizlaLKxQ6Vs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lYAJ0zCyZ2/jqTKtRR1NiZ/jwokH1k0q/KJrKpNdrA4I05Lm70lCfL3p9dGdfmmHpKSaEMrZbY3MLk1uH+Cmlb8cND6O7YNcCBpwDQ0vd9AYQHFRVGS2hDT3yOVOBxMOn+UgJSXlpDGAMIdmeC24NYmW3kGUqVgGIzmLK1nWUwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gK/6DbpA; arc=none smtp.client-ip=91.218.175.164
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=WxYEXPgLYsZD9MjhXDPfCqF9E6MRnAWrJGvmqcfgA/DG0Rm2l1Lt2xvLtR/tZSfGX5IZR2Mi7cfnNGk9dx4ZStl3AWqpDpWQ8zqec6wLyNUcDvh5cA7nDlCCOnKVtlBw6f9JILzCHtJLRlz9bc5bmIPXvkWE+vCMsNMn62NVfcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kO69tl0G; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gK/6DbpA"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=HNkEwA1ANe2Cy1ef5VkR+k5aNsAR9SDnOLDe/iDUfoE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790178439; v=1; x=1790783239;
- b=gK/6DbpA5mLun8HfaS0RPh07yI9BS6uvaiXwxcf4URpNyeOHH3l9Cizm02q+9l4WbNCfpyNq
- Gei+5dxy5AbaydJUMUhKus3pqAgJOB9Fle++kwSW1Y1h9rW0EGsOHA0mBNEwW5YBpGbVojbGrb+
- vp8pLFvwP+JRvXceviDmsU+M=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id d5fec120cfd73ec7;
-	Wed, 23 Sep 2026 15:47:08 +0000
-X-Mizu-Trace-ID: d5fec120cfd73ec7
-X-Migadu-Flow: FLOW_OUT
-Date: Wed, 23 Sep 2026 08:47:07 -0700
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Yafang Shao <laoar.shao@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kO69tl0G"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EF3C1F000FF;
+	Wed, 23 Sep 2026 15:53:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790178845;
+	bh=wAV8stNGXVD0suD8B1a8qtsl7mm0RfyqHixhi/NZx3k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=kO69tl0GVqEJBDtzXtj722GeS02r981KicvQg4cQHtdo8zYbHSuzX4xKugLSuxZ80
+	 hNKF+inpI1rG93f1F5QhrTtVFxLcKRCTL+snyRWCp/N/q3HEczsFeIqExmwrr7tt/Y
+	 BvYVVTOYIPgApkyrBXMn24Qh05xMwuFcGHVzqgJTNe/gle65zMUCXYN6+65S4HSHY7
+	 tGBuhIwWJ1Pazb14YseddKo0V64lXM6Wy4pe1LmUGi7p3l+GZYljbhlHPVyxqBuygF
+	 nqC8DLo3R+mPNhwr+2JNkPsIA6gODez9Nt0VUzmMq2DMdlQhA1/ymS6rMHMT1y9mfa
+	 Lr1sgEWelyeVQ==
+Date: Wed, 23 Sep 2026 16:53:33 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	JP Kobryn <jp.kobryn@linux.dev>, Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>, 
-	Michal Koutny <mkoutny@suse.com>, Amery Hung <ameryhung@gmail.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Jiayuan Chen <jiayuan.chen@linux.dev>, hui.zhu@linux.dev, 
-	Donet Tom <donettom@linux.ibm.com>, Greg Thelen <gthelen@google.com>, 
-	Meta kernel team <kernel-team@meta.com>, linux-mm@kvack.org, bpf@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] memcg_ext: memcg policy through cgroup-attached
- struct_ops
-Message-ID: <arPyspcEFNkqfNyr@linux.dev>
-References: <20260921192559.2619635-1-shakeel.butt@linux.dev>
- <CALOAHbA4EgGw_uWfbXD0Q87exP7ek=z9ENuU_ARgb+DgBgy1kQ@mail.gmail.com>
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen" <mkp@kernel.org>, 
+	Jaya Kumar <jayalk@intworks.biz>, Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, 
+	Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
+	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
+	Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
+	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
+	Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, selinux@vger.kernel.org, linux-sound@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, fuse-devel@lists.linux.dev
+Subject: Re: [PATCH v3 02/40] mm/vma: predicate setting mmap_prepare VMA
+ fields on new vma alloc
+Message-ID: <arP0oJgrgZlgtrb6@gremlin>
+References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
+ <20260917-b4-mmap-prepare-vma-flag-sanify-v3-2-4583d8a23bca@kernel.org>
+ <CAJuCfpEa8tUmYJBjx-cRdAE8y-jcKY0C81kAOa1QZS7F6tKdfQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -60,54 +100,78 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALOAHbA4EgGw_uWfbXD0Q87exP7ek=z9ENuU_ARgb+DgBgy1kQ@mail.gmail.com>
+In-Reply-To: <CAJuCfpEa8tUmYJBjx-cRdAE8y-jcKY0C81kAOa1QZS7F6tKdfQ@mail.gmail.com>
 
-Hi Yafang,
-
-On Wed, Sep 23, 2026 at 09:07:40PM +0800, Yafang Shao wrote:
-> On Tue, Sep 22, 2026 at 3:30 AM Shakeel Butt <shakeel.butt@linux.dev> wrote:
+On Wed, Sep 23, 2026 at 08:32:43AM -0700, Suren Baghdasaryan wrote:
+> On Thu, Sep 17, 2026 at 9:24 AM Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
 > >
-[...]
+> > It only makes sense to manipulate VMA fields if we allocated a new VMA,
+> > rather than merged it.
 > >
-> > Known open questions
-> > ====================
+> > VMA merging does not compare vm_ops or vm_private_data, so a merged VMA
+> > keeps its own, which is also what the legacy f_op->mmap path does since it
+> > never touches an existing VMA. Previously set_vma_user_defined_fields()
+> > overwrote the merged VMA's fields with those set for the new mapping. In
+> > practice these are the same values, with rare exceptions such as shmem
+> > selecting vm_ops based on whether the file has been unlinked, so no
+> > user-visible change is expected.
 > >
-> > The semantics of memory.high for remote chargers or kernel threads is a
-> > grey area and this series does not aim to resolve that.
+> > Make this dependency explicit, and additionally constify have_mmap_prepare
+> > while we're here.
+>
+> The fact that we might be overriding attributes of an existing VMA
+> that we merged with is technically a bug even if we never hit it,
+> right? If so, should we have:
+>
+> Fixes: c84bf6dd2b83 ("mm: introduce new .mmap_prepare() file callback")
+
+It's not a bug, it is an in-built assumption that the state used to assess
+mergeability implies the same properties.
+
+And if it was, it'd need fixing a different way (check the field for instance)
+and would apply to the legacy mmap hook also.
+
+This change is needed for the series though.
+
+>
 > >
-> > Another open question is whether a bound on debt deferral is needed. At
-> > the moment, we think that rather than putting a limit on deferral for
-> > memory.high, it will be better to handle that through an async worker like
-> > memcg->high_work.  We aim to introduce that later, along with the right CPU
-> > accounting for that async work.
-> 
-> Hello Shakeel,
-> 
-> On the open question of how deferred debt eventually gets paid: would
-> it make sense for the policy to also notify userspace (e.g. via
-> ringbuf) when it defers,
+> > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+>
+> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
 
-I think the notification through bpf programs is already possible and a bpf
-program deciding to bypass memory.high can already do notification via ringbuf.
+Thanks!
 
-> and have a userspace reclaimer do the reclaim
-> through memory.reclaim?
-> 
-> I understand one of the concerns for the async worker is CPU
-> accounting. If the concern is that the kworker's CPU usage is not
-> charged to the target cgroup, the userspace reclaimer could instead be
-> spawned with clone3(CLONE_INTO_CGROUP) so it runs inside the target
-> cgroup, and both its CPU and memory usage get charged there.
-> 
-> One caveat: intermediate cgroups with the no-internal-process
-> constraint cannot take processes, so this would only work for leaf
-> cgroups.
-> 
-> What do you think?
+>
+> > ---
+> >  mm/vma.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/mm/vma.c b/mm/vma.c
+> > index fa784f069da4..4b74b48c29b7 100644
+> > --- a/mm/vma.c
+> > +++ b/mm/vma.c
+> > @@ -2894,7 +2894,7 @@ static unsigned long __mmap_region(struct file *file, unsigned long addr,
+> >  {
+> >         struct mm_struct *mm = current->mm;
+> >         struct vm_area_struct *vma = NULL;
+> > -       bool have_mmap_prepare = file && file->f_op->mmap_prepare;
+> > +       const bool have_mmap_prepare = file && file->f_op->mmap_prepare;
+> >         VMA_ITERATOR(vmi, mm, addr);
+> >         const pgoff_t anon_pgoff = addr >> PAGE_SHIFT;
+> >         MMAP_STATE(map, mm, &vmi, addr, len, pgoff, anon_pgoff, vma_flags, file);
+> > @@ -2937,7 +2937,7 @@ static unsigned long __mmap_region(struct file *file, unsigned long addr,
+> >                 allocated_new = true;
+> >         }
+> >
+> > -       if (have_mmap_prepare && !map_is_anon(&map))
+> > +       if (have_mmap_prepare && allocated_new && !map_is_anon(&map))
+> >                 set_vma_user_defined_fields(vma, &map);
+> >
+> >         __mmap_complete(&map, vma);
+> >
+> > --
+> > 2.55.0
+> >
 
-I think all of this is possible without additional code and with this series.
-With AI, should be very easy to prototype it. Please take a stab and I will look
-into it as well (time permitting).
-
-Thanks for taking a look and also please let me know what other ways you think
-memcg can be customized through BPF in a beneficial way.
+--
+Cheers, Lorenzo
