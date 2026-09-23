@@ -1,139 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f9.google.com (mail-wr2-f9.google.com [74.125.225.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 156F03806AB;
-	Wed, 23 Sep 2026 04:22:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790137381; cv=none; b=jjlecxVjZjlYOG61jMd59RLF1GFxRnGYUCKenu1IxVp0DsHkkFrNfDVg0ZnXsAqoepTFmVBWxv3TCaeOg6cTLvSUzN29VI9Xrf5NuKUsMHopU2MxhZ+t50N7maA/VPqGkQ/CORC/l6jQtPVS1L/n4qyZZfXYRuPLd17f2fkiNz4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790137381; c=relaxed/simple;
-	bh=kERN3nirdCDImWuZxrGf0a3UcWYedwQ+gqhAnShPMzM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=LD7VbsjR/tdt8UGg8he7JX39Cw5FOKw8pnv9mSyOQMPKFzNwAh/pK6Bp7pUsxfxHKSrajMBc2Xjv+lg5dDNvvmFNhPGJbR6CHd2ZMWjWheTY+R8lF8A2EpzTrcyPVOBO0CtF70tU7LMCC2Ag6lLxxoMYk6HJ/ro/8a7RSkLQk4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GFWEyvM5; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BF473939D2
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 04:37:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.225.73
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790138236; cv=pass; b=Sruap3/L3bAl+IwjFhb8AR0dO8K3n4JSFbYVg9n8DCrb7s33Do7M1oByOcW2n8UpRtd9Uud+OIXW1kATK0cCfOYDphMm+WP1fopVzxbfawh5BTuOG5ZiPzeFxc6BsLdf4vF0MkdOXuwSsE3uF8WivxYHAUC1J7e8DPDY1IQH5JI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790138236; c=relaxed/simple;
+	bh=uii4uZSwuRp1E2i/9mczGA2c4h65XX04B5SOMwY0GVg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ugDOKV/DOwAuuAvbOspRUBfUrU2y+e4he2s9q25rbML7nBWhRvO5ulyOR2HPFIoVXOwteuDeTPR96SgYHUehdzE/WHzain0LqUGrPBJAVQTbxnIu8aA7CMyvP4CL2KJHMks8HudOFbzcTZtS4Qj7BiVkvNA5V1nNxcPNRnt7XvA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V3BVske5; arc=pass smtp.client-ip=74.125.225.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GFWEyvM5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9380B1F000FF;
-	Wed, 23 Sep 2026 04:22:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790137379;
-	bh=2YJ89MmcjHMt5JvaeKT4zxPvjJxnsv18Y2TXX1vLqa8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=GFWEyvM5ptV4i5St00T5s73Ph8IwEX5LReXEzjG2ro78nCuu84nR3nF4vKJS9Cp3s
-	 FlLu44l91GjfLgE2d+ElPp86jLchZ5CfHt5FET1pB5CsmUAIwXTAdigDKMWAhaw7Ah
-	 jgc9EeNzwxDzZCplYqEbKs3oVIiMZIjICqf69GdSOWBdhYRnlCu6oe17xEuA5TycGr
-	 aJWMq7axJpLQiWNXVTNVqA2K3CE2JMNyVWZp1hcS8aeIaxa1AdrAzBwipjZEIUZ6Gv
-	 bps0tqewDomKDfvDkPFgUOzzx234D/lN+MwoRaDnmgJQsSB0Sj0LWwHpkQL+loSozB
-	 7r0RhmCT2rwhA==
-Content-Type: multipart/mixed; boundary="===============2323606412187480710=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V3BVske5"
+Received: by mail-wr2-f9.google.com with SMTP id ffacd0b85a97d-485850cf4deso269627f8f.1
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 21:37:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790138233; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ZvOhMzJcfaBGWkZYIgo0CkQoX6eDX493Nc0CojMmfc/gnhYMEU72/u9ZZZVKew1vnz
+         AP6piAONVPFYiU/wtEfdfu2ugoF3aZdWd6Wt8qApkyPcpbLI7zYSluDneHG8i7+bclOQ
+         29DljovLRqMZiNEt8hD/Ei4zcWVywgBHLEYQ38Aa1WMheN10miAUKj6fJ4py0pz7tvMT
+         fZP4OfNaTGHozhuN3kCET8HmMR24lX4Fk2JXz2FQppyOUICkckUkPBHvnZpwYYFGJHSS
+         ZqhGd3YnKZUdIIrjm16/ljpR3Yeo5UhI6DD6UVWNUmRn5XMHVObkx5c3aN7G+oAMkr17
+         zebg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=uii4uZSwuRp1E2i/9mczGA2c4h65XX04B5SOMwY0GVg=;
+        fh=AMoCKYy0bhTSxkMuE4WId0GrUptcjGnZy2I2Mber3Do=;
+        b=hPYLURpcSFIkn8Lqj+jFpD8YkhaLV/XLFw6ZyXvsHmVtOkYmHzAjKsLpWuJN7lj9jO
+         t6KPfWHEvJc3Rub/YyNqqwZ6ib418+RO01x8+qgXVvFDRDN7jnH+OG9wpDsH+2AW4ggH
+         bN4yPdX7quuvqWnmOKoltD71uAuZDZ5cO6v76MMXhu2TrdXvtKUqdCvdNtT7iZ5o92vZ
+         knzXUERHkpZdKJZ0aEN3RFZthbLdZP/TmuvlCat3rsu+mJuwViNJHQGXzPqipjAGzXVt
+         v0Yc/e5oR2uFha8W1brWa6/r/x8flLCKePHNZL4iTrUHf51qDEx0gsfHcdpqLbq1RSEq
+         iXAA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790138233; x=1790743033; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=uii4uZSwuRp1E2i/9mczGA2c4h65XX04B5SOMwY0GVg=;
+        b=V3BVske5Qa+MCOp8sodg/eGavJcHj5UgqLYGP70vuq1tzseQQLWuBa9XWOTaqdhI3v
+         0TREPgTCi//Zl/EfO/H58OQAr0I0o4J67P1v9VT37Cik3B+rD9aWPNYP/gWWrY8OXE6J
+         pA1c98k/Vwytr0l29fRDYWKQXIVb0bC/y32L4kPx3B85qrF2xMnR5BppHHSJ6bK0My3Q
+         VnsBST4yOum/rb9CO2pAQCx+1/zXbmEYpRGJc+Ec2DYlcI/0n/+IegVs2EwV5880VDs1
+         0oRosdsMZ8oSVu7vQ8/sxE2lLm/G2EN+jfY1p1y72/SGK0Gm/JkFuunjFOAQgPbrrCVN
+         V06A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790138233; x=1790743033;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=uii4uZSwuRp1E2i/9mczGA2c4h65XX04B5SOMwY0GVg=;
+        b=L++9+u1QxPVHI+KwjGznyp0eDTECxMItHvOp3ykAK1SWLvSneD22o2G8l80Y3FE2SF
+         fgFMiH4WfJ9MWi80gkMveggo+RV8lG3DftVdzwe+LzwcsbCpgpdYz7jY0UjisAahx27/
+         EsN+RKnZcN2sEPGttZRN7AJpnJBC0uq+f7lM4SJLKzGncdTD5q9MB0IjilbLAAbUy85n
+         6NeUmrGZnaUoPnLlXx83WB6iYLiHtz4T68sIZqKlbLCXZSHvqpsXAd4Vfpf4E7XmdcIZ
+         yqkGr1tG8UP++ny3AiicFhy+OggZ8pRjznbcbvxm4VWBmUoJTHN6NlpOFxQigU24JTEJ
+         C33Q==
+X-Forwarded-Encrypted: i=1; AKwUvBxZEMLxzU6scFUhs7bLGDXlrE3NzpqPCaa41RPhD83LCuOnP246Fs8wLXcULA6NhMMiH+Y=@vger.kernel.org
+X-Gm-Message-State: AFuF++kjoBq6fwC7adZJbtelRS06MxqVz+6sq5YJyn0tHa+ZsD+ccHzv
+	pgMoS0zNieDrqVxdzALJkdUz9xo5DL7Oq58oBhuj5WjaCgbVWSt8Tpgb8JjdsaxfJrUwUc/R5LK
+	jP/7i2Ki8Km1fE1O32pKcs6XRXoMWvPc=
+X-Gm-Gg: AYBFou16vPrdGVpWQwe+MGQJdqCH0nbZwO8jmbS1w6r8TvV+OPbei+xu6krQY8KbhGx
+	Y1ElKFF7qGHPJyBCZIz27xn3NNMNfJL0l2uw56tbO+YOd5cs7l4IFWjZKcoZ8hwsEptz+U0qg3o
+	HCVlfgijnhtgOg8IDfKRlAeLg9v3I9W5Y8xC46VQtiQJEs6gCzOhn4by6+SzcaG4wz794uc5k+Z
+	trOrmb31faLAAOERFWIgI2SWCocEyLKLgF1LmRFm9RTy5vmZruStYwJKmo0cNXb+8iTvkFM7GGC
+	o2XJiKYbJtBJX1BO4Rudg+5oaxGEG0MOwryoUprcNA3zpwlx+j0sa3s/n4HdT5jxu9H0+H8visj
+	sxXK9GiX/ccmhxqJjada7UemC9CpIHTzOzyRFAx22XZURExoo/rIsPdcPX1zxrCwlNMss+vHomk
+	vptUO/nCRQ1WvoJ0ctco+8RlK7xmDccHq4txzkU3xeaw==
+X-Received: by 2002:a05:6000:2608:b0:487:2347:817 with SMTP id
+ ffacd0b85a97d-48867090ed6mr2115579f8f.33.1790138232477; Tue, 22 Sep 2026
+ 21:37:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a5e07fdd93b0f6b38dfce4cf977e88eac653bed08ee713372bf31bc6cff349e7@mail.kernel.org>
-In-Reply-To: <20260923032703.59816-1-ebiggers@kernel.org>
-References: <20260923032703.59816-1-ebiggers@kernel.org>
-Subject: Re: [PATCH bpf-next v4] bpf: crypto: Use AES-CBC and AES-ECB libraries
-From: bot+bpf-ci@kernel.org
-To: ebiggers@kernel.org,bpf@vger.kernel.org,vadim.fedorenko@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: linux-crypto@vger.kernel.org,linux-kernel@vger.kernel.org,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,john.fastabend@gmail.com,kmehltretter@gmail.com,ebiggers@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 23 Sep 2026 04:22:57 +0000 (UTC)
+References: <20260921210033.1715000-1-yonghong.song@linux.dev>
+ <7e7076ce94e803403bcee003569d4b2ac7bc4e2c.camel@gmail.com>
+ <DLLHFJDS6G5L.2B273FIKF9A09@gmail.com> <DLLHQDZBGDUO.2TT8UBHIMZEFK@gmail.com> <DLM696EA5JAQ.3DBNX7Z6DB7N3@gmail.com>
+In-Reply-To: <DLM696EA5JAQ.3DBNX7Z6DB7N3@gmail.com>
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date: Wed, 23 Sep 2026 06:36:35 +0200
+X-Gm-Features: AclHuK97qrdHWoo3XeIrAoR5n17PHP3sC4jtIlLimYkZ5xh1HgsLbUPAvCGVb7Q
+Message-ID: <CAP01T76JZUzzyr50dk0NzGv73p12v8E17Lbgy1_yZVqg3Qju0g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 00/20] bpf: Run exception cleanup landing pads
+ when bpf_throw() unwinds
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
+Content-Type: text/plain; charset="UTF-8"
 
---===============2323606412187480710==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
-> index 51f89cecefb4..784e2bd5ca92 100644
-> --- a/kernel/bpf/crypto.c
-> +++ b/kernel/bpf/crypto.c
-
-[ ... ]
-
-> @@ -36,94 +30,53 @@ struct bpf_crypto_params {
->  	u32 authsize;
->  };
+On Tue, 22 Sept 2026 at 23:44, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> +enum bpf_crypto_algo_id {
-> +	BPF_ALGO_AES_CBC,
-> +	BPF_ALGO_AES_ECB,
-> +};
-> +
-> +/**
-> + * struct bpf_crypto_ctx - refcounted BPF crypto context structure
-> + * @algo:	The crypto algorithm ID
-> + * @key:	The crypto key
-> + * @rcu:	The RCU head used to free the crypto context with RCU safety.
-> + * @usage:	Object reference counter. When the refcount goes to 0, the
-> + *		memory is released back to the BPF allocator, which provides
-> + *		RCU safety.
-> + */
-> +struct bpf_crypto_ctx {
-> +	enum bpf_crypto_algo_id algo;
-> +	union {
-> +		struct aes_key aes;
-> +	} key;
-> +	struct rcu_head rcu;
-> +	refcount_t usage;
-> +};
+> On Tue Sep 22, 2026 at 2:31 AM UTC, Kumar Kartikeya Dwivedi wrote:
+> >
+> > I think you misunderstood his question.
+> >
+> > What Eduard meant or is asking, was that (per his understanding), the verifier,
+> > in the future, would attempt to defer to runtime checks where it cannot prove
+> > certain patterns in the program safe, regardless of how they came to be (in C,
+> > or Rust). Instead of rejecting the program from loading, in such a case, we
+> > would emit some form of a runtime assertion that, for the remainder of the
+> > program, guarantees a given value to be in the range the verifier accepts, as a
+> > very simple example.
+> >
+> > In such a case, the assertion and associated panic is being injected after
+> > compilation, hence it is likely there is no associated landing pad to fall back
+> > to and clean up program resources. Yet to safety inject such a runtime assertion
+> > clean up would be necessary.
+>
+> In this case presence of landing pads from rust is especially important.
+> The verifier would need to rely on them to insert additional run-time checks:
+> if something bad between [ip_start, ip_end] goto landing_pad.
+> It's not possible to insert control flow edge at random points,
+> since the verifier cannot see original rust code and its meaning.
+>
 
-This isn't a bug, but struct aes_enckey pads itself so the round keys
-can be 16-byte aligned for better performance (as documented in
-include/crypto/aes.h). Putting the 4-byte algo enum before the key union
-means key.aes lands at offset 4, so the round keys can never hit that
-alignment. Would putting key first (or aligning it) be worth considering
-here?
+I think you're conflating several aspects again.
 
-[ ... ]
+You can obviously insert aborts at any point in the program, provided
+such a primitive works, even when the compiler doesn't see it. It is
+just a way to halt program execution along a given path, and has
+plenty of precedents (assert(false), std::terminate(), panic!() =
+abort). That property can be used for several purposes, including
+proving a condition true on the other path that does not abort, and
+retaining that path condition throughout the rest of the program. That
+is basically the gist of Eduard's suggestion.
 
-> +static int bpf_aes_cbc_crypt(u8 *dst, u32 dst_len, const u8 *src, u32 src_len,
-> +			     u8 *iv, u32 iv_len,
-> +			     const struct bpf_crypto_ctx *ctx, bool decrypt)
-> +{
-> +	if (iv_len != AES_BLOCK_SIZE)
-> +		return -EINVAL;
-> +	if (src_len % AES_BLOCK_SIZE || dst_len < src_len)
-> +		return -EINVAL;
-> +	if (decrypt)
-> +		aes_cbc_decrypt(dst, src, src_len, iv, &ctx->key.aes);
-> +	else
-> +		aes_cbc_encrypt(dst, src, src_len, iv, &ctx->key.aes);
-> +	return 0;
-> +}
-> +
-> +static int bpf_aes_ecb_crypt(u8 *dst, u32 dst_len, const u8 *src, u32 src_len,
-> +			     u8 *iv, u32 iv_len,
-> +			     const struct bpf_crypto_ctx *ctx, bool decrypt)
-> +{
-> +	if (iv_len != 0)
-> +		return -EINVAL;
-> +	if (src_len % AES_BLOCK_SIZE || dst_len < src_len)
-> +		return -EINVAL;
-> +	if (decrypt)
-> +		aes_ecb_decrypt(dst, src, src_len, &ctx->key.aes);
-> +	else
-> +		aes_ecb_encrypt(dst, src, src_len, &ctx->key.aes);
-> +	return 0;
-> +}
+Injecting random gotos and jumps to some other part of the program is
+problematic, of course, and for that, your explanation above is valid.
+However, we weren't discussing those.
 
-This isn't a bug, but both helpers repeat the same src_len %
-AES_BLOCK_SIZE and dst_len < src_len checks. Could that validation stay
-in bpf_crypto_crypt() next to the existing length checks, leaving only
-the iv_len check per mode?
-
-Also, bpf_aes_ecb_crypt() takes an iv parameter but never uses it (only
-iv_len is checked). Would it read more clearly to drop the iv argument
-from this function, or drop both iv and iv_len and do the iv_len != 0
-check in the ECB arm of bpf_crypto_crypt()?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35815287581
---===============2323606412187480710==--
+Anyhow, let's keep focus on the current patch set and continue with
+it. We need the ability to invoke user-provided landing pads in any
+case.
