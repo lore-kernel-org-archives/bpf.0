@@ -1,166 +1,199 @@
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+Received: from mail-yx2-f13.google.com (mail-yx2-f13.google.com [74.125.224.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 923E6476CE9
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 21:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.199
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790199770; cv=none; b=bz0tjfkKAlPaAtDHN77/4IY3ymxkeXPiY77jqT2xIr7k6To2/ZDigNPVExVb0HEgZnmdQ4AhQ3N1aXsZuRRmUinAFKatjSlobDhugN4AB5FPY7bhRjDiTBiN+EwKUh1XZqQhVsibYVHiWx6jY8o69bOG82T67JjqxH+5omn2slc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790199770; c=relaxed/simple;
-	bh=P8UxBoi3c6dfgfFRuUvBQXAQn7T0thA4jbPoLoodgvI=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ifDcJOPxCwvT9AdC+xV32nkFchhuuC0OThINFyJnan7tfMzY0OEWV9yGQxk1PPSwJsjjGi/tQOSJ4WpMn5lvsuK7IP8dFCZZifSx9p1gX9bHPVrs5BvNC71vwNF2Lg4Oz48NAY76NfvaizTiO1KGU/e8QFOB9du6myTkAjs8q/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--morbo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vtpYaRwK; arc=none smtp.client-ip=209.85.214.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--morbo.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 773EC47DD42
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 21:48:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.141
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790200126; cv=pass; b=f0fPyEeW4mvtItsHIFCMpv1/8Nm3le9Ccgyo765QtM2eIMsGAmoKIIid7ueBuv5Id4nhcBx0J9tv5Kc1rJKBwO8ZTPc8PHw6Y+ZCMYZkYGazMySgGrPmwGqjEShUH+7Hn9eplmdXIipLMvrJnia1ea2OZ1P6/DiPkzcY6Ylw8eg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790200126; c=relaxed/simple;
+	bh=q5ivT0wUQd61fCFGQxZI1dnMkjtQWORiTQEkMidUqOM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DAM+MXH0sIZckyG+QdunFXrSi9es0BZOCj0cfHD+Ow7TMLXf1SMSwbfUNBHfVq9Z653EWqdN36tkq341c5n6zNzgVqM1Q5gV//dV2W/CmZGUMPOoBvDqCjyyivV6kWnwakcQfjsaaN/fgYOLWTc2SAB9/XsDCaYRaQAnrEl0fWs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=Ix1nDopC; arc=pass smtp.client-ip=74.125.224.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vtpYaRwK"
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2d6fed0652bso11367085ad.2
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 14:42:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="Ix1nDopC"
+Received: by mail-yx2-f13.google.com with SMTP id 00721157ae682-85d45ae011aso19082467b3.0
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 14:48:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790200121; cv=none;
+        d=google.com; s=arc-20260327;
+        b=IVM2BYel+zdSfPVZxt2Ysqf3SCtcdPKZYQydQxZWIwommMFJJrHgbOJ93RcYgwgab3
+         LzW+K4/7tKFEzc9ALwsMUJCgP3mXxYH/Nx28meDHIkR5+NRU2NIhWFROiKwrLYycTOZE
+         dncN8Tm5OxiomXk4vl9ctENTTEFtG/c4f5/mJK8A2TSJMt2uUwoaNVTtOeR8NvHMGW7d
+         4UZlDajymvH4yh3gbAHxsWOqUHiUOnKrYyr8jdSm4cjrK8sRhLDqX+rSNa1Yrpa0nKez
+         09bH22j2jfVS2cXtiHsJnp/MX9c3rvLz4PyV8zBXFwlZgCMiKUPKiiUa0hoBeTAAw25p
+         sPKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=v6LsnyCFOVejcsE+7NjLo2kzmY1l5LMibw4r5k6gDuY=;
+        fh=q29HihNU4cjyG7H+hLc7lKiQRx2mBr0oIrH5Ay814rU=;
+        b=QSR4HAohzJHncTED6XqAjCQi+MOpRWOCVRtlEVhAOmFqXZ9f4eFlPQkJMJMIbYrcIj
+         Ug0kwh4BQR87K+dsPoX3ZQZw+qrJIuwbL/e04mysuJCuOXQRN4row1McMFTrnyHsnKwJ
+         EZ+g/eXDOa1LkuGp9nLHC++ZpXvXEvqQRi4SriWMlYoYpG14bBXuQwA2+7Ci88FsA8sL
+         VCeAOhz/BscK3kBrIaPdueQxlnoyGMiu2UqRSGOfcgRJYSUWGHb7Mwsr5EPld5C/mbK4
+         mI0s/n3oAWxGemPkZm5cQQzcU2T5WZ3IxfFbV7gk61hGL2fnC/geFhoRL9Fm6CuFbL92
+         Yj4g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790199769; x=1790804569; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ZbPFPeyTORjeOg7jOjV9V6Jywp+gStr7Zp4FX6jbmec=;
-        b=vtpYaRwKMnDKkkv+qH9dmDu92b2wMpl1EQHO9V/FsQrDx9+mWE8KgCQ8O/1NxJy9IC
-         W8PG8Zzjjus8DmrEAgn2h+eT0awYFoZNpd3Dqo8s9RVQLr3P4kdBChhn4DmWp5W7/UTm
-         Y4E9MHvAsns9gaUeNV5ybqrPSeiER6xHFhEIaIH9oTOayuMLvmovN5Rke06T3tvsdkkV
-         oj0LWx/hE0eAd2oWyFNgbXKkEexjeyRwgnst7ViL6Dk/0AKYlCuJgUKFdYR2m+pw2tOc
-         Oe+n1C7HuVVBXZ3DeSJFpLDwkFw0uQFhxAvqYKhzdLuBBnBp0yV4e7w9gHUlyuAOygY/
-         qvXg==
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790200121; x=1790804921; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=v6LsnyCFOVejcsE+7NjLo2kzmY1l5LMibw4r5k6gDuY=;
+        b=Ix1nDopCk0GjR4nCxG3pctfH4kfkV9m6BPkvBfm/dna2cCjwg1oKyNdIBhnXSkZGvQ
+         +FHNMQrUZeNktLDjl8v/FdEjgEM2p7Ypt0TgoAXwWR7hcTy4rQlMI7Dmm/CdWAg+sS38
+         LG2TS/plDrQkr2QHaEkxXfXDrzLNnfxANcu6li2IAwWZU1I2UIXfNzwjrgKrF5KtVFqT
+         kQQ8bFZhOhqIcj20SqUTPXHW8VWHk5H3+XBgkunPM59a4MVntMbrO1h6hZQ/xFVjrN8W
+         z2vrhw/dtBt/eI8DwiSOE37eGh0fimomCNaT6XIc7gXVsiqdeEQa9XABOuMqzpKGjxM2
+         mAXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790199769; x=1790804569;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
+        d=1e100.net; s=20260707; t=1790200121; x=1790804921;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ZbPFPeyTORjeOg7jOjV9V6Jywp+gStr7Zp4FX6jbmec=;
-        b=syA73ELj3GdMKNN7Sk2y4GRyw/WtQw2Fa3gamjHHKuAqqunq4U+v/GjB0b8F373y/N
-         NHKCEEejR0jD6ZM6T2RgmKg/VPDwHT1Bg09M8hx9DTlN93u9nPKtu4pzStpVh7Tt9P+7
-         LCNWu72zOZxSlGyl+9FNTQVEiRcyW++kss58jh83GwmONDca1uVaV7pcRcj4FTcYnTGd
-         E6XmB6Q1RQdCb2x3nhsxLOIdbEmwj3aduIz7ZZHxiy5h7+EXBSE94YN8OFWSRl6PGeoj
-         j0pucRl+iD8Ar0ekVi77sfo8S/omzfTfjm8VbO3zpKIdC+yyID39y98QegOiyoeRgrqD
-         faTg==
-X-Forwarded-Encrypted: i=1; AKwUvBzTztbtL8xm6UI5Ge+U9Iln/4rrXpi5di62j1REu3d3W77XGuIKFbbkAg939gjZ0c2I830=@vger.kernel.org
-X-Gm-Message-State: AFuF++kyZHv2Oi21TfoSB5CeWRFi1vVW85pl+MTz55S2AX13e1UxPQTg
-	znJ0WgjCI7XjFz+z45jJDcJomUVnmFnQu7EpWfjy5ra3ed3+svx4Qe7/Q+ez0J3NLxN4bwkO6WI
-	z
-X-Received: from plrd9.prod.google.com ([2002:a17:902:aa89:b0:2dd:bf7a:f211])
- (user=morbo job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1b4e:b0:2c8:2808:3ec9
- with SMTP id d9443c01a7336-2df7e26759fmr3174125ad.12.1790199768442; Wed, 23
- Sep 2026 14:42:48 -0700 (PDT)
-Date: Wed, 23 Sep 2026 21:42:46 +0000
+        bh=v6LsnyCFOVejcsE+7NjLo2kzmY1l5LMibw4r5k6gDuY=;
+        b=k8Qwoeso1yIlx1g4XcWVDabejEACThA3+ReeBbeCSSKTqYj/d6i4z/+wX8hxJXtIWY
+         J/pDgiAwJwu/mzecuk4nib4pJYgkBx7HL2yxD/Dp4q8M+fXgtbJd5ecRovL5bRl1VXdy
+         de3Fr5Vr5zhAyEdQptesqPMKQ0tErAAJEoFScYtlr3g20QGaxeLg7UXPK0WuSb8sxZso
+         DTFwGFPrG2Q0ZLIgiXJJrl4QrdVNxfs9WKank7iLgaSxDRgBnV1dKtGqbR9QPO+0NnSH
+         mH/UbUalcASFSvlvzBkBU0/7yy4mhJk/RsvSI8fRq+YN2z7m5XkZE61xccKgkc24isUv
+         GmJA==
+X-Gm-Message-State: AFuF++nn/GJMgLHsCzz4fB8c2vzc979Ae54ZeSoJw4pdViukWPttHH+x
+	NCuNbw1bnpTpN3P7s9idaiLm25v4Woutg8gVw3sPLnWAVGbWjRsSEEP9jzE9jcEPU8fxULU9rY/
+	k4D/1NwP5NWHUduOLAhdlwDOrNcjDcvnbFaEfmWpAmw==
+X-Gm-Gg: AYBFou05km3/LJGC5rwjiSLSnupcM+0WuxOeEFzkO+qKf9hQ0Yf38cjpDKDnaf7JxSo
+	xXmfooUr57BpsxpYNod586M6VhqDF0M3At/exlTRb9g1kMrXJ2rrYhcX+a5uWUaul0pwVB2XK66
+	IF1MiefSqKayKFuWkVFfkIQ9dak8X5Hykghd31RrlwqN5IyV4uDpdmIrzgWkj5kuo3VIwJTJo1d
+	HjfbTz83kVtaR9LtyXUNFQsU4CCR8pufUXbToeannKjqUjoP//KRSGoRzUXzDZKA1UlZNkJln9h
+	+ocDvqNEawwbJAvwj9UeE3c1Xd4YG2hXw6PbVkB5OqOjgfMjKSk3ELgWDYf6+jUJEOoEyBLkPpA
+	nkbqRlw==
+X-Received: by 2002:a05:690c:6d82:b0:845:1064:5c03 with SMTP id
+ 00721157ae682-8a64bc39bb2mr3624507b3.23.1790200121136; Wed, 23 Sep 2026
+ 14:48:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.56.0.rc1.310.g51773c2048-goog
-Message-ID: <20260923214246.3098156-1-morbo@google.com>
-Subject: [PATCH] HID: bpf: fix lockless race on device_data allocation
-From: Bill Wendling <morbo@google.com>
-To: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>, Puranjay Mohan <puranjay@kernel.org>, 
-	Johan Hovold <johan@kernel.org>, Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Kees Cook <kees@kernel.org>, 
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, Bill Wendling <morbo@google.com>
+MIME-Version: 1.0
+References: <20260824082530.47553-1-emil@etsalapatis.com> <20260824082530.47553-3-emil@etsalapatis.com>
+ <DKYHFTVFY5T7.1TLXUTDOWQXF7@gmail.com>
+In-Reply-To: <DKYHFTVFY5T7.1TLXUTDOWQXF7@gmail.com>
+From: Emil Tsalapatis <emil@etsalapatis.com>
+Date: Wed, 23 Sep 2026 21:48:29 +0000
+X-Gm-Features: AclHuK9uKiHqk9W_APTNTjd8c2EgcJKGpE7jq4Fqsyq2o6TmPDI4dTzDO4yePd0
+Message-ID: <CABFh=a4H9_3pkFzgyrooz8eg=8pa-f_JHK3XdLSvTfV_nVN8JA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] bpf: Add sleepable arena page allocation path
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, memxor@gmail.com, 
+	daniel@iogearbox.net, eddyz87@gmail.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-When attaching a hid_device_event BPF program to an already-connected
-HID device, hid_bpf_reg() calls hid_bpf_allocate_event_data() while
-holding only hdev->bpf.prog_list_lock. Concurrently, incoming HID
-reports invoke dispatch_hid_bpf_device_event() while holding only
-hdev->driver_input_lock.
+On Wed, Aug 26, 2026 at 1:25=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Mon Aug 24, 2026 at 1:25 AM PDT, Emil Tsalapatis wrote:
+> > The bpf_arena_alloc_pages() function currently only allocates pages
+> > inside a spinlock critical section with IRQs off. This forces the use
+> > of alloc_pages_nolock() in the BPF allocator, even when the caller is
+> > a sleepable BPF function. This in turn causes allocation failures even
+> > in cases where falling into the allocator slow path and possibly
+> > sleeping would eventually succeed. This can be triggered consistently
+> > by heavy BPF arena users like scx.
+> >
+> > Add a separate arena page allocation path just for sleepable callers.
+> > The path preallocates the arena memory to be added to the tree before
+> > taking the critical section.
+> >
+> > Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+> > ---
+> >  include/linux/bpf.h  |  6 ++++
+> >  kernel/bpf/arena.c   | 76 +++++++++++++++++++++++++++++++++++++++++---
+> >  kernel/bpf/syscall.c |  8 +----
+> >  3 files changed, 79 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index ffa5626411ac..d15ed7a3879b 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -710,6 +710,12 @@ void bpf_map_free_internal_structs(struct bpf_map =
+*map, void *obj);
+> >  int bpf_dynptr_from_file_sleepable(struct file *file, u32 flags,
+> >                                  struct bpf_dynptr *ptr__uninit);
+> >
+> > +static inline bool is_bpf_alloc_nonsleepable(void)
+> > +{
+> > +     return preempt_count() > 0 || irqs_disabled() ||
+> > +             IS_ENABLED(CONFIG_PREEMPT_RT);
+> > +}
+> > +
+> >  #if defined(CONFIG_MMU) && defined(CONFIG_64BIT)
+> >  void *bpf_arena_alloc_pages_non_sleepable(void *p__map, void *addr__ig=
+n, u32 page_cnt, int node_id,
+> >                                         u64 flags);
+> > diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+> > index da356989786a..126ddae763f9 100644
+> > --- a/kernel/bpf/arena.c
+> > +++ b/kernel/bpf/arena.c
+> > @@ -683,8 +683,73 @@ static int arena_adjust_tree(struct bpf_arena *are=
+na, long uaddr, long page_cnt,
+> >       return range_tree_clear(&arena->rt, *pgoff, page_cnt);
+> >  }
+> >
+> > -static long arena_alloc_pages_internal(struct bpf_arena *arena, long p=
+age_cnt,
+> > -             long uaddr, long pgoff, int node_id, bool sleepable)
+> > +static long arena_alloc_pages_sleepable(struct bpf_arena *arena, long =
+page_cnt,
+> > +             long uaddr, long pgoff, int node_id)
+> > +{
+> > +     u64 kern_vm_start =3D bpf_arena_get_kern_vm_start(arena);
+> > +     struct apply_range_data data;
+> > +     struct page **pages =3D NULL;
+> > +     unsigned long flags;
+> > +     u32 uaddr32;
+> > +     int ret, i;
+> > +
+> > +     pages =3D kvcalloc(page_cnt, sizeof(struct page *), GFP_KERNEL_AC=
+COUNT);
+> > +     if (!pages)
+> > +             return 0;
+> > +
+> > +     ret =3D bpf_map_alloc_pages(&arena->map, node_id, page_cnt, pages=
+);
+> > +     if (ret) {
+> > +             kvfree(pages);
+> > +             return 0;
+> > +     }
+> > +
+> > +     data.i =3D 0;
+> > +     data.pages =3D pages;
+> > +     data.arena =3D arena;
+> > +
+>
+> Why have this split?
+> Always use an approach of allocating pages outside of the lock?
+>
 
-Previously, __hid_bpf_allocate_data() assigned *data (device_data)
-before *size (allocated_data) without release semantics, and
-dispatch_hid_bpf_device_event() loaded hdev->bpf.allocated_data and
-initialized ctx_kern before checking whether hdev->bpf.device_data was
-non-NULL. A concurrent reader could therefore observe device_data != NULL
-with allocated_data == 0, skipping the memset() clear and dropping the
-report with -EINVAL (or dereferencing NULL if device_data was reloaded
-for the NULL check).
+Mainly to avoid multiple kmalloc_nolock() allocations outside the lock
+for the sleepable
+path. That should matter for larger allocations. The two separate
+paths also stay simpler
+than if we had a single path (at the cost of a bit of extra
+duplication). I can change to a single
+code path during respin if you feel these are not worth having two
+internal calls.
 
-Use WRITE_ONCE() and smp_store_release() in __hid_bpf_allocate_data() so
-allocated_data and the zeroed buffer are visible before device_data becomes
-non-NULL, and pair it with smp_load_acquire() in
-dispatch_hid_bpf_device_event() before reading allocated_data and
-initializing ctx_kern.
+> Considering severity of the issue bpf tree is probably appropriate.
 
-Fixes: 658ee5a64fcf ("HID: bpf: allocate data memory for device_event BPF programs")
-Assisted-by: LLM
-Signed-off-by: Bill Wendling <morbo@google.com>
----
- drivers/hid/bpf/hid_bpf_dispatch.c | 38 +++++++++++++++++++-----------
- 1 file changed, 24 insertions(+), 14 deletions(-)
+Will do.
 
-diff --git a/drivers/hid/bpf/hid_bpf_dispatch.c b/drivers/hid/bpf/hid_bpf_dispatch.c
-index d46779b63660..1a0c4fa6ed86 100644
---- a/drivers/hid/bpf/hid_bpf_dispatch.c
-+++ b/drivers/hid/bpf/hid_bpf_dispatch.c
-@@ -28,16 +28,10 @@ dispatch_hid_bpf_device_event(struct hid_device *hdev, enum hid_report_type type
- 			      size_t *buf_size, u32 *size, int interrupt, u64 source,
- 			      bool from_bpf)
- {
--	struct hid_bpf_ctx_kern ctx_kern = {
--		.ctx = {
--			.hid = hdev,
--			.allocated_size = hdev->bpf.allocated_data,
--			.size = *size,
--		},
--		.data = hdev->bpf.device_data,
--		.from_bpf = from_bpf,
--	};
-+	struct hid_bpf_ctx_kern ctx_kern;
- 	struct hid_bpf_ops *e;
-+	u8 *device_data;
-+	u32 allocated_data;
- 	int ret;
- 
- 	if (unlikely(hdev->bpf.destroyed))
-@@ -46,11 +40,26 @@ dispatch_hid_bpf_device_event(struct hid_device *hdev, enum hid_report_type type
- 	if (type >= HID_REPORT_TYPES)
- 		return ERR_PTR(-EINVAL);
- 
--	/* no program has been attached yet */
--	if (!hdev->bpf.device_data)
-+	/*
-+	 * No program has been attached yet. Pairs with smp_store_release()
-+	 * in __hid_bpf_allocate_data().
-+	 */
-+	device_data = smp_load_acquire(&hdev->bpf.device_data);
-+	if (!device_data)
- 		return data;
- 
--	memset(ctx_kern.data, 0, hdev->bpf.allocated_data);
-+	allocated_data = READ_ONCE(hdev->bpf.allocated_data);
-+	ctx_kern = (struct hid_bpf_ctx_kern){
-+		.ctx = {
-+			.hid = hdev,
-+			.allocated_size = allocated_data,
-+			.size = *size,
-+		},
-+		.data = device_data,
-+		.from_bpf = from_bpf,
-+	};
-+
-+	memset(ctx_kern.data, 0, allocated_data);
- 	memcpy(ctx_kern.data, data, *size);
- 
- 	rcu_read_lock();
-@@ -255,8 +264,9 @@ static int __hid_bpf_allocate_data(struct hid_device *hdev, u8 **data, u32 *size
- 	if (!alloc_data)
- 		return -ENOMEM;
- 
--	*data = alloc_data;
--	*size = alloc_size;
-+	WRITE_ONCE(*size, alloc_size);
-+	/* Pairs with smp_load_acquire() in dispatch_hid_bpf_device_event() */
-+	smp_store_release(data, alloc_data);
- 
- 	return 0;
- }
--- 
-2.56.0.rc1.310.g51773c2048-goog
-
+>
+> pw-bot: cr
