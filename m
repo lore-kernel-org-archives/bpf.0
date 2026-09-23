@@ -1,240 +1,253 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB757535FD0
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 14:02:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCFBA535FD0
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 14:04:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790172143; cv=none; b=pPv3d5VsZKIvGb8lMcOlCBPrTLVF0zfqJZOkMXVk1UumG+URHD+70IJVtumQOJbzNSfh9ozhcHzub+tzhf0I++inFk8v7Q2M8MNq2y4PspHrQDmQXe74mkYlBOBH7HuwSC3jhsuDxPJ8eaFlxNGYwqdbuc4JdiZivVoFnjj94MY=
+	t=1790172247; cv=none; b=iS8cP6tNiw/6VHiKRCnNKCo8qJsWYBnN3V+YFFEnYr0ULAMMlgi0wGJabtTNNQeB4wRcddQK/Y97isb5xmJ3L89BJLBAwhCRwJbE4MeRz6EjNgUujdLhX8qlxqTLZazTyLwu6Dj2pECWbWug4GvEwJ4hMT6J/W4ogHCI1OkD4nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790172143; c=relaxed/simple;
-	bh=DdSpORdAm2Up9OROt9ZDxetj1OlbN9o7iu6RF3psrBg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VvOSeapp7KcyOtxwBrGQvyU7yy4yGGFWE/RcDVrhxIsfoP6RfHr3rwxxcOJ4ci0mEMMMWjt09sTe+TDrtvYBke8AS7GO2l59Ws+aaznpR9qxUn1OfOWXmjzxudc04QjT2JijUoN2KZ6EDzYSNz6eAKEJbyZmegNmOCu+/XGiIbw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fDgMIfNi; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790172247; c=relaxed/simple;
+	bh=DWXEVR/nImyjT52a2AkdJ0/GtEHNPHqpW8sgbYZ1058=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iGErES8RAQ8XVRGwICn68zW0Z3sLPhIkje4IzZbvxem0lMAHerxDH/+mHRA3pLcXBpaHAWMxHzRLxBOfFajf3nEtWtmhZzhQawBrtqXqoY7BMnvBNTvGL3ztTBv1tmop4YWvswEzuI0EKZcymE3VQ0Ds0wt4GU74ejj1BIWaQLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=QkkJ8wPG; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=MvkoPSVe; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fDgMIfNi"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414DE1F000FF;
-	Wed, 23 Sep 2026 14:02:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790172141;
-	bh=Rm8lnHJhtTX9YGl9WQhg2aG//XzOc+O/zGHPeiTR8OU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=fDgMIfNiHKss30MrzvEmnWOqm3CLI9Oxdwi7sCPpuxMURGuqRiYQ9mA0qLYMXHl0g
-	 K1Yrqd2NW2U6dnNHS7zUn4KNdCN8abmhETAfclfSwCjQg390Zr5NOLjXHxhy9/q7zj
-	 1PeMa/1CZjyNjvAsnAobVVw3tFNoA/W9tYPGpIsCBjEzKFl5ljJgc6UDmaz6gaxDv4
-	 J7nHD3bZHY8uogs/1dBLmk6KSEdSduJkBurHb3WxmFvDmMiQJ1l7aKT3HVEY9jTpGu
-	 cv3W6BEBJHFOq9aI3BGw1QbvxdVgxPFSj3/0LK0PmNlfrjERLiO04UQugR29vfg2yR
-	 aVgptfnYMO+Ww==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	"Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Martin KaFai Lau" <martin.lau@linux.dev>,
-	"Eduard Zingerman" <eddyz87@gmail.com>,
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-	"Song Liu" <song@kernel.org>,
-	"Yonghong Song" <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add timer tests for a re-arming callback with a loop
-Date: Wed, 23 Sep 2026 07:01:50 -0700
-Message-ID: <20260923140152.4005097-3-puranjay@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260923140152.4005097-1-puranjay@kernel.org>
-References: <20260923140152.4005097-1-puranjay@kernel.org>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="QkkJ8wPG";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="MvkoPSVe"
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68NDKwJi2056502
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 14:04:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=kJg38mn8rmBJsAk2QglOyCXR
+	PXF+oFVPZQNgrbNVJQM=; b=QkkJ8wPGG4H7MZNmeQ3EgodSLg19SdxVhi8Zbcza
+	rTv+DJrguxu+5nbIlEvRtRXgdd0PRSh4Q2udsnqEOazKFTvk8La8JEdgjmND6QoE
+	rOSsZggtTdFUOuG+qp1oArYlSF89JiCyV0w9UDIv5WkuMh+wWc2WJ4MakL76f8jh
+	JLRE7JLUfVbPlsnxX8bsUcOCAuMDADhdv5mITUOMEj2ksH38OYd2gAqObiLjzP9m
+	UWp4GIiSMq5vdkeuz4rP5zApyrvTFFgnyugJWu3Cg6yoAWk16xK8r58yJFPvgdU1
+	QnmSkofXWudNH6aQinm4rEGxyl+T0KnNjIuKbZ8Z41OTfQ==
+Received: from mail-vs1-f71.google.com (mail-vs1-f71.google.com [209.85.217.71])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4gvfjv0613-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 14:04:04 +0000 (GMT)
+Received: by mail-vs1-f71.google.com with SMTP id ada2fe7eead31-78f2fe53829so1054243137.2
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 07:04:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1790172244; x=1790777044; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=kJg38mn8rmBJsAk2QglOyCXRPXF+oFVPZQNgrbNVJQM=;
+        b=MvkoPSVeNC2xzw2YWoedOd3j9MtFoRMNgnaVqkEJ7vvZTpLTjG7Cr4T+A/uqO4Kc78
+         fCAAvwK2w4lOo2V3DgTxOnQ/z/dVxfxa2RWZszCoy/vGPk7sRLWMP/ikb9ZmCu7uF4ix
+         975NFTX+vRBoBAsXPBsOvusD6tIEBU2cw30rxx/9n1o9a0qhhJNRtFDtrvHv+Hj7JkZO
+         GTdmdtMnDLbEX8U12foimTdVAAsimfb4REmIaYmhto+C5IusNp1dTGcW7kJ61Yt51i7e
+         mktDrVDHnVVuLet1fQqDDey5+qDj+NbbC1kfB+5YRamZxOoS1tO/xKArK9mvIxOPGL4p
+         Fq6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790172244; x=1790777044;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=kJg38mn8rmBJsAk2QglOyCXRPXF+oFVPZQNgrbNVJQM=;
+        b=CP+dgGslBYfM2Qbzh65X1s57G8BxEYidMZucLhgX1w6OwrRH0DRGS4sG82H+x+7tqr
+         lKSxQ9cVOhSxyF0sXHL7osoAXCCNlyhkoFUJjKnrBINx9tZUWwJcgN+2BHgB/gQybxLR
+         +q6enqPUjyIc/QqN7Tk1SvArJ/yR+ex4OYw87MYwI3E5Ih1+wh25YOyiluB2OhnGRimY
+         jNvpmyt5Kcl6GfbxeYcEFZl9ivgehpu3/7nsAhRB08uYYw+sSj4lxG7BP3GMcwUAoVYY
+         9B3Jy0llwTP67/7hXRLMaNPglQTo4m+pY3KxZt6fRn3k5FsluWyKZ+1xBiITWC4ZyusY
+         BVvA==
+X-Gm-Message-State: AFuF++mCWiazxvVISLqke2WFxEeTf+oT7C3rfsvUCLqoSn1XhVkcVKzk
+	WrTQyAX/b/uVMoWRvCWFZMyRZvygtsalbkyGB5bbFXE4x7DPD2kSXRv4w6gXKF7WJn+1rvWBBfV
+	BeiHwoyIep0qfcN4nR2CCQ5ekUYiDOg/Rw6K6NJSEyfVZnB7QFiukqS4=
+X-Gm-Gg: AYBFou2shRnxUIrDKZ03QTIlXgWcT8O3nT377fiFomeKi6AWmLDWoeiIvivR9Xqu08V
+	IMMwgqS9Sg+Ra0f9K6qSX7icedrDjGST/kyQwGCy03+TTByyGaqJQhReMdM2Oj4MlywkeA/PdZY
+	l7RawvzEoBtkNhmHt11uEH8la+7lCREOqOE/7pNPb1CV7wIm4NqpwExFuG2+xKh/KgsiAaaD3Fn
+	3GwehGrSCrlN+4m1AVbYKH5lsOxdwOcdTDw3m3ZWFr069elCvwsKtLLQ2FvQhnvd1/X0eSzkk1z
+	vk3CmzK2kwhpXeNp/mdqaXMS4Qk48OtrPO5zgWA7X0MhTaKaHpQ8VxtZaZCiuKp3/BWXdQehXfU
+	EBhTCgRvrsWnFCA==
+X-Received: by 2002:a05:6102:5107:b0:7a7:198b:6747 with SMTP id ada2fe7eead31-7ac1da2b2d5mr2613459137.28.1790172243525;
+        Wed, 23 Sep 2026 07:04:03 -0700 (PDT)
+X-Received: by 2002:a05:6102:5107:b0:7a7:198b:6747 with SMTP id ada2fe7eead31-7ac1da2b2d5mr2613382137.28.1790172242469;
+        Wed, 23 Sep 2026 07:04:02 -0700 (PDT)
+Received: from localhost ([188.216.77.92])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-488682673bdsm7168688f8f.2.2026.09.23.07.04.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2026 07:04:01 -0700 (PDT)
+Date: Wed, 23 Sep 2026 16:04:00 +0200
+From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+To: sashiko-reviews@lists.linux.dev
+Cc: bpf@vger.kernel.org
+Subject: Re: [PATCH net-next v2] net: stmmac: rework stmmac_rx to support XDP
+ rx multi-buff
+Message-ID: <arPcUDeg6_oclSHM@lore-desk>
+References: <20260921-stmmac-rx-mb-v2-1-6e826e1ff306@oss.qualcomm.com>
+ <20260922085901.1195F1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="AMKPKGpkZGkhIFnA"
+Content-Disposition: inline
+In-Reply-To: <20260922085901.1195F1F000FF@smtp.kernel.org>
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTIzMDA1NiBTYWx0ZWRfX1qtALz53GV1L
+ XzhFhL4kGuwPOmXFeOYQHiCpAd4S4ez/ZsgDZBJ5KeGMR82WaA8djR2HAYmfN+kVnzwJ+qmS0Y8
+ IE2+Inr/KbTfJGxv8ektvVCvJIQN7tlUxLU1KsrZ+UaDRaK/yN2IYG25Qux/a+OLytEQ4am+HAU
+ sA6+/H7PF2LJtmQF55DvSWMYbJh9SsGbVokh3W0kmBylIDI0BOpv8zduZUofkeCxvfIGZBt88rk
+ Ptvaul1BdPl3T2K9zW1DT+OUXflse4FnzmlNtVu1kuO80qIIQd1i94CuMwWrleif1gWcflgF+hQ
+ 5DH4EG6Ra0NKRwh1m9Acv7711zzJOJH+/bQsSgUyiFS4eMukugixj/rxhDTXbeoz2gFs0Qcm31k
+ LpZur3KSG36jV9NfzVXBvxZbtzpn/WEp2rp4G+GHed+nQNqWUSplRPd7wFDLWhpxWNIVC8vTLmS
+ iOYuLPSq6yF1sfcEuDA==
+X-Authority-Analysis: v=2.4 cv=aIxlOr9m c=1 sm=1 tr=0 ts=6ab3dc54 cx=c_pps
+ a=P2rfLEam3zuxRRdjJWA2cw==:117 a=WpTaRW6qxYHRGzLzQsVYzg==:17
+ a=VdqzKS8jKosA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=DJpcGTmdVt4CTyJn9g5Z:22 a=VwQbUJbxAAAA:8
+ a=EUspDBNiAAAA:8 a=c92rfblmAAAA:8 a=hWlZslobsKYm2kuh_kAA:9 a=wPNLvfGTeEIA:10
+ a=WFXUMWCSyfWjG0GqNEYA:9 a=ODZdjJIeia2B_SHc_B0f:22 a=GvGzcOZaWPEFPQC_NcjD:22
+X-Proofpoint-GUID: BzSBOkGbeHqNj6qhP3_exbWTnQeI876x
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTIzMDA1NiBTYWx0ZWRfX4M8Brpu/zpXX
+ +VWl9paWoHer17sxR+mXQpFhuB0qXPCzc/GxoOxcjdAvGz0vIoGtxDp6/KaUA5UIRybr4hmcDoi
+ 6KJ8ZShg2uslcc0vOoeBrB3BkzYXVwI=
+X-Proofpoint-ORIG-GUID: BzSBOkGbeHqNj6qhP3_exbWTnQeI876x
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-23_04,2026-09-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 spamscore=0 phishscore=0
+ malwarescore=0 lowpriorityscore=0 adultscore=0 bulkscore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609230056
 
-Existing timer callbacks either do not re-arm through
-bpf_timer_set_callback(), which is what starts another async callback
-entry, or do not reach a loop once they do. Cover that: loop_cb() re-arms
-itself and reaches a bounded loop through sum_to(), which is static and
-not inlined, so the loop is walked in a frame below the callback's rather
-than in a separately verified global subprog. Without the preceding fix
-the program is rejected with "infinite loop detected".
+--AMKPKGpkZGkhIFnA
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Telling async callback entries apart must not stop the verifier catching
-a real loop in a callback, and no existing test covers that either, so
-also check that a callback which never returns is still rejected.
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [Medium] net: stmmac: missing drop accounting when XDP fragment additio=
+n fails
+> --
+>=20
+> commit ec049e650a3e45a0def65bd264e60d42d99ff7f9
+> Author: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+>=20
+> net: stmmac: rework stmmac_rx to support XDP rx multi-buff
+>=20
+> This commit builds the xdp_buff by accumulating descriptors so the XDP
+> program runs on the full packet. It saves the state in rx_q->state across
+> NAPI poll boundaries and builds the skb from the head buffer and fragment=
+s.
+>=20
+> Link: https://lore.kernel.org/r/20260918-stmmac-rx-mb-v1-1-0b4517d404af@o=
+ss.qualcomm.com
+>=20
+> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/driver=
+s/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > index bf9e7e4cb1c31..7d1149511c55d 100644
+> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+>=20
+> [ ... ]
+>=20
+> > @@ -5866,6 +5932,33 @@ static int stmmac_rx(struct stmmac_priv *priv, i=
+nt limit, u32 queue)
+> >  			xdp_init_buff(&ctx.xdp, bufsz, &rx_q->xdp_rxq);
+> >  			xdp_prepare_buff(&ctx.xdp, page_address(buf->page),
+> >  					 buf->page_offset, buf1_len, true);
+> > +			first_desc =3D false;
+> > +			buf->page =3D NULL;
+> > +		} else if (buf1_len) {
+> > +			error |=3D !stmmac_build_xdp_frags(priv, rx_q, buf1_len,
+> > +							 buf->page,
+> > +							 buf->page_offset,
+> > +							 dma_dir, &ctx.xdp);
+>=20
+> [Severity: Medium]
+> When stmmac_build_xdp_frags() returns false, the error flag is set.
+>=20
+> This could happen when receiving large frames (e.g. Jumbo frames) on hard=
+ware
+> configured with small DMA buffers, leading to many descriptors per frame.
+>=20
+> Will this cause the packet to be silently dropped without updating
+> rx_dropped or rx_errors?
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- .../testing/selftests/bpf/prog_tests/timer.c  | 33 ++++++++++++
- tools/testing/selftests/bpf/progs/timer.c     | 50 ++++++++++++++++++-
- .../selftests/bpf/progs/timer_failure.c       | 29 +++++++++++
- 3 files changed, 111 insertions(+), 1 deletion(-)
+ack, I will fix it in v3.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/timer.c b/tools/testing/selftests/bpf/prog_tests/timer.c
-index 09ff21e1ad2f0..178223190b8b7 100644
---- a/tools/testing/selftests/bpf/prog_tests/timer.c
-+++ b/tools/testing/selftests/bpf/prog_tests/timer.c
-@@ -262,6 +262,34 @@ static int timer_cancel_async(struct timer *timer_skel)
- 	return 0;
- }
- 
-+/*
-+ * A timer callback which re-arms itself and reaches a loop through a call:
-+ * the two entries into the callback meet at the loop, in a frame of its own.
-+ */
-+static int timer_loop_rearm(struct timer *timer_skel)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	int err, prog_fd, i;
-+
-+	err = timer__attach(timer_skel);
-+	if (!ASSERT_OK(err, "timer_attach"))
-+		return err;
-+
-+	timer_skel->bss->loop_rearm = 1;
-+
-+	prog_fd = bpf_program__fd(timer_skel->progs.test_loop_rearm);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	if (!ASSERT_OK(err, "test_run"))
-+		return err;
-+
-+	for (i = 0; i < 100 && timer_skel->bss->loop_sum < 120 * 2; i++)
-+		usleep(1000);
-+
-+	timer__detach(timer_skel);
-+	ASSERT_EQ(timer_skel->bss->loop_sum, 120 * 2, "loop_sum");
-+	return 0;
-+}
-+
- static void test_timer(int (*timer_test_fn)(struct timer *timer_skel))
- {
- 	struct timer *timer_skel = NULL;
-@@ -287,6 +315,11 @@ void serial_test_timer(void)
- 	RUN_TESTS(timer_failure);
- }
- 
-+void serial_test_timer_loop_rearm(void)
-+{
-+	test_timer(timer_loop_rearm);
-+}
-+
- void serial_test_timer_stress(void)
- {
- 	test_timer(timer_stress);
-diff --git a/tools/testing/selftests/bpf/progs/timer.c b/tools/testing/selftests/bpf/progs/timer.c
-index d6d5fefcd9b13..832b94b8e8dff 100644
---- a/tools/testing/selftests/bpf/progs/timer.c
-+++ b/tools/testing/selftests/bpf/progs/timer.c
-@@ -6,6 +6,7 @@
- #include <errno.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
-+#include "bpf_experimental.h"
- 
- #define CLOCK_MONOTONIC 1
- #define CLOCK_BOOTTIME 7
-@@ -57,9 +58,12 @@ struct {
- 	__type(key, int);
- 	__type(value, struct elem);
- } abs_timer SEC(".maps"), soft_timer_pinned SEC(".maps"), abs_timer_pinned SEC(".maps"),
--	race_array SEC(".maps");
-+	race_array SEC(".maps"), loop_array SEC(".maps");
- 
- __u64 bss_data;
-+__u64 loop_sum;
-+int loop_rearm;		/* number of times loop_cb() re-arms itself */
-+__u64 zero;
- __u64 abs_data;
- __u64 err;
- __u64 ok;
-@@ -139,6 +143,50 @@ static int timer_cb1(void *map, int *key, struct bpf_timer *timer)
- 	return 0;
- }
- 
-+/*
-+ * Static and not inlined, so the loop is walked in a frame below the
-+ * callback's rather than in a separately verified global subprog.
-+ */
-+static __noinline int sum_to(__u64 n)
-+{
-+	__u64 i, sum = 0;
-+
-+	for (i = zero; i < n && can_loop; i++)
-+		sum += i;
-+
-+	return sum;
-+}
-+
-+/* Re-arms itself and reaches a bounded loop through a call. */
-+static int loop_cb(void *map, int *key, struct elem *val)
-+{
-+	loop_sum += sum_to(16);
-+
-+	if (loop_rearm > 0) {
-+		loop_rearm--;
-+		/* set_callback is what starts another async callback entry */
-+		bpf_timer_set_callback(&val->t, loop_cb);
-+		bpf_timer_start(&val->t, 0, 0);
-+	}
-+	return 0;
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG2(test_loop_rearm, int, a)
-+{
-+	struct bpf_timer *timer;
-+	int key = 0;
-+
-+	timer = bpf_map_lookup_elem(&loop_array, &key);
-+	if (!timer)
-+		return 0;
-+
-+	bpf_timer_init(timer, &loop_array, CLOCK_MONOTONIC);
-+	bpf_timer_set_callback(timer, loop_cb);
-+	bpf_timer_start(timer, 0, 0);
-+	return 0;
-+}
-+
- SEC("fentry/bpf_fentry_test1")
- int BPF_PROG2(test1, int, a)
- {
-diff --git a/tools/testing/selftests/bpf/progs/timer_failure.c b/tools/testing/selftests/bpf/progs/timer_failure.c
-index 5a2e9dabf1c6c..0538269101cac 100644
---- a/tools/testing/selftests/bpf/progs/timer_failure.c
-+++ b/tools/testing/selftests/bpf/progs/timer_failure.c
-@@ -66,3 +66,32 @@ long BPF_PROG2(test_bad_ret, int, a)
- 
- 	return 0;
- }
-+
-+/*
-+ * A real loop inside an async callback must still be rejected: both entries
-+ * into the callback have the same async_entry_cnt, so telling entries apart
-+ * does not apply here.
-+ */
-+static int timer_cb_infinite_loop(void *map, int *key, struct elem *val)
-+{
-+	for (;;) {}
-+
-+	return 0;
-+}
-+
-+SEC("fentry/bpf_fentry_test1")
-+__failure __msg("infinite loop detected")
-+long BPF_PROG2(test_infinite_loop_cb, int, a)
-+{
-+	struct bpf_timer *timer;
-+	int key = 0;
-+
-+	timer = bpf_map_lookup_elem(&timer_map, &key);
-+	if (timer) {
-+		bpf_timer_init(timer, &timer_map, CLOCK_BOOTTIME);
-+		bpf_timer_set_callback(timer, timer_cb_infinite_loop);
-+		bpf_timer_start(timer, 1000, 0);
-+	}
-+
-+	return 0;
-+}
--- 
-2.53.0-Meta
+>=20
+> > +			buf->page =3D NULL;
+> > +		}
+> > +
+> > +		if (buf2_len) {
+> > +			error |=3D !stmmac_build_xdp_frags(priv, rx_q, buf2_len,
+> > +							 buf->sec_page,
+> > +							 buf->page_offset,
+> > +							 dma_dir, &ctx.xdp);
+> > +			buf->sec_page =3D NULL;
+> > +		}
+> > +
+> > +		if (likely(status & rx_not_ls))
+> > +			goto read_again;
+> > +
+> > +		if (unlikely(error))
+> > +			goto error_free_frag;
+>=20
+> [ ... ]
+>=20
+> > @@ -5989,13 +6036,24 @@ static int stmmac_rx(struct stmmac_priv *priv, =
+int limit, u32 queue)
+> >  		rx_packets++;
+> >  		rx_bytes +=3D len;
+> >  		count++;
+> > +		continue;
+> > +error_free_frag:
+> > +		if (!first_desc) {
+> > +			stmmac_xdp_put_buff(rx_q, &ctx.xdp, -1);
+> > +			first_desc =3D true;
+> > +		}
+> > +		dev_kfree_skb(skb);
+> > +		skb =3D NULL;
+> > +		count++;
+>=20
+> [Severity: Medium]
+> If we reach this teardown path due to an error, the frame is consumed and
+> the polling count is incremented, but no interface drop statistics appear=
+ to
+> be updated.
+>=20
+> Could this make debugging MTU or fragmentation issues difficult, since dr=
+ops
+> (such as exceeding MAX_SKB_FRAGS) would be invisible to monitoring? Should
+> rx_dropped or rx_errors be incremented here?
 
+ack, I will fix it in v3.
+
+Regards,
+Lorenzo
+
+>=20
+> >  	}
+>=20
+> --=20
+> Sashiko AI review =B7 https://sashiko.dev/#/patchset/20260921-stmmac-rx-m=
+b-v2-1-6e826e1ff306@oss.qualcomm.com?part=3D1
+
+--AMKPKGpkZGkhIFnA
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCarPcUAAKCRA6cBh0uS2t
+rIbyAQCB2k2lvjMwy1yrSABsZIrY8BYsgfVYbS4r36VlHKfgrAD/V5MEZqQOmNJc
+0Sapm6EkCgFfU+AF07MBj5d6KMQF/wI=
+=WVtv
+-----END PGP SIGNATURE-----
+
+--AMKPKGpkZGkhIFnA--
