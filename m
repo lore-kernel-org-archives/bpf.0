@@ -1,208 +1,268 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8C33905F4
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 23:37:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26C1D400995
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 23:37:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790206629; cv=none; b=YZRAUFuX7nOSNqYrIFK6DkBrkG/yi8ECpYTJWAhhbTRVXr/FCYTmCriYiYnZAaPR58atmQ+0nt1DKwoGaqjv4rIMyazpZWygSkDD+aBMJCdADtmkMWgdFGnmuamp1f4Y87wfzAOh/zxIOWGKnLheV3K8fjiDrEyqrtPMzfOPTNo=
+	t=1790206632; cv=none; b=WHwrUie2XYAxq4zMbGY/Ztpv/v3AFWk/9Uv2QnhyLNxbFCMvjLA9Jiz+Uea0FVVGuKr89+hSe7FIky+fdDHdVY0nhA0HhSvgXaTOtcB7S9xlKuStmrlw9CXdHXfNRyAJRcTMuhtErxDjRl1gCHNHx2xumHBJ1w7UTfculsMkQaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790206629; c=relaxed/simple;
-	bh=kE5HN6IEtUDyR0NYi1ujgz85skb5wAv5kmZAU5Qdr6I=;
+	s=arc-20240116; t=1790206632; c=relaxed/simple;
+	bh=rBkYJ4vkBFl9C3+CrdvVSqZWv8Vo9Qzba6Qocv0jUJw=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=P8UzaTs4gzrTchvodGDCH8Tk2inAj3w9Bj26wbciz2wpyRCfNBSbvl/8mDMc/uP9Ua5lJFy2+uSo9pGjfNoCaCY3/Xa0tAlUoYT/pjOJ1kPqdGdaKR3NaZpuAZ7PrBx3mfEYEM7TM5p4mS46jH+uC2lHUTDo0upqNUM/51iXUh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EVwu1i2Q; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=BQqwbb+YItPPtLe+8PiS55dlh4VYnQtIeRwt1mv8s1Kcl+NACgaXpTXPgiA0Kl/s+rU724NGZNnDSfzPH5//abWVDupFX7vrtoQlDBbI3Azp4aKp2DPdZZ00j4EPnvvUN9mPaNrC/fib/Ec5YrVyIE1kFezd6KQH9FgTpa6ROLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ITAeHtzq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EVwu1i2Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E081F000FF;
-	Wed, 23 Sep 2026 23:37:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ITAeHtzq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C3171F000FF;
+	Wed, 23 Sep 2026 23:37:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790206627;
-	bh=N8hSfk6Wl2b9hDgHap0AFCiHOE+WoW++h15s8vo66bc=;
+	s=k20260515; t=1790206630;
+	bh=r3HpWZO0F4UpFzXwJg/20YlhF0166HvHabyef7qdMQg=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=EVwu1i2QXt6uDkeXcSXAlwIXg1KAFQaOQcfIlwtCmQSNe+QI3KCVU5c9npM4DQOi3
-	 8B297My7PNDuTZgeHwrytAlhMYYa8UugA4EkhawHfj1kcpPoOLi4ceDR9blYL2LSoj
-	 YDkjIzBFwR60aYTB2F8i02GzTjfH6OrkbCa6DwJooQoAq3TX57xrd/Q5BM0M3IsTjW
-	 RVEBYugLJLiDSJwMd9zRuQFx4fHfZ+PFg2YXnrCT0iECRBeXXPPHg252NBNFFGI5SF
-	 filzdlVChs0dP2xyPAruCqpPJ3gH6WVM8sarDIUIu9hGvkSPDJYb8y7x0jUBoqQvlI
-	 4r/9fVGrwGcEQ==
-Content-Type: multipart/mixed; boundary="===============5014498001170898123=="
+	b=ITAeHtzqCR9+lRT3wYvcaPQC5JPfWUK/0XQxtmCdArYapOrAVxOMdqAgLlcRLgQzW
+	 c3IY2k3OpSDbBzJ0B5BHo6kYZLdslwbOnHSi4rztCAldudZ16BY+l6la3CoscD5jPP
+	 gzED0nC7zHPPmVXcly4pjCAIBGJeFu+Erktx9ol2sH4DKNhBA3eusCeZxv4MmAhsDf
+	 ow6MjExC2slZkNj3yD1bn0L7LzttIailw1wVhYHq4TeUfu9mixk3MEHb6D6V7MPfht
+	 rj2VbONSCkZ3rE2JgtLFmEm5B/pfzAlosBuUdkVqlGE5cNTZOrHo6ulm66srLW4mBo
+	 o0Wh8XyT4CKLg==
+Content-Type: multipart/mixed; boundary="===============0462094654699547438=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <18bd41964fbba19f88700b86cb724513f56e55764ed20cf4986f7f7073355b35@mail.kernel.org>
-In-Reply-To: <20260923223554.562379-8-alexei.starovoitov@gmail.com>
-References: <20260923223554.562379-8-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 7/8] selftests/bpf: Adjust tests to widened loops
+Message-Id: <5073f8a5b50800bbcc6724199bafee6e347ea6de01e049b4c890723d8ba44726@mail.kernel.org>
+In-Reply-To: <20260923223554.562379-6-alexei.starovoitov@gmail.com>
+References: <20260923223554.562379-6-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 5/8] bpf: Add may_goto to loops that are not walked to the end
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 23 Sep 2026 23:37:05 +0000 (UTC)
+Date: Wed, 23 Sep 2026 23:37:09 +0000 (UTC)
 
---===============5014498001170898123==
+--===============0462094654699547438==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-> index 902a70d5afeb6..2dc37090d7a4f 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 60f483d7e4a96..fb35f8a7aedd2 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
 
 [ ... ]
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_cfg.c b/tools/testing/selftests/bpf/progs/verifier_cfg.c
-> index 3c3bb03e8217a..700eadf5d430a 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_cfg.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_cfg.c
-> @@ -98,8 +98,8 @@ l0_%=:	r1 = r0;					\
->
->  SEC("socket")
->  __description("conditional loop")
-> -__failure __msg("infinite loop detected")
-> -__msg_unpriv("back-edge")
-> +__success
-> +__failure_unpriv __msg_unpriv("back-edge")
->  __naked void conditional_loop(void)
->  {
->  	asm volatile ("					\
-
-Can this test pass on arches where the JIT doesn't support exceptions?
-Adding the may_goto guard depends on bpf_jit_supports_exceptions()
-returning true in the verifier's cannot_throw() check. When that check
-fails, the loop isn't widened, and the verifier rejects the program with
-"infinite loop detected" or "BPF program is too large" like before the
-series.
-
-Looking at bpf_jit_supports_exceptions() in kernel/bpf/verifier.c:
-
-	if (!env->prog->jit_requested || !bpf_jit_supports_exceptions())
-		return "JIT does not support exceptions";
-
-Arches where bpf_jit_supports_exceptions() is false include riscv64
-(which has an official config.riscv64, and DENYLIST.riscv64 already lists
-"exceptions # JIT does not support exceptions"), loongarch, ppc32, and x86
-without CONFIG_UNWINDER_ORC. Kernels with the JIT disabled are also
-affected.
-
-This applies to the other tests updated in this commit as well:
- - verifier_movsx: MOV32SX, S8, var_off u32_max
- - verifier_search_pruning: short_loop1
- - verif_scale_loop3
- - test_verifier: "calls: conditional call 6"
-
-None of these use __load_if_JITed(), __arch_x86_64, __arch_arm64,
-__arch_s390x gating, F_NEEDS_JIT_ENABLED, or DENYLIST.riscv64 entries,
-so they will fail instead of being skipped on those arches.
-
-Per the selftests guide, a test that fails when a capability is missing,
-instead of skipping, is a bug.
-
-Should these tests be gated on JIT plus exception support? For example,
-__load_if_JITed() and arch masks in the test_loader programs,
-F_NEEDS_JIT_ENABLED for test_verifier, and a skip for verif_scale_loop3,
-or adding them to DENYLIST.riscv64?
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-> index 195b27a51224f..280ccee336635 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
+> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
+> index 2add8001c3ec3..2b965fa4bacc0 100644
+> --- a/kernel/bpf/fixups.c
+> +++ b/kernel/bpf/fixups.c
 
 [ ... ]
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_precision.c b/tools/testing/selftests/bpf/progs/verifier_precision.c
-> index f4459561bf393..88358586e7964 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_precision.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_precision.c
-> @@ -152,22 +152,21 @@ __naked int bpf_store_release(void)
->  SEC("?raw_tp")
->  __success __log_level(2)
->  /*
-> - * Without the bug fix there will be no history between "last_idx 3 first_idx 3"
-> - * and "parent state regs=" lines. "R0=6" parts are here to help anchor
-> - * expected log messages to the one specific mark_chain_precision operation.
-> - *
-> - * This is quite fragile: if verifier checkpointing heuristic changes, this
-> - * might need adjusting.
-> + * The state is widened when it comes back to the loop head, so the exit test
-> + * is decided only on the first trip around the loop. "R0=2" parts are here to
-> + * help anchor expected log messages to that mark_chain_precision operation.
+> @@ -1537,6 +1537,143 @@ static int add_hidden_subprog(struct bpf_verifier_env *env, struct bpf_insn *pat
+>  /* Do various post-verification rewrites in a single program pass.
+>   * These rewrites simplify JIT and interpreter implementations.
 >   */
-> -__msg("2: (07) r0 += 1                       ; R0=6")
-> +__msg("2: (07) r0 += 1                       ; R0=2")
->  __msg("3: (35) if r0 >= 0xa goto pc+1")
-> -__msg("mark_precise: frame0: last_idx 3 first_idx 3 subseq_idx -1")
-> +__msg("mark_precise: frame0: last_idx 3 first_idx 1 subseq_idx -1")
->  __msg("mark_precise: frame0: regs=r0 stack= before 2: (07) r0 += 1")
->  __msg("mark_precise: frame0: regs=r0 stack= before 1: (07) r0 += 1")
-> -__msg("mark_precise: frame0: regs=r0 stack= before 4: (05) goto pc-4")
-> -__msg("mark_precise: frame0: regs=r0 stack= before 3: (35) if r0 >= 0xa goto pc+1")
-> -__msg("mark_precise: frame0: parent state regs= stack=:  R0=P4")
-> -__msg("3: R0=6")
-> +__msg("mark_precise: frame0: parent state regs=r0 stack=:  R0=P0")
-> +__msg("mark_precise: frame0: last_idx 0 first_idx 0 subseq_idx 1")
-> +__msg("mark_precise: frame0: regs=r0 stack= before 0: (b7) r0 = 0")
-> +__msg("3: R0=2")
-> +__msg("loop head 1 widened, pass 1")
-> +__msg("1: safe")
->  __naked int state_loop_first_last_equal(void)
->  {
->  	asm volatile (
-> @@ -175,11 +174,7 @@ __naked int state_loop_first_last_equal(void)
->  	"l0_%=:"
->  		"r0 += 1;"
->  		"r0 += 1;"
-> -		/* every few iterations we'll have a checkpoint here with
-> -		 * first_idx == last_idx, potentially confusing precision
-> -		 * backtracking logic
-> -		 */
-> -		"if r0 >= 10 goto l1_%=;"	/* checkpoint + mark_precise */
-> +		"if r0 >= 10 goto l1_%=;"	/* mark_precise */
->  		"goto l0_%=;"
->  	"l1_%=:"
->  		"exit;"
-
-Does this test still cover the original bug it was written to test?
-state_loop_first_last_equal was the regression test for precision
-backtracking when a checkpoint has first_idx == last_idx and jump history.
-The old expectations checked the "before 4: (05) goto pc-4" / "before 3:
-(35) if r0 >= 0xa" history between "last_idx 3 first_idx 3" and "parent
-state regs=" lines.
-
-As the commit message says, loop widening means that checkpoint no longer
-happens. The test now only checks one straight-line backtrack from the
-first trip. The name no longer describes what it tests, and nothing else
-covers the first_idx == last_idx case.
-
-The backtracking code in bpf_mark_chain_precision/get_prev_insn_idx is
-unchanged and still runs through the every-iteration walk in these cases:
-
-	loops that hold references or locks
-	callbacks
-	fallback walk after a widened walk fails
-	JITs without exception support
-
-So a regression of the original bug would no longer be caught on
-JIT-capable arches.
-
-Should there be a variant that forces the old walk, for example by holding
-a reference across the loop or using a program type where 0 is not a valid
-return value, and keep the old expectations for that variant?
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_search_pruning.c b/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
-> index f40e57251e941..7098b44faafc5 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
+> +/*
+> + * The walk with widened loops is done. Loops where some state came back to
+> + * a state that was still walked were not walked to the end and have to be
+> + * bounded at run time.
+> + */
+> +int bpf_commit_loop_guards(struct bpf_verifier_env *env)
+> +{
+> +	struct bpf_insn_aux_data *aux = env->insn_aux_data;
+> +	int i;
+> +
+> +	for (i = 0; i < env->prog->len; i++) {
+> +		if (!aux[i].scc || !test_bit(aux[i].scc, env->scc_converged))
+> +			continue;
+> +		if (aux[i].guard_impossible) {
+> +			verbose(env, "loop with back-edge at insn %d cannot be bounded\n", i);
+> +			return -E2BIG;
+> +		}
+> +		if (aux[i].guard_pending) {
+> +			aux[i].loop_guard = true;
+> +			env->seen_exception = true;
+> +		}
+> +	}
+> +	return 0;
+> +}
 
 [ ... ]
 
-> diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
-> index 8b94b87135bcf..c7c501bfc660a 100644
-> --- a/tools/testing/selftests/bpf/verifier/calls.c
-> +++ b/tools/testing/selftests/bpf/verifier/calls.c
+> +/*
+> + * The main pass went over the back-edge of jump @insn at @idx with a state
+> + * that stands for any number of iterations. Nothing bounds the loop at run
+> + * time, so add may_goto to the back-edge. The program cannot go on when
+> + * may_goto is out of budget: nothing but the loop was verified for the state
+> + * in the loop. Call bpf_throw(). The main pass made sure it can be called.
+> + *
+> + * back-edge is the jump:             back-edge is the edge to the next insn:
+> + *   if cond goto guard                 if cond goto target
+> + *   goto next                        guard:
+> + * guard:                               may_goto throw
+> + *   may_goto throw                     goto next
+> + *   goto head                        throw:
+> + * throw:                               r1 = 0
+> + *   r1 = 0                             call bpf_throw
+> + *   call bpf_throw                   next:
+> + * next:
+> + *
+> + * Returns the number of insns in @buf.
+> + */
+> +static int add_loop_guard(struct bpf_verifier_env *env, int idx, struct bpf_insn *buf,
+> +			  int stack_depth, u16 *stack_depth_extra)
+> +{
+> +	struct bpf_insn_aux_data *aux = &env->insn_aux_data[idx];
+> +	struct bpf_insn orig = env->prog->insnsi[idx];
+> +	bool ja = BPF_OP(orig.code) == BPF_JA;
+> +	bool gotol = ja && BPF_CLASS(orig.code) == BPF_JMP32;
+> +	int target = idx + 1 + (gotol ? orig.imm : orig.off);
+> +	bool guard_jump_edge = ja || aux->backedge_br;
+> +	struct bpf_insn *p = buf, *jeq, *skip = NULL, *back = NULL;
+> +	int stack_off, cnt, err = 0;
+> +
+> +	if (guard_jump_edge && !ja) {
+> +		*p = orig;
+> +		p->off = 1;
+> +		p++;
+> +		skip = p;
+> +		*p++ = BPF_JMP_A(0);
+> +	} else if (!guard_jump_edge) {
+> +		*p++ = orig;
+> +	}
+> +
+> +	/* the same insns may_goto is replaced with, see bpf_do_misc_fixups() */
+> +	if (bpf_jit_supports_timed_may_goto()) {
+> +		stack_off = -stack_depth - 16;
+> +		*stack_depth_extra = 16;
+> +		*p++ = BPF_LDX_MEM(BPF_DW, BPF_REG_AX, BPF_REG_10, stack_off);
+
+If a subprogram has multiple loops, will add_loop_guard() be called
+multiple times?
+
+Looking at bpf_commit_loop_guards():
+
+    for (i = 0; i < env->prog->len; i++) {
+        if (aux[i].guard_pending) {
+            aux[i].loop_guard = true;
+
+and bpf_do_misc_fixups():
+
+    for (i = 0; i < insn_cnt;) {
+        if (env->insn_aux_data[i + delta].loop_guard) {
+            cnt = add_loop_guard(env, i + delta, insn_buf, stack_depth,
+                                 &stack_depth_extra);
+
+add_loop_guard() gets called once per back-edge that needs a guard.
+
+When bpf_jit_supports_timed_may_goto() returns true, add_loop_guard()
+computes stack_off = -stack_depth - 16 and sets *stack_depth_extra = 16.
+
+If add_loop_guard() is called a second time for another back-edge in the
+same subprogram, it will compute the same stack_off and overwrite
+stack_depth_extra with 16 again.
+
+Both guards would use the same stack slot (-stack_depth - 16), corrupting
+each other's loop counters.
+
+Further down in bpf_do_misc_fixups(), the code checks:
+
+    int stack_slots = subprogs[i].stack_extra / 8;
+    int slots = delta;  // delta = 2 for timed
+    if (stack_slots > slots) {
+        verifier_bug(env, "stack_slots supports may_goto only");
+        return -EFAULT;
+    }
+
+With one guard: stack_extra=16, stack_slots=2, slots=2 => passes
+With two guards: stack_extra=16 (wrong!), stack_slots=2, slots=2 => passes
+but the guards share one slot
+
+Should the timed case accumulate stack_depth_extra?
+
+    stack_off = -stack_depth - *stack_depth_extra - 16;
+    *stack_depth_extra += 16;
+
+The non-timed case has a similar issue:
+
+> +	} else {
+> +		stack_off = -stack_depth - 8;
+> +		*stack_depth_extra = max_t(u16, *stack_depth_extra, 8);
+
+If a subprogram has multiple non-timed guards, they would all compute
+stack_off = -stack_depth - 8 and share the same stack slot.
+
+Should this also accumulate?
+
+    stack_off = -stack_depth - *stack_depth_extra - 8;
+    *stack_depth_extra += 8;
+
+[ ... ]
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 06dc269991b22..2fb5a66bd7d49 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -8322,6 +8322,73 @@ int bpf_widen_loop_head(struct bpf_verifier_env *env, int insn_idx, bool backedg
+>  	return 0;
+>  }
+>
+> +static bool program_returns_void(struct bpf_verifier_env *env);
+> +static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_range *range);
+> +
+> +/* Why bpf_throw() cannot be called in @st, NULL if it can. */
+> +static const char *cannot_throw(struct bpf_verifier_env *env, struct bpf_verifier_state *st)
+> +{
+> +	struct bpf_retval_range range;
+> +	struct bpf_func_state *frame;
+> +	int i;
+> +
+> +	if (!env->prog->jit_requested || !bpf_jit_supports_exceptions())
+> +		return "JIT does not support exceptions";
+
+This checks jit_requested, but nothing requires the program to actually use
+JIT at load time.
+
+When add_loop_guard() emits BPF_EMIT_CALL(bpf_throw), does anything set
+prog->jit_required?
+
+For an explicit bpf_throw() in the program, add_kfunc_call() sets
+env->prog->jit_required = 1, so a JIT failure rejects the program.
+
+For loop guards, on a kernel without CONFIG_BPF_JIT_ALWAYS_ON,
+bpf_fixup_call_args() can fall back to the interpreter:
+
+    if (env->prog->jit_requested && !bpf_prog_is_offloaded(env->prog->aux)) {
+        err = bpf_jit_subprogs(env);
+        if (err == 0)
+            return 0;
+        if (err == -EFAULT)
+            return err;
+    }
+#ifndef CONFIG_BPF_JIT_ALWAYS_ON
+    if (prog->jit_required) { ... return -EINVAL; }
+
+The exception callback makes subprog_cnt > 1, so JIT goes through
+bpf_jit_subprogs(). If that fails (e.g., JIT allocation failure), the
+out_cleanup path clears prog->jit_requested.
+
+Since jit_required is false, the program is accepted and
+__bpf_prog_select_runtime() lets it run in the interpreter.
+
+When the may_goto budget of a guarded loop runs out, the interpreter calls
+bpf_throw(). arch_bpf_stack_walk() finds no JITed BPF frame, so ctx.aux
+stays NULL.
+
+After WARN_ON_ONCE(!ctx.aux), bpf_throw() dereferences ctx.aux:
+
+    ctx.aux->bpf_exception_cb(cookie, ctx.sp +
+        ctx.aux->stack_arg_sp_adjust, ctx.bp, 0, 0);
+
+Can bpf_commit_loop_guards() set env->prog->jit_required = true when it
+commits a guard?
 
 [ ... ]
 
@@ -212,4 +272,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35929952632
---===============5014498001170898123==--
+--===============0462094654699547438==--
