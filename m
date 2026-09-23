@@ -1,340 +1,519 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E26B3B27D1
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 16:59:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790182766; cv=pass; b=LiLY1brjJhk2DZjtunG4hsgJy0qzSlIopwoRjq8Qk6HRJgh0h39Eg81Kl29w7jafrboW76xDR1mzBs7IEfIJoWCjWbRLLqBBWDExKrHgb72ksdwE61DegGnKjDjNxdgCWpE5faV+Omt997Fy2K5QWisZzJQiDSzySdmbAYbwld0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790182766; c=relaxed/simple;
-	bh=fpFeo4eYe48WkeIhCW1725t5yHGdlJu7KUlFzUcu8KY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RruYILosKv/gEOD/tkvKu2ZDrCcWel0i/peOw+qaVPQyfGIJ3xjq+g5a1Y58OqhRT3gtixShZVaJiJkHClPSetBn23fYU13ZgMf/DrfZ1VN4hEDlJ09yqPspPMHnQMS4n78U1KLRBiqQL43CNTw3rzev8DQcxcUsKyDLUKeItGc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jruN/ida; arc=pass smtp.client-ip=74.125.228.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76C27370D57;
+	Wed, 23 Sep 2026 17:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790182875; cv=none; b=sDaXkNYMlhOpip8bKYz/7tRZDxBtsN/fdANuJhv7zBULIvywqmovCiDYkx8auvXO01ywQqBCiDLPqSPzi2FzRo9hHRGYRgZH5i7F9cJSHHDCxnmf02BNR1rm/vNXK/0Ji0HU9apfxXABVPAc/er40rVQWcM/zFi0eWqKRrZXDRs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790182875; c=relaxed/simple;
+	bh=bKVapP0UqAcNDSXUwrjEiFbQ6T/H5UNYOsSn2NX0zaw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iwJAD24wNJYy3Ujoj29gMtlIR9nSe5SOxp2ZpbytpDuBDH/DVjDvrJBZO1PG7YbZrN/wzs2kOu1OYq/AEGI5o0waRYCrhalNDOUIl73Dw0XX7eFpG3IQHMBTKp0M2m/YJixR755DYNyk/v2pSsFDVeafsYxBydA72hBIyEotWYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZcQp1PRn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jruN/ida"
-Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc1cea50dc3so739091a12.3
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 09:59:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790182764; cv=none;
-        d=google.com; s=arc-20260327;
-        b=U8GdlZgQQgGtIQMkVY9BXqJ0a8TTnMluY5BDTtADK3rkaImBddJQAXWY3AmgVLnsUq
-         ApczIsxmxIgOHve3wLpJMuk2nsHDJw+Ux0onduiWjrTa7+ztZF9lSvyDyVmA6Bdb3CsX
-         +f17c7rp7MVTcCjwmtr6Myao3arDcVp91cRIaP5xG5kBkHt7iuHjeS2o7V14acCbc24M
-         knXnqna+5nQn7Rlz9LjaujJJao3HsLULZQrhVxlMJSFr9YC89iZzE0BfUf4W59TzPN+3
-         Zo0TXpzN1t+xIvmQi8fW4ZLwrgpKxWAtZRImeIKtKVV/ckGD/5r7uKSr0a5usMew1gUW
-         62jg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=0z2LCGrolad0TmyiVW1oFKGlwCLwRV8kBWH095wFzDA=;
-        fh=V1MTmoyojOGGmFV8yW6vTaXWNAzvGSAxEcrZTp6hJvk=;
-        b=D06IMvtwnFB35Govg/nlE83PARiEhfOTlXt/1xFVp2+l16R54ckHao0fTS+/SBAzLR
-         BLHfnm2pF7dOtPnyp60yyzFPEj2EYSE01nCCpl6qeVtgu2+hyPkG7fVG776VhIhQwfpD
-         N3UlxOjfuIlhC6NUDrwFtXNVMBxYXgmp6EcQzO4hDPa5MHjWzPD9zUGOtMkOUYTVdyez
-         X7Fa3A+8ROutVU1gyEOBSKr86YGo8fxAwEX+QZ6OYmFgiqBptwVAH27rJgw/U/iJ3WLM
-         ueWCOVcs6pWSb66JciG5raHh2lNBmEVKY58LiZGnBAPF6T3wk8o3y4htgNYdyiPbH4rZ
-         1CIA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790182764; x=1790787564; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=0z2LCGrolad0TmyiVW1oFKGlwCLwRV8kBWH095wFzDA=;
-        b=jruN/ida6hri/DDSCHNk0vUzwwjYnQaag6c5gLvKhsn0rMxoQbwdh5jc+DVE1HJ6Zh
-         bcJIHhQ4bKa4fzuWq/HZg3VGAFRK3w1fakm8xlwg9jGCgAdIoYdoJP2D3nirrqAyJrhr
-         gE/snScjfGZiT3ensOIsa5KVoqAniDF4uM2ytY510OjzSC9YoDXcwhDmCZyGEXANm/cY
-         CcpHGJutompK3j3ZpOPt9ZY79SALszCzYIuIvuqmQCpYlOOFjLaIjANoQxLGJyTeTzw5
-         qq+Ir5QQ2EXt8QNUoy59ZIII4pgjFvPkmvoqYJlhGdvf72i3Ofro4SO1dIY0xw3rRBzl
-         wLNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790182764; x=1790787564;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0z2LCGrolad0TmyiVW1oFKGlwCLwRV8kBWH095wFzDA=;
-        b=HDJJQTOxxTaJ6SRNOqdF1Qcb7d6UYTEwD5ZWbm+YTWqZcKLst3qvLCmDFBC0lr407e
-         UDQvbWY7Talqqp079DTlIaKnafJC69qIqZlZG1hmd3h4GYEJUzGylwkZQjUVnEeVaDOs
-         L3jbzCv5cmi5USDcLxhb6MIgovihfwY20/JXbuWo6LoLvc2dXo+deIt5giucemH8uTQN
-         CYpmKl4xL9jppJ6IojFVVwz5NN7HTPrdBa1sXibcOHUoZSQ854y67yGLnnztdYBRgR8h
-         3wmiuzCnKGxQYNzF25wixZqcG8QllomCH8UadcNBCU+StYpcNdtR+l83nMujlDRFNgqm
-         cOow==
-X-Forwarded-Encrypted: i=1; AKwUvBwF8MeMTK92fETGx9GYg4Bpw8enk5Z7k2wKWRVn92c5yfO3s5yrOWe3cq0cs7FvnwoydxU=@vger.kernel.org
-X-Gm-Message-State: AFuF++mUNuldlvm9PKPOdBAJ3WTiGVRd9VVx1Z5yESHHDexfp9CTpdha
-	LLmCzMMYW2vOknPPPXUMQRaodTStQuq2RKuT2hCEkIALcGDAPxbuWbg3pJWNfY4dsbSxpF1AkHe
-	IQUNyPa4fS/VlFGI+uw6esROXQQoFwLQV6A==
-X-Gm-Gg: AYBFou2Pnmq3uq3AGn5wY2ezaXb7HJ134410HooGdx494Kxu0k9kzgITR/21hpDTbHi
-	vtoTDuskK0rCsKyd7wmlibAaNVqzRAgwgpPH+mSHpBUXKDMP54Db718bN91gLhMP6gime+a6kyu
-	gg3x+IAnbbTc6t/3QLITL07STAWDw9A+dJy3jbkwg+4EB/uRsjFFSSKU1TFAICBCdJNGzanIGc/
-	aXH0KKDu6ZJtkInOHIL4RBNmmZiFT1MrW31NrwR0cds3uoxUHuDNdwqmGFJOZKDrcRWzxBOsESG
-	2qJeaIUir06cGfX+MlK7CasZ9jlN2PppNtPRZlfVvK+OY+ok4kUYxGTQPX0+zfXNZVeLteLdOxb
-	MxoSSzXfKlFt/u0A7PeJ4B9mM5eywn70HwfEgApK5iGoMNjc=
-X-Received: by 2002:a17:90b:384e:b0:39e:6c6a:4b79 with SMTP id
- 98e67ed59e1d1-3a07e71edddmr3282813a91.67.1790182763374; Wed, 23 Sep 2026
- 09:59:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZcQp1PRn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 561491F000FF;
+	Wed, 23 Sep 2026 17:00:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790182872;
+	bh=IJaDFCurzscncuVAFa6+vn22cawBT99G95jk4ztKBZA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ZcQp1PRnB0QUSVQpuckyN6NnlN+6MRRjA34s3hMaCu8POd1KGSSc4nMgFHRy/IHqA
+	 sCDiNxAphIqnCATmrKjeMRENal9GdJ2FHLLfzcPAvtBm4HQgDI17YB3YuuU9mmpey8
+	 M40JgzYg2AeW6EmFVSPS3WJjbwL+R67KY/9UZgXjOugo+2fSheSMvvUrWSx7A6M9mR
+	 6+iMWSwNyDGjyL6vwrzt+dUQVxRsaK8B7fh+pUqbFmYGQUDsh1+AuIGD6iO43coutn
+	 vK0C7KFxaOB2Put8d5jI/j+DturfIgk3i+kflpxHx5ltcdoSP5VGVCG112PoZDHOPD
+	 a2ikeQJL/niYA==
+Date: Wed, 23 Sep 2026 18:00:41 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen" <mkp@kernel.org>, 
+	Jaya Kumar <jayalk@intworks.biz>, Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, 
+	Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
+	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
+	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
+	Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
+	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
+	Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, selinux@vger.kernel.org, linux-sound@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, fuse-devel@lists.linux.dev
+Subject: Re: [PATCH v3 04/40] mm: consistently validate VMA state after
+ mmap[_prepare] hooks
+Message-ID: <arQFp_bwAHnmkp2V@gremlin>
+References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
+ <20260917-b4-mmap-prepare-vma-flag-sanify-v3-4-4583d8a23bca@kernel.org>
+ <CAJuCfpELP9Ups5XeS3PNbF=VtrfkYbkwRj-LuEHd7bLsTw4LUw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260922200208.3203834-1-puranjay@kernel.org> <CAEf4BzaifaWk+oHu-berWcKuS6Y5WfkcFTKZW-iMCPxG0=5i0w@mail.gmail.com>
- <CANk7y0g8Mh-je_o_nyXQ3zsGVeAsz2qMfgDtv4j-MXhAJ7PcMA@mail.gmail.com>
- <DLMNTHW945RO.TLPGJHZRWHUY@gmail.com> <CAEf4BzaR=oQz13GVxM+DjLkyjCjFmETvj9=bAuccLNKCXHJPaw@mail.gmail.com>
- <DLMUP8JM4L3U.1A9R0QUFFIQV9@gmail.com>
-In-Reply-To: <DLMUP8JM4L3U.1A9R0QUFFIQV9@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 23 Sep 2026 09:59:10 -0700
-X-Gm-Features: AcwNN1XkieR63ESkFYu00SSuhZwXy-1HyU4HvCrhz9c9cjVo_EhV2eDt2QbBorI
-Message-ID: <CAEf4BzYvSXNKu2qtBHEvmFg8sm3yJS_2xRUmuQhfjfx79VfgNQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v6 0/4] bpf: Add bpf_call_rcu() and bpf_call_rcu_tasks_trace()
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Puranjay Mohan <puranjay12@gmail.com>, bpf@vger.kernel.org, rcu@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, "Harry Yoo (Oracle)" <harry@kernel.org>, 
-	"Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpELP9Ups5XeS3PNbF=VtrfkYbkwRj-LuEHd7bLsTw4LUw@mail.gmail.com>
 
-On Wed, Sep 23, 2026 at 9:53=E2=80=AFAM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
->
-> On Wed Sep 23, 2026 at 6:45 PM CEST, Andrii Nakryiko wrote:
-> > On Wed, Sep 23, 2026 at 4:29=E2=80=AFAM Kumar Kartikeya Dwivedi
-> > <memxor@gmail.com> wrote:
-> >>
-> >> On Wed Sep 23, 2026 at 12:37 PM CEST, Puranjay Mohan wrote:
-> >> > On Wed, Sep 23, 2026 at 12:41=E2=80=AFAM Andrii Nakryiko
-> >> > <andrii.nakryiko@gmail.com> wrote:
-> >> >>
-> >> >> On Tue, Sep 22, 2026 at 1:02=E2=80=AFPM Puranjay Mohan <puranjay@ke=
-rnel.org> wrote:
-> >> >> >
-> >> >> > Changelog:
-> >> >> > v5: https://lore.kernel.org/all/20260921191407.1742386-1-puranjay=
-@kernel.org/
-> >> >> > Changes in v6:
-> >> >> > - Size struct bpf_rcu_head at 48 bytes rather than 64, matching w=
-hat the
-> >> >> >   inline state uses (Alexei)
-> >> >> > - Trim patch 1's changelog: drop the reasoning about possible fut=
-ure
-> >> >> >   layouts and about what the other async kfuncs return
-> >> >> > - Rebase on bpf-next/master
-> >> >> >
-> >> >> > v4: https://lore.kernel.org/all/20260915154248.3612028-1-puranjay=
-@kernel.org/
-> >> >> > Changes in v5:
-> >> >> > - Rename the "hash_map" subtest to "bad_map" so that it matches i=
-ts
-> >> >> >   helper test_call_rcu_bad_map() (bpf-ci)
-> >> >> > - Bump the callback counter after chain_err in the selftest callb=
-ack.
-> >> >> >   Userspace polls that counter and then reads chain_err, so it co=
-uld
-> >> >> >   still see the initial value before the re-arm had stored one, w=
-hich
-> >> >> >   let the chain subtest's assertion pass without checking anythin=
-g
-> >> >> > - Say in patch 1 why embedding struct rcu_head in a uapi struct i=
-s
-> >> >> >   acceptable here (Mykyta, Paul, Alexei)
-> >> >> > - Rebase on bpf-next/master
-> >> >> > v3: https://lore.kernel.org/all/20260915143640.36292-1-puranjay@k=
-ernel.org/
-> >> >> > Changes in v4:
-> >> >> > - Drop an unrelated hunk in bpf_async_update_prog_callback() that=
- turned
-> >> >> >   PTR_ERR(prog) into -EBADF.  That is the shared bpf_timer/bpf_wq=
- path
-> >> >> >   and bpf_prog_inc_not_zero() returns -ENOENT, so it would have c=
-hanged
-> >> >> >   the errno bpf_timer_set_callback() and bpf_wq_set_callback() re=
-port to
-> >> >> >   userspace (Sashiko).  No other changes from v3
-> >> >> > v2: https://lore.kernel.org/all/20260915114240.3269184-1-puranjay=
-@kernel.org/
-> >> >> > Changes in v3:
-> >> >> > - Move the bpf_call_rcu_tasks_trace() verifier bits from patch 1 =
-to
-> >> >> >   patch 3; patch 1 alone emitted "resolve_btfids: unresolved symb=
-ol
-> >> >> >   bpf_call_rcu_tasks_trace" (Sashiko)
-> >> >> > - Poll the callback counter with an acquire load (Sashiko)
-> >> >> > - teardown: v2 only checked that the program was eventually freed=
-, which
-> >> >> >   passes even if nothing was ever armed.  Also assert that the ch=
-ain ran,
-> >> >> >   and read the -EPERM back through an independent .bss fd
-> >> >> > - Use kern_sync_rcu() instead of open coding the grace-period wai=
-t
-> >> >> > - Return -EBADF rather than -ENOENT when the calling program is g=
-oing
-> >> >> >   away, matching bpf_task_work_schedule()
-> >> >> > - mismatch_map now pins the bpf_rcu_head label the new code emits=
-; it
-> >> >> >   passed with that branch removed.  Add a two_heads test, and wai=
-t for
-> >> >> >   each grace period separately in the chain test
-> >> >> > - Commit messages: correct the -EPERM parity claim, explain the i=
-nline
-> >> >> >   callback state and the struct size, motivate the tasks trace fl=
-avour
-> >> >> > v1: https://lore.kernel.org/all/20260907134552.1772405-1-puranjay=
-@kernel.org/
-> >> >> > Changes in v2:
-> >> >> > - Rebase on bpf-next/master
-> >> >> > - Use rcu_read_lock_dont_migrate() over open coding (Alexei)
-> >> >> > - Improve re-arming selftest to detect failure (Sashiko)
-> >> >> >
-> >> >> > BPF programs that manage their own objects have no way to run the=
-ir own
-> >> >> > logic once an RCU grace period has elapsed.  bpf_obj_drop() defer=
-s a
-> >> >> > free, but returning an index to an allocator or unpinning a resou=
-rce
-> >> >> > once readers are done has no equivalent.  sched_ext's BPF library=
- works
-> >> >> > around this today by pushing freed nodes onto a list and having a
-> >> >> > userspace thread call membarrier(MEMBARRIER_CMD_GLOBAL) and then =
-run a
-> >> >> > BPF program to reclaim them; it is the first intended user.
-> >> >> >
-> >> >> > Add:
-> >> >> >
-> >> >> >         int bpf_call_rcu(struct bpf_rcu_head *rh, void *map,
-> >> >> >                          int (*callback)(struct bpf_map *map, voi=
-d *key,
-> >> >> >                                          void *value));
-> >> >> >
-> >> >> > and bpf_call_rcu_tasks_trace(), same signature, which also waits =
-for
-> >> >> > sleepable programs.
-> >> >> >
-> >> >> > @rh is a struct bpf_rcu_head embedded in a value of @map, so the
-> >> >> > callback runs as callback(map, key, value) for the element it liv=
-es in
-> >> >> > and needs no cookie.  The field is only accepted in BPF_MAP_TYPE_=
-ARRAY,
-> >> >>
-> >> >> Isn't restricting this to BPF_MAP_TYPE_ARRAY unnecessarily restrict=
-ive
-> >> >> in practice? Do other APIs of similar kind have this limitation? E.=
-g.,
-> >> >> bpf_task_work_schedule() or timer, I don't think they limit user to
-> >> >> just ARRAY maps, it's way too inflexible.
-> >> >
-> >> > Right, bpf_timer and bpf_task_work take HASH/LRU_HASH/ARRAY. They ca=
-n
-> >> > because they can cancel: on element delete bpf_obj_free_fields() cal=
-ls
-> >>
-> >> bpf_obj_cancel_fields(). bpf_obj_free_fields() is no longer called exc=
-ept when
-> >> the object is being freed finally.
-> >>
-> >> > bpf_task_work_cancel_and_free(), which reaches task_work_cancel(), s=
-o
-> >> > a pending callback never runs against a recycled element.
-> >> > A queued RCU callback cannot be cancelled. rcu_barrier() is the only
-> >> > thing that waits for one, and it sleeps, so it is not callable from =
-an
-> >> > element delete. Array elements are never freed individually, which i=
-s
-> >> > what makes it safe.
-> >>
-> >> If cancel is a noop, can you not simply skip it on map update?
-> >>
-> >> It is a bit unfortunate we can't provide cancel semantics, it will be =
-yet
-> >> another divergence from how all other async callbacks work...sigh.
-> >>
-> >> >
-> >> > I can think of a complicated way to support hash maps but that would
-> >> > need making the state dynamically allocated and finding a way to
-> >> > cancel the callbacks. But I would do it as a follow-up if there is a
-> >> > real use case.
-> >>
-> >> That would mean allocation and frees, it is already quite expensive as=
- is for a
-> >> call_rcu() primitive (with the refcount bumps and atomics).
+On Wed, Sep 23, 2026 at 09:47:20AM -0700, Suren Baghdasaryan wrote:
+> On Thu, Sep 17, 2026 at 9:25 AM Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
 > >
-> > maybe so, but as is ARRAY is a severe limitation and makes a lot of
-> > cases either unusable or requiring extra sequential ID allocation
-> > logic to remap some HASH map entry to index in an ARRAY map, just so
-> > you can call rcu callback for a given kernel object stored in HASH
-> > map.
+> > When the f_op->mmap_prepare or deprecated f_op->mmap hooks are invoked, the
+> > driver might have done something crazy that is not permitted by the kernel.
 > >
-> > E.g., think about keep as set of sockets, or tasks, or whatnot in HASH
-> > or RHASHTABLE (especially the latter one with support for resizing).
-> > How would you do bpf_call_rcu() for them with unduly complications,
-> > limitations and a lot of waste (unlike HASH you can't have lazy memory
-> > allocation).
+> > Currently we check for three such cases in __mmap_new_file_vma(), but only
+> > if the legacy f_op->mmap hook is used:
+> >
+> > * Did sparc ADI result in invalid flags?
+> >
+> > * Did the driver alter vma->vm_start?
+> >
+> > * Did the driver make a file-backed mapping on a read-only file writable?
+> >
+> > Generalise these checks for both mmap_prepare and mmap and apply to all
+> > invocations of mmap_file(), the f_op->mmap and f_op->mmap_prepare handling
+> > in the core VMA code and the mmap_prepare compatibility layer.
+> >
+> > Also extend the vm_start check to vm_end also - drivers must not change the
+> > VMA range at all.
+> >
+> > We also WARN_ON_ONCE() on these conditions as they are things that should
+> > simply not occur in the kernel and it's important to call it out when it
+> > does.
+> >
+> > We invoke mmap_prepare_validate() after mmap_action_prepare(), as mmap
+> > actions often manipulate state in the descriptor thus providing the final
+> > state the VMA will be derived from.
+> >
+> > Also call mmap_validate_vma_flags() in insert_vm_struct() to ensure that
+> > special regions which are inserted (such as a VDSO or VVAR) also satisfy
+> > the sanity checks.
+> >
+> > This way every VMA established through an mmap hook, whether via mmap() or
+> > the compatibility layer, or inserted via insert_vm_struct(), has been
+> > validated. brk() VMAs never pass through a driver hook and so need no such
+> > check.
+> >
+> > While we're here, also fixup a couple disjoint blocks of #ifdef CONFIG_MMU.
+> >
+> > Finally, update the VMA userland tests to reflect the change.
+> >
+> > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 >
-> Yeah, I don't disagree. We would also need to support storing them in mor=
-e map
-> types to make it woth with arenas (which was one of the motivations for t=
-he
-> feature).
->
-> Perhaps it is better to make cancel a noop / unsupported and skip it when=
- a map
-> element is deleted. That will be the easiest path to enabling it, but it =
-does
-> create (perhaps surprising) divergence from some of the other async callb=
-ack
-> primitives.
+> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
 
-I don't see much need for cancellation, but a more useful/sane
-behavior would be rearming on subsequent calls to bpf_call_rcu(). This
-would also handle update/delete/reuse of entries. Not sure how hard it
-is to support that in kernel's call_rcu() implementation, though, but
-that would solve the problem, because it should always be OK to delay
-call_rcu() callback, but not the other way around (which is what would
-happen today because we will ignore subsequent bpf_call_rcu() calls).
+Thanks!
 
 >
-> That said, I do think performance should be a consideration for this API;=
- maybe
-> unlike other ones, I would expect that this could be called very frequent=
-ly. I
-
-I'm not sure why this has to be super high frequency API to use, tbh.
-You'd normally use this when cleaning up when some kernel object is
-freed, no? Sure that can be relatively frequent, but not to the point
-where we should be *that* concerned with refcount or atomics overhead
-per se (multi-cpu cache bouncing of refcounting is a concern, but not
-sure what you can do about that).
-
-> had concerns about prog refcount increment as well, but didn't really bri=
-ng it
-> up since it is something that can be addressed after the fact (maybe usin=
-g pcpu
-> refs). But once we promise supporting cancellation, it is hard to walk th=
-at
-> back. I think it's less of a concern for other async cb types. In practic=
-e,
-> except to support map semantics I don't know if anyone will use cancellat=
-ion API
-> either, the kernel side never grew such support.
+> > ---
+> >  mm/internal.h                   |  51 ++++++++++++--------
+> >  mm/util.c                       |  19 ++++++--
+> >  mm/vma.c                        | 100 ++++++++++++++++++++++++++++++++++------
+> >  mm/vma.h                        |  25 ++++++++--
+> >  tools/testing/vma/include/dup.h |  10 ++++
+> >  5 files changed, 163 insertions(+), 42 deletions(-)
+> >
+> > diff --git a/mm/internal.h b/mm/internal.h
+> > index fe576d468af4..970fb34898b2 100644
+> > --- a/mm/internal.h
+> > +++ b/mm/internal.h
+> > @@ -213,6 +213,24 @@ static inline void *folio_raw_mapping(const struct folio *folio)
+> >         return (void *)(mapping & ~FOLIO_MAPPING_FLAGS);
+> >  }
+> >
+> > +/*
+> > + * If the VMA has a close hook then close it, and since closing it might leave
+> > + * it in an inconsistent state which makes the use of any hooks suspect, clear
+> > + * them down by installing dummy empty hooks.
+> > + */
+> > +static inline void vma_close(struct vm_area_struct *vma)
+> > +{
+> > +       if (vma->vm_ops && vma->vm_ops->close) {
+> > +               vma->vm_ops->close(vma);
+> > +
+> > +               /*
+> > +                * The mapping is in an inconsistent state, and no further hooks
+> > +                * may be invoked upon it.
+> > +                */
+> > +               vma->vm_ops = &vma_dummy_vm_ops;
+> > +       }
+> > +}
+> > +
+> >  /*
+> >   * This is a file-backed mapping, and is about to be memory mapped - invoke its
+> >   * mmap hook and safely handle error conditions. On error, VMA hooks will be
+> > @@ -225,8 +243,12 @@ static inline void *folio_raw_mapping(const struct folio *folio)
+> >   */
+> >  static inline int mmap_file(struct file *file, struct vm_area_struct *vma)
+> >  {
+> > -       int err = vfs_mmap(file, vma);
+> > +       const unsigned long prev_start = vma->vm_start;
+> > +       const unsigned long prev_end = vma->vm_end;
+> > +       const vma_flags_t prev_flags = vma->flags;
 >
-> Anyway, overall the best path to me seems to be just enabling it as is an=
-d
+> nit: Might be just me but when I see prev_XXX in VMA-related code I
+> picture previous VMA in the address space. Maybe call these orig_XXX?
 
-you mean enabling for HASH or keeping it for ARRAY only? If the
-latter, my concern is that to support HASH we might need to change the
-internal structure and break that 48-byte size, so we should probably
-decide all this before we get this into the next Linux release.
+Sure, will change.
 
-> declaring bpf_obj_cancel_fields() on this noop. Existing synchronization =
-should
-> be enough to ensure callback stops getting issued once element is finally=
- freed
-> back to kernel allocator.
+>
+> > +       int err;
+> >
+> > +       err = vfs_mmap(file, vma);
+> >         /*
+> >          * Either we tried to call the file hook for mmap() and an error arose
+> >          * or a driver set vma->vm_ops = NULL intending there to be no VMA
+> > @@ -239,26 +261,17 @@ static inline int mmap_file(struct file *file, struct vm_area_struct *vma)
+> >          */
+> >         if (unlikely(err || !vma->vm_ops))
+> >                 vma->vm_ops = &vma_dummy_vm_ops;
+> > +       if (unlikely(err))
+> > +               return err;
+> >
+> > -       return err;
+> > -}
+> > -
+> > -/*
+> > - * If the VMA has a close hook then close it, and since closing it might leave
+> > - * it in an inconsistent state which makes the use of any hooks suspect, clear
+> > - * them down by installing dummy empty hooks.
+> > - */
+> > -static inline void vma_close(struct vm_area_struct *vma)
+> > -{
+> > -       if (vma->vm_ops && vma->vm_ops->close) {
+> > -               vma->vm_ops->close(vma);
+> > -
+> > -               /*
+> > -                * The mapping is in an inconsistent state, and no further hooks
+> > -                * may be invoked upon it.
+> > -                */
+> > -               vma->vm_ops = &vma_dummy_vm_ops;
+> > +       err = mmap_hook_validate(prev_start, prev_end, &prev_flags, vma);
+> > +       if (unlikely(err)) {
+> > +               vma->vm_start = prev_start;
+> > +               vma->vm_end = prev_end;
+> > +               vma_close(vma);
+> >         }
+> > +
+> > +       return err;
+> >  }
+> >
+> >  /* unmap_vmas is in mm/memory.c */
+> > diff --git a/mm/util.c b/mm/util.c
+> > index 016932780925..bdd5923eebc7 100644
+> > --- a/mm/util.c
+> > +++ b/mm/util.c
+> > @@ -1224,19 +1224,28 @@ EXPORT_SYMBOL(compat_set_desc_from_vma);
+> >  int __compat_vma_mmap(struct vm_area_desc *desc,
+> >                       struct vm_area_struct *vma)
+> >  {
+> > +       struct vm_area_desc prev_desc;
+> >         int err;
+> >
+> > +       /* Derive state prior to mmap_prepare hook. */
+> > +       compat_set_desc_from_vma(&prev_desc, desc->file, vma);
+> >         /* Perform any preparatory tasks for mmap action. */
+> >         err = mmap_action_prepare(desc);
+> > -       if (err) {
+> > -               if (desc->vm_file != vma->vm_file)
+> > -                       fput(desc->vm_file);
+> > -               return err;
+> > -       }
+> > +       if (err)
+> > +               goto err_put;
+> > +       /* Check the caller did nothing crazy. */
+> > +       err = mmap_prepare_validate(&prev_desc, desc);
+> > +       if (err)
+> > +               goto err_put;
+> >         /* Update the VMA from the descriptor. */
+> >         compat_set_vma_from_desc(vma, desc);
+> >         /* Complete any specified mmap actions. */
+> >         return mmap_action_complete(vma, &desc->action, /*is_compat=*/true);
+> > +
+> > +err_put:
+> > +       if (desc->vm_file != vma->vm_file)
+> > +               fput(desc->vm_file);
+> > +       return err;
+> >  }
+> >  EXPORT_SYMBOL(__compat_vma_mmap);
+> >
+> > diff --git a/mm/vma.c b/mm/vma.c
+> > index 05d2c676672e..d6ed10cefc8f 100644
+> > --- a/mm/vma.c
+> > +++ b/mm/vma.c
+> > @@ -2623,16 +2623,6 @@ static int __mmap_new_file_vma(struct mmap_state *map,
+> >                 return error;
+> >         }
+> >
+> > -       /* Drivers cannot alter the address of the VMA. */
+> > -       WARN_ON_ONCE(map->addr != vma->vm_start);
+> > -       /*
+> > -        * Drivers should not permit writability when previously it was
+> > -        * disallowed.
+> > -        */
+> > -       VM_WARN_ON_ONCE(!vma_flags_same_pair(&map->vma_flags, &vma->flags) &&
+> > -                       !vma_flags_test(&map->vma_flags, VMA_MAYWRITE_BIT) &&
+> > -                       vma_test(vma, VMA_MAYWRITE_BIT));
+> > -
+> >         map->vma_flags = vma->flags;
+> >
+> >         return 0;
+> > @@ -2710,11 +2700,6 @@ static int __mmap_new_vma(struct mmap_state *map, struct vm_area_struct **vmap,
+> >                 vma->flags = map->vma_flags;
+> >         }
+> >
+> > -#ifdef CONFIG_SPARC64
+> > -       /* TODO: Fix SPARC ADI! */
+> > -       WARN_ON_ONCE(!arch_validate_flags(map->vm_flags));
+> > -#endif
+> > -
+> >         /* Lock the VMA since it is modified after insertion into VMA tree */
+> >         vma_start_write(vma);
+> >         vma_iter_store_new(vmi, vma);
+> > @@ -2777,6 +2762,80 @@ static void __mmap_complete(struct mmap_state *map, struct vm_area_struct *vma)
+> >         vma_set_page_prot(vma);
+> >  }
+> >
+> > +/* Check to ensure that the VMA flags of a newly mapped VMA are sane. */
+> > +static int mmap_validate_vma_flags(const vma_flags_t *flags)
+> > +{
+> > +#ifdef CONFIG_SPARC64
+> > +       const vm_flags_t legacy_flags = vma_flags_to_legacy(*flags);
+> > +
+> > +       /* TODO: Fix SPARC ADI! */
+> > +       if (WARN_ON_ONCE(!arch_validate_flags(legacy_flags)))
+> > +               return -EINVAL;
+> > +#endif
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +/* Check to ensure a driver hasn't done something crazy. */
+> > +static int mmap_validate(unsigned long prev_start, unsigned long prev_end,
+> > +                        unsigned long curr_start, unsigned long curr_end,
+> > +                        const vma_flags_t *prev_flags,
+> > +                        const vma_flags_t *curr_flags)
+> > +{
+> > +       bool was_maywrite, is_maywrite;
+> > +
+> > +       /* Drivers cannot alter the range of the VMA. */
+> > +       if (WARN_ON_ONCE(prev_start != curr_start || prev_end != curr_end))
+> > +               return -EINVAL;
+> > +
+> > +       was_maywrite = vma_flags_test(prev_flags, VMA_MAYWRITE_BIT);
+> > +       is_maywrite = vma_flags_test(curr_flags, VMA_MAYWRITE_BIT);
+> > +
+> > +       /* A driver may not make a previously unwritable mapping writable. */
+> > +       if (WARN_ON_ONCE(!was_maywrite && is_maywrite))
+> > +               return -EINVAL;
+> > +
+> > +       return mmap_validate_vma_flags(curr_flags);
+> > +}
+> > +
+> > +/**
+> > + * mmap_prepare_validate() - Ensure the driver hasn't violated invariants in its
+> > + * f_op->mmap_prepare hook.
+> > + * @prev_desc: The VMA descriptor prior to the mmap_prepare hook being called.
+> > + * @desc: The VMA descriptor after the mmap_prepare hook has been called.
+> > + *
+> > + * Returns: 0 on success, otherwise an error.
+> > + */
+> > +int mmap_prepare_validate(const struct vm_area_desc *prev_desc,
+> > +                         const struct vm_area_desc *desc)
+> > +{
+> > +       return mmap_validate(prev_desc->start, prev_desc->end,
+> > +                            desc->start, desc->end,
+> > +                            &prev_desc->vma_flags, &desc->vma_flags);
+> > +}
+> > +
+> > +/**
+> > + * mmap_hook_validate() - Ensure the driver hasn't violated invariants in
+> > + * its f_op->mmap hook.
+> > + * @prev_start: The start of the mapping prior to the mmap hook.
+> > + * @prev_end: The end of the mapping prior to the mmap hook.
+> > + * @prev_flags: The VMA flags set for the VMA prior to the mmap hook.
+> > + * @vma: The VMA after the hook has been applied.
+> > + *
+> > + * Returns: 0 on success, otherwise an error.
+> > + */
+> > +int mmap_hook_validate(unsigned long prev_start, unsigned long prev_end,
+> > +                      const vma_flags_t *prev_flags,
+> > +                      const struct vm_area_struct *vma)
+> > +{
+> > +       const unsigned long start = vma->vm_start;
+> > +       const unsigned long end = vma->vm_end;
+> > +       const vma_flags_t *flags = &vma->flags;
+> > +
+> > +       return mmap_validate(prev_start, prev_end, start, end, prev_flags,
+> > +                            flags);
+> > +}
+> > +
+> >  static int call_action_prepare(struct mmap_state *map,
+> >                                struct vm_area_desc *desc)
+> >  {
+> > @@ -2803,6 +2862,7 @@ static int call_action_prepare(struct mmap_state *map,
+> >  static int call_mmap_prepare(struct mmap_state *map,
+> >                 struct vm_area_desc *desc)
+> >  {
+> > +       const struct vm_area_desc prev_desc = *desc;
+> >         int err;
+> >
+> >         /* Invoke the hook. */
+> > @@ -2822,6 +2882,11 @@ static int call_mmap_prepare(struct mmap_state *map,
+> >         if (err)
+> >                 return err;
+> >
+> > +       /* Check the caller did nothing crazy. */
+> > +       err = mmap_prepare_validate(&prev_desc, desc);
+> > +       if (err)
+> > +               return err;
+> > +
+> >         /* Update fields permitted to be changed. */
+> >         map->pgoff = desc->pgoff;
+> >         map->vma_flags = desc->vma_flags;
+> > @@ -3457,10 +3522,15 @@ int __vm_munmap(unsigned long start, size_t len, bool unlock)
+> >  int insert_vm_struct(struct mm_struct *mm, struct vm_area_struct *vma)
+> >  {
+> >         unsigned long charged = vma_pages(vma);
+> > +       int err;
+> >
+> >         if (find_vma_intersection(mm, vma->vm_start, vma->vm_end))
+> >                 return -ENOMEM;
+> >
+> > +       err = mmap_validate_vma_flags(&vma->flags);
+> > +       if (err)
+> > +               return err;
+> > +
+> >         if (vma_test(vma, VMA_ACCOUNT_BIT) &&
+> >              security_vm_enough_memory_mm(mm, charged))
+> >                 return -ENOMEM;
+> > diff --git a/mm/vma.h b/mm/vma.h
+> > index f15faa83f3d6..b2c3bc832a48 100644
+> > --- a/mm/vma.h
+> > +++ b/mm/vma.h
+> > @@ -782,14 +782,19 @@ struct vm_area_struct *vm_area_alloc(struct mm_struct *mm);
+> >  struct vm_area_struct *vm_area_dup(struct vm_area_struct *orig);
+> >  void vm_area_free(struct vm_area_struct *vma);
+> >
+> > -/* vma_exec.c */
+> >  #ifdef CONFIG_MMU
+> > +int mmap_prepare_validate(const struct vm_area_desc *prev_desc,
+> > +                         const struct vm_area_desc *desc);
+> > +
+> > +int mmap_hook_validate(unsigned long prev_start, unsigned long prev_end,
+> > +                      const vma_flags_t *prev_flags,
+> > +                      const struct vm_area_struct *vma);
+> > +
+> > +/* vma_exec.c */
+> >  int create_init_stack_vma(struct mm_struct *mm, struct vm_area_struct **vmap,
+> >                           unsigned long *top_mem_p);
+> >  int relocate_vma_down(struct vm_area_struct *vma, unsigned long shift);
+> > -#endif
+> >
+> > -#ifdef CONFIG_MMU
+> >  /*
+> >   * Denies creating a writable executable mapping or gaining executable permissions.
+> >   *
+> > @@ -838,6 +843,20 @@ static inline bool map_deny_write_exec(const vma_flags_t *old,
+> >
+> >         return false;
+> >  }
+> > +#else
+> > +static inline int mmap_prepare_validate(const struct vm_area_desc *prev_desc,
+> > +                                       const struct vm_area_desc *desc)
+> > +{
+> > +       return 0;
+> > +}
+> > +
+> > +static inline int mmap_hook_validate(unsigned long prev_start,
+> > +                                    unsigned long prev_end,
+> > +                                    const vma_flags_t *prev_flags,
+> > +                                    const struct vm_area_struct *vma)
+> > +{
+> > +       return 0;
+> > +}
+> >  #endif
+> >
+> >  struct vm_area_struct *__install_special_mapping(struct mm_struct *mm,
+> > diff --git a/tools/testing/vma/include/dup.h b/tools/testing/vma/include/dup.h
+> > index 2fd422789717..2986ae6ca1e5 100644
+> > --- a/tools/testing/vma/include/dup.h
+> > +++ b/tools/testing/vma/include/dup.h
+> > @@ -1359,13 +1359,23 @@ static inline int vfs_mmap_prepare(struct file *file, struct vm_area_desc *desc)
+> >         return file->f_op->mmap_prepare(desc);
+> >  }
+> >
+> > +int mmap_prepare_validate(const struct vm_area_desc *prev_desc,
+> > +                         const struct vm_area_desc *desc);
+> > +
+> >  static inline int __compat_vma_mmap(struct vm_area_desc *desc,
+> >                 struct vm_area_struct *vma)
+> >  {
+> > +       struct vm_area_desc prev_desc;
+> >         int err;
+> >
+> > +       /* Derive state prior to mmap_prepare hook. */
+> > +       compat_set_desc_from_vma(&prev_desc, desc->file, vma);
+> >         /* Perform any preparatory tasks for mmap action. */
+> >         err = mmap_action_prepare(desc);
+> > +       if (err)
+> > +               return err;
+> > +       /* Check the caller did nothing crazy. */
+> > +       err = mmap_prepare_validate(&prev_desc, desc);
+> >         if (err)
+> >                 return err;
+> >         /* Update the VMA from the descriptor. */
+> >
+> > --
+> > 2.55.0
+> >
+
+--
+Cheers, Lorenzo
