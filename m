@@ -1,127 +1,215 @@
-Received: from mail-lf2-f12.google.com (mail-lf2-f12.google.com [74.125.229.204])
+Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70386422E08
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 11:11:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24CFD49EC68
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 11:29:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790161864; cv=none; b=nFuNhBZidd46/4rXBrlrfsYyI6j1dvMlNu4su7aBDdXgvH/BVRVd4GOYkvxNL8cA+98Oh/Subs0vkN8akgKpj6YV+zDRHBaUJhYQqJQFqsDpmUb6G3tCdQEIHNIPh/uOvAPLXt5kXl+2nc4Ulro1vrCwAQVPXtX8MWwAn8FoEeU=
+	t=1790163002; cv=none; b=tMMTmjtMXeEw4jE3p+6fa/fozGAew8Pxr5JievNp2nwfYiXPVcmu5ijuqiBnOh1s3Q6qKh9yoZkb7Ijt7aROsNZg5fe3VN0h3DD225swMpf4UQw1wurfmzrrLvLELQqh8AY1QnVpfQf7HzovI+s0HmtiSqejrZuc8kvREiIc1Os=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790161864; c=relaxed/simple;
-	bh=Y1MeJjIUqtIcD45CjDERSrfL5qZNM44AZrKbswPZd44=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cAgASxpS3UgKB73AMT7SpMNnWiXstKDDDc4LkUd15CtgMsR5RtaXMkmWkhEDqPD6v/lO5jZnQdkR8/XoiK+Mbd14bdBWHJW7ILXQUvte87m2Qf24qVV1xCBiMISEJofzwkW58cyJ1YDyukYZ4qspey6RbjVdmNIc6NQ68+kJ+Uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anyfinetworks.com; spf=none smtp.mailfrom=anyfinetworks.com; dkim=pass (2048-bit key) header.d=anyfinetworks-com.20251104.gappssmtp.com header.i=@anyfinetworks-com.20251104.gappssmtp.com header.b=kQnWQvwV; arc=none smtp.client-ip=74.125.229.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=anyfinetworks.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=anyfinetworks.com
+	s=arc-20240116; t=1790163002; c=relaxed/simple;
+	bh=opWqWSXnGRjYbUf5OxwbuCPUUj3bvnft5t6/JcjWp8k=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=lFRSkwUbDrIc5CcLQQ6960NV7MaU9ILUpYicYFIwYS8bk9E6/XIz/7YBrnzT21B/CRTAICZgJzo6H0J+Bjhfvv84fF1UXH6/6KeGB6MIruDv+5pPN7K1K2kDfDcvHnGTeOqEoyGRPe8g5cOymtI0Sjmbb55eqsJ0NFYLYf+BACw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YKwmrzHO; arc=none smtp.client-ip=74.125.225.75
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=anyfinetworks-com.20251104.gappssmtp.com header.i=@anyfinetworks-com.20251104.gappssmtp.com header.b="kQnWQvwV"
-Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b5e4f13d76so691876e87.3
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 04:11:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YKwmrzHO"
+Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-483960225ccso198870f8f.1
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 04:29:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=anyfinetworks-com.20251104.gappssmtp.com; s=20251104; t=1790161858; x=1790766658; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=6F6IrMVbkAxuPsXSBU2GCL4E74W3Y9sNczvVD9Ex120=;
-        b=kQnWQvwVasq7adqWT9Slkc7J5ZkUUv3mCOWZ2r4wpRIgh2pxTcG9W4NsX+Sv5cu8iY
-         c2gbdKY/4/78qcUAHWsVYKmUAKlPcjBjVQUwRQn3KKT1aXTGqVBod9Ky3tlX0B71WY/P
-         UE2Zv0FkFJMS9D71T04+MqQeTktiSgEzlu3Ewme40FIDQpLwb9Lv0BsKSuPqOaCEMV2W
-         YcJboTJB1bZzjicaUZNnJ5EX2At5mwC7R1XQQTA6rLKEB8GXneG6wdjz+7US/Jp92AV+
-         e+qb/l8purEmF+266z4RkQGyIw4vUZ9DIS0FprE2ZQ7ACi4qvQUCYhFG4t+WvC9sKiiw
-         TorQ==
+        d=gmail.com; s=20251104; t=1790162995; x=1790767795; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=5TJi5pYYgXT5a+4BNFFHNYyeAaTkJJY7o8Za71zVW8k=;
+        b=YKwmrzHOa8Jv1ydKrAvZTY/oA2BVptcvSs0NzieSMnhhSzRPBP3itghlC8DdbNmo6y
+         TsHMHp13WPapCmW7KMnsR9Pw8FB6cd+STLcdgRrzLFOC1iVUTgXscIN9qg7Yl5MciA/B
+         sApYddJeG2H3s4FoSWlCv11oYR+6NsKLzhOzoLakNt9T8HtrmhmLrT7+IMIG6ayTHUNp
+         eK/SvtScLuH0Di4ocfk1qIKyZD5HXjGV3m+TBXzJnh767dn/7kiQc7XdMTDa59rHNh7x
+         syspQfzoKMflix+pJmkJDBzzIrw2fv3Q/GZP+lxElsImzmJmTQasZHWrLtuC5A1ZkKIW
+         LxIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790161858; x=1790766658;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6F6IrMVbkAxuPsXSBU2GCL4E74W3Y9sNczvVD9Ex120=;
-        b=Fu07P3XExODy38ttDiDzYYuEmRrXwtcdv2n87imx/0yGmlN09b1F6rPpIG8tj8OhKl
-         sBONOgaGfbMh0OzVZAhZTpqaWtJnmnhKWav+L8+ypwLSaTXc3lDHg8Gicf0HwpECSTZ2
-         dgXo277scs47H1xhYyHQlcabpgN4kpAVVrlhNSqXdDsnCcom2GfEmaigNcPu3/9TR0hQ
-         Rum2I4LgM2Mz1CEiy3CfhodV7g5Ynzm9FeDVfuufC+SI3hMDztgVx1cIDu1rBLbK+Vub
-         iIl35wSTHJhTo9qrKa/OG8T5NF8A24i48iq51t+ADJTTHClQx9SzxkatpQXWDVXbryHx
-         4+9A==
-X-Forwarded-Encrypted: i=1; AKwUvBzze+v1UKV1JhRFvRH7fDeyFU1Dw3SbEdLfNDrcb73jK0egWcXTn9aaZrC8H+IRbmE+TW0=@vger.kernel.org
-X-Gm-Message-State: AFuF++m5eOSjaYUBPqD/hIQcvpReEOmRycfKjE0HRUr/Gs8NMIYLy+Bz
-	CEny5/PXpAHM1mo/P6kG+S9p0aFDk1NyJ2WVYJRThObmjQi+j7ABhPPEO3RXTlehP+A=
-X-Gm-Gg: AYBFou1M+L2MM5Alpenzy8F58/qLrLzgBD2dbO4dRzacXz3YIdVIPLfg4YxEUKLjM2w
-	PNP1MY07tykopAZKePISUiuhG4WbKT4qviP4Wx8t6f+GrQveBkCN3QRddHhwraZuwSUvoln9UqS
-	3p+EpUmMOmIV1XCJuTZ2kzIZ/mtUuIACnl1eNyX6FQ3WXFez/W6x95JzvsYX+ghYSfidYBU2ZIv
-	7HKwV8bXD4c7H/+evS35e2ieJBZSnHycrc7PJKlXxSeXylZk1pMoU/QW9Hz4pzqtb6/NnnYL+t8
-	CMkQpe1TWcmylYuUlE71/7TjEW9zx58XtUL/xMGrspgAxzuHw9Co1W95Vm8aNP6Uq8qvyXYGe8k
-	BtcgY5H93/rtPofAYAIXTpoc8E5bdV0rPuh7eTYN6l3nWWzPVz6jZHVAIQz6VnjRx3r77E8Q34Y
-	1+A6l0yZ+POT8O6H+b9L5ZzwBvR0FSPFtln7ANqeTpKgH273KEtpHLMS0s/ln/mgjoJ2WxLOd8j
-	xbz3xciFhX0vHPkjwLrTTDWCW5vYkL7w4zLKV11HAk=
-X-Received: by 2002:a05:6512:3f26:b0:5b6:4ae:5b83 with SMTP id 2adb3069b0e04-5b8d89b6f07mr733196e87.33.1790161858572;
-        Wed, 23 Sep 2026 04:10:58 -0700 (PDT)
-Received: from nuc.. (78-69-188-101-no600.tbcn.telia.com. [78.69.188.101])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b8d8589783sm507873e87.51.2026.09.23.04.10.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 04:10:58 -0700 (PDT)
-From: Johan Almbladh <johan.almbladh@anyfinetworks.com>
-To: tsbogend@alpha.franken.de,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	paulburton@kernel.org,
-	main.kalliope@gmail.com
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	philmd@oss.qualcomm.com,
-	Johan Almbladh <johan.almbladh@anyfinetworks.com>
-Subject: [PATCH bpf 2/2] bpf, mips: Fix BSWAP 32 and 16 on MIPS64
-Date: Wed, 23 Sep 2026 12:51:58 +0200
-Message-ID: <20260923105158.3514342-2-johan.almbladh@anyfinetworks.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260923105158.3514342-1-johan.almbladh@anyfinetworks.com>
-References: <20260923105158.3514342-1-johan.almbladh@anyfinetworks.com>
+        d=1e100.net; s=20260707; t=1790162995; x=1790767795;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5TJi5pYYgXT5a+4BNFFHNYyeAaTkJJY7o8Za71zVW8k=;
+        b=gJUT3CFhKrcYK90pLgosENfatO7HKB3KZZDWdmzvL5KvuZRPTvZqsX+XBIiTQB7fct
+         63KMYNml4vei2ilwiYXG3kiT054MhQWqMtphQCCrt8Tgm6Vel5PNUkRxmpg0UHxiLK58
+         6bTpXESpUDrzjz3itPOspnVaeOLtl4J7qDzXI7M3sdVBP7W6OfwsytbzLbbqYK+/A4+T
+         AOu5sjx9N7+r5VOunGvBvYyH3X1cRM3RTXPQBQKub+fvJk9rMqwlrpsDr/AWRZSy7hDu
+         uQTKSCGaIE7stXwM7kfdJcITXRFUw0wgysMDCrl6KANWBS/a4gphnn/tbAJsgXfztU1L
+         KMlA==
+X-Gm-Message-State: AFuF++mkvBuCU1rgesoUPnJjjb9bIKFQkPKcAqegHSG8fkb42Mkj7OP0
+	XNrzXoqGl8gfS0hCN0UMJFJ1uBr7QI/G/QDuN/iqzrgy6IfaS7xWBoNcwzlW9n6j
+X-Gm-Gg: AYBFou1Cv9sn4OrH3o+7A37B/kf+a1je+IbAGjPwamOcMJ9syY9FN4mykqTWlAoas9b
+	wZ6xtbGuOs4fQrYLYZcPFFeu4hHszdlJsTBJEcShGoMbYzcGGHf+Mj6d2ZFM1uVB1jri14OIR72
+	B6i1XtBNq+bc5qGI6p7geRt556SCulMMxULIdVEkGaC+X6MwU0R7L5j7xvGOTKqPy46uSwkviDJ
+	4fuzWYtWey90eLSeHAZA9I6L1wA87A60Xgd23EIUCiuY1fGqRueHtjFYgo0jS7IeaGuageMjmeh
+	stDH0GzylQ6FHBjZ8ODXOMG0CYLfEHpB97H4LZxBhuR2kbjnp0bNB3gKtEZOYaeB3wdTm8ERQcw
+	+BG1JYR6yqAgaF+jVOg5JrG7OfyR7JNb9O+SRABeVwAyQgfhibSFGM3SKMs3H4+8mN36PrHx6wV
+	/mQQKn2CDfQTrHhkOhSTyFXp//kEUpTRi/VArDjsRcWmKKDUGol/TrW5Lv1L9NI3EAyzsqP6A8l
+	BvJ/dITFSujDDVzwYgwV1Z2c/sKUYKo5KDzsvLUhbdYqaRnFrXk+fLRqcNHEsiPN2aL5BINI16G
+	fyqDF/SJvBgSOcyYtD3KkG9lbPEMmJL85HZhBXaXKnGbdpL0
+X-Received: by 2002:a05:6000:1886:b0:487:172:6293 with SMTP id ffacd0b85a97d-48867060a67mr3901721f8f.3.1790162994662;
+        Wed, 23 Sep 2026 04:29:54 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886876c119sm6797699f8f.15.2026.09.23.04.29.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Sep 2026 04:29:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 23 Sep 2026 13:29:53 +0200
+Message-Id: <DLMNTHW945RO.TLPGJHZRWHUY@gmail.com>
+Subject: Re: [PATCH bpf-next v6 0/4] bpf: Add bpf_call_rcu() and
+ bpf_call_rcu_tasks_trace()
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Puranjay Mohan" <puranjay12@gmail.com>, "Andrii Nakryiko"
+ <andrii.nakryiko@gmail.com>
+Cc: <bpf@vger.kernel.org>, <rcu@vger.kernel.org>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "Harry Yoo (Oracle)"
+ <harry@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>
+X-Mailer: aerc 0.21.0
+References: <20260922200208.3203834-1-puranjay@kernel.org>
+ <CAEf4BzaifaWk+oHu-berWcKuS6Y5WfkcFTKZW-iMCPxG0=5i0w@mail.gmail.com>
+ <CANk7y0g8Mh-je_o_nyXQ3zsGVeAsz2qMfgDtv4j-MXhAJ7PcMA@mail.gmail.com>
+In-Reply-To: <CANk7y0g8Mh-je_o_nyXQ3zsGVeAsz2qMfgDtv4j-MXhAJ7PcMA@mail.gmail.com>
 
-The 16/32-bit byteswap implementations for MIPS64r1 and earlier do
-not have an explicit zero extension afterwards. The input is first
-sign-extended to 64 bits, and the byteswap sequence can then leave
-the result sign-extended depending on the value of the low bits.
+On Wed Sep 23, 2026 at 12:37 PM CEST, Puranjay Mohan wrote:
+> On Wed, Sep 23, 2026 at 12:41=E2=80=AFAM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+>>
+>> On Tue, Sep 22, 2026 at 1:02=E2=80=AFPM Puranjay Mohan <puranjay@kernel.=
+org> wrote:
+>> >
+>> > Changelog:
+>> > v5: https://lore.kernel.org/all/20260921191407.1742386-1-puranjay@kern=
+el.org/
+>> > Changes in v6:
+>> > - Size struct bpf_rcu_head at 48 bytes rather than 64, matching what t=
+he
+>> >   inline state uses (Alexei)
+>> > - Trim patch 1's changelog: drop the reasoning about possible future
+>> >   layouts and about what the other async kfuncs return
+>> > - Rebase on bpf-next/master
+>> >
+>> > v4: https://lore.kernel.org/all/20260915154248.3612028-1-puranjay@kern=
+el.org/
+>> > Changes in v5:
+>> > - Rename the "hash_map" subtest to "bad_map" so that it matches its
+>> >   helper test_call_rcu_bad_map() (bpf-ci)
+>> > - Bump the callback counter after chain_err in the selftest callback.
+>> >   Userspace polls that counter and then reads chain_err, so it could
+>> >   still see the initial value before the re-arm had stored one, which
+>> >   let the chain subtest's assertion pass without checking anything
+>> > - Say in patch 1 why embedding struct rcu_head in a uapi struct is
+>> >   acceptable here (Mykyta, Paul, Alexei)
+>> > - Rebase on bpf-next/master
+>> > v3: https://lore.kernel.org/all/20260915143640.36292-1-puranjay@kernel=
+.org/
+>> > Changes in v4:
+>> > - Drop an unrelated hunk in bpf_async_update_prog_callback() that turn=
+ed
+>> >   PTR_ERR(prog) into -EBADF.  That is the shared bpf_timer/bpf_wq path
+>> >   and bpf_prog_inc_not_zero() returns -ENOENT, so it would have change=
+d
+>> >   the errno bpf_timer_set_callback() and bpf_wq_set_callback() report =
+to
+>> >   userspace (Sashiko).  No other changes from v3
+>> > v2: https://lore.kernel.org/all/20260915114240.3269184-1-puranjay@kern=
+el.org/
+>> > Changes in v3:
+>> > - Move the bpf_call_rcu_tasks_trace() verifier bits from patch 1 to
+>> >   patch 3; patch 1 alone emitted "resolve_btfids: unresolved symbol
+>> >   bpf_call_rcu_tasks_trace" (Sashiko)
+>> > - Poll the callback counter with an acquire load (Sashiko)
+>> > - teardown: v2 only checked that the program was eventually freed, whi=
+ch
+>> >   passes even if nothing was ever armed.  Also assert that the chain r=
+an,
+>> >   and read the -EPERM back through an independent .bss fd
+>> > - Use kern_sync_rcu() instead of open coding the grace-period wait
+>> > - Return -EBADF rather than -ENOENT when the calling program is going
+>> >   away, matching bpf_task_work_schedule()
+>> > - mismatch_map now pins the bpf_rcu_head label the new code emits; it
+>> >   passed with that branch removed.  Add a two_heads test, and wait for
+>> >   each grace period separately in the chain test
+>> > - Commit messages: correct the -EPERM parity claim, explain the inline
+>> >   callback state and the struct size, motivate the tasks trace flavour
+>> > v1: https://lore.kernel.org/all/20260907134552.1772405-1-puranjay@kern=
+el.org/
+>> > Changes in v2:
+>> > - Rebase on bpf-next/master
+>> > - Use rcu_read_lock_dont_migrate() over open coding (Alexei)
+>> > - Improve re-arming selftest to detect failure (Sashiko)
+>> >
+>> > BPF programs that manage their own objects have no way to run their ow=
+n
+>> > logic once an RCU grace period has elapsed.  bpf_obj_drop() defers a
+>> > free, but returning an index to an allocator or unpinning a resource
+>> > once readers are done has no equivalent.  sched_ext's BPF library work=
+s
+>> > around this today by pushing freed nodes onto a list and having a
+>> > userspace thread call membarrier(MEMBARRIER_CMD_GLOBAL) and then run a
+>> > BPF program to reclaim them; it is the first intended user.
+>> >
+>> > Add:
+>> >
+>> >         int bpf_call_rcu(struct bpf_rcu_head *rh, void *map,
+>> >                          int (*callback)(struct bpf_map *map, void *ke=
+y,
+>> >                                          void *value));
+>> >
+>> > and bpf_call_rcu_tasks_trace(), same signature, which also waits for
+>> > sleepable programs.
+>> >
+>> > @rh is a struct bpf_rcu_head embedded in a value of @map, so the
+>> > callback runs as callback(map, key, value) for the element it lives in
+>> > and needs no cookie.  The field is only accepted in BPF_MAP_TYPE_ARRAY=
+,
+>>
+>> Isn't restricting this to BPF_MAP_TYPE_ARRAY unnecessarily restrictive
+>> in practice? Do other APIs of similar kind have this limitation? E.g.,
+>> bpf_task_work_schedule() or timer, I don't think they limit user to
+>> just ARRAY maps, it's way too inflexible.
+>
+> Right, bpf_timer and bpf_task_work take HASH/LRU_HASH/ARRAY. They can
+> because they can cancel: on element delete bpf_obj_free_fields() calls
 
-Add the missing zero-extension.
+bpf_obj_cancel_fields(). bpf_obj_free_fields() is no longer called except w=
+hen
+the object is being freed finally.
 
-Found with test_bpf on MIPS64r1 emulated by QEMU.
+> bpf_task_work_cancel_and_free(), which reaches task_work_cancel(), so
+> a pending callback never runs against a recycled element.
+> A queued RCU callback cannot be cancelled. rcu_barrier() is the only
+> thing that waits for one, and it sleeps, so it is not callable from an
+> element delete. Array elements are never freed individually, which is
+> what makes it safe.
 
-Fixes: fbc802de6b10 ("mips, bpf: Add new eBPF JIT for 64-bit MIPS")
-Signed-off-by: Johan Almbladh <johan.almbladh@anyfinetworks.com>
----
- arch/mips/net/bpf_jit_comp64.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+If cancel is a noop, can you not simply skip it on map update?
 
-diff --git a/arch/mips/net/bpf_jit_comp64.c b/arch/mips/net/bpf_jit_comp64.c
-index fa7e9aa37f49..6681ccac9dd9 100644
---- a/arch/mips/net/bpf_jit_comp64.c
-+++ b/arch/mips/net/bpf_jit_comp64.c
-@@ -305,8 +305,7 @@ static void emit_bswap_r64(struct jit_context *ctx, u8 dst, u32 width)
- 	case 16:
- 		emit_sext(ctx, dst, dst);
- 		emit_bswap_r(ctx, dst, width);
--		if (cpu_has_mips64r2 || cpu_has_mips64r6)
--			emit_zext(ctx, dst);
-+		emit_zext(ctx, dst);
- 		break;
- 	}
- 	clobber_reg(ctx, dst);
--- 
-2.43.0
+It is a bit unfortunate we can't provide cancel semantics, it will be yet
+another divergence from how all other async callbacks work...sigh.
 
+>
+> I can think of a complicated way to support hash maps but that would
+> need making the state dynamically allocated and finding a way to
+> cancel the callbacks. But I would do it as a follow-up if there is a
+> real use case.
+
+That would mean allocation and frees, it is already quite expensive as is f=
+or a
+call_rcu() primitive (with the refcount bumps and atomics).
