@@ -1,66 +1,66 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F34372ED3
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 23:21:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CB6E3876BE
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 23:22:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790205663; cv=none; b=qVmSxXoIz/hTmjV8tkAX4ecbqkk9ettIeMWjodA+SJSaqkCOb+gdyUloARbKfJhqnd0d8H8kEHN+D1jac+igQHWtcDcYrWnKwEYnJx1A/taSuNY+k3qKH4zV/I7+PD6b9vaMoQz5E4jXmwhhem+Rnq3LIuRQgAUl2+HV5FcCdTk=
+	t=1790205774; cv=none; b=JMEqLWRqx0IgE8ptbzm+p4ibAM9c/wpPbkpvyDHMXYHVWwrbm148k60OroUPiyobwiPcr6r5ReKdC/O2fwzRMQISnYjsUHmLHdMYsEQWd51xbNNDhdYlDCmYKcEuCu/A4TTJb3nk22Z+XMZVk1M4AnCYsks0LPPP5yYCVk17F0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790205663; c=relaxed/simple;
-	bh=Y0HJO77HxrPEQSmFMpzdx4PkYf6guG2ohv0vAAZv0V4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=IQGeiZbbiQNWA/9sd5rQb8EMlDmXDuPUnu5xmdx/JGNTuDl+ILmGhniIumcSnB5401VxWC9GU+unjpYAtMZEbFZgXzJ86dFrWuvYGCMpm/asqWTaF/47tHRpN5dSZwI6hE7TowYI44GKGgiDO+M7OVyY8Kr5OREz0XICMAGCjB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ivpf0a/j; arc=none smtp.client-ip=74.125.227.140
+	s=arc-20240116; t=1790205774; c=relaxed/simple;
+	bh=dYGsuq+SJziMFd5RS0Z8dLtN9uvyFymjO/cvyMoAFbc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=Fl+rQLp2rfA/lPj2h7Plb6c7fzxXFB5pIYwltb5FbnTCaEsPdbaMo07ccEllt7VbHLrZY5/0ik/Ivg9nO2ZPR3Y5mRqTtLOcV/B5Nk3hkvNq8iWAcMT+ZLWEQOOlUUU2e57Go4niZBl4IO7zkD7kAbFhlw9TmMt8shkkTJeZT/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DMhtuE0y; arc=none smtp.client-ip=74.125.227.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ivpf0a/j"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-396ccb1a98fso1059505a91.1
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 16:21:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DMhtuE0y"
+Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-39b910bdf2eso799405a91.2
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 16:22:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790205661; x=1790810461; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=gmail.com; s=20251104; t=1790205773; x=1790810573; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=xAWbKNApdX6DxFupC+xN8Y/UmbTzZQIyk+vEvFcA8sA=;
-        b=ivpf0a/jSI+cs+1GUCjE//OVYyjQlP7BgT2ccDch4Ey9LToeDAj1FM8Dqh9wFncllc
-         45o99ppC1dr9mpgrUZ2NTrdqJzqnoKc4qPD2If8w2+MIi6dXx03XfPKJx6ScmQDA2Ill
-         vJaTzFlqAysBWchdJCb2O4/dSn8J8TI5hMBFfHqK83f1lQ8bQ5I2Oj5HtsYHU8rIoBhC
-         oLWd2uWnSTIfNTghycsnNk+/0l1ONZeaV9+vfTy5Kv+DgJ3YMJeyuZZD/j7go6QbkFsB
-         GGpF3QyPpDhOLKoz0xTQGUHO8zf990wN5YbIxM0J2dwFpTXv136LVvPJaNQyLSLJkYwG
-         2x/Q==
+        bh=dYGsuq+SJziMFd5RS0Z8dLtN9uvyFymjO/cvyMoAFbc=;
+        b=DMhtuE0yzg3j8jE7wUcfF4NUAZBw6Y8B8ySDQPN6tLH1EPqrO75SGNxI0O+Vw3bA++
+         C7eHGoJcyLi8YBaM3Ay71Ho7DgYIsAKoC17qtKu05fFLDz8Bn7BQ+oMWJXWKj9Bt6Xhr
+         j/QWilnOaVX1EQUycRthBAtKtNw8sEomGquQa3KlepLfkXbkTaXclXe23+h5q3PznHcC
+         S+1FLjGy6cuUEqy9ryK0gaDLo7OzTG/ifDpaJqbB0mIayh4agUJaaH9OePwOuMZiuT7T
+         erYxIBDNu/XUbYDkncIqAVGMjSXB1IvPBfOWggcj37s4iH3RnWLRMr+fVsIcnBaNpqzs
+         3CtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790205661; x=1790810461;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20260707; t=1790205773; x=1790810573;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=xAWbKNApdX6DxFupC+xN8Y/UmbTzZQIyk+vEvFcA8sA=;
-        b=tTtXMPpkZ0gBpPtMofsoDbrIgLF0l0Mj690kPC/Z6/I4ksTkbxe2OMvh9CK6+bsLNv
-         4GDnN+V1AO/nuUm2FfIi3xgc+0AHbI754FNPQpao0XwfdO16S3h6Hte5kMWIaajwaycS
-         Oa1jgfh6e3bCFIRQCLXVPNwc189JAD64PtqAEpMQjmQJ5NIbD1SZkYSlOb3SORvrC+Mx
-         n8d8vyJ3/CANOUfqPG2m22PRfzY/TGyJWdHU+NYzvu4rf1b9T6ZJ/lMOJ/xsKEPoFk3v
-         1wSwsrpxDiQyfmPoJdol5FkI40OOGrLCSfK8H2eavCzyauVbJPrrz5oCo1SQGRF5OK+M
-         kWuQ==
-X-Forwarded-Encrypted: i=1; AKwUvBz81UW5FyI0IVJQEwyQUmPgoGmy3tvZWE6Ksen7rUoWVvfcc0cOobki4fGkdk1YyouzfZw=@vger.kernel.org
-X-Gm-Message-State: AFuF++mP1O72LQgjht+H1Rbh78m03sKfYLHGovurxQidlZdYL5CEWUCT
-	T69aCoDSssxXIRqPIhrzRYBTpEKV0QM4jyZsUsk5EYSPolE511CqU2hR
-X-Gm-Gg: AYBFou3DBR/27Y/25ZQBagmHHRsYlTUs55aYLEVGM6kAITbgKsZVp1DT+JWe4PNmqpq
-	6iKfINvpj5jJ43fjn4jJsfr6V5EwXzcW+4owCxOXZnY4d9JOF8RYYhE8o7vc1p4mtajsOGODuJx
-	ZCChK1ws62Wz3FKZjg3y3yhJlFkYfenavQmh0YS5BlofJ3aBPTjSSn3L4n3CPxiLRhGe6TyRXDe
-	pZC7Y8yW0TdXXGnKa/vYo9Cmm9OFXT9brl3RGkpSylPvbYovqzPFrlzJAU0ZX+bCuKrjxHUOqa6
-	3o59gtTAd4Tsn/OOshRl68/uHKm0jCLHsNAANh+goHIDj7b7jnwN4FDs2KT1zS/coK3JOMF8TEM
-	xvthwangJBdY9TO2oitgrg2RMNkzS8IZalYPOeqbKhW7B6cX7NKG/81Pi3ZSAPHrT6Zo9Tp3Yqc
-	v8YfC70Pd38S0U4ZRv+TtgsPClztGpUTUscKIkmSRwChZYkV/W83//x+w1tmVJiXuhRr+jUg3xE
-	5KQSREoAmCnUMEZpqnw6Z/4FMLYNAgwAelPtxnKbxcjZ4VXEoxV9Y00A+qxV1xrnoSetHC4e6K3
-	C1+E7x18LEX0uw==
-X-Received: by 2002:a17:90b:2250:b0:3a0:574f:5854 with SMTP id 98e67ed59e1d1-3a0987247b2mr518800a91.39.1790205661095;
-        Wed, 23 Sep 2026 16:21:01 -0700 (PDT)
-Received: from localhost ([153.61.198.250])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6a5a9516sm17296065ad.29.2026.09.23.16.21.00
+        bh=dYGsuq+SJziMFd5RS0Z8dLtN9uvyFymjO/cvyMoAFbc=;
+        b=fj1w0zfe9+792EBdtGvqmmbf9tMq8ygWCUF/mPsoY75SlvvChZ09FflcZDGKqg6wYc
+         dMZEpsGYOOQnZeDg/P/xWvBrm87+H9zxf0CPjF6aV5LuicX54HEVmXFIyd3DzHP1bxjN
+         loOI6DDs+krVq+xFVqaG1UDwIpjk6KshEFxphaOC/PdKl7KaAsFRZF8HER/IbxXuUlaG
+         WqIRqN+xPS93xzGUeDHroz5kJd9SP42NPn6PcNsk1lkX8OvfsosQXkkBzIYgVtkHq7bL
+         PmHLX0wpIXQQMzOg2AzLH2DIMuARku74inrDm9/3Hy3/uNx/88wJvFLfZGhY/Uy/C7Xq
+         VT9w==
+X-Forwarded-Encrypted: i=1; AKwUvBxCnR2Y2RiHj1J8djRG0WljI5f/SsWCcCA++B3AA3D8SqQCaShGhCXoWV/Zpf9LlX/puEY=@vger.kernel.org
+X-Gm-Message-State: AFuF++kLHzSZxaLMfkkvDggTL8gxhYIofqq+5OWPpMH6d9TnYmQ50imy
+	yBlIr0ptfrN5j+DNL+CGM78mF3oDPl+Cq4Zv0On12iWAXDcpuvh3PJ9C
+X-Gm-Gg: AYBFou2iDE29SYsk9E5zNx2Uwj4QRuw0pIBApSU+kpqIOkEHeQP1g+megK7RFsMQJZW
+	aO1KRpOqQk6Dg9u4W0q+ijC6FrY44A1h8YBFW9wWh/yeWEJM2IW4bgDK7UvdNxHGk+hqsW0f/qR
+	AGrSHQ+YU1FSbkr9HGbHgHWwZVLJDrMkuDSVVi/3ZXTbnKrof57P14deG6lQSedeJTJcEIPK4s/
+	GZEWGSFzjPr7qmeNXDZSr0cKIj/J8nkD3C/1kHG25aHnVJFBZlkSqlh/GA+SQGzpyIXKnfg0AVU
+	VTaTNODRy44i3SM2qtm7sh59OAFsgukh7Ms8fRn6wD/W3GYq0I/PGFN41QRzMlrUt0ZXTT5jtRJ
+	ac+jAzzcp8gWo0cl1+Mc+MBSrVS8Xl1/xVeo4EQTS4jR6tOYeyEcWGScbgJwi8JgPHhJKNYcFK2
+	Ztsm1fXmM4E+HLnSu7CyOllzryjO3FOGHTzbhxoRxS4R2sw1GLK1g9o9CpyxeXpZaY3oBbU/yDr
+	4gMdhg2jBv7Lm9GaRd0vG1BaMsduPLgNiAc1nIEuYPrfu+rbiysuH67fnJ2fVZoRgRcFXFlmBtw
+	hwW5gwBtt4FSDg==
+X-Received: by 2002:a17:90b:3883:b0:39e:6c6a:2093 with SMTP id 98e67ed59e1d1-3a098970abbmr578141a91.52.1790205772655;
+        Wed, 23 Sep 2026 16:22:52 -0700 (PDT)
+Received: from localhost ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a09733f48fsm1267490a91.11.2026.09.23.16.22.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Sep 2026 16:21:00 -0700 (PDT)
+        Wed, 23 Sep 2026 16:22:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,80 +69,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 23 Sep 2026 23:20:59 +0000
-Message-Id: <DLN2XYLSE1PL.3HCQB74CH54GY@gmail.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
+Date: Wed, 23 Sep 2026 23:22:51 +0000
+Message-Id: <DLN2ZDTXXAB7.1R7UPYW6JRF5G@gmail.com>
+To: "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
+Cc: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
  <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
  <kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next v5 07/21] bpf: Explore the landing pads no call
- site reaches
+Subject: Re: [PATCH bpf-next v4 00/20] bpf: Run exception cleanup landing
+ pads when bpf_throw() unwinds
 From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, "Yonghong Song"
- <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
 X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
-References: <20260923045846.2414643-1-yonghong.song@linux.dev>
- <20260923045922.2417689-1-yonghong.song@linux.dev>
- <df24934c5ecbd70bc35b528b8e58ae668ce02051.camel@gmail.com>
- <DLN0K7231LF2.1UNIBGA546C90@gmail.com>
- <9d794d45da75370d010dd0234cbba5dea61c19ba.camel@gmail.com>
-In-Reply-To: <9d794d45da75370d010dd0234cbba5dea61c19ba.camel@gmail.com>
+References: <20260921210033.1715000-1-yonghong.song@linux.dev>
+ <7e7076ce94e803403bcee003569d4b2ac7bc4e2c.camel@gmail.com>
+ <DLLHFJDS6G5L.2B273FIKF9A09@gmail.com>
+ <7eba4eb055e15d5c78f463d013fa98bb21d7b494.camel@gmail.com>
+ <DLM6BVU1G0V3.29T5BPPZTZ77Z@gmail.com>
+ <37e53199dfda608de30a31fc51d22ed2b25d6d2e.camel@gmail.com>
+ <DLM8NP9S8A4E.1YIS9HRMSR62@gmail.com>
+ <a9c4ebe0c1a08d7025179b1ec2297a4d975cd072.camel@gmail.com>
+ <b3a29c0b77ada6a7eff101a5d8b4e83021a3052e.camel@gmail.com>
+ <CAEf4BzaStrSG-hGERB8J=mt3agEq7d9L8+L9rsr4Z+=68gtA-w@mail.gmail.com>
+ <DLMY4E5MYGQI.29MKOKECHM134@gmail.com>
+ <DLN0OB4STWN9.1101L0OPX69QV@gmail.com>
+ <d2ad6462af36f389b208ab17544ec760c27fb782.camel@gmail.com>
+In-Reply-To: <d2ad6462af36f389b208ab17544ec760c27fb782.camel@gmail.com>
 
-On Wed Sep 23, 2026 at 10:19 PM UTC, Eduard Zingerman wrote:
-> On Wed, 2026-09-23 at 21:28 +0000, Alexei Starovoitov wrote:
+On Wed Sep 23, 2026 at 10:00 PM UTC, Eduard Zingerman wrote:
+> On Wed, 2026-09-23 at 21:34 +0000, Alexei Starovoitov wrote:
 >
 > ...
 >
->> imo the following is cleaner:
->> - do not repurpose bpf_throw() for this new thing.
->>   Introduce new kfunc that will do the unwind, let's name it bpf_unwind(=
-) ?
->> - replace all 'call bpf_unwind_resume' with NOP by the verifier (or may =
-with bpf_exit. tbd)
->>   Technically rustc or llvm can do that too, but it's cleaner to do in t=
-he verifier.
->> - In bpf_unwind() walk all exception tables and replace return addresses
->>   in corresponding frames to landing_pad_ip-s.
->> - just return from bpf_unwind().
->>   restoring callee saved registers will happen automatically by correspo=
-nding
->>   frames and there is no need to search exception tables at each step.
->>   That's what typical eh unwinder does, but it's doing it due to C++ log=
-ic
->>   that is more complex that Rust. For Rust unwinds we don't need all tha=
-t.
->>   The above algorithm will do.
+>> Sorry, all I hear is a knee jerk reaction to a lot of slop.
+>> yes. a lot of it is not needed, but invoke approach is no go.
+>> As I said couple time [ip_start, ip_end] is not a single call insn.
+>> libbpf patches do a bunch of unnecessary copy paste,
+>> but that's because we didn't do insn_array support cleanly.
+>> From libbpf pov bpf_cleanup section shouldn't be any different as
+>> "one more section with pointers to instructions".
+>>=20
+>> Sorry, we're not doing new 16-byte insn. We can chat about it
+>> during the meeting, but I feel it will be a waste of time.
 >
-> +1, makes sense.
-> After return address rewrite the unwind would have to jump to it's epilog=
-ue, right?
+> If you simply don't like 16-byte instructions, then yes,
+> nothing to talk about.
+>
+>> New insn doesn't reduce amount of slop.
+>
+> It literally and demonstrably does, I listed the actions that are not
+> necessary with this encoding in the previous email. No matter which
+> llm you use more actions needed =3D=3D more code.
+>
+>> Ed's example 1k vs 2k is a counter example.
+>> This is just one llm vs another. Both sucked and both slop.
+>> Just different amount of it.
+>
+> Fwiw, it was not a one-shot. The verifier part is curated.
+> The jit part is whatever codex decided to do with the original series.
+> I stand by the complexity reduction claim.
 
-yes. I feel there will be no need in asm() tricks in such kfunc.
-unwind will rewrite its own return address, and will return through normal =
-C
-and will restore callee saved (whatever it needed),
-then immediate callee in bpf prog should have had a landing pad for this kf=
-unc,
-since this kfunc is throwing.
-so bpf_unwind() will jump to whatever is necessary to unwind in that bpf pr=
-og.
-And so on till the end.
-
-> Why not reusing bpf_throw() though, is it because of the exception cb mec=
-hanics?
-
-yes. bpf_throw() is not seen as throwing from compiler pov.
-I believe all kfuncs are not throwing. (that was a bug in this patch I allu=
-ded earlier).
-So we need a new kfunc and mark it attr(may_throw) or whatever the attr is =
-called,
-so that compiler will generate exception tables for that bpf prog.
-Last time I checked there were bpf_cleanup section for rust-c in that case,
-but that was back in April.
-
-There is also a case of 'catching' abort in rust. iirc it only stops unwind=
- and
-rust-c generates something else instead of 'call bpf_unwind_resume'.
-Memory is vague. I think that frame will continue as normal after processin=
-g
-landing pad drop()s.
-
+I don't measure complexity in number of lines.
+There is also llvm part that you're forgetting about
+and dragging that new insn all the way.
