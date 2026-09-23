@@ -1,216 +1,337 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D9804E73C5;
-	Wed, 23 Sep 2026 17:07:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 560C73E7635
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 17:20:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790183262; cv=none; b=SOwvH2oE3tovfm/f8JEsL/awomwhyiF+QQs3fYAVBrTQxq+zLubAJX99peLQ+NGTqniYri8lwzQOp6zwOpo+A20VisY2vJqn0EJqJVuzfHOchxXHNFE+CsUXql8uvRz2QS0z2BF3K73deKudOhHOYcNPnt5XU8POgAAEnWcwblY=
+	t=1790184062; cv=none; b=uXg8MdaVf5d8NerGmByj0QwCfYNmpIYqPtyjOnF/AzXhyPLsRkyLpJgzNaNXVyeRUK+HzVTsgW0npoev1gpbsgkyTOlX+QQnm6mpnAMyBnfsBCmHiul8mjyQ8c0dxchn45FIq/CqHtkk73bMo8L+Cgh7CLY3LtfN0ej2B2a4rTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790183262; c=relaxed/simple;
-	bh=dY5VEKC+MHSoJK6lwGGGvjwFMDTn23WTI6Yxn6zXOoA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ql7lUO1RySwXq0AAwVruFx/wOT5lkzo+sXn5RMPhFhxgTz5qNQm1hdZchA8XiLfjaRqQmQMgSRgGRIeKnoQzui/otgKHBbVAhyds0l3zum+SN+xxlwVPL+yNCqvJ0KXEcISstCqwKlxc65DgG6eNxlSFkp/49OuV465XzfAf+sY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i12XGUT+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790184062; c=relaxed/simple;
+	bh=sKms44Jz7nYWU3WWESN0uAuguLUQfpH6u69uHptIacc=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=te/XuzJ2DsGHnzVI7RluiYereNpcpRdFnjbZrvY7A7k8L50Jqwlp0ay/zvZsy9vfKs/cZAibss5K6ibJTVpWEezTkI3MDPhqiS/XqpP33wgfOCV9YTr//F3xUFyhXy8FFJT5EGxtZvig7BuI+zA6QYcUqbH0EH69ibtqFnqrB8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uv8qt/I5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i12XGUT+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 370A61F000FF;
-	Wed, 23 Sep 2026 17:07:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uv8qt/I5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E154C1F00898;
+	Wed, 23 Sep 2026 17:20:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790183260;
-	bh=DPNB6bW0x8y7Uu11BgHcG7CSR1tZ//UGOmZllbw9Ljw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=i12XGUT+ELGTRJSrycRVzqTit3D2pyM9ZR0ZSTlIa0mojim7gB9yUZwmIu+wgWYZK
-	 Ybyv+CV/Yh7wSmglW9QNbCpnx18TWoVPczcRHqo0Q/mnJsqjZQ3eFn2cP25qIt7fM9
-	 +POE/rp3vRI+Oxpo8QK9N4EfOTJ5jI0dLtJ432mM7IKfaNA3MKzBEomsWln5bFOqPN
-	 PxFbALYbyklQCFhfUINibcEvNCNrhcGgRwqd9F7gXGPywV48eYeWHkrJqezKwBbst0
-	 GSXVIWXaPeEYe4X28qZjKKxCsy9Q0ESN1tzaw+iT6CqBpO8zm4Si1SUtWVa2wxKSZ8
-	 vegFjunsRBTBA==
-Date: Wed, 23 Sep 2026 18:07:07 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
-	David Hildenbrand <david@kernel.org>, Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Leon Romanovsky <leon@kernel.org>, Paul Moore <paul@paul-moore.com>, 
-	Stephen Smalley <stephen.smalley.work@gmail.com>, Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <nico.pache@linux.dev>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, "Martin K. Petersen" <mkp@kernel.org>, 
-	Jaya Kumar <jayalk@intworks.biz>, Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>, 
-	Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>, 
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Marc Zyngier <maz@kernel.org>, 
-	Oliver Upton <oupton@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
-	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
-	Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
-	Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Michal Hocko <mhocko@kernel.org>, 
-	Miklos Szeredi <miklos@szeredi.hu>, Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-rdma@vger.kernel.org, selinux@vger.kernel.org, linux-sound@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
-	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, fuse-devel@lists.linux.dev
-Subject: Re: [PATCH v3 02/40] mm/vma: predicate setting mmap_prepare VMA
- fields on new vma alloc
-Message-ID: <arQCCzmMARX81-3y@gremlin>
-References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
- <20260917-b4-mmap-prepare-vma-flag-sanify-v3-2-4583d8a23bca@kernel.org>
- <CAJuCfpEa8tUmYJBjx-cRdAE8y-jcKY0C81kAOa1QZS7F6tKdfQ@mail.gmail.com>
- <arP0oJgrgZlgtrb6@gremlin>
- <CAJuCfpFPPGaK-grNx9qiQOhzAXbxU+SO+95Fht1571TGREx2oQ@mail.gmail.com>
+	s=k20260515; t=1790184057;
+	bh=3e2YEzFEJIWLIMFbB+hKcP/dJcz3rgnd6r526CkNl/A=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=Uv8qt/I5BXqnlKoBveSiZlLyJgINAWzAYSno1w03xEJrnOSk7FUhpd58e5rGy8Txy
+	 I14csKycLuoej6xYuKti2/Oi6rs1UDk2mZCUDpLsUKKjpzeC1/OJXTO8blv9C/RBe5
+	 p0m/M5BGNfaMJxTmj7P29X9b8q/9o1EipIe7uAxh0DldANu4bLkERo+zToRaXN+pvg
+	 wFodcyiKb69g0/dhVztAqgdSRgV/e3724CI8rFag+DdVguj1vMmtydwjxxvKGbfeu5
+	 tT+tbH3hbOQ7tpGPjY6/WIHKVDMM5VssepUsjmm82Nu5l0UPEc8E868lrg1qJRQHff
+	 V0ELofo9P3K8g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCHv8 net-next] tcp: Add TCP ROCCET congestion control
+ module.
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tim Fuechsel" <t.fuechsel@gmx.de>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <arK46Rr0cB7gJ7JS@volt-roccet-vm>
+References: <arK46Rr0cB7gJ7JS@volt-roccet-vm>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Wed, 23 Sep 2026 17:20:56 +0000
+Message-Id: <20260923172056.E154C1F00898@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpFPPGaK-grNx9qiQOhzAXbxU+SO+95Fht1571TGREx2oQ@mail.gmail.com>
 
-On Wed, Sep 23, 2026 at 09:09:38AM -0700, Suren Baghdasaryan wrote:
-> On Wed, Sep 23, 2026 at 8:54 AM Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
-> >
-> > On Wed, Sep 23, 2026 at 08:32:43AM -0700, Suren Baghdasaryan wrote:
-> > > On Thu, Sep 17, 2026 at 9:24 AM Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
-> > > >
-> > > > It only makes sense to manipulate VMA fields if we allocated a new VMA,
-> > > > rather than merged it.
-> > > >
-> > > > VMA merging does not compare vm_ops or vm_private_data, so a merged VMA
-> > > > keeps its own, which is also what the legacy f_op->mmap path does since it
-> > > > never touches an existing VMA. Previously set_vma_user_defined_fields()
-> > > > overwrote the merged VMA's fields with those set for the new mapping. In
-> > > > practice these are the same values, with rare exceptions such as shmem
-> > > > selecting vm_ops based on whether the file has been unlinked, so no
-> > > > user-visible change is expected.
-> > > >
-> > > > Make this dependency explicit, and additionally constify have_mmap_prepare
-> > > > while we're here.
-> > >
-> > > The fact that we might be overriding attributes of an existing VMA
-> > > that we merged with is technically a bug even if we never hit it,
-> > > right? If so, should we have:
-> > >
-> > > Fixes: c84bf6dd2b83 ("mm: introduce new .mmap_prepare() file callback")
-> >
-> > It's not a bug, it is an in-built assumption that the state used to assess
-> > mergeability implies the same properties.
->
-> Hmm. What prevents two VMAs with different vm_private_data members to
-> be merged? IIUC is_mergeable_vma() does not check vm_private_data. In
-> such a case set_vma_user_defined_fields() would override
-> vm_private_data of an existing VMA, no?
-
-I think you're right that it should be a fix patch, I'll put it out of the
-series and send it as one.
-
-The issue here is more so vm_private_data than vm_ops. And really it's that
-vm_ops->mapped() wasn't called so you could have a refcount go to zero and
-stay at zero when it shouldn't have been, for instance.
-
-But in general though if you remove mmap_prepare and ask the same question:
-
-What prevents a merge of 2 existing VMAs that were mapped using the
-traditional mmap hook which somehow have entirely distinct vm_private_data
-and vm_ops but the same file?
-
-The answer is nothing prevents that, but there's an underlying assumption
-that this state is fungible for a VMA over a given range given the same
-file.
-
-In that case, for anything where an allocation or e.g. refcount change
-occurred, then vm_ops->close() will handle the decrement, and the original
-VMA's state should suffice.
-
-But here it's a problem because you overwrite it + don't call
-vm_ops->mapped()...
-
->
-> >
-> > And if it was, it'd need fixing a different way (check the field for instance)
-> > and would apply to the legacy mmap hook also.
-> >
-> > This change is needed for the series though.
-> >
-> > >
-> > > >
-> > > > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> > >
-> > > Reviewed-by: Suren Baghdasaryan <surenb@google.com>
-> >
-> > Thanks!
-> >
-> > >
-> > > > ---
-> > > >  mm/vma.c | 4 ++--
-> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/mm/vma.c b/mm/vma.c
-> > > > index fa784f069da4..4b74b48c29b7 100644
-> > > > --- a/mm/vma.c
-> > > > +++ b/mm/vma.c
-> > > > @@ -2894,7 +2894,7 @@ static unsigned long __mmap_region(struct file *file, unsigned long addr,
-> > > >  {
-> > > >         struct mm_struct *mm = current->mm;
-> > > >         struct vm_area_struct *vma = NULL;
-> > > > -       bool have_mmap_prepare = file && file->f_op->mmap_prepare;
-> > > > +       const bool have_mmap_prepare = file && file->f_op->mmap_prepare;
-> > > >         VMA_ITERATOR(vmi, mm, addr);
-> > > >         const pgoff_t anon_pgoff = addr >> PAGE_SHIFT;
-> > > >         MMAP_STATE(map, mm, &vmi, addr, len, pgoff, anon_pgoff, vma_flags, file);
-> > > > @@ -2937,7 +2937,7 @@ static unsigned long __mmap_region(struct file *file, unsigned long addr,
-> > > >                 allocated_new = true;
-> > > >         }
-> > > >
-> > > > -       if (have_mmap_prepare && !map_is_anon(&map))
-> > > > +       if (have_mmap_prepare && allocated_new && !map_is_anon(&map))
-> > > >                 set_vma_user_defined_fields(vma, &map);
-> > > >
-> > > >         __mmap_complete(&map, vma);
-> > > >
-> > > > --
-> > > > 2.55.0
-> > > >
-> >
-> > --
-> > Cheers, Lorenzo
-
+Thank you for your contribution! Sashiko AI review found 7 potential issue(=
+s) to consider:
+- [High] tcp_roccet: jiffies_to_usecs wrap-around traps state machine in DR=
+AIN
+- [High] tcp_roccet: unhandled DRAIN transition leaves jiffies in usecs fie=
+ld
+- [High] tcp_roccet: ignoring packet loss in LAUNCH phase violates RFC 5681
+- [High] tcp_roccet: direct snd_cwnd assignment bypasses PRR pacing on reco=
+very
+- [Medium] tcp_roccet: idle period recovery discards first ACK burst in rat=
+e tracking
+- [Medium] tcp_roccet: 32-bit integer overflow in guard space limits throug=
+hput
+- [Low] tcp_roccet: struct roccettcp size exceeds ICSK_CA_PRIV_SIZE
 --
-Cheers, Lorenzo
+
+commit d642a91b63f63d245583e8b6f4edc513976b1e3f
+Author: Tim Fuechsel <t.fuechsel@gmx.de>
+
+tcp: Add TCP ROCCET congestion control module.
+
+TCP ROCCET is a new congestion control algorithm based on TCP CUBIC
+that improves its overall performance in cellular networks. By its mode
+of function, CUBIC causes bufferbloat while it tries to detect the
+available throughput of a network path. This is particularly a problem
+with large buffers in mobile networks.
+
+Link: https://doi.org/10.1109/VTC2023-Fall60731.2023.10333357
+Link: https://doi.org/10.1109/WMNC.2016.7543932
+Link: https://doi.org/10.23919/WONS68803.2026.11501781
+Link: http://go.lu-h.de/roccet-2026-07-21
+
+> diff --git a/net/ipv4/tcp_roccet.c b/net/ipv4/tcp_roccet.c
+> new file mode 100644
+> index 0000000000000..801b575e231aa
+> --- /dev/null
+> +++ b/net/ipv4/tcp_roccet.c
+> @@ -0,0 +1,1320 @@
+
+[ ... ]
+
+> +static void update_ack_rate(struct roccettcp *ca, u32 acked, u32 now)
+> +{
+> +	const s32 idle_threshold =3D USEC_PER_SEC * 2;
+> +	const s32 interval =3D USEC_PER_MSEC * 100;
+> +
+> +	/* Check if the last interval has elapsed.
+> +	 *
+> +	 * Check via time_between32, so that idle connections
+> +	 * (for more than U32_MAX/2 usecs), also trigger a new update
+> +	 * and don't stall the ack-counting.
+> +	 */
+> +	bool interval_elapsed =3D !time_between32(now, ca->last_ack_rate_time
+> +						  - interval,
+> +						  ca->last_ack_rate_time
+> +						  + interval);
+> +
+> +	if (interval_elapsed) {
+> +		/* Check if the connection was idle for *idle_threshold*
+> +		 * seconds (e.g. no ACK for X seconds). If so, reset the ack
+> +		 * counting as if a new connection was created.
+> +		 */
+> +		if (!time_between32(now, ca->last_ack_rate_time
+> +					- idle_threshold,
+> +					ca->last_ack_rate_time
+> +					+ idle_threshold)) {
+> +			ca->ack_rate_last_rate =3D 0;
+> +			ca->last_ack_rate_time =3D
+> +				jiffies_to_usecs(tcp_jiffies32);
+> +			ca->curr_ack_rate =3D 0;
+> +			ca->ack_rate_cnt =3D 0;
+
+[Severity: Medium]
+Are the newly received ACKs lost during idle period recovery?
+
+When recovering from an idle period, the ack_rate_cnt is zeroed, but the ac=
+ked
+parameter is completely ignored. This appears to incorrectly calculate the =
+ACK
+rate as zero for the first 100ms interval by discarding the first burst of
+ACKs.
+
+> +		} else {
+> +			/* start counting for the new interval */
+> +			ca->last_ack_rate_time =3D now;
+> +			ca->ack_rate_last_rate =3D ca->curr_ack_rate;
+
+[ ... ]
+
+> +static void roccet_enter_min_rtt_probe(struct sock *sk, u32 now)
+> +{
+> +	struct tcp_sock *tp =3D tcp_sk(sk);
+> +	struct roccettcp *ca =3D inet_csk_ca(sk);
+> +	u32 interval, probe_cwnd;
+> +
+> +	/* If probing is already set, there was a mix up.
+> +	 * Continue anyway so we can recover.
+> +	 */
+> +	if (ca->rtt_probe_timers_set)
+> +		pr_warn_once("TCP ROCCET: Probing time should not be set when entering=
+ RTT Probe\n");
+> +
+> +	/* Safeguard for an "infinite" probe. This should logically never
+> +	 * happen but still safeguard it.
+> +	 */
+> +	if (ca->curr_rtt =3D=3D U32_MAX) {
+> +		pr_warn_once("TCP ROCCET: curr_rtt is U32_MAX, cannot enter RTT_PROBE\=
+n");
+> +		ca->state =3D ORBITER;
+> +		return;
+> +	}
+> +
+> +	/* Use field to store when we entered min RTT probing. Here we use
+> +	 * jiffies to stay consistent with the epoch_start format.
+> +	 */
+> +	ca->next_min_rtt_probe =3D tcp_jiffies32;
+
+[Severity: High]
+Could an interrupted state transition leave a jiffies timestamp permanently
+stranded in the next_min_rtt_probe field?
+
+In roccet_enter_min_rtt_probe(), next_min_rtt_probe is overloaded with a
+tcp_jiffies32 value. If a packet loss or ECN triggers roccet_congestion_eve=
+nt()
+while in RTT_PROBE_REFILL, the state shifts directly to DRAIN.
+
+When transitioning from DRAIN to ORBITER, roccet_handle_state_transitions()
+fails to rewrite this timestamp (since prev_state is DRAIN, not a probe
+state). Could this trap the connection in an infinite RTT_PROBE_ENTER loop
+when ORBITER compares a large microsecond now against this small jiffies
+value?
+
+> +
+> +	/* Start min RTT probing */
+
+[ ... ]
+
+> +static void roccet_orbiter_update(struct sock *sk, u32 acked)
+> +{
+> +	/* ORBITER: Increase the cwnd by using the CUBIC cwnd growth function,
+> +	 * if no roccet congestion event is detected.
+> +	 */
+> +
+> +	struct tcp_sock *tp =3D tcp_sk(sk);
+> +	struct roccettcp *ca =3D inet_csk_ca(sk);
+> +
+> +	u32 now =3D jiffies_to_usecs(tcp_jiffies32);
+> +	bool evaluate_srrtt =3D false;
+> +	bool sent_more_than_acked =3D false;
+> +	u32 roccet_xj, jitter, sent, received;
+> +
+> +	/* Enter DRAIN when roccet was recently triggered */
+> +	if (ca->last_event_time_set &&
+> +	    time_before32(now, ca->roccet_last_event_time_us +
+> +			  100 * USEC_PER_MSEC)) {
+> +		ca->state =3D DRAIN;
+> +		return;
+> +	}
+
+[Severity: High]
+Can jiffies_to_usecs() overflow and trap the connection in DRAIN?
+
+At HZ=3D1000, jiffies_to_usecs(tcp_jiffies32) wraps around 32 bits every ~7=
+1.58
+minutes. If a connection lives for more than 35.79 minutes (2^31 microsecon=
+ds)
+without a congestion event, the time delta flips sign, causing time_before3=
+2()
+to erroneously evaluate to true on every subsequent packet.
+
+> +
+> +	/* Enter RTT_PROBE when the "timer" has expired.
+
+[ ... ]
+
+> +	/* Calculate if more bytes were sent than received
+> +	 * in the time interval.
+> +	 *
+> +	 * Handle wrap arounds by relying on unsigned subtraction.
+> +	 * e.g. if snd_nxt wraps to 10 and seq_start is U32_MAX - 10,
+> +	 * the subtraction will result in the value of 21.
+> +	 */
+> +	sent =3D tp->snd_nxt - ca->interval_snd_seq_start;
+> +	received =3D tp->snd_una - ca->interval_una_seq_start;
+> +
+> +	/* Check sent and received bytes from the previous interval.
+> +	 * Here we use a guard space of 1% of the current cwnd.
+> +	 * We do this to avoid a false positive evaluation due
+> +	 * to delays caused by jitter or scheduling.
+> +	 */
+> +	sent_more_than_acked =3D
+> +		sent >
+> +		received + ((tcp_snd_cwnd(tp) * tp->mss_cache) / 100);
+
+[Severity: Medium]
+Can the multiplication of tcp_snd_cwnd(tp) and tp->mss_cache overflow here?
+
+Since both are 32-bit unsigned integers, connections with high
+bandwidth-delay products or large MTUs (e.g., Loopback with 64KB MSS) can
+easily exceed 4.29 billion before the division by 100 occurs. This overflow
+could falsely trigger a ROCCET congestion event and needlessly limit
+throughput.
+
+> +
+> +	/* Check if it's time to evaluate the srRTT */
+
+[ ... ]
+
+> +static u32 roccet_recalc_ssthresh(struct sock *sk)
+> +{
+> +	const struct tcp_sock *tp =3D tcp_sk(sk);
+> +	struct roccettcp *ca =3D inet_csk_ca(sk);
+> +	u32 cwnd =3D tcp_snd_cwnd(tp);
+> +
+> +	/* In LAUNCH, we want no reduction on loss/ECN.
+> +	 * On ECN this is set later on in roccet_state()
+> +	 */
+> +	if (ca->state =3D=3D LAUNCH)
+> +		return cwnd;
+
+[Severity: High]
+By returning cwnd unchanged instead of scaling it down during fast recovery,
+does this ignore packet drops in the initial slow start phase? Refusing to
+back off when router buffers overflow appears to violate RFC 5681 and could
+risk severe congestion collapse.
+
+> +
+> +	/* In min RTT probe, use the cwnd before the probe to not undershoot */
+
+[ ... ]
+
+> +static void roccet_state(struct sock *sk, u8 new_state)
+> +{
+> +	struct roccettcp *ca =3D inet_csk_ca(sk);
+> +	struct tcp_sock *tp =3D tcp_sk(sk);
+> +	u32 cwnd;
+> +	u32 now =3D jiffies_to_usecs(tcp_jiffies32);
+> +	enum roccet_state prev_state =3D ca->state;
+> +
+> +	if (new_state =3D=3D TCP_CA_Loss) {
+> +		roccet_reset(sk, ca);
+> +		tcp_snd_cwnd_set(tp, TCP_INIT_CWND);
+> +	} else if (new_state =3D=3D TCP_CA_CWR) {
+> +		/* Handle CWR as ROCCET congestion event,
+> +		 * however afterwards always set Wmax to the current cwnd
+> +		 * except during min RTT probing.
+> +		 */
+> +		cwnd =3D tcp_snd_cwnd(tp);
+> +		roccet_congestion_event(sk, now);
+> +		if (ca->state !=3D RTT_PROBE_ENTER && ca->state !=3D RTT_PROBE &&
+> +		    ca->state !=3D RTT_PROBE_REFILL)
+> +			ca->last_max_cwnd =3D cwnd;
+> +	} else if (new_state =3D=3D TCP_CA_Recovery) {
+> +		/* Directly reduce cwnd and rely on pacing */
+> +		cwnd =3D roccet_handle_recovery(sk);
+> +		tcp_snd_cwnd_set(tp, cwnd);
+> +	}
+
+[Severity: High]
+Does instantly halving the congestion window here bypass the internal
+Proportional Rate Reduction (PRR) pacing mechanisms? By directly mutating
+snd_cwnd inside the state machine callback, it appears the sender could be
+artificially blocked from transmitting until a full half-window of ACKs
+drains, causing large transmission stalls.
+
+> +
+> +	roccet_handle_state_transitions(sk, prev_state, now);
+
+[ ... ]
+
+> +static int __init roccet_register(void)
+> +{
+> +	int param_err;
+> +
+> +	BUILD_BUG_ON(sizeof(struct roccettcp) > ICSK_CA_PRIV_SIZE);
+
+[Severity: Low]
+Will this compile-time assertion fail deterministically?
+
+The struct roccettcp requires 108 bytes of storage (24 u32s =3D 96 bytes,
+3 u16s =3D 6 bytes, 2 bytes padding to align the 4-byte enum bitfield, maki=
+ng
+108 bytes). The BUILD_BUG_ON() enforces a 104-byte limit for
+ICSK_CA_PRIV_SIZE, which would cause a build failure on all platforms.
+
+> +
+> +	/* Check for valid parameter ranges and then precompute factors */
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/arK46Rr0cB7gJ7JS@vo=
+lt-roccet-vm?part=3D1
