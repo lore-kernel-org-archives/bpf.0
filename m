@@ -1,135 +1,183 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE7458122B
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB28D57F721
 	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 20:12:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790194373; cv=none; b=JW8irmqfKNuh3ioj7QqzJquWUjO+Qo9rKI0JGvJQW3QhJ8lMHYBo/LVWGXNYWgBASfaxKHwr/rqKI9ttC0Khbjhiutp26685MY17LQdwEn7M6CZ0ZhNt42nKkfZxQ/DNtCKSMxB/oBNiaQ1hpr8byZgQoWY/tnhuvocrSC5IC3E=
+	t=1790194378; cv=none; b=Xei5nPWI6cmfcr2BZe6rYcvRgEKUY+YVjSOIBwQN+trkiKW6z8ml/xqDsFYc25xeRFRN51emZ3AD2ijRv+iQlLNOVLo+xYv0GFApteku89ucJUUPceqHy/StDCpfbkWc5zwnLxFUIY+HoH2YXEIP/9O975WJqzWvaAeGoA4ctgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790194373; c=relaxed/simple;
-	bh=wAEuQNjEMmFW5aZClx53ALoIyHMSSJNPMinF1Nal70Y=;
+	s=arc-20240116; t=1790194378; c=relaxed/simple;
+	bh=No7mrmR+8LHwu/43B5Yygh4Ij/nyTImdTnzaR/3FG94=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=JU2lrvhhqjaQTQ26bhU3tS0WNiwuv/kGq+pTPlw1aI9s0FeZwdDukInL8zOPeZeoAenzlw+m3IovzRQQo0Cvy5qACg8jqvQjfXp/JA9W3vDRU/izukq9BK9s7i/aa3se8hKAtNMSxwhQmIb2+efimoYg/20yCHjdw7ZiMSpJV/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TBOzKP9k; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=D+c9SF8UH6pgjtDGzEzhx19F+ty1MxWUZoMEFf6FfBQgSqX2DZjxdosWWf8lLO/kegCk74te//9sQyNRlit5pOtUSIsnykCSqzmwSTe5bCmlXiYoN/HZHWhq6HbxzEX+Rraw6pmjT8ZZgvYAwhtIszfAOQQigAfbPXdxuSFm+uE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bXJQpUPJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TBOzKP9k"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 258951F00898;
-	Wed, 23 Sep 2026 20:12:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bXJQpUPJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06D661F0089B;
+	Wed, 23 Sep 2026 20:12:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790194363;
-	bh=JGiYvQ1+a8NmS3ajeASpGC/dbBojlZOw7TmzqPIsptA=;
+	s=k20260515; t=1790194360;
+	bh=50b6NN5voQOs96uzuuiZLerCN+UkebC4BDwX01LsdKk=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=TBOzKP9k7i6X/GNMwMncK2C1UoP08f+/ILj5QEnQvwGrs/PRJeVvKRKAElCe1BwDl
-	 QJrshGrel7//j5hvkyNlrxs6CrxJOr7g+V33XTejbyqIBi+B61tEQ5rqy+GnppEPdo
-	 qgk/MlVr9BtyamGjt4p9ZXsQIz2/iCtPuZ1WSIK0FnrCWn8vIMjuhjmQTZqJ/jlxOs
-	 eegdMubj7cYFaP6OStWaa0F/LP7WuzF1I+AR3S7vzwcF1L2oiPQ1XWTxwmeAnR9V/x
-	 jv1RCeYaPayX2OFMz+vjJhMpHx2o0eIMtah737hZiJ6pyXxuy1whulhv76N2eEFZ5b
-	 Ec3M4k/CbkqlA==
-Content-Type: multipart/mixed; boundary="===============2181079628725225313=="
+	b=bXJQpUPJisqbGZTS/IuXaHAscTyDoP1e59Qb2zNDWBDXUl9E5GghobtN9CsfJIqDY
+	 RvITutelxUktSktu0d3hvUvR3AiTAj0GUQe6XIYUiif3DxcISm2fvHZnJwJ+i2+g3y
+	 ZPjrM9FDsbYf5ArKqOyqot3nqfePgKjckSGDhfUybMOdY2IwFH91KKjkWRBHexoRRf
+	 2Bo4zxmozVpJFV9vaJV/BZNzfZpiNuU4z2WIxCgGuacudrrIll+E1cQYFl6kSgbz5e
+	 Q4YXmyUwTJJfhNbtc1CKUE2hiqkMvUrEN+/xavpxjlnRJhmqoimD3NxBrZrUyQXvEF
+	 doDhoc49xbcrA==
+Content-Type: multipart/mixed; boundary="===============6040287993884596337=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a1d67ea63858c1e4125d88f346df080360f4a9dd7b17e53163ccbfdb0dddd2c3@mail.kernel.org>
-In-Reply-To: <20260923191139.2816206-13-memxor@gmail.com>
-References: <20260923191139.2816206-13-memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v1 12/18] bpf: Size the per-frame verifier structures for a 2 KiB stack
+Message-Id: <0c79a8882d6a3efb42ca407727b2a03ac66675272e0610b319996f582c22cd31@mail.kernel.org>
+In-Reply-To: <20260923191139.2816206-19-memxor@gmail.com>
+References: <20260923191139.2816206-19-memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v1 18/18] selftests/bpf: Test the 2 KiB stack budget
 From: bot+bpf-ci@kernel.org
 To: memxor@gmail.com,bpf@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,tj@kernel.org,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Wed, 23 Sep 2026 20:12:42 +0000 (UTC)
+Date: Wed, 23 Sep 2026 20:12:38 +0000 (UTC)
 
---===============2181079628725225313==
+--===============6040287993884596337==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index d8cafd3d74aa..11fa9f1f087c 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -19,11 +19,12 @@
->   * that converting umax_value to int cannot overflow.
->   */
->  #define BPF_MAX_VAR_SIZ	(1 << 29)
-> -/* size of tmp_str_buf in bpf_verifier.
-> - * we need at least 306 bytes to fit full stack mask representation
-> - * (in the "-8,-16,...,-512" form)
-> +/*
-> + * size of tmp_str_buf in bpf_verifier.
-> + * we need at least 1399 bytes to fit full stack mask representation
-> + * (in the "-8,-16,...,-2048" form)
->   */
-> -#define TMP_STR_BUF_LEN 320
-> +#define TMP_STR_BUF_LEN 1408
-
-TMP_STR_BUF_LEN is raised to 1408 so that bpf_fmt_stack_mask() can render
-all 256 slots. The commit message says the buffer grows "so that all 256
-slots still fit". But every place that consumes env->tmp_str_buf prints it
-through verbose() -> bpf_verifier_vlog(), which formats into a fixed kbuf:
-
-kernel/bpf/log.c:bpf_verifier_vlog() {
-    n = vscnprintf(log->kbuf, BPF_VERIFIER_TMP_LOG_SIZE, fmt, args);
-}
-
-BPF_VERIFIER_TMP_LOG_SIZE is still 1024 (include/linux/bpf_verifier.h).
-The precision backtracking log lines are:
-
-kernel/bpf/backtrack.c: {
-    verbose(env, "stack=%s before ", env->tmp_str_buf);
-    verbose(env, "stack=%s: ", env->tmp_str_buf);
-}
-
-With a full 256-slot mask, the "stack=%s before " line is 1412 bytes and is
-silently cut at 1023 characters. The remaining slots and the trailing
-" before " / ": " separator are lost, so the next log fragment runs into
-the truncated mask.
-
-The mask alone goes over the kbuf limit once roughly 168 or more slots are
-set. The larger tmp_str_buf therefore does not deliver the complete log
-line the comment and commit message promise. The extra 1 KiB only helps up
-to the 1023-character kbuf limit.
-
-This commit only resizes the structures; the verifier still caps the stack
-at 512 bytes here. The problem becomes reachable later in the same series,
-in d1a4a32c6444 ("bpf, x86: Allow programs 2 KiB of stack") and
-5782325bd60a ("bpf, arm64: Allow programs 2 KiB of stack"), which let
-bpf_jit_supports_large_stack() programs use more than 64 slots. No later
-commit in 00a8442f56e5..7757cddf610a changes BPF_VERIFIER_TMP_LOG_SIZE or
-the print sites.
-
-The impact is limited to log readability (no memory-safety or
-verification-result impact), but selftests or tools that parse the stack=
-mask from level-2 logs will see incomplete data.
-
-Should BPF_VERIFIER_TMP_LOG_SIZE be raised to at least TMP_STR_BUF_LEN
-plus a small prefix, or should the mask be emitted in pieces with several
-verbose() calls?
-
->  /* Patch buffer size */
->  #define INSN_BUF_SIZE 32
->
-> @@ -243,12 +244,13 @@ enum bpf_stack_slot_type {
->  #define BPF_REG_SIZE 8	/* size of eBPF register in bytes */
->
->  /*
-> - * Largest number of BPF_REG_SIZE stack slots a single frame can have. A frame
-> - * may use any part of the MAX_BPF_STACK budget; check_max_stack_depth()
-> - * enforces the bound on the combined depth of frames sharing the kernel stack
-> - * and on each frame using a private stack.
-> + * Largest number of BPF_REG_SIZE stack slots a single frame can have, sized
-> + * for the largest stack budget any JIT supports. A frame may use any part of
-> + * its program's budget; check_max_stack_depth() enforces the budget on the
-> + * combined depth of frames sharing the kernel stack and on each frame using
-> + * a private stack.
->   */
-> -#define MAX_BPF_STACK_SLOTS	(MAX_BPF_STACK / BPF_REG_SIZE)
-> +#define MAX_BPF_STACK_SLOTS	(MAX_BPF_STACK_JIT / BPF_REG_SIZE)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
+> index 98db9bafa44b..2b3ec2b79091 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
 
 [ ... ]
+
+> @@ -78,6 +79,34 @@ static void test_private_stack_recur(void)
+>  	struct_ops_private_stack_recur__destroy(skel);
+>  }
+>
+> +/* Two frames of 2 KiB each on the private stack */
+> +static void test_private_stack_large(void)
+> +{
+> +	struct struct_ops_private_stack_large *skel;
+> +	struct bpf_link *link;
+> +
+> +	if (!is_large_stack_supported()) {
+> +		test__skip();
+> +		return;
+> +	}
+
+A subsystem pattern flags this as potentially concerning: The BPF
+selftests guide recommends always including a reason string in the skip
+message so future debuggers know why the test was skipped. When the probe
+gets a clean "invalid write to stack" rejection, is_large_stack_supported()
+prints nothing, and the subtest shows only SKIP with no indication that
+the reason is missing large stack support.
+
+The test_loader's run_subtest() prints a reason
+(printf("%s:SKIP: %s\n", __func__, spec->skip_reason)) before calling
+test__skip(), but here the skip is silent. On the other hand, a bare
+test__skip() with no printf is the most common idiom in prog_tests
+(about 90 of 149 call sites follow this pattern, and the #else branch
+of this same file does the same). Could this include a skip reason,
+or is silent skipping acceptable BPF selftest convention?
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+> index c5c9d6c359bb..c5e3f198ca7f 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+
+[ ... ]
+
+> @@ -1953,6 +1954,45 @@ static void test_tailcall_bpf2bpf_fexit_links(void)
+>  	tailcall_bpf2bpf2__destroy(skel_tc);
+>  }
+>
+> +/*
+> + * test_tailcall_large_stack runs a tail call made from a subprog with a 1536
+> + * byte frame, under a 240-byte caller, into a program with a 2 KiB frame:
+> + *
+> + * entry (240) --call-> subprog_tail (1536) --tailcall-> classifier_0 (2048)
+> + */
+> +static void test_tailcall_large_stack(void)
+> +{
+> +	struct tailcall_large_stack *skel;
+> +	int err, prog_fd, map_fd, key = 0;
+> +	char buff[128] = {};
+> +	LIBBPF_OPTS(bpf_test_run_opts, topts,
+> +		    .data_in = buff,
+> +		    .data_size_in = sizeof(buff),
+> +		    .repeat = 1,
+> +	);
+> +
+> +	if (!is_large_stack_supported()) {
+> +		test__skip();
+> +		return;
+> +	}
+
+The same pattern appears here: when is_large_stack_supported() returns
+false, test__skip() is called with no reason string. Could this also
+benefit from a skip message?
+
+[ ... ]
+
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_large_stack.c b/tools/testing/selftests/bpf/progs/verifier_large_stack.c
+> new file mode 100644
+> index 000000000000..2d4c81a3f0cb
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/verifier_large_stack.c
+> @@ -0,0 +1,377 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/bpf.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include "bpf_misc.h"
+> +
+> +/*
+> + * Programs may use MAX_BPF_STACK_JIT (2 KiB) of stack on JITs that support
+> + * large stacks, combined over a call chain, with no separate limit on a
+> + * single frame. Interpreted programs and other JITs keep 512 bytes.
+> + */
+
+A subsystem pattern flags this as potentially concerning: Several tests
+in this new file appear to be 2 KiB versions of tests that already
+exist elsewhere in the same directory.
+
+For instance, frame_2048_with_may_goto is the same program as
+stack_check_size_512_with_may_goto_jit in verifier_stack_ptr.c
+(r1 = r10; r1 += -512; r0 = 42; *(u32*)(r1 + 0) = r0; may_goto ...; exit),
+with only -512 changed to -2048 and __load_if_JITed() changed to
+__load_if_large_stack().
+
+Similarly, single_frame_2048 / single_frame_2048_no_large_stack check
+the single-frame boundary that verifier_stack_ptr.c already covers with
+stack_check_size_gt_512 and the new stack_check_size_gt_2048 (fp-2056).
+
+The var_off_write_to_2048/2056 tests check variable-offset stack bounds,
+which verifier_var_off.c already covers (it gained
+access_min_out_of_bound_large in the earlier patch in this series).
+
+The private_stack_two_frames test follows verifier_private_stack.c's
+"Private stack, subtree > MAX_BPF_STACK" test, including the same
+__log_level(4) "stack depth max" / "subprog N (...) stack" messages.
+
+The BPF selftests guide asks whether variants like these belong as new
+cases in the existing files instead of a new file, especially since
+the earlier patch in this series (2d0faaadf6a8) already places its
+2 KiB versions next to the originals.
+
+On the other hand, this new file does group tests for the 2 KiB stack
+feature, and several behaviors (four 512-byte frames that fit, a tail
+call from a 1 KiB frame, 1536-byte global subprogs and callbacks) cannot
+occur under the 512-byte budget, so they have no existing counterpart.
+Adding one verifier_<feature>.c file per feature is also common in BPF
+selftests (verifier_private_stack.c is an example). Could you clarify
+whether the overlap cases should be integrated into existing files, or
+is a new file the intended organization here?
 
 
 ---
@@ -137,4 +185,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35909853278
---===============2181079628725225313==--
+--===============6040287993884596337==--
