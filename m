@@ -1,87 +1,171 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4934313E03;
-	Wed, 23 Sep 2026 00:47:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DDD7318EFF;
+	Wed, 23 Sep 2026 00:56:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790124471; cv=none; b=EehUeVdXeI5EXkrsEjyvp2VATZjXU87hHASiZRWFnCxTRthvA1nQX2pkeVfo2Qrnsi2YGdtQ0GWjE1K9SdoxWfgAlwxGF99o7+1BvwaedjlxVhanQnTPJXkenUWJwAwsESQNpjAJOlzpx1RHwLhgCF+Bjm8WproCH+ALnZ6M6qA=
+	t=1790124982; cv=none; b=SSK24WImCLaYkX79RLCcgkbRB1t1/In2IU2xpBNEtTxOW+blEGNSExyDcWYW3eKtApsi3YbAVOB+iJUhZR6RnJjO7jfs61Fy8UtJo0rgiJcrKoY+5CDxoDF/XY0JGz2qia/9Zvhgo3L2mNiTsYA57+Fq7QFNIy7vNk9JuQxfprk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790124471; c=relaxed/simple;
-	bh=B4ra+2ZVhen2q9WjThUNe5NN3AdNdGl8yD8gwXgVeuw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qS4k5llQCGWMWf5fmiZjSmoeCkcaf+X6XuI50SpasIo7qW1y0VkfLcSkQVbC2ZF0k3y5/dAtjSbNljZVa83eveqUAOVRlPVJfGMgF6tUEn/WG706isnXJS3KNtc/lrCq6XPo6e0LsMwzaQjmzj3qTKe/GUhgH+JdXh4G9m/CVhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=TX8yDkcx; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	s=arc-20240116; t=1790124982; c=relaxed/simple;
+	bh=RCu65nTkQnj76zhgyrdUviMiADSeaid5QCzfmZbNP38=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=LlsXUedMb1uWvKJBFe+0DAW/n9DnImyzvCbrwBXfegJo9oHTISrXQaFD0QGhS+G9Q9LDiZopRp4SmilCcjmth8gO5J0zQVFYfD+ssXBAlcLIObFb+Ne7pXDxvI+qPpPcU7JK12YRB/K59zUa8E6wwo98j9HCGOWGFFPZzgWcK2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TQZdeG8A; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="TX8yDkcx"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=xGq9rwKs6zOSERDHcPXz2t5IH8ioYzNY8P7u5lh0XZk=; b=TX8yDkcxbI/5urihg4q3EwAXyu
-	7tesNQWje7Dx8qwWKaA4+9rkx5m3d6PPAGfxaZ3CU73YxZdyjB8zW9Jd1RnKT0vyM1dN+97nlFysf
-	NYySCAx5hUqRhq4DUd8DAafOH5xurHEhwNraT7mLGHXJaJahlNEctea/yIiVYpa8d54E=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1x9B8v-006hSd-KD; Wed, 23 Sep 2026 02:47:25 +0200
-Date: Wed, 23 Sep 2026 02:47:25 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: James Hilliard <james.hilliard1@gmail.com>
-Cc: Russell King <linux@armlinux.org.uk>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Joakim Zhang <qiangqing.zhang@nxp.com>,
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
-	Maxime Chevallier <maxime.chevallier@bootlin.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Christian Marangi <ansuelsmth@gmail.com>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Richard Genoud <richard.genoud@bootlin.com>,
-	Alastair D'Silva <alastair@d-silva.org>,
-	Maxime Ripard <mripard@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net v2 2/2] net: stmmac: keep datapath state coherent
- after reinitialization failure
-Message-ID: <af3d89fc-0fb5-41a9-98ab-5a7df4c10173@lunn.ch>
-References: <20260922-submit-stmmac-reset-fixes-v1-v2-0-d92e609be996@gmail.com>
- <20260922-submit-stmmac-reset-fixes-v1-v2-2-d92e609be996@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TQZdeG8A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3C301F000FF;
+	Wed, 23 Sep 2026 00:56:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790124980;
+	bh=xVe6eZVsM2VaZORoW6oADEFcC35xw7e3lHiorJq7vJs=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=TQZdeG8ACsA2HZWQZNe957zHdNRBCDH8LEI8lX7RxKdGPPtg3HjuE7AeSjOm2blkU
+	 TPMcFSwPCPqVjB1OU28DaJot9R0LYFOyHhzOFbCM5CbxCWw8TCh/I6Sf7InEYDWiuI
+	 CVXWotfC7p0yGFcKKBb9e30ax3lAIM+8BjsgriwrYeEZdVrJHXcsk45ZoMp41PianS
+	 mOwGCsozufI9DgzrTbRER6BVfa22T0SJTyg5kmtX8cfxiuwgR/PC4yUawfJHz77seR
+	 9vLl3mkW61VgOWu8iirFZGBiS0UTqrTOTewttfB6KTN75LlRJ+QZPrmdC4pDT1MwtV
+	 34D9oLXKDzw6A==
+Content-Type: multipart/mixed; boundary="===============8622471367442830940=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260922-submit-stmmac-reset-fixes-v1-v2-2-d92e609be996@gmail.com>
+Message-Id: <3d31f180b472adb3b215571fa73ba38641cc93a33ea2e8e82413f37957c2d99a@mail.kernel.org>
+In-Reply-To: <20260923000801.1764758-3-donggeunyoo.kernel@gmail.com>
+References: <20260923000801.1764758-3-donggeunyoo.kernel@gmail.com>
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Test per-cpu initialization of a BPF_F_CPU created element
+From: bot+bpf-ci@kernel.org
+To: donggeunyoo.kernel@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,leon.hwang@linux.dev,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,donggeunyoo.kernel@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Wed, 23 Sep 2026 00:56:18 +0000 (UTC)
 
-On Tue, Sep 22, 2026 at 05:27:41PM -0600, James Hilliard wrote:
-> An MTU change releases the running datapath before reopening it.
+--===============8622471367442830940==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This is the real problem. Changing the MTU should not release the
-datapath. 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
+> index a72ae0b29f6e..f853f97bb882 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
 
-> If the reopen fails
+[ ... ]
 
-Why is reopen failing?
+> @@ -350,6 +350,80 @@ static void test_lru_percpu_hash_cpu_flag(void)
+>  	test_percpu_map_cpu_flag(BPF_MAP_TYPE_LRU_PERCPU_HASH);
+>  }
+>
+> +/*
+> + * A BPF_F_CPU update that creates an element must zero the value on the other
+> + * cpus, rather than leave them holding whatever the recycled element last
+> + * contained. max_entries is 1 so the second key can only reuse the element
+> + * the first one released.
+> + */
+> +static void test_percpu_map_cpu_flag_create(enum bpf_map_type map_type, __u32 map_flags)
+> +{
+> +	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = map_flags);
+> +	const u32 stale = 0xDEADC0DE, fresh = 0xC0FFEE;
+> +	int nr_cpus, cpu, map_fd, err, key;
+> +	u32 value;
+> +	u64 flags;
+> +
+> +	nr_cpus = libbpf_num_possible_cpus();
+> +	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
+> +		return;
+> +
+> +	if (nr_cpus < 2) {
+> +		test__skip();
+> +		return;
+> +	}
+> +
+> +	map_fd = bpf_map_create(map_type, "cpu_flag_create", sizeof(key), sizeof(value), 1, &opts);
+> +	if (!ASSERT_GE(map_fd, 0, "bpf_map_create"))
+> +		return;
+> +
+> +	key = 1;
+> +	value = stale;
+> +	err = bpf_map_update_elem(map_fd, &key, &value, BPF_F_ALL_CPUS);
+> +	if (!ASSERT_OK(err, "bpf_map_update_elem all_cpus"))
+> +		goto out;
+> +
+> +	err = bpf_map_delete_elem(map_fd, &key);
+> +	if (!ASSERT_OK(err, "bpf_map_delete_elem"))
+> +		goto out;
+> +
+> +	key = 2;
+> +	value = fresh;
+> +	flags = BPF_F_CPU;
+> +	err = bpf_map_update_elem(map_fd, &key, &value, flags);
+> +	if (!ASSERT_OK(err, "bpf_map_update_elem specified cpu"))
+> +		goto out;
+> +
+> +	for (cpu = 0; cpu < nr_cpus; cpu++) {
+> +		value = 0;
+> +		flags = (u64)cpu << 32 | BPF_F_CPU;
+> +		err = bpf_map_lookup_elem_flags(map_fd, &key, &value, flags);
+> +		if (!ASSERT_OK(err, "bpf_map_lookup_elem_flags specified cpu"))
+> +			goto out;
+> +		if (!ASSERT_EQ(value, cpu ? 0 : fresh, "value on specified cpu"))
+> +			goto out;
+> +	}
+> +
+> +out:
+> +	close(map_fd);
+> +}
+> +
+> +static void test_percpu_hash_cpu_flag_create(void)
+> +{
+> +	test_percpu_map_cpu_flag_create(BPF_MAP_TYPE_PERCPU_HASH, 0);
+> +}
+> +
+> +static void test_percpu_hash_cpu_flag_create_malloc(void)
+> +{
+> +	test_percpu_map_cpu_flag_create(BPF_MAP_TYPE_PERCPU_HASH, BPF_F_NO_PREALLOC);
+> +}
 
-You want the driver to allocate all the resources it needs before
-releasing its old resources. That way you can always undo part way
-through and still have a working interface.
+Can this test give false negatives on the BPF_F_NO_PREALLOC variant?
 
-	Andrew
+For preallocated maps, the comment's reasoning holds: max_entries 1 means
+there's a single struct htab_elem whose per-cpu area is allocated once and
+never freed. When the test deletes key 1, the element goes back to the
+freelist with stale 0xDEADC0DE still in its per-cpu area. Creating key 2
+gets that same element back, so if pcpu_init_value() is broken, cpu 0 will
+see 0xC0FFEE but other CPUs will still see 0xDEADC0DE.
+
+With BPF_F_NO_PREALLOC, the per-cpu area uses bpf_mem_alloc:
+
+kernel/bpf/hashtab.c:htab_elem_free()
+    bpf_mem_cache_free(&htab->pcpu_ma, l->ptr_to_pptr)
+
+which does unit_free() and pushes to the *current* CPU's free list. The
+subsequent create calls bpf_mem_cache_alloc(), which does unit_alloc() and
+pops from whatever CPU the second syscall runs on.
+
+If the thread migrated between the delete and the create, unit_alloc() gets
+a prefilled zero object from __alloc_percpu_gfp() rather than the
+just-freed stale one, so the test passes even on a broken kernel. Only when
+both syscalls run on the same CPU does the LIFO allocator return the stale
+object and trigger the assertion.
+
+Should this arm either pin the thread with sched_setaffinity() around the
+delete/create pair, or loop over all CPUs to make the result deterministic?
+
+> +
+> +static void test_lru_percpu_hash_cpu_flag_create(void)
+> +{
+> +	/* lru without prealloc is -ENOTSUPP, so there is no malloc variant */
+> +	test_percpu_map_cpu_flag_create(BPF_MAP_TYPE_LRU_PERCPU_HASH, 0);
+> +}
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35801690900
+--===============8622471367442830940==--
