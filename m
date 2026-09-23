@@ -1,284 +1,694 @@
-Received: from mail-wm2-f6.google.com (mail-wm2-f6.google.com [74.125.225.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93B2C476694
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 08:42:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 471063D904C;
+	Wed, 23 Sep 2026 08:45:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790152942; cv=none; b=nCN4kSqgsX2yeywP73/jk8bZUn9+PcCmM8l5m0UVXUHVHDJoz4J91Roi5SiGpG+ZE3dO3d6dqjsMv2qjyekCooiNf8i0VQR32JrZoefO6q1lgc46BB05G03/KQ2aMauRP2jRGDm9APozoOLiCGaryJ0s3gzQMhRFppcwgw24IY4=
+	t=1790153147; cv=none; b=S8iBS9i4wC0awA+lFYiPhM/dAzoiZVl/vy3ck8nnM4tH1ZvxENdOc0GOQMcLNOfVa80HjLkUUVUC7Uhwnv05RG9FVkVd8f2jV6AbtDQwMoO3V9Q1bd3HAK4BJqx7+OTLEGVxUvrRlGcgxleym3ckXfqw7E59igg5mIgzR+SUB0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790152942; c=relaxed/simple;
-	bh=DOyS1CPECR94FS4O1jSftoS4FtluVkKxiJWl4+ZqPWE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WV70XqteTQ75XcAQVcqaAcqKd2mY9w0SppMthBzkLxidHhT2uSoCKTxrTGK8WZ4wheCyRIXhiqpbeFQ/VmkcCAXwE2GW42HGOih+ZHKAxsie5orYhYRQ8on5MNVPnFnhNsF21GhveEem8XZ3RDaLF1r5VRY6S15omk/4p3G4nVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DWrJp5Bm; arc=none smtp.client-ip=74.125.225.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790153147; c=relaxed/simple;
+	bh=gZoJn8dtnYcXAOAiXm8aGKWW7joS9eEI91xrTyLKbVY=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SF8dzy9V2+KaXcNUpH5Z5saDd+0h3NU5GtKhkacgaFpI7wINS9y3SDDPFFiX4EfHOdHh+KUAtgREImcZtT3hxHzMyYuWMg2imoOPKc3l0GAjxVAdErPvmw5HDW34TvClmwWI8W+v3vL1/bkRP71zU72B2sTJH+7FrnbuEgmlHw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=npYumDqT; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DWrJp5Bm"
-Received: by mail-wm2-f6.google.com with SMTP id 5b1f17b1804b1-49b0dd21eb8so1166745e9.0
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 01:42:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790152928; x=1790757728; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=0MiYWv8nATX8UuMcrgTfEjfOZdAtVU5t6f1RtGnqyXc=;
-        b=DWrJp5Bm9vZeCI1ssaHwk6b4sWoKaVhiQX4uhTor9SlAafQ2Gw/jg5dkVS9JDcpEVj
-         8KAAf4Rv0mQ3qcD2W5eieatsCTHzeevl6PptcB5Zpsm/uFQkHXjXSBGCpZdjDxuHcMY0
-         wT49cqfNhQsOkQnt1MPfvN0R28VPclrwH4U0Q+jL9sKL1SZjBDcteTZsK+nCCrjr7Cez
-         2226lva4Y1VA0GQpxugdRC27gdPSzyD/4eJWcnyTvTEBmtsDdLxykMO4w9QmDU1u5ajZ
-         ZkrAepSqssAvSUXZzPIl5H/EYQCUV+PdvVqz8sBKSPjuo3u7K12njTalSgaWL9+XfFJS
-         tNzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790152928; x=1790757728;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=0MiYWv8nATX8UuMcrgTfEjfOZdAtVU5t6f1RtGnqyXc=;
-        b=bDE/NDfsZFUns7P9IHzJhXGCHXRa3ugMzIQWYhcl93YHfAw8QFe8kNZSfm3u3F32tq
-         W2HkZOqYu3JpebyD/3uVXAvMDkSx2uVsiRsSET7Kah4iKArlbKzCxYXzPQU+fuEa3z0l
-         dt0th3MqoJi8usz0dQ30zIPGyADJeUm5FP3zUKo+FCgyx8b6Vaulx+Hrfcezt+1+orXG
-         KT81eALjdctRBeduyRNyT1oMLpuoUDBMI5CLyQMjJRooRL3/w+qqYeb75bhi8wa8/u5Z
-         vg1tvIn05HArC2EBuQKD/CybdkqNWzG7rcqneILcI6QI78OHMEBlOMEyo7P2oAMLM/qP
-         6npg==
-X-Gm-Message-State: AFuF++mrmFbROvp4JsNg7lWxN6fiWEq/AoLTJbnstNXIWsLZ8hYa3oh5
-	aaOS24Gga2i+SQMJKdX+e3YR+KBGdIQbYFp3LfrNEt+5oYwH89osR2KeTimAejR2
-X-Gm-Gg: AYBFou1cYHJH0Ci46c3JYgND3zGdiddFQXTS5N3acXymt36cacu6V+otLQbETOuS/X5
-	o9wBmmD9fPT/q2ABF6kl057FkOIgk/l02y8ubsROLHd73GU1iDCB8f84iHc/mIHEwHmdFzYxcCq
-	Vtuq+dU5nM6jWXd/Fy/DnpAoLhLynPgepksnv/HSXgL9QI2E+PTKTHXgCoijIhUzVZM0+gxwsKH
-	2h0bSR3B7rsi8yYTTMON3cgwaFeP/z8zC4ubiCkXnbO1WU2tZI5DeWm22V0TV6yuK7U8KFYQ+8c
-	nOcZi/WKQ3vrcgbxZy62UEP/LXx/Zi0132duD+G018pN0uJ0kWkaAzouy8bbmhPNKFq5SwkLVb4
-	nGBsQKwRJN2nuQsX05CCbnLTO48SzLo4mXhKS/BTkaERx1jh/orT11aE2dyn6P75Tjpd/i9fwMc
-	sy/A+/E+YPeLse1BrGMA70CllvZ1aTHOoPHD05yxlSJz+Gs0j8ZmZR7N+AUmXcbFQgkCiBCHjGv
-	8Bvnaz2l3VcM3SgoGDr27L3qHgJcI1Rc2u9pelSDl5kUQoHcfUTtyE3lRyF8r+2Ic2OfW/j9MQS
-	cV9i8u811gUF+2uUqpc0Wo4KVCs+tgIA8AduHi+VFTGgg2Wh
-X-Received: by 2002:a05:600c:19d2:b0:49c:e42b:a4ac with SMTP id 5b1f17b1804b1-49fdf0fb362mr22979905e9.11.1790152928152;
-        Wed, 23 Sep 2026 01:42:08 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe0c3731fsm43821725e9.2.2026.09.23.01.42.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 01:42:07 -0700 (PDT)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 3/3] selftests/bpf: Test fastcall rewrite with indirect stack accesses
-Date: Wed, 23 Sep 2026 10:41:58 +0200
-Message-ID: <20260923084201.2437625-4-memxor@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260923084201.2437625-1-memxor@gmail.com>
-References: <20260923084201.2437625-1-memxor@gmail.com>
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="npYumDqT"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1790153145; x=1821689145;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=gZoJn8dtnYcXAOAiXm8aGKWW7joS9eEI91xrTyLKbVY=;
+  b=npYumDqTXLPOCjs2nkkLluz1h8hGAx8icGwL81axfAaOhHXkcykf5zcN
+   2q6FeTtzOYW+GoTut0yQzX3f6SOuUcLG2RugYmol7hkK4c4VYde0eCuGv
+   22Yful6SfmsHlGGW41JHpuUbh8eYdnlSSeiGvH8rnJKisUI2CR0V/QNRh
+   gELiDDMUgBqdGYYZ8Z0z2inlAZfs7pNfmt2sIokoWDsK3TWypSepxzxJi
+   n+Nc3eue/RkGJ09iKTP4qUoIrDZQjvWJyAU9EP6Ax74iKC6UTVG7HlErK
+   KqB2S6fo0Lvv+gIosscFIkDCQ7onBWVHzBSWSW07OW4OOfWmwrM2n8dwH
+   A==;
+X-CSE-ConnectionGUID: iKr+KxGLRXWYaWM+I386fA==
+X-CSE-MsgGUID: ciBZ7Q/PQQSoOwQJ46eehA==
+X-IronPort-AV: E=Sophos;i="6.27,118,1787036400"; 
+   d="scan'208";a="231148803"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Sep 2026 01:45:43 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Wed, 23 Sep 2026 01:45:43 -0700
+Received: from DEN-DL-M70577 (10.10.85.11) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
+ Transport; Wed, 23 Sep 2026 01:45:39 -0700
+Date: Wed, 23 Sep 2026 10:45:38 +0200
+From: Daniel Machon <daniel.machon@microchip.com>
+To: <netdev-bot+sashiko@kernel.org>
+CC: <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, <horatiu.vultur@microchip.com>,
+	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
+	<ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
+	<john.fastabend@gmail.com>, <sdf@fomichev.me>, <herve.codina@bootlin.com>,
+	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <mohsin.bashr@gmail.com>,
+	<richardcochran@gmail.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next v7 10/14] net: lan966x: add PCIe FDMA support
+Message-ID: <20260923084538.wgkw2nt5ergoxcot@DEN-DL-M70577>
+References: <20260918-lan966x-pci-fdma-v7-10-0ecc179c8a2c@microchip.com>
+ <179008205148.2160803.12818321368571406375@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5243; i=memxor@gmail.com; h=from:subject; bh=DOyS1CPECR94FS4O1jSftoS4FtluVkKxiJWl4+ZqPWE=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvzhF2/JzRGVh10iZ9hKfbFrb0poVP25oYN005Zysddj 95k+lGjo5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABP5Ks/I0Mz0XL+h6NJO2RW7 Um4f7vl5NvWglpLuYtMdb3q37b+depuRoXdq4fTvmYp7xJTWTP4gcpxP0GmW6uYtM0wN4y4vvjL ZjQMA
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <179008205148.2160803.12818321368571406375@kernel.org>
 
-Add tests where a helper stack buffer, or a load through a pointer into
-another frame, overlaps the slots of a fastcall spill/fill pair. The
-rewrite must not be applied in these cases, so check that the spill and
-fill remain in the translated program and that the final stack depth
-still covers the accessed slots. Cover:
+> Thank you for your contribution! Sashiko AI review found 6 potential
+> issue(s) to consider.
+> 
+> Critical: 0 · High: 0 · Medium: 4 (1) · Low: 2
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [Medium] DISCARDED (resolved later in the series): claim that the new {
+>   TARGET_PCIE_DBI, 0x400000, 0 } iomap entry points 3 MiB past the end…
+> - [Medium] DISCARDED (resolved later in the series): claim that
+>   lan966x_fdma_pci_resize() returning -EOPNOTSUPP unconditionally makes…
+> - [Medium] The PCIe FDMA path places hardware descriptors in host memory
+>   and lets the LAN966x endpoint fetch them over PCIe, but every…
+> - [Medium] net: lan966x: rx_bytes statistic undercounts received frame
+>   size
+> - [Low] DISCARDED (resolved later in the series): claim that the PCIe
+>   FDMA backend is dead code because drivers/misc/lan966x_pci.dtso…
+> - [Low] In lan966x_fdma_pci_napi_poll() the FDMA_ERROR arm carries the
+>   comment "No rx_dropped increment here because src_port is invalid.",…
+> 
+> Pre-existing issues:
+> - [Medium] DISCARDED: claim that __fdma_dcb_add() links a new DCB into
+>   the live hardware chain (writing fdma->last_dcb->nextptr) before…
+> 
+> --
+> 
+> net: lan966x: add PCIe FDMA support
+> 
+> This adds a second FDMA backend for lan966x that is selected when the
+> switch is enumerated over PCIe. It uses contiguous coherent DMA buffers
+> mapped through the endpoint ATU and memcpy-based frame transfer, and it
+> opts out of XDP and PTP on that path.
+> 
+> A couple of questions about the new path below.
+> 
+> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
+> > new file mode 100644
+> > index 000000000000..5d6902459f20
+> > --- /dev/null
+> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
+> > @@ -0,0 +1,421 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
+> > +
+> > +#include "fdma_api.h"
+> > +#include "lan966x_main.h"
+> > +
+> > +static int lan966x_fdma_pci_dataptr_cb(struct fdma *fdma, int dcb, int db,
+> > +                                    u64 *dataptr)
+> > +{
+> > +     u64 addr;
+> > +
+> > +     addr = fdma_dataptr_dma_addr_contiguous(fdma, dcb, db);
+> > +
+> > +     *dataptr = fdma_pci_atu_translate_addr(fdma->atu_region, addr);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int lan966x_fdma_pci_nextptr_cb(struct fdma *fdma, int dcb, u64 *nextptr)
+> > +{
+> > +     u64 addr;
+> > +
+> > +     fdma_nextptr_cb(fdma, dcb, &addr);
+> > +
+> > +     *nextptr = fdma_pci_atu_translate_addr(fdma->atu_region, addr);
+> > +
+> > +     return 0;
+> > +}
+> 
+> [Severity: Medium]
+> Is this path expected to work on a big-endian host?
+> 
+> Until now the descriptor producer and the FDMA engine were both on the
+> little-endian SoC, so the native-endian descriptor layout in
+> drivers/net/ethernet/microchip/fdma/fdma_api.h was fine:
+> 
+>   struct fdma_db {
+>         u64 dataptr;
+>         u64 status;
+>   };
+> 
+>   struct fdma_dcb {
+>         u64 nextptr;
+>         u64 info;
+>         struct fdma_db db[FDMA_DB_MAX];
+>   };
+> 
+> With PCIe FDMA the descriptors live in host memory and are fetched by the
+> endpoint, so the host and the engine can disagree on byte order. The
+> translated addresses written here, and the status/info words written by
+> __fdma_db_add()/__fdma_dcb_add(), all go out in host byte order, and the
+> HW-written DONE/BLOCKL fields are read back the same way in
+> lan966x_fdma_pci_get_next_dcb() and lan966x_fdma_pci_rx_check_frame().
+> 
+> CONFIG_MCHP_LAN966X_PCI in drivers/misc/Kconfig only has
+> 
+>   depends on PCI
+>   depends on OF_OVERLAY
+> 
+> so a big-endian host (e.g. powerpc) can select it. On such a host, would
+> the engine see byte-swapped nextptr/dataptr and length fields, i.e. would
+> RX/TX not work at all? Should the descriptor fields become explicit
+> little-endian types with accessors at the hardware boundary, or should the
+> Kconfig entry gain a little-endian dependency?
 
- - a constant-sized uninitialized output without CAP_PERFMON;
- - the same output in the caller's stack, passed to a helper by a callee;
- - a helper input whose only initialization is the fastcall spill;
- - a callee load from the caller's fastcall spill slot.
+Hmm. Never tested on PowerPC, not this driver nor the DT overlay mechanism it
+relies on for PCI deployment, which has only been exercised on ARM and x86 so
+far (AFAICT) [1].
 
-Also add a zero-sized buffer, for which the rewrite must still be
-applied.
+[1] https://lore.kernel.org/all/20240430183301.46568e35@bootlin.com/
 
-The tests only load the programs and inspect the verifier log and the
-translated instructions. Do not run them: without the fixes, the
-verifier accepts programs that access memory outside their stack frame.
+> 
+> [ ... ]
+> 
+> > +static int lan966x_fdma_pci_rx_check_frame(struct lan966x_rx *rx, u64 *src_port)
+> > +{
+> [ ... ]
+> > +     lan966x_ifh_get_src_port(virt_addr, src_port);
+> > +
+> > +     if (*src_port >= lan966x->num_phys_ports)
+> > +             return FDMA_ERROR;
+> > +
+> > +     port = lan966x->ports[*src_port];
+> > +     if (!port)
+> > +             return FDMA_ERROR;
+> > +
+> > +     db = fdma_db_next_get(fdma);
+> > +
+> > +     /* BLOCKL is a 16-bit HW-populated field; reject obviously-bad
+> > +      * values before they feed memcpy/XDP sizes.
+> > +      */
+> > +     blockl = FDMA_DCB_STATUS_BLOCKL(db->status);
+> > +     if (!lan966x_fdma_pci_rx_size_fits(fdma, blockl))
+> > +             return FDMA_ERROR;
+> > +
+> > +     return FDMA_PASS;
+> > +}
+> 
+> [ ... ]
+> 
+> > +             switch (lan966x_fdma_pci_rx_check_frame(rx, &src_port)) {
+> > +             case FDMA_PASS:
+> > +                     break;
+> > +             case FDMA_ERROR:
+> > +                     /* No rx_dropped increment here because src_port is
+> > +                      * invalid.
+> > +                      */
+> > +                     fdma_dcb_advance(fdma);
+> > +                     continue;
+> > +             }
+> 
+> [Severity: Low]
+> Is this comment accurate for all FDMA_ERROR cases?
+> 
+> lan966x_fdma_pci_rx_check_frame() also returns FDMA_ERROR for a BLOCKL
+> value rejected by lan966x_fdma_pci_rx_size_fits(), and that check runs
+> after *src_port and lan966x->ports[*src_port] have already been validated.
+> 
+> So for a frame whose BLOCKL is below IFH_LEN_BYTES + ETH_HLEN +
+> ETH_FCS_LEN or above db_size - XDP_PACKET_HEADROOM, src_port is known
+> good, yet the frame is dropped without incrementing rx_dropped on
+> lan966x->ports[src_port]->dev.
+> 
+> Would it make sense to distinguish the two failures so the size-rejected
+> frames get counted, and adjust the comment accordingly?
+> 
+> [ ... ]
+> 
+> > @@ -0,0 +1,421 @@
+> > +// SPDX-License-Identifier: GPL-2.0+
+> > +
+> > +#include "fdma_api.h"
+> > +#include "lan966x_main.h"
+> > +
+> > +static int lan966x_fdma_pci_dataptr_cb(struct fdma *fdma, int dcb, int db,
+> > +                                    u64 *dataptr)
+> > +{
+> > +     u64 addr;
+> > +
+> > +     addr = fdma_dataptr_dma_addr_contiguous(fdma, dcb, db);
+> > +
+> > +     *dataptr = fdma_pci_atu_translate_addr(fdma->atu_region, addr);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int lan966x_fdma_pci_nextptr_cb(struct fdma *fdma, int dcb, u64 *nextptr)
+> > +{
+> > +     u64 addr;
+> > +
+> > +     fdma_nextptr_cb(fdma, dcb, &addr);
+> > +
+> > +     *nextptr = fdma_pci_atu_translate_addr(fdma->atu_region, addr);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +/* Stop the TX queues on every port, so nothing feeds the injection channel
+> > + * while it is torn down or resized.
+> > + */
+> > +static void lan966x_fdma_tx_disable_netdev(struct lan966x *lan966x)
+> > +{
+> > +     struct lan966x_port *port;
+> > +     int i;
+> > +
+> > +     for (i = 0; i < lan966x->num_phys_ports; ++i) {
+> > +             port = lan966x->ports[i];
+> > +             if (!port)
+> > +                     continue;
+> > +
+> > +             netif_tx_disable(port->dev);
+> > +     }
+> > +}
+> > +
+> > +static int lan966x_fdma_pci_rx_alloc(struct lan966x_rx *rx)
+> > +{
+> > +     struct lan966x *lan966x = rx->lan966x;
+> > +     struct fdma *fdma = &rx->fdma;
+> > +     int err;
+> > +
+> > +     err = fdma_alloc_coherent_and_map(lan966x->dma_dev, fdma,
+> > +                                       &lan966x->atu);
+> > +     if (err)
+> > +             return err;
+> > +
+> > +     err = fdma_dcbs_init(fdma,
+> > +                          FDMA_DCB_INFO_DATAL(fdma->db_size - XDP_PACKET_HEADROOM),
+> > +                          FDMA_DCB_STATUS_INTR);
+> > +     if (err) {
+> > +             fdma_free_coherent_and_unmap(lan966x->dma_dev, fdma);
+> > +             return err;
+> > +     }
+> > +
+> > +     lan966x_fdma_llp_configure(lan966x,
+> > +                                fdma->atu_region->base_addr,
+> > +                                fdma->channel_id);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int lan966x_fdma_pci_tx_alloc(struct lan966x_tx *tx)
+> > +{
+> > +     struct lan966x *lan966x = tx->lan966x;
+> > +     struct fdma *fdma = &tx->fdma;
+> > +     int err;
+> > +
+> > +     err = fdma_alloc_coherent_and_map(lan966x->dma_dev, fdma,
+> > +                                       &lan966x->atu);
+> > +     if (err)
+> > +             return err;
+> > +
+> > +     err = fdma_dcbs_init(fdma,
+> > +                          FDMA_DCB_INFO_DATAL(fdma->db_size),
+> > +                          FDMA_DCB_STATUS_DONE);
+> > +     if (err) {
+> > +             fdma_free_coherent_and_unmap(lan966x->dma_dev, fdma);
+> > +             return err;
+> > +     }
+> > +
+> > +     lan966x_fdma_llp_configure(lan966x,
+> > +                                fdma->atu_region->base_addr,
+> > +                                fdma->channel_id);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int lan966x_fdma_pci_get_next_dcb(struct fdma *fdma)
+> > +{
+> > +     struct fdma_db *db;
+> > +
+> > +     for (int i = 0; i < fdma->n_dcbs; i++) {
+> > +             db = fdma_db_get(fdma, i, 0);
+> > +
+> > +             if (!fdma_db_is_done(db))
+> > +                     continue;
+> > +             if (fdma_is_last(fdma, &fdma->dcbs[i]))
+> > +                     continue;
+> > +
+> > +             return i;
+> > +     }
+> > +
+> > +     return -ENOSPC;
+> > +}
+> > +
+> > +/* TX slot layout (sizes in bytes):
+> > + *
+> > + *  +---------------------+-----+---------+-----+
+> > + *  | XDP_PACKET_HEADROOM | IFH | payload | FCS |
+> > + *  |         256         |  28 |   len   |   4 |
+> > + *  +---------------------+-----+---------+-----+
+> > + *  |<---------------- db_size ----------------->|
+> > + *
+> > + * Return true if the frame plus required overhead fits.
+> > + */
+> > +static bool lan966x_fdma_pci_tx_size_fits(struct fdma *fdma, u32 len)
+> > +{
+> > +     return XDP_PACKET_HEADROOM + IFH_LEN_BYTES + len + ETH_FCS_LEN <=
+> > +            fdma->db_size;
+> > +}
+> > +
+> > +/* Return true if blockl is a valid RX frame size. */
+> > +static bool lan966x_fdma_pci_rx_size_fits(struct fdma *fdma, u32 blockl)
+> > +{
+> > +     return blockl >= IFH_LEN_BYTES + ETH_HLEN + ETH_FCS_LEN &&
+> > +            blockl <= fdma->db_size - XDP_PACKET_HEADROOM;
+> > +}
+> > +
+> > +static int lan966x_fdma_pci_rx_check_frame(struct lan966x_rx *rx, u64 *src_port)
+> > +{
+> > +     struct lan966x *lan966x = rx->lan966x;
+> > +     struct fdma *fdma = &rx->fdma;
+> > +     struct lan966x_port *port;
+> > +     struct fdma_db *db;
+> > +     void *virt_addr;
+> > +     u32 blockl;
+> > +
+> > +     /* virt_addr points to the IFH. */
+> > +     virt_addr = fdma_dataptr_virt_addr_contiguous(fdma,
+> > +                                                   fdma->dcb_index,
+> > +                                                   fdma->db_index);
+> > +
+> > +     lan966x_ifh_get_src_port(virt_addr, src_port);
+> > +
+> > +     if (*src_port >= lan966x->num_phys_ports)
+> > +             return FDMA_ERROR;
+> > +
+> > +     port = lan966x->ports[*src_port];
+> > +     if (!port)
+> > +             return FDMA_ERROR;
+> > +
+> > +     db = fdma_db_next_get(fdma);
+> > +
+> > +     /* BLOCKL is a 16-bit HW-populated field; reject obviously-bad
+> > +      * values before they feed memcpy/XDP sizes.
+> > +      */
+> > +     blockl = FDMA_DCB_STATUS_BLOCKL(db->status);
+> > +     if (!lan966x_fdma_pci_rx_size_fits(fdma, blockl))
+> > +             return FDMA_ERROR;
+> > +
+> > +     return FDMA_PASS;
+> > +}
+> > +
+> > +static struct sk_buff *lan966x_fdma_pci_rx_get_frame(struct lan966x_rx *rx,
+> > +                                                  u64 src_port)
+> > +{
+> > +     struct lan966x *lan966x = rx->lan966x;
+> > +     struct fdma *fdma = &rx->fdma;
+> > +     struct sk_buff *skb;
+> > +     struct fdma_db *db;
+> > +     u32 data_len;
+> > +
+> > +     /* Get the received frame and create an SKB for it. */
+> > +     db = fdma_db_next_get(fdma);
+> > +     data_len = FDMA_DCB_STATUS_BLOCKL(db->status);
+> > +
+> > +     skb = napi_alloc_skb(&lan966x->napi, data_len);
+> > +     if (unlikely(!skb))
+> > +             return NULL;
+> > +
+> > +     memcpy(skb->data,
+> > +            fdma_dataptr_virt_addr_contiguous(fdma,
+> > +                                              fdma->dcb_index,
+> > +                                              fdma->db_index),
+> > +                                              data_len);
+> > +
+> > +     skb_put(skb, data_len);
+> > +
+> > +     skb->dev = lan966x->ports[src_port]->dev;
+> > +     skb_pull(skb, IFH_LEN_BYTES);
+> > +
+> > +     skb_trim(skb, skb->len - ETH_FCS_LEN);
+> > +
+> > +     skb->protocol = eth_type_trans(skb, skb->dev);
+> > +
+> > +     if (lan966x->bridge_mask & BIT(src_port)) {
+> > +             skb->offload_fwd_mark = 1;
+> > +
+> > +             skb_reset_network_header(skb);
+> > +             if (!lan966x_hw_offload(lan966x, src_port, skb))
+> > +                     skb->offload_fwd_mark = 0;
+> > +     }
+> > +
+> > +     skb->dev->stats.rx_bytes += skb->len;
+> > +     skb->dev->stats.rx_packets++;
+> > +
+> > +     return skb;
+> > +}
+> > +
+> > +static int lan966x_fdma_pci_xmit(struct sk_buff *skb, __be32 *ifh,
+> > +                              struct net_device *dev)
+> > +{
+> > +     struct lan966x_port *port = netdev_priv(dev);
+> > +     struct lan966x *lan966x = port->lan966x;
+> > +     struct lan966x_tx *tx = &lan966x->tx;
+> > +     struct fdma *fdma = &tx->fdma;
+> > +     int next_to_use;
+> > +     void *virt_addr;
+> > +
+> > +     next_to_use = lan966x_fdma_pci_get_next_dcb(fdma);
+> > +
+> > +     if (next_to_use < 0) {
+> > +             netif_stop_queue(dev);
+> > +             return NETDEV_TX_BUSY;
+> > +     }
+> > +
+> > +     if (skb_put_padto(skb, ETH_ZLEN)) {
+> > +             dev->stats.tx_dropped++;
+> > +             return NETDEV_TX_OK;
+> > +     }
+> > +
+> > +     if (!lan966x_fdma_pci_tx_size_fits(fdma, skb->len)) {
+> > +             dev_kfree_skb_any(skb);
+> > +             dev->stats.tx_dropped++;
+> > +             return NETDEV_TX_OK;
+> > +     }
+> > +
+> > +     skb_tx_timestamp(skb);
+> > +
+> > +     /* virt_addr points to the IFH. */
+> > +     virt_addr = fdma_dataptr_virt_addr_contiguous(fdma, next_to_use, 0);
+> > +     memcpy(virt_addr, ifh, IFH_LEN_BYTES);
+> > +     memcpy(virt_addr + IFH_LEN_BYTES, skb->data, skb->len);
+> > +
+> > +     /* Order frame write before DCB status write below. */
+> > +     dma_wmb();
+> > +
+> > +     fdma_dcb_add(fdma,
+> > +                  next_to_use,
+> > +                  0,
+> > +                  FDMA_DCB_STATUS_INTR |
+> > +                  FDMA_DCB_STATUS_SOF |
+> > +                  FDMA_DCB_STATUS_EOF |
+> > +                  FDMA_DCB_STATUS_BLOCKO(0) |
+> > +                  FDMA_DCB_STATUS_BLOCKL(IFH_LEN_BYTES + skb->len + ETH_FCS_LEN));
+> > +
+> > +     /* Start the transmission. */
+> > +     lan966x_fdma_tx_start(tx);
+> > +
+> > +     dev->stats.tx_bytes += skb->len;
+> > +     dev->stats.tx_packets++;
+> > +
+> > +     /* Safe to free: PTP is not supported on the PCIe path yet,
+> > +      * so lan966x->ptp is always 0 here.
+> > +      */
+> > +     dev_consume_skb_any(skb);
+> > +
+> > +     return NETDEV_TX_OK;
+> > +}
+> > +
+> > +static int lan966x_fdma_pci_napi_poll(struct napi_struct *napi, int weight)
+> > +{
+> > +     struct lan966x *lan966x = container_of(napi, struct lan966x, napi);
+> > +     struct lan966x_rx *rx = &lan966x->rx;
+> > +     struct fdma *fdma = &rx->fdma;
+> > +     int dcb_reload, old_dcb;
+> > +     struct sk_buff *skb;
+> > +     int counter = 0;
+> > +     u64 src_port;
+> > +
+> > +     /* Wake any stopped TX queues if a TX DCB is available. */
+> > +     spin_lock(&lan966x->tx_lock);
+> > +     if (lan966x_fdma_pci_get_next_dcb(&lan966x->tx.fdma) >= 0)
+> > +             lan966x_fdma_wakeup_netdev(lan966x);
+> > +     spin_unlock(&lan966x->tx_lock);
+> > +
+> > +     dcb_reload = fdma->dcb_index;
+> > +
+> > +     /* Get all received skbs. */
+> > +     while (counter < weight) {
+> > +             if (!fdma_has_frames(fdma))
+> > +                     break;
+> > +             /* Order DONE read before DCB/frame reads below. */
+> > +             dma_rmb();
+> > +             counter++;
+> > +             switch (lan966x_fdma_pci_rx_check_frame(rx, &src_port)) {
+> > +             case FDMA_PASS:
+> > +                     break;
+> > +             case FDMA_ERROR:
+> > +                     /* No rx_dropped increment here because src_port is
+> > +                      * invalid.
+> > +                      */
+> > +                     fdma_dcb_advance(fdma);
+> > +                     continue;
+> > +             }
+> > +             skb = lan966x_fdma_pci_rx_get_frame(rx, src_port);
+> > +             fdma_dcb_advance(fdma);
+> > +             if (!skb) {
+> > +                     lan966x->ports[src_port]->dev->stats.rx_dropped++;
+> > +                     continue;
+> > +             }
+> > +
+> > +             napi_gro_receive(&lan966x->napi, skb);
+> > +     }
+> > +     while (dcb_reload != fdma->dcb_index) {
+> > +             old_dcb = dcb_reload;
+> > +             dcb_reload++;
+> > +             dcb_reload &= fdma->n_dcbs - 1;
+> > +
+> > +             fdma_dcb_add(fdma,
+> > +                          old_dcb,
+> > +                          FDMA_DCB_INFO_DATAL(fdma->db_size - XDP_PACKET_HEADROOM),
+> > +                          FDMA_DCB_STATUS_INTR);
+> > +
+> > +             lan966x_fdma_rx_reload(rx);
+> > +     }
+> > +
+> > +     if (counter < weight && napi_complete_done(napi, counter))
+> > +             lan_wr(0xff, lan966x, FDMA_INTR_DB_ENA);
+> > +
+> > +     return counter;
+> > +}
+> > +
+> > +static int lan966x_fdma_pci_init(struct lan966x *lan966x)
+> > +{
+> > +     struct fdma *rx_fdma = &lan966x->rx.fdma;
+> > +     struct fdma *tx_fdma = &lan966x->tx.fdma;
+> > +     int err;
+> > +
+> > +     if (!lan966x->fdma)
+> > +             return 0;
+> > +
+> > +     lan_wr(FDMA_CTRL_NRESET_SET(0), lan966x, FDMA_CTRL);
+> > +     lan_wr(FDMA_CTRL_NRESET_SET(1), lan966x, FDMA_CTRL);
+> > +
+> > +     fdma_pci_atu_init(&lan966x->atu, lan966x->regs[TARGET_PCIE_DBI]);
+> > +
+> > +     lan966x->rx.lan966x = lan966x;
+> > +     lan966x->rx.max_mtu = lan966x_fdma_get_max_frame(lan966x);
+> > +     rx_fdma->channel_id = FDMA_XTR_CHANNEL;
+> > +     rx_fdma->n_dcbs = FDMA_DCB_MAX;
+> > +     rx_fdma->n_dbs = FDMA_RX_DCB_MAX_DBS;
+> > +     rx_fdma->priv = lan966x;
+> > +     rx_fdma->db_size = FDMA_PCI_DB_SIZE(lan966x->rx.max_mtu);
+> > +     rx_fdma->size = fdma_get_size_contiguous(rx_fdma);
+> > +     rx_fdma->ops.nextptr_cb = &lan966x_fdma_pci_nextptr_cb;
+> > +     rx_fdma->ops.dataptr_cb = &lan966x_fdma_pci_dataptr_cb;
+> > +
+> > +     lan966x->tx.lan966x = lan966x;
+> > +     tx_fdma->channel_id = FDMA_INJ_CHANNEL;
+> > +     tx_fdma->n_dcbs = FDMA_DCB_MAX;
+> > +     tx_fdma->n_dbs = FDMA_TX_DCB_MAX_DBS;
+> > +     tx_fdma->priv = lan966x;
+> > +     tx_fdma->db_size = FDMA_PCI_DB_SIZE(lan966x->rx.max_mtu);
+> > +     tx_fdma->size = fdma_get_size_contiguous(tx_fdma);
+> > +     tx_fdma->ops.nextptr_cb = &lan966x_fdma_pci_nextptr_cb;
+> > +     tx_fdma->ops.dataptr_cb = &lan966x_fdma_pci_dataptr_cb;
+> > +
+> > +     err = lan966x_fdma_pci_rx_alloc(&lan966x->rx);
+> > +     if (err)
+> > +             return err;
+> > +
+> > +     err = lan966x_fdma_pci_tx_alloc(&lan966x->tx);
+> > +     if (err) {
+> > +             fdma_free_coherent_and_unmap(lan966x->dma_dev, rx_fdma);
+> > +             return err;
+> > +     }
+> > +
+> > +     lan966x_fdma_rx_start(&lan966x->rx);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int lan966x_fdma_pci_resize(struct lan966x *lan966x)
+> > +{
+> > +     return -EOPNOTSUPP;
+> > +}
+> > +
+> > +static void lan966x_fdma_pci_deinit(struct lan966x *lan966x)
+> > +{
+> > +     if (!lan966x->fdma)
+> > +             return;
+> > +
+> > +     if (lan966x->fdma_ndev)
+> > +             napi_disable(&lan966x->napi);
+> > +
+> > +     lan966x_fdma_tx_disable_netdev(lan966x);
+> > +     lan966x_fdma_rx_disable(&lan966x->rx);
+> > +     lan966x_fdma_tx_disable(&lan966x->tx);
+> > +
+> > +     fdma_free_coherent_and_unmap(lan966x->dma_dev, &lan966x->rx.fdma);
+> > +     fdma_free_coherent_and_unmap(lan966x->dma_dev, &lan966x->tx.fdma);
+> > +}
+> > +
+> > +const struct lan966x_fdma_ops lan966x_fdma_pci_ops = {
+> > +     .fdma_init = &lan966x_fdma_pci_init,
+> > +     .fdma_deinit = &lan966x_fdma_pci_deinit,
+> > +     .fdma_xmit = &lan966x_fdma_pci_xmit,
+> > +     .fdma_poll = &lan966x_fdma_pci_napi_poll,
+> > +     .fdma_resize = &lan966x_fdma_pci_resize,
+> > +};
+> 
+> [Severity: Medium]
+> Is rx_bytes meant to count the frame as it arrived on the wire?
+> 
+> By the time this runs, skb->len has already been reduced twice: the
+> skb_trim() above drops ETH_FCS_LEN, and eth_type_trans() pulls the
+> MAC header out of the linear region, so skb->len is short by at least
+> ETH_HLEN. If lan966x_hw_offload() ends up untagging a VLAN header,
+> that is another four bytes gone. So every packet delivered through
+> lan966x_fdma_pci_rx_get_frame() undercounts rx_bytes by 14 bytes or
+> more, which is visible to userspace via ip -s link.
+> 
+> The frame length is available before any of that surgery happens --
+> data_len from FDMA_DCB_STATUS_BLOCKL(db->status), or skb->len right
+> after the skb_pull(skb, IFH_LEN_BYTES) -- so accounting could be done
+> there instead.
+> 
+> I realise this mirrors what the existing register/page path in
+> lan966x_fdma.c does, so if the intent is to keep the two backends
+> byte-for-byte consistent, please say so; otherwise it would be good
+> not to copy the miscount into the new file.
 
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- .../bpf/progs/verifier_bpf_fastcall.c         | 161 ++++++++++++++++++
- 1 file changed, 161 insertions(+)
+Not only lan966x, but sparx5 and lan969x does the exact same thing, increasing
+rx_bytes after headers are pulled.  The undercount is real, but not visible to
+userspace. Both implementations (platform and PCI) read hardware counters directly
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-index a73b837553fb..5f54f542a622 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
-@@ -502,6 +502,167 @@ __naked void bad_helper_write(void)
- 	: __clobber_all);
- }
- 
-+/*
-+ * Load these programs without running them: removing the fastcall spills must
-+ * not shrink the stack below an output buffer that has no explicit accesses.
-+ */
-+SEC("tc")
-+__log_level(4)
-+__msg_unpriv("subprog 0 (helper_uninit_stack) main {{.*}} stack 64")
-+__xlated_unpriv("*(u64 *)(r10 -8) = r1")
-+__xlated_unpriv("...")
-+__xlated_unpriv("r1 = *(u64 *)(r10 -8)")
-+__caps_unpriv(CAP_BPF | CAP_NET_ADMIN)
-+__success_unpriv
-+__naked void helper_uninit_stack(void)
-+{
-+	asm volatile (
-+	"*(u64 *)(r10 - 8) = r1;"
-+	"call %[bpf_get_smp_processor_id];"
-+	"r1 = *(u64 *)(r10 - 8);"
-+	"r2 = 0;"
-+	"r3 = r10;"
-+	"r3 += -64;"
-+	"r4 = 8;"
-+	"call %[bpf_skb_load_bytes];"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_smp_processor_id),
-+	  __imm(bpf_skb_load_bytes)
-+	: __clobber_all);
-+}
-+
-+static __used __naked void helper_uninit_stack_callee(void)
-+{
-+	asm volatile (
-+	"r3 = r2;"
-+	"r2 = 0;"
-+	"r4 = 8;"
-+	"call %[bpf_skb_load_bytes];"
-+	"exit;"
-+	:
-+	: __imm(bpf_skb_load_bytes)
-+	: __clobber_all);
-+}
-+
-+SEC("tc")
-+__log_level(4)
-+__msg_unpriv("subprog 0 (helper_uninit_stack_caller) main {{.*}} stack 64")
-+__xlated_unpriv("*(u64 *)(r10 -8) = r1")
-+__xlated_unpriv("...")
-+__xlated_unpriv("r1 = *(u64 *)(r10 -8)")
-+__caps_unpriv(CAP_BPF | CAP_NET_ADMIN)
-+__success_unpriv
-+__naked void helper_uninit_stack_caller(void)
-+{
-+	asm volatile (
-+	"*(u64 *)(r10 - 8) = r1;"
-+	"call %[bpf_get_smp_processor_id];"
-+	"r1 = *(u64 *)(r10 - 8);"
-+	"r2 = r10;"
-+	"r2 += -64;"
-+	"call helper_uninit_stack_callee;"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_smp_processor_id)
-+	: __clobber_all);
-+}
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} fastcall_map SEC(".maps");
-+
-+SEC("tc")
-+__log_level(4)
-+__msg("subprog 0 (helper_reads_fastcall_spill) main {{.*}} stack 8")
-+__xlated("*(u64 *)(r10 -8) = r1")
-+__xlated("...")
-+__xlated("r1 = *(u64 *)(r10 -8)")
-+__success
-+__naked void helper_reads_fastcall_spill(void)
-+{
-+	asm volatile (
-+	"r1 = 0;"
-+	"*(u64 *)(r10 - 8) = r1;"
-+	"call %[bpf_get_smp_processor_id];"
-+	"r1 = *(u64 *)(r10 - 8);"
-+	"r1 = %[fastcall_map] ll;"
-+	"r2 = r10;"
-+	"r2 += -8;"
-+	"call %[bpf_map_lookup_elem];"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_smp_processor_id),
-+	  __imm(bpf_map_lookup_elem),
-+	  __imm_addr(fastcall_map)
-+	: __clobber_all);
-+}
-+
-+static __used __naked void read_caller_stack_callee(void)
-+{
-+	asm volatile (
-+	"r0 = *(u64 *)(r1 + 0);"
-+	"exit;"
-+	::: __clobber_all);
-+}
-+
-+SEC("raw_tp")
-+__log_level(4)
-+__msg("subprog 0 (callee_reads_fastcall_spill) main {{.*}} stack 8")
-+__xlated("*(u64 *)(r10 -8) = r1")
-+__xlated("...")
-+__xlated("r1 = *(u64 *)(r10 -8)")
-+__success
-+__naked void callee_reads_fastcall_spill(void)
-+{
-+	asm volatile (
-+	"r1 = 1;"
-+	"*(u64 *)(r10 - 8) = r1;"
-+	"call %[bpf_get_smp_processor_id];"
-+	"r1 = *(u64 *)(r10 - 8);"
-+	"r1 = r10;"
-+	"r1 += -8;"
-+	"call read_caller_stack_callee;"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_smp_processor_id)
-+	: __clobber_all);
-+}
-+
-+SEC("raw_tp")
-+__arch_x86_64
-+__log_level(4)
-+__msg("subprog 0 (helper_zero_size_buffer) main {{.*}} stack 0")
-+__xlated("0: r1 = 1")
-+__xlated("1: r0 =")
-+__success
-+__naked void helper_zero_size_buffer(void)
-+{
-+	asm volatile (
-+	"r1 = 1;"
-+	"*(u64 *)(r10 - 8) = r1;"
-+	"call %[bpf_get_smp_processor_id];"
-+	"r1 = *(u64 *)(r10 - 8);"
-+	"r1 = r10;"
-+	"r1 += -64;"
-+	"r2 = 0;"
-+	"r3 = 0;"
-+	"call %[bpf_probe_read_kernel];"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_get_smp_processor_id),
-+	  __imm(bpf_probe_read_kernel)
-+	: __clobber_all);
-+}
-+
- SEC("raw_tp")
- __arch_x86_64
- /* main, not patched */
--- 
-2.53.0
-
+> --
+> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260918-lan966x-pci-fdma-v7-0-0ecc179c8a2c%40microchip.com
