@@ -1,749 +1,240 @@
-Received: from pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.34.181.151])
+Received: from pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.13.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD5843C1977;
-	Wed, 23 Sep 2026 05:41:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.34.181.151
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790142085; cv=none; b=pRs6hQKa6VWid9C/csApg4I+EIsQ4IAXb8il/izCsTzl/m1CejNwxtpXtgl2qeQn/cQNMDnwfu2THLK6HRq7UMzrim8/3XfoP5PohKUvikpC05+Uk0/7iayDOPCVRXsWJ/sidfHWP6Id6VY8YK+XsJKoNWR53ToaD5KQ8C3ZJZs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790142085; c=relaxed/simple;
-	bh=Ojy5qHrjikKKwR93jbWNyZrhvbt0Jp+kI1q/xVRg37I=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=C4l0R4Kks6GaV3ba5dOHrEdoBjocRnOCcOVAvje9JyV4iSndcMKP6Gu/oT8DRi7JaTgcqZ/1vkOWj+n4rPyNnJAkSkN0ld9nyLYqqB33JjjonU3Oeza8dfju8GTO1b5Pv5Y+AypADCtWZwS7hpcj9zMjC+X0++BlkpAIOsYXhtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=MbM9kgi0; arc=none smtp.client-ip=52.34.181.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487D53E8C56;
+	Wed, 23 Sep 2026 05:46:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.13.214.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790142389; cv=fail; b=JfC9O195+H169RfBLRenm0zuD61eDGuGmmAM4YGrJFySkGjlp77uYOiRSgEDZW0jxRwaiLJpUG/fM+yS4AYE8euGwLxivVpaz/VqxksgOZOh/n88H/IV9ZLKpcOT4t65Zyqwe7YGqW5Lis+xLaRZMbig5K8L8gzxogkrUUZy11I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790142389; c=relaxed/simple;
+	bh=zX7CPh475azDVpUZMRnXRECSwxDtPXolJS+s6IyqRlU=;
+	h=Subject:From:To:CC:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=FRSURie1GlI8f8rWbaPi0Zyf9S1es76pR6XXI7dChyOTQIxzCs6O/XrauBPqLvTeoRyvEM++NE1+T7+Ct+EeIEg8XRr8TF0DuhWuTctMYkCLanbjnLrr5Cg4+FoYwZwAsLhi1ifkodCR41Reb684Ynbqjq6QWhprMY3rOyrC64g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=DWAnmo7x; arc=fail smtp.client-ip=52.13.214.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="MbM9kgi0"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="DWAnmo7x"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1790142083; x=1821678083;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=usAUkm2oNPIPlWlGTUyS8j3XcpVsC1Gdc0Kkt71uYak=;
-  b=MbM9kgi0E5Gh5t9XkygXGDFAQmlz2GJhUjkHz/N6UDrwbeC34Ttapd+U
-   ewPSYbx1SpumyJr4VvmgxJ28lKNDD+GBCMjKI9UVfOpk6S+GoTU2jHb20
-   i45Nte1T73xlDUPHzaIAETz+8EfaZLJRIKLa8BX/2AEmn+ycEou8J/vXj
-   CNF5UfZ1YeJwMIFlVPbzGaby7V+JUGlLAklVTbEvpIp773yc80KPunN+F
-   pfDnZWZzx9NM+pEezITTPjuwLTMvgKFLxjd6r6c5lAQ2cRIV1He+4FP3v
-   DGw9G2mbMvlpcRv0WrNU3MyuB/BGbeuIeFQNOaQLbbnAEZGraUc64owWD
-   Q==;
-X-CSE-ConnectionGUID: Fi1O6+OPSgaMM6ONJ4F+Hg==
-X-CSE-MsgGUID: nrxdIa+MQm6Fcrsm3xloQA==
+  t=1790142388; x=1821678388;
+  h=from:to:cc:date:message-id:references:in-reply-to:
+   content-id:content-transfer-encoding:mime-version:subject;
+  bh=zX7CPh475azDVpUZMRnXRECSwxDtPXolJS+s6IyqRlU=;
+  b=DWAnmo7xwrSu5nwspN9tIssXt25GjqQdzKrc5hxrWMku7L/NOLGVfW9h
+   AGcv4fZq+xDp1J7sVZvET76cOqIboA84ZxO3YPr5jgORJKYQ6DyX/W6Fq
+   +lewjrXpKCFVfL0RnDfZN6+0lJKlV7DuPFg6ynsWKp9NsFm082erkVv5Z
+   hwftXL1CYbjaZXSvjsbNgUppwEc93H4ozlfM4V5cOfNucdZz5Bq0GlRVF
+   R/RsPeXIGa8ZeVjn5HmJNWK1q7Ev/YqnUBwK8/Z7p22Vm+ZW90owxa5da
+   x5cE9IaRUo2jBykYvl18P98dQq4g+JhIFDu9Ai47bR0WEFKD7vtFfAgj8
+   A==;
+X-CSE-ConnectionGUID: CVfKPyG2QBOUY711WZ/kJw==
+X-CSE-MsgGUID: uOwHaidZRsC4Kz1jdKKN2A==
 X-IronPort-AV: E=Sophos;i="6.27,117,1787011200"; 
-   d="scan'208";a="29398036"
-Received: from ip-10-5-9-48.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.9.48])
-  by internal-pdx-out-007.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2026 05:41:23 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.111:25629]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.20.120:2525] with esmtp (Farcaster)
- id 36533df6-7c9e-4377-a345-731bd5588139; Wed, 23 Sep 2026 05:41:23 +0000 (UTC)
-X-Farcaster-Flow-ID: 36533df6-7c9e-4377-a345-731bd5588139
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
+   d="scan'208";a="29383402"
+Subject: Re: [PATCH bpf-next 1/1] bpf: btf: add btf=off boot parameter to disable and
+ free vmlinux BTF
+Thread-Topic: [PATCH bpf-next 1/1] bpf: btf: add btf=off boot parameter to disable and
+ free vmlinux BTF
+Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
+  by internal-pdx-out-005.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2026 05:46:27 +0000
+Received: from EX19MTAUWA001.ant.amazon.com [205.251.233.236:9056]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.60.208:2525] with esmtp (Farcaster)
+ id 6ebcf10b-acc6-4fc2-9560-490c333ef766; Wed, 23 Sep 2026 05:46:27 +0000 (UTC)
+X-Farcaster-Flow-ID: 6ebcf10b-acc6-4fc2-9560-490c333ef766
+Received: from EX19EXOUWA001.ant.amazon.com (10.250.64.209) by
+ EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Wed, 23 Sep 2026 05:41:22 +0000
-Received: from dev-dsk-wanjay-2c-d25651b4.us-west-2.amazon.com (172.19.198.4)
- by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49;
- Wed, 23 Sep 2026 05:41:22 +0000
-From: Jay Wang <wanjay@amazon.com>
-To: <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
-	"Eduard Zingerman" <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi
-	<memxor@gmail.com>
-CC: Alan Maguire <alan.maguire@oracle.com>, Martin KaFai Lau
-	<martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, "Nathan
- Chancellor" <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
-	<linux-kbuild@vger.kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, "Petr
- Pavlu" <petr.pavlu@suse.com>, <linux-modules@vger.kernel.org>, Arnd Bergmann
-	<arnd@arndb.de>, <linux-kernel@vger.kernel.org>, Hazem Mohamed Abuelfotoh
-	<abuehaze@amazon.com>, Bjoern Doebel <doebel@amazon.de>,
-	<jay.wang.upstream@gmail.com>
-Subject: [PATCH bpf-next 6/6] kbuild, bpf: allow building the vmlinux BTF as a module
-Date: Wed, 23 Sep 2026 05:39:48 +0000
-Message-ID: <20260923053948.30617-7-wanjay@amazon.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260923053948.30617-1-wanjay@amazon.com>
-References: <20260923053948.30617-1-wanjay@amazon.com>
+ Wed, 23 Sep 2026 05:46:12 +0000
+Received: from BYAPR08CU003.outbound.protection.outlook.com (10.250.64.206) by
+ EX19EXOUWA001.ant.amazon.com (10.250.64.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.49
+ via Frontend Transport; Wed, 23 Sep 2026 05:46:12 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=sFrFl03JG4BX7ntqO6XqDF778rAQuM+nxC9ELRsZRr5qqcJRfrpDVnid6H/clqWZg4/JieiHatSc0Majrz14i2PYbUkIMx3rlnrW1J+qipBsXr4A4YuQdrHvfbZs19uikHbWHyA1x9tp1KXsNLo3nfQHTTz4FRw4a9EhJoZgDN1d+1JAb0XPoBitPMpKrcme1/h6JK4yhSWX/q9Cf3gIL/bUi69lGKNZ3ELUQd5FUKByzdHgQZDPhQ6nKtVfMT1BlqUOCnFCGXqKqDN+G8WxzJFBAfHVMc1TBIGEb38q6atKcjYX67ejMFmxAdCjTzjIbtVjyb8TUX5hK2ldWG4euA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zX7CPh475azDVpUZMRnXRECSwxDtPXolJS+s6IyqRlU=;
+ b=J1refF6nGkr1R7Q3RAtmRvm1RSjF8ANldIbhsSxwYzs/dAFL1QgMAxEJ1gniswu87WVRgq38DqD+SaAhOCfHz1VCNt6/wk6YHy+wukw/EgC7xUiOEXz39Jh2r8XAea+XDECs2G3O/Mh/r3hF38aw5Tq6ucG1F4lxv1J/XsZYv/rJqBOT8WjDYBjMP+QZnXutkpXDszPnFpubZUZo3GyIe+my6gmBxllPvailnRKBkS4Zl2RFoC9VDGmR3/2ikIohxXrQF04KYejT/yCX+f1mKTOr9KRvSkxFwd2uRBYO0e1XM9hTUmReESTI/3IRAMpGd1ivE0AMQRHCyGgLbVSO7w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amazon.com; dmarc=pass action=none header.from=amazon.com;
+ dkim=pass header.d=amazon.com; arc=none
+Received: from MN2PR18MB2669.namprd18.prod.outlook.com (2603:10b6:208:10a::32)
+ by IA0PPF30E686C57.namprd18.prod.outlook.com (2603:10b6:20f:fc04::c11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.13; Wed, 23 Sep
+ 2026 05:46:03 +0000
+Received: from MN2PR18MB2669.namprd18.prod.outlook.com
+ ([fe80::7a22:7d4b:a619:1a8]) by MN2PR18MB2669.namprd18.prod.outlook.com
+ ([fe80::7a22:7d4b:a619:1a8%5]) with mapi id 15.21.0428.015; Wed, 23 Sep 2026
+ 05:46:03 +0000
+From: "Wang, Jay" <wanjay@amazon.com>
+To: Alan Maguire <alan.maguire@oracle.com>, Alexei Starovoitov
+	<alexei.starovoitov@gmail.com>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"daniel@iogearbox.net" <daniel@iogearbox.net>, "andrii@kernel.org"
+	<andrii@kernel.org>
+CC: "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, "will@kernel.org"
+	<will@kernel.org>, "x86@kernel.org" <x86@kernel.org>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "Mohamed Abuelfotoh, Hazem"
+	<abuehaze@amazon.com>, "Doebel, Bjoern" <doebel@amazon.de>,
+	"jay.wang.upstream@gmail.com" <jay.wang.upstream@gmail.com>
+Thread-Index: AQHdRkfPPs5hrVoBI0OIjl6KqnCeG7bRsjiAgACogACACOEBAA==
+Date: Wed, 23 Sep 2026 05:46:03 +0000
+Message-ID: <8AAEFE7A-9167-4DC9-AD57-DB92742F57F7@amazon.com>
+References: <20260917000201.25581-1-wanjay@amazon.com>
+ <20260917000201.25581-2-wanjay@amazon.com>
+ <DLH7UY9PDSQP.2AXEGNH838JS0@gmail.com>
+ <C1DF89F9-B9F4-4FBC-9B94-E250AAAFEDA2@amazon.com>
+ <33592fca-88a8-44aa-8d94-40e1e604554e@oracle.com>
+In-Reply-To: <33592fca-88a8-44aa-8d94-40e1e604554e@oracle.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+user-agent: Microsoft-MacOutlook/16.111.26071325
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amazon.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN2PR18MB2669:EE_|IA0PPF30E686C57:EE_
+x-ms-office365-filtering-correlation-id: 80711833-053c-4fa6-9962-08df1935f462
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014|23010399003|18002099003|22082099003|3023799007|11063799006|10067099003|38070700021|56012099006|4143699003;
+x-microsoft-antispam-message-info: /aNdkG7mjorAw6gWaoRG1hJE/QwydvIVkxexeHwiaaUI4AEub2TkePe3QJ9lZj6ya0SIcgekt4MFBF0U/31CMHog7tLVY4TmWHJkQAW7ac0E0BIjlkFCos1aJWZKmcXggBGAtv61OUWID/idP0o0gL2Jzuq7Xok/EFSRrQ7VFJQ/yRA4O0JgvXz5+aYjws3j6mmXcbCqbbzB/iMrh2ik21hbgphguKWX6XrnqSBzeEWsj0Bkk2uPGP6RwrzUpBHGhFZWl402IabOOehg/6S4yeMTqoVpSxD/n60mmUADYMEbZXmv6Is4DLzsI9fEfYFYkAjcbxWXlo3184bChT/ZuT1Q1DlBHmDg3utsbWZ0mXJirLDAHPkNCBBium2iz7FPUcGN0YiHlPUkQZNbdmcfxIedrh6LgVA0a6GgKJTsLSxu6KoPCpQro+TCXIAj/sIX6zaKyvgrKhDjAdnslSIt7z74kIcupqIaYBjvhs2ZRZhqSGvjTKmBooTYIGAQCISe1S4ihI4R4LPAoqqo6o8rw/5g6/P/x9M1epIkAya1z3WBJWZi5K9ojzUyQi9ysnT/b7doOS+HTj2+uWsCKoBZShorhhD32+7xvKXqx6a2DsObbpY3jsJ1xlEqFfcnItPpcFSGWS226ZxmljsjRp/kts/A4kT82w0InCax6co+ds7gHYr8qwptIYZDcegXF63db/HtZi654ZDj+eQeAzZ2XaRXSFGVSquOAIyESydMZpo=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR18MB2669.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(23010399003)(18002099003)(22082099003)(3023799007)(11063799006)(10067099003)(38070700021)(56012099006)(4143699003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QmRyczlBeFJuVFhKVXdnZWVkd1E3QitvcHdlWGVFRE16MVlMalVUYXVhSDNL?=
+ =?utf-8?B?VUl0azU0b1B2eTNpa0VMT3VvbkVaZGROSzR6WTd5RFpwMytKMDRXZm1UaVlj?=
+ =?utf-8?B?d0N0eitDUFNMeElseHdDOVVVQ05SclJJSkh6cWlxcldHemZlK1JVUUR1WjFi?=
+ =?utf-8?B?Z2pPeVl2OHBzVTYyL2RsRW1XTU1kYXR0S3dGbGRPMWlLcVBzcGpKbjZUSXdp?=
+ =?utf-8?B?cW9KQm8rN2hBVWN1QW1ndVA2YVdIaTJwbFlqbEVuNHkvYXdzeU1JMWJmSGdN?=
+ =?utf-8?B?TnJBd081RXpRZzgzZEtKMGhMYlFFYmFDVy94aWl6WS9jbFh5MWljam9DWWFa?=
+ =?utf-8?B?S0tzWDhkc3EyRktiSWxpbjY4clVXSjdmY3pEcFNFTXVYbGh0eXFSeWhBc2x5?=
+ =?utf-8?B?TW1TZ3N4NHhZelM4d2lvZlZNVnkwLy94T28wUlM3RllzdjFxWktzbDlla3JQ?=
+ =?utf-8?B?dXY0WE92K1N1NytVU1puakE4MDh3K1hHb1psdW5mTWN3K1ZlM1pTbEptNlFY?=
+ =?utf-8?B?QTJjdzFDUzRobjRlR3hBZnA5S0RDSWRpcU5ITncxd0p5SnA4QzQrU1JBbHdP?=
+ =?utf-8?B?eW9yTk1LMWdITEdWdldQU0RTUzMvblJLZHJiMTFWTVViNngzKzJhTWIvRVZG?=
+ =?utf-8?B?R2ZPcDB5WXlwZG85NEc3L2FCTW9aMUpGMGFwMDlPZ0F6Ui9YRVc2Y3Jybm1y?=
+ =?utf-8?B?ZzlLclRvRzFKWHpyVkdmMkNiZ1c5SCs3V1ZDR01ERVRkd3IwUTRLclNrU1g3?=
+ =?utf-8?B?SEN2OFZzUmxNdlhYSG9mLzlVYStmYVVjRHB5RlA3R3kxdTJ2ZE1KQXh5WmF5?=
+ =?utf-8?B?THlVaUxncGxUQ0ZrejI5OFltZVhjZTVMR0wrMGxDKzVhclVSQjlXeS9Udmxw?=
+ =?utf-8?B?YjZyL2lOYTVVbjZxUUZ4akNHV0Y3MUUrZWVwRjdXa1ZHank5eWNHbUEvaE5s?=
+ =?utf-8?B?MGFpN0lRRXFsMWpFOTNuNVhrd2pUTFd2TlFLQ0tTRjRWbjltNkVVMDgrSHRW?=
+ =?utf-8?B?ZEVPamVWV3phbHNyeFQ2M1BRbWpzREhCanVySy83ZVB4dktpZm5VZ2FiQktt?=
+ =?utf-8?B?ZCtEZ0NWZXhSeFhWbDY5ZkxpMHdvSU02N0FobUh5RTlSZkloRVNFbGI1R3hH?=
+ =?utf-8?B?TGhnNjdwUDdLdjR0VjNBQXByeWRKeThZTFowRGcwMjJ3WWpweUxaYm1GT0Rl?=
+ =?utf-8?B?WWl1Y2pzMzlKUXdBTWFvdjlUZk9KN0xDdW15a3VZR2ZsTUZKUmFYeW5idzdp?=
+ =?utf-8?B?cVcvMmRNanZtdTQ4OVZiWFB3SkczUlZUcmxtZ1ZsYjVWVGswckJsTlJpdGVU?=
+ =?utf-8?B?LzVjQmtDeDV1eFZRNExjeHdnaWFwdEpuT0NKaDE4c3dEaUExWjBCS0J3QXF5?=
+ =?utf-8?B?TERPT3U2R09MUFpTQjlQajlLK0tXa1A0Z1FDS2lqS2RxUVNab09UMklNanhv?=
+ =?utf-8?B?b081bVJaeTBhRWVOR29oTnF2QW1XbVVNLzBQOWoySmk0M213SmJBSU51bXFG?=
+ =?utf-8?B?VzAzU2xzdnY2SDFKano3bmpLZlo0aTA5NEpWek5YRGppNGZxL0plMW4ybk4y?=
+ =?utf-8?B?WDRGSVlnOXNoR3FhQXdhR1dha0Ryb1RyLzRLMGJtTGVMYSsrc21iTmRBYjlk?=
+ =?utf-8?B?WlZabDM1ckNlczZwYUdNWFZmVjlTUEdRNjd1Y0JvMVY0MDdveDVqQzFxa25l?=
+ =?utf-8?B?c0tIZFNlaU1lVDVJNVExM1BWWkNaN0tSdnFpM1dSRlZDakxiejE5eGV2ZExZ?=
+ =?utf-8?B?WmdCOGNvdk4xeWlyWlh2andpK09DZVBXTVpMOHhLRmhRcllMcEJjNWp3Z2VP?=
+ =?utf-8?B?Vm9JN3ZmYjRiTmtxVEdEWS9lc0xpNFl5NVF4VlBNWWo2VUlTUUhuRW0rVS9R?=
+ =?utf-8?B?allXc3RMeFd2azk0cG1ZM3FmeW9lOG5MOVFkZlc1MFIrODRJMDU4SytGMWtl?=
+ =?utf-8?B?VGljUlFWYmVTaXZjdlU0dS9zYjFVdVp4dkhpL3Nna0VyM1FyU0ltblIrYi9V?=
+ =?utf-8?B?d0hkNmxOeWVhZWFzWUxsMVVnblJyeWxXSi93a0syZjBveGlsWWRTaXc3dEhq?=
+ =?utf-8?B?b3ZkdGIxd0pXWjFkNGQySW91c1g5ZjZYb2NvK1RlSU93VFNyeGNCT0xYeksx?=
+ =?utf-8?B?ZHdLTU5UMXMvdnc1UDBQQ2FEK3hicnpyd05tNTZzb1RtV0tuM09WeG9UQkdL?=
+ =?utf-8?B?S0xEb2VsbnFZYm1ENDNLK0pleXpEdUVlVDU4TkNXQ2ZhdnlSRi9NYUNPNDls?=
+ =?utf-8?B?S3gxNUo2ZFhLdDMyRXFXTHhFNWFFVURha25xVmkxWGUzR3ZxcWlubmpOMFVh?=
+ =?utf-8?B?N1pxdmdid2NlOHk3MmFJMVJJbUNMSzFwR0hMREh1dm5ibmVsUzVjZz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <D65C764C79F1B749B80FA01AB21A8AE3@namprd18.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D035UWB004.ant.amazon.com (10.13.138.104) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+X-Exchange-RoutingPolicyChecked: AA+Mj+O+hdzx3Iz3qEtw67o5AyR6EuOkSyKSZhdc5frOXWo6aWpsODuvEp1NZfeTYAZ8EAyeCP4XJqSgc6gpkYE5rwv3E0ck//IR5HCpisGrOJrRICxyjHd4WgSoLUcokB1gAPQv1C9aBjnghxXabcXhjUYOXkR8Eqt/HxCoJZLcEyO0QgRMsO00+f+bYqVz0nYNdKEc1tmc5hFenKa70xxr1lME4qgBWLMduAywaqPyFdL5hxcugdpn3F2xso+jW8XRCM9/lltZoAb60D34b/vxgGOxpudHJUNjdyChxquQ7z62UGXMc1rrElGH82NYF2pEL+rF8BhI2jgIErrKGw==
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR18MB2669.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 80711833-053c-4fa6-9962-08df1935f462
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Sep 2026 05:46:03.3930
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5280104a-472d-4538-9ccf-1e1d0efe8b1b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: OC3W4ZgR0Uv6eAl9dkZhGFg9DLlxdo6NqUA669rZ2bN+exrAIvhODxBLHbKHsujutXV/zTIj2sVCxCRffHtSrw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PPF30E686C57
+X-OriginatorOrg: amazon.com
 
-Make CONFIG_DEBUG_INFO_BTF a tristate.  With =m the vmlinux BTF is not
-part of the kernel image: it is carried by a new module, btf_vmlinux, and
-loaded the first time something needs it.  Nothing that works with =y
-stops working; the 5.4 MiB of read-only data (distribution config) is
-simply not there on systems where nothing uses it.
-
-The only way to save that memory today is CONFIG_DEBUG_INFO_BTF=n, which
-a distribution cannot ship: one binary goes to every user, and off takes
-BTF away from the users of CO-RE, fentry/fexit, kfuncs, struct_ops,
-sched_ext or bpf-lsm.  Whether BTF is used is a property of the
-workload, not of the build, so let the first user decide.
-
-The BTF is generated as before, but with =m the .BTF section is linked
-into vmlinux as a non-loadable section (like .comment), so the vmlinux
-ELF still carries it for module BTF generation and tooling while the
-image does not.  .BTF_ids stays loadable, the verifier needs it once the
-BTF is loaded.  The object that carries .BTF also carries .BTF.meta, the
-size and SHA-256 of the BTF (struct btf_vmlinux_meta, checked by the
-module notifier); the first link, which the BTF is generated from, gets a
-zeroed .BTF.meta of the same size.  kernel/bpf/btf_vmlinux.c is an empty
-carrier module; scripts/gen-btf.sh gives it the vmlinux .BTF as its own
-.BTF section instead of generating split BTF for it, so modules depend
-on vmlinux with =m as they do with CONFIG_DEBUG_INFO_BTF_MODULES.
-
-Makefiles that compiled kfunc objects with obj-$(CONFIG_DEBUG_INFO_BTF)
-now treat m as y, and the #ifdef CONFIG_DEBUG_INFO_BTF sites that must
-also apply with =m (the .BTF_ids tables, type tags, tracepoint and
-syscall BTF ids) use IS_ENABLED(): the generated BTF and its id tables
-are the same for =y and =m, only the delivery of the blob differs.
-
-CONFIG_BPF_PRELOAD is not selectable with =m: its iterator programs
-attach through the vmlinux BTF, so every bpffs mount (systemd does one
-at boot) would load it and defeat the point.
-
-The module has no exit: once loaded the BTF stays, as with =y.  The
-runtime side -- loading the module on first use, checking it against
-.BTF.meta, deferring kfunc and struct_ops registrations and module BTF
-until it arrives -- is in the preceding patches; this one makes it
-selectable.
-
-Tested with 1 GiB of memory, same tree, =y vs =m, both with
-CONFIG_DEBUG_INFO_BTF_MODULES=y:
-
- - MemTotal is ~5.4 MB higher with =m while the BTF is unused: the size
-   of the .BTF section.
- - stat() of /sys/kernel/btf/vmlinux reports the BTF size before it is
-   loaded, as the btf_sysfs selftest expects.
- - With BTF in use, MemFree is the same within run-to-run noise.
- - Modules loaded before the trigger (ext4, nf_conntrack and its kfuncs,
-   xfrm_interface) appear in /sys/kernel/btf immediately and get BTF ids
-   once the BTF is loaded; a socket filter loads without loading the
-   module; a kprobe program calling bpf_get_current_task_btf(), opening
-   /sys/kernel/btf/vmlinux or BPF_BTF_GET_NEXT_ID each load it.
- - A carrier module with one byte of its .BTF changed is refused with
-   "BTF does not match this kernel" and leaves no state behind.
- - After the load: fstat/read/mmap of /sys/kernel/btf/vmlinux, a
-   struct_ops map for tcp_congestion_ops, a syscall program calling the
-   bpf_task_from_pid()/bpf_task_release() kfuncs, and modules loaded
-   afterwards (nf_nat) all work as with =y.
- - =m without DEBUG_INFO_BTF_MODULES, and =y, build and pass the same
-   tests.
-
-Signed-off-by: Jay Wang <wanjay@amazon.com>
----
- Documentation/bpf/btf.rst         | 35 ++++++++++++
- Makefile                          |  8 ++-
- include/asm-generic/vmlinux.lds.h | 30 +++++++++-
- include/linux/btf_ids.h           |  2 +-
- include/linux/compiler_types.h    |  2 +-
- include/trace/trace_events.h      |  2 +-
- kernel/bpf/Makefile               |  6 +-
- kernel/bpf/btf_vmlinux.c          | 23 ++++++++
- kernel/bpf/preload/Kconfig        |  4 ++
- kernel/trace/trace_syscalls.c     |  6 +-
- lib/Kconfig.debug                 | 13 ++++-
- net/netfilter/Makefile            |  6 +-
- net/xfrm/Makefile                 |  4 +-
- scripts/Makefile.modfinal         | 14 +++--
- scripts/gen-btf.sh                | 93 +++++++++++++++++++++++++++++--
- scripts/link-vmlinux.sh           | 25 +++++++--
- 16 files changed, 244 insertions(+), 29 deletions(-)
- create mode 100644 kernel/bpf/btf_vmlinux.c
-
-diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-index 004aa1058d85..a835231187ef 100644
---- a/Documentation/bpf/btf.rst
-+++ b/Documentation/bpf/btf.rst
-@@ -1197,6 +1197,41 @@ format.::
-             .long   58
-             .long   8206                    # Line 8 Col 14
- 
-+6.1 Kernel BTF
-+--------------
-+
-+With CONFIG_DEBUG_INFO_BTF=y the BTF of the kernel is generated at link time
-+from its DWARF and placed in the .BTF section of vmlinux, which is read-only
-+data of the kernel image. It is available as /sys/kernel/btf/vmlinux and, if
-+CONFIG_DEBUG_INFO_BTF_MODULES is set, module BTF is generated as split BTF
-+against it and available as /sys/kernel/btf/<module>.
-+
-+With CONFIG_DEBUG_INFO_BTF=m the same BTF is generated, but it is not part of
-+the kernel image (the vmlinux ELF file still carries it in a non-loadable .BTF
-+section for tooling and module BTF generation). It is delivered by the
-+btf_vmlinux module, which the kernel loads on demand the first time the BTF is
-+needed: when /sys/kernel/btf/vmlinux is read or mmap()ed, when kernel BTF
-+objects are enumerated (BPF_BTF_GET_NEXT_ID), or when a BPF program needs
-+kernel type information (an attach_btf_id, a kfunc call, a ksym, a map pointer
-+or a helper that takes or returns a kernel BTF pointer). Until then no memory
-+is used for it, and afterwards nothing differs from =y. In particular:
-+
-+  * /sys/kernel/btf/vmlinux exists from boot with its final size.
-+  * Modules loaded before the vmlinux BTF are exposed in /sys/kernel/btf right
-+    away, their BTF is parsed and gets a BTF id once the vmlinux BTF is
-+    loaded, together with their kfunc and struct_ops registrations.
-+  * kfunc, dtor kfunc and struct_ops registrations of the kernel itself are
-+    applied before the BTF becomes visible.
-+  * The kernel only accepts the BTF it was built with: the size and SHA-256 of
-+    the BTF are linked into the kernel and checked against the module.
-+  * Once loaded the BTF stays; the module cannot be unloaded.
-+
-+If the module is not available (not installed, or the root file system is not
-+mounted yet), the kernel behaves as one built without BTF and retries next
-+time. CONFIG_BPF_PRELOAD is not available with =m: its iterators attach through
-+the vmlinux BTF, so mounting bpffs would load it. bpf_snprintf_btf() and bpf_seq_printf_btf() only use the BTF if it has
-+already been parsed, as they run in program context.
-+
- 7. Testing
- ==========
- 
-diff --git a/Makefile b/Makefile
-index 66654fa71655..0a37decd9d01 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1208,7 +1208,8 @@ endif
- # include additional Makefiles when needed
- include-y			:= scripts/Makefile.warn
- include-$(CONFIG_DEBUG_INFO)	+= scripts/Makefile.debug
--include-$(CONFIG_DEBUG_INFO_BTF)+= scripts/Makefile.btf
-+# CONFIG_DEBUG_INFO_BTF is a tristate; BTF is generated for both y and m
-+include-$(subst m,y,$(CONFIG_DEBUG_INFO_BTF)) += scripts/Makefile.btf
- include-$(CONFIG_KASAN)		+= scripts/Makefile.kasan
- include-$(CONFIG_KCSAN)		+= scripts/Makefile.kcsan
- include-$(CONFIG_KMSAN)		+= scripts/Makefile.kmsan
-@@ -1744,8 +1745,9 @@ endif
- #
- 
- # *.ko are usually independent of vmlinux, but CONFIG_DEBUG_INFO_BTF_MODULES
--# is an exception.
--ifdef CONFIG_DEBUG_INFO_BTF_MODULES
-+# is an exception, and so is the btf_vmlinux module with CONFIG_DEBUG_INFO_BTF=m,
-+# which carries the vmlinux BTF.
-+ifneq ($(CONFIG_DEBUG_INFO_BTF_MODULES)$(filter m,$(CONFIG_DEBUG_INFO_BTF)),)
- KBUILD_BUILTIN := y
- modules: vmlinux
- endif
-diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
-index b2988aa12f66..9e2f4861fef2 100644
---- a/include/asm-generic/vmlinux.lds.h
-+++ b/include/asm-generic/vmlinux.lds.h
-@@ -674,8 +674,17 @@
- 
- /*
-  * .BTF
-+ *
-+ * With CONFIG_DEBUG_INFO_BTF=y the vmlinux BTF is loaded as read-only data and
-+ * bounded by __start_BTF/__stop_BTF.  With CONFIG_DEBUG_INFO_BTF=m it is still
-+ * emitted into the vmlinux ELF file so that module BTF generation and tooling
-+ * can read it, but as a non-loadable section (see BTF_NOLOAD in ELF_DETAILS):
-+ * the btf_vmlinux module carries a copy and provides it on demand at runtime.
-+ * What is loaded instead is .BTF.meta, the size and hash of that BTF (see
-+ * scripts/gen-btf.sh), empty in the first link that the BTF is generated
-+ * from.  .BTF_ids is needed by the kernel in both cases.
-  */
--#ifdef CONFIG_DEBUG_INFO_BTF
-+#if IS_BUILTIN(CONFIG_DEBUG_INFO_BTF)
- #define BTF								\
- 	. = ALIGN(PAGE_SIZE);						\
- 	.BTF : AT(ADDR(.BTF) - LOAD_OFFSET) {				\
-@@ -685,10 +694,28 @@
- 	.BTF_ids : AT(ADDR(.BTF_ids) - LOAD_OFFSET) {			\
- 		*(.BTF_ids)						\
- 	}
-+#elif IS_MODULE(CONFIG_DEBUG_INFO_BTF)
-+#define BTF								\
-+	. = ALIGN(8);							\
-+	.BTF.meta : AT(ADDR(.BTF.meta) - LOAD_OFFSET) {			\
-+		BOUNDED_SECTION_BY(.BTF.meta, _BTF_meta)		\
-+	}								\
-+	. = ALIGN(PAGE_SIZE);						\
-+	.BTF_ids : AT(ADDR(.BTF_ids) - LOAD_OFFSET) {			\
-+		*(.BTF_ids)						\
-+	}
- #else
- #define BTF
- #endif
- 
-+#if IS_MODULE(CONFIG_DEBUG_INFO_BTF)
-+/* quoted: BTF is a macro, an unquoted .BTF here would expand it */
-+#define BTF_NOLOAD							\
-+		".BTF" 0 : { *(".BTF") }
-+#else
-+#define BTF_NOLOAD
-+#endif
-+
- /*
-  * Init task
-  */
-@@ -849,6 +876,7 @@
- /* Required sections not related to debugging. */
- #define ELF_DETAILS							\
- 		.comment 0 : { *(.comment) }				\
-+		BTF_NOLOAD						\
- 		.symtab 0 : { *(.symtab) }				\
- 		.strtab 0 : { *(.strtab) }				\
- 		.shstrtab 0 : { *(.shstrtab) }				\
-diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-index 8b5a9ee92513..c665afff100e 100644
---- a/include/linux/btf_ids.h
-+++ b/include/linux/btf_ids.h
-@@ -22,7 +22,7 @@ struct btf_id_set8 {
- 	} pairs[];
- };
- 
--#ifdef CONFIG_DEBUG_INFO_BTF
-+#if IS_ENABLED(CONFIG_DEBUG_INFO_BTF)
- 
- #include <linux/compiler.h> /* for __PASTE */
- #include <linux/compiler_attributes.h> /* for __maybe_unused */
-diff --git a/include/linux/compiler_types.h b/include/linux/compiler_types.h
-index c5921f139007..a90a99849cee 100644
---- a/include/linux/compiler_types.h
-+++ b/include/linux/compiler_types.h
-@@ -34,7 +34,7 @@
-  * Skipped when running bindgen due to a libclang issue;
-  * see https://github.com/rust-lang/rust-bindgen/issues/2244.
-  */
--#if defined(CONFIG_DEBUG_INFO_BTF) && defined(CONFIG_PAHOLE_HAS_BTF_TAG) && \
-+#if IS_ENABLED(CONFIG_DEBUG_INFO_BTF) && defined(CONFIG_PAHOLE_HAS_BTF_TAG) && \
- 	__has_attribute(btf_type_tag) && !defined(__BINDGEN__)
- # define BTF_TYPE_TAG(value) __attribute__((btf_type_tag(#value)))
- #else
-diff --git a/include/trace/trace_events.h b/include/trace/trace_events.h
-index 93011f800d0f..2a0098929771 100644
---- a/include/trace/trace_events.h
-+++ b/include/trace/trace_events.h
-@@ -398,7 +398,7 @@ static inline notrace int trace_event_get_offsets_##call(		\
- #define _TRACE_PERF_INIT(call)
- #endif /* CONFIG_PERF_EVENTS */
- 
--#if defined(CONFIG_BPF_EVENTS) && defined(CONFIG_DEBUG_INFO_BTF)
-+#if defined(CONFIG_BPF_EVENTS) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)
- /*
-  * Per-template BTF id list, populated at link time by resolve_btfids:
-  *   [0] FUNC   __bpf_trace_<call>     (the BPF dispatcher)
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 9a92c348bbda..8ab46f496fa4 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -41,7 +41,11 @@ ifeq ($(CONFIG_INET),y)
- obj-$(CONFIG_BPF_SYSCALL) += reuseport_array.o
- endif
- ifeq ($(CONFIG_SYSFS),y)
--obj-$(CONFIG_DEBUG_INFO_BTF) += sysfs_btf.o
-+obj-$(subst m,y,$(CONFIG_DEBUG_INFO_BTF)) += sysfs_btf.o
-+endif
-+# With CONFIG_DEBUG_INFO_BTF=m the vmlinux BTF is carried by this module
-+ifeq ($(CONFIG_DEBUG_INFO_BTF),m)
-+obj-m += btf_vmlinux.o
- endif
- ifeq ($(CONFIG_BPF_JIT),y)
- obj-$(CONFIG_BPF_SYSCALL) += bpf_struct_ops.o
-diff --git a/kernel/bpf/btf_vmlinux.c b/kernel/bpf/btf_vmlinux.c
-new file mode 100644
-index 000000000000..8d89b4bb3c43
---- /dev/null
-+++ b/kernel/bpf/btf_vmlinux.c
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Carrier module for the vmlinux BTF when CONFIG_DEBUG_INFO_BTF=m.
-+ *
-+ * This module has no code of its own.  Its .BTF section is a copy of the
-+ * vmlinux BTF (see scripts/gen-btf.sh), which the BTF module notifier in
-+ * kernel/bpf/btf.c recognizes by module name and installs as the vmlinux BTF.
-+ * The kernel loads it on demand, the first time the vmlinux BTF is needed.
-+ *
-+ * There is deliberately no module_exit(): once the BTF is in use it cannot
-+ * be taken away again, exactly as with CONFIG_DEBUG_INFO_BTF=y.
-+ */
-+#include <linux/init.h>
-+#include <linux/module.h>
-+
-+static int __init btf_vmlinux_init(void)
-+{
-+	return 0;
-+}
-+module_init(btf_vmlinux_init);
-+
-+MODULE_DESCRIPTION("BTF type information for vmlinux");
-+MODULE_LICENSE("GPL");
-diff --git a/kernel/bpf/preload/Kconfig b/kernel/bpf/preload/Kconfig
-index aef7b0bc96d6..b1600bdce7a0 100644
---- a/kernel/bpf/preload/Kconfig
-+++ b/kernel/bpf/preload/Kconfig
-@@ -6,6 +6,10 @@ menuconfig BPF_PRELOAD
- 	# The dependency on !COMPILE_TEST prevents it from being enabled
- 	# in allmodconfig or allyesconfig configurations
- 	depends on !COMPILE_TEST
-+	# The preloaded iterators attach through the vmlinux BTF, so with
-+	# CONFIG_DEBUG_INFO_BTF=m every bpffs mount would load the BTF, which
-+	# defeats the point of =m on any system that mounts bpffs at boot.
-+	depends on DEBUG_INFO_BTF!=m
- 	help
- 	  This builds kernel module with several embedded BPF programs that are
- 	  pinned into BPF FS mount point as human readable files that are
-diff --git a/kernel/trace/trace_syscalls.c b/kernel/trace/trace_syscalls.c
-index e35744049e3f..7a0d59c308c2 100644
---- a/kernel/trace/trace_syscalls.c
-+++ b/kernel/trace/trace_syscalls.c
-@@ -1304,7 +1304,7 @@ struct trace_event_functions exit_syscall_print_funcs = {
- 	.trace		= print_syscall_exit,
- };
- 
--#if defined(CONFIG_BPF_EVENTS) && defined(CONFIG_DEBUG_INFO_BTF)
-+#if defined(CONFIG_BPF_EVENTS) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)
- /* BTF id lists for the shared sys_enter/sys_exit dispatcher tracepoints. */
- BTF_ID_LIST(syscall_enter_btf_ids)
- BTF_ID(func,   __bpf_trace_sys_enter)
-@@ -1321,7 +1321,7 @@ struct trace_event_class __refdata event_class_syscall_enter = {
- 	.fields_array	= syscall_enter_fields_array,
- 	.get_fields	= syscall_get_enter_fields,
- 	.raw_init	= init_syscall_trace,
--#if defined(CONFIG_BPF_EVENTS) && defined(CONFIG_DEBUG_INFO_BTF)
-+#if defined(CONFIG_BPF_EVENTS) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)
- 	.btf_ids	= syscall_enter_btf_ids,
- #endif
- };
-@@ -1336,7 +1336,7 @@ struct trace_event_class __refdata event_class_syscall_exit = {
- 	},
- 	.fields		= LIST_HEAD_INIT(event_class_syscall_exit.fields),
- 	.raw_init	= init_syscall_trace,
--#if defined(CONFIG_BPF_EVENTS) && defined(CONFIG_DEBUG_INFO_BTF)
-+#if defined(CONFIG_BPF_EVENTS) && IS_ENABLED(CONFIG_DEBUG_INFO_BTF)
- 	.btf_ids	= syscall_exit_btf_ids,
- #endif
- };
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 134b15a44625..5307caa39176 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -396,7 +396,7 @@ config DEBUG_INFO_SPLIT
- 	  Incompatible with older versions of ccache.
- 
- config DEBUG_INFO_BTF
--	bool "Generate BTF type information"
-+	tristate "Generate BTF type information"
- 	depends on !DEBUG_INFO_SPLIT && !DEBUG_INFO_REDUCED
- 	depends on !GCC_PLUGIN_RANDSTRUCT || COMPILE_TEST
- 	depends on BPF_SYSCALL
-@@ -408,6 +408,17 @@ config DEBUG_INFO_BTF
- 	  Turning this on requires pahole v1.22 or later, which will convert
- 	  DWARF type info into equivalent deduplicated BTF type info.
- 
-+	  If built as a module (=m), the vmlinux BTF is not part of the
-+	  kernel image.  It is carried by the btf_vmlinux module, which is
-+	  loaded on demand the first time the BTF is needed: when a BPF
-+	  program requires kernel type information, or when
-+	  /sys/kernel/btf/vmlinux is opened.  Until then, no memory is
-+	  spent on it.  The BTF is still emitted into the vmlinux ELF file
-+	  (as a non-loadable section) so tooling and module BTF generation
-+	  work as before.  Module BTF (DEBUG_INFO_BTF_MODULES) is registered
-+	  when the vmlinux BTF becomes available.  Not compatible with
-+	  BPF_PRELOAD, whose iterators would load the BTF at every bpffs mount.
-+
- config PAHOLE_HAS_BTF_TAG
- 	def_bool PAHOLE_VERSION >= 123
- 	depends on CC_IS_CLANG
-diff --git a/net/netfilter/Makefile b/net/netfilter/Makefile
-index 6bf74d488a29..a2c7f00794d2 100644
---- a/net/netfilter/Makefile
-+++ b/net/netfilter/Makefile
-@@ -18,7 +18,7 @@ nf_conntrack-$(CONFIG_NF_CT_PROTO_GRE) += nf_conntrack_proto_gre.o
- ifeq ($(CONFIG_NF_CONNTRACK),m)
- nf_conntrack-$(CONFIG_DEBUG_INFO_BTF_MODULES) += nf_conntrack_bpf.o
- else ifeq ($(CONFIG_NF_CONNTRACK),y)
--nf_conntrack-$(CONFIG_DEBUG_INFO_BTF) += nf_conntrack_bpf.o
-+nf_conntrack-$(subst m,y,$(CONFIG_DEBUG_INFO_BTF)) += nf_conntrack_bpf.o
- endif
- 
- obj-$(CONFIG_NETFILTER) = netfilter.o
-@@ -65,7 +65,7 @@ nf_nat-$(CONFIG_NF_NAT_OVS) += nf_nat_ovs.o
- ifeq ($(CONFIG_NF_NAT),m)
- nf_nat-$(CONFIG_DEBUG_INFO_BTF_MODULES) += nf_nat_bpf.o
- else ifeq ($(CONFIG_NF_NAT),y)
--nf_nat-$(CONFIG_DEBUG_INFO_BTF) += nf_nat_bpf.o
-+nf_nat-$(subst m,y,$(CONFIG_DEBUG_INFO_BTF)) += nf_nat_bpf.o
- endif
- 
- # NAT helpers
-@@ -147,7 +147,7 @@ nf_flow_table-$(CONFIG_NF_FLOW_TABLE_PROCFS) += nf_flow_table_procfs.o
- ifeq ($(CONFIG_NF_FLOW_TABLE),m)
- nf_flow_table-$(CONFIG_DEBUG_INFO_BTF_MODULES) += nf_flow_table_bpf.o
- else ifeq ($(CONFIG_NF_FLOW_TABLE),y)
--nf_flow_table-$(CONFIG_DEBUG_INFO_BTF) += nf_flow_table_bpf.o
-+nf_flow_table-$(subst m,y,$(CONFIG_DEBUG_INFO_BTF)) += nf_flow_table_bpf.o
- endif
- 
- obj-$(CONFIG_NF_FLOW_TABLE_INET) += nf_flow_table_inet.o
-diff --git a/net/xfrm/Makefile b/net/xfrm/Makefile
-index 5a1787587cb3..b7f6e5046a0e 100644
---- a/net/xfrm/Makefile
-+++ b/net/xfrm/Makefile
-@@ -8,7 +8,7 @@ xfrm_interface-$(CONFIG_XFRM_INTERFACE) += xfrm_interface_core.o
- ifeq ($(CONFIG_XFRM_INTERFACE),m)
- xfrm_interface-$(CONFIG_DEBUG_INFO_BTF_MODULES) += xfrm_interface_bpf.o
- else ifeq ($(CONFIG_XFRM_INTERFACE),y)
--xfrm_interface-$(CONFIG_DEBUG_INFO_BTF) += xfrm_interface_bpf.o
-+xfrm_interface-$(subst m,y,$(CONFIG_DEBUG_INFO_BTF)) += xfrm_interface_bpf.o
- endif
- 
- obj-$(CONFIG_XFRM) := xfrm_policy.o xfrm_state.o xfrm_hash.o \
-@@ -23,4 +23,4 @@ obj-$(CONFIG_XFRM_IPCOMP) += xfrm_ipcomp.o
- obj-$(CONFIG_XFRM_INTERFACE) += xfrm_interface.o
- obj-$(CONFIG_XFRM_IPTFS) += xfrm_iptfs.o
- obj-$(CONFIG_XFRM_ESPINTCP) += espintcp.o
--obj-$(CONFIG_DEBUG_INFO_BTF) += xfrm_state_bpf.o
-+obj-$(subst m,y,$(CONFIG_DEBUG_INFO_BTF)) += xfrm_state_bpf.o
-diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-index 01a37ec872b9..ad182f84b5fc 100644
---- a/scripts/Makefile.modfinal
-+++ b/scripts/Makefile.modfinal
-@@ -46,12 +46,18 @@ quiet_cmd_btf_ko = BTF [M] $@
- 		$(CONFIG_SHELL) $(srctree)/scripts/gen-btf.sh --btf_base $(objtree)/vmlinux $@; \
- 	fi;
- 
--# Re-generate module BTFs if either module's .ko or vmlinux changed
--%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(CONFIG_DEBUG_INFO_BTF_MODULES),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
--	+$(call if_changed,ld_ko_o)
-+# Modules that get a .BTF section: all of them with CONFIG_DEBUG_INFO_BTF_MODULES,
-+# otherwise only the vmlinux BTF carrier module with CONFIG_DEBUG_INFO_BTF=m.
- ifdef CONFIG_DEBUG_INFO_BTF_MODULES
--	+$(if $(newer-prereqs),$(call cmd,btf_ko))
-+btf-modules := $(modules:%.o=%.ko)
-+else ifeq ($(CONFIG_DEBUG_INFO_BTF),m)
-+btf-modules := $(filter %/btf_vmlinux.ko,$(modules:%.o=%.ko))
- endif
-+
-+# Re-generate module BTFs if either module's .ko or vmlinux changed
-+%.ko: %.o %.mod.o .module-common.o $(objtree)/scripts/module.lds $(and $(btf-modules),$(KBUILD_BUILTIN),$(objtree)/vmlinux) FORCE
-+	+$(call if_changed,ld_ko_o)
-+	+$(if $(and $(filter $@,$(btf-modules)),$(newer-prereqs)),$(call cmd,btf_ko))
- 	+$(call cmd,check_tracepoint)
- 
- targets += $(modules:%.o=%.ko) $(modules:%.o=%.mod.o) .module-common.o
-diff --git a/scripts/gen-btf.sh b/scripts/gen-btf.sh
-index 8ca96eb10a69..7fa3189a3ded 100755
---- a/scripts/gen-btf.sh
-+++ b/scripts/gen-btf.sh
-@@ -22,16 +22,26 @@
- #   - ${1}.btf.o ready for linking into vmlinux
- #   - ${1}.BTF_ids with .BTF_ids data blob
- # This output is consumed by scripts/link-vmlinux.sh
-+#
-+# With CONFIG_DEBUG_INFO_BTF=m the .BTF section in ${1}.btf.o is not
-+# allocatable, so the vmlinux ELF file carries the BTF but the kernel image
-+# does not.  ${1}.btf.o then also carries .BTF.meta, the size and SHA-256 of
-+# the BTF for the kernel (struct btf_vmlinux_meta); "--placeholder ${1}"
-+# produces a ${1}.btf.o with a zeroed .BTF.meta and no .BTF for the first
-+# vmlinux link, which the BTF is generated from.  The btf_vmlinux module gets
-+# no BTF of its own; its .BTF section is a copy of the vmlinux BTF, extracted
-+# from --btf_base.
- 
- set -e
- 
- usage()
- {
--	echo "Usage: $0 [--btf_base <file>] <target ELF file>"
-+	echo "Usage: $0 [--btf_base <file>] [--placeholder] <target ELF file>"
- 	exit 1
- }
- 
- BTF_BASE=""
-+PLACEHOLDER=""
- 
- while [ $# -gt 0 ]; do
- 	case "$1" in
-@@ -39,6 +49,10 @@ while [ $# -gt 0 ]; do
- 		BTF_BASE="$2"
- 		shift 2
- 		;;
-+	--placeholder)
-+		PLACEHOLDER=1
-+		shift
-+		;;
- 	-*)
- 		echo "Unknown option: $1" >&2
- 		usage
-@@ -60,6 +74,10 @@ is_enabled() {
- 	grep -q "^$1=y" ${objtree}/include/config/auto.conf
- }
- 
-+is_module() {
-+	grep -q "^$1=m" ${objtree}/include/config/auto.conf
-+}
-+
- case "${KBUILD_VERBOSE}" in
- *1*)
- 	set -x
-@@ -79,6 +97,30 @@ gen_btf_data()
- 		--btf ${btf1} "${ELF_FILE}"
- }
- 
-+# Write one byte with value $1 (0..255)
-+put_byte()
-+{
-+	printf "\\$(printf '%03o' "$1")"
-+}
-+
-+# CONFIG_DEBUG_INFO_BTF=m: write struct btf_vmlinux_meta { u32 size; u8
-+# sha256[32]; } for the BTF in $1 to $2, in the target's byte order.
-+gen_btf_meta()
-+{
-+	size=$(${CONFIG_SHELL} "${srctree}/scripts/file-size.sh" "$1")
-+	sha256=$(sha256sum < "$1" | cut -d' ' -f1)
-+	{
-+		if is_enabled CONFIG_CPU_BIG_ENDIAN; then
-+			for shift in 24 16 8 0; do put_byte $(( (size >> shift) & 255 )); done
-+		else
-+			for shift in 0 8 16 24; do put_byte $(( (size >> shift) & 255 )); done
-+		fi
-+		for byte in $(echo "${sha256}" | sed 's/../& /g'); do
-+			put_byte $(( 0x${byte} ))
-+		done
-+	} > "$2"
-+}
-+
- gen_btf_o()
- {
- 	btf_data=${ELF_FILE}.btf.o
-@@ -88,9 +130,23 @@ gen_btf_o()
- 	# deletes all symbols including __start_BTF and __stop_BTF, which will
- 	# be redefined in the linker script.
- 	echo "" | ${CC} ${CLANG_FLAGS} ${KBUILD_CPPFLAGS} ${KBUILD_CFLAGS} -fno-lto -c -x c -o ${btf_data} -
--	${OBJCOPY} --add-section .BTF=${ELF_FILE}.BTF \
--		--set-section-flags .BTF=alloc,readonly ${btf_data}
--	${OBJCOPY} --only-section=.BTF --strip-all ${btf_data}
-+	if is_module CONFIG_DEBUG_INFO_BTF; then
-+		# CONFIG_DEBUG_INFO_BTF=m: .BTF stays non-allocatable, kept in the
-+		# vmlinux ELF file for tooling but not loaded; the btf_vmlinux
-+		# module provides it at runtime.  What is loaded is .BTF.meta,
-+		# its size and hash, so that /sys/kernel/btf/vmlinux has the right
-+		# size from boot and only the matching BTF is accepted.
-+		gen_btf_meta ${ELF_FILE}.BTF ${ELF_FILE}.BTF.meta
-+		${OBJCOPY} --add-section .BTF=${ELF_FILE}.BTF \
-+			--set-section-flags .BTF=readonly \
-+			--add-section .BTF.meta=${ELF_FILE}.BTF.meta \
-+			--set-section-flags .BTF.meta=alloc,readonly ${btf_data}
-+		${OBJCOPY} --only-section=.BTF --only-section=.BTF.meta --strip-all ${btf_data}
-+	else
-+		${OBJCOPY} --add-section .BTF=${ELF_FILE}.BTF \
-+			--set-section-flags .BTF=alloc,readonly ${btf_data}
-+		${OBJCOPY} --only-section=.BTF --strip-all ${btf_data}
-+	fi
- 
- 	# Change e_type to ET_REL so that it can be used to link final vmlinux.
- 	# GNU ld 2.35+ and lld do not allow an ET_EXEC input.
-@@ -121,6 +177,7 @@ cleanup()
- {
- 	rm -f "${ELF_FILE}.BTF.1"
- 	rm -f "${ELF_FILE}.BTF"
-+	rm -f "${ELF_FILE}.BTF.meta"
- 	if [ "${BTFGEN_MODE}" = "module" ]; then
- 		rm -f "${ELF_FILE}.BTF.base"
- 		rm -f "${ELF_FILE}.BTF_ids"
-@@ -133,6 +190,34 @@ if [ -n "${BTF_BASE}" ]; then
- 	BTFGEN_MODE="module"
- fi
- 
-+if [ -n "${PLACEHOLDER}" ]; then
-+	btf_data=${ELF_FILE}.btf.o
-+	echo "" | ${CC} ${CLANG_FLAGS} ${KBUILD_CPPFLAGS} ${KBUILD_CFLAGS} -fno-lto -c -x c -o ${btf_data} -
-+	head -c 36 /dev/zero > ${ELF_FILE}.BTF.meta
-+	${OBJCOPY} --add-section .BTF.meta=${ELF_FILE}.BTF.meta \
-+		--set-section-flags .BTF.meta=alloc,readonly ${btf_data}
-+	${OBJCOPY} --only-section=.BTF.meta --strip-all ${btf_data}
-+	exit 0
-+fi
-+
-+# CONFIG_DEBUG_INFO_BTF=m: the btf_vmlinux module carries the vmlinux BTF
-+# itself.  Its own types are of no interest, so instead of generating split
-+# BTF for it, copy the (non-loadable) .BTF section of vmlinux into the module.
-+# The kernel recognizes the module by name and treats its .BTF as base BTF.
-+case "${BTFGEN_MODE}:${ELF_FILE}" in
-+module:*/btf_vmlinux.ko)
-+	if is_module CONFIG_DEBUG_INFO_BTF; then
-+		# -O binary only emits allocatable sections; make .BTF one for
-+		# the extraction.  ${BTF_BASE} itself is not modified.
-+		${OBJCOPY} -O binary --only-section=.BTF			\
-+			--set-section-flags .BTF=alloc,load,readonly	\
-+			"${BTF_BASE}" "${ELF_FILE}.BTF"
-+		${OBJCOPY} --add-section .BTF="${ELF_FILE}.BTF" "${ELF_FILE}"
-+		exit 0
-+	fi
-+	;;
-+esac
-+
- gen_btf_data
- 
- case "${BTFGEN_MODE}" in
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index ab0b8125c8cb..a9a066267ef6 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -37,6 +37,15 @@ is_enabled() {
- 	grep -q "^$1=y" include/config/auto.conf
- }
- 
-+is_module() {
-+	grep -q "^$1=m" include/config/auto.conf
-+}
-+
-+# =y or =m
-+is_set() {
-+	grep -q "^$1=[ym]" include/config/auto.conf
-+}
-+
- # Nice output in kbuild format
- # Will be suppressed by "make -s"
- info()
-@@ -211,17 +220,25 @@ if is_enabled CONFIG_KALLSYMS; then
- 	kallsyms .tmp_vmlinux0.syms .tmp_vmlinux0.kallsyms
- fi
- 
--if is_enabled CONFIG_KALLSYMS || is_enabled CONFIG_DEBUG_INFO_BTF; then
-+if is_module CONFIG_DEBUG_INFO_BTF; then
-+	# The kernel refers to the size and hash of its BTF, which only the
-+	# BTF generated from the first link can provide; link a placeholder
-+	# of the same layout until then.
-+	${CONFIG_SHELL} ${srctree}/scripts/gen-btf.sh --placeholder .tmp_vmlinux0
-+	btf_vmlinux_bin_o=.tmp_vmlinux0.btf.o
-+fi
-+
-+if is_enabled CONFIG_KALLSYMS || is_set CONFIG_DEBUG_INFO_BTF; then
- 
- 	# The kallsyms linking does not need debug symbols, but the BTF does.
--	if ! is_enabled CONFIG_DEBUG_INFO_BTF; then
-+	if ! is_set CONFIG_DEBUG_INFO_BTF; then
- 		strip_debug=1
- 	fi
- 
- 	vmlinux_link .tmp_vmlinux1
- fi
- 
--if is_enabled CONFIG_DEBUG_INFO_BTF; then
-+if is_set CONFIG_DEBUG_INFO_BTF; then
- 	info BTF .tmp_vmlinux1
- 	if ! ${CONFIG_SHELL} ${srctree}/scripts/gen-btf.sh .tmp_vmlinux1; then
- 		echo >&2 "Failed to generate BTF for vmlinux"
-@@ -287,7 +304,7 @@ fi
- 
- vmlinux_link "${VMLINUX}"
- 
--if is_enabled CONFIG_DEBUG_INFO_BTF; then
-+if is_set CONFIG_DEBUG_INFO_BTF; then
- 	info BTFIDS ${VMLINUX}
- 	${RESOLVE_BTFIDS} --patch_btfids ${btfids_vmlinux} ${VMLINUX}
- fi
--- 
-2.47.3
-
+PiBUaGUgY2hhbGxlbmdpbmcgcGFydCBJIHN1c3BlY3Qgd2lsbCBiZSBob3cgdG8gcHJlc2VydmUg
+eW91ciBnb2FsIC0gDQphdm9pZGluZyBtZW1vcnkgYWxsb2NhdGlvbiAtIHdoaWxlIHN1cHBvcnRp
+bmcgbW9kdWxlIEJURi4gU3BlY2lmaWNhbGx5DQpmb3IgY2FzZXMgd2hlcmUgdm1saW51eCBCVEYg
+aGFzIG5vdCBiZWVuIHVzZWQgeWV0IGFuZCBtb2R1bGVzIGxvYWQuDQpTaW5jZSB5b3UnZCBuZWVk
+IHRvIHByZXNlcnZlIHRoZSBtb2R1bGUgQlRGIGZvciBsYXRlciB1c2Ugb24gbG9hZCAoZHVlIHRv
+DQp0aGUgbmF0dXJlIG9mIHRoZSBFTEYgc2VjdGlvbiBpdCBpcyBpbiksIEknbSBub3Qgc3VyZSB0
+aGF0IHBhcnQgd291bGQgYmUgZmVhc2libGUsDQp1bmxlc3MgeW91IHdhbnRlZCB0byBqdXN0IHN1
+cHBvcnQgQlRGIGZvciBtb2R1bGVzIGxvYWRlZCBhZnRlciB2bWxpbnV4IEJURg0KDQpUaGFua3Mg
+Zm9yIHBvaW50aW5nIHRoaXMgb3V0LCBBbGFuLiAgSSBoYXZlIGZpbmlzaGVkIENPTkZJR19ERUJV
+R19JTkZPX0JURj1tLCBpbmNsdWRpbmcgbW9kdWxlIEJURiBmb3IgbW9kdWxlcyBsb2FkZWQgYmVm
+b3JlIHRoZSB2bWxpbnV4IEJURjogIGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2JwZi8yMDI2MDky
+MzA1Mzk0OC4zMDYxNy0xLXdhbmpheUBhbWF6b24uY29tLyAgY2M6QWxleGVpDQogIA0KDQrvu79P
+biA5LzE3LzI2LCAxMjoxMiBBTSwgIkFsYW4gTWFndWlyZSIgPGFsYW4ubWFndWlyZUBvcmFjbGUu
+Y29tIDxtYWlsdG86YWxhbi5tYWd1aXJlQG9yYWNsZS5jb20+PiB3cm90ZToNCg0KDQpDQVVUSU9O
+OiBUaGlzIGVtYWlsIG9yaWdpbmF0ZWQgZnJvbSBvdXRzaWRlIG9mIHRoZSBvcmdhbml6YXRpb24u
+IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3UgY2FuIGNv
+bmZpcm0gdGhlIHNlbmRlciBhbmQga25vdyB0aGUgY29udGVudCBpcyBzYWZlLg0KDQoNCg0KDQoN
+Cg0KT24gMTcvMDkvMjAyNiAwNTowNywgV2FuZywgSmF5IHdyb3RlOg0KPj4gQ29uc2lkZXIgdXNp
+bmcgQWxhbidzIGFwcHJvYWNoIGFuZCBzdXBwb3J0IENPTkZJR19ERUJVR19JTkZPX0JURj1tDQo+
+DQo+IFRoYW5rcyBmb3IgdGhlIHN1Z2dlc3Rpb24uIFdl4oCZbGwgZXhwbG9yZSBob3cgd2UgY2Fu
+IG1ha2UgQ09ORklHX0RFQlVHX0lORk9fQlRGPW0gc3VwcG9ydGFibGUgYW5kIG1heSBwb3N0IGEg
+djIgcGF0Y2ggbGF0ZXIuDQo+DQo+IEJlc3QsDQo+IEpheQ0KPg0KDQoNClNlZSBzb21lIG9mIHRo
+ZSBtYWNoaW5lcnkgaW4gWzFdIGZvciBoaW50cyBvbiBob3cgdG8gZG8gdGhpcy4gSWRlYWxseQ0K
+d2Ugd291bGQgd2FudCB0aGUgZmlyc3QgdXNlciBvZiB2bWxpbnV4IHRvIGZvcmNlIHRoZSBtb2R1
+bGUgdG8gbG9hZCwNCi9zeXMva2VybmVsL2J0Zi92bWxpbnV4IHRvIGJlaGF2ZSBzaW1pbGFybHkg
+YXMgYmVmb3JlIGV0Yy4gVGhlIGFwcHJvYWNoDQp0aGVyZSBkb2VzIHRoaXMgZm9yIHZtbGludXgu
+aW5saW5lIHNvIGFkYXB0aW5nIHNvbWV0aGluZyBsaWtlIHRoYXQgaXMNCmxpa2VseSB0aGUgd2F5
+IHRvIGdvLg0KDQoNClRoZSBjaGFsbGVuZ2luZyBwYXJ0IEkgc3VzcGVjdCB3aWxsIGJlIGhvdyB0
+byBwcmVzZXJ2ZSB5b3VyIGdvYWwgLQ0KYXZvaWRpbmcgbWVtb3J5IGFsbG9jYXRpb24gLSB3aGls
+ZSBzdXBwb3J0aW5nIG1vZHVsZSBCVEYuIFNwZWNpZmljYWxseQ0KZm9yIGNhc2VzIHdoZXJlIHZt
+bGludXggQlRGIGhhcyBub3QgYmVlbiB1c2VkIHlldCBhbmQgbW9kdWxlcyBsb2FkLg0KU2luY2Ug
+eW91J2QgbmVlZCB0byBwcmVzZXJ2ZSB0aGUgbW9kdWxlIEJURiBmb3IgbGF0ZXIgdXNlIG9uIGxv
+YWQgKGR1ZSB0bw0KdGhlIG5hdHVyZSBvZiB0aGUgRUxGIHNlY3Rpb24gaXQgaXMgaW4pLCBJJ20g
+bm90IHN1cmUgdGhhdCBwYXJ0IHdvdWxkIGJlIGZlYXNpYmxlLA0KdW5sZXNzIHlvdSB3YW50ZWQg
+dG8ganVzdCBzdXBwb3J0IEJURiBmb3IgbW9kdWxlcyBsb2FkZWQgYWZ0ZXIgdm1saW51eCBCVEYN
+Cndhcy4NCg0KDQpPbi1kZW1hbmQgdm1saW51eCBCVEYgYXZhaWxhYmlsaXR5IHdvdWxkIHN0aWxs
+IGJlIGEgd2luLg0KDQoNClsxXSBodHRwczovL2xvcmUua2VybmVsLm9yZy9icGYvMjAyNjA5MDEx
+NjU3NTcuODAxNDQ5LTE2LWFsYW4ubWFndWlyZUBvcmFjbGUuY29tIDxtYWlsdG86MjAyNjA5MDEx
+NjU3NTcuODAxNDQ5LTE2LWFsYW4ubWFndWlyZUBvcmFjbGUuY29tPi8NCg0KDQo+IE9uIDkvMTYv
+MjYsIDY6NTYgUE0sICJBbGV4ZWkgU3Rhcm92b2l0b3YiIDxhbGV4ZWkuc3Rhcm92b2l0b3ZAZ21h
+aWwuY29tIDxtYWlsdG86YWxleGVpLnN0YXJvdm9pdG92QGdtYWlsLmNvbT4gPG1haWx0bzphbGV4
+ZWkuc3Rhcm92b2l0b3ZAZ21haWwuY29tIDxtYWlsdG86YWxleGVpLnN0YXJvdm9pdG92QGdtYWls
+LmNvbT4+PiB3cm90ZToNCj4NCj4NCj4gQ0FVVElPTjogVGhpcyBlbWFpbCBvcmlnaW5hdGVkIGZy
+b20gb3V0c2lkZSBvZiB0aGUgb3JnYW5pemF0aW9uLiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3Bl
+biBhdHRhY2htZW50cyB1bmxlc3MgeW91IGNhbiBjb25maXJtIHRoZSBzZW5kZXIgYW5kIGtub3cg
+dGhlIGNvbnRlbnQgaXMgc2FmZS4NCj4NCj4NCj4NCj4NCj4NCj4NCj4gT24gVGh1LCBTZXAgMTcs
+IDIwMjYgYXQgMTI6MDIgQU0gSmF5IFdhbmcgPHdhbmpheUBhbWF6b24uY29tIDxtYWlsdG86d2Fu
+amF5QGFtYXpvbi5jb20+IDxtYWlsdG86d2FuamF5QGFtYXpvbi5jb20gPG1haWx0bzp3YW5qYXlA
+YW1hem9uLmNvbT4+PiB3cm90ZToNCj4+DQo+PiBBZGQgYSAiYnRmPW9mZiIgZWFybHkgYm9vdCBw
+YXJhbWV0ZXIsIHNpbWlsYXIgdG8gdGhlIGV4aXN0aW5nICJzZWxpbnV4PTAiDQo+PiBwYXJhbWV0
+ZXIsIHNvIHVzZXJzIHdobyBkbyBub3Qgd2FudCBCVEYgY2FuIHR1cm4gaXQgb2ZmIGF0IGJvb3Q7
+IHRoZQ0KPj4gc2VjdGlvbiBpcyB0aGVuIGZyZWVkIHRvIHNhdmUgbWVtb3J5Lg0KPg0KPg0KPiB0
+YmggSSdtIG5vdCBleGNpdGVkIGFib3V0IGJ0Zj1vZmYuIEJURiBpcyBub3QgZGVidWcgaW5mbyBh
+bnltb3JlLg0KPiBzY2hlZF9leHQsIGJwZi1sc20gKHN5c3RlbWQgdXNlcyBpdCksIGhpZC1icGYs
+IG1vc3Qgb2YgYmNjL2JwZnRyYWNlDQo+IHF1aWV0bHkgc3RvcCB3b3JraW5nLCBhbmQgd2UnbGwg
+YmUgdGhlIG9uZXMgdHJpYWdpbmcgImxpYmJwZjogZmFpbGVkDQo+IHRvIGZpbmQgdmFsaWQga2Vy
+bmVsIEJURiIgcmVwb3J0cyBmcm9tIHBlb3BsZSB3aG8gY29weS1wYXN0ZWQgYQ0KPiAic2F2ZSA1
+TUIiIHR1bmluZyBndWlkZS4NCj4gVGhpcyBuZWVkcyBtb3JlIHRob3VnaHQuDQo+DQo+DQo+PiAu
+Li4vYWRtaW4tZ3VpZGUva2VybmVsLXBhcmFtZXRlcnMudHh0IHwgMTQgKysrDQo+PiBhcmNoL2Fy
+bTY0L21tL21tdS5jIHwgMTA4ICsrKysrKysrKysrKysrKysrLQ0KPj4gYXJjaC94ODYvbW0vaW5p
+dF82NC5jIHwgMzAgKysrKysNCj4+IGFyY2gveDg2L21tL3BhdC9zZXRfbWVtb3J5LmMgfCAyOCAr
+KysrLQ0KPj4gaW5jbHVkZS9saW51eC9idGYuaCB8IDkgKysNCj4+IGtlcm5lbC9icGYvYnRmLmMg
+fCA1MSArKysrKysrKy0NCj4+IGtlcm5lbC9icGYvc3lzZnNfYnRmLmMNCj4gfCA3ICsrDQo+PiBr
+ZXJuZWwvYnBmL3ZlcmlmaWVyLmMgfCAyICstDQo+DQo+DQo+IFRoaXMgZG9lc24ndCBhcHBseSB0
+byBicGYtbmV4dC4NCj4gQ29uc2lkZXIgdXNpbmcgQWxhbidzIGFwcHJvYWNoIGFuZCBzdXBwb3J0
+IENPTkZJR19ERUJVR19JTkZPX0JURj1tDQo+DQo+DQo+IHB3LWJvdDogY3INCj4NCj4NCj4NCg0K
+DQoNCg0KDQo=
