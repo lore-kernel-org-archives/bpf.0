@@ -1,343 +1,206 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com [74.125.228.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26EAA47F3C5;
-	Wed, 23 Sep 2026 10:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790158494; cv=none; b=rHXpvta8rU/HkwJ9qjSlfYRpdpcpF2l7dPtsAAKcueD16aVuMSWIfDKOsL7ipfbiL0Aq4+7PoPJ5YhQsLeBty2QnGFK7k1aITAZjg8lkm7Iq8Aiqow3D+lHxDOnmZwfplUXKfeZH/LnYwb5FoFc3WPnIsv/lkEyjv2jvbW0jZAw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790158494; c=relaxed/simple;
-	bh=tT3CGbysE//BgveGLAUWMDCFv0yyOVvgFjvvNhzCT4c=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nzrQyteJCF8C9PjMSDAplbv3Ps7CGVpDT6rKd55P9YdDgGxiP7EoKPIYNzN/aCDLGUMzVOqnLbpmVxiSTy1bwvmVaKlB4/i4F4VVJlQCeyMSWoLS1faPkaSQVveKO/NGeGu/94Cot7V08wrRSCBASRHdJo9DzjdrRcWhjhdqCNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=bPYyqNzD; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D10493D53
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 10:38:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790159910; cv=pass; b=bkQrNyoXrCBx+obcpiYs9LFiCYFR/NEuKLv7NWIGq6lrLs6iXOFcW8ffriw+owBXgusgBA239W/xyLOXI3lpTVp8txfTlRIwxWaJLC8zT4c21aUENusD8TIxa7jnV6kwHFnMVjo2Js94R1RXUQ/GvOrow5kOsLGy1WaY/pTJLk0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790159910; c=relaxed/simple;
+	bh=5bBZTIhJ1VDX0f09EYU0W2JJIYCCiRMPtgnSccz0QeY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gVeBTFNRtERbm0l2QZXSyY5Asj1BXY9907B7wvL47A7bX1BYEbR5VSgeIWnSU3kmHwsQOKPhV4FkViN9BkNQZ0hW+rPzAS2tw2uXVoG6jwRRtoND/ManCXK3kGD+h/oAWxVWbvrjtSYnDos0lqFLPFSry/ZxkSSwknlDXVTD9f8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rqta2/s1; arc=pass smtp.client-ip=74.125.228.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="bPYyqNzD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1790158484; x=1821694484;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=tT3CGbysE//BgveGLAUWMDCFv0yyOVvgFjvvNhzCT4c=;
-  b=bPYyqNzDSsT4jMXxI+XtxbnxXy0sOENcFnAjgdmEBk+I7a/JGCss4/sk
-   wm9a7nKhjMZoKIM1A2Ac5TiiRVYlcEu+I5RhDZqEQcQlJ2EsJBArcKkS4
-   kIZE021wTcKwBkZrLAxAPf63kocT2R+VTJBl0SJ3ojZUmvVwpmKj8P4m+
-   adPhIl9GMv8NMgXlpQMHeH73eDmeCYzE4Q8ka9XAE1oyb3AEyXDmMJ7j3
-   lq6bNkV9+C8UEw9vbAWUb11rry0knpPHO+3ZGIRYMDJQKc4Lz47rhIcoH
-   M/D1e5j0UTZxNKkyoE3L6j2GJWsilzunrwEtW9Kg/fkRVGDrOK6if/gkv
-   A==;
-X-CSE-ConnectionGUID: Pa30JuG2SJq29n2dxociEw==
-X-CSE-MsgGUID: zb0+GdwRRWKi52uCOutGAQ==
-X-IronPort-AV: E=Sophos;i="6.27,118,1787036400"; 
-   d="scan'208";a="64333347"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Sep 2026 03:14:36 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Wed, 23 Sep 2026 03:14:35 -0700
-Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Wed, 23 Sep 2026 03:14:31 -0700
-Date: Wed, 23 Sep 2026 12:14:27 +0200
-From: Daniel Machon <daniel.machon@microchip.com>
-To: <netdev-bot+sashiko@kernel.org>
-CC: <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
-	<kuba@kernel.org>, <pabeni@redhat.com>, <horatiu.vultur@microchip.com>,
-	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
-	<ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
-	<john.fastabend@gmail.com>, <sdf@fomichev.me>, <herve.codina@bootlin.com>,
-	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <mohsin.bashr@gmail.com>,
-	<richardcochran@gmail.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH net-next v7 12/14] net: lan966x: add PCIe FDMA XDP support
-Message-ID: <20260923101427.z7inl6pdkf4tddcc@DEN-DL-M70577.microsemi.net>
-References: <20260918-lan966x-pci-fdma-v7-12-0ecc179c8a2c@microchip.com>
- <179008205544.2160803.323034395102452966@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rqta2/s1"
+Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c254f5603a0so107905266b.0
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 03:38:17 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790159894; cv=none;
+        d=google.com; s=arc-20260327;
+        b=jDGHfQGuBF9FvYBHRv8RWRJYoJdMuMbSGOOAIZFIybM72+tRrZjyUsn5m5SyI9Uj+C
+         e4a54WBMA+mMvlFknJ1Uw1poaDpsEHNtgwPeaUxaJRdBDREF7TTRGAiJT1Nqujz1tq7I
+         DlbwCVQ7eNt5T0ULJRip32tJgk+qPLxYbgXqOgrYcnpMe+bvdrrDrjFy4jAINZHAHgI8
+         DOqf2ouu6yayvNjc+lUyphkkV334BeHKJLgKonUr5rj1UrAx9o82HJ6rQxlZ7osmXUwZ
+         w2GdLhTxk5Pv9OpmgMjf+Q9oM80lg6U/+0afMj1dM5xmAVoSedOa4jXWDm6UpssKQvlg
+         hHdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=NOmzl3Lo3C4M70pbXlcdYKKFRiDhI9/7UZkmUgMpPVo=;
+        fh=S4qmepyJSHTpUQaAD0nV/51v3o+5l8PoJuL4jbKBFXU=;
+        b=RWI5+invIJpu0nEuQEBbvLfAA7rDCOLCJZ/oLkzClguAV1nahBwgDkUz2E0rR6OxsZ
+         FVH+hXW0AOX8kQURrgpe2sEDuHhIunTMMWT70VcpumBrb9b0PKM2CsxAWOgLgwmwDIar
+         4lrI2/8mu5IIiDXpqfBrMw1dd5F4wap6uUY86Ngpfu+e3xWcI58v5b4yx9padguOboYz
+         3DqJTH4G81Gdo/Y2I4t6/3fEAbcYjkzgSQSjoHGmBjsRqxxghVLEe8cY6yhsUhd6Ga8f
+         KUL6Frog4F6W4sE7mhoYPauQ1aBQ8d+OZG5041ibu1jySqDfjUsn6X3mSk8dKuVCeBTK
+         jWUg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790159894; x=1790764694; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=NOmzl3Lo3C4M70pbXlcdYKKFRiDhI9/7UZkmUgMpPVo=;
+        b=rqta2/s1wmXwbb65CLXFEClUsYZTaKfHG2jSvl4kLCBGO7Pd5MHaj4nUEQErEK5fd4
+         mq07rlHMKtTrONqugQhH2rPPmGVq4fqTNIsOBu6PQ7ncLHN4snOrPQqMGTJifbCSdUtn
+         9/ma/4yTtHlaTmkfOpghMyoBmtAjz1F5SF2C2f3zjf5zxuhvZkuKZmqtwLwwFO7eNc9H
+         FReOFqdlxycVgbD67xrRf4LPJDVYmh8sKngZ6HYz3EdaaDZdZQOZRebr3dl+3k0scZid
+         nYjNvk82c9sV3xHZv2dlmVCb5Ymo84GwoSvXHz3Hwdxuj0PkqxsIFADNr3M9Q79/BOKy
+         Dd/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790159894; x=1790764694;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NOmzl3Lo3C4M70pbXlcdYKKFRiDhI9/7UZkmUgMpPVo=;
+        b=ggGt17YgizoIRvsLzcnDZLB3k8Ze07Lf4cGRiwWA/tC55+SfAn1Rkit+/uH90rder5
+         QE0MLYPFPDoiZki/ktSauL+fkrhXaG0Tm0IF1SQUyigaOPwHEqoNnPhDjCyIcmRed61v
+         /k+tMlp21fzAYJH0pbpB5M9hMMwA5WWUkQnqMHLxhyNzCzlsqHHL6l0fukJmbvMr1PAt
+         NAkJUeJzbG15Facq9Mh5/CyQq0Fo6DlVl0+JMwxVqcnpFHKYKl543G0sVORLcFX+SVix
+         FIHqexeJpbLAJnFl0Ue/4J3oakOd5gdjOUnHKwh7q0klbYnBqRgY5a9D8UolYbxfaRGX
+         RJKQ==
+X-Gm-Message-State: AFuF++nbQwY7ioOEioFhaBPr/bGv409iHDWe56QcfylIPgeqIekcouU8
+	O4umzpATAUlBnWl2etJ91ayCy8EfiAhZcUTeu8Mskrw2PX0rsdOjeTQ8IuHMIJ6uR4ErJp4RCOo
+	JGqg2NCIi2/phfRfIxY7H68SAH+8bUHk=
+X-Gm-Gg: AYBFou2RUQOyRUhwYydVxdsFrYa4HvUOUu1tu4TsqeuC7yTp7oe/THLi2BxcK9UklCA
+	pkR85W7GiOel948Tjpg3sZRKP1pLMEcFACtmc4tqaK/HDjfwB42RbiheTvyis/tygXHkJx3rvKK
+	CL9u8Tq7D+lELYgO8sct3hs8PtpF+lD7vo7Xmcn1CJ2WEoFh/n64FANAilQR6/hSfQJRPHX2y1u
+	o9DpUKk8dW0d6weiKukULWTgvMB669GJi8OYvR8sZSWGDTEmGyZErGbvBE5o8AG1N9E084cuLzK
+	wg4ssWuJ4wQGnKJK1IHRdia6qcmbsnGeC0GAn9ilYqar/hmgl7dQ21hCchpWXjtBcUA87Mc=
+X-Received: by 2002:a17:907:608a:b0:c29:555e:bef with SMTP id
+ a640c23a62f3a-c2aadfc5b2fmr163903866b.9.1790159894167; Wed, 23 Sep 2026
+ 03:38:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <179008205544.2160803.323034395102452966@kernel.org>
+References: <20260922200208.3203834-1-puranjay@kernel.org> <CAEf4BzaifaWk+oHu-berWcKuS6Y5WfkcFTKZW-iMCPxG0=5i0w@mail.gmail.com>
+In-Reply-To: <CAEf4BzaifaWk+oHu-berWcKuS6Y5WfkcFTKZW-iMCPxG0=5i0w@mail.gmail.com>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Wed, 23 Sep 2026 11:37:59 +0100
+X-Gm-Features: AclHuK8pdOJUxuHrx1JIbWKYUF7JdvDFBS4P-u95gPodKlFXuPe3W3Au750rJNg
+Message-ID: <CANk7y0g8Mh-je_o_nyXQ3zsGVeAsz2qMfgDtv4j-MXhAJ7PcMA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 0/4] bpf: Add bpf_call_rcu() and bpf_call_rcu_tasks_trace()
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, rcu@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, "Harry Yoo (Oracle)" <harry@kernel.org>, 
+	"Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> Thank you for your contribution! Sashiko AI review found 3 potential
-> issue(s) to consider.
-> 
-> Critical: 0 · High: 0 · Medium: 3 · Low: 0
-> 
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
-> 
-> - [Medium] The same lan966x driver now presents two different XDP frame
->   views depending on the FDMA back-end.
-> - [Medium] lan966x_xdp_pci_run()
->   (drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c) has no…
-> - [Medium] lan966x_fdma_pci_napi_poll() bounds its RX loop only by the
->   caller-supplied weight, and clears the DONE bits solely in the…
-> 
-> --
-> 
-> net: lan966x: add PCIe FDMA XDP support
-> 
-> This adds XDP support to the lan966x PCIe FDMA path, running the BPF
-> program on the contiguous ATU-mapped RX buffer and implementing XDP_TX by
-> rebuilding the IFH and memcpy'ing the post-XDP frame into a TX slot. The
-> IFH and FCS are now stripped in lan966x_fdma_pci_rx_check_frame() before
-> the program runs, and lan966x_xdp_setup() no longer rejects programs on
-> the PCIe path.
-> 
-> A few questions below.
-> 
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> > index 940425beec2f..e833dbb4fcf0 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> 
-> [ ... ]
-> 
-> > +static int lan966x_xdp_pci_run(struct lan966x_port *port, void *data,
-> > +                            u32 data_len, void **xdp_data, u32 *xdp_len)
-> > +{
-> 
-> [ ... ]
-> 
-> > +     act = bpf_prog_run_xdp(xdp_prog, &xdp);
-> > +
-> > +     *xdp_data = xdp.data;
-> > +     *xdp_len = xdp.data_end - xdp.data;
-> > +
-> > +     switch (act) {
-> > +     case XDP_PASS:
-> > +             return FDMA_PASS;
-> > +     case XDP_TX:
-> > +             return lan966x_fdma_pci_xmit_xdpf(port, *xdp_data, *xdp_len) ?
-> > +                    FDMA_DROP : FDMA_TX;
-> > +     default:
-> > +             bpf_warn_invalid_xdp_action(port->dev, xdp_prog, act);
-> 
-> [Severity: Medium]
-> Should this switch have an XDP_REDIRECT arm, at least for the bonding
-> case?  XDP_TX can be rewritten into XDP_REDIRECT inside
-> bpf_prog_run_xdp() before the driver sees the action:
-> 
-> include/net/xdp.h:bpf_prog_run_xdp() {
->         u32 act = __bpf_prog_run(prog, xdp, BPF_DISPATCHER_FUNC(xdp));
-> 
->         if (static_branch_unlikely(&bpf_master_redirect_enabled_key)) {
->                 if (act == XDP_TX && netif_is_bond_slave(xdp->rxq->dev))
->                         act = xdp_master_redirect(xdp);
->         }
->         ...
-> }
-> 
-> bond_xdp_set() increments bpf_master_redirect_enabled_key and only
-> requires the slave to provide ndo_bpf and ndo_xdp_xmit, both of which
-> lan966x_port_netdev_ops provides on the PCIe path as well.  Before this
-> patch lan966x_xdp_setup() rejected any program on the PCIe path, so this
-> combination was not reachable; now it is.
-> 
-> With no XDP_REDIRECT case, a program returning XDP_TX on a bonded PCIe
-> port lands in the default arm, so the frame is dropped,
-> bpf_warn_invalid_xdp_action() prints "Driver unsupported XDP return value
-> 4", trace_xdp_exception() fires, and the per-CPU redirect info stashed by
-> xdp_master_redirect() is never consumed - while lan966x_probe_port() now
-> advertises NETDEV_XDP_ACT_BASIC (XDP_TX) for exactly this path.
-> 
-> The other implementer of the same lan966x_fdma_action values,
-> lan966x_xdp_run() in lan966x_xdp.c, does handle XDP_REDIRECT, so the two
-> sides of the shared enum disagree.
-> 
-
-I think this is fine. We explicitly tell (through dev->xdp_features) that we do
-not support NETDEV_XDP_ACT_REDIRECT in the PCI path, so falling back to a
-warning seems OK to me.
-
-> > +             fallthrough;
-> > +     case XDP_ABORTED:
-> > +             trace_xdp_exception(port->dev, xdp_prog, act);
-> > +             fallthrough;
-> > +     case XDP_DROP:
-> > +             return FDMA_DROP;
-> > +     }
-> > +}
-> > +
-> > +static int lan966x_fdma_pci_rx_check_frame(struct lan966x_rx *rx, u64 *src_port,
-> > +                                        void **data, u32 *data_len)
-> >  {
-> >       struct lan966x *lan966x = rx->lan966x;
-> >       struct fdma *fdma = &rx->fdma;
-> > @@ -168,38 +286,33 @@ static int lan966x_fdma_pci_rx_check_frame(struct lan966x_rx *rx, u64 *src_port)
-> >       if (!lan966x_fdma_pci_rx_size_fits(fdma, blockl))
-> >               return FDMA_ERROR;
+On Wed, Sep 23, 2026 at 12:41=E2=80=AFAM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Tue, Sep 22, 2026 at 1:02=E2=80=AFPM Puranjay Mohan <puranjay@kernel.o=
+rg> wrote:
 > >
-> > -     return FDMA_PASS;
-> > +     /* Present the Ethernet frame (no IFH, no FCS). HW re-inserts the
-> > +      * FCS on TX; see lan966x_fdma_pci_xmit_xdpf(). May be overridden
-> > +      * by XDP. The FCS strip is unconditional because NETIF_F_RXFCS
-> > +      * is not advertised in hw_features.
-> > +      */
-> > +     *data = virt_addr + IFH_LEN_BYTES;
-> > +     *data_len = blockl - IFH_LEN_BYTES - ETH_FCS_LEN;
-> > +
-> > +     return lan966x_xdp_pci_run(port, virt_addr, *data_len, data, data_len);
-> >  }
-> 
-> [Severity: Medium]
-> The commit message states:
-> 
->     XDP sees the frame with IFH and FCS stripped.
-> 
-> Is that only true for the PCIe back-end?  The platform back-end of the
-> same driver hands the FCS to the program:
-> 
-> drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c:lan966x_xdp_run() {
->         ...
->         xdp_prepare_buff(&xdp, page_address(page),
->                          IFH_LEN_BYTES + XDP_PACKET_HEADROOM,
->                          data_len - IFH_LEN_BYTES, false);
->         ...
-> }
-> 
-> and the trailing 4 bytes are only removed afterwards, once the program has
-> already run:
-> 
-> drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:lan966x_fdma_rx_get_frame() {
->         ...
->         if (likely(!(skb->dev->features & NETIF_F_RXFCS)))
->                 skb_trim(skb, skb->len - ETH_FCS_LEN);
->         ...
-> }
-> 
-> So one XDP program keyed on xdp->data_end - xdp->data, or doing an IP
-> total-length cross-check or tail parsing, sees 4 extra bytes on a platform
-> lan966x and not on a PCIe lan966x, and for XDP_TX the platform path
-> re-sends the stale FCS as payload while the PCIe path strips it and lets
-> HW insert a fresh one.
-> 
-> Could either the platform path be harmonized in this series, or the commit
-> message say that the divergence is known and intentional?
-
-Same as my reply to v6. I believe the correct handling (as done here) is to
-strip the FCS before the program runs. Also, the platform path does not even use
-the post-program length, so its not really compareable.
-
-> 
-> [ ... ]
-> 
-> > @@ -287,6 +400,8 @@ static int lan966x_fdma_pci_napi_poll(struct napi_struct *napi, int weight)
-> >       struct sk_buff *skb;
-> >       int counter = 0;
-> >       u64 src_port;
-> > +     u32 data_len;
-> > +     void *data;
+> > Changelog:
+> > v5: https://lore.kernel.org/all/20260921191407.1742386-1-puranjay@kerne=
+l.org/
+> > Changes in v6:
+> > - Size struct bpf_rcu_head at 48 bytes rather than 64, matching what th=
+e
+> >   inline state uses (Alexei)
+> > - Trim patch 1's changelog: drop the reasoning about possible future
+> >   layouts and about what the other async kfuncs return
+> > - Rebase on bpf-next/master
 > >
-> >       /* Wake any stopped TX queues if a TX DCB is available. */
-> >       spin_lock(&lan966x->tx_lock);
-> > @@ -303,7 +418,10 @@ static int lan966x_fdma_pci_napi_poll(struct napi_struct *napi, int weight)
-> >               /* Order DONE read before DCB/frame reads below. */
-> >               dma_rmb();
-> >               counter++;
-> > -             switch (lan966x_fdma_pci_rx_check_frame(rx, &src_port)) {
-> > +             switch (lan966x_fdma_pci_rx_check_frame(rx,
-> > +                                                     &src_port,
-> > +                                                     &data,
-> > +                                                     &data_len)) {
-> >               case FDMA_PASS:
-> >                       break;
-> >               case FDMA_ERROR:
-> > @@ -312,8 +430,17 @@ static int lan966x_fdma_pci_napi_poll(struct napi_struct *napi, int weight)
-> >                        */
-> >                       fdma_dcb_advance(fdma);
-> >                       continue;
-> > +             case FDMA_TX:
-> > +                     fdma_dcb_advance(fdma);
-> > +                     continue;
-> > +             case FDMA_DROP:
-> > +                     fdma_dcb_advance(fdma);
-> > +                     continue;
-> >               }
-> 
-> [Severity: Medium]
-> Can the same descriptors be processed twice when the RX loop consumes the
-> whole ring in one poll?
-> 
-> The RX loop is bounded only by the caller-supplied weight, and the DONE
-> bits are cleared solely by the fdma_dcb_add() in the replenish loop, whose
-> trip count comes from a wrapped index comparison:
-> 
-> lan966x_fdma_pci_napi_poll() {
->         dcb_reload = fdma->dcb_index;
-> 
->         while (counter < weight) {
->                 if (!fdma_has_frames(fdma))
->                         break;
->                 ...
->         }
->         while (dcb_reload != fdma->dcb_index) {
->                 old_dcb = dcb_reload;
->                 dcb_reload++;
->                 dcb_reload &= fdma->n_dcbs - 1;
-> 
->                 fdma_dcb_add(fdma, old_dcb, ...);
->                 lan966x_fdma_rx_reload(rx);
->         }
->         ...
-> }
-> 
-> The PCIe ring has FDMA_PCI_DCB_MAX = 256 descriptors.  With all 256 DONE
-> and weight >= 256, fdma_dcb_advance() wraps fdma->dcb_index back to
-> dcb_reload, so the replenish loop runs zero iterations: nothing is
-> re-armed and no DONE bit is cleared.  counter == weight also suppresses
-> napi_complete_done(), so the next poll re-processes the same 256
-> descriptors - duplicate skbs via napi_gro_receive(), and with this patch
-> the same frames are re-run through the BPF program and re-transmitted by
-> lan966x_fdma_pci_xmit_xdpf() on XDP_TX.
-> 
-> A weight >= 256 is reachable through busy polling: SO_BUSY_POLL_BUDGET
-> accepts up to U16_MAX (CAP_NET_ADMIN needed to raise it) and
-> __napi_busy_loop() passes that budget straight into napi->poll():
-> 
-> net/core/dev.c:__napi_busy_loop() {
->         ...
->         work = napi_poll(napi, budget);
->         ...
-> }
-> 
-> The loop shape itself came in with "net: lan966x: add"Can" PCIe FDMA support"
-> earlier in this series, and the platform twin lan966x_fdma_napi_poll() has
-> the same shape with 512 DCBs; this patch extends the switch with
-> FDMA_TX/FDMA_DROP, which adds the repeated XDP execution and repeated
-> transmit to the effects.  Would counting consumed descriptors and capping
-> the loop at fdma->n_dcbs address this?
-> 
+> > v4: https://lore.kernel.org/all/20260915154248.3612028-1-puranjay@kerne=
+l.org/
+> > Changes in v5:
+> > - Rename the "hash_map" subtest to "bad_map" so that it matches its
+> >   helper test_call_rcu_bad_map() (bpf-ci)
+> > - Bump the callback counter after chain_err in the selftest callback.
+> >   Userspace polls that counter and then reads chain_err, so it could
+> >   still see the initial value before the re-arm had stored one, which
+> >   let the chain subtest's assertion pass without checking anything
+> > - Say in patch 1 why embedding struct rcu_head in a uapi struct is
+> >   acceptable here (Mykyta, Paul, Alexei)
+> > - Rebase on bpf-next/master
+> > v3: https://lore.kernel.org/all/20260915143640.36292-1-puranjay@kernel.=
+org/
+> > Changes in v4:
+> > - Drop an unrelated hunk in bpf_async_update_prog_callback() that turne=
+d
+> >   PTR_ERR(prog) into -EBADF.  That is the shared bpf_timer/bpf_wq path
+> >   and bpf_prog_inc_not_zero() returns -ENOENT, so it would have changed
+> >   the errno bpf_timer_set_callback() and bpf_wq_set_callback() report t=
+o
+> >   userspace (Sashiko).  No other changes from v3
+> > v2: https://lore.kernel.org/all/20260915114240.3269184-1-puranjay@kerne=
+l.org/
+> > Changes in v3:
+> > - Move the bpf_call_rcu_tasks_trace() verifier bits from patch 1 to
+> >   patch 3; patch 1 alone emitted "resolve_btfids: unresolved symbol
+> >   bpf_call_rcu_tasks_trace" (Sashiko)
+> > - Poll the callback counter with an acquire load (Sashiko)
+> > - teardown: v2 only checked that the program was eventually freed, whic=
+h
+> >   passes even if nothing was ever armed.  Also assert that the chain ra=
+n,
+> >   and read the -EPERM back through an independent .bss fd
+> > - Use kern_sync_rcu() instead of open coding the grace-period wait
+> > - Return -EBADF rather than -ENOENT when the calling program is going
+> >   away, matching bpf_task_work_schedule()
+> > - mismatch_map now pins the bpf_rcu_head label the new code emits; it
+> >   passed with that branch removed.  Add a two_heads test, and wait for
+> >   each grace period separately in the chain test
+> > - Commit messages: correct the -EPERM parity claim, explain the inline
+> >   callback state and the struct size, motivate the tasks trace flavour
+> > v1: https://lore.kernel.org/all/20260907134552.1772405-1-puranjay@kerne=
+l.org/
+> > Changes in v2:
+> > - Rebase on bpf-next/master
+> > - Use rcu_read_lock_dont_migrate() over open coding (Alexei)
+> > - Improve re-arming selftest to detect failure (Sashiko)
+> >
+> > BPF programs that manage their own objects have no way to run their own
+> > logic once an RCU grace period has elapsed.  bpf_obj_drop() defers a
+> > free, but returning an index to an allocator or unpinning a resource
+> > once readers are done has no equivalent.  sched_ext's BPF library works
+> > around this today by pushing freed nodes onto a list and having a
+> > userspace thread call membarrier(MEMBARRIER_CMD_GLOBAL) and then run a
+> > BPF program to reclaim them; it is the first intended user.
+> >
+> > Add:
+> >
+> >         int bpf_call_rcu(struct bpf_rcu_head *rh, void *map,
+> >                          int (*callback)(struct bpf_map *map, void *key=
+,
+> >                                          void *value));
+> >
+> > and bpf_call_rcu_tasks_trace(), same signature, which also waits for
+> > sleepable programs.
+> >
+> > @rh is a struct bpf_rcu_head embedded in a value of @map, so the
+> > callback runs as callback(map, key, value) for the element it lives in
+> > and needs no cookie.  The field is only accepted in BPF_MAP_TYPE_ARRAY,
+>
+> Isn't restricting this to BPF_MAP_TYPE_ARRAY unnecessarily restrictive
+> in practice? Do other APIs of similar kind have this limitation? E.g.,
+> bpf_task_work_schedule() or timer, I don't think they limit user to
+> just ARRAY maps, it's way too inflexible.
 
-Reachable only if budget is pushed above ring size. The PCI NAPI poll reuses the
-same pattern as the platform path (and lan969x and sparx5), and no issues have
-ever been observed or reported.
+Right, bpf_timer and bpf_task_work take HASH/LRU_HASH/ARRAY. They can
+because they can cancel: on element delete bpf_obj_free_fields() calls
+bpf_task_work_cancel_and_free(), which reaches task_work_cancel(), so
+a pending callback never runs against a recycled element.
+A queued RCU callback cannot be cancelled. rcu_barrier() is the only
+thing that waits for one, and it sleeps, so it is not callable from an
+element delete. Array elements are never freed individually, which is
+what makes it safe.
 
-> > -             skb = lan966x_fdma_pci_rx_get_frame(rx, src_port);
-> > +             skb = lan966x_fdma_pci_rx_get_frame(rx,
-> > +                                                 src_port,
-> > +                                                 data,
-> > +                                                 data_len);
-> >               fdma_dcb_advance(fdma);
-> >               if (!skb) {
-> >                       lan966x->ports[src_port]->dev->stats.rx_dropped++;
-> 
-> [ ... ]
-> 
-> --
-> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260918-lan966x-pci-fdma-v7-0-0ecc179c8a2c%40microchip.com
+I can think of a complicated way to support hash maps but that would
+need making the state dynamically allocated and finding a way to
+cancel the callbacks. But I would do it as a follow-up if there is a
+real use case.
