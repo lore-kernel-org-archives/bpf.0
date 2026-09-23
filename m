@@ -1,135 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BF2D3D810F
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 19:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C60852FE2D
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 19:29:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790191701; cv=none; b=CuREqHtoXZUeO0am38TpkFfToo1SwqEITqQD0dLGdMyf+gJ4lNhR7Ronj1kinvaI3Zv8sC7xFJwer+ekZcGW683FeAq3DWGjBiGNfbV2BVl1hWM3b+eFzU78d1x1CJz9F+xsNl2U78xnCRxK+4TyGoB0uQGq1B7QYkEMz52cMRQ=
+	t=1790191771; cv=none; b=XhYupNzdKVuMYsfr2KTtcFWBSipuEvPVaS9sUgLezbG+MN2YFDcNXF2nmF6SuHeAU1f3mSLsEKoiNwbqBn1xXVNTDRUMXMA1Y0T1JIelZYGxXS3sxSEMmJq2T3aZSgIzicmbyGKEFhXOw2SYjx4YidZA4ARFWP7qifDmImjvN1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790191701; c=relaxed/simple;
-	bh=T8aaX97K3vOUq1veCKMzjTkLsDgXC4akS1yAQB/+eLQ=;
-	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=AU0n/2XsqOMHsOkjbGpAVpuQkkI+AEf+fZJuUzszQrZmuJBNApSx9HjzWGERNU2WA56Ia0jKiRhj4HXOFXLBoMVdkAMgxQXxpTAyq4dKxsoUHTOa0pAuqRZsaNi//oNpx6A71TSW9jwvwju9efmqlZtvnmrnuJVd3um+cnw2X8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iEt6X5Q2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790191771; c=relaxed/simple;
+	bh=54+iOccS4wvS3KEHskCddFEnm7kmenUIqpDRw31AZAc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=l1BfiUSyhfCjRa+26kHEIFJPdqsrLeyYtcfpqED8Z6PteviF8z8A4VO5AHRKVU0DaZpzBhpOIssbSi5fGDY4kiYi3vLiqsgt5GIojo+MO7UUwtxnHANIp4kuadaSRQnlFMiVuABPUN4uL4QEy15TzZ3lwevW4B998dSGXYb4yqQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YaNbQhq3; arc=none smtp.client-ip=74.125.225.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iEt6X5Q2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F4D1F000FF;
-	Wed, 23 Sep 2026 19:28:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790191699;
-	bh=bcJBOzwQED6qLYIz4RWgdA3+pFnmB+2r2w3K2az31aE=;
-	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=iEt6X5Q23btuzhgv5MBng/ufdrIe1O1SFyGGbvVrgKjF0ePp2uMXNS0C0KUlxVNAh
-	 +qIs+vZ9vUg6E6vw8ov4uMEPsKKxRO83QWrH1PdCE754DARYaemk5HQqRB2GLN5RTf
-	 xdcr3+iBaHw2H2N3enbLxEl1vkVvhdV8SH3/I6DcT+wLg1+kdJrp0C6rFu5+YwjJxW
-	 TQrXTh11cZI/jtX+qUVNs2rv4LS1UGJR19WLRhCPSKdt8e1AqCrTBsbQhE58Zxw5yN
-	 nneVr6oyZ+ACUjlgblAVgfJzFmOarns2MHjc20lLPj6awt85gHeQVENvpdVi6OB58M
-	 24uP/dTIJdHmw==
-From: sashiko-bot@kernel.org
-Subject: Re: [PATCH bpf-next v3 5/6] bpf: Atomically update PTE and range
- tree in arena VM fault handler
-Reply-To: sashiko-reviews@lists.linux.dev
-To: "Emil Tsalapatis" <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org
-In-Reply-To: <20260923191125.5311-6-emil@etsalapatis.com>
-References: <20260923191125.5311-1-emil@etsalapatis.com>
- <20260923191125.5311-6-emil@etsalapatis.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-Date: Wed, 23 Sep 2026 19:28:19 +0000
-Message-Id: <20260923192819.B4F4D1F000FF@smtp.kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YaNbQhq3"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49e6eb11e9cso5056285e9.1
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 12:29:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790191768; x=1790796568; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=4XqmhhXP0A/R76xAAP865zT+LyEnQax3kp6jk0z97rQ=;
+        b=YaNbQhq37oKtQD7PlnNaPyW6R0b7wpGxCqsQRm7aVRhYBSoInInxouRvIdY102VK4h
+         IsvsejOr53EIv1iRPOCznKatz0skC10Qjhp/qWQ3Fi8IsoccDRVKCvemDwfSK4c2qIOG
+         NVlqiuSQ6pT/xIohWVC4lx27ufU/SXsyftEk3cMx5UM3NV14PK3H5557YEHDUQjWICe6
+         MXk4jRnEwh5I1aGRP/5Ee8liZyetQ38swBdzLyv6nAfuCOdkzFLxrgqRRRVOTApZbx60
+         F+nY6ChbBtD2hdo6fSKg6oBDmzC3b/XxL8V2LyaNDXV6hJdGiaTHGT5JMw7Jwb/VUuqJ
+         YLEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790191768; x=1790796568;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=4XqmhhXP0A/R76xAAP865zT+LyEnQax3kp6jk0z97rQ=;
+        b=b0Z5mCBHX19asVwSJYTJdytcyugFiycjRoVyuCpzLP15Mddrytp4bu8Zsp00GVtPO7
+         KD/b0MMqQyf1sxsfrL+jFzFpZnbWXXfU22/D5zBbcLGQOT6Vsdi+JjKZTbB1VVDyAxgn
+         S2BBGaEZkfAXkKxvatTyLy/VetAS55M7NG4vjGhbRunLb2oSzNTxL6VspVevB1t7lLxt
+         lmsUD9i7qHx51xTwoOWbrjjL7HlVtye6xH8MZQ6RBeob3V//8p3dsHvSfIw2cUkn1sj6
+         7AERPp5LEPNrTOXgJ9Jg4av+y+aXIR4ccUocfZBzARwJBJMtXULuz71MM/PDy0BrATgx
+         cF9w==
+X-Gm-Message-State: AFuF++me65giU+EowuqaNIyostTf2gUngwXLjX6Shw/gSWVxSB1StSrN
+	UJRZhWQPdVWcKb/Rd5/T3FL2jyrDNC4lp3bZmzdeUmzRkq6i+xkkOyAfaWENMCcU
+X-Gm-Gg: AYBFou0Xa7qhHoKHxahKyzOYpwmp/+8rx8I1fLBBbGTwSLaXxX7YEJd07liWjr+2GC1
+	mXy8SM7IPYxk8WZwt7UI+eVqud7BTJBC48xudguHJ1nL1c9Kdxy5XSKLCdBi/N+Q5V1nkQsf7+9
+	iVlX1utAmc/rPp9+wSxEVVZo1LVT2ZhlFct9YJzq9iPuLRCmJxIdTLZ8YjI/xDSQBcx2srPI9vW
+	K5iJKnlNODuwGqavh1HV1IHd93f4gDbf/Jmu7oQSZaMwcKET4xiiJw8TsQikV9SxkJbcNte1tpW
+	tisOH5NxwPGaLhgoo9+JZqMVfj7XA/8XwwghziEkaKKe/Uz8Ema1Plz+5Ay+6zFP+uUk/zS6kbH
+	27Qh9gKjcc9B/2wmFYr2qGadOacTPif9iqBbvn9z+uy8if8Y2oEJwWdByYR2ehXGwDMWpHl1Eyt
+	GdRiMXmr7VZ4WbZvukNc/BbPNFvf7gtuCKl40+Fokke5GsNfQ3+FUvsgqWnIepK0LPMDmJU32Pv
+	98s1vzXqqvNDzUf+atZuQcL4SYzYf2kglF+Q/RYgVieT/kKiXTFAb4MWvPTiplZDy9eIJbxa9jG
+	KWcWqke5IYaGhA8TL3Knfr/msTGG6tQKCLvC4A==
+X-Received: by 2002:a05:600c:6290:b0:49e:799a:8969 with SMTP id 5b1f17b1804b1-49fe6707bb7mr3307245e9.30.1790191768392;
+        Wed, 23 Sep 2026 12:29:28 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-488688856f0sm8470163f8f.30.2026.09.23.12.29.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Sep 2026 12:29:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 23 Sep 2026 21:29:27 +0200
+Message-Id: <DLMY0OLDC2E9.20RXZ8ZAY73PG@gmail.com>
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: <sashiko-reviews@lists.linux.dev>
+Cc: <bpf@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v1 08/18] bpf: Grow the verifier id scratch on
+ demand
+X-Mailer: aerc 0.21.0
+References: <20260923191139.2816206-1-memxor@gmail.com>
+ <20260923191139.2816206-9-memxor@gmail.com>
+ <20260923192404.EE7E21F000FF@smtp.kernel.org>
+In-Reply-To: <20260923192404.EE7E21F000FF@smtp.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 2 potential issue(=
-s) to consider:
-- [Critical] bpf: memory isolation breach on arena spinlock -EDEADLK
-- [Medium] bpf: spurious VM_FAULT_SIGBUS on concurrent arena page faults
---
+On Wed Sep 23, 2026 at 9:24 PM CEST, sashiko-bot wrote:
+> Thank you for your contribution! Sashiko AI review found 1 potential issu=
+e(s) to consider:
+> - [Medium] bpf: OOM in release_reference() triggers WARN_ON_ONCE and is i=
+mproperly ignored in unmark_stack_slots_iter()
+> --
+>
+> commit bdefbd593b54c82f98de0288f1f6f5e793ee9fbb
+> Author: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+>
+> bpf: Grow the verifier id scratch on demand
+>
+> The id map used to compare the ids of two states, which also serves as
+> the id stack of release_reference() and as the id set of
+> bpf_clear_singular_ids(), is a fixed array embedded in struct
+> bpf_verifier_env and sized for the most registers and stack slots a
+> state can possibly hold. Turn the map and the set into arrays grown on
+> demand, starting at 64 entries and doubling, and free them with the env.
+>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index d8f43f3a89912..8641f1a8d017d 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -10136,8 +10136,9 @@ static int idstack_push(struct bpf_idmap *idmap,=
+ u32 id)
+>>  		if (idmap->map[i].old =3D=3D id)
+>>  			return 0;
+>>
+>> -	if (WARN_ON_ONCE(idmap->cnt >=3D BPF_ID_MAP_SIZE))
+>> -		return -EFAULT;
+>> +	if (!bpf_id_scratch_reserve((void **)&idmap->map, &idmap->cap, idmap->=
+cnt,
+>> +				    sizeof(*idmap->map)))
+>> +		return -ENOMEM;
+>
+> [Severity: Medium]
+> With this change, idstack_push() can return -ENOMEM on a normal allocatio=
+n
+> failure, which propagates up through release_reference().
+>
+> However, in kernel/bpf/verifier.c:unmark_stack_slots_iter(), we have:
+>
+> 	for (i =3D 0; i < nr_slots; i++) {
+> 		struct bpf_stack_state *slot =3D bpf_stack_slot(state, spi - i);
+> 		struct bpf_reg_state *st =3D &slot->spilled_ptr;
+>
+> 		if (i =3D=3D 0)
+> 			WARN_ON_ONCE(release_reference(env, st->id));
+>
+> Does this mean a simple -ENOMEM during verification will trigger this
+> WARN_ON_ONCE splat? Since release_reference() can now legitimately fail u=
+nder
+> memory pressure, should this warning be removed, and should the -ENOMEM e=
+rror
+> be properly propagated here instead of discarded?
 
-commit a5d5ccfbb2dd50c63d33c5a9de680c3dad099509
-Author: Emil Tsalapatis <emil@etsalapatis.com>
-
-bpf: Atomically update PTE and range tree in arena VM fault handler
-
-This commit modifies the arena VM fault handler to atomically adjust the
-range tree and insert PTEs, avoiding deadlocks with the range tree spinlock
-under PREEMPT_RT. It does this by marking the range as unavailable, dropping
-the lock to insert the PTE, then re-acquiring the lock to fully remove the
-range.
-
-> diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
-> index 69c8924f4c306..5438b68d269a8 100644
-> --- a/kernel/bpf/arena.c
-> +++ b/kernel/bpf/arena.c
-> @@ -562,7 +565,7 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
->  	/* If a range is unavailable, try again. */
->  	if (ret =3D=3D -EAGAIN) {
->  		raw_res_spin_unlock_irqrestore(&arena->spinlock, flags);
-> -		goto retry;
-> +		goto retry_memcg;
->  	} else if (ret) {
-[ ... ]
-> @@ -583,12 +586,40 @@ static vm_fault_t arena_vm_fault(struct vm_fault *v=
-mf)
-[ ... ]
-> +	fault_ret =3D vmf_insert_page(vmf->vma, vmf->address, page);
-> +	while ((ret =3D raw_res_spin_lock_irqsave(&arena->spinlock, flags))) {
-> +		/* If we somehow deadlocked stop trying to take the lock. */
-> +		if (ret =3D=3D -EDEADLK) {
-> +			range_node_mark_available(unavail_node);
-> +			return VM_FAULT_SIGBUS;
-> +		}
-
-[Severity: Critical]
-Does this error path leave memory isolation broken? By calling
-range_node_mark_available(), it marks the range as free in the arena's range
-tree allocator.=20
-
-However, the page was already mapped into the kernel vmap via
-apply_to_page_range() and the user page tables via vmf_insert_page().
-
-If the lock returns -EDEADLK, subsequent allocations might hand out this sa=
-me
-page to other BPF programs or userspace, potentially causing two independent
-users to share and corrupt the same memory. Should this path unmap the page
-before returning?
-
-> +
-> +		cond_resched();
-> +	}
-[ ... ]
-> @@ -598,8 +629,9 @@ static vm_fault_t arena_vm_fault(struct vm_fault *vmf)
-[ ... ]
-> -retry:
-> +retry_memcg:
->  	bpf_map_memcg_exit(old_memcg, new_memcg);
-> +retry:
->  	if (new_page)
->  		free_pages_nolock(new_page, 0);
-> =20
->  	if (!(vmf->flags & FAULT_FLAG_ALLOW_RETRY))
->  		return VM_FAULT_SIGBUS;
-
-[Severity: Medium]
-Will this lead to spurious process crashes for concurrent faults? When two
-threads concurrently page-fault on the same arena page, the first thread ma=
-rks
-the range as unavailable and drops the spinlock to call vmf_insert_page().
-
-The second thread sees the unavailable range via range_tree_clear(), which
-returns -EAGAIN. This sends the second thread to retry_memcg and it returns
-VM_FAULT_RETRY.=20
-
-When the kernel fault handler drops the mmap lock and retries the fault, it
-clears FAULT_FLAG_ALLOW_RETRY. If the first thread hasn't removed the
-unavailable node yet, the second thread hits -EAGAIN again, fails this flag
-check, and returns VM_FAULT_SIGBUS instead of waiting.
-
---=20
-Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260923191125.5311=
--1-emil@etsalapatis.com?part=3D5
+This one is legit, probably needs more graceful handling.
