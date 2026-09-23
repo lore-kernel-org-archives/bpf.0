@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51027413798;
-	Wed, 23 Sep 2026 08:50:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5390040926E;
+	Wed, 23 Sep 2026 08:51:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790153416; cv=none; b=GtHqVsT1qBC5p41FX3Gtw/T18dvkPWKNuaGUgr61Pdf0R8nbO+MZaFcAhCrJvjIYLMQJtbuNg4oOwYSgjewxAlWxKXZ0mx96ENGlk/hU09L7P4u7wPknNxhD1iCCrWOuLfUUKuJtO5Y07ZwJgheomAWrlE2HDaJ/E9tStlN3/CA=
+	t=1790153474; cv=none; b=UykALcX804FyG5CF6cEz7TP4j/42fU3fSl3AgUn4zi9WLNWgJrB4WCFT2ptPL9DHLmtXlLH/SfXGEJTSW2V3/BARNmvBDeFyHpZNeV6PwzAO78m0qspA10Ezb/uuKLD0oMCgWZ5pOMN/Vv812Jkcom8uzokhjqh/f4ASVobLUZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790153416; c=relaxed/simple;
-	bh=vw6CA2I173k93qtQof0Y5hXQlDUAFKr5FN6nPvywoH8=;
+	s=arc-20240116; t=1790153474; c=relaxed/simple;
+	bh=+7FMOKX/U495rXpqit8lAtAJb9+uYHSyEnYDT1BGj7s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rv1LcvrG+RWFlqfXowIDSzpRYJKoTqWN0Myg19QC7taiXH3jqFFfeBLlYwGUjNTIP72d1Xjml93IGNT+Jc5KzidwvXHE/pxELFJfJP/UZmIr8FoVatAgnFIj96XdTTNeMaJvi0PpfIhUbsIhCvA1fnlwxi8eUqThony0BJYOGeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fkKZSamI; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=NJHFFmZeME0JTnFP5IpUYITv0du3FgLkv1GXEWltoT3oZw6946vrjNZxkhnxckiUkkE5uVeu/fTAvP21fmOrbOHfA79NvAu9wxJ8aJuHpt53K7Pjcx6UxOnVgLFyJTrcYitufKOKnaJhfy4zO7UhUBc0C6OeyS3WAQ4TQwvk7pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U38BvoMo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fkKZSamI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F52C1F000FF;
-	Wed, 23 Sep 2026 08:50:10 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U38BvoMo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B79D1F000FF;
+	Wed, 23 Sep 2026 08:51:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790153414;
-	bh=/mgicnWaAz9WEZlH7S8mQa/MGfsAmlS+pMaAuGE5fsE=;
+	s=k20260515; t=1790153473;
+	bh=9R/jdzp6H0trc2YHptwzrPBCOeYRbcCIeW7Re4MZVEk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=fkKZSamInRjp0YI6W/QSd94uSdRqcQ9QG3AN7LzO5kpo4tlYBH/7stKVPbI3rLWyM
-	 51Dj3Xr2eoRkgKWBU4SY7eLclI1AxSXOsxKETndqXL9ldyKkMhzAv/ZNZvub7kjzOt
-	 DDU8nJDFcNzSiHFvnUTGQ0mtBiDOKWNMcWZumwBbB59w2fcSByR6RtKjuxmaYeao08
-	 FQOno6iQvFl5zGAI3kL6lHZK/oMgAFXCndNUeKC7Nv1r0+KwtkLxzlLsPWdLNJrwdl
-	 iSYhji6PMY481nS8SormHxQvzAsjaFE//fvW59ZmXBe19z1plukrQPQnmnIQ5+SRM5
-	 IeQxyNoTML6Gg==
-Date: Wed, 23 Sep 2026 09:49:38 +0100
+	b=U38BvoMok+tVm3LD4Ox8Qje/Ld8r5MGUiJpdYr/Jfkn9dkII3NsVjrgAuBnuRCiXq
+	 ogWXrdHo7tAqB7qAi2wc/OzUqDtWz9zl9+GPwdlr/uqVyP+6Gia9GfHI6VLfKDZfHC
+	 nIN/kOJ028wE3w9LEY5xJ8np+WrRCSyUKdapHmMQ7XM5CrtM7UGYutgkC+yL8E0jkR
+	 6rwemc1YCu2rFOe3+75D0zpdfR7MIPncEdcboAI9Mc7t3kmDGT4M2cyE029ClKegr8
+	 RRzwKOUgVEBsbGHRoHcSo7CFAHyvH6TJhWsU1kUe4A9RCbf5hHAUmci0WI027bQfCC
+	 4QmrVM1TVvucg==
+Date: Wed, 23 Sep 2026 09:51:07 +0100
 From: Simon Horman <horms@kernel.org>
 To: Daniel Machon <daniel.machon@microchip.com>
 Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -47,11 +47,11 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
 	Richard Cochran <richardcochran@gmail.com>, netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH net-next v7 02/14] net: microchip: fdma: rename
- contiguous dataptr helpers
-Message-ID: <20260923084938.GK13925@horms.kernel.org>
+Subject: Re: [PATCH net-next v7 03/14] net: microchip: fdma: add PCIe ATU
+ support
+Message-ID: <20260923085107.GL13925@horms.kernel.org>
 References: <20260918-lan966x-pci-fdma-v7-0-0ecc179c8a2c@microchip.com>
- <20260918-lan966x-pci-fdma-v7-2-0ecc179c8a2c@microchip.com>
+ <20260918-lan966x-pci-fdma-v7-3-0ecc179c8a2c@microchip.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -60,20 +60,31 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260918-lan966x-pci-fdma-v7-2-0ecc179c8a2c@microchip.com>
+In-Reply-To: <20260918-lan966x-pci-fdma-v7-3-0ecc179c8a2c@microchip.com>
 
-On Fri, Sep 18, 2026 at 01:33:54PM +0200, Daniel Machon wrote:
-> When the FDMA library was introduced [1], two helpers to get the DMA and
-> virtual address of a data buffer, in contiguous memory, were added. These
-> helpers have had no callers until this series. I found the naming I
-> initially used confusing and inconsistent.
+On Fri, Sep 18, 2026 at 01:33:55PM +0200, Daniel Machon wrote:
+> When lan966x or lan969x operates as a PCIe endpoint, the internal FDMA
+> engine cannot directly access host memory. Instead, DMA addresses must
+> be translated through the PCIe Address Translation Unit (ATU). The ATU
+> provides outbound windows that map internal addresses to PCIe bus
+> addresses.
 > 
-> Rename fdma_dataptr_get_contiguous() and
-> fdma_dataptr_virt_get_contiguous() to fdma_dataptr_dma_addr_contiguous()
-> and fdma_dataptr_virt_addr_contiguous(). This makes the pair symmetric
-> and clarifies what type of address each returns.
+> The ATU outbound address space (0x10000000-0x1fffffff) is divided into
+> six equally-sized regions (~42MB each). When FDMA buffers are allocated,
+> a free ATU region is claimed and programmed with the DMA target address.
+> The FDMA engine then uses the region's base address in its descriptors,
+> and the ATU translates these to the actual DMA addresses on the PCIe bus.
 > 
-> [1]: commit 30e48a75df9c ("net: microchip: add FDMA library")
+> Add the required functions and helpers that combine the DMA allocation
+> with the ATU region mapping. These are used by the lan966x PCIe FDMA
+> path.
+> 
+> The ATU cannot express a limit finer than its 64KB region granularity,
+> so pad the mapped allocation to that boundary; otherwise the outbound
+> window would extend past the memory the host allocated for DMA.
+> 
+> This implementation will also be used by the lan969x, when PCIe FDMA is
+> added for that platform in the future.
 > 
 > Tested-by: Herve Codina <herve.codina@bootlin.com>
 > Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
