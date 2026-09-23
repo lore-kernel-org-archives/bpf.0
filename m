@@ -1,134 +1,254 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661693C3789
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 16:34:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790181261; cv=none; b=KkMeYr2rwZU/8XhBNN/V6aT6FcLOuDPjqZbJ+mS8coEmf/xw9caIJRyyiz9Llm4MAwr6wyeOGV8L4DfGMNv0icXnbW19rsIu4guGpQkXPSGOO3L9ab/rAAZUiWm97HOj/6/tMSTcSrUCAi92XYxicgUYK2Ztkjt8j0GbyLhkmfo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790181261; c=relaxed/simple;
-	bh=Nvrl7wcQtldq9wdgVuk3u5CKvayoGjbq66DdtvxQmes=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ElZ1fxMmC20T44vMspzYW7R/RYBYt4RJuf3uO+jvvXESwiKsvmQaPzFJjnuzsLBictLxh+iiFtMkp5k9jk2cKMwKEbXspnqNKxdUB4BgVQu4jS5JzFRj461h3DLFL4Kan/P4QNjpzNSuer09KYGz/YKQVbjR6ScuIO1KQOTmUgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XT1Wxy25; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700DE374A02
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 16:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790181944; cv=pass; b=fbtc7AI4fT1oS7wN3iZ7l+41CPf2JJU2mG4UWa1Y8jRRFfXz040z+jnqd7AtxeBEyo4Un2RZj77zy3u9RdAlYSKDN2z5YxJL+tpYUzhycFFJcBffqi2KVJOB1OvMvCpBDIEgR/LQsW5xt0Yt/4Ixg1vXOhgKUUYKHA9D1NLZ1Fw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790181944; c=relaxed/simple;
+	bh=L+2zMzhb4tUlolCxg1C+yPPPYo1Gf6UujqbLr0kkEvg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uMw5r1VubaEODE7DiEj82zXUE7wfKcuy00w9DuJoRwrFcX7vWqAMlrS2tRs7S2+6X6XyD9Dp4b5cgXEGw4fmAHJnATLatRf1ImsKt0O8WVmM9ruY8gHIXlMMW04uiMZ1KCTNX/x40lP3+8zi97xAo9a1uyggiAFuam1P0en9tJ0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cUKJdEUN; arc=pass smtp.client-ip=74.125.227.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XT1Wxy25"
-Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc4c08393dfso827161a12.3
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 09:34:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cUKJdEUN"
+Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-396ccd5cf03so903130a91.1
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 09:45:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790181937; cv=none;
+        d=google.com; s=arc-20260327;
+        b=BA8npE1ItNB1Ll1va3BMxO5uT1X5GSHUo7tVGvHcwDjYrxeT6c8bOLD3EPe+Ltjxc8
+         yVQ2zAD1SfdBQszQLFsMES82Qz9NSlfbBhRHy5KXylnjvxLFIiQbDtF+/uR+B+S+L1ZH
+         v9PDHui6s87sDSRhlq9Ot1I691IfG0bGJpC0qh0DQYhEGU5s88obJfhOHpzV3m9ueBeP
+         ylQ0DhHvquEmOD6o1BE3ePgsm+TQs2uXHQjKKNmc0zHRq8gyqdB2yieoLfHWHORm6ERh
+         W5B3XMVaoECWBu8zFmTabI8Z5D0z0qt3XibO++Iz99Q5uSzU7K9VZE5RJJQERWuAqkxN
+         N97Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=DSvCVSKVXY3Gl0Ib6FP+dcF6QEzuyebpmVGiNdTMdsM=;
+        fh=mzBO7g1xB2PBPZ4mrrJ4OY+fGqUE1MEZoUBd9/S4AW0=;
+        b=Tser6CdhhjM5upPIlr9QftSEwfHpNhJQ7Yas4e/d5SQIr+Xqb/DxVu+bK41gK4IIwf
+         cBMor4hxwDz65ZTH6udKmRdv+HMp/NHnft67hmTwwiP/31tjJniFyHEe2oJB6eYRaVux
+         0fopx0JosoNEjmVuhv1WkfjCZHqn46vL3CGzVCy5tUreadcQXwqoYGHNOX2fSK+22DRb
+         expw6vNohudJOQqLWLiemDV7BpGyWRu0RODvPCwG611s4SMlbrrs0MAmRR5laRWiUaSW
+         cxD5Oqkrrua5JQ5Stz51lWQ8YAz6Rp30903bWcNdOIDFvkyMDktSBv6erCIFZuhVinXH
+         vqcg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790181250; x=1790786050; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=FamkZUODYIGHbvA1njtcil/9BISIu3ifAMfURVlYBoc=;
-        b=XT1Wxy25Z3jgyssiuZuq6uds2Pps9IQbwWBA9JYONeYExb08m/dpOuhZxKQjpE6GOX
-         rTs+EauM9K234efYbmMLNVbC+A3hanpn+Vk5XiEWoT9uZ7o2E5IN8NdKESTc1B2j3/8J
-         cFdaqizOwtAnla1cBGmjhi72NRACMGitwQp6ehpjt2cWn+G/fl/0zawn51ztHQEvdZQV
-         Xzwqs8QyYM9Hgzglplzorl9qsZQUsT4NEuRdU/taWxRWC3X4GarsSuJxueAaJlIt6atN
-         3TpI2r6wpsA0QW1TYF2TNdpFKS51/iYfSRkgafdeQiCjY/MNgeWI+umqXFokW6ru8qv6
-         k6uA==
+        d=gmail.com; s=20251104; t=1790181937; x=1790786737; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=DSvCVSKVXY3Gl0Ib6FP+dcF6QEzuyebpmVGiNdTMdsM=;
+        b=cUKJdEUNeg4p1mGNGK4fJREXWeb+WfSrTrXrpSGs3jE1nuve5qw9vM7LCGbwaotyGR
+         58oJ3LDAM1l7hMwknjzB32yCNi+HXKvhWvkTdnyAJl6xMu5ZIluuozUeN2rbeKuhY3Bj
+         mWTgDUW0NXN7oZgxLnYMaGBhefEh9MVUsuzjznsb93SIu8vxS5ec4qNzRX65QlZDOLu+
+         9RUCVGm6dYpVzvcVmVCS9eEnB0daL7scMbCcY5KPHm6iJ/onLl3kDZ7e6idvLxztKogo
+         OiClUXcSEvydH1s4KtnR0oqrzibbPdnTHw1c61UQeKZJGAa9LXFPopGrGtgFG+6Pwi6i
+         4icA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790181250; x=1790786050;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20260707; t=1790181937; x=1790786737;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=FamkZUODYIGHbvA1njtcil/9BISIu3ifAMfURVlYBoc=;
-        b=oKxeaZJNUTzjPqVqQFJqtiwNnxaXcUu3IicElT/nKEAYPAIbOTMV9H0aHCEjqclXZ4
-         1GAkF6QI5Q8jd4tws2qlzTGdJ7ZdghBkCoGfMKyGpKER4IHLpPpgxB5KIIbFb2kM0Q8l
-         mZEP50dquyq9V7EtSPxbtU42FfRDHkY1k5cGFtR4e0wmx92lyJdfopdmN1n/HUQB6shO
-         FsWsRRx9UEgJeVbwvy8CpsfVSgxDKA2OkvOdPF4o7xx6N9y/t2jmq6M1LasXKCYCxWuQ
-         NMoH1/2tnRdo6fMnlZGhNpxOJ39IUYgVxpGGrbWwJ9HNbkcHsu/CKHHciGJqIRqsIJiC
-         kH/A==
-X-Forwarded-Encrypted: i=1; AKwUvBwpTJqR0it89/qagghZsW8Un86wuCqKsddPFrhivSFMoyHvicF/UeRVAqmSViAHjM74n48=@vger.kernel.org
-X-Gm-Message-State: AFuF++lfgLkf/8wLWVZTMw3LY6nihzjeGZU7j8jZ5Xk9rUVaXB2xwTus
-	/NxKZ91psRzqUGxoiJuQEVHMQS/7NHhuLp1VW/sMCxcga7QmzF4J9m2ovFgIixh8
-X-Gm-Gg: AYBFou3apPcDCyTLBRorxxnuOqMc5zQIXnLgwuGcuF4etneV9fr8mFyrKfcKsz0uKr+
-	u23lLy71VJGG5VuWkOWmEcmNcN8ezWI0xsx4KC8SGPesb5Fq9Fe7EFWTsFm5ihvbVciLzafUB+y
-	S9aDleOSYzHxsBDWKQzVM80ePcIwfrf2jxXZj4qIBW9zauFeOYMrIP8PqWMGtMKrdJ5PPAJI+J6
-	7bnlFZ0N238T3gJuZiWAbfYgNJPBxqb0kpfCqNsmSHbJHHWxyaHZ4/TpNvhjbgGOPfqvRYU5wew
-	h4GWcftJuGndkFIx4gU1hxj7a4YBv95vXlbLjO5DiZ/ylY3swGN4qfWZfE4rvoaepKwNt2bqoC9
-	Cy25YOMwnvc+7ffuomxDbqI1bUgZjxKv0GnGqKqSAm4PP8fphY82IFFAWZSpfcVjP44OXpNJKax
-	RFVsmRhwc3v1nB397TWlZrXYqtl99c1wDI4TLnOCQfNgUg0jt0kz6UzqIZRmJ6PkbUk8YXDGN2H
-	JmB63Q3JbmzbH77I2RTFC6bvD/ASmF9/zzPm3aMq7SsEp20u4/11XxDaw==
-X-Received: by 2002:a05:6a20:3d08:b0:3dd:7a92:77bf with SMTP id adf61e73a8af0-3ddf79f1a9dmr3618723637.0.1790181250437;
-        Wed, 23 Sep 2026 09:34:10 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:c487:37ae:5ef2:4c1? ([2620:10d:c090:500::7:ac0c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87d1dff9552sm1614554b3a.47.2026.09.23.09.34.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 09:34:10 -0700 (PDT)
-Message-ID: <2333883f3fe2abcc40679edb4dc11f7b9bf5d1dd.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v5 08/21] bpf: Walk the exception unwind in the
- verifier
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yonghong Song <yonghong.song@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko
- <andrii@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,
- kernel-team@fb.com
-Date: Wed, 23 Sep 2026 09:34:08 -0700
-In-Reply-To: <20260923045927.2418543-1-yonghong.song@linux.dev>
-References: <20260923045846.2414643-1-yonghong.song@linux.dev>
-	 <20260923045927.2418543-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+        bh=DSvCVSKVXY3Gl0Ib6FP+dcF6QEzuyebpmVGiNdTMdsM=;
+        b=apseF5dXqkhXCpQ6b+vIk2hr0kY22FwfKLkoFroLt81I1n+VtJKDny5izRzBatZ5ND
+         QgOzq4DO8oAelGMpkyQzVTgGHGAm71CnOHi5wJyZw9rTbtWZjH+Q/vaMaWij4kWq4wca
+         gk6CA8BavL4YJJ1wBRRTh+GTZXBIPEjpFXtbKZDboHDPeWefhXeRyXE0HtYFxcRCZpoF
+         5vFyaJ/xhZew7wB8uNFDyTiJqap9Sy0CkxVi4oDv6lyhgzH18gHGS9lm0UD64iEzk2qM
+         jrK5RgFsSO+jbBnxQwSzhTgN5LUkFCTF63evMtbblG5/NT2rj5LMzhrb/PMkeMOQvN9m
+         dObA==
+X-Forwarded-Encrypted: i=1; AKwUvBxGdhex1ZU0WJUQT9g1MvbXsnTdc5P63Qh0tqf784muFsSXEHvKcoSJVzWaeQT32hYacvs=@vger.kernel.org
+X-Gm-Message-State: AFuF++kXxPsiFISOoCfdWCEWnSpXoJ7VxLgtB3Kjs8YRN0biLLZInWFF
+	b8wrDxZkvaZ/ykLETNe+/ATVyCkQwie7NurFMqYZBU48NJILSqUo+Cnu7NpwexzsSkVsdFFuwxD
+	DlU2zyPHPN3XUforB79kA52MF8GaphMk=
+X-Gm-Gg: AYBFou0x9CnmyMpWGgucUPUth5dWVVAupoNdTK4jgN0b73ZDYy4OvT365PsRkViCR+K
+	dTQ+cZ7y5JkjmiDL9I4KXMkzM5anmZnwSh70xluUc0o8uZJn0NrpIVk309HnpA7x4Iw/3bW8bjX
+	/Zicyu2S7izcKdikiYtMoZZiDpHZhu9vlgw0fjVyVld7vYkeitdpH5z/D5VUhlkX95ASL3SwwDJ
+	5WOgB+TX78rU5+8kBWXmH/2Lk5AbZB04f4v1BWJKT7Hh4GrQKNXWS6HRepcpFHMSZd07cdZkSVj
+	dk6tQ+idVgzUC6MAMKQs1OydlymNDYNA4P3RqHnWS9Hh+h9b1ZAhEfSl9BsoewP4IM8fsLLXdNc
+	d2E1Lykxw7sM7Z9p7X2aROgICXOBBzvs7mo8u
+X-Received: by 2002:a17:90b:4d0d:b0:39e:6c69:f47e with SMTP id
+ 98e67ed59e1d1-3a07e780406mr2692598a91.61.1790181936352; Wed, 23 Sep 2026
+ 09:45:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260922200208.3203834-1-puranjay@kernel.org> <CAEf4BzaifaWk+oHu-berWcKuS6Y5WfkcFTKZW-iMCPxG0=5i0w@mail.gmail.com>
+ <CANk7y0g8Mh-je_o_nyXQ3zsGVeAsz2qMfgDtv4j-MXhAJ7PcMA@mail.gmail.com> <DLMNTHW945RO.TLPGJHZRWHUY@gmail.com>
+In-Reply-To: <DLMNTHW945RO.TLPGJHZRWHUY@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 23 Sep 2026 09:45:24 -0700
+X-Gm-Features: AcwNN1VI6k8tyBvNuMGIlSIV8i1zr8Kw0m2loWKMO_BouDh9dLnKWsi762pvE3w
+Message-ID: <CAEf4BzaR=oQz13GVxM+DjLkyjCjFmETvj9=bAuccLNKCXHJPaw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 0/4] bpf: Add bpf_call_rcu() and bpf_call_rcu_tasks_trace()
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Puranjay Mohan <puranjay12@gmail.com>, bpf@vger.kernel.org, rcu@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, "Harry Yoo (Oracle)" <harry@kernel.org>, 
+	"Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2026-09-22 at 21:59 -0700, Yonghong Song wrote:
+On Wed, Sep 23, 2026 at 4:29=E2=80=AFAM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> On Wed Sep 23, 2026 at 12:37 PM CEST, Puranjay Mohan wrote:
+> > On Wed, Sep 23, 2026 at 12:41=E2=80=AFAM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> >>
+> >> On Tue, Sep 22, 2026 at 1:02=E2=80=AFPM Puranjay Mohan <puranjay@kerne=
+l.org> wrote:
+> >> >
+> >> > Changelog:
+> >> > v5: https://lore.kernel.org/all/20260921191407.1742386-1-puranjay@ke=
+rnel.org/
+> >> > Changes in v6:
+> >> > - Size struct bpf_rcu_head at 48 bytes rather than 64, matching what=
+ the
+> >> >   inline state uses (Alexei)
+> >> > - Trim patch 1's changelog: drop the reasoning about possible future
+> >> >   layouts and about what the other async kfuncs return
+> >> > - Rebase on bpf-next/master
+> >> >
+> >> > v4: https://lore.kernel.org/all/20260915154248.3612028-1-puranjay@ke=
+rnel.org/
+> >> > Changes in v5:
+> >> > - Rename the "hash_map" subtest to "bad_map" so that it matches its
+> >> >   helper test_call_rcu_bad_map() (bpf-ci)
+> >> > - Bump the callback counter after chain_err in the selftest callback=
+.
+> >> >   Userspace polls that counter and then reads chain_err, so it could
+> >> >   still see the initial value before the re-arm had stored one, whic=
+h
+> >> >   let the chain subtest's assertion pass without checking anything
+> >> > - Say in patch 1 why embedding struct rcu_head in a uapi struct is
+> >> >   acceptable here (Mykyta, Paul, Alexei)
+> >> > - Rebase on bpf-next/master
+> >> > v3: https://lore.kernel.org/all/20260915143640.36292-1-puranjay@kern=
+el.org/
+> >> > Changes in v4:
+> >> > - Drop an unrelated hunk in bpf_async_update_prog_callback() that tu=
+rned
+> >> >   PTR_ERR(prog) into -EBADF.  That is the shared bpf_timer/bpf_wq pa=
+th
+> >> >   and bpf_prog_inc_not_zero() returns -ENOENT, so it would have chan=
+ged
+> >> >   the errno bpf_timer_set_callback() and bpf_wq_set_callback() repor=
+t to
+> >> >   userspace (Sashiko).  No other changes from v3
+> >> > v2: https://lore.kernel.org/all/20260915114240.3269184-1-puranjay@ke=
+rnel.org/
+> >> > Changes in v3:
+> >> > - Move the bpf_call_rcu_tasks_trace() verifier bits from patch 1 to
+> >> >   patch 3; patch 1 alone emitted "resolve_btfids: unresolved symbol
+> >> >   bpf_call_rcu_tasks_trace" (Sashiko)
+> >> > - Poll the callback counter with an acquire load (Sashiko)
+> >> > - teardown: v2 only checked that the program was eventually freed, w=
+hich
+> >> >   passes even if nothing was ever armed.  Also assert that the chain=
+ ran,
+> >> >   and read the -EPERM back through an independent .bss fd
+> >> > - Use kern_sync_rcu() instead of open coding the grace-period wait
+> >> > - Return -EBADF rather than -ENOENT when the calling program is goin=
+g
+> >> >   away, matching bpf_task_work_schedule()
+> >> > - mismatch_map now pins the bpf_rcu_head label the new code emits; i=
+t
+> >> >   passed with that branch removed.  Add a two_heads test, and wait f=
+or
+> >> >   each grace period separately in the chain test
+> >> > - Commit messages: correct the -EPERM parity claim, explain the inli=
+ne
+> >> >   callback state and the struct size, motivate the tasks trace flavo=
+ur
+> >> > v1: https://lore.kernel.org/all/20260907134552.1772405-1-puranjay@ke=
+rnel.org/
+> >> > Changes in v2:
+> >> > - Rebase on bpf-next/master
+> >> > - Use rcu_read_lock_dont_migrate() over open coding (Alexei)
+> >> > - Improve re-arming selftest to detect failure (Sashiko)
+> >> >
+> >> > BPF programs that manage their own objects have no way to run their =
+own
+> >> > logic once an RCU grace period has elapsed.  bpf_obj_drop() defers a
+> >> > free, but returning an index to an allocator or unpinning a resource
+> >> > once readers are done has no equivalent.  sched_ext's BPF library wo=
+rks
+> >> > around this today by pushing freed nodes onto a list and having a
+> >> > userspace thread call membarrier(MEMBARRIER_CMD_GLOBAL) and then run=
+ a
+> >> > BPF program to reclaim them; it is the first intended user.
+> >> >
+> >> > Add:
+> >> >
+> >> >         int bpf_call_rcu(struct bpf_rcu_head *rh, void *map,
+> >> >                          int (*callback)(struct bpf_map *map, void *=
+key,
+> >> >                                          void *value));
+> >> >
+> >> > and bpf_call_rcu_tasks_trace(), same signature, which also waits for
+> >> > sleepable programs.
+> >> >
+> >> > @rh is a struct bpf_rcu_head embedded in a value of @map, so the
+> >> > callback runs as callback(map, key, value) for the element it lives =
+in
+> >> > and needs no cookie.  The field is only accepted in BPF_MAP_TYPE_ARR=
+AY,
+> >>
+> >> Isn't restricting this to BPF_MAP_TYPE_ARRAY unnecessarily restrictive
+> >> in practice? Do other APIs of similar kind have this limitation? E.g.,
+> >> bpf_task_work_schedule() or timer, I don't think they limit user to
+> >> just ARRAY maps, it's way too inflexible.
+> >
+> > Right, bpf_timer and bpf_task_work take HASH/LRU_HASH/ARRAY. They can
+> > because they can cancel: on element delete bpf_obj_free_fields() calls
+>
+> bpf_obj_cancel_fields(). bpf_obj_free_fields() is no longer called except=
+ when
+> the object is being freed finally.
+>
+> > bpf_task_work_cancel_and_free(), which reaches task_work_cancel(), so
+> > a pending callback never runs against a recycled element.
+> > A queued RCU callback cannot be cancelled. rcu_barrier() is the only
+> > thing that waits for one, and it sleeps, so it is not callable from an
+> > element delete. Array elements are never freed individually, which is
+> > what makes it safe.
+>
+> If cancel is a noop, can you not simply skip it on map update?
+>
+> It is a bit unfortunate we can't provide cancel semantics, it will be yet
+> another divergence from how all other async callbacks work...sigh.
+>
+> >
+> > I can think of a complicated way to support hash maps but that would
+> > need making the state dynamically allocated and finding a way to
+> > cancel the callbacks. But I would do it as a follow-up if there is a
+> > real use case.
+>
+> That would mean allocation and frees, it is already quite expensive as is=
+ for a
+> call_rcu() primitive (with the refcount bumps and atomics).
 
-...
+maybe so, but as is ARRAY is a severe limitation and makes a lot of
+cases either unusable or requiring extra sequential ID allocation
+logic to remap some HASH map entry to index in an ARRAY map, just so
+you can call rcu callback for a given kernel object stored in HASH
+map.
 
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index e12ec91b8150..3146f707e030 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -429,7 +429,8 @@ struct bpf_jmp_history_entry {
->  	u32 prev_idx : 20;
->  	/* special INSN_F_xxx flags */
->  	u32 flags : 4;
-> -	u32 : 8;
-> +	u32 unwind_frames : 4;	/* frames popped to reach this landing pad */
-> +	u32 : 4;
->  	/*
->  	 * additional registers that need precision tracking when this
->  	 * jump is backtracked, vector of five 11-bit records
-> @@ -510,6 +511,9 @@ struct bpf_verifier_state {
->  	bool speculative;
->  	bool in_sleepable;
-> =20
-> +	bool unwinding; /* an exception is in flight */
-> +	u8 unwind_frameno; /* the frame whose landing pad is running */
-> +
->  	/* first and last insn idx of this verifier state */
->  	u32 first_insn_idx;
->  	u32 last_insn_idx;
-> @@ -991,6 +995,8 @@ struct bpf_verifier_env {
->  	} cfg;
->  	struct backtrack_state bt;
->  	struct bpf_jmp_history_entry *cur_hist_ent;
-> +	u8 cur_unwind_frames; /* frames popped to reach this insn, if a pad */
-> +	u8 unwind_frames; /* frames popped, staged for the next insn */
-
-Similarly to v4, stashing these variables into env in one place and
-reading them in another in order to push to jump history is an
-obfuscation step. Why don't you want to push to the jump history right
-away? Like in [1].
-
-So far the only field in env that changes with current verifier state is in=
-sn_idx.
-I don't see why this feature requires adding two more such fields.
-
-[1] https://github.com/kernel-patches/bpf/commit/fbc89e90cacd207b4271da25ed=
-7a380f6b56125e#diff-edbb57adf10d1ce1fbb830a34fa92712fd01db1fbd9b6f2504001eb=
-7bcc7b9d0R5604-R18577
-    (with corresponding changes in backtrack.c in the same commit)
-
-...
+E.g., think about keep as set of sockets, or tasks, or whatnot in HASH
+or RHASHTABLE (especially the latter one with support for resizing).
+How would you do bpf_call_rcu() for them with unduly complications,
+limitations and a lot of waste (unlike HASH you can't have lazy memory
+allocation).
