@@ -1,168 +1,200 @@
-Received: from mail-wm2-f4.google.com (mail-wm2-f4.google.com [74.125.225.132])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 934B13C1974
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 08:36:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB7803DA7DD;
+	Wed, 23 Sep 2026 08:40:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790152602; cv=none; b=QoFvlictNOXUOQo/t8IxUkMuClPzrHGLzXVlFKkUNgw1GGvIYC0NGEUDZ1RztEoyfpJrdaH3XaDD7PFGkpcwcuhT1IWBAhztOH1nUdKhkbSza516H+lCWYDC/F2YIVc+o31T8enqoaGzW67/1UHBoMRyyX7n4Auz4x0Am5xcC5w=
+	t=1790152826; cv=none; b=HJZcqz87q1EA12kCGb+Fx+/I490P/nVfUZ9o36SMW/R5LFnlSWPk4RGbDTukPuEmqbc1Sz44OHAf4VibThbcKres63GzpkzetgjTaYkoMqDQzkpuOiVvge9r4lXcW93uBF6qvshegoFtLe629DbW+ucxJu3anE+zdQlD3yp/n4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790152602; c=relaxed/simple;
-	bh=C3x+p55peaNqYVVGmlytsyxcLlSSPBJm5iFBzUdVsJ0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=dWntasHfUj9Zc6PB0ihrskMiQdpTjQHnfzSy0OxBTkUOTOaK9v/T+s5ycWUT59inBPL5mJFQXCfQ2aGYm/NjZWTj5VyaIgBKKx/lKauPjhS9xh66Ywf3P5Utu18AuJY840ZZ3eo6wG2gqPLWpD24LBO4iTENERFsE5CCxOiTB3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AOXLyi8U; arc=none smtp.client-ip=74.125.225.132
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790152826; c=relaxed/simple;
+	bh=96Md5DrNgaVWw5OC1SXNKXffLQh1vTtZvJhVJt1cONs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qFtZNgm9z9004Z1e81iQYtJhDp9NrLOVJYXCqjel3UKeygZrsN8IPouslhYLkPByvq3Iwffss+QvHlolRaeQp7DXs94wrlzEvKQZwLNkeMuYTV+m34MC3XvrYTQFL0Keh0ZzqiCjvABrCJV0S6HOJ89KzEg2a1aqQic+s/sJzzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UwlzpLjm; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AOXLyi8U"
-Received: by mail-wm2-f4.google.com with SMTP id 5b1f17b1804b1-49cd71f9909so1268535e9.1
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 01:36:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790152587; x=1790757387; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Tk1PkJuXbm1k2rbLIHz3zfD1EjdVMf2khcKO+8Fg5vo=;
-        b=AOXLyi8U+gqfBgtd2h7CGE+zgkrelUDyNn9D/OnxshbkYNI6Q1qfMN/ZiLttBzxEE3
-         yNdI9FzF/7Fc2Q7RyGPCQ+I+9we4joJQOPOQf9w0R1QomUpr/S2vTQYJoxLw/q+KM0k3
-         BgZFiclY0dkMYO9JWKTiM0hwHchf4otu6RfHcc6mnJrOPx70JZ+xlG2UDtpg475HEupM
-         NGKr32vrNBHsE6UJAG7mFR15WQiNJP6/TffIQ5k6qavPQPtWH8yhcS6zvwWg9lz2xi7c
-         VP52q0guMXgDRkrI2nFfspduJlLX4DzYrhOdY/kn5dJSlQ7IDX4w4RMY+C9kmH3BGFAM
-         anOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790152587; x=1790757387;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Tk1PkJuXbm1k2rbLIHz3zfD1EjdVMf2khcKO+8Fg5vo=;
-        b=MxJ166q4QCcIkioRxTJC9P3o4wq4XazTBN2feH9+DCcm8eYZF92lIiRWoPlwxzzIRl
-         wjoe5HSqZcy7qO0jR13GRBtnN7Y688yepBVoawcK/aQWVEwKY8q5Qe8p3TDdmBbrJUhj
-         5YlYzEnCj5daiFn4YRBexxuyqqEWSpnPqxS4ZSClE/9JZA8YRYF0ThCx7ETq8+6GuJ0K
-         3kRXY13wAZwS7VZ64CwRyWVqeRK8j24yRv4iYTS7KW7pJziGhp4aE1n1UNCvo48tuOO6
-         7OMS85TbqLKcAmZwkdXFu35fTfpjX/a7OmE0O6lnTd6M5B3SSArPQvfa+01lXhrjkB9+
-         2D3Q==
-X-Forwarded-Encrypted: i=1; AKwUvBwd7Aws+QDsDDfv3JhvRIdguBDo6/EDP8XplOrYhU/Eh0jcNZDD9XEpT3OxFQyL96KKhOQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++k9Xfi2yEpAUTWS2ZXCEHxA93hu+J8ZX1hVbbwW/z9alqiKkTbk
-	LiBCeqJJIxHmc3rDNK6mePMct8j2rhBjTUVZN+4NcCIG43q3NVJexZO9
-X-Gm-Gg: AYBFou1McwfzmyxUXfnuHrwR1XlZQJVlRKIOM3WabSelcr47fYpkalrhKatb8QX1OFi
-	IG+CgfbyOQ+eHPu3qLu0KkAqCjqPAR5mEhFdHyjYO3jYBI+53WeTuqF6nMh8pSnEj8sMfhPCGm4
-	kzlMhz0h3H8LQHNjBIrSzgZ1x9sNC+SkDstkrbYMWf8P8dP6f69dSx9hdGOW9Wy8uuVOethgLId
-	9a+ONDEgSmO8hp25mJB4e4PMPPG3vVwV4NJ4bJAXVAQeFKZEF9hwPYULH5qaQT6TgyKjAO7QsyR
-	I9ALmxuNBH83T4o6B60XrUskfqBbprgzL5ZA9963t/aR5+KYefAx+IOaejVbojB2bJUarp29Xrh
-	N5JwpsXAecBycd35ae/lGswTIJhaFjVU0wWgmSKzeXf1D+seHQq7guqHkW+8+R9vYGEg7GfsQwr
-	lehd5I7tXc6Ljuwe8az6N+ynbE5skMPiANYOEAerfvPJ5ImYVVcy+i62aVcJBq4aEgK812Z1gog
-	nD71FmirIbFRKMBXXHIqOFpeW+qjwQfesS4bJJFplDxSDXtcuH1OhqiO4d9CJ/HW/L0F/aDRnh7
-	gdRAHnx/0cJsnXppO9ayQpbko578FALhcU+V5k/b9FppsRmB5Q==
-X-Received: by 2002:a05:600c:1988:b0:49f:ce78:3565 with SMTP id 5b1f17b1804b1-49fdee0a1d4mr22339985e9.22.1790152586504;
-        Wed, 23 Sep 2026 01:36:26 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fde197466sm54725785e9.7.2026.09.23.01.36.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Sep 2026 01:36:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UwlzpLjm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F1AC1F000FF;
+	Wed, 23 Sep 2026 08:39:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790152799;
+	bh=wyh/pOgTF7kL8hlZc2xBVOE3tXIRZyVNxNqqITwdaBM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=UwlzpLjmsWYQu2X1w7dPBuGy9erltg3vOL+NfJ/uSQJOrfQZlmrZRX6l6hUG4aJNu
+	 TIvi5TPQoCTfXAy0RAoguEf6mQORqWqbFPbBFb1Yvt0SH9n2/Qs2LaLGimCaz+fm2w
+	 T8dFUUnNLMdizGKkGqqr2O5bg0+pgzDyYyTE/cTuhGeYVBNIL4mitLsMDxcBI96C2e
+	 u//dZhCVEMH4DJvU7iBXv2WG12zQPZ/UyJlyaQK7I64hFTFC7IROS30zAFLt5WULss
+	 OSRcfn3e8dbaKrIfZo56huYPUUIc4z0kJ1Fi4Zi8c+ZQhg/H4nld0N6VuWFasb9d7U
+	 hnf2wJf5IlUxA==
+Message-ID: <b007cd0f-29ef-457a-8e44-63ab26f3bcd0@kernel.org>
+Date: Wed, 23 Sep 2026 10:39:15 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/40] mm: make VMA flag semantics explicit, eliminate
+ VM_SPECIAL
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
+ Mike Rapoport <rppt@kernel.org>, Michal Hocko <mhocko@suse.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+ Paul Moore <paul@paul-moore.com>,
+ Stephen Smalley <stephen.smalley.work@gmail.com>,
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Doug Gilbert <dgilbert@interlog.com>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Martin K. Petersen" <mkp@kernel.org>, Jaya Kumar <jayalk@intworks.biz>,
+ Simona Vetter <simona@ffwll.ch>, Helge Deller <deller@gmx.de>,
+ Sebastian Reichel <sre@kernel.org>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, Will Deacon <will@kernel.org>,
+ "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, Nick Piggin
+ <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+ Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+ Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>,
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>,
+ Matthew Brost <matthew.brost@intel.com>,
+ Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
+ Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>,
+ Ying Huang <ying.huang@linux.alibaba.com>,
+ Alistair Popple <apopple@nvidia.com>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>,
+ Youngjun Park <youngjun.park@lge.com>, Johannes Weiner <hannes@cmpxchg.org>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Chengming Zhou <chengming.zhou@linux.dev>,
+ Michal Hocko <mhocko@kernel.org>, Miklos Szeredi <miklos@szeredi.hu>,
+ Xu Xin <xu.xin@linux.dev>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-rdma@vger.kernel.org, selinux@vger.kernel.org,
+ linux-sound@vger.kernel.org, bpf@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
+ kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+ fuse-devel@lists.linux.dev, Takashi Iwai <tiwai@suse.de>
+References: <20260914-b4-mmap-prepare-vma-flag-sanify-v2-0-7d9781ed5361@kernel.org>
+ <20260914180811.057cba8fcc48d6e0b53a2683@linux-foundation.org>
+ <0b064fe6-ddb3-4f26-a1f2-2e9dd88d590f@kernel.org>
+ <CAJuCfpFBichJH4OcmSHTb1rOuQBT6k5pXeua9_KgpWjDBKvsYw@mail.gmail.com>
+ <aq6kzpK7wPl3iFGe@gremlin> <aq6lW9FvL69QeA9H@gremlin>
+ <arOCPN02xB7mykju@gremlin>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <arOCPN02xB7mykju@gremlin>
 Content-Type: text/plain; charset=UTF-8
-Date: Wed, 23 Sep 2026 10:36:25 +0200
-Message-Id: <DLMK4OKUQVYZ.2WG2LPON31FB6@gmail.com>
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Yonghong Song" <yonghong.song@linux.dev>, <bpf@vger.kernel.org>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard
- Zingerman" <eddyz87@gmail.com>, <kernel-team@fb.com>
-Subject: Re: [PATCH bpf-next v5 14/21] libbpf: Resolve the compiler's
- _Unwind_Resume to the kernel's kfunc
-X-Mailer: aerc 0.21.0
-References: <20260923045846.2414643-1-yonghong.song@linux.dev>
- <20260923045958.2420847-1-yonghong.song@linux.dev>
-In-Reply-To: <20260923045958.2420847-1-yonghong.song@linux.dev>
+Content-Transfer-Encoding: 7bit
 
-On Wed Sep 23, 2026 at 6:59 AM CEST, Yonghong Song wrote:
-> LLVM terminates a cleanup landing pad with a call to _Unwind_Resume: the
-> base unwind ABI's entry point for carrying an unwind on once a frame's
-> cleanups have run. The kernel provides that terminator as a kfunc, but
-> not under that name: claiming _Unwind_Resume in the kernel's own symbol
-> table, for a function whose body never runs, would be needlessly confusin=
-g,
-> so it is called bpf_unwind_resume.
->
-> Both load paths take the detour. A direct load resolves the name against
-> the kernel's BTF while libbpf runs. A light skeleton instead writes the
-> name into the loader program's blob of bytes, for that program to resolve
-> when it runs, so the name recorded there has to be translated as well.
->
-> Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-> ---
->  tools/lib/bpf/libbpf.c | 23 ++++++++++++++++++-----
->  1 file changed, 18 insertions(+), 5 deletions(-)
->
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index cd1ea1bb53cb..2d0081784445 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -8379,6 +8379,16 @@ static void fixup_verifier_log(struct bpf_program =
-*prog, char *buf, size_t buf_s
->  	}
->  }
->
-> +/*
-> + * LLVM terminates a cleanup landing pad with a call to _Unwind_Resume, =
-the
-> + * base unwind ABI's entry point for carrying an unwind on once a frame'=
-s
-> + * cleanups have run. The kernel knows it as bpf_unwind_resume.
-> + */
-> +static const char *kern_extern_name(const char *name)
-> +{
-> +	return strcmp(name, "_Unwind_Resume") ? name : "bpf_unwind_resume";
-> +}
-> +
->  static int bpf_program_record_relos(struct bpf_program *prog)
->  {
->  	struct bpf_object *obj =3D prog->obj;
-> @@ -8395,12 +8405,12 @@ static int bpf_program_record_relos(struct bpf_pr=
-ogram *prog)
->  				continue;
->  			kind =3D btf_is_var(btf__type_by_id(obj->btf, ext->btf_id)) ?
->  				BTF_KIND_VAR : BTF_KIND_FUNC;
-> -			bpf_gen__record_extern(obj->gen_loader, ext->name,
-> +			bpf_gen__record_extern(obj->gen_loader, kern_extern_name(ext->name),
->  					       ext->is_weak, !ext->ksym.type_id,
->  					       true, kind, relo->insn_idx);
->  			break;
->  		case RELO_EXTERN_CALL:
-> -			bpf_gen__record_extern(obj->gen_loader, ext->name,
-> +			bpf_gen__record_extern(obj->gen_loader, kern_extern_name(ext->name),
->  					       ext->is_weak, false, false, BTF_KIND_FUNC,
->  					       relo->insn_idx);
->  			break;
-> @@ -8876,17 +8886,20 @@ static int bpf_object__resolve_ksym_func_btf_id(s=
-truct bpf_object *obj,
->  	struct module_btf *mod_btf =3D NULL;
->  	const struct btf_type *kern_func;
->  	struct btf *kern_btf =3D NULL;
-> +	const char *local_name, *kern_name;
->  	int ret;
->
->  	local_func_proto_id =3D ext->ksym.type_id;
->
-> -	kfunc_id =3D find_ksym_btf_id(obj, ext->essent_name ?: ext->name, BTF_K=
-IND_FUNC, &kern_btf,
-> -				    &mod_btf);
-> +	local_name =3D ext->essent_name ?: ext->name;
-> +	kern_name =3D kern_extern_name(local_name);
-> +
-> +	kfunc_id =3D find_ksym_btf_id(obj, kern_name, BTF_KIND_FUNC, &kern_btf,=
- &mod_btf);
+On 9/23/26 10:13, Lorenzo Stoakes (ARM) wrote:
+> On Sat, Sep 19, 2026 at 04:09:13PM +0100, Lorenzo Stoakes (ARM) wrote:
+>> On Sat, Sep 19, 2026 at 04:05:57PM +0100, Lorenzo Stoakes (ARM) wrote:
+>>>
+>>> Thanks guys!
+>>
+>> Note v3 has been posted to fix a stupid bug in 1/40 + attack some very trivial
+>> sashiko stuff
+>>
+>> https://lore.kernel.org/linux-mm/20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org/
+> 
+> Just a gentle nudge on this :)
+> 
+> If you guys or anybody else has some time it'd be appreciated! (obv. the v3 as
+> linked above not this v2!)
+> 
+> I know the series seems intimidating but most of the commits are very small and
+> it's been in -next for a while.
 
-Compiler doesn't directly emit it in .ksyms section, right? How does this w=
-ork
-in practice? It's a bit confusing and not clear from the commit log.
+Busy with too many other things sorry. Its time will come.
 
-> [...]
+-- 
+Cheers,
+
+David
