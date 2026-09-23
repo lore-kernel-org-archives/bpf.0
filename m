@@ -1,102 +1,213 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18CAF3D1712;
-	Wed, 23 Sep 2026 09:02:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C82E1471274;
+	Wed, 23 Sep 2026 09:07:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790154167; cv=none; b=eQhX5LBKhRTL8RI9oAdsJSAei3gRNervT9UW+mVoTPFgMZO2R3cL1aGl9iULmYUZ+puOFgguUXgQRWLC6IrSX5jeT/PCGr9s0iDdV+3377F3s6SfW/JZynB2nD4UXsgJGRGn/pL2Zm68QBMgBkPiuKuKmtmbQ5HFmOhK5WLgG6s=
+	t=1790154455; cv=none; b=bkVD4RnKn8EjHlOOUfz8Gd+LByL6zRpASg4z9S2nxtgoSvGJOfyBWY40YC0fTA7e8q6w9s59ioCQOPZHPPtDtHTy7wZ2NhVv/KuWpdV+TI3LPXSe5i88PDbwcCYoFjvrh/MYajTgrHYoDCwrLQOzSggkBa6VGeFdQ9Mi7Rp0YiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790154167; c=relaxed/simple;
-	bh=cSCLKswE0dYCxdT9s6rlNNNALsaDPQbgfmMnNLwfG/o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tqH3x7/U5Coj9fzG02ITaYZPLyPIEk3nVBIkHlfaLhDGa2PqUS+B2Z95DNMB65YnF8eIV7Hrcwk9HWkvketbkww7pxLfeXb26iQhWonBhRYSPlv4VVbvAw+KFLjqq48figRYhFhlcZdzxopdqFmo5dUpnWySejKjdzG8SncPgcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fx1fzDL6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790154455; c=relaxed/simple;
+	bh=4rjEPn5rsRxjqIv65BtjQP5DFSL+taxZZqqx/X+y3WE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=k1/LAEfAiSJ20HQmAKK4qJbReZfywY2vAapmn+5fLu90KaWJei4GszxzKdy/pMNzuIWA5hlkrLgfSqbmC/W2eZRgsTA2aRYOQ+5g9w2m3B93U03WOUkKO/PBG4Jzc/YYYghNsOTQ9qLeewQnQ/8Hoo7ACls8enX4Il+Kd5B8KI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=bRItVp/r; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fx1fzDL6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A19F1F000FF;
-	Wed, 23 Sep 2026 09:02:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790154165;
-	bh=246+YFY0hcM1gZTyJYBwDA5GnPdAK2YN+khCzJ9w3xk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=fx1fzDL6n++zlKFba/TD6ua1TazikVupjqJ+tpB2waBe7XVD+F+lnJbkIVvRrElwe
-	 S+6he4ANapJNJ/Ze0HxDGEOX0yxjravBL7HOehd2Ex37FDQdCd00tCSRZ87cd4+Mnr
-	 sHiwZNMR2k6fi2LEZxorZKO3qiD5Q6FU9xnQ/d/dkX7dfB2m/5/WRYl8d3qN8F4c1M
-	 aFBYXnwpbUfP2IQ5PCKADXrW+0GRtrH6rNknOYwlabC4oWP5WDznRFal9akAaOCPkV
-	 USdsJUQTxiFkVJ0ZgmYOCOI6FbZlYB3tL2HLq/xebrNN/GcEVjrkC5rqm9ifYSaGu2
-	 epfs3ppNEngXQ==
-Date: Wed, 23 Sep 2026 10:02:10 +0100
-From: Simon Horman <horms@kernel.org>
-To: Daniel Machon <daniel.machon@microchip.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Steen Hegelund <steen.hegelund@microchip.com>,
-	UNGLinuxDriver@microchip.com, Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="bRItVp/r"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=bc
+	NqT1UVY8xeWIGgXMpMHXdOczJ57YxKCerzPo7aX8A=; b=bRItVp/rD4EC6ndInq
+	QtzHqIIpZMSIyW5pFBz4FvaVSREXaM3be2tV8XS3IE7kTuE96alrXrzTKokdQay3
+	xLhbj9Lf/bICnOo6evd8V7/pFbQqaMvcpxBlx5tu4/3/cD7wK/04osV5nVBMT8+U
+	H380AILXGAs8K6v1MdjW92EOk=
+Received: from nec8-i7 (unknown [])
+	by gzsmtp3 (Coremail) with SMTP id PigvCgDXvIWmlrNqQZffAw--.40141S4;
+	Wed, 23 Sep 2026 17:06:51 +0800 (CST)
+From: chenyuan_fl@163.com
+To: bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Herve Codina <herve.codina@bootlin.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mohsin Bashir <mohsin.bashr@gmail.com>,
-	Richard Cochran <richardcochran@gmail.com>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH net-next v7 09/14] net: lan966x: add shutdown callback to
- stop the FDMA on reboot
-Message-ID: <20260923090210.GR13925@horms.kernel.org>
-References: <20260918-lan966x-pci-fdma-v7-0-0ecc179c8a2c@microchip.com>
- <20260918-lan966x-pci-fdma-v7-9-0ecc179c8a2c@microchip.com>
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Yuan Chen <chenyuan@kylinos.cn>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Verify is_extended with multiple freplace links
+Date: Wed, 23 Sep 2026 17:06:35 +0800
+Message-ID: <20260923090635.368488-3-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260923090635.368488-1-chenyuan_fl@163.com>
+References: <20260923090635.368488-1-chenyuan_fl@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260918-lan966x-pci-fdma-v7-9-0ecc179c8a2c@microchip.com>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PigvCgDXvIWmlrNqQZffAw--.40141S4
+X-Coremail-Antispam: 1Uf129KBjvJXoW3Gr1UKr17Cr45KrWxWFy5CFg_yoW7AFyDpa
+	yjqw1rKr1rXw1qqF47Cw4xW3ya9a1kXry5GryrWwn5Ar1jvr929F18KryDCF9xXrW5t34r
+	Zr1qvrn5G3yxZaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j45lbUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbDAQtXFWqzlqs3QQAA3a
 
-On Fri, Sep 18, 2026 at 01:34:01PM +0200, Daniel Machon wrote:
-> As a PCIe endpoint, lan966x is not reset by a host reboot: its FDMA
-> channels and interrupt sources stay armed, and the OIC ORs every
-> source into the shared PCIe INTx, asserted before the driver has
-> re-probed. A still-active channel also keeps write access to host
-> memory the next kernel will reuse.
-> 
-> Add a shutdown callback that:
-> - frees the ana, xtr and FDMA irqs, masking and unmapping them at
->   the OIC (disable_irq() would leave both set - the OIC has no
->   irq_disable())
-> - masks the analyzer source, armed unconditionally by lan966x_init()
->   and re-armed by the MAC table's age timer
-> - stops and detaches the netdevs, draining in-flight xmit and
->   clearing netif_device_present() so ndo_open/ndo_change_mtu cannot
->   re-enter the FDMA against a disabled NAPI
-> - disables both FDMA channels and masks their interrupts
-> - unmaps the outbound ATU windows, leaving none armed
-> 
-> NAPI is skipped when fdma_ndev is unset (a probed switch with no
-> usable port never adds one), and XDP attach cannot re-enter either,
-> since lan966x_xdp_setup() returns early on PCIe before touching the
-> FDMA.
-> 
-> Only the PCIe instantiation needs this - the SoC one resets with the
-> chip - so the callback returns early on a platform device; the check
-> is at runtime since .shutdown belongs to the driver, and a
-> PCIe-enabled kernel binds both.
-> 
-> FDMA_INTR_ENA persists across a warm reboot, so also restore the
-> full enable in lan966x_fdma_rx_start(), run after both rings are
-> allocated, re-arming both backends from one site.
-> 
-> Tested-by: Herve Codina <herve.codina@bootlin.com>
-> Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+Extend tc_bpf2bpf with two freplace links, one on entry_tc and one on
+subprog_tc, and detach the one on the entry: while subprog_tc is still
+extended, updating entry_tc into a prog_array map must keep failing
+with -EBUSY, and succeed again once the last link detaches.  The test
+asserts the rejection instead of running the prog, as the update
+succeeds and the prog loops unbounded on an unfixed kernel.
+
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+---
+ .../selftests/bpf/prog_tests/tailcalls.c      | 74 +++++++++++++++++++
+ .../bpf/progs/tailcall_freplace_multi.c       | 27 +++++++
+ 2 files changed, 101 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall_freplace_multi.c
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+index c5c9d6c359bb..aefb46778307 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
++++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+@@ -6,6 +6,7 @@
+ #include "tailcall_bpf2bpf_hierarchy2.skel.h"
+ #include "tailcall_bpf2bpf_hierarchy3.skel.h"
+ #include "tailcall_freplace.skel.h"
++#include "tailcall_freplace_multi.skel.h"
+ #include "tc_bpf2bpf.skel.h"
+ #include "tailcall_fail.skel.h"
+ #include "tailcall_cgrp_storage_owner.skel.h"
+@@ -1655,6 +1656,77 @@ static void test_tailcall_bpf2bpf_freplace(void)
+ 	tc_bpf2bpf__destroy(tc_skel);
+ }
+ 
++static void test_tailcall_freplace_multi(void)
++{
++	struct tailcall_freplace_multi *freplace_skel = NULL;
++	struct bpf_link *link_subprog = NULL, *link_entry = NULL;
++	struct tc_bpf2bpf *tc_skel = NULL;
++	int tc_prog_fd, map_fd, key = 0, err;
++
++	tc_skel = tc_bpf2bpf__open_and_load();
++	if (!ASSERT_OK_PTR(tc_skel, "tc_bpf2bpf__open_and_load"))
++		return;
++
++	tc_prog_fd = bpf_program__fd(tc_skel->progs.entry_tc);
++
++	freplace_skel = tailcall_freplace_multi__open();
++	if (!ASSERT_OK_PTR(freplace_skel, "tailcall_freplace_multi__open"))
++		goto out;
++
++	err = bpf_program__set_attach_target(freplace_skel->progs.subprog_freplace,
++					     tc_prog_fd, "subprog_tc");
++	if (!ASSERT_OK(err, "set_attach_target subprog_tc"))
++		goto out;
++
++	err = bpf_program__set_attach_target(freplace_skel->progs.entry_freplace,
++					     tc_prog_fd, "entry_tc");
++	if (!ASSERT_OK(err, "set_attach_target entry_tc"))
++		goto out;
++
++	err = tailcall_freplace_multi__load(freplace_skel);
++	if (!ASSERT_OK(err, "tailcall_freplace_multi__load"))
++		goto out;
++
++	map_fd = bpf_map__fd(freplace_skel->maps.jmp_table);
++
++	link_subprog = bpf_program__attach_freplace(freplace_skel->progs.subprog_freplace,
++						    tc_prog_fd, "subprog_tc");
++	if (!ASSERT_OK_PTR(link_subprog, "attach_freplace subprog_tc"))
++		goto out;
++
++	link_entry = bpf_program__attach_freplace(freplace_skel->progs.entry_freplace,
++						  tc_prog_fd, "entry_tc");
++	if (!ASSERT_OK_PTR(link_entry, "attach_freplace entry_tc"))
++		goto out;
++
++	err = bpf_map_update_elem(map_fd, &key, &tc_prog_fd, BPF_ANY);
++	if (!ASSERT_ERR(err, "update jmp_table with extended prog"))
++		goto out;
++
++	err = bpf_link__destroy(link_entry);
++	link_entry = NULL;
++	if (!ASSERT_OK(err, "destroy entry link"))
++		goto out;
++
++	err = bpf_map_update_elem(map_fd, &key, &tc_prog_fd, BPF_ANY);
++	if (!ASSERT_ERR(err, "update jmp_table with still extended prog"))
++		goto out;
++
++	err = bpf_link__destroy(link_subprog);
++	link_subprog = NULL;
++	if (!ASSERT_OK(err, "destroy subprog link"))
++		goto out;
++
++	err = bpf_map_update_elem(map_fd, &key, &tc_prog_fd, BPF_ANY);
++	ASSERT_OK(err, "update jmp_table");
++
++out:
++	bpf_link__destroy(link_subprog);
++	bpf_link__destroy(link_entry);
++	tailcall_freplace_multi__destroy(freplace_skel);
++	tc_bpf2bpf__destroy(tc_skel);
++}
++
+ static void test_tailcall_failure()
+ {
+ 	RUN_TESTS(tailcall_fail);
+@@ -2005,6 +2077,8 @@ void test_tailcalls(void)
+ 		test_tailcall_freplace();
+ 	if (test__start_subtest("tailcall_bpf2bpf_freplace"))
+ 		test_tailcall_bpf2bpf_freplace();
++	if (test__start_subtest("tailcall_freplace_multi"))
++		test_tailcall_freplace_multi();
+ 	if (test__start_subtest("tailcall_failure"))
+ 		test_tailcall_failure();
+ 	if (test__start_subtest("tailcall_sleepable"))
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_freplace_multi.c b/tools/testing/selftests/bpf/progs/tailcall_freplace_multi.c
+new file mode 100644
+index 000000000000..ca764411dc0b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tailcall_freplace_multi.c
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 KylinSoft Corporation. */
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 1);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++} jmp_table SEC(".maps");
++
++SEC("freplace")
++int subprog_freplace(struct __sk_buff *skb)
++{
++	bpf_tail_call_static(skb, &jmp_table, 0);
++	return 0;
++}
++
++SEC("freplace")
++int entry_freplace(struct __sk_buff *skb)
++{
++	return 0;
++}
++
++char __license[] SEC("license") = "GPL";
+-- 
+2.54.0
 
