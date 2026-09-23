@@ -1,85 +1,64 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA3E47FAE7
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 10:13:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26EAA47F3C5;
+	Wed, 23 Sep 2026 10:14:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790158401; cv=none; b=ig+MAO9anNafNs06RLTsPQ+7nkhUFolQttDUC39a2eFHmAV54F3u7XLItEQHhgA7WpPr0tEDVmPGp/Oj9Qr39b6syLXeBnL+xpIe9uOtuUtmmHRlxYihFh6QtSgLOEAnGfdtwGCaJLL8DenFEjYF6OyGGgj7T2VyvQNYhKSJTho=
+	t=1790158494; cv=none; b=rHXpvta8rU/HkwJ9qjSlfYRpdpcpF2l7dPtsAAKcueD16aVuMSWIfDKOsL7ipfbiL0Aq4+7PoPJ5YhQsLeBty2QnGFK7k1aITAZjg8lkm7Iq8Aiqow3D+lHxDOnmZwfplUXKfeZH/LnYwb5FoFc3WPnIsv/lkEyjv2jvbW0jZAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790158401; c=relaxed/simple;
-	bh=o01mtNQy3KwVF+ElcBbjBGFwVMtkk4Jqm1hOQQLr9Ro=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ASLrhSXOzC2qWTKcZoppOEVHzf0SgZZjwWuGxgiwewHH7Xg7qzpXE+F1GkXBZHpMqZ92pWvCWsHfbv9oHLdvpBJ/OVRcypBJ0+IdaCOEQXKYxGK2IrWZyYHsyFPxJyBfcKOGCdVway5GB0ph9bqVKf9oXvwyviIqrovuYeq4lyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=CA/pydT7; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=TEirt8OC; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1790158494; c=relaxed/simple;
+	bh=tT3CGbysE//BgveGLAUWMDCFv0yyOVvgFjvvNhzCT4c=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nzrQyteJCF8C9PjMSDAplbv3Ps7CGVpDT6rKd55P9YdDgGxiP7EoKPIYNzN/aCDLGUMzVOqnLbpmVxiSTy1bwvmVaKlB4/i4F4VVJlQCeyMSWoLS1faPkaSQVveKO/NGeGu/94Cot7V08wrRSCBASRHdJo9DzjdrRcWhjhdqCNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=bPYyqNzD; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="CA/pydT7";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="TEirt8OC"
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68NA3hMp1623776
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 10:13:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=qcppdkim1; bh=FKQRrHaIRweaetYz3Unhx+
-	PbssZns4EPFcVrQ768yAY=; b=CA/pydT79wiLZr1gEDqGS+aqL6DUC7xethxhLh
-	072QKW9osXlXxJFu1uGGeg6TK4HRYp+74OThSXRd+hJxs9auwTTFkz0KkCl7Ogik
-	Ne6D638MIQbmGgao8lcNxIPpcReXu5gDlOiJUCuSCekd0wImf8uLG0WJiH2a+fDF
-	NgVd3GFd0ZukdtnZmkcmjqrgnzmV3KpmJ3Xeutl7apXui4qoR3ySVlXOXZTGUNnX
-	e4Bdqp8GW2AaopYYsKIQ0uan/kkIC2uMw9ttsxeX95uIf/OzUl4F2znpyKzBYGmN
-	7XX+IFTuWljousA93he/+gINWBVOI7XnhVGVseoB3qFMU7GA==
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4guyma3bdp-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 10:13:03 +0000 (GMT)
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-936aa34873bso150667785a.3
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 03:13:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1790158382; x=1790763182; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=FKQRrHaIRweaetYz3Unhx+PbssZns4EPFcVrQ768yAY=;
-        b=TEirt8OCaU5UV+B5w8CTiAS1Ry0vRDacak76LvuASHXvD7iSK3bPR9LPdw2jx+G11f
-         Lb//JSZpwuC3V0PNIEpihRXPdHcKxj29+s3v+hmK5QSJ2njOVpiys53adye1AGD+7LfG
-         Sq1PhKU8dpyB77mHQj/Ez+R964PGTtE9QoBwLkceAFU+AJbBmWjNjGD6X3y3RBUIzOJb
-         cMi4gcRE4lwPm1fgnNAaMRjTxqL9xVfqzCav/LuFxWAfOmMxS7ZBlSW2O+YyNA3jN6E/
-         9hQObdVdQ/ox3P7N6Gh8ogyAxsVX5MZaNxh86WIZYY/peuoen6tybcFWFGHfdoW4Rm3H
-         JdTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790158382; x=1790763182;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=FKQRrHaIRweaetYz3Unhx+PbssZns4EPFcVrQ768yAY=;
-        b=fO84TyW6cjnngaoVCK5xfj0QQbws7IHMcMShWC1xFB49ju71v21dn84loGZrUBGw9/
-         Yuwrhm5us4B2Irck3XylFp7Dp3OMG7efOzggm0PUcJtOYN45KHieQYdw4yyju9qjrjq1
-         RPrWxrp1ZZfnOiuER+y8IlE91iPr7rw2iSItYXmH792b1d+LyFNXbz5XTtTzloDHdKoT
-         zqSpiX+Sy4Qc1uCt8BxsJHtej7blxh0bpzE4P0eFXwZE+dnTbrD5J15PnBr4YM+2DQ6s
-         eX9RCXvy+I0sZbr7T2L4otCmxc4awUPB1HHpQe5YaMYIIw+hvPBjgQ3EwNOTVXMgMQY2
-         M1oQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwwASyx1Tw6dHkZ6516p6ERP9Mz9iUdIv/7LAEWN9yZ1g6NNoz7wGzloE0MdhTl4jVWGuo=@vger.kernel.org
-X-Gm-Message-State: AFuF++l42hw68e3rsogvBNhIUGCNKvXGRL0NIqW1Vy0hnqagP8XKnoga
-	W7g5RPyBZMtavq+BF9AUU0SCdKZJPpUOxDWiFGlR8Nj+ska96zyOyuoDRr9ZbDwTg6Tteo6LCYc
-	1kXl2Sl5bn4SIhnqHBImvoFhKRqdV+U7ymL+hoFL/XsYnJctjcekhDus=
-X-Gm-Gg: AYBFou38YWctbU5CUuxAaEVN18RE4ASEW8ju9oA7TD6cHmcCobZVN/taQiwMUUdlpuj
-	r2Iv9DjlWhq1HT+66lI1hL/I6tE8ampOq1oDk9KlV2qTXQYeCmJ4oRAUljuSjbp6vU6fTZz++EA
-	2FvyVriWe4vS3gxs31CH64LBSi3UCx5NnZvGGPGOoewDnh66S/jPlfiyzQ44EWW5bmS7mogJNwE
-	4/4SMZjL4DVSsCcIYQIpqBY/qnrvV6qyl2+h7LXxIu8CynRiLP62zpYWNcX5u1NzEovPKPZX2fX
-	+M7vPhYvE4/RKecCexfBSZwj1W5BSltKuyL34zkMTpyroK8dZY4IGaNPm9fvwdNpjbzdWruGbfZ
-	jN2KuhWrGjLJT3g==
-X-Received: by 2002:a05:620a:26a4:b0:93b:be6d:4f3e with SMTP id af79cd13be357-93c2513dba6mr321426685a.25.1790158382080;
-        Wed, 23 Sep 2026 03:13:02 -0700 (PDT)
-X-Received: by 2002:a05:620a:26a4:b0:93b:be6d:4f3e with SMTP id af79cd13be357-93c2513dba6mr321423985a.25.1790158381572;
-        Wed, 23 Sep 2026 03:13:01 -0700 (PDT)
-Received: from localhost ([188.216.77.92])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6aab38a9756sm1423662a12.25.2026.09.23.03.12.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 03:13:00 -0700 (PDT)
-From: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-Date: Wed, 23 Sep 2026 12:12:41 +0200
-Subject: [PATCH net v2] net: mvneta: clear XDP pfmemalloc flag between
- frames
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="bPYyqNzD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1790158484; x=1821694484;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=tT3CGbysE//BgveGLAUWMDCFv0yyOVvgFjvvNhzCT4c=;
+  b=bPYyqNzDSsT4jMXxI+XtxbnxXy0sOENcFnAjgdmEBk+I7a/JGCss4/sk
+   wm9a7nKhjMZoKIM1A2Ac5TiiRVYlcEu+I5RhDZqEQcQlJ2EsJBArcKkS4
+   kIZE021wTcKwBkZrLAxAPf63kocT2R+VTJBl0SJ3ojZUmvVwpmKj8P4m+
+   adPhIl9GMv8NMgXlpQMHeH73eDmeCYzE4Q8ka9XAE1oyb3AEyXDmMJ7j3
+   lq6bNkV9+C8UEw9vbAWUb11rry0knpPHO+3ZGIRYMDJQKc4Lz47rhIcoH
+   M/D1e5j0UTZxNKkyoE3L6j2GJWsilzunrwEtW9Kg/fkRVGDrOK6if/gkv
+   A==;
+X-CSE-ConnectionGUID: Pa30JuG2SJq29n2dxociEw==
+X-CSE-MsgGUID: zb0+GdwRRWKi52uCOutGAQ==
+X-IronPort-AV: E=Sophos;i="6.27,118,1787036400"; 
+   d="scan'208";a="64333347"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 23 Sep 2026 03:14:36 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Wed, 23 Sep 2026 03:14:35 -0700
+Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Wed, 23 Sep 2026 03:14:31 -0700
+Date: Wed, 23 Sep 2026 12:14:27 +0200
+From: Daniel Machon <daniel.machon@microchip.com>
+To: <netdev-bot+sashiko@kernel.org>
+CC: <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, <horatiu.vultur@microchip.com>,
+	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
+	<ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
+	<john.fastabend@gmail.com>, <sdf@fomichev.me>, <herve.codina@bootlin.com>,
+	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <mohsin.bashr@gmail.com>,
+	<richardcochran@gmail.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next v7 12/14] net: lan966x: add PCIe FDMA XDP support
+Message-ID: <20260923101427.z7inl6pdkf4tddcc@DEN-DL-M70577.microsemi.net>
+References: <20260918-lan966x-pci-fdma-v7-12-0ecc179c8a2c@microchip.com>
+ <179008205544.2160803.323034395102452966@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -87,114 +66,278 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260923-mvneta-xdp-clear-frag-fix-v2-1-298693a7ea6b@oss.qualcomm.com>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/32NwQqDMBBEf0X23BUTUElP/Y/iYZtsNKDGJhos4
- r832HsvAzPDvDkgcnAc4V4cEDi56PycjbwVoAeae0ZnsgdZyaZSQuGUZl4Jd7OgHpkC2kA9Wrd
- jS7pRgkVTqxfk/RI4xxf7CXkEXQ4HF1cfPtdfElf1Q8vqDzoJFGhatmRYW1Wrh4+xfG80aj9NZ
- RbozvP8ArnMYBnOAAAA
-X-Change-ID: 20260919-mvneta-xdp-clear-frag-fix-7ac691e1659b
-To: Marcin Wojtas <marcin.s.wojtas@gmail.com>,
-        Andrew Lunn <andrew+netdev@lunn.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>,
-        Toke Hoiland-Jorgensen <toke@redhat.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>, Simon Horman <horms@kernel.org>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-X-Mailer: b4 0.14.3
-X-Proofpoint-ORIG-GUID: 7zTtK7TLeLdZRPQItFMOBDnkbqz7w957
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTIzMDAzOSBTYWx0ZWRfX4wzuLORuYCA3
- q0PBaU/r7r03XNUcg37SUD5kWfcGOQ8Fp/0+Ge7HgzVuB+sKpxgljRhq38OgWZBVNhZcOHuvgLm
- 40FUJC47+bQHvQt+EHfTDlW0UqCqNH4=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTIzMDAzOSBTYWx0ZWRfX6an0QrJ4KLK6
- uCgaXgliM0J4FyNAAjDvmvxG6VkhA/MosirGNkGbr4WfWlt0E9RGyU1D0jifIYlhfNhZFlHXX5D
- MYBp8cIinjGCB5UzIDo5Gdgh+GtivC+cnuapMR9GvQwHxxj+5fDoNROgWyOv3CG8PeRK4FW9T1X
- 1VbL7yWVbLN/T3OmesnXRZcmp+6JGarN4HhbqgDoQ7Mlkmb7o+PwP+CnEGT/zJXx7IUBExPy62V
- Vx/VOIoFBcEpziDN4jVpyVwWCTzmYGaHCtdNXMEuy9NaS4w84mSJbuDsqwoV90eQYxER3fDmhny
- pVMchWN/lQvO7Bz0H480Ew2z8qEa3K7COkeAH3kbKJpkJb5XpcIVIf6TnuTcwowPumf9FnvWAo1
- jiSktsqQuCQWtNOEgQg5irx6oNzsz8yKwPvkSHODhHnSLHGJwAmuId05R9pPd2XKq0i9Ph+qeCX
- rolDqWRnrPT/sohH9SQ==
-X-Authority-Analysis: v=2.4 cv=N828hG9B c=1 sm=1 tr=0 ts=6ab3a62f cx=c_pps
- a=qKBjSQ1v91RyAK45QCPf5w==:117 a=WpTaRW6qxYHRGzLzQsVYzg==:17
- a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=DJpcGTmdVt4CTyJn9g5Z:22
- a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=Bf4p-39G4bmrPmVIT4wA:9
- a=0bXxn9q0MV6snEgNplNhOjQmxlI=:19 a=QEXdDO2ut3YA:10 a=NFOGd7dJGGMPyQGDc5-O:22
-X-Proofpoint-GUID: 7zTtK7TLeLdZRPQItFMOBDnkbqz7w957
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-23_04,2026-09-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 clxscore=1015 malwarescore=0 adultscore=0 spamscore=0
- impostorscore=0 bulkscore=0 phishscore=0 lowpriorityscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609230039
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <179008205544.2160803.323034395102452966@kernel.org>
 
-mvneta_swbm_add_rx_fragment() sets XDP_FLAGS_FRAGS_PF_MEMALLOC on the
-xdp_buff when a fragment page is a pfmemalloc one (page under memory
-pressure). The xdp_buff is reused for the next frame, but only the
-XDP_FLAGS_HAS_FRAGS bit was cleared at frame start, so the pfmemalloc
-bit leaked from one frame into the following ones. mvneta_swbm_build_skb()
-propagates the flag to skb->pfmemalloc through xdp_update_skb_frags_info(),
-so the skb of a subsequent fragmented frame could be wrongly marked as
-pfmemalloc even if none of its pages are under pressure.
+> Thank you for your contribution! Sashiko AI review found 3 potential
+> issue(s) to consider.
+> 
+> Critical: 0 · High: 0 · Medium: 3 · Low: 0
+> 
+> If you believe none of the issues are legitimate, please reply to each
+> issue of Medium severity or higher and explain why the AI is wrong.
+> If any of them are legitimate and you plan to respin, please let patchwork
+> know by including "pw-bot: cr" as a separate line at the end of your reply
+> (one such reply per series is enough).
+> 
+> - [Medium] The same lan966x driver now presents two different XDP frame
+>   views depending on the FDMA back-end.
+> - [Medium] lan966x_xdp_pci_run()
+>   (drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c) has no…
+> - [Medium] lan966x_fdma_pci_napi_poll() bounds its RX loop only by the
+>   caller-supplied weight, and clears the DONE bits solely in the…
+> 
+> --
+> 
+> net: lan966x: add PCIe FDMA XDP support
+> 
+> This adds XDP support to the lan966x PCIe FDMA path, running the BPF
+> program on the contiguous ATU-mapped RX buffer and implementing XDP_TX by
+> rebuilding the IFH and memcpy'ing the post-XDP frame into a TX slot. The
+> IFH and FCS are now stripped in lan966x_fdma_pci_rx_check_frame() before
+> the program runs, and lan966x_xdp_setup() no longer rejects programs on
+> the PCIe path.
+> 
+> A few questions below.
+> 
+> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
+> > index 940425beec2f..e833dbb4fcf0 100644
+> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
+> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
+> 
+> [ ... ]
+> 
+> > +static int lan966x_xdp_pci_run(struct lan966x_port *port, void *data,
+> > +                            u32 data_len, void **xdp_data, u32 *xdp_len)
+> > +{
+> 
+> [ ... ]
+> 
+> > +     act = bpf_prog_run_xdp(xdp_prog, &xdp);
+> > +
+> > +     *xdp_data = xdp.data;
+> > +     *xdp_len = xdp.data_end - xdp.data;
+> > +
+> > +     switch (act) {
+> > +     case XDP_PASS:
+> > +             return FDMA_PASS;
+> > +     case XDP_TX:
+> > +             return lan966x_fdma_pci_xmit_xdpf(port, *xdp_data, *xdp_len) ?
+> > +                    FDMA_DROP : FDMA_TX;
+> > +     default:
+> > +             bpf_warn_invalid_xdp_action(port->dev, xdp_prog, act);
+> 
+> [Severity: Medium]
+> Should this switch have an XDP_REDIRECT arm, at least for the bonding
+> case?  XDP_TX can be rewritten into XDP_REDIRECT inside
+> bpf_prog_run_xdp() before the driver sees the action:
+> 
+> include/net/xdp.h:bpf_prog_run_xdp() {
+>         u32 act = __bpf_prog_run(prog, xdp, BPF_DISPATCHER_FUNC(xdp));
+> 
+>         if (static_branch_unlikely(&bpf_master_redirect_enabled_key)) {
+>                 if (act == XDP_TX && netif_is_bond_slave(xdp->rxq->dev))
+>                         act = xdp_master_redirect(xdp);
+>         }
+>         ...
+> }
+> 
+> bond_xdp_set() increments bpf_master_redirect_enabled_key and only
+> requires the slave to provide ndo_bpf and ndo_xdp_xmit, both of which
+> lan966x_port_netdev_ops provides on the PCIe path as well.  Before this
+> patch lan966x_xdp_setup() rejected any program on the PCIe path, so this
+> combination was not reachable; now it is.
+> 
+> With no XDP_REDIRECT case, a program returning XDP_TX on a bonded PCIe
+> port lands in the default arm, so the frame is dropped,
+> bpf_warn_invalid_xdp_action() prints "Driver unsupported XDP return value
+> 4", trace_xdp_exception() fires, and the per-CPU redirect info stashed by
+> xdp_master_redirect() is never consumed - while lan966x_probe_port() now
+> advertises NETDEV_XDP_ACT_BASIC (XDP_TX) for exactly this path.
+> 
+> The other implementer of the same lan966x_fdma_action values,
+> lan966x_xdp_run() in lan966x_xdp.c, does handle XDP_REDIRECT, so the two
+> sides of the shared enum disagree.
+> 
 
-Clear all the xdp_buff flags in mvneta_swbm_rx_frame(), which is invoked
-for each new frame, instead of just the XDP_FLAGS_HAS_FRAGS bit.
+I think this is fine. We explicitly tell (through dev->xdp_features) that we do
+not support NETDEV_XDP_ACT_REDIRECT in the PCI path, so falling back to a
+warning seems OK to me.
 
-Fixes: ed7a58cb40bd ("net: marvell: rely on xdp_update_skb_shared_info utility routine")
-Reviewed-by: Simon Horman <horms@kernel.org>
-Signed-off-by: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
----
-Changes in v2:
-- Introduce xdp_buff_clear_flags() utility routine.
-- Link to v1: https://lore.kernel.org/r/20260920-mvneta-xdp-clear-frag-fix-v1-1-d7efadecf959@oss.qualcomm.com
----
- drivers/net/ethernet/marvell/mvneta.c | 2 +-
- include/net/xdp.h                     | 5 +++++
- 2 files changed, 6 insertions(+), 1 deletion(-)
+> > +             fallthrough;
+> > +     case XDP_ABORTED:
+> > +             trace_xdp_exception(port->dev, xdp_prog, act);
+> > +             fallthrough;
+> > +     case XDP_DROP:
+> > +             return FDMA_DROP;
+> > +     }
+> > +}
+> > +
+> > +static int lan966x_fdma_pci_rx_check_frame(struct lan966x_rx *rx, u64 *src_port,
+> > +                                        void **data, u32 *data_len)
+> >  {
+> >       struct lan966x *lan966x = rx->lan966x;
+> >       struct fdma *fdma = &rx->fdma;
+> > @@ -168,38 +286,33 @@ static int lan966x_fdma_pci_rx_check_frame(struct lan966x_rx *rx, u64 *src_port)
+> >       if (!lan966x_fdma_pci_rx_size_fits(fdma, blockl))
+> >               return FDMA_ERROR;
+> >
+> > -     return FDMA_PASS;
+> > +     /* Present the Ethernet frame (no IFH, no FCS). HW re-inserts the
+> > +      * FCS on TX; see lan966x_fdma_pci_xmit_xdpf(). May be overridden
+> > +      * by XDP. The FCS strip is unconditional because NETIF_F_RXFCS
+> > +      * is not advertised in hw_features.
+> > +      */
+> > +     *data = virt_addr + IFH_LEN_BYTES;
+> > +     *data_len = blockl - IFH_LEN_BYTES - ETH_FCS_LEN;
+> > +
+> > +     return lan966x_xdp_pci_run(port, virt_addr, *data_len, data, data_len);
+> >  }
+> 
+> [Severity: Medium]
+> The commit message states:
+> 
+>     XDP sees the frame with IFH and FCS stripped.
+> 
+> Is that only true for the PCIe back-end?  The platform back-end of the
+> same driver hands the FCS to the program:
+> 
+> drivers/net/ethernet/microchip/lan966x/lan966x_xdp.c:lan966x_xdp_run() {
+>         ...
+>         xdp_prepare_buff(&xdp, page_address(page),
+>                          IFH_LEN_BYTES + XDP_PACKET_HEADROOM,
+>                          data_len - IFH_LEN_BYTES, false);
+>         ...
+> }
+> 
+> and the trailing 4 bytes are only removed afterwards, once the program has
+> already run:
+> 
+> drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c:lan966x_fdma_rx_get_frame() {
+>         ...
+>         if (likely(!(skb->dev->features & NETIF_F_RXFCS)))
+>                 skb_trim(skb, skb->len - ETH_FCS_LEN);
+>         ...
+> }
+> 
+> So one XDP program keyed on xdp->data_end - xdp->data, or doing an IP
+> total-length cross-check or tail parsing, sees 4 extra bytes on a platform
+> lan966x and not on a PCIe lan966x, and for XDP_TX the platform path
+> re-sends the stale FCS as payload while the PCIe path strips it and lets
+> HW insert a fresh one.
+> 
+> Could either the platform path be harmonized in this series, or the commit
+> message say that the divergence is known and intentional?
 
-diff --git a/drivers/net/ethernet/marvell/mvneta.c b/drivers/net/ethernet/marvell/mvneta.c
-index c2b1098d8d1d..334896d67c1c 100644
---- a/drivers/net/ethernet/marvell/mvneta.c
-+++ b/drivers/net/ethernet/marvell/mvneta.c
-@@ -2340,7 +2340,7 @@ mvneta_swbm_rx_frame(struct mvneta_port *pp,
- 
- 	/* Prefetch header */
- 	prefetch(data);
--	xdp_buff_clear_frags_flag(xdp);
-+	xdp_buff_clear_flags(xdp);
- 	xdp_prepare_buff(xdp, data, pp->rx_offset_correction + MVNETA_MH_SIZE,
- 			 data_len, true);
- }
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index aa742f413c35..2617a4908beb 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -106,6 +106,11 @@ struct xdp_buff {
- 	};
- };
- 
-+static __always_inline void xdp_buff_clear_flags(struct xdp_buff *xdp)
-+{
-+	xdp->flags = 0;
-+}
-+
- static __always_inline bool xdp_buff_has_frags(const struct xdp_buff *xdp)
- {
- 	return !!(xdp->flags & XDP_FLAGS_HAS_FRAGS);
+Same as my reply to v6. I believe the correct handling (as done here) is to
+strip the FCS before the program runs. Also, the platform path does not even use
+the post-program length, so its not really compareable.
 
----
-base-commit: 944ae66642b726bd6b25ae71b1e9ff88a0e0bdb0
-change-id: 20260919-mvneta-xdp-clear-frag-fix-7ac691e1659b
+> 
+> [ ... ]
+> 
+> > @@ -287,6 +400,8 @@ static int lan966x_fdma_pci_napi_poll(struct napi_struct *napi, int weight)
+> >       struct sk_buff *skb;
+> >       int counter = 0;
+> >       u64 src_port;
+> > +     u32 data_len;
+> > +     void *data;
+> >
+> >       /* Wake any stopped TX queues if a TX DCB is available. */
+> >       spin_lock(&lan966x->tx_lock);
+> > @@ -303,7 +418,10 @@ static int lan966x_fdma_pci_napi_poll(struct napi_struct *napi, int weight)
+> >               /* Order DONE read before DCB/frame reads below. */
+> >               dma_rmb();
+> >               counter++;
+> > -             switch (lan966x_fdma_pci_rx_check_frame(rx, &src_port)) {
+> > +             switch (lan966x_fdma_pci_rx_check_frame(rx,
+> > +                                                     &src_port,
+> > +                                                     &data,
+> > +                                                     &data_len)) {
+> >               case FDMA_PASS:
+> >                       break;
+> >               case FDMA_ERROR:
+> > @@ -312,8 +430,17 @@ static int lan966x_fdma_pci_napi_poll(struct napi_struct *napi, int weight)
+> >                        */
+> >                       fdma_dcb_advance(fdma);
+> >                       continue;
+> > +             case FDMA_TX:
+> > +                     fdma_dcb_advance(fdma);
+> > +                     continue;
+> > +             case FDMA_DROP:
+> > +                     fdma_dcb_advance(fdma);
+> > +                     continue;
+> >               }
+> 
+> [Severity: Medium]
+> Can the same descriptors be processed twice when the RX loop consumes the
+> whole ring in one poll?
+> 
+> The RX loop is bounded only by the caller-supplied weight, and the DONE
+> bits are cleared solely by the fdma_dcb_add() in the replenish loop, whose
+> trip count comes from a wrapped index comparison:
+> 
+> lan966x_fdma_pci_napi_poll() {
+>         dcb_reload = fdma->dcb_index;
+> 
+>         while (counter < weight) {
+>                 if (!fdma_has_frames(fdma))
+>                         break;
+>                 ...
+>         }
+>         while (dcb_reload != fdma->dcb_index) {
+>                 old_dcb = dcb_reload;
+>                 dcb_reload++;
+>                 dcb_reload &= fdma->n_dcbs - 1;
+> 
+>                 fdma_dcb_add(fdma, old_dcb, ...);
+>                 lan966x_fdma_rx_reload(rx);
+>         }
+>         ...
+> }
+> 
+> The PCIe ring has FDMA_PCI_DCB_MAX = 256 descriptors.  With all 256 DONE
+> and weight >= 256, fdma_dcb_advance() wraps fdma->dcb_index back to
+> dcb_reload, so the replenish loop runs zero iterations: nothing is
+> re-armed and no DONE bit is cleared.  counter == weight also suppresses
+> napi_complete_done(), so the next poll re-processes the same 256
+> descriptors - duplicate skbs via napi_gro_receive(), and with this patch
+> the same frames are re-run through the BPF program and re-transmitted by
+> lan966x_fdma_pci_xmit_xdpf() on XDP_TX.
+> 
+> A weight >= 256 is reachable through busy polling: SO_BUSY_POLL_BUDGET
+> accepts up to U16_MAX (CAP_NET_ADMIN needed to raise it) and
+> __napi_busy_loop() passes that budget straight into napi->poll():
+> 
+> net/core/dev.c:__napi_busy_loop() {
+>         ...
+>         work = napi_poll(napi, budget);
+>         ...
+> }
+> 
+> The loop shape itself came in with "net: lan966x: add"Can" PCIe FDMA support"
+> earlier in this series, and the platform twin lan966x_fdma_napi_poll() has
+> the same shape with 512 DCBs; this patch extends the switch with
+> FDMA_TX/FDMA_DROP, which adds the repeated XDP execution and repeated
+> transmit to the effects.  Would counting consumed descriptors and capping
+> the loop at fdma->n_dcbs address this?
+> 
 
-Best regards,
--- 
-Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+Reachable only if budget is pushed above ring size. The PCI NAPI poll reuses the
+same pattern as the platform path (and lan969x and sparx5), and no issues have
+ever been observed or reported.
 
+> > -             skb = lan966x_fdma_pci_rx_get_frame(rx, src_port);
+> > +             skb = lan966x_fdma_pci_rx_get_frame(rx,
+> > +                                                 src_port,
+> > +                                                 data,
+> > +                                                 data_len);
+> >               fdma_dcb_advance(fdma);
+> >               if (!skb) {
+> >                       lan966x->ports[src_port]->dev->stats.rx_dropped++;
+> 
+> [ ... ]
+> 
+> --
+> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260918-lan966x-pci-fdma-v7-0-0ecc179c8a2c%40microchip.com
