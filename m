@@ -1,73 +1,73 @@
-Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
+Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C561C5A0ACB
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 22:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B2F59E349
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 22:36:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790202984; cv=none; b=qBo27RBTipNp3PqJbOmjyJYJCtmO9Deh8fPKhoFbKDE3n/hSIgnpTV+O9n3bdKU5znfQSq5t3fMJNCeWPatHYg7YYJdxbIivzVADtKSCodpGPM0sUuxnvN0zniYT8q01ezY26sp1ARe10NaUVtbyZuOfQfAkWsVwZ8+NeZwnq24=
+	t=1790202985; cv=none; b=mTpo+PuOHGKcpzHBX5ACrbaG/dZ479ZzwE18IbqJxOgoTLb7glvVYdHeYtAQqxOkb9WPE3aETgZ+khKgBZInZitvvx0wQqT0dIcuMXEkRRBjxYZvAuDcMIu41zSelf7luVh5EkzBFdF4dEhYYAtx5hVmJgQR5ySD9mRMh0R+l7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790202984; c=relaxed/simple;
-	bh=ziUwrCFRUxuBRCEynhMeoORg002VmKh0DcZoA/iaRmw=;
+	s=arc-20240116; t=1790202985; c=relaxed/simple;
+	bh=urmtphIzt8lh360etwe3gEDMvtgUbtXcGq9iBFJ9M4E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Wmxa25PgCBRVexPxTKZUdeOAD7+wdMUm6zBYuvwgUqxE/+2eOe85hRP4Uuqrb0KnKCgg0fei9m6dJEBpoo/P0rFrcriGqKyzEsoBvH//ejWP+vq6Dd4VjjiSuw0iNN9zf/7ef9ySwYqn3nm3RUWxP/3v39tWLrWwTbU18qdNHgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mQ1vdXbB; arc=none smtp.client-ip=74.125.227.141
+	 MIME-Version; b=I8pceYgeSS9E5brXOehqyPwj4zv/1QXaCe/Xcbtli6yoBDcSy0OjBk2lU3OzmSo1d/1lqQs0vqC+XvFUT81kMfn92wfEWeMnUS4YXNC1Nv0swG5quyO+f7MXKjXb321exjjvOjTLRcsGqY0shk5zOr0gr+BwOKO/woGU/ZmA83c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l6mb8hWm; arc=none smtp.client-ip=74.125.227.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mQ1vdXbB"
-Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-398a1676000so911395a91.2
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 15:36:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l6mb8hWm"
+Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-39e03468a5fso891023a91.0
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 15:36:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790202978; x=1790807778; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790202981; x=1790807781; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=nfzBapFtMu1/UY4ChBEJn5OQXUt4PTrom7FavQN92BM=;
-        b=mQ1vdXbBz6Ls852Kw3TSIP7Cmr3Mn4CxMcq+OlQynrEItQgiv6X6dXbvhwj1ixrtK5
-         UUKVVKkeM3e3JD8TYV7YjMQE+0o/esVyZYDkuV2yxJsgcaxN4u3mx1Xw1cPtDGVuj/23
-         YSDahA2YWKP2KmzI2eHaSx1nhwB88SXaklHLiKZ9A62vB0/hZaUJjgUV+wbRg0caLFCY
-         VM6EjFBY2DzsXCguLefM4/Mjur8yGeBokfzFqYv9zG58clBapQ78wP0fZ/Xj5qsPyNnG
-         6PzQpjUblJyN9IY834XnazkjQRVJDRA2kyEwwUwglUPyclRO5iRu4UR1q1WyrGq5IRT7
-         SA8Q==
+        bh=gQzaQp0XuHktyR3UA4DWIV+Ohv6BhTFsk8mq7ueE+As=;
+        b=l6mb8hWmfmRQfGsgSvU9D9dHUocPlkqGup5To0FwH8vykPN1qVwja4kN2+4NYmZs6+
+         3Yju6v/08qLH6+Xr2B0a5PC883Ww6Ow8PM96tMT2RMjeNf5j+tSPhVVtXxhiNOkbkFu5
+         1iTa0QLoJEeVUg0OQ/Y/LTMqZ0IHhyxfttLGrZfc9pvWOuD/+7FkoZXE0zu+/5CiyClx
+         HKthZYJEk/4QktWqNaWK1bpDuSdyiYIzJIMnXo+gdxybzxG2ZEWwM0f89kEasn64Ccqx
+         C5t4cg6R/lkz/wFijdXI3k8btCodQ0VGQaHKftKcVeZxeqx9oGnuZ+OXw2wUXXOTIa1D
+         JqCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790202978; x=1790807778;
+        d=1e100.net; s=20260707; t=1790202981; x=1790807781;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=nfzBapFtMu1/UY4ChBEJn5OQXUt4PTrom7FavQN92BM=;
-        b=l4q4FaA9k5hcwWDTnyB41C5zUXdLb9B4lSoeceMCiS4LOLdQtdOPfJleQ03wpFBaws
-         xoOeuCrZX1hv6aQx1GGFqu4mfxwo6Pa6ZAr4x44CSvVleNzdkJGjZ2sZmIZxKCd+Ib9Z
-         kiy4V0Z26DXDcuKqJmy+SYdmLCL9VgNq0aqcWChnZ8Eh8HEsFbKdffOOTWOgA0yRQsK7
-         EAbD1sE1qgVsATc7wm/0UVSVQQslVi3Gm+VnTtiGQQDVoDwW6tKM78xzNtOqGfXPTMJZ
-         TaDCo5L5nyDRMozRkUsSqK4XEBPcoarKkyQwDEVXeqx+VjuoUlLZmliCILeOP4pHIaw7
-         FahQ==
-X-Gm-Message-State: AFuF++l5N+EnzbqQ6TUe7akUwjzT+t4Fimc308V2y/AbDKzApuYUKlCm
-	8Yg1GllyWfdKCOdwPW/gQYxTp/ZtNX3tgGxx/zGrW+Vb8rzQuRwfXz0Ky/T4Fw==
-X-Gm-Gg: AYBFou01Jl1wTj8trnoJ+lm/4WONE0TaSHAl34CxgbH9qdo/KtZkU/977u8ZLaGnrzw
-	Oteqctru+UZpHLhoslBN/5+oE64Tn64HdIars+ZbWUkl6YJBMEyXKaY+bhvXbWNmypEEDnkJKcu
-	MKmQKdHZ3U5BOvUj7crm13Xmw2sQPAxOdZCmqCM1CteuR2MGHRpVy6kninsdCPHvymaKQnR/akm
-	W8ZBOZpxTVsgHJv99683XO4OyNOTv6iDR9VRqYKKc+Hrt0uHONFXHgcH4c0HAeNRz8mfjs2M7jR
-	qbbOu7BA9rHsRsUsA+SR0STShmGjCk9IFBrAm7YK+RByDIZi+zTPwAn+JC8xN5cfA2ZJ+ZZ5Sib
-	rupG6d2Od1+fG2MpOuY8Szr+7JA3LKofDioztg5vw2WB9N58jc4PyiD81b8MIVN+MMpzeK+NPB5
-	OXaj4yp5S5BlkaNzZlBHxzTUzmrNF66llfvcODy+h24lOPEaD7WR8LsGQNS/LrbqSAQoD3qzeC4
-	gte9ylKrFOjAtfUZPdeDnlcD8Wifs51VGlODkZNVVTsZ370AToQP+G7V+gWE2JPnOn4vkfjWkKE
-	RGIJvITrbULwRwEBhZIkhxQF6XfJdLLBP0xvBRyrAlSwLz7sTOyu4A==
-X-Received: by 2002:a17:90b:2241:b0:39e:6a81:f34c with SMTP id 98e67ed59e1d1-3a098bb6416mr487568a91.38.1790202978149;
-        Wed, 23 Sep 2026 15:36:18 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a09773a515sm1104288a91.15.2026.09.23.15.36.17
+        bh=gQzaQp0XuHktyR3UA4DWIV+Ohv6BhTFsk8mq7ueE+As=;
+        b=dCsBuIesUwpyYwFrd9Bqj5pPPI07zVIqioWgHFe8tvlPdCqB+cAINq+6h43eOt0x3G
+         ECZQTpLf/7BzPJ25aPjsKKGj5X+YX6+Dg0aLAkauw2mNu1ri2gj3vfWVju309dnXJhXu
+         byExPVMy9olL7729kaz+xVk2gKKOoXlk3OwKQMVz4alX8gU3Ng0KjEHZozpcBZk6OEu/
+         LarDSfUe70lzrHDKXgku9uT0pOt2C4X7I86JeWLDaG+jJyEKMzfqS8l/+E3BumlbFUYD
+         edAS/8dXYr5IxhYQnkIwHGGHENkgTF9aJ2poehKno/0HhKPDz88o+7x/Tq8H7JQeN4+S
+         6zkA==
+X-Gm-Message-State: AFuF++lZZp8hCjdSz2JDG9hWHhdw9QP+Pw9v/9FuHZeDMCVD/KLFmDLv
+	sGj6ngriHdivHP/XtbnkkOLlvE1p2VT/KPmWEMI1aclnBPj1xUZEk2q9Mjovdw==
+X-Gm-Gg: AYBFou1l9QsN3X/+OeTVRKeJqZe6uVbvL6XYJBFis+HTX9puRhCb9G8zHuQt7uMLWJq
+	6sDm5KXSdAggy+iL7y5KJILiFklp+DgUxUtc/dBtjJ+WNAErugmVg3MyHyZ0KquS91oVcn7fySU
+	WOearB3jsX9JHbem/Bws19mAcZghZHKNyMQQNyKnZQq5vshxwcXfcVZHHqrJ4osusgg5lVtu/vr
+	GORTX1bbjKt8ZBghLirHcowtfDk2hSRE37pDqBQnkP3zjupr/TpESB4aMZ6YSKN6bDcZHeIX5gG
+	eg9C7HvExcgNMVT7qXAjSOe9reei4pKBfprMosAlAVKV7bETVjMbMFsWbvzl9hYXcHmVztD15K8
+	j2UjDqOgtobLVnboFwfbOorQNtNvJWEEsE5i8FUBJyUYGCy3XbrU7laG1TSu5QdWVxHM6aDBnUx
+	iuV/d9N1sbNaDo1S8CJO7YuKJJJs+HM5W/iRObElZ+lxG2UzDSvTwMbprCu8Hv2P1pF1jeAxsUL
+	vfZ29jv6cjnl2c4mL8Yaenu1kn9WQPM5Tzdw5IzRshndtLqjxPQaH6DY1DvoFDte3EiXaKEuWej
+	mWWsmbrGL4RbM281iNTtoJRu7ko9wBrX+dLtvW45ln8=
+X-Received: by 2002:a17:90b:314e:b0:39e:6a81:5a90 with SMTP id 98e67ed59e1d1-3a098e37387mr377888a91.36.1790202980992;
+        Wed, 23 Sep 2026 15:36:20 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a09773a515sm1104434a91.15.2026.09.23.15.36.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 15:36:17 -0700 (PDT)
+        Wed, 23 Sep 2026 15:36:20 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next 7/8] selftests/bpf: Adjust tests to widened loops
-Date: Wed, 23 Sep 2026 22:35:53 +0000
-Message-ID: <20260923223554.562379-8-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 8/8] selftests/bpf: Add tests for widened loops
+Date: Wed, 23 Sep 2026 22:35:54 +0000
+Message-ID: <20260923223554.562379-9-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260923223554.562379-1-alexei.starovoitov@gmail.com>
 References: <20260923223554.562379-1-alexei.starovoitov@gmail.com>
@@ -81,157 +81,395 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-The loop that can exit, but is not known to, is accepted with may_goto
-added to it. The tests that expect "infinite loop detected" or
-"BPF program is too large" for such loop expect it to load:
- - verifier_cfg: conditional loop
- - verifier_movsx: MOV32SX, S8, var_off u32_max
- - verifier_search_pruning: short_loop1
- - verif_scale_loop3
- - test_verifier: "calls: conditional call 6". Don't run it, it takes
-   may_goto 250ms to end it.
+Loops with the counter that steps by 1, 4, 8, up and down, with 64-bit
+and 32-bit counter, nested, with too many iterations to walk every
+one of them. The ones with the step other than 1 that leave the loop
+on '!=' need range ends trimmed to var_off members.
 
-The loops that never exit are rejected as before.
+Negative tests: the loop with one iteration too many, the counter that
+never equals the bound, the access at the exit value of the counter.
 
-verifier_precision/state_loop_first_last_equal: the loop converges on
-the second trip. Checkpoint with first_idx == last_idx doesn't happen.
-Expect mark_precise from the exit test of the first trip.
+spin_until_flag tests run the loop that never ends and check that
+may_goto added by the verifier ends the program. loop_with_reference
+cannot have may_goto and is walked every iteration.
 
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- .../bpf/prog_tests/bpf_verif_scale.c          |  4 +--
- .../selftests/bpf/progs/verifier_cfg.c        |  4 +--
- .../selftests/bpf/progs/verifier_movsx.c      |  2 +-
- .../selftests/bpf/progs/verifier_precision.c  | 29 ++++++++-----------
- .../bpf/progs/verifier_search_pruning.c       |  3 +-
- tools/testing/selftests/bpf/verifier/calls.c  |  5 ++--
- 6 files changed, 21 insertions(+), 26 deletions(-)
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../selftests/bpf/progs/verifier_loop_widen.c | 344 ++++++++++++++++++
+ 2 files changed, 346 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_loop_widen.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-index 902a70d5afeb..2dc37090d7a4 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-@@ -154,9 +154,9 @@ void test_verif_scale_loop2()
- 	scale_test("loop2.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false);
- }
- 
--void test_verif_scale_loop3_fail()
-+void test_verif_scale_loop3()
- {
--	scale_test("loop3.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT, true /* fails */);
-+	scale_test("loop3.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false);
- }
- 
- void test_verif_scale_loop4()
-diff --git a/tools/testing/selftests/bpf/progs/verifier_cfg.c b/tools/testing/selftests/bpf/progs/verifier_cfg.c
-index 3c3bb03e8217..700eadf5d430 100644
---- a/tools/testing/selftests/bpf/progs/verifier_cfg.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_cfg.c
-@@ -98,8 +98,8 @@ l0_%=:	r1 = r0;					\
- 
- SEC("socket")
- __description("conditional loop")
--__failure __msg("infinite loop detected")
--__msg_unpriv("back-edge")
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 4f1e1c1cd5ab..5bed8f958777 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -65,6 +65,7 @@
+ #include "verifier_live_stack.skel.h"
+ #include "verifier_liveness_exp.skel.h"
+ #include "verifier_load_acquire.skel.h"
++#include "verifier_loop_widen.skel.h"
+ #include "verifier_loops1.skel.h"
+ #include "verifier_lwt.skel.h"
+ #include "verifier_map_in_map.skel.h"
+@@ -234,6 +235,7 @@ void test_verifier_leak_ptr(void)             { RUN(verifier_leak_ptr); }
+ void test_verifier_linked_scalars(void)       { RUN(verifier_linked_scalars); }
+ void test_verifier_live_stack(void)           { RUN(verifier_live_stack); }
+ void test_verifier_liveness_exp(void)         { RUN(verifier_liveness_exp); }
++void test_verifier_loop_widen(void)           { RUN(verifier_loop_widen); }
+ void test_verifier_loops1(void)               { RUN(verifier_loops1); }
+ void test_verifier_lwt(void)                  { RUN(verifier_lwt); }
+ void test_verifier_map_in_map(void)           { RUN(verifier_map_in_map); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_loop_widen.c b/tools/testing/selftests/bpf/progs/verifier_loop_widen.c
+new file mode 100644
+index 000000000000..4bdfc198bfaa
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_loop_widen.c
+@@ -0,0 +1,344 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Loops that are verified by widening the state at the loop head. */
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++struct small_val {
++	char buf[400];
++};
++
++struct big_val {
++	char buf[1000000];
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, struct small_val);
++} map_small SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, struct big_val);
++} map_big SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_RINGBUF);
++	__uint(max_entries, 4096);
++} ringbuf SEC(".maps");
++
++#define LOOKUP(map)					\
++	"r1 = 0;"					\
++	"*(u64*)(r10 - 8) = r1;"			\
++	"r2 = r10;"					\
++	"r2 += -8;"					\
++	"r1 = %[" #map "] ll;"				\
++	"call %[bpf_map_lookup_elem];"			\
++	"if r0 == 0 goto l_exit_%=;"			\
++	"r7 = r0;"
++
++/* counter steps by 4 and the loop is left on '!=', 100 trips */
++SEC("socket")
 +__success
-+__failure_unpriv __msg_unpriv("back-edge")
- __naked void conditional_loop(void)
- {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_movsx.c b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-index 195b27a51224..280ccee33663 100644
---- a/tools/testing/selftests/bpf/progs/verifier_movsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_movsx.c
-@@ -226,7 +226,7 @@ l0_%=:							\
- 
- SEC("socket")
- __description("MOV32SX, S8, var_off u32_max")
--__failure __msg("infinite loop detected")
++__naked void stride4_ne_100(void)
++{
++	asm volatile (
++	LOOKUP(map_small)
++	"r6 = 0;"
++"l_loop_%=:"
++	"r1 = r7;"
++	"r1 += r6;"
++	"r0 = *(u32*)(r1 + 0);"
++	"r6 += 4;"
++	"if r6 != 400 goto l_loop_%=;"
++"l_exit_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem), __imm_addr(map_small)
++	: __clobber_all);
++}
++
++/* same loop, 250000 trips, too many to walk every one of them */
++SEC("socket")
 +__success
- __failure_unpriv __msg_unpriv("back-edge from insn 2 to 0")
- __naked void mov64sx_s32_varoff_1(void)
- {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_precision.c b/tools/testing/selftests/bpf/progs/verifier_precision.c
-index f4459561bf39..88358586e796 100644
---- a/tools/testing/selftests/bpf/progs/verifier_precision.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_precision.c
-@@ -152,22 +152,21 @@ __naked int bpf_store_release(void)
- SEC("?raw_tp")
- __success __log_level(2)
- /*
-- * Without the bug fix there will be no history between "last_idx 3 first_idx 3"
-- * and "parent state regs=" lines. "R0=6" parts are here to help anchor
-- * expected log messages to the one specific mark_chain_precision operation.
-- *
-- * This is quite fragile: if verifier checkpointing heuristic changes, this
-- * might need adjusting.
-+ * The state is widened when it comes back to the loop head, so the exit test
-+ * is decided only on the first trip around the loop. "R0=2" parts are here to
-+ * help anchor expected log messages to that mark_chain_precision operation.
-  */
--__msg("2: (07) r0 += 1                       ; R0=6")
-+__msg("2: (07) r0 += 1                       ; R0=2")
- __msg("3: (35) if r0 >= 0xa goto pc+1")
--__msg("mark_precise: frame0: last_idx 3 first_idx 3 subseq_idx -1")
-+__msg("mark_precise: frame0: last_idx 3 first_idx 1 subseq_idx -1")
- __msg("mark_precise: frame0: regs=r0 stack= before 2: (07) r0 += 1")
- __msg("mark_precise: frame0: regs=r0 stack= before 1: (07) r0 += 1")
--__msg("mark_precise: frame0: regs=r0 stack= before 4: (05) goto pc-4")
--__msg("mark_precise: frame0: regs=r0 stack= before 3: (35) if r0 >= 0xa goto pc+1")
--__msg("mark_precise: frame0: parent state regs= stack=:  R0=P4")
--__msg("3: R0=6")
-+__msg("mark_precise: frame0: parent state regs=r0 stack=:  R0=P0")
-+__msg("mark_precise: frame0: last_idx 0 first_idx 0 subseq_idx 1")
-+__msg("mark_precise: frame0: regs=r0 stack= before 0: (b7) r0 = 0")
-+__msg("3: R0=2")
-+__msg("loop head 1 widened, pass 1")
-+__msg("1: safe")
- __naked int state_loop_first_last_equal(void)
- {
- 	asm volatile (
-@@ -175,11 +174,7 @@ __naked int state_loop_first_last_equal(void)
- 	"l0_%=:"
- 		"r0 += 1;"
- 		"r0 += 1;"
--		/* every few iterations we'll have a checkpoint here with
--		 * first_idx == last_idx, potentially confusing precision
--		 * backtracking logic
--		 */
--		"if r0 >= 10 goto l1_%=;"	/* checkpoint + mark_precise */
-+		"if r0 >= 10 goto l1_%=;"	/* mark_precise */
- 		"goto l0_%=;"
- 	"l1_%=:"
- 		"exit;"
-diff --git a/tools/testing/selftests/bpf/progs/verifier_search_pruning.c b/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
-index f40e57251e94..7098b44faafc 100644
---- a/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_search_pruning.c
-@@ -341,8 +341,7 @@ l0_%=:	r1 = 42;					\
-  * test would take a very long time to verify.
-  */
- SEC("kprobe")
--__failure __log_level(4)
--__msg("BPF program is too large.")
++__naked void stride4_ne_250k(void)
++{
++	asm volatile (
++	LOOKUP(map_big)
++	"r6 = 0;"
++"l_loop_%=:"
++	"r1 = r7;"
++	"r1 += r6;"
++	"r0 = *(u32*)(r1 + 0);"
++	"r6 += 4;"
++	"if r6 != 1000000 goto l_loop_%=;"
++"l_exit_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem), __imm_addr(map_big)
++	: __clobber_all);
++}
++
++/* 8 byte stride, 32-bit counter */
++SEC("socket")
 +__success
- __naked void short_loop1(void)
- {
- 	asm volatile (
-diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
-index 8b94b87135bc..c7c501bfc660 100644
---- a/tools/testing/selftests/bpf/verifier/calls.c
-+++ b/tools/testing/selftests/bpf/verifier/calls.c
-@@ -559,8 +559,9 @@
- 	BPF_EXIT_INSN(),
- 	},
- 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
--	.errstr = "infinite loop detected",
--	.result = REJECT,
-+	/* may_goto ends the loop after 250ms, do not run it */
-+	.result = ACCEPT,
-+	.runs = -1,
- },
- {
- 	"calls: using r0 returned by callee",
++__naked void stride8_ne_w_125k(void)
++{
++	asm volatile (
++	LOOKUP(map_big)
++	"w6 = 0;"
++"l_loop_%=:"
++	"r1 = r7;"
++	"r1 += r6;"
++	"r0 = *(u64*)(r1 + 0);"
++	"w6 += 8;"
++	"if w6 != 1000000 goto l_loop_%=;"
++"l_exit_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem), __imm_addr(map_big)
++	: __clobber_all);
++}
++
++/* counts down by 4 to zero */
++SEC("socket")
++__success
++__naked void stride4_down_250k(void)
++{
++	asm volatile (
++	LOOKUP(map_big)
++	"r6 = 1000000;"
++"l_loop_%=:"
++	"r6 += -4;"
++	"r1 = r7;"
++	"r1 += r6;"
++	"r0 = *(u32*)(r1 + 0);"
++	"if r6 != 0 goto l_loop_%=;"
++"l_exit_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem), __imm_addr(map_big)
++	: __clobber_all);
++}
++
++/* step of 1 and '<', no alignment to make use of */
++SEC("socket")
++__success
++__naked void stride1_lt_1m(void)
++{
++	asm volatile (
++	LOOKUP(map_big)
++	"r6 = 0;"
++"l_loop_%=:"
++	"r1 = r7;"
++	"r1 += r6;"
++	"r0 = *(u8*)(r1 + 0);"
++	"r6 += 1;"
++	"if r6 < 1000000 goto l_loop_%=;"
++"l_exit_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem), __imm_addr(map_big)
++	: __clobber_all);
++}
++
++/* two loops, one in the other */
++SEC("socket")
++__success
++__naked void nested_stride4(void)
++{
++	asm volatile (
++	LOOKUP(map_big)
++	"r8 = 0;"
++"l_outer_%=:"
++	"r6 = 0;"
++"l_loop_%=:"
++	"r1 = r7;"
++	"r1 += r6;"
++	"r0 = *(u32*)(r1 + 0);"
++	"r6 += 4;"
++	"if r6 != 1000000 goto l_loop_%=;"
++	"r8 += 1;"
++	"if r8 != 1000 goto l_outer_%=;"
++"l_exit_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem), __imm_addr(map_big)
++	: __clobber_all);
++}
++
++/* the last trip reads 4 bytes at offset 400 of 400 */
++SEC("socket")
++__failure __msg("invalid access to map value")
++__naked void stride4_ne_one_too_many(void)
++{
++	asm volatile (
++	LOOKUP(map_small)
++	"r6 = 0;"
++"l_loop_%=:"
++	"r1 = r7;"
++	"r1 += r6;"
++	"r0 = *(u32*)(r1 + 0);"
++	"r6 += 4;"
++	"if r6 != 404 goto l_loop_%=;"
++"l_exit_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem), __imm_addr(map_small)
++	: __clobber_all);
++}
++
++/* same with too many trips to walk */
++SEC("socket")
++__failure __msg("BPF program is too large")
++__naked void stride4_ne_250k_one_too_many(void)
++{
++	asm volatile (
++	LOOKUP(map_big)
++	"r6 = 0;"
++"l_loop_%=:"
++	"r1 = r7;"
++	"r1 += r6;"
++	"r0 = *(u32*)(r1 + 0);"
++	"r6 += 4;"
++	"if r6 != 1000004 goto l_loop_%=;"
++"l_exit_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem), __imm_addr(map_big)
++	: __clobber_all);
++}
++
++/* the counter never equals the bound and reads out of bounds */
++SEC("socket")
++__failure __msg("BPF program is too large")
++__naked void stride4_ne_misses_bound(void)
++{
++	asm volatile (
++	LOOKUP(map_big)
++	"r6 = 0;"
++"l_loop_%=:"
++	"r1 = r7;"
++	"r1 += r6;"
++	"r0 = *(u32*)(r1 + 0);"
++	"r6 += 4;"
++	"if r6 != 999998 goto l_loop_%=;"
++"l_exit_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem), __imm_addr(map_big)
++	: __clobber_all);
++}
++
++/* the value read after the loop is at the exit value of the counter */
++SEC("socket")
++__failure __msg("BPF program is too large")
++__naked void stride4_ne_use_after_loop(void)
++{
++	asm volatile (
++	LOOKUP(map_big)
++	"r6 = 0;"
++"l_loop_%=:"
++	"r1 = r7;"
++	"r1 += r6;"
++	"r0 = *(u32*)(r1 + 0);"
++	"r6 += 4;"
++	"if r6 != 1000000 goto l_loop_%=;"
++	"r1 = r7;"
++	"r1 += r6;"
++	"r0 = *(u32*)(r1 + 0);"
++"l_exit_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem), __imm_addr(map_big)
++	: __clobber_all);
++}
++
++/*
++ * Nothing in the loop changes what it tests. may_goto that the verifier
++ * adds to the back-edge ends the program: 0 is returned instead of 2.
++ */
++SEC("socket")
++__success __retval(0)
++__naked void spin_until_flag(void)
++{
++	asm volatile (
++	LOOKUP(map_small)
++"l_loop_%=:"
++	"r0 = *(u32*)(r7 + 0);"
++	"if r0 == 0 goto l_loop_%=;"
++	"r0 = 2;"
++	"exit;"
++"l_exit_%=:"
++	"r0 = 1;"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem), __imm_addr(map_small)
++	: __clobber_all);
++}
++
++/* same with the back-edge that is not a conditional jump */
++SEC("socket")
++__success __retval(0)
++__naked void spin_until_flag_ja(void)
++{
++	asm volatile (
++	LOOKUP(map_small)
++"l_loop_%=:"
++	"r0 = *(u32*)(r7 + 0);"
++	"if r0 != 0 goto l_done_%=;"
++	"goto l_loop_%=;"
++"l_done_%=:"
++	"r0 = 2;"
++	"exit;"
++"l_exit_%=:"
++	"r0 = 1;"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem), __imm_addr(map_small)
++	: __clobber_all);
++}
++
++/* may_goto cannot end the program that holds a reference, every iteration is walked */
++SEC("socket")
++__success __retval(0)
++__naked void loop_with_reference(void)
++{
++	asm volatile (
++	"r1 = %[ringbuf] ll;"
++	"r2 = 8;"
++	"r3 = 0;"
++	"call %[bpf_ringbuf_reserve];"
++	"if r0 == 0 goto l_exit_%=;"
++	"r7 = r0;"
++	"r6 = 0;"
++"l_loop_%=:"
++	"r6 += 1;"
++	"if r6 != 100 goto l_loop_%=;"
++	"r1 = r7;"
++	"r2 = 0;"
++	"call %[bpf_ringbuf_discard];"
++"l_exit_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_ringbuf_reserve), __imm(bpf_ringbuf_discard), __imm_addr(ringbuf)
++	: __clobber_all);
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.55.0
 
