@@ -1,140 +1,97 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-11.mta1.migadu.com [95.215.58.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FA1F427A10;
-	Wed, 23 Sep 2026 18:07:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D2ED41F5D7
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 18:09:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790186858; cv=none; b=Qc+vnjjPgemXkCcC9jhpz+h4KBzilP2/U/5q0tVrgr23Bp+xGnDKVbvhe/MU8wiQ9GQ0PQ8gJOFwAdECZ/CuWpw+ZJ/5QGZzYSib7R3gg6CjO4jKZq9VVDDTHHoS1Wb9L90a0dzxd7M7MAm5BqSC6q5Sl0W9o+BfTj522hGeWAw=
+	t=1790186971; cv=none; b=ckhZ4OApuzSRTGsiEeGvLWsZ3ZOiEfFfsUOKarIcpxiCBytgjtwGYepF7Gts/1/Jydk7sf0D+nk/OzNPc5EtOPGvsskO0CZPuZL7g1CGT+9o72JxpADuKH+nyslLRtG3QkxnoIKj/C8ivmYjEKFoASavOCjyLjk385+2JQaGNJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790186858; c=relaxed/simple;
-	bh=U5+nhunaLiSVoMI+VdQBIfVkc9YsZ6zc1C4hVwZKmCM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UQODosILX4M9chOGqxsrclKa2ZjPLoqrrLSc/VF3WMgRfIGRas5g1fCqR+O0k8K1cHAa/c3hCMKg1dbayM2N8cCDqVRIVM1YgByd7FHmKYCuZ0ZCTm5P+jNHuFP86PUiZOgthQPRHQJgkLDgmQOf7hG6g64BGKpGkWSkluz+jVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kZJpmvu7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790186971; c=relaxed/simple;
+	bh=2OSwAATVuMCSkiCTvVkrFXgtQXDm39p0VcxTLm/GZ+4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZznT9dmb7O9O6z0AthhpXAUpbwWx2Zb84U4UMsG9+zza59QtfzU8IVBW3Z2/TQrmyzyl1WT9cNqxmfvv0QKPCUubIyyvQn2PQRkKVuw4n3lkCP0a7AZ+O1x5ozI6zaUcwIzO6EIqZ6p8aIbu7piqEuNsTuL5QYX3Ldbt9JDRnRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gUONVBC8; arc=none smtp.client-ip=95.215.58.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kZJpmvu7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0BA91F000FF;
-	Wed, 23 Sep 2026 18:07:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790186857;
-	bh=+vDPcquJM7GahtjddOoqJJfhDpqWnXxKLvU+vehlwfQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=kZJpmvu7LipMdS7s6+mj9xDLvZhIbIEu5iavgnSnpKXpDsyvWxAwjkhQfEWK5EvB3
-	 puajcWtvMf/x7BQSh8XixkLDEZbx1IP0iI8dXlEFD83TJlneF5YQjtadOY6PFulIF6
-	 L0G2y+7enOt+6AmbfvtSPxtYFRJzsw6kPgFlIF6GL0488YwRZ2KqW28I0ftI63c6Jn
-	 Jh8OoFaA4UUyN8HygG5Q4MSkdgZkPKCj3SN2TP2BpTdxH/M1bgouZwMEDeqCyM3OFC
-	 swXiKbV5JxoXCdQRQsVCdO5HqcoPaSEEausVGKdlcYl+OQ9i14JSTEpnH+23iJUVkG
-	 82Dr4cmCduoCA==
-Date: Wed, 23 Sep 2026 19:07:30 +0100
-From: Simon Horman <horms@kernel.org>
-To: Daniel Machon <daniel.machon@microchip.com>
-Cc: netdev-bot+sashiko@kernel.org, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, horatiu.vultur@microchip.com,
-	steen.hegelund@microchip.com, UNGLinuxDriver@microchip.com,
-	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-	john.fastabend@gmail.com, sdf@fomichev.me, herve.codina@bootlin.com,
-	arnd@arndb.de, gregkh@linuxfoundation.org, mohsin.bashr@gmail.com,
-	richardcochran@gmail.com, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH net-next v7 10/14] net: lan966x: add PCIe FDMA support
-Message-ID: <20260923180730.GV13925@horms.kernel.org>
-References: <20260918-lan966x-pci-fdma-v7-10-0ecc179c8a2c@microchip.com>
- <179008205148.2160803.12818321368571406375@kernel.org>
- <20260923084538.wgkw2nt5ergoxcot@DEN-DL-M70577>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gUONVBC8"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=2OSwAATVuMCSkiCTvVkrFXgtQXDm39p0VcxTLm/GZ+4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790186968; v=1; x=1790791768;
+ b=gUONVBC8ahJOvHbWxJKHIyIVhLaNhT2f7po7sn03rIyTQyDhq+ke4NyCqh9oK3leyK2+V8l6
+ Q20gFLPOwHY1CTScnUcyx1i5FimZ6YfyzeFtT3ooikE3QZg+lFXCHWJEYkfHTCf+YLg3sS2Qx/j
+ SMEB7xFcXccwfowiAJvn3NOQ=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id c87db9c4947cdb24;
+	Wed, 23 Sep 2026 18:09:28 +0000
+X-Mizu-Trace-ID: c87db9c4947cdb24
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <981c9440-2fb8-4236-9d6e-759f9f2bbbaa@linux.dev>
+Date: Wed, 23 Sep 2026 11:09:24 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260923084538.wgkw2nt5ergoxcot@DEN-DL-M70577>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v5 07/21] bpf: Explore the landing pads no call
+ site reaches
+Content-Language: en-GB
+To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, kernel-team@fb.com
+References: <20260923045846.2414643-1-yonghong.song@linux.dev>
+ <20260923045922.2417689-1-yonghong.song@linux.dev>
+ <df24934c5ecbd70bc35b528b8e58ae668ce02051.camel@gmail.com>
+ <3469ede8-6c37-49c9-b261-d2c8506eada5@linux.dev>
+ <0c312ad4f725193e714a50c5fcfc31ad2b273f7d.camel@gmail.com>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <0c312ad4f725193e714a50c5fcfc31ad2b273f7d.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Sep 23, 2026 at 10:45:38AM +0200, Daniel Machon wrote:
 
-...
 
-> > [Severity: Medium]
-> > Is this path expected to work on a big-endian host?
-> > 
-> > Until now the descriptor producer and the FDMA engine were both on the
-> > little-endian SoC, so the native-endian descriptor layout in
-> > drivers/net/ethernet/microchip/fdma/fdma_api.h was fine:
-> > 
-> >   struct fdma_db {
-> >         u64 dataptr;
-> >         u64 status;
-> >   };
-> > 
-> >   struct fdma_dcb {
-> >         u64 nextptr;
-> >         u64 info;
-> >         struct fdma_db db[FDMA_DB_MAX];
-> >   };
-> > 
-> > With PCIe FDMA the descriptors live in host memory and are fetched by the
-> > endpoint, so the host and the engine can disagree on byte order. The
-> > translated addresses written here, and the status/info words written by
-> > __fdma_db_add()/__fdma_dcb_add(), all go out in host byte order, and the
-> > HW-written DONE/BLOCKL fields are read back the same way in
-> > lan966x_fdma_pci_get_next_dcb() and lan966x_fdma_pci_rx_check_frame().
-> > 
-> > CONFIG_MCHP_LAN966X_PCI in drivers/misc/Kconfig only has
-> > 
-> >   depends on PCI
-> >   depends on OF_OVERLAY
-> > 
-> > so a big-endian host (e.g. powerpc) can select it. On such a host, would
-> > the engine see byte-swapped nextptr/dataptr and length fields, i.e. would
-> > RX/TX not work at all? Should the descriptor fields become explicit
-> > little-endian types with accessors at the hardware boundary, or should the
-> > Kconfig entry gain a little-endian dependency?
-> 
-> Hmm. Never tested on PowerPC, not this driver nor the DT overlay mechanism it
-> relies on for PCI deployment, which has only been exercised on ARM and x86 so
-> far (AFAICT) [1].
-> 
-> [1] https://lore.kernel.org/all/20240430183301.46568e35@bootlin.com/
+On 9/23/26 11:06 AM, Eduard Zingerman wrote:
+> On Wed, 2026-09-23 at 10:27 -0700, Yonghong Song wrote:
+>
+> ...
+>
+>> This patch is to avoid a verification failure. Let us say, we remove this
+>> patch and run the following
+>>     ./test_progs -t exceptions_cleanup
+>> and we will get the following failure:
+> ...
+>
+>> This patch intends to explore *unreachable* insns to avoid verification failure.
+>>
+>> I think due to "record = { begin = 1, end = 2, pad = 4 }", it is considered that the code at 'pad = 4'
+>> is not dead, but actually it does dead later so we have the above failure.
+>>
+>> So I add this patch to avoid failure. But maybe we should just remove this patch,
+>> and mark this test as failure as indeed landing pad is not reachable.
+>>
+>> WDYT?
+> But that's a self-fulfilling thing, the test you are pointing at looks
+> as follows:
+>
+>   /*
+>    * 15. A region around a call the kernel knows cannot unwind: no call site is
+>    * marked, nothing reaches the pad, and the sweep removes it. The program is
+>    * otherwise ordinary and has to load.
+>    */
+>   static __used __naked __noinline __u64 nounwind_rec_frame(void)
+>   {
+>           ...
+>   }
+>
+> So, the test is added to test this cfg pass, the cfg pass is added to
+> make this test pass, meanwhile compiler does not generate such code.
+> I don't see a point, tbh.
 
-I don't think that the baseline expectation is that drivers are tested
-on big-endian systems, but rather that reasonable effort is made to ensure
-that byte-order usage is correct.
+Confirmed. Will remove this patch.
 
-In this case I suggest that will involve using __le64 instead of u64,
-coupled with calling le64_to_cpu() and cpu_to_le64() as appropriate.
-
-Sparse can aid with getting this right.
-
-...
-
-> > [Severity: Medium]
-> > Is rx_bytes meant to count the frame as it arrived on the wire?
-> > 
-> > By the time this runs, skb->len has already been reduced twice: the
-> > skb_trim() above drops ETH_FCS_LEN, and eth_type_trans() pulls the
-> > MAC header out of the linear region, so skb->len is short by at least
-> > ETH_HLEN. If lan966x_hw_offload() ends up untagging a VLAN header,
-> > that is another four bytes gone. So every packet delivered through
-> > lan966x_fdma_pci_rx_get_frame() undercounts rx_bytes by 14 bytes or
-> > more, which is visible to userspace via ip -s link.
-> > 
-> > The frame length is available before any of that surgery happens --
-> > data_len from FDMA_DCB_STATUS_BLOCKL(db->status), or skb->len right
-> > after the skb_pull(skb, IFH_LEN_BYTES) -- so accounting could be done
-> > there instead.
-> > 
-> > I realise this mirrors what the existing register/page path in
-> > lan966x_fdma.c does, so if the intent is to keep the two backends
-> > byte-for-byte consistent, please say so; otherwise it would be good
-> > not to copy the miscount into the new file.
-> 
-> Not only lan966x, but sparx5 and lan969x does the exact same thing, increasing
-> rx_bytes after headers are pulled.  The undercount is real, but not visible to
-> userspace. Both implementations (platform and PCI) read hardware counters directly
-
-I'm a little unsure, but if it's consistent then I guess that is ok.
-It's an old interface anyway.
