@@ -1,61 +1,63 @@
 Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588CC18CC13
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 00:08:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768DB9463
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 00:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790122103; cv=none; b=W2ePNXJqQp95pltEa8gyAefiKkypENlj2nY6UJynyONVPsGab+KZctfvM1LrbGlW1wdgDV8k9SwV65yXs9kPv6xs5O0/Yid5vfpuveiSgSXgF9yLagX6QIrp8L0mhqjf9Z4gwMypbSA9GtCngAk/wdq40BeVmyHdm49y/zLgJUU=
+	t=1790122110; cv=none; b=svdq1StBL5ozeSJfQ8rrGxbU8WpkjciahIji8fDtRGVFcY35QBnmumPZgxW30ThnqMazo7RDS6JNrcZeomflzwX42omasCarb4obOoAq5WJBez203AyJtVf+/wsQCSC8QN6etRvzKFKZCMCB3Kv8JRgOLSdynoVgymK2ERabWkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790122103; c=relaxed/simple;
-	bh=ERimEa1G3IdfKCVSb18kreNgeDbEZqHoSBqszcbkbXA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OgaUjLc3ggXUH6FTPWX3JRZy332rbMFArMyDIMtF4g6XTK/xn6af1EL+S15Mqiiy8kL7hbXlal/mea7eaiZoXkjDGiC16JZhYkOF0TztM7LVKP4EJk/CNwGrGqwMl36MOnZJzBOjIIzl487xUGSJrYm9ggR5SzlNRGkY9CpHoo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AIUppR8x; arc=none smtp.client-ip=74.125.227.141
+	s=arc-20240116; t=1790122110; c=relaxed/simple;
+	bh=fsWaJap2Z4snPeSf3DEBaGqtx3ZtQ4arg0Z0hs6TbO8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ehVAbIdN1EUHX++K02R8svqOxaokCRYC6rIt47LTn3HqL8cKUF5NSs5u+hwLen6UEVe2Capgmlnv36TQOEjZrjhjQp0+7J6KKMOaDkZ2NpP782p5luOh/4O613KR8BnDKD0ijKNQ5B4Ewu+rK3X9E3Lb1RV7TneTTolrRCOTXRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cq2yw6Nt; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AIUppR8x"
-Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d747f0b25dso2276775ad.2
-        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 17:08:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cq2yw6Nt"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d747f05ffcso2124115ad.0
+        for <bpf@vger.kernel.org>; Tue, 22 Sep 2026 17:08:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790122102; x=1790726902; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=RolIiA9xWOqMDMe26HLaPTxvXgDJ3sSrQxbTSLuZkCs=;
-        b=AIUppR8xW5R1Qz2Mi/6s6ITXHro6q/nM+HbpzRBySlrg1m+2bq2zI7IhVRwLi9hcZt
-         MbjWpcYXEOK3rR7WEBNb33cJ6hMFMTwBeE1L13MiFxC0Zccf/2yvvMBeeJF92uS7wmlo
-         T2lp+xKuJCjrYpTcaXKwaVb/69WQ5XQV/zkOcAID9Yn4L6ehOGeGcMNkrbW3zcF8CoG7
-         KhDlyJPfTk2nQLdM6gkaIQkc78jHSFW3Q5MaCBcjevflrK0NA3kej+UyoSDC1fc42aD8
-         uHWqvmWFvi/t/VavEM4iwvaBvzBbsSZoFS91t7Uvx/O1+tQxtC78G4StaqvvHy6vWBgX
-         R/eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790122102; x=1790726902;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1790122107; x=1790726907; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=RolIiA9xWOqMDMe26HLaPTxvXgDJ3sSrQxbTSLuZkCs=;
-        b=zAbsVo848MV8VBSIo8YXhPLJJW6pztwrxLP3+SR00qG7FNmyMkBWx17BiRrWqrNWM/
-         RmWD8qhQtCRBClpaBvm//AOPfnxBudMBwsmz7VT11Yv0XUXJBPCMHWP5/XY5OvQ4DXxG
-         79hEk2huaBFNC6+nQT3dT3ahNZac6kTJSN2vgj3HQwgNtTSI2f7HIZqRzgquuWvPP0Nw
-         qt1dgFBbYetWspBGqJYutS4p0zRSbeqouPy5iKksslxeXgulAa1oEpV/nPF11xWbsCCW
-         V4EmFGaoO3bFVkPI0NUFDHVElmygtFDFJM8AoI2fHVu0dLGnHoklSqLrXoDZN55x9Neb
-         OXiQ==
-X-Gm-Message-State: AFuF++nU/d6YCboRU+y9XUA2Wix7IKJS+kJWeJa+sZlvR6Uy9r6gqalT
-	VqMm8j7dg4fwTdmqLQUjLy6KnyHcB41Ck11+THbZK+YYIfN+Z7ibAUJ0MYF1rgQrzA==
-X-Gm-Gg: AYBFou1gbDfjHvNwyrD0Ey9ls5qiVlycyO8pcAm1EzGXXgqbvBSOX7lLvTYC9EHjQTd
-	LkUStc+bvMHILpgQvCd9ge4Ert7rx7/4JBgMWp6VHi6x+5nSocm6eAg6eliJQgI5NgVztWryR27
-	V5eSSx5NjcjvBJBKRY1CZGd4RdrCivWzpBrAaC0NOQRKzRJu5fOthKAYMu/C9LRiL+9z59syKRR
-	FKkW0hJZ7GS7KMOPxq4zUm4FcBAGtwc/JO25cJVZtEBXFlSNsfprR3Go7l+erixSokti9/2fqR8
-	Xygw1qYsprWeqYNHNt2GKmlfUMzdEtr+oJrBnln9L9v+ec2TivNMeJTV3NJW+RRo6686Bcry4jC
-	EmE/ZREdAxHjBYTDiUWD8NuDI3u8Year0hxNNU+11A3m0P6Ib4c0hv1cnZK40BOWhiAZd27DguY
-	uTBpRJLj3JOPCjIbtCJ7h6KlFDRQbIKPl9lGZATRk8btnI4HY/cfG/IoLmtMY9a6zrBgoYLM2Og
-	COyObpNyO291VXs4ltrqJ/QUDVmB5KrQu39kg==
-X-Received: by 2002:a17:903:8c3:b0:2d0:cc92:f7ae with SMTP id d9443c01a7336-2df69d1aad5mr9368365ad.3.1790122101577;
-        Tue, 22 Sep 2026 17:08:21 -0700 (PDT)
+        bh=LKmQCvI2wiAQJXN+O58M5/YjmdCMCrm9Tdz8ibDBbpU=;
+        b=cq2yw6NtCjOj5tsW3Fow42xuVBtmfqLBQd+bB7gR7tl5wIUu1xfQNzdLixk0ytZiCf
+         p+ai/8XVv9RwHk4DvpPoFiY9r0mT1cOXs760+Oywj/Nqn0mPuWG7jf1zJBMxicilaHX7
+         kJXC+0JULD8btF76QXkcc9PhsguLyguPLFBCT6pu9Qn8+0LIzXuUWNHxCb3AdNB3nW1/
+         StB0/hJM+nXtKrOTE09Gj3CiZdGCWSnvM9Wu4Iyswjw82gjweRM1e/IBiucWHqOQf4QT
+         y3YErqU3T/ToEs8fYLLjj5SQisLyJKhADr9kfMwDCrV9uMPgYvDxJkAjR7L0DWqkrHMh
+         E3ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790122107; x=1790726907;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=LKmQCvI2wiAQJXN+O58M5/YjmdCMCrm9Tdz8ibDBbpU=;
+        b=izPQ6SqlL/vI4RCKaeTlNCxl4K8H6SvdQUJpg99tQOR3SG9iIpvhfJ/403bSYkRUjB
+         yYV3Oxf/sUISFVMMddcbJlAlhnQNXdni/iZVLXJ/bpDCmOr21W8QCBHPcaI96y96mR3b
+         92PH6jd2g2LFglM1ZRsW/g4kw9dl2+Q0fTPfXgGCDF3VxwukKRhJbNdve3yEbDGNpX9a
+         lDYhOyMocC+6XdzFz6tY8N1irTE9rPRrchliaiIx5u8WEVHNdaduJsD/1Ncp5SKa7O2Y
+         kjALnygVM8cFxBZP4FqkknKKzl9/SpZAcSTP4BJKu5AoAo8x/HrkuEm6MVq+58STV09Z
+         usRQ==
+X-Gm-Message-State: AFuF++k5unuRyaRuuzCSWUeR7GSlc4DEOknhk38b5dULwOqmSIrdXjOT
+	U/ZqCPTu+mR17t86RgQeFFyhD1N+sJabM+kkfMEAjuN0MQTsS0n06MppKGdqFR4asw==
+X-Gm-Gg: AYBFou05RJ3Icx4YbpKiC79kcPzei3R4ebm/k/1m5Mzhx62BwRrz9eFV2u7hA4dEFlU
+	MtS8gZf+1UTvTz0UdYxrhxrOfmZtFk6dhfU05KTW3ILVuZtaalBpzS5/0GSrik855xX+Sx0jzeR
+	utcWlCdguL92sFu+6CmahKaRtE502/1mH1tFpvNahIIGZm5zfN7CQn3ul9BBIWLCKwLLNabCRAa
+	Wqc8YDoHCCrXukota4tszKC/OTtD6YtOb/fpmP2J7KupolWSSmntCuygCcGkc9wSHOz9YoPL84Z
+	3oQTWf9hU33yTUSkcd+cZvdcFiyN0GfS3sw/gKQ7hQCcCX8/N5cA7bH4ezbOjVU+bdkm0LV6ky/
+	/4OV5L9gMfnsFTR78yY/v/Bt3OgJn95hVVKRl0FDZS5BP8BKW5AxdWCX0lVSw/F69zP3imbXof+
+	nE5TdbkDPKwyupzzIo+eA68wVqH98cbWOqw/n1cOoRZ22L1Cml9PlrcbjeEKCd89IIjIDQ53dPA
+	ovEZh3HdFbMgXZS51iSnvZJEWY=
+X-Received: by 2002:a17:902:e741:b0:2dd:c053:e0fa with SMTP id d9443c01a7336-2df69e017bdmr8199925ad.41.1790122106661;
+        Tue, 22 Sep 2026 17:08:26 -0700 (PDT)
 Received: from ydg-Zenbook-14-UM3406GA ([2001:2d8:7f00:8c85:2466:805a:e198:cde8])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6a5c3a3dsm2021425ad.43.2026.09.22.17.08.04
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6a5c3a3dsm2021425ad.43.2026.09.22.17.08.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Sep 2026 17:08:21 -0700 (PDT)
+        Tue, 22 Sep 2026 17:08:25 -0700 (PDT)
 From: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -73,10 +75,12 @@ Cc: ast@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	donggeunyoo.kernel@gmail.com
-Subject: [PATCH bpf v2 0/2] bpf: fix per-cpu initialization of a BPF_F_CPU created hash element
-Date: Wed, 23 Sep 2026 09:07:59 +0900
-Message-ID: <20260923000801.1764758-1-donggeunyoo.kernel@gmail.com>
+Subject: [PATCH bpf v2 1/2] bpf: Zero-fill other CPUs when BPF_F_CPU creates a per-cpu hash element
+Date: Wed, 23 Sep 2026 09:08:00 +0900
+Message-ID: <20260923000801.1764758-2-donggeunyoo.kernel@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260923000801.1764758-1-donggeunyoo.kernel@gmail.com>
+References: <20260923000801.1764758-1-donggeunyoo.kernel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -85,39 +89,61 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A BPF_F_CPU update that creates a [lru_]percpu_hash element writes the
-named CPU's slot and leaves the others holding the recycled element's
-values, so a lookup of the new key returns a deleted key's per-cpu
-values.
+pcpu_init_value() initializes the per-cpu area of a newly created
+[lru_]percpu_hash element.  The area is recycled, so when the value
+comes from a BPF program (onallcpus == false) it writes the running
+CPU's slot and zeroes the rest.
 
-Patch 1 zero-fills the other CPUs.  Patch 2 adds the selftest: the
-existing cpu_flag subtests always prime a key with BPF_F_ALL_CPUS
-first, so the create path is not covered today.
+bpf_percpu_hash_update() passes onallcpus == true, which delegates to
+pcpu_copy_value().  Since BPF_F_CPU was added that writes only the CPU
+named in map_flags when the flag is set, so on the create path the other
+slots keep the recycled element's values:
 
-v1: https://lore.kernel.org/bpf/20260920093153.439743-1-donggeunyoo.kernel@gmail.com/
+  update(k1, 0xdeadc0de, BPF_F_ALL_CPUS)  every CPU holds 0xdeadc0de
+  delete(k1)                              element back on the freelist
+  update(k2, 0xc0ffee, BPF_F_CPU | 0)     creates, writes CPU 0 only
+  lookup(k2)                              CPU 0 0xc0ffee, rest 0xdeadc0de
 
-Changes in v2:
- - skip the new subtests instead of failing them on a uniprocessor
-   machine (Sashiko AI review)
- - cover the BPF_F_CPU entry condition in the block comment above
-   pcpu_init_value() (BPF CI AI review, Alexei Starovoitov)
+Zero-fill the other CPUs on that arm too.
 
-test_progs -t percpu_alloc and fourteen neighboring map tests, x86_64
-under QEMU/KVM, 4 vCPUs:
+Fixes: c6936161fd55 ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_hash and lru_percpu_hash maps")
+Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
+---
+The merged arm no longer calls bpf_obj_cancel_fields() on the named
+CPU.  That call is inert here: it acts only on BPF_TIMER,
+BPF_WORKQUEUE and BPF_TASK_WORK, which map_check_btf() rejects for
+[lru_]percpu_hash.
 
-  without patch 1   31/112 PASSED, 1/3 FAILED
-  with patch 1      32/115 PASSED, 0/0 FAILED
+v2: name the BPF_F_CPU entry condition in the block comment.
 
-Donggeun Yoo (2):
-  bpf: Zero-fill other CPUs when BPF_F_CPU creates a per-cpu hash
-    element
-  selftests/bpf: Test per-cpu initialization of a BPF_F_CPU created
-    element
+ kernel/bpf/hashtab.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
- kernel/bpf/hashtab.c                          | 10 ++-
- .../selftests/bpf/prog_tests/percpu_alloc.c   | 80 +++++++++++++++++++
- 2 files changed, 86 insertions(+), 4 deletions(-)
-
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 4f495dcbf670c..f7a9c432d9b76 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1054,14 +1054,16 @@ static void pcpu_init_value(struct bpf_htab *htab, void __percpu *pptr,
+ 	/* When not setting the initial value on all cpus, zero-fill element
+ 	 * values for other cpus. Otherwise, bpf program has no way to ensure
+ 	 * known initial values for cpus other than current one
+-	 * (onallcpus=false always when coming from bpf prog).
++	 * (onallcpus=false always when coming from bpf prog,
++	 *  map_flags & BPF_F_CPU when coming from syscall but setting
++	 *  only one cpu).
+ 	 */
+-	if (!onallcpus) {
+-		int current_cpu = raw_smp_processor_id();
++	if (!onallcpus || (map_flags & BPF_F_CPU)) {
++		int init_cpu = onallcpus ? map_flags >> 32 : raw_smp_processor_id();
+ 		int cpu;
+ 
+ 		for_each_possible_cpu(cpu) {
+-			if (cpu == current_cpu)
++			if (cpu == init_cpu)
+ 				copy_map_value(&htab->map, per_cpu_ptr(pptr, cpu), value);
+ 			else /* Since elem is preallocated, we cannot touch special fields */
+ 				zero_map_value(&htab->map, per_cpu_ptr(pptr, cpu));
 -- 
 2.53.0
 
