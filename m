@@ -1,337 +1,286 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f4.google.com (mail-wm2-f4.google.com [74.125.225.132])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F9A7498904
-	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 16:53:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644234BF94C
+	for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 16:53:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790182400; cv=none; b=EGBc13eGNnArbW75fL2N84VUWGnjfCTQYI/8cpDuLttHaqzNVAx8w5+Gk7M4PhP/sbIyFh+TXXN+e+QI/9bwy2reXVp3BLFakPf5jrMt9edO04pWm/4X+jLv2PH7fIdhoykXmrsK/gZ62W/wdzUjxA2euSalVT99v2k4lSRh8NQ=
+	t=1790182412; cv=none; b=fS9RD24o2WkbiYKwUEzq3IUEMfAyn+ZR2m363hqxyepIit3A4ojjpqZBZBYuK1Sq0S96KxQRM4BsEDaiPz+Bgi4/4LK9I54K6v0ToDEF/uQTHCgfmWEoH/wLqyvIL70M3SVZGBbofDCy9txoSzuWP6MxokIPhCFAMmBtuQAZjAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790182400; c=relaxed/simple;
-	bh=cINrVnrX5YJUqRSkMZ4dxtVoBTwBWaIGcPYZhXHkn5Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KCBNbT97flpj1wZb3GrVvyUx1Q6GusjlLjG+e8DMHlSeJH1IdBpqe2t/SmnToobqM3QD5e85iQ0T9LGK5I2C4M4fmQL+0TVmWqa3Sug/1M8Zt6Q14ljxbCxsU1js3Zd93Rcu82aq56nHrBw9pUn79SJ4SWAQKszQz55wmrzFPEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NOqemeUV; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790182412; c=relaxed/simple;
+	bh=p/0KZ68LGr2iJJaK0QtwantBUJwpkmc/lQxRK1SBwvI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Pi92xzmy9fYYuHvzJykCNluWKNSjcWY/RjIROBZjPUqQh8KZvWqhi9/rOKsBd9/pEFnSWv143YZ/Hh+1RN9MKj9cfQnDjMS5f8TWsZLGCks+FWvruBPV6RuznLY1HrbUhxch119rIJ4pl1URbCr5q2Mph57fERnBlAfW+kYdgoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bgq4g0Bo; arc=none smtp.client-ip=74.125.225.132
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NOqemeUV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 965BD1F000FF;
-	Wed, 23 Sep 2026 16:53:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790182398;
-	bh=IKR8rT0o5zV6E5/BLrYuyl/4pcrnWQdkJmDts4Iuxu8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=NOqemeUVr5W97A1mHf4nTtj2OovXPY5TWa7C0EwxObVd649aYOxiTzXsWC2eIoH0d
-	 3VSxGqlFv2wXUpdgRTUS+wZAea9lDfOo+AdgDd72hN0rgNo/6g2oxKHOt1v9lVmyHj
-	 7L2+APysYThyb9PnCnZ/Mu16Ra4qYEPZADuq+if0bh9qlXOkC2Ayw0anKzHwUukcRH
-	 a/SKLTI/e9YPYrHLpfJTUeLAdpMGTHHkaRIDQtL1p0gBSyd4PizdOdLfmRal575+4M
-	 G+whlNY+wR0ZgYy1hA92rkAHs8cSAjKcZOvMU686zGg37/hieQAMViwtSjMhr/lW0+
-	 jQ3oFqyvIp3PQ==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	"Alexei Starovoitov" <ast@kernel.org>,
-	"Daniel Borkmann" <daniel@iogearbox.net>,
-	"Andrii Nakryiko" <andrii@kernel.org>,
-	"Martin KaFai Lau" <martin.lau@linux.dev>,
-	"Eduard Zingerman" <eddyz87@gmail.com>,
-	"Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
-	"Song Liu" <song@kernel.org>,
-	"Yonghong Song" <yonghong.song@linux.dev>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Test fetching AND/OR/XOR atomics in arena
-Date: Wed, 23 Sep 2026 09:53:00 -0700
-Message-ID: <20260923165301.3463007-3-puranjay@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260923165301.3463007-1-puranjay@kernel.org>
-References: <20260923165301.3463007-1-puranjay@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bgq4g0Bo"
+Received: by mail-wm2-f4.google.com with SMTP id 5b1f17b1804b1-49cd71f9909so2320145e9.1
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 09:53:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790182409; x=1790787209; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=ed3QXESutta5PNgIuWlBBjkorsQK7Sz7FQtCM4TE32s=;
+        b=bgq4g0BoqaCqSt5G1eNc1DZXIF4Owmeg157qMKh39k5eZdJ3KnNZi2+cLlDrDd36qu
+         YcAiCFzNFWTWCxfw8zv0onxTyX9jqxtbwLT0+xFunQclVVagTkGEs8VJsQUyAuWDozbU
+         tF5NRSJ6lrtoVJMs/TVaAbX27FhwxJ838/nOUdnNHP3RGaOJawIGrL17c2bPyGlHg+1R
+         IMMyDskVOtGgrwMgBrvTnngVrpxM0RoLR5k9Dnk+w+5mDdaX22cXS4Q3Wc7ZQ1lgM6+o
+         3m6AI9I0PYRoC1i9N5zr6HwcX9BzpP9EKEh6nUPS0y0TnElcdyJH2R3zstgsJV8K7vag
+         xxoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790182409; x=1790787209;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ed3QXESutta5PNgIuWlBBjkorsQK7Sz7FQtCM4TE32s=;
+        b=ytrgibqMdYq5J1xTvSjQpIOp8baplcYEOqaC+kNPAzAceeTzvdyUr5nGPYmF0D9+UZ
+         McETaKc18RkLY8oWpNjfijalYi4whLCSrGliCg+NqZVg0MCdQdg62o3B0NPSQ3wg1Q4/
+         lrJiG8OeigQSIzBgcA82NjHSlRNB4BXMWMW53t4HzKdbnTrJt9tD8eONrPSRGlEzpslc
+         4Vc1EGpPK4AfeAB1dwhG8yTwHdFV5TZKAqaR4S4bf77UZt5Lk/FhKsF1Qx+1dC24u4F5
+         Ck4SdwNNt+lMqGYM6KdCAZZZBj0l6zJ2zk/bgslmv3r2omQb+3Y0/F+sd5jkSlP5plEG
+         r+xw==
+X-Forwarded-Encrypted: i=1; AKwUvBwbQ1xA5oLU+QJCOMz3fup/RwfgYdDvehyrhATVpxUY84Vh9MUaAngiYN8BHgV78AGu/vI=@vger.kernel.org
+X-Gm-Message-State: AFuF++l5FM/NH6YTGoRnyiG8lSncZKaCXlSQo8zwhU6WiMsgTscC3J5f
+	zMjSzRxnnwleKRmtWvnHLV4lR4jaFQ96aca0bMFDedkXv+EEWn1JGn/gdSvKut2T
+X-Gm-Gg: AYBFou1/OeZISMNXMYYHIlWPWJPvbz/aLijVP+cNlm6ZBoFEVfiHSQxbmZBGgX9+S3Y
+	6Wsr9WzuP9m2mQfQ2PVdcZRCXy8YrpaIPGhwxN5oVO3nikXFmhzoWrGXSn0fbRy8v3xBDPbvH6O
+	T78DbVg1OzRWKTCnCYp9XL7dxCzY6O0zV7EivadHiqEmy1ctCVtLA3ln3KZCKwolm5VO1lO3Jin
+	DRBygAd3alNbjZ3qzeOrCVSecALpIhluZsNdNSLi9yBJzMp3gckKrtb9q5bSo2Nl0Ixou0/1/nt
+	fGIFOcjcRnSSba6RfA7fTNDOX7/QsdzPPM2fUCkk5jdQ8dRQD6ztEjt7z/ZuCFjex44SaCAIvJQ
+	e7nfP6dl63lrJlwfpSgoSXXB+cLdrzKI4O+A2FleWTnwivxBEWYMI5RYfb1EhL8SJSH1P7ifKve
+	MEpyMhQKFElD2d3K91mRjAXRTt25GQZRE1KHYVgJMuHVh0GMZ9IwxNAjgknugXBfIGLME4MmhYz
+	po0S9jStPdnOTdmyNVlLm9aqWNzI1GiV9GbtJ14m6D/lsqEl4O0wWkzF45bfzul/XAZ2aDOB28N
+	Tdn89sLn7HmSZtqopfcw8aYLVvYES3VIrRflMPbRwkz598MU
+X-Received: by 2002:a05:600c:c493:b0:49f:ce78:3564 with SMTP id 5b1f17b1804b1-49fdee0a323mr46208655e9.21.1790182408356;
+        Wed, 23 Sep 2026 09:53:28 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fde1c0f6csm107711875e9.3.2026.09.23.09.53.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Sep 2026 09:53:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 23 Sep 2026 18:53:27 +0200
+Message-Id: <DLMUP8JM4L3U.1A9R0QUFFIQV9@gmail.com>
+Cc: "Puranjay Mohan" <puranjay12@gmail.com>, <bpf@vger.kernel.org>,
+ <rcu@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>, "Daniel
+ Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Harry Yoo (Oracle)" <harry@kernel.org>, "Paul
+ E. McKenney" <paulmck@kernel.org>
+Subject: Re: [PATCH bpf-next v6 0/4] bpf: Add bpf_call_rcu() and
+ bpf_call_rcu_tasks_trace()
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
+X-Mailer: aerc 0.21.0
+References: <20260922200208.3203834-1-puranjay@kernel.org>
+ <CAEf4BzaifaWk+oHu-berWcKuS6Y5WfkcFTKZW-iMCPxG0=5i0w@mail.gmail.com>
+ <CANk7y0g8Mh-je_o_nyXQ3zsGVeAsz2qMfgDtv4j-MXhAJ7PcMA@mail.gmail.com>
+ <DLMNTHW945RO.TLPGJHZRWHUY@gmail.com>
+ <CAEf4BzaR=oQz13GVxM+DjLkyjCjFmETvj9=bAuccLNKCXHJPaw@mail.gmail.com>
+In-Reply-To: <CAEf4BzaR=oQz13GVxM+DjLkyjCjFmETvj9=bAuccLNKCXHJPaw@mail.gmail.com>
 
-The arena and/or/xor tests never exercised the fetching form of the
-instruction. Commit 2897b1e2a2f4 ("selftests/bpf: Fix arena_atomics
-failure due to llvm change") deliberately switched them to
-__c11_atomic_fetch_*() with memory_order_relaxed, which clang lowers to a
-non-fetching locked instruction when the result is unused, because
-x86-64 could not JIT the fetching one against an arena.
+On Wed Sep 23, 2026 at 6:45 PM CEST, Andrii Nakryiko wrote:
+> On Wed, Sep 23, 2026 at 4:29=E2=80=AFAM Kumar Kartikeya Dwivedi
+> <memxor@gmail.com> wrote:
+>>
+>> On Wed Sep 23, 2026 at 12:37 PM CEST, Puranjay Mohan wrote:
+>> > On Wed, Sep 23, 2026 at 12:41=E2=80=AFAM Andrii Nakryiko
+>> > <andrii.nakryiko@gmail.com> wrote:
+>> >>
+>> >> On Tue, Sep 22, 2026 at 1:02=E2=80=AFPM Puranjay Mohan <puranjay@kern=
+el.org> wrote:
+>> >> >
+>> >> > Changelog:
+>> >> > v5: https://lore.kernel.org/all/20260921191407.1742386-1-puranjay@k=
+ernel.org/
+>> >> > Changes in v6:
+>> >> > - Size struct bpf_rcu_head at 48 bytes rather than 64, matching wha=
+t the
+>> >> >   inline state uses (Alexei)
+>> >> > - Trim patch 1's changelog: drop the reasoning about possible futur=
+e
+>> >> >   layouts and about what the other async kfuncs return
+>> >> > - Rebase on bpf-next/master
+>> >> >
+>> >> > v4: https://lore.kernel.org/all/20260915154248.3612028-1-puranjay@k=
+ernel.org/
+>> >> > Changes in v5:
+>> >> > - Rename the "hash_map" subtest to "bad_map" so that it matches its
+>> >> >   helper test_call_rcu_bad_map() (bpf-ci)
+>> >> > - Bump the callback counter after chain_err in the selftest callbac=
+k.
+>> >> >   Userspace polls that counter and then reads chain_err, so it coul=
+d
+>> >> >   still see the initial value before the re-arm had stored one, whi=
+ch
+>> >> >   let the chain subtest's assertion pass without checking anything
+>> >> > - Say in patch 1 why embedding struct rcu_head in a uapi struct is
+>> >> >   acceptable here (Mykyta, Paul, Alexei)
+>> >> > - Rebase on bpf-next/master
+>> >> > v3: https://lore.kernel.org/all/20260915143640.36292-1-puranjay@ker=
+nel.org/
+>> >> > Changes in v4:
+>> >> > - Drop an unrelated hunk in bpf_async_update_prog_callback() that t=
+urned
+>> >> >   PTR_ERR(prog) into -EBADF.  That is the shared bpf_timer/bpf_wq p=
+ath
+>> >> >   and bpf_prog_inc_not_zero() returns -ENOENT, so it would have cha=
+nged
+>> >> >   the errno bpf_timer_set_callback() and bpf_wq_set_callback() repo=
+rt to
+>> >> >   userspace (Sashiko).  No other changes from v3
+>> >> > v2: https://lore.kernel.org/all/20260915114240.3269184-1-puranjay@k=
+ernel.org/
+>> >> > Changes in v3:
+>> >> > - Move the bpf_call_rcu_tasks_trace() verifier bits from patch 1 to
+>> >> >   patch 3; patch 1 alone emitted "resolve_btfids: unresolved symbol
+>> >> >   bpf_call_rcu_tasks_trace" (Sashiko)
+>> >> > - Poll the callback counter with an acquire load (Sashiko)
+>> >> > - teardown: v2 only checked that the program was eventually freed, =
+which
+>> >> >   passes even if nothing was ever armed.  Also assert that the chai=
+n ran,
+>> >> >   and read the -EPERM back through an independent .bss fd
+>> >> > - Use kern_sync_rcu() instead of open coding the grace-period wait
+>> >> > - Return -EBADF rather than -ENOENT when the calling program is goi=
+ng
+>> >> >   away, matching bpf_task_work_schedule()
+>> >> > - mismatch_map now pins the bpf_rcu_head label the new code emits; =
+it
+>> >> >   passed with that branch removed.  Add a two_heads test, and wait =
+for
+>> >> >   each grace period separately in the chain test
+>> >> > - Commit messages: correct the -EPERM parity claim, explain the inl=
+ine
+>> >> >   callback state and the struct size, motivate the tasks trace flav=
+our
+>> >> > v1: https://lore.kernel.org/all/20260907134552.1772405-1-puranjay@k=
+ernel.org/
+>> >> > Changes in v2:
+>> >> > - Rebase on bpf-next/master
+>> >> > - Use rcu_read_lock_dont_migrate() over open coding (Alexei)
+>> >> > - Improve re-arming selftest to detect failure (Sashiko)
+>> >> >
+>> >> > BPF programs that manage their own objects have no way to run their=
+ own
+>> >> > logic once an RCU grace period has elapsed.  bpf_obj_drop() defers =
+a
+>> >> > free, but returning an index to an allocator or unpinning a resourc=
+e
+>> >> > once readers are done has no equivalent.  sched_ext's BPF library w=
+orks
+>> >> > around this today by pushing freed nodes onto a list and having a
+>> >> > userspace thread call membarrier(MEMBARRIER_CMD_GLOBAL) and then ru=
+n a
+>> >> > BPF program to reclaim them; it is the first intended user.
+>> >> >
+>> >> > Add:
+>> >> >
+>> >> >         int bpf_call_rcu(struct bpf_rcu_head *rh, void *map,
+>> >> >                          int (*callback)(struct bpf_map *map, void =
+*key,
+>> >> >                                          void *value));
+>> >> >
+>> >> > and bpf_call_rcu_tasks_trace(), same signature, which also waits fo=
+r
+>> >> > sleepable programs.
+>> >> >
+>> >> > @rh is a struct bpf_rcu_head embedded in a value of @map, so the
+>> >> > callback runs as callback(map, key, value) for the element it lives=
+ in
+>> >> > and needs no cookie.  The field is only accepted in BPF_MAP_TYPE_AR=
+RAY,
+>> >>
+>> >> Isn't restricting this to BPF_MAP_TYPE_ARRAY unnecessarily restrictiv=
+e
+>> >> in practice? Do other APIs of similar kind have this limitation? E.g.=
+,
+>> >> bpf_task_work_schedule() or timer, I don't think they limit user to
+>> >> just ARRAY maps, it's way too inflexible.
+>> >
+>> > Right, bpf_timer and bpf_task_work take HASH/LRU_HASH/ARRAY. They can
+>> > because they can cancel: on element delete bpf_obj_free_fields() calls
+>>
+>> bpf_obj_cancel_fields(). bpf_obj_free_fields() is no longer called excep=
+t when
+>> the object is being freed finally.
+>>
+>> > bpf_task_work_cancel_and_free(), which reaches task_work_cancel(), so
+>> > a pending callback never runs against a recycled element.
+>> > A queued RCU callback cannot be cancelled. rcu_barrier() is the only
+>> > thing that waits for one, and it sleeps, so it is not callable from an
+>> > element delete. Array elements are never freed individually, which is
+>> > what makes it safe.
+>>
+>> If cancel is a noop, can you not simply skip it on map update?
+>>
+>> It is a bit unfortunate we can't provide cancel semantics, it will be ye=
+t
+>> another divergence from how all other async callbacks work...sigh.
+>>
+>> >
+>> > I can think of a complicated way to support hash maps but that would
+>> > need making the state dynamically allocated and finding a way to
+>> > cancel the callbacks. But I would do it as a follow-up if there is a
+>> > real use case.
+>>
+>> That would mean allocation and frees, it is already quite expensive as i=
+s for a
+>> call_rcu() primitive (with the refcount bumps and atomics).
+>
+> maybe so, but as is ARRAY is a severe limitation and makes a lot of
+> cases either unusable or requiring extra sequential ID allocation
+> logic to remap some HASH map entry to index in an ARRAY map, just so
+> you can call rcu callback for a given kernel object stored in HASH
+> map.
+>
+> E.g., think about keep as set of sockets, or tasks, or whatnot in HASH
+> or RHASHTABLE (especially the latter one with support for resizing).
+> How would you do bpf_call_rcu() for them with unduly complications,
+> limitations and a lot of waste (unlike HASH you can't have lazy memory
+> allocation).
 
-It can now, so go back to plain __sync_fetch_and_*() and check the
-returned old value. Drop the _Atomic declarations and <stdatomic.h> along
-with the workaround.
+Yeah, I don't disagree. We would also need to support storing them in more =
+map
+types to make it woth with arenas (which was one of the motivations for the
+feature).
 
-Add a fetch_r0 test for the two register assignments the x86 JIT has to
-special-case, where the operand and where the arena pointer is R0 and
-BPF_REG_AX is substituted for it. Clang picks its own registers and will
-not reliably produce either, so spell the instructions out.
+Perhaps it is better to make cancel a noop / unsupported and skip it when a=
+ map
+element is deleted. That will be the easiest path to enabling it, but it do=
+es
+create (perhaps surprising) divergence from some of the other async callbac=
+k
+primitives.
 
-Finally drop x86 from the exclusion list of the uaf test, which is what
-covers the fault path through both of the new exception table entries.
-arm64 stays excluded: whether its JIT accepts arena RMW atomics depends
-on LSE being present at run time, which is not a compile-time property.
+That said, I do think performance should be a consideration for this API; m=
+aybe
+unlike other ones, I would expect that this could be called very frequently=
+. I
+had concerns about prog refcount increment as well, but didn't really bring=
+ it
+up since it is something that can be addressed after the fact (maybe using =
+pcpu
+refs). But once we promise supporting cancellation, it is hard to walk that
+back. I think it's less of a concern for other async cb types. In practice,
+except to support map semantics I don't know if anyone will use cancellatio=
+n API
+either, the kernel side never grew such support.
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- .../selftests/bpf/prog_tests/arena_atomics.c  |  32 +++++
- .../selftests/bpf/progs/arena_atomics.c       | 114 ++++++++++++------
- 2 files changed, 107 insertions(+), 39 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_atomics.c b/tools/testing/selftests/bpf/prog_tests/arena_atomics.c
-index 1ad5d03d07adb..13c37b087d6e7 100644
---- a/tools/testing/selftests/bpf/prog_tests/arena_atomics.c
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_atomics.c
-@@ -68,6 +68,9 @@ static void test_and(struct arena_atomics *skel)
- 
- 	ASSERT_EQ(skel->arena->and64_value, 0x010ull << 32, "and64_value");
- 	ASSERT_EQ(skel->arena->and32_value, 0x010, "and32_value");
-+
-+	ASSERT_EQ(skel->arena->and64_result, 0x110ull << 32, "and64_result");
-+	ASSERT_EQ(skel->arena->and32_result, 0x110, "and32_result");
- }
- 
- static void test_or(struct arena_atomics *skel)
-@@ -85,6 +88,9 @@ static void test_or(struct arena_atomics *skel)
- 
- 	ASSERT_EQ(skel->arena->or64_value, 0x111ull << 32, "or64_value");
- 	ASSERT_EQ(skel->arena->or32_value, 0x111, "or32_value");
-+
-+	ASSERT_EQ(skel->arena->or64_result, 0x110ull << 32, "or64_result");
-+	ASSERT_EQ(skel->arena->or32_result, 0x110, "or32_result");
- }
- 
- static void test_xor(struct arena_atomics *skel)
-@@ -102,6 +108,9 @@ static void test_xor(struct arena_atomics *skel)
- 
- 	ASSERT_EQ(skel->arena->xor64_value, 0x101ull << 32, "xor64_value");
- 	ASSERT_EQ(skel->arena->xor32_value, 0x101, "xor32_value");
-+
-+	ASSERT_EQ(skel->arena->xor64_result, 0x110ull << 32, "xor64_result");
-+	ASSERT_EQ(skel->arena->xor32_result, 0x110, "xor32_result");
- }
- 
- static void test_cmpxchg(struct arena_atomics *skel)
-@@ -146,6 +155,27 @@ static void test_xchg(struct arena_atomics *skel)
- 	ASSERT_EQ(skel->arena->xchg32_result, 1, "xchg32_result");
- }
- 
-+static void test_fetch_r0(struct arena_atomics *skel)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	int err, prog_fd;
-+
-+	/* No need to attach it, just run it directly */
-+	prog_fd = bpf_program__fd(skel->progs.fetch_r0);
-+	err = bpf_prog_test_run_opts(prog_fd, &topts);
-+	if (!ASSERT_OK(err, "test_run_opts err"))
-+		return;
-+	if (!ASSERT_OK(topts.retval, "test_run_opts retval"))
-+		return;
-+
-+	ASSERT_EQ(skel->arena->fetch_src_r0_value, 0x111, "fetch_src_r0_value");
-+	ASSERT_EQ(skel->arena->fetch_src_r0_result, 0x110, "fetch_src_r0_result");
-+
-+	ASSERT_EQ(skel->arena->fetch_dst_r0_value, 0x111, "fetch_dst_r0_value");
-+	ASSERT_EQ(skel->arena->fetch_dst_r0_result, 0x110, "fetch_dst_r0_result");
-+	ASSERT_EQ(skel->arena->fetch_dst_r0_readback, 0x111, "fetch_dst_r0_readback");
-+}
-+
- static void test_uaf(struct arena_atomics *skel)
- {
- 	LIBBPF_OPTS(bpf_test_run_opts, topts);
-@@ -256,6 +286,8 @@ void serial_test_arena_atomics(void)
- 		test_cmpxchg(skel);
- 	if (test__start_subtest("xchg"))
- 		test_xchg(skel);
-+	if (test__start_subtest("fetch_r0"))
-+		test_fetch_r0(skel);
- 	if (test__start_subtest("uaf"))
- 		test_uaf(skel);
- 	if (test__start_subtest("load_acquire"))
-diff --git a/tools/testing/selftests/bpf/progs/arena_atomics.c b/tools/testing/selftests/bpf/progs/arena_atomics.c
-index 73bc2b835f3fe..697f2c14e84eb 100644
---- a/tools/testing/selftests/bpf/progs/arena_atomics.c
-+++ b/tools/testing/selftests/bpf/progs/arena_atomics.c
-@@ -4,7 +4,6 @@
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- #include <stdbool.h>
--#include <stdatomic.h>
- #include <bpf_arena_common.h>
- #include "../../../include/linux/filter.h"
- #include "bpf_misc.h"
-@@ -91,13 +90,10 @@ int sub(const void *ctx)
- 	return 0;
- }
- 
--#ifdef __BPF_FEATURE_ATOMIC_MEM_ORDERING
--_Atomic __u64 __arena_global and64_value = (0x110ull << 32);
--_Atomic __u32 __arena_global and32_value = 0x110;
--#else
- __u64 __arena_global and64_value = (0x110ull << 32);
- __u32 __arena_global and32_value = 0x110;
--#endif
-+__u64 __arena_global and64_result = 0;
-+__u32 __arena_global and32_result = 0;
- 
- SEC("raw_tp/sys_enter")
- int and(const void *ctx)
-@@ -105,25 +101,17 @@ int and(const void *ctx)
- 	if (pid != (bpf_get_current_pid_tgid() >> 32))
- 		return 0;
- #ifdef ENABLE_ATOMICS_TESTS
--#ifdef __BPF_FEATURE_ATOMIC_MEM_ORDERING
--	__c11_atomic_fetch_and(&and64_value, 0x011ull << 32, memory_order_relaxed);
--	__c11_atomic_fetch_and(&and32_value, 0x011, memory_order_relaxed);
--#else
--	__sync_fetch_and_and(&and64_value, 0x011ull << 32);
--	__sync_fetch_and_and(&and32_value, 0x011);
--#endif
-+	and64_result = __sync_fetch_and_and(&and64_value, 0x011ull << 32);
-+	and32_result = __sync_fetch_and_and(&and32_value, 0x011);
- #endif
- 
- 	return 0;
- }
- 
--#ifdef __BPF_FEATURE_ATOMIC_MEM_ORDERING
--_Atomic __u32 __arena_global or32_value = 0x110;
--_Atomic __u64 __arena_global or64_value = (0x110ull << 32);
--#else
- __u32 __arena_global or32_value = 0x110;
- __u64 __arena_global or64_value = (0x110ull << 32);
--#endif
-+__u64 __arena_global or64_result = 0;
-+__u32 __arena_global or32_result = 0;
- 
- SEC("raw_tp/sys_enter")
- int or(const void *ctx)
-@@ -131,25 +119,17 @@ int or(const void *ctx)
- 	if (pid != (bpf_get_current_pid_tgid() >> 32))
- 		return 0;
- #ifdef ENABLE_ATOMICS_TESTS
--#ifdef __BPF_FEATURE_ATOMIC_MEM_ORDERING
--	__c11_atomic_fetch_or(&or64_value, 0x011ull << 32, memory_order_relaxed);
--	__c11_atomic_fetch_or(&or32_value, 0x011, memory_order_relaxed);
--#else
--	__sync_fetch_and_or(&or64_value, 0x011ull << 32);
--	__sync_fetch_and_or(&or32_value, 0x011);
--#endif
-+	or64_result = __sync_fetch_and_or(&or64_value, 0x011ull << 32);
-+	or32_result = __sync_fetch_and_or(&or32_value, 0x011);
- #endif
- 
- 	return 0;
- }
- 
--#ifdef __BPF_FEATURE_ATOMIC_MEM_ORDERING
--_Atomic __u64 __arena_global xor64_value = (0x110ull << 32);
--_Atomic __u32 __arena_global xor32_value = 0x110;
--#else
- __u64 __arena_global xor64_value = (0x110ull << 32);
- __u32 __arena_global xor32_value = 0x110;
--#endif
-+__u64 __arena_global xor64_result = 0;
-+__u32 __arena_global xor32_result = 0;
- 
- SEC("raw_tp/sys_enter")
- int xor(const void *ctx)
-@@ -157,13 +137,8 @@ int xor(const void *ctx)
- 	if (pid != (bpf_get_current_pid_tgid() >> 32))
- 		return 0;
- #ifdef ENABLE_ATOMICS_TESTS
--#ifdef __BPF_FEATURE_ATOMIC_MEM_ORDERING
--	__c11_atomic_fetch_xor(&xor64_value, 0x011ull << 32, memory_order_relaxed);
--	__c11_atomic_fetch_xor(&xor32_value, 0x011, memory_order_relaxed);
--#else
--	__sync_fetch_and_xor(&xor64_value, 0x011ull << 32);
--	__sync_fetch_and_xor(&xor32_value, 0x011);
--#endif
-+	xor64_result = __sync_fetch_and_xor(&xor64_value, 0x011ull << 32);
-+	xor32_result = __sync_fetch_and_xor(&xor32_value, 0x011);
- #endif
- 
- 	return 0;
-@@ -213,6 +188,64 @@ int xchg(const void *ctx)
- 	return 0;
- }
- 
-+__u64 __arena_global fetch_src_r0_value = 0x110;
-+__u64 __arena_global fetch_src_r0_result = 0;
-+__u64 __arena_global fetch_dst_r0_value = 0x110;
-+__u64 __arena_global fetch_dst_r0_result = 0;
-+__u64 __arena_global fetch_dst_r0_readback = 0;
-+
-+/*
-+ * A fetching OR with the operand in r0, and one with the arena pointer in r0.
-+ * The x86 JIT needs RAX for its CMPXCHG loop and substitutes BPF_REG_AX for
-+ * whichever of the two is r0, so both have to keep working. Hand-written
-+ * because clang picks its own registers and will not reliably emit either.
-+ */
-+SEC("raw_tp/sys_enter")
-+int fetch_r0(const void *ctx)
-+{
-+	if (pid != (bpf_get_current_pid_tgid() >> 32))
-+		return 0;
-+#if defined(ENABLE_ATOMICS_TESTS) && defined(__BPF_FEATURE_ADDR_SPACE_CAST)
-+	asm volatile (
-+	"r1 = %[fetch_src_r0_value] ll;"
-+	"r1 = addr_space_cast(r1, 0x0, 0x1);"
-+	"r0 = 0x011;"
-+	".8byte %[fetch_src_r0_insn];"
-+	"r2 = %[fetch_src_r0_result] ll;"
-+	"r2 = addr_space_cast(r2, 0x0, 0x1);"
-+	"*(u64 *)(r2 + 0) = r0;"
-+	:
-+	: __imm_addr(fetch_src_r0_value),
-+	  __imm_insn(fetch_src_r0_insn,
-+		     BPF_ATOMIC_OP(BPF_DW, BPF_OR | BPF_FETCH, BPF_REG_1, BPF_REG_0, 0)),
-+	  __imm_addr(fetch_src_r0_result)
-+	: __clobber_all);
-+
-+	asm volatile (
-+	"r0 = %[fetch_dst_r0_value] ll;"
-+	"r0 = addr_space_cast(r0, 0x0, 0x1);"
-+	"r1 = 0x011;"
-+	".8byte %[fetch_dst_r0_insn];"
-+	"r2 = %[fetch_dst_r0_result] ll;"
-+	"r2 = addr_space_cast(r2, 0x0, 0x1);"
-+	"*(u64 *)(r2 + 0) = r1;"
-+	/* r0 is only read by the atomic, so it must still be the pointer. */
-+	"r3 = *(u64 *)(r0 + 0);"
-+	"r2 = %[fetch_dst_r0_readback] ll;"
-+	"r2 = addr_space_cast(r2, 0x0, 0x1);"
-+	"*(u64 *)(r2 + 0) = r3;"
-+	:
-+	: __imm_addr(fetch_dst_r0_value),
-+	  __imm_insn(fetch_dst_r0_insn,
-+		     BPF_ATOMIC_OP(BPF_DW, BPF_OR | BPF_FETCH, BPF_REG_0, BPF_REG_1, 0)),
-+	  __imm_addr(fetch_dst_r0_result),
-+	  __imm_addr(fetch_dst_r0_readback)
-+	: __clobber_all);
-+#endif
-+
-+	return 0;
-+}
-+
- __u64 __arena_global uaf_sink;
- volatile __u64 __arena_global uaf_recovery_fails;
- 
-@@ -221,8 +254,11 @@ int uaf(const void *ctx)
- {
- 	if (pid != (bpf_get_current_pid_tgid() >> 32))
- 		return 0;
--#if defined(ENABLE_ATOMICS_TESTS) && !defined(__TARGET_ARCH_arm64) && \
--    !defined(__TARGET_ARCH_x86)
-+/*
-+ * arm64 stays excluded: whether the JIT accepts arena RMW atomics depends on
-+ * LSE being available at run time, which is not a compile-time property.
-+ */
-+#if defined(ENABLE_ATOMICS_TESTS) && !defined(__TARGET_ARCH_arm64)
- 	__u32 __arena *page32;
- 	__u64 __arena *page64;
- 	void __arena *page;
--- 
-2.53.0-Meta
-
+Anyway, overall the best path to me seems to be just enabling it as is and
+declaring bpf_obj_cancel_fields() on this noop. Existing synchronization sh=
+ould
+be enough to ensure callback stops getting issued once element is finally f=
+reed
+back to kernel allocator.
