@@ -1,572 +1,86 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E13D352C34;
-	Wed, 23 Sep 2026 09:46:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CE33101A2;
+	Wed, 23 Sep 2026 09:50:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790156797; cv=none; b=tgekmACTeCH6/S7Sx721x6T83DIYllgWdrMPnYeP1Y69wsaKk8T0F/Pu9BPh3577cR8GPobEXb71oVT7aVPypzBca/0qRPRkqvNg0ldbLtFLUkLRCqemdPeX0YMnRUEdtf7hTOdVeQ1LFvzKdTFMsK/MxGmxdzU07Gt5fm6St2g=
+	t=1790157027; cv=none; b=nqUDbPlTdB4NSpP+cSEjot11y/hrOuRYM2WylIxlq6LqTvKRvxjLzvn4r4547oBfw0B/hGu9CvKKbVZfAZB9icZLf57Rb5AYRnuvNjjya1vXKr7cQkpVhUTe0sbcfo97wTI4kOiEF9xgihHP7u2+GCV27I7LRilyKkyY9pLE5Bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790156797; c=relaxed/simple;
-	bh=Yup1gX9DfP4ksR8ZD2Pyfkau+dyrndpWzeF6780RweI=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=M+EvQUxDx7tVZAvyHBFbfpls/UBj0iogJ7meyX59I+npj60sz5EHMQZO8dinf8TslhpqpuGG+ADKYjZRwI1faIjaW9ctQk9ZlRSo2NQ0btAjMfGMsGTV4Z8w2XtAOgLg2P48fh2Z0Mek5ANvrnQUc4Fa2g1sDem8eE3p1PdecbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=kjNuhyKz; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1790157027; c=relaxed/simple;
+	bh=Rt3/NFZZz4cdcRpxs53KVqUFllGatzRwcr/YgEZsSyo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QdsESxvMDl+2dZTSJHHZiEJZF7c6wQDN62KTyxpiOcRbSp76yzh+2qp4ktIjYz9BIyQVxfjz1VqgEYaVxn0QYb1VYdkML4vdftlDM0Uu6hoBRQNu/rF444AXyOQXLHIIv8wuNTOhKX7+Jea9/6mkZD8NcEy9GSke7VJ8FeMtrXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Kzg3VwFy; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="kjNuhyKz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1790156796; x=1821692796;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Yup1gX9DfP4ksR8ZD2Pyfkau+dyrndpWzeF6780RweI=;
-  b=kjNuhyKz7hA3SEAGvQCR0r+EY+htM5rBSAa1B2fjR0FmdFKzLvVCgwDc
-   LFuJYjGBq1qosTHONtYfsOxoGOduLZ2yhun/eLr0N+7xC89QZnoF97Zkr
-   stsC1xc6uOl/DNWiVwBc4nGi7kWKwZ8QLlFi7iNrVCeJiOeB7DQGui6pf
-   YDOuq1OKb6T6myA4k7sd1Xl+EBY7Mli+bIJ3WWx/61gsEwRRQ7Dsedizu
-   Q9dNq6Fg2s4fMh4+eX+yoVOo5x8GQbzA2jWLXBU4Iju1N8DY5vSwcgfs8
-   veCw9jmDJzKtdWpQxMQ1VNmO/JNdjpn+bVTX1nULiNwkRNrbBScll83rG
-   A==;
-X-CSE-ConnectionGUID: AVDlGNA5SGew5AlK3h/b2A==
-X-CSE-MsgGUID: FTG2eZL/Tta3HdQ39cfm7g==
-X-IronPort-AV: E=Sophos;i="6.27,118,1787036400"; 
-   d="scan'208";a="64026580"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2026 02:46:29 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.87.71) by
- chn-vm-ex3.mchp-main.com (10.10.87.32) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.49; Wed, 23 Sep 2026 02:46:27 -0700
-Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Wed, 23 Sep 2026 02:46:23 -0700
-Date: Wed, 23 Sep 2026 11:46:22 +0200
-From: Daniel Machon <daniel.machon@microchip.com>
-To: <netdev-bot+sashiko@kernel.org>
-CC: <andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
-	<kuba@kernel.org>, <pabeni@redhat.com>, <horatiu.vultur@microchip.com>,
-	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
-	<ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
-	<john.fastabend@gmail.com>, <sdf@fomichev.me>, <herve.codina@bootlin.com>,
-	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <mohsin.bashr@gmail.com>,
-	<richardcochran@gmail.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH net-next v7 11/14] net: lan966x: add PCIe FDMA MTU change
- support
-Message-ID: <20260923094622.gmxyw46ligz4rsyd@DEN-DL-M70577.microsemi.net>
-References: <20260918-lan966x-pci-fdma-v7-11-0ecc179c8a2c@microchip.com>
- <179008205354.2160803.17637640817184992984@kernel.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Kzg3VwFy"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=VpSnW0tcXE8Wun87Oph/D5qXO4sz73FbBK/xJn2RUgs=; b=Kzg3VwFyyKI/FWYmFCkZYosU9V
+	zolreXvN16jBEa1HkB2teV12avbKUQRJVEjMlteAjzaHwpVq+0EbS56/AjuSl/dt1ZQFJZvWFt3c1
+	i0XffPnfGfCQhFIgnzz2duWaux+zYCW94fVZMobEGdpZ1CexZEzD7NNdlOshFN2OVrZ1QvJkp4E4b
+	755nYmLVcIeKXZ2Fs1SdMpiYwRNZ6gMtTjsPFnhDuESqROBp3IO6KO+3r/zxrsLG+JaPGqsnkjau8
+	Q4okzdCqx/AHDaUodRfNEHqnLkRC31/DAZZUS0TqdycO6SdPFQmdemwzglKF5NneGkJiFIiwcRdpP
+	yNkwuo2g==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
+	id 1x9Jc5-0000000Ebo0-2WA3;
+	Wed, 23 Sep 2026 09:50:07 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 428313005E0; Wed, 23 Sep 2026 11:50:04 +0200 (CEST)
+Date: Wed, 23 Sep 2026 11:50:04 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Usama Arif <usama.arif@linux.dev>, Will Deacon <will@kernel.org>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Ravi Bangoria <ravi.bangoria@amd.com>,
+	Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 0/3] perf/core: sched_task() dispatch and branch entry
+ fixes
+Message-ID: <20260923095004.GG2009045@noisy.programming.kicks-ass.net>
+References: <20260810133540.1947118-1-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <179008205354.2160803.17637640817184992984@kernel.org>
+In-Reply-To: <20260810133540.1947118-1-puranjay@kernel.org>
 
-> Thank you for your contribution! Sashiko AI review found 4 potential
-> issue(s) to consider.
-> 
-> Critical: 0 · High: 2 (2) · Medium: 1 (1) · Low: 1
-> 
-> If you believe none of the issues are legitimate, please reply to each
-> issue of Medium severity or higher and explain why the AI is wrong.
-> If any of them are legitimate and you plan to respin, please let patchwork
-> know by including "pw-bot: cr" as a separate line at the end of your reply
-> (one such reply per series is enough).
-> 
-> - [High] MTU change during or after PCIe FDMA teardown runs the full
->   reload on freed/quiesced state: unbounded napi_disable() while holding…
-> - [High] The new resize readiness check publishes lan966x->rx.lan966x
->   before the PCI FDMA rings exist, so an MTU change can race with ring…
-> - [Medium] The new PCIe resize path retires DMA rings and tears down
->   their ATU outbound window without ever confirming the hardware is…
-> - [Low] FDMA_PCI_DB_SIZE_MAX / FDMA_PCI_MAX_MTU perform unsigned
->   arithmetic with no underflow guard and no BUILD_BUG_ON, even though…
-> 
-> Pre-existing issues:
-> - [High] The hazard the new PCIe reload path documents and avoids is
->   still live in the sibling platform reload path, which this series…
-> - [High] The two implementers of lan966x_fdma_ops::fdma_resize now
->   disagree about the 'rings not built yet' precondition, and the…
-> - [Medium] Window in which DEV_MAC_MAXLEN_CFG exceeds the DCB buffer
->   size, combined with a missing SOF/EOF check in…
-> 
-> --
-> 
-> net: lan966x: add PCIe FDMA MTU change support
-> 
-> This adds MTU change support to the PCIe FDMA path by reallocating the
-> contiguous ATU-mapped RX and TX rings at the new size and falling back to
-> the old buffers on failure.  It also caps the PCIe DCB ring at 256 entries
-> and advertises a derived dev->max_mtu (FDMA_PCI_MAX_MTU) when the FDMA is
-> in use.
-> 
-> A few questions below about the new reload path and the new size macros.
-> 
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> > index 5d6902459f20..940425beec2f 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
-> > @@ -358,7 +358,7 @@ static int lan966x_fdma_pci_init(struct lan966x *lan966x)
-> >       lan966x->rx.lan966x = lan966x;
-> >       lan966x->rx.max_mtu = lan966x_fdma_get_max_frame(lan966x);
-> >       rx_fdma->channel_id = FDMA_XTR_CHANNEL;
-> > -     rx_fdma->n_dcbs = FDMA_DCB_MAX;
-> > +     rx_fdma->n_dcbs = FDMA_PCI_DCB_MAX;
-> >       rx_fdma->n_dbs = FDMA_RX_DCB_MAX_DBS;
-> >       rx_fdma->priv = lan966x;
-> >       rx_fdma->db_size = FDMA_PCI_DB_SIZE(lan966x->rx.max_mtu);
-> 
-> [Severity: High]
-> Can an MTU change race with ring construction here?  lan966x_fdma_pci_init()
-> sets rx.lan966x before it fills in channel_id/n_dcbs/n_dbs/db_size/size and
-> before the two sleeping allocations in lan966x_fdma_pci_rx_alloc() and
-> lan966x_fdma_pci_tx_alloc().
-> 
-> The netdevs are already live at that point: lan966x_probe() runs the whole
-> port loop, including lan966x_probe_port()->register_netdev() and
-> lan966x_port_init()->lan966x_fdma_netdev_init()->netif_napi_add()+
-> napi_enable(), and only calls ops->fdma_init() afterwards, without holding
-> RTNL.
-> 
-> So an rtnl-held ndo_change_mtu in that window sees rx.lan966x != NULL, passes
-> the new guard in lan966x_fdma_pci_resize(), finds a max_mtu that differs from
-> the partially initialised rx.max_mtu, and enters __lan966x_fdma_pci_reload().
-> Both contexts then write the same lan966x->rx.fdma / lan966x->tx.fdma:
-> 
->   lan966x_fdma_pci_reload()
->       lan966x_fdma_rx_disable(&lan966x->rx)   /* channel_id still 0 */
->       lan966x->rx.fdma.atu_region = NULL;     /* under probe's feet */
->       lan966x_fdma_pci_rx_alloc(&lan966x->rx) /* second ring */
-> 
-> Does this leak probe's ring plus its ATU region (only
-> FDMA_PCI_ATU_REGION_MAX == 6 exist), or trip WARN_ON(fdma->atu_region) /
-> -ENOSPC in fdma_pci_atu_region_map()?  And on the failure branch,
-> lan966x_fdma_pci_reset_mem() dereferences tx->fdma.atu_region->base_addr,
-> which is NULL in a snapshot taken before probe allocated it.
+On Mon, Aug 10, 2026 at 06:35:33AM -0700, Puranjay Mohan wrote:
 
-Yes, same issue as adressed in #4. Theres a race because netdevs are registered
-before initialization (in this case FDMA) has happened. The proper fix is a
-reordering of the probe initialization.
+> Puranjay Mohan (3):
+>   perf/core: Fix NULL pmu_ctx passed to pmu->sched_task()
+>   perf/core: Run sched_task() for PMUs with only CPU-wide events
+>   perf/core: Fill branch entries with a single assignment
+> 
+>  arch/x86/events/amd/brs.c   |  9 +++--
+>  arch/x86/events/amd/lbr.c   | 16 ++++-----
+>  arch/x86/events/intel/lbr.c | 65 ++++++++++++++++++++-----------------
+>  drivers/perf/arm_brbe.c     |  2 +-
+>  include/linux/perf_event.h  | 17 ----------
+>  kernel/events/core.c        | 15 ++++++---
+>  6 files changed, 58 insertions(+), 66 deletions(-)
+> 
 
-> 
-> [ ... ]
-> 
-> > @@ -391,9 +391,156 @@ static int lan966x_fdma_pci_init(struct lan966x *lan966x)
-> >       return 0;
-> >  }
-> >
-> > +/* Reset existing rx and tx buffers. */
-> > +static void lan966x_fdma_pci_reset_mem(struct lan966x *lan966x)
-> > +{
-> > +     struct lan966x_rx *rx = &lan966x->rx;
-> > +     struct lan966x_tx *tx = &lan966x->tx;
-> > +
-> > +     memset(rx->fdma.dcbs, 0, rx->fdma.size);
-> > +     memset(tx->fdma.dcbs, 0, tx->fdma.size);
-> > +
-> > +     fdma_dcbs_init(&rx->fdma,
-> > +                    FDMA_DCB_INFO_DATAL(rx->fdma.db_size - XDP_PACKET_HEADROOM),
-> > +                    FDMA_DCB_STATUS_INTR);
-> > +
-> > +     fdma_dcbs_init(&tx->fdma,
-> > +                    FDMA_DCB_INFO_DATAL(tx->fdma.db_size),
-> > +                    FDMA_DCB_STATUS_DONE);
-> > +
-> > +     lan966x_fdma_llp_configure(lan966x,
-> > +                                tx->fdma.atu_region->base_addr,
-> > +                                tx->fdma.channel_id);
-> > +     lan966x_fdma_llp_configure(lan966x,
-> > +                                rx->fdma.atu_region->base_addr,
-> > +                                rx->fdma.channel_id);
-> > +}
-> > +
-> 
-> [ ... ]
-> 
-> > +static int lan966x_fdma_pci_reload(struct lan966x *lan966x, int new_mtu)
-> > +{
-> > +     struct fdma tx_fdma_old = lan966x->tx.fdma;
-> > +     struct fdma rx_fdma_old = lan966x->rx.fdma;
-> > +     u32 old_mtu = lan966x->rx.max_mtu;
-> > +     int err;
-> > +
-> > +     napi_disable(&lan966x->napi);
-> > +     lan966x_fdma_tx_disable_netdev(lan966x);
-> > +     lan966x_fdma_rx_disable(&lan966x->rx);
-> > +     lan966x_fdma_tx_disable(&lan966x->tx);
-> 
-> [Severity: High]
-> What happens if an MTU change lands after the PCIe FDMA has already been torn
-> down?  lan966x_fdma_pci_deinit() disables NAPI and frees both coherent rings,
-> but it leaves lan966x->rx.lan966x set, lan966x->fdma true and fdma->dcbs
-> dangling.  It also runs before the netdevs are unregistered and without RTNL:
-> 
->   lan966x_remove()
->       lan966x->ops->fdma_deinit(lan966x);
->       lan966x_cleanup_ports(lan966x);   /* unregister_netdev() here */
-> 
-> The new guard in lan966x_fdma_pci_resize() only rejects "rings not built
-> yet", so an ndo_change_mtu in that window passes it and reaches this
-> function.  Three things then follow in order:
-> 
-> napi_disable(&lan966x->napi) on an already-disabled NAPI.  Does
-> napi_disable_locked() spin forever in
-> 
->         while (val & (NAPIF_STATE_SCHED | NAPIF_STATE_NPSVC))
->                 usleep_range(20, 200);
-> 
-> since nothing clears those bits until napi_enable()?  That task holds RTNL,
-> so unregister_netdev() in lan966x_remove() can never complete.
-> 
-> If that is somehow passed, the success path below calls
-> fdma_free_coherent_and_unmap() on the stale rx_fdma_old/tx_fdma_old
-> snapshots, so dma_free_coherent(dev, fdma->size, fdma->dcbs, fdma->dma) runs
-> a second time on the multi-MB blocks deinit already released.
-> 
-> And the restore: path calls lan966x_fdma_pci_reset_mem(), which memsets up to
-> rx->fdma.size bytes into freed DMA memory and then dereferences
-> tx->fdma.atu_region->base_addr, which fdma_free_coherent_and_unmap() already
-> set to NULL.
-> 
-> Would a "rings are live" state check (or clearing rx.lan966x and dcbs in
-> deinit, or unregistering the netdevs before fdma_deinit) close this?
-
-lan966x_remove() is not touched by this series (apart from calling
-ops->fdma_deinit), so I'd say pre-existing. But I believe this issue will also
-disappear, when we refactor probe init as described above.
-
-> 
-> [Severity: Medium]
-> Is the hardware guaranteed to be quiesced at this point?  Both
-> lan966x_fdma_rx_disable() and lan966x_fdma_tx_disable() are void and swallow
-> the result of
-> 
->         readx_poll_timeout_atomic(lan966x_fdma_channel_active, lan966x,
->                                   val, !(val & BIT(fdma->channel_id)),
->                                   READL_SLEEP_US, READL_TIMEOUT_US);
-> 
-> so a -ETIMEDOUT never reaches this caller, and the EQ_AVAIL drain poll in
-> __lan966x_fdma_pci_reload() is discarded too (see below).  If either poll
-> times out, the extraction/injection engine still owns the old DCB ring while
-> this function reprograms FDMA_DCB_LLP and then calls
-> fdma_free_coherent_and_unmap(&rx_fdma_old), which does:
-> 
->   fdma_free_coherent_and_unmap()
->       fdma_pci_atu_region_unmap(fdma->atu_region);  /* ENA=0, translation cleared */
->       fdma->atu_region = NULL;
->       fdma_free_coherent(dev, fdma);                /* pages returned */
-> 
-> On the PCIe path the ATU window is the address translation itself, so
-> in-flight writes land on a disabled outbound window or into memory already
-> handed back to the DMA allocator.  Should a timeout abort the resize and
-> propagate the error so the MTU change is rejected instead?
-
-I believe the quiesce poll before teardown is also discarded on lan966x, lan969x
-and sparx5 alltogether, same pattern.  READL_TIMEOUT_US is 100 seconds, so a
-timeout means the channel was already wedged for a long time.
-
-> 
-> > +
-> > +     lan966x->rx.max_mtu = new_mtu;
-> > +
-> > +     /* Must be NULL'ed in order to realloc them. */
-> > +     lan966x->rx.fdma.atu_region = NULL;
-> > +     lan966x->tx.fdma.atu_region = NULL;
-> > +
-> > +     lan966x->tx.fdma.db_size = FDMA_PCI_DB_SIZE(lan966x->rx.max_mtu);
-> > +     lan966x->tx.fdma.size = fdma_get_size_contiguous(&lan966x->tx.fdma);
-> > +     lan966x->rx.fdma.db_size = FDMA_PCI_DB_SIZE(lan966x->rx.max_mtu);
-> > +     lan966x->rx.fdma.size = fdma_get_size_contiguous(&lan966x->rx.fdma);
-> > +
-> > +     err = lan966x_fdma_pci_rx_alloc(&lan966x->rx);
-> > +     if (err)
-> > +             goto restore;
-> > +
-> > +     err = lan966x_fdma_pci_tx_alloc(&lan966x->tx);
-> > +     if (err) {
-> > +             fdma_free_coherent_and_unmap(lan966x->dma_dev,
-> > +                                          &lan966x->rx.fdma);
-> > +             goto restore;
-> > +     }
-> > +
-> > +     /* Free and unmap old memory. */
-> > +     fdma_free_coherent_and_unmap(lan966x->dma_dev, &rx_fdma_old);
-> > +     fdma_free_coherent_and_unmap(lan966x->dma_dev, &tx_fdma_old);
-> > +
-> > +     /* Order matters: napi_enable() must precede the wakes, or a TX that
-> > +      * completes first clears FDMA_INTR_DB_ENA with nothing scheduled to
-> > +      * restore it, leaving RX dead until the next reload.
-> > +      */
-> > +     napi_enable(&lan966x->napi);
-> > +     lan966x_fdma_rx_start(&lan966x->rx);
-> > +     lan966x_fdma_pci_wakeup_netdev(lan966x);
-> 
-> [Severity: High]
-> This isn't a bug introduced by this patch, but the hazard this comment
-> describes looks like it is still live in the sibling register-path reload,
-> which the series leaves untouched and the commit message does not mention.
-> 
-> lan966x_fdma_reload() uses exactly the order this comment forbids, in both
-> its success and its restore path:
-> 
->         lan966x_fdma_rx_start(&lan966x->rx);    /* re-arms RX bit in DB_ENA */
->         ... page_pool_put_full_page() over 512 DCBs ...
->         fdma_free_coherent();
->         page_pool_destroy();
->         lan966x_fdma_wakeup_netdev(lan966x);
->         napi_enable(&lan966x->napi);
-> 
-> The mechanism matches what the comment states.  lan966x_fdma_irq_handler()
-> does:
-> 
->         if (db) {
->                 lan_wr(0, lan966x, FDMA_INTR_DB_ENA);
->                 lan_wr(db, lan966x, FDMA_INTR_DB);
-> 
->                 napi_schedule(&lan966x->napi);
->         }
-> 
-> With NAPI disabled, napi_schedule_prep() returns false and only sets
-> NAPIF_STATE_MISSED; napi_enable_locked() clears SCHED/NPSVC but does not
-> re-check MISSED, so no poll runs and the only code that restores DB_ENA
-> (the lan_wr(0xff, lan966x, FDMA_INTR_DB_ENA) after napi_complete_done()) is
-> never reached.  Since DB_ENA is now 0, no further DB interrupt can be raised
-> either.
-> 
-> The TX channel is not disabled during that window, so an in-flight TX
-> completion or RX DB interrupt there appears to mask all FDMA interrupts
-> permanently until another MTU change happens to reload.  Should the platform
-> path get the same ordering fix?
-> 
-> > +
-> > +     return err;
-> > +restore:
-> > +
-> > +     /* No new buffers are allocated at this point. Use the old buffers,
-> > +      * but reset them before starting the FDMA again.
-> > +      */
-> > +
-> > +     memcpy(&lan966x->tx.fdma, &tx_fdma_old, sizeof(struct fdma));
-> > +     memcpy(&lan966x->rx.fdma, &rx_fdma_old, sizeof(struct fdma));
-> > +
-> > +     lan966x->rx.max_mtu = old_mtu;
-> > +
-> > +     lan966x_fdma_pci_reset_mem(lan966x);
-> > +
-> > +     napi_enable(&lan966x->napi);
-> > +     lan966x_fdma_rx_start(&lan966x->rx);
-> > +     lan966x_fdma_pci_wakeup_netdev(lan966x);
-> > +
-> > +     return err;
-> > +}
-> 
-> [Severity: Medium]
-> This is a pre-existing ordering issue, but does this patch widen it
-> noticeably?  lan966x_port_change_mtu() programs the new frame length before
-> the buffers are grown:
-> 
->         lan_wr(DEV_MAC_MAXLEN_CFG_MAX_LEN_SET(LAN966X_HW_MTU(new_mtu)),
->                lan966x, DEV_MAC_MAXLEN_CFG(port->chip_port));
->         WRITE_ONCE(dev->mtu, new_mtu);
-> 
->         if (!lan966x->fdma)
->                 return 0;
-> 
->         err = lan966x->ops->fdma_resize(lan966x);
-> 
-> and only restores the old value after the callback returns.  On the PCIe path
-> the callback now does real work: the CPU-queue flush, a
-> usleep_range(USEC_PER_MSEC, 2 * USEC_PER_MSEC), two multi-megabyte coherent
-> allocations, and on this restore: path a full RX/TX restart with db_size and
-> DATAL back at the old smaller value while the larger MAXLEN is still
-> programmed.
-> 
-> With n_dbs == 1 the FDMA bounds each write by DATAL but continues an
-> oversized frame in the next DCB, and lan966x_fdma_pci_rx_check_frame() only
-> validates BLOCKL:
-> 
->         blockl = FDMA_DCB_STATUS_BLOCKL(db->status);
->         if (!lan966x_fdma_pci_rx_size_fits(fdma, blockl))
->                 return FDMA_ERROR;
-> 
-> It never checks FDMA_DCB_STATUS_SOF/EOF, so a continuation DB is treated as a
-> complete frame and lan966x_ifh_get_src_port(virt_addr, src_port) parses
-> payload bytes as the IFH source port.  src_port is range-checked and data_len
-> is bounded, so this is not an out-of-bounds access, but can a remote sender
-> that injects an oversized frame in this window get frames delivered to the
-> stack attributed to a source port of its choosing?
-> 
-> > +
-> > +static int __lan966x_fdma_pci_reload(struct lan966x *lan966x, int max_mtu)
-> > +{
-> > +     int err;
-> > +     u32 val;
-> > +
-> > +     /* Disable the CPU port. */
-> > +     lan_rmw(QSYS_SW_PORT_MODE_PORT_ENA_SET(0),
-> > +             QSYS_SW_PORT_MODE_PORT_ENA,
-> > +             lan966x, QSYS_SW_PORT_MODE(CPU_PORT));
-> > +
-> > +     /* Flush the CPU queues. */
-> > +     readx_poll_timeout(lan966x_qsys_sw_status,
-> > +                        lan966x,
-> > +                        val,
-> > +                        !(QSYS_SW_STATUS_EQ_AVAIL_GET(val)),
-> > +                        READL_SLEEP_US, READL_TIMEOUT_US);
-> 
-> [Severity: Medium]
-> The return value of this readx_poll_timeout() is discarded, so "CPU queues
-> drained" is assumed rather than verified before the rings are retired in
-> lan966x_fdma_pci_reload().  Should a -ETIMEDOUT here abort the resize?
-> 
-> > +
-> > +     /* Add a sleep in case there are frames between the queues and the CPU
-> > +      * port
-> > +      */
-> > +     usleep_range(USEC_PER_MSEC, 2 * USEC_PER_MSEC);
-> > +
-> > +     err = lan966x_fdma_pci_reload(lan966x, max_mtu);
-> > +
-> > +     /* Enable back the CPU port. */
-> > +     lan_rmw(QSYS_SW_PORT_MODE_PORT_ENA_SET(1),
-> > +             QSYS_SW_PORT_MODE_PORT_ENA,
-> > +             lan966x, QSYS_SW_PORT_MODE(CPU_PORT));
-> > +
-> > +     return err;
-> > +}
-> > +
-> >  static int lan966x_fdma_pci_resize(struct lan966x *lan966x)
-> >  {
-> > -     return -EOPNOTSUPP;
-> > +     int max_mtu;
-> > +
-> > +     /* Nothing to resize until fdma_pci_init() has built the rings; it
-> > +      * sizes them from DEV_MAC_MAXLEN_CFG, which the caller already set.
-> > +      */
-> > +     if (!lan966x->rx.lan966x)
-> > +             return 0;
-> 
-> [Severity: High]
-> This is a pre-existing gap in the other callback rather than something this
-> patch introduces, but the two implementers of
-> lan966x_fdma_ops::fdma_resize now disagree about this precondition.  The
-> platform one has no equivalent check:
-> 
-> lan966x_fdma.c:lan966x_fdma_change_mtu() {
->         max_mtu = lan966x_fdma_get_max_frame(lan966x);
->         if (max_mtu == lan966x->rx.max_mtu)
->                 return 0;
-> 
->         return __lan966x_fdma_reload(lan966x, max_mtu);
-> }
-> 
-> lan966x_fdma_init() sets rx.lan966x = lan966x only at its own start, so in
-> the window between register_netdev() in lan966x_probe_port() and
-> ops->fdma_init() in lan966x_probe(), rx.max_mtu is 0, the comparison always
-> differs, and the reload runs against an unbuilt ring:
-> 
->   __lan966x_fdma_reload()->lan966x_fdma_reload()
->       lan966x_fdma_rx_disable(&lan966x->rx)
->           struct lan966x *lan966x = rx->lan966x;   /* NULL */
->           lan_rmw(..., lan966x, FDMA_CH_DISABLE);  /* lan966x->regs */
-> 
-> lan966x->fdma is already true before the port loop and the NAPI instance is
-> added and enabled by lan966x_port_init()->lan966x_fdma_netdev_init(), so
-> nothing else stops the path.  Would the guard be better placed once in the
-> shared caller lan966x_port_change_mtu(), or duplicated in both callbacks?
-> 
-> > +
-> > +     max_mtu = lan966x_fdma_get_max_frame(lan966x);
-> > +     if (max_mtu == lan966x->rx.max_mtu)
-> > +             return 0;
-> > +
-> > +     return __lan966x_fdma_pci_reload(lan966x, max_mtu);
-> >  }
-> >
-> >  static void lan966x_fdma_pci_deinit(struct lan966x *lan966x)
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> > index c803619d83e2..2177e2bbfbd3 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> > @@ -823,7 +823,8 @@ static int lan966x_probe_port(struct lan966x *lan966x, u32 p,
-> >       port->chip_port = p;
-> >       lan966x->ports[p] = port;
-> >
-> > -     dev->max_mtu = ETH_MAX_MTU;
-> > +     dev->max_mtu = lan966x_is_pci(lan966x) && lan966x->fdma ?
-> > +                    FDMA_PCI_MAX_MTU : ETH_MAX_MTU;
-> >
-> >       dev->netdev_ops = &lan966x_port_netdev_ops;
-> >       dev->ethtool_ops = &lan966x_ethtool_ops;
-> > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-> > index 16bc28c8f11f..1877f1916d71 100644
-> > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-> > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
-> 
-> [ ... ]
-> 
-> > @@ -87,6 +88,33 @@
-> >  #define FDMA_INJ_CHANNEL             0
-> >  #define FDMA_DCB_MAX                 512
-> >
-> > +/* Ring must fit in one MAX_PAGE_ORDER DMA block; 512 DCBs overflows
-> > + * at jumbo MTU.
-> > + */
-> > +#define FDMA_PCI_DCB_MAX             256
-> > +
-> > +#define FDMA_OVERHEAD                                                        \
-> > +     (IFH_LEN_BYTES +                                                \
-> > +      SKB_DATA_ALIGN(sizeof(struct skb_shared_info)) +               \
-> > +      VLAN_HLEN * 2 +                                                \
-> > +      XDP_PACKET_HEADROOM)
-> > +
-> > +/* Largest db_size keeping the ATU-padded ring inside one MAX_PAGE_ORDER
-> > + * block and within the 16-bit DCB DATAL field. Inverts ALIGN(x, R) <= L
-> > + * into x <= ALIGN_DOWN(L, R) to bound x directly.
-> > + */
-> > +#define FDMA_PCI_DB_SIZE_MAX                                         \
-> > +     MIN_T(u32,                                                      \
-> > +           (ALIGN_DOWN(PAGE_SIZE << MAX_PAGE_ORDER,                  \
-> > +                       FDMA_PCI_ATU_REGION_ALIGN) -                  \
-> > +            FDMA_PCI_DCB_MAX * sizeof(struct fdma_dcb)) /            \
-> > +           (FDMA_PCI_DCB_MAX * FDMA_RX_DCB_MAX_DBS),                 \
-> > +           ALIGN_DOWN(GENMASK(15, 0), FDMA_PCI_DB_ALIGN))
-> > +
-> > +#define FDMA_PCI_MAX_MTU                                             \
-> > +     (FDMA_PCI_DB_SIZE_MAX - FDMA_OVERHEAD -                         \
-> > +      (ETH_HLEN + ETH_FCS_LEN))
-> 
-> [Severity: Low]
-> Would a BUILD_BUG_ON help here?  Both subtractions are unsigned and
-> unguarded, and this macro is the only enforcement point for the
-> MAX_PAGE_ORDER ring-size limit, the 16-bit DATAL limit, and dev->max_mtu.
-> 
-> FDMA_PCI_DCB_MAX * sizeof(struct fdma_dcb) is 256 * 256 = 65536.  If
-> PAGE_SIZE << MAX_PAGE_ORDER is at or below 128 KB, the first subtraction
-> wraps and MIN_T(u32, ...) then picks the 65408 branch.  In between, the
-> second subtraction wraps: with 4 KB pages and MAX_PAGE_ORDER == 5 the
-> quotient is 256 while FDMA_OVERHEAD + ETH_HLEN + ETH_FCS_LEN is 630, so
-> FDMA_PCI_MAX_MTU becomes roughly 4G and is assigned straight into
-> dev->max_mtu, so dev_validate_mtu() accepts anything up to INT_MAX and the
-> cap this patch installs disappears.
-> 
-> In the other direction, 4 KB pages with MAX_PAGE_ORDER 6 or 7 yield 138 and
-> 1162, i.e. dev->max_mtu below ETH_DATA_LEN, so a plain 1500-byte MTU cannot
-> be set.  Nothing asserts FDMA_PCI_MAX_MTU >= ETH_DATA_LEN.
-> 
-> The default 4 KB-page, MAX_PAGE_ORDER=10 build does give 16128 and MTU 15498
-> as the commit message says, and arch/arm/Kconfig declares ARCH_FORCE_MAX_ORDER
-> as a plain int prompt with no range constraint (it already ships
-> default "8" if SA1111), so these values are at least legal.
-> 
-> --
-> Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260918-lan966x-pci-fdma-v7-0-0ecc179c8a2c%40microchip.com
+Found this series ... I'll feed it to the robots and barring them
+screaming I'll push it out to -tip.
