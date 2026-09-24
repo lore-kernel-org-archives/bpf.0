@@ -1,95 +1,95 @@
-Received: from mail-pj2-f42.google.com (mail-pj2-f42.google.com [74.125.227.170])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6142F44470B
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 23:19:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE61C3BED2D
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 23:19:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.141
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790291948; cv=pass; b=h4jugi0QZoX4rx+hK37RXnsOPHE96v1gRJ/FYgoUfa0AurC5U4N6f6OHNDNnvnkeuPg40qUw79lKw/QwYAd0XcqGjRW6/bCoy35YyvgF9mJVavvR3PRR3VPFeC2Slgpdm/14ekGjSsjvR7ooCyE0p359NZYN1s6h+Y7UX2ho5Jw=
+	t=1790291960; cv=pass; b=dpeePTG2MixefO0RX2klolJUae/S6U52Qf0IZt3nrtuclocRBHxwjZ3CUebGRG4PN/iRDqZV2UWPY5Kg3yB63kSfQDXFo/LFOIjwCWTPrcQL4bra2ri+l0PjvcEZWboD/aOBIDUduxDLs6BSndo5w0SkaHoCivsAT0M9XPjW2e4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790291948; c=relaxed/simple;
-	bh=Dl76kS3TxqzW8es8CRr6DTM22Vk8nLETkh+kBL0H3R8=;
+	s=arc-20240116; t=1790291960; c=relaxed/simple;
+	bh=hAvyW7mntZ8gF1r5CIPOxW8yQh2xQo2NnBouag07/ME=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LgN3wwMpqN3j139kJfAPcFG8bnCqihoZ7XRHgWqj3HpGxa1XDcwdeFT+FDJZbTU9xNdZFxok992nofpiQJfwRkdE16qzliS4g0foqIEknpvoDgqYLENtcsSdsZ4ISIe57HPqmF24/mLfAueQmOW8sbr5R6rKb/p1wNCQNZ6sShY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KtCgoUtg; arc=pass smtp.client-ip=74.125.227.170
+	 To:Cc:Content-Type; b=K5dQSrves3sCvB3LssYsWbhUEnqBbD2WHCwXPFKpqOyfRldVU3EeP29CZ+VranQPN05//LYIYyJp6zAGa4yBUDaedNLVb2LeNbPU/NyCdUumQWmzr4KqJlD7Xp/1s6+ZJGJ5HMj7QBO6nf7hGj1Q5j9foEjMawO/9Q11oyyMINk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pd7Jk0jj; arc=pass smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KtCgoUtg"
-Received: by mail-pj2-f42.google.com with SMTP id d9443c01a7336-2df8818fe1eso826475ad.1
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:19:07 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790291946; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pd7Jk0jj"
+Received: by mail-pj2-f13.google.com with SMTP id d9443c01a7336-2d747eb79f7so1160675ad.1
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:19:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790291958; cv=none;
         d=google.com; s=arc-20260327;
-        b=UgNwmFnCMAiaUXpYjUtFSHeq/l+WtED23zdpcJXmjcl/34LHk2JvE5XPWOOzPQ8xQ7
-         krl+yfZvJmAYTz3rpeuTRJxd3RpqmRAuEUYb+QHQoYM/NCzPFuGVoh9aqkcvd4xpjGl/
-         MQiX//1TYr5N5WmGauj5mZqcKP4VuSyS90OaFOoO+v88Kq4bY2RyzGByhDNCi1IVT7Gz
-         88GlgFE7DkQOIWhEx+cqBWFyBoAWM6CfzD2QzqVHU20wu29VXjr02cOkE2vohnRHw2DO
-         Yh4c6iYpVbpjN5G6lvyFYAzVmpbs0B8ukPt6XCBEYNiRMUfyAnUZ9/45ec/PBIbucSxd
-         lU0Q==
+        b=K9l8mOALbwZFEZZ2o7ba50X1d5tWkJ0EHYVGcQjW3bkcsfT6UfMkiQVjBRpAO1FaWR
+         49l6XM5eL2zV7ziHymkuhALZwpgOtgl6BO7W0jrUXy6ttxw8/wz2LHb0P59UWBM4nFtU
+         6I/J0hElWwWPNFhUDlLtOgSV1tK2aO3tt/SzRLa1AI+Uf/Rvcu5NaAjR6G1SC4+krTOv
+         4fLzLBmRTtK+t2bIpIS1z4qTxgpPC8PeQqcMw04rlrVn9/dZuek9KUjTn87SxpKRYLso
+         iYBHI8HTON9EDJ9btiZLv5hZOkXqgSxsmzRpXivQ7JPMRnMQikPv7r/6DivQVMqzDK8o
+         N/7g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=uGKg1ypaTIxIm+h/NqbIGNtGUyd1i/dvq2OYFzGt/2g=;
+        bh=lEqKjK+kKIVdFGgWgPOwrXBb0zqHdCpXqdwBp5xz3ho=;
         fh=FLd6JgKJC78bvz9uUBQxoN4rjy641h97g+CnETlClq4=;
-        b=gVKUeRz+8dTJf+qnn+W4xwc/RoPipyL7JreJcPhPDogiv3gvCW3q4sP++llnAfn6Tr
-         4SZtl6ouhL4wpcJgexwTSBqVYB3amNgZ/Pkpf3VnIVBXf/PU6EWg6zqcNdQ8blOGXzQj
-         Nek0PfDRMb7mD8hUjZApfpJ7cOwbi1S2qteDWIIpUrON97b+9jEPTTCwz6VojEMHe2Lo
-         krYF4BlrmkoEdiErNM2uixCCurKtV/XzYfHUue9/r66x2U8sObQiRcB01EbeiktQ+DSq
-         XXTuN2Mv+a8tpIc/YcCywmncXJ5446L34fYUq6gOdZ03RkHvPI61OspNcsdUBDIuxHTG
-         lItQ==;
+        b=SxAQHF4BnEZCGtnPwpoujwHGpIhXy76sU7xkiGESZinXIZh/OZidM70tGdXH8U2Hbr
+         6SDejA4f89aiLQQiuiOknyxd+E4TDbwmwnVN+bcQU4sTQf/sGhxUjGzXYaY1jMc1lLh0
+         /ZBDNmoxE3ZILauykMjUGqaQczIwpcCvwvzLmIMF6f5mClElI/ZOk7NQaYWIITTZl+y6
+         NjeqTRt+ycx2bL35FMfvNeg8azlwgmq6EsNMztqfWiFyhJffBOoRfHbnOippl1IiQyU1
+         ACJbEAoXyD0hN276b0SUSfxn7+u4CTDVW6PDCvzABwQia2fsjwakQhfgDncluwmBvpG3
+         eqoQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790291946; x=1790896746; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790291958; x=1790896758; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=uGKg1ypaTIxIm+h/NqbIGNtGUyd1i/dvq2OYFzGt/2g=;
-        b=KtCgoUtgEPTzQmy4No/4pG0f/yXs6ubywkwyIqe5iHCpRbtOjN1smtgTu+UyKN1a8n
-         m6lhy1N7GHgXGbPFcCsV1L2jckYbFRbBpL8jvYTcwn0pgOd/w1jpCQghbcqQ0fkWh7f5
-         QfgJaRmK5k2cUrMvmFCT9KwPcrZQq/KBfnXRFvSEFTv7T4OClfs0H03x70IgOos52l29
-         kLYAA0U+Xfgn10nufQKYH/XjG3fbmgLhc6N2Qe9GwyBqN3hUaDJk3WQQXCuaVSUrQiD8
-         J3VvNU+b7+kt2a5tbGGJwtxlGUh/JARUIy/tTFS6+l7bV2QtYH2j5gWf/XFDMvIxHje1
-         0R1g==
+        bh=lEqKjK+kKIVdFGgWgPOwrXBb0zqHdCpXqdwBp5xz3ho=;
+        b=pd7Jk0jj9L8Lj8ZI3ejR0tUxX5vrAvatauJ233zFoKMgfz4cUNXRfX3O38QLr3tTDI
+         yJTTrp2aa9RmmfUzSadUm2PPg17jS1v7cEPi2cyCVBaC+a2YGEebO/Dh8B0CCc41xw+G
+         LGTNXNpBSlUEykgS0FmvLAib3huDi8EfFpsOXroogaDWYGm4XO87q9QlY5VX2Mg+0foU
+         MU+I3JplFwLsh24UMaytL3CVT8aPP0khdiFytzNx6y1+Fvgi0uxXqBv1dEy3br9IqDu8
+         eWDD/PK4uEmT+Bhiz4Qr/Q2ZnWWN+c3EbvqHsZel7hi6rVzk+ZDvlcbk9EX/rSTw9WjT
+         L7Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790291946; x=1790896746;
+        d=1e100.net; s=20260707; t=1790291958; x=1790896758;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=uGKg1ypaTIxIm+h/NqbIGNtGUyd1i/dvq2OYFzGt/2g=;
-        b=k3/Z204gLW7oxjoxYCvwv5REB5P6RK+FUPzFkT04/oXeslIwEzyYSyBIwd/JB8Im9o
-         hqjjmTDhkz1D/yB91/LW8yZHXOP8GC0U+La/ToOuYRopgvwdRiHWBN9uQlb4hWjPh2Yc
-         UvVXumfOIpTBwHKcEqboq4momMvQ2364Kv7O2FR6EOddWeXJ84Ru2N5BuLzhVFIEf2y2
-         QolGgwAKkJYz3qEBvW8TyGpWEhvDWGt4fyPX4tCufKKPs1QkfpnsgqzIztr2yQBrF07j
-         fBXqa0SnLo8eA75aMyUV9vJNNiSAUoUsuJMI+RYke0t+/JTwUF4i5IijtdykF1itrOfg
-         3VhA==
-X-Gm-Message-State: AFuF++lIRTv/y8dGgsnz5mi/xkDlDgI3A5Mq6El/nBq9aovhMZRw85me
-	NVlRtBVTC7yfCvR9ihTWYiUpBa56J4W49NzYRa6PsKqPypnEVPAWIFENgxnXClzywRnlViZou+W
-	zMCloBBaGGIhh2bCZwjHageqxhgQ53Iw=
-X-Gm-Gg: AYBFou1tikkidMO0+9gU7WYDNPBwPS04CoRru7/U0g17njTRVgbwBD0M+Gm0rVIJQpM
-	Qf1bmlTyh8iKUswxKSN957G514F922kb/DD4m2x1P8XTIC5THsi+YvmhB1v/3d2rx6gpL9rKp35
-	6bi04vlSKBVeIUEsWkfq18K5OLOrnfnW59CvZYPbN4Hze7N8v5elRp5mlTvip/abmy8Jt4IYUOF
-	FbEKRRrlL+j6m0kpijqfK9JHw5/d537LhYhmWn52VATB5yU1Drm2UoL4oM7rAuZhQ5VzsrSX3z5
-	dcB4YO8AEZul6s+VophPIvyKYuJgV5lqcnE7YfQgm5uMafT2+m1SG3YxFYyomO0OLREgSRsK5Kz
-	Xo+6VXpv6pQqm9Tc3e/Cu5Zh2YYoqyWzb/RIM
-X-Received: by 2002:a17:90a:f94f:b0:3a0:2614:2077 with SMTP id
- 98e67ed59e1d1-3a098b93d4bmr2758481a91.41.1790291946307; Thu, 24 Sep 2026
- 16:19:06 -0700 (PDT)
+        bh=lEqKjK+kKIVdFGgWgPOwrXBb0zqHdCpXqdwBp5xz3ho=;
+        b=0rEbfR6Aou2HksaWZ0Ewhg5Dps+trZX74sY1Z7i6RufvYQ4X1lo4JI3vJui+E+mu+U
+         07/aO5TS7G5QOXpmqsoibZKtfxdeqOXu2Ej3ROgEidUASpJgf2uW5Gkup0mfXIk9XLVh
+         I4rIhINJHExYpCeoAJ20HUJvLQhqnhDzhGJ6gw1zwuX5CBHtwF/463SpJN7JOuhz5hbq
+         gaf/l3inPQPXObBxDbOHEJNZWnQViFn+vCP29giKZDN6nus42vg9FrsUDN6qURB+I8dJ
+         8cTnQcG+B2/OJGb66oWVDYRUS2dXceDDZUEqypTzAfWgT5+unr09n4hJGgUaAzWozu8+
+         RtfQ==
+X-Gm-Message-State: AFuF++l1xOtawrV+sCXvrtsE+UfrmoFWjCHe/+smjzAl6Fn55MA0W4mT
+	m32ybzV/btSu8y03w0cH355NZfsKLmZNehMN4Jqmo0h20XP9fyb5DOapBI6az8OZhbQ9yi4NoKo
+	X0VPGqyueBxZbUeeI+AsZioT3+ry868M=
+X-Gm-Gg: AYBFou14HgMDErKmVBV0yxdqWERqVgJ/KdTc02XN2QGKkX07cee1v1UWzRSuaX4ZHUO
+	h2ogOGNiy/J49zRB7mlOBIpHsFXKlsqPs1Sh5GkWKkoW4oqwjFhT3S2cnhTc6rYxNMB8pIpMDBr
+	iKuT9vwuy6BHuNiCv3qKxemhDxNMfWkV3BrSW9uIAmC8IXMNn78zCteobEVlpkXDGckG7EOoV/G
+	LPivVr+9nBtuktP4gX4t+j+z8uRpzmJJ1MxgEjMBsRmVXcYpZkfsXidVMPjaBaT2cSSPxQSXlSr
+	cs04EcidN2IuKWsELinx1mHjR/g3WTplEC6HOsbmPcNtWUVFsCBxxQ8VK21JYoKUDpXAJdutzoz
+	2ptnpqoZmv1G6bQR//WWuOUxHfL57DtSIzQ5h
+X-Received: by 2002:a17:902:d983:b0:2dd:ad73:c97f with SMTP id
+ d9443c01a7336-2df7dc40989mr31008245ad.23.1790291957741; Thu, 24 Sep 2026
+ 16:19:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260923232939.1886328-1-andrey.grodzovsky@crowdstrike.com> <20260923232939.1886328-5-andrey.grodzovsky@crowdstrike.com>
-In-Reply-To: <20260923232939.1886328-5-andrey.grodzovsky@crowdstrike.com>
+References: <20260923232939.1886328-1-andrey.grodzovsky@crowdstrike.com> <20260923232939.1886328-6-andrey.grodzovsky@crowdstrike.com>
+In-Reply-To: <20260923232939.1886328-6-andrey.grodzovsky@crowdstrike.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 24 Sep 2026 16:18:52 -0700
-X-Gm-Features: AclHuK8Ayw-tkg1IMleCkQkxnhbqxuwzgu2Ngy3Mg8MVfv6LD28TGgOoDczg8_U
-Message-ID: <CAEf4BzYJe6FXO5Fj+RQtd9R1SYR0Lo-1Cm9G77kgvZ2uSe3K4w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 4/8] libbpf: Reject gen_loader for objects
- with already-manual programs
+Date: Thu, 24 Sep 2026 16:19:02 -0700
+X-Gm-Features: AclHuK8-_nr3nFeaC20-YrV4gKvSQjcJfceENJcoTBtHp-6K0FoV4K322Nmwv08
+Message-ID: <CAEf4BzbgkghzOfHJh-A9z=kMn=NaHgr04_DUUrQ63bvHaAsqTg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 5/8] libbpf: Version bpf_program__set_autoattach()
+ ABI change
 To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
 Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org, 
 	martin.kelly@crowdstrike.com, slava.imameev@crowdstrike.com, 
@@ -100,117 +100,125 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Sep 23, 2026 at 4:29=E2=80=AFPM Andrey Grodzovsky
 <andrey.grodzovsky@crowdstrike.com> wrote:
 >
-> bpf_program__set_load_strategy()'s MANUAL case rejects setting MANUAL
-> strategy while a gen_loader is already attached, but a program marked
-> MANUAL declaratively (SEC("!...")) gets that strategy during
-> bpf_object__open(), before bpf_object__gen_loader() can ever be
-> called, so the existing guard can never observe it.
+> bpf_program__set_autoattach()'s return type changed from void to int to
+> let callers observe the new -EINVAL rejection for MANUAL-strategy
+> programs, but the symbol stayed under its original LIBBPF_1.0.0 node in
+> libbpf.map. Binaries already linked against the old void-returning ABI
+> recorded a request for exactly that symbol@version pair at link time;
+> without a version bump they would silently start hitting the new
+> rejection behavior underneath them after a libbpf upgrade.
 >
-> Left unchecked, bpf_object_load_progs() skips such programs, so
-> gen->nr_progs undercounts relative to the object's real program
-> count. bpf_gen__finish() only rejects the opposite mismatch direction
-> (nr_progs < gen->nr_progs), so this passes silently, and every
-> generated skeleton program slot after the manual one ends up wired to
-> the wrong prog_fd.
+> Split the symbol via ELF symbol versioning:
 >
-> Catch it at the one point guaranteed to run after any MANUAL marking
-> has already happened: reject in bpf_object__gen_loader() itself if any
-> program already has load_strategy =3D=3D BPF_PROG_LOAD_STRATEGY_MANUAL.
+>   - bpf_program__set_autoattach_deprecated() keeps the original
+>     unconditional behavior, bound via COMPAT_VERSION() to the existing
+>     LIBBPF_1.0.0 node.
+>   - bpf_program__set_autoattach_v1_8_0() carries the new MANUAL-rejecting
+>     behavior, bound via DEFAULT_VERSION() to the new LIBBPF_1.8.0 node.
+>
+> Old binaries keep resolving bpf_program__set_autoattach() to the old
+> behavior at runtime; anything linked against the current headers/map
+> gets the new int-returning, MANUAL-rejecting behavior. Also adds the
+> missing __LIBBPF_MARK_DEPRECATED_1_8 gate to libbpf_common.h (only the
+> 1.0 gate existed) so LIBBPF_DEPRECATED_SINCE(1, 8, ...) can mark the
+> deprecated variant.
 >
 > Assisted-by: Claude:claude-sonnet-5
-> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
 > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
 > ---
->  tools/lib/bpf/libbpf.c | 34 ++++++++++++++++++++++++----------
->  1 file changed, 24 insertions(+), 10 deletions(-)
+>  tools/lib/bpf/libbpf.c        | 9 ++++++++-
+>  tools/lib/bpf/libbpf.h        | 6 ++++++
+>  tools/lib/bpf/libbpf.map      | 2 ++
+>  tools/lib/bpf/libbpf_common.h | 6 ++++++
+>  4 files changed, 22 insertions(+), 1 deletion(-)
 >
 > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index d815e53e8295..85e1d9c775ab 100644
+> index 85e1d9c775ab..224fb0247a39 100644
 > --- a/tools/lib/bpf/libbpf.c
 > +++ b/tools/lib/bpf/libbpf.c
-> @@ -9859,11 +9859,31 @@ int bpf_object__set_kversion(struct bpf_object *o=
-bj, __u32 kern_version)
->  int bpf_object__gen_loader(struct bpf_object *obj, struct gen_loader_opt=
-s *opts)
->  {
->         struct bpf_gen *gen;
-> +       size_t i;
+> @@ -9974,7 +9974,14 @@ bool bpf_program__autoattach(const struct bpf_prog=
+ram *prog)
+>         return prog->autoattach;
+>  }
 >
->         if (!opts)
->                 return libbpf_err(-EFAULT);
->         if (!OPTS_VALID(opts, gen_loader_opts))
+> -int bpf_program__set_autoattach(struct bpf_program *prog, bool autoattac=
+h)
+> +COMPAT_VERSION(bpf_program__set_autoattach_deprecated, bpf_program__set_=
+autoattach, LIBBPF_1.0.0)
+
+no compat stuff, it should be backwards compatible to change return
+from void to int
+
+
+> +void bpf_program__set_autoattach_deprecated(struct bpf_program *prog, bo=
+ol autoattach)
+> +{
+> +       prog->autoattach =3D autoattach;
+> +}
+> +
+> +DEFAULT_VERSION(bpf_program__set_autoattach_v1_8_0, bpf_program__set_aut=
+oattach, LIBBPF_1.8.0)
+> +int bpf_program__set_autoattach_v1_8_0(struct bpf_program *prog, bool au=
+toattach)
+>  {
+>         if (prog->load_strategy =3D=3D BPF_PROG_LOAD_STRATEGY_MANUAL)
 >                 return libbpf_err(-EINVAL);
-
-gen_loader shouldn't be set after prepare step, we should just reject
-that operation, it's a misuse of the API
-
+> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+> index faea42f75847..d172c137cc37 100644
+> --- a/tools/lib/bpf/libbpf.h
+> +++ b/tools/lib/bpf/libbpf.h
+> @@ -393,6 +393,12 @@ LIBBPF_API bool bpf_program__autoload(const struct b=
+pf_program *prog);
+>  LIBBPF_API int bpf_program__set_autoload(struct bpf_program *prog, bool =
+autoload);
+>  LIBBPF_API bool bpf_program__autoattach(const struct bpf_program *prog);
+>  LIBBPF_API int bpf_program__set_autoattach(struct bpf_program *prog, boo=
+l autoattach);
+> +/* this "specialization" should go away once the deprecation window for
+> + * bpf_program__set_autoattach_deprecated() closes
+> + */
+> +LIBBPF_API int bpf_program__set_autoattach_v1_8_0(struct bpf_program *pr=
+og, bool autoattach);
+> +LIBBPF_DEPRECATED_SINCE(1, 8, "use int-returning bpf_program__set_autoat=
+tach() instead")
+> +LIBBPF_API void bpf_program__set_autoattach_deprecated(struct bpf_progra=
+m *prog, bool autoattach);
+>
+>  struct bpf_insn;
+>
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index 8def5474885a..999e791d9887 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -465,6 +465,8 @@ LIBBPF_1.8.0 {
+>                 bpf_program__clone;
+>                 bpf_program__load;
+>                 bpf_program__load_strategy;
+> +               bpf_program__set_autoattach;
+> +               bpf_program__set_autoattach_deprecated;
+>                 bpf_program__set_load_strategy;
+>                 btf__find_by_name_kind_own;
+>                 btf__new_empty_opts;
+> diff --git a/tools/lib/bpf/libbpf_common.h b/tools/lib/bpf/libbpf_common.=
+h
+> index 8fe248e14eb6..12ad4f5f558f 100644
+> --- a/tools/lib/bpf/libbpf_common.h
+> +++ b/tools/lib/bpf/libbpf_common.h
+> @@ -36,6 +36,12 @@
+>  #define __LIBBPF_MARK_DEPRECATED_1_0(X)
+>  #endif
+>
+> +#if __LIBBPF_CURRENT_VERSION_GEQ(1, 8)
+> +#define __LIBBPF_MARK_DEPRECATED_1_8(X) X
+> +#else
+> +#define __LIBBPF_MARK_DEPRECATED_1_8(X)
+> +#endif
 > +
-> +       /*
-> +        * Manually-loaded programs are not visible to gen_loader (see
-> +        * bpf_program__set_load_strategy()'s MANUAL case), and marking a
-> +        * program MANUAL happens during bpf_object__open(), before this
-> +        * function can ever run, so that guard can never catch it here.
-> +        * Reject any pre-existing MANUAL program now, since this is the
-> +        * earliest point where both are known.
-> +        */
-> +       for (i =3D 0; i < obj->nr_programs; i++) {
-> +               struct bpf_program *prog =3D &obj->programs[i];
-> +
-> +               if (prog->load_strategy =3D=3D BPF_PROG_LOAD_STRATEGY_MAN=
-UAL) {
-> +                       pr_warn("prog '%s': gen_loader does not support m=
-anually-loaded programs\n",
-> +                               prog->name);
-> +                       return libbpf_err(-EOPNOTSUPP);
-> +               }
-> +       }
-> +
-
-and there is no need to check this on setting gen_loader, during
-bpf_object_prepare all this stuff (gen_loader, MANUAL settings) should
-be finalized and never changed again. that's when we check all these
-conditions
-
-
->         gen =3D calloc(1, sizeof(*gen));
->         if (!gen)
->                 return libbpf_err(-ENOMEM);
-> @@ -15470,16 +15490,10 @@ int bpf_program__set_load_strategy(struct bpf_p=
-rogram *prog, enum bpf_prog_load_
->                 break;
->         case BPF_PROG_LOAD_STRATEGY_MANUAL:
->                 /*
-> -                * Manually-loaded programs are not supported for gen_loa=
-der.
-> -                * This is because bpf_object_load_prog is not called for
-> -                * manually-loaded programs, so such programs are not vis=
-ible
-> -                * to gen_loader. For this reason, prevent calling
-> -                * bpf_program__set_load_strategy(MANUAL) when gen_loader=
- was
-> -                * used to generate a BPF object loader.
-> -                * A gen_loader implementation is being called for autolo=
-aded
-> -                * programs and defines its own model for loading BPF pro=
-grams.
-> -                * To pass a BPF program to gen_loader, set the program's=
- load strategy
-> -                * to BPF_PROG_LOAD_STRATEGY_AUTO.
-> +                * Manually-loaded programs are not visible to gen_loader=
-,
-> +                * since bpf_object__load_progs() skips them during the b=
-ulk
-> +                * load pass; see bpf_object__gen_loader()'s own guard fo=
-r
-> +                * the full explanation.
->                  */
-
-yeah, wow, nice way to score human reviewer's points, more sloppy slop plea=
-se
-
-
->                 if (obj->gen_loader)
->                         return libbpf_err(-EOPNOTSUPP);
+>  /* This set of internal macros allows to do "function overloading" based=
+ on
+>   * number of arguments provided by used in backwards-compatible way duri=
+ng the
+>   * transition to libbpf 1.0
 > --
 > 2.34.1
 >
