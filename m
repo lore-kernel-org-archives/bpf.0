@@ -1,86 +1,106 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA094A2E00;
-	Thu, 24 Sep 2026 17:33:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5705C4AF175
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 17:38:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790271194; cv=none; b=Hoxsfdhx4x2PjaQV9TgGevRxZGB3b5Af73NUnkx7rfJXuUfPBonCw2EsP8HCeFQyLViaf8dKIRw78d2oW4HOYLU/2ItVj6dJJkHdR9nEvQhS5896RP9943UgnVmSafSb2eY1YM7hu3TII28PSe/9zQoO24cmMIRSVeHZEKgsaws=
+	t=1790271537; cv=none; b=Xu7Gr5i0zH1aali3zTkDo6+5JAO6FdYmhfnqEFSvRUNEJVj6+FR0Y8J8Sn6ihoZvVnV3wYGxK5AqXn+yf4fr+bonJqmOk6Sxa5xtc84aato2AoENc2YjiuA6fMrfM/Rqcj7LQyOYfSQYwgkVFYWUs1kB3nJ4IvvcMGOkkJpP8QA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790271194; c=relaxed/simple;
-	bh=obbJKP/A+7IPNb418as8NRAGQ4lw7cpNNtgP+Jlxpvw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NtRgbHt/GPcMYhZGOKn3CERqe3b7nw6bkXm9nQZja1dxE/eV4KoP8lMjwBZSsYtPgttJVD2ENXa7o8kZx/pTOvmx6YYDCJu7peFoZq4D4hgy7yGOEHJlutkn+4eK+V70nHxCE/qVQknjqb6DW2A5cMwMf6g8Lzb/NzA1/dD4PmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bzdjiYnU; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ABkkPgKM; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1790271537; c=relaxed/simple;
+	bh=jL1Zn7oGmT9UIX9HvAjLpRNAlqN3FzC+52/25OUT5w4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=hJU5wex3zKxYEafE78KxGyTh+39hK8f/WxTIZ9TySwzFpO9L+MQJamIdlTZjsknlDWXyyWmaFnsJoE2dwy1GQFsrwWzvAZHVD30A9E9HROwTTeP8pOmNuJVikhwZuYft1lTIBlm+PSKews8Ar2S6jSNNsQINWqx7NUw7MO/+d9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h+kp+bpR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bzdjiYnU";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ABkkPgKM"
-Date: Thu, 24 Sep 2026 19:33:07 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1790271189;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CppBDAJ4f/mYAuFO/9BiWz8GeSlq5uEp3U+JHtkF4No=;
-	b=bzdjiYnU422dbBO17UvO3Sy9Mse+Fz4j6qtQga0TvFu3RJe81DDpC6cAtYL+jXoVEHRpWt
-	8/uBibsO1Ybx8msaKY6jcjrEZJcsk5l98NoGcNFYBJrCeQ8ES6WWYtvU8rjWif6lRSMYHr
-	Mrmec37ubCTiI5qvMErR4SqDtMLmTmdI17+TG+9ey9NuLUT8WVE3fAhtkiJCbaLi3OXcE+
-	ICrecUaANatg0rWL27dQzli4+ISAL0quAocBmyQ+wAA5xnSkwE6xGvT3yI5p4yBUZBAv1s
-	13Za0sxqlQLJSSir6JxirwK8XQiRFUqZSiV1NcSKH+vpdjULtMAIJ4gXhB5cyg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1790271189;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CppBDAJ4f/mYAuFO/9BiWz8GeSlq5uEp3U+JHtkF4No=;
-	b=ABkkPgKMmdnwTQxPHsLI9A1VPdTLc51R5aLbDd5gVKmoy4/d+Whx3AqgWbhmXaMfbq9tTC
-	fckMpMaJREdfmwAw==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v3 bpf-next] selftests/bpf: Replace %pK output with 0
-Message-ID: <20260924173307.FQgZQfVP@linutronix.de>
-References: <20260924153153.tlErkAb5@linutronix.de>
- <DLNO7GO4QMNE.23673O3BC9B7@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h+kp+bpR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28A031F00893;
+	Thu, 24 Sep 2026 17:38:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790271535;
+	bh=aUpJzZXRsyh8X7iMWt+oY5+bsWj+o/aejCJ19jQuMhA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=h+kp+bpRxpTWYPdLKUB8pZhfop9sYMhqk3Ybgk33z6QvjbF36ruw5RyFEMwMti901
+	 x7Tk+nqVI8pe5dkXGakNsXY+JJb83Y5SxCY2K5weM/2+twWO8BLHJIRpNw3K0rIA6M
+	 4NzE5KDVwkjCvQxyAk73kV/MVrah0nuUGRTtZZTA4fN05V8wO5DYf3yYuEbGaAfBfh
+	 fTAnSjF0G2HJeiMNzJekKppq5zzQH+xu0aGsZDXs5L/TLFzxm7qpNjFKlq+Tw9Nb7T
+	 B/dbMM8tKT6SqXi3Ef1EBzJ5mJ/iafQhtJpcfLIyaEDtbUTG7KicMdZH8/wQwNsydN
+	 R6V4uhj/ighUQ==
+Content-Type: multipart/mixed; boundary="===============1142546263766202448=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <DLNO7GO4QMNE.23673O3BC9B7@gmail.com>
+Message-Id: <8db5bd81a1abb7cedd563257f5431fc2e90762ea213978ac846d1574672c24b7@mail.kernel.org>
+In-Reply-To: <20260924165740.2146806-9-memxor@gmail.com>
+References: <20260924165740.2146806-9-memxor@gmail.com>
+Subject: Re: [PATCH bpf-next v4 08/18] bpf: Grow the verifier id scratch on demand
+From: bot+bpf-ci@kernel.org
+To: memxor@gmail.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,tj@kernel.org,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 24 Sep 2026 17:38:54 +0000 (UTC)
 
-On 2026-09-24 16:00:47 [+0000], Alexei Starovoitov wrote:
-> On Thu, Sep 24, 2026 at 05:31 PM Sebastian Andrzej Siewior <bigeasy@linut=
-ronix.de> wrote:
-> > v2=E2=80=A6v3: https://lore.kernel.org/all/20260918102610.gxA3km8_@linu=
-tronix.de/
-> >   - correct the subject line
-> >   - correct grammar error in the commit description
-> >   - Pickup a reviewed-by tag from Emil which was sent for v1
->=20
-> v2 was applied to bpf-next two days ago.
-> See commit 79dc258c9392 ("selftests/bpf: Replace %pK output with 0").
-> The code in v3 is the same. Nothing to apply.
+--===============1142546263766202448==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Oh, thank you. I haven't seen a mail from the bot and the patch tracker
-said had "changes requested".
+> The id map used to compare the ids of two states, which also serves as
+> the id stack of release_reference() and as the id set of
+> bpf_clear_singular_ids(), is a fixed array embedded in struct
+> bpf_verifier_env and sized for the most registers and stack slots a
+> state can possibly hold: 1312 entries, 10 KiB, for 512-byte frames, and
+> four times that once frames may reach 2 KiB, which pushes the env
+> allocation from 64 KiB to 128 KiB for every program verified. States
+> compare a few dozen ids in practice.
+>
+> Turn the map and the set into arrays grown on demand, starting at 64
+> entries and doubling, and free them with the env. A map that cannot
+> grow treats the states as different, an id set that cannot grow keeps
+> every id of the state, since its counts are then incomplete, and the id
+> stack reports -ENOMEM, which release_reference()
+> hands to its callers. The iterator destroy path used to warn on any
+> failure of release_reference(), which could only come from a bug while
+> the id stack could not run out of room; it now returns -ENOMEM and
+> keeps warning about anything else. An allocation failure thus fails
+> the load and is never unsafe. This removes the last structure whose
+> size scaled with the stack bound and shrinks the env by 10 KiB.
+>
+> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-Sebastian
+The commit message says this patch "removes the last structure whose
+size scaled with the stack bound", but struct bpf_verifier_env still
+contains stack-bound-sized members in the same header file:
+
+include/linux/bpf_verifier.h (struct backtrack_state, embedded as env->bt):
+
+    unsigned long stack_masks[MAX_CALL_FRAMES][BITS_TO_LONGS(MAX_BPF_STACK_SLOTS)];
+
+include/linux/bpf_verifier.h:
+
+    DECLARE_BITMAP(scratched_stack_slots, MAX_BPF_STACK_SLOTS);
+
+tmp_str_buf[TMP_STR_BUF_LEN] is also sized for the full stack mask
+string representation.
+
+The next patch in the series, fd50b14aca8a ("bpf: Size the per-frame
+verifier structures for a 2 KiB stack"), says the same thing in its
+commit message: "The verifier keeps a few structures whose size
+follows the deepest frame a program may have: the backtracking and
+scratched-slot bitmaps, the jump history slot index and the clamp of
+the liveness masks". It then grows those bitmaps from one to four
+words per frame and tmp_str_buf from 320 to 1408 bytes.
+
+Should the sentence say this removes the last *large* structure that
+scales with the stack bound, or say it is the last one sized by frames
+times slots, to match what the next patch describes?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36032786938
+--===============1142546263766202448==--
