@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from mta1.migadu.com (out-39.mta1.migadu.com [95.215.58.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 657AD429023
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 18:48:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DEFA4BA1D3
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 18:47:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790275689; cv=none; b=HYrzFp4BWFyJe0IlzTviP016+rRtx1orE4iO68TrGLwd5MIuDBF3yazZB9fhfHgBJzLfSMkiUfqg2c215kuOB8AlqIb/wXm+USy6CMVcPgB/8ph8BcOFWXXo9QKuEo5CiPnMGaOVbjsOqh2yAb7eOInOLzBH//5EVZKgTLlXToo=
+	t=1790275688; cv=none; b=o4f9zYZyL4HwSiFk9lBI+RAGZSt5bImU95Mq3WUvMmNeIlcLNiqAxgkdJok8jldjFz4NjtucYSVqmcKHCebPlpPjXsU2CwA+jU/fwVkU2vHt64NRis+mzNVc+FVz39sQItYceH9rred48HvL9HcwGQfzCGHmt0WBQlBFDK3BJjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790275689; c=relaxed/simple;
-	bh=9jyiyub5pkrnacT6pD4Pz1+9t1/b6Bu7Fi8ftJHlMSQ=;
+	s=arc-20240116; t=1790275688; c=relaxed/simple;
+	bh=YPDMx5Cpm0Ky2M5qOc3ie9+dgsk3KEGxwc7kMebFStk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cfhouuHxs1bVXwuDTZEeLRVUeQ9qZilylQj2HBo20cbLCKoz6vTehW5HAAekTcPTwmS7RjkhME10oAFKnr3htWFmSWd6Cdt4+HerQv5JdjFaL2wv85iS0MXRVd04MMvjlYvWiMlUsFhw5ld5HMblS05YSJp3INCAg2nqvgY/Y2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OH9wo06k; arc=none smtp.client-ip=91.218.175.188
+	 MIME-Version; b=TmPzOksMSTq8fJK8Zx8MJyyNfJmWG0ZQ9CT+YOvORZcN1hZjlMErFznosnGPXvvvexNzEQCeZbvLNWklkSKGK+cHd0FjMvq6qswzfJ+2avyrfluKKVk8DVtstC1j8RKCuY/va036ssXuOcRcTCT1XUE0bs7y04c6G3bVB0BESic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hRt6T8GX; arc=none smtp.client-ip=95.215.58.39
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OH9wo06k"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hRt6T8GX"
 X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=9jyiyub5pkrnacT6pD4Pz1+9t1/b6Bu7Fi8ftJHlMSQ=;
+DKIM-Signature: a=rsa-sha256; bh=YPDMx5Cpm0Ky2M5qOc3ie9+dgsk3KEGxwc7kMebFStk=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790275683; v=1; x=1790880483;
- b=OH9wo06k9/Fnu35XwoLBll23iqCQGlAEPK/fZrp1NIsjqWL4AoK+57TmyYAIXhjd3LlgOU40
- wk/Q49psUZi0DQRSbLOE4IqagUfT6Blu76471uezZmTTc7ruCQtPQSNtq182el/aYCOM6BVqHKz
- 82sHkBTL+v5+97pVPYWa+Ezc=
+ t=1790275675; v=1; x=1790880475;
+ b=hRt6T8GX88GoHf5QBQK+pSkz/vS596pjl0ZY5HL4IoVLD1gXsNPWE8+Xin3CSM9peiBdJvj1
+ B65aPsUnHWs30w5E5gAIRODr+kWUrvbJ9gaAbrxPzFjn7Gx8LnXrMnqoPAcE14G74xU6IWJ3BHT
+ D4bL3PTKBTIjkOk0NGppL7H0=
 X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id f865f6d5c743fba8;
-	Thu, 24 Sep 2026 18:48:02 +0000
-X-Mizu-Trace-ID: f865f6d5c743fba8
+Received: by smtp.migadu.com with ESMTPS id 458fdd5e55f5d437;
+	Thu, 24 Sep 2026 18:47:55 +0000
+X-Mizu-Trace-ID: 458fdd5e55f5d437
 X-Migadu-Flow: FLOW_OUT
 From: Shakeel Butt <shakeel.butt@linux.dev>
 To: Tejun Heo <tj@kernel.org>,
@@ -61,9 +61,9 @@ Cc: =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 7/7] selftests: cgroup: check that high_work reclaim is charged to the memcg
-Date: Thu, 24 Sep 2026 11:47:11 -0700
-Message-ID: <20260924184714.912181-8-shakeel.butt@linux.dev>
+Subject: [RFC PATCH 5/7] cgroup: take set_active_cgroup() time out of the cgroup's cpu.max
+Date: Thu, 24 Sep 2026 11:47:09 -0700
+Message-ID: <20260924184714.912181-6-shakeel.butt@linux.dev>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260924184714.912181-1-shakeel.butt@linux.dev>
 References: <20260924184714.912181-1-shakeel.butt@linux.dev>
@@ -75,381 +75,73 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Fill a memcg's TCP receive buffers from softirq while its only task
-sleeps, so the memcg goes over memory.high and high_work reclaims.
+Kernel work done under set_active_cgroup() shows up in the cgroup's
+cpu.stat, but the cgroup's tasks still get their full cpu.max quota.
 
-test_memcg_high_work checks that the memcg's cpu.stat and
-memory.pressure grow, which only happens if that reclaim is charged to
-the memcg.
-
-test_memcg_high_work_cpu_max also runs a CPU hog in the memcg under a
-cpu.max limit. The reclaim time should come out of the memcg's quota,
-so the hog should get less CPU while high_work is busy.
-
-Both need swap, so the anon memory can be reclaimed.
+Remember the task's run time at each set_active_cgroup(). When the
+active cgroup changes, charge the time used under the old one to its
+cpu.max quota with cfs_bandwidth_charge(). The caller is in the root
+cgroup, which has no cpu.max, so no quota is charged twice.
 
 Signed-off-by: Shakeel Butt <shakeel.butt@linux.dev>
 ---
- .../selftests/cgroup/test_memcontrol.c        | 332 ++++++++++++++++++
- 1 file changed, 332 insertions(+)
+ include/linux/sched.h |  2 ++
+ kernel/sched/core.c   | 12 ++++++++++--
+ 2 files changed, 12 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 0ed82347044e..00802804c0d9 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -18,6 +18,7 @@
- #include <netdb.h>
- #include <errno.h>
- #include <sys/mman.h>
-+#include <time.h>
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 002941f60e88..7ecea9cfa702 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -1358,6 +1358,8 @@ struct task_struct {
+ 	struct list_head		cg_list;
+ 	/* If set, CPU time is charged here; see set_active_cgroup(): */
+ 	struct cgroup			*active_cgroup;
++	/* se.sum_exec_runtime at the last set_active_cgroup(): */
++	u64				active_cgroup_start;
+ #ifdef CONFIG_PREEMPT_RT
+ 	struct llist_node		cg_dead_lnode;
+ #endif	/* CONFIG_PREEMPT_RT */
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index a487da494795..91fec6461e4f 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -5738,8 +5738,9 @@ unsigned long long task_sched_runtime(struct task_struct *p)
+  * @cgrp: the cgroup to charge, or NULL for current's own cgroup
+  *
+  * For kernel code that does work for a cgroup. The time it uses is charged
+- * to @cgrp as kernel time. Returns the old value, which the caller restores
+- * when done. @cgrp must stay alive until then.
++ * to @cgrp as kernel time, and taken out of @cgrp's cpu.max quota. Returns
++ * the old value, which the caller restores when done. @cgrp must stay alive
++ * until then.
+  *
+  * Only for callers in the root cgroup, like kworkers. The scheduler still
+  * runs the caller in its own cgroup, so from any other cgroup the time would
+@@ -5753,6 +5754,7 @@ struct cgroup *set_active_cgroup(struct cgroup *cgrp)
+ 	struct cgroup *old;
+ 	struct rq_flags rf;
+ 	struct rq *rq;
++	u64 used;
  
- #include "kselftest.h"
- #include "cgroup_util.h"
-@@ -1474,6 +1475,335 @@ static int test_memcg_sock(const char *root)
- 	return ret;
+ 	WARN_ON_ONCE(!in_task());
+ 	WARN_ON_ONCE(cgrp && cgrp->root != &cgrp_dfl_root);
+@@ -5768,9 +5770,15 @@ struct cgroup *set_active_cgroup(struct cgroup *cgrp)
+ 	rq->donor->sched_class->update_curr(rq);
+ 
+ 	old = p->active_cgroup;
++	used = p->se.sum_exec_runtime - p->active_cgroup_start;
++	p->active_cgroup_start = p->se.sum_exec_runtime;
+ 	psi_set_active_cgroup(p, cgrp);
+ 	task_rq_unlock(rq, p, &rf);
+ 
++	/* Take that time out of the old cgroup's cpu.max quota as well. */
++	if (old)
++		cfs_bandwidth_charge(old, used);
++
+ 	return old;
  }
- 
-+#define HIGH_WORK_NCONN		16
-+
-+struct high_work_args {
-+	int ctl[2];
-+};
-+
-+/*
-+ * Fill some anon memory, accept HIGH_WORK_NCONN connections, then sleep
-+ * without ever reading, so all received data stays charged to the memcg.
-+ */
-+static int high_work_receiver(const char *cgroup, void *arg)
-+{
-+	struct high_work_args *args = arg;
-+	struct sockaddr_in sa = { .sin_family = AF_INET };
-+	socklen_t len = sizeof(sa);
-+	int sk, i, rcvbuf = MB(8);
-+	unsigned long long x = 1, *p;
-+	size_t size = MB(256);
-+
-+	close(args->ctl[0]);
-+
-+	/* Hard to compress, so reclaiming it to swap takes real work. */
-+	p = mmap(NULL, size, PROT_READ | PROT_WRITE,
-+		 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	if (p == MAP_FAILED)
-+		return -1;
-+	for (size_t j = 0; j < size / sizeof(*p); j++) {
-+		x = x * 6364136223846793005ULL + 1442695040888963407ULL;
-+		p[j] = x;
-+	}
-+
-+	sk = socket(AF_INET, SOCK_STREAM, 0);
-+	if (sk < 0)
-+		return -1;
-+	if (setsockopt(sk, SOL_SOCKET, SO_RCVBUFFORCE, &rcvbuf, sizeof(rcvbuf)))
-+		return -1;
-+	sa.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-+	if (bind(sk, (struct sockaddr *)&sa, len) || listen(sk, HIGH_WORK_NCONN))
-+		return -1;
-+	if (getsockname(sk, (struct sockaddr *)&sa, &len))
-+		return -1;
-+	if (write(args->ctl[1], &sa.sin_port, sizeof(sa.sin_port)) !=
-+	    sizeof(sa.sin_port))
-+		return -1;
-+
-+	for (i = 0; i < HIGH_WORK_NCONN; i++)
-+		if (accept(sk, NULL, NULL) < 0)
-+			return -1;
-+	if (write(args->ctl[1], "A", 1) != 1)
-+		return -1;
-+
-+	for (;;)
-+		pause();
-+	return 0;
-+}
-+
-+static long psi_some_total(const char *cgroup, const char *control)
-+{
-+	char buf[BUF_SIZE];
-+	long total;
-+
-+	if (cg_read(cgroup, control, buf, sizeof(buf)))
-+		return -1;
-+	if (sscanf(buf, "some avg10=%*f avg60=%*f avg300=%*f total=%ld",
-+		   &total) != 1)
-+		return -1;
-+	return total;
-+}
-+
-+/*
-+ * Socket memory charged from softirq can push a memcg over memory.high.
-+ * The reclaim then runs from high_work on a kworker. The memcg's only task
-+ * sleeps the whole time here, so its cpu.stat and memory.pressure only move
-+ * if that reclaim is charged to the memcg.
-+ */
-+static int test_memcg_high_work(const char *root)
-+{
-+	int ret = KSFT_FAIL, pid = -1, i, sk[HIGH_WORK_NCONN];
-+	long usage, high, some, current, sent = 0;
-+	struct high_work_args args;
-+	char *memcg, *buf = NULL, c;
-+	in_port_t port;
-+	time_t last;
-+
-+	for (i = 0; i < HIGH_WORK_NCONN; i++)
-+		sk[i] = -1;
-+
-+	if (!is_swap_enabled())
-+		return KSFT_SKIP;
-+
-+	memcg = cg_name(root, "memcg_test");
-+	if (!memcg)
-+		goto cleanup;
-+	if (cg_create(memcg))
-+		goto cleanup;
-+	if (pipe(args.ctl))
-+		goto cleanup;
-+
-+	pid = cg_run_nowait(memcg, high_work_receiver, &args);
-+	if (pid < 0)
-+		goto cleanup;
-+	close(args.ctl[1]);
-+	if (read(args.ctl[0], &port, sizeof(port)) != sizeof(port))
-+		goto cleanup;
-+
-+	for (i = 0; i < HIGH_WORK_NCONN; i++) {
-+		struct sockaddr_in sa = { .sin_family = AF_INET, .sin_port = port };
-+
-+		sa.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-+		sk[i] = socket(AF_INET, SOCK_STREAM, 0);
-+		if (sk[i] < 0 || connect(sk[i], (struct sockaddr *)&sa, sizeof(sa)))
-+			goto cleanup;
-+	}
-+	if (read(args.ctl[0], &c, 1) != 1)
-+		goto cleanup;
-+
-+	/* Just above the current usage, so this write does not reclaim. */
-+	current = cg_read_long(memcg, "memory.current");
-+	if (current < 0 || cg_write_numeric(memcg, "memory.high", current + MB(2)))
-+		goto cleanup;
-+
-+	usage = cg_read_key_long(memcg, "cpu.stat", "usage_usec ");
-+	high = cg_read_key_long(memcg, "memory.events", "high ");
-+	some = psi_some_total(memcg, "memory.pressure");
-+
-+	/* Fill all sockets until they stop taking data. */
-+	buf = calloc(1, MB(1));
-+	if (!buf)
-+		goto cleanup;
-+	last = time(NULL);
-+	while (time(NULL) - last < 2) {
-+		for (i = 0; i < HIGH_WORK_NCONN; i++) {
-+			long n = send(sk[i], buf, MB(1), MSG_DONTWAIT);
-+
-+			if (n > 0) {
-+				sent += n;
-+				last = time(NULL);
-+			}
-+		}
-+	}
-+	sleep(2);
-+
-+	if (cg_read_key_long(memcg, "memory.events", "high ") <= high) {
-+		ksft_print_msg("high_work did not run, sent %ld bytes\n", sent);
-+		goto cleanup;
-+	}
-+	if (cg_read_key_long(memcg, "cpu.stat", "usage_usec ") <= usage) {
-+		ksft_print_msg("high_work CPU time not charged to the memcg\n");
-+		goto cleanup;
-+	}
-+	if (some >= 0 && psi_some_total(memcg, "memory.pressure") <= some) {
-+		ksft_print_msg("high_work stall not in memcg memory.pressure\n");
-+		goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	for (i = 0; i < HIGH_WORK_NCONN; i++)
-+		if (sk[i] >= 0)
-+			close(sk[i]);
-+	if (pid > 0) {
-+		kill(pid, SIGKILL);
-+		waitpid(pid, NULL, 0);
-+	}
-+	free(buf);
-+	cg_destroy(memcg);
-+	free(memcg);
-+
-+	return ret;
-+}
-+
-+static int high_work_spinner(const char *cgroup, void *arg)
-+{
-+	for (;;)
-+		;
-+	return 0;
-+}
-+
-+/* CPU time @pid has used so far, in microseconds. */
-+static long task_cpu_usec(int pid)
-+{
-+	unsigned long long ns;
-+	char buf[128];
-+
-+	if (proc_read_text(pid, false, "schedstat", buf, sizeof(buf)) <= 0 ||
-+	    sscanf(buf, "%llu", &ns) != 1)
-+		return -1;
-+	return ns / 1000;
-+}
-+
-+static long now_usec(void)
-+{
-+	struct timespec ts;
-+
-+	clock_gettime(CLOCK_MONOTONIC, &ts);
-+	return ts.tv_sec * 1000000L + ts.tv_nsec / 1000;
-+}
-+
-+/*
-+ * The setup of test_memcg_high_work, plus a CPU hog in the memcg and a
-+ * cpu.max limit. The reclaim that high_work does for the memcg should come
-+ * out of the memcg's CPU quota, so the hog should get less CPU while
-+ * high_work is busy than it gets otherwise.
-+ */
-+static int test_memcg_high_work_cpu_max(const char *root)
-+{
-+	int ret = KSFT_FAIL, pid = -1, hog = -1, i, sk[HIGH_WORK_NCONN];
-+	long current, h0, h1, h2, t0, t1, t2, u1, u2, reclaim, lost;
-+	bool cpu_enabled = false;
-+	struct high_work_args args;
-+	char *memcg = NULL, *buf = NULL, c;
-+	in_port_t port;
-+	time_t last;
-+
-+	for (i = 0; i < HIGH_WORK_NCONN; i++)
-+		sk[i] = -1;
-+
-+	if (!is_swap_enabled())
-+		return KSFT_SKIP;
-+	if (cg_read_strstr(root, "cgroup.controllers", "cpu"))
-+		return KSFT_SKIP;
-+	if (cg_read_strstr(root, "cgroup.subtree_control", "cpu")) {
-+		if (cg_write(root, "cgroup.subtree_control", "+cpu"))
-+			return KSFT_SKIP;
-+		cpu_enabled = true;
-+	}
-+
-+	memcg = cg_name(root, "memcg_test");
-+	if (!memcg || cg_create(memcg))
-+		goto cleanup;
-+	/* 20% of a CPU, in short periods so the numbers come out smooth. */
-+	if (cg_write(memcg, "cpu.max", "2000 10000"))
-+		goto cleanup;
-+	if (pipe(args.ctl))
-+		goto cleanup;
-+
-+	pid = cg_run_nowait(memcg, high_work_receiver, &args);
-+	if (pid < 0)
-+		goto cleanup;
-+	close(args.ctl[1]);
-+	if (read(args.ctl[0], &port, sizeof(port)) != sizeof(port))
-+		goto cleanup;
-+
-+	for (i = 0; i < HIGH_WORK_NCONN; i++) {
-+		struct sockaddr_in sa = { .sin_family = AF_INET, .sin_port = port };
-+
-+		sa.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
-+		sk[i] = socket(AF_INET, SOCK_STREAM, 0);
-+		if (sk[i] < 0 || connect(sk[i], (struct sockaddr *)&sa, sizeof(sa)))
-+			goto cleanup;
-+	}
-+	if (read(args.ctl[0], &c, 1) != 1)
-+		goto cleanup;
-+
-+	hog = cg_run_nowait(memcg, high_work_spinner, NULL);
-+	if (hog < 0)
-+		goto cleanup;
-+
-+	current = cg_read_long(memcg, "memory.current");
-+	if (current < 0 || cg_write_numeric(memcg, "memory.high", current + MB(2)))
-+		goto cleanup;
-+
-+	/* How much CPU the hog gets without high_work. */
-+	sleep(1);
-+	h0 = task_cpu_usec(hog);
-+	t0 = now_usec();
-+	sleep(3);
-+	h1 = task_cpu_usec(hog);
-+	t1 = now_usec();
-+	u1 = cg_read_key_long(memcg, "cpu.stat", "usage_usec ");
-+
-+	/* Fill the sockets slowly, so high_work runs many times. */
-+	buf = calloc(1, 64 << 10);
-+	if (!buf)
-+		goto cleanup;
-+	last = time(NULL);
-+	while (time(NULL) - last < 2) {
-+		for (i = 0; i < HIGH_WORK_NCONN; i++)
-+			if (send(sk[i], buf, 64 << 10, MSG_DONTWAIT) > 0)
-+				last = time(NULL);
-+		usleep(15000);
-+	}
-+	h2 = task_cpu_usec(hog);
-+	t2 = now_usec();
-+	u2 = cg_read_key_long(memcg, "cpu.stat", "usage_usec ");
-+
-+	if (h0 < 0 || h1 <= h0 || h2 < 0 || u1 < 0 || u2 < 0)
-+		goto cleanup;
-+
-+	/* The receiver sleeps, so the rest of the memcg's time is high_work. */
-+	reclaim = (u2 - u1) - (h2 - h1);
-+	lost = (h1 - h0) * (t2 - t1) / (t1 - t0) - (h2 - h1);
-+	if (reclaim < 30000) {
-+		ksft_print_msg("high_work used only %ld us, too little to test\n",
-+			       reclaim);
-+		ret = KSFT_SKIP;
-+		goto cleanup;
-+	}
-+	if (lost < reclaim / 3) {
-+		ksft_print_msg("hog lost %ld us, high_work used %ld us\n",
-+			       lost, reclaim);
-+		goto cleanup;
-+	}
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	for (i = 0; i < HIGH_WORK_NCONN; i++)
-+		if (sk[i] >= 0)
-+			close(sk[i]);
-+	if (hog > 0) {
-+		kill(hog, SIGKILL);
-+		waitpid(hog, NULL, 0);
-+	}
-+	if (pid > 0) {
-+		kill(pid, SIGKILL);
-+		waitpid(pid, NULL, 0);
-+	}
-+	free(buf);
-+	if (memcg)
-+		cg_destroy(memcg);
-+	free(memcg);
-+	if (cpu_enabled)
-+		cg_write(root, "cgroup.subtree_control", "-cpu");
-+
-+	return ret;
-+}
-+
- /*
-  * This test disables swapping and tries to allocate anonymous memory
-  * up to OOM with memory.group.oom set. Then it checks that all
-@@ -1780,6 +2110,8 @@ struct memcg_test {
- 	T(test_memcg_oom_events),
- 	T(test_memcg_swap_max_peak),
- 	T(test_memcg_sock),
-+	T(test_memcg_high_work),
-+	T(test_memcg_high_work_cpu_max),
- 	T(test_memcg_oom_group_leaf_events),
- 	T(test_memcg_oom_group_parent_events),
- 	T(test_memcg_oom_group_score_events),
+ #endif
 -- 
 2.53.0-Meta
 
