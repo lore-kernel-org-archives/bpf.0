@@ -1,333 +1,213 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 421D64A2E19;
-	Thu, 24 Sep 2026 15:31:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790263920; cv=none; b=UMONIRIdYIG1G0ks4Ppg2sViO8lwo2B/pQtPUsLdLyvFJdVaYrMyB91X5H20cRyHzO7qFE5YfsFKmqttNg7pxSEon1y/5xBTCnJzRdDD3F06RMLJeW1e6aGr0pKtH8XpZuK+B9ltgjZvSUviKrz8/qcQdzb90r8UU1kSfhy+pRk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790263920; c=relaxed/simple;
-	bh=3xo8ngm/a45taQFOuaP0QBr/hJSDbioFbORZziwTNgw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=VfhM1lkNs1Jo2X6BXED9lMX2SfJzjiKkP1oS+F5fN0GILorgIC7icRWcrt5tvIgVdihZ3rs0OwUwM7kBhSHS5uzA+71CV6Pfe06FmfSTnhTUbBVyBOQDCRyx1+CrOzJ/qKXtzzXl6Dd1WTtD3TtJjd2ep5iDn4xLcWNrEWVn/VA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=floOD8J8; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SWkaRAUi; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1FC34A260B
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 15:34:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790264048; cv=fail; b=tqlK21xiEIxKpz7YuTqukVjvRG7hWvnsCmUgXhlVJ9McVyNxHN0/0pdqUtADfa9zqFiJR0ZB6hWdC9Bom3m0AgmxzT87hLTmHwstY/FWa2MklHQcD0l1W2rIJarIv6ZwexYY7Y15MYDy7ItVLOlZAsel+jevsSbSPn3EnzsqT/0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790264048; c=relaxed/simple;
+	bh=SHV6qp8QaVW3UGbVAJdeWIUBggZOGp0ywgNjkJI0XXE=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=t7QmsYczkze/cObpNMM2jqA46dkM1wz9wYaqE5Uo35MbgSxZEIwABft9DN0YyaavgLQWblFmDjSLW49Fb3YwesYLkMNLHDOnII+zbs2oW42PL2OlRMCaz1pOC6bCPVnZ2KMLGh4W/MbrzdPMmbyYcJ1OU5GXH0Y+4sE78l1bT4o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=XUaPXO8V; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=tCzj8UAt; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="floOD8J8";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SWkaRAUi"
-Date: Thu, 24 Sep 2026 17:31:53 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1790263915;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=wiPTQbaQJEV34RoypBhntP44b/GO1dhGqAzeDjKzHns=;
-	b=floOD8J8WL1BIoRbv8JoybFmQXvK//30BoLaqmmskCXp+UFQtc9dK6DYls0kSdZr+omfgZ
-	pkNajWbIW3s4cCHCamzvcZMvYpS2SLxldDJDXmc1ZjVK+mv/jDG+wySaj8XhRbQESnl82/
-	VwtbfsSwIb3iHBzM2HDEkRzj7WBgEOSuqYgpoiemH9ItNYk6YTrM0O43oeWxskGQ5HsRjx
-	HvsM/eSS5j/HKaDkjUZ7P+CuhzXUID9FeUMTP3cBf3Imwe1NQ7Ox/0yrntO2t+NPllghZ0
-	YEEsyRNp6CAQU3TKzm40UFitcztcNewTvq3qmXGyeMhoBfVQHTKLJRB/6Bg64g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1790263915;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=wiPTQbaQJEV34RoypBhntP44b/GO1dhGqAzeDjKzHns=;
-	b=SWkaRAUiDx2uTxJ6EghqsmHO+OG7jVZOpK0Z87LESniZ/fk27qrwnZRoTvPd6eMYzLU89B
-	GVBnVHDdC5JYC2Bw==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>
-Subject: [PATCH v3 bpf-next] selftests/bpf: Replace %pK output with 0
-Message-ID: <20260924153153.tlErkAb5@linutronix.de>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="XUaPXO8V";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="tCzj8UAt"
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68ODir8J1362146;
+	Thu, 24 Sep 2026 15:33:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=wr7aVFfxPAINmkB81mK7vYnVH6F+ppS6/Y7OWh1D7Kc=; b=
+	XUaPXO8VbJflbH8HZhWctxW/HM5CBo2iM77/5tywccwuarQb9l/ZLxNaHWUWHUkS
+	Z2eqFxgrunc4uzRKxjw00ug4E236snwrAMCClTr6uoT+SGHMqNCeSRtfSmy3eshA
+	Kw1G6aXMBJqpTUk+LuMjFC3ojQ2qWJzb8SqZBEaG1SAlVizQmKtQN6GLBdJAPEXW
+	9BU/67cKFP2SOycg8xcBpIfuG9fZlPCzkfkXOBd2shAqezpuODuaIZ0yZbeTxfq2
+	eOoBGIW/Nk1s81n1j+m3Pk5hZHd6s991qit/Gt6SA+Qkp+RJGrFlYg4R/2Sa4BkH
+	ENji5Fl3YOgA+Z1PINH9FQ==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gsk1qfye0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 24 Sep 2026 15:33:42 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68OFKbIU028531;
+	Thu, 24 Sep 2026 15:33:41 GMT
+Received: from ph7pr06cu001.outbound.protection.outlook.com (mail-westus3azon11010044.outbound.protection.outlook.com [52.101.201.44])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4gu1rd2fy0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 24 Sep 2026 15:33:41 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=yTEZya1DM9+zC/YIkkFl528iP+IAm56JrXYen8s95V3PlZcZIzs5vQy7/7PLyZs26ik7Yb5//XoWxsJN116xImUpP8M6azzV2L4gPy7Kwzcv0166KGDHLH6pfMM2FmGidRy5vGVsSW9OuEk/dM1XF71tjF+wWusVB9J+oRzxgXj3SDnaBaJw3u4okjJ83bMF5lnZg8T2vjVXl0q2QUP411/kvgbotU+Et3EsE5YjBD0Pr7RxG8OFOH/eQ+DRkdBgcSMYcajAmF873fuhnWS+gPeVfPc6wQfzN5v/CgnFMkPn/ZOkWs+mtxJ3dp0fPmDT5sxsrLZNj6dZRlGZzRaZig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wr7aVFfxPAINmkB81mK7vYnVH6F+ppS6/Y7OWh1D7Kc=;
+ b=iira9c8Un9Y6RXP0uHtCGsFpiCRdUUnC3u5u4i8mkMdYil2cRL58CKA3elKVpktr4zJXq+JfMeUnqRh4No0+kHSXKiNU4GHg1jozrod7iIyNK2tOZQqFOObkD85cL+mCj6ojZTLFC9y6uftX3qthVrbqPTfFGJ9d2aQGnWgUy5fUpQu6SR/SV8ivMcGGlt2n2/AyqGBNOgtiLwXGe093NgDkxdJd7JgOYMqdltd/7+LcFLUexhpiPer8kvuAYsYN2dylAK8C8AXtUATy8hSbuinpiBBJmne4NnEbDUOrfuAHU1zuD/pdNMLqpZP4FIZRak5T4ujSWM/n98SzST0hpQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wr7aVFfxPAINmkB81mK7vYnVH6F+ppS6/Y7OWh1D7Kc=;
+ b=tCzj8UAtyBE5d6UmVPd9bgZyxlsjfxjVp4lWoP3n3nUxRAx7AAJXGLTdgr4TuHbQz1sQBDqhaPet7acRoS9JiX7YNjluVVls2eowPpJYjd8tDnsFa3f03qyOHh+Y834M1FIYaPNiLDF6BhL+x8CDBjbpwTIQd7NtPBna0Wy3B5w=
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oracle.com;
+Received: from BN0PR10MB4901.namprd10.prod.outlook.com (2603:10b6:408:126::19)
+ by CH2PR10MB4167.namprd10.prod.outlook.com (2603:10b6:610:ac::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.472.7; Thu, 24 Sep
+ 2026 15:33:37 +0000
+Received: from BN0PR10MB4901.namprd10.prod.outlook.com
+ ([fe80::19a8:41b4:f519:1b79]) by BN0PR10MB4901.namprd10.prod.outlook.com
+ ([fe80::19a8:41b4:f519:1b79%5]) with mapi id 15.21.0472.005; Thu, 24 Sep 2026
+ 15:33:37 +0000
+Message-ID: <3dc200bd-1e24-40ec-be53-2d94c0feeb14@oracle.com>
+Date: Thu, 24 Sep 2026 16:33:30 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 bpf-next 09/11] bpftool: Add ability to dump LOC_PARAM,
+ LOC_PROTO and LOCSEC
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, andrii@kernel.org,
+        eddyz87@gmail.com, qmo@kernel.org
+Cc: jolsa@kernel.org, daniel@iogearbox.net, ihor.solodrai@linux.dev,
+        yonghong.song@linux.dev, song@kernel.org, martin.lau@linux.dev,
+        memxor@gmail.com, emil@etsalapatis.com, bpf@vger.kernel.org,
+        nsc@kernel.org, puranjay@kernel.org, yatsenko@meta.com
+References: <20260924111428.75957-1-alan.maguire@oracle.com>
+ <20260924111428.75957-10-alan.maguire@oracle.com>
+ <DLNN9DAADBPQ.18FN1VMU78XSH@gmail.com>
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <DLNN9DAADBPQ.18FN1VMU78XSH@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR4P281CA0119.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:bb::14) To BN0PR10MB4901.namprd10.prod.outlook.com
+ (2603:10b6:408:126::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|CH2PR10MB4167:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5aa80521-29df-4f37-9d5c-08df1a51338f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|366016|23010399003|376014|7416014|10067099003|56012099006|4143699003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	v+c1EjJv9vijtWoIw5HMIJUCzgvzpAMsLsOSm7I63EIBlVrp/5gzs/WBl+iBp5w3vt53oFwbsqGv9E4o/L6exvdayxIuD82KTmY3myDdgWe5FFs4FU31J1mXbaq3y8DFJiInjbAwgwOjbLfFC0I+GPfwyWb4BUFlyOaRV800KbgtWDxteHrdY00uIXwZKKEz9qkyJfBFChxhwnWfaH8vr4j0/QCR6HPz50FeT0k+qfTN7Y9MyEl79vR+2ySRArORXsEiAcx067DnmhXC2WEmgeDnECSJktIp2bhvc1V27ORyX2qrUf17yop/G45o9bJ2BznPc/ct74muWje3fpc1lCtiHSJqSNwZCZeRJc6eDpHcp/nuitfOYXebXjTnHUKhFla9UJ+hbJJTiyt7GGAbgCANuUdveHJcUfjoSsLN/YPvmrirzDqCbqFS6jZB4e2TaOvmLDHqp3GYsLQi2QfRFpPGvCUqPrjedBf/jO7KHpTHykRBIIce/iX1lYTfbVBerpq1wgs/5oWJKeSVmIW72pwXvqhd/7oXyxxwqiJnOWNQw7PEhy5Dw6i3Tu4cuPnXQGn6Amydl3Wgcyz4idqh+RXgl3ZIcMssR8N5ErSu/pWu5sXik0FUEIs0SlhSFToCd/X1CWTaw2/M3KgOeq/C8zv35VO0IE2J7amDv3HL+7I=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(23010399003)(376014)(7416014)(10067099003)(56012099006)(4143699003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?YlZQeE1kT1hSZTN4N1o1YXZSNlZEcUk5Y1Mwdld2cUJuRVRqVFhoYnEzSlNO?=
+ =?utf-8?B?dGIyNTdLVHd1YzhvUTBNMDRIMXV0Y3p3UXp1alNaUkF6bFNsN0tVVWllZlRE?=
+ =?utf-8?B?VFlHSkdGU0xid2IwZXlXcjN1bmlOSXhKYTJoVEJMeDE3bHlTRHFtOTJacEV0?=
+ =?utf-8?B?eWZpRFpIU3Nmek1xNHJwcGx5SThneEVtRDFwYlBrdHJLcVB1aEZlOCtGRDYx?=
+ =?utf-8?B?YWZ2RCtJU3NldjdtRFNuNjV0TXlxQjJVbjlUblppQ0xMVmVSUDh4Z3RjbGR0?=
+ =?utf-8?B?L1F5V0lyM3BUQ2Z0bDd3K0dIMllrQkMyNEJiRlpwelM5VlR5elpDMjVGZTBX?=
+ =?utf-8?B?eGluK1VyTldkSERIL1I5MFQ3cERyQTFObnVBWkcwRUZoeXJSTzl2clNzOFdB?=
+ =?utf-8?B?R0hJME1zNm1lQThZVlVoU0MvVEdHK3o0NmhHcFM5TFdLYTRZeHZHTTNVbDVU?=
+ =?utf-8?B?RkRHV2ZvMDJQamhIV3B6dXY4YWJ5MjBnQ2laNmF4ZWx4UlMzQUNkclE0Y1dx?=
+ =?utf-8?B?ZUdVMWJuZzFnRTBBUmFoZU9vTGNlSll5YllpeGd5cTdtd3pTUHByWU9HeFJ2?=
+ =?utf-8?B?YThpY1EvV1NnSWl4eC9vZlZwVTdBSjd6TkNBYy95QUF5OE1FeHVjdVp0OWZW?=
+ =?utf-8?B?M3VZQ2VDQ2g3eW1iMVdFY2RQUzBzQU1HNjZ0Q1FRQk0vT21vWHFuVTFnekdF?=
+ =?utf-8?B?Z1RQUENnUGJXOTRXYkh5OXg3cGNta0ZoTGg2d2p2b0k3blFVMDlkVk9ZbWZR?=
+ =?utf-8?B?ZTBZbnZGUVR2ZThWSXlPNDM5TjlGNWRSZkNDUUI1TmNTSnJwcXpxRGlNd25Z?=
+ =?utf-8?B?UWJYZ0pNYU1lalZ6c01Mc2ZBOWwxZmRjN2l4R2IvMnlkMUxiM0xhMnppRU1G?=
+ =?utf-8?B?azdFMlFvUklzeXlkVE44d0twQThQeHJUaWIyVmtEUU9qQ1pwNmdFa2EraTk4?=
+ =?utf-8?B?bTNhY3FDZ3l1NVdTdlJaZ1Q5a1VlbmpPWEhTdG5tK2JiT2hnTHRhT1EvV1dK?=
+ =?utf-8?B?ZVlBc3pNc1czS1ZRNWJtU3ZvdnN1Y2JwTW5iVHZxY1p0emRlV0xtbjgyUE1z?=
+ =?utf-8?B?VXZqdXkvSk1mZWdWUk1lOXI4NWV6Yis1TC8yZWxTejNjTVFzTHZSTHM0QmNu?=
+ =?utf-8?B?dXN6TzBPa3RDNEs2WU9WZ2JJamY0YzVUb2JWbG5TclJsaUNhK2FMRFZxM0Ur?=
+ =?utf-8?B?dGZPbjNtU2owZkJ3aDVqd3FtVStjakFMQXNscExNUER3ZmNPb09lMjZUWmNP?=
+ =?utf-8?B?V0VPWlpMTVNVcUhYRDdGVmtZUHU2cFBveENmZUl6SkdhYUxaOUZLNnE1d3RW?=
+ =?utf-8?B?emZCVElOdDZ4d3hQUWU2LzNOYS9Ock5WTW9FR1ljczhVYkxWWEl0VUt6aDFX?=
+ =?utf-8?B?K1YvdUUzQ1ZwSk5XM2U0Rzdpd2QrT2ZUZjV1S2Q5S044dmZFVk5WUmhwUmho?=
+ =?utf-8?B?ZFNPSk5la0VFaFc2NHM2NlhEUHIzOEY1WVJRZlcrdWRMQk1kZ2pvNHhXdmVL?=
+ =?utf-8?B?K2dWcCt1Y2NJeXdQOFNyMXhCck9CUklKNmRRZXkyalRETlJIY2JiVzFPck80?=
+ =?utf-8?B?OGdsdUY4MGJ3Nm1IRDlpeVZ1Zi9DYnhjYktvUmcwdDEzQmJSWitnODEyVysz?=
+ =?utf-8?B?TUFpMTdOTVNqc2hES1R5WDlPZVhxc1BVdXRtTzExTzlpMUlKVWlOR1l1MjRK?=
+ =?utf-8?B?ckl4aWFNeE82eWNIQStOMVFwZjdkZkloNXBUTEw1Z0t1c3hEYTNTdk1UZlYv?=
+ =?utf-8?B?YTF0dVIrYVcxZ3N3M1lwZGhLeXVyck5scWpXc0pKWnJoeDkxMktSWFJhZDF6?=
+ =?utf-8?B?LzNCMmZvYnYyQzRPL09FQzFRL3FrakEvS3VEY0wyVlJtNXJPck1QZ1FIMHN4?=
+ =?utf-8?B?d3Q0bGxyK0NKMHh3dGtIbmVUdk5GOE5XZk15QzRPZWhJeTRRMS8yaEVrK3lL?=
+ =?utf-8?B?RE5ZMWtaN2JhYWJsVTBveXRHN3RyKzhJbDI5bnJBVDY0RlZsK1J1Q0RjSlgy?=
+ =?utf-8?B?TnhQS2RTUmwrTDh4MEw0eHE0ZFFPWWF1T3lVVmF4V1VCWFAzaE12U1NwVGdU?=
+ =?utf-8?B?dUgyRVJxekNKMHJtNU9vc2UrNTM5ZG5UVTFUSVUxYkk5QmNjS0l1d3l1WXBF?=
+ =?utf-8?B?WUxRR0tOWXVFS2ErUHJGeGxodi91SHRISk9ucy8xL0VYcTFvdlJzL3NNck1r?=
+ =?utf-8?B?VlBpdk5ibG80QXJZNEljNk9DQXRmMFBoVkFHeVpSNUdlWTY0cW9VdlZhbUQw?=
+ =?utf-8?B?RWY0cXAzL3ZZTkJ0UFFIRWtOY2l5dnhHOWR2bGJ6ZjZRYjFidWJmYW8yMk1V?=
+ =?utf-8?B?d3dXNVJNZU9qNG5IZGx4WGs1Z2dpbjJoZHBOYkt3aEw0ZkZmTkh5dz09?=
+X-Exchange-RoutingPolicyChecked:
+	QcQxQDe8I9kmeFp/zKERDuO0kT/fkiDvq7TxPpEf0Ztc+HUgkauiAwLCuxV4d0KhhO5foB28/F/UB/xu7lppbVjDvt+wJ1SIj47I0ZLY9xCC5W1bwbhuaramk8vDxldiwhf71cOzA93BWcw8txiTn6jW1jaD94jpQl7BUpCZDxzX+AxjUoSxzjU1WAE352dA50ZwYpLiQt31wuPrhfowFb+CKP9/rbYwM9m9EphN2Y46wExtomN947JYtheQl41nY4rjlqct68jy9BO0YYwfG/HNaADpJnre8iJOnvggFFipvQ39wTf1xVUkM5UimVoGT4QTILcMo3vkv2NDyiJMcg==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	7QRA8UF5CvMH2/ewBgMw4bxH4x0Q71+a35XXoRY0cjoUjbU5cvjqRuFSNsC819NVlF3ExIb0dpfc+rpuNp9QHlf7vCRdVSmR/9if+bJVI3K2PDhb7QEYIk79/WftIU2XXulLU15a6zfPIFCK/RLXIdzrpzi4unk1HZcXeG2O7QeQIcqITszg5QZVswNl7DHhe2mGpOlCBdicj+kPBgmBMCh52u48TqaTLroxUa0oDiJXxW7BL7JtJOxoJIibgBPWvRax0NxghzCKj0VbwL+nWoOHjY1HhWehRNQEbtWmoUYnEUyBVTjyRlqxA2uOH2agXE4sA7uyVsLs4A4P374aRRqDuMoXQy9k2u6VwkPy+eLyj6gEMXQDfuZdZo810+037LVrhRU55BUT3vLn0fSKb/Jd0Ou/oSRnnAKKhniLLZ50nF1Kgc+M2l+xrKnArLmCPlxlR9Pz/cEE1ZhoUWp6L2C/2w91hv6tw++TCYwodyFKvaVWXwEBt1BhwF+GfrbDFYNh+iEE+K0KX9YdwY+CR5z7X2HRm2Rx2RSrpQ5M8mDOaUTjoCYCCuDFh3DjasFJrqF/+92nrHENOf7PxfoOztmc5UwGdqTL2nvMDj+FH/Q=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5aa80521-29df-4f37-9d5c-08df1a51338f
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB4901.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2026 15:33:37.2597
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eevfTmUstIlaqf04WvHfOjrLmZk7i/2OLQsZYFfaLSxS9cTqcX2gbJJP+/zJ1hFC1zX9prPYAtZw9z5ojyVCAw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR10MB4167
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-24_03,2026-09-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
+ bulkscore=0 lowpriorityscore=0 spamscore=0 suspectscore=0 malwarescore=0
+ mlxscore=0 mlxlogscore=999 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2609040000 definitions=main-2609240063
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI0MDA2MyBTYWx0ZWRfX+w8ECtbW0zHu
+ jNA3rUH+yUxRQIcpKKYdm3YoxvZOFiH+jnEbsdgj1T6+k+SW8sscIO55dBmIegidF/8J2FZ2l9U
+ 8iS/W8T5e57ntlEpE450Fb0kdbfhOohO2Rg8INxBH7JhDghVBBXA
+X-Proofpoint-ORIG-GUID: n1M4WhwJu7W2KGlFEOz41kBdbwmMqtbS
+X-Proofpoint-GUID: n1M4WhwJu7W2KGlFEOz41kBdbwmMqtbS
+X-Authority-Analysis: v=2.4 cv=LIzz05W9 c=1 sm=1 tr=0 ts=6ab542d6 b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=VdqzKS8jKosA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=x0eKOSpe3m1H3M0S9YoZ:22 a=yPCof4ZbAAAA:8
+ a=EwUd0v5pEmvV-QdUe4sA:9 a=QEXdDO2ut3YA:10 a=zgiPjhLxNE0A:10
+ a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12107
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI0MDA2MyBTYWx0ZWRfXwYHuQ73SHdVP
+ yY0BO/B+lBFWbm1UIje48Llss1HPQHim4ngeiYa3Ar1YI44wQPLVRT/ft+PCRBk7k4v3lzXO9ZQ
+ uMAodIxRReg4Dh+1+KWedH7iVmVdR8cuNQpbqIVZq/a6uEydICxAcqaUFdIs9u7UfCNRGSnwWTV
+ EFl5WzIwNglDnvydJN15tRGqLTbRrSO/XTHvSMWB7ska/FDKkVub1ksESo+TdA/09HQ9f8vxl8u
+ N1Ms+XK0NSPNl80Uz24Ta+PjiuqjySIw9vPoWBZWljC8milXYfxOUxKEyJzGn/pjttH59FkBVic
+ p5oKRfp5Hk1ytu8/tM8M4ZWfno+EeiAPhZG8u7pLGbSz7229kqYqD5fBgF//Uu8cWWg9mmHWui3
+ 3+WHAheUX7ldTVQR6Z2y1Hlw2zKw9zc/DXj0cNP0JAgwkphWtEX8NMCTgHC4NH0w4SQGVNHDVFX
+ ioKkpdLH6gVDlzHODA4G1qT7ShSB4fnrcwERbNV4=
 
-Networking used to print the socket pointer with %p as output in the
-/proc interface. This was later changed to %pK in order not to reveal
-the actual pointer value. The output format has then been copied to bpf
-tests which produce the same format including the %pK format modifier.
+On 24/09/2026 16:16, Alexei Starovoitov wrote:
+> On Thu, Sep 24, 2026 at 12:14 PM Alan Maguire <alan.maguire@oracle.com> wrote:
+>> +				printf("\n\tname='%s' func_type_id=%u loc_proto_type_id=%u offset=%u",
+>> +				       name, locs->func, locs->loc_proto, locs->offset);
+> 
+> My earlier feedback must have been lost:
+> Pls print argument names and where they are held here as well.
+> FUNC_PROTO has the names. LOC_PROTO has the locations.
+> Something like:
+>   foo(arg1 reg1, arg2 *(reg2 + 0x10)) offset=64
+> 
+> Or is it planned for follow up?
+> 
 
-Networking recently replaced the socket output with a plain 0 because
-the socket pointer added no value to the output and the %pK should be
-removed from library handling. The format remained otherwise unchanged in
-order not to break any tools which are parsing this information.
+Ah, I missed that, sorry. I added display of LOC_PARAMs for LOC_PROTO; didn't add
+the signature for each LOCSEC entry.
 
-This change removes the %pK modifier from bpf, following the change in
-networking.
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
-The networking change is in net-next as commit 7c0ec6288b497 ("net:
-Replace %pK output with 0")
-
-The bots complain about "unchanged format" which is changed in terms of
-spacing. The order of printed items is unchanged.
-
-v2=E2=80=A6v3: https://lore.kernel.org/all/20260918102610.gxA3km8_@linutron=
-ix.de/
-  - correct the subject line
-  - correct grammar error in the commit description
-  - Pickup a reviewed-by tag from Emil which was sent for v1
-
-v1=E2=80=A6v2: https://lore.kernel.org/all/20260911145011.kErTVDkS@linutron=
-ix.de/
-  - sync dump_udp4(), dump_udp6() with net (0, spacing). The columns are
-    (were) not aligned.
-  - Update comment in snprintf.c
-
- tools/testing/selftests/bpf/README.rst               |  2 +-
- tools/testing/selftests/bpf/prog_tests/snprintf.c    |  4 ++--
- tools/testing/selftests/bpf/progs/bpf_iter_netlink.c |  4 ++--
- tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c    | 11 +++++------
- tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c    | 11 +++++------
- tools/testing/selftests/bpf/progs/bpf_iter_udp4.c    |  4 ++--
- tools/testing/selftests/bpf/progs/bpf_iter_udp6.c    |  4 ++--
- tools/testing/selftests/bpf/progs/bpf_iter_unix.c    |  5 ++---
- tools/testing/selftests/bpf/progs/test_snprintf.c    |  4 ++--
- 9 files changed, 23 insertions(+), 26 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftes=
-ts/bpf/README.rst
-index 07c834433b388..75ff1142c1857 100644
---- a/tools/testing/selftests/bpf/README.rst
-+++ b/tools/testing/selftests/bpf/README.rst
-@@ -187,7 +187,7 @@ The symptom for ``bpf_iter/netlink`` looks like
-   ...
-   15: (bf) r2 =3D r7
-   16: (0f) r2 +=3D r1
--  ; BPF_SEQ_PRINTF(seq, "%pK %-3d ", s, s->sk_protocol);
-+  ; BPF_SEQ_PRINTF(seq, "%p %-3d ", s, s->sk_protocol);
-   17: (7b) *(u64 *)(r7 +0) =3D r2
-   only read is supported
-=20
-diff --git a/tools/testing/selftests/bpf/prog_tests/snprintf.c b/tools/test=
-ing/selftests/bpf/prog_tests/snprintf.c
-index 4e4a82d54f799..ccfb02bd4e7cd 100644
---- a/tools/testing/selftests/bpf/prog_tests/snprintf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/snprintf.c
-@@ -15,8 +15,8 @@
- #define EXP_SYM_OUT  "schedule schedule+0x0/"
- #define MIN_SYM_RET  sizeof(EXP_SYM_OUT)
-=20
--/* The third specifier, %p, is a hashed pointer which changes on every reb=
-oot */
--#define EXP_ADDR_OUT "0000000000000000 ffff00000add4e55 "
-+/* The second specifier, %p, is a hashed pointer which changes on every re=
-boot */
-+#define EXP_ADDR_OUT "ffff00000add4e55 "
- #define EXP_ADDR_RET sizeof(EXP_ADDR_OUT "unknownhashedptr")
-=20
- #define EXP_STR_OUT  "str1         a  b c      d e longstr"
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c b/tools/t=
-esting/selftests/bpf/progs/bpf_iter_netlink.c
-index 00b2ceae81fb0..b9107d3ab6039 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_netlink.c
-@@ -25,12 +25,12 @@ int dump_netlink(struct bpf_iter__netlink *ctx)
- 		return 0;
-=20
- 	if (ctx->meta->seq_num =3D=3D 0)
--		BPF_SEQ_PRINTF(seq, "sk               Eth Pid        Groups   "
-+		BPF_SEQ_PRINTF(seq, "sk Eth Pid        Groups   "
- 				    "Rmem     Wmem     Dump  Locks    Drops    "
- 				    "Inode\n");
-=20
- 	s =3D &nlk->sk;
--	BPF_SEQ_PRINTF(seq, "%pK %-3d ", s, s->sk_protocol);
-+	BPF_SEQ_PRINTF(seq, "0  %-3d ", s->sk_protocol);
-=20
- 	if (!nlk->groups)  {
- 		group =3D 0;
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c b/tools/test=
-ing/selftests/bpf/progs/bpf_iter_tcp4.c
-index b1e509b231cd9..d149cf0d07be6 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_tcp4.c
-@@ -131,8 +131,7 @@ static int dump_tcp_sock(struct seq_file *seq, struct t=
-cp_sock *tp,
- 		       icsk->icsk_probes_out,
- 		       sock_i_ino(sp),
- 		       sp->sk_refcnt.refs.counter);
--	BPF_SEQ_PRINTF(seq, "%pK %lu %lu %u %u %d\n",
--		       tp,
-+	BPF_SEQ_PRINTF(seq, "0 %lu %lu %u %u %d\n",
- 		       jiffies_to_clock_t(icsk->icsk_rto),
- 		       jiffies_to_clock_t(icsk->icsk_ack.ato),
- 		       (icsk->icsk_ack.quick << 1) | inet_csk_in_pingpong_mode(icsk),
-@@ -161,10 +160,10 @@ static int dump_tw_sock(struct seq_file *seq, struct =
-tcp_timewait_sock *ttw,
- 	BPF_SEQ_PRINTF(seq, "%4d: %08X:%04X %08X:%04X ",
- 		       seq_num, src, srcp, dest, destp);
-=20
--	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n",
-+	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
- 		       tw->tw_substate, 0, 0,
- 		       3, jiffies_delta_to_clock_t(delta), 0, 0, 0, 0,
--		       tw->tw_refcnt.refs.counter, tw);
-+		       tw->tw_refcnt.refs.counter);
-=20
- 	return 0;
- }
-@@ -185,9 +184,9 @@ static int dump_req_sock(struct seq_file *seq, struct t=
-cp_request_sock *treq,
- 		       seq_num, irsk->ir_loc_addr,
- 		       irsk->ir_num, irsk->ir_rmt_addr,
- 		       bpf_ntohs(irsk->ir_rmt_port));
--	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n",
-+	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
- 		       TCP_SYN_RECV, 0, 0, 1, jiffies_to_clock_t(ttd),
--		       req->num_timeout, uid, 0, 0, 0, req);
-+		       req->num_timeout, uid, 0, 0, 0);
-=20
- 	return 0;
- }
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c b/tools/test=
-ing/selftests/bpf/progs/bpf_iter_tcp6.c
-index dbc7166aee91f..cd65fa81f1219 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_tcp6.c
-@@ -135,8 +135,7 @@ static int dump_tcp6_sock(struct seq_file *seq, struct =
-tcp6_sock *tp,
- 		       icsk->icsk_probes_out,
- 		       sock_i_ino(sp),
- 		       sp->sk_refcnt.refs.counter);
--	BPF_SEQ_PRINTF(seq, "%pK %lu %lu %u %u %d\n",
--		       tp,
-+	BPF_SEQ_PRINTF(seq, "0 %lu %lu %u %u %d\n",
- 		       jiffies_to_clock_t(icsk->icsk_rto),
- 		       jiffies_to_clock_t(icsk->icsk_ack.ato),
- 		       (icsk->icsk_ack.quick << 1) | inet_csk_in_pingpong_mode(icsk),
-@@ -170,10 +169,10 @@ static int dump_tw_sock(struct seq_file *seq, struct =
-tcp_timewait_sock *ttw,
- 		       dest->s6_addr32[0], dest->s6_addr32[1],
- 		       dest->s6_addr32[2], dest->s6_addr32[3], destp);
-=20
--	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n",
-+	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
- 		       tw->tw_substate, 0, 0,
- 		       3, jiffies_delta_to_clock_t(delta), 0, 0, 0, 0,
--		       tw->tw_refcnt.refs.counter, tw);
-+		       tw->tw_refcnt.refs.counter);
-=20
- 	return 0;
- }
-@@ -201,9 +200,9 @@ static int dump_req_sock(struct seq_file *seq, struct t=
-cp_request_sock *treq,
- 		       dest->s6_addr32[0], dest->s6_addr32[1],
- 		       dest->s6_addr32[2], dest->s6_addr32[3],
- 		       bpf_ntohs(irsk->ir_rmt_port));
--	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d %pK\n",
-+	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5d %8d %d %d 0\n",
- 		       TCP_SYN_RECV, 0, 0, 1, jiffies_to_clock_t(ttd),
--		       req->num_timeout, uid, 0, 0, 0, req);
-+		       req->num_timeout, uid, 0, 0, 0);
-=20
- 	return 0;
- }
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c b/tools/test=
-ing/selftests/bpf/progs/bpf_iter_udp4.c
-index 23b2aa2604de2..d4079a619da66 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_udp4.c
-@@ -57,13 +57,13 @@ int dump_udp4(struct bpf_iter__udp *ctx)
- 	BPF_SEQ_PRINTF(seq, "%5d: %08X:%04X %08X:%04X ",
- 		       ctx->bucket, src, srcp, dest, destp);
-=20
--	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %pK %u=
-\n",
-+	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d 0 %u\n=
-",
- 		       inet->sk.sk_state,
- 		       inet->sk.sk_wmem_alloc.refs.counter - 1,
- 		       rqueue,
- 		       0, 0L, 0, ctx->uid, 0,
- 		       sock_i_ino(&inet->sk),
--		       inet->sk.sk_refcnt.refs.counter, udp_sk,
-+		       inet->sk.sk_refcnt.refs.counter,
- 		       udp_sk->drop_counters.drops0.counter +
- 		       udp_sk->drop_counters.drops1.counter);
-=20
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c b/tools/test=
-ing/selftests/bpf/progs/bpf_iter_udp6.c
-index c48b05aa2a4b2..dadc5f73ff098 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_udp6.c
-@@ -65,13 +65,13 @@ int dump_udp6(struct bpf_iter__udp *ctx)
- 		       dest->s6_addr32[0], dest->s6_addr32[1],
- 		       dest->s6_addr32[2], dest->s6_addr32[3], destp);
-=20
--	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d %pK %u=
-\n",
-+	BPF_SEQ_PRINTF(seq, "%02X %08X:%08X %02X:%08lX %08X %5u %8d %lu %d 0 %u\n=
-",
- 		       inet->sk.sk_state,
- 		       inet->sk.sk_wmem_alloc.refs.counter - 1,
- 		       rqueue,
- 		       0, 0L, 0, ctx->uid, 0,
- 		       sock_i_ino(&inet->sk),
--		       inet->sk.sk_refcnt.refs.counter, udp_sk,
-+		       inet->sk.sk_refcnt.refs.counter,
- 		       udp_sk->drop_counters.drops0.counter +
- 		       udp_sk->drop_counters.drops1.counter);
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c b/tools/test=
-ing/selftests/bpf/progs/bpf_iter_unix.c
-index a2652c8c3616f..df3d971b21e8a 100644
---- a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
-@@ -42,10 +42,9 @@ int dump_unix(struct bpf_iter__unix *ctx)
- 	seq =3D ctx->meta->seq;
- 	seq_num =3D ctx->meta->seq_num;
- 	if (seq_num =3D=3D 0)
--		BPF_SEQ_PRINTF(seq, "Num               RefCount Protocol Flags    Type S=
-t    Inode Path\n");
-+		BPF_SEQ_PRINTF(seq, "Num       RefCount Protocol Flags    Type St    Ino=
-de Path\n");
-=20
--	BPF_SEQ_PRINTF(seq, "%pK: %08X %08X %08X %04X %02X %8lu",
--		       unix_sk,
-+	BPF_SEQ_PRINTF(seq, "%08u: %08X %08X %08X %04X %02X %8lu", 0,
- 		       sk->sk_refcnt.refs.counter,
- 		       0,
- 		       sk->sk_state =3D=3D TCP_LISTEN ? __SO_ACCEPTCON : 0,
-diff --git a/tools/testing/selftests/bpf/progs/test_snprintf.c b/tools/test=
-ing/selftests/bpf/progs/test_snprintf.c
-index 8fda075440235..48a0025cf2ca8 100644
---- a/tools/testing/selftests/bpf/progs/test_snprintf.c
-+++ b/tools/testing/selftests/bpf/progs/test_snprintf.c
-@@ -57,8 +57,8 @@ int handler(const void *ctx)
- 	sym_ret  =3D BPF_SNPRINTF(sym_out,  sizeof(sym_out), "%ps %pS %pB",
- 				&schedule, &schedule, &schedule);
- 	/* Kernel pointers */
--	addr_ret =3D BPF_SNPRINTF(addr_out, sizeof(addr_out), "%pK %px %p",
--				0, 0xFFFF00000ADD4E55, 0xFFFF00000ADD4E55);
-+	addr_ret =3D BPF_SNPRINTF(addr_out, sizeof(addr_out), "%px %p",
-+				0xFFFF00000ADD4E55, 0xFFFF00000ADD4E55);
- 	/* Strings and single-byte character embedding */
- 	str_ret  =3D BPF_SNPRINTF(str_out, sizeof(str_out), "%s % 9c %+2c %-3c %0=
-4c %0c %+05s",
- 				str1, 'a', 'b', 'c', 'd', 'e', longstr);
---=20
-2.55.0
-
+I can respin with this and the vlen/flag checking for patch 1, along with anything else 
+the bots dig up.
