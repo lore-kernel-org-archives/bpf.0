@@ -1,221 +1,146 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F40953A05FC
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 03:48:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CCD23AC0EF
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 03:56:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790221703; cv=none; b=XfOWPnKXnu7oxTfoTj6f45F9p52iiFDLOq0MhCDVNUlUYxQSS7GHaxL9iMh1X4YLt5oAyS8wNSHF5BlBwS7hncUEV6iFkQwvNxeNQQJCisyB4yy74UoruzsL9MhzCnzodqETcFrA44q6Nf5CkNTUqImqxV9iiZwbQ7/ZMs0gpeQ=
+	t=1790222180; cv=none; b=j8nDuDg3Dge5GwNiX7pFZqsE4w1D5X/EKowWw4blL7wwcgiQb8G67ST0LHF05/X3e/3yo1qxFYIoa1ACpfgH4d+u4nEwwqzBunor8ILAq2GB0knguYaHYJbArUKGYxWd61GrfOIDiQ7/j8rGLlKZv6shs/DJ19OUuhbfprVFVHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790221703; c=relaxed/simple;
-	bh=u7VfKm5rOaDl8d0G3ZndWq3QuUaMVh/vqQ+AIdsZlfc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=pHSG0BAkCY6bREH/yo1KOsWkw1tS+rPI25ESz4CIqAwdUBG3YvguVmoB8sSeUkgPlmtSLYpPj//pfEAM6LshJGlA0eJPPM7h3OHVrUwgCyist5nqVpyJdOPktOFv0Y/PDK5H9rok0jUpYe4nTsAcsSs12n/CQWLIucVcHeHWa7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=qHcjRU7b; arc=none smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1790222180; c=relaxed/simple;
+	bh=RotpGiA05m+p0Amug6HPkQ1OcXVJJYrOYgXatiaygZg=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=fXAZEDCXreQE66LLIjU28Zj8pMQIdCCdRaBeObCfgGMHtDoMx4G4anwwMEI/8EQNihrQQYMKHxGD9c/33tUHByZWD48/Msln7ycJSqDC04C563dNJuEva1v2lLHexL5qbjtRq9dXLvWMz+QVwMbQiT8TNiSUVLyMIUvMeLAOX9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WdBL8wvx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="qHcjRU7b"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d9004a1ac0so7238885ad.3
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 20:48:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1790221699; x=1790826499; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=vyH+46wvVCG42WHP8ZLxeKrUMVBuwkf4fMiMhZ0rDTg=;
-        b=qHcjRU7bbGiYDZYWVQtKUkV83qv8owh8mJxTgCs4rimyrFHNg0SfsjWzB0NxZyuj59
-         VmW3tm1Kuf7XNt3r2saoVM1QVB6XSXCSgHY0TwhiIR+kDnQjxYvpoZ6mXxFduTc8g/ac
-         ex10OZleEzSJkkN8bdQfND+qFw0+iOIeuoBLlXLcpMYD9S6vPPW4ewCSN8L4hHK0axqC
-         xPawEIGL7LWzhINI2GH9TsfpZvUT9BSwDICnyAOumWFNJHWQkDfjjyTyxwr2d/MiKQjn
-         qPmnUDb7RYQ6GoMfDUgU3IWDZXCYhwRgV+0MO0NfKIOKxiRmSwRmSHwl2W+cfCJYodCH
-         3yxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790221699; x=1790826499;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=vyH+46wvVCG42WHP8ZLxeKrUMVBuwkf4fMiMhZ0rDTg=;
-        b=SrkKhtlnQwDgs98r1YdzpiUE7H4Ylo/100VXOTZYBV+pLTwvUqJhRudc2P0WuG0zsl
-         ZglglcY+E2PFfXnY/KWJDAk9H5ZfzdJRYmjRfReHnhljww+ssfv6HVF2Aj1ooYNzQkPX
-         Hk2nnhCM7a6QfZJVsPbKpcUoE7CrZ69ciFRNzzEfeZTyltojFZ1Md55bMb/Jl97p9Hhe
-         G8DftMh5BBbAPvYiA3jq7Vgy/rrgMNQae6QqVIexMHwkyWw1ZD+1SM4UVScRoLNfFbP8
-         +HWErKWOnB6P57LSI6ZtIvWGG7zQ2amaZxAhb5JYlKMGaQJarjbPTp+wZ6GqSHOU6Uhk
-         O2tA==
-X-Forwarded-Encrypted: i=1; AKwUvBy8DDUByxaTtAvVCz1HkbeGSBtkUCLnmURRPmDHJ/sOrNSDBK/Lmp4LpQkzb5SpXJOClEs=@vger.kernel.org
-X-Gm-Message-State: AFuF++naNx0tICYdM6ZDNQfM8qZU/5SHwel/2ev/O5UwjBcLN8/Bqldj
-	hgY4vk7eRuOiDB0NU0qGWqFsgwijfb9BkORAQwYQDlYuuhX4EDzVoqtHyPtcujUrqP8=
-X-Gm-Gg: AYBFou1XgCYDoQahQLyruQ6qyruic9cCh1B2V3QLLD95H5hoHdHLNfuUwR13JwflNIy
-	3oMCv2icxpuiwvxKew0UF+G3gnM6F5tlB2y2hCB8B+oNqykzPSySR4mDOm0aauwh7ptKHor9RiI
-	/Mjmdv/vGQl5g7wTqpwcQ6m9ddTyjBtve+jHTf8/wtdKd1Hbb5CPi76fYDBUQeLZwX5MfCkQkOq
-	oJ57Ejt4b/eVImpRW1UcjP4QpLiFsCVWMWIIcaG09NFPGQRGnJW7lBAcdQt9oqWAeOrJd03xf+o
-	c6FVFd8mbz5/+4OdnriHSMH4FPZiJBeZS2lRoFN4jtFRcncyi464+6ZHM3rgQoP/beyJVk/+sxy
-	wjmXRmya6QrBbB8IMcXaKzkiao/hAycqpkVgH28vlqwgqwa69FnGI4aXEkX6+teE7qGMmT3plRK
-	ZoJ26bS6h8NfhbK0A2p49ofyd61uOF4W1O3F22Docz9ld6/C9sTQKYM+YlTEAOmLf9osamXSC+y
-	4Y01N6FtWv3jzBnWn+M+n8FYSK4Me+G
-X-Received: by 2002:a17:902:ebc8:b0:2df:8226:4930 with SMTP id d9443c01a7336-2df82264b0emr3767795ad.37.1790221699268;
-        Wed, 23 Sep 2026 20:48:19 -0700 (PDT)
-Received: from localhost (69-172-153-146.cable.teksavvy.com. [69.172.153.146])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6a5dbc0fsm19242845ad.57.2026.09.23.20.48.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Sep 2026 20:48:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WdBL8wvx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 051DF1F000FF;
+	Thu, 24 Sep 2026 03:56:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790222179;
+	bh=3s/iTWKRnntYee5bNdR/4pwL2asbyaja04eCrtTR6SA=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=WdBL8wvxtEAwbrLOsscd7hbubogyz609wWPnWpIkj3ssWMGR4HTd297C/Jp83/EWO
+	 Yr7pFK6K8MN87izrWXZiODx7IJNpqLFFx3AgPlxKUykQmXOGCIX9Fj2de6xxJ2TQEt
+	 b/b+ZQqeGMP4RoQSgUGGjVbLio4mm6Kt2zevcSNHw5U+B6kVgFU3clpurq/rB3C9dG
+	 +vPAlQBsojhQ5OIY2zihmNw42G6fJ417WAHxtla+oJPpKL6Scdl/TWzxN0jZdJIZdq
+	 a/O7/4kaklZSiqrXjneFRsgHIOsmwJgFb84614d37pLuEFurUny8oajheSeG2G7CN/
+	 7NEc6oXPtyJMw==
+Content-Type: multipart/mixed; boundary="===============5293372113419748155=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 24 Sep 2026 03:48:17 +0000
-Message-Id: <DLN8MMAY53A6.31EWYOHJ1YWLV@etsalapatis.com>
-Cc: "Yonghong Song" <yonghong.song@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "Stanislav Fomichev" <sdf@fomichev.me>, "Eric
- Dumazet" <edumazet@google.com>, "Neal Cardwell" <ncardwell@google.com>,
- "Willem de Bruijn" <willemb@google.com>, "Tenzin Ukyab"
- <ukyab@berkeley.edu>, =?utf-8?q?Cl=C3=A9ment_L=C3=A9ger?=
- <cleger@meta.com>, "Kuniyuki Iwashima" <kuni1840@gmail.com>,
- <bpf@vger.kernel.org>, <netdev@vger.kernel.org>
-Subject: Re: [PATCH v2 bpf-next 6/8] bpf: mptcp: Don't support
- BPF_SOCK_OPS_RCVQ_CB_FLAG.
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Kuniyuki Iwashima" <kuniyu@google.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260923213719.224838-1-kuniyu@google.com>
- <20260923213719.224838-7-kuniyu@google.com>
-In-Reply-To: <20260923213719.224838-7-kuniyu@google.com>
+MIME-Version: 1.0
+Message-Id: <3a38d9324b4b99767bf5b5988a7f6852c7815a5db8c3b1ec3f3440e59cc1d760@mail.kernel.org>
+In-Reply-To: <20260924031042.1690890-16-alexei.starovoitov@gmail.com>
+References: <20260924031042.1690890-16-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v2 15/17] selftests/bpf: Add tests for callx
+From: bot+bpf-ci@kernel.org
+To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Thu, 24 Sep 2026 03:56:17 +0000 (UTC)
 
-On Wed Sep 23, 2026 at 9:35 PM UTC, Kuniyuki Iwashima wrote:
-> The next patch exposes a new kfunc calling __tcp_set_rcvlowat()
-> to bpf_tcp_ops.
+--===============5293372113419748155==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+> index 8b4be06bb181..bc96a752b1ae 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/verifier.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+
+[ ... ]
+
+> @@ -173,6 +174,14 @@ static void run_tests_aux(const char *skel_name,
 >
-> MPTCP has its own sock->ops->set_rcvlowat() / mptcp_set_rcvlowat(),
-> so we should not allow calling __tcp_set_rcvlowat() on MPTCP
-> subflows.
+>  #define RUN(skel) run_tests_aux(#skel, skel##__elf_bytes, NULL)
 >
-> Let's disable BPF_SOCK_OPS_RCVQ_CB_FLAG for MPTCP for now.
->
-> If needed in the future, bpf_tcp_ops_set_rcvlowat() could be
-> extended to properly support MPTCP.
->
-> Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> ---
->  include/net/tcp.h      | 15 +++++++++++++++
->  net/core/filter.c      | 10 ++++++----
->  net/ipv4/bpf_tcp_ops.c |  5 ++++-
->  3 files changed, 25 insertions(+), 5 deletions(-)
->
-> diff --git a/include/net/tcp.h b/include/net/tcp.h
-> index 07426e8641b7..d3cf655da9ec 100644
-> --- a/include/net/tcp.h
-> +++ b/include/net/tcp.h
-> @@ -2932,6 +2932,16 @@ static inline int tcp_call_bpf_3arg(struct sock *s=
-k, int op, u32 arg1, u32 arg2,
->  	return tcp_call_bpf(sk, op, 3, args);
->  }
-> =20
-> +static inline int tcp_set_sock_ops_cb_flags(struct sock *sk, int val)
-> +{
-> +	if (sk_is_mptcp(sk) &&
-> +	    (val & BPF_SOCK_OPS_RCVQ_CB_FLAG))
-> +		return -EOPNOTSUPP;
+> +/* for tests of what the interpreter doesn't support */
+> +#define RUN_JITED(skel) do {		\
+> +	if (is_jit_enabled())		\
+> +		RUN(skel);		\
+> +	else				\
+> +		test__skip();		\
+> +} while (0)
+
+Does RUN_JITED() properly check JIT support for callx?
+
+Looking at the kernel side added in this series, callx is rejected
+in more cases than just the JIT being off:
+
+kernel/bpf/verifier.c:require_callx_jit() {
+    if (!env->prog->jit_requested) {
+        verbose(env, "JIT is required to use callx\n");
+        return -EOPNOTSUPP;
+    }
+    if (!bpf_jit_supports_callx()) {
+        verbose(env, "JIT doesn't support callx\n");
+        return -EOPNOTSUPP;
+    }
+    ...
+}
+
+Only x86 and arm64 implement bpf_jit_supports_callx(). Everywhere else the
+__weak default in kernel/bpf/core.c returns false: s390x, riscv64, powerpc,
+loongarch and others. On x86 it also returns false when cfi_mode ==
+CFI_FINEIBT. By default FineIBT is picked on IBT-capable CPUs when the
+kernel is built with CFI support.
+
+RUN_JITED() only checks whether the JIT is turned on via
+is_jit_enabled(), which reads /proc/sys/net/core/bpf_jit_enable. In all
+of the cases where bpf_jit_supports_callx() returns false, bpf_jit_enable
+is 1, so RUN_JITED() goes ahead with RUN(verifier_callx). Then:
+
+- Every __success program in progs/verifier_callx.c fails with
+  "unexpected_load_failure". check_func_callx() and the rodata read path
+  both call require_callx_jit() and get -EOPNOTSUPP.
+
+- Most __failure __msg(...) programs also fail. The log says "JIT doesn't
+  support callx" instead of the expected message.
+
+None of the 40 programs in verifier_callx.c have __arch_* annotations.
+DENYLIST.s390x and DENYLIST.riscv64 do not list verifier_callx either, so
+test_progs will report FAIL, not SKIP, on the s390x BPF CI.
+
+The selftests guide says a missing capability that causes EOPNOTSUPP must
+lead to a skip with a reason message. Here the test fails, and in the
+bpf_jit_enable=0 case test__skip() is called with no reason.
+
+Other JIT-only verifier tests already handle this per program, using the
+__arch_x86_64 / __arch_arm64 annotations together with __load_if_JITed()
+(see progs/verifier_arena.c:641-642 and progs/arena_kfunc_jit.c).
+run_subtest() in test_loader.c already applies both the arch mask and the
+JITED/NO_JITED load mask. Using these annotations, or probing the load of
+a minimal callx program and skipping on -EOPNOTSUPP, would cover
+s390x/riscv64 and the rest. Only the runtime probe would also cover x86
+with FineIBT.
+
+The later commit in this series, 922d9559e25a ("selftests/bpf: Add tests
+for callx through pointers in read-only data"), does not fix this. It adds
+test_verifier_callx_rodata with the same RUN_JITED() gate, so it has the
+same problem.
+
 > +
-> +	tcp_sk(sk)->bpf_sock_ops_cb_flags =3D val;
-> +	return 0;
-> +}
-> +
->  static inline void tcp_clear_sock_ops_cb_flags(struct sock *sk)
->  {
->  	tcp_sk(sk)->bpf_sock_ops_cb_flags =3D 0;
-> @@ -2954,6 +2964,11 @@ static inline int tcp_call_bpf_3arg(struct sock *s=
-k, int op, u32 arg1, u32 arg2,
->  	return -EPERM;
->  }
-> =20
-> +static inline int tcp_set_sock_ops_cb_flags(struct sock *sk, int val)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
->  static inline void tcp_clear_sock_ops_cb_flags(struct sock *sk)
->  {
->  }
-> diff --git a/net/core/filter.c b/net/core/filter.c
-> index 5feb99884682..f29c061bb066 100644
-> --- a/net/core/filter.c
-> +++ b/net/core/filter.c
-> @@ -5588,8 +5588,7 @@ static int bpf_sol_tcp_setsockopt(struct sock *sk, =
-int optname,
->  	case TCP_BPF_SOCK_OPS_CB_FLAGS:
->  		if (val & ~(BPF_SOCK_OPS_ALL_CB_FLAGS))
->  			return -EINVAL;
-> -		tp->bpf_sock_ops_cb_flags =3D val;
-> -		break;
-> +		return tcp_set_sock_ops_cb_flags(sk, val);
->  	default:
->  		return -EINVAL;
->  	}
-> @@ -6178,8 +6177,9 @@ static const struct bpf_func_proto bpf_sock_ops_get=
-sockopt_proto =3D {
->  BPF_CALL_2(bpf_sock_ops_cb_flags_set, struct bpf_sock_ops_kern *, bpf_so=
-ck,
->  	   int, argval)
->  {
-> -	struct sock *sk =3D bpf_sock->sk;
->  	int val =3D argval & BPF_SOCK_OPS_ALL_CB_FLAGS;
-> +	struct sock *sk =3D bpf_sock->sk;
-> +	int err;
-> =20
->  	if (!is_locked_tcp_sock_ops(bpf_sock))
->  		return -EOPNOTSUPP;
-> @@ -6187,7 +6187,9 @@ BPF_CALL_2(bpf_sock_ops_cb_flags_set, struct bpf_so=
-ck_ops_kern *, bpf_sock,
->  	if (!IS_ENABLED(CONFIG_INET) || !sk_fullsock(sk))
->  		return -EINVAL;
-> =20
-> -	tcp_sk(sk)->bpf_sock_ops_cb_flags =3D val;
-> +	err =3D tcp_set_sock_ops_cb_flags(sk, val);
-> +	if (err)
-> +		return err;
+>  void test_arena_kfunc(void)                   { RUN_TESTS(arena_kfunc); }
 
-Afaict the tcp_set_sock_ops_cb_flags is inconsistent with the previous retu=
-rn values,
-in that it returns an errno instead of the flags it couldn't set (it also d=
-oesn't
-set the flags that we can set for MPTCP when BPF_SOCK_OPS_RCVQ_CB_FLAG is s=
-et, which
-is the convention of its callers). Would changing the error path to
+[ ... ]
 
-	tp->bpf_sock_ops_cb_flags =3D val & BPF_SOCK_OPS_RCVQ_CB_FLAG;
-	return (val & (~(BPF_SOCK_OPS_ALL_CB_FLAGS ^ BPF_SOCK_OPS_RCVQ_CB_FLAG);
-
-work?
+> @@ -199,6 +208,7 @@ void test_verifier_bswap(void)                { RUN(verifier_bswap); }
+>  void test_verifier_btf_ctx_access(void)       { RUN(verifier_btf_ctx_access); }
+>  void test_verifier_btf_unreliable_prog(void)  { RUN(verifier_btf_unreliable_prog); }
+>  void test_verifier_call_large_imm(void)       { RUN(verifier_call_large_imm); }
+> +void test_verifier_callx(void)                { RUN_JITED(verifier_callx); }
+>  void test_verifier_cfg(void)                  { RUN(verifier_cfg); }
+>  void test_verifier_cgroup_inv_retcode(void)   { RUN(verifier_cgroup_inv_retcode); }
+>  void test_verifier_cgroup_skb(void)           { RUN(verifier_cgroup_skb); }
 
 
-> =20
->  	return argval & (~BPF_SOCK_OPS_ALL_CB_FLAGS);
->  }
-> diff --git a/net/ipv4/bpf_tcp_ops.c b/net/ipv4/bpf_tcp_ops.c
-> index 4b48711d92a2..b0cade34cce6 100644
-> --- a/net/ipv4/bpf_tcp_ops.c
-> +++ b/net/ipv4/bpf_tcp_ops.c
-> @@ -223,8 +223,11 @@ const struct bpf_func_proto bpf_tcp_ops_get_retval_p=
-roto =3D {
->  BPF_CALL_2(bpf_tcp_ops_cb_flags_set, struct sock *, sk, int, argval)
->  {
->  	int val =3D argval & BPF_SOCK_OPS_ALL_CB_FLAGS;
-> +	int err;
-> =20
-> -	tcp_sk(sk)->bpf_sock_ops_cb_flags =3D val;
-> +	err =3D tcp_set_sock_ops_cb_flags(sk, val);
-> +	if (err)
-> +		return err;
-> =20
->  	return argval & ~BPF_SOCK_OPS_ALL_CB_FLAGS;
->  }
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35951148075
+--===============5293372113419748155==--
