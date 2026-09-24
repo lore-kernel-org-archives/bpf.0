@@ -1,32 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B565A314A6F;
-	Thu, 24 Sep 2026 02:05:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18D8E344D8C;
+	Thu, 24 Sep 2026 02:05:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790215536; cv=none; b=ZOG/GEtRwdMWyhJqmXWohlec3EvV7SB+vo95Jqzh0oPkO50TxutOkIBdnfr2ONTcMonFTzFMRT7NyZNCeqBdH3S9Bmi86k2yfpa+4MIuKo/jW2LGaGyY0VZyAMwUE1Oe9RhXWVsOmp9W3t0kkYk55O6nlxI7ZXfuEdVxyiCbTC8=
+	t=1790215537; cv=none; b=tAGfjeAsUMzI3pu4EcUPpCr85FMQ11dnom0begdDg8Wzk+XYLANt4k5efbAUKKI6Aou3uWnRDr9OdNouQ8jspFfmAFBhJ1xFPRayOPs4loholfeOJ59LWD1P2cfCZZkoqmsn2Kvea7A7TWiGBF4visuLlYldL6sqlku1mNvCZDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790215536; c=relaxed/simple;
-	bh=LSTmqoAPgDEphguCxDzuLrV4z7S59cRXqgno2ecaTQo=;
+	s=arc-20240116; t=1790215537; c=relaxed/simple;
+	bh=INUWDUamiz4Y0hvC3pIrcJ+0uEmCVYzqeLMJn7FoYA4=;
 	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HkseeYOiS1V86VbFErWzq1HcMv4zmJmzUvrq0t77D7QEq+Vx8IBt8oIPOOTM6mUUHBJqycBoho2up7/P7aIiSZ7LpnLT3TGHYXoGMeO144oKHOc/8PPuiv9cmAkSH8ZPfH3n7jrKyYX0NlpWJrEgmIK5FFidTTKKWaI5eZQpxOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ScmCMjVe; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:MIME-Version; b=mHMbBxZU4YIOvip33+QDfreY3/PGWsu7aJLqhYCCypEdJM9DIRRaHRB1JTqwaY0lIVi96LI++hz5km5Vd5cthuzbBbR0QAuPAYSEQvUr4WUKCygQV58oxfXxyQp6d5zD2uQ9uk1um9SjJj5A2wts9Lh+0pAMfbA4+ZOP11cY6Ak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dVGrRDX7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ScmCMjVe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63A681F000FF;
-	Thu, 24 Sep 2026 02:05:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dVGrRDX7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E695E1F00893;
+	Thu, 24 Sep 2026 02:05:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790215534;
-	bh=noqM9s6yQpmsxRTZLEMpl+Qp1hAhVjiVnUkBsZRmBjA=;
+	s=k20260515; t=1790215535;
+	bh=DrxmNLLSP4wFq1ZILXBibz6M0o8IyY9bV3emg9qzGKc=;
 	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ScmCMjVe35rzpKFAEvuy3GSmQ6ZgZwCXCFBW2xA+8XoUBfpxdu6cHZ/W39cYeS5ek
-	 FD3AZ5AxTj3b4CL7p7gcReoC2AYHGNmdJFW96CNBUHuUcdW8JS35dcieLzlr+3g/5R
-	 On2jwjWJTvMRCRXjBqemwWp3HpcUDhIKa4FBzCsS7EBrqajuuuh05f0uyqcJqQxcgQ
-	 LmGHX3ysN5iHROYBDXnuZi3qcflW8zDAJNj7VyDz0u/091PMLTKTJI8qA7CmulDeSN
-	 lQ1NMg1FCKWLdmSDUxUXJcKATJyHBvmVrfzYTEBH1vupmmbzFCQDwet9+pxo6hQPKR
-	 RoXfE+1Em+pQQ==
-Subject: Re: [PATCH net-next 2/8] eth: mpnic: add register init for the device
+	b=dVGrRDX7kUf4qAC7aqB00N5uU7byqpCAnmaIQZI2YT9q8JWgqLB5+76cXdZJzrwDT
+	 OuqyXM+XspqfZrjU2SSoFkK/PP2UBzfhBaDn/QRmPU4lcDlNsaSMp6PXwSUdtNA/4D
+	 hDgsrvmFGRPXBq5cUepP/fRvJ2guuVdzbvr7tw1jGSCHQCl45xfr6I55PpFpQX7knh
+	 TJrX/sfnMrfo5+/HKAxjY3HYwqE3904ob04VsoH++xYAFEKSEJE3NfqHewqW1F8W97
+	 rmrfE/yQaqrfb9q9SnslQ8K3fKD215ry7XWi/9wnvr1OijIgpjYs+0aNgRYqTIdsBb
+	 ZZV+5Q1m1FakA==
+Subject: Re: [PATCH net-next 4/8] eth: mpnic: implement Tx queue allocation
+ and cleanup
 From: netdev-bot+sashiko@kernel.org
 To: daniel.zahka@gmail.com
 Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
@@ -35,11 +36,11 @@ Cc: alexanderduyck@fb.com, kuba@kernel.org, kernel-team@meta.com,
  john.fastabend@gmail.com, sdf@fomichev.me, dimitri.daskalakis1@gmail.com,
  mohsin.bashr@gmail.com, linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
  bpf@vger.kernel.org
-Date: Thu, 24 Sep 2026 02:05:32 +0000
-Message-ID: <179021553292.2160803.15849497453510759239@kernel.org>
-In-Reply-To: <20260922-linux-mpnic-v1-2-236844f53072@gmail.com>
-References: <20260922-linux-mpnic-v1-2-236844f53072@gmail.com>
-X-sashiko-severity: High
+Date: Thu, 24 Sep 2026 02:05:34 +0000
+Message-ID: <179021553452.2160803.1706539646105038044@kernel.org>
+In-Reply-To: <20260922-linux-mpnic-v1-4-236844f53072@gmail.com>
+References: <20260922-linux-mpnic-v1-4-236844f53072@gmail.com>
+X-sashiko-severity: Low
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
@@ -49,168 +50,155 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Thank you for your contribution! Sashiko AI review found 2 potential
-issue(s) to consider.
+Thank you for your contribution! Sashiko AI review found more severe
+issue(s) in other patches of this series. This mail is only an FYI, in case
+you want to address the nit picks below when you respin.
 
-Critical: 0 · High: 1 · Medium: 1 · Low: 0
+Low priority / nit picks for your consideration:
 
-If you believe none of the issues are legitimate, please reply to each
-issue of Medium severity or higher and explain why the AI is wrong.
-If any of them are legitimate and you plan to respin, please let patchwork
-know by including "pw-bot: cr" as a separate line at the end of your reply
-(one such reply per series is enough).
-
-- [High] pci: missing pci_resource_len() check in mpnic_probe() allows
-  OOB MMIO access
-- [Medium] The 1 MiB Tx buffer is split between MAC and BMC differently
-  in TXB and in TQS.
+- [Low] Cached doorbell pointers let queue-head MMIO writes reach BAR0
+  after the driver has marked the device as gone.
+- [Low] Concern (baseline: rejected): mpnic_alloc_ring_desc() stores
+  `count - 1` into the u16 ring->size_mask (line 334) without checking…
+- [Low] Concern (baseline: rejected): mpnic_clean_tcq() takes HEAD0 from
+  the device-written completion descriptor (line 163) and passes it…
 
 --
 
-eth: mpnic: add register init for the device
+eth: mpnic: implement Tx queue allocation and cleanup
 
-This commit adds one-time CSR initialization to mpnic_probe() through a
-new mpnic_dev_init(). It programs the TXB, RXB, TQS, descriptor SRAM,
-AXI and relaxed ordering settings, starts the on-chip SRAM
-initializations and polls until they complete.
+This adds the Tx ring structures and allocates queue triads per NAPI
+vector, along with their descriptor memory and interrupts. It also adds
+Tx completion processing, where one completion reports a work queue head
+and can release many packets. Nothing enables the queues in hardware yet.
 
-> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_init.c b/drivers/net/ethernet/meta/mpnic/mpnic_init.c
+> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
 > new file mode 100644
-> index 0000000000000..f8ebb19766731
+> index 0000000000000..fe360a26a27be
 > --- /dev/null
-> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_init.c
-> @@ -0,0 +1,553 @@
+> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
+> @@ -0,0 +1,496 @@
 
 [ ... ]
 
-> +/* A total of 1 MiB worth of Tx credits is available, in units of 128 B.
-> + * The BMC gets a guaranteed share of them whether or not the host is
-> + * routing anything its way, everything else goes to MAC TC0.
-> + */
-> +#define MPNIC_TXB_BMC_PVT_CRDT_INIT_VAL		800
-> +#define MPNIC_TXB_P0_MAC_PVT_CRDT_INIT_VAL	\
-> +	(SZ_1M / 128 - 2 * MPNIC_TXB_BMC_PVT_CRDT_INIT_VAL)
-
-[ ... ]
-
-> +/* The 1 MiB Tx buffer is partitioned between the MAC and the BMC in units
-> + * of 1 KiB. The BMC portion is fixed at 100 KB.
-> + */
-> +#define MPNIC_TQS_GLBL_TXB_CRDT_BMC	100
-> +#define MPNIC_TQS_GLBL_TXB_CRDT_MAC	(SZ_1M / SZ_1K - \
-> +					 MPNIC_TQS_GLBL_TXB_CRDT_BMC)
-
-[ ... ]
-
-> +static void mpnic_txb_init(struct mpnic_dev *mpd)
+> +static void mpnic_commit_cq_head(struct mpnic_ring *cmpl)
 > +{
-> +	int i;
+> +	u32 head = cmpl->head;
 > +
-> +	mpnic_wr64(mpd, MPNIC_TXB_BMC, MPNIC_TXB_BMC_PVT_CRDT_INIT_VAL);
-> +
-> +	/* Zero the private credits of every traffic class, then hand the
-> +	 * unreserved ones to MAC TC0.
+> +	/* The tail shadows the last value written to the doorbell, so a
+> +	 * completion queue which has not moved costs no MMIO write.
 > +	 */
-> +	for (i = 0; i < MPNIC_TXB_P0_CNT; i++)
-> +		mpnic_wr64(mpd, MPNIC_TXB_P0(i), 0);
-> +	mpnic_wr64(mpd, MPNIC_TXB_P0(MPNIC_TXB_TC_IDX_MAC_0),
-> +		   MPNIC_TXB_P0_MAC_PVT_CRDT_INIT_VAL);
-> +	mpnic_wr64(mpd, MPNIC_TXB_P0(MPNIC_TXB_TC_IDX_BMC),
-> +		   MPNIC_TXB_BMC_PVT_CRDT_INIT_VAL);
+> +	if (cmpl->tail != head) {
+> +		cmpl->tail = head;
+> +		writeq(head & cmpl->size_mask, cmpl->doorbell);
+> +	}
+> +}
 
-[ ... ]
+[Severity: Low]
+Can this doorbell write still reach BAR0 after the driver has marked the
+device as gone?
 
-> +static void mpnic_tqs_init(struct mpnic_dev *mpd)
+mpnic_alloc_napi_vector() reads mpd->uc_addr0 once and stores raw BAR0
+addresses in the rings:
+
+    mpnic_ring_init(&nv->qt[0].sub0, &uc_addr[MPNIC_TWQ_TAIL(idx, 0)], idx);
+    mpnic_ring_init(&nv->qt[0].cmpl, &uc_addr[MPNIC_TCQ_HEAD(idx)], idx);
+
+When mpnic_rd64() sees all-ones reads, mpnic_mmio_err() in mpnic_pci.c
+clears only the accessor pointer:
+
+    WRITE_ONCE(mpd->uc_addr0, NULL);
+
+BAR0 stays mapped through pcim_iomap_region(). mpnic_wr64() checks for
+the NULL pointer, but mpnic_commit_cq_head() always writes through
+cmpl->doorbell.
+
+So suppose one mpnic_poll() run still has unprocessed completions that
+were posted before the failure. The TCQ head doorbell write goes out,
+while the mpnic_nv_irq_rearm() write through mpnic_wr64() is dropped.
+
+The scaffolding commit says that once the device is gone, no further
+accesses reach the bus. Should that also cover the doorbells?
+
+Later in the series, mpnic_tx_doorbell() and __mpnic_bdq_commit_tail()
+use the same cached-pointer pattern. Would a mpnic_present() check help
+in those places and here?
+
+The comment in mpnic_alloc_napi_vector() already says the doorbells
+cannot notice the window going away, and fbnic does the same thing. The
+practical effect is probably limited to posted writes to a dead link.
+
+> +static void mpnic_clean_tcq(struct mpnic_napi_vector *nv,
+> +			    struct mpnic_q_triad *qt, int napi_budget)
 > +{
 
 [ ... ]
 
-> +	/* Only port 0 is used. A single traffic class is in use as well, so
-> +	 * give all of the Tx buffer credits to TC0.
-> +	 */
-> +	mpnic_wr64(mpd, MPNIC_TQS_GLBL_P0_0,
-> +		   FIELD_PREP(MPNIC_TQS_GLBL_P0_0_TXB_MAX_CRDTS_0,
-> +			      MPNIC_TQS_GLBL_TXB_CRDT_MAC));
-> +	mpnic_wr64(mpd, MPNIC_TQS_GLBL_P0_1, 0);
-> +	mpnic_wr64(mpd, MPNIC_TQS_GLBL_BMC,
-> +		   FIELD_PREP(MPNIC_TQS_GLBL_BMC_TXB_MAX_CRDTS,
-> +			      MPNIC_TQS_GLBL_TXB_CRDT_BMC));
-
-[Severity: Medium]
-Do TXB and TQS split the 1 MiB Tx buffer the same way?
-
-On the TXB side, mpnic_txb_init() writes MPNIC_TXB_BMC_PVT_CRDT_INIT_VAL
-(800 x 128 B = 100 KiB) to both MPNIC_TXB_BMC and
-MPNIC_TXB_P0(MPNIC_TXB_TC_IDX_BMC). MAC TC0 then gets:
-
-  SZ_1M / 128 - 2 * 800 = 6592 credits = 824 KiB
-
-On the TQS side, mpnic_tqs_init() programs
-MPNIC_TQS_GLBL_P0_0_TXB_MAX_CRDTS_0 with:
-
-  SZ_1M / SZ_1K - 100 = 924 (1 KiB units) = 924 KiB
-
-That lets the scheduler use 100 KiB more for TC0 than TXB reserved as
-TC0 private credit.
-
-Suppose TXB_MAX_CRDTS limits how much data the scheduler can have
-outstanding in the TC0 TXB pool. Could a Tx burst that fills TC0 then
-overrun the pool once the Tx datapath is running?
-
-If the BMC only needs a single 100 KiB share, as the TQS comment says,
-does the "2 *" in MPNIC_TXB_P0_MAC_PVT_CRDT_INIT_VAL leave 100 KiB of Tx
-buffer unused?
-
-The TXB comment says "everything else goes to MAC TC0", but the code
-subtracts the BMC share twice, so the two don't match either.
+> +	while ((*raw_tcd & cpu_to_le64(MPNIC_TCD_DONE)) == done) {
+> +		u64 tcd;
+> +
+> +		dma_rmb();
+> +
+> +		tcd = le64_to_cpu(*raw_tcd);
+> +		head0 = FIELD_GET(MPNIC_TCD_TYPE0_HEAD0, tcd);
 
 [ ... ]
 
-> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_pci.c b/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
-> --- a/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
-> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
-> @@ -108,6 +112,10 @@ static int mpnic_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
->  	pci_set_master(pdev);
->  	pci_save_state(pdev);
->  
-> +	err = mpnic_dev_init(mpd);
-> +	if (err)
-> +		goto err_free_mpd;
+> +	cmpl->head = head;
 > +
->  	return 0;
->  
->  err_free_mpd:
->
+> +	if (head0 >= 0)
+> +		mpnic_clean_twq0(nv, napi_budget, &qt->sub0, false, head0);
+> +}
 
-[Severity: High]
-mpnic_dev_init() reaches much further into BAR 0 than anything the
-driver touched before. Before this patch, the furthest access was
-MPNIC_BDQ_SPARE in mpnic_rd64(). Now the TXB, RXB, RPC, ROF, TOF and
-PEMO_WRAPPER blocks are all programmed.
+[Severity: Low]
+This isn't a bug with a conforming device, but head0 comes straight from
+the completion descriptor the device writes. It goes to
+mpnic_clean_twq0() without any check against sub0.tail.
 
-The highest one is MPNIC_OB_ATTR_RDE_P in mpnic_ro_init(). It is
-0x9a001a in u32 units, so the writeq() lands at byte offset 0x2680068.
-BAR 0 therefore has to be at least ~38.5 MiB for this sequence to stay
-inside the mapping.
+If the device ever reported a head past the posted tail,
+mpnic_clean_twq0() would reach an empty slot and dereference NULL:
 
-mpnic_probe() maps BAR 0 with pcim_iomap_region(), which accepts
-whatever length the device advertised. Nothing checks
-pci_resource_len(pdev, 0) against the register file the driver is
-about to use. mpnic_wr64() and mpnic_rd64() only test that uc_addr0
-is non-NULL, then add the register index unconditionally.
+    struct sk_buff *skb = ring->tx_buf[head];
+    ...
+    desc_cnt = MPNIC_XMIT_CB(skb)->desc_count;
 
-Suppose a device presents a BAR 0 smaller than that. It could be a
-misconfigured board, or something spoofing this ID behind
-Thunderbolt/USB4. Won't the first out-of-range writeq() in
-mpnic_dev_init() fault on an unmapped address during probe, or
-scribble over whatever happens to be mapped after the BAR?
+The completion walk loop is also not bounded by the NAPI budget. In
+practice the device cannot post past the CQ head, and that head is only
+committed after the loop.
 
-Could mpnic_probe() reject the device with -ENODEV before calling
-mpnic_dev_init() when pci_resource_len(pdev, 0) is too small? Does the
-hardware have a documented BAR 0 size that could serve as the bound?
-That seems better than deriving one from the highest CSR currently
-defined in mpnic_csr.h, which will keep moving as more blocks are
-added.
+Stale entries from an earlier bringup do not look reachable. The
+descriptor memory is freshly zeroed by dma_alloc_coherent(), the head
+and tail are reset to 0 later in the series, and at head 0 the expected
+DONE bit is 1.
+
+Would a cheap sanity check on head0, or a NULL check on skb, be worth
+adding as hardening?
+
+[ ... ]
+
+> +static int mpnic_alloc_ring_desc(struct mpnic_net *mpn,
+> +				 struct mpnic_ring *ring, u32 count)
+> +{
+
+[ ... ]
+
+> +	ring->size_mask = count - 1;
+> +	ring->size = size;
+
+[Severity: Low]
+This isn't a bug with the current callers, but count is a u32 while
+ring->size_mask is a u16 in struct mpnic_ring. Nothing here checks that
+count is a non-zero power of two no larger than 65536.
+
+This cannot be reached today. The only caller passes mpn->txq_size,
+which is only ever set to MPNIC_TXQ_SIZE_DEFAULT (1024), and there is
+no set_ringparam path.
+
+If a runtime ring size setter is added later, a count that is zero, not
+a power of two, or above 65536 would break the masked indexes in
+mpnic_clean_twq0() and mpnic_clean_tcq().
+
+Would a WARN_ON_ONCE() or an explicit check here be worthwhile?
 
 -- 
 Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260922-linux-mpnic-v1-0-236844f53072%40gmail.com
