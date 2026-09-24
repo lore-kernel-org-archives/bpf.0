@@ -1,64 +1,64 @@
-Received: from mail-wm2-f7.google.com (mail-wm2-f7.google.com [74.125.225.135])
+Received: from mail-wr2-f9.google.com (mail-wr2-f9.google.com [74.125.225.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E3924A841D
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:58:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.135
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615344A8FE6
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:58:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790269090; cv=none; b=awpBTmmMMm/8oiyObI49IrJWDlT0Dr8l4Y1pbcpk+mE7QQjjYt3Cye81vz3v2BV0gcqvi7UU2fSrEAskE1ygJXaU60LW2D3aeD0LcS4VeZWficEwalv+nOC4vZ6w5OmUXfdl+feb4294mlOopsU2mEfw9YKrwSf3qy/KX0YJlLw=
+	t=1790269091; cv=none; b=l4VGog2BqQc1ORYOeJp1u3Z3OngEe8DueVVlLb408dBji4tS5FNNI7YT8WYC0eVhH7wE7eTAfXCVVy9krQ1XcQEstDIfcUQjZ/xzfvThCtN+qIDx8vj3S5rWlFTrlvAggs1eHtsvn96E33SmlzsyAqRxCzOJJhmMyiK/ObeM6cw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790269090; c=relaxed/simple;
-	bh=SjnBPu0576uU4MH3+Alb4L6ywPPOos6QjPiuwYGQmfA=;
+	s=arc-20240116; t=1790269091; c=relaxed/simple;
+	bh=svjCu+rHac5ooO/yG52EY3SLmfIV+fRA5BQukGIdfHY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DHyICnKS4Emo7qdY2c4XGDAViglbn3ENz3VjvITX4EW61mKI+ZkF6poUy8ukxjTlZOjBEHeN2XGC7Gitg1+gGPWKu1HqdvIY1ksq72x6gJ/NhDRTWA0lvSFVAXxOTX3wdPETC0fcXKdFFIMXMk3mEvcDQx9yj4Sj0Qtjl2T8iIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GhHbfZXd; arc=none smtp.client-ip=74.125.225.135
+	 MIME-Version; b=V90Ca15FmhDHDtUkSdZs/sT7BopNtVQCl0Li2lwHScu/gARf+bS6t2yfg4sGNVqAj/D/HZTcr9WWkvnaYOZcskZYn8fBXUN+4m/IGZ9bDb25Odbdhu24L5OshocYcrOFMKcJ/wvmSNiPRZSmTLyWjcHpd7sOZfSQT8qAapdZoQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AH/EwnF3; arc=none smtp.client-ip=74.125.225.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GhHbfZXd"
-Received: by mail-wm2-f7.google.com with SMTP id 5b1f17b1804b1-49e8361492fso302095e9.0
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:58:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AH/EwnF3"
+Received: by mail-wr2-f9.google.com with SMTP id ffacd0b85a97d-4843169420fso4985f8f.1
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:58:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20251104; t=1790269087; x=1790873887; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=dZR0ugLKXWVt3Wd0kl+0FD2/mB9z6fVu7ANDQcj4+h0=;
-        b=GhHbfZXdnENBeZ8/QAUAXp8PB+wZ7LeglKjXH1cSJas6+hZ7LyQlJ46a/XEwlJSG7l
-         Zbe+K8bc3LsKoaEKQKlUsZtFU+Ja0neumAiu4Ckd0YGJPe2vlVBSD6f1B/yS/fXHgk0e
-         JEvvKfR7vO2N2Ct3Vaz2/HUwkmNPwCk3EGQw1o4/fvtzzKgwENeRKju8ICLdhKcXAIW5
-         NZWBU4FOHA6q3HKzsjHdZRZLrPR4JlkiosAwYyiynVMH3GRBgm7VZmlLHEI2kit0fyFW
-         D5vO8mI27SFaOERlxA8GM3xXwqoYA/mrY1za4Cr/QJW/+vPMQ7yMVjJTR8xIyrDkqBs4
-         Lu5w==
+        bh=d0UgR1mbEYaQSsIvvBAmFBNcW/oCs8t3tTZO/gtDzI0=;
+        b=AH/EwnF3/zNE6LZFQhxlwUlErrXKeYNaU81tOlT6ITGFxe4VaWmKltPgAz81MZptFb
+         CAfK0ChzVO7fW3YF3ElBKlzUJmVYn3mLTH9llDcP1zd7WHNgJduI2viS94gbbeh006om
+         vk7akJmPDQbyEfpbfGmuTY8SfPqeQap6iCU4oiTUO0uOmYE3/IrATKuEFI2f+qtd1mdU
+         qKhV1tRlB+r/O6M5say2PPeAiQyzZiw99NlYbXm5Dn0ajttLasJQOFgNkABuw+7pOUep
+         VbLOdmKvEcKMSr6Zzy/uJV6PXeIWvuh/8ccNgh5o21PamwvUuSCadABDqoD1uoQxqCDd
+         5mlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20260707; t=1790269087; x=1790873887;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=dZR0ugLKXWVt3Wd0kl+0FD2/mB9z6fVu7ANDQcj4+h0=;
-        b=qqd5AOZt4WB1AxzKdpXNPyjUpFESFGwO7ZwrLUofQV9Ma+6aOe9uIUsQAMh2nR0t2r
-         Wp97zjmPGD41zNoAq4s6k4eOmLt8aPGg2hdnh6XA3/vXS0yZRMabWpTYhTy8dbkTPHn1
-         OLYom0YXkYin+/zdAcy5SO6YWTxjX7qy8313SjKQK2+MNMjEZ87T0e0HovMIgx67B9cn
-         Q7yejgS/N+F2oAcbFK6BcX1bxPIpYDk6/in1GV9XkFqPrp0YknLVqwHguPwAtunlIfDn
-         LcwsnmrOZnkeRu5CZzLD7NYGh5tva01RozHx7YznFCKPZKnJzx4+mK8EADyTpI7aK/4E
-         xTrw==
-X-Gm-Message-State: AFuF++lVowq0udzyGvq2edVLpWo7cbDjIDFui2KDdUGYtLPmicNGDn0N
-	Wh/nJcyB8JvTH9nfuycNFpEBqVOq7UBgdHXD7VYJluVgOGuo+Tgpk9tuVnB5PZbM
-X-Gm-Gg: AYBFou3anAA5ygu8yGYPbMgeAM1YCyiYR81g+ARvMrqEp6a5/Bn8uJUvybdUpgp4jfT
-	/CaJVP47xQbE8H0x8c7wCdacstV9luWJPMMs9krjrUVZPIqNXlZTWI12Q1RbAKh7+FBu0+QV4Pg
-	2oGeacEpITl1Kn65UaryjQdJXn/HE7OToFl9yxStXEnqNKSVM1YaLEgAaO131s+x7uqpfRuXEK4
-	RPlXanqGzHYnYwuPW8WNqGXdZwLrS5NUwE47KMyqXzAQ6B0uNsucv80D1w7E2CbJ75/WimdWeCt
-	TAMwG99d0RNaqUUlJ5eXKXrxyxFOaBhJk8PSGFa9mwQLxdhT8zDpeKkhRhGx4n1Ygt+t6L6sHWX
-	oIy0xCDFN/5Yd07pGhYpI5YftQPKb8w80oPSCWspDg3ek1luhOMNWTjaTB+heVB8oyJ6wrLSvqr
-	3o5rM+glX73as8qwx9W/AOnu3JI2Ck7v0tE4SH5RZQzhBZkNituj7Yj5LdAu5r4SstdVtwiJJ7a
-	YVkVhqFMclpjUuTDf4tpjlshz4CVKt5oAS4CwqteG3v7roU3c2BH/c0W4qE2Ya+zWGK36D3wnw2
-	M9p074mpQkceIGg0Sy/YE/ph0u8RWrI5FkcTAAE=
-X-Received: by 2002:a05:600c:4e49:b0:49d:1cc7:5ec3 with SMTP id 5b1f17b1804b1-49fe66d456cmr49821445e9.9.1790269086767;
-        Thu, 24 Sep 2026 09:58:06 -0700 (PDT)
+        bh=d0UgR1mbEYaQSsIvvBAmFBNcW/oCs8t3tTZO/gtDzI0=;
+        b=HT4liPam6/YEB98DZ6gx7m5XGOnKtIP4sdJo+JgS3w0ipEEvvnlSsRcpcQ99G/3cFz
+         fSCNjzla6oN0fgnRcsCpGRhevwdah9CoPrbmxZ1+Vp+5SQ7eV4sgUL8xptUrU7OE1iWu
+         jpwsTKiKD/UgLHBNBqat80q2IGemjuq08Q8YIg3vRhiHe4gD5dZNJTFhAz8nd1jkTLAO
+         sCp/i+rqJod66b0CmKB1mgOJFL3pG9aXR2dvDrr3t1eA0iK2Gq9nhouS2/6KGQzT9E3r
+         1x+wR5/4E3zUD3ho2AwUwkXhOvV5Eh+k9JW+/Px5mtzv2ijv/a3joF3WWfh9dzDrgH/E
+         qgOQ==
+X-Gm-Message-State: AFuF++m31N9wy+aSjyFHPCNNBJ2bb9wWu91o+FWydFSyK9iTdjuGzJm7
+	nw0Wf/EekYE4O/oRVWx43jzprwtVwYLKojyi/7VMGTMpfp1jiZ6fFqCgrZHo9n2A
+X-Gm-Gg: AYBFou2EqjC5HBoelbUvDfyl4vQdawHepPdVgfJrouOQbID7wsaKDLTcERwy9/wMtgZ
+	jEW8hmBRszA3URoLD8/dvvvodV4khhV9+ZZqTrxLNTx9oMKfjfr2vW6GLtgrMHOCDgAYpbKp3dF
+	uDUg/zmEXHxIyJu3289dkWebnTUZwI6tQhlfyuqVs5JhTtQeW9HRJyaArEKoIywWks38SqWOiDP
+	c/t3btQppH6zKwmOfwUkkWr3h9Ec9EJJgeHYxvnCIiURLqvjuu1m6me8G8hPinyqjwjVOQYOt1R
+	15SMn3oCIU7OMXi7PMGQsY0jeH9JE/SXt2+CNJhkvG/H9G58olXoRcynh3A4edTuhNAdsPYsQpr
+	ncQYKYWbw7S/ZfTrOfIscPzyXVW2twdAnXSKUKftPlEsri7Gnz8hOL1CTtu5FA4sUNLgURXWp1U
+	OpxCtGS2nSIyD02RHEoeyXCgW20lesKfcLbApK+ZCdb+CKWOKhcTDhFIBwUXOxPthzw4IRAJ5VJ
+	O5vgQWvtUuE7DoSvjv978qMt/2bgHXSHTbOHZXgjXD9HtUdovl/EWjBC9v+GlfxI/EjslaEG+Av
+	yMxKrOuFR8gGVFEF+mz6DVmKhF++VANnqKjG4A==
+X-Received: by 2002:a05:600c:a013:b0:49d:1f10:8b9f with SMTP id 5b1f17b1804b1-49fe66bdeb8mr51650435e9.7.1790269082820;
+        Thu, 24 Sep 2026 09:58:02 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe5e07bdcsm73202925e9.15.2026.09.24.09.58.06
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe0c5c41asm119529145e9.4.2026.09.24.09.58.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 09:58:06 -0700 (PDT)
+        Thu, 24 Sep 2026 09:58:02 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -69,9 +69,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 14/18] selftests/bpf: Add load conditions on the program stack limit
-Date: Thu, 24 Sep 2026 18:57:15 +0200
-Message-ID: <20260924165740.2146806-15-memxor@gmail.com>
+Subject: [PATCH bpf-next v4 12/18] bpf: Size the per-frame verifier structures for a 2 KiB stack
+Date: Thu, 24 Sep 2026 18:57:13 +0200
+Message-ID: <20260924165740.2146806-13-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260924165740.2146806-1-memxor@gmail.com>
 References: <20260924165740.2146806-1-memxor@gmail.com>
@@ -81,183 +81,197 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6297; i=memxor@gmail.com; h=from:subject; bh=SjnBPu0576uU4MH3+Alb4L6ywPPOos6QjPiuwYGQmfA=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtraPGNr9d4dq45+J5JgztA9d6hd049M/d0Jk0O9r6s8 26S9D6fjlIWBjEuBlkxRZaS//uYjE9U/g60XcYNM4eVCWQIAxenAEzEiIPhv6tQc6B+9+v7AvoZ d9nXCzy7eO5o1Lbth8t7CzQsxKwz5jIyzPZ+7LB+XmhhavGLwjWrd8m9N89N3Nzu5FZk37FfxXc HMwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8672; i=memxor@gmail.com; h=from:subject; bh=svjCu+rHac5ooO/yG52EY3SLmfIV+fRA5BQukGIdfHY=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtraNFV1j09zzRC3ayF7lzXNV3jpHn87+nnGwr29Mu96 51i7XK2o5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABMR+cvIcMP4wuuvRjkpTy4G un7Yo5T1zD/2kbzjxZiqmk3fb2av/MzIcKDLPMPOMehi6w/P6ZZai1gjWr70hs044SZ7aDqDa0A +GwA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-The stack a program may use will depend on the JIT: 2 KiB where the JIT
-declares support for large stacks, 512 bytes elsewhere and for
-interpreted programs. Tests that probe the limit therefore need to know
-which one is in force. Add __load_if_large_stack() and
-__load_if_no_large_stack() to test_loader, analogous to the JIT load
-conditions, backed by a one-time probe that loads a program storing at
-fp-2048. The probe caches only the verifier's verdict on that store: a
-load that fails for another reason, such as a missing capability, is
-reported and probed again on the next call.
+The verifier keeps a few structures whose size follows the deepest
+frame a program may have: the backtracking and scratched-slot bitmaps,
+the jump history slot index and the clamp of the liveness masks. They
+are all expressed through MAX_BPF_STACK_SLOTS, which derives from
+MAX_BPF_STACK, the frame size of the interpreter.
+
+Introduce MAX_BPF_STACK_JIT, the stack budget a program may get on a
+JIT that can lay out frames of any size, and derive those structures
+from it so that a frame may be as deep as that budget. Nothing grants
+the budget yet, so no program verifies differently; the only visible
+change is that the liveness log prints a whole-frame read up to the new
+depth, so the three selftests matching such reads are updated.
+
+The spill tracker of the liveness analysis keeps a table entry per
+instruction and tracked slot, so it follows more than the 64 slots of a
+MAX_BPF_STACK frame only while that table stays within what 64 slots
+need for the largest program; a subprog of a million instructions keeps
+64, one of a quarter million may track all 256. This bounds the table
+at its old worst case of 640 MiB instead of letting a single deep store
+push it past what kvmalloc() serves.
+
+The backtracking and scratched-slot bitmaps grow from one to four
+words per frame, a fixed few hundred bytes per verifier environment.
+tmp_str_buf, which formats a frame's slot list for the log, grows from
+320 to 1408 bytes so that all 256 slots still fit, and the log's line
+buffer from 1 to 2 KiB so that a line built from it is not cut; the
+environment stays within its 64 KiB allocation. The liveness masks are
+only as wide as the stack a frame uses, so most frames cost the same as
+before; a frame that is read as a whole, through a pointer of unknown
+offset or by bpf_loop() with two callbacks, now carries masks of eight
+words, 192 bytes per instruction per frame instead of 48. Measured over
+the 5075 selftest programs, that is 0.2% of the total peak verifier
+memory: strobemeta_bpf_loop and pyperf600_bpf_loop grow by 11% (1.2 MiB
+and 0.6 MiB), a few dozen small programs by 40 to 100 KiB each,
+everything else is unchanged. The next patch bounds such reads by the
+program's budget, so this cost is only paid once a JIT grants it.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/testing/selftests/bpf/progs/bpf_misc.h  |  3 ++
- tools/testing/selftests/bpf/test_loader.c     | 24 +++++++++++
- tools/testing/selftests/bpf/testing_helpers.c | 41 +++++++++++++++++++
- tools/testing/selftests/bpf/testing_helpers.h |  1 +
- 4 files changed, 69 insertions(+)
+ include/linux/bpf_verifier.h                  | 26 ++++++++++++-------
+ include/linux/filter.h                        |  5 ++++
+ kernel/bpf/liveness.c                         | 17 ++++++++++--
+ .../selftests/bpf/progs/verifier_live_stack.c |  6 ++---
+ 4 files changed, 39 insertions(+), 15 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index 2ced1d751ace..f3dbc3b59bff 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -175,6 +175,9 @@
- #define __prepare_priv		__test_tag("test_prepare_priv")
- #define __load_if_JITed()	__test_tag("load_mode=jited")
- #define __load_if_no_JITed()	__test_tag("load_mode=no_jited")
-+/* Whether programs may use more than 512 bytes of stack on this kernel and JIT */
-+#define __load_if_large_stack()		__test_tag("stack_mode=large")
-+#define __load_if_no_large_stack()	__test_tag("stack_mode=small")
- #define __stderr(msg)		__test_tag("test_expect_stderr=" msg)
- #define __stderr_unpriv(msg)	__test_tag("test_expect_stderr_unpriv=" msg)
- #define __stdout(msg)		__test_tag("test_expect_stdout=" msg)
-diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-index a6e3fcc1079c..25eeb1c1248b 100644
---- a/tools/testing/selftests/bpf/test_loader.c
-+++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -45,6 +45,11 @@ enum load_mode {
- 	NO_JITED	= 1 << 1,
- };
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index c5f2e18b7e54..019322e8196b 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -19,11 +19,12 @@
+  * that converting umax_value to int cannot overflow.
+  */
+ #define BPF_MAX_VAR_SIZ	(1 << 29)
+-/* size of tmp_str_buf in bpf_verifier.
+- * we need at least 306 bytes to fit full stack mask representation
+- * (in the "-8,-16,...,-512" form)
++/*
++ * size of tmp_str_buf in bpf_verifier.
++ * we need at least 1399 bytes to fit full stack mask representation
++ * (in the "-8,-16,...,-2048" form)
+  */
+-#define TMP_STR_BUF_LEN 320
++#define TMP_STR_BUF_LEN 1408
+ /* Patch buffer size */
+ #define INSN_BUF_SIZE 32
  
-+enum stack_mode {
-+	LARGE_STACK	= 1 << 0,
-+	SMALL_STACK	= 1 << 1,
-+};
-+
- struct test_subspec {
- 	char *name;
- 	char *description;
-@@ -70,6 +75,7 @@ struct test_spec {
- 	int mode_mask;
- 	int arch_mask;
- 	int load_mask;
-+	int stack_mask;
- 	int linear_sz;
- 	const char *skip_reason;
- 	bool prepare_priv;
-@@ -425,6 +431,7 @@ static int parse_test_spec(struct test_loader *tester,
- 	int err = 0;
- 	u32 arch_mask = 0;
- 	u32 load_mask = 0;
-+	u32 stack_mask = 0;
- 	struct btf *btf;
- 	enum arch arch;
+@@ -244,12 +245,13 @@ enum bpf_stack_slot_type {
+ #define BPF_REG_SIZE 8	/* size of eBPF register in bytes */
  
-@@ -620,6 +627,16 @@ static int parse_test_spec(struct test_loader *tester,
- 				err = -EINVAL;
- 				goto cleanup;
- 			}
-+		} else if ((val = str_has_pfx(s, "stack_mode="))) {
-+			if (strcmp(val, "large") == 0) {
-+				stack_mask = LARGE_STACK;
-+			} else if (strcmp(val, "small") == 0) {
-+				stack_mask = SMALL_STACK;
-+			} else {
-+				PRINT_FAIL("bad stack spec: '%s'", val);
-+				err = -EINVAL;
-+				goto cleanup;
-+			}
- 		} else if ((msg = str_has_pfx(s, "test_expect_stderr="))) {
- 			err = push_disasm_msg(msg, &stderr_on_next_line,
- 					      &spec->priv.stderr);
-@@ -659,6 +676,7 @@ static int parse_test_spec(struct test_loader *tester,
+ /*
+- * Largest number of BPF_REG_SIZE stack slots a single frame can have. A frame
+- * may use any part of the MAX_BPF_STACK budget; check_max_stack_depth()
+- * enforces the bound on the combined depth of frames sharing the kernel stack
+- * and on each frame using a private stack.
++ * Largest number of BPF_REG_SIZE stack slots a single frame can have, sized
++ * for the largest stack budget any JIT supports. A frame may use any part of
++ * its program's budget; check_max_stack_depth() enforces the budget on the
++ * combined depth of frames sharing the kernel stack and on each frame using
++ * a private stack.
+  */
+-#define MAX_BPF_STACK_SLOTS	(MAX_BPF_STACK / BPF_REG_SIZE)
++#define MAX_BPF_STACK_SLOTS	(MAX_BPF_STACK_JIT / BPF_REG_SIZE)
  
- 	spec->arch_mask = arch_mask ?: -1;
- 	spec->load_mask = load_mask ?: (JITED | NO_JITED);
-+	spec->stack_mask = stack_mask ?: (LARGE_STACK | SMALL_STACK);
+ /* 4-byte stack slot granularity for liveness analysis */
+ #define BPF_HALF_REG_SIZE	4
+@@ -719,7 +721,11 @@ struct bpf_insn_aux_data {
+ #define MAX_USED_MAPS 64 /* max number of maps accessed by one eBPF program */
+ #define MAX_USED_BTFS 64 /* max number of BTFs accessed by one BPF program */
  
- 	if (spec->mode_mask == 0)
- 		spec->mode_mask = PRIV;
-@@ -1331,6 +1349,7 @@ void run_subtest(struct test_loader *tester,
- {
- 	struct test_subspec *subspec = unpriv ? &spec->unpriv : &spec->priv;
- 	int current_runtime = is_jit_enabled() ? JITED : NO_JITED;
-+	int current_stack = is_large_stack_supported() ? LARGE_STACK : SMALL_STACK;
- 	struct bpf_program *tprog = NULL, *tprog_iter;
- 	struct bpf_link *link, *links[32] = {};
- 	struct test_spec *spec_iter;
-@@ -1360,6 +1379,11 @@ void run_subtest(struct test_loader *tester,
- 		return;
+-#define BPF_VERIFIER_TMP_LOG_SIZE	1024
++/*
++ * Longest line the verifier log can carry: a full stack mask of
++ * MAX_BPF_STACK_SLOTS slots, see TMP_STR_BUF_LEN, plus its prefix.
++ */
++#define BPF_VERIFIER_TMP_LOG_SIZE	2048
+ 
+ struct bpf_verifier_log {
+ 	/* Logical start and end positions of a "log window" of the verifier log.
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index 4f0662e42897..fe72e71984e5 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -98,6 +98,11 @@ struct ctl_table_header;
+ 
+ /* BPF program can access up to 512 bytes of stack space. */
+ #define MAX_BPF_STACK	512
++/*
++ * Stack budget of a program on a JIT that lays out frames of that size.
++ * The interpreter and JITs without such support keep MAX_BPF_STACK.
++ */
++#define MAX_BPF_STACK_JIT	2048
+ 
+ /* Helper macros for filter block array initializers. */
+ 
+diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+index 1d83a4cf6ec5..25e95387e0e1 100644
+--- a/kernel/bpf/liveness.c
++++ b/kernel/bpf/liveness.c
+@@ -15,7 +15,7 @@
+  * Half-slot 0 covers [fp-4, fp), half-slot 1 covers [fp-8, fp-4), and so on,
+  * hence FRAME_HALF_SPIS - 1 is the deepest half-slot a frame can have.
+  */
+-#define FRAME_HALF_SPIS		(MAX_BPF_STACK / BPF_HALF_REG_SIZE)
++#define FRAME_HALF_SPIS		(MAX_BPF_STACK_JIT / BPF_HALF_REG_SIZE)
+ #define FRAME_MAX_WORDS		BITS_TO_LONGS(FRAME_HALF_SPIS)
+ 
+ /* Masks tracked for each instruction of a frame */
+@@ -1021,6 +1021,19 @@ static void arg_padd(struct arg_track *at, s64 delta)
  	}
- 
-+	if ((current_stack & spec->stack_mask) == 0) {
-+		test__skip();
-+		return;
-+	}
-+
- 	if (unpriv) {
- 		if (!can_execute_unpriv(tester, spec)) {
- 			test__skip();
-diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
-index d1d60451c5bc..47fe61a1ebff 100644
---- a/tools/testing/selftests/bpf/testing_helpers.c
-+++ b/tools/testing/selftests/bpf/testing_helpers.c
-@@ -517,6 +517,47 @@ bool is_jit_enabled(void)
- 	return enabled;
  }
  
 +/*
-+ * Whether the kernel accepts a program using more than 512 bytes of stack,
-+ * which depends on the JIT in use. Probed once with a program that stores
-+ * at the 2 KiB depth. Only the verifier's verdict on that store is cached:
-+ * a load that fails for another reason, such as a missing capability, is
-+ * reported and probed again on the next call.
++ * Slots the spill tracker may follow for a subprog of @len instructions
++ * without its per-instruction tables costing more than they could for the
++ * largest program while every frame stayed within MAX_BPF_STACK: as many
++ * entries as 64 slots need for BPF_COMPLEXITY_LIMIT_INSNS instructions.
 + */
-+bool is_large_stack_supported(void)
++static u32 spill_slots_affordable(int len)
 +{
-+	static int supported = -1;
-+	struct bpf_insn insns[] = {
-+		BPF_ST_MEM(BPF_DW, BPF_REG_10, -2048, 0),
-+		BPF_MOV64_IMM(BPF_REG_0, 0),
-+		BPF_EXIT_INSN(),
-+	};
-+	char log[1024] = {};
-+	LIBBPF_OPTS(bpf_prog_load_opts, opts,
-+		.log_buf = log,
-+		.log_size = sizeof(log),
-+		.log_level = 1,
-+	);
-+	int fd;
++	u32 base = MAX_BPF_STACK / BPF_REG_SIZE;
 +
-+	if (supported >= 0)
-+		return supported;
-+
-+	fd = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL", insns, ARRAY_SIZE(insns),
-+			   &opts);
-+	if (fd >= 0) {
-+		close(fd);
-+		supported = 1;
-+	} else if (strstr(log, "invalid write to stack")) {
-+		supported = 0;
-+	} else {
-+		fprintf(stderr, "%s: probe failed with errno %d, assuming 512 bytes:\n%s",
-+			__func__, errno, log);
-+		return false;
-+	}
-+	return supported;
++	return max_t(u32, base, base * BPF_COMPLEXITY_LIMIT_INSNS / len);
 +}
 +
- int stack_mprotect(void)
+ /*
+  * Number of 8-byte spill slots to track for the instructions in [@start, @end):
+  * the 64 slots of a MAX_BPF_STACK frame, which the tracker has always
+@@ -1793,7 +1806,7 @@ static int compute_subprog_args(struct bpf_verifier_env *env,
+ 	int end = env->subprog_info[subprog + 1].start;
+ 	int po_end = env->subprog_info[subprog + 1].postorder_start;
+ 	int len = end - start;
+-	u32 nslots = subprog_spill_slots(env, start, end);
++	u32 nslots = min(subprog_spill_slots(env, start, end), spill_slots_affordable(len));
+ 	struct arg_track (*at_in)[MAX_AT_TRACK_REGS] = NULL;
+ 	struct arg_track at_out[MAX_AT_TRACK_REGS];
+ 	struct arg_track *at_stack_in = NULL;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+index c3b08089fef1..a916d4049a0b 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+@@ -1953,7 +1953,7 @@ static __used __naked void fwd_parent_key_to_helper(void)
+ SEC("socket")
+ __log_level(2)
+ __success
+-__msg("call bpf_map_update_elem{{.*}}; use: fp1-8..-512 fp0-8")
++__msg("call bpf_map_update_elem{{.*}}; use: fp1-8..-2048 fp0-8")
+ __naked void helper_arg_fallback_keeps_scanning(void)
  {
- 	void *buf;
-diff --git a/tools/testing/selftests/bpf/testing_helpers.h b/tools/testing/selftests/bpf/testing_helpers.h
-index 1c58a2f08b64..f1505108e26a 100644
---- a/tools/testing/selftests/bpf/testing_helpers.h
-+++ b/tools/testing/selftests/bpf/testing_helpers.h
-@@ -59,6 +59,7 @@ struct bpf_insn;
- int get_xlated_program(int fd_prog, struct bpf_insn **buf, __u32 *cnt);
- int testing_prog_flags(void);
- bool is_jit_enabled(void);
-+bool is_large_stack_supported(void);
- int stack_mprotect(void);
- 
- /* Runs diff(1) on mismatch */
+ 	asm volatile (
+@@ -2267,7 +2267,7 @@ static __used __naked void merge_leaf_read(void)
+ SEC("socket")
+ __log_level(2)
+ __success
+-__msg("call bpf_loop#181            ; use: fp2-8..-512 fp1-8..-512 fp0-8..-512")
++__msg("call bpf_loop#181            ; use: fp2-8..-2048 fp1-8..-2048 fp0-8..-2048")
+ __naked void bpf_loop_two_callbacks(void)
+ {
+ 	asm volatile (
+@@ -2874,7 +2874,7 @@ __naked void narrow_store_defines_nothing(void)
+ SEC("socket")
+ __log_level(2)
+ __msg("stack use/def subprog#{{[0-9]+}} merge_read_all_callee (d2,cs{{[0-9]+}}):")
+-__msg("(79) r0 = *(u64 *)(r1 +0){{.*}}; use: fp0-8..-512")
++__msg("(79) r0 = *(u64 *)(r1 +0){{.*}}; use: fp0-8..-2048")
+ __naked void merge_keeps_whole_frame_read(void)
+ {
+ 	asm volatile (
 -- 
 2.53.0
 
