@@ -1,299 +1,243 @@
-Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013025.outbound.protection.outlook.com [40.93.196.25])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F86A371887;
-	Thu, 24 Sep 2026 02:52:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.25
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790218360; cv=fail; b=T8aKxRbNWKsmqCcFWUiHb3Z7xMxGf2VLfz7ymI61aRwumjC42cDUchDBKlu/kTA2eFqq8KWcMdlHBu64+VbQhMgrkvVT8U/dcd9+2eRz+OE3zhF8qb6Zup9+HWTCb/gr0nHzdp3v6XfHPs48HEhvi5ESPqLBTFeVNOeiwhE2Bls=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790218360; c=relaxed/simple;
-	bh=adh1a9LxRrIQRaCpBKU9pv7GvS6AKNq+AgdNFeluttY=;
-	h=Content-Type:Date:Message-Id:Subject:Cc:To:From:References:
-	 In-Reply-To:MIME-Version; b=HX0/PtRRv0f3Wff9sftKoQMMpTFRDlw+YJw5kUf+yYzCMzcUdtafsigXNu9o7X+l/3cx2pr/QX+zddnUGVxI2HToLa9D5uqRm45AEQIHPgg1HnIghZbR+uIMOD21gzaVCFUd84XT0UhAkRlzNTZWm/PSO96AmPANcCt2/Q5aN/w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=tCMIVBDe; arc=fail smtp.client-ip=40.93.196.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CC956FC5
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 03:10:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790219448; cv=none; b=gRJpOc8ZwrhMNaffR+06K8V0K1tUtvK1AxRrt5e4bqgrZCbkIokZGguQqb4JDaHTUreBCXXnlncgT5s4Xv+Psf6YhOV0c03n2EVE4F0+Jtq1NnQUleOUAtO3+1pi1QhdySGFFtYmXeVJHKEJ1QRo2srJrmbIRTVonXceXecd5Bw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790219448; c=relaxed/simple;
+	bh=U1ahZKa16hqOnDL3P+1aupgrE07yFaE70k1xYhVLHhk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fRoivf7Hv+LuEUfr9phGsOwM3qUYNI2iIZjod16PCMniltwP2jSPtRxu/L7VPsyKqdPRX2l5lqiVOg4TAZI09tyRegkFHM7DvrU6PpjZD+38UHW9wpYZa+al7wKPMywplL4Mj0NV0LmADefKdPIxyzF2TW/TPQDbqYt9FV37nd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WgJ5zCMq; arc=none smtp.client-ip=74.125.228.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="tCMIVBDe"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rrf6tqIn7V8/tqVHalPAaMsrS+TaBsGfKeRG2qKnRvCS/11wXM1ltIXxLRoM/fz97DK+e0BUV6UJ5cg76U8mA6BWtiU4HoWGQRvhJ7J9ZeWvAODcjMuxtXTkcrN9lswqzZf5dT7uFuTKAL5ZWPZShsILMpTMVOGh+Sc9LQWobi2UyaCT1gzy/qiDknTuLkh19fD9PAd76pUY4B9CCkwaMl/jcHCDIUlBLEgrKhHYaNhMVAJGkHei/I8G3ByoJtJC+WU8vTdpIoaYs4sfoczUGa+xjsBo3C1OCTbRPXwlWhasUwnnNldbtwIJ79YXxN5r4LHb91yDqmWIp+4N54URXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8yM5iIU4Az6KRE7DwLvqEvDNeRolw1PHv9BwsT35mHc=;
- b=rIH85O9Q2dfL3CSJ0P2n2lwcaI0OGgP0CDEA2xWaTlBiCzj2N/6P8D5lbST8jBaD9t0TxIf4Ow0KFL34QGUpUcOczx8MQ8QTNsb1c/NbA3cFIOcZjC/4Ll7YHPJ1Cs907lgxHK/qFFPnBgcN0ZkeyOrs+rGNVO/+0h8FpXkpDHot9YfRCQWn3y7EaQfp7PsVoMSP2gq0Cmp/BxLJFHoMqRjghAfQ/y5YXGaCGoLQYHY2N3tvFLRnYrhBNYkpSJhLCUcqjdnSmSxd0q2vwyM0k39Kw14KrcqinrtNM9b5rfHm4OjnxFm+aM1AtkipOcMIVRUju7q9zgStcggljHns7g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8yM5iIU4Az6KRE7DwLvqEvDNeRolw1PHv9BwsT35mHc=;
- b=tCMIVBDeEtDSS9jLrAYb1ybEqd39vQIl9QNuSd63prGFjsR8FtLMdHm4yI59lLn+LxwvbpNMoYTPQYIC7vw9rjbEU57UkvXNrODEGZb1MOndIhJIq6kCOe7gyOWcpCy4z329N49gzkphDaYVNsWUJUpB+B1pCSJzGJ3bwX5FXDzGGD3XF7ObYTV9Z9SfQU4pgl4kvHdK4Cvz2edXqHvpYrIo+sXh9h0B9oQL5sglDBqlApFu2biPSrdbrl8t5FeO85LnCS4hVXHU7WdJsi2jFbsqlIrKWRv9qzBmXX8GPQufKSfuQ90bLoKJn24RgWjL6wnE8F8HZbVlrYOGcfrA0Q==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
- by DM4PR12MB5745.namprd12.prod.outlook.com (2603:10b6:8:5c::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.428.13; Thu, 24 Sep 2026 02:52:10 +0000
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16%6]) with mapi id 15.21.0451.014; Thu, 24 Sep 2026
- 02:52:10 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 23 Sep 2026 22:52:06 -0400
-Message-Id: <DLN7FLRJGS5Y.1T8T274W2NS6L@nvidia.com>
-Subject: Re: [PATCH v3 04/40] mm: consistently validate VMA state after
- mmap[_prepare] hooks
-Cc: <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <linux-usb@vger.kernel.org>,
- <linux-rdma@vger.kernel.org>, <selinux@vger.kernel.org>,
- <linux-sound@vger.kernel.org>, <bpf@vger.kernel.org>,
- <linux-scsi@vger.kernel.org>, <linux-fbdev@vger.kernel.org>,
- <dri-devel@lists.freedesktop.org>, <linux-trace-kernel@vger.kernel.org>,
- <linux-perf-users@vger.kernel.org>, <linux-arch@vger.kernel.org>,
- <linux-fsdevel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
- <kvmarm@lists.linux.dev>, <linuxppc-dev@lists.ozlabs.org>,
- <kvm@vger.kernel.org>, <kvm-riscv@lists.infradead.org>,
- <linux-riscv@lists.infradead.org>, <linux-s390@vger.kernel.org>,
- <sparclinux@vger.kernel.org>, <fuse-devel@lists.linux.dev>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, "Andrew Morton"
- <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>,
- "Vlastimil Babka" <vbabka@kernel.org>, "Jann Horn" <jannh@google.com>,
- "Pedro Falcato" <pfalcato@suse.de>, "David Hildenbrand" <david@kernel.org>,
- "Mike Rapoport" <rppt@kernel.org>, "Suren Baghdasaryan"
- <surenb@google.com>, "Michal Hocko" <mhocko@suse.com>, "Jonathan Corbet"
- <corbet@lwn.net>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Dennis Dalessandro" <dennis.dalessandro@cornelisnetworks.com>, "Jason
- Gunthorpe" <jgg@ziepe.ca>, "Leon Romanovsky" <leon@kernel.org>, "Paul
- Moore" <paul@paul-moore.com>, "Stephen Smalley"
- <stephen.smalley.work@gmail.com>, "Jaroslav Kysela" <perex@perex.cz>,
- "Takashi Iwai" <tiwai@suse.com>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>, "Baolin Wang"
- <baolin.wang@linux.alibaba.com>, "Nico Pache" <nico.pache@linux.dev>, "Ryan
- Roberts" <ryan.roberts@arm.com>, "Dev Jain" <dev.jain@arm.com>, "Barry
- Song" <baohua@kernel.org>, "Lance Yang" <lance.yang@linux.dev>, "Usama
- Arif" <usama.arif@linux.dev>, "Kiryl Shutsemau" <kas@kernel.org>, "Doug
- Gilbert" <dgilbert@interlog.com>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, "Martin K. Petersen"
- <mkp@kernel.org>, "Jaya Kumar" <jayalk@intworks.biz>, "Simona Vetter"
- <simona@ffwll.ch>, "Helge Deller" <deller@gmx.de>, "Sebastian Reichel"
- <sre@kernel.org>, "John Hubbard" <jhubbard@nvidia.com>, "Peter Xu"
- <peterx@redhat.com>, "Masami Hiramatsu" <mhiramat@kernel.org>, "Oleg
- Nesterov" <oleg@redhat.com>, "Peter Zijlstra" <peterz@infradead.org>,
- "Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, <x86@kernel.org>, "Arnaldo Carvalho de Melo"
- <acme@kernel.org>, "Namhyung Kim" <namhyung@kernel.org>, "Mark Rutland"
- <mark.rutland@arm.com>, "Rik van Riel" <riel@surriel.com>, "Harry Yoo"
- <harry@kernel.org>, "Juri Lelli" <juri.lelli@redhat.com>, "Vincent Guittot"
- <vincent.guittot@linaro.org>, "Maarten Lankhorst"
- <maarten.lankhorst@linux.intel.com>, "Maxime Ripard" <mripard@kernel.org>,
- "Thomas Zimmermann" <tzimmermann@suse.de>, "David Airlie"
- <airlied@gmail.com>, "Will Deacon" <will@kernel.org>, "Aneesh Kumar K.V"
- <aneesh.kumar@kernel.org>, "Nick Piggin" <npiggin@gmail.com>, "Arnd
- Bergmann" <arnd@arndb.de>, "Muchun Song" <muchun.song@linux.dev>, "Oscar
- Salvador" <osalvador@suse.de>, "Matthew Wilcox (Oracle)"
- <willy@infradead.org>, "Jan Kara" <jack@suse.cz>, "Marc Zyngier"
- <maz@kernel.org>, "Oliver Upton" <oupton@kernel.org>, "Catalin Marinas"
- <catalin.marinas@arm.com>, "Madhavan Srinivasan" <maddy@linux.ibm.com>,
- "Anup Patel" <anup@brainfault.org>, "Paul Walmsley" <pjw@kernel.org>,
- "Palmer Dabbelt" <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>, "Janosch Frank"
- <frankja@linux.ibm.com>, "Claudio Imbrenda" <imbrenda@linux.ibm.com>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>, "Gerald Schaefer"
- <gerald.schaefer@linux.ibm.com>, "Heiko Carstens" <hca@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>, "David S. Miller"
- <davem@davemloft.net>, "Andreas Larsson" <andreas@gaisler.com>, "Alexander
- Viro" <viro@zeniv.linux.org.uk>, "Christian Brauner" <brauner@kernel.org>,
- "Matthew Brost" <matthew.brost@intel.com>, "Joshua Hahn"
- <joshua.hahnjy@gmail.com>, "Rakie Kim" <rakie.kim@sk.com>, "Byungchul Park"
- <byungchul@sk.com>, "Gregory Price" <gourry@gourry.net>, "Ying Huang"
- <ying.huang@linux.alibaba.com>, "Alistair Popple" <apopple@nvidia.com>,
- "Chris Li" <chrisl@kernel.org>, "Kairui Song" <kasong@tencent.com>, "Kemeng
- Shi" <shikemeng@huaweicloud.com>, "Nhat Pham" <nphamcs@gmail.com>, "Baoquan
- He" <baoquan.he@linux.dev>, "Youngjun Park" <youngjun.park@lge.com>,
- "Johannes Weiner" <hannes@cmpxchg.org>, "Qi Zheng" <qi.zheng@linux.dev>,
- "Shakeel Butt" <shakeel.butt@linux.dev>, "Axel Rasmussen"
- <axelrasmussen@google.com>, "Yuanchu Xie" <yuanchu@google.com>, "Wei Xu"
- <weixugc@google.com>, "Chengming Zhou" <chengming.zhou@linux.dev>, "Michal
- Hocko" <mhocko@kernel.org>, "Miklos Szeredi" <miklos@szeredi.hu>, "Xu Xin"
- <xu.xin@linux.dev>
-From: "Zi Yan" <ziy@nvidia.com>
-X-Mailer: aerc 0.22.0
-References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org> <20260917-b4-mmap-prepare-vma-flag-sanify-v3-4-4583d8a23bca@kernel.org>
-In-Reply-To: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-4-4583d8a23bca@kernel.org>
-X-ClientProxiedBy: IA1P220CA0021.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:208:464::14) To IA0PR12MB8374.namprd12.prod.outlook.com
- (2603:10b6:208:40e::7)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WgJ5zCMq"
+Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-86e6d007703so860811b3a.0
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 20:10:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790219446; x=1790824246; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=7Ryb3DDC6Bknh6AQJMfPEpwBegzjeZoarmc4S5YO3Ro=;
+        b=WgJ5zCMq/JfTNXa0VRFr7v7GLZD+DlTVjw+R8Uj9QQBBYTQ7nwGrkGhKHP52T6WwyJ
+         CeXKwVMvY+v1af6nY8k6H8m7QgU9Lk2APTAHT/CRxhy49mO532IVsRKpkqJ1QR4pyaGB
+         7hmHHFxLrCfJJBWKOuIjjd4joou3S1fHVWmReqveeyRfBOJxjx1X0sipWK/Gvv+PfjZp
+         ZeumJPu15wE+i6vpjyr2/0ZZreFH/VspElpXZFPJfMctJLkHBF8pkkq4bDRPhV8gjcqT
+         1hu03ahXvKkuHUoH3BeScKr8P4nLfdn5j0ZWEZQkpcQ0rgjvXoO/LZuZejaWnTwffLJp
+         Ba7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790219446; x=1790824246;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=7Ryb3DDC6Bknh6AQJMfPEpwBegzjeZoarmc4S5YO3Ro=;
+        b=Rn+NAjOX2kJtV99CBbf1MudVxgMq6BfSr59h/UiRHO7FQ5JfWgnQPuAOZ+griGpnOb
+         S1nIJwfTo/HbUrW+aNoKMgfmiCoDrUH9AKCkckrI4PYd/dM67UzdvnoH50BPnRo7/jrK
+         WlApFuGYw+q9pa1aDuUduByKMRfEu7zXwojNFrQhXEdwJg8yteNnBLQg1DcYbkCbxEWd
+         U5rPabH/3akckG9kHhPe1Ddsi/l9kHxOfos57/9rp9JK9Szze9+PcrRILcjXYTdE58O+
+         q1pKd/NF1HIGPUWroApa2xjdVxiy7qgJMoYhKf6fKPz7gI2wp7BdreUxLv4bR8ti/Ejr
+         Ekbw==
+X-Gm-Message-State: AFuF++kEKNYt92xNJ5hM3/o7v3rMued21COfBAiq5QvjgRKWXiyNmT8j
+	tJUwcFzKPWN6w3GPGmHR4iTtlpUDWjHyIRjRWWDrHehEfnozp5efjBkV/FvOeA==
+X-Gm-Gg: AYBFou3hh3rQJJdIMHCT2cdVmsKgQvFEGGHRxG64ZMp0wuZhQorndabf3iiOx7Sd+cs
+	ksfLA16Dl0WCkq9/dwzWyKcfiZZoxeob0R56HzfGpPixAsIqWf3nIYC0BJmSypF3doGKsBskE6k
+	w1qoAKaBDYeTEN1cIq/ta99WsVNI2pa40NPQeFQr05CjtPLeWgMvY5sHe5bkiCz+DxFGZBhK7EN
+	27uhoh46ilGFPCEpcqstQZD34sTvee6VJqv6CgDoiTncQVxlM2NaANH2DYMmDVVzvS+O3aZs9nD
+	Dty9sqIk9DEhbdI6H5ROw3556GzpyDz1Qdk1oC13VAmrVF6GeVMepYXtXAmjrxoTOy8rSUUOqdo
+	xaIzTpkyBhiOfOKufDEGChJEFnPmE4oUPtzrIcBCRfAvrkcf3gid+YYd0+04H7Y60Dxst5kVHgQ
+	On2K13YdPqF13hyt8wcwOfH/VARu47H9UI+mSKQsv7Q5F106GhIswND0ZM62N5NaWx7yxGMSJ0G
+	wgqfJ9BqlSlg2s5iPH2n312RZt8yoiRnEJDhwzmv4ni13rGJwouEwRcjrhr+2Wr/uu1QfDE+SnB
+	8UbeLPcbjmg1tQ+YnbTGOJ2nrWKlRA5R7b+GLfmSlJ1Ll0YB8SHfUA==
+X-Received: by 2002:a05:6a00:398a:b0:878:39ac:5a88 with SMTP id d2e1a72fcca58-87e9fe16914mr817815b3a.60.1790219446229;
+        Wed, 23 Sep 2026 20:10:46 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87d1cfbfd11sm2158417b3a.11.2026.09.23.20.10.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2026 20:10:45 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH bpf-next v2 00/17] bpf: Indirect calls of bpf subprogs (callx)
+Date: Thu, 24 Sep 2026 03:10:25 +0000
+Message-ID: <20260924031042.1690890-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|DM4PR12MB5745:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1336bf1e-0317-4150-1c3c-08df19e6d425
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|366016|23010399003|1800799024|10067099003|6133799003|5023799004|11063799006|22082099003|18002099003|921020|4143699003|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	qemAkzXTKTDzQhkfrMhRpI2txuNGBJfhYzIpf/WeGP3YpK50uv9oCBJAhM0zqjlR24qfENLarVTCdpDkBq0ozYTikbYSnqaPkxD/wzJGUAFB+ZX+NuV/kW3FKn4JJdVFJ3TkRvMxEUfDemfpIq88CHhnLp76KVBVjdmEIyfjQ9F8eAaffEWUVZ2X0v0fFzeL+KIZNzaQ5ixUTmYKcBdyULENUNKJsMOMsLxEW7dlVVOo+8Ckim2ud8DmXspL18s5ORbnzVWYpbW2YdXtMDFuhAKSzE7sZQzhTNUFp17IDzpJHBRhxBYk8PVD9NXYGQc0TS0lUjZ9bNSHL64aA9rd0/xebr6n5xmdBqK4p8MVuYQFqug5JK7NKkiH2fPWCgZWuMRsiikDqE9hyYRTrOQbYk1aUqbdnk/bKjewd30eqQjQKVOAmx9i5HRNs5rzUpvGFneJMMba+3XB2pQ3Ep7j5NCQRoVTYODI/lYRIFdLFF5MbMYpOG+FXQKNab1pEDEZuckBXKUz0E45KAcZtvbmgbotc2L3cDqEExXylT+WR0g9wK18LGpTeVBHl7cfMgcMLDXlNZi9SgW5XI4Eown6255A6kw26OG4ul5i/bmG6YiXs36EoR1j19StR44hkfFuOMZoh3Vx2gUhDESDhwZGeG3beqo73Dv+rDFIlLzrh4dptsvAg+jANY/tJ+CRG2et/Rq45Em/SxB3/zhn4D09/Q==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(23010399003)(1800799024)(10067099003)(6133799003)(5023799004)(11063799006)(22082099003)(18002099003)(921020)(4143699003)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VVplcjAvVVpUekVyMHI2SitkSlU4Qk5SRzYxT0hKY0RLQk55RmpFOGszNFp2?=
- =?utf-8?B?d1Y5ZnBKM3NXeEpVZ2NkNUY1Y0x5WFRHZ3NQUkJSY1ErN2JJR2JoeEhxR3JB?=
- =?utf-8?B?d2lQVUo4RFJwekhaMVdFS3VtUFVMNHBWdW90MWsvN0h1WllVdWxKaHRmTlFD?=
- =?utf-8?B?Y2pTRUozM1ROOVVaL1F1ajZ0S1BlTmp2YkdaZDV6Z0RmMUw4Y3lGdE55UVFH?=
- =?utf-8?B?R1RsWkRlTzdFVVJNQUhpNnYwMmNYOGJGTkZMRXpLalA0TnQ2OWR2T3oyM0gx?=
- =?utf-8?B?YU9aWG9ueUZ1YU5RRHN1SVR6UjZXN0RtaUJWMy9LQVB3dmVIRG1BWnB5MlQr?=
- =?utf-8?B?cGQ4N0VLZDgxeS9iWHllL2hiM2p3bVY1ZHhLajFRRWtUMFFqcFRNS1oxZHZt?=
- =?utf-8?B?S1FlV0hPNjVvdVpwZ2ZKM3FZa3JvZWMwN0UrUUt2Zi81bzVSWlRMbVpmOERR?=
- =?utf-8?B?RkZqTXg1MnJEZ2JqZE1QN2lyb3RlYmRXUGQ0WUtHNHg1ZFlHUExCb084VlJJ?=
- =?utf-8?B?VEFzU01YZXhDWFlNMzBMMVR1YWRGV0xJS3FUZTAzaklDZFlXS3M5WFZLVU12?=
- =?utf-8?B?TWgwaXQ4RUZ5dlp4WGUzc0s3cTRnektBcHVjTkhxbFJZM3JoYWJ5RWJlbEFP?=
- =?utf-8?B?UmFYeU5TN2YzcU5DRFJvdk9ad3AvMnlVMkZ2VWNEWUF1VXMvbDllUmE4YUhr?=
- =?utf-8?B?TndLQm9DWkZlcFhNQWlzQnhzTHJ3L2V2NGVzNUt0b2NNSXp5NjRkMHova3JV?=
- =?utf-8?B?THQyS1ZESWNCV2ZJaDZWdjBCd3hDUE04N2o1UGVhN0Fqdm0rbGV5U2dzUERa?=
- =?utf-8?B?TEN6MnliZzEybXQ5WFlPMTg0RlVDMjBMYWYrSzNUNS9IdWlzRVk3bjVKd0ZV?=
- =?utf-8?B?TGNIWk5GSzBwMm1MOXVNSDIvb1RZaXUzeTc3cGM0V3ZwVHNnNmxRUkxYK0F4?=
- =?utf-8?B?Vk1ZSmxwRjVsNDRxVzM3ZlcvVWU0cm9LbkFwbXBBemtvSkNaSG9ObktSQW5r?=
- =?utf-8?B?eGZvZUx2cWE3Z2NQVWFDaE1paThZRzBjOWRiN2xJb2JoOHdYN0o2aXdsMlg1?=
- =?utf-8?B?LzBxalFpTTQ5TytXMm9Ja2RndWwrcHdRbk1DSS8yeFlZLzdjUUNBYmJRMlVT?=
- =?utf-8?B?bUp3NTVlUU9WTzZQbTlQa0M0YTE5cHFKVjd3RE8zbVhsaUFxbUtRNGhybGRB?=
- =?utf-8?B?ZllDb1VCTmMrMTFwVUpJVHZhaVJoWm14UlpjK0lyaHRYODJnSzBKSzc0Tm9Z?=
- =?utf-8?B?Q1ZZRy9kZERwWjhkOCt1UlByektMWi9TMVZ0RVBoa2hrY3ZZRy9MZjFtQWVt?=
- =?utf-8?B?dG9RN21sWndKcjRHbEpudkNoNUlWNkxwVXV1NTI4c21PM0luK0hySnhRK3B5?=
- =?utf-8?B?Y3lremVBT09LRmpTZ1dnNW1ZTXBVS3VoZjN2M3N6MlRYTnJTNnQzdGpTSkJN?=
- =?utf-8?B?QmlHNTl0MUQxZEVhTkNrWnA4QnQwYlgwNFEyY2lZcU5FT1FHeEpJNUZEbzNJ?=
- =?utf-8?B?aGpRRTgvT2lCYVhLbmFDTGVMMC85RDFVeFhsN0VaZExvNk1rTXI2VndLdDVj?=
- =?utf-8?B?aWFQMmlLS2J5UmVjZ3RqODRwVUthbG80ZEdqQVA0QXk1aVcvU1dTQnlSM2Js?=
- =?utf-8?B?QmQ4L1ZWRUU3aGlaTDF2b2VrMzlReGp6UkhhMnphdXRNSnZ4Y0liMGJaYm9z?=
- =?utf-8?B?VWx4MFJESEhJa0xORDdjY3p0WmE1Qkp2MTZoSmh3WXlJZmlEV2tVU2M4QXdF?=
- =?utf-8?B?aTN2Z0UwSzV3MktFbk56ZzFEOEdKb056L0VsdytlRSsxQzNLb3IyN01ON1Vi?=
- =?utf-8?B?QWk5Z0oyUURGcnhXOXJ5NDVDb2lta2ttQ3psMWgzcnBGRUdVUnUyc3pIOVdt?=
- =?utf-8?B?SVd4SXF1YlpqNFJKRnEyMTFoR0NyYjNTdUVkN21jTzY5elgySGR6NENoTDRW?=
- =?utf-8?B?bEZCdXZYUmVwSEVwMkxOZHR0TURNaDdhdTlRcGFGSGJrU0htb1B1R2g3WEtp?=
- =?utf-8?B?YUJpVG9IcTBvWW4zaCsrZVFPZm13MnF4aE9UczdlRUlDVUJyOEdPWXhzM2dZ?=
- =?utf-8?B?V3FJNStETnMvdkpYRzRuQmdEaFVIR1U5QitjeFNKVWxUdWZLSGRiTnVyWDV5?=
- =?utf-8?B?WTJoUjA3VWRCQ1RSMGQ2aTYwNEJ6ZHNFV1JiUkFGWU9EZktISTZ3SFhSMFRr?=
- =?utf-8?B?SmlVVzltR3o0dTVhdDQ3TEEvSzNiSmFSb29CRlRHUTFDMUFqeVZYZ1JOTXMr?=
- =?utf-8?B?WEFXVjlxY3B5eENUQjJIRHFVckhpbWF3VnhQM0thcEcvN21pTTliRWQwZEMz?=
- =?utf-8?Q?V/r5JoTStyf2LgCpx+?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1336bf1e-0317-4150-1c3c-08df19e6d425
-X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2026 02:52:10.3918
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bu8jhEyZgLIp1tN8d8dL4Ad1qUuH0Wrhr9tixL2tgWDTDnnSqHpbURWOp23zX0Fr
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5745
+Content-Transfer-Encoding: 8bit
 
-On Thu Sep 17, 2026 at 12:22 PM EDT, Lorenzo Stoakes (ARM) wrote:
-> When the f_op->mmap_prepare or deprecated f_op->mmap hooks are invoked, t=
-he
-> driver might have done something crazy that is not permitted by the kerne=
-l.
->
-> Currently we check for three such cases in __mmap_new_file_vma(), but onl=
-y
-> if the legacy f_op->mmap hook is used:
->
-> * Did sparc ADI result in invalid flags?
->
-> * Did the driver alter vma->vm_start?
->
-> * Did the driver make a file-backed mapping on a read-only file writable?
->
-> Generalise these checks for both mmap_prepare and mmap and apply to all
-> invocations of mmap_file(), the f_op->mmap and f_op->mmap_prepare handlin=
-g
-> in the core VMA code and the mmap_prepare compatibility layer.
->
-> Also extend the vm_start check to vm_end also - drivers must not change t=
-he
-> VMA range at all.
->
-> We also WARN_ON_ONCE() on these conditions as they are things that should
-> simply not occur in the kernel and it's important to call it out when it
-> does.
->
-> We invoke mmap_prepare_validate() after mmap_action_prepare(), as mmap
-> actions often manipulate state in the descriptor thus providing the final
-> state the VMA will be derived from.
->
-> Also call mmap_validate_vma_flags() in insert_vm_struct() to ensure that
-> special regions which are inserted (such as a VDSO or VVAR) also satisfy
-> the sanity checks.
->
-> This way every VMA established through an mmap hook, whether via mmap() o=
-r
-> the compatibility layer, or inserted via insert_vm_struct(), has been
-> validated. brk() VMAs never pass through a driver hook and so need no suc=
-h
-> check.
->
-> While we're here, also fixup a couple disjoint blocks of #ifdef CONFIG_MM=
-U.
->
-> Finally, update the VMA userland tests to reflect the change.
->
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> ---
->  mm/internal.h                   |  51 ++++++++++++--------
->  mm/util.c                       |  19 ++++++--
->  mm/vma.c                        | 100 ++++++++++++++++++++++++++++++++++=
-------
->  mm/vma.h                        |  25 ++++++++--
->  tools/testing/vma/include/dup.h |  10 ++++
->  5 files changed, 163 insertions(+), 42 deletions(-)
->
-<snip>
-> +
-> +/* Check to ensure a driver hasn't done something crazy. */
-> +static int mmap_validate(unsigned long prev_start, unsigned long prev_en=
-d,
-> +			 unsigned long curr_start, unsigned long curr_end,
-> +			 const vma_flags_t *prev_flags,
-> +			 const vma_flags_t *curr_flags)
-> +{
-> +	bool was_maywrite, is_maywrite;
-> +
-> +	/* Drivers cannot alter the range of the VMA. */
-> +	if (WARN_ON_ONCE(prev_start !=3D curr_start || prev_end !=3D curr_end))
-> +		return -EINVAL;
-> +
-> +	was_maywrite =3D vma_flags_test(prev_flags, VMA_MAYWRITE_BIT);
-> +	is_maywrite =3D vma_flags_test(curr_flags, VMA_MAYWRITE_BIT);
-> +
-> +	/* A driver may not make a previously unwritable mapping writable. */
-> +	if (WARN_ON_ONCE(!was_maywrite && is_maywrite))
+From: Alexei Starovoitov <ast@kernel.org>
 
-Is it driver specific or generally applicable to all mmap(_preppare)
-operations? Is the comment too specific?
+v1->v2:
+- Dropped "bpf: Don't fold loads from insn_array maps into constants".
+  bpf_map_direct_read() rejects insn_array already.
+- patch 1: emit the same diag as sort_subprogs_topo() (bpf-ci).
+- patch 3 is new: taking the address of a function that is never called
+  hit verifier_bug() in jit_subprogs(). Not related to callx, but callx
+  makes it likely.
+- patch 4: BPF_OP() == BPF_CALL in liveness like in const_fold, explained
+  in the comment why slots are live before callx callsite (Eduard).
+- patch 5: moved !bpf_is_callx() into nested 'if' (Eduard). JIT support
+  is checked before the type of the register.
+- patch 6: sync callbacks are in the call graph too. Stack depth of
+  a callback whose address is read from .rodata or taken in another
+  subprog was not accounted.
+- patch 10:
+  . check_cfg() explores functions of a table one at a time. It was
+    losing changes_pkt_data and other effects of the functions in
+    a table that call each other.
+  . no cmpxchg64(), it's not available on all 32-bit archs.
+  . don't reject the prog that reads a pointer to a function that was
+    removed as dead code (sashiko).
+  . load of the pointer sets jit_required, so the prog that passes it to
+    a helper as a callback can't run in the interpreter (bpf-ci).
+  . tbl[i].data at variable offset is a regular load when none of
+    the possible offsets overlaps with a pointer (bpf-ci).
+- patch 12: append the functions and copy the map only for progs that
+  have callx. The rest use .rodata as-is (bpf-ci). Pass token_fd to map
+  create. Dropped dead bpf_map_lookup_elem() fallback.
+- patch 14: light skeleton reserves fd_array slots only when the object
+  has callx.
+- selftests: anchored callx_retval_is_tracked to the caller, the tests
+  of global func in a table and of const folding of the pointer test what
+  they claim now, skip without JIT, fixed ASSERT_GT() of u32 and
+  the comment, added tests for the above (bpf-ci). The table in
+  callx_rodata_lskel test is volatile. clang was turning it into
+  direct calls, so the test didn't test light skeleton.
+- Added acks.
+v1: https://lore.kernel.org/bpf/20260922011323.1298619-1-alexei.starovoitov@gmail.com/
 
-During my LLM quiz, making memfd write seals writable via a
-hypothetically wrong shmem_mmap_prepare() implementation is an example
-for this WARN_ON_ONCE. It is not driver related. Let me know if I get it
-wrong.
+Introduce BPF_JMP | BPF_CALL | BPF_X 'callx dst_reg' instruction: indirect
+call of bpf subprog with address in a register. LLVM emits it for calls
+via function pointer. The verifier rejected it as unknown opcode.
 
-Otherwise, LGTM.
+Only static subprogs can be called. The callee is verified in the context
+of the caller like a direct call of static subprog. No callx into global
+subprogs, helpers or kfuncs.
 
-Reviewed-by: Zi Yan <ziy@nvidia.com>
+All callees are known before the main verifier pass. The address of
+the callee comes from:
+
+- ld_imm64 BPF_PSEUDO_FUNC, which is allowed for static subprogs only.
+  add_subprogs() and check_cfg() see them already.
+
+- 64-bit load from read-only data: tables of functions, struct ops,
+  vtables, where pointers are mixed with other data. Rust needs that:
+
+    r6 = vtable ll
+    r1 = *(u64 *)(r6 + 0)      // data
+    r2 = *(u64 *)(r6 + 8)      // pointer to a function
+    callx r2
+
+  libbpf keeps the data in a frozen read-only array map, one per prog
+  that has callx, and stores byte offset of static function in the prog
+  into the pointer. Progs without callx use .rodata as before.
+  The kernel guesses pointers by that value before check_cfg() (patch 10).
+  Wrong guess is safe. Functions referenced by data only are found via
+  func_info (patch 9). After JIT the kernel replaces the offsets in
+  the map with addresses. The prog must be the only user of the map,
+  since other progs would have been verified with its old content. The
+  prog reads addresses as data, so CAP_PERFMON is required.
+
+Both produce PTR_TO_FUNC.
+
+The passes before the main one don't know the callee and treat callx
+conservatively (patch 4). The main pass records caller -> callee edges.
+Recursion and stack depth checks use them afterwards (patch 6).
+
+In C:
+
+  static const struct shape_ops square_ops = { 1, area, 10, perimeter };
+  ...
+  return ops->area(x) * ops->scale + ops->perimeter(ops->id);
+
+and
+
+  static int (* const handlers[])(struct xdp_md *) = { foo, bar, baz };
+  ...
+  if (i < ARRAY_SIZE(handlers))
+          return handlers[i](ctx);
+
+plus what clang compiles without data: picking one of several functions,
+passing a function pointer into another function.
+
+Patches 1-3 are fixes I hit along the way: a prog without callx that
+hangs bpf_prog_load() in check_max_stack_depth(), its test, and
+verifier_bug() when the address of a function that is never called is
+taken.
+
+Not supported:
+- JITs other than x86-64 and arm64. No interpreter support.
+- x86-64 with FineIBT: bpf_jit_supports_callx() returns false.
+- tail calls in callees of callx.
+- pointers to functions in writable data, misaligned pointers.
+
+Alexei Starovoitov (17):
+  bpf: Fix infinite loop in check_max_stack_depth()
+  selftests/bpf: Test recursion through a global function and a callback
+  bpf: Keep functions with address taken when removing dead code
+  bpf: Prepare static analysis passes for callx instruction
+  bpf: Add callx instruction to call bpf subprogs indirectly
+  bpf: Add callx calls to the call graph
+  bpf, x86: Add JIT support for callx
+  bpf, arm64: Add JIT support for callx
+  bpf: Discover subprogs described by func_info
+  bpf: Recognize pointers to functions in read-only maps
+  libbpf: Support pointers to static functions in data when linking
+  libbpf: Resolve pointers to functions in read-only data
+  libbpf: Treat .data.rel.ro as read-only data
+  libbpf: Support pointers to functions in read-only data in light
+    skeleton
+  selftests/bpf: Add tests for callx
+  selftests/bpf: Add tests for callx through pointers in read-only data
+  bpf, docs: Document callx instruction
+
+ Documentation/bpf/clang-notes.rst             |    7 +-
+ Documentation/bpf/linux-notes.rst             |   31 +-
+ arch/arm64/net/bpf_jit_comp.c                 |   16 +
+ arch/x86/net/bpf_jit_comp.c                   |   68 ++
+ include/linux/bpf.h                           |   10 +
+ include/linux/bpf_verifier.h                  |   42 +
+ include/linux/filter.h                        |    1 +
+ kernel/bpf/backtrack.c                        |   20 +-
+ kernel/bpf/cfg.c                              |   76 ++
+ kernel/bpf/const_fold.c                       |    6 +-
+ kernel/bpf/core.c                             |   12 +
+ kernel/bpf/disasm.c                           |    5 +-
+ kernel/bpf/fixups.c                           |   94 +-
+ kernel/bpf/liveness.c                         |   38 +-
+ kernel/bpf/verifier.c                         |  714 ++++++++++-
+ tools/lib/bpf/bpf_gen_internal.h              |   13 +-
+ tools/lib/bpf/gen_loader.c                    |  172 ++-
+ tools/lib/bpf/libbpf.c                        |  443 ++++++-
+ tools/lib/bpf/linker.c                        |   18 +
+ tools/testing/selftests/bpf/Makefile.skel     |    2 +-
+ .../bpf/prog_tests/callx_func_ptr_map.c       |  202 ++++
+ .../bpf/prog_tests/callx_rodata_lskel.c       |   63 +
+ .../selftests/bpf/prog_tests/verifier.c       |   12 +
+ .../selftests/bpf/progs/callx_rodata.c        |   51 +
+ .../selftests/bpf/progs/verifier_callx.c      | 1039 +++++++++++++++++
+ .../bpf/progs/verifier_callx_rodata.c         |  846 ++++++++++++++
+ .../bpf/progs/verifier_global_subprogs.c      |   31 +
+ .../selftests/bpf/verifier/basic_call.c       |    2 +-
+ 28 files changed, 3913 insertions(+), 121 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/callx_func_ptr_map.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
+ create mode 100644 tools/testing/selftests/bpf/progs/callx_rodata.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_callx.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
 
 
---=20
-Best Regards,
-Yan, Zi
+base-commit: b4d936547f5a3ca5563f48ee81f153c928336027
+-- 
+2.55.0
 
