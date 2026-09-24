@@ -1,130 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067281A8F7B;
-	Thu, 24 Sep 2026 06:17:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 233E4403138;
+	Thu, 24 Sep 2026 06:20:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790230649; cv=none; b=XCpXnR+i2CIym65owHspHGTN/R9ulKh4xgS7EWcqIP7MVp11vWGqv0AAaW2hOwCYFeExwMsH50AJOtlGjgA/B8FBq1rG6pc38XOhYZR1pRCBepVvSQrctVnIvoRyJiNxdwj8zS3lDa5dWK1bE2vDr0iomV15ozr+tgAvsKsLg6A=
+	t=1790230868; cv=none; b=Q4VDzely54G84ryLHhfu1eACbTEnIW3gYxoYiqQ4ksZcLhMrmI7F5+RfK8ib3/UkYjOjx5qlOR5o/3pAq4gTb1Plht6JtUcR6PKBbsjYfpceAvMZYnln1B41tDnPI2IcKd2BuZs6isK9JcwOJRkXnksj2OHqjFn4oRliRoKeKQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790230649; c=relaxed/simple;
-	bh=K5LbEpUdCRyhP6+zeqIs5CQbPD9lIcpv/WtyYozchjw=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=A/ztQIKrhs1byZYpNzEbRYoYnO/9RmU0hi5I8RTxvqdF3KLeZP71VUvfwB3Cd/6OoDuGuWkZxpCaOjvBKwLbcaPD+MiCSjfggeLaAn6nxKyLJkTih3fvYJ1i3bCJlUnvFot6DhQnmNpfqfB0AccW4ISvKPEQheAg68WPmISYTHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ye89XQ0F; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790230868; c=relaxed/simple;
+	bh=reBBHsp3dFVFx1bF+MzYdUeYyaVuB7Dha/3mQOU4WLA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=O6TT15NdDsKb8FKqhZCLx8tQXIQtfAImlb3KaijMgHeVtS4U4ZZurjqjgSQDg8U3eFlVBJvfZBAR7MjkZJNUR3PtxsGqBSMMjRDgqMwOeEdo6JpFCLwrLzGQ5H/3x+Qx5s7JuTF+uBlFf+8aGOCxQu2JWjDp8sAsHDMuiDYtxX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=ldix3Ne3; arc=none smtp.client-ip=115.124.30.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ye89XQ0F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DDA91F000FF;
-	Thu, 24 Sep 2026 06:17:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790230647;
-	bh=/UnLhQ/lvASg74cIdHap1FuwWyDeDuvmje7+NT56u4s=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Ye89XQ0Ficz8lzEEbIXGnRn0HNZNJwzSDcwr507lgp/n1atcS/vrL2uffUhjaUz9i
-	 oqBXkQpoRJZLe7UZkWWJHC4ijRFUPN+U9WsNeuxolB7+vKUftaWo/dSj+sIL0Inuwh
-	 O9gRYAppuMPrQCW8votXBJJ1+9IuaBbma2ppNKDcwdXmmadjekViIlxmjTIiXQOBn6
-	 wbWoFB4JzzbAucvCja+M0k16eGJuUB1UQRc6pHcD1yJBtfNHCWAA0TuJS1CDODV67l
-	 Sk32lsSMWw+5kVhRUP7hwoZ/0HSieYplRrM0qYbWEzZ+eOyQ5cIWNlHFRePWnFV4TD
-	 GRJskZu0Ywccw==
-Content-Type: multipart/mixed; boundary="===============5180222862375520979=="
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="ldix3Ne3"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1790230853; h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+	bh=UZmmCpa9iQGypCYX6K6r43HbgZn3fz9spOS64iksXTs=;
+	b=ldix3Ne3+9sO2eMsKeLXrXRkSZNYFjD96PKUARWcza4N92lo+DSuLQSGiTml6deieiKXBw5XaZpNz3WDD8pWmjiD+p37zd8RmoX5mSzYIijpLB26h8Yu4rdSkUZKmPcl6g73o1ZS3W0jDeL2WsKN8/ae78auOF0ve+cko+8lr6A=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0XBYn2f4_1790230804;
+Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0XBYn2f4_1790230804 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 24 Sep 2026 14:20:53 +0800
+From: Chen Pei <cp0613@linux.alibaba.com>
+To: JaeJoon Jung <rgbi3307@gmail.com>,
+	rgbi3307@nate.com
+Cc: bjorn@kernel.org,
+	bjorn.topel@gmail.com,
+	luke.r.nels@gmail.com,
+	xi.wang@gmail.com,
+	puranjay@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	ast@kernel.org,
+	memxor@gmail.com,
+	pulehui@huawei.com,
+	bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] riscv: net: bpf: add bpf_jit_supports_private_stack()
+Date: Thu, 24 Sep 2026 14:19:59 +0800
+Message-ID: <20260923114951-private-stack-rfc-cp0613@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260810031418.95364-1-rgbi3307@gmail.com>
+References: <20260810031418.95364-1-rgbi3307@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0997af18f538770e776a2e2af287ccb144450b5da0108e6bdd0d849aa90353b4@mail.kernel.org>
-In-Reply-To: <20260924054549.2271705-4-cui.tao@linux.dev>
-References: <20260924054549.2271705-4-cui.tao@linux.dev>
-Subject: Re: [RFC PATCH v7 3/4] blk-iocost: add iocost_ioc_tick tracepoint for per-period device summary
-From: bot+bpf-ci@kernel.org
-To: cui.tao@linux.dev,tj@kernel.org,josef@toxicopanda.com,axboe@kernel.dk
-Cc: cgroups@vger.kernel.org,linux-block@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,linux-kselftest@vger.kernel.org,cui.tao@linux.dev,cuitao@kylinos.cn,ameryhung@gmail.com,alexei.starovoitov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 24 Sep 2026 06:17:25 +0000 (UTC)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
---===============5180222862375520979==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi JaeJoon,
 
-> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-> index 21e4f8cbd9f2..a48751b6dbdd 100644
-> --- a/block/blk-iocost.c
-> +++ b/block/blk-iocost.c
+Thanks for the report. I have been looking at what still blocks
+sched_ext on riscv64, and the private stack is indeed an important part
+of it.
 
-[ ... ]
+> $ sudo ./build/bin/scx_simple
+> libbpf: prog 'simple_dispatch': BPF program load failed: -EACCES
+> libbpf: prog 'simple_dispatch': -- BEGIN PROG LOAD LOG --
+> Private stack not supported by jit
 
-> diff --git a/include/trace/events/iocost.h b/include/trace/events/iocost.h
-> index e772b1bc60d6..32f19861a78f 100644
-> --- a/include/trace/events/iocost.h
-> +++ b/include/trace/events/iocost.h
-> @@ -178,6 +178,51 @@ TRACE_EVENT(iocost_ioc_vrate_adj,
->  	)
->  );
->
-> +/*
-> + * Periodic per-device summary, emitted once per period from the tail of
-> + * ioc_timer_fn().  Unlike the state-change events above, this fires every
-> + * period the controller is running, including steady states, and carries
-> + * the overall controller state so basic monitoring doesn't require drgn.
-> + */
-> +TRACE_EVENT(iocost_ioc_tick,
-> +
-> +	TP_PROTO(struct ioc *ioc, int nr_active, u64 usage_us_sum,
-> +		 u32 tick_period_us, u64 tick_vrate,
-> +		 int tick_busy, int tick_running, u64 tick_dur),
-> +
-> +	TP_ARGS(ioc, nr_active, usage_us_sum, tick_period_us, tick_vrate,
-> +		tick_busy, tick_running, tick_dur),
-> +
-> +	TP_STRUCT__entry (
-> +		__string(devname, ioc_name(ioc))
-> +		__field(u64, cur_period)
-> +		__field(u32, period_us)
-> +		__field(u64, vrate)
-> +		__field(int, busy_level)
-> +		__field(int, nr_active)
-> +		__field(u32, usage_pct)
-> +		__field(int, running)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__assign_str(devname);
-> +		__entry->cur_period = atomic64_read(&ioc->cur_period);
-> +		__entry->period_us = tick_period_us;
-> +		__entry->vrate = tick_vrate;
-> +		__entry->busy_level = tick_busy;
+I don't think we can take the hook on its own, though.
 
-This isn't a bug, but since the ioc pointer is already passed and
-cur_period is read from it inside TP_fast_assign, could period_us, vrate
-and busy_level also be read from ioc here?
+The other architectures paid for this with real JIT work rather than
+with the hook alone: arm64 (6c17a882d380), x86 (7d1cd70d4b16) and
+powerpc64 (156d985123b6) each added the per-CPU allocation with
+overflow/underflow guard regions, the prologue work that puts the
+program on that stack, and the guard check plus free on the program
+free path.
 
-The neighbouring iocost_ioc_vrate_adj event reads ioc->vtime_base_rate
-and ioc->busy_level directly from the ioc pointer in its TP_fast_assign.
-Reading them directly would make this event's prototype consistent with
-that pattern.
+> It seems that it should be defined in the same way in RISCV as well.
 
-> +		__entry->nr_active = nr_active;
-> +		__entry->usage_pct = tick_dur ?
-> +			div64_u64(usage_us_sum * 100, tick_dur) : 0;
-> +		__entry->running = tick_running;
-> +	),
-> +
-> +	TP_printk("[%s] period=%llu:%uus vrate=%llu busy=%d active=%d usage=%u%% running=%d",
-> +		__get_str(devname), __entry->cur_period, __entry->period_us,
-> +		__entry->vrate, __entry->busy_level, __entry->nr_active,
-> +		__entry->usage_pct, __entry->running
-> +	)
-> +);
-> +
->  TRACE_EVENT(iocost_iocg_forgive_debt,
->
->  	TP_PROTO(struct ioc_gq *iocg, const char *path, struct ioc_now *now,
+Defining it the same way means that JIT work, not just the hook. With
+the hook alone the verifier would let these programs load while riscv64
+still runs them on the per-task stack and has no guard region, turning
+the clean -EACCES above into a silent stack overflow.
 
+Going through those three commits, this is what I expect the riscv64
+side to need, and I plan to post it as an RFC series:
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+  1) per-CPU private stack allocation with overflow/underflow guard
+     regions, plus the guard check and free_percpu() on program free;
+  2) pointing BPF_REG_FP (S5) at priv_sp + the program's stack size
+     while leaving SP on the kernel stack, the way arm64 does;
+  3) emitting the per-CPU lookup that produces that pointer after the
+     tail-call entry point, since RV_TAILCALL_OFFSET is a constant
+     added to the target program's bpf_func;
+  4) bpf_jit_supports_private_stack() returning true only once the
+     above is in place.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35962141400
---===============5180222862375520979==--
+Aiming to send RFC v1 within the next couple of weeks. JaeJoon, I hope
+we can go over the testing together once it is posted.
+
+Thanks,
+Pei
