@@ -1,244 +1,266 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv2-f0.google.com (mail-qv2-f0.google.com [74.125.230.128])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED183F929B;
-	Thu, 24 Sep 2026 16:15:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57CBF43F8D9
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:16:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.128
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790266538; cv=fail; b=enhXKjx4nLs5FOOR585E3MjqpkznJOMxHLUFivsY8FsI1S7WXHt60ElqPoRNKKdyjilBkRVqFoBiunNyqp3Z1KRchtBWE/Jr7TwbRXyjIWPLiynXM8DCph1zf7xsRuIQS9zdl0efDMnUhyYMnqzlBBmiAdRJMKmDa3bC/S/0cjY=
+	t=1790266562; cv=pass; b=shg+qvo7KLHu/vNK/lwX4N/QtMQOL4ZGfm+QKnvKMOq7cQGvxC9d8Flbj80B+FQEm+x/m4RStmW/YWRuEiT9CnhF3ifkvMQW7em0V6HlE6NkLMIpbLONYR+AFgRJssturfXHI9INReziYvO5JMt0WtlUA6bCDRwU6IuED08HtQE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790266538; c=relaxed/simple;
-	bh=iHrEhshB0KoOp9+OOoMnl1N8xZ3LAhiqczF5RydUMrk=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=YTX/Ro5qQaX/tlQWCTUIcaCTe8WsO4Q0lPkfX1sf445m1RcIGj8wpyVZy1KeTCBPs7CIFrW6AOFsuskP8052yhAq+GQQpddsZ31vnZv2oYRdMYISe+8faxvnsZ+e5U8kbq5P87fKYfpaWwzj0uFKxLcuCebq3QMf0ytyCA4Y2xk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=BnWa9Lpg; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=KFwQvYqQ; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1790266562; c=relaxed/simple;
+	bh=AzxhmYlqJMtI2hGV/3afybSd85lTojyYwdmA+SxmSSU=;
+	h=MIME-Version:From:In-Reply-To:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=F64V5GlD+2iFHkNIZ5VGw+iRFxQCFTzSKeA7ZZoVNoeRZsOyMnUH5Aw2xaG2lM0LU80nPwPa8QvkJ8arIbIRSsUFcogXehsBIl6HGdvDcIhZiru+l+3JOF9ciYfomAgptKt/jwd6C7dWJSc3ptVBQaqU34L++jEyxWmP8yl7PE8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lw+2tO42; arc=pass smtp.client-ip=74.125.230.128
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="BnWa9Lpg";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="KFwQvYqQ"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68OFtZlE3288633;
-	Thu, 24 Sep 2026 16:15:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=gJMQTj/BThkXVkKT1bwfbPDH555QjXSeTkWPImPG1Ak=; b=
-	BnWa9Lpg2+JpkQgVxja91YuYRvcgbH33ELYHV0ngTUuo/jgOUr6SMjhpsJOQdPvi
-	Wi9+vhSSeby3O8Jg8ZFpjfSD2axG1wuR3i3ejHbzm3FQ6UKuf4saVEhZWRoq5x/B
-	674aFXo17E4Cu9byaIv4JFM8evikokrERKQKQJxlhZ0FbeV2n0n/DChtdTaMEFp1
-	2vMezBCqn8NR2Yr9p+sUAcfZ3ybeE+Bc46/W22r7xEovl3x/PLu18Hqh4M73DKR0
-	1crqeIcvj+FkqtxQI+/uwwHAzPJzX5vZL9OmuOcz8ymPz3xXpNCNPXBdEqUdnpnW
-	kuM93AxuI7guPZ/FNg8bGQ==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gsjxb82m9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 24 Sep 2026 16:15:26 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68OG5bWA038466;
-	Thu, 24 Sep 2026 16:15:25 GMT
-Received: from bn8pr05cu002.outbound.protection.outlook.com (mail-eastus2azon11011020.outbound.protection.outlook.com [52.101.57.20])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4guurkh2hx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 24 Sep 2026 16:15:25 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=P28N/XVxTzCrEm8y41uVAufAfkbeblRxAAzoSVUaAhKrU927XJuNHt3HKTflsfrgsyoXa9Mb5GpCfGrzghHkEAIpaIWc4ZIaBTZNwZ2mKm27RWi9krz0QTEFfOnJCVRGE6PJikxLB8lJMCibO7nMkRUnahpE2jc0VPHSwAnemV6I1GvtikzFb3mXSRmfYv9+5heH/KYQfZLIhK57TeOd0IF97YPoxXoVCpcpcoWFj2ssHg5d/9WGdj/ZHFy7Lgdt7PlH9Z4r1wBwjW7xcRkm/FaKa9YLz0CnzCxJu+M40jk0SZak37lNHKzUf0IdXwWh+zpJ2Nr/ARkXnKGmJS/qeA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gJMQTj/BThkXVkKT1bwfbPDH555QjXSeTkWPImPG1Ak=;
- b=RB9BosQZ2pZe8ddm38O6cFYUoGuHIb5gLKUN5D6UtQ7WWDMZqej7erUUrM5qwzNamOSNZdLlRUUuAAvxel+DiA4eah0G/mD01DdQebsuwkXHaHornsmVbOQ+8Mc2Rpg2KFAKi92fT3Dcc1pv8alx/3H0kXbHulvzdkA4MymuPFp1rE1D27PgANRZ+WLXIYPrVlaVB7h4Ci/bJ3t0huqGtgDIEhnPzzpT99kpAEp4YIDqMr7jS/HV1RnNny/1kYAjPPqnncKwd+TGLh/spBYyXgfXdJ9ShfWBCKD9uXPIorJu1pbCGyvKJJFnomh2/1UcLSPEh+ww3q6isb/Br1/Tyg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lw+2tO42"
+Received: by mail-qv2-f0.google.com with SMTP id 6a1803df08f44-910603aa531so103986d6.1
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:16:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790266559; cv=none;
+        d=google.com; s=arc-20260327;
+        b=oSKR11nok6DNDP5zsNqn/hROuhluKBcVwxZYLSWg+ZZ+RiCkSRjTcWgPBaeMGrn9FN
+         YROvn81YX8mlyFNBlI0eYSlOuQGlIRQRa6HZor4Y3sv3xGzC3cTI4GWH5VEoJtmJCsMM
+         1nulh0AMGMmcvCzeeQOLZl/RHCEEmY3zWUc3QZxCKNvmPInWf8eWP4toGde9aUynoq78
+         LcK2A7tTDCWCwuECDWxfVK5O+Dbl7wXvZpoKeSA6AXirqxxsEx2Bg0WsZjDYLzVokpLh
+         5myjSxch0jAXDhLV52kww7Op1FLpitxccJL9MBpk6aSKyX8eQGNN5am3esZZlQdE6C0W
+         CsLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:references:in-reply-to:from
+         :mime-version:dkim-signature;
+        bh=8VzKkG9mi98ONJzS+sXNaXBzrMP/Vmv7pjoyvpH11DA=;
+        fh=ZqsbCIb2GN2KOl/EevUDRPKfC3NR8S9fwNdVhf7l2EE=;
+        b=oGEoxWkRmLn33WqkpEhxR9+KdcjjP+u01lGuKcTtMKZC3UClGnT+uHqN7dHnJzqmI0
+         XnsmAguyAWOf8AtKjc79UxrkZJ6GO9/5OXRC22T4rODN56L3cIYNZMwMSLwgrq47iNOR
+         vb6nDrjVy1A566LV2Qje9TAjB8IgHVDHh3UG2vEqnjNN06ijfPqITL2MFs5IbhzKz/np
+         fqDY3oMYBXwMMiN1eABJM47BvUW2HQlQFG5FP2YxUCYsP9ic/RhPVILuvSrDMjaTq0Cr
+         6UHJbfuxf381BE6mIBUqOUgsvx1DNH9SndNlJ+l8rpfLY4784HnwVW4Y0XIlhlK2XkCz
+         EQcw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gJMQTj/BThkXVkKT1bwfbPDH555QjXSeTkWPImPG1Ak=;
- b=KFwQvYqQeGCf/c7Jembefc+NxYiQAoZFFUtKZ/jZ9iyEoJjX9t3SZ3JEna4Ncsg1fwo58KtQJZJQjFDFGAFPRRWgW0Nzo94MjbROT0sFZ3FxF97XQXBPJZCsU64YXqnfsiy4CvAnEH2mOe8qqf35l1rzNKmxAux/wzzPRPscWAg=
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oracle.com;
-Received: from BN0PR10MB4901.namprd10.prod.outlook.com (2603:10b6:408:126::19)
- by MW4PR10MB6440.namprd10.prod.outlook.com (2603:10b6:303:218::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.472.7; Thu, 24 Sep
- 2026 16:15:14 +0000
-Received: from BN0PR10MB4901.namprd10.prod.outlook.com
- ([fe80::19a8:41b4:f519:1b79]) by BN0PR10MB4901.namprd10.prod.outlook.com
- ([fe80::19a8:41b4:f519:1b79%5]) with mapi id 15.21.0472.005; Thu, 24 Sep 2026
- 16:15:14 +0000
-Message-ID: <09dbfeea-a4d1-4b7a-b92e-bcf8c4cdabb4@oracle.com>
-Date: Thu, 24 Sep 2026 17:15:09 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH dwarves v2 0/3] pahole: Fix arm64 argument register
- allocation
-To: Yonghong Song <yonghong.song@linux.dev>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
-        dwarves@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-        bpf@vger.kernel.org, kernel-team@fb.com
-References: <20260917164038.1576763-1-yonghong.song@linux.dev>
-Content-Language: en-GB
-From: Alan Maguire <alan.maguire@oracle.com>
-In-Reply-To: <20260917164038.1576763-1-yonghong.song@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0129.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9e::16) To BN0PR10MB4901.namprd10.prod.outlook.com
- (2603:10b6:408:126::19)
+        d=gmail.com; s=20251104; t=1790266559; x=1790871359; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:references:in-reply-to
+         :from:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8VzKkG9mi98ONJzS+sXNaXBzrMP/Vmv7pjoyvpH11DA=;
+        b=Lw+2tO424QQg74GQzpY6feq33s82iMeyR8SLSHhYPTNvayhXYkcgxAEsVZFwVeTesa
+         fHnmzWmlSpUPDN56sRA5HUKds1WfbWG95txBn4oW4tijOo+W2FZNpnBBuzYUD/kPCSG3
+         xuaCcs6MazDMbM4N/ZZtcIT9M3mQiQVNju4lCBdpgo+crzvoO+UOAL5OjTyvkv0jxaA8
+         mLq89NNXrwtLxAbWlvNyTI1+IHtYGL3PH3PAEIoXZXyt895C7pOQYt+RMNvhjGjNn3Fy
+         rHIbw69+9zjeIVDOUOiq62pkcAnr2Iy5eF0928IJWzVNwRF6unZ3zHqZ5nAzlR+0yS4G
+         ML1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790266559; x=1790871359;
+        h=content-type:cc:to:subject:message-id:date:references:in-reply-to
+         :from:mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=8VzKkG9mi98ONJzS+sXNaXBzrMP/Vmv7pjoyvpH11DA=;
+        b=Yewiqe9EG45bzdi2uuSovU+ehjUFOSQhJsrshBn636UpZp0qrl16GaSHT9LT3iIxFY
+         Q5a9BFgE6DdJbGNzpMXoTdzXbxIe8c+6LeYrtFT67VOkfpx3IMUYAkzWzOypWg9duADt
+         ZyO6xXFzuxG34mjynbz3/t85O3UXKvUP9t+AdWy49H4aWt8zmCxmeJsWVoMxEofyY6Ah
+         0GWy9D4R3gpZzlhiaJG5YvnCzuK+34Pm3TOOO7jORgTJKEO9RprNQMGxvZcIZ4wyCl3N
+         HctC5BZ7wVWgyP/oRUuvcQMia4HOEoPnsAjbpI4NFOLjSydZ3RNpr85MBiMzlp/hMhXm
+         XsdA==
+X-Forwarded-Encrypted: i=1; AKwUvBySsA+/2pk98RcONTogjsJLhmq/xUY5pkf2wIVFr2tvwEY0qUNoxS8ZYELRhdMF2nILBis=@vger.kernel.org
+X-Gm-Message-State: AFuF++lXLAb842w/VJGd0RJKdkr166lbGaKLPRQzMtR0YUCTUrswHkES
+	trIQcdMOnLEKBZ8Mj73S5kr9k649QOjyB9no3rP+bR2SW1LVZDFn6zuH+kj1dFICHTeleQlYtqd
+	OVVke0tq6jXAJj96GIKpCQXyiFKCHO5I=
+X-Gm-Gg: AYBFou1khqi7PkUa/bzPRxCU06Q/96EMvkYxWxI0F2AwvAWnzDhgl5wAB9aOxJ9J4uh
+	wcXNA8huLgUMDEhqcfej2zKdwef+iwUnntwQVEYi5GYvrCkvhncGy4w1ESUPw1cKUGvclaeYnrx
+	jdSBk7bctfjKsCJLCvH/gt5In/Y1XvTfZg/41VmZf+cG4fM6e5G36Ca6WdVy3GEyRSFA8cpTmx+
+	NHSlIgGhOwSYTneBRVL9y0JYt/pDKDnYLJY2Xnsyby4nZxqfyR9RtqX+d/j4jYZLDcmoO75gJIW
+	eB/gn/CAWAwdTGnZekmsnkhpyf3tVomfN/mY9DPyLPOoUtHOx3QiIg==
+X-Received: by 2002:a05:6214:f0f:b0:913:fa79:99c3 with SMTP id
+ 6a1803df08f44-91421f13ba5mr28893306d6.43.1790266558827; Thu, 24 Sep 2026
+ 09:15:58 -0700 (PDT)
+Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
+ Thu, 24 Sep 2026 09:15:57 -0700
+Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
+ Thu, 24 Sep 2026 09:15:57 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|MW4PR10MB6440:EE_
-X-MS-Office365-Filtering-Correlation-Id: 069f0a01-2af7-4265-bc85-08df1a57040b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|366016|23010399003|6133799003|22082099003|18002099003|56012099006|10067099003;
-X-Microsoft-Antispam-Message-Info:
-	n6j7MFJUfYDCVM+GmELE5P9TfeXAYROOthd/zttw7upIyQIYrPrJa7Fp7UOLSFyMuRTTuX7yueiDnuS9544Kpo4wtsM1ndACDVtCvNN5qzP7h7mXBpQoiWYhKXENIvP5BoChLL95BdiLfW3G2DggVBKUgRc2t35BMJQBCE5pzJe8rjGAcfO02DkPHf4iu8HOhqx9O1iXmbjQU6j4ogoPLhrA3OYhxexzw3Tb67ua/ACOhlYwcilGi1no3wP132Hzw5lPJo1Rsp+xwnk44RGsXynn6koNotRFi5/a2mVqLZy83Wr4y/LVeOQvvD49WfdpTZQUs9MlF31ae1S4jsZNkr4QvVjalGUtmgDBOEqVOgOaEhZmjTMv3+GKXUfaOH45J0u2ZAOaCIqWpIzJJT7Kziwx0qP4OfDgIwRR5omt/vZvHGZfDoOXI83kXHQBn6TXXVrqDMeurWExybnjIFl6Jyu18uooOwNWX2eW0PsbWVBoSe7XecZ0pcPORy/MZ8wWmOsvaLUAXm3f+YTVfvn9RrtwUYQGWZd5EVfDt6z+v2P/FFlcCq0zCn/f+EdopQOk/31HniwhOWP0kz/vCo4l/NpgC+729Phk1IijpGUXdG/JTLLKoP/8T1z+XZbmqi0emuoh76U8ejmHWl715PG0e8IvjjRd2DoZF6/FhsTKEy8=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(23010399003)(6133799003)(22082099003)(18002099003)(56012099006)(10067099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MlVtTjBaTElQUWx0RGJOS3VGK2huRmtqSE0zWkJYLzN6ZmxNN0VZcXVPQTJ5?=
- =?utf-8?B?aU9EQ1F3c2g4WDZDTWNRWEh3bVlvaExDYmVidkRlRGdhSnA0NENtMmVQQjln?=
- =?utf-8?B?QWs1aTYvNHlOb0hGZ0Zya2NxeDVrYWlzaEQ2M1BxenFHeFZpZmY2UUhraTNm?=
- =?utf-8?B?eTlZMU9ocmZXQlZIYmhHV0dVVWVQU0J2NEdMVkRocUZxUi9kY3cxckhlQU85?=
- =?utf-8?B?V04vejFQZk5BZXdURnQ2YjhZZkhGUzJRM1lpNkNRa0hwbWY1aW82c09JUVM0?=
- =?utf-8?B?Zkh5UUVhZWlIcmhLMmw5OTU4WGdteWUyYVdVcVZwWlJVY1REZFZhZEFIUllF?=
- =?utf-8?B?QVl4d1A4VlpKenFHaHoyNzk0QmhsU01CNllETnFMY1RkWlNsQWlMRXo3L21O?=
- =?utf-8?B?eUZvWld2UWtzbUJkSk9XVEYvRFZ2aktoOHg2SldJbkFlbmt0Q1M0M04wMzFK?=
- =?utf-8?B?OVk3Y05TQVJCQ1dIQmV6Z2tTeWdTNngvVGhYZElHS3Vmcmg5YkZ1K05JWUR0?=
- =?utf-8?B?MEFhT3VFcmZDRkpETU9FaFRYTkV3N1U5UDc2bWptS0ZRMGprcnNpSDk0d25Y?=
- =?utf-8?B?WGwyQmtvLzF0MFVoNmVwTEt2UkNoNzdlbXdMTjFFaTBBK2wvQ3pvcXYvaVRQ?=
- =?utf-8?B?L2E3a1dUbE9xT2lHUnVGODJGNlFRenJQb2wySFFOOXVPdnV5T1dkYnN3OXlm?=
- =?utf-8?B?MG1uVVlOaElJU1NBUGhFdVVVRDRUTDc0U0xCOUpiOU82NnRZL0dUdkljSGF1?=
- =?utf-8?B?WndZK3FpMlFGWWtUWXk5OUtCWkpIZUErMTVDblllMmlVSnhQb05oTlZ2ODZN?=
- =?utf-8?B?c2VQZmhnbTRxR2FNZzlvOE9XNXFlSVZFK3dOTjczaEE5V0t1SlZZRnBuY043?=
- =?utf-8?B?QlZQUGVYWlh4N1dNOHlUVXkxOWpLNFlNTXRsaExmRXhRNG1maUh1Y3RPVXRE?=
- =?utf-8?B?bmtmVUF0R1JxM21WVUorUHJtb1ZmN05ScWF6cVZtcExicG5tL3NlKzZmOGpL?=
- =?utf-8?B?VjNvcHlsUUVnRG0rWEszNU5FZVZQN3hycGJ4MzBDZGdGRHZBK291Rk1zaDhW?=
- =?utf-8?B?UEhIdWxVWjhWUk5QRVdIWURwTkhEcWhvZTJKN28yOGNZTE5xY1AyTWo5ei91?=
- =?utf-8?B?RUwzMFdPNGJ5YXdqek1Jc3JHR3dUNStNQXdxM1FlWDBzcTRxWnlVRDU1NkJ1?=
- =?utf-8?B?V3M2WDE0RE93VkIwZ1RYS2NReWpvUFo3UlY3VCtvM2pQbU51REIvR2hVNXZw?=
- =?utf-8?B?THZ3WVNwK00xZyt2bHd6ZnFqTkI3NlAvcFM0RHYxUEcvaGpUUGN4alpMNzNF?=
- =?utf-8?B?VEVoeERrTHF5Zm04akZWREZmNHp6K1pvelBDaUhnVkd5K0xBcFdNTlZMMERO?=
- =?utf-8?B?dUtySG55RGYwQkNuR0EwRE1pa3NPWmcvS0FMK3M5OVZDM3lwcG5DZGlqYVFF?=
- =?utf-8?B?QVh4dUNNVGJ0dUNGd2JIRys4NnhBQzZJY1h0OUZpOXpJMERub0RCNUdHWGtJ?=
- =?utf-8?B?UDVmTkdKNHl3QTIrbXRqMlZQakdCSDIyZ2Y4TzZQSi9LbTY2Y1ByZ3RhNzNB?=
- =?utf-8?B?bnpDM2dMMVhEQWkwK0dZemtRajljalJJb3p6V01LYzliTHdQYWJxck5sQ3NT?=
- =?utf-8?B?TUhXbnA0VDk1a3N5bDFQNGd2Um1WNjM5WnEzSW80VC9XSFMyWU9zcUFPQ3F1?=
- =?utf-8?B?UmxpMHV4MUdWQVVxT1JDN2xGdVNGSjR3ZUloKzA0NmZaQ2lGTmJ2U1pGNTV2?=
- =?utf-8?B?aGV0WkIvWStweGlRbGpPMVZNeWNYRElmUTVyenM3SDIvUWVPc2w1OTlIVEZk?=
- =?utf-8?B?TlJOM0YydGFKbW9PbzEwckc1b3F4YUF2Y09vWWdmQ01XVDhhbUZieFF4UFNS?=
- =?utf-8?B?RXo5UDR3ZFVPa2dDTGdzaDBlZzRVRm5Zcjd6MnJHbml3T3hVcHNmamIwVUJo?=
- =?utf-8?B?UnIwRlp2cnZLRlNXZTdPTVl6ekYwY0s3Si8wSEZpOWxTQ0d1bGRabE9qRjVT?=
- =?utf-8?B?cVhzaGNaYkMvckhqS3FpdVh5SEQ5Zy9ZSVU3cmpxRVZpdW9wUEYwVWhkWWFL?=
- =?utf-8?B?MjBSdEFLRkh4VklDeVVnVVNSbml1YVNDbU85NUpSZ1dJVmp0dm8yUGN2TEVU?=
- =?utf-8?B?ZkFWK0hvcm5SOE41Y0FtOER1YjZJVWlGVmR0V0RNYnN5b0VuVndra0lMSFh6?=
- =?utf-8?B?NGMvTmNsZ1FsVjZpZDZqa0RuTVJkZjRJZlVoclR4RzJuVEtabUMwOEtFcDVJ?=
- =?utf-8?B?QkNWMUdsQmlqVFltbzFlRENMTjErbTlwOXRtaDlod3BEdk9Jc2tMc3NhUjBC?=
- =?utf-8?B?V0hjdDFtUmk4V1RWd0l3dFNsQ1NmdU5hSTFzdWJyM1RSTUZkUGZDUT09?=
-X-Exchange-RoutingPolicyChecked:
-	VC8qmxysnEhb8ho+FPPBKplf/WxaBTIqgvtfXSlLa95v1S5gMOZyjWCw++k4Rl4XkbBLUZUG5nNe7K37yOuszF8MdLqMQbacxzH9d/vlF7OMFM5lpoDe68JqOJwI6qrVNmdeC8t3UwZu24EjuuoVLpLfvGabeYn+h/K1CaysWy+E7rok3N9+1e6VUIwCcLMCjs7Y0cuAe/07D9AzDwJ6ZpT8uM5xR9fxIcSLF43cEBw9p5VY+64BqY3Zv7vBJM0vXybcsXaqRjsiC1e/N+dhHb0NoW10/9FywhuL5GinqJV0WJ1cmPGrQRL+Yf2uCZSwJpg5XY+gsvbFyywKDcn+gg==
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	D9Padoz4eTzFmHGNnyCM9GEMWvqho+k90GJEOmwHYDQxsqIFRZMsaJDNG5l6WMTVPWvjtuIm6nrZiJGElMsa875EA52aCqc5qBE94tQFzMUgFD00sGSRZGGEfAL4YxxpIC31foPU4a/kxi+B+AORIOr9tqwf7dQ43fcNoSejMDRFePltYTzu+V+X8pmkBJDCMXCqm9FcIXX4RorA/ylCLYpBs6jFpHXmMaNTYiazUZSmIXU4vUN9Z9L1RalplySA6whTxnOzewUxqU1JSemkjH+2mfRfkT/j9HhjHC6PraIJLqVdzaSL9GqUrxTSE/vPFJbWoebP5paFxKbtCsL1pvjh9DXfcw9EbNrehFgfUwFg0y8P5r3nfOYGK8n33JG9KN8hNCHU2tCt7SMXfL+MszLP11EsgLBo97wTP0VoNUH1Ha3UVkjXuOPmJY4s0HS4KhVNaqBofJnpOSuCCuZ8kzWNTR8RcDOpr50xH95oOcl/fpSh5ZHqhDPuiXZoQnGSwt07UWXhsbotZ+F9sp1SoQ0t3hhU7LbUrpD+vDMkN6w1YfmAnZHOEJONdcD8WvB/KmuuzKV4EINRATb72kqlNxoPYLMJFWN29HcZ3mGDjDI=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 069f0a01-2af7-4265-bc85-08df1a57040b
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB4901.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2026 16:15:14.4192
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Pj7ckBG4O5CRZsTYLtHeNz+2KmCiCRRe101aCJlw69yD0jlVGk/68usDikjOIyUOD3VSsneMtw/dBmnte32piA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6440
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-24_04,2026-09-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
- suspectscore=0 malwarescore=0 mlxscore=0 phishscore=0 spamscore=0
- lowpriorityscore=0 mlxlogscore=993 bulkscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.19.0-2609040000 definitions=main-2609240066
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI0MDA2NiBTYWx0ZWRfX7N5Xa40E7mpb
- 194x8vV2/kTgOVLuWYrroEociAHIPbtuN565wY1FUqDrspTerY3I0Qt6Xi1k5B8KAHQY90EZvPd
- VSc8+A1cyV5uNaJCKKBjLYa0HJRM9No6eyFo3wjAbML+mPiPI8OLnCPOkm5oHYAt5P//PIhAjOh
- LMjZc1azIRLgevx218efOndcpPLwZU8aHDobVpT68LqZioi4ois5VlEdQktpAvnKrytDLOF8He6
- zydwdsuNoyH26ic5/jwrBmNju2NzJk6AMKRXtsGa2nBbmcPu5CSZoCLGzkbYmvkrqduPn9FOZT5
- 4yDxWx2EI1gctl0wjB9qiS6QfEtQjrR7ByBcOW3UUlfGp91tCKzmn/GOHiB1ItZ7RM2sjycV99q
- h4bFgUD4HoQZerm0kf8vizpBRlrhgqyjvVyFI0DWkZO6dMhfCtHRE2uhe/V82h2v7tRo6Ow6z/A
- xNPVeZ4dt1sY4LsCQ7A==
-X-Proofpoint-ORIG-GUID: S8oU7yGyGQKDv6N8O4JdrATzKrBa54lx
-X-Authority-Analysis: v=2.4 cv=UINIjyfy c=1 sm=1 tr=0 ts=6ab54c9f b=1 cx=c_pps
- a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=VdqzKS8jKosA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=jiCTI4zE5U7BLdzWsZGv:22 a=RD47p0oAkeU5bO7t-o6f:22 a=VwQbUJbxAAAA:8
- a=G6qNw-qzJdZysMDmmfoA:9 a=QEXdDO2ut3YA:10 a=WmVTiCyuxqgg3mnwYu6p:22
-X-Proofpoint-GUID: S8oU7yGyGQKDv6N8O4JdrATzKrBa54lx
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI0MDA2NiBTYWx0ZWRfX/bepRdgQpOsA
- xWKjLfYxbWbF4TY1O98/E/zTq2XLw85xvtdL2Cbt3c8Y6yvfpS4l5UwsK+036o4zrsk21+jc2S2
- gZ17DfuytRe8BUSNYP9pe1bxDepVHtwF2+QtQJe8gh/9lpuCQMKF
+From: Tianyi Chen <diannaaav@gmail.com>
+In-Reply-To: <44ec5184-5a77-413d-9f42-fd93b0abbf11@kernel.org>
+References: <20260911051053.283421-1-diannaaav@gmail.com> <20260911051053.283421-2-diannaaav@gmail.com>
+ <44ec5184-5a77-413d-9f42-fd93b0abbf11@kernel.org>
+Date: Thu, 24 Sep 2026 09:15:57 -0700
+X-Gm-Features: AclHuK9YCtTvd_QbdRbtmViunIHXj9l7XzS8j0CSByJO8XmDbA6NWq1LazlJuiE
+Message-ID: <CACGbirS7z-ND6bBhdd2RMyGhj5kwHi+Nng23Z=qG4+W3uaxd2w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 1/2] bpftool: Add recursive map dumping
+To: Quentin Monnet <qmo@kernel.org>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, eddyz87@gmail.com, ihor.solodrai@linux.dev, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 17/09/2026 17:40, Yonghong Song wrote:
-> 
-> The arm64 ABI starts an argument twice the register size on an even-numbered
-> argument register, leaving a hole when the next free register is an odd one:
-> 
->   u64 f(u64 a, __int128 v, u64 b);
-> 
-> passes a in x0, v in x2:x3 -- skipping x1 -- and b in x4.  pahole did not
-> model the hole, so b looked like it was in an unexpected register and the
-> whole function was dropped from BTF.  Patch 1 skips the register the ABI
-> leaves behind, patch 3 adds a test for it.  Only arm64 has this rule; the
-> other architectures are unaffected.
-> 
-> Patch 2 is a small follow-up.  Floating point and vector arguments are
-> allocated from a register bank of their own -- v0-v7 on arm64, xmm0-xmm7 on
-> x86-64 -- so a wide one never occupies a general purpose register pair and
-> must not trigger the even-register rule either.  It does not change the BTF
-> emitted today, because such an argument still advances the general purpose
-> register index by its own size, so it comes with no test of its own; it
-> keeps the alignment rule scoped to the bank it applies to.
+Hi Quentin,
+
+> break the line after |COMMON_OPTIONS|
+
+Done.
+
+> I'm not sure we need such a detailed description of the output format
+
+Removed the detailed output/error descriptions and JSON-container note.
+The man page now describes recursion and the non-atomic traversal.
+
+> bpftool map dump id 1337 recursive
+
+Changed to this keyword syntax, with per-invocation state and matching
+help, completion and selftests. The global -r/--recursive options are gone.
+
+Sent v7 as a new thread:
+https://lore.kernel.org/r/20260924161434.95116-1-hi@tychen.cc
+
+All 13 map-dump subtests pass. I also checked pinned maps, per-CPU inner
+maps and keyword scope across batch commands after rebasing onto current
+bpf-next.
+
+Thanks,
+Tianyi
+
+
+On Thu, 24 Sep 2026 16:59:35 +0100, Quentin Monnet <qmo@kernel.org> wrote:
+> 2026-09-11 13:10 UTC+0800 ~ Tianyi Chen <diannaaav@gmail.com>
+> > From: Tianyi Chen <hi@tychen.cc>
+> >
+> > Dumping a map-of-maps currently shows inner map IDs without their
+> > contents. Add -r/--recursive to dump referenced inner maps as well,
+> > leaving the default output unchanged. Show the selected maps followed
+> > by distinct discovered inner maps, preserving plain and BTF formatting
+> > and using an array of map objects for JSON output.
+> >
+> > Holding every discovered inner-map FD open would make descriptor use
+> > grow with the number of maps and could exhaust RLIMIT_NOFILE. Keep the
+> > selected map FDs open, queue distinct inner map IDs, and open, dump and
+> > close each queued map in turn. This needs only one additional map FD.
+> > The tradeoff is deferred ID resolution: concurrently removed inner
+> > maps can disappear before they are opened, so the dump is not atomic.
+> >
+> > Report failure when an inner map cannot be opened, retain per-entry
+> > lookup errors, and close JSON containers before returning.
+> >
+> > Link: https://github.com/libbpf/bpftool/issues/58
+> > Assisted-by: LLM
+> > Signed-off-by: Tianyi Chen <hi@tychen.cc>
 >
-
-one small issue here; we record alignment for structs from DW_AT_align
-in associated tags; we should ensure that we utilize that alignment
-where available. However it's a bit broken in that we don't appear
-to record alignment for typedefs, just structs.
-
-I think we can tackle that with a followup though; unless anyone objects I'll
-land these patches later today.
-
- 
-> Changelog:
->   v1 -> v2:
->     - v1: https://lore.kernel.org/bpf/20260911040955.339939-1-yonghong.song@linux.dev/
->     - add commit "Do not align the argument register index for FP arguments".
-> 
-> Yonghong Song (3):
->   dwarf_loader: Skip the argument register the arm64 ABI leaves as a
->     hole
->   dwarf_loader: Do not align the argument register index for FP
->     arguments
->   tests: tests: Add test for 16-byte aligned arguments on arm64
-> 
->  dwarf_loader.c              | 72 ++++++++++++++++++++++++++++++++--
->  dwarves.h                   | 11 ++++++
->  tests/clang_parm_align16.sh | 77 +++++++++++++++++++++++++++++++++++++
->  tests/test_lib.sh           |  3 +-
->  4 files changed, 158 insertions(+), 5 deletions(-)
->  create mode 100755 tests/clang_parm_align16.sh
-> 
-> -- 
-> 2.53.0-Meta
-> 
-
+> Hi, and thanks for working on this!
+>
+> Please find some comments below.
+>
+> > ---
+> >  .../bpf/bpftool/Documentation/bpftool-map.rst |  22 ++-
+> >  tools/bpf/bpftool/bash-completion/bpftool     |   2 +-
+> >  tools/bpf/bpftool/main.c                      |   7 +-
+> >  tools/bpf/bpftool/main.h                      |   1 +
+> >  tools/bpf/bpftool/map.c                       | 130 ++++++++++++++++--
+> >  5 files changed, 151 insertions(+), 11 deletions(-)
+> >
+> > diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+> > index 5daf3de5c74..23faa672685 100644
+> > --- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
+> > +++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+> > @@ -16,7 +16,8 @@ SYNOPSIS
+> >
+> >  **bpftool** [*OPTIONS*] **map** *COMMAND*
+> >
+> > -*OPTIONS* := { |COMMON_OPTIONS| | { **-f** | **--bpffs** } | { **-n** | **--nomount** } }
+> > +*OPTIONS* := { |COMMON_OPTIONS| | { **-f** | **--bpffs** } |
+> > +{ **-n** | **--nomount** } | { **-r** | **--recursive** } }
+>
+> Nitpick: I'd rather break the line after |COMMON_OPTIONS|, like in
+> bpftool-prog.rst.
+>
+> >
+> >  *COMMANDS* :=
+> >  { **show** | **list** | **create** | **dump** | **update** | **lookup** | **getnext** |
+> > @@ -170,6 +171,25 @@ OPTIONS
+> >      Do not automatically attempt to mount any virtual file system (such as
+> >      tracefs or BPF virtual file system) when necessary.
+> >
+> > +-r, --recursive
+> > +    Also dump the inner maps referenced by **array_of_maps** and **hash_of_maps**
+> > +    entries when running **map dump**. Each map ID is visited once, even if
+> > +    several entries refer to it. Selected maps are followed by their inner maps.
+>
+> OK
+>
+> > +
+> > +    Plain output includes a header identifying each map. On success, JSON output
+> > +    is always an array of map objects, each containing an **id** and an
+> > +    **elements** array, including when only one map is dumped. Outer map entries
+> > +    retain their **inner_map_id** field, which identifies the corresponding inner
+> > +    map object.
+>
+> I'm not sure we need such a detailed description of the output format in
+> the man page. Please remove.
+>
+> > +
+> > +    Inner map IDs are resolved when the maps are visited. The dump is not an
+> > +    atomic snapshot: concurrent updates can change map contents or remove a
+> > +    referenced inner map before it is visited. Failure to open a referenced
+> > +    inner map stops the dump and returns a nonzero exit status. Output may
+> > +    contain maps or entries printed before the error.
+>
+> Same thing, I'm not sure this is necessary. Maybe just keep the first
+> half (the note about the maps susceptible to change during the dump).
+>
+> > +
+> > +    In JSON mode, the enclosing arrays and objects are closed before returning.
+>
+> Let's get rid of this, please.
+>
+> > +
+> >  EXAMPLES
+> >  ========
+> >  **# bpftool map show**
+> > diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftool/bash-completion/bpftool
+> > index 75cbcb512eb..45c336d63be 100644
+> > --- a/tools/bpf/bpftool/bash-completion/bpftool
+> > +++ b/tools/bpf/bpftool/bash-completion/bpftool
+> > @@ -261,7 +261,7 @@ _bpftool()
+> >
+> >      # Deal with options
+> >      if [[ ${words[cword]} == -* ]]; then
+> > -        local c='--version --json --pretty --bpffs --mapcompat --debug \
+> > +        local c='--version --json --pretty --recursive --bpffs --mapcompat --debug \
+> >              --use-loader --base-btf --sign -i -k'
+> >          COMPREPLY=( $( compgen -W "$c" -- "$cur" ) )
+> >          return 0
+> > diff --git a/tools/bpf/bpftool/main.c b/tools/bpf/bpftool/main.c
+> > index 5ababd8f7d0..c0f4df10102 100644
+> > --- a/tools/bpf/bpftool/main.c
+> > +++ b/tools/bpf/bpftool/main.c
+> > @@ -26,6 +26,7 @@ static int (*last_do_help)(int argc, char **argv);
+> >  json_writer_t *json_wtr;
+> >  bool pretty_output;
+> >  bool json_output;
+> > +bool recursive_dump;
+> >  bool show_pinned;
+> >  bool block_mount;
+> >  bool verifier_logs;
+> > @@ -456,6 +457,7 @@ int main(int argc, char **argv)
+> >  		{ "json",	no_argument,	NULL,	'j' },
+> >  		{ "help",	no_argument,	NULL,	'h' },
+> >  		{ "pretty",	no_argument,	NULL,	'p' },
+> > +		{ "recursive",	no_argument,	NULL,	'r' },
+>
+> The "recursive" option that you add is specific to a single subcommand
+> for "bpftool map". It's true that some other options behave in a similar
+> way, but overall, bpftool tends to use dash-options when it affects the
+> generic behaviour (perfect example: JSON flags), and keywords otherwise.
+> In the current case, given that we don't really have an equivalent use
+> for "recursive" for the other commands, I'd keep it a keyword:
+>
+>     bpftool map dump id 1337 recursive
+>
+> Could you change it, please?
+>
+> The code itself looks good to me, thanks for working on this!
+>
+> Quentin
