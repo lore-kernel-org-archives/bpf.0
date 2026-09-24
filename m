@@ -1,64 +1,64 @@
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
+Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7027A4307B0
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 07:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482973B8950
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 07:53:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790236440; cv=none; b=Jrm+OzPMf9WNfCp8AwdzcLVt1eFHktjlHe2IlcFd+6SSVQg2m7UWxi4Vdz2d1YCfqYq9kP3JmbkFJw3DwvDyCr5wglNxxxi7kMqIkPXP5zae6O5qHivod9Ij9dIsnRtHhElKXJcV7ZymaPJDr7+WV9+emwiRKbX7adewUnFMmII=
+	t=1790236442; cv=none; b=H/uFvBvzP0Gy7SyT316A8WlxijfJ+6K7d4r3gcsBKGeKQ2Y4++6+eYsmOWOdtmRJiAVHDkZXD0mGCmvxqmfs73M4PobejQipYjDr9BC0O1BYxDwfZoyhXo8N9NwRbZBlGGeuOTaKxcGgc8vMZLezW8PgG0t8Pg+Xz0L+OHrc1DQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790236440; c=relaxed/simple;
-	bh=23/IK+v0ZJraodc3cIyE8mZofrn5jdm+WcweK5PGXMw=;
+	s=arc-20240116; t=1790236442; c=relaxed/simple;
+	bh=K4T2r/+yWGJyrtHppNXCDFzcDdLab7mdFu17JtIQpm4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=babzggYP82SDSIIspPoKad+eKq62MzTsNsGvN/Uk+Ror/GFKKPY/8ECW2tGAaLy+7CrFBz1Fs2nQ53sS4LgXS98LeJn6667Vv4EsHJhlkV5uU3G95Bp3Z8olbbhidEu9UvJqlxGmoZLOEPcAkIu041a0xdNX+RPcBLyHWr3pcRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qQVSJXSM; arc=none smtp.client-ip=74.125.225.75
+	 MIME-Version; b=TzhyE/sgpEK9Pa8JCp19SvaJwxUgH0dTfbzRvxqea+DOQRUhs+ZNFFjK9SX3LQ1wyhxu4ZNAXEQeUWvlDNZp/dojEhhibfOpcKrOLL4nWJLV08IP1SVjc0m9zO6FfqwkYkfXxErp8y7ZxkYu4uYITC1Te9mqW5dxT7EeW54iwbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LXiKAVUw; arc=none smtp.client-ip=74.125.225.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qQVSJXSM"
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-48351e5bb47so551146f8f.1
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 00:53:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LXiKAVUw"
+Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-49814d35686so388855e9.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 00:53:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790236436; x=1790841236; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790236438; x=1790841238; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=SivqUH7MJczvTZ962EBibSuSrTPZX1+IyKmPjA05+80=;
-        b=qQVSJXSMdGMnra/3l9DpuvMtLMppV/SKIpIMAZmzh/18ob3mT96XFeK4EM78uJjy1X
-         HMZ7mgE84O0pWlj37uyIf1Xxwep4dpuNtw37bMw4H6fNvf5VNwTzMt3SaLeuUmyvB9mF
-         8/BVJiRuACtANwLEXwOoCkz3APFNttv82yOdqJTz2uBMmW5jjsIinrN0C8EDaTTBgnsx
-         pw7LIO/bJjwWfFHWtJEv87Q4mCCWQUznhyBAK08A8cWVq5Qp2oTMp2bQBVU7A5cSXuK6
-         K8WWgOUDDFvcwZWkT1mqyDsv2Qg0fOrX2efZHm+vKj+bIXwRM3kGgsI6OXOmoUQvpz1k
-         vVUQ==
+        bh=nonQ2U9/QFHaERgf3oRsPVuMS149Fy+A2szR/ywmsVM=;
+        b=LXiKAVUwBg0xkRdXQnbXBixn+D9lnz2CHt6gYwaFIP1DE+DV8xHog9f5DEduGQ2dYp
+         d2juhYo1awKcluMz2jKjAiwpqEtz5G98TzBXxOXCk6jcHnMZpf5uDFOswoBRJwz1LlIk
+         cCTbInLK5WRjReH6O7OzlcIsDhS6N3SjAmfa+ro2cmh+ohKajKPqwYTnJaij66Hhh3HY
+         8BZAzJeJKMKmOAphmN8VtQovobFLe/I5GfWIPspoocGEkRz9h5RkiMXLYujORT0ZQ9Qd
+         yR2ARh/HAOEIijfHTliVr3xfyXmIVQvzuVb98h9LZEtpgoDSt8FlwMDnfAmkjSh93C80
+         /qZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790236436; x=1790841236;
+        d=1e100.net; s=20260707; t=1790236438; x=1790841238;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SivqUH7MJczvTZ962EBibSuSrTPZX1+IyKmPjA05+80=;
-        b=j1nhZYz2tYfdTsMP0nvuo1EBoWDUxT2oTRzezEt8B/B38tJaWszv7yTZXSA32v4fKl
-         7MFTi1nLqVUhx3YemNc5uv931vESCJ6oJRKyaSgQUO/GzniQGnBoMe6JN6iN7RnxsLil
-         4CpsQJQ6cs9X8noS8yJ0gK1twtqrtCmYRP3p23p3yY7g4F4dd+4hUlh/P5UPal/boJBG
-         4Sc5MOURtoprqDghBQ5N1Y1TEaKP1d9W063cdI8McaLnS6Nkan/bWW8x5s5gYj97v3FG
-         tSndn1cYhGhgzjL5/NDEDkR9TM98tXvh1EAxnKRP+6kZ/pl+rf+DLQpmllxSHpjaB6nZ
-         4gtA==
-X-Gm-Message-State: AFuF++mZxvir7jQ6VngM29GqEJuoj7W7BtsnEk5bz+zdx4kXjrRS7OPd
-	kV6J5vr6ew3SDRg0OJmWGStZcc0FSOk9bvlZJKrZz+GsbvNHCuPYTUgl0LkXF7lr
-X-Gm-Gg: AYBFou3V9NP8QxaaUUfYEy8UkoeAF8u8KWMsP5qJHsw5X7MJmDqok4VwP0iR0Pwr1kH
-	0jZpOdn88807dTG3VX2ErmXE2Lw204Q1FWDBvKQ0pBVUux+goNaKA3Wnxw/ml3Qx0fVX1L726s7
-	kHBlgJX/sfbwCQHo8+fKqtztm2gppKC+I1V9bTe1v/Hjh8bWeewnejs50CC0tDN1+qwKlufTb+t
-	ZQhNqGCCLqehpkrPWn4fF4WyE8/ZDeJWtulNPLq8/h1Rpp1KT/+2KI6o2I1lEfoXgJ6/AV7csPx
-	Hao2Y9kcEwBxs9l0C7waZ/4agDBU3zvyTyTYXkuLKtoXD7UcMG2QeNWFjqxudYFlIBoDY3HMjUV
-	X/owhje32TnbVzdduTHqXNAYY8CGGcCzqRYrrRViRclbXhvRnHurQtwYjDjpVP9Vzi7/JQKEwnk
-	SQIKOpgCit1kgAkKT4OueOirnRqQUKbfE4o3xhj8baacaXSv/KZGy3tcxbUJVf0Ugr4D4IKlIdH
-	t7ehqkjHJxkSZrVVmlDtNPKVjUK3eZ58WY/beTXLNAKeHzR2UUvExRsg8BptxSOOD8456cmUxSn
-	HtKnSFg8rx0rcmurERYR6hJmpx0hOpuQfcgjfA==
-X-Received: by 2002:a05:600c:37c9:b0:49f:c2ef:cfb9 with SMTP id 5b1f17b1804b1-49fe66c897cmr22525535e9.4.1790236436011;
-        Thu, 24 Sep 2026 00:53:56 -0700 (PDT)
+        bh=nonQ2U9/QFHaERgf3oRsPVuMS149Fy+A2szR/ywmsVM=;
+        b=N7raSrsbIiSYy9hbhsfbixQOMYlBwgKcsNffKkTqHpreooQN7lkjcuQnGMqebrhYi5
+         ejtXozOtlBj8z318Z1qhcWfLSL3qidVojFF1ahrOHYeSEHs4uK0my1O6P8oC72vHnD4X
+         I85/PeOA+bXWqYCHlitzE6vfNmW+Wq9JtAQ4x4lPKJBLTwu/lAfhumg+slypSPNzjesR
+         x7fj0HhCvjyFCDwMG7K5Gq7AAvE2kv4XEL2i6ZZxGVR6koAOAoKpAZ8ePzt1em8qICml
+         OqJe9rSrQ88HoPtY8hgCZz1RNSTszkzHj1UiFVjU2a1WnqOiRza1RuY8AT9pKExQI4YU
+         Cm5g==
+X-Gm-Message-State: AFuF++no/zc211Z1A5sj0N4r0Pm5vBRnJ7JQhxsQMV7dm5gKa0vat3dW
+	Agp6Vb6MPBbsIA25NAvNdcAuWV/Eq+sP7VQunIQJUPJigCAxnOXVkcAzj/vAtjwC
+X-Gm-Gg: AYBFou0rA+o2QeujCdCLZ3wyriIzAh+oat1bY+b33oyX1vNKcnsfDQthUsV8GmEFfPE
+	ILm/giE14g+V+r1aFrpZX48TLTv1k75vyd5mmCFVvVvT+TV/lso7ATQNoIFCascTPt2SZDFFLr8
+	jeldIEm8pXoNBgbqRElig/7/8CbPuDVwyW53CZU7PzdMAQR+q4p+/uQVwV38hVubzxZRyWKe91o
+	LU7wLhrKxMPuZxiKM/rOljwLsFKO3K6b51xlLS4fqmXCl8ZwEFrorVGz8Un1zB9/f9WZvTzgvL3
+	YlSmNUh6zPcSYc3fg3UBSbFoGr/YHrAy+L4L3tZYWei5ynzP82C46/CCb6v+zLWk3fHqBdN212i
+	XyrFnSVuDjW5EgvjSktiSH4cvkQ3u6IXZlCLCbKho6aolykF8khO5otI9fIuOsGnPCZE0enGWox
+	evlmGrGdLAEDLh0uwjbb2TLCaKjIbKnyulLUOGPvrBDdBADU1OPv3bHrckzINmwIGs7SA/iiVcJ
+	d2AbZdArlSG8dUGtZTKQvPtldUMTYrqQu5+yvwcT6b4y+mna9cXzGqU6sGQa4aKqrzKoMESg0Os
+	2NVMp5FR+Ky8ilFrQtoIzRgjDI5k441v7YThbg==
+X-Received: by 2002:a05:600c:4705:b0:49e:65f2:db64 with SMTP id 5b1f17b1804b1-49fe66d03b6mr26129375e9.5.1790236437772;
+        Thu, 24 Sep 2026 00:53:57 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe41b8446sm29266655e9.1.2026.09.24.00.53.55
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe5bb9891sm42797365e9.6.2026.09.24.00.53.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 00:53:55 -0700 (PDT)
+        Thu, 24 Sep 2026 00:53:57 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -68,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 1/2] bpf: Check fastcall stack contract once for all stack accesses
-Date: Thu, 24 Sep 2026 09:53:49 +0200
-Message-ID: <20260924075352.2343553-2-memxor@gmail.com>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Test fastcall rewrite with indirect stack accesses
+Date: Thu, 24 Sep 2026 09:53:50 +0200
+Message-ID: <20260924075352.2343553-3-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260924075352.2343553-1-memxor@gmail.com>
 References: <20260924075352.2343553-1-memxor@gmail.com>
@@ -80,139 +80,213 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5526; i=memxor@gmail.com; h=from:subject; bh=23/IK+v0ZJraodc3cIyE8mZofrn5jdm+WcweK5PGXMw=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvLtXMsJd3CNRs0Q9aI83w8Jv914n8brU2HzT3ZnmzM8 Nton6PdUcrCIMbFICumyFLyfx+T8YnK34G2y7hh5rAygQxh4OIUgIm8TGNk+DjPu8RMslWdd33G AwnOJ+orCx2fScnnJCyvsg6drLpvAsP/CKtNBWdnuxikKPiw1t00l2Odu7Q64YNT4E69gBOl189 wAgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5695; i=memxor@gmail.com; h=from:subject; bh=K4T2r/+yWGJyrtHppNXCDFzcDdLab7mdFu17JtIQpm4=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvLtXOPfLjkvvioJyhuqfVjv9WU+6Q2tlMn68xZjmt+0 vPuVD7tKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwERcVzAybDmdkD9JZvcNg0jt Ff9/snGm+kV3nj5X270k857uAsvaGQz/jEXqH9xa0zU3dv3tzz5TpfjTLx73un444G3Ooc266Tm KrAA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-When the verifier inlines a bpf_fastcall helper or kfunc, it removes the
-spill/fill pairs that clang emitted around the call and lowers the
-subprogram's stack depth so that their slots are no longer part of the
-frame. This is only safe if nothing else accesses those slots or any slot
-below them. check_fastcall_stack_contract() enforces this: an access to
-that region from outside a fastcall pattern disables the rewrite for the
-subprogram. It is called from the four stack load and store paths, and
-two kinds of access escape it.
+Add tests where a helper stack buffer, or a load through a pointer into
+another frame, overlaps the slots of a fastcall spill/fill pair. The
+rewrite must not be applied in these cases, so check that the spill and
+fill remain in the translated program and that the final stack depth
+still covers the accessed slots. Cover:
 
-Stack buffers passed to helpers and kfuncs are validated by
-check_stack_range_initialized(), which does not call it. If such a buffer
-is the only other access to the region, the rewrite is still applied, the
-JIT reserves a frame that does not contain the buffer, and the helper
-reads or writes live kernel stack below the program's frame. For example,
-without CAP_PERFMON:
+ - a constant-sized uninitialized output without CAP_PERFMON;
+ - the same output in the caller's stack, passed to a helper by a callee;
+ - a helper input whose only initialization is the fastcall spill;
+ - a callee load from the caller's fastcall spill slot.
 
-	*(u64 *)(r10 - 8) = r1;
-	call bpf_get_smp_processor_id;
-	r1 = *(u64 *)(r10 - 8);
-	r2 = 0;
-	r3 = r10;
-	r3 += -64;
-	r4 = 8;
-	call bpf_skb_load_bytes;
+Also add a zero-sized buffer, for which the rewrite must still be
+applied.
 
-is accepted with a stack depth of 0 instead of 64.
+The tests only load the programs and inspect the verifier log and the
+translated instructions. Do not run them: without the fixes, the
+verifier accepts programs that access memory outside their stack frame.
 
-Some buffers got the check indirectly. For constant-sized outputs in raw
-mode, mark_raw_stack() marks the buffer initialized through ordinary
-byte stores, which call the check. Commit 5da4a9f26fca ("bpf: Preserve
-stack initialization for generic output buffers") limited raw mode to
-programs that may read uninitialized stack, so outputs of programs
-without CAP_PERFMON lost the check, as in the example above. Buffers
-that never used raw mode have lacked the check since fastcall support
-was added: helper inputs such as a map key whose only store is a fastcall
-spill, variable-sized outputs, and buffers at a variable stack offset.
-
-check_stack_read_fixed_off() applies the check to the current frame,
-even when the pointer targets a caller's stack. A callee can therefore
-read a caller's fastcall spill slot without disabling the caller's
-rewrite:
-
-	caller:
-	r1 = 1;
-	*(u64 *)(r10 - 8) = r1;
-	call bpf_get_smp_processor_id;
-	r1 = *(u64 *)(r10 - 8);
-	r1 = r10;
-	r1 += -8;
-	call callee;
-
-	callee:
-	r0 = *(u64 *)(r1 + 0);
-
-The caller's spill and fill are removed and its stack depth drops to 0,
-but the verifier still tracks the slot as holding the spilled constant.
-The callee's load then reads kernel stack outside the caller's frame,
-while the verifier assumes r0 is 1.
-
-Every stack access first goes through check_stack_access_within_bounds():
-loads and stores from check_mem_access(), helper and kfunc buffers from
-check_stack_range_initialized(), and the dynptr, iterator and irq flag
-slots that kfuncs initialize, whose handlers use check_mem_access(). It
-resolves the frame that owns the slots and the lowest offset the access
-can touch, and it is the only place where a frame's stack depth grows.
-Check the contract there, once for every access, and drop the calls from
-the stack read and write paths. Zero-sized buffers touch no stack and
-leave the rewrite enabled.
-
-Fixes: 5b5f51bff1b6 ("bpf: no_caller_saved_registers attribute for helper calls")
-Fixes: 5da4a9f26fca ("bpf: Preserve stack initialization for generic output buffers")
-Link: https://lore.kernel.org/bpf/85f9995a43edb70c76615280e103dc5325742e88330f36c97962ee35f17e3e32@mail.kernel.org
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/verifier.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
+ .../bpf/progs/verifier_bpf_fastcall.c         | 169 ++++++++++++++++++
+ 1 file changed, 169 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index fec5a1ae6a4d..fe19d24d8773 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3711,7 +3711,6 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
- 	if (err)
- 		return err;
- 
--	check_fastcall_stack_contract(env, state, insn_idx, off);
- 	mark_stack_slot_scratched(env, spi);
- 	if (reg && !(off % BPF_REG_SIZE) && reg->type == SCALAR_VALUE && env->bpf_capable) {
- 		bool reg_value_fits;
-@@ -3832,7 +3831,6 @@ static int check_stack_write_var_off(struct bpf_verifier_env *env,
- 			return err;
- 	}
- 
--	check_fastcall_stack_contract(env, state, insn_idx, min_off);
- 	/* Variable offset writes destroy any spilled pointers in range. */
- 	for (i = min_off; i < max_off; i++) {
- 		u8 new_type, *stype;
-@@ -4017,7 +4015,6 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
- 	reg = &reg_state->stack[spi].spilled_ptr;
- 
- 	mark_stack_slot_scratched(env, spi);
--	check_fastcall_stack_contract(env, state, env->insn_idx, off);
- 
- 	/*
- 	 * Refine the in-progress load record's origin to the source stack slot.
-@@ -4204,7 +4201,6 @@ static int check_stack_read_var_off(struct bpf_verifier_env *env, struct bpf_reg
- 				  dst_regno);
- 	if (err)
- 		return err;
--	check_fastcall_stack_contract(env, ptr_state, env->insn_idx, min_off);
- 	return 0;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
+index a73b837553fb..e0c389102db9 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bpf_fastcall.c
+@@ -502,6 +502,175 @@ __naked void bad_helper_write(void)
+ 	: __clobber_all);
  }
  
-@@ -6609,6 +6605,15 @@ static int check_stack_access_within_bounds(
- 		return err;
- 	}
- 
-+	/*
-+	 * Every stack access passes through here, including buffers passed to
-+	 * helpers and kfuncs and accesses into a caller's frame, so check the
-+	 * fastcall contract of the frame that owns the slots once for all of
-+	 * them. Zero-sized accesses touch no stack and keep the rewrite enabled.
-+	 */
-+	if (access_size)
-+		check_fastcall_stack_contract(env, state, env->insn_idx, min_off);
++/*
++ * A helper buffer or a callee's pointer that reaches a fastcall spill slot
++ * must keep the spill/fill pair and the stack that covers it. Only load
++ * these programs: without the fix, they access kernel stack outside their
++ * frame.
++ *
++ * Uninitialized outputs without CAP_PERFMON have no explicit stack accesses.
++ */
++SEC("tc")
++__log_level(4)
++__msg_unpriv("subprog 0 (helper_uninit_stack) main {{.*}} stack 64")
++__xlated_unpriv("*(u64 *)(r10 -8) = r1")
++__xlated_unpriv("...")
++__xlated_unpriv("r1 = *(u64 *)(r10 -8)")
++__caps_unpriv(CAP_BPF | CAP_NET_ADMIN)
++__success_unpriv
++__naked void helper_uninit_stack(void)
++{
++	asm volatile (
++	"*(u64 *)(r10 - 8) = r1;"
++	"call %[bpf_get_smp_processor_id];"
++	"r1 = *(u64 *)(r10 - 8);"
++	"r2 = 0;"
++	"r3 = r10;"
++	"r3 += -64;"
++	"r4 = 8;"
++	"call %[bpf_skb_load_bytes];"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_get_smp_processor_id),
++	  __imm(bpf_skb_load_bytes)
++	: __clobber_all);
++}
 +
- 	/* Note that there is no stack access with offset zero, so the needed stack
- 	 * size is -min_off, not -min_off+1.
- 	 */
++/* Same output in the caller's stack, passed to the helper by a callee. */
++static __used __naked void helper_uninit_stack_callee(void)
++{
++	asm volatile (
++	"r3 = r2;"
++	"r2 = 0;"
++	"r4 = 8;"
++	"call %[bpf_skb_load_bytes];"
++	"exit;"
++	:
++	: __imm(bpf_skb_load_bytes)
++	: __clobber_all);
++}
++
++SEC("tc")
++__log_level(4)
++__msg_unpriv("subprog 0 (helper_uninit_stack_caller) main {{.*}} stack 64")
++__xlated_unpriv("*(u64 *)(r10 -8) = r1")
++__xlated_unpriv("...")
++__xlated_unpriv("r1 = *(u64 *)(r10 -8)")
++__caps_unpriv(CAP_BPF | CAP_NET_ADMIN)
++__success_unpriv
++__naked void helper_uninit_stack_caller(void)
++{
++	asm volatile (
++	"*(u64 *)(r10 - 8) = r1;"
++	"call %[bpf_get_smp_processor_id];"
++	"r1 = *(u64 *)(r10 - 8);"
++	"r2 = r10;"
++	"r2 += -64;"
++	"call helper_uninit_stack_callee;"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_get_smp_processor_id)
++	: __clobber_all);
++}
++
++/* A helper input whose only initialization is the fastcall spill. */
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} fastcall_map SEC(".maps");
++
++SEC("tc")
++__log_level(4)
++__msg("subprog 0 (helper_reads_fastcall_spill) main {{.*}} stack 8")
++__xlated("*(u64 *)(r10 -8) = r1")
++__xlated("...")
++__xlated("r1 = *(u64 *)(r10 -8)")
++__success
++__naked void helper_reads_fastcall_spill(void)
++{
++	asm volatile (
++	"r1 = 0;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"call %[bpf_get_smp_processor_id];"
++	"r1 = *(u64 *)(r10 - 8);"
++	"r1 = %[fastcall_map] ll;"
++	"r2 = r10;"
++	"r2 += -8;"
++	"call %[bpf_map_lookup_elem];"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_get_smp_processor_id),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_addr(fastcall_map)
++	: __clobber_all);
++}
++
++/* A callee load from the caller's fastcall spill slot. */
++static __used __naked void read_caller_stack_callee(void)
++{
++	asm volatile (
++	"r0 = *(u64 *)(r1 + 0);"
++	"exit;"
++	::: __clobber_all);
++}
++
++SEC("raw_tp")
++__log_level(4)
++__msg("subprog 0 (callee_reads_fastcall_spill) main {{.*}} stack 8")
++__xlated("*(u64 *)(r10 -8) = r1")
++__xlated("...")
++__xlated("r1 = *(u64 *)(r10 -8)")
++__success
++__naked void callee_reads_fastcall_spill(void)
++{
++	asm volatile (
++	"r1 = 1;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"call %[bpf_get_smp_processor_id];"
++	"r1 = *(u64 *)(r10 - 8);"
++	"r1 = r10;"
++	"r1 += -8;"
++	"call read_caller_stack_callee;"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_get_smp_processor_id)
++	: __clobber_all);
++}
++
++/* A zero-sized buffer touches no stack, the rewrite is still applied. */
++SEC("raw_tp")
++__arch_x86_64
++__log_level(4)
++__msg("subprog 0 (helper_zero_size_buffer) main {{.*}} stack 0")
++__xlated("0: r1 = 1")
++__xlated("1: r0 =")
++__success
++__naked void helper_zero_size_buffer(void)
++{
++	asm volatile (
++	"r1 = 1;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"call %[bpf_get_smp_processor_id];"
++	"r1 = *(u64 *)(r10 - 8);"
++	"r1 = r10;"
++	"r1 += -64;"
++	"r2 = 0;"
++	"r3 = 0;"
++	"call %[bpf_probe_read_kernel];"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_get_smp_processor_id),
++	  __imm(bpf_probe_read_kernel)
++	: __clobber_all);
++}
++
+ SEC("raw_tp")
+ __arch_x86_64
+ /* main, not patched */
 -- 
 2.53.0
 
