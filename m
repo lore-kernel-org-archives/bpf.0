@@ -1,241 +1,213 @@
-Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E7F488208
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 10:23:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4843FD96B;
+	Thu, 24 Sep 2026 10:46:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790245419; cv=none; b=ThTOExjiFhQTKwCD9dRMONOTGXnaHYD97QJdvnau0Zx0Wy6H8bX5qEv4EXlfX8H//b8z3bKGB63r3L8La5Q8tfBJJEmbwTrPyOWDKkldWVzt9Gvm4ZzuSOiwmy9deDlWOe4UXNTQJixNreDVMX8aZNBjqGa7UUaNQhiMeeR59zg=
+	t=1790246808; cv=none; b=HVsu3MVYIEthRbHyEhBWGAm/tClmdU0S59iTXjFURovt+9zwNW3I2L+HrUhEhrpuMcp+NI3GPhq9Qud2gGpBFh5tE7WHqgxGVoHk6/PlnI1RGb3JnqmdR238ehleAHIDHHCSYJD9iHRmB0cHaaTPKIYvw8v7CJMf245pyYLuOe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790245419; c=relaxed/simple;
-	bh=6YX6h+lVa19ibUpshe0Fzrnf6t9VpTENK7zNCAt5Y1I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Zm7t/ivbLZV2jo3GNoSKWBD7GU4mBpeXAuDF6SxzEilww05eF1tM33lAA+ZYqViNUFbpw7Npf5z7PpqCO1HQ46CzxTjrX5pT40rq6thQayj6A4/HHP22VaPJwmwZ/5nZUK/Zc3Zp78QfRCTfLX7oEbeG3fjOkouCyWSNoQ5C4tU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PDHCprvY; arc=none smtp.client-ip=74.125.228.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790246808; c=relaxed/simple;
+	bh=pexZf/lQWtuVxEygmxSvzl6d8CItj5/N0Rz0PZcxpaY=;
+	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Q1JSD10kmJzsWyZXen8p6UUdT05yFhFooQBeckKX8Xe10a3nodKnDEcl5HQKMaerbr6uFStJJLSV6UFN38XhVMaBY6gjC1fONeZL5qaJxRqWR7LdCVZzzhBrJP7u9nx9YPcYd+Cul/D6sk/jdto3fbbHwwZ5pT5nNlfp/KLikuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B3Dbduyr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PDHCprvY"
-Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc1cea4c79fso593989a12.0
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 03:23:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790245417; x=1790850217; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=bfDHIscfZIaZ+G0e6fi+cyup/qsdiCf7G7ZWGqivqVU=;
-        b=PDHCprvYMNfTvELc1uQm6aZk2TJdVYVP1Q6fq/5zJ0MPffMZI21DAHw7PHhYeP669u
-         PA7R52RIOIe7p9evRblMmpsDCVHgBgH37/xhGtH+pNJe37mM4Mze4H5Mag2xC1Z1RlEz
-         hn8KTVUWu0iK5Vvgt/6Oqf5Ut6qpQ6+MZxG2YENNXU4iFJJX24Xh+wFGImnVbBd6SgjI
-         1MrGHTCG2Mj0ARHXuMZ/2ZFHeEpruBFmfe62QlqKcLSzsW7tGvR66mSH8UYWm1ri64JP
-         25Tw9+z8FHZH/M5Q12Z00A5rYsEOd1PfkASy+ldswo0JxD6YDRjY35ba6olFxQqezZIn
-         Pyig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790245417; x=1790850217;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=bfDHIscfZIaZ+G0e6fi+cyup/qsdiCf7G7ZWGqivqVU=;
-        b=DgBly+LJeQkDnzyQ2EeAo3BrMoXHJdgguaKW1tjcA9MX4EThA+RWeGh0TWR+DI0jX3
-         Fb9dzE7c6/o8H27cdYoqChUCmJpUF1Jco7e0BLWycWAVPNUlHdtiHvXAIVkRN9XOzbX+
-         D6AFeRYeCWlOW1xFwyKS7VWRVh7v9GJtvgSAzuSEZC4X9qqSN46rwnVEwfQ1AzNMqJ4t
-         If4pLtssAddKTfysYmOCqbWPYUJS3vANjKikPir+gq3ItVDmSS3U9FZB5W3DxEQzNKjX
-         PEEbyenEO/k5N4jKGhWKVBQaD7G1100gANzcXAgAFCQFoCzejB8DzcH5EKP6L/rFBuV2
-         PCoQ==
-X-Gm-Message-State: AFuF++miiZy4BEhExnYImUs+xe45akyzt1gIOBUhtpkWRcmfLXr291i6
-	oSYGqMmMaBivDXyovFATv0bloWvDY62bK+kLUZ5ioUpso90SXK0QJGuZv7oq6m9CUw==
-X-Gm-Gg: AYBFou3uoImU6CMt9xcXIR1UgFkXxwkIqO4kjBjd8NLn8dVxxbqug8s6MWHd0cfMT6e
-	fCQnFczNl1NJrpS0CsijZFn0wlxdMN+Z/B6lGXfmKdIsH3sJ5jaTJVd1J9xUxMMK5Nnky+S7KgW
-	sAHAC+RVCRbb3cusC+FO6vmopDut751OdRvLQi9/9Lidstf8sxUxiUQRpEIE+GfDFKcEdGvdcZq
-	kClIoAcE+dWshYKaT3bj677pryidWAl8fYlYEpaPfO6TQXXGitC20tNP602fMNzOL5OtUI7E8Ge
-	AykS4ZoiK/rRZaxKv0qhUy/nRPNbAjVorWB1kftCD372J/e10u9E7z7ZJEoyEySn7efQyG71Y9f
-	z0Y/EblJGKdB6iBOgbn6IUKGPVz/MumL7Kc3JEuhvZVnxxOPECC8KGnrbAuy0mGAcc/KBpn0Jds
-	rhRECqJr533hugJocIzJap88TMkzB8W13p0vkSYKi8FbxNUm7MxBtbKxA7+BNwck0Xinnwd+O9Z
-	i8OL/P2yucTIMvaCL5vMAdj
-X-Received: by 2002:a05:6a20:4394:b0:3dd:85aa:d26d with SMTP id adf61e73a8af0-3de0e7f4a52mr1881230637.37.1790245417278;
-        Thu, 24 Sep 2026 03:23:37 -0700 (PDT)
-Received: from ydg-Zenbook-14-UM3406GA ([211.230.25.193])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87d1afb9416sm2661582b3a.7.2026.09.24.03.23.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 03:23:37 -0700 (PDT)
-From: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	leon.hwang@linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	donggeunyoo.kernel@gmail.com
-Subject: [PATCH bpf v3 2/2] selftests/bpf: Test per-cpu initialization of a BPF_F_CPU created element
-Date: Thu, 24 Sep 2026 19:23:21 +0900
-Message-ID: <20260924102321.2120434-3-donggeunyoo.kernel@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260924102321.2120434-1-donggeunyoo.kernel@gmail.com>
-References: <20260924102321.2120434-1-donggeunyoo.kernel@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B3Dbduyr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBD981F000FF;
+	Thu, 24 Sep 2026 10:46:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790246805;
+	bh=pHwjyd75jGXUA28aQ8EhKH5vE+R5WhiWoZJE1UJa0W4=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=B3Dbduyr3JmYwWReoyQlsQGv9XPzKelGrn19zLIfHBCv0wvTvoAdX9pBGzzUYWyT/
+	 ri9EaAHfZ1af8ehO1b8GP1d+lCIrLGoJr+4vBIijg5HkreCiM0txbUefaAqxkSKmWf
+	 5DiNxeUVI0fC6PEFEQjTTKdxLg4EO/GXt9x2t+xTf0jP+SM3QWK4MThVV6xNJQj2rY
+	 +Q4rbwWdkdD6/cySQJFi8OXr3SZk+SxVEyglxVC/uwhlG5ocjlBLpWrKP4zK4Ot+C9
+	 AP3w4lkafbsO8PpJhGUzPasZ4bTIFlBhWLwy9V6EUMetXS2oCGO7IVlbPJ5ZcCfvQr
+	 LVqFmknBNolTQ==
+Subject:
+ Re: [PATCH net v2 1/9] gve: increment work_done for XDP and error packets
+From: netdev-bot+sashiko@kernel.org
+To: joshwash@google.com
+Cc: netdev@vger.kernel.org, hramamurthy@google.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, jordanrhee@google.com,
+ willemb@google.com, thostet@google.com, nktgrg@google.com,
+ eddiephillips@google.com, pkaligineedi@google.com, jeroendb@google.com,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, stable@vger.kernel.org
+Date: Thu, 24 Sep 2026 10:46:44 +0000
+Message-ID: <179024680434.2160803.7562423537279284993@kernel.org>
+In-Reply-To: <20260922194533.631387-2-joshwash@google.com>
+References: <20260922194533.631387-2-joshwash@google.com>
+X-sashiko-severity: Medium
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The existing cpu_flag subtests always prime a key with BPF_F_ALL_CPUS
-before any BPF_F_CPU write, so the create path is never covered.
+Thank you for your contribution! Sashiko AI review found 2 potential
+issue(s) to consider.
 
-Add a subtest that creates the element with BPF_F_CPU on a map with
-max_entries 1, so the key can only reuse the element the previous key
-released, and check that the CPUs the update did not name read back
-zero.  Run it for PERCPU_HASH preallocated and BPF_F_NO_PREALLOC,
-whose per-cpu areas come from different allocators, and for
-LRU_PERCPU_HASH.
+Critical: 0 · High: 0 · Medium: 2 · Low: 0
 
-Under BPF_F_NO_PREALLOC the reuse is only guaranteed on the cpu that
-ran the delete, so pin the thread across the pair, and name a cpu other
-than that one in map_flags.
+If you believe none of the issues are legitimate, please reply to each
+issue of Medium severity or higher and explain why the AI is wrong.
+If any of them are legitimate and you plan to respin, please let patchwork
+know by including "pw-bot: cr" as a separate line at the end of your reply
+(one such reply per series is enough).
 
-Signed-off-by: Donggeun Yoo <donggeunyoo.kernel@gmail.com>
----
- .../selftests/bpf/prog_tests/percpu_alloc.c   | 105 ++++++++++++++++++
- 1 file changed, 105 insertions(+)
+- [Medium] The commit message describes only a NAPI `work_done`
+  accounting fix, but the patch also changes the semantics of the…
+- [Medium] The newly added receive packet/byte accounting for XDP-
+  consumed packets is unreachable for AF_XDP zero-copy buffers, so the…
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-index a72ae0b29f6e9..7b4a1e24363b5 100644
---- a/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-+++ b/tools/testing/selftests/bpf/prog_tests/percpu_alloc.c
-@@ -1,4 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <sched.h>
- #include <test_progs.h>
- #include "cgroup_helpers.h"
- #include "percpu_alloc_array.skel.h"
-@@ -350,6 +352,103 @@ static void test_lru_percpu_hash_cpu_flag(void)
- 	test_percpu_map_cpu_flag(BPF_MAP_TYPE_LRU_PERCPU_HASH);
- }
- 
-+/*
-+ * A BPF_F_CPU update that creates an element must zero the value on the other
-+ * cpus, rather than leave them holding whatever the recycled element last
-+ * contained. max_entries is 1 so the second key can only reuse the element
-+ * the first one released.
-+ */
-+static void test_percpu_map_cpu_flag_create(enum bpf_map_type map_type, __u32 map_flags)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = map_flags);
-+	const u32 stale = 0xDEADC0DE, fresh = 0xC0FFEE;
-+	int nr_cpus, cpu, map_fd, err, key;
-+	int pinned_cpu, value_cpu;
-+	cpu_set_t old_mask, new_mask;
-+	bool restore_mask = false;
-+	u32 value;
-+	u64 flags;
-+
-+	nr_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	if (nr_cpus < 2) {
-+		test__skip();
-+		return;
-+	}
-+
-+	map_fd = bpf_map_create(map_type, "cpu_flag_create", sizeof(key), sizeof(value), 1, &opts);
-+	if (!ASSERT_GE(map_fd, 0, "bpf_map_create"))
-+		return;
-+
-+	/* NO_PREALLOC recycles per cpu, so keep the delete and the create on one cpu. */
-+	err = sched_getaffinity(0, sizeof(old_mask), &old_mask);
-+	if (!ASSERT_OK(err, "sched_getaffinity"))
-+		goto out;
-+
-+	pinned_cpu = sched_getcpu();
-+	if (!ASSERT_GE(pinned_cpu, 0, "sched_getcpu"))
-+		goto out;
-+
-+	CPU_ZERO(&new_mask);
-+	CPU_SET(pinned_cpu, &new_mask);
-+	err = sched_setaffinity(0, sizeof(new_mask), &new_mask);
-+	if (!ASSERT_OK(err, "sched_setaffinity"))
-+		goto out;
-+	restore_mask = true;
-+
-+	value_cpu = pinned_cpu ? 0 : 1;
-+
-+	key = 1;
-+	value = stale;
-+	err = bpf_map_update_elem(map_fd, &key, &value, BPF_F_ALL_CPUS);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem all_cpus"))
-+		goto out;
-+
-+	err = bpf_map_delete_elem(map_fd, &key);
-+	if (!ASSERT_OK(err, "bpf_map_delete_elem"))
-+		goto out;
-+
-+	key = 2;
-+	value = fresh;
-+	flags = (u64)value_cpu << 32 | BPF_F_CPU;
-+	err = bpf_map_update_elem(map_fd, &key, &value, flags);
-+	if (!ASSERT_OK(err, "bpf_map_update_elem specified cpu"))
-+		goto out;
-+
-+	for (cpu = 0; cpu < nr_cpus; cpu++) {
-+		value = 0;
-+		flags = (u64)cpu << 32 | BPF_F_CPU;
-+		err = bpf_map_lookup_elem_flags(map_fd, &key, &value, flags);
-+		if (!ASSERT_OK(err, "bpf_map_lookup_elem_flags specified cpu"))
-+			goto out;
-+		if (!ASSERT_EQ(value, cpu == value_cpu ? fresh : 0, "value on specified cpu"))
-+			goto out;
-+	}
-+
-+out:
-+	if (restore_mask)
-+		sched_setaffinity(0, sizeof(old_mask), &old_mask);
-+	close(map_fd);
-+}
-+
-+static void test_percpu_hash_cpu_flag_create(void)
-+{
-+	test_percpu_map_cpu_flag_create(BPF_MAP_TYPE_PERCPU_HASH, 0);
-+}
-+
-+static void test_percpu_hash_cpu_flag_create_malloc(void)
-+{
-+	test_percpu_map_cpu_flag_create(BPF_MAP_TYPE_PERCPU_HASH, BPF_F_NO_PREALLOC);
-+}
-+
-+static void test_lru_percpu_hash_cpu_flag_create(void)
-+{
-+	/* lru without prealloc is -ENOTSUPP, so there is no malloc variant */
-+	test_percpu_map_cpu_flag_create(BPF_MAP_TYPE_LRU_PERCPU_HASH, 0);
-+}
-+
- static void test_percpu_cgroup_storage_cpu_flag(void)
- {
- 	struct percpu_alloc_array *skel = NULL;
-@@ -454,6 +553,12 @@ void test_percpu_alloc(void)
- 		test_percpu_hash_cpu_flag();
- 	if (test__start_subtest("cpu_flag_lru_percpu_hash"))
- 		test_lru_percpu_hash_cpu_flag();
-+	if (test__start_subtest("cpu_flag_create_percpu_hash"))
-+		test_percpu_hash_cpu_flag_create();
-+	if (test__start_subtest("cpu_flag_create_percpu_hash_malloc"))
-+		test_percpu_hash_cpu_flag_create_malloc();
-+	if (test__start_subtest("cpu_flag_create_lru_percpu_hash"))
-+		test_lru_percpu_hash_cpu_flag_create();
- 	if (test__start_subtest("cpu_flag_percpu_cgroup_storage"))
- 		test_percpu_cgroup_storage_cpu_flag();
- 	if (test__start_subtest("cpu_flag_array"))
+--
+
+gve: increment work_done for XDP and error packets
+
+The DQO RX poll loop now increments work_done for every end-of-packet
+completion instead of only for completions that produced an SKB, so XDP
+and error packets are charged against the NAPI budget. The packet and
+byte counters were moved into a separate rx_packets accumulator plus a
+new increment on the XDP non-PASS path.
+
+> diff --git a/drivers/net/ethernet/google/gve/gve_rx_dqo.c b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
+> index 5cf242b285577..c3f4a76b0fac5 100644
+> --- a/drivers/net/ethernet/google/gve/gve_rx_dqo.c
+> +++ b/drivers/net/ethernet/google/gve/gve_rx_dqo.c
+> @@ -932,6 +932,10 @@ static int gve_rx_dqo(struct napi_struct *napi, struct gve_rx_ring *rx,
+>  		if (xdp_act != XDP_PASS) {
+>  			gve_xdp_done_dqo(priv, rx, &gve_xdp.xdp, xprog, xdp_act,
+>  					 buf_state);
+> +			u64_stats_update_begin(&rx->statss);
+> +			rx->rpackets++;
+> +			rx->rbytes += compl_desc->packet_len;
+> +			u64_stats_update_end(&rx->statss);
+>  			return 0;
+>  		}
+
+[Severity: Medium]
+Is this new accounting reachable for AF_XDP zero-copy buffers?
+
+gve_rx_dqo() dispatches those buffers before the xprog block above:
+
+	xprog = READ_ONCE(priv->xdp_prog);
+	if (buf_state->xsk_buff)
+		return gve_rx_xsk_dqo(napi, rx, compl_desc, buf_state, xprog);
+
+and gve_rx_xsk_dqo() takes its own non-PASS exit, which updates only
+xdp_actions[] via gve_xsk_done_dqo() and leaves rx->ctx.skb_head NULL:
+
+	if (xprog) {
+		xdp_act = bpf_prog_run_xdp(xprog, xdp);
+		buf_len = xdp->data_end - xdp->data;
+		if (xdp_act != XDP_PASS) {
+			gve_xsk_done_dqo(priv, rx, xdp, xprog, xdp_act);
+			gve_free_buf_state(rx, buf_state);
+			return 0;
+		}
+	}
+
+With the reworked loop below, such a completion bumps work_done and then
+hits "if (!rx->ctx.skb_head) continue;", so it is never added to
+rx_packets/bytes either. Should a DQO queue running zero-copy with a
+program that mostly returns XDP_DROP/XDP_TX/XDP_REDIRECT keep reporting
+0 rx_packets/rx_bytes while the same program on the copy path now
+reports them?
+
+The GQI path counts XDP-consumed packets in rpackets/rbytes
+(gve_rx_no_hsplit() does "ctx->total_size += frag_size; goto
+finish_ok_pkt;"), so the DQO zero-copy path looks like the only
+remaining outlier.
+
+[Severity: Medium]
+The commit message only describes the work_done change:
+
+    Ensure every packet is accounted for in work_done by incrementing
+    work_done before checking for the existence of a SKB.
+
+Could it also mention that rx->rpackets/rx->rbytes semantics change?
+XDP_DROP/XDP_ABORTED/XDP_TX/XDP_REDIRECT packets on the non-zero-copy
+DQO path did not previously contribute to these counters, and
+gve_get_stats() folds them into rtnl_link_stats64 rx_packets/rx_bytes:
+
+	packets = priv->rx[ring].rpackets;
+	bytes = priv->rx[ring].rbytes;
+	...
+	s->rx_packets += packets;
+	s->rx_bytes += bytes;
+
+The note "corrected stat counting for packets relative to work_done"
+sits below the --- separator, so it will not be part of the git history,
+and the patch carries Fixes: 293b49361f91 plus Cc: stable@vger.kernel.org.
+
+> @@ -1090,6 +1094,7 @@ int gve_rx_poll_dqo(struct gve_notify_block *block, int budget)
+>  	struct gve_rx_ring *rx;
+>  	struct gve_priv *priv;
+>  	u64 xdp_redirects;
+> +	u32 rx_packets = 0;
+>  	u32 work_done = 0;
+>  	u64 bytes = 0;
+>  	u64 xdp_txs;
+> @@ -1150,13 +1155,14 @@ int gve_rx_poll_dqo(struct gve_notify_block *block, int budget)
+>  		/* Free running counter of completed descriptors */
+>  		rx->cnt++;
+>  
+> -		if (!rx->ctx.skb_head)
+> -			continue;
+> -
+>  		if (!compl_desc->end_of_packet)
+>  			continue;
+>  
+>  		work_done++;
+> +
+> +		if (!rx->ctx.skb_head)
+> +			continue;
+> +
+>  		pkt_bytes = rx->ctx.skb_head->len;
+>  		/* The ethernet header (first ETH_HLEN bytes) is snipped off
+>  		 * by eth_type_trans.
+> @@ -1164,6 +1170,9 @@ int gve_rx_poll_dqo(struct gve_notify_block *block, int budget)
+>  		if (skb_headlen(rx->ctx.skb_head))
+>  			pkt_bytes += ETH_HLEN;
+>  
+> +		rx_packets++;
+> +		bytes += pkt_bytes;
+> +
+>  		/* gve_rx_complete_skb() will consume skb if successful */
+>  		if (gve_rx_complete_skb(rx, napi, compl_desc, feat) != 0) {
+>  			gve_rx_free_skb(napi, rx);
+
+[Severity: Medium]
+Related to the commit message question above: moving "bytes += pkt_bytes"
+ahead of the gve_rx_complete_skb() failure branch means packets the
+driver drops here (and also counted in rx_desc_err_dropped_pkt) now add
+their bytes to rx_bytes, where previously they did not. Is that change
+intended, and should it be described in the changelog?
+
+> @@ -1173,7 +1182,6 @@ int gve_rx_poll_dqo(struct gve_notify_block *block, int budget)
+>  			continue;
+>  		}
+>  
+> -		bytes += pkt_bytes;
+>  		rx->ctx.skb_head = NULL;
+>  		rx->ctx.skb_tail = NULL;
+>  	}
+> @@ -1187,7 +1195,7 @@ int gve_rx_poll_dqo(struct gve_notify_block *block, int budget)
+>  	gve_rx_post_buffers_dqo(rx);
+>  
+>  	u64_stats_update_begin(&rx->statss);
+> -	rx->rpackets += work_done;
+> +	rx->rpackets += rx_packets;
+>  	rx->rbytes += bytes;
+>  	u64_stats_update_end(&rx->statss);
+>
+
 -- 
-2.53.0
-
+Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260922194533.631387-1-joshwash%40google.com
