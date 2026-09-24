@@ -1,35 +1,72 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f42.google.com (mail-pj2-f42.google.com [74.125.227.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B26D4AA57C
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 18:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F20924AAC5F
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 18:21:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790273484; cv=none; b=RaXjvOgNysME034vl71VLTNPVoAEGVKkZ8Yo2u9YYVxjnf4sUBO8BH0O0msyO33G8U1vJ0AuEbdUx68KqSfCZaMoPoGEGCuP5/iXZNPOtnGGoWGPrH/q8vZgNUQ9BZ/X/D0yJ+9KubzH/YXd+Mopcc2m66y1q1L0qa2HQyIaQQk=
+	t=1790274069; cv=none; b=gYoLTkd6RrVHu4VfBr6sHlAPWLXGOHP73LVli3ymwbEhD90/mgp8hauqy/JIgLVXgBcRZb2yTvPw6RV/iY7GWEZO+fGYV4arzGRei4cWVPNsaN4NCFVCBn97huvyeVeY17MbwpDQAwiOUSL1WAHeFH00zEkOQ4pgBTxwH2wPrxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790273484; c=relaxed/simple;
-	bh=2UqZlfTNdlcicZ7dzpiHjHHb/5BEYKtuQq/dlIBsXYI=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=DrQiQ7By1vWEWS1tuQ8Lrz2icZ9stt75frnQLOS35rIPtoQL31+0/maPzvKuVWMFK460zDGpurBVBwYsyJ/8+eYpp2qmVYVtY+t54RsMNacVJ63ZvmWV3pz/n/asO74KvlpzX8XQu8Smr9Djb5SmCpxL6jTyiSqH3iYtbJWxL5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ezhQ4idz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790274069; c=relaxed/simple;
+	bh=JnfT7VS81piH6sp71u+n8Tk+bZUWlQM5+MR54GoQGYA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=N8Te9d51Gt3pg9aWI7RQTjAZqmJJrDCEQDr6Gg6ElSWMTPjEbkzRYSSVOiztcPSg0+ITY7TYnoFnWVjBDUUNrl2BEk39q8M8Xsk4vVFJhvoNmlBjtdEJxi5LQ6q+q6Bd/lMtv8DtwSWdD0Bqu/B0vR2bUH8bc/A+S3JgliN5Lp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ss4zQU+D; arc=none smtp.client-ip=74.125.227.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ezhQ4idz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEDB11F000FF;
-	Thu, 24 Sep 2026 18:11:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790273482;
-	bh=YiiVPQBEvCATubzTYyt43qfDxWzT5lDK1cYabKTnv+4=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=ezhQ4idzBZGH0ZpMB1KCNuMudqJP8VwvCILLByuHQtOMJxkBhj0eD+gmDIrAnw+k1
-	 ZMLCe1WNLu8HGaDLnHBHvYRWYPdHiPzFNlPyp01OdsDXBs/V3Fjc0buQYOOFyVoqzg
-	 8vkhD+Z0/HKNMAOrfSn7AEZxBlvqMjvN1NcBPQrs8AzbKcfy6tmFe8DeojdtX43CTM
-	 lPcCvacgDdnkOYuI53e0fQQnuWonnelxG5/70daaWNBqQgRJ9CgAGHmtPuh1+hTVWt
-	 P/6J+r5B92DDthcc23bLU/dF7g/gNAJvA8JYy7AfKvDxfMm8bRczjUICpL7kcZ0jd9
-	 Aylxf93ojueeA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D09E83A566DD;
-	Thu, 24 Sep 2026 18:10:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ss4zQU+D"
+Received: by mail-pj2-f42.google.com with SMTP id 98e67ed59e1d1-396ccd5cf02so121722a91.3
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 11:21:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790274067; x=1790878867; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=pu+cf2HW60Bu22Jh2AbwJqeaS4sqcr7R3fh3cTR6Qkk=;
+        b=Ss4zQU+DbmFF/wCoGs0IHr580auFZ1/msN98ZHoV/OMTPY2waI2nt3u/hPztHA9bWI
+         4Hhg2V3ehyUle2aRiyZk19AAHcOg3S3wkMEinMywx32xi5jg0Utj28GeUAgTZmwtIOjC
+         fwWvxfLMMWXk01H3ySd/jMvM8GZU5h4pqlWaMpKCkhI4ehVbO6e/MT0zHH9KBAcR6Opm
+         If9HaUmDgaBLqJehyqY9s8ChrrU07wEfgOI/K1X5X6eESJfaH+qrGofzhkN14bzKsilx
+         o1Ky+AR2QZVZQrE+vY0LMOHJ6plnHe89UiNZlxHFY2JkFKuqxteOCCNAM0YWENvXI53J
+         z4ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790274067; x=1790878867;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=pu+cf2HW60Bu22Jh2AbwJqeaS4sqcr7R3fh3cTR6Qkk=;
+        b=nPUNrO8QfgBWqRnlr6B0rcVzApTjD0LCgQuq72pxutff724q2lOR+OTJe8AllNsU5W
+         fCD6g6kSyhET/OIix/Ide/gfUgUQqS1uKBioZ2OObyE2NuqdtpNRbBEbCbxMjqyvzc/w
+         waw8dWXUCLDcvqfv9iY1C4eHvU0wpSomekofC/2MrfhcPcvOf7o4+lgjxBq0GgCUkqlp
+         KqrA1J4oTGKfNJu3s92vquvVFASy/sU1Tb05d3ifkW1VD3WnrpbTQ6Lx7G5Vh5MqT8Zt
+         jXIjb5xm1IfT1miKbyl5bdyCzAEKsLTeBIFtAKEeynw9vVbLqENp1WT5atqgZY/lA2Q4
+         aBGg==
+X-Gm-Message-State: AFuF++nCjZqJ360wNJseHrt9eRULIfcFuPt4h1jRUxgHTgdKCu7OyQ1p
+	L+kzFbMIHZzGQuSdDASE/5ucS3LC825rSlS5d5HGhR0hgdDzhhq5a+P9L87u3A==
+X-Gm-Gg: AYBFou1pgcAZP+qeK4oCoayu2vzjzDRfwb4FzYEllty6TsjpdbevM2Qg0p8WzuBULm/
+	fpOS0BLBoCC9Cm2OLuI/3L35Rayl07wTqnSxnQGes8cl6/A0DT3Xc6GyCdxFKi54XMAQ/d+t7J+
+	5qyakm2grLT9IJAmrWEUwj2xfPY1SR9L5D3NiZGy2i/Y5Px8dp4Lo2E7hQbZTzwWogw8dw+yqds
+	HlrjmHVfiSBr4KypHmd6a9rPqGzIBj68jKIob2sZvN0We+yIQzjdVaDdH7l1fzjxP/2jbnzEXSR
+	z5+jB0qDXQu4GfuhBFGu+XcP/MyGR4uMRiQB6M0JtuV34npx6NFgOJWf1+v+BqgeOqigmBqdEED
+	bKisx+5XLzWwmJ629jk0fAApHyy0l9QE1JAhaFNm6mR+wgsHmQ2gTQPyuSf2m5YLLdJzxENq3No
+	6xl+rxJW0HVS7JytksHAyDt3NrFo3oZvPTieB2PLL8wCwkYt7fFhyjHPZhPqf3rWvxYU2Tuy4D5
+	X65yG8QB09mi9divVubFQIrU9BwlrVipDdkhPhil5+s3j3IXKJxHymZak9zdg1UsWG1SAS7+5M4
+	ru7USdwvLyfiEF8ki2MF+UfY6sCXkGRurLjEhk4N6C5s
+X-Received: by 2002:a17:90b:2649:b0:3a0:b223:683e with SMTP id 98e67ed59e1d1-3a0b2236bfbmr564658a91.48.1790274067055;
+        Thu, 24 Sep 2026 11:21:07 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.247])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a09773d402sm6468056a91.16.2026.09.24.11.21.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2026 11:21:06 -0700 (PDT)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Subject: [PATCH bpf-next] selftests/bpf: Fix build of callx tests with GCC
+Date: Thu, 24 Sep 2026 18:21:04 +0000
+Message-ID: <20260924182104.261823-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,77 +74,129 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 00/18] Raise BPF program stack size to 2KiB
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179027341165.1690644.15234244935000712349.git-patchwork-notify@kernel.org>
-Date: Thu, 24 Sep 2026 18:10:11 +0000
-References: <20260924165740.2146806-1-memxor@gmail.com>
-In-Reply-To: <20260924165740.2146806-1-memxor@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com, tj@kernel.org,
- kkd@meta.com, kernel-team@meta.com
 
-Hello:
+From: Alexei Starovoitov <ast@kernel.org>
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+GCC doesn't support indirect calls in BPF:
 
-On Thu, 24 Sep 2026 18:57:01 +0200 you wrote:
-> BPF programs get 512 bytes of stack. This series raises that to 2 KiB
-> on x86-64 and arm64. The budget covers a whole call chain, or each frame
-> on a private stack, and a single function may use all of it. The
-> interpreter, offloaded programs and the other JITs keep 512 bytes.
-> 
-> The x86-64 and arm64 JITs do not depend on 512-byte frames: both encode
-> frame sizes in wide enough immediates, and on both a tail call pops the
-> caller's frame and lands in the target's prologue before the target sets
-> up its own.
-> 
-> [...]
+  progs/verifier_callx.c: In function 'apply_op':
+  progs/verifier_callx.c:977:1: error: indirect call in function, which are not supported by eBPF
+  progs/verifier_callx_rodata.c: In function 'use_shape':
+  progs/verifier_callx_rodata.c:746:1: error: indirect call in function, which are not supported by eBPF
 
-Here is the summary with links:
-  - [bpf-next,v4,01/18] bpf: Add accessors for verifier stack slots
-    https://git.kernel.org/bpf/bpf-next/c/3b8da394c289
-  - [bpf-next,v4,02/18] bpf: Widen the stack slot index in the jump history
-    https://git.kernel.org/bpf/bpf-next/c/a9082d8a54c6
-  - [bpf-next,v4,03/18] bpf: Store linked registers in the jump history as an array
-    https://git.kernel.org/bpf/bpf-next/c/9eda94d7e898
-  - [bpf-next,v4,04/18] bpf: Track backtracking stack slots with bitmaps
-    https://git.kernel.org/bpf/bpf-next/c/765e7328d64d
-  - [bpf-next,v4,05/18] bpf: Track scratched stack slots with a bitmap
-    https://git.kernel.org/bpf/bpf-next/c/ec373f1f0788
-  - [bpf-next,v4,06/18] bpf: Treat unknown-size stack reads as reaching the frame top
-    https://git.kernel.org/bpf/bpf-next/c/1e054ab4aad6
-  - [bpf-next,v4,07/18] bpf: Size liveness stack masks by the stack each frame uses
-    https://git.kernel.org/bpf/bpf-next/c/481ceda77aeb
-  - [bpf-next,v4,08/18] bpf: Grow the verifier id scratch on demand
-    https://git.kernel.org/bpf/bpf-next/c/9f3d900a69be
-  - [bpf-next,v4,09/18] selftests/bpf: Cover the tail call caller stack depth limit
-    https://git.kernel.org/bpf/bpf-next/c/7fc140ba3dd9
-  - [bpf-next,v4,10/18] selftests/bpf: Check that narrow stack stores define no slot
-    https://git.kernel.org/bpf/bpf-next/c/76ab55b45244
-  - [bpf-next,v4,11/18] selftests/bpf: Check liveness merge of masks with different widths
-    https://git.kernel.org/bpf/bpf-next/c/10e9fa2b0b20
-  - [bpf-next,v4,12/18] bpf: Size the per-frame verifier structures for a 2 KiB stack
-    https://git.kernel.org/bpf/bpf-next/c/ecc441fc774e
-  - [bpf-next,v4,13/18] bpf: Bound program stack use by a per-program limit
-    https://git.kernel.org/bpf/bpf-next/c/9cfc28c9a8e6
-  - [bpf-next,v4,14/18] selftests/bpf: Add load conditions on the program stack limit
-    https://git.kernel.org/bpf/bpf-next/c/4fc52c1b549b
-  - [bpf-next,v4,15/18] selftests/bpf: Give the 512-byte stack boundary tests a 2 KiB twin
-    https://git.kernel.org/bpf/bpf-next/c/41fc2320aafe
-  - [bpf-next,v4,16/18] bpf, x86: Allow programs 2 KiB of stack
-    https://git.kernel.org/bpf/bpf-next/c/9f3bcf081ded
-  - [bpf-next,v4,17/18] bpf, arm64: Allow programs 2 KiB of stack
-    https://git.kernel.org/bpf/bpf-next/c/1d5306c11da2
-  - [bpf-next,v4,18/18] selftests/bpf: Test the 2 KiB stack budget
-    https://git.kernel.org/bpf/bpf-next/c/17d6fa978c00
+Build verifier_callx, verifier_callx_rodata and callx_rodata progs
+with clang only. Skip callx_rodata_lskel test when progs are built
+with GCC.
 
-You are awesome, thank you!
+Fixes: e9b22d50796d ("selftests/bpf: Add tests for callx")
+Fixes: b018e998e645 ("selftests/bpf: Add tests for callx through pointers in read-only data")
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+---
+ .../bpf/prog_tests/callx_rodata_lskel.c       |  6 ++++
+ .../selftests/bpf/progs/callx_rodata.c        | 28 +++++++++++++++++--
+ .../selftests/bpf/progs/verifier_callx.c      |  3 +-
+ .../bpf/progs/verifier_callx_rodata.c         |  3 +-
+ 4 files changed, 36 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c b/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
+index 96f6179f0492..6a43b880d730 100644
+--- a/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
++++ b/tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
+@@ -35,6 +35,12 @@ void test_callx_rodata_lskel(void)
+ 	if (!ASSERT_OK_PTR(skel, "open"))
+ 		return;
+ 
++	/* gcc doesn't support indirect calls */
++	if (skel->rodata->skip) {
++		test__skip();
++		goto out;
++	}
++
+ 	skel->rodata->bias = 7;
+ 
+ 	if (!ASSERT_OK(callx_rodata_lskel__load(skel), "load"))
+diff --git a/tools/testing/selftests/bpf/progs/callx_rodata.c b/tools/testing/selftests/bpf/progs/callx_rodata.c
+index 07ae2d1b6b8e..e3f8335f80f8 100644
+--- a/tools/testing/selftests/bpf/progs/callx_rodata.c
++++ b/tools/testing/selftests/bpf/progs/callx_rodata.c
+@@ -1,16 +1,21 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* callx through pointers to functions in .rodata, loaded by light skeleton */
+ 
++#include <stdbool.h>
+ #include <linux/bpf.h>
+ #include <bpf/bpf_helpers.h>
+ 
+-typedef int (*op_fn)(int);
+-
+ /* set by user space before the programs are loaded, it's in .rodata too */
+ const volatile int bias = 1;
+ 
+ int op_idx;
+ 
++#ifdef __clang__
++
++const volatile bool skip = false;
++
++typedef int (*op_fn)(int);
++
+ static __noinline int add_bias(int x)
+ {
+ 	return x + bias;
+@@ -41,6 +46,25 @@ int both_ops(void *ctx)
+ 	return ops[1](ops[0](4));
+ }
+ 
++#else
++
++/* gcc doesn't support indirect calls */
++const volatile bool skip = true;
++
++SEC("socket")
++int select_op(void *ctx)
++{
++	return 0;
++}
++
++SEC("socket")
++int both_ops(void *ctx)
++{
++	return 0;
++}
++
++#endif
++
+ /* no callx here */
+ SEC("socket")
+ int read_bias(void *ctx)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_callx.c b/tools/testing/selftests/bpf/progs/verifier_callx.c
+index ea3d3f97da31..bc31d0221f6a 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_callx.c
++++ b/tools/testing/selftests/bpf/progs/verifier_callx.c
+@@ -6,7 +6,8 @@
+ #include "bpf_misc.h"
+ #include "../../../include/linux/filter.h"
+ 
+-#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
++/* gcc doesn't support indirect calls */
++#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && defined(__clang__)
+ 
+ #define CALLX_INSN(DST, SRC, OFF, IMM) \
+ 	BPF_RAW_INSN(BPF_JMP | BPF_CALL | BPF_X, DST, SRC, OFF, IMM)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
+index 65d34769c8bf..db3169a1ddf6 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
++++ b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
+@@ -6,7 +6,8 @@
+ #include "bpf_misc.h"
+ #include "../../../include/linux/filter.h"
+ 
+-#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
++/* gcc doesn't support indirect calls */
++#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && defined(__clang__)
+ 
+ /*
+  * Read-only data with pointers to functions, where the compiler puts tables
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.55.0
 
