@@ -1,117 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 620053C3F4B;
-	Thu, 24 Sep 2026 15:03:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B9D4854ED
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 15:12:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790262200; cv=none; b=ko88s3RtZ5BKW2e1Rn+z4FfxIEl68ic+RHvmuhg25nhrvA+pK6pCNwthhi99pQUEVitTmZyZ5zh7f78JdOXNWofYY3nPgLzIBzQyhqT6H0wV7YzGB8mpOwPXg+FB7NROF47KoxO4wuXSJ0JY53G9uazcMR5zlPkos+QfB+/JM3Q=
+	t=1790262773; cv=none; b=WcF/TwizXZBtx0Kd96HttF1VbLbOPJR0OPySrln+xMu2KMgXBPKgbG25AWKoxYQfv8vRQrGEV4mpKStOaXVGqIjq0MK0RffQMo4goAze7uelv3vYeqANaawHaTuBkO1+IVbvs83byxrpyNPQI7wFQcP2Wz7Ebsw4IRngZ0EBIMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790262200; c=relaxed/simple;
-	bh=FQnSwZUmrwrYXPPavatTEU6DVMM/WNs5hDeCgI9yiH8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Kkgqc31DRLw3P9xsRKV0cHnoBl0Ik6Rbd9biwmrlLPum5oQY/mzPH/iAuNS/STpH3lvHBp8lQwXPpKU4TPihwFkBx86Ppcnoef1zzq4ug7kOOL6j+ua23JJ4mtbOIGoHSm7km7jhC+YLIs3Wfe8/Q6FLhs3YrbTZCFxRKYpIdCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CKKlX2PD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790262773; c=relaxed/simple;
+	bh=JpgBke/JjVNFxU3pQATjnBoTHzf7n6UOIVD/oEzarCQ=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=GqXkc3e+jmM537t06mExFDUbeGvopOfNBBRQmre5Zx5pxQWI5rOASnxLV80a3c4QYFlrllmqwnqe518ZrOjPclcObltrpzYbSYyEmp0eUiNuCFEZe5jTV6ekwW9ChNBMVSaJF9Lj994rueifQ6BCHcohIwiFq9ZxeHAGENoiDu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bC4B/rND; arc=none smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CKKlX2PD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 441851F000FF;
-	Thu, 24 Sep 2026 15:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790262196;
-	bh=rbI3J5MByOqOf6dl+z31TMJPnlEaks35mTvEW1B2isk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=CKKlX2PDopw4V/FG5N+J2hHi95G/OP+TAIXWBHQEO1AKEU0nskH8Xd1WjjBpAHaej
-	 qbQrqjWXnN7jt1t6tS49pbAys1YTcSbvK8HycJpXul+v1jpuCEDwV6Gl1jN3zW0tWh
-	 j48OOJ5XWAJMgPLfDUh0TbX7OVTZYtzV9gazFKBY0htB+yRccKfU9KxPbeA5fdqPXz
-	 lNVyfbU2Qe9jcIVAIpz2tr5j/Ln+wA0bGihFeni+XTPzrpp8f3Jpovw7BSEciXA4ag
-	 +3b7lka90+Y5U1enhzdCgNZL+kM2w7upW0UY/lDsWkhulr2X+hhjiWk7yd/zqWB5EU
-	 RHrc1vZrLL3Hw==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Chen Pei <cp0613@linux.alibaba.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com,
- puranjay@kernel.org
-Cc: ihor.solodrai@linux.dev, eddyz87@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, pulehui@huawei.com, pjw@kernel.org,
- palmer@dabbelt.com, shuah@kernel.org, guoren@kernel.org,
- bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 0/2] bpf, riscv: Add support for indirect jumps
-In-Reply-To: <20260924102938-gotox-v2-style-question-cp0613@linux.alibaba.com>
-References: <20260923130856.1157-1-cp0613@linux.alibaba.com>
- <20260924102938-gotox-v2-style-question-cp0613@linux.alibaba.com>
-Date: Thu, 24 Sep 2026 17:03:13 +0200
-Message-ID: <87ld8qpu8e.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bC4B/rND"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2db1ca06a25so10725375ad.2
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 08:12:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790262771; x=1790867571; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=gvSKNoOn4vM5/R0bP+3l0LZ3cRQeqnoPEjhgdn22ZdU=;
+        b=bC4B/rND7JfkAvoIxmBZXIIOBMN3gd+qUaEQyRTg55SIj1ZfcV3btv5FWGEs/8YeQJ
+         twEKbE79/Oz1vmj8uE9uqOBrXQt7NGEQrC95drBmtohj6HonT8qPCgYWkxrV4X0y772G
+         t4BnwkOQ9iZT+oOcHmgAOYojbuqaZoID1GVuzBvAZqCH/fRqHYuwzZZkeYVTKFZwqUjE
+         6vTgU/pMFg6W0TS2nXP3jotLyVfhiZ7FavKv5bTZW33GN4hE0anwu572LtYHfENhebok
+         PzdujddDN81Nvc2Q8YjiRYVHIOLOWSfZdGX58wVuqueONLc2MIkf/Pj8pA0/lZKrbrwH
+         hc9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790262771; x=1790867571;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gvSKNoOn4vM5/R0bP+3l0LZ3cRQeqnoPEjhgdn22ZdU=;
+        b=xPCldIRowfpPAf2menxKSC9sPrSkSUFD/mpEEbIJ5wrPAX4C68HmiINI2Te0o1ia0P
+         9OXibjxzgjRLqxGNpOeoneUlXoZuBSW0ojaM/00Ne4AmzJy2DVg2tLI3CSDINL4vvIhR
+         4Mf1+v3CwDEk/FBx46B+OloeBnCb9q+FVFLClqyXdDlYqo6v1o94UD9PFrfb1oH9kdF6
+         8eW9TM//HMX6A32j/FqpBz9nN25oWqJQ4gaQD3ae7eVEI145kV0vJHtnayI2rWOINDXL
+         BieMGp0XG/eYpLiedll3rJkQQcP1Jiy4VPmIIFLigX4eCicN+PrmKgknu92TPEdYhX+b
+         IvvA==
+X-Forwarded-Encrypted: i=1; AKwUvBz7NvubWcB7o7ZFEI+LFEq5knK/TWfFxD+9m1XboePi6BABb3EV3M+oOgN73iZvfBfPaSc=@vger.kernel.org
+X-Gm-Message-State: AFuF++lFApwXKKCMu/CI15FZA79osk26zd45qhI+CAQ6ZD0il6hNqcv0
+	FoejvSgQzP/5zqR7jBCd3q/SkUVFDyY62MpGc49CfFqrIWgJ0Opdq4Dj
+X-Gm-Gg: AYBFou1vRwGonGdMtedXzXv6iMEoUG3kCj0BdJEgmXwAz4dMjCN1xQeTPQuAuuORkq7
+	1pOq+uAB+UuNyw/Y/6DZycKfNS+cDXCGL+nGrJ/ErI9drkbpPvRNe/j4DyVxQ9EaLmx63NoZW4H
+	ohcUNjQg4h3GAOFqZvRzqbdRDFO2nQR8TlxUtvVjENmtm9k8RJeRChduN+MBExzMweijsQc1Lbd
+	xBKQb2eaylbdkxq7gkLG5/401ZcuU/rDM9X5sd1PGeAJ/TckhmGMEoQlYfaBcH4nUbGrzMAzNMO
+	r1wHro1mN8LjmqYGzgglD+v07jULzfeCvxXYGYbTteoUzdGAkFcA5EltRHium07JRl68M30hXAQ
+	CSENO5WnKaXDZjAEp3wVXVoedzjtqhde57Gi5GUV4Py1IORe3pkWAF3pGLrv98+uF+qfgACLEkg
+	3nj0rP9quUP7BqbcmFAmpaZpfxYQfwToGZIJY2iXI/i1050/PyXN54yK1jaE4wHkbDY7CKAimZb
+	m4Fo9lrKKRWRQ0O92YH8H1jWej2dbLv5r77e42iLJ3y83LVtB3kN4Bu0sVSRqX9xn0h/J29GaZH
+	SIQ=
+X-Received: by 2002:a17:903:2f8c:b0:2dd:c053:e0f9 with SMTP id d9443c01a7336-2df7e43e249mr21645835ad.40.1790262766431;
+        Thu, 24 Sep 2026 08:12:46 -0700 (PDT)
+Received: from localhost ([153.61.198.249])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6a5a7b76sm29253555ad.20.2026.09.24.08.12.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Sep 2026 08:12:45 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 24 Sep 2026 15:12:44 +0000
+Message-Id: <DLNN6OBVQG1W.3QKYZXB09YNWO@gmail.com>
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Tejun Heo" <tj@kernel.org>,
+ <kkd@meta.com>, <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v2 07/18] bpf: Size liveness stack masks by the
+ stack each frame uses
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
+In-Reply-To: <20260924082607.2695649-8-memxor@gmail.com>
+References: <20260924082607.2695649-1-memxor@gmail.com> <20260924082607.2695649-8-memxor@gmail.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-Hey!
+On Thu, Sep 24, 2026 at 10:25 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+> -	at_stack_in = kvmalloc_objs(*at_stack_in, len, GFP_KERNEL_ACCOUNT);
+> +	at_stack_in = kvmalloc_objs(*at_stack_in, (size_t)len * nslots, GFP_KERNEL_ACCOUNT);
 
-Chen Pei <cp0613@linux.alibaba.com> writes:
+at_stack_in is now len * nslots * sizeof(struct arg_track).
+One 8-byte store at fp-2048 makes nslots 256, so the subprog pays
+2560 bytes per insn instead of 640.
+A subprog with 900K insns and one such store asks kvmalloc for more
+than 2G and hits WARN_ON_ONCE(size > INT_MAX) in
+__kvmalloc_node_noprof().
 
-> Hi all,
->
-> Thanks for the reviews. Patch 1 is a plain wording fix and will go into
-> v2. For patch 2 I need your input on one thing before I respin: which
-> form of the #endif comment you would prefer.
->
-> Patch 1, on the comment above bpf_prog_update_insn_ptrs():
->
->> This isn't a bug, but could the comment say "shift ctx->offset[] by one"
->> rather than "shift the linfo array by one"? The jited_linfo was already
->> filled in by the bpf_prog_fill_jited_linfo() call above, and it is the
->> JIT's own offset table that is being rewritten here.
->
-> Agreed. Fixed in v2.
->
-> Patch 2, on the #endif marker in verifier_gotox.c:
->
->> [Severity: Low]
->> This isn't a bug, but does this newly introduced multi-line comment
->> follow the BPF subsystem style guide? The subsystem guidelines
->> explicitly require that multi-line comments have the opening '/*' on
->> its own line, rather than beginning text on the same line as the
->> opening marker.
->
-> I would rather collapse it to a single line, but there is more than one
-> way to spell it:
->
->   a) 89 columns, clean under scripts/checkpatch.pl --strict:
->
-> #endif /* __TARGET_ARCH_x86 || __TARGET_ARCH_arm64 || __TARGET_ARCH_power=
-pc || riscv64 */
->
->   b) 101 columns, keeps every macro name verbatim, but checkpatch then
->      reports "WARNING: line length of 101 exceeds 100 columns":
->
-> #endif /* __TARGET_ARCH_x86 || __TARGET_ARCH_arm64 || __TARGET_ARCH_power=
-pc || __TARGET_ARCH_riscv */
->
->   c) or a short marker that does not repeat the condition at all:
->
-> #endif /* gotox-capable arch */
->
-> I lean towards (a): tools/testing/selftests/bpf/progs/ otherwise only
-> uses single-line #endif markers, and "riscv64" matches the guard, which
-> is __TARGET_ARCH_riscv && __riscv_xlen =3D=3D 64.
->
-> I will send v2 with the patch 1 fix and whichever form you pick, together
-> with any other feedback, so please let me know if you would like anything
-> else changed. If nobody has a preference, I will go with (a) in a few
-> days.
+Should we clamp it somehow?
 
-Maybe just (d):
-  | #endif /* gotox: x86, arm64, powerpc, riscv64 */
-
-but (c) or (a) is fine as well, IMO.
-
-Feel free to add for the series for your v2:
-
-Reviewed-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
-Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
