@@ -1,164 +1,120 @@
-Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940D540F73F
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 07:18:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6792413789
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 07:53:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790234329; cv=none; b=pstoRzG5PmS08UZIlTGkhIl+qqrOgj0gHwDP0eLbEpE/8JPfelteKrlFVgxr8FNbndzfxUd/cz9mvdJnMJXOKrrnvNi2cb/XdnTv+4bswlk7tSC6AKHo9NE2JZucVk9rCoa/ybWaUq4AGn2bLfpckWOXHqEO3moXz6cc9t90dJY=
+	t=1790236439; cv=none; b=elCICPUJQcbtdmZeRB977uNtrhKlVAks82iNKG+u8K5FODKP60U6t3S/ti9IFWQUwKv/1opKRhNyvbEepGr/3Y66rfQVw5jUHyFVByTyHFqc/06AY9ETNo9JOZSHE/dND+xoVB24D6+liR80NlR8rim1zeEkWBBmDodM6A3jiAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790234329; c=relaxed/simple;
-	bh=RkQZIUAkC/CwNHAccWBmK7QrU2UwzqU4lzfZ5AArSQ0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=bXmXx1zzOWulX2/0pwD9KlDSWcrKkpyHrfzFXCiDPJ1+iyp+/gHPnQOVdmaCVgwdL193LJiDnIwUYfA/JHPshBrZ3jhZb9bXHy+kTAa8EKwWMqLR9ePz/sVeKv9p17rF1HLcmPcwFHawXN3cMIV7JkGk8COxyR8VqD9zCjqUj4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oGp6lhUf; arc=none smtp.client-ip=74.125.225.74
+	s=arc-20240116; t=1790236439; c=relaxed/simple;
+	bh=StkFi5tu0TWhQw83mflsWzE6rd7j3Dr5YHUtWci6wEc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E4LWwsgrQ/YfBYwXZbTtI6SvZr0hJRs4BOBTivnGLWw8qAfpC2gNByffNf7/SqzD6TsjfEEPYYKXOzeH70tARQtsWVqru2y1wnKHJv1DHvHP6RVGPe9YR/JGv8o6CjTAwF5yNZOmDFEL0JzX4nkCvpWO71GAgN3yqt/DbJWuC8g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZZhgUlMT; arc=none smtp.client-ip=74.125.225.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oGp6lhUf"
-Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-484373a2e82so922990f8f.0
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 00:18:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZZhgUlMT"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49e6bbf77e8so2739735e9.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 00:53:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790234322; x=1790839122; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=523fTptxsOAJ8wEQL/CwkuoPNTaX+slLlXT8PVpSULI=;
-        b=oGp6lhUfWvnkLvJ/MVURmlhVmC6OALMjPL+LGNxfAwbC9qlCXbRrSUzDdyqAqn/J9L
-         gmCMyGvkx4+uvATE2wOhLaY25Z0PDT/JjIvISRjXw0olQ+JxMiJcooXVf1KLKzP6n0Rf
-         fcBHr+kl1HyjajyY5VRWVRIOxc0tjdXYxx0SUppJOdy2KsfWvgzoCQFBCsDKzCGtYaL/
-         FzN9J7qrNLCOaG0ksSOW1G1hwYz673P+1mobMhbpPzlPPcqyQLvOjng/FNyDOT7SnH67
-         8ow/2hhWHqYj1tQhm2tWUylVxK+ie9chXkffpqjsHy6YqBVUuGgW3I/e6xGqA+Kv+T6g
-         SZqQ==
+        d=gmail.com; s=20251104; t=1790236434; x=1790841234; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=98lKZ5j8Do1HmaMCm8F3v9cW+qx+5YV3pRrKHyAEYAA=;
+        b=ZZhgUlMTAySSCAeuDxN7zggKebpzUPY8rWxbYxzO+ZyAXFQYiIOnd2AZL4D6334oNo
+         AmWkz+R7v3gqPkuAgVoywMLi666QKtHqZHeYtOdOjULdFtpLo79wVAJErJcYhrr+mCUw
+         8VXtY5OAJ+cSxBhWUg5MK+nyr4StS/gJO78TZrpkKVycyDFGwhta186RiRqhEPdvOYYR
+         QywADpWI3M3UFNDY4LRjTQtl3nmPmVdy6fbDYC7dmBWtUpNB3JLaeSBPSjG+AGYyIXQr
+         Z9jgbmCxG6HG5JiJSYInznNaR9T1/QzMLj1rCJKWnNwUZ9P0lt5ORzBuMSM9HphBzXjW
+         J5jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790234322; x=1790839122;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=523fTptxsOAJ8wEQL/CwkuoPNTaX+slLlXT8PVpSULI=;
-        b=hRx7/vfvFEUpFNN8fWoh2y4/RkorwALBK862EW6ngOESHG1tpDMMoq903VH+sH8jow
-         u2DJpMyb/Fufi4awIsvL3LnenjIZY3yHb2aMNgjYsMVtZIk3+jzujzak8oP/o7Q6Ndcz
-         0deKKnd9nPyaTyB6il7fF5PZnWuW3slD4gUDtzkrhMfK9RaA1X/bpqOOhSt8KiiuGkcu
-         SOmXONmdZ6qNG/pzWTV1/seNHFeCQykDbwY4s8UACPYeVTP+jpEqACr8YfabLYjUAV1v
-         a9yeJ7GW2KrHSpzDkHozfwQPB5CgxAuv+BTbOHdUHmDIOyUtTf4anuU90FiI43E6JAtR
-         XkGg==
-X-Forwarded-Encrypted: i=1; AKwUvBxZyXmXImHL/jqtzmhZnpjI4NRL66LVX/sZLyrl1rInk6q5McLa5mKJ0KEtKZzGJzWI278=@vger.kernel.org
-X-Gm-Message-State: AFuF++l1Y5PPVz3kVoNHCBB70mi0EtkvFoSutSy8PI+4B3jo/rOjND9F
-	fDIPmM3XNFtLL40va3It7BGaUTWnTOY4WcNX7NU54D8FaOtvPIylEjRX
-X-Gm-Gg: AYBFou0pwQ8jzVxxxvyZX6eW1A67UwVGYb/duhnPe1yUoupYVayooN1ZIF9WhoXeA08
-	7eZb6BStjKYZgXlhjUq52z6AjNeDnLyJIE/NrZSoPCgAVz46xqTCv1hLE0lrK5j0m0Cw++b7EMZ
-	OwyepKPgs9TDBKODxhpPvoaUjjIKS8QJkahlouCxGCT4OU+MFK7AtyqXWu8iBdld+7Wk0StqutM
-	qXldue7NKRMs+5uzq9j2+NfRUFu3D5WXShpY2qONRNBW3EG8ZlLUaPOVA56V4X3Ed8Y6Qbh6ddW
-	CEKRith8mqxIS9B9N8PdXAu+Y84GnkNyBbLgmuZbhdaaasAJA7GDh+0zM099DH2Wd85Tl4J041+
-	g5/6zgBqXVnbNJ6ykAnIFe2JRc6bGzmBW0XjAYL1Ugn/QVVzvfJLwJTaOYGT+7R64x6l+YAZKzx
-	oiQm7wUSE+ni0aBFE6yKrSd3WP1BrE4Vm6nm0i43ZuhvcHXSdw1jRMKtZVK6lnHoPV+DVDuj8WE
-	kfOXwauUvX6r1q2jdkbquIwKyPpUMCfux71yGRFJ1PpOhUlkenzIS4sYkOn85/E/P3ShwIv5q/b
-	4RzhPuUER9jdMJ5pcmFx+UaXJaWU0Gj8L9jdMNaD3MdFltiI
-X-Received: by 2002:a05:6000:4012:b0:487:8ec:bbd2 with SMTP id ffacd0b85a97d-488716c9360mr2499338f8f.19.1790234321688;
-        Thu, 24 Sep 2026 00:18:41 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790236434; x=1790841234;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=98lKZ5j8Do1HmaMCm8F3v9cW+qx+5YV3pRrKHyAEYAA=;
+        b=EDSrLlHDvUPQkse+nx0026Vzz6ASOroIZVuKxmzvy4Bqcr/kJ9N7H12tvXMZ+wg2lb
+         B0+uM4odb45hX1DG/QrCrX3ihWkHGFReXuiyylJVgzy1atsSPCYXgew3cDllTCjPjNW/
+         8cECuEqOZSbO89MzlFxnt1HvoAG2c1n2Yl6c/uLy3RRoindx1ZPhNQuzFyPEjgErznsE
+         u55HAusEUG6IsXw7BbfJgJJknsvamPEic812WDc/vP03tE4Xyh5a+K4YXgEkUFmODpQ8
+         g3dVab4ioVSZRsu11xwMKqt1IGSOgDs/qtcEsUR7UKSwrpHu31oemfzl6nhBpgEvd0Z2
+         dWLA==
+X-Gm-Message-State: AFuF++nLg07GycwUe5mLDlqMaBShNUN1FPXBK25PS8dOuUobQnOFdF4g
+	Sr+I1ZeUcC1er+hqVL2MTNdONfekPJpJnuMwCLzXzOQyz6hFufSY/TkLlUMmOVDY
+X-Gm-Gg: AYBFou0PF1/FsMzL9AXDDbY4dPaPVDRktFVGyWwSqkyEUgz/h4NTk5tNblUGUxyyLOc
+	t9r8FowQ1js3eIA0eqP9tgb8sU/wjbxDvUiYJT6MvA7/MKYIbIRAzfSMQ3Q7jEy63rrPWi7T3kx
+	TjgNX48TFwI7kasG/FSa9v9b/OclpQjWcMp11Pc9A5MjXMfca5URHLu91QCgr1erkTReKWkaH3B
+	bAuSgEyI4AfNa5HW4yDY2pl14ipJVKMyo42a+2iEgAkl5QfX6XnmdMzc+qEg/nnEXenGTL8vfyk
+	hMfn9UvdzfpPr3vJezDUY9D8aWOu5zGUJA4rdWnkwai6EFGPD59qXGed/WVAYxhaxfCZSrci09t
+	DdZP0WaToNBlKzr+MmIYgwD7ELR1LBCXcp5fCP3bnX+LpQsyNBaA6DwKY9Gh8QIkHMb92sRETR8
+	JMU0gm43ys3siNHmciwNWvy+DDRqMYc9p5m+tYEIw84kAENkidPYTPqPONrLhxfJqMSzfJv5SZj
+	IxRyek82sH8POVxx5KGLnA2WQotLxH4c8ZMDAtqh03vpHL3Rk2Eu62ja0v/cbrANhVMT1xZ4mWj
+	v63Y3ahjxrlAf7qau0KZy3k+j8w/XpKA4naxnw==
+X-Received: by 2002:a05:600c:548e:b0:49f:ddc0:6e8f with SMTP id 5b1f17b1804b1-49fe66c86a2mr24006565e9.5.1790236433977;
+        Thu, 24 Sep 2026 00:53:53 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-488682668dcsm13312703f8f.1.2026.09.24.00.18.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Sep 2026 00:18:41 -0700 (PDT)
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48868889337sm12932680f8f.34.2026.09.24.00.53.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2026 00:53:53 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v2 0/2] Fix fastcall rewrite with indirect stack accesses
+Date: Thu, 24 Sep 2026 09:53:48 +0200
+Message-ID: <20260924075352.2343553-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 24 Sep 2026 09:18:40 +0200
-Message-Id: <DLND3P616VVS.RP36A73FJ1BB@gmail.com>
-Subject: Re: [PATCH bpf-next v1 0/6] bpf: Scope callback arguments to their
- frame
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alexei Starovoitov"
- <alexei.starovoitov@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard Zingerman"
- <eddyz87@gmail.com>
-Cc: "Amery Hung" <ameryhung@gmail.com>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, "Nicholas Carlini" <npc@anthropic.com>,
- <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <kernel-team@meta.com>
-X-Mailer: aerc 0.21.0
-References: <20260922010333.1226537-1-ihor.solodrai@linux.dev>
- <DLLGYV7DI406.JRNDNAZ4S29I@gmail.com>
- <ddb3c0eb-2a95-4af8-a9b9-a0624d38a7bc@linux.dev>
-In-Reply-To: <ddb3c0eb-2a95-4af8-a9b9-a0624d38a7bc@linux.dev>
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1655; i=memxor@gmail.com; h=from:subject; bh=StkFi5tu0TWhQw83mflsWzE6rd7j3Dr5YHUtWci6wEc=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvLtXM/FzP4Mnpb75UOULlsaLt04/sji69Xzm/6ZS6iG 3/zxZXDHaUsDGJcDLJiiiwl//cxGZ+o/B1ou4wbZg4rE8gQBi5OAZhIygRGhifBRs/KPt3fvtxw ei5b3hPB0JjLK286dm0+apLC7LmqMIvhv5tVtLZ2/lQ2Lqb2aUVXHbRFPU/f3zfxq1guY0Xb3qV PmAE=
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
+Content-Transfer-Encoding: 8bit
 
-On Tue Sep 22, 2026 at 8:13 AM CEST, Ihor Solodrai wrote:
-> On 2026-09-21 6:55 p.m., Alexei Starovoitov wrote:
->> On Mon, Sep 21, 2026 at 06:03 PM Ihor Solodrai <ihor.solodrai@linux.dev>=
- wrote:
->>
->>> Neither has a local fix: both arguments point into a helper's own
->>> frame, with nothing longer-lived to anchor them to.
->>
->> It's the same problem as a pointer to callee's stack.
->> check_stack_write_fixed_off() deals with it like this:
->>    if (state !=3D cur && reg->type =3D=3D PTR_TO_STACK) {
->>            verbose(env, "cannot spill pointers to stack into stack frame=
- of the caller\n");
->>            return -EINVAL;
->>    }
->> CONST_PTR_TO_DYNPTR wasn't spillable before 7.3, so nothing depends
->> on parking it in the caller's frame. Reject it there too ?
->> and then no need for REF_TYPE_FRAME complexity?
->
-> If we focus on the nasty bpf_user_ringbuf_drain() bug specifically,
-> then yes, check_stack_write_fixed_off() change patches it:
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index d62c0f74cff5..f261423e9282 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3668,7 +3668,8 @@ static int check_stack_write_fixed_off(struct
-> bpf_verifier_env *env,
->                          verbose(env, "invalid size of register spill\n")=
-;
->                          return -EACCES;
->                  }
-> -               if (state !=3D cur && reg->type =3D=3D PTR_TO_STACK) {
-> +               if (state !=3D cur && (reg->type =3D=3D PTR_TO_STACK ||
-> +                                    reg->type =3D=3D CONST_PTR_TO_DYNPTR=
-)) {
->                          verbose(env, "cannot spill pointers to stack
-> into stack frame of the caller\n");
->                          return -EINVAL;
->                  }
->
-> However it doesn't cover some of the new test cases:
->    - user_ringbuf_callback_park_data_slice
->    - user_ringbuf_callback_park_kfunc_slice
->    - user_ringbuf_callback_park_clone
->    - user_ringbuf_callback_park_clone_then_slice
->
-> (not counting the diag message diff)
->
-> The original suggestion that came with the bug report was a
-> cb_dynptr_id field in bpf_func_state set up in
-> set_user_ringbuf_callback_state() and read in prepare_func_exit() to
-> release it there.
->
-> The cb_dynptr_id seemed way too specific, I didn't like it. So I've
-> tried to figure out a feasible generalization of the problem, and came
-> to "verifier can't track a lifetime of a ref tied to a frame", and
-> then to this series.
->
-> I think we need to decide whether the REF_TYPE_FRAME is a useful
-> mechanism in principle, and whether it's sufficiently generic. It at
-> least covers the cases in this series and more.
->
-> For example AI also flagged for me parking the vma argument
-> (PTR_TO_BTF_ID) of the bpf_find_vma() callback. It's low severity,
-> which is why I excluded that from the series, but "reject a reg type"
-> wouldn't work there AFAIU (we would break many legitimate programs).
->
-> Opinions?
+When a bpf_fastcall call is inlined, the verifier removes the spill/fill
+pairs around it and shrinks the stack frame to exclude their slots. Two
+kinds of stack access skip the check that must disable this rewrite, so
+the program can then access kernel stack outside its frame: stack
+buffers passed to helpers and kfuncs, which BPF CI reported after commit
+5da4a9f26fca ("bpf: Preserve stack initialization for generic output
+buffers"), and a callee's load from its caller's stack, which checked
+the callee's frame instead of the caller's.
 
-Ok, I think I didn't realize the issue was broader than just CONST_PTR_TO_D=
-YNPTR
-type. In that case I think what you suggest does make sense, and might help
-generalize the behavior across different cases.
+Patch 1 moves the check into check_stack_access_within_bounds(), which
+every stack access goes through with the frame that owns the slots, and
+drops the calls from the stack read and write paths. Patch 2 adds tests.
+
+Changelog:
+----------
+v1 -> v2
+v1: https://lore.kernel.org/bpf/20260923084201.2437625-1-memxor@gmail.com
+
+ * Check the contract once in check_stack_access_within_bounds() and drop
+   the calls in the stack read and write paths, which also fixes the frame
+   check_stack_read_fixed_off() checked; fold v1 patch 2 into patch 1.
+   (Alexei)
+ * Scope the test comment to the output buffer tests and describe the
+   remaining tests individually. (BPF CI)
+
+Kumar Kartikeya Dwivedi (2):
+  bpf: Check fastcall stack contract once for all stack accesses
+  selftests/bpf: Test fastcall rewrite with indirect stack accesses
+
+ kernel/bpf/verifier.c                         |  13 +-
+ .../bpf/progs/verifier_bpf_fastcall.c         | 169 ++++++++++++++++++
+ 2 files changed, 178 insertions(+), 4 deletions(-)
+
+
+base-commit: 24629aac43d2884109ae47a993fd51b504e2b09b
+-- 
+2.53.0
+
