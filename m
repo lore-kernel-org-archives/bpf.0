@@ -1,82 +1,107 @@
-Received: from mta1.migadu.com (out-74.mta1.migadu.com [95.215.58.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ED9242E409
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 19:50:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3265632937A;
+	Thu, 24 Sep 2026 19:57:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790279436; cv=none; b=ROVt+gzukw7ChpYx1BBvj7t7GdbH5BaTWM9ETkceUdusDPb88Xf4xIAUBnHs1m09KA3txHEDgC7coCuDyWeVSntK5vU/9tYq5cG2HVWeGX2LGjXAzAgFACbCZUKoVQO0w/im6olG9Rz3SDnJX+ac1zb0jn2VkokhvrrTLqv9HUM=
+	t=1790279837; cv=none; b=l01jcqep6bsDoWF8NaLz50JZvOP21SA6RnhUQVTaSjyzXKgiO0waLP6MCTq98bnMtChDxcbjCEvO4nHRYrrzMh4BXqX/UQHaX9FwVfx6SJQEEi+PN09xVW6u6r8VbTTG/6zWanDZip/tfT9UOlNanZW+Ba9EXFEBwLCsAUd0oIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790279436; c=relaxed/simple;
-	bh=aKZTR9UmXIUM+ZuJhj9lrNYV2VcUVjjMrWUianxOCpE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O3G1brKh7ehStjfutOCQGhYM61bP8hTCfP7DqHPAE1vbCKCWMBIMru9m6TBdsDhkc0mByUrMCaLCuYam2uEpFT2rxSl8Dzkyqhf6sWjiQfYuY47xPDKiZaPANUj3iB8GNZKf+Yx0nl4+ihIsVfBoti7L9JSmErtVbaqiq95/Ofc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XNBkfC0e; arc=none smtp.client-ip=95.215.58.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790279837; c=relaxed/simple;
+	bh=Gn2TaEmSIG+/lBYc0ldYI+V/SltKbL/jrsFeLOUFEck=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=uorSGrpyKCPZRtths/HmGS9odCodccCaJE5Fp3vBC9UznrIXaGp3DqqWZY5BZkXQp/AGZWEzbpvpbSVkheLB+1aUZzR3Qr4BX86KmJ9Sv7MbZdwJ/IIZI9QBg2784J4FCNxN8xykOq5+v82vfCN8j+Bcgd5UdaELQ8MkGYH4H3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=Vej73FJo; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XNBkfC0e"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=aKZTR9UmXIUM+ZuJhj9lrNYV2VcUVjjMrWUianxOCpE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790279430; v=1; x=1790884230;
- b=XNBkfC0eOvKknIJMF8RZG+O/shIhGVDO1NMe6vSRnTdE4KqsquH0a4i1PiHkUbtb88SUtljz
- LYnR+MsjnIku0pyFalqxxL3tLx/YmqDNqN6CGHfJ0bqMJ8znE+Qa2RYZeX7m1zRrBJNc6mVscK9
- XM2ND2qSLqI86awBO2cFV+zw=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 928ef052ab13ac34;
-	Thu, 24 Sep 2026 19:50:29 +0000
-X-Mizu-Trace-ID: 928ef052ab13ac34
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <d9aa643c-438f-4658-a82c-f16b9ca944e3@linux.dev>
-Date: Thu, 24 Sep 2026 12:50:26 -0700
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="Vej73FJo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1790279832; x=1821815832;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to:cc;
+  bh=Gn2TaEmSIG+/lBYc0ldYI+V/SltKbL/jrsFeLOUFEck=;
+  b=Vej73FJosCuxJmFLKpA2ZjDUG/UGxWSxTS1L5uPbg1MEBr9SWLjqlHrG
+   9bJyQh0bE546DqlzazKHu63qj7x23VKkrcIlT/Q1X8UQdn3edHX9g1yD+
+   y9+pBFE8BHfPa4eLvyLSnSvI6Dpmzp3tSZanK6NLNzCXFFKY7wxl/W6++
+   3a15ckpewExd072RgkJMj44PCELRM4TV+6BV0/8rfCeLzsv3BJdJ1xvKo
+   igVzClmf/l2jOsBFwEXiKc6Z9ewshyBh4EYM+WVz5rB7ICGENY1m1CSv1
+   8wGiWD2OCkh/Km1XBRGLAZpiNPHt7W/JFrI1bx/iq3J5bDamhsP05Xz91
+   g==;
+X-CSE-ConnectionGUID: dt19c12VQ8e4I6MEbc3qBA==
+X-CSE-MsgGUID: GAV2M1Q1SI6YQ7IauS2mwg==
+X-IronPort-AV: E=Sophos;i="6.27,121,1787036400"; 
+   d="scan'208";a="64420627"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Sep 2026 12:57:06 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.58; Thu, 24 Sep 2026 12:57:05 -0700
+Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.58 via Frontend Transport; Thu, 24 Sep 2026 12:57:01 -0700
+From: Daniel Machon <daniel.machon@microchip.com>
+Date: Thu, 24 Sep 2026 21:56:49 +0200
+Subject: [PATCH net-next v8 01/15] MAINTAINERS: add FDMA library to Sparx5
+ SoC entry
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] selftests/bpf: Fix build of callx tests with GCC
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf@vger.kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com
-References: <20260924182104.261823-1-alexei.starovoitov@gmail.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260924182104.261823-1-alexei.starovoitov@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-ID: <20260924-lan966x-pci-fdma-v8-1-201c7b707d8b@microchip.com>
+References: <20260924-lan966x-pci-fdma-v8-0-201c7b707d8b@microchip.com>
+In-Reply-To: <20260924-lan966x-pci-fdma-v8-0-201c7b707d8b@microchip.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
+	<horatiu.vultur@microchip.com>, Steen Hegelund
+	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, Herve
+ Codina <herve.codina@bootlin.com>, Arnd Bergmann <arnd@arndb.de>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Mohsin Bashir
+	<mohsin.bashr@gmail.com>, "Simon Horman" <horms@kernel.org>
+CC: Richard Cochran <richardcochran@gmail.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>
+X-Mailer: b4 0.14.3
 
-On 9/24/26 11:21 AM, Alexei Starovoitov wrote:
-> From: Alexei Starovoitov <ast@kernel.org>
-> 
-> GCC doesn't support indirect calls in BPF:
-> 
->   progs/verifier_callx.c: In function 'apply_op':
->   progs/verifier_callx.c:977:1: error: indirect call in function, which are not supported by eBPF
->   progs/verifier_callx_rodata.c: In function 'use_shape':
->   progs/verifier_callx_rodata.c:746:1: error: indirect call in function, which are not supported by eBPF
-> 
-> Build verifier_callx, verifier_callx_rodata and callx_rodata progs
-> with clang only. Skip callx_rodata_lskel test when progs are built
-> with GCC.
-> 
-> Fixes: e9b22d50796d ("selftests/bpf: Add tests for callx")
-> Fixes: b018e998e645 ("selftests/bpf: Add tests for callx through pointers in read-only data")
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+The FDMA library under drivers/net/ethernet/microchip/fdma/ is shared by
+the lan966x, sparx5 and lan969x drivers, but is not covered by an entry
+in the MAINTAINERS file. A subsequent patch will add new files to the
+FDMA library, so let's make sure it's covered.
 
-Tested-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+Add drivers/net/ethernet/microchip/fdma/ to the Sparx5 SoC entry, since
+I am already listed there.
 
-Confirmed the patch fixes the GCC BPF selftests build:
-https://github.com/kernel-patches/vmtest/actions/runs/36043955840/job/107785910578
+Tested-by: Herve Codina <herve.codina@bootlin.com>
+Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
+Reviewed-by: Simon Horman <horms@kernel.org>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
 
-> ---
->  .../bpf/prog_tests/callx_rodata_lskel.c       |  6 ++++
->  .../selftests/bpf/progs/callx_rodata.c        | 28 +++++++++++++++++--
->  .../selftests/bpf/progs/verifier_callx.c      |  3 +-
->  .../bpf/progs/verifier_callx_rodata.c         |  3 +-
->  4 files changed, 36 insertions(+), 4 deletions(-)
-> 
-> [...]
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e3ce77c839b0..e5da9d0378b6 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -3214,6 +3214,7 @@ M:	UNGLinuxDriver@microchip.com
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Supported
+ F:	arch/arm64/boot/dts/microchip/sparx*
++F:	drivers/net/ethernet/microchip/fdma/
+ F:	drivers/net/ethernet/microchip/vcap/
+ F:	drivers/pinctrl/pinctrl-microchip-sgpio.c
+ N:	sparx5
+
+-- 
+2.34.1
+
