@@ -1,591 +1,244 @@
-Received: from out-zbxj-a91.jellyfish.systems (out-zbxj-a91.jellyfish.systems [198.54.127.91])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D03BC34D92C
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.54.127.91
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790266523; cv=none; b=YkkChbtilX4q8/a0Hj1bV05s3fBVyEwKKXUMnv6ccy3N51xNFI6NkL+UmduQ6MDfzNs58wLfbFvy6rIFhYWu5V0HoRhAqovdHbj6SzT9cxsucG3aKU3+XlO8hk0X8p1o4fsSi4io7tumn7sCY7oEKY7cbVj1SchfB11xpoLHvUk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790266523; c=relaxed/simple;
-	bh=Zd4qcRfTZ3O++Rsw9bRzu5MKhzconY+SqFhvQGupwag=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Cdabg7eB/9EreIafZTK1BUbo5WFWZEU8lMH6p7wAFGnoAheQmvxhTmRI+Br9uwQQIhP51gGm9PFUjvUAhRaIF6K3sgYO8eh8jZsnPyDZhpYTbMEV9YRL8F1mgar6H4dZ/g2PK+dEWeoqLY7VeG2e1xIJvcEYH7YtVIxQ8m9ha0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc; spf=pass smtp.mailfrom=tychen.cc; dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b=TMPQPKyn; arc=none smtp.client-ip=198.54.127.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tychen.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tychen.cc
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED183F929B;
+	Thu, 24 Sep 2026 16:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790266538; cv=fail; b=enhXKjx4nLs5FOOR585E3MjqpkznJOMxHLUFivsY8FsI1S7WXHt60ElqPoRNKKdyjilBkRVqFoBiunNyqp3Z1KRchtBWE/Jr7TwbRXyjIWPLiynXM8DCph1zf7xsRuIQS9zdl0efDMnUhyYMnqzlBBmiAdRJMKmDa3bC/S/0cjY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790266538; c=relaxed/simple;
+	bh=iHrEhshB0KoOp9+OOoMnl1N8xZ3LAhiqczF5RydUMrk=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=YTX/Ro5qQaX/tlQWCTUIcaCTe8WsO4Q0lPkfX1sf445m1RcIGj8wpyVZy1KeTCBPs7CIFrW6AOFsuskP8052yhAq+GQQpddsZ31vnZv2oYRdMYISe+8faxvnsZ+e5U8kbq5P87fKYfpaWwzj0uFKxLcuCebq3QMf0ytyCA4Y2xk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=BnWa9Lpg; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=KFwQvYqQ; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tychen.cc header.i=@tychen.cc header.b="TMPQPKyn"
-Received: from fedora (unknown [124.160.34.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4hrJnn6JlSz8sZJ;
-	Thu, 24 Sep 2026 16:14:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tychen.cc;
-	s=spacemail; t=1790266497;
-	bh=BRuBgtuWO631bBKo/xvRIUCvC2rwavIsK3xFV5QXB18=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TMPQPKyngAgtXeLbPh/W57ghpFaD96ACYSINIZCcfpkVGyRabESEcI528QdU1xY0K
-	 ix2bk6XbwaLMlugbyh/dAzQk1br/L5du8j1SUcF8Hjep2Lgz+Jt9Dw/81CsUUV/1Ch
-	 YYvn4U1JySvZjseU+oITXKE4wHn7OUzimWo0/CcoI3Kp+G6lxRiLuFXnVSR7AJVpBV
-	 Oj21Aizm+5oQjirtY6P3CxqLZZvvrWSqIfymZvSaDZqAMNQLJFTXfYfJ/dPLY/8u6W
-	 NkLokxDkXfXCwIzUffFDVZuyTmwi00gv+Pv2RkdRVN///lpgznFhEhks6CwesBzA2a
-	 SkR6orBCA/zJw==
-From: Tianyi Chen <hi@tychen.cc>
-To: bpf@vger.kernel.org
-Cc: qmo@kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	ihor.solodrai@linux.dev,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v7 2/2] selftests/bpf: Cover recursive bpftool map dumps
-Date: Fri, 25 Sep 2026 01:14:34 +0900
-Message-ID: <20260924161434.95116-3-hi@tychen.cc>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260924161434.95116-1-hi@tychen.cc>
-References: <20260924161434.95116-1-hi@tychen.cc>
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="BnWa9Lpg";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="KFwQvYqQ"
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68OFtZlE3288633;
+	Thu, 24 Sep 2026 16:15:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2025-04-25; bh=gJMQTj/BThkXVkKT1bwfbPDH555QjXSeTkWPImPG1Ak=; b=
+	BnWa9Lpg2+JpkQgVxja91YuYRvcgbH33ELYHV0ngTUuo/jgOUr6SMjhpsJOQdPvi
+	Wi9+vhSSeby3O8Jg8ZFpjfSD2axG1wuR3i3ejHbzm3FQ6UKuf4saVEhZWRoq5x/B
+	674aFXo17E4Cu9byaIv4JFM8evikokrERKQKQJxlhZ0FbeV2n0n/DChtdTaMEFp1
+	2vMezBCqn8NR2Yr9p+sUAcfZ3ybeE+Bc46/W22r7xEovl3x/PLu18Hqh4M73DKR0
+	1crqeIcvj+FkqtxQI+/uwwHAzPJzX5vZL9OmuOcz8ymPz3xXpNCNPXBdEqUdnpnW
+	kuM93AxuI7guPZ/FNg8bGQ==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gsjxb82m9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 24 Sep 2026 16:15:26 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68OG5bWA038466;
+	Thu, 24 Sep 2026 16:15:25 GMT
+Received: from bn8pr05cu002.outbound.protection.outlook.com (mail-eastus2azon11011020.outbound.protection.outlook.com [52.101.57.20])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4guurkh2hx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 24 Sep 2026 16:15:25 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=P28N/XVxTzCrEm8y41uVAufAfkbeblRxAAzoSVUaAhKrU927XJuNHt3HKTflsfrgsyoXa9Mb5GpCfGrzghHkEAIpaIWc4ZIaBTZNwZ2mKm27RWi9krz0QTEFfOnJCVRGE6PJikxLB8lJMCibO7nMkRUnahpE2jc0VPHSwAnemV6I1GvtikzFb3mXSRmfYv9+5heH/KYQfZLIhK57TeOd0IF97YPoxXoVCpcpcoWFj2ssHg5d/9WGdj/ZHFy7Lgdt7PlH9Z4r1wBwjW7xcRkm/FaKa9YLz0CnzCxJu+M40jk0SZak37lNHKzUf0IdXwWh+zpJ2Nr/ARkXnKGmJS/qeA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gJMQTj/BThkXVkKT1bwfbPDH555QjXSeTkWPImPG1Ak=;
+ b=RB9BosQZ2pZe8ddm38O6cFYUoGuHIb5gLKUN5D6UtQ7WWDMZqej7erUUrM5qwzNamOSNZdLlRUUuAAvxel+DiA4eah0G/mD01DdQebsuwkXHaHornsmVbOQ+8Mc2Rpg2KFAKi92fT3Dcc1pv8alx/3H0kXbHulvzdkA4MymuPFp1rE1D27PgANRZ+WLXIYPrVlaVB7h4Ci/bJ3t0huqGtgDIEhnPzzpT99kpAEp4YIDqMr7jS/HV1RnNny/1kYAjPPqnncKwd+TGLh/spBYyXgfXdJ9ShfWBCKD9uXPIorJu1pbCGyvKJJFnomh2/1UcLSPEh+ww3q6isb/Br1/Tyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gJMQTj/BThkXVkKT1bwfbPDH555QjXSeTkWPImPG1Ak=;
+ b=KFwQvYqQeGCf/c7Jembefc+NxYiQAoZFFUtKZ/jZ9iyEoJjX9t3SZ3JEna4Ncsg1fwo58KtQJZJQjFDFGAFPRRWgW0Nzo94MjbROT0sFZ3FxF97XQXBPJZCsU64YXqnfsiy4CvAnEH2mOe8qqf35l1rzNKmxAux/wzzPRPscWAg=
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oracle.com;
+Received: from BN0PR10MB4901.namprd10.prod.outlook.com (2603:10b6:408:126::19)
+ by MW4PR10MB6440.namprd10.prod.outlook.com (2603:10b6:303:218::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.472.7; Thu, 24 Sep
+ 2026 16:15:14 +0000
+Received: from BN0PR10MB4901.namprd10.prod.outlook.com
+ ([fe80::19a8:41b4:f519:1b79]) by BN0PR10MB4901.namprd10.prod.outlook.com
+ ([fe80::19a8:41b4:f519:1b79%5]) with mapi id 15.21.0472.005; Thu, 24 Sep 2026
+ 16:15:14 +0000
+Message-ID: <09dbfeea-a4d1-4b7a-b92e-bcf8c4cdabb4@oracle.com>
+Date: Thu, 24 Sep 2026 17:15:09 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH dwarves v2 0/3] pahole: Fix arm64 argument register
+ allocation
+To: Yonghong Song <yonghong.song@linux.dev>,
+        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>,
+        dwarves@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        bpf@vger.kernel.org, kernel-team@fb.com
+References: <20260917164038.1576763-1-yonghong.song@linux.dev>
+Content-Language: en-GB
+From: Alan Maguire <alan.maguire@oracle.com>
+In-Reply-To: <20260917164038.1576763-1-yonghong.song@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR2P281CA0129.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9e::16) To BN0PR10MB4901.namprd10.prod.outlook.com
+ (2603:10b6:408:126::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Envelope-From: hi@tychen.cc
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN0PR10MB4901:EE_|MW4PR10MB6440:EE_
+X-MS-Office365-Filtering-Correlation-Id: 069f0a01-2af7-4265-bc85-08df1a57040b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|366016|23010399003|6133799003|22082099003|18002099003|56012099006|10067099003;
+X-Microsoft-Antispam-Message-Info:
+	n6j7MFJUfYDCVM+GmELE5P9TfeXAYROOthd/zttw7upIyQIYrPrJa7Fp7UOLSFyMuRTTuX7yueiDnuS9544Kpo4wtsM1ndACDVtCvNN5qzP7h7mXBpQoiWYhKXENIvP5BoChLL95BdiLfW3G2DggVBKUgRc2t35BMJQBCE5pzJe8rjGAcfO02DkPHf4iu8HOhqx9O1iXmbjQU6j4ogoPLhrA3OYhxexzw3Tb67ua/ACOhlYwcilGi1no3wP132Hzw5lPJo1Rsp+xwnk44RGsXynn6koNotRFi5/a2mVqLZy83Wr4y/LVeOQvvD49WfdpTZQUs9MlF31ae1S4jsZNkr4QvVjalGUtmgDBOEqVOgOaEhZmjTMv3+GKXUfaOH45J0u2ZAOaCIqWpIzJJT7Kziwx0qP4OfDgIwRR5omt/vZvHGZfDoOXI83kXHQBn6TXXVrqDMeurWExybnjIFl6Jyu18uooOwNWX2eW0PsbWVBoSe7XecZ0pcPORy/MZ8wWmOsvaLUAXm3f+YTVfvn9RrtwUYQGWZd5EVfDt6z+v2P/FFlcCq0zCn/f+EdopQOk/31HniwhOWP0kz/vCo4l/NpgC+729Phk1IijpGUXdG/JTLLKoP/8T1z+XZbmqi0emuoh76U8ejmHWl715PG0e8IvjjRd2DoZF6/FhsTKEy8=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB4901.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(23010399003)(6133799003)(22082099003)(18002099003)(56012099006)(10067099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MlVtTjBaTElQUWx0RGJOS3VGK2huRmtqSE0zWkJYLzN6ZmxNN0VZcXVPQTJ5?=
+ =?utf-8?B?aU9EQ1F3c2g4WDZDTWNRWEh3bVlvaExDYmVidkRlRGdhSnA0NENtMmVQQjln?=
+ =?utf-8?B?QWs1aTYvNHlOb0hGZ0Zya2NxeDVrYWlzaEQ2M1BxenFHeFZpZmY2UUhraTNm?=
+ =?utf-8?B?eTlZMU9ocmZXQlZIYmhHV0dVVWVQU0J2NEdMVkRocUZxUi9kY3cxckhlQU85?=
+ =?utf-8?B?V04vejFQZk5BZXdURnQ2YjhZZkhGUzJRM1lpNkNRa0hwbWY1aW82c09JUVM0?=
+ =?utf-8?B?Zkh5UUVhZWlIcmhLMmw5OTU4WGdteWUyYVdVcVZwWlJVY1REZFZhZEFIUllF?=
+ =?utf-8?B?QVl4d1A4VlpKenFHaHoyNzk0QmhsU01CNllETnFMY1RkWlNsQWlMRXo3L21O?=
+ =?utf-8?B?eUZvWld2UWtzbUJkSk9XVEYvRFZ2aktoOHg2SldJbkFlbmt0Q1M0M04wMzFK?=
+ =?utf-8?B?OVk3Y05TQVJCQ1dIQmV6Z2tTeWdTNngvVGhYZElHS3Vmcmg5YkZ1K05JWUR0?=
+ =?utf-8?B?MEFhT3VFcmZDRkpETU9FaFRYTkV3N1U5UDc2bWptS0ZRMGprcnNpSDk0d25Y?=
+ =?utf-8?B?WGwyQmtvLzF0MFVoNmVwTEt2UkNoNzdlbXdMTjFFaTBBK2wvQ3pvcXYvaVRQ?=
+ =?utf-8?B?L2E3a1dUbE9xT2lHUnVGODJGNlFRenJQb2wySFFOOXVPdnV5T1dkYnN3OXlm?=
+ =?utf-8?B?MG1uVVlOaElJU1NBUGhFdVVVRDRUTDc0U0xCOUpiOU82NnRZL0dUdkljSGF1?=
+ =?utf-8?B?WndZK3FpMlFGWWtUWXk5OUtCWkpIZUErMTVDblllMmlVSnhQb05oTlZ2ODZN?=
+ =?utf-8?B?c2VQZmhnbTRxR2FNZzlvOE9XNXFlSVZFK3dOTjczaEE5V0t1SlZZRnBuY043?=
+ =?utf-8?B?QlZQUGVYWlh4N1dNOHlUVXkxOWpLNFlNTXRsaExmRXhRNG1maUh1Y3RPVXRE?=
+ =?utf-8?B?bmtmVUF0R1JxM21WVUorUHJtb1ZmN05ScWF6cVZtcExicG5tL3NlKzZmOGpL?=
+ =?utf-8?B?VjNvcHlsUUVnRG0rWEszNU5FZVZQN3hycGJ4MzBDZGdGRHZBK291Rk1zaDhW?=
+ =?utf-8?B?UEhIdWxVWjhWUk5QRVdIWURwTkhEcWhvZTJKN28yOGNZTE5xY1AyTWo5ei91?=
+ =?utf-8?B?RUwzMFdPNGJ5YXdqek1Jc3JHR3dUNStNQXdxM1FlWDBzcTRxWnlVRDU1NkJ1?=
+ =?utf-8?B?V3M2WDE0RE93VkIwZ1RYS2NReWpvUFo3UlY3VCtvM2pQbU51REIvR2hVNXZw?=
+ =?utf-8?B?THZ3WVNwK00xZyt2bHd6ZnFqTkI3NlAvcFM0RHYxUEcvaGpUUGN4alpMNzNF?=
+ =?utf-8?B?VEVoeERrTHF5Zm04akZWREZmNHp6K1pvelBDaUhnVkd5K0xBcFdNTlZMMERO?=
+ =?utf-8?B?dUtySG55RGYwQkNuR0EwRE1pa3NPWmcvS0FMK3M5OVZDM3lwcG5DZGlqYVFF?=
+ =?utf-8?B?QVh4dUNNVGJ0dUNGd2JIRys4NnhBQzZJY1h0OUZpOXpJMERub0RCNUdHWGtJ?=
+ =?utf-8?B?UDVmTkdKNHl3QTIrbXRqMlZQakdCSDIyZ2Y4TzZQSi9LbTY2Y1ByZ3RhNzNB?=
+ =?utf-8?B?bnpDM2dMMVhEQWkwK0dZemtRajljalJJb3p6V01LYzliTHdQYWJxck5sQ3NT?=
+ =?utf-8?B?TUhXbnA0VDk1a3N5bDFQNGd2Um1WNjM5WnEzSW80VC9XSFMyWU9zcUFPQ3F1?=
+ =?utf-8?B?UmxpMHV4MUdWQVVxT1JDN2xGdVNGSjR3ZUloKzA0NmZaQ2lGTmJ2U1pGNTV2?=
+ =?utf-8?B?aGV0WkIvWStweGlRbGpPMVZNeWNYRElmUTVyenM3SDIvUWVPc2w1OTlIVEZk?=
+ =?utf-8?B?TlJOM0YydGFKbW9PbzEwckc1b3F4YUF2Y09vWWdmQ01XVDhhbUZieFF4UFNS?=
+ =?utf-8?B?RXo5UDR3ZFVPa2dDTGdzaDBlZzRVRm5Zcjd6MnJHbml3T3hVcHNmamIwVUJo?=
+ =?utf-8?B?UnIwRlp2cnZLRlNXZTdPTVl6ekYwY0s3Si8wSEZpOWxTQ0d1bGRabE9qRjVT?=
+ =?utf-8?B?cVhzaGNaYkMvckhqS3FpdVh5SEQ5Zy9ZSVU3cmpxRVZpdW9wUEYwVWhkWWFL?=
+ =?utf-8?B?MjBSdEFLRkh4VklDeVVnVVNSbml1YVNDbU85NUpSZ1dJVmp0dm8yUGN2TEVU?=
+ =?utf-8?B?ZkFWK0hvcm5SOE41Y0FtOER1YjZJVWlGVmR0V0RNYnN5b0VuVndra0lMSFh6?=
+ =?utf-8?B?NGMvTmNsZ1FsVjZpZDZqa0RuTVJkZjRJZlVoclR4RzJuVEtabUMwOEtFcDVJ?=
+ =?utf-8?B?QkNWMUdsQmlqVFltbzFlRENMTjErbTlwOXRtaDlod3BEdk9Jc2tMc3NhUjBC?=
+ =?utf-8?B?V0hjdDFtUmk4V1RWd0l3dFNsQ1NmdU5hSTFzdWJyM1RSTUZkUGZDUT09?=
+X-Exchange-RoutingPolicyChecked:
+	VC8qmxysnEhb8ho+FPPBKplf/WxaBTIqgvtfXSlLa95v1S5gMOZyjWCw++k4Rl4XkbBLUZUG5nNe7K37yOuszF8MdLqMQbacxzH9d/vlF7OMFM5lpoDe68JqOJwI6qrVNmdeC8t3UwZu24EjuuoVLpLfvGabeYn+h/K1CaysWy+E7rok3N9+1e6VUIwCcLMCjs7Y0cuAe/07D9AzDwJ6ZpT8uM5xR9fxIcSLF43cEBw9p5VY+64BqY3Zv7vBJM0vXybcsXaqRjsiC1e/N+dhHb0NoW10/9FywhuL5GinqJV0WJ1cmPGrQRL+Yf2uCZSwJpg5XY+gsvbFyywKDcn+gg==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	D9Padoz4eTzFmHGNnyCM9GEMWvqho+k90GJEOmwHYDQxsqIFRZMsaJDNG5l6WMTVPWvjtuIm6nrZiJGElMsa875EA52aCqc5qBE94tQFzMUgFD00sGSRZGGEfAL4YxxpIC31foPU4a/kxi+B+AORIOr9tqwf7dQ43fcNoSejMDRFePltYTzu+V+X8pmkBJDCMXCqm9FcIXX4RorA/ylCLYpBs6jFpHXmMaNTYiazUZSmIXU4vUN9Z9L1RalplySA6whTxnOzewUxqU1JSemkjH+2mfRfkT/j9HhjHC6PraIJLqVdzaSL9GqUrxTSE/vPFJbWoebP5paFxKbtCsL1pvjh9DXfcw9EbNrehFgfUwFg0y8P5r3nfOYGK8n33JG9KN8hNCHU2tCt7SMXfL+MszLP11EsgLBo97wTP0VoNUH1Ha3UVkjXuOPmJY4s0HS4KhVNaqBofJnpOSuCCuZ8kzWNTR8RcDOpr50xH95oOcl/fpSh5ZHqhDPuiXZoQnGSwt07UWXhsbotZ+F9sp1SoQ0t3hhU7LbUrpD+vDMkN6w1YfmAnZHOEJONdcD8WvB/KmuuzKV4EINRATb72kqlNxoPYLMJFWN29HcZ3mGDjDI=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 069f0a01-2af7-4265-bc85-08df1a57040b
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB4901.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2026 16:15:14.4192
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Pj7ckBG4O5CRZsTYLtHeNz+2KmCiCRRe101aCJlw69yD0jlVGk/68usDikjOIyUOD3VSsneMtw/dBmnte32piA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6440
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-24_04,2026-09-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0
+ suspectscore=0 malwarescore=0 mlxscore=0 phishscore=0 spamscore=0
+ lowpriorityscore=0 mlxlogscore=993 bulkscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2609040000 definitions=main-2609240066
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI0MDA2NiBTYWx0ZWRfX7N5Xa40E7mpb
+ 194x8vV2/kTgOVLuWYrroEociAHIPbtuN565wY1FUqDrspTerY3I0Qt6Xi1k5B8KAHQY90EZvPd
+ VSc8+A1cyV5uNaJCKKBjLYa0HJRM9No6eyFo3wjAbML+mPiPI8OLnCPOkm5oHYAt5P//PIhAjOh
+ LMjZc1azIRLgevx218efOndcpPLwZU8aHDobVpT68LqZioi4ois5VlEdQktpAvnKrytDLOF8He6
+ zydwdsuNoyH26ic5/jwrBmNju2NzJk6AMKRXtsGa2nBbmcPu5CSZoCLGzkbYmvkrqduPn9FOZT5
+ 4yDxWx2EI1gctl0wjB9qiS6QfEtQjrR7ByBcOW3UUlfGp91tCKzmn/GOHiB1ItZ7RM2sjycV99q
+ h4bFgUD4HoQZerm0kf8vizpBRlrhgqyjvVyFI0DWkZO6dMhfCtHRE2uhe/V82h2v7tRo6Ow6z/A
+ xNPVeZ4dt1sY4LsCQ7A==
+X-Proofpoint-ORIG-GUID: S8oU7yGyGQKDv6N8O4JdrATzKrBa54lx
+X-Authority-Analysis: v=2.4 cv=UINIjyfy c=1 sm=1 tr=0 ts=6ab54c9f b=1 cx=c_pps
+ a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=VdqzKS8jKosA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=jiCTI4zE5U7BLdzWsZGv:22 a=RD47p0oAkeU5bO7t-o6f:22 a=VwQbUJbxAAAA:8
+ a=G6qNw-qzJdZysMDmmfoA:9 a=QEXdDO2ut3YA:10 a=WmVTiCyuxqgg3mnwYu6p:22
+X-Proofpoint-GUID: S8oU7yGyGQKDv6N8O4JdrATzKrBa54lx
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI0MDA2NiBTYWx0ZWRfX/bepRdgQpOsA
+ xWKjLfYxbWbF4TY1O98/E/zTq2XLw85xvtdL2Cbt3c8Y6yvfpS4l5UwsK+036o4zrsk21+jc2S2
+ gZ17DfuytRe8BUSNYP9pe1bxDepVHtwF2+QtQJe8gh/9lpuCQMKF
 
-Exercise array-of-maps and hash-of-maps dumps with shared inner maps,
-empty maps, BTF values and multiple selected roots. Check complete JSON
-documents, plain output, root ordering, deduplication and unchanged
-nonrecursive output. Reject empty, unknown, duplicate and extra dump
-arguments.
+On 17/09/2026 17:40, Yonghong Song wrote:
+> 
+> The arm64 ABI starts an argument twice the register size on an even-numbered
+> argument register, leaving a hole when the next free register is an odd one:
+> 
+>   u64 f(u64 a, __int128 v, u64 b);
+> 
+> passes a in x0, v in x2:x3 -- skipping x1 -- and b in x4.  pahole did not
+> model the hole, so b looked like it was in an unexpected register and the
+> whole function was dropped from BTF.  Patch 1 skips the register the ABI
+> leaves behind, patch 3 adds a test for it.  Only arm64 has this rule; the
+> other architectures are unaffected.
+> 
+> Patch 2 is a small follow-up.  Floating point and vector arguments are
+> allocated from a register bank of their own -- v0-v7 on arm64, xmm0-xmm7 on
+> x86-64 -- so a wide one never occupies a general purpose register pair and
+> must not trigger the even-register rule either.  It does not change the BTF
+> emitted today, because such an argument still advances the general purpose
+> register index by its own size, so it comes with no test of its own; it
+> keeps the alignment rule scoped to the bank it applies to.
+>
 
-Cover ordinary and nested perf event arrays to preserve unsupported
-lookup error markers. Dump 64 distinct inner maps under RLIMIT_NOFILE=32
-to detect retaining a descriptor for every inner map. Check JSON and
-plain output, and ensure child descriptor cleanup leaves the parent's
-resources usable.
+one small issue here; we record alignment for structs from DW_AT_align
+in associated tags; we should ensure that we utilize that alignment
+where available. However it's a bit broken in that we don't appear
+to record alignment for typedefs, just structs.
 
-Assisted-by: LLM
-Signed-off-by: Tianyi Chen <hi@tychen.cc>
----
- .../bpf/prog_tests/bpftool_map_dump.c         | 507 ++++++++++++++++++
- 1 file changed, 507 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
+I think we can tackle that with a followup though; unless anyone objects I'll
+land these patches later today.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
-new file mode 100644
-index 000000000000..d36aaa658010
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/bpftool_map_dump.c
-@@ -0,0 +1,507 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <test_progs.h>
-+#include <bpftool_helpers.h>
-+#include <bpf/btf.h>
-+#include <sys/resource.h>
-+#include <dirent.h>
-+
-+#define OUTPUT_SIZE 8192
-+#define MANY_MAPS_OUTPUT_SIZE 65536
-+
-+static bool dump_map(__u32 id, const char *options, bool recursive, char *output)
-+{
-+	char command[MAX_BPFTOOL_CMD_LEN];
-+
-+	snprintf(command, sizeof(command), "%s map dump id %u%s", options, id,
-+		 recursive ? " recursive" : "");
-+	memset(output, 0, OUTPUT_SIZE);
-+	if (!ASSERT_OK(get_bpftool_command_output(command, output, OUTPUT_SIZE - 1),
-+		       "dump_map"))
-+		return false;
-+	/* The helper leaves the trailing newline in place. */
-+	output[strcspn(output, "\n")] = '\0';
-+	return true;
-+}
-+
-+static __u32 map_id(int fd)
-+{
-+	struct bpf_map_info info = {};
-+	__u32 len = sizeof(info);
-+
-+	if (!ASSERT_OK(bpf_map_get_info_by_fd(fd, &info, &len), "map_info"))
-+		return 0;
-+	return info.id;
-+}
-+
-+static int count_token(const char *output, const char *token)
-+{
-+	int count = 0;
-+
-+	while ((output = strstr(output, token))) {
-+		count++;
-+		output += strlen(token);
-+	}
-+	return count;
-+}
-+
-+static void check_plain(__u32 root_id, __u32 inner_id, const char *type,
-+			int entries, bool typed)
-+{
-+	char command[MAX_BPFTOOL_CMD_LEN], header[128];
-+	char output[OUTPUT_SIZE] = {};
-+	const char *root, *inner;
-+
-+	snprintf(command, sizeof(command), "map dump id %u recursive", root_id);
-+	if (!ASSERT_OK(get_bpftool_command_output(command, output, sizeof(output) - 1),
-+		       "plain_dump"))
-+		return;
-+	snprintf(header, sizeof(header), "%u: %s  name dump_outer  ", root_id, type);
-+	root = strstr(output, header);
-+	if (!ASSERT_OK_PTR(root, "plain_root_header"))
-+		return;
-+	ASSERT_EQ(root - output, 0, "plain_root_first");
-+	ASSERT_EQ(count_token(output, "inner_map_id:"), entries, "plain_references");
-+	if (entries) {
-+		snprintf(header, sizeof(header), "%u: hash  name dump_inner  ", inner_id);
-+		inner = strstr(output, header);
-+		if (ASSERT_OK_PTR(inner, "plain_inner_header"))
-+			ASSERT_GT(inner - root, 0, "plain_inner_after_root");
-+		ASSERT_EQ(count_token(output, header), 1, "plain_inner_once");
-+	}
-+	ASSERT_EQ(count_token(output, "Found "), entries && !typed ? 2 : 1,
-+		  "plain_map_count");
-+	if (typed) {
-+		ASSERT_HAS_SUBSTR(output, "\"key\": 0", "plain_btf_key");
-+		ASSERT_HAS_SUBSTR(output, "\"value\": 16843009", "plain_btf_value");
-+	}
-+}
-+
-+static void test_outer(enum bpf_map_type type, int entries, bool empty_inner,
-+		       bool typed)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+	LIBBPF_OPTS(bpf_map_create_opts, inner_opts);
-+	struct btf *btf = NULL;
-+	char outer[OUTPUT_SIZE], inner[OUTPUT_SIZE], output[OUTPUT_SIZE];
-+	char expected[OUTPUT_SIZE * 3], reference[64];
-+	const char *type_name = libbpf_bpf_map_type_str(type);
-+	int inner_fd = -1, outer_fd = -1;
-+	__u32 root_id, inner_id, key, value = 0x01010101;
-+
-+	if (typed) {
-+		btf = btf__new_empty();
-+		if (!ASSERT_OK_PTR(btf, "create_btf") ||
-+		    !ASSERT_EQ(btf__add_int(btf, "unsigned int", 4, 0), 1, "btf_int") ||
-+		    !ASSERT_OK(btf__load_into_kernel(btf), "load_btf"))
-+			goto out;
-+		inner_opts.btf_fd = btf__fd(btf);
-+		inner_opts.btf_key_type_id = 1;
-+		inner_opts.btf_value_type_id = 1;
-+	}
-+	inner_fd = bpf_map_create(BPF_MAP_TYPE_HASH, "dump_inner", sizeof(key),
-+				  sizeof(value), 2, &inner_opts);
-+	if (!ASSERT_OK_FD(inner_fd, "create_inner"))
-+		goto out;
-+	key = 0;
-+	if (!empty_inner &&
-+	    !ASSERT_OK(bpf_map_update_elem(inner_fd, &key, &value, BPF_ANY),
-+		       "populate_inner"))
-+		goto out;
-+	opts.inner_map_fd = inner_fd;
-+	outer_fd = bpf_map_create(type, "dump_outer", sizeof(key), sizeof(__u32),
-+				  3, &opts);
-+	if (!ASSERT_OK_FD(outer_fd, "create_outer"))
-+		goto out;
-+	/* For arrays, unused slots also exercise failed lookups. */
-+	for (key = 0; key < entries; key++)
-+		if (!ASSERT_OK(bpf_map_update_elem(outer_fd, &key, &inner_fd, BPF_ANY),
-+			       "populate_outer"))
-+			goto out;
-+	root_id = map_id(outer_fd);
-+	inner_id = map_id(inner_fd);
-+	if (!root_id || !inner_id || !dump_map(root_id, "-j", false, outer) ||
-+	    !dump_map(inner_id, "-j", false, inner))
-+		goto out;
-+
-+	ASSERT_EQ(outer[0], '[', "default_array");
-+	ASSERT_EQ(count_token(outer, "\"elements\":"), 0, "default_no_wrapper");
-+	ASSERT_EQ(count_token(outer, "\"id\":"), 0, "default_no_header");
-+	snprintf(reference, sizeof(reference), "\"inner_map_id\":%u", inner_id);
-+	ASSERT_EQ(count_token(outer, reference), entries, "default_references");
-+	if (!entries)
-+		ASSERT_STREQ(outer, "[]", "empty_outer_default");
-+	if (empty_inner)
-+		ASSERT_STREQ(inner, "[]", "empty_inner_default");
-+	else if (typed)
-+		ASSERT_HAS_SUBSTR(inner, "\"formatted\":{\"key\":0,\"value\":16843009}",
-+				  "typed_inner");
-+	else
-+		ASSERT_STREQ(inner,
-+			     "[{\"key\":[\"0x00\",\"0x00\",\"0x00\",\"0x00\"],"
-+			     "\"value\":[\"0x01\",\"0x01\",\"0x01\",\"0x01\"]}]",
-+			     "ordinary_default");
-+
-+	/*
-+	 * Compare the complete JSON document: a flat array with the root first,
-+	 * one copy of the shared inner map, and unchanged entry representations.
-+	 */
-+	if (entries)
-+		snprintf(expected, sizeof(expected),
-+			 "[{\"id\":%u,\"type\":\"%s\",\"name\":\"dump_outer\","
-+			 "\"flags\":0,\"elements\":%s},{\"id\":%u,\"type\":\"hash\","
-+			 "\"name\":\"dump_inner\",\"flags\":0,\"elements\":%s}]",
-+			 root_id, type_name, outer, inner_id, inner);
-+	else
-+		snprintf(expected, sizeof(expected),
-+			 "[{\"id\":%u,\"type\":\"%s\",\"name\":\"dump_outer\","
-+			 "\"flags\":0,\"elements\":[]}]", root_id, type_name);
-+	if (dump_map(root_id, "-j", true, output))
-+		ASSERT_STREQ(output, expected, "recursive_json");
-+	if (dump_map(root_id, "--json", true, output))
-+		ASSERT_STREQ(output, expected, "recursive_long_json");
-+	check_plain(root_id, inner_id, type_name, entries, typed);
-+
-+	/* Recursion on an ordinary map still emits a single map object. */
-+	snprintf(expected, sizeof(expected),
-+		 "[{\"id\":%u,\"type\":\"hash\",\"name\":\"dump_inner\","
-+		 "\"flags\":0,\"elements\":%s}]", inner_id, inner);
-+	if (dump_map(inner_id, "-j", true, output))
-+		ASSERT_STREQ(output, expected, "ordinary_recursive");
-+out:
-+	if (outer_fd >= 0)
-+		close(outer_fd);
-+	if (inner_fd >= 0)
-+		close(inner_fd);
-+	btf__free(btf);
-+}
-+
-+static void test_multiple_roots(void)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+	char command[MAX_BPFTOOL_CMD_LEN], name[BPF_OBJ_NAME_LEN];
-+	char output[OUTPUT_SIZE] = {}, expected[OUTPUT_SIZE * 4], elements[OUTPUT_SIZE];
-+	static const char * const types[] = { "hash", "array_of_maps", "hash_of_maps", "hash" };
-+	int fds[] = { -1, -1, -1, -1 };
-+	__u32 ids[4], key;
-+	size_t len = 0;
-+	int i, n;
-+
-+	/*
-+	 * Select the first inner map and both outers as roots. The other inner
-+	 * map must be appended after all three roots, even though it is found
-+	 * while dumping the first outer. A process-specific name avoids other
-+	 * tests' maps joining the selection.
-+	 */
-+	snprintf(name, sizeof(name), "dump_%u", getpid());
-+	fds[0] = bpf_map_create(BPF_MAP_TYPE_HASH, name, 4, 4, 1, NULL);
-+	if (!ASSERT_OK_FD(fds[0], "create_selected_inner"))
-+		goto out;
-+	fds[3] = bpf_map_create(BPF_MAP_TYPE_HASH, "dump_discovered", 4, 4, 1, NULL);
-+	if (!ASSERT_OK_FD(fds[3], "create_discovered_inner"))
-+		goto out;
-+	opts.inner_map_fd = fds[0];
-+	fds[1] = bpf_map_create(BPF_MAP_TYPE_ARRAY_OF_MAPS, name, 4, 4, 2, &opts);
-+	if (!ASSERT_OK_FD(fds[1], "create_array_root"))
-+		goto out;
-+	fds[2] = bpf_map_create(BPF_MAP_TYPE_HASH_OF_MAPS, name, 4, 4, 2, &opts);
-+	if (!ASSERT_OK_FD(fds[2], "create_hash_root"))
-+		goto out;
-+	for (i = 1; i <= 2; i++) {
-+		key = 0;
-+		if (!ASSERT_OK(bpf_map_update_elem(fds[i], &key, &fds[0], BPF_ANY),
-+			       "reference_selected_inner"))
-+			goto out;
-+		key = 1;
-+		if (!ASSERT_OK(bpf_map_update_elem(fds[i], &key, &fds[3], BPF_ANY),
-+			       "reference_discovered_inner"))
-+			goto out;
-+	}
-+	for (i = 0; i < ARRAY_SIZE(fds); i++) {
-+		ids[i] = map_id(fds[i]);
-+		if (!ids[i] || !dump_map(ids[i], "-j", false, elements))
-+			goto out;
-+		n = snprintf(expected + len, sizeof(expected) - len,
-+			     "%s{\"id\":%u,\"type\":\"%s\",\"name\":\"%s\","
-+			     "\"flags\":0,\"elements\":%s}%s",
-+			     i ? "," : "[", ids[i], types[i],
-+			     i == 3 ? "dump_discovered" : name, elements, i == 3 ? "]" : "");
-+		if (!ASSERT_GE(n, 0, "format_expected") ||
-+		    !ASSERT_LT(n, sizeof(expected) - len, "expected_length"))
-+			goto out;
-+		len += n;
-+	}
-+	snprintf(command, sizeof(command), "-j map dump name %s recursive", name);
-+	if (ASSERT_OK(get_bpftool_command_output(command, output, sizeof(output) - 1),
-+		      "dump_multiple_roots")) {
-+		output[strcspn(output, "\n")] = '\0';
-+		ASSERT_STREQ(output, expected, "roots_first_and_seed_dedup");
-+	}
-+out:
-+	for (i = 0; i < ARRAY_SIZE(fds); i++)
-+		if (fds[i] >= 0)
-+			close(fds[i]);
-+}
-+
-+static void test_unreadable(bool outer)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+	char elements[OUTPUT_SIZE], output[OUTPUT_SIZE], root[OUTPUT_SIZE];
-+	char expected[OUTPUT_SIZE * 3], plain[OUTPUT_SIZE] = {};
-+	char command[MAX_BPFTOOL_CMD_LEN];
-+	int inner_fd = -1, outer_fd = -1, lookup_errno;
-+	__u32 inner_id, root_id, key = 0, value;
-+
-+	/*
-+	 * Every key is enumerable, but PERF_EVENT_ARRAY lookup returns
-+	 * ENOTSUPP (the kernel-internal errno). Check both entries so an
-+	 * early exit on the first lookup failure cannot pass.
-+	 */
-+	inner_fd = bpf_map_create(BPF_MAP_TYPE_PERF_EVENT_ARRAY, "dump_unreadable",
-+				  sizeof(key), sizeof(value), 2, NULL);
-+	if (!ASSERT_OK_FD(inner_fd, "create_unreadable"))
-+		goto out;
-+	if (!ASSERT_LT(bpf_map_lookup_elem(inner_fd, &key, &value), 0,
-+		       "unreadable_lookup"))
-+		goto out;
-+	lookup_errno = errno;
-+	if (!ASSERT_NEQ(lookup_errno, ENOENT, "unreadable_not_missing"))
-+		goto out;
-+	inner_id = map_id(inner_fd);
-+	if (!inner_id || !dump_map(inner_id, "-j", false, elements))
-+		goto out;
-+	ASSERT_EQ(count_token(elements, "\"error\":"), 2, "default_json_errors");
-+	snprintf(command, sizeof(command), "map dump id %u", inner_id);
-+	if (!ASSERT_OK(get_bpftool_command_output(command, plain, sizeof(plain) - 1),
-+		       "default_plain_unreadable"))
-+		goto out;
-+	ASSERT_EQ(count_token(plain, strerror(lookup_errno)), 2, "default_plain_errors");
-+	ASSERT_HAS_SUBSTR(plain, "Found 0 elements", "default_plain_count");
-+
-+	root_id = inner_id;
-+	if (outer) {
-+		opts.inner_map_fd = inner_fd;
-+		outer_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY_OF_MAPS, "dump_outer",
-+					  sizeof(key), sizeof(value), 1, &opts);
-+		if (!ASSERT_OK_FD(outer_fd, "create_outer") ||
-+		    !ASSERT_OK(bpf_map_update_elem(outer_fd, &key, &inner_fd, BPF_ANY),
-+			       "populate_outer"))
-+			goto out;
-+		root_id = map_id(outer_fd);
-+		if (!root_id || !dump_map(root_id, "-j", false, root))
-+			goto out;
-+		snprintf(expected, sizeof(expected),
-+			 "[{\"id\":%u,\"type\":\"array_of_maps\",\"name\":\"dump_outer\","
-+			 "\"flags\":0,\"elements\":%s},{\"id\":%u,"
-+			 "\"type\":\"perf_event_array\",\"name\":\"dump_unreadable\","
-+			 "\"flags\":0,\"elements\":%s}]", root_id, root, inner_id, elements);
-+	} else {
-+		snprintf(expected, sizeof(expected),
-+			 "[{\"id\":%u,\"type\":\"perf_event_array\","
-+			 "\"name\":\"dump_unreadable\",\"flags\":0,\"elements\":%s}]",
-+			 inner_id, elements);
-+	}
-+	if (dump_map(root_id, "-j", true, output))
-+		ASSERT_STREQ(output, expected, "recursive_unreadable_json");
-+	memset(output, 0, sizeof(output));
-+	snprintf(command, sizeof(command), "map dump id %u recursive", root_id);
-+	if (ASSERT_OK(get_bpftool_command_output(command, output, sizeof(output) - 1),
-+		      "recursive_unreadable_plain")) {
-+		ASSERT_HAS_SUBSTR(output, plain, "recursive_plain_preserves_errors");
-+		ASSERT_EQ(count_token(output, strerror(lookup_errno)), 2,
-+			  "recursive_plain_errors");
-+		ASSERT_EQ(count_token(output, "Found "), outer ? 2 : 1,
-+			  "recursive_plain_maps");
-+	}
-+out:
-+	if (outer_fd >= 0)
-+		close(outer_fd);
-+	if (inner_fd >= 0)
-+		close(inner_fd);
-+}
-+
-+static void test_many_inner_maps(bool json)
-+{
-+	enum {
-+		DUMP_OK,
-+		DUMP_ERR_RLIMIT,
-+		DUMP_ERR_COMMAND,
-+		DUMP_ERR_COUNTS,
-+		DUMP_ERR_IDS,
-+		DUMP_ERR_JSON,
-+		DUMP_ERR_FDS,
-+	};
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+	const struct rlimit limit = { .rlim_cur = 32, .rlim_max = 32 };
-+	char command[MAX_BPFTOOL_CMD_LEN], token[64];
-+	__u32 ids[64], root_id, key;
-+	int inner_fd = -1, outer_fd = -1, status;
-+	int inherited_fds[32], nr_inherited = 0, i;
-+	char *output = NULL;
-+	pid_t pid;
-+
-+	inner_fd = bpf_map_create(BPF_MAP_TYPE_HASH, "dump_inner", 4, 4, 1, NULL);
-+	if (!ASSERT_OK_FD(inner_fd, "create_template"))
-+		goto out;
-+	opts.inner_map_fd = inner_fd;
-+	outer_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY_OF_MAPS, "dump_outer", 4, 4,
-+				  ARRAY_SIZE(ids), &opts);
-+	close(inner_fd);
-+	inner_fd = -1;
-+	if (!ASSERT_OK_FD(outer_fd, "create_outer"))
-+		goto out;
-+	for (key = 0; key < ARRAY_SIZE(ids); key++) {
-+		inner_fd = bpf_map_create(BPF_MAP_TYPE_HASH, "dump_inner", 4, 4, 1, NULL);
-+		if (!ASSERT_OK_FD(inner_fd, "create_inner") ||
-+		    !ASSERT_OK(bpf_map_update_elem(outer_fd, &key, &inner_fd, BPF_ANY),
-+			       "populate_outer"))
-+			goto out;
-+		ids[key] = map_id(inner_fd);
-+		if (!ids[key])
-+			goto out;
-+		/* The outer map keeps each distinct inner map alive. */
-+		close(inner_fd);
-+		inner_fd = -1;
-+	}
-+	root_id = map_id(outer_fd);
-+	output = calloc(1, MANY_MAPS_OUTPUT_SIZE);
-+	if (!root_id || !ASSERT_OK_PTR(output, "allocate_output"))
-+		goto out;
-+
-+	/* Fill the low FD slots to exercise inherited descriptor cleanup. */
-+	for (i = 0; i < ARRAY_SIZE(inherited_fds); i++) {
-+		int fd = open("/dev/null", O_RDONLY);
-+
-+		if (!ASSERT_OK_FD(fd, "open_inherited_fd"))
-+			goto out;
-+		inherited_fds[nr_inherited++] = fd;
-+	}
-+
-+	/*
-+	 * Create all fixtures before lowering the limit, and keep the test
-+	 * runner's limit unchanged. Retaining every discovered FD would exceed
-+	 * this limit before the recursive dump could visit all inner maps.
-+	 */
-+	pid = fork();
-+	if (!ASSERT_GE(pid, 0, "fork"))
-+		goto out;
-+	if (!pid) {
-+		struct dirent *entry;
-+		DIR *dir;
-+
-+		/* Reserve a slot for the directory even if the parent is full. */
-+		close(inherited_fds[nr_inherited - 1]);
-+		dir = opendir("/proc/self/fd");
-+		if (!dir)
-+			_exit(DUMP_ERR_FDS);
-+		/* The parent keeps the outer map and its inner maps alive. */
-+		for (;;) {
-+			char *end;
-+			long fd;
-+
-+			errno = 0;
-+			entry = readdir(dir);
-+			if (!entry) {
-+				if (errno)
-+					_exit(DUMP_ERR_FDS);
-+				break;
-+			}
-+			fd = strtol(entry->d_name, &end, 10);
-+			if (*end || fd < 3 || fd == dirfd(dir))
-+				continue;
-+			close(fd);
-+		}
-+		if (closedir(dir))
-+			_exit(DUMP_ERR_FDS);
-+		if (setrlimit(RLIMIT_NOFILE, &limit))
-+			_exit(DUMP_ERR_RLIMIT);
-+		snprintf(command, sizeof(command), "%s map dump id %u recursive",
-+			 json ? "-j" : "", root_id);
-+		if (get_bpftool_command_output(command, output, MANY_MAPS_OUTPUT_SIZE - 1))
-+			_exit(DUMP_ERR_COMMAND);
-+		if (count_token(output, json ? "\"id\":" : "Found ") != ARRAY_SIZE(ids) + 1 ||
-+		    count_token(output, json ? "\"inner_map_id\":" : "inner_map_id:") !=
-+		    ARRAY_SIZE(ids))
-+			_exit(DUMP_ERR_COUNTS);
-+		for (key = 0; key < ARRAY_SIZE(ids); key++) {
-+			if (json)
-+				snprintf(token, sizeof(token), "\"id\":%u,", ids[key]);
-+			else
-+				snprintf(token, sizeof(token), "\n%u: hash  name dump_inner  ",
-+					 ids[key]);
-+			if (count_token(output, token) != 1)
-+				_exit(DUMP_ERR_IDS);
-+		}
-+		if (json && (output[0] != '[' ||
-+			     strcmp(output + strlen(output) - 2, "]\n")))
-+			_exit(DUMP_ERR_JSON);
-+		_exit(DUMP_OK);
-+	}
-+	if (ASSERT_EQ(waitpid(pid, &status, 0), pid, "waitpid") &&
-+	    ASSERT_TRUE(WIFEXITED(status), "child_exited"))
-+		ASSERT_EQ(WEXITSTATUS(status), DUMP_OK, "dump_with_low_fd_limit");
-+	for (i = 0; i < nr_inherited; i++)
-+		ASSERT_GE(fcntl(inherited_fds[i], F_GETFD), 0, "parent_fd_preserved");
-+	ASSERT_EQ(map_id(outer_fd), root_id, "parent_outer_preserved");
-+out:
-+	while (nr_inherited)
-+		close(inherited_fds[--nr_inherited]);
-+	free(output);
-+	if (outer_fd >= 0)
-+		close(outer_fd);
-+	if (inner_fd >= 0)
-+		close(inner_fd);
-+}
-+
-+static void test_dump_arguments(void)
-+{
-+	const char * const options[] = {
-+		"''", "unknown", "recursive recursive", "recursive unknown",
-+	};
-+	char command[MAX_BPFTOOL_CMD_LEN];
-+	__u32 id;
-+	int fd;
-+	size_t i;
-+
-+	fd = bpf_map_create(BPF_MAP_TYPE_HASH, "dump_args", 4, 4, 1, NULL);
-+	if (!ASSERT_OK_FD(fd, "create_map"))
-+		return;
-+	id = map_id(fd);
-+	if (!id)
-+		goto out;
-+	for (i = 0; i < ARRAY_SIZE(options); i++) {
-+		snprintf(command, sizeof(command), "map dump id %u %s", id, options[i]);
-+		ASSERT_NEQ(run_bpftool_command(command), 0, options[i]);
-+	}
-+out:
-+	close(fd);
-+}
-+
-+void test_bpftool_map_dump(void)
-+{
-+	if (test__start_subtest("arguments"))
-+		test_dump_arguments();
-+	if (test__start_subtest("unreadable_ordinary"))
-+		test_unreadable(false);
-+	if (test__start_subtest("unreadable_inner"))
-+		test_unreadable(true);
-+	if (test__start_subtest("many_inner_maps_json"))
-+		test_many_inner_maps(true);
-+	if (test__start_subtest("many_inner_maps_plain"))
-+		test_many_inner_maps(false);
-+	if (test__start_subtest("multiple_roots"))
-+		test_multiple_roots();
-+	if (test__start_subtest("array_of_maps"))
-+		test_outer(BPF_MAP_TYPE_ARRAY_OF_MAPS, 1, false, false);
-+	if (test__start_subtest("hash_of_maps"))
-+		test_outer(BPF_MAP_TYPE_HASH_OF_MAPS, 1, false, false);
-+	if (test__start_subtest("shared_inner"))
-+		test_outer(BPF_MAP_TYPE_ARRAY_OF_MAPS, 2, false, false);
-+	if (test__start_subtest("empty_array_of_maps"))
-+		test_outer(BPF_MAP_TYPE_ARRAY_OF_MAPS, 0, false, false);
-+	if (test__start_subtest("empty_hash_of_maps"))
-+		test_outer(BPF_MAP_TYPE_HASH_OF_MAPS, 0, false, false);
-+	if (test__start_subtest("btf_inner"))
-+		test_outer(BPF_MAP_TYPE_HASH_OF_MAPS, 1, false, true);
-+	if (test__start_subtest("empty_inner"))
-+		test_outer(BPF_MAP_TYPE_HASH_OF_MAPS, 1, true, false);
-+}
--- 
-2.55.0
+ 
+> Changelog:
+>   v1 -> v2:
+>     - v1: https://lore.kernel.org/bpf/20260911040955.339939-1-yonghong.song@linux.dev/
+>     - add commit "Do not align the argument register index for FP arguments".
+> 
+> Yonghong Song (3):
+>   dwarf_loader: Skip the argument register the arm64 ABI leaves as a
+>     hole
+>   dwarf_loader: Do not align the argument register index for FP
+>     arguments
+>   tests: tests: Add test for 16-byte aligned arguments on arm64
+> 
+>  dwarf_loader.c              | 72 ++++++++++++++++++++++++++++++++--
+>  dwarves.h                   | 11 ++++++
+>  tests/clang_parm_align16.sh | 77 +++++++++++++++++++++++++++++++++++++
+>  tests/test_lib.sh           |  3 +-
+>  4 files changed, 158 insertions(+), 5 deletions(-)
+>  create mode 100755 tests/clang_parm_align16.sh
+> 
+> -- 
+> 2.53.0-Meta
+> 
 
