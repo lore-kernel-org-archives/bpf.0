@@ -1,87 +1,79 @@
-Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com [74.125.228.140])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 140D835677C
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:31:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394FA3F6C2A
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:48:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790242320; cv=none; b=r6gw25VTQY0+0aeGmbAwzJ7xvCwk+lwgmbpLICMzZy6+qRrjJvLoDSadUloEzmmD4sderm2eVPUJXxDISCXDAsRUlCmcZoD5ZmZ8SBGWFn/KZ0JHwjQ1OWBwa3XQxg9RFuJ1Ko3yq+YrcGUbAeD5m5FLyIFn0W+LmTg3n9nFdZE=
+	t=1790243307; cv=none; b=mIpB9hiTOY8y0cFGjwtLXmfblL2G6xw+qReuh+xy6vqp9IHIxjed982plbJLLS7TQ80WR6QhF1uT0ukx+F1MAapSiorIuZMKqIu6q8qHLMU5LvmKiUp+2rV62pQjLM0uc9vX2IyofZb3p/FZNX+7/cIVzU3PTdtzZNuzxFBwKxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790242320; c=relaxed/simple;
-	bh=nzvl7mqCF4ztoD1AQhrEHtx+ggc5PpKtO7mNFBUOwCs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iQw6hKCfOp3hZ1PaN5Y0x2vCJYzJ2jvBDjiljhB0jXUFsq8pN7JGUXB2zk7PRhsXubCiwBk2Y7puz5DnU/7Rv0Wn8h3addN0U91bYdhvReHyHfJb6wRU0FEvKLyZy9/qAGrR9b1df+suwJZiLYDljAaMBPzEj60ukwD3wVfdeiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f47e3Cim; arc=none smtp.client-ip=74.125.228.140
+	s=arc-20240116; t=1790243307; c=relaxed/simple;
+	bh=HEeUd+LSqVw5hynFy7d5WxUSYyIFITCcanCLFiiRq9k=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kVrPNUdn105QxdlsmjcQw3AWFKEteXCv2rxPgTl0xv6YnNQNiH2BlMMngU06mH+8+p7va4KvgQah/m4amGpTmU2Cw3HceWLdPg9ayx3KzypXJv+/m0G20a9iVOYGlOSBWalPa8xRLeIkMXZutGRU2nDSX9AWQY9tnZxg+13Mwqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jRbzQyKa; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f47e3Cim"
-Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c254f705536so341135766b.1
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 02:31:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jRbzQyKa"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-488615e6cfcso302202f8f.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 02:48:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790242317; x=1790847117; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790243296; x=1790848096; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=IVufKMPB9vejpNzxTLukLIifCoBhEi//kGkahD5KaUo=;
-        b=f47e3Cimiq/4GG/lBAVvrd1xly4gsc9O4dK5YuRxulEjBDmz6olRWnVL0TveIpkiFi
-         uvz9xeCMA/3K7vbu4v8AkF2hbW22qq03Z1KfDkRBCz3oirpIYrLJ5Eq9hlHH0/Xdd6Am
-         3ZqWTqIJGfI8CznfuuD4iMZhodEHg1gqpWSdKBKURrElNF3CArEFI51tvz+2ULuz4R/L
-         /Wl20E2CvTIOGWZZUEEJAjFbrW6q8rKCxTw2goPBhAEWE6qHH3oCYtOE+r4UGkxwHeDa
-         yEx5wECT6uohnRGbonOnbM2ctn+iJeYV3ur8BsFYaYNDdchZfsDgLtqYGiXc/Wpw7ga0
-         +NbQ==
+        bh=UXZ9XUc1fFWwTexSbP5UtcuqGHX4d6cpGE1SNbJUFEU=;
+        b=jRbzQyKa2LcUrzkvfIhgdjfphY6Nfwr1i5EaytP0sFL/a6LeFKLet0O6C/tdvommzv
+         hpa9O+YGmH4wVV1BbAi3QbzlquMxCyn9sD7QuNTMMimNnolO7qb7ZmmN2gtITXCKzmLT
+         I+1K8Dw8FqRWrXP13tRfrjXZoG2hUpVOJG4es1MfMQttLLs5fxV8crYa+v3wNQm4bWZu
+         n536gGOjmS8LMNPSKGC7a+/6KwzCmrIREAFXAeNdQR6Wjij43vwo+2faiQAN3VqGfe/T
+         j2PckwRqzeNdd8ppR9Acs5R/lEK9Yo4gnzPrfsb380qFV3fW3GgNYbE5dLdqnnM7qmrV
+         oaKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790242317; x=1790847117;
+        d=1e100.net; s=20260707; t=1790243296; x=1790848096;
         h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=IVufKMPB9vejpNzxTLukLIifCoBhEi//kGkahD5KaUo=;
-        b=iF8YSdzuAD4VWC/sj3Ld/SJLHng5KjsbXIg1Wu8vPAVd7EWhFkbeRmDcTsE+Y+rm+O
-         koRe7EAR+EF4jgdD/k21Vc1M8GW2Eq261qKHUos37o6rnGmXzWW70KPbegm33Ub/zqn+
-         ooh5MHy3qcKpnzSnO8Udvo+YHMBcp5TRwG9b8Bt4PLjTLzJgeLHCV+bKgbRjpzBr3va3
-         THejnd3ws7hEmSFXoS6q2dq6P5NQoxB7I0CROAYsLqVaAJjbi0mzrHl2tniVFFGrevEY
-         Jsewd2bAgWUo4yKBtI+89shay9c2atmDA61MC4tuprtNQ8nSjlzZ2Ddq/g1Rpc05kA6J
-         glzQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxMO7fLfoepfzRIcyt7tW5CS5zqfkyICuRIS3R3SG73RyKUwT9jzT64xY/Wz/Cb7qKFKpM=@vger.kernel.org
-X-Gm-Message-State: AFuF++lDoaWTFL213rRnO56TtTGAMFT+QiYL4vtU6InR5ByVImHk41pH
-	NXcrdpKGLGTmtYSYzIa/9SV9+Cam5DEt9grPQZDXsujlpDtEIuQwakIa
-X-Gm-Gg: AYBFou156sAQyMi4Ty89M9phi6gYN28klMQIsTi99t0dqSjLmlrYNcyr8VmaY0iminL
-	MkXCrmYGx46+AmaoL1fhfeNEBLhLjRM32Ty/uZlp64lg9vyODDdMIUeYoT6PWV0kwWPSl0xC0gQ
-	t1Lqmdg26g/xImrpZsAwJIcPYJC818Qg0uHymxSOoA2oSXp2myrVdNOTbnec2nFF23QmX0o3mrq
-	inRQPcztllpFoA/D6iyVcKDe8KN/+gK9p80Jba9d1tgFkUy+nTpWdyPbqxSgFS/+HVq+vxIJaW8
-	My1mLWVWP129NwpmQ32AQ7QaLVJcuCNa/jU4u3ojHuDrNfG0w9ivAlzYYnwWB/Nt2FqOb2e0Nbb
-	z+a5YwJoqgvlrNjtYvGEz2c8IcxtkscT/tZIa6T0NeiYh0Kqj6gytGfoMYPpydvmTcVu7LvHU1j
-	AHxb3nldKOYSmoBBV+f6zEXikIBGgkZhzDponDwnZ8SU2/wl4jIP45Z+FXKpF3U9fHC61UkqqWj
-	5tCvHIJPXMjokGCl57DSv9wUgYhLxJflmCFfjmCzGGvDVHWvWhpoKxTjlZNUEdhujrj44pj9n02
-	anSz
-X-Received: by 2002:a17:907:9812:b0:c26:1648:a06e with SMTP id a640c23a62f3a-c2ac253f94cmr137512666b.41.1790242317135;
-        Thu, 24 Sep 2026 02:31:57 -0700 (PDT)
-Received: from andreayoga.localdomain (93-42-14-189.ip84.fastwebnet.it. [93.42.14.189])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2aae675d59sm270080366b.42.2026.09.24.02.31.53
+        bh=UXZ9XUc1fFWwTexSbP5UtcuqGHX4d6cpGE1SNbJUFEU=;
+        b=P060liXLzu4CgZu4hy6XbH5hIDq5iCsTS8P7BxMLha84wlAAv/sQmt296D0NQ9XMvT
+         hlzx9WGP5e0Gn3im8rnq2FY1QYCzvTsMo6XkaMLXy2fNv5MSRyKrlDuQY4vbiL99nHpF
+         36HbKktqS/eFCI7Mo+Gef9X5S2oc8T5B6O4Pd9A6F4k4hck/g/ypsV955WOwFxuTmNh1
+         UsHfx0zzd7QqyKkneSaJ2rg5yUaUWgBA1xPyNi11rSVn+zx0ej5siqtQlmdSITM2E521
+         YyjrXaScbY4aOafNZaaoOV8GOoXdu03j58C5Te9/mJGfg3austFxcO1yZEp0aIII6xEI
+         Py5w==
+X-Forwarded-Encrypted: i=1; AKwUvBxpofoXcMDJWQDnaxD3+C14TYiWfPxggXk0HP0mPI0cPgnHPd+wxXgiA9XjVybJgfIwZGo=@vger.kernel.org
+X-Gm-Message-State: AFuF++lKfgqogfV7mA00CihkdpZfG+ozn+zLa+xf81/YNcAEvgrBuBIH
+	UvtjNB/qoHCVXbTE5hbEo+0WZGq1rmcvCRNo01/uUNn3xDXetKB0wiMJ
+X-Gm-Gg: AYBFou3zCekhvlVXVyalwl8gb0ibgrUDPr1oLJ9/KmmxNzYZ/IbqoBGjDWAm55hfu0+
+	dHfB//IaYuLVWCLrGllqxUVNholegKaW5H9oaIzX07lKDIVb5y6mYCChRmrmABMIu7GG6fzNCsC
+	IEC5uBNsDbxg8UgNgfrgtwikCUGlJ5lVdhY3bG9HlVeYgiUv0FWh+q0pwiQQyh0+Yy396oh/mst
+	KnffRZUnt6FlEtUIJ9okpSZS8clglEk0Ak6KuR66/JX80CgGd/tWmOOXVA0oWIdmD1bvXhDiOks
+	4GkuF0G9a9UKhGujoF6ZNhmNhaTlSKGmtlCJxp9f5YoFSPhvijcyOh42r0TRDEDepZzN3e9ievj
+	fUboMNhIaZe0h5IQtXXMGsLUtOaf3nXekK9ABQf7nf/m6Vc1tHWiWB3owLc/UfCGmr8ys/D7ZV3
+	D7uWD4ynNnmycVXiUBY39SimRr5I9iTXID0JfwgasyiNhad1t9l4i06NyKng==
+X-Received: by 2002:a05:6000:4013:b0:487:22b1:e511 with SMTP id ffacd0b85a97d-488716af28amr3701541f8f.9.1790243295567;
+        Thu, 24 Sep 2026 02:48:15 -0700 (PDT)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886876c64dsm13751435f8f.21.2026.09.24.02.48.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 02:31:55 -0700 (PDT)
-Date: Thu, 24 Sep 2026 11:31:50 +0200
-From: Andrea Parri <parri.andrea@gmail.com>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Josef Bacik <josef@toxicpanda.com>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>, Boqun Feng <boqun@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>, rcu@vger.kernel.org,
-	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kprobes: Make optprobe optimizer multi-generational and
- asynchronous
-Message-ID: <arTuBodyGqQ0mErI@andreayoga.localdomain>
-References: <20260923164510.f3bbddefea4423f8f1bfecb8@kernel.org>
- <179017148080.466588.9116221556625712980.stgit@devnote2>
+        Thu, 24 Sep 2026 02:48:15 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 24 Sep 2026 11:48:13 +0200
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: chenyuan_fl@163.com, alexei.starovoitov@gmail.com, ast@kernel.org,
+	bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
+	yonghong.song@linux.dev, john.fastabend@gmail.com, song@kernel.org,
+	ihor.solodrai@linux.dev, Yuan Chen <chenyuan@kylinos.cn>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Keep target extended until its last
+ freplace link detaches
+Message-ID: <arTx3bjNv_BZcQ9K@krava>
+References: <20260924023737.1140521-1-chenyuan_fl@163.com>
+ <20260924023737.1140521-2-chenyuan_fl@163.com>
+ <d3e65c94-45d9-4c67-a276-103c5e7fa052@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -90,58 +82,80 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <179017148080.466588.9116221556625712980.stgit@devnote2>
+In-Reply-To: <d3e65c94-45d9-4c67-a276-103c5e7fa052@linux.dev>
 
-Hi Masami,
+On Thu, Sep 24, 2026 at 03:06:16PM +0800, Leon Hwang wrote:
+> On 24/9/26 10:37, chenyuan_fl@163.com wrote:
+> > From: Yuan Chen <chenyuan@kylinos.cn>
+> > 
+> > The is_extended / prog_array_member_cnt protocol introduced by commit
+> > d6083f040d5d ("bpf: Prevent tailcall infinite loop caused by freplace")
+> > keeps a prog extended by a freplace program out of prog_array maps, and
+> > vice versa: once a tail call re-enters an extended subprogram, its
+> > tail_call_cnt resets on every execution and the loop never terminates.
+> > 
+> > But is_extended is a plain boolean, while one target prog can carry
+> > several freplace links at the same time, one on its entry and one on a
+> > global subprogram.  __bpf_trampoline_unlink_prog() cleared is_extended
+> > whenever *any* freplace link detached, so detaching one of two links
+> > re-armed the unbounded loop through the remaining one.
+> 
+> A prog may have multiple global subprogs. And each of the subprogs can
+> be attached with freplace prog. When all the subprogs are attached with
+> freplace progs then detach one of the freplace prog, the *is_extended*
+> becomes *false*, which relaxes the restriction between tailcall and
+> freplace introduced by the commit d6083f040d5d ("bpf: Prevent tailcall
+> infinite loop caused by freplace").
+> 
+> > 
+> > Replace the is_extended boolean with a count of the freplace links
+> > attached to each target prog, so the target stays extended until its
+> > last link detaches.  Also rename bpf_freplace_check_tgt_prog() to
+> > bpf_freplace_link_tgt_prog(), as the helper has never been a pure
+> > check: it reserves the target prog on success.
+> > 
+> > Fixes: d6083f040d5d ("bpf: Prevent tailcall infinite loop caused by freplace")
+> > Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+> > 
+> 
+> [...]
+> 
+> > @@ -933,7 +933,7 @@ static int __bpf_trampoline_link_prog(struct bpf_tramp_node *node,
+> >  		/* Cannot attach extension if fentry/fexit are in use. */
+> >  		if (cnt)
+> >  			return -EBUSY;
+> > -		err = bpf_freplace_check_tgt_prog(tgt_prog);
+> > +		err = bpf_freplace_link_tgt_prog(tgt_prog);
+> >  		if (err)
+> >  			return err;
+> >  		tr->extension_prog = node->link->prog;
+> 
+>                 return bpf_arch_text_poke(tr->func.addr, BPF_MOD_NOP,
+>                                           BPF_MOD_JUMP, NULL,
+>                                           node->link->prog->bpf_func);
+> 
+> 
+> I think there are existing issues here: if bpf_arch_text_poke() returns
+> error, the tr->extension_prog and aux->freplace_link_cnt should be
+> rollbacked.
 
-> -	/* Step 5: Kick optimizer again if needed. But if there is a flush requested, */
-> -	if (completion_done(&optimizer_completion))
-> -		complete(&optimizer_completion);
-> +	/* Step 2: Dispatch waiting room generation if allowed */
-> +	optprobe_dispatch_generation();
->  
-> -	if (!list_empty(&optimizing_list) || !list_empty(&unoptimizing_list))
-> -		kick_kprobe_optimizer();	/*normal kick*/
-> +	/* Step 3: Check completion if flush was requested */
-> +	if (!optprobe_optimizer_busy()) {
-> +		if (optprobe_flush_requested) {
-> +			optprobe_flush_requested = false;
-> +			complete_all(&optimizer_completion);
-> +		}
++1, let's set tr->extension_prog and tgt_prog->aux->freplace_link_cnt++
+only if bpf_arch_text_poke succeeds
 
-Removing the completion_done() check also fixes a hang in the current
-code: completion_done() is only true once the completion has been
-completed, so complete() is never called while a flusher waits.  For
-example, "echo 0 > /proc/sys/debug/kprobes-optimization" with an
-optimized kprobe never returns.  I posted a fix for that separately [1].
+jirka
 
-[...]
-
-
-> -	while (!list_empty(&optimizing_list) || !list_empty(&unoptimizing_list)) {
-> +	while (optprobe_optimizer_busy()) {
->  		init_completion(&optimizer_completion);
-
-This part is still racy, though.  The flusher drops kprobe_mutex while
-it sleeps, and the sysctl handler and the debugfs "enabled" file do not
-otherwise serialize against each other.  A second flusher can then run
-init_completion() on the wait queue the first one is sleeping on: the
-first waiter is dropped from the queue, and complete_all() wakes only
-the second one.
-
-With this patch the window is wider, since kprobe_mutex is released
-while the Tasks RCU grace period runs and optprobe_optimizer_busy()
-stays true until the generation is finalized.
-
-The fix in [1] replaces the completion with a counter of optimizer
-passes, bumped at the end of each pass and signalled with
-wake_up_var_locked(), both under kprobe_mutex; the flusher samples the
-count and waits with wait_var_event_mutex() until it changes.
-Something similar should fit here, with the counter bumped at the end
-of each kprobe_optimizer() call and the flusher re-checking
-optprobe_optimizer_busy() under kprobe_mutex as it does now.
-
-[1] https://lore.kernel.org/all/20260924092142.199198-1-parri.andrea@gmail.com/
-
-Thanks,
-  Andrea
+> 
+> Thanks,
+> Leon
+> 
+> > @@ -979,7 +979,7 @@ static int __bpf_trampoline_unlink_prog(struct bpf_tramp_node *node,
+> >  					 tr->extension_prog->bpf_func, NULL);
+> >  		tr->extension_prog = NULL;
+> >  		guard(mutex)(&tgt_prog->aux->ext_mutex);
+> > -		tgt_prog->aux->is_extended = false;
+> > +		tgt_prog->aux->freplace_link_cnt--;
+> >  		return err;
+> >  	}
+> >  	bpf_trampoline_remove_prog(tr, node);
+> 
+> 
