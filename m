@@ -1,178 +1,357 @@
-Received: from mail-pz2-f16.google.com (mail-pz2-f16.google.com [74.125.228.16])
+Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 040E14AF690
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 19:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.228.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790278440; cv=pass; b=TgcPnEHLUJzBP1Lcm6I6QxuTnQD5QXT64WMHCWq6zieCVIwEKgT9ViD42Na6TclYX+6XsqmZQ45xHFkWpB430so35nbBR9mPH63OXhBbom+IbtaQZLYaBIYYN2YwZsGqLkoOU+/uSkpOOaxQArbXjAjQiUJtkEWMuLOfLFiep54=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790278440; c=relaxed/simple;
-	bh=t/N4X0XnQ9obqaKHrk7vetf+dDL6VPJaFNb/XYutegc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Wp/KY54zDOAO81bP/IV5at/C/Ki+b+Wuh9MXdiiG98yEbht0XQI/1JFMK/bRar3AYt2JHR61Pa98LqDM0m/ZrMF89qPM+Pbl9dS9O/rt/eTu9mSQ1D5AA9uw7PJH2vmOWtRcANk7pOz8zdpPwyq+UzfkVW5/44RK5Az4JQpkMqI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=GeD5PrGf; arc=pass smtp.client-ip=74.125.228.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B32F24BFE81
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 19:34:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790278452; cv=none; b=BfveqVrsxeMSBhGAgzOsF4y6UlLFzIYcsBL9w9lLxpkQC9AMXMJ0Q4y3OQ6UwCkOALkFssy3XiL75WjweNN9teKanu3d2xFZwRYGRbgSRLbG1+aWAjt1oOhbM02i2FiH8ZN+3h7/Kx9ApvedUgFvTZ/Ch7bMIMFePAEr5q3VStU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790278452; c=relaxed/simple;
+	bh=1cHflBFa7MXRprmcxaPGtzF2PQD9CSurwue4VHkXruU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QgB0mzyrsy8gwDBmHNHoKaHP4ygW9vOz4Gh2XKoZkTvgnmzQ4NT1vgbIR9DM0aSHYIyL6rWSRn058zPXFiktV9VYYRNjFJAyh6S2l/GDSGPsMkmgb7EpIaxBvN6Aq7/telx835fjAJ3gpg75bn26ELbN0cxkZEcC3cEo3tOHKY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bCVvzxh8; arc=none smtp.client-ip=74.125.225.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="GeD5PrGf"
-Received: by mail-pz2-f16.google.com with SMTP id 41be03b00d2f7-cc4d2fe2056so40766a12.2
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 12:33:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790278438; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Q2yvd3PJwegnTriFLf5LD1sEX+RIehj06uwlf2PFVwOu953dJ7c6yxJr4fSg/BFhEx
-         K61XfucztQy/rojqPmhvqLuzZwE0Ok3uMoF4S3V5WH/DGywEn6TbE96EJVY+PIa1OVwm
-         3pHCmeI1fI/4igIrmpRPXINiQZE+4yWxQgfFFLF1Nu/+ZZiam/gjpDgUVpNAUxz7E2Yj
-         80VFt5UiUJPR95yl4Lv+6NZJNvZChEUslbZ5nP0UaNEMxFzetZXGAOYzqEzg5H4JHbfp
-         5uk+hPXCBbyKozjM+SrGpem4iFoPDj8EFNrqreKpfSci7584iQfUo8dV+w9sZkb6fi7m
-         mLLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Er0wNZ7ei/sffJZBS6vip8iLxFYHICi+dbdHiy3n2DU=;
-        fh=eMZf64/3mRYE56GfGfA7qqOaKYgSmjQqSwNu/E2vruU=;
-        b=s5B81IThvdUD1yEba9L2nDKVto4TJlPch4yN0lDGW0S2mlfF4NcmYjguAcKPgLNH65
-         JMtTOahWlA7mjWy9zYwTaCXzFdyAI8Tpe2DGWsIIYGlnWEpV6QVE3qRkxNpRVBOk7N4P
-         mAjBSe3e4gnyJ3f4zVn5YZEzx+EsekRzoAiMOk36K1S9xHzlUhldc8/e8K90HZ1yrjVd
-         FaXo9cvHLrS7pAnywt/kifFKh0srE5+OXk0xsHdzimrX5b0xHM3xq7An69C2s8iNXu+z
-         Vk2+hM9SmjTMNLfwkD7G5F3PgAoAlFM7xPcRjvcDGt6IhoJYNL/PjWVKhl+TbqVXNPME
-         yYzw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bCVvzxh8"
+Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-484373a2e82so92035f8f.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 12:34:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1790278438; x=1790883238; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Er0wNZ7ei/sffJZBS6vip8iLxFYHICi+dbdHiy3n2DU=;
-        b=GeD5PrGfMnjZPhdCBFwzGInNpnt3BxrGUjomNh4N1K3ZP9F1k0lDJezDWB5DQhPTJZ
-         0p58BADZ/12tdMpaevVRhR1H/JHnK3TS1Tpw3rFFAE/mWivIHgWUUI9Sdd/MAETsSiRA
-         L5uWDVMTZDJocm2plpS4mzt/o0nTa98GymvR7SsQf6qUzOZmTHxOW6cmqIYNRh5cnvuX
-         G5adkdOY9W3MLY3FeFDEEayolvPNPxqnlkDuuJI3dF9nnyAHmCQMX7vNZZ7aIc5UEg7f
-         3b8xoKP5Wo6Ro3d98cJtXF7LGj310r7tDb9CWDqy1UIGlmE7e7JjB+yeq/bAEcsLatJY
-         kPuw==
+        d=gmail.com; s=20251104; t=1790278447; x=1790883247; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=KShod/ogDjVZKlSiidsb1WJl2E9yT6W0rAzz8dAiSAk=;
+        b=bCVvzxh8UEzeea1SBv7hxh3BVTsN6iy9ZwCjyC6YceMU6I+WDEAD/Gb5/82XkN69/e
+         U43rYmUZQUU1ud7zh+uGkhQ/8ttdbdjAisVOOCPIoKm2N4AUOBU7O5+O2/paKZdBL3MV
+         M+tPMCDRJYimL+/IaLh1Fw3ydKYH/Os/kSNUui6x1TcJatZJ/jFjUG8l1vupNj3MAxUI
+         WDFcf6kT5IbPA0gRHmhCafW94/Y+CqgM/3XVaM7ty/b+Lqs2AMxkIYYE23UvtJk+/ngV
+         BwA7hH/l3JKquSrvcCvPm8ZJ2jOT9lA3WyIrqfIZX7JIgQiLPdx5kTSTNMHsM6Ryqziz
+         gdeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790278438; x=1790883238;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Er0wNZ7ei/sffJZBS6vip8iLxFYHICi+dbdHiy3n2DU=;
-        b=FrM2Pdvd4OAFengOpf/m5p0m44GN8z7HjXQAu/3eIEoaTyqktOknlm79E+VcVsi3JG
-         CAnp4BTIMBs/fw84SQNvL+fghpPVNYbt4uV1+oj1vWH6DJfhYS8MaChzegl1J6XxvgFc
-         EK+4o9/n+jSD4O6jevExUPfK+mNyhTStAzAYnfy78yU2UsEbcQRi4jD4/0+FZKNwA5UD
-         eLazghwwitqLFjfNr+BYi4II+2zhURrsE817baEPg97bcXBykL1g3eKsfNBYHtVO5SAc
-         +Y+qkkiCGSyxs9Uv5lC0zOfOns7ZFGorEdBSm8Ev/RRQQ7R/eL7eH0Fh7CUwM7YGd0fr
-         ZWeA==
-X-Forwarded-Encrypted: i=1; AKwUvBzpJBv7q/GTLF/1vbG+aJ2SxDHZbhVyMB+2hg8KMxLXDqzeP/2xnexd/fs+HXggoE6Z5Ks=@vger.kernel.org
-X-Gm-Message-State: AFuF++kRSn91gFNnzOuCAQsmDtsO6qHNr8LY+vDJSKVhRvYVFhOSHBWA
-	vztCytCmroCT/98HYpeHxU7RZ9WDroQTXmNc7WUE2D8ESuJmnx5tQcL8TCod9r2BqI9ORQUI5xE
-	EeID1D1PsaFWRphex+vYRyHdJg5w/vj3ctDY6iL578gwXh3qGCdSeCqMF
-X-Gm-Gg: AYBFou34tb5Yn+59k1EbrNtSFMIebFfM/ktmBRIDgMvH/B5/GPb6Xoae64TRZ1NDuiq
-	UXCcRMxbgH8aTpnpr+8aMhOcQfvbg8F/wfBWxlt1PNUsqOlQ4MM5SIikxW8X9+upwqpWPUmwUfD
-	Exj/EmoPNt6ZwDDpVrCsdKwcZ1TFZseqLxB3rSu2Ov9jzRv4VIqPuFF8NRb6GclBnz6uOZrwcP0
-	PLmQQdrxbHrHLEIsy9oxCBybFzSx/cJbXJ0fTqEzVNFfBjv8WwujS0KRxDTvQh5Y1L/AnjTxVcf
-	i8/kQ/jXBeCe26mxaPX5s9LEWh6Y2HFnPNR2TfRDBZT4Y13aNtZaI8xlWC7LE7SclAKHpH6BRRC
-	GztNgzRhE5z4=
-X-Received: by 2002:a17:90b:380a:b0:39e:6c69:f481 with SMTP id
- 98e67ed59e1d1-3a098d56a2cmr3187553a91.64.1790278438044; Thu, 24 Sep 2026
- 12:33:58 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1790278447; x=1790883247;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=KShod/ogDjVZKlSiidsb1WJl2E9yT6W0rAzz8dAiSAk=;
+        b=eSeZDCX+dkVOmZdOcZLgcJ76mQvBaKeBKxCQo3FJ8V/AQLg3292bGL9+1/GB8f+3T4
+         bMk5c2bxP9opc4RHKMRily1/VASG74sbs2GB1XHo4CHiZd2eobhKPrpFruXht1g1qVW4
+         efwt9SANvQZ/lqeDI3jzD0zCqThmgooOgSG1ipOjXYFyHdKvTqnqTm7kQFzS4/bx9ZxO
+         Lu3gbaC4+KoG319E/WOy1iB44WXAO+/F4gy9pfvf46hPXyGMWFuPBiIrTjxxZWJId3Ff
+         8oKq3ymLYAkm7qgPx5948xmMA7B/WTVkS4KcJt+YEMU6IWVl544XvpaeJa/IZwOs5HL+
+         BtCA==
+X-Gm-Message-State: AFuF++lmZp/E22Pl14C9gZ9UE/ZTS7jPpB18N62vDMUxGupOeZ9x03Zp
+	/ZCFesKFgJxBebKWeVNhcAmy4rhfnWRK6GyPocTH5WhnO6xBRdnOA9icSXJ7jajL
+X-Gm-Gg: AYBFou3IqW7fdRzfRvK9sU5IbxSSryjNjOqPmlLGuHY/LZ3zDWUCNS86jIF5YOQ7Fxq
+	QLb3DP6eeOq6M79qzzBlLXKWF9ptj6zVq9iyPdpT3bmm1o4hgiNy4v5ypFXOFz/ZhAJJ7cKQRU1
+	V7faCYT75fCeHOxLsUbF4PaYIE2G3qtqum9oqNuStjMBZEYIzuBGUV2ZRhAlUwIxQrORA/Snnxj
+	RBjTprnvkMBq0/v1vmRKBYmSxCz1JueDpfri3vl/9puHs/970iEbN3Z7b3/gl/rf3lnejIzORvW
+	IvOU+HQeE2/mbk6v5YZ2MlEImBaoioOnp8ruiEsePWKbH+BUCengnGQGx/FhbxxjCT7ZUeEZfUk
+	qV1/eFHM49X+DuQL5WOUvDiOe9eNW+KEzjZEmP6ZOqpgKTGc4zwYvk2lqFbJQzLqMRJvYzRlJfw
+	eaBx7LBuTWzTiXqNGOrTb2ZFXX9WjomIW4bE/KLXlvImjNXDc9cC5fOfCk0jEk5H3tXdWYhpzDo
+	GgtR+bDLOU5LQ45SRx0Iwi2Hy60g6z3HCqSXLDBcG3YMsdMpdVqftsJS0VxOkbNTHrSk/XxFhMU
+	opXmhmFixEYNkZO8/ffaq3ZWXXN6cQDeGQXZqQ==
+X-Received: by 2002:a05:6000:2083:b0:487:27f9:844 with SMTP id ffacd0b85a97d-4887172ac0cmr6021835f8f.57.1790278447186;
+        Thu, 24 Sep 2026 12:34:07 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a64ed6esm1271324f8f.29.2026.09.24.12.34.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2026 12:34:06 -0700 (PDT)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Tejun Heo <tj@kernel.org>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next] bpf: Return the id scratch to a fixed array sized for the stack budget
+Date: Thu, 24 Sep 2026 21:34:01 +0200
+Message-ID: <20260924193403.3032037-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260915150739.284189-1-daniel@iogearbox.net> <20260915150739.284189-5-daniel@iogearbox.net>
- <CAHC9VhR2Zp9LzDRwDOZoesOC7o8hretfgRH-PRqQRXA0EES2vA@mail.gmail.com>
- <CAEXv5_g1XQAwsydnbu9SUvxNBdYQf+xXjPaZMeC8hxgfThP+pw@mail.gmail.com>
- <arVKSpezisxe3pkr@suesslenovo> <CAHC9VhSwbHF8tZkZ00JM40VTBeXVgcVdoBt7NcX0XKaKSARWug@mail.gmail.com>
- <arVkWs7tG3ayGxyX@suesslenovo>
-In-Reply-To: <arVkWs7tG3ayGxyX@suesslenovo>
-From: Paul Moore <paul@paul-moore.com>
-Date: Thu, 24 Sep 2026 15:33:45 -0400
-X-Gm-Features: AclHuK8Djm6kng1KVJoAo1IKBHaXUoPUqY4SRBxOWSBr835p7OAm38aVvkcIm4U
-Message-ID: <CAHC9VhTzGJz5Lt8tXYzJfMihsMOX3Wa=6b83dV8QihpRBfBbWw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 4/8] bpf, lsm: Let BPF LSM provide xattrs at
- inode creation
-To: Justin Suess <utilityemal77@gmail.com>
-Cc: David Windsor <dwindsor@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	alexei.starovoitov@gmail.com, brauner@kernel.org, john.fastabend@gmail.com, 
-	memxor@gmail.com, kpsingh@kernel.org, matt@bobrowski.net, bpf@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 24, 2026 at 2:38=E2=80=AFPM Justin Suess <utilityemal77@gmail.c=
-om> wrote:
-> On Thu, Sep 24, 2026 at 12:23:13PM -0400, Paul Moore wrote:
-> > On Thu, Sep 24, 2026 at 12:15=E2=80=AFPM Justin Suess <utilityemal77@gm=
-ail.com> wrote:
-> > > On Wed, Sep 23, 2026 at 03:14:28PM -0400, David Windsor wrote:
-> > > > On Wed, Sep 23, 2026 at 12:57=E2=80=AFPM Paul Moore <paul@paul-moor=
-e.com> wrote:
-> > > > > @David, simply for my own understanding, did you ask Daniel to do
-> > > > > this, or was Daniel operating on his own with this patchset?
-> > > > >
-> > > >
-> > > > Daniel and I work together and both have things written on top of t=
-his
-> > > > kfunc. He reached out to collaborate, I agreed. We're also going to
-> > > > send bpf_set_file_xattr shortly.
-> > > >
-> > > > This implementation was chosen due to its immediate mergeability (i=
-t
-> > > > only touches security/bpf), but was actually suggested by Kumar in =
-v1
-> > > > or so of my original series.
-> > > >
-> > > > That said, sorry for any confusion about this appearing as a new
-> > > > series rather than as v7 of my previous one.
-> > >
-> > > Howdy all,
-> > >
-> > > Hope you all are doing well and having a good Thursday.
-> > >
-> > > These patches are excellent and useful, and have been in the pipeline
-> > > for a while.
-> > >
-> > > In the interest of moving forward:
-> > >
-> > > Would you both be able to live with the following: provide a security=
- hook
-> > > for lsm_get_xattr_slot or another proper interface with the necessary
-> > > abstraction, and keep the kfunc where it is in fs/?
-> >
-> > That still doesn't change the fundamentals around the kfunc: it is
-> > really only a valid to call it from within the LSM inode_init_security
-> > callback, it populates a LSM framework managed buffer, and that buffer
-> > is then used to by the LSM framework code in
-> > security_inode_init_security() to do the xattr initialization using
-> > the values from the BPF LSM as well as all of the other configured
-> > LSMs.  It's very hard to see this as anything other than an LSM kfunc.
-> > I worked with David over several revisions of his patchset to review
-> > the code and get it in a good place, I'm supportive of the basic
-> > ideas, but this really needs to be located in
-> > security/bpf_lsm_kfuncs.c as it is an LSM kfunc.  As we've seen there
-> > is precedence for subsystem specific kfuncs located in the associated
-> > subsystem's directory, things should be no different here.
-> >
-> Hello,
->
-> I'm less arguing for any particular placement:
->
-> More so that the concrete security interest of just getting the kfunc
-> *somewhere* is much more important. I have no doubt that the function
-> would be equally well stewarded in either directory.
->
-> The xattr kfunc in security/ question can be fought best in a different
-> venue where it's not holding back good contributions.
+Commit 9f3d900a69be ("bpf: Grow the verifier id scratch on demand") turned
+the id map comparing the ids of two states, which also serves as the id
+stack of release_reference() and as the id set of
+bpf_clear_singular_ids(), into arrays grown on demand, so that the env
+would not embed a map sized for 2 KiB frames. That gave the map a way to
+fail, and with it release_reference() and the iterator destroy path an
+-ENOMEM to hand up, states_equal() a case where states compare unequal
+for lack of memory, and bpf_clear_singular_ids() a flag to keep every id
+when the set could not record them all.
 
-This (the mailing list) is *the* venue, and sorting out
-cross-subsystem issues isn't a foundational thing, not something that
-can be cast aside because it is inconvenient.  In this particular
-case, resolving this before it lands in Linus' tree is that much more
-important since cooperation has been "strained" to put it mildly.
+The env is allocated once per program load, so the map can afford to be
+sized for the largest state again: MAX_BPF_STACK_SLOTS in each of
+MAX_CALL_FRAMES frames, which a state on a private stack can reach since
+every frame there may use the whole budget. That makes the map 34 KiB
+instead of 10 KiB, a small price per load for having no growth that can
+fail. Make the map and the set a fixed union in the env again and drop
+the growth and its failure handling.
 
---=20
-paul-moore.com
+Suggested-by: Alexei Starovoitov <ast@kernel.org>
+Link: https://lore.kernel.org/bpf/DLNQW1IRYK94.1DP0M5VKZSY32@gmail.com
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ include/linux/bpf_verifier.h | 29 +++++++++------------
+ kernel/bpf/states.c          | 44 ++++++++++---------------------
+ kernel/bpf/verifier.c        | 50 +++++++++++-------------------------
+ 3 files changed, 40 insertions(+), 83 deletions(-)
+
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 1c787208ff82..646e447cebd8 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -411,7 +411,10 @@ struct bpf_jmp_history_entry {
+ static_assert(MAX_CALL_FRAMES <= (1 << 4));
+ static_assert(MAX_BPF_STACK_SLOTS <= (1 << 12));
+
++/* Maximum number of bpf_reg_state objects that can exist at once */
+ #define MAX_STACK_ARG_SLOTS (MAX_BPF_FUNC_ARGS - MAX_BPF_FUNC_REG_ARGS)
++#define BPF_ID_MAP_SIZE ((MAX_BPF_REG + MAX_BPF_STACK_SLOTS + MAX_STACK_ARG_SLOTS) * \
++			 MAX_CALL_FRAMES)
+ struct bpf_verifier_state {
+ 	/* call stack tracking */
+ 	struct bpf_func_state *frame[MAX_CALL_FRAMES];
+@@ -866,27 +869,18 @@ struct bpf_id_pair {
+ 	u32 cur;
+ };
+
+-/*
+- * Scratch map from the ids of one verifier state to those of another, also
+- * used as a stack of ids. Grown on demand by bpf_id_scratch_reserve().
+- */
+ struct bpf_idmap {
+ 	u32 tmp_id_gen;
+ 	u32 cnt;
+-	u32 cap;
+-	struct bpf_id_pair *map;
++	struct bpf_id_pair map[BPF_ID_MAP_SIZE];
+ };
+
+-struct bpf_idset_entry {
+-	u32 id;
+-	u32 cnt;
+-};
+-
+-/* Scratch set of ids with a use count each, grown on demand */
+ struct bpf_idset {
+ 	u32 num_ids;
+-	u32 cap;
+-	struct bpf_idset_entry *entries;
++	struct {
++		u32 id;
++		u32 cnt;
++	} entries[BPF_ID_MAP_SIZE];
+ };
+
+ /* see verifier.c:compute_scc_callchain() */
+@@ -995,8 +989,10 @@ struct bpf_verifier_env {
+ 	 * via callx. Allocated when the first such edge is recorded.
+ 	 */
+ 	unsigned long *callx_edges;
+-	struct bpf_idmap idmap_scratch;
+-	struct bpf_idset idset_scratch;
++	union {
++		struct bpf_idmap idmap_scratch;
++		struct bpf_idset idset_scratch;
++	};
+ 	struct {
+ 		int *insn_state;
+ 		int *insn_stack;
+@@ -1264,7 +1260,6 @@ int bpf_copy_verifier_state(struct bpf_verifier_state *dst_state,
+ struct list_head *bpf_explored_state(struct bpf_verifier_env *env, int idx);
+ void bpf_free_verifier_state(struct bpf_verifier_state *state, bool free_self);
+ void bpf_free_backedges(struct bpf_scc_visit *visit);
+-bool bpf_id_scratch_reserve(void **arr, u32 *cap, u32 cnt, size_t elem_size);
+ int bpf_push_jmp_history(struct bpf_verifier_env *env, struct bpf_verifier_state *cur,
+ 			 int insn_flags, int spi, int frame, const u16 *linked_regs,
+ 			 u8 linked_regs_cnt);
+diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
+index a1f7b4a87502..5c7169bfb4e9 100644
+--- a/kernel/bpf/states.c
++++ b/kernel/bpf/states.c
+@@ -335,18 +335,21 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+ 			return false;
+ 	}
+
++	/* Reached the end of known mappings; haven't seen this id before */
++	if (idmap->cnt < BPF_ID_MAP_SIZE) {
++		map[idmap->cnt].old = old_id;
++		map[idmap->cnt].cur = cur_id;
++		idmap->cnt++;
++		return true;
++	}
++
+ 	/*
+-	 * Reached the end of known mappings; haven't seen this id before. If
+-	 * the map cannot grow, treat the states as not equivalent, which only
+-	 * costs pruning.
++	 * idmap slots are bounded by the number of registers and stack slots.
++	 * Since referenced dynptrs acquire intermediate references that do
++	 * not live in either, so the map can be exhausted. Since it is unlikely,
++	 * fail the verification by treating the states as not equivalent.
+ 	 */
+-	if (!bpf_id_scratch_reserve((void **)&idmap->map, &idmap->cap, idmap->cnt, sizeof(*map)))
+-		return false;
+-	map = idmap->map;
+-	map[idmap->cnt].old = old_id;
+-	map[idmap->cnt].cur = cur_id;
+-	idmap->cnt++;
+-	return true;
++	return false;
+ }
+
+ /*
+@@ -964,27 +967,6 @@ static bool func_states_equal(struct bpf_verifier_env *env, struct bpf_func_stat
+ 	return true;
+ }
+
+-/*
+- * Make room for one more entry in an id scratch array, doubling it as needed.
+- * Returns false if it could not grow; callers then treat the id as unknown
+- * or the states as different, which is always safe.
+- */
+-bool bpf_id_scratch_reserve(void **arr, u32 *cap, u32 cnt, size_t elem_size)
+-{
+-	u32 new_cap;
+-	void *p;
+-
+-	if (cnt < *cap)
+-		return true;
+-	new_cap = *cap ? *cap * 2 : 64;
+-	p = krealloc_array(*arr, new_cap, elem_size, GFP_KERNEL_ACCOUNT | __GFP_NOWARN);
+-	if (!p)
+-		return false;
+-	*arr = p;
+-	*cap = new_cap;
+-	return true;
+-}
+-
+ static void reset_idmap_scratch(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_idmap *idmap = &env->idmap_scratch;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 865b6c6eb8dd..955f1650163c 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1041,7 +1041,7 @@ static int unmark_stack_slots_iter(struct bpf_verifier_env *env,
+ 				   struct bpf_reg_state *reg, int nr_slots)
+ {
+ 	struct bpf_func_state *state = bpf_func(env, reg);
+-	int spi, i, j, err;
++	int spi, i, j;
+
+ 	spi = iter_get_spi(env, reg, nr_slots);
+ 	if (spi < 0)
+@@ -1051,12 +1051,8 @@ static int unmark_stack_slots_iter(struct bpf_verifier_env *env,
+ 		struct bpf_stack_state *slot = bpf_stack_slot(state, spi - i);
+ 		struct bpf_reg_state *st = &slot->spilled_ptr;
+
+-		if (i == 0) {
+-			err = release_reference(env, st->id);
+-			if (err == -ENOMEM)
+-				return err;
+-			WARN_ON_ONCE(err);
+-		}
++		if (i == 0)
++			WARN_ON_ONCE(release_reference(env, st->id));
+
+ 		bpf_mark_reg_not_init(env, st);
+
+@@ -10531,9 +10527,8 @@ static int idstack_push(struct bpf_idmap *idmap, u32 id)
+ 		if (idmap->map[i].old == id)
+ 			return 0;
+
+-	if (!bpf_id_scratch_reserve((void **)&idmap->map, &idmap->cap, idmap->cnt,
+-				    sizeof(*idmap->map)))
+-		return -ENOMEM;
++	if (WARN_ON_ONCE(idmap->cnt >= BPF_ID_MAP_SIZE))
++		return -EFAULT;
+
+ 	idmap->map[idmap->cnt++].old = id;
+ 	return 0;
+@@ -18959,27 +18954,23 @@ static void adjust_btf_func(struct bpf_verifier_env *env)
+ 		aux->func_info[i].insn_off = env->subprog_info[i].start;
+ }
+
+-/*
+- * Find id in idset and increment its count, or add new entry. Returns false
+- * when a new id could not be recorded, which leaves the counts incomplete.
+- */
+-static bool idset_cnt_inc(struct bpf_idset *idset, u32 id)
++/* Find id in idset and increment its count, or add new entry */
++static void idset_cnt_inc(struct bpf_idset *idset, u32 id)
+ {
+ 	u32 i;
+
+ 	for (i = 0; i < idset->num_ids; i++) {
+ 		if (idset->entries[i].id == id) {
+ 			idset->entries[i].cnt++;
+-			return true;
++			return;
+ 		}
+ 	}
+-	if (!bpf_id_scratch_reserve((void **)&idset->entries, &idset->cap, idset->num_ids,
+-				    sizeof(*idset->entries)))
+-		return false;
+-	idset->entries[idset->num_ids].id = id;
+-	idset->entries[idset->num_ids].cnt = 1;
+-	idset->num_ids++;
+-	return true;
++	/* New id */
++	if (idset->num_ids < BPF_ID_MAP_SIZE) {
++		idset->entries[idset->num_ids].id = id;
++		idset->entries[idset->num_ids].cnt = 1;
++		idset->num_ids++;
++	}
+ }
+
+ /* Find id in idset and return its count, or 0 if not found */
+@@ -19005,7 +18996,6 @@ void bpf_clear_singular_ids(struct bpf_verifier_env *env,
+ 	struct bpf_idset *idset = &env->idset_scratch;
+ 	struct bpf_func_state *func;
+ 	struct bpf_reg_state *reg;
+-	bool complete = true;
+
+ 	idset->num_ids = 0;
+
+@@ -19014,17 +19004,9 @@ void bpf_clear_singular_ids(struct bpf_verifier_env *env,
+ 			continue;
+ 		if (!reg->id)
+ 			continue;
+-		complete &= idset_cnt_inc(idset, reg->id & ~BPF_ADD_CONST);
++		idset_cnt_inc(idset, reg->id & ~BPF_ADD_CONST);
+ 	}));
+
+-	/*
+-	 * An id that could not be recorded may be shared, and a later
+-	 * occurrence of it may have been recorded with a count of one. Without
+-	 * complete counts keep every id; clearing is only an optimization.
+-	 */
+-	if (!complete)
+-		return;
+-
+ 	bpf_for_each_reg_in_vstate(st, func, reg, ({
+ 		if (reg->type != SCALAR_VALUE)
+ 			continue;
+@@ -22737,8 +22719,6 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr,
+ 	kvfree(env->gotox_tmp_buf);
+ 	kvfree(env->callx_edges);
+ 	kvfree(env->func_ptrs);
+-	kfree(env->idmap_scratch.map);
+-	kfree(env->idset_scratch.entries);
+ 	bpf_diag_free(env);
+ 	kvfree(env);
+ 	return ret;
+--
+2.53.0
+
