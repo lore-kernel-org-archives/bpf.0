@@ -1,98 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-71.mta0.migadu.com [91.218.175.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 586923F1AD5;
-	Thu, 24 Sep 2026 12:39:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F0CA48424C
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 13:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790253583; cv=none; b=UNY9t79T1W9kb7N4WuusCXjGv7/3PP6URpjyAe9UjnSGvOaj05EcX6pzTimda4YqShJBvRCI5cSqspwW1ER9rhOvDoRxJ1NeMFJ0u/th1oUMi9iZ84yd6GsZQZ/j4DlsHyq4xcRvF+OK7FDYABONXGjxxRLfk2z1QPzdB70Dh7Y=
+	t=1790255115; cv=none; b=nP5fhDkBOKTIYO+5DFvSZXKnAlIEbX3560uxcwGzfxiJiVAXHA8fIjxXclk+LjwX6uRGJDkBLwnQehiNVjzFpAiQlL0QFU3V+MpGQcfIY/kUhWnZgidoA4wSK9He1OB8EQS05OMTcpTB7CcKI0RTWFwPhN6ANy6kOqFPL6aFlX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790253583; c=relaxed/simple;
-	bh=cnExcQWXcl8PtXzuGi64NnpcpmbnmatuREqpexHy5Xc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=JaHtuwVLD44Kn2tR/l+y9eLkKTIvkaBkuM86kcJlWuiB5AhcC+n7q6mTIm2SciRcvmudJquj8Pu6UhjteuD/n+9Sg2OZDdIrgZHWTaQWW+NeWClmfXgrL0pDw7xSTIxB4JZ2dfi6zhUY7YPggu6N/YlrAMGQYk0+xY1NnvZBDbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pc2pxKHI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790255115; c=relaxed/simple;
+	bh=EMai31/qqyf5QaAObsfQuiXXHW9sYpANFB9S/2uRX4k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RRJmoitpean2muSxEsvlPqhgjZlFh5gKaozd36NBGnXRdquZszMDoV9k30iSiNVe6VpwkOKaCMUPnN3laMv09QTpnj48Is5CISHvF+U+sNbuophnu+HXntn+HqSPht3Cbdjv7IK4BcXOFUo7xUB679tMb7Qs12IpR+cir+iYxVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GIDB7sst; arc=none smtp.client-ip=91.218.175.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pc2pxKHI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D42D01F000FF;
-	Thu, 24 Sep 2026 12:39:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790253571;
-	bh=NWV63fbaJvOqGNz/oJFAY0kcJbTAepBIBYHStlfPyLw=;
-	h=Date:From:To:Cc:Subject;
-	b=Pc2pxKHIZrDt06ehZWlEtSlkgo6KqDAoVR+KEx5s9wn8Sbomp8FVTaSLfalW4GJgt
-	 b/NwgDIEtugWlT5vsDgTJRYJYRRIKcTh0Pm+DmTiFqZW/QiC/q9qE5WVrdAJSgcUZG
-	 MHnL/iUqJVaLsQyRKNRLquYxU41ic8Bbj3IiSp3JqZfN3F0kLLQfU29ACfiCdBGeeu
-	 ppFH+XPflbhwf2+uFTpjVxLg5K9HSJLBRTE3xMERDJYE/zcSa+my6DUUdT6YiSSbTy
-	 vx7W0DBWl2izEuith895Udrsdsn7WhRzhMmvBfsfE+HGtIPvy9y2NcRb9JM9Y/THh8
-	 AidwnzFHjKFKQ==
-Date: Thu, 24 Sep 2026 13:39:27 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Networking <netdev@vger.kernel.org>
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
-Message-ID: <arUZ_0CU-Zlct_Tt@sirena.org.uk>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GIDB7sst"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=EMai31/qqyf5QaAObsfQuiXXHW9sYpANFB9S/2uRX4k=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790255108; v=1; x=1790859908;
+ b=GIDB7sstN5kfpUloqyFxkw201OUYQ80sOb0J8uvAcet+ZhI6PhWttd8rT12+KTQ6kOTeEXjj
+ riLjHXvRMAvVoYXnY98XiLKVQA3QCohYoOM8B7zSJ4+j2XsUhMvMoQQCWEm36D92keHK/bxH1Ek
+ 1SyLATqBtxZd7PeWCs/binEU=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by mta12.migadu.com with ESMTPS id a8de4e7e9e9a9053;
+	Thu, 24 Sep 2026 13:05:08 +0000
+X-Mizu-Trace-ID: a8de4e7e9e9a9053
+X-Migadu-Flow: FLOW_OUT
+From: Usama Arif <usama.arif@linux.dev>
+To: arighi@nvidia.com,
+	bpf@vger.kernel.org,
+	bsegall@google.com,
+	changwoo@igalia.com,
+	dietmar.eggemann@arm.com,
+	etsal@meta.com,
+	juri.lelli@redhat.com,
+	kprateek.nayak@amd.com,
+	linux-kernel@vger.kernel.org,
+	mgorman@suse.de,
+	mingo@redhat.com,
+	peterz@infradead.org,
+	rostedt@goodmis.org,
+	sched-ext@lists.linux.dev,
+	tj@kernel.org,
+	vincent.guittot@linaro.org,
+	void@manifault.com,
+	vschneid@redhat.com,
+	yphbchou0911@gmail.com
+Cc: Usama Arif <usama.arif@linux.dev>
+Subject: [PATCH v2] sched_ext: Update scx_dispatch_dequeue() comments
+Date: Thu, 24 Sep 2026 06:05:03 -0700
+Message-ID: <20260924130503.853919-1-usama.arif@linux.dev>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3vVy6u0p7esVuByA"
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
+Remote consumption now reaches the !dsq branch with holding_cpu set,
+just like dispatch_to_local_dsq(). Clearing holding_cpu in this branch
+also tells dispatch_to_local_dsq() that it lost to a dequeue. The
+dsq-present branch races with unlink_dsq_and_switch_rq_lock(), not
+dispatch_to_local_dsq().
 
---3vVy6u0p7esVuByA
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Update both comments to describe the current transfer paths and race
+semantics. No functional change.
 
-Hi all,
+Suggested-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: Usama Arif <usama.arif@linux.dev>
+---
+v1 -> v2: (Tejun)
+- Name dispatch_to_local_dsq() in the comments and commit description.
+- Explain that clearing holding_cpu tells dispatch_to_local_dsq() that it
+  lost to a dequeue.
+- Rewrap both comments to 80 columns.
+---
+ kernel/sched/ext/ext.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+diff --git a/kernel/sched/ext/ext.c b/kernel/sched/ext/ext.c
+index 911bb6d433ba7..d01f44839da32 100644
+--- a/kernel/sched/ext/ext.c
++++ b/kernel/sched/ext/ext.c
+@@ -1821,10 +1821,10 @@ void scx_dispatch_dequeue(struct rq *rq, struct task_struct *p)
+ 			list_del_init(&p->scx.dsq_list.node);
+ 
+ 		/*
+-		 * When dispatching directly from the BPF scheduler to a local
+-		 * DSQ, the task isn't associated with any DSQ but
+-		 * @p->scx.holding_cpu may be set under the protection of
+-		 * %SCX_OPSS_DISPATCHING.
++		 * When dispatch_to_local_dsq() or remote consumption moves a
++		 * task to a local DSQ, the task isn't associated with any DSQ
++		 * but @p->scx.holding_cpu may be set. Clearing holding_cpu
++		 * tells dispatch_to_local_dsq() that it lost to a dequeue.
+ 		 */
+ 		if (p->scx.holding_cpu >= 0)
+ 			p->scx.holding_cpu = -1;
+@@ -1844,10 +1844,10 @@ void scx_dispatch_dequeue(struct rq *rq, struct task_struct *p)
+ 		scx_task_unlink_from_dsq(p, dsq);
+ 	} else {
+ 		/*
+-		 * We're racing against dispatch_to_local_dsq() which already
+-		 * removed @p from @dsq and set @p->scx.holding_cpu. Clear the
+-		 * holding_cpu which tells dispatch_to_local_dsq() that it lost
+-		 * the race.
++		 * We're racing against unlink_dsq_and_switch_rq_lock(),
++		 * which already removed @p from @dsq and set
++		 * @p->scx.holding_cpu. Clear holding_cpu to tell
++		 * unlink_dsq_and_switch_rq_lock() that it lost the race.
+ 		 */
+ 		WARN_ON_ONCE(!list_empty(&p->scx.dsq_list.node));
+ 		p->scx.holding_cpu = -1;
+-- 
+2.53.0-Meta
 
-  tools/testing/selftests/bpf/prog_tests/cb_refs.c
-
-between commit:
-
-  04ae4ffc57a6b ("selftests/bpf: Check callback map value lock identity")
-
-=66rom the bpf tree and commit:
-
-  11300f54bd887 ("selftests/bpf: Refactor cb_refs selftests")
-
-=66rom the bpf-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-(deleted the file, which probably lost the test)
-
---3vVy6u0p7esVuByA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmq1Gf4ACgkQJNaLcl1U
-h9D8PAf/avM/0V8V3Hr3cNMhZaTjbagIkMivmZJiSQ/LChwAwlNGnvZBLXCVRfRa
-2AVvM0q8/DYn61oY2LNnjm6WAXtj9QmSlBHau7e5/LoJO0mlb5g1a6z8PCMwLHbn
-xCCecqfOJlpLAtBpcQpqOvQR/fmwCq/y3bpB4XctU3CXYCM+FyNsdxusfBsy0+su
-td78ToW9Vkmi7OplweEHpMNgwwc/0Jz9KnOq6xP3sqQM1/YzP4TGB8FftHB8Zw+X
-lIIV/6R6TYMmzVhedbpyAT2yT8Eosu5ov2l11UTW4BEao9CG7hmWJVcfnTuRKNGq
-lpBw4i/Q4CzaJ/UYGGuK26FuzytDHg==
-=yIqI
------END PGP SIGNATURE-----
-
---3vVy6u0p7esVuByA--
