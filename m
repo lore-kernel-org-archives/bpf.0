@@ -1,277 +1,240 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5551222A80D
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 00:33:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D892E11D2
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 00:33:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790210026; cv=none; b=MXRS14WwnNUvM+pFp/fpx4lki9uKi85rALjZskWL9ufr0XZd2IMK/0uf6KEMiWwgGVj5Vo1iaz+SFF2kmrfkrClN7LHtXARWiJPE11v1RyeKPT9ZHcViVH1WxW1REEio/FGYL4W42GYkLEWaroktGIgP8JWQ+ffxXOWBuNesFes=
+	t=1790210029; cv=none; b=hdkT/pCG7UV/lA0XQ5C4N3tRFoN/yOoN4oR6D6q0Xkp3Ue/Q0M88NE2NQ6lyNNn3kgkxo4HoylG+9S2jFOjryI6ZqVo+nZOSqDF8IZNWEyKAdWM5Hx1p6ZydoD69eQ9u9sK5sIYo9wtmZNvXsI54Qyo6B8Tr9qgZ7OhmJVJ7eRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790210026; c=relaxed/simple;
-	bh=/5KdHFN5XNFwwH/j8JBNRlEAyBu9n4eGq86qRb7R/c8=;
+	s=arc-20240116; t=1790210029; c=relaxed/simple;
+	bh=x5BpPbe1e8H+K5yRzhQdMEG4NTs7an6GEhqz3ELaGuk=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=tVLLTyHa8oMbzvVrrE2TlORKG9JvyYX/D2JlndoPVKF02Zf6mD1ccpQDLN0SFfd+g8BSdKaYUBPwm1+Pf+VSzAec2QSGaOLqQJPbzLg72hIcuYMCJ5hbKmeLU+LOcD5JMKbxguFG1KktZf5KiZ+CEZN2nXYPg9miIhxIXJ5Y2Is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V1GV5XKa; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=tYpcB79+u9xShlzQcdzV5sSuchFFwAPuuqWXCrrNiPG9Mu7srZwpXknug7zu+8QE5OnfyhWxlQdV7b8i4YxAxfcmHoHH3SSiw79UvbOeeApUC1uFnYp6A4Tt5k3tj+OTOuKRGpMPjAvSMaJ2N1zHLg9/lWweEwV30ZGqVpIfDnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IHK4iBft; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V1GV5XKa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DDF01F000FF;
-	Thu, 24 Sep 2026 00:33:43 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IHK4iBft"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFCEF1F000FF;
+	Thu, 24 Sep 2026 00:33:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790210024;
-	bh=RXeBTTEsvZ2E3To2M6GqKDwvfk9LkAk2HaRoMhrjoXk=;
+	s=k20260515; t=1790210028;
+	bh=T4gmq7mTWmbUtOsnpRQrEvuxmcMTj9DE80Yl+vXED/k=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=V1GV5XKadRaTXuwceezQdjiJ/EcUB26J74m9zmDQqgwXWUVx+Bs4V2PqTquxzQ8EW
-	 HpIoHD2Z0AQ/2QcYGmfEjy8l4Ri5C6wyzcwkcO+qO5JveCnPlnhi+g0Fc/jYT6oaWA
-	 3vBTNxGDB9NBaym1ozOgvGNozDX2jNgE8NodV071JO3DhhbZ6K5kzMgBnDCSX4gVit
-	 xsGUiWD9glbB/AnAO3oK1KdwTqgigAu1kSrfe8Q7A+fFu57bAwqIcYKCxmZnp3T6Yb
-	 TjQRTQiedmTeg3n7AXl2ArfHpORDD6nE3AvaFk3h9IjErvCFgWA53yHGj9w2eGtYwH
-	 Af7Vjc8xgODzA==
-Content-Type: multipart/mixed; boundary="===============4372679374321826094=="
+	b=IHK4iBftBeLCuupLcjj3wvQXh6s6wsKPvjz+Rj+EgmsOqtb6g5zRtmyJv9xv5Lj2m
+	 okDSN4k8KolXN23Otyw4crrazJ5jETfje6HdlGAP846hjp6BGprvho19nsWdVnSngz
+	 s4fUV4MTDY+26T3Jrl+s7X73IsHPKqMMOtLPJo3mT/4SUIyfk3wwdneZ72K3PLo7v+
+	 BYy1fEWsf0vzGYm4cw0xthrOdw4sYP2m/FI3wcJpMOKOVKMRE72Oh1wUFSA61XlQ89
+	 QVwo6bYbKyYyNXVdoGjZA1JNKmct8OF160bIeMSNmcBPI6O70bs4/CgYOAMg9u9Oeo
+	 XKxpULnoMUZlQ==
+Content-Type: multipart/mixed; boundary="===============1707737354958412526=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c292100880a6fff41fde6ff71c9538f82d1c3af90f5c478989768a14074a32a7@mail.kernel.org>
-In-Reply-To: <20260922011323.1298619-13-alexei.starovoitov@gmail.com>
-References: <20260922011323.1298619-13-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next 12/17] libbpf: Resolve pointers to functions in read-only data
+Message-Id: <27df6acd9bf26283a14a534d61af648dbaf53dce6540870b02a09588a0a73ff3@mail.kernel.org>
+In-Reply-To: <20260922011323.1298619-17-alexei.starovoitov@gmail.com>
+References: <20260922011323.1298619-17-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next 16/17] selftests/bpf: Add tests for callx through pointers in read-only data
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,a.s.protopopov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 24 Sep 2026 00:33:43 +0000 (UTC)
+Date: Thu, 24 Sep 2026 00:33:46 +0000 (UTC)
 
---===============4372679374321826094==
+--===============1707737354958412526==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index cd1ea1bb53cb..9538a21f0db4 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
+> diff --git a/tools/testing/selftests/bpf/Makefile.skel b/tools/testing/selftests/bpf/Makefile.skel
+> index 580d1d82c186..3d92cdca62ed 100644
+> --- a/tools/testing/selftests/bpf/Makefile.skel
+> +++ b/tools/testing/selftests/bpf/Makefile.skel
 
 [ ... ]
 
-> @@ -6471,6 +6514,137 @@ static int create_jt_map(struct bpf_object *obj, struct bpf_program *prog, struc
->  	return err;
->  }
->
-> +/*
-> + * The kernel recognizes a pointer to a function in a frozen read-only map by
-> + * its value: the offset in bytes of the function in the program. It makes
-> + * callx work for tables of functions, structures of operations and vtables,
-> + * where pointers are mixed with other data. Functions have different offsets
-> + * in different programs, so create a copy of the map for the program.
-> + * The kernel replaces the offsets with the addresses of the functions when it
-> + * loads the program, which has to be the only user of the map.
-> + */
-> +static int create_func_ptr_map(struct bpf_object *obj, struct bpf_program *prog, int map_idx)
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
+> new file mode 100644
+> index 000000000000..419a90b1f894
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
+> @@ -0,0 +1,651 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/* Tests for callx through pointers to functions in read-only data */
+
+[ ... ]
+
+> +__noinline __used
+> +int global_add3(int x)
 > +{
-> +	LIBBPF_OPTS(bpf_map_create_opts, opts, .map_flags = BPF_F_RDONLY_PROG);
-> +	struct bpf_map *map = &obj->maps[map_idx];
-> +	__u32 value_size = map->def.value_size;
-> +	size_t i, j, cnt, sec_insn_off;
-> +	struct func_ptr *ptrs;
-> +	int map_fd, err, zero = 0;
-> +	__u64 val;
-> +	void *data, *tmp;
+> +	return x + 3;
+> +}
 > +
-> +	for (i = 0; i < obj->func_ptr_map_cnt; i++)
-> +		if (obj->func_ptr_maps[i].prog == prog &&
-> +		    obj->func_ptr_maps[i].map_idx == map_idx)
-> +			return obj->func_ptr_maps[i].fd;
-> +
-> +	if (obj->gen_loader) {
-> +		pr_warn("prog '%s': map '%s': pointers to functions in data are not supported by light skeleton\n",
-> +			prog->name, map->name);
-> +		return -ENOTSUP;
-> +	}
-> +
-> +	data = malloc(value_size);
-> +	if (!data)
-> +		return -ENOMEM;
-> +
-> +	/* the content of the map is final, it's frozen already */
-> +	if (map->mmaped) {
-> +		memcpy(data, map->mmaped, value_size);
-> +	} else if (bpf_map_lookup_elem(map->fd, &zero, data)) {
-> +		err = -errno;
-> +		pr_warn("prog '%s': map '%s': failed to read the content: %s\n",
-> +			prog->name, map->name, errstr(err));
-> +		goto err_free;
-> +	}
-
-Is this comment accurate about the map being frozen?
-
-Looking at bpf_object_prepare(), create_func_ptr_map() runs during
-bpf_object__relocate():
-
-    err = err ? : bpf_object__relocate(obj, ...);
-    err = err ? : bpf_object__sanitize_and_load_btf(obj);
-    err = err ? : bpf_object__create_maps(obj);
-
-At this point the .rodata map has not been created, populated or frozen,
-and map->fd is still the placeholder fd from create_placeholder_fd().
-
-The data is correct because it comes from map->mmaped (the anonymous mmap
-allocated at open time in bpf_object__init_internal_map()), but the
-comment's claim and the bpf_map_lookup_elem(map->fd, ...) fallback don't
-match the actual call order.
-
-> +
-> +	ptrs = map->func_ptrs;
-> +	cnt = map->func_ptr_cnt;
-
-[ ... ]
-
-> +
-> +	map_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, map->name, sizeof(int), value_size, 1, &opts);
-> +	if (map_fd < 0) {
-> +		err = map_fd;
-> +		goto err_free;
-> +	}
-
-Does this need to pass the object's BPF token?
-
-Every other map creation in libbpf sets the token when present, for
-example bpf_object__create_map():
-
-    create_attr.token_fd = obj->token_fd;
-    if (obj->token_fd)
-        create_attr.map_flags |= BPF_F_TOKEN_FD;
-
-Program load does the same (load_attr.token_fd = obj->token_fd). Without
-the token, map_create() in kernel/bpf/syscall.c:1493 returns -EPERM when
-sysctl_unprivileged_bpf_disabled is set and the caller relies on a
-delegated BPF token (user namespace with obj->token_fd set by
-bpf_object_prepare_token()).
-
-In that case, bpf_object__relocate_data() prints "can't create a copy of
-map ... with pointers to functions" and the whole object fails to load,
-even though the kernel side could grant allow_ptr_leaks through the token
-(CAP_PERFMON). This affects any program in the object that references
-.rodata with function pointers. The existing create_jt_map() has the same
-gap.
-
-[ ... ]
-
-> @@ -6835,6 +7021,51 @@ bpf_object__append_subprog_code(struct bpf_object *obj, struct bpf_program *main
->  	return 0;
->  }
->
-> +static int
-> +bpf_object__reloc_code(struct bpf_object *obj, struct bpf_program *main_prog,
-> +		       struct bpf_program *prog);
-> +
-> +/* Append to the main program all functions that the data of the map points to */
-> +static int
-> +bpf_object__append_func_ptrs_code(struct bpf_object *obj, struct bpf_program *main_prog,
-> +				  const struct bpf_map *map)
+> +/* a pointer to a global function is not recognized, it's a number */
+> +SEC("socket")
+> +__failure __msg("R2 has type scalar, expected func")
+> +__naked void callx_rodata_global_func(void)
 > +{
-> +	struct bpf_program *subprog;
-> +	size_t i, cnt, sec_insn_off;
-> +	struct func_ptr *ptrs;
-> +	int err;
+> +	asm volatile (
+> +		FUNC_TABLE2(tbl, add1, global_add3)
+> +		"r2 = tbl_%= ll;"
+> +		"r2 = *(u64 *)(r2 + 8);"
+> +		"r1 = 10;"
+> +		"callx r2;"
+> +		"exit;"
+> +		::: __clobber_all);
+> +}
+
+Does this test actually verify that the kernel skips global functions?
+
+Looking at bpf_object__append_func_ptrs_code() in libbpf, it explicitly
+skips global functions:
+
+    if (subprog->sym_global)
+        continue;
+
+Since global_add3() is not referenced directly anywhere in the program,
+libbpf never appends it. create_func_ptr_map() then finds no subprog for
+that slot and writes 0 there:
+
+    if (j == prog->subprog_cnt) {
+        pr_debug("... no function for the pointer at offset %zu, it's NULL\n", ...);
+        val = 0;
+    }
+
+So the kernel receives { offset(add1), 0 }. In resolve_func_ptrs(), the 0
+is dropped by `if (!val || ...) continue;` before the
+`bpf_subprog_is_global(env, subprog)` skip is ever reached. A kernel
+without that skip would give the same "R2 has type scalar, expected func"
+message.
+
+To actually test global function handling, the program would need to also
+reference global_add3() directly (e.g., with a `call global_add3`) so that
+libbpf includes it and stores its offset in the table.
+
+> +/* the compiler might turn the switch into a table that has no symbol */
+> +static __noinline int call_by_switch(unsigned int idx, int x)
+> +{
+> +	op_fn op;
 > +
-> +	ptrs = map->func_ptrs;
-> +	cnt = map->func_ptr_cnt;
-> +	for (i = 0; i < cnt; i++) {
-> +		sec_insn_off = ptrs[i].text_off / BPF_INSN_SZ;
-> +		subprog = find_prog_by_sec_insn(obj, obj->efile.text_shndx, sec_insn_off);
-> +		if (!subprog || subprog->sec_insn_off != sec_insn_off) {
-> +			pr_warn("prog '%s': map '%s': no function at .text+%zu for the pointer at offset %zu\n",
-> +				main_prog->name, map->name, ptrs[i].text_off, ptrs[i].sec_off);
-> +			return -LIBBPF_ERRNO__RELOC;
-> +		}
+> +	switch (idx) {
+> +	case 0:
+> +		op = op8;
+
+[ ... ]
+
+> +	return op(x);
+> +}
 > +
-> +		/*
-> +		 * callx can't call global functions. Don't add one to the
-> +		 * program only because the data points to it.
-> +		 */
-> +		if (subprog->sym_global)
-> +			continue;
+> +SEC("socket")
+> +__success __retval(50)
+> +int callx_c_table_null_check(void *ctx)
+> +{
+> +	unsigned int i = op_idx;
+> +	op_fn op;
 > +
-> +		/* see the comment in bpf_object__reloc_code() */
-> +		if (subprog->sub_insn_off == 0) {
-> +			err = bpf_object__append_subprog_code(obj, main_prog, subprog);
-> +			if (err)
-> +				return err;
-> +			err = bpf_object__reloc_code(obj, main_prog, subprog);
-> +			if (err)
-> +				return err;
-> +		}
-> +	}
-> +	return 0;
+> +	if (i >= sizeof(ops) / sizeof(ops[0]))
+> +		return -1;
+> +	/* the address of a function is not known until the program is jitted */
+> +	op = ops[i];
+> +	if (!op)
+> +		return -2;
+> +	return op(3);
+> +}
+
+Does the NULL check reach the const_fold logic it claims to test?
+
+The commit message says this test covers a "NULL check of an element that
+bpf_prune_dead_branches() must not fold". The comment points at the
+const_fold.c check in const_reg_xfer():
+
+    /* so are the addresses of functions that the map points to */
+    bpf_map_range_func_ptrs(env, map, off, size, &cnt) ||
+
+However, the index comes from `int op_idx = 11;`, which is in writable
+.data, so const_fold treats `i` as unknown. The element address is built
+as `r2 = ops ll; r2 += rX`. That BPF_ADD|BPF_X goes to the
+`default: *dst = unknown;` case of const_reg_xfer(). The following BPF_LDX
+then leaves at `if (!ci_is_map_value(src)) { *dst = unknown; break; }`
+before bpf_map_range_func_ptrs() is ever called.
+
+So `op` is never treated as a constant, and bpf_prune_dead_branches()
+never considers the `if (!op)` conditional, whether or not the
+function-pointer exclusion exists.
+
+To cover the claim, the test would need a constant index into the table,
+so that const_fold reaches the func-ptr read, followed by a conditional
+jump on the loaded value.
+
+> +/* a structure of operations, where pointers to functions are mixed with data */
+> +struct shape_ops {
+> +	int id;
+> +	op_fn area;
+> +	long scale;
+> +	op_fn perimeter;
+> +};
+> +
+> +static const struct shape_ops square_ops = { 1, op1, 10, op2 };
+> +static const struct shape_ops circle_ops = { 2, op3, 20, op1 };
+> +
+> +static __noinline int use_shape(const struct shape_ops *ops, int x)
+> +{
+> +	return ops->area(x) * ops->scale + ops->perimeter(ops->id);
+> +}
+> +
+> +SEC("socket")
+> +__success __retval(433)
+> +int callx_c_ops_mixed_with_data(void *ctx)
+> +{
+> +	/*
+> +	 * square: op1(2) * 10 + op2(1) = 7 * 10 + 6 = 76
+> +	 * circle: op3(3) * 20 + op1(2) = 18 * 20 + 7 = 367
+> +	 * minus 10 when op_idx is not what it is set to
+> +	 */
+> +	return use_shape(&square_ops, 2) + use_shape(&circle_ops, 3) - (op_idx == 11 ? 10 : 0);
 > +}
 
 [ ... ]
 
-> @@ -6851,6 +7082,20 @@ bpf_object__reloc_code(struct bpf_object *obj, struct bpf_program *main_prog,
->
->  	for (insn_idx = 0; insn_idx < prog->sec_insn_cnt; insn_idx++) {
->  		insn = &main_prog->insns[prog->sub_insn_off + insn_idx];
-> +		if (insn_is_func_ptrs_addr(insn)) {
-> +			/*
-> +			 * The code that loads the address of the data might
-> +			 * call any function that the data points to.
-> +			 */
-> +			relo = find_prog_insn_relo(prog, insn_idx);
-> +			if (relo && relo->type == RELO_DATA) {
-> +				err = bpf_object__append_func_ptrs_code(obj, main_prog,
-> +									&obj->maps[relo->map_idx]);
-> +				if (err)
-> +					return err;
-> +			}
-> +			continue;
-> +		}
->  		if (!insn_is_subprog_call(insn) && !insn_is_pseudo_func(insn))
->  			continue;
+> +SEC("socket")
+> +__success __retval(50)
+> +int callx_c_switch_table(void *ctx)
+> +{
+> +	/* op11(3) = 3 * 13 + 11 */
+> +	return call_by_switch(op_idx - 8, 3);
+> +}
 
-Does this append functions to programs without callx?
+A subsystem pattern flags this as potentially concerning: callx_c_switch_table()
+compiles to callx, but is annotated only `__success __retval(50)`, with no
+`__load_if_JITed()`.
 
-bpf_object__reloc_code() calls bpf_object__append_func_ptrs_code() for
-every ld_imm64 of a map with func_ptr_cnt. bpf_object__relocate() marks
-any RELO_DATA targeting a map with function pointers:
+check_callx() in kernel/bpf/verifier.c rejects callx with -EOPNOTSUPP when
+the program is not going to be JITed:
 
-    if (relo->type == RELO_DATA && obj->maps[relo->map_idx].func_ptr_cnt)
-        insn[0].src_reg = BPF_PSEUDO_MAP_VALUE;
+    /* there is no support for callx in the interpreter */
+    if (!env->prog->jit_requested) {
+        verbose(env, "JIT is required to use callx\n");
+        return -EOPNOTSUPP;
+    }
 
-Nothing checks whether the program contains a callx instruction. .rodata
-is a single shared map for all const and const volatile globals in the
-object, so any ld_imm64 that reads .rodata for a config variable pulls in
-all static functions that the section points to.
+With the JIT off (a kernel without CONFIG_BPF_JIT_ALWAYS_ON and
+net.core.bpf_jit_enable=0), run_subtest() in test_loader.c computes
+current_runtime = NO_JITED. The default load_mask is JITED | NO_JITED, so
+the load-mode skip does not apply. The load goes ahead, bpf_object__load()
+returns -EOPNOTSUPP, and ASSERT_OK(err, "unexpected_load_failure") reports
+a failure.
 
-On the kernel side, resolve_func_ptrs() makes those functions reachable
-only when the program has callx:
+The other callx-based tests in the file (callx_c_table,
+callx_c_table_null_check, callx_c_ops_mixed_with_data, callx_c_ops_selected
+and the asm callx_rodata_* success tests) have the same pattern. The file
+already has the mechanism: `#define __load_if_JITed()
+__test_tag("load_mode=jited")` in bpf_misc.h, which about 30 other verifier
+progs use.
 
-    if (!env->has_callx || !env->allow_ptr_leaks)
-        return 0;
-
-When the program has no callx, the appended functions are not reached by
-any edge, and check_cfg() in kernel/bpf/cfg.c:729 rejects it with
-"unreachable insn %d". e7d77667afdf states this: "A function that is
-listed in func_info and not referenced by anything is still rejected by
-check_cfg() as unreachable."
-
-For example, with tools/testing/selftests/bpf/progs/callx_rodata.c:
-
-    const volatile int bias = 1;
-    static op_fn const ops[] = { add_bias, mul3 };
-    SEC("socket") int use_table(void *ctx) { ... }
-    SEC("socket") int read_config(void *ctx) { return bias; }
-
-The ld_imm64 for bias in read_config() makes libbpf append add_bias and
-mul3 to it. The kernel then rejects read_config as containing unreachable
-instructions, and bpf_object__load() fails for the whole object, including
-use_table. Before this patch, .rel.rodata was skipped and read_config
-loaded fine. The same failure hits a callx program loaded without
-CAP_PERFMON (allow_ptr_leaks false).
-
-Should the functions be appended only when the program (or one of its
-subprogs) contains BPF_CALL|BPF_X, or should libbpf probe for kernel
-callx support before processing func_ptrs?
+This is unlikely to show up in BPF CI (tools/testing/selftests/bpf/config.x86_64
+and config.aarch64 both set CONFIG_BPF_JIT_ALWAYS_ON=y), but the test
+should skip when JIT support is unavailable.
 
 
 ---
@@ -279,4 +242,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35935998342
---===============4372679374321826094==--
+--===============1707737354958412526==--
