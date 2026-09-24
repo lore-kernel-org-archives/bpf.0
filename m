@@ -1,139 +1,130 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA37B442B3F
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:13:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1E3442397
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:15:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790241213; cv=none; b=Kj6tReJjWI2Ui3kVmUmP4FZ+r6ubBes+1B2t6DnMuxep/w+aH8IesOXj/eQMnIGwZrMlbMCgi8v39jtYsOQpKMtJFVy0BrPljmsZGfK4lNWIfPKxo5BR3gz7gvisYMlu2H6gizG5SoAwkBa4TIdWavpkqQYkdjVen88mKAEkOx0=
+	t=1790241331; cv=none; b=C0sZrMByGQ6JKPmKZmBMXc3BYVUYYtOkPsWD/YbUvk5DfSVJU7S6oOBb7jJNJVc9peY2un2gXeJjxzdlSNf3yMLvlLJdDi8eKKwiaDyT91UgjL+fZiXslJ7sTT1JBrVx9zQ8uxXPIVzBusVJexq3JHB6rzZZ1jcdxSZVrSZJIvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790241213; c=relaxed/simple;
-	bh=EuruMAkqzsYPw4yHWWG1d0EbtgWx0OtfM3AnKrza01Q=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=JjIXX0l/yofAibMviRIS82hxY9VL9mZkQgSj1hZYDA5z7Fi/ViiBJGSxDpsou47swXmN58sYpMIh95H6kWwiL0+oZiIscivXBw1hL+X6ThLlMGgc0lV4+eShExOd8s2i2OVPrJW1AUytWH6wDCfWteP7wInrHgmHvKwyigC+2/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wwz7Z1Ri; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790241331; c=relaxed/simple;
+	bh=RHDCCkVs8tDCGLl7VdbnSLmy7AOHiT7IxMoar3pGZTw=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=S3sRb6Nt30gFA6VFZpsz/SpGbyI36qwwAMdIMDJM6nSsS2ONW4DSYzl8L937F1rKzksmxSRBDrjkD/1AGlqOKKxXfTYqxYWyP2vm7pRt1zpR1aoNPL6fOEuyM+k9e+cLWBVatgLlH5Zbtr7tQeCvfHvr38w4g3Kk+Z+N3lo5SYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VOSv2Z6U; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wwz7Z1Ri"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3F6B1F000FF;
-	Thu, 24 Sep 2026 09:13:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VOSv2Z6U"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D9131F000FF;
+	Thu, 24 Sep 2026 09:15:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790241211;
-	bh=eEYAO/oHUxXw6t2240zzoZkU+i1Mz6RoyP/e+56UrZw=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Wwz7Z1RigAojg2KgXDdwjQSsJNy/8Ug19+eNkBAoE3bBk8TvEhNlCEEKNLL+IAK40
-	 wz2WvOIQBQ75wOEor2iloOwh2X/PBijZGzFbzgqMC+55MrOfBKwHwSXfyUqgsMgVjY
-	 8fKH9qsgu9CW5cR8Qv4rkpfxmn3gu7eNhNGXdjlrMKo2QhPTOMHiB3S2FDymMP7NrR
-	 +Yspcc+fIAGaIByGHAEHQZE9n2gVyZORQN7l986dtW5VktO33uIspCp8Ntl5BbYIv3
-	 V78SIilayhv6oJvZvhwnnTITL/8dPGFIdWxEmNflH3M4QrW/mSj9UJwi1NrPm900aS
-	 uqgbyL8tcugfg==
-Content-Type: multipart/mixed; boundary="===============5325565195457656736=="
+	s=k20260515; t=1790241330;
+	bh=Q/AIhdNFIA82q4Ft2e+e3NKhPdXqvcnDww5ec9HB/SQ=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=VOSv2Z6UMo+4Mhutw3Eudc0/Up37fQ4ZaSNZvXF+N2Z6d8GGpryAkvPwWn+t8FtFD
+	 GTWmmBr9golgF+yXlycm/OGj9y1vg+O7JJSZMgshyM+tcsraSQSpL+ZXvyOfSuxboJ
+	 ZuEzkfZRXAU2RMPlToHlpGiMWtZBnHMNFXhnI3biGhDBQkt11+TybIU9BUsNlXAXV5
+	 nsFT39tgQ6BD5vy8MDO1ITNKklb65rROggqnC1xBYD7YtUafB22H/wmO+GUcg+PDKS
+	 Ey1rjt1r/rG7zbNZ2vFEf2f0XA2qZYJSqRW2RhWhCbmdkoGKFSrau2Fq2u9XSFJkyK
+	 DPA0Mklq0EVpA==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net v3] net: stmmac: fix rx Scatter-Gather support
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Lorenzo Bianconi" <lorenzo.bianconi@oss.qualcomm.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260923-stmmac-rx-sg-fix-v3-1-ed26fea7180d@oss.qualcomm.com>
+References: <20260923-stmmac-rx-sg-fix-v3-1-ed26fea7180d@oss.qualcomm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 24 Sep 2026 09:15:29 +0000
+Message-Id: <20260924091530.0D9131F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <61fbaeed4b3968122da9da2b7ac83e193a0058de88466d6f79fe0a446853d500@mail.kernel.org>
-In-Reply-To: <20260924082607.2695649-17-memxor@gmail.com>
-References: <20260924082607.2695649-17-memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v2 16/18] bpf, x86: Allow programs 2 KiB of stack
-From: bot+bpf-ci@kernel.org
-To: memxor@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,emil@etsalapatis.com,tj@kernel.org,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 24 Sep 2026 09:13:29 +0000 (UTC)
 
---===============5325565195457656736==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [High] net: stmmac: data corruption in multi-descriptor frames with XDP o=
+n legacy MACs
+--
 
-> diff --git a/Documentation/bpf/bpf_design_QA.rst b/Documentation/bpf/bpf_design_QA.rst
-> index eb19c945f4d5..be5fc4ac00d6 100644
-> --- a/Documentation/bpf/bpf_design_QA.rst
-> +++ b/Documentation/bpf/bpf_design_QA.rst
+commit bffa481d7cb386a04b24759408cee45add543fcd
+Author: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+
+net: stmmac: fix rx Scatter-Gather support
+
+This commit enables scatter-gather for non-SPH frames on GMAC4/XGMAC cores =
+to
+address an SMMU translation fault on oversized frames overflowing the buffe=
+r. It
+also updates FCS trimming to use pskb_trim() on the assembled skb instead of
+subtracting it from individual buffers.
+
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
+net/ethernet/stmicro/stmmac/stmmac_main.c
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
 
 [ ... ]
 
-> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-> index 9fbef7504e51..e2e531dd1e0b 100644
-> --- a/arch/x86/net/bpf_jit_comp.c
-> +++ b/arch/x86/net/bpf_jit_comp.c
-> @@ -4520,6 +4520,18 @@ bool bpf_jit_supports_subprog_tailcalls(void)
->  	return true;
->  }
->
-> +/*
-> + * Frame sizes are 32-bit immediates in the prologue, epilogue and tail call
-> + * sequences, a tail call pops the caller's frame and lands in the target's
-> + * prologue before the target allocates its own, and private stacks are
-> + * allocated from the program's own depth, so MAX_BPF_STACK_JIT frames need
-> + * nothing special.
-> + */
-> +bool bpf_jit_supports_large_stack(void)
-> +{
-> +	return true;
-> +}
+> @@ -5809,24 +5814,25 @@ static int stmmac_rx(struct stmmac_priv *priv, in=
+t limit, u32 queue)
+>  		len +=3D buf2_len;
+> =20
+>  		/* ACS is disabled; strip manually. */
+> -		if (likely(!(status & rx_not_ls))) {
+> -			if (buf2_len) {
+> -				buf2_len -=3D ETH_FCS_LEN;
+> -				len -=3D ETH_FCS_LEN;
+> -			} else if (buf1_len) {
+> -				buf1_len -=3D ETH_FCS_LEN;
+> -				len -=3D ETH_FCS_LEN;
+> -			}
+> -		}
+> +		if (likely(!(status & rx_not_ls)))
+> +			len -=3D ETH_FCS_LEN;
+> =20
+>  		if (!skb) {
+>  			unsigned int pre_len, sync_len;
+> =20
+> +			/* Each frame starts here: reset the FCS handling */
+> +			fcs_stripped =3D false;
 > +
+>  			dma_sync_single_for_cpu(priv->device, buf->addr,
+>  						buf1_len, dma_dir);
+>  			net_prefetch(page_address(buf->page) +
+>  				     buf->page_offset);
+> =20
+> +			if (stmmac_xdp_is_enabled(priv) && !buf2_len) {
+> +				buf1_len -=3D ETH_FCS_LEN;
+> +				fcs_stripped =3D true;
+> +			}
 
-Can a sched_cls or lwt_xmit program overflow the kernel stack through
-bpf_clone_redirect() recursion?
+[Severity: High]
+Does this incorrectly strip the FCS from the first descriptor of a
+multi-descriptor frame on legacy MACs?
 
-A TC egress program on device X that calls bpf_clone_redirect(skb,
-X_ifindex, 0) redirects the packet back to itself. The redirect happens
-while the calling program's frame is on the stack:
+On legacy MACs, buffer2 is not used, so buf2_len is always 0. When a scatte=
+red
+(multi-descriptor) frame is received with XDP enabled, this condition evalu=
+ates
+to true on the first descriptor.
 
-  bpf_clone_redirect()
-    __bpf_redirect()
-      __bpf_redirect_common()
-        __bpf_tx_skb()
-          dev_queue_xmit()
-            __dev_queue_xmit()
-              sch_handle_egress()
-                tcx_run()
-                  bpf_prog_run() -> (same or another tc egress program)
+Because there is no check for whether this is the last descriptor
+(!(status & rx_not_ls)), it incorrectly subtracts 4 bytes (ETH_FCS_LEN) fro=
+m the
+payload in the first descriptor, corrupting the packet data.
 
-The guard in __bpf_tx_skb() (net/core/filter.c) only fails when the
-counter exceeds XMIT_RECURSION_LIMIT (8):
+Additionally, because fcs_stripped is set to true, the actual FCS at the en=
+d of
+the frame will not be removed when the final descriptor is processed.
 
-  if (dev_xmit_recursion()) {
-      net_crit_ratelimited("bpf: recursion limit reached on datapath, buggy bpf program?\n");
-      kfree_skb(skb);
-      return -ENETDOWN;
-  }
+> +
+>  			xdp_init_buff(&ctx.xdp, bufsz, &rx_q->xdp_rxq);
+>  			xdp_prepare_buff(&ctx.xdp, page_address(buf->page),
+>  					 buf->page_offset, buf1_len, true);
 
-So dev_xmit_recursion() allows values 0 through 8 before it fails, which
-means the program runs at nesting levels 0 through 9. That puts ten of
-its frames on the stack at once.
-
-sched_cls programs never get a private stack:
-
-  kernel/bpf/verifier.c:bpf_enable_priv_stack() returns NO_PRIV_STACK
-  for them
-
-so their frames live on the task or IRQ stack. On x86-64 without KASAN
-that stack is 16 KiB (THREAD_SIZE_ORDER = IRQ_STACK_ORDER = 2).
-
-With this patch, a single 2048-byte frame is accepted. The BPF frames
-alone then take 10 x 2048 = 20 KiB, before any kernel frames in each
-round. That exceeds 16 KiB, so the stack overflows.
-
-Before this patch the same program was capped at 10 x 512 = 5 KiB of BPF
-frames, which fit. The recursion limit was meant to stop a buggy program
-from crashing the kernel.
-
-The commit message says nested programs "are not accounted against each
-other before or after this change; each level of nesting may now add up
-to 1.5 KiB more." It does not bound how many levels there can be. Here
-the kernel allows up to 10, which adds about 15 KiB compared to before.
-
-The same construction works through lwt_xmit programs, which also get
-bpf_clone_redirect(). Triggering the overflow needs CAP_BPF and
-CAP_NET_ADMIN to attach.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35976322553
---===============5325565195457656736==--
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260923-stmmac-rx-=
+sg-fix-v3-1-ed26fea7180d@oss.qualcomm.com?part=3D1
