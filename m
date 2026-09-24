@@ -1,140 +1,221 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DEC3388E6E
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 01:44:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F26238B7B0
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 01:44:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790214278; cv=none; b=uJLgNafLvv2BkraIypwCez34ykWdjiRxYhKeVLOzMngR3RysFFOiCeb4XWGASK3c2pdlkVuNlEDP++0djEvU5t7kZhlG68S+2QpJy/84+vr64ly2yo/lIx6X7AKOAOP/eIjMB2OoxwfLY6SYwSPvxkfjQtTPOFxEzjIvyeDU+aQ=
+	t=1790214279; cv=none; b=IGjP6TVbKIzozb7nwZcZRhAwXNK7AdenPBxyQj/R5HNumooc9O4VzWdzpedKq6CVWW3qo7Y7xg9GqhE7hLJaw34ghasijyJo6dYCNI00MRUtCLD53A+l6RVg8ONR0MU4G4tnTjdf1oIaC1z3XMgUr3wW04JDRme3yWiNeVPipFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790214278; c=relaxed/simple;
-	bh=PUCp6otpaAG2a9GZ3AiPoqod+oP6BeLS35egB/bgg+o=;
+	s=arc-20240116; t=1790214279; c=relaxed/simple;
+	bh=9FLTsGHQU41tAFmZRJnWfnrFQmunYK9m72d+mRGatwU=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=hDN5Q1rbH8xMYGWF6lS8H0J1gK3dfprOspDtOiyxdqPsLImY4wEFWWSCYERJlVk0aIYydeo4I+wqVg/YYOJktzp6JkNpAmLcv/iXAiZ3xB+YcPxxQJ9kA7T8h5Ui/u8eoE3S/bNN4TAso6fOL3BUzSWhd6dXlm7qwQODBmh8SNk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=THnO3aW3; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=IRpcjeBzNHfp2TFEhljn6p2RcsqEdUiHB84xG78c2JPRO5AJ0HVT3e7J6uO9tPvrUZUpyIXUi7HPeGs/jjbVhYp622i9RAlea3QV1dLvEmMY/+QFXkcewDkT2VYXy8DIzcIywDc1mO3pP3yFVVf8YMG0eXBvj7WM0e3HNCGcq7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rwm8fbyj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="THnO3aW3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D31001F000FF;
-	Thu, 24 Sep 2026 01:44:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rwm8fbyj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8963E1F00893;
+	Thu, 24 Sep 2026 01:44:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1790214276;
-	bh=gZ/ZZXRfBz2rjn9Vc1p9+MSp1EBzmNJsXB9yoz/LkZ8=;
+	bh=AYgVtkmZcCqL3S4XQtx7IVWtw2nAk/VYKrtudwiuZCs=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=THnO3aW3djV+nJQOh8fR+LKRF87HeqBAsKze1pD1jSlI6DBM3XFsW2jUW0+xIrsAB
-	 CGUFKn4nIFGZ4CuXnnOkOkAm3aHZgJ4t6kqu9GSv86ewukhRSldYsOAVtiHJvqD/4A
-	 pIICvKo7wkzdOE90kOZbUUyV9f7Uy6JMnxopeqtNHlXmEQ5JPbIzEHC3qfjKHScoSo
-	 oCrukSSnNrY75MaQd5Kn3htcfdoFmYn970DctLi2ke6KSlU9YHTuvPw7LAMLiUGEBk
-	 EgrbkoDrthrh5vZULlikXuTKnpYiNu/a+MaWp3Y5PLHym4/2PihbUc1KgxFc5yDHrs
-	 LJhjkippoMm/w==
+	b=Rwm8fbyjGUiRayydFoywChwtl5Ya3zCUOnYz/QQbZj10yeNmWtjyV62iafaCKy8iu
+	 oNQNNVcDhHOMyWAW6L0Yvna49nVON9D7+1pN0J1hW0JrbIZ0S3mSSWLmL+4fO55Bei
+	 DROmXSkbscBPZeAyZ0c1EYL5IEoju8+Qs2RS4CwYdfEw5v659qcQ4+oh2WwivB8p5G
+	 uJ6kdyhgPUBsLuKpea6Etxg9rxIgrHjPUi7NlSeTiOdj3a2e7hFvt5ApUPutxAOGA+
+	 kL6X6Vwlbpswy6ILTiRe+CrZvkkaOo6YgdzrRNLMUadEfKPHImtBrVEnKo2unbOwVG
+	 mcmlsi0DdpZQg==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 1/8] eth: mpnic: add scaffolding for Meta
- Platforms NIC
+Subject: Re: [PATCH net-next 8/8] eth: mpnic: add basic Rx handling
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Daniel Zahka" <daniel.zahka@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260922-linux-mpnic-v1-1-236844f53072@gmail.com>
+In-Reply-To: <20260922-linux-mpnic-v1-8-236844f53072@gmail.com>
 References: <20260922-linux-mpnic-v1-0-236844f53072@gmail.com>
- <20260922-linux-mpnic-v1-1-236844f53072@gmail.com>
+ <20260922-linux-mpnic-v1-8-236844f53072@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-Date: Thu, 24 Sep 2026 01:44:35 +0000
-Message-Id: <20260924014435.D31001F000FF@smtp.kernel.org>
+Date: Thu, 24 Sep 2026 01:44:36 +0000
+Message-Id: <20260924014436.8963E1F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
-Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
 s) to consider:
-- [High] mpnic: Missing PCI BAR size validation causing OOB MMIO access
+- [High] net: mpnic: unbounded NAPI budget in mpnic_poll causes fairness vi=
+olation
+- [High] net: mpnic: missing descriptor sequence validation causes NULL poi=
+nter dereference
+- [Medium] net: mpnic: direct DMA sync on page pool buffers breaks memory p=
+roviders
 --
 
-commit 04a97e4905a47ed1a317515fbb919eef32a497b2
+commit a0a26aee27284ff3d767cd871801499330442f84
 Author: Daniel Zahka <daniel.zahka@gmail.com>
 
-eth: mpnic: add scaffolding for Meta Platforms NIC
+eth: mpnic: add basic Rx handling
 
-This commit adds the initial bare PCI driver scaffolding for the Meta
-Platforms Network Interface Controller. It introduces basic MMIO read/write
-operations and PCI device registration.
+This commit introduces basic receive handling for the mpnic driver. It=20
+assembles frames using completion descriptors, merging contiguous payload
+fragments, and utilizes a batched page reference strategy to manage=20
+xdp_buff allocations.
 
-> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_pci.c b/drivers/net/et=
-hernet/meta/mpnic/mpnic_pci.c
-> new file mode 100644
-> index 0000000000000..96393e7812418
-> --- /dev/null
-> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_pci.c
-
+> diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c b/drivers/net/e=
+thernet/meta/mpnic/mpnic_txrx.c
+> --- a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
+> +++ b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
 [ ... ]
-
-> +u64 mpnic_rd64(struct mpnic_dev *mpd, u32 reg)
+> +static void
+> +mpnic_pkt_prepare(struct mpnic_napi_vector *nv, u64 rcd,
+> +		  struct mpnic_rcq_state *state, struct mpnic_q_triad *qt)
 > +{
-> +	u32 __iomem *csr =3D READ_ONCE(mpd->uc_addr0);
-> +	u64 value;
+[ ... ]
+> +	/* Short-cut the end calculation if the page is fully consumed */
+> +	pg_end =3D fin ? page_size(page) : mpnic_hdr_pg_end(pg_off, len);
+> +	frame_sz =3D pg_end - pg_start;
 > +
-> +	if (!csr)
-> +		return ~0ULL;
-> +
-> +	value =3D readq(csr + reg);
-> +
-> +	/* If any bits are 0 value should be valid */
-> +	if (~value)
-> +		return value;
-> +
-> +	/* All ones can be a valid value, so confirm against a register
-> +	 * which never reads that way on a live device.
-> +	 */
-> +	if (reg !=3D MPNIC_BDQ_SPARE && ~readq(csr + MPNIC_BDQ_SPARE))
+> +	dma_sync_single_range_for_cpu(nv->dev, page_pool_get_dma_addr(page),
+> +				      pg_start, frame_sz, DMA_FROM_DEVICE);
 
-[Severity: High]
-Could this unconditionally read at a large offset (~16.5MB) regardless of t=
-he
-actual mapped BAR size? If a device (or an attacker via hotplug/virtualizat=
-ion)
-presents a smaller BAR, wouldn't this cause an out-of-bounds MMIO access
-and potentially a kernel page fault?
+[Severity: Medium]
+Does this break the abstraction for memory providers like dmabuf?=20
+Using dma_sync_single_range_for_cpu() directly on page pool buffers bypasse=
+s=20
+the standard page pool synchronization hooks like page_pool_dma_sync_for_cp=
+u()=20
+or page_pool_dma_sync_netmem_for_cpu().
 
-> +		return value;
 > +
-> +	mpnic_mmio_err(mpd, reg);
+> +	xdp_init_buff(buff, frame_sz, &qt->xdp_rxq);
+> +	xdp_prepare_buff(buff, page_address(page) + pg_start,
+> +			 pg_off - pg_start, len, true);
+> +	net_prefetch(buff->data);
 > +
-> +	return ~0ULL;
+> +	state->add_frag_failed =3D false;
 > +}
-
-[ ... ]
-
-> +static int mpnic_probe(struct pci_dev *pdev, const struct pci_device_id =
-*ent)
-> +{
-> +	void __iomem *uc_addr0;
-> +	struct mpnic_dev *mpd;
-> +	int err;
-
-[ ... ]
-
-> +	mpd =3D mpnic_alloc(pdev);
-> +	if (!mpd)
-> +		return -ENOMEM;
 > +
-> +	uc_addr0 =3D pcim_iomap_region(pdev, 0, MPNIC_DRV_NAME);
+> +static void
+> +mpnic_add_rx_frag(struct mpnic_napi_vector *nv, u64 rcd,
+> +		  struct mpnic_rcq_state *state, struct mpnic_q_triad *qt)
+> +{
+[ ... ]
+> +	truesz =3D (fin ? page_size(page) : ALIGN(pg_off + len, 128)) - pg_off;
+> +
+> +	dma_sync_single_range_for_cpu(nv->dev, page_pool_get_dma_addr(page),
+> +				      pg_off, truesz, DMA_FROM_DEVICE);
+
+[Severity: Medium]
+Similarly here, does direct use of dma_sync_single_range_for_cpu() on the=20
+payload fragments circumvent the required page pool wrappers?
+
+> +
+> +	if (!xdp_buff_add_frag(buff, page_to_netmem(page), pg_off, len,
+> +			       truesz)) {
 
 [Severity: High]
-Does this code map the PCI BAR without first validating that the resource
-length is large enough to cover the expected register offsets? Should this
-validate pci_resource_len(pdev, 0) before mapping to ensure that accesses
-like MPNIC_BDQ_SPARE remain within bounds?
+Can a malformed descriptor sequence crash the kernel here?
 
-> +	if (IS_ERR(uc_addr0)) {
-> +		err =3D PTR_ERR(uc_addr0);
-> +		dev_err(&pdev->dev, "Mapping the register file failed: %d\n",
-> +			err);
-> +		goto err_free_mpd;
+If the hardware delivers a payload (PAY_AL) descriptor before a header=20
+(HDR_AL) descriptor, mpnic_pkt_prepare() won't be called, so the buffer=20
+won't be properly initialized. The data_hard_start field would remain NULL,=
+=20
+causing xdp_buff_add_frag() to compute an invalid pointer for the=20
+skb_shared_info.
+
+> +		state->payld.pagecnt_bias++;
+> +		state->add_frag_failed =3D true;
 > +	}
-> +	mpd->uc_addr0 =3D uc_addr0;
-
+> +}
 [ ... ]
+> +static int mpnic_clean_rcq(struct mpnic_napi_vector *nv,
+> +			   struct mpnic_q_triad *qt, int budget)
+> +{
+[ ... ]
+> +	while (packets < budget) {
+> +		u64 rcd;
+> +
+> +		if ((*raw_rcd & cpu_to_le64(MPNIC_RCD_DONE)) !=3D done)
+> +			break;
+> +
+> +		dma_rmb();
+> +
+> +		rcd =3D le64_to_cpu(*raw_rcd);
+> +
+> +		switch (FIELD_GET(MPNIC_RCD_TYPE, rcd)) {
+> +		case MPNIC_RCD_TYPE_HDR_AL:
+> +			if (FIELD_GET(MPNIC_RCD_HDR_SUBTYPE, rcd) =3D=3D
+> +			    MPNIC_RCD_HDR_SUBTYPE_HDR)
+> +				mpnic_pkt_prepare(nv, rcd, state, qt);
+> +			break;
+> +		case MPNIC_RCD_TYPE_PAY_AL:
+> +			mpnic_add_rx_frag(nv, rcd, state, qt);
+> +			break;
+> +		case MPNIC_RCD_TYPE_META: {
+> +			struct sk_buff *skb =3D NULL;
+> +
+> +			if (likely(!(rcd &
+> +				     MPNIC_RCD_META_UNCORRECTABLE_ERR_MASK) &&
+> +				   !state->add_frag_failed))
+> +				skb =3D xdp_build_skb_from_buff(&state->pkt);
+
+[Severity: High]
+If a metadata (META) descriptor is received before any header descriptor=20
+(HDR_AL), could xdp_build_skb_from_buff() also attempt to operate on an=20
+uninitialized state->pkt and dereference a NULL data_hard_start?
+
+> +
+> +			if (likely(skb))
+> +				napi_gro_receive(&nv->napi, skb);
+> +			else
+> +				mpnic_put_pkt_buff(&state->pkt, true);
+> +
+> +			state->pkt.data_hard_start =3D NULL;
+> +			packets++;
+> +			break;
+> +		}
+> +		}
+[ ... ]
+>  static int mpnic_poll(struct napi_struct *napi, int budget)
+>  {
+>  	struct mpnic_napi_vector *nv =3D container_of(napi,
+>  						    struct mpnic_napi_vector,
+>  						    napi);
+> -	int i;
+> +	int i, j, work_done =3D 0;
+> =20
+>  	for (i =3D 0; i < nv->txt_count; i++)
+>  		mpnic_clean_tcq(nv, &nv->qt[i], budget);
+> =20
+> +	for (j =3D 0; j < nv->rxt_count; j++, i++)
+> +		work_done +=3D mpnic_clean_rcq(nv, &nv->qt[i], budget);
+
+[Severity: High]
+Does this allow the total work done to dramatically exceed the NAPI limit?
+
+The full budget is unconditionally passed to every RX queue without dividing
+or subtracting the work already done. A NAPI vector with multiple RX queues
+handling a burst could process nv->rxt_count * budget packets, potentially
+defeating softirq fairness mechanisms and causing high system latency.
+
+> +
+>  	for (i =3D 0; i < nv->txt_count; i++)
+>  		mpnic_commit_cq_head(&nv->qt[i].cmpl);
+> =20
+> -	if (likely(napi_complete_done(napi, 0)))
+> +	if (work_done >=3D budget)
+> +		return budget;
+> +
+> +	if (likely(napi_complete_done(napi, work_done)))
+>  		mpnic_nv_irq_rearm(nv);
+> =20
+> -	return 0;
+> +	return work_done;
+>  }
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260922-linux-mpni=
-c-v1-0-236844f53072@gmail.com?part=3D1
+c-v1-0-236844f53072@gmail.com?part=3D8
