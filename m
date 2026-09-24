@@ -1,89 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f43.google.com (mail-pz2-f43.google.com [74.125.228.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6B03F39D0
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 21:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07FE4371D1F
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 21:11:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790284280; cv=none; b=HK6T/a5ka/H3qfjQDngE3278l0p4WNKPgvcsgcDo1Mxd5M6qNLOF8ZSAjaeldQrsMV4HodwzD7jYCzWryP3XvKoE3crsAdi3GWCnrQMCXBMGuedWESl2Tuvl2wk16v6GY3I4cAN7jUs0vJXnsjl8Jq14MjQw0DFHLMn3fnnWbd4=
+	t=1790284311; cv=none; b=gX5ciHql6D6e2Df7gy4kzydSAp4gew8FxN7j6JnLMtVYk9SCDdPfz1eHkFuopSasGsX+jkXoxafXEbRQ4ScHuoiyl2hlCUiwKgw676T21fGWkiwah8NPVKDT51JdPDYvmkoKWGhsC9M09FC/UA+jPZM3tUIN5O4vqhLpp5YlyKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790284280; c=relaxed/simple;
-	bh=UWMx24jNhyMN10He2G6GYq3hLESdwPmlbKmsfJI6kO0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=foMiBSrCRv2X6g6aDe+K8Ta4rkP8eu8o1YDHu3afBb0eAGziUCC0BjTevBwFGguIGYuyr8aid/e/8ukfsm0KVxIz7A9AX/Jol9B0AYB+ds7QiXZ60eqyCkgwM8oXaS1VWapIpca7l+yYGDEgCbTn+J7GFbZokNkhTdEeYKK1RlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iBUsgaXE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790284311; c=relaxed/simple;
+	bh=4Hmz/aCwPxPxXQgsrAS2zMA0OKCrRCcIyPayyhnt0w4=;
+	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:In-Reply-To:
+	 References:MIME-Version; b=BspdSJR6I5izd7/yicEuJPhq/RQCIRQ/pkb1625smeEJAckb8MI344aZ2snzSZVlnFKyNv3IaJFxIR/tH9G/M1AETocU/I19tiWgM9jOEsYW0/3NlHDPZSwJFEwZ+sg+bGVZxGyIXuQpVOxMUvNNeUgcGjw0ayoFf709BGeEcO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ly3TQp1g; arc=none smtp.client-ip=74.125.228.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iBUsgaXE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94DB71F000FF;
-	Thu, 24 Sep 2026 21:11:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790284278;
-	bh=8TjiWzJ59MxY8A6f7qitBBDe6dAA42BKo8W7DQWI+0Q=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=iBUsgaXEo5w2flFPh7y+qAOJc6wLH8sH+IM7+Up2hdRfZGnp6tVhVVe4Ttmunj+qF
-	 u6gPGxE7kBuGITEx5xiR3LcHoQMsGPkjkjW2WjQlpb7XPvbudoKkMWAzncnPk3uWLo
-	 X1R+PAt9/qu/ehgH/xWqbA2TZtmM5KBXdcalDqEOpWsMNEcA7j1Qa24IPe92pEqjks
-	 Qno3sCKviFmBU3dcUyRhMuzMl0A1b0MoVjlgvvCrPlZP1c/CHfuNZPUbGp7ajBQO+a
-	 43sQmltva+2cxOh3uIWfZIhHlJq1KN2E0FdrguHNV+yGigbDPh1cDrnY32zmiB+b07
-	 km+4FiXGcn5xw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93DEC3A566E5;
-	Thu, 24 Sep 2026 21:10:08 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ly3TQp1g"
+Received: by mail-pz2-f43.google.com with SMTP id d2e1a72fcca58-85469f204f6so161213b3a.2
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 14:11:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790284309; x=1790889109; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=A9yQwZzRCpiYQiJxF3BfQJ2oULkNnaltgNKkojug3hU=;
+        b=ly3TQp1gNOBA/2eGU7lm83IWziJk5x34aC/D8lTKFrpibII/24kbxMGIymqM0Y2KKQ
+         CgoxqgsGgr8Ues3NhZOwOG25OpgRGiacdM0tpJtuhvdHYfdk8hSFEu71b8JuinUE8RU4
+         U1qZ8VQp+yp41YjA/N4daVn/ssjsMNGUZD4fmaIZUDL1q24RqA/9WQU7eW+pixppb87Q
+         jN4frGRas0pJDiBjMdP94FH4ATrMjbcDM/zpu7lhqYs41922e/yzHAtg+X8FaV7tHvwj
+         2BWeNXO+9a81tXb3muGVRC9nbG28gFdsE0KwCWvvddK0c4pguRO53TkjmY7Y8ygt7sWT
+         osKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790284309; x=1790889109;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:from
+         :subject:cc:to:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=A9yQwZzRCpiYQiJxF3BfQJ2oULkNnaltgNKkojug3hU=;
+        b=ylPePWwgLLHIyQPwZiAipkIa6pIE/QJjfUibPgB48P7WX3wwavkgAecdeqK9h6/XjJ
+         7qjRhc+C9pYcKWr5EkM+iSoLge3asxVHObxazLSK1BurZ9UDxkPubUdr9IUB9dNhJ3Er
+         T3t3YCOk4X2kBpHDos+167xDdccQ5ecB3MurbBKIrWC0YPBCR1eGr3IV8PAIb3TePcw/
+         BHQAj4CFiVX6/Rib4QbyQADR9f8oJoV4VuKSBW0Z3FjIAxcF3+fGqQ2ylNausnT+R3wu
+         zCykFTlHUcxjgBClIRe4VZTwKjb3Ohoci9gqLV1rN1D+WDboofWbhKSnW6EYn1GdsVEI
+         0oFQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzYxYXcIG+OazBYzQr1ZDWVv/9xtfllDniPh3NjSJ/WDuf08hENVmzv1xb6Dl7kzYBtUDg=@vger.kernel.org
+X-Gm-Message-State: AFuF++k5uaNeG6JkYBRXmyZjNoIvLM7wkm7Zx1qpwqeA8YJhy41h8P1o
+	KIEIaLRuSd1yR8EjXu5wIEeuptxUs2AyODPxcxZEHFB8ClVq1cyWpHGl
+X-Gm-Gg: AYBFou3ZVganJCLG+0HYN37BIxGnj17/P9ecnhBIsE+8s1kvOh2fErW+23buiPPsYdA
+	jzHR9VR/h8W/oOfnB1NAihARP3VyPmQE7k/UcbXEUs6LkaCnXpj5L3YW+3P4xUrfXE4ngOK6Tqz
+	JgnCDB0WC28H+J+wRhGwu96iNQeWFiJPs07T7EK+gFeqJbdFtwzGDg8w4D3/vPtbJ6DKpc9nHRI
+	FynnjhydoGEQchEsslfj/O8NZgeHe9FOnQXg1sa+5HuvTx4i8vpVZNC8jrXdhiDh01GgjWEzVEH
+	0QRHTvOHjyRM+F4dWlez8oAtaJTGi1JGFvNCBw1GAzJMWqrVrZefthLgiy2GRpTJzQUGIcVwxKh
+	lFi4m5Bbn/pzW37dBpsaRsYfXhttWB/vDQPcLBYQTdOteBJec+q72sKxKnn8ljB0TAFJzFtsr62
+	uJbXu9cdfd7QqmL+X6UJFgi1iUBinreygMqteiYjqwgxWr+2droK2A/LRqZU7G6Yu3OrrAdvz5a
+	Pb2AooPocVkk7pfoI5v5pu2Z/wDSnOPsu54n/3Gs7ZDc5NxXOqB5trElbEGRJ2Od00u//MGF5B9
+	z6Y=
+X-Received: by 2002:a05:6a20:7d9f:b0:3dd:a197:7371 with SMTP id adf61e73a8af0-3de0e938760mr3627017637.74.1790284309137;
+        Thu, 24 Sep 2026 14:11:49 -0700 (PDT)
+Received: from localhost ([153.61.198.251])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc78791d7b9sm259426a12.14.2026.09.24.14.11.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Sep 2026 14:11:48 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 24 Sep 2026 21:11:47 +0000
+Message-Id: <DLNUTL0UJVKC.NN3B416MJ0BI@gmail.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Tejun Heo" <tj@kernel.org>,
+ <kkd@meta.com>, <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next v2 2/5] bpf: Add file descriptor interface for
+ program streams
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+In-Reply-To: <20260924162641.1922423-3-memxor@gmail.com>
+References: <20260924162641.1922423-1-memxor@gmail.com> <20260924162641.1922423-3-memxor@gmail.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/7] Follow ups for verifier errors set
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <179028420740.2201630.9968715215127891056.git-patchwork-notify@kernel.org>
-Date: Thu, 24 Sep 2026 21:10:07 +0000
-References: <20260924170646.2366016-1-memxor@gmail.com>
-In-Reply-To: <20260924170646.2366016-1-memxor@gmail.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com, kkd@meta.com,
- kernel-team@meta.com
 
-Hello:
+On Thu, Sep 24, 2026 at 06:26 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+> +static void bpf_stream_publish(struct bpf_stream *stream, int len)
+> +{
+> +	/* Pairs with atomic_read_acquire() in bpf_stream_readable_bytes(). */
+> +	(void)atomic_add_return_release(len, &stream->readable);
+> +	bpf_stream_queue_notify(stream);
+> +}
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+This queues irq_work on every bpf_stream_vprintk() and every stage
+commit, whether anyone opened the stream or not.
+That's an irq_work interrupt per print for every existing user.
+ringbuf queues it only when the consumer caught up.
 
-On Thu, 24 Sep 2026 19:06:34 +0200 you wrote:
-> Some follow up changes based on comments from Eduard, Sashiko, and BPF
-> CI Bot. See commits for details.
-> 
-> Changelog:
-> ----------
-> v2 -> v3
-> v2: https://lore.kernel.org/bpf/20260924092941.3174809-1-memxor@gmail.com
-> 
-> [...]
+The result of atomic_add_return_release() is thrown away.
+can we queue the work only when it returns len, i.e. when the stream
+was empty ?
 
-Here is the summary with links:
-  - [bpf-next,v3,1/7] bpf: Correct verifier diagnostic attribution for stack reads
-    https://git.kernel.org/bpf/bpf-next/c/9774ae5951c2
-  - [bpf-next,v3,2/7] selftests/bpf: Test verifier stack-read diagnostic attribution
-    https://git.kernel.org/bpf/bpf-next/c/e4b20ef33f93
-  - [bpf-next,v3,3/7] bpf: Drop dead spill diagnostic condition
-    https://git.kernel.org/bpf/bpf-next/c/e9ac05b98278
-  - [bpf-next,v3,4/7] bpf: Report non-sleepable kfunc programs accurately
-    https://git.kernel.org/bpf/bpf-next/c/dac3b7a30d7e
-  - [bpf-next,v3,5/7] selftests/bpf: Test non-sleepable kfunc context
-    (no matching commit)
-  - [bpf-next,v3,6/7] bpf: Correct Program Structure diagnostic context
-    (no matching commit)
-  - [bpf-next,v3,7/7] selftests/bpf: Test Program Structure diagnostic context
-    (no matching commit)
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+pw-bot: cr
