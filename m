@@ -1,111 +1,139 @@
-Received: from mta0.migadu.com (out-40.mta0.migadu.com [91.218.175.40])
+Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA983346BE
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 07:06:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47B8422522
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 07:06:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790233604; cv=none; b=Rl+oqpJYyyw02z7yyAoz+YKCd4+KGdLp5wzrBXAt3wO4iAo4EXzfWnvpJacwnIE3dFGsEPciU2L+Yg9Zqt9Yzi035QRDl9FFUJ6z9cIscMregyWj7J1mU/L7G53TgviZ/RDgXkVPeMIbKQ+hxo8ZURfX3G+ARaUpHjlOBm5T2f4=
+	t=1790233624; cv=none; b=i4v5f2xuiNPM44da67U0ezo02A+7JwBtkj1dtXPgzvK7dU+2c3lTKIDEtlHjKLofSlFg/HAoUr9nvlr0cjJ9XrdEwlxAA+vLL3IeqrfUivkGzV35OT3YTd7qffcHh/VZFGZ2jsJ//u0Ys+j/salZtPSpQRdgcZcsCDa95/ekXoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790233604; c=relaxed/simple;
-	bh=pR2VM/wyNF4fUcANHV2LHURbgA4sGXgjZT0CoXCSGmc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IrjK7nnfd67c/YY/GLlWznrAZl5JGZ8kjXEjGM/Vb15qdso/YXDrHL6ueOVFJqp2qWVEZOyq5mK7YBspgBmOF/grhBeTG71YFnIECegPEqLzdDuiqTxJGZbhMdIlPWy/9iDMjTUd+CNtTXnLmlWrLqBtKSe3OWAkq43t2hbffFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OF62RIIi; arc=none smtp.client-ip=91.218.175.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790233624; c=relaxed/simple;
+	bh=fSy2bFU6GAk6z5ZL2rJh0ddr4lBF44OoZjZB4arg5Sk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=NHhkOVHxn+4fM2sKqvjpaEON2WsXjn3pR9JKlFp0zOc9ahxkf1Gidz0M/vrXuGbErGtufIBKs1V+l2eCMI6nnWsD8k9UNVSedX/OuEiYQXC9yIjQdd3cMP9qMPlQzjvnY2Wx3qO0QhFNHQCDuq6DuZKLx/MRW95WxOTFj/LlWKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gvZNxhm6; arc=none smtp.client-ip=74.125.228.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OF62RIIi"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=pR2VM/wyNF4fUcANHV2LHURbgA4sGXgjZT0CoXCSGmc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790233596; v=1; x=1790838396;
- b=OF62RIIi99kthlPD+vju2rS+qgMdgAE+H0TZWgH7D5AyQwEbADFnMNMNkB6poX2M1T/Ycycj
- aIe0VlQhm3yIk2h/t0w3JpelHTz3ewQyKyXC4GEnNlvEt496gQiuuV2IQmvP0kxlHxgJxsRRZhs
- 8SWKubGsMAzcC6cmWOVRJo+o=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 8d74c66461d80915;
-	Thu, 24 Sep 2026 07:06:36 +0000
-X-Mizu-Trace-ID: 8d74c66461d80915
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <99f01c64-cc16-4ab8-8bb5-c8eaa6cd6e77@linux.dev>
-Date: Thu, 24 Sep 2026 15:06:28 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gvZNxhm6"
+Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-85f0fc1fd8eso873736b3a.1
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 00:06:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790233616; x=1790838416; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=fSy2bFU6GAk6z5ZL2rJh0ddr4lBF44OoZjZB4arg5Sk=;
+        b=gvZNxhm6X/Ho40VGWUzqu8Cdr1Da/XA1GMZqC9Hy/XiIzhGECzDdrhLUbNFXH2evJT
+         XcZ16gDPw0lBqhC8aUvspTisogSd9VUTJl78AlA0P5kolGuqPh8Iesd9bF7b+sx2v61/
+         vMy0NjLtnqd3hg+3ZV7nEjR+QKtego5hLYzZlhcDbScT8gRs375gfT1NFDE4zUwYJxW7
+         9xZy01cG19s/jQrTT/1zHHzL/9iX/mM1MxY01BemIAB/26vnhJSgu+hQWVL0BL6JIu18
+         a46XiggZZ0B417q3E+uQ31hpxGjn4Da6+s2MsZ4JDtaj6B72+jKK4z2wblqwGbcIn/gr
+         aIsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790233616; x=1790838416;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=fSy2bFU6GAk6z5ZL2rJh0ddr4lBF44OoZjZB4arg5Sk=;
+        b=MDFxZL3igKMVEsWcmzRuzqBvHEFMid+FEaGGSThSzXPmNMUO6rGSxWkIi4/DYxoMLh
+         h1ORuToLqYoNGZmWwYmQklM8U57A+mOnKHd/DnZC3IDpuA9j/kUpYfn6m/usINWWk66E
+         CqRpY0tTg1y+dSUUmgPlTQVB8A04iPEGH251cghgv4+tvXbB3VHzeqspNbutEzuXJWtF
+         3kQaHFMuty8ZvLupVXwd1K16UmJGoO1SqJ4ddf/+X5/jsCOoEx3AoFj+gVlUL3QSsfzT
+         zc+7XVyZC/DeMDmND/wUksZUogvNT/GzkKL0rdUHoNVDngKqx2+qlzuv1bKYx5yUZIiA
+         zpjA==
+X-Gm-Message-State: AFuF++myPVQC/iXiiy/3y0T5/cj5PFYYonotf1QLtHPTSuToefKO3/o8
+	996B7OIbi/GnoNBJ43fgtKIwWVrYs+45aoifs/X9TpOp6d1uYeuvLUf5
+X-Gm-Gg: AYBFou05WHZ9Yzpe0c8zdJVByel5//u5J0VLD5oo0U0MyBSnWnD1Ng4ehM9QVdw/6f9
+	g1VerMacJj7Fo8ysg7i1eoY3hd4srCfini4LfGT/+2RaC6M6ivVahrswmnRUFsqsn52tiNTiHXn
+	7hcAVHaZRT+e64zYqewnOdiWfaH9O0WcKGpDJOPWxXwX+ZZKZIcIuIwA7xNrN1xWIoTEvF5YzXn
+	HjL/YVVCLTMbOBFnioVsZfRJz8bwMWMjzEo9b11C+VBLuStDO4Cfz16bVHneXQ5cc2Lswv8TETi
+	8McFTOS3fqMlip1QTC6tU+fQxIVMTUXuVtgZ+vQZ9yELks4f0qsvrNBG7SSDh17x3qvIbz+blb7
+	uD2ZkeygxzYl4bpHGaYfjffjD7YQIR7784mt7dSZ/VfmpzOqbYxmYYkz65rLhfJnoi2kX0tr/5B
+	AH7jL+KTl9bg0nuUQPnDmPeyAoE0PFKWxeVGzP1ekCYZYp9rLNE/y/xqZqRiH9cTLoCvl+hVzFl
+	cco+MLoHRYems6w5SExTWY00xs=
+X-Received: by 2002:a05:6a00:340d:b0:878:391d:b217 with SMTP id d2e1a72fcca58-87e9d001107mr1322001b3a.60.1790233616005;
+        Thu, 24 Sep 2026 00:06:56 -0700 (PDT)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87d1e0fc5casm2368187b3a.53.2026.09.24.00.06.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2026 00:06:55 -0700 (PDT)
+Message-ID: <78e6ad2dc979983bd65514166fa0020729a4147d.camel@gmail.com>
+Subject: Re: [PATCH 0/3] selftests/bpf: Fixes for out-of-tree builds
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: "Ricardo B." =?ISO-8859-1?Q?Marli=E8re?= "(SUSE)"
+ <ricardo@marliere.net>,  "Nico Pache (Red Hat)"	 <nico.pache@linux.dev>,
+ ihor.solodrai@linux.dev, nickolay.lysenko@gmail.com
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, Emil Tsalapatis
+	 <emil@etsalapatis.com>, Jiri Olsa <jolsa@kernel.org>, Yonghong Song
+	 <yonghong.song@linux.dev>, Song Liu <song@kernel.org>, Andrii Nakryiko
+	 <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Alexei Starovoitov
+	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
+	 <martin.lau@linux.dev>
+Date: Thu, 24 Sep 2026 00:06:52 -0700
+In-Reply-To: <DLM25PIKJTE5.1Q1IO5PAM6VBD@marliere.net>
+References: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
+	 <6f95ec90-194a-4304-9673-c7bb50065223@linux.dev>
+	 <d3a251acf5131bea732e23bbd135a5fdebec9ad6.camel@gmail.com>
+	 <DLM25PIKJTE5.1Q1IO5PAM6VBD@marliere.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Verify is_extended with
- multiple freplace links
-To: chenyuan_fl@163.com, alexei.starovoitov@gmail.com, ast@kernel.org,
- leon.hwang@linux.dev
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev,
- yonghong.song@linux.dev, john.fastabend@gmail.com, song@kernel.org,
- ihor.solodrai@linux.dev, Yuan Chen <chenyuan@kylinos.cn>
-References: <20260924023737.1140521-1-chenyuan_fl@163.com>
- <20260924023737.1140521-3-chenyuan_fl@163.com>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260924023737.1140521-3-chenyuan_fl@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 24/9/26 10:37, chenyuan_fl@163.com wrote:
-> From: Yuan Chen <chenyuan@kylinos.cn>
-> 
-> Extend tc_bpf2bpf with two freplace links, one on entry_tc and one on
-> subprog_tc, and detach the one on the entry: while subprog_tc is still
-> extended, updating entry_tc into a prog_array map must keep failing
-> with -EBUSY, and succeed again once the last link detaches.  The test
-> asserts the rejection instead of running the prog, as the update
-> succeeds and the prog loops unbounded on an unfixed kernel.
-> 
-> Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
-> ---
->  .../selftests/bpf/prog_tests/tailcalls.c      | 74 +++++++++++++++++++
->  .../bpf/progs/tailcall_freplace_multi.c       | 27 +++++++
->  2 files changed, 101 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/progs/tailcall_freplace_multi.c
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-> index c5c9d6c359bb..aefb46778307 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
-> @@ -6,6 +6,7 @@
->  #include "tailcall_bpf2bpf_hierarchy2.skel.h"
->  #include "tailcall_bpf2bpf_hierarchy3.skel.h"
->  #include "tailcall_freplace.skel.h"
-> +#include "tailcall_freplace_multi.skel.h"
->  #include "tc_bpf2bpf.skel.h"
->  #include "tailcall_fail.skel.h"
->  #include "tailcall_cgrp_storage_owner.skel.h"
-> @@ -1655,6 +1656,77 @@ static void test_tailcall_bpf2bpf_freplace(void)
->  	tc_bpf2bpf__destroy(tc_skel);
->  }
->  
-> +static void test_tailcall_freplace_multi(void)
-> +{
-> +	struct tailcall_freplace_multi *freplace_skel = NULL;
-> +	struct bpf_link *link_subprog = NULL, *link_entry = NULL;
-> +	struct tc_bpf2bpf *tc_skel = NULL;
-> +	int tc_prog_fd, map_fd, key = 0, err;
+On Tue, 2026-09-22 at 15:31 -0300, Ricardo B. Marli=C3=A8re (SUSE) wrote:
+> On Mon Sep 21, 2026 at 6:04 PM -03, Eduard Zingerman wrote:
+> > On Mon, 2026-09-21 at 14:40 -0600, Nico Pache (Red Hat) wrote:
+> >=20
+> > ...
+> >=20
+> > > Given your series was defferred, and there is a "rewrite" coming, wha=
+t would
+> > > be the best approach to working together (between us three) to get th=
+ese
+> > > fixes in that series too.=20
+> >=20
+> > The, "rewrite", as you call it, had landed today.
+> > So the series in question can be re-spun.
+> > Regarding your patch on top of it, it appears you can just post is sepa=
+rately.
+> > However, I am inclined to be confrontational towards changes like this =
+one.
+> > The purpose of the selftests makefile is to run selftests as appropriat=
+e
+> > for current tip of the kernel tree using a very specific kernel configu=
+ration.
+>=20
+> Ideally, if a Kconfig symbol is needed and the kernel under test does not
+> have it, tests are skipped. But with BPF they were simply not built,
+> rendering the tests useless for anything other than in-tree vmlinux with
+> tools/selftests/bpf/config*.
+>=20
+> > Main users of this makefile are BPF developers and BPF CI.
+>=20
+> But they shouldn't be the *only* ones, IMHO. Enabling distros to build an=
+d
+> run the tests is also valuable to catch regressions in their kernels, don=
+'t
+> you think?
+>=20
+> > Support for distros customizing the makefile is a non-goal.
+> > The "PERMISSIVE" change done enough damage already.
+>=20
+> It's ugly, I agree, but what damage has it caused? I see that it's going =
+to
+> be reverted anyway, but I would appreciate if you could elaborate.
 
+It's the first time I see a makefile that builds stuff not fully but
+90% of it and returns success. The damage is the need to maintain it
+going forward that already cost some time.
 
-Pls keep the above lines with inverted Christmas tree style.
-
-And, drop '= NULL' for tc_skel, because tc_skel is the first variable to
-be initialized.
-
-Thanks,
-Leon
-
-> +
-> +	tc_skel = tc_bpf2bpf__open_and_load();
-> +	if (!ASSERT_OK_PTR(tc_skel, "tc_bpf2bpf__open_and_load"))
-> +		return;
-> [...]
-
+Do you have a list of kernel configs you had issues with?
