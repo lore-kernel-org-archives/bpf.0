@@ -1,111 +1,140 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E78C4078C0
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 10:00:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08F345D1BD;
+	Thu, 24 Sep 2026 10:00:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790244015; cv=none; b=kSTzrRDfFhLG95rYzYJtHtXJ1Z0abTxJSB/wZ+du/nJpGCQleGsiNNkVzw5UDvZmmrJtpY9FYvygDx0qKlMJ6YKiMYIPLJVbh0n3555g7nnCG/WS6y7qTzM9pOj/Wph7hl7JTpuz2Dc16654J/IhR4xAUu4fx5awed0JKjkb4WM=
+	t=1790244058; cv=none; b=r//11qQYTCpN/aln+dLx8lwz7EgM50i/XRCn3WJWZcP0hZ55wpKV2fYKgL0aILwVFXH8E5wh91zJwrwAQHgFF46Je5AZaKWNV9fCdgvyHFtEfvg8Vr4qtATKu3SlQbtZfw8CqsqYR+C2Xodc0h7FcgnRL5l8Aw653T5s45Lh9iE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790244015; c=relaxed/simple;
-	bh=he1OUgcYO6WkvuDtjG/NbRZFIZrry1JMZz4DuaDTaO0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=CN2WjJ53yp0RY9OuNUB8DX/PgOn0ZzEVzneIHp97PBRJ1+jugsOYkttBYX+hncVze+ZJqXQI/AFveGkPZxhh+68vV7uNs7N6RiX2R++n913p5gOZYvp9qzJ7gsZ453/5u+gavJTkoxvxUxgZN1IVw5vkWKhQPnlqwWb0uz26+oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=pMLNjKtk; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1790244058; c=relaxed/simple;
+	bh=FFQYnczjBATsnDZ529OE5mhMgnVzXRtQTsOmc4nStHc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aSCpLgDx2uo2VC2PUDQ8GeBj4FsGAFI4vnf+UBVhQaFdMiggypFrnype7m8Tqs3SPeHAocnwmhK/rEvupahnaTlyDjJu7s0/iNRUtQFnphF9/eBJj2lIVxNxKvITlSsI7+g/WtF6DivTUxkKdtuQF9HrSHjONbE+DkvAD2g3xYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=L3+eDnBY; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="pMLNjKtk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=he1OUgcYO6WkvuDtjG/NbRZFIZrry1JMZz4DuaDTaO0=; b=p
-	MLNjKtk2vaRoSyQqUkqpE6OofayJGvCtmUhan6BI1Jk5WmHhIUxnTAb7DAOj3928
-	lIpcNQyo/cRGqGNq1PRe/+xFRKaEJ+PDHRLEC26X07ZHswMjzzB2kqKi2co0FMuT
-	/g62/PPK3sdeNhTfXB18vntyfpwNoQkYpVdjR/bO9w=
-Date: Thu, 24 Sep 2026 17:58:57 +0800 (CST)
-From: chenyuan  <chenyuan_fl@163.com>
-To: "Leon Hwang" <leon.hwang@linux.dev>
-Cc: alexei.starovoitov@gmail.com, ast@kernel.org, bpf@vger.kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
-	memxor@gmail.com, martin.lau@linux.dev, yonghong.song@linux.dev,
-	john.fastabend@gmail.com, song@kernel.org, ihor.solodrai@linux.dev,
-	"Yuan Chen" <chenyuan@kylinos.cn>
-Subject: Re:Re: [PATCH bpf-next v2 1/2] bpf: Keep target extended until its
- last freplace link detaches
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
-In-Reply-To: <d3e65c94-45d9-4c67-a276-103c5e7fa052@linux.dev>
-References: <20260924023737.1140521-1-chenyuan_fl@163.com>
- <20260924023737.1140521-2-chenyuan_fl@163.com>
- <d3e65c94-45d9-4c67-a276-103c5e7fa052@linux.dev>
-X-NTES-SC: AL_Qu2SAv6fvEEo4SCYZ+kdnUYWg+8/X8W3svwi2YVUc+IEtxnL6zE7XnpIHWHm19KtCjiRuxSSfDtq1OtecKd/xaJ2qpmfEt8YF+4V+CBiqA==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="L3+eDnBY"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=xt0MlUmSz2PI0Rs6KjVEiWXP3SZQmqgbE8xNOYhlUnA=; b=L3+eDnBYBrBBegfejLjGVQpoZv
+	/m8mslbFtnH9L8vWjDaNeyXWjMY2P9g87gq/2DlbW6dgm5krE+axEuXWAEQV2AlfQpGYRKnDTmp92
+	cjxKuQekxs8N4Um2Bc8KBI+DqKDG8AQj7skY2Z+kCuIj/TES9CPd4yTVx0CacEtesQsE1v+Buqzi5
+	EtQwx51aV42yiPeg+dNdnQTFfyFh6znXD3qFAVfJtU2Kb1SCcK9JrICp7aTJz5Pj9AmqG3mceluQM
+	8KxA9F1VmJFoDOudBJwMsSZcZAryBqXRjrQNAZk1/7kC091pkZ50wPz275IOnQ4vo4XkiuZy/WDQw
+	MigtAWYw==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
+	id 1x9gFt-0000000FoXH-3bW0;
+	Thu, 24 Sep 2026 10:00:42 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id A08433006DD; Thu, 24 Sep 2026 12:00:40 +0200 (CEST)
+Date: Thu, 24 Sep 2026 12:00:40 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Vineet Gupta <vineet.gupta@linux.dev>
+Cc: rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com,
+	mathieu.desnoyers@efficios.com, andrii@kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, kernel-team@meta.com, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] tracing: fgraph: Raise FTRACE_RETSTACK_ALLOC_SIZE to
+ 1024
+Message-ID: <20260924100040.GD4121339@noisy.programming.kicks-ass.net>
+References: <20260922225526.1554758-1-vineet.gupta@linux.dev>
+ <20260922225526.1554758-2-vineet.gupta@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <4669addf.91e8.1a0d2da9b9c.Coremail.chenyuan_fl@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:bSgvCgDX30Zh9LRqOqZOAA--.8613W
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/xtbC5gEd2mq09GFwgQAA3a
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260922225526.1554758-2-vineet.gupta@linux.dev>
 
-ClRoYW5rcyBmb3IgdGhlIHJldmlldy4gVGhpcyBpcyBhIHByZS1leGlzdGluZyBidWcgaW4gdGhl
-IGxpbmsgcGF0aCwgbm90IGludHJvZHVjZWQgYnkgdGhpcyBwYXRjaC4gSSdsbCBzZW5kIGEKc2Vw
-YXJhdGUgZml4IGZvciB0aGUgcm9sbGJhY2sgbGF0ZXIuIFRoaXMgcGF0Y2ggc3RheXMgZm9jdXNl
-ZCBvbiB0aGUgaXNfZXh0ZW5kZWQgY291bnRpbmcuCgoKCgoKCgoKCgoKCgpBdCAyMDI2LTA5LTI0
-IDE1OjA2OjE2LCAiTGVvbiBId2FuZyIgPGxlb24uaHdhbmdAbGludXguZGV2PiB3cm90ZToKPk9u
-IDI0LzkvMjYgMTA6MzcsIGNoZW55dWFuX2ZsQDE2My5jb20gd3JvdGU6Cj4+IEZyb206IFl1YW4g
-Q2hlbiA8Y2hlbnl1YW5Aa3lsaW5vcy5jbj4KPj4gCj4+IFRoZSBpc19leHRlbmRlZCAvIHByb2df
-YXJyYXlfbWVtYmVyX2NudCBwcm90b2NvbCBpbnRyb2R1Y2VkIGJ5IGNvbW1pdAo+PiBkNjA4M2Yw
-NDBkNWQgKCJicGY6IFByZXZlbnQgdGFpbGNhbGwgaW5maW5pdGUgbG9vcCBjYXVzZWQgYnkgZnJl
-cGxhY2UiKQo+PiBrZWVwcyBhIHByb2cgZXh0ZW5kZWQgYnkgYSBmcmVwbGFjZSBwcm9ncmFtIG91
-dCBvZiBwcm9nX2FycmF5IG1hcHMsIGFuZAo+PiB2aWNlIHZlcnNhOiBvbmNlIGEgdGFpbCBjYWxs
-IHJlLWVudGVycyBhbiBleHRlbmRlZCBzdWJwcm9ncmFtLCBpdHMKPj4gdGFpbF9jYWxsX2NudCBy
-ZXNldHMgb24gZXZlcnkgZXhlY3V0aW9uIGFuZCB0aGUgbG9vcCBuZXZlciB0ZXJtaW5hdGVzLgo+
-PiAKPj4gQnV0IGlzX2V4dGVuZGVkIGlzIGEgcGxhaW4gYm9vbGVhbiwgd2hpbGUgb25lIHRhcmdl
-dCBwcm9nIGNhbiBjYXJyeQo+PiBzZXZlcmFsIGZyZXBsYWNlIGxpbmtzIGF0IHRoZSBzYW1lIHRp
-bWUsIG9uZSBvbiBpdHMgZW50cnkgYW5kIG9uZSBvbiBhCj4+IGdsb2JhbCBzdWJwcm9ncmFtLiAg
-X19icGZfdHJhbXBvbGluZV91bmxpbmtfcHJvZygpIGNsZWFyZWQgaXNfZXh0ZW5kZWQKPj4gd2hl
-bmV2ZXIgKmFueSogZnJlcGxhY2UgbGluayBkZXRhY2hlZCwgc28gZGV0YWNoaW5nIG9uZSBvZiB0
-d28gbGlua3MKPj4gcmUtYXJtZWQgdGhlIHVuYm91bmRlZCBsb29wIHRocm91Z2ggdGhlIHJlbWFp
-bmluZyBvbmUuCj4KPkEgcHJvZyBtYXkgaGF2ZSBtdWx0aXBsZSBnbG9iYWwgc3VicHJvZ3MuIEFu
-ZCBlYWNoIG9mIHRoZSBzdWJwcm9ncyBjYW4KPmJlIGF0dGFjaGVkIHdpdGggZnJlcGxhY2UgcHJv
-Zy4gV2hlbiBhbGwgdGhlIHN1YnByb2dzIGFyZSBhdHRhY2hlZCB3aXRoCj5mcmVwbGFjZSBwcm9n
-cyB0aGVuIGRldGFjaCBvbmUgb2YgdGhlIGZyZXBsYWNlIHByb2csIHRoZSAqaXNfZXh0ZW5kZWQq
-Cj5iZWNvbWVzICpmYWxzZSosIHdoaWNoIHJlbGF4ZXMgdGhlIHJlc3RyaWN0aW9uIGJldHdlZW4g
-dGFpbGNhbGwgYW5kCj5mcmVwbGFjZSBpbnRyb2R1Y2VkIGJ5IHRoZSBjb21taXQgZDYwODNmMDQw
-ZDVkICgiYnBmOiBQcmV2ZW50IHRhaWxjYWxsCj5pbmZpbml0ZSBsb29wIGNhdXNlZCBieSBmcmVw
-bGFjZSIpLgo+Cj4+IAo+PiBSZXBsYWNlIHRoZSBpc19leHRlbmRlZCBib29sZWFuIHdpdGggYSBj
-b3VudCBvZiB0aGUgZnJlcGxhY2UgbGlua3MKPj4gYXR0YWNoZWQgdG8gZWFjaCB0YXJnZXQgcHJv
-Zywgc28gdGhlIHRhcmdldCBzdGF5cyBleHRlbmRlZCB1bnRpbCBpdHMKPj4gbGFzdCBsaW5rIGRl
-dGFjaGVzLiAgQWxzbyByZW5hbWUgYnBmX2ZyZXBsYWNlX2NoZWNrX3RndF9wcm9nKCkgdG8KPj4g
-YnBmX2ZyZXBsYWNlX2xpbmtfdGd0X3Byb2coKSwgYXMgdGhlIGhlbHBlciBoYXMgbmV2ZXIgYmVl
-biBhIHB1cmUKPj4gY2hlY2s6IGl0IHJlc2VydmVzIHRoZSB0YXJnZXQgcHJvZyBvbiBzdWNjZXNz
-Lgo+PiAKPj4gRml4ZXM6IGQ2MDgzZjA0MGQ1ZCAoImJwZjogUHJldmVudCB0YWlsY2FsbCBpbmZp
-bml0ZSBsb29wIGNhdXNlZCBieSBmcmVwbGFjZSIpCj4+IFNpZ25lZC1vZmYtYnk6IFl1YW4gQ2hl
-biA8Y2hlbnl1YW5Aa3lsaW5vcy5jbj4KPj4gCj4KPlsuLi5dCj4KPj4gQEAgLTkzMyw3ICs5MzMs
-NyBAQCBzdGF0aWMgaW50IF9fYnBmX3RyYW1wb2xpbmVfbGlua19wcm9nKHN0cnVjdCBicGZfdHJh
-bXBfbm9kZSAqbm9kZSwKPj4gIAkJLyogQ2Fubm90IGF0dGFjaCBleHRlbnNpb24gaWYgZmVudHJ5
-L2ZleGl0IGFyZSBpbiB1c2UuICovCj4+ICAJCWlmIChjbnQpCj4+ICAJCQlyZXR1cm4gLUVCVVNZ
-Owo+PiAtCQllcnIgPSBicGZfZnJlcGxhY2VfY2hlY2tfdGd0X3Byb2codGd0X3Byb2cpOwo+PiAr
-CQllcnIgPSBicGZfZnJlcGxhY2VfbGlua190Z3RfcHJvZyh0Z3RfcHJvZyk7Cj4+ICAJCWlmIChl
-cnIpCj4+ICAJCQlyZXR1cm4gZXJyOwo+PiAgCQl0ci0+ZXh0ZW5zaW9uX3Byb2cgPSBub2RlLT5s
-aW5rLT5wcm9nOwo+Cj4gICAgICAgICAgICAgICAgcmV0dXJuIGJwZl9hcmNoX3RleHRfcG9rZSh0
-ci0+ZnVuYy5hZGRyLCBCUEZfTU9EX05PUCwKPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgIEJQRl9NT0RfSlVNUCwgTlVMTCwKPiAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgIG5vZGUtPmxpbmstPnByb2ctPmJwZl9mdW5jKTsKPgo+Cj5JIHRo
-aW5rIHRoZXJlIGFyZSBleGlzdGluZyBpc3N1ZXMgaGVyZTogaWYgYnBmX2FyY2hfdGV4dF9wb2tl
-KCkgcmV0dXJucwo+ZXJyb3IsIHRoZSB0ci0+ZXh0ZW5zaW9uX3Byb2cgYW5kIGF1eC0+ZnJlcGxh
-Y2VfbGlua19jbnQgc2hvdWxkIGJlCj5yb2xsYmFja2VkLgo+Cj5UaGFua3MsCj5MZW9uCj4KPj4g
-QEAgLTk3OSw3ICs5NzksNyBAQCBzdGF0aWMgaW50IF9fYnBmX3RyYW1wb2xpbmVfdW5saW5rX3By
-b2coc3RydWN0IGJwZl90cmFtcF9ub2RlICpub2RlLAo+PiAgCQkJCQkgdHItPmV4dGVuc2lvbl9w
-cm9nLT5icGZfZnVuYywgTlVMTCk7Cj4+ICAJCXRyLT5leHRlbnNpb25fcHJvZyA9IE5VTEw7Cj4+
-ICAJCWd1YXJkKG11dGV4KSgmdGd0X3Byb2ctPmF1eC0+ZXh0X211dGV4KTsKPj4gLQkJdGd0X3By
-b2ctPmF1eC0+aXNfZXh0ZW5kZWQgPSBmYWxzZTsKPj4gKwkJdGd0X3Byb2ctPmF1eC0+ZnJlcGxh
-Y2VfbGlua19jbnQtLTsKPj4gIAkJcmV0dXJuIGVycjsKPj4gIAl9Cj4+ICAJYnBmX3RyYW1wb2xp
-bmVfcmVtb3ZlX3Byb2codHIsIG5vZGUpOwo=
+On Tue, Sep 22, 2026 at 03:55:25PM -0700, Vineet Gupta wrote:
+> When ftrace graphing is turned on, all tasks in the system missing
+> return stack page are assigned one. This is done in a simplistic
+> multi-sweep loop of FTRACE_RETSTACK_ALLOC_SIZE (currently 32) tasks
+> at a time as follows:
+> 
+>    start_graph_tracing()
+> 	do {
+> 		alloc_retstack_tasklist
+> 	} while (-EAGAIN);
+> 
+>    alloc_retstack_tasklist()
+> 	alloc x32           # GFP_KERNEL, may sleep
+> 	rcu_read_lock()     # preempt off
+> 		for_each_process_thread    walk N_total, no cond_resched
+>                      t->ret_stack = new_page
+> 	rcu_read_unlock()   # preempt enable but no explicit yield
+> 
+> Each successive iteration of loop invokes for_each_process_thread()
+> which doesn't support cursor based resume and always restarts from the
+> init_task. Thus each successive loop needs to skip the tasks assigned
+> ret_stack in prior sweeps and thus take longer and longer to find the
+> candidate 32 tasks. 
+
+Does this work?
+
+diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+index ed455b53513b..155dafad474d 100644
+--- a/kernel/trace/fgraph.c
++++ b/kernel/trace/fgraph.c
+@@ -1036,10 +1036,9 @@ trace_func_graph_ent_t ftrace_graph_entry = ftrace_graph_entry_stub;
+ /* Try to assign a return stack array on FTRACE_RETSTACK_ALLOC_SIZE tasks. */
+ static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
+ {
+-	int i;
+-	int ret = 0;
+ 	int start = 0, end = FTRACE_RETSTACK_ALLOC_SIZE;
+ 	struct task_struct *g, *t;
++	int i, ret = 0;
+ 
+ 	if (WARN_ON_ONCE(!fgraph_stack_cachep))
+ 		return -ENOMEM;
+@@ -1054,26 +1053,29 @@ static int alloc_retstack_tasklist(unsigned long **ret_stack_list)
+ 		}
+ 	}
+ 
+-	rcu_read_lock();
+-	for_each_process_thread(g, t) {
+-		if (start == end) {
+-			ret = -EAGAIN;
+-			goto unlock;
+-		}
++	scoped_guard (rcu) {
++		for_each_process_thread(g, t) {
++			unsigned long *rs;
++
++			if (t->ret_stack)
++				continue;
++
++			rs = kmem_cache_alloc(fgraph_stack_cachep, GFP_NOWAIT);
++			if (!rs) {
++				if (start == end)
++					return -EAGAIN;
++				rs = ret_stack_list[start++];
++			}
+ 
+-		if (t->ret_stack == NULL) {
+ 			atomic_set(&t->trace_overrun, 0);
+-			ret_stack_init_task_vars(ret_stack_list[start]);
++			ret_stack_init_task_vars(rs);
+ 			t->curr_ret_stack = 0;
+ 			t->curr_ret_depth = -1;
+ 			/* Make sure the tasks see the 0 first: */
+-			smp_wmb();
+-			t->ret_stack = ret_stack_list[start++];
++			smp_store_release(&t->ret_stack, rs);
+ 		}
+ 	}
+ 
+-unlock:
+-	rcu_read_unlock();
+ free:
+ 	for (i = start; i < end; i++)
+ 		kmem_cache_free(fgraph_stack_cachep, ret_stack_list[i]);
