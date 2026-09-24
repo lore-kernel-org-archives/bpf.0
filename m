@@ -1,66 +1,66 @@
-Received: from mail-wr2-f0.google.com (mail-wr2-f0.google.com [74.125.225.64])
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5F844F561
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:55:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D74456E14
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:56:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790243784; cv=none; b=rjXSgrIY3aluG139N5mpfUy5emjsvFT2JP5ELDKOAoZVp5EYn2ct3B9XauEih6oc6aihgwdO/vT4BlPYtlrGRJTOlnnxuIuMEeqZneNlswSPJjotSsP+lVzDzyCYcB2axFU1XeJIa/0SgUmo5HaMMb5e55ZVvoqw9bsbymNyxeQ=
+	t=1790243802; cv=none; b=GK+sSjd8xF3GSy+Mv33apAbI8/dKU/xkWz4lekpazZo5iX/SYtkonFj2exaDHCmYWRSJH33kKVxqhdFxiBymzDgnyhT7wd0RZh6MIadyk9Jv5u6o4AQlg4/P5v/dXX5rohMzQizq7RGrhy1eUiAZcZOxMkEK4PXI0sQYls/GkqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790243784; c=relaxed/simple;
-	bh=pIk+jR30Onm5QcH0mKygT7waW2zVesO7QBFMwF/SwP8=;
+	s=arc-20240116; t=1790243802; c=relaxed/simple;
+	bh=1fwJpUZyuAlum0e26ECZkGYzgsT1Jq8xi6Z+PjwLyMY=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=n9qkZ3ToL0qhUJvXAi8BzIyCNicu1igjY1UL/9kYSHvswApzKMRDUYrB4h5ViAxvIrHZNB7Ycfot7MIO6BPXBS+WuSKAavT9ED0iAR+MzBvDF0KYjJ6u6n0okjR9oMRBTO6Z46gZ6L9iKKjJtQIvf9wADHVtaPmmhEzUeI37uZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T9/HFoFw; arc=none smtp.client-ip=74.125.225.64
+	 References:In-Reply-To; b=QPwiPiGYyut6jINBR2X3Pwqdfp423GVJtAh6F5xPHA5u8uMY7O/Jkbd2S33j1MhXXbt7hK7OkpA4hQFQNvNRfKyyf+b8M3Do8XvPvk32YBeaHOsCmO7fHWZH5xQ7pCpgF/SOWPfhDjppmrQB+crdOV5RyTZTPxQU2QDoe1nifow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bI6yH2+a; arc=none smtp.client-ip=74.125.225.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T9/HFoFw"
-Received: by mail-wr2-f0.google.com with SMTP id ffacd0b85a97d-48861ba835cso490840f8f.1
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 02:55:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bI6yH2+a"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49e6bbf77e8so2961565e9.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 02:56:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790243747; x=1790848547; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790243790; x=1790848590; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=m28l/QNvZiPjg9uPHhVPGv2lB/hFI5iwpIldJ84fSb8=;
-        b=T9/HFoFwlkkq8ZR2wJq6kAKxFJ8oKNsnV3LB8PpM4zU9gKP5hTqHz6D2PpUreJ0+HN
-         QvdBRipqkl/hY2ZKsL/nKqi8lENCi+i1fDrpMZflhpJFbTOq9M2i5o1SNkcGfUIXxtYj
-         2CIdPqFhZyX0Og+rpnkIYru6HXO5visv57OvGyUdsy0j0xoHQz7QnSW2fs0hCutxKQMm
-         VhGidIDfNrtcnr0TlrnyCcp1J/fujaC1/KyT77X0Kz7POZz5MyBX8SJ5rnhxN2WcUnm6
-         XfPRxOyvSV9Wbdh8b3ZC6idN66OHXgnSnmd0NlOvfxJDoBMNNCnOLPQ0PVAg/HxfppWe
-         BrYw==
+        bh=X81ExZ24uv6kUpZw8Nsp1jb4V1Rl70Ka/Us45MU2YTQ=;
+        b=bI6yH2+aOAHu5bYodZYh1ZpOjHThqQzIFguhue4sKCvvbdIH5N0CXOto2Ze7a/xTr0
+         ILNKNe49V8BarCj9sq0QykzJaLlbzmsRp3HDgd0xNdeFdbbTndkOBnw0ehF39jnl4I0M
+         IFJC4fR3UP6/mByv3NEv2v6k8wFGSwNP0lGLa+AugWxyvbePcG8h+mpmtETuCvgL+7Hq
+         SV/OoQ+A6S+yARVyYqxYwgQRDkTlwvms9vhqfHqaLs4mz2L2qxDQ94UMtwH7L9sSo6ED
+         0E+gIldYLt64q5J5J5VihC/lDqYgFGR9bJ0sP8nhsR2MxjNCkEb3QfV0BDfBpzEg+NvG
+         dWdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790243747; x=1790848547;
+        d=1e100.net; s=20260707; t=1790243790; x=1790848590;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=m28l/QNvZiPjg9uPHhVPGv2lB/hFI5iwpIldJ84fSb8=;
-        b=R54pZFoTjxVCwrrY6yeV5bjfHaeIDNFnj+hTs9V2T+iwkf5SpXIiyfA48UN/N3Z14V
-         yRJ+W2CMr1BGyv04NdWtxTZom6lz5q+yZD040PDof8vlD2GZP5xAO1iQ7hlJYv9IdtCK
-         Qhugk2h2VaZA4mgLaE4v1Mo5Sn2STyhFEZ4e0BqwW3rxRG1jRE4lameSen70CwWYpU/w
-         WsEbL9NBixEx4LyvXnGJNh9okLg/SvYeJVocG8sAH1+eMAnEhjb/N77wokmylozekR8G
-         HDicOJkGkGwP/Kjmd9KO59LjR4qtp4Zf6TicnZzE1Kt2A2RA4JvABpWBHYoEkaR4DmFU
-         Tb3g==
-X-Forwarded-Encrypted: i=1; AKwUvBwDlZzHGw80+gDdmEHLGN0FLSBv1S8bYBLhDpjBEJCItMyB/ZxfkvkAFa0SaEL8O+6g/8w=@vger.kernel.org
-X-Gm-Message-State: AFuF++kewLM0JG0aJMYa1iHoyrJr9pp6jvRNnNoTuIJSnw8DAThAp8nE
-	WzyeJPZMu5VgOUgEyXpfpH60nnn/plYja0VF4UjvZXBQI/wAvlb8g03yYGA6zM5A
-X-Gm-Gg: AYBFou3vxHX7WKvnQw376Mg2s7X6k9SOXieLReG8NzBUgitGtofU/TmsceiGFww0VyU
-	Mk8epwn0MQiAz5h3uiH/sTb1Fci3LXwCSNFFWKCRr3J95NrAATHUL8gAYp7tSpkDl5C1/MGXVUv
-	0Ey0CIDv7Rfa3L/gPXi2UYokq8aBOOx7dgdW81bD3DGJdEyCHJVPdA6bv49l4AI0xWVj7LpQ2jj
-	bK/X5J8BjcZI2sBN8Y/6A7OSX5QU0XdS0/ov01C6FvU8BYboAiM37413Q5Gta/T0ku+s11CGCOs
-	Wf0gVQuk6wp0kzgJAlDrmHhYOC58DV7jxJWW3ZP4fiAFEEPIOZ5Swzy1vLyG8pg9is69PtLp/8E
-	AjEi1Y2jPxa0Hd7yRAthomH0shpfuD/VK0cF8hkiPwJw9bnnPeg1F2nnLQYvCmbZAU6vOhZm++S
-	p39wGE4Hy+IzAyOcdp8w7X1FVhHEGoVjJHqKtRcKg/naRCcW7+q12aIGlAonJWSBDFrAXjoVfqU
-	javcVHSl5CqBxWKo0sRbVApVs5Aakw3zyTZfvWs9QW0YN7gIzYaXFmVc9ttMJ2p5KYv4JORieUk
-	zZSi+PbjbjYLF4gQad6RimNhoOg/aAo4s+oyoA==
-X-Received: by 2002:a05:6000:310e:b0:487:1662:cf4c with SMTP id ffacd0b85a97d-4887170cfc5mr3786531f8f.7.1790243746820;
-        Thu, 24 Sep 2026 02:55:46 -0700 (PDT)
+        bh=X81ExZ24uv6kUpZw8Nsp1jb4V1Rl70Ka/Us45MU2YTQ=;
+        b=byZwxHBSylh8hriPH7yjDOT40US5tyqMEXkUXq/2drNiqEaJomtVCZHRoYItK7oRmB
+         2VSPUfxCnlryXRKTG6GUQexSlkfld5uCMauUkrcKZXgCJoKmtgXzppz6j+eQe6t43TiE
+         VpqCEitjVmfBWBn9dcMN3U/jR4BxzAqQ6yg6o/dJ0s1WiFwtFcqSYXebpOyHkMAQJL/6
+         sTM2iNnZ5ZqYSBbKzu34ulK8QjNH46pau/5lbiUDoohhPtcQNtoG7g8oaOuYPvLTV7xG
+         ebhI4zdtZ5ksFjzQ9bi/ztTkc9xjld4ltcfST5HdgFefFIId7z3IwDVrKmLXrU4kNrSB
+         P0vg==
+X-Forwarded-Encrypted: i=1; AKwUvBw/gEXwYS4xMvcsoWC+em5EfaBPb7Y0hgt1SSQqbs0rq6yDT9/TmVHDbKQ0P0WrDbGtOYA=@vger.kernel.org
+X-Gm-Message-State: AFuF++lvnIapZX6caHn5VF9uR+Zj2UalIj8Sf7o7opGP7m9W1V7m08ro
+	llLg1LgE3B7JqlezGQoGBZldzlgp9bcs6gyHkc26BlvIjCniQM/29uHu
+X-Gm-Gg: AYBFou3T/m+Uh1uPjCcGG/H1+NtbDsZ4s4UdPZnjf44MCA0nBg0B/oP30USaqiUbwVf
+	MVoAABVp9F3bYfmfbiJyxj8VSyAXiVEQASdvwhLgBUa2ZhW4kZx/pUu64vMWs3dwA3h4HC37qq2
+	y1HW7WbwLTfmJWe621k396ETTAyS/aQ2q3YTzDZEY5aaDURxtJJqadVQmotDl7LuxzJCFA69FZG
+	wkfkKj67+uMsT816qd6rWWSyLttLEggSWgyr6G2tlTVbwZsdpNRmX2a79/zsr+cu6ahzLHvuJl0
+	95Fh/sHvmVID31d5HpRE2zDDFSALi48xtU4A5B4HZGVKSHS5gHypq9Ad8ZWHMJSR0hexzpUvlAG
+	lMxz815944DQ3AbjcCc5t6kUkvmBY9WkCMSyFyS3WqBX+1l5i4oILb7n26ZDl+QZLl5ov+pit16
+	9Ecn/YAwrn1lP1eTIBxpEcnEKVznmPNRkzGFAzXjYWWQdpSv9rn2GK+omql8cGbCU86zJSC9qev
+	FvdfseOAa+yle6Wa+GR15GpbT+E7glgc/6B3Qg9QXk4Z7+tDybfixr8LtxcmWBM97nyzog4UB2r
+	qGHn059jqJEsH6y0siYAqQEQzHqaaB8S6d61uw==
+X-Received: by 2002:a05:600c:8b22:b0:49f:ce78:3566 with SMTP id 5b1f17b1804b1-49fe66fa413mr30593735e9.23.1790243790338;
+        Thu, 24 Sep 2026 02:56:30 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886876c119sm14764465f8f.15.2026.09.24.02.55.46
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe43fc27csm52591785e9.2.2026.09.24.02.56.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Sep 2026 02:55:46 -0700 (PDT)
+        Thu, 24 Sep 2026 02:56:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,99 +69,118 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 24 Sep 2026 11:55:45 +0200
-Message-Id: <DLNGFZ3CTNOY.VXQBGFNVON3D@gmail.com>
+Date: Thu, 24 Sep 2026 11:56:28 +0200
+Message-Id: <DLNGGISVWINA.35D1HVUJZDY10@gmail.com>
 Cc: <ast@kernel.org>, <andrii@kernel.org>, <daniel@iogearbox.net>,
  <eddyz87@gmail.com>, <emil@etsalapatis.com>, <tj@kernel.org>,
  <kkd@meta.com>, <kernel-team@meta.com>, <martin.lau@kernel.org>,
  <yonghong.song@linux.dev>, <mason@kernel.org>, <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v2 08/18] bpf: Grow the verifier id scratch on
- demand
+Subject: Re: [PATCH bpf-next v2 13/18] bpf: Bound program stack use by a
+ per-program limit
 From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
 To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
 X-Mailer: aerc 0.21.0
-References: <20260924082607.2695649-9-memxor@gmail.com>
- <137d352e6b635833e3e69d9ef6215e7674b239c05ae0a7a0efb0e6b492669696@mail.kernel.org>
-In-Reply-To: <137d352e6b635833e3e69d9ef6215e7674b239c05ae0a7a0efb0e6b492669696@mail.kernel.org>
+References: <20260924082607.2695649-14-memxor@gmail.com>
+ <52c1223353ad134a1dae657457cd39cb67c3e3d8caeaef0b07d4498f92bb653a@mail.kernel.org>
+In-Reply-To: <52c1223353ad134a1dae657457cd39cb67c3e3d8caeaef0b07d4498f92bb653a@mail.kernel.org>
 
 On Thu Sep 24, 2026 at 11:13 AM CEST, bot+bpf-ci wrote:
->> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->> index b314b9425b86..3ff1d4f753d3 100644
->> --- a/include/linux/bpf_verifier.h
->> +++ b/include/linux/bpf_verifier.h
->
-> [ ... ]
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 8b7f2c283e5a..aebe2e6b2a3d 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->
-> [ ... ]
->
->> @@ -18898,12 +18903,13 @@ static void idset_cnt_inc(struct bpf_idset *id=
-set, u32 id)
->>  			return;
->>  		}
->>  	}
->> -	/* New id */
->> -	if (idset->num_ids < BPF_ID_MAP_SIZE) {
->> -		idset->entries[idset->num_ids].id =3D id;
->> -		idset->entries[idset->num_ids].cnt =3D 1;
->> -		idset->num_ids++;
->> -	}
->> +	/* New id; one that cannot be recorded counts as shared and is kept */
->> +	if (!bpf_id_scratch_reserve((void **)&idset->entries, &idset->cap, ids=
-et->num_ids,
->> +				    sizeof(*idset->entries)))
->> +		return;
->> +	idset->entries[idset->num_ids].id =3D id;
->> +	idset->entries[idset->num_ids].cnt =3D 1;
->> +	idset->num_ids++;
+>> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
+>> index 2f52315d8bdd..de83736509a8 100644
+>> --- a/kernel/bpf/liveness.c
+>> +++ b/kernel/bpf/liveness.c
+>> @@ -36,9 +36,9 @@ enum {
+>>   * relative index @i is at &bits[(i * FM_MASK_CNT + kind) * words]. A
+>>   * half-slot at or past @words * BITS_PER_LONG is never read by this fr=
+ame,
+>>   * hence never live. An instruction that may read the whole frame, such=
+ as a
+>> - * call passing a frame pointer to another subprog, widens the array to
+>> - * FRAME_MAX_WORDS, so that the read cannot lose half-slots to a later
+>> - * widening.
+>> + * call passing a frame pointer to another subprog, widens the array to=
+ the
+>> + * program's stack budget, the deepest an accepted program can reach, s=
+o
+>> + * that the read cannot lose half-slots to a later widening.
+>>   */
+>>  struct frame_masks {
+>>  	u32 words;
+>> @@ -264,12 +264,16 @@ static int mark_stack_write(struct func_instance *=
+instance, u32 frame, u32 insn_
+>>
+>>  /*
+>>   * Mark every half-slot of @frame as possibly read by @insn_idx. This w=
+idens
+>> - * the masks to the maximum width: a full read recorded at a narrower w=
+idth
+>> - * would leave the bits added by a later widening clear and lose part o=
+f it.
+>> + * the masks to the program's stack budget: a full read recorded at a n=
+arrower
+>> + * width would leave the bits added by a later widening clear and lose =
+part of
+>> + * it, and an access past the budget is rejected by the main pass later=
+, so no
+>> + * widening of an accepted program goes further.
+>>   */
+>> -static int mark_stack_read_all(struct func_instance *instance, u32 fram=
+e, u32 insn_idx)
+>> +static int mark_stack_read_all(struct bpf_verifier_env *env, struct fun=
+c_instance *instance,
+>> +			       u32 frame, u32 insn_idx)
+>>  {
+>> -	return mark_stack_read(instance, frame, insn_idx, 0, FRAME_HALF_SPIS -=
+ 1);
+>> +	return mark_stack_read(instance, frame, insn_idx, 0,
+>> +			       env->stack_limit / BPF_HALF_REG_SIZE - 1);
 >>  }
 >
-> The comment says "one that cannot be recorded counts as shared and is kep=
-t".
-> With the old fixed array, once num_ids reached BPF_ID_MAP_SIZE, that was
-> permanent -- every subsequent new id failed to be recorded. But
-> krealloc_array() failure is transient, and bpf_id_scratch_reserve() leave=
-s
-> cap unchanged after a failure, so the next call retries the same allocati=
-on
-> and can succeed.
+> The new comment on mark_stack_read_all() says "an access past the budget
+> is rejected by the main pass later, so no widening of an accepted program
+> goes further." Can that claim hold in all cases?
 >
-> Consider a scalar id X held by exactly two registers, with num_ids =3D=3D=
- cap
-> when X first appears in the idset_cnt_inc() pass of bpf_clear_singular_id=
-s():
+> bpf_compute_subprog_arg_access() records accesses on every instruction
+> the CFG can reach, but do_check() only explores feasible paths. In
+> check_cond_jmp_op(), when is_branch_taken() returns 0 or 1, the other
+> branch is pushed only if !env->bypass_spec_v1.
 >
->   1st occurrence of X: reserve fails -> X not recorded
->   (a later new id Y: reserve succeeds -> cap doubles)
->   2nd occurrence of X: not found -> reserve succeeds -> entries[] =3D {X,=
- cnt =3D 1}
+> For a privileged load, a branch that is provably dead but not
+> constant-folded is never verified. Looking at something like this:
 >
-> X now has cnt =3D=3D 1 even though two registers share it. The second pas=
-s then
-> runs clear_scalar_id() on both registers. This is sound, because the clea=
-red
-> state is cur, which keeps being explored, and forgetting a relation only
-> widens the abstraction.
+>     call bpf_get_prandom_u32
+>     r0 &=3D 15
+>     if r0 > 20 goto L
+>     r0 =3D 0
+>     exit
+>   L:
+>     *(u64 *)(r10 - 1024) =3D r0
 >
-> It does silently drop a real scalar link, though: sync_linked_regs() no
-> longer refines the second register, so a valid program can be rejected wi=
-th
-> an ordinary verifier error instead of failing with -ENOMEM. The outcome a=
-lso
-> depends on allocation timing.
+> The program is accepted with stack_limit =3D=3D 512. The liveness pass
+> still calls mark_stack_write() for half-slots 254..255, and
+> widen_frame_masks() grows that frame past the budget, to 4 words.
 >
-> Would it be better to remember that a reservation failed during this pass
-> (for example a flag in struct bpf_idset) and then skip the clearing pass
-> entirely? That would make "is kept" true in every case.
+> There is no functional impact. widen_frame_masks() keeps all old bits,
+> and liveness is only queried from __clean_func_state() for half-slots
+> below 2 * allocated_stack / BPF_REG_SIZE. allocated_stack only grows
+> through grow_stack_state() after check_stack_access_within_bounds() has
+> enforced -env->stack_limit. So bits past the budget are never read,
+> and a read-all up to stack_limit / BPF_HALF_REG_SIZE - 1 covers every
+> half-slot the verifier can query.
+>
+> Could the comments state that invariant (verifier states never hold slots
+> past env->stack_limit), rather than claiming that accepted programs never
+> record accesses past the budget? As written, a later change could rely on
+> masks never being wider than the budget, for example to size a buffer fro=
+m
+> stack_limit instead of FRAME_MAX_WORDS, and that would be unsafe.
 >
 
-Fixed for v3: when the id set cannot record an id its counts are incomplete=
-, so
-bpf_clear_singular_ids() now keeps every id instead of clearing any.
+Reworded for v3: the comment now states the invariant that verifier states =
+never
+hold slots past the budget, and notes that unreachable code may still widen=
+ the
+masks harmlessly.
 
 >
 > ---
