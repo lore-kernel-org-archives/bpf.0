@@ -1,129 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80F4C3E5595
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 03:56:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E37E3D9674
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 03:56:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790222183; cv=none; b=mc4Ub5P3VbG04sQz1wWl4Gj33UvdKO8smg2IVQvDkPCucd+BVmZBt3urJlkqS6mh4WtdaY3vna1K9H5KSDHY/h0OI4CVcwOvuATnGs+oQpGDICqNiWgJLiqbq6LK+WpobtlRjlorQ+5WIOwGDVYk5I/w1ueMa3EBPbM/YWo/QfA=
+	t=1790222187; cv=none; b=cdMikbrk1wTSkNn07rrRz/jz4akVYD5lgLH6/JCaSxvaTy8IwqVR/4A5csPP3O8PB7VzERmFi2NA2nLT01+TN7TZQltPg0CpxG53ws5BM2jPg0qKNcieCQuCLrif8GQmkmfwbrXKnf4WJ8MmhRaMat5caUodfD8D1sNIMfYlNeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790222183; c=relaxed/simple;
-	bh=SZmJa5RVXbD0Dp3WV0I6Tg0R/wSz5eyBJtvBLKRMABk=;
+	s=arc-20240116; t=1790222187; c=relaxed/simple;
+	bh=JKRgj8ZEUEFuVcv0I5nauNwdfend54k/MwOz5VvInhU=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=RaOBGrgqUSloccxqnlduIXXrYK9aFblb023anzs5YMDNALS8N1wZ3VQwXZQgiYKsXwsoficX4sGHsVXg1SA4K22Tv50kC5uJKfO01PUGqcx2jpIqJINfpHNi9l79j0aXf28XQt9qkFgqnUnXi8XXBj8e50vexbXY5UKaHifU2T4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JOb9mNdu; arc=none smtp.client-ip=100.103.45.18
+	 Subject:From:To:Cc:Date; b=iTm3yZGtDgD0/ihHO4tMVHQQ8Ot5u2eoJy/I6VDEOPmA5w3YV3GhMLBz7KY0ocd07K5xBAeYrskgXHGGZdxS4AMBoXM9yany0kfXlHOAKadE1RxLyOsQBoatTmXG3W2fouxhVG2qtISWU677wrL3qZZSZjy/GQczVhnSp+1Ery8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M69Xz4ko; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JOb9mNdu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EEEF1F000FF;
-	Thu, 24 Sep 2026 03:56:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M69Xz4ko"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D9381F000FF;
+	Thu, 24 Sep 2026 03:56:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790222182;
-	bh=tTgVr8SCsp/z4xKz1heNaqgb3vdcv/FszeemmbyRwbs=;
+	s=k20260515; t=1790222185;
+	bh=hqd5lheG4032mnB2rsV+bHqfLJtTxywU0n2t8jMZrqI=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=JOb9mNduazAzki3PAoUQ70GDqdYnXLX5XnJ4lHWp1TO3QwKNzqSajc1u9ehjklhkg
-	 rrB5lXQJmh+KM8xngZKfp+uR6PScaXrUj56VOotXsvsL7NSYjLbcM8moYSiN7sBhrX
-	 Q22g8lIlTOAPoWh0DdqQ9Vm4E5PoXbEbjLxBGvN37EvuMY/PWRkWlfH1qk+ijyD1jb
-	 pKGiUda+eOmxc1Z7xbczcIq93SqwBBvpyS9r/wEXCzz7MQyxP0PnldqVUaVBWjoI2+
-	 hf+xwXD1zUePCit3H5vPgleGUeOrQm7yH2mdpMx4ZaWMBQiBh25eivDx/n1zfzBULF
-	 kazEO5dYGu6Fg==
-Content-Type: multipart/mixed; boundary="===============7746873327517886572=="
+	b=M69Xz4koF4PbCCu2PtYTNA/Gfrwl0gm/bRj+RApicjLc1QlrAOfwF+GzS12d4NbkX
+	 D43kBx9OiFNnMYCJnKrKGoXuop5raY2lX3SdurtrNdkVAWKIDkX79SpJxfdc4bG4ma
+	 sc9PmipWwtyNsZMMiftOuvp13hkgLqRYvMy0R9WcHr+Rhx+zBAXy8loKXDQUa7zDaG
+	 CmXBxMWFAaRhsBNaW0fLwHZRgoT2dQhnu2asGqyZGe7rEXTMTGFxeDm48coQBmsC2n
+	 8ywX4k+qY/noeB5w9OqPPHWdMeqEXMjzvM+3GzxId5dIebUopQR7AQVjUAlAvtVp4P
+	 ryCX8gvgr22Zw==
+Content-Type: multipart/mixed; boundary="===============5623308181778460454=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d7fd0e8fae2022bcd7310050dcee7b43a7d5dad6249ad20167b9a73b0d1deb5f@mail.kernel.org>
-In-Reply-To: <20260924031042.1690890-5-alexei.starovoitov@gmail.com>
-References: <20260924031042.1690890-5-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH bpf-next v2 04/17] bpf: Prepare static analysis passes for callx instruction
+Message-Id: <4a58d29d46c559a643c5dc1fd859d7ec93482705257cc92bcc86f8d1f4deeff2@mail.kernel.org>
+In-Reply-To: <20260924031042.1690890-7-alexei.starovoitov@gmail.com>
+References: <20260924031042.1690890-7-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH bpf-next v2 06/17] bpf: Add callx calls to the call graph
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 24 Sep 2026 03:56:20 +0000 (UTC)
+Date: Thu, 24 Sep 2026 03:56:24 +0000 (UTC)
 
---===============7746873327517886572==
+--===============5623308181778460454==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 > diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 6380c851ed24..931f305fa440 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
 
 [ ... ]
 
-> diff --git a/kernel/bpf/liveness.c b/kernel/bpf/liveness.c
-> index 44ecdc5b4ec2..a204b492acc8 100644
-> --- a/kernel/bpf/liveness.c
-> +++ b/kernel/bpf/liveness.c
-> @@ -356,12 +356,29 @@ int bpf_live_stack_query_init(struct bpf_verifier_env *env, struct bpf_verifier_
->  	return 0;
->  }
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index eb014bf6a2e8..d00d0ecab17c 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -10615,6 +10693,15 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
+>  		return 0;
+>  	}
 >
-> +/*
-> + * Stack slots of outer frames that the callee may read are accounted as read
-> + * by the @callsite insn itself, i.e. they are live before @callsite and may be
-> + * dead after it, when:
-> + * - @callsite calls a callback, which may be called several times;
-> + * - @callsite is callx. Its callee is not known when stack liveness is
-> + *   computed, so there is no func instance for it at @callsite. While
-> + *   the verifier is in the callee lookup_instance() finds its standalone
-> + *   instance that knows nothing about outer frames. What the callee may read
-> + *   there is recorded by record_call_access().
-> + */
-> +static bool callee_stack_access_at_callsite(struct bpf_verifier_env *env, u32 callsite)
-> +{
-> +	return bpf_calls_callback(env, callsite) ||
-> +	       bpf_is_callx(&env->prog->insnsi[callsite]);
-> +}
+> +	/*
+> +	 * The address of the callback might be taken in another function or
+> +	 * read from a map, see check_func_ptr_read(). Like with callx it's
+> +	 * known here what is called.
+> +	 */
+> +	err = record_callx_edge(env, caller->subprogno, subprog);
+> +	if (err)
+> +		return err;
+> +
 
-The comment and the commit message line "The callee is analyzed as
-standalone instance" say that a callx callee always has a standalone
-depth-0 func instance that lookup_instance() finds. Is that accurate for
-all cases?
+Could the map part of this comment move to a later commit?  The comment
+references check_func_ptr_read() which doesn't exist at this commit.
 
-Looking at bpf_compute_subprog_arg_access(), the standalone instance is
-only created for subprogs not already analyzed through a direct call:
+Looking through the tree, check_func_ptr_read() appears in a later commit
+(0ff120b53396 "bpf: Recognize pointers to functions in read-only maps").
+That commit also enables loading PTR_TO_FUNC from map values, which isn't
+supported here.
 
-kernel/bpf/liveness.c:bpf_compute_subprog_arg_access() {
-    ...
-    if (info[sub].at_in && !bpf_subprog_is_global(env, sub))
-        continue;
-    instance = call_instance(env, NULL, 0, sub);
-    ...
-}
-
-Subprogs are walked callers-first. If a static subprog S is both a callx
-target and reached by a BPF_PSEUDO_CALL that passes an fp-derived
-argument, analyze_subprog() has already set info[S].at_in, so no depth-0
-instance is created.
-
-With the verifier state in frame S entered through callx,
-lookup_instance() tries key == callx insn idx at depths frameno..1 (no
-match, call_instance() is only called for pseudo calls and callbacks),
-then tries key == S start at depth 0 (does not exist), so it returns NULL.
-
-bpf_live_stack_query_init() stores NULL in q->instances[frame], and
-bpf_stack_slot_alive() returns true for every slot:
-
-kernel/bpf/liveness.c:bpf_stack_slot_alive() {
-    ...
-    if (!curframe_instance)
-        return true;
-    ...
-    if (!instance)
-        return true;
-    ...
-}
-
-The result is safe (slots are only treated as more alive), but the
-comment appears to misdescribe the mechanism. Stack-slot cleaning in
-__clean_func_state() is also silently lost for the whole callx chain in
-that case, which reduces state pruning.
-
-At this commit callx is still rejected, so this only matters later when
-callx is enabled. Could the comment and changelog be reworded to cover
-the case where lookup_instance() returns NULL, or should the standalone
-instance be created for address-taken static subprogs as well?
+Until then the comment has a dangling reference and describes a capability
+this commit doesn't have.  The address-taken-in-another-function case is
+the only one that applies.
 
 
 ---
@@ -131,4 +93,4 @@ AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35951148075
---===============7746873327517886572==--
+--===============5623308181778460454==--
