@@ -1,183 +1,153 @@
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D689D43F8D9
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:58:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9813EDE63
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 10:00:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790243898; cv=none; b=t7kqIkK/6ZAUjzBIArSa6aThH9pInyz3W4G2SBZniMMc95+aNAM+KeWkWH+UBxnujcNJjYv6cIqzAVZYBUC4sgqIhkpGxDLdudius5BIVWG9UUwwhp8gf2swvgF8HwnxX0kvXsA07VIaFkMB8ENGUvH2ZyT/A1APBkV54Fy5tlg=
+	t=1790244012; cv=none; b=DCgjNXbGPwb+Vdn7TbFQTk/eBjLS0ILE0GBxgXXp5SMIc45C7PmBe7RNIpTjspb64SNFk29wJ5uRtjlRLcNP3F2KWN1n+RC7eMx6fxM+mIBgl/6ILXDaY5C9YI9Vn6y9q/SKUCPfMLaGbh9OFYGjArxqtjnR4Mnf0ZoqvYyQEsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790243898; c=relaxed/simple;
-	bh=9SGKTc6D6xfMPeZHEks6c+okgQs+/kD01vjoPgrCeW0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=XM/5VeaubY4IvhFkyDjeKg8LiNGFzUh7JtoCGadFCamjIA0QL6kDbpjZKHetUg3k2byajBOliQYEJ4M/81UKMTPdEvQneGnztAx71upQ0aWETPYK/wwb+SG5F5A+rqxqQCQajvn3TbDIUhT99fiRKFBPdx/tsaI2ln60a6hduek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e0dSR4jb; arc=none smtp.client-ip=74.125.225.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790244012; c=relaxed/simple;
+	bh=bNKcdMnGeGMzp5obwp/ejl4SCDxf2U9LwHX8Z6chyYQ=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=AQxIv9u+zK0W2DW+NsJEnBS5NwA6J+kYeMxcEbbOpzHwdjJd3NjvkTIjEIG6cib6fzK8qLC+/Laz5XhdFtp0QLyzaicZp5i7HAPJ3jcN7a0YkVY/pf8K0vSbI+atJPoWi34DIEfstGMshtv+vi0+l9FHcQ9/E/DwynCuDnkhi90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IgwLGxst; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e0dSR4jb"
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-4843147998cso82658f8f.0
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 02:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790243883; x=1790848683; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=6Sg33ie5LuP6WxDBF1LG0/+7a9OYvJVQV6Xo3Y8WeTo=;
-        b=e0dSR4jbPoJa3HD2AQhYCYLUyHpJ4+a+z4HOMHPlT0p46XJEedcAyrYw3StWoZGNRj
-         h1szZOZ2+3IApzr6PKqCykR8Y451YJ8WxPvN7ocuxemWZXCY5hWs6svfSHRUOcrbdo72
-         FoZ3J2PDYnqt+F5jV71uK9un0s4hRRpVFr29YIp0p8/LovRfXR2UyESwlc/3XUDvcgsp
-         /8AgKTbXcbKQG3p6hu6QV4iRMBD6KByqMCmhtVO0wkrM0f2CfZHwBVlBNvFHY0ESam7L
-         9TWG05QIccaFtePBp8U8h38Zkq+cgak/quocIv1pX1tSIwsNW3PEiaSxKmQwV65svocF
-         7S7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790243883; x=1790848683;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6Sg33ie5LuP6WxDBF1LG0/+7a9OYvJVQV6Xo3Y8WeTo=;
-        b=wGR9rawqeq1c9OfeTtqFfh+XyTl40Gml+cOkxvFmdYaCVM5sDQ9jwkjND2GrKqV57h
-         I992ynHV75ZkXnw11HIQGXpCpRq1BVg5DmBRAUFoPQyGygLt/oNVsujeI/r/lvz8C9eL
-         R6T5xScxfeCYhHJ8pV1iLiR4tTane2DgT7qAU8UPaGU1dIcY+hzgFQTLKJlvuZstpbkT
-         lPG9lNuhKer6tkVUKYXHXfUhPsBeFCg5lqV0VyuXM8oEAbERCwyL0EL8OiFMM2BxH6LW
-         sXfnBDcAduvvoyLaa2cfgwVbuJzyJ+GY5pPd5x4KAOj1VA4iYR7suv2X1UhvS0JVaYHY
-         VfHg==
-X-Forwarded-Encrypted: i=1; AKwUvBzUSkIL+T6UamwuJFr8P/UjMHgJ2UUSTug2qGsflrMdAuvR1KNqPKTseWrpit/XAfoAXGI=@vger.kernel.org
-X-Gm-Message-State: AFuF++leS7DdHUeMxSdixUi6RZ4SequJwOlvpBhcE38P7yV+6pz2ovRE
-	PwY41K5F677qUs5jF5zYlJEtk2mWuYE2oCSwcYxwt9DaGEUgvCLfxE4/
-X-Gm-Gg: AYBFou3Lp7tsLdXNPUsUXSbqSCuc9mGSyMlLbEIl9yLFYMFS7FRk13wZPwwajRMT+Rt
-	mvqSyWI8HlB/cyp3SNO1E3mzaF4mZFr/CDiIwhF3C+E+IjkP26zjEUwwPX8ySg1CvuOTeubhyF+
-	9UrtpxaWdyhvnIPOtWWw5cqntCjTnZWXFJ4iX83RI84mi9VbCAjzL0cIxNCJKcLfoH6rl8miGWc
-	bSGxRQ4JaSxks1jrCS/1xI1Q7zThCFfk/IkkxqZYm8Qd+kXxrN7WmpbsfuP9mCKUN1Br/mo6O7s
-	iWgOaMBDeuZlanv4hZiBtavm6nAVfqAkmpXDyfZBI7tQF2/pGzm6mI+GuyBsm7pSHAiuI3f3gEK
-	61ip+GlmJ2BASSWdCRSwo70kKnAo+Gx2Q1P0PbxwBLFWg2Y+bRkzY6kisuGkQmbfGcHUyAuwozf
-	0LAfwWx90XjWuDIdHqNHMqFzKK0zUiSWxBLnxHiL2sTtT3t6amLfELK8iv1rAAgltoFw2hdyd39
-	gFnt/mdI0WSmA7p6NPT2D6oew+/4Nut9oS22Gawf0/Zccv4zxYRWTnQK5we1rosYICxj3wO7SIc
-	GcCzV298Zc6/OPQt8PnkW0nMs7BoFPHc0Qktig==
-X-Received: by 2002:a05:600c:4e53:b0:49c:e37e:4389 with SMTP id 5b1f17b1804b1-49fe66c8288mr31334425e9.4.1790243882786;
-        Thu, 24 Sep 2026 02:58:02 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fdf9691e2sm127086005e9.1.2026.09.24.02.58.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Sep 2026 02:58:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IgwLGxst"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F06341F000FF;
+	Thu, 24 Sep 2026 10:00:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790244006;
+	bh=z8pZ2s9UwAknyqzvw0IX645AF8djaud5dTgOcliQaio=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=IgwLGxst3/TWeFaz+IpXxlSLFjwBqe2E73Lg5K9YlNva3KVZhgRv29Pn7l4F/tALf
+	 2JJ821PxJVy06vKSftONSgTYoKHMpH48DZ4Wq8M9k1+5HgnRJxplFSP0NPHOX5nweF
+	 jfAMOGrvL/kYlUFEAC9R5giKDwdD2/mqpUckUBiIEn32ZRHtDXY7y9pbdiuwuCD2hQ
+	 geRoFZhsMshnKf5kiRz/KwdHZCDYX9lxngqqzh286xDfMVt6LOEVlsvE/h9dAj4ZCu
+	 kxUR6n8MjRF+KxgyMiwsnphuwLeHa092ZBSTeQLwIhl1+cXVaQqlqwXxIDxSwVMCRz
+	 H6RwpEJ+u9D5g==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH net-next] net: stmmac: add XDP multi-buff support for TX
+ side
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Lorenzo Bianconi" <lorenzo.bianconi@oss.qualcomm.com>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260923-b4-stmmac-xmit-mb-v1-1-a71a1c522142@oss.qualcomm.com>
+References: <20260923-b4-stmmac-xmit-mb-v1-1-a71a1c522142@oss.qualcomm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 24 Sep 2026 10:00:04 +0000
+Message-Id: <20260924100004.F06341F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 24 Sep 2026 11:58:01 +0200
-Message-Id: <DLNGHPJYHLOH.1KYZYC4XQPTRM@gmail.com>
-Cc: <ast@kernel.org>, <andrii@kernel.org>, <daniel@iogearbox.net>,
- <eddyz87@gmail.com>, <emil@etsalapatis.com>, <tj@kernel.org>,
- <kkd@meta.com>, <kernel-team@meta.com>, <martin.lau@kernel.org>,
- <yonghong.song@linux.dev>, <mason@kernel.org>, <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH bpf-next v2 18/18] selftests/bpf: Test the 2 KiB stack
- budget
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0
-References: <20260924082607.2695649-19-memxor@gmail.com>
- <a0d61b61004d7351500248ef2a9e84ad6634dea366fe9bb15cd0a0887b301a82@mail.kernel.org>
-In-Reply-To: <a0d61b61004d7351500248ef2a9e84ad6634dea366fe9bb15cd0a0887b301a82@mail.kernel.org>
 
-On Thu Sep 24, 2026 at 11:13 AM CEST, bot+bpf-ci wrote:
->> diff --git a/tools/testing/selftests/bpf/progs/verifier_large_stack.c b/=
-tools/testing/selftests/bpf/progs/verifier_large_stack.c
->> new file mode 100644
->> index 000000000000..2d4c81a3f0cb
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/verifier_large_stack.c
->> @@ -0,0 +1,377 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +
->> +#include <linux/bpf.h>
->> +#include <bpf/bpf_helpers.h>
->> +#include "bpf_misc.h"
->> +
->> +/*
->> + * Programs may use MAX_BPF_STACK_JIT (2 KiB) of stack on JITs that sup=
-port
->> + * large stacks, combined over a call chain, with no separate limit on =
-a
->> + * single frame. Interpreted programs and other JITs keep 512 bytes.
->> + */
->> +
->> +SEC("socket")
->> +__description("single frame of 2048 bytes")
->> +__load_if_large_stack()
->> +__success __success_unpriv __retval(42)
->> +__naked void single_frame_2048(void)
->> +{
->> +	asm volatile ("					\
->> +	r1 =3D r10;					\
->> +	r1 +=3D -2048;					\
->> +	r0 =3D 42;					\
->> +	*(u64*)(r1 + 0) =3D r0;				\
->> +	r0 =3D *(u64*)(r1 + 0);				\
->> +	exit;						\
->> +"	::: __clobber_all);
->> +}
->> +
->> +SEC("socket")
->> +__description("single frame of 2048 bytes without large stack support")
->> +__load_if_no_large_stack()
->> +__failure __msg("invalid write to stack R1 off=3D-2048 size=3D8")
->> +__naked void single_frame_2048_no_large_stack(void)
->> +{
->> +	asm volatile ("					\
->> +	r0 =3D 0;						\
->> +	exit;						\
->> +"	::: __clobber_all);
->> +}
->
-> Does the single_frame_2048_no_large_stack test body match its expected
-> failure message?
->
-> This test is meant to verify that a 2 KiB frame is rejected on systems
-> without large stack support (the interpreter, bpf_jit_enable=3D0, and JIT=
-s
-> without bpf_jit_supports_large_stack() like s390x, riscv64, loongarch,
-> and powerpc).
->
-> The test is marked __failure with the expected message "invalid write to
-> stack R1 off=3D-2048 size=3D8", but the test body is:
->
->     r0 =3D 0;
->     exit;
->
-> This 2-instruction program never touches fp-2048, so it verifies fine on
-> all configurations. The __failure annotation then causes
-> ASSERT_ERR(err, "unexpected_load_success") to trip in run_subtest() in
-> test_loader.c, failing the test on every configuration it targets.
->
-> Looking at single_frame_2048 above, the expected error message matches
-> this sequence:
->
->     r1 =3D r10;
->     r1 +=3D -2048;
->     r0 =3D 42;
->     *(u64*)(r1 + 0) =3D r0;
->
-> Should single_frame_2048_no_large_stack repeat that write sequence so the
-> verifier rejects it with the expected message on systems without large
-> stack support?
->
+Thank you for your contribution! Sashiko AI review found 3 potential issue(=
+s) to consider:
+- [High] stmmac: exact-match coalescing logic skips TX completion interrupts
+- [High] stmmac: missing memory barrier before setting TX OWN bit
+- [Medium] stmmac: XDP frame check removes SKB TX threshold reservation
+--
 
-Not a bug: single_frame_2048_no_large_stack does store through r1 =3D r10 -=
- 2048;
-the quoted two-instruction body is not in the patch.
+commit 4955fe9fec58eed4009939eaf9ed4fcf2a742ee7
+Author: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
 
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/359763=
-22553
+net: stmmac: add XDP multi-buff support for TX side
 
+This patch extends stmmac_xdp_xmit_xdpf to transmit XDP frames with fragmen=
+ts
+by mapping and programming each buffer into a dedicated TX descriptor.
+
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/=
+net/ethernet/stmicro/stmmac/stmmac_main.c
+> index bf9e7e4cb1c31..41ccde6371ecd 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -5239,77 +5239,114 @@ static unsigned int stmmac_rx_buf2_len(struct st=
+mmac_priv *priv,
+[ ... ]
+> -	if (stmmac_tx_avail(priv, queue) < STMMAC_TX_THRESH(priv))
+> +	if (stmmac_tx_avail(priv, queue) < num_frames)
+
+[Severity: Medium]
+Could this change lead to TX ring starvation for standard SKB traffic?
+
+The STMMAC_TX_THRESH check was designed to reserve a portion of the shared =
+TX
+ring for standard SKB traffic. By replacing the threshold with a check agai=
+nst
+just num_frames, heavy XDP loads could exhaust all available TX descriptors,
+potentially leaving 0 descriptors for SKBs and monopolizing the TX ring.
+
+>  		return STMMAC_XDP_CONSUMED;
+[ ... ]
+> +	tx_q->tx_count_frames +=3D num_frames;
+> =20
+> -	if (tx_q->tx_count_frames % priv->tx_coal_frames[queue] =3D=3D 0)
+> -		set_ic =3D true;
+> -	else
+> -		set_ic =3D false;
+> -
+> -	if (set_ic) {
+> +	if (!(tx_q->tx_count_frames % priv->tx_coal_frames[queue])) {
+
+[Severity: High]
+Will this exact-match coalescing logic reliably trigger TX completion
+interrupts?
+
+When transmitting XDP multi-buffer frames, tx_count_frames increases by
+num_frames, which can be greater than 1. The modulo condition relies on an
+exact match to 0 to trigger the Interrupt on Completion (IC) bit.
+
+If num_frames causes the counter to overshoot a multiple of tx_coal_frames
+(for example, jumping from 24 to 26 when the threshold is 25), the IC bit
+will not be set. This could indefinitely delay TX completion handling and
+exhaust the TX ring.
+
+> +		struct stmmac_txq_stats *txq_stats;
+> =20
+> +		desc =3D stmmac_get_tx_desc(priv, tx_q, entry);
+> +		stmmac_set_tx_ic(priv, desc);
+>  		tx_q->tx_count_frames =3D 0;
+> -		stmmac_set_tx_ic(priv, tx_desc);
+> +
+> +		txq_stats =3D &priv->xstats.txq_stats[queue];
+>  		u64_stats_update_begin(&txq_stats->q_syncp);
+>  		u64_stats_inc(&txq_stats->q.tx_set_ic_bit);
+>  		u64_stats_update_end(&txq_stats->q_syncp);
+>  	}
+> =20
+> +	/* Set the OWN bit on the first descriptor now that all descriptors
+> +	 * for this skb are populated.
+> +	 */
+> +	desc =3D stmmac_get_tx_desc(priv, tx_q, first_entry);
+> +	stmmac_set_tx_owner(priv, desc);
+
+[Severity: High]
+Is a dma_wmb() needed here before setting the TX OWN bit on the first
+descriptor?
+
+The new logic loops over fragments, calling stmmac_prepare_tx_desc() with
+tx_own=3D0 for the first descriptor. This effectively bypasses the internal
+dma_wmb() inside stmmac_prepare_tx_desc(), which typically requires both
+is_fs and tx_own to be true.
+
+Without a preceding dma_wmb() before manually setting the OWN bit here,
+the CPU might reorder the write to the first descriptor's OWN bit before
+the writes that populated the fragment descriptors. The DMA engine could
+then process stale or uninitialized memory.
+
+> +	tx_q->cur_tx =3D STMMAC_NEXT_ENTRY(entry, priv->dma_conf.dma_tx_size);
+>  	stmmac_enable_dma_transmission(priv, priv->ioaddr, queue);
+> =20
+> -	entry =3D STMMAC_NEXT_ENTRY(entry, priv->dma_conf.dma_tx_size);
+> -	tx_q->cur_tx =3D entry;
+> -
+>  	return STMMAC_XDP_TX;
+[ ... ]
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260923-b4-stmmac-=
+xmit-mb-v1-1-a71a1c522142@oss.qualcomm.com?part=3D1
