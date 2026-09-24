@@ -1,265 +1,175 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1466F3EDE43;
-	Thu, 24 Sep 2026 06:30:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E48735E549;
+	Thu, 24 Sep 2026 06:43:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790231418; cv=none; b=npPQnwM2OyHqaNheNSSbjDkyC+nOyZ/4+YiRmpKtGhWBZFy0cguhnh1koUBX8K34+lPV5YAHr8IO1KMVuz/66QjIRVlhSf4X3f/ks8GXC8g3pdHtzn/AjTj5nC6Q0o/g5hLAcxmNFPtD3Co6btpfYoQBazKzLE8VFlqx0TCLZf8=
+	t=1790232231; cv=none; b=KYtKw8fk3AYce4z85l0OYwzYM5F9Hg3A065JYXAgQZGJZH6GFO1mwwoFRs6scqcn4yFQyhtP0w5O61fSb1oCjUAOM44s3T3qeH5/p48lttA/duUVQlMJ1CW05xipyCgkf1F6ccEYNgkIET9/vxW1tnnMmow4I49ZLxQp/QRb3Dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790231418; c=relaxed/simple;
-	bh=/JZ9eTH+cCJ8CPcHJGFAzukhXlFXtJ6fBtRKjn2tIGg=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Vb3amD2elKGNHg3jHhRkQu3wzBteMN//Mgw26EdWzLXi+UozK6cD6/VruUHcyq83EAyR5baWGa3qf4vR9c7G0oIGIn6TuwiwrphSXmfGP8D/r67c0aOPYsyxMZNaZzbF/Hd2YEwHzuqFFvGn52Lvo5IHb0D/OPitF5RUOHZcy54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nv2eY9Q+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790232231; c=relaxed/simple;
+	bh=YHalUQcickU79fH74N4hk3gAbubZkhtOKMC6fhDq0pg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XgiZ0KzQcOWEojA22OCepjO10Wni4f/BgimQ/cnu7LNHXtegpC6s3ZfVTJtUui0OABl4zdoQMNd2mF+wFelgT1RgHCkfvacjqtVrAnxq14ldh+1ragpuLwMqusFMiXNb3nKp5zwqkz6MZk/Rse6hfcl0bJ3EY/oxJwou7S4DeHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WVxUBLLE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nv2eY9Q+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D801F00893;
-	Thu, 24 Sep 2026 06:30:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WVxUBLLE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1AF01F000FF;
+	Thu, 24 Sep 2026 06:43:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790231416;
-	bh=PbUnL7Dp8W4lDbAThqkmUJ0eg5I5/4s5qPPqTg4hmVQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Nv2eY9Q+EOCRBN8dAA4cSOUc5FOoaNc9lGhYgb6ontWHYPb5AOVPAXN2c80gkknci
-	 Ulhwqjn/RxVRuQTsjbRUL5RQ39hTIeBYgyFeBlGaVYPdB36UhkqPMZwvVXOTLjdcx1
-	 sTLWKHE0AQH+P5jFGtN30DB8vtvv//LqquGrs7w5QTxnRzGEx9TOYprI77WKjaMKC7
-	 IreWkAk/AdpRuHLxf3fB3FA/Y/i3t5xUZQDpiZsYL6JuWD0uupsmD6/VzKMkZKzqHU
-	 Dg9YNL3WEynqCWEHPOogU6fLSAktHZnxT9eDq+gyJMm2aVDM55NiUBmkjsj8CnhWIT
-	 JgxSHjXMoZ0RQ==
-Content-Type: multipart/mixed; boundary="===============0377911730758240839=="
+	s=k20260515; t=1790232230;
+	bh=8+aDnBPe6Fe8ZVXl+yIt16LOFB9XYRmkMboC0hDkoW0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=WVxUBLLEsP97RLZPooJ8iLZlylwhI3IHUEcRwN90QZNfoMLn49qpcrlGtA7/TtLFu
+	 mXifHSgg+0RI0KmPwytBN5yDS39a8uwDkniVYuUzqiR+8TIPsLg8OlWckb4FaGTK6+
+	 G/wVW55tOOSi+zGXFJlrev0sVcekMW3fQ4k328plRClRFnjhQVjvJibIwzf72QHEhB
+	 WRG+d3Dr6KajQzV9cTA6/zhXHgxAFz8KU9/hUgeD2PW0SV1xLb9E26D3FK5uYPDtBN
+	 dnWTZu58Av0FO7t5i937AyYVVtoKjq5bubYxd2nGJYQ2181qwVQDpBJFghdiQ2zDpO
+	 nvRrAxWoyEKFA==
+Date: Thu, 24 Sep 2026 07:43:43 +0100
+From: Simon Horman <horms@kernel.org>
+To: Daniel Machon <daniel.machon@microchip.com>
+Cc: netdev-bot+sashiko@kernel.org, andrew+netdev@lunn.ch,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, horatiu.vultur@microchip.com,
+	steen.hegelund@microchip.com, UNGLinuxDriver@microchip.com,
+	ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+	john.fastabend@gmail.com, sdf@fomichev.me, herve.codina@bootlin.com,
+	arnd@arndb.de, gregkh@linuxfoundation.org, mohsin.bashr@gmail.com,
+	richardcochran@gmail.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH net-next v7 11/14] net: lan966x: add PCIe FDMA MTU change
+ support
+Message-ID: <20260924064343.GX13925@horms.kernel.org>
+References: <20260918-lan966x-pci-fdma-v7-11-0ecc179c8a2c@microchip.com>
+ <179008205354.2160803.17637640817184992984@kernel.org>
+ <20260923094622.gmxyw46ligz4rsyd@DEN-DL-M70577.microsemi.net>
+ <20260923193929.GW13925@horms.kernel.org>
+ <20260923200712.jirfdepdpv5vm45m@DEN-DL-M70577.microsemi.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <708eecd95cb24c85757f7f217915bfbb2bbd855b8f963a4cc32aa61ad6031034@mail.kernel.org>
-In-Reply-To: <20260924054549.2271705-2-cui.tao@linux.dev>
-References: <20260924054549.2271705-2-cui.tao@linux.dev>
-Subject: Re: [RFC PATCH v7 1/4] blk-iocost: add BPF struct_ops cost model support
-From: bot+bpf-ci@kernel.org
-To: cui.tao@linux.dev,tj@kernel.org,josef@toxicopanda.com,axboe@kernel.dk
-Cc: cgroups@vger.kernel.org,linux-block@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,linux-kselftest@vger.kernel.org,cui.tao@linux.dev,cuitao@kylinos.cn,ameryhung@gmail.com,alexei.starovoitov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 24 Sep 2026 06:30:14 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260923200712.jirfdepdpv5vm45m@DEN-DL-M70577.microsemi.net>
 
---===============0377911730758240839==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, Sep 23, 2026 at 10:07:12PM +0200, Daniel Machon wrote:
+> > On Wed, Sep 23, 2026 at 11:46:22AM +0200, Daniel Machon wrote:
+> > > > Thank you for your contribution! Sashiko AI review found 4 potential
+> > > > issue(s) to consider.
+> > > >
+> > > > Critical: 0 · High: 2 (2) · Medium: 1 (1) · Low: 1
+> > > >
+> > > > If you believe none of the issues are legitimate, please reply to each
+> > > > issue of Medium severity or higher and explain why the AI is wrong.
+> > > > If any of them are legitimate and you plan to respin, please let patchwork
+> > > > know by including "pw-bot: cr" as a separate line at the end of your reply
+> > > > (one such reply per series is enough).
+> > > >
+> > > > - [High] MTU change during or after PCIe FDMA teardown runs the full
+> > > >   reload on freed/quiesced state: unbounded napi_disable() while holding…
+> > > > - [High] The new resize readiness check publishes lan966x->rx.lan966x
+> > > >   before the PCI FDMA rings exist, so an MTU change can race with ring…
+> > > > - [Medium] The new PCIe resize path retires DMA rings and tears down
+> > > >   their ATU outbound window without ever confirming the hardware is…
+> > > > - [Low] FDMA_PCI_DB_SIZE_MAX / FDMA_PCI_MAX_MTU perform unsigned
+> > > >   arithmetic with no underflow guard and no BUILD_BUG_ON, even though…
+> > > >
+> > > > Pre-existing issues:
+> > > > - [High] The hazard the new PCIe reload path documents and avoids is
+> > > >   still live in the sibling platform reload path, which this series…
+> > > > - [High] The two implementers of lan966x_fdma_ops::fdma_resize now
+> > > >   disagree about the 'rings not built yet' precondition, and the…
+> > > > - [Medium] Window in which DEV_MAC_MAXLEN_CFG exceeds the DCB buffer
+> > > >   size, combined with a missing SOF/EOF check in…
+> > > >
+> > > > --
+> > > >
+> > > > net: lan966x: add PCIe FDMA MTU change support
+> > > >
+> > > > This adds MTU change support to the PCIe FDMA path by reallocating the
+> > > > contiguous ATU-mapped RX and TX rings at the new size and falling back to
+> > > > the old buffers on failure.  It also caps the PCIe DCB ring at 256 entries
+> > > > and advertises a derived dev->max_mtu (FDMA_PCI_MAX_MTU) when the FDMA is
+> > > > in use.
+> > > >
+> > > > A few questions below about the new reload path and the new size macros.
+> > > >
+> > > > > diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
+> > > > > index 5d6902459f20..940425beec2f 100644
+> > > > > --- a/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
+> > > > > +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_fdma_pci.c
+> > > > > @@ -358,7 +358,7 @@ static int lan966x_fdma_pci_init(struct lan966x *lan966x)
+> > > > >       lan966x->rx.lan966x = lan966x;
+> > > > >       lan966x->rx.max_mtu = lan966x_fdma_get_max_frame(lan966x);
+> > > > >       rx_fdma->channel_id = FDMA_XTR_CHANNEL;
+> > > > > -     rx_fdma->n_dcbs = FDMA_DCB_MAX;
+> > > > > +     rx_fdma->n_dcbs = FDMA_PCI_DCB_MAX;
+> > > > >       rx_fdma->n_dbs = FDMA_RX_DCB_MAX_DBS;
+> > > > >       rx_fdma->priv = lan966x;
+> > > > >       rx_fdma->db_size = FDMA_PCI_DB_SIZE(lan966x->rx.max_mtu);
+> > > >
+> > > > [Severity: High]
+> > > > Can an MTU change race with ring construction here?  lan966x_fdma_pci_init()
+> > > > sets rx.lan966x before it fills in channel_id/n_dcbs/n_dbs/db_size/size and
+> > > > before the two sleeping allocations in lan966x_fdma_pci_rx_alloc() and
+> > > > lan966x_fdma_pci_tx_alloc().
+> > > >
+> > > > The netdevs are already live at that point: lan966x_probe() runs the whole
+> > > > port loop, including lan966x_probe_port()->register_netdev() and
+> > > > lan966x_port_init()->lan966x_fdma_netdev_init()->netif_napi_add()+
+> > > > napi_enable(), and only calls ops->fdma_init() afterwards, without holding
+> > > > RTNL.
+> > > >
+> > > > So an rtnl-held ndo_change_mtu in that window sees rx.lan966x != NULL, passes
+> > > > the new guard in lan966x_fdma_pci_resize(), finds a max_mtu that differs from
+> > > > the partially initialised rx.max_mtu, and enters __lan966x_fdma_pci_reload().
+> > > > Both contexts then write the same lan966x->rx.fdma / lan966x->tx.fdma:
+> > > >
+> > > >   lan966x_fdma_pci_reload()
+> > > >       lan966x_fdma_rx_disable(&lan966x->rx)   /* channel_id still 0 */
+> > > >       lan966x->rx.fdma.atu_region = NULL;     /* under probe's feet */
+> > > >       lan966x_fdma_pci_rx_alloc(&lan966x->rx) /* second ring */
+> > > >
+> > > > Does this leak probe's ring plus its ATU region (only
+> > > > FDMA_PCI_ATU_REGION_MAX == 6 exist), or trip WARN_ON(fdma->atu_region) /
+> > > > -ENOSPC in fdma_pci_atu_region_map()?  And on the failure branch,
+> > > > lan966x_fdma_pci_reset_mem() dereferences tx->fdma.atu_region->base_addr,
+> > > > which is NULL in a snapshot taken before probe allocated it.
+> > >
+> > > Yes, same issue as adressed in #4. Theres a race because netdevs are registered
+> > > before initialization (in this case FDMA) has happened. The proper fix is a
+> > > reordering of the probe initialization.
+> > 
+> > Hi Daniel,
+> > 
+> > I'm wondering if you could expand on this a little. I'm unsure what #4
+> > refers to. And I'm unclear if you are planing the reordering as part
+> > of this patchset.
+> 
+> Hi Simon,
+> 
+> Yes, sorry for being vague here.
+> 
+> #4 refers to patch 4, where I explained that the issue reported there was really
+> due to the existing probe initialization order and netdev registration order.
+> Sashiko seems to report multiple race issues that can happen since the netdevs
+> are registered before the HW is fully initialized. This is real, and something
+> that needs to be fixed, just not in this series, IMHO.
 
-> diff --git a/block/blk-iocost-bpf.c b/block/blk-iocost-bpf.c
-> new file mode 100644
-> index 000000000000..2306c5fd6d8d
-> --- /dev/null
-> +++ b/block/blk-iocost-bpf.c
+Understood. I think that from the perspective of avoiding scope-creep
+your approach makes sense.
 
-[ ... ]
+> For Sparx5 and lan969x, I fixed this not long ago, and made sure that netdevs
+> were registered last in probe, as they should be. Now, lan966x should get the
+> same treatment, as a separate fix series for net. :-)
 
-> +static int bpf_iocost_reg(void *kdata, struct bpf_link *link)
-> +{
-> +	struct iocost_model_ops *ops = kdata;
-> +
-> +	if (!ops->dev)
-> +		return -EINVAL;
-> +
-> +	return ioc_bpf_attach(ops);
-> +}
-
-Does this guard against multiple registrations of the same struct_ops?
-
-bpf_struct_ops_link_create() allows several links from one BPF_F_LINK map.
-bpf_struct_ops_valid_to_reg() only checks the map type, BPF_F_LINK flag,
-and the READY state.  The state stays READY after a link is created, so
-every bpf_link_create() on the map calls ->reg(st_map->kvalue.data, link)
-on the same kdata.
-
-hid_bpf_reg(), which the commit message names as the model, guards this
-case:
-
-    /* prevent multiple attach of the same struct_ops */
-    if (ops->hdev)
-        return -EINVAL;
-
-While the first link is attached, a second link on the same device is
-refused by the ioc->model check in ioc_bpf_attach() with -EBUSY.  That
-check stops working once the device goes away:
-
-1. link1 = bpf_link_create(map). ioc_bpf_attach() opens f1 =
-   bdev_file_open_by_dev(dev) and stores ops->q = q1 and ops->bdev_file =
-   f1.
-2. The disk is removed, for example a null_blk device deleted through
-   configfs. null_del_dev() calls ida_free(&nullb_indexes, nullb->index)
-   and then del_gendisk(). __del_gendisk() -> rq_qos_exit() ->
-   ioc_rqos_exit() clears ioc->model and calls ioc_bpf_detach(), which does
-   WRITE_ONCE(ops->q, NULL) but deliberately leaves ops->bdev_file = f1.
-   The old disk and queue stay alive because f1 pins them. __del_gendisk()
-   also calls bdev_unhash(), so the old bdev can no longer be looked up by
-   dev_t.
-3. A new null_blk device is created. It gets the same index, and so the
-   same dev_t, because null_add_dev() sets disk->first_minor = nullb->index
-   and the index was already freed.
-4. link2 = bpf_link_create(map). bpf_iocost_reg() sees ops->dev != 0.
-   ioc_bpf_attach() opens f2 on the new disk and finds no model on the new
-   ioc. It then runs:
-       rcu_assign_pointer(ioc->model, ops);
-       ops->q = q;
-       ops->bdev_file = bdevf;
-   This overwrites f1, and nothing ever releases f1. The dead gendisk,
-   request_queue, bdev and the driver module reference held through the
-   open file are leaked, so null_blk can no longer be unloaded.
-5. Closing link1 then runs bpf_iocost_unreg() -> ioc_bpf_unreg(). It reads
-   q = new queue and bdevf = f2, detaches the model from the new device and
-   fputs f2. link2 is still alive but its model has been silently removed.
-   When link2 is released, ops->q and ops->bdev_file are both NULL and
-   nothing happens.
-
-The map's dev cannot be changed after the first update, because
-map_update_elem requires state INIT, so dev_t reuse is the trigger.  Every
-step can be reached by a user with CAP_BPF, CAP_PERFMON and the ability to
-add and remove block devices.
-
-> diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-> index 2745bffcd5ee..21e4f8cbd9f2 100644
-> --- a/block/blk-iocost.c
-> +++ b/block/blk-iocost.c
-
-[ ... ]
-
-> +#ifdef CONFIG_BLK_CGROUP_IOCOST_BPF
-> +/*
-> + * Attach a BPF cost model to the device named by ops->dev: resolve the
-> + * queue, make sure iocost is on it, and publish the model.  Attaching
-> + * switches the device away from the builtin linear model; detaching
-> + * restores it.  The struct_ops core holds the program alive for the
-> + * whole registered period, so no extra reference is taken on the ops.
-> + */
-> +int ioc_bpf_attach(struct iocost_model_ops *ops)
-> +{
-> +	struct block_device *bdev;
-> +	struct request_queue *q;
-> +	struct ioc *ioc;
-> +	const struct iocost_model_ops *old;
-> +	struct file *bdevf;
-> +	int ret;
-> +
-> +	bdevf = bdev_file_open_by_dev(new_decode_dev(ops->dev),
-> +				      BLK_OPEN_READ, NULL, NULL);
-> +	if (IS_ERR(bdevf))
-> +		return PTR_ERR(bdevf);
-> +	bdev = file_bdev(bdevf);
-> +
-> +	if (bdev_is_partition(bdev)) {
-> +		fput(bdevf);
-> +		return -EINVAL;
-> +	}
-> +
-> +	q = bdev->bd_queue;
-> +	if (!queue_is_mq(q)) {
-> +		fput(bdevf);
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	mutex_lock(&q->rq_qos_mutex);
-> +	ioc = q_to_ioc(q);
-> +	if (!ioc) {
-> +		ret = blk_iocost_init(bdev->bd_disk);
-
-Does this check that the disk is still live?
-
-ioc_bpf_attach() takes q->rq_qos_mutex and, if the queue has no ioc, calls
-blk_iocost_init() to add one. It never checks that the disk is still live.
-The only liveness check is the one bdev_file_open_by_dev() does under
-open_mutex at open time, and __del_gendisk() does not wait for existing
-openers.
-
-The blkcg config path handles the same race explicitly in
-blkg_conf_open_bdev():
-
-    mutex_lock(&bdev->bd_queue->rq_qos_mutex);
-    if (!disk_live(bdev->bd_disk)) {
-        blkdev_put_no_open(bdev);
-        mutex_unlock(&bdev->bd_queue->rq_qos_mutex);
-        return -ENODEV;
-    }
-
-Without that check, this interleaving is possible:
-
-1. bpf_iocost_reg() -> ioc_bpf_attach(): bdev_file_open_by_dev() succeeds
-   while the disk is live.
-2. __del_gendisk() on another CPU: bdev_unhash, GD_DEAD, blk_unregister_queue,
-   device_del, blk_mq_freeze_queue_wait, then rq_qos_exit(q). rq_qos_exit()
-   unlinks every rqos under rq_qos_mutex and runs ioc_rqos_exit(), so
-   q->rq_qos no longer has an ioc.
-3. ioc_bpf_attach() then gets rq_qos_mutex. q_to_ioc(q) is NULL, so
-   blk_iocost_init() runs on the dead disk. rq_qos_add() only checks for a
-   duplicate id, so it links a new rqos, and blkcg_activate_policy() succeeds
-   because the blkgs are only destroyed later in disk_release(). The model is
-   then published and blk_stat accounting is turned on.
-
-Nothing tears down an rqos added after rq_qos_exit(). disk_release() only
-calls blkcg_exit_disk(), and blk_free_queue() does not look at q->rq_qos.
-The consequences depend on who owns the queue:
-
-- GD_OWNS_QUEUE: the ioc and its pcpu_stat leak.
-- Queue not owned by the disk, e.g. SCSI sd, where __del_gendisk()
-  unfreezes the queue and it is reused for the next disk on sd rebind: the
-  stale ioc stays on q->rq_qos with ioc->rqos.disk pointing at the freed
-  old gendisk. The following paths then dereference it:
-  - the next rq_qos_exit(), via ioc_rqos_exit() ->
-    blkcg_deactivate_policy(rqos->disk, ...)
-  - ioc_rqos_queue_depth_changed() -> ioc_refresh_params() ->
-    ioc_refresh_params_disk(ioc, force, ioc->rqos.disk)
-  - an io.cost.qos write on the new disk, where q_to_ioc() returns the
-    stale ioc
-
-[ ... ]
-
-> @@ -3531,11 +3778,31 @@ static ssize_t ioc_cost_model_write(struct kernfs_open_file *of, char *input,
->  				user = false;
->  			else if (!strcmp(buf, "user"))
->  				user = true;
-> +#ifdef CONFIG_BLK_CGROUP_IOCOST_BPF
-> +			else if (!strcmp(buf, "bpf")) {
-> +				/*
-> +				 * readback value while a BPF model is
-> +				 * attached; attaching is done by loading
-> +				 * the struct_ops, not through this file
-> +				 */
-> +				continue;
-> +			}
-> +#endif
->  			else
->  				goto unlock;
-
-Is ctrl=bpf meant to be accepted here?
-
-The COST_CTRL case now accepts "ctrl=bpf" as a silent no-op. Before this
-patch the write failed with -EINVAL. The comment justifies this as a
-"readback value while a BPF model is attached", and the documentation
-(da89d4c2165e) says ctrl=bpf is accepted "so a saved configuration still
-parses". But the read side never produces ctrl=bpf. ioc_cost_model_prfill()
-still prints only
-
-    dname, ioc->user_cost_model ? "user" : "auto",
-    model ? "bpf" : "linear",
-
-so only model= can read back as "bpf". The same docs commit also says
-"ctrl keeps describing the builtin coefficients" and lists ctrl as "auto"
-or "user". So no saved configuration can contain ctrl=bpf, and the stated
-reason for accepting it does not hold.
-
-The branch adds a write-only io.cost.model token with no read-side
-counterpart and no effect. As user ABI it would have to be kept forever.
-It is also accepted when no BPF model is attached, so a mistyped config is
-taken silently where it used to be rejected.
-
-The model=bpf branch in COST_MODEL is consistent with the readback and is
-not affected.
+Reviewed-by: Simon Horman <horms@kernel.org>
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/35962141400
---===============0377911730758240839==--
