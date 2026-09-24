@@ -1,68 +1,53 @@
-Received: from mta0.migadu.com (out-54.mta0.migadu.com [91.218.175.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83B443C1984
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 18:46:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A0884ACC6A;
+	Thu, 24 Sep 2026 18:46:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790275574; cv=none; b=Y92CKnwZHC2n7MlpQGQ+OOSeBLckPAx7T6RuOOzh+1pNANPP1+Yyem+B8xqoMpiGDo7WdSt1M8J9pm3tU0YnN1tU6WMefikdawNPQNZ6q+l+FmWoACqEekY0uNLLPFuWfzMQEnsU6joXOmgptIUsaKc1h2LT/67OW3rLmHeFNno=
+	t=1790275586; cv=none; b=rR/Ue59pYPeuCUwehmSZIBrbNAPzxUzFnsBMhaCFJYsGKs3gplYiKAd2oLDlOjst3cINexNthc9tIUuhpGOqlWR34s4D5Bz3caj/ZgKSXw4ryTCzRKtYb/mSCdwwbUdcc645M7r195FS+5ifWDcBIGHUSmCp46GN0xEvgKwBf1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790275574; c=relaxed/simple;
-	bh=91syfsU5GYx0rGSvaym71XNdT9fl8e/N6mWVzG2+jLQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=C3u9Xhs5Y8dEEfNqBivTpZWOHSfZXlE7F1DwB2k22IMquhfKmYfwHvMBrRyqz3YanId0+VVQ3RWJc+JusrTYb3JlAU2YU9+3l4+RKbpzuQ5ay0Z0jDp9FtinvorZYaQLsbFJdvBQjoOFDwabOTwfWpWtKcBpAEeuO7X8lWMp6mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IOIYj5+V; arc=none smtp.client-ip=91.218.175.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790275586; c=relaxed/simple;
+	bh=ScGHLye2zEuhowdsmwp4hVzfmvVpf9HfRN7Uaj1wddg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VVq58X6J0X+AMjg3k658SHN9OKj8NZQ6k1bjjt6Dy2SNkyFN8nmduqfu2vI9/1jzFADp6Cv85Ouz8IUSZR1lqmC5JDSVWIFNbAGJFR1Yqlsm9VIHtSCxKxFaDvOxw8QD/zDVD6osOgKuujpWhH77tdMqnsZFJW39Uo8UVqLyUhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ahmLDt/b; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IOIYj5+V"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=91syfsU5GYx0rGSvaym71XNdT9fl8e/N6mWVzG2+jLQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790275560; v=1; x=1790880360;
- b=IOIYj5+VjsG9hUuYSnQhqlVYL/2iq+akA2W0bwrSeUSazTjLI/+WYRim3Ko5k6PxAi/HFseq
- Qmcl8gNMsI29I5ZSQtFR4dQ1kvOFDxPLF9eEIz4ttvhwcGvOl3uaubsA2DwYTnVDqky5mdy2AQZ
- pZUUyHwQ6RbIr7DV2TjHJW20=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 69da63fa5bdfc846;
-	Thu, 24 Sep 2026 18:46:00 +0000
-X-Mizu-Trace-ID: 69da63fa5bdfc846
-X-Migadu-Flow: FLOW_OUT
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Peter Zijlstra <peterz@infradead.org>
-Cc: =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	David Dai <david.dai@linux.dev>,
-	JP Kobryn <jp.kobryn@linux.dev>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Aaron Lu <ziqianlu@bytedance.com>,
-	Daniel Jordan <daniel.m.jordan@oracle.com>,
-	Hao Lee <haolee.swjtu@gmail.com>,
-	cgroups@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 0/7] cgroup: charge kernel work to the cgroup it is done for
-Date: Thu, 24 Sep 2026 11:45:21 -0700
-Message-ID: <20260924184529.879516-1-shakeel.butt@linux.dev>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ahmLDt/b"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 126301F000FF;
+	Thu, 24 Sep 2026 18:46:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790275576;
+	bh=tPEaLdlky2k48YUEkKC0bzKTctmPi/mix6L9SaSLvTw=;
+	h=From:To:Cc:Subject:Date;
+	b=ahmLDt/bU6s0+/Kcha7Ry0am/zS8DEHdyUcp2daCf8brW9JFZkOobSvdy77MexJVU
+	 1vAMIsysbhzEJJ8Xrkbbrg+QuvYfAlOHYM5hFPAH2gDjrVbvoSp71seMBSUfVgut9d
+	 QnZfJjIHqg71Kf2cAOTIii5mzGG/t8lrg0OCxUVsJ4fCX2oJEbGTKiDFxHxDJ5s5LI
+	 HCYLFVn7gOKnruQEnv6YzH7exl4chc9H6MaihxZvWI8Ro7RSYDJNqh3tgQF8Qi6R1G
+	 DZsMwFZ6Xvkq+6dnqmKzlz/I5JHg0wSH7u9Q72SnaUfGyzb1UPKi1j1wQTZH5UYpBJ
+	 nZeIUsFXaCRDw==
+From: Eric Biggers <ebiggers@kernel.org>
+To: bpf@vger.kernel.org,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Karl Mehltretter <kmehltretter@gmail.com>,
+	Eric Biggers <ebiggers@kernel.org>
+Subject: [PATCH bpf-next v5] bpf: crypto: Use AES-CBC and AES-ECB libraries
+Date: Thu, 24 Sep 2026 11:42:54 -0700
+Message-ID: <20260924184254.142720-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -71,360 +56,718 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Sometimes a kernel thread does work for a cgroup. The CPU time of that
-work is charged to the thread's own cgroup, which is usually the root.
-The cgroup that caused the work never sees it, and never pays for it.
-
-This series lets a kernel thread say which cgroup it is working for.
-That cgroup then sees the CPU time in its cpu.stat and the stalls in
-its memory.pressure, and the CPU time comes out of its cpu.max quota.
-The first user is the memcg reclaim that runs from high_work.
-
-
-The problem
-===========
-
-When a memcg goes over memory.high, the task that charged the memory
-is made to reclaim on its way back to user space. That does not work
-when the charge happens in IRQ context, because the interrupted task
-may have nothing to do with the memcg. For that case the kernel
-queues memcg->high_work, and a kworker does the reclaim later.
-
-The kworker runs in the root cgroup. So for that reclaim:
- - its CPU time does not show up in the memcg's cpu.stat;
- - its reclaim work does not show up in the memcg's memory.pressure;
- - its CPU time does not count against the memcg's cpu.max limit;
- - the rest of the system sees it as system overhead.
-
-It is one case of a wider gap. For memory, a kernel thread can charge
-an allocation to another memcg with set_active_memcg(). For IO there
-is kthread_associate_blkcg(). For CPU time and pressure there is
-nothing like it. And a kworker cannot just be moved into the cgroup:
-kworkers are bound kthreads (PF_NO_SETAFFINITY), and cgroup refuses to
-move those.
-
-For our lock isolation work [5, 6], we plan to use async reclaim more
-extensively, not just for charge requests from IRQ context, and thus
-we want to make the CPU accounting of this work accurate.
-
-
-Earlier attempts
-================
-
-This has come up before, with memory reclaim as one of the main
-examples.
-
-In 2019, Daniel Jordan posted "cgroup-aware unbound workqueues" [1].
-It moved the worker into the work item's cgroup before running it, and
-back to the root after. A move took about 1 us, but every move takes
-cgroup_mutex and cgroup_threadgroup_rwsem, so moves cannot run in
-parallel. The workers also showed up in cgroup.procs and blocked
-rmdir, and cpuset did not work. It was not merged. In his reply [2],
-Tejun said the direction for memory and IO is "remote charging, where
-a kthread explicitly says who the specific io or allocation is for",
-along with back-charging, and that "CPU doesn't have a backcharging
-mechanism yet".
-
-In 2021, Hao Lee asked for remote charging of CPU time [3]. His case
-is ours: memcg reclaim from a workqueue "will steal cpu time from the
-system level, which breaks the resource isolation". Tejun agreed [4]
-that something like this is needed for CPU time spent in common code
-for a specific cgroup, "e.g. memory reclaim, net packet rx", and said
-he knew of no patches for it. Daniel said he was working on one.
-Nothing has been merged since.
-
-
-Options we looked at
-====================
-
-A. Keep the shared kworker, and only charge the cgroup.
-
-  A1. Measure how long the reclaim ran, then charge that time to the
-      memcg's cgroup.
-
-  A2. Let the kworker say "charge this cgroup" while it works, the
-      same way set_active_memcg() works for memory.
-
-B. Also make the cgroup's CPU limits apply.
-
-  B1. Run the kworker in the cgroup's scheduling group while it works,
-      so cpu.weight and cpu.max apply to it.
-
-  B2. Run the reclaim at full speed, then take its CPU time out of the
-      cgroup's cpu.max quota afterwards (back-charging).
-
-C. Do the reclaim inside the cgroup.
-
-  C1. Record the overage as a debt on the memcg, and let the memcg's
-      own tasks pay it the next time they charge memory or return to
-      user space.
-
-  C2. Give each memcg its own reclaim thread that lives in the cgroup.
-
-  C3. Use a cgroup-aware workqueue, as in [1], or per-cgroup worker
-      pools.
-
-
-What we chose and why
-=====================
-
-We chose A2, together with B2 for cpu.max.
-
-We do not throttle the reclaim itself. Adding limits to it is more
-complicated and most probably unneeded, as we envision that we will
-need concurrent background reclaimers instead of throttling in a
-real-world environment. We are working on developing a system to
-balance the rate of allocations/charges with the rate of reclaim, to
-keep the system always running effectively.
-
-In addition, reclaim takes sleeping locks, like i_mmap_rwsem and the
-anon_vma lock in rmap walks, and fs locks in shrinkers. With a low
-cgroup weight, the kworker can be preempted while it holds them, and
-then tasks in other cgroups wait on it. It also hurts the workqueue. A
-kworker that is runnable but not running still counts as running, and
-the workqueue only spots CPU hogs by the CPU time they use. So other
-work queued on that CPU's system_wq waits too.
-
-Still, the reclaim should not be free CPU time on top of the cgroup's
-limit. With A2 alone, the reclaim shows up in cpu.stat, but the
-cgroup's own tasks still get their full cpu.max quota. B2 fixes that
-without slowing the reclaim down. The kworker runs at full speed, and
-afterwards its time is taken out of the cgroup's cpu.max quota, so the
-cgroup's own tasks get less CPU time instead. This is the
-back-charging Tejun described [2]. It only covers cpu.max.
-Back-charging cpu.weight is future work.
-
-We did not take C2 or C3. A high_work run asks for only 64 pages,
-which is far too little to pay for moving a thread into a cgroup
-through the global cgroup locks. A thread per memcg means thousands of
-threads. cgroup v2 does not allow tasks in a non-leaf domain cgroup.
-And a kernel thread in a cgroup shows up in cgroup.procs and blocks
-rmdir.
-
-C1 changes behaviour. memory.high would start slowing tasks down for
-socket memory that arrived in softirq, and it would still need a
-fallback for when no task in the memcg runs. That deserves its own
-discussion.
-
-Between A1 and A2: A1 is a few lines and easy to backport, but it only
-fixes cpu.stat, it charges the time in one lump at the end, and it
-only helps this one user. A2 charges the time as it is used, PSI can
-follow it, and any kernel thread that works for a cgroup can use it.
-
-
-How it works
-============
-
-task_struct gets an active_cgroup pointer. set_active_cgroup() sets it
-and returns the old value, which the caller puts back when done:
-
-	old = set_active_cgroup(memcg->css.cgroup);
-	reclaim_high(memcg, MEMCG_CHARGE_BATCH, GFP_KERNEL);
-	set_active_cgroup(old);
-
-Three important details:
-
- - Before switching, set_active_cgroup() charges the time used so far
-   to the old target, under the task's rq lock. A high_work run is
-   often shorter than a tick. Without this, its time goes to whatever
-   is set the next time the scheduler adds up run time, which is
-   usually root again.
-
- - Code run under set_active_cgroup() is always kernel code. So its
-   time is charged as system time right away, and the tick and vtime
-   paths skip it. Without this, on nohz_full CPUs vtime posts kernel
-   time late, after the old value is back, and system_usec comes out
-   as 0. Forced idle time from core scheduling comes through the same
-   path. It is not run time, so it goes to the active cgroup there.
-
- - PSI follows active_cgroup too. When it changes, the task's pressure
-   state moves from the old groups to the new ones under the same rq
-   lock, the same way cgroup_move_task() does for a real move.
-
-For cpu.max, set_active_cgroup() also notes the task's run time at
-each switch. When it switches away from a cgroup, it passes the time
-used under that cgroup to cfs_bandwidth_charge():
-
- - The time is taken from the cpu.max pool of the cgroup and of each
-   ancestor that has a limit. These are the same pools the cgroup's
-   own tasks draw from.
-
- - The kworker is never throttled, because the work has already run.
-   If a pool runs dry, the rest becomes debt, which is paid first out
-   of the next periods' quota. So the cgroup's own tasks get less CPU
-   time for a while.
-
- - The debt is capped at one period's quota, so one long piece of
-   work cannot starve the cgroup for long. Time over the cap still
-   shows up in cpu.stat. Writing cpu.max or cpu.max.burst clears the
-   debt.
-
- - If neither the cgroup nor any ancestor has a limit, it returns
-   right away.
-
-The caller must keep the cgroup alive until it puts back the old
-value. For high_work this holds: the memcg's css pins its cgroup, and
-high_work is cancelled in mem_cgroup_css_free(). If a task exits with
-active_cgroup still set, it gets a warning and the field is cleared.
-
-The caller must be in the root cgroup, as kworkers are. The scheduler
-still runs the caller in its own cgroup, so from any other cgroup the
-time would also be taken out of that cgroup's cpu.max, and on nohz_full
-CPUs vtime could post some system time to the wrong cgroup at a switch.
-For such a caller, set_active_cgroup() warns and does nothing.
-
-Which cgroup pays for high_work? The work belongs to the memcg that is
-over memory.high. A charge in IRQ context walks up from the charging
-memcg and queues the high_work of the first memcg it finds over
-memory.high. So if a child makes the charge but only its parent is
-over memory.high, the reclaim is charged to the parent: its cpu.stat,
-its memory.pressure, and the cpu.max of the parent and of each
-ancestor above it that has a limit. The child is not charged. Reclaim
-in task context is different: the charging task reclaims on its way
-back to user space, so the child and every ancestor above it are
-charged.
-
-
-The patches
-===========
-
-  1: A helper that charges kernel CPU time to a cgroup.
-  2: set_active_cgroup().
-  3: PSI following it.
-  4: A helper that takes kernel CPU time out of a cgroup's cpu.max.
-  5: set_active_cgroup() using it.
-  6: high_work using set_active_cgroup().
-  7: Selftests for high_work.
-
-
-Testing
-=======
-
- - End to end, with the setup above. Without the series, the memcg's
-   cpu.stat and memory.pressure did not move. With it, the memcg's
-   usage_usec matched the CPU time that high_work used, measured with
-   bpftrace, to within 1%, all of it as system time, also on nohz_full.
-   memory.pressure grew by the reclaim's stall time.
-
- - A test module that calls set_active_cgroup() directly. The charge
-   matches the CPU time used to within 20 us in runs of 200 to 500 ms.
-   It also covers nesting, use from a user task in the root cgroup,
-   over 30,000 switches while userspace moves the thread between
-   cgroups, a task that exits without putting the old value back, and
-   rmdir of a cgroup that is still in use. A caller outside the root
-   cgroup gets one warning, and its time stays with its own cgroup. It
-   passes on normal, psi=0, cgroup_disable=pressure, nohz_full,
-   lockdep+KASAN+UBSAN and KCSAN kernels. No pressure state is left
-   behind, and KCSAN reports nothing in the new code.
-
- - Forced idle, on a core scheduling kernel with SMT siblings. The
-   module burns 500 ms under set_active_cgroup() next to a busy loop
-   with a different core scheduling cookie, so each forces the other's
-   CPU idle. The active cgroup's core_sched.force_idle_usec grows by
-   exactly the forced idle time charged to the module's thread, about
-   250 ms per run.
-
- - The same module against cpu.max, with a CPU hog in a cgroup whose
-   cpu.max is "20000 100000":
-    - 100 pieces of 2 ms of work for the cgroup cost the hog 214 to
-      233 ms of CPU time for 199 ms of work. The same holds with the
-      limit on the parent and the hog in a sibling cgroup.
-    - Five 300 ms pieces cost the hog 89 to 104 ms, about five
-      periods' quota. When cpu.max is written after each piece, the
-      debt is cleared and the hog loses nothing.
-    - Without a limit, the hog loses nothing.
-    - rmdir of a cgroup that has debt works.
-   It passes on normal, lockdep+KASAN+UBSAN and KCSAN kernels.
-
- - A caller inside a limited cgroup, doing 200 ms of work for that same
-   cgroup. set_active_cgroup() refuses it, so the work is charged once:
-   a hog there loses 227 to 233 ms, the same as when the caller does
-   not use set_active_cgroup() at all (211 to 232 ms). Without the
-   root cgroup rule, it loses 412 to 423 ms, as the time is charged
-   twice.
-
- - A stress test that creates, fills, kills and removes memcgs while
-   high_work runs, with and without cpu.max limits on the memcgs and
-   their parent, on normal and debug kernels. With limits, each run
-   takes 4 to 5 seconds of high_work time out of cpu.max, in about
-   2,100 pieces. All the dying memcgs get freed within 2 seconds.
-
- - The two new selftests. Without the series, the first fails and the
-   second skips, because no reclaim time shows up at all. With only
-   patches 1-3 and 6, the second fails. With the whole series, both
-   pass, on normal and debug kernels.
-
- - Every patch builds, with and without cgroups, and with core
-   scheduling. The whole series builds cleanly without PSI, without
-   memcg, without cgroups, without CFS bandwidth control, without
-   CGROUP_SCHED, on UP, with PREEMPT_RT, with SCHED_CORE, with
-   nohz_full, on i386, with clang, on arm64, with allmodconfig, and
-   with W=1 on the touched files.
-
- - No measurable change in perf bench sched pipe or messaging. The hot
-   path gains one load and one branch.
-
-
-Open questions
-==============
-
- - When the memcg's own tasks are idle, the kworker is its only busy
-   member while it reclaims. So memory.pressure "full" equals "some"
-   for that time. Is that what we want? Tools like oomd will see it.
-
- - Is set_active_cgroup() the right name and place? It is limited to
-   callers in the root cgroup. Other callers would need the vtime state
-   split at each switch, and their own cpu.max left alone while the
-   override is set. Is that worth doing?
-
- - Is one period's quota the right cap for the cpu.max debt? A larger
-   cap makes the cgroup pay for more of a long run, but can stall its
-   tasks for longer.
-
- - Should high_work charge the memcg that made the charge instead, as
-   reclaim in task context does? That would mean queuing the charging
-   memcg's own high_work, so several children of an over-high parent
-   could reclaim at the same time, instead of one shared work item.
-
- - Other kernel threads that work for one cgroup could use
-   set_active_cgroup() too. Network receive itself is harder, because
-   the cgroup is only known after the work starts, as Daniel pointed
-   out in the thread at [3].
-
-
-[1] https://lore.kernel.org/20190605133650.28545-1-daniel.m.jordan@oracle.com/
-[2] https://lore.kernel.org/20190605135319.GK374014@devbig004.ftw2.facebook.com/
-[3] https://lore.kernel.org/60decdb6.1c69fb81.6130e.7642@mx.google.com/
-[4] https://lore.kernel.org/YN+Sne76dhKBzV%2FR@mtj.duckdns.org/
-[5] https://lore.kernel.org/20260921192559.2619635-1-shakeel.butt@linux.dev/
-[6] https://lore.kernel.org/20260924155025.949998-1-shakeel.butt@linux.dev/
-
-Shakeel Butt (7):
-  cgroup: add cgroup_account_system_time()
-  cgroup: add set_active_cgroup() to charge CPU time to a cgroup
-  psi: charge pressure to the task's active cgroup
-  sched/fair: add cfs_bandwidth_charge() for kernel work done for a
-    cgroup
-  cgroup: take set_active_cgroup() time out of the cgroup's cpu.max
-  memcg: charge high_work reclaim to the memcg
-  selftests: cgroup: check that high_work reclaim is charged to the
-    memcg
-
- include/linux/cgroup.h                        |  39 ++
- include/linux/sched.h                         |   4 +
- kernel/cgroup/cgroup.c                        |   4 +
- kernel/fork.c                                 |   4 +
- kernel/sched/core.c                           |  52 +++
- kernel/sched/fair.c                           |  43 +++
- kernel/sched/psi.c                            |  22 +-
- kernel/sched/sched.h                          |   8 +
- kernel/sched/stats.h                          |  10 +
- mm/memcontrol.c                               |   5 +
- .../selftests/cgroup/test_memcontrol.c        | 332 ++++++++++++++++++
- 11 files changed, 522 insertions(+), 1 deletion(-)
-
-
-base-commit: a8c591ed6b672915e0be57843f943a2a723aff40
+BPF crypto was implemented using the lskcipher API, which doesn't seem
+to be going anywhere.  lskcipher supports only ARC4 and block ciphers in
+CBC and ECB mode, and only with unoptimized implementations.
+
+Library APIs also have been found to be a much better approach, for a
+variety of reasons, including reduced overhead, greater flexibility, and
+having to be explicit about the crypto algorithms that are supported.
+
+We can safely ignore the theoretical ARC4 and non-AES block cipher
+support in BPF crypto as unused, which leaves AES-CBC and AES-ECB.
+AES-CBC was stated to be needed for decrypting packets using a homebrew
+UDP-based protocol
+(https://lore.kernel.org/r/d1cdfc23-b336-49a9-8833-29f05b5b9fec@linux.dev/).
+AES-ECB is used by the BPF self-tests, and it was stated to maybe be
+used in the future for QUIC-LB
+(https://lore.kernel.org/r/5f9c3aab-5339-463c-a86d-edac297e1e95@linux.dev/).
+
+Those reasons don't make much sense either, especially AES-ECB which
+isn't appropriate in new systems and should be dropped.  Regardless,
+let's assume that both AES-CBC and AES-ECB need to be kept for now.
+
+There are library APIs for both of these now, which are much easier to
+use and more efficient.  Reimplement BPF crypto on top of them, greatly
+simplifying the code.  As part of this, the bpf_crypto_type abstraction
+layer is removed, as it's not useful.
+
+This removes the only user of the lskcipher API, so follow-up patches
+will be able to remove that code as well.
+
+Signed-off-by: Eric Biggers <ebiggers@kernel.org>
+---
+
+Changed in v5:
+    - Go back to v1's approach of using 'select' statements to select
+      the library code, as requested by Alexei at
+      https://lore.kernel.org/bpf/DLN6PUF2FMLF.NU2U8L9V0XWH@gmail.com/
+    - Put aes_key at beginning of struct to address bot bikeshedding
+    - Rebase onto latest bpf-next
+
+Changed in v4:
+    - Switch back to the embedded struct used in v1 and v2.
+
+Changed in v3:
+    - Update the #ifdef in kernel/bpf/verifier.c.
+    - Store the key behind a void pointer so that BPF programs can't
+      read it via BTF, as requested by the bpf-ci AI review.
+    - Update the selftests kconfig.
+    - Use WARN_ON_ONCE instead of WARN_ON.
+
+Changed in v2:
+    - Use 'depends on' instead of 'select', to match the usual
+      convention for bpf kfuncs.
+    - Keep using EOPNOTSUPP for unsupported algorithms.
+    - Avoid reading *err_ret after it's been written.
+    - Clarify that non-AES block ciphers are dropped too.
+    - Mention that lskcipher will be deleted later.
+    - Update a comment.
+
+ MAINTAINERS                        |   2 -
+ crypto/Makefile                    |   3 -
+ crypto/bpf_crypto_skcipher.c       |  83 ---------
+ include/linux/bpf_crypto.h         |  24 ---
+ kernel/bpf/Kconfig                 |   9 +
+ kernel/bpf/Makefile                |   4 +-
+ kernel/bpf/crypto.c                | 288 +++++++++++++----------------
+ kernel/bpf/verifier.c              |   2 +-
+ tools/testing/selftests/bpf/config |   2 +-
+ 9 files changed, 136 insertions(+), 281 deletions(-)
+ delete mode 100644 crypto/bpf_crypto_skcipher.c
+ delete mode 100644 include/linux/bpf_crypto.h
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 140eafcbbd78..cf806c2b788e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4936,8 +4936,6 @@ BPF [CRYPTO]
+ M:	Vadim Fedorenko <vadim.fedorenko@linux.dev>
+ L:	bpf@vger.kernel.org
+ S:	Maintained
+-F:	crypto/bpf_crypto_skcipher.c
+-F:	include/linux/bpf_crypto.h
+ F:	kernel/bpf/crypto.c
+ 
+ BPF [DOCUMENTATION] (Related to Standardization)
+diff --git a/crypto/Makefile b/crypto/Makefile
+index 8386d55a9755..33bb5ad595e8 100644
+--- a/crypto/Makefile
++++ b/crypto/Makefile
+@@ -22,9 +22,6 @@ crypto_skcipher-y += lskcipher.o
+ crypto_skcipher-y += skcipher.o
+ 
+ obj-$(CONFIG_CRYPTO_SKCIPHER2) += crypto_skcipher.o
+-ifeq ($(CONFIG_BPF_SYSCALL),y)
+-obj-$(CONFIG_CRYPTO_SKCIPHER2) += bpf_crypto_skcipher.o
+-endif
+ 
+ obj-$(CONFIG_CRYPTO_SEQIV) += seqiv.o
+ obj-$(CONFIG_CRYPTO_ECHAINIV) += echainiv.o
+diff --git a/crypto/bpf_crypto_skcipher.c b/crypto/bpf_crypto_skcipher.c
+deleted file mode 100644
+index a88798d3e8c8..000000000000
+--- a/crypto/bpf_crypto_skcipher.c
++++ /dev/null
+@@ -1,83 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/* Copyright (c) 2024 Meta, Inc */
+-#include <linux/types.h>
+-#include <linux/module.h>
+-#include <linux/bpf_crypto.h>
+-#include <crypto/skcipher.h>
+-
+-static void *bpf_crypto_lskcipher_alloc_tfm(const char *algo)
+-{
+-	return crypto_alloc_lskcipher(algo, 0, 0);
+-}
+-
+-static void bpf_crypto_lskcipher_free_tfm(void *tfm)
+-{
+-	crypto_free_lskcipher(tfm);
+-}
+-
+-static int bpf_crypto_lskcipher_has_algo(const char *algo)
+-{
+-	return crypto_has_skcipher(algo, CRYPTO_ALG_TYPE_LSKCIPHER, CRYPTO_ALG_TYPE_MASK);
+-}
+-
+-static int bpf_crypto_lskcipher_setkey(void *tfm, const u8 *key, unsigned int keylen)
+-{
+-	return crypto_lskcipher_setkey(tfm, key, keylen);
+-}
+-
+-static u32 bpf_crypto_lskcipher_get_flags(void *tfm)
+-{
+-	return crypto_lskcipher_get_flags(tfm);
+-}
+-
+-static unsigned int bpf_crypto_lskcipher_ivsize(void *tfm)
+-{
+-	return crypto_lskcipher_ivsize(tfm);
+-}
+-
+-static unsigned int bpf_crypto_lskcipher_statesize(void *tfm)
+-{
+-	return crypto_lskcipher_statesize(tfm);
+-}
+-
+-static int bpf_crypto_lskcipher_encrypt(void *tfm, const u8 *src, u8 *dst,
+-					unsigned int len, u8 *siv)
+-{
+-	return crypto_lskcipher_encrypt(tfm, src, dst, len, siv);
+-}
+-
+-static int bpf_crypto_lskcipher_decrypt(void *tfm, const u8 *src, u8 *dst,
+-					unsigned int len, u8 *siv)
+-{
+-	return crypto_lskcipher_decrypt(tfm, src, dst, len, siv);
+-}
+-
+-static const struct bpf_crypto_type bpf_crypto_lskcipher_type = {
+-	.alloc_tfm	= bpf_crypto_lskcipher_alloc_tfm,
+-	.free_tfm	= bpf_crypto_lskcipher_free_tfm,
+-	.has_algo	= bpf_crypto_lskcipher_has_algo,
+-	.setkey		= bpf_crypto_lskcipher_setkey,
+-	.encrypt	= bpf_crypto_lskcipher_encrypt,
+-	.decrypt	= bpf_crypto_lskcipher_decrypt,
+-	.ivsize		= bpf_crypto_lskcipher_ivsize,
+-	.statesize	= bpf_crypto_lskcipher_statesize,
+-	.get_flags	= bpf_crypto_lskcipher_get_flags,
+-	.owner		= THIS_MODULE,
+-	.name		= "skcipher",
+-};
+-
+-static int __init bpf_crypto_skcipher_init(void)
+-{
+-	return bpf_crypto_register_type(&bpf_crypto_lskcipher_type);
+-}
+-
+-static void __exit bpf_crypto_skcipher_exit(void)
+-{
+-	int err = bpf_crypto_unregister_type(&bpf_crypto_lskcipher_type);
+-	WARN_ON_ONCE(err);
+-}
+-
+-module_init(bpf_crypto_skcipher_init);
+-module_exit(bpf_crypto_skcipher_exit);
+-MODULE_LICENSE("GPL");
+-MODULE_DESCRIPTION("Symmetric key cipher support for BPF");
+diff --git a/include/linux/bpf_crypto.h b/include/linux/bpf_crypto.h
+deleted file mode 100644
+index a41e71d4e2d9..000000000000
+--- a/include/linux/bpf_crypto.h
++++ /dev/null
+@@ -1,24 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/* Copyright (c) 2024 Meta Platforms, Inc. and affiliates. */
+-#ifndef _BPF_CRYPTO_H
+-#define _BPF_CRYPTO_H
+-
+-struct bpf_crypto_type {
+-	void *(*alloc_tfm)(const char *algo);
+-	void (*free_tfm)(void *tfm);
+-	int (*has_algo)(const char *algo);
+-	int (*setkey)(void *tfm, const u8 *key, unsigned int keylen);
+-	int (*setauthsize)(void *tfm, unsigned int authsize);
+-	int (*encrypt)(void *tfm, const u8 *src, u8 *dst, unsigned int len, u8 *iv);
+-	int (*decrypt)(void *tfm, const u8 *src, u8 *dst, unsigned int len, u8 *iv);
+-	unsigned int (*ivsize)(void *tfm);
+-	unsigned int (*statesize)(void *tfm);
+-	u32 (*get_flags)(void *tfm);
+-	struct module *owner;
+-	char name[14];
+-};
+-
+-int bpf_crypto_register_type(const struct bpf_crypto_type *type);
+-int bpf_crypto_unregister_type(const struct bpf_crypto_type *type);
+-
+-#endif /* _BPF_CRYPTO_H */
+diff --git a/kernel/bpf/Kconfig b/kernel/bpf/Kconfig
+index d7d25477ef48..98493e32db2a 100644
+--- a/kernel/bpf/Kconfig
++++ b/kernel/bpf/Kconfig
+@@ -91,6 +91,15 @@ config BPF_UNPRIV_DEFAULT_OFF
+ 
+ 	  If you are unsure how to answer this question, answer Y.
+ 
++config BPF_CRYPTO
++	def_bool y
++	depends on BPF_SYSCALL
++	select CRYPTO_LIB_AES_CBC
++	select CRYPTO_LIB_AES_ECB
++	help
++	  Provide the kfuncs needed for BPF programs to encrypt and decrypt
++	  data. The supported algorithms are AES-CBC and AES-ECB.
++
+ source "kernel/bpf/preload/Kconfig"
+ 
+ config BPF_LSM
+diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
+index 9a92c348bbda..c1f9b0d3468d 100644
+--- a/kernel/bpf/Makefile
++++ b/kernel/bpf/Makefile
+@@ -58,9 +58,7 @@ obj-$(CONFIG_BPF_SYSCALL) += cpumask.o
+ # semantics within pahole are revisited accordingly.
+ obj-${CONFIG_BPF_LSM} += bpf_lsm_proto.o bpf_lsm.o
+ endif
+-ifneq ($(CONFIG_CRYPTO),)
+-obj-$(CONFIG_BPF_SYSCALL) += crypto.o
+-endif
++obj-$(CONFIG_BPF_CRYPTO) += crypto.o
+ obj-$(CONFIG_BPF_PRELOAD) += preload/
+ 
+ obj-$(CONFIG_BPF_SYSCALL) += relo_core.o
+diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
+index 3f3fe2450fc6..69bc29d0a4d4 100644
+--- a/kernel/bpf/crypto.c
++++ b/kernel/bpf/crypto.c
+@@ -1,19 +1,13 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /* Copyright (c) 2024 Meta, Inc */
+ #include <linux/bpf.h>
+-#include <linux/bpf_crypto.h>
+ #include <linux/bpf_mem_alloc.h>
+ #include <linux/btf.h>
+ #include <linux/btf_ids.h>
+ #include <linux/filter.h>
+-#include <linux/scatterlist.h>
+ #include <linux/skbuff.h>
+-#include <crypto/skcipher.h>
+-
+-struct bpf_crypto_type_list {
+-	const struct bpf_crypto_type *type;
+-	struct list_head list;
+-};
++#include <crypto/aes-cbc.h>
++#include <crypto/aes-ecb.h>
+ 
+ /* BPF crypto initialization parameters struct */
+ /**
+@@ -36,94 +30,53 @@ struct bpf_crypto_params {
+ 	u32 authsize;
+ };
+ 
+-static LIST_HEAD(bpf_crypto_types);
+-static DECLARE_RWSEM(bpf_crypto_types_sem);
++enum bpf_crypto_algo_id {
++	BPF_ALGO_AES_CBC,
++	BPF_ALGO_AES_ECB,
++};
++
++static const struct {
++	const char *type_name;
++	const char *algo_name;
++	enum bpf_crypto_algo_id algo;
++} bpf_crypto_algos[] = {
++	{ "skcipher", "cbc(aes)", BPF_ALGO_AES_CBC },
++	{ "skcipher", "ecb(aes)", BPF_ALGO_AES_ECB },
++};
++
++static bool bpf_crypto_find_algo(const struct bpf_crypto_params *params,
++				 enum bpf_crypto_algo_id *id_ret)
++{
++	for (size_t i = 0; i < ARRAY_SIZE(bpf_crypto_algos); i++) {
++		if (strncmp(bpf_crypto_algos[i].type_name, params->type,
++			    sizeof(params->type)) == 0 &&
++		    strncmp(bpf_crypto_algos[i].algo_name, params->algo,
++			    sizeof(params->algo)) == 0) {
++			*id_ret = bpf_crypto_algos[i].algo;
++			return true;
++		}
++	}
++	return false;
++}
+ 
+ /**
+  * struct bpf_crypto_ctx - refcounted BPF crypto context structure
+- * @type:	The pointer to bpf crypto type
+- * @tfm:	The pointer to instance of crypto API struct.
+- * @siv_len:    Size of IV and state storage for cipher
++ * @key:	The crypto key
++ * @algo:	The crypto algorithm ID
+  * @rcu:	The RCU head used to free the crypto context with RCU safety.
+  * @usage:	Object reference counter. When the refcount goes to 0, the
+  *		memory is released back to the BPF allocator, which provides
+  *		RCU safety.
+  */
+ struct bpf_crypto_ctx {
+-	const struct bpf_crypto_type *type;
+-	void *tfm;
+-	u32 siv_len;
++	union {
++		struct aes_key aes;
++	} key;
++	enum bpf_crypto_algo_id algo;
+ 	struct rcu_head rcu;
+ 	refcount_t usage;
+ };
+ 
+-int bpf_crypto_register_type(const struct bpf_crypto_type *type)
+-{
+-	struct bpf_crypto_type_list *node;
+-	int err = -EBUSY;
+-
+-	down_write(&bpf_crypto_types_sem);
+-	list_for_each_entry(node, &bpf_crypto_types, list) {
+-		if (!strcmp(node->type->name, type->name))
+-			goto unlock;
+-	}
+-
+-	node = kmalloc_obj(*node);
+-	err = -ENOMEM;
+-	if (!node)
+-		goto unlock;
+-
+-	node->type = type;
+-	list_add(&node->list, &bpf_crypto_types);
+-	err = 0;
+-
+-unlock:
+-	up_write(&bpf_crypto_types_sem);
+-
+-	return err;
+-}
+-EXPORT_SYMBOL_GPL(bpf_crypto_register_type);
+-
+-int bpf_crypto_unregister_type(const struct bpf_crypto_type *type)
+-{
+-	struct bpf_crypto_type_list *node;
+-	int err = -ENOENT;
+-
+-	down_write(&bpf_crypto_types_sem);
+-	list_for_each_entry(node, &bpf_crypto_types, list) {
+-		if (strcmp(node->type->name, type->name))
+-			continue;
+-
+-		list_del(&node->list);
+-		kfree(node);
+-		err = 0;
+-		break;
+-	}
+-	up_write(&bpf_crypto_types_sem);
+-
+-	return err;
+-}
+-EXPORT_SYMBOL_GPL(bpf_crypto_unregister_type);
+-
+-static const struct bpf_crypto_type *bpf_crypto_get_type(const char *name)
+-{
+-	const struct bpf_crypto_type *type = ERR_PTR(-ENOENT);
+-	struct bpf_crypto_type_list *node;
+-
+-	down_read(&bpf_crypto_types_sem);
+-	list_for_each_entry(node, &bpf_crypto_types, list) {
+-		if (strcmp(node->type->name, name))
+-			continue;
+-
+-		if (try_module_get(node->type->owner))
+-			type = node->type;
+-		break;
+-	}
+-	up_read(&bpf_crypto_types_sem);
+-
+-	return type;
+-}
+-
+ __bpf_kfunc_start_defs();
+ 
+ /**
+@@ -132,93 +85,70 @@ __bpf_kfunc_start_defs();
+  * Allocates a crypto context that can be used, acquired, and released by
+  * a BPF program. The crypto context returned by this function must either
+  * be embedded in a map as a kptr, or freed with bpf_crypto_ctx_release().
+- * As crypto API functions use GFP_KERNEL allocations, this function can
+- * only be used in sleepable BPF programs.
++ * As this uses a GFP_KERNEL allocation, this function can only be used in
++ * sleepable BPF programs.
+  *
+  * bpf_crypto_ctx_create() allocates memory for crypto context.
+  * It may return NULL if no memory is available.
+  * @params:	pointer to struct bpf_crypto_params which contains all the
+  *		details needed to initialise crypto context.
+- * @params__sz:	size of steuct bpf_crypto_params usef by bpf program
+- * @err:	integer to store error code when NULL is returned.
++ * @params__sz:	size of struct bpf_crypto_params used by bpf program
++ * @err_ret:	integer to store error code when NULL is returned.
+  */
+ __bpf_kfunc struct bpf_crypto_ctx *
+ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+-		      int *err)
++		      int *err_ret)
+ {
+-	const struct bpf_crypto_type *type;
+ 	struct bpf_crypto_ctx *ctx;
++	int err;
+ 
+ 	if (!params ||
+ 	    params__sz != sizeof(struct bpf_crypto_params) ||
+ 	    params->reserved[0] || params->reserved[1]) {
+-		*err = -EINVAL;
++		*err_ret = -EINVAL;
+ 		return NULL;
+ 	}
+ 
+-	type = bpf_crypto_get_type(params->type);
+-	if (IS_ERR(type)) {
+-		*err = PTR_ERR(type);
+-		return NULL;
+-	}
+-
+-	if (!type->has_algo(params->algo)) {
+-		*err = -EOPNOTSUPP;
+-		goto err_module_put;
+-	}
+-
+-	if (!!params->authsize ^ !!type->setauthsize) {
+-		*err = -EOPNOTSUPP;
+-		goto err_module_put;
+-	}
+-
+ 	if (!params->key_len || params->key_len > sizeof(params->key)) {
+-		*err = -EINVAL;
+-		goto err_module_put;
++		*err_ret = -EINVAL;
++		return NULL;
+ 	}
+ 
+ 	ctx = kzalloc_obj(*ctx);
+ 	if (!ctx) {
+-		*err = -ENOMEM;
+-		goto err_module_put;
++		*err_ret = -ENOMEM;
++		return NULL;
+ 	}
+ 
+-	ctx->type = type;
+-	ctx->tfm = type->alloc_tfm(params->algo);
+-	if (IS_ERR(ctx->tfm)) {
+-		*err = PTR_ERR(ctx->tfm);
+-		goto err_free_ctx;
++	if (!bpf_crypto_find_algo(params, &ctx->algo)) {
++		err = -EOPNOTSUPP;
++		goto out;
+ 	}
+ 
+-	if (params->authsize) {
+-		*err = type->setauthsize(ctx->tfm, params->authsize);
+-		if (*err)
+-			goto err_free_tfm;
++	switch (ctx->algo) {
++	case BPF_ALGO_AES_CBC:
++	case BPF_ALGO_AES_ECB:
++		if (params->authsize)
++			err = -EOPNOTSUPP;
++		else
++			err = aes_preparekey(&ctx->key.aes, params->key,
++					     params->key_len);
++		break;
++	default:
++		WARN_ON_ONCE(1);
++		err = -EOPNOTSUPP;
++		break;
+ 	}
+ 
+-	*err = type->setkey(ctx->tfm, params->key, params->key_len);
+-	if (*err)
+-		goto err_free_tfm;
+-
+-	if (type->get_flags(ctx->tfm) & CRYPTO_TFM_NEED_KEY) {
+-		*err = -EINVAL;
+-		goto err_free_tfm;
++out:
++	if (err) {
++		kfree_sensitive(ctx);
++		*err_ret = err;
++		return NULL;
+ 	}
+-
+-	ctx->siv_len = type->ivsize(ctx->tfm) + type->statesize(ctx->tfm);
+-
+ 	refcount_set(&ctx->usage, 1);
+-
++	*err_ret = 0;
+ 	return ctx;
+-
+-err_free_tfm:
+-	type->free_tfm(ctx->tfm);
+-err_free_ctx:
+-	kfree(ctx);
+-err_module_put:
+-	module_put(type->owner);
+-
+-	return NULL;
+ }
+ 
+ static void crypto_free_cb(struct rcu_head *head)
+@@ -226,9 +156,7 @@ static void crypto_free_cb(struct rcu_head *head)
+ 	struct bpf_crypto_ctx *ctx;
+ 
+ 	ctx = container_of(head, struct bpf_crypto_ctx, rcu);
+-	ctx->type->free_tfm(ctx->tfm);
+-	module_put(ctx->type->owner);
+-	kfree(ctx);
++	kfree_sensitive(ctx);
+ }
+ 
+ /**
+@@ -268,27 +196,53 @@ __bpf_kfunc void bpf_crypto_ctx_release_dtor(void *ctx)
+ }
+ CFI_NOSEAL(bpf_crypto_ctx_release_dtor);
+ 
++static int bpf_aes_cbc_crypt(u8 *dst, u32 dst_len, const u8 *src, u32 src_len,
++			     u8 *iv, u32 iv_len,
++			     const struct bpf_crypto_ctx *ctx, bool decrypt)
++{
++	if (iv_len != AES_BLOCK_SIZE)
++		return -EINVAL;
++	if (src_len % AES_BLOCK_SIZE || dst_len < src_len)
++		return -EINVAL;
++	if (decrypt)
++		aes_cbc_decrypt(dst, src, src_len, iv, &ctx->key.aes);
++	else
++		aes_cbc_encrypt(dst, src, src_len, iv, &ctx->key.aes);
++	return 0;
++}
++
++static int bpf_aes_ecb_crypt(u8 *dst, u32 dst_len, const u8 *src, u32 src_len,
++			     u8 *iv, u32 iv_len,
++			     const struct bpf_crypto_ctx *ctx, bool decrypt)
++{
++	if (iv_len != 0)
++		return -EINVAL;
++	if (src_len % AES_BLOCK_SIZE || dst_len < src_len)
++		return -EINVAL;
++	if (decrypt)
++		aes_ecb_decrypt(dst, src, src_len, &ctx->key.aes);
++	else
++		aes_ecb_encrypt(dst, src, src_len, &ctx->key.aes);
++	return 0;
++}
++
+ static int bpf_crypto_crypt(const struct bpf_crypto_ctx *ctx,
+ 			    const struct bpf_dynptr_kern *src,
+ 			    const struct bpf_dynptr_kern *dst,
+-			    const struct bpf_dynptr_kern *siv,
++			    const struct bpf_dynptr_kern *iv,
+ 			    bool decrypt)
+ {
+-	u32 src_len, dst_len, siv_len;
++	u32 src_len, dst_len, iv_len;
+ 	const u8 *psrc;
+ 	u8 *pdst, *piv;
+-	int err;
+ 
+ 	if (__bpf_dynptr_is_rdonly(dst))
+ 		return -EINVAL;
+ 
+-	siv_len = siv ? __bpf_dynptr_size(siv) : 0;
++	iv_len = iv ? __bpf_dynptr_size(iv) : 0;
+ 	src_len = __bpf_dynptr_size(src);
+ 	dst_len = __bpf_dynptr_size(dst);
+-	if (!src_len || !dst_len || src_len > dst_len)
+-		return -EINVAL;
+-
+-	if (siv_len != ctx->siv_len)
++	if (!src_len || !dst_len)
+ 		return -EINVAL;
+ 
+ 	psrc = __bpf_dynptr_data(src, src_len);
+@@ -298,14 +252,20 @@ static int bpf_crypto_crypt(const struct bpf_crypto_ctx *ctx,
+ 	if (!pdst)
+ 		return -EINVAL;
+ 
+-	piv = siv_len ? __bpf_dynptr_data_rw(siv, siv_len) : NULL;
+-	if (siv_len && !piv)
++	piv = iv_len ? __bpf_dynptr_data_rw(iv, iv_len) : NULL;
++	if (iv_len && !piv)
+ 		return -EINVAL;
+ 
+-	err = decrypt ? ctx->type->decrypt(ctx->tfm, psrc, pdst, src_len, piv)
+-		      : ctx->type->encrypt(ctx->tfm, psrc, pdst, src_len, piv);
+-
+-	return err;
++	switch (ctx->algo) {
++	case BPF_ALGO_AES_CBC:
++		return bpf_aes_cbc_crypt(pdst, dst_len, psrc, src_len, piv,
++					 iv_len, ctx, decrypt);
++	case BPF_ALGO_AES_ECB:
++		return bpf_aes_ecb_crypt(pdst, dst_len, psrc, src_len, piv,
++					 iv_len, ctx, decrypt);
++	default:
++		return -EINVAL;
++	}
+ }
+ 
+ /**
+@@ -313,20 +273,20 @@ static int bpf_crypto_crypt(const struct bpf_crypto_ctx *ctx,
+  * @ctx:		The crypto context being used. The ctx must be a trusted pointer.
+  * @src:		bpf_dynptr to the encrypted data. Must be a trusted pointer.
+  * @dst:		bpf_dynptr to the buffer where to store the result. Must be a trusted pointer.
+- * @siv__nullable:	bpf_dynptr to IV data and state data to be used by decryptor. May be NULL.
++ * @iv__nullable:	bpf_dynptr to the initialization vector. May be NULL.
+  *
+  * Decrypts provided buffer using IV data and the crypto context. Crypto context must be configured.
+  */
+ __bpf_kfunc int bpf_crypto_decrypt(struct bpf_crypto_ctx *ctx,
+ 				   const struct bpf_dynptr *src,
+ 				   const struct bpf_dynptr *dst,
+-				   const struct bpf_dynptr *siv__nullable)
++				   const struct bpf_dynptr *iv__nullable)
+ {
+ 	const struct bpf_dynptr_kern *src_kern = (struct bpf_dynptr_kern *)src;
+ 	const struct bpf_dynptr_kern *dst_kern = (struct bpf_dynptr_kern *)dst;
+-	const struct bpf_dynptr_kern *siv_kern = (struct bpf_dynptr_kern *)siv__nullable;
++	const struct bpf_dynptr_kern *iv_kern = (struct bpf_dynptr_kern *)iv__nullable;
+ 
+-	return bpf_crypto_crypt(ctx, src_kern, dst_kern, siv_kern, true);
++	return bpf_crypto_crypt(ctx, src_kern, dst_kern, iv_kern, true);
+ }
+ 
+ /**
+@@ -334,20 +294,20 @@ __bpf_kfunc int bpf_crypto_decrypt(struct bpf_crypto_ctx *ctx,
+  * @ctx:		The crypto context being used. The ctx must be a trusted pointer.
+  * @src:		bpf_dynptr to the plain data. Must be a trusted pointer.
+  * @dst:		bpf_dynptr to the buffer where to store the result. Must be a trusted pointer.
+- * @siv__nullable:	bpf_dynptr to IV data and state data to be used by decryptor. May be NULL.
++ * @iv__nullable:	bpf_dynptr to the initialization vector. May be NULL.
+  *
+  * Encrypts provided buffer using IV data and the crypto context. Crypto context must be configured.
+  */
+ __bpf_kfunc int bpf_crypto_encrypt(struct bpf_crypto_ctx *ctx,
+ 				   const struct bpf_dynptr *src,
+ 				   const struct bpf_dynptr *dst,
+-				   const struct bpf_dynptr *siv__nullable)
++				   const struct bpf_dynptr *iv__nullable)
+ {
+ 	const struct bpf_dynptr_kern *src_kern = (struct bpf_dynptr_kern *)src;
+ 	const struct bpf_dynptr_kern *dst_kern = (struct bpf_dynptr_kern *)dst;
+-	const struct bpf_dynptr_kern *siv_kern = (struct bpf_dynptr_kern *)siv__nullable;
++	const struct bpf_dynptr_kern *iv_kern = (struct bpf_dynptr_kern *)iv__nullable;
+ 
+-	return bpf_crypto_crypt(ctx, src_kern, dst_kern, siv_kern, false);
++	return bpf_crypto_crypt(ctx, src_kern, dst_kern, iv_kern, false);
+ }
+ 
+ __bpf_kfunc_end_defs();
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 865b6c6eb8dd..4077c88d9525 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4742,7 +4742,7 @@ BTF_ID(struct, cgroup)
+ BTF_ID(struct, bpf_cpumask)
+ #endif
+ BTF_ID(struct, task_struct)
+-#ifdef CONFIG_CRYPTO
++#ifdef CONFIG_BPF_CRYPTO
+ BTF_ID(struct, bpf_crypto_ctx)
+ #endif
+ #ifdef CONFIG_INET
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index d292cb60a5a4..2b883b388f90 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -18,7 +18,7 @@ CONFIG_CRYPTO_SHA512=y
+ CONFIG_CRYPTO_USER_API=y
+ CONFIG_CRYPTO_USER_API_HASH=y
+ CONFIG_CRYPTO_USER_API_SKCIPHER=y
+-CONFIG_CRYPTO_SKCIPHER=y
++CONFIG_CRYPTO_CBC=y
+ CONFIG_CRYPTO_ECB=y
+ CONFIG_CRYPTO_AES=y
+ CONFIG_DEBUG_INFO=y
+
+base-commit: ce5cbbef271efd5968e8027ffefddb3246e9bc29
 -- 
-2.53.0-Meta
+2.55.0
 
