@@ -1,216 +1,125 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491D63AD50F
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 11:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F2F646E01D
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 11:23:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790248542; cv=none; b=BdRmJqIphGboDhHzgFaE2im1/M5Htw6GeFzJ7k0ATaVUm3aLPlfPwYf2vNO7UDzhG7X04KpehMarAI4J+i+kpENa7bdhp92D1d6t9UVsre2keaHgLSLt7BcqZh5elZddx3REOtSdEK7aBQrk7gpT7NRz9Oa7Aa1aAZEfy/HVuqU=
+	t=1790249009; cv=none; b=M8jbpuqceAN+z1VM361NfE6uF07MCMGMQtpR2/sbGk6/pmiTTayjDgL2hZTfXqN6GAGJjfW1koRXkvt5Fds5zL+pcroqUL6z8Bp1rDBKudaSIvR8mQ/Yy7PIGFxOOG2rtI9/Yiv6qaDccoPvnSF+qppJFqfkiBnCK7X5M4dfDas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790248542; c=relaxed/simple;
-	bh=0jM5guvuEaIv/Ao4DriO+wIor7j+q+L8gc2OEYUV/LM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MMhCOuAmc4y/QceKT03Yo3jL6xWXivEsjJegPpgl7wXZ1GxaZm7SMWYjWUpnfm4RPIuUCtC+E59U3GM9qud106oyMNJQngdpL8WNLko+T3dXnkqHcNlqbs0bLZ84d6+x//S9kLXcA0pjnwQbfsWQbwkl7fEa7hC5FuriWG1Q0OA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=QpR6fhnR; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1790249009; c=relaxed/simple;
+	bh=tZUd4B+l/yWunNQIY+ZJIho41qAzK/3+syJlrXZunwo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jjwPF8pgC2kWmL6USfNWf9uZvCgpazCPEYqf7uwXMoGBdDly7LXUi9iAdlpQqWVBiYwsv5WmWdw765+h/T/0oLXsmhzwT/DaVlouWQrnrULTg5AfJ0aUmDnjEwfxpRYV4cVJ1c15wAsiN8Va1qvArpnH4EoGF4xUmodCOkl25WU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ObnIzt6o; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=QrUB5/lJ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="QpR6fhnR"
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68O6Dbo53901246;
-	Thu, 24 Sep 2026 11:15:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=RJRsf
-	/2o5SC1+zanyjjkIxTSh/P2UVPVnUtRAJnSOEA=; b=QpR6fhnRMFzjEkR0AXt2y
-	to1heIN0pXfK/pP5A15peFX3dlVd/kVvDqSsrJYfUqwmKAn9vfwQitWfirXPncsZ
-	bEaV1Jm3A6Z2AUM4JrQg79KGH8lpoji8fLoVoHY/ZGsGKZZbmlzTlYNiXafEECxE
-	gNcHl412660T1T1TuDO8xZzxzArv15/iRQFoVEu2ou0M7kUxmRSRHYwoFQjb30qI
-	JA6oHErH1q+CYadC9fiA2l2vm3ernNpJAKewaIit+MEBE9x7h9oQGgb+5Vp62GPH
-	dDj5LLVlmnTKlqQx8yrazRZPs0baotvRr986WPVR/RvmcU1rwK8nYDrwD2ItCT9/
-	A==
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4gsk217aw5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 24 Sep 2026 11:15:13 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 68OB5W18013049;
-	Thu, 24 Sep 2026 11:15:11 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4guf119mqc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 24 Sep 2026 11:15:11 +0000 (GMT)
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 68OBEVuR002821;
-	Thu, 24 Sep 2026 11:15:11 GMT
-Received: from bpf.uk.oracle.com (dhcp-10-154-80-22.vpn.oracle.com [10.154.80.22])
-	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4guf119knh-12;
-	Thu, 24 Sep 2026 11:15:10 +0000 (GMT)
-From: Alan Maguire <alan.maguire@oracle.com>
-To: ast@kernel.org, andrii@kernel.org, eddyz87@gmail.com, qmo@kernel.org
-Cc: jolsa@kernel.org, daniel@iogearbox.net, ihor.solodrai@linux.dev,
-        yonghong.song@linux.dev, song@kernel.org, martin.lau@linux.dev,
-        memxor@gmail.com, emil@etsalapatis.com, bpf@vger.kernel.org,
-        nsc@kernel.org, puranjay@kernel.org, yatsenko@meta.com,
-        Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v4 bpf-next 11/11] Documentation/bpf: Describe new location-related BTF kinds
-Date: Thu, 24 Sep 2026 12:14:28 +0100
-Message-ID: <20260924111428.75957-12-alan.maguire@oracle.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20260924111428.75957-1-alan.maguire@oracle.com>
-References: <20260924111428.75957-1-alan.maguire@oracle.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ObnIzt6o";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="QrUB5/lJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790249006;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Q+uE5rBvrti+pPPlj185x2L2aTe3IHJgFjAYd6EKuC0=;
+	b=ObnIzt6oHganyNAMJaE46uqe1HzG9SiXPTvk+aGU4cE5XrQGIR/W9keTTY0/0VfFzXNFWT
+	uaZ44Y8G1owTiIzsWXmB+fGMqzOfGqG5E/EgoGuRiR8au/6PCJsoJRxfxYa/R/KfGx6oGd
+	1Vv78q0PegzR/SxDDsfnB9MPinplB14=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-18-Lw6KaXG2NrSHqKBintjILA-1; Thu, 24 Sep 2026 07:23:24 -0400
+X-MC-Unique: Lw6KaXG2NrSHqKBintjILA-1
+X-Mimecast-MFC-AGG-ID: Lw6KaXG2NrSHqKBintjILA_1790249003
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-487057d8a3eso204523f8f.2
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 04:23:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1790249003; x=1790853803; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Q+uE5rBvrti+pPPlj185x2L2aTe3IHJgFjAYd6EKuC0=;
+        b=QrUB5/lJdzhqAqElYsCYl8E/DVBdYOgQPudGrV2EHr8gz830M1jxltfkj6VblBnEcG
+         kvUT99gOR+ZifCA8vjFCrS9QruEmUPXjWo7iz4qJ2P8O4Nmdx9NFqTKijoTjRKDVfdpw
+         77gEDBDo5qV3bPCptCMxSfzhVjd6t1uAO+kGsoDQnQMqn+666URx5VdWOmlU+deuCa94
+         YdybIc9o7myK9jfzK9MfTds5grDVP8FiXETehLS2h9j5Njy4jPHX/VL/6HcChycGIHFS
+         6ncPmEvaxjWZBlU+Q6BrSXV8nqwYO5jlAqfUfmERjpCwAilklCUpjXzouavuMHL7l9qm
+         aqhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790249003; x=1790853803;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Q+uE5rBvrti+pPPlj185x2L2aTe3IHJgFjAYd6EKuC0=;
+        b=aOIWjKleLeMMsJSrt8PPAmDoQQXk7nwqIbUVaT83vG7QM7stqS0DkzMQyzv8i9STpm
+         zPrV416zD4gXRYyqfD7tk3EQspXnyUZxs7uIXIfvXumYbrHsdEoPASxIkLIi7Kqxbrzh
+         EyzVOsnlWEqP7xgDfhygw+uTckk7WeHhiDeUb4FAbQoTtUfn5AVHnGWVgDcqI0x9ymW5
+         PR9Vf2B9MnGyq1+Sc6HNT56RVOhQw/m/fXc4DwVqWaH4vAe5z16YBY5mwZ9wPe6DoGw9
+         2XoSMCCX21aQvF/lzl1D/EVqVMPXT9sWZt/oD+9NPO1pp/jkukTV1UMklDFcuzymvYDU
+         oj7w==
+X-Forwarded-Encrypted: i=1; AKwUvBx35cSDfEo/fsbdfANw2J/BE5GepYkMl1hY8CkKCtq56GbUVGOcLZJZAyr47RwLlxPbMQI=@vger.kernel.org
+X-Gm-Message-State: AFuF++mSPZNYP18ORhQELzkaoE3pX9F7HqnGU5VUYz3yzQkb/qKTv9br
+	5jh1kOxgzKz8o4i0OLD+0gHAx1kQvSy10LfCSP5i4FlDEsBWWnFWLnwM2yTq+Xfz3QbmeIViV0U
+	VF4VusquOspToRpp2y7EKrG/GBONTz7fXavB+IAYQu6a8D7rs4iZ2AA==
+X-Gm-Gg: AYBFou0pyKHd7WFqmp3i0Z8pto2g0MKlz4S2saCILErbQubqvGRxDeaE8J7u53xcRhl
+	gKsooBV44Q/en2+nVdzkHss6iVjSi3w7Ep/nrg+eSb+aBx1pOChBdk7m6nctDfErWUVENQsQYxM
+	OKuRb+NUmzIDmcGZ2mN8xx6X8ksu/Bm0zyNnzdZykDQa7orJwAXpudv7zDM5mNQ3hKhdl1MVxIb
+	kN5ZwWEhlXGRO42YB/Zo44t8cG9LCUPd46etQComRcupimXcorrDl9wS5SWH0+mIHH+L2T8vP1H
+	XZKhs2v57tWHxjPi1om5vM7BBD9QVCBO4G8/7q8+3Yl6GgMAdyqCfyP2GMMq5MFnn1BWwGTrGaX
+	gIgp5SY2rSwhg8Sou+A4i7UEi5L7e9Dn2aivw81dskyh63Iqjl/mdmdjMfiHphGdPUW4HKtEpIQ
+	==
+X-Received: by 2002:a05:6000:705:b0:487:bef:31cb with SMTP id ffacd0b85a97d-488716ca7e9mr3595372f8f.22.1790249003247;
+        Thu, 24 Sep 2026 04:23:23 -0700 (PDT)
+X-Received: by 2002:a05:6000:705:b0:487:bef:31cb with SMTP id ffacd0b85a97d-488716ca7e9mr3595325f8f.22.1790249002827;
+        Thu, 24 Sep 2026 04:23:22 -0700 (PDT)
+Received: from [192.168.188.234] (ip232-47-231-195.pool-bba.aruba.it. [195.231.47.232])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886876c64dsm14440667f8f.21.2026.09.24.04.23.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Sep 2026 04:23:22 -0700 (PDT)
+Message-ID: <b67609c0-d640-47bc-b25d-d40bb59f237c@redhat.com>
+Date: Thu, 24 Sep 2026 13:23:20 +0200
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-24_02,2026-09-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
- spamscore=0 bulkscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
- mlxscore=0 mlxlogscore=999 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2609040000 definitions=main-2609240046
-X-Authority-Analysis: v=2.4 cv=APP6TA4N c=1 sm=1 tr=0 ts=6ab50641 b=1 cx=c_pps
- a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17
- a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=7Gl3-_t3PgB9XO-mQDs3:22 a=yPCof4ZbAAAA:8 a=73AEzqow_fZ0RHA0zHsA:9
- a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:12106
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI0MDA0NiBTYWx0ZWRfX4nGCso7uY7BI
- 6nQSIMfYdotAWhi2ChzCaUIObZXseUi3IqCTxCCGJJFQc46kLlo8jU4suy395NQ8bO6kZYFbsPq
- BsEdlwp0f96OQ9FuvGaXSjvBXdzG3OIaUmUr+iRd63jn4zDBGRry
-X-Proofpoint-ORIG-GUID: znLtZGUlDCrqM-p5HMaxGaLjfEFxEFiU
-X-Proofpoint-GUID: znLtZGUlDCrqM-p5HMaxGaLjfEFxEFiU
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI0MDA0NiBTYWx0ZWRfXzzCi9jZIiMBX
- qsJChpcDPREE3R8KM3ybrgqSsyq7JT0uOvn/4+9/hi5MEUlaqMNSrw9El5xoxcw/gpIqQmd6w9Y
- 7ooOgiSAtLi9B/gEHw3xe3/rCjUS28HlkYwfMMMHu9IXFbVv85sCbKsWzvzct2IjXIxoDDTKvzj
- zVPg/q/qOy7tkppduD04mRqMQadvHVL5M6gbACtYuDZa0wShlycnkHYByL4prV8xo3EwoX9ua1d
- ajZAC2hBeJgBaTbdEV0AKIIQ+nQZ6KDmMhpLN47fiB6KjWbJZ8CSBNtT6z/vBKAC19nzlABgp+X
- 5E8rct4fTxvMWBPst8laALXrli7E77Uf9iGtJdbWDCFOeL0pNCBouXk0z0M9q3bd6PbM6wKH8hk
- YJwSPkbQHduOJS3i1Ghwar3+p08kZBFl/hN6R5fHr/sR5N40HNeE4+Tkfcsz8n1vvdhsucrmSvQ
- 095fYp3Wqb+r8N5bK6w4CbasyaFzGsdjqOku7zEs=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net 0/8][pull request] Intel Wired LAN Driver Updates
+ 2026-09-18 (i40e)
+To: Tony Nguyen <anthony.l.nguyen@intel.com>, davem@davemloft.net,
+ kuba@kernel.org, edumazet@google.com, andrew+netdev@lunn.ch,
+ netdev@vger.kernel.org
+Cc: maciej.fijalkowski@intel.com, zhaochenguang@kylinos.cn,
+ magnus.karlsson@intel.com, jacob.e.keller@intel.com,
+ przemyslaw.kitszel@intel.com, jbrandeb@kernel.org, horms@kernel.org,
+ kerneljasonxing@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ bpf@vger.kernel.org
+References: <20260918212458.550425-1-anthony.l.nguyen@intel.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20260918212458.550425-1-anthony.l.nguyen@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Update BTF specification to describe encoding schemes for
-BTF_KIND_LOC_PARAM, BTF_KIND_LOC_PROTO and BTF_KIND_LOCSEC.
+On 9/18/26 23:24, Tony Nguyen wrote:
+> Maciej fixes various issues with VSI setup, cleanup, and rebuild paths.
+> Notably, keeping q_vector allocation synchronized with channel-count
+> changes to prevent threaded NAPI reconfiguration failures.
+> 
+> Chenguang Zhao fixes AF_XDP multi-buffer handling by correctly copying
+> and attaching fragments and cleaning up on allocation failure.
+> 
+> The following are changes since commit 46bc52d13594848023e681860df8700c8db14354:
+>    ipv4: fib: fix data-race and stale genid check around nh->nh_saddr
+> and are available in the git repository at:
+>    git://git.kernel.org/pub/scm/linux/kernel/git/tnguy/net-queue 40GbE
+It looks like clashiko has found a few serious regressions, worth a respin.
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- Documentation/bpf/btf.rst | 83 ++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 81 insertions(+), 2 deletions(-)
-
-diff --git a/Documentation/bpf/btf.rst b/Documentation/bpf/btf.rst
-index 004aa1058d85..29de1222c3e7 100644
---- a/Documentation/bpf/btf.rst
-+++ b/Documentation/bpf/btf.rst
-@@ -88,6 +88,9 @@ sequentially and type id is assigned to each recognized type starting from id
-     #define BTF_KIND_DECL_TAG       17      /* Decl Tag     */
-     #define BTF_KIND_TYPE_TAG       18      /* Type Tag     */
-     #define BTF_KIND_ENUM64         19      /* Enumeration up to 64-bit values */
-+    #define BTF_KIND_LOC_PARAM      20      /* Location description (register, const etc) */
-+    #define BTF_KIND_LOC_PROTO      21      /* Set of location parameters for site */
-+    #define BTF_KIND_LOCSEC         22      /* Section with site descriptions */
- 
- Note that the type section encodes debug info, not just pure types.
- ``BTF_KIND_FUNC`` is not a type, and it represents a defined subprogram.
-@@ -104,11 +107,13 @@ Each type contains the following common data::
-          *             decl_tag and type_tag
-          */
-         __u32 info;
--        /* "size" is used by INT, ENUM, STRUCT, UNION and ENUM64.
-+        /* "size" is used by INT, ENUM, STRUCT, UNION, ENUM64 and
-+         * LOC_PARAM.
-          * "size" tells the size of the type it is describing.
-          *
-          * "type" is used by PTR, TYPEDEF, VOLATILE, CONST, RESTRICT,
--         * FUNC, FUNC_PROTO, DECL_TAG and TYPE_TAG.
-+         * FUNC, FUNC_PROTO, DECL_TAG and TYPE_TAG. It is unused by
-+         * LOC_PROTO and LOCSEC.
-          * "type" is a type_id referring to another type.
-          */
-         union {
-@@ -563,6 +568,80 @@ The ``btf_enum64`` encoding:
- If the original enum value is signed and the size is less than 8,
- that value will be sign extended into 8 bytes.
- 
-+2.2.20 BTF_KIND_LOC_PARAM
-+~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+``struct btf_type`` encoding requirement:
-+  * ``name_off``: 0
-+  * ``info.kind_flag``: 0
-+  * ``info.kind``: BTF_KIND_LOC_PARAM
-+  * ``info.vlen``: number of 32-bit location value words
-+  * ``size``: size in bytes of the represented parameter: 1 through 16
-+
-+``btf_type`` is followed by a ``struct btf_loc_param`` and ``info.vlen``
-+number of 32-bit value words.::
-+
-+    struct btf_loc_param {
-+        __u32 flags;
-+        __u32 values[];
-+    };
-+
-+The ``flags`` field describes how to interpret ``values``:
-+
-+  * ``BTF_LOC_PARAM_CONST`` describes a constant; the value is stored in
-+    low-word, high-word order when it requires 64 bits.
-+  * ``BTF_LOC_PARAM_ADDR | BTF_LOC_PARAM_CONST`` describes an address offset
-+    relative to the runtime base address of the kernel or module image.
-+  * ``BTF_LOC_PARAM_REG`` with one word describes a register number; with two
-+    words it describes a multi-register parameter.
-+  * ``BTF_LOC_PARAM_REG | BTF_LOC_PARAM_OFFSET`` describes an address held in
-+    a register plus an offset. Adding ``BTF_LOC_PARAM_DEREF`` dereferences
-+    that address. ``BTF_LOC_PARAM_REG | BTF_LOC_PARAM_DEREF`` with one word
-+    dereferences the value held in the register.
-+  * ``BTF_LOC_PARAM_SIGNED`` makes a constant or offset signed. A constant's
-+    signed width is ``size``. For a register-relative offset, its signed
-+    width is the number of offset value words times 32 bits.
-+
-+2.2.21 BTF_KIND_LOC_PROTO
-+~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+``struct btf_type`` encoding requirement:
-+  * ``name_off``: 0
-+  * ``info.kind_flag``: 0
-+  * ``info.kind``: BTF_KIND_LOC_PROTO
-+  * ``info.vlen``: number of function parameter locations
-+  * ``type``: 0
-+
-+``btf_type`` is followed by ``info.vlen`` number of ``__u32`` BTF type IDs.
-+Each entry corresponds to a function parameter at an inline site. An entry is
-+either 0, meaning that no location information is available, or the type ID
-+of a ``BTF_KIND_LOC_PARAM``.
-+
-+2.2.22 BTF_KIND_LOCSEC
-+~~~~~~~~~~~~~~~~~~~~~~
-+
-+``struct btf_type`` encoding requirement:
-+  * ``name_off``: offset to a valid ELF section name
-+  * ``info.kind_flag``: 0
-+  * ``info.kind``: BTF_KIND_LOCSEC
-+  * ``info.vlen``: number of inline sites in the section
-+  * ``type``: 0
-+
-+``btf_type`` is followed by ``info.vlen`` number of ``struct btf_loc``.::
-+
-+    struct btf_loc {
-+        __u32 func;
-+        __u32 loc_proto;
-+        __u32 offset;
-+    };
-+
-+The ``func`` field is the non-zero type ID of the ``BTF_KIND_FUNC`` being
-+described. ``loc_proto`` is the non-zero type ID of the associated
-+``BTF_KIND_LOC_PROTO``. ``offset`` is the location address offset relative to
-+the runtime base address of the ELF section associated with the LOCSEC.
-+For example, a LOCSEC named ``inline.text`` contains records for ``.text``
-+whose offsets are relative to the runtime base of that section.
-+
- 2.3 Constant Values
- -------------------
- 
--- 
-2.43.5
+/P
 
