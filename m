@@ -1,72 +1,76 @@
-Received: from mail-pz2-f41.google.com (mail-pz2-f41.google.com [74.125.228.41])
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CC956FC5
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 03:10:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555066FC5
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 03:10:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790219448; cv=none; b=gRJpOc8ZwrhMNaffR+06K8V0K1tUtvK1AxRrt5e4bqgrZCbkIokZGguQqb4JDaHTUreBCXXnlncgT5s4Xv+Psf6YhOV0c03n2EVE4F0+Jtq1NnQUleOUAtO3+1pi1QhdySGFFtYmXeVJHKEJ1QRo2srJrmbIRTVonXceXecd5Bw=
+	t=1790219451; cv=none; b=NhhrhYlMf/qz2iP/CrcEiCKum0+4vnFgGkkz7SXh1RJZk+jEQQqUiwnWRJTVy73jQUx7XsCSmdM84dQO5mWL6XuoZ7Bo0gqbo9sSHiZEcksb/t3NzGPWYn/KkrMRYiAbpS/wnHmIG+uZjhd9WqLrTQ2Y2dfP3D9qblzU3R1vCsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790219448; c=relaxed/simple;
-	bh=U1ahZKa16hqOnDL3P+1aupgrE07yFaE70k1xYhVLHhk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fRoivf7Hv+LuEUfr9phGsOwM3qUYNI2iIZjod16PCMniltwP2jSPtRxu/L7VPsyKqdPRX2l5lqiVOg4TAZI09tyRegkFHM7DvrU6PpjZD+38UHW9wpYZa+al7wKPMywplL4Mj0NV0LmADefKdPIxyzF2TW/TPQDbqYt9FV37nd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WgJ5zCMq; arc=none smtp.client-ip=74.125.228.41
+	s=arc-20240116; t=1790219451; c=relaxed/simple;
+	bh=+NZDeb4a09LwEWAjY9MeDGtgXauZ/6FNdbQDl5h1h7Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NTWs77s+XZC2pEBu6XkMD9j2I1rOge9BbqjLp7Mu1ELPrAZmVzfwU5sQUghq4PmXKUU6I59QwIR4kN8qp2vVJlk33XzGAsH5lZV7V+vN7xIwMQu8/Bmr1c53ocrnNuh/NOP+qbPI7zHGkcvhBUZ2q0TSFMUQgGx6bh1ItkvrbI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N7ffY0fx; arc=none smtp.client-ip=74.125.228.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WgJ5zCMq"
-Received: by mail-pz2-f41.google.com with SMTP id d2e1a72fcca58-86e6d007703so860811b3a.0
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 20:10:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N7ffY0fx"
+Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc1cea4ae2cso1004961a12.0
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 20:10:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790219446; x=1790824246; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=7Ryb3DDC6Bknh6AQJMfPEpwBegzjeZoarmc4S5YO3Ro=;
-        b=WgJ5zCMq/JfTNXa0VRFr7v7GLZD+DlTVjw+R8Uj9QQBBYTQ7nwGrkGhKHP52T6WwyJ
-         CeXKwVMvY+v1af6nY8k6H8m7QgU9Lk2APTAHT/CRxhy49mO532IVsRKpkqJ1QR4pyaGB
-         7hmHHFxLrCfJJBWKOuIjjd4joou3S1fHVWmReqveeyRfBOJxjx1X0sipWK/Gvv+PfjZp
-         ZeumJPu15wE+i6vpjyr2/0ZZreFH/VspElpXZFPJfMctJLkHBF8pkkq4bDRPhV8gjcqT
-         1hu03ahXvKkuHUoH3BeScKr8P4nLfdn5j0ZWEZQkpcQ0rgjvXoO/LZuZejaWnTwffLJp
-         Ba7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790219446; x=1790824246;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1790219450; x=1790824250; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=7Ryb3DDC6Bknh6AQJMfPEpwBegzjeZoarmc4S5YO3Ro=;
-        b=Rn+NAjOX2kJtV99CBbf1MudVxgMq6BfSr59h/UiRHO7FQ5JfWgnQPuAOZ+griGpnOb
-         S1nIJwfTo/HbUrW+aNoKMgfmiCoDrUH9AKCkckrI4PYd/dM67UzdvnoH50BPnRo7/jrK
-         WlApFuGYw+q9pa1aDuUduByKMRfEu7zXwojNFrQhXEdwJg8yteNnBLQg1DcYbkCbxEWd
-         U5rPabH/3akckG9kHhPe1Ddsi/l9kHxOfos57/9rp9JK9Szze9+PcrRILcjXYTdE58O+
-         q1pKd/NF1HIGPUWroApa2xjdVxiy7qgJMoYhKf6fKPz7gI2wp7BdreUxLv4bR8ti/Ejr
-         Ekbw==
-X-Gm-Message-State: AFuF++kEKNYt92xNJ5hM3/o7v3rMued21COfBAiq5QvjgRKWXiyNmT8j
-	tJUwcFzKPWN6w3GPGmHR4iTtlpUDWjHyIRjRWWDrHehEfnozp5efjBkV/FvOeA==
-X-Gm-Gg: AYBFou3hh3rQJJdIMHCT2cdVmsKgQvFEGGHRxG64ZMp0wuZhQorndabf3iiOx7Sd+cs
-	ksfLA16Dl0WCkq9/dwzWyKcfiZZoxeob0R56HzfGpPixAsIqWf3nIYC0BJmSypF3doGKsBskE6k
-	w1qoAKaBDYeTEN1cIq/ta99WsVNI2pa40NPQeFQr05CjtPLeWgMvY5sHe5bkiCz+DxFGZBhK7EN
-	27uhoh46ilGFPCEpcqstQZD34sTvee6VJqv6CgDoiTncQVxlM2NaANH2DYMmDVVzvS+O3aZs9nD
-	Dty9sqIk9DEhbdI6H5ROw3556GzpyDz1Qdk1oC13VAmrVF6GeVMepYXtXAmjrxoTOy8rSUUOqdo
-	xaIzTpkyBhiOfOKufDEGChJEFnPmE4oUPtzrIcBCRfAvrkcf3gid+YYd0+04H7Y60Dxst5kVHgQ
-	On2K13YdPqF13hyt8wcwOfH/VARu47H9UI+mSKQsv7Q5F106GhIswND0ZM62N5NaWx7yxGMSJ0G
-	wgqfJ9BqlSlg2s5iPH2n312RZt8yoiRnEJDhwzmv4ni13rGJwouEwRcjrhr+2Wr/uu1QfDE+SnB
-	8UbeLPcbjmg1tQ+YnbTGOJ2nrWKlRA5R7b+GLfmSlJ1Ll0YB8SHfUA==
-X-Received: by 2002:a05:6a00:398a:b0:878:39ac:5a88 with SMTP id d2e1a72fcca58-87e9fe16914mr817815b3a.60.1790219446229;
-        Wed, 23 Sep 2026 20:10:46 -0700 (PDT)
-Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.242])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87d1cfbfd11sm2158417b3a.11.2026.09.23.20.10.45
+        bh=UzTsMkdbQ8NlGIH89IJGiojKxLUeYR7zDMCBDgMwb7Q=;
+        b=N7ffY0fxaF1f6mtTJD3m2kEeb+Cv7FSEyb5usC3nlNc/M6jeuYNZ0FAZcaUPFWBWUv
+         ESbJiaMJD3dtG/3nvYhyPX6uv07cyOE+FccI5XYJeSw+9ntF+sejCgeGMbWfXYhI3tcO
+         qdVHdaNVyw9aWrxzjSe6iqEz7MsVQN0vbJ22p34L1aKCIHLNVn51FIVWzOaZLmNPhO3U
+         dx2kk2y2bxJ+EvzB77rVGjxaT4gg7B8pkxQ/4CLaCofZnEP6vlxICneyXY/1X1fFj9bR
+         k8Fm9U/JiMI/7prwgamV2TD+5xpDfiheFIXYXRx/Pmo1iumLvd71ibNQl4hDwb8knmNO
+         1AIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790219450; x=1790824250;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=UzTsMkdbQ8NlGIH89IJGiojKxLUeYR7zDMCBDgMwb7Q=;
+        b=vDtmtGzwe92fg6eHrtHYJaS03u1+Ud+mMkyTlkr138t7Fme/lbImnQlu0uf2ZOW9RV
+         p3JyHSzkF8is2dtAOieHnI/Hip8lPtCg+peoIqI88sfj/3p1fQUWocSyHarOXyN7AvKb
+         UaIMEqBUF67tpo3nWflK/aCTk8QQ/A7UqItANJmO7dvPwI/1oKZ70ln/7OPeNDfX/K7z
+         J5PgrAY1fzJWbvUzvRerTlXf+XiJ15Tw9HECBdh9auraTF6W3FcyPASgyfCGHIQ4PHT4
+         FgHQc7Iz96FFQKXfZu82ycZrIZceaYhFF71mRF1OwQVnsF2ElOqHeMR1ngJglziLt+g0
+         wPkw==
+X-Gm-Message-State: AFuF++ky/0cVSRJP9KYOxlee0QFdoFQyGakHH2ECDulNcUtyVpxqT0i1
+	4Gw6NT+ANCw6hGJvl6ojiKdRf/dSEIfEZAAmk3Mg27FucD08uksI+JAePWRw1A==
+X-Gm-Gg: AYBFou0VyDinIiSzT8n3cuA0BvIV/AMjYnXdEbwqYis7q8aKmoUzcb1g9G/Cf8/P/BX
+	A1q1EdlQZq94cq29VDnjgzJuDO1p8VARV4yDbHloZAvsUJHsTngeVOcf0XhuKtZkf5dB9/6Xbze
+	dqSrHmwGjYNYVdD+PChU58FO37lJ/UifLPb1mmUlHFmdWuytWNtGYgbqXKnA9vsJvbRnk50x425
+	iq0jIiu48jmVdX95+kRHjl7xBDAtpRkkF9qlwhZg+W4MYJ5WYRa+EED+jA4PJdBSFHXJBzPKx34
+	uAJSffJzvEKG6fXhsvSTUQaxKHYalYiTA8+7hMiqCqQaUzwR3FuInhZrBMNVgHKWv1yOhpCY1B4
+	8HK3LNkBSBBiTkNxJm4PdUWWppMNx9Y4ECZInbvY2hD2sZPCc0X4cnu9L13XjQaoovnLH+7fY6+
+	80CbrDOMXEedaVM7BdNH4Fy8mII6qH2lyoO4oV+hDDbP9kct+T+6T3xvWZTMKcgN7JKXIC3b5mG
+	tHdIBDN2QC3x4fdoTZCQpzQ1FAuIQTViKBfp/LuqrTsnBtIwQKImXE3jAY/adpNOp9ytnzsb9aI
+	bel+G9nAB7sv0gXb5m9goQP7O3H+kYtS1cu589Rn+s8=
+X-Received: by 2002:a05:6a20:748f:b0:3dd:a196:5397 with SMTP id adf61e73a8af0-3de0e93453emr1088443637.57.1790219449490;
+        Wed, 23 Sep 2026 20:10:49 -0700 (PDT)
+Received: from coder-ast-ast-dev-ml-0.tail2dda0.ts.net ([153.61.198.252])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87d1d5c12besm2078208b3a.29.2026.09.23.20.10.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 20:10:45 -0700 (PDT)
+        Wed, 23 Sep 2026 20:10:48 -0700 (PDT)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	eddyz87@gmail.com,
 	memxor@gmail.com
-Subject: [PATCH bpf-next v2 00/17] bpf: Indirect calls of bpf subprogs (callx)
-Date: Thu, 24 Sep 2026 03:10:25 +0000
-Message-ID: <20260924031042.1690890-1-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next v2 01/17] bpf: Fix infinite loop in check_max_stack_depth()
+Date: Thu, 24 Sep 2026 03:10:26 +0000
+Message-ID: <20260924031042.1690890-2-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260924031042.1690890-1-alexei.starovoitov@gmail.com>
+References: <20260924031042.1690890-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,167 +81,65 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-v1->v2:
-- Dropped "bpf: Don't fold loads from insn_array maps into constants".
-  bpf_map_direct_read() rejects insn_array already.
-- patch 1: emit the same diag as sort_subprogs_topo() (bpf-ci).
-- patch 3 is new: taking the address of a function that is never called
-  hit verifier_bug() in jit_subprogs(). Not related to callx, but callx
-  makes it likely.
-- patch 4: BPF_OP() == BPF_CALL in liveness like in const_fold, explained
-  in the comment why slots are live before callx callsite (Eduard).
-- patch 5: moved !bpf_is_callx() into nested 'if' (Eduard). JIT support
-  is checked before the type of the register.
-- patch 6: sync callbacks are in the call graph too. Stack depth of
-  a callback whose address is read from .rodata or taken in another
-  subprog was not accounted.
-- patch 10:
-  . check_cfg() explores functions of a table one at a time. It was
-    losing changes_pkt_data and other effects of the functions in
-    a table that call each other.
-  . no cmpxchg64(), it's not available on all 32-bit archs.
-  . don't reject the prog that reads a pointer to a function that was
-    removed as dead code (sashiko).
-  . load of the pointer sets jit_required, so the prog that passes it to
-    a helper as a callback can't run in the interpreter (bpf-ci).
-  . tbl[i].data at variable offset is a regular load when none of
-    the possible offsets overlaps with a pointer (bpf-ci).
-- patch 12: append the functions and copy the map only for progs that
-  have callx. The rest use .rodata as-is (bpf-ci). Pass token_fd to map
-  create. Dropped dead bpf_map_lookup_elem() fallback.
-- patch 14: light skeleton reserves fd_array slots only when the object
-  has callx.
-- selftests: anchored callx_retval_is_tracked to the caller, the tests
-  of global func in a table and of const folding of the pointer test what
-  they claim now, skip without JIT, fixed ASSERT_GT() of u32 and
-  the comment, added tests for the above (bpf-ci). The table in
-  callx_rodata_lskel test is volatile. clang was turning it into
-  direct calls, so the test didn't test light skeleton.
-- Added acks.
-v1: https://lore.kernel.org/bpf/20260922011323.1298619-1-alexei.starovoitov@gmail.com/
+sort_subprogs_topo() rejects recursion via direct calls, but allows cycles
+that go through ld_imm64 BPF_PSEUDO_FUNC, since the address could be taken
+for an async callback. The main verifier pass limits the number of frames,
+but it doesn't follow calls into global functions.
+So the following program passes both:
 
-Introduce BPF_JMP | BPF_CALL | BPF_X 'callx dst_reg' instruction: indirect
-call of bpf subprog with address in a register. LLVM emits it for calls
-via function pointer. The verifier rejected it as unknown opcode.
+  static int cb(u32 i, void *ctx) { return foo(i); }
+  static int foo(int x)           { return bar(x); }
+  int bar(int x)                  { bpf_loop(1, cb, NULL, 0); return 0; }
 
-Only static subprogs can be called. The callee is verified in the context
-of the caller like a direct call of static subprog. No callx into global
-subprogs, helpers or kfuncs.
+  SEC("socket") int prog(void *ctx) { return cb(0, NULL); }
 
-All callees are known before the main verifier pass. The address of
-the callee comes from:
+cb -> foo -> bar -> bpf_loop -> cb is unbounded recursion.
+check_max_stack_depth_subprog() walks this cycle too. None of
+the functions use stack and the frame counter is reset by every global
+function, so neither stack size nor frame limit is hit and bpf_prog_load()
+spins forever.
 
-- ld_imm64 BPF_PSEUDO_FUNC, which is allowed for static subprogs only.
-  add_subprogs() and check_cfg() see them already.
+Reject a call into a subprog that is already in the chain of callers.
+Async callbacks are skipped earlier and are not affected.
 
-- 64-bit load from read-only data: tables of functions, struct ops,
-  vtables, where pointers are mixed with other data. Rust needs that:
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+---
+ kernel/bpf/verifier.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-    r6 = vtable ll
-    r1 = *(u64 *)(r6 + 0)      // data
-    r2 = *(u64 *)(r6 + 8)      // pointer to a function
-    callx r2
-
-  libbpf keeps the data in a frozen read-only array map, one per prog
-  that has callx, and stores byte offset of static function in the prog
-  into the pointer. Progs without callx use .rodata as before.
-  The kernel guesses pointers by that value before check_cfg() (patch 10).
-  Wrong guess is safe. Functions referenced by data only are found via
-  func_info (patch 9). After JIT the kernel replaces the offsets in
-  the map with addresses. The prog must be the only user of the map,
-  since other progs would have been verified with its old content. The
-  prog reads addresses as data, so CAP_PERFMON is required.
-
-Both produce PTR_TO_FUNC.
-
-The passes before the main one don't know the callee and treat callx
-conservatively (patch 4). The main pass records caller -> callee edges.
-Recursion and stack depth checks use them afterwards (patch 6).
-
-In C:
-
-  static const struct shape_ops square_ops = { 1, area, 10, perimeter };
-  ...
-  return ops->area(x) * ops->scale + ops->perimeter(ops->id);
-
-and
-
-  static int (* const handlers[])(struct xdp_md *) = { foo, bar, baz };
-  ...
-  if (i < ARRAY_SIZE(handlers))
-          return handlers[i](ctx);
-
-plus what clang compiles without data: picking one of several functions,
-passing a function pointer into another function.
-
-Patches 1-3 are fixes I hit along the way: a prog without callx that
-hangs bpf_prog_load() in check_max_stack_depth(), its test, and
-verifier_bug() when the address of a function that is never called is
-taken.
-
-Not supported:
-- JITs other than x86-64 and arm64. No interpreter support.
-- x86-64 with FineIBT: bpf_jit_supports_callx() returns false.
-- tail calls in callees of callx.
-- pointers to functions in writable data, misaligned pointers.
-
-Alexei Starovoitov (17):
-  bpf: Fix infinite loop in check_max_stack_depth()
-  selftests/bpf: Test recursion through a global function and a callback
-  bpf: Keep functions with address taken when removing dead code
-  bpf: Prepare static analysis passes for callx instruction
-  bpf: Add callx instruction to call bpf subprogs indirectly
-  bpf: Add callx calls to the call graph
-  bpf, x86: Add JIT support for callx
-  bpf, arm64: Add JIT support for callx
-  bpf: Discover subprogs described by func_info
-  bpf: Recognize pointers to functions in read-only maps
-  libbpf: Support pointers to static functions in data when linking
-  libbpf: Resolve pointers to functions in read-only data
-  libbpf: Treat .data.rel.ro as read-only data
-  libbpf: Support pointers to functions in read-only data in light
-    skeleton
-  selftests/bpf: Add tests for callx
-  selftests/bpf: Add tests for callx through pointers in read-only data
-  bpf, docs: Document callx instruction
-
- Documentation/bpf/clang-notes.rst             |    7 +-
- Documentation/bpf/linux-notes.rst             |   31 +-
- arch/arm64/net/bpf_jit_comp.c                 |   16 +
- arch/x86/net/bpf_jit_comp.c                   |   68 ++
- include/linux/bpf.h                           |   10 +
- include/linux/bpf_verifier.h                  |   42 +
- include/linux/filter.h                        |    1 +
- kernel/bpf/backtrack.c                        |   20 +-
- kernel/bpf/cfg.c                              |   76 ++
- kernel/bpf/const_fold.c                       |    6 +-
- kernel/bpf/core.c                             |   12 +
- kernel/bpf/disasm.c                           |    5 +-
- kernel/bpf/fixups.c                           |   94 +-
- kernel/bpf/liveness.c                         |   38 +-
- kernel/bpf/verifier.c                         |  714 ++++++++++-
- tools/lib/bpf/bpf_gen_internal.h              |   13 +-
- tools/lib/bpf/gen_loader.c                    |  172 ++-
- tools/lib/bpf/libbpf.c                        |  443 ++++++-
- tools/lib/bpf/linker.c                        |   18 +
- tools/testing/selftests/bpf/Makefile.skel     |    2 +-
- .../bpf/prog_tests/callx_func_ptr_map.c       |  202 ++++
- .../bpf/prog_tests/callx_rodata_lskel.c       |   63 +
- .../selftests/bpf/prog_tests/verifier.c       |   12 +
- .../selftests/bpf/progs/callx_rodata.c        |   51 +
- .../selftests/bpf/progs/verifier_callx.c      | 1039 +++++++++++++++++
- .../bpf/progs/verifier_callx_rodata.c         |  846 ++++++++++++++
- .../bpf/progs/verifier_global_subprogs.c      |   31 +
- .../selftests/bpf/verifier/basic_call.c       |    2 +-
- 28 files changed, 3913 insertions(+), 121 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/callx_func_ptr_map.c
- create mode 100644 tools/testing/selftests/bpf/prog_tests/callx_rodata_lskel.c
- create mode 100644 tools/testing/selftests/bpf/progs/callx_rodata.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_callx.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_callx_rodata.c
-
-
-base-commit: b4d936547f5a3ca5563f48ee81f153c928336027
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index a7c9e2d8965d..74cf24ce3007 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -5510,6 +5510,27 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+ 			}
+ 		}
+ 
++		/*
++		 * sort_subprogs_topo() tolerates cycles in the call graph that
++		 * go through the address of a function being taken, since it
++		 * doesn't know what it is taken for. Such cycle is a recursion
++		 * unless it's an async callback, which are skipped above.
++		 * The main verification pass limits the depth of the recursion,
++		 * but it doesn't follow calls of global functions.
++		 */
++		for (tmp = idx; tmp >= 0; tmp = dinfo[tmp].caller) {
++			if (tmp != sidx)
++				continue;
++			verbose(env, "recursive call from %s() to %s()\n",
++				bpf_subprog_name(env, idx), bpf_subprog_name(env, sidx));
++			bpf_diag_program_structure(
++				env, i, "recursive subprogram call",
++				"Rewrite the recursion as an explicit bounded loop, or split the logic so subprogram calls do not form a cycle.",
++				"This call or callback would make the subprogram call graph recursive. "
++				"The verifier requires a finite, acyclic call graph so it can bound stack depth and analysis.");
++			return -EINVAL;
++		}
++
+ 		/* store caller info for after we return from callee */
+ 		dinfo[idx].frame = frame;
+ 		dinfo[idx].ret_insn = i + 1;
 -- 
 2.55.0
 
