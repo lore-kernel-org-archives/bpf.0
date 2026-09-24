@@ -1,90 +1,130 @@
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx2-f43.google.com (mail-yx2-f43.google.com [74.125.224.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F2C3DC4C2;
-	Thu, 24 Sep 2026 16:24:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B818140F72B
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:24:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790267090; cv=none; b=hgLNXDHjlIPr5lPgbBOpH51o4yoAoPcmqfV0dddd15dqb1JWORQaBqJLaAsxrfshHvQm3Sk/PtUh0gYH2kVhR0vsv8wXGFuhGOZ/mK3q4xHvo00jYclXhWUHr+nfj3g7NvIiU+JQFZw3sQVeWEzQB3HhjA3TgchulskY+R2lEjI=
+	t=1790267096; cv=none; b=ll1L+/iycpEg2j5zu9SApg8S9De7K62RpLampAwbDKzPbkixVOFDx+1056lMXg2fJBNjacPhbloeRksxs2WtVCQOnKkxjVEt59pVs0EXJ0oB9uHpC52DXRA1bfyCumEPzNGxLGTmt/g6gdj1BJSbcFSfshAYjT4E0Ux6VWArL2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790267090; c=relaxed/simple;
-	bh=057w4K6AIH+2cjgtX4h1v5myM/zTrovsfRnreCXZXgk=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u5kbaa4IO5PFm5SdDJ8ZWAOWGu0Krzdu5Q3Xtnh5VSNkxRKRLSTYH5UzgHFASVl+se4G/xRiYsIG0NVNfC5fAuLGJpiZGv+Te0uO05ba0gIKEBbqqP6hpoKw7d+OgAowQ/6X24jB4o4Z3+Gf23oT6/fchRXokF4W0WKt5noLGZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=U6IAhE70; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1790267096; c=relaxed/simple;
+	bh=440h9dFKjB/gL6Kt8Wwp2sOdSQZbYHU2D2i/qlxYifE=;
+	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
+	 References:MIME-Version; b=aqiOHLTVtSfm2BEhn+PI/wzppbv9874ypgx8qZDMlIcHjIGRRzbZMPWDnNlbo7BXkYa84kdNvBAe0A9aCviG7iVXLgpygEvkASKDkgCt0THIMeHZg/dwjPgZiYhCf+bv/bdQWmLUnu45EjrRq/w8VzBLY7XU/ciabWxLnRLyl2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=amgVEXlD; arc=none smtp.client-ip=74.125.224.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="U6IAhE70"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1790267089; x=1821803089;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=057w4K6AIH+2cjgtX4h1v5myM/zTrovsfRnreCXZXgk=;
-  b=U6IAhE70dtOHVXdjZPBet44xD02bMw6SmAXMstzga1+c6VtD24xrD0t2
-   p+ygqbVHSjR1kulqz3X28bYGX5kC2XY9PemCJ0LjDIeR8ZghTStTAEqEV
-   a/wjs+tuv5pW3/M3VO4q1frQFGk5AJimkXyfTr7+TxN3QN4jevKCLxbNY
-   GuqUNbHM+E1PwaxFkv3oOAytQNVzG9AXXcr3tP45KypV5XS0/DS0UlrbT
-   8w2wKd+JVwOzXOU3loy1CyCvSyrw/YHscKQe2HVXOuHIrLgk1IoXqLTok
-   CklEaEthYo1rkJo7UB9Un7YoD+apys4gQMbA5Wstx+vvVi/iq5QgNPWHM
-   Q==;
-X-CSE-ConnectionGUID: W2R9KMarSxa+DEZ33B5E4A==
-X-CSE-MsgGUID: jaEIntY6QkyEU8YyNCAOvA==
-X-IronPort-AV: E=Sophos;i="6.27,120,1787036400"; 
-   d="scan'208";a="64409041"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Sep 2026 09:24:48 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Thu, 24 Sep 2026 09:24:47 -0700
-Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Thu, 24 Sep 2026 09:24:43 -0700
-Date: Thu, 24 Sep 2026 18:24:43 +0200
-From: Daniel Machon <daniel.machon@microchip.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: Simon Horman <horms@kernel.org>, <netdev-bot+sashiko@kernel.org>,
-	<andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
-	<pabeni@redhat.com>, <horatiu.vultur@microchip.com>,
-	<steen.hegelund@microchip.com>, <UNGLinuxDriver@microchip.com>,
-	<ast@kernel.org>, <daniel@iogearbox.net>, <hawk@kernel.org>,
-	<john.fastabend@gmail.com>, <sdf@fomichev.me>, <herve.codina@bootlin.com>,
-	<arnd@arndb.de>, <gregkh@linuxfoundation.org>, <mohsin.bashr@gmail.com>,
-	<richardcochran@gmail.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH net-next v7 10/14] net: lan966x: add PCIe FDMA support
-Message-ID: <20260924162443.5vmx3dx5c4cx7rrm@DEN-DL-M70577.microsemi.net>
-References: <20260918-lan966x-pci-fdma-v7-10-0ecc179c8a2c@microchip.com>
- <179008205148.2160803.12818321368571406375@kernel.org>
- <20260923084538.wgkw2nt5ergoxcot@DEN-DL-M70577>
- <20260923180730.GV13925@horms.kernel.org>
- <20260923201155.lbbbtx22adz2ilhg@DEN-DL-M70577.microsemi.net>
- <20260924064617.GY13925@horms.kernel.org>
- <20260924083141.67eecb6e@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="amgVEXlD"
+Received: by mail-yx2-f43.google.com with SMTP id 00721157ae682-85e68bdbcc1so25191687b3.2
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:24:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790267093; x=1790871893; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=4EdeJyFvDx7/h+uSzbqlt1nBcvAWTDwgRsH1W939sSc=;
+        b=amgVEXlDw3WXRKkw5jFf6JpviEeeFfSBTxlJqyFOUZQQcq75eahVQc4AgIH9Y+x964
+         LXSA+pPeDYsb4frucnXxAQClFs52vbiIi/rdKjiGB3NVsxadrU/FetTvPESDGytbSQ+d
+         EzIRWq6/pPGSJu4kKHNl/ElAI4NORTdY+jsRLTgMkeJAk/u/KrxIdJGEr5m4Kp8+EoAO
+         6MOOCfrZgcGU8dL//sUrhvpl9d+f6uDvbA4sTnrILiSLJcF2L5qfXfO5/gZDkGJHyxCd
+         dR+jpg0YePr46Zy+3kZBxFB0xJYtKcErl89nkXDiveIYLHiDkIVnD5jSoVtBpi2WjZ/C
+         c11g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790267093; x=1790871893;
+        h=mime-version:content-transfer-encoding:references:in-reply-to:to
+         :from:subject:cc:message-id:date:content-type:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=4EdeJyFvDx7/h+uSzbqlt1nBcvAWTDwgRsH1W939sSc=;
+        b=PMqvMYMJAmvDxeMzVtVaFwYd83HWDVsbfCjEAPty6a8/VGxypL+UylBTnbE1urIpuH
+         pJ7gezjiWCGlY7uiUMGClY0RxgBb6KFizPHKsm3XmxxMhLldnwWXOuh8sy8JErQCp1Gk
+         KD5jpSsYjTUkCxatk80h71C/JVxOnavWybCYw7OJCN0BnOsudUWVla6bwodjcFilXkBl
+         9K6TP46164RVhljADLb25ZlhNobpd1gPYwdVjQX+QNNKorQgcQhe3/dR98h6bb30wdFC
+         UdlfbKkMJcPaEhfaBX0mC89qLLNjadDHacHFyu13aruDZbAMa0Sk69NArgw3v2L3BZn7
+         Mukw==
+X-Forwarded-Encrypted: i=1; AKwUvBy72eZIujiHpmVSn0ywxTVmLupvfYnzDkzJgO3vDxjklSfdr4UtpqETX4CmH9SL1Qwj0qA=@vger.kernel.org
+X-Gm-Message-State: AFuF++kTas0h3mJuLP6sqfFdd6VOL1qG0j3GIBdzZiKxO694Gv3GJmmh
+	lGXjUFc+u44a4chCfpq42X5ebuEXxC6y1P7TaehWDjYx+fTRUkXdHEzV
+X-Gm-Gg: AYBFou09f+ZzTNFsLEyudnPnoBgr1vdcpTnB199YKWhlelDng/1sEQWlI+QXja9RBJg
+	YHo/RoXu4macokrYXyXbwncN2KWKB2EsPZly/ni3yB4g+YrDGvbK5a12RdmlzFhq5gmFke2YkWo
+	aNJve6XDvHe6IJesPLDxhI0Riqz5XT8lxZoXju64mp2ZbBDpdsHJf6+exj6fikPFNE37MGemRmZ
+	QUGQHN3+EhjD02iOS99P251z8OXaT3lkgXHGiK0Bn462Irfgf4+fXq3crfPDUWPTrv2ccO/66yv
+	+Bj3XlUvvcHv58iHQ6KNdbGByBi8/VN/Pia/WmSji4npMw9Cya0dtbXbg23JN4crizkbXsGe8/Q
+	9rjgU/gdcYcba+PKeKAcZAkVW6WE/lx0/emOYOdTxA4KEnSrOebXynFw9jXjGYg0tjnhXBVFk1E
+	VuFzC+m+3b1xzfyAzCXirceEADPn86s+x0ilNeFAT1/y310eqasSEut2JWK59sTopgd2Relm3Ke
+	/nbcMlkYNZiYOMnhEq+ZFzIHTKQWA4GH39gK1CKCQzcCNEiknmmdCeDTZZBQ1VBCG54cHFdFwse
+	czg=
+X-Received: by 2002:a05:690c:39b:b0:89a:63da:cbe1 with SMTP id 00721157ae682-8a649f614eamr21784567b3.39.1790267093494;
+        Thu, 24 Sep 2026 09:24:53 -0700 (PDT)
+Received: from localhost ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-8a652715b65sm10602237b3.40.2026.09.24.09.24.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Sep 2026 09:24:52 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 24 Sep 2026 16:24:50 +0000
+Message-Id: <DLNOPVM33JL0.4IW7LA889QQ2@gmail.com>
+Cc: <qmo@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <eddyz87@gmail.com>, <memxor@gmail.com>, <martin.lau@linux.dev>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
+ <kuba@kernel.org>, <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH bpf-next 1/2] bpftool: Don't report an empty map when
+ key iteration fails
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Maxim Skokov" <skokovmaksimevg@gmail.com>, <bpf@vger.kernel.org>
+In-Reply-To: <20260924160732.485650-2-skokovmaksimevg@gmail.com>
+References: <20260924160732.485650-1-skokovmaksimevg@gmail.com> <20260924160732.485650-2-skokovmaksimevg@gmail.com>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260924083141.67eecb6e@kernel.org>
 
-> On Thu, 24 Sep 2026 07:46:17 +0100 Simon Horman wrote:
-> > > I am a little reluctant, when I cant really test it properly. Sashiko gives
-> > > another solution - adding a LE dependency to the Kconfig of the misc PCI driver,
-> > > maybe that'll do?
-> >
-> > I think that should be a last resort. I won't hold out on this,
-> > but I would prefer the approach I suggested.
-> 
-> +1
+On Thu, Sep 24, 2026 at 07:07 PM Maxim Skokov <skokovmaksimevg@gmail.com> wrote:
+> This is what every local storage map (sk, inode, task and cgrp storage)
+> gets, since their map_get_next_key returns -ENOTSUPP. On a
+> BPF_MAP_TYPE_SK_STORAGE map holding storage for five TCP sockets:
+>
+>   # bpftool map dump pinned /sys/fs/bpf/tc/globals/cilium_lb4_reverse_sk_v2
+>   []
+>   # echo $?
+>   244
 
-Ack. Will add the big-endian support in v8. Thanks.
+cilium_lb4_reverse_sk is an LRU hash in cilium. It's not sk_storage
+and bpftool dumps it just fine.
+So where did this output come from?
 
-/Daniel
+[...]
+
+> Fixes: 71bb428fe2c1 ("tools: bpf: add bpftool")
+
+That's not a fix. The exit status was non-zero before and it's the
+same after. Drop the Fixes tag.
+
+[...]
+
+> +			p_err("can't get next key: %s%s", strerror(saved_errno),
+> +			      saved_errno == 524 /* ENOTSUPP */ ?
+> +			      " -- map type does not support iteration" : "");
+
+Local storage and ringbuf return ENOTSUPP.
+Bloom filter and arena return EOPNOTSUPP. Queue and stack return EINVAL.
+None of them can be iterated. The hint is printed for the first two only.
+
+[...]
+
+> -	} else {
+> +	} else if (!err) {
+>  		printf("Found %u element%s\n", num_elems,
+>  		       num_elems != 1 ? "s" : "");
+
+The subject says "Don't report an empty map", but when the map has BTF
+the elements array is opened before the loop and closed after it,
+so stdout is still "[]". Only the line on stderr is new.
+With -j the error object is printed inside that array:
+[{"error":"can't get next key: ..."}]
+
+pw-bot: cr
