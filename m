@@ -1,79 +1,82 @@
 Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 542E436C0D6
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 05:55:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B73D39F166
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 05:56:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790229320; cv=none; b=I0H9xSWevcD8PUeqK/k18jWL9fD4nTgwi8cQSIVrq3OWWIH+YIXaHAxg3ZNHUKD7vnOSECOvCInYAdMzOSLzP+BxZXJurdk5/mkOW8m/g6CzfaPiZGj4ClZKg74YlykmTSjDSIYn9HyBJfY4naxk7v1YkzymGuRijQu2gsswpTI=
+	t=1790229373; cv=none; b=FAzo1Box+y9h45P8p41K1KMtgmRcEPh7eXY0dGR9zhuTxiz1PBGXt4s4BTWSvW2zkOYsWpia5bUqmkmIf6/ZqhW6Y5XLyR7ItLF/GjXhaY8GIcUePnag0Km2xLE+O59oVhqFnyLWryw/DK1dzwgZB+kpTmvK4kbomQysGzGLx98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790229320; c=relaxed/simple;
-	bh=iT57O0JsvQT1oO/7SKdemLl2pW+BwJt0QPVuDng7JEA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Upu3/2N6Xn0RifIiFVOF+IyJeqyOhZkdWmqJCt9GD94Bv9cI0mw055tqVXVUuJVrgfnpK/MVGheuT95huzeQYxuMdltIYzfoJiv1NbZSgspUk8iywzt2BlTRoV7UoWc4RnCHOzSDnxlnGqESWXu4FvbZoiPWT6195QtHkbuGmRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EK1G/aro; arc=none smtp.client-ip=74.125.227.140
+	s=arc-20240116; t=1790229373; c=relaxed/simple;
+	bh=PFsqgsfgnZ0F4NBxRigPGHFfA4KXZ4IRVsUbSf/RVFs=;
+	h=Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
+	 References:MIME-Version; b=VELE7Xg/6qQZcZoEvbG1RcjbZC37uqUV4XdBnCOyDB57hk3A1GvrRRKE7EeSZOJBakLgGqT7lwmJ/MEfyQqQk8ho7TfUW4nc9aGAlalbATXRYUdkl/I3iJmSVjlAE7xOqxwgZ0+kP44+FHZBQN6oGJ6yzA96+TNIRF43pP6iWVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n1hYUjUM; arc=none smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EK1G/aro"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2dd58e1e2c7so8781095ad.0
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 22:55:19 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n1hYUjUM"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747eb79f6so7908155ad.0
+        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 22:56:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790229318; x=1790834118; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=iT57O0JsvQT1oO/7SKdemLl2pW+BwJt0QPVuDng7JEA=;
-        b=EK1G/arosKoqsglEH0Mtplm0NlN9XOtAZMlBD6M478r2mZDAqK39ogU0YRIFh4oOhO
-         J6u2MkmKDu1R6IFfCfuKUhiXZ298c0Ba77sUsaH2Js0GCFdjaY0/1YQTey087fh8xqJr
-         07/hXFBi9jg6qntXs+jshrRTClvZ0bMIqrTC9N4X86sbC75y2YJ6wNZJMNNZ2/eEqViY
-         ZjDw8WYQom/hk/pu5RGchkJ6Ir32Z5+0DCEhuWcPkpIOPPPye6x1T/+NAE6lWhataT73
-         1f9yoU4xuh+zSdCL7REMg4e1H8NPT8teSWgmAQGnrZ6TFJV/ch1eJWtSjDrYmv6y2pvj
-         4TwA==
+        d=gmail.com; s=20251104; t=1790229372; x=1790834172; darn=vger.kernel.org;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Ddc11RZTLsW/NfRYZ6ufKgL8eOQLhIlzC2wVbMASsYs=;
+        b=n1hYUjUM56AHvg8eCcYwkzuZKLRPkdlHGvr+xA/pEhnLh8GFvudmFsVFZivmI3IJ3p
+         8aGhlnxMXteRNHr22eWGTtMrpdwdwC1USTPHbwkx3fyFFNPZYha8GC2en9L8q4FOxIHs
+         h1op2ARRu29U2Ct7gSeGVQ0DRsaTDNxgnIAxVNAsgZJdSG+EbRaF867ZpMaTizQI5/6Z
+         JrSfcEtN+53oD00jCDXyfx27kh/b3gWJfl5/uZyWhQbFZ8+pVUUDoeffo9OoveUJA8uA
+         Nm3zMN8GGbApeOs/0z122YojiqotAdlQJxlMfALv2u46PVkYvN3nbNlu4muphAgw+Ui6
+         vg+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790229318; x=1790834118;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20260707; t=1790229372; x=1790834172;
+        h=mime-version:content-transfer-encoding:references:in-reply-to
+         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=iT57O0JsvQT1oO/7SKdemLl2pW+BwJt0QPVuDng7JEA=;
-        b=hMmaBeB1k6jZ0COkts7xnntKMkiSSGEen6KDv5V6JS0BIozSPTaow+vxcrYVfd9Y2V
-         +Kdk3KhiW1v85JKzls+/gdhdaG3FcCWXcP2Eff56JNLbirVjzs0NPxR83+QufXyu4pD/
-         9/Mx316T9QZGtfo487U79Lnipp+AnvFCWCY0Pyx5gSBrAteG5+UwkzwuN1tS26qRHJoW
-         zF30c0ra6eeUWRnwSmOfOGAZrZXqMMIyJzaTeBHmGil3MPdKYZ+ItdGlcWDmOn9T1Efb
-         tG2StQebfX9MNuopP/iaFG/Lf1atUAqemQ0TYOGX9L73h7MUNGqJU1ScrXQsUc2Dfdst
-         XCww==
-X-Gm-Message-State: AFuF++m3WDrrXf1XqvQL3PvBIpAdE1mUiw3/gZylkfs9ft1Vd7oqFB/T
-	6Yfej6MiT1MLO/Tkjvh0f6Bwaj7rYK+8rlgs17XeeRwt6lJlZOLHDsFS
-X-Gm-Gg: AYBFou2qnFl/e24j+X5ZdjxMcSn40nKUSsWbbbevHNn6HCCFhssoTXIXQe4LfKW4DP/
-	HjhJwSITFtZ0XSqzDRwjw0mZx7R5okjE9etKgEbcCASlY71HeMSc1zrC/vLvdZqEygqT9chCrl9
-	Gr6SGGXa5rj+H0K8/JZ7ihyoD89ATqRd/JsL7MOWidxUyU9CVEi3aJw/EGv4AQOBKIDCauutJte
-	RIG8pFL+c3+x7WQIZxrnOaHqYx7IfrapTbv7183PKnpEItqy1Q5La4eIAP2T1y7cSst5o+YpTG8
-	kuPlPciArqtU8wp9hYBlCFaU5I1GDZkf/rCghQ4WtWu1WNW8/7+j5rJrm/i99vaI8ire2M+dr1K
-	YkHd47fBBUBlZpmuSZLpsmjWa14HlFVOVcu009++pBX8Kop9ots4rRZd/Oc4+RettL6p6RLvF0M
-	tr73ETfG+HgRaBjhatBa+YaAta3sedSgmcKmZ88Py3SjGprxvvIyhV93cEcFVzouq+o0pHS7pq3
-	XRKGutMvJ0WPyawOYjEJlDdD6o=
-X-Received: by 2002:a17:903:240d:b0:2ca:6c8:abd8 with SMTP id d9443c01a7336-2df7da42900mr11739725ad.12.1790229318602;
-        Wed, 23 Sep 2026 22:55:18 -0700 (PDT)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6d4910e2sm19383575ad.12.2026.09.23.22.55.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 22:55:18 -0700 (PDT)
-Message-ID: <a913f2c69fdd3fa9ccf6df18b3e95fc880c0ea72.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 00/17] bpf: Indirect calls of bpf subprogs
- (callx)
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: patchwork-bot+netdevbpf@kernel.org, Alexei Starovoitov
-	 <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	memxor@gmail.com
-Date: Wed, 23 Sep 2026 22:55:15 -0700
-In-Reply-To: <179022901639.1337807.12766583921039284951.git-patchwork-notify@kernel.org>
-References: <20260924031042.1690890-1-alexei.starovoitov@gmail.com>
-	 <179022901639.1337807.12766583921039284951.git-patchwork-notify@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-2.fc44) 
+        bh=Ddc11RZTLsW/NfRYZ6ufKgL8eOQLhIlzC2wVbMASsYs=;
+        b=QcnnhpS8QFFAEyS0dJ1MveH4q9cH3z35Xzo6/n5/4hu+dxFltljl80v2qTmTkdYhYL
+         x9+Aj19ipYE1c72MT/3f5Ck6JsbQZTjg+OW38tAcklpOmr2h8aN8iYwpB80UIBx13FqD
+         A3hcF4bi6JdeZXwHy2n+Er0vMTFcvocd4UW5RhEXdG9ZuJh8vx8+1WB9uPnXUzEK045u
+         QsUJrBf8Vn+HQvwpo1a85pBxjaG+efV4zbstVHTPGO6KOmYkEjt4qyTMVTK/sK3JkTXK
+         2slZgr7ZZ3/B7wSLNxZC9ZKBNRcqDVaPBLwibLOLdLwXpqlg3I5QE2QRahiFm2ncJ/Gt
+         T4Pg==
+X-Forwarded-Encrypted: i=1; AKwUvBxND+elcOcE6R4+SzlWu7RMcUQh0AqhqZF+mt0G+XsGSVaqjgR3OlFygEu6XwE8ARWjySY=@vger.kernel.org
+X-Gm-Message-State: AFuF++nCOOqplEdb1Tgg1lf1W0z7uUutXl5HK5N8niiKea7/TRxh1dpX
+	dufygi6NeZaQF1RyIYSuoJEDe0gAqqwfJg1OnoS2fPwwyjD2VH+rkEJA
+X-Gm-Gg: AYBFou2PggxxkV0KOTKZwg78/se+m2IzD3WHBzNEeRlfHuOUSrkSdgiiAwE8efikC08
+	zujuTCwRArz43BTR9Gp2Qf+znOIqm3TzXHJgRp/N2hSNScyd5pYrOuANtGCXReQrFnn89kVMuec
+	Y93LTITerd80Esxab70ESUiEXFMDkIi8mAWEToD1Q4VEP2Sp2sDJLdnKe0qFlQ756rZ3EvaN5Vu
+	NPDG6lU6T0f3szhbk2O0KXM7fPJXNrWMrQXtZ7HdCVlkn3LdAkN3KyNolGSFmERxK3NDgILUbb7
+	WUBSVu/TEBudSeXenonbntEtiPVdrDjbi2BxuhZnH2s0Hk1VUsGaKrAgxqEaF+ZYj6aIRHFHvuA
+	h0zx9KMq9WeZAzigj62NZDSbb4p7Fr7+WrafkeTbeszznjlYPYcEU/b6C3KSkF0w4AZg8z0T4FW
+	12h4cMhKpy5c+sSccuWIw1/d63aIKO8u7ImNXr2KAw0da1WTpT/Ynw7oVBWkni5G5/IPgJZWtuB
+	41XzYp+fWSz9mSPpJR2sjAzhH2JW/LVOT0LB7WTxnC8zOUo3XnUJZdM9qb8ithTCDZSAgjZx5YG
+	AkM=
+X-Received: by 2002:a17:903:b08:b0:2c9:e9db:8167 with SMTP id d9443c01a7336-2df7dc03019mr11410365ad.7.1790229371816;
+        Wed, 23 Sep 2026 22:56:11 -0700 (PDT)
+Received: from localhost ([153.61.198.245])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6a5a777csm20814575ad.18.2026.09.23.22.56.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 23 Sep 2026 22:56:11 -0700 (PDT)
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 24 Sep 2026 05:56:10 +0000
+Message-Id: <DLNBCJAQ73G1.3U6JELNSXMQM3@gmail.com>
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Puranjay Mohan" <puranjay@kernel.org>, <bpf@vger.kernel.org>
+Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
+ <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Look at frame 0 when telling async
+ callback entries apart
+In-Reply-To: <20260923140152.4005097-2-puranjay@kernel.org>
+References: <20260923140152.4005097-1-puranjay@kernel.org> <20260923140152.4005097-2-puranjay@kernel.org>
+X-Mailer: mkdraft (claude review draft; edit before sending)
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -81,13 +84,22 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Thu, 2026-09-24 at 05:50 +0000, patchwork-bot+netdevbpf@kernel.org wrote=
-:
-> Hello:
->=20
-> This series was applied to bpf/bpf-next.git (master)
-> by Alexei Starovoitov <ast@kernel.org>:
+On Wed, Sep 23, 2026 at 07:01 AM Puranjay Mohan <puranjay@kernel.org> wrote:
+> -			struct bpf_func_state *frame = sl->state.frame[sl->state.curframe];
+> +			struct bpf_func_state *frame = sl->state.frame[0];
+>
+>  			if (frame->in_async_callback_fn &&
+> -			    frame->async_entry_cnt != cur->frame[cur->curframe]->async_entry_cnt) {
+> +			    frame->async_entry_cnt != cur->frame[0]->async_entry_cnt) {
 
-Well, that was not fair at all.
-We agreed that I'll review this code today.
-Anyway, if my input is not needed, so be it.
+push_callback_call() has the same problem:
+  caller = state->frame[state->curframe];
+  ...
+  callee->async_entry_cnt = caller->async_entry_cnt + 1;
+When the callback re-arms itself from a subprog the caller is
+frame 1 with async_entry_cnt == 0, so every entry into the callback
+gets async_entry_cnt == 1 and the check above never skips.
+A loop anywhere in such callback is still rejected with
+"infinite loop detected".
+
+pw-bot: cr
