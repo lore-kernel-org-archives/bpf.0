@@ -1,77 +1,76 @@
-Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
+Received: from mail-wm2-f6.google.com (mail-wm2-f6.google.com [74.125.225.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5B613E3D92
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9EB442A178
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790242189; cv=none; b=TehaVL/mtEImmfwMlo5GSN68p/A5D/3JN+YKRa3K5jEsVMJa4pD795F9Ecx/WU9ojJIDOQlIXVOWGELaGmMLgljQeR1cLe1MAUoPxEA3J2DMzVMdK6DRJY8v4hSFbKpkFwYlbzIthssMGZpn/WbO8p767LC8nTso+vil7LLb3mI=
+	t=1790242191; cv=none; b=HkGWfzM8EXueZJ14Wo7HgmxtO743ZEqrifsIxAeFaKG+pcyDP//vt0B70pBdbvHE4v1c+cU68Zdf+KhBGsSmgzobpXoct98E/eyX72HuS7LoUKUS56pUrwDWQyyABUmuBMng0IU3zoYr/IVVZ5fHgMMGDJkMluifEaIuGbYCBYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790242189; c=relaxed/simple;
-	bh=DxADR/Z3L79bnFJpantLa09fZvFM/nAApOZ8iWpOU2A=;
+	s=arc-20240116; t=1790242191; c=relaxed/simple;
+	bh=wZ9Z6KyaUHwoAi4Ql7ayOvfc8TL9rrRcF1blgjU2xJ0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G5yGdm0jNj4eBknepbOinEBFudLGeayDT0yX3uBpGAOsIXWEchZdYYhCa3dIHIFUnODPyT0AZjTq5dnhSPhkOr2tc3j++qC0FPlchEyx4PVC076iFVnd18RHMCyB3HND6ZFtyK8HzDAJDCSE/YehGOStk61N/tmpB1UQwAvHXRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jT6RpnXd; arc=none smtp.client-ip=209.85.221.66
+	 MIME-Version; b=YkddyXLoVDbZ2bG+OgFYJgfDr0T43DAy7wGNiuAhEPGmjAmLmooOMgKFUAPK1xL/EcSAIbzqeZAYxAa2d7LeeV7OPYHV+0R1UzzWChqkBKx3uncEWSVSGj2F0PWAGnaABRmhu3Usj592VBxCY3CZNbvO9Dc150LBqb/bo1WkCdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OY8/9pvt; arc=none smtp.client-ip=74.125.225.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jT6RpnXd"
-Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-488615e6cfcso294966f8f.0
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 02:29:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OY8/9pvt"
+Received: by mail-wm2-f6.google.com with SMTP id 5b1f17b1804b1-49fe8bf90c9so846755e9.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 02:29:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790242185; x=1790846985; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790242187; x=1790846987; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=cQMGBmafDls2avY0DjvYgDRcEpBYRvnA2el1XMvcYL8=;
-        b=jT6RpnXdaXNnJC4jeAdFnDulPbUCfyIDOp0J3RHRU7dKlykUIco7uvnQnKBqKp1E2E
-         hII2dWl/pmyKxgST8iRDxmrAcCwsdEJKfeZDlXX2fDFqN/hUcdRkjz16QSILtIVD4zLt
-         B2ONfEmNIznC9PZOuFgrVue/qxhHeHLdua2FGD9sjLtW9nVqMC7EhgVBTbDEK8L713LA
-         sG+Gu6dcf0HIQ6T5Sg64kb+A8SZCAhuXpKr7siPHDTDT6ilo/DREWgnftOvBSyDnz0nN
-         qVnTmnd+XSJIM+mZJAOL338FlUS5EkAzXCWoHE+YZi4sQvX2GrR4k3+cqSM8Kih0zuqB
-         j/0Q==
+        bh=QhxObcpprhTchCMdpWdXUUMI2Kk8s59Gxags6MSYgNo=;
+        b=OY8/9pvt+iVwBAcSkBn3d90HpWktvQOUsJ/ycPxM75kdOonyjJL7zApxEwkWZZpd67
+         3NH+uvJEM3WK/Nvc6zM6JNC7+KICY/NRCgAfLdMTPQd7r5yZBuB6Sq01x02vEmYyL4Ek
+         5IUoywwrkFU7G+GWFXKq3QMgEaAUMxoyQo8GpGrdFLJHXrn8Z5BcoBLYgGXsrPsKYlqm
+         XoJewU1Ml7p3ZRt0QrMbV35HxdDXbrgoddmoDW+7i4IskrzFE9lSBAqMYf7UKzA3k71r
+         ullCfjvXj8xLjNN6j3MwVkmoo7Ca84NLrdetjt3ds6qI8bkn9nzRSVkuWxw7O8A+4M/X
+         VUQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790242185; x=1790846985;
+        d=1e100.net; s=20260707; t=1790242187; x=1790846987;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cQMGBmafDls2avY0DjvYgDRcEpBYRvnA2el1XMvcYL8=;
-        b=jQBmTJLXwoPQGuz9KIcxcsjiAbrJKbCmyBde6M9IClonQAQB4mGnPXVGwLtyE8pHxl
-         IbvN+Wy5RSR2yldK/Bq2rSzfEoHhMADscgqhx0Tn8go/IgTnvTtyjLeHIqMH3dkj8UlL
-         ODsjbpmqC/63W+lRXb9kZnEfCQ8CYRLcFTLNP7NKnKUfRNabBOLQ/81iFL5clcLZ27SL
-         udr7TfEGPHh1surCzFkJjUjyke7Y/C0braW9F68MwJF8VkyU53rQwX1vtvW1Unt1yPU6
-         jLfh5eVOktoihNJLaHV2b5RnjBUARFBdx2nz4cwW3Z4n3MQIa6B6HzTyFuj6WOOa5H32
-         PNAA==
-X-Gm-Message-State: AFuF++k29Y0nmv9d/3ILFe9NqlL5PpkYrL3kqoTONtxjCffMJd5K4HQB
-	wqvPaIRUyfK9ugJDjyj3zKeod12XqKXhAvGEV4/5unRLK+7NdKfHzTalhvmRSXEK
-X-Gm-Gg: AYBFou0wRJrN95j3sARDE6EiHT+1f7dOBID6Bpc4+yCu8WPxYhYXpNO2AKWaCGJW+nx
-	zg+o/hY9nN7fW0Mq8wX+GBmOUUPsbzufhA7TYMAAiXTtGQ77ysYuh41zoktTAJU0a5oN1ONTnDm
-	e73Rl1nEZ3uER03U9ytGlchuqSFWL5E2OhmSxSx4RCztzZGOz8z5qlhEVKo9QqD9ivVLEovLX6i
-	s3Bg9dTEHXO5tRKCIE0CJsYvCUBajxoxQKHc/sxVw35xgi1P8kV80rcd6WaWn3y3s5HG2t+EfZ+
-	Yx5VGUUoTFASFay+GWrvd9BI+5joDx9Ts8nBgEutdq0UXWCaGHTmzwnIWsxE1KLjj2hU+9HiasA
-	j1mSjW9GDVkmIdfs0iTZBxCazKQpI+tff7xCl1DycCS8phQGWWRD1cdjLd8/p4VX50t4UitDf+h
-	9JkH5XJhMSSV0ZotaKXG4/nvZ/4lIC8rlrRU/REICdKmeaskyemIG1mv/p20elQGGA8MQlSFuIC
-	zGQZcpPdA2fXK08FyNi6Zm1gDhgGa1ffmBhdpx7yzLItqsGeSaY2831qSO06UrQAZnhNB8um5XI
-	n+UAzCwmPWjSmUPS//BcCJLfoomIEgpISuqunw==
-X-Received: by 2002:a05:600c:c101:b0:49d:27ee:79c9 with SMTP id 5b1f17b1804b1-49fe66d63fcmr25730265e9.8.1790242184831;
-        Thu, 24 Sep 2026 02:29:44 -0700 (PDT)
+        bh=QhxObcpprhTchCMdpWdXUUMI2Kk8s59Gxags6MSYgNo=;
+        b=TMREv7HwxVkeWo0mMryQHYqKuPBmlop6jo1FWzZWGiVZKi4YTRISXgW2CWHDLEiEYB
+         HpnF0i3o6o6SCsLVz3KNv/IjyJ6i17f7eHQNihI5y86cE7gJgLc2AKotrbvFCyUmWWv2
+         w7oXon4pbTkPOlfjl80puvOfd5sutAfjRSEnEyN+XsjYZshUfcPOBitV1ypvH4Fhov3d
+         KL9IUEu473IN3SDqPQJjeohFmB4w4pGmtDV46/SzhBPlDRfxOABJ7CnFG6MZ3i3zmMYr
+         E6fh5ssLD91o+/Mdgsir5uzNjIm+0DsMham8vpoi9B5L2ewlEowcZTSGwJJclxRqa+TT
+         pIWQ==
+X-Gm-Message-State: AFuF++maTiIDIkC9fzb/2bCxx3fJuxGweAE4BpINZxVNTpLQkYuw8sxR
+	nnLy/haaJ1J/kUGazheIvzV5tgydpBe3MJoheYIf/l5nHR2HStpGuEhxmm6FplEZ
+X-Gm-Gg: AYBFou3Ioqv4kWL/MTyTe4ZQofr2JYsReUc5P3dE5jdu0Xpt1rdFV0M1s6ckdW/Gqkz
+	YP7/QnmeCOqdI5eBQ9i00UdOPNdyjA4fMTZ0564YB7lXV8Q9Z0BXKY2y0OtnEeKL4nHyl3zMxe5
+	Nj1RtEa6MijBiqHoU9Papx2p3eO95/NXXr+KjC7zXXKgFzmyncAk6wWO+9IfA31m7rd/ajZM9wb
+	75v8Xcrj2+7ebGF83Ct2g31f12PN4KAwf3csJo3z/uRxC5QZft8YStpMvjsAaOPj5rkKJvYn+HG
+	KiSuFNBJurWVDB/H0taMHvtm0F6M5d4x1oS9xBplzDFq7kIkEVkjI76wbL0EGn/DUv8Y5nrVYc8
+	7OB6AB5aObf8GwYxsy3o+X4nuOU7SIZ9DcYrh7W3QBf9+0HautzcjJPCn8OGVmapF1vknVxqUL8
+	RKadb/FVg55nGo7Qz55hZUBwCRBU5VWXjX8HeH8hj0gHMIyrtT+4sFswPR06KQ+sJrzWKA980TY
+	9YRQiQIOVK3V+9wQyhZU+cE+zEXzQJIKmV5YcEOoTnuWGMF7vHrKH2UJH9wzg/VqRzGJoAqEBgt
+	8LTKerNE0GcRuBPYVp1jG1K5JRC6EYsRpj0dXA==
+X-Received: by 2002:a05:600c:3515:b0:49e:7a10:1b71 with SMTP id 5b1f17b1804b1-49fe66d089dmr30283235e9.11.1790242186599;
+        Thu, 24 Sep 2026 02:29:46 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886848646dsm12080535f8f.10.2026.09.24.02.29.44
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe5cd2bacsm50319185e9.13.2026.09.24.02.29.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 02:29:44 -0700 (PDT)
+        Thu, 24 Sep 2026 02:29:46 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Sashiko <sashiko-bot@kernel.org>,
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 1/7] bpf: Correct verifier diagnostic attribution for stack reads
-Date: Thu, 24 Sep 2026 11:29:30 +0200
-Message-ID: <20260924092941.3174809-2-memxor@gmail.com>
+Subject: [PATCH bpf-next v2 2/7] selftests/bpf: Test verifier stack-read diagnostic attribution
+Date: Thu, 24 Sep 2026 11:29:31 +0200
+Message-ID: <20260924092941.3174809-3-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260924092941.3174809-1-memxor@gmail.com>
 References: <20260924092941.3174809-1-memxor@gmail.com>
@@ -81,133 +80,134 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6096; i=memxor@gmail.com; h=from:subject; bh=DxADR/Z3L79bnFJpantLa09fZvFM/nAApOZ8iWpOU2A=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvL2+zODRN3sx6bP/v4ma4nPx+0fm28kFyR1G9e9n3vJ 5fWf+c7OkpZGMS4GGTFFFlK/u9jMj5R+TvQdhk3zBxWJpAhDFycAjCRm6qMDJdSdFseV1xao5y+ WvXf22e6b5vnmbduk3i18lxsRuTZju+MDJuvTJ+f782V+e0At/T7KUxmk/q5C3eenvy6YIGE3MW yRFYA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5270; i=memxor@gmail.com; h=from:subject; bh=wZ9Z6KyaUHwoAi4Ql7ayOvfc8TL9rrRcF1blgjU2xJ0=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvL2+yfWwQ7nhz9f5hPct90m3A+HeOkK3980t52bZHJ1 b/pp3G4o5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABN5rsnwP8714ukjfklzrKYt mlSfOcNZWi7ERHf3uTmT59cW5+pM62D4K/RBRfr1+bwP+UofMtvvdS45Uy4u9mr9vklV5l1KP/I PswEA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Verifier memory diagnostics currently label every fixed-offset stack
-read rejected by check_stack_read_fixed_off() as uninitialized. Dynptr,
-iterator, and IRQ-flag slots instead contain initialized
-verifier-managed state, so the report incorrectly suggests
-initialization or CAP_PERFMON.
+Verifier diagnostics distinguish uninitialized stack bytes from opaque
+dynptr, iterator, and IRQ-flag state, and identify variable-offset
+stack accesses without changing the existing verbose messages.
 
-The variable-offset read without a destination register is currently
-reached by atomic read-modify-write instructions, but that follows from
-the call sites rather than the check_stack_read() interface. Its
-diagnostic also attributes the access to a helper.
+Add output assertions to the existing uninitialized-stack, dynptr, and
+iterator rejection cases. The uninitialized-stack assertion uses the
+CAP_PERFMON-less read inside the allocated stack, because a read below
+the allocated stack is rejected by the bounds check before the slot
+classification runs. Add a direct IRQ-flag read and a variable-offset
+atomic stack access to cover the other classifications. Retain an
+assertion for the legacy helper-worded verbose message in the atomic
+test.
 
-Classify rejected stack reads by slot type. Retain the existing
-uninitialized report for STACK_INVALID, and describe verifier-managed
-slots as opaque state. Use instruction-neutral wording for the
-variable-offset read while leaving the existing verifier messages
-unchanged.
-
-Reported-by: Sashiko <sashiko-bot@kernel.org>
-Link: https://lore.kernel.org/bpf/20260815065956.49D2B1F000E9@smtp.kernel.org/
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/verifier.c | 63 ++++++++++++++++++++++++++++++-------------
- 1 file changed, 45 insertions(+), 18 deletions(-)
+ .../testing/selftests/bpf/progs/dynptr_fail.c |  3 +++
+ tools/testing/selftests/bpf/progs/irq.c       | 13 +++++++++
+ .../selftests/bpf/progs/iters_state_safety.c  |  3 +++
+ .../selftests/bpf/progs/verifier_spill_fill.c |  2 ++
+ .../selftests/bpf/progs/verifier_xadd.c       | 27 +++++++++++++++++++
+ 5 files changed, 48 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index fec5a1ae6a4d..dbb3153fe1b5 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3975,19 +3975,46 @@ static int mark_reg_stack_read(struct bpf_verifier_env *env,
- 	return 0;
- }
- 
--static void bpf_diag_stack_read_uninit(struct bpf_verifier_env *env, int off, int i,
--				       int size)
-+static void bpf_diag_stack_read_invalid(struct bpf_verifier_env *env, int off, int i, int size,
-+					enum bpf_stack_slot_type type)
+diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+index 1cd61d72c166..9418dfe4d7b7 100644
+--- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
++++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
+@@ -560,6 +560,9 @@ int global(void *ctx)
+ /* A direct read should fail */
+ SEC("?raw_tp")
+ __failure __msg("invalid read from stack")
++__msg("Verification failed: Memory Safety: Direct read of dynptr stack state")
++__msg("verifier-managed dynptr state")
++__msg("Use dynptr helpers or kfuncs")
+ int invalid_read1(void *ctx)
  {
--	const char *reason;
-+	const char *problem, *reason, *suggestion, *kind;
-+
-+	if (type == STACK_INVALID) {
-+		reason = bpf_diag_fmt(
-+			env, "This rejected read uses %d bytes at stack offset %d, but byte %d in that range is uninitialized on this path. "
-+			"Programs loaded with CAP_PERFMON can be allowed to read uninitialized stack bytes, but this program is being rejected without that allowance.",
-+			size, off, i);
-+		bpf_diag_memory(
-+			env, env->insn_idx, "uninitialized stack read", reason,
-+			"Initialize every byte in the stack range before reading it, adjust the offset and size so the read covers only initialized bytes, "
-+			"or load with CAP_PERFMON if uninitialized stack reads are intended.");
-+		return;
-+	}
+ 	struct bpf_dynptr ptr;
+diff --git a/tools/testing/selftests/bpf/progs/irq.c b/tools/testing/selftests/bpf/progs/irq.c
+index 53df6d248e26..50727fa9b11d 100644
+--- a/tools/testing/selftests/bpf/progs/irq.c
++++ b/tools/testing/selftests/bpf/progs/irq.c
+@@ -14,6 +14,19 @@ extern int bpf_copy_from_user_str(void *dst, u32 dst__sz, const void *unsafe_ptr
+ struct bpf_res_spin_lock lockA __hidden SEC(".data.A");
+ struct bpf_res_spin_lock lockB __hidden SEC(".data.B");
  
--	reason = bpf_diag_fmt(env,
--			      "This rejected read uses %d bytes at stack offset %d, but byte %d in that range is uninitialized on this path. "
--		"Programs loaded with CAP_PERFMON can be allowed to read uninitialized stack bytes, but this program is being rejected without that allowance.",
--		size, off, i);
--	bpf_diag_memory(
--		env, env->insn_idx, "uninitialized stack read", reason,
--		"Initialize every byte in the stack range before reading it, adjust the offset and size so the read covers only initialized bytes, "
--		"or load with CAP_PERFMON if uninitialized stack reads are intended.");
-+	switch (type) {
-+	case STACK_DYNPTR:
-+		kind = "dynptr";
-+		suggestion = "Use dynptr helpers or kfuncs to access the object represented by the dynptr instead of reading the dynptr state directly.";
-+		break;
-+	case STACK_ITER:
-+		kind = "iterator";
-+		suggestion = "Use iterator kfuncs to advance or destroy the iterator instead of reading its state directly.";
-+		break;
-+	case STACK_IRQ_FLAG:
-+		kind = "IRQ flag";
-+		suggestion = "Pass the saved IRQ flag to the matching restore kfunc instead of reading its state directly.";
-+		break;
-+	default:
-+		return;
-+	}
++SEC("?tc")
++__failure __msg("invalid read from stack")
++__msg("Verification failed: Memory Safety: Direct read of IRQ flag stack state")
++__msg("verifier-managed IRQ flag state")
++__msg("Pass the saved IRQ flag to the matching restore kfunc")
++int irq_flag_direct_read(struct __sk_buff *ctx)
++{
++	unsigned long flags;
 +
-+	problem = bpf_diag_fmt(env, "direct read of %s stack state", kind);
-+	reason = bpf_diag_fmt(
-+		env, "This rejected read uses %d bytes at stack offset %d, but byte %d in that range belongs to verifier-managed %s state. "
-+		"This state has an opaque representation that BPF programs cannot read directly.",
-+		size, off, i, kind);
-+	bpf_diag_memory(env, env->insn_idx, problem, reason, suggestion);
++	bpf_local_irq_save(&flags);
++	return flags;
++}
++
+ SEC("?tc")
+ __failure __msg("R1 type=map_value expected=fp")
+ int irq_save_bad_arg(struct __sk_buff *ctx)
+diff --git a/tools/testing/selftests/bpf/progs/iters_state_safety.c b/tools/testing/selftests/bpf/progs/iters_state_safety.c
+index 646026430e9b..4723ae578e53 100644
+--- a/tools/testing/selftests/bpf/progs/iters_state_safety.c
++++ b/tools/testing/selftests/bpf/progs/iters_state_safety.c
+@@ -332,6 +332,9 @@ int next_after_destroy_fail(void *ctx)
+ 
+ SEC("?raw_tp")
+ __failure __msg("invalid read from stack")
++__msg("Verification failed: Memory Safety: Direct read of iterator stack state")
++__msg("verifier-managed iterator state")
++__msg("Use iterator kfuncs")
+ int __naked read_from_iter_slot_fail(void)
+ {
+ 	asm volatile (
+diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+index 39a1766dae3f..e1a698db0364 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
++++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+@@ -1277,6 +1277,8 @@ __description("stack_noperfmon: reject read of invalid slots")
+ __success
+ __caps_unpriv(CAP_BPF)
+ __failure_unpriv __msg_unpriv("invalid read from stack off -8+1 size 8")
++__msg_unpriv("Verification failed: Memory Safety: Uninitialized stack read")
++__msg_unpriv("Initialize every byte in the stack range before reading it")
+ __naked void stack_noperfmon_reject_invalid_read(void)
+ {
+ 	asm volatile ("					\
+diff --git a/tools/testing/selftests/bpf/progs/verifier_xadd.c b/tools/testing/selftests/bpf/progs/verifier_xadd.c
+index 05a0a55adb45..7bde3da2f36e 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_xadd.c
++++ b/tools/testing/selftests/bpf/progs/verifier_xadd.c
+@@ -121,4 +121,31 @@ l0_%=:	r0 = 42;					\
+ "	::: __clobber_all);
  }
  
- /* Read the stack at 'off' and put the results into the register indicated by
-@@ -4079,7 +4106,7 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
- 					} else {
- 						verbose(env, "invalid read from stack off %d+%d size %d\n",
- 							off, i, size);
--						bpf_diag_stack_read_uninit(env, off, i, size);
-+						bpf_diag_stack_read_invalid(env, off, i, size, type);
- 					}
- 					return -EACCES;
- 				}
-@@ -4138,7 +4165,7 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
- 			} else {
- 				verbose(env, "invalid read from stack off %d+%d size %d\n",
- 					off, i, size);
--				bpf_diag_stack_read_uninit(env, off, i, size);
-+				bpf_diag_stack_read_invalid(env, off, i, size, type);
- 			}
- 			return -EACCES;
- 		}
-@@ -4237,13 +4264,13 @@ static int check_stack_read(struct bpf_verifier_env *env,
- 		tnum_strn(tn_buf, sizeof(tn_buf), reg->var_off);
- 		verbose(env, "variable offset stack pointer cannot be passed into helper function; var_off=%s off=%d size=%d\n",
- 			tn_buf, off, size);
--		reason = bpf_diag_fmt(env,
--				      "The helper would access the stack through variable offset %s plus fixed offset %d and size %d. "
--			"Helper stack memory arguments require a constant stack offset and a precise initialized range.",
-+		reason = bpf_diag_fmt(
-+			env, "The instruction would access the stack through variable offset %s plus fixed offset %d and size %d. "
-+			"This stack access requires a constant stack offset and a precise initialized range.",
- 			tn_buf, off, size);
- 		bpf_diag_memory(
--			env, env->insn_idx, "variable stack access", reason,
--			"Use a fixed stack offset for helper memory arguments, or copy the needed bytes into a fixed stack slot first.");
-+			env, env->insn_idx, "variable-offset stack access", reason,
-+			"Use a fixed stack offset for the instruction, selecting the target stack slot on separate control-flow paths if necessary.");
- 		return -EACCES;
- 	}
- 	/* Variable offset is prohibited for unprivileged mode for simplicity
++SEC("tc")
++__description("xadd with variable stack offset")
++__failure
++__msg("variable offset stack pointer cannot be passed into helper function")
++__msg("Verification failed: Memory Safety: Variable-offset stack access")
++__msg("The instruction would access the stack")
++__msg("Use a fixed stack offset for the instruction")
++__naked void xadd_variable_stack_offset(void)
++{
++	asm volatile ("					\
++	r1 = 0;						\
++	*(u64 *)(r10 - 16) = r1;			\
++	*(u64 *)(r10 - 8) = r1;				\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 8;					\
++	r1 = r10;					\
++	r1 += -16;					\
++	r1 += r0;					\
++	r2 = 1;						\
++	lock *(u64 *)(r1 + 0) += r2;			\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.53.0
 
