@@ -1,64 +1,64 @@
-Received: from mail-wm2-f5.google.com (mail-wm2-f5.google.com [74.125.225.133])
+Received: from mail-wr2-f10.google.com (mail-wr2-f10.google.com [74.125.225.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2910943F8D9
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 08:26:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B23BD43E483
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 08:26:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790238405; cv=none; b=qEHeIv/kNpyhsWbux2/Fp8JCdGgIVl38o7/rA4O0alUXgXothIyv5Yf0EvNAhbN48SxSkHWovJ91Z/OrwYQRwgbpxkOBdtx5+rad697oBFCnlmtkm3D2sNKfEQIDTjzMyKTynd9QNTrci8jTFEdN3RYToIcfk1xegK0b2DNmCZ8=
+	t=1790238407; cv=none; b=if33MFWvbxWldfPgb4CWf+dtKF4Hlwsj/D3LUjKKEoFfV41NH0ky6BOfLWX7FlCz7HVmHmZp764t8BF80E+4D6RK5Dv3dECPFinJRqbjdJ2APsyFw3DOLyS+envxEoVyJDOYyhjc0b136qrsQxE7RfCfTxkB3+RsAjDv7gzsE64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790238405; c=relaxed/simple;
-	bh=quYMvWUwO7boIXLxbD55gR9zkLwNS/IB5roYLQCyGmk=;
+	s=arc-20240116; t=1790238407; c=relaxed/simple;
+	bh=CIt1HJxMZRkghGBTTfTEow8ce/DOFYe4/63gU+qHsaU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QwJ5kTIoFuteNFmhWoqVwhHwQvzOrGL0s6Y+7yheBX+duSdGe7KTJvfz9hwrZGK2I+7b5cIqIVzVYgOjGu/v4YLxagcRiOlRB0URmo5PtQ4Goaq2I9Xxr0OIzcUy3Rh5rKxIruFg+RDcbrrD8lTcE2LAQrOH9o7W1Iufi0WsUCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JTm1nxlL; arc=none smtp.client-ip=74.125.225.133
+	 MIME-Version; b=Otp4JnpE/sfQBnDmJgmjqdag1vHjRc32hb/k5znYa/iiOeUWImzLpFYdfX9LOTf6E5xUQ51SPwJXKJZMa9vq72+2XgAp7pw8kQQdwf7xVEq2iZmt8LAlD8wB3//cdcrYf+yrYKHIN6LFGbA1JgJnoMI6+AbFQVBJtdsNA8DH4mU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eCWgDPAZ; arc=none smtp.client-ip=74.125.225.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JTm1nxlL"
-Received: by mail-wm2-f5.google.com with SMTP id 5b1f17b1804b1-49e66652cc3so8588265e9.1
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 01:26:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eCWgDPAZ"
+Received: by mail-wr2-f10.google.com with SMTP id ffacd0b85a97d-48436370540so587013f8f.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 01:26:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790238400; x=1790843200; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790238402; x=1790843202; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=eVQ8JEms7POvUUEQGlzf25XejAcIwzrSpES6KFXciMA=;
-        b=JTm1nxlLzTZ3wHe/N0LbLI4txU+PRhxzZ7HkScu0IC0AAG9KUiv6mreHhTPrKKUXXk
-         sGSL6eMNraRzGHFAG2ZRDAjYToVm5H3RBOPbghz2aukuLJLaLTaDeQ7YMDiQwYJ/YpKV
-         /k4pHLWUEQ9V4tCY8Eyq6zvZbOxWIeaZt6WZsdu8azWFVtFYnQz28IoJrU3+J+TL+CEV
-         27k/dghu9Ztwf2L/WwvaCe+ilbAusvybMmj/tHuyqMJE8PMdBBPQXvzrwnQEP0aYYhuh
-         qoKP8P4oYHEbAFLFZJGoBxMMkgp+ELr/bLPTFu/bESnIpMVtzyLpfPtxo5lWfdKVPozH
-         3Naw==
+        bh=PCiYpVefbMU8E1VBnuGvtN9F/m7inSUYFdN6WR17nkc=;
+        b=eCWgDPAZ4gXr6ksz1rhq9qkXvz0osEYBvAulwsYSHbviJP1Dv+ZhgaXPJgyYoPtuDc
+         yLFYwugoVYzXA67rJD3ns+7NYrP9e9b993lKrZ7NMPmLIPXACNYnR7j75XcCgLk8DePK
+         cCB1bJ/GfhQ9EK24UZgHXCQKhkMfIdb+dncMTqS4w3BT38fbidJzayX46p57pRJY1NqX
+         jvjlgoIAUYfhFEni2OoI2/klSPVGIXA6C/oMHZe8oN1/nCzYvObmnqybtiLmPCWWNWtH
+         C4A6JXj1mEql0fCOfoHVVNX2yaQ/lyZuX/r4pOYY/i6DeMyAg1EnsMnClM+S9LU9+rCd
+         mU/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790238400; x=1790843200;
+        d=1e100.net; s=20260707; t=1790238402; x=1790843202;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=eVQ8JEms7POvUUEQGlzf25XejAcIwzrSpES6KFXciMA=;
-        b=JwawibyEVufhPPJRIeWSmnZo96tIHf+EH+zxyKmiquqDS0veMqcQNwfewYkTGSuq9n
-         xw9sb/Ky3GE5BfUpY4+Rhb6Hag83cxExQ86tzIVh1C3Aq2Map2Y4wHMLYOO/r7obESnU
-         BV+252yU1+mzqaEpggxiHDA2+a826ipH3IYspZisqKTY5WO+ldATfbSjG+lXQjEwGPdn
-         UF1ESAI6mzc0INRgKkS4WY9Reoq2Lty3gPIVmr9eausr4n2c9cb1RsoW9B90rZcLxcwe
-         LZQiVYrvsitXSLHfyAaO2a2PJIvHOYpPt1OeJzEhjs+vUjqqk7MeLdYmaYgMZg8WkDVP
-         CDbg==
-X-Gm-Message-State: AFuF++kVtq1JQ02WXYVT2QjhAg5owoPazkBeqLnzV5/B/vjXlsBVdhuE
-	T0KHMgowIve2A+G7WwDEBU1agPjlR1RieHZBqErQG2CGKZ8PXCXhJbINFr6ON5lC
-X-Gm-Gg: AYBFou3GRfb1bnEXEBueLHataiddAwobMWj2NwFlVs6s8juZZNFklBSL3vxd2KXVlac
-	nbnxSLWRUPMpuJNoeB0xej7dmu38ADcUhLElk1wYJDT/TO4UMqQi2JFnfGoZYbRKF4rbhT4HfUx
-	oWJiovG4Bbs+0kcT5cdHABGZxiva0NizzxrQ+iYsl0ytfnpWekGSqp3cOm99ZZUSJs5SL3V5MWp
-	Oyeb7BE2C4G4OWTFUqIJMCBZNzUH/CGmnic3ALhr3vjbUU8E9mRPx/7zHOyhsjGr0c5/ZkkwSBf
-	qdMH8hq2UQz/0FoHuyl7dkIqa5D4A0bnoQUoLlHdugvQKySSetGNRD1Hj7O6Dtr61zWaYaW4PiE
-	TOoiyuJ9Rq6x6jBajWa4uVtGGQWHz4Wzd1VDpvb7rGwEW/rqhjzbMvaMAB8cngjIQ1EasLsdEkt
-	wapqI28CPsIcwHK5UQ3twsqv/dVsYpkKf4ykTZWtJUFuPOQvrHGgmnRXuSSf2zEReg2OdShEuaJ
-	Kk/98ThZbbLux7wcGQXxFyo/zu1EqHCGGdnKkxSipsXz0O4W6HpcQ+qzEqiFsecZPCCUoqXECTX
-	es0DHYpgNeaUfnzVn5EojatfFremnJCYm3yOAGojNBc4B4PGbg==
-X-Received: by 2002:a05:600c:8b22:b0:49e:6fd2:a45 with SMTP id 5b1f17b1804b1-49fe66d81fbmr27642775e9.16.1790238400173;
-        Thu, 24 Sep 2026 01:26:40 -0700 (PDT)
+        bh=PCiYpVefbMU8E1VBnuGvtN9F/m7inSUYFdN6WR17nkc=;
+        b=18XANZE8TGpfv0Z90/3L3Y2NrYQyJgCnsSiery28Y8TFpTvm6Op9nFSY0uF7GaeeqR
+         0nZrx6CUH3iQ5PN7UR4dL3SumTDDpki7RwZCEUoT0qU/dS8BPtHagNKrDK7hJUu2hynn
+         dvEoR9+YOyV0NuYPB6eEodmzW9UEyXIJ3MPuTAIr0v4eidUwnAAnQ/CbAE25OcwovWY2
+         K7DsEhFDfBImU0b72KOViODmKhvoGaCCSsDJbmUjXzkbWeqkcF0WuPWFohnE6t1sstPs
+         aCIqGVzYJFBiMVXZyKVtDy8vilh5BdsrzbxbE1B29x4oeAg3vEBp0pkwbAK3FI4/RjSW
+         kM9Q==
+X-Gm-Message-State: AFuF++kl3hgdvudhb5nJwfMpgZuX4ldzMxXf4emkU50xze7Kkb+4LTfS
+	8GrHoOsnWFDCF9NfqCrx1O39w50NNo3iyR39Si2rKEkdhRpJq7zvEqG6Z65mlxn/
+X-Gm-Gg: AYBFou3uv0X6R0QO5+EuZXLqfy4oSlLigR8LseT9LBXOBrgQdFNFDa0DTr4nzDtkczU
+	w4PH33743rkffBhHKzcpvsYcSfY1rcmxNriMrmKiztLRp84S3jrIjI62fECrx5SGUknHVbJ4p1P
+	4AxlKv5+SlBcyBGYhj7+69wft1Jv2oGaQgFCGcPbs9PNi1N1LNjnfQQzHBE793C6xVDScgD+5cH
+	9teZVcEOKCi+DkMHUCPQy+mhjv4ICoaeTi5rPwh/wfEzRxd5k1eXZukJwC4+qjAsDA6OZe6eJ5Z
+	3VyBWdk/ME28hk8day1PEX/76NUtvyHfA2TguG3AEby27zNT7/UAK61YGNmU4GVAoMujxmZpTlZ
+	ndAVnHP6sRW7MtJJyxUauX7rJ7b7ie6mMvOiMFR9nWjzoL+XcFZf4i4tFVv8gMPrugFkrftGv8K
+	m9yd5zARkN2st3ZsqH/x+K/PsTsv1aUzaONR6ARpJ6wsgykMj7eP5W0vj1wZf7Djnvn8u7T+99N
+	0jshGdeAMeJdwSK+RIF/fY8XBtvvZuKkalSV2KfIm19LZOwCQecM9UeBj2eqr9qG3XELrWs/Z1u
+	ZqjIod1NTwGfHOpp757cQKVG3hl3e7kpO7Xbkw==
+X-Received: by 2002:a05:6000:4707:b0:488:5d38:71fe with SMTP id ffacd0b85a97d-4887176f7f0mr2588150f8f.39.1790238402018;
+        Thu, 24 Sep 2026 01:26:42 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe5ce4941sm48297445e9.6.2026.09.24.01.26.39
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886876c027sm14267296f8f.17.2026.09.24.01.26.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 01:26:39 -0700 (PDT)
+        Thu, 24 Sep 2026 01:26:41 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -69,9 +69,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 17/18] bpf, arm64: Allow programs 2 KiB of stack
-Date: Thu, 24 Sep 2026 10:25:53 +0200
-Message-ID: <20260924082607.2695649-18-memxor@gmail.com>
+Subject: [PATCH bpf-next v2 18/18] selftests/bpf: Test the 2 KiB stack budget
+Date: Thu, 24 Sep 2026 10:25:54 +0200
+Message-ID: <20260924082607.2695649-19-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260924082607.2695649-1-memxor@gmail.com>
 References: <20260924082607.2695649-1-memxor@gmail.com>
@@ -81,70 +81,719 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2964; i=memxor@gmail.com; h=from:subject; bh=quYMvWUwO7boIXLxbD55gR9zkLwNS/IB5roYLQCyGmk=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvLvTS39n8zFEsn3nWY8+Jk9nl23sOzZdXaupPP7J+30 jq8QMCro5SFQYyLQVZMkaXk/z4m4xOVvwNtl3HDzGFlAhnCwMUpABP528HI8ElBza9cl03k5a4V 6xUC0p5VlxtL3X51pbyJL1Dk6zKldob/iZ+5WLo3x/Okfzj7M66HIeL26VL/ULuJVR8dtzvPeRH ODAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=20730; i=memxor@gmail.com; h=from:subject; bh=CIt1HJxMZRkghGBTTfTEow8ce/DOFYe4/63gU+qHsaU=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvLvTS5zvgZy4T0ORSVfB8riB5S+tF2ZJ8Qv+oSrQvl9 TUb2k07SlkYxLgYZMUUWUr+72MyPlH5O9B2GTfMHFYmkCEMXJwCMBH+YIZ/2jVlEm+FJpbeXP/x HaNKF3PPqV/3Isrb+g/0rDu3mot/BcP/nF0vZrmsfLWybvtSzX1h204fPvR2UYv0g+2/OvhSpaU k2AE=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-The arm64 JIT sets up a frame with an add/sub immediate, which encodes
-up to 4 KiB directly, addresses the BPF stack relative to SP or the
-private stack pointer with offsets that fall back to a scratch register
-when they do not fit the load/store immediate, and a tail call pops the
-current frame and lands in the target's prologue before the target
-sets up its own. The exception callback reuses the frame record of the
-main program and does not depend on its size. Report
-bpf_jit_supports_large_stack() to give JITed programs the same 2 KiB
-budget as on x86-64.
+Add tests for the stack budget of JITs with large stack support: a
+single 2 KiB frame, with and without may_goto, four 512-byte frames
+that fit the budget and five that do not, a 512-byte frame calling a
+1536-byte static subprog, global subprog or bpf_loop() callback and the
+same with eight bytes too many, variable offset writes reaching exactly
+the budget and past it, a tail call made from a 1 KiB frame, and two
+2 KiB frames on a private stack, where each frame gets the whole budget.
+A program with a 2 KiB frame is checked to be rejected wherever the
+budget is 512 bytes.
 
-Tested on an emulated arm64 guest with programs loaded and run through
-the raw bpf() syscall: a 2 KiB frame, a 2 KiB frame with may_goto, a
-chain of four 512-byte frames, and a tail call from a program with a
-2 KiB frame into another one; a 2056-byte frame and five 512-byte frames
-are rejected. The selftest suite was not run on arm64.
+Two tests run such programs: a tail call made from a subprog with a
+1536-byte frame under a 240-byte caller into a program with a 2 KiB
+frame, and a struct_ops program on a private stack calling a subprog
+when both frames are 2 KiB.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- Documentation/bpf/bpf_design_QA.rst | 11 ++++++-----
- arch/arm64/net/bpf_jit_comp.c       |  5 +++++
- 2 files changed, 11 insertions(+), 5 deletions(-)
+ .../bpf/prog_tests/struct_ops_private_stack.c |  31 ++
+ .../selftests/bpf/prog_tests/tailcalls.c      |  42 ++
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../progs/struct_ops_private_stack_large.c    |  51 +++
+ .../bpf/progs/tailcall_large_stack.c          |  62 +++
+ .../bpf/progs/verifier_large_stack.c          | 377 ++++++++++++++++++
+ .../selftests/bpf/progs/verifier_live_stack.c |  23 ++
+ 7 files changed, 588 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/struct_ops_private_stack_large.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tailcall_large_stack.c
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_large_stack.c
 
-diff --git a/Documentation/bpf/bpf_design_QA.rst b/Documentation/bpf/bpf_design_QA.rst
-index be5fc4ac00d6..98d70b8a2533 100644
---- a/Documentation/bpf/bpf_design_QA.rst
-+++ b/Documentation/bpf/bpf_design_QA.rst
-@@ -223,11 +223,12 @@ Q: How much stack space a BPF program uses?
- -------------------------------------------
- A: A program may use up to 2 KiB of stack, combined over its call
- chain, when the JIT of the architecture reports support for large
--stacks (currently x86-64); a single function may use all of it, and
--every frame of a program running on a private stack gets the whole
--amount. Elsewhere, and whenever the interpreter is used, the limit is
--512 bytes. The verifier computes the actual amount of stack used and
--both interpreter and most JITed code consume necessary amount.
-+stacks (currently x86-64 and arm64); a single function may use all of
-+it, and every frame of a program running on a private stack gets the
-+whole amount. Elsewhere, and for programs verified for the interpreter,
-+the limit is 512 bytes; the interpreter itself never runs a frame
-+larger than that. The verifier computes the actual amount of stack
-+used and both interpreter and most JITed code consume necessary amount.
+diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
+index 98db9bafa44b..2b3ec2b79091 100644
+--- a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
++++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
+@@ -4,6 +4,7 @@
+ #include "struct_ops_private_stack.skel.h"
+ #include "struct_ops_private_stack_fail.skel.h"
+ #include "struct_ops_private_stack_recur.skel.h"
++#include "struct_ops_private_stack_large.skel.h"
  
- Q: Can BPF be offloaded to HW?
- ------------------------------
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 9544b2f483e5..2b2d6d178ea1 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -2501,6 +2501,11 @@ bool bpf_jit_supports_callx(void)
- 	return true;
+ #if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__)
+ static void test_private_stack(void)
+@@ -78,6 +79,34 @@ static void test_private_stack_recur(void)
+ 	struct_ops_private_stack_recur__destroy(skel);
  }
  
-+bool bpf_jit_supports_large_stack(void)
++/* Two frames of 2 KiB each on the private stack */
++static void test_private_stack_large(void)
 +{
-+	return true;
++	struct struct_ops_private_stack_large *skel;
++	struct bpf_link *link;
++
++	if (!is_large_stack_supported()) {
++		test__skip();
++		return;
++	}
++
++	skel = struct_ops_private_stack_large__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "struct_ops_private_stack_large__open_and_load"))
++		return;
++
++	link = bpf_map__attach_struct_ops(skel->maps.testmod_1);
++	if (!ASSERT_OK_PTR(link, "attach_struct_ops"))
++		goto cleanup;
++
++	ASSERT_OK(trigger_module_test_read(256), "trigger_read");
++
++	ASSERT_EQ(skel->bss->val, 100 + 30 + 12, "val");
++
++	bpf_link__destroy(link);
++cleanup:
++	struct_ops_private_stack_large__destroy(skel);
 +}
 +
- static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_node *node,
- 			    int bargs_off, int retval_off, int run_ctx_off,
- 			    bool save_ret)
+ static void __test_struct_ops_private_stack(void)
+ {
+ 	if (test__start_subtest("private_stack"))
+@@ -86,6 +115,8 @@ static void __test_struct_ops_private_stack(void)
+ 		test_private_stack_fail();
+ 	if (test__start_subtest("private_stack_recur"))
+ 		test_private_stack_recur();
++	if (test__start_subtest("private_stack_large"))
++		test_private_stack_large();
+ }
+ #else
+ static void __test_struct_ops_private_stack(void)
+diff --git a/tools/testing/selftests/bpf/prog_tests/tailcalls.c b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+index c5c9d6c359bb..c5e3f198ca7f 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tailcalls.c
++++ b/tools/testing/selftests/bpf/prog_tests/tailcalls.c
+@@ -9,6 +9,7 @@
+ #include "tc_bpf2bpf.skel.h"
+ #include "tailcall_fail.skel.h"
+ #include "tailcall_cgrp_storage_owner.skel.h"
++#include "tailcall_large_stack.skel.h"
+ #include "tailcall_cgrp_storage_no_storage.skel.h"
+ #include "tailcall_cgrp_storage.skel.h"
+ #include "tailcall_sleepable.skel.h"
+@@ -1953,6 +1954,45 @@ static void test_tailcall_bpf2bpf_fexit_links(void)
+ 	tailcall_bpf2bpf2__destroy(skel_tc);
+ }
+ 
++/*
++ * test_tailcall_large_stack runs a tail call made from a subprog with a 1536
++ * byte frame, under a 240-byte caller, into a program with a 2 KiB frame:
++ *
++ * entry (240) --call-> subprog_tail (1536) --tailcall-> classifier_0 (2048)
++ */
++static void test_tailcall_large_stack(void)
++{
++	struct tailcall_large_stack *skel;
++	int err, prog_fd, map_fd, key = 0;
++	char buff[128] = {};
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		    .data_in = buff,
++		    .data_size_in = sizeof(buff),
++		    .repeat = 1,
++	);
++
++	if (!is_large_stack_supported()) {
++		test__skip();
++		return;
++	}
++
++	skel = tailcall_large_stack__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "tailcall_large_stack__open_and_load"))
++		return;
++
++	prog_fd = bpf_program__fd(skel->progs.classifier_0);
++	map_fd = bpf_map__fd(skel->maps.jmp_table);
++	err = bpf_map_update_elem(map_fd, &key, &prog_fd, BPF_ANY);
++	if (!ASSERT_OK(err, "update jmp_table"))
++		goto out;
++
++	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.entry), &topts);
++	ASSERT_OK(err, "test_run");
++	ASSERT_EQ(topts.retval, 42 + 7, "retval");
++out:
++	tailcall_large_stack__destroy(skel);
++}
++
+ void test_tailcalls(void)
+ {
+ 	if (test__start_subtest("tailcall_1"))
+@@ -2022,4 +2062,6 @@ void test_tailcalls(void)
+ 	test_tailcall_callback();
+ 	if (test__start_subtest("tailcall_bpf2bpf_fexit_links"))
+ 		test_tailcall_bpf2bpf_fexit_links();
++	if (test__start_subtest("tailcall_large_stack"))
++		test_tailcall_large_stack();
+ }
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 9c3ff7d83fbe..dbf98751aae6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -62,6 +62,7 @@
+ #include "verifier_kfunc_uninit.skel.h"
+ #include "verifier_kfunc_uninit_multi.skel.h"
+ #include "verifier_ld_ind.skel.h"
++#include "verifier_large_stack.skel.h"
+ #include "verifier_ldsx.skel.h"
+ #include "verifier_leak_ptr.skel.h"
+ #include "verifier_linked_scalars.skel.h"
+@@ -244,6 +245,7 @@ void test_verifier_kfunc_uninit(void)         { RUN_TESTS(verifier_kfunc_uninit)
+ void test_verifier_kfunc_uninit_multi(void)   { RUN_TESTS(verifier_kfunc_uninit_multi); }
+ void test_verifier_load_acquire(void)         { RUN(verifier_load_acquire); }
+ void test_verifier_ld_ind(void)               { RUN(verifier_ld_ind); }
++void test_verifier_large_stack(void)          { RUN(verifier_large_stack); }
+ void test_verifier_ldsx(void)                  { RUN(verifier_ldsx); }
+ void test_verifier_leak_ptr(void)             { RUN(verifier_leak_ptr); }
+ void test_verifier_linked_scalars(void)       { RUN(verifier_linked_scalars); }
+diff --git a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_large.c b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_large.c
+new file mode 100644
+index 000000000000..94a25a2cff6e
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_large.c
+@@ -0,0 +1,51 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "../test_kmods/bpf_testmod.h"
++#include "bpf_misc.h"
++
++char _license[] SEC("license") = "GPL";
++
++long val;
++
++/* On a private stack every frame gets the whole 2 KiB budget. */
++__used __naked
++static long frame_2048_leaf(void)
++{
++	asm volatile ("					\
++	r1 = 30;					\
++	*(u64 *)(r10 - 2048) = r1;			\
++	r1 = 12;					\
++	*(u64 *)(r10 - 8) = r1;				\
++	r0 = *(u64 *)(r10 - 2048);			\
++	r1 = *(u64 *)(r10 - 8);				\
++	r0 += r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/* test_1 is the member bpf_testmod requests a private stack for */
++SEC("struct_ops")
++__naked int test_1(void)
++{
++	asm volatile ("					\
++	r1 = 100;					\
++	*(u64 *)(r10 - 2048) = r1;			\
++	call frame_2048_leaf;				\
++	r1 = *(u64 *)(r10 - 2048);			\
++	r0 += r1;					\
++	r1 = %[val] ll;					\
++	*(u64 *)(r1 + 0) = r0;				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm_addr(val)
++	: __clobber_all);
++}
++
++SEC(".struct_ops")
++struct bpf_testmod_ops3 testmod_1 = {
++	.test_1 = (void *)test_1,
++};
+diff --git a/tools/testing/selftests/bpf/progs/tailcall_large_stack.c b/tools/testing/selftests/bpf/progs/tailcall_large_stack.c
+new file mode 100644
+index 000000000000..977197dac5d3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tailcall_large_stack.c
+@@ -0,0 +1,62 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 1);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++} jmp_table SEC(".maps");
++
++/* The tail call target sets up a 2 KiB frame of its own and uses both of its ends. */
++SEC("tc")
++__naked int classifier_0(void)
++{
++	asm volatile ("					\
++	r1 = 42;					\
++	*(u64 *)(r10 - 2048) = r1;			\
++	r1 = 7;						\
++	*(u64 *)(r10 - 8) = r1;				\
++	r0 = *(u64 *)(r10 - 2048);			\
++	r1 = *(u64 *)(r10 - 8);				\
++	r0 += r1;					\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/*
++ * The frame of the subprog doing the tail call is unwound by it, so it may be
++ * large; only the frames of its callers stay behind and are limited to 256
++ * bytes in total. Returns 1 when the tail call falls through.
++ */
++__used __naked
++static int subprog_tail(void)
++{
++	asm volatile ("					\
++	r2 = 1;						\
++	*(u64 *)(r10 - 1536) = r2;			\
++	r2 = %[jmp_table] ll;				\
++	r3 = 0;						\
++	call %[bpf_tail_call];				\
++	r0 = 1;						\
++	exit;						\
++"	:
++	: __imm(bpf_tail_call),
++	  __imm_addr(jmp_table)
++	: __clobber_all);
++}
++
++SEC("tc")
++__naked int entry(void)
++{
++	asm volatile ("					\
++	r2 = 2;						\
++	*(u64 *)(r10 - 240) = r2;			\
++	call subprog_tail;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_large_stack.c b/tools/testing/selftests/bpf/progs/verifier_large_stack.c
+new file mode 100644
+index 000000000000..2d4c81a3f0cb
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_large_stack.c
+@@ -0,0 +1,377 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++/*
++ * Programs may use MAX_BPF_STACK_JIT (2 KiB) of stack on JITs that support
++ * large stacks, combined over a call chain, with no separate limit on a
++ * single frame. Interpreted programs and other JITs keep 512 bytes.
++ */
++
++SEC("socket")
++__description("single frame of 2048 bytes")
++__load_if_large_stack()
++__success __success_unpriv __retval(42)
++__naked void single_frame_2048(void)
++{
++	asm volatile ("					\
++	r1 = r10;					\
++	r1 += -2048;					\
++	r0 = 42;					\
++	*(u64*)(r1 + 0) = r0;				\
++	r0 = *(u64*)(r1 + 0);				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("single frame of 2048 bytes without large stack support")
++__load_if_no_large_stack()
++__failure __msg("invalid write to stack R1 off=-2048 size=8")
++__naked void single_frame_2048_no_large_stack(void)
++{
++	asm volatile ("					\
++	r1 = r10;					\
++	r1 += -2048;					\
++	r0 = 42;					\
++	*(u64*)(r1 + 0) = r0;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++__used __naked
++static void frame_512_leaf(void)
++{
++	asm volatile ("					\
++	r1 = 1;						\
++	*(u64 *)(r10 - 512) = r1;			\
++	exit;						\
++"	::: __clobber_all);
++}
++
++__used __naked
++static void frame_512_depth_2(void)
++{
++	asm volatile ("					\
++	r1 = 2;						\
++	*(u64 *)(r10 - 512) = r1;			\
++	call frame_512_leaf;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++__used __naked
++static void frame_512_depth_3(void)
++{
++	asm volatile ("					\
++	r1 = 3;						\
++	*(u64 *)(r10 - 512) = r1;			\
++	call frame_512_depth_2;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++__used __naked
++static void frame_512_depth_4(void)
++{
++	asm volatile ("					\
++	r1 = 4;						\
++	*(u64 *)(r10 - 512) = r1;			\
++	call frame_512_depth_3;				\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("four frames of 512 bytes fit the 2 KiB budget")
++__load_if_large_stack()
++__success __log_level(4) __msg("stack depth max 2048")
++__naked void four_frames_of_512(void)
++{
++	asm volatile ("					\
++	call frame_512_depth_4;				\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("five frames of 512 bytes exceed the 2 KiB budget")
++__load_if_large_stack()
++__failure __msg("combined stack size of 5 calls is 2560. Too large")
++__naked void five_frames_of_512(void)
++{
++	asm volatile ("					\
++	r1 = 5;						\
++	*(u64 *)(r10 - 512) = r1;			\
++	call frame_512_depth_4;				\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++__used __naked
++static void frame_1536_leaf(void)
++{
++	asm volatile ("					\
++	r1 = 1;						\
++	*(u64 *)(r10 - 1536) = r1;			\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("512-byte frame calling a 1536-byte frame")
++__load_if_large_stack()
++__success __log_level(4) __msg("stack depth max 2048")
++__naked void uneven_frames_fit(void)
++{
++	asm volatile ("					\
++	r1 = 2;						\
++	*(u64 *)(r10 - 512) = r1;			\
++	call frame_1536_leaf;				\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("520-byte frame calling a 1536-byte frame")
++__load_if_large_stack()
++__failure __msg("combined stack size of 2 calls is 2064. Too large")
++__naked void uneven_frames_exceed(void)
++{
++	asm volatile ("					\
++	r1 = 2;						\
++	*(u64 *)(r10 - 520) = r1;			\
++	call frame_1536_leaf;				\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++#ifdef __BPF_FEATURE_MAY_GOTO
++/* may_goto adds its counter below the frame; a JIT does not hold that against the budget */
++SEC("socket")
++__description("frame of 2048 bytes with may_goto")
++__load_if_large_stack()
++__success __retval(42)
++__naked void frame_2048_with_may_goto(void)
++{
++	asm volatile ("					\
++	r1 = r10;					\
++	r1 += -2048;					\
++	r0 = 42;					\
++	*(u32*)(r1 + 0) = r0;				\
++	may_goto l0_%=;					\
++	r2 = 100;					\
++	l0_%=:						\
++	exit;						\
++"	::: __clobber_all);
++}
++#endif
++
++SEC("socket")
++__description("variable offset write reaching 2048 bytes deep")
++__load_if_large_stack()
++__success
++__naked void var_off_write_to_2048(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 8;					\
++	r2 = r10;					\
++	r2 += -2048;					\
++	r2 += r0;					\
++	r1 = 0;						\
++	*(u64*)(r2 + 0) = r1;				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("variable offset write reaching 2056 bytes deep")
++__load_if_large_stack()
++__failure __msg("invalid variable-offset write to stack R2")
++__naked void var_off_write_to_2056(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 8;					\
++	r2 = r10;					\
++	r2 += -2056;					\
++	r2 += r0;					\
++	r1 = 0;						\
++	*(u64*)(r2 + 0) = r1;				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/* Each frame of a private stack gets the whole budget. */
++__used __naked
++static void priv_stack_frame_2048(void)
++{
++	asm volatile ("					\
++	r1 = 1;						\
++	*(u64 *)(r10 - 2048) = r1;			\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("kprobe")
++__description("private stack: two frames of 2048 bytes")
++__load_if_large_stack()
++__arch_x86_64
++__arch_arm64
++__success __log_level(4)
++__msg("stack depth max 2048")
++__msg("subprog 0 (private_stack_two_frames) main {{.*}} stack 2048")
++__msg("subprog 1 (priv_stack_frame_2048) static {{.*}} stack 2048")
++__naked void private_stack_two_frames(void)
++{
++	asm volatile ("					\
++	r1 = 2;						\
++	*(u64 *)(r10 - 2048) = r1;			\
++	call priv_stack_frame_2048;			\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++struct {
++	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
++	__uint(max_entries, 1);
++	__uint(key_size, sizeof(__u32));
++	__uint(value_size, sizeof(__u32));
++} jmp_table SEC(".maps");
++
++/*
++ * A tail call unwinds the frame of the program doing it, so a large main
++ * frame is fine; the 256-byte rule only concerns the frames of callers of a
++ * subprog that tail calls.
++ */
++SEC("tc")
++__description("tail call from a 1 KiB frame")
++__load_if_large_stack()
++__success
++__naked void tail_call_from_large_frame(void)
++{
++	asm volatile ("					\
++	r2 = 42;					\
++	*(u64 *)(r10 - 1024) = r2;			\
++	r2 = %[jmp_table] ll;				\
++	r3 = 0;						\
++	call %[bpf_tail_call];				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_tail_call),
++	  __imm_addr(jmp_table)
++	: __clobber_all);
++}
++
++/* Global subprogs are verified on their own but share the call chain budget. */
++__used __naked int global_frame_1536(void)
++{
++	asm volatile ("					\
++	r1 = 1;						\
++	*(u64 *)(r10 - 1536) = r1;			\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("512-byte frame calling a 1536-byte global subprog")
++__load_if_large_stack()
++__success __log_level(4) __msg("stack depth max 2048")
++__naked void global_subprog_fits(void)
++{
++	asm volatile ("					\
++	r1 = 2;						\
++	*(u64 *)(r10 - 512) = r1;			\
++	call global_frame_1536;				\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("520-byte frame calling a 1536-byte global subprog")
++__load_if_large_stack()
++__failure __msg("combined stack size of 2 calls is 2064. Too large")
++__naked void global_subprog_exceeds(void)
++{
++	asm volatile ("					\
++	r1 = 2;						\
++	*(u64 *)(r10 - 520) = r1;			\
++	call global_frame_1536;				\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++/* Callback frames are part of the chain of the helper that calls them. */
++static __naked int loop_cb_1536(void)
++{
++	asm volatile ("					\
++	r1 = 1;						\
++	*(u64 *)(r10 - 1536) = r1;			\
++	r0 = 0;						\
++	exit;						\
++"	::: __clobber_all);
++}
++
++SEC("socket")
++__description("512-byte frame with a 1536-byte bpf_loop callback")
++__load_if_large_stack()
++__success __log_level(4) __msg("stack depth max 2048")
++__naked void loop_callback_fits(void)
++{
++	asm volatile ("					\
++	r1 = 2;						\
++	*(u64 *)(r10 - 512) = r1;			\
++	r1 = 1;						\
++	r2 = %[loop_cb_1536];				\
++	r3 = 0;						\
++	r4 = 0;						\
++	call %[bpf_loop];				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm_ptr(loop_cb_1536),
++	  __imm(bpf_loop)
++	: __clobber_common);
++}
++
++SEC("socket")
++__description("520-byte frame with a 1536-byte bpf_loop callback")
++__load_if_large_stack()
++__failure __msg("combined stack size of 2 calls is 2064. Too large")
++__naked void loop_callback_exceeds(void)
++{
++	asm volatile ("					\
++	r1 = 2;						\
++	*(u64 *)(r10 - 520) = r1;			\
++	r1 = 1;						\
++	r2 = %[loop_cb_1536];				\
++	r3 = 0;						\
++	r4 = 0;						\
++	call %[bpf_loop];				\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm_ptr(loop_cb_1536),
++	  __imm(bpf_loop)
++	: __clobber_common);
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+index a832df0b5bd2..16b2b1e57534 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
++++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
+@@ -2912,3 +2912,26 @@ static __used __naked void merge_read_all_callee(void)
+ 	"exit;"
+ 	::: __clobber_all);
+ }
++
++/*
++ * A frame pointer spilled below fp-512 is a spill like any other: the fill
++ * restores its identity, and a load through it reads only the slot it names
++ * instead of the whole frame.
++ */
++SEC("socket")
++__log_level(2)
++__load_if_large_stack()
++__msg("(79) r0 = *(u64 *)(r1 +0){{.*}}; use: fp0-8{{$}}")
++__naked void spill_below_512_stays_precise(void)
++{
++	asm volatile (
++	"r1 = 0;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"r1 = r10;"
++	"r1 += -8;"
++	"*(u64 *)(r10 - 520) = r1;"
++	"r1 = *(u64 *)(r10 - 520);"
++	"r0 = *(u64 *)(r1 + 0);"
++	"exit;"
++	::: __clobber_all);
++}
 -- 
 2.53.0
 
