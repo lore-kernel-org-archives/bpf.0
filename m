@@ -1,57 +1,35 @@
-Received: from mta1.migadu.com (out-199.mta1.migadu.com [95.215.58.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3513FC5C9
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 05:46:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D9E62931EE
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 05:51:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790228792; cv=none; b=OMZHFrLyGZqC6y1YnUaIAaM+4nNCY/Plj1E2Q6Ae1Gwxl/lHWfUqWFvTsORBTrnTpP0k2B6K7cySaSzNOe1gM1BDkc1y3jI0+TdxXIBieoGmS0z+T/gFh5qtFhVTnI61AAugk8QtDxVfMmUUxXp1Z6+nnNmtFCnDwJwD2RVdMPE=
+	t=1790229090; cv=none; b=iDogM66JoFZwyCiarWSx9BZ4/IxGBLvxbgODQGDXu9KVDfWs701PqRenMHxYdgrljYFtxKmXVtE7f00ROiFKzFaY4a2Fl2nJkY0iVJnSfEQYG+T4TaZwN1BOFlPgtDozeIqdiOevZq4cmwsbsNfEQ/1DNNDCiZXz1jChLbzFic8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790228792; c=relaxed/simple;
-	bh=gq5YaNX1tq+qtMZoYlZYtZqfDgp0LgXDTh2kYD4sEXA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bPjXmmzlIVHNzBqnVIGXTOXq897wrA7lYA8SXqkLbbtzi0FajBZgo3hkFPjlf1v9wjxEF63/wuQ8tHQkYKNh+9foAUIrQl9UougrrclIjv7Bl2wkBtwtmMNjWjuILN4D5PVIxpxxx1JJUD6AT+a/ObB1Nt96ffo0eeHoMKkSTjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WGsxiJMd; arc=none smtp.client-ip=95.215.58.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790229090; c=relaxed/simple;
+	bh=YYqAZ2If+Qtg0+94+hClVusgL6OpIQ+iHwRYfdAtZh8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Kv2jPNtUaxBY9IOVOLRNKbsvf85+VU9Zye/7FphBWPfZkbkgRELCDowxLnM1lM+MPURMb9bO+xNRcUu3vNLGzvmBYnUSp2yrA3uYEdAfd+a4bOudzQpHSu1i5A0fYM2eTlMkcLYrXokjyCx8lJTJmSpiSvP0NfH31Nht1Bk78/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lp4fico0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WGsxiJMd"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=gq5YaNX1tq+qtMZoYlZYtZqfDgp0LgXDTh2kYD4sEXA=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790228787; v=1; x=1790833587;
- b=WGsxiJMdZ6QjlZ0hegC3GJ1huPIpq9/xhC3m50cDR1vzGLBvHHgpzedSrQVd6xkhzFBtsEut
- jeqhKubPrIOqGf3WeZDvXz3DkO6lmiNm1aE5R3LnpsKhctKFJaN6T6RbgFmaRleaityXCdcEsIj
- w/Er8thaBzxfsus71VownKU8=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 1003cfcb96295a8f;
-	Thu, 24 Sep 2026 05:46:27 +0000
-X-Mizu-Trace-ID: 1003cfcb96295a8f
-X-Migadu-Flow: FLOW_OUT
-From: Tao Cui <cui.tao@linux.dev>
-To: tj@kernel.org,
-	josef@toxicopanda.com,
-	axboe@kernel.dk
-Cc: cgroups@vger.kernel.org,
-	linux-block@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	linux-kselftest@vger.kernel.org,
-	cui.tao@linux.dev,
-	cuitao@kylinos.cn,
-	ameryhung@gmail.com,
-	alexei.starovoitov@gmail.com
-Subject: [RFC PATCH v7 4/4] docs: cgroup-v2: document the iocost BPF cost model attachment
-Date: Thu, 24 Sep 2026 13:45:49 +0800
-Message-ID: <20260924054549.2271705-5-cui.tao@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260924054549.2271705-1-cui.tao@linux.dev>
-References: <20260924054549.2271705-1-cui.tao@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lp4fico0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED4601F000FF;
+	Thu, 24 Sep 2026 05:51:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790229087;
+	bh=Zhm21WsPX/ZHNUAX57uojAbIY6/DxEHRS2ZpYtAJ+vg=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=Lp4fico0dny7PBCy6Spw8rBy4B0NU9Jg4ddQ+842iKu6KVB5u9BEagWgjFU3UxFWG
+	 a6Bdu5Akbcvp15umbkaSzVJ5PTGimhKSgjzLpeGNHv3b9yGxznbYGx4y6aW1iy+G2E
+	 F05h9rr6+BwJmLn3rLaed8AJgaXahtmQt013DgjnyDJMcJ4yxfyZPkd/dnna2m/uF7
+	 mHRkZz0yCMwT6Sk3Xga8auKBts+S9xjgfPaw3SyW/UKUccO9ejGqFYQKK6ZHGptuK6
+	 HrG9laea57ZxIPUjoLSISlYRngISwItisJmDGfIiA8psOab5TC2WgkZAnL2vxc/Qla
+	 IeHcBR18glHkQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93AD139EAF44;
+	Thu, 24 Sep 2026 05:50:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -59,56 +37,106 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 00/17] bpf: Indirect calls of bpf subprogs
+ (callx)
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179022901639.1337807.12766583921039284951.git-patchwork-notify@kernel.org>
+Date: Thu, 24 Sep 2026 05:50:16 +0000
+References: <20260924031042.1690890-1-alexei.starovoitov@gmail.com>
+In-Reply-To: <20260924031042.1690890-1-alexei.starovoitov@gmail.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com
 
-From: Tao Cui <cuitao@kylinos.cn>
+Hello:
 
-Document the BPF cost model attachment in the io.cost.model section
-of the cgroup v2 documentation: attaching an iocost_model_ops
-struct_ops to a device by its major:minor, the model=bpf readback
-while attached (ctrl keeps describing the coefficients), that
-detaching restores the builtin model, and that writes never select
-a model.
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-Signed-off-by: Tao Cui <cuitao@kylinos.cn>
----
- Documentation/admin-guide/cgroup-v2.rst | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+On Thu, 24 Sep 2026 03:10:25 +0000 you wrote:
+> From: Alexei Starovoitov <ast@kernel.org>
+> 
+> v1->v2:
+> - Dropped "bpf: Don't fold loads from insn_array maps into constants".
+>   bpf_map_direct_read() rejects insn_array already.
+> - patch 1: emit the same diag as sort_subprogs_topo() (bpf-ci).
+> - patch 3 is new: taking the address of a function that is never called
+>   hit verifier_bug() in jit_subprogs(). Not related to callx, but callx
+>   makes it likely.
+> - patch 4: BPF_OP() == BPF_CALL in liveness like in const_fold, explained
+>   in the comment why slots are live before callx callsite (Eduard).
+> - patch 5: moved !bpf_is_callx() into nested 'if' (Eduard). JIT support
+>   is checked before the type of the register.
+> - patch 6: sync callbacks are in the call graph too. Stack depth of
+>   a callback whose address is read from .rodata or taken in another
+>   subprog was not accounted.
+> - patch 10:
+>   . check_cfg() explores functions of a table one at a time. It was
+>     losing changes_pkt_data and other effects of the functions in
+>     a table that call each other.
+>   . no cmpxchg64(), it's not available on all 32-bit archs.
+>   . don't reject the prog that reads a pointer to a function that was
+>     removed as dead code (sashiko).
+>   . load of the pointer sets jit_required, so the prog that passes it to
+>     a helper as a callback can't run in the interpreter (bpf-ci).
+>   . tbl[i].data at variable offset is a regular load when none of
+>     the possible offsets overlaps with a pointer (bpf-ci).
+> - patch 12: append the functions and copy the map only for progs that
+>   have callx. The rest use .rodata as-is (bpf-ci). Pass token_fd to map
+>   create. Dropped dead bpf_map_lookup_elem() fallback.
+> - patch 14: light skeleton reserves fd_array slots only when the object
+>   has callx.
+> - selftests: anchored callx_retval_is_tracked to the caller, the tests
+>   of global func in a table and of const folding of the pointer test what
+>   they claim now, skip without JIT, fixed ASSERT_GT() of u32 and
+>   the comment, added tests for the above (bpf-ci). The table in
+>   callx_rodata_lskel test is volatile. clang was turning it into
+>   direct calls, so the test didn't test light skeleton.
+> - Added acks.
+> v1: https://lore.kernel.org/bpf/20260922011323.1298619-1-alexei.starovoitov@gmail.com/
+> 
+> [...]
 
-diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-index 8d2603751c51..306cc929c88d 100644
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -2117,8 +2117,30 @@ IO Interface Files
- 	  =====		================================
- 	  ctrl		"auto" or "user"
- 	  model		The cost model in use - "linear"
-+			or "bpf" while a BPF model is
-+			attached
- 	  =====		================================
- 
-+	When CONFIG_BLK_CGROUP_IOCOST_BPF is enabled, a BPF cost model
-+	can be attached to a device by loading an "iocost_model_ops"
-+	struct_ops with the whole disk's major:minor in its "dev" member
-+	(a partition's major:minor is rejected);
-+	attaching switches the device's pricing to the model, detaching
-+	the struct_ops restores the builtin linear model.  While a model
-+	is attached, "model" reads back "bpf"; "ctrl" keeps describing
-+	the builtin coefficients, which are inert while the model is
-+	attached: coefficient writes are stored and take effect again
-+	after the struct_ops is detached, and the automatic profile
-+	stepping does not switch profiles.  Writing "ctrl=bpf" or
-+	"model=bpf" is accepted as a no-op so a saved configuration
-+	still parses, but re-attaching the model requires loading the
-+	struct_ops again, not writing to this file.  Attaching
-+	implicitly enables the controller if needed (disabling wbt
-+	like io.cost.qos does); detaching does not disable it again,
-+	and writing "enable=0" to io.cost.qos suspends the model's
-+	pricing until the controller is re-enabled, while it stays
-+	attached.
-+
- 	When "ctrl" is "auto", the kernel may change all parameters
- 	dynamically.  When "ctrl" is set to "user" or any other
- 	parameters are written to, "ctrl" become "user" and the
+Here is the summary with links:
+  - [bpf-next,v2,01/17] bpf: Fix infinite loop in check_max_stack_depth()
+    https://git.kernel.org/bpf/bpf-next/c/f2c33a159190
+  - [bpf-next,v2,02/17] selftests/bpf: Test recursion through a global function and a callback
+    https://git.kernel.org/bpf/bpf-next/c/6cec7366b5ce
+  - [bpf-next,v2,03/17] bpf: Keep functions with address taken when removing dead code
+    https://git.kernel.org/bpf/bpf-next/c/fb1f5ac185b7
+  - [bpf-next,v2,04/17] bpf: Prepare static analysis passes for callx instruction
+    https://git.kernel.org/bpf/bpf-next/c/373e3fd0bff0
+  - [bpf-next,v2,05/17] bpf: Add callx instruction to call bpf subprogs indirectly
+    https://git.kernel.org/bpf/bpf-next/c/7f0f66c069ae
+  - [bpf-next,v2,06/17] bpf: Add callx calls to the call graph
+    https://git.kernel.org/bpf/bpf-next/c/b7151a69bc6e
+  - [bpf-next,v2,07/17] bpf, x86: Add JIT support for callx
+    https://git.kernel.org/bpf/bpf-next/c/69a30e5fe5a8
+  - [bpf-next,v2,08/17] bpf, arm64: Add JIT support for callx
+    https://git.kernel.org/bpf/bpf-next/c/11a516144d9a
+  - [bpf-next,v2,09/17] bpf: Discover subprogs described by func_info
+    https://git.kernel.org/bpf/bpf-next/c/3a03595510dc
+  - [bpf-next,v2,10/17] bpf: Recognize pointers to functions in read-only maps
+    https://git.kernel.org/bpf/bpf-next/c/a04286f6d828
+  - [bpf-next,v2,11/17] libbpf: Support pointers to static functions in data when linking
+    https://git.kernel.org/bpf/bpf-next/c/296fd4782754
+  - [bpf-next,v2,12/17] libbpf: Resolve pointers to functions in read-only data
+    https://git.kernel.org/bpf/bpf-next/c/b223044a68d5
+  - [bpf-next,v2,13/17] libbpf: Treat .data.rel.ro as read-only data
+    https://git.kernel.org/bpf/bpf-next/c/6ec77f0a7697
+  - [bpf-next,v2,14/17] libbpf: Support pointers to functions in read-only data in light skeleton
+    https://git.kernel.org/bpf/bpf-next/c/9f99fc05fc92
+  - [bpf-next,v2,15/17] selftests/bpf: Add tests for callx
+    https://git.kernel.org/bpf/bpf-next/c/e9b22d50796d
+  - [bpf-next,v2,16/17] selftests/bpf: Add tests for callx through pointers in read-only data
+    https://git.kernel.org/bpf/bpf-next/c/b018e998e645
+  - [bpf-next,v2,17/17] bpf, docs: Document callx instruction
+    https://git.kernel.org/bpf/bpf-next/c/fd318eab4b09
+
+You are awesome, thank you!
 -- 
-2.43.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
