@@ -1,293 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com [74.125.228.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51063793C3;
-	Thu, 24 Sep 2026 16:17:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5B273CB560
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:20:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790266662; cv=none; b=WHxGTc8SxpexuiJHhfKSuSaMLFG9b7MQdm9GoMnVpT4Zpjb/Z+KHi0s193B4T/TRzGbOkl8tH60eZ0dHpKj8aKfCikPnuQTtZDKNIsBCcvnaaAoZaFiMjY2rdHuECFLr8jqDKQvzMzEGhn32c5TheVetZYkDzaSe+y9Sx8TeKSY=
+	t=1790266816; cv=none; b=ao1mwgqrrtA3OJ44bT+gmdzkUwtPwopYtdHfO6CDmS96SQ11ZrqrxCJWFma5WO4CCCQ7baR33Hm0nvS3Mz0LxUmzUh+C/XbUsEvxj42dAF4YDdPx5QNiTF/LTqnNlP1UQeXmltq4yfTZiLNgIkgw68BUL6AxaRxfwn1hw9NYBHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790266662; c=relaxed/simple;
-	bh=54j6jm9bBfedLrJ77nc05dsO/9GGqZr7GBq9pImLWco=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Gu0EdhhNBun9PSEizzNj0ldcGrLv+oAzXgXu9HrrcLgxbC240TfxZF7J02wnDcdtRkWLnXSd65S4fq/FhbIg/km04RDrZ2o9AXQEbYTMk9YnOdGpq+OqcDtzv/ahKAJw4q1/IHYOR3NbMMHnHXS1y+AFRJfxvnvAIuZ/hlAJQEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iwE+7vle; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790266816; c=relaxed/simple;
+	bh=3RqIO6sePBeRSZKF7G/2KBgpPD2lZ4MbL7NsJ27Vwb4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=OqzL9clFnk4UGoiTfOfj9O7eDNu0gC6U4UYL+ZLo8ozzIBX5QZWmJiHNPx8GaAjcpvcozrH+iHbKmZ71iNebWzDrDbwMN1CVoeyCHCeCQ114uEdKw5KpYROvuV+45ogLWOt0Lo5cIsaDVddo9cXWVGDg69ywiAQ9NsgPGndt9Nc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j5bqZmiF; arc=none smtp.client-ip=74.125.228.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iwE+7vle"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 375811F00893;
-	Thu, 24 Sep 2026 16:17:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790266660;
-	bh=/vir7cOOalrm3uAtBCr/uUQaicGXlCKvmJG7+GwiX1g=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=iwE+7vleCFfMnAijc6nhK/b+R0CA8Ynie7k007PULFTJSSXletRWl3GgzUiPQUtKd
-	 l7wYcPCT3oOc/WzZlXp9MaV4eOcDUqmfrZ2L5sl2V2N/PiNG6TaOcMk5q7vFNAaXMq
-	 v6LwPMgkO+jU2Avkw9xKX3IMLz2PgfKt6r3KHZJiQHjk+npatXy2gKRMxij0z/WXym
-	 5wRrjm3GavyMYYh+/H2SEnPcjEKL6+jQBohI0ZWGQ6qMWyo/549lo2PxPZiqMvgjV+
-	 nBwIimYQdYDvDcQwTHqObEbK4cK04/yG+3iIF/gAgGFD19AOyoW8NJyIVn15iJYoiF
-	 VrVTgi/AD/4+w==
-Content-Type: multipart/mixed; boundary="===============3199754947234595145=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j5bqZmiF"
+Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c254fa663bfso392299766b.1
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:20:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790266813; x=1790871613; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=qWiIWAbEhMe5Qe0PgIHxYK173K5Od+mN1jv9eb0aS9g=;
+        b=j5bqZmiFLxl0IR2tzdLDnMn/kCWj/59BKoEpMyuMTDuGbQYr/XBsMj9JQhwI3L56yo
+         EbsRsrDUuWfR89Q0N82oW3tadJ73JY2zaQPx45lkLrvrK6jLeZRw91hZNGgpnzMtyn9m
+         wJIVwxoSEMKhZ4MhVs1LYWIZCbKqHvQ0U29dU5Fmg74YUkGXb/SGQNR3x4bektPqUi48
+         Pb5pjTBJ5SJa20ac8uzXewiywYIIkUUcEWxseLbYm6CyGn/ezCWe1o/Kz1OIOMyTaZUf
+         tD+hzkz857ISE6/E0xsUv13hP5e0Esz62XiGo5hiDYmWqJ5qkybGyHKOxNMEQDEJzIek
+         XgSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790266813; x=1790871613;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=qWiIWAbEhMe5Qe0PgIHxYK173K5Od+mN1jv9eb0aS9g=;
+        b=Ms6JBMv366UPdhm9ShbV79ve1p/9NcEvBYagZl70vOQrXBAF3XQqfdwCRnTZqcIsLF
+         DkBY4zeljaqAZNXrD1zZ07JOfkI7u19p630o4GhLa56Abl13RyN1/Abt/th66HVITbNw
+         E6Ja/78XQ1kZB4c1FkUwrq2Zg6Dx2+Ebp+r87UINvFTNIPtr60VJy/z231bF/AgExLr4
+         bka73NzZ5pZ7SlRXng3315ndMjdEWz3BGJSO0qyiy2zakOLskt3lJncsdBcESD8vHoWC
+         LmJsgWF+pXJnRqjRPe49QB+7qrRh18asfcmOr57f1Dj/4J9B1sX9I0Y3KUpAWNmisjKg
+         keog==
+X-Forwarded-Encrypted: i=1; AKwUvBwvUdPuyU6xF8Rpnj9W/qbMJ+5qt2btOhgHsCqKrhpNXGlSO4vfq2c3BEGCENEUoQJyHCk=@vger.kernel.org
+X-Gm-Message-State: AFuF++lIcpBX+kOu7E8+RSQS1MIwJvFduqq/AJ/U8Se/lpWxgjSSK/Bc
+	XaDWkg1KC8YETdveQqX2IqbRvKbjiDgaxOrw0J0JsvNQrIPyHlO0ceFk
+X-Gm-Gg: AYBFou2rMAQcZEgoutaHc9nBUMe4qYz1YmDK8OkRSc95f+BEVjl9GugRgWYW8R3DC+C
+	wEO338q6fiAZqX6OgBkH6qHVt6sLz0ONtwB8kWzwuW9bzNswwWKm6dCP20hTxFFRVUYLMmf8iAW
+	EsxLGJ7D7LftsjW5fHFZZkPTO+81UyviKva79uIEZSgU9npqF/TKZZBjEuCDVoF1FGrKNZOGYCX
+	c9G9nntEQlV9twEAqslXyTe3iEYCTK3DcJtugOdF4Oh+OP1YSSzDc5Bm20k4EHk8nOU2X1YNEtC
+	599Vf6pb8J4XmnR/SKz5djdJDpNuo6apUWE3Qd6zR0e1QbQ2201p/9jVAiqdpZI1lnJijtsqw1t
+	M15/P8Hlc236Vb6CtITdNip8r4JOjYCIhNen1Qa1QnEuwbfNM3+mGNi1ImAXz9fDwdZj9+oAMT/
+	C33m/1HNX9Ie95ed2uwK9E/+VmMyh3wT8tg3I9Q0vxjRZKIcQ6EQfPmIs1lc6tU3VpvHMemAlA/
+	Jjnij5fNKAEgPXn+YeYF6RrUtz0uuVuS1M8DJZ6JYEjVFQ5+kJrfhRpqdDSf3BubgMSZ+PxLt67
+	QGj2
+X-Received: by 2002:a17:906:6312:b0:c25:2d27:5652 with SMTP id a640c23a62f3a-c2ac2308fd7mr272369366b.11.1790266812819;
+        Thu, 24 Sep 2026 09:20:12 -0700 (PDT)
+Received: from localhost ([153.61.198.248])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2aae5c6f35sm331872766b.12.2026.09.24.09.20.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Sep 2026 09:20:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <6469f266e0c06de407583746d4f533a03a002fa8d7871124196b0bb568fe38fa@mail.kernel.org>
-In-Reply-To: <179017148080.466588.9116221556625712980.stgit@devnote2>
-References: <179017148080.466588.9116221556625712980.stgit@devnote2>
-Subject: Re: [PATCH] kprobes: Make optprobe optimizer multi-generational and asynchronous
-From: bot+bpf-ci@kernel.org
-To: mhiramat@kernel.org,josef@toxicpanda.com,paulmck@kernel.org,frederic@kernel.org,ast@kernel.org,rostedt@goodmis.org
-Cc: boqun@kernel.org,mhiramat@kernel.org,mark.rutland@arm.com,peterz@infradead.org,tglx@kernel.org,daniel@iogearbox.net,andrii@kernel.org,puranjay@kernel.org,rcu@vger.kernel.org,bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,linux-arm-kernel@lists.infradead.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Thu, 24 Sep 2026 16:17:38 +0000 (UTC)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 24 Sep 2026 16:20:08 +0000
+Message-Id: <DLNOMA3RI740.18YZJ9G0HDKDQ@gmail.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
+ <andrii@kernel.org>, <bpf@vger.kernel.org>, <kernel-team@fb.com>
+Subject: Re: [PATCH dwarves v2 0/3] pahole: Fix arm64 argument register
+ allocation
+From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
+To: "Alan Maguire" <alan.maguire@oracle.com>, "Yonghong Song"
+ <yonghong.song@linux.dev>, "Arnaldo Carvalho de Melo"
+ <arnaldo.melo@gmail.com>, <dwarves@vger.kernel.org>
+X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
+References: <20260917164038.1576763-1-yonghong.song@linux.dev>
+ <09dbfeea-a4d1-4b7a-b92e-bcf8c4cdabb4@oracle.com>
+In-Reply-To: <09dbfeea-a4d1-4b7a-b92e-bcf8c4cdabb4@oracle.com>
 
---===============3199754947234595145==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> index 6337da5cab9e..1e25980303c4 100644
-> --- a/kernel/kprobes.c
-> +++ b/kernel/kprobes.c
-
-[ ... ]
-
-> @@ -530,50 +553,78 @@ static DECLARE_COMPLETION(optimizer_completion);
+On Thu Sep 24, 2026 at 4:15 PM UTC, Alan Maguire wrote:
+> On 17/09/2026 17:40, Yonghong Song wrote:
+>>=20
+>> The arm64 ABI starts an argument twice the register size on an even-numb=
+ered
+>> argument register, leaving a hole when the next free register is an odd =
+one:
+>>=20
+>>   u64 f(u64 a, __int128 v, u64 b);
+>>=20
+>> passes a in x0, v in x2:x3 -- skipping x1 -- and b in x4.  pahole did no=
+t
+>> model the hole, so b looked like it was in an unexpected register and th=
+e
+>> whole function was dropped from BTF.  Patch 1 skips the register the ABI
+>> leaves behind, patch 3 adds a test for it.  Only arm64 has this rule; th=
+e
+>> other architectures are unaffected.
+>>=20
+>> Patch 2 is a small follow-up.  Floating point and vector arguments are
+>> allocated from a register bank of their own -- v0-v7 on arm64, xmm0-xmm7=
+ on
+>> x86-64 -- so a wide one never occupies a general purpose register pair a=
+nd
+>> must not trigger the even-register rule either.  It does not change the =
+BTF
+>> emitted today, because such an argument still advances the general purpo=
+se
+>> register index by its own size, so it comes with no test of its own; it
+>> keeps the alignment rule scoped to the bank it applies to.
+>>
 >
->  #define OPTIMIZE_DELAY 5
+> one small issue here; we record alignment for structs from DW_AT_align
+> in associated tags; we should ensure that we utilize that alignment
+> where available. However it's a bit broken in that we don't appear
+> to record alignment for typedefs, just structs.
 >
-> +static bool optprobe_has_queued_probes(void)
-> +{
-> +	struct optprobe_generation *gen = &optprobe_gens[optprobe_cur_gen];
-> +
-> +	return !list_empty(&gen->optimizing_list) ||
-> +	       !list_empty(&gen->unoptimizing_list);
-> +}
+> I think we can tackle that with a followup though; unless anyone objects =
+I'll
+> land these patches later today.
 
-Does this logic need to check gen->freeing_list as well?
+Pls go ahead.
+Also pls land LOC* things too, so you can post the rest of LOC* kernel bits=
+.
+So that everything lands and ready for the merge window in a couple weeks.
 
-optprobe_dispatch_generation() returns early when this is false:
+People will be traveling soon, so the sooner the better.
 
-    if (!optprobe_can_fire() || !optprobe_has_queued_probes())
-        return;
-
-But ops can reach cur_gen->freeing_list without leaving anything on the
-other two lists. unoptimize_kprobe(ap, true) on an op queued for
-unoptimization does:
-
-    force_unoptimize_kprobe(op);
-    list_move(&op->list, &optprobe_gens[optprobe_cur_gen].freeing_list);
-
-This is reached from add_new_kprobe() when a probe with a post_handler
-is registered at the same address, and from __arm_kprobe() for an
-overlapping optprobe. kill_optimized_kprobe() also list_move()s an
-unused, queued op there.
-
-If that op was the only entry on cur_gen->unoptimizing_list, the kick
-issued when it was queued produces a kprobe_optimizer() pass that
-dispatches nothing. optprobe_optimizer_busy() is then false and nothing
-kicks again. The op stays on freeing_list until some unrelated probe is
-queued, possibly indefinitely.
-
-While the op sits on freeing_list:
-
-- kprobe_queued(ap) stays true, so a later __disarm_kprobe() skips
-  arch_disarm_kprobe(). The int3 then stays in the text after the
-  probes at that address are disabled or unregistered.
-
-- The unused aggregator stays in kprobe_table and is not freed.
-
-- wait_for_kprobe_optimizer() returns immediately because
-  optprobe_optimizer_busy() is false. This contradicts the commit
-  message, which says flushing "waits asynchronously for all in-flight
-  and queued generations to drain".
-
-- Registering again at that address goes through reuse_unused_kprobe()
-  -> optimize_kprobe(). That sets KPROBE_FLAG_OPTIMIZED again (the
-  force path cleared it) and hits WARN_ON_ONCE(!list_empty(&op->list)),
-  leaving OPTIMIZED set with no jump installed.
-
-Should optprobe_has_queued_probes() also check
-!list_empty(&gen->freeing_list), so that dispatch and the flush loop
-account for these ops?
-
-[ ... ]
-
-> @@ -622,67 +675,119 @@ static void do_free_cleaned_kprobes(void)
->
->  static void kick_kprobe_optimizer(void);
->
-> +static void optprobe_generation_rcu_cb(struct rcu_head *rcu)
-> +{
-> +	struct optprobe_generation *gen;
-> +
-> +	gen = container_of(rcu, struct optprobe_generation, rcu);
-> +	WRITE_ONCE(gen->ready, true);
-> +	wake_up(&kprobe_optimizer_wait);
-> +}
-> +
-> +static void optprobe_finalize_generation(struct optprobe_generation *gen)
-> +{
-> +	lockdep_assert_held(&kprobe_mutex);
-> +
-> +	scoped_guard(cpus_read_lock) {
-> +		guard(mutex)(&text_mutex);
-> +
-> +		/* Optimization never be done when disarmed */
-> +		if (!kprobes_all_disarmed && kprobes_allow_optimization &&
-> +		    !list_empty(&gen->optimizing_list))
-> +			arch_optimize_kprobes(&gen->optimizing_list);
-> +	}
-> +
-> +	/* Free cleaned kprobes after quiescence period */
-> +	do_free_cleaned_kprobes(&gen->freeing_list);
-> +
-> +	gen->in_flight = false;
-> +	WRITE_ONCE(gen->ready, false);
-> +}
-> +
-> +static void optprobe_dispatch_generation(void)
-> +{
-> +	struct optprobe_generation *gen;
-> +
-> +	lockdep_assert_held(&kprobe_mutex);
-> +
-> +	if (!optprobe_can_fire() || !optprobe_has_queued_probes())
-> +		return;
-> +
-> +	gen = &optprobe_gens[optprobe_cur_gen];
-> +
-> +	scoped_guard(cpus_read_lock) {
-> +		guard(mutex)(&text_mutex);
-> +
-> +		/*
-> +		 * Unoptimize kprobes and collect cleaned (unused and disarmed)
-> +		 * kprobes before waiting for quiescence period.
-> +		 */
-> +		do_unoptimize_kprobes(&gen->unoptimizing_list, &gen->freeing_list);
-> +	}
-> +
-> +	/* Advance cur_gen to the next generation slot */
-> +	optprobe_cur_gen = (optprobe_cur_gen + 1) % OPTPROBE_GEN_MAX;
-> +
-> +	gen->in_flight = true;
-> +	WRITE_ONCE(gen->ready, false);
-> +
-> +	call_rcu_tasks(&gen->rcu, optprobe_generation_rcu_cb);
-> +}
-
-Now that kprobe_mutex is dropped during the Tasks RCU grace period, can
-an aggregator probe that was unoptimized but is still in use be freed
-while a task is still preempted inside its detour buffer?
-
-When an op on the unoptimizing list is not unused (for example, it is
-disabled but its child probe is still registered, as after
-disable_kprobe() through __disable_trace_kprobe()),
-do_unoptimize_kprobes() takes the else branch:
-
-    } else {
-        list_del_init(&op->list);
-    }
-
-After optprobe_dispatch_generation() returns, the op is on no generation
-list, and nothing ties its lifetime to the pending call_rcu_tasks()
-grace period. kprobe_optimizer() then drops kprobe_mutex, so unregister
-can run during the grace period:
-
-  unregister_kprobes()
-    __unregister_kprobe_top(p)
-      /* list_is_singular(&ap->list) && kprobe_disarmed(ap) is true,
-         since kprobe_disarmed() is kprobe_disabled(p) &&
-         list_empty(&op->list) */
-      hlist_del_rcu(&ap->hlist);
-    synchronize_rcu();
-    __unregister_kprobe_bottom(p)
-      free_aggr_kprobe(ap)
-        arch_remove_optimized_kprobe(op);  /* frees the detour slot */
-        kfree(op);
-
-Sequence with CONFIG_OPTPROBES=y and CONFIG_PREEMPTION=y:
-
-1. Task T enters op->optinsn.insn, through the jump or through
-   setup_detour_execution(), and is preempted there. The x86 template
-   runs with IRQs enabled, and optimized_callback() reads op->kp.flags
-   before preempt_disable(). T can also be preempted in the copied
-   instructions.
-
-2. disable_kprobe(child) calls unoptimize_kprobe(ap, false), which
-   queues ap on cur_gen->unoptimizing_list.
-
-3. kprobe_optimizer() calls optprobe_dispatch_generation().
-   arch_unoptimize_kprobes() runs, then the list_del_init() above, then
-   call_rcu_tasks(), and kprobe_mutex is released.
-
-4. unregister_kprobe(child) runs hlist_del_rcu(), then
-   synchronize_rcu(), then free_aggr_kprobe(), which does kfree(op).
-
-5. T resumes in the freed or dirty detour slot. If it was preempted in
-   the template, it then calls optimized_callback(op, regs), and
-   kprobe_disabled(&op->kp) reads freed memory.
-
-synchronize_rcu() does not wait for a task preempted outside
-rcu_read_lock(). The detour slot is freed with dirty=1 and can be
-reclaimed and reused through collect_garbage_slots(), which also uses
-only synchronize_rcu(). kill_kprobe() -> kill_optimized_kprobe() ->
-arch_remove_optimized_kprobe() during module unload has the same window.
-
-In the parent commit, kprobe_optimizer() held kprobe_mutex across
-synchronize_rcu_tasks(), so step 4 could not start until every such task
-had passed a voluntary context switch. The commit message says these
-grace periods can last seconds to minutes, which makes this window wide.
-
-Should ops that were unoptimized but are still in use stay attached to
-the in-flight generation until optprobe_finalize_generation() runs? Or
-should the unregister and kill paths treat such an op as not yet
-disarmed until its generation has finished?
-
-[ ... ]
-
-> @@ -707,12 +812,11 @@ static void wait_for_kprobe_optimizer_locked(void)
->  {
->  	lockdep_assert_held(&kprobe_mutex);
->
-> -	while (!list_empty(&optimizing_list) || !list_empty(&unoptimizing_list)) {
-> +	while (optprobe_optimizer_busy()) {
->  		init_completion(&optimizer_completion);
-> -		/*
-> -		 * Set state to OPTIMIZER_ST_FLUSHING and wake up the thread if it's
-> -		 * idle. If it's already kicked, it will see the state change.
-> -		 */
-> +		optprobe_flush_requested = true;
-> +
-> +		/* Wake up optimizer thread */
->  		if (atomic_xchg_acquire(&optimizer_state,
->  			OPTIMIZER_ST_FLUSHING) != OPTIMIZER_ST_FLUSHING)
->  			wake_up(&kprobe_optimizer_wait);
-
-Andrea Parri raised a concern on 2026-09-24 about a race condition in
-this code (https://lore.kernel.org/all/arTuBodyGqQ0mErI@andreayoga.localdomain/).
-
-The flusher drops kprobe_mutex while it sleeps, and the sysctl handler
-and the debugfs "enabled" file do not otherwise serialize against each
-other. A second flusher can then run init_completion() on the wait queue
-the first one is sleeping on: the first waiter is dropped from the
-queue, and complete_all() wakes only the second one. Andrea notes that
-with this patch the window is wider, since kprobe_mutex is released
-while the Tasks RCU grace period runs and optprobe_optimizer_busy()
-stays true until the generation is finalized.
-
-Andrea suggests replacing the completion with a counter of optimizer
-passes bumped at the end of each pass and signalled with
-wake_up_var_locked().
-
-Should this race be addressed before the patch is applied?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36019837684
---===============3199754947234595145==--
