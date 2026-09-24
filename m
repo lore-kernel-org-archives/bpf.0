@@ -1,161 +1,147 @@
-Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com [74.125.228.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F6CF486436
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:52:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5CB49F121
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:52:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790268757; cv=none; b=L5qil2L4/Rpn9PFDVYZo5T3SD4CBYeUfgPwZ41jy3VbZPTlEJuiAa7jSaJ4Kw6vPP/5+KvFnhDoztxUdnvVhylvXWjZ9w0nduQlSQvk8VS8aqQppeKZqNGq63P6vs8evFEnu+Fg3wWUWFXnV3snsdIGgHZqNB6TcQo1VcX+veO4=
+	t=1790268771; cv=none; b=mStPpdJn7ER140nMucCOOSxOu6qeflMC8B4Y4P2pHBG7GLayD0uziA5+AwrLtun3UNtPQferr7u4X+4G2rAHmzen7OIV/uvfdqfTNKLIW+doWMzxNS5Pnqd/dnpyaclWHgDCCGxBuQiYyS2i+3I/VnWLW+uzh7gnm1Xe8p0yWA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790268757; c=relaxed/simple;
-	bh=zajOpfpBg5ymkn/Jim8bbUW8GjfWWdYrue2j1pBz1T8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=J0Fjl6UM0RbDY79j8Lf61sUlidXlFFPPhcKcOj+dZBcCuFuzQBRvoqY00rab7uCTYDWAelY3Dmzg/l1OC7c+Z/yRhjYaU26HH0gAPMsghwhpAlr+hBcNfPHecowK6zbNPdtX+tqvn7y+a2lSdhq3FPbplXU00iZ6LMOB8oFfS6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=f7Yue0/q; arc=none smtp.client-ip=74.125.228.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1790268771; c=relaxed/simple;
+	bh=X4KZ3yYeatSHgzD9k80LTgYTTt2ON/QFP0NL+KQ141w=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=f7e6rWycosCVfKk6crK52JYv9CDiApA1MLt3HP9frxsbl70xHKdvxVBROq0c0xp+b8kaX+p7eeX7G5X+E05ylpYXgiC7vvQDtAt4vj9XB7sjT06RrzlF9UroeIz+rlr/5hqKbLX6FiDKTF9ovbUk6F1BMGnPlJ+ViDDPTaGwa+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VHDwqA4T; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="f7Yue0/q"
-Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a98505364aso98410a12.3
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:52:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1790268754; x=1790873554; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :user-agent:references:in-reply-to:subject:cc:to:from:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=5ZgnWusXCU12zGzkWVjE72AKIB7phfrZXuIevy8gML4=;
-        b=f7Yue0/qpeOInQp8bQpMhoJku1geFlUAPGz6JBPNi7FmjlOKjKTWuezqjX5X46OkHd
-         oVBseXyLUF/eL/JRuuTA6pZBwZB+Yq5OqD4EExGzHirhBcsKEX1awlt53lzzRCycm76E
-         K9rLbztJfLNVvgFQ8IG5bRlWNRvBlZwaIIts8TR1pvSyJqI7kLGkMW7wEmuE91yDP7EE
-         NYCymrMnQffqABOFBBEwwDGcVqfW8LYS+e6taZOjK/VDNfdtClxLK7MirgQqR82B7T5x
-         qZcCkXoZT5eG3hFxcjBdTyWm71TVD5SpRb61p6qxDMfveP3KsVC4qI4cSga16aWALnX3
-         lsdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790268754; x=1790873554;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :user-agent:references:in-reply-to:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5ZgnWusXCU12zGzkWVjE72AKIB7phfrZXuIevy8gML4=;
-        b=emVRmZKwfjpSgKp7KPEJwBOjuJtisFukDGr/lPV2ZSDWKpagN6qxjZxl2xSNYhx2pc
-         LS45sEaiUA3HlGJ/qRQlRWLd6XW1NZdVp8b88aoNiwovyzLo/jYbm8YUf2vQFrcJV73E
-         xpOWXHBQ7MIhbg8hrHJsyU+M9flnwkzkNSQHtJ4Lv2pafjpUzGzcskK3/dx8NHy6zR7U
-         BwTxHstEa0wUBjo1p8tpDgy8ac/BdS02vEFuFSFErBy+lknROwaL4CXUfB79ZtBTaN00
-         uugXI88ZqkhFeTOCdWgryROP2f6UmxjjYTB0T6KnbE16tvrjycseG6mbohqHBs0Mt3rZ
-         9L+Q==
-X-Forwarded-Encrypted: i=1; AKwUvBy1njayrRJ8P6jsYQUAVxn2Nqy7XrqeNaqKspuIiqhWrVROzsaMA6BPdacKTYhFcFWk+qo=@vger.kernel.org
-X-Gm-Message-State: AFuF++l72N0wKiDJ7S74fsAC5YD7ijvmG2++5kIyxS/bfDK2EcXyAphq
-	tioXKjT7tCx0OL4SRlzzPZXdxOezlntQZmYUFYOHJWodCjmVpdCjc2BXKikmg6HvG3Q=
-X-Gm-Gg: AYBFou2qJfLtIHwD+iY+pHjnGLATQitLOTDNWkbzFGYp85yLNzmw78LsA3lYg115YDo
-	+YVd2tm0AX7nK0ccOnVuqEFCna39Dlzo76x9XTpKXTk7CeVZPM0nuck2DZVGMiiIihcdqTsiSV8
-	7baCWW+mJmVu8cIZKBccfwCwwJQ1F/96tm1MwXcVHqaoH+rTW6aftWraeYdBNVmwv7nEurH1iBo
-	7k2bW5NlPjrjgiOk17ZuX7po+nqHrzMAvRenAwNKdjX9lI9MuB9pY+0IErdzZP0u/6xPmxBd8u3
-	lmOviMZ89AxmsADOLo0/3VrhrK1tyMAArVt2f3iDPer57cR7RNDR/GP4k2ETpE4PEqqJQq3AAOL
-	te+zAw5KEXCKq/p8+jmSn0KQy93zJct1Yo1i03OM5esQRkTEvzs+/jLiP+HhWxwncL2RfHRl+R3
-	G7J+UBRziMdEnkUPmXxjsiPmgYUkUj0wvxg+QiPdZ32CoRIZVodhhjh9QFEjGOzk5iLrmGY+aYy
-	cdRFaJccOI=
-X-Received: by 2002:a05:6402:52c1:b0:6aa:1d41:628 with SMTP id 4fb4d7f45d1cf-6aac8ecf666mr2384920a12.7.1790268754290;
-        Thu, 24 Sep 2026 09:52:34 -0700 (PDT)
-Received: from cloudflare.com ([104.28.21.182])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6aae3a9924asm37248a12.30.2026.09.24.09.52.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 09:52:33 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: "Daniel Zahka" <daniel.zahka@gmail.com>
-Cc: <netdev@vger.kernel.org>,  "Alexei Starovoitov" <ast@kernel.org>,
-  "Jakub Kicinski" <kuba@kernel.org>,  "Kuniyuki Iwashima"
- <kuniyu@google.com>,  "Paolo Abeni" <pabeni@redhat.com>,  "Stanislav
- Fomichev" <sdf@fomichev.me>,  <bpf@vger.kernel.org>,
-  <kernel-team@cloudflare.com>,  "Daniel Borkmann" <daniel@iogearbox.net>,
-  "John Fastabend" <john.fastabend@gmail.com>,  "Andrii Nakryiko"
- <andrii@kernel.org>,  "Eduard Zingerman" <eddyz87@gmail.com>,  "Kumar
- Kartikeya Dwivedi" <memxor@gmail.com>,  "Martin KaFai Lau"
- <martin.lau@linux.dev>,  "Song Liu" <song@kernel.org>,  "Yonghong Song"
- <yonghong.song@linux.dev>,  "Jiri Olsa" <jolsa@kernel.org>,  "Emil
- Tsalapatis" <emil@etsalapatis.com>,  "David S. Miller"
- <davem@davemloft.net>,  "Eric Dumazet" <edumazet@google.com>,  "Simon
- Horman" <horms@kernel.org>,  "Jesper Dangaard Brouer" <hawk@kernel.org>,
-  "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,  "Florian Westphal"
- <fw@strlen.de>,  "Jack Wang" <163wangjack@gmail.com>
-Subject: Re: [PATCH net-next v2 03/14] bpf: Make BPF skb extension survive
- packet scrubbing
-In-Reply-To: <DLMVTU0WA4OA.BWWVXT5BYT8V@gmail.com> (Daniel Zahka's message of
-	"Wed, 23 Sep 2026 13:46:28 -0400")
-References: <20260910-bpf-meta-inside-skb-ext-v2-0-0b21e42180b0@cloudflare.com>
-	<20260910-bpf-meta-inside-skb-ext-v2-3-0b21e42180b0@cloudflare.com>
-	<DLMVTU0WA4OA.BWWVXT5BYT8V@gmail.com>
-User-Agent: mu4e 1.14.1; emacs 30.2
-Date: Thu, 24 Sep 2026 18:52:32 +0200
-Message-ID: <87fqyypp67.fsf@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VHDwqA4T"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2C8F1F000FF;
+	Thu, 24 Sep 2026 16:52:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790268769;
+	bh=K8+HpcqsKkefFhZCbyg8lqeAkjogVfMxH0yUQpPZovc=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=VHDwqA4T66Jq3H6SUFdZPoNxWhbs4tvqGYRjluHftMIZlfTov1MPrAEt1kBPtu9Pp
+	 Wxtls9YmNU/D532zRKSlHNTZLVYkCTuxNFKU/xSVZTM+MxWVTO3tnJIkkY9Rhc19mS
+	 EKfRpse6EJ2nCXibD+o0dVIcz1shrCSM9qHrTj6BatVtsUdvOYCoQMcDZ8mN1xFq7O
+	 QWeeGD6V1PpjQHnnuDJzW9XBr1ZTo5lOMnIUwALRK9xolwu1exLma6T8gf0NwBCFZ/
+	 sXHIYo1iE0XpI0B0dRJnwkJJYQvfsJLHxlQIBXpMM58XRaaJVLwLTHTiZsjmfS49Md
+	 ahhM/R+fENBNw==
+From: sashiko-bot@kernel.org
+Subject: Re: [PATCH bpf-next 1/2] bpf: Support bpf_rcu_head in hash and LRU
+ hash maps
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Puranjay Mohan" <puranjay@kernel.org>
+Cc: bpf@vger.kernel.org
+In-Reply-To: <20260924162858.2435106-2-puranjay@kernel.org>
+References: <20260924162858.2435106-1-puranjay@kernel.org>
+ <20260924162858.2435106-2-puranjay@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 24 Sep 2026 16:52:49 +0000
+Message-Id: <20260924165249.A2C8F1F000FF@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-Hi Daniel,
+Thank you for your contribution! Sashiko AI review found 2 potential issue(=
+s) to consider:
+- [High] bpf: preallocated hash map loses per-cpu spare causing update fail=
+ure
+- [Medium] bpf: LRU eviction fails to cancel timers immediately for RCU cla=
+imed elements
+--
 
-On Wed, Sep 23, 2026 at 01:46 PM -04, Daniel Zahka wrote:
-> On Thu Sep 10, 2026 at 10:02 AM EDT, Jakub Sitnicki wrote:
->> skb_scrub_packet() drops all skb extensions unconditionally via
->> skb_ext_reset(). It runs on tunnel encap/decap (ip_tunnel_rcv, vxlan_rcv,
->> etc.) and cross-netns forwarding (dev_forward_skb).
->>
->> This makes it impossible for a BPF program to pass metadata via bpf_skb_=
-ext
->> through a tunnel or across a netns boundary. The extension is always lost
->> at the scrub point.
->>
->> Introduce skb_ext_scrub(), a selective variant of skb_ext_reset(). It
->> deletes every extension except SKB_EXT_BPF. Scrubbing is safe when the
->> extension slab is shared with clones: deleting an extension only clears =
-the
->> per-skb active_extensions bit, and the shared slab payload is released
->> lazily by __skb_ext_put() once the last reference goes away.
->>
->> Replace the skb_ext_reset() call in skb_scrub_packet() with skb_ext_scru=
-b()
->> and also switch udp_try_make_stateless() to skb_ext_scrub() as well, so =
-the
->> BPF metadata survives queueing onto a UDP socket receive queue and stays
->> readable there (e.g. for a sockmap verdict program). Only mark the skb
->> stateless when no extension survives the scrub. Otherwise skb_consume_ud=
-p()
->> would take the __consume_stateless_skb() fast path, which skips
->> skb_release_head_state(), and leak the extension slab.
->>
->> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
->> ---
->
-> Hello Jakub,
-> What are your current plans for this series? This commit solves the same
-> problem I have with wanting to preserve the PSP skb extension across
-> netns forwarding.
+commit 48e7d59b1040d1c559a2c8cba927c93eb44f710e
+Author: Puranjay Mohan <puranjay@kernel.org>
 
-I've implemented Alexei's idea of skb-lifecycle tracepoints that run
-only when an skb is marked/traced. Currently putting final touches on it
-before sending it out for the first round of feedback. You can take
-sneak peek at it on GH [1] to see if it meets your needs.
+bpf: Support bpf_rcu_head in hash and LRU hash maps
 
-The CPU overhead is lower compared to the skb extension, at least in my
-local runs, and the kernel changes are simpler, so it seems like a win
-overall:
+This commit introduces bpf_rcu_head support for hash and LRU hash maps,
+allowing map elements with RCU callbacks to be handled appropriately on
+deletion. Elements are kept alive until the callback completes, with the
+dead bit stopping further arming.
 
-|                  | gated skb tps    | bpf skb ext      |
-|------------------|------------------|------------------|
-| **busy**         | **+5.44 =C2=B1 3.16** | **+8.01 =C2=B1 4.75** |
-| sys              | +2.62 =C2=B1 2.06     | +3.67 =C2=B1 2.76     |
-| soft             | +2.89 =C2=B1 1.43     | +3.83 =C2=B1 2.10     |
-| ns/pkt @146k pps | **+=E2=89=88 373**       | **+=E2=89=88 549**       |
+> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+> index f744a42bb8139..5e2f4cbe9d0f2 100644
+> --- a/kernel/bpf/hashtab.c
+> +++ b/kernel/bpf/hashtab.c
+> @@ -914,15 +925,24 @@ static bool htab_lru_map_delete_node(void *arg, str=
+uct bpf_lru_node *node)
+>  	hlist_nulls_for_each_entry_rcu(l, n, head, hash_node)
+>  		if (l =3D=3D tgt_l) {
+>  			hlist_nulls_del_rcu(&l->hash_node);
+> -			bpf_map_dec_elem_count(&htab->map);
+>  			break;
+>  		}
+> =20
+>  	htab_unlock_bucket(b, flags);
+> =20
+> -	if (l =3D=3D tgt_l)
+> -		check_and_cancel_fields(htab, l);
+> -	return l =3D=3D tgt_l;
+> +	if (l !=3D tgt_l)
+> +		return false;
+> +
+> +	/*
+> +	 * An arm can land after the check above. The element is already unlink=
+ed
+> +	 * by now, so map_release_elem() finishes the handoff to the free list.
+> +	 */
+> +	if (bpf_rcu_head_claim(&htab->map, htab_elem_value(l, htab->map.key_siz=
+e)))
+> +		return false;
 
-I'll be giving an update on it at LPC [1], if you're attending, and of
-course will keep you posted here on the ML.
+[Severity: Medium]
+When an element is claimed by an RCU callback, htab_lru_map_delete_node()
+returns early and skips check_and_cancel_fields(). Does this leave timers
+and other special fields active after logical deletion?
 
--jkbs
+The commit message mentions that timers and friends in the same value are
+still cancelled on delete, but they appear to remain active here and could
+fire during the RCU grace period.
 
-[1] https://github.com/jsitnicki/linux/commits/gated-skb-tracepoints-2026-0=
-9-24/
-[2] https://lpc.events/event/20/contributions/2549/
+> +
+> +	bpf_map_dec_elem_count(&htab->map);
+> +	check_and_cancel_fields(htab, l);
+> +	return true;
+>  }
+
+[ ... ]
+
+> @@ -1129,9 +1179,18 @@ static struct htab_elem *alloc_htab_elem(struct bp=
+f_htab *htab, void *key,
+>  			struct pcpu_freelist_node *l;
+> =20
+>  			l =3D __pcpu_freelist_pop(&htab->freelist);
+> -			if (!l)
+> -				return ERR_PTR(-E2BIG);
+> -			l_new =3D container_of(l, struct htab_elem, fnode);
+> +			if (l) {
+> +				l_new =3D container_of(l, struct htab_elem, fnode);
+> +			} else {
+> +				/* Spend the spare; freeing old_elem refills the freelist. */
+> +				if (!old_elem)
+> +					return ERR_PTR(-E2BIG);
+> +				pl_new =3D this_cpu_ptr(htab->extra_elems);
+> +				l_new =3D *pl_new;
+> +				if (!l_new)
+> +					return ERR_PTR(-E2BIG);
+> +				*pl_new =3D NULL;
+
+[Severity: High]
+By setting the per-CPU spare *pl_new =3D NULL and later pushing the replaced
+element into the global freelist, is the per-CPU spare permanently lost?
+
+Once all CPUs lose their spares and the map is full, could updating an
+existing element fail with -E2BIG?
+
+> +			}
+>  			bpf_map_inc_elem_count(&htab->map);
+>  		}
+>  	} else {
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260924162858.2435=
+106-1-puranjay@kernel.org?part=3D1
