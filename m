@@ -1,51 +1,52 @@
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED4C430DEA6;
-	Thu, 24 Sep 2026 19:57:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B508C42E42F;
+	Thu, 24 Sep 2026 19:57:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790279841; cv=none; b=YGQOHsqohGQZGkJQfAqC5qO6vJ4gQ8Dh5DLmL7TivDa2SGB1hFX8+1QyuXy0D8RRgnlpwhnXEzVB1fMaAxKvpxmqCQBQhJ8SHhWL5HtkHhW72+ePnxS7THTsZRit3b3HaTlDXP92zw1mH/lqaYzYa1g15lT0SmZuw4rEkoev/vs=
+	t=1790279844; cv=none; b=IY8uJ57dv+fM/tzulJKeXBQyYHkUVuFVbwa+EIOSU7Gco3OhhijmTWqKqNi47edf2wHp4GKqQg+itapjJHltFujgFDh2RYHavz23qX7Qve8NmSu7+souMZtjM25M+IqwcNp+RL8kNpRocK9eTJP+XVUFTPhKVKjoNbZuvB7s7+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790279841; c=relaxed/simple;
-	bh=d4S/mde55+8dc57xkY58Mpjvb3g8IeUqgjBA/BNphF8=;
-	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=kvaOLTz3qBLF6hYHOj3LjJIKnEFFr9oCpKJtJWH7IPAgt2teEAHV0AYGzGx5qpnzStQklczbS6Cn0Ku49Vvg3Fc3eeCgzWNh8d2Rd/Hc2EXZWRWw3C1FBabDmdqa4lAQTpa0wemQE0opN7r0g2nJFhKblGoA8psx7vMSBI67r4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=bYOxWokD; arc=none smtp.client-ip=68.232.154.123
+	s=arc-20240116; t=1790279844; c=relaxed/simple;
+	bh=eWXDxvjo1b40Oaa4SLtuLOQS21zoSGBx8A9HWDSwW9M=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
+	 In-Reply-To:To:CC; b=kUXg5o2Rb1T89VPT1pWNM3nsasQ8yMaK1yNiLX0Lqwox6u+dWrFe0AVEzvhpGqcS+xZK2N7iYbjfr84jEquRAiqydvNIi8wWZk06pI8ZBQND8dnGdwpfIKKDuDbbvKpc9sUAE4+E9zCua3R82xLTU4jJ6ug6KwsPa+6P67knqvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=rAt8Xa05; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="bYOxWokD"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="rAt8Xa05"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1790279830; x=1821815830;
-  h=from:subject:date:message-id:mime-version:
-   content-transfer-encoding:to:cc;
-  bh=d4S/mde55+8dc57xkY58Mpjvb3g8IeUqgjBA/BNphF8=;
-  b=bYOxWokDd9XKC4+MKuvt0QQVnATN9Pa6DaIM/+6ZPmk9PDmgB/mzJLQD
-   9CLh89KQUdvOr5fHntE1I+xC8TITXxzzSxAMLt5i09KuHnezsnGOuTv2o
-   qHTmqHnXqqI4Xe4QIG9zWg75M5gylfgyszUNGJDNH8ApzBH0kVxkgTK54
-   j10GRq/USniekcAg99ZcorkrixFdW5fUhcbqUSvHxqxt/oj1sxYX20Lhs
-   pYXgwWtwS49htrAGGp1riB3Thy4la2vfd1GAp+1qB4UbXxjdtGhD40apL
-   waFhpJk+3mAKFKMnWVYTur42d7GdZAkOhMYj7nacUflkQvKOoUpVhFP0G
+  t=1790279839; x=1821815839;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:references:in-reply-to:to:cc;
+  bh=eWXDxvjo1b40Oaa4SLtuLOQS21zoSGBx8A9HWDSwW9M=;
+  b=rAt8Xa05LjikKNc+tfpgroR4MnmNXGp+QKAPlh3sdqXJsDSPwf5S6//p
+   GDEieA3oBGupHjCkQLSI9X3uNUATA//hp0Ahbs1rK7ZI1pZSaavAFBKDb
+   6dLya5P4ZyZfueVTYsinK7/tHQbyJlchpGzAQZ5BOnXbrKXInUBT2nFgF
+   a+a039btKRR+n79Wf1cIda/bWHJ0JIwA28O4v3ylpecRfTIbq0F09HDVH
+   2bVkiC2YglwA17RNs8Gt4ih0cebxS5G9/9+brSgjx+d0DJ+7WO6s/PQrU
+   6Ia9lZZ2CJ84/ySIUFBVNkqqnY2XY3w8pHxWqruy1i7UPoZSRghin6JGE
    w==;
-X-CSE-ConnectionGUID: 7Kn8RAjYQz2XVn5p7/nE9w==
-X-CSE-MsgGUID: k0bhmGRSQGmpOd6gZkv7eA==
+X-CSE-ConnectionGUID: BO+XYviMQOmTA54m9chmgA==
+X-CSE-MsgGUID: USQ1WD8gRUWeXaLTbfQ9Nw==
 X-IronPort-AV: E=Sophos;i="6.27,121,1787036400"; 
-   d="scan'208";a="231239472"
+   d="scan'208";a="231239474"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2026 12:57:01 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.87.151) by
- chn-vm-ex2.mchp-main.com (10.10.87.31) with Microsoft SMTP Server
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Sep 2026 12:57:14 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.2562.49; Thu, 24 Sep 2026 12:57:01 -0700
+ 15.1.2507.58; Thu, 24 Sep 2026 12:57:14 -0700
 Received: from DEN-DL-M70577.microsemi.net (10.10.85.11) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.58 via Frontend Transport; Thu, 24 Sep 2026 12:56:57 -0700
+ 15.1.2507.58 via Frontend Transport; Thu, 24 Sep 2026 12:57:10 -0700
 From: Daniel Machon <daniel.machon@microchip.com>
-Subject: [PATCH net-next v8 00/15] net: lan966x: add support for PCIe FDMA
-Date: Thu, 24 Sep 2026 21:56:48 +0200
-Message-ID: <20260924-lan966x-pci-fdma-v8-0-201c7b707d8b@microchip.com>
+Date: Thu, 24 Sep 2026 21:56:51 +0200
+Subject: [PATCH net-next v8 03/15] net: microchip: fdma: add PCIe ATU
+ support
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,14 +54,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAICAtWoC/23QS26EMAwA0KuMsm4q55/MqveougiOKZE6gAAhq
- hF3b0QXoDZLy/bz58lmmjLN7H57sonWPOehL4F/uTHsYv9JPKcSMwnSghKKf8U+WLvxETNv0yP
- yoClpb5JUbWSlbZyozdtBvrOeFt7TtrCPkunyvAzT9zFrFUf+l5Xwn10FB06t0diEBlA3b4+M0
- 4BdHl9xeBzgKk9ES19BZEGSIrSWwJa6GqJOxICuIKog0djWOA3JO6gh+orUNtEFEZoAfUg+WVV
- DzAWp/sQUBMsqIrhIYKo/sScSIFQQWxDbap9iE5J1ooa4CyJq57iCACEKF9BHiX+Rfd9/AA2z0
- 5ZcAgAA
-X-Change-ID: 20260313-lan966x-pci-fdma-94ed485d23fa
+Content-Transfer-Encoding: 7bit
+Message-ID: <20260924-lan966x-pci-fdma-v8-3-201c7b707d8b@microchip.com>
+References: <20260924-lan966x-pci-fdma-v8-0-201c7b707d8b@microchip.com>
+In-Reply-To: <20260924-lan966x-pci-fdma-v8-0-201c7b707d8b@microchip.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
 	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
 	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Horatiu Vultur
@@ -77,352 +74,427 @@ CC: Richard Cochran <richardcochran@gmail.com>, <netdev@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>
 X-Mailer: b4 0.14.3
 
-When lan966x operates as a PCIe endpoint, the driver currently uses
-register-based I/O for frame injection and extraction. This approach is
-functional but slow, topping out at around 33 Mbps on an Intel x86 host
-with a lan966x PCIe card.
+When lan966x or lan969x operates as a PCIe endpoint, the internal FDMA
+engine cannot directly access host memory. Instead, DMA addresses must
+be translated through the PCIe Address Translation Unit (ATU). The ATU
+provides outbound windows that map internal addresses to PCIe bus
+addresses.
 
-This series adds FDMA (Frame DMA) support for the PCIe path. When
-operating as a PCIe endpoint, the internal FDMA engine on lan966x cannot
-directly access host memory, so DMA buffers are allocated as contiguous
-coherent memory and mapped through the PCIe Address Translation Unit
-(ATU). The ATU provides outbound windows that translate internal FDMA
-addresses to PCIe bus addresses, allowing the FDMA engine to read and
-write host memory. Because the ATU requires contiguous address regions,
-page_pool and normal per-page DMA mappings cannot be used. Instead,
-frames are transferred using memcpy between the ATU-mapped buffers and
-the network stack. With this, throughput increases from ~33 Mbps to
-~620 Mbps for default MTU.
+The ATU outbound address space (0x10000000-0x1fffffff) is divided into
+six equally-sized regions (~42MB each). When FDMA buffers are allocated,
+a free ATU region is claimed and programmed with the DMA target address.
+The FDMA engine then uses the region's base address in its descriptors,
+and the ATU translates these to the actual DMA addresses on the PCIe bus.
 
-Patch 1 adds the shared drivers/net/ethernet/microchip/fdma/ directory
-to the Sparx5 SoC MAINTAINERS entry.
+Add the required functions and helpers that combine the DMA allocation
+with the ATU region mapping. These are used by the lan966x PCIe FDMA
+path.
 
-Patches 2-4 prepare the shared FDMA library: patch 2 renames the
-contiguous dataptr helpers for clarity, patch 3 adds PCIe ATU region
-management and coherent DMA allocation with ATU mapping, and patch 4
-gives the descriptor fields an explicit little-endian type, since on the
-PCIe path the descriptors are written by the host CPU.
+The ATU cannot express a limit finer than its 64KB region granularity,
+so pad the mapped allocation to that boundary; otherwise the outbound
+window would extend past the memory the host allocated for DMA.
 
-Patches 5-8 refactor the lan966x FDMA code to support both platform
-and PCIe paths: extracting the LLP register write into a helper,
-exporting shared functions, introducing a dedicated device for DMA
-operations, and adding an ops dispatch table selected at probe time.
+This implementation will also be used by the lan969x, when PCIe FDMA is
+added for that platform in the future.
 
-Patches 9-10 harden the existing FDMA path for the PCIe endpoint
-lifecycle: patch 9 clears latched FDMA error/interrupt stickies after
-the switch reset so they don't assert as soon as interrupts are
-enabled, and patch 10 adds a shutdown() callback that quiesces the
-FDMA engine on host warm reboot (on the PCIe card the FDMA survives
-host reset and would otherwise keep the shared INTx asserted into
-the next probe).
-
-Patch 11 adds the core PCIe FDMA implementation with RX/TX using
-contiguous ATU-mapped buffers. Patches 12 and 13 extend it with MTU
-change and XDP support respectively. XDP_PASS, XDP_TX, XDP_DROP and
-XDP_ABORTED are supported; XDP_REDIRECT is deliberately not, because
-the PCIe data path does not use page_pool.
-
-Patches 14-15 update the lan966x PCI device tree overlay to extend the
-cpu register mapping to cover the ATU register space and add the FDMA
-interrupt.
-
-Patches 1-13 touch MAINTAINERS and drivers/net/ethernet/microchip/, and
-are for the netdev tree.
-
-Patches 14-15 touch drivers/misc/lan966x_pci.dtso, and are for the
-char-misc tree.
-
-To: Andrew Lunn <andrew+netdev@lunn.ch>
-To: David S. Miller <davem@davemloft.net>
-To: Eric Dumazet <edumazet@google.com>
-To: Jakub Kicinski <kuba@kernel.org>
-To: Paolo Abeni <pabeni@redhat.com>
-To: Horatiu Vultur <horatiu.vultur@microchip.com>
-To: Steen Hegelund <steen.hegelund@microchip.com>
-To: UNGLinuxDriver@microchip.com
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: Jesper Dangaard Brouer <hawk@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>
-To: Stanislav Fomichev <sdf@fomichev.me>
-To: Herve Codina <herve.codina@bootlin.com>
-To: Arnd Bergmann <arnd@arndb.de>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Mohsin Bashir <mohsin.bashr@gmail.com>
-To: Simon Horman <horms@kernel.org>
-Cc: Richard Cochran <richardcochran@gmail.com>
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: bpf@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
-
+Tested-by: Herve Codina <herve.codina@bootlin.com>
 Signed-off-by: Daniel Machon <daniel.machon@microchip.com>
+Reviewed-by: Simon Horman <horms@kernel.org>
 ---
-Changes in v8:
-- New patch 4: use little-endian types for the FDMA descriptor fields.
-  On the PCIe path the descriptors live in host memory and are written
-  by the host CPU, which may be big-endian, while the FDMA engine reads
-  them little-endian. The fields become __le64 and are converted at the
-  library boundary; the dataptr/nextptr callbacks keep their u64
-  signatures, so sparx5 and lan969x need no changes. Checked with sparse
-  (-D__CHECK_ENDIAN__). No functional change on little-endian hosts.
-  Tested on lan966x (arm), sparx5 and lan969x (arm64), and lan966x over
-  PCIe on an x86 host, with no regressions. (Simon)
-- PCIe: read the RX block length through fdma_db_len_get() instead of
-  open-coding the status field, following patch 4.
-- Stickies: extend the comment to also mention the data-block sticky,
-  which is cleared alongside the error stickies.
-- Shutdown: reword the commit message to describe the tree at that
-  commit, noting where it relies on the PCIe FDMA backend added later
-  in the series.
-- Link to v7: https://lore.kernel.org/r/20260918-lan966x-pci-fdma-v7-0-0ecc179c8a2c@microchip.com
+ drivers/net/ethernet/microchip/fdma/Makefile   |   4 +
+ drivers/net/ethernet/microchip/fdma/fdma_api.c |  44 ++++++
+ drivers/net/ethernet/microchip/fdma/fdma_api.h |  14 ++
+ drivers/net/ethernet/microchip/fdma/fdma_pci.c | 208 +++++++++++++++++++++++++
+ drivers/net/ethernet/microchip/fdma/fdma_pci.h |  57 +++++++
+ 5 files changed, 327 insertions(+)
 
-Changes in v7:
+diff --git a/drivers/net/ethernet/microchip/fdma/Makefile b/drivers/net/ethernet/microchip/fdma/Makefile
+index cc9a736be357..910a10b33fb9 100644
+--- a/drivers/net/ethernet/microchip/fdma/Makefile
++++ b/drivers/net/ethernet/microchip/fdma/Makefile
+@@ -5,3 +5,7 @@
+ 
+ obj-$(CONFIG_FDMA) += fdma.o
+ fdma-y += fdma_api.o
++
++ifneq ($(CONFIG_MCHP_LAN966X_PCI),)
++fdma-y += fdma_pci.o
++endif
+diff --git a/drivers/net/ethernet/microchip/fdma/fdma_api.c b/drivers/net/ethernet/microchip/fdma/fdma_api.c
+index e78c3590da9e..a3c9e3097c5c 100644
+--- a/drivers/net/ethernet/microchip/fdma/fdma_api.c
++++ b/drivers/net/ethernet/microchip/fdma/fdma_api.c
+@@ -127,6 +127,50 @@ void fdma_free_phys(struct fdma *fdma)
+ }
+ EXPORT_SYMBOL_GPL(fdma_free_phys);
+ 
++#if IS_ENABLED(CONFIG_MCHP_LAN966X_PCI)
++/* Allocate coherent DMA memory and map it in the ATU. */
++int fdma_alloc_coherent_and_map(struct device *dev, struct fdma *fdma,
++				struct fdma_pci_atu *atu)
++{
++	struct fdma_pci_atu_region *region;
++	int err;
++
++	if (WARN_ON(fdma->atu_region))
++		return -EBUSY;
++
++	/* The ATU cannot express a limit finer than the region granularity, so
++	 * the hardware widens the programmed limit to that boundary. Pad the
++	 * allocation to match, or the outbound window would extend past the
++	 * memory we own.
++	 */
++	fdma->size = ALIGN(fdma->size, FDMA_PCI_ATU_REGION_ALIGN);
++
++	err = fdma_alloc_coherent(dev, fdma);
++	if (err)
++		return err;
++
++	region = fdma_pci_atu_region_map(atu, fdma->dma, fdma->size);
++	if (IS_ERR(region)) {
++		fdma_free_coherent(dev, fdma);
++		return PTR_ERR(region);
++	}
++
++	fdma->atu_region = region;
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(fdma_alloc_coherent_and_map);
++
++/* Free coherent DMA memory and unmap the memory in the ATU. */
++void fdma_free_coherent_and_unmap(struct device *dev, struct fdma *fdma)
++{
++	fdma_pci_atu_region_unmap(fdma->atu_region);
++	fdma->atu_region = NULL;
++	fdma_free_coherent(dev, fdma);
++}
++EXPORT_SYMBOL_GPL(fdma_free_coherent_and_unmap);
++#endif
++
+ /* Get the size of the FDMA memory */
+ u32 fdma_get_size(struct fdma *fdma)
+ {
+diff --git a/drivers/net/ethernet/microchip/fdma/fdma_api.h b/drivers/net/ethernet/microchip/fdma/fdma_api.h
+index dea8e3cc155a..ccc30d506e89 100644
+--- a/drivers/net/ethernet/microchip/fdma/fdma_api.h
++++ b/drivers/net/ethernet/microchip/fdma/fdma_api.h
+@@ -7,6 +7,8 @@
+ #include <linux/etherdevice.h>
+ #include <linux/types.h>
+ 
++#include "fdma_pci.h"
++
+ /* This provides a common set of functions and data structures for interacting
+  * with the Frame DMA engine on multiple Microchip switchcores.
+  *
+@@ -109,6 +111,11 @@ struct fdma {
+ 	u32 channel_id;
+ 
+ 	struct fdma_ops ops;
++
++#if IS_ENABLED(CONFIG_MCHP_LAN966X_PCI)
++	/* PCI ATU region for this FDMA instance. */
++	struct fdma_pci_atu_region *atu_region;
++#endif
+ };
+ 
+ /* Advance the DCB index and wrap if required. */
+@@ -233,9 +240,16 @@ int __fdma_dcb_add(struct fdma *fdma, int dcb_idx, u64 info, u64 status,
+ 
+ int fdma_alloc_coherent(struct device *dev, struct fdma *fdma);
+ int fdma_alloc_phys(struct fdma *fdma);
++#if IS_ENABLED(CONFIG_MCHP_LAN966X_PCI)
++int fdma_alloc_coherent_and_map(struct device *dev, struct fdma *fdma,
++				struct fdma_pci_atu *atu);
++#endif
+ 
+ void fdma_free_coherent(struct device *dev, struct fdma *fdma);
+ void fdma_free_phys(struct fdma *fdma);
++#if IS_ENABLED(CONFIG_MCHP_LAN966X_PCI)
++void fdma_free_coherent_and_unmap(struct device *dev, struct fdma *fdma);
++#endif
+ 
+ u32 fdma_get_size(struct fdma *fdma);
+ u32 fdma_get_size_contiguous(struct fdma *fdma);
+diff --git a/drivers/net/ethernet/microchip/fdma/fdma_pci.c b/drivers/net/ethernet/microchip/fdma/fdma_pci.c
+new file mode 100644
+index 000000000000..dd1dc46cbc9d
+--- /dev/null
++++ b/drivers/net/ethernet/microchip/fdma/fdma_pci.c
+@@ -0,0 +1,208 @@
++// SPDX-License-Identifier: GPL-2.0+
++
++#include <linux/align.h>
++#include <linux/errno.h>
++#include <linux/io.h>
++#include <linux/kernel.h>
++#include <linux/types.h>
++
++#include "fdma_pci.h"
++
++/* When the switch operates as a PCIe endpoint, the FDMA engine needs to
++ * DMA to/from host memory. The FDMA writes to addresses within the endpoint's
++ * internal Outbound (OB) address space, and the PCIe ATU translates these to
++ * DMA addresses on the PCIe bus, targeting host memory.
++ *
++ * The ATU supports up to six outbound regions. This implementation divides
++ * the OB address space into six equally sized chunks.
++ *
++ * +-------------+------------+------------+-----+------------+
++ * | Index       | Region 0   | Region 1   | ... | Region 5   |
++ * +-------------+------------+------------+-----+------------+
++ * | Base addr   | 0x10000000 | 0x12aa0000 | ... | 0x1d520000 |
++ * | Limit addr  | 0x12a9ffff | 0x1553ffff | ... | 0x1ffbffff |
++ * | Target addr | host dma   | host dma   | ... | host dma   |
++ * +-------------+------------+------------+-----+------------+
++ *
++ * Base addr is the start address of the region within the OB address space.
++ * Limit addr is each region's own upper bound. The value actually
++ * programmed is set per-mapping as base_addr + mapped size - 1, and is
++ * usually smaller than this.
++ * Target addr is the host DMA address that the base addr translates to.
++ */
++
++#define FDMA_PCI_ATU_OB_START        0x10000000
++#define FDMA_PCI_ATU_OB_END          0x1fffffff
++
++#define FDMA_PCI_ATU_ADDR            0x300000
++#define FDMA_PCI_ATU_IDX_SIZE        0x200
++#define FDMA_PCI_ATU_ENA_REG         0x4
++#define FDMA_PCI_ATU_ENA_BIT         BIT(31)
++#define FDMA_PCI_ATU_LWR_BASE_ADDR   0x8
++#define FDMA_PCI_ATU_UPP_BASE_ADDR   0xc
++#define FDMA_PCI_ATU_LIMIT_ADDR      0x10
++#define FDMA_PCI_ATU_LWR_TARGET_ADDR 0x14
++#define FDMA_PCI_ATU_UPP_TARGET_ADDR 0x18
++
++static u32 fdma_pci_atu_region_size(void)
++{
++	return round_down((FDMA_PCI_ATU_OB_END - FDMA_PCI_ATU_OB_START) /
++			  FDMA_PCI_ATU_REGION_MAX, FDMA_PCI_ATU_REGION_ALIGN);
++}
++
++static void __iomem *fdma_pci_atu_addr_get(void __iomem *addr, int offset,
++					   int idx)
++{
++	return addr + FDMA_PCI_ATU_ADDR + FDMA_PCI_ATU_IDX_SIZE * idx + offset;
++}
++
++static void fdma_pci_atu_region_enable(struct fdma_pci_atu_region *region)
++{
++	writel(FDMA_PCI_ATU_ENA_BIT,
++	       fdma_pci_atu_addr_get(region->atu->addr, FDMA_PCI_ATU_ENA_REG,
++				     region->idx));
++}
++
++static void fdma_pci_atu_region_disable(struct fdma_pci_atu_region *region)
++{
++	writel(0, fdma_pci_atu_addr_get(region->atu->addr, FDMA_PCI_ATU_ENA_REG,
++					region->idx));
++}
++
++/* Configure the address translation in the ATU. */
++static void
++fdma_pci_atu_configure_translation(struct fdma_pci_atu_region *region)
++{
++	struct fdma_pci_atu *atu = region->atu;
++	int idx = region->idx;
++
++	writel(lower_32_bits(region->base_addr),
++	       fdma_pci_atu_addr_get(atu->addr,
++				     FDMA_PCI_ATU_LWR_BASE_ADDR, idx));
++
++	writel(upper_32_bits(region->base_addr),
++	       fdma_pci_atu_addr_get(atu->addr,
++				     FDMA_PCI_ATU_UPP_BASE_ADDR, idx));
++
++	/* The OB address space lies entirely below 4GB, so the limit always
++	 * fits the lower limit register and the upper one is left alone.
++	 */
++	writel(region->limit_addr,
++	       fdma_pci_atu_addr_get(atu->addr, FDMA_PCI_ATU_LIMIT_ADDR, idx));
++
++	writel(lower_32_bits(region->target_addr),
++	       fdma_pci_atu_addr_get(atu->addr,
++				     FDMA_PCI_ATU_LWR_TARGET_ADDR, idx));
++
++	writel(upper_32_bits(region->target_addr),
++	       fdma_pci_atu_addr_get(atu->addr,
++				     FDMA_PCI_ATU_UPP_TARGET_ADDR, idx));
++}
++
++/* Find an unused ATU region. */
++static struct fdma_pci_atu_region *
++fdma_pci_atu_region_get_free(struct fdma_pci_atu *atu)
++{
++	struct fdma_pci_atu_region *regions = atu->regions;
++
++	for (int i = 0; i < FDMA_PCI_ATU_REGION_MAX; i++) {
++		if (regions[i].in_use)
++			continue;
++
++		return &regions[i];
++	}
++
++	return ERR_PTR(-ENOSPC);
++}
++
++/* Unmap an ATU region, clearing its translation and disabling it. */
++void fdma_pci_atu_region_unmap(struct fdma_pci_atu_region *region)
++{
++	if (IS_ERR_OR_NULL(region))
++		return;
++
++	mutex_lock(&region->atu->lock);
++
++	region->target_addr = 0;
++	region->in_use = false;
++
++	fdma_pci_atu_region_disable(region);
++	fdma_pci_atu_configure_translation(region);
++
++	mutex_unlock(&region->atu->lock);
++}
++EXPORT_SYMBOL_GPL(fdma_pci_atu_region_unmap);
++
++/* Map a host DMA address into a free outbound region. */
++struct fdma_pci_atu_region *
++fdma_pci_atu_region_map(struct fdma_pci_atu *atu, u64 target_addr, int size)
++{
++	struct fdma_pci_atu_region *region;
++
++	if (!atu)
++		return ERR_PTR(-EINVAL);
++
++	if (size <= 0)
++		return ERR_PTR(-EINVAL);
++
++	if (size > fdma_pci_atu_region_size())
++		return ERR_PTR(-ERANGE);
++
++	/* The ATU region base is only ever aligned to FDMA_PCI_ATU_REGION_ALIGN;
++	 * require the same alignment of the host target address, since the ATU
++	 * translates addr - target_addr + base_addr and any misalignment here
++	 * would shift every translated address by the same amount.
++	 */
++	if (!IS_ALIGNED(target_addr, FDMA_PCI_ATU_REGION_ALIGN))
++		return ERR_PTR(-EINVAL);
++
++	mutex_lock(&atu->lock);
++
++	region = fdma_pci_atu_region_get_free(atu);
++	if (IS_ERR(region)) {
++		mutex_unlock(&atu->lock);
++		return region;
++	}
++
++	region->target_addr = target_addr;
++	region->limit_addr = region->base_addr + size - 1;
++	region->in_use = true;
++
++	fdma_pci_atu_configure_translation(region);
++	fdma_pci_atu_region_enable(region);
++
++	mutex_unlock(&atu->lock);
++
++	return region;
++}
++EXPORT_SYMBOL_GPL(fdma_pci_atu_region_map);
++
++/* Translate a host DMA address to the corresponding OB address. */
++u64 fdma_pci_atu_translate_addr(struct fdma_pci_atu_region *region, u64 addr)
++{
++	return region->base_addr + (addr - region->target_addr);
++}
++EXPORT_SYMBOL_GPL(fdma_pci_atu_translate_addr);
++
++/* Initialize ATU, dividing the OB space into equally sized regions. */
++void fdma_pci_atu_init(struct fdma_pci_atu *atu, void __iomem *addr)
++{
++	struct fdma_pci_atu_region *regions = atu->regions;
++	u32 region_size = fdma_pci_atu_region_size();
++
++	atu->addr = addr;
++	mutex_init(&atu->lock);
++
++	for (int i = 0; i < FDMA_PCI_ATU_REGION_MAX; i++) {
++		regions[i].base_addr =
++			FDMA_PCI_ATU_OB_START + (i * region_size);
++		regions[i].limit_addr = 0;
++		regions[i].target_addr = 0;
++		regions[i].idx = i;
++		regions[i].atu = atu;
++		regions[i].in_use = false;
++
++		fdma_pci_atu_region_disable(&regions[i]);
++	}
++}
++EXPORT_SYMBOL_GPL(fdma_pci_atu_init);
+diff --git a/drivers/net/ethernet/microchip/fdma/fdma_pci.h b/drivers/net/ethernet/microchip/fdma/fdma_pci.h
+new file mode 100644
+index 000000000000..010bdb4d50b0
+--- /dev/null
++++ b/drivers/net/ethernet/microchip/fdma/fdma_pci.h
+@@ -0,0 +1,57 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++
++#ifndef _FDMA_PCI_H_
++#define _FDMA_PCI_H_
++
++#include <linux/align.h>
++#include <linux/bits.h>
++#include <linux/mutex.h>
++#include <linux/types.h>
++
++#define FDMA_PCI_ATU_REGION_MAX 6
++
++/* Outbound regions are 64KB granular (datasheet section 3.24.7.4.1), so both
++ * the region base and the mapped size must be aligned to this.
++ */
++#define FDMA_PCI_ATU_REGION_ALIGN BIT(16)
++
++#define FDMA_PCI_DB_ALIGN 128
++#define FDMA_PCI_DB_SIZE(mtu) ALIGN(mtu, FDMA_PCI_DB_ALIGN)
++
++struct fdma_pci_atu;
++
++struct fdma_pci_atu_region {
++	struct fdma_pci_atu *atu;
++	u64 base_addr; /* Base addr of the OB window */
++	u64 limit_addr; /* End addr of the active mapping (base_addr + size - 1) */
++	u64 target_addr; /* Host DMA address this region maps to */
++	int idx;
++	bool in_use;
++};
++
++struct fdma_pci_atu {
++	void __iomem *addr;
++	struct mutex lock; /* Protects region alloc/free and ATU register access */
++	struct fdma_pci_atu_region regions[FDMA_PCI_ATU_REGION_MAX];
++};
++
++/* Initialize ATU, dividing OB space into regions. */
++void fdma_pci_atu_init(struct fdma_pci_atu *atu, void __iomem *addr);
++
++/* Unmap an ATU region, clearing its translation and disabling it. */
++void fdma_pci_atu_region_unmap(struct fdma_pci_atu_region *region);
++
++/* Map a host DMA address into a free ATU region. target_addr and size must be
++ * FDMA_PCI_ATU_REGION_ALIGN aligned; a misaligned target_addr returns -EINVAL.
++ */
++struct fdma_pci_atu_region *fdma_pci_atu_region_map(struct fdma_pci_atu *atu,
++						    u64 target_addr,
++						    int size);
++
++/* Translate a host DMA address to the OB address space. Reads the region
++ * unlocked, so the caller must quiesce DMA and the descriptor paths before
++ * unmapping the region.
++ */
++u64 fdma_pci_atu_translate_addr(struct fdma_pci_atu_region *region, u64 addr);
++
++#endif
 
-Mostly a response to the automated review of v6. The notable change is
-that the resize-time MTU guards added in v6 are replaced by an advertised
-limit. v6 rejected an oversized MTU inside lan966x_fdma_pci_resize() with
--ERANGE, which is late, and leaves dev->max_mtu advertising a range the
-PCIe path cannot honour. v7 derives the maximum from the same constants
-and publishes it in dev->max_mtu instead, so the core rejects the request
-up front and both -ERANGE returns become unreachable and are removed.
-Also, the shutdown() was refactored to not race with ndo's.
-
-- PCIe: cap dev->max_mtu on the PCIe path (FDMA_PCI_MAX_MTU), derived
-  from the contiguous ring having to fit one MAX_PAGE_ORDER block after
-  padding to the ATU region granularity, and from db_size having to fit
-  the 16-bit DCB DATAL field. On a 4KB-page, MAX_PAGE_ORDER=10 build that
-  is MTU 15498. Both resize-time -ERANGE checks are removed with it.
-- PCIe: factor the frame overhead into LAN966X_FDMA_OVERHEAD and use it
-  for both the cap and lan966x_fdma_get_max_frame(), so it is not
-  open-coded twice.
-- PCIe: skip the resize while the FDMA is not initialised. The rings are
-  built by lan966x_fdma_pci_init(), which runs after the netdevs are
-  registered, so an MTU change in that window would dereference NULL.
-- PCIe: comment why NAPI has to be enabled before the queues are woken in
-  the MTU reload path.
-- shutdown(): rework the quiesce ordering. Free the xtr, ana and FDMA
-  irqs first so no source can assert INTx, mask ANA_ANAINTR whether or not
-  the FDMA is in use, then disable NAPI, stop and detach the netdevs,
-  disable the FDMA channels, clear the FDMA interrupt enables and unmap
-  the ATU windows.
-- ATU: document the alignment requirement and -EINVAL at
-  fdma_pci_atu_region_map(), document at fdma_pci_atu_translate_addr()
-  that the caller must quiesce DMA and the descriptor paths before
-  unmapping a region, initialise the region bookkeeping explicitly in
-  fdma_pci_atu_init(), and fix the comment on the upper limit register.
-- Patch 3 commit message: drop the claim that the patch adds PCIe FDMA
-  support; it adds the helpers the lan966x path later uses.
-
-Reported by the v6 review and deliberately not fixed here, because the
-code is pre-existing and the fixes want a Fixes: tag:
-
-- register_netdev() and the FDMA irq request both happen before
-  ops->fdma_init(), so an MTU change or a stale interrupt can reach an
-  uninitialised FDMA. Pre-existing on the platform path; the fix is a
-  reorder of the shared probe, which I will send against net. The skip
-  above closes the MTU-change half on PCIe in the meantime.
-- lan966x_hw_offload() frees the caller's skb and reports only a bool.
-  Pre-existing, all three callers affected. Goes to net with
-  Fixes: 6476f90aefaf.
-- The platform XDP hook leaves the FCS in the window handed to the BPF
-  program, while the PCIe hook strips it. Pre-existing. Goes to net with
-  Fixes: 6a2159be7604.
-- Link to v6: https://lore.kernel.org/r/20260909-lan966x-pci-fdma-v6-0-6f48dab9d671@microchip.com
-
-Changes in v6:
-
-The main change is a DMA bug on the PCIe path, found after enabling the
-IOMMU on the test host. The rest is hardening and cleanup.
-
-- New patch 6: use a dedicated device for DMA operations. On the PCIe
-  path lan966x->dev is the platform device created by
-  of_platform_default_populate(), which carries no iommus/dma-ranges of
-  its own, so it is not the device the IOMMU has a domain for. DMA
-  mapped against it lands outside the domain the endpoint's requester ID
-  is associated with. With the IOMMU enabled, AMD-Vi reported
-  IO_PAGE_FAULT for the endpoint and no traffic passed. All FDMA DMA now
-  targets the real PCIe endpoint device. Retested with the IOMMU in
-  translated (DMA-FQ) mode.
-- ATU: serialise region allocation/free and ATU register access with a
-  mutex.
-- ATU: program the region limit per mapping (base_addr + size - 1)
-  instead of the full region bound, and disable every region in
-  fdma_pci_atu_init().
-- ATU: return -ERANGE instead of -E2BIG when the requested size exceeds
-  the region size, and clear fdma->atu_region on unmap.
-- PCIe FDMA: check fdma_dcbs_init() and unwind the coherent allocation
-  and the ATU mapping on failure.
-- PCIe FDMA: drop the WARN_ON() on an out-of-range src_port; a malformed
-  IFH should not be able to splat the host.
-- Quiesce consistently in shutdown, deinit and the MTU reload: stop the
-  netdev queues and NAPI before disabling the FDMA channels, and share
-  one lan966x_fdma_tx_disable_netdev() helper instead of open-coding it
-  per path.
-- shutdown: also mask ANA_ANAINTR, which shares the PCIe INTx with the
-  FDMA sources.
-- MTU change: reject an MTU whose ring would not fit in a single
-  MAX_PAGE_ORDER coherent block, and reject one whose db_size would be
-  truncated by the 16-bit DCB DATAL field, rather than programming a
-  wrong buffer length.
-- Assign lan966x->ops directly in the ops dispatch patch, so that patch
-  no longer adds a helper returning a single constant; PCI detection now
-  derives from dma_dev and arrives with the PCIe implementation.
-- ATU: reject a target address that is not aligned to the 64KB ATU region
-  granularity, instead of programming a translation offset by the
-  misalignment.
-- Drop the CONFIG_MCHP_LAN966X_PCI guard around the fdma_pci.h include in
-  fdma_api.h (Jakub).
-- Use ifneq ($(CONFIG_MCHP_LAN966X_PCI),) instead of ifdef in both the fdma
-  and lan966x Makefiles; the symbol is tristate, so the condition has to
-  cover both y and m (Jakub).
-- Reprogram the FDMA LLP registers on the platform reload restore path,
-  which stopped happening when the LLP write moved into the allocation
-  functions.
-- XDP: drop the napi_synchronize() before freeing the old program on the
-  PCIe path; READ_ONCE() on port->xdp_prog plus the RCU-deferred
-  bpf_prog_put() already cover the in-flight poll.
-- XDP: note that the ETH_ZLEN floor is deliberately not enforced on XDP_TX.
-- PCIe FDMA: count tx_dropped when the DCB ring is full.
-- PCIe FDMA: guard the deinit napi_disable() on fdma_ndev, as shutdown()
-  already does; NAPI is only initialised on the first ndo_open.
-- ATU: program the region translation before enabling the region.
-- ATU: pad the mapped allocation to the 64KB outbound region granularity,
-  so the window does not extend past the coherent allocation.
-- ATU: reject mapping an fdma that already holds a region, instead of
-  overwriting the handle and leaking the old mapping. The MTU reload clears
-  the handle on the live rings first, since it keeps the old mapping alive
-  until the new rings are in place.
-- PCIe FDMA: declare the RX DCB DATAL as the space actually available to the
-  extraction engine (db_size - XDP_PACKET_HEADROOM), since the data block
-  pointer starts that far into the slot.
-- Move the XDP-unsupported guards from the XDP patch into the PCIe FDMA
-  patch, so that no intermediate commit advertises NETDEV_XDP_ACT_NDO_XMIT
-  for a PCIe instance while tx->dcbs_buf is NULL, and none lets an XDP
-  attach reach the platform page_pool reload. The final tree is unchanged.
-- shutdown: take rtnl, so it cannot interleave with the rtnl-only reload
-  paths and double-disable the NAPI, which would spin forever in
-  napi_disable().
-- Link to v5: https://lore.kernel.org/r/20260520-lan966x-pci-fdma-v5-0-ca56197ae05b@microchip.com
-
-Changes in v5:
-
-This version fixes a single AI review issue, flagged by Paolo. Other AI
-issues  for v4 has been classified as pre-existing or changes for
-follow-ups.
-
-- Fix premature napi_complete_done() in lan966x_fdma_pci_napi_poll() on
-  FDMA_ERROR and napi_alloc_skb() failure. Bailing out left DONE=1 DCBs
-  in the ring with no IRQ to drain them. Drop the frame and continue
-  the poll loop instead. Bump rx_dropped on memory-pressure drop.
-  (Paolo)
-- Link to v4: https://lore.kernel.org/r/20260508-lan966x-pci-fdma-v4-0-14e0c89d8d63@microchip.com
-
-Changes in v4:
-- Consolidate rx size checks into lan966x_fdma_pci_rx_size_fits().
-  Subtract XDP_PACKET_HEADROOM on the max size check, and add ETH_HLEN
-  on the min size check. This fixes potential OOB reads/writes.
-- On xdp_prepare_buff(), update comment to clarify that data is already
-  offset by XDP_PACKET_HEADROOM.
-- Link to v3:
-  https://lore.kernel.org/r/20260504-lan966x-pci-fdma-v3-0-a56f5740d870@microchip.com
-
-Changes in v3:
-
-Version 3 fixes a number of issues reported by sashiko - mostly
-hardening.
-
-- Fix double use of XDP_PACKET_HEADROOM.
-- Fix ERR_PTR persistence in fdma->atu_region and add missing
-  NULL/ERR_PTR guard in fdma_pci_atu_region_unmap().
-- Reject size <= 0 in fdma_pci_atu_region_map() and return
-  -ENOSPC (was -ENOMEM) when no region is free.
-- Introduce lan966x_fdma_pci_tx_size_fits() that accounts for
-  XDP_PACKET_HEADROOM; use it from both xmit paths to keep
-  bpf_xdp_adjust_tail from writing past the TX slot.
-- Validate BLOCKL in rx_check_frame() (reject < IFH+FCS or
-  > db_size) before it feeds memcpy/XDP sizes.
-- READ_ONCE(port->xdp_prog) inside lan966x_xdp_pci_run() to close
-  a TOCTOU on XDP detach that could deref NULL in
-  bpf_prog_run_xdp().
-- Strip IFH and FCS pre-XDP in rx_check_frame(). After BPF runs
-  the driver cannot tell whether the tail was modified; drop the
-  unconditional skb_pull/skb_trim in rx_get_frame().
-- Account tx_bytes/tx_packets on XDP_TX success and tx_dropped on
-  XDP_TX size reject.
-- Add dma_wmb()/dma_rmb() around DCB status writes and reads in
-  xmit, xmit_xdpf, and napi_poll.
-- Collected Tested-by: Hervé Codina.
-- Link to v2: https://lore.kernel.org/r/20260428-lan966x-pci-fdma-v2-0-d3ec66e06202@microchip.com
-
-Changes in v2:
-
-Version 2 primarily addresses issues with module unload/load, where
-traffic would stop working (Hervé), and XDP head/tail adjust that would be
-discarded (Mohsin).
-
-Apart from that, I ran through issues reported by Sashiko, and fixed a
-number of other issues.
-
-- New patch 1: add drivers/net/ethernet/microchip/fdma/ to the Sparx5
-  SoC MAINTAINERS entry.
-- New patch 7: clear latched FDMA error/interrupt stickies after the
-  switch reset so they don't fire as soon as interrupts are enabled.
-- New patch 8: shutdown() callback, quiescing FDMA on host warm reboot.
-- Replaced the depth-2 dev_is_pci(parent->parent) backend selector
-  with a parent-chain walk.
-- XDP: use xdp.data/xdp.data_end for the post-XDP frame length so that
-  bpf_xdp_adjust_head/tail are respected (Mohsin Bashir)
-- MTU change: drain in-flight xmits with netif_tx_disable() on every
-  port before reallocating rings, waking them again on completion.
-- MTU change: cap the PCIe DCB ring at 256 entries so a full-ring
-  coherent DMA allocation fits in a single MAX_PAGE_ORDER block at
-  jumbo MTU.
-- PCIe ATU: disable the region before clearing its translation on
-  unmap.
-- PCIe FDMA: hold tx_lock in napi_poll around the free-DCB check used
-  to wake stopped netdev queues.
-- PCIe FDMA: return -ENOSPC (not -1) when the DCB ring is exhausted.
-- Link to v1: https://lore.kernel.org/r/20260320-lan966x-pci-fdma-v1-0-ef54cb9b0c4b@microchip.com
-
----
-Daniel Machon (15):
-      MAINTAINERS: add FDMA library to Sparx5 SoC entry
-      net: microchip: fdma: rename contiguous dataptr helpers
-      net: microchip: fdma: add PCIe ATU support
-      net: microchip: fdma: use little-endian types for descriptor fields
-      net: lan966x: add FDMA LLP register write helper
-      net: lan966x: export FDMA helpers for reuse
-      net: lan966x: use a dedicated device for DMA operations
-      net: lan966x: add FDMA ops dispatch for PCIe support
-      net: lan966x: clear FDMA interrupt stickies after switch reset
-      net: lan966x: add shutdown callback to stop the FDMA on reboot
-      net: lan966x: add PCIe FDMA support
-      net: lan966x: add PCIe FDMA MTU change support
-      net: lan966x: add PCIe FDMA XDP support
-      misc: lan966x-pci: dts: extend cpu reg to cover PCIE DBI space
-      misc: lan966x-pci: dts: add fdma interrupt to overlay
-
- MAINTAINERS                                        |   1 +
- drivers/misc/lan966x_pci.dtso                      |   5 +-
- drivers/net/ethernet/microchip/fdma/Makefile       |   4 +
- drivers/net/ethernet/microchip/fdma/fdma_api.c     |  65 +-
- drivers/net/ethernet/microchip/fdma/fdma_api.h     |  42 +-
- drivers/net/ethernet/microchip/fdma/fdma_pci.c     | 208 ++++++
- drivers/net/ethernet/microchip/fdma/fdma_pci.h     |  57 ++
- drivers/net/ethernet/microchip/lan966x/Makefile    |   4 +
- .../net/ethernet/microchip/lan966x/lan966x_fdma.c  |  97 ++-
- .../ethernet/microchip/lan966x/lan966x_fdma_pci.c  | 695 +++++++++++++++++++++
- .../net/ethernet/microchip/lan966x/lan966x_main.c  | 121 +++-
- .../net/ethernet/microchip/lan966x/lan966x_main.h  |  69 ++
- .../net/ethernet/microchip/lan966x/lan966x_regs.h  |  25 +
- .../net/ethernet/microchip/lan966x/lan966x_xdp.c   |   6 +
- 14 files changed, 1321 insertions(+), 78 deletions(-)
----
-base-commit: 447cb143d024d97257cefcdb2192e4b7d2fe47ac
-change-id: 20260313-lan966x-pci-fdma-94ed485d23fa
-
-Best regards,
 -- 
-Daniel Machon <daniel.machon@microchip.com>
+2.34.1
 
