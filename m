@@ -1,299 +1,121 @@
-Received: from mail-pj2-f41.google.com (mail-pj2-f41.google.com [74.125.227.169])
+Received: from mta0.migadu.com (out-156.mta0.migadu.com [91.218.175.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1FFF480335
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 21:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3124DA9B8
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 21:11:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790283904; cv=none; b=sPos0EAvFk7MUNxRD/XMoN7N/RT0FlNe1iJsZXm+A4d8mTummiAmZJWAn/JzsKOH0usPo0itwqahMj/4TRNebZ0zVHhbYbzO7wkBBShww9IXJG6i2W+YcyiVSqnOUpOW1hNyJOgBrLlRS0XSt9HYsq2C0QIrV2xbEu0r5lHLxMA=
+	t=1790284266; cv=none; b=ON/C8l4H3mxcXYBJ6PKPNsh704ewmhKZe7eTzEX8B71+zKCpnXHYzE/efhX2OwvlfNwRHq3DjZrCKLfnk+J+NMgK8UDwpUR0dj+72diyrJQvMsFNrHat43ddBwVcgVWTAl8S3ajtLCID9IJ2aZRKFWJjUyM7QcEietBvlO6PyQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790283904; c=relaxed/simple;
-	bh=HJ2xIbh0oWTdMH0REN3APnwAa2RPG5tjkFhvKB4UGcc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=Oy4aLrtF+8Q74yftJh58dS9pNoPz30U+v8cNyufZFHpEcXb7rS/rmiCggNhgd/sRQLcVXT81d3GMAg7eYLuiaUqwy9z8yEdqPvNXSnZX1yrHuZUEcaIFsVpRFvmkWHfNI/CgirXrKSxR95ZmDu4/YY+mINgkxdm1dP7wz8URhcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JG3rKKex; arc=none smtp.client-ip=74.125.227.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790284266; c=relaxed/simple;
+	bh=geWEgMSYQDaXHL8PI+SwL20O2XP2TtLwPQS9ZQiVmS0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ESu2FwCKGW2b40bbs5w6MDVj8X0p9q/8qBHlBZqecO8LO6OeSykwJo0o6XCdv5Vj97anVnWOq+5rUtargBrlG2MFAvUMIrO7sr50s6lYNBhuZVG1hsIDe3OQoK3ckW+scqrRBdRqJqh8z/zT+PXcB4/EhCT3tjsja3zreX1ptbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Eeh4tDSK; arc=none smtp.client-ip=91.218.175.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JG3rKKex"
-Received: by mail-pj2-f41.google.com with SMTP id 98e67ed59e1d1-3a0af40d240so183533a91.3
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 14:05:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790283902; x=1790888702; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=5lxSVXCMELqqjPBNPKdm/yFxvm4MjMRUQX7vr9/r/Vw=;
-        b=JG3rKKex3wvKYt2ACrNo7dM4llJU68KQchx/qHAbjyMeBPPyxMIl7p6mlv5VWLDOf7
-         LoXuqjKUwn9j/YppQtgQvoqu/zcq0rJ1rrPXc7K0Wob7vW9O091WxnD21BkEGQIvtxIJ
-         8XabGCzMB80BCk3Wavdmdt5ZmPf/15ZmN/R+hpaghVawqQI8Hcl+QFYcaabwbEC9Z56s
-         IXyvQDT46aQp1am/7FGaRBwm1B2XpGCPk0ntZlNidn/itjEQYjF6w2VXVSgrCqtNi/ah
-         NbHt8aB3/f8yVQw/MkZoFWV0wq9Ha+j8utNZ7692RZVbn0KD5VIIExg0/f3qu/uq64Aj
-         WZQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790283902; x=1790888702;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5lxSVXCMELqqjPBNPKdm/yFxvm4MjMRUQX7vr9/r/Vw=;
-        b=fljnNmD9ofT4frBJ/udU5KE3P18kGfkGTYnwTP/ZQR+9dUsvMNI6Zk8+k8s0qkilYf
-         ounEwyrKM73qtCFEHsUNKwu1eDGeBHVOkgniqhB9KiMw7zKe9lU9V8mXl0Ico5QSMq/v
-         DK4DcsxlEFJ/QCfhw9HEg8IxxqrEwQXPYfZ3bf7v/h1I0yGkoh1TYiX8hQpCLI8egYhv
-         saZjZZ6iCoyD+hAKoMexjN1I3bd2Zf3nuEk08OtiT2D/qtiuvb+pE0/OTDCGlf2NG0fc
-         UFSJBdbPEdPBypZUJn3EIfBGn/zwLDrbqeOmMneZkV+ex/O/qPkMammm4KhZ4g3GPLjF
-         n94g==
-X-Forwarded-Encrypted: i=1; AKwUvBx6nvowdU8CHFV5k4515FhENQWYLm2aoXndiaEdN6IrW1bvxdivNCwmmNMLOhGTCQIcb/4=@vger.kernel.org
-X-Gm-Message-State: AFuF++l4+5OtwySo0oi/rUR45Of5z/X6IWt7PbLApC9ASWJSTLhr5Bzz
-	nDNjEluN6B2R7tvcnZ4O/7+6w1en8Ku83hJwGnqt1GtvQN65KF/TdiZq
-X-Gm-Gg: AYBFou2dHC+aFgwhBdr0p9zBxFZHSRdFy/hBXHEEM1alFrw1Ugd2axcA6kQyshPbzX6
-	RRAMoyZS0o5R4H7+7K2gc5MZxweogNZ6vAl0NzM1w2L+/pqSvuLuOi0GcaFoYfXmXkUnb1KbLan
-	CRJZV5NZr2EqIHtkWBTf7U2EflJYSNTDQPkqqPewK5+sBGz6rbhpTZrrq0AhFD3rmlCtVjUyhj9
-	FfgHC46LHRRQK9vi/24JXZPI/t+5KlajujfmwgIBT7Kfx7e1CKSQ80WbhsJbFfSbSfvQWh0i8Ug
-	Z15pe/HyxniPsHKTImr6IXvaEyTtlxxMv2rxfzbUa3zB2XDadUZNpwoHR2kEmWdtdETOCKgXEB2
-	/LqPVTvF96k5Cs04nx+brt6ClEF0trZ+2Emgv5HhR2YShmX9ipHRFDooGHcx6W3Vq4W6cWyEHJM
-	sd78RliqfEvFoPiRq9BCCAOvM6XbsCa1psJujs/yptAaU5JhiJE1/WcXFLekVcmd6UxqSI/nG0K
-	/53R5SqGHahizbL5jSoBQMof3xd2x5M95ExDBphFNnNeWUqApH1UtyCVXIAiCuwFvlP0cN32fLZ
-	1zs=
-X-Received: by 2002:a17:90b:3d89:b0:3a0:9640:803e with SMTP id 98e67ed59e1d1-3a09853e39cmr3361122a91.7.1790283901935;
-        Thu, 24 Sep 2026 14:05:01 -0700 (PDT)
-Received: from localhost ([153.61.198.255])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0976c8f8dsm6796781a91.12.2026.09.24.14.05.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Sep 2026 14:05:01 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Eeh4tDSK"
+X-Envelope-To: bpf@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=geWEgMSYQDaXHL8PI+SwL20O2XP2TtLwPQS9ZQiVmS0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790284262; v=1; x=1790889062;
+ b=Eeh4tDSK23G+TbvqhrDIDogpAxLZ6xsTOdlLHlKDetZUvHYMlAb3Ik1/Ut9G4V0OpLuS3y0m
+ tmLn0/6MzpnzE+zUdW0zakrd9SIewOskKFysWTXFiUgIYljj4C4UMB51spUhO9DV8AYOc1SNMmb
+ p165Nm7nJOoKWTlpRoaGar18=
+X-Envelope-To: bpf@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id de8f8ffe1b04012f;
+	Thu, 24 Sep 2026 21:11:01 +0000
+X-Mizu-Trace-ID: de8f8ffe1b04012f
+X-Migadu-Flow: FLOW_OUT
+Date: Thu, 24 Sep 2026 14:11:00 -0700
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Tejun Heo <tj@kernel.org>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	David Dai <david.dai@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>, 
+	Frederic Weisbecker <frederic@kernel.org>, Aaron Lu <ziqianlu@bytedance.com>, 
+	Daniel Jordan <daniel.m.jordan@oracle.com>, Hao Lee <haolee.swjtu@gmail.com>, kernel-team@meta.com, 
+	cgroups@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/7] cgroup: charge kernel work to the cgroup it is
+ done for
+Message-ID: <arWLq4p488JPhuZ1@linux.dev>
+References: <20260924184714.912181-1-shakeel.butt@linux.dev>
+ <befc0a9b9998db0292c9998c639a3a9f@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 24 Sep 2026 21:05:00 +0000
-Message-Id: <DLNUODSRIPTF.1MRZX3443BJ19@gmail.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Emil Tsalapatis" <emil@etsalapatis.com>,
- <kkd@meta.com>, <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next v2 6/7] bpf: Correct Program Structure
- diagnostic context
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
-References: <20260924092941.3174809-1-memxor@gmail.com>
- <20260924092941.3174809-7-memxor@gmail.com>
-In-Reply-To: <20260924092941.3174809-7-memxor@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <befc0a9b9998db0292c9998c639a3a9f@kernel.org>
 
-On Thu Sep 24, 2026 at 9:29 AM UTC, Kumar Kartikeya Dwivedi wrote:
-> Program Structure reports have two attribution gaps. A missing jump
-> table is reported at the beginning of its subprogram rather than at
-> the gotox that needs the table, and the early subprogram-layout checks
-> run before BTF line information is installed.
->
-> Pass the failing gotox instruction into the jump-table lookup.
->
-> The BTF validator needs the discovered subprogram boundaries together
-> with the LD_ABS and tail-call properties collected during the layout
-> scan. Collect those properties, along with the program's callx marker,
-> with nested subprogram and instruction loops, then validate BTF before
-> reporting layout errors. This makes validated source information
-> available to the jump-boundary and fallthrough reports without changing
-> either check.
->
-> Moving BTF validation ahead of normal instruction validation also lets
-> CO-RE see a truncated final LD_IMM64. Reject a relocation targeting
-> that instruction before bpf_core_apply() can inspect or patch its
-> missing second half.
->
-> Link: https://lore.kernel.org/bpf/cf2f420c2b21de440a7dc51b1565c0f06d4b539=
-640ee5c03384e5d77bcfb5686@mail.kernel.org/
-> Fixes: a8f427835394 ("bpf: Report Program Structure CFG errors")
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
->  kernel/bpf/cfg.c       |  6 ++---
->  kernel/bpf/check_btf.c | 15 +++++++++---
->  kernel/bpf/verifier.c  | 54 +++++++++++++++++++++++++++++-------------
->  3 files changed, 52 insertions(+), 23 deletions(-)
->
-> diff --git a/kernel/bpf/cfg.c b/kernel/bpf/cfg.c
-> index 0de2f634ef67..33b98285e802 100644
-> --- a/kernel/bpf/cfg.c
-> +++ b/kernel/bpf/cfg.c
-> @@ -288,7 +288,7 @@ static struct bpf_iarray *jt_from_map(struct bpf_map =
-*map)
->   * combined jump table in jt->items (allocated with kvcalloc)
->   */
->  static struct bpf_iarray *jt_from_subprog(struct bpf_verifier_env *env,
-> -					  int subprog_start, int subprog_end)
-> +					  int insn_idx, int subprog_start, int subprog_end)
->  {
->  	struct bpf_iarray *jt =3D NULL;
->  	struct bpf_map *map;
-> @@ -328,7 +328,7 @@ static struct bpf_iarray *jt_from_subprog(struct bpf_=
-verifier_env *env,
->  	if (!jt) {
->  		verbose(env, "no jump tables found for subprog starting at %u\n", subp=
-rog_start);
->  		bpf_diag_program_structure(
-> -			env, subprog_start, "missing jump table",
-> +			env, insn_idx, "missing jump table",
->  			"Make sure subprograms containing gotox instructions are accompanied =
-by jump tables referencing these subprograms.",
->  			"No jump table was found for the subprogram that starts at instructio=
-n %u.",
->  			subprog_start);
-> @@ -350,7 +350,7 @@ create_jt(int t, struct bpf_verifier_env *env)
->  	subprog =3D bpf_find_containing_subprog(env, t);
->  	subprog_start =3D subprog->start;
->  	subprog_end =3D (subprog + 1)->start;
-> -	jt =3D jt_from_subprog(env, subprog_start, subprog_end);
-> +	jt =3D jt_from_subprog(env, t, subprog_start, subprog_end);
->  	if (IS_ERR(jt))
->  		return jt;
-> =20
-> diff --git a/kernel/bpf/check_btf.c b/kernel/bpf/check_btf.c
-> index 0e8b3ccc7a5b..81f4dbfbf146 100644
-> --- a/kernel/bpf/check_btf.c
-> +++ b/kernel/bpf/check_btf.c
-> @@ -373,6 +373,8 @@ static int check_core_relo(struct bpf_verifier_env *e=
-nv,
->  	 * relocation record one at a time.
->  	 */
->  	for (i =3D 0; i < nr_core_relo; i++) {
-> +		u32 insn_idx;
-> +
->  		/* future proofing when sizeof(bpf_core_relo) changes */
->  		err =3D bpf_check_uarg_tail_zero(u_core_relo, expected_size, rec_size)=
-;
->  		if (err) {
-> @@ -391,15 +393,22 @@ static int check_core_relo(struct bpf_verifier_env =
-*env,
->  			break;
->  		}
-> =20
-> -		if (core_relo.insn_off % 8 || core_relo.insn_off / 8 >=3D prog->len) {
-> +		insn_idx =3D core_relo.insn_off / 8;
-> +		if (core_relo.insn_off % 8 || insn_idx >=3D prog->len) {
->  			verbose(env, "Invalid core_relo[%u].insn_off:%u prog->len:%u\n",
->  				i, core_relo.insn_off, prog->len);
->  			err =3D -EINVAL;
->  			break;
->  		}
-> +		if (insn_idx =3D=3D prog->len - 1 &&
-> +		    prog->insnsi[insn_idx].code =3D=3D (BPF_LD | BPF_IMM | BPF_DW)) {
-> +			verbose(env, "Invalid core_relo[%u] targets truncated bpf_ld_imm64 in=
-sn\n",
-> +				i);
-> +			err =3D -EINVAL;
-> +			break;
-> +		}
-> =20
-> -		err =3D bpf_core_apply(&ctx, &core_relo, i,
-> -				     &prog->insnsi[core_relo.insn_off / 8]);
-> +		err =3D bpf_core_apply(&ctx, &core_relo, i, &prog->insnsi[insn_idx]);
->  		if (err)
->  			break;
->  		bpfptr_add(&u_core_relo, rec_size);
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 1c52e7bd570d..63b32a39a0f7 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -3098,6 +3098,34 @@ static int add_kfuncs(struct bpf_verifier_env *env=
-)
->  	return 0;
->  }
-> =20
-> +static void find_subprog_properties(struct bpf_verifier_env *env)
-> +{
-> +	struct bpf_subprog_info *subprog =3D env->subprog_info;
-> +	struct bpf_insn *insn =3D env->prog->insnsi;
-> +	int cur_subprog;
-> +
-> +	for (cur_subprog =3D 0; cur_subprog < env->subprog_cnt; cur_subprog++) =
-{
-> +		int i;
-> +
-> +		for (i =3D subprog[cur_subprog].start;
-> +		     i < subprog[cur_subprog + 1].start; i++) {
-> +			u8 code =3D insn[i].code;
-> +
-> +			if (code =3D=3D (BPF_JMP | BPF_CALL) &&
-> +			    insn[i].src_reg =3D=3D 0 &&
-> +			    insn[i].imm =3D=3D BPF_FUNC_tail_call) {
-> +				subprog[cur_subprog].has_tail_call =3D true;
-> +				subprog[cur_subprog].tail_call_reachable =3D true;
-> +			}
-> +			if (BPF_CLASS(code) =3D=3D BPF_LD &&
-> +			    (BPF_MODE(code) =3D=3D BPF_ABS || BPF_MODE(code) =3D=3D BPF_IND))
-> +				subprog[cur_subprog].has_ld_abs =3D true;
-> +			if (bpf_is_callx(&insn[i]))
-> +				env->has_callx =3D true;
-> +		}
-> +	}
-> +}
-> +
->  static int check_subprogs(struct bpf_verifier_env *env)
->  {
->  	int i, subprog_start, subprog_end, off, cur_subprog =3D 0;
-> @@ -3111,17 +3139,6 @@ static int check_subprogs(struct bpf_verifier_env =
-*env)
->  	for (i =3D 0; i < insn_cnt; i++) {
->  		u8 code =3D insn[i].code;
-> =20
-> -		if (code =3D=3D (BPF_JMP | BPF_CALL) &&
-> -		    insn[i].src_reg =3D=3D 0 &&
-> -		    insn[i].imm =3D=3D BPF_FUNC_tail_call) {
-> -			subprog[cur_subprog].has_tail_call =3D true;
-> -			subprog[cur_subprog].tail_call_reachable =3D true;
-> -		}
-> -		if (BPF_CLASS(code) =3D=3D BPF_LD &&
-> -		    (BPF_MODE(code) =3D=3D BPF_ABS || BPF_MODE(code) =3D=3D BPF_IND))
-> -			subprog[cur_subprog].has_ld_abs =3D true;
-> -		if (bpf_is_callx(&insn[i]))
-> -			env->has_callx =3D true;
->  		if (BPF_CLASS(code) !=3D BPF_JMP && BPF_CLASS(code) !=3D BPF_JMP32)
->  			goto next;
->  		if (BPF_OP(code) =3D=3D BPF_CALL)
-> @@ -3143,9 +3160,10 @@ static int check_subprogs(struct bpf_verifier_env =
-*env)
->  		}
->  next:
->  		if (i =3D=3D subprog_end - 1) {
-> -			/* to avoid fall-through from one subprog into another
-> +			/*
-> +			 * To avoid fall-through from one subprog into another,
->  			 * the last insn of the subprog should be either exit
-> -			 * or unconditional jump back or bpf_throw call
-> +			 * or unconditional jump back or bpf_throw call.
->  			 */
->  			if (code !=3D (BPF_JMP | BPF_EXIT) &&
->  			    code !=3D (BPF_JMP32 | BPF_JA) &&
-> @@ -22410,17 +22428,19 @@ int bpf_check(struct bpf_prog **prog, union bpf=
-_attr *attr, bpfptr_t uattr,
->  	if (ret < 0)
->  		goto skip_full_check;
-> =20
-> -	/* Discover all subprograms before validating their layout and BTF. */
-> +	/* Discover all subprograms and collect the properties needed by BTF va=
-lidation. */
->  	ret =3D add_subprogs(env);
->  	if (ret < 0)
->  		goto skip_full_check;
-> =20
-> -	ret =3D check_subprogs(env);
-> +	find_subprog_properties(env);
-> +
-> +	/* Validate BTF and apply CO-RE before reporting subprogram layout erro=
-rs. */
-> +	ret =3D bpf_check_btf_info(env, attr, uattr);
->  	if (ret < 0)
->  		goto skip_full_check;
-> =20
-> -	/* Validate BTF against the complete subprogram layout and apply CO-RE.=
- */
-> -	ret =3D bpf_check_btf_info(env, attr, uattr);
-> +	ret =3D check_subprogs(env);
+On Thu, Sep 24, 2026 at 10:28:10AM -1000, Tejun Heo wrote:
+> Hello, Shakeel.
+> 
+> On Thu, Sep 24, 2026 at 11:47:04AM -0700, Shakeel Butt wrote:
+> > This series lets a kernel thread say which cgroup it is working for.
+> > That cgroup then sees the CPU time in its cpu.stat and the stalls in
+> > its memory.pressure, and the CPU time comes out of its cpu.max quota.
+> > The first user is the memcg reclaim that runs from high_work.
+> 
+> This doesn't translate to net rx, which is another major source of
+> displaced CPU usage. Switching membership on each packet isn't going to
+> work there. Attribution can't happen that way. We'd much rather count
+> per-cgroup received packets and prorate the CPU consumption. If at all
+> possible, I think it'd be better to adopt an approach which can cover
+> both use cases.
 
-I think this is undoing your own fix
-commit c26e97721b172163
+Very good point. I think we need to think for net rx for two scenarios. First,
+the modern NICs with rx steering support and second, old NIC with shared queues.
 
+On the modern NICs where the workloads get their own rx queues, I think the
+proposed mechanism can help to do the accurate accounting (I have to extend this
+to softirqs as it is limited to kthreads atm) very easily.
+
+The challenge you mentioned is for the old NICs where we get to know the cgroup
+assosiation of the rx packets very late (or deep) in the stack. Also CPU spent
+on each packet is not necessarily uniform (due to out-of-order or drops or
+checksum errors or window shrinking) but for simplicity we can assume uniform
+CPU. Maybe the right place to charge for such scenario might be at application
+receiving those packets into the memory. I feel like we might need a very
+special way to account for this case (maybe through BPF or something). At
+the moment to me it seems very hard to have a universal solution which helps
+this case and the reclaim case I am targetted.
+
+If you don't mind, I think having solution for modern NICs i.e. dedicated rx
+queues, should suffice for now (unless you want the solution for old NICs as
+well). Let me know what you think.
+
+> 
+> >  - The debt is capped at one period's quota, so one long piece of
+> >    work cannot starve the cgroup for long. Time over the cap still
+> >    shows up in cpu.stat. Writing cpu.max or cpu.max.burst clears the
+> >    debt.
+> 
+> I don't like the debt capping. Having debt doesn't have to mean that
+> the cgroup doesn't get any bandwidth at all. The cgroup just needs to
+> be slowed down enough that the generation of new work is throttled and
+> the whole thing doesn't go out of control. IO control already does
+> this: when IO debt is accumulated, userspace is heavily throttled, but
+> not completely stalled, until the whole cgroup's consumption comes
+> under control. I don't see why the debts would need to be forgiven
+> unconditionally. The cgroup can keep paying them while running at a
+> minimal rate to avoid triggering stall failures, and if the situation
+> doesn't resolve quickly, that will most likely trigger pressure based
+> kills in any reasonable setup anyway.
+
+Sounds good, I will remove this capping in the next version.
+
+Thanks for taking a look.
