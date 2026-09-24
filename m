@@ -1,115 +1,106 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.archlinux.org (mail.archlinux.org [95.216.189.61])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF41E46AEF2
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1DD4A1DE1;
+	Thu, 24 Sep 2026 16:02:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.216.189.61
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790265748; cv=none; b=jpqKkVTh42rWAIfn6EQC85ujsHtwKDUrMyJ4ACRA6tnDgxvgIaDXhIDXn0VuK022xYHEWgfEX/VmxtpQIjq9MkbOA1xafC6tiI00H6Ax+whYoqoJ0Fe0caperRZ+4dGo1RztLRcWUdZ8/L7GWQdvr3cWsIFUF4ma0MkDf1ibpmk=
+	t=1790265779; cv=none; b=SrHn7giullG5L2dL49pT6stgcpwOUZfGwT/lvhBJyespMr/x3BZ3Q6oXkdM7aGSqhdA2oRX0aUJGF2oiSNYcrywaCHTXza1IT25TuEtHVjvbYevv/tcfJxVZkO3vgJbnOYyhRdDY5D7iTpFL0RsR01o5TUDovKmRZSR5Avs37zM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790265748; c=relaxed/simple;
-	bh=TmImaUDgegmg1778MTFeB/M8Ob6EPE57DwsFTlvYsFw=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=E/RK/Au9m6O6Rvc00GtmqcxeNAUayztPezi9pc7nURqsqa++I1DenerXi4aG7qvZ88Fh829BbgeHKQyMQ+1en7smOTdPcALK0RAJbdbb15YhOMCsoA5E2oJKYy4MQ9/71brrIKFXQzIgEN72Q4jo0khGUqXq/CgD/haw18WNQO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lY5wsvb3; arc=none smtp.client-ip=74.125.228.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790265779; c=relaxed/simple;
+	bh=ypkc0FuzcUHPgfC58MWa/fnycMenJ6PB86mv3ZMQuOE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WXlTg6U4yr5b9ot3ubl4IXzCS5IguF9uVexPNtF+MGWhts/EeEb7wXYPYHXegD9RKRMGQFBsKhkViXAwfYkMYYYMX3uNwOjwiXIvfZwR8Xfn7xlL1KatjVMlgx8QA5EKyhUepq3F+DdldSF4v8gX/lrb/hAdf46xSfcd+TS1mTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=archlinux.org; spf=pass smtp.mailfrom=archlinux.org; dkim=pass (4096-bit key) header.d=archlinux.org header.i=@archlinux.org header.b=HQwqIo2g; dkim=permerror (0-bit key) header.d=archlinux.org header.i=@archlinux.org header.b=5wwhhOvH; arc=none smtp.client-ip=95.216.189.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=archlinux.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=archlinux.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lY5wsvb3"
-Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-85469f204f6so20104b3a.2
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:02:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790265746; x=1790870546; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Zv5L+1bkbyPWkA26DWnaWnJTRxw1dDd66TZP/T2+DRw=;
-        b=lY5wsvb35/WersXla31RYfeqZXpq3wBuTgwbMG/CmA1VvqN0eQJoDLARyGtDmlZYEm
-         oQ5vyuDEkhEtvM6RgQ8oZPlYMrgPhUwvluEi1RNh2PPp519QO5Pt87psY4lfjiZaXIu5
-         CYPhrTvkdmmLtWxWn8gVLwafcjhhiowYwGaiMxLfAQUjfsMs1PpesbRDloxumPgVPKvq
-         sg/iWwxOifdV/Q2MU9gb1IbbfKS2OgUVmO8cnBqrwu9K7WZZ4CQgpR6vUqGa4ICRBWE2
-         BeWFBRNYrEbNw2IQEZ9YzBK8ONaVkM3LL2qCi7iOElzrm+GIcByKD3qpNOm8rjPey5sP
-         ZSbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790265746; x=1790870546;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Zv5L+1bkbyPWkA26DWnaWnJTRxw1dDd66TZP/T2+DRw=;
-        b=lDhmI20WaXBbS3cZhuIOTntGNHkH0SagsxgSFbfQQ+tz/ysgGOV7/9W2k0aEYryueS
-         XbUb/GUYpDbBszqk9rzYaQxHSFevTvhxxg/q1OJHe9ikc8bNjPJI3Qy1IkLJ9kilG7z8
-         29s8vcl/i0E35cGdLkbRIWKIrlTfQ0SvVN/9Pvvt0/oebrJAVtFTfhk+Dcg2Ed5svaxM
-         DsbammoWhCpWCuZfvu1PhYXBzpWBVDJTXeJaXRTGXHn5+jrX/AP6ja1wJ8jnA857cQs+
-         b5uGlClkQhePQVgg267lI6v3RHNkuRKnW1auV0jl1mnQpWkSMLuqL75l491h23Pd8Vtk
-         pc7A==
-X-Forwarded-Encrypted: i=1; AKwUvByWMqWm4QWXegjpR9ckShntvvxnPNmYI22PlvXojCghAlzK1XWfDMr+mILBbPtLPS/PW9g=@vger.kernel.org
-X-Gm-Message-State: AFuF++mlxJ4rdt4IOHIaxI3dUS9DgAbIupVW153+oObB05+7o4YXY3HR
-	01Mf2UclvbaMjk4niOI+fYwOVGIc/f+3jPpPutUeUdTCSt7fKUveIBba
-X-Gm-Gg: AYBFou0Ym9CP8MYd9RiBzhc7Rw0CoH1xT09EVJmO0fcJN6xHax5eVZ1aWthMMjbU1Oa
-	JeRZRdInwWTDR2aluW8R1XAXxv5haAsZ05Plet0B5Dmy5J59a97CU6NGyr1HaO26+izGQU+eBEa
-	m0FnYQBOU6KgyzFLynRGCQOVZmkS2bxoc3NLt4JKPXBrmzKcio/NHtV9wmBsQtN/Ziw2EtUlw+/
-	LNrexyR5lHj7BjEzJAmTRtWQu93f1F4mcAS1e9Lnv923Xa0025R1KwNkGeO5pR6ayPBTMV26NVT
-	z00vcbTLf4BBZ4mnB+sERgsPvT86kPN7rabKqqLTPKRcdelF80Csi5a36LQKSWb/oOEiPK5tsKk
-	7UgznkrtoEpWHeBOYP3x3wBC1JaJLvHLvvbS9tpZy1QSrDdo/tIz5/cSWRRf1VS2aCmzMuu2MXb
-	4YgaFURTaC+LELVyQu/c+cwg8JZmDOIceCs4nOZeB08RAyFhn9xOE9LkMltqgU1bEa8VBpdm4NF
-	n0vLYnAdQ/DTqvakdOcmhih9usNEG4hatK/nje6nVEYyi1clIMS4HE3qCT++LTueQu4SLQ8G9w4
-	VJk=
-X-Received: by 2002:a05:6a00:1da3:b0:84e:4d6:78fe with SMTP id d2e1a72fcca58-87e98996dbcmr2554884b3a.3.1790265745682;
-        Thu, 24 Sep 2026 09:02:25 -0700 (PDT)
-Received: from localhost ([153.61.198.246])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87d1dad44c6sm3287740b3a.42.2026.09.24.09.02.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Sep 2026 09:02:25 -0700 (PDT)
+	dkim=pass (4096-bit key) header.d=archlinux.org header.i=@archlinux.org header.b="HQwqIo2g";
+	dkim=permerror (0-bit key) header.d=archlinux.org header.i=@archlinux.org header.b="5wwhhOvH"
+From: George Hu <integral@archlinux.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=archlinux.org;
+	s=dkim-rsa; t=1790265774;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=weJSPBdbOEXZMKYu3fBfRIOkPkIIHuxhlXQ0OoqPoA0=;
+	b=HQwqIo2gtfzzAoDly6x0Za7c8cnyRnvSvZ+Y7J0oZsLG13qyhrHd0GkqpT2d5Uhex+8TH4
+	5r7dK0uM83flxzDbrjRuQiZuvMyyYT+eLDcZ/Qfo3Ciu9rzGKeaPB0R1Gz/77wAjfoNmay
+	Cuky+8Qe/XLtCg/nM5G7oLwkyxZpjVK+izzpr9J91afuZzaqt7CzrVKx229djxAAj/HL+V
+	hv2mMvDkD739rAMe7Ndia1dKQhyXuDpKaZiKzrrHfORQgcnv7CLK+cDziil6o92xYqbXLT
+	DHGM8uuh9ltABlTTMMyLtSrToo58Q+NTv6VdVHfe9lvo+iPVeoVr40FHBedEYdtnPh9JHM
+	Hic13d2MiC5Sq3Vu+Pji7lWi4bV6xFEeF9K+k27Ske2KVS5V2yUqI8yUOjo1dAxVVo3C/J
+	uharwnL4xcjhX1IoMgeItEUevoXBbHSP8mAfR/UFjEdGXtoo114XC5NsKlKfncDh5OC8DR
+	4In82m9OG2pPx8TU2cvwxbQPisgOKgzXSLZQVdvOtsxM6mvFpDIq8nI//VTWRRpKWnLVh4
+	Beq19MnaDZwfuzpd3wK+cUB4w9GrQ+3DWetBHEBGYcaLt5Hfwy6inxlDMezmsbD0q2+rhA
+	uFbH+bInRndghPv/IV8YMiJKiieG5q3S3DMs2idb5bmVtqD56RbsM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=archlinux.org;
+	s=dkim-ed25519; t=1790265774;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=weJSPBdbOEXZMKYu3fBfRIOkPkIIHuxhlXQ0OoqPoA0=;
+	b=5wwhhOvHzFbA+30LNMWc/fXP8hRQ/U6ejll0pFYGJLVMCn+Z9yDehZ7K0l0h38r2a58mQf
+	+b+9696mYVToHuAw==
+Authentication-Results: mail.archlinux.org;
+	auth=pass smtp.auth=integral smtp.mailfrom=integral@archlinux.org
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	x86@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	George Hu <integral@archlinux.org>
+Subject: [PATCH] bpf, x86: use 32-bit zero idiom for shorter encoding
+Date: Fri, 25 Sep 2026 00:01:54 +0800
+Message-ID: <20260924160154.12807-1-integral@archlinux.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 24 Sep 2026 16:02:24 +0000
-Message-Id: <DLNO8P8BZIFT.1XSPD32OMO5GI@gmail.com>
-Cc: <jolsa@kernel.org>, <daniel@iogearbox.net>, <ihor.solodrai@linux.dev>,
- <yonghong.song@linux.dev>, <song@kernel.org>, <martin.lau@linux.dev>,
- <memxor@gmail.com>, <emil@etsalapatis.com>, <bpf@vger.kernel.org>,
- <nsc@kernel.org>, <puranjay@kernel.org>, <yatsenko@meta.com>
-Subject: Re: [PATCH v4 bpf-next 09/11] bpftool: Add ability to dump
- LOC_PARAM, LOC_PROTO and LOCSEC
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Alan Maguire" <alan.maguire@oracle.com>, <andrii@kernel.org>,
- <eddyz87@gmail.com>, <qmo@kernel.org>
-X-Mailer: aerc 0.20.1-349-gb940a4174a3e-dirty
-References: <20260924111428.75957-1-alan.maguire@oracle.com>
- <20260924111428.75957-10-alan.maguire@oracle.com>
- <DLNN9DAADBPQ.18FN1VMU78XSH@gmail.com>
- <3dc200bd-1e24-40ec-be53-2d94c0feeb14@oracle.com>
-In-Reply-To: <3dc200bd-1e24-40ec-be53-2d94c0feeb14@oracle.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu Sep 24, 2026 at 3:33 PM UTC, Alan Maguire wrote:
-> On 24/09/2026 16:16, Alexei Starovoitov wrote:
->> On Thu, Sep 24, 2026 at 12:14 PM Alan Maguire <alan.maguire@oracle.com> =
-wrote:
->>> +				printf("\n\tname=3D'%s' func_type_id=3D%u loc_proto_type_id=3D%u o=
-ffset=3D%u",
->>> +				       name, locs->func, locs->loc_proto, locs->offset);
->>=20
->> My earlier feedback must have been lost:
->> Pls print argument names and where they are held here as well.
->> FUNC_PROTO has the names. LOC_PROTO has the locations.
->> Something like:
->>   foo(arg1 reg1, arg2 *(reg2 + 0x10)) offset=3D64
->>=20
->> Or is it planned for follow up?
->>=20
->
-> Ah, I missed that, sorry. I added display of LOC_PARAMs for LOC_PROTO; di=
-dn't add
-> the signature for each LOCSEC entry.
->
-> I can respin with this and the vlen/flag checking for patch 1, along with=
- anything else=20
-> the bots dig up.
+Emit "xor eax, eax" instead of "xor rax, rax".
+In 64-bit mode, zeroing EAX implicitly clears RAX, and the 32-bit
+form encodes one byte smaller while keeping identical semantics.
 
-Already applied. Just send a follow up. We need to move fast.
+Signed-off-by: George Hu <integral@archlinux.org>
+---
+ arch/x86/net/bpf_jit_comp.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 9fbef7504e51..2e3c8e9861a4 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -579,8 +579,11 @@ static void emit_prologue(u8 **pprog, u8 *ip, u32 stack_depth, bool ebpf_from_cb
+ 		if (tail_call_reachable && !is_subprog)
+ 			/* When it's the entry of the whole tailcall context,
+ 			 * zeroing rax means initialising tail_call_cnt.
++			 *
++			 * xor eax, eax
++			 * equivalent to 'xor rax, rax', but one byte less
+ 			 */
+-			EMIT3(0x48, 0x31, 0xC0); /* xor rax, rax */
++			EMIT2(0x31, 0xC0);
+ 		else
+ 			/* Keep the same instruction layout. */
+ 			emit_nops(&prog, 3);     /* nop3 */
+-- 
+2.55.0
+
