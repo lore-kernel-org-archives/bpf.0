@@ -1,121 +1,89 @@
-Received: from mta0.migadu.com (out-156.mta0.migadu.com [91.218.175.156])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D3124DA9B8
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 21:11:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D6B03F39D0
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 21:11:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790284266; cv=none; b=ON/C8l4H3mxcXYBJ6PKPNsh704ewmhKZe7eTzEX8B71+zKCpnXHYzE/efhX2OwvlfNwRHq3DjZrCKLfnk+J+NMgK8UDwpUR0dj+72diyrJQvMsFNrHat43ddBwVcgVWTAl8S3ajtLCID9IJ2aZRKFWJjUyM7QcEietBvlO6PyQE=
+	t=1790284280; cv=none; b=HK6T/a5ka/H3qfjQDngE3278l0p4WNKPgvcsgcDo1Mxd5M6qNLOF8ZSAjaeldQrsMV4HodwzD7jYCzWryP3XvKoE3crsAdi3GWCnrQMCXBMGuedWESl2Tuvl2wk16v6GY3I4cAN7jUs0vJXnsjl8Jq14MjQw0DFHLMn3fnnWbd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790284266; c=relaxed/simple;
-	bh=geWEgMSYQDaXHL8PI+SwL20O2XP2TtLwPQS9ZQiVmS0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ESu2FwCKGW2b40bbs5w6MDVj8X0p9q/8qBHlBZqecO8LO6OeSykwJo0o6XCdv5Vj97anVnWOq+5rUtargBrlG2MFAvUMIrO7sr50s6lYNBhuZVG1hsIDe3OQoK3ckW+scqrRBdRqJqh8z/zT+PXcB4/EhCT3tjsja3zreX1ptbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Eeh4tDSK; arc=none smtp.client-ip=91.218.175.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790284280; c=relaxed/simple;
+	bh=UWMx24jNhyMN10He2G6GYq3hLESdwPmlbKmsfJI6kO0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=foMiBSrCRv2X6g6aDe+K8Ta4rkP8eu8o1YDHu3afBb0eAGziUCC0BjTevBwFGguIGYuyr8aid/e/8ukfsm0KVxIz7A9AX/Jol9B0AYB+ds7QiXZ60eqyCkgwM8oXaS1VWapIpca7l+yYGDEgCbTn+J7GFbZokNkhTdEeYKK1RlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iBUsgaXE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Eeh4tDSK"
-X-Envelope-To: bpf@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=geWEgMSYQDaXHL8PI+SwL20O2XP2TtLwPQS9ZQiVmS0=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790284262; v=1; x=1790889062;
- b=Eeh4tDSK23G+TbvqhrDIDogpAxLZ6xsTOdlLHlKDetZUvHYMlAb3Ik1/Ut9G4V0OpLuS3y0m
- tmLn0/6MzpnzE+zUdW0zakrd9SIewOskKFysWTXFiUgIYljj4C4UMB51spUhO9DV8AYOc1SNMmb
- p165Nm7nJOoKWTlpRoaGar18=
-X-Envelope-To: bpf@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id de8f8ffe1b04012f;
-	Thu, 24 Sep 2026 21:11:01 +0000
-X-Mizu-Trace-ID: de8f8ffe1b04012f
-X-Migadu-Flow: FLOW_OUT
-Date: Thu, 24 Sep 2026 14:11:00 -0700
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Tejun Heo <tj@kernel.org>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>, 
-	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, K Prateek Nayak <kprateek.nayak@amd.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	David Dai <david.dai@linux.dev>, JP Kobryn <jp.kobryn@linux.dev>, 
-	Frederic Weisbecker <frederic@kernel.org>, Aaron Lu <ziqianlu@bytedance.com>, 
-	Daniel Jordan <daniel.m.jordan@oracle.com>, Hao Lee <haolee.swjtu@gmail.com>, kernel-team@meta.com, 
-	cgroups@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/7] cgroup: charge kernel work to the cgroup it is
- done for
-Message-ID: <arWLq4p488JPhuZ1@linux.dev>
-References: <20260924184714.912181-1-shakeel.butt@linux.dev>
- <befc0a9b9998db0292c9998c639a3a9f@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iBUsgaXE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94DB71F000FF;
+	Thu, 24 Sep 2026 21:11:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790284278;
+	bh=8TjiWzJ59MxY8A6f7qitBBDe6dAA42BKo8W7DQWI+0Q=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=iBUsgaXEo5w2flFPh7y+qAOJc6wLH8sH+IM7+Up2hdRfZGnp6tVhVVe4Ttmunj+qF
+	 u6gPGxE7kBuGITEx5xiR3LcHoQMsGPkjkjW2WjQlpb7XPvbudoKkMWAzncnPk3uWLo
+	 X1R+PAt9/qu/ehgH/xWqbA2TZtmM5KBXdcalDqEOpWsMNEcA7j1Qa24IPe92pEqjks
+	 Qno3sCKviFmBU3dcUyRhMuzMl0A1b0MoVjlgvvCrPlZP1c/CHfuNZPUbGp7ajBQO+a
+	 43sQmltva+2cxOh3uIWfZIhHlJq1KN2E0FdrguHNV+yGigbDPh1cDrnY32zmiB+b07
+	 km+4FiXGcn5xw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93DEC3A566E5;
+	Thu, 24 Sep 2026 21:10:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <befc0a9b9998db0292c9998c639a3a9f@kernel.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3 0/7] Follow ups for verifier errors set
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <179028420740.2201630.9968715215127891056.git-patchwork-notify@kernel.org>
+Date: Thu, 24 Sep 2026 21:10:07 +0000
+References: <20260924170646.2366016-1-memxor@gmail.com>
+In-Reply-To: <20260924170646.2366016-1-memxor@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, emil@etsalapatis.com, kkd@meta.com,
+ kernel-team@meta.com
 
-On Thu, Sep 24, 2026 at 10:28:10AM -1000, Tejun Heo wrote:
-> Hello, Shakeel.
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Thu, 24 Sep 2026 19:06:34 +0200 you wrote:
+> Some follow up changes based on comments from Eduard, Sashiko, and BPF
+> CI Bot. See commits for details.
 > 
-> On Thu, Sep 24, 2026 at 11:47:04AM -0700, Shakeel Butt wrote:
-> > This series lets a kernel thread say which cgroup it is working for.
-> > That cgroup then sees the CPU time in its cpu.stat and the stalls in
-> > its memory.pressure, and the CPU time comes out of its cpu.max quota.
-> > The first user is the memcg reclaim that runs from high_work.
+> Changelog:
+> ----------
+> v2 -> v3
+> v2: https://lore.kernel.org/bpf/20260924092941.3174809-1-memxor@gmail.com
 > 
-> This doesn't translate to net rx, which is another major source of
-> displaced CPU usage. Switching membership on each packet isn't going to
-> work there. Attribution can't happen that way. We'd much rather count
-> per-cgroup received packets and prorate the CPU consumption. If at all
-> possible, I think it'd be better to adopt an approach which can cover
-> both use cases.
+> [...]
 
-Very good point. I think we need to think for net rx for two scenarios. First,
-the modern NICs with rx steering support and second, old NIC with shared queues.
+Here is the summary with links:
+  - [bpf-next,v3,1/7] bpf: Correct verifier diagnostic attribution for stack reads
+    https://git.kernel.org/bpf/bpf-next/c/9774ae5951c2
+  - [bpf-next,v3,2/7] selftests/bpf: Test verifier stack-read diagnostic attribution
+    https://git.kernel.org/bpf/bpf-next/c/e4b20ef33f93
+  - [bpf-next,v3,3/7] bpf: Drop dead spill diagnostic condition
+    https://git.kernel.org/bpf/bpf-next/c/e9ac05b98278
+  - [bpf-next,v3,4/7] bpf: Report non-sleepable kfunc programs accurately
+    https://git.kernel.org/bpf/bpf-next/c/dac3b7a30d7e
+  - [bpf-next,v3,5/7] selftests/bpf: Test non-sleepable kfunc context
+    (no matching commit)
+  - [bpf-next,v3,6/7] bpf: Correct Program Structure diagnostic context
+    (no matching commit)
+  - [bpf-next,v3,7/7] selftests/bpf: Test Program Structure diagnostic context
+    (no matching commit)
 
-On the modern NICs where the workloads get their own rx queues, I think the
-proposed mechanism can help to do the accurate accounting (I have to extend this
-to softirqs as it is limited to kthreads atm) very easily.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-The challenge you mentioned is for the old NICs where we get to know the cgroup
-assosiation of the rx packets very late (or deep) in the stack. Also CPU spent
-on each packet is not necessarily uniform (due to out-of-order or drops or
-checksum errors or window shrinking) but for simplicity we can assume uniform
-CPU. Maybe the right place to charge for such scenario might be at application
-receiving those packets into the memory. I feel like we might need a very
-special way to account for this case (maybe through BPF or something). At
-the moment to me it seems very hard to have a universal solution which helps
-this case and the reclaim case I am targetted.
 
-If you don't mind, I think having solution for modern NICs i.e. dedicated rx
-queues, should suffice for now (unless you want the solution for old NICs as
-well). Let me know what you think.
-
-> 
-> >  - The debt is capped at one period's quota, so one long piece of
-> >    work cannot starve the cgroup for long. Time over the cap still
-> >    shows up in cpu.stat. Writing cpu.max or cpu.max.burst clears the
-> >    debt.
-> 
-> I don't like the debt capping. Having debt doesn't have to mean that
-> the cgroup doesn't get any bandwidth at all. The cgroup just needs to
-> be slowed down enough that the generation of new work is throttled and
-> the whole thing doesn't go out of control. IO control already does
-> this: when IO debt is accumulated, userspace is heavily throttled, but
-> not completely stalled, until the whole cgroup's consumption comes
-> under control. I don't see why the debts would need to be forgiven
-> unconditionally. The cgroup can keep paying them while running at a
-> minimal rate to avoid triggering stall failures, and if the situation
-> doesn't resolve quickly, that will most likely trigger pressure based
-> kills in any reasonable setup anyway.
-
-Sounds good, I will remove this capping in the next version.
-
-Thanks for taking a look.
