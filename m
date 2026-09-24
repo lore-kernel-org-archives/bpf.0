@@ -1,66 +1,66 @@
-Received: from mail-wm2-f6.google.com (mail-wm2-f6.google.com [74.125.225.134])
+Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42343F9268
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:57:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D689D43F8D9
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:58:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790243877; cv=none; b=m3N1zK5btEB0Y+6r5cI9JncnRnS2/4vQm1IHlEWqlcgxYA3ikmnDyFHXDATKxY0XPckxHyNHzRSs0jvRTbyectP6npFsutn2PhgDu4IdmP82KMWi5upZg8GpA6fruDSzUagMx0jW2srXIWivAsWsL+rl8Y4x44gpxF42qS+9Gac=
+	t=1790243898; cv=none; b=t7kqIkK/6ZAUjzBIArSa6aThH9pInyz3W4G2SBZniMMc95+aNAM+KeWkWH+UBxnujcNJjYv6cIqzAVZYBUC4sgqIhkpGxDLdudius5BIVWG9UUwwhp8gf2swvgF8HwnxX0kvXsA07VIaFkMB8ENGUvH2ZyT/A1APBkV54Fy5tlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790243877; c=relaxed/simple;
-	bh=oDmWZzEF67iT0LIDNfxsIVScHStlrZ+4gtON/6h3WTI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=u860Ws0N8VMy4EDK46olhAcUOp9v89KY75DcvgAJ/8Esfz8fplPuPgQBKQQvVCT/ZhDBG8XSe0KQvuOKXhUuLTDYAzmLxvTr62LJEJNr+wmeCHU3SzuilcZ1j0uUN1FyMQDFC0xBFHiEyyYRjgbn+5EBQa/j0dVCH2QStE5Gh2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cNtHr3ls; arc=none smtp.client-ip=74.125.225.134
+	s=arc-20240116; t=1790243898; c=relaxed/simple;
+	bh=9SGKTc6D6xfMPeZHEks6c+okgQs+/kD01vjoPgrCeW0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=XM/5VeaubY4IvhFkyDjeKg8LiNGFzUh7JtoCGadFCamjIA0QL6kDbpjZKHetUg3k2byajBOliQYEJ4M/81UKMTPdEvQneGnztAx71upQ0aWETPYK/wwb+SG5F5A+rqxqQCQajvn3TbDIUhT99fiRKFBPdx/tsaI2ln60a6hduek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e0dSR4jb; arc=none smtp.client-ip=74.125.225.75
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cNtHr3ls"
-Received: by mail-wm2-f6.google.com with SMTP id 5b1f17b1804b1-49fe8bf90c9so914095e9.0
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 02:57:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e0dSR4jb"
+Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-4843147998cso82658f8f.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 02:58:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790243867; x=1790848667; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=gmail.com; s=20251104; t=1790243883; x=1790848683; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:from:to:cc
          :subject:date:message-id:reply-to:content-type;
-        bh=bOX3rEX7SDzQ7fG/AqCIxYmIJXr/sz+qoblhwhXznpw=;
-        b=cNtHr3ls91MMA5kINX8z4U+VsoLLdIKp1bJa+VTyV9GoiSIztfk58492cN+MLPobCB
-         Y+CFBwaoKlZ4GW2N5zaTxuQvuzae32NCtkKn6r6mRx7GZ4W5sLdG7x1UE8eqikAItCi1
-         quegw4I4lntual2k78M7Hg7sNwicPLA2AZBXiCoUaJQgpvE0XL9mIV5X/3J/GR0LOIz/
-         YgT3SCrLk0BWcGi1hKbDwy1VMDT52s/a5CH3qF1sfORV42aLkYUjrlUUkDAf80F6T8dU
-         Ko6q6S9oluZo+vqqaNZGxMBG/gJ0iK7r72AZeo+uF+4Qoi2mPOV8r7fLUB2Zevsn7lRb
-         5jvg==
+        bh=6Sg33ie5LuP6WxDBF1LG0/+7a9OYvJVQV6Xo3Y8WeTo=;
+        b=e0dSR4jbPoJa3HD2AQhYCYLUyHpJ4+a+z4HOMHPlT0p46XJEedcAyrYw3StWoZGNRj
+         h1szZOZ2+3IApzr6PKqCykR8Y451YJ8WxPvN7ocuxemWZXCY5hWs6svfSHRUOcrbdo72
+         FoZ3J2PDYnqt+F5jV71uK9un0s4hRRpVFr29YIp0p8/LovRfXR2UyESwlc/3XUDvcgsp
+         /8AgKTbXcbKQG3p6hu6QV4iRMBD6KByqMCmhtVO0wkrM0f2CfZHwBVlBNvFHY0ESam7L
+         9TWG05QIccaFtePBp8U8h38Zkq+cgak/quocIv1pX1tSIwsNW3PEiaSxKmQwV65svocF
+         7S7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790243867; x=1790848667;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=1e100.net; s=20260707; t=1790243883; x=1790848683;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-type:content-transfer-encoding:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=bOX3rEX7SDzQ7fG/AqCIxYmIJXr/sz+qoblhwhXznpw=;
-        b=T1qYFKwLIydgC5AwEJ5GHlDdhyaQDBNA7R47RgTPcNjRRstsCPcL9PryMKLK3hQ22B
-         4MYKSL4nSnfN+0vdYWKVk32dAXQ34y6RTIj/0ny3hPII9kNtP8Jo6Ay4qR4qkTMLPUfX
-         8HWB8a30ZLIBuD1PTS/wrDkBKBzQa2a0M5w2yPDRbx6jGtYY+rSKzcvjqSettfF5me+A
-         QHNLQRNgDnAAHhHfP/3w2fdsOW+gb06NO5tbN8d93dqrzp4r48G5dqtS5koMr/DReNZv
-         A4ACtXmF7C2N9/ZDx5WqS8c/M3AUCoM48S1KnYO0tNiFrJcjsPw7oXFOZCndEYlQCZBZ
-         rcuw==
-X-Forwarded-Encrypted: i=1; AKwUvBzKo0eGsRjAyqGuLM2UPOBbeRG3DkAUO5I0g7LcGV0w3Fm2jIK2REL/Lkj//ev84ury/go=@vger.kernel.org
-X-Gm-Message-State: AFuF++lTC6Dt3UobdUsRD1tz5JnB8ccgabXQ3kkoe3FNh6G6QkVVjww8
-	0jPFlNPw2hDnFaLNvLSd0NAq0rO7yFMKlg28hC+g2Juelu8JDxC3UFWZ
-X-Gm-Gg: AYBFou0PPRKBd9RSmmbW7+SQbwznUpO/y7M1sTBgRBJYlddLivqsbvJhlY87bvPTQgd
-	JOvAqyQLauKNZ9b6hAc95xCBj0Q+gO6rpS5IitP+XT4amEYFc9Om1Pk46NO6vS8iDTwYvsWCi2v
-	2mm6X3xaYa1ImNr2Mu1pVUm1cZqiV980ItZsqHN72dB3WkjW5FXCbWo5OKsm50bG6RwIvdwf1BT
-	uYC2Zg7koL86m8VznlQL7DD70D/+FD38d2Gq5mLluc3hLuZ3TB661+HoxI4dBtGQVahhQlFjIxN
-	4Q8utVvdaPrXj8JxnhruozMv6f6YOMNH9AhTnWN7xQd1MDUEpaFd5+ozPHoKR57HE0PAfxDlVA0
-	Eix5bP/YSNV1VW3Ji0hp18sn6MYJwx9IxxZ4ajEkcmpvhiSpx1kOZlk9vXJ4N0j2dwURkdvO6Aj
-	KkOPJ3tpYTyVQ9o4tl0dmtuxPWumv/JVuKF9ff339uieUO0iirpiLSlCkGYVKyRGwa0BQq6ufhF
-	ha2QYsPVDLadqQMFn/3mx7Qdz6wXTBHdl+ie74lbRfTbBtNai3xTNbmpgFy8jlFDKdn/sMiNAnB
-	/iv8cIBhPrMFoO5pmDrUKuyHh5kQqIUJ6PTQSg==
-X-Received: by 2002:a05:600c:621a:b0:49c:fa21:e74a with SMTP id 5b1f17b1804b1-49fe6705673mr32565215e9.32.1790243867277;
-        Thu, 24 Sep 2026 02:57:47 -0700 (PDT)
+        bh=6Sg33ie5LuP6WxDBF1LG0/+7a9OYvJVQV6Xo3Y8WeTo=;
+        b=wGR9rawqeq1c9OfeTtqFfh+XyTl40Gml+cOkxvFmdYaCVM5sDQ9jwkjND2GrKqV57h
+         I992ynHV75ZkXnw11HIQGXpCpRq1BVg5DmBRAUFoPQyGygLt/oNVsujeI/r/lvz8C9eL
+         R6T5xScxfeCYhHJ8pV1iLiR4tTane2DgT7qAU8UPaGU1dIcY+hzgFQTLKJlvuZstpbkT
+         lPG9lNuhKer6tkVUKYXHXfUhPsBeFCg5lqV0VyuXM8oEAbERCwyL0EL8OiFMM2BxH6LW
+         sXfnBDcAduvvoyLaa2cfgwVbuJzyJ+GY5pPd5x4KAOj1VA4iYR7suv2X1UhvS0JVaYHY
+         VfHg==
+X-Forwarded-Encrypted: i=1; AKwUvBzUSkIL+T6UamwuJFr8P/UjMHgJ2UUSTug2qGsflrMdAuvR1KNqPKTseWrpit/XAfoAXGI=@vger.kernel.org
+X-Gm-Message-State: AFuF++leS7DdHUeMxSdixUi6RZ4SequJwOlvpBhcE38P7yV+6pz2ovRE
+	PwY41K5F677qUs5jF5zYlJEtk2mWuYE2oCSwcYxwt9DaGEUgvCLfxE4/
+X-Gm-Gg: AYBFou3Lp7tsLdXNPUsUXSbqSCuc9mGSyMlLbEIl9yLFYMFS7FRk13wZPwwajRMT+Rt
+	mvqSyWI8HlB/cyp3SNO1E3mzaF4mZFr/CDiIwhF3C+E+IjkP26zjEUwwPX8ySg1CvuOTeubhyF+
+	9UrtpxaWdyhvnIPOtWWw5cqntCjTnZWXFJ4iX83RI84mi9VbCAjzL0cIxNCJKcLfoH6rl8miGWc
+	bSGxRQ4JaSxks1jrCS/1xI1Q7zThCFfk/IkkxqZYm8Qd+kXxrN7WmpbsfuP9mCKUN1Br/mo6O7s
+	iWgOaMBDeuZlanv4hZiBtavm6nAVfqAkmpXDyfZBI7tQF2/pGzm6mI+GuyBsm7pSHAiuI3f3gEK
+	61ip+GlmJ2BASSWdCRSwo70kKnAo+Gx2Q1P0PbxwBLFWg2Y+bRkzY6kisuGkQmbfGcHUyAuwozf
+	0LAfwWx90XjWuDIdHqNHMqFzKK0zUiSWxBLnxHiL2sTtT3t6amLfELK8iv1rAAgltoFw2hdyd39
+	gFnt/mdI0WSmA7p6NPT2D6oew+/4Nut9oS22Gawf0/Zccv4zxYRWTnQK5we1rosYICxj3wO7SIc
+	GcCzV298Zc6/OPQt8PnkW0nMs7BoFPHc0Qktig==
+X-Received: by 2002:a05:600c:4e53:b0:49c:e37e:4389 with SMTP id 5b1f17b1804b1-49fe66c8288mr31334425e9.4.1790243882786;
+        Thu, 24 Sep 2026 02:58:02 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-488684864c8sm13561429f8f.13.2026.09.24.02.57.46
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fdf9691e2sm127086005e9.1.2026.09.24.02.58.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Sep 2026 02:57:46 -0700 (PDT)
+        Thu, 24 Sep 2026 02:58:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,59 +69,108 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 24 Sep 2026 11:57:45 +0200
-Message-Id: <DLNGHIB312GJ.2YIJYBY4U9TNZ@gmail.com>
-Subject: Re: [PATCH bpf-next v2 17/18] bpf, arm64: Allow programs 2 KiB of
- stack
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
+Date: Thu, 24 Sep 2026 11:58:01 +0200
+Message-Id: <DLNGHPJYHLOH.1KYZYC4XQPTRM@gmail.com>
 Cc: <ast@kernel.org>, <andrii@kernel.org>, <daniel@iogearbox.net>,
  <eddyz87@gmail.com>, <emil@etsalapatis.com>, <tj@kernel.org>,
  <kkd@meta.com>, <kernel-team@meta.com>, <martin.lau@kernel.org>,
  <yonghong.song@linux.dev>, <mason@kernel.org>, <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v2 18/18] selftests/bpf: Test the 2 KiB stack
+ budget
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
 X-Mailer: aerc 0.21.0
-References: <20260924082607.2695649-18-memxor@gmail.com>
- <4ee0bb9bfdc8274a074f6e80dfc65d386e15586e27dd3951317d0eb4b01aa0f3@mail.kernel.org>
-In-Reply-To: <4ee0bb9bfdc8274a074f6e80dfc65d386e15586e27dd3951317d0eb4b01aa0f3@mail.kernel.org>
+References: <20260924082607.2695649-19-memxor@gmail.com>
+ <a0d61b61004d7351500248ef2a9e84ad6634dea366fe9bb15cd0a0887b301a82@mail.kernel.org>
+In-Reply-To: <a0d61b61004d7351500248ef2a9e84ad6634dea366fe9bb15cd0a0887b301a82@mail.kernel.org>
 
-On Thu Sep 24, 2026 at 11:00 AM CEST, bot+bpf-ci wrote:
->> diff --git a/Documentation/bpf/bpf_design_QA.rst b/Documentation/bpf/bpf=
-_design_QA.rst
->> index be5fc4ac00d6..98d70b8a2533 100644
->> --- a/Documentation/bpf/bpf_design_QA.rst
->> +++ b/Documentation/bpf/bpf_design_QA.rst
->> @@ -223,11 +223,12 @@ Q: How much stack space a BPF program uses?
->>  -------------------------------------------
->>  A: A program may use up to 2 KiB of stack, combined over its call
->>  chain, when the JIT of the architecture reports support for large
->> -stacks (currently x86-64); a single function may use all of it, and
->> -every frame of a program running on a private stack gets the whole
->> -amount. Elsewhere, and whenever the interpreter is used, the limit is
->> -512 bytes. The verifier computes the actual amount of stack used and
->> -both interpreter and most JITed code consume necessary amount.
->> +stacks (currently x86-64 and arm64); a single function may use all of
->> +it, and every frame of a program running on a private stack gets the
->> +whole amount. Elsewhere, and for programs verified for the interpreter,
->> +the limit is 512 bytes; the interpreter itself never runs a frame
->> +larger than that. The verifier computes the actual amount of stack
->> +used and both interpreter and most JITed code consume necessary amount.
+On Thu Sep 24, 2026 at 11:13 AM CEST, bot+bpf-ci wrote:
+>> diff --git a/tools/testing/selftests/bpf/progs/verifier_large_stack.c b/=
+tools/testing/selftests/bpf/progs/verifier_large_stack.c
+>> new file mode 100644
+>> index 000000000000..2d4c81a3f0cb
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/verifier_large_stack.c
+>> @@ -0,0 +1,377 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +
+>> +#include <linux/bpf.h>
+>> +#include <bpf/bpf_helpers.h>
+>> +#include "bpf_misc.h"
+>> +
+>> +/*
+>> + * Programs may use MAX_BPF_STACK_JIT (2 KiB) of stack on JITs that sup=
+port
+>> + * large stacks, combined over a call chain, with no separate limit on =
+a
+>> + * single frame. Interpreted programs and other JITs keep 512 bytes.
+>> + */
+>> +
+>> +SEC("socket")
+>> +__description("single frame of 2048 bytes")
+>> +__load_if_large_stack()
+>> +__success __success_unpriv __retval(42)
+>> +__naked void single_frame_2048(void)
+>> +{
+>> +	asm volatile ("					\
+>> +	r1 =3D r10;					\
+>> +	r1 +=3D -2048;					\
+>> +	r0 =3D 42;					\
+>> +	*(u64*)(r1 + 0) =3D r0;				\
+>> +	r0 =3D *(u64*)(r1 + 0);				\
+>> +	exit;						\
+>> +"	::: __clobber_all);
+>> +}
+>> +
+>> +SEC("socket")
+>> +__description("single frame of 2048 bytes without large stack support")
+>> +__load_if_no_large_stack()
+>> +__failure __msg("invalid write to stack R1 off=3D-2048 size=3D8")
+>> +__naked void single_frame_2048_no_large_stack(void)
+>> +{
+>> +	asm volatile ("					\
+>> +	r0 =3D 0;						\
+>> +	exit;						\
+>> +"	::: __clobber_all);
+>> +}
 >
-> This isn't a bug, but the interpreter sentence changes meaning here,
-> not just the architecture list. The old sentence said "whenever the
-> interpreter is used, the limit is 512 bytes" while the new one says
-> "for programs verified for the interpreter, the limit is 512 bytes; the
-> interpreter itself never runs a frame larger than that."
+> Does the single_frame_2048_no_large_stack test body match its expected
+> failure message?
 >
-> Would this correction fit better in the x86 patch that first added the
-> paragraph, or could the changelog say why it changes?
+> This test is meant to verify that a 2 KiB frame is rejected on systems
+> without large stack support (the interpreter, bpf_jit_enable=3D0, and JIT=
+s
+> without bpf_jit_supports_large_stack() like s390x, riscv64, loongarch,
+> and powerpc).
+>
+> The test is marked __failure with the expected message "invalid write to
+> stack R1 off=3D-2048 size=3D8", but the test body is:
+>
+>     r0 =3D 0;
+>     exit;
+>
+> This 2-instruction program never touches fp-2048, so it verifies fine on
+> all configurations. The __failure annotation then causes
+> ASSERT_ERR(err, "unexpected_load_success") to trip in run_subtest() in
+> test_loader.c, failing the test on every configuration it targets.
+>
+> Looking at single_frame_2048 above, the expected error message matches
+> this sequence:
+>
+>     r1 =3D r10;
+>     r1 +=3D -2048;
+>     r0 =3D 42;
+>     *(u64*)(r1 + 0) =3D r0;
+>
+> Should single_frame_2048_no_large_stack repeat that write sequence so the
+> verifier rejects it with the expected message on systems without large
+> stack support?
 >
 
-Not a bug; the sentence was corrected in the patch that adds arm64 because =
-that
-is where the wording was revisited, and it stays here.
+Not a bug: single_frame_2048_no_large_stack does store through r1 =3D r10 -=
+ 2048;
+the quoted two-instruction body is not in the patch.
 
-> [ ... ]
->
 >
 > ---
 > AI reviewed your patch. Please fix the bug or email reply why it's not a =
