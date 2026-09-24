@@ -1,105 +1,135 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B73D39F166
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 05:56:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418643B71A0
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 05:57:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790229373; cv=none; b=FAzo1Box+y9h45P8p41K1KMtgmRcEPh7eXY0dGR9zhuTxiz1PBGXt4s4BTWSvW2zkOYsWpia5bUqmkmIf6/ZqhW6Y5XLyR7ItLF/GjXhaY8GIcUePnag0Km2xLE+O59oVhqFnyLWryw/DK1dzwgZB+kpTmvK4kbomQysGzGLx98=
+	t=1790229432; cv=none; b=p6AO1NazxcHbBzis/2GXDyNjnS2RBFK3iw0JDR6sM5Cat3EsEZJ3YpOOFjVAFsPUzb427/k9KUl81jr0dEndnQfuTmL+tY49VOwiKpHM9uZgzHTYiK1myJZIq1Nc8MJs1DZFiXFH2qPKEvT7McUgx22F+2SouCDlzsmr4Czyung=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790229373; c=relaxed/simple;
-	bh=PFsqgsfgnZ0F4NBxRigPGHFfA4KXZ4IRVsUbSf/RVFs=;
-	h=Content-Type:Date:Message-Id:From:To:Cc:Subject:In-Reply-To:
-	 References:MIME-Version; b=VELE7Xg/6qQZcZoEvbG1RcjbZC37uqUV4XdBnCOyDB57hk3A1GvrRRKE7EeSZOJBakLgGqT7lwmJ/MEfyQqQk8ho7TfUW4nc9aGAlalbATXRYUdkl/I3iJmSVjlAE7xOqxwgZ0+kP44+FHZBQN6oGJ6yzA96+TNIRF43pP6iWVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n1hYUjUM; arc=none smtp.client-ip=74.125.227.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790229432; c=relaxed/simple;
+	bh=IW3s5y1ntACCzL35xFQXKY1yEPLhhl9zpbNoqlX+GZE=;
+	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
+	 Message-Id; b=ZxtdcUL7OSqIxc21lbYUve+Jjmo0UDHnDzsZKKSJe6y+DDyUhVGRmSMgqSAW8jXc6/46dcEks+lgpVI2pJhl1tyTz1P8xpOQi1UZPIXLHpm01AsSk5EpszfoR7ZY/315GmzuYr4QZqxueZB/8jBU4UhOaHSgJ3DBTjv5rf9267A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SbVBAXue; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n1hYUjUM"
-Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2d747eb79f6so7908155ad.0
-        for <bpf@vger.kernel.org>; Wed, 23 Sep 2026 22:56:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790229372; x=1790834172; darn=vger.kernel.org;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Ddc11RZTLsW/NfRYZ6ufKgL8eOQLhIlzC2wVbMASsYs=;
-        b=n1hYUjUM56AHvg8eCcYwkzuZKLRPkdlHGvr+xA/pEhnLh8GFvudmFsVFZivmI3IJ3p
-         8aGhlnxMXteRNHr22eWGTtMrpdwdwC1USTPHbwkx3fyFFNPZYha8GC2en9L8q4FOxIHs
-         h1op2ARRu29U2Ct7gSeGVQ0DRsaTDNxgnIAxVNAsgZJdSG+EbRaF867ZpMaTizQI5/6Z
-         JrSfcEtN+53oD00jCDXyfx27kh/b3gWJfl5/uZyWhQbFZ8+pVUUDoeffo9OoveUJA8uA
-         Nm3zMN8GGbApeOs/0z122YojiqotAdlQJxlMfALv2u46PVkYvN3nbNlu4muphAgw+Ui6
-         vg+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790229372; x=1790834172;
-        h=mime-version:content-transfer-encoding:references:in-reply-to
-         :subject:cc:to:from:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Ddc11RZTLsW/NfRYZ6ufKgL8eOQLhIlzC2wVbMASsYs=;
-        b=QcnnhpS8QFFAEyS0dJ1MveH4q9cH3z35Xzo6/n5/4hu+dxFltljl80v2qTmTkdYhYL
-         x9+Aj19ipYE1c72MT/3f5Ck6JsbQZTjg+OW38tAcklpOmr2h8aN8iYwpB80UIBx13FqD
-         A3hcF4bi6JdeZXwHy2n+Er0vMTFcvocd4UW5RhEXdG9ZuJh8vx8+1WB9uPnXUzEK045u
-         QsUJrBf8Vn+HQvwpo1a85pBxjaG+efV4zbstVHTPGO6KOmYkEjt4qyTMVTK/sK3JkTXK
-         2slZgr7ZZ3/B7wSLNxZC9ZKBNRcqDVaPBLwibLOLdLwXpqlg3I5QE2QRahiFm2ncJ/Gt
-         T4Pg==
-X-Forwarded-Encrypted: i=1; AKwUvBxND+elcOcE6R4+SzlWu7RMcUQh0AqhqZF+mt0G+XsGSVaqjgR3OlFygEu6XwE8ARWjySY=@vger.kernel.org
-X-Gm-Message-State: AFuF++nCOOqplEdb1Tgg1lf1W0z7uUutXl5HK5N8niiKea7/TRxh1dpX
-	dufygi6NeZaQF1RyIYSuoJEDe0gAqqwfJg1OnoS2fPwwyjD2VH+rkEJA
-X-Gm-Gg: AYBFou2PggxxkV0KOTKZwg78/se+m2IzD3WHBzNEeRlfHuOUSrkSdgiiAwE8efikC08
-	zujuTCwRArz43BTR9Gp2Qf+znOIqm3TzXHJgRp/N2hSNScyd5pYrOuANtGCXReQrFnn89kVMuec
-	Y93LTITerd80Esxab70ESUiEXFMDkIi8mAWEToD1Q4VEP2Sp2sDJLdnKe0qFlQ756rZ3EvaN5Vu
-	NPDG6lU6T0f3szhbk2O0KXM7fPJXNrWMrQXtZ7HdCVlkn3LdAkN3KyNolGSFmERxK3NDgILUbb7
-	WUBSVu/TEBudSeXenonbntEtiPVdrDjbi2BxuhZnH2s0Hk1VUsGaKrAgxqEaF+ZYj6aIRHFHvuA
-	h0zx9KMq9WeZAzigj62NZDSbb4p7Fr7+WrafkeTbeszznjlYPYcEU/b6C3KSkF0w4AZg8z0T4FW
-	12h4cMhKpy5c+sSccuWIw1/d63aIKO8u7ImNXr2KAw0da1WTpT/Ynw7oVBWkni5G5/IPgJZWtuB
-	41XzYp+fWSz9mSPpJR2sjAzhH2JW/LVOT0LB7WTxnC8zOUo3XnUJZdM9qb8ithTCDZSAgjZx5YG
-	AkM=
-X-Received: by 2002:a17:903:b08:b0:2c9:e9db:8167 with SMTP id d9443c01a7336-2df7dc03019mr11410365ad.7.1790229371816;
-        Wed, 23 Sep 2026 22:56:11 -0700 (PDT)
-Received: from localhost ([153.61.198.245])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2df6a5a777csm20814575ad.18.2026.09.23.22.56.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Sep 2026 22:56:11 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 24 Sep 2026 05:56:10 +0000
-Message-Id: <DLNBCJAQ73G1.3U6JELNSXMQM3@gmail.com>
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Puranjay Mohan" <puranjay@kernel.org>, <bpf@vger.kernel.org>
-Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Look at frame 0 when telling async
- callback entries apart
-In-Reply-To: <20260923140152.4005097-2-puranjay@kernel.org>
-References: <20260923140152.4005097-1-puranjay@kernel.org> <20260923140152.4005097-2-puranjay@kernel.org>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SbVBAXue"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80FD61F00899;
+	Thu, 24 Sep 2026 05:57:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790229430;
+	bh=a9v25GfLqTbT4GFV3yvvHWEXVFDVp9URsvlMdkSRL90=;
+	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
+	b=SbVBAXuekDUwbJ9OurUqVWVaz7LsfU28DNP2ZidHD7pMP7KE5DZ6d6LHSbL/gXcUG
+	 cFpa4w9N71fI1Uith/DyJESaJRHwTZMAuJN/BZ7EKPUtonNxyRqwLRj5RMuOxLfwqr
+	 Kvfa0d8uWivDGotLVDV5BUlBpqgBtVpmmyzcFxOmEpl0+KFc18YdYpN8sABECZ6Mk2
+	 EwRl7BEn/pgQGYU0t2jlBgPoLuuDUAQLoXKcxHpHCImqyn/RPU+8So6jK8+SEzDtmO
+	 gPLcQe/J7cmXIhzvEtg8ulpZYPWuUNj0D7lUxc2jRAeEDUPILUT7g5Xt7TPK6qxurF
+	 ph1TZ2g9yc1rA==
+From: sashiko-bot@kernel.org
+Subject: Re: [RFC PATCH v7 2/4] selftests/bpf: add iocost cost model test
+Reply-To: sashiko-reviews@lists.linux.dev
+To: "Tao Cui" <cui.tao@linux.dev>
+Cc: tj@kernel.org, hannes@cmpxchg.org, bpf@vger.kernel.org, mkoutny@suse.com
+In-Reply-To: <20260924054549.2271705-3-cui.tao@linux.dev>
+References: <20260924054549.2271705-1-cui.tao@linux.dev>
+ <20260924054549.2271705-3-cui.tao@linux.dev>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 24 Sep 2026 05:57:10 +0000
+Message-Id: <20260924055710.80FD61F00899@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
 
-On Wed, Sep 23, 2026 at 07:01 AM Puranjay Mohan <puranjay@kernel.org> wrote:
-> -			struct bpf_func_state *frame = sl->state.frame[sl->state.curframe];
-> +			struct bpf_func_state *frame = sl->state.frame[0];
->
->  			if (frame->in_async_callback_fn &&
-> -			    frame->async_entry_cnt != cur->frame[cur->curframe]->async_entry_cnt) {
-> +			    frame->async_entry_cnt != cur->frame[0]->async_entry_cnt) {
+Thank you for your contribution! Sashiko AI review found 1 potential issue(=
+s) to consider:
+- [Medium] selftests/bpf: endianness bug when writing 64-bit device ID to 3=
+2-bit dev field
+--
 
-push_callback_call() has the same problem:
-  caller = state->frame[state->curframe];
-  ...
-  callee->async_entry_cnt = caller->async_entry_cnt + 1;
-When the callback re-arms itself from a subprog the caller is
-frame 1 with async_entry_cnt == 0, so every entry into the callback
-gets async_entry_cnt == 1 and the check above never skips.
-A loop anywhere in such callback is still rejected with
-"infinite loop detected".
+commit d5f4da7dcc6342f2064a4e05e68659fc439deaa1
+Author: Tao Cui <cuitao@kylinos.cn>
 
-pw-bot: cr
+selftests/bpf: add iocost cost model test
+
+Add an example cost model implementing the full builtin linear HDD
+formula at double cost, and a test which attaches it to one device:
+the dev member of the struct_ops is written through the map's
+initial value before load, as hid_bpf tests do with hid_id, and
+attaching the struct_ops attaches the model to the device.
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/iocost_model.c b/tool=
+s/testing/selftests/bpf/prog_tests/iocost_model.c
+> new file mode 100644
+> index 0000000000000..156c75367af05
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/iocost_model.c
+> @@ -0,0 +1,182 @@
+[ ... ]
+> +void serial_test_iocost_model(void)
+> +{
+> +	struct iocost_model *skel, *second;
+> +	unsigned int maj, min;
+> +	__u64 *ops_dev, *sdev;
+> +	int err;
+> +	char model[32], *dev;
+[ ... ]
+> +	/* dev is the first member of struct iocost_model_ops */
+> +	ops_dev =3D bpf_map__initial_value(skel->maps.iocost_2x, NULL);
+> +	if (!ASSERT_OK_PTR(ops_dev, "initial_value")) {
+> +		iocost_model__destroy(skel);
+> +		return;
+> +	}
+> +	*ops_dev =3D makedev(maj, min);
+
+[Severity: Medium]
+Will this 64-bit write cause an endianness issue on big-endian architecture=
+s?
+
+Since the first member dev of struct iocost_model_ops is a 32-bit dev_t,
+casting the pointer to __u64 * and writing a 64-bit value will place the
+actual device ID into the trailing padding on big-endian systems, leaving t=
+he
+dev field as 0. Could this cause the test to fail by attaching to the wrong
+device or being rejected by the kernel?
+
+[ ... ]
+> +		/* a second model on the same device fails with -EBUSY */
+> +		second =3D iocost_model__open();
+> +		if (ASSERT_OK_PTR(second, "second_open")) {
+> +			sdev =3D bpf_map__initial_value(
+> +					second->maps.iocost_2x, NULL);
+> +			if (!ASSERT_OK_PTR(sdev, "second_initial_value"))
+> +				goto out_destroy;
+> +			*sdev =3D makedev(maj, min);
+
+[Severity: Medium]
+Does this have the same 64-bit write endianness issue on big-endian systems
+as the first model?
+
+[ ... ]
+> +void serial_test_iocost_model_streams(void)
+> +{
+> +	struct iocost_ms *skel;
+> +	unsigned int maj, min;
+> +	__u64 *ops_dev;
+> +	int err;
+> +	char model[32], *dev;
+[ ... ]
+> +	ops_dev =3D bpf_map__initial_value(skel->maps.iocost_ms, NULL);
+> +	if (!ASSERT_OK_PTR(ops_dev, "initial_value")) {
+> +		iocost_ms__destroy(skel);
+> +		return;
+> +	}
+> +	*ops_dev =3D makedev(maj, min);
+
+[Severity: Medium]
+Does this also share the same 64-bit write endianness issue for the 32-bit
+dev field?
+
+--=20
+Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260924054549.2271=
+705-1-cui.tao@linux.dev?part=3D2
