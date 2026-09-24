@@ -1,76 +1,76 @@
-Received: from mail-wr2-f1.google.com (mail-wr2-f1.google.com [74.125.225.65])
+Received: from mail-wm2-f11.google.com (mail-wm2-f11.google.com [74.125.225.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2A0412BEF
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 17:06:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFCB3EB80E
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 17:06:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790269615; cv=none; b=L8aNnmOR5ApxZA1CJ6NMhsqblQaf8jkpDUu8f9OdDS3C51MJ/HJHO2cvkALgPDg7E8laojr4beGT7bpscY72iNhgkBklM3tXGpq2mbzw175qOnYg7i3Z5cQYWPIdWj3dBwmZtK1au2dA9f2fz85dVPTuNEYFrMXHsIpNlHMDuZs=
+	t=1790269617; cv=none; b=F51GVbzbMLH7ro7cqYCz3AGomVGueII92TU3LD5MVFuZsApi1OGqW+XZzBgSCNHeUZOQTeYnvLXCyuQDsoAQhjTeO8Qe4IPBVAny+XSTDj/9n2tqeJhZYHToGAsTQ0vB4jh6bAZHfsacXJOjLApfdmheic3/v6TSDt+npWZjkxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790269615; c=relaxed/simple;
-	bh=t6/OgB6it3JQ8/i8BerNowgOs5ZinF/Sf3BIZ/gf1Mw=;
+	s=arc-20240116; t=1790269617; c=relaxed/simple;
+	bh=+j8tjysSebyQiEKsSaaHGJKB861gN0qzOSXYqdtBPi4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HUsRJehQVuC8DnQGAwnD1EqHSav4g53H7Ai1/9UBI/4C0Agvaea5+pWqKgnczwH6kpq3dCR/8VvLHwznvS/jENcFdxCHUWSiFw8XvQLYjE7R9X4bY5bCeYlY9dLaivsb3olywEX1XVHLSPA19KYuSQgdXyJ3DVqaGbh+zmRIrw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b8P0GqA+; arc=none smtp.client-ip=74.125.225.65
+	 MIME-Version; b=hbX85jMoERzbh1bAheK5NVSNgHYGYs0eSjfsdB3YRUupIFuJG9lM6gFb3/y+6HrCbBjuFxwQkisbyVCP7QCiZIMnfVqECou2RyXwSxw7lA0S52RpBUWhNpXUISSEUY9ORezNs935kU3f2QLsk+int5wwuHHWEEJmLNGbdxHe39g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=plsM9Ftf; arc=none smtp.client-ip=74.125.225.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b8P0GqA+"
-Received: by mail-wr2-f1.google.com with SMTP id ffacd0b85a97d-482dd2e92ebso13441f8f.0
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 10:06:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="plsM9Ftf"
+Received: by mail-wm2-f11.google.com with SMTP id 5b1f17b1804b1-49e78a58e17so332695e9.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 10:06:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790269612; x=1790874412; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790269614; x=1790874414; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=+CcJheJ9W8+R/1ynNqND2sqTCtW6PBRA8uRZM8ThNts=;
-        b=b8P0GqA+QKPTtpA1lu/X0ApZtucGmD6+LKGnBDU+z9st0twQU1bzS+sEXoSC42xYAs
-         EFqTquM0ikUR4H9JmzYAaLiRFShdvRDANUPOiQdo7uDRyf3eHC5x7AtTQWRJoXVAdNkG
-         RelLe/kw7UCQzPlFFKiSi8JpIs+X92uv4a3pjq4C17iOqh0txwZfLQ/QFye6ziH/2sbE
-         171uSgtbkP9InsnP2iIBwVY9kDLh+SpaX6m+/rZ0jhJwls2BX/o5DLrPd0F1+BDoO0lu
-         JDGDQ4jZzCOTh3KoCJaWk1QaLPly514S/NJyyyMqaq/BYNzAXLPL1YX7S4rHYqOo2M4X
-         RGfg==
+        bh=EoiU00rV+S0xqnX0Qa+m79O1j8hVwxZkiSNaqTY6Z/A=;
+        b=plsM9FtfK+61wV4CgpDBoZxZ+QwtVl2iwk/uFffZzgYIJLgWqZ1oLgwIud7lq2DTzl
+         tFZLTHdFvIvUcFZ5zjqfg6EPK3KGtRY8eGJwCtsCACees4M76/rW2p97mSZ5uMV++8+a
+         8rKciG3zp4tNEne8LhMS1u/6OXXkobRhW4UxN1HEWyDEH6H1fLu/6u2/oShP/gXqNt+V
+         Jwjh/iOPNoXYKtKuSD7Qj0HwSPPWWu/wXUoRxAh3KTrM8JjO6JuFcESKbQjj8I76Xv7r
+         eeKiwvs6Y47hfK8Iq/hc/M1tRGwxVVRkom860uRT8QxmMCGfgCiqZcJ+oHyDBdVrQesu
+         h76A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790269612; x=1790874412;
+        d=1e100.net; s=20260707; t=1790269614; x=1790874414;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=+CcJheJ9W8+R/1ynNqND2sqTCtW6PBRA8uRZM8ThNts=;
-        b=gWYU01B1lBjS2xO9hyr7xXQ0/kZJCuBUqw6t/w38IF5i9nb8RVV3+As3IPJJm3Qt4/
-         sY7eIGdouSQaKqr9rjqHwaAPKSElVB5WWpVjpVUatFICKCMhbDzUYVL7DE9FO8nftwKf
-         B/Xm824Yr+1q2RNDDRN7wY48A5ucgdz4dpVe1cdkfYtrQ4mlJeSkjmeY5qh009F9dtW+
-         P8WCeahaUaLXB5YFC7dY2g3C2NlOMszH6IKyqp8gCmgw8Kp3DpXub8wAazd2oeg4Hi5p
-         Ssv21gv+sz0eh/3nAo5RaQ7so6HihR0D6ggXudCbC4XaaHuXIsD/6chyTzPoh2PsAkUl
-         Scng==
-X-Gm-Message-State: AFuF++no9z+//GxF/P7vr5MDAEPFVSwr3yDujA30f8fJ5Iln4Bt4XtjV
-	XXyCPIaGHW3lO9I/mZ7kecbnDXJi93H8Vtv8EBNd3ZJPIaR9Zhfvt5CDs4MkIaiv
-X-Gm-Gg: AYBFou3eQqjI7IdS0EjERSifba9+zrFiZHDLMh0xm1kQZANmhRsFnynTlLjzR8ItNOw
-	EtMQY5U0zzCxrKLYbI1bWNUHIIuLFYzZqs7XZzYyvPVlWSyE8jO+Tw0P0f0J6a59qTa6Smji80/
-	t8ztRwJXcXTgbTddeEKLDYVM5/oa7gFThn4fF/YFL28paGEBB2mq/9LqaBYH9gWnOshOesCS5/K
-	giAw6g9D9jsJB3ff5jMmZQMtzjmdqcigrEmufEQ8Ljt12lt0DtlzMJMHCiIm5vze0iEWluEyd/d
-	yIYZ3TzreFwe0S0GyI8Vp36myiBteLrcHvVZUbDqDyQVBRRlgAti9Ge4YgBMtoTTMhhCm/8tVIK
-	AblPJK5Opgwr26V8qqzDOMoNi4B9xnQcNtu3D5y+K8hkBnJFsDQ/mhVRaeeCnSdVw6/cRFf+1Ex
-	84PrSrAkEnI6GoM2RHY1GqpUjDko1nfWonRkkw29CWdv3JSMyxA+k2RNPDshfRm9NXayrjQaeCF
-	sd4uqBRo1y7wVfcOgHcZm2kC7Tz7YbSCix8QB+cMQ+12g+tWUQw1/JNO2SHSu2g0dYCjxK9hStd
-	21so9KSCIYRgazRXT8YQVTLCZh7das6ytwxRUw11Wj3+ENmb
-X-Received: by 2002:a05:6000:4381:b0:486:fa31:b468 with SMTP id ffacd0b85a97d-48871699455mr5497738f8f.28.1790269611952;
-        Thu, 24 Sep 2026 10:06:51 -0700 (PDT)
+        bh=EoiU00rV+S0xqnX0Qa+m79O1j8hVwxZkiSNaqTY6Z/A=;
+        b=pDOGraCVPxAbvXAKriUltIPuQz/dDPeyCBdJWeLTIyTZclgMbGZg+MFxkFqW0ReqT3
+         rBlrdjbOBdc8dd0TNlmyrPxuyM8me7M3NoMpglnC4MqaLTnC6UXZs+kRRfxTYrcdrLmL
+         2yynAK1XtcULh8e5dTagZWwzLoS4g5Dy+IJ6wmEsJtOtHD3AbQbzDcEW7Q1I6gqCYEiI
+         HoJ5IvEqOfE6liwaoE5Aljo4Ov/iHT5WLlJy3q8DjQfgOnuuPjnl9AhIfXFMzM44EBEG
+         v+vNnuJDJPzV11PigCgaKkmW8qf4E/AXcby0vLBzM6sPmb2nF70Um4eMfIoci2b5oQCp
+         NL3Q==
+X-Gm-Message-State: AFuF++mIwgytPoqkqtlPWvmC/tg1PSJCa6c4lnZrhA+hF671GhupNRx7
+	i2uV55m79lGJrD1FgYlz1YZp1sYsFmWHZimEBxbE8FqbnAOnNOAQz1kyl8lWk3mo
+X-Gm-Gg: AYBFou1StK2+wLVjL+yN9fKwNJ1CAS3KAg6YKUkKrBx8i1hCM8wVyDTcHPJRd8UoHb0
+	rMy+jcblYguRHKjqj3DCGJI0uxEZN3+zvjhM3Es5xu8CbOo+lAH//ev3aGmhfQofIFRrqX3l3WM
+	zyQDCteMS5NQWhDcT4vu07Vw88nKWsW2Nvtp42hYi6xQ3+6iVc+W/7ajgH7HMmQzHcPmyd1BvoU
+	pjDtG+NB2dRlSXI3AyowEB7Ions707loRBMQw1nGolVF8Nl9IlE6I4pE8f4es9SghDxO5GZVyCT
+	KT5y6L7t3rkqRrnCzRmiORWw3QJfJi+Sz2IcHOa2/APahBCssbwGyJTwfUWDs8qVFlLpVBy7Tn5
+	PHqAT11uBKo13ilLR0OUBQB86/rO98Ywx86sctPZsy/T8KnH08kaKnaXgQEPkPyY38U6V0wri0c
+	ZOZ70g/1W5iRV77C2hIZSOjN7ySM0n4dFkiFKXIJZHGYZ9SLAqPRiL3zT8bfs2rNjkcRYwhDR1n
+	o3CE/TNLsdYb8N8ZY8F6t6lqkb0GGnNgDELfuCfEer51ngJKWQgs1XG1Jz55CvarS0RXb9gVzMU
+	8mTgOPqfTbUkchRsKFrh7mhhhE+CNA3cpC2xpg==
+X-Received: by 2002:a05:600c:4e08:b0:499:8b13:3a98 with SMTP id 5b1f17b1804b1-49fe66c9f6fmr57468625e9.4.1790269613746;
+        Thu, 24 Sep 2026 10:06:53 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4887a30b1dfsm474002f8f.4.2026.09.24.10.06.51
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe0c5c41asm119956405e9.4.2026.09.24.10.06.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 10:06:51 -0700 (PDT)
+        Thu, 24 Sep 2026 10:06:53 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Emil Tsalapatis <emil@etsalapatis.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 2/7] selftests/bpf: Test verifier stack-read diagnostic attribution
-Date: Thu, 24 Sep 2026 19:06:36 +0200
-Message-ID: <20260924170646.2366016-3-memxor@gmail.com>
+Subject: [PATCH bpf-next v3 3/7] bpf: Drop dead spill diagnostic condition
+Date: Thu, 24 Sep 2026 19:06:37 +0200
+Message-ID: <20260924170646.2366016-4-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260924170646.2366016-1-memxor@gmail.com>
 References: <20260924170646.2366016-1-memxor@gmail.com>
@@ -80,134 +80,43 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5270; i=memxor@gmail.com; h=from:subject; bh=t6/OgB6it3JQ8/i8BerNowgOs5ZinF/Sf3BIZ/gf1Mw=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtrRLH/lyudM76923qZMfXx17kZdz40Tfz5eMbHE/wHn wY4J0he6yhlYRDjYpAVU2Qp+b+PyfhE5e9A22XcMHNYmUCGMHBxCsBEAlkYGb5d2hLCWXXBpuRR ZZZirrj3rX9ii9RO/q0J1jjOn8k/gZPhf1ntrziB0/+Urdb6G3BGJZrtC1DrMjs2U1uVtYc3/UE ABwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1639; i=memxor@gmail.com; h=from:subject; bh=+j8tjysSebyQiEKsSaaHGJKB861gN0qzOSXYqdtBPi4=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtrRHFd6MNlOSlLFt/4/enj2gdzblr9/pXc+LeYX67ry tYbRnmxHaUsDGJcDLJiiiwl//cxGZ+o/B1ou4wbZg4rE8gQBi5OAZjIHgFGhhOhartXPV8gP0Ps D1vfbZ6iO60FsbMvB2XIe36MXH5/qi0jw6Ke7/vkIvSupKkd+Hg7V3Vtl29s663159je3XQ9t1D qEiMA
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Verifier diagnostics distinguish uninitialized stack bytes from opaque
-dynptr, iterator, and IRQ-flag state, and identify variable-offset
-stack accesses without changing the existing verbose messages.
+diag_record_mod() suppresses lineage-preserving register writes when the
+diagnostic snapshot is unchanged. This is reachable for ALU operations that
+do not change the represented type or bounds, avoiding a redundant history
+event while retaining the register's earlier lineage.
 
-Add output assertions to the existing uninitialized-stack, dynptr, and
-iterator rejection cases. The uninitialized-stack assertion uses the
-CAP_PERFMON-less read inside the allocated stack, because a read below
-the allocated stack is rejected by the bounds check before the slot
-classification runs. Add a direct IRQ-flag read and a variable-offset
-atomic stack access to cover the other classifications. Retain an
-assertion for the legacy helper-worded verbose message in the atomic
-test.
+The condition appears to extend this suppression to spill events, but
+diag_mod_keeps_lineage() only accepts register writes. The spill producer also
+supplies a stack target and an explicit origin, so a spill can never satisfy
+the conjunction.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Restrict the condition to writes to reflect the filter's actual contract and
+avoid suggesting that it applies to spills.
+
+Link: https://lore.kernel.org/bpf/48e6f021b89562f68850fe21ef8c78719819b04cf9c4e4f50bc791937d37ace8@mail.kernel.org/
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../testing/selftests/bpf/progs/dynptr_fail.c |  3 +++
- tools/testing/selftests/bpf/progs/irq.c       | 13 +++++++++
- .../selftests/bpf/progs/iters_state_safety.c  |  3 +++
- .../selftests/bpf/progs/verifier_spill_fill.c |  2 ++
- .../selftests/bpf/progs/verifier_xadd.c       | 27 +++++++++++++++++++
- 5 files changed, 48 insertions(+)
+ kernel/bpf/diagnostics.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-index 1cd61d72c166..9418dfe4d7b7 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -560,6 +560,9 @@ int global(void *ctx)
- /* A direct read should fail */
- SEC("?raw_tp")
- __failure __msg("invalid read from stack")
-+__msg("Verification failed: Memory Safety: Direct read of dynptr stack state")
-+__msg("verifier-managed dynptr state")
-+__msg("Use dynptr helpers or kfuncs")
- int invalid_read1(void *ctx)
- {
- 	struct bpf_dynptr ptr;
-diff --git a/tools/testing/selftests/bpf/progs/irq.c b/tools/testing/selftests/bpf/progs/irq.c
-index 53df6d248e26..50727fa9b11d 100644
---- a/tools/testing/selftests/bpf/progs/irq.c
-+++ b/tools/testing/selftests/bpf/progs/irq.c
-@@ -14,6 +14,19 @@ extern int bpf_copy_from_user_str(void *dst, u32 dst__sz, const void *unsafe_ptr
- struct bpf_res_spin_lock lockA __hidden SEC(".data.A");
- struct bpf_res_spin_lock lockB __hidden SEC(".data.B");
- 
-+SEC("?tc")
-+__failure __msg("invalid read from stack")
-+__msg("Verification failed: Memory Safety: Direct read of IRQ flag stack state")
-+__msg("verifier-managed IRQ flag state")
-+__msg("Pass the saved IRQ flag to the matching restore kfunc")
-+int irq_flag_direct_read(struct __sk_buff *ctx)
-+{
-+	unsigned long flags;
-+
-+	bpf_local_irq_save(&flags);
-+	return flags;
-+}
-+
- SEC("?tc")
- __failure __msg("R1 type=map_value expected=fp")
- int irq_save_bad_arg(struct __sk_buff *ctx)
-diff --git a/tools/testing/selftests/bpf/progs/iters_state_safety.c b/tools/testing/selftests/bpf/progs/iters_state_safety.c
-index e5bb9fe6d5e5..b2ba4609a31e 100644
---- a/tools/testing/selftests/bpf/progs/iters_state_safety.c
-+++ b/tools/testing/selftests/bpf/progs/iters_state_safety.c
-@@ -354,6 +354,9 @@ int next_after_destroy_fail(void *ctx)
- 
- SEC("?raw_tp")
- __failure __msg("invalid read from stack")
-+__msg("Verification failed: Memory Safety: Direct read of iterator stack state")
-+__msg("verifier-managed iterator state")
-+__msg("Use iterator kfuncs")
- int __naked read_from_iter_slot_fail(void)
- {
- 	asm volatile (
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 39a1766dae3f..e1a698db0364 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -1277,6 +1277,8 @@ __description("stack_noperfmon: reject read of invalid slots")
- __success
- __caps_unpriv(CAP_BPF)
- __failure_unpriv __msg_unpriv("invalid read from stack off -8+1 size 8")
-+__msg_unpriv("Verification failed: Memory Safety: Uninitialized stack read")
-+__msg_unpriv("Initialize every byte in the stack range before reading it")
- __naked void stack_noperfmon_reject_invalid_read(void)
- {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/progs/verifier_xadd.c b/tools/testing/selftests/bpf/progs/verifier_xadd.c
-index 05a0a55adb45..7bde3da2f36e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_xadd.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_xadd.c
-@@ -121,4 +121,31 @@ l0_%=:	r0 = 42;					\
- "	::: __clobber_all);
- }
- 
-+SEC("tc")
-+__description("xadd with variable stack offset")
-+__failure
-+__msg("variable offset stack pointer cannot be passed into helper function")
-+__msg("Verification failed: Memory Safety: Variable-offset stack access")
-+__msg("The instruction would access the stack")
-+__msg("Use a fixed stack offset for the instruction")
-+__naked void xadd_variable_stack_offset(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;						\
-+	*(u64 *)(r10 - 16) = r1;			\
-+	*(u64 *)(r10 - 8) = r1;				\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 8;					\
-+	r1 = r10;					\
-+	r1 += -16;					\
-+	r1 += r0;					\
-+	r2 = 1;						\
-+	lock *(u64 *)(r1 + 0) += r2;			\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
+diff --git a/kernel/bpf/diagnostics.c b/kernel/bpf/diagnostics.c
+index 5ecfa86ed49f..496d24064532 100644
+--- a/kernel/bpf/diagnostics.c
++++ b/kernel/bpf/diagnostics.c
+@@ -1567,8 +1567,7 @@ static void diag_record_mod(struct bpf_verifier_env *env, u32 insn_idx,
+ 	} else if (diag_mod_insn_origin(env, insn_idx, &target, &event.mod.origin)) {
+ 		event.mod.origin_valid = true;
+ 	}
+-	if (old_reg && new_reg &&
+-	    (reason == BPF_DIAG_MOD_WRITE || reason == BPF_DIAG_MOD_SPILL) &&
++	if (old_reg && new_reg && reason == BPF_DIAG_MOD_WRITE &&
+ 	    !memcmp(&event.mod.old, &event.mod.new, sizeof(event.mod.old)) &&
+ 	    !event.mod.origin_valid &&
+ 	    diag_mod_keeps_lineage(env, &event))
 -- 
 2.53.0
 
