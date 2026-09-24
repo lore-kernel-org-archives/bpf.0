@@ -1,64 +1,64 @@
-Received: from mail-wr2-f11.google.com (mail-wr2-f11.google.com [74.125.225.75])
+Received: from mail-wm2-f7.google.com (mail-wm2-f7.google.com [74.125.225.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8724A6CE1
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:57:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954A24A6CF2
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790269072; cv=none; b=bAdZ8dW4rIVK/DiXLPKBJ9n9nzFyxzdLvpFuyMFQgSMZxE6kD4f5uplW8+HkkEFZkSPV/5nnmEh4Qb3SN3KOqfVUZmjsOjISqWzwEDhZazB5JaKsrlFE2OjBL0+mXqc7z4rrLStggBeQ5uQ+0FpZeRDhhnoi6k1AGsNfqnpWTJg=
+	t=1790269074; cv=none; b=COQ53w6e403VpzTBazuUPCw4P59isrUpcbp/TU4yS+Nq5CJ30mnwlaUh9lw8djItibBaqziYCRirxp8x7LBPQe9xqdZ9SfExKlp+/KXQV0AgDpXehY5nVYxmQA74mljCFi/cGyh+fZdWXf43TAJ0qFJAXu+nevw0vd/o6krG85Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790269072; c=relaxed/simple;
-	bh=foU+CDWPTxrIDmAptT6W0rSXfoIaYoSwKuhhy6sD3CE=;
+	s=arc-20240116; t=1790269074; c=relaxed/simple;
+	bh=Fi5q4eK45bMh/cAfYEgUrLxXx/YEo6ca3a4vRvVNJqw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GE3yKWsCsZ5UvNngWxKLERGlQmcmXeFCmVLrjVPGFsHsAuNPDJGDK47GCSyMDkdrvVjU5p/Dd3AWEQXoWDdz21fD0xSSSI8pAfdEO3/Yjj2L4gi8v0abZURrDIanceh0YzCaXNmTggvYOVfgzLOG2xXQyCatKnYkgaI+OjuNoHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DlhQK1dS; arc=none smtp.client-ip=74.125.225.75
+	 MIME-Version; b=QiGXYRPIlbGophMISRv5YPs6NIl3XR1Zgbcx/6JwBCakUjx4rCX0dR8pXfrcwET+R0C6w0zWJ+PxTRcsYaphADLLj6N31t4yJ6tr7f1qrpOaa03FMy51VWWNmSnRcbxw0qNMcIz6viBpS5hfifekTFVbt1kZoJV68jD06IsejSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZluXavTP; arc=none smtp.client-ip=74.125.225.135
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DlhQK1dS"
-Received: by mail-wr2-f11.google.com with SMTP id ffacd0b85a97d-482e61db882so7966f8f.0
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:57:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZluXavTP"
+Received: by mail-wm2-f7.google.com with SMTP id 5b1f17b1804b1-49e8361492fso301225e9.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:57:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790269069; x=1790873869; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790269071; x=1790873871; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=sWmpLznRtcIWm40i+Rexqi80TIZQ2nTaJhLPtJ4C1qA=;
-        b=DlhQK1dSz30wwVsxeh0whNR21JOAXMsaEWIRvySrtV7kkle9nVE/VmCj677TKo+pwe
-         68gEsKUKvH0pwGk+Qq46JlTzwITI8dYffVTcKMv+ufXMhN35yDSLeB5Ib1alssx2PyLK
-         gU4yK7oPnMA1JQXfUEvJxEeHewKT8diRCAiYh/77i/mB29Jxc/HuCOd0Vc0Py4auXwMA
-         BBrJKZHsbVWMFhiEhQgEJBHsYCVarJqecRkTigPWLZhb3MCIvPw4DCZN6JJXqwIzDYnK
-         dbHsQLKlqcbNDLqVwPesGWXriUwpZWnEHZ2ZM407g2/1rAFfFgQ+wnNbYRybnwaYxg2v
-         hsGQ==
+        bh=BCEPDgo41ULbDXFu78KWwVu3tn9rEbMu8NT52ZYw+VU=;
+        b=ZluXavTP7d4Fqu0am2V7w/wRBdvQneIaYeKXdr/X4m0ftis34q7B04xJZr7IRD7oTg
+         mlqXFASiEIYKr0HAb+VvOPWhcgf7Tc5u2wA9Hzl6Rqv0Fazi1VYLd7XH5VqkUBh3cSHi
+         oQ6lzEMuTMCo5/GcxDszSvs+DFDkd92XV4Jkom9Euw5GS7cpKN5IpWgURJYYPcIIfWyu
+         69ecGx1s4BgwFnxcxg60NHWhXmroOIVcrHVyKAiRybu/ppPYLXlN6tEataWozsrjehYV
+         HZXFwq7JZIlOdT6uKf3PCFVXCgI4KH2kj0sSLhZTkjnYKUsfKbBig4nIVTQidJxqW3TZ
+         RyxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790269069; x=1790873869;
+        d=1e100.net; s=20260707; t=1790269071; x=1790873871;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=sWmpLznRtcIWm40i+Rexqi80TIZQ2nTaJhLPtJ4C1qA=;
-        b=cgJN7DmUySn1zryaLfVe7AD2vRQd522A7+PT9wKFSD4hE7LrjvjYUshgM4mmSoBQpR
-         YpSa107VwB80i/F/pIwP10rvQnSF65XaZ+CEXJgeVg181FZ5iwykH+AX92GVa4KAm1DU
-         bxrUdIFbo8rOwNYuhGS4G8jQtjZ9TgokBK98Pv2q04HwJ7AueP5x0rLDgw2fy7l2Wk8j
-         wtIGERAKBHy8TfumsA5umoIBH/MlzipjKeB6pLamCzj9kGWcw7H/78mMbTE4CvN4GD+D
-         Kd/WvRjqCTv/SUYZeO5StDS/1REwONTVbo2yLOp+VoygbKFJObuqmYPUi7YMoQKVQ7+i
-         Qmmw==
-X-Gm-Message-State: AFuF++nMt23tlGrJp37HYudE3KbdvJWCJCOJr2kaFb1m3IM5Vy9j+eeP
-	vxXfIRirn13he6Xb3o1/MgWdWHB7y8p6DS/lQf2g2nY1mtuofry37zSZ3fQsTGlQ
-X-Gm-Gg: AYBFou0bD4Rzu+cDLabP+LN+3pMyOQTf7aLaoVWDAmWRN3pGYDb0Xe3JkSn8k2fjqWj
-	7St3/fwFh+t9Q+FigUEr627/jNGgRyg1lfksHyI25c7Q7eWs0SkCkFKxgRwB88aYAJZiS7gvCRr
-	a9BKBSrFLWiT0z/i3Y3T/a6gyaJfe5J8UDZbDxcZt9jfeKwDiWrmf7dsJSiwYd35+VvvZdYsXh4
-	dGbSiSsUJfIN+iYWwt7P94JopcRkb+Ivs4DpdBZQ+Zs912dSFHwrQBYQ95CZwV0da7+x3lLgf6f
-	VpB5PaiKA8n+aW3EhbYNq5Wog2vE0i+A9d9UQC4i7uSRXYjJfWfvMHr8hSzGPX70M9BxWDD7zpp
-	fC3lDd8ygtzVx5Iy5vKIku76P1FgpPAta01HgPsog3wSgx+vwLDRiuvNJfvYUOJ3jPIpuAgTwek
-	cuo5TpiY1nlesSaarCYtgONn/bRfEsv9+TtCNETFBzGdd9k6Z6/qPYCbWOeUEpv0fljTHrV8HQc
-	c7yM/ICj8dM3cC4Hj9CBQdpXBdyM9bCIKOPwCYzHBCUQQ/YlbMDtiEj06NuTMyoY5Du0r3+K8Uu
-	V/Rq4Z8TuDndqsmLtLiJgnUoPM8b8wN7gyEnlw==
-X-Received: by 2002:a05:600c:4e49:b0:49d:29ab:540b with SMTP id 5b1f17b1804b1-49fe66cec31mr51362275e9.15.1790269068778;
-        Thu, 24 Sep 2026 09:57:48 -0700 (PDT)
+        bh=BCEPDgo41ULbDXFu78KWwVu3tn9rEbMu8NT52ZYw+VU=;
+        b=yjL9MCez+iCtwR4KHjCzcVd1YFsuNSItlwZAlSofIifexswEOlil3QCiOlM3wx+iIb
+         4w/Y1EHl2HsS9/CKU0u5Xdn51VvgIGPwhTL1eGGb9guYVsyVOVqvKl7Qu1xK0hSnFRuo
+         dZu31HgAA0iTPkGcQAyW+Z/j4KFA33Q/XfKLoJV/DD1O3Lo4A+7riwSVkA155m9aO+54
+         hcoVb2lJJmtlmTKRE+sw304adsrM4vsuSfNW/JG9DNlZNodDOFgDooCqBDUohUDNNj7d
+         cQ1jyD/3NNdLNw4MW2qV9IO/nRfGlXYbfTY1J/8w+RJ91dyrqoq2+vp6qRQeZd6kQ0fJ
+         /abg==
+X-Gm-Message-State: AFuF++k7UnB+ttqti6Xl1vlP/NP2IXrf2p4tVYYV9SFf0OR+hsswdN0h
+	87urp3O+zCJQHlhOJuH1nR/Gx+0skHVfSEBkGxef7nVsPaGcBR7ba0AZBnD88zo0
+X-Gm-Gg: AYBFou2Fix4rByCWwgBxolOvzl9zQZVDu4+jzIlGsNZK0+PYvUQKZw5mNzScJhM2UJF
+	uj2jatSUiJJK2Qa/Me30FqXGXeDZSZkvtFJzTowKqXfFu2CcbT/4cJAB4KrMVJxNVyh7uyar4fv
+	z3aRerx/bXw+3iZTfEs1N+n98kaDzDW0BKE5xIQIwN4/uAHOaOJnVmtRwMii3+1IqxNlQVsiVxi
+	uwoscv8rVK3EzsHZYBuSP+YAqztPz2azfWB3+xN+uAZ9kujvmT9Uxuejw5XVhUu8iiHvwc8LXJn
+	ilvymEG39qdWM9Wy8jqOoucxg4v3A89g0BizF1pwOCEofAWJGhsbQuGJq6GPcdM2+yBXHlGULfa
+	k1v0ZjkreJOd8OGoyIXtKNhdAeV9j8HMbm+nJZRUKIG0+7tLLQ6Cn/oSJKNS1jXpOR0Y2fNvwgE
+	vnSn2FUsmk/ggVUZsE6BFy5/XlooovhEDLS/KAEVdqBstyG7PkCVJjNofH2vahLfIn6nnfKWeXm
+	1I2WMPKQScGTYAZxAi8Yl/DOwDvRn3Jz06Qpr98Pa0/c0jOdccrgg5AnHmU6s05aCk6ZkMtz5B2
+	Rw1CRLqQoO8qCJT2SfhdLJL14NeE+428h2+Dbw==
+X-Received: by 2002:a05:600c:138f:b0:49e:602a:b4ec with SMTP id 5b1f17b1804b1-49fe66d2700mr55199925e9.8.1790269070772;
+        Thu, 24 Sep 2026 09:57:50 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fee6ca26fsm3319225e9.0.2026.09.24.09.57.48
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe5cbd77bsm95438225e9.8.2026.09.24.09.57.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 09:57:48 -0700 (PDT)
+        Thu, 24 Sep 2026 09:57:50 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -69,9 +69,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 04/18] bpf: Track backtracking stack slots with bitmaps
-Date: Thu, 24 Sep 2026 18:57:05 +0200
-Message-ID: <20260924165740.2146806-5-memxor@gmail.com>
+Subject: [PATCH bpf-next v4 05/18] bpf: Track scratched stack slots with a bitmap
+Date: Thu, 24 Sep 2026 18:57:06 +0200
+Message-ID: <20260924165740.2146806-6-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260924165740.2146806-1-memxor@gmail.com>
 References: <20260924165740.2146806-1-memxor@gmail.com>
@@ -81,264 +81,79 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=9878; i=memxor@gmail.com; h=from:subject; bh=foU+CDWPTxrIDmAptT6W0rSXfoIaYoSwKuhhy6sD3CE=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtraH72Lum+LWxNk84Iu2ausn0kJsAxp0W/4fmzox5HG dNnflfoKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwEQ6zzIydMc9dgq2TZSSi1k+ Ob0mfBdX0jNxPb9lvkXdRc2fX8bZMzIsVBbeftSpY++02lusU9QzDk5OX6i/a76gi/+tD5oXHha yAQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2740; i=memxor@gmail.com; h=from:subject; bh=Fi5q4eK45bMh/cAfYEgUrLxXx/YEo6ca3a4vRvVNJqw=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWtraL76r1Qxn2TOh3+XJPC6+ryM3NFpMu2o/vS2z108V rtkb0/uKGVhEONikBVTZCn5v4/J+ETl70DbZdwwc1iZQIYwcHEKwEQ8jBn+R7Zxz4t7onnz35Wg tx8qjKLlr/5rbcgNlVQpavRdcuK/BCPDlFz/jrntoZueOBh5zpddW3X39+T/UanVc7ed6LumcOI 9BwA=
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-Precision backtracking keeps the stack slots that still need a precise
-mark in one u64 per frame, which ties it to frames of at most 64 slots.
-Turn the per-frame masks into bitmaps sized by MAX_BPF_STACK_SLOTS and
-use the bitmap helpers for setting, clearing, testing and iterating
-them. The formatting helper takes a bitmap and the leftover-slot bug
-reports print the formatted slot list instead of a hex mask.
-
-mark_reg_stack_read() collected zero spills in a u64 of its own before
-handing it to the backtracker; it now counts them and revisits the
-range to mark each slot, which drops the only remaining mask-typed
-entry point.
+The set of stack slots touched since the verifier state was last
+printed lives in a u64, so the log could only ever mark the first 64
+slots of a frame as scratched. Make it a bitmap sized by
+MAX_BPF_STACK_SLOTS and go through the bitmap helpers for setting,
+testing, clearing and filling it.
 
 No functional change.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf_verifier.h | 13 +++-----
- kernel/bpf/backtrack.c       | 65 ++++++++++++++++++++++--------------
- kernel/bpf/verifier.c        | 15 ++++++---
- 3 files changed, 54 insertions(+), 39 deletions(-)
+ include/linux/bpf_verifier.h | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 7d5da5b38e0e..781dc5ca1fe2 100644
+index 781dc5ca1fe2..e64cfb3fe675 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -900,7 +900,7 @@ struct backtrack_state {
- 	struct bpf_verifier_env *env;
- 	u32 frame;
- 	u32 reg_masks[MAX_CALL_FRAMES];
--	u64 stack_masks[MAX_CALL_FRAMES];
-+	unsigned long stack_masks[MAX_CALL_FRAMES][BITS_TO_LONGS(MAX_BPF_STACK_SLOTS)];
- 	u8 stack_arg_masks[MAX_CALL_FRAMES];
- };
+@@ -1092,7 +1092,7 @@ struct bpf_verifier_env {
+ 	 */
+ 	u32 scratched_regs;
+ 	/* Same as scratched_regs but for stack slots */
+-	u64 scratched_stack_slots;
++	DECLARE_BITMAP(scratched_stack_slots, MAX_BPF_STACK_SLOTS);
+ 	u64 prev_log_pos, prev_insn_print_pos;
+ 	/* buffer used to temporary hold constants as scalar registers */
+ 	struct bpf_reg_state fake_reg[1];
+@@ -1520,7 +1520,7 @@ static inline void mark_reg_scratched(struct bpf_verifier_env *env, u32 regno)
  
-@@ -1367,12 +1367,7 @@ static inline void bpf_bt_set_frame_reg(struct backtrack_state *bt, u32 frame, u
- 
- static inline void bpf_bt_set_frame_slot(struct backtrack_state *bt, u32 frame, u32 slot)
+ static inline void mark_stack_slot_scratched(struct bpf_verifier_env *env, u32 spi)
  {
--	bt->stack_masks[frame] |= 1ull << slot;
--}
--
--static inline void bpf_bt_set_frame_slot_mask(struct backtrack_state *bt, u32 frame, u64 mask)
--{
--	bt->stack_masks[frame] |= mask;
-+	__set_bit(slot, bt->stack_masks[frame]);
+-	env->scratched_stack_slots |= 1ULL << spi;
++	__set_bit(spi, env->scratched_stack_slots);
  }
  
- static inline void bt_set_frame_stack_arg_slot(struct backtrack_state *bt, u32 frame, u32 slot)
-@@ -1387,7 +1382,7 @@ static inline bool bt_is_frame_reg_set(struct backtrack_state *bt, u32 frame, u3
+ static inline bool reg_scratched(const struct bpf_verifier_env *env, u32 regno)
+@@ -1528,27 +1528,28 @@ static inline bool reg_scratched(const struct bpf_verifier_env *env, u32 regno)
+ 	return (env->scratched_regs >> regno) & 1;
+ }
  
- static inline bool bt_is_frame_slot_set(struct backtrack_state *bt, u32 frame, u32 slot)
+-static inline bool stack_slot_scratched(const struct bpf_verifier_env *env, u64 regno)
++static inline bool stack_slot_scratched(const struct bpf_verifier_env *env, u32 spi)
  {
--	return bt->stack_masks[frame] & (1ull << slot);
-+	return test_bit(slot, bt->stack_masks[frame]);
+-	return (env->scratched_stack_slots >> regno) & 1;
++	return test_bit(spi, env->scratched_stack_slots);
  }
  
- bool bpf_map_is_rdonly(const struct bpf_map *map);
-@@ -1588,7 +1583,7 @@ struct bpf_subprog_info *bpf_find_containing_subprog(struct bpf_verifier_env *en
- const char *bpf_subprog_name(const struct bpf_verifier_env *env, int subprog);
- int bpf_jmp_offset(struct bpf_insn *insn);
- struct bpf_iarray *bpf_insn_successors(struct bpf_verifier_env *env, u32 idx);
--void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, u64 stack_mask);
-+void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, const unsigned long *stack_mask);
- bool bpf_subprog_is_global(const struct bpf_verifier_env *env, int subprog);
- 
- /* Kinds of member a by-value struct or union may be composed of. */
-diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
-index 06630acd0d1f..0e38b9575328 100644
---- a/kernel/bpf/backtrack.c
-+++ b/kernel/bpf/backtrack.c
-@@ -129,13 +129,26 @@ static inline void bt_reset(struct backtrack_state *bt)
- 	bt->env = env;
- }
- 
--static inline u32 bt_empty(struct backtrack_state *bt)
-+static inline bool bt_frame_stack_empty(struct backtrack_state *bt, u32 frame)
+ static inline bool verifier_state_scratched(const struct bpf_verifier_env *env)
  {
--	u64 mask = 0;
-+	return bitmap_empty(bt->stack_masks[frame], MAX_BPF_STACK_SLOTS);
-+}
-+
-+static inline bool bt_stack_empty(struct backtrack_state *bt)
-+{
-+	return bt_frame_stack_empty(bt, bt->frame);
-+}
-+
-+static inline bool bt_empty(struct backtrack_state *bt)
-+{
-+	u32 mask = 0;
- 	int i;
- 
--	for (i = 0; i <= bt->frame; i++)
--		mask |= bt->reg_masks[i] | bt->stack_masks[i] | bt->stack_arg_masks[i];
-+	for (i = 0; i <= bt->frame; i++) {
-+		mask |= bt->reg_masks[i] | bt->stack_arg_masks[i];
-+		if (!bt_frame_stack_empty(bt, i))
-+			return false;
-+	}
- 
- 	return mask == 0;
+-	return env->scratched_regs || env->scratched_stack_slots;
++	return env->scratched_regs ||
++	       !bitmap_empty(env->scratched_stack_slots, MAX_BPF_STACK_SLOTS);
  }
-@@ -187,7 +200,7 @@ static inline void bt_clear_reg(struct backtrack_state *bt, u32 reg)
  
- static inline void bt_clear_frame_slot(struct backtrack_state *bt, u32 frame, u32 slot)
+ static inline void mark_verifier_state_clean(struct bpf_verifier_env *env)
  {
--	bt->stack_masks[frame] &= ~(1ull << slot);
-+	__clear_bit(slot, bt->stack_masks[frame]);
+ 	env->scratched_regs = 0U;
+-	env->scratched_stack_slots = 0ULL;
++	bitmap_zero(env->scratched_stack_slots, MAX_BPF_STACK_SLOTS);
  }
  
- static inline u32 bt_frame_reg_mask(struct backtrack_state *bt, u32 frame)
-@@ -200,14 +213,14 @@ static inline u32 bt_reg_mask(struct backtrack_state *bt)
- 	return bt->reg_masks[bt->frame];
- }
- 
--static inline u64 bt_frame_stack_mask(struct backtrack_state *bt, u32 frame)
-+static inline unsigned long *bt_frame_stack_mask(struct backtrack_state *bt, u32 frame)
+ /* Used for printing the entire verifier state. */
+ static inline void mark_verifier_state_scratched(struct bpf_verifier_env *env)
  {
- 	return bt->stack_masks[frame];
+ 	env->scratched_regs = ~0U;
+-	env->scratched_stack_slots = ~0ULL;
++	bitmap_fill(env->scratched_stack_slots, MAX_BPF_STACK_SLOTS);
  }
  
--static inline u64 bt_stack_mask(struct backtrack_state *bt)
-+static inline unsigned long *bt_stack_mask(struct backtrack_state *bt)
- {
--	return bt->stack_masks[bt->frame];
-+	return bt_frame_stack_mask(bt, bt->frame);
- }
- 
- static inline u8 bt_stack_arg_mask(struct backtrack_state *bt)
-@@ -239,17 +252,16 @@ static void fmt_reg_mask(char *buf, ssize_t buf_sz, u32 reg_mask)
- 			break;
- 	}
- }
--/* format stack slots bitmask, e.g., "-8,-24,-40" for 0x15 mask */
--void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, u64 stack_mask)
-+
-+/* format stack slots bitmask, e.g., "-8,-24,-40" for slots 0, 2 and 4 */
-+void bpf_fmt_stack_mask(char *buf, ssize_t buf_sz, const unsigned long *stack_mask)
- {
--	DECLARE_BITMAP(mask, 64);
- 	bool first = true;
- 	int i, n;
- 
- 	buf[0] = '\0';
- 
--	bitmap_from_u64(mask, stack_mask);
--	for_each_set_bit(i, mask, 64) {
-+	for_each_set_bit(i, stack_mask, MAX_BPF_STACK_SLOTS) {
- 		n = snprintf(buf, buf_sz, "%s%d", first ? "" : ",", -(i + 1) * 8);
- 		first = false;
- 		buf += n;
-@@ -461,10 +473,11 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
- 				/* we are now tracking register spills correctly,
- 				 * so any instance of leftover slots is a bug
- 				 */
--				if (bt_stack_mask(bt) != 0) {
--					verifier_bug(env,
--						     "static subprog leftover stack slots %llx",
--						     bt_stack_mask(bt));
-+				if (!bt_stack_empty(bt)) {
-+					bpf_fmt_stack_mask(env->tmp_str_buf, TMP_STR_BUF_LEN,
-+							   bt_stack_mask(bt));
-+					verifier_bug(env, "static subprog leftover stack slots %s",
-+						     env->tmp_str_buf);
- 					return -EFAULT;
- 				}
- 				/* propagate r1-r5 to the caller */
-@@ -497,9 +510,11 @@ static int backtrack_insn(struct bpf_verifier_env *env, int idx, int subseq_idx,
- 					     bt_reg_mask(bt));
- 				return -EFAULT;
- 			}
--			if (bt_stack_mask(bt) != 0) {
--				verifier_bug(env, "callback leftover stack slots %llx",
--					     bt_stack_mask(bt));
-+			if (!bt_stack_empty(bt)) {
-+				bpf_fmt_stack_mask(env->tmp_str_buf, TMP_STR_BUF_LEN,
-+						   bt_stack_mask(bt));
-+				verifier_bug(env, "callback leftover stack slots %s",
-+					     env->tmp_str_buf);
- 				return -EFAULT;
- 			}
- 			/* clear r1-r5 in callback subprog's mask */
-@@ -881,7 +896,7 @@ int bpf_mark_chain_precision(struct bpf_verifier_env *env,
- 			if (st->curframe == 0 &&
- 			    st->frame[0]->subprogno > 0 &&
- 			    st->frame[0]->callsite == BPF_MAIN_FUNC &&
--			    bt_stack_mask(bt) == 0 &&
-+			    bt_stack_empty(bt) &&
- 			    (bt_reg_mask(bt) & ~BPF_REGMASK_ARGS) == 0) {
- 				bitmap_from_u64(mask, bt_reg_mask(bt));
- 				for_each_set_bit(i, mask, 32) {
-@@ -895,8 +910,9 @@ int bpf_mark_chain_precision(struct bpf_verifier_env *env,
- 				return 0;
- 			}
- 
--			verifier_bug(env, "backtracking func entry subprog %d reg_mask %x stack_mask %llx",
--				     st->frame[0]->subprogno, bt_reg_mask(bt), bt_stack_mask(bt));
-+			bpf_fmt_stack_mask(env->tmp_str_buf, TMP_STR_BUF_LEN, bt_stack_mask(bt));
-+			verifier_bug(env, "backtracking func entry subprog %d reg_mask %x stack_mask %s",
-+				     st->frame[0]->subprogno, bt_reg_mask(bt), env->tmp_str_buf);
- 			return -EFAULT;
- 		}
- 
-@@ -957,8 +973,7 @@ int bpf_mark_chain_precision(struct bpf_verifier_env *env,
- 				}
- 			}
- 
--			bitmap_from_u64(mask, bt_frame_stack_mask(bt, fr));
--			for_each_set_bit(i, mask, 64) {
-+			for_each_set_bit(i, bt_frame_stack_mask(bt, fr), MAX_BPF_STACK_SLOTS) {
- 				if (verifier_bug_if(i >= bpf_stack_nr_slots(func),
- 						    env, "stack slot %d, total slots %d",
- 						    i, bpf_stack_nr_slots(func)))
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 401540bf6586..2b87cb9beea0 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3934,10 +3934,9 @@ static int mark_reg_stack_read(struct bpf_verifier_env *env,
- {
- 	struct bpf_verifier_state *vstate = env->cur_state;
- 	struct bpf_func_state *state = vstate->frame[vstate->curframe];
--	u64 zero_spill_mask = 0;
- 	int i, slot, spi;
- 	u8 *stype;
--	int zeros = 0;
-+	int zeros = 0, zero_spills = 0;
- 
- 	for (i = min_off; i < max_off; i++) {
- 		slot = -i - 1;
-@@ -3950,7 +3949,7 @@ static int mark_reg_stack_read(struct bpf_verifier_env *env,
- 		}
- 		if (stype[slot % BPF_REG_SIZE] == STACK_SPILL &&
- 		    bpf_register_is_null(&bpf_stack_slot(ptr_state, spi)->spilled_ptr)) {
--			zero_spill_mask |= 1ull << spi;
-+			zero_spills++;
- 			zeros++;
- 			continue;
- 		}
-@@ -3961,8 +3960,14 @@ static int mark_reg_stack_read(struct bpf_verifier_env *env,
- 		 * so the whole register == const_zero.
- 		 */
- 		__mark_reg_const_zero(env, &state->regs[dst_regno]);
--		if (zero_spill_mask) {
--			bpf_bt_set_frame_slot_mask(&env->bt, ptr_state->frameno, zero_spill_mask);
-+		if (zero_spills) {
-+			for (i = min_off; i < max_off; i++) {
-+				slot = -i - 1;
-+				spi = slot / BPF_REG_SIZE;
-+				stype = bpf_stack_slot(ptr_state, spi)->slot_type;
-+				if (stype[slot % BPF_REG_SIZE] == STACK_SPILL)
-+					bpf_bt_set_frame_slot(&env->bt, ptr_state->frameno, spi);
-+			}
- 			return mark_chain_precision_batch(env, env->cur_state);
- 		}
- 	} else {
+ static inline bool bpf_stack_narrow_access_ok(int off, int fill_size, int spill_size)
 -- 
 2.53.0
 
