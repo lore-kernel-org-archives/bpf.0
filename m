@@ -1,44 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD572D5412
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 01:44:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7389C32D0FC
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 01:44:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790214275; cv=none; b=svQI+mE5M2sIdSWBiVkQTlupFfizygK9JhoGxXLW3M80cW61T58P3veSMd8nkIWKMFxRPdxlQkP1+1mnq40p9VJd2G1nV8uVFIC8h8FKWxf6cKEVxAlNzOile1kynsIQfEFhNCyd/tvEbiwcAYS4MKQzRdDHAB7ipOmwUeWUoLY=
+	t=1790214275; cv=none; b=QgO5kEA5zuvotp637dmj80Kf7wUJ9spGHN5EiJSj5nmqEQ9l2YZ3o/oOaI0FahoI5eYShdU8O59mTS1hOCLJ0gb8vqIMDIpb6pNGAlYQvpX9x4y3KXpYbmj+eZSPMiA6WdqRcp2aCvyHCzVLd73yQ/R/BIMeY/gcfmVRzT8J8XU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1790214275; c=relaxed/simple;
-	bh=K/iVaKi9LgVkL1h6qTwY7ePdhbfMAVL/ey30klLhH6Y=;
+	bh=Sr5qIUxVw2kaigMk3/IIL3c21ChMRIgZV5Fu2+vBW5w=;
 	h=From:Subject:To:Cc:In-Reply-To:References:Content-Type:Date:
-	 Message-Id; b=IMA7Um0SIpAd4nQ8WhP/DqcfaUe5Ne3Zf/1S+p/ylBKbxpk2UBCxN30MBLYQUKF/YozpzN/+sD2Qly2MrJx/ZizM5MyxMvJOBp95B9+8QCp+aH6yXeLgArKad3x/s97ozfG8kI5Sidsk2t0YZUKT5kzP54irIsh230Tkgyg5yJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nW5Cfq9h; arc=none smtp.client-ip=100.103.45.18
+	 Message-Id; b=NXgzr0AfnCGXXtzZI1r22k9xYrUB3zpaf3lfaClNPePoZFLI7rLcoXiEe13z3G1K9s/4yfSNZjrcpw+kg8vnw9r/XcxPmjQ2LnCvPTFKFWtf3IYmxWIxxnAW3paYcM0+aYEGe7LNXlIFa83hgGieIcg1TvYL2V9M+8AiTV9mu38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F6qVV9PO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nW5Cfq9h"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 829931F000FF;
-	Thu, 24 Sep 2026 01:44:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F6qVV9PO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 214B01F00893;
+	Thu, 24 Sep 2026 01:44:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790214273;
-	bh=mr7+dFnisMGyi67TaqvVrox3zoLvYh4i4peaTM/ZywM=;
+	s=k20260515; t=1790214274;
+	bh=vlYpsIDwTk/ML0EJUTGZBAIZ5E2I4cmV1QhP1ezepL4=;
 	h=From:Subject:Reply-To:To:Cc:In-Reply-To:References:Date;
-	b=nW5Cfq9h5zrhucses6E9IAJSTuOOJFHQsAf6q3nLLxjn8R5BqRVQmszrIQln5vhVW
-	 UgJuBP/CIJqxhVEao4APQxlDfRI5NVcRFpj6lJ2lxqljw0JQdFxS/HQU6M11rzTH4u
-	 X3+VjJZFZeoCkR216FcT2rsKXg2hJuymEbEyQ9fG5T96JO1fsaLl6y/cBm+qdnm5NE
-	 PYPMXqfEJdFWpCo2cWst8TDpKd2r4FZncoPvIKG5oO5GxvIss8KeU6Tqp31xmbyuLp
-	 oKAETB+zhwWCpBohgYRJvXE9LytZUxcXYLK2nuZIwer8eX+C2lnwGxVG6AOhgXc0Pq
-	 kAR3tbo1kF/HA==
+	b=F6qVV9POIfW+1F7Gq72bax6plY1gX7kvbL1mf/JLicgDtVc2TmhpCsr4pYwzYXDer
+	 62M5CE++N4jsYrxoqeaF/UaY97HN+7tqdiREGwzTk8SCtcA2OZQIFcAx2il8DQachg
+	 HR5pHCPGkyE8lSBPvQk7n7l/imsKH2e8QOnoYpcTkxQrUyLTi88eFC8ssiZAPqq9N8
+	 KjrRVRi80sNNdkOulaA9s7Y+NVscUDiPmIInXM7V7F2fRHkVbA+xebHraR2YfMBoUL
+	 IEA6ojONoM4V0V6cld8mGcWzrzHXKzJ10wCRrO4//C12yX849ERnnEoRxEfVnpRfsM
+	 5ESwbjhbheD3w==
 From: sashiko-bot@kernel.org
-Subject: Re: [PATCH net-next 4/8] eth: mpnic: implement Tx queue allocation
- and cleanup
+Subject: Re: [PATCH net-next 5/8] eth: mpnic: start and stop the Tx HW
+ queues
 Reply-To: sashiko-reviews@lists.linux.dev
 To: "Daniel Zahka" <daniel.zahka@gmail.com>
 Cc: bpf@vger.kernel.org
-In-Reply-To: <20260922-linux-mpnic-v1-4-236844f53072@gmail.com>
+In-Reply-To: <20260922-linux-mpnic-v1-5-236844f53072@gmail.com>
 References: <20260922-linux-mpnic-v1-0-236844f53072@gmail.com>
- <20260922-linux-mpnic-v1-4-236844f53072@gmail.com>
+ <20260922-linux-mpnic-v1-5-236844f53072@gmail.com>
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 Date: Thu, 24 Sep 2026 01:44:33 +0000
-Message-Id: <20260924014433.829931F000FF@smtp.kernel.org>
+Message-Id: <20260924014434.214B01F00893@smtp.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -47,109 +47,145 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 
 Thank you for your contribution! Sashiko AI review found 2 potential issue(=
 s) to consider:
-- [Critical] eth: mpnic: TOCTOU IOMMU bypass when unmapping Tx descriptors
-- [High] eth: mpnic: missing bounds check on hardware completion head
+- [High] eth: mpnic: hardware pipeline deadlock from incorrect teardown seq=
+uence
+- [High] eth: mpnic: DMA use-after-free due to ignored queue idle timeout
 --
 
-commit 154e61c52ca2706a8f945c1575f31b7f328f5529
+commit f74c6bf4e3ce87eee577108084c59c43728d6d01
 Author: Daniel Zahka <daniel.zahka@gmail.com>
 
-eth: mpnic: implement Tx queue allocation and cleanup
+eth: mpnic: start and stop the Tx HW queues
 
-Queues come in triads of two work queues and one completion queue. The
-Tx triad only uses the first work queue for now, the second one will be
-used for the XDP ring later.
+This patch points the hardware at the descriptor rings and provides functio=
+ns
+for turning the Tx queues on and off. Teardown waits for the DMA engines to
+go idle before the ring memory can be freed.
 
 > diff --git a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c b/drivers/net/e=
 thernet/meta/mpnic/mpnic_txrx.c
-> index 0000000000000..fe360a26a27be 100644
-> --- /dev/null
+> index fe360a26a27be..cb4d1427434c9 100644
+> --- a/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
 > +++ b/drivers/net/ethernet/meta/mpnic/mpnic_txrx.c
+
 [ ... ]
-> +static void mpnic_unmap_single_twd(struct device *dev, __le64 *twd)
+
+> @@ -460,6 +461,180 @@ void mpnic_reset_netif_queues(struct mpnic_net *mpn)
+>  	}
+>  }
+> =20
+> +static void mpnic_enable_twq(struct mpnic_dev *mpd, struct mpnic_ring *t=
+wq)
+
+[ ... ]
+
+> +void mpnic_enable(struct mpnic_net *mpn)
 > +{
-> +	u64 raw_twd =3D le64_to_cpu(*twd);
+> +	struct mpnic_dev *mpd =3D mpn->mpd;
+> +	int i, j;
 > +
-> +	dma_unmap_single(dev, FIELD_GET(MPNIC_TWD_ADDR, raw_twd),
-> +			 FIELD_GET(MPNIC_TWD_LEN, raw_twd), DMA_TO_DEVICE);
+> +	for (i =3D 0; i < mpn->num_napi; i++) {
+> +		struct mpnic_napi_vector *nv =3D mpn->napi[i];
+> +
+> +		for (j =3D 0; j < nv->txt_count; j++) {
+> +			mpnic_enable_twq(mpd, &nv->qt[j].sub0);
+> +			mpnic_enable_tcq(mpd, nv, &nv->qt[j].cmpl);
+> +		}
+> +	}
+> +
+> +	mpnic_wrfl(mpd);
 > +}
-> +
-> +static void mpnic_unmap_page_twd(struct device *dev, __le64 *twd)
-> +{
-> +	u64 raw_twd =3D le64_to_cpu(*twd);
-> +
-> +	dma_unmap_page(dev, FIELD_GET(MPNIC_TWD_ADDR, raw_twd),
-> +		       FIELD_GET(MPNIC_TWD_LEN, raw_twd), DMA_TO_DEVICE);
-> +}
-
-[Severity: Critical]
-Can a malicious PCIe device corrupt host memory by rewriting these descript=
-ors?
-
-During Tx completion, the DMA address and length are read directly from the
-device-accessible descriptor ring in mpnic_clean_twq0() and passed to
-dma_unmap_single() and dma_unmap_page() here. Because the descriptor memory
-is coherent DMA memory, the device could change the addresses between
-submission and completion, bypassing IOMMU protections.
-
-Could we store the DMA metadata in host-private memory (like the tx_buf
-array) instead of reading it back from the ring?
-
-> +
-> +static void mpnic_clean_twq0(struct mpnic_napi_vector *nv, int napi_budg=
-et,
-> +			     struct mpnic_ring *ring, bool discard,
-> +			     unsigned int hw_head)
-> +{
-> +	u64 total_bytes =3D 0, total_packets =3D 0;
-> +	unsigned int head =3D ring->head;
-> +	struct netdev_queue *txq;
-> +	unsigned int clean_desc;
-> +
-> +	clean_desc =3D (hw_head - head) & ring->size_mask;
-> +
-> +	while (clean_desc) {
-> +		struct sk_buff *skb =3D ring->tx_buf[head];
-> +		unsigned int desc_cnt;
-> +
-> +		desc_cnt =3D MPNIC_XMIT_CB(skb)->desc_count;
 
 [Severity: High]
-Is it possible for a malfunctioning or malicious device to cause a NULL poi=
-nter
-dereference here?
+Does enabling the Transmit Work Queue (TWQ) before the Transmit Completion
+Queue (TCQ) allow in-flight descriptors to complete against a disabled TCQ?
 
-The loop boundary clean_desc is calculated from the untrusted hw_head witho=
-ut
-validating it against the software-maintained tail that tracks actually
-submitted descriptors. If the hardware reports an out-of-bounds hw_head, the
-loop will access unpopulated slots in ring->tx_buf, returning a NULL skb th=
-at
-gets immediately dereferenced.
+Could we swap the initialization order in mpnic_enable so the TCQ is ready
+before the hardware picks up new work?
 
-> +		if (desc_cnt > clean_desc)
-> +			break;
+> +static void mpnic_disable_twq(struct mpnic_dev *mpd, struct mpnic_ring *=
+txr)
+> +{
+> +	u64 twq_ctl =3D mpnic_rd64(mpd, MPNIC_TWQ_CTL(txr->q_idx, 0));
 > +
-> +		ring->tx_buf[head] =3D NULL;
+> +	twq_ctl &=3D ~MPNIC_TWQ_CTL_ENABLE;
+> +	mpnic_wr64(mpd, MPNIC_TWQ_CTL(txr->q_idx, 0), twq_ctl);
+> +}
 > +
-> +		clean_desc -=3D desc_cnt;
+> +static void mpnic_disable_tcq(struct mpnic_dev *mpd, struct mpnic_ring *=
+txr)
+> +{
+> +	mpnic_wr64(mpd, MPNIC_TCQ_CTL(txr->q_idx), 0);
+> +	mpnic_wr64(mpd, MPNIC_TIM_INTR_MASK(txr->q_idx),
+> +		   MPNIC_TIM_INTR_MASK_MASK);
+> +}
 > +
-> +		/* Step over the metadata descriptor */
-> +		head++;
-> +		head &=3D ring->size_mask;
-> +		desc_cnt--;
+> +void mpnic_disable(struct mpnic_net *mpn)
+> +{
+> +	struct mpnic_dev *mpd =3D mpn->mpd;
+> +	int i, j;
 > +
-> +		mpnic_unmap_single_twd(nv->dev, &ring->desc[head]);
-> +		head++;
-> +		head &=3D ring->size_mask;
-> +		desc_cnt--;
+> +	for (i =3D 0; i < mpn->num_napi; i++) {
+> +		struct mpnic_napi_vector *nv =3D mpn->napi[i];
 > +
-> +		while (desc_cnt--) {
-> +			mpnic_unmap_page_twd(nv->dev, &ring->desc[head]);
-> +			head++;
-> +			head &=3D ring->size_mask;
+> +		for (j =3D 0; j < nv->txt_count; j++) {
+> +			mpnic_disable_twq(mpd, &nv->qt[j].sub0);
+> +			mpnic_disable_tcq(mpd, &nv->qt[j].cmpl);
 > +		}
+> +	}
+> +
+> +	mpnic_wrfl(mpd);
+> +}
+
+[Severity: High]
+Does shutting down the TCQ concurrently with the TWQ stall the hardware
+pipeline during teardown?
+
+If the TWQ is disabled, packets already in the pipeline still need to be
+completed. By disabling the TCQ immediately in mpnic_disable, the DMA engine
+(TDE) is blocked from writing completions to host memory.
+
+Will this prevent the pipeline from ever reaching an idle state, guaranteei=
+ng
+that the subsequent wait for idle queues times out? Should we disable the
+TWQ, wait for the pipeline to drain, and then disable the TCQ?
+
+[ ... ]
+
+> +void mpnic_wait_all_queues_idle(struct mpnic_dev *mpd)
+> +{
+> +	static const struct mpnic_idle_regs queues[] =3D {
+> +		{ MPNIC_TWQ_IDLE(0), MPNIC_TWQ_IDLE_CNT, "TWQ" },
+> +		{ MPNIC_TQS_IDLE(0), MPNIC_TQS_IDLE_CNT, "TQS" },
+> +		{ MPNIC_TDE_IDLE(0), MPNIC_TDE_IDLE_CNT, "TDE" },
+> +		{ MPNIC_TCQ_IDLE(0), MPNIC_TCQ_IDLE_CNT, "TCQ" },
+> +	};
+> +	u32 non_idle_bitmap;
+> +	int err;
+> +
+> +	err =3D read_poll_timeout(mpnic_non_idle_queues, non_idle_bitmap,
+> +				!non_idle_bitmap, 20, 500000, false, mpd,
+> +				queues, ARRAY_SIZE(queues));
+> +	if (err)
+> +		mpnic_idle_dump(mpd, queues, ARRAY_SIZE(queues),
+> +				non_idle_bitmap, err);
+> +}
+
+[Severity: High]
+Does returning void here prevent callers from handling hardware wedges safe=
+ly?
+
+If the 500ms timeout is reached in read_poll_timeout(), mpnic_wait_all_queu=
+es_idle
+logs an error but the caller will unconditionally proceed to free the DMA-m=
+apped
+descriptor rings.
+
+Could freeing this memory while the DMA engine is still active cause a DMA
+use-after-free, leading to IOMMU faults or memory corruption? Should this
+function return the error so callers can either leak the memory or issue a
+hard device reset if the device fails to idle?
 
 --=20
 Sashiko AI review =C2=B7 https://sashiko.dev/#/patchset/20260922-linux-mpni=
-c-v1-0-236844f53072@gmail.com?part=3D4
+c-v1-0-236844f53072@gmail.com?part=3D5
