@@ -1,64 +1,64 @@
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F73438484
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 08:26:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35F8B43BDAA
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 08:26:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790238390; cv=none; b=kKKu4QqtBD/JRveEWrr1Vrax61vp4R7W+0jlThad9m87Aob6l792LOxAiAySs6MOFn2H39TbTqPTsKESfNHx8UX0snqu1+3VxPnXN1lFtqmW61nqjcRI0qJoP4uDGNlNfOPWmEJfV46VLnnt7RMZ6rjbkL6BrIFKtUgMoGanwFc=
+	t=1790238393; cv=none; b=FZNall5AIk0YKMmlkpjc6j7jOlWhF0QSFznmENtdcVuh/PSqNpSCkEFdQoYr2LkqCo0XhvCE0TbmzNrsAlbMhHBlr+oTeWMlTSvSiR35z5RlopjA9C15ng5bkzceWILukb71dkBuLpPFXZHlnBuCbIdSBWMcec3ItsVMfaA4zrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790238390; c=relaxed/simple;
-	bh=DOhWPHTOArS4mrHtJtgEtmuk6Kxe9jrINlyIz4DiUt8=;
+	s=arc-20240116; t=1790238393; c=relaxed/simple;
+	bh=z7qBVG8nW8vc/+QcAecaLQvvM1sq0vQBOLcPe4wRmqA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NM20g8989n7SeU7Tm70Yw/WGdQKp4bKPaZDwHpNjMcz0GhIWL0d0AwT13cdKTOAxM4qSWjwZkMmaKjSneWemk8Ol+xx/+tMu2i+SrEobYnxfw8xlemTNRo9ZGHrAix87tNE96kzacJRbUICTAD/5kRw22SCLig5bjKBIsCDtBVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=q0X4RWHz; arc=none smtp.client-ip=74.125.225.138
+	 MIME-Version; b=cgkOiOvc5O1BP16feahErGKxPEFAPbZNA4Ejenp4sIanrkT18HuwUFZtcXd68hyxKzm1zKLI/vX0I9IsrDAkfvncgZbQbfzqWuJAl0z3ph4+yf+EF2LwxeuT6KveioqNh4ulpmclsvAoo8ihQo0pfgBJYla04slUnV8OCATc3VA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZARnxA9m; arc=none smtp.client-ip=74.125.225.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="q0X4RWHz"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-49b963f51f6so5005855e9.1
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 01:26:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZARnxA9m"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49e6bbf77e8so2795445e9.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 01:26:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790238387; x=1790843187; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1790238389; x=1790843189; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=3vi/tokI2txuDvIDPHNdVxf0myayiG0209UOvcPi5IU=;
-        b=q0X4RWHzhUnLfYg/q7qZAFLo0oo2T3fnmdASWY39x2K63ORt021GmakUKIip5vygfW
-         6WPDOrDzK/y/VEm4Mjy540R9n/SrmUut1rgeVPSbD0kzvQ+ytBzkGc1tH/MQZGkTCUpq
-         9uq5jxAjDWQy0FtZyakqDGPQF5eL49/waDcYnE915TPgkDUfP4UYoIv4VTblfwrBEHa1
-         b/CcfPaI8c7SuxDwkdX5GfWcH+hWa7Zeu19xMkWSizScRSw+qubJYXKCtA5OHzzGrNtR
-         dp1bF3oXmLzlN37kfscnt4e8j2rEnyjfRtqTOteE5j100iG9PsItyC/VxDdJ7GbMCeLS
-         V31A==
+        bh=Eii86tLen5tcd0oZnA+P+QRUTYVrSjfkyoMDGr0y1e8=;
+        b=ZARnxA9mit/YYnYim26MUD0ZaxiGoBNvd4aEmbmf2AjjlB9xkRWhr5joWMjlrY75AT
+         pUxY660VBopzkIC4p/NaMOzxgPRONlnkWMvXmL3JowPGtPEZCDrtw6asmGjT8Q3450/k
+         1OEdrZh9PicQHUWkoZmYBtBi4MkcefOCSBPwoxXqPWWjmwjGMKlgIkMGThAxKGbHZU4q
+         UBFhJU5dv7zM+cx/p1S7ajS3r2c4Bg6XrsY/2HNfg5KhBFyrgd6cUjAJVwqF0ACvMxYH
+         Owwmo+VVz9Umft+suSzLmztZKzVVPTfnP45cr06ES543peSZj+BMEzkIVGaSu92SyESm
+         LLNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790238387; x=1790843187;
+        d=1e100.net; s=20260707; t=1790238389; x=1790843189;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3vi/tokI2txuDvIDPHNdVxf0myayiG0209UOvcPi5IU=;
-        b=HBuYKjCesr15UazMLcR+HnWGe3enyipsVfexLjP2fpsVfg/TfAUKvBGqdNJvZVdz50
-         QtPMxw0jkvsXHS6vKUv1k56yxbi1ZHjYVmd42g0OFi9trSHrefXw3Li59wTwd0nai1fZ
-         46EL5BfxvONDz8NpSoB0DKPcuzmbgoJDkVM336mojVzT3RywlPJ4Pfe7EgIuVCdsIalU
-         qNF/GhiYDSNb/+VtSb2Cp9mhjFczP3FzPMpmAAN5Vu7J6aBiYw11bYFYQ8b0+eZo3N1w
-         CqYN75VBFlWjUhEaMGBGzOl5nEwHzHOfvGOsYkAUJSYPo6+RLiWZxENm+fcfrD2d5+Yt
-         oHbw==
-X-Gm-Message-State: AFuF++npVnsmaC8EDpBf3Sc3f8LPJPcCSZWZ/jBsf0fhM1eg9PccSJPY
-	GZ5fdM62Kxc4YLQ6GuCNOfMCT0fZyHbVOiAK5t03dZQ9xH8cwLbTCipDso7eu1j0
-X-Gm-Gg: AYBFou1UFSCMxzXhM6lq9HTB5m6EjhfisXAKIMJSb5s6pGdPdyPbOxZWVrR//38FdT7
-	Xczj2kbiLCe+7fkruQfUOc3RU2LZFRHPcmzC95nUWuEOKls4A+L6dPGBR2yIeX2TgAw0AnwLHwM
-	cpnpCIA7yQz5B7tW615N0hmCK1gIAsYHzjRtZYDtU33Rq9p36Yi7AMwXut2dwptjM0ZwI1hUR3N
-	d7wTGSVoTGfhsGHkcnelpKJzHPVEdu3nGx9nKFBS+sCcOADkSm3bOEht9JXXGxpbqbqZJvMs1JX
-	IPItHioflLbkVqU6/ErxRRj5E8Xua4+02qx1yiGqb2z6HLJKohbZWV3kGSb95pD1e+ykCw9ThCa
-	zqsGyoiaDzP/c5UJ+/2Ik9fX4iYeqo7bisfuo0vxAFh9P8gyq2Pv2hY50+4irTxBiJG/dysV28F
-	pMaFmF8mx9wlvhjSjljLFGCtGz4U/YiRJ0bzgOPAVgjCr7v9r1BMJ1ba5AvcFNxEA8/A6qwQwx4
-	uXq1pIayIjd8Ln1EZcT04GlRCoSyYCE+XWJZCdN30A0zzWFR9z+4f2NlKGQvc6SUgT3In6Cdrqr
-	LJ5RgvDiigCpBnLuotG8zVb5Ap7auSmRIgQlMA==
-X-Received: by 2002:a05:600c:8b22:b0:49f:bbab:aa10 with SMTP id 5b1f17b1804b1-49fe66f13f6mr27131865e9.20.1790238387269;
-        Thu, 24 Sep 2026 01:26:27 -0700 (PDT)
+        bh=Eii86tLen5tcd0oZnA+P+QRUTYVrSjfkyoMDGr0y1e8=;
+        b=OestVlJdweOGkJho3JiiDy9bj+tTMeiMc0qtnDBHoteIjqakLNiAdOdaQwmJLMF9Fn
+         oRjrb4UkJ9HG/t3lH037EowkqMSqC+d9TywlC2JIlVr8Q+ojmMtzgSxyWvM+6/DXFx8E
+         x01E19wrm45gFSJtoZN/4ksGg5qlCGFTjRRgeXTAljhH4KYXMd4rEG7MKKjlgLKVejF4
+         k3POJyGrltma61FMK47tnKBbvYbYtYfjcpuiRjAUIerIt4wHaoeBD508eso/z5oj32Kb
+         ZIQk0f+NP5sIPyae7uiM3luWl0vO14/B/q4o5Uz/MlMHsGPk0/vvYlsrv6bArPxF3gPW
+         soDw==
+X-Gm-Message-State: AFuF++mrm+hnjMTmv0iXP/PhwWE1XMN4gJWZMVC4j+kSUMq18QWy7v83
+	QkUQ58iS/h8wn8lEE/3Y1HtYWcbKByr0wYn6JUQhW//tC2NiDiYLUzBxV4NQrivi
+X-Gm-Gg: AYBFou31+tXLwTKvw332+IXy4AtGP0aBWOvK7OaYtfaLb32UXHr7ombOh/RYBO9KO3i
+	vR7tw5nspDjDtb0lC5HhiAtW4lRjJBWYO+XWO5w7KvCkHqNNXS5qIB2eRrPj3HnGi45qVQ+uN7L
+	YC/ikpuKiolQGtplMGBu1dyd9vTFgtBspAfV/K5k+XOCMufN8nyvJ73Gw8kMVKN61zwzn0xhsEx
+	wIPVkT8ycnzxlZYEawKHVc/i7qt5lr4ooJqTDMxHQ2gEGZ+qHUJ4gD9fy3v1fxMWg35P+xjn/v1
+	S/EDezzKGLedenQAvTUTfFImwfOqBhu79ZLq+g+0t6ebsNvjEvntx10E6AiF0xZlGaK9kucvm8Y
+	sW2cThkXwqsc2SK02YSgj1ml44IEQo8AYAm7UE0ALR/2WE/DKmr3AJv7ETaD5zq3oJUP0utxeDg
+	/XZpqpIwwIjT+x5VkPNpxXLYt3ehY1pgjTUGvOaGQW2b/1uMK+PSjjn949jVvWFlASzlkdJftTq
+	46SXyPckBQxtIRVjGEITajZRAIP7TLra3I7DeEzwP4+7kDjBVxBQK43ui3LBk/uDTFps8hKgBEc
+	O4ca6uskswuUIgFmBBb2R2/QIswacZmXOyY5YNzkXpGaYfQs
+X-Received: by 2002:a05:600c:1f95:b0:49f:ce78:3562 with SMTP id 5b1f17b1804b1-49fe66f1aa8mr24709955e9.19.1790238389109;
+        Thu, 24 Sep 2026 01:26:29 -0700 (PDT)
 Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886876c417sm12176219f8f.18.2026.09.24.01.26.26
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4886877a2d5sm12553268f8f.27.2026.09.24.01.26.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 01:26:26 -0700 (PDT)
+        Thu, 24 Sep 2026 01:26:28 -0700 (PDT)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -69,9 +69,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Tejun Heo <tj@kernel.org>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 10/18] selftests/bpf: Check that narrow stack stores define no slot
-Date: Thu, 24 Sep 2026 10:25:46 +0200
-Message-ID: <20260924082607.2695649-11-memxor@gmail.com>
+Subject: [PATCH bpf-next v2 11/18] selftests/bpf: Check liveness merge of masks with different widths
+Date: Thu, 24 Sep 2026 10:25:47 +0200
+Message-ID: <20260924082607.2695649-12-memxor@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260924082607.2695649-1-memxor@gmail.com>
 References: <20260924082607.2695649-1-memxor@gmail.com>
@@ -81,49 +81,85 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1719; i=memxor@gmail.com; h=from:subject; bh=DOhWPHTOArS4mrHtJtgEtmuk6Kxe9jrINlyIz4DiUt8=; b=owGbwMvMwCXmrmtenRyi38x4Wi2JIWvLvZTLNgd5zu6fx/b8Wf6h5cZBfizyx57qr17Rl3Vlb bjXsZ71HaUsDGJcDLJiiiwl//cxGZ+o/B1ou4wbZg4rE8gQBi5OAZjIX2mG/+VHrhTt+nSpopk7 +TFXj5tQS8w1VgUTgb8PxapfeZbOOcTwP8hp3odShT+/l8+R/Tmld9ZNsfCGq/FXeMr5eXW2NBa 0cQIA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2907; i=memxor@gmail.com; h=from:subject; bh=z7qBVG8nW8vc/+QcAecaLQvvM1sq0vQBOLcPe4wRmqA=; b=kA0DAAoWRy03e2NUL4MByyZiAGq03mShsLpzpEOc443M/ATiyYf88SUKUki/MiY/WlO9033Fk Ih1BAAWCgAdFiEEdP++AjPIeftRPaYLRy03e2NUL4MFAmq03mQACgkQRy03e2NUL4OdvQEAly+X ruQ0DZHchLhuxIYncVg9sUJomzX4vD4RqRZ+b94A/0AdgbRv/UoRfdguk9I3i9EgaKCOu/b3OZd WConrjAsD
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=B34BD741DE8494B76E2F717880EF20021D46C59B
 Content-Transfer-Encoding: 8bit
 
-The stack liveness analysis records a store as a "def" only for the
-4-byte half-slots it covers completely, so a one or two byte store near
-the top of the frame must not define anything. Add a test that reads
-fp-8, stores one byte at fp-1 and two bytes at fp-4, and reads fp-8
-again, expecting no def mark on either store and the second read to
-still use fp-8.
+The liveness masks of a function instance are as wide as the deepest
+half-slot the instance was seen to access. When the same instance is
+analyzed again through another call site, the new pass may have settled
+on a different width, and merge_instances() has to widen the original
+before combining the two. Add a test where the first pass of a callee
+reads through a pointer 248 bytes into the main frame and the second
+one through a pointer of unknown offset, which reads the whole frame,
+and check that the merged result keeps the whole-frame read. The
+precise read stays within the first mask word on 64-bit, so the
+whole-frame pass is wider under every stack budget and the merge has
+to widen the masks; a deeper read would need two words already, which
+is all a 512-byte whole-frame read needs on 64-bit, and the widening
+would go untested there.
 
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- .../selftests/bpf/progs/verifier_live_stack.c | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+ .../selftests/bpf/progs/verifier_live_stack.c | 51 +++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/progs/verifier_live_stack.c b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-index 7a1a0670f851..f8758eb62dac 100644
+index f8758eb62dac..c3b08089fef1 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_live_stack.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_live_stack.c
-@@ -2839,3 +2839,25 @@ static __used __naked void imprecise_dst_spill_join_sub(void)
- 	:: __imm(bpf_get_prandom_u32)
- 	: __clobber_all);
+@@ -2861,3 +2861,54 @@ __naked void narrow_store_defines_nothing(void)
+ 	"exit;"
+ 	::: __clobber_all);
  }
 +
 +/*
-+ * A store that does not fully cover a 4-byte half-slot defines nothing, so a
-+ * narrow store at the top of the frame must not turn any slot into a "def",
-+ * least of all every slot of the frame: the earlier data at fp-8 stays live.
++ * The same callee instance is analyzed twice: the call sites are visited in
++ * postorder, so the second one goes first with a precise pointer 248 bytes
++ * into the main frame, and the first one then passes a pointer of unknown
++ * offset, which reads the whole frame. The precise pass stays within the
++ * first word of the masks on 64-bit, so the whole-frame pass is wider under
++ * every stack budget and merging the second into the first has to widen the
++ * masks while keeping the whole-frame read.
 + */
 +SEC("socket")
 +__log_level(2)
-+__msg("0: (79) r0 = *(u64 *)(r10 -8)        ; use: fp0-8")
-+__msg("1: (73) *(u8 *)(r10 -1) = r0{{$}}")
-+__msg("2: (6b) *(u16 *)(r10 -4) = r0{{$}}")
-+__msg("3: (79) r0 = *(u64 *)(r10 -8)        ; use: fp0-8")
-+__naked void narrow_store_defines_nothing(void)
++__msg("stack use/def subprog#{{[0-9]+}} merge_read_all_callee (d2,cs{{[0-9]+}}):")
++__msg("(79) r0 = *(u64 *)(r1 +0){{.*}}; use: fp0-8..-512")
++__naked void merge_keeps_whole_frame_read(void)
 +{
 +	asm volatile (
-+	"r0 = *(u64 *)(r10 - 8);"
-+	"*(u8 *)(r10 - 1) = r0;"
-+	"*(u16 *)(r10 - 4) = r0;"
-+	"r0 = *(u64 *)(r10 - 8);"
++	"r1 = 0;"
++	"*(u64 *)(r10 - 8) = r1;"
++	"*(u64 *)(r10 - 16) = r1;"
++	"*(u64 *)(r10 - 248) = r1;"
++	"call %[bpf_get_prandom_u32];"
++	"r0 &= 8;"
++	"r1 = r10;"
++	"r1 += -16;"
++	"r1 += r0;"
++	"call merge_read_all_mid;"
++	"r1 = r10;"
++	"r1 += -248;"
++	"call merge_read_all_mid;"
++	"r0 = 0;"
++	"exit;"
++	:: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++static __used __naked void merge_read_all_mid(void)
++{
++	asm volatile (
++	"call merge_read_all_callee;"
++	"exit;"
++	::: __clobber_all);
++}
++
++static __used __naked void merge_read_all_callee(void)
++{
++	asm volatile (
++	"r0 = *(u64 *)(r1 + 0);"
 +	"exit;"
 +	::: __clobber_all);
 +}
