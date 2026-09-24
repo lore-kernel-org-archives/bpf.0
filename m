@@ -1,117 +1,108 @@
-Received: from mail-lr2-f12.google.com (mail-lr2-f12.google.com [74.125.230.76])
+Received: from mail-qk2-f43.google.com (mail-qk2-f43.google.com [74.125.230.235])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5137E413791
-	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:35:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 344A245D5DE
+	for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 16:38:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790267754; cv=none; b=c7A9F1j24bOwDPpQfxAbrZ0RfC1EbabByV1TEUEzga1Sr1VO4k8BMC3kVYo9JgXp4fd3lW8B1VNbA7xO5/l+1SwC4VAEm511UqYAabiEd/XDs6jXLwsledL6jJw2nziVz8CLVH8KRZgUBIa/75Djc5XpPdvHN9rImHANH7KhAn8=
+	t=1790267895; cv=none; b=ut0abc5eXFKqLm5bB32FnlZ6BSBXnATdCWK8EOsk6h3qMLJhARMBUe5QjQA1iLEELTpvOsFYnjlUaDOzLoOqw8YOcfafbEMIgRkRjCaqJlQJRn/TuMQDbavDHODQEXMqhz+EHYEcC8ygM2uwh+fHmRyPeSt053Jl6WNvP6kqe14=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790267754; c=relaxed/simple;
-	bh=h/hXtBX+fOSa7csou+2ldyLRB/lDDehU91pD9bYN77Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ciaq7luBHWYUsQv5hik+vvCR5KYcIKxqcWnbEmN8k52AgavjFUxKVTbcF83NOG6/vSjIUDGH4LxfzFEcKN/SKkwJISerecMFiq2PEK5sB0j12IyTVk7EJjfTp8AQmf+ANW8wYN0P9fh2vqz2fh+ccBNvoXOSBIkbC2WZ7QsOCug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VaC1iArF; arc=none smtp.client-ip=74.125.230.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790267895; c=relaxed/simple;
+	bh=Y6dfgoDu9ENyHz35342iESy0PYqePxl/sIn9jSurkUk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JG6ZzNHm5zW1jgrquJE3ip6+u6Fl87Pcms7URa7RnRqDmby87opdW+fnXW5hzmzT3DUQO+XeEdRGFmB5CID5EZFk4OQfqlpqVw7Fn3nvNnWLJyhOhsgp/0cKWdWxNRPdpBqOL40gQ+JB9SQ42+vuu6x7+tgw5rg3onkwSPczeys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=DELaQ6H+; arc=none smtp.client-ip=74.125.230.235
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VaC1iArF"
-Received: by mail-lr2-f12.google.com with SMTP id 38308e7fff4ca-3a3156692c6so16561171fa.3
-        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:35:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="DELaQ6H+"
+Received: by mail-qk2-f43.google.com with SMTP id d75a77b69052e-530280b8234so211591cf.0
+        for <bpf@vger.kernel.org>; Thu, 24 Sep 2026 09:38:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790267751; x=1790872551; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=h/hXtBX+fOSa7csou+2ldyLRB/lDDehU91pD9bYN77Q=;
-        b=VaC1iArFzSlFp3j7U3DL6I/n5dQXEynqO5eYRbrC7sCK0WvrsXWdsHSgS4XibBDTy6
-         G236gY/BsxrfFrwK6nbbGHG3D+0dkyNpLd1mVwBjnWgP8qWmw7wP3+W/87L6d66Kl591
-         35O8daPO0ghKyKfBVV0a80Kl5WqGqUe8EU5V0cs2mvp1W82BfCvf+QE5KMziprkX3P+j
-         qRy/VmwdtkklsOpztk5wuikzgX0mE34L88+j4Mh/u/69EDhUPeNMD2XYjWW61o7g/jCg
-         qErunwmcxHH6T7IN5yeNwz+XZ4L5RIkDhPVIU/eLkf/coChdYvAX8MAjmPxF+N/Tr6uE
-         Y4HA==
+        d=gourry.net; s=google; t=1790267891; x=1790872691; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=LuPrvXBzY5FQ+f/5fzbveR9yF272P1V2+jsIcGJNdC0=;
+        b=DELaQ6H+GoqYKhSPbbw83I2UghjOPLUKt/HJzwYXOl5vd4By1b/ewKsZIbd9ahXhZb
+         TJDLBT2drAnq8j1D4gtZjKdZE54vfhHIW07z7SMjyhNrpJZ88lIXL27llafwJKgt7Hvw
+         zeqWn52o1fsiwmzoo4rrDQZv3h3IiFJnFO2iuBnkUsGA3ktjvtFHA3Jr6K2ZEcGMg8M1
+         1di2ZTIAJ2yTB2V6zmlctv6zG6tcG5IvMF9RkWmI06r7tX+skZxDuVThBB0MSr3NZe3S
+         B2+XxiOTA95Xk/3/+mlBZ2rpvQSIcAx9lD43yFxhcrOBvTesr5mE416XkZK5Fw1vsdLx
+         5Q7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790267751; x=1790872551;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=h/hXtBX+fOSa7csou+2ldyLRB/lDDehU91pD9bYN77Q=;
-        b=oKss3pfHNZbpJHWNsduYJp/qdc8nY0B8dl6FSM5hELRrRJsXfT0Xil8q5NoFxLZkbE
-         5FJd4+oIyvOsh/VkELfl2wu2a7L/R7ktk6A8c0WYs8GVq7zkElmq9ZNWmbJwUKr04gjJ
-         k8pkwPDQ8aA3J9Bbjci2+oioAvRgWY9oFudW/yMlThzJRuninur9/ZLwnPgVxAYwiULO
-         rRBcnoZhwCD6F7UolRMnVMI0kZqGXOkNMD8Xz34j2adtETLTcfZCvSeoqu1CK/0q7QRa
-         j1ImEybqnXzi2NloKog+7OLwEYBda7pA/NY0WZj0NeZYRwi9NIVJh8tpw+JCvEBQB/Bw
-         owyg==
-X-Forwarded-Encrypted: i=1; AKwUvBzHAgrj079GvXRHvhrAVhu6ku9F/qHl91peFcSZyB/rHt6Fqx5BMHW9+/Q6LikUnm2rONo=@vger.kernel.org
-X-Gm-Message-State: AFuF++nt7QNVx5Y1jdTCpKHiIYlRDAYyC7svowvJQxVl5LBAD6LweZT3
-	EgoSm5lkhYnRUqb+Kof+aDmCvOfawJHNHWSNMkYzL9fU3cGRbKLzlx4D
-X-Gm-Gg: AYBFou0hVl0lzsQwmOfXC12pdine+tPuAJbtj8/baX1ul0ICl6NusMm5eUO5smNZqvP
-	1muB8bOmMBcZgCN8mXan6/wnOMzbsaje3/y6K076DPBigpnZYYK/DX9/OnSkEFOFKjF6i3ItDr+
-	9VlREPlBVRaUVBscomX6vpk5sy7j4sXY+u16UPKfmTInQlFQhVG6Xl8OOkkhdeJlNe7qm7lw1Ry
-	Drakan6rEfu3Yrm1MKvjb+VFlhjQbpFbHLcI7uy6bGknYk5W+a43TXub+HlEbdEN4VXLHG/98qZ
-	HIVA2tcY4Qwpd8Bs3K4hCoC9U1f18xCQG/d8guQNdRfO7LN+qb7180F/7VdOJe2ljNvcMt90TpE
-	RRsJfPKdsS8ykl9XFhEBHWgstNXhX3/q0RSXft6GE+50Mc/XXfGvMlzAdzehBZr6bh8iG0euoxa
-	eDjQgvW5yIqEn/dI60A1quyqbQDRqSOYW0TbhgPH0UIv5xv1nGXPz9Ma7fV3J6ByBMCGUh8mza1
-	+xNdCUIzkwj1Gfa
-X-Received: by 2002:a05:651c:154a:b0:3a3:74b7:fc0b with SMTP id 38308e7fff4ca-3a63c30eaf2mr8247881fa.23.1790267750921;
-        Thu, 24 Sep 2026 09:35:50 -0700 (PDT)
-Received: from localhost.localdomain ([80.66.93.106])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3a63c0785c4sm9611801fa.41.2026.09.24.09.35.47
+        d=1e100.net; s=20260707; t=1790267891; x=1790872691;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LuPrvXBzY5FQ+f/5fzbveR9yF272P1V2+jsIcGJNdC0=;
+        b=m0ytsNNLSAtt5Mou49SKZszM5/l5IOf+GKaiwtuOPbC8aNoONR8hmXAijgGEL7gzdU
+         HNUTMC3FG+rRIAjD89CqPFNKU5mhhiBRzaqcCRRIrMaayzCmxJR7PSiH6xPUsuceEM0m
+         4xgkKGOEWGgqupys9VN5wOC5S9zJ2sUSGOt74bg6aeQDbUCkCD/Ng/nQOhFBqaux7wLr
+         09RH38ZcL+mn3AnQfDnpm3WNatgva3zjc+EdcV5W6H7Jz2XbKQB91/P2ryN0MQ4FIhSt
+         5PfZyh7gWFjZ+iNT8fsugGXDpKF5LC2GK/PmxJgL+3Agt6D3sner2kzovkSNbMlQUGeT
+         7FgA==
+X-Forwarded-Encrypted: i=1; AKwUvBy6GrVhribpmA5SMg9QwBoiuRui523TSQScq6DKX0crK4ftxaO5G9xojyZL4bP0ktmRdC0=@vger.kernel.org
+X-Gm-Message-State: AFuF++nWGzzkSWbBkZj7m9QpRxQKxd0CSvGkCTNnAPdUvBwHF3zQPN1c
+	YfxZ5wPxFZ6jqFP+SDKG9+3uDwQhqBHS2oSK6aGTmpXlEPcFa4M791sIXo08hwcKpjk=
+X-Gm-Gg: AYBFou04Ut+t/FYU7eYlIkKlwJ68SzsiHpaXz7sZXUAziqBn+nNx/g9nRMd94qdVk8I
+	Mg9w0OZLxNagKzl/CVqqb52obBcqAJ4+h4MK74Ny4qf4dQRSYR4drCxx7VvMgco7Z1IgJETJqKg
+	Y1TJR9Aep46r3l2MiDRlIbTD8VJVVCZ9eL/Q13q/6NyOdW7aiyfq9uvDx/SvhDZ8Ole6SAbi18f
+	w6S6baAyD80MLQkGONejy3lPT2J89D6/AUULl1AX8rFt4i0uy7jnJne5Xx7ul1c+ulrTimCS6mB
+	LIl5q3B/xpF9VOI3+BC80GdXPy0kRbTva3mEbUeqyz9IZOVJyr8sC1pCvAp6tDpiOdAm5HjoMMq
+	RHHG7afd0nX0s6/6Q5HrsRGkuIGXL3Q1QQwiVHbTws+l7Ha7fkmfIRdsDofWJIeG03yQEUCkSQ3
+	w73gDDuLAPDjMNr83UzDtnWsAlfJBBgr6Nk8VGyHXR6Jm8Gr9kmZw/aaIsXt8upoV5BXXWxPwNx
+	4K5h0GVhP8sNCfdM3r2pjKYVYcmWCrsnnesoOumcp/O+jRsFYQ8uno=
+X-Received: by 2002:ac8:5743:0:b0:530:d860:ffba with SMTP id d75a77b69052e-532fe9f05bamr29797891cf.6.1790267890993;
+        Thu, 24 Sep 2026 09:38:10 -0700 (PDT)
+Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-532eb32f6aasm45064551cf.16.2026.09.24.09.38.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 09:35:50 -0700 (PDT)
-From: Maxim Skokov <skokovmaksimevg@gmail.com>
-To: alexei.starovoitov@gmail.com
-Cc: Maxim Skokov <skokovmaksimevg@gmail.com>,
-	bpf@vger.kernel.org,
-	qmo@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	kuba@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next 1/2] bpftool: Don't report an empty map when key iteration fails
-Date: Thu, 24 Sep 2026 19:35:34 +0300
-Message-ID: <20260924163536.507053-1-skokovmaksimevg@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <DLNOPVM33JL0.4IW7LA889QQ2@gmail.com>
-References: <20260924160732.485650-1-skokovmaksimevg@gmail.com> <20260924160732.485650-2-skokovmaksimevg@gmail.com> <DLNOPVM33JL0.4IW7LA889QQ2@gmail.com>
+        Thu, 24 Sep 2026 09:38:10 -0700 (PDT)
+Date: Thu, 24 Sep 2026 12:38:08 -0400
+From: Gregory Price <gourry@gourry.net>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-rdma@vger.kernel.org, selinux@vger.kernel.org, linux-sound@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-scsi@vger.kernel.org, linux-fbdev@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-trace-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-arch@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
+	kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, fuse-devel@lists.linux.dev
+Subject: Re: [PATCH v3 03/40] mm/vma: introduce and use
+ vma_[flags_]can_merge()
+Message-ID: <arVRqJZkql6sGunt@gourry-fedora-PF4VCD3F>
+References: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-0-4583d8a23bca@kernel.org>
+ <20260917-b4-mmap-prepare-vma-flag-sanify-v3-3-4583d8a23bca@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260917-b4-mmap-prepare-vma-flag-sanify-v3-3-4583d8a23bca@kernel.org>
 
-On Thu, Sep 24, 2026 at 04:24 PM Alexei Starovoitov wrote:
-> cilium_lb4_reverse_sk is an LRU hash in cilium. It's not sk_storage
-> and bpftool dumps it just fine.
-> So where did this output come from?
+On Thu, Sep 17, 2026 at 05:22:12PM +0100, Lorenzo Stoakes (ARM) wrote:
+> Replace the open-coded VMA_SPECIAL_FLAGS check in the VMA merge logic with
+> two new functions vma_flags_can_merge() and vma_can_merge() and update the
+> merge logic to use the former.
+> 
+> This abstracts the check and expresses it in terms of the desired behaviour
+> rather than an arbitrary and confusing VMA flag.
+> 
+> This also lays the groundwork for making further improvements in VMA flag
+> usage.
+> 
+> Also update the userland VMA tests to reflect the change.
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-That's cilium_lb4_reverse_sk_v2, a BPF_MAP_TYPE_SK_STORAGE map from an
-unmerged Cilium change (cilium/cilium#44767) I was testing, not the
-upstream LRU map. Bad example, v2 will use a plain socket storage map.
+Reviewed-by: Gregory Price (Meta) <gourry@gourry.net>
 
-> That's not a fix. The exit status was non-zero before and it's the
-> same after. Drop the Fixes tag.
-
-Will do.
-
-> Local storage and ringbuf return ENOTSUPP.
-> Bloom filter and arena return EOPNOTSUPP. Queue and stack return EINVAL.
-> None of them can be iterated. The hint is printed for the first two only.
-
-> The subject says "Don't report an empty map", but when the map has BTF
-> the elements array is opened before the loop and closed after it,
-> so stdout is still "[]". Only the line on stderr is new.
-
-Right on both. In v2 map_dump() asks for the first key before printing
-the header or opening the array, and on anything but ENOENT fails with
-"can't dump <map type> map: <error>". Nothing goes to stdout then, -j
-gives only the error object, and no errno guessing is needed.
